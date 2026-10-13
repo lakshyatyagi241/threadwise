@@ -55,7 +55,7 @@ The campaign table counts the contacts who wrote back within 24 and 72 hours of 
 
 ## Insights
 
-- **Best time to send**: the hours when your contacts read and write, in your workspace time zone.
+- **Best time to send**: the hours when your contacts read and write, in your own time zone (else the workspace's, or UTC if it has none).
 - **Conversion model**: learns from the contacts who became customers which behaviour goes with converting and scores everyone from 0 to 100. The score shows on the contact page. When there are too few converted contacts it says so and uses fixed weights.
 - **Quality**: how many suggestions are accepted or dismissed, how well the lead score separates the contacts who converted, and what the AI cost in the last 30 days.
 - **Company details**: for contacts with a business email address, looks up company details. This sends that email address to the lookup service, so it asks before you turn it on. Personal addresses such as Gmail are never sent, and nothing happens until the server has a lookup service connected.

@@ -167,7 +167,7 @@
     "insights": {
       "sendTimes": {
         "title": "Mejor hora de envío",
-        "hint": "Cuándo tus contactos leen las campañas y te escriben, en la zona horaria de tu espacio de trabajo.",
+        "hint": "Cuándo tus contactos leen las campañas y te escriben, en tu zona horaria.",
         "empty": "Aún no hay suficiente actividad para decirlo.",
         "best": "Mejores horas: {hours} ({zone}).",
         "quiet": "Horas más tranquilas: {hours}.",

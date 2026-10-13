@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
   GROWTH_FEATURES,
+  isIanaTimeZone,
   type GrowthAudience,
   type GrowthAudienceKind,
   type GrowthAudiencesResponse,
@@ -286,14 +287,18 @@ export class GrowthService {
 
   // --- send times ----------------------------------------------------------------------------------------------------------
 
-  async sendTimes(orgId: number): Promise<GrowthSendTimes> {
+  async sendTimes(orgId: number, timezone?: string): Promise<GrowthSendTimes> {
     await this.gate.require(orgId, 'send_times');
-    return this.sendTimesIn(orgId);
+    return this.sendTimesIn(orgId, timezone);
   }
 
-  async sendTimesIn(orgId: number): Promise<GrowthSendTimes> {
+  /** The hours in `timezone` (the viewer's zone) when it is a real zone, else in the workspace's. */
+  async sendTimesIn(orgId: number, timezone?: string): Promise<GrowthSendTimes> {
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
-      const tz = safeTimezone(await this.repo.timezone(tx, orgId));
+      const tz =
+        timezone && isIanaTimeZone(timezone)
+          ? timezone
+          : safeTimezone(await this.repo.timezone(tx, orgId));
       const h = await this.repo.hourHistograms(tx, orgId, tz);
       return sendTimeProfile(h.inbound, h.read, tz);
     });

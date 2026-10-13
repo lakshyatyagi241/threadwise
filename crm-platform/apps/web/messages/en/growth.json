@@ -167,7 +167,7 @@
     "insights": {
       "sendTimes": {
         "title": "Best time to send",
-        "hint": "When your contacts read campaigns and write to you, in your workspace time zone.",
+        "hint": "When your contacts read campaigns and write to you, in your time zone.",
         "empty": "Not enough activity yet to say.",
         "best": "Best hours: {hours} ({zone}).",
         "quiet": "Quietest hours: {hours}.",

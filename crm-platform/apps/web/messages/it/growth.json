@@ -167,7 +167,7 @@
     "insights": {
       "sendTimes": {
         "title": "Momento migliore per inviare",
-        "hint": "Quando i tuoi contatti leggono le campagne e ti scrivono, nel fuso orario del tuo workspace.",
+        "hint": "Quando i tuoi contatti leggono le campagne e ti scrivono, nel tuo fuso orario.",
         "empty": "Non c’è ancora abbastanza attività per dirlo.",
         "best": "Orari migliori: {hours} ({zone}).",
         "quiet": "Orari più tranquilli: {hours}.",

@@ -167,7 +167,7 @@
     "insights": {
       "sendTimes": {
         "title": "Beste verzendmoment",
-        "hint": "Wanneer je contacten campagnes lezen en je berichten sturen, in de tijdzone van je werkruimte.",
+        "hint": "Wanneer je contacten campagnes lezen en je schrijven, in jouw tijdzone.",
         "empty": "Nog niet genoeg activiteit om dat te zeggen.",
         "best": "Beste uren: {hours} ({zone}).",
         "quiet": "Rustigste uren: {hours}.",

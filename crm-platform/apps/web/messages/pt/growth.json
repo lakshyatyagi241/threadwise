@@ -167,7 +167,7 @@
     "insights": {
       "sendTimes": {
         "title": "Melhor horário de envio",
-        "hint": "Quando seus contatos leem as campanhas e escrevem para você, no fuso horário do seu workspace.",
+        "hint": "Quando seus contatos leem as campanhas e escrevem para você, no seu fuso horário.",
         "empty": "Ainda não há atividade suficiente para dizer.",
         "best": "Melhores horários: {hours} ({zone}).",
         "quiet": "Horários mais calmos: {hours}.",

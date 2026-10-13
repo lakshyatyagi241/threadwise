@@ -60,7 +60,7 @@ export class GrowthAssistantService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    const times = await this.growth.sendTimesIn(orgId).catch(() => null);
+    const times = await this.growth.sendTimesIn(orgId, input.timezone).catch(() => null);
     const candidates: AssistantCandidates = {
       audiences: found.audiences,
       templates: found.templates.map((t) => {
