@@ -137,7 +137,8 @@
         "recipients": "{count}人の受信者",
         "scheduled": "予約日時: {date}",
         "instant": "送信: 即時",
-        "template": "テンプレート {name}"
+        "template": "テンプレート {name}",
+        "cost": "コスト"
       },
       "createBroadcast": "一斉配信を作成",
       "noData": "データが見つかりません",
@@ -648,7 +649,9 @@
         "read": "既読",
         "replies": "返信",
         "clicks": "クリック",
-        "failed": "失敗"
+        "failed": "失敗",
+        "cost": "コスト",
+        "costHint": "これまでにウォレットから引き落とされた額"
       },
       "tabs": {
         "overview": "概要",

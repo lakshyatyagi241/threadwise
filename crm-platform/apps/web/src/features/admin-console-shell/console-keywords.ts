@@ -58,6 +58,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'sms-channel': 'sms text message twilio msg91 channel switch enable disable platform',
   'webhook-forwarding':
     'webhook forwarding fanout relay forward meta whatsapp events targets url failures retry',
+  'waboo-migration':
+    'waboo migration migrate move client import dry run load pipeline whatsapp database report',
 
   'market-catalogue': 'marketplace apps catalogue listings integrations publish review',
   'market-categories': 'categories marketplace tags groups',

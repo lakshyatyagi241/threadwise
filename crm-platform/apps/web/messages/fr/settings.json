@@ -354,6 +354,11 @@
         "label": "Objectifs de réponse (SLA)",
         "description": "Définissez la rapidité de réponse et de résolution de votre équipe, et soyez alerté lorsqu'une conversation manque son objectif.",
         "keywords": "sla, temps de réponse, première réponse, résolution, non-respect, objectifs, heures ouvrables"
+      },
+      "team-performance": {
+        "label": "Performance de l'équipe",
+        "description": "Voyez la rapidité de chaque agent à répondre et résoudre aujourd'hui, cette semaine ou ce mois-ci.",
+        "keywords": "rapports, analyses, agents, temps de réponse, première réponse, résolues, charge, performance"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

@@ -233,6 +233,48 @@
       "conflict": "其他人已先更改了此策略。列表已重新加载。",
       "loading": "正在加载策略…",
       "loadFailed": "无法加载策略。"
+    },
+    "performance": {
+      "eyebrow": "团队收件箱 · 报表",
+      "title": "您的团队响应有多快？",
+      "subtitle": "查看每位客服的回复数、解决数和首次回复时间。",
+      "summary": "回复 {replies} 条，已解决 {resolved} 个，平均首次回复 {avg}",
+      "live": "实时",
+      "backToInbox": "返回收件箱",
+      "rangeLabel": "时间范围",
+      "ranges": {
+        "today": "今天",
+        "week": "本周",
+        "month": "本月"
+      },
+      "channelLabel": "渠道",
+      "allChannels": "所有渠道",
+      "loadFailed": "无法加载报表，稍后将重试。",
+      "noAccess": "您无权查看团队绩效报表。",
+      "loading": "正在加载报表…",
+      "empty": "此时间段内没有客服活动。",
+      "unknown": "未知",
+      "tiles": {
+        "replies": "已发送回复",
+        "resolved": "已解决",
+        "inbounds": "收到",
+        "avgFirstReply": "平均首次回复"
+      },
+      "columns": {
+        "agent": "客服",
+        "status": "状态",
+        "load": "负载",
+        "replies": "回复",
+        "resolved": "已解决",
+        "avgReply": "平均回复",
+        "lastSeen": "最后在线"
+      },
+      "statuses": {
+        "online": "在线",
+        "away": "离开",
+        "busy": "忙碌",
+        "offline": "离线"
+      }
     }
   }
 }

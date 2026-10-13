@@ -14,6 +14,8 @@ import {
   PacingRuntime,
   CapTally,
   SenderLease,
+  WALLET_GATE,
+  type WalletGate,
   assemblePhone,
   batchCooldownMs,
   batchingApplies,
@@ -78,6 +80,7 @@ export class ScheduledRunService {
     private readonly warmer: WarmerService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     private readonly outbox: OutboxService,
+    @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -214,6 +217,29 @@ export class ScheduledRunService {
               const now = this.runtime.now();
               await this.pause(orgId, scheduledId, counts, nextUtcMidnight(now));
               this.logger.warn({ orgId, scheduledId, used }, '[SCHED] paused: daily cap reached');
+              return 'paused';
+            }
+          }
+
+          // The wallet must pay for this message: when it cannot, the run pauses (nobody is failed) and retries later.
+          if (to) {
+            try {
+              await this.wallet.precheckSend(orgId, to, {
+                source: 'scheduled',
+                category: 'marketing',
+              });
+            } catch (err) {
+              if (!(err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY)) throw err;
+              await this.pause(
+                orgId,
+                scheduledId,
+                counts,
+                new Date(this.runtime.now().getTime() + HALT_RETRY_MS),
+              );
+              this.logger.warn(
+                { orgId, scheduledId },
+                '[SCHED] paused: wallet cannot cover the next message',
+              );
               return 'paused';
             }
           }

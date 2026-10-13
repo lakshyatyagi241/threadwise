@@ -233,6 +233,48 @@
       "conflict": "Qualcun altro ha modificato prima questa policy. L'elenco è stato ricaricato.",
       "loading": "Caricamento delle policy…",
       "loadFailed": "Impossibile caricare le policy."
+    },
+    "performance": {
+      "eyebrow": "Posta in arrivo del team · Report",
+      "title": "Quanto è stato veloce il tuo team a rispondere?",
+      "subtitle": "Risposte, risoluzioni e tempi di prima risposta di ogni agente.",
+      "summary": "{replies} risposte, {resolved} risolte, prima risposta media {avg}",
+      "live": "In diretta",
+      "backToInbox": "Torna alla posta in arrivo",
+      "rangeLabel": "Periodo",
+      "ranges": {
+        "today": "Oggi",
+        "week": "Questa settimana",
+        "month": "Questo mese"
+      },
+      "channelLabel": "Canale",
+      "allChannels": "Tutti i canali",
+      "loadFailed": "Impossibile caricare il report. Riproveremo tra poco.",
+      "noAccess": "Non hai accesso al report sulle prestazioni del team.",
+      "loading": "Caricamento del report…",
+      "empty": "Nessuna attività degli agenti in questo periodo.",
+      "unknown": "Sconosciuto",
+      "tiles": {
+        "replies": "Risposte inviate",
+        "resolved": "Risolte",
+        "inbounds": "In arrivo",
+        "avgFirstReply": "Prima risposta media"
+      },
+      "columns": {
+        "agent": "Agente",
+        "status": "Stato",
+        "load": "Carico",
+        "replies": "Risposte",
+        "resolved": "Risolte",
+        "avgReply": "Risp. media",
+        "lastSeen": "Ultimo accesso"
+      },
+      "statuses": {
+        "online": "Online",
+        "away": "Assente",
+        "busy": "Occupato",
+        "offline": "Offline"
+      }
     }
   }
 }

@@ -233,6 +233,48 @@
       "conflict": "Başka biri bu politikayı önce değiştirdi. Liste yeniden yüklendi.",
       "loading": "Politikalar yükleniyor…",
       "loadFailed": "Politikalar yüklenemedi."
+    },
+    "performance": {
+      "eyebrow": "Ekip gelen kutusu · Raporlar",
+      "title": "Ekibiniz ne kadar hızlı yanıt verdi?",
+      "subtitle": "Her temsilcinin yanıtlarını, çözümlerini ve ilk yanıt sürelerini görün.",
+      "summary": "{replies} yanıt, {resolved} çözüldü, ortalama ilk yanıt {avg}",
+      "live": "Canlı",
+      "backToInbox": "Gelen kutusuna dön",
+      "rangeLabel": "Dönem",
+      "ranges": {
+        "today": "Bugün",
+        "week": "Bu hafta",
+        "month": "Bu ay"
+      },
+      "channelLabel": "Kanal",
+      "allChannels": "Tüm kanallar",
+      "loadFailed": "Rapor yüklenemedi. Birazdan yeniden denenecek.",
+      "noAccess": "Ekip performansı raporuna erişiminiz yok.",
+      "loading": "Rapor yükleniyor…",
+      "empty": "Bu dönemde temsilci etkinliği yok.",
+      "unknown": "Bilinmiyor",
+      "tiles": {
+        "replies": "Gönderilen yanıtlar",
+        "resolved": "Çözüldü",
+        "inbounds": "Gelen",
+        "avgFirstReply": "Ort. ilk yanıt"
+      },
+      "columns": {
+        "agent": "Temsilci",
+        "status": "Durum",
+        "load": "Yük",
+        "replies": "Yanıtlar",
+        "resolved": "Çözüldü",
+        "avgReply": "Ort. yanıt",
+        "lastSeen": "Son görülme"
+      },
+      "statuses": {
+        "online": "Çevrimiçi",
+        "away": "Uzakta",
+        "busy": "Meşgul",
+        "offline": "Çevrimdışı"
+      }
     }
   }
 }

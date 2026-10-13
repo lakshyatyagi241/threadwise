@@ -233,6 +233,48 @@
       "conflict": "Someone else changed this policy first. The list was reloaded.",
       "loading": "Loading policies…",
       "loadFailed": "Could not load the policies."
+    },
+    "performance": {
+      "eyebrow": "Team inbox · Reports",
+      "title": "How fast did your team respond?",
+      "subtitle": "See replies, resolutions and first-reply times for each agent.",
+      "summary": "{replies} replies, {resolved} resolved, average first reply {avg}",
+      "live": "Live",
+      "backToInbox": "Back to inbox",
+      "rangeLabel": "Period",
+      "ranges": {
+        "today": "Today",
+        "week": "This week",
+        "month": "This month"
+      },
+      "channelLabel": "Channel",
+      "allChannels": "All channels",
+      "loadFailed": "The report could not be loaded. It will try again in a moment.",
+      "noAccess": "You do not have access to the team performance report.",
+      "loading": "Loading the report…",
+      "empty": "No agent activity in this window.",
+      "unknown": "Unknown",
+      "tiles": {
+        "replies": "Replies sent",
+        "resolved": "Resolved",
+        "inbounds": "Inbounds",
+        "avgFirstReply": "Avg first reply"
+      },
+      "columns": {
+        "agent": "Agent",
+        "status": "Status",
+        "load": "Load",
+        "replies": "Replies",
+        "resolved": "Resolved",
+        "avgReply": "Avg reply",
+        "lastSeen": "Last seen"
+      },
+      "statuses": {
+        "online": "Online",
+        "away": "Away",
+        "busy": "Busy",
+        "offline": "Offline"
+      }
     }
   }
 }

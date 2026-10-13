@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { TeamAnalyticsController } from './team-analytics.controller';
+import { TeamAnalyticsService } from './team-analytics.service';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { AssigneesService } from './assignees.service';
 import { AssignmentController } from './assignment.controller';
@@ -23,7 +25,12 @@ import { RoutingRulesService } from './routing-rules.service';
  */
 @Module({
   imports: [TeamInboxConversationsModule, PlansCoreModule],
-  controllers: [AssignmentController, RoutingRulesController, SlaPoliciesController],
+  controllers: [
+    AssignmentController,
+    RoutingRulesController,
+    SlaPoliciesController,
+    TeamAnalyticsController,
+  ],
   providers: [
     AssignmentService,
     BulkActionsService,
@@ -34,6 +41,7 @@ import { RoutingRulesService } from './routing-rules.service';
     SlaPoliciesRepository,
     SlaPoliciesService,
     SlaClockService,
+    TeamAnalyticsService,
   ],
   exports: [AssignmentService, RoutingEngine, SlaClockService],
 })

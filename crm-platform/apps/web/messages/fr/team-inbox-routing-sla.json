@@ -233,6 +233,48 @@
       "conflict": "Quelqu'un d'autre a modifié cette politique avant vous. La liste a été rechargée.",
       "loading": "Chargement des politiques…",
       "loadFailed": "Impossible de charger les politiques."
+    },
+    "performance": {
+      "eyebrow": "Boîte de réception d'équipe · Rapports",
+      "title": "À quelle vitesse votre équipe a-t-elle répondu ?",
+      "subtitle": "Réponses, résolutions et délais de première réponse de chaque agent.",
+      "summary": "{replies} réponses, {resolved} résolues, première réponse moyenne {avg}",
+      "live": "En direct",
+      "backToInbox": "Retour à la boîte de réception",
+      "rangeLabel": "Période",
+      "ranges": {
+        "today": "Aujourd'hui",
+        "week": "Cette semaine",
+        "month": "Ce mois-ci"
+      },
+      "channelLabel": "Canal",
+      "allChannels": "Tous les canaux",
+      "loadFailed": "Le rapport n'a pas pu être chargé. Nouvelle tentative dans un instant.",
+      "noAccess": "Vous n'avez pas accès au rapport de performance de l'équipe.",
+      "loading": "Chargement du rapport…",
+      "empty": "Aucune activité d'agent sur cette période.",
+      "unknown": "Inconnu",
+      "tiles": {
+        "replies": "Réponses envoyées",
+        "resolved": "Résolues",
+        "inbounds": "Entrants",
+        "avgFirstReply": "Première réponse moy."
+      },
+      "columns": {
+        "agent": "Agent",
+        "status": "Statut",
+        "load": "Charge",
+        "replies": "Réponses",
+        "resolved": "Résolues",
+        "avgReply": "Rép. moy.",
+        "lastSeen": "Dernière activité"
+      },
+      "statuses": {
+        "online": "En ligne",
+        "away": "Absent",
+        "busy": "Occupé",
+        "offline": "Hors ligne"
+      }
     }
   }
 }

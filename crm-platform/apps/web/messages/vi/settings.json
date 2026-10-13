@@ -354,6 +354,11 @@
         "label": "Mục tiêu phản hồi",
         "description": "Đặt tốc độ phản hồi và giải quyết của nhóm (SLA), và nhận cảnh báo khi cuộc trò chuyện lỡ mục tiêu.",
         "keywords": "sla, thời gian phản hồi, phản hồi đầu tiên, giải quyết, vi phạm, mục tiêu, giờ làm việc"
+      },
+      "team-performance": {
+        "label": "Hiệu suất nhóm",
+        "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
+        "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

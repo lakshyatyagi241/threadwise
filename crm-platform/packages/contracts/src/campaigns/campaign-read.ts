@@ -55,7 +55,7 @@ export const campaignListResponseSchema = z.object({
     perPage: z.number().int(),
     total: z.number().int(),
   }),
-  /** Workspace-wide, not filtered. */
+  /** The tiles above the list: the campaigns created in the chosen date range (all time by default), whatever the status, type or search. */
   stats: z.object({
     total: z.number().int(),
     queued: z.number().int(),

@@ -233,6 +233,48 @@
       "conflict": "Iemand anders heeft dit beleid eerder gewijzigd. De lijst is opnieuw geladen.",
       "loading": "Beleid laden…",
       "loadFailed": "Kan het beleid niet laden."
+    },
+    "performance": {
+      "eyebrow": "Teaminbox · Rapporten",
+      "title": "Hoe snel reageerde je team?",
+      "subtitle": "Bekijk antwoorden, oplossingen en tijden tot het eerste antwoord per agent.",
+      "summary": "{replies} antwoorden, {resolved} opgelost, gemiddeld eerste antwoord {avg}",
+      "live": "Live",
+      "backToInbox": "Terug naar inbox",
+      "rangeLabel": "Periode",
+      "ranges": {
+        "today": "Vandaag",
+        "week": "Deze week",
+        "month": "Deze maand"
+      },
+      "channelLabel": "Kanaal",
+      "allChannels": "Alle kanalen",
+      "loadFailed": "Het rapport kon niet worden geladen. Het wordt zo opnieuw geprobeerd.",
+      "noAccess": "Je hebt geen toegang tot het teamprestatierapport.",
+      "loading": "Rapport laden…",
+      "empty": "Geen agentactiviteit in deze periode.",
+      "unknown": "Onbekend",
+      "tiles": {
+        "replies": "Verzonden antwoorden",
+        "resolved": "Opgelost",
+        "inbounds": "Inkomend",
+        "avgFirstReply": "Gem. eerste antwoord"
+      },
+      "columns": {
+        "agent": "Agent",
+        "status": "Status",
+        "load": "Belasting",
+        "replies": "Antwoorden",
+        "resolved": "Opgelost",
+        "avgReply": "Gem. antwoord",
+        "lastSeen": "Laatst gezien"
+      },
+      "statuses": {
+        "online": "Online",
+        "away": "Afwezig",
+        "busy": "Bezet",
+        "offline": "Offline"
+      }
     }
   }
 }

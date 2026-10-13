@@ -137,7 +137,8 @@
         "recipients": "{count} وصول کنندگان",
         "scheduled": "شیڈول: {date}",
         "instant": "ارسال: فوری",
-        "template": "ٹیمپلیٹ {name}"
+        "template": "ٹیمپلیٹ {name}",
+        "cost": "لاگت"
       },
       "createBroadcast": "براڈکاسٹ بنائیں",
       "noData": "کوئی ڈیٹا نہیں ملا",
@@ -648,7 +649,9 @@
         "read": "پڑھے گئے",
         "replies": "جوابات",
         "clicks": "کلکس",
-        "failed": "ناکام"
+        "failed": "ناکام",
+        "cost": "لاگت",
+        "costHint": "اب تک والیٹ سے کاٹی گئی رقم"
       },
       "tabs": {
         "overview": "جائزہ",

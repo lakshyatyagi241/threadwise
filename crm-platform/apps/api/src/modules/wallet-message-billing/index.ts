@@ -18,7 +18,8 @@ export {
   type SettleDelivered,
   type SettleOutcome,
 } from './message-billing.service';
-export { WalletGateService, type LaunchRequest } from './wallet-gate.service';
+export { AiChargeService } from './ai-charge.service';
+export { WalletGateService, type LaunchRequest, type SendRequest } from './wallet-gate.service';
 export { WalletSettingsService } from './wallet-settings.service';
 export { countryOfPhone } from './phone-country';
 export { RateCardService } from './rate-card.service';

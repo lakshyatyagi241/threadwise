@@ -233,6 +233,48 @@
       "conflict": "他のユーザーが先にこのポリシーを変更しました。一覧を再読み込みしました。",
       "loading": "ポリシーを読み込み中…",
       "loadFailed": "ポリシーを読み込めませんでした。"
+    },
+    "performance": {
+      "eyebrow": "チーム受信トレイ · レポート",
+      "title": "チームの返信はどれくらい速かったですか？",
+      "subtitle": "エージェントごとの返信数、解決数、初回返信までの時間を確認します。",
+      "summary": "返信 {replies} 件、解決 {resolved} 件、平均初回返信 {avg}",
+      "live": "ライブ",
+      "backToInbox": "受信トレイに戻る",
+      "rangeLabel": "期間",
+      "ranges": {
+        "today": "今日",
+        "week": "今週",
+        "month": "今月"
+      },
+      "channelLabel": "チャンネル",
+      "allChannels": "すべてのチャンネル",
+      "loadFailed": "レポートを読み込めませんでした。しばらくして再試行します。",
+      "noAccess": "チームパフォーマンスのレポートを見る権限がありません。",
+      "loading": "レポートを読み込み中…",
+      "empty": "この期間にエージェントの活動はありません。",
+      "unknown": "不明",
+      "tiles": {
+        "replies": "送信した返信",
+        "resolved": "解決",
+        "inbounds": "受信",
+        "avgFirstReply": "平均初回返信"
+      },
+      "columns": {
+        "agent": "エージェント",
+        "status": "ステータス",
+        "load": "負荷",
+        "replies": "返信",
+        "resolved": "解決",
+        "avgReply": "平均返信",
+        "lastSeen": "最終確認"
+      },
+      "statuses": {
+        "online": "オンライン",
+        "away": "退席中",
+        "busy": "取り込み中",
+        "offline": "オフライン"
+      }
     }
   }
 }

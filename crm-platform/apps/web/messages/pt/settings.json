@@ -354,6 +354,11 @@
         "label": "Metas de resposta (SLA)",
         "description": "Defina a rapidez com que sua equipe deve responder e resolver, e receba alertas quando uma conversa descumprir a meta.",
         "keywords": "sla, tempo de resposta, primeira resposta, resolução, descumprimento, metas, horário comercial"
+      },
+      "team-performance": {
+        "label": "Desempenho da equipe",
+        "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
+        "keywords": "relatórios, análises, agentes, tempo de resposta, primeira resposta, resolvidas, carga, desempenho"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

@@ -439,7 +439,7 @@
       "imported": "{count, plural, other {Đã nhập # liên hệ.}}",
       "importedUpdated": "{count, plural, other {Đã cập nhật # liên hệ hiện có.}}",
       "importedInvalid": "{count, plural, other {Đã bỏ qua # hàng không hợp lệ.}}",
-      "downloadRejects": "Tải xuống các hàng bị từ chối",
+      "downloadRejects": "Tải xuống lỗi và các dòng bị bỏ qua",
       "fileTooLarge": "Tệp đó lớn hơn {mb} MB.",
       "checking": "Đang kiểm tra tệp...",
       "errorFile": "Không thể đọc tệp đó dưới dạng CSV liên hệ. Hãy kiểm tra tệp có hàng tiêu đề và ít nhất một liên hệ.",
@@ -470,7 +470,8 @@
         "group_name_too_long": "tên nhóm quá dài",
         "tag_name_too_long": "tên thẻ quá dài",
         "plan_limit_reached": "đã đạt giới hạn liên hệ của gói",
-        "tag_limit_reached": "đã đạt giới hạn thẻ của gói"
+        "tag_limit_reached": "đã đạt giới hạn thẻ của gói",
+        "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",
@@ -1172,13 +1173,14 @@
         "updated": "Đã cập nhật",
         "rejected": "Bị từ chối",
         "actions": "Thao tác",
-        "downloadRejects": "Tải xuống dòng bị từ chối",
+        "downloadRejects": "Tải xuống lỗi và các dòng bị bỏ qua",
         "statuses": {
           "queued": "Đang xếp hàng",
           "running": "Đang chạy",
           "completed": "Hoàn tất",
           "failed": "Thất bại"
-        }
+        },
+        "by": "Người nhập"
       },
       "exports": {
         "title": "Lần xuất",

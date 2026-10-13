@@ -439,7 +439,7 @@
       "imported": "{count, plural, one {Se importó # contacto.} other {Se importaron # contactos.}}",
       "importedUpdated": "{count, plural, one {Se actualizó # contacto existente.} other {Se actualizaron # contactos existentes.}}",
       "importedInvalid": "{count, plural, one {Se omitió # fila no válida.} other {Se omitieron # filas no válidas.}}",
-      "downloadRejects": "Descargar filas rechazadas",
+      "downloadRejects": "Descargar errores y filas omitidas",
       "fileTooLarge": "Ese archivo supera los {mb} MB.",
       "checking": "Comprobando el archivo...",
       "errorFile": "No se pudo leer ese archivo como un CSV de contactos. Comprueba que tenga una fila de encabezado y al menos un contacto.",
@@ -470,7 +470,8 @@
         "group_name_too_long": "nombre de grupo demasiado largo",
         "tag_name_too_long": "nombre de etiqueta demasiado largo",
         "plan_limit_reached": "se alcanzó el límite de contactos del plan",
-        "tag_limit_reached": "se alcanzó el límite de etiquetas del plan"
+        "tag_limit_reached": "se alcanzó el límite de etiquetas del plan",
+        "duplicate_in_file": "número repetido, combinado con una fila anterior"
       },
       "statusHint": "Se aplica a los contactos que crea este archivo.",
       "queued": "Esperando para empezar...",
@@ -1172,13 +1173,14 @@
         "updated": "Actualizados",
         "rejected": "Rechazados",
         "actions": "Acciones",
-        "downloadRejects": "Descargar rechazados",
+        "downloadRejects": "Descargar errores y filas omitidas",
         "statuses": {
           "queued": "En cola",
           "running": "En curso",
           "completed": "Completada",
           "failed": "Fallida"
-        }
+        },
+        "by": "Importado por"
       },
       "exports": {
         "title": "Exportaciones",

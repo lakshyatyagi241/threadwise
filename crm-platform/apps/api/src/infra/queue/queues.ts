@@ -72,6 +72,8 @@ export const QUEUES = {
   LSC_SCORE: 'lsc-score',
   /** One job per requested export of the consent proof above the direct download's 50,000 rows: reads the ledger into a CSV and mails the requester. Own queue: a large export must not hold a send or a receipt. */
   CONSENT_EXPORT: 'consent-export',
+  /** One job per Waboo -> WaDesk migration run started from the operator panel. Own queue: a run lasts up to an hour and must hold nothing else. */
+  WAB_MIGRATE: 'wab-migrate',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

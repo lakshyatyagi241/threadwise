@@ -1059,6 +1059,7 @@ Connections: **TIB1** (conversation columns, queue poll host, kanban, bulk toolb
   - Given a plan without `access_team_performance`, When a Manager opens the page, Then it renders with a paywall overlay.
 - **Source refs:** `app/Http/Controllers/TeamInboxController.php` (teamAnalyticsPage, teamAnalytics), `resources/views/user/team-inbox/analytics-team.blade.php`, `app/Models/AgentStatus.php`, `routes/web.php`, `Documentation/pages/messaging/team-inbox.html`.
 - **Port notes:** `GET /inbox/analytics/team` with `analytics.view`; compute in SQL over event tables in the org timezone; attribute auto-replies to the automation, not a user; add pagination and CSV export as follow-ups.
+- **Built (Threadwise):** `GET /v2/inbox/analytics/team` (permission `inbox.analytics.view`, plan feature `team_performance`), page `/inbox/analytics/team`, Settings tile `team-performance` (with an inbox shortcut) instead of Reference's rail icons; see `docs/api/team-inbox-routing-sla.md`. QUIRK 1 (agents listed only if they replied) kept; QUIRK 2 (auto-replies inflating the owner's count) fixed; the open JSON endpoint is gated. Not built: the link to AI Performance (TW-TIB2-035).
 
 ### TW-TIB2-035 — AI Agent Performance analytics
 

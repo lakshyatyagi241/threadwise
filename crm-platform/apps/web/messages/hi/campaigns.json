@@ -137,7 +137,8 @@
         "recipients": "{count} प्राप्तकर्ता",
         "scheduled": "शेड्यूल: {date}",
         "instant": "भेजना: तुरंत",
-        "template": "टेम्पलेट {name}"
+        "template": "टेम्पलेट {name}",
+        "cost": "लागत"
       },
       "createBroadcast": "ब्रॉडकास्ट बनाएं",
       "noData": "कोई डेटा नहीं मिला",
@@ -648,7 +649,9 @@
         "read": "पढ़े गए",
         "replies": "जवाब",
         "clicks": "क्लिक",
-        "failed": "विफल"
+        "failed": "विफल",
+        "cost": "लागत",
+        "costHint": "अब तक वॉलेट से काटी गई राशि"
       },
       "tabs": {
         "overview": "अवलोकन",
