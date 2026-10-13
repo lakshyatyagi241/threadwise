@@ -80,6 +80,8 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'sales_doc_decided',
   /** A sent email bounced: it did not reach a recipient (TW-MAIL-032). Told to the person who wrote it. */
   'email_bounced',
+  /** A conversation's response clock ran out (SLA, BL-036): told to its assignee, else its team, else the SLA managers. */
+  'sla_breached',
 ] as const;
 
 /** Every type a person can set preferences for. */

@@ -964,6 +964,17 @@
         "created": "Étiquette créée",
         "deleted": "Étiquette supprimée"
       }
+    },
+    "sla": {
+      "breached": "SLA non respecté",
+      "atRisk": "SLA à échéance dans {minutes} min",
+      "ok": "SLA à échéance {time}",
+      "kind": {
+        "first_response": "Objectif de première réponse",
+        "resolution": "Objectif de résolution"
+      },
+      "titleBreached": "{kind} : manqué (échéance {time})",
+      "titleOpen": "{kind} : échéance {time}"
     }
   }
 }

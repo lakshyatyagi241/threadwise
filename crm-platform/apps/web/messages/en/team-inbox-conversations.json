@@ -964,6 +964,17 @@
         "created": "Label created",
         "deleted": "Label deleted"
       }
+    },
+    "sla": {
+      "breached": "SLA breached",
+      "atRisk": "SLA due in {minutes} min",
+      "ok": "SLA due {time}",
+      "kind": {
+        "first_response": "First reply target",
+        "resolution": "Resolution target"
+      },
+      "titleBreached": "{kind}: missed (was due {time})",
+      "titleOpen": "{kind}: due {time}"
     }
   }
 }

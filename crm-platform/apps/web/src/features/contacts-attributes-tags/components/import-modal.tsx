@@ -724,7 +724,7 @@ function JobView({
         )}
       </div>
       {job.limitExceeded > 0 && <Alert tone="warning">{t('limitExceededNote')}</Alert>}
-      {job.invalid > 0 && (
+      {job.invalid + job.limitExceeded + job.duplicatesInFile > 0 && (
         <Button variant="secondary" size="sm" onClick={() => void rejects()} disabled={busy}>
           {busy ? <Spinner /> : <DownloadIcon />} {t('downloadRejects')}
         </Button>

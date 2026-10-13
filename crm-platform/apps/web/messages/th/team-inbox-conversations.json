@@ -964,6 +964,17 @@
         "created": "สร้างป้ายกำกับแล้ว",
         "deleted": "ลบป้ายกำกับแล้ว"
       }
+    },
+    "sla": {
+      "breached": "SLA เกินกำหนด",
+      "atRisk": "SLA ครบกำหนดใน {minutes} นาที",
+      "ok": "SLA ครบกำหนด {time}",
+      "kind": {
+        "first_response": "เป้าหมายการตอบกลับครั้งแรก",
+        "resolution": "เป้าหมายการแก้ไขให้เสร็จ"
+      },
+      "titleBreached": "{kind}: พลาดเป้าหมาย (กำหนด {time})",
+      "titleOpen": "{kind}: ครบกำหนด {time}"
     }
   }
 }

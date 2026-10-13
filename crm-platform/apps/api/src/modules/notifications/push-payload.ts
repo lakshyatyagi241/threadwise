@@ -62,6 +62,7 @@ const TEXT_BEARING = new Set([
   'mention',
   'teamchat_mention',
   'teamchat_message',
+  'sla_breached',
 ]);
 
 /**

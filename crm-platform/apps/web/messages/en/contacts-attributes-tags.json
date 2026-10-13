@@ -456,7 +456,7 @@
       "imported": "{count, plural, one {Imported # contact.} other {Imported # contacts.}}",
       "importedUpdated": "{count, plural, one {# existing contact updated.} other {# existing contacts updated.}}",
       "importedInvalid": "{count, plural, one {# invalid row skipped.} other {# invalid rows skipped.}}",
-      "downloadRejects": "Download rejected rows",
+      "downloadRejects": "Download errors and skipped rows",
       "fileTooLarge": "That file is larger than {mb} MB.",
       "checking": "Checking the file...",
       "errorFile": "That file could not be read as a contacts CSV. Check it has a header row and at least one contact.",
@@ -487,7 +487,8 @@
         "group_name_too_long": "group name too long",
         "tag_name_too_long": "tag name too long",
         "plan_limit_reached": "plan contact limit reached",
-        "tag_limit_reached": "plan tag limit reached"
+        "tag_limit_reached": "plan tag limit reached",
+        "duplicate_in_file": "repeated number, merged into an earlier row"
       },
       "statusHint": "Applied to contacts this file creates.",
       "queued": "Waiting to start...",
@@ -1203,13 +1204,14 @@
         "updated": "Updated",
         "rejected": "Rejected",
         "actions": "Actions",
-        "downloadRejects": "Download rejects",
+        "downloadRejects": "Download errors and skipped rows",
         "statuses": {
           "queued": "Queued",
           "running": "Running",
           "completed": "Completed",
           "failed": "Failed"
-        }
+        },
+        "by": "Imported by"
       },
       "exports": {
         "title": "Exports",

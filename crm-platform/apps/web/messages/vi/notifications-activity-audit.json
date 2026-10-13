@@ -354,6 +354,10 @@
         "device_group_removed": {
           "label": "Bị xóa khỏi nhóm của số cá nhân",
           "hint": "Ai đó đã xóa một trong các số WhatsApp cá nhân của bạn khỏi một nhóm. Đây có thể là dấu hiệu số đã bị báo cáo."
+        },
+        "sla_breached": {
+          "label": "SLA bị vi phạm",
+          "hint": "Một cuộc trò chuyện bạn phụ trách đã lỡ mục tiêu phản hồi đầu tiên hoặc giải quyết."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

@@ -456,7 +456,7 @@
       "imported": "{count, plural, one {Zaimportowano # kontakt.} few {Zaimportowano # kontakty.} many {Zaimportowano # kontaktów.} other {Zaimportowano # kontaktu.}}",
       "importedUpdated": "{count, plural, one {Zaktualizowano # istniejący kontakt.} few {Zaktualizowano # istniejące kontakty.} many {Zaktualizowano # istniejących kontaktów.} other {Zaktualizowano # istniejącego kontaktu.}}",
       "importedInvalid": "{count, plural, one {Pominięto # nieprawidłowy wiersz.} few {Pominięto # nieprawidłowe wiersze.} many {Pominięto # nieprawidłowych wierszy.} other {Pominięto # nieprawidłowego wiersza.}}",
-      "downloadRejects": "Pobierz odrzucone wiersze",
+      "downloadRejects": "Pobierz błędy i pominięte wiersze",
       "fileTooLarge": "Ten plik jest większy niż {mb} MB.",
       "checking": "Sprawdzanie pliku...",
       "errorFile": "Nie można odczytać tego pliku jako pliku CSV z kontaktami. Sprawdź, czy ma wiersz nagłówka i co najmniej jeden kontakt.",
@@ -487,7 +487,8 @@
         "group_name_too_long": "nazwa grupy jest za długa",
         "tag_name_too_long": "nazwa tagu jest za długa",
         "plan_limit_reached": "osiągnięto limit kontaktów w planie",
-        "tag_limit_reached": "osiągnięto limit tagów w planie"
+        "tag_limit_reached": "osiągnięto limit tagów w planie",
+        "duplicate_in_file": "powtórzony numer, scalony z wcześniejszym wierszem"
       },
       "statusHint": "Stosowane do kontaktów tworzonych przez ten plik.",
       "queued": "Oczekiwanie na start...",
@@ -1203,13 +1204,14 @@
         "updated": "Zaktualizowano",
         "rejected": "Odrzucono",
         "actions": "Akcje",
-        "downloadRejects": "Pobierz odrzucone",
+        "downloadRejects": "Pobierz błędy i pominięte wiersze",
         "statuses": {
           "queued": "W kolejce",
           "running": "W toku",
           "completed": "Ukończono",
           "failed": "Niepowodzenie"
-        }
+        },
+        "by": "Zaimportował"
       },
       "exports": {
         "title": "Eksporty",

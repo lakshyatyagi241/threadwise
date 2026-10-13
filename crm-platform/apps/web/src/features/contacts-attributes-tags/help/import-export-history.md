@@ -15,8 +15,8 @@ This page lists the contact files your workspace has imported and the exports it
 ## How to use it
 
 1. Open **Settings**, go to **Data and security** and select **Import and export**.
-2. Under **Imports**, read each file's status, how many contacts it created and updated, and how many rows were rejected.
-3. For an import with rejected rows, select **Download rejects**. The file lists each row, the reason it was refused and the original cells. Fix them and upload it again.
+2. Under **Imports**, read each file's status, who imported it, how many contacts it created and updated, and how many rows were rejected.
+3. For an import with rejected or skipped rows, select **Download errors and skipped rows**. The file lists each row, the reason (an error, the plan limit, or a repeated number that was merged into an earlier row) and the original cells. Fix them and upload it again.
 4. Select **Import contacts** to start a new import from here.
 5. Under **Exports**, see who exported, when, how many contacts, and whether it was the ticked contacts or everything matching. Select **Download** on a row to get that file again.
 

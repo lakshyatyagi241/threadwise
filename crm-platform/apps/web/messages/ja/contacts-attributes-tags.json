@@ -456,7 +456,7 @@
       "imported": "{count, plural, other {#件の連絡先をインポートしました。}}",
       "importedUpdated": "{count, plural, other {既存の#件の連絡先を更新しました。}}",
       "importedInvalid": "{count, plural, other {無効な#行をスキップしました。}}",
-      "downloadRejects": "却下された行をダウンロード",
+      "downloadRejects": "エラーとスキップされた行をダウンロード",
       "fileTooLarge": "そのファイルは{mb} MBを超えています。",
       "checking": "ファイルを確認中...",
       "errorFile": "そのファイルを連絡先のCSVとして読み取れませんでした。ヘッダー行と、少なくとも1件の連絡先があるか確認してください。",
@@ -487,7 +487,8 @@
         "group_name_too_long": "グループ名が長すぎます",
         "tag_name_too_long": "タグ名が長すぎます",
         "plan_limit_reached": "プランの連絡先上限に達しました",
-        "tag_limit_reached": "プランのタグ上限に達しました"
+        "tag_limit_reached": "プランのタグ上限に達しました",
+        "duplicate_in_file": "重複した番号、前の行に統合"
       },
       "statusHint": "このファイルで作成される連絡先に適用されます。",
       "queued": "開始を待機中...",
@@ -1203,13 +1204,14 @@
         "updated": "更新",
         "rejected": "却下",
         "actions": "操作",
-        "downloadRejects": "却下行をダウンロード",
+        "downloadRejects": "エラーとスキップされた行をダウンロード",
         "statuses": {
           "queued": "待機中",
           "running": "実行中",
           "completed": "完了",
           "failed": "失敗"
-        }
+        },
+        "by": "インポートした人"
       },
       "exports": {
         "title": "エクスポート",

@@ -4,6 +4,7 @@ import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
 import { channelCapabilitiesSchema } from './channels';
 import { conversationPrioritySchema, inboxTabSchema } from './enums';
+import { slaStatusSchema } from '../team-inbox-routing-sla/sla';
 
 /**
  * chat-conversations: the conversation (thread) as the inbox list and the thread header read it (plan-inbox-chat.md section 3.3).
@@ -85,6 +86,8 @@ export const conversationSummarySchema = z.object({
   snoozedUntil: z.string().datetime().nullable(),
   /** Labels on the thread, by name. */
   labels: z.array(conversationLabelSchema),
+  /** The response clock that matters now (SLA, `inbox_sla`): null when the conversation has none running. */
+  slaStatus: slaStatusSchema.nullable(),
   lastMessageAt: z.string().datetime().nullable(),
   lastInboundAt: z.string().datetime().nullable(),
   lastOutboundAt: z.string().datetime().nullable(),
@@ -107,7 +110,14 @@ export const listConversationsQuerySchema = paginationQuerySchema.extend({
   labels: z
     .string()
     .optional()
-    .transform((v) => (v ? v.split(',').map((x) => x.trim()).filter(Boolean) : []))
+    .transform((v) =>
+      v
+        ? v
+            .split(',')
+            .map((x) => x.trim())
+            .filter(Boolean)
+        : [],
+    )
     .pipe(z.array(uuidSchema).max(20)),
   /** Contact name, peer name or number, or a word of the preview. */
   q: z.string().trim().min(1).max(200).optional(),

@@ -431,8 +431,24 @@ export class ContactImportService {
     return this.db.tx(async (tx) => {
       const row = await this.jobs.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Import', uuid);
-      return toImportJobResponse(row);
+      const names = await this.userNames(tx, ctx.orgId, [row]);
+      return toImportJobResponse(row, names.get(row.createdBy ?? -1) ?? null);
     });
+  }
+
+  /** The display names of whoever started these imports. */
+  private async userNames(
+    tx: Tx,
+    orgId: number,
+    jobs: ReadonlyArray<{ createdBy: number | null }>,
+  ): Promise<Map<number, string>> {
+    const ids = [...new Set(jobs.map((j) => j.createdBy).filter((v): v is number => v !== null))];
+    if (ids.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: schema.users.id, name: schema.users.fullName })
+      .from(schema.users)
+      .where(and(eq(schema.users.orgId, orgId), inArray(schema.users.id, ids)));
+    return new Map(rows.map((r) => [r.id, r.name]));
   }
 
   async listJobs(query: ListImportJobsQuery): Promise<PageResponse<ContactImportJob>> {
@@ -440,7 +456,11 @@ export class ContactImportService {
     return this.db.tx(async (tx) => {
       const rows = await this.jobs.list(tx, ctx.orgId, query);
       const { items, page } = buildPage(rows, query.limit);
-      return { data: items.map(toImportJobResponse), page };
+      const names = await this.userNames(tx, ctx.orgId, items);
+      return {
+        data: items.map((j) => toImportJobResponse(j, names.get(j.createdBy ?? -1) ?? null)),
+        page,
+      };
     });
   }
 

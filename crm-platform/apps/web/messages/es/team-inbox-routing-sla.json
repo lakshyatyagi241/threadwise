@@ -183,6 +183,98 @@
         "goneOption": "Un flujo que ya no existe",
         "loadFailed": "No se pudieron cargar los flujos, así que la lista puede estar incompleta."
       }
+    },
+    "sla": {
+      "back": "Volver a Ajustes",
+      "title": "Objetivos de respuesta (SLA)",
+      "intro": "Define cuánto pueden esperar los clientes una primera respuesta y cuánto puede permanecer sin resolver una conversación. Si una conversación incumple un objetivo, se marca y se avisa al responsable.",
+      "howTitle": "Cómo funciona",
+      "how1": "El mensaje de un cliente inicia el contador, con la política predeterminada.",
+      "how2": "Una respuesta de tu equipo detiene el contador de primera respuesta.",
+      "how3": "Una conversación que incumple un objetivo muestra una insignia de SLA en la bandeja.",
+      "how4": "Los objetivos pueden contar solo tu horario laboral.",
+      "newTitle": "Añadir una política",
+      "editTitle": "Editar política",
+      "name": "Nombre",
+      "firstResponse": "Primera respuesta en (minutos)",
+      "resolution": "Resolver en (minutos)",
+      "minutesHint": "Déjalo vacío para no tener objetivo. 60 es una hora, 1440 es un día.",
+      "minutesInvalid": "Usa números enteros desde 1.",
+      "pause": "Pausar mientras se espera al cliente",
+      "pauseHint": "Una conversación en estado pendiente no se marca.",
+      "businessHours": "Contar solo el horario laboral",
+      "businessHoursHint": "Usa el horario y la zona horaria de los ajustes de tu espacio de trabajo.",
+      "makeDefault": "Establecer como política predeterminada",
+      "defaultChip": "Predeterminada",
+      "overridesTitle": "Objetivos por prioridad",
+      "overridesHint": "Los objetivos de una prioridad reemplazan los de la política. Déjalo vacío para mantener los de la política.",
+      "priority": {
+        "low": "Baja",
+        "normal": "Normal",
+        "high": "Alta",
+        "urgent": "Urgente"
+      },
+      "create": "Crear política",
+      "save": "Guardar cambios",
+      "cancel": "Cancelar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "deleteTitle": "¿Eliminar esta política?",
+      "deleteMessage": "Se eliminará \"{name}\". Las conversaciones que ya la usan conservan sus contadores en marcha.",
+      "emptyTitle": "Aún no hay políticas",
+      "emptyMessage": "Añade una política para empezar a medir los tiempos de respuesta. La primera será la predeterminada.",
+      "inUse": "{count, plural, one {# conversación} other {# conversaciones}}",
+      "firstShort": "Primera respuesta: {minutes} min",
+      "resolutionShort": "Resolución: {minutes} min",
+      "noTarget": "Sin objetivos",
+      "saved": "Política guardada",
+      "created": "Política creada",
+      "deleted": "Política eliminada",
+      "conflict": "Otra persona cambió antes esta política. Se recargó la lista.",
+      "loading": "Cargando políticas…",
+      "loadFailed": "No se pudieron cargar las políticas."
+    },
+    "performance": {
+      "eyebrow": "Bandeja del equipo · Informes",
+      "title": "¿Qué tan rápido respondió tu equipo?",
+      "subtitle": "Consulta respuestas, resoluciones y tiempos de primera respuesta de cada agente.",
+      "summary": "{replies} respuestas, {resolved} resueltas, primera respuesta media {avg}",
+      "live": "En vivo",
+      "backToInbox": "Volver a la bandeja",
+      "rangeLabel": "Periodo",
+      "ranges": {
+        "today": "Hoy",
+        "week": "Esta semana",
+        "month": "Este mes"
+      },
+      "channelLabel": "Canal",
+      "allChannels": "Todos los canales",
+      "loadFailed": "No se pudo cargar el informe. Se reintentará en un momento.",
+      "noAccess": "No tienes acceso al informe de rendimiento del equipo.",
+      "loading": "Cargando el informe…",
+      "empty": "Sin actividad de agentes en este periodo.",
+      "unknown": "Desconocido",
+      "tiles": {
+        "replies": "Respuestas enviadas",
+        "resolved": "Resueltas",
+        "inbounds": "Entrantes",
+        "avgFirstReply": "Primera respuesta media"
+      },
+      "columns": {
+        "agent": "Agente",
+        "status": "Estado",
+        "load": "Carga",
+        "replies": "Respuestas",
+        "resolved": "Resueltas",
+        "avgReply": "Resp. media",
+        "lastSeen": "Última conexión"
+      },
+      "statuses": {
+        "online": "En línea",
+        "away": "Ausente",
+        "busy": "Ocupado",
+        "offline": "Desconectado"
+      }
     }
   }
 }

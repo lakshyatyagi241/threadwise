@@ -964,6 +964,17 @@
         "created": "Метка создана",
         "deleted": "Метка удалена"
       }
+    },
+    "sla": {
+      "breached": "SLA нарушен",
+      "atRisk": "SLA истекает через {minutes} мин",
+      "ok": "SLA до {time}",
+      "kind": {
+        "first_response": "Цель по первому ответу",
+        "resolution": "Цель по решению"
+      },
+      "titleBreached": "{kind}: нарушена (срок был {time})",
+      "titleOpen": "{kind}: срок {time}"
     }
   }
 }

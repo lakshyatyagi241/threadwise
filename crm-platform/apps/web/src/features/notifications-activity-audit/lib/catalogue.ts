@@ -111,6 +111,7 @@ const LOOK: Record<NotificationPrefType, Look> = {
   teamchat_mention: look('mention', 'info', 'team_chat_channel'),
   teamchat_message: look('team_chat', 'info', 'team_chat_channel'),
   email_bounced: look('chat', 'danger', 'conversation'),
+  sla_breached: look('waiting', 'danger', 'conversation'),
   waba_group_join_request: look('group', 'info', 'waba_group'),
   waba_group_suspended: look('group', 'danger', 'waba_group'),
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),

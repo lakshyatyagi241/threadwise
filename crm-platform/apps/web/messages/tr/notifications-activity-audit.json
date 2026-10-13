@@ -354,6 +354,10 @@
         "device_group_removed": {
           "label": "Kişisel numara grubundan çıkarıldınız",
           "hint": "Biri kişisel WhatsApp numaralarınızdan birini bir gruptan çıkardı. Numaranın şikayet edildiğinin işareti olabilir."
+        },
+        "sla_breached": {
+          "label": "SLA aşıldı",
+          "hint": "Sahibi olduğunuz bir görüşme ilk yanıt veya çözüm hedefini kaçırdı."
         }
       },
       "loading": "Tercihleriniz yükleniyor",

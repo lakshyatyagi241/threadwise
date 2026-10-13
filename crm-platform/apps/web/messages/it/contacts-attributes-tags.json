@@ -456,7 +456,7 @@
       "imported": "{count, plural, one {Importato # contatto.} other {Importati # contatti.}}",
       "importedUpdated": "{count, plural, one {# contatto esistente aggiornato.} other {# contatti esistenti aggiornati.}}",
       "importedInvalid": "{count, plural, one {# riga non valida saltata.} other {# righe non valide saltate.}}",
-      "downloadRejects": "Scarica le righe rifiutate",
+      "downloadRejects": "Scarica errori e righe saltate",
       "fileTooLarge": "Quel file supera {mb} MB.",
       "checking": "Controllo del file...",
       "errorFile": "Impossibile leggere quel file come CSV di contatti. Verifica che abbia una riga di intestazione e almeno un contatto.",
@@ -487,7 +487,8 @@
         "group_name_too_long": "nome del gruppo troppo lungo",
         "tag_name_too_long": "nome del tag troppo lungo",
         "plan_limit_reached": "limite di contatti del piano raggiunto",
-        "tag_limit_reached": "limite di tag del piano raggiunto"
+        "tag_limit_reached": "limite di tag del piano raggiunto",
+        "duplicate_in_file": "numero ripetuto, unito a una riga precedente"
       },
       "statusHint": "Applicato ai contatti creati da questo file.",
       "queued": "In attesa di avvio...",
@@ -1203,13 +1204,14 @@
         "updated": "Aggiornati",
         "rejected": "Rifiutate",
         "actions": "Azioni",
-        "downloadRejects": "Scarica rifiutate",
+        "downloadRejects": "Scarica errori e righe saltate",
         "statuses": {
           "queued": "In coda",
           "running": "In esecuzione",
           "completed": "Completata",
           "failed": "Non riuscita"
-        }
+        },
+        "by": "Importato da"
       },
       "exports": {
         "title": "Esportazioni",

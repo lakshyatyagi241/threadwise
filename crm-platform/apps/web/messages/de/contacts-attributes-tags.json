@@ -456,7 +456,7 @@
       "imported": "{count, plural, one {# Kontakt importiert.} other {# Kontakte importiert.}}",
       "importedUpdated": "{count, plural, one {# vorhandener Kontakt aktualisiert.} other {# vorhandene Kontakte aktualisiert.}}",
       "importedInvalid": "{count, plural, one {# ungültige Zeile übersprungen.} other {# ungültige Zeilen übersprungen.}}",
-      "downloadRejects": "Abgelehnte Zeilen herunterladen",
+      "downloadRejects": "Fehler und übersprungene Zeilen herunterladen",
       "fileTooLarge": "Diese Datei ist größer als {mb} MB.",
       "checking": "Datei wird geprüft...",
       "errorFile": "Diese Datei konnte nicht als Kontakte-CSV gelesen werden. Prüfen Sie, ob sie eine Kopfzeile und mindestens einen Kontakt enthält.",
@@ -487,7 +487,8 @@
         "group_name_too_long": "Gruppenname zu lang",
         "tag_name_too_long": "Tag-Name zu lang",
         "plan_limit_reached": "Kontaktlimit des Tarifs erreicht",
-        "tag_limit_reached": "Tag-Limit des Tarifs erreicht"
+        "tag_limit_reached": "Tag-Limit des Tarifs erreicht",
+        "duplicate_in_file": "doppelte Nummer, mit einer früheren Zeile zusammengeführt"
       },
       "statusHint": "Wird auf Kontakte angewendet, die diese Datei erstellt.",
       "queued": "Warten auf den Start...",
@@ -1203,13 +1204,14 @@
         "updated": "Aktualisiert",
         "rejected": "Abgelehnt",
         "actions": "Aktionen",
-        "downloadRejects": "Abgelehnte herunterladen",
+        "downloadRejects": "Fehler und übersprungene Zeilen herunterladen",
         "statuses": {
           "queued": "In Warteschlange",
           "running": "Läuft",
           "completed": "Abgeschlossen",
           "failed": "Fehlgeschlagen"
-        }
+        },
+        "by": "Importiert von"
       },
       "exports": {
         "title": "Exporte",
