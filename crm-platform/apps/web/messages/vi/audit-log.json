@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Nhật ký kiểm tra",
+    "description": "Ai đã thay đổi gì trong không gian làm việc này, khi nào, từ giá trị nào sang giá trị nào. Dùng để trả lời “ai đã làm việc này?”, xem lại các thay đổi của nhóm và kiểm tra những gì bộ phận hỗ trợ nền tảng đã làm khi bạn nhờ giúp đỡ.",
+    "tile": {
+      "label": "Nhật ký kiểm tra",
+      "description": "Xem ai đã thay đổi gì trong không gian làm việc, khi nào, từ giá trị nào sang giá trị nào. Có thể lọc và xuất.",
+      "keywords": "nhật ký hoạt động, kiểm tra, lịch sử, thay đổi, ai đã thay đổi, bảo mật, tuân thủ, xuất, quyền truy cập hỗ trợ"
+    },
+    "retention": {
+      "days": "Các mục được lưu trong {days, plural, other {# ngày}} rồi bị xóa. Nền tảng quy định thời hạn này.",
+      "forever": "Các mục được lưu không giới hạn thời gian. Nền tảng quy định chính sách này.",
+      "unknown": "Các mục được lưu trong thời hạn do nền tảng quy định rồi bị xóa."
+    },
+    "forbidden": {
+      "title": "Bạn không có quyền truy cập nhật ký kiểm tra",
+      "body": "Hãy nhờ Owner hoặc Admin của không gian làm việc cấp cho vai trò của bạn quyền xem nhật ký kiểm tra."
+    },
+    "filters": {
+      "label": "Bộ lọc nhật ký kiểm tra",
+      "range": "Khoảng thời gian",
+      "from": "Từ",
+      "to": "Đến",
+      "actor": "Người thực hiện",
+      "allActors": "Tất cả mọi người",
+      "actorType": "Đối tượng thực hiện",
+      "allActorTypes": "Bất kỳ ai",
+      "module": "Khu vực",
+      "allModules": "Tất cả khu vực",
+      "action": "Hành động",
+      "allActions": "Tất cả hành động",
+      "search": "Tìm khu vực và hành động",
+      "searchHint": "Chỉ khớp với khu vực và hành động, không bao giờ khớp với các giá trị đã thay đổi.",
+      "recordId": "Số bản ghi",
+      "requestId": "ID yêu cầu",
+      "supportOnly": "Chỉ phiên của bộ phận hỗ trợ nền tảng",
+      "apply": "Áp dụng bộ lọc",
+      "refresh": "Làm mới",
+      "reset": "Đặt lại bộ lọc"
+    },
+    "ranges": {
+      "24h": "24 giờ qua",
+      "7d": "7 ngày qua",
+      "30d": "30 ngày qua",
+      "90d": "90 ngày qua",
+      "custom": "Chọn ngày"
+    },
+    "actorTypes": {
+      "user": "Một người",
+      "system": "Hệ thống",
+      "api_key": "Một khóa API",
+      "bot": "Một bot",
+      "partner_agent": "Một đại lý đối tác",
+      "candidate": "Một ứng viên",
+      "other": "Đối tượng khác"
+    },
+    "actors": {
+      "system": "Hệ thống",
+      "api_key": "Khóa API",
+      "apiKeyNamed": "Khóa API: {name}",
+      "bot": "Bot",
+      "partner_agent": "Đại lý đối tác",
+      "candidate": "Ứng viên",
+      "other": "Khác",
+      "removedUser": "Người dùng đã bị xóa",
+      "support": "Hỗ trợ nền tảng",
+      "actingAs": "đang thao tác với tư cách {name}",
+      "supportBadge": "Hỗ trợ nền tảng"
+    },
+    "actions": {
+      "insert": "Đã tạo",
+      "update": "Đã cập nhật",
+      "delete": "Đã xóa",
+      "merge": "Đã gộp",
+      "login": "Đã đăng nhập",
+      "export": "Đã xuất",
+      "read": "Đã xem"
+    },
+    "modules": {
+      "contacts": "Liên hệ",
+      "contact_groups": "Nhóm liên hệ",
+      "contact_notes": "Ghi chú liên hệ",
+      "companies": "Công ty",
+      "deals": "Giao dịch",
+      "tags": "Thẻ",
+      "members": "Thành viên nhóm",
+      "teams": "Nhóm",
+      "conversation_notes": "Ghi chú hội thoại",
+      "broadcasts": "Tin phát sóng",
+      "campaigns": "Chiến dịch",
+      "faqs": "Câu hỏi thường gặp",
+      "api_keys": "Khóa API",
+      "audit-log": "Nhật ký kiểm tra",
+      "audit-log-exports": "Bản xuất nhật ký kiểm tra",
+      "contact_consent_exports": "Bản xuất bằng chứng đồng ý"
+    },
+    "table": {
+      "caption": "Các mục nhật ký kiểm tra, mới nhất trước. Thời gian hiển thị theo múi giờ của bạn ({zone}).",
+      "zone": "Thời gian hiển thị theo múi giờ của bạn: {zone}.",
+      "time": "Khi nào",
+      "actor": "Ai",
+      "action": "Làm gì",
+      "record": "Bản ghi",
+      "changed": "Trường đã thay đổi",
+      "request": "Yêu cầu",
+      "details": "Chi tiết",
+      "openDetails": "Chi tiết thay đổi này: {what}"
+    },
+    "states": {
+      "loading": "Đang tải nhật ký kiểm tra",
+      "empty": "Không có gì được ghi lại trong khoảng thời gian này",
+      "emptyHint": "Các thay đổi của nhóm bạn sẽ xuất hiện ở đây.",
+      "emptyFiltered": "Không có mục nào khớp với các bộ lọc này",
+      "emptyFilteredHint": "Hãy thử khoảng thời gian dài hơn hoặc bỏ bớt một bộ lọc.",
+      "retry": "Thử lại",
+      "showing": "{count, plural, other {Đã tải # mục}}",
+      "loadMore": "Tải thêm",
+      "end": "Hết danh sách"
+    },
+    "detail": {
+      "title": "Mục nhật ký kiểm tra",
+      "when": "Khi nào",
+      "who": "Ai",
+      "what": "Làm gì",
+      "record": "Bản ghi",
+      "openRecord": "Mở bản ghi",
+      "request": "ID yêu cầu",
+      "changes": "Đã thay đổi gì",
+      "field": "Trường",
+      "before": "Trước",
+      "after": "Sau",
+      "noChanges": "Mục này không liệt kê thay đổi theo trường.",
+      "supportTitle": "Bộ phận hỗ trợ nền tảng đã thao tác trong không gian làm việc của bạn",
+      "supportBody": "Một nhân viên hỗ trợ nền tảng đã dùng phiên hỗ trợ với tư cách {name}. Họ có thể làm mọi việc mà người đó làm được.",
+      "supportReason": "Lý do được nêu: {reason}",
+      "supportNoReason": "Không còn lý do của phiên này.",
+      "supportReadOnly": "Phiên này chỉ có quyền xem.",
+      "secret": "Bí mật đã được ẩn",
+      "secretHint": "Mật khẩu, khóa và token không bao giờ được hiển thị.",
+      "maskedHint": "Dữ liệu cá nhân được ẩn một phần.",
+      "maskedNote": "Dữ liệu cá nhân như số điện thoại, địa chỉ email, tên và ghi chú được ẩn một phần. Thông tin bí mật không bao giờ được hiển thị.",
+      "maskedNoteOwner": "Thông tin bí mật như mật khẩu, khóa và token được ẩn với tất cả mọi người.",
+      "audited": "Việc mở mục này được ghi vào nhật ký kiểm tra."
+    },
+    "export": {
+      "title": "Xuất",
+      "note": "Tạo tệp CSV gồm các mục khớp với bộ lọc ở trên. Tệp được lưu trong {days} ngày và luôn ẩn dữ liệu cá nhân.",
+      "button": "Xuất CSV",
+      "preparing": "Đang chuẩn bị tệp",
+      "requested": "Bản xuất đang được chuẩn bị. Chúng tôi sẽ gửi email cho bạn khi sẵn sàng.",
+      "none": "Chưa có bản xuất nào.",
+      "status": {
+        "queued": "Đang chờ",
+        "running": "Đang chuẩn bị",
+        "ready": "Sẵn sàng",
+        "failed": "Thất bại",
+        "expired": "Đã hết hạn"
+      },
+      "rows": "{count, plural, other {# mục}}",
+      "expires": "lưu đến {date}",
+      "download": "Tải xuống",
+      "failed": "Không thể tạo bản xuất này. Hãy yêu cầu lại."
+    },
+    "errors": {
+      "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "notFound": "Không tìm thấy mục hoặc bản xuất đó.",
+      "rangeInvalid": "Hãy chọn khoảng thời gian tối đa 400 ngày, có ngày kết thúc sau ngày bắt đầu.",
+      "exportInProgress": "Một bản xuất đang được chuẩn bị. Hãy đợi email của nó rồi mới yêu cầu bản khác.",
+      "exportNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "validation": "Một trong các bộ lọc không hợp lệ.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+    },
+    "common": {
+      "close": "Đóng",
+      "dismiss": "Bỏ qua"
+    }
+  }
+}

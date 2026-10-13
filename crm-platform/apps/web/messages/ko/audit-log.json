@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "감사 로그",
+    "description": "이 워크스페이스에서 누가 무엇을 언제, 어떤 값에서 어떤 값으로 변경했는지 보여 줘요. \"누가 이렇게 했지?\"라는 질문에 답하고, 팀이 변경한 내용을 검토하고, 도움을 요청했을 때 플랫폼 지원팀이 한 작업을 확인하는 데 사용하세요.",
+    "tile": {
+      "label": "감사 로그",
+      "description": "워크스페이스에서 누가 무엇을 언제, 어떤 값에서 어떤 값으로 변경했는지 확인하세요. 필터링하고 내보낼 수도 있어요.",
+      "keywords": "활동 로그, 감사, 기록, 변경, 변경한 사람, 보안, 규정 준수, 내보내기, 지원 접근"
+    },
+    "retention": {
+      "days": "항목은 {days, plural, other {#일}} 동안 보관된 후 삭제돼요. 이 기간은 플랫폼에서 정해요.",
+      "forever": "항목은 종료일 없이 보관돼요. 이 정책은 플랫폼에서 정해요.",
+      "unknown": "항목은 플랫폼에서 정한 기간 동안 보관된 후 삭제돼요."
+    },
+    "forbidden": {
+      "title": "감사 로그에 접근할 수 없어요",
+      "body": "워크스페이스 Owner 또는 Admin에게 내 역할에 감사 로그 보기 권한을 부여해 달라고 요청하세요."
+    },
+    "filters": {
+      "label": "감사 로그 필터",
+      "range": "기간",
+      "from": "시작",
+      "to": "종료",
+      "actor": "사용자",
+      "allActors": "모든 사용자",
+      "actorType": "실행 주체",
+      "allActorTypes": "모든 주체",
+      "module": "영역",
+      "allModules": "모든 영역",
+      "action": "작업",
+      "allActions": "모든 작업",
+      "search": "영역 및 작업 검색",
+      "searchHint": "영역과 작업만 검색하며, 변경된 값은 검색하지 않아요.",
+      "recordId": "레코드 번호",
+      "requestId": "요청 ID",
+      "supportOnly": "플랫폼 지원 세션만",
+      "apply": "필터 적용",
+      "refresh": "새로고침",
+      "reset": "필터 초기화"
+    },
+    "ranges": {
+      "24h": "최근 24시간",
+      "7d": "최근 7일",
+      "30d": "최근 30일",
+      "90d": "최근 90일",
+      "custom": "날짜 선택"
+    },
+    "actorTypes": {
+      "user": "사용자",
+      "system": "시스템",
+      "api_key": "API 키",
+      "bot": "봇",
+      "partner_agent": "파트너 상담원",
+      "candidate": "후보자",
+      "other": "기타"
+    },
+    "actors": {
+      "system": "시스템",
+      "api_key": "API 키",
+      "apiKeyNamed": "API 키: {name}",
+      "bot": "봇",
+      "partner_agent": "파트너 상담원",
+      "candidate": "후보자",
+      "other": "기타",
+      "removedUser": "삭제된 사용자",
+      "support": "플랫폼 지원팀",
+      "actingAs": "{name} 권한으로 작업",
+      "supportBadge": "플랫폼 지원팀"
+    },
+    "actions": {
+      "insert": "생성됨",
+      "update": "수정됨",
+      "delete": "삭제됨",
+      "merge": "병합됨",
+      "login": "로그인",
+      "export": "내보냄",
+      "read": "조회됨"
+    },
+    "modules": {
+      "contacts": "연락처",
+      "contact_groups": "연락처 그룹",
+      "contact_notes": "연락처 메모",
+      "companies": "회사",
+      "deals": "거래",
+      "tags": "태그",
+      "members": "팀 구성원",
+      "teams": "팀",
+      "conversation_notes": "대화 메모",
+      "broadcasts": "브로드캐스트",
+      "campaigns": "캠페인",
+      "faqs": "FAQ",
+      "api_keys": "API 키",
+      "audit-log": "감사 로그",
+      "audit-log-exports": "감사 로그 내보내기",
+      "contact_consent_exports": "동의 증빙 내보내기"
+    },
+    "table": {
+      "caption": "감사 항목이에요(최신순). 시간은 내 시간대({zone}) 기준으로 표시돼요.",
+      "zone": "시간은 내 시간대({zone}) 기준으로 표시돼요.",
+      "time": "일시",
+      "actor": "누가",
+      "action": "무엇을",
+      "record": "레코드",
+      "changed": "변경된 필드",
+      "request": "요청",
+      "details": "상세",
+      "openDetails": "이 변경의 상세: {what}"
+    },
+    "states": {
+      "loading": "감사 로그를 불러오는 중",
+      "empty": "이 기간에 기록된 내용이 없어요",
+      "emptyHint": "팀이 변경한 내용이 여기에 표시돼요.",
+      "emptyFiltered": "필터와 일치하는 항목이 없어요",
+      "emptyFilteredHint": "기간을 늘리거나 필터를 제거해 보세요.",
+      "retry": "다시 시도",
+      "showing": "{count, plural, other {#개 항목 불러옴}}",
+      "loadMore": "더 보기",
+      "end": "목록의 끝이에요"
+    },
+    "detail": {
+      "title": "감사 항목",
+      "when": "일시",
+      "who": "누가",
+      "what": "무엇을",
+      "record": "레코드",
+      "openRecord": "레코드 열기",
+      "request": "요청 ID",
+      "changes": "변경 내용",
+      "field": "필드",
+      "before": "변경 전",
+      "after": "변경 후",
+      "noChanges": "이 항목에는 필드 변경 내용이 없어요.",
+      "supportTitle": "플랫폼 지원팀이 내 워크스페이스에서 작업했어요",
+      "supportBody": "플랫폼 지원팀 담당자가 {name} 권한으로 지원 세션을 사용했어요. 해당 사용자가 할 수 있는 작업을 수행할 수 있었어요.",
+      "supportReason": "사유: {reason}",
+      "supportNoReason": "이 세션의 사유를 더 이상 확인할 수 없어요.",
+      "supportReadOnly": "읽기 전용 세션이었어요.",
+      "secret": "숨겨진 비밀 정보",
+      "secretHint": "비밀번호, 키, 토큰은 절대 표시되지 않아요.",
+      "maskedHint": "개인정보는 일부 가려져 있어요.",
+      "maskedNote": "전화번호, 이메일 주소, 이름, 메모 같은 개인정보는 일부 가려져 있어요. 비밀 정보는 절대 표시되지 않아요.",
+      "maskedNoteOwner": "비밀번호, 키, 토큰 같은 비밀 정보는 모두에게 숨겨져요.",
+      "audited": "이 항목을 여는 기록은 감사 로그에 남아요."
+    },
+    "export": {
+      "title": "내보내기",
+      "note": "위 필터와 일치하는 항목을 CSV로 준비해요. 파일은 {days}일 동안 보관되며 개인정보는 항상 가려져요.",
+      "button": "CSV 내보내기",
+      "preparing": "파일 준비 중",
+      "requested": "내보내기를 준비하고 있어요. 준비되면 이메일로 알려 드릴게요.",
+      "none": "아직 내보내기가 없어요.",
+      "status": {
+        "queued": "대기 중",
+        "running": "준비 중",
+        "ready": "준비됨",
+        "failed": "실패",
+        "expired": "만료됨"
+      },
+      "rows": "{count, plural, other {#개 항목}}",
+      "expires": "{date}까지 보관",
+      "download": "다운로드",
+      "failed": "이 내보내기를 만들 수 없었어요. 다시 요청하세요."
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없어요. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없어요.",
+      "notFound": "해당 항목 또는 내보내기를 찾을 수 없어요.",
+      "rangeInvalid": "종료일이 시작일 이후이고 최대 400일 이내인 기간을 선택하세요.",
+      "exportInProgress": "이미 내보내기를 준비하고 있어요. 이메일을 받은 후에 다시 요청하세요.",
+      "exportNotReady": "이 내보내기는 아직 준비되지 않았거나 만료되었어요.",
+      "rateLimited": "요청이 너무 많아요. 잠시 후 다시 시도하세요.",
+      "validation": "필터 중 하나가 올바르지 않아요.",
+      "unexpected": "문제가 발생했어요. 다시 시도하세요."
+    },
+    "common": {
+      "close": "닫기",
+      "dismiss": "닫기"
+    }
+  }
+}

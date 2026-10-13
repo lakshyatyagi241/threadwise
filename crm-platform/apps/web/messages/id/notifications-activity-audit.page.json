@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Notifikasi",
+      "description": "Semua yang membutuhkan perhatian Anda, terbaru lebih dulu. Pilih event yang sampai ke Anda di pengaturan notifikasi.",
+      "markAll": "Tandai semua dibaca",
+      "clearAll": "Hapus semua",
+      "preferences": "Pengaturan notifikasi",
+      "clearTitle": "Hapus semua notifikasi?",
+      "clearBody": "Ini menghapus semua notifikasi Anda secara permanen. Orang lain tetap memiliki notifikasi mereka. Tindakan ini tidak dapat dibatalkan.",
+      "clearConfirm": "Hapus semua",
+      "cancel": "Batal",
+      "dismiss": "Abaikan notifikasi ini",
+      "tiles": {
+        "unread": "Belum dibaca",
+        "unreadHint": "Pilih untuk hanya menampilkan yang belum dibaca",
+        "day": "24 jam terakhir",
+        "dayHint": "Diterima hari ini",
+        "week": "7 hari terakhir",
+        "weekHint": "Diterima minggu ini",
+        "total": "Tersimpan",
+        "totalHint": "Yang lebih lama dihapus otomatis"
+      },
+      "filters": {
+        "label": "Filter notifikasi",
+        "readLabel": "Tampilkan",
+        "all": "Semua",
+        "unread": "Belum dibaca",
+        "type": "Jenis",
+        "allTypes": "Semua jenis",
+        "otherTypes": "Lainnya",
+        "search": "Cari notifikasi",
+        "reset": "Reset filter"
+      },
+      "sections": {
+        "today": "Hari ini",
+        "yesterday": "Kemarin",
+        "thisWeek": "Awal minggu ini",
+        "older": "Lebih lama"
+      },
+      "loading": "Memuat notifikasi",
+      "failed": "Tidak dapat memuat notifikasi Anda.",
+      "retry": "Coba lagi",
+      "empty": "Belum ada notifikasi",
+      "emptyHint": "Chat baru, penugasan, sebutan, dan hasil pengiriman Anda akan muncul di sini.",
+      "emptyFiltered": "Tidak ada notifikasi yang cocok dengan filter ini",
+      "emptyFilteredHint": "Hapus filter atau cari hal lain.",
+      "showing": "{count, plural, other {# notifikasi dimuat}}",
+      "loadMore": "Muat lebih banyak",
+      "end": "Akhir daftar"
+    }
+  }
+}
