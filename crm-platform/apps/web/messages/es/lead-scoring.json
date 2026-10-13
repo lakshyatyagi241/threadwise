@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Descartar",
       "retry": "Reintentar",
-      "requestId": "Solicitud {id}",
       "noAccessTitle": "No tienes acceso a esta pantalla",
       "noAccess": "Pide a un administrador del espacio de trabajo que dé a tu rol el permiso {permission}."
     },

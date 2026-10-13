@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "重试",
-      "requestId": "请求 {id}",
       "noAccessTitle": "你无权访问此页面",
       "noAccess": "请让工作区管理员为你的角色授予权限 {permission}。"
     },

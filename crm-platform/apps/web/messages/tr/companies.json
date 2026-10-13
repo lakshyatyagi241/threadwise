@@ -18,7 +18,6 @@
       "planDisabled": "Planınız şirketleri içermiyor. Kilidini açmak için yükseltin.",
       "ownerInvalid": "Sahibi bu çalışma alanının etkin bir üyesi olmalıdır.",
       "unexpected": "Bir şeyler ters gitti. Birazdan tekrar deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Tekrar dene"
     },
     "list": {

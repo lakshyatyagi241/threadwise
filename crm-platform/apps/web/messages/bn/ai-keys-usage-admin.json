@@ -14,7 +14,6 @@
     "common": {
       "loading": "লোড হচ্ছে",
       "retry": "আবার চেষ্টা করুন",
-      "requestId": "রিকোয়েস্ট আইডি",
       "dismiss": "সরিয়ে দিন",
       "tokens": "{count, number}টি টোকেন",
       "dash": "-",

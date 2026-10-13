@@ -193,7 +193,6 @@
         "outOfOrder": "Krok wykonano w złej kolejności. Przeładuj stronę i zacznij ponownie.",
         "step": "Krok instalacji się nie powiódł. Sprawdź dane i logi serwera, a następnie spróbuj ponownie.",
         "unknown": "Coś poszło nie tak. Spróbuj ponownie.",
-        "requestId": "ID żądania {id}",
         "prerequisites": "Serwer nie jest gotowy do konfiguracji: {items}.",
         "licence": {
           "empty": "Wpisz kod zakupu CodeCanyon.",
@@ -265,7 +264,6 @@
       "loading": "Wczytywanie",
       "errorForbidden": "Nie masz dostępu do tej strony.",
       "errorUnexpected": "Nie udało się wczytać aktualizatora.",
-      "requestId": "ID żądania",
       "retry": "Spróbuj ponownie",
       "licence": {
         "kicker": "krok 1 · licencja",

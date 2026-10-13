@@ -382,7 +382,7 @@ describe('FAQ engine admin page', () => {
       throw new ApiError(500, 'INTERNAL', 'x', 'req-7');
     });
     await mount();
-    expect(text()).toContain('req-7');
+    expect(text()).not.toContain('req-7');
     expect(button('Try again')).toBeDefined();
   });
 });

@@ -21,7 +21,6 @@
       "unavailable": "API 的这一部分暂不可用。",
       "rateLimited": "请求过多。请稍候再试。",
       "unexpected": "出了点问题。请重试。",
-      "requestId": "请求 ID",
       "retry": "重试",
       "reservedKey": "该键已被内置令牌保留。请选择其他键。",
       "attributeInUse": "部分联系人在此属性上有值。",

@@ -64,7 +64,6 @@
       "conflict": "Quelqu’un d’autre a enregistré ces paramètres après que vous les avez ouverts. Rechargez pour voir ses modifications, puis réappliquez les vôtres.",
       "reload": "Recharger les paramètres",
       "unexpected": "Une erreur est survenue, rien n’a été enregistré.",
-      "requestId": "ID de la requête",
       "readOnly": "Vous pouvez consulter ces paramètres, mais seul un super administrateur peut les modifier.",
       "secretSet": "Enregistré. Laissez vide pour le conserver.",
       "secretUnset": "Non défini.",

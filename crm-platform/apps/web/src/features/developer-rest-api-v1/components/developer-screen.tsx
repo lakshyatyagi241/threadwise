@@ -286,11 +286,6 @@ export function NoticeBox({ notice }: { notice: Notice }) {
             {t('upgrade')}
           </Link>
         )}
-        {notice.requestId && (
-          <p className="font-mono text-[10px] opacity-70">
-            {t('requestId', { id: notice.requestId })}
-          </p>
-        )}
       </div>
     </div>
   );
@@ -305,13 +300,9 @@ export function toNotice(e: unknown): Notice {
 function LoadFailed({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   const t = useTranslations('developer-rest-api-v1.errors');
   const kind = errorKind(error);
-  const n = toNotice(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{kind === 'forbidden' ? t('forbidden') : t('loadFailed')}</p>
-      {n.requestId && (
-        <p className="font-mono text-[10px] opacity-70">{t('requestId', { id: n.requestId })}</p>
-      )}
       <Button variant="secondary" size="sm" onClick={onRetry}>
         {t('retry')}
       </Button>

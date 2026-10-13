@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Sluiten",
-      "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-id"
+      "retry": "Opnieuw proberen"
     },
     "errors": {
       "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",

@@ -214,7 +214,6 @@
         "sessionExpired": "セキュリティのためセッションの有効期限が切れました。もう一度お試しください。",
         "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
         "unexpected": "サーバー側で問題が発生しました。もう一度お試しください。",
-        "requestId": "リクエストID",
         "signupExpired": "最初から登録をやり直してください。",
         "policyRules": {
           "min_length": "{min, plural, other {#文字}}以上で入力してください。",

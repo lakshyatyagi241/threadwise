@@ -19,7 +19,6 @@
       "optional": "optioneel",
       "required": "verplicht",
       "readOnly": "Je kunt deze pagina bekijken, maar alleen een superbeheerder kan haar wijzigen.",
-      "requestId": "Verzoek-ID",
       "errors": {
         "forbidden": "Je hebt geen toegang tot deze pagina.",
         "request": "Het verzoek kon niet worden voltooid.",

@@ -35,7 +35,6 @@
       "notFound": "Không tìm thấy giao dịch đó. Có thể nó đã bị xóa.",
       "planDisabled": "Gói của bạn không bao gồm quy trình bán hàng. Hãy nâng cấp để mở khóa.",
       "unexpected": "Đã xảy ra lỗi. Hãy thử lại sau giây lát.",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại",
       "planLimit": "Bạn đã đạt giới hạn của gói.",
       "lostReasonRequired": "Hãy chọn lý do để đánh dấu giao dịch là thất bại.",

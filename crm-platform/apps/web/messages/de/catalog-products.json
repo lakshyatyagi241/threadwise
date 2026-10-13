@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Schließen",
-      "retry": "Erneut versuchen",
-      "requestId": "Anfrage-ID"
+      "retry": "Erneut versuchen"
     },
     "errors": {
       "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",

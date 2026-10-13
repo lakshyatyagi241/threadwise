@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "إغلاق",
       "retry": "حاول مرة أخرى",
-      "requestId": "الطلب {id}",
       "noAccessTitle": "ليس لديك صلاحية الوصول إلى هذه الشاشة",
       "noAccess": "اطلب من مسؤول مساحة العمل منح دورك الإذن {permission}."
     },

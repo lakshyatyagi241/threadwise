@@ -159,7 +159,7 @@ describe('ScoreCard', () => {
       const alert = host.querySelector('[role="alert"]')!;
       expect(alert.textContent).toContain(text(`scoreErrors.${key}`));
       expect(alert.textContent).not.toContain('server words');
-      expect(alert.textContent).toContain('Request req-1');
+      expect(alert.textContent).not.toContain('Request req-1');
     });
 
     it('links LSC_NOT_ENABLED to the settings screen and LSC_NO_KEY to the AI keys screen', async () => {

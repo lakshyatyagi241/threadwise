@@ -5,8 +5,7 @@
       "loading": "Memuat",
       "retry": "Coba lagi",
       "copied": "Disalin",
-      "copyFailed": "Tidak dapat menyalin: pilih teksnya dan salin secara manual",
-      "requestId": "Referensi: {id}"
+      "copyFailed": "Tidak dapat menyalin: pilih teksnya dan salin secara manual"
     },
     "states": {
       "noAccessTitle": "Anda tidak memiliki akses ke Prospek media sosial",

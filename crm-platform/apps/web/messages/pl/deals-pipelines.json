@@ -35,7 +35,6 @@
       "notFound": "Nie znaleziono tej transakcji. Mogła zostać usunięta.",
       "planDisabled": "Twój plan nie obejmuje lejka sprzedaży. Zmień plan, aby go odblokować.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "requestId": "Identyfikator żądania",
       "retry": "Spróbuj ponownie",
       "planLimit": "Osiągnięto limit Twojego planu.",
       "lostReasonRequired": "Wybierz powód, aby oznaczyć transakcję jako przegraną.",

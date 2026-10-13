@@ -257,7 +257,6 @@
       "ownerInvalid": "Pemilik harus merupakan anggota workspace yang aktif.",
       "invoicingUnavailable": "Penagihan belum tersedia, sehingga dokumen ini tidak dapat dikonversi.",
       "unexpected": "Terjadi kesalahan. Coba lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi"
     },
     "link": {

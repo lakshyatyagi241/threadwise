@@ -22,7 +22,6 @@
         "signedOut": "Your session has ended. Please sign in again.",
         "rateLimited": "Too many attempts. Please wait a moment and try again.",
         "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
-        "requestId": "Request id",
         "locked": "Too many failed attempts. Wait a while before trying again.",
         "lockedWait": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
       },

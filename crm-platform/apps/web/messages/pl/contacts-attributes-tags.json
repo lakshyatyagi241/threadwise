@@ -21,7 +21,6 @@
       "unavailable": "Ta część API nie jest jeszcze dostępna.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
-      "requestId": "Identyfikator żądania",
       "retry": "Spróbuj ponownie",
       "reservedKey": "Ten klucz jest zarezerwowany dla wbudowanego tokenu. Wybierz inny.",
       "attributeInUse": "Niektóre kontakty mają wartość dla tego atrybutu.",

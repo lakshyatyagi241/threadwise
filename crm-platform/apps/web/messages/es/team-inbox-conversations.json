@@ -137,7 +137,6 @@
       "unsupported": "Este canal no puede enviar ese tipo de mensaje o archivo.",
       "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
       "generic": "Algo salió mal. Inténtalo de nuevo.",
-      "genericWithId": "Algo salió mal. Inténtalo de nuevo. Referencia: {id}",
       "templateNotSendable": "Esa plantilla no se puede enviar en esta conversación. Elige otra.",
       "groupSendUnavailable": "El envío a grupos de WhatsApp todavía no está disponible. Responde desde la app WhatsApp Business.",
       "logRange": "Elige fechas dentro del último año, con el inicio antes del fin y sin fechas futuras.",

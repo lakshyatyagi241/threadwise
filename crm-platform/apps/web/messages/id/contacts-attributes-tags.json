@@ -21,7 +21,6 @@
       "unavailable": "Bagian API ini belum tersedia.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "unexpected": "Terjadi kesalahan. Coba lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "reservedKey": "Kunci itu dicadangkan untuk token bawaan. Pilih yang lain.",
       "attributeInUse": "Beberapa kontak memiliki nilai untuk atribut ini.",

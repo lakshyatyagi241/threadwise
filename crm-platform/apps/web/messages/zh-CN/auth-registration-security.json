@@ -214,7 +214,6 @@
         "sessionExpired": "出于安全考虑，你的会话已过期，请重试。",
         "network": "无法连接服务器。请检查网络连接后重试。",
         "unexpected": "我们这边出了点问题，请重试。",
-        "requestId": "请求 ID",
         "signupExpired": "请重新开始注册。",
         "policyRules": {
           "min_length": "请至少使用 {min, plural, other {# 个字符}}。",

@@ -734,11 +734,6 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       {fatal && (
         <Alert tone="danger" className="space-y-1">
           <p>{t('common.unexpected')}</p>
-          {fatal.requestId && (
-            <p className="text-xs opacity-80">
-              {t('common.requestId')}: <span className="font-mono">{fatal.requestId}</span>
-            </p>
-          )}
         </Alert>
       )}
       {tested && (

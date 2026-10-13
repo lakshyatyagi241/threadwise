@@ -46,7 +46,6 @@
         "copyFailed": "Could not copy",
         "loading": "Loading",
         "retry": "Try again",
-        "requestId": "Request id",
         "errors": {
           "forbidden": "Your role does not allow this.",
           "request": "The request was refused. Reload the page and try again.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Operator sign-in",
         "intro": "This console is for the people who run the platform. Workspace users sign in on the main sign-in page.",
-        "requestId": "Request id",
         "submit": "Sign in",
         "submitting": "Signing in",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Your account",
         "title": "Two-factor authentication",
         "description": "Protect {email} with an authenticator app. Operator accounts are the highest-trust accounts on the platform.",
-        "requestId": "Request id",
         "status": {
           "title": "Authenticator app",
           "on": "On",
@@ -181,7 +178,6 @@
         "saving": "Saving",
         "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
         "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
-        "requestId": "Request id",
         "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
         "discard": "Discard changes",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Working",
             "close": "Close",
             "signInAgain": "Sign in again",
-            "requestId": "Request id",
             "errors": {
               "forbidden": "Only a super admin can run this action.",
               "unexpected": "The action did not complete. Check the event log before trying again."
@@ -731,7 +726,6 @@
         "saving": "Saving",
         "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
         "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
-        "requestId": "Request id",
         "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
         "discard": "Discard changes",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "A test code was sent to {to}.",
             "remaining": "{count, plural, one {# test left this hour.} other {# tests left this hour.}}",
             "notShown": "The code is not shown here; read it on the phone.",
-            "requestId": "Request id",
             "errors": {
               "invalidNumber": "Enter the number with its country code, for example +91 98765 43221.",
               "rateLimited": "Too many test codes this hour. Try again in {minutes, plural, one {# minute} other {# minutes}}.",
@@ -1045,7 +1038,6 @@
           "saved": "Sender saved",
           "removed": "Sender removed",
           "secretRemoved": "Saved secret removed",
-          "requestId": "Request id",
           "problems": {
             "required": "This field is required.",
             "tooLong": "At most {max} characters.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "That footer was not accepted.",
             "unexpected": "The footer could not be saved. Try again in a moment."
-          },
-          "requestId": "Request id"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Saving",
         "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
         "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
-        "requestId": "Request id",
         "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
         "discard": "Discard changes",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Cancel",
           "working": "Removing",
           "error": "The secret could not be removed. Try again in a moment.",
-          "requestId": "Request id",
           "done": "The saved {name} secret was removed.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "Saving",
         "saved": "{count, plural, one {# setting saved} other {# settings saved}}",
         "rejected": "Nothing was saved. {count, plural, one {# field was} other {# fields were}} rejected.",
-        "requestId": "Request id",
         "unsaved": "{count, plural, one {# unsaved change} other {# unsaved changes}}",
         "discard": "Discard changes",
         "errors": {

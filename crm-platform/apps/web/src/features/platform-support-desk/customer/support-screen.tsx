@@ -131,16 +131,7 @@ export function SupportScreen() {
             {t('created', { number: justSubmitted })}
           </Alert>
         )}
-        {create.isError && (
-          <Alert tone="danger">
-            {te(errorKey(create.error))}
-            {create.error instanceof ApiError && create.error.requestId && (
-              <span className="ms-2 font-mono text-xs">
-                {te('requestId')}: {create.error.requestId}
-              </span>
-            )}
-          </Alert>
-        )}
+        {create.isError && <Alert tone="danger">{te(errorKey(create.error))}</Alert>}
 
         <div className="grid items-start gap-5 xl:grid-cols-[20rem_minmax(0,1fr)]">
           <aside className="overflow-hidden rounded-lg border bg-background">

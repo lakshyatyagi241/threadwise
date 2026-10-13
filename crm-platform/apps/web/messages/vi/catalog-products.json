@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Đóng",
-      "retry": "Thử lại",
-      "requestId": "ID yêu cầu"
+      "retry": "Thử lại"
     },
     "errors": {
       "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối và thử lại.",

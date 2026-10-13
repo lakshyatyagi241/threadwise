@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "Bạn đã đạt giới hạn của gói.",
       "WA_UNOFFICIAL_DISABLED": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn số WhatsApp Business API chính thức.",
       "AUTH_SEND_HALTED": "Việc gửi tin đã bị tạm dừng cho không gian làm việc này.",
-      "upgrade": "Xem các gói và nâng cấp",
-      "requestId": "Yêu cầu {id}"
+      "upgrade": "Xem các gói và nâng cấp"
     },
     "actions": {
       "done": {

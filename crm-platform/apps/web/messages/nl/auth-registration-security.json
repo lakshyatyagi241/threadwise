@@ -214,7 +214,6 @@
         "sessionExpired": "Je sessie is om veiligheidsredenen verlopen. Probeer het opnieuw.",
         "network": "We kunnen de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
         "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw.",
-        "requestId": "Aanvraag-id",
         "signupExpired": "Begin de registratie opnieuw.",
         "policyRules": {
           "min_length": "Gebruik minimaal {min, plural, one {# teken} other {# tekens}}.",

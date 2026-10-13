@@ -18,7 +18,6 @@
       "planDisabled": "Votre forfait n’inclut pas les entreprises. Passez à un forfait supérieur pour les débloquer.",
       "ownerInvalid": "Le propriétaire doit être un membre actif de cet espace de travail.",
       "unexpected": "Un problème est survenu. Réessayez dans un instant.",
-      "requestId": "ID de requête",
       "retry": "Réessayer"
     },
     "list": {

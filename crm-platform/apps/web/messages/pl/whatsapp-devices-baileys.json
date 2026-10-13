@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "Odrzuć",
-      "requestId": "Żądanie {id}",
       "unofficial": "Nieoficjalne",
       "reminder": "Nieoficjalne połączenie. WhatsApp może ograniczyć ten numer.",
       "readGuide": "Przeczytaj przewodnik",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "Usługa połączeń jest niedostępna. Spróbuj ponownie za kilka minut.",
       "RATE_LIMITED": "Zbyt wiele żądań. Poczekaj chwilę.",
       "upgrade": "Zobacz plany i zmień na wyższy",
-      "requestId": "Żądanie {id}",
       "DEVICE_PILOT_CAP_REACHED": "Twoja przestrzeń robocza osiągnęła liczbę osobistych numerów WhatsApp dozwolonych w okresie pilotażowym. Usuń jeden, aby połączyć inny.",
       "DEVICE_CREATE_RATE_LIMITED": "W ciągu ostatniej godziny dodano zbyt wiele numerów. Spróbuj ponownie później.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "W ciągu ostatniej godziny dodano zbyt wiele numerów. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}.",

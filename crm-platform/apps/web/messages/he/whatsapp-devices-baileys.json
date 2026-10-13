@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "סגירה",
-      "requestId": "בקשה {id}",
       "unofficial": "לא רשמי",
       "reminder": "חיבור לא רשמי. WhatsApp עלולה להגביל את המספר הזה.",
       "readGuide": "קראו את המדריך",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "שירות החיבור אינו זמין. נסה שוב בעוד כמה דקות.",
       "RATE_LIMITED": "יותר מדי בקשות. המתן רגע.",
       "upgrade": "צפה בתוכניות ושדרג",
-      "requestId": "בקשה {id}",
       "DEVICE_PILOT_CAP_REACHED": "סביבת העבודה שלך הגיעה למספר מספרי WhatsApp אישיים המותרים בתקופת הפיילוט. מחק מספר אחד כדי לחבר מספר אחר.",
       "DEVICE_CREATE_RATE_LIMITED": "נוספו יותר מדי מספרים בשעה האחרונה. נסה שוב מאוחר יותר.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "נוספו יותר מדי מספרים בשעה האחרונה. נסה שוב בעוד {minutes, plural, one {# דקה} two {# דקות} other {# דקות}}.",

@@ -156,7 +156,6 @@
       "notFound": "Ten numer już nie istnieje. Lista została odświeżona.",
       "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie.",
-      "genericWithId": "Coś poszło nie tak. Spróbuj ponownie. Numer referencyjny: {id}",
       "detail": "Szczegóły: {detail}",
       "fix": {
         "tokenInvalid": "Utwórz stały token użytkownika systemowego w ustawieniach firmy w Meta i wklej go w sekcji Edytuj dane uwierzytelniające.",

@@ -193,7 +193,6 @@
         "outOfOrder": "Uma etapa foi executada fora de ordem. Recarregue a página e comece de novo.",
         "step": "Uma etapa da instalação falhou. Confira seus dados e os registros do servidor e tente novamente.",
         "unknown": "Algo deu errado. Tente novamente.",
-        "requestId": "ID da solicitação {id}",
         "prerequisites": "O servidor não está pronto para a instalação: {items}.",
         "licence": {
           "empty": "Informe seu código de compra do CodeCanyon.",
@@ -265,7 +264,6 @@
       "loading": "Carregando",
       "errorForbidden": "Você não pode ver esta página.",
       "errorUnexpected": "Não foi possível carregar o atualizador.",
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente",
       "licence": {
         "kicker": "etapa 1 · licença",

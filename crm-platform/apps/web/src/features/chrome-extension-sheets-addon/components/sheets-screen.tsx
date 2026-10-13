@@ -106,13 +106,10 @@ function Header({ overview }: { overview: ExtSheetsOverview | undefined }) {
 
 export function LoadFailed({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   const t = useTranslations('chrome-extension-sheets-addon.page');
-  const c = useTranslations('chrome-extension-sheets-addon.common');
-  const requestId = error instanceof ApiError ? error.requestId : undefined;
   return (
     <Alert tone="danger">
       <p className="font-semibold">{t('loadFailed.title')}</p>
       <p>{t(`loadFailed.${errorKind(error)}`)}</p>
-      {requestId && <p className="mt-1 font-mono text-xs">{c('reference', { id: requestId })}</p>}
       <Button className="mt-2" variant="secondary" size="sm" onClick={onRetry}>
         {t('retry')}
       </Button>
@@ -243,7 +240,6 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
       {notice && (
         <Alert tone="danger" className="mt-3">
           <p>{t(`errors.${notice.kind}`)}</p>
-          {notice.requestId && <p className="mt-1 font-mono text-xs">{notice.requestId}</p>}
         </Alert>
       )}
 

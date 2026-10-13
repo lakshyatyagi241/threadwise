@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Dismiss",
       "retry": "Try again",
-      "requestId": "Request {id}",
       "noAccessTitle": "You do not have access to this screen",
       "noAccess": "Ask a workspace admin to give your role the permission {permission}."
     },

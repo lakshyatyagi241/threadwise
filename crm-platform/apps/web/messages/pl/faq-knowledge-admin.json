@@ -7,7 +7,6 @@
     "common": {
       "loading": "Wczytywanie",
       "retry": "Spróbuj ponownie",
-      "requestId": "Identyfikator żądania",
       "dash": "-",
       "cancel": "Anuluj",
       "errors": {

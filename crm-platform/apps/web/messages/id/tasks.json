@@ -282,7 +282,6 @@
       "planDisabled": "Paket Anda tidak mencakup tugas. Tingkatkan paket untuk membukanya.",
       "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini.",
       "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi"
     },
     "toast": {

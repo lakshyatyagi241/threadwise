@@ -46,7 +46,6 @@
         "copyFailed": "Copie impossible",
         "loading": "Chargement",
         "retry": "Réessayer",
-        "requestId": "ID de requête",
         "errors": {
           "forbidden": "Votre rôle ne permet pas cette action.",
           "request": "La requête a été refusée. Rechargez la page et réessayez.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Connexion opérateur",
         "intro": "Cette console est destinée aux personnes qui exploitent la plateforme. Les utilisateurs d’espaces de travail se connectent sur la page de connexion principale.",
-        "requestId": "ID de requête",
         "submit": "Se connecter",
         "submitting": "Connexion",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Votre compte",
         "title": "Authentification à deux facteurs",
         "description": "Protégez {email} avec une application d’authentification. Les comptes opérateur sont les comptes les plus sensibles de la plateforme.",
-        "requestId": "ID de requête",
         "status": {
           "title": "Application d’authentification",
           "on": "Activée",
@@ -181,7 +178,6 @@
         "saving": "Enregistrement",
         "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
         "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
-        "requestId": "ID de requête",
         "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
         "discard": "Annuler les modifications",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "En cours",
             "close": "Fermer",
             "signInAgain": "Se reconnecter",
-            "requestId": "ID de requête",
             "errors": {
               "forbidden": "Seul un super administrateur peut exécuter cette action.",
               "unexpected": "L’action ne s’est pas terminée. Consultez le journal des événements avant de réessayer."
@@ -731,7 +726,6 @@
         "saving": "Enregistrement",
         "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
         "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
-        "requestId": "ID de requête",
         "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
         "discard": "Annuler les modifications",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Un code de test a été envoyé à {to}.",
             "remaining": "{count, plural, one {# test restant cette heure.} other {# tests restants cette heure.}}",
             "notShown": "Le code n’est pas affiché ici ; lisez-le sur le téléphone.",
-            "requestId": "ID de requête",
             "errors": {
               "invalidNumber": "Saisissez le numéro avec son indicatif de pays, par exemple +91 98765 43221.",
               "rateLimited": "Trop de codes de test cette heure. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}.",
@@ -1045,7 +1038,6 @@
           "saved": "Expéditeur enregistré",
           "removed": "Expéditeur supprimé",
           "secretRemoved": "Secret enregistré supprimé",
-          "requestId": "ID de requête",
           "problems": {
             "required": "Ce champ est obligatoire.",
             "tooLong": "{max} caractères au maximum.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Ce pied de message n’a pas été accepté.",
             "unexpected": "Le pied de message n’a pas pu être enregistré. Réessayez dans un instant."
-          },
-          "requestId": "ID de requête"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Enregistrement",
         "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
         "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
-        "requestId": "ID de requête",
         "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
         "discard": "Annuler les modifications",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Annuler",
           "working": "Suppression",
           "error": "Le secret n’a pas pu être supprimé. Réessayez dans un instant.",
-          "requestId": "ID de requête",
           "done": "Le secret {name} enregistré a été supprimé.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "Enregistrement",
         "saved": "{count, plural, one {# paramètre enregistré} other {# paramètres enregistrés}}",
         "rejected": "Rien n’a été enregistré. {count, plural, one {# champ a été rejeté} other {# champs ont été rejetés}}.",
-        "requestId": "ID de requête",
         "unsaved": "{count, plural, one {# modification non enregistrée} other {# modifications non enregistrées}}",
         "discard": "Annuler les modifications",
         "errors": {

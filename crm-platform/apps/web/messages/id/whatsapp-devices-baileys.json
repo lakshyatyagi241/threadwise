@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "Tutup",
-      "requestId": "Permintaan {id}",
       "unofficial": "Tidak resmi",
       "reminder": "Koneksi tidak resmi. WhatsApp dapat membatasi nomor ini.",
       "readGuide": "Baca panduannya",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "Layanan koneksi tidak tersedia. Coba lagi dalam beberapa menit.",
       "RATE_LIMITED": "Terlalu banyak permintaan. Tunggu sebentar.",
       "upgrade": "Lihat paket dan tingkatkan",
-      "requestId": "Permintaan {id}",
       "DEVICE_PILOT_CAP_REACHED": "Workspace Anda telah mencapai jumlah nomor WhatsApp pribadi yang diizinkan selama pilot. Hapus satu untuk menghubungkan yang lain.",
       "DEVICE_CREATE_RATE_LIMITED": "Terlalu banyak nomor ditambahkan dalam satu jam terakhir. Coba lagi nanti.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "Terlalu banyak nomor ditambahkan dalam satu jam terakhir. Coba lagi dalam {minutes, plural, other {# menit}}.",

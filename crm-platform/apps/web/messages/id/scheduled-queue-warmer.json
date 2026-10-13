@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "Anda telah mencapai batas paket Anda.",
       "WA_UNOFFICIAL_DISABLED": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
       "AUTH_SEND_HALTED": "Pengiriman dihentikan untuk workspace ini.",
-      "upgrade": "Lihat paket dan tingkatkan",
-      "requestId": "Permintaan {id}"
+      "upgrade": "Lihat paket dan tingkatkan"
     },
     "actions": {
       "done": {

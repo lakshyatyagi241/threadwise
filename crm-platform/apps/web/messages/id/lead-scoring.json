@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Tutup",
       "retry": "Coba lagi",
-      "requestId": "Permintaan {id}",
       "noAccessTitle": "Anda tidak memiliki akses ke layar ini",
       "noAccess": "Minta admin ruang kerja untuk memberikan izin {permission} kepada peran Anda."
     },

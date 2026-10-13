@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "닫기",
       "retry": "다시 시도",
-      "requestId": "요청 {id}",
       "noAccessTitle": "이 화면을 열 수 없습니다",
       "noAccess": "관리자에게 “{permission}” 권한을 요청하세요."
     },

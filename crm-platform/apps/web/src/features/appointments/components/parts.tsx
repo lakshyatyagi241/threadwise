@@ -6,7 +6,7 @@ import { useEffect, useState, type ComponentProps } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import type { AppointmentStatus } from '../api/schemas';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 import { avatarColor, initials, safeColor } from '../lib/format';
 import { STATUS_TONE, TONE_CHIP, TONE_DOT, type Tone } from '../lib/status';
 
@@ -128,15 +128,9 @@ export function ErrorLine({
 }) {
   const t = useTranslations('appointments.errors');
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone={kind === 'unavailable' ? 'warning' : 'danger'} className={className}>
       <span>{t(kind)}</span>
-      {requestId && (
-        <span className="mt-1 block text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </span>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}

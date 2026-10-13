@@ -22,7 +22,6 @@
         "signedOut": "你的会话已结束。请重新登录。",
         "rateLimited": "尝试次数过多。请稍等片刻后重试。",
         "rateLimitedWait": "尝试次数过多。请在 {seconds, plural, other {# 秒}}后重试。",
-        "requestId": "请求 ID",
         "locked": "失败次数过多。请稍等一段时间后再试。",
         "lockedWait": "失败次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
       },

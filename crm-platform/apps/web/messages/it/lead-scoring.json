@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Chiudi",
       "retry": "Riprova",
-      "requestId": "Richiesta {id}",
       "noAccessTitle": "Non hai accesso a questa schermata",
       "noAccess": "Chiedi a un amministratore dello spazio di lavoro di assegnare al tuo ruolo il permesso {permission}."
     },

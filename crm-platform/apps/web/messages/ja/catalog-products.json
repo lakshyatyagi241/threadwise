@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "閉じる",
-      "retry": "再試行",
-      "requestId": "リクエストID"
+      "retry": "再試行"
     },
     "errors": {
       "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",

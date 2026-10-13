@@ -11,7 +11,6 @@
       "breadcrumb": "Navigationspfad",
       "loading": "Wird geladen…",
       "retry": "Erneut versuchen",
-      "requestId": "Anfrage-ID",
       "cancel": "Abbrechen",
       "noAccess": {
         "title": "Sie haben keinen Zugriff auf diese Ansicht",

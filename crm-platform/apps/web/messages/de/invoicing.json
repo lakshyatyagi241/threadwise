@@ -40,7 +40,6 @@
       "planDisabled": "Ihr Tarif enthält keine Rechnungsstellung.",
       "invalidState": "Das ist im aktuellen Status der Rechnung nicht möglich. Laden Sie neu und prüfen Sie den Status.",
       "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es erneut.",
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen"
     },
     "picker": {

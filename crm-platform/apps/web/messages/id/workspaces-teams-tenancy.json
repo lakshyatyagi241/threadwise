@@ -11,8 +11,7 @@
       "copied": "Tersalin",
       "retry": "Coba lagi",
       "loadMore": "Muat lainnya",
-      "loadingMore": "Memuat",
-      "requestId": "ID permintaan"
+      "loadingMore": "Memuat"
     },
     "tiers": {
       "owner": "Pemilik",

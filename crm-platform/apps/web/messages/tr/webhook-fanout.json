@@ -7,7 +7,6 @@
     "common": {
       "loading": "Yükleniyor",
       "retry": "Yeniden dene",
-      "requestId": "İstek kimliği",
       "dash": "-",
       "errors": {
         "forbidden": "Bunu yapmaya yetkiniz yok.",

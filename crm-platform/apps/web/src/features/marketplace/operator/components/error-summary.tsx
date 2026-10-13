@@ -32,7 +32,6 @@ export function ErrorSummary({
   attempted: boolean;
 }) {
   const t = useTranslations(NS);
-  const tc = useTranslations('marketplace.operator.common');
   const errorText = useErrorText();
   const total = manifestCount + recipeCount + fieldCount;
   if (!general && !(attempted && total > 0)) return null;
@@ -67,11 +66,6 @@ export function ErrorSummary({
           )}
           {fieldCount > 0 && <li>{t('fields', { count: fieldCount })}</li>}
         </ul>
-      )}
-      {sentence?.requestId && (
-        <p className="text-xs opacity-80">
-          {tc('requestId')}: <span className="font-mono">{sentence.requestId}</span>
-        </p>
       )}
     </div>
   );

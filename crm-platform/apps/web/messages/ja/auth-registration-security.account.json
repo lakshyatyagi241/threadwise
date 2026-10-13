@@ -22,7 +22,6 @@
         "signedOut": "セッションが終了しました。もう一度サインインしてください。",
         "rateLimited": "試行回数が多すぎます。しばらく待ってからもう一度お試しください。",
         "rateLimitedWait": "試行回数が多すぎます。{seconds, plural, other {# 秒}}後にもう一度お試しください。",
-        "requestId": "リクエストID",
         "locked": "失敗が続いています。しばらく待ってからもう一度お試しください。",
         "lockedWait": "失敗が続いています。{minutes, plural, other {# 分}}後にもう一度お試しください。"
       },

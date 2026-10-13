@@ -36,7 +36,6 @@
       "slotTaken": "Quell'orario è appena stato preso. Scegline un altro.",
       "gone": "Questa prenotazione non può più essere modificata.",
       "unexpected": "Qualcosa è andato storto. Riprova tra un attimo.",
-      "requestId": "ID richiesta",
       "retry": "Riprova",
       "invalidTransition": "Questa prenotazione non è in uno stato in cui si può eseguire questa azione. Ricarica per vedere a che punto è.",
       "notStarted": "Si può fare solo dopo l'inizio della prenotazione.",

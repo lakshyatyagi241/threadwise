@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Chargement...",
-      "retry": "Réessayer",
-      "requestId": "Identifiant de la requête"
+      "retry": "Réessayer"
     },
     "errors": {
       "conflict": "Quelqu’un d’autre a modifié ce fournisseur pendant que vous le modifiiez. La dernière version a été chargée ; vérifiez-la et appliquez à nouveau votre modification.",

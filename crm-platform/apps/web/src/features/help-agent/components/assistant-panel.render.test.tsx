@@ -284,7 +284,7 @@ describe('assistant panel: failed', () => {
     );
     expect(out).toContain('data-testid="assistant-error"');
     expect(out).toContain('The AI service did not answer');
-    expect(out).toContain('Request ID: req-123');
+    expect(out).not.toContain('Request ID: req-123');
     expect(out).toContain('Try again');
   });
   it('has a message for every kind of failure', () => {
@@ -387,6 +387,6 @@ describe('assistant panel: Arabic', () => {
     expect(idle).toContain('أرني بدلاً من ذلك');
     const confirm = html(states[3]!, 'ar');
     expect(confirm.indexOf('>رفض<')).toBeLessThan(confirm.indexOf('>سماح مرة واحدة<'));
-    expect(html(states[6]!, 'ar')).toContain('معرّف الطلب: r-1');
+    expect(html(states[6]!, 'ar')).not.toContain('معرّف الطلب: r-1');
   });
 });

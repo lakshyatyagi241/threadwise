@@ -7,7 +7,6 @@
     "common": {
       "loading": "جارٍ التحميل",
       "retry": "إعادة المحاولة",
-      "requestId": "معرّف الطلب",
       "dash": "-",
       "cancel": "إلغاء",
       "errors": {

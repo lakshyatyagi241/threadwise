@@ -4,8 +4,7 @@
       "title": "Plantillas"
     },
     "common": {
-      "dismiss": "Descartar",
-      "requestId": "ID de la solicitud"
+      "dismiss": "Descartar"
     },
     "status": {
       "draft": "Borrador",

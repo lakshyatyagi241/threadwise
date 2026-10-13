@@ -322,11 +322,6 @@ function RoleForm({
           {summary.map((m) => (
             <p key={m}>{m}</p>
           ))}
-          {serverInfo?.requestId && (
-            <p className="font-mono text-xs opacity-80">
-              {tc('requestId')}: {serverInfo.requestId}
-            </p>
-          )}
         </Alert>
       )}
 

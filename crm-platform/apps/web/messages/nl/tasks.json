@@ -282,7 +282,6 @@
       "planDisabled": "Je abonnement bevat geen taken. Upgrade om ze te ontgrendelen.",
       "assigneeInvalid": "Deze persoon is geen actief lid van deze workspace.",
       "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw.",
-      "requestId": "Verzoek-id",
       "retry": "Opnieuw proberen"
     },
     "toast": {

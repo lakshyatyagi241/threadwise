@@ -8,7 +8,6 @@
     "common": {
       "loading": "Загрузка…",
       "retry": "Повторить",
-      "requestId": "ID запроса",
       "cancel": "Отмена",
       "back": "Назад",
       "close": "Закрыть",

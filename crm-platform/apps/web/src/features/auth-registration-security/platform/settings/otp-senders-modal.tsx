@@ -446,11 +446,6 @@ export function SendersModal({
       {failure && (
         <Alert tone="danger" className="space-y-1">
           <p>{failure.detail ?? t('errors.unexpected')}</p>
-          {failure.requestId && (
-            <p className="text-xs opacity-80">
-              {t('requestId')}: <span className="font-mono">{failure.requestId}</span>
-            </p>
-          )}
         </Alert>
       )}
     </div>
@@ -489,11 +484,6 @@ export function SendersModal({
         {mode.type === 'list' && failure && (
           <Alert tone="danger" className="space-y-1">
             <p>{failure.detail ?? t('errors.unexpected')}</p>
-            {failure.requestId && (
-              <p className="text-xs opacity-80">
-                {t('requestId')}: <span className="font-mono">{failure.requestId}</span>
-              </p>
-            )}
           </Alert>
         )}
         {mode.type === 'list' ? listView : formView}

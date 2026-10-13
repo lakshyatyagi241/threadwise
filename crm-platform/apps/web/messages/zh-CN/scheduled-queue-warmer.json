@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "您已达到套餐上限。",
       "WA_UNOFFICIAL_DISABLED": "工作区未启用通过个人 WhatsApp 号码（非官方 API）发送。请选择官方 WhatsApp Business API 号码。",
       "AUTH_SEND_HALTED": "此工作区的发送已暂停。",
-      "upgrade": "查看套餐并升级",
-      "requestId": "请求 {id}"
+      "upgrade": "查看套餐并升级"
     },
     "actions": {
       "done": {

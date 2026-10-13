@@ -156,7 +156,6 @@
       "notFound": "Ce numéro n’existe plus. La liste a été actualisée.",
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
       "generic": "Un problème est survenu. Réessayez.",
-      "genericWithId": "Un problème est survenu. Réessayez. Référence : {id}",
       "detail": "Détails : {detail}",
       "fix": {
         "tokenInvalid": "Créez un jeton permanent d’utilisateur système dans les paramètres de votre entreprise Meta et collez-le dans Modifier les identifiants.",

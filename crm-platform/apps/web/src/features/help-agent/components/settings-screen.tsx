@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Alert, Card, Spinner, Switch } from '@crm/ui';
-import { ApiError } from '@/lib/api/errors';
 import { useHelpAgentSettings, useSaveHelpAgentSettings } from '../api/help-agent';
 
 /** What the owner agrees to by switching the assistant on: the opt-in text, then the switch. */
@@ -16,15 +15,9 @@ export function SettingsScreen() {
     return <Spinner label={t('loading')} />;
   }
   if (settings.isError || !settings.data) {
-    const error = settings.error;
     return (
       <Alert tone="danger">
         <p>{t('loadFailed')}</p>
-        {error instanceof ApiError && error.requestId ? (
-          <p className="mt-1 break-all font-mono text-xs">
-            {t('requestId', { id: error.requestId })}
-          </p>
-        ) : null}
       </Alert>
     );
   }
@@ -62,11 +55,6 @@ export function SettingsScreen() {
       {save.isError ? (
         <Alert tone="danger">
           <p>{t('saveFailed')}</p>
-          {save.error instanceof ApiError && save.error.requestId ? (
-            <p className="mt-1 break-all font-mono text-xs">
-              {t('requestId', { id: save.error.requestId })}
-            </p>
-          ) : null}
         </Alert>
       ) : null}
       {save.isSuccess ? (

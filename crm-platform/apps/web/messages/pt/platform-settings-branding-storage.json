@@ -64,7 +64,6 @@
       "conflict": "Outra pessoa salvou estas configurações depois que você as abriu. Recarregue para ver as alterações dela e aplique as suas novamente.",
       "reload": "Recarregar configurações",
       "unexpected": "Algo deu errado e nada foi salvo.",
-      "requestId": "ID da solicitação",
       "readOnly": "Você pode ver estas configurações, mas somente um super admin pode alterá-las.",
       "secretSet": "Salvo. Deixe em branco para mantê-lo.",
       "secretUnset": "Não definido.",

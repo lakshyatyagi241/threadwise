@@ -46,7 +46,6 @@
         "copyFailed": "Nie udało się skopiować",
         "loading": "Ładowanie",
         "retry": "Spróbuj ponownie",
-        "requestId": "Identyfikator żądania",
         "errors": {
           "forbidden": "Twoja rola na to nie zezwala.",
           "request": "Żądanie zostało odrzucone. Odśwież stronę i spróbuj ponownie.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Logowanie operatora",
         "intro": "Ta konsola jest dla osób zarządzających platformą. Użytkownicy przestrzeni roboczych logują się na głównej stronie logowania.",
-        "requestId": "Identyfikator żądania",
         "submit": "Zaloguj się",
         "submitting": "Logowanie",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Twoje konto",
         "title": "Uwierzytelnianie dwuskładnikowe",
         "description": "Chroń adres {email} za pomocą aplikacji uwierzytelniającej. Konta operatorów to konta o najwyższym poziomie zaufania na platformie.",
-        "requestId": "Identyfikator żądania",
         "status": {
           "title": "Aplikacja uwierzytelniająca",
           "on": "Włączone",
@@ -181,7 +178,6 @@
         "saving": "Zapisywanie",
         "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
         "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
-        "requestId": "Identyfikator żądania",
         "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
         "discard": "Odrzuć zmiany",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Przetwarzanie",
             "close": "Zamknij",
             "signInAgain": "Zaloguj się ponownie",
-            "requestId": "Identyfikator żądania",
             "errors": {
               "forbidden": "Tylko superadministrator może wykonać tę akcję.",
               "unexpected": "Akcja nie została ukończona. Sprawdź dziennik zdarzeń, zanim spróbujesz ponownie."
@@ -731,7 +726,6 @@
         "saving": "Zapisywanie",
         "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
         "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
-        "requestId": "Identyfikator żądania",
         "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
         "discard": "Odrzuć zmiany",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Kod testowy został wysłany na {to}.",
             "remaining": "{count, plural, one {Pozostał # test w tej godzinie.} few {Pozostały # testy w tej godzinie.} many {Pozostało # testów w tej godzinie.} other {Pozostało # testu w tej godzinie.}}",
             "notShown": "Kod nie jest tu pokazywany; odczytaj go na telefonie.",
-            "requestId": "Identyfikator żądania",
             "errors": {
               "invalidNumber": "Wpisz numer z numerem kierunkowym kraju, na przykład +91 98765 43221.",
               "rateLimited": "Zbyt wiele kodów testowych w tej godzinie. Spróbuj ponownie za {minutes, plural, one {# minutę} few {# minuty} many {# minut} other {# minuty}}.",
@@ -1045,7 +1038,6 @@
           "saved": "Nadawca zapisany",
           "removed": "Nadawca usunięty",
           "secretRemoved": "Zapisany sekret usunięty",
-          "requestId": "Identyfikator żądania",
           "problems": {
             "required": "To pole jest wymagane.",
             "tooLong": "Maksymalnie {max} znaków.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Ta stopka nie została zaakceptowana.",
             "unexpected": "Nie udało się zapisać stopki. Spróbuj ponownie za chwilę."
-          },
-          "requestId": "Identyfikator żądania"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Zapisywanie",
         "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
         "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
-        "requestId": "Identyfikator żądania",
         "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
         "discard": "Odrzuć zmiany",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Anuluj",
           "working": "Usuwanie",
           "error": "Nie udało się usunąć sekretu. Spróbuj ponownie za chwilę.",
-          "requestId": "Identyfikator żądania",
           "done": "Zapisany sekret {name} został usunięty.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "Zapisywanie",
         "saved": "{count, plural, one {Zapisano # ustawienie} few {Zapisano # ustawienia} many {Zapisano # ustawień} other {Zapisano # ustawienia}}",
         "rejected": "Nic nie zapisano. {count, plural, one {Odrzucono # pole.} few {Odrzucono # pola.} many {Odrzucono # pól.} other {Odrzucono # pola.}}",
-        "requestId": "Identyfikator żądania",
         "unsaved": "{count, plural, one {# niezapisana zmiana} few {# niezapisane zmiany} many {# niezapisanych zmian} other {# niezapisanej zmiany}}",
         "discard": "Odrzuć zmiany",
         "errors": {

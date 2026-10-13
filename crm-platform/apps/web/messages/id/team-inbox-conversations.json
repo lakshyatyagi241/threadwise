@@ -137,7 +137,6 @@
       "unsupported": "Channel ini tidak dapat mengirim jenis pesan atau file tersebut.",
       "network": "Server tidak dapat dihubungi. Periksa koneksi Anda lalu coba lagi.",
       "generic": "Terjadi kesalahan. Coba lagi.",
-      "genericWithId": "Terjadi kesalahan. Coba lagi. Referensi: {id}",
       "templateNotSendable": "Templat itu tidak dapat dikirim ke percakapan ini. Pilih yang lain.",
       "groupSendUnavailable": "Pengiriman ke grup WhatsApp belum tersedia. Balas dari aplikasi WhatsApp Business.",
       "logRange": "Pilih tanggal dalam satu tahun terakhir, dengan tanggal mulai sebelum tanggal akhir dan tidak di masa depan.",

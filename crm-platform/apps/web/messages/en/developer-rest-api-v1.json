@@ -96,8 +96,7 @@
       "unexpected": "Something went wrong on our side. Try again in a moment.",
       "loadFailed": "Could not load your API key.",
       "retry": "Retry",
-      "upgrade": "See plans",
-      "requestId": "Request id: {id}"
+      "upgrade": "See plans"
     }
   }
 }

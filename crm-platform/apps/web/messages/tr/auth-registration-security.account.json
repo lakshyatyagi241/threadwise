@@ -22,7 +22,6 @@
         "signedOut": "Oturumunuz sona erdi. Lütfen tekrar oturum açın.",
         "rateLimited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
         "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
-        "requestId": "İstek kimliği",
         "locked": "Çok fazla başarısız deneme. Tekrar denemeden önce bir süre bekleyin.",
         "lockedWait": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin."
       },

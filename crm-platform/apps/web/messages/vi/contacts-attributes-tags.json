@@ -21,7 +21,6 @@
       "unavailable": "Phần này của API chưa khả dụng.",
       "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
       "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại",
       "reservedKey": "Khóa đó được dành riêng cho một token tích hợp sẵn. Hãy chọn khóa khác.",
       "attributeInUse": "Một số liên hệ đang giữ giá trị của thuộc tính này.",

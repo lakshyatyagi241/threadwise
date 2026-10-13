@@ -21,7 +21,6 @@
       "unavailable": "Cette partie de l’API n’est pas encore disponible.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
       "unexpected": "Un problème est survenu. Réessayez.",
-      "requestId": "ID de requête",
       "retry": "Réessayer",
       "reservedKey": "Cette clé est réservée à un jeton intégré. Choisissez-en une autre.",
       "attributeInUse": "Certains contacts ont une valeur pour cet attribut.",

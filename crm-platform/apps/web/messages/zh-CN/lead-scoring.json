@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "关闭",
       "retry": "重试",
-      "requestId": "请求 {id}",
       "noAccessTitle": "您无权访问此页面",
       "noAccess": "请联系工作区管理员，为您的角色授予权限 {permission}。"
     },

@@ -137,7 +137,6 @@
       "unsupported": "Bu kanal bu türde mesaj veya dosya gönderemez.",
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
       "generic": "Bir sorun oluştu. Yeniden deneyin.",
-      "genericWithId": "Bir sorun oluştu. Yeniden deneyin. Referans: {id}",
       "templateNotSendable": "Bu şablon bu konuşmaya gönderilemez. Başka bir şablon seçin.",
       "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın.",
       "logRange": "Son bir yıl içinde, başlangıcı bitişten önce olan ve gelecekte olmayan tarihler seçin.",

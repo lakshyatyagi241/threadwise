@@ -7,7 +7,6 @@
     "common": {
       "loading": "Memuat",
       "retry": "Coba lagi",
-      "requestId": "ID permintaan",
       "dash": "-",
       "errors": {
         "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",

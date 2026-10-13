@@ -282,7 +282,6 @@
       "planDisabled": "Planınız görevleri içermiyor. Açmak için planınızı yükseltin.",
       "assigneeInvalid": "Bu kişi bu çalışma alanının aktif bir üyesi değil.",
       "unexpected": "Bir sorun oluştu. Biraz sonra yeniden deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Yeniden dene"
     },
     "toast": {

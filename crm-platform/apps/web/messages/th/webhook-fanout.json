@@ -7,7 +7,6 @@
     "common": {
       "loading": "กำลังโหลด",
       "retry": "ลองอีกครั้ง",
-      "requestId": "รหัสคำขอ",
       "dash": "-",
       "errors": {
         "forbidden": "คุณไม่มีสิทธิ์ทำสิ่งนี้",

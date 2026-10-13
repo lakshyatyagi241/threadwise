@@ -21,7 +21,6 @@
       "unavailable": "Questa parte dell'API non è ancora disponibile.",
       "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
       "unexpected": "Qualcosa è andato storto. Riprova.",
-      "requestId": "ID richiesta",
       "retry": "Riprova",
       "reservedKey": "Quella chiave è riservata a un token integrato. Scegline un'altra.",
       "attributeInUse": "Alcuni contatti hanno un valore per questo attributo.",

@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "Osiągnięto limit Twojego planu.",
       "WA_UNOFFICIAL_DISABLED": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone w Twojej przestrzeni roboczej. Wybierz oficjalny numer WhatsApp Business API.",
       "AUTH_SEND_HALTED": "Wysyłanie w tej przestrzeni roboczej zostało wstrzymane.",
-      "upgrade": "Zobacz plany i ulepsz",
-      "requestId": "Żądanie {id}"
+      "upgrade": "Zobacz plany i ulepsz"
     },
     "actions": {
       "done": {

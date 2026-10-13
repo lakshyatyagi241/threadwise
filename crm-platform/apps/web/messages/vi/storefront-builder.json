@@ -8,7 +8,6 @@
         "dismiss": "Bỏ qua"
       },
       "errors": {
-        "requestId": "Mã yêu cầu",
         "retry": "Thử lại",
         "network": {
           "title": "Không kết nối được máy chủ",

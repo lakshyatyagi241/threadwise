@@ -137,7 +137,6 @@
       "unsupported": "Ten kanał nie może wysłać tego typu wiadomości ani pliku.",
       "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie.",
-      "genericWithId": "Coś poszło nie tak. Spróbuj ponownie. Numer referencyjny: {id}",
       "templateNotSendable": "Tego szablonu nie można wysłać do tej rozmowy. Wybierz inny.",
       "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business.",
       "logRange": "Wybierz daty z ostatniego roku, przy czym początek musi być przed końcem i nie może być w przyszłości.",

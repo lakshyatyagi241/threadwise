@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Đang tải...",
-      "retry": "Thử lại",
-      "requestId": "Mã yêu cầu"
+      "retry": "Thử lại"
     },
     "errors": {
       "conflict": "Có người khác đã thay đổi nhà cung cấp này trong lúc bạn đang chỉnh sửa. Phiên bản mới nhất đã được tải; hãy xem lại và áp dụng thay đổi của bạn một lần nữa.",

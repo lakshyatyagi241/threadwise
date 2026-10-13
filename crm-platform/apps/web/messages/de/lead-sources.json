@@ -5,8 +5,7 @@
       "loading": "Wird geladen",
       "retry": "Erneut versuchen",
       "copied": "Kopiert",
-      "copyFailed": "Kopieren nicht möglich: Markieren Sie den Text und kopieren Sie ihn manuell",
-      "requestId": "Referenz: {id}"
+      "copyFailed": "Kopieren nicht möglich: Markieren Sie den Text und kopieren Sie ihn manuell"
     },
     "states": {
       "noAccessTitle": "Sie haben keinen Zugriff auf Social Leads",

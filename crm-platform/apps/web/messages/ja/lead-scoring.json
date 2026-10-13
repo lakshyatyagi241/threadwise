@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "閉じる",
       "retry": "再試行",
-      "requestId": "リクエスト {id}",
       "noAccessTitle": "この画面にアクセスする権限がありません",
       "noAccess": "ワークスペース管理者に、あなたのロールへ権限 {permission} を付与するよう依頼してください。"
     },

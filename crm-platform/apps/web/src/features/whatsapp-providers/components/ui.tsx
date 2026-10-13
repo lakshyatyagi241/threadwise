@@ -85,15 +85,10 @@ export function Failure({ error, onRetry }: { error: unknown; onRetry?: () => vo
     const permission = wapError(error).values?.permission;
     return <NoAccess permission={permission || undefined} />;
   }
-  const { text: message, requestId } = text(error);
+  const { text: message } = text(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{message}</p>
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}
@@ -216,18 +211,12 @@ export function SecretState({ state }: { state: CredentialState }) {
 
 /** Says why a mutation failed, next to the control that ran it. */
 export function ErrorLine({ error }: { error: unknown }) {
-  const t = useTranslations(`${NS}.common`);
   const text = useErrorText();
   if (!error) return null;
-  const { text: message, requestId } = text(error);
+  const { text: message } = text(error);
   return (
     <Alert tone="danger" className="text-sm">
       <p>{message}</p>
-      {requestId && (
-        <p className="mt-1 text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </p>
-      )}
     </Alert>
   );
 }

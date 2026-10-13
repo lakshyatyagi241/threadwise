@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "התעלם",
       "retry": "נסו שוב",
-      "requestId": "בקשה {id}",
       "noAccessTitle": "אין לך גישה למסך הזה",
       "noAccess": "בקשו ממנהל מערכת את ההרשאה “{permission}”."
     },

@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp AI"
     },
     "errors": {
-      "requestId": "रिक्वेस्ट ID",
       "retry": "फिर कोशिश करें",
       "network": {
         "title": "सर्वर तक नहीं पहुंच सके",

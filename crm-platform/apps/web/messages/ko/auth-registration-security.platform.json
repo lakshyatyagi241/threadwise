@@ -46,7 +46,6 @@
         "copyFailed": "복사할 수 없습니다",
         "loading": "로드 중",
         "retry": "다시 시도",
-        "requestId": "요청 ID",
         "errors": {
           "forbidden": "현재 역할로는 허용되지 않습니다.",
           "request": "요청이 거부되었습니다. 페이지를 새로고침하고 다시 시도하세요.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "운영자 로그인",
         "intro": "이 콘솔은 플랫폼을 운영하는 사람을 위한 곳입니다. 워크스페이스 사용자는 메인 로그인 페이지에서 로그인하세요.",
-        "requestId": "요청 ID",
         "submit": "로그인",
         "submitting": "로그인 중",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "내 계정",
         "title": "2단계 인증",
         "description": "인증 앱으로 {email}을(를) 보호하세요. 운영자 계정은 플랫폼에서 신뢰도가 가장 높은 계정입니다.",
-        "requestId": "요청 ID",
         "status": {
           "title": "인증 앱",
           "on": "켜짐",
@@ -181,7 +178,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "처리 중",
             "close": "닫기",
             "signInAgain": "다시 로그인",
-            "requestId": "요청 ID",
             "errors": {
               "forbidden": "슈퍼 관리자만 이 작업을 실행할 수 있습니다.",
               "unexpected": "작업이 완료되지 않았습니다. 다시 시도하기 전에 이벤트 로그를 확인하세요."
@@ -731,7 +726,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "테스트 코드를 {to}(으)로 보냈습니다.",
             "remaining": "{count, plural, other {이번 시간에 남은 테스트 #회.}}",
             "notShown": "코드는 여기에 표시되지 않습니다. 휴대폰에서 확인하세요.",
-            "requestId": "요청 ID",
             "errors": {
               "invalidNumber": "국가 번호를 포함해 번호를 입력하세요(예: +91 98765 43221).",
               "rateLimited": "이번 시간의 테스트 코드 전송 횟수를 초과했습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요.",
@@ -1045,7 +1038,6 @@
           "saved": "발신자가 저장되었습니다",
           "removed": "발신자가 제거되었습니다",
           "secretRemoved": "저장된 시크릿이 제거되었습니다",
-          "requestId": "요청 ID",
           "problems": {
             "required": "필수 입력 항목입니다.",
             "tooLong": "최대 {max}자까지 입력할 수 있습니다.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "해당 푸터는 허용되지 않습니다.",
             "unexpected": "푸터를 저장할 수 없습니다. 잠시 후 다시 시도하세요."
-          },
-          "requestId": "요청 ID"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "취소",
           "working": "제거 중",
           "error": "시크릿을 제거할 수 없습니다. 잠시 후 다시 시도하세요.",
-          "requestId": "요청 ID",
           "done": "저장된 {name} 시크릿이 제거되었습니다.",
           "names": {
             "google": "Google",
@@ -1670,7 +1659,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {

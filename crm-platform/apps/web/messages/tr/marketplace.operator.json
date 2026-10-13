@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "Yükleniyor...",
-        "requestId": "Talep kimliği",
         "retry": "Tekrar dene",
         "noPermissions": "İzin yok"
       },

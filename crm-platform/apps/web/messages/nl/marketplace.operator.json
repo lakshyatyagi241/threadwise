@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "Laden...",
-        "requestId": "Verzoek-ID",
         "retry": "Opnieuw proberen",
         "noPermissions": "Geen rechten"
       },

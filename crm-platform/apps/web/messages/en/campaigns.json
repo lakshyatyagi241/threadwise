@@ -855,7 +855,6 @@
         "notFound": "This was not found. It may have been deleted.",
         "rateLimited": "Too many requests. Wait a moment and try again.",
         "unexpected": "Something went wrong on our side. Try again.",
-        "requestId": "Request ID",
         "retry": "Try again"
       },
       "categories": {
