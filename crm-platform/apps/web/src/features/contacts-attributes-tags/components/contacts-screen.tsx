@@ -610,6 +610,7 @@ export function ContactsScreen() {
             segmentsState={segmentsState}
             onRetrySegments={() => void segmentList.refetch()}
             canCreateSegment={canCreateSegments}
+            onCreateView={canCreateViews ? () => router.push('/contacts/views/new') : undefined}
             // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
             onSaveAsSegment={
               canCreateSegments && filtered && !filters.segment && !filters.rules

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {
   Button,
   Input,
@@ -63,6 +64,8 @@ export interface ContactsToolbarProps {
   /** Present when the person may save the active filters as a segment: the button then shows. */
   onSaveAsSegment?: () => void;
   canCreateSegment: boolean;
+  /** Opens the new-view form; undefined when the viewer cannot create views (the views icon is then hidden). */
+  onCreateView?: () => void;
 
   /** Ad-hoc conditions applied now (JSON text of a rule tree), or empty. */
   rules: string;
@@ -153,6 +156,7 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
   // The panel closes on a press outside it, the button included; this stops that press from reopening it.
   const wasOpen = useRef(false);
   const tb = useTranslations('contacts-attributes-tags.bulk');
+  const tv = useTranslations('contacts-attributes-tags.views');
   // A viewer can do none of these: an empty dropdown would only be a button that opens nothing.
   const hasMoreActions = Object.values(p.can).some(Boolean);
 
@@ -198,6 +202,16 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
             </kbd>
           )}
         </div>
+
+        {p.onCreateView && (
+          <Menu
+            label={tv('add')}
+            trigger={<VisibilityOutlinedIcon fontSize="small" />}
+            triggerClassName={iconBtn}
+          >
+            <MenuItem onSelect={p.onCreateView}>{tv('picker.create')}</MenuItem>
+          </Menu>
+        )}
 
         <SegmentPicker
           value={p.segment}
