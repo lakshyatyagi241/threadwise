@@ -55,6 +55,8 @@ export function makeConfig(over: Record<string, unknown> = {}) {
     trialDays: 14,
     rememberMeEnabled: true,
     otp: { enabled: false },
+    businessEmailOnly: true,
+    phoneRequired: true,
     captcha: null,
     social: { google: true, facebook: true },
     defaultCountryIso: null,

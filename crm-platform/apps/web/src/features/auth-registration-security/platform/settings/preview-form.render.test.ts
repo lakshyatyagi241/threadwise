@@ -11,6 +11,8 @@ const config = (over: Partial<RegistrationConfigResponse> = {}): RegistrationCon
   trialDays: 14,
   rememberMeEnabled: true,
   otp: { enabled: false },
+  businessEmailOnly: true,
+  phoneRequired: true,
   captcha: null,
   social: { google: false, facebook: false },
   defaultCountryIso: null,

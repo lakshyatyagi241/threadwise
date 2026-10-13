@@ -738,7 +738,9 @@
           "link": "Dùng đường dẫn của trang như /legal/terms, hoặc địa chỉ http hay https đầy đủ.",
           "senderFormat": "Chọn một trong các người gửi trong danh sách.",
           "countryFormat": "Dùng mã quốc gia hai chữ cái.",
-          "senderRequired": "Chọn kênh người gửi trước khi tạo mẫu."
+          "senderRequired": "Chọn kênh người gửi trước khi tạo mẫu.",
+          "domainFormat": "{entry} không phải là tên miền hợp lệ. Hãy dùng tên như vidu.com.",
+          "tooMany": "Tối đa {max} tên miền."
         },
         "policy": {
           "kicker": "Đăng ký",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Số lần thử tối đa"
+          },
+          "businessEmailOnly": {
+            "label": "Chỉ email công việc",
+            "hintOn": "Các nhà cung cấp miễn phí như Gmail, Outlook và Yahoo bị từ chối khi đăng ký.",
+            "hintOff": "Bất kỳ ai cũng có thể đăng ký bằng địa chỉ cá nhân miễn phí."
+          },
+          "blockDisposableEmail": {
+            "label": "Chặn email tạm thời",
+            "hintOn": "Tên miền dùng một lần, tạm thời và tên miền không có máy chủ thư đều bị từ chối.",
+            "hintOff": "Địa chỉ tạm thời được chấp nhận."
+          },
+          "requirePhoneVerification": {
+            "label": "Yêu cầu số di động đã xác minh",
+            "hintOn": "Mỗi lượt đăng ký phải xác nhận mã dùng một lần. Nếu không gửi được mã, việc đăng ký sẽ dừng lại thay vì bỏ qua bước kiểm tra.",
+            "hintOff": "Bước nhập mã chỉ chạy khi mã đăng ký bên dưới được bật."
+          },
+          "blockedEmailDomains": {
+            "label": "Tên miền luôn bị chặn",
+            "hint": "Mỗi dòng một tên miền. Tên miền phụ cũng bị chặn. Vẫn bị từ chối ngay cả khi «Chỉ email công việc» đang tắt.",
+            "placeholder": "vidu.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Chân tin nhắn đó không được chấp nhận.",
             "unexpected": "Không thể lưu chân tin nhắn. Hãy thử lại sau giây lát."
           }
+        },
+        "guard": {
+          "kicker": "Bảo vệ đăng ký",
+          "title": "Kiểm tra email công việc và số di động",
+          "description": "Chặn địa chỉ dùng một lần và địa chỉ cá nhân, đồng thời đảm bảo mọi tài khoản mới đều có số di động đã xác minh. Áp dụng cho đăng ký bằng email và mạng xã hội.",
+          "phoneOffWarning": "Khi tắt kiểm tra di động, có thể tạo tài khoản mà không cần số đã xác minh, khiến việc đăng ký giả hàng loạt dễ hơn."
         }
       },
       "social": {

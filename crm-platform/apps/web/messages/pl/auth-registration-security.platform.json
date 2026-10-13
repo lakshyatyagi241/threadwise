@@ -738,7 +738,9 @@
           "link": "Użyj ścieżki witryny, takiej jak /legal/terms, lub pełnego adresu http albo https.",
           "senderFormat": "Wybierz jednego z nadawców z listy.",
           "countryFormat": "Użyj dwuliterowego kodu kraju.",
-          "senderRequired": "Wybierz kanał nadawcy przed utworzeniem szablonu."
+          "senderRequired": "Wybierz kanał nadawcy przed utworzeniem szablonu.",
+          "domainFormat": "{entry} nie jest prawidłową domeną. Użyj nazwy takiej jak przyklad.pl.",
+          "tooMany": "Nie więcej niż {max} domen."
         },
         "policy": {
           "kicker": "Rejestracja",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Maks. liczba prób"
+          },
+          "businessEmailOnly": {
+            "label": "Tylko służbowe adresy e-mail",
+            "hintOn": "Bezpłatni dostawcy, tacy jak Gmail, Outlook i Yahoo, są odrzucani przy rejestracji.",
+            "hintOff": "Każdy może się zarejestrować przy użyciu bezpłatnego adresu prywatnego."
+          },
+          "blockDisposableEmail": {
+            "label": "Blokuj tymczasowe adresy e-mail",
+            "hintOn": "Domeny jednorazowe i tymczasowe oraz domeny bez serwera poczty są odrzucane.",
+            "hintOff": "Adresy tymczasowe są akceptowane."
+          },
+          "requirePhoneVerification": {
+            "label": "Wymagaj zweryfikowanego numeru komórkowego",
+            "hintOn": "Każda rejestracja musi potwierdzić jednorazowy kod. Jeśli nie można wysłać kodu, rejestracja zostaje zatrzymana zamiast pominąć weryfikację.",
+            "hintOff": "Krok z kodem działa tylko wtedy, gdy poniższy kod rejestracji jest włączony."
+          },
+          "blockedEmailDomains": {
+            "label": "Zawsze blokowane domeny",
+            "hint": "Jedna domena w wierszu. Subdomeny są również blokowane. Są odrzucane nawet przy wyłączonej opcji „Tylko służbowe adresy e-mail”.",
+            "placeholder": "przyklad.pl"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Ta stopka nie została zaakceptowana.",
             "unexpected": "Nie udało się zapisać stopki. Spróbuj ponownie za chwilę."
           }
+        },
+        "guard": {
+          "kicker": "Ochrona rejestracji",
+          "title": "Sprawdzanie służbowego e-maila i numeru komórkowego",
+          "description": "Odsiewa adresy jednorazowe i prywatne oraz dba o to, by każde nowe konto miało zweryfikowany numer komórkowy. Dotyczy rejestracji e-mailem i przez media społecznościowe.",
+          "phoneOffWarning": "Przy wyłączonym sprawdzaniu numeru komórkowego można tworzyć konta bez zweryfikowanego numeru, co ułatwia masowe fałszywe rejestracje."
         }
       },
       "social": {

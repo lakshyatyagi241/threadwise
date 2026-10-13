@@ -738,7 +738,9 @@
           "link": "Usa un percorso del sito come /legal/terms oppure un indirizzo http o https completo.",
           "senderFormat": "Scegli uno dei mittenti dell'elenco.",
           "countryFormat": "Usa un codice paese di due lettere.",
-          "senderRequired": "Scegli un canale mittente prima di creare il template."
+          "senderRequired": "Scegli un canale mittente prima di creare il template.",
+          "domainFormat": "{entry} non è un dominio valido. Usa un nome come esempio.it.",
+          "tooMany": "Non più di {max} domini."
         },
         "policy": {
           "kicker": "Registrazione",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Massimo di tentativi"
+          },
+          "businessEmailOnly": {
+            "label": "Solo indirizzi e-mail aziendali",
+            "hintOn": "I provider gratuiti come Gmail, Outlook e Yahoo vengono rifiutati alla registrazione.",
+            "hintOff": "Chiunque può registrarsi con un indirizzo personale gratuito."
+          },
+          "blockDisposableEmail": {
+            "label": "Blocca le e-mail temporanee",
+            "hintOn": "I domini usa e getta e temporanei, e i domini senza server di posta, vengono rifiutati.",
+            "hintOff": "Gli indirizzi temporanei sono accettati."
+          },
+          "requirePhoneVerification": {
+            "label": "Richiedi un numero di cellulare verificato",
+            "hintOn": "Ogni registrazione deve confermare un codice monouso. Se il codice non può essere inviato, la registrazione si ferma invece di saltare il controllo.",
+            "hintOff": "Il passaggio del codice viene eseguito solo quando il codice di registrazione qui sotto è attivo."
+          },
+          "blockedEmailDomains": {
+            "label": "Domini sempre bloccati",
+            "hint": "Un dominio per riga. Anche i sottodomini sono bloccati. Vengono rifiutati anche con «Solo indirizzi e-mail aziendali» disattivato.",
+            "placeholder": "esempio.it"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Il piè di pagina non è stato accettato.",
             "unexpected": "Impossibile salvare il piè di pagina. Riprova tra un momento."
           }
+        },
+        "guard": {
+          "kicker": "Protezione della registrazione",
+          "title": "Controllo di e-mail aziendale e cellulare",
+          "description": "Tiene fuori gli indirizzi usa e getta e personali e assicura che ogni nuovo account abbia un cellulare verificato. Vale per la registrazione via e-mail e social.",
+          "phoneOffWarning": "Con il controllo del cellulare disattivato si possono creare account senza un numero verificato, il che facilita le registrazioni false in massa."
         }
       },
       "social": {

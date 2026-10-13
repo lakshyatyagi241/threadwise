@@ -738,7 +738,9 @@
           "link": "Gunakan path situs seperti /legal/terms, atau alamat http atau https lengkap.",
           "senderFormat": "Pilih salah satu pengirim dari daftar.",
           "countryFormat": "Gunakan kode negara dua huruf.",
-          "senderRequired": "Pilih kanal pengirim sebelum membuat templat."
+          "senderRequired": "Pilih kanal pengirim sebelum membuat templat.",
+          "domainFormat": "{entry} bukan domain yang valid. Gunakan nama seperti contoh.com.",
+          "tooMany": "Paling banyak {max} domain."
         },
         "policy": {
           "kicker": "Pendaftaran",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Maks. percobaan"
+          },
+          "businessEmailOnly": {
+            "label": "Hanya alamat email kerja",
+            "hintOn": "Penyedia gratis seperti Gmail, Outlook, dan Yahoo ditolak saat pendaftaran.",
+            "hintOff": "Siapa pun dapat mendaftar dengan alamat pribadi gratis."
+          },
+          "blockDisposableEmail": {
+            "label": "Blokir email sementara",
+            "hintOn": "Domain sekali pakai dan sementara, serta domain tanpa server email, ditolak.",
+            "hintOff": "Alamat sementara diterima."
+          },
+          "requirePhoneVerification": {
+            "label": "Wajibkan nomor ponsel terverifikasi",
+            "hintOn": "Setiap pendaftaran harus mengonfirmasi kode sekali pakai. Jika kode tidak dapat dikirim, pendaftaran berhenti alih-alih melewati pemeriksaan.",
+            "hintOff": "Langkah kode hanya berjalan saat kode pendaftaran di bawah aktif."
+          },
+          "blockedEmailDomains": {
+            "label": "Domain yang selalu diblokir",
+            "hint": "Satu domain per baris. Subdomain juga diblokir. Tetap ditolak meskipun «Hanya alamat email kerja» dinonaktifkan.",
+            "placeholder": "contoh.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "Footer itu tidak diterima.",
             "unexpected": "Footer tidak dapat disimpan. Coba lagi sebentar lagi."
           }
+        },
+        "guard": {
+          "kicker": "Perlindungan pendaftaran",
+          "title": "Pemeriksaan email kerja dan ponsel",
+          "description": "Menolak alamat sekali pakai dan pribadi serta memastikan setiap akun baru memiliki nomor ponsel terverifikasi. Berlaku untuk pendaftaran email dan sosial.",
+          "phoneOffWarning": "Dengan pemeriksaan ponsel dimatikan, akun dapat dibuat tanpa nomor terverifikasi, sehingga pendaftaran palsu massal lebih mudah."
         }
       },
       "social": {

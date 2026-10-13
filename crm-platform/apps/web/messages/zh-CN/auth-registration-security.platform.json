@@ -738,7 +738,9 @@
           "link": "请使用站内路径，例如 /legal/terms，或完整的 http 或 https 地址。",
           "senderFormat": "请从列表中选择一个发送方。",
           "countryFormat": "请使用两位字母的国家/地区代码。",
-          "senderRequired": "创建模板之前，请先选择发送渠道。"
+          "senderRequired": "创建模板之前，请先选择发送渠道。",
+          "domainFormat": "{entry} 不是有效的域名。请使用类似 example.com 的名称。",
+          "tooMany": "最多 {max} 个域名。"
         },
         "policy": {
           "kicker": "注册",
@@ -820,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "最大尝试次数"
+          },
+          "businessEmailOnly": {
+            "label": "仅限工作邮箱",
+            "hintOn": "注册时会拒绝 Gmail、Outlook、Yahoo 等免费邮箱服务商。",
+            "hintOff": "任何人都可以使用免费个人邮箱注册。"
+          },
+          "blockDisposableEmail": {
+            "label": "屏蔽临时邮箱",
+            "hintOn": "拒绝一次性和临时域名，以及没有邮件服务器的域名。",
+            "hintOff": "接受临时邮箱地址。"
+          },
+          "requirePhoneVerification": {
+            "label": "要求已验证的手机号",
+            "hintOn": "每次注册都必须确认一次性验证码。如果无法发送验证码，注册将停止，而不是跳过验证。",
+            "hintOff": "仅当下方的注册验证码开启时，才会执行验证码步骤。"
+          },
+          "blockedEmailDomains": {
+            "label": "始终屏蔽的域名",
+            "hint": "每行一个域名。子域名也会被屏蔽。即使关闭“仅限工作邮箱”，这些域名也会被拒绝。",
+            "placeholder": "example.com"
           }
         },
         "otp": {
@@ -1069,6 +1091,12 @@
             "invalid": "该页脚未被接受。",
             "unexpected": "无法保存页脚。请稍后重试。"
           }
+        },
+        "guard": {
+          "kicker": "注册防护",
+          "title": "工作邮箱与手机验证",
+          "description": "拦截一次性和个人邮箱，并确保每个新账户都有已验证的手机号。适用于邮箱注册和社交账号注册。",
+          "phoneOffWarning": "关闭手机验证后，可以在没有已验证号码的情况下创建账户，批量虚假注册会更容易。"
         }
       },
       "social": {
