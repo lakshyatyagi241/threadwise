@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Field, Input, Select, Textarea, cn } from '@crm/ui';
+import { OptOutLine, OptOutTemplateHint } from '@/features/contact-consent';
 import type { AttributeCatalog, CampaignBuilder, ComposeTemplate } from '@crm/contracts';
 import { OverridesPanel } from '@/features/broadcasts/components/overrides-panel';
 import { UploadMediaButton } from '@/features/broadcasts/components/upload-media-button';
@@ -159,6 +160,11 @@ export function StepCompose({
             ) : (
               <p className="mt-1 text-[11px] text-muted-foreground">{t('bodyHint')}</p>
             )}
+            <OptOutLine
+              body={form.customMessage}
+              onChange={(v) => patch({ customMessage: v })}
+              idPrefix="camp-a"
+            />
           </div>
 
           {form.abTesting && (
@@ -173,6 +179,11 @@ export function StepCompose({
                 placeholder={t('variantBPlaceholder')}
               />
               <p className="mt-1 text-[11px] text-muted-foreground">{t('variantBHint')}</p>
+              <OptOutLine
+                body={form.customMessageB}
+                onChange={(v) => patch({ customMessageB: v })}
+                idPrefix="camp-b"
+              />
             </div>
           )}
 
@@ -348,6 +359,7 @@ export function StepCompose({
           <p className="text-[12px] text-muted-foreground">
             {approvedOnly ? t('templateIntroApproved') : t('templateIntro')}
           </p>
+          <OptOutTemplateHint />
           <Field
             label={`${approvedOnly ? t('templateApproved') : t('template')} *`}
             htmlFor="camp-template"

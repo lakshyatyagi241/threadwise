@@ -10,7 +10,8 @@
       "webchat": "Web sitesi sohbeti",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "E-posta (Gmail)"
     },
     "page": {
       "back": "Otomasyon ve yapay zekâ",
@@ -81,7 +82,10 @@
       "lastFired": "son: {when}",
       "edit": "Düzenle",
       "duplicate": "Çoğalt",
-      "delete": "Sil"
+      "delete": "Sil",
+      "startsFlow": "{name} akışını da başlatır",
+      "flowOff": "Akış kapalı",
+      "flowGone": "Silinmiş bir akışı da başlatır"
     },
     "form": {
       "back": "Otomatik atama",
@@ -170,7 +174,15 @@
       "cancel": "İptal",
       "save": "Kaydet",
       "saveActivate": "Kaydet ve etkinleştir",
-      "openCount": "{open} açık"
+      "openCount": "{open} açık",
+      "flow": {
+        "title": "Ayrıca bir akış başlat",
+        "hint": "İsteğe bağlı. Bu kural çalıştığında akış, aynı kanalda görüşme için başlar. Yalnızca açık olması gerekir; yayımlanmış olması gerekmez.",
+        "none": "Akış yok",
+        "offOption": "{name} (kapalı)",
+        "goneOption": "Artık var olmayan bir akış",
+        "loadFailed": "Akışlar yüklenemedi, bu yüzden liste eksik olabilir."
+      }
     }
   }
 }

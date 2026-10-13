@@ -1,0 +1,217 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "AI-leadscoring"
+    },
+    "common": {
+      "loading": "Laden",
+      "retry": "Opnieuw proberen",
+      "requestId": "Verzoek-id",
+      "dash": "-",
+      "cancel": "Annuleren",
+      "errors": {
+        "forbidden": "Je hebt hier geen toestemming voor.",
+        "request": "Dat verzoek kon niet worden voltooid.",
+        "unexpected": "Er ging iets mis aan onze kant. Probeer het zo opnieuw.",
+        "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+        "validation": "Sommige waarden zijn ongeldig. Controleer de gemarkeerde velden.",
+        "notFound": "Dit item bestaat niet meer."
+      }
+    },
+    "page": {
+      "eyebrow": "Beheer · AI · Leadscoring",
+      "title": "AI-leadscoring",
+      "description": "Bepaalt of werkruimtes hun contacten met een AI-model kunnen scoren, welk model dat doet, de limieten en wat het kost.",
+      "superOnly": "Alleen een superbeheerder kan AI-leadscoring bekijken of wijzigen."
+    },
+    "status": {
+      "label": "Status van leadscoring",
+      "switch": {
+        "title": "Platformschakelaar",
+        "on": "Aan",
+        "off": "Uit",
+        "hintOn": "Werkruimtes die zich hebben aangemeld kunnen hun contacten scoren.",
+        "hintOff": "Geen enkele werkruimte kan contacten scoren, wat de eigen instelling ook is."
+      },
+      "model": {
+        "title": "Model",
+        "custom": "Een handmatig ingevoerd model, niet in de lijst."
+      },
+      "key": {
+        "title": "OpenRouter-sleutel van het platform",
+        "ready": "Gereed",
+        "missing": "Ontbreekt",
+        "explainReady": "Werkruimtes zonder eigen OpenRouter-sleutel worden met deze sleutel gescoord, en jij betaalt voor die scores.",
+        "explainMissing": "Zonder platformsleutel kunnen alleen werkruimtes die hun eigen OpenRouter-sleutel hebben opgeslagen contacten scoren.",
+        "link": "AI-sleutels openen"
+      },
+      "reach": {
+        "title": "Bereik",
+        "workspaces": "Aangemelde werkruimtes",
+        "contacts": "Gescoorde contacten"
+      }
+    },
+    "settings": {
+      "title": "Instellingen",
+      "description": "Wijzigingen gelden voor alle werkruimtes tegelijk. Alleen de velden die je wijzigt worden opgeslagen.",
+      "enabled": {
+        "label": "AI-leadscoring",
+        "hint": "Standaard uit. Indien aan sturen aangemelde werkruimtes geanonimiseerde contactgegevens naar OpenRouter om een score van 0 tot 100 te krijgen. Zet uit om alle scoring te stoppen."
+      },
+      "model": {
+        "label": "Model",
+        "hint": "Prijzen zijn in Amerikaanse dollars per miljoen tokens, volgens de lijst van OpenRouter.",
+        "option": "{label} · {input} in / {output} uit",
+        "other": "Ander OpenRouter-model-id",
+        "details": "{input} per miljoen invoertokens, {output} per miljoen uitvoertokens.",
+        "customLabel": "OpenRouter-model-id",
+        "customHint": "Elk model-id van OpenRouter dat gestructureerde uitvoer ondersteunt.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limieten",
+        "scoresPerHour": "Scores per werkruimte per uur",
+        "scoresPerHourHint": "Een kostenbeveiliging voor werkruimtes die de platformsleutel gebruiken. 0 betekent geen limiet.",
+        "retentionDays": "Log bewaren (dagen)",
+        "retentionDaysHint": "Oudere runs en hun kostenhistorie worden verwijderd. 7 tot 730 dagen."
+      },
+      "saving": "Opslaan",
+      "save": "Wijzigingen opslaan",
+      "reset": "Wijzigingen negeren",
+      "changed": "{count, plural, one {# wijziging klaar om op te slaan} other {# wijzigingen klaar om op te slaan}}",
+      "unchanged": "Geen wijzigingen om op te slaan.",
+      "saved": "Instellingen voor leadscoring opgeslagen.",
+      "errors": {
+        "range": "Voer een waarde in tussen {min} en {max}.",
+        "integer": "Voer een geheel getal in.",
+        "modelId": "Gebruik een OpenRouter-model-id zoals openai/gpt-6-luna.",
+        "invalid": "Deze waarde is ongeldig."
+      },
+      "confirm": {
+        "title": "Bevestig de wijziging",
+        "turnOn": "Hiermee kunnen aangemelde werkruimtes geanonimiseerde contactgegevens naar OpenRouter sturen en het tegoed van je platformsleutel verbruiken.",
+        "turnOff": "Hiermee stopt alle AI-leadscoring voor elke werkruimte. Reeds opgeslagen scores blijven behouden.",
+        "confirm": "Wijzigingen opslaan"
+      }
+    },
+    "cost": {
+      "title": "Wat scoring kost",
+      "description": "Totalen uit het scoringlog, in Amerikaanse dollars.",
+      "last24h": "Laatste 24 uur",
+      "last30d": "Laatste 30 dagen",
+      "scores": "Geschreven scores",
+      "failed": "Mislukte runs",
+      "tokens": "Tokens",
+      "tokensSplit": "Invoer-/uitvoertokens",
+      "total": "Totale kosten",
+      "average": "Gemiddelde per score",
+      "platform": "Betaald met de platformsleutel",
+      "footnote": "Kosten zijn het bedrag dat OpenRouter heeft gemeld, of een schatting op basis van het aantal tokens als er niets is gemeld. Runs die op de eigen sleutel van een werkruimte zijn gefactureerd, tellen mee in het totaal maar niet in het aandeel van het platform."
+    },
+    "workspaces": {
+      "title": "Werkruimtes",
+      "description": "Wie AI-leadscoring gebruikt en wat het hen de afgelopen 30 dagen heeft gekost, hoogste eerst.",
+      "search": "Werkruimtes zoeken",
+      "searchPlaceholder": "Naam van werkruimte",
+      "limit": "Rijen",
+      "limitOption": "{count} rijen",
+      "noMatchTitle": "Geen werkruimte gevonden",
+      "noMatchMessage": "Probeer een andere naam.",
+      "clearSearch": "Zoekopdracht wissen",
+      "emptyTitle": "Nog geen werkruimtes",
+      "emptyMessage": "Werkruimtes verschijnen hier zodra ze bestaan.",
+      "tableLabel": "Werkruimtes naar scoringkosten",
+      "columns": {
+        "name": "Werkruimte",
+        "enabled": "Scoring",
+        "contacts": "Gescoorde contacten",
+        "scores": "Scores, 30 dagen",
+        "cost": "Kosten, 30 dagen"
+      },
+      "enabled": "Aan",
+      "disabled": "Uit"
+    },
+    "runs": {
+      "title": "Scoringlog",
+      "description": "Elke scoringpoging van alle werkruimtes, nieuwste eerst, met tokens, kosten en wie betaalde.",
+      "refresh": "Vernieuwen",
+      "filters": {
+        "status": "Status",
+        "anyStatus": "Elke status",
+        "workspace": "Werkruimte",
+        "anyWorkspace": "Alle werkruimtes",
+        "clear": "Filters wissen"
+      },
+      "status": {
+        "ok": "Gescoord",
+        "kept": "Behouden",
+        "failed": "Mislukt",
+        "skipped": "Overgeslagen"
+      },
+      "trigger": {
+        "created": "Contact aangemaakt",
+        "updated": "Contact bijgewerkt",
+        "manual": "Scoreknop",
+        "backfill": "Aanvullen"
+      },
+      "scoreWas": "{score} (was {previous})",
+      "tokensTitle": "{input} invoer, {output} uitvoer",
+      "costSource": {
+        "vendor": "Gemeld",
+        "estimate": "Schatting",
+        "none": "Geen aanroep"
+      },
+      "costSourceHelp": {
+        "vendor": "De kosten die OpenRouter voor deze aanroep heeft gemeld.",
+        "estimate": "Er zijn geen kosten gemeld, dus dit is het aantal tokens maal de lijstprijs van het model.",
+        "none": "Er is geen aanroep gedaan, dus er is niets in rekening gebracht."
+      },
+      "paidBy": {
+        "admin": "Platform",
+        "workspace": "Werkruimte",
+        "none": "Niemand"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "Platformschakelaar staat uit",
+        "not_enabled": "Werkruimte heeft zich niet aangemeld",
+        "contact_gone": "Contact is verwijderd",
+        "manual_score": "Contact heeft een handmatige score",
+        "no_key": "Geen OpenRouter-sleutel",
+        "token_allowance": "Tokentegoed opgebruikt",
+        "hourly_limit": "Uurlimiet bereikt",
+        "auth": "OpenRouter weigerde de sleutel",
+        "rate_limited": "OpenRouter-limiet bereikt",
+        "provider": "OpenRouter-fout",
+        "timeout": "Time-out bij OpenRouter",
+        "bad_response": "Antwoord was geen geldige score"
+      },
+      "noMatchTitle": "Geen runs gevonden",
+      "noMatchMessage": "Geen scoringrun komt overeen met deze filters.",
+      "emptyTitle": "Nog geen runs",
+      "emptyMessage": "Runs verschijnen hier zodra een werkruimte een contact scoort.",
+      "tableLabel": "Scoringruns",
+      "columns": {
+        "time": "Tijd",
+        "workspace": "Werkruimte",
+        "contact": "Contact",
+        "trigger": "Aanleiding",
+        "status": "Status",
+        "score": "Score",
+        "model": "Model",
+        "tokens": "Tokens",
+        "cost": "Kosten",
+        "paidBy": "Betaald door",
+        "duration": "Duur",
+        "error": "Reden"
+      },
+      "costLegend": "Een ~ voor een bedrag geeft een schatting op basis van het aantal tokens aan in plaats van het bedrag dat OpenRouter heeft gemeld.",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden"
+    }
+  }
+}

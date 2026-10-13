@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "SSS",
       "label": "SSS bölümleri",
       "tab": {
         "faqs": "SSS",
@@ -13,7 +12,6 @@
       "unansweredCount": "{count, plural, one {# yanıtsız mesaj} other {# yanıtsız mesaj}}"
     },
     "common": {
-      "dismiss": "Kapat",
       "retry": "Tekrar dene",
       "requestId": "İstek {id}",
       "noAccessTitle": "Bu ekrana erişim izniniz yok",
@@ -26,7 +24,6 @@
       "conflict": "Siz düzenlerken başka biri bunu değiştirdi.",
       "duplicateQuestion": "Başka bir SSS zaten bu soruyu kullanıyor.",
       "duplicateVariation": "Bu SSS zaten bu ifadeye sahip.",
-      "limitReached": "Çalışma alanınız SSS sınırına ulaştı. Kullanılmayan SSS veya varyasyonları silin ya da platform yöneticisinden sınırı artırmasını isteyin.",
       "flowNotFound": "Seçilen akış bu çalışma alanında artık yok. Başka bir akış seçin.",
       "embeddingUnavailable": "Yapay zeka sağlayıcısı kullanılamıyor. Çalışma alanınıza bir OpenRouter anahtarı ekleyin veya platform yöneticisinden ortak anahtarı etkinleştirmesini isteyin, ardından tekrar deneyin.",
       "engineDisabled": "SSS yanıtlama şu anda tüm platform için kapalı.",
@@ -34,21 +31,21 @@
       "validation": "Bazı alanlar düzeltme gerektiriyor.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin; sorun sürerse istek kimliğini destekle paylaşın.",
-      "flowNodeNotFound": "Seçilen adım artık bu akışta yok. Başka bir adım seçin veya akışın başından başlatın."
+      "flowNodeNotFound": "Seçilen adım artık bu akışta yok. Başka bir adım seçin veya akışın başından başlatın.",
+      "limitReached": "Bu akış SSS sınırına ulaştı. Kullanılmayan SSS öğelerini veya varyasyonları silin ya da platform yöneticinizden sınırı artırmasını isteyin."
     },
     "banner": {
       "enabledToast": "SSS yanıtlama açık.",
       "engineOff": "SSS yanıtlama platform tarafından kapatıldı. Yeniden açılana kadar müşteriler SSS yanıtı almaz.",
       "modelChanged": "Bu eşiği ayarladıktan sonra platform yapay zeka modelini değiştirdi. Skorlar değişti, bu yüzden hassasiyetinizi gözden geçirin.",
       "reviewSensitivity": "Hassasiyeti gözden geçir",
-      "offTitle": "Müşteriler için SSS yanıtlama KAPALI",
-      "offBody": "SSS yazıp test edebilirsiniz ama siz açana kadar müşteriler yanıt almaz.",
       "offNoRight": "faq.settings.manage iznine sahip birinden (genellikle çalışma alanı yöneticisi) açmasını isteyin.",
-      "enable": "SSS yanıtlamayı aç"
+      "enable": "SSS yanıtlamayı aç",
+      "offTitle": "Bu akış için SSS yanıtlama KAPALI",
+      "offBody": "Bu akışın SSS öğelerini yazıp test edebilirsiniz, ancak siz açana kadar müşteriler yanıt almaz."
     },
     "list": {
       "title": "SSS",
-      "subtitle": "Müşterilerinizin sorduğu sorular ve botunuzun verdiği yanıtlar. Müşterilerin tam sizin kelimelerinizi kullanması gerekmez.",
       "add": "SSS ekle",
       "stats": {
         "label": "SSS toplamları",
@@ -98,10 +95,10 @@
       "deleted": "SSS silindi.",
       "empty": {
         "title": "Botunuza sık sorulan soruların yanıtlarını öğretin",
-        "body": "Bir soruyu ve yanıtını bir kez yazın. Botunuz müşterilerin kendi sözcükleriyle yazdıklarını eşleştirir ve yanıtı gönderir ya da bir akış başlatır.",
         "how": "Aynı şeyi sormanın birkaç farklı yolunu (ifadeleri) ekleyin ve müşteriler görmeden önce test edin.",
         "cta": "İlk SSS öğenizi ekleyin",
-        "noRight": "SSS ekleme izni için çalışma alanı yöneticisine başvurun."
+        "noRight": "SSS ekleme izni için çalışma alanı yöneticisine başvurun.",
+        "body": "Bir soruyu ve yanıtını bir kez yazın. Botunuz müşterilerin kendi sözcükleriyle yazdıklarını eşleştirir ve yanıt verir ya da onları bir akış adımına yönlendirir."
       },
       "noMatch": {
         "title": "Bu filtrelerle eşleşen SSS yok",
@@ -142,7 +139,9 @@
         "failed": "{count} başarısız"
       },
       "stepMissing": "Adım yok",
-      "startsAt": "Başlangıç adımı: {step}"
+      "subtitle": "Müşterilerin {flow} içinde sorduğu sorular ve botun yanıtları. Bu SSS öğeleri yalnızca bu akışın içinde yanıt verir.",
+      "thisFlow": "Bu akış",
+      "startsAt": "Gideceği yer: {step}"
     },
     "editor": {
       "back": "SSS listesine dön",
@@ -159,7 +158,6 @@
       "saved": "SSS kaydedildi.",
       "deleted": "SSS silindi.",
       "readOnly": "Bu SSS öğesini görüntüleyebilirsiniz ama rolünüz onu değiştiremez.",
-      "faqLimit": "Çalışma alanınız {max} SSS sınırında. Yenisini eklemek için birini silin.",
       "prefilled": "Soru, yanıtsız bir müşteri mesajından dolduruldu. Bu SSS kaydedildiğinde o mesaj da işlenmiş olarak işaretlenir.",
       "tryItSaveFirst": "Önce SSS öğesini kaydedin, ardından müşteri mesajlarının onunla nasıl eşleştiğini deneyebilirsiniz.",
       "conflict": {
@@ -189,23 +187,30 @@
         "title": "Yanıt",
         "hint": "Bu SSS eşleştiğinde müşterinin alacağı içerik.",
         "text": "Metin yanıtı",
-        "flow": "Akış başlat",
         "textLabel": "Yanıt metni",
         "count": "{count} / {max} karakter",
         "preview": "WhatsApp içinde görünümü",
         "previewEmpty": "Yanıtınız burada görünür",
-        "flowLabel": "Başlatılacak akış",
         "noFlow": "Akış seçilmedi",
-        "startsAt": "Başlangıç adımı: {step}",
-        "stepGone": "Bu SSS öğesinin başladığı adım artık yok, bu yüzden müşteriler yanıt alamaz."
+        "flow": "Bir adıma git",
+        "flowLabel": "Nereye gidilecek",
+        "startsAt": "Gideceği adım: {step}",
+        "stepGone": "Bu SSS öğesinin yönlendirdiği adım artık yok, bu yüzden müşteriler yanıt almaz.",
+        "thisFlowNamed": "Bu akışın bir adımı ({name})",
+        "target": {
+          "here": "Bu akışın bir adımı",
+          "hereHint": "Müşteri {name} içinde devam eder. Bu olağan seçimdir.",
+          "other": "Başka bir akışın adımı",
+          "otherHint": "Görüşmeyi farklı bir akışa devredin."
+        }
       },
       "advanced": {
         "title": "Gelişmiş: yalnızca bu SSS için hassasiyet",
-        "body": "Varsayılan olarak her SSS çalışma alanı hassasiyetini kullanır. Bu SSS çok kolay eşleşiyorsa (değeri yükseltin) veya çok az eşleşiyorsa (değeri düşürün) özel bir değer kullanın.",
         "custom": "Bu SSS için özel hassasiyet kullan",
         "sliderLabel": "Şu değer ve üzerinde eşleş",
-        "workspace": "Çalışma alanı hassasiyeti %{value}.",
-        "following": "Çalışma alanı hassasiyeti izleniyor (%{value})."
+        "body": "Varsayılan olarak her SSS bu akışın hassasiyetini kullanır. Çok sık eşleşiyorsa (yükseltin) veya çok seyrek eşleşiyorsa (düşürün) özel bir değer kullanın.",
+        "workspace": "Bu akışın hassasiyeti %{value}.",
+        "following": "Bu akışın hassasiyeti izleniyor (%{value})."
       },
       "problem": {
         "question": {
@@ -219,9 +224,9 @@
           "invalid": "Bu yanıt geçerli değil."
         },
         "flowId": {
-          "required": "Başlatılacak akışı seçin.",
-          "tooLong": "Başlatılacak akışı seçin.",
-          "invalid": "Başlatılacak akışı seçin."
+          "required": "Gidilecek akışı seçin.",
+          "tooLong": "Gidilecek akışı seçin.",
+          "invalid": "Gidilecek akışı seçin."
         },
         "category": {
           "required": "Bir kategori yazın veya boş bırakın.",
@@ -249,11 +254,11 @@
         "body": "Bu SSS üzerindeki değişiklikleriniz kaydedilmedi.",
         "leave": "Çık",
         "stay": "Düzenlemeye devam et"
-      }
+      },
+      "faqLimit": "Bu akış {max} SSS sınırında. Yenisini eklemek için birini silin."
     },
     "flowPicker": {
       "noAccess": "Burada akış seçmek için akışları görüntüleme iznine (flb.flows.read) ihtiyacınız var.",
-      "missing": "Bu SSS öğesinin başlattığı akış artık yok. Başka bir akış seçin, aksi halde bu SSS yanıt veremez.",
       "selected": "Seçildi",
       "search": "Akış ara",
       "searchPlaceholder": "Akışları ada göre ara",
@@ -267,7 +272,9 @@
         "off": "Etkin değil",
         "draft": "Taslak"
       },
-      "note": "Akış, aşağıda seçtiğiniz adımdan veya başlangıcından başlar. Yalnızca yayınlanmış ve etkin akışlar çalışabilir."
+      "missing": "Bu SSS öğesinin yönlendirdiği akış artık yok. Başka bir akış seçin, aksi halde bu SSS yanıt veremez.",
+      "noOthers": "Bu çalışma alanında başka akış yok.",
+      "note": "Müşteri aşağıda seçtiğiniz adımdan veya akışın başından devam eder. Yalnızca yayımlanmış, etkin akışlar çalışabilir."
     },
     "variations": {
       "title": "Soru varyasyonları",
@@ -343,7 +350,7 @@
       "verdict": {
         "answer": {
           "title": "Yanıt verirdi",
-          "body": "Bir SSS yeterince iyi eşleşti. Müşteri yanıtını alır (veya akışı başlar)."
+          "body": "Bir SSS yeterince iyi eşleşti. Müşteri yanıtını alır veya gösterdiği adıma yönlendirilir."
         },
         "below": {
           "title": "Eşiğin altında",
@@ -397,8 +404,8 @@
       "winner": {
         "title": "Müşterinin alacağı içerik",
         "unavailable": "Bu SSS yüklenemedi.",
-        "flow": "{name} akışını başlatır",
-        "flowMissing": "Artık var olmayan bir akışı başlatır"
+        "flow": "{name} akışının bir adımına gider",
+        "flowMissing": "Artık var olmayan bir akışa gider"
       },
       "candidates": {
         "title": "En iyi eşleşmeler",
@@ -415,16 +422,16 @@
     },
     "playground": {
       "title": "Botum buna nasıl yanıt verirdi?",
-      "subtitle": "Bir müşteri mesajını botunuzun kullandığı eşleştirmeden geçirin. Hiçbir şey gönderilmez ve analizlerde sayılmaz.",
       "label": "Müşteri mesajı",
       "placeholder": "Paketim nerede?",
       "run": "Çalıştır",
-      "hint": "Yalnızca kayıtlı SSS öğeleri eşleştirilir. Yayında ifadesi olan etkin SSS öğeleri dahil edilir.",
       "empty": "Kararı görmek için yukarıya bir mesaj yazıp çalıştırın.",
       "history": {
         "title": "Bu oturum",
         "empty": "Son 10 testiniz burada görünür."
-      }
+      },
+      "subtitle": "Bir müşteri mesajını {flow} akışının kullandığı eşleştirmeden geçirin. Hiçbir şey gönderilmez ve içgörülerde sayılmaz.",
+      "hint": "Yalnızca bu akışın kaydedilmiş SSS öğeleri eşleştirilir. Etkin ifadeleri olan etkin SSS öğeleri katılır."
     },
     "unanswered": {
       "title": "Yanıtsız mesajlar",
@@ -492,7 +499,6 @@
       "loadingMore": "Yükleniyor",
       "why": {
         "answered": "\"{faq}\" ile %{score} skorla yanıtlandı.",
-        "flowStarted": "\"{faq}\" akışı %{score} skorla başlatıldı.",
         "belowThreshold": "En iyi eşleşme %{score} skor aldı, %{threshold} eşiğinin altında kaldı, bu yüzden hiçbir şey gönderilmedi.",
         "belowThresholdNoBar": "En iyi eşleşme %{score} skor aldı, bu yeterli olmadı, bu yüzden hiçbir şey gönderilmedi.",
         "lowMargin": "İki SSS birbirine çok yakındı (%{score} ve %{second}), bu yüzden bot tahmin yürütmedi.",
@@ -502,7 +508,8 @@
         "tier": "Kararı {tier} katmanı verdi.",
         "error": "Hata: {error}",
         "vetoed": "En iyi eşleşme %{score} skor aldı ve %{threshold} eşiğini aştı, ancak ikinci kontrol bunun mesajı yanıtlamadığını söyledi, bu yüzden hiçbir şey gönderilmedi.",
-        "vetoedNoBar": "En iyi eşleşme %{score} skor aldı, ancak ikinci kontrol bunun mesajı yanıtlamadığını söyledi, bu yüzden hiçbir şey gönderilmedi."
+        "vetoedNoBar": "En iyi eşleşme %{score} skor aldı, ancak ikinci kontrol bunun mesajı yanıtlamadığını söyledi, bu yüzden hiçbir şey gönderilmedi.",
+        "flowStarted": "Müşteri \"{faq}\" öğesinin adımına %{score} ile yönlendirildi."
       },
       "flowRun": "(bir akıştan)"
     },
@@ -565,7 +572,6 @@
     },
     "settings": {
       "title": "SSS ayarları",
-      "subtitle": "SSS yanıtlamayı açın ve bir mesajın ne kadar yakın eşleşmesi gerektiğini ayarlayın.",
       "unsaved": "Kaydedilmemiş değişiklikler",
       "discard": "Vazgeç",
       "save": "Ayarları kaydet",
@@ -580,11 +586,11 @@
       },
       "enable": {
         "title": "SSS yanıtlama",
-        "label": "Müşterilere SSS ile yanıt ver",
         "on": "Açık",
         "off": "Kapalı",
-        "onBody": "Bir müşteri yazdığında bot mesajı SSS öğelerinizle karşılaştırır ve en iyi yanıtı gönderir ya da akışını başlatır. Mesajı zaten alan bir akış veya anahtar kelime tetikleyicisi önceliklidir.",
-        "offBody": "Müşteriler SSS yanıtı almaz. Yine de SSS yazıp test edebilirsiniz."
+        "label": "Müşterilere bu akışın SSS öğeleriyle yanıt ver",
+        "onBody": "Bu akış canlıyken, hiçbir anahtar sözcük tetikleyicisinin veya çalışan akışın üstlenmediği müşteri mesajı bu akışın SSS öğeleriyle karşılaştırılır. Bot en iyi yanıtla cevap verir veya müşteriyi SSS öğesinin gösterdiği adıma yönlendirir.",
+        "offBody": "Bu akışın SSS öğeleri müşterilere yanıt vermez. Yine de yazıp test edebilirsiniz."
       },
       "sens": {
         "title": "Hassasiyet",
@@ -653,21 +659,23 @@
         "explainOn": "%{from} ile %{to} arasında skor alan eşleşmeler {model} tarafından kontrol edilir. \"Hayır\" yanıtı, hiçbir yanıtın gönderilmeyeceği ve mesajın Yanıtsız altında görüneceği anlamına gelir.",
         "explainOff": "%{threshold} veya üzeri skor alan her eşleşme yanıtlanır. En sınırdaki eşleşmelerin yeniden kontrol edilmesi için ikinci kontrolü açın.",
         "cost": "Her kontrol, müşterinin mesajını ve SSS öğesinin sorusunu modele gönderir: birkaç yüz token tutar ve sınırdaki bir yanıta yaklaşık bir saniye ekler. Aralığın dışındaki eşleşmeler hiçbir zaman kontrol edilmez. Kontrol başarısız olursa, kullanılamazsa veya saatlik sınıra ulaşılırsa eşleşme, kontrol yokmuş gibi geçerli kalır."
-      }
+      },
+      "subtitle": "{flow} için SSS yanıtlamayı açın ve bir mesajın ne kadar yakın eşleşmesi gerektiğini ayarlayın."
     },
     "flowNode": {
-      "label": "Başlangıç noktası",
       "start": "Akışın başlangıcı",
-      "hint": "Akışın başlangıcını atlamak için bir adım seçin. Müşteriler akışa seçtiğiniz adımdan girer.",
       "loading": "Bu akışın adımları yükleniyor",
       "empty": "Bu akışta başka adım yok, bu yüzden başından başlar.",
       "retry": "Tekrar dene",
       "deletedOption": "Silinmiş adım (başka bir tane seçin)",
       "missing": {
-        "title": "Bu SSS öğesinin başladığı adım silinmiş",
         "body": "Bu adım akıştan silindi. Başka bir adım seçene kadar bu SSS öğesiyle eşleşen müşteriler yanıt almaz. Aşağıdan bir adım seçin veya akışın başlangıcından başlatın.",
-        "fix": "Akışın başından başlat"
-      }
+        "fix": "Akışın başından başlat",
+        "title": "Bu SSS öğesinin yönlendirdiği adım kayboldu"
+      },
+      "label": "Git",
+      "hint": "Akışın başını atlamak için bir adım seçin. Müşteriler seçtiğiniz adımdan devam eder.",
+      "hintOwn": "Bu akışın bir adımını seçin. Akışı son kaydettiğinizden beri eklediğiniz adımlar, akışı kaydettikten sonra görünür."
     },
     "verify": {
       "title": "İkinci kontrol",
@@ -684,6 +692,14 @@
         "vetoed": "Eşleşme sınırdaydı ve ikinci kontrol bu SSS öğesinin mesajı yanıtlamadığını söyledi. Yanıt tutuldu, hiçbir şey gönderilmedi ve mesaj Yanıtsız altında görünüyor.",
         "failed": "Eşleşme sınırdaydı, ancak kontrol tamamlanamadı; bu yüzden eşleşme geçerli kaldı ve yanıt, ikinci kontrol yokmuş gibi gönderildi.",
         "skipped": "İkinci kontrol bu eşleşme için çalışmadı, bu yüzden eşleşme olduğu gibi kaldı."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "SSS öğelerinden kaydetmeden çıkılsın mı?",
+        "body": "SSS öğelerinde kaydedilmemiş değişiklikleriniz var. Bu sekmeden ayrılırsanız kaybolur.",
+        "leave": "Çık",
+        "stay": "Düzenlemeye devam et"
       }
     }
   }

@@ -406,7 +406,8 @@
         "failed": "We could not switch workspaces. Please try again.",
         "notAvailable": "You cannot switch to that workspace.",
         "rateLimited": "Too many attempts. Please wait a moment and try again.",
-        "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}."
+        "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
+        "unverified": "Verify your email in this workspace to switch to it."
       },
       "mfaChallenge": {
         "title": "Confirm it is you",
@@ -591,7 +592,9 @@
             "extra_channels": "Telegram, Facebook and Instagram",
             "form_builder": "Forms",
             "waba_groups": "WhatsApp groups",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Help assistant",
+            "email_channel": "Email (Gmail) channel"
           },
           "cta": {
             "continueFree": "Continue free",

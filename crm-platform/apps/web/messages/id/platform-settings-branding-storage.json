@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Kampanye",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Pembuat alur"
     },
     "hub": {
@@ -930,6 +932,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Klien OAuth Google tempat setiap ruang kerja menghubungkan kotak suratnya.",
+        "sections": {
+          "oauth": {
+            "title": "Klien OAuth Google"
+          },
+          "push": {
+            "title": "Push Gmail (opsional)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Izinkan ruang kerja menghubungkan Gmail",
+            "hint": "Nonaktif: tidak ada ruang kerja yang dapat terhubung dan tidak ada email yang dibaca atau dikirim. Kotak surat yang sudah terhubung tetap disimpan."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "Dari Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Kosong akan menggunakan GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Disimpan terenkripsi dan tidak akan ditampilkan lagi. Kosong berarti tetap menggunakan yang tersimpan; GOOGLE_MAIL_CLIENT_SECRET sebagai cadangan."
+          },
+          "redirectUri": {
+            "label": "Penggantian Redirect URI",
+            "hint": "Kosongkan untuk menggunakan alamat di atas. Harus sama persis dengan Authorised redirect URI pada klien."
+          },
+          "pubsubTopic": {
+            "label": "Topik Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Beri gmail-api-push@system.gserviceaccount.com peran Publisher pada topik ini. Kosong memakai GOOGLE_MAIL_PUBSUB_TOPIC; tanpa topik, kotak surat hanya dicek berkala."
+          },
+          "pushAudience": {
+            "label": "Audiens push",
+            "hint": "Audiens yang diatur pada langganan push. Kosong memakai GOOGLE_MAIL_PUSH_AUDIENCE, jika tidak ada maka alamat endpoint push platform ini."
+          },
+          "pushServiceAccount": {
+            "label": "Akun layanan push",
+            "hint": "Akun layanan yang dipakai langganan push untuk menandatangani. Push dari akun lain ditolak. Kosong memakai GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Email Microsoft 365",
+        "description": "Aplikasi Microsoft yang dipakai setiap ruang kerja untuk menghubungkan kotak surat Outlook dan Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikasi Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Izinkan ruang kerja menghubungkan Microsoft 365",
+            "hint": "Nonaktif: tidak ada ruang kerja yang dapat terhubung dan tidak ada email yang dibaca atau dikirim. Kotak surat yang sudah terhubung tetap disimpan."
+          },
+          "clientId": {
+            "label": "ID aplikasi (klien)",
+            "hint": "Dari pusat admin Microsoft Entra, Pendaftaran aplikasi, Ringkasan. Kosong memakai MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Disimpan terenkripsi dan tidak akan ditampilkan lagi. Kosong berarti tetap menggunakan yang tersimpan; MICROSOFT_MAIL_CLIENT_SECRET sebagai cadangan."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common mengizinkan akun kerja, sekolah, dan pribadi; gunakan ID direktori (tenant) untuk aplikasi satu tenant. Kosong memakai MICROSOFT_MAIL_TENANT, jika tidak ada maka common."
+          },
+          "redirectUri": {
+            "label": "Penggantian Redirect URI",
+            "hint": "Kosongkan untuk menggunakan alamat di atas. Harus sama persis dengan Authorised redirect URI pada klien."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Pembuat alur",
         "description": "Pembuat alur mana yang ditawarkan kepada workspace.",
@@ -1062,6 +1137,16 @@
         "title": "Google Calendar",
         "description": "Klien OAuth Google yang digunakan workspace untuk menghubungkan kalender mereka untuk pemesanan dan jadwal sibuk.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Klien OAuth Google yang dipakai ruang kerja untuk menghubungkan kotak surat Gmail mereka.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Email Microsoft 365",
+        "description": "Aplikasi Microsoft yang dipakai ruang kerja untuk menghubungkan kotak surat Outlook dan Microsoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Pembuat alur",
@@ -1648,6 +1733,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Email Gmail",
+        "eyebrow": "Admin - Email",
+        "description": "Satu klien OAuth Google Cloud untuk seluruh platform, terpisah dari Google Kalender. Setiap ruang kerja menghubungkan kotak suratnya sendiri dari Email dan tidak pernah melihat ID klien atau rahasianya.",
+        "sections": {
+          "oauth": {
+            "title": "Klien OAuth Google",
+            "description": "Tanpa ID klien dan rahasia, ruang kerja tidak dapat menghubungkan kotak surat."
+          },
+          "push": {
+            "title": "Push Gmail (opsional)",
+            "description": "Email baru sampai di kotak masuk tim dalam hitungan detik, tanpa menunggu pengecekan berikutnya. Pengecekan berkala tetap aktif sebagai jaring pengaman."
+          }
+        },
+        "guide": {
+          "title": "Siapkan di Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Proyek dan API",
+              "body": "Di Google Cloud Console, buat proyek dan aktifkan Gmail API."
+            },
+            "redirect": {
+              "title": "2. Klien OAuth",
+              "body": "Buat OAuth 2.0 Client ID bertipe Web application dan tambahkan redirect URI yang ditampilkan di halaman ini di bawah Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Layar persetujuan",
+              "body": "Tambahkan cakupan openid, email, gmail.readonly, dan gmail.send. Cakupan Gmail bersifat terbatas: Google harus memverifikasi aplikasi untuk penggunaan umum, dan dalam mode Pengujian izin berakhir setelah 7 hari."
+            },
+            "workspaces": {
+              "title": "4. Workspace terhubung",
+              "body": "Tempel ID klien dan rahasia di sini lalu simpan. Setelah itu admin menghubungkan dari Email."
+            },
+            "push": {
+              "title": "5. Email instan (opsional)",
+              "body": "Buat topik Pub/Sub, beri gmail-api-push@system.gserviceaccount.com peran Publisher, tambahkan langganan push ke APP_URL/v2/public/email/google/push dengan autentikasi OIDC, lalu isi topik, audiens, dan akun layanan di sini."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Email Microsoft 365",
+        "eyebrow": "Admin - Email",
+        "description": "Satu aplikasi Microsoft Entra untuk seluruh platform. Setiap ruang kerja menghubungkan kotak suratnya sendiri dari Email dan tidak pernah melihat ID atau rahasia klien.",
+        "sections": {
+          "oauth": {
+            "title": "Aplikasi Microsoft Entra",
+            "description": "Tanpa ID klien dan rahasia, ruang kerja tidak dapat menghubungkan kotak surat."
+          }
+        },
+        "guide": {
+          "title": "Siapkan di Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Pendaftaran aplikasi",
+              "body": "Di pusat admin Microsoft Entra, buat pendaftaran aplikasi. Pilih jenis akun pelanggan Anda (kerja atau sekolah, dan akun pribadi untuk Outlook.com), lalu salin ID aplikasi (klien) dan tenant ke sini."
+            },
+            "redirect": {
+              "title": "2. URI pengalihan dan rahasia",
+              "body": "Tambahkan URI pengalihan yang ditampilkan di halaman ini sebagai pengalihan platform Web, lalu buat rahasia klien di Sertifikat & rahasia dan tempel nilainya di sini."
+            },
+            "permissions": {
+              "title": "3. Izin API",
+              "body": "Tambahkan izin delegasi Microsoft Graph Mail.Read, Mail.Send, User.Read, dan offline_access. Untuk penggunaan umum, selesaikan verifikasi penerbit; beberapa organisasi juga mewajibkan persetujuan admin."
+            },
+            "workspaces": {
+              "title": "4. Workspace terhubung",
+              "body": "Tempel ID klien dan rahasia di sini lalu simpan. Setelah itu admin menghubungkan dari Email."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Pembuat alur",
         "eyebrow": "Admin - Otomatisasi",
@@ -1735,6 +1892,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "Daftarkan alamat ini persis sebagai Authorised redirect URI pada klien OAuth. Di sinilah Google mengirim browser setelah admin workspace menyetujui.",
+      "copy": "Salin",
+      "copied": "Disalin"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "Daftarkan alamat ini persis sebagai URI pengalihan Web di pendaftaran aplikasi. Ke sinilah Microsoft mengirim browser setelah admin ruang kerja menyetujui.",
       "copy": "Salin",
       "copied": "Disalin"
     }

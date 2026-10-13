@@ -1,8 +1,7 @@
 import { createHash } from 'node:crypto';
 import { FLOW_RUN_LOG_MAX_STEPS, type FlowStepIoItem } from '@crm/contracts';
 import type { RuntimeGraph, RuntimeNode } from '../graph/runtime-graph';
-import type { StepOutcome } from './engine-core';
-import type { OutboundMessage, SendOutcome } from './types';
+import type { OutboundMessage, SendOutcome, StepOutcome } from './types';
 
 /**
  * What one node execution leaves in the run log (TW-FLR-054, 083). Pure: no database, no clock.
@@ -219,6 +218,8 @@ export function stepFields(
   } else if (t.t === 'halt') kind = 'error';
   else if (t.t === 'wait' || t.t === 'sleep') kind = 'waiting';
   else if (outcome.notes.some((n) => n.startsWith('no executor'))) kind = 'skipped';
+  // The node carried on but its message never reached the customer: that is a failure of the node, not an OK.
+  if (kind === 'ok' && outcome.sendFailed) kind = 'error';
 
   const bits = [...(outcome.sent ?? []), ...outcome.notes];
   if (t.t === 'halt') bits.push(t.reason);

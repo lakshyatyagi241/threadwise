@@ -52,6 +52,8 @@ export const workspaceItemSchema = z.object({
   slug: z.string(),
   name: z.string(),
   current: z.boolean(),
+  /** The email is not verified in that workspace yet, so it is listed but cannot be switched to. */
+  unverified: z.boolean().optional(),
 });
 export const workspaceListResponseSchema = z.object({ data: z.array(workspaceItemSchema) });
 export type WorkspaceListResponse = z.infer<typeof workspaceListResponseSchema>;

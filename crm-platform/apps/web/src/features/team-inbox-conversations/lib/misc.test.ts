@@ -1,11 +1,43 @@
 import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
 import { ERROR_KINDS, errorCode, errorKind, isRetryableSend } from './errors';
-import { isGroupThread } from './group-thread';
+import {
+  isGroupLimited,
+  isGroupSendBlocked,
+  isGroupThread,
+  isPersonalGroupThread,
+  personalGroupBlock,
+} from './group-thread';
 import { shortcutAction } from './shortcuts';
 import { eventLabel } from './timeline';
 
 describe('group threads', () => {
+  it('the Reply tab is off on a group thread only for a channel that cannot send to a group', () => {
+    expect(isGroupSendBlocked('g:Y2FwaV9ncm91cDox', 'whatsapp_cloud')).toBe(false);
+    // A personal (linked) number sends into its groups.
+    expect(isGroupSendBlocked('g:120363025246125486', 'whatsapp_qr')).toBe(false);
+    expect(isGroupSendBlocked('g:Y2FwaV9ncm91cDox', 'telegram')).toBe(true);
+    expect(isGroupSendBlocked('g:Y2FwaV9ncm91cDox', 'email')).toBe(true);
+    expect(isGroupSendBlocked('919876543210', 'whatsapp_qr')).toBe(false);
+  });
+  it('only the Cloud API keeps the group thread limited to text and files; a personal number gets the whole composer', () => {
+    expect(isGroupLimited('g:abc', 'whatsapp_cloud')).toBe(true);
+    expect(isGroupLimited('g:120363025246125486', 'whatsapp_qr')).toBe(false);
+    expect(isGroupLimited('919876543210', 'whatsapp_cloud')).toBe(false);
+    expect(isPersonalGroupThread('g:120363025246125486', 'whatsapp_qr')).toBe(true);
+    expect(isPersonalGroupThread('g:abc', 'whatsapp_cloud')).toBe(false);
+    expect(isPersonalGroupThread('919876543210', 'whatsapp_qr')).toBe(false);
+  });
+  it('a personal group is read-only when the number left, or when only admins write and it is not one', () => {
+    const open = { left: false, announceOnly: false, canSend: true };
+    expect(personalGroupBlock(open)).toBeNull();
+    expect(personalGroupBlock(undefined)).toBeNull();
+    expect(personalGroupBlock({ ...open, left: true, canSend: false })).toBe('left');
+    expect(personalGroupBlock({ ...open, announceOnly: true, canSend: false })).toBe(
+      'announceOnly',
+    );
+    expect(personalGroupBlock({ ...open, canSend: false })).toBe('announceOnly');
+  });
   it('a thread keyed g:<id> is a group; a phone number or nothing is not', () => {
     expect(isGroupThread('g:Y2FwaV9ncm91cDox')).toBe(true);
     expect(isGroupThread('919876543210')).toBe(false);
@@ -22,6 +54,15 @@ describe('error kinds', () => {
     expect(errorKind('ROW_VERSION_CONFLICT')).toBe('conflict');
     expect(errorKind('CONVERSATION_NOT_FOUND')).toBe('notFound');
     expect(errorKind('WABA_GROUP_SEND_UNAVAILABLE')).toBe('groupSendUnavailable');
+    expect(errorKind('WABA_GROUP_SUSPENDED')).toBe('groupSuspended');
+    expect(errorKind('WALLET_EMPTY')).toBe('walletEmpty');
+    expect(errorKind('WA_GROUP_LEFT')).toBe('groupLeft');
+    expect(errorKind('WA_GROUP_ANNOUNCE_ONLY')).toBe('groupAnnounceOnly');
+    expect(errorKind('WA_GROUP_RATE_LIMITED')).toBe('groupRateLimited');
+    expect(errorKind('WA_GROUP_UNAVAILABLE')).toBe('groupUnavailable');
+    expect(isRetryableSend('WA_GROUP_RATE_LIMITED')).toBe(true);
+    expect(isRetryableSend('WA_GROUP_LEFT')).toBe(false);
+    expect(isRetryableSend('WA_GROUP_ANNOUNCE_ONLY')).toBe(false);
     expect(isRetryableSend('WABA_GROUP_SEND_UNAVAILABLE')).toBe(false);
     expect(errorKind('SOMETHING_NEW')).toBe('generic');
   });

@@ -78,6 +78,11 @@
       "payments": "Pagamentos"
     },
     "help": "Ajuda",
-    "unreadCount": "{count, plural, one {# não lida} other {# não lidas}}"
+    "unreadCount": "{count, plural, one {# não lida} other {# não lidas}}",
+    "backgroundError": {
+      "message": "Não foi possível atualizar alguns números em tempo real, como notificações, saldo ou contagens da caixa de entrada. O que você vê pode estar desatualizado.",
+      "retry": "Tentar novamente",
+      "dismiss": "Dispensar"
+    }
   }
 }

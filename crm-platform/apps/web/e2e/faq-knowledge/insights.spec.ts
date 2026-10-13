@@ -2,24 +2,25 @@ import {
   call,
   customerSays,
   expect,
-  go,
-  login,
+  faqBase,
   logCount,
+  login,
   newWorkspace,
   open,
+  openFaqs,
   putSettings,
   repliesTo,
   seedFaq,
   seedFlow,
   simulator,
+  type State,
   test,
   waitIndexed,
-  type State,
   type Workspace,
 } from './support';
 import type { Page } from '@playwright/test';
 
-/** `/faq/insights`: the numbers must agree with exactly what a simulated customer sent, and the log must explain each decision. */
+/** A flow's insights (the Insights screen of its FAQs tab): the numbers must agree with exactly what a simulated customer sent, and the log must explain each decision. */
 let ws: Workspace;
 let state: State;
 let fresh: Workspace;
@@ -64,7 +65,7 @@ const kpi = (page: Page) => page.getByRole('group', { name: 'Key numbers' });
 
 test('a workspace with no traffic shows the empty insights', async ({ browser, watch }) => {
   const { page } = await open(browser, freshState, watch);
-  await go(page, '/faq/insights');
+  await openFaqs(page, fresh, 'insights');
   await expect(page.getByText('No messages yet')).toBeVisible();
   await expect(kpi(page)).toHaveCount(0);
   await expect(page.getByText('No messages here yet.')).toBeVisible();
@@ -74,7 +75,7 @@ test('the key numbers and rankings agree with what was sent and with the API', a
   browser,
   watch,
 }) => {
-  const api = (await call(ws, 'GET', '/v2/faq/insights/summary?days=30')).body;
+  const api = (await call(ws, 'GET', `${faqBase(ws)}/insights/summary?days=30`)).body;
   expect(api.totals).toMatchObject({
     messages: 5,
     answered: 2,
@@ -85,7 +86,7 @@ test('the key numbers and rankings agree with what was sent and with the API', a
   expect(api.answerRate).toBeCloseTo(0.6, 5);
 
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/insights');
+  await openFaqs(page, ws, 'insights');
   const k = kpi(page);
   await expect(k).toBeVisible();
   const tile = (label: string) => k.getByText(label, { exact: true }).locator('..');
@@ -116,7 +117,7 @@ test('the key numbers and rankings agree with what was sent and with the API', a
 
 test('the score histogram has a table view with the same counts', async ({ browser, watch }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/insights');
+  await openFaqs(page, ws, 'insights');
   const hist = page.getByRole('region', { name: 'How well messages scored' });
   await expect(hist.getByRole('img', { name: /Histogram of match scores/ })).toBeVisible();
   await expect(hist.getByText('Threshold 80%')).toBeVisible();
@@ -150,7 +151,7 @@ test('the match log filters, searches, and expands a row to its candidates and s
   watch,
 }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/insights');
+  await openFaqs(page, ws, 'insights');
   const log = page.getByRole('region', { name: 'Match log' });
   const rows = log
     .locator('tbody > tr')
@@ -196,7 +197,7 @@ test('a flow start and an answer are labelled differently in the log', async ({
   watch,
 }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/insights');
+  await openFaqs(page, ws, 'insights');
   const log = page.getByRole('region', { name: 'Match log' });
   await log.getByRole('searchbox', { name: 'Search the log' }).fill('talk to billing');
   const row = log.locator('tbody > tr').first();
@@ -204,7 +205,7 @@ test('a flow start and an answer are labelled differently in the log', async ({
   await expect(row).toContainText('100%');
   await row.getByRole('button', { name: 'Show details' }).click();
   await expect(log.locator('tbody tr[id^="faq-log-"]')).toContainText(
-    'Started the flow of "Talk to billing"',
+    'Sent the customer to the step of "Talk to billing"',
   );
   await expect(log.locator('tbody tr[id^="faq-log-"]')).toContainText('Exact match');
 });

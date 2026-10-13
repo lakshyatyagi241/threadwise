@@ -164,7 +164,12 @@
       "messaging": "Luồng tin nhắn",
       "messagingNote": "WhatsApp, Instagram hoặc Facebook — đổi kênh ở nút Kích hoạt",
       "call": "Cuộc gọi",
-      "callNote": "IVR thoại AI — nói, lắng nghe, chuyển máy"
+      "callNote": "IVR thoại AI — nói, lắng nghe, chuyển máy",
+      "subtitleSimple": "Mỗi bot được xây dựng cho một kênh, vì không phải thành phần nào cũng hoạt động trên mọi kênh.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Trả lời khách hàng trên số WhatsApp đã kết nối",
+      "web": "Chat trên website",
+      "webNote": "Một widget chat bạn thêm vào website của mình"
     },
     "rename": {
       "title": "Đổi tên luồng",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Tất cả FAQ",
           "faqCategory": "FAQ: {name}",
           "faqScore": "điểm tối thiểu {score}",
-          "faqWorkspaceScore": "điểm của workspace",
-          "faqNotSent": "không gửi"
+          "faqNotSent": "không gửi",
+          "faqWorkspaceScore": "điểm của luồng"
         },
         "overlays": {
           "startPinned": "Đây là điểm bắt đầu (nhấn để bỏ ghim)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "So khớp tin nhắn với các FAQ của bạn theo ý nghĩa và trả lời. Thoát qua <mono>đã trả lời</mono> khi có FAQ trả lời, và qua <mono>không khớp</mono> trong trường hợp còn lại.",
-            "sub": "Hoạt động mà không cần bật tự động trả lời bằng FAQ. <link>Quản lý FAQ của bạn</link>"
+            "body": "So khớp tin nhắn với FAQ của luồng này theo ý nghĩa và trả lời. Thoát qua <mono>answered</mono> khi một FAQ đã trả lời, và qua <mono>no match</mono> trong các trường hợp còn lại.",
+            "sub": "Hoạt động mà không cần bật trả lời FAQ tự động của luồng này. <link>Quản lý FAQ của luồng này</link>"
           },
           "exitsLabel": "Lối ra",
           "exitMatchedName": "Đã trả lời",
           "exitMatched": "một FAQ đã trả lời: văn bản của nó đã được gửi (trừ khi tắt gửi), hoặc luồng của nó tiếp quản và không quay lại.",
           "exitNoMatchName": "Không khớp",
           "exitNoMatch": "không có gì đủ gần, tự động trả lời bằng FAQ bị tắt cho nền tảng, luồng hoặc bước được liên kết không còn, hoặc tin nhắn trống.",
-          "noFaqs": "Bạn chưa có FAQ nào, nên bước này luôn thoát qua không khớp. <link>Thêm FAQ đầu tiên của bạn</link>",
           "query": "Tin nhắn cần so khớp",
           "queryHint": "Mặc định là tin nhắn cuối cùng của khách hàng. Biến do bước Câu hỏi lưu cũng dùng được, ví dụ <mono>{variable}</mono>. Nhập / để chèn.",
           "category": "Chỉ các FAQ này",
           "allFaqs": "Tất cả FAQ",
           "loadingCategories": "Đang tải danh mục…",
           "categoryGone": "{name} (không có FAQ nào dùng)",
-          "categoryHint": "Chỉ FAQ thuộc danh mục này mới có thể trả lời. Các danh mục lấy từ FAQ của bạn.",
-          "categoriesFailed": "Không thể tải danh mục FAQ của bạn.",
           "retry": "Thử lại",
           "minScore": "Điểm tối thiểu",
-          "useWorkspaceScore": "Dùng cài đặt của workspace",
-          "minScoreHint": "Thay thế điểm của workspace chỉ cho bước này, từ {min} đến {max}. Điểm phụ thuộc vào mô hình embedding của nền tảng, vì vậy hãy thử một tin nhắn trên <link>Kiểm tra FAQ</link> trước khi chọn số.",
-          "minScoreInvalid": "Nhập số từ {min} đến {max}, hoặc dùng cài đặt của workspace.",
           "sendAnswer": "Gửi câu trả lời cho khách hàng",
           "sendAnswerToggle": "Gửi câu trả lời văn bản khớp dưới dạng tin nhắn",
           "sendAnswerOnHint": "FAQ văn bản khớp sẽ được gửi cho khách hàng. FAQ bắt đầu một luồng sẽ tiếp tục trong luồng đó.",
@@ -1824,7 +1823,14 @@
             "question": "câu hỏi của FAQ khớp",
             "score": "mức độ khớp",
             "id": "id của FAQ khớp"
-          }
+          },
+          "noFaqs": "Luồng này chưa có FAQ nào, nên bước này luôn thoát qua no match. <link>Thêm FAQ đầu tiên cho luồng này</link>",
+          "useWorkspaceScore": "Dùng cài đặt của luồng này",
+          "minScoreInvalid": "Nhập một số từ {min} đến {max}, hoặc dùng cài đặt của luồng này.",
+          "saveFlowFirst": "Hãy lưu luồng trước. FAQ của luồng được chỉnh sửa ở tab FAQ của trình tạo đơn giản, và bước này trả lời từ đó.",
+          "categoryHint": "Chỉ FAQ thuộc danh mục này mới có thể trả lời. Các danh mục lấy từ FAQ của luồng này.",
+          "categoriesFailed": "Không thể tải danh mục FAQ của luồng này.",
+          "minScoreHint": "Thay thế điểm của luồng này chỉ cho bước này, từ {min} đến {max}. Điểm phụ thuộc vào mô hình embedding của nền tảng, nên hãy thử một tin nhắn trong <link>kiểm tra FAQ</link> của luồng này trước khi chọn số."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Địa điểm thử nghiệm",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Các phần của luồng",
+        "faqs": "FAQ",
+        "saveFirst": "Hãy lưu luồng trước.",
+        "build": "Xây dựng",
+        "customize": "Tùy chỉnh",
+        "install": "Cài đặt",
+        "needsCustomizing": "Widget vẫn dùng giao diện mặc định. Hãy mở Tùy chỉnh.",
+        "customizeFirst": "Hãy tùy chỉnh widget chat và lưu một lần trước khi xuất bản."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Email"
+        "email": "Email",
+        "web": "Chat trên website"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "Nút Kích hoạt chưa chọn tài khoản Instagram — hãy chọn ở bước Kích hoạt.",
         "noSenderFacebook": "Nút Kích hoạt chưa chọn Trang Facebook — hãy chọn ở bước Kích hoạt.",
         "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt.",
-        "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của workspace."
+        "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của luồng."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Bước {stage}: mỗi dòng cần tiêu đề tối đa {max} ký tự.",
         "rowDescriptionTooLong": "Bước {stage}: mô tả dòng dài hơn {max} ký tự.",
         "variableUsed": "Bước {stage}: \"{name}\" đã được bước {other} sử dụng; hãy đặt tên riêng cho từng đáp án.",
-        "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của workspace."
+        "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của luồng."
       },
       "faqSummary": "{hasCategory, select, true {Từ FAQ của bạn · {category}} other {Từ FAQ của bạn}}"
     },

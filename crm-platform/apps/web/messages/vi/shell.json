@@ -78,6 +78,11 @@
       "payments": "Thanh toán"
     },
     "help": "Trợ giúp",
-    "unreadCount": "{count, plural, other {# chưa đọc}}"
+    "unreadCount": "{count, plural, other {# chưa đọc}}",
+    "backgroundError": {
+      "message": "Không thể làm mới một số số liệu trực tiếp, như thông báo, số dư hoặc số lượng hộp thư đến. Những gì bạn thấy có thể đã cũ.",
+      "retry": "Thử lại",
+      "dismiss": "Đóng"
+    }
   }
 }

@@ -121,6 +121,12 @@
       "selectedActionsNone": "Ausgewählte Kontakte (zuerst Zeilen auswählen)",
       "modifyColumns": "Spalten anpassen",
       "resetColumns": "Auf Standard zurücksetzen",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Kontaktname",
       "colPhone": "Telefonnummer",
       "colEmailId": "E-Mail-Adresse",
@@ -170,7 +176,8 @@
       "import": "Importieren",
       "columns": "Spalten",
       "addColumnField": "Benutzerdefiniertes Feld als Spalte hinzufügen",
-      "kanbanView": "Board-Ansicht (nach Phase)"
+      "kanbanView": "Board-Ansicht (nach Phase)",
+      "colLeadScore": "Lead-Score"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -406,7 +413,8 @@
         "address": "Adresse",
         "memo": "Memo",
         "status": "Status",
-        "source": "Quelle"
+        "source": "Quelle",
+        "consent": "Marketing-Einverständnis (ja / nein)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Exporte",
-        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Die heruntergeladene Datei wird nicht aufbewahrt.",
+        "hint": "Kontaktexporte aus dem Hub, neueste zuerst. Jede Datei wird 30 Tage aufbewahrt, damit Sie und Teammitglieder mit Exportrecht sie erneut herunterladen können.",
         "empty": "Noch keine Exporte.",
         "by": "Von",
         "rows": "Kontakte",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Markierte Kontakte",
           "filter": "Alles, was passt"
-        }
+        },
+        "download": "Herunterladen",
+        "noFile": "Nicht gespeichert",
+        "keptUntil": "Aufbewahrt bis {date}",
+        "downloadFailed": "Die Datei konnte nicht heruntergeladen werden. Sie ist möglicherweise abgelaufen."
       }
     }
   }

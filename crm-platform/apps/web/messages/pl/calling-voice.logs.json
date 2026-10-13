@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Przestrzeń robocza",
+      "title": "Rejestr połączeń",
+      "subtitle": "Każde połączenie WhatsApp wykonane lub odebrane przez zespół, z czasem trwania, osobą, która je obsłużyła, i nagraniem.",
+      "sideTip": "Każde połączenie WhatsApp z Twoich numerów lub na nie. Filtruj według daty, statusu, numeru lub współpracownika, aby znaleźć konkretne połączenie.",
+      "loading": "Ładowanie połączeń",
+      "loadFailed": "Nie udało się wczytać rejestru połączeń.",
+      "retry": "Spróbuj ponownie",
+      "emptyTitle": "Brak połączeń",
+      "emptyMessage": "Gdy klient zadzwoni na jeden z Twoich numerów WhatsApp lub zespół wykona połączenie ze skrzynki odbiorczej, pojawi się tutaj z czasem trwania, osobą, która je obsłużyła, i nagraniem.",
+      "emptyFilteredTitle": "Żadne połączenia nie pasują do filtrów",
+      "emptyFilteredMessage": "Wybierz szerszy zakres czasu lub wyczyść filtry.",
+      "clearFilters": "Wyczyść filtry",
+      "tabs": {
+        "label": "Widoki połączeń",
+        "log": "Rejestr połączeń",
+        "analytics": "Analityka"
+      },
+      "range": {
+        "title": "Zakres czasu",
+        "last24h": "Ostatnie 24 godz.",
+        "last7d": "Ostatnie 7 dni",
+        "last30d": "Ostatnie 30 dni",
+        "custom": "Zakres niestandardowy",
+        "from": "Od",
+        "to": "Do",
+        "apply": "Zastosuj"
+      },
+      "status": {
+        "title": "Status",
+        "all": "Wszystkie",
+        "completed": "Zakończone",
+        "in-progress": "Trwa teraz",
+        "no-answer": "Bez odpowiedzi",
+        "declined": "Odrzucone",
+        "failed": "Nieudane"
+      },
+      "kpi": {
+        "total": "Razem",
+        "last24h": "Ostatnie 24 godz.",
+        "minutes": "{count} min",
+        "completed": "Zakończone",
+        "failed": "Nieudane",
+        "selection": "W tym wyborze",
+        "calls": "Połączenia",
+        "answered": "Odebrane",
+        "missed": "Nieodebrane",
+        "avgDuration": "Średni czas trwania",
+        "totalMinutes": "Łączna liczba minut"
+      },
+      "filters": {
+        "label": "Filtruj połączenia",
+        "searchLabel": "Szukaj połączeń",
+        "searchPlaceholder": "Numer telefonu lub nazwa kontaktu...",
+        "direction": "Kierunek",
+        "allDirections": "Wszystkie połączenia",
+        "inbound": "Przychodzące",
+        "outbound": "Wychodzące",
+        "number": "Numer",
+        "allNumbers": "Wszystkie numery",
+        "agent": "Obsłużył(a)",
+        "allAgents": "Wszyscy",
+        "apply": "Filtruj",
+        "clear": "Wyczyść"
+      },
+      "table": {
+        "caption": "Połączenia, od najnowszych",
+        "customer": "Klient",
+        "number": "Numer",
+        "handledBy": "Obsłużył(a)",
+        "started": "Rozpoczęto",
+        "duration": "Czas trwania",
+        "status": "Status",
+        "actions": "Akcje",
+        "open": "Otwórz",
+        "inbound": "Przychodzące",
+        "outbound": "Wychodzące",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Strony",
+        "showing": "Wyświetlanie {from}-{to} z {total} połączeń",
+        "beyond": "Ta strona jest poza ostatnią ({pages} stron).",
+        "previous": "Poprzednia",
+        "next": "Następna",
+        "page": "Strona {page} z {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Ścieżka nawigacji",
+        "back": "Rejestr połączeń",
+        "loading": "Ładowanie połączenia",
+        "loadFailed": "Nie udało się wczytać tego połączenia.",
+        "notFound": "Nie znaleziono tego połączenia. Może należeć do innej przestrzeni roboczej lub być poza połączeniami, które możesz zobaczyć.",
+        "retry": "Spróbuj ponownie",
+        "handledBy": "Obsłużył(a): {name}",
+        "handler": {
+          "none": "Nikt nie obsłużył",
+          "ai": "Asystent AI",
+          "voicemail": "Poczta głosowa"
+        },
+        "openContact": "Otwórz kontakt",
+        "openInbox": "Otwórz w skrzynce odbiorczej",
+        "tiles": {
+          "duration": "Czas trwania",
+          "number": "Numer",
+          "answered": "Odebrano",
+          "ended": "Zakończono"
+        },
+        "reasons": {
+          "unknown": "Połączenie nie powiodło się.",
+          "COMPLETED": "Zakończone",
+          "REJECTED": "Połączenie zostało odrzucone.",
+          "DECLINED": "Połączenie zostało odrzucone.",
+          "BUSY": "Klient rozmawiał już przez inne połączenie.",
+          "NO_ANSWER": "Nikt nie odebrał.",
+          "MISSED": "Klient nie odebrał połączenia.",
+          "CANCELLED": "Połączenie zostało anulowane.",
+          "FAILED": "WhatsApp zgłosił, że połączenie nie powiodło się.",
+          "NO_PERMISSION": "Klient nie zezwolił jeszcze na połączenia, więc połączenie nie zostało wykonane.",
+          "META_REFUSED": "WhatsApp odmówił wykonania połączenia."
+        },
+        "timeline": {
+          "title": "Oś czasu",
+          "count": "{count, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}}",
+          "empty": "Dla tego połączenia nie zapisano żadnych kroków."
+        },
+        "steps": {
+          "dial_sent": "Połączenie wykonane",
+          "dial_failed": "Nie udało się wykonać połączenia",
+          "connect": "Połączenie połączone z WhatsApp",
+          "pre_accept_sent": "Przygotowanie do odebrania",
+          "accept_sent": "Połączenie odebrane",
+          "accept_failed": "Odbieranie nie powiodło się",
+          "reject_sent": "Połączenie odrzucone",
+          "terminate_sent": "Wysłano rozłączenie",
+          "terminate": "Połączenie zakończone",
+          "recording_stored": "Nagranie zapisane"
+        },
+        "noRecording": {
+          "title": "Nagranie",
+          "message": "To połączenie nie ma nagrania."
+        }
+      },
+      "recording": {
+        "title": "Nagranie",
+        "notice": "To połączenie zostało nagrane.",
+        "privacy": "Tylko osoby z dostępem do nagrań mogą je odtworzyć, a każde odtworzenie jest rejestrowane.",
+        "noAccess": "Widzisz, że to połączenie zostało nagrane, ale nie masz uprawnień do odtwarzania nagrań.",
+        "play": "Odtwórz nagranie",
+        "loading": "Pobieranie nagrania",
+        "playerLabel": "Nagranie połączenia",
+        "linkUntil": "Ten link działa do {time}. Po tym czasie naciśnij odtwarzanie ponownie.",
+        "playFailed": "Nie udało się odtworzyć nagrania.",
+        "retry": "Spróbuj ponownie"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Przestrzeń robocza",
+      "title": "Analityka połączeń",
+      "subtitle": "Połączenia w czasie, ile z nich odebrano, kto je obsłużył i kiedy Twoje linie są najbardziej obciążone.",
+      "loading": "Ładowanie analityki połączeń",
+      "loadFailed": "Nie udało się wczytać analityki połączeń.",
+      "retry": "Spróbuj ponownie",
+      "emptyTitle": "Brak połączeń w tym okresie",
+      "emptyMessage": "Wybierz szerszy zakres czasu lub wróć po pierwszych połączeniach.",
+      "number": "Numer",
+      "allNumbers": "Wszystkie numery",
+      "period": "{from} do {to}, strefa czasowa {tz}",
+      "kpi": {
+        "total": "Połączenia",
+        "answeredRate": "Odebrane",
+        "answeredOf": "Odebrane: {answered}",
+        "missed": "Nieodebrane",
+        "avgHandle": "Średni czas obsługi",
+        "avgHandleHint": "Czas rozmowy w odebranych połączeniach",
+        "totalMinutes": "Łączna liczba minut"
+      },
+      "overTime": {
+        "title": "Połączenia w czasie",
+        "hint": "Jeden słupek na dzień. Zielona część to połączenia odebrane.",
+        "summary": "{total} połączeń w ciągu {days} dni",
+        "answered": "Odebrane",
+        "other": "Nieodebrane",
+        "missed": "Nieodebrane",
+        "day": "Dzień",
+        "calls": "Połączenia"
+      },
+      "byAgent": {
+        "title": "Według współpracownika",
+        "agent": "Współpracownik",
+        "calls": "Połączenia",
+        "answered": "Odebrane",
+        "avgHandle": "Średni czas obsługi",
+        "minutes": "Minuty",
+        "unassigned": "Nikt nie obsłużył"
+      },
+      "heatmap": {
+        "title": "Połączenia według godziny w tygodniu",
+        "hint": "Ciemniejszy kolor oznacza więcej połączeń rozpoczętych w danej godzinie. Godziny w strefie czasowej {tz}.",
+        "weekday": "Dzień tygodnia",
+        "cell": "{day}, {hour}:00: {calls, plural, =0 {brak połączeń} one {# połączenie} few {# połączenia} many {# połączeń} other {# połączenia}}"
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ import { useCursorList } from '@/lib/api/use-cursor-list';
 import { fetchCategories, mktKeys } from '../api';
 import {
   AVAILABILITY_VIEWS,
+  BROWSE_RETRY,
   SEARCH_MAX,
   SORT_OPTIONS,
   availabilityPatch,
@@ -30,6 +31,7 @@ import { AppCard } from './app-card';
 import { CategoryList, RequestBox, Shelves } from './browse-parts';
 import { SearchIcon } from './icons';
 import { MarketplaceHeader } from './marketplace-header';
+import { ToolCards } from './tool-cards';
 import { ErrorPanel, LoadingBlock, PAGE, TEXT_LINK } from './ui';
 
 const DEBOUNCE_MS = 300;
@@ -73,12 +75,14 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
     queryKey: mktKeys.categories(kind),
     queryFn: ({ signal }) => fetchCategories(kind, signal),
     staleTime: 60_000,
+    ...BROWSE_RETRY,
   });
   const list = useCursorList(
     mktKeys.apps(kind),
     '/marketplace/apps',
     marketAppCardSchema,
     listQuery(kind, filters),
+    BROWSE_RETRY,
   );
 
   // The whole Marketplace is behind a plan feature: one clear panel instead of two failed regions.
@@ -180,6 +184,8 @@ export function BrowsePage({ kind }: { kind: MarketAppKind }) {
               </Link>
             </Alert>
           )}
+
+          {kind === 'integration' && showShelves(filters) && <ToolCards tab="integrations" />}
 
           {showShelves(filters) && <Shelves kind={kind} />}
 

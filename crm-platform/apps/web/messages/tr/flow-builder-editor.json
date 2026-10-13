@@ -164,7 +164,12 @@
       "messaging": "Mesajlaşma akışı",
       "messagingNote": "WhatsApp, Instagram veya Facebook — kanalı Tetikleyici düğümünde değiştirin",
       "call": "Arama",
-      "callNote": "Yapay zekâ sesli IVR — söyle, dinle, aktar"
+      "callNote": "Yapay zekâ sesli IVR — söyle, dinle, aktar",
+      "subtitleSimple": "Her bot tek bir kanal için oluşturulur, çünkü her bileşen her kanalda çalışmaz.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Bağlı bir WhatsApp numarasında müşterilere yanıt verir",
+      "web": "Web sitesi sohbeti",
+      "webNote": "Web sitenize eklediğiniz bir sohbet widget'ı"
     },
     "rename": {
       "title": "Akışı yeniden adlandır",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Tüm FAQ'lar",
           "faqCategory": "FAQ'lar: {name}",
           "faqScore": "en düşük puan {score}",
-          "faqWorkspaceScore": "çalışma alanı puanı",
-          "faqNotSent": "gönderilmez"
+          "faqNotSent": "gönderilmez",
+          "faqWorkspaceScore": "akış puanı"
         },
         "overlays": {
           "startPinned": "Bu başlangıç noktasıdır (sabitlemeyi kaldırmak için tıklayın)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Bir mesajı anlamına göre FAQ'larınızla eşleştirir ve yanıtlar. Bir FAQ yanıtladığında <mono>yanıtlandı</mono> çıkışından, aksi halde <mono>eşleşme yok</mono> çıkışından ayrılır.",
-            "sub": "Otomatik FAQ yanıtlamayı açmadan da çalışır. <link>FAQ'larınızı yönetin</link>"
+            "body": "Bir mesajı anlamına göre bu akışın SSS öğeleriyle eşleştirir ve yanıtlar. Bir SSS yanıtladığında <mono>answered</mono> çıkışından, aksi halde <mono>no match</mono> çıkışından ayrılır.",
+            "sub": "Bu akışın otomatik SSS yanıtlaması açılmadan da çalışır. <link>Bu akışın SSS öğelerini yönet</link>"
           },
           "exitsLabel": "Çıkışlar",
           "exitMatchedName": "Yanıtlandı",
           "exitMatched": "bir FAQ yanıtladı: metni gönderildi (gönderim kapalı değilse) ya da akışı devraldı ve geri dönmez.",
           "exitNoMatchName": "Eşleşme yok",
           "exitNoMatch": "yeterince yakın bir şey bulunamadı, platform için FAQ ile yanıtlama kapalı, bağlı akış veya adım artık yok ya da mesaj boştu.",
-          "noFaqs": "Henüz FAQ'ınız yok, bu yüzden bu adım her zaman eşleşme yok çıkışından ayrılır. <link>İlk FAQ'ınızı ekleyin</link>",
           "query": "Eşleştirilecek mesaj",
           "queryHint": "Varsayılan olarak müşterinin son mesajıdır. Bir Soru adımının kaydettiği değişken de olur, örneğin <mono>{variable}</mono>. Eklemek için / yazın.",
           "category": "Yalnızca bu FAQ'lar",
           "allFaqs": "Tüm FAQ'lar",
           "loadingCategories": "Kategoriler yükleniyor…",
           "categoryGone": "{name} (hiçbir FAQ kullanmıyor)",
-          "categoryHint": "Yalnızca bu kategorideki FAQ'lar yanıtlayabilir. Kategoriler FAQ'larınızdan gelir.",
-          "categoriesFailed": "FAQ kategorileriniz yüklenemedi.",
           "retry": "Tekrar dene",
           "minScore": "En düşük puan",
-          "useWorkspaceScore": "Çalışma alanı ayarını kullan",
-          "minScoreHint": "Yalnızca bu adım için çalışma alanı puanının yerine geçer, {min} ile {max} arasında. Puanlar platformun gömme modeline bağlıdır, bu yüzden bir sayı seçmeden önce <link>FAQ testi</link> sayfasında bir mesaj deneyin.",
-          "minScoreInvalid": "{min} ile {max} arasında bir sayı girin veya çalışma alanı ayarını kullanın.",
           "sendAnswer": "Yanıtı müşteriye gönder",
           "sendAnswerToggle": "Eşleşen metin yanıtını mesaj olarak gönder",
           "sendAnswerOnHint": "Eşleşen metin FAQ'ı müşteriye gönderilir. Bir akış başlatan FAQ o akışta devam eder.",
@@ -1824,7 +1823,14 @@
             "question": "eşleşen FAQ'ın sorusu",
             "score": "eşleşmenin ne kadar yakın olduğu",
             "id": "eşleşen FAQ'ın kimliği"
-          }
+          },
+          "noFaqs": "Bu akışın henüz SSS öğesi yok, bu yüzden bu adım her zaman no match çıkışından ayrılır. <link>Bu akışın ilk SSS öğesini ekle</link>",
+          "useWorkspaceScore": "Bu akışın ayarını kullan",
+          "minScoreInvalid": "{min} ile {max} arasında bir sayı girin veya bu akışın ayarını kullanın.",
+          "saveFlowFirst": "Önce akışı kaydedin. SSS öğeleri Basit oluşturucunun SSS sekmesinde düzenlenir ve bu adım onlardan yanıt verir.",
+          "categoryHint": "Yalnızca bu kategorideki SSS öğeleri yanıt verebilir. Kategoriler bu akışın SSS öğelerinden gelir.",
+          "categoriesFailed": "Bu akışın SSS kategorileri yüklenemedi.",
+          "minScoreHint": "Bu akışın puanını yalnızca bu adım için, {min} ile {max} arasında değiştirir. Puanlar platformun gömme modeline bağlıdır; bir sayı seçmeden önce bu akışın <link>SSS testinde</link> bir mesaj deneyin."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Test yeri",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Akış bölümleri",
+        "faqs": "SSS",
+        "saveFirst": "Önce akışı kaydedin.",
+        "build": "Oluştur",
+        "customize": "Özelleştir",
+        "install": "Yükle",
+        "needsCustomizing": "Widget hâlâ varsayılan görünümü kullanıyor. Özelleştir'i açın.",
+        "customizeFirst": "Yayınlamadan önce sohbet widget'ınızı özelleştirin ve bir kez kaydedin."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-posta"
+        "email": "E-posta",
+        "web": "Web sitesi sohbeti"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",
-        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya çalışma alanı ayarını kullanmak için boş bırakın."
+        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Adım {stage}: her satırın en fazla {max} karakterlik bir başlığı olmalı.",
         "rowDescriptionTooLong": "Adım {stage}: bir satır açıklaması {max} karakterden uzun.",
         "variableUsed": "Adım {stage}: \"{name}\" zaten {other} adımında kullanılıyor; her yanıta kendi adını verin.",
-        "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya çalışma alanı ayarı kullanılmalı."
+        "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı."
       },
       "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
     },

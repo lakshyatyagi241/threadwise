@@ -1,8 +1,14 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { WIZARD_NAME_MAX, type WizardSender, type WizardTemplate } from '@crm/contracts';
+import {
+  WIZARD_NAME_MAX,
+  type SenderHidden,
+  type WizardSender,
+  type WizardTemplate,
+} from '@crm/contracts';
 import { Field, Input, Select } from '@crm/ui';
+import { SenderEmptyNotice, SenderLoading } from '../../components/sender-empty';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { TemplatePicker, type TemplatesQuery } from './template-picker';
 import { TemplatePreview } from './template-preview';
@@ -13,6 +19,7 @@ export function StepTemplate({
   templateId,
   senderKey,
   senders,
+  hidden,
   templates,
   issues,
   disabled,
@@ -25,6 +32,8 @@ export function StepTemplate({
   senderKey: string | null;
   /** The connected numbers (undefined while they load). */
   senders: readonly WizardSender[] | undefined;
+  /** The numbers the server left out, so an empty list can say why. */
+  hidden?: readonly SenderHidden[] | undefined;
   templates: TemplatesQuery;
   /** Shown only after the person tried to continue. */
   issues: StepIssue[];
@@ -62,31 +71,31 @@ export function StepTemplate({
         <Field
           label={t('senderLabel')}
           htmlFor="wizard-sender"
-          hint={senders && senders.length === 0 ? undefined : t('senderHint')}
-          error={
-            senders && senders.length === 0
-              ? t('noSenders')
-              : senderIssue
-                ? ti(senderIssue.code)
-                : undefined
-          }
+          hint={senders && senders.length > 0 ? t('senderHint') : undefined}
+          error={senders && senders.length > 0 && senderIssue ? ti(senderIssue.code) : undefined}
         >
-          <Select
-            id="wizard-sender"
-            value={senderKey ?? ''}
-            disabled={disabled || !senders || senders.length === 0}
-            invalid={Boolean(senderIssue)}
-            onChange={(e) => onSender(e.target.value)}
-          >
-            {!senderKey && <option value="">{t('pickSender')}</option>}
-            {(senders ?? []).map((s) => (
-              <option key={s.key} value={s.key}>
-                {s.label}
-                {s.phone ? ` (${s.phone})` : ''} - {s.engineLabel}
-                {s.guided ? '' : ` - ${t('classicOption')}`}
-              </option>
-            ))}
-          </Select>
+          {!senders ? (
+            <SenderLoading id="wizard-sender" />
+          ) : senders.length === 0 ? (
+            <SenderEmptyNotice id="wizard-sender" hidden={hidden} />
+          ) : (
+            <Select
+              id="wizard-sender"
+              value={senderKey ?? ''}
+              disabled={disabled}
+              invalid={Boolean(senderIssue)}
+              onChange={(e) => onSender(e.target.value)}
+            >
+              {!senderKey && <option value="">{t('pickSender')}</option>}
+              {senders.map((s) => (
+                <option key={s.key} value={s.key}>
+                  {s.label}
+                  {s.phone ? ` (${s.phone})` : ''} - {s.engineLabel}
+                  {s.guided ? '' : ` - ${t('classicOption')}`}
+                </option>
+              ))}
+            </Select>
+          )}
         </Field>
         <div className="space-y-2">
           <h2 className="text-sm font-medium">{t('pickTitle')}</h2>

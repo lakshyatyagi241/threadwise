@@ -10,7 +10,8 @@
       "webchat": "Chat web",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "Correo electrónico (Gmail)"
     },
     "page": {
       "back": "Automatización e IA",
@@ -81,7 +82,10 @@
       "lastFired": "última vez el {when}",
       "edit": "Editar",
       "duplicate": "Duplicar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "startsFlow": "También inicia el flujo {name}",
+      "flowOff": "El flujo está desactivado",
+      "flowGone": "También inicia un flujo que fue eliminado"
     },
     "form": {
       "back": "Asignación automática",
@@ -170,7 +174,15 @@
       "cancel": "Cancelar",
       "save": "Guardar",
       "saveActivate": "Guardar y activar",
-      "openCount": "{open} abiertas"
+      "openCount": "{open} abiertas",
+      "flow": {
+        "title": "Iniciar también un flujo",
+        "hint": "Opcional. El flujo se inicia para la conversación cuando se activa esta regla, en el mismo canal. Solo tiene que estar activado; no hace falta que esté publicado.",
+        "none": "Ningún flujo",
+        "offOption": "{name} (desactivado)",
+        "goneOption": "Un flujo que ya no existe",
+        "loadFailed": "No se pudieron cargar los flujos, así que la lista puede estar incompleta."
+      }
     }
   }
 }

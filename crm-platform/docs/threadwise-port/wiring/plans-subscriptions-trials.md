@@ -49,3 +49,7 @@ enforcement yet** (their domains do not call `assertWithinLimit`): follow-up for
 ## Events
 
 `plan.changed` (workspace switch), `plan.attached` (operator). Not yet emitted: `plan.trial_expired`, `plan.lapsed` (no scheduler; derived at read time).
+
+## Provider-managed subscriptions (added with the Razorpay subscription work)
+
+New consumers of the same tables: web `/billing/subscriptions` (settings tile `billing-subscriptions`), operator `/admin/subscriptions`, refund dialog on `/admin/order-history`; API `SubscriptionCancelService`, `RefundService`, `PlatformSubscriptionsService`, worker `SubscriptionNotificationsConsumer`; table `order_refunds`; notification types `billing_payment_failed`, `billing_subscription_canceled`. See `docs/api/plans-subscriptions-trials.md`.

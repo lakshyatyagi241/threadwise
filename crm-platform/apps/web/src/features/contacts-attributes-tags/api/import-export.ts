@@ -24,7 +24,7 @@ import {
 export type ImportOptions = Pick<
   ContactImportOptions,
   'mapping' | 'status' | 'source' | 'groupId' | 'tagIds' | 'defaultCountryCode'
->;
+> & { consentConfirmed?: boolean };
 
 async function upload<T>(
   path: string,
@@ -72,6 +72,16 @@ export const getImportJob = (id: string, signal?: AbortSignal): Promise<ContactI
 
 export const isImportFinished = (job: ContactImportJob) =>
   job.status === 'completed' || job.status === 'failed';
+
+/** A saved export's CSV, downloaded again from the history (kept 30 days). */
+export async function downloadSavedExport(fileId: string): Promise<Blob> {
+  const res = await fetch(`/api/v2/contacts/exports/${fileId}/download`, {
+    headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) throw toApiError(res.status, undefined, res.headers.get('x-request-id'));
+  return res.blob();
+}
 
 /** The rows that were not imported, with the reason, as the CSV the API builds. */
 export async function downloadRejects(jobId: string): Promise<Blob> {

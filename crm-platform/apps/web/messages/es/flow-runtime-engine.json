@@ -119,6 +119,8 @@
       "colStarted": "Inicio",
       "colActivity": "Última actividad",
       "colSteps": "Pasos",
+      "colReplies": "Respuestas",
+      "repliesHint": "Mensajes del cliente que llegaron a un nodo de espera de esta ejecución",
       "colActions": "Acciones",
       "open": "Abrir ejecución",
       "cancel": "Cancelar",
@@ -207,7 +209,9 @@
         "request": "Solicitud",
         "response": "Respuesta",
         "result": "Resultado"
-      }
+      },
+      "factMenuKept": "No hay siguiente paso. Las opciones de {node} siguen activas.",
+      "factAnswered": "Respondió tras {time}"
     },
     "event": {
       "step": "Paso",
@@ -513,7 +517,9 @@
       "error": "Error",
       "skipped": "Omitido",
       "waiting": "En espera",
-      "timeout": "Tiempo agotado"
+      "timeout": "Tiempo agotado",
+      "answered": "Respondido",
+      "gaveUp": "Sin respuesta"
     }
   }
 }

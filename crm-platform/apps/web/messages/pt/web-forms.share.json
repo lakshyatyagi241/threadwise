@@ -148,7 +148,10 @@
         "required": "Deve ser marcado para enviar",
         "requiredHint": "Desative esta opção se o consentimento for opcional.",
         "marketing": "Opt-in de marketing",
-        "marketingHint": "Marcar a caixa registra o consentimento de marketing no contato. Uma caixa desmarcada nunca inscreve ninguém."
+        "marketingHint": "Marcar a caixa registra o consentimento de marketing no contato. Uma caixa desmarcada nunca inscreve ninguém.",
+        "whatsappHint": "Você vai enviar mensagens para estes contatos pelo WhatsApp? Use um texto que informe isso e explique como cancelar. A caixa marcada é guardada como comprovação, com este texto exato e a versão dele.",
+        "whatsappInsert": "Usar o texto de consentimento do WhatsApp",
+        "whatsappWording": "Concordo em receber novidades e ofertas pelo WhatsApp. Posso responder STOP a qualquer momento para cancelar."
       },
       "crm": {
         "title": "No CRM",

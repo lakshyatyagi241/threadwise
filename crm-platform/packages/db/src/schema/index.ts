@@ -81,3 +81,6 @@ export * from './forms-builder';
 export * from './admin-console-shell';
 export * from './api-library';
 export * from './faq-knowledge';
+export * from './lead-scoring';
+export * from './help-agent';
+export * from './channel-email';

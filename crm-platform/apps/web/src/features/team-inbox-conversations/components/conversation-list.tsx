@@ -2,8 +2,17 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
+} from 'react';
 import { Button, EmptyState, Select, Spinner, cn } from '@crm/ui';
+import { EmailChannelOptions } from '@/features/channel-email/components/channel-options';
 import {
   CONVERSATION_STATUSES,
   INBOX_TABS,
@@ -17,7 +26,9 @@ import {
   type ListFilters,
   type ListState,
 } from '../lib/list';
+import type { Selection } from '../lib/selection';
 import { ConversationRow } from './conversation-row';
+import { LabelFilter } from './label-filter';
 import { FlaskIcon, RefreshIcon, SearchIcon } from './icons';
 import { useErrorText } from './parts';
 
@@ -38,6 +49,14 @@ export interface ConversationListProps {
   canManageChannels: boolean;
   simulatorAvailable: boolean;
   onOpenSimulator: () => void;
+  /** Present when the caller may use bulk actions: the "Select" button, the selection and the bar shown while rows are picked. */
+  bulk?: {
+    selecting: boolean;
+    selection: Selection;
+    onToggleSelecting: () => void;
+    onSelect: (id: string, shift: boolean) => void;
+    bar: ReactNode;
+  };
 }
 
 /**
@@ -73,6 +92,20 @@ export function ConversationList(props: ConversationListProps) {
                 <FlaskIcon />
               </button>
             )}
+            {props.bulk && (
+              <button
+                type="button"
+                data-testid="inbox-select-toggle"
+                aria-pressed={props.bulk.selecting}
+                onClick={props.bulk.onToggleSelecting}
+                className={cn(
+                  'flex h-8 items-center rounded-md px-2 text-xs font-medium hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+                  props.bulk.selecting ? 'bg-muted text-foreground' : 'text-muted-foreground',
+                )}
+              >
+                {props.bulk.selecting ? t('selectDone') : t('select')}
+              </button>
+            )}
             <button
               type="button"
               title={t('refresh')}
@@ -84,6 +117,8 @@ export function ConversationList(props: ConversationListProps) {
             </button>
           </div>
         </div>
+
+        {props.bulk?.selecting && props.bulk.bar}
 
         <SearchBox
           value={filters.q}
@@ -116,6 +151,7 @@ export function ConversationList(props: ConversationListProps) {
             ))}
             <option value="all">{t('statusAll')}</option>
           </Select>
+          <LabelFilter value={filters.labels} onChange={(labels) => props.onFilters({ labels })} />
           {showChannel && (
             <Select
               aria-label={t('channelFilter')}
@@ -124,11 +160,14 @@ export function ConversationList(props: ConversationListProps) {
               className="h-8 text-xs"
             >
               <option value="">{t('allChannels')}</option>
-              {channels!.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
+              {channels!
+                .filter((c) => c.kind !== 'email')
+                .map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              <EmailChannelOptions channels={channels!} />
             </Select>
           )}
         </div>
@@ -220,6 +259,9 @@ export function ConversationList(props: ConversationListProps) {
                 nowMs={props.nowMs}
                 showChannel={showChannel}
                 onOpen={props.onOpen}
+                selecting={props.bulk?.selecting ?? false}
+                selected={props.bulk?.selection.has(row.id) ?? false}
+                onSelect={props.bulk?.onSelect}
               />
             ))}
           </ul>

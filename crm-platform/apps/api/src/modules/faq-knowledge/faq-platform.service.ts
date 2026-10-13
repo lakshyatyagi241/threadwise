@@ -41,7 +41,7 @@ export class FaqPlatformService {
       const r = (
         await tx.execute(sql`
           SELECT
-            (SELECT count(*) FROM faq_settings WHERE enabled) AS workspaces_enabled,
+            (SELECT count(DISTINCT org_id) FROM faq_settings WHERE enabled) AS workspaces_enabled,
             (SELECT count(*) FROM faqs) AS faqs,
             (SELECT count(*) FROM faq_variations) AS variations,
             (SELECT count(*) FROM faq_variations WHERE embed_state = 'ready' AND embedding_model = ${model}) AS ready,
@@ -84,7 +84,8 @@ export class FaqPlatformService {
     const like = q.search ? `%${q.search.replace(/[\\%_]/g, (m) => `\\${m}`)}%` : null;
     const rows = await this.db.privileged(async (tx) => {
       const res = await tx.execute(sql`
-        SELECT o.uuid, o.name, COALESCE(s.enabled, false) AS enabled,
+        SELECT o.uuid, o.name,
+          EXISTS (SELECT 1 FROM faq_settings s WHERE s.org_id = o.id AND s.enabled) AS enabled,
           (SELECT count(*) FROM faqs f WHERE f.org_id = o.id) AS faqs,
           (SELECT count(*) FROM faq_variations v WHERE v.org_id = o.id) AS variations,
           (SELECT count(*) FROM faq_variations v WHERE v.org_id = o.id AND v.embed_state = 'pending') AS pending,
@@ -93,9 +94,9 @@ export class FaqPlatformService {
              AND l.created_at >= now() - interval '30 days') AS matches,
           (SELECT count(*) FROM faq_match_logs l WHERE l.org_id = o.id AND l.origin = 'inbound'
              AND l.outcome IN ('answered', 'flow_started') AND l.created_at >= now() - interval '30 days') AS answered
-        FROM organizations o LEFT JOIN faq_settings s ON s.org_id = o.id
+        FROM organizations o
         WHERE (${like}::text IS NULL OR o.name ILIKE ${like})
-        ORDER BY COALESCE(s.enabled, false) DESC,
+        ORDER BY EXISTS (SELECT 1 FROM faq_settings s WHERE s.org_id = o.id AND s.enabled) DESC,
                  (SELECT count(*) FROM faq_variations v WHERE v.org_id = o.id) DESC, o.id
         LIMIT ${q.limit}`);
       return res.rows as Raw[];

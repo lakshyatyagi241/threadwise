@@ -20,6 +20,7 @@ import {
   type PhoneValue,
 } from '@/features/auth-registration-security/shared/phone-field';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { LeadScoreField, isScoreInvalid } from '@/features/lead-scoring';
 import {
   createContact,
   fetchContact,
@@ -131,6 +132,7 @@ function ContactForm({
   const [conflict, setConflict] = useState(false);
   const [pendingTags, setPendingTags] = useState<TagLite[]>([]);
   const [lostProblem, setLostProblem] = useState<'pick' | 'text' | null>(null);
+  const [scoreProblem, setScoreProblem] = useState(false);
   /** What changing the stage just did to the status field (shown under it until the person picks a status). */
   const [statusMove, setStatusMove] = useState<StatusNotice>({ kind: 'none' });
 
@@ -250,6 +252,7 @@ function ContactForm({
             contact.customFields,
             fieldsByKey,
             lostPayload,
+            contact.leadScore,
           ),
         );
         const before = initialGroups.current;
@@ -357,9 +360,15 @@ function ContactForm({
     setFieldProblems(fp);
     const lostFound = isLost ? lostReasonProblem(lostAnswer, lostChoices.length > 0) : null;
     setLostProblem(lostFound);
+    const scoreBad = isScoreInvalid(merged.leadScore);
+    setScoreProblem(scoreBad);
     if (Object.keys(next).length > 0) {
       const first = Object.keys(next)[0];
       document.getElementById(id(first === 'firstName' ? 'first' : first))?.focus();
+      return;
+    }
+    if (scoreBad) {
+      document.getElementById(id('lead-score'))?.focus();
       return;
     }
     if (lostFound) {
@@ -503,6 +512,18 @@ function ContactForm({
             onChange={(e) => set('address', e.target.value)}
           />
         </Field>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
+        <LeadScoreField
+          id={id('lead-score')}
+          value={values.leadScore}
+          invalid={scoreProblem}
+          onChange={(v) => {
+            set('leadScore', v);
+            setScoreProblem(false);
+          }}
+        />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">

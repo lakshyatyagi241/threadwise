@@ -367,7 +367,8 @@
         "failed": "Не удалось переключить пространство. Повторите попытку.",
         "notAvailable": "Вы не можете переключиться на это пространство.",
         "rateLimited": "Слишком много попыток. Подождите немного и повторите.",
-        "rateLimitedWait": "Слишком много попыток. Повторите через {seconds, plural, one {# секунду} few {# секунды} many {# секунд} other {# секунды}}."
+        "rateLimitedWait": "Слишком много попыток. Повторите через {seconds, plural, one {# секунду} few {# секунды} many {# секунд} other {# секунды}}.",
+        "unverified": "Подтвердите email в этом рабочем пространстве, чтобы переключиться на него."
       },
       "mfaChallenge": {
         "title": "Подтвердите, что это вы",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook и Instagram",
             "form_builder": "Формы",
             "waba_groups": "Группы WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Помощник",
+            "email_channel": "Канал электронной почты (Gmail)"
           },
           "cta": {
             "continueFree": "Продолжить бесплатно",

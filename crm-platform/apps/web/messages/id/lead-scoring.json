@@ -1,0 +1,345 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Tutup",
+      "retry": "Coba lagi",
+      "requestId": "Permintaan {id}",
+      "noAccessTitle": "Anda tidak memiliki akses ke layar ini",
+      "noAccess": "Minta admin ruang kerja untuk memberikan izin {permission} kepada peran Anda."
+    },
+    "badge": {
+      "none": "Tidak ada skor prospek",
+      "aria": "Skor prospek {score} dari 100, {band}, {source}",
+      "titleAi": "Dinilai oleh AI",
+      "titleAiOn": "Dinilai oleh AI pada {date}",
+      "titleManual": "Dimasukkan oleh seseorang",
+      "band": {
+        "cold": "Dingin",
+        "warm": "Hangat",
+        "hot": "Panas"
+      },
+      "source": {
+        "ai": "dinilai oleh AI",
+        "manual": "dimasukkan oleh seseorang"
+      }
+    },
+    "card": {
+      "title": "Skor prospek",
+      "band": {
+        "cold": "Prospek dingin",
+        "warm": "Prospek hangat",
+        "hot": "Prospek panas"
+      },
+      "sourceAi": "AI",
+      "sourceManual": "Manual",
+      "score": "Beri skor dengan AI",
+      "rescore": "Skor ulang",
+      "scoring": "Menilai...",
+      "scoringSlow": "Menanyakan ke AI. Ini bisa memakan waktu beberapa detik.",
+      "neverScored": "Kontak ini belum diberi skor.",
+      "scoredBy": "Dinilai oleh AI pada {date} dengan {model}.",
+      "scoredOn": "Dinilai oleh AI pada {date}.",
+      "scoredByAi": "Dinilai oleh AI.",
+      "reasons": "Alasan skor ini",
+      "manualWhy": "Skor ini diketik oleh seseorang, jadi AI tidak akan mengubahnya. Agar AI menilai kontak ini, edit kontak dan hapus skor prospek.",
+      "manualNote": "Skor ini diketik oleh seseorang, jadi AI tidak mengubahnya.",
+      "lastRun": "Skor {score}. Biaya {cost}, {tokens} token.",
+      "showHistory": "Tampilkan riwayat penilaian",
+      "hideHistory": "Sembunyikan riwayat penilaian",
+      "historyLoading": "Memuat riwayat...",
+      "historyFailed": "Riwayat tidak dapat dimuat.",
+      "historyEmpty": "Belum ada percobaan penilaian untuk kontak ini.",
+      "historyCaption": "Percobaan penilaian untuk kontak ini, terbaru lebih dulu",
+      "historyMore": "Muat lebih banyak"
+    },
+    "errors": {
+      "network": "Server tidak dapat dijangkau. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Peran Anda tidak mengizinkan ini.",
+      "notFound": "Kontak atau data tersebut sudah tidak ada.",
+      "conflict": "Seseorang mengubah ini pada saat yang sama. Data telah dimuat ulang.",
+      "platformDisabled": "Penilaian prospek dengan AI sedang dimatikan untuk seluruh platform.",
+      "notEnabled": "Penilaian prospek dengan AI tidak diaktifkan untuk ruang kerja ini.",
+      "noKey": "Tidak ada kunci AI yang tersedia untuk ruang kerja ini.",
+      "providerFailed": "Penyedia AI tidak memberikan jawaban yang dapat digunakan. Coba lagi sebentar lagi.",
+      "manualScore": "Kontak ini memiliki skor yang diketik oleh seseorang.",
+      "planLimit": "Kuota AI paket Anda sudah habis.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "validation": "Beberapa nilai tidak valid.",
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "chatUnavailable": "Pembacaan percakapan tidak tersedia untuk ruang kerja ini.",
+      "notEnoughChat": "Kontak ini belum menulis cukup banyak untuk dibaca.",
+      "suggestionGone": "Saran itu sudah diputuskan atau digantikan."
+    },
+    "scoreErrors": {
+      "network": "Server tidak dapat dijangkau, jadi kontak tidak diberi skor. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Peran Anda tidak diizinkan untuk menilai kontak.",
+      "notFound": "Kontak ini sudah tidak ada.",
+      "conflict": "Seseorang mengubah kontak ini pada saat yang sama. Data telah dimuat ulang; coba lagi.",
+      "platformDisabled": "Penilaian prospek dengan AI sedang dimatikan untuk seluruh platform. Tidak ada yang dapat dinilai sampai operator platform mengaktifkannya kembali.",
+      "notEnabled": "Penilaian prospek dengan AI tidak diaktifkan untuk ruang kerja ini. Fitur ini nonaktif sampai Anda memilih, karena data kontak dikirim ke penyedia AI.",
+      "noKey": "Belum ada kunci OpenRouter yang disiapkan untuk ruang kerja ini. Tambahkan di Kunci AI, atau minta admin platform Anda mengaktifkan kunci bersama.",
+      "providerFailed": "Penyedia AI tidak memberikan jawaban yang dapat digunakan, jadi tidak ada skor yang disimpan. Coba lagi sebentar lagi.",
+      "manualScore": "Kontak ini memiliki skor yang diketik oleh seseorang, dan AI tidak pernah menimpanya. Edit kontak dan hapus skor prospek terlebih dahulu jika ingin AI menilainya.",
+      "planLimit": "Kuota AI paket Anda sudah habis, jadi kontak tidak diberi skor. Coba lagi nanti atau tambahkan kunci OpenRouter Anda sendiri.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "validation": "Permintaan tidak valid.",
+      "unexpected": "Terjadi kesalahan dan kontak tidak diberi skor. Coba lagi.",
+      "openSettings": "Buka pengaturan penilaian prospek dengan AI",
+      "openKeys": "Buka kunci AI",
+      "chatUnavailable": "Pembacaan percakapan belum diaktifkan untuk ruang kerja ini. Ini adalah fitur percontohan yang perlu diaktifkan di pengaturan penilaian prospek AI.",
+      "notEnoughChat": "Kontak ini belum menulis cukup banyak: hanya sapaan, emoji, atau balasan otomatis. Coba lagi setelah kontak menulis lebih banyak.",
+      "suggestionGone": "Saran itu sudah diputuskan atau digantikan oleh saran yang lebih baru, sehingga tidak ada yang diubah."
+    },
+    "field": {
+      "label": "Skor prospek",
+      "placeholder": "0 sampai 100",
+      "hint": "Mengetik skor menjadikannya milik Anda: AI berhenti mengubahnya. Hapus skor untuk menyerahkan kontak kembali ke AI.",
+      "invalid": "Masukkan bilangan bulat dari 0 sampai 100, atau biarkan kosong."
+    },
+    "runs": {
+      "col": {
+        "when": "Waktu",
+        "contact": "Kontak",
+        "result": "Hasil",
+        "score": "Skor",
+        "trigger": "Pemicu",
+        "tokens": "Token",
+        "cost": "Biaya",
+        "key": "Kunci"
+      },
+      "unnamed": "Kontak tanpa nama",
+      "deletedContact": "Kontak yang dihapus",
+      "status": {
+        "ok": "Dinilai",
+        "kept": "Tidak disimpan",
+        "failed": "Gagal",
+        "skipped": "Dilewati"
+      },
+      "keptNote": "AI menjawab, tetapi seseorang mengetik skor pada saat yang sama, jadi skor AI tidak disimpan.",
+      "reason": {
+        "no_key": "Tidak ada kunci AI yang tersedia.",
+        "token_allowance": "Kuota AI paket sudah habis.",
+        "hourly_limit": "Batas per jam untuk kunci bersama tercapai.",
+        "manual_score": "Kontak memiliki skor yang diketik oleh seseorang.",
+        "platform_off": "Penilaian prospek dengan AI dimatikan untuk platform.",
+        "not_enabled": "Penilaian prospek dengan AI nonaktif untuk ruang kerja ini.",
+        "auth": "Penyedia AI menolak kunci tersebut.",
+        "rate_limited": "Penyedia AI sedang sibuk.",
+        "provider": "Penyedia AI mengembalikan galat.",
+        "timeout": "Penyedia AI terlalu lama merespons.",
+        "bad_response": "AI menjawab dengan sesuatu yang bukan skor.",
+        "other": "Percobaan tidak selesai."
+      },
+      "trigger": {
+        "created": "Kontak dibuat",
+        "updated": "Kontak diubah",
+        "manual": "Tombol skor",
+        "backfill": "Beri skor kontak yang belum dinilai",
+        "chat": "Obrolan menjadi sepi"
+      },
+      "tokensDetail": "{prompt} masuk, {completion} keluar",
+      "costSource": {
+        "vendor": "Biaya yang dilaporkan oleh OpenRouter",
+        "estimate": "Diperkirakan dari jumlah token dan harga resmi"
+      },
+      "billed": {
+        "admin": "Kunci platform",
+        "workspace": "Kunci Anda"
+      }
+    },
+    "log": {
+      "title": "Log penilaian",
+      "hint": "Setiap percobaan penilaian, terbaru lebih dulu, dengan token dan biaya.",
+      "filter": "Tampilkan percobaan dengan hasil ini",
+      "all": "Semua hasil",
+      "status": {
+        "ok": "Dinilai",
+        "kept": "Tidak disimpan",
+        "failed": "Gagal",
+        "skipped": "Dilewati"
+      },
+      "refresh": "Segarkan",
+      "emptyTitle": "Belum ada percobaan penilaian",
+      "emptyBody": "Percobaan muncul di sini setelah penilaian prospek dengan AI aktif dan sebuah kontak dinilai.",
+      "emptyFilteredTitle": "Tidak ada percobaan dengan hasil ini",
+      "emptyFilteredBody": "Pilih hasil lain, atau tampilkan semua hasil.",
+      "caption": "Percobaan penilaian, terbaru lebih dulu",
+      "loadMore": "Muat lebih banyak"
+    },
+    "settings": {
+      "title": "Penilaian prospek dengan AI",
+      "subtitle": "Beri setiap kontak skor 0 sampai 100 yang menunjukkan seberapa besar kemungkinan mereka membeli, dan lihat biayanya.",
+      "discard": "Buang",
+      "save": "Simpan",
+      "saved": "Pengaturan disimpan.",
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya. Minta admin ruang kerja untuk izin lsc.settings.manage.",
+      "conflict": "Orang lain mengubah pengaturan ini lebih dulu. Pengaturan dimuat ulang, jadi yang Anda lihat adalah versi tersimpan. Lakukan perubahan Anda lagi.",
+      "conflictOk": "Mengerti",
+      "enable": {
+        "title": "Aktifkan penilaian prospek dengan AI",
+        "hint": "Nonaktif sampai Anda memilih, karena data tentang kontak Anda dikirim ke penyedia AI.",
+        "label": "Penilaian prospek dengan AI",
+        "on": "Aktif",
+        "off": "Nonaktif",
+        "what": "Saat aktif, model AI membaca deskripsi singkat dan anonim tentang kontak dan menjawab dengan skor beserta alasannya. Skor ditulis ke skor prospek kontak."
+      },
+      "sent": {
+        "title": "Apa yang dikirim ke AI",
+        "stage": "Tahap dan status kontak",
+        "source": "Asal kontak",
+        "tags": "Nama tag",
+        "deals": "Jumlah deal yang terbuka, menang, dan kalah",
+        "activity": "Seberapa baru kontak aktif",
+        "company": "Nama perusahaan",
+        "engagement": "Seberapa aktif kontak berinteraksi akhir-akhir ini: jumlah pesannya, siaran yang dibuka, tautan yang diklik, dan seberapa cepat ia membalas (hanya angka)"
+      },
+      "notSent": {
+        "title": "Apa yang tidak pernah dikirim",
+        "name": "Nama kontak",
+        "email": "Alamat email",
+        "phone": "Nomor telepon",
+        "messages": "Teks pesan apa pun",
+        "messagesChat": "Isi pesan apa pun, kecuali Anda mengaktifkan pembacaan percakapan (di bawah)"
+      },
+      "manualRule": "Skor yang diketik seseorang tidak pernah ditimpa. AI hanya mengisi skor yang kosong dan memperbarui skor yang ditulisnya sendiri.",
+      "auto": {
+        "label": "Beri skor otomatis saat kontak berubah",
+        "onBody": "Kontak dinilai saat dibuat dan dinilai lagi saat detailnya berubah.",
+        "offBody": "Kontak hanya dinilai saat Anda menggunakan tombol Beri skor dengan AI atau menilai kontak yang belum dinilai di bawah."
+      },
+      "confirm": {
+        "title": "Kirim data kontak yang dianonimkan ke penyedia AI?",
+        "body": "Setelah diaktifkan, deskripsi singkat kontak Anda (tahap, sumber, tag, jumlah transaksi, aktivitas, angka keterlibatan seperti pesan, siaran yang dibuka dan tautan yang diklik, serta nama perusahaan) dikirim ke penyedia AI melalui OpenRouter. Nama, alamat email, nomor telepon, dan teks pesan tidak pernah dikirim. Anda dapat menonaktifkannya kapan saja.",
+        "yes": "Aktifkan",
+        "no": "Batal"
+      },
+      "banner": {
+        "platformOff": "Penilaian prospek dengan AI dimatikan untuk seluruh platform. Tidak ada yang dinilai, apa pun pengaturan di sini, sampai operator platform mengaktifkannya kembali.",
+        "noKey": "Tidak ada kunci OpenRouter yang tersedia, jadi tidak ada yang dapat dinilai. Tambahkan kunci Anda sendiri di Kunci AI, atau minta admin platform Anda mengaktifkan kunci bersama.",
+        "openKeys": "Buka kunci AI",
+        "off": "Penilaian prospek dengan AI nonaktif untuk ruang kerja ini. Tidak ada yang dikirim ke penyedia AI.",
+        "ready": "Siap. Kontak dinilai dengan {model} menggunakan {key}.",
+        "keyWorkspace": "kunci OpenRouter milik ruang kerja Anda sendiri",
+        "keyAdmin": "kunci OpenRouter bersama milik platform"
+      },
+      "backfill": {
+        "title": "Beri skor kontak yang sudah Anda miliki",
+        "hint": "Memasukkan kontak yang belum memiliki skor ke antrean, maksimal {limit} sekali jalan. Penilaian berjalan di latar belakang.",
+        "eligible": "Kontak yang boleh dinilai AI",
+        "scored": "Dinilai oleh AI",
+        "waiting": "Menunggu skor",
+        "eligibleNote": "Kontak dengan skor yang diketik seseorang tidak disertakan: AI tidak pernah mengubahnya.",
+        "button": "Beri skor kontak yang belum dinilai sekarang",
+        "noRight": "Peran Anda tidak diizinkan menilai kontak. Diperlukan izin lsc.contacts.score.",
+        "notReady": "Aktifkan penilaian prospek dengan AI, dan pastikan ada kunci yang tersedia, untuk menilai kontak.",
+        "queued": "{count, plural, other {# kontak masuk antrean}} dan akan dinilai di latar belakang. Muat ulang log dalam semenit untuk melihat hasilnya.",
+        "nothingToScore": "Tidak ada kontak yang belum dinilai untuk dimasukkan ke antrean."
+      },
+      "cost": {
+        "title": "30 hari terakhir",
+        "hint": "Apa yang dilakukan penilaian dan biayanya selama 30 hari terakhir.",
+        "scores": "Kontak yang dinilai",
+        "tokens": "Token yang digunakan",
+        "total": "Total biaya",
+        "average": "Rata-rata per skor",
+        "averageHint": "Total biaya dibagi jumlah kontak yang dinilai",
+        "model": "Model",
+        "payer": "Siapa yang membayar",
+        "payerBy": {
+          "workspace": "Kunci OpenRouter Anda sendiri, ditagihkan kepada Anda oleh OpenRouter",
+          "admin": "Kunci OpenRouter bersama milik platform",
+          "none": "Belum ada kunci yang tersedia"
+        },
+        "failed": "Percobaan gagal",
+        "platformPart": "Dari total, yang memakai kunci platform"
+      },
+      "chat": {
+        "title": "Baca percakapan (percontohan)",
+        "hint": "Nonaktif sampai Anda memilihnya, karena pesan terbaru kontak dikirim ke penyedia AI dengan data pribadi yang disamarkan sebagian.",
+        "label": "Baca percakapan kontak saat obrolan menjadi sepi",
+        "onBody": "Sekitar 12 menit setelah kontak berhenti menulis, AI membaca pesan terbaru dan mencatat apa yang diinginkan kontak. AI juga memberikan skornya.",
+        "offBody": "Percakapan tidak dibaca. Skor hanya menggunakan data kontak dan angka interaksi.",
+        "needsScoring": "Aktifkan penilaian prospek AI terlebih dahulu.",
+        "stageLabel": "Sarankan tahap siklus hidup",
+        "stageBody": "Ketika percakapan dengan jelas menunjukkan bahwa kontak sudah maju, AI menyarankan tahap berikutnya. Seseorang menerima atau menolaknya; tidak ada yang berpindah sendiri, dan tahap Menang dan Kalah tidak pernah disarankan.",
+        "masked": {
+          "title": "Cara data pribadi disamarkan",
+          "phone": "Nomor telepon hanya menyisakan digit pertama dan dua digit terakhir (+91 ***** ***10)",
+          "email": "Alamat email hanya menyisakan huruf pertama dan domain (p***@acme.io)",
+          "card": "Nomor kartu, Aadhaar, dan PAN hanya menyisakan karakter pertama dan terakhir",
+          "name": "Nama kontak, dan nama yang disebutkan seseorang tentang dirinya, hanya menyisakan huruf pertama dan terakhir"
+        },
+        "rules": {
+          "title": "Apa yang dibaca, dan apa yang tidak",
+          "quiet": "Hanya obrolan yang sudah sepi, dan hanya dua minggu terakhir",
+          "enough": "Kontak yang hanya menekan tombol dicocokkan dengan tabel frasa, tanpa panggilan AI",
+          "person": "Skor atau tahap yang ditetapkan seseorang tidak pernah ditimpa",
+          "closing": "Bot, pesan yang dihapus, obrolan grup, dan balasan otomatis tidak disertakan"
+        },
+        "confirm": {
+          "title": "Kirim percakapan yang disamarkan ke penyedia AI?",
+          "body": "Setelah diaktifkan, pesan terbaru kontak dikirim ke penyedia AI melalui OpenRouter setelah obrolan menjadi sepi. Nomor telepon, email, nomor kartu, dan nama disamarkan sebagian terlebih dahulu, sehingga data yang dikirim tidak dapat digunakan untuk menghubungi orangnya. Anda dapat menonaktifkannya kapan saja.",
+          "yes": "Aktifkan",
+          "no": "Batal"
+        }
+      }
+    },
+    "insight": {
+      "title": "Pembacaan percakapan",
+      "empty": "Belum dibaca. Obrolan dibaca sekitar 12 menit setelah kontak berhenti menulis, atau Anda dapat membacanya sekarang.",
+      "analyze": "Baca obrolan",
+      "analyzing": "Membaca...",
+      "analyzingSlow": "Menanyakan ke AI. Ini bisa memakan waktu beberapa detik.",
+      "sourceAi": "Dibaca oleh AI",
+      "sourceRules": "Dicocokkan dari ketukan tombol",
+      "signals": "Sinyal dari kontak",
+      "signal": {
+        "askedPrice": "Menanyakan harga",
+        "readyToBuy": "Siap membeli",
+        "objection": "Keraguan atau keberatan",
+        "urgent": "Mendesak"
+      },
+      "readOn": "Dibaca pada {date} dari {count, plural, other {# pesan}}.",
+      "privacy": "Nama, nomor telepon, dan email dalam obrolan disamarkan sebagian sebelum apa pun dikirim ke AI.",
+      "intent": {
+        "ready_to_buy": "Siap membeli",
+        "asking_price": "Menanyakan harga",
+        "comparing": "Membandingkan pilihan",
+        "registering": "Mendaftar",
+        "needs_support": "Butuh dukungan",
+        "post_purchase": "Purnajual atau layanan",
+        "browsing": "Hanya melihat-lihat",
+        "not_interested": "Tidak tertarik",
+        "other": "Tidak ada niat yang jelas"
+      },
+      "suggestion": {
+        "title": "Tahap yang disarankan",
+        "move": "Pindah dari {from} ke {to}",
+        "confidence": "Yakin {percent}%",
+        "accept": "Terima",
+        "dismiss": "Tolak",
+        "accepted": "Tahap diubah menjadi {stage}.",
+        "dismissed": "Saran ditolak.",
+        "noRight": "Anda tidak memiliki izin untuk menerima atau menolak saran.",
+        "couldNot": "Saran tidak dapat diterapkan. Mungkin sudah diputuskan sebelumnya."
+      }
+    },
+    "suggestions": {
+      "title": "Saran tahap",
+      "hint": "Perpindahan yang disarankan AI setelah membaca percakapan. Tidak ada yang berubah sampai Anda menerimanya.",
+      "empty": "Tidak ada saran yang menunggu.",
+      "unnamed": "Kontak tanpa nama",
+      "move": "Pindah dari {from} ke {to}",
+      "confidence": "Yakin {percent}%",
+      "accept": "Terima",
+      "dismiss": "Tolak",
+      "acceptConfident": "Terima {count} saran di atas {percent}%",
+      "dismissAll": "Tolak semua",
+      "more": "Muat lebih banyak",
+      "doneAccept": "{count, plural, other {# tahap diubah.}}",
+      "doneDismiss": "{count, plural, other {# saran ditolak.}}",
+      "noRight": "Anda dapat melihat saran tetapi tidak dapat memutuskannya: itu memerlukan izin lsc.stage.review.",
+      "couldNot": "{count, plural, other {# saran tidak dapat diterapkan.}}"
+    }
+  }
+}

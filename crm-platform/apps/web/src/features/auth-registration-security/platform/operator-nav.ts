@@ -23,6 +23,7 @@ import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
 import { FAQ_OPERATOR_NAV } from '../../faq-knowledge/platform/operator-nav';
+import { LSC_OPERATOR_NAV } from '../../lead-scoring/platform/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -138,6 +139,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   },
   // FAQ engine (FAQ, not a Reference feature): messages/en/faq-knowledge-admin.json
   ...FAQ_OPERATOR_NAV,
+  // AI lead scoring (LSC, not a Reference feature): messages/en/lead-scoring-admin.json
+  ...LSC_OPERATOR_NAV,
   // Webhook forwarding (WFWD, not a Reference feature): messages/en/webhook-fanout.json
   {
     id: 'webhook-forwarding',
@@ -204,6 +207,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     id: 'order-history',
     href: '/admin/order-history',
     labelKey: 'platform-payment-gateways.nav.orders',
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'subscriptions',
+    href: '/admin/subscriptions',
+    labelKey: 'platform-payment-gateways.nav.subscriptions',
     groupKey: `${BSP}.groups.billing`,
   },
   {

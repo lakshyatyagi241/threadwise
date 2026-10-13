@@ -17,6 +17,12 @@ export const SETTINGS_SECTIONS = [
 ] as const;
 export type SettingsSection = (typeof SETTINGS_SECTIONS)[number];
 
+/**
+ * The section whose tiles are shown in the Marketplace (as cards on the Add-ons and Integrations tabs) instead of on a Settings
+ * page. The tiles stay in the registry, so they keep their gates, icons and copy; the Settings pages and Settings search skip them.
+ */
+export const MARKETPLACE_TOOLS_SECTION: SettingsSection = 'integrations';
+
 export function isSettingsSection(value: unknown): value is SettingsSection {
   return typeof value === 'string' && (SETTINGS_SECTIONS as readonly string[]).includes(value);
 }

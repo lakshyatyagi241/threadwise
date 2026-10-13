@@ -227,8 +227,6 @@
         "senderHint": "保持默认时，营销活动将通过您工作区的主引擎发出。",
         "defaultSender": "默认发送方",
         "nameHint": "用于报表和队列历史的内部标签。",
-        "noSenders": "没有已连接的发送方。",
-        "connectOne": "去连接 →",
         "type": "营销活动类型",
         "types": {
           "custom": {
@@ -897,8 +895,7 @@
         "previewEmpty": "选择模板以查看消息效果。",
         "senderLabel": "发送自",
         "senderHint": "发送此群发所用的 WhatsApp 号码。",
-        "pickSender": "选择号码",
-        "noSenders": "未连接任何 WhatsApp 号码。请先连接一个。"
+        "pickSender": "选择号码"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",
@@ -932,6 +929,7 @@
         "optedOut": "已退订",
         "invalidNumbers": "无效号码",
         "alwaysSkipped": "已退订的联系人和无效号码始终会被跳过。",
+        "noConsent": "无同意记录（已跳过）",
         "willBeMessaged": "将收到消息",
         "about": "约 {count}",
         "approximate": "这是估算值：受众规模过大，无法及时精确统计。",
@@ -1403,6 +1401,41 @@
         "runs": "运行",
         "noRuns": "尚未开始任何运行。",
         "cancel": "取消系列"
+      }
+    },
+    "senderEmpty": {
+      "loading": "正在加载您的号码…",
+      "none": {
+        "title": "尚未连接 WhatsApp 号码",
+        "body": "连接 WhatsApp Business 号码后，即可选择此活动的发送号码。",
+        "action": "连接 WhatsApp 号码"
+      },
+      "sms": {
+        "none": {
+          "title": "尚未连接短信发送方",
+          "body": "连接短信发送方后，即可选择此活动的发送方。",
+          "action": "连接短信发送方"
+        }
+      },
+      "pending": {
+        "title": "有 {count} 个号码仍在连接中",
+        "body": "号码连接完成后即可发送活动。打开其状态页面完成设置。",
+        "action": "查看号码状态"
+      },
+      "error": {
+        "title": "有 {count} 个号码连接失败",
+        "body": "在其状态页面重新连接该号码，它就会显示在这里。",
+        "action": "修复连接"
+      },
+      "disconnected": {
+        "title": "有 {count} 个号码已断开",
+        "body": "重新连接后即可通过它发送活动。已连接的号码会显示在这里。",
+        "action": "重新连接号码"
+      },
+      "personal_off": {
+        "title": "此工作区已关闭个人号码",
+        "body": "此功能关闭期间，{count} 个个人（二维码）号码无法发送活动。平台管理员可为此工作区开启，或者您可以连接官方 WhatsApp Business 号码。",
+        "action": "连接官方号码"
       }
     }
   }

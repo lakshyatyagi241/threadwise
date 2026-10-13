@@ -367,7 +367,8 @@
         "failed": "Nie udało się przełączyć przestrzeni roboczych. Spróbuj ponownie.",
         "notAvailable": "Nie możesz przełączyć się na tę przestrzeń roboczą.",
         "rateLimited": "Zbyt wiele prób. Poczekaj chwilę i spróbuj ponownie.",
-        "rateLimitedWait": "Zbyt wiele prób. Spróbuj ponownie za {seconds, plural, one {# sekundę} few {# sekundy} many {# sekund} other {# sekundy}}."
+        "rateLimitedWait": "Zbyt wiele prób. Spróbuj ponownie za {seconds, plural, one {# sekundę} few {# sekundy} many {# sekund} other {# sekundy}}.",
+        "unverified": "Zweryfikuj swój e-mail w tym obszarze roboczym, aby się do niego przełączyć."
       },
       "mfaChallenge": {
         "title": "Potwierdź, że to Ty",
@@ -552,7 +553,9 @@
             "extra_channels": "Telegram, Facebook i Instagram",
             "form_builder": "Formularze",
             "waba_groups": "Grupy WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Asystent pomocy",
+            "email_channel": "Kanał e-mail (Gmail)"
           },
           "cta": {
             "continueFree": "Kontynuuj za darmo",

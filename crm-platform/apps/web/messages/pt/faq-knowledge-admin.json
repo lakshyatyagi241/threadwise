@@ -88,18 +88,18 @@
       },
       "threshold": {
         "label": "Limite de correspondência padrão",
-        "hint": "Uma mensagem corresponde quando sua pontuação é pelo menos este valor. Usado apenas por workspaces que nunca salvaram o próprio limite. As pontuações dependem do modelo de IA.",
         "value": "{value}",
         "follow": "Seguir o modelo",
-        "followHint": "A sensibilidade padrão é o valor recomendado do modelo ({value}) e muda quando o modelo muda. Desative para fixar um número."
+        "followHint": "A sensibilidade padrão é o valor recomendado do modelo ({value}) e muda quando o modelo muda. Desative para fixar um número.",
+        "hint": "Uma mensagem corresponde quando sua pontuação é pelo menos esta. Usado apenas por fluxos que nunca salvaram um limite próprio. As pontuações dependem do modelo de embeddings."
       },
       "limits": {
         "title": "Limites",
-        "maxFaqs": "Máximo de FAQs por workspace",
         "maxVariationsPerFaq": "Máximo de variações por FAQ",
         "semanticPerHour": "Correspondências semânticas por workspace por hora",
         "semanticPerHourHint": "Acima disso, o workspace recorre à similaridade de grafia pelo resto da hora. 0 significa sempre similaridade de grafia.",
-        "verifyPerHour": "Segundas verificações por workspace por hora"
+        "verifyPerHour": "Segundas verificações por workspace por hora",
+        "maxFaqs": "Máximo de FAQs por fluxo"
       },
       "errors": {
         "integer": "Digite um número inteiro.",
@@ -117,11 +117,10 @@
         "title": "Revise antes de salvar",
         "confirm": "Salvar alterações",
         "engineOff": "Desativar o mecanismo impede que todos os workspaces respondam aos clientes por FAQ e bloqueia as edições de FAQ até você reativá-lo.",
-        "modelChange": "Trocar o modelo de IA de {from} para {to} recria todos os vetores armazenados. Até isso terminar, a correspondência usa apenas similaridade de grafia. A sensibilidade padrão seguirá o novo modelo (recomendado {threshold}), a menos que você defina um valor fixo. Limites de workspaces salvos individualmente podem precisar de novo ajuste, pois as pontuações mudam com o modelo."
+        "modelChange": "Trocar o modelo de embeddings de {from} para {to} faz todos os vetores armazenados serem recalculados. Até terminar, a correspondência usa apenas a semelhança de grafia. A sensibilidade padrão seguirá o novo modelo (recomendado {threshold}), a menos que você defina um valor fixo. Os limites salvos pelos próprios fluxos podem precisar de ajuste, pois as pontuações mudam com o modelo."
       },
       "verify": {
         "title": "Segunda verificação para casos duvidosos",
-        "description": "Um modelo de chat pequeno confere as correspondências que mal atingiram o limite de um workspace. Ele só pode reter uma resposta. Os workspaces a ativam nas próprias configurações de FAQ.",
         "enabled": {
           "label": "Permitir a segunda verificação",
           "hint": "Desative para interromper a verificação em todos os workspaces, independentemente do que eles definirem."
@@ -130,7 +129,8 @@
           "label": "Modelo de verificação",
           "hint": "O ID do modelo do OpenRouter que avalia os casos duvidosos, por exemplo openai/gpt-4o-mini. Um modelo pequeno e rápido basta."
         },
-        "perHourHint": "Depois disso, um caso duvidoso vale sem verificação pelo resto da hora. 0 significa nunca verificar."
+        "perHourHint": "Depois disso, um caso duvidoso vale sem verificação pelo resto da hora. 0 significa nunca verificar.",
+        "description": "Um pequeno modelo de chat confere novamente as correspondências que mal atingiram o limite de um fluxo. Ele só pode reter uma resposta. Os fluxos o ativam nas próprias configurações de FAQ."
       }
     },
     "maintenance": {

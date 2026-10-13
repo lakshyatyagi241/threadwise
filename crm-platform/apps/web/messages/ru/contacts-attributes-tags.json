@@ -121,6 +121,12 @@
       "selectedActionsNone": "Выбранные контакты (сначала выберите строки)",
       "modifyColumns": "Изменить столбцы",
       "resetColumns": "Сбросить по умолчанию",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Имя контакта",
       "colPhone": "Номер телефона",
       "colEmailId": "Эл. почта",
@@ -170,7 +176,8 @@
       "import": "Импорт",
       "columns": "Столбцы",
       "addColumnField": "Добавить пользовательское поле как столбец",
-      "kanbanView": "Доска (по этапам)"
+      "kanbanView": "Доска (по этапам)",
+      "colLeadScore": "Оценка лида"
     },
     "bulk": {
       "label": "Действия для выбранных контактов",
@@ -406,7 +413,8 @@
         "address": "Адрес",
         "memo": "Заметка",
         "status": "Статус",
-        "source": "Источник"
+        "source": "Источник",
+        "consent": "Маркетинговое согласие (да / нет)"
       },
       "notInFile": "Нет в файле",
       "columnN": "Столбец {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Экспорты",
-        "hint": "Экспорты контактов из хаба, сначала новые. Скачанный файл не хранится.",
+        "hint": "Экспорты контактов из Hub, сначала новые. Каждый файл хранится 30 дней, чтобы вы и коллеги с правом экспорта могли скачать его снова.",
         "empty": "Экспортов пока нет.",
         "by": "Кем",
         "rows": "Контакты",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Отмеченные контакты",
           "filter": "Все подходящие"
-        }
+        },
+        "download": "Скачать",
+        "noFile": "Не сохранён",
+        "keptUntil": "Хранится до {date}",
+        "downloadFailed": "Не удалось скачать файл. Возможно, срок хранения истёк."
       }
     }
   }

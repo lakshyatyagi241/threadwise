@@ -10,7 +10,8 @@
       "webchat": "ウェブサイトのチャット",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "メール (Gmail)"
     },
     "page": {
       "back": "オートメーションと AI",
@@ -81,7 +82,10 @@
       "lastFired": "最終使用: {when}",
       "edit": "編集",
       "duplicate": "複製",
-      "delete": "削除"
+      "delete": "削除",
+      "startsFlow": "フロー「{name}」も開始します",
+      "flowOff": "フローがオフです",
+      "flowGone": "削除されたフローも開始します"
     },
     "form": {
       "back": "自動割り当て",
@@ -170,7 +174,15 @@
       "cancel": "キャンセル",
       "save": "保存",
       "saveActivate": "保存して有効化",
-      "openCount": "未対応 {open} 件"
+      "openCount": "未対応 {open} 件",
+      "flow": {
+        "title": "フローも開始する",
+        "hint": "任意です。このルールが適用されると、同じチャネルでその会話に対してフローが開始されます。フローはオンになっていれば十分で、公開されている必要はありません。",
+        "none": "フローなし",
+        "offOption": "{name}（オフ）",
+        "goneOption": "既に存在しないフロー",
+        "loadFailed": "フローを読み込めなかったため、一覧が不完全な可能性があります。"
+      }
     }
   }
 }

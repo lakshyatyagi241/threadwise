@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Abaikan",
+      "retry": "Coba lagi",
+      "requestId": "Permintaan {id}",
+      "noAccessTitle": "Anda tidak dapat membuka layar ini",
+      "noAccess": "Minta izin “{permission}” kepada admin."
+    },
+    "errors": {
+      "network": "Tidak dapat menghubungi server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Peran Anda tidak diizinkan melakukan ini.",
+      "notAvailable": "Pilot pertumbuhan tidak tersedia untuk ruang kerja ini.",
+      "featureOff": "Bagian pilot pertumbuhan ini dimatikan. Aktifkan di Kontrol.",
+      "actionGone": "Seseorang sudah memutuskan hal ini.",
+      "assistantFailed": "Asisten tidak dapat memberi saran. Pastikan Anda memiliki audiens dan template yang disetujui, lalu coba lagi.",
+      "undoRefused": "Perubahan ini tidak dapat dibatalkan lagi: kontak sudah berpindah, atau perubahan sudah dibatalkan.",
+      "conflict": "Seseorang menyimpan pengaturan ini lebih dulu. Versi terbaru telah dimuat.",
+      "notFound": "Itu sudah tidak ada.",
+      "validation": "Beberapa nilai tidak valid. Periksa lalu coba lagi.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi, dan hubungi dukungan jika terus terjadi."
+    },
+    "page": {
+      "title": "Pertumbuhan",
+      "subtitle": "Apa yang disampaikan kampanye dan percakapan Anda, diubah menjadi hal yang dapat ditindaklanjuti tim Anda. Tidak ada yang di sini mengirim pesan ke kontak secara otomatis.",
+      "notAvailableTitle": "Bukan bagian dari pilot",
+      "notAvailable": "Pilot pertumbuhan hanya diaktifkan untuk ruang kerja tertentu. Ruang kerja Anda belum termasuk.",
+      "tabs": {
+        "inbox": "Kotak masuk",
+        "audiences": "Audiens",
+        "campaigns": "Kampanye",
+        "insights": "Wawasan",
+        "autoStage": "Perubahan tahap otomatis",
+        "assistant": "Asisten broadcast",
+        "controls": "Kontrol"
+      }
+    },
+    "digest": {
+      "title": "Hari ini",
+      "quiet": "Tidak ada yang perlu diperhatikan saat ini.",
+      "highlights": {
+        "hotLeads": "{count, plural, other {# lead panas siap membeli}}",
+        "unanswered": "{count, plural, other {# pertanyaan pembelian belum dijawab}}",
+        "optOuts": "{count, plural, other {# kontak meminta berhenti}}",
+        "suggestionsPending": "{count, plural, other {# perubahan tahap menunggu keputusan}}",
+        "campaignReplies": "{count, plural, other {# kontak membalas dalam sehari setelah kampanye}}",
+        "lapsed": "{count, plural, other {# pelanggan sudah tidak aktif}}"
+      }
+    },
+    "inbox": {
+      "title": "Kotak masuk pertumbuhan",
+      "hint": "Hal-hal yang layak dilihat. Menerima menjalankan tindakan sesuai jenisnya; mengabaikan hanya menutupnya.",
+      "filter": "Tampilkan",
+      "all": "Semua ({count})",
+      "empty": "Tidak ada yang menunggu. Item baru muncul di sini saat obrolan dibaca dan pemeriksaan harian berjalan.",
+      "more": "Tampilkan lebih banyak",
+      "doneAccept": "{count, plural, other {# item selesai}}",
+      "doneDismiss": "{count, plural, other {# item diabaikan}}",
+      "someFailed": "{count, plural, other {# item tidak dapat diselesaikan}}",
+      "openContact": "Buka kontak",
+      "someone": "Seorang kontak",
+      "dismiss": "Abaikan",
+      "types": {
+        "hot_lead": "Lead panas",
+        "unanswered_intent": "Belum dijawab",
+        "registration_issue": "Masalah pendaftaran",
+        "purchase_route": "Arahkan ke seseorang",
+        "opt_out": "Meminta berhenti",
+        "lapsed": "Tidak aktif",
+        "service_due": "Servis jatuh tempo",
+        "status_reply": "Status pesanan"
+      },
+      "titles": {
+        "hot_lead": "{name} siap membeli",
+        "unanswered_intent": "{name} bertanya soal pembelian dan belum ada yang menjawab",
+        "registration_issue": "{name} melaporkan masalah dengan pendaftarannya",
+        "purchase_route": "Serahkan {name} kepada {user}",
+        "opt_out": "{name} meminta berhenti",
+        "lapsed": "{name} sudah tidak aktif",
+        "service_due": "{name}: {rule} jatuh tempo",
+        "status_reply": "{name} bertanya soal pesanannya"
+      },
+      "accept": {
+        "hot_lead": "Tandai sudah ditangani",
+        "unanswered_intent": "Tandai sudah ditangani",
+        "registration_issue": "Tandai sudah ditangani",
+        "purchase_route": "Tugaskan obrolan",
+        "opt_out": "Catat opt-out",
+        "lapsed": "Selesai",
+        "service_due": "Selesai",
+        "status_reply": "Selesai"
+      },
+      "facts": {
+        "routeOwner": "{name} memiliki kontak ini.",
+        "routeLeastBusy": "{name} memiliki obrolan terbuka paling sedikit.",
+        "lapsedDays": "Tidak ada pembukaan atau pesan selama {count, plural, other {# hari}}.",
+        "issue": {
+          "missing_confirmation": "Tidak menerima konfirmasi.",
+          "payment_problem": "Melaporkan masalah pembayaran.",
+          "wrong_info": "Mengatakan beberapa detail salah."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Audiens",
+      "hint": "Kelompok kontak yang ditentukan dari apa yang benar-benar mereka lakukan. Sinkronkan untuk mengisi grup kontak yang dapat dikirimi kampanye.",
+      "empty": "Belum ada audiens. Aktifkan salah satu bagian di Kontrol.",
+      "synced": "“{name}” sekarang memiliki {count, plural, other {# kontak}}.",
+      "lastSync": "Grup “{name}”, terakhir disinkronkan {when}.",
+      "notSynced": "Grup “{name}” akan dibuat pada sinkronisasi pertama.",
+      "sync": "Sinkronkan ke grup",
+      "resync": "Sinkronkan lagi",
+      "errors": {
+        "forbidden": "Peran Anda tidak diizinkan menyinkronkan audiens.",
+        "failed": "Audiens tidak dapat disinkronkan. Coba lagi."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Terlibat",
+          "description": "Membuka beberapa kampanye baru-baru ini."
+        },
+        "silent": {
+          "label": "Diam",
+          "description": "Menerima kampanye tetapi tidak membuka satu pun."
+        },
+        "lapsed": {
+          "label": "Tidak aktif",
+          "description": "Pelanggan tanpa pembukaan atau pesan dalam waktu lama."
+        },
+        "hot_chat": {
+          "label": "Panas di obrolan",
+          "description": "Kontak yang pembacaan obrolan terbarunya menunjukkan siap membeli."
+        },
+        "high_propensity": {
+          "label": "Berpeluang tinggi berkonversi",
+          "description": "Sepersepuluh teratas menurut model konversi."
+        },
+        "service_due": {
+          "label": "Servis jatuh tempo",
+          "description": "Kontak yang tanggal servisnya sudah tiba."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Balasan kampanye",
+      "hint": "Kontak yang membalas dalam 24 dan 72 jam setelah pengiriman, dihitung dari kotak masuk.",
+      "stamp": "Catat balasan sekarang",
+      "stamped": "{count, plural, other {# balasan dicatat}}.",
+      "stampFailed": "Balasan tidak dapat dicatat. Coba lagi.",
+      "empty": "Belum ada kampanye yang dikirim.",
+      "totals": {
+        "sent": "Terkirim",
+        "read": "Dibaca",
+        "replied24h": "Membalas dalam 24 jam",
+        "replied72h": "Membalas dalam 72 jam"
+      },
+      "cols": {
+        "campaign": "Kampanye",
+        "sent": "Terkirim",
+        "read": "Dibaca",
+        "replied24h": "24 jam",
+        "replied72h": "72 jam",
+        "replyRate": "Tingkat balasan"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Waktu terbaik untuk mengirim",
+        "hint": "Kapan kontak Anda membaca kampanye dan menulis kepada Anda, dalam zona waktu ruang kerja Anda.",
+        "empty": "Belum cukup aktivitas untuk disimpulkan.",
+        "best": "Jam terbaik: {hours} ({zone}).",
+        "quiet": "Jam paling sepi: {hours}.",
+        "chart": "Aktivitas menurut jam dalam sehari",
+        "sample": "Berdasarkan {count, plural, other {# kejadian}}."
+      },
+      "propensity": {
+        "title": "Model konversi",
+        "hint": "Mempelajari dari kontak yang menjadi pelanggan perilaku mana yang berkaitan dengan konversi, lalu memberi skor kepada semua orang.",
+        "recompute": "Pelajari ulang sekarang",
+        "done": "Model telah diperbarui.",
+        "failed": "Model tidak dapat diperbarui. Coba lagi.",
+        "contacts": "Kontak yang diberi skor",
+        "converted": "Berkonversi",
+        "auc": "Seberapa baik peringkatnya",
+        "capture": "Berkonversi di sepersepuluh teratas",
+        "captureHint": "Peringkat acak akan menghasilkan 10%",
+        "none": "Belum diukur",
+        "trained": "Model telah belajar dari kontak Anda yang berkonversi.",
+        "notTrained": "Kontak yang berkonversi masih terlalu sedikit untuk dipelajari, sehingga bobot tetap digunakan.",
+        "computedAt": "Diperbarui {when}.",
+        "drivers": "Yang memengaruhi skor",
+        "features": {
+          "campaigns_opened_30d": "Kampanye dibuka (30 hari)",
+          "campaigns_received_30d": "Kampanye diterima (30 hari)",
+          "messages_from_contact_30d": "Pesan yang mereka tulis (30 hari)",
+          "links_clicked_30d": "Tautan diklik (30 hari)",
+          "groups": "Grup yang diikuti",
+          "has_email": "Memiliki alamat email",
+          "chat_messages_total": "Pesan dalam obrolan",
+          "age_days": "Hari sejak ditambahkan"
+        }
+      },
+      "quality": {
+        "title": "Seberapa baik hasilnya",
+        "hint": "Apakah saran digunakan, seberapa baik skor lead membedakan kontak yang berkonversi, dan berapa biaya AI, selama 30 hari terakhir.",
+        "none": "Belum diukur",
+        "scoreAuc": "Kualitas skor lead",
+        "scoreAucHint": "{scored} diberi skor, {converted} berkonversi",
+        "calls": "Panggilan AI",
+        "cost": "Biaya AI",
+        "autoApplied": "Diubah otomatis",
+        "undone": "{count} dibatalkan",
+        "suggestions": {
+          "chat": "Saran tahap dari obrolan",
+          "engagement": "Saran tahap dari kampanye"
+        },
+        "suggestionLine": "{accepted} diterima, {dismissed} diabaikan, {pending} menunggu.",
+        "cols": {
+          "type": "Item kotak masuk",
+          "done": "Selesai",
+          "dismissed": "Diabaikan",
+          "open": "Terbuka"
+        },
+        "actionTypes": {
+          "hot_lead": "Lead panas",
+          "unanswered_intent": "Belum dijawab",
+          "registration_issue": "Masalah pendaftaran",
+          "purchase_route": "Arahkan ke seseorang",
+          "opt_out": "Meminta berhenti",
+          "lapsed": "Tidak aktif",
+          "service_due": "Servis jatuh tempo",
+          "status_reply": "Status pesanan"
+        }
+      },
+      "enrichment": {
+        "title": "Detail perusahaan",
+        "hint": "Mencari detail perusahaan untuk kontak dengan alamat email bisnis dan menampilkannya pada kontak.",
+        "run": "Cari kelompok berikutnya",
+        "asked": "{count, plural, other {# kontak dicari}}.",
+        "failed": "Pencarian gagal. Coba lagi.",
+        "status": "{provider}: {found} ditemukan, {notFound} tidak ditemukan, {failed} gagal.",
+        "notConfigured": "Tidak ada layanan pencarian yang terhubung di server, jadi pengaturan ini belum berpengaruh."
+      }
+    },
+    "autoStage": {
+      "title": "Perubahan tahap otomatis",
+      "hint": "Hanya hasil pembacaan yang sangat diyakini AI, hingga batas harian. Masing-masing dapat dikembalikan selama belum ada yang memindahkan kontak sejak itu.",
+      "today": "{done} dari {cap} digunakan hari ini.",
+      "empty": "Belum ada yang diubah secara otomatis.",
+      "contact": "Seorang kontak",
+      "moved": "Dipindahkan dari {from} ke {to}.",
+      "confidence": "{percent}% yakin",
+      "undone": "Dikembalikan",
+      "undo": "Kembalikan",
+      "undoDone": "Kontak sudah kembali seperti semula.",
+      "undoRefused": "Perubahan ini tidak dapat dibatalkan lagi: kontak sudah berpindah.",
+      "undoFailed": "Perubahan tidak dapat dibatalkan. Coba lagi."
+    },
+    "assistant": {
+      "title": "Asisten broadcast",
+      "hint": "Sampaikan apa yang ingin Anda capai. Asisten menyarankan satu audiens dan satu template yang disetujui, dengan mempertimbangkan balasan yang benar-benar diterima tiap template. Asisten tidak mengirim atau membuat apa pun.",
+      "goal": "Apa yang ingin Anda capai?",
+      "goalHint": "Misalnya: ingatkan semua yang terdaftar tentang acara hari Sabtu.",
+      "placeholder": "Ingatkan kontak terdaftar tentang acara hari Sabtu",
+      "ask": "Sarankan kampanye",
+      "audience": "Audiens",
+      "audienceValue": "{name} ({count} kontak)",
+      "template": "Template",
+      "replyRate": "{percent} membalas dalam sehari",
+      "sendAt": "Kirim sekitar",
+      "considered": "Dipilih dari {audiences, plural, other {# audiens}} dan {templates, plural, other {# template}}."
+    },
+    "controls": {
+      "readOnly": "Anda dapat melihat pengaturan ini tetapi tidak dapat mengubahnya.",
+      "saved": "Pengaturan disimpan.",
+      "discard": "Buang perubahan",
+      "save": "Simpan",
+      "problem": {
+        "numbers": "Salah satu angka di luar rentang. Periksa ambang batas.",
+        "serviceRules": "Aturan servis pada baris {line} tidak sesuai format: label | properti tanggal | hari setelah | hari sebelum.",
+        "customPhrases": "Frasa pada baris {line} tidak sesuai format: frasa = maksud."
+      },
+      "groups": {
+        "measure": {
+          "title": "Pengukuran",
+          "hint": "Pengukuran hanya-baca. Tidak mengubah apa pun."
+        },
+        "audiences": {
+          "title": "Audiens dan tahap",
+          "hint": "Menentukan siapa yang perlu dihubungi, dan menyarankan perubahan tahap dari apa yang dilakukan kontak terhadap kampanye."
+        },
+        "chats": {
+          "title": "Membaca obrolan",
+          "hint": "Menggunakan pembacaan obrolan dari penilaian lead AI, jadi fitur itu harus aktif. Data pribadi sebagian disamarkan sebelum obrolan dibaca."
+        },
+        "assist": {
+          "title": "Asisten",
+          "hint": "Membantu pengambilan keputusan. Tidak ada yang dikirim ke kontak."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Balasan kampanye sesungguhnya",
+          "hint": "Hitung kontak yang membalas setelah kampanye dan perbaiki angka respons."
+        },
+        "send_times": {
+          "label": "Waktu terbaik untuk mengirim",
+          "hint": "Tampilkan jam saat kontak Anda membaca dan menulis."
+        },
+        "propensity": {
+          "label": "Model konversi",
+          "hint": "Beri skor setiap kontak berdasarkan kemungkinan mereka berkonversi."
+        },
+        "quality": {
+          "label": "Dasbor kualitas",
+          "hint": "Tampilkan seberapa sering saran digunakan dan berapa biaya AI."
+        },
+        "daily_digest": {
+          "label": "Ringkasan harian",
+          "hint": "Ringkasan singkat ruang kerja di bagian atas layar ini."
+        },
+        "engagement_audiences": {
+          "label": "Audiens keterlibatan",
+          "hint": "Kontak yang terlibat, diam, dan tidak aktif, siap dikirimi kampanye."
+        },
+        "engagement_stage_rules": {
+          "label": "Saran tahap dari kampanye",
+          "hint": "Sarankan memajukan kontak ketika mereka terus membuka kampanye."
+        },
+        "service_rules": {
+          "label": "Pengingat servis dan tindak lanjut",
+          "hint": "Temukan kontak yang tanggal servis atau pembeliannya sudah jatuh tempo, menggunakan aturan Anda sendiri."
+        },
+        "enrichment": {
+          "label": "Detail perusahaan",
+          "hint": "Cari detail perusahaan untuk kontak dengan alamat email bisnis."
+        },
+        "intent_fields": {
+          "label": "Maksud obrolan pada kontak",
+          "hint": "Tulis topik obrolan ke properti “Maksud AI”, sehingga alur dapat bereaksi terhadapnya."
+        },
+        "language_detect": {
+          "label": "Bahasa obrolan",
+          "hint": "Catat bahasa yang digunakan di setiap obrolan."
+        },
+        "auto_notes": {
+          "label": "Catatan ringkasan obrolan",
+          "hint": "Tambahkan ringkasan singkat obrolan ke kontak sebagai catatan."
+        },
+        "hot_lead_alerts": {
+          "label": "Peringatan lead panas",
+          "hint": "Munculkan peringatan dan beri tahu pemilik saat kontak jelas siap membeli."
+        },
+        "unanswered_watch": {
+          "label": "Pertanyaan pembelian yang belum dijawab",
+          "hint": "Tandai pertanyaan pembelian atau harga yang belum dijawab siapa pun."
+        },
+        "handover_summary": {
+          "label": "Ringkasan saat serah terima",
+          "hint": "Saat obrolan diserahkan kepada seseorang, letakkan ringkasannya di bagian atas."
+        },
+        "purchase_routing": {
+          "label": "Arahkan pembeli ke seseorang",
+          "hint": "Sarankan siapa yang sebaiknya menangani obrolan saat kontak ingin membeli."
+        },
+        "registration_check": {
+          "label": "Masalah pendaftaran",
+          "hint": "Tandai kontak yang mengaku sudah membayar atau mendaftar tetapi tidak menerima konfirmasi."
+        },
+        "status_reply": {
+          "label": "Status pesanan dan perbaikan",
+          "hint": "Siapkan status pesanan atau perbaikan saat pelanggan menanyakannya."
+        },
+        "optout_detection": {
+          "label": "Permintaan opt-out",
+          "hint": "Tandai kontak yang meminta berhenti; menerimanya akan mencatatnya di buku besar persetujuan."
+        },
+        "broadcast_assistant": {
+          "label": "Asisten broadcast",
+          "hint": "Sarankan audiens dan template untuk sebuah tujuan."
+        },
+        "auto_stage": {
+          "label": "Perubahan tahap otomatis",
+          "hint": "Majukan kontak saat AI sangat yakin, hingga batas harian, dengan opsi batal."
+        }
+      },
+      "thresholds": {
+        "title": "Ambang batas",
+        "hint": "Angka yang digunakan oleh bagian-bagian di atas.",
+        "hotLeadConfidence": "Tingkat keyakinan lead panas",
+        "hotLeadConfidenceHint": "Seberapa yakin hasil pembacaan harus, dari 0,5 sampai 1.",
+        "unansweredHours": "Jam sebelum pertanyaan dianggap belum dijawab",
+        "unansweredHoursHint": "Dari 1 sampai 168.",
+        "lapsedDays": "Hari sebelum pelanggan dianggap tidak aktif",
+        "lapsedDaysHint": "Dari 7 sampai 730.",
+        "engagedOpens": "Kampanye yang dibuka agar dianggap terlibat",
+        "engagedOpensHint": "Dalam 30 hari.",
+        "stageMinOpens": "Kampanye yang dibuka untuk menyarankan perubahan tahap",
+        "stageWindowDays": "Hari yang dilihat ke belakang untuk itu",
+        "autoMinConfidence": "Tingkat keyakinan untuk perubahan otomatis",
+        "autoMinConfidenceHint": "Dari 0,8 sampai 1.",
+        "autoDailyCap": "Perubahan otomatis per hari",
+        "autoDailyCapHint": "Batas untuk seluruh ruang kerja.",
+        "requireGroup": "Hanya sarankan perubahan tahap untuk kontak yang berada dalam grup"
+      },
+      "rules": {
+        "title": "Aturan dan kata Anda sendiri",
+        "hint": "Satu entri per baris.",
+        "statusFields": "Properti status",
+        "statusFieldsHint": "Properti kontak yang menyimpan status pesanan atau perbaikan, seperti repair_status.",
+        "serviceRules": "Aturan servis",
+        "serviceRulesHint": "Label | properti tanggal | hari setelah | hari sebelum (opsional).",
+        "serviceRulesExample": "Ganti baterai | purchase_date | 700 | 760",
+        "customPhrases": "Ketukan tombol dan kata kunci",
+        "customPhrasesHint": "Frasa = maksud. Maksud: {intents}.",
+        "customPhrasesExample": "Lihat kartu garansi = post_purchase",
+        "extraMaskTerms": "Kata yang selalu disembunyikan",
+        "extraMaskTermsHint": "Merek, alamat, atau nama yang tidak boleh dikirim ke AI."
+      },
+      "confirmEnrich": {
+        "title": "Cari detail perusahaan?",
+        "body": "Untuk menemukan detail perusahaan, alamat email bisnis kontak dikirim ke layanan pencarian. Alamat email pribadi tidak dikirim.",
+        "yes": "Aktifkan",
+        "no": "Nanti saja"
+      }
+    },
+    "contactCard": {
+      "title": "Pertumbuhan",
+      "propensity": "Kemungkinan berkonversi: {score} dari 100.",
+      "computedAt": "Diperbarui {when}."
+    }
+  }
+}

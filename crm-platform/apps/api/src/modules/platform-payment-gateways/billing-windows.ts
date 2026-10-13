@@ -27,8 +27,31 @@ function lastDays(days: number, now: Date): Range {
   return { from, to, prevFrom, prevTo };
 }
 
+/** The `from`/`to` days (YYYY-MM-DD) of a `custom` window; the contract has already checked them. */
+export interface CustomDays {
+  from?: string;
+  to?: string;
+}
+
+/** Whole days between the two bounds, both included, and the window that ends at the end of `to`. */
+function customRange(c: CustomDays | undefined): Range | null {
+  if (!c?.from || !c.to) return null;
+  const from = new Date(`${c.from}T00:00:00Z`);
+  const to = endOfDay(new Date(`${c.to}T00:00:00Z`));
+  if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || from > to) return null;
+  const days = Math.round((startOfDay(to).getTime() - from.getTime()) / DAY) + 1;
+  const prevTo = new Date(from.getTime() - 1000);
+  const prevFrom = startOfDay(new Date(prevTo.getTime() - (days - 1) * DAY));
+  return { from, to, prevFrom, prevTo };
+}
+
 /** Order history: 90 days (also any unknown value), "this year" = days since 1 January (at least 1), "all" = 5 years. */
-export function orderRange(window: OrderWindow | string, now = new Date()): Range {
+export function orderRange(
+  window: OrderWindow | string,
+  now = new Date(),
+  custom?: CustomDays,
+): Range {
+  if (window === 'custom') return customRange(custom) ?? lastDays(90, now);
   if (window === 'this_year') {
     const jan = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
     return lastDays(Math.max(1, Math.floor((now.getTime() - jan.getTime()) / DAY)), now);
@@ -37,7 +60,12 @@ export function orderRange(window: OrderWindow | string, now = new Date()): Rang
 }
 
 /** Billing history and analytics: 7d, 30d, 90d (default), 1y, all (5 years). */
-export function billingRange(window: BillingWindow | string, now = new Date()): Range {
+export function billingRange(
+  window: BillingWindow | string,
+  now = new Date(),
+  custom?: CustomDays,
+): Range {
+  if (window === 'custom') return customRange(custom) ?? lastDays(90, now);
   const days =
     window === '7d'
       ? 7

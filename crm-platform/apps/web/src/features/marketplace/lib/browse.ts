@@ -15,6 +15,12 @@ export type BrowseSort = (typeof MARKET_APP_SORTS)[number];
 export const DEFAULT_SORT: BrowseSort = 'featured';
 export const SORT_OPTIONS = MARKET_APP_SORTS;
 export const PAGE_SIZE = 24;
+/**
+ * The browse screens retry a failed read once, quickly, so a person sees "Could not load this / Try again" in about a second
+ * instead of a spinner for several (the app default is two retries with growing waits).
+ */
+export const BROWSE_RETRY = { retry: 1, retryDelay: 300 } as const;
+
 export const SEARCH_MAX = 80;
 
 export interface BrowseTab {

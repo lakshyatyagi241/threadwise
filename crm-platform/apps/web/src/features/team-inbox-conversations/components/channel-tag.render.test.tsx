@@ -29,4 +29,10 @@ describe('inbox channel badge', () => {
     expect(render('whatsapp_cloud', false)).toContain('data-channel-kind="whatsapp_cloud"');
     expect(render('telegram', false)).toContain('>TEL<');
   });
+
+  it('marks a mailbox with EML, named by its address', () => {
+    const html = render('email', false);
+    expect(html).toContain('data-channel-kind="email"');
+    expect(html).toContain('>EML<');
+  });
 });

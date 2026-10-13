@@ -1,0 +1,135 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Zapytaj",
+      "shortcut": "Zapytaj asystenta (Ctrl lub Cmd + Shift + L)"
+    },
+    "panel": {
+      "title": "Zapytaj asystenta",
+      "subtitle": "Napisz, co chcesz zrobić. Czytam tę stronę i klikam za Ciebie, a przed zapisaniem, wysłaniem, usunięciem lub zapłaceniem czegokolwiek pytam o zgodę.",
+      "close": "Zamknij",
+      "taskLabel": "Co chcesz zrobić?",
+      "taskPlaceholder": "Na przykład: dodaj tag VIP do kontaktu",
+      "tooLong": "Maksymalnie {max} znaków.",
+      "doItForMe": "Zrób to za mnie",
+      "showMe": "Pokaż mi",
+      "stop": "Zatrzymaj",
+      "stopping": "Zatrzymywanie...",
+      "newTask": "Nowe zadanie",
+      "tryAgain": "Spróbuj ponownie",
+      "openGuide": "Otwórz przewodnik",
+      "showSteps": "Pokaż kroki",
+      "guidesTitle": "Z przewodników pomocy",
+      "examplesTitle": "Spróbuj zapytać",
+      "disabledHere": "Asystent jest wyłączony na tym ekranie, ponieważ wyświetla wiadomości i dane napisane przez klientów. Otwórz inny ekran, aby z niego skorzystać."
+    },
+    "notice": {
+      "title": "Zanim zaczniesz",
+      "sent": "Aby wykonać zadanie, asystent wysyła Twoją prośbę i tekst strony, na której jesteś, do dostawcy AI.",
+      "masked": "Numery telefonów, adresy e-mail i dane poufne są najpierw ukrywane. Imiona i nazwiska oraz inny tekst na stronie nie są.",
+      "asks": "Korzysta z Twojego konta, więc może zrobić tylko to, co możesz zrobić Ty. Pyta Cię przed zapisaniem, wysłaniem, usunięciem, płatnością, zaproszeniem osób lub zmianą ustawień.",
+      "limits": "Nigdy nie wpisuje haseł ani danych karty, nigdy nie otwiera innych stron internetowych, a Ty możesz go zatrzymać w dowolnej chwili.",
+      "accept": "Rozumiem"
+    },
+    "status": {
+      "progress": "Krok {n} z {max}",
+      "thinking": "Myślę...",
+      "starting": "Uruchamianie..."
+    },
+    "activity": {
+      "click": "Klikam: {label}",
+      "type": "Wpisuję w: {label}",
+      "select": "Wybieram w: {label}",
+      "blocked": "Pominięto: {label}",
+      "declined": "Odmówiono: {label}",
+      "shown": "Pokazuję: {label}"
+    },
+    "confirm": {
+      "title": "Zezwolić?",
+      "clickBody": "Asystent zaraz kliknie \"{label}\".",
+      "selectBody": "Asystent zaraz wybierze \"{detail}\" w \"{label}\".",
+      "allow": "Zezwól jednorazowo",
+      "deny": "Odmów",
+      "reasons": {
+        "marked": "To jeden z najbardziej wrażliwych przycisków w aplikacji.",
+        "submit": "To zapisuje lub wysyła to, co jest na stronie.",
+        "delete": "To usuwa, kasuje lub odłącza coś.",
+        "send": "To wysyła, publikuje lub uruchamia coś, co zobaczą inni.",
+        "pay": "To może kosztować pieniądze lub zmienić Twoje opłaty.",
+        "invite": "To zaprasza kogoś do Twojego obszaru roboczego.",
+        "connect": "To łączy lub rozłącza kanał albo aplikację.",
+        "access": "To zmienia, kto co może robić, albo dane poufne lub rozliczeniowe.",
+        "settings": "To włącza lub wyłącza coś.",
+        "toggle": "Ten przełącznik działa natychmiast.",
+        "dialog": "To potwierdza to, o co pyta okno.",
+        "signout": "To Cię wylogowuje."
+      }
+    },
+    "question": {
+      "title": "Asystent pyta",
+      "answerLabel": "Twoja odpowiedź",
+      "send": "Wyślij"
+    },
+    "result": {
+      "completedTitle": "Gotowe",
+      "failedTitle": "Nie udało mi się tego dokończyć",
+      "stoppedTitle": "Zatrzymano",
+      "summary": "{steps, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}}, zezwolono: {confirmed}, odmówiono: {denied}."
+    },
+    "stopped": {
+      "person": "Zatrzymano zadanie.",
+      "budget": "Zadanie osiągnęło limit kroków i zostało zatrzymane. Spróbuj z mniejszą prośbą.",
+      "location": "Zadanie zostało zatrzymane, ponieważ dotarło do ekranu, z którego asystent nie może korzystać."
+    },
+    "errors": {
+      "disabled": "Asystent jest wyłączony dla tego obszaru roboczego lub na tym ekranie.",
+      "planLocked": "Asystent nie jest częścią Twojego planu.",
+      "forbidden": "Nie masz uprawnień do korzystania z asystenta.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "taskLimit": "Rozpoczęto już maksymalną dozwoloną na razie liczbę zadań. Spróbuj ponownie później.",
+      "stepLimit": "To zadanie wykorzystało wszystkie kroki. Zacznij nowe z mniejszą prośbą.",
+      "closed": "To zadanie zostało zakończone. Zacznij nowe.",
+      "providerDown": "Usługa AI nie odpowiedziała. Spróbuj za chwilę lub zapytaj właściciela platformy, jeśli problem się powtarza.",
+      "monthlyLimit": "Twój obszar roboczy wykorzystał tegomiesięczny limit AI.",
+      "signedOut": "Sesja wygasła. Zaloguj się ponownie.",
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "retryIn": "Spróbuj ponownie za {seconds} s.",
+      "requestId": "ID żądania: {id}"
+    },
+    "examples": {
+      "howDo": "Jak korzystać z: {title}?",
+      "showMe": "Pokaż mi, od czego zacząć w: {title}",
+      "whereIs": "Gdzie znajdę: {title}?",
+      "generic1": "Jak połączyć mój numer WhatsApp?",
+      "generic2": "Gdzie zmienię profil firmy?",
+      "generic3": "Jak zaprosić członka zespołu?"
+    },
+    "helpCard": {
+      "title": "Zapytaj asystenta",
+      "body": "Powiedz, co chcesz zrobić. Asystent znajdzie właściwy przewodnik, pokaże, gdzie kliknąć, albo wykona kroki za Ciebie, pytając o zgodę przed wszystkim ważnym.",
+      "button": "Otwórz asystenta"
+    },
+    "settingsPage": {
+      "title": "Asystent pomocy",
+      "description": "Pozwól zespołowi prosić o to, co chce zrobić, a aplikacja poprowadzi go lub wykona kroki na jego własnym koncie.",
+      "loading": "Ładowanie",
+      "loadFailed": "Nie udało się wczytać ustawienia.",
+      "requestId": "ID żądania: {id}",
+      "shareTitle": "Co jest udostępniane, gdy ktoś z niego korzysta",
+      "share1": "Prośba wpisana przez użytkownika oraz widoczny tekst strony, na której się znajduje, są wysyłane do dostawcy AI używanego przez platformę.",
+      "share2": "Numery telefonów, adresy e-mail, dane poufne i pola osobowe formularzy są najpierw ukrywane. Imiona i nazwiska oraz inny dowolny tekst na stronie nie są.",
+      "share3": "Wiadomości klientów i czat zespołu nigdy nie są czytane: na tych ekranach asystent jest wyłączony.",
+      "share4": "Asystent działa z uprawnieniami zalogowanej osoby i pyta o zgodę przed zapisaniem, wysłaniem, usunięciem, płatnością lub zmianą ustawień. Zapisywane są tylko liczby i wynik każdego zadania, nigdy treść prośby.",
+      "optIn": "Włączając go, potwierdzasz, że Twój obszar roboczy zgadza się na udostępnianie tego dostawcy AI.",
+      "switchLabel": "Włącz asystenta pomocy dla tego obszaru roboczego",
+      "stateOn": "Włączony. Osoby z uprawnieniem widzą przycisk Zapytaj.",
+      "stateOff": "Wyłączony. Nikt nie widzi asystenta.",
+      "saveFailed": "Nie udało się zapisać ustawienia.",
+      "savedOn": "Asystent jest włączony.",
+      "savedOff": "Asystent jest wyłączony.",
+      "whoCanUse": "Widzą go tylko role z uprawnieniem \"Korzystanie z asystenta pomocy\". Właściciele i administratorzy je mają.",
+      "rolesLink": "Otwórz role"
+    }
+  }
+}

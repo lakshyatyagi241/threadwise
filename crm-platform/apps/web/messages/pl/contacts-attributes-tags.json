@@ -121,6 +121,12 @@
       "selectedActionsNone": "Wybrane kontakty (najpierw zaznacz wiersze)",
       "modifyColumns": "Zmień kolumny",
       "resetColumns": "Przywróć domyślne",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nazwa kontaktu",
       "colPhone": "Numer telefonu",
       "colEmailId": "Adres e-mail",
@@ -170,7 +176,8 @@
       "import": "Importuj",
       "columns": "Kolumny",
       "addColumnField": "Dodaj pole niestandardowe jako kolumnę",
-      "kanbanView": "Widok tablicy (według etapu)"
+      "kanbanView": "Widok tablicy (według etapu)",
+      "colLeadScore": "Ocena leada"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -406,7 +413,8 @@
         "address": "Adres",
         "memo": "Notatka",
         "status": "Status",
-        "source": "Źródło"
+        "source": "Źródło",
+        "consent": "Zgoda marketingowa (tak / nie)"
       },
       "notInFile": "Brak w pliku",
       "columnN": "Kolumna {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Eksporty",
-        "hint": "Eksporty kontaktów z Centrum kontaktów, od najnowszych. Pobrany plik nie jest przechowywany.",
+        "hint": "Eksporty kontaktów z Hubu, od najnowszych. Każdy plik jest przechowywany 30 dni, aby Ty i współpracownicy z uprawnieniem do eksportu mogli pobrać go ponownie.",
         "empty": "Brak eksportów.",
         "by": "Przez",
         "rows": "Kontakty",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Zaznaczone kontakty",
           "filter": "Wszystkie pasujące"
-        }
+        },
+        "download": "Pobierz",
+        "noFile": "Nie zapisano",
+        "keptUntil": "Przechowywany do {date}",
+        "downloadFailed": "Nie udało się pobrać pliku. Mógł wygasnąć."
       }
     }
   }

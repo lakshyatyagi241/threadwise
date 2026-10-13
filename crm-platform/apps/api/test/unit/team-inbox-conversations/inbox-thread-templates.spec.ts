@@ -46,7 +46,12 @@ function setup(
   const service = new InboxThreadService(
     { tx: (fn: (t: unknown) => unknown) => fn(tx) } as never,
     {
-      recordByUuid: async () => ({ id: 1, assigneeUserId: 5, assigneeTeamId: null }),
+      recordByUuid: async () => ({
+        id: 1,
+        assigneeUserId: 5,
+        assigneeTeamId: null,
+        channelOwnerUserId: null,
+      }),
       byUuid: async () => ({ channelId: 3 }),
     } as never,
     {

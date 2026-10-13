@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "受信箱",
-      "messageLogs": "メッセージログ"
+      "messageLogs": "メッセージログ",
+      "savedReplies": "返信テンプレート"
     },
     "common": {
       "dismiss": "閉じる"
@@ -24,7 +25,11 @@
       "pickTitle": "会話を選択",
       "pickMessage": "リストから会話を選ぶと内容を確認して返信できます。新しいメッセージはここに自動で表示されます。",
       "shortcuts": "ショートカット: j と k でリストを移動、e で解決、/ で検索。",
-      "teamChanged": "チームを更新しました。"
+      "teamChanged": "チームを更新しました。",
+      "priorityChanged": "優先度を更新しました",
+      "snoozed": "会話をスヌーズしました",
+      "labelAdded": "ラベルを追加しました",
+      "labelRemoved": "ラベルを外しました"
     },
     "list": {
       "title": "受信箱",
@@ -100,7 +105,9 @@
           "title": "すべて確認済みです",
           "message": "お客様から新しいメッセージが届いた会話がここに表示されます。"
         }
-      }
+      },
+      "select": "選択",
+      "selectDone": "完了"
     },
     "status": {
       "received": "受信済み",
@@ -135,7 +142,18 @@
       "groupSendUnavailable": "WhatsApp グループへの送信はまだ利用できません。WhatsApp Business アプリから返信してください。",
       "logRange": "過去1年以内の日付を選択してください。開始日は終了日より前で、未来の日付は指定できません。",
       "logBusy": "エクスポートはすでに準備中です。届くメールをお待ちのうえ、あらためてリクエストしてください。",
-      "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。"
+      "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。",
+      "groupSuspended": "Metaがこのグループを停止したため、解除されるまでメッセージを送信できません。",
+      "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。",
+      "groupPlanLocked": "ご利用のプランにはWhatsAppグループが含まれていないため、このグループにメッセージを送れません。管理者にプランのアップグレードを依頼してください。",
+      "groupLeft": "この番号はグループから退出したため、メッセージを送信できなくなりました。",
+      "groupAnnounceOnly": "このグループでは管理者のみメッセージを送信でき、この番号は管理者ではありません。",
+      "groupRateLimited": "短時間にこの番号からのグループメッセージが多すぎます。1分待ってからもう一度お試しください。",
+      "groupUnavailable": "WhatsAppがこのグループメッセージを受け付けませんでした。数分後にもう一度お試しください。",
+      "savedReplyGone": "この返信テンプレートは存在しなくなりました。",
+      "savedReplyChannel": "この返信テンプレートは、この種類のチャネル向けではありません。",
+      "shortcutTaken": "そのショートカットは別の返信テンプレートで既に使われています。",
+      "importInvalid": "このファイルは保存済みの返信として読み込めません。1行目に title、shortcut、body の列が必要で、行数は 1,000 行までです。"
     },
     "bubble": {
       "kind": {
@@ -201,7 +219,11 @@
         "takeBackLabel": "あなたのリアクション {emoji}。取り消す",
         "failed": "このリアクションは送信されませんでした"
       },
-      "deliveryLog": "配信ログ"
+      "deliveryLog": "配信ログ",
+      "groupMember": "グループメンバー",
+      "groupTally": "{members}人中{delivered}人に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
+      "groupTallyNoTotal": "{delivered, plural, other {#人のメンバー}}に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
+      "groupTallyBilled": "課金 {billable}、無料 {free}"
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -350,7 +372,9 @@
           "url": "http:// または https:// で始まるリンクを入力してください",
           "tooManyRows": "リストには合計で最大10行まで含められます"
         }
-      }
+      },
+      "savedReplies": "返信テンプレート",
+      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。"
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",
@@ -632,6 +656,313 @@
           "failed": "失敗",
           "expired": "期限切れ"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "グループを開く",
+      "readOnly": {
+        "left": {
+          "title": "この番号はグループから退出しました",
+          "message": "会話はそのまま保存されています。閲覧と社内メモの追加はできますが、メッセージは送信できません。"
+        },
+        "announceOnly": {
+          "title": "このグループでは管理者のみ送信可能",
+          "message": "この番号はグループの管理者ではないため、WhatsAppはメッセージを配信しません。社内メモは引き続き追加できます。"
+        }
+      },
+      "mention": {
+        "label": "グループのメンバー",
+        "loading": "メンバーを検索中",
+        "none": "該当するメンバーがいません"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Metaがこのグループを停止しました",
+          "message": "WhatsAppは停止中のグループにメッセージを配信しません。Metaが解除するまで、スレッドの閲覧と社内メモの追加はできます。"
+        },
+        "plan": {
+          "title": "ご利用のプランにはWhatsAppグループが含まれていません",
+          "message": "このスレッドの閲覧と社内メモの追加はできますが、グループへの送信にはグループ対応のプランが必要です。管理者にアップグレードを依頼してください。"
+        },
+        "ineligible": {
+          "title": "この番号ではWhatsAppグループを利用できません",
+          "message": "前回の確認で、Metaはこの番号でのグループを許可しませんでした（公式ビジネスアカウントが必要です）。スレッドの閲覧と社内メモの追加はできます。再確認するにはMetaグループを開いてください。"
+        }
+      },
+      "cost": {
+        "members": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。概算費用 {cost}：WhatsAppは受信したメンバー1人ごとに課金します。",
+        "membersNoEstimate": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。WhatsAppは受信したメンバー1人ごとに課金します。",
+        "sizeUnknown": "メンバー数はまだ分かりません。WhatsAppはこのメッセージを受信したメンバー1人ごとに課金します。",
+        "walletShort": "ウォレットの残高がこのメッセージに足りない可能性があります。送信前にチャージしてください。"
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "シミュレーター（テスト）",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp（QR）",
+        "webchat": "ウェブサイトチャット",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "メール"
+      },
+      "variableGroup": {
+        "contact": "連絡先",
+        "agent": "あなた",
+        "workspace": "ワークスペース",
+        "conversation": "会話"
+      },
+      "variable": {
+        "first_name": "連絡先の名",
+        "last_name": "連絡先の姓",
+        "name": "連絡先のフルネーム",
+        "email": "連絡先のメールアドレス",
+        "phone": "連絡先の電話番号",
+        "agent_name": "あなたのフルネーム",
+        "agent_first_name": "あなたの名",
+        "workspace_name": "ワークスペース名",
+        "company_name": "会社名",
+        "today": "今日の日付",
+        "device_name": "チャネル名",
+        "device_phone": "チャネルの電話番号"
+      },
+      "picker": {
+        "title": "返信テンプレート",
+        "close": "返信テンプレートを閉じる",
+        "searchLabel": "返信テンプレートを検索",
+        "searchPlaceholder": "ショートカット、タイトル、テキストで検索",
+        "listLabel": "返信テンプレート",
+        "loading": "返信テンプレートを読み込み中",
+        "loadFailed": "返信テンプレートを読み込めませんでした。",
+        "retry": "再試行",
+        "empty": "返信テンプレートはまだありません。",
+        "emptyForChannel": "このチャネル向けの返信テンプレートはありません。",
+        "createFirst": "最初のテンプレートを作成",
+        "noMatch": "「{q}」に一致する返信テンプレートはありません。",
+        "mine": "自分用",
+        "hint": "矢印キーで移動、Enterで挿入、Escで閉じます。",
+        "manage": "返信テンプレートを管理",
+        "tooLong": "この返信はこのチャネルのメッセージ上限を超えるため、挿入されませんでした。"
+      },
+      "screen": {
+        "back": "設定",
+        "title": "返信テンプレート",
+        "subtitle": "チームが返信に挿入できる再利用可能な回答です。会話で / を入力して探せます。",
+        "create": "新しい返信テンプレート",
+        "noAccess": "返信テンプレートを管理する権限がありません。",
+        "meter": "返信テンプレート {used} / {limit} 件を使用中",
+        "meterLabel": "プランで使用中の返信テンプレート",
+        "meterNote": "共有の返信も個人用の返信も上限に含まれます。",
+        "atLimit": "プランの上限である返信テンプレート{limit}件に達しました。1件削除するか、アップグレードして追加してください。",
+        "nearLimit": "プランの上限である返信テンプレート{limit}件に近づいています。",
+        "upgrade": "プランを見る",
+        "tabsLabel": "表示",
+        "tab": {
+          "all": "すべて（{count}）",
+          "shared": "共有（{count}）",
+          "mine": "自分用（{count}）"
+        },
+        "categoryFilter": "カテゴリで絞り込む",
+        "allCategories": "すべてのカテゴリ",
+        "searchLabel": "返信テンプレートを検索",
+        "searchPlaceholder": "ショートカット、タイトル、テキストで検索",
+        "howItWorks": "受信トレイでは、メッセージ欄に / を入力するか、返信テンプレートボタンを使います。'{{first_name}}' のような変数は、テキストが入力欄に届く前に会話の内容で置き換えられます。担当者が送信を押すまで何も送信されません。",
+        "loading": "返信テンプレートを読み込み中",
+        "loadFailed": "返信テンプレートを読み込めませんでした。",
+        "retry": "再試行",
+        "loadMore": "さらに読み込む",
+        "list": "返信テンプレート",
+        "emptyTitle": "返信テンプレートはまだありません",
+        "empty": "チームが何度も返す回答を書いておけば、キー1つで挿入できます。",
+        "noMatchTitle": "見つかりませんでした",
+        "noMatch": "「{q}」に一致する返信テンプレートはありません。",
+        "noMatchCategory": "このカテゴリには返信テンプレートがありません。",
+        "scope": {
+          "shared": "共有",
+          "mine": "自分用"
+        },
+        "allChannels": "すべてのチャネル",
+        "neverUsed": "未使用",
+        "used": "{count, plural, other {#回}}使用",
+        "lastUsed": "最終使用 {when}",
+        "createdBy": "作成者：{name}",
+        "readOnly": "共有の返信を変更できるのは、返信テンプレートを管理する人だけです。",
+        "edit": "編集",
+        "duplicate": "複製",
+        "delete": "削除",
+        "cancel": "キャンセル",
+        "deleteTitle": "この返信テンプレートを削除しますか？",
+        "deleteShared": "/{shortcut} はワークスペースの全員から削除されます。",
+        "deleteMine": "/{shortcut} はあなたの返信から削除されます。",
+        "deleted": "返信テンプレートを削除しました。",
+        "duplicated": "返信テンプレートを複製しました。",
+        "created": "返信テンプレート /{shortcut} を作成しました。",
+        "saved": "返信テンプレートを更新しました。"
+      },
+      "form": {
+        "eyebrow": "返信テンプレート",
+        "titleNew": "新しい返信テンプレート",
+        "titleEdit": "返信テンプレートを編集",
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "saving": "保存中…",
+        "shortcut": "ショートカット",
+        "shortcutPlaceholder": "ありがとう",
+        "shortcutHint": "英数字とアンダースコア、最大{max}文字。",
+        "shortcutStored": "担当者は /{shortcut} と入力",
+        "shortcutEmpty": "英数字またはアンダースコアでショートカットを入力してください。",
+        "shortcutTaken": "/{shortcut} は別の返信で既に使われています。別のショートカットを選んでください。",
+        "title": "タイトル",
+        "titlePlaceholder": "お問い合わせありがとうございます",
+        "titleEmpty": "タイトルを入力してください。",
+        "titleLong": "タイトルは最大{max}文字までです。",
+        "body": "テキスト",
+        "bodyHint": "プレーンテキスト。WhatsAppと同様に *太字* や _斜体_ が使えます。",
+        "bodyPlaceholder": "こんにちは '{{first_name}}' さん、お問い合わせありがとうございます。どのようなご用件でしょうか？",
+        "bodyEmpty": "返信のテキストを入力してください。",
+        "bodyLong": "テキストは最大{max}文字までです。",
+        "count": "{n} / {max}",
+        "variables": "変数を挿入",
+        "variablesHint": "クリックするとカーソル位置に追加されます。入力できない変数はそのまま残るので、担当者が気づけます。",
+        "preview": "プレビュー",
+        "previewHint": "サンプルの顧客データを使用。",
+        "previewEmpty": "テキストを入力すると表示を確認できます。",
+        "previewIssues": "プレビューで未入力：{list}。返信を使用するとき、連絡先に属性があれば置き換えられ、それ以外はそのまま残ります。",
+        "category": "カテゴリ（任意）",
+        "categoryPlaceholder": "あいさつ、請求、サポート",
+        "language": "言語（任意）",
+        "languageHint": "en や pt-BR などのコード。ご自身の参照用です。",
+        "languageFormat": "en や pt-BR などの言語コードを使用してください。",
+        "channels": "これらのチャネルのみ",
+        "channelsHint": "すべて未選択のままにすると、全チャネルで利用できます。",
+        "scope": "利用できる人",
+        "scopeOption": {
+          "shared": "ワークスペースの全員",
+          "mine": "自分のみ"
+        },
+        "scopeLocked": "保存後は、共有と個人用を切り替えることはできません。",
+        "planLimit": "プランの返信テンプレート上限に達しました。",
+        "upgrade": "プランを見る",
+        "conflict": "他の人が先にこの返信を変更しました。このウィンドウを閉じて、もう一度開いてください。",
+        "invalid": "入力内容の一部が正しくありません。"
+      },
+      "transfer": {
+        "export": "CSV をエクスポート",
+        "import": "CSV をインポート",
+        "title": "保存済みの返信をインポート",
+        "intro": "title、shortcut、body の列を含む CSV をアップロードしてください。必要に応じて category、language、channel の列も使えます（channel は | 区切りで指定し、空欄にするとすべてのチャネルが対象になります）。1,000 行まで、{maxKb} KB までです。インポートした返信はチーム全体で共有されます。エクスポートも同じ列です。",
+        "file": "CSV ファイル",
+        "tooBig": "このファイルは大きすぎます。",
+        "duplicates": "共有の返信がすでに同じショートカットを使っている場合",
+        "policy": {
+          "skip": "既存の返信を残す",
+          "overwrite": "本文を置き換える"
+        },
+        "policyHint": {
+          "skip": "この行はスキップされ、返信はそのまま残ります。",
+          "overwrite": "タイトル、本文、カテゴリ、言語、チャネルが置き換えられます。使用回数は引き継がれます。"
+        },
+        "check": "ファイルを確認",
+        "go": "インポート ({count})",
+        "cancel": "キャンセル",
+        "summary": "作成 {create} 件、置き換え {update} 件、スキップ {skip} 件、問題あり {invalid} 件。まだ何も保存されていません。",
+        "plan": "ご利用プラン: {limit} 件中 {used} 件の返信。",
+        "row": "{line} 行目: /{shortcut}",
+        "truncated": "問題がある行または変更される行のうち、先頭の行のみを表示しています。",
+        "done": "インポート完了: {created} 件作成、{updated} 件置き換え。",
+        "issue": {
+          "update": "置き換えられます",
+          "skip": "スキップ",
+          "invalid": "問題があります",
+          "duplicate": "ショートカットはすでに使用中のためスキップ",
+          "missing_shortcut": "ショートカットなし",
+          "shortcut_invalid": "ショートカットに使える英字や数字がありません",
+          "missing_title": "タイトルなし",
+          "title_too_long": "タイトルが長すぎます",
+          "missing_body": "本文なし",
+          "body_too_long": "本文が長すぎます",
+          "control_characters": "制御文字が含まれています",
+          "category_too_long": "カテゴリが長すぎます",
+          "language_invalid": "言語が en や pt-BR のようなコードではありません",
+          "channel_unknown": "不明なチャネル",
+          "duplicate_in_file": "同じショートカットがファイル内の前の行にあります",
+          "plan_limit_reached": "プランの上限を超えています"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "一括操作",
+      "selected": "{count, plural, one {#件の会話を選択中} other {#件の会話を選択中}}",
+      "selectAllInView": "表示中の{count}件をすべて選択",
+      "done": "完了",
+      "markRead": "既読にする",
+      "resolve": "解決済みにする",
+      "close": "閉じる",
+      "reopen": "再開する",
+      "assign": "割り当て",
+      "assignToMe": "自分に割り当て",
+      "unassign": "割り当て解除",
+      "removeTeam": "チームを外す",
+      "priority": "優先度",
+      "snooze": "スヌーズ",
+      "snoozePreset": {
+        "oneHour": "1時間後",
+        "threeHours": "3時間後",
+        "tomorrow": "明日 9:00",
+        "nextWeek": "来週月曜 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {#件の会話を更新しました} other {#件の会話を更新しました}}。",
+        "nothingChanged": "変更はありません。選択した会話はすでに最新です。",
+        "partial": "{done}件を更新、{unchanged}件はすでに最新、{failed}件は変更できませんでした。失敗した会話は選択されたままです。",
+        "allFailed": "{count, plural, one {#件の会話} other {#件の会話}}のいずれも変更できませんでした。"
+      },
+      "label": "ラベル",
+      "labelAdd": "ラベルを追加",
+      "labelRemove": "ラベルを外す"
+    },
+    "triage": {
+      "priority": "優先度",
+      "snooze": "スヌーズ",
+      "wake": "今すぐ再開"
+    },
+    "labels": {
+      "label": "ラベル",
+      "loading": "ラベルを読み込み中…",
+      "loadFailed": "ラベルを読み込めませんでした。",
+      "none": "ラベルはまだありません。",
+      "newLabel": "新しいラベル",
+      "add": "追加",
+      "filter": "ラベル",
+      "filterActive": "{count, plural, one {#件のラベル} other {#件のラベル}}",
+      "clearFilter": "ラベルの絞り込みを解除",
+      "screen": {
+        "back": "受信トレイに戻る",
+        "title": "ラベル",
+        "intro": "ラベルは会話にタグを付け、チームで並べ替えや絞り込みができるようにします。連絡先で使うタグと同じものです。",
+        "newTitle": "新しいラベル",
+        "editTitle": "ラベルを編集",
+        "name": "名前",
+        "color": "色",
+        "colorInvalid": "#075E54 のような16進数カラーか色名を指定してください。",
+        "description": "説明（任意）",
+        "create": "ラベルを作成",
+        "save": "変更を保存",
+        "cancel": "キャンセル",
+        "edit": "編集",
+        "delete": "削除",
+        "inUse": "{count, plural, one {#件の会話} other {#件の会話}}",
+        "emptyTitle": "ラベルはまだありません",
+        "emptyMessage": "上で最初のラベルを作成し、受信トレイから会話に付けましょう。",
+        "deleteTitle": "このラベルを削除しますか？",
+        "deleteMessage": "\"{name}\" は{count, plural, one {#件の会話} other {#件の会話}}に付いています。削除すると、それらの会話とこのラベルを持つ連絡先から外れます。この操作は元に戻せません。",
+        "nameTaken": "同じ名前のラベルがすでにあります。",
+        "conflict": "ほかのユーザーが先にこのラベルを変更しました。一覧を再読み込みしました。",
+        "saved": "ラベルを保存しました",
+        "created": "ラベルを作成しました",
+        "deleted": "ラベルを削除しました"
       }
     }
   }

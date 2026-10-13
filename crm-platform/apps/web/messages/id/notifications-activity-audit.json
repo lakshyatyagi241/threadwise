@@ -149,6 +149,16 @@
         "title": "{name} aktif kembali",
         "titleNoName": "Sebuah grup WhatsApp aktif kembali",
         "body": "WhatsApp memulihkan grup ini. Anda dapat mengirim pesan lagi."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, other {# orang ingin bergabung ke {name}}}",
+        "titleNoName": "{count, plural, other {# orang ingin bergabung ke grup WhatsApp}}",
+        "body": "Buka Grup untuk menyetujui atau menolak."
+      },
+      "device_group_removed": {
+        "title": "Nomor Anda dikeluarkan dari {name}",
+        "titleNoName": "Nomor Anda dikeluarkan dari grup WhatsApp",
+        "body": "Seseorang mengeluarkan nomor pribadi Anda dari grup ini. Grup disimpan di sini, hanya bisa dibaca."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Pesan langsung baru",
         "waba_group_join_request": "Permintaan bergabung ke grup",
         "waba_group_suspended": "Grup WhatsApp ditangguhkan",
-        "waba_group_suspension_cleared": "Grup WhatsApp aktif kembali"
+        "waba_group_suspension_cleared": "Grup WhatsApp aktif kembali",
+        "device_group_join_request": "Permintaan bergabung ke grup",
+        "device_group_removed": "Dikeluarkan dari grup WhatsApp"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "Nomor WhatsApp",
         "broadcasts": "Broadcast dan kampanye",
         "team_chat": "Team chat",
-        "whatsapp_groups": "Grup WhatsApp"
+        "whatsapp_groups": "Grup WhatsApp",
+        "billing": "Penagihan dan langganan"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "Dokumen penjualan diputuskan",
           "hint": "Sebuah penawaran atau faktur diterima atau ditolak."
         },
+        "email_bounced": {
+          "label": "Email tidak terkirim",
+          "hint": "Email yang Anda kirim terpental atau tertunda."
+        },
         "wallet_credited": {
           "label": "Dompet diisi ulang",
           "hint": "Dompet workspace telah dikreditkan."
@@ -321,6 +338,22 @@
         "form_payment_duplicate": {
           "label": "Formulir dibayar dua kali",
           "hint": "Pengunjung membayar untuk kedua kalinya dan kelebihan pembayaran perlu dikembalikan."
+        },
+        "billing_payment_failed": {
+          "label": "Pembayaran langganan gagal",
+          "hint": "Penagihan perpanjangan tidak berhasil dan perlu Anda tangani."
+        },
+        "billing_subscription_canceled": {
+          "label": "Langganan dibatalkan",
+          "hint": "Penyedia pembayaran Anda mengakhiri langganan ruang kerja ini."
+        },
+        "device_group_join_request": {
+          "label": "Permintaan bergabung ke grup nomor pribadi",
+          "hint": "Orang meminta bergabung ke grup dari nomor WhatsApp pribadi yang Anda kelola. Sepuluh permintaan digabung menjadi satu baris."
+        },
+        "device_group_removed": {
+          "label": "Dikeluarkan dari grup nomor pribadi",
+          "hint": "Seseorang mengeluarkan salah satu nomor WhatsApp pribadi Anda dari sebuah grup. Ini bisa menjadi tanda bahwa nomor tersebut dilaporkan."
         }
       },
       "loading": "Memuat preferensi Anda",

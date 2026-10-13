@@ -1,0 +1,217 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "Lead scoring con AI"
+    },
+    "common": {
+      "loading": "Caricamento",
+      "retry": "Riprova",
+      "requestId": "ID richiesta",
+      "dash": "-",
+      "cancel": "Annulla",
+      "errors": {
+        "forbidden": "Non hai il permesso di eseguire questa azione.",
+        "request": "Impossibile completare la richiesta.",
+        "unexpected": "Qualcosa è andato storto da parte nostra. Riprova tra un momento.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "validation": "Alcuni valori non sono validi. Controlla i campi evidenziati.",
+        "notFound": "Questo elemento non esiste più."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · AI · Lead scoring",
+      "title": "Lead scoring con AI",
+      "description": "Controlla se i workspace possono assegnare un punteggio ai propri contatti con un modello AI, quale modello lo fa, i limiti e quanto costa.",
+      "superOnly": "Solo un super admin può vedere o modificare il lead scoring con AI."
+    },
+    "status": {
+      "label": "Stato del lead scoring",
+      "switch": {
+        "title": "Interruttore della piattaforma",
+        "on": "Attivo",
+        "off": "Disattivato",
+        "hintOn": "I workspace che hanno aderito possono assegnare un punteggio ai propri contatti.",
+        "hintOff": "Nessun workspace può valutare i contatti, qualunque sia la sua impostazione."
+      },
+      "model": {
+        "title": "Modello",
+        "custom": "Un modello inserito a mano, non presente nell'elenco."
+      },
+      "key": {
+        "title": "Chiave OpenRouter della piattaforma",
+        "ready": "Pronta",
+        "missing": "Mancante",
+        "explainReady": "I workspace senza una propria chiave OpenRouter vengono valutati con questa, e quei punteggi sono a tuo carico.",
+        "explainMissing": "Senza una chiave della piattaforma, solo i workspace che hanno salvato una propria chiave OpenRouter possono valutare i contatti.",
+        "link": "Apri chiavi AI"
+      },
+      "reach": {
+        "title": "Copertura",
+        "workspaces": "Workspace aderenti",
+        "contacts": "Contatti valutati"
+      }
+    },
+    "settings": {
+      "title": "Impostazioni",
+      "description": "Le modifiche si applicano a tutti i workspace contemporaneamente. Vengono salvati solo i campi modificati.",
+      "enabled": {
+        "label": "Lead scoring con AI",
+        "hint": "Disattivato per impostazione predefinita. Quando è attivo, i workspace che hanno aderito inviano dati anonimizzati dei contatti a OpenRouter per ottenere un punteggio da 0 a 100. Disattivalo per fermare ogni valutazione."
+      },
+      "model": {
+        "label": "Modello",
+        "hint": "I prezzi sono in dollari USA per milione di token, dall'elenco di OpenRouter.",
+        "option": "{label} · {input} in / {output} out",
+        "other": "Altro ID modello OpenRouter",
+        "details": "{input} per milione di token in ingresso, {output} per milione di token in uscita.",
+        "customLabel": "ID modello OpenRouter",
+        "customHint": "Qualsiasi ID modello di OpenRouter che supporti l'output strutturato.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limiti",
+        "scoresPerHour": "Punteggi per workspace all'ora",
+        "scoresPerHourHint": "Un limite di spesa per i workspace che usano la chiave della piattaforma. 0 significa nessun limite.",
+        "retentionDays": "Conserva il registro per (giorni)",
+        "retentionDaysHint": "Le esecuzioni più vecchie, e il loro storico dei costi, vengono eliminate. Da 7 a 730 giorni."
+      },
+      "saving": "Salvataggio",
+      "save": "Salva modifiche",
+      "reset": "Annulla modifiche",
+      "changed": "{count, plural, one {# modifica pronta da salvare} other {# modifiche pronte da salvare}}",
+      "unchanged": "Nessuna modifica da salvare.",
+      "saved": "Impostazioni del lead scoring salvate.",
+      "errors": {
+        "range": "Inserisci un valore tra {min} e {max}.",
+        "integer": "Inserisci un numero intero.",
+        "modelId": "Usa un ID modello OpenRouter come openai/gpt-6-luna.",
+        "invalid": "Questo valore non è valido."
+      },
+      "confirm": {
+        "title": "Conferma la modifica",
+        "turnOn": "Questo consente ai workspace che hanno aderito di inviare dati anonimizzati dei contatti a OpenRouter e di consumare il credito della chiave della piattaforma.",
+        "turnOff": "Questo ferma tutto il lead scoring con AI per ogni workspace. I punteggi già salvati restano.",
+        "confirm": "Salva modifiche"
+      }
+    },
+    "cost": {
+      "title": "Quanto costa il scoring",
+      "description": "Totali dal registro del scoring, in dollari USA.",
+      "last24h": "Ultime 24 ore",
+      "last30d": "Ultimi 30 giorni",
+      "scores": "Punteggi scritti",
+      "failed": "Esecuzioni non riuscite",
+      "tokens": "Token",
+      "tokensSplit": "Token in ingresso / in uscita",
+      "total": "Costo totale",
+      "average": "Media per punteggio",
+      "platform": "Pagato dalla chiave della piattaforma",
+      "footnote": "I costi sono l'importo comunicato da OpenRouter, oppure una stima dal numero di token quando non ne ha comunicato alcuno. Le esecuzioni addebitate alla chiave di un workspace rientrano nel totale ma non nella quota della piattaforma."
+    },
+    "workspaces": {
+      "title": "Workspace",
+      "description": "Chi usa il lead scoring con AI e quanto è costato negli ultimi 30 giorni, dal più alto.",
+      "search": "Cerca workspace",
+      "searchPlaceholder": "Nome del workspace",
+      "limit": "Righe",
+      "limitOption": "{count} righe",
+      "noMatchTitle": "Nessun workspace corrisponde",
+      "noMatchMessage": "Prova con un nome diverso.",
+      "clearSearch": "Cancella ricerca",
+      "emptyTitle": "Ancora nessun workspace",
+      "emptyMessage": "I workspace compaiono qui non appena esistono.",
+      "tableLabel": "Workspace per costo di scoring",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "Scoring",
+        "contacts": "Contatti valutati",
+        "scores": "Punteggi, 30 giorni",
+        "cost": "Costo, 30 giorni"
+      },
+      "enabled": "Attivo",
+      "disabled": "Disattivato"
+    },
+    "runs": {
+      "title": "Registro del scoring",
+      "description": "Ogni tentativo di scoring in tutti i workspace, dal più recente, con token, costo e chi ha pagato.",
+      "refresh": "Aggiorna",
+      "filters": {
+        "status": "Stato",
+        "anyStatus": "Qualsiasi stato",
+        "workspace": "Workspace",
+        "anyWorkspace": "Tutti i workspace",
+        "clear": "Cancella filtri"
+      },
+      "status": {
+        "ok": "Valutato",
+        "kept": "Mantenuto",
+        "failed": "Non riuscito",
+        "skipped": "Saltato"
+      },
+      "trigger": {
+        "created": "Contatto creato",
+        "updated": "Contatto aggiornato",
+        "manual": "Pulsante Punteggio",
+        "backfill": "Recupero storico"
+      },
+      "scoreWas": "{score} (prima {previous})",
+      "tokensTitle": "{input} in ingresso, {output} in uscita",
+      "costSource": {
+        "vendor": "Comunicato",
+        "estimate": "Stima",
+        "none": "Nessuna chiamata"
+      },
+      "costSourceHelp": {
+        "vendor": "Il costo comunicato da OpenRouter per questa chiamata.",
+        "estimate": "Nessun costo è stato comunicato, quindi è il numero di token per il prezzo di listino del modello.",
+        "none": "Non è stata effettuata alcuna chiamata, quindi non è stato addebitato nulla."
+      },
+      "paidBy": {
+        "admin": "Piattaforma",
+        "workspace": "Workspace",
+        "none": "Nessuno"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "L'interruttore della piattaforma è disattivato",
+        "not_enabled": "Il workspace non ha aderito",
+        "contact_gone": "Il contatto è stato eliminato",
+        "manual_score": "Il contatto ha un punteggio inserito a mano",
+        "no_key": "Nessuna chiave OpenRouter",
+        "token_allowance": "Quota di token esaurita",
+        "hourly_limit": "Limite orario raggiunto",
+        "auth": "OpenRouter ha rifiutato la chiave",
+        "rate_limited": "Limite di richieste di OpenRouter",
+        "provider": "Errore di OpenRouter",
+        "timeout": "OpenRouter è andato in timeout",
+        "bad_response": "La risposta non era un punteggio valido"
+      },
+      "noMatchTitle": "Nessuna esecuzione corrisponde",
+      "noMatchMessage": "Nessuna esecuzione di scoring corrisponde a questi filtri.",
+      "emptyTitle": "Ancora nessuna esecuzione",
+      "emptyMessage": "Le esecuzioni compaiono qui quando un workspace valuta un contatto.",
+      "tableLabel": "Esecuzioni di scoring",
+      "columns": {
+        "time": "Ora",
+        "workspace": "Workspace",
+        "contact": "Contatto",
+        "trigger": "Origine",
+        "status": "Stato",
+        "score": "Punteggio",
+        "model": "Modello",
+        "tokens": "Token",
+        "cost": "Costo",
+        "paidBy": "Pagato da",
+        "duration": "Durata",
+        "error": "Motivo"
+      },
+      "costLegend": "Una ~ prima di un costo indica una stima dal numero di token invece dell'importo comunicato da OpenRouter.",
+      "loadMore": "Carica altro",
+      "loadingMore": "Caricamento"
+    }
+  }
+}

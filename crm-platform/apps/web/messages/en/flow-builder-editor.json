@@ -558,7 +558,7 @@
           "faqAllFaqs": "All FAQs",
           "faqCategory": "FAQs: {name}",
           "faqScore": "min score {score}",
-          "faqWorkspaceScore": "workspace score",
+          "faqWorkspaceScore": "flow score",
           "faqNotSent": "not sent"
         },
         "overlays": {
@@ -631,13 +631,14 @@
         }
       },
       "webBot": {
-        "aria": "Bot sections",
+        "aria": "Flow sections",
         "build": "Build",
         "customize": "Customize",
         "install": "Install",
-        "saveFirst": "Save the bot first.",
+        "saveFirst": "Save the flow first.",
         "needsCustomizing": "The widget still uses the default look. Open Customize.",
-        "customizeFirst": "Customize your chat widget and save it once before publishing."
+        "customizeFirst": "Customize your chat widget and save it once before publishing.",
+        "faqs": "FAQs"
       },
       "simple": {
         "loading": "Loading the flow…",
@@ -1277,6 +1278,7 @@
             "comment_to_dm": "Instagram: someone comments on a post → DM",
             "group_leave": "Audience: when contact leaves a list",
             "segment_join": "Audience: when contact enters a segment",
+            "segment_leave": "Audience: when contact leaves a segment",
             "contact_updated": "Audience: when a contact is updated",
             "field_match": "Audience: when a contact field matches a value",
             "date_field_match": "Schedule: relative to a date on the contact (birthday…)",
@@ -1326,6 +1328,7 @@
             "groupLeaveLabel": "List that triggers the flow",
             "groupLeaveHint": "Runs when a contact is taken out of this list by a person or an import. A flow that removes them itself does not start it.",
             "segmentLabel": "Segment",
+            "segmentLeaveHint": "Runs once each time a contact who was inside this segment is found outside it after being updated, tagged or listed. A contact is only noticed leaving if the flow saw them inside first.",
             "segmentHint": "Runs once per contact, the first time they are found inside the segment after being created, tagged, listed or updated.",
             "fieldLabel": "Contact field",
             "fieldHint": "The field key: name, email, title, language, address, or a custom field's key.",
@@ -1804,28 +1807,28 @@
         },
         "faq": {
           "intro": {
-            "body": "Matches a message against your FAQs by meaning and answers it. It leaves by <mono>answered</mono> when an FAQ answered, and by <mono>no match</mono> otherwise.",
-            "sub": "Works without switching automatic FAQ answering on. <link>Manage your FAQs</link>"
+            "body": "Matches a message against this flow's FAQs by meaning and answers it. It leaves by <mono>answered</mono> when an FAQ answered, and by <mono>no match</mono> otherwise.",
+            "sub": "Works without switching this flow's automatic FAQ answering on. <link>Manage this flow's FAQs</link>"
           },
           "exitsLabel": "Exits",
           "exitMatchedName": "Answered",
           "exitMatched": "an FAQ answered: its text was sent (unless sending is off), or its flow took over and does not come back.",
           "exitNoMatchName": "No match",
           "exitNoMatch": "nothing was close enough, FAQ answering is switched off for the platform, the linked flow or step is gone, or the message was empty.",
-          "noFaqs": "You have no FAQs yet, so this step always leaves by no match. <link>Add your first FAQ</link>",
+          "noFaqs": "This flow has no FAQs yet, so this step always leaves by no match. <link>Add the first FAQ of this flow</link>",
           "query": "Message to match",
           "queryHint": "Defaults to the customer's last message. A variable a Question step saved works too, for example <mono>{variable}</mono>. Type / to insert one.",
           "category": "Only these FAQs",
           "allFaqs": "All FAQs",
           "loadingCategories": "Loading categories…",
           "categoryGone": "{name} (no FAQ uses it)",
-          "categoryHint": "Only FAQs of this category can answer. The categories come from your FAQs.",
-          "categoriesFailed": "Your FAQ categories could not be loaded.",
+          "categoryHint": "Only FAQs of this category can answer. The categories come from this flow's FAQs.",
+          "categoriesFailed": "This flow's FAQ categories could not be loaded.",
           "retry": "Try again",
           "minScore": "Minimum score",
-          "useWorkspaceScore": "Use the workspace setting",
-          "minScoreHint": "Replaces the workspace score for this step only, from {min} to {max}. Scores depend on the platform's embedding model, so try a message on <link>FAQ test</link> before choosing a number.",
-          "minScoreInvalid": "Enter a number from {min} to {max}, or use the workspace setting.",
+          "useWorkspaceScore": "Use this flow's setting",
+          "minScoreHint": "Replaces this flow's score for this step only, from {min} to {max}. Scores depend on the platform's embedding model, so try a message on the <link>FAQ test</link> of this flow before choosing a number.",
+          "minScoreInvalid": "Enter a number from {min} to {max}, or use this flow's setting.",
           "sendAnswer": "Send the answer to the customer",
           "sendAnswerToggle": "Send a matching text answer as a message",
           "sendAnswerOnHint": "A matching text FAQ is sent to the customer. An FAQ that starts a flow continues in that flow.",
@@ -1838,7 +1841,8 @@
             "question": "the question of the FAQ that matched",
             "score": "how close the match was",
             "id": "the id of the FAQ that matched"
-          }
+          },
+          "saveFlowFirst": "Save the flow first. Its FAQs are edited on the FAQs tab of the Simple builder, and this step answers from them."
         }
       },
       "attrPicker": {
@@ -2254,6 +2258,7 @@
         "manual_enroll": "on enroll",
         "group_leave": "on list leave",
         "segment_join": "on segment join",
+        "segment_leave": "on segment leave",
         "contact_updated": "on contact update",
         "field_match": "on field match",
         "date_field_match": "on date match",
@@ -2322,7 +2327,7 @@
         "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",
         "noSenderFacebook": "The Trigger node has no Facebook Page selected — pick one on the Trigger step.",
         "noSenderNumber": "The Trigger node has no number selected — pick one on the Trigger step.",
-        "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the workspace setting."
+        "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow's setting."
       }
     },
     "simpleModel": {
@@ -2458,7 +2463,7 @@
         "rowTitle": "Step {stage}: every row needs a title of up to {max} characters.",
         "rowDescriptionTooLong": "Step {stage}: a row description is longer than {max} characters.",
         "variableUsed": "Step {stage}: \"{name}\" is already used by step {other}; give each answer its own name.",
-        "faqMinScore": "Step {stage}: the minimum score must be from 0.05 to 0.99, or use the workspace setting."
+        "faqMinScore": "Step {stage}: the minimum score must be from 0.05 to 0.99, or use the flow's setting."
       },
       "faqSummary": "{hasCategory, select, true {From your FAQs · {category}} other {From your FAQs}}"
     },

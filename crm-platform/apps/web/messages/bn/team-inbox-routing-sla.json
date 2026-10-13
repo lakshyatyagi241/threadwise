@@ -10,7 +10,8 @@
       "webchat": "ওয়েবসাইট চ্যাট",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "ইমেইল (Gmail)"
     },
     "page": {
       "back": "অটোমেশন ও AI",
@@ -81,7 +82,10 @@
       "lastFired": "শেষবার {when}",
       "edit": "সম্পাদনা করুন",
       "duplicate": "ডুপ্লিকেট করুন",
-      "delete": "মুছুন"
+      "delete": "মুছুন",
+      "startsFlow": "ফ্লো {name}ও শুরু করে",
+      "flowOff": "ফ্লো বন্ধ আছে",
+      "flowGone": "মুছে ফেলা ফ্লোও শুরু করে"
     },
     "form": {
       "back": "স্বয়ংক্রিয় বরাদ্দ",
@@ -170,7 +174,15 @@
       "cancel": "বাতিল করুন",
       "save": "সংরক্ষণ করুন",
       "saveActivate": "সংরক্ষণ করে সক্রিয় করুন",
-      "openCount": "{open}টি খোলা"
+      "openCount": "{open}টি খোলা",
+      "flow": {
+        "title": "একটি ফ্লোও শুরু করুন",
+        "hint": "ঐচ্ছিক। এই নিয়ম প্রযোজ্য হলে একই চ্যানেলে কথোপকথনের জন্য ফ্লো শুরু হয়। ফ্লো শুধু চালু থাকলেই হয়; প্রকাশিত হওয়া জরুরি নয়।",
+        "none": "কোনো ফ্লো নেই",
+        "offOption": "{name} (বন্ধ)",
+        "goneOption": "যে ফ্লো আর নেই",
+        "loadFailed": "ফ্লো লোড করা যায়নি, তাই তালিকা অসম্পূর্ণ হতে পারে।"
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -52,6 +53,7 @@ import {
   imports: [
     PlansCoreModule,
     CrmModule,
+    ContactConsentModule,
     forwardRef(() => NodeBridgeRuntimeModule),
     WalletMessageBillingModule,
     PlatformSettingsModule,

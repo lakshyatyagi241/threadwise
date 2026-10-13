@@ -149,6 +149,16 @@
         "title": "{name} دوبارہ فعال ہے",
         "titleNoName": "ایک WhatsApp گروپ دوبارہ فعال ہے",
         "body": "WhatsApp نے یہ گروپ بحال کر دیا ہے۔ اب آپ اسے دوبارہ پیغام بھیج سکتے ہیں۔"
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {کوئی {name} میں شامل ہونا چاہتا ہے} other {# افراد {name} میں شامل ہونا چاہتے ہیں}}",
+        "titleNoName": "{count, plural, one {کوئی WhatsApp گروپ میں شامل ہونا چاہتا ہے} other {# افراد WhatsApp گروپ میں شامل ہونا چاہتے ہیں}}",
+        "body": "منظور یا مسترد کرنے کے لیے گروپس کھولیں۔"
+      },
+      "device_group_removed": {
+        "title": "آپ کا نمبر {name} سے خارج کر دیا گیا",
+        "titleNoName": "آپ کا نمبر WhatsApp گروپ سے خارج کر دیا گیا",
+        "body": "کسی نے آپ کے ذاتی نمبر کو اس گروپ سے خارج کر دیا۔ گروپ یہاں صرف پڑھنے کے لیے محفوظ ہے۔"
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "نیا براہِ راست پیغام",
         "waba_group_join_request": "گروپ میں شامل ہونے کی درخواست",
         "waba_group_suspended": "WhatsApp گروپ معطل",
-        "waba_group_suspension_cleared": "WhatsApp گروپ دوبارہ فعال"
+        "waba_group_suspension_cleared": "WhatsApp گروپ دوبارہ فعال",
+        "device_group_join_request": "گروپ میں شمولیت کی درخواست",
+        "device_group_removed": "WhatsApp گروپ سے خارج کیا گیا"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "WhatsApp نمبرز",
         "broadcasts": "براڈکاسٹس اور مہمات",
         "team_chat": "ٹیم چیٹ",
-        "whatsapp_groups": "WhatsApp گروپس"
+        "whatsapp_groups": "WhatsApp گروپس",
+        "billing": "بلنگ اور سبسکرپشنز"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "سیلز دستاویز کا فیصلہ ہو گیا",
           "hint": "کوئی کوٹیشن یا انوائس قبول یا مسترد ہوئی۔"
         },
+        "email_bounced": {
+          "label": "ای میل ڈیلیور نہیں ہوئی",
+          "hint": "آپ کی بھیجی ہوئی ای میل واپس آ گئی یا اس میں تاخیر ہوئی۔"
+        },
         "wallet_credited": {
           "label": "والٹ میں رقم ڈالی گئی",
           "hint": "ورک اسپیس کے والٹ میں رقم جمع ہوئی۔"
@@ -321,6 +338,22 @@
         "form_payment_duplicate": {
           "label": "فارم کی دو بار ادائیگی",
           "hint": "کسی وزیٹر نے دوسری بار ادائیگی کی اور اضافی رقم واپس کرنا ہوگی۔"
+        },
+        "billing_payment_failed": {
+          "label": "سبسکرپشن کی ادائیگی ناکام ہو گئی",
+          "hint": "تجدید کی ایک ادائیگی مکمل نہیں ہوئی اور آپ کی توجہ چاہتی ہے۔"
+        },
+        "billing_subscription_canceled": {
+          "label": "سبسکرپشن منسوخ ہو گئی",
+          "hint": "آپ کے ادائیگی فراہم کنندہ نے اس ورک اسپیس کی ایک سبسکرپشن ختم کر دی ہے۔"
+        },
+        "device_group_join_request": {
+          "label": "ذاتی نمبر کے گروپ میں شمولیت کی درخواست",
+          "hint": "لوگ آپ کے زیر انتظام ذاتی WhatsApp نمبر کے گروپ میں شامل ہونے کی درخواست کرتے ہیں۔ دس درخواستیں ایک قطار بناتی ہیں۔"
+        },
+        "device_group_removed": {
+          "label": "ذاتی نمبر کے گروپ سے خارج کیا گیا",
+          "hint": "کسی نے آپ کے ذاتی WhatsApp نمبرز میں سے ایک کو گروپ سے خارج کر دیا۔ یہ اس بات کی علامت ہو سکتی ہے کہ نمبر کی رپورٹ کی گئی۔"
         }
       },
       "loading": "آپ کی ترجیحات لوڈ ہو رہی ہیں",

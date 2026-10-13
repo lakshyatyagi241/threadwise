@@ -366,9 +366,9 @@ function MembersScreen() {
         <AddMemberModal
           roles={grantable}
           onClose={() => setAdding(false)}
-          onCreated={(name) => {
+          onCreated={(name, emailSent) => {
             setAdding(false);
-            toast.toast(t('toasts.added', { name }), 'success');
+            toast.toast(t(emailSent ? 'toasts.invited' : 'toasts.added', { name }), 'success');
           }}
         />
       )}

@@ -42,7 +42,7 @@ export function AppCard({ card, className }: { card: MarketAppCard; className?: 
           <h3 className="truncate text-base font-semibold">
             <Link
               href={mktRoutes.app(card.slug)}
-              className="hover:underline focus-visible:underline"
+              className="block truncate py-0.5 hover:underline focus-visible:underline"
             >
               {card.name}
             </Link>

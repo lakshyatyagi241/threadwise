@@ -10,7 +10,8 @@
       "install": "설치 · 마켓플레이스",
       "installed": "설치됨 · 마켓플레이스",
       "manage": "앱 관리 · 마켓플레이스",
-      "requests": "요청 · 마켓플레이스"
+      "requests": "요청 · 마켓플레이스",
+      "addons": "부가 기능 · 마켓플레이스"
     },
     "common": {
       "dismiss": "닫기",
@@ -124,7 +125,8 @@
       "moreLabel": "설치됨 및 요청",
       "tabs": {
         "mini_app": "미니 앱",
-        "integration": "연동"
+        "integration": "연동",
+        "addon": "부가 기능"
       },
       "installed": "설치됨",
       "installedLimit": "설치됨 ({installed}/{limit})",
@@ -865,6 +867,15 @@
       },
       "working": "처리 중",
       "noCheckout": "지금은 이 앱의 결제를 진행할 수 없습니다. 잠시 후 다시 시도하세요."
+    },
+    "tools": {
+      "open": "열기",
+      "empty": {
+        "title": "사용할 수 있는 부가 기능이 없습니다",
+        "message": "역할과 요금제에 포함된 부가 기능이 여기에 표시됩니다."
+      },
+      "soon": "출시 예정",
+      "upgrade": "업그레이드"
     }
   }
 }

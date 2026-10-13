@@ -121,6 +121,12 @@
       "selectedActionsNone": "Contacts sélectionnés (sélectionnez d’abord des lignes)",
       "modifyColumns": "Modifier les colonnes",
       "resetColumns": "Rétablir les valeurs par défaut",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nom du contact",
       "colPhone": "Numéro de téléphone",
       "colEmailId": "Adresse e-mail",
@@ -170,7 +176,8 @@
       "import": "Importer",
       "columns": "Colonnes",
       "addColumnField": "Ajouter un champ personnalisé comme colonne",
-      "kanbanView": "Vue tableau (par étape)"
+      "kanbanView": "Vue tableau (par étape)",
+      "colLeadScore": "Score du lead"
     },
     "bulk": {
       "label": "Actions pour les contacts sélectionnés",
@@ -406,7 +413,8 @@
         "address": "Adresse",
         "memo": "Mémo",
         "status": "Statut",
-        "source": "Source"
+        "source": "Source",
+        "consent": "Consentement marketing (oui / non)"
       },
       "notInFile": "Absent du fichier",
       "columnN": "Colonne {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Exportations",
-        "hint": "Exportations de contacts depuis le Hub, de la plus récente à la plus ancienne. Le fichier téléchargé n’est pas conservé.",
+        "hint": "Exports de contacts depuis le Hub, du plus récent au plus ancien. Chaque fichier est conservé 30 jours pour que vous et vos collègues autorisés à exporter puissiez le télécharger de nouveau.",
         "empty": "Aucune exportation pour le moment.",
         "by": "Par",
         "rows": "Contacts",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Contacts cochés",
           "filter": "Tout ce qui correspond"
-        }
+        },
+        "download": "Télécharger",
+        "noFile": "Non conservé",
+        "keptUntil": "Conservé jusqu'au {date}",
+        "downloadFailed": "Le fichier n'a pas pu être téléchargé. Il a peut-être expiré."
       }
     }
   }

@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useState, type DragEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ImportConsent } from '@/features/contact-consent';
 import { useTranslations } from 'next-intl';
 import {
   IMPORT_FIELDS,
@@ -52,6 +53,7 @@ const MAIN_FIELDS: readonly ImportField[] = [
   'countryCode',
   'group',
   'language',
+  'consent',
 ];
 
 type Mapping = Partial<Record<ImportField, number | null>>;
@@ -128,6 +130,7 @@ function ImportBody({
   const groupMode: 'existing' | 'new' =
     groups.isSuccess && groups.data.length === 0 ? 'new' : groupModeChoice;
   const [tagIds, setTagIds] = useState<string[]>([]);
+  const [consent, setConsent] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
 
   const statuses = useMemo(
@@ -142,6 +145,7 @@ function ImportBody({
     ...(source.trim() ? { source: source.trim() } : {}),
     ...(groupId ? { groupId } : {}),
     ...(tagIds.length > 0 ? { tagIds } : {}),
+    ...(consent ? { consentConfirmed: true } : {}),
   };
 
   // What the file would do. Only the column mapping changes the answer, so the knobs below do not re-upload it.
@@ -456,6 +460,12 @@ function ImportBody({
           )}
         </div>
       </div>
+
+      <ImportConsent
+        checked={consent}
+        onChange={setConsent}
+        summary={preview.data?.consent ?? null}
+      />
 
       {start.isError && <PreviewError error={start.error} />}
 

@@ -119,6 +119,8 @@
       "colStarted": "התחיל",
       "colActivity": "פעילות אחרונה",
       "colSteps": "שלבים",
+      "colReplies": "תגובות",
+      "repliesHint": "הודעות לקוח שהגיעו לצומת המתנה של ההרצה הזו",
       "colActions": "פעולות",
       "open": "פתיחת הרצה",
       "cancel": "ביטול",
@@ -207,7 +209,9 @@
         "request": "בקשה",
         "response": "תגובה",
         "result": "תוצאה"
-      }
+      },
+      "factMenuKept": "אין כאן שלב הבא. האפשרויות של {node} נשארות פעילות.",
+      "factAnswered": "נענה לאחר {time}"
     },
     "event": {
       "step": "שלב",
@@ -513,7 +517,9 @@
       "error": "שגיאה",
       "skipped": "דולג",
       "waiting": "ממתין",
-      "timeout": "זמן קצוב עבר"
+      "timeout": "זמן קצוב עבר",
+      "answered": "נענה",
+      "gaveUp": "אין תשובה"
     }
   }
 }

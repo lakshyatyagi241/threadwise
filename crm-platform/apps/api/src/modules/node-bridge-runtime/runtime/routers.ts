@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import type {
+  GroupEvent,
   GroupSnapshot,
   ReceiptUpdate,
 } from '../../../infra/providers/node-bridge-runtime/inbound.port';
@@ -27,8 +28,17 @@ export interface InboundSink {
     ctx: { orgId: number; deviceId: number },
     state: { status: string; connected: boolean },
   ): Promise<void>;
-  /** The groups this device is in, after a change. */
-  groups?(ctx: { orgId: number; deviceId: number }, groups: GroupSnapshot[]): Promise<void>;
+  /**
+   * The groups this device is in, after a change. `opts.complete` true: `groups` is every group the account is in (a group missing from
+   * it was left); false: only these were re-read, nothing is implied about the rest.
+   */
+  groups?(
+    ctx: { orgId: number; deviceId: number },
+    groups: GroupSnapshot[],
+    opts: { complete: boolean },
+  ): Promise<void>;
+  /** One change in one group as it happened (subject, settings, members, a join request). */
+  groupEvent?(ctx: { orgId: number; deviceId: number }, event: GroupEvent): Promise<void>;
 }
 
 const DEDUP_TTL_S = 7 * 24 * 3600;
@@ -105,12 +115,30 @@ export class InboundRouter {
     }
   }
 
-  async groups(orgId: number, deviceId: number, groups: GroupSnapshot[]): Promise<void> {
+  async groups(
+    orgId: number,
+    deviceId: number,
+    groups: GroupSnapshot[],
+    opts: { complete: boolean } = { complete: true },
+  ): Promise<void> {
     for (const s of this.sinks) {
       try {
-        await s.groups?.({ orgId, deviceId }, groups);
+        await s.groups?.({ orgId, deviceId }, groups, opts);
       } catch (err) {
         this.logger.error({ orgId, deviceId, err: String(err) }, '[NODE] a group consumer failed');
+      }
+    }
+  }
+
+  async groupEvent(orgId: number, deviceId: number, event: GroupEvent): Promise<void> {
+    for (const s of this.sinks) {
+      try {
+        await s.groupEvent?.({ orgId, deviceId }, event);
+      } catch (err) {
+        this.logger.error(
+          { orgId, deviceId, err: String(err) },
+          '[NODE] a group event consumer failed',
+        );
       }
     }
   }

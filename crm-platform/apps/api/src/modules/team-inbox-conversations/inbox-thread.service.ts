@@ -55,6 +55,12 @@ export class InboxThreadService {
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
+  /** The conversation for a contact on a channel, created if missing. The route requires `inbox.conversation.reply`, like sending the first message. */
+  async open(contactId: string, channelId: string): Promise<{ id: string }> {
+    const ref = await this.conversations.openConversationFor(contactId, channelId);
+    return { id: ref.id };
+  }
+
   async listMessages(uuid: string, query: ListMessagesQuery): Promise<MessageListResponse> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
@@ -100,7 +106,14 @@ export class InboxThreadService {
     let claimed: { id: number; fresh: boolean } | null = null;
     const content = await this.db.tx(async (tx): Promise<OutboundContent> => {
       await this.assertCanReply(tx, ctx, uuid);
-      if (input.kind === 'text') return { kind: 'text', body: input.body };
+      if (input.kind === 'text') {
+        return {
+          kind: 'text',
+          body: input.body,
+          ...(input.email ? { email: input.email } : {}),
+          ...(input.mentions?.length ? { mentions: input.mentions } : {}),
+        };
+      }
       if (input.kind === 'reaction') return { kind: 'reaction', emoji: input.emoji };
       if (input.kind === 'location') {
         const { latitude, longitude, name, address } = input;

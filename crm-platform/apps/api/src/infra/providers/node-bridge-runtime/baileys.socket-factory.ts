@@ -10,7 +10,6 @@ import makeWASocket, {
   proto,
   type AnyMessageContent,
   type AuthenticationCreds,
-  type GroupMetadata,
   type SignalDataTypeMap,
   type SignalKeyStore,
   type WAVersion,
@@ -18,6 +17,17 @@ import makeWASocket, {
 import pino from 'pino';
 import { normalizeMessage, type Normalized, type RawMessage } from './inbound-normalizer';
 import type { GroupSnapshot } from './inbound.port';
+import {
+  bareDevice,
+  includesSelf,
+  inviteCodeOf,
+  jidUser,
+  looksLikeGroupId,
+  toGroupJid,
+  toSnapshot,
+  type RawGroupMetadata,
+  type SelfIds,
+} from './group-mapping';
 import {
   UnsupportedSendError,
   type MessageAction,
@@ -28,6 +38,9 @@ import {
 import { SafeFetch } from './safe-fetch';
 import type {
   GroupAction,
+  GroupInviteInfo,
+  GroupJoinRequestSnapshot,
+  GroupParticipantStatus,
   GroupResult,
   SocketEvent,
   SocketTarget,
@@ -42,18 +55,61 @@ const VERSION_TTL_MS = 60 * 60 * 1000;
 const INBOUND_MEDIA_MAX_BYTES = 25 * 1024 * 1024;
 const DOWNLOAD_TIMEOUT_MS = 60_000;
 
-/** A chat id for a number, or the id as given when it already is one. Digits only: Reference's last-12-digits cut misrouted some countries. */
+/**
+ * A chat id for a number, or the id as given when it already is one. Digits only: Reference's last-12-digits cut misrouted some countries.
+ * A bare GROUP id (digits with a dash, or longer than any phone number) is sent to `@g.us`, never turned into a person's address.
+ */
 const jidOf = (to: string): string =>
-  to.includes('@') ? to : `${to.replace(/\D+/g, '')}@s.whatsapp.net`;
-const groupJid = (g: string): string =>
-  g.endsWith('@g.us') ? g : `${g.replace(/[^\d-]/g, '')}@g.us`;
+  to.includes('@')
+    ? to
+    : looksLikeGroupId(to)
+      ? toGroupJid(to)
+      : `${to.replace(/\D+/g, '')}@s.whatsapp.net`;
+const groupJid = toGroupJid;
 
-const snapshot = (g: GroupMetadata): GroupSnapshot => ({
-  jid: g.id,
-  subject: g.subject ?? null,
-  description: g.desc ?? null,
-  size: g.size ?? g.participants?.length ?? null,
-});
+/** Where a command goes: a group addressed by its id, or a person. */
+const addressOf = (command: SendCommand): string =>
+  command.type === 'group_text'
+    ? groupJid(command.groupJid)
+    : command.type !== 'template' && command.toGroup
+      ? groupJid(command.to)
+      : jidOf(command.to);
+
+const bareGroupIdOf = (jid: string): string => jid.replace(/@g\.us$/, '');
+
+/** The invite code given to `get_invite_info` / `accept_invite` is not a link or code. Reads as a 400 from WhatsApp would. */
+class InviteCodeError extends Error {
+  readonly data = 400;
+  constructor() {
+    super('invalid invite code');
+  }
+}
+
+function joinRequestOf(attrs: Record<string, string>): GroupJoinRequestSnapshot {
+  const jid = attrs.jid ?? '';
+  const phoneId = attrs.phone_number ?? (jid.endsWith('@s.whatsapp.net') ? jid : '');
+  const at = Number(attrs.request_time);
+  return {
+    jid,
+    phone: phoneId ? jidUser(phoneId).replace(/\D+/g, '') || null : null,
+    lid: jid.endsWith('@lid') ? jidUser(jid) : null,
+    name: null,
+    requestedAt: Number.isFinite(at) && at > 0 ? new Date(at * 1000).toISOString() : null,
+  };
+}
+
+function inviteInfoOf(g: RawGroupMetadata): GroupInviteInfo {
+  return {
+    groupId: bareGroupIdOf(g.id),
+    subject: g.subject ?? null,
+    description: g.desc ?? null,
+    size: g.size ?? g.participants?.length ?? null,
+    joinApproval: g.joinApprovalMode === true,
+  };
+}
+
+/** The most pending group re-reads kept before a full read is cheaper than one read per group. */
+const GROUP_REFRESH_MAX = 5;
 
 /** Runs `fn` once after calls stop coming for `ms`. */
 function debounce(ms: number, fn: () => void): () => void {
@@ -188,14 +244,97 @@ export class BaileysSocketFactory implements WaSocketFactory {
         }
       }
     });
+    /** The connected number's own ids, read when needed (they are not known until the link is open). */
+    const self = (): SelfIds => ({
+      jid: sock.user?.id ? bareDevice(sock.user.id) : null,
+      lid: sock.user?.lid ? bareDevice(sock.user.lid) : null,
+    });
+    const snap = (g: unknown): GroupSnapshot => toSnapshot(g as RawGroupMetadata, self());
     const syncGroups = debounce(5_000, () => {
       void sock
         .groupFetchAllParticipating()
-        .then((all) => emit({ type: 'groups', groups: Object.values(all).map(snapshot) }))
+        .then((all) =>
+          emit({ type: 'groups', groups: Object.values(all).map(snap), complete: true }),
+        )
         .catch(() => undefined);
     });
+    // One change in one group re-reads that group only (a full read per change is a known source of "rate-overlimit").
+    const pendingGroups = new Set<string>();
+    const refreshGroups = debounce(5_000, () => {
+      const ids = [...pendingGroups];
+      pendingGroups.clear();
+      if (ids.length > GROUP_REFRESH_MAX) {
+        syncGroups();
+        return;
+      }
+      void (async () => {
+        for (const id of ids) {
+          try {
+            emit({ type: 'groups', groups: [snap(await sock.groupMetadata(id))], complete: false });
+          } catch {
+            // Removed from the group, or it is gone: the event already said so.
+          }
+        }
+      })();
+    });
+    const queueGroup = (id: string) => {
+      pendingGroups.add(id);
+      refreshGroups();
+    };
     sock.ev.on('groups.upsert', syncGroups);
-    sock.ev.on('group-participants.update', syncGroups);
+    sock.ev.on('groups.update', (updates) => {
+      for (const u of updates) {
+        if (!u.id) continue;
+        emit({
+          type: 'group_event',
+          event: {
+            kind: 'update',
+            groupId: bareGroupIdOf(u.id),
+            author: u.author ?? null,
+            patch: {
+              ...(u.subject !== undefined ? { subject: u.subject } : {}),
+              ...(u.desc !== undefined ? { description: u.desc } : {}),
+              ...(u.announce !== undefined ? { announce: u.announce } : {}),
+              ...(u.restrict !== undefined ? { restrict: u.restrict } : {}),
+              ...(u.joinApprovalMode !== undefined ? { joinApproval: u.joinApprovalMode } : {}),
+              ...(u.memberAddMode !== undefined
+                ? { memberAddMode: u.memberAddMode ? 'all_member_add' : 'admin_add' }
+                : {}),
+            },
+          },
+        });
+        queueGroup(u.id);
+      }
+    });
+    sock.ev.on('group-participants.update', (u) => {
+      const selfAffected = includesSelf(u.participants, self());
+      emit({
+        type: 'group_event',
+        event: {
+          kind: 'participants',
+          groupId: bareGroupIdOf(u.id),
+          author: u.author || null,
+          action: u.action,
+          participants: u.participants,
+          selfAffected,
+        },
+      });
+      // Removed from the group: it cannot be read any more.
+      if (!(selfAffected && u.action === 'remove')) queueGroup(u.id);
+    });
+    sock.ev.on('group.join-request', (u) => {
+      emit({
+        type: 'group_event',
+        event: {
+          kind: 'join_request',
+          groupId: bareGroupIdOf(u.id),
+          participant: u.participant,
+          author: u.author || null,
+          action: u.action,
+          method: u.method ?? null,
+        },
+      });
+    });
     sock.ev.on('creds.update', () => {
       // Never debounced: a lost credentials write is a lost device.
       void saveCreds()
@@ -214,14 +353,34 @@ export class BaileysSocketFactory implements WaSocketFactory {
     };
     const send = (command: SendCommand, _ctx: SendContext): Promise<SendOutcome> =>
       serialize(async () => {
-        const jid = command.type === 'group_text' ? groupJid(command.groupJid) : jidOf(command.to);
-        const sent = await sock.sendMessage(jid, await this.content(command));
+        const jid = addressOf(command);
+        const quoted = command.quote
+          ? ({
+              key: {
+                remoteJid: jid,
+                id: command.quote.providerMessageId,
+                fromMe: command.quote.fromMe,
+                ...(command.quote.participant ? { participant: command.quote.participant } : {}),
+              },
+              message: { conversation: command.quote.text ?? '' },
+            } as unknown as proto.IWebMessageInfo)
+          : undefined;
+        const sent = await sock.sendMessage(
+          jid,
+          await this.content(command),
+          quoted ? { quoted } : undefined,
+        );
         return { providerMessageId: sent?.key?.id ?? null };
       });
     const act = (a: MessageAction): Promise<void> =>
       serialize(async () => {
         const jid = jidOf(a.to);
-        const key = { remoteJid: jid, id: a.messageId, fromMe: 'fromMe' in a ? a.fromMe : true };
+        const key = {
+          remoteJid: jid,
+          id: a.messageId,
+          fromMe: 'fromMe' in a ? a.fromMe : true,
+          ...(a.type === 'react' && a.participant ? { participant: a.participant } : {}),
+        };
         switch (a.type) {
           case 'react':
             await sock.sendMessage(jid, { react: { text: a.emoji, key } });
@@ -243,42 +402,124 @@ export class BaileysSocketFactory implements WaSocketFactory {
             return;
         }
       });
+    const statuses = (
+      r: Array<{ status: string; jid: string | undefined }>,
+    ): GroupParticipantStatus[] => r.map((x) => ({ jid: x.jid ?? '', status: x.status }));
     const groups = async (a: GroupAction): Promise<GroupResult> => {
       switch (a.type) {
         case 'list':
-          return { groups: Object.values(await sock.groupFetchAllParticipating()).map(snapshot) };
+          return { groups: Object.values(await sock.groupFetchAllParticipating()).map(snap) };
         case 'metadata':
-          return { group: snapshot(await sock.groupMetadata(groupJid(a.groupJid))) };
+          return { group: snap(await sock.groupMetadata(groupJid(a.groupJid))) };
         case 'create':
-          return {
-            group: snapshot(
-              await sock.groupCreate(
-                a.subject,
+          return serialize(async () => {
+            const wanted = a.participants.map((p) => jidOf(p));
+            const meta = snap(await sock.groupCreate(a.subject, wanted));
+            let descriptionSet = false;
+            if (a.description) {
+              try {
+                await sock.groupUpdateDescription(meta.jid, a.description);
+                descriptionSet = true;
+                meta.description = a.description;
+              } catch {
+                // The group exists; the description is best effort.
+              }
+            }
+            // WhatsApp's create reply lists who is in; anyone asked for and missing was refused (privacy, not on WhatsApp).
+            const inside = new Set(
+              meta.participants.flatMap((p) => [p.phone, p.lid, jidUser(p.jid)].filter(Boolean)),
+            );
+            return {
+              group: meta,
+              participants: wanted.map((jid) => ({
+                jid,
+                status: inside.has(jidUser(jid)) ? '200' : '403',
+              })),
+              descriptionSet,
+            };
+          });
+        case 'participants':
+          return serialize(async () => ({
+            participants: statuses(
+              await sock.groupParticipantsUpdate(
+                groupJid(a.groupJid),
                 a.participants.map((p) => jidOf(p)),
+                a.change,
               ),
             ),
-          };
-        case 'participants':
-          await sock.groupParticipantsUpdate(
-            groupJid(a.groupJid),
-            a.participants.map((p) => jidOf(p)),
-            a.change,
-          );
-          return { ok: true };
+          }));
         case 'subject':
-          await sock.groupUpdateSubject(groupJid(a.groupJid), a.subject);
-          return { ok: true };
+          return serialize(async () => {
+            await sock.groupUpdateSubject(groupJid(a.groupJid), a.subject);
+            return { ok: true as const };
+          });
         case 'description':
-          await sock.groupUpdateDescription(groupJid(a.groupJid), a.description);
-          return { ok: true };
+          return serialize(async () => {
+            await sock.groupUpdateDescription(groupJid(a.groupJid), a.description);
+            return { ok: true as const };
+          });
         case 'settings':
-          await sock.groupSettingUpdate(groupJid(a.groupJid), a.setting);
-          return { ok: true };
+          return serialize(async () => {
+            await sock.groupSettingUpdate(groupJid(a.groupJid), a.setting);
+            return { ok: true as const };
+          });
+        case 'member_add_mode':
+          return serialize(async () => {
+            await sock.groupMemberAddMode(groupJid(a.groupJid), a.mode);
+            return { ok: true as const };
+          });
+        case 'join_approval':
+          return serialize(async () => {
+            await sock.groupJoinApprovalMode(groupJid(a.groupJid), a.enabled ? 'on' : 'off');
+            return { ok: true as const };
+          });
+        case 'join_requests': {
+          const rows = await sock.groupRequestParticipantsList(groupJid(a.groupJid));
+          return { requests: rows.map(joinRequestOf) };
+        }
+        case 'join_request_update':
+          return serialize(async () => ({
+            participants: statuses(
+              await sock.groupRequestParticipantsUpdate(
+                groupJid(a.groupJid),
+                a.participants,
+                a.action,
+              ),
+            ),
+          }));
         case 'leave':
-          await sock.groupLeave(groupJid(a.groupJid));
-          return { ok: true };
+          return serialize(async () => {
+            await sock.groupLeave(groupJid(a.groupJid));
+            return { ok: true as const };
+          });
         case 'invite':
           return { code: (await sock.groupInviteCode(groupJid(a.groupJid))) ?? '' };
+        case 'revoke_invite':
+          return serialize(async () => ({
+            code: (await sock.groupRevokeInvite(groupJid(a.groupJid))) ?? '',
+          }));
+        case 'picture':
+          return serialize(async () => {
+            if (a.remove) {
+              await sock.removeProfilePicture(groupJid(a.groupJid));
+              return { ok: true as const };
+            }
+            if (!a.data) throw new UnsupportedSendError('The picture has no file.');
+            await sock.updateProfilePicture(groupJid(a.groupJid), a.data);
+            return { ok: true as const };
+          });
+        case 'get_invite_info': {
+          const code = inviteCodeOf(a.code);
+          if (!code) throw new InviteCodeError();
+          return { invite: inviteInfoOf(await sock.groupGetInviteInfo(code)) };
+        }
+        case 'accept_invite':
+          return serialize(async () => {
+            const code = inviteCodeOf(a.code);
+            if (!code) throw new InviteCodeError();
+            const id = await sock.groupAcceptInvite(code);
+            return { joined: { groupId: id ? jidUser(id) : null, requested: !id } };
+          });
       }
     };
 
@@ -382,15 +623,16 @@ export class BaileysSocketFactory implements WaSocketFactory {
   }
 
   /**
-   * A customer's file, kept for the inbox (TW-NODE-016 rule 6). Only inbound customer messages: an echo or a group message is stored
-   * as text. Skipped past the size cap, and a failed or slow download delivers the message without the file instead of losing it.
+   * A customer's (or a group member's) file, kept for the inbox (TW-NODE-016 rule 6). Never an echo of our own message. Skipped past the size cap, and a failed or slow download delivers the message without the file instead of losing it.
    */
   private async downloadMedia(
     sock: ReturnType<typeof makeWASocket>,
     m: unknown,
     n: Normalized,
   ): Promise<Buffer | null> {
-    if (n.kind !== 'inbound' || !n.message.media) return null;
+    // A customer's file, or a member's file in a group (never our own message echoed back).
+    if (n.kind === 'echo' || (n.kind === 'group' && n.message.fromMe) || !n.message.media)
+      return null;
     const size = n.message.media.sizeBytes;
     if (size !== null && size > INBOUND_MEDIA_MAX_BYTES) return null;
     try {

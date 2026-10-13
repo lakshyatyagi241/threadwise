@@ -8,6 +8,7 @@ import { PlanCampaignGate } from './_shims/plan-gate';
 import { PlatformCampaignSettings } from './_shims/platform-campaign-settings';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { BroadcastsModule } from '../broadcasts';
+import { ContactConsentModule } from '../contact-consent';
 import { ChatConversationsModule } from '../chat-conversations';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CrmModule } from '../crm';
@@ -59,6 +60,7 @@ import { WizardRepository } from './wizard/wizard.repository';
   imports: [
     AiKeysUsageAdminModule,
     BroadcastsModule,
+    ContactConsentModule,
     ChatConversationsModule,
     CrmModule,
     PlansCoreModule,

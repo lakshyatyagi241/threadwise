@@ -3,7 +3,8 @@
     "nav": {
       "title": "Appels",
       "description": "Activez ou désactivez les appels WhatsApp pour chaque numéro.",
-      "keywords": "appel, appels, voix, téléphone, appels whatsapp, bouton d’appel"
+      "keywords": "appel, appels, voix, téléphone, appels whatsapp, bouton d’appel",
+      "callLogs": "Journal des appels"
     },
     "common": {
       "dismiss": "Fermer"
@@ -25,7 +26,7 @@
     "toast": {
       "noPhone": "Aucun numéro de téléphone pour ce contact.",
       "noNumber": "Les appels ne sont activés sur aucun numéro WABA.",
-      "alreadyPermitted": "Ce contact autorise déjà les appels : démarrage de l’appel...",
+      "alreadyPermitted": "Ce contact autorise déjà les appels. Cliquez sur Appeler pour démarrer l’appel.",
       "permissionSent": "Demande d’autorisation envoyée. Il verra Accepter/Refuser dans WhatsApp : réessayez d’appeler après sa réponse.",
       "permissionFailed": "Impossible d’envoyer la demande d’autorisation : {message}",
       "startFailed": "Impossible de démarrer l’appel : {message}",
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Vous n’avez pas l’autorisation d’utiliser les appels.",
       "PLAN_FEATURE_LOCKED": "Votre forfait n’inclut pas les appels WhatsApp.",
       "NETWORK": "Erreur réseau : veuillez réessayer.",
-      "UNEXPECTED": "Une erreur s’est produite. Veuillez réessayer."
+      "UNEXPECTED": "Une erreur s’est produite. Veuillez réessayer.",
+      "CALL_PLAYBACK_LINK_INVALID": "Ce lien d'enregistrement a expiré. Appuyez à nouveau sur lecture pour en obtenir un nouveau.",
+      "CALL_RANGE_INVALID": "Ces dates sont incohérentes : le début ne doit pas être après la fin, la période ne peut pas dépasser un an et le fuseau horaire doit être valide."
     },
     "settings": {
       "title": "Appels",

@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Collega una casella di posta per inviare e ricevere email nell’inbox.",
-        "keywords": "casella di posta, smtp, imap, gmail, outlook, mittente"
+        "description": "Collega caselle Gmail o Google Workspace così il tuo team può leggere e rispondere alle email dei clienti nell’inbox condivisa.",
+        "keywords": "casella di posta, gmail, google workspace, inbox condivisa, email di supporto, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -315,11 +315,42 @@
         "description": "Esporta il registro di consegna dei tuoi messaggi, fino a un anno indietro, come file inviato alla tua e-mail.",
         "keywords": "esportare, registro di consegna, cronologia, archivio, csv, messaggi"
       },
+      "billing-subscriptions": {
+        "label": "Abbonamenti",
+        "description": "Cosa si rinnova, fino a quando è pagato e annullamento.",
+        "keywords": "abbonamento, rinnovo, rinnovo automatico, annulla, addebito automatico, pagamento non riuscito, addebiti"
+      },
       "web": {
         "label": "Chat del sito web",
         "description": "Bot creati per la chat del tuo sito web e il widget in cui viene eseguito ciascuno.",
         "keywords": "web, sito web, widget, chatbot, incorporare, chat live"
+      },
+      "lead-scoring": {
+        "label": "Lead scoring con IA",
+        "description": "Assegna un punteggio a ogni contatto con l'IA, scegli cosa viene inviato e vedi quanto costa.",
+        "keywords": "punteggio lead, scoring, valutazione, ia, caldo, tiepido, freddo, openrouter, costo, qualificare"
+      },
+      "help-assistant": {
+        "label": "Assistente di aiuto",
+        "description": "Attiva l'assistente che guida il tuo team o svolge i passaggi al posto suo.",
+        "keywords": "ai, assistente, agente, guida, aiuto, automazione"
+      },
+      "consent": {
+        "label": "Consenso e risposte STOP",
+        "description": "Scegli le parole STOP e START, le risposte di conferma, la riga di disiscrizione e se il marketing richiede un consenso registrato.",
+        "keywords": "consenso, disiscrizione, reiscrizione, annullare iscrizione, stop, start, gdpr, conformità, privacy, marketing"
+      },
+      "inbox-labels": {
+        "label": "Etichette",
+        "description": "Crea le etichette che il tuo team applica alle conversazioni e con cui filtra la posta in arrivo.",
+        "keywords": "tag, etichette, categorie, organizzare, filtrare"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Lead caldi, audience, risposte alle campagne e altro su cui il tuo team può agire, ricavato da chat e campagne.",
+        "keywords": "growth, lead caldo, audience, coinvolgimento, inattivo, risposte alle campagne, probabilità di conversione, opt-out, pilota"
       }
-    }
+    },
+    "backToMarketplace": "Torna al Marketplace"
   }
 }

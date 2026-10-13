@@ -121,6 +121,12 @@
       "selectedActionsNone": "Contatti selezionati (seleziona prima le righe)",
       "modifyColumns": "Modifica colonne",
       "resetColumns": "Ripristina predefiniti",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nome contatto",
       "colPhone": "Numero di telefono",
       "colEmailId": "ID email",
@@ -170,7 +176,8 @@
       "import": "Importa",
       "columns": "Colonne",
       "addColumnField": "Aggiungi un campo personalizzato come colonna",
-      "kanbanView": "Vista board (per fase)"
+      "kanbanView": "Vista board (per fase)",
+      "colLeadScore": "Punteggio lead"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -406,7 +413,8 @@
         "address": "Indirizzo",
         "memo": "Memo",
         "status": "Stato",
-        "source": "Origine"
+        "source": "Origine",
+        "consent": "Consenso marketing (sì / no)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Esportazioni",
-        "hint": "Esportazioni di contatti dall'Hub, dalla più recente. Il file scaricato non viene conservato.",
+        "hint": "Esportazioni di contatti dall'Hub, dalla più recente. Ogni file viene conservato 30 giorni, così tu e i colleghi con permesso di esportazione potete scaricarlo di nuovo.",
         "empty": "Ancora nessuna esportazione.",
         "by": "Da",
         "rows": "Contatti",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Contatti selezionati",
           "filter": "Tutto ciò che corrisponde"
-        }
+        },
+        "download": "Scarica",
+        "noFile": "Non salvato",
+        "keptUntil": "Conservato fino al {date}",
+        "downloadFailed": "Impossibile scaricare il file. Potrebbe essere scaduto."
       }
     }
   }

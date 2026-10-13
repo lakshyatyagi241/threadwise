@@ -50,6 +50,13 @@ export const PaperclipIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="m21 11-9 9a5 5 0 0 1-7-7l9-9a3.5 3.5 0 0 1 5 5l-9 9a2 2 0 0 1-3-3l8-8" />
   </Icon>
 );
+/** A speech bubble with a slash: the saved-reply picker (type / in the box). */
+export const SavedReplyIcon = (p: SVGProps<SVGSVGElement>) => (
+  <Icon {...p}>
+    <path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8Z" />
+    <path d="m13 8-3 8" />
+  </Icon>
+);
 export const CloseIcon = (p: SVGProps<SVGSVGElement>) => (
   <Icon {...p}>
     <path d="M6 6l12 12M18 6 6 18" />

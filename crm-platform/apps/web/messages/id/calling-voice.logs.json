@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Ruang kerja",
+      "title": "Log panggilan",
+      "subtitle": "Semua panggilan WhatsApp yang dilakukan atau dijawab tim Anda, lengkap dengan durasi, penanganannya, dan rekamannya.",
+      "sideTip": "Semua panggilan WhatsApp ke atau dari nomor Anda. Filter berdasarkan tanggal, status, nomor, atau rekan tim untuk menemukan panggilan tertentu.",
+      "loading": "Memuat panggilan",
+      "loadFailed": "Log panggilan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "emptyTitle": "Belum ada panggilan",
+      "emptyMessage": "Setelah pelanggan menelepon salah satu nomor WhatsApp Anda, atau tim Anda melakukan panggilan dari kotak masuk, panggilan itu akan muncul di sini beserta durasi, penanganannya, dan rekamannya.",
+      "emptyFilteredTitle": "Tidak ada panggilan yang cocok dengan filter ini",
+      "emptyFilteredMessage": "Coba rentang waktu yang lebih luas atau hapus filter.",
+      "clearFilters": "Hapus filter",
+      "tabs": {
+        "label": "Tampilan panggilan",
+        "log": "Log panggilan",
+        "analytics": "Analitik"
+      },
+      "range": {
+        "title": "Rentang waktu",
+        "last24h": "24 jam terakhir",
+        "last7d": "7 hari terakhir",
+        "last30d": "30 hari terakhir",
+        "custom": "Rentang kustom",
+        "from": "Dari",
+        "to": "Sampai",
+        "apply": "Terapkan"
+      },
+      "status": {
+        "title": "Status",
+        "all": "Semua",
+        "completed": "Selesai",
+        "in-progress": "Sedang berlangsung",
+        "no-answer": "Tidak dijawab",
+        "declined": "Ditolak",
+        "failed": "Gagal"
+      },
+      "kpi": {
+        "total": "Total",
+        "last24h": "24 jam terakhir",
+        "minutes": "{count} mnt",
+        "completed": "Selesai",
+        "failed": "Gagal",
+        "selection": "Dalam pilihan ini",
+        "calls": "Panggilan",
+        "answered": "Dijawab",
+        "missed": "Tak terjawab",
+        "avgDuration": "Durasi rata-rata",
+        "totalMinutes": "Total menit"
+      },
+      "filters": {
+        "label": "Filter panggilan",
+        "searchLabel": "Cari panggilan",
+        "searchPlaceholder": "Nomor telepon atau nama kontak...",
+        "direction": "Arah",
+        "allDirections": "Semua panggilan",
+        "inbound": "Masuk",
+        "outbound": "Keluar",
+        "number": "Nomor",
+        "allNumbers": "Semua nomor",
+        "agent": "Ditangani oleh",
+        "allAgents": "Semua orang",
+        "apply": "Filter",
+        "clear": "Hapus"
+      },
+      "table": {
+        "caption": "Panggilan, terbaru dulu",
+        "customer": "Pelanggan",
+        "number": "Nomor",
+        "handledBy": "Ditangani oleh",
+        "started": "Dimulai",
+        "duration": "Durasi",
+        "status": "Status",
+        "actions": "Aksi",
+        "open": "Buka",
+        "inbound": "Masuk",
+        "outbound": "Keluar",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Halaman",
+        "showing": "Menampilkan {from}-{to} dari {total} panggilan",
+        "beyond": "Halaman ini melewati halaman terakhir ({pages} halaman).",
+        "previous": "Sebelumnya",
+        "next": "Berikutnya",
+        "page": "Halaman {page} dari {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Breadcrumb",
+        "back": "Log panggilan",
+        "loading": "Memuat panggilan",
+        "loadFailed": "Panggilan ini tidak dapat dimuat.",
+        "notFound": "Panggilan ini tidak ditemukan. Mungkin milik ruang kerja lain atau di luar panggilan yang dapat Anda lihat.",
+        "retry": "Coba lagi",
+        "handledBy": "Ditangani oleh {name}",
+        "handler": {
+          "none": "Tidak ditangani siapa pun",
+          "ai": "Asisten AI",
+          "voicemail": "Pesan suara"
+        },
+        "openContact": "Buka kontak",
+        "openInbox": "Buka di kotak masuk",
+        "tiles": {
+          "duration": "Durasi",
+          "number": "Nomor",
+          "answered": "Dijawab",
+          "ended": "Berakhir"
+        },
+        "reasons": {
+          "unknown": "Panggilan gagal.",
+          "COMPLETED": "Selesai",
+          "REJECTED": "Panggilan ditolak.",
+          "DECLINED": "Panggilan ditolak.",
+          "BUSY": "Pelanggan sedang dalam panggilan lain.",
+          "NO_ANSWER": "Tidak ada yang mengangkat.",
+          "MISSED": "Pelanggan tidak menjawab panggilan.",
+          "CANCELLED": "Panggilan dibatalkan.",
+          "FAILED": "WhatsApp melaporkan bahwa panggilan gagal.",
+          "NO_PERMISSION": "Pelanggan belum mengizinkan panggilan, sehingga panggilan tidak dilakukan.",
+          "META_REFUSED": "WhatsApp menolak melakukan panggilan."
+        },
+        "timeline": {
+          "title": "Linimasa",
+          "count": "{count, plural, one {# langkah} other {# langkah}}",
+          "empty": "Tidak ada langkah yang tercatat untuk panggilan ini."
+        },
+        "steps": {
+          "dial_sent": "Panggilan dilakukan",
+          "dial_failed": "Panggilan tidak dapat dilakukan",
+          "connect": "Panggilan terhubung ke WhatsApp",
+          "pre_accept_sent": "Bersiap menjawab",
+          "accept_sent": "Panggilan dijawab",
+          "accept_failed": "Gagal menjawab",
+          "reject_sent": "Panggilan ditolak",
+          "terminate_sent": "Perintah tutup telepon dikirim",
+          "terminate": "Panggilan berakhir",
+          "recording_stored": "Rekaman disimpan"
+        },
+        "noRecording": {
+          "title": "Rekaman",
+          "message": "Panggilan ini tidak memiliki rekaman."
+        }
+      },
+      "recording": {
+        "title": "Rekaman",
+        "notice": "Panggilan ini direkam.",
+        "privacy": "Hanya orang dengan akses rekaman yang dapat memutarnya, dan setiap pemutaran dicatat.",
+        "noAccess": "Anda dapat melihat bahwa panggilan ini direkam, tetapi Anda tidak memiliki izin untuk memutar rekaman.",
+        "play": "Putar rekaman",
+        "loading": "Mengambil rekaman",
+        "playerLabel": "Rekaman panggilan",
+        "linkUntil": "Tautan ini berlaku sampai {time}. Tekan putar lagi setelah itu.",
+        "playFailed": "Rekaman tidak dapat diputar.",
+        "retry": "Coba lagi"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Ruang kerja",
+      "title": "Analitik panggilan",
+      "subtitle": "Panggilan dari waktu ke waktu, berapa yang dijawab, siapa yang menjawab, dan kapan saluran Anda paling sibuk.",
+      "loading": "Memuat analitik panggilan",
+      "loadFailed": "Analitik panggilan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "emptyTitle": "Tidak ada panggilan pada periode ini",
+      "emptyMessage": "Pilih rentang waktu yang lebih luas, atau kembali setelah panggilan pertama Anda.",
+      "number": "Nomor",
+      "allNumbers": "Semua nomor",
+      "period": "{from} sampai {to}, dalam zona waktu {tz}",
+      "kpi": {
+        "total": "Panggilan",
+        "answeredRate": "Dijawab",
+        "answeredOf": "{answered} dijawab",
+        "missed": "Tak terjawab",
+        "avgHandle": "Rata-rata waktu penanganan",
+        "avgHandleHint": "Waktu bicara panggilan yang dijawab",
+        "totalMinutes": "Total menit"
+      },
+      "overTime": {
+        "title": "Panggilan dari waktu ke waktu",
+        "hint": "Satu batang per hari. Bagian hijau adalah panggilan yang dijawab.",
+        "summary": "{total} panggilan dalam {days} hari",
+        "answered": "Dijawab",
+        "other": "Tidak dijawab",
+        "missed": "Tak terjawab",
+        "day": "Hari",
+        "calls": "Panggilan"
+      },
+      "byAgent": {
+        "title": "Per rekan tim",
+        "agent": "Rekan tim",
+        "calls": "Panggilan",
+        "answered": "Dijawab",
+        "avgHandle": "Rata-rata waktu penanganan",
+        "minutes": "Menit",
+        "unassigned": "Tidak ditangani siapa pun"
+      },
+      "heatmap": {
+        "title": "Panggilan menurut jam dalam seminggu",
+        "hint": "Warna lebih gelap berarti lebih banyak panggilan dimulai pada jam itu. Jam menggunakan zona waktu {tz}.",
+        "weekday": "Hari dalam seminggu",
+        "cell": "{day}, {hour}:00: {calls, plural, =0 {tidak ada panggilan} one {# panggilan} other {# panggilan}}"
+      }
+    }
+  }
+}

@@ -41,6 +41,13 @@ describe('scope registry', () => {
     }
   });
 
+  it('the Email add-on scopes stand for the mailbox keys, and write is the high-risk one', () => {
+    expect(permissionKeysForScopes(['email.read'])).toEqual(['mail.mailboxes.read']);
+    expect(permissionKeysForScopes(['email.write'])).toEqual(['mail.mailboxes.manage']);
+    expect(scopeCovers(['email.read'], 'mail.mailboxes.manage')).toBe(false);
+    expect(highestScopeRisk(['email.read', 'email.write'])).toBe('high');
+  });
+
   it('scope ids are unique and lowercase dotted', () => {
     const ids = MARKET_SCOPES.map((s) => s.id);
     expect(new Set(ids).size).toBe(ids.length);

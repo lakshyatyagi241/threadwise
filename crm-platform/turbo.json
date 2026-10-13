@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": ["NODE_ENV"],
+  "globalPassThroughEnv": ["SWC_NATIVE_BINDING_CACHE", "NODE_OPTIONS"],
   "globalDependencies": [".env", "packages/config/tsconfig.base.json"],
   "tasks": {
     "build": {

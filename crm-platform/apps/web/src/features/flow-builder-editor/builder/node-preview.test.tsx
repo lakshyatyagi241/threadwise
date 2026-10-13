@@ -66,7 +66,7 @@ describe('Answer from FAQ card', () => {
     });
     expect(html).toContain('{{user_message}}');
     expect(html).toContain('All FAQs');
-    expect(html).toContain('workspace score');
+    expect(html).toContain('flow score');
     expect(html).not.toContain('not sent');
     expect(html).toContain('{{faq}}');
   });
@@ -82,7 +82,7 @@ describe('Answer from FAQ card', () => {
     expect(html).toContain('{{answer}}');
     expect(html).toContain('FAQs: Billing');
     expect(html).toContain('min score 0.62');
-    expect(html).not.toContain('workspace score');
+    expect(html).not.toContain('flow score');
     expect(html).toContain('not sent');
     expect(html).toContain('{{kb}}');
   });

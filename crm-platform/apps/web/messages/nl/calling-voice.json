@@ -3,7 +3,8 @@
     "nav": {
       "title": "Bellen",
       "description": "Schakel WhatsApp-bellen per nummer in of uit.",
-      "keywords": "bellen, gesprekken, spraak, telefoon, whatsapp bellen, belknop"
+      "keywords": "bellen, gesprekken, spraak, telefoon, whatsapp bellen, belknop",
+      "callLogs": "Gespreksoverzicht"
     },
     "common": {
       "dismiss": "Sluiten"
@@ -25,7 +26,7 @@
     "toast": {
       "noPhone": "Geen telefoonnummer bij dit contact.",
       "noNumber": "Bellen is op geen enkel WABA-nummer ingeschakeld.",
-      "alreadyPermitted": "Dit contact staat gesprekken al toe - het gesprek wordt gestart...",
+      "alreadyPermitted": "Dit contact staat gesprekken al toe. Druk op Bellen om het gesprek te starten.",
       "permissionSent": "Toestemmingsverzoek verzonden. Ze zien Accepteren/Weigeren in WhatsApp - probeer Bellen opnieuw nadat ze hebben gereageerd.",
       "permissionFailed": "Het toestemmingsverzoek kon niet worden verzonden: {message}",
       "startFailed": "Het gesprek kon niet worden gestart: {message}",
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Je hebt geen toestemming om bellen te gebruiken.",
       "PLAN_FEATURE_LOCKED": "Je abonnement bevat geen WhatsApp-bellen.",
       "NETWORK": "Netwerkfout - probeer het opnieuw.",
-      "UNEXPECTED": "Er is iets misgegaan. Probeer het opnieuw."
+      "UNEXPECTED": "Er is iets misgegaan. Probeer het opnieuw.",
+      "CALL_PLAYBACK_LINK_INVALID": "Deze opnamelink is verlopen. Druk opnieuw op afspelen om een nieuwe te krijgen.",
+      "CALL_RANGE_INVALID": "Deze datums kloppen niet: het begin mag niet na het einde liggen, een bereik mag maximaal een jaar beslaan en de tijdzone moet bestaan."
     },
     "settings": {
       "title": "Bellen",

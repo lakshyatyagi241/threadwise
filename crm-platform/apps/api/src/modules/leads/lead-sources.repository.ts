@@ -275,6 +275,14 @@ export class LeadSourcesRepository {
     return res.rows.length > 0;
   }
 
+  /** Whether the workspace has this flow (its uuid). Whether it is switched on is read when a lead arrives. */
+  async flowExists(tx: Tx, orgId: number, uuid: string): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM flows WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+    );
+    return res.rows.length > 0;
+  }
+
   async pipelineExists(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
     const res = await tx.execute(
       sql`SELECT id FROM pipelines WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,

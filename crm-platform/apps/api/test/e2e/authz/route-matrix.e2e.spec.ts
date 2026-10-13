@@ -37,6 +37,8 @@ interface Route {
   file: string;
   handler: string;
   method: string;
+  /** The route path inside its controller version, e.g. `/contacts/:id` (the scanner emits it next to `url`). */
+  path: string;
   url: string;
   gate: string;
   permissions: string[];

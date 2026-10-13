@@ -54,7 +54,6 @@ function usedKeys(source: string): string[] {
 
 /** Keys the code builds from a value (a template string), so the literal scan cannot see them. */
 const DYNAMIC = [
-  `${ROOT}.nav.faq`,
   `${ROOT}.list.paused`,
   `${ROOT}.list.activated`,
   `${ROOT}.editor.created`,

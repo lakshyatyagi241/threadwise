@@ -119,6 +119,8 @@
       "colStarted": "启动时间",
       "colActivity": "最近活动",
       "colSteps": "步骤",
+      "colReplies": "回复",
+      "repliesHint": "到达本次运行等待节点的客户消息",
       "colActions": "操作",
       "open": "打开运行记录",
       "cancel": "取消",
@@ -207,7 +209,9 @@
         "request": "请求",
         "response": "响应",
         "result": "结果"
-      }
+      },
+      "factMenuKept": "此处没有下一步。{node} 的选项保持有效。",
+      "factAnswered": "{time} 后回复"
     },
     "event": {
       "step": "步骤",
@@ -513,7 +517,9 @@
       "error": "错误",
       "skipped": "已跳过",
       "waiting": "等待中",
-      "timeout": "已超时"
+      "timeout": "已超时",
+      "answered": "已回复",
+      "gaveUp": "无回复"
     }
   }
 }

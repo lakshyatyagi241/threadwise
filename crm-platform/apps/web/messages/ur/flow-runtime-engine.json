@@ -406,6 +406,8 @@
       "colStarted": "شروع ہوا",
       "colActivity": "آخری سرگرمی",
       "colSteps": "مراحل",
+      "colReplies": "جوابات",
+      "repliesHint": "اس رن کے انتظار نوڈ تک پہنچنے والے صارف کے پیغامات",
       "colActions": "عمل",
       "open": "رن کھولیں",
       "cancel": "منسوخ کریں",
@@ -494,7 +496,9 @@
         "request": "درخواست",
         "response": "جواب",
         "result": "نتیجہ"
-      }
+      },
+      "factMenuKept": "یہاں اگلا مرحلہ نہیں۔ {node} کے اختیارات فعال رہتے ہیں۔",
+      "factAnswered": "{time} بعد جواب ملا"
     },
     "event": {
       "step": "مرحلہ",
@@ -513,7 +517,9 @@
       "error": "خرابی",
       "skipped": "چھوڑا گیا",
       "waiting": "انتظار میں",
-      "timeout": "وقت ختم"
+      "timeout": "وقت ختم",
+      "answered": "جواب مل گیا",
+      "gaveUp": "کوئی جواب نہیں"
     }
   }
 }

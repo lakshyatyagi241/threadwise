@@ -15,6 +15,7 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { ContactQuotaService } from '../contacts/contact-quota.service';
+import { ContactConsentService } from '../../contact-consent';
 import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
@@ -91,6 +92,7 @@ export class ContactImportEngine {
     private readonly displayIds: DisplayIdService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consent: ContactConsentService,
   ) {}
 
   /** Runs (or resumes) an import job to the end. Needs a request context (the processor sets one). */
@@ -459,6 +461,26 @@ export class ContactImportEngine {
       ]);
     }
 
+    // 5b. consent: the importer confirmed they have it, so each contact in the batch gets a ledger grant (never over an opt-out).
+    //     With a consent column mapped, only the rows that say yes are granted; no, blank and unknown words record nothing.
+    if (options.consentConfirmed) {
+      for (const o of ops.values()) {
+        if (o.contactId === undefined) continue;
+        if (o.row.consentColumn && o.row.consent !== 'granted') continue;
+        await this.consent.recordInTx(tx, orgId, {
+          contactId: o.contactId,
+          channel: 'whatsapp',
+          action: 'granted',
+          source: 'import',
+          evidence: { fileName: job.fileName, reference: job.uuid },
+          actorUserId: userId,
+          note: 'The person importing confirmed consent for this file',
+          idempotencyKey: `import:${job.uuid}:${o.contactId}`,
+          respectWithdrawn: true,
+        });
+      }
+    }
+
     // 6. groups and tags: the file's own plus the knobs, for new and updated contacts alike
     const members: Array<{ orgId: number; contactId: number; groupId: number }> = [];
     const tagged: Array<{
@@ -587,5 +609,7 @@ function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
   ] as const) {
     if (b[key]) (out as unknown as Record<string, unknown>)[key] = b[key];
   }
+  // A later row for the same number refines the answer, except with a blank cell.
+  if (b.consent) out.consent = b.consent;
   return out;
 }

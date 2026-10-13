@@ -1,10 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import {
   UNOFFICIAL_ENGINE,
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { ConsentPolicyService } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
@@ -77,7 +78,7 @@ const HEARTBEAT_MS = 20_000;
 export type CampaignRunResult =
   'skipped' | 'busy' | 'finished' | 'rearmed' | 'halted' | 'expired' | 'failed';
 
-type Stop = 'cap' | 'window' | null;
+type Stop = 'cap' | 'window' | 'wallet' | null;
 
 const PERMANENT_SENDER_MESSAGES = {
   waba: 'WhatsApp Cloud (Official API) campaigns must use an approved template. This campaign sends a custom message, which Meta only permits inside an open 24-hour customer session.',
@@ -119,6 +120,7 @@ export class CampaignDispatchService {
     @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
     @Inject(CAMPAIGN_SETTINGS) private readonly settingsSource: CampaignSettingsSource,
+    @Optional() private readonly consentPolicy?: ConsentPolicyService,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -147,7 +149,12 @@ export class CampaignDispatchService {
         return null;
       await this.repo.touch(t, orgId, campaignId);
       const settings = await this.settingsSource.get(t, orgId);
-      await this.repo.screenRecipients(t, orgId, campaignId);
+      await this.repo.screenRecipients(
+        t,
+        orgId,
+        campaignId,
+        (await this.consentPolicy?.requiresConsent(orgId)) ?? false,
+      );
       return { c, settings };
     });
     if (!prep) return 'skipped';
@@ -395,6 +402,12 @@ export class CampaignDispatchService {
         paceIdx++;
 
         const sent = await this.sendOne(o, r, sentThisRun);
+        if (sent === 'wallet') {
+          // The wallet cannot pay for the next message: this recipient and the rest go back, the campaign pauses (a top-up and Resume continue it).
+          stop = 'wallet';
+          await putBack(batch.slice(i));
+          break batches;
+        }
         if (sent) sentThisRun++;
         if (++sinceCounters >= COUNTER_EVERY) {
           sinceCounters = 0;
@@ -411,7 +424,7 @@ export class CampaignDispatchService {
     o: Parameters<CampaignDispatchService['loop']>[0],
     r: ClaimedRecipient,
     sentThisRun: number,
-  ): Promise<boolean> {
+  ): Promise<boolean | 'wallet'> {
     const { orgId, c, maxAttempts, settings } = o;
     const content = pickVariant(o.bundles, c.abTesting, r.variant);
     const to = assemblePhone(r.phone, r.countryCode);
@@ -496,12 +509,9 @@ export class CampaignDispatchService {
       }
     }
 
-    // Plan first: free under the plan's monthly messages, one wallet credit after.
+    // Free under the plan's monthly messages, else the wallet must cover this message: if not, the run stops (nothing is failed).
     const allowed = await this.billing.consume({ orgId, to, usedThisMonth: sentThisRun });
-    if (!allowed) {
-      await permanent('Plan cap reached — top up wallet to keep sending');
-      return false;
-    }
+    if (!allowed) return 'wallet';
 
     try {
       let providerMessageId: string | null;
@@ -673,6 +683,18 @@ export class CampaignDispatchService {
     const left = await this.db.txAs({ orgId }, (t) =>
       this.repo.remaining(t, orgId, c.id, maxAttempts),
     );
+    if (o.stop === 'wallet') {
+      await this.db.txAs({ orgId }, async (t) => {
+        await this.repo.recount(t, orgId, c.id);
+        await this.repo.setStatus(t, orgId, c.id, 'paused');
+        await this.events.statusChanged(t, orgId, c.id, 'running');
+      });
+      this.logger.warn(
+        { orgId, campaign: c.uuid },
+        '[CAMP] paused: wallet cannot cover the next message',
+      );
+      return 'halted';
+    }
     const live = await this.db.txAs({ orgId }, (t) => this.repo.liveStatus(t, orgId, c.id));
     if (o.halted || live === 'cancelled' || live === 'paused') {
       await this.db.txAs({ orgId }, (t) => this.repo.recount(t, orgId, c.id));
@@ -686,16 +708,18 @@ export class CampaignDispatchService {
     const now = this.runtime.now();
     const recurring = c.scheduleType === 'recurring';
     let result: CampaignRunResult = 'finished';
+    // The wallet stop returned above, so what is left is a daily cap or a send window.
+    const stop = o.stop;
 
     await this.db.txAs({ orgId }, async (t) => {
       await this.repo.recount(t, orgId, c.id);
       const previous = 'running';
-      if (o.stop && left.remaining > 0 && !recurring) {
-        const slot = nextRunSlot(c, o.stop, now);
+      if (stop && left.remaining > 0 && !recurring) {
+        const slot = nextRunSlot(c, stop, now);
         await this.repo.setSchedule(t, orgId, c.id, { scheduleType: 'scheduled', ...slot });
         await this.repo.setStatus(t, orgId, c.id, 'scheduled');
         result = 'rearmed';
-      } else if (!o.stop && left.retryable > 0 && !recurring) {
+      } else if (!stop && left.retryable > 0 && !recurring) {
         // Retries are waiting: scheduled again at the earliest due time, else after one backoff.
         const at = left.nextRetryAt ?? new Date(now.getTime() + settings.retryBackoffSec * 1000);
         const slot = this.slotAt(at, c.timezone ?? 'UTC');

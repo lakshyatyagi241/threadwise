@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { useOptionalFaqFlow } from './faq-flow';
 
 /**
  * Stops unsaved edits from being lost: the browser asks before the tab closes or reloads, and a click on an in-app link is held
@@ -10,6 +11,12 @@ import { useCallback, useEffect, useState } from 'react';
 export function useLeaveGuard(dirty: boolean) {
   const router = useRouter();
   const [target, setTarget] = useState<string | null>(null);
+  // The builder owns the tab buttons (they are not links), so it is told when something here is unsaved and asks before leaving.
+  const report = useOptionalFaqFlow()?.onDirtyChange;
+  useEffect(() => {
+    report?.(dirty);
+    return () => report?.(false);
+  }, [dirty, report]);
 
   useEffect(() => {
     if (!dirty) return;

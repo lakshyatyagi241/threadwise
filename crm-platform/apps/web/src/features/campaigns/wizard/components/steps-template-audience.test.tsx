@@ -152,6 +152,41 @@ describe('step 1: name and template', () => {
     ).toContain('Pick the WhatsApp number to send from.');
   });
 
+  it('tells each reason an empty list is empty, with the action that fixes it', () => {
+    const empty = (hidden: Parameters<typeof StepTemplate>[0]['hidden']) =>
+      step({ senders: [], hidden });
+    const none = empty([]);
+    expect(none).toContain('data-cause="none"');
+    expect(none).toContain('Connect a WhatsApp Business number');
+    expect(none).toContain('href="/channels/whatsapp"');
+    const off = empty([{ engine: 'baileys', reason: 'unofficial_disabled', count: 1 }]);
+    expect(off).toContain('data-cause="personal_off"');
+    expect(off).toContain('Personal numbers are turned off for this workspace');
+    expect(off).toContain('A platform administrator can turn it on');
+    const pending = empty([{ engine: 'waba', reason: 'pending', count: 1 }]);
+    expect(pending).toContain('1 number is still connecting');
+    expect(pending).toContain('href="/channels/whatsapp"');
+    expect(empty([{ engine: 'waba', reason: 'error', count: 2 }])).toContain(
+      'The connection of 2 numbers failed',
+    );
+    expect(empty([{ engine: 'twilio', reason: 'not_connected', count: 1 }])).toContain(
+      '1 number is disconnected',
+    );
+    // Never the bare old message, and the select is not offered with nothing in it.
+    for (const out of [none, off, pending]) {
+      expect(out).not.toContain('Connect one first');
+      expect(out).not.toContain('<select id="wizard-sender"');
+    }
+  });
+
+  it('shows a skeleton while the numbers load, not an empty dropdown', () => {
+    const out = step({ senders: undefined });
+    expect(out).toContain('aria-busy="true"');
+    expect(out).toContain('aria-label="Loading your numbers…"');
+    expect(out).not.toContain('<select id="wizard-sender"');
+    expect(out).not.toContain('data-cause');
+  });
+
   it('lists the approved templates as radio cards with language, category and sender', () => {
     const out = step();
     expect(out).toContain('role="radiogroup"');

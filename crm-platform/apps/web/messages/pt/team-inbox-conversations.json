@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Caixa de entrada",
-      "messageLogs": "Registros de mensagens"
+      "messageLogs": "Registros de mensagens",
+      "savedReplies": "Respostas salvas"
     },
     "common": {
       "dismiss": "Dispensar"
@@ -24,7 +25,11 @@
       "pickTitle": "Escolha uma conversa",
       "pickMessage": "Escolha uma conversa na lista para lê-la e responder. Novas mensagens aparecem aqui automaticamente.",
       "shortcuts": "Atalhos: j e k navegam pela lista, e resolve, / pesquisa.",
-      "teamChanged": "Equipe atualizada."
+      "teamChanged": "Equipe atualizada.",
+      "priorityChanged": "Prioridade atualizada",
+      "snoozed": "Conversa adiada",
+      "labelAdded": "Etiqueta adicionada",
+      "labelRemoved": "Etiqueta removida"
     },
     "list": {
       "title": "Caixa de entrada",
@@ -100,7 +105,9 @@
           "title": "Você está em dia",
           "message": "Aqui aparecem as conversas com novas mensagens de clientes."
         }
-      }
+      },
+      "select": "Selecionar",
+      "selectDone": "Concluído"
     },
     "status": {
       "received": "Recebida",
@@ -135,7 +142,18 @@
       "groupSendUnavailable": "O envio para grupos do WhatsApp ainda não está disponível. Responda pelo aplicativo WhatsApp Business.",
       "logRange": "Escolha datas dentro do último ano, com o início antes do fim e sem datas futuras.",
       "logBusy": "Uma exportação já está sendo preparada. Aguarde o e-mail dela e depois solicite outra.",
-      "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente."
+      "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente.",
+      "groupSuspended": "A Meta suspendeu este grupo, então ele não pode receber mensagens até que a Meta o libere.",
+      "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente.",
+      "groupPlanLocked": "O seu plano não inclui grupos do WhatsApp, por isso não é possível enviar mensagens a este grupo. Peça a um administrador para atualizar o plano.",
+      "groupLeft": "Este número saiu do grupo, por isso não pode mais enviar mensagens nele.",
+      "groupAnnounceOnly": "Somente admins podem enviar mensagens neste grupo, e este número não é admin.",
+      "groupRateLimited": "Mensagens de grupo demais deste número em pouco tempo. Aguarde um minuto e tente novamente.",
+      "groupUnavailable": "O WhatsApp não aceitou esta mensagem de grupo. Tente novamente em alguns minutos.",
+      "savedReplyGone": "Esta resposta salva não existe mais.",
+      "savedReplyChannel": "Esta resposta salva não se destina a este tipo de canal.",
+      "shortcutTaken": "Outra resposta salva já usa esse atalho.",
+      "importInvalid": "Não é possível ler este arquivo como respostas salvas. Ele precisa de uma primeira linha com as colunas title, shortcut e body, e no máximo 1.000 linhas."
     },
     "bubble": {
       "kind": {
@@ -201,7 +219,11 @@
         "takeBackLabel": "Sua reação {emoji}. Desfazer",
         "failed": "Esta reação não foi enviada"
       },
-      "deliveryLog": "Registro de entrega"
+      "deliveryLog": "Registro de entrega",
+      "groupMember": "Membro do grupo",
+      "groupTally": "Entregue a {delivered} de {members}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
+      "groupTallyNoTotal": "Entregue a {delivered, plural, one {# membro} other {# membros}}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
+      "groupTallyBilled": "{billable} cobradas, {free} gratuitas"
     },
     "media": {
       "openImage": "Abrir imagem {name}",
@@ -350,7 +372,9 @@
           "url": "Informe um link que comece com http:// ou https://",
           "tooManyRows": "Uma lista aceita no máximo 10 linhas no total"
         }
-      }
+      },
+      "savedReplies": "Respostas salvas",
+      "savedReplyIssues": "Não preenchidas e mantidas como escritas ({count}): {list}. Corrija antes de enviar."
     },
     "panel": {
       "tabsLabel": "Notas e linha do tempo",
@@ -632,6 +656,313 @@
           "failed": "Falhou",
           "expired": "Expirada"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Abrir grupo",
+      "readOnly": {
+        "left": {
+          "title": "Este número saiu do grupo",
+          "message": "A conversa foi mantida como estava. Você pode lê-la e adicionar notas internas, mas não pode enviar mensagens."
+        },
+        "announceOnly": {
+          "title": "Somente admins podem enviar neste grupo",
+          "message": "Este número não é admin do grupo, por isso o WhatsApp não entregaria a mensagem. Você ainda pode adicionar notas internas."
+        }
+      },
+      "mention": {
+        "label": "Participantes do grupo",
+        "loading": "Procurando participantes",
+        "none": "Nenhum participante corresponde"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "A Meta suspendeu este grupo",
+          "message": "O WhatsApp não entrega mensagens a um grupo suspenso. Pode ler a conversa e adicionar notas internas até a Meta o repor."
+        },
+        "plan": {
+          "title": "O seu plano não inclui grupos do WhatsApp",
+          "message": "Pode ler esta conversa e adicionar notas internas, mas enviar para o grupo exige um plano com grupos. Peça a um administrador para atualizar."
+        },
+        "ineligible": {
+          "title": "Este número não pode usar grupos do WhatsApp",
+          "message": "A Meta não permitiu grupos neste número na última verificação (exige uma conta comercial oficial). Pode ler a conversa e adicionar notas internas. Abra Grupos da Meta para verificar de novo."
+        }
+      },
+      "cost": {
+        "members": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. Custo estimado {cost}: o WhatsApp cobra por cada membro que a recebe.",
+        "membersNoEstimate": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. O WhatsApp cobra por cada membro que a recebe.",
+        "sizeUnknown": "O número de membros ainda não é conhecido. O WhatsApp cobra por cada membro que recebe esta mensagem.",
+        "walletShort": "A sua carteira pode não cobrir esta mensagem. Recarregue antes de enviar."
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulador (testes)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Chat do site",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-mail"
+      },
+      "variableGroup": {
+        "contact": "Contato",
+        "agent": "Você",
+        "workspace": "Espaço de trabalho",
+        "conversation": "Conversa"
+      },
+      "variable": {
+        "first_name": "Primeiro nome do contato",
+        "last_name": "Sobrenome do contato",
+        "name": "Nome completo do contato",
+        "email": "E-mail do contato",
+        "phone": "Telefone do contato",
+        "agent_name": "Seu nome completo",
+        "agent_first_name": "Seu primeiro nome",
+        "workspace_name": "Nome do espaço de trabalho",
+        "company_name": "Nome da empresa",
+        "today": "Data de hoje",
+        "device_name": "Nome do canal",
+        "device_phone": "Número de telefone do canal"
+      },
+      "picker": {
+        "title": "Respostas salvas",
+        "close": "Fechar respostas salvas",
+        "searchLabel": "Pesquisar respostas salvas",
+        "searchPlaceholder": "Pesquisar por atalho, título ou texto",
+        "listLabel": "Respostas salvas",
+        "loading": "Carregando respostas salvas",
+        "loadFailed": "Não foi possível carregar as respostas salvas.",
+        "retry": "Tentar novamente",
+        "empty": "Ainda não há respostas salvas.",
+        "emptyForChannel": "Nenhuma resposta salva se destina a este canal.",
+        "createFirst": "Criar a primeira",
+        "noMatch": "Nenhuma resposta salva corresponde a \"{q}\".",
+        "mine": "Minhas",
+        "hint": "As setas movem, Enter insere, Esc fecha.",
+        "manage": "Gerenciar respostas salvas",
+        "tooLong": "Essa resposta é longa demais para o limite de mensagem deste canal, por isso não foi inserida."
+      },
+      "screen": {
+        "back": "Configurações",
+        "title": "Respostas salvas",
+        "subtitle": "Respostas reutilizáveis que sua equipe insere em uma resposta. Digite / em uma conversa para encontrar uma.",
+        "create": "Nova resposta salva",
+        "noAccess": "Você não tem permissão para gerenciar respostas salvas.",
+        "meter": "{used} de {limit} respostas salvas usadas",
+        "meterLabel": "Respostas salvas usadas no seu plano",
+        "meterNote": "Respostas compartilhadas e pessoais contam para o limite.",
+        "atLimit": "Você atingiu o limite de {limit} respostas salvas do seu plano. Exclua uma ou faça upgrade para adicionar mais.",
+        "nearLimit": "Você está perto do limite de {limit} respostas salvas do seu plano.",
+        "upgrade": "Ver planos",
+        "tabsLabel": "Mostrar",
+        "tab": {
+          "all": "Todas ({count})",
+          "shared": "Compartilhadas ({count})",
+          "mine": "Minhas ({count})"
+        },
+        "categoryFilter": "Filtrar por categoria",
+        "allCategories": "Todas as categorias",
+        "searchLabel": "Pesquisar respostas salvas",
+        "searchPlaceholder": "Pesquisar por atalho, título ou texto",
+        "howItWorks": "Na caixa de entrada, digite / na caixa de mensagem ou use o botão Respostas salvas. Variáveis como '{{first_name}}' são preenchidas com os dados da conversa antes de o texto chegar à caixa. Nada é enviado até o atendente pressionar Enviar.",
+        "loading": "Carregando respostas salvas",
+        "loadFailed": "Não foi possível carregar as respostas salvas.",
+        "retry": "Tentar novamente",
+        "loadMore": "Carregar mais",
+        "list": "Respostas salvas",
+        "emptyTitle": "Ainda não há respostas salvas",
+        "empty": "Escreva as respostas que sua equipe dá repetidamente e insira-as com um único toque de tecla.",
+        "noMatchTitle": "Nada encontrado",
+        "noMatch": "Nenhuma resposta salva corresponde a \"{q}\".",
+        "noMatchCategory": "Nenhuma resposta salva nesta categoria.",
+        "scope": {
+          "shared": "Compartilhada",
+          "mine": "Minha"
+        },
+        "allChannels": "Todos os canais",
+        "neverUsed": "Ainda não usada",
+        "used": "Usada {count, plural, one {# vez} other {# vezes}}",
+        "lastUsed": "Último uso {when}",
+        "createdBy": "Criada por {name}",
+        "readOnly": "Somente quem gerencia respostas salvas pode alterar uma resposta compartilhada.",
+        "edit": "Editar",
+        "duplicate": "Duplicar",
+        "delete": "Excluir",
+        "cancel": "Cancelar",
+        "deleteTitle": "Excluir esta resposta salva?",
+        "deleteShared": "/{shortcut} será removido para todos no espaço de trabalho.",
+        "deleteMine": "/{shortcut} será removido das suas respostas.",
+        "deleted": "Resposta salva excluída.",
+        "duplicated": "Resposta salva duplicada.",
+        "created": "Resposta salva /{shortcut} criada.",
+        "saved": "Resposta salva atualizada."
+      },
+      "form": {
+        "eyebrow": "Resposta salva",
+        "titleNew": "Nova resposta salva",
+        "titleEdit": "Editar resposta salva",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "save": "Salvar",
+        "saving": "Salvando…",
+        "shortcut": "Atalho",
+        "shortcutPlaceholder": "obrigado",
+        "shortcutHint": "Letras, números e sublinhados, até {max} caracteres.",
+        "shortcutStored": "Os atendentes digitam /{shortcut}",
+        "shortcutEmpty": "Informe um atalho com letras, números ou sublinhados.",
+        "shortcutTaken": "/{shortcut} já é usado por outra resposta. Escolha um atalho diferente.",
+        "title": "Título",
+        "titlePlaceholder": "Obrigado por entrar em contato",
+        "titleEmpty": "Informe um título.",
+        "titleLong": "O título pode ter no máximo {max} caracteres.",
+        "body": "Texto",
+        "bodyHint": "Texto simples. Use *negrito* e _itálico_ como no WhatsApp.",
+        "bodyPlaceholder": "Olá '{{first_name}}', obrigado por entrar em contato. Como podemos ajudar?",
+        "bodyEmpty": "Informe o texto da resposta.",
+        "bodyLong": "O texto pode ter no máximo {max} caracteres.",
+        "count": "{n} de {max}",
+        "variables": "Inserir uma variável",
+        "variablesHint": "Clique em uma para adicioná-la no cursor. Uma variável que não puder ser preenchida permanece como escrita, para que o atendente a veja.",
+        "preview": "Pré-visualização",
+        "previewHint": "Com dados de cliente de exemplo.",
+        "previewEmpty": "Digite o texto para ver como ficará.",
+        "previewIssues": "Não preenchidas na pré-visualização: {list}. Quando uma resposta é usada, os atributos do seu contato são preenchidos se ele os tiver; o restante permanece como escrito.",
+        "category": "Categoria (opcional)",
+        "categoryPlaceholder": "Saudações, cobrança, suporte",
+        "language": "Idioma (opcional)",
+        "languageHint": "Um código como en ou pt-BR, para sua própria referência.",
+        "languageFormat": "Use um código de idioma como en ou pt-BR.",
+        "channels": "Somente nestes canais",
+        "channelsHint": "Deixe tudo desmarcado para oferecê-la em todos os canais.",
+        "scope": "Quem pode usar",
+        "scopeOption": {
+          "shared": "Todos no espaço de trabalho",
+          "mine": "Somente eu"
+        },
+        "scopeLocked": "Uma resposta não pode mudar entre compartilhada e pessoal depois de salva.",
+        "planLimit": "Você atingiu o limite de respostas salvas do seu plano.",
+        "upgrade": "Ver planos",
+        "conflict": "Outra pessoa alterou esta resposta primeiro. Feche esta janela e abra-a novamente.",
+        "invalid": "Parte do que você informou não é válida."
+      },
+      "transfer": {
+        "export": "Exportar CSV",
+        "import": "Importar CSV",
+        "title": "Importar respostas salvas",
+        "intro": "Envie um CSV com as colunas title, shortcut, body e, se quiser, category, language e channel (tipos de canal separados por |, vazio para todos os canais). Até 1.000 linhas e {maxKb} KB. As respostas importadas são compartilhadas com toda a equipe. A exportação tem as mesmas colunas.",
+        "file": "Arquivo CSV",
+        "tooBig": "Este arquivo é grande demais.",
+        "duplicates": "Quando uma resposta compartilhada já usa o atalho",
+        "policy": {
+          "skip": "Manter a resposta existente",
+          "overwrite": "Substituir o texto"
+        },
+        "policyHint": {
+          "skip": "A linha é ignorada e a resposta permanece como está.",
+          "overwrite": "Título, texto, categoria, idioma e canais são substituídos. O número de usos é mantido."
+        },
+        "check": "Verificar o arquivo",
+        "go": "Importar ({count})",
+        "cancel": "Cancelar",
+        "summary": "{create} para criar, {update} para substituir, {skip} ignoradas, {invalid} com problema. Nada foi salvo ainda.",
+        "plan": "Seu plano: {used} de {limit} respostas.",
+        "row": "Linha {line}: /{shortcut}",
+        "truncated": "Somente as primeiras linhas com problema ou alteração são listadas.",
+        "done": "Importadas: {created} criadas, {updated} substituídas.",
+        "issue": {
+          "update": "será substituída",
+          "skip": "ignorada",
+          "invalid": "tem um problema",
+          "duplicate": "atalho já em uso, ignorada",
+          "missing_shortcut": "sem atalho",
+          "shortcut_invalid": "o atalho não tem letras ou números utilizáveis",
+          "missing_title": "sem título",
+          "title_too_long": "o título é muito longo",
+          "missing_body": "sem texto",
+          "body_too_long": "o texto é muito longo",
+          "control_characters": "contém caracteres de controle",
+          "category_too_long": "a categoria é muito longa",
+          "language_invalid": "o idioma não é um código como en ou pt-BR",
+          "channel_unknown": "um canal desconhecido",
+          "duplicate_in_file": "o atalho aparece antes no arquivo",
+          "plan_limit_reached": "acima do limite do seu plano"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "Ações em massa",
+      "selected": "{count, plural, one {# conversa selecionada} other {# conversas selecionadas}}",
+      "selectAllInView": "Selecionar todas as {count} na tela",
+      "done": "Concluído",
+      "markRead": "Marcar como lida",
+      "resolve": "Resolver",
+      "close": "Fechar",
+      "reopen": "Reabrir",
+      "assign": "Atribuir",
+      "assignToMe": "Atribuir a mim",
+      "unassign": "Remover atribuição",
+      "removeTeam": "Remover equipe",
+      "priority": "Prioridade",
+      "snooze": "Adiar",
+      "snoozePreset": {
+        "oneHour": "1 hora",
+        "threeHours": "3 horas",
+        "tomorrow": "Amanhã, 9:00",
+        "nextWeek": "Próxima segunda, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversa atualizada} other {# conversas atualizadas}}.",
+        "nothingChanged": "Nada a alterar: as conversas selecionadas já estão atualizadas.",
+        "partial": "{done} atualizadas, {unchanged} já estavam atualizadas, {failed} não puderam ser alteradas. As que falharam continuam selecionadas.",
+        "allFailed": "Nenhuma {count, plural, one {das # conversa pôde} other {das # conversas pôde}} ser alterada."
+      },
+      "label": "Etiqueta",
+      "labelAdd": "Adicionar etiqueta",
+      "labelRemove": "Remover etiqueta"
+    },
+    "triage": {
+      "priority": "Prioridade",
+      "snooze": "Adiar",
+      "wake": "Reativar agora"
+    },
+    "labels": {
+      "label": "Etiqueta",
+      "loading": "Carregando etiquetas…",
+      "loadFailed": "Não foi possível carregar as etiquetas.",
+      "none": "Nenhuma etiqueta ainda.",
+      "newLabel": "Nova etiqueta",
+      "add": "Adicionar",
+      "filter": "Etiquetas",
+      "filterActive": "{count, plural, one {# etiqueta} other {# etiquetas}}",
+      "clearFilter": "Limpar filtro de etiquetas",
+      "screen": {
+        "back": "Voltar para a caixa de entrada",
+        "title": "Etiquetas",
+        "intro": "As etiquetas marcam as conversas para que sua equipe possa organizá-las e filtrá-las. São as mesmas usadas nos contatos.",
+        "newTitle": "Nova etiqueta",
+        "editTitle": "Editar etiqueta",
+        "name": "Nome",
+        "color": "Cor",
+        "colorInvalid": "Use uma cor hexadecimal como #075E54 ou um nome de cor.",
+        "description": "Descrição (opcional)",
+        "create": "Criar etiqueta",
+        "save": "Salvar alterações",
+        "cancel": "Cancelar",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "inUse": "{count, plural, one {# conversa} other {# conversas}}",
+        "emptyTitle": "Nenhuma etiqueta ainda",
+        "emptyMessage": "Crie sua primeira etiqueta acima e depois aplique-a às conversas na caixa de entrada.",
+        "deleteTitle": "Excluir esta etiqueta?",
+        "deleteMessage": "\"{name}\" está em {count, plural, one {# conversa} other {# conversas}}. Excluí-la a remove delas e de todos os contatos que a possuem. Esta ação não pode ser desfeita.",
+        "nameTaken": "Já existe uma etiqueta com esse nome.",
+        "conflict": "Outra pessoa alterou esta etiqueta primeiro. A lista foi recarregada.",
+        "saved": "Etiqueta salva",
+        "created": "Etiqueta criada",
+        "deleted": "Etiqueta excluída"
       }
     }
   }

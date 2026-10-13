@@ -1,17 +1,18 @@
 import {
   entries,
   expect,
-  go,
   login,
   newWorkspace,
   open,
+  openFaqs,
   phrasingBox,
   questionBox,
+  reloadFaqs,
   seedFaq,
+  type State,
   tabTo,
   test,
   waitIndexed,
-  type State,
   type Workspace,
 } from './support';
 
@@ -37,9 +38,12 @@ test.describe('validation', () => {
     const posts: string[] = [];
     page.on(
       'request',
-      (r) => r.method() === 'POST' && r.url().includes('/faq/entries') && posts.push(r.url()),
+      (r) =>
+        r.method() === 'POST' &&
+        /\/faq\/flows\/[^/]+\/entries$/.test(new URL(r.url()).pathname) &&
+        posts.push(r.url()),
     );
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await page.getByRole('button', { name: 'Create FAQ' }).click();
     await expect(page.getByText('Write the question customers ask.').first()).toBeVisible();
     await expect(page.getByText('Write the answer customers should get.')).toBeVisible();
@@ -76,7 +80,7 @@ test.describe('validation', () => {
     watch,
   }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await expect(page.getByText('0 / 500')).toBeVisible();
     await expect(page.getByText('0 / 4096 characters')).toBeVisible();
     await questionBox(page).fill('x'.repeat(120));
@@ -112,7 +116,7 @@ test.describe('validation', () => {
     watch,
   }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await questionBox(page).fill('Do you gift wrap?');
     await phrasingBox(page).fill('gift wrapping available');
     await phrasingBox(page).press('Enter');
@@ -145,7 +149,7 @@ test.describe('validation', () => {
     watch.allow(/409/);
     await seedFaq(ws, { question: 'Do you offer discounts?', answerText: 'Sometimes.' });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await questionBox(page).fill('do you OFFER   discounts?');
     await page.getByLabel('Answer text').fill('My typed answer');
     await page.getByLabel('Category').fill('Promos');
@@ -154,7 +158,7 @@ test.describe('validation', () => {
     await page.getByRole('button', { name: 'Create FAQ' }).click();
 
     await expect(page.getByText('Another FAQ already has this question.')).toBeVisible();
-    await expect(page).toHaveURL(/\/faq\/new$/);
+    await expect(page).toHaveURL(/[?&]view=new$/);
     await expect(questionBox(page)).toBeFocused();
     await expect(questionBox(page)).toHaveAttribute('aria-invalid', 'true');
     // Nothing the person typed was lost.
@@ -185,7 +189,7 @@ test.describe('editing a saved FAQ', () => {
     });
     await waitIndexed(ws);
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     const list = page.getByRole('list', { name: 'Phrasings' });
     const questionRow = list.getByRole('listitem').filter({ hasText: 'Edit phrasings FAQ' });
     await expect(questionRow.getByText('Question', { exact: true })).toBeVisible();
@@ -236,11 +240,11 @@ test.describe('editing a saved FAQ', () => {
 
   test('double-clicking Create makes exactly one FAQ', async ({ browser, watch }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq/new');
+    await openFaqs(page, ws, 'new');
     await questionBox(page).fill('Double click safety');
     await page.getByLabel('Answer text').fill('One only.');
     await page.getByRole('button', { name: 'Create FAQ' }).dblclick();
-    await expect(page).toHaveURL(/\/faq\/[0-9a-f-]{36}$/);
+    await expect(page).toHaveURL(/[?&]view=[0-9a-f-]{36}$/);
     await expect.poll(async () => (await byQuestion('Double click safety')).length).toBe(1);
     // Give a stray second request time to land, then check again.
     await page.waitForTimeout(1500);
@@ -253,9 +257,9 @@ test.describe('editing a saved FAQ', () => {
   }) => {
     const faq = await seedFaq(ws, { question: 'Threshold FAQ', answerText: 'T.' });
     const { page } = await open(browser, state, watch);
-    await go(page, `/faq/${faq.id}`);
+    await openFaqs(page, ws, faq.id);
     await page.getByText('Advanced: sensitivity for this FAQ only').click();
-    await expect(page.getByText(/Following the workspace sensitivity \(\d+%\)\./)).toBeVisible();
+    await expect(page.getByText(/Following this flow's sensitivity \(\d+%\)\./)).toBeVisible();
     await page.getByLabel('Use a custom sensitivity for this FAQ').check();
     const slider = page.getByRole('slider', { name: /Match at or above/ });
     await slider.focus();
@@ -275,7 +279,7 @@ test.describe('editing a saved FAQ', () => {
       )
       .toBe(0.5);
 
-    await page.reload();
+    await reloadFaqs(page);
     await page.getByText('Advanced: sensitivity for this FAQ only').click();
     await expect(page.getByLabel('Use a custom sensitivity for this FAQ')).toBeChecked();
     await page.getByLabel('Use a custom sensitivity for this FAQ').uncheck();

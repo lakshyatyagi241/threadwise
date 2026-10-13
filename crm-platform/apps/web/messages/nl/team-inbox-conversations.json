@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "Inbox",
-      "messageLogs": "Berichtlogboeken"
+      "messageLogs": "Berichtlogboeken",
+      "savedReplies": "Opgeslagen antwoorden"
     },
     "common": {
       "dismiss": "Sluiten"
@@ -24,7 +25,11 @@
       "pickTitle": "Kies een gesprek",
       "pickMessage": "Kies een gesprek uit de lijst om het te lezen en te beantwoorden. Nieuwe berichten verschijnen hier vanzelf.",
       "shortcuts": "Sneltoetsen: j en k bewegen door de lijst, e lost op, / zoekt.",
-      "teamChanged": "Team bijgewerkt."
+      "teamChanged": "Team bijgewerkt.",
+      "priorityChanged": "Prioriteit bijgewerkt",
+      "snoozed": "Gesprek uitgesteld",
+      "labelAdded": "Label toegevoegd",
+      "labelRemoved": "Label verwijderd"
     },
     "list": {
       "title": "Inbox",
@@ -100,7 +105,9 @@
           "title": "Je bent helemaal bij",
           "message": "Gesprekken met nieuwe berichten van klanten staan hier."
         }
-      }
+      },
+      "select": "Selecteren",
+      "selectDone": "Klaar"
     },
     "status": {
       "received": "Ontvangen",
@@ -135,7 +142,18 @@
       "groupSendUnavailable": "Verzenden naar WhatsApp-groepen is nog niet beschikbaar. Antwoord via de WhatsApp Business-app.",
       "logRange": "Kies datums binnen het afgelopen jaar, waarbij de start voor het einde ligt en niet in de toekomst.",
       "logBusy": "Er wordt al een export voorbereid. Wacht op de e-mail ervan en vraag daarna een nieuwe aan.",
-      "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan."
+      "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan.",
+      "groupSuspended": "Meta heeft deze groep opgeschort, dus er kunnen geen berichten naartoe worden gestuurd totdat Meta dit opheft.",
+      "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw.",
+      "groupPlanLocked": "Je abonnement bevat geen WhatsApp-groepen, dus je kunt deze groep geen berichten sturen. Vraag een beheerder om het abonnement te upgraden.",
+      "groupLeft": "Dit nummer heeft de groep verlaten, dus kan er geen berichten meer sturen.",
+      "groupAnnounceOnly": "Alleen beheerders kunnen berichten sturen in deze groep en dit nummer is geen beheerder.",
+      "groupRateLimited": "Te veel groepsberichten van dit nummer in korte tijd. Wacht een minuut en probeer het opnieuw.",
+      "groupUnavailable": "WhatsApp heeft dit groepsbericht niet geaccepteerd. Probeer het over een paar minuten opnieuw.",
+      "savedReplyGone": "Dit opgeslagen antwoord bestaat niet meer.",
+      "savedReplyChannel": "Dit opgeslagen antwoord is niet bedoeld voor dit soort kanaal.",
+      "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al.",
+      "importInvalid": "Dit bestand kan niet als opgeslagen antwoorden worden gelezen. Het heeft een eerste rij nodig met de kolommen title, shortcut en body, en maximaal 1.000 rijen."
     },
     "bubble": {
       "kind": {
@@ -201,7 +219,11 @@
         "takeBackLabel": "Jouw reactie {emoji}. Intrekken",
         "failed": "Deze reactie is niet verzonden"
       },
-      "deliveryLog": "Bezorglogboek"
+      "deliveryLog": "Bezorglogboek",
+      "groupMember": "Groepslid",
+      "groupTally": "Afgeleverd bij {delivered} van {members}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
+      "groupTallyNoTotal": "Afgeleverd bij {delivered, plural, one {# lid} other {# leden}}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
+      "groupTallyBilled": "{billable} aangerekend, {free} gratis"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -350,7 +372,9 @@
           "url": "Voer een link in die begint met http:// of https://",
           "tooManyRows": "Een lijst bevat in totaal maximaal 10 rijen"
         }
-      }
+      },
+      "savedReplies": "Opgeslagen antwoorden",
+      "savedReplyIssues": "Niet ingevuld en gelaten zoals geschreven ({count}): {list}. Los dit op voordat u verzendt."
     },
     "panel": {
       "tabsLabel": "Notities en tijdlijn",
@@ -632,6 +656,313 @@
           "failed": "Mislukt",
           "expired": "Verlopen"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "Groep openen",
+      "readOnly": {
+        "left": {
+          "title": "Dit nummer heeft de groep verlaten",
+          "message": "Het gesprek blijft zoals het was. Je kunt het lezen en interne notities toevoegen, maar je kunt geen berichten sturen."
+        },
+        "announceOnly": {
+          "title": "Alleen beheerders kunnen in deze groep sturen",
+          "message": "Dit nummer is geen beheerder van de groep, dus WhatsApp zou een bericht niet bezorgen. Je kunt nog wel interne notities toevoegen."
+        }
+      },
+      "mention": {
+        "label": "Groepsleden",
+        "loading": "Leden zoeken",
+        "none": "Geen lid gevonden"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta heeft deze groep geschorst",
+          "message": "WhatsApp levert geen berichten af in een geschorste groep. Je kunt het gesprek lezen en interne notities toevoegen totdat Meta de schorsing opheft."
+        },
+        "plan": {
+          "title": "Je abonnement bevat geen WhatsApp-groepen",
+          "message": "Je kunt dit gesprek lezen en interne notities toevoegen, maar versturen naar de groep vereist een abonnement met groepen. Vraag een beheerder om te upgraden."
+        },
+        "ineligible": {
+          "title": "Dit nummer kan geen WhatsApp-groepen gebruiken",
+          "message": "Bij de laatste controle stond Meta geen groepen toe op dit nummer (een officieel zakelijk account is vereist). Je kunt het gesprek lezen en interne notities toevoegen. Open Meta-groepen om opnieuw te controleren."
+        }
+      },
+      "cost": {
+        "members": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. Geschatte kosten {cost}: WhatsApp rekent elk lid aan dat het ontvangt.",
+        "membersNoEstimate": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. WhatsApp rekent elk lid aan dat het ontvangt.",
+        "sizeUnknown": "Het aantal leden is nog niet bekend. WhatsApp rekent elk lid aan dat dit bericht ontvangt.",
+        "walletShort": "Je saldo dekt dit bericht mogelijk niet. Waardeer op voordat je verstuurt."
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulator (testen)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Websitechat",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-mail"
+      },
+      "variableGroup": {
+        "contact": "Contact",
+        "agent": "U",
+        "workspace": "Werkruimte",
+        "conversation": "Gesprek"
+      },
+      "variable": {
+        "first_name": "Voornaam van het contact",
+        "last_name": "Achternaam van het contact",
+        "name": "Volledige naam van het contact",
+        "email": "E-mailadres van het contact",
+        "phone": "Telefoonnummer van het contact",
+        "agent_name": "Uw volledige naam",
+        "agent_first_name": "Uw voornaam",
+        "workspace_name": "Naam van de werkruimte",
+        "company_name": "Bedrijfsnaam",
+        "today": "De datum van vandaag",
+        "device_name": "Naam van het kanaal",
+        "device_phone": "Telefoonnummer van het kanaal"
+      },
+      "picker": {
+        "title": "Opgeslagen antwoorden",
+        "close": "Opgeslagen antwoorden sluiten",
+        "searchLabel": "Opgeslagen antwoorden zoeken",
+        "searchPlaceholder": "Zoek op sneltoets, titel of tekst",
+        "listLabel": "Opgeslagen antwoorden",
+        "loading": "Opgeslagen antwoorden laden",
+        "loadFailed": "Opgeslagen antwoorden konden niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "empty": "Er zijn nog geen opgeslagen antwoorden.",
+        "emptyForChannel": "Geen opgeslagen antwoord is bedoeld voor dit kanaal.",
+        "createFirst": "Maak het eerste aan",
+        "noMatch": "Geen opgeslagen antwoord komt overeen met \"{q}\".",
+        "mine": "Van mij",
+        "hint": "Pijltjestoetsen verplaatsen, Enter voegt in, Esc sluit.",
+        "manage": "Opgeslagen antwoorden beheren",
+        "tooLong": "Dat antwoord is te lang voor de berichtlimiet van dit kanaal en is daarom niet ingevoegd."
+      },
+      "screen": {
+        "back": "Instellingen",
+        "title": "Opgeslagen antwoorden",
+        "subtitle": "Herbruikbare antwoorden die uw team in een reactie invoegt. Typ / in een gesprek om er een te vinden.",
+        "create": "Nieuw opgeslagen antwoord",
+        "noAccess": "U hebt geen toestemming om opgeslagen antwoorden te beheren.",
+        "meter": "{used} van {limit} opgeslagen antwoorden gebruikt",
+        "meterLabel": "Opgeslagen antwoorden gebruikt in uw abonnement",
+        "meterNote": "Gedeelde en persoonlijke antwoorden tellen beide mee voor de limiet.",
+        "atLimit": "U hebt de limiet van {limit} opgeslagen antwoorden van uw abonnement bereikt. Verwijder er een of upgrade om meer toe te voegen.",
+        "nearLimit": "U nadert de limiet van {limit} opgeslagen antwoorden van uw abonnement.",
+        "upgrade": "Abonnementen bekijken",
+        "tabsLabel": "Tonen",
+        "tab": {
+          "all": "Alle ({count})",
+          "shared": "Gedeeld ({count})",
+          "mine": "Van mij ({count})"
+        },
+        "categoryFilter": "Filteren op categorie",
+        "allCategories": "Alle categorieën",
+        "searchLabel": "Opgeslagen antwoorden zoeken",
+        "searchPlaceholder": "Zoek op sneltoets, titel of tekst",
+        "howItWorks": "Typ in de inbox / in het berichtvak of gebruik de knop Opgeslagen antwoorden. Variabelen zoals '{{first_name}}' worden uit het gesprek ingevuld voordat de tekst in het vak komt. Er wordt niets verzonden totdat de medewerker op Verzenden drukt.",
+        "loading": "Opgeslagen antwoorden laden",
+        "loadFailed": "Opgeslagen antwoorden konden niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "loadMore": "Meer laden",
+        "list": "Opgeslagen antwoorden",
+        "emptyTitle": "Nog geen opgeslagen antwoorden",
+        "empty": "Schrijf de antwoorden die uw team steeds opnieuw geeft en voeg ze in met één toetsaanslag.",
+        "noMatchTitle": "Niets gevonden",
+        "noMatch": "Geen opgeslagen antwoord komt overeen met \"{q}\".",
+        "noMatchCategory": "Geen opgeslagen antwoord in deze categorie.",
+        "scope": {
+          "shared": "Gedeeld",
+          "mine": "Van mij"
+        },
+        "allChannels": "Alle kanalen",
+        "neverUsed": "Nog niet gebruikt",
+        "used": "{count, plural, one {# keer gebruikt} other {# keer gebruikt}}",
+        "lastUsed": "Laatst gebruikt {when}",
+        "createdBy": "Gemaakt door {name}",
+        "readOnly": "Alleen mensen die opgeslagen antwoorden beheren kunnen een gedeeld antwoord wijzigen.",
+        "edit": "Bewerken",
+        "duplicate": "Dupliceren",
+        "delete": "Verwijderen",
+        "cancel": "Annuleren",
+        "deleteTitle": "Dit opgeslagen antwoord verwijderen?",
+        "deleteShared": "/{shortcut} wordt voor iedereen in de werkruimte verwijderd.",
+        "deleteMine": "/{shortcut} wordt uit uw antwoorden verwijderd.",
+        "deleted": "Opgeslagen antwoord verwijderd.",
+        "duplicated": "Opgeslagen antwoord gedupliceerd.",
+        "created": "Opgeslagen antwoord /{shortcut} aangemaakt.",
+        "saved": "Opgeslagen antwoord bijgewerkt."
+      },
+      "form": {
+        "eyebrow": "Opgeslagen antwoord",
+        "titleNew": "Nieuw opgeslagen antwoord",
+        "titleEdit": "Opgeslagen antwoord bewerken",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "saving": "Opslaan…",
+        "shortcut": "Sneltoets",
+        "shortcutPlaceholder": "bedankt",
+        "shortcutHint": "Letters, cijfers en underscores, maximaal {max} tekens.",
+        "shortcutStored": "Medewerkers typen /{shortcut}",
+        "shortcutEmpty": "Voer een sneltoets in met letters, cijfers of underscores.",
+        "shortcutTaken": "/{shortcut} wordt al door een ander antwoord gebruikt. Kies een andere sneltoets.",
+        "title": "Titel",
+        "titlePlaceholder": "Bedankt voor uw bericht",
+        "titleEmpty": "Voer een titel in.",
+        "titleLong": "De titel mag maximaal {max} tekens bevatten.",
+        "body": "Tekst",
+        "bodyHint": "Platte tekst. Gebruik *vet* en _cursief_ zoals in WhatsApp.",
+        "bodyPlaceholder": "Hallo '{{first_name}}', bedankt voor uw bericht. Waarmee kunnen we u helpen?",
+        "bodyEmpty": "Voer de tekst van het antwoord in.",
+        "bodyLong": "De tekst mag maximaal {max} tekens bevatten.",
+        "count": "{n} van {max}",
+        "variables": "Variabele invoegen",
+        "variablesHint": "Klik er een aan om hem op de cursor toe te voegen. Een variabele die niet kan worden ingevuld blijft staan zoals geschreven, zodat de medewerker het ziet.",
+        "preview": "Voorbeeld",
+        "previewHint": "Met voorbeeldklantgegevens.",
+        "previewEmpty": "Typ de tekst om te zien hoe het eruit komt te zien.",
+        "previewIssues": "Niet ingevuld in het voorbeeld: {list}. Wanneer een antwoord wordt gebruikt, worden de contactkenmerken ingevuld als het contact ze heeft; al het andere blijft staan zoals geschreven.",
+        "category": "Categorie (optioneel)",
+        "categoryPlaceholder": "Begroetingen, facturering, support",
+        "language": "Taal (optioneel)",
+        "languageHint": "Een code zoals en of pt-BR, voor uw eigen referentie.",
+        "languageFormat": "Gebruik een taalcode zoals en of pt-BR.",
+        "channels": "Alleen op deze kanalen",
+        "channelsHint": "Laat alles uitgevinkt om het op elk kanaal aan te bieden.",
+        "scope": "Wie het kan gebruiken",
+        "scopeOption": {
+          "shared": "Iedereen in de werkruimte",
+          "mine": "Alleen ik"
+        },
+        "scopeLocked": "Een antwoord kan na het opslaan niet meer wisselen tussen gedeeld en persoonlijk.",
+        "planLimit": "U hebt de limiet van opgeslagen antwoorden van uw abonnement bereikt.",
+        "upgrade": "Abonnementen bekijken",
+        "conflict": "Iemand anders heeft dit antwoord eerder gewijzigd. Sluit dit venster en open het opnieuw.",
+        "invalid": "Een deel van wat u hebt ingevoerd is ongeldig."
+      },
+      "transfer": {
+        "export": "CSV exporteren",
+        "import": "CSV importeren",
+        "title": "Opgeslagen antwoorden importeren",
+        "intro": "Upload een CSV met de kolommen title, shortcut, body en desgewenst category, language en channel (kanaaltypes gescheiden door |, leeg voor alle kanalen). Maximaal 1.000 rijen en {maxKb} KB. Geïmporteerde antwoorden worden gedeeld met het hele team. De export heeft dezelfde kolommen.",
+        "file": "CSV-bestand",
+        "tooBig": "Dit bestand is te groot.",
+        "duplicates": "Wanneer een gedeeld antwoord de shortcut al gebruikt",
+        "policy": {
+          "skip": "Bestaand antwoord behouden",
+          "overwrite": "Tekst vervangen"
+        },
+        "policyHint": {
+          "skip": "De rij wordt overgeslagen en het antwoord blijft ongewijzigd.",
+          "overwrite": "Titel, tekst, categorie, taal en kanalen worden vervangen. Het aantal keren dat het is gebruikt, blijft behouden."
+        },
+        "check": "Bestand controleren",
+        "go": "Importeren ({count})",
+        "cancel": "Annuleren",
+        "summary": "{create} om aan te maken, {update} om te vervangen, {skip} overgeslagen, {invalid} met een probleem. Er is nog niets opgeslagen.",
+        "plan": "Jouw abonnement: {used} van {limit} antwoorden.",
+        "row": "Regel {line}: /{shortcut}",
+        "truncated": "Alleen de eerste rijen met een probleem of wijziging worden getoond.",
+        "done": "Geïmporteerd: {created} aangemaakt, {updated} vervangen.",
+        "issue": {
+          "update": "wordt vervangen",
+          "skip": "overgeslagen",
+          "invalid": "heeft een probleem",
+          "duplicate": "shortcut al in gebruik, overgeslagen",
+          "missing_shortcut": "geen shortcut",
+          "shortcut_invalid": "de shortcut bevat geen bruikbare letters of cijfers",
+          "missing_title": "geen titel",
+          "title_too_long": "de titel is te lang",
+          "missing_body": "geen tekst",
+          "body_too_long": "de tekst is te lang",
+          "control_characters": "bevat besturingstekens",
+          "category_too_long": "de categorie is te lang",
+          "language_invalid": "de taal is geen code zoals en of pt-BR",
+          "channel_unknown": "een onbekend kanaal",
+          "duplicate_in_file": "de shortcut staat eerder in het bestand",
+          "plan_limit_reached": "boven de limiet van jouw abonnement"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "Bulkacties",
+      "selected": "{count, plural, one {# gesprek geselecteerd} other {# gesprekken geselecteerd}}",
+      "selectAllInView": "Alle {count} in beeld selecteren",
+      "done": "Klaar",
+      "markRead": "Markeren als gelezen",
+      "resolve": "Oplossen",
+      "close": "Sluiten",
+      "reopen": "Heropenen",
+      "assign": "Toewijzen",
+      "assignToMe": "Aan mij toewijzen",
+      "unassign": "Toewijzing opheffen",
+      "removeTeam": "Team verwijderen",
+      "priority": "Prioriteit",
+      "snooze": "Uitstellen",
+      "snoozePreset": {
+        "oneHour": "1 uur",
+        "threeHours": "3 uur",
+        "tomorrow": "Morgen, 9:00",
+        "nextWeek": "Volgende maandag, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# gesprek bijgewerkt} other {# gesprekken bijgewerkt}}.",
+        "nothingChanged": "Niets te wijzigen: de geselecteerde gesprekken zijn al up-to-date.",
+        "partial": "{done} bijgewerkt, {unchanged} al up-to-date, {failed} konden niet worden gewijzigd. De mislukte blijven geselecteerd.",
+        "allFailed": "Geen van de {count, plural, one {# gesprek} other {# gesprekken}} kon worden gewijzigd."
+      },
+      "label": "Label",
+      "labelAdd": "Label toevoegen",
+      "labelRemove": "Label verwijderen"
+    },
+    "triage": {
+      "priority": "Prioriteit",
+      "snooze": "Uitstellen",
+      "wake": "Nu terugzetten"
+    },
+    "labels": {
+      "label": "Label",
+      "loading": "Labels laden…",
+      "loadFailed": "De labels konden niet worden geladen.",
+      "none": "Nog geen labels.",
+      "newLabel": "Nieuw label",
+      "add": "Toevoegen",
+      "filter": "Labels",
+      "filterActive": "{count, plural, one {# label} other {# labels}}",
+      "clearFilter": "Labelfilter wissen",
+      "screen": {
+        "back": "Terug naar de inbox",
+        "title": "Labels",
+        "intro": "Met labels markeer je gesprekken zodat je team ze kan sorteren en filteren. Het zijn dezelfde tags als bij contacten.",
+        "newTitle": "Nieuw label",
+        "editTitle": "Label bewerken",
+        "name": "Naam",
+        "color": "Kleur",
+        "colorInvalid": "Gebruik een hexkleur zoals #075E54 of een kleurnaam.",
+        "description": "Beschrijving (optioneel)",
+        "create": "Label aanmaken",
+        "save": "Wijzigingen opslaan",
+        "cancel": "Annuleren",
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "inUse": "{count, plural, one {# gesprek} other {# gesprekken}}",
+        "emptyTitle": "Nog geen labels",
+        "emptyMessage": "Maak hierboven je eerste label aan en zet het vervolgens op gesprekken vanuit de inbox.",
+        "deleteTitle": "Dit label verwijderen?",
+        "deleteMessage": "\"{name}\" staat op {count, plural, one {# gesprek} other {# gesprekken}}. Als je het verwijdert, wordt het van die gesprekken en van alle contacten met dit label gehaald. Dit kan niet ongedaan worden gemaakt.",
+        "nameTaken": "Er bestaat al een label met die naam.",
+        "conflict": "Iemand anders heeft dit label eerder gewijzigd. De lijst is opnieuw geladen.",
+        "saved": "Label opgeslagen",
+        "created": "Label aangemaakt",
+        "deleted": "Label verwijderd"
       }
     }
   }

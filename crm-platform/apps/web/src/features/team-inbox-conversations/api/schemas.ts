@@ -1,7 +1,11 @@
 import {
+  bulkConversationsResponseSchema,
+  inboxLabelListSchema,
+  inboxLabelSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
+  conversationGroupMembersSchema,
   conversationListResponseSchema,
   conversationNoteSchema,
   conversationSummarySchema,
@@ -28,9 +32,13 @@ import {
  */
 
 export {
+  bulkConversationsResponseSchema,
+  inboxLabelListSchema,
+  inboxLabelSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
+  conversationGroupMembersSchema,
   conversationListResponseSchema,
   conversationNoteSchema,
   conversationSummarySchema,

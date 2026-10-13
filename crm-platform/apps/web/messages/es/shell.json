@@ -78,6 +78,11 @@
       "payments": "Pagos"
     },
     "help": "Ayuda",
-    "unreadCount": "{count, plural, one {# sin leer} other {# sin leer}}"
+    "unreadCount": "{count, plural, one {# sin leer} other {# sin leer}}",
+    "backgroundError": {
+      "message": "No se pudieron actualizar algunas cifras en vivo, como las notificaciones, el saldo o los contadores de la bandeja. Lo que ves puede estar desactualizado.",
+      "retry": "Reintentar",
+      "dismiss": "Descartar"
+    }
   }
 }

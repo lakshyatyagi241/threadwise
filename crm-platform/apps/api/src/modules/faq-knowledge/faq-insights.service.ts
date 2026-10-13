@@ -33,23 +33,27 @@ export class FaqInsightsService {
     private readonly audit: AuditService,
   ) {}
 
-  async summary(query: FaqInsightsQuery): Promise<FaqInsights> {
+  async summary(flowUuid: string, query: FaqInsightsQuery): Promise<FaqInsights> {
     const orgId = RequestContextStore.orgId();
-    return this.db.tx((tx) => this.logs.insights(tx, orgId, query.days));
+    return this.db.tx(async (tx) => {
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
+      return this.logs.insights(tx, orgId, flow.id, query.days);
+    });
   }
 
-  async list(query: ListFaqLogQuery): Promise<FaqLogResponse> {
+  async list(flowUuid: string, query: ListFaqLogQuery): Promise<FaqLogResponse> {
     const orgId = RequestContextStore.orgId();
     const afterId = query.cursor ? decodeCursor(query.cursor).id : null;
     const rows = await this.db.tx(async (tx) => {
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
       let faqId: number | undefined;
       if (query.faqId) {
-        const f = await this.faqs.idsByUuids(tx, orgId, [query.faqId]);
-        // A FAQ that is not in this workspace matches nothing rather than leaking that it exists elsewhere.
+        const f = await this.faqs.idsByUuids(tx, orgId, flow.id, [query.faqId]);
+        // A FAQ that is not in this flow matches nothing rather than leaking that it exists elsewhere.
         if (f.length === 0) return [];
         faqId = f[0]!.id;
       }
-      return this.logs.list(tx, orgId, {
+      return this.logs.list(tx, orgId, flow.id, {
         limit: query.limit,
         afterId,
         view: query.view,
@@ -65,7 +69,7 @@ export class FaqInsightsService {
    * The playground: runs the real matcher on a typed message and shows the decision with its numbers, sends nothing. It is logged
    * as `origin: test` so it never counts in the insights or the unanswered list.
    */
-  async test(input: TestFaqQueryInput): Promise<FaqMatchDecision> {
+  async test(flowUuid: string, input: TestFaqQueryInput): Promise<FaqMatchDecision> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     if (!cfg.engineEnabled) {
@@ -75,9 +79,11 @@ export class FaqInsightsService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    const result = await this.matcher.match(orgId, input.query);
+    const flow = await this.db.tx((tx) => this.faqs.requireFlow(tx, orgId, flowUuid));
+    const result = await this.matcher.match(orgId, flow.id, input.query);
     await this.db.tx((tx) =>
       this.logs.insert(tx, orgId, {
+        flowId: flow.id,
         origin: 'test',
         conversationId: null,
         channelId: null,
@@ -100,18 +106,23 @@ export class FaqInsightsService {
   }
 
   /** The customer's unanswered message becomes a `learned` variation of the FAQ it should have reached. */
-  async learn(logUuid: string, input: LearnFaqLogInput): Promise<{ added: boolean }> {
+  async learn(
+    flowUuid: string,
+    logUuid: string,
+    input: LearnFaqLogInput,
+  ): Promise<{ added: boolean }> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     return this.db.tx(async (tx) => {
-      const log = await this.logs.findByUuid(tx, orgId, logUuid);
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
+      const log = await this.logs.findByUuid(tx, orgId, flow.id, logUuid);
       if (!log) throw AppError.notFound('Log entry', logUuid);
       if (!log.query) {
         throw AppError.validation('This message was not kept, so it cannot be learned.', [
           { path: 'id', message: 'Query logging was off when this message arrived.' },
         ]);
       }
-      const faq = await this.faqs.findByUuid(tx, orgId, input.faqId, cfg.embeddingModel);
+      const faq = await this.faqs.findByUuid(tx, orgId, flow.id, input.faqId, cfg.embeddingModel);
       if (!faq) throw AppError.notFound('FAQ', input.faqId);
       const have = await this.faqs.variationCount(tx, orgId, faq.id);
       if (have >= cfg.maxVariationsPerFaq) {
@@ -123,7 +134,7 @@ export class FaqInsightsService {
       }
       const created = await this.faqs.insertVariations(tx, orgId, faq.id, [log.query], 'learned');
       await this.logs.resolve(tx, orgId, log.internalId);
-      await this.logs.resolveSameQuery(tx, orgId, log.query);
+      await this.logs.resolveSameQuery(tx, orgId, flow.id, log.query);
       if (created.length > 0) {
         await this.audit.record(tx, {
           module: 'faqs',
@@ -136,13 +147,14 @@ export class FaqInsightsService {
     });
   }
 
-  async dismiss(logUuid: string): Promise<void> {
+  async dismiss(flowUuid: string, logUuid: string): Promise<void> {
     const orgId = RequestContextStore.orgId();
     await this.db.tx(async (tx) => {
-      const log = await this.logs.findByUuid(tx, orgId, logUuid);
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
+      const log = await this.logs.findByUuid(tx, orgId, flow.id, logUuid);
       if (!log) throw AppError.notFound('Log entry', logUuid);
       await this.logs.resolve(tx, orgId, log.internalId);
-      if (log.query) await this.logs.resolveSameQuery(tx, orgId, log.query);
+      if (log.query) await this.logs.resolveSameQuery(tx, orgId, flow.id, log.query);
     });
   }
 }

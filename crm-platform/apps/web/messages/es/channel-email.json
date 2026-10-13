@@ -1,0 +1,390 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Descartar"
+    },
+    "hub": {
+      "kicker": "Canales",
+      "title": "Correo electrónico",
+      "titleAccent": "buzones",
+      "intro": "Conecta tu Gmail, Microsoft 365 o cualquier buzón IMAP. Los correos de clientes llegan a la bandeja del equipo, una conversación por hilo, y tus respuestas salen desde la misma dirección.",
+      "inbox": "Abrir bandeja",
+      "channels": "Canales",
+      "loadError": "No se pudieron cargar tus buzones. Inténtalo de nuevo en un momento.",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
+      "connectedCount": "{count, plural, one {# buzón conectado} other {# buzones conectados}}",
+      "notConnected": "Sin conectar",
+      "usageLabel": "Buzones en uso",
+      "usage": "{used} de {limit} buzones",
+      "usageUnlimited": "{used, plural, one {# buzón} other {# buzones}}, sin límite",
+      "howTitle": "Cómo funciona",
+      "how": {
+        "connect": {
+          "title": "Conecta un buzón",
+          "body": "Inicia sesión con Google o Microsoft, o introduce los ajustes de tu servidor de correo, y permite que Threadwise lea y envíe correo de esa dirección."
+        },
+        "inbox": {
+          "title": "El correo llega a la bandeja",
+          "body": "El correo nuevo se descarga cada minuto. Cada hilo de correo se convierte en una conversación y cada buzón es su propia bandeja."
+        },
+        "reply": {
+          "title": "Responde desde la bandeja",
+          "body": "Tu respuesta sale desde el buzón dentro del mismo hilo, con Cc y Bcc si los añades."
+        },
+        "limit": {
+          "title": "Los buzones dependen de tu plan",
+          "body": "Tu plan define cuántos buzones puedes conectar. Los correos no cuentan para tu cuota de mensajes."
+        }
+      },
+      "connectedTitle": "Buzones conectados",
+      "total": "{count, plural, one {# buzón} other {# buzones}}",
+      "empty": "Aún no hay ningún buzón conectado. Conecta uno abajo para empezar a recibir correo en la bandeja.",
+      "addTitle": "Añadir un buzón",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Inicia sesión con la cuenta de Google propietaria del buzón, por ejemplo support@tuempresa.com."
+        },
+        "imap": {
+          "name": "Otro correo (IMAP / SMTP)",
+          "hint": "Cualquier otro proveedor de correo con usuario y contraseña."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Inicia sesión con una cuenta de trabajo o escuela de Microsoft."
+        }
+      },
+      "notReady": "{provider} aún no está configurado en esta plataforma. Pide al administrador de la plataforma que añada las credenciales.",
+      "limitReached": "Has usado los {limit, plural, one {# buzón} other {# buzones}} que permite tu plan. Elimina un buzón o pide a tu administrador que mejore el plan.",
+      "noPermission": "Puedes ver los buzones, pero solo quienes tienen permiso para gestionarlos pueden conectar uno.",
+      "connectFailed": "No se pudo iniciar el inicio de sesión. Inténtalo de nuevo.",
+      "connect": {
+        "google": "Conectar Gmail",
+        "microsoft": "Conectar Microsoft 365",
+        "imap": "Conectar IMAP / SMTP"
+      },
+      "imapConnected": "Buzón conectado. Se están descargando a la bandeja los correos de los últimos 7 días.",
+      "imapReconnected": "Buzón reconectado.",
+      "scope": {
+        "title": "¿Para quién es este buzón?",
+        "shared": "Compartido",
+        "sharedHint": "Un buzón de la empresa, como soporte@. Todo el equipo puede atender sus conversaciones.",
+        "personal": "Personal",
+        "personalHint": "Tu propio buzón. Solo tú puedes leer sus conversaciones.",
+        "onlyPersonal": "Puedes conectar tu propio buzón personal. Solo tú puedes leer sus conversaciones."
+      }
+    },
+    "card": {
+      "status": {
+        "connected": "Conectado",
+        "needs_reauth": "Requiere reconexión",
+        "error": "Error",
+        "disconnected": "Desconectado"
+      },
+      "sendsAs": "Las respuestas salen como",
+      "displayName": "Nombre visible",
+      "edit": "Editar",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "renamed": "Nombre visible guardado.",
+      "needsReauthHint": "El proveedor ya no nos deja leer este buzón. Reconéctalo para volver a recibir y enviar correo.",
+      "lastError": "Último problema: {error}",
+      "lastSynced": "Última sincronización",
+      "neverSynced": "Aún sin sincronizar",
+      "conversations": "Conversaciones",
+      "openInbox": "Abrir en la bandeja",
+      "sync": "Sincronizar ahora",
+      "syncStarted": "Sincronización iniciada. El correo nuevo aparecerá en la bandeja en un momento.",
+      "reconnect": "Reconectar",
+      "remove": "Eliminar",
+      "removeTitle": "Eliminar buzón",
+      "removeConfirm": "¿Eliminar {address}? Sus conversaciones permanecen en la bandeja como historial de solo lectura y ya no se recibe ni se envía correo desde él. Puedes volver a conectar la misma dirección más adelante.",
+      "removed": "Buzón eliminado.",
+      "failed": "No se pudo actualizar el buzón. Inténtalo de nuevo.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Compartido",
+        "personal": "Personal",
+        "personalOf": "Personal · {name}"
+      },
+      "push": "Actualizaciones en vivo",
+      "pushHint": "El correo nuevo llega en cuanto el proveedor lo avisa.",
+      "signature": "Firma",
+      "signatureHint": "Las respuestas de este buzón llevan su firma.",
+      "summaryNote": "Este es el buzón personal de otra persona. Solo su propietario puede leerlo y gestionarlo.",
+      "sendLimit": "Límite de envíos por hora",
+      "limitDefault": "Valor de la plataforma",
+      "limitPerHour": "{count, plural, one {# correo por hora} other {# correos por hora}}",
+      "limitSaved": "Límite de envíos guardado.",
+      "needsReauthImap": "El servidor de correo rechazó la contraseña guardada. Reconecta e introduce la contraseña de nuevo."
+    },
+    "outcome": {
+      "connected": "Buzón conectado. Se está descargando a la bandeja el correo de los últimos 7 días.",
+      "denied": "Se canceló el inicio de sesión, así que no se conectó nada.",
+      "missing_scope": "No se dio acceso para leer y enviar correo. Conecta de nuevo y permite todos los permisos en la pantalla de inicio de sesión.",
+      "limit": "Se alcanzó el límite de buzones de tu plan, así que este buzón no se conectó.",
+      "not_configured": "El inicio de sesión de este proveedor aún no está configurado en esta plataforma. Pregunta al administrador de la plataforma.",
+      "wrong_account": "Iniciaste sesión con una cuenta distinta a la del buzón que se reconecta. Inicia sesión con la misma dirección.",
+      "failed": "Algo salió mal al conectar el buzón. Inténtalo de nuevo."
+    },
+    "errors": {
+      "notConfigured": "El inicio de sesión de este proveedor aún no está configurado en esta plataforma. Pregunta al administrador de la plataforma.",
+      "limit": "Se alcanzó el límite de buzones de tu plan.",
+      "unavailable": "Este buzón está desconectado o primero debe reconectarse.",
+      "sendRefused": "El proveedor de correo rechazó enviar este correo. Revisa las direcciones y el tamaño e inténtalo de nuevo.",
+      "wrongAccount": "Es una cuenta distinta a la de este buzón. Inicia sesión con la misma dirección.",
+      "locked": "La integración de correo no forma parte de tu plan.",
+      "changed": "Este buzón se modificó en otro lugar. Se recargó la lista, inténtalo de nuevo.",
+      "personalDisabled": "Los buzones personales están desactivados en este espacio de trabajo.",
+      "personalNotAllowed": "No tienes permiso para conectar un buzón personal.",
+      "providerUnsupported": "Este proveedor de correo no está disponible.",
+      "rateLimited": "Este buzón alcanzó su límite de envíos. Inténtalo más tarde."
+    },
+    "guide": {
+      "title": "Guía de configuración",
+      "google": {
+        "title": "Conectar Gmail o Google Workspace",
+        "p1": "Elige Conectar Gmail e inicia sesión con la cuenta propietaria del buzón, como una dirección compartida support@ o sales@.",
+        "p2": "En la pantalla de Google, permite leer y enviar correo. Sin ambos permisos no se puede recibir ni enviar correo.",
+        "p3": "Volverás aquí y los primeros 7 días de correo se descargarán en la bandeja sin avisar a nadie.",
+        "p4": "Añade más buzones de la misma forma, hasta el número que permita tu plan. Cada uno aparece como su propia bandeja."
+      },
+      "consent": {
+        "title": "Qué leemos y enviamos",
+        "p1": "Leemos el correo de tu bandeja de entrada para mostrarlo en la bandeja del equipo. Se omiten el spam, la papelera y los borradores.",
+        "p2": "El correo que enviamos nosotros mismos desde tu cuenta en otro lugar no se copia a la bandeja.",
+        "p3": "Las respuestas automáticas, los rebotes y el correo de listas de distribución se guardan y se marcan como Automatizado.",
+        "p4": "Al eliminar un buzón se deja de leer y enviar. Sus conversaciones pasadas permanecen como historial de solo lectura."
+      },
+      "trouble": {
+        "title": "Si algo no funciona",
+        "p1": "Necesita reconexión significa que el proveedor revocó o caducó el acceso, o que el servidor de correo rechazó la contraseña. Pulsa Reconectar.",
+        "p2": "Error muestra el último problema. Selecciona Sincronizar ahora para reintentar; si sigue fallando, reconecta el buzón.",
+        "p3": "Conectar se desactiva cuando la plataforma no tiene configurado el inicio de sesión de ese proveedor o se alcanzó el límite de buzones de tu plan.",
+        "p4": "Las imágenes de un correo permanecen ocultas hasta que eliges Cargar imágenes en la conversación."
+      },
+      "other": {
+        "title": "Conectar Microsoft 365 u otro proveedor de correo",
+        "p1": "Para Microsoft 365 u Outlook, elige Conectar Microsoft 365 e inicia sesión con la cuenta de trabajo o de centro educativo propietaria del buzón.",
+        "p2": "Para cualquier otro proveedor, elige Conectar IMAP / SMTP e introduce el servidor, puerto, seguridad, usuario y contraseña que da tu proveedor.",
+        "p3": "Primero iniciamos sesión en el servidor de entrada y en el de salida. Si uno rechaza, el mensaje dice cuál.",
+        "p4": "Algunos proveedores piden una contraseña de aplicación en lugar de tu contraseña normal. Créala en los ajustes de seguridad de tu proveedor."
+      },
+      "personal": {
+        "title": "Buzones personales y uso compartido",
+        "p1": "Un administrador activa los buzones personales en Uso compartido del correo y elige quién puede conectar uno.",
+        "p2": "Al conectar un buzón, elige Personal. Solo tú puedes leer sus conversaciones en la bandeja.",
+        "p3": "Los administradores solo ven un resumen de tu buzón, salvo que el espacio de trabajo les permita leer buzones personales.",
+        "p4": "Desactivar los buzones personales nunca abre un buzón personal existente a otras personas."
+      }
+    },
+    "thread": {
+      "noSubject": "(sin asunto)",
+      "automated": "Automatizado",
+      "from": "De",
+      "to": "Para",
+      "cc": "Cc",
+      "date": "Fecha",
+      "imagesBlocked": "Las imágenes de internet están ocultas.",
+      "loadImages": "Cargar imágenes",
+      "frameTitle": "Correo: {subject}",
+      "truncated": "Este correo era largo, así que solo se muestra la primera parte.",
+      "noBody": "Este correo no tiene texto.",
+      "attachments": "{count, plural, one {# archivo adjunto} other {# archivos adjuntos}}",
+      "tooLarge": "demasiado grande para conservarlo ({size})",
+      "download": "Descargar {name} ({size})",
+      "bounce": {
+        "title": "No se entregó a {address}.",
+        "reason": "Motivo: {reason}",
+        "hard": "La dirección fue rechazada de forma definitiva. Revisa que no tenga errores y envía un correo nuevo a la dirección corregida.",
+        "soft": "Parece algo temporal, como un buzón lleno. Puede funcionar si lo envías más tarde, o puedes editar la dirección."
+      }
+    },
+    "composer": {
+      "toggle": "Cc, Bcc y asunto",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Asunto",
+      "addressesPlaceholder": "nombre@ejemplo.com, otro@ejemplo.com",
+      "problem": {
+        "ccInvalid": "Estas direcciones de Cc no son válidas: {list}",
+        "bccInvalid": "Estas direcciones de Bcc no son válidas: {list}",
+        "ccTooMany": "Cc admite como máximo 20 direcciones.",
+        "bccTooMany": "Bcc admite como máximo 20 direcciones.",
+        "subjectTooLong": "El asunto puede tener como máximo 998 caracteres."
+      },
+      "editor": {
+        "toolbar": "Formato de texto",
+        "bold": "Negrita",
+        "italic": "Cursiva",
+        "underline": "Subrayado",
+        "bulletList": "Lista con viñetas",
+        "numberedList": "Lista numerada",
+        "quote": "Cita",
+        "link": "Añadir enlace",
+        "clear": "Quitar formato",
+        "linkAddress": "Dirección del enlace",
+        "linkApply": "Añadir",
+        "linkInvalid": "Escribe una dirección web, de correo o de teléfono.",
+        "label": "Respuesta por correo",
+        "toPlain": "Cambiar a texto sin formato",
+        "toRich": "Cambiar a texto con formato",
+        "hint": "Pulsa Ctrl+Intro (Cmd+Intro en Mac) para enviar. Intro inserta un salto de línea."
+      },
+      "attach": {
+        "dismiss": "Descartar",
+        "list": "Archivos adjuntos ({count})",
+        "uploading": "Subiendo {name}",
+        "ready": "Adjunto",
+        "failed": "Error al subir",
+        "retry": "Reintentar",
+        "remove": "Quitar {name}",
+        "waiting": "Esperando a que terminen de subirse los archivos.",
+        "fixFailed": "Reintenta o quita los archivos que no se subieron.",
+        "refused": {
+          "empty": "{name} está vacío y no se añadió.",
+          "tooLarge": "{name} supera {max} y no se añadió.",
+          "tooMany": "En un correo caben solo {count} archivos. {name} no se añadió.",
+          "totalTooLarge": "Con {name} el correo sería demasiado grande y no se añadió.",
+          "blocked": "{name} es un tipo de archivo que el correo no puede llevar y no se añadió."
+        }
+      },
+      "error": {
+        "rateLimited": "Este buzón alcanzó su límite de envíos por hora. {seconds, plural, =0 {Inténtalo de nuevo dentro de un rato.} other {Inténtalo de nuevo en # s.}}",
+        "attachmentTooLarge": "Un archivo es demasiado grande para adjuntarlo. Cada archivo puede pesar como máximo 10 MB y todos juntos 20 MB.",
+        "tooManyAttachments": "Demasiados archivos. Un correo admite como máximo 10.",
+        "attachmentGone": "Un archivo adjunto caducó o se eliminó. Adjúntalo de nuevo.",
+        "signatureGone": "La firma elegida ya no existe. Elige otra.",
+        "sendRefused": "El proveedor de correo rechazó este mensaje. Revisa las direcciones y el tamaño e inténtalo de nuevo.",
+        "unavailable": "Este buzón está desconectado o hay que reconectarlo primero.",
+        "attachmentBlocked": "Ese tipo de archivo no se puede enviar por correo.",
+        "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+        "generic": "No se pudo enviar el correo. Inténtalo de nuevo.",
+        "bodyTooLong": "Este correo es demasiado largo para enviarlo. Acórtalo e inténtalo de nuevo."
+      },
+      "signature": {
+        "label": "Firma",
+        "auto": "Predeterminada ({name})",
+        "autoNone": "Predeterminada (ninguna)",
+        "none": "Sin firma",
+        "mine": "{name} (mía)",
+        "shared": "{name} (buzón)",
+        "preview": "Vista previa de la firma",
+        "noneShown": "No se añadirá ninguna firma."
+      }
+    },
+    "inbox": {
+      "group": "Correo electrónico"
+    },
+    "imap": {
+      "eyebrow": "Otro correo",
+      "title": "Conectar buzón IMAP / SMTP",
+      "reconnectTitle": "Reconectar buzón IMAP / SMTP",
+      "close": "Cerrar",
+      "intro": "Introduce los ajustes que tu proveedor de correo da para esta dirección. Iniciamos sesión en ambos servidores antes de guardar nada.",
+      "reconnectIntro": "Introduce la contraseña de nuevo. Iniciamos sesión en ambos servidores antes de guardar nada.",
+      "address": "Dirección del buzón",
+      "displayName": "Nombre para mostrar",
+      "preset": "Proveedor de correo",
+      "presetHint": "Al elegir uno se rellenan los ajustes del servidor. Aún puedes cambiarlos.",
+      "presetCustom": "Otro (introducir los ajustes)",
+      "incoming": "Correo entrante (IMAP)",
+      "outgoing": "Correo saliente (SMTP)",
+      "host": "Servidor",
+      "port": "Puerto",
+      "securityLabel": "Seguridad",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Ninguna"
+      },
+      "username": "Usuario",
+      "password": "Contraseña",
+      "passwordHint": "Se guarda cifrada y no se vuelve a mostrar.",
+      "passwordAgain": "Escribe la contraseña de nuevo. Nunca se muestra.",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "sameCredentials": "Usar el mismo usuario y contraseña para enviar",
+      "noEncryption": "Esta conexión no está cifrada. Cualquiera en la red podría leer la contraseña y el correo.",
+      "verifyNote": "El certificado del servidor siempre se comprueba.",
+      "cancel": "Cancelar",
+      "submit": "Verificar y conectar",
+      "reconnectSubmit": "Verificar y reconectar",
+      "verifying": "Verificando",
+      "errors": {
+        "required": "Este campo es obligatorio.",
+        "invalid": "Este valor no es válido."
+      },
+      "failure": {
+        "imapAuth": "El servidor de entrada (IMAP) rechazó el usuario o la contraseña. Compruébalos e inténtalo de nuevo.",
+        "smtpAuth": "El servidor de salida (SMTP) rechazó el usuario o la contraseña. Compruébalos e inténtalo de nuevo.",
+        "unreachable": "No se pudo llegar al servidor de correo o su certificado no es válido. Revisa el servidor, el puerto y la seguridad.",
+        "generic": "No se pudo conectar el buzón. Inténtalo de nuevo."
+      }
+    },
+    "sharing": {
+      "title": "Uso compartido del correo",
+      "intro": "Decide si las personas pueden conectar su propio buzón y quién puede verlo.",
+      "enabled": {
+        "title": "Buzones personales",
+        "body": "Permite que las personas conecten su propio buzón. Sus conversaciones solo son visibles para ellas."
+      },
+      "who": {
+        "title": "Quién puede conectar uno",
+        "body": "Solo pueden las personas con permiso para gestionar buzones personales.",
+        "admins": "Solo administradores",
+        "agents": "Administradores y agentes"
+      },
+      "admins": {
+        "title": "Los administradores pueden leer buzones personales",
+        "body": "Los administradores pueden abrir las conversaciones de los buzones personales de otras personas. Si está desactivado, solo ven un resumen."
+      },
+      "offNote": "Desactivar los buzones personales solo oculta la opción de conectar. Los buzones personales existentes siguen siendo privados para sus propietarios.",
+      "save": "Guardar",
+      "reset": "Descartar cambios",
+      "saved": "Uso compartido del correo guardado.",
+      "failed": "No se pudo guardar. Inténtalo de nuevo."
+    },
+    "signatures": {
+      "title": "Firmas",
+      "intro": "Una firma se añade al final de tus respuestas. Cada buzón puede tener una compartida y tú puedes tener la tuya, que se usa primero.",
+      "new": "Nueva firma",
+      "edit": "Editar firma",
+      "scope": "A quién pertenece",
+      "scopes": {
+        "user": "A mí",
+        "mailbox": "A un buzón",
+        "userBadge": "Mía",
+        "mailboxBadge": "Buzón"
+      },
+      "mailbox": "Buzón",
+      "pickMailbox": "Elige un buzón",
+      "mailboxRequired": "Elige un buzón.",
+      "name": "Nombre",
+      "nameRequired": "Ponle un nombre a la firma.",
+      "body": "Firma",
+      "bodyPlaceholder": "Tu nombre, cargo, teléfono, enlaces...",
+      "variables": "Puedes usar {name}, {title} y {phone}. Se rellenan con los datos de quien envía.",
+      "tooLong": "La firma es demasiado larga.",
+      "defaultUser": "Usar como mi firma predeterminada",
+      "defaultMailbox": "Usar como predeterminada de este buzón",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "loading": "Cargando firmas...",
+      "loadError": "No se pudieron cargar las firmas. Inténtalo de nuevo en un momento.",
+      "empty": "Todavía no hay firmas.",
+      "default": "Predeterminada",
+      "editShort": "Editar",
+      "delete": "Eliminar",
+      "confirmDelete": "Eliminar definitivamente",
+      "noPermission": "No tienes permiso para gestionar firmas.",
+      "changed": "Esta firma se cambió en otro lugar. La lista se recargó, inténtalo de nuevo.",
+      "failed": "No se pudo guardar la firma. Inténtalo de nuevo."
+    }
+  }
+}

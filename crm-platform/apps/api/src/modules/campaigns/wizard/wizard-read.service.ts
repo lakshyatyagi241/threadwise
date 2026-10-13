@@ -108,7 +108,7 @@ export class WizardReadService {
 
   /** The connected WhatsApp numbers a broadcast can be sent from (the composer's own list), default engine first. */
   async listSenders(): Promise<WizardSendersResponse> {
-    const { senders } = await this.compose.compose();
+    const { senders, hidden } = await this.compose.compose();
     const { orgId } = RequestContextStore.require();
     const wabaIds = senders
       .filter((x) => x.engine === 'waba')
@@ -131,6 +131,7 @@ export class WizardReadService {
         configs.set(r.uuid, { status: r.status, meta: r.meta_json });
     }
     return {
+      hidden,
       data: senders.map((x) => {
         const c = configs.get(x.key.slice(x.engine.length + 1));
         return {

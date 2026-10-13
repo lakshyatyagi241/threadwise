@@ -121,6 +121,12 @@
       "selectedActionsNone": "Liên hệ đã chọn (hãy chọn hàng trước)",
       "modifyColumns": "Chỉnh sửa cột",
       "resetColumns": "Đặt lại về mặc định",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Tên liên hệ",
       "colPhone": "Số điện thoại",
       "colEmailId": "Email",
@@ -170,7 +176,8 @@
       "import": "Nhập",
       "columns": "Cột",
       "addColumnField": "Thêm trường tùy chỉnh làm cột",
-      "kanbanView": "Chế độ bảng (theo giai đoạn)"
+      "kanbanView": "Chế độ bảng (theo giai đoạn)",
+      "colLeadScore": "Điểm khách hàng tiềm năng"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -406,7 +413,8 @@
         "address": "Địa chỉ",
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
-        "source": "Nguồn"
+        "source": "Nguồn",
+        "consent": "Đồng ý tiếp thị (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Lần xuất",
-        "hint": "Các lần xuất liên hệ từ Hub, mới nhất trước. Tệp đã tải xuống không được lưu giữ.",
+        "hint": "Các lần xuất danh bạ từ Hub, mới nhất trước. Mỗi tệp được giữ 30 ngày để bạn và đồng nghiệp có quyền xuất có thể tải lại.",
         "empty": "Chưa có lần xuất nào.",
         "by": "Bởi",
         "rows": "Liên hệ",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Liên hệ đã đánh dấu",
           "filter": "Tất cả liên hệ khớp"
-        }
+        },
+        "download": "Tải xuống",
+        "noFile": "Không được lưu",
+        "keptUntil": "Giữ đến {date}",
+        "downloadFailed": "Không thể tải tệp. Có thể tệp đã hết hạn."
       }
     }
   }

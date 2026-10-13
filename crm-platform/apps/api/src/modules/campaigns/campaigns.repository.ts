@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { assemblePhone } from '../broadcasts';
+import { hasGrantedConsentSql } from '../contact-consent';
 
 /** `IN (...)` lists are chunked so a big audience never builds one giant statement. */
 export const CHUNK = 1_000;
@@ -495,7 +496,8 @@ export class CampaignsRepository {
     tx: Tx,
     orgId: number,
     id: number,
-  ): Promise<{ optedOut: number; duplicates: number }> {
+    requireConsent = false,
+  ): Promise<{ optedOut: number; duplicates: number; noConsent: number }> {
     const settled = sql`('sent','delivered','read','responded','unsubscribed','skipped')`;
     const out = await tx.execute(sql`
       UPDATE wp_campaign_contacts r SET status = 'unsubscribed', is_unsubscribed = true, unsubscribed = true
@@ -503,6 +505,16 @@ export class CampaignsRepository {
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
         AND c.is_unsubscribed AND r.status NOT IN ${settled}
       RETURNING r.id`);
+    // The workspace requires a recorded consent for marketing and this contact has none: not sent, not a failure.
+    const noConsent = requireConsent
+      ? await tx.execute(sql`
+          UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = 'no recorded consent'
+          FROM contacts c
+          WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
+            AND NOT c.is_unsubscribed AND r.status NOT IN ${settled}
+            AND NOT ${hasGrantedConsentSql('c')}
+          RETURNING r.id`)
+      : { rows: [] as unknown[] };
     const dup = await tx.execute(sql`
       UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = 'duplicate number — already sent this run'
       FROM (
@@ -515,7 +527,11 @@ export class CampaignsRepository {
       ) d
       WHERE r.org_id = ${orgId} AND r.id = d.id AND d.rn > 1
       RETURNING r.id`);
-    return { optedOut: out.rows.length, duplicates: dup.rows.length };
+    return {
+      optedOut: out.rows.length,
+      duplicates: dup.rows.length,
+      noConsent: noConsent.rows.length,
+    };
   }
 
   /**

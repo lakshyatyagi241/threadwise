@@ -11,7 +11,7 @@ import { usageView } from '../lib/manage';
 import { ChevronLeftIcon, flip } from './icons';
 import { TEXT_LINK } from './ui';
 
-export type HeaderSection = 'apps' | 'integrations' | 'installed' | 'requests';
+export type HeaderSection = 'apps' | 'integrations' | 'addons' | 'installed' | 'requests';
 
 /** "Installed (3 of 10)": the usage of the plan's installed-apps cap, as the installed list reports it. Says nothing until it is known. */
 export function InstalledLinkLabel() {
@@ -45,8 +45,9 @@ export function MarketplaceHeader({ section }: { section: HeaderSection }) {
         ? 'border-primary text-foreground'
         : 'border-transparent text-muted-foreground hover:text-foreground',
     );
+  // Sticky under the 56px top bar; the bleed (-mx / px) lets its background cover the page padding while the cards scroll beneath it.
   return (
-    <header className="space-y-3">
+    <header className="sticky top-14 z-[35] -mx-4 -mt-4 space-y-3 bg-background px-4 pt-4 md:-mx-6 md:-mt-6 md:px-6 md:pt-6">
       <div>
         <h1 className="text-2xl font-semibold">{t('title')}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{t('subtitle')}</p>
@@ -66,6 +67,13 @@ export function MarketplaceHeader({ section }: { section: HeaderSection }) {
               </Link>
             );
           })}
+          <Link
+            href={mktRoutes.addons}
+            aria-current={section === 'addons' ? 'page' : undefined}
+            className={tabClass(section === 'addons')}
+          >
+            {t('tabs.addon')}
+          </Link>
         </nav>
         <nav
           aria-label={t('moreLabel')}
@@ -74,14 +82,22 @@ export function MarketplaceHeader({ section }: { section: HeaderSection }) {
           <Link
             href={mktRoutes.installed}
             aria-current={section === 'installed' ? 'page' : undefined}
-            className={cn(TEXT_LINK, section === 'installed' && 'underline')}
+            className={cn(
+              TEXT_LINK,
+              'inline-flex min-h-7 items-center',
+              section === 'installed' && 'underline',
+            )}
           >
             <InstalledLinkLabel />
           </Link>
           <Link
             href={mktRoutes.requests}
             aria-current={section === 'requests' ? 'page' : undefined}
-            className={cn(TEXT_LINK, section === 'requests' && 'underline')}
+            className={cn(
+              TEXT_LINK,
+              'inline-flex min-h-7 items-center',
+              section === 'requests' && 'underline',
+            )}
           >
             {t('request')}
           </Link>

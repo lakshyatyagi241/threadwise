@@ -121,6 +121,12 @@
       "selectedActionsNone": "Contatos selecionados (selecione as linhas primeiro)",
       "modifyColumns": "Modificar colunas",
       "resetColumns": "Restaurar padrão",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nome do contato",
       "colPhone": "Número de telefone",
       "colEmailId": "E-mail",
@@ -170,7 +176,8 @@
       "import": "Importar",
       "columns": "Colunas",
       "addColumnField": "Adicionar um campo personalizado como coluna",
-      "kanbanView": "Visualização em quadro (por estágio)"
+      "kanbanView": "Visualização em quadro (por estágio)",
+      "colLeadScore": "Pontuação do lead"
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",
@@ -406,7 +413,8 @@
         "address": "Endereço",
         "memo": "Memorando",
         "status": "Status",
-        "source": "Origem"
+        "source": "Origem",
+        "consent": "Consentimento de marketing (sim / não)"
       },
       "notInFile": "Não está no arquivo",
       "columnN": "Coluna {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Exportações",
-        "hint": "Exportações de contatos feitas no Hub, as mais recentes primeiro. O arquivo baixado não é guardado.",
+        "hint": "Exportações de contatos do Hub, das mais recentes às mais antigas. Cada arquivo é mantido por 30 dias para que você e os colegas com permissão de exportar possam baixá-lo de novo.",
         "empty": "Ainda não há exportações.",
         "by": "Por",
         "rows": "Contatos",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Contatos marcados",
           "filter": "Tudo que corresponde"
-        }
+        },
+        "download": "Baixar",
+        "noFile": "Não salvo",
+        "keptUntil": "Mantido até {date}",
+        "downloadFailed": "Não foi possível baixar o arquivo. Ele pode ter expirado."
       }
     }
   }

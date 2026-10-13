@@ -471,6 +471,28 @@ export class WabaAdminClient implements WabaAdminPort {
     });
   }
 
+  async requestVerificationCode(
+    conn: WabaConnection,
+    method: 'SMS' | 'VOICE',
+    language: string,
+  ): Promise<void> {
+    if (!conn.registry && !conn.accessToken) throw noToken();
+    await this.viaRoute(conn, {
+      method: 'POST',
+      path: `/${conn.phoneNumberId}/request_code`,
+      json: { code_method: method, language },
+    });
+  }
+
+  async verifyCode(conn: WabaConnection, code: string): Promise<void> {
+    if (!conn.registry && !conn.accessToken) throw noToken();
+    await this.viaRoute(conn, {
+      method: 'POST',
+      path: `/${conn.phoneNumberId}/verify_code`,
+      json: { code },
+    });
+  }
+
   async unsubscribe(conn: WabaConnection): Promise<void> {
     if (!conn.registry && !conn.accessToken) throw noToken();
     await this.viaRoute(conn, {

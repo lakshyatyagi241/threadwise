@@ -97,7 +97,7 @@ export function WizardScreen() {
               href={
                 mode && mode.kind !== 'list' && wizard.data && wizard.data.shops.length > 0
                   ? LIST_HREF
-                  : '/channels'
+                  : '/channels/whatsapp'
               }
               title={t('back')}
               aria-label={t('back')}
@@ -113,7 +113,7 @@ export function WizardScreen() {
             </div>
           </div>
           <Link
-            href="/channels"
+            href="/channels/whatsapp"
             className="shrink-0 text-xs font-semibold text-primary hover:underline"
           >
             {t('manageConnections')}
@@ -143,7 +143,7 @@ export function WizardScreen() {
               <Eyebrow>{t('gate.step')}</Eyebrow>
               <h2 className="mt-0.5 text-xl font-semibold leading-tight">{t('gate.title')}</h2>
               <p className="mt-1.5 text-sm text-muted-foreground">{t('gate.message')}</p>
-              <LinkButton href="/channels" className="mt-4 rounded-full">
+              <LinkButton href="/channels/whatsapp" className="mt-4 rounded-full">
                 {t('gate.action')} <ArrowIcon className="size-3 rtl:rotate-180" />
               </LinkButton>
             </div>

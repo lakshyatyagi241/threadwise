@@ -27,6 +27,7 @@ import {
   useToast,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
 import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
@@ -113,10 +114,13 @@ export function SubmissionsScreen({ formId }: { formId: string }) {
   const opener = useRef<HTMLElement | null>(null);
   // A notification links here with `?submission=<id>`: open that submission, even when it is not in the first page of the list (a
   // detail carries everything a list row does, so it stands in for the row).
+  // Adjusted while rendering, when the link changes, rather than in an effect (which would render the stale state first).
   const linked = params.get('submission');
-  useEffect(() => {
+  const [seenLink, setSeenLink] = useState<string | null>(null);
+  if (linked !== seenLink) {
+    setSeenLink(linked);
     if (linked && UUID_PARAM.test(linked)) setOpenId(linked);
-  }, [linked]);
+  }
   const listed = openId ? (rows.find((r) => r.id === openId) ?? null) : null;
   const fetched = useSubmission(formId, openId && !listed ? openId : null);
   const open = listed ?? (openId ? (fetched.data ?? null) : null);
@@ -508,7 +512,7 @@ function Preview({ s }: { s: FormSubmissionSummary }) {
   const t = useTranslations('web-forms.submissions');
   const { name, email, phone } = s.preview;
   return (
-    <span className="block min-w-0 text-start">
+    <span {...AGENT_PII} className="block min-w-0 text-start">
       {name ? (
         <span className="block truncate font-medium" dir="auto">
           {name}
@@ -1013,7 +1017,7 @@ export function SubmissionDrawer({
                 {d.answers.length === 0 ? (
                   <p className="text-sm text-muted-foreground">{t('drawer.noAnswers')}</p>
                 ) : (
-                  <dl className="space-y-3" data-testid="answers">
+                  <dl {...AGENT_IGNORE} className="space-y-3" data-testid="answers">
                     {d.answers.map((a) => {
                       const v = answerView(a.value);
                       return (

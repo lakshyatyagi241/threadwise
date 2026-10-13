@@ -34,7 +34,8 @@
         "registered": "« {name} » enregistré sur l’API Cloud.",
         "disconnected": "« {name} » déconnecté.",
         "removed": "« {name} » supprimé.",
-        "warningsTitle": "Connecté, mais vérifiez ceci :"
+        "warningsTitle": "Connecté, mais vérifiez ceci :",
+        "verified": "« {name} » est vérifié."
       },
       "notReady": {
         "title": "L’inscription intégrée n’est pas configurée",
@@ -81,7 +82,8 @@
         "register": "Enregistrer",
         "meta": "Meta",
         "disconnect": "Déconnecter",
-        "remove": "Supprimer"
+        "remove": "Supprimer",
+        "verify": "Vérifier le numéro"
       },
       "confirm": {
         "fixInboundTitle": "Corriger les messages entrants ?",
@@ -100,6 +102,17 @@
         "pin": "Code PIN en deux étapes (facultatif)",
         "pinError": "Le code PIN comporte 6 chiffres",
         "submit": "Enregistrer"
+      },
+      "verifyDialog": {
+        "title": "Vérifier ce numéro",
+        "message": "Meta enverra un code à 6 chiffres au {phone}. Choisissez comment le recevoir.",
+        "enterCode": "Saisissez le code à 6 chiffres que Meta a envoyé au {phone}.",
+        "sendSms": "Envoyer le code par SMS",
+        "sendVoice": "Envoyer le code par appel",
+        "code": "Code de vérification",
+        "codeError": "Le code comporte 6 chiffres",
+        "submit": "Vérifier",
+        "resend": "Envoyer un nouveau code"
       }
     },
     "connect": {

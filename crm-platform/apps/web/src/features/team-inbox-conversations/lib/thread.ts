@@ -1,8 +1,10 @@
 import {
   canAdvanceMessageStatus,
   type ConversationNote,
+  type EmailReplyExtras,
   type MessageResponse,
   type MessageStatus,
+  type WaGroupMention,
 } from '@crm/contracts';
 import { dayKey } from './time';
 
@@ -19,12 +21,18 @@ export interface PendingSend {
   body: string;
   /** The message this send answers (its `id`), or null. */
   replyToMessageId?: string | null;
+  /** Email conversations: cc, bcc and subject of the reply, kept so a retry sends them again. */
+  email?: EmailReplyExtras;
+  /** Personal-number group text: the members @mentioned in `body` (kept so a retry sends them again). */
+  mentions?: WaGroupMention[];
   /** For a media send: what the bubble shows while it goes. */
   media: { mediaId: string; name: string; mime: string; sizeBytes: number | null } | null;
   /** `sending` until the server answered; `failed` when the request itself was refused or never arrived. */
   status: 'sending' | 'failed';
   /** An error code the screen turns into a sentence. */
   error: string | null;
+  /** Seconds to wait before trying again, when the refusal said so (an email rate limit). */
+  retryAfterS?: number;
   createdAt: string;
 }
 
@@ -63,7 +71,7 @@ export type ThreadAction =
       at: string;
     }
   | { type: 'send'; pending: PendingSend }
-  | { type: 'sendFailed'; clientMessageId: string; error: string }
+  | { type: 'sendFailed'; clientMessageId: string; error: string; retryAfterS?: number }
   | { type: 'sendRetry'; clientMessageId: string }
   | { type: 'dismiss'; clientMessageId: string };
 
@@ -192,7 +200,12 @@ export function threadReducer(state: ThreadState, action: ThreadAction): ThreadS
         ...state,
         pending: state.pending.map((p) =>
           p.clientMessageId === action.clientMessageId
-            ? { ...p, status: 'failed', error: action.error }
+            ? {
+                ...p,
+                status: 'failed',
+                error: action.error,
+                ...(action.retryAfterS !== undefined ? { retryAfterS: action.retryAfterS } : {}),
+              }
             : p,
         ),
       };

@@ -64,8 +64,14 @@ export const QUEUES = {
   MKT_INBOUND: 'mkt-inbound',
   /** One job per bell row that may deserve a browser (Web Push) notification (BL-097). Own queue: a slow push service must not hold the outbox consumers or any other job. */
   WEB_PUSH: 'web-push',
+  /** One job per connected Gmail mailbox (TW-MAIL-021): reads what arrived since the last sync and stores it in the inbox. Own queue: a slow Google must not hold any other job. */
+  MAIL_SYNC: 'mail-sync',
   /** One job per requested export of the message delivery log: reads up to a year of events (live and archived) into a CSV and mails the requester. Own queue: a year-long export must not hold a send or a receipt. */
   MSG_LOG_EXPORT: 'msg-log-export',
+  /** One job per contact to score with AI (LSC): the vendor call and the score write. Own queue: a slow AI vendor must not hold any other job. */
+  LSC_SCORE: 'lsc-score',
+  /** One job per requested export of the consent proof above the direct download's 50,000 rows: reads the ledger into a CSV and mails the requester. Own queue: a large export must not hold a send or a receipt. */
+  CONSENT_EXPORT: 'consent-export',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

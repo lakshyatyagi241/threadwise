@@ -1,8 +1,10 @@
 import {
+  type BuilderNode,
   call,
   customerAsks,
   enableAutomation,
   expect,
+  faqUrl,
   flowGraph,
   go,
   login,
@@ -11,14 +13,13 @@ import {
   repliesTo,
   seedBuilderFlow,
   seedFaq,
+  type Sim,
   simulator,
   sql,
+  type State,
   tabTo,
   test,
   waitIndexed,
-  type BuilderNode,
-  type Sim,
-  type State,
   type Workspace,
 } from './support';
 import type { Locator, Page } from '@playwright/test';
@@ -38,30 +39,36 @@ let n = 0;
 const tag = () => `Fn${Date.now().toString(36)}${(n++).toString(36)}`;
 
 const BIG = { width: 1600, height: 1000 };
-const MIN_SCORE_MSG = 'Enter a number from 0.05 to 0.99, or use the workspace setting.';
+const MIN_SCORE_MSG = "Enter a number from 0.05 to 0.99, or use this flow's setting.";
 const SAVE_BLOCKED =
-  '"Answer from FAQ" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the workspace setting.';
+  '"Answer from FAQ" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow\'s setting.';
 
-test.beforeAll(async ({ browser }) => {
-  test.setTimeout(240_000);
-  ws = await newWorkspace('flownode');
-  enableAutomation(ws);
-  await seedFaq(ws, {
+/**
+ * The FAQs of a flow: the "Answer from FAQ" step answers from the FAQs of the flow it is in, so every flow a test builds gets its own
+ * two (a Shipping one and an Account one). The phrasings are what the customer journeys type.
+ */
+async function standardFaqs(w: Workspace, flow: string) {
+  await seedFaq(w, {
+    owner: flow,
     question: 'Where is my order?',
     answerText: 'Your order ships tomorrow.',
     category: 'Shipping',
     variations: ['faqnodea where is my order', 'faqnoded where is my order'],
   });
-  await seedFaq(ws, {
+  await seedFaq(w, {
+    owner: flow,
     question: 'Reset my password',
     answerText: 'Use the reset link.',
     category: 'Account',
     variations: ['faqnodec reset my password'],
   });
-  await waitIndexed(ws);
+}
+
+test.beforeAll(async ({ browser }) => {
+  test.setTimeout(240_000);
+  ws = await newWorkspace('flownode', { builder: 'advanced' });
   state = await login(browser, ws.email);
-  empty = await newWorkspace('flownodeempty');
-  enableAutomation(empty);
+  empty = await newWorkspace('flownodeempty', { builder: 'advanced' });
   emptyState = await login(browser, empty.email);
 });
 
@@ -105,8 +112,14 @@ const faqNode = (id: string, data: Record<string, unknown> = {}): BuilderNode =>
   },
 });
 /** Trigger, an FAQ node `f`, and a message on each exit, all wired. */
-function wiredFlow(w: Workspace, name: string, data: Record<string, unknown> = {}, opts = {}) {
-  return seedBuilderFlow(
+async function wiredFlow(
+  w: Workspace,
+  name: string,
+  data: Record<string, unknown> = {},
+  opts: { keywords?: string; published?: boolean; faqs?: boolean } = {},
+) {
+  const { faqs = true, ...flowOpts } = opts;
+  const uuid = seedBuilderFlow(
     w,
     name,
     [BRANCHES[0]!, faqNode('f', data), BRANCHES[1]!, BRANCHES[2]!],
@@ -115,8 +128,10 @@ function wiredFlow(w: Workspace, name: string, data: Record<string, unknown> = {
       ['f', 'matched', 'A'],
       ['f', 'no_match', 'B'],
     ],
-    opts,
+    flowOpts,
   );
+  if (faqs) await standardFaqs(w, uuid);
+  return uuid;
 }
 
 /**
@@ -217,6 +232,7 @@ test.describe('in the advanced builder', () => {
     test.setTimeout(240_000);
     const t = tag();
     const uuid = seedBuilderFlow(ws, t, BRANCHES, []);
+    await standardFaqs(ws, uuid);
     const { page } = await open(browser, state, watch, { viewport: BIG });
     await openBuilder(page, uuid, 3);
 
@@ -229,7 +245,7 @@ test.describe('in the advanced builder', () => {
     await expect(card).toContainText('Answer from FAQ');
     await expect(card).toContainText('{{user_message}}');
     await expect(card).toContainText('All FAQs');
-    await expect(card).toContainText('workspace score');
+    await expect(card).toContainText('flow score');
     await expect(card).toContainText('save → {{faq}}');
     await expect(card).toContainText('answered');
     await expect(card).toContainText('no match');
@@ -254,7 +270,7 @@ test.describe('in the advanced builder', () => {
       .toEqual(['All FAQs', 'Account', 'Shipping']);
     await category.selectOption('Shipping');
     const useWorkspace = field(page, 'Minimum score').getByRole('checkbox', {
-      name: 'Use the workspace setting',
+      name: "Use this flow's setting",
     });
     await expect(useWorkspace).toBeChecked();
     await expect(field(page, 'Minimum score').locator('input[type=number]')).toHaveCount(0);
@@ -325,7 +341,7 @@ test.describe('in the advanced builder', () => {
     await expect(field(page, 'Message to match').locator('input')).toHaveValue('{{answer}}');
     await expect(field(page, 'Only these FAQs').locator('select')).toHaveValue('Shipping');
     await expect(
-      field(page, 'Minimum score').getByRole('checkbox', { name: 'Use the workspace setting' }),
+      field(page, 'Minimum score').getByRole('checkbox', { name: "Use this flow's setting" }),
     ).not.toBeChecked();
     await expect(field(page, 'Minimum score').locator('input[type=number]')).toHaveValue('0.65');
     await expect(
@@ -341,12 +357,12 @@ test.describe('in the advanced builder', () => {
   }) => {
     test.setTimeout(240_000);
     const t = tag();
-    const uuid = wiredFlow(ws, t);
+    const uuid = await wiredFlow(ws, t);
     const { page } = await open(browser, state, watch, { viewport: BIG });
     await openBuilder(page, uuid, 4);
     await openInspector(page, 'f');
     const own = field(page, 'Minimum score');
-    await own.getByRole('checkbox', { name: 'Use the workspace setting' }).uncheck();
+    await own.getByRole('checkbox', { name: "Use this flow's setting" }).uncheck();
     const min = own.locator('input[type=number]');
     const alert = own.getByRole('alert');
     await expect(alert).toHaveCount(0);
@@ -379,14 +395,14 @@ test.describe('in the advanced builder', () => {
     await expect(popup).toHaveCount(0);
 
     // "Use the workspace setting" goes back to no score of its own.
-    await own.getByRole('checkbox', { name: 'Use the workspace setting' }).check();
+    await own.getByRole('checkbox', { name: "Use this flow's setting" }).check();
     await expect(min).toHaveCount(0);
     await saveButton(page).click();
     await expect.poll(() => savedNode(ws, uuid, 'f').data.minScore, { timeout: 30_000 }).toBeNull();
   });
 
   test('a blank minimum score is saved as "no score of its own"', async ({ browser, watch }) => {
-    const uuid = wiredFlow(ws, tag(), { minScore: 0.7 });
+    const uuid = await wiredFlow(ws, tag(), { minScore: 0.7 });
     const { page } = await open(browser, state, watch, { viewport: BIG });
     await openBuilder(page, uuid, 4);
     await openInspector(page, 'f');
@@ -400,11 +416,11 @@ test.describe('in the advanced builder', () => {
       .toBe(true);
   });
 
-  test("the category list is the workspace's FAQ categories, and a saved category nobody uses any more is kept", async ({
+  test("the category list is this flow's FAQ categories, and a saved category nobody uses any more is kept", async ({
     browser,
     watch,
   }) => {
-    const uuid = wiredFlow(ws, tag(), { category: 'Retired' });
+    const uuid = await wiredFlow(ws, tag(), { category: 'Retired' });
     const { page } = await open(browser, state, watch, { viewport: BIG });
     await openBuilder(page, uuid, 4);
     await openInspector(page, 'f');
@@ -434,25 +450,30 @@ test.describe('in the advanced builder', () => {
     await expect(nodeCard(page, 'f')).toContainText('All FAQs');
   });
 
-  test('a workspace with no FAQs is told so, with a link to add the first one', async ({
+  test('a flow with no FAQs is told so, with a link to add the first one', async ({
     browser,
     watch,
   }) => {
-    const uuid = wiredFlow(empty, tag());
+    const uuid = await wiredFlow(empty, tag(), {}, { faqs: false });
     const { page } = await open(browser, emptyState, watch, { viewport: BIG });
     await openBuilder(page, uuid, 4);
     await openInspector(page, 'f');
     const hint = inspector(page).getByText(
-      /^You have no FAQs yet, so this step always leaves by no match\./,
+      /^This flow has no FAQs yet, so this step always leaves by no match\./,
     );
     await expect(hint).toBeVisible();
-    const link = inspector(page).getByRole('link', { name: 'Add your first FAQ' });
-    await expect(link).toHaveAttribute('href', '/faq/new');
+    // The link opens the FAQs tab of THIS flow, on the new FAQ screen.
+    const link = inspector(page).getByRole('link', { name: 'Add the first FAQ of this flow' });
+    await expect(link).toHaveAttribute('href', faqUrl(uuid, 'new'));
+    // The step's intro links to the flow's FAQs too.
+    await expect(
+      inspector(page).getByRole('link', { name: "Manage this flow's FAQs" }),
+    ).toHaveAttribute('href', faqUrl(uuid));
     await expect(field(page, 'Only these FAQs').locator('select option')).toHaveText(['All FAQs']);
 
-    // A workspace that has FAQs does not see it, and its categories are listed.
+    // A flow that has FAQs does not see it, and its categories are listed.
     const withFaqs = await open(browser, state, watch, { viewport: BIG });
-    const uuid2 = wiredFlow(ws, tag());
+    const uuid2 = await wiredFlow(ws, tag());
     await openBuilder(withFaqs.page, uuid2, 4);
     await openInspector(withFaqs.page, 'f');
     await expect(field(withFaqs.page, 'Only these FAQs').locator('select option')).toHaveText([
@@ -460,14 +481,14 @@ test.describe('in the advanced builder', () => {
       'Account',
       'Shipping',
     ]);
-    await expect(withFaqs.page.getByText(/You have no FAQs yet/)).toHaveCount(0);
+    await expect(withFaqs.page.getByText(/has no FAQs yet/)).toHaveCount(0);
   });
 
   test('the form and the card show markup, emoji and very long text as plain text', async ({
     browser,
     watch,
   }) => {
-    const uuid = wiredFlow(ws, tag());
+    const uuid = await wiredFlow(ws, tag());
     const { page } = await open(browser, state, watch, { viewport: BIG });
     let alerts = 0;
     page.on('dialog', (d) => {
@@ -495,7 +516,7 @@ test.describe('in the advanced builder', () => {
   });
 
   test('the form works with the keyboard alone', async ({ browser, watch }) => {
-    const uuid = wiredFlow(ws, tag());
+    const uuid = await wiredFlow(ws, tag());
     const { page } = await open(browser, state, watch, { viewport: BIG });
     await openBuilder(page, uuid, 4);
     await openInspector(page, 'f');
@@ -508,7 +529,7 @@ test.describe('in the advanced builder', () => {
     await expect(field(page, 'Only these FAQs').locator('select')).toHaveValue('Account');
     await tabTo(
       page,
-      field(page, 'Minimum score').getByRole('checkbox', { name: 'Use the workspace setting' }),
+      field(page, 'Minimum score').getByRole('checkbox', { name: "Use this flow's setting" }),
       10,
     );
     await kb.press('Space');
@@ -539,7 +560,7 @@ test.describe('in the advanced builder', () => {
     browser,
     watch,
   }) => {
-    const uuid = wiredFlow(ws, tag());
+    const uuid = await wiredFlow(ws, tag());
     const { page } = await open(browser, state, watch, { viewport: BIG });
     await openBuilder(page, uuid, 4);
     expect(await edgeCount(page)).toBe(3);
@@ -570,7 +591,7 @@ test.describe('in the advanced builder', () => {
     browser,
     watch,
   }) => {
-    const both = wiredFlow(ws, tag());
+    const both = await wiredFlow(ws, tag());
     const onlyNoMatch = seedBuilderFlow(
       ws,
       tag(),
@@ -620,7 +641,7 @@ test.describe('in the advanced builder', () => {
   });
 
   test('dark mode and a right-to-left page keep the form usable', async ({ browser, watch }) => {
-    const uuid = wiredFlow(ws, tag());
+    const uuid = await wiredFlow(ws, tag());
     const dark = await open(browser, state, watch, {
       viewport: BIG,
       colorScheme: 'dark',
@@ -657,12 +678,8 @@ test.describe('in the Simple builder', () => {
   let sstate: State;
   test.beforeAll(async ({ browser }) => {
     test.setTimeout(240_000);
+    // (`newWorkspace` already switched the workspace to the Simple builder and gave it the automation feature.)
     sws = await newWorkspace('flownodesimple');
-    enableAutomation(sws);
-    await seedFaq(sws, { question: 'Where is my order?', category: 'Shipping' });
-    await seedFaq(sws, { question: 'Reset my password', category: 'Account' });
-    const mode = await call(sws, 'PUT', '/v2/flows/builder-mode', { mode: 'simple' });
-    expect(mode.status, JSON.stringify(mode.body)).toBe(200);
     sstate = await login(browser, sws.email);
   });
 
@@ -771,6 +788,7 @@ test.describe('in the Simple builder', () => {
       ],
       [['t', 'out', 'a']],
     );
+    await standardFaqs(sws, uuid);
     const { page } = await open(browser, sstate, watch, {
       viewport: { width: 1440, height: 1100 },
     });
@@ -786,7 +804,7 @@ test.describe('in the Simple builder', () => {
       .toEqual(['All FAQs', 'Account', 'Shipping']);
     await category.selectOption('Shipping');
     const useWorkspace = sfield(page, 'Minimum score').getByRole('checkbox', {
-      name: 'Use the workspace setting',
+      name: "Use this flow's setting",
     });
     await useWorkspace.uncheck();
     const min = sfield(page, 'Minimum score').getByRole('spinbutton', { name: 'Minimum score' });
@@ -860,7 +878,7 @@ test.describe('in the Simple builder', () => {
     await expect(sfield(page, 'Message to match').locator('input')).toHaveValue('{{answer}}');
     await expect(sfield(page, 'Only these FAQs').locator('select')).toHaveValue('Shipping');
     await expect(
-      sfield(page, 'Minimum score').getByRole('checkbox', { name: 'Use the workspace setting' }),
+      sfield(page, 'Minimum score').getByRole('checkbox', { name: "Use this flow's setting" }),
     ).not.toBeChecked();
     await expect(
       sfield(page, 'Minimum score').getByRole('spinbutton', { name: 'Minimum score' }),
@@ -912,7 +930,7 @@ test.describe('in the Simple builder', () => {
     // Publishing is refused and says which step; Save still works (a draft may be unfinished).
     await page.getByRole('button', { name: 'Publish changes' }).click();
     const problem = page.getByRole('button', {
-      name: 'Step 1.2: the minimum score must be from 0.05 to 0.99, or use the workspace setting.',
+      name: "Step 1.2: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
     });
     await expect(problem).toBeVisible();
     await expect(page.getByText('Fix these before publishing:')).toBeVisible();
@@ -959,6 +977,7 @@ test.describe('in the Simple builder', () => {
         ['f', 'no_match', 'q'],
       ],
     );
+    await standardFaqs(sws, uuid);
     const { page } = await open(browser, sstate, watch, {
       viewport: { width: 1440, height: 1000 },
     });
@@ -1021,15 +1040,20 @@ test.describe('a customer goes through a published flow with the node', () => {
         { keywords },
       );
     };
-    flow('Journey A', 'faqnodea', {}, '');
-    flow('Journey C', 'faqnodec', { category: 'Shipping' }, ' C');
-    flow(
-      'Journey D',
-      'faqnoded',
-      { sendAnswer: false, save: 'ans' },
-      ' D',
-      'Got: {{ans.matched}} {{ans.answer}}',
-    );
+    // Each flow answers from its own FAQs.
+    const made = [
+      flow('Journey A', 'faqnodea', {}, ''),
+      flow('Journey C', 'faqnodec', { category: 'Shipping' }, ' C'),
+      flow(
+        'Journey D',
+        'faqnoded',
+        { sendAnswer: false, save: 'ans' },
+        ' D',
+        'Got: {{ans.matched}} {{ans.answer}}',
+      ),
+    ];
+    for (const uuid of made) await standardFaqs(ws, uuid);
+    await waitIndexed(ws);
   });
 
   test('a message that matches an FAQ gets its answer and then the "answered" branch', async () => {

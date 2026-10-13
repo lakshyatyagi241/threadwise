@@ -78,6 +78,11 @@
       "payments": "Paiements"
     },
     "help": "Aide",
-    "unreadCount": "{count, plural, one {# non lu} other {# non lus}}"
+    "unreadCount": "{count, plural, one {# non lu} other {# non lus}}",
+    "backgroundError": {
+      "message": "Certains chiffres en direct, comme les notifications, le solde ou les compteurs de la boîte de réception, n'ont pas pu être actualisés. Ce que vous voyez peut être périmé.",
+      "retry": "Réessayer",
+      "dismiss": "Ignorer"
+    }
   }
 }

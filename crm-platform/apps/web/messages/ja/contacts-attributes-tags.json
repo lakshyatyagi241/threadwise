@@ -121,6 +121,12 @@
       "selectedActionsNone": "選択した連絡先(先に行を選択してください)",
       "modifyColumns": "列を変更",
       "resetColumns": "既定に戻す",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "連絡先名",
       "colPhone": "電話番号",
       "colEmailId": "メールアドレス",
@@ -170,7 +176,8 @@
       "import": "インポート",
       "columns": "列",
       "addColumnField": "カスタムフィールドを列として追加",
-      "kanbanView": "ボード表示(ステージ別)"
+      "kanbanView": "ボード表示(ステージ別)",
+      "colLeadScore": "リードスコア"
     },
     "bulk": {
       "label": "選択した連絡先の操作",
@@ -406,7 +413,8 @@
         "address": "住所",
         "memo": "メモ",
         "status": "ステータス",
-        "source": "ソース"
+        "source": "ソース",
+        "consent": "マーケティング同意（はい / いいえ）"
       },
       "notInFile": "ファイルにありません",
       "columnN": "列 {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "エクスポート",
-        "hint": "ハブからの連絡先エクスポートを新しい順に表示します。ダウンロードしたファイルは保存されません。",
+        "hint": "Hub からの連絡先エクスポート（新しい順）。各ファイルは30日間保存され、あなたとエクスポート権限を持つチームメンバーが再ダウンロードできます。",
         "empty": "エクスポートはまだありません。",
         "by": "実行者",
         "rows": "連絡先",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "チェックした連絡先",
           "filter": "一致するすべて"
-        }
+        },
+        "download": "ダウンロード",
+        "noFile": "未保存",
+        "keptUntil": "{date} まで保存",
+        "downloadFailed": "ファイルをダウンロードできませんでした。期限切れの可能性があります。"
       }
     }
   }

@@ -44,7 +44,8 @@
       "forms": "Formularios web",
       "form_submissions_monthly": "Envíos de formularios al mes",
       "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes",
-      "sms_monthly": "SMS al mes"
+      "sms_monthly": "SMS al mes",
+      "email_mailboxes": "Buzones de correo"
     },
     "features": {
       "automation": "Automatización",
@@ -76,7 +77,9 @@
       "extra_channels": "Telegram, Facebook e Instagram",
       "form_builder": "Formularios",
       "waba_groups": "Grupos de WhatsApp",
-      "sms": "Canal SMS"
+      "sms": "Canal SMS",
+      "help_agent": "Asistente de ayuda",
+      "email_channel": "Canal de correo (Gmail)"
     },
     "limitGroups": {
       "messaging": "Mensajería",
@@ -127,7 +130,8 @@
       "forms": "Formularios web activos (app de Formularios). Archivar un formulario libera su lugar. 0 = ilimitado.",
       "form_submissions_monthly": "Envíos de formularios aceptados en el mes natural, sin contar el spam. Si se supera el límite, el envío se guarda para revisión y nunca se descarta. 0 = ilimitado.",
       "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluidos los reintentos de reparación. 0 = ilimitado.",
-      "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado."
+      "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado.",
+      "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado."
     },
     "planAddons": {
       "title": "Complementos disponibles en tu plan",

@@ -78,6 +78,11 @@
       "payments": "भुगतान"
     },
     "help": "मदद",
-    "unreadCount": "{count, plural, one {# बिना पढ़ा} other {# बिना पढ़े}}"
+    "unreadCount": "{count, plural, one {# बिना पढ़ा} other {# बिना पढ़े}}",
+    "backgroundError": {
+      "message": "कुछ लाइव आँकड़े, जैसे सूचनाएँ, बैलेंस या इनबॉक्स की गिनती, ताज़ा नहीं हो सके। जो आप देख रहे हैं वह पुराना हो सकता है।",
+      "retry": "फिर कोशिश करें",
+      "dismiss": "हटाएँ"
+    }
   }
 }

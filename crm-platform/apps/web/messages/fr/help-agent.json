@@ -1,0 +1,135 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Demander",
+      "shortcut": "Demander à l’assistant (Ctrl ou Cmd + Maj + L)"
+    },
+    "panel": {
+      "title": "Demander à l’assistant",
+      "subtitle": "Dites ce que vous voulez faire. Je lis cette page et je clique pour vous, et je demande avant que quoi que ce soit soit enregistré, envoyé, supprimé ou payé.",
+      "close": "Fermer",
+      "taskLabel": "Que voulez-vous faire ?",
+      "taskPlaceholder": "Par exemple : ajouter le tag VIP à un contact",
+      "tooLong": "Maximum {max} caractères.",
+      "doItForMe": "Faites-le pour moi",
+      "showMe": "Montrez-moi plutôt",
+      "stop": "Arrêter",
+      "stopping": "Arrêt en cours...",
+      "newTask": "Nouvelle tâche",
+      "tryAgain": "Réessayer",
+      "openGuide": "Ouvrir le guide",
+      "showSteps": "Afficher les étapes",
+      "guidesTitle": "Dans les guides d’aide",
+      "examplesTitle": "Essayez de demander",
+      "disabledHere": "L’assistant est désactivé sur cet écran, car il affiche des messages et des détails rédigés par des clients. Ouvrez un autre écran pour l’utiliser."
+    },
+    "notice": {
+      "title": "Avant de commencer",
+      "sent": "Pour réaliser une tâche, l’assistant envoie votre demande et le texte de la page affichée à un fournisseur d’IA.",
+      "masked": "Les numéros de téléphone, les adresses e-mail et les secrets sont masqués au préalable. Les noms et le reste du texte de la page ne le sont pas.",
+      "asks": "Il utilise votre propre compte et ne peut donc faire que ce que vous pouvez faire. Il vous demande avant d’enregistrer, d’envoyer, de supprimer, de payer, d’inviter des personnes ou de modifier des paramètres.",
+      "limits": "Il ne saisit jamais de mots de passe ni de données de carte, n’ouvre jamais d’autres sites web, et vous pouvez l’arrêter à tout moment.",
+      "accept": "J’ai compris"
+    },
+    "status": {
+      "progress": "Étape {n} sur {max}",
+      "thinking": "Réflexion...",
+      "starting": "Démarrage..."
+    },
+    "activity": {
+      "click": "Clic sur : {label}",
+      "type": "Saisie dans : {label}",
+      "select": "Choix dans : {label}",
+      "blocked": "Ignoré : {label}",
+      "declined": "Vous avez refusé : {label}",
+      "shown": "Affichage : {label}"
+    },
+    "confirm": {
+      "title": "Autoriser ?",
+      "clickBody": "L’assistant s’apprête à cliquer sur \"{label}\".",
+      "selectBody": "L’assistant s’apprête à choisir \"{detail}\" dans \"{label}\".",
+      "allow": "Autoriser une fois",
+      "deny": "Refuser",
+      "reasons": {
+        "marked": "C’est l’un des boutons les plus sensibles de l’app.",
+        "submit": "Cela enregistre ou envoie ce qui se trouve sur la page.",
+        "delete": "Cela supprime, retire ou déconnecte quelque chose.",
+        "send": "Cela envoie, publie ou lance quelque chose que d’autres verront.",
+        "pay": "Cela peut dépenser de l’argent ou modifier ce que vous payez.",
+        "invite": "Cela invite quelqu’un dans votre espace de travail.",
+        "connect": "Cela connecte ou déconnecte un canal ou une app.",
+        "access": "Cela modifie qui peut faire quoi, ou un secret ou une information de facturation.",
+        "settings": "Cela active ou désactive quelque chose.",
+        "toggle": "Ce commutateur prend effet immédiatement.",
+        "dialog": "Cela confirme ce que demande la fenêtre.",
+        "signout": "Cela vous déconnecte."
+      }
+    },
+    "question": {
+      "title": "L’assistant demande",
+      "answerLabel": "Votre réponse",
+      "send": "Envoyer"
+    },
+    "result": {
+      "completedTitle": "Terminé",
+      "failedTitle": "Je n’ai pas pu terminer cette tâche",
+      "stoppedTitle": "Arrêté",
+      "summary": "{steps, plural, one {# étape} other {# étapes}}, {confirmed} autorisées, {denied} refusées."
+    },
+    "stopped": {
+      "person": "Vous avez arrêté la tâche.",
+      "budget": "La tâche a atteint sa limite d’étapes et s’est arrêtée. Essayez une demande plus petite.",
+      "location": "La tâche s’est arrêtée, car elle est arrivée sur un écran que l’assistant n’a pas le droit d’utiliser."
+    },
+    "errors": {
+      "disabled": "L’assistant est désactivé pour cet espace de travail ou sur cet écran.",
+      "planLocked": "L’assistant ne fait pas partie de votre forfait.",
+      "forbidden": "Vous n’avez pas l’autorisation d’utiliser l’assistant.",
+      "rateLimited": "Trop de demandes. Patientez un instant et réessayez.",
+      "taskLimit": "Vous avez lancé autant de tâches que permis pour le moment. Réessayez plus tard.",
+      "stepLimit": "Cette tâche a épuisé ses étapes. Lancez-en une nouvelle avec une demande plus petite.",
+      "closed": "Cette tâche est terminée. Lancez-en une nouvelle.",
+      "providerDown": "Le service d’IA n’a pas répondu. Réessayez dans un instant, ou contactez le propriétaire de la plateforme si cela continue.",
+      "monthlyLimit": "Votre espace de travail a utilisé le quota d’IA de ce mois-ci.",
+      "signedOut": "Votre session a pris fin. Reconnectez-vous.",
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "generic": "Une erreur s’est produite. Réessayez.",
+      "retryIn": "Réessayez dans {seconds} secondes.",
+      "requestId": "ID de requête : {id}"
+    },
+    "examples": {
+      "howDo": "Comment utiliser {title} ?",
+      "showMe": "Montrez-moi par où commencer dans {title}",
+      "whereIs": "Où trouver {title} ?",
+      "generic1": "Comment connecter mon numéro WhatsApp ?",
+      "generic2": "Où modifier le profil de mon entreprise ?",
+      "generic3": "Comment inviter un coéquipier ?"
+    },
+    "helpCard": {
+      "title": "Demander à l’assistant",
+      "body": "Dites-lui ce que vous voulez faire. Il trouve le bon guide, vous montre où cliquer, ou réalise les étapes pour vous et demande avant toute action importante.",
+      "button": "Ouvrir l’assistant"
+    },
+    "settingsPage": {
+      "title": "Assistant d’aide",
+      "description": "Laissez votre équipe demander ce qu’elle veut faire et laissez l’app la guider ou réaliser les étapes sur son propre compte.",
+      "loading": "Chargement",
+      "loadFailed": "Le paramètre n’a pas pu être chargé.",
+      "requestId": "ID de requête : {id}",
+      "shareTitle": "Ce qui est partagé lors de l’utilisation",
+      "share1": "La demande saisie par la personne et le texte visible de la page affichée sont envoyés au fournisseur d’IA utilisé par la plateforme.",
+      "share2": "Les numéros de téléphone, les adresses e-mail, les secrets et les champs personnels des formulaires sont masqués au préalable. Les noms et les autres textes libres d’une page ne le sont pas.",
+      "share3": "Les messages des clients et le chat d’équipe ne sont jamais lus : l’assistant est désactivé sur ces écrans.",
+      "share4": "L’assistant agit avec les propres autorisations de la personne connectée et demande avant d’enregistrer, d’envoyer, de supprimer, de payer ou de modifier des paramètres. Seuls les compteurs et le résultat de chaque tâche sont conservés, jamais le texte de la demande.",
+      "optIn": "En l’activant, vous confirmez que votre espace de travail accepte de partager ces données avec le fournisseur d’IA.",
+      "switchLabel": "Activer l’assistant d’aide pour cet espace de travail",
+      "stateOn": "Activé. Les personnes autorisées voient le bouton Demander.",
+      "stateOff": "Désactivé. Personne ne voit l’assistant.",
+      "saveFailed": "Le paramètre n’a pas pu être enregistré.",
+      "savedOn": "L’assistant est activé.",
+      "savedOff": "L’assistant est désactivé.",
+      "whoCanUse": "Seuls les rôles disposant de l’autorisation \"Utiliser l’assistant d’aide\" le voient. Les propriétaires et les administrateurs l’ont.",
+      "rolesLink": "Ouvrir les rôles"
+    }
+  }
+}

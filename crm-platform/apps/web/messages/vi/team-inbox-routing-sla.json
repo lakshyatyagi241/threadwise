@@ -10,7 +10,8 @@
       "webchat": "Chat trên website",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "Email (Gmail)"
     },
     "page": {
       "back": "Tự động hóa và AI",
@@ -81,7 +82,10 @@
       "lastFired": "lần cuối vào {when}",
       "edit": "Sửa",
       "duplicate": "Nhân bản",
-      "delete": "Xóa"
+      "delete": "Xóa",
+      "startsFlow": "Đồng thời bắt đầu luồng {name}",
+      "flowOff": "Luồng đang tắt",
+      "flowGone": "Đồng thời bắt đầu một luồng đã bị xóa"
     },
     "form": {
       "back": "Tự động giao việc",
@@ -170,7 +174,15 @@
       "cancel": "Hủy",
       "save": "Lưu",
       "saveActivate": "Lưu và kích hoạt",
-      "openCount": "{open} đang mở"
+      "openCount": "{open} đang mở",
+      "flow": {
+        "title": "Đồng thời bắt đầu một luồng",
+        "hint": "Không bắt buộc. Luồng được bắt đầu cho cuộc trò chuyện khi quy tắc này chạy, trên cùng kênh. Luồng chỉ cần được bật; không cần phải xuất bản.",
+        "none": "Không có luồng",
+        "offOption": "{name} (đã tắt)",
+        "goneOption": "Một luồng không còn tồn tại",
+        "loadFailed": "Không thể tải các luồng nên danh sách có thể chưa đầy đủ."
+      }
     }
   }
 }

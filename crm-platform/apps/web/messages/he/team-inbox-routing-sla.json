@@ -10,7 +10,8 @@
       "webchat": "צ׳אט באתר",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "אימייל (Gmail)"
     },
     "page": {
       "back": "אוטומציה ובינה מלאכותית",
@@ -81,7 +82,10 @@
       "lastFired": "לאחרונה ב-{when}",
       "edit": "ערוך",
       "duplicate": "שכפל",
-      "delete": "מחק"
+      "delete": "מחק",
+      "startsFlow": "מפעיל גם את התהליך {name}",
+      "flowOff": "התהליך כבוי",
+      "flowGone": "מפעיל גם תהליך שנמחק"
     },
     "form": {
       "back": "שיוך אוטומטי",
@@ -170,7 +174,15 @@
       "cancel": "ביטול",
       "save": "שמור",
       "saveActivate": "שמור והפעל",
-      "openCount": "{open} פתוחות"
+      "openCount": "{open} פתוחות",
+      "flow": {
+        "title": "הפעלת תהליך נוסף",
+        "hint": "אופציונלי. התהליך מתחיל עבור השיחה כשהכלל הזה מופעל, באותו ערוץ. מספיק שהתהליך יהיה פעיל; אין צורך שיהיה מפורסם.",
+        "none": "ללא תהליך",
+        "offOption": "{name} (כבוי)",
+        "goneOption": "תהליך שכבר לא קיים",
+        "loadFailed": "לא ניתן היה לטעון את התהליכים, ולכן הרשימה עשויה להיות חלקית."
+      }
     }
   }
 }

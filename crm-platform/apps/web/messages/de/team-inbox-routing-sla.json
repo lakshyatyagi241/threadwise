@@ -10,7 +10,8 @@
       "webchat": "Website-Chat",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "E-Mail (Gmail)"
     },
     "page": {
       "back": "Automatisierung und KI",
@@ -81,7 +82,10 @@
       "lastFired": "zuletzt am {when}",
       "edit": "Bearbeiten",
       "duplicate": "Duplizieren",
-      "delete": "Löschen"
+      "delete": "Löschen",
+      "startsFlow": "Startet außerdem den Flow {name}",
+      "flowOff": "Der Flow ist ausgeschaltet",
+      "flowGone": "Startet außerdem einen gelöschten Flow"
     },
     "form": {
       "back": "Automatische Zuweisung",
@@ -170,7 +174,15 @@
       "cancel": "Abbrechen",
       "save": "Speichern",
       "saveActivate": "Speichern und aktivieren",
-      "openCount": "{open} offen"
+      "openCount": "{open} offen",
+      "flow": {
+        "title": "Zusätzlich einen Flow starten",
+        "hint": "Optional. Der Flow wird für die Unterhaltung gestartet, wenn diese Regel greift, im selben Kanal. Er muss nur eingeschaltet sein; veröffentlicht sein muss er nicht.",
+        "none": "Kein Flow",
+        "offOption": "{name} (ausgeschaltet)",
+        "goneOption": "Ein Flow, den es nicht mehr gibt",
+        "loadFailed": "Die Flows konnten nicht geladen werden, die Auswahl ist deshalb eventuell unvollständig."
+      }
     }
   }
 }

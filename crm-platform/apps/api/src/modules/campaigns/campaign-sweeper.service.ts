@@ -169,15 +169,20 @@ export class CampaignSweeper {
       const rows = await tx.execute(sql`
         SELECT id, error_message FROM wp_campaign_contacts
         WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'failed' AND send_attempts < ${max} AND next_attempt_at IS NULL`);
-      let retryable = false;
+      const throttled: number[] = [];
       for (const x of rows.rows as Array<{ id: number | string; error_message: string | null }>) {
-        if (isEcosystemThrottle(x.error_message ?? '')) retryable = true;
+        if (isEcosystemThrottle(x.error_message ?? '')) throttled.push(Number(x.id));
         else
           await tx.execute(
             sql`UPDATE wp_campaign_contacts SET send_attempts = ${max} WHERE org_id = ${orgId} AND id = ${Number(x.id)}`,
           );
       }
-      if (!retryable) continue;
+      if (throttled.length === 0) continue;
+      // Each row is picked up once per pass: with a next attempt set it no longer matches this scan, so a run that leaves it
+      // untouched (a closed window, a halt) cannot start the campaign again every ten minutes. The run's own result then rewrites it.
+      await tx.execute(
+        sql`UPDATE wp_campaign_contacts SET next_attempt_at = now() WHERE org_id = ${orgId} AND id = ANY(${orgIdList(throttled)})`,
+      );
       const now = this.runtime.now();
       const zone = c.timezone ?? 'UTC';
       await this.repo.setSchedule(tx, orgId, id, {

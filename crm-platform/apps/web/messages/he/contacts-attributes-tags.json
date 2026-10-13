@@ -121,6 +121,12 @@
       "selectedActionsNone": "אנשי קשר שנבחרו (בחר שורות תחילה)",
       "modifyColumns": "שנה עמודות",
       "resetColumns": "אפס לברירת מחדל",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "שם איש קשר",
       "colPhone": "מספר טלפון",
       "colEmailId": "כתובת אימייל",
@@ -170,7 +176,8 @@
       "import": "ייבוא",
       "columns": "עמודות",
       "addColumnField": "הוסף שדה מותאם כעמודה",
-      "kanbanView": "תצוגת לוח (לפי שלב)"
+      "kanbanView": "תצוגת לוח (לפי שלב)",
+      "colLeadScore": "דירוג ליד"
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",
@@ -406,7 +413,8 @@
         "address": "כתובת",
         "memo": "תזכיר",
         "status": "סטטוס",
-        "source": "מקור"
+        "source": "מקור",
+        "consent": "הסכמה לשיווק (כן / לא)"
       },
       "notInFile": "לא בקובץ",
       "columnN": "עמודה {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "ייצואים",
-        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ביותר ראשונים. הקובץ שהורד אינו נשמר.",
+        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ראשונים. כל קובץ נשמר 30 יום כדי שאתם ועמיתים עם הרשאת ייצוא תוכלו להוריד אותו שוב.",
         "empty": "אין עדיין ייצואים.",
         "by": "על ידי",
         "rows": "אנשי קשר",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "אנשי קשר שסומנו",
           "filter": "כל ההתאמות"
-        }
+        },
+        "download": "הורדה",
+        "noFile": "לא נשמר",
+        "keptUntil": "נשמר עד {date}",
+        "downloadFailed": "לא ניתן היה להוריד את הקובץ. ייתכן שפג תוקפו."
       }
     }
   }

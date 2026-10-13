@@ -28,6 +28,7 @@ export const FLOW_TRIGGER_KINDS = [
   'out_of_hours',
   'group_leave',
   'segment_join',
+  'segment_leave',
   'contact_updated',
   'field_match',
   'date_field_match',
@@ -62,6 +63,7 @@ export const FLOW_RUN_SOURCES = [
   'out_of_hours',
   'group_leave',
   'segment_join',
+  'segment_leave',
   'contact_updated',
   'field_match',
   'date_field_match',
@@ -144,6 +146,8 @@ export const flowRunSummarySchema = z.object({
   endedAt: z.string().nullable(),
   resumeAt: z.string().nullable(),
   steps: z.number().int(),
+  /** Customer messages that reached a wait node of this run and moved it on (logged `reply` steps). */
+  replies: z.number().int().default(0),
   /** Node executions logged, how many of them failed, and the run's total node time (ms). */
   nodeCount: z.number().int(),
   errorCount: z.number().int(),

@@ -148,7 +148,10 @@
         "required": "Harus dicentang untuk mengirim",
         "requiredHint": "Nonaktifkan jika persetujuan bersifat opsional.",
         "marketing": "Persetujuan pemasaran",
-        "marketingHint": "Mencentang kotak ini mencatat persetujuan pemasaran pada kontak. Kotak yang tidak dicentang tidak pernah berlangganan siapa pun."
+        "marketingHint": "Mencentang kotak ini mencatat persetujuan pemasaran pada kontak. Kotak yang tidak dicentang tidak pernah berlangganan siapa pun.",
+        "whatsappHint": "Apakah Anda akan mengirim pesan ke kontak ini lewat WhatsApp? Gunakan kalimat yang menyatakannya dan cara berhenti. Kotak yang dicentang disimpan sebagai bukti, dengan teks persis ini dan versinya.",
+        "whatsappInsert": "Gunakan kalimat persetujuan WhatsApp",
+        "whatsappWording": "Saya setuju menerima pembaruan dan penawaran di WhatsApp. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan."
       },
       "crm": {
         "title": "Di CRM",

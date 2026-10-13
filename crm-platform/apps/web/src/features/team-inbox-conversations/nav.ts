@@ -24,4 +24,15 @@ export const nav: NavItem[] = [
     inMenu: false,
     gates: { permission: 'inbox.logs.export' },
   },
+  {
+    // Reached from the Settings tile and from the composer's picker; the gate closes the route for roles that cannot manage replies.
+    id: 'inbox-saved-replies',
+    group: 'inbox',
+    labelKey: 'team-inbox-conversations.nav.savedReplies',
+    href: '/inbox/saved-replies',
+    order: 2,
+    icon: 'inbox',
+    inMenu: false,
+    gates: { permission: 'inbox.savedreply.manage' },
+  },
 ];

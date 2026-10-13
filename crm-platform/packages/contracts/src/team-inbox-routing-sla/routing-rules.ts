@@ -11,12 +11,20 @@ import { segmentRulesSchema } from '../segments/rules';
  * match wins unless it says `stopOnMatch: false`; the one rule marked `isFallback` runs only when no other rule matched.
  *
  * Storage (no new table): `routing_rules.conditions` holds `routingConditionsSchema`, `routing_rules.actions` holds a list of action
- * dicts (Reference's shape): one `{ type: 'assign', ... }` and an optional `{ type: 'note', description }` for the rule's description.
+ * dicts (Reference's shape): one `{ type: 'assign', ... }`, an optional `{ type: 'trigger_flow', flowId }` (start a flow for the conversation)
+ * and an optional `{ type: 'note', description }` for the rule's description.
  * The round robin cursor (`rrCursor`, the internal id of the agent who got the last one) lives in the assign action and never leaves
  * the server. Port additions beyond the inventory (marked "addition" in the inventory file): `least_busy`/`specific` strategies on a
  * set of agents, the `contact` condition (the shared segment rule tree), `keywords`, `languages`, `channelKinds`, and the
  * "keep returning contacts with their agent" setting.
  */
+
+/**
+ * The outbox event a firing rule writes (in the transaction that fires it) when it starts a flow. The flow runtime's worker consumes it
+ * by name (modules do not import each other's internals): payload `conversationId`, `flowId` (uuids), `ruleId`, `ruleName`,
+ * `messageUuid` (the inbound message that made the conversation, the idempotency key of the start).
+ */
+export const ROUTING_FLOW_REQUESTED = 'routing.flow_requested';
 
 export const ROUTING_STRATEGIES = ['round_robin', 'least_busy', 'specific'] as const;
 export const routingStrategySchema = z.enum(ROUTING_STRATEGIES);
@@ -89,12 +97,25 @@ export type RoutingAssign = z.infer<typeof routingAssignSchema>;
 const nameSchema = z.string().trim().min(1).max(ROUTING_NAME_MAX);
 const descriptionSchema = z.string().trim().max(ROUTING_DESCRIPTION_MAX);
 
+/**
+ * The flow a rule starts for the conversation (TW-TIB2-017, Reference's `trigger_flow` action). The flow is chosen by its uuid; the name
+ * and the switch are read when the rule is shown, so a rule pointing at a flow that was paused or deleted says so (`null` name: gone).
+ */
+export const routingTriggerFlowSchema = z.object({
+  id: uuidSchema,
+  name: z.string().nullable(),
+  isActive: z.boolean(),
+});
+export type RoutingTriggerFlow = z.infer<typeof routingTriggerFlowSchema>;
+
 export const routingRuleSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   description: z.string(),
   conditions: routingConditionsSchema,
   assign: routingAssignSchema,
+  /** Also start this flow for the conversation when the rule fires. The flow only has to be switched on (publishing is not required). */
+  triggerFlow: routingTriggerFlowSchema.nullable(),
   stopOnMatch: z.boolean(),
   isActive: z.boolean(),
   /** The one rule that runs when no other rule matched. */
@@ -159,6 +180,7 @@ export const createRoutingRuleSchema = z
     description: descriptionSchema.default(''),
     conditions: routingConditionsSchema.default({}),
     assign: routingAssignSchema,
+    triggerFlowId: uuidSchema.nullable().default(null),
     stopOnMatch: z.boolean().default(true),
     isFallback: z.boolean().default(false),
     isActive: z.boolean().default(false),
@@ -175,6 +197,7 @@ export const updateRoutingRuleSchema = z
     description: descriptionSchema.optional(),
     conditions: routingConditionsSchema.optional(),
     assign: routingAssignSchema.optional(),
+    triggerFlowId: uuidSchema.nullable().optional(),
     stopOnMatch: z.boolean().optional(),
     isFallback: z.boolean().optional(),
     isActive: z.boolean().optional(),

@@ -2,7 +2,8 @@
   "team-inbox-conversations": {
     "nav": {
       "inbox": "收件箱",
-      "messageLogs": "消息日志"
+      "messageLogs": "消息日志",
+      "savedReplies": "快捷回复"
     },
     "common": {
       "dismiss": "关闭"
@@ -24,7 +25,11 @@
       "pickTitle": "选择一个会话",
       "pickMessage": "从列表中选择会话以阅读并回复。新消息会自动显示在此处。",
       "shortcuts": "快捷键：j 和 k 切换列表，e 标记解决，/ 搜索。",
-      "teamChanged": "团队已更新。"
+      "teamChanged": "团队已更新。",
+      "priorityChanged": "优先级已更新",
+      "snoozed": "对话已暂时搁置",
+      "labelAdded": "已添加标签",
+      "labelRemoved": "已移除标签"
     },
     "list": {
       "title": "收件箱",
@@ -100,7 +105,9 @@
           "title": "您已处理完所有会话",
           "message": "客户有新消息的会话会列在此处。"
         }
-      }
+      },
+      "select": "选择",
+      "selectDone": "完成"
     },
     "status": {
       "received": "已接收",
@@ -135,7 +142,18 @@
       "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。",
       "logRange": "请选择最近一年内的日期，开始日期须早于结束日期，且不能是未来日期。",
       "logBusy": "已有一个导出正在准备中。请等待收到邮件后再发起新的导出。",
-      "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。"
+      "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。",
+      "groupSuspended": "Meta 已暂停此群组，在 Meta 解除之前无法向其发送消息。",
+      "walletEmpty": "消息钱包余额不足以支付此群消息（每位成员收取一次费用）。请充值后重试。",
+      "groupPlanLocked": "您的套餐不包含 WhatsApp 群组，因此无法向此群组发送消息。请联系管理员升级套餐。",
+      "groupLeft": "此号码已退出该群组，因此无法再在其中发送消息。",
+      "groupAnnounceOnly": "此群组仅管理员可以发送消息，而此号码不是管理员。",
+      "groupRateLimited": "此号码在短时间内发送的群组消息过多。请等待一分钟后重试。",
+      "groupUnavailable": "WhatsApp 未接受此群组消息。请几分钟后重试。",
+      "savedReplyGone": "此快捷回复已不存在。",
+      "savedReplyChannel": "此快捷回复不适用于这类渠道。",
+      "shortcutTaken": "另一条快捷回复已使用该快捷方式。",
+      "importInvalid": "无法将此文件读取为快捷回复。第一行需要包含 title、shortcut 和 body 列，最多 1,000 行。"
     },
     "bubble": {
       "kind": {
@@ -201,7 +219,11 @@
         "takeBackLabel": "你的回应 {emoji}。撤回",
         "failed": "此回应未发送"
       },
-      "deliveryLog": "投递日志"
+      "deliveryLog": "投递日志",
+      "groupMember": "群成员",
+      "groupTally": "已送达 {delivered}/{members} 人{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
+      "groupTallyNoTotal": "已送达 {delivered, plural, other {#位成员}}{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
+      "groupTallyBilled": "计费 {billable}，免费 {free}"
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -350,7 +372,9 @@
           "url": "请输入以 http:// 或 https:// 开头的链接",
           "tooManyRows": "一个列表总共最多包含 10 行"
         }
-      }
+      },
+      "savedReplies": "快捷回复",
+      "savedReplyIssues": "未填写并保持原样（{count}）：{list}。请在发送前修正。"
     },
     "panel": {
       "tabsLabel": "备注与时间线",
@@ -632,6 +656,313 @@
           "failed": "失败",
           "expired": "已过期"
         }
+      }
+    },
+    "groupThread": {
+      "openGroup": "打开群组",
+      "readOnly": {
+        "left": {
+          "title": "此号码已退出该群组",
+          "message": "对话将保持原样。您可以阅读并添加内部备注，但无法发送消息。"
+        },
+        "announceOnly": {
+          "title": "此群组仅管理员可以发送",
+          "message": "此号码不是该群组的管理员，因此 WhatsApp 不会送达消息。您仍可添加内部备注。"
+        }
+      },
+      "mention": {
+        "label": "群组成员",
+        "loading": "正在查找成员",
+        "none": "没有匹配的成员"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta 已暂停此群组",
+          "message": "WhatsApp 不会向已暂停的群组送达消息。在 Meta 解除暂停之前，您可以查看对话并添加内部备注。"
+        },
+        "plan": {
+          "title": "您的套餐不包含 WhatsApp 群组",
+          "message": "您可以查看此对话并添加内部备注，但向群组发送消息需要包含群组功能的套餐。请联系管理员升级。"
+        },
+        "ineligible": {
+          "title": "此号码无法使用 WhatsApp 群组",
+          "message": "上次检查时 Meta 不允许此号码使用群组（需要官方商业账号）。您可以查看对话并添加内部备注。打开 Meta 群组可重新检查。"
+        }
+      },
+      "cost": {
+        "members": "此消息将发送给 {count, plural, other {#位成员}}。预计费用 {cost}：WhatsApp 按每位收到消息的成员计费。",
+        "membersNoEstimate": "此消息将发送给 {count, plural, other {#位成员}}。WhatsApp 按每位收到消息的成员计费。",
+        "sizeUnknown": "成员数量暂时未知。WhatsApp 按每位收到此消息的成员计费。",
+        "walletShort": "您的钱包余额可能不足以发送此消息。请先充值再发送。"
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "模拟器（测试）",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp（QR）",
+        "webchat": "网站聊天",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "电子邮件"
+      },
+      "variableGroup": {
+        "contact": "联系人",
+        "agent": "你",
+        "workspace": "工作区",
+        "conversation": "会话"
+      },
+      "variable": {
+        "first_name": "联系人的名",
+        "last_name": "联系人的姓",
+        "name": "联系人的全名",
+        "email": "联系人的电子邮件",
+        "phone": "联系人的电话号码",
+        "agent_name": "你的全名",
+        "agent_first_name": "你的名",
+        "workspace_name": "工作区名称",
+        "company_name": "公司名称",
+        "today": "今天的日期",
+        "device_name": "渠道名称",
+        "device_phone": "渠道的电话号码"
+      },
+      "picker": {
+        "title": "快捷回复",
+        "close": "关闭快捷回复",
+        "searchLabel": "搜索快捷回复",
+        "searchPlaceholder": "按快捷方式、标题或文本搜索",
+        "listLabel": "快捷回复",
+        "loading": "正在加载快捷回复",
+        "loadFailed": "无法加载快捷回复。",
+        "retry": "重试",
+        "empty": "还没有快捷回复。",
+        "emptyForChannel": "没有适用于此渠道的快捷回复。",
+        "createFirst": "创建第一条",
+        "noMatch": "没有与“{q}”匹配的快捷回复。",
+        "mine": "我的",
+        "hint": "方向键移动，Enter 插入，Esc 关闭。",
+        "manage": "管理快捷回复",
+        "tooLong": "该回复超出此渠道的消息长度限制，因此未插入。"
+      },
+      "screen": {
+        "back": "设置",
+        "title": "快捷回复",
+        "subtitle": "团队可插入回复中的可复用答复。在会话中输入 / 即可查找。",
+        "create": "新建快捷回复",
+        "noAccess": "你没有管理快捷回复的权限。",
+        "meter": "已使用 {used} / {limit} 条快捷回复",
+        "meterLabel": "你的套餐已使用的快捷回复",
+        "meterNote": "共享回复和个人回复都计入上限。",
+        "atLimit": "你已达到套餐的 {limit} 条快捷回复上限。请删除一条或升级以添加更多。",
+        "nearLimit": "你已接近套餐的 {limit} 条快捷回复上限。",
+        "upgrade": "查看套餐",
+        "tabsLabel": "显示",
+        "tab": {
+          "all": "全部（{count}）",
+          "shared": "共享（{count}）",
+          "mine": "我的（{count}）"
+        },
+        "categoryFilter": "按分类筛选",
+        "allCategories": "所有分类",
+        "searchLabel": "搜索快捷回复",
+        "searchPlaceholder": "按快捷方式、标题或文本搜索",
+        "howItWorks": "在收件箱中，在消息框输入 / 或使用“快捷回复”按钮。像 '{{first_name}}' 这样的变量会在文本进入输入框之前，根据会话内容填充。在客服点击发送之前不会发送任何内容。",
+        "loading": "正在加载快捷回复",
+        "loadFailed": "无法加载快捷回复。",
+        "retry": "重试",
+        "loadMore": "加载更多",
+        "list": "快捷回复",
+        "emptyTitle": "还没有快捷回复",
+        "empty": "写下团队反复给出的答复，然后一键插入。",
+        "noMatchTitle": "未找到任何内容",
+        "noMatch": "没有与“{q}”匹配的快捷回复。",
+        "noMatchCategory": "此分类中没有快捷回复。",
+        "scope": {
+          "shared": "共享",
+          "mine": "我的"
+        },
+        "allChannels": "所有渠道",
+        "neverUsed": "尚未使用",
+        "used": "已使用 {count, plural, other {# 次}}",
+        "lastUsed": "上次使用 {when}",
+        "createdBy": "创建者：{name}",
+        "readOnly": "只有管理快捷回复的人才能更改共享回复。",
+        "edit": "编辑",
+        "duplicate": "复制",
+        "delete": "删除",
+        "cancel": "取消",
+        "deleteTitle": "删除此快捷回复？",
+        "deleteShared": "/{shortcut} 将对工作区中的所有人移除。",
+        "deleteMine": "/{shortcut} 将从你的回复中移除。",
+        "deleted": "快捷回复已删除。",
+        "duplicated": "快捷回复已复制。",
+        "created": "快捷回复 /{shortcut} 已创建。",
+        "saved": "快捷回复已更新。"
+      },
+      "form": {
+        "eyebrow": "快捷回复",
+        "titleNew": "新建快捷回复",
+        "titleEdit": "编辑快捷回复",
+        "close": "关闭",
+        "cancel": "取消",
+        "save": "保存",
+        "saving": "正在保存…",
+        "shortcut": "快捷方式",
+        "shortcutPlaceholder": "谢谢",
+        "shortcutHint": "字母、数字和下划线，最多 {max} 个字符。",
+        "shortcutStored": "客服输入 /{shortcut}",
+        "shortcutEmpty": "请输入由字母、数字或下划线组成的快捷方式。",
+        "shortcutTaken": "/{shortcut} 已被另一条回复使用。请选择其他快捷方式。",
+        "title": "标题",
+        "titlePlaceholder": "感谢您联系我们",
+        "titleEmpty": "请输入标题。",
+        "titleLong": "标题最多可有 {max} 个字符。",
+        "body": "文本",
+        "bodyHint": "纯文本。可像在 WhatsApp 中一样使用 *粗体* 和 _斜体_。",
+        "bodyPlaceholder": "您好 '{{first_name}}'，感谢您联系我们。请问有什么可以帮您？",
+        "bodyEmpty": "请输入回复的文本。",
+        "bodyLong": "文本最多可有 {max} 个字符。",
+        "count": "{n} / {max}",
+        "variables": "插入变量",
+        "variablesHint": "点击其中一个即可在光标处添加。无法填充的变量会保持原样，以便客服看到。",
+        "preview": "预览",
+        "previewHint": "使用示例客户数据。",
+        "previewEmpty": "输入文本以查看显示效果。",
+        "previewIssues": "预览中未填充：{list}。使用回复时，如果联系人有相应属性则会填充；其余内容保持原样。",
+        "category": "分类（可选）",
+        "categoryPlaceholder": "问候、账单、支持",
+        "language": "语言（可选）",
+        "languageHint": "如 en 或 pt-BR 的代码，仅供你自己参考。",
+        "languageFormat": "请使用 en 或 pt-BR 这样的语言代码。",
+        "channels": "仅限这些渠道",
+        "channelsHint": "全部不勾选则在所有渠道提供。",
+        "scope": "谁可以使用",
+        "scopeOption": {
+          "shared": "工作区中的所有人",
+          "mine": "仅我自己"
+        },
+        "scopeLocked": "回复保存后，不能在共享和个人之间切换。",
+        "planLimit": "你已达到套餐的快捷回复上限。",
+        "upgrade": "查看套餐",
+        "conflict": "有人先更改了此回复。请关闭此窗口并重新打开。",
+        "invalid": "你输入的部分内容无效。"
+      },
+      "transfer": {
+        "export": "导出 CSV",
+        "import": "导入 CSV",
+        "title": "导入快捷回复",
+        "intro": "上传包含 title、shortcut、body 列的 CSV，也可以选填 category、language 和 channel 列（多个渠道类型用 | 分隔，留空表示所有渠道）。最多 1,000 行，{maxKb} KB。导入的快捷回复会与整个团队共享。导出文件使用相同的列。",
+        "file": "CSV 文件",
+        "tooBig": "文件太大。",
+        "duplicates": "当共享快捷回复已使用该快捷指令时",
+        "policy": {
+          "skip": "保留现有快捷回复",
+          "overwrite": "替换其文本"
+        },
+        "policyHint": {
+          "skip": "将跳过该行，快捷回复保持不变。",
+          "overwrite": "标题、文本、分类、语言和渠道都会被替换。使用次数保持不变。"
+        },
+        "check": "检查文件",
+        "go": "导入 ({count})",
+        "cancel": "取消",
+        "summary": "{create} 条待创建，{update} 条待替换，{skip} 条已跳过，{invalid} 条有问题。尚未保存任何内容。",
+        "plan": "你的套餐：{used}/{limit} 条快捷回复。",
+        "row": "第 {line} 行：/{shortcut}",
+        "truncated": "仅列出前几条有问题或有变更的行。",
+        "done": "已导入：创建 {created} 条，替换 {updated} 条。",
+        "issue": {
+          "update": "将被替换",
+          "skip": "已跳过",
+          "invalid": "有问题",
+          "duplicate": "快捷指令已被使用，已跳过",
+          "missing_shortcut": "没有快捷指令",
+          "shortcut_invalid": "快捷指令中没有可用的字母或数字",
+          "missing_title": "没有标题",
+          "title_too_long": "标题过长",
+          "missing_body": "没有文本",
+          "body_too_long": "文本过长",
+          "control_characters": "包含控制字符",
+          "category_too_long": "分类过长",
+          "language_invalid": "语言不是 en 或 pt-BR 之类的代码",
+          "channel_unknown": "未知渠道",
+          "duplicate_in_file": "该快捷指令在文件前面已出现",
+          "plan_limit_reached": "超出套餐限制"
+        }
+      }
+    },
+    "bulk": {
+      "barLabel": "批量操作",
+      "selected": "{count, plural, one {已选择 # 个对话} other {已选择 # 个对话}}",
+      "selectAllInView": "选择当前视图中的全部 {count} 个",
+      "done": "完成",
+      "markRead": "标为已读",
+      "resolve": "标为已解决",
+      "close": "关闭",
+      "reopen": "重新打开",
+      "assign": "分配",
+      "assignToMe": "分配给我",
+      "unassign": "取消分配",
+      "removeTeam": "移除团队",
+      "priority": "优先级",
+      "snooze": "暂时搁置",
+      "snoozePreset": {
+        "oneHour": "1 小时",
+        "threeHours": "3 小时",
+        "tomorrow": "明天 9:00",
+        "nextWeek": "下周一 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {已更新 # 个对话} other {已更新 # 个对话}}。",
+        "nothingChanged": "无需更改：所选对话已是最新状态。",
+        "partial": "已更新 {done} 个，{unchanged} 个已是最新，{failed} 个无法更改。失败的对话仍保持选中。",
+        "allFailed": "{count, plural, one {# 个对话} other {# 个对话}}均无法更改。"
+      },
+      "label": "标签",
+      "labelAdd": "添加标签",
+      "labelRemove": "移除标签"
+    },
+    "triage": {
+      "priority": "优先级",
+      "snooze": "暂时搁置",
+      "wake": "立即恢复"
+    },
+    "labels": {
+      "label": "标签",
+      "loading": "正在加载标签…",
+      "loadFailed": "无法加载标签。",
+      "none": "暂无标签。",
+      "newLabel": "新建标签",
+      "add": "添加",
+      "filter": "标签",
+      "filterActive": "{count, plural, one {# 个标签} other {# 个标签}}",
+      "clearFilter": "清除标签筛选",
+      "screen": {
+        "back": "返回收件箱",
+        "title": "标签",
+        "intro": "标签用于标记会话，方便团队分类和筛选。它们与联系人上使用的标签相同。",
+        "newTitle": "新建标签",
+        "editTitle": "编辑标签",
+        "name": "名称",
+        "color": "颜色",
+        "colorInvalid": "请使用十六进制颜色（如 #075E54）或颜色名称。",
+        "description": "描述（可选）",
+        "create": "创建标签",
+        "save": "保存更改",
+        "cancel": "取消",
+        "edit": "编辑",
+        "delete": "删除",
+        "inUse": "{count, plural, one {# 个会话} other {# 个会话}}",
+        "emptyTitle": "暂无标签",
+        "emptyMessage": "请先在上方创建第一个标签，然后在收件箱中将其添加到会话。",
+        "deleteTitle": "删除此标签？",
+        "deleteMessage": "\"{name}\" 已用于 {count, plural, one {# 个会话} other {# 个会话}}。删除后，它将从这些会话以及带有该标签的所有联系人中移除。此操作无法撤销。",
+        "nameTaken": "已存在同名标签。",
+        "conflict": "其他人已先修改了此标签。列表已重新加载。",
+        "saved": "标签已保存",
+        "created": "标签已创建",
+        "deleted": "标签已删除"
       }
     }
   }

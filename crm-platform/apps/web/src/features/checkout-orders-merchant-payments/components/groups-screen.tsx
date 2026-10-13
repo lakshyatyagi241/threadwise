@@ -124,7 +124,7 @@ function SummaryStrip({ summary }: { summary: ReturnType<typeof useGroupSummary>
           <div className="space-y-1 text-sm font-normal">
             <p className="text-muted-foreground">{t('summary.noBot')}</p>
             <Link
-              href={'/channels'}
+              href="/channels/whatsapp"
               className="font-medium text-primary underline-offset-2 hover:underline"
             >
               {t('summary.connect')}
@@ -164,7 +164,7 @@ function EmptyGroups({ searching }: { searching: boolean }) {
       <div className="text-lg font-semibold">{t('empty.title')}</div>
       <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">{t('empty.message')}</p>
       <div className="mt-5 flex justify-center">
-        <LinkButton href={'/channels'} variant="secondary">
+        <LinkButton href="/channels/whatsapp" variant="secondary">
           {t('empty.action')}
         </LinkButton>
       </div>

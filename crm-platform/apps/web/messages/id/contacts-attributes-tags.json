@@ -121,6 +121,12 @@
       "selectedActionsNone": "Kontak terpilih (pilih baris terlebih dahulu)",
       "modifyColumns": "Ubah Kolom",
       "resetColumns": "Reset ke default",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nama Kontak",
       "colPhone": "Nomor Telepon",
       "colEmailId": "ID Email",
@@ -170,7 +176,8 @@
       "import": "Impor",
       "columns": "Kolom",
       "addColumnField": "Tambah kolom kustom sebagai kolom tabel",
-      "kanbanView": "Tampilan papan (berdasarkan tahap)"
+      "kanbanView": "Tampilan papan (berdasarkan tahap)",
+      "colLeadScore": "Skor prospek"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -406,7 +413,8 @@
         "address": "Alamat",
         "memo": "Memo",
         "status": "Status",
-        "source": "Sumber"
+        "source": "Sumber",
+        "consent": "Persetujuan pemasaran (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",
@@ -1174,7 +1182,7 @@
       },
       "exports": {
         "title": "Ekspor",
-        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. File yang diunduh tidak disimpan.",
+        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. Setiap file disimpan 30 hari agar Anda dan rekan yang boleh mengekspor dapat mengunduhnya lagi.",
         "empty": "Belum ada ekspor.",
         "by": "Oleh",
         "rows": "Kontak",
@@ -1183,7 +1191,11 @@
         "selections": {
           "ids": "Kontak yang dicentang",
           "filter": "Semua yang cocok"
-        }
+        },
+        "download": "Unduh",
+        "noFile": "Tidak disimpan",
+        "keptUntil": "Disimpan hingga {date}",
+        "downloadFailed": "File tidak dapat diunduh. Mungkin sudah kedaluwarsa."
       }
     }
   }

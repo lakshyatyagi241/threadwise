@@ -164,7 +164,12 @@
       "messaging": "Fluxo de mensagens",
       "messagingNote": "WhatsApp, Instagram ou Facebook — troque o canal no nó Gatilho",
       "call": "Chamada",
-      "callNote": "URA de voz com IA — fale, escute, transfira"
+      "callNote": "URA de voz com IA — fale, escute, transfira",
+      "subtitleSimple": "Cada bot é criado para um único canal, porque nem todos os componentes funcionam em todos os canais.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Responde aos clientes em um número de WhatsApp conectado",
+      "web": "Chat do site",
+      "webNote": "Um widget de chat que você adiciona ao seu site"
     },
     "rename": {
       "title": "Renomear fluxo",
@@ -553,8 +558,8 @@
           "faqAllFaqs": "Todas as FAQs",
           "faqCategory": "FAQs da categoria {name}",
           "faqScore": "pontuação mín. {score}",
-          "faqWorkspaceScore": "pontuação do workspace",
-          "faqNotSent": "não enviada"
+          "faqNotSent": "não enviada",
+          "faqWorkspaceScore": "pontuação do fluxo"
         },
         "overlays": {
           "startPinned": "Este é o ponto de partida (clique para desafixar)",
@@ -1790,28 +1795,22 @@
         },
         "faq": {
           "intro": {
-            "body": "Compara uma mensagem com suas FAQs pelo significado e a responde. Sai por <mono>respondida</mono> quando uma FAQ respondeu, e por <mono>sem correspondência</mono> caso contrário.",
-            "sub": "Funciona sem ativar a resposta automática com FAQ. <link>Gerenciar suas FAQs</link>"
+            "body": "Compara uma mensagem com as FAQs deste fluxo por significado e a responde. Sai por <mono>answered</mono> quando uma FAQ respondeu e por <mono>no match</mono> caso contrário.",
+            "sub": "Funciona sem ativar a resposta automática por FAQ deste fluxo. <link>Gerenciar as FAQs deste fluxo</link>"
           },
           "exitsLabel": "Saídas",
           "exitMatchedName": "Respondida",
           "exitMatched": "uma FAQ respondeu: o texto dela foi enviado (a menos que o envio esteja desativado), ou o fluxo dela assumiu e não volta.",
           "exitNoMatchName": "Sem correspondência",
           "exitNoMatch": "nada foi parecido o bastante, a resposta com FAQ está desativada na plataforma, o fluxo ou a etapa vinculada não existe mais, ou a mensagem estava vazia.",
-          "noFaqs": "Você ainda não tem FAQs, então esta etapa sempre sai por sem correspondência. <link>Adicione sua primeira FAQ</link>",
           "query": "Mensagem a comparar",
           "queryHint": "Por padrão, é a última mensagem do cliente. Uma variável salva por uma etapa de Pergunta também funciona, por exemplo <mono>{variable}</mono>. Digite / para inserir uma.",
           "category": "Somente estas FAQs",
           "allFaqs": "Todas as FAQs",
           "loadingCategories": "Carregando categorias…",
           "categoryGone": "{name} (nenhuma FAQ a usa)",
-          "categoryHint": "Somente FAQs desta categoria podem responder. As categorias vêm das suas FAQs.",
-          "categoriesFailed": "Não foi possível carregar as categorias das suas FAQs.",
           "retry": "Tentar novamente",
           "minScore": "Pontuação mínima",
-          "useWorkspaceScore": "Usar a configuração do workspace",
-          "minScoreHint": "Substitui a pontuação do workspace somente nesta etapa, de {min} a {max}. As pontuações dependem do modelo de embeddings da plataforma, então teste uma mensagem em <link>Teste de FAQ</link> antes de escolher um número.",
-          "minScoreInvalid": "Digite um número de {min} a {max}, ou use a configuração do workspace.",
           "sendAnswer": "Enviar a resposta ao cliente",
           "sendAnswerToggle": "Enviar como mensagem a resposta de texto correspondente",
           "sendAnswerOnHint": "A FAQ de texto correspondente é enviada ao cliente. Uma FAQ que inicia um fluxo continua nesse fluxo.",
@@ -1824,7 +1823,14 @@
             "question": "a pergunta da FAQ correspondente",
             "score": "o quão próxima foi a correspondência",
             "id": "o id da FAQ correspondente"
-          }
+          },
+          "noFaqs": "Este fluxo ainda não tem FAQs, então esta etapa sempre sai por no match. <link>Adicionar a primeira FAQ deste fluxo</link>",
+          "useWorkspaceScore": "Usar a configuração deste fluxo",
+          "minScoreInvalid": "Digite um número de {min} a {max}, ou use a configuração deste fluxo.",
+          "saveFlowFirst": "Salve o fluxo primeiro. As FAQs dele são editadas na aba FAQs do construtor simples, e esta etapa responde com base nelas.",
+          "categoryHint": "Somente FAQs desta categoria podem responder. As categorias vêm das FAQs deste fluxo.",
+          "categoriesFailed": "Não foi possível carregar as categorias de FAQ deste fluxo.",
+          "minScoreHint": "Substitui a pontuação deste fluxo apenas para esta etapa, de {min} a {max}. As pontuações dependem do modelo de embeddings da plataforma, então teste uma mensagem no <link>teste de FAQ</link> deste fluxo antes de escolher um número."
         }
       },
       "attrPicker": {
@@ -1885,6 +1891,16 @@
           "sampleName": "Local de teste",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Seções do fluxo",
+        "faqs": "FAQs",
+        "saveFirst": "Salve o fluxo primeiro.",
+        "build": "Criar",
+        "customize": "Personalizar",
+        "install": "Instalar",
+        "needsCustomizing": "O widget ainda usa a aparência padrão. Abra Personalizar.",
+        "customizeFirst": "Personalize o widget de chat e salve-o uma vez antes de publicar."
       }
     },
     "contracts": {
@@ -2212,7 +2228,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-mail"
+        "email": "E-mail",
+        "web": "Chat do site"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-AAAA",
@@ -2307,7 +2324,7 @@
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",
         "noSenderFacebook": "O nó Gatilho não tem Página do Facebook selecionada — escolha uma na etapa Gatilho.",
         "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho.",
-        "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do workspace."
+        "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do fluxo."
       }
     },
     "simpleModel": {
@@ -2443,7 +2460,7 @@
         "rowTitle": "Etapa {stage}: cada linha precisa de um título de até {max} caracteres.",
         "rowDescriptionTooLong": "Etapa {stage}: a descrição de uma linha tem mais de {max} caracteres.",
         "variableUsed": "Etapa {stage}: “{name}” já é usado pela etapa {other}; dê a cada resposta o seu próprio nome.",
-        "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do workspace."
+        "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do fluxo."
       },
       "faqSummary": "{hasCategory, select, true {Das suas FAQs · {category}} other {Das suas FAQs}}"
     },

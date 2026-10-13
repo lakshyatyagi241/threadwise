@@ -56,6 +56,12 @@ Query (all optional, all filters combine with AND):
 A uuid in a filter that is not in this workspace (a deleted group, a stale tag, another workspace's owner) matches nothing; it never
 widens the result. `limit` above 1000, a `tagId` that is not a uuid, or `groupId` with `noGroup` is 422 `VALIDATION_FAILED`.
 
+**`lastActivityAt`** (the "Last Activity" column, the `lastActivityFrom`/`lastActivityTo` filter and the segment field) moves when a
+note, activity, meeting or file is added, a form is submitted or an order is placed, **and when the contact writes to us or a person on
+the team replies** in the Inbox (a bot reply, a broadcast, an imported history message and a group thread do not count). The chat's
+stamp is a bookkeeping write: it moves forward at most once a minute per contact and it does not change `updatedAt` or `rowVersion`
+(migration `20261121090000_contacts_activity_touch`), so an open edit form is not sent a 409 while the customer is typing.
+
 ### `GET /contacts/stats` [`record.contacts.read`, scope]
 
 Workspace-wide, ignores any filter: `{ "total": 10, "groups": 3, "subscribed": 8, "unsubscribed": 2, "noGroup": 7, "grouped": 3, "imported": 0 }`.

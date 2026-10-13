@@ -28,9 +28,15 @@ import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { EXT_ERROR_CODES } from '../chrome-extension-sheets-addon/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
 import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
+import { LSC_ERROR_CODES } from '../lead-scoring/errors';
+import { CONSENT_ERROR_CODES } from '../contact-consent/errors';
+import { GROWTH_ERROR_CODES } from '../growth';
 
 export const ERROR_CODES = {
   ...FAQ_ERROR_CODES,
+  ...LSC_ERROR_CODES,
+  ...GROWTH_ERROR_CODES,
+  ...CONSENT_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,
@@ -229,6 +235,53 @@ export const ERROR_CODES = {
   TG_NOTHING_TO_SEND: 'TG_NOTHING_TO_SEND',
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
+
+  // Help assistant (docs/specs/help-agent-assistant.md)
+  /** The workspace switch is off, or the person may not use the assistant here (a disabled screen, a missing permission). */
+  HELP_AGENT_DISABLED: 'HELP_AGENT_DISABLED',
+  /** Too many tasks started for this person or workspace today, or too fast. */
+  HELP_AGENT_TASK_LIMIT: 'HELP_AGENT_TASK_LIMIT',
+  /** The task used its step budget, its time or its token allowance. */
+  HELP_AGENT_STEP_LIMIT: 'HELP_AGENT_STEP_LIMIT',
+  /** The task already finished or expired: start a new one. */
+  HELP_AGENT_TASK_CLOSED: 'HELP_AGENT_TASK_CLOSED',
+  /** No AI provider key is configured, or the provider failed. */
+  HELP_AGENT_PROVIDER_UNAVAILABLE: 'HELP_AGENT_PROVIDER_UNAVAILABLE',
+  /** The model request is not one the assistant sends (an unknown field, a stream, too large). */
+  HELP_AGENT_REQUEST_INVALID: 'HELP_AGENT_REQUEST_INVALID',
+  // Email channel (TW-MAIL)
+  /** The platform operator has not entered the Google credentials. */
+  MAIL_NOT_CONFIGURED: 'MAIL_NOT_CONFIGURED',
+  /** The workspace is at its mailbox limit. */
+  MAIL_MAILBOX_LIMIT: 'MAIL_MAILBOX_LIMIT',
+  /** The mailbox is disconnected or needs reconnecting, so it cannot send or sync. */
+  MAIL_MAILBOX_UNAVAILABLE: 'MAIL_MAILBOX_UNAVAILABLE',
+  /** Google refused a send (address, size, quota). */
+  MAIL_SEND_REFUSED: 'MAIL_SEND_REFUSED',
+  /** The signed-in Google account is not the mailbox being reconnected. */
+  MAIL_WRONG_ACCOUNT: 'MAIL_WRONG_ACCOUNT',
+  /** The provider is unknown, or its platform setup is missing (Microsoft client, Pub/Sub). */
+  MAIL_PROVIDER_UNSUPPORTED: 'MAIL_PROVIDER_UNSUPPORTED',
+  /** IMAP refused the user name or password (connect, or a later sync). */
+  MAIL_IMAP_AUTH_FAILED: 'MAIL_IMAP_AUTH_FAILED',
+  /** SMTP refused the user name or password. */
+  MAIL_SMTP_AUTH_FAILED: 'MAIL_SMTP_AUTH_FAILED',
+  /** The IMAP or SMTP server could not be reached or its TLS failed. */
+  MAIL_IMAP_CONNECT_FAILED: 'MAIL_IMAP_CONNECT_FAILED',
+  /** The workspace has not enabled personal mailboxes. */
+  MAIL_PERSONAL_DISABLED: 'MAIL_PERSONAL_DISABLED',
+  /** Personal mailboxes are on, but the caller may not connect one (policy 'admins', or the mailbox is someone else's). */
+  MAIL_PERSONAL_NOT_ALLOWED: 'MAIL_PERSONAL_NOT_ALLOWED',
+  /** The mailbox hit its per-hour send limit. */
+  MAIL_RATE_LIMITED: 'MAIL_RATE_LIMITED',
+  /** An outbound attachment is over the per-file or the total size cap. */
+  MAIL_ATTACHMENT_TOO_LARGE: 'MAIL_ATTACHMENT_TOO_LARGE',
+  /** More than the allowed number of attachments on one reply. */
+  MAIL_TOO_MANY_ATTACHMENTS: 'MAIL_TOO_MANY_ATTACHMENTS',
+  /** A staged attachment id does not exist, expired, or is not the caller's. */
+  MAIL_ATTACHMENT_NOT_FOUND: 'MAIL_ATTACHMENT_NOT_FOUND',
+  /** The signature does not exist or is not one the caller may use. */
+  MAIL_SIGNATURE_NOT_FOUND: 'MAIL_SIGNATURE_NOT_FOUND',
 
   // SMS channel (TW-SMS)
   /** The provider refused the credentials at connect time. */

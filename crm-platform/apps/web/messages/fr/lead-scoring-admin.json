@@ -1,0 +1,217 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "IA",
+      "scoring": "Scoring de leads par IA"
+    },
+    "common": {
+      "loading": "Chargement",
+      "retry": "Réessayer",
+      "requestId": "ID de la requête",
+      "dash": "-",
+      "cancel": "Annuler",
+      "errors": {
+        "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+        "request": "La requête n'a pas pu aboutir.",
+        "unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "validation": "Certaines valeurs ne sont pas valides. Vérifiez les champs en surbrillance.",
+        "notFound": "Cet élément n'existe plus."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · IA · Scoring de leads",
+      "title": "Scoring de leads par IA",
+      "description": "Détermine si les espaces de travail peuvent évaluer leurs contacts avec un modèle d'IA, quel modèle le fait, les limites et ce que cela coûte.",
+      "superOnly": "Seul un super administrateur peut voir ou modifier le scoring de leads par IA."
+    },
+    "status": {
+      "label": "Statut du scoring de leads",
+      "switch": {
+        "title": "Interrupteur de la plateforme",
+        "on": "Activé",
+        "off": "Désactivé",
+        "hintOn": "Les espaces de travail qui ont activé l'option peuvent évaluer leurs contacts.",
+        "hintOff": "Aucun espace de travail ne peut évaluer de contacts, quel que soit son propre réglage."
+      },
+      "model": {
+        "title": "Modèle",
+        "custom": "Un modèle saisi à la main, absent de la liste."
+      },
+      "key": {
+        "title": "Clé OpenRouter de la plateforme",
+        "ready": "Prête",
+        "missing": "Manquante",
+        "explainReady": "Les espaces de travail sans clé OpenRouter propre sont évalués avec celle-ci, et vous payez ces évaluations.",
+        "explainMissing": "Sans clé de plateforme, seuls les espaces de travail ayant enregistré leur propre clé OpenRouter peuvent évaluer des contacts.",
+        "link": "Ouvrir les clés IA"
+      },
+      "reach": {
+        "title": "Portée",
+        "workspaces": "Espaces de travail inscrits",
+        "contacts": "Contacts évalués"
+      }
+    },
+    "settings": {
+      "title": "Paramètres",
+      "description": "Les modifications s'appliquent à tous les espaces de travail à la fois. Seuls les champs modifiés sont enregistrés.",
+      "enabled": {
+        "label": "Scoring de leads par IA",
+        "hint": "Désactivé par défaut. Lorsqu'il est activé, les espaces de travail inscrits envoient des données de contact anonymisées à OpenRouter pour obtenir un score de 0 à 100. Désactivez-le pour arrêter tout scoring."
+      },
+      "model": {
+        "label": "Modèle",
+        "hint": "Les prix sont en dollars américains par million de tokens, d'après la liste d'OpenRouter.",
+        "option": "{label} · {input} en entrée / {output} en sortie",
+        "other": "Autre ID de modèle OpenRouter",
+        "details": "{input} par million de tokens d'entrée, {output} par million de tokens de sortie.",
+        "customLabel": "ID de modèle OpenRouter",
+        "customHint": "Tout ID de modèle OpenRouter qui prend en charge la sortie structurée.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limites",
+        "scoresPerHour": "Scores par espace de travail et par heure",
+        "scoresPerHourHint": "Une protection des coûts pour les espaces de travail qui utilisent la clé de la plateforme. 0 signifie aucune limite.",
+        "retentionDays": "Conserver le journal pendant (jours)",
+        "retentionDaysHint": "Les exécutions plus anciennes et leur historique de coûts sont supprimés. De 7 à 730 jours."
+      },
+      "saving": "Enregistrement",
+      "save": "Enregistrer les modifications",
+      "reset": "Annuler les modifications",
+      "changed": "{count, plural, one {# modification prête à être enregistrée} many {# de modifications prêtes à être enregistrées} other {# modifications prêtes à être enregistrées}}",
+      "unchanged": "Aucune modification à enregistrer.",
+      "saved": "Paramètres du scoring de leads enregistrés.",
+      "errors": {
+        "range": "Saisissez une valeur comprise entre {min} et {max}.",
+        "integer": "Saisissez un nombre entier.",
+        "modelId": "Utilisez un ID de modèle OpenRouter tel que openai/gpt-6-luna.",
+        "invalid": "Cette valeur n'est pas valide."
+      },
+      "confirm": {
+        "title": "Confirmer la modification",
+        "turnOn": "Les espaces de travail inscrits pourront envoyer des données de contact anonymisées à OpenRouter et consommer le crédit de la clé de votre plateforme.",
+        "turnOff": "Cela arrête tout le scoring de leads par IA pour tous les espaces de travail. Les scores déjà enregistrés sont conservés.",
+        "confirm": "Enregistrer les modifications"
+      }
+    },
+    "cost": {
+      "title": "Coût du scoring",
+      "description": "Totaux issus du journal de scoring, en dollars américains.",
+      "last24h": "Dernières 24 heures",
+      "last30d": "30 derniers jours",
+      "scores": "Scores écrits",
+      "failed": "Exécutions en échec",
+      "tokens": "Tokens",
+      "tokensSplit": "Tokens d'entrée / de sortie",
+      "total": "Coût total",
+      "average": "Moyenne par score",
+      "platform": "Payé par la clé de la plateforme",
+      "footnote": "Les coûts correspondent au montant communiqué par OpenRouter, ou à une estimation fondée sur le nombre de tokens à défaut. Les exécutions facturées sur la clé propre d'un espace de travail sont comprises dans le total, mais pas dans la part de la plateforme."
+    },
+    "workspaces": {
+      "title": "Espaces de travail",
+      "description": "Qui utilise le scoring de leads par IA et ce que cela leur a coûté sur les 30 derniers jours, du plus élevé au plus faible.",
+      "search": "Rechercher des espaces de travail",
+      "searchPlaceholder": "Nom de l'espace de travail",
+      "limit": "Lignes",
+      "limitOption": "{count} lignes",
+      "noMatchTitle": "Aucun espace de travail ne correspond",
+      "noMatchMessage": "Essayez un autre nom.",
+      "clearSearch": "Effacer la recherche",
+      "emptyTitle": "Aucun espace de travail pour l'instant",
+      "emptyMessage": "Les espaces de travail apparaîtront ici dès qu'ils existeront.",
+      "tableLabel": "Espaces de travail par coût de scoring",
+      "columns": {
+        "name": "Espace de travail",
+        "enabled": "Scoring",
+        "contacts": "Contacts évalués",
+        "scores": "Scores, 30 jours",
+        "cost": "Coût, 30 jours"
+      },
+      "enabled": "Activé",
+      "disabled": "Désactivé"
+    },
+    "runs": {
+      "title": "Journal de scoring",
+      "description": "Chaque tentative de scoring dans tous les espaces de travail, la plus récente d'abord, avec tokens, coût et payeur.",
+      "refresh": "Actualiser",
+      "filters": {
+        "status": "Statut",
+        "anyStatus": "Tous les statuts",
+        "workspace": "Espace de travail",
+        "anyWorkspace": "Tous les espaces de travail",
+        "clear": "Effacer les filtres"
+      },
+      "status": {
+        "ok": "Évalué",
+        "kept": "Conservé",
+        "failed": "Échec",
+        "skipped": "Ignoré"
+      },
+      "trigger": {
+        "created": "Contact créé",
+        "updated": "Contact modifié",
+        "manual": "Bouton Évaluer",
+        "backfill": "Rattrapage"
+      },
+      "scoreWas": "{score} (était {previous})",
+      "tokensTitle": "{input} en entrée, {output} en sortie",
+      "costSource": {
+        "vendor": "Communiqué",
+        "estimate": "Estimation",
+        "none": "Aucun appel"
+      },
+      "costSourceHelp": {
+        "vendor": "Le coût communiqué par OpenRouter pour cet appel.",
+        "estimate": "Aucun coût n'a été communiqué ; il s'agit donc du nombre de tokens multiplié par le prix catalogue du modèle.",
+        "none": "Aucun appel n'a été effectué, donc rien n'a été facturé."
+      },
+      "paidBy": {
+        "admin": "Plateforme",
+        "workspace": "Espace de travail",
+        "none": "Personne"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "L'interrupteur de la plateforme est désactivé",
+        "not_enabled": "L'espace de travail ne s'est pas inscrit",
+        "contact_gone": "Le contact a été supprimé",
+        "manual_score": "Le contact a un score saisi manuellement",
+        "no_key": "Aucune clé OpenRouter",
+        "token_allowance": "Quota de tokens épuisé",
+        "hourly_limit": "Limite horaire atteinte",
+        "auth": "OpenRouter a refusé la clé",
+        "rate_limited": "Limite de débit OpenRouter",
+        "provider": "Erreur OpenRouter",
+        "timeout": "Délai dépassé côté OpenRouter",
+        "bad_response": "La réponse n'était pas un score valide"
+      },
+      "noMatchTitle": "Aucune exécution ne correspond",
+      "noMatchMessage": "Aucune exécution de scoring ne correspond à ces filtres.",
+      "emptyTitle": "Aucune exécution pour l'instant",
+      "emptyMessage": "Les exécutions apparaîtront ici dès qu'un espace de travail évaluera un contact.",
+      "tableLabel": "Exécutions de scoring",
+      "columns": {
+        "time": "Heure",
+        "workspace": "Espace de travail",
+        "contact": "Contact",
+        "trigger": "Déclencheur",
+        "status": "Statut",
+        "score": "Score",
+        "model": "Modèle",
+        "tokens": "Tokens",
+        "cost": "Coût",
+        "paidBy": "Payé par",
+        "duration": "Durée",
+        "error": "Motif"
+      },
+      "costLegend": "Un ~ devant un coût indique une estimation fondée sur le nombre de tokens plutôt que le montant communiqué par OpenRouter.",
+      "loadMore": "Charger plus",
+      "loadingMore": "Chargement"
+    }
+  }
+}
