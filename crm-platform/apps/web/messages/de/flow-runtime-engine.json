@@ -119,6 +119,8 @@
       "colStarted": "Gestartet",
       "colActivity": "Letzte Aktivität",
       "colSteps": "Schritte",
+      "colReplies": "Antworten",
+      "repliesHint": "Kundennachrichten, die einen Warteknoten dieses Laufs erreicht haben",
       "colActions": "Aktionen",
       "open": "Durchlauf öffnen",
       "cancel": "Abbrechen",
