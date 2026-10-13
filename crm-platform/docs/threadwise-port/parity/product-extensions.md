@@ -376,3 +376,7 @@ Open follow-ups are BL-103 in [backlog.md](../../backlog.md).
 Reference has a flat list of quick replies with two variables. Ours is a library: server-filled variables from the open conversation (contact, agent, workspace,
 channel), an optional channel restriction and language, a duplicate action, a category filter, a plan meter with an upgrade link, and a keyboard-driven
 picker. The rules that differ from Reference are listed one by one in [team-inbox-conversations.md](team-inbox-conversations.md#saved-replies-tw-tib1-024).
+
+## Contact owner (BL-108): visible and editable on every contact screen, not in Reference
+
+Reference keeps the creator of a contact in `user_id` and shows it nowhere. Here the owner is a first-class field of the contact: an Owner select in the form (a new contact starts as its creator), an optional Owner column (hidden until turned on), an Owner filter in the Hub (several people, Unassigned, My contacts), the owner on the profile with Change owner, `owner_email` in the CSV export, and a reassignment of "all N matching" in one request. Who may be named follows the record scope. Details, the screen-by-screen table and what is not verified: [contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contact owner"), wiring [contact-owner.md](../wiring/contact-owner.md). The owner on leave, delegation and auto-assignment are a design only: [specs/contact-owner-leave-and-delegation.md](../../specs/contact-owner-leave-and-delegation.md).
