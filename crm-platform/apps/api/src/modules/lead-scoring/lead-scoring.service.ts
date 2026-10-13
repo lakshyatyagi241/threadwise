@@ -419,6 +419,7 @@ export class LeadScoringService {
       autoScore: row?.autoScore ?? true,
       chatDigest: row?.chatDigest ?? false,
       stageSuggestions: row?.stageSuggestions ?? false,
+      stageAutoApply: row?.stageAutoApply ?? true,
       chatDigestAvailable: isChatDigestPilot(slug),
       pendingSuggestions: pending,
       platformEnabled: cfg.platformEnabled,
@@ -448,6 +449,8 @@ export class LeadScoringService {
         // A stage is suggested from a reading of the chat, so it cannot be on without it.
         stageSuggestions:
           chatDigest && (input.stageSuggestions ?? before?.stageSuggestions ?? false),
+        // Automatic is the default; the choice is kept while suggestions are off, so turning them back on remembers it.
+        stageAutoApply: input.stageAutoApply ?? before?.stageAutoApply ?? true,
       };
       // Reading conversations sends masked chat text to the vendor, which is only offered to the pilot workspaces.
       const turningOn =
@@ -468,9 +471,16 @@ export class LeadScoringService {
         autoScore: before?.autoScore ?? true,
         chatDigest: before?.chatDigest ?? false,
         stageSuggestions: before?.stageSuggestions ?? false,
+        stageAutoApply: before?.stageAutoApply ?? true,
       };
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      for (const k of ['enabled', 'autoScore', 'chatDigest', 'stageSuggestions'] as const) {
+      for (const k of [
+        'enabled',
+        'autoScore',
+        'chatDigest',
+        'stageSuggestions',
+        'stageAutoApply',
+      ] as const) {
         if (was[k] !== next[k]) delta[k] = { old: was[k], new: next[k] };
       }
       await this.audit.record(tx, {

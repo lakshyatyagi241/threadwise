@@ -223,7 +223,15 @@
       "groupMember": "חבר קבוצה",
       "groupTally": "נמסר ל-{delivered} מתוך {members}{read, plural, =0 {} other {, נקרא על ידי #}}{failed, plural, =0 {} other {, # נכשלו}}",
       "groupTallyNoTotal": "נמסר ל-{delivered, plural, one {חבר אחד} other {# חברים}}{read, plural, =0 {} other {, נקרא על ידי #}}{failed, plural, =0 {} other {, # נכשלו}}",
-      "groupTallyBilled": "{billable} חויבו, {free} בחינם"
+      "groupTallyBilled": "{billable} חויבו, {free} בחינם",
+      "stageLine": {
+        "auto": "הבינה המלאכותית קראה את הצ׳אט והעבירה את איש הקשר הזה מ-{from} ל-{to}.",
+        "undo": "ביטול",
+        "wasUndone": "בוטל",
+        "undone": "שינוי השלב בוטל: חזרה ל-{stage}.",
+        "undoneToast": "השלב הוחזר ל-{stage}.",
+        "couldNotUndo": "אי אפשר עוד לבטל את השינוי הזה: איש הקשר התקדם או שהשינוי כבר בוטל."
+      }
     },
     "media": {
       "openImage": "פתח תמונה {name}",

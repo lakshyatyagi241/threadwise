@@ -7,6 +7,7 @@ const settings = (over: Partial<LscSettings> = {}): LscSettings => ({
   autoScore: false,
   chatDigest: false,
   stageSuggestions: false,
+  stageAutoApply: true,
   chatDigestAvailable: false,
   pendingSuggestions: 0,
   platformEnabled: true,
@@ -31,7 +32,13 @@ const settings = (over: Partial<LscSettings> = {}): LscSettings => ({
 describe('toSettingsInput', () => {
   it('sends no rowVersion on the first save (no row yet)', () => {
     const input = toSettingsInput(
-      { enabled: true, autoScore: false, chatDigest: false, stageSuggestions: false },
+      {
+        enabled: true,
+        autoScore: false,
+        chatDigest: false,
+        stageSuggestions: false,
+        stageAutoApply: true,
+      },
       settings(),
     );
     expect(input).toEqual({ enabled: true, autoScore: false });
@@ -40,7 +47,13 @@ describe('toSettingsInput', () => {
   it('sends the version it read on every later save', () => {
     expect(
       toSettingsInput(
-        { enabled: false, autoScore: true, chatDigest: false, stageSuggestions: false },
+        {
+          enabled: false,
+          autoScore: true,
+          chatDigest: false,
+          stageSuggestions: false,
+          stageAutoApply: true,
+        },
         settings({ rowVersion: 4 }),
       ),
     ).toEqual({
@@ -58,11 +71,19 @@ describe('form', () => {
     expect(settingsDirty({ ...base, autoScore: true }, base)).toBe(true);
     expect(settingsDirty({ ...base, chatDigest: true }, base)).toBe(true);
     expect(settingsDirty({ ...base, stageSuggestions: true }, base)).toBe(true);
+    expect(settingsDirty({ ...base, stageAutoApply: false }, base)).toBe(true);
+    expect(base.stageAutoApply).toBe(true);
   });
 });
 
 describe('reading conversations is a pilot', () => {
-  const on = { enabled: true, autoScore: true, chatDigest: true, stageSuggestions: true };
+  const on = {
+    enabled: true,
+    autoScore: true,
+    chatDigest: true,
+    stageSuggestions: true,
+    stageAutoApply: true,
+  };
   it('is sent only by a workspace that is offered it', () => {
     expect(toSettingsInput(on, settings({ chatDigestAvailable: false }))).toEqual({
       enabled: true,
@@ -73,7 +94,13 @@ describe('reading conversations is a pilot', () => {
       autoScore: true,
       chatDigest: true,
       stageSuggestions: true,
+      stageAutoApply: true,
     });
+  });
+  it('sends the manual choice for stage changes', () => {
+    expect(
+      toSettingsInput({ ...on, stageAutoApply: false }, settings({ chatDigestAvailable: true })),
+    ).toMatchObject({ stageAutoApply: false });
   });
   it('never sends stage suggestions without the chat reading', () => {
     expect(

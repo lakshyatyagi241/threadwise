@@ -281,6 +281,21 @@ export class LeadChatDigestRepository {
       : null;
   }
 
+  /** The thread a contact's stage line goes into: the newest one-to-one conversation, as its channel and peer. */
+  async threadOf(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+  ): Promise<{ channelUuid: string; peerKey: string } | null> {
+    const res = await tx.execute(sql`
+      SELECT ch.uuid AS channel_uuid, cv.peer_key FROM conversations cv
+        JOIN channels ch ON ch.org_id = cv.org_id AND ch.id = cv.channel_id
+       WHERE cv.org_id = ${orgId} AND cv.contact_id = ${contactId} AND cv.peer_key NOT LIKE '%@g.us'
+       ORDER BY cv.last_message_at DESC NULLS LAST, cv.id DESC LIMIT 1`);
+    const r = res.rows[0] as Raw | undefined;
+    return r ? { channelUuid: String(r.channel_uuid), peerKey: String(r.peer_key) } : null;
+  }
+
   async latestDigest(tx: Tx, orgId: number, contactUuid: string): Promise<LscDigest | null> {
     const res = await tx.execute(sql`
       SELECT d.*, c.uuid AS contact_uuid FROM lead_chat_digests d
@@ -356,6 +371,23 @@ export class LeadChatDigestRepository {
     return r ? toSuggestionRow(r) : null;
   }
 
+  async suggestionById(tx: Tx, orgId: number, id: number): Promise<SuggestionRow | null> {
+    const res = await tx.execute(sql`
+      SELECT ${SUGGESTION_SELECT} FROM lifecycle_stage_suggestions s
+        JOIN contacts c ON c.org_id = s.org_id AND c.id = s.contact_id
+       WHERE s.org_id = ${orgId} AND s.id = ${id}`);
+    const r = res.rows[0] as Raw | undefined;
+    return r ? toSuggestionRow(r) : null;
+  }
+
+  /** `auto_applied` -> `undone`: false when it was not auto-applied any more (undone already). */
+  async markUndone(tx: Tx, orgId: number, id: number, userId: number | null): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE lifecycle_stage_suggestions SET status = 'undone', decided_by = ${userId}, decided_at = now()
+       WHERE org_id = ${orgId} AND id = ${id} AND status = 'auto_applied' RETURNING id`);
+    return res.rows.length > 0;
+  }
+
   async listSuggestions(
     tx: Tx,
     orgId: number,
@@ -384,7 +416,7 @@ export class LeadChatDigestRepository {
     tx: Tx,
     orgId: number,
     id: number,
-    status: 'accepted' | 'dismissed' | 'superseded',
+    status: 'accepted' | 'dismissed' | 'superseded' | 'auto_applied',
     userId: number | null,
   ): Promise<boolean> {
     const res = await tx.execute(sql`

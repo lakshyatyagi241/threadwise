@@ -223,7 +223,15 @@
       "groupMember": "گروپ رکن",
       "groupTally": "{members} میں سے {delivered} کو پہنچ گیا{read, plural, =0 {} other {، # نے پڑھا}}{failed, plural, =0 {} other {، # ناکام}}",
       "groupTallyNoTotal": "{delivered, plural, one {# رکن} other {# اراکین}} کو پہنچ گیا{read, plural, =0 {} other {، # نے پڑھا}}{failed, plural, =0 {} other {، # ناکام}}",
-      "groupTallyBilled": "{billable} بل ہوئے، {free} مفت"
+      "groupTallyBilled": "{billable} بل ہوئے، {free} مفت",
+      "stageLine": {
+        "auto": "AI نے چیٹ پڑھی اور اس رابطے کو {from} سے {to} میں منتقل کر دیا۔",
+        "undo": "واپس کریں",
+        "wasUndone": "واپس کر دیا گیا",
+        "undone": "مرحلے کی تبدیلی واپس کر دی گئی: دوبارہ {stage}۔",
+        "undoneToast": "مرحلہ واپس {stage} پر کر دیا گیا۔",
+        "couldNotUndo": "اس تبدیلی کو اب واپس نہیں کیا جا سکتا: رابطہ آگے بڑھ چکا ہے یا پہلے ہی واپس کیا جا چکا ہے۔"
+      }
     },
     "media": {
       "openImage": "تصویر {name} کھولیں",

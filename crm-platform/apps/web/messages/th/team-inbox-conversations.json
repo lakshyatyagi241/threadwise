@@ -223,7 +223,15 @@
       "groupMember": "สมาชิกกลุ่ม",
       "groupTally": "ส่งถึง {delivered} จาก {members} คน{read, plural, =0 {} other { อ่านแล้ว # คน}}{failed, plural, =0 {} other { ล้มเหลว #}}",
       "groupTallyNoTotal": "ส่งถึง {delivered, plural, other {# สมาชิก}}{read, plural, =0 {} other { อ่านแล้ว # คน}}{failed, plural, =0 {} other { ล้มเหลว #}}",
-      "groupTallyBilled": "คิดเงิน {billable} ฟรี {free}"
+      "groupTallyBilled": "คิดเงิน {billable} ฟรี {free}",
+      "stageLine": {
+        "auto": "AI อ่านแชตแล้วย้ายผู้ติดต่อนี้จาก {from} ไปที่ {to}",
+        "undo": "เลิกทำ",
+        "wasUndone": "เลิกทำแล้ว",
+        "undone": "เลิกทำการเปลี่ยนขั้นตอนแล้ว: กลับไปที่ {stage}",
+        "undoneToast": "คืนขั้นตอนเป็น {stage} แล้ว",
+        "couldNotUndo": "ไม่สามารถเลิกทำการเปลี่ยนแปลงนี้ได้อีก: ผู้ติดต่อเปลี่ยนขั้นตอนไปแล้ว หรือเลิกทำไปแล้ว"
+      }
     },
     "media": {
       "openImage": "เปิดรูปภาพ {name}",

@@ -223,7 +223,15 @@
       "groupMember": "গ্রুপ সদস্য",
       "groupTally": "{members} জনের মধ্যে {delivered} জনের কাছে পৌঁছেছে{read, plural, =0 {} other {, #জন পড়েছেন}}{failed, plural, =0 {} other {, #টি ব্যর্থ}}",
       "groupTallyNoTotal": "{delivered, plural, one {# সদস্যের} other {# সদস্যের}} কাছে পৌঁছেছে{read, plural, =0 {} other {, #জন পড়েছেন}}{failed, plural, =0 {} other {, #টি ব্যর্থ}}",
-      "groupTallyBilled": "{billable}টি বিল হয়েছে, {free}টি বিনামূল্যে"
+      "groupTallyBilled": "{billable}টি বিল হয়েছে, {free}টি বিনামূল্যে",
+      "stageLine": {
+        "auto": "AI চ্যাট পড়ে এই যোগাযোগটিকে {from} থেকে {to}-এ সরিয়েছে।",
+        "undo": "পূর্বাবস্থায় ফেরান",
+        "wasUndone": "পূর্বাবস্থায় ফেরানো হয়েছে",
+        "undone": "ধাপ পরিবর্তন পূর্বাবস্থায় ফেরানো হয়েছে: আবার {stage}।",
+        "undoneToast": "ধাপ আবার {stage}-এ ফিরিয়ে আনা হয়েছে।",
+        "couldNotUndo": "এই পরিবর্তন আর পূর্বাবস্থায় ফেরানো যাবে না: যোগাযোগটি এগিয়ে গেছে বা আগেই ফেরানো হয়েছে।"
+      }
     },
     "media": {
       "openImage": "ছবি {name} খুলুন",

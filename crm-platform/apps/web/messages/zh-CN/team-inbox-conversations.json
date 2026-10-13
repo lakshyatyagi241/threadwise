@@ -223,7 +223,15 @@
       "groupMember": "群成员",
       "groupTally": "已送达 {delivered}/{members} 人{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
       "groupTallyNoTotal": "已送达 {delivered, plural, other {#位成员}}{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
-      "groupTallyBilled": "计费 {billable}，免费 {free}"
+      "groupTallyBilled": "计费 {billable}，免费 {free}",
+      "stageLine": {
+        "auto": "AI 阅读了聊天，并将此联系人从“{from}”移至“{to}”。",
+        "undo": "撤销",
+        "wasUndone": "已撤销",
+        "undone": "阶段变更已撤销：已恢复为“{stage}”。",
+        "undoneToast": "阶段已恢复为“{stage}”。",
+        "couldNotUndo": "此更改已无法撤销：联系人已进入后续阶段，或已被撤销。"
+      }
     },
     "media": {
       "openImage": "打开图片 {name}",
