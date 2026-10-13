@@ -137,7 +137,8 @@
         "recipients": "{count} alıcı",
         "scheduled": "Zamanlandı: {date}",
         "instant": "Gönderim: anında",
-        "template": "Şablon {name}"
+        "template": "Şablon {name}",
+        "cost": "Maliyet"
       },
       "createBroadcast": "Toplu gönderim oluştur",
       "noData": "Veri bulunamadı",
@@ -227,8 +228,6 @@
         "senderHint": "Varsayılan bırakılırsa kampanya çalışma alanınızın ana altyapısı üzerinden gider.",
         "defaultSender": "Varsayılan gönderici",
         "nameHint": "Raporlar ve kuyruk geçmişi için dahili etiket.",
-        "noSenders": "Bağlı gönderici yok.",
-        "connectOne": "Bir tane bağlayın →",
         "type": "Kampanya türü",
         "types": {
           "custom": {
@@ -650,7 +649,9 @@
         "read": "Okundu",
         "replies": "Yanıtlar",
         "clicks": "Tıklamalar",
-        "failed": "Başarısız"
+        "failed": "Başarısız",
+        "cost": "Maliyet",
+        "costHint": "Şu ana kadar cüzdandan düşülen"
       },
       "tabs": {
         "overview": "Genel bakış",
@@ -827,7 +828,6 @@
         "notFound": "Bu bulunamadı. Silinmiş olabilir.",
         "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
         "unexpected": "Bizim tarafımızda bir şeyler ters gitti. Tekrar deneyin.",
-        "requestId": "İstek kimliği",
         "retry": "Tekrar dene"
       },
       "categories": {
@@ -897,8 +897,7 @@
         "previewEmpty": "Mesajın nasıl göründüğünü görmek için bir şablon seçin.",
         "senderLabel": "Gönderen",
         "senderHint": "Bu toplu gönderimin gönderildiği WhatsApp numarası.",
-        "pickSender": "Bir numara seçin",
-        "noSenders": "Bağlı WhatsApp numarası yok. Önce bir tane bağlayın."
+        "pickSender": "Bir numara seçin"
       },
       "audience": {
         "selectionTitle": "Kişi Merkezinde seçildi",
@@ -932,6 +931,7 @@
         "optedOut": "Çıkmış",
         "invalidNumbers": "Geçersiz numaralar",
         "alwaysSkipped": "Çıkmış kişiler ve geçersiz numaralar her zaman atlanır.",
+        "noConsent": "Kayıtlı onay yok (atlandı)",
         "willBeMessaged": "Mesaj gönderilecek",
         "about": "yaklaşık {count}",
         "approximate": "Bu bir tahmindir: kitle zamanında tam sayılamayacak kadar büyük.",
@@ -1403,6 +1403,41 @@
         "runs": "Çalıştırmalar",
         "noRuns": "Henüz çalıştırma başlamadı.",
         "cancel": "Seriyi iptal et"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Numaralarınız yükleniyor…",
+      "none": {
+        "title": "Bağlı bir WhatsApp numarası yok",
+        "body": "Bu kampanyanın hangi numaradan gönderileceğini seçmek için bir WhatsApp Business numarası bağlayın.",
+        "action": "WhatsApp numarası bağla"
+      },
+      "sms": {
+        "none": {
+          "title": "Bağlı bir SMS gönderici yok",
+          "body": "Bu kampanyanın hangi göndericiden gönderileceğini seçmek için bir SMS göndericisi bağlayın.",
+          "action": "SMS göndericisi bağla"
+        }
+      },
+      "pending": {
+        "title": "{count} numaranın bağlantısı hâlâ sürüyor",
+        "body": "Bir numara, bağlantısı tamamlandığında kampanya gönderebilir. Kurulumu bitirmek için durumunu açın.",
+        "action": "Numaranın durumunu kontrol et"
+      },
+      "error": {
+        "title": "{count} numaranın bağlantısı başarısız oldu",
+        "body": "Numarayı durum sayfasından yeniden bağlayın, burada görünecektir.",
+        "action": "Bağlantıyı düzelt"
+      },
+      "disconnected": {
+        "title": "{count} numaranın bağlantısı kesildi",
+        "body": "Bu numaradan kampanya göndermek için yeniden bağlayın. Bağlı numaralar burada görünür.",
+        "action": "Numarayı yeniden bağla"
+      },
+      "personal_off": {
+        "title": "Kişisel numaralar bu çalışma alanı için kapalı",
+        "body": "Bu seçenek kapalıyken {count} kişisel (QR) numara kampanya gönderemez. Bir platform yöneticisi bunu bu çalışma alanı için açabilir veya resmi bir WhatsApp Business numarası bağlayabilirsiniz.",
+        "action": "Resmi numara bağla"
       }
     }
   }

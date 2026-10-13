@@ -8,7 +8,6 @@
     "common": {
       "loading": "Memuat",
       "retry": "Coba lagi",
-      "requestId": "ID permintaan",
       "cancel": "Batal",
       "back": "Kembali",
       "close": "Tutup",

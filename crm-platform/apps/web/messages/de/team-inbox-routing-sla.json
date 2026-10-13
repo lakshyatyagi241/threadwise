@@ -10,7 +10,8 @@
       "webchat": "Website-Chat",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "E-Mail (Gmail)"
     },
     "page": {
       "back": "Automatisierung und KI",
@@ -81,7 +82,10 @@
       "lastFired": "zuletzt am {when}",
       "edit": "Bearbeiten",
       "duplicate": "Duplizieren",
-      "delete": "Löschen"
+      "delete": "Löschen",
+      "startsFlow": "Startet außerdem den Flow {name}",
+      "flowOff": "Der Flow ist ausgeschaltet",
+      "flowGone": "Startet außerdem einen gelöschten Flow"
     },
     "form": {
       "back": "Automatische Zuweisung",
@@ -170,7 +174,107 @@
       "cancel": "Abbrechen",
       "save": "Speichern",
       "saveActivate": "Speichern und aktivieren",
-      "openCount": "{open} offen"
+      "openCount": "{open} offen",
+      "flow": {
+        "title": "Zusätzlich einen Flow starten",
+        "hint": "Optional. Der Flow wird für die Unterhaltung gestartet, wenn diese Regel greift, im selben Kanal. Er muss nur eingeschaltet sein; veröffentlicht sein muss er nicht.",
+        "none": "Kein Flow",
+        "offOption": "{name} (ausgeschaltet)",
+        "goneOption": "Ein Flow, den es nicht mehr gibt",
+        "loadFailed": "Die Flows konnten nicht geladen werden, die Auswahl ist deshalb eventuell unvollständig."
+      }
+    },
+    "sla": {
+      "back": "Zurück zu den Einstellungen",
+      "title": "Antwortziele (SLA)",
+      "intro": "Legen Sie fest, wie lange Kunden auf eine erste Antwort warten dürfen und wie lange eine Unterhaltung ungelöst bleiben darf. Eine Unterhaltung, die ein Ziel verfehlt, wird markiert und die verantwortliche Person benachrichtigt.",
+      "howTitle": "So funktioniert es",
+      "how1": "Die Nachricht eines Kunden startet die Uhr gemäß der Standardrichtlinie.",
+      "how2": "Eine Antwort Ihres Teams stoppt die Uhr für die erste Antwort.",
+      "how3": "Eine Unterhaltung, die ein Ziel verfehlt, zeigt im Posteingang ein SLA-Abzeichen.",
+      "how4": "Ziele können nur Ihre Geschäftszeiten zählen.",
+      "newTitle": "Richtlinie hinzufügen",
+      "editTitle": "Richtlinie bearbeiten",
+      "name": "Name",
+      "firstResponse": "Erste Antwort innerhalb von (Minuten)",
+      "resolution": "Lösung innerhalb von (Minuten)",
+      "minutesHint": "Leer lassen, wenn es kein Ziel gibt. 60 ist eine Stunde, 1440 ist ein Tag.",
+      "minutesInvalid": "Verwenden Sie ganze Zahlen ab 1.",
+      "pause": "Pausieren, solange auf den Kunden gewartet wird",
+      "pauseHint": "Eine Unterhaltung mit Status „Ausstehend“ wird nicht markiert.",
+      "businessHours": "Nur Geschäftszeiten zählen",
+      "businessHoursHint": "Nutzt die Zeiten und die Zeitzone aus den Einstellungen Ihres Arbeitsbereichs.",
+      "makeDefault": "Diese Richtlinie zur Standardrichtlinie machen",
+      "defaultChip": "Standard",
+      "overridesTitle": "Ziele nach Priorität",
+      "overridesHint": "Die Ziele einer Priorität ersetzen die der Richtlinie. Leer lassen, um die Ziele der Richtlinie beizubehalten.",
+      "priority": {
+        "low": "Niedrig",
+        "normal": "Normal",
+        "high": "Hoch",
+        "urgent": "Dringend"
+      },
+      "create": "Richtlinie erstellen",
+      "save": "Änderungen speichern",
+      "cancel": "Abbrechen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "deleteTitle": "Diese Richtlinie löschen?",
+      "deleteMessage": "\"{name}\" wird entfernt. Unterhaltungen, die sie bereits verwenden, behalten ihre laufenden Uhren.",
+      "emptyTitle": "Noch keine Richtlinien",
+      "emptyMessage": "Fügen Sie eine Richtlinie hinzu, um Antwortzeiten zu messen. Die erste wird zur Standardrichtlinie.",
+      "inUse": "{count, plural, one {# Unterhaltung} other {# Unterhaltungen}}",
+      "firstShort": "Erste Antwort: {minutes} Min.",
+      "resolutionShort": "Lösung: {minutes} Min.",
+      "noTarget": "Keine Ziele",
+      "saved": "Richtlinie gespeichert",
+      "created": "Richtlinie erstellt",
+      "deleted": "Richtlinie gelöscht",
+      "conflict": "Jemand anderes hat diese Richtlinie zuerst geändert. Die Liste wurde neu geladen.",
+      "loading": "Richtlinien werden geladen…",
+      "loadFailed": "Die Richtlinien konnten nicht geladen werden."
+    },
+    "performance": {
+      "eyebrow": "Team-Posteingang · Berichte",
+      "title": "Wie schnell hat Ihr Team geantwortet?",
+      "subtitle": "Antworten, Lösungen und Zeiten bis zur ersten Antwort je Agent.",
+      "summary": "{replies} Antworten, {resolved} gelöst, durchschnittliche erste Antwort {avg}",
+      "live": "Live",
+      "backToInbox": "Zurück zum Posteingang",
+      "rangeLabel": "Zeitraum",
+      "ranges": {
+        "today": "Heute",
+        "week": "Diese Woche",
+        "month": "Dieser Monat"
+      },
+      "channelLabel": "Kanal",
+      "allChannels": "Alle Kanäle",
+      "loadFailed": "Der Bericht konnte nicht geladen werden. Es wird gleich erneut versucht.",
+      "noAccess": "Sie haben keinen Zugriff auf den Teamleistungsbericht.",
+      "loading": "Bericht wird geladen…",
+      "empty": "Keine Agentenaktivität in diesem Zeitraum.",
+      "unknown": "Unbekannt",
+      "tiles": {
+        "replies": "Gesendete Antworten",
+        "resolved": "Gelöst",
+        "inbounds": "Eingehend",
+        "avgFirstReply": "Ø erste Antwort"
+      },
+      "columns": {
+        "agent": "Agent",
+        "status": "Status",
+        "load": "Auslastung",
+        "replies": "Antworten",
+        "resolved": "Gelöst",
+        "avgReply": "Ø Antwort",
+        "lastSeen": "Zuletzt gesehen"
+      },
+      "statuses": {
+        "online": "Online",
+        "away": "Abwesend",
+        "busy": "Beschäftigt",
+        "offline": "Offline"
+      }
     }
   }
 }

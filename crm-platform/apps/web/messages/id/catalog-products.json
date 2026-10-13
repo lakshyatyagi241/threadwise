@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Tutup",
-      "retry": "Coba lagi",
-      "requestId": "ID permintaan"
+      "retry": "Coba lagi"
     },
     "errors": {
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",

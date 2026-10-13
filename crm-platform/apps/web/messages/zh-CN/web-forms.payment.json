@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "支付",
+      "description": "访客提交后，通过您的支付网关向其收款。只有网关确认后，表单才算已支付。",
+      "enabled": "收取付款",
+      "enabledHint": "答案保存后，访客将被引导至您网关的托管支付页面。",
+      "gateway": {
+        "checking": "正在检查您的支付网关...",
+        "failed": "无法检查您的支付网关。请稍后再试。",
+        "ready": "付款将进入 {name}（{mode}）。",
+        "mode": {
+          "test": "测试模式",
+          "live": "正式模式"
+        },
+        "none": "尚未连接支付网关，因此此表单暂时无法收款。",
+        "noLink": "{name} 无法生成托管支付链接，因此不能用于表单。请连接 Razorpay 或 Stripe。",
+        "open": "打开支付网关"
+      },
+      "amountType": "金额设置方式",
+      "amountTypes": {
+        "fixed": "固定价格",
+        "from_field": "来自选择字段",
+        "pay_what_you_want": "由访客输入金额"
+      },
+      "amountTypeHints": {
+        "fixed": "每位访客支付相同的价格。",
+        "from_field": "下拉或单选字段的每个选项都有各自的价格。",
+        "pay_what_you_want": "适用于捐款和打赏。您可设置最小和最大金额。"
+      },
+      "currency": "币种",
+      "currencyHint": "三个字母，例如 INR 或 USD。您的网关必须支持该币种。",
+      "amount": "价格",
+      "amountHint": "以 {currency} 计，按日常说法填写，例如 499.00。",
+      "fieldChoice": "选择字段",
+      "fieldNumber": "金额字段",
+      "fieldNone": "选择字段",
+      "noChoiceFields": "请先在表单中添加下拉或单选字段。",
+      "noNumberFields": "请先在表单中添加数字或货币字段。",
+      "optionPrices": "各选项的价格",
+      "optionPrice": "“{label}”的价格",
+      "min": "最小金额",
+      "minHint": "低于此金额将被拒绝。",
+      "max": "最大金额（可选）",
+      "maxHint": "留空表示没有上限。",
+      "descriptionLabel": "显示在支付页面上",
+      "descriptionHint": "给付款人的简短说明，例如付款用途。",
+      "issues": {
+        "amountRequired": "请输入价格。",
+        "fieldRequired": "请选择金额所在的字段。",
+        "fieldNotRequired": "请将此字段设为必填，以便每位访客都填写金额。",
+        "optionsNeedAmounts": "请为每个选项设置价格。",
+        "minRequired": "请输入最小金额。",
+        "minAboveMax": "最小金额不能高于最大金额。"
+      }
+    }
+  }
+}

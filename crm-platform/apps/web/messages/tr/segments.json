@@ -128,7 +128,6 @@
       "planLimit": "Planınız bunlardan daha fazlasına izin vermiyor.",
       "unavailable": "Segmentler bu sunucuda henüz kullanılamıyor.",
       "unexpected": "Bir sorun oluştu. Yeniden deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Yeniden dene",
       "shareEmpty": "Segmenti paylaşmak için en az bir kişi ya da ekip seçin.",
       "shareInvalid": "Seçilen bazı kişiler ya da ekipler artık bu çalışma alanında değil. Onları kaldırıp yeniden kaydedin."

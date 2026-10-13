@@ -101,6 +101,7 @@ import {
   HmacGenericGateway,
   ManualTransferGateway,
 } from '../../infra/providers/invoice-payments/invoice-payment-gateways';
+import { ContactConsentModule } from '../contact-consent';
 import { CreditNotesController } from './invoicing/credit-notes.controller';
 import { CreditNotesRepository } from './invoicing/credit-notes.repository';
 import { CreditNotesService } from './invoicing/credit-notes.service';
@@ -167,7 +168,12 @@ import { TagsService } from './tags/tags.service';
  */
 @Module({
   // PlansCoreModule: the contact and tag caps (TW-CON-026) are plan entitlements.
-  imports: [PlansCoreModule, CheckoutOrdersMerchantPaymentsModule, PlatformSettingsModule],
+  imports: [
+    PlansCoreModule,
+    CheckoutOrdersMerchantPaymentsModule,
+    PlatformSettingsModule,
+    ContactConsentModule,
+  ],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
     // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`
@@ -328,6 +334,8 @@ import { TagsService } from './tags/tags.service';
   exports: [
     ContactsService,
     ContactsRepository,
+    // The growth pilot writes its chat summary as a note (modules/growth-pilot).
+    ContactNotesRepository,
     ContactQuotaService,
     ContactResolverService,
     CONTACT_RESOLVER,

@@ -14,7 +14,6 @@
       "dismiss": "忽略",
       "admin": "管理员",
       "readOnly": "您可以查看此页面，但只有超级管理员可以更改。",
-      "requestId": "请求 ID",
       "errors": {
         "forbidden": "您无权访问此页面。",
         "request": "无法完成该请求。",
@@ -404,7 +403,6 @@
         "validation": "无法应用这些筛选条件。请重置后重试。",
         "network": "无法连接服务器。请检查网络连接后重试。",
         "generic": "出了点问题。请稍后重试。",
-        "requestId": "请求 ID",
         "retry": "重试"
       }
     }

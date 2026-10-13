@@ -106,7 +106,8 @@
         "light": "Terang",
         "dark": "Gelap",
         "schemeHint": "Mode warna diatur ke Terang, jadi tidak ada versi gelap untuk dipratinjau.",
-        "frameTitle": "Pratinjau langsung formulir"
+        "frameTitle": "Pratinjau langsung formulir",
+        "popup": "Popup"
       }
     }
   }

@@ -76,6 +76,11 @@ export interface WalletGate {
    * platform-owned workspaces and for plan-quota workspaces still inside their free monthly messages. Called before any row exists.
    */
   precheck(orgId: number, count: number, opts?: WalletGateOptions): Promise<void>;
+  /**
+   * The per-recipient check of a running send: throws 422 `WALLET_EMPTY` when the wallet cannot pay for this one message, so a run
+   * (or several started on the same balance) stops once the money is spent. Same exemptions as `precheck`; a free message passes.
+   */
+  precheckSend(orgId: number, to: string, opts?: Omit<WalletGateOptions, 'phones'>): Promise<void>;
 }
 export interface WalletGateOptions {
   /** What is launching, for the wallet log. Defaults to `broadcast`. */

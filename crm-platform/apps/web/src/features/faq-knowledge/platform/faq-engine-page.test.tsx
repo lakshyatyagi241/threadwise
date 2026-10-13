@@ -63,6 +63,8 @@ function overview(over: Partial<FaqPlatformOverview['stats']> = {}, platformKeyR
       matches30d: 10,
       answered30d: 5,
       embeddingTokens30d: 1234,
+      verified30d: 321,
+      vetoed30d: 45,
       ...over,
     },
   } satisfies FaqPlatformOverview;
@@ -176,10 +178,65 @@ describe('FAQ engine admin page', () => {
     expect(text()).toContain('Acme Retail');
   });
 
+  it('shows how many close calls were checked and how many answers were held back', async () => {
+    await mount();
+    const strip = host.querySelector('section[aria-label="Engine status"]')!.textContent!;
+    expect(strip).toContain('Second checks');
+    expect(strip).toContain('321');
+    expect(strip).toContain('Answers withheld');
+    expect(strip).toContain('45');
+  });
+
+  it('shows the second check settings as saved', async () => {
+    await mount();
+    expect(text()).toContain('Second check for close calls');
+    expect(byLabel('Allow the second check').getAttribute('aria-checked')).toBe('true');
+    expect(byLabel('Check model').value).toBe('openai/gpt-4o-mini');
+    expect(byLabel('Second checks per workspace per hour').value).toBe('300');
+  });
+
+  it('sends only the second check fields that changed', async () => {
+    await mount();
+    await click(byLabel('Allow the second check'));
+    await type(byLabel('Check model'), ' google/gemini-2.5-flash ');
+    await type(byLabel('Second checks per workspace per hour'), '0');
+    await click(button('Save changes'));
+    const [[, req]] = callsTo('/faq', 'PATCH');
+    expect((req as { body: unknown }).body).toEqual({
+      verifyEnabled: false,
+      verifyModel: 'google/gemini-2.5-flash',
+      verifyPerHour: 0,
+    });
+  });
+
+  it('refuses a bad check model or cap, marks the fields and sends nothing', async () => {
+    await mount();
+    await type(byLabel('Check model'), 'not a model!');
+    await type(byLabel('Second checks per workspace per hour'), '100001');
+    await click(button('Save changes'));
+    expect(callsTo('/faq', 'PATCH')).toHaveLength(0);
+    expect(byLabel('Check model').getAttribute('aria-invalid')).toBe('true');
+    expect(byLabel('Second checks per workspace per hour').getAttribute('aria-invalid')).toBe(
+      'true',
+    );
+    expect(text()).toContain('Use an OpenRouter model id such as openai/gpt-4o-mini.');
+    expect(text()).toContain('Enter a value between 0 and 100,000.');
+  });
+
+  it('counts the second check edits as unsaved changes and discards them', async () => {
+    await mount();
+    expect(text()).toContain('No changes to save.');
+    await click(byLabel('Allow the second check'));
+    expect(text()).toContain('1 change ready to save');
+    await click(button('Discard changes'));
+    expect(byLabel('Allow the second check').getAttribute('aria-checked')).toBe('true');
+    expect(text()).toContain('No changes to save.');
+  });
+
   it('sends only the changed fields', async () => {
     await mount();
     expect(button('Save changes').disabled).toBe(true);
-    await type(byLabel('Maximum FAQs per workspace'), '900');
+    await type(byLabel('Maximum FAQs per flow'), '900');
     await click(button('Save changes'));
     const [[, req]] = callsTo('/faq', 'PATCH');
     expect((req as { body: unknown }).body).toEqual({ maxFaqs: 900 });
@@ -325,7 +382,7 @@ describe('FAQ engine admin page', () => {
       throw new ApiError(500, 'INTERNAL', 'x', 'req-7');
     });
     await mount();
-    expect(text()).toContain('req-7');
+    expect(text()).not.toContain('req-7');
     expect(button('Try again')).toBeDefined();
   });
 });

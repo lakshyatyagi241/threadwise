@@ -10,7 +10,7 @@ import {
 } from '@crm/contracts';
 import { Alert, Button, Field, Spinner, Textarea } from '@crm/ui';
 import { KEYS, sendTest, useTestLog } from '../api/wizard';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 import { formatMinor } from '../lib/money';
 import { testTone } from '../lib/test-log';
 import { Chip, ErrorBlock, WizardCard } from './parts';
@@ -180,12 +180,7 @@ export function TestSendCard({
           </div>
           {notSaved && <Alert tone="danger">{t('notSaved')}</Alert>}
           {send.isError && !notSaved && (
-            <Alert tone="danger">
-              {t(`sendError.${errorKind(send.error)}`)}
-              {requestIdOf(send.error) && (
-                <span className="mt-1 block font-mono text-xs">{requestIdOf(send.error)}</span>
-              )}
-            </Alert>
+            <Alert tone="danger">{t(`sendError.${errorKind(send.error)}`)}</Alert>
           )}
           {latest.length > 0 && (
             <div aria-live="polite">

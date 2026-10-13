@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQs",
       "label": "Seções de FAQ",
       "tab": {
         "faqs": "FAQs",
@@ -13,9 +12,7 @@
       "unansweredCount": "{count, plural, one {# mensagem sem resposta} other {# mensagens sem resposta}}"
     },
     "common": {
-      "dismiss": "Dispensar",
       "retry": "Tentar novamente",
-      "requestId": "Solicitação {id}",
       "noAccessTitle": "Você não tem acesso a esta tela",
       "noAccess": "Peça a um administrador do workspace para dar ao seu perfil a permissão {permission}."
     },
@@ -26,28 +23,28 @@
       "conflict": "Outra pessoa alterou isto enquanto você editava.",
       "duplicateQuestion": "Outra FAQ já tem esta pergunta.",
       "duplicateVariation": "Esta FAQ já tem esta formulação.",
-      "limitReached": "Seu workspace atingiu o limite de FAQs. Exclua FAQs ou variações não usadas, ou peça ao administrador da plataforma para aumentar o limite.",
       "flowNotFound": "O fluxo escolhido não existe mais neste workspace. Escolha outro.",
       "embeddingUnavailable": "O provedor de IA não está disponível. Adicione uma chave do OpenRouter ao seu workspace, ou peça ao administrador da plataforma para ativar a chave compartilhada, e tente novamente.",
       "engineDisabled": "As respostas por FAQ estão desativadas em toda a plataforma no momento.",
       "modelNotAllowed": "O modelo de IA da plataforma para correspondência não é permitido. Fale com o administrador da plataforma.",
       "validation": "Alguns campos precisam de atenção.",
       "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
-      "unexpected": "Algo deu errado. Tente novamente e informe o ID da solicitação ao suporte se o problema continuar."
+      "unexpected": "Algo deu errado. Tente novamente e informe o ID da solicitação ao suporte se o problema continuar.",
+      "flowNodeNotFound": "A etapa escolhida não está mais neste fluxo. Escolha outra etapa ou comece pelo início do fluxo.",
+      "limitReached": "Este fluxo atingiu o limite de FAQs. Exclua FAQs ou variações não usadas, ou peça ao administrador da plataforma para aumentá-lo."
     },
     "banner": {
       "enabledToast": "As respostas por FAQ estão ativadas.",
       "engineOff": "As respostas por FAQ foram desativadas pela plataforma. Os clientes não recebem respostas de FAQ até que sejam reativadas.",
       "modelChanged": "A plataforma mudou o modelo de IA depois que você ajustou este limite. As pontuações mudaram, então revise sua sensibilidade.",
       "reviewSensitivity": "Revisar sensibilidade",
-      "offTitle": "As respostas por FAQ estão DESATIVADAS para os clientes",
-      "offBody": "Você pode escrever e testar FAQs, mas os clientes não recebem respostas até você ativar.",
       "offNoRight": "Peça a quem tem a permissão faq.settings.manage (geralmente um administrador do workspace) para ativar.",
-      "enable": "Ativar respostas por FAQ"
+      "enable": "Ativar respostas por FAQ",
+      "offTitle": "A resposta por FAQ está DESATIVADA neste fluxo",
+      "offBody": "Você pode escrever e testar as FAQs deste fluxo, mas os clientes não recebem respostas até você ativá-la."
     },
     "list": {
       "title": "FAQs",
-      "subtitle": "As perguntas que seus clientes fazem e o que seu bot responde. Os clientes não precisam usar exatamente as suas palavras.",
       "add": "Adicionar FAQ",
       "stats": {
         "label": "Totais de FAQs",
@@ -97,10 +94,10 @@
       "deleted": "FAQ excluída.",
       "empty": {
         "title": "Ensine ao seu bot as respostas das perguntas frequentes",
-        "body": "Escreva uma pergunta e sua resposta uma única vez. Seu bot reconhece o que os clientes escrevem, com as próprias palavras deles, e responde com a resposta ou inicia um fluxo.",
         "how": "Adicione algumas outras formas de fazer a mesma pergunta (formulações) e teste antes que os clientes vejam.",
         "cta": "Adicione sua primeira FAQ",
-        "noRight": "Peça a um administrador do workspace a permissão para adicionar FAQs."
+        "noRight": "Peça a um administrador do workspace a permissão para adicionar FAQs.",
+        "body": "Escreva uma pergunta e a resposta uma só vez. Seu bot reconhece o que os clientes escrevem com as próprias palavras e responde ou os envia a uma etapa de um fluxo."
       },
       "noMatch": {
         "title": "Nenhuma FAQ corresponde a estes filtros",
@@ -139,7 +136,11 @@
         "ready": "{count} ativas",
         "pending": "{count} indexando",
         "failed": "{count} com falha"
-      }
+      },
+      "stepMissing": "Etapa ausente",
+      "subtitle": "Perguntas que os clientes fazem em {flow} e o que o bot responde. Estas FAQs só respondem dentro deste fluxo.",
+      "thisFlow": "Este fluxo",
+      "startsAt": "Vai para: {step}"
     },
     "editor": {
       "back": "Voltar para FAQs",
@@ -156,7 +157,6 @@
       "saved": "FAQ salva.",
       "deleted": "FAQ excluída.",
       "readOnly": "Você pode ver esta FAQ, mas seu perfil não pode alterá-la.",
-      "faqLimit": "Seu workspace atingiu o limite de {max} FAQs. Exclua uma para adicionar outra.",
       "prefilled": "A pergunta foi preenchida a partir de uma mensagem de cliente sem resposta. Salvar esta FAQ também marca essa mensagem como tratada.",
       "tryItSaveFirst": "Salve a FAQ primeiro para poder testar como as mensagens dos clientes correspondem a ela.",
       "conflict": {
@@ -186,21 +186,30 @@
         "title": "Resposta",
         "hint": "O que o cliente recebe quando esta FAQ corresponde.",
         "text": "Resposta em texto",
-        "flow": "Iniciar um fluxo",
         "textLabel": "Texto da resposta",
         "count": "{count} / {max} caracteres",
         "preview": "Como fica no WhatsApp",
         "previewEmpty": "Sua resposta aparece aqui",
-        "flowLabel": "Fluxo a iniciar",
-        "noFlow": "Nenhum fluxo escolhido"
+        "noFlow": "Nenhum fluxo escolhido",
+        "flow": "Ir para uma etapa",
+        "flowLabel": "Para onde ir",
+        "startsAt": "Vai para a etapa: {step}",
+        "stepGone": "A etapa para a qual esta FAQ vai não existe mais, então os clientes não recebem resposta.",
+        "thisFlowNamed": "Uma etapa deste fluxo ({name})",
+        "target": {
+          "here": "Uma etapa deste fluxo",
+          "hereHint": "O cliente continua dentro de {name}. Esta é a escolha habitual.",
+          "other": "Uma etapa de outro fluxo",
+          "otherHint": "Passe a conversa para outro fluxo."
+        }
       },
       "advanced": {
         "title": "Avançado: sensibilidade só para esta FAQ",
-        "body": "Por padrão, toda FAQ usa a sensibilidade do workspace. Use um valor personalizado quando esta corresponder com facilidade demais (aumente) ou raramente demais (diminua).",
         "custom": "Usar uma sensibilidade personalizada para esta FAQ",
         "sliderLabel": "Corresponder a partir de",
-        "workspace": "A sensibilidade do workspace é {value}%.",
-        "following": "Seguindo a sensibilidade do workspace ({value}%)."
+        "body": "Por padrão, toda FAQ usa a sensibilidade deste fluxo. Use um valor personalizado quando ela corresponder demais (aumente) ou de menos (diminua).",
+        "workspace": "A sensibilidade deste fluxo é {value}%.",
+        "following": "Seguindo a sensibilidade deste fluxo ({value}%)."
       },
       "problem": {
         "question": {
@@ -214,9 +223,9 @@
           "invalid": "Esta resposta não é válida."
         },
         "flowId": {
-          "required": "Escolha o fluxo a iniciar.",
-          "tooLong": "Escolha o fluxo a iniciar.",
-          "invalid": "Escolha o fluxo a iniciar."
+          "required": "Escolha o fluxo de destino.",
+          "tooLong": "Escolha o fluxo de destino.",
+          "invalid": "Escolha o fluxo de destino."
         },
         "category": {
           "required": "Escreva uma categoria ou deixe em branco.",
@@ -227,6 +236,11 @@
           "required": "Escolha um valor entre 5% e 99%.",
           "tooLong": "Escolha um valor entre 5% e 99%.",
           "invalid": "Escolha um valor entre 5% e 99%."
+        },
+        "flowNodeId": {
+          "required": "Escolha uma etapa deste fluxo ou o início do fluxo.",
+          "tooLong": "Escolha uma etapa deste fluxo ou o início do fluxo.",
+          "invalid": "Escolha uma etapa deste fluxo ou o início do fluxo."
         }
       },
       "deleteConfirm": {
@@ -239,11 +253,11 @@
         "body": "Suas alterações nesta FAQ não foram salvas.",
         "leave": "Sair",
         "stay": "Continuar editando"
-      }
+      },
+      "faqLimit": "Este fluxo está no limite de {max} FAQs. Exclua uma para adicionar outra."
     },
     "flowPicker": {
       "noAccess": "Você precisa da permissão para ver fluxos (flb.flows.read) para escolher um aqui.",
-      "missing": "O fluxo que esta FAQ iniciava não existe mais. Escolha outro fluxo, senão esta FAQ não poderá responder.",
       "selected": "Escolhido",
       "search": "Pesquisar fluxos",
       "searchPlaceholder": "Pesquisar fluxos pelo nome",
@@ -257,7 +271,9 @@
         "off": "Inativo",
         "draft": "Rascunho"
       },
-      "note": "O fluxo começa pelo seu gatilho. Só fluxos publicados e ativos podem ser executados."
+      "missing": "O fluxo para o qual esta FAQ vai não existe mais. Escolha outro fluxo, ou esta FAQ não poderá responder.",
+      "noOthers": "Não há outro fluxo neste workspace.",
+      "note": "O cliente continua na etapa que você escolher abaixo, ou no início do fluxo. Somente fluxos publicados e ativos podem ser executados."
     },
     "variations": {
       "title": "Variações da pergunta",
@@ -333,7 +349,7 @@
       "verdict": {
         "answer": {
           "title": "Responderia",
-          "body": "Uma FAQ correspondeu bem o bastante. O cliente recebe a resposta dela (ou o fluxo dela é iniciado)."
+          "body": "Uma FAQ correspondeu bem o bastante. O cliente recebe a resposta ou é enviado à etapa indicada."
         },
         "below": {
           "title": "Abaixo do limite",
@@ -354,6 +370,10 @@
         "notSent": {
           "title": "Correspondeu, não enviada",
           "body": "Uma FAQ correspondeu, mas a resposta não foi enviada, por exemplo porque as respostas por FAQ estavam desativadas."
+        },
+        "vetoed": {
+          "title": "Resposta retida",
+          "body": "A correspondência teve pontuação suficiente, mas a segunda verificação disse não, então nada seria enviado."
         }
       },
       "tier": {
@@ -383,8 +403,8 @@
       "winner": {
         "title": "O que o cliente receberia",
         "unavailable": "Não foi possível carregar esta FAQ.",
-        "flow": "Inicia o fluxo {name}",
-        "flowMissing": "Inicia um fluxo que não existe mais"
+        "flow": "Vai para uma etapa de {name}",
+        "flowMissing": "Vai para um fluxo que não existe mais"
       },
       "candidates": {
         "title": "Melhores correspondências",
@@ -401,16 +421,16 @@
     },
     "playground": {
       "title": "Como meu bot responderia a isto?",
-      "subtitle": "Passe uma mensagem de cliente pela mesma correspondência que seu bot usa. Nada é enviado e nada é contado nas análises.",
       "label": "Mensagem do cliente",
       "placeholder": "Onde está meu pacote?",
       "run": "Executar",
-      "hint": "Só FAQs salvas são comparadas. Participam as FAQs ativas com formulações ativas.",
       "empty": "Digite uma mensagem acima e execute para ver a decisão.",
       "history": {
         "title": "Esta sessão",
         "empty": "Seus últimos 10 testes aparecem aqui."
-      }
+      },
+      "subtitle": "Passe uma mensagem de cliente pela correspondência usada por {flow}. Nada é enviado e nada é contado nos insights.",
+      "hint": "Somente as FAQs salvas deste fluxo são comparadas. As FAQs ativas com formulações ativas participam."
     },
     "unanswered": {
       "title": "Mensagens sem resposta",
@@ -478,7 +498,6 @@
       "loadingMore": "Carregando",
       "why": {
         "answered": "Respondeu com \"{faq}\" em {score}%.",
-        "flowStarted": "Iniciou o fluxo de \"{faq}\" em {score}%.",
         "belowThreshold": "A melhor correspondência teve {score}%, abaixo do mínimo de {threshold}%, então nada foi enviado.",
         "belowThresholdNoBar": "A melhor correspondência teve {score}%, o que não foi suficiente, então nada foi enviado.",
         "lowMargin": "Duas FAQs ficaram próximas demais ({score}% e {second}%), então o bot não arriscou.",
@@ -486,8 +505,12 @@
         "providerError": "O provedor de IA falhou, então o bot só pôde comparar pela grafia.",
         "notSent": "Uma FAQ correspondeu, mas a resposta não foi enviada.",
         "tier": "Decidido pelo nível {tier}.",
-        "error": "Erro: {error}"
-      }
+        "error": "Erro: {error}",
+        "vetoed": "A melhor correspondência teve pontuação de {score}%, acima do limite de {threshold}%, mas a segunda verificação disse que ela não responde à mensagem, então nada foi enviado.",
+        "vetoedNoBar": "A melhor correspondência teve pontuação de {score}%, mas a segunda verificação disse que ela não responde à mensagem, então nada foi enviado.",
+        "flowStarted": "Cliente enviado à etapa de \"{faq}\" com {score}%."
+      },
+      "flowRun": "(de um fluxo)"
     },
     "insights": {
       "title": "Análises das FAQs",
@@ -548,7 +571,6 @@
     },
     "settings": {
       "title": "Configurações de FAQ",
-      "subtitle": "Ative as respostas por FAQ e ajuste o quanto uma mensagem precisa corresponder.",
       "unsaved": "Alterações não salvas",
       "discard": "Descartar",
       "save": "Salvar configurações",
@@ -563,11 +585,11 @@
       },
       "enable": {
         "title": "Respostas por FAQ",
-        "label": "Responder aos clientes com FAQs",
         "on": "Ativado",
         "off": "Desativado",
-        "onBody": "Quando um cliente escreve, o bot compara a mensagem com suas FAQs e responde com a melhor resposta, ou inicia o fluxo dela. Um fluxo ou gatilho de palavra-chave que já tratou a mensagem tem prioridade.",
-        "offBody": "Os clientes não recebem respostas de FAQ. Você ainda pode escrever e testar FAQs."
+        "label": "Responder aos clientes com as FAQs deste fluxo",
+        "onBody": "Enquanto este fluxo estiver ativo, uma mensagem de cliente que nenhum gatilho de palavra-chave nem fluxo em execução tratou é comparada com as FAQs deste fluxo. O bot responde com a melhor resposta ou envia o cliente à etapa indicada pela FAQ.",
+        "offBody": "As FAQs deste fluxo não respondem aos clientes. Você ainda pode escrevê-las e testá-las."
       },
       "sens": {
         "title": "Sensibilidade",
@@ -612,7 +634,8 @@
         "exact": "Exata: a mensagem é igual a uma formulação salva, ignorando maiúsculas e espaços.",
         "semantic": "Significado: a mensagem é comparada pelo significado com cada formulação ativa, então palavras diferentes podem corresponder.",
         "trigram": "Alternativa por grafia: se o provedor de IA estiver indisponível, as letras são comparadas, o que pega apenas erros de digitação.",
-        "threshold": "A melhor pontuação é comparada com a sensibilidade. Acima dela, a FAQ responde; abaixo, a mensagem aparece em Sem resposta."
+        "threshold": "A melhor pontuação é comparada com a sensibilidade. Acima dela, a FAQ responde; abaixo, a mensagem aparece em Sem resposta.",
+        "verify": "Segunda verificação (opcional): uma correspondência que mal atingiu a sensibilidade pode ser conferida por um modelo de chat pequeno, que só pode reter uma resposta."
       },
       "who": "Alterar estas configurações exige a permissão faq.settings.manage.",
       "leave": {
@@ -620,6 +643,62 @@
         "body": "Suas alterações nestas configurações não foram salvas.",
         "leave": "Sair",
         "stay": "Ficar"
+      },
+      "verify": {
+        "title": "Segunda verificação para casos duvidosos",
+        "hint": "Um modelo de chat pequeno confere as correspondências que mal atingiram o limite.",
+        "unavailable": "A plataforma desativou a segunda verificação, então ela não é executada mesmo que você a ative aqui. Fale com o administrador da plataforma.",
+        "label": "Conferir casos duvidosos com uma segunda opinião",
+        "on": "Ativada",
+        "off": "Desativada",
+        "onBody": "Quando uma correspondência mal passa do limite, um modelo de chat pequeno lê a mensagem do cliente e a FAQ e diz se a resposta serve. Ele só pode dizer não: nunca faz uma resposta ser enviada.",
+        "offBody": "Toda correspondência que atinge o limite é respondida sem uma segunda conferência.",
+        "bandLabel": "Quão próximo conta como caso duvidoso",
+        "bandValue": "+{value}%",
+        "explainOn": "As correspondências com pontuação de {from}% até {to}% são conferidas por {model}. Um \"não\" significa que nenhuma resposta é enviada e a mensagem aparece em Sem resposta.",
+        "explainOff": "Toda correspondência com pontuação de {threshold}% ou mais é respondida. Ative a segunda verificação para que os casos mais duvidosos sejam conferidos.",
+        "cost": "Cada verificação envia ao modelo a mensagem do cliente e a pergunta da FAQ: algumas centenas de tokens, e acrescenta cerca de um segundo a uma resposta no limite. Correspondências fora da faixa nunca são conferidas. Se a verificação falhar, não estiver disponível ou o limite por hora for atingido, a correspondência vale como se não houvesse verificação."
+      },
+      "subtitle": "Ative a resposta por FAQ em {flow} e ajuste o quanto uma mensagem precisa corresponder."
+    },
+    "flowNode": {
+      "start": "O início do fluxo",
+      "loading": "Carregando as etapas deste fluxo",
+      "empty": "Este fluxo não tem outras etapas, então ele começa pelo início.",
+      "retry": "Tentar novamente",
+      "deletedOption": "Etapa excluída (escolha outra)",
+      "missing": {
+        "body": "Essa etapa foi excluída do fluxo. Até você escolher outra etapa, os clientes que correspondem a esta FAQ não recebem resposta. Escolha uma etapa abaixo ou comece pelo início do fluxo.",
+        "fix": "Começar pelo início do fluxo",
+        "title": "A etapa para a qual esta FAQ vai não existe mais"
+      },
+      "label": "Ir para",
+      "hint": "Escolha uma etapa para pular o início do fluxo. Os clientes continuam na etapa escolhida.",
+      "hintOwn": "Escolha uma etapa deste fluxo. As etapas adicionadas desde o último salvamento aparecem depois que você salvar o fluxo."
+    },
+    "verify": {
+      "title": "Segunda verificação",
+      "chip": {
+        "confirmed": "Segunda verificação: sim",
+        "vetoed": "Segunda verificação: não",
+        "failed": "Segunda verificação falhou",
+        "skipped": "Segunda verificação ignorada"
+      },
+      "model": "Conferido por",
+      "reason": "Motivo",
+      "body": {
+        "confirmed": "A correspondência era um caso duvidoso, então um modelo de chat pequeno leu a mensagem e a FAQ e concordou que a resposta serve.",
+        "vetoed": "A correspondência era um caso duvidoso e a segunda verificação disse que esta FAQ não responde à mensagem. A resposta foi retida, nada foi enviado e a mensagem aparece em Sem resposta.",
+        "failed": "A correspondência era um caso duvidoso, mas a verificação não pôde ser concluída, então a correspondência valeu e a resposta foi enviada como se não houvesse segunda verificação.",
+        "skipped": "A segunda verificação não foi executada para esta correspondência, então ela valeu como estava."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "Sair das FAQs sem salvar?",
+        "body": "Você tem alterações não salvas nas FAQs. Se sair desta aba, elas serão perdidas.",
+        "leave": "Sair",
+        "stay": "Continuar editando"
       }
     }
   }

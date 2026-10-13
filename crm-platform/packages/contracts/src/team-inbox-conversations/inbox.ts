@@ -5,6 +5,7 @@ import { paginationQuerySchema, pageResponseSchema } from '../common/pagination'
 import {
   conversationChannelSchema,
   conversationDetailSchema,
+  conversationTagSchema,
 } from '../chat-conversations/conversation';
 import type { ConversationStatus } from '../chat-conversations/enums';
 
@@ -60,7 +61,18 @@ export const inboxContactSummarySchema = z.object({
   source: z.string().nullable(),
   isUnsubscribed: z.boolean(),
   whatsappSubscriptionStatus: z.string().nullable(),
+  /** AI lead scoring: the contact's score and who set it, the same fields the contact page reads (null: never scored). */
+  leadScore: z.number().int().min(0).max(100).nullable(),
+  leadScoreSource: z.enum(['manual', 'ai']).nullable(),
+  leadScoreReasons: z.array(z.string()).nullable(),
+  leadScoredAt: z.string().datetime().nullable(),
+  leadScoreModel: z.string().nullable(),
   createdAt: z.string().datetime(),
+  /**
+   * The contact's own tags (they describe the person: VIP, lead, region), from the same workspace tag library as the thread's tags.
+   * Read-only here; they are edited on the contact.
+   */
+  contactTags: z.array(conversationTagSchema).default([]),
 });
 export type InboxContactSummary = z.infer<typeof inboxContactSummarySchema>;
 
@@ -178,3 +190,13 @@ export const inboxMediaUploadSchema = z.object({
   expiresAt: z.string().datetime(),
 });
 export type InboxMediaUpload = z.infer<typeof inboxMediaUploadSchema>;
+
+/**
+ * `POST /v2/inbox/conversations/open`: the conversation for a contact on a channel, created when there is none yet (a phone channel
+ * and a contact with a number). The first message to a contact outside the 24 hour window must then be a template.
+ */
+export const openConversationSchema = z.object({
+  contactId: z.string().uuid(),
+  channelId: z.string().uuid(),
+});
+export type OpenConversationInput = z.infer<typeof openConversationSchema>;

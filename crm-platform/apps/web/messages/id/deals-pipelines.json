@@ -35,7 +35,6 @@
       "notFound": "Deal tersebut tidak ditemukan. Mungkin telah dihapus.",
       "planDisabled": "Paket Anda tidak menyertakan pipeline penjualan. Upgrade untuk membukanya.",
       "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "planLimit": "Anda telah mencapai batas paket Anda.",
       "lostReasonRequired": "Pilih alasan untuk menandai Deal sebagai kalah.",

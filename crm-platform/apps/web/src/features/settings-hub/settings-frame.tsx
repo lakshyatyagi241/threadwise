@@ -8,7 +8,7 @@ import { cn } from '@crm/ui';
 import { defaultSection, toSettingsSections } from '@/features/_registry/settings-resolve';
 import { isSettingsSection } from '@/features/_registry/settings-types';
 import { SearchResults } from './search-results';
-import { useSettingsTiles } from './settings-context';
+import { useSettingsPageTiles } from './settings-context';
 import { searchTiles } from './settings-search';
 import { SettingsSearchBox } from './settings-search-box';
 import { useSearchableTiles } from './use-tile-copy';
@@ -23,7 +23,7 @@ const DEBOUNCE_MS = 150;
  */
 export function SettingsFrame({ children }: { children: ReactNode }) {
   const t = useTranslations();
-  const tiles = useSettingsTiles();
+  const tiles = useSettingsPageTiles();
   const sections = useMemo(() => toSettingsSections(tiles), [tiles]);
   const entries = useSearchableTiles(tiles);
   const segment = useSelectedLayoutSegment();
@@ -46,11 +46,12 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
   const activeLink = useRef<HTMLAnchorElement>(null);
   // On a phone the sections are a scrolling strip: keep the open one in view (a deep link may land past the edge).
   useEffect(() => {
+    if (window.matchMedia('(min-width: 1024px)').matches) return;
     activeLink.current?.scrollIntoView({ inline: 'center', block: 'nearest' });
   }, [activeSection]);
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <div className="w-full">
       <h1 className="mb-4 text-2xl font-semibold tracking-tight">{t('settings.title')}</h1>
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-8">
         <nav aria-label={t('settings.sectionsLabel')} className="min-w-0 lg:w-72 lg:shrink-0">
@@ -74,7 +75,12 @@ export function SettingsFrame({ children }: { children: ReactNode }) {
                     <span className="block whitespace-nowrap text-sm font-semibold lg:whitespace-normal">
                       {t(`settings.sections.${section}.title`)}
                     </span>
-                    <span className="mt-0.5 hidden text-xs leading-snug text-muted-foreground lg:block">
+                    <span
+                      className={cn(
+                        'mt-0.5 hidden text-xs leading-snug lg:block',
+                        active ? 'text-foreground/80' : 'text-muted-foreground',
+                      )}
+                    >
                       {t(`settings.sections.${section}.description`)}
                     </span>
                   </Link>

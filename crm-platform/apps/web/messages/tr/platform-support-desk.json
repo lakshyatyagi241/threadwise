@@ -63,8 +63,7 @@
       "closed": "Bu talep kapalı. Devam etmek için yeni bir talep açın.",
       "notFound": "Bu talep bulunamadı.",
       "unexpected": "Bir sorun oluştu. Tekrar deneyin.",
-      "retry": "Tekrar dene",
-      "requestId": "İstek kimliği"
+      "retry": "Tekrar dene"
     },
     "customer": {
       "title": "Size nasıl yardımcı olabiliriz?",

@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "טוען...",
-        "requestId": "מזהה בקשה",
         "retry": "נסה שוב",
         "noPermissions": "אין הרשאות"
       },

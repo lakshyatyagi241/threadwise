@@ -17,7 +17,6 @@
       "delete": "删除",
       "edit": "编辑",
       "loadMore": "加载更多",
-      "requestId": "请求 ID",
       "errors": {
         "forbidden": "只有超级管理员可以更改此项。",
         "conflict": "您编辑时其他人已修改此内容。请重新加载后重试。",

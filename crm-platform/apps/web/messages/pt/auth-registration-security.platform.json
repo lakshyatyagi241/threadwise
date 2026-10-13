@@ -46,7 +46,6 @@
         "copyFailed": "Não foi possível copiar",
         "loading": "Carregando",
         "retry": "Tentar novamente",
-        "requestId": "ID da solicitação",
         "errors": {
           "forbidden": "Sua função não permite isso.",
           "request": "A solicitação foi recusada. Recarregue a página e tente novamente.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Login de operador",
         "intro": "Este console é para quem opera a plataforma. Usuários de espaços de trabalho entram na página de login principal.",
-        "requestId": "ID da solicitação",
         "submit": "Entrar",
         "submitting": "Entrando",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Sua conta",
         "title": "Autenticação em duas etapas",
         "description": "Proteja {email} com um app autenticador. Contas de operador são as de maior confiança na plataforma.",
-        "requestId": "ID da solicitação",
         "status": {
           "title": "App autenticador",
           "on": "Ativada",
@@ -181,7 +178,6 @@
         "saving": "Salvando",
         "saved": "{count, plural, one {# configuração salva} other {# configurações salvas}}",
         "rejected": "Nada foi salvo. {count, plural, one {# campo foi rejeitado} other {# campos foram rejeitados}}.",
-        "requestId": "ID da solicitação",
         "unsaved": "{count, plural, one {# alteração não salva} other {# alterações não salvas}}",
         "discard": "Descartar alterações",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Processando",
             "close": "Fechar",
             "signInAgain": "Entrar novamente",
-            "requestId": "ID da solicitação",
             "errors": {
               "forbidden": "Somente um superadministrador pode executar esta ação.",
               "unexpected": "A ação não foi concluída. Verifique o log de eventos antes de tentar novamente."
@@ -731,7 +726,6 @@
         "saving": "Salvando",
         "saved": "{count, plural, one {# configuração salva} other {# configurações salvas}}",
         "rejected": "Nada foi salvo. {count, plural, one {# campo foi rejeitado} other {# campos foram rejeitados}}.",
-        "requestId": "ID da solicitação",
         "unsaved": "{count, plural, one {# alteração não salva} other {# alterações não salvas}}",
         "discard": "Descartar alterações",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Um código de teste foi enviado para {to}.",
             "remaining": "{count, plural, one {# teste restante nesta hora.} other {# testes restantes nesta hora.}}",
             "notShown": "O código não é exibido aqui; leia-o no telefone.",
-            "requestId": "ID da solicitação",
             "errors": {
               "invalidNumber": "Digite o número com o código do país, por exemplo +91 98765 43221.",
               "rateLimited": "Muitos códigos de teste nesta hora. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}.",
@@ -1045,7 +1038,6 @@
           "saved": "Remetente salvo",
           "removed": "Remetente removido",
           "secretRemoved": "Segredo salvo removido",
-          "requestId": "ID da solicitação",
           "problems": {
             "required": "Este campo é obrigatório.",
             "tooLong": "No máximo {max} caracteres.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Esse rodapé não foi aceito.",
             "unexpected": "Não foi possível salvar o rodapé. Tente novamente em instantes."
-          },
-          "requestId": "ID da solicitação"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Salvando",
         "saved": "{count, plural, one {# configuração salva} other {# configurações salvas}}",
         "rejected": "Nada foi salvo. {count, plural, one {# campo foi rejeitado} other {# campos foram rejeitados}}.",
-        "requestId": "ID da solicitação",
         "unsaved": "{count, plural, one {# alteração não salva} other {# alterações não salvas}}",
         "discard": "Descartar alterações",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Cancelar",
           "working": "Removendo",
           "error": "Não foi possível remover o segredo. Tente novamente em instantes.",
-          "requestId": "ID da solicitação",
           "done": "O segredo salvo de {name} foi removido.",
           "names": {
             "google": "Google",
@@ -1418,7 +1407,10 @@
             "forms_and_links": "Formulários de captação de leads e links compartilháveis.",
             "extra_channels": "Os canais Telegram, Facebook e Instagram.",
             "form_builder": "Formulários web hospedados e incorporados que criam contatos no CRM. O app pago de Formulários controla esta chave.",
-            "waba_groups": "Crie e gerencie grupos do WhatsApp a partir de um número da API em nuvem: link de convite, solicitações de entrada, membros. O número deve ser uma Conta Comercial Oficial."
+            "waba_groups": "Crie e gerencie grupos do WhatsApp a partir de um número da API em nuvem: link de convite, solicitações de entrada, membros. O número deve ser uma Conta Comercial Oficial.",
+            "sms": "SMS somente de envio via Twilio ou MSG91: conecte remetentes e envie transmissões e campanhas por SMS.",
+            "help_agent": "O Assistente de ajuda do app: as pessoas pedem uma tarefa com palavras simples e ele orienta ou executa na própria sessão delas, perguntando antes de qualquer ação arriscada. Gasta tokens de IA.",
+            "email_channel": "Conecte caixas do Gmail e do Google Workspace à caixa de entrada da equipe. O app pago E-mail controla este botão."
           },
           "units": {
             "days": "Dias",
@@ -1559,7 +1551,9 @@
             "ai_token_limit_monthly": "Tokens de IA por mês (chaves da plataforma)",
             "forms": "Formulários web",
             "form_submissions_monthly": "Envios de formulário por mês",
-            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA por mês"
+            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA por mês",
+            "sms_monthly": "SMS por mês",
+            "email_mailboxes": "Caixas de e-mail"
           },
           "featureGroups": {
             "messaging": "Mensagens",
@@ -1596,7 +1590,10 @@
             "forms_and_links": "Formulários, links de clique para conversar e grupos",
             "extra_channels": "Canais Telegram, Facebook e Instagram",
             "form_builder": "Formulários (construtor de formulários web)",
-            "waba_groups": "Grupos do WhatsApp (API em nuvem)"
+            "waba_groups": "Grupos do WhatsApp (API em nuvem)",
+            "sms": "Canal SMS",
+            "help_agent": "Assistente de ajuda (IA, gasta tokens)",
+            "email_channel": "Canal de e-mail (Gmail)"
           },
           "problems": {
             "required": "Este campo é obrigatório.",
@@ -1648,7 +1645,9 @@
             "ai_token_limit_monthly": "Tokens que os assistentes de IA usam no mês civil com as chaves da plataforma. Espaços de trabalho com chaves próprias não têm limite.",
             "forms": "Formulários web ativos (app Formulários). Arquivar um formulário libera a vaga. 0 = ilimitado.",
             "form_submissions_monthly": "Envios de formulário aceitos no mês civil, exceto spam. Acima do limite, o envio ainda é salvo para revisão, nunca descartado. 0 = ilimitado.",
-            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA no mês civil, incluindo nova tentativa de correção. 0 = ilimitado."
+            "ai_form_generations_monthly": "Gerações do construtor de formulários com IA no mês civil, incluindo nova tentativa de correção. 0 = ilimitado.",
+            "sms_monthly": "Mensagens SMS enviadas no mês civil. 0 = ilimitado.",
+            "email_mailboxes": "Caixas do Gmail conectadas (uma desconectada libera o lugar). 0 = ilimitado."
           }
         }
       },
@@ -1660,7 +1659,6 @@
         "saving": "Salvando",
         "saved": "{count, plural, one {# configuração salva} other {# configurações salvas}}",
         "rejected": "Nada foi salvo. {count, plural, one {# campo foi rejeitado} other {# campos foram rejeitados}}.",
-        "requestId": "ID da solicitação",
         "unsaved": "{count, plural, one {# alteração não salva} other {# alterações não salvas}}",
         "discard": "Descartar alterações",
         "errors": {

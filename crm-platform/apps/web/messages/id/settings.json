@@ -97,13 +97,13 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Kirim dan terima pesan teks dengan pengirim Anda sendiri.",
+        "description": "Kirim pesan teks dengan nomor Twilio atau pengirim MSG91 Anda sendiri.",
         "keywords": "pesan teks, sender id, dlt, twilio, seluler"
       },
       "email": {
         "label": "Email",
-        "description": "Hubungkan kotak surat untuk mengirim dan menerima email di Inbox.",
-        "keywords": "kotak surat, smtp, imap, gmail, outlook, pengirim"
+        "description": "Hubungkan kotak surat Gmail atau Google Workspace agar tim Anda dapat membaca dan menjawab email pelanggan di inbox bersama.",
+        "keywords": "kotak surat, gmail, google workspace, inbox bersama, email dukungan, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -311,10 +311,56 @@
         "keywords": "routing, round robin, tetapkan, agen, aturan inbox, distribusikan, pemilik"
       },
       "web": {
-        "label": "Chat situs web",
-        "description": "Bot yang dibuat untuk chat situs web Anda beserta widget tempat masing-masing berjalan.",
-        "keywords": "web, situs web, widget, chatbot, embed, live chat"
+        "label": "Obrolan situs web",
+        "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
+        "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
+      },
+      "message-logs": {
+        "label": "Log pesan",
+        "description": "Ekspor log pengiriman pesan Anda, hingga satu tahun ke belakang, sebagai file yang dikirim ke email Anda.",
+        "keywords": "ekspor, log pengiriman, riwayat, arsip, csv, pesan"
+      },
+      "billing-subscriptions": {
+        "label": "Langganan",
+        "description": "Apa yang diperpanjang, dibayar hingga kapan, dan pembatalan.",
+        "keywords": "langganan, perpanjangan, perpanjangan otomatis, batalkan, autodebet, pembayaran gagal, tagihan"
+      },
+      "lead-scoring": {
+        "label": "Penilaian prospek dengan AI",
+        "description": "Beri skor setiap kontak dengan AI, pilih data yang dikirim, dan lihat biayanya.",
+        "keywords": "skor prospek, penilaian, ai, panas, hangat, dingin, openrouter, biaya, kualifikasi"
+      },
+      "help-assistant": {
+        "label": "Asisten Bantuan",
+        "description": "Aktifkan asisten yang memandu tim Anda atau mengerjakan langkahnya untuk mereka.",
+        "keywords": "ai, asisten, agen, panduan, bantuan, otomatisasi"
+      },
+      "consent": {
+        "label": "Persetujuan dan balasan STOP",
+        "description": "Pilih kata STOP dan START, balasan konfirmasi, baris berhenti berlangganan, dan apakah pemasaran memerlukan persetujuan yang tercatat.",
+        "keywords": "persetujuan, berhenti berlangganan, berlangganan kembali, unsubscribe, stop, start, gdpr, kepatuhan, privasi, pemasaran"
+      },
+      "inbox-tags": {
+        "label": "Tag percakapan",
+        "description": "Buat tag yang dipasang tim Anda pada percakapan dan dipakai untuk memfilter kotak masuk. Tag ini sama dengan yang digunakan pada kontak.",
+        "keywords": "tag, kategori, atur, filter, tag percakapan"
+      },
+      "growth": {
+        "label": "Pertumbuhan",
+        "description": "Lead panas, audiens, balasan kampanye, dan hal lain yang dapat ditindaklanjuti tim Anda, disimpulkan dari obrolan dan kampanye.",
+        "keywords": "pertumbuhan, lead panas, audiens, keterlibatan, tidak aktif, balasan kampanye, kecenderungan konversi, opt-out, pilot"
+      },
+      "sla-policies": {
+        "label": "Target respons",
+        "description": "Atur seberapa cepat tim Anda harus membalas dan menyelesaikan (SLA), dan dapatkan peringatan saat percakapan melewati target.",
+        "keywords": "sla, waktu respons, balasan pertama, penyelesaian, pelanggaran, target, jam kerja"
+      },
+      "team-performance": {
+        "label": "Kinerja tim",
+        "description": "Lihat seberapa cepat tiap agen membalas dan menyelesaikan hari ini, minggu ini, atau bulan ini.",
+        "keywords": "laporan, analitik, agen, waktu respons, balasan pertama, selesai, beban kerja, kinerja"
       }
-    }
+    },
+    "backToMarketplace": "Kembali ke Marketplace"
   }
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { FlowRunStep } from '@crm/contracts';
-import { formatMs, pathOf, timelineRows } from './timeline-model';
+import { formatMs, nodeNames, pathOf, stepFacts, timelineRows, waitStates } from './timeline-model';
 
 const step = (over: Partial<FlowRunStep>): FlowRunStep => ({
   seq: 1,
@@ -17,6 +17,8 @@ const step = (over: Partial<FlowRunStep>): FlowRunStep => ({
   attempt: 1,
   summary: null,
   errorCode: null,
+  input: [],
+  output: [],
   ...over,
 });
 
@@ -74,5 +76,72 @@ describe('pathOf', () => {
       reached: [],
       unreached: [],
     });
+  });
+});
+
+describe('stepFacts', () => {
+  const names = nodeNames({
+    graph: { nodes: [{ id: 'n2', type: 'Message', label: 'Hours' }], edges: [] },
+    log: [],
+  });
+  it('words the next node by its name, never its id or raw keys', () => {
+    expect(stepFacts(step({ detail: { next: 'n2' } }), names)).toEqual([
+      { kind: 'next', node: 'Hours' },
+    ]);
+    expect(stepFacts(step({ detail: { next: 'gone' } }), names)).toEqual([
+      { kind: 'next', node: 'gone' },
+    ]);
+  });
+  it('knows replies, waits, delays and why a run ended', () => {
+    expect(stepFacts(step({ event: 'reply', detail: { text: 'yes', tap: 'b1' } }), names)).toEqual([
+      { kind: 'replied', text: 'yes' },
+    ]);
+    expect(
+      stepFacts(step({ nodeId: 'n2', detail: { waitingOn: 'n2', seconds: 5 } }), names),
+    ).toEqual([
+      { kind: 'waitingAt', node: 'Hours' },
+      { kind: 'delay', seconds: 5 },
+    ]);
+    expect(
+      stepFacts(step({ event: 'end', detail: { reason: 'dead_end', status: 'completed' } }), names),
+    ).toEqual([{ kind: 'ended', reason: 'dead_end' }]);
+  });
+  it('says nothing for a step with no detail', () => {
+    expect(stepFacts(step({}), names)).toEqual([]);
+  });
+});
+
+describe('waitStates', () => {
+  const ask = step({ seq: 1, event: 'wait', outcome: 'waiting', at: '2026-01-01T00:00:00Z' });
+  const answer = step({ seq: 2, event: 'reply', at: '2026-01-01T00:00:23Z' });
+  it('settles a wait with the next customer reply and says how long it took', () => {
+    const w = waitStates([ask, answer], true);
+    expect(w.get(ask)).toEqual({ state: 'answered', ms: 23000 });
+  });
+  it('leaves the last wait waiting while the run is live, and gave up once it is over', () => {
+    expect(waitStates([ask], true).get(ask)).toEqual({ state: 'waiting' });
+    expect(waitStates([ask], false).get(ask)).toEqual({ state: 'gaveUp' });
+  });
+  it('settles each wait by its own reply (a re-prompt is a new wait)', () => {
+    const again = step({ seq: 3, event: 'wait', outcome: 'waiting', at: '2026-01-01T00:00:30Z' });
+    const second = step({ seq: 4, event: 'reply', at: '2026-01-01T00:00:40Z' });
+    const w = waitStates([ask, answer, again, second], true);
+    expect(w.get(ask)).toMatchObject({ state: 'answered', ms: 23000 });
+    expect(w.get(again)).toMatchObject({ state: 'answered', ms: 10000 });
+  });
+  it('ignores rows that are not waits', () => {
+    expect(waitStates([answer], true).size).toBe(0);
+  });
+});
+
+describe('a menu kept alive after a dead end', () => {
+  const names = (id: string) => id;
+  it('says the options stay active, not that this node is waiting', () => {
+    const row = step({ nodeId: 'num', event: 'wait', detail: { waitingOn: 'menu' } });
+    expect(stepFacts(row, names)).toEqual([{ kind: 'menuKept', node: 'menu' }]);
+  });
+  it('still says a node waits at itself', () => {
+    const row = step({ nodeId: 'q', event: 'wait', detail: { waitingOn: 'q' } });
+    expect(stepFacts(row, names)).toEqual([{ kind: 'waitingAt', node: 'q' }]);
   });
 });

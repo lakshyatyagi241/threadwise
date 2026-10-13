@@ -69,6 +69,33 @@ the conversation row (`status`, `assign`).
   `+91 98765-43210` finds `919876543210`. Four trigram indexes serve it. Searching inside older messages is a later phase.
 - `title` in a row is the contact's name, else the peer's name, else the title the thread was created with (the number).
 
+## Tags: contact tags and conversation tags
+
+One word, one concept: the reference calls them tags, and the first name used here ("labels") is retired. The workspace tag library is the `tags` table
+the contacts domain also uses (`/tags`, see [contacts-attributes-tags.md](contacts-attributes-tags.md#tags-extends-tags)); the plan `tags` limit counts
+both uses. A **contact tag** describes the person (VIP, lead, region); a **conversation tag** describes this thread (billing, refund, urgent).
+
+| Method and path                               | Permission                | Purpose                                                                                                                       |
+| --------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `GET /inbox/tags`                             | `inbox.conversation.read` | The library with `conversationCount` per tag.                                                                                 |
+| `POST /inbox/tags`                            | `inbox.tag.manage`        | `{ name, color?, description? }`; `409 CON_TAG_NAME_TAKEN`, plan limit `422 PLAN_LIMIT_REACHED`. `201`.                       |
+| `PATCH /inbox/tags/:id`                       | `inbox.tag.manage`        | `{ rowVersion, name?, color?, description? }`; `409 ROW_VERSION_CONFLICT`.                                                    |
+| `DELETE /inbox/tags/:id`                      | `inbox.tag.manage`        | Removes the tag from every conversation and every contact. `204`.                                                             |
+| `POST /inbox/conversations/:id/tags`          | `inbox.conversation.tag`  | `{ tagId }` or `{ name }` (a new name creates the tag and also needs `inbox.tag.manage`: `403 INBOX_LABEL_CREATE_FORBIDDEN`). |
+| `DELETE /inbox/conversations/:id/tags/:tagId` | `inbox.conversation.tag`  | A tag not on the thread is a no-op. Both return the conversation row.                                                         |
+
+- **List filter**: `GET /inbox/conversations?tags=<id>,<id>` returns threads that carry ANY of the tags (at most 20). `tagScope=conversation`
+  (default) matches the thread's own tags; `tagScope=contact` matches the tags of the thread's contact (`contact_tags`; a thread with no contact never
+  matches). The contact scope is one `EXISTS` over `contact_tags` and `tags` on `(org_id, contact_id)`, indexed, with the same tenant match as the other
+  filters. Counts are unaffected.
+- **Row and detail**: the thread's tags are `labels: [{ id, name, color }]` on the row and on the detail (the field keeps its original name for
+  existing clients). The detail's `contactSummary.contactTags` has the contact's tags (read-only here; empty if the caller may not read contacts).
+- **Bulk**: `POST /inbox/conversations/bulk` with `action: { type: 'tag', mode: 'add' | 'remove', tagId }`.
+- **Events**: timeline `tag_added` / `tag_removed`, outbox `conversation.tag_added` / `conversation.tag_removed` (payload `conversationId`, `tagId`,
+  `name`), an audit row with `tags` in the delta, and `inbox.conversation.upsert` with `changed: ['tags', 'labels']`.
+- **Aliases kept so nothing breaks**: `/inbox/labels*`, `/inbox/conversations/:id/labels*`, `?labels=` (merged with `?tags=`), bulk action
+  type `label`, error codes `INBOX_LABEL_NOT_FOUND` and `INBOX_LABEL_CREATE_FORBIDDEN`. They are retired in BL-113.
+
 ## The thread
 
 `GET .../messages` has no cursor of its own: the newest `limit` (default 50, at most 100) in ascending order, or `before` (a `seq`) for older ones, or
@@ -100,6 +127,21 @@ conversation is a 404 before any link exists). The storage key is never in a res
   the content screen are checked at send time by the worker, so a halt also stops what is already queued (the message ends `failed`).
 - `kind: 'template'` sends an approved template of the conversation's WhatsApp number with the agent's values (`422 INBOX_TEMPLATE_NOT_SENDABLE`
   for one the inbox cannot send, with the reason; `422 VALIDATION_FAILED` for a missing value).
+- **A Meta Cloud API group thread** (`peerKey` `g:<group id>` on a `whatsapp_cloud` channel; BL-094 phase 3, [spec](../specs/waba-groups-management.md)):
+  text, files and templates go to the group (`recipient_type: group`, the id verbatim); reactions, places, contact cards and buttons answer
+  `422 CHANNEL_CAPABILITY_UNSUPPORTED`. Refused before anything is stored: `422 PLAN_FEATURE_LOCKED` (the plan has no `waba_groups`, the same gate as
+  the management routes; a retry is checked again), `422 WABA_GROUP_SUSPENDED` (Meta suspended the group, D10), `422 WALLET_EMPTY` (the workspace's wallet
+  cannot cover one message to every member, D8). The message remembers the group size (`meta.group_members`). Reply permission is the ordinary
+  `inbox.conversation.reply`; no new key.
+  - `GET .../conversations/:id` carries `cloudGroup` for such a thread: `{ groupId, subject, memberCount, suspended, block: 'suspended' | 'plan' | 'ineligible' | null,
+canSend, estimate: { minor, currency } | null, walletShort }`. `block` is why the composer is off; `walletShort` only warns (the send decides).
+    `ineligible` is read from the Groups screen's cached eligibility probe (Redis, no Meta call), so it is "unknown" until that screen has probed the
+    number. `estimate` is an upper bound (one message at the marketing rate for every member). No phone number and no invite link is in it.
+  - A message of the thread has `groupDelivery` (outbound) `{ members, deliveredTo, readBy, failed, billable, free }` rolled up from Meta's per-member statuses
+    (a member's status only moves forward, so a retried webhook cannot inflate a count), and `group` (inbound) `{ participant, senderName }`.
+    Member numbers appear only in the inbound `group.participant`, never in the tally.
+  - Money: nothing is held. Each member that reaches delivered or read is reported to the wallet once, keyed `<wamid>:<member id>` (outbox
+    `message.delivery_reported`); a member Meta marks `free_group_customer_service` is not reported.
 - The message pipeline (the row, the ledger, the dispatch queue, the worker, receipts, the realtime events `inbox.message.new`, `inbox.message.status`,
   `inbox.unread`) belongs to the conversation core and is reached through `ConversationsFacade`; this domain proves first that the caller may see
   the conversation (404) and may reply to it (403).
@@ -193,7 +235,7 @@ conversation's room). Message events and `inbox.unread` are the core's. Events a
 
 ## Not built here (later phases, recorded not dropped)
 
-Template send (TPL), snooze and spam routes, priority, labels, bulk, saved replies, saved views, SLA, routing rules and strategies, mention
+Template send (TPL), snooze and spam routes, priority, tags (built, see above), bulk, saved replies, saved views, SLA, routing rules and strategies, mention
 notifications, presence and typing, the AI hand-off hooks (AIAG), compose-to-many, the sweep of expired uploads. Reference's inbox deep link
 `/inbox?c=<uuid>` is the web's.
 

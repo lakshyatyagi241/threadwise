@@ -6,7 +6,8 @@
       "orders": "Storico ordini",
       "billingHistory": "Storico fatturazione",
       "invoices": "Fatture",
-      "billingSettings": "Impostazioni di fatturazione"
+      "billingSettings": "Impostazioni di fatturazione",
+      "subscriptions": "Abbonamenti"
     },
     "admin": {
       "title": "Gateway di pagamento",
@@ -236,8 +237,12 @@
           "30d": "Ultimi 30 giorni",
           "90d": "Ultimi 90 giorni",
           "1y": "Ultimo anno",
-          "all": "Sempre"
-        }
+          "all": "Sempre",
+          "custom": "Intervallo personalizzato"
+        },
+        "customFrom": "Data iniziale",
+        "customTo": "Data finale",
+        "customInvalid": "Scegli due giorni validi: l'inizio non può essere dopo la fine, con al massimo 5 anni di distanza."
       },
       "orders": {
         "title": "Storico ordini",
@@ -249,7 +254,8 @@
         "windows": {
           "90d": "Ultimi 90 giorni",
           "this_year": "Quest’anno",
-          "all": "Sempre"
+          "all": "Sempre",
+          "custom": "Intervallo personalizzato"
         },
         "kpi": {
           "total": "Ordini totali",
@@ -299,7 +305,8 @@
           "markPaid": "Segna come pagato",
           "cancelOrder": "Annulla",
           "approve": "Approva",
-          "reject": "Rifiuta"
+          "reject": "Rifiuta",
+          "refund": "Rimborso"
         },
         "confirm": {
           "approveTitle": "Segnare questo ordine come pagato?",
@@ -432,7 +439,7 @@
           "gross": "Ricavi lordi",
           "net": "Ricavi netti",
           "netPct": "{pct}% netto",
-          "success": "Autorizzazioni riuscite",
+          "success": "Tasso di successo dei pagamenti",
           "failed": "Non riuscite",
           "events": "{count, plural, one {# evento} other {# eventi}}",
           "refunds": "Rimborsi",
@@ -673,6 +680,79 @@
           "faqsHint": "Elementi a fisarmonica mostrati sotto i piani.",
           "configured": "{count} configurati."
         }
+      },
+      "subscriptions": {
+        "title": "Abbonamenti",
+        "eyebrow": "Fatturazione",
+        "titleFirst": "Piattaforma",
+        "titleSecond": "abbonamenti",
+        "description": "Abbonamenti a piani e add-on gestiti presso un fornitore di pagamenti, in tutti gli spazi di lavoro. Terminane uno, aggiornalo dal fornitore o rimborsa un addebito.",
+        "kpi": {
+          "active": "Attivo",
+          "pastDue": "Pagamento non riuscito",
+          "canceled": "Annullato"
+        },
+        "statusFilter": "Stato dell'abbonamento",
+        "statuses": {
+          "all": "Tutti",
+          "active": "Attivo",
+          "past_due": "Pagamento non riuscito",
+          "pending": "In sospeso",
+          "canceled": "Annullato",
+          "expired": "Scaduto"
+        },
+        "kind": {
+          "plan": "Piano",
+          "addon": "Add-on"
+        },
+        "search": "Cerca spazio di lavoro o ID del fornitore",
+        "noun": "abbonamenti",
+        "empty": "Nessun abbonamento corrisponde.",
+        "col": {
+          "workspace": "Spazio di lavoro",
+          "item": "Elemento",
+          "price": "Prezzo",
+          "paidUntil": "Pagato fino al",
+          "status": "Stato",
+          "provider": "Fornitore",
+          "actions": "Azioni"
+        },
+        "cancelFailed": "Annullamento presso il fornitore non riuscito",
+        "cancelFailedHint": "Il record locale è terminato, ma il fornitore non ha confermato l'annullamento. Completalo nella dashboard del fornitore affinché smetta di addebitare.",
+        "actions": {
+          "sync": "Aggiorna",
+          "refund": "Rimborsa",
+          "endAtCycle": "Termina a fine ciclo",
+          "endNow": "Termina ora"
+        },
+        "confirm": {
+          "title": "Terminare questo abbonamento?",
+          "atCycle": "{name} mantiene l'accesso fino alla fine del ciclo pagato e non verrà più addebitato.",
+          "now": "Termina ora l'abbonamento di {name} presso il fornitore. Non verrà effettuato alcun altro addebito."
+        },
+        "ended": "Abbonamento terminato presso il fornitore.",
+        "endedLocalOnly": "Terminato qui, ma il fornitore non ha confermato l'annullamento. Completalo nella dashboard del fornitore.",
+        "endedUnsupported": "Terminato qui. Questo fornitore non può essere annullato da qui.",
+        "alreadyEnded": "Era già terminato.",
+        "synced": "Verificato con il fornitore: {outcome}."
+      },
+      "refund": {
+        "title": "Rimborsa {label}",
+        "intro": "Il rimborso viene inviato al fornitore di pagamenti e torna al metodo di pagamento originale dell'acquirente.",
+        "charge": "Addebito da rimborsare",
+        "pickCharge": "Scegli un addebito pagato",
+        "loadingCharges": "Caricamento degli addebiti",
+        "chargesFailed": "Non è stato possibile chiedere al fornitore di pagamenti gli addebiti di questo abbonamento.",
+        "noPaidCharges": "Il fornitore non elenca alcun addebito pagato per questo abbonamento.",
+        "amount": "Importo ({currency})",
+        "amountHint": "Lascia vuoto per rimborsare tutto ciò che non è ancora stato rimborsato.",
+        "reason": "Motivo",
+        "endSubscription": "Termina anche l'abbonamento ora per evitare altri addebiti",
+        "submit": "Rimborsa",
+        "processed": "Rimborsati {amount}.",
+        "pending": "Rimborso inviato. Il fornitore lo sta elaborando.",
+        "failed": "Il fornitore ha rifiutato il rimborso.",
+        "badAmount": "Inserisci l'importo come numero, ad esempio 12.50."
       }
     },
     "offline": {
@@ -711,6 +791,74 @@
       "rejected": "Tipo di file non consentito. Usa JPG, PNG, WEBP o PDF.",
       "closed": "Non è più possibile inviare la ricevuta di pagamento per questo ordine.",
       "failed": "Impossibile caricare il file. Riprova."
+    },
+    "subscriptions": {
+      "title": "Abbonamenti",
+      "subtitle": "I tuoi abbonamenti a piani e add-on presso il fornitore di pagamenti: cosa si rinnova, fino a quando sei pagato e cosa è stato addebitato.",
+      "loading": "Caricamento degli abbonamenti",
+      "loadFailed": "Non è stato possibile caricare i tuoi abbonamenti. Riprova tra un momento.",
+      "emptyTitle": "Ancora nessun abbonamento",
+      "emptyMessage": "Quando paghi un piano o un add-on con rinnovo automatico, compare qui.",
+      "browsePlans": "Vedi i piani",
+      "failedBanner": "L'ultimo pagamento per {names} non è riuscito. Per ora il tuo accesso continua mentre il fornitore riprova; aggiorna il metodo di pagamento con la tua banca o con il fornitore per non perderlo.",
+      "paymentFailed": "L'ultimo pagamento non è riuscito. Il fornitore sta riprovando.",
+      "kind": {
+        "plan": "Piano",
+        "addon": "Add-on"
+      },
+      "status": {
+        "active": "Attivo",
+        "past_due": "Pagamento non riuscito",
+        "pending": "In attesa di pagamento",
+        "canceled": "Annullato",
+        "expired": "Scaduto"
+      },
+      "cycle": {
+        "monthly": "mese",
+        "yearly": "anno"
+      },
+      "price": "{amount} per {cycle}",
+      "renewsOn": "Si rinnova il {date}",
+      "endsOn": "Pagato fino al {date}. Non si rinnoverà.",
+      "endedOn": "Terminato il {date}",
+      "refreshFromProvider": "Aggiorna dal fornitore",
+      "showCharges": "Mostra addebiti",
+      "hideCharges": "Nascondi addebiti",
+      "cancel": "Annulla abbonamento",
+      "confirmTitle": "Annullare {name}?",
+      "confirmBody": "Mantieni l'accesso fino al {date}. Dopo non si rinnoverà e non ti verrà più addebitato nulla.",
+      "confirmBodyNoDate": "Non si rinnoverà e non ti verrà più addebitato nulla.",
+      "confirm": "Annulla abbonamento",
+      "keep": "Mantienilo",
+      "cancelDone": "Annullato. Il periodo pagato continua e non verrà addebitato altro.",
+      "cancelFailed": "Non è stato possibile annullare questo abbonamento. Riprova o contatta l'assistenza.",
+      "forbidden": "Non hai l'autorizzazione per gestire gli abbonamenti.",
+      "sync": {
+        "up_to_date": "Già aggiornato con il fornitore di pagamenti.",
+        "renewed": "Aggiornato: il fornitore aveva un rinnovo più recente.",
+        "gateway_canceled": "Il fornitore mostra questo abbonamento come annullato.",
+        "gateway_expired": "Il fornitore mostra questo abbonamento come terminato.",
+        "unknown": "Verificato con il fornitore di pagamenti.",
+        "failed": "Non è stato possibile contattare il fornitore di pagamenti. Riprova tra un momento."
+      },
+      "chargesFailed": "Non è stato possibile caricare gli addebiti.",
+      "chargesFromOrders": "Il fornitore di pagamenti non era raggiungibile, quindi vengono mostrati invece i tuoi ordini pagati.",
+      "noCharges": "Ancora nessun addebito.",
+      "col": {
+        "date": "Data",
+        "amount": "Importo",
+        "status": "Stato",
+        "receipt": "Ricevuta"
+      },
+      "chargeStatus": {
+        "paid": "Pagato",
+        "issued": "In attesa di pagamento",
+        "failed": "Non riuscito",
+        "cancelled": "Annullato",
+        "expired": "Scaduto",
+        "other": "Altro"
+      },
+      "openReceipt": "Apri ricevuta"
     }
   }
 }

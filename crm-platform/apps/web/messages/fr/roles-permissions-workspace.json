@@ -9,7 +9,6 @@
       "breadcrumb": "Fil d’Ariane",
       "loading": "Chargement…",
       "retry": "Réessayer",
-      "requestId": "ID de la requête",
       "cancel": "Annuler",
       "close": "Fermer",
       "dismiss": "Ignorer",
@@ -102,7 +101,8 @@
         "added": "{name} a été ajouté à l’espace de travail.",
         "rolesUpdated": "Rôles de {name} mis à jour.",
         "deactivated": "{name} a été désactivé.",
-        "reactivated": "{name} a été réactivé."
+        "reactivated": "{name} a été réactivé.",
+        "invited": "Invitation envoyée à {name}."
       },
       "deactivate": {
         "action": "Désactiver",
@@ -123,7 +123,13 @@
         "passwordShort": "Le mot de passe doit comporter au moins 8 caractères.",
         "generate": "Générer",
         "role": "Rôle",
-        "submit": "Ajouter un membre"
+        "submit": "Ajouter un membre",
+        "inviteHint": "Nous leur envoyons par e-mail un lien pour définir leur propre mot de passe. Le lien fonctionne une seule fois et expire au bout de quelques jours.",
+        "submitInvite": "Envoyer l'invitation",
+        "linkNotSent": "L'e-mail à {email} n'a pas pu être envoyé. Copiez ce lien et transmettez-le ; il ne sera plus affiché.",
+        "copyLink": "Copier le lien",
+        "copied": "Copié",
+        "done": "Terminé"
       },
       "changeRole": {
         "title": "Modifier les rôles de {name}",

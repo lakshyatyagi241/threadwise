@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Auditlogboek",
+    "description": "Wie wat in deze workspace heeft gewijzigd, wanneer en van wat naar wat. Gebruik het om te beantwoorden \"wie heeft dit gedaan?\", om wijzigingen van je team te controleren en om na te gaan wat platformondersteuning deed toen je om hulp vroeg.",
+    "tile": {
+      "label": "Auditlogboek",
+      "description": "Bekijk wie wat in je workspace heeft gewijzigd, wanneer en van wat naar wat. Filter en exporteer het.",
+      "keywords": "activiteitenlogboek, audit, geschiedenis, wijzigingen, wie heeft gewijzigd, beveiliging, compliance, exporteren, supporttoegang"
+    },
+    "retention": {
+      "days": "Items worden {days, plural, one {# dag} other {# dagen}} bewaard en daarna verwijderd. Het platform bepaalt deze periode.",
+      "forever": "Items worden zonder einddatum bewaard. Het platform bepaalt dit beleid.",
+      "unknown": "Items worden bewaard gedurende de periode die het platform instelt en daarna verwijderd."
+    },
+    "forbidden": {
+      "title": "Je hebt geen toegang tot het auditlogboek",
+      "body": "Vraag een Owner of Admin van de workspace om je rol de toestemming te geven om het auditlogboek te bekijken."
+    },
+    "filters": {
+      "label": "Filters voor het auditlogboek",
+      "range": "Periode",
+      "from": "Van",
+      "to": "Tot",
+      "actor": "Persoon",
+      "allActors": "Iedereen",
+      "actorType": "Wie handelde",
+      "allActorTypes": "Iedereen",
+      "module": "Onderdeel",
+      "allModules": "Alle onderdelen",
+      "action": "Actie",
+      "allActions": "Alle acties",
+      "search": "Zoek in onderdelen en acties",
+      "searchHint": "Zoekt alleen in het onderdeel en de actie, nooit in de gewijzigde waarden.",
+      "recordId": "Recordnummer",
+      "requestId": "Request-ID",
+      "supportOnly": "Alleen sessies van platformondersteuning",
+      "apply": "Filters toepassen",
+      "refresh": "Vernieuwen",
+      "reset": "Filters resetten"
+    },
+    "ranges": {
+      "24h": "Laatste 24 uur",
+      "7d": "Laatste 7 dagen",
+      "30d": "Laatste 30 dagen",
+      "90d": "Laatste 90 dagen",
+      "custom": "Kies datums"
+    },
+    "actorTypes": {
+      "user": "Een persoon",
+      "system": "Het systeem",
+      "api_key": "Een API-sleutel",
+      "bot": "Een bot",
+      "partner_agent": "Een partneragent",
+      "candidate": "Een kandidaat",
+      "other": "Iets anders"
+    },
+    "actors": {
+      "system": "Systeem",
+      "api_key": "API-sleutel",
+      "apiKeyNamed": "API-sleutel: {name}",
+      "bot": "Bot",
+      "partner_agent": "Partneragent",
+      "candidate": "Kandidaat",
+      "other": "Overig",
+      "removedUser": "Een verwijderde gebruiker",
+      "support": "Platformondersteuning",
+      "actingAs": "handelend als {name}",
+      "supportBadge": "Platformondersteuning"
+    },
+    "actions": {
+      "insert": "Aangemaakt",
+      "update": "Bijgewerkt",
+      "delete": "Verwijderd",
+      "merge": "Samengevoegd",
+      "login": "Ingelogd",
+      "export": "Geëxporteerd",
+      "read": "Bekeken"
+    },
+    "modules": {
+      "contacts": "Contacten",
+      "contact_groups": "Contactgroepen",
+      "contact_notes": "Contactnotities",
+      "companies": "Bedrijven",
+      "deals": "Deals",
+      "tags": "Tags",
+      "members": "Teamleden",
+      "teams": "Teams",
+      "conversation_notes": "Gespreksnotities",
+      "broadcasts": "Broadcasts",
+      "campaigns": "Campagnes",
+      "faqs": "Veelgestelde vragen",
+      "api_keys": "API-sleutels",
+      "audit-log": "Auditlogboek",
+      "audit-log-exports": "Exports van het auditlogboek",
+      "contact_consent_exports": "Exports van toestemmingsbewijzen"
+    },
+    "table": {
+      "caption": "Audititems, nieuwste eerst. Tijden worden getoond in jouw tijdzone ({zone}).",
+      "zone": "Tijden worden getoond in jouw tijdzone: {zone}.",
+      "time": "Wanneer",
+      "actor": "Wie",
+      "action": "Wat",
+      "record": "Record",
+      "changed": "Gewijzigde velden",
+      "request": "Request",
+      "details": "Details",
+      "openDetails": "Details van deze wijziging: {what}"
+    },
+    "states": {
+      "loading": "Auditlogboek laden",
+      "empty": "Niets vastgelegd in deze periode",
+      "emptyHint": "Wijzigingen van je team verschijnen hier.",
+      "emptyFiltered": "Geen items die bij deze filters passen",
+      "emptyFilteredHint": "Probeer een langere periode of verwijder een filter.",
+      "retry": "Opnieuw proberen",
+      "showing": "{count, plural, one {# item geladen} other {# items geladen}}",
+      "loadMore": "Meer laden",
+      "end": "Einde van de lijst"
+    },
+    "detail": {
+      "title": "Auditiem",
+      "when": "Wanneer",
+      "who": "Wie",
+      "what": "Wat",
+      "record": "Record",
+      "openRecord": "Record openen",
+      "request": "Request-ID",
+      "changes": "Wat is gewijzigd",
+      "field": "Veld",
+      "before": "Voor",
+      "after": "Na",
+      "noChanges": "Dit item vermeldt geen veldwijzigingen.",
+      "supportTitle": "Platformondersteuning was actief in je workspace",
+      "supportBody": "Een medewerker van platformondersteuning gebruikte een supportsessie als {name}. Die kon doen wat die persoon kan doen.",
+      "supportReason": "Opgegeven reden: {reason}",
+      "supportNoReason": "De reden voor deze sessie is niet meer beschikbaar.",
+      "supportReadOnly": "De sessie was alleen-lezen.",
+      "secret": "Verborgen geheim",
+      "secretHint": "Wachtwoorden, sleutels en tokens worden nooit getoond.",
+      "maskedHint": "Persoonsgegevens zijn deels verborgen.",
+      "maskedNote": "Persoonsgegevens zoals telefoonnummers, e-mailadressen, namen en notities zijn deels verborgen. Geheimen worden nooit getoond.",
+      "maskedNoteOwner": "Geheimen zoals wachtwoorden, sleutels en tokens zijn voor iedereen verborgen.",
+      "audited": "Het openen van dit item wordt vastgelegd in het auditlogboek."
+    },
+    "export": {
+      "title": "Exporteren",
+      "note": "Maakt een CSV van de items die bij de filters hierboven passen. Het bestand wordt {days} dagen bewaard en verbergt altijd persoonsgegevens.",
+      "button": "CSV exporteren",
+      "preparing": "Bestand voorbereiden",
+      "requested": "De export wordt voorbereid. We mailen je zodra hij klaar is.",
+      "none": "Nog geen exports.",
+      "status": {
+        "queued": "In wachtrij",
+        "running": "Bezig met voorbereiden",
+        "ready": "Klaar",
+        "failed": "Mislukt",
+        "expired": "Verlopen"
+      },
+      "rows": "{count, plural, one {# item} other {# items}}",
+      "expires": "bewaard tot {date}",
+      "download": "Downloaden",
+      "failed": "Deze export kon niet worden gemaakt. Vraag hem opnieuw aan."
+    },
+    "errors": {
+      "network": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt hier geen toestemming voor.",
+      "notFound": "Dat item of die export is niet gevonden.",
+      "rangeInvalid": "Kies een periode van maximaal 400 dagen, die eindigt na de start.",
+      "exportInProgress": "Er wordt al een export voorbereid. Wacht op de e-mail en vraag daarna een nieuwe aan.",
+      "exportNotReady": "Deze export is niet klaar of is verlopen.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "validation": "Een van de filters is ongeldig.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "common": {
+      "close": "Sluiten",
+      "dismiss": "Negeren"
+    }
+  }
+}

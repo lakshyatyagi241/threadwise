@@ -1,0 +1,355 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Sluiten",
+      "retry": "Opnieuw proberen",
+      "noAccessTitle": "Je hebt geen toegang tot dit scherm",
+      "noAccess": "Vraag een beheerder van de werkruimte om je rol de machtiging {permission} te geven."
+    },
+    "badge": {
+      "none": "Geen leadscore",
+      "aria": "Leadscore {score} van 100, {band}, {source}",
+      "titleAi": "Gescoord door AI",
+      "titleAiOn": "Gescoord door AI op {date}",
+      "titleManual": "Ingevoerd door een persoon",
+      "band": {
+        "cold": "Koud",
+        "warm": "Warm",
+        "hot": "Heet"
+      },
+      "source": {
+        "ai": "gescoord door AI",
+        "manual": "ingevoerd door een persoon"
+      }
+    },
+    "card": {
+      "title": "Leadscore",
+      "band": {
+        "cold": "Koude lead",
+        "warm": "Warme lead",
+        "hot": "Hete lead"
+      },
+      "sourceAi": "AI",
+      "sourceManual": "Handmatig",
+      "score": "Score met AI",
+      "rescore": "Opnieuw scoren",
+      "scoring": "Scoren...",
+      "scoringSlow": "De AI wordt gevraagd. Dit kan een paar seconden duren.",
+      "neverScored": "Dit contact is nog niet gescoord.",
+      "scoredBy": "Gescoord door AI op {date} met {model}.",
+      "scoredOn": "Gescoord door AI op {date}.",
+      "scoredByAi": "Gescoord door AI.",
+      "reasons": "Waarom deze score",
+      "manualWhy": "Een persoon heeft deze score ingevoerd, dus de AI past hem niet aan. Wil je dat de AI dit contact scoort, bewerk dan het contact en wis de leadscore.",
+      "manualNote": "Een persoon heeft deze score ingevoerd, dus de AI past hem niet aan.",
+      "lastRun": "Gescoord: {score}. Kosten {cost}, {tokens} tokens.",
+      "showHistory": "Scoregeschiedenis tonen",
+      "hideHistory": "Scoregeschiedenis verbergen",
+      "historyLoading": "Geschiedenis laden...",
+      "historyFailed": "De geschiedenis kon niet worden geladen.",
+      "historyEmpty": "Nog geen scorepogingen voor dit contact.",
+      "historyCaption": "Scorepogingen voor dit contact, nieuwste eerst",
+      "historyMore": "Meer laden"
+    },
+    "errors": {
+      "network": "De server was niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je rol staat dit niet toe.",
+      "notFound": "Dat contact of die record bestaat niet meer.",
+      "conflict": "Iemand heeft dit tegelijkertijd gewijzigd. Het is opnieuw geladen.",
+      "platformDisabled": "AI-leadscoring is momenteel voor het hele platform uitgeschakeld.",
+      "notEnabled": "AI-leadscoring is niet ingeschakeld voor deze werkruimte.",
+      "noKey": "Er is geen AI-sleutel beschikbaar voor deze werkruimte.",
+      "providerFailed": "De AI-provider gaf geen bruikbaar antwoord. Probeer het zo meteen opnieuw.",
+      "manualScore": "Dit contact heeft een score die een persoon heeft ingevoerd.",
+      "planLimit": "Het AI-tegoed van je abonnement is op.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "validation": "Sommige waarden zijn ongeldig.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw.",
+      "chatUnavailable": "Het lezen van gesprekken is niet beschikbaar voor deze werkruimte.",
+      "notEnoughChat": "Dit contact heeft nog niet genoeg geschreven om gelezen te worden.",
+      "suggestionGone": "Die suggestie is al beoordeeld of vervangen."
+    },
+    "scoreErrors": {
+      "network": "De server was niet bereikbaar, dus het contact is niet gescoord. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je rol mag geen contacten scoren.",
+      "notFound": "Dit contact bestaat niet meer.",
+      "conflict": "Iemand heeft dit contact tegelijkertijd gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+      "platformDisabled": "AI-leadscoring is momenteel voor het hele platform uitgeschakeld. Er kan niets worden gescoord totdat de platformbeheerder het weer inschakelt.",
+      "notEnabled": "AI-leadscoring is niet ingeschakeld voor deze werkruimte. Het staat uit totdat je kiest, omdat contactgegevens naar een AI-provider worden gestuurd.",
+      "noKey": "Er is geen OpenRouter-sleutel ingesteld voor deze werkruimte. Voeg er een toe onder AI-sleutels, of vraag je platformbeheerder de gedeelde sleutel in te schakelen.",
+      "providerFailed": "De AI-provider gaf geen bruikbaar antwoord, dus er is geen score opgeslagen. Probeer het zo meteen opnieuw.",
+      "manualScore": "Dit contact heeft een score die een persoon heeft ingevoerd, en de AI overschrijft die nooit. Bewerk het contact en wis eerst de leadscore als je wilt dat de AI het scoort.",
+      "planLimit": "Het AI-tegoed van je abonnement is op, dus het contact is niet gescoord. Probeer het later opnieuw of voeg je eigen OpenRouter-sleutel toe.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "validation": "Het verzoek was ongeldig.",
+      "unexpected": "Er ging iets mis en het contact is niet gescoord. Probeer het opnieuw.",
+      "openSettings": "Instellingen voor AI-leadscoring openen",
+      "openKeys": "AI-sleutels openen",
+      "chatUnavailable": "Het lezen van gesprekken is niet ingeschakeld voor deze werkruimte. Het is een pilotfunctie die moet worden ingeschakeld in de instellingen voor AI-leadscoring.",
+      "notEnoughChat": "Dit contact heeft nog niet genoeg geschreven: alleen begroetingen, emoji of automatische antwoorden. Probeer het opnieuw zodra er meer is geschreven.",
+      "suggestionGone": "Die suggestie was al beoordeeld of vervangen door een nieuwere, dus er is niets gewijzigd."
+    },
+    "field": {
+      "label": "Leadscore",
+      "placeholder": "0 tot 100",
+      "hint": "Als je een score invoert, is die van jou: de AI past hem niet meer aan. Wis hem om het contact weer aan de AI over te laten.",
+      "invalid": "Voer een geheel getal van 0 tot 100 in, of laat het veld leeg."
+    },
+    "runs": {
+      "col": {
+        "when": "Wanneer",
+        "contact": "Contact",
+        "result": "Resultaat",
+        "score": "Score",
+        "trigger": "Trigger",
+        "tokens": "Tokens",
+        "cost": "Kosten",
+        "key": "Sleutel"
+      },
+      "unnamed": "Naamloos contact",
+      "deletedContact": "Verwijderd contact",
+      "status": {
+        "ok": "Gescoord",
+        "kept": "Niet opgeslagen",
+        "failed": "Mislukt",
+        "skipped": "Overgeslagen"
+      },
+      "keptNote": "De AI antwoordde, maar ondertussen heeft een persoon een score ingevoerd, dus die is niet opgeslagen.",
+      "reason": {
+        "no_key": "Er was geen AI-sleutel beschikbaar.",
+        "token_allowance": "Het AI-tegoed van het abonnement was op.",
+        "hourly_limit": "De uurlimiet voor de gedeelde sleutel is bereikt.",
+        "manual_score": "Het contact heeft een score die een persoon heeft ingevoerd.",
+        "platform_off": "AI-leadscoring was uitgeschakeld voor het platform.",
+        "not_enabled": "AI-leadscoring stond uit voor deze werkruimte.",
+        "auth": "De AI-provider weigerde de sleutel.",
+        "rate_limited": "De AI-provider was bezet.",
+        "provider": "De AI-provider gaf een fout terug.",
+        "timeout": "De AI-provider deed er te lang over.",
+        "bad_response": "De AI antwoordde met iets wat geen score was.",
+        "other": "De poging is niet afgerond."
+      },
+      "trigger": {
+        "created": "Contact aangemaakt",
+        "updated": "Contact gewijzigd",
+        "manual": "Scoreknop",
+        "backfill": "Ongescoorde contacten scoren",
+        "chat": "Gesprek viel stil"
+      },
+      "tokensDetail": "{prompt} in, {completion} uit",
+      "costSource": {
+        "vendor": "De kosten zoals gemeld door OpenRouter",
+        "estimate": "Geschat op basis van de tokens en de catalogusprijs"
+      },
+      "billed": {
+        "admin": "Platformsleutel",
+        "workspace": "Jouw sleutel"
+      }
+    },
+    "log": {
+      "title": "Scorelogboek",
+      "hint": "Elke scorepoging, nieuwste eerst, met tokens en kosten.",
+      "filter": "Pogingen met dit resultaat tonen",
+      "all": "Alle resultaten",
+      "status": {
+        "ok": "Gescoord",
+        "kept": "Niet opgeslagen",
+        "failed": "Mislukt",
+        "skipped": "Overgeslagen"
+      },
+      "refresh": "Vernieuwen",
+      "emptyTitle": "Nog geen scorepogingen",
+      "emptyBody": "Pogingen verschijnen hier zodra AI-leadscoring aan staat en een contact is gescoord.",
+      "emptyFilteredTitle": "Geen pogingen met dit resultaat",
+      "emptyFilteredBody": "Kies een ander resultaat, of toon alle resultaten.",
+      "caption": "Scorepogingen, nieuwste eerst",
+      "loadMore": "Meer laden"
+    },
+    "settings": {
+      "title": "AI-leadscoring",
+      "subtitle": "Geef elk contact een score van 0 tot 100 die aangeeft hoe waarschijnlijk het is dat het koopt, en zie wat het kost.",
+      "discard": "Negeren",
+      "save": "Opslaan",
+      "saved": "Instellingen opgeslagen.",
+      "readOnly": "Je kunt deze instellingen zien, maar niet wijzigen. Vraag een beheerder van de werkruimte om de machtiging lsc.settings.manage.",
+      "conflict": "Iemand anders heeft deze instellingen eerder gewijzigd. Ze zijn opnieuw geladen, dus je ziet de opgeslagen versie. Voer je wijziging opnieuw door.",
+      "conflictOk": "Begrepen",
+      "enable": {
+        "title": "AI-leadscoring inschakelen",
+        "hint": "Staat uit totdat je kiest, omdat gegevens over je contacten naar een AI-provider worden gestuurd.",
+        "label": "AI-leadscoring",
+        "on": "Aan",
+        "off": "Uit",
+        "what": "Als dit aan staat, leest een AI-model een korte, anonieme beschrijving van een contact en antwoordt met een score en de redenen daarvoor. De score wordt opgeslagen als leadscore van het contact."
+      },
+      "sent": {
+        "title": "Wat naar de AI wordt gestuurd",
+        "stage": "De fase en status van het contact",
+        "source": "Waar het contact vandaan komt",
+        "tags": "Namen van tags",
+        "deals": "Hoeveel deals open, gewonnen en verloren zijn",
+        "activity": "Hoe recent het contact actief was",
+        "company": "De bedrijfsnaam",
+        "engagement": "Hoe het contact onlangs heeft gereageerd: aantal berichten, geopende broadcasts en aangeklikte links, en hoe snel het antwoordt (alleen cijfers)"
+      },
+      "notSent": {
+        "title": "Wat nooit wordt gestuurd",
+        "name": "De naam van het contact",
+        "email": "Het e-mailadres",
+        "phone": "Het telefoonnummer",
+        "messages": "De tekst van elk bericht",
+        "messagesChat": "De tekst van berichten, tenzij je het lezen van gesprekken inschakelt (hieronder)"
+      },
+      "manualRule": "Een score die een persoon heeft ingevoerd wordt nooit overschreven. De AI vult alleen lege scores in en ververst de scores die hij zelf heeft geschreven.",
+      "auto": {
+        "label": "Automatisch scoren wanneer contacten wijzigen",
+        "onBody": "Een contact wordt gescoord wanneer het wordt aangemaakt en opnieuw wanneer de gegevens wijzigen.",
+        "offBody": "Contacten worden alleen gescoord wanneer je de knop Score met AI gebruikt of hieronder de ongescoorde contacten scoort."
+      },
+      "confirm": {
+        "title": "Geanonimiseerde contactgegevens naar een AI-provider sturen?",
+        "body": "Zodra dit aan staat, worden korte beschrijvingen van uw contacten (fase, bron, tags, aantal deals, activiteit, betrokkenheidscijfers zoals berichten, geopende broadcasts en aangeklikte links, en bedrijfsnaam) via OpenRouter naar een AI-aanbieder gestuurd. Namen, e-mailadressen, telefoonnummers en berichtteksten worden nooit verzonden. U kunt dit op elk moment uitzetten.",
+        "yes": "Inschakelen",
+        "no": "Annuleren"
+      },
+      "banner": {
+        "platformOff": "AI-leadscoring is uitgeschakeld voor het hele platform. Er wordt niets gescoord, wat je hier ook instelt, totdat de platformbeheerder het weer inschakelt.",
+        "noKey": "Er is geen OpenRouter-sleutel beschikbaar, dus er kan niets worden gescoord. Voeg je eigen sleutel toe onder AI-sleutels, of vraag je platformbeheerder de gedeelde sleutel in te schakelen.",
+        "openKeys": "AI-sleutels openen",
+        "off": "AI-leadscoring staat uit voor deze werkruimte. Er wordt niets naar een AI-provider gestuurd.",
+        "ready": "Klaar. Contacten worden gescoord met {model} met behulp van {key}.",
+        "keyWorkspace": "de eigen OpenRouter-sleutel van je werkruimte",
+        "keyAdmin": "de gedeelde OpenRouter-sleutel van het platform"
+      },
+      "backfill": {
+        "title": "Score de contacten die je al hebt",
+        "hint": "Zet contacten zonder score in de wachtrij, tot {limit} tegelijk. Ze worden op de achtergrond gescoord.",
+        "eligible": "Contacten die de AI mag scoren",
+        "scored": "Gescoord door de AI",
+        "waiting": "Wachten op een score",
+        "eligibleNote": "Contacten met een score die een persoon heeft ingevoerd blijven buiten beschouwing: de AI wijzigt die nooit.",
+        "button": "Ongescoorde contacten nu scoren",
+        "noRight": "Je rol mag geen contacten scoren. Hiervoor is de machtiging lsc.contacts.score nodig.",
+        "notReady": "Schakel AI-leadscoring in en zorg dat er een sleutel beschikbaar is om contacten te scoren.",
+        "queued": "{count, plural, one {# contact staat} other {# contacten staan}} in de wachtrij en {count, plural, one {wordt} other {worden}} op de achtergrond gescoord. Laad het logboek over een minuut opnieuw om de resultaten te zien.",
+        "nothingToScore": "Er zijn geen ongescoorde contacten om in de wachtrij te zetten."
+      },
+      "cost": {
+        "title": "Laatste 30 dagen",
+        "hint": "Wat het scoren de afgelopen 30 dagen heeft gedaan en gekost.",
+        "scores": "Gescoorde contacten",
+        "tokens": "Gebruikte tokens",
+        "total": "Totale kosten",
+        "average": "Gemiddeld per score",
+        "averageHint": "Totale kosten gedeeld door het aantal gescoorde contacten",
+        "model": "Model",
+        "payer": "Wie betaalt",
+        "payerBy": {
+          "workspace": "Je eigen OpenRouter-sleutel, door OpenRouter bij jou in rekening gebracht",
+          "admin": "De gedeelde OpenRouter-sleutel van het platform",
+          "none": "Er is nog geen sleutel beschikbaar"
+        },
+        "failed": "Mislukte pogingen",
+        "platformPart": "Hiervan op de sleutel van het platform"
+      },
+      "chat": {
+        "title": "Gesprekken lezen (pilot)",
+        "hint": "Uit tot je het kiest, omdat de recente berichten van een contact naar een AI-provider worden gestuurd, waarbij persoonsgegevens gedeeltelijk worden gemaskeerd.",
+        "label": "Het gesprek van een contact lezen wanneer het stilvalt",
+        "onBody": "Ongeveer 12 minuten nadat een contact stopt met schrijven, leest de AI de recente berichten en noteert wat het contact zoekt. Ook geeft de AI de score.",
+        "offBody": "Gesprekken worden niet gelezen. Scores gebruiken alleen contactgegevens en betrokkenheidscijfers.",
+        "needsScoring": "Schakel eerst AI-leadscoring in.",
+        "stageLabel": "Levenscyclusfasen voorstellen",
+        "stageBody": "Wanneer het gesprek duidelijk laat zien dat een contact verder is, kiest de AI de volgende fase. De fases Gewonnen en Verloren zet de AI nooit. Kies hieronder of de wijziging vanzelf wordt toegepast of op een persoon wacht.",
+        "masked": {
+          "title": "Hoe persoonsgegevens worden gemaskeerd",
+          "phone": "Van telefoonnummers blijven alleen het eerste en de laatste twee cijfers staan (+91 ***** ***10)",
+          "email": "Van e-mailadressen blijven de eerste letter en het domein staan (p***@acme.io)",
+          "card": "Van kaart-, Aadhaar- en PAN-nummers blijven alleen het eerste en laatste teken staan",
+          "name": "Van de naam van het contact en een naam die iemand over zichzelf geeft, blijven alleen de eerste en laatste letter staan"
+        },
+        "rules": {
+          "title": "Wat wordt gelezen en wat niet",
+          "quiet": "Alleen gesprekken die zijn stilgevallen, en alleen de laatste twee weken",
+          "enough": "Contacten die alleen op knoppen tikten, worden gekoppeld via een zinnentabel, zonder AI-aanroep",
+          "person": "Een score of fase die een persoon heeft ingesteld, wordt nooit overschreven",
+          "closing": "Bots, verwijderde berichten, groepschats en automatische antwoorden blijven buiten beschouwing"
+        },
+        "confirm": {
+          "title": "Gemaskeerde gesprekken naar een AI-provider sturen?",
+          "body": "Zodra dit aanstaat, worden de recente berichten van een contact via OpenRouter naar een AI-provider gestuurd nadat het gesprek is stilgevallen. Telefoonnummers, e-mailadressen, kaartnummers en namen worden eerst gedeeltelijk gemaskeerd, zodat wat wordt verstuurd niet kan worden gebruikt om de persoon te bereiken. Je kunt dit op elk moment uitzetten.",
+          "yes": "Inschakelen",
+          "no": "Annuleren"
+        },
+        "stageMode": {
+          "title": "Hoe een fase verandert",
+          "auto": {
+            "label": "Automatisch",
+            "body": "Het contact wordt meteen verplaatst en de chat toont een regel met Ongedaan maken."
+          },
+          "manual": {
+            "label": "Handmatig",
+            "body": "De suggestie wacht onder Fasesuggesties tot een persoon haar accepteert of afwijst."
+          }
+        }
+      }
+    },
+    "insight": {
+      "title": "Gesprek lezen",
+      "empty": "Nog niet gelezen. Een gesprek wordt ongeveer 12 minuten nadat het contact stopt met schrijven gelezen, of je kunt het nu lezen.",
+      "analyze": "Chat lezen",
+      "analyzing": "Lezen...",
+      "analyzingSlow": "De AI wordt gevraagd. Dit kan een paar seconden duren.",
+      "sourceAi": "Gelezen door AI",
+      "sourceRules": "Gekoppeld via knoptikken",
+      "signals": "Wat het contact liet blijken",
+      "signal": {
+        "askedPrice": "Vroeg naar de prijs",
+        "readyToBuy": "Klaar om te kopen",
+        "objection": "Twijfel of bezwaar",
+        "urgent": "Dringend"
+      },
+      "readOn": "Gelezen op {date} uit {count, plural, one {# bericht} other {# berichten}}.",
+      "privacy": "Namen, telefoonnummers en e-mailadressen in de chat worden gedeeltelijk gemaskeerd voordat er iets naar de AI wordt gestuurd.",
+      "intent": {
+        "ready_to_buy": "Klaar om te kopen",
+        "asking_price": "Vraagt naar de prijs",
+        "comparing": "Vergelijkt opties",
+        "registering": "Registreert zich",
+        "needs_support": "Heeft ondersteuning nodig",
+        "post_purchase": "Nazorg of service",
+        "browsing": "Kijkt alleen rond",
+        "not_interested": "Niet geïnteresseerd",
+        "other": "Geen duidelijke intentie"
+      },
+      "suggestion": {
+        "title": "Voorgestelde fase",
+        "move": "Verplaats van {from} naar {to}",
+        "confidence": "{percent}% zeker",
+        "accept": "Accepteren",
+        "dismiss": "Afwijzen",
+        "accepted": "Fase gewijzigd naar {stage}.",
+        "dismissed": "Suggestie afgewezen.",
+        "noRight": "Je hebt geen toestemming om suggesties te accepteren of af te wijzen.",
+        "couldNot": "De suggestie kon niet worden toegepast. Mogelijk is er al over beslist."
+      }
+    },
+    "suggestions": {
+      "title": "Fasesuggesties",
+      "hint": "Verplaatsingen die de AI voorstelt na het lezen van gesprekken. Er verandert niets totdat je accepteert.",
+      "empty": "Er staan geen suggesties te wachten.",
+      "unnamed": "Naamloos contact",
+      "move": "Verplaats van {from} naar {to}",
+      "confidence": "{percent}% zeker",
+      "accept": "Accepteren",
+      "dismiss": "Afwijzen",
+      "acceptConfident": "Accepteer de {count} boven {percent}%",
+      "dismissAll": "Alles afwijzen",
+      "more": "Meer laden",
+      "doneAccept": "{count, plural, one {# fase gewijzigd.} other {# fasen gewijzigd.}}",
+      "doneDismiss": "{count, plural, one {# suggestie afgewezen.} other {# suggesties afgewezen.}}",
+      "noRight": "Je kunt de suggesties zien maar er niet over beslissen: daarvoor is de toestemming lsc.stage.review nodig.",
+      "couldNot": "{count, plural, one {# suggestie kon niet worden toegepast.} other {# suggesties konden niet worden toegepast.}}"
+    }
+  }
+}

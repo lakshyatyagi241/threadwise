@@ -137,7 +137,8 @@
         "recipients": "{count}人の受信者",
         "scheduled": "予約日時: {date}",
         "instant": "送信: 即時",
-        "template": "テンプレート {name}"
+        "template": "テンプレート {name}",
+        "cost": "コスト"
       },
       "createBroadcast": "一斉配信を作成",
       "noData": "データが見つかりません",
@@ -227,8 +228,6 @@
         "senderHint": "既定のままにすると、キャンペーンはワークスペースのメインエンジンから送信されます。",
         "defaultSender": "既定の送信者",
         "nameHint": "レポートと送信キューの履歴で使う内部ラベルです。",
-        "noSenders": "連携済みの送信元はありません。",
-        "connectOne": "連携する →",
         "type": "キャンペーンの種類",
         "types": {
           "custom": {
@@ -650,7 +649,9 @@
         "read": "既読",
         "replies": "返信",
         "clicks": "クリック",
-        "failed": "失敗"
+        "failed": "失敗",
+        "cost": "コスト",
+        "costHint": "これまでにウォレットから引き落とされた額"
       },
       "tabs": {
         "overview": "概要",
@@ -827,7 +828,6 @@
         "notFound": "見つかりませんでした。削除された可能性があります。",
         "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
         "unexpected": "サーバー側で問題が発生しました。もう一度お試しください。",
-        "requestId": "リクエストID",
         "retry": "再試行"
       },
       "categories": {
@@ -897,8 +897,7 @@
         "previewEmpty": "テンプレートを選択すると、メッセージの見た目を確認できます。",
         "senderLabel": "送信元",
         "senderHint": "この一斉配信の送信元となるWhatsApp番号です。",
-        "pickSender": "番号を選択",
-        "noSenders": "WhatsApp番号が接続されていません。先に接続してください。"
+        "pickSender": "番号を選択"
       },
       "audience": {
         "selectionTitle": "連絡先ハブで選択済み",
@@ -932,6 +931,7 @@
         "optedOut": "配信停止",
         "invalidNumbers": "無効な番号",
         "alwaysSkipped": "配信停止した連絡先と無効な番号は常にスキップされます。",
+        "noConsent": "同意の記録なし（スキップ）",
         "willBeMessaged": "送信対象",
         "about": "約{count}件",
         "approximate": "これは推定値です。対象が大きすぎて、時間内に正確に集計できませんでした。",
@@ -1403,6 +1403,41 @@
         "runs": "実行",
         "noRuns": "まだ実行が開始されていません。",
         "cancel": "シリーズをキャンセル"
+      }
+    },
+    "senderEmpty": {
+      "loading": "番号を読み込んでいます…",
+      "none": {
+        "title": "接続済みのWhatsApp番号がありません",
+        "body": "WhatsApp Business番号を接続すると、このキャンペーンの送信元を選べます。",
+        "action": "WhatsApp番号を接続"
+      },
+      "sms": {
+        "none": {
+          "title": "接続済みのSMS送信元がありません",
+          "body": "SMS送信元を接続すると、このキャンペーンの送信元を選べます。",
+          "action": "SMS送信元を接続"
+        }
+      },
+      "pending": {
+        "title": "{count}件の番号が接続中です",
+        "body": "接続が完了すると、その番号からキャンペーンを送信できます。ステータスを開いて設定を完了してください。",
+        "action": "番号のステータスを確認"
+      },
+      "error": {
+        "title": "{count}件の番号の接続に失敗しました",
+        "body": "ステータスページから番号を再接続すると、ここに表示されます。",
+        "action": "接続を修正"
+      },
+      "disconnected": {
+        "title": "{count}件の番号が切断されています",
+        "body": "再接続すると、その番号からキャンペーンを送信できます。接続済みの番号はここに表示されます。",
+        "action": "番号を再接続"
+      },
+      "personal_off": {
+        "title": "このワークスペースでは個人番号が無効です",
+        "body": "これが無効の間、{count}件の個人（QR）番号ではキャンペーンを送信できません。プラットフォーム管理者がこのワークスペースで有効にするか、公式のWhatsApp Business番号を接続してください。",
+        "action": "公式番号を接続"
       }
     }
   }

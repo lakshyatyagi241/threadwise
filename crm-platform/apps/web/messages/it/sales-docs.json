@@ -257,7 +257,6 @@
       "ownerInvalid": "Il responsabile deve essere un membro attivo del workspace.",
       "invoicingUnavailable": "La fatturazione non è ancora disponibile, quindi questo documento non può essere convertito.",
       "unexpected": "Qualcosa è andato storto. Riprova.",
-      "requestId": "ID richiesta",
       "retry": "Riprova"
     },
     "link": {

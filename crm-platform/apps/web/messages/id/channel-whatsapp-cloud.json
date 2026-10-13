@@ -156,7 +156,6 @@
       "notFound": "Nomor ini sudah tidak ada. Daftar telah disegarkan.",
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
       "generic": "Terjadi kesalahan. Coba lagi.",
-      "genericWithId": "Terjadi kesalahan. Coba lagi. Referensi: {id}",
       "detail": "Detail: {detail}",
       "fix": {
         "tokenInvalid": "Buat token system user permanen di pengaturan bisnis Meta Anda lalu tempel di Edit kredensial.",

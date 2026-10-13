@@ -62,7 +62,12 @@ export class CampaignsActionsService {
   ) {}
 
   /** A run that starts again needs a funded wallet for what is still unsent (TW-WALLET-013); the transaction rolls back on refusal. */
-  private assertFunded(orgId: number, c: { totalRecipients: number; counts: { sent: number } }) {
+  private assertFunded(
+    orgId: number,
+    c: { provider: string | null; totalRecipients: number; counts: { sent: number } },
+  ) {
+    // SMS is never charged to the wallet (TW-SMS-027).
+    if (c.provider === 'sms') return Promise.resolve();
     return this.wallet.precheck(orgId, Math.max(0, c.totalRecipients - c.counts.sent), {
       source: 'campaign',
     });
@@ -181,7 +186,7 @@ export class CampaignsActionsService {
             : 'Nothing to resend — no matching recipients.',
         );
       }
-      await this.wallet.precheck(orgId, n, { source: 'campaign' });
+      if (c.provider !== 'sms') await this.wallet.precheck(orgId, n, { source: 'campaign' });
       await this.repo.recount(tx, orgId, c.id);
       // `now` campaigns run at once for the reset rows; the others go back to the schedule.
       const next: CampaignStatus = c.scheduleType === 'now' ? 'running' : 'scheduled';

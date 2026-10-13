@@ -22,7 +22,6 @@
         "signedOut": "Votre session a pris fin. Veuillez vous reconnecter.",
         "rateLimited": "Trop de tentatives. Veuillez patienter un instant et réessayer.",
         "rateLimitedWait": "Trop de tentatives. Réessayez dans {seconds, plural, one {# seconde} other {# secondes}}.",
-        "requestId": "ID de requête",
         "locked": "Trop d’échecs. Patientez un moment avant de réessayer.",
         "lockedWait": "Trop d’échecs. Réessayez dans {minutes, plural, one {# minute} other {# minutes}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Fuseau horaire",
         "workspaceTimezoneHint": "S’applique à {workspace}. Seuls les propriétaires et les administrateurs peuvent le modifier.",
+        "myTimezone": "Mon fuseau horaire",
+        "myTimezoneHint": "Les dates et heures s’affichent pour vous en {zone}. Laissez vide pour suivre le fuseau horaire de l’espace de travail (UTC s’il n’en a pas).",
+        "myTimezoneUseWorkspace": "Utiliser celui de l’espace de travail",
         "saved": "Profil enregistré.",
         "errors": {
           "fullNameRequired": "Saisissez votre nom complet.",
@@ -367,7 +369,8 @@
         "failed": "Impossible de changer d’espace de travail. Veuillez réessayer.",
         "notAvailable": "Vous ne pouvez pas passer à cet espace de travail.",
         "rateLimited": "Trop de tentatives. Patientez un instant et réessayez.",
-        "rateLimitedWait": "Trop de tentatives. Réessayez dans {seconds, plural, one {# seconde} other {# secondes}}."
+        "rateLimitedWait": "Trop de tentatives. Réessayez dans {seconds, plural, one {# seconde} other {# secondes}}.",
+        "unverified": "Vérifiez votre e-mail dans cet espace de travail pour pouvoir y basculer."
       },
       "mfaChallenge": {
         "title": "Confirmez votre identité",
@@ -551,7 +554,10 @@
             "forms_and_links": "Formulaires et liens",
             "extra_channels": "Telegram, Facebook et Instagram",
             "form_builder": "Formulaires",
-            "waba_groups": "Groupes WhatsApp"
+            "waba_groups": "Groupes WhatsApp",
+            "sms": "SMS",
+            "help_agent": "Assistant d’aide",
+            "email_channel": "Canal e-mail (Gmail)"
           },
           "cta": {
             "continueFree": "Continuer gratuitement",

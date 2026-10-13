@@ -1,9 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { authOf, type WabaConnection } from './waba-admin.port';
+import type { WabaConnection } from './waba-admin.port';
 import { WabaApiError } from './waba-errors';
 import { GROUP_ERR_NOT_ELIGIBLE } from './waba-group-errors';
 import type { GroupInfo, GroupInfoField, WabaGroupsPort } from './waba-groups.port';
 import { WabaHttp } from './waba-http';
+
+/**
+ * Groups always go to Meta's own Graph host with the number's own access token, whatever route the number's other traffic takes
+ * (Reference's GroupClient did the same). A number onboarded through Interakt only for its credit line still holds a Meta token.
+ */
+function metaAuthOf(conn: WabaConnection): { provider: 'meta'; accessToken: string } {
+  if (!conn.accessToken) throw new Error('Groups need the number\'s Meta access token');
+  return { provider: 'meta', accessToken: conn.accessToken };
+}
 
 /** Meta's limits (spec 6): the subject is trimmed and cut at 128 characters, the description at 2,048, a removal takes 8. */
 const SUBJECT_MAX = 128;
@@ -50,7 +59,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
     input: { subject: string; description?: string; joinApprovalMode?: string },
   ): Promise<{ groupId: string }> {
     const description = input.description?.trim();
-    const res = await this.http.call<{ id?: string; group_id?: string }>(authOf(conn), {
+    const res = await this.http.call<{ id?: string; group_id?: string }>(metaAuthOf(conn), {
       method: 'POST',
       path: `/${conn.phoneNumberId}/groups`,
       json: {
@@ -65,7 +74,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
 
   async probe(conn: WabaConnection): Promise<'eligible' | 'not_eligible' | 'unknown'> {
     try {
-      await this.http.call(authOf(conn), {
+      await this.http.call(metaAuthOf(conn), {
         method: 'GET',
         path: `/${conn.phoneNumberId}/groups`,
         query: { limit: 1 },
@@ -83,7 +92,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
     groupId: string,
     fields: GroupInfoField[] = ALL_FIELDS,
   ): Promise<GroupInfo> {
-    const r = await this.http.call<RawInfo>(authOf(conn), {
+    const r = await this.http.call<RawInfo>(metaAuthOf(conn), {
       method: 'GET',
       path: `/${groupId}`,
       query: { fields: fields.join(',') },
@@ -104,7 +113,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
   }
 
   async inviteLink(conn: WabaConnection, groupId: string): Promise<string | null> {
-    const r = await this.http.call<{ invite_link?: string }>(authOf(conn), {
+    const r = await this.http.call<{ invite_link?: string }>(metaAuthOf(conn), {
       method: 'GET',
       path: `/${groupId}/invite_link`,
     });
@@ -112,7 +121,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
   }
 
   async resetInviteLink(conn: WabaConnection, groupId: string): Promise<string | null> {
-    const r = await this.http.call<{ invite_link?: string }>(authOf(conn), {
+    const r = await this.http.call<{ invite_link?: string }>(metaAuthOf(conn), {
       method: 'POST',
       path: `/${groupId}/invite_link`,
       json: { messaging_product: 'whatsapp' },
@@ -125,7 +134,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
     groupId: string,
     fields: { subject?: string; description?: string },
   ): Promise<void> {
-    await this.http.call(authOf(conn), {
+    await this.http.call(metaAuthOf(conn), {
       method: 'POST',
       path: `/${groupId}`,
       json: {
@@ -141,11 +150,11 @@ export class WabaGroupsClient implements WabaGroupsPort {
   }
 
   async delete(conn: WabaConnection, groupId: string): Promise<void> {
-    await this.http.call(authOf(conn), { method: 'DELETE', path: `/${groupId}` });
+    await this.http.call(metaAuthOf(conn), { method: 'DELETE', path: `/${groupId}` });
   }
 
   async approveJoinRequests(conn: WabaConnection, groupId: string, ids: string[]): Promise<void> {
-    await this.http.call(authOf(conn), {
+    await this.http.call(metaAuthOf(conn), {
       method: 'POST',
       path: `/${groupId}/join_requests`,
       json: { messaging_product: 'whatsapp', join_requests: ids.map(String) },
@@ -153,7 +162,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
   }
 
   async rejectJoinRequests(conn: WabaConnection, groupId: string, ids: string[]): Promise<void> {
-    await this.http.call(authOf(conn), {
+    await this.http.call(metaAuthOf(conn), {
       method: 'DELETE',
       path: `/${groupId}/join_requests`,
       json: { messaging_product: 'whatsapp', join_requests: ids.map(String) },
@@ -166,7 +175,7 @@ export class WabaGroupsClient implements WabaGroupsPort {
     // The contract already caps this; the adapter refuses too, so no caller can send Meta a request it will reject.
     if (participants.length > REMOVE_MAX)
       throw new Error(`Meta allows at most ${REMOVE_MAX} participants per removal request`);
-    await this.http.call(authOf(conn), {
+    await this.http.call(metaAuthOf(conn), {
       method: 'DELETE',
       path: `/${groupId}/participants`,
       json: { messaging_product: 'whatsapp', participants },

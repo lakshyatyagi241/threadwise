@@ -352,7 +352,7 @@ describe('request box and error panel', () => {
       ]);
       const html = renderMarket(<ErrorPanel error={error} onRetry={() => undefined} />, { locale });
       expect(html).toContain('href="/account/plans"');
-      expect(html).toContain('req-77');
+      expect(html).not.toContain('req-77');
       expect(html).not.toContain('Try again');
     });
   }

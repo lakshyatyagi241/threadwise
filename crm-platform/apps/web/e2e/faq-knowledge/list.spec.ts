@@ -1,17 +1,17 @@
 import {
   entries,
   expect,
-  go,
   login,
   newWorkspace,
   open,
+  openFaqs,
   seedFaq,
-  test,
   type State,
+  test,
   type Workspace,
 } from './support';
 
-/** The FAQ list: search, filters, the status switch, row actions, paging and bulk actions. */
+/** The FAQ list of a flow (its FAQs tab): search, filters, the status switch, row actions, paging and bulk actions. */
 let ws: Workspace;
 let state: State;
 
@@ -50,7 +50,7 @@ test.describe('search and filters', () => {
     watch,
   }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await expect(rows(page)).toHaveCount(3);
     const search = page.getByLabel('Search FAQs');
 
@@ -89,7 +89,7 @@ test.describe('search and filters', () => {
 
   test('status and category filters narrow the list and combine', async ({ browser, watch }) => {
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await expect(rows(page)).toHaveCount(3);
 
     await page.getByLabel('Status').selectOption({ label: 'Paused' });
@@ -119,7 +119,7 @@ test.describe('row actions', () => {
   }) => {
     const faq = await seedFaq(ws, { question: 'Toggle me please', answerText: 'Toggled.' });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill('Toggle me please');
     const row = rowOf(page, 'Toggle me please');
     const sw = row.getByRole('switch', { name: 'Active: Toggle me please' });
@@ -148,7 +148,7 @@ test.describe('row actions', () => {
     const faq = await seedFaq(ws, { question: 'Delete this one', answerText: 'Bye.' });
     await seedFaq(ws, { question: 'Keep this neighbour', answerText: 'Stay.' });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill('this');
     await expect(rowOf(page, 'Delete this one')).toBeVisible();
 
@@ -183,15 +183,15 @@ test.describe('row actions', () => {
   test('the question and the edit icon both open the editor', async ({ browser, watch }) => {
     const faq = await seedFaq(ws, { question: 'Open me', answerText: 'Opened.' });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill('Open me');
     await page.getByRole('link', { name: 'Open me', exact: true }).click();
-    await expect(page).toHaveURL(new RegExp(`/faq/${faq.id}$`));
+    await expect(page).toHaveURL(new RegExp(`[?&]view=${faq.id}$`));
     await expect(page.getByRole('heading', { name: 'Edit FAQ', level: 1 })).toBeVisible();
     await page.goBack();
     await page.getByLabel('Search FAQs').fill('Open me');
     await page.getByRole('link', { name: 'Edit Open me' }).click();
-    await expect(page).toHaveURL(new RegExp(`/faq/${faq.id}$`));
+    await expect(page).toHaveURL(new RegExp(`[?&]view=${faq.id}$`));
   });
 });
 
@@ -206,7 +206,7 @@ test.describe('paging and bulk actions', () => {
     for (const q of questions) await seedFaq(big, { question: q, answerText: `Answer ${q}` });
 
     const { page } = await open(browser, bigState, watch);
-    await go(page, '/faq');
+    await openFaqs(page, big);
     await expect(rows(page)).toHaveCount(20);
     await expect(page.getByRole('group', { name: 'FAQ totals' })).toContainText('27');
     await page.getByRole('button', { name: 'Load more' }).click();
@@ -228,7 +228,7 @@ test.describe('paging and bulk actions', () => {
     for (const q of names) await seedFaq(ws, { question: q, answerText: `Reply ${q}` });
     await seedFaq(ws, { question: 'Bulk bystander', answerText: 'Untouched.' });
     const { page } = await open(browser, state, watch);
-    await go(page, '/faq');
+    await openFaqs(page, ws);
     await page.getByLabel('Search FAQs').fill('Bulk');
     await expect(rows(page)).toHaveCount(4);
 

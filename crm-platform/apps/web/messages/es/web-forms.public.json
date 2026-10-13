@@ -33,9 +33,32 @@
         "too_short": "Introduce al menos {min} caracteres.",
         "too_long": "Introduce como máximo {max} caracteres.",
         "pattern": "No coincide con el formato esperado.",
-        "invalid_option": "Elige una de las opciones de la lista."
+        "invalid_option": "Elige una de las opciones de la lista.",
+        "invalid_amount": "Introduce un importe dentro del rango permitido."
       },
-      "closedTitle": "Este formulario está cerrado"
+      "closedTitle": "Este formulario está cerrado",
+      "payTitle": "Un paso más",
+      "payTotal": "Importe a pagar",
+      "payFromChoice": "El importe depende de lo que elijas arriba.",
+      "payEnter": "Introduce arriba el importe que deseas pagar.",
+      "payNote": "Después de enviar, irás a una página de pago segura.",
+      "payRedirecting": "Tus respuestas están guardadas. Te llevamos a la página de pago...",
+      "payContinue": "Continuar con el pago",
+      "paymentUnavailable": "Este formulario no puede cobrar en este momento. Inténtalo de nuevo más tarde.",
+      "payReturn": {
+        "confirmingTitle": "Confirmando tu pago",
+        "confirmingBody": "Esperamos la confirmación del proveedor de pagos. Suele tardar unos segundos. No vuelvas a pagar.",
+        "slowTitle": "Aún esperamos la confirmación",
+        "slowBody": "Si ya pagaste, la confirmación llegará en breve y puedes cerrar esta página. Si no has pagado, vuelve atrás e inténtalo de nuevo.",
+        "paidTitle": "Pago recibido",
+        "expiredTitle": "El enlace de pago ha caducado",
+        "expiredBody": "No se cobró nada. Pide a quien te envió el formulario un nuevo enlace de pago.",
+        "failedTitle": "El pago no se completó",
+        "failedBody": "No se cobró nada. Puedes intentarlo de nuevo.",
+        "tryAgain": "Intentar pagar de nuevo",
+        "missingTitle": "No encontramos este pago",
+        "missingBody": "Puede que el enlace sea incorrecto o demasiado antiguo."
+      }
     }
   }
 }

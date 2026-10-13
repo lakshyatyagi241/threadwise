@@ -60,7 +60,8 @@ export interface TypeMeta {
     | 'campaign'
     | 'scheduled_message'
     | 'team_chat_channel'
-    | 'waba_group';
+    | 'waba_group'
+    | 'device_group';
 }
 
 type Look = Pick<TypeMeta, 'icon' | 'tone' | 'subject'>;
@@ -91,9 +92,13 @@ const LOOK: Record<NotificationPrefType, Look> = {
   new_lead: look('lead', 'info'),
   form_submission: look('form', 'info'),
   form_needs_review: look('form', 'info'),
+  form_payment: look('form', 'success'),
+  form_payment_duplicate: look('form', 'danger'),
   sales_doc_decided: look('document', 'info'),
   wallet_low_balance: look('wallet', 'danger'),
   wallet_credited: look('wallet', 'success'),
+  billing_payment_failed: look('wallet', 'danger'),
+  billing_subscription_canceled: look('wallet', 'info'),
   device_connected: look('device_on', 'success', 'device'),
   device_disconnected: look('device_off', 'danger', 'device'),
   device_logged_out: look('device_off', 'danger', 'device'),
@@ -105,9 +110,13 @@ const LOOK: Record<NotificationPrefType, Look> = {
   scheduled_failed: look('schedule', 'danger', 'scheduled_message'),
   teamchat_mention: look('mention', 'info', 'team_chat_channel'),
   teamchat_message: look('team_chat', 'info', 'team_chat_channel'),
+  email_bounced: look('chat', 'danger', 'conversation'),
+  sla_breached: look('waiting', 'danger', 'conversation'),
   waba_group_join_request: look('group', 'info', 'waba_group'),
   waba_group_suspended: look('group', 'danger', 'waba_group'),
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),
+  device_group_join_request: look('group', 'info', 'device_group'),
+  device_group_removed: look('group', 'danger', 'device_group'),
 };
 
 export const TYPE_CATALOGUE: Readonly<Record<string, TypeMeta>> = Object.fromEntries(
@@ -208,6 +217,11 @@ export function notificationHref(n: LinkSource): string | null {
     case 'waba_group': {
       const conn = id(d.connectionId);
       return conn ? `/waba-groups?account=${conn}` : '/waba-groups';
+    }
+    case 'device_group': {
+      // The Groups tab of the personal numbers: `?device=` selects the number the group belongs to.
+      const dev = id(d.deviceId);
+      return dev ? `/devices/groups?device=${dev}` : '/devices/groups';
     }
     default:
       return null;

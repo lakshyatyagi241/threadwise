@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Chiudi",
-      "retry": "Riprova",
-      "requestId": "ID richiesta"
+      "retry": "Riprova"
     },
     "errors": {
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",

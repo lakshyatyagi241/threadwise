@@ -1,0 +1,205 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "닫기",
+      "retry": "다시 시도",
+      "loading": "불러오는 중..."
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "notFound": "이 연락처는 더 이상 존재하지 않습니다.",
+      "conflict": "편집하는 동안 다른 사용자가 내용을 변경했습니다. 새로고침한 후 다시 시도하세요.",
+      "noteRequired": "동의를 기록하기 전에 연락처가 동의한 이유(말하거나 서명한 내용과 장소)를 입력하세요.",
+      "settingsInvalid": "키워드에는 문자나 숫자가 하나 이상 있어야 하며, 감지가 켜져 있는 동안에는 STOP 키워드가 최소 하나 남아 있어야 합니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
+      "validation": "일부 값이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
+      "exportInProgress": "동의 증빙 파일을 이미 준비하는 중입니다. 완료될 때까지 기다린 후 다시 시도하세요.",
+      "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 파일을 준비하세요."
+    },
+    "settings": {
+      "title": "수신 동의 및 STOP 답장",
+      "subtitle": "연락처를 수신 거부하거나 다시 수신하게 하는 단어, 자동 답변, 마케팅 메시지의 수신 거부 문구, 마케팅에 기록된 동의가 필요한지 여부를 설정하세요.",
+      "exportProof": "동의 증빙 내보내기 (CSV)",
+      "discard": "변경 취소",
+      "save": "변경 사항 저장",
+      "saved": "수신 동의 설정이 저장되었습니다.",
+      "conflict": "다른 사용자가 먼저 이 설정을 저장했습니다. 양식에 저장된 내용이 표시됩니다.",
+      "conflictOk": "확인",
+      "problems": {
+        "noOptOutWord": "STOP 키워드를 하나 이상 추가하거나 감지를 끄세요.",
+        "badLang": "언어 코드는 en, ar, pt-BR 같은 형식입니다."
+      }
+    },
+    "policy": {
+      "title": "마케팅 정책",
+      "requireConsent": "마케팅 발송에 기록된 동의 요구",
+      "requireConsentHint": "꺼짐: 수신 거부하지 않은 모든 연락처에 마케팅을 보냅니다. 켜짐: 동의가 기록된 연락처에만 보냅니다. 캠페인 및 브로드캐스트 대상에 제외된 수가 표시됩니다.",
+      "withdrawnAlways": "수신 거부한 연락처는 이 설정과 관계없이 항상 제외됩니다."
+    },
+    "detect": {
+      "title": "STOP 및 START 답장",
+      "enabled": "STOP 및 START 답장 감지",
+      "enabledHint": "연락처가 아래 단어 중 하나만 보내면 해당 채널에서 수신 거부되거나 다시 수신하게 됩니다.",
+      "autoReply": "확인 답장 보내기",
+      "autoReplyHint": "24시간 창 안에서 보내는 짧은 자유 텍스트 답변이며, 변경당 한 번만 전송됩니다. 캠페인이 아니며 마케팅으로 집계되지 않습니다.",
+      "rule": "메시지 전체가 키워드여야 합니다. 대소문자, 공백, 문장 부호, 이모지, 아랍어 발음 기호는 무시됩니다. \"Please stop sending me invoices\"나 \"don't stop\"은 일치하지 않으므로 실수로 수신 거부되는 일은 없습니다."
+    },
+    "lang": {
+      "groupLabel": "{lang} 단어 및 답장",
+      "title": "언어",
+      "remove": "언어 삭제",
+      "optOutWords": "STOP 키워드 (수신 거부)",
+      "optInWords": "START 키워드 (다시 수신)",
+      "wordsHint": "한 줄에 하나씩 입력하세요.",
+      "optOutReply": "STOP 후 답장",
+      "optInReply": "START 후 답장",
+      "replyHint": "연락처의 이름에는 '{{name}}'을(를) 사용할 수 있습니다. 다시 수신하는 방법을 안내하세요.",
+      "footer": "마케팅 메시지 수신 거부 문구",
+      "footerHint": "마케팅 문자 아래에 추가됩니다. 보내야 할 단어를 안내하세요.",
+      "add": "언어 추가",
+      "addHint": "fr 또는 pt-BR 같은 언어 코드입니다.",
+      "invalid": "fr 또는 pt-BR 같은 코드를 사용하세요.",
+      "addButton": "추가"
+    },
+    "footer": {
+      "title": "수신 거부 문구",
+      "intro": "브로드캐스트 및 캠페인 작성기에서 마케팅 문자 아래에 이 문구를 추가하면 수신자가 STOP으로 답장할 수 있음을 알 수 있습니다. 승인된 템플릿은 변경되지 않으므로 템플릿 자체에 문구를 넣으세요.",
+      "defaultOn": "마케팅 문자에 수신 거부 문구가 없으면 경고",
+      "defaultOnHint": "작성기에 경고와 한 번에 추가할 수 있는 버튼이 표시됩니다.",
+      "noneSet": "어떤 언어에도 수신 거부 문구가 설정되어 있지 않습니다.",
+      "previewLabel": "수신자에게 보이는 내용",
+      "sample": "봄 세일이 오늘 시작됩니다. 이번 주에 방문해 주세요."
+    },
+    "test": {
+      "title": "메시지 테스트",
+      "intro": "연락처가 보낼 만한 내용을 입력하고 어떻게 처리되는지 확인하세요. 아무것도 변경되거나 전송되지 않습니다. 저장하기 전이라도 위의 단어를 사용합니다.",
+      "label": "연락처의 메시지",
+      "run": "테스트",
+      "failed": "테스트를 실행할 수 없습니다. 다시 시도하세요.",
+      "outcome": {
+        "opts_out": "연락처가 마케팅 수신을 거부하게 됩니다.",
+        "opts_in": "연락처가 다시 수신하게 됩니다.",
+        "no_match": "아무 일도 일어나지 않습니다. 메시지가 키워드가 아닙니다.",
+        "detection_off": "아무 일도 일어나지 않습니다. 감지가 꺼져 있습니다."
+      },
+      "matched": "키워드 \"{keyword}\"({lang})와(과) 일치했습니다.",
+      "replyLabel": "연락처가 받는 내용",
+      "noReply": "답장이 전송되지 않습니다."
+    },
+    "card": {
+      "title": "수신 동의",
+      "status": {
+        "optedOut": "수신 거부",
+        "subscribed": "수신 중",
+        "none": "기록된 동의 없음"
+      },
+      "export": "증빙 내보내기 (CSV)",
+      "markSubscribed": "수신 중으로 표시",
+      "markUnsubscribed": "수신 거부로 표시",
+      "loading": "수신 동의 불러오는 중...",
+      "noneRecorded": "이 연락처에 기록된 동의가 없습니다. 마케팅 발송은 워크스페이스 정책을 따릅니다.",
+      "perChannel": "채널별 수신 동의",
+      "timeline": "수신 동의 기록",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "이메일",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "웹 채팅"
+      },
+      "state": {
+        "granted": "수신 중",
+        "withdrawn": "수신 거부"
+      },
+      "action": {
+        "granted": "수신 중",
+        "withdrawn": "수신 거부"
+      },
+      "source": {
+        "form": "양식",
+        "keyword": "키워드 답장",
+        "manual": "담당자가 기록",
+        "import": "가져오기",
+        "api": "API",
+        "flow": "플로우",
+        "inbound_message": "메시지",
+        "contact_request": "연락 요청",
+        "legacy": "수신 동의 기록 이전"
+      },
+      "by": "{name}님이 기록",
+      "evidence": {
+        "consentText": "표시된 문구",
+        "consentVersion": "버전",
+        "consentHash": "해시",
+        "formId": "양식",
+        "submissionId": "제출",
+        "messageId": "메시지",
+        "keyword": "키워드",
+        "fileName": "파일",
+        "apiKeyId": "API 키",
+        "flowId": "플로우",
+        "reference": "참조"
+      },
+      "dialog": {
+        "titleGranted": "수신 중으로 표시",
+        "titleWithdrawn": "수신 거부로 표시",
+        "introGranted": "이 연락처가 마케팅 메시지 수신에 동의했음을 기록합니다. 사유는 증빙으로 보관됩니다.",
+        "introWithdrawn": "이 연락처가 더 이상 마케팅 메시지를 원하지 않음을 기록합니다. 모든 캠페인과 브로드캐스트에서 제외됩니다.",
+        "channel": "채널",
+        "noteRequired": "사유 (필수)",
+        "noteOptional": "메모 (선택)",
+        "noteHint": "예: 창구에서 종이 양식에 서명함, 또는 3월 3일에 이메일로 동의함.",
+        "confirm": "저장",
+        "cancel": "취소",
+        "close": "닫기",
+        "savedGranted": "수신 중으로 표시되었습니다.",
+        "savedWithdrawn": "수신 거부로 표시되었습니다."
+      }
+    },
+    "composer": {
+      "add": "수신 거부 문구 추가",
+      "missing": "이 마케팅 메시지에는 수신 거부 방법이 없습니다. \"수신 거부하려면 STOP을 보내세요\" 같은 문구를 추가하세요.",
+      "addButton": "문구 추가",
+      "templateHint": "템플릿은 승인 시점의 내용으로 고정됩니다. 수신 거부 방법을 안내하려면 템플릿 자체에 \"{line}\" 같은 문구를 넣으세요.",
+      "footerSuggestion": "마케팅 템플릿 추천 문구: \"{line}\"",
+      "footerUse": "푸터로 사용"
+    },
+    "import": {
+      "legend": "동의",
+      "label": "이 연락처에 메시지를 보낼 동의를 받았습니다",
+      "hint": "선택하면 파일의 모든 연락처가 마케팅에 동의한 것으로 기록되며, 파일 이름이 증빙으로 저장됩니다. 선택하지 않으면 가져오기에서 동의가 기록되지 않습니다. 수신 거부한 연락처는 계속 수신 거부 상태로 유지됩니다.",
+      "hintColumn": "마케팅 동의에 매핑된 열이 기록 대상을 정합니다. '예'라고 표시된 행에만 동의가 기록되며, 증빙으로 파일 이름이 남습니다. '아니요', 빈 셀, 알 수 없는 단어는 아무것도 기록하지 않습니다. 수신 거부한 연락처는 계속 수신 거부 상태로 유지됩니다.",
+      "columnSummary": "{granted}개 행이 '예'라고 되어 있어 기록됩니다. {notGranted}개 행은 '아니요'이거나 비어 있어 동의 기록이 생성되지 않습니다.",
+      "unrecognised": "{count, plural, one {#개 행에} other {#개 행에}} '예' 또는 '아니요'가 아닌 동의 값({values})이 있습니다. 동의하지 않은 것으로 처리됩니다. yes / no, true / false 또는 1 / 0을 사용하세요.",
+      "columnIgnored": "위 체크박스를 선택하기 전까지 동의 열은 적용되지 않습니다."
+    },
+    "systemLine": {
+      "withdrawn": "연락처가 {keyword}로 답장함: 마케팅 수신 거부",
+      "granted": "연락처가 {keyword}로 답장함: 마케팅 수신 재동의"
+    },
+    "proof": {
+      "title": "준비된 증빙 파일",
+      "prepare": "전체 증빙 파일 준비",
+      "preparing": "증빙 파일 준비 중",
+      "largeHint": "원장이 {max}건을 넘어 백그라운드에서 파일을 준비합니다",
+      "large": "원장에 {max}건을 넘는 이벤트가 있어 직접 다운로드로는 제공할 수 없습니다. 전체 파일을 준비하세요. 백그라운드에서 만들어지며, 준비가 끝나면 이메일로 알려드립니다.",
+      "none": "아직 준비된 파일이 없습니다.",
+      "keptFor": "준비된 파일은 {days}일 동안 다운로드할 수 있으며, 이후 삭제됩니다. 한 번에 한 개의 파일만 준비할 수 있습니다.",
+      "rows": "{count, plural, one {이벤트 #건} other {이벤트 #건}}",
+      "expires": "{date}까지 이용 가능",
+      "download": "CSV 다운로드",
+      "failed": "파일을 만들지 못했습니다. 다시 준비하세요.",
+      "status": {
+        "queued": "대기 중",
+        "running": "생성 중",
+        "ready": "준비됨",
+        "failed": "실패",
+        "expired": "만료됨"
+      }
+    }
+  }
+}

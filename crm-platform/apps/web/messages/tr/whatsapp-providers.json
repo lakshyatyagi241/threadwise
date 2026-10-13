@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Yükleniyor...",
-      "retry": "Yeniden dene",
-      "requestId": "İstek kimliği"
+      "retry": "Yeniden dene"
     },
     "errors": {
       "conflict": "Siz düzenlerken bu sağlayıcıyı başka biri değiştirdi. En son sürüm yüklendi; gözden geçirip değişikliğinizi yeniden uygulayın.",

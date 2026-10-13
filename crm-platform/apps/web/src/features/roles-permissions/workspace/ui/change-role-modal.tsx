@@ -103,11 +103,6 @@ export function ChangeRoleModal({
             data-code={error.key}
           >
             <p>{te(error.key, error.values)}</p>
-            {error.requestId && (
-              <p className="mt-1 font-mono text-xs opacity-80">
-                {tc('requestId')}: {error.requestId}
-              </p>
-            )}
           </Alert>
         )}
         <div className="flex justify-end gap-2 pt-1">

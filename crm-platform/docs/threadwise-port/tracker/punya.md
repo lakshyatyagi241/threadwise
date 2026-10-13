@@ -102,3 +102,78 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-AIAG-016 | frontend-done |  | our addition: Create knowledge base link and Refresh list in the three AI node forms |
 | TW-AIAG-017 | blocked |  | inbox AI agents (ai_agents, /ai-agents): separate port, not in this slice |
 | TW-AIAG-018 | blocked |  | AI voice assistants (ai_call_assistants): belongs with calling-voice, not in this slice |
+
+## channel-sms (sms)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-SMS-001 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-002 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-003 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-004 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-005 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-006 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-007 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-008 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-009 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-010 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-011 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-012 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-013 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-014 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-015 | blocked |  | templates domain create path hard-codes channel waba; no way to create an sms template yet |
+| TW-SMS-016 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-017 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-018 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-019 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-020 | in-progress |  | send-later on SMS not verified end to end |
+| TW-SMS-021 | in-progress |  | shared retry sweeper unchanged: still retries permanent failures |
+| TW-SMS-022 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-023 | in-progress |  | delivery reports reach broadcast and campaign recipients; analytics roll-up not checked |
+| TW-SMS-024 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-025 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-026 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-027 | in-progress |  | rate stored per sender; cost figure not computed or reported |
+| TW-SMS-028 | done |  | built and tested; hub twin-compared with Reference |
+| TW-SMS-029 | wontfix |  | no per-message SMS table by design; the broadcast and campaign recipient rows carry the result |
+| TW-SMS-030 | done |  | built and tested; hub twin-compared with Reference |
+
+## channel-email (mail)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-MAIL-001 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-002 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-003 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-004 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-005 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-006 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-007 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-008 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-009 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-010 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-011 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-012 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-013 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-014 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-015 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-016 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-017 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-018 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-019 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-020 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-021 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-022 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-023 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-024 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-025 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-026 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-027 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-028 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-029 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-030 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-031 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-032 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-033 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-034 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-035 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |

@@ -51,7 +51,9 @@
         "generic": "Problème : {reason}",
         "reason": {
           "crm_required_unbound": "Une propriété requise par votre espace de travail n’est pas dans le formulaire.",
-          "no_contact_point": "Ajoutez un champ e-mail ou téléphone lié au contact, afin que chaque réponse puisse être associée à une personne."
+          "no_contact_point": "Ajoutez un champ e-mail ou téléphone lié au contact, afin que chaque réponse puisse être associée à une personne.",
+          "payment_no_gateway": "Connectez une passerelle de paiement capable de créer des liens de paiement, ou désactivez le paiement.",
+          "captcha_not_configured": "Le CAPTCHA est réglé sur « toujours actif », mais la plateforme n'a pas de CAPTCHA. Choisissez un autre réglage ou demandez à l'administrateur de votre plateforme d'en ajouter un."
         },
         "code": {
           "no_fields": "Ajoutez au moins un champ.",
@@ -129,7 +131,14 @@
         "custom": "Personnalisée",
         "requiredByCrm": "Obligatoire",
         "inForm": "Dans le formulaire",
-        "full": "Le formulaire a atteint sa limite de blocs."
+        "full": "Le formulaire a atteint sa limite de blocs.",
+        "section": {
+          "contact": "Contact",
+          "contactAddress": "Adresse du contact",
+          "company": "Entreprise",
+          "companyAddress": "Adresse de l'entreprise"
+        },
+        "addAddress": "Ajouter tous les champs d'adresse"
       },
       "list": {
         "title": "Champs",

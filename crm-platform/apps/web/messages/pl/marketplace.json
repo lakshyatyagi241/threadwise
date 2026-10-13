@@ -10,13 +10,13 @@
       "install": "Instalacja · Marketplace",
       "installed": "Zainstalowane · Marketplace",
       "manage": "Zarządzaj aplikacją · Marketplace",
-      "requests": "Żądania · Marketplace"
+      "requests": "Żądania · Marketplace",
+      "addons": "Dodatki · Marketplace"
     },
     "common": {
       "dismiss": "Odrzuć",
       "loading": "Wczytywanie",
       "errorTitle": "Nie udało się wczytać tego",
-      "requestId": "ID żądania",
       "retry": "Spróbuj ponownie",
       "upgrade": "Zobacz plany i ulepsz",
       "opensNewTab": "(otwiera się w nowej karcie)",
@@ -124,7 +124,8 @@
       "moreLabel": "Zainstalowane i prośby",
       "tabs": {
         "mini_app": "Miniaplikacje",
-        "integration": "Integracje"
+        "integration": "Integracje",
+        "addon": "Dodatki"
       },
       "installed": "Zainstalowane",
       "installedLimit": "Zainstalowane ({installed} z {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "Przetwarzanie",
       "noCheckout": "Kasa dla tej aplikacji jest teraz niedostępna. Spróbuj ponownie za chwilę."
+    },
+    "tools": {
+      "open": "Otwórz",
+      "empty": {
+        "title": "Brak dostępnych dodatków",
+        "message": "Dodatki wchodzące w skład Twojej roli i planu pojawią się tutaj."
+      },
+      "soon": "Wkrótce",
+      "upgrade": "Ulepsz"
     }
   }
 }

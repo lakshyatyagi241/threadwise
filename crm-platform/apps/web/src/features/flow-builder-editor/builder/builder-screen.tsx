@@ -1,6 +1,5 @@
 'use client';
 
-import { FlowEditorContext } from '../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -24,12 +23,13 @@ import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
 import { GetaPublishStatus } from '../geta-publish/sync-status';
 import {
+  BuilderTabs,
   WebBotPanels,
-  WebBotTabs,
   useInitialTab,
   whatsappDefaultsFrom,
-  type WebBotTab,
+  type BuilderTab,
 } from './web-bot-tabs';
+import { FlowEditorContext } from '../lib/flow-editor-context';
 import { FLB_KEYS, useBuilderContext } from '../api/hooks';
 import {
   ZOOM_DEFAULT,
@@ -257,9 +257,9 @@ function BuilderInner({
   const widgetChannel: 'web' | 'chat' | null =
     mode === 'web' ? 'web' : mode === 'chat' ? 'chat' : null;
   const initialTab = useInitialTab(!!initial);
-  const [tab, setTab] = useState<WebBotTab>(initialTab);
+  const [tab, setTab] = useState<BuilderTab>(initialTab);
   // Another channel has no tabs, whatever the link asked for.
-  const shownTab: WebBotTab = widgetChannel ? tab : 'build';
+  const shownTab: BuilderTab = widgetChannel ? tab : 'build';
   const canEditFlow = useCan('flb.flows.update');
   const widgetQuery = useFlowWidget(widgetChannel ? flowId : null);
   const needsCustomizing = !!widgetChannel && !!flowId && widgetQuery.data?.widget === null;
@@ -598,11 +598,14 @@ function BuilderInner({
         />
 
         {widgetChannel ? (
-          <WebBotTabs
+          // The Advanced builder has no FAQs tab: a flow's FAQs are edited in the Simple builder.
+          <BuilderTabs
             tab={shownTab}
             onTab={setTab}
             saved={!!flowId}
             needsCustomizing={needsCustomizing}
+            faqs={false}
+            web
           />
         ) : null}
 

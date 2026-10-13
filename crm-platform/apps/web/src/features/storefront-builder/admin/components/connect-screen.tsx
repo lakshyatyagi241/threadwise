@@ -18,7 +18,7 @@ export function ConnectScreen() {
   const isStore = platform === WA_STORE_PLATFORM;
 
   useEffect(() => {
-    if (!isStore) router.replace('/channels');
+    if (!isStore) router.replace('/channels/whatsapp');
   }, [isStore, router]);
 
   return isStore ? (

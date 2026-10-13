@@ -19,7 +19,6 @@
       "optional": "isteğe bağlı",
       "required": "zorunlu",
       "readOnly": "Bu sayfayı görüntüleyebilirsiniz ancak yalnızca süper yönetici değiştirebilir.",
-      "requestId": "İstek kimliği",
       "errors": {
         "forbidden": "Bu sayfaya erişiminiz yok.",
         "request": "İstek tamamlanamadı.",

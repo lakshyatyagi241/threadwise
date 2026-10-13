@@ -51,7 +51,9 @@
         "generic": "Problem: {reason}",
         "reason": {
           "crm_required_unbound": "A property your workspace requires is not in the form.",
-          "no_contact_point": "Add an email or phone field linked to the contact, so every submission can be matched to a person."
+          "no_contact_point": "Add an email or phone field linked to the contact, so every submission can be matched to a person.",
+          "payment_no_gateway": "Connect a payment gateway that can make payment links, or turn payment off.",
+          "captcha_not_configured": "CAPTCHA is set to always on, but the platform has no CAPTCHA. Choose another setting, or ask your platform administrator to add one."
         },
         "code": {
           "no_fields": "Add at least one field.",
@@ -129,7 +131,14 @@
         "custom": "Custom",
         "requiredByCrm": "Required",
         "inForm": "In form",
-        "full": "The form has reached its limit of blocks."
+        "full": "The form has reached its limit of blocks.",
+        "section": {
+          "contact": "Contact",
+          "contactAddress": "Contact address",
+          "company": "Company",
+          "companyAddress": "Company address"
+        },
+        "addAddress": "Add all address fields"
       },
       "list": {
         "title": "Fields",

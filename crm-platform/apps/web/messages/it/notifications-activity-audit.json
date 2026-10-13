@@ -149,6 +149,16 @@
         "title": "{name} è di nuovo attivo",
         "titleNoName": "Un gruppo WhatsApp è di nuovo attivo",
         "body": "WhatsApp ha ripristinato questo gruppo. Puoi di nuovo inviarvi messaggi."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Qualcuno vuole entrare in {name}} other {# persone vogliono entrare in {name}}}",
+        "titleNoName": "{count, plural, one {Qualcuno vuole entrare in un gruppo WhatsApp} other {# persone vogliono entrare in un gruppo WhatsApp}}",
+        "body": "Apri Gruppi per approvare o rifiutare."
+      },
+      "device_group_removed": {
+        "title": "Il tuo numero è stato rimosso da {name}",
+        "titleNoName": "Il tuo numero è stato rimosso da un gruppo WhatsApp",
+        "body": "Qualcuno ha rimosso il tuo numero personale da questo gruppo. Il gruppo resta qui, in sola lettura."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Nuovo messaggio diretto",
         "waba_group_join_request": "Richiesta di accesso a un gruppo",
         "waba_group_suspended": "Gruppo WhatsApp sospeso",
-        "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo"
+        "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo",
+        "device_group_join_request": "Richiesta di ingresso in un gruppo",
+        "device_group_removed": "Rimosso da un gruppo WhatsApp"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "Numeri WhatsApp",
         "broadcasts": "Broadcast e campagne",
         "team_chat": "Team chat",
-        "whatsapp_groups": "Gruppi WhatsApp"
+        "whatsapp_groups": "Gruppi WhatsApp",
+        "billing": "Fatturazione e abbonamenti"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "Documento di vendita deciso",
           "hint": "Un preventivo o una fattura è stato accettato o rifiutato."
         },
+        "email_bounced": {
+          "label": "Email non consegnata",
+          "hint": "Un'email che hai inviato è stata respinta o è in ritardo."
+        },
         "wallet_credited": {
           "label": "Wallet ricaricato",
           "hint": "Il wallet del workspace è stato accreditato."
@@ -313,6 +330,34 @@
         "waba_group_suspension_cleared": {
           "label": "Gruppo di nuovo attivo",
           "hint": "WhatsApp ha ripristinato un gruppo sospeso. Solo se eri stato informato della sospensione."
+        },
+        "form_payment": {
+          "label": "Pagamento del modulo ricevuto",
+          "hint": "Un visitatore ha pagato tramite uno dei tuoi moduli."
+        },
+        "form_payment_duplicate": {
+          "label": "Modulo pagato due volte",
+          "hint": "Un visitatore ha pagato una seconda volta e il pagamento extra va rimborsato."
+        },
+        "billing_payment_failed": {
+          "label": "Pagamento dell'abbonamento non riuscito",
+          "hint": "Un addebito di rinnovo non è andato a buon fine e richiede la tua attenzione."
+        },
+        "billing_subscription_canceled": {
+          "label": "Abbonamento annullato",
+          "hint": "Il tuo fornitore di pagamenti ha terminato un abbonamento di questo spazio di lavoro."
+        },
+        "device_group_join_request": {
+          "label": "Richiesta di ingresso in un gruppo di numeri personali",
+          "hint": "Alcune persone chiedono di entrare in un gruppo di un numero WhatsApp personale che gestisci. Dieci richieste formano una riga."
+        },
+        "device_group_removed": {
+          "label": "Rimosso da un gruppo di numeri personali",
+          "hint": "Qualcuno ha rimosso uno dei tuoi numeri WhatsApp personali da un gruppo. Può essere un segnale che il numero è stato segnalato."
+        },
+        "sla_breached": {
+          "label": "SLA violato",
+          "hint": "Una conversazione di tua competenza ha mancato l'obiettivo di prima risposta o di risoluzione."
         }
       },
       "loading": "Caricamento delle tue preferenze",

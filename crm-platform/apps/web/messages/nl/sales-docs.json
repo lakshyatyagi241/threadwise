@@ -257,7 +257,6 @@
       "ownerInvalid": "De eigenaar moet een actief lid van de workspace zijn.",
       "invoicingUnavailable": "Facturatie is nog niet beschikbaar, dus dit document kan niet worden omgezet.",
       "unexpected": "Er ging iets mis. Probeer het opnieuw.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen"
     },
     "link": {

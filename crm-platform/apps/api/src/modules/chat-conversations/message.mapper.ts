@@ -1,4 +1,4 @@
-import type { MessageResponse } from '@crm/contracts';
+import { emailMetaSchema, type EmailMeta, type MessageResponse } from '@crm/contracts';
 import type { MessageRow } from './messages.repository';
 
 /** Mints the short-lived url of a stored file for one reader; null leaves the url out (the realtime payload has no single reader). */
@@ -97,6 +97,30 @@ function sentInteractiveOf(row: MessageRow): MessageResponse['sentInteractive'] 
 }
 
 /** The ad or link that opened the chat (Meta `referral`), on the message that carried it. */
+/**
+ * The system lines the web app words in the reader's language: the consent line the STOP / START listener wrote (`meta.event =
+ * 'consent'`) and the stage change lines the growth pilot writes (`meta.event = 'stage_change'`).
+ */
+function systemEventOf(row: MessageRow): MessageResponse['systemEvent'] {
+  if (row.kind !== 'system') return undefined;
+  if (row.meta.event === 'consent') {
+    const action = row.meta.consentAction;
+    if (action !== 'withdrawn' && action !== 'granted') return undefined;
+    return { event: 'consent', action, keyword: str(row.meta.consentKeyword) };
+  }
+  if (row.meta.event === 'stage_change') {
+    const action = row.meta.stageAction;
+    const suggestionId = str(row.meta.suggestionId);
+    const fromStage = str(row.meta.fromStage);
+    const toStage = str(row.meta.toStage);
+    if ((action !== 'auto' && action !== 'undone') || !suggestionId || !fromStage || !toStage) {
+      return undefined;
+    }
+    return { event: 'stage_change', action, suggestionId, fromStage, toStage };
+  }
+  return undefined;
+}
+
 function referralOf(row: MessageRow): MessageResponse['referral'] {
   const r = row.meta.referral as Record<string, unknown> | undefined;
   if (!r || typeof r !== 'object') return null;
@@ -106,6 +130,62 @@ function referralOf(row: MessageRow): MessageResponse['referral'] {
     sourceId: str(r.sourceId),
     headline: str(r.headline),
     body: str(r.body),
+  };
+}
+
+/** The member who posted in a WhatsApp group (`meta.group`, set by the inbound ingest). */
+function groupAuthorOf(row: MessageRow): MessageResponse['group'] {
+  const g = row.meta.group as Record<string, unknown> | undefined;
+  if (!g || typeof g !== 'object' || row.direction !== 'in') return undefined;
+  const lid = str(g.senderLid);
+  return {
+    participant: str(g.participant),
+    senderName: str(g.senderName),
+    ...(lid ? { senderLid: lid } : {}),
+  };
+}
+
+/** The members @mentioned in a message (`meta.mentions`: inbound from WhatsApp, outbound from the composer). */
+function mentionsOf(row: MessageRow): MessageResponse['mentions'] {
+  const list = row.meta.mentions;
+  if (!Array.isArray(list)) return undefined;
+  const out = list
+    .filter((x): x is Record<string, unknown> => typeof x === 'object' && x !== null)
+    .map((x) => ({ jid: str(x.jid), name: str(x.name) }))
+    .filter((x): x is { jid: string; name: string | null } => x.jid !== null)
+    .map((x) => ({ jid: x.jid, ...(x.name ? { name: x.name } : {}) }));
+  return out.length > 0 ? out : undefined;
+}
+
+/**
+ * The tally of a message sent to a WhatsApp group, rolled up from the per-member statuses Meta reported (`meta.group_delivery`, folded
+ * by `applyGroupDelivery`): who it reached (delivered or read), who read it, who it failed for. `members` is the size of the group when the
+ * message was queued (`meta.group_members`; 0 when it was not known). A member's status only moves forward, so a retried webhook cannot
+ * inflate a count; a member Meta has not reported on is in none of them.
+ */
+function groupDeliveryOf(row: MessageRow): MessageResponse['groupDelivery'] {
+  const d = row.meta.group_delivery as Record<string, unknown> | undefined;
+  if (!d || typeof d !== 'object' || row.direction !== 'out') return undefined;
+  const n = (v: unknown) =>
+    typeof v === 'number' && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0;
+  const people =
+    d.participants && typeof d.participants === 'object'
+      ? Object.values(d.participants as Record<string, { status?: unknown }>)
+      : [];
+  const status = (p: { status?: unknown } | null) =>
+    typeof p?.status === 'string' ? p.status : '';
+  const read = people.filter((p) => status(p) === 'read').length;
+  const delivered = people.filter((p) => status(p) === 'delivered').length + read;
+  const failed = people.filter((p) => status(p) === 'failed').length;
+  const hasPeople = people.length > 0;
+  return {
+    members: n(row.meta.group_members),
+    // Older rows carry only the counters (no per-member map): those counted every member Meta had reported on.
+    deliveredTo: hasPeople ? delivered : n(d.delivered_to),
+    readBy: read,
+    failed,
+    billable: n(d.billable_count),
+    free: n(d.free_count),
   };
 }
 
@@ -166,6 +246,13 @@ function legacyView(row: MessageRow): {
   return null;
 }
 
+/** An email message's `meta.email` block, validated on the way out (a row written by an older build or by hand never breaks the response). */
+function emailOf(row: MessageRow): EmailMeta | undefined {
+  if (row.meta.email === undefined) return undefined;
+  const parsed = emailMetaSchema.safeParse(row.meta.email);
+  return parsed.success ? parsed.data : undefined;
+}
+
 /**
  * The only place a message row becomes its wire shape (internal ids never leave: every reference is a uuid; the storage key never
  * leaves: the file is a link minted per reader).
@@ -212,8 +299,13 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     contacts: contactsOf(row),
     interactive: legacy?.interactive ?? interactiveOf(row),
     forwarded: row.meta.forwarded === true ? true : undefined,
+    systemEvent: systemEventOf(row),
     referral: referralOf(row),
+    group: groupAuthorOf(row),
+    mentions: mentionsOf(row),
+    groupDelivery: groupDeliveryOf(row),
     sentInteractive: sentInteractiveOf(row),
+    email: emailOf(row),
     unsupported:
       row.meta.unsupported === true &&
       row.meta.rawType !== 'order' &&

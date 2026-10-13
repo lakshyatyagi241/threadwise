@@ -137,7 +137,8 @@
         "recipients": "{count} Empfänger",
         "scheduled": "Geplant: {date}",
         "instant": "Versand: sofort",
-        "template": "Vorlage {name}"
+        "template": "Vorlage {name}",
+        "cost": "Kosten"
       },
       "createBroadcast": "Broadcast erstellen",
       "noData": "Keine Daten gefunden",
@@ -227,8 +228,6 @@
         "senderHint": "Bei der Standardeinstellung wird die Kampagne über die Hauptengine Ihres Workspace versendet.",
         "defaultSender": "Standardabsender",
         "nameHint": "Interne Bezeichnung für Berichte und Warteschlangenverlauf.",
-        "noSenders": "Keine verbundenen Absender.",
-        "connectOne": "Einen verbinden →",
         "type": "Kampagnentyp",
         "types": {
           "custom": {
@@ -650,7 +649,9 @@
         "read": "Gelesen",
         "replies": "Antworten",
         "clicks": "Klicks",
-        "failed": "Fehlgeschlagen"
+        "failed": "Fehlgeschlagen",
+        "cost": "Kosten",
+        "costHint": "Bisher vom Guthaben abgebucht"
       },
       "tabs": {
         "overview": "Übersicht",
@@ -827,7 +828,6 @@
         "notFound": "Nicht gefunden. Möglicherweise wurde es gelöscht.",
         "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
         "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es erneut.",
-        "requestId": "Anfrage-ID",
         "retry": "Erneut versuchen"
       },
       "categories": {
@@ -897,8 +897,7 @@
         "previewEmpty": "Wählen Sie eine Vorlage, um die Nachricht anzusehen.",
         "senderLabel": "Senden von",
         "senderHint": "Die WhatsApp-Nummer, von der dieser Broadcast gesendet wird.",
-        "pickSender": "Nummer auswählen",
-        "noSenders": "Es ist keine WhatsApp-Nummer verbunden. Verbinden Sie zuerst eine."
+        "pickSender": "Nummer auswählen"
       },
       "audience": {
         "selectionTitle": "Im Contact Hub ausgewählt",
@@ -932,6 +931,7 @@
         "optedOut": "Abgemeldet",
         "invalidNumbers": "Ungültige Nummern",
         "alwaysSkipped": "Abgemeldete Kontakte und ungültige Nummern werden immer übersprungen.",
+        "noConsent": "Keine Einwilligung erfasst (übersprungen)",
         "willBeMessaged": "Werden angeschrieben",
         "about": "etwa {count}",
         "approximate": "Dies ist eine Schätzung: Die Zielgruppe ist zu groß, um rechtzeitig exakt gezählt zu werden.",
@@ -1403,6 +1403,41 @@
         "runs": "Durchläufe",
         "noRuns": "Es wurde noch kein Durchlauf gestartet.",
         "cancel": "Serie abbrechen"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Ihre Nummern werden geladen…",
+      "none": {
+        "title": "Es ist keine WhatsApp-Nummer verbunden",
+        "body": "Verbinden Sie eine WhatsApp-Business-Nummer, um auszuwählen, von welcher Nummer diese Kampagne gesendet wird.",
+        "action": "WhatsApp-Nummer verbinden"
+      },
+      "sms": {
+        "none": {
+          "title": "Es ist kein SMS-Absender verbunden",
+          "body": "Verbinden Sie einen SMS-Absender, um auszuwählen, von welchem Absender diese Kampagne gesendet wird.",
+          "action": "SMS-Absender verbinden"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# Nummer wird noch verbunden} other {# Nummern werden noch verbunden}}",
+        "body": "Eine Nummer kann Kampagnen senden, sobald ihre Verbindung abgeschlossen ist. Öffnen Sie ihren Status, um die Einrichtung abzuschließen.",
+        "action": "Status der Nummer prüfen"
+      },
+      "error": {
+        "title": "{count, plural, one {Die Verbindung von # Nummer ist fehlgeschlagen} other {Die Verbindung von # Nummern ist fehlgeschlagen}}",
+        "body": "Verbinden Sie die Nummer über ihre Statusseite neu, dann erscheint sie hier.",
+        "action": "Verbindung reparieren"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# Nummer ist getrennt} other {# Nummern sind getrennt}}",
+        "body": "Verbinden Sie sie neu, um Kampagnen darüber zu senden. Verbundene Nummern erscheinen hier.",
+        "action": "Nummer neu verbinden"
+      },
+      "personal_off": {
+        "title": "Persönliche Nummern sind für diesen Arbeitsbereich deaktiviert",
+        "body": "{count, plural, one {Ihre persönliche (QR-)Nummer kann} other {Ihre # persönlichen (QR-)Nummern können}} keine Kampagnen senden, solange dies deaktiviert ist. Ein Plattform-Administrator kann es für diesen Arbeitsbereich aktivieren, oder Sie verbinden eine offizielle WhatsApp-Business-Nummer.",
+        "action": "Offizielle Nummer verbinden"
       }
     }
   }

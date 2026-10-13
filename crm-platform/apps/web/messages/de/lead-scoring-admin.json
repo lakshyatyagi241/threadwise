@@ -1,0 +1,216 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "KI",
+      "scoring": "KI-Lead-Scoring"
+    },
+    "common": {
+      "loading": "Wird geladen",
+      "retry": "Erneut versuchen",
+      "dash": "-",
+      "cancel": "Abbrechen",
+      "errors": {
+        "forbidden": "Sie haben keine Berechtigung dafür.",
+        "request": "Die Anfrage konnte nicht abgeschlossen werden.",
+        "unexpected": "Auf unserer Seite ist ein Fehler aufgetreten. Versuchen Sie es gleich noch einmal.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "validation": "Einige Werte sind ungültig. Prüfen Sie die markierten Felder.",
+        "notFound": "Dieses Element existiert nicht mehr."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · KI · Lead-Scoring",
+      "title": "KI-Lead-Scoring",
+      "description": "Legt fest, ob Workspaces ihre Kontakte mit einem KI-Modell bewerten können, welches Modell das übernimmt, welche Limits gelten und was es kostet.",
+      "superOnly": "Nur ein Super-Admin kann das KI-Lead-Scoring sehen oder ändern."
+    },
+    "status": {
+      "label": "Status des Lead-Scorings",
+      "switch": {
+        "title": "Plattformschalter",
+        "on": "An",
+        "off": "Aus",
+        "hintOn": "Workspaces, die sich angemeldet haben, können ihre Kontakte bewerten.",
+        "hintOff": "Kein Workspace kann Kontakte bewerten, unabhängig von der eigenen Einstellung."
+      },
+      "model": {
+        "title": "Modell",
+        "custom": "Ein von Hand eingegebenes Modell, das nicht in der Liste steht."
+      },
+      "key": {
+        "title": "OpenRouter-Schlüssel der Plattform",
+        "ready": "Bereit",
+        "missing": "Fehlt",
+        "explainReady": "Workspaces ohne eigenen OpenRouter-Schlüssel werden mit diesem bewertet, und Sie bezahlen diese Bewertungen.",
+        "explainMissing": "Ohne Plattformschlüssel können nur Workspaces mit eigenem gespeicherten OpenRouter-Schlüssel Kontakte bewerten.",
+        "link": "KI-Schlüssel öffnen"
+      },
+      "reach": {
+        "title": "Reichweite",
+        "workspaces": "Angemeldete Workspaces",
+        "contacts": "Bewertete Kontakte"
+      }
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "description": "Änderungen gelten für alle Workspaces gleichzeitig. Nur geänderte Felder werden gespeichert.",
+      "enabled": {
+        "label": "KI-Lead-Scoring",
+        "hint": "Standardmäßig aus. Wenn aktiv, senden angemeldete Workspaces anonymisierte Kontaktdaten an OpenRouter, um eine Bewertung von 0 bis 100 zu erhalten. Ausschalten stoppt jedes Scoring."
+      },
+      "model": {
+        "label": "Modell",
+        "hint": "Preise in US-Dollar pro Million Tokens, aus der Liste von OpenRouter.",
+        "option": "{label} · {input} Ein / {output} Aus",
+        "other": "Andere OpenRouter-Modell-ID",
+        "details": "{input} pro Million Eingabe-Tokens, {output} pro Million Ausgabe-Tokens.",
+        "customLabel": "OpenRouter-Modell-ID",
+        "customHint": "Jede Modell-ID von OpenRouter, die strukturierte Ausgabe unterstützt.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limits",
+        "scoresPerHour": "Bewertungen pro Workspace und Stunde",
+        "scoresPerHourHint": "Ein Kostenschutz für Workspaces, die den Plattformschlüssel nutzen. 0 bedeutet kein Limit.",
+        "retentionDays": "Protokoll aufbewahren für (Tage)",
+        "retentionDaysHint": "Ältere Läufe und ihr Kostenverlauf werden gelöscht. 7 bis 730 Tage."
+      },
+      "saving": "Speichern läuft",
+      "save": "Änderungen speichern",
+      "reset": "Änderungen verwerfen",
+      "changed": "{count, plural, one {# Änderung bereit zum Speichern} other {# Änderungen bereit zum Speichern}}",
+      "unchanged": "Keine Änderungen zu speichern.",
+      "saved": "Einstellungen für das Lead-Scoring gespeichert.",
+      "errors": {
+        "range": "Geben Sie einen Wert zwischen {min} und {max} ein.",
+        "integer": "Geben Sie eine ganze Zahl ein.",
+        "modelId": "Verwenden Sie eine OpenRouter-Modell-ID wie openai/gpt-6-luna.",
+        "invalid": "Dieser Wert ist ungültig."
+      },
+      "confirm": {
+        "title": "Änderung bestätigen",
+        "turnOn": "Damit können angemeldete Workspaces anonymisierte Kontaktdaten an OpenRouter senden und das Guthaben Ihres Plattformschlüssels verbrauchen.",
+        "turnOff": "Damit wird das gesamte KI-Lead-Scoring für alle Workspaces gestoppt. Bereits gespeicherte Bewertungen bleiben erhalten.",
+        "confirm": "Änderungen speichern"
+      }
+    },
+    "cost": {
+      "title": "Was das Scoring kostet",
+      "description": "Summen aus dem Scoring-Protokoll, in US-Dollar.",
+      "last24h": "Letzte 24 Stunden",
+      "last30d": "Letzte 30 Tage",
+      "scores": "Geschriebene Bewertungen",
+      "failed": "Fehlgeschlagene Läufe",
+      "tokens": "Tokens",
+      "tokensSplit": "Eingabe- / Ausgabe-Tokens",
+      "total": "Gesamtkosten",
+      "average": "Durchschnitt pro Bewertung",
+      "platform": "Vom Plattformschlüssel bezahlt",
+      "footnote": "Die Kosten sind der von OpenRouter gemeldete Betrag oder, falls keiner gemeldet wurde, eine Schätzung aus den Token-Zahlen. Läufe, die über den eigenen Schlüssel eines Workspaces abgerechnet wurden, zählen zur Gesamtsumme, aber nicht zum Anteil der Plattform."
+    },
+    "workspaces": {
+      "title": "Workspaces",
+      "description": "Wer das KI-Lead-Scoring nutzt und was es in den letzten 30 Tagen gekostet hat, höchste zuerst.",
+      "search": "Workspaces suchen",
+      "searchPlaceholder": "Name des Workspaces",
+      "limit": "Zeilen",
+      "limitOption": "{count} Zeilen",
+      "noMatchTitle": "Kein Workspace gefunden",
+      "noMatchMessage": "Versuchen Sie einen anderen Namen.",
+      "clearSearch": "Suche zurücksetzen",
+      "emptyTitle": "Noch keine Workspaces",
+      "emptyMessage": "Workspaces erscheinen hier, sobald sie existieren.",
+      "tableLabel": "Workspaces nach Scoring-Kosten",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "Scoring",
+        "contacts": "Bewertete Kontakte",
+        "scores": "Bewertungen, 30 Tage",
+        "cost": "Kosten, 30 Tage"
+      },
+      "enabled": "An",
+      "disabled": "Aus"
+    },
+    "runs": {
+      "title": "Scoring-Protokoll",
+      "description": "Jeder Scoring-Versuch über alle Workspaces, neueste zuerst, mit Tokens, Kosten und Zahler.",
+      "refresh": "Aktualisieren",
+      "filters": {
+        "status": "Status",
+        "anyStatus": "Beliebiger Status",
+        "workspace": "Workspace",
+        "anyWorkspace": "Alle Workspaces",
+        "clear": "Filter zurücksetzen"
+      },
+      "status": {
+        "ok": "Bewertet",
+        "kept": "Beibehalten",
+        "failed": "Fehlgeschlagen",
+        "skipped": "Übersprungen"
+      },
+      "trigger": {
+        "created": "Kontakt erstellt",
+        "updated": "Kontakt aktualisiert",
+        "manual": "Schaltfläche „Bewerten“",
+        "backfill": "Nachberechnung"
+      },
+      "scoreWas": "{score} (vorher {previous})",
+      "tokensTitle": "{input} Eingabe, {output} Ausgabe",
+      "costSource": {
+        "vendor": "Gemeldet",
+        "estimate": "Schätzung",
+        "none": "Kein Aufruf"
+      },
+      "costSourceHelp": {
+        "vendor": "Die Kosten, die OpenRouter für diesen Aufruf gemeldet hat.",
+        "estimate": "Es wurden keine Kosten gemeldet, daher ist dies die Token-Zahl mal dem Listenpreis des Modells.",
+        "none": "Es wurde kein Aufruf gemacht, daher entstanden keine Kosten."
+      },
+      "paidBy": {
+        "admin": "Plattform",
+        "workspace": "Workspace",
+        "none": "Niemand"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "Plattformschalter ist aus",
+        "not_enabled": "Workspace hat sich nicht angemeldet",
+        "contact_gone": "Kontakt wurde gelöscht",
+        "manual_score": "Kontakt hat eine eingetragene Bewertung",
+        "no_key": "Kein OpenRouter-Schlüssel",
+        "token_allowance": "Token-Kontingent aufgebraucht",
+        "hourly_limit": "Stundenlimit erreicht",
+        "auth": "OpenRouter hat den Schlüssel abgelehnt",
+        "rate_limited": "OpenRouter-Ratenlimit",
+        "provider": "OpenRouter-Fehler",
+        "timeout": "OpenRouter-Zeitüberschreitung",
+        "bad_response": "Antwort war keine gültige Bewertung"
+      },
+      "noMatchTitle": "Keine passenden Läufe",
+      "noMatchMessage": "Kein Scoring-Lauf passt zu diesen Filtern.",
+      "emptyTitle": "Noch keine Läufe",
+      "emptyMessage": "Läufe erscheinen hier, sobald ein Workspace einen Kontakt bewertet.",
+      "tableLabel": "Scoring-Läufe",
+      "columns": {
+        "time": "Zeit",
+        "workspace": "Workspace",
+        "contact": "Kontakt",
+        "trigger": "Auslöser",
+        "status": "Status",
+        "score": "Bewertung",
+        "model": "Modell",
+        "tokens": "Tokens",
+        "cost": "Kosten",
+        "paidBy": "Bezahlt von",
+        "duration": "Dauer",
+        "error": "Grund"
+      },
+      "costLegend": "Ein ~ vor den Kosten kennzeichnet eine Schätzung aus Token-Zahlen statt des von OpenRouter gemeldeten Betrags.",
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen"
+    }
+  }
+}

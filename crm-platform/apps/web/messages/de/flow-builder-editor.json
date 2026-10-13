@@ -165,11 +165,11 @@
       "messagingNote": "WhatsApp, Instagram oder Facebook: Kanal im Auslöser-Knoten wechseln",
       "call": "Anruf",
       "callNote": "KI-Sprach-IVR: sagen, zuhören, weiterleiten",
-      "subtitleSimple": "Jeder Bot wird für einen Kanal erstellt, da nicht jede Komponente auf jedem Kanal funktioniert.",
+      "subtitleSimple": "Jeder Bot wird für einen Kanal erstellt, weil nicht jede Komponente auf jedem Kanal funktioniert.",
       "whatsapp": "WhatsApp",
-      "whatsappNote": "Antwortet Kunden auf einer verbundenen WhatsApp-Nummer",
+      "whatsappNote": "Antwortet Kunden über eine verbundene WhatsApp-Nummer",
       "web": "Website-Chat",
-      "webNote": "Ein Chat-Widget, das Sie Ihrer Website hinzufügen"
+      "webNote": "Ein Chat-Widget, das Sie in Ihre Website einbinden"
     },
     "rename": {
       "title": "Flow umbenennen",
@@ -554,7 +554,12 @@
           "cardGallery": "Kartengalerie",
           "cardCount": "{count} Karte(n)",
           "payLink": "Zahlungslink",
-          "invoice": "Rechnung"
+          "invoice": "Rechnung",
+          "faqAllFaqs": "Alle FAQs",
+          "faqCategory": "FAQ-Kategorie: {name}",
+          "faqScore": "Mindestscore {score}",
+          "faqNotSent": "nicht gesendet",
+          "faqWorkspaceScore": "Flow-Score"
         },
         "overlays": {
           "startPinned": "Dies ist der Startpunkt (zum Lösen anklicken)",
@@ -711,9 +716,11 @@
             "send": "Senden",
             "ask": "Den Kunden fragen",
             "handoff": "Übergeben",
-            "logic": "Entscheiden"
+            "logic": "Entscheiden",
+            "answer": "Antwort"
           },
-          "blockedTitle": "Schaltflächen und Listen beenden einen Flow, daher können sie nur am Ende stehen."
+          "blockedTitle": "Schaltflächen und Listen beenden einen Flow, daher können sie nur am Ende stehen.",
+          "blockedTitleFaq": "„Antwort aus FAQ“ hat zwei Ausgänge und kann daher nur als Letztes stehen."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -722,7 +729,11 @@
           "moveUp": "Nach oben",
           "moveDown": "Nach unten",
           "duplicate": "Duplizieren",
-          "deleteStep": "Schritt löschen"
+          "deleteStep": "Schritt löschen",
+          "faqExits": {
+            "matched": "Beantwortet",
+            "no_match": "Kein Treffer"
+          }
         },
         "editors": {
           "linkLabel": "Wohin das führt",
@@ -879,9 +890,20 @@
           },
           "handoff": {
             "hint": "Der Besucher wird mit Ihrer Notiz an dieses Team übergeben. Nach dieser Schaltfläche muss nichts verbunden werden."
+          },
+          "faq": {
+            "exits": {
+              "matched": "Wenn eine FAQ geantwortet hat, weiter zu",
+              "no_match": "Wenn keine FAQ geantwortet hat, weiter zu"
+            },
+            "exitsHint": {
+              "matched": "Bis dahin wurde eine Textantwort gesendet. Eine FAQ, die einen Flow startet, wird stattdessen in diesem Flow fortgesetzt.",
+              "no_match": "Nichts war nah genug, oder die automatische FAQ-Antwort ist ausgeschaltet."
+            }
           }
         },
-        "branchAdd": "Schritt für „{title}“ hinzufügen"
+        "branchAdd": "Schritt für „{title}“ hinzufügen",
+        "faqEnds": "Dieser Schritt beendet diesen Abschnitt: Was als Nächstes gesendet wird, hängt davon ab, ob eine FAQ geantwortet hat."
       },
       "formsCore": {
         "helpers": {
@@ -1814,6 +1836,45 @@
           "afterSending": "Nach dem Senden",
           "afterSendingHint": "Ein: Der Flow pausiert hier und wird erst über den Ausgang „out“ fortgesetzt, wenn der Kunde bezahlt (Betrag kommt als {paidAmount} {paidCurrency} an). Aus: Die Rechnung wird gesendet und der Flow läuft sofort weiter.",
           "waitUntilPaid": "Bis zur Zahlung warten, dann fortfahren"
+        },
+        "faq": {
+          "intro": {
+            "body": "Gleicht eine Nachricht inhaltlich mit den FAQs dieses Flows ab und beantwortet sie. Verlässt den Schritt über <mono>beantwortet</mono>, wenn eine FAQ geantwortet hat, sonst über <mono>kein Treffer</mono>.",
+            "sub": "Funktioniert auch ohne eingeschaltete automatische FAQ-Antworten für diesen Flow. <link>FAQs dieses Flows verwalten</link>"
+          },
+          "exitsLabel": "Ausgänge",
+          "exitMatchedName": "Beantwortet",
+          "exitMatched": "eine FAQ hat geantwortet: Ihr Text wurde gesendet (außer das Senden ist aus), oder ihr Flow hat übernommen und kehrt nicht zurück.",
+          "exitNoMatchName": "Kein Treffer",
+          "exitNoMatch": "nichts war nah genug, die automatische FAQ-Antwort ist für die Plattform ausgeschaltet, der verknüpfte Flow oder Schritt existiert nicht mehr, oder die Nachricht war leer.",
+          "query": "Zu prüfende Nachricht",
+          "queryHint": "Standardmäßig die letzte Nachricht des Kunden. Eine von einem Frage-Schritt gespeicherte Variable funktioniert ebenfalls, zum Beispiel <mono>{variable}</mono>. Mit / fügen Sie eine ein.",
+          "category": "Nur diese FAQs",
+          "allFaqs": "Alle FAQs",
+          "loadingCategories": "Kategorien werden geladen …",
+          "categoryGone": "{name} (keine FAQ nutzt sie)",
+          "retry": "Erneut versuchen",
+          "minScore": "Mindestscore",
+          "sendAnswer": "Antwort an den Kunden senden",
+          "sendAnswerToggle": "Passende Textantwort als Nachricht senden",
+          "sendAnswerOnHint": "Eine passende Text-FAQ wird an den Kunden gesendet. Eine FAQ, die einen Flow startet, wird in diesem Flow fortgesetzt.",
+          "sendAnswerOffHint": "Es wird nichts gesendet: Die Antwort wird nur in den Variablen unten gespeichert, sodass ein späterer Schritt die Antwort selbst formulieren kann. Eine FAQ, die einen Flow startet, wird weiterhin in diesem Flow fortgesetzt.",
+          "save": "Ergebnis speichern als",
+          "saveHint": "Der Name, unter dem das Ergebnis gespeichert wird. Spätere Schritte lesen es wie unten gezeigt.",
+          "variables": {
+            "answer": "der Antworttext",
+            "matched": "ja oder nein",
+            "question": "die Frage der passenden FAQ",
+            "score": "wie gut der Treffer war",
+            "id": "die ID der passenden FAQ"
+          },
+          "noFaqs": "Dieser Flow hat noch keine FAQs, daher verlässt dieser Schritt immer über kein Treffer. <link>Erste FAQ dieses Flows hinzufügen</link>",
+          "useWorkspaceScore": "Einstellung dieses Flows verwenden",
+          "minScoreInvalid": "Geben Sie eine Zahl von {min} bis {max} ein oder verwenden Sie die Einstellung dieses Flows.",
+          "saveFlowFirst": "Speichern Sie zuerst den Flow. Seine FAQs bearbeiten Sie im Tab FAQs des einfachen Builders, und dieser Schritt antwortet aus ihnen.",
+          "categoryHint": "Nur FAQs dieser Kategorie können antworten. Die Kategorien stammen aus den FAQs dieses Flows.",
+          "categoriesFailed": "Die FAQ-Kategorien dieses Flows konnten nicht geladen werden.",
+          "minScoreHint": "Ersetzt den Score dieses Flows nur für diesen Schritt, von {min} bis {max}. Scores hängen vom Embedding-Modell der Plattform ab. Probieren Sie daher eine Nachricht im <link>FAQ-Test</link> dieses Flows aus, bevor Sie eine Zahl wählen."
         }
       },
       "attrPicker": {
@@ -1876,14 +1937,16 @@
         }
       },
       "webBot": {
-        "aria": "Bot-Bereiche",
+        "aria": "Flow-Bereiche",
         "build": "Erstellen",
         "customize": "Anpassen",
-        "saveFirst": "Speichern Sie zuerst den Bot.",
-        "needsCustomizing": "„Anpassen“ ist noch nicht gespeichert. Öffnen Sie „Anpassen“.",
+        "saveFirst": "Speichern Sie zuerst den Flow.",
+        "needsCustomizing": "Das Widget verwendet noch das Standarddesign. Öffnen Sie „Anpassen“.",
         "customizeFirst": "Passen Sie Ihr Chat-Widget an und speichern Sie es einmal, bevor Sie veröffentlichen.",
         "deploy": "Bereitstellen",
-        "customizeFirstWhatsapp": "Passen Sie Ihren WhatsApp-Button an und speichern Sie ihn einmal, bevor Sie veröffentlichen."
+        "customizeFirstWhatsapp": "Passen Sie Ihren WhatsApp-Button an und speichern Sie ihn einmal, bevor Sie veröffentlichen.",
+        "faqs": "FAQs",
+        "install": "Installieren"
       },
       "buttonIcon": {
         "label": "Symbol (optional)",
@@ -2168,6 +2231,10 @@
         "carousel": {
           "label": "Karussell",
           "description": "Scrollbare Karten mit Bildern und Schaltflächen"
+        },
+        "faq": {
+          "label": "Antwort aus FAQ",
+          "description": "Nachricht mit Ihren FAQs abgleichen"
         }
       },
       "groups": {
@@ -2311,7 +2378,8 @@
         "wrongChannel": "„{node}“ funktioniert nicht auf {channel}. Löschen Sie es oder aktivieren Sie den Kanal im Auslöser-Knoten wieder.",
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",
         "noSenderFacebook": "Der Auslöser-Knoten hat keine Facebook-Seite ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
-        "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt."
+        "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
+        "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Einstellung des Flows zu verwenden."
       }
     },
     "simpleModel": {
@@ -2398,6 +2466,10 @@
         "condition": {
           "label": "Bedingung",
           "help": "Verzweigen nach dem, was der Kunde gesagt oder gespeichert hat, mit AND-/OR-Regeln"
+        },
+        "faq": {
+          "label": "Antwort aus FAQ",
+          "help": "Die Nachricht des Kunden mit Ihren FAQs abgleichen. Beendet diesen Flow: ein Ausgang, wenn eine FAQ geantwortet hat, ein anderer, wenn nicht"
         }
       },
       "typeLabel": {
@@ -2414,7 +2486,8 @@
         "cta": "Link-Schaltfläche",
         "assign": "Einem Agenten zuweisen",
         "carousel": "Karussell",
-        "condition": "Bedingung"
+        "condition": "Bedingung",
+        "faq": "Antwort aus FAQ"
       },
       "stepLabel": {
         "questionOf": "Frage · {kind}"
@@ -2454,8 +2527,10 @@
         "variableUsed": "Schritt {stage}: „{name}“ wird bereits von Schritt {other} verwendet. Geben Sie jeder Antwort einen eigenen Namen.",
         "carouselCards": "Schritt {stage}: Fügen Sie mindestens eine Karte hinzu und geben Sie jeder Karte einen Titel.",
         "carouselButtons": "Schritt {stage}: Geben Sie jeder Schaltfläche einen Namen sowie einen Link, eine Nummer oder eine Adresse, wo sie etwas öffnet.",
-        "conditionIncomplete": "Schritt {stage}: Vervollständigen Sie die Regeln der Bedingung (jeweils eine Variable und ein Wert)."
-      }
+        "conditionIncomplete": "Schritt {stage}: Vervollständigen Sie die Regeln der Bedingung (jeweils eine Variable und ein Wert).",
+        "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows."
+      },
+      "faqSummary": "{hasCategory, select, true {Aus Ihren FAQs · {category}} other {Aus Ihren FAQs}}"
     },
     "waboImport": {
       "notes": {
@@ -2566,7 +2641,9 @@
       "optionNotConnected": "Ausgang „{port}“ (Option {n}) nicht verbunden, Ende.",
       "buttonNotConnected": "Schaltfläche „{label}“ nicht verbunden, Ende.",
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
-      "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“"
+      "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
+      "faqAnswered": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, daher wird nichts gesendet und {ref} bleibt leer. Ausgang „Beantwortet“ wird genommen.",
+      "faqNoMatch": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, und der Ausgang „Beantwortet“ ist nicht verbunden, daher wird „Kein Treffer“ genommen. {ref} bleibt leer."
     }
   }
 }

@@ -9,39 +9,56 @@ import {
   ParseUUIDPipe,
   Post,
   Query,
+  Res,
+  StreamableFile,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { Response } from 'express';
 import {
   createConversationNoteSchema,
+  createMessageLogExportSchema,
   listConversationEventsQuerySchema,
+  listConversationGroupMembersQuerySchema,
   listConversationNotesQuerySchema,
   listConversationsQuerySchema,
   listInboxTemplatesQuerySchema,
+  listMessageLogExportsQuerySchema,
   listMessagesQuerySchema,
   markConversationReadSchema,
   sendMessageSchema,
+  setConversationPrioritySchema,
   setConversationStatusSchema,
+  snoozeConversationSchema,
   type CreateConversationNoteInput,
+  type CreateMessageLogExportInput,
   type ListConversationEventsQuery,
+  type ListConversationGroupMembersQuery,
   type ListConversationNotesQuery,
   type ListConversationsQuery,
   type ListInboxTemplatesQuery,
+  type ListMessageLogExportsQuery,
   type ListMessagesQuery,
   type MarkConversationReadInput,
   type SendMessageInput,
+  type SetConversationPriorityInput,
   type SetConversationStatusInput,
+  type SnoozeConversationInput,
+  openConversationSchema,
+  type OpenConversationInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { chatMediaConfig } from '../../infra/providers/chat-conversations/media';
 import { InboxConversationsService } from './inbox-conversations.service';
+import { InboxMessageLogService } from './inbox-message-log.service';
 import { InboxMediaService, type UploadedFile as UploadedFileShape } from './inbox-media.service';
 import { InboxNotesService } from './inbox-notes.service';
 import { InboxThreadService } from './inbox-thread.service';
 import { InboxTimelineService } from './inbox-timeline.service';
+import { InboxTriageService } from './inbox-triage.service';
 
 const upload = FileInterceptor('file', {
   limits: { fileSize: Math.max(...Object.values(chatMediaConfig().maxBytes)), files: 1 },
@@ -65,6 +82,8 @@ export class InboxController {
     private readonly notes: InboxNotesService,
     private readonly timeline: InboxTimelineService,
     private readonly media: InboxMediaService,
+    private readonly messageLogs: InboxMessageLogService,
+    private readonly triage: InboxTriageService,
   ) {}
 
   // --- the list ---------------------------------------------------------------------------------------------------------------
@@ -111,7 +130,69 @@ export class InboxController {
     return this.thread.retry(id);
   }
 
+  @Get('messages/:id/log')
+  @RequirePermission('inbox.conversation.read')
+  @ApiOperation({
+    summary: 'The delivery log of one message: its status now and every event, oldest first',
+    description:
+      'Events of the last 90 days come from the live log, older ones from the archive (kept one year). Same visibility as the thread.',
+  })
+  async messageLog(@Param('id', ParseUUIDPipe) id: string) {
+    return this.messageLogs.messageLog(id);
+  }
+
+  // --- export of the message log -------------------------------------------------------------------------------------------------
+
+  @Post('message-logs/exports')
+  @Idempotent()
+  @HttpCode(HttpStatus.ACCEPTED)
+  @RequirePermission('inbox.logs.export')
+  @ApiOperation({
+    summary:
+      'Export the delivery log of a date range (up to a year back); built in the background and announced by email (202)',
+  })
+  async requestLogExport(
+    @Body(zodPipe(createMessageLogExportSchema)) body: CreateMessageLogExportInput,
+  ) {
+    return this.messageLogs.requestExport(body);
+  }
+
+  @Get('message-logs/exports')
+  @RequirePermission('inbox.logs.export')
+  @ApiOperation({ summary: 'The latest exports of the message log, newest first' })
+  async listLogExports(
+    @Query(zodPipe(listMessageLogExportsQuerySchema)) query: ListMessageLogExportsQuery,
+  ) {
+    return this.messageLogs.listExports(query.kind);
+  }
+
+  @Get('message-logs/exports/:id/download')
+  @RequirePermission('inbox.logs.export')
+  @ApiOperation({ summary: 'The finished export as CSV (kept 7 days)' })
+  async downloadLogExport(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const { stream, fileName } = await this.messageLogs.downloadExport(id);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    return new StreamableFile(stream);
+  }
+
   // --- one conversation ----------------------------------------------------------------------------------------------------------
+
+  @Post('conversations/open')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.reply')
+  @ApiOperation({
+    summary: 'Open (or create) the conversation for a contact on a channel',
+    description:
+      'Answers `{ id }`. Creates the thread when the contact has none on that phone channel; 422 when the channel cannot start one or the contact has no number. The first message outside the 24 hour window must be a template.',
+  })
+  async open(@Body(zodPipe(openConversationSchema)) body: OpenConversationInput) {
+    return this.thread.open(body.contactId, body.channelId);
+  }
 
   @Get('conversations/:id')
   @RequirePermission('inbox.conversation.read')
@@ -120,6 +201,21 @@ export class InboxController {
   })
   async get(@Param('id', ParseUUIDPipe) id: string) {
     return this.conversations.detail(id);
+  }
+
+  @Get('conversations/:id/group-members')
+  @RequirePermission('inbox.conversation.read')
+  @ApiOperation({
+    summary: 'The members of a personal-number group thread, for @mentions',
+    description:
+      'Read from the group directory (no call to WhatsApp). Empty for a thread that is not a group on a linked personal number.',
+  })
+  async groupMembers(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(listConversationGroupMembersQuerySchema))
+    query: ListConversationGroupMembersQuery,
+  ) {
+    return this.conversations.groupMembers(id, query);
   }
 
   @Get('conversations/:id/messages')
@@ -195,6 +291,38 @@ export class InboxController {
     @Body(zodPipe(setConversationStatusSchema)) body: SetConversationStatusInput,
   ) {
     return this.conversations.setStatus(id, body);
+  }
+
+  @Post('conversations/:id/priority')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.priority')
+  @ApiOperation({
+    summary: 'Set the priority (low, normal, high, urgent)',
+    description:
+      'Requires the rowVersion you read (409 ROW_VERSION_CONFLICT otherwise). The priority the thread already has is a no-op.',
+  })
+  async priority(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(setConversationPrioritySchema)) body: SetConversationPriorityInput,
+  ) {
+    return this.triage.setPriority(id, body);
+  }
+
+  @Post('conversations/:id/snooze')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.snooze')
+  @ApiOperation({
+    summary: 'Park an open or pending conversation until a time (it reopens by itself)',
+    description:
+      '`until` is 1 minute to 365 days ahead. A resolved, closed or spam thread is 422 CONVERSATION_STATUS_INVALID. To wake it now, move it to open with the status route.',
+  })
+  async snooze(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(snoozeConversationSchema)) body: SnoozeConversationInput,
+  ) {
+    return this.triage.snooze(id, body);
   }
 
   // --- notes and the timeline ---------------------------------------------------------------------------------------------------

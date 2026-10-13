@@ -78,6 +78,11 @@
       "payments": "תשלומים"
     },
     "help": "עזרה",
-    "unreadCount": "{count, plural, one {# לא נקראה} two {# לא נקראו} other {# לא נקראו}}"
+    "unreadCount": "{count, plural, one {# לא נקראה} two {# לא נקראו} other {# לא נקראו}}",
+    "backgroundError": {
+      "message": "לא ניתן היה לרענן חלק מהנתונים החיים, כמו התראות, יתרה או ספירות תיבת הדואר הנכנס. ייתכן שמה שמוצג אינו עדכני.",
+      "retry": "נסו שוב",
+      "dismiss": "סגירה"
+    }
   }
 }

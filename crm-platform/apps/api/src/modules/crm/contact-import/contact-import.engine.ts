@@ -15,6 +15,7 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { ContactQuotaService } from '../contacts/contact-quota.service';
+import { ContactConsentService } from '../../contact-consent';
 import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
@@ -91,6 +92,7 @@ export class ContactImportEngine {
     private readonly displayIds: DisplayIdService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consent: ContactConsentService,
   ) {}
 
   /** Runs (or resumes) an import job to the end. Needs a request context (the processor sets one). */
@@ -340,6 +342,27 @@ export class ContactImportEngine {
     const keys = [...new Set(valid.map((r) => r.phone))].filter((k) => !state.fileMap.has(k));
     const existing = await this.findExisting(tx, orgId, keys);
 
+    // A repeated number is merged, not lost, but it is listed in the report so the person sees what was folded in.
+    const cellsByLine = new Map(slice.map((rec) => [rec.line, rec.cells]));
+    const noteDuplicate = (line: number) => {
+      // At most half the report goes to merged duplicates, so a file full of them cannot hide the real errors.
+      if (
+        state.rejects.length >= IMPORT_REJECTS_MAX ||
+        state.counters.duplicatesInFile > IMPORT_REJECTS_MAX / 2
+      )
+        return;
+      const cells = cellsByLine.get(line) ?? [];
+      state.rejects.push({
+        row: line,
+        reason: 'duplicate_in_file',
+        values: Object.fromEntries(
+          header
+            .slice(0, 20)
+            .map((h, i) => [h || `column_${i + 1}`, (cells[i] ?? '').slice(0, 200)]),
+        ),
+      });
+    };
+
     // 3. one operation per distinct number in the batch; a later row for the same number
     //    refines the earlier one (its non-empty cells win)
     const ops = new Map<string, Op>();
@@ -347,6 +370,7 @@ export class ContactImportEngine {
       const seen = ops.get(row.phone);
       if (seen) {
         state.counters.duplicatesInFile += 1;
+        noteDuplicate(row.line);
         seen.row = mergeRows(seen.row, row);
         row.groups.forEach((g) => seen.groups.add(g));
         row.tags.forEach((t) => seen.tags.add(t));
@@ -354,8 +378,10 @@ export class ContactImportEngine {
       }
       const knownId = state.fileMap.get(row.phone) ?? existing.get(row.phone);
       if (knownId !== undefined) {
-        if (state.fileMap.has(row.phone)) state.counters.duplicatesInFile += 1;
-        else state.counters.updated += 1;
+        if (state.fileMap.has(row.phone)) {
+          state.counters.duplicatesInFile += 1;
+          noteDuplicate(row.line);
+        } else state.counters.updated += 1;
         ops.set(row.phone, {
           kind: 'update',
           contactId: knownId,
@@ -457,6 +483,26 @@ export class ContactImportEngine {
         sql`(${orgId}, ${o.contactId}, 'phone', ${o.row.phone}, true)`,
         ...(o.row.email ? [sql`(${orgId}, ${o.contactId}, 'email', ${o.row.email}, true)`] : []),
       ]);
+    }
+
+    // 5b. consent: the importer confirmed they have it, so each contact in the batch gets a ledger grant (never over an opt-out).
+    //     With a consent column mapped, only the rows that say yes are granted; no, blank and unknown words record nothing.
+    if (options.consentConfirmed) {
+      for (const o of ops.values()) {
+        if (o.contactId === undefined) continue;
+        if (o.row.consentColumn && o.row.consent !== 'granted') continue;
+        await this.consent.recordInTx(tx, orgId, {
+          contactId: o.contactId,
+          channel: 'whatsapp',
+          action: 'granted',
+          source: 'import',
+          evidence: { fileName: job.fileName, reference: job.uuid },
+          actorUserId: userId,
+          note: 'The person importing confirmed consent for this file',
+          idempotencyKey: `import:${job.uuid}:${o.contactId}`,
+          respectWithdrawn: true,
+        });
+      }
     }
 
     // 6. groups and tags: the file's own plus the knobs, for new and updated contacts alike
@@ -587,5 +633,7 @@ function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
   ] as const) {
     if (b[key]) (out as unknown as Record<string, unknown>)[key] = b[key];
   }
+  // A later row for the same number refines the answer, except with a blank cell.
+  if (b.consent) out.consent = b.consent;
   return out;
 }

@@ -97,13 +97,13 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Gửi và nhận tin nhắn văn bản bằng tên người gửi của riêng bạn.",
+        "description": "Gửi tin nhắn văn bản bằng số Twilio hoặc tên người gửi MSG91 của riêng bạn.",
         "keywords": "tin nhắn văn bản, sender id, dlt, twilio, di động"
       },
       "email": {
         "label": "Email",
-        "description": "Kết nối hộp thư để gửi và nhận email trong hộp thư đến.",
-        "keywords": "hộp thư, smtp, imap, gmail, outlook, người gửi"
+        "description": "Kết nối hộp thư Gmail hoặc Google Workspace để nhóm của bạn đọc và trả lời email khách hàng trong hộp thư đến dùng chung.",
+        "keywords": "hộp thư, gmail, google workspace, hộp thư đến dùng chung, email hỗ trợ, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -312,9 +312,55 @@
       },
       "web": {
         "label": "Chat trên website",
-        "description": "Các bot được xây dựng cho chat trên website và widget mà mỗi bot chạy trong đó.",
-        "keywords": "web, website, widget, chatbot, nhúng, chat trực tiếp"
+        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
+      },
+      "message-logs": {
+        "label": "Nhật ký tin nhắn",
+        "description": "Xuất nhật ký gửi của tin nhắn, lùi tối đa một năm, thành tệp được gửi đến email của bạn.",
+        "keywords": "xuất, nhật ký gửi, lịch sử, lưu trữ, csv, tin nhắn"
+      },
+      "billing-subscriptions": {
+        "label": "Gói đăng ký",
+        "description": "Gói nào sẽ gia hạn, đã trả đến khi nào và hủy gói.",
+        "keywords": "gói đăng ký, gia hạn, tự động gia hạn, hủy, tự động thanh toán, thanh toán thất bại, các khoản thu"
+      },
+      "lead-scoring": {
+        "label": "Chấm điểm khách hàng tiềm năng bằng AI",
+        "description": "Chấm điểm mọi liên hệ bằng AI, chọn dữ liệu được gửi đi và xem chi phí.",
+        "keywords": "điểm khách hàng tiềm năng, chấm điểm, ai, nóng, ấm, lạnh, openrouter, chi phí, đánh giá"
+      },
+      "help-assistant": {
+        "label": "Trợ lý trợ giúp",
+        "description": "Bật trợ lý hướng dẫn nhóm của bạn hoặc làm các bước giúp họ.",
+        "keywords": "ai, trợ lý, tác nhân, hướng dẫn, trợ giúp, tự động hóa"
+      },
+      "consent": {
+        "label": "Đồng ý nhận tin và phản hồi STOP",
+        "description": "Chọn từ khóa STOP và START, phản hồi xác nhận, dòng từ chối và việc marketing có cần sự đồng ý đã ghi nhận hay không.",
+        "keywords": "đồng ý, từ chối, đăng ký lại, hủy đăng ký, stop, start, gdpr, tuân thủ, quyền riêng tư, marketing"
+      },
+      "inbox-tags": {
+        "label": "Thẻ cuộc trò chuyện",
+        "description": "Tạo các thẻ mà nhóm của bạn gắn vào cuộc trò chuyện và dùng để lọc hộp thư. Đây là các thẻ giống như dùng cho liên hệ.",
+        "keywords": "thẻ, thẻ cuộc trò chuyện, danh mục, sắp xếp, lọc"
+      },
+      "growth": {
+        "label": "Tăng trưởng",
+        "description": "Khách tiềm năng nóng, đối tượng, phản hồi chiến dịch và những việc khác nhóm của bạn có thể hành động, được rút ra từ các cuộc trò chuyện và chiến dịch.",
+        "keywords": "tăng trưởng, khách tiềm năng nóng, đối tượng, tương tác, đã rời bỏ, phản hồi chiến dịch, xu hướng chuyển đổi, ngừng nhận tin, thí điểm"
+      },
+      "sla-policies": {
+        "label": "Mục tiêu phản hồi",
+        "description": "Đặt tốc độ phản hồi và giải quyết của nhóm (SLA), và nhận cảnh báo khi cuộc trò chuyện lỡ mục tiêu.",
+        "keywords": "sla, thời gian phản hồi, phản hồi đầu tiên, giải quyết, vi phạm, mục tiêu, giờ làm việc"
+      },
+      "team-performance": {
+        "label": "Hiệu suất nhóm",
+        "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
+        "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
       }
-    }
+    },
+    "backToMarketplace": "Quay lại Marketplace"
   }
 }

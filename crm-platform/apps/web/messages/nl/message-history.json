@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "nav": {
+      "history": "Geschiedenis"
+    },
+    "crumb": "Campagnes / Berichtgeschiedenis",
+    "title": "Berichtgeschiedenis",
+    "loading": "Berichten laden…",
+    "tryAgain": "Opnieuw proberen",
+    "retention": "De bezorgstappen van elk bericht worden {hot} dagen volledig bewaard, daarna gearchiveerd en bewaard tot {days} dagen na het bericht. De feed zelf reikt een jaar terug.",
+    "range": {
+      "label": "Periode",
+      "24h": "Laatste 24 uur",
+      "7d": "Laatste 7 dagen",
+      "30d": "Laatste 30 dagen",
+      "90d": "Laatste 90 dagen",
+      "custom": "Eigen datums",
+      "short": {
+        "24h": "24u",
+        "7d": "7d",
+        "30d": "30d",
+        "90d": "90d"
+      },
+      "from": "Van",
+      "to": "Tot",
+      "apply": "Datums toepassen",
+      "problem": {
+        "order": "De eerste datum mag niet na de laatste liggen."
+      }
+    },
+    "exports": {
+      "title": "CSV-exports",
+      "request": "CSV exporteren",
+      "requested": "Je export wordt voorbereid. We mailen je zodra hij klaar is.",
+      "requestedTo": "Je export wordt voorbereid. We mailen {email} zodra hij klaar is.",
+      "status": {
+        "queued": "Wacht op start",
+        "running": "Bezig met voorbereiden",
+        "ready": "Klaar",
+        "failed": "Mislukt",
+        "expired": "Verlopen"
+      },
+      "preparing": "Voorbereiden…",
+      "download": "Downloaden",
+      "rows": "{n} berichten",
+      "keptUntil": "bewaard tot {when} ({days} dagen)",
+      "fromEmail": "Uit je e-mail"
+    },
+    "kpi": {
+      "label": "Kerncijfers",
+      "total": "Totaal aantal berichten",
+      "vsLast": "{pct}% t.o.v. vorige periode",
+      "sent": "Verzonden",
+      "received": "Ontvangen",
+      "failed": "Mislukt",
+      "avgResponse": "Gem. reactietijd",
+      "delivered": "Bezorgd",
+      "read": "Gelezen",
+      "deliveryRate": "Bezorgpercentage",
+      "cost": "Kosten",
+      "outgoing": "uitgaand",
+      "incoming": "inkomend",
+      "retryQueue": "wachtrij voor opnieuw proberen",
+      "toFirstReply": "tot eerste antwoord",
+      "healthy": "gezond",
+      "na": "n.v.t.",
+      "deliveredCaption": "bij de klant aangekomen",
+      "readCaption": "geopend door de klant",
+      "deliveryRateCaption": "van de berichten die de wachtrij verlieten",
+      "costCaption": "afgeschreven van je wallet"
+    },
+    "charts": {
+      "volume": "Volume",
+      "volumeTitle": "Berichten in de tijd",
+      "bucketLabel": "Groeperen per",
+      "bucket": {
+        "daily": "Dag",
+        "hourly": "Uur",
+        "weekly": "Week"
+      },
+      "volumeAria": "Berichten in de tijd: {sent} verzonden, {received} ontvangen, {failed} mislukt",
+      "when": "Wanneer",
+      "series": {
+        "sent": "Verzonden",
+        "received": "Ontvangen",
+        "failed": "Mislukt"
+      },
+      "direction": "Verdeling per richting",
+      "directionTitle": "Verzonden vs. ontvangen",
+      "directionAria": "{total} berichten, verdeeld in verzonden, ontvangen en mislukt",
+      "types": "Per berichttype",
+      "typesTitle": "Mix in deze periode",
+      "media": "Media",
+      "top": "Top-gesprekken",
+      "topTitle": "Meest actieve gesprekken ({range})",
+      "openInbox": "Inbox openen",
+      "topEmpty": "Nog geen actieve gesprekken in deze periode.",
+      "topMeta": "{n} ber. · laatste {time}"
+    },
+    "filters": {
+      "search": "Berichten zoeken",
+      "searchPlaceholder": "Zoek op tekst, contact, telefoon of bericht-ID…",
+      "directionLabel": "Richting",
+      "dir": {
+        "all": "Alle",
+        "out": "Verzonden",
+        "in": "Ontvangen",
+        "fail": "Mislukt"
+      },
+      "channel": "Kanaal",
+      "allChannels": "Alle kanalen",
+      "type": "Type",
+      "allTypes": "Alle typen",
+      "status": "Status",
+      "allStatuses": "Alle statussen",
+      "sources": "Verzonden door",
+      "clear": "Filters wissen",
+      "active": "Actieve filters",
+      "chip": {
+        "templateId": "Eén sjabloon",
+        "campaignId": "Eén campagne",
+        "broadcastId": "Eén broadcast",
+        "scheduledId": "Eén ingepland bericht"
+      },
+      "removeFilter": "Filter verwijderen: {filter}"
+    },
+    "type": {
+      "text": "Gewone tekst",
+      "template": "Sjabloon",
+      "auto_reply": "Automatisch antwoord",
+      "campaign": "Campagne",
+      "broadcast": "Broadcast",
+      "scheduled": "Ingepland",
+      "image": "Afbeelding",
+      "video": "Video",
+      "audio": "Audio",
+      "document": "Document",
+      "location": "Locatie"
+    },
+    "status": {
+      "queued": "In wachtrij",
+      "sent": "Verzonden",
+      "delivered": "Bezorgd",
+      "read": "Gelezen",
+      "failed": "Mislukt",
+      "received": "Inkomend"
+    },
+    "source": {
+      "inbox": "Inbox",
+      "flow": "Flow",
+      "auto_reply": "Automatisch antwoord",
+      "ai": "AI-assistent",
+      "api": "API",
+      "broadcast": "Broadcast",
+      "campaign": "Campagne",
+      "scheduled": "Ingepland",
+      "other": "Overig"
+    },
+    "direction": {
+      "in": "Inkomend",
+      "out": "Uitgaand",
+      "failed": "Mislukt"
+    },
+    "table": {
+      "col": {
+        "when": "Wanneer",
+        "dir": "Rtg.",
+        "contact": "Contact",
+        "message": "Bericht",
+        "type": "Type",
+        "status": "Status",
+        "open": "Openen"
+      },
+      "unknown": "Onbekend contact",
+      "masked": "Dit nummer is verborgen omdat je dit contact niet kunt openen.",
+      "entity": {
+        "broadcast": "Broadcast · {name}",
+        "campaign": "Campagne · {name}",
+        "scheduled": "Ingepland · {name}"
+      },
+      "openSource": "Openen",
+      "openSourceFor": "Bron van {name} openen",
+      "showing": "{n} weergegeven",
+      "showingOf": "{n} van {total} weergegeven",
+      "loadMore": "Meer laden"
+    },
+    "empty": {
+      "noMatch": "Geen berichten voor deze filters",
+      "noMatchHint": "Wis de zoekopdracht of kies een ruimere periode.",
+      "period": "Geen berichten in de laatste {days} dagen",
+      "periodCustom": "Geen berichten in deze datums",
+      "periodHint": "Berichten die je verstuurt of ontvangt verschijnen hier, met hun bezorgstatus."
+    },
+    "drawer": {
+      "title": "Berichtdetails",
+      "close": "Sluiten",
+      "loading": "Laden…",
+      "tryAgain": "Opnieuw proberen",
+      "copied": "Gekopieerd",
+      "copyFailed": "Kopiëren mislukt",
+      "copyId": "ID kopiëren",
+      "openChat": "Chat openen",
+      "openContact": "Contact openen",
+      "openEntity": {
+        "broadcast": "Broadcast openen",
+        "campaign": "Campagne openen",
+        "scheduled": "Ingepland bericht openen"
+      },
+      "unknown": "Onbekend contact",
+      "masked": "Dit nummer is verborgen omdat je dit contact niet kunt openen.",
+      "direction": "Richting",
+      "directionValue": {
+        "in": "Inkomend",
+        "out": "Uitgaand"
+      },
+      "status": "Status",
+      "type": "Type",
+      "when": "Wanneer",
+      "content": "Inhoud",
+      "noText": "Geen tekst",
+      "failure": "Fout",
+      "failedNoReason": "Het bericht is mislukt en er is geen reden vastgelegd.",
+      "details": "Details",
+      "messageId": "Bericht-ID",
+      "source": "Verzonden door",
+      "sourceValue": {
+        "inbox": "Inbox",
+        "flow": "Flow",
+        "auto_reply": "Automatisch antwoord",
+        "ai": "AI-assistent",
+        "api": "API",
+        "broadcast": "Broadcast",
+        "campaign": "Campagne",
+        "scheduled": "Ingepland bericht",
+        "other": "Overig"
+      },
+      "channel": "Kanaal",
+      "template": "Sjabloon",
+      "entity": {
+        "broadcast": "Broadcast",
+        "campaign": "Campagne",
+        "scheduled": "Ingepland bericht"
+      },
+      "sender": "Afzender",
+      "senderKind": {
+        "customer": "Klant",
+        "agent": "Medewerker",
+        "bot": "Automatisering",
+        "system": "Systeem",
+        "broadcast": "Massaverzending"
+      },
+      "providerId": "Bericht-ID van provider",
+      "language": "Taal",
+      "cost": "Kosten",
+      "timeline": "Bezorgstappen",
+      "expired": "Dit bericht is ouder dan {days} dagen, dus de bezorgstappen zijn verwijderd. De status wordt hierboven nog steeds getoond.",
+      "timelineEmpty": "Voor dit bericht zijn geen bezorgstappen vastgelegd.",
+      "archived": "Een deel van dit logboek komt uit het archief (gebeurtenissen ouder dan {days} dagen)."
+    },
+    "errors": {
+      "generic": "Er ging iets mis. Probeer het opnieuw.",
+      "MESSAGE_NOT_FOUND": "Dit bericht bestaat niet, of je kunt het niet zien.",
+      "VALIDATION_FAILED": "Die datums of filters zijn niet geldig.",
+      "FORBIDDEN": "Je hebt hier geen toegang toe.",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "Er wordt al een export voorbereid. Wacht op de e-mail en vraag daarna een nieuwe aan.",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "Deze export is nog niet klaar.",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "Deze export bestaat niet.",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "Kies datums binnen de laatste 365 dagen."
+    }
+  }
+}

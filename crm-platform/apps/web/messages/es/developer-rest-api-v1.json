@@ -96,8 +96,7 @@
       "unexpected": "Algo salió mal de nuestro lado. Inténtalo de nuevo en un momento.",
       "loadFailed": "No se pudo cargar tu clave de API.",
       "retry": "Reintentar",
-      "upgrade": "Ver planes",
-      "requestId": "ID de solicitud: {id}"
+      "upgrade": "Ver planes"
     }
   }
 }

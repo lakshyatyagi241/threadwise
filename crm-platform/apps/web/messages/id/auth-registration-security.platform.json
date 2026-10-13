@@ -46,7 +46,6 @@
         "copyFailed": "Tidak dapat menyalin",
         "loading": "Memuat",
         "retry": "Coba lagi",
-        "requestId": "ID permintaan",
         "errors": {
           "forbidden": "Peran Anda tidak mengizinkan ini.",
           "request": "Permintaan ditolak. Muat ulang halaman lalu coba lagi.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Masuk operator",
         "intro": "Konsol ini untuk orang yang menjalankan platform. Pengguna ruang kerja masuk di halaman masuk utama.",
-        "requestId": "ID permintaan",
         "submit": "Masuk",
         "submitting": "Sedang masuk",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Akun Anda",
         "title": "Autentikasi dua faktor",
         "description": "Lindungi {email} dengan aplikasi autentikator. Akun operator adalah akun dengan tingkat kepercayaan tertinggi di platform.",
-        "requestId": "ID permintaan",
         "status": {
           "title": "Aplikasi autentikator",
           "on": "Aktif",
@@ -181,7 +178,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Memproses",
             "close": "Tutup",
             "signInAgain": "Masuk lagi",
-            "requestId": "ID permintaan",
             "errors": {
               "forbidden": "Hanya super admin yang dapat menjalankan tindakan ini.",
               "unexpected": "Tindakan tidak selesai. Periksa log peristiwa sebelum mencoba lagi."
@@ -731,7 +726,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Kode uji dikirim ke {to}.",
             "remaining": "{count, plural, other {Sisa # uji jam ini.}}",
             "notShown": "Kode tidak ditampilkan di sini; baca di ponsel.",
-            "requestId": "ID permintaan",
             "errors": {
               "invalidNumber": "Masukkan nomor dengan kode negaranya, misalnya +91 98765 43221.",
               "rateLimited": "Terlalu banyak kode uji jam ini. Coba lagi dalam {minutes, plural, other {# menit}}.",
@@ -1045,7 +1038,6 @@
           "saved": "Pengirim disimpan",
           "removed": "Pengirim dihapus",
           "secretRemoved": "Rahasia tersimpan dihapus",
-          "requestId": "ID permintaan",
           "problems": {
             "required": "Kolom ini wajib diisi.",
             "tooLong": "Maksimal {max} karakter.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Footer itu tidak diterima.",
             "unexpected": "Footer tidak dapat disimpan. Coba lagi sebentar lagi."
-          },
-          "requestId": "ID permintaan"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Batal",
           "working": "Menghapus",
           "error": "Rahasia tidak dapat dihapus. Coba lagi sebentar lagi.",
-          "requestId": "ID permintaan",
           "done": "Rahasia {name} yang tersimpan telah dihapus.",
           "names": {
             "google": "Google",
@@ -1418,7 +1407,10 @@
             "forms_and_links": "Formulir penangkap lead dan tautan yang dapat dibagikan.",
             "extra_channels": "Kanal Telegram, Facebook, dan Instagram.",
             "form_builder": "Formulir web yang di-host dan disematkan yang membuat kontak di CRM. Aplikasi Formulir berbayar memegang sakelar ini.",
-            "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account."
+            "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account.",
+            "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS.",
+            "help_agent": "Asisten Bantuan dalam aplikasi: pengguna meminta tugas dengan kata-kata biasa, lalu asisten memandu atau mengerjakannya di sesi mereka sendiri dan bertanya dulu sebelum hal berisiko. Memakai token AI.",
+            "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini."
           },
           "units": {
             "days": "Hari",
@@ -1559,7 +1551,9 @@
             "ai_token_limit_monthly": "Token AI per bulan (kunci platform)",
             "forms": "Formulir web",
             "form_submissions_monthly": "Pengiriman formulir per bulan",
-            "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI per bulan"
+            "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI per bulan",
+            "sms_monthly": "SMS per bulan",
+            "email_mailboxes": "Kotak surat email"
           },
           "featureGroups": {
             "messaging": "Pesan",
@@ -1596,7 +1590,10 @@
             "forms_and_links": "Formulir, tautan klik-untuk-obrolan, dan grup",
             "extra_channels": "Kanal Telegram, Facebook, dan Instagram",
             "form_builder": "Formulir (pembuat formulir web)",
-            "waba_groups": "Grup WhatsApp (Cloud API)"
+            "waba_groups": "Grup WhatsApp (Cloud API)",
+            "sms": "Kanal SMS",
+            "help_agent": "Asisten Bantuan (AI, memakai token)",
+            "email_channel": "Kanal email (Gmail)"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",
@@ -1648,7 +1645,9 @@
             "ai_token_limit_monthly": "Token yang dipakai asisten AI dalam bulan kalender pada kunci platform. Ruang kerja dengan kunci sendiri tidak dibatasi.",
             "forms": "Formulir web aktif (aplikasi Formulir). Mengarsipkan formulir membebaskan tempatnya. 0 = tanpa batas.",
             "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
-            "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas."
+            "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
+            "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
+            "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas."
           }
         }
       },
@@ -1660,7 +1659,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {

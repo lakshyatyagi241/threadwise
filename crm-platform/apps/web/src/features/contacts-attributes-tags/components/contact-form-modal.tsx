@@ -19,7 +19,8 @@ import {
   PhoneField,
   type PhoneValue,
 } from '@/features/auth-registration-security/shared/phone-field';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { LeadScoreField, isScoreInvalid } from '@/features/lead-scoring';
 import {
   createContact,
   fetchContact,
@@ -30,6 +31,7 @@ import {
 import { useStatusOptions } from '../api/attributes';
 import { useContactFields, useFieldDependencies, useFieldSections } from '../api/properties';
 import { setContactGroups, useGroups } from '../api/groups';
+import { useOwners } from '../api/owners';
 import { attachTagToContact, detachTag, useContactTags, useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
 import {
@@ -110,12 +112,14 @@ function ContactForm({
   const qc = useQueryClient();
   const { toast } = useToast();
   const canCreateTags = useCan('record.tags.create');
+  const session = useSession();
   const uid = useId();
   const id = (name: string) => `${uid}-${name}`;
 
   const editing = contact !== undefined;
   const [values, setValues] = useState<ContactFormValues>(() =>
-    contact ? contactToForm(contact) : EMPTY_FORM,
+    // A new contact belongs to whoever creates it, as in Reference (it stamped `user_id` with the caller); "Unassigned" is one click away.
+    contact ? contactToForm(contact) : { ...EMPTY_FORM, ownerId: session.user.id },
   );
   const [phone, setPhone] = useState<PhoneValue>({
     e164: contact?.phone ?? null,
@@ -131,6 +135,7 @@ function ContactForm({
   const [conflict, setConflict] = useState(false);
   const [pendingTags, setPendingTags] = useState<TagLite[]>([]);
   const [lostProblem, setLostProblem] = useState<'pick' | 'text' | null>(null);
+  const [scoreProblem, setScoreProblem] = useState(false);
   /** What changing the stage just did to the status field (shown under it until the person picks a status). */
   const [statusMove, setStatusMove] = useState<StatusNotice>({ kind: 'none' });
 
@@ -139,6 +144,7 @@ function ContactForm({
   const dependencies = useFieldDependencies();
   const statusOptions = useStatusOptions();
   const groups = useGroups();
+  const owners = useOwners();
   const allTags = useTags();
   const contactTags = useContactTags(contact?.id ?? null);
   const initialGroups = useRef((contact?.groups ?? []).map((g) => g.id));
@@ -250,6 +256,8 @@ function ContactForm({
             contact.customFields,
             fieldsByKey,
             lostPayload,
+            contact.leadScore,
+            contact.ownerId,
           ),
         );
         const before = initialGroups.current;
@@ -357,9 +365,15 @@ function ContactForm({
     setFieldProblems(fp);
     const lostFound = isLost ? lostReasonProblem(lostAnswer, lostChoices.length > 0) : null;
     setLostProblem(lostFound);
+    const scoreBad = isScoreInvalid(merged.leadScore);
+    setScoreProblem(scoreBad);
     if (Object.keys(next).length > 0) {
       const first = Object.keys(next)[0];
       document.getElementById(id(first === 'firstName' ? 'first' : first))?.focus();
+      return;
+    }
+    if (scoreBad) {
+      document.getElementById(id('lead-score'))?.focus();
       return;
     }
     if (lostFound) {
@@ -377,6 +391,14 @@ function ContactForm({
 
   const loadingLookups = registry.isPending;
   const err = (key: 'firstName' | 'phone' | 'email') => problems[key] ?? serverFields[key];
+  // The server refuses an owner the person's record scope does not reach (403 with the field `ownerId`): say it at the field.
+  const ownerRefused =
+    save.isError && errorKind(save.error) === 'forbidden' && !!serverFields.ownerId;
+  const people = owners.data ?? [];
+  // Only people the caller may hand a contact to; the contact's current owner stays selectable so saving never silently drops them.
+  const ownerChoices = people.filter((p) => p.canAssign || p.id === values.ownerId);
+  const ownerKnown =
+    !values.ownerId || owners.isPending || people.some((p) => p.id === values.ownerId);
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-4">
@@ -393,7 +415,7 @@ function ContactForm({
           </Button>
         </Alert>
       )}
-      {save.isError && !conflict && <ErrorLine error={save.error} />}
+      {save.isError && !conflict && !ownerRefused && <ErrorLine error={save.error} />}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Field label={t('title')} htmlFor={id('title')}>
@@ -505,7 +527,19 @@ function ContactForm({
         </Field>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <LeadScoreField
+          id={id('lead-score')}
+          value={values.leadScore}
+          invalid={scoreProblem}
+          onChange={(v) => {
+            set('leadScore', v);
+            setScoreProblem(false);
+          }}
+        />
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2">
         <Field label={t('stage')} htmlFor={id('stage')}>
           <Select
             id={id('stage')}
@@ -576,6 +610,31 @@ function ContactForm({
             placeholder={t('sourcePlaceholder')}
             onChange={(e) => set('source', e.target.value)}
           />
+        </Field>
+        <Field
+          label={t('owner')}
+          htmlFor={id('owner')}
+          hint={t('ownerHelp')}
+          error={ownerRefused ? t('ownerOutOfScope') : undefined}
+        >
+          <Select
+            id={id('owner')}
+            value={values.ownerId}
+            invalid={ownerRefused}
+            disabled={owners.isLoading}
+            onChange={(e) => {
+              set('ownerId', e.target.value);
+              setServerFields(({ ownerId: _gone, ...rest }) => rest);
+            }}
+          >
+            <option value="">{t('ownerNone')}</option>
+            {!ownerKnown && <option value={values.ownerId}>{t('ownerFormer')}</option>}
+            {ownerChoices.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.id === session.user.id ? t('ownerMe', { name: p.fullName }) : p.fullName}
+              </option>
+            ))}
+          </Select>
         </Field>
       </div>
 

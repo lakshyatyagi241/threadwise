@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQs",
       "label": "FAQ sections",
       "tab": {
         "faqs": "FAQs",
@@ -13,9 +12,7 @@
       "unansweredCount": "{count, plural, one {# unanswered message} other {# unanswered messages}}"
     },
     "common": {
-      "dismiss": "Dismiss",
       "retry": "Try again",
-      "requestId": "Request {id}",
       "noAccessTitle": "You do not have access to this screen",
       "noAccess": "Ask a workspace admin to give your role the permission {permission}."
     },
@@ -26,28 +23,29 @@
       "conflict": "Someone else changed this while you were editing it.",
       "duplicateQuestion": "Another FAQ already has this question.",
       "duplicateVariation": "This FAQ already has this phrasing.",
-      "limitReached": "Your workspace reached its FAQ limit. Delete unused FAQs or variations, or ask your platform admin to raise it.",
+      "limitReached": "This flow reached its FAQ limit. Delete unused FAQs or variations, or ask your platform admin to raise it.",
       "flowNotFound": "The chosen flow no longer exists in this workspace. Pick another one.",
       "embeddingUnavailable": "The AI provider is not available. Add an OpenRouter key to your workspace, or ask your platform admin to enable the shared key, then try again.",
       "engineDisabled": "FAQ answering is switched off for the whole platform right now.",
       "modelNotAllowed": "The platform's embedding model is not allowed. Ask your platform admin.",
       "validation": "Some fields need attention.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
-      "unexpected": "Something went wrong. Try again, and share the request id with support if it keeps happening."
+      "unexpected": "Something went wrong. Try again, and share the request id with support if it keeps happening.",
+      "flowNodeNotFound": "The chosen step is no longer in this flow. Pick another step, or start at the flow's start."
     },
     "banner": {
       "enabledToast": "FAQ answering is on.",
       "engineOff": "FAQ answering has been switched off by the platform. Customers get no FAQ answers until it is switched back on.",
       "modelChanged": "The platform changed the AI model after you tuned this threshold. Scores moved, so review your sensitivity.",
       "reviewSensitivity": "Review sensitivity",
-      "offTitle": "FAQ answering is OFF for customers",
-      "offBody": "You can write and test FAQs, but customers do not get answers until you switch it on.",
+      "offTitle": "FAQ answering is OFF for this flow",
+      "offBody": "You can write and test this flow's FAQs, but customers do not get answers until you switch it on.",
       "offNoRight": "Ask someone with the permission faq.settings.manage (usually a workspace admin) to switch it on.",
       "enable": "Turn on FAQ answering"
     },
     "list": {
       "title": "FAQs",
-      "subtitle": "Questions your customers ask, and what your bot answers. Customers do not have to use your exact words.",
+      "subtitle": "Questions customers ask in {flow}, and what the bot answers. These FAQs only answer inside this flow.",
       "add": "Add FAQ",
       "stats": {
         "label": "FAQ totals",
@@ -97,7 +95,7 @@
       "deleted": "FAQ deleted.",
       "empty": {
         "title": "Teach your bot the answers to common questions",
-        "body": "Write a question and its answer once. Your bot matches what customers write, in their own words, and replies with the answer or starts a flow.",
+        "body": "Write a question and its answer once. Your bot matches what customers write, in their own words, and replies with the answer or sends them to a step of a flow.",
         "how": "Add a few other ways to ask the same thing (phrasings) and test it before customers see it.",
         "cta": "Add your first FAQ",
         "noRight": "Ask a workspace admin for the permission to add FAQs."
@@ -139,7 +137,10 @@
         "ready": "{count} live",
         "pending": "{count} indexing",
         "failed": "{count} failed"
-      }
+      },
+      "stepMissing": "Step missing",
+      "startsAt": "Goes to: {step}",
+      "thisFlow": "This flow"
     },
     "editor": {
       "back": "Back to FAQs",
@@ -156,7 +157,7 @@
       "saved": "FAQ saved.",
       "deleted": "FAQ deleted.",
       "readOnly": "You can view this FAQ but your role cannot change it.",
-      "faqLimit": "Your workspace is at its limit of {max} FAQs. Delete one to add another.",
+      "faqLimit": "This flow is at its limit of {max} FAQs. Delete one to add another.",
       "prefilled": "The question was filled in from an unanswered customer message. Saving this FAQ also marks that message as handled.",
       "tryItSaveFirst": "Save the FAQ first, then you can try how customer messages match it.",
       "conflict": {
@@ -186,21 +187,30 @@
         "title": "Answer",
         "hint": "What the customer gets when this FAQ matches.",
         "text": "Text answer",
-        "flow": "Start a flow",
+        "flow": "Go to a step",
         "textLabel": "Answer text",
         "count": "{count} / {max} characters",
         "preview": "How it looks in WhatsApp",
         "previewEmpty": "Your answer appears here",
-        "flowLabel": "Flow to start",
-        "noFlow": "No flow chosen"
+        "flowLabel": "Where to go",
+        "noFlow": "No flow chosen",
+        "startsAt": "Goes to step: {step}",
+        "stepGone": "The step this FAQ goes to no longer exists, so customers get no answer.",
+        "thisFlowNamed": "A step of this flow ({name})",
+        "target": {
+          "here": "A step of this flow",
+          "hereHint": "The customer continues inside {name}. This is the usual choice.",
+          "other": "A step of another flow",
+          "otherHint": "Hand the conversation over to a different flow."
+        }
       },
       "advanced": {
         "title": "Advanced: sensitivity for this FAQ only",
-        "body": "By default every FAQ uses the workspace sensitivity. Use a custom value when this one matches too eagerly (raise it) or too rarely (lower it).",
+        "body": "By default every FAQ uses this flow's sensitivity. Use a custom value when this one matches too eagerly (raise it) or too rarely (lower it).",
         "custom": "Use a custom sensitivity for this FAQ",
         "sliderLabel": "Match at or above",
-        "workspace": "The workspace sensitivity is {value}%.",
-        "following": "Following the workspace sensitivity ({value}%)."
+        "workspace": "This flow's sensitivity is {value}%.",
+        "following": "Following this flow's sensitivity ({value}%)."
       },
       "problem": {
         "question": {
@@ -214,9 +224,9 @@
           "invalid": "This answer is not valid."
         },
         "flowId": {
-          "required": "Choose the flow to start.",
-          "tooLong": "Choose the flow to start.",
-          "invalid": "Choose the flow to start."
+          "required": "Choose the flow to go to.",
+          "tooLong": "Choose the flow to go to.",
+          "invalid": "Choose the flow to go to."
         },
         "category": {
           "required": "Write a category or leave it empty.",
@@ -227,6 +237,11 @@
           "required": "Choose a value between 5% and 99%.",
           "tooLong": "Choose a value between 5% and 99%.",
           "invalid": "Choose a value between 5% and 99%."
+        },
+        "flowNodeId": {
+          "required": "Choose a step of this flow, or the flow's start.",
+          "tooLong": "Choose a step of this flow, or the flow's start.",
+          "invalid": "Choose a step of this flow, or the flow's start."
         }
       },
       "deleteConfirm": {
@@ -243,7 +258,7 @@
     },
     "flowPicker": {
       "noAccess": "You need the permission to view flows (flb.flows.read) to choose one here.",
-      "missing": "The flow this FAQ started no longer exists. Choose another flow, or this FAQ cannot answer.",
+      "missing": "The flow this FAQ goes to no longer exists. Choose another flow, or this FAQ cannot answer.",
       "selected": "Chosen",
       "search": "Search flows",
       "searchPlaceholder": "Search flows by name",
@@ -257,7 +272,8 @@
         "off": "Inactive",
         "draft": "Draft"
       },
-      "note": "The flow starts from its trigger. Only published, active flows can run."
+      "note": "The customer continues at the step you choose below, or at the flow's start. Only published, active flows can run.",
+      "noOthers": "There is no other flow in this workspace."
     },
     "variations": {
       "title": "Question variations",
@@ -333,7 +349,7 @@
       "verdict": {
         "answer": {
           "title": "Would answer",
-          "body": "A FAQ matched well enough. The customer gets its answer (or its flow starts)."
+          "body": "An FAQ matched well enough. The customer gets its answer, or is sent to the step it points at."
         },
         "below": {
           "title": "Below threshold",
@@ -354,6 +370,10 @@
         "notSent": {
           "title": "Matched, not sent",
           "body": "A FAQ matched but the answer was not sent, for example because FAQ answering was off."
+        },
+        "vetoed": {
+          "title": "Answer withheld",
+          "body": "The match scored high enough, but the second check said no, so nothing would be sent."
         }
       },
       "tier": {
@@ -383,8 +403,8 @@
       "winner": {
         "title": "What the customer would get",
         "unavailable": "This FAQ could not be loaded.",
-        "flow": "Starts the flow {name}",
-        "flowMissing": "Starts a flow that no longer exists"
+        "flow": "Goes to a step of {name}",
+        "flowMissing": "Goes to a flow that no longer exists"
       },
       "candidates": {
         "title": "Top matches",
@@ -401,11 +421,11 @@
     },
     "playground": {
       "title": "How would my bot answer this?",
-      "subtitle": "Run a customer message through the same matching your bot uses. Nothing is sent and nothing is counted in the insights.",
+      "subtitle": "Run a customer message through the matching that {flow} uses. Nothing is sent and nothing is counted in the insights.",
       "label": "Customer message",
       "placeholder": "Where is my parcel?",
       "run": "Run",
-      "hint": "Only saved FAQs are matched. Active FAQs with live phrasings take part.",
+      "hint": "Only the saved FAQs of this flow are matched. Active FAQs with live phrasings take part.",
       "empty": "Type a message above and run it to see the decision.",
       "history": {
         "title": "This session",
@@ -478,7 +498,7 @@
       "loadingMore": "Loading",
       "why": {
         "answered": "Answered with \"{faq}\" at {score}%.",
-        "flowStarted": "Started the flow of \"{faq}\" at {score}%.",
+        "flowStarted": "Sent the customer to the step of \"{faq}\" at {score}%.",
         "belowThreshold": "The best match scored {score}%, below the {threshold}% bar, so nothing was sent.",
         "belowThresholdNoBar": "The best match scored {score}%, which was not enough, so nothing was sent.",
         "lowMargin": "Two FAQs were too close ({score}% and {second}%), so the bot did not guess.",
@@ -486,8 +506,11 @@
         "providerError": "The AI provider failed, so the bot could only match by spelling.",
         "notSent": "A FAQ matched but the answer was not sent.",
         "tier": "Decided by the {tier} tier.",
-        "error": "Error: {error}"
-      }
+        "error": "Error: {error}",
+        "vetoed": "The best match scored {score}%, above the {threshold}% bar, but the second check said it does not answer the message, so nothing was sent.",
+        "vetoedNoBar": "The best match scored {score}%, but the second check said it does not answer the message, so nothing was sent."
+      },
+      "flowRun": "(from a flow)"
     },
     "insights": {
       "title": "FAQ insights",
@@ -548,7 +571,7 @@
     },
     "settings": {
       "title": "FAQ settings",
-      "subtitle": "Switch FAQ answering on and tune how closely a message has to match.",
+      "subtitle": "Switch FAQ answering on for {flow} and tune how closely a message has to match.",
       "unsaved": "Unsaved changes",
       "discard": "Discard",
       "save": "Save settings",
@@ -563,11 +586,11 @@
       },
       "enable": {
         "title": "FAQ answering",
-        "label": "Answer customers with FAQs",
+        "label": "Answer customers with this flow's FAQs",
         "on": "On",
         "off": "Off",
-        "onBody": "When a customer writes in, the bot compares the message with your FAQs and replies with the best answer, or starts its flow. A flow or keyword trigger that already took the message wins.",
-        "offBody": "Customers get no FAQ answers. You can still write and test FAQs."
+        "onBody": "While this flow is live, a customer message that no keyword trigger or running flow took is compared with this flow's FAQs. The bot replies with the best answer, or sends the customer to the step the FAQ points at.",
+        "offBody": "This flow's FAQs do not answer customers. You can still write and test them."
       },
       "sens": {
         "title": "Sensitivity",
@@ -612,7 +635,8 @@
         "exact": "Exact: the message equals a saved phrasing, ignoring case and spacing.",
         "semantic": "Meaning: the message is compared by meaning with every live phrasing, so different words can match.",
         "trigram": "Spelling fallback: if the AI provider is unavailable, letters are compared instead, which catches typos only.",
-        "threshold": "The best score is compared with the sensitivity. Above it, the FAQ answers; below it, the message is listed under Unanswered."
+        "threshold": "The best score is compared with the sensitivity. Above it, the FAQ answers; below it, the message is listed under Unanswered.",
+        "verify": "Second check (optional): a match that only just reached the sensitivity can be double-checked by a small chat model, which can only withhold an answer."
       },
       "who": "Changing these settings needs the permission faq.settings.manage.",
       "leave": {
@@ -620,6 +644,61 @@
         "body": "Your changes to these settings are not saved.",
         "leave": "Leave",
         "stay": "Stay"
+      },
+      "verify": {
+        "title": "Second check for close calls",
+        "hint": "A small chat model double-checks matches that only just reached the bar.",
+        "unavailable": "The platform has switched the second check off, so it does not run even if you turn it on here. Ask your platform admin.",
+        "label": "Check close calls with a second opinion",
+        "on": "On",
+        "off": "Off",
+        "onBody": "When a match only just clears the bar, a small chat model reads the customer's message and the FAQ and says whether the answer fits. It can only say no: it never makes an answer happen.",
+        "offBody": "Every match that reaches the bar is answered without a second look.",
+        "bandLabel": "How close counts as a close call",
+        "bandValue": "+{value}%",
+        "explainOn": "Matches scoring from {from}% up to {to}% are checked by {model}. A \"no\" means no answer is sent and the message appears under Unanswered.",
+        "explainOff": "Every match scoring {threshold}% or more is answered. Turn the second check on to have the closest calls double-checked.",
+        "cost": "Each check sends the customer's message and the FAQ's question to the model: a few hundred tokens, and it adds about a second to a borderline reply. Matches outside the band are never checked. If the check fails, is not available or the hourly limit is reached, the match stands as if there were no check."
+      }
+    },
+    "flowNode": {
+      "label": "Go to",
+      "start": "The flow's start",
+      "hint": "Choose a step to skip the beginning of the flow. Customers continue at the step you pick.",
+      "loading": "Loading the steps of this flow",
+      "empty": "This flow has no other steps, so it starts at its beginning.",
+      "retry": "Try again",
+      "deletedOption": "Deleted step (choose another)",
+      "missing": {
+        "title": "The step this FAQ goes to is gone",
+        "body": "That step was deleted from the flow. Until you choose another step, customers who match this FAQ get no answer. Pick a step below, or start at the flow's start.",
+        "fix": "Start at the flow's start"
+      },
+      "hintOwn": "Choose a step of this flow. Steps you added since you last saved the flow appear after you save it."
+    },
+    "verify": {
+      "title": "Second check",
+      "chip": {
+        "confirmed": "Second check: yes",
+        "vetoed": "Second check: no",
+        "failed": "Second check failed",
+        "skipped": "Second check skipped"
+      },
+      "model": "Checked by",
+      "reason": "Reason",
+      "body": {
+        "confirmed": "The match was a close call, so a small chat model read the message and the FAQ and agreed the answer fits.",
+        "vetoed": "The match was a close call and the second check said this FAQ does not answer the message. The answer was withheld, nothing was sent, and the message appears under Unanswered.",
+        "failed": "The match was a close call, but the check could not finish, so the match stood and the answer was sent as if there were no second check.",
+        "skipped": "The second check did not run for this match, so the match stood as it was."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "Leave the FAQs without saving?",
+        "body": "You have unsaved changes in the FAQs. If you leave this tab they are lost.",
+        "leave": "Leave",
+        "stay": "Keep editing"
       }
     }
   }

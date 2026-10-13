@@ -1,20 +1,22 @@
 import {
   call,
   expect,
-  go,
+  faqBase,
   login,
   newWorkspace,
   open,
+  openFaqs,
   putSettings,
+  reloadFaqs,
   seedFaq,
+  type State,
   test,
   waitIndexed,
-  type State,
   type Workspace,
 } from './support';
 import type { Page } from '@playwright/test';
 
-/** `/faq/test`: what the bot would do with a message, in words and numbers. Fixture AI: shared words match, no shared words do not. */
+/** A flow's Test screen: what the bot would do with a message, in words and numbers. Fixture AI: shared words match, no shared words do not. */
 let ws: Workspace;
 let state: State;
 let empty: Workspace;
@@ -58,7 +60,7 @@ test('an exact phrase answers at 100% with the answer the customer would get', a
   watch,
 }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, ws, 'test');
   await expect(
     page.getByText('Type a message above and run it to see the decision.'),
   ).toBeVisible();
@@ -82,7 +84,7 @@ test('a different wording is matched by meaning, a stranger is below the bar', a
   watch,
 }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, ws, 'test');
   await ask(page, 'password reset help');
   await expect(verdict(page, 'Would answer')).toBeVisible();
   await expect(page.getByText('Meaning match', { exact: true })).toBeVisible();
@@ -109,13 +111,13 @@ test('two FAQs that score alike are ambiguous once a minimum lead is set', async
   });
   await waitIndexed(own);
   const { page } = await open(browser, ownState, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, own, 'test');
   // No lead needed: the first one just wins.
   await ask(page, 'track');
   await expect(verdict(page, 'Would answer')).toBeVisible();
 
   await putSettings(own, { minMargin: 0.2 });
-  await page.reload();
+  await reloadFaqs(page);
   await ask(page, 'track');
   await expect(verdict(page, 'Ambiguous')).toBeVisible();
   await expect(page.getByText('Lead over the runner-up')).toBeVisible();
@@ -128,7 +130,7 @@ test('when the AI provider fails the decision falls back to spelling and says so
   watch,
 }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, ws, 'test');
   // Close to a saved phrasing: spelling similarity still finds it.
   await ask(page, 'where is my order [[fail]]');
   await expect(page.getByText('Spelling fallback', { exact: true })).toBeVisible();
@@ -145,7 +147,7 @@ test('when the AI provider fails the decision falls back to spelling and says so
 
 test('a message that is too short is explained', async ({ browser, watch }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, ws, 'test');
   await ask(page, 'a');
   await expect(verdict(page, 'Below threshold')).toBeVisible();
   await expect(page.getByText(/Too short to match/)).toBeVisible();
@@ -155,7 +157,7 @@ test('a message that is too short is explained', async ({ browser, watch }) => {
 
 test('a workspace with no FAQs says there is nothing to match', async ({ browser, watch }) => {
   const { page } = await open(browser, emptyState, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, empty, 'test');
   await ask(page, 'where is my order');
   await expect(verdict(page, 'No FAQs to match')).toBeVisible();
   await expect(page.getByText('There are no active FAQs with live phrasings yet.')).toBeVisible();
@@ -168,7 +170,7 @@ test('"Add this phrase as a variation" saves the tested message on that FAQ', as
   const faq = await seedFaq(ws, { question: 'Do you sell gift cards?', answerText: 'Yes we do.' });
   await waitIndexed(ws);
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, ws, 'test');
   await ask(page, 'gift certificates available');
   const add = page.getByRole('button', {
     name: 'Add this phrase as a variation to Do you sell gift cards?',
@@ -177,7 +179,7 @@ test('"Add this phrase as a variation" saves the tested message on that FAQ', as
   await add.click();
   await expect(page.getByText('Added as a phrasing of Do you sell gift cards?.')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Added' })).toBeDisabled();
-  const saved = (await call(ws, 'GET', `/v2/faq/entries/${faq.id}`)).body;
+  const saved = (await call(ws, 'GET', `${faqBase(ws)}/entries/${faq.id}`)).body;
   expect(saved.variations.map((v: any) => v.text)).toContain('gift certificates available');
   expect(saved.variations.find((v: any) => v.text === 'gift certificates available').source).toBe(
     'manual',
@@ -197,7 +199,7 @@ test('the session keeps the last 10 tests, newest first, and a test is never cou
   await seedFaq(own, { question: 'History seed', answerText: 'H.' });
   await waitIndexed(own);
   const { page } = await open(browser, ownState, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, own, 'test');
   const history = page.getByRole('complementary', { name: 'This session' });
   await expect(history).toContainText('Your last 10 tests appear here.');
   for (let i = 1; i <= 11; i++) {
@@ -218,15 +220,15 @@ test('the session keeps the last 10 tests, newest first, and a test is never cou
   await history.getByRole('button', { name: /number 9/ }).click();
   await expect(page.getByLabel('Customer message')).toHaveValue('unrelated message number 9');
 
-  const summary = (await call(own, 'GET', '/v2/faq/insights/summary?days=30')).body;
+  const summary = (await call(own, 'GET', `${faqBase(own)}/insights/summary?days=30`)).body;
   expect(summary.totals.messages).toBe(0);
-  const unanswered = (await call(own, 'GET', '/v2/faq/insights/log?view=unanswered')).body;
+  const unanswered = (await call(own, 'GET', `${faqBase(own)}/insights/log?view=unanswered`)).body;
   expect(unanswered.data).toHaveLength(0);
 });
 
 test('the Run button is off for an empty message and Enter submits', async ({ browser, watch }) => {
   const { page } = await open(browser, state, watch);
-  await go(page, '/faq/test');
+  await openFaqs(page, ws, 'test');
   await expect(page.getByRole('button', { name: 'Run' })).toBeDisabled();
   await page.getByLabel('Customer message').fill('   ');
   await expect(page.getByRole('button', { name: 'Run' })).toBeDisabled();

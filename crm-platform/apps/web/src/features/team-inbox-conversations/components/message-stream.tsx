@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Button, Spinner, cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
@@ -8,6 +8,7 @@ import { agentReactions, buildItems, lastSeq, type ThreadState } from '../lib/th
 import { dayLabel } from '../lib/time';
 import { MessageBubble, NoteBubble, PendingBubble } from './message-bubble';
 import { ArrowDownIcon } from './icons';
+import { MessageLogDialog } from './message-log-dialog';
 import { useErrorText } from './parts';
 
 /** Keep following new messages only when the reader is already this close to the bottom. */
@@ -38,6 +39,8 @@ export interface MessageStreamProps {
   /** Puts an emoji on a message (`''` takes it back); absent when the person or the channel cannot react. */
   onReact?: (message: MessageResponse, emoji: string) => Promise<void>;
   canManageChannel: boolean;
+  /** The person may export the delivery log (`inbox.logs.export`): its dialog links to the export page. */
+  canExportLogs?: boolean;
   onRetryPending: (clientMessageId: string) => void;
   onDismissPending: (clientMessageId: string) => void;
   onDeleteNote: (id: string) => void;
@@ -53,11 +56,14 @@ export interface MessageStreamProps {
 export function MessageStream(props: MessageStreamProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const ref = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const stick = useRef(true);
   const [atBottom, setAtBottom] = useState(true);
+  // The message whose delivery log is open (the dialog fetches it when this is set).
+  const [logMessageId, setLogMessageId] = useState<string | null>(null);
   const [unseen, setUnseen] = useState(0);
   const [announcement, setAnnouncement] = useState('');
   const prev = useRef({ conversationId: '', lastSeq: 0, pending: 0, loaded: false });
@@ -65,11 +71,21 @@ export function MessageStream(props: MessageStreamProps) {
 
   const { state } = props;
   const items = useMemo(
-    () => buildItems(state.messages, props.notes, state.pending, state.hasMoreBefore),
-    [state.messages, props.notes, state.pending, state.hasMoreBefore],
+    () => buildItems(state.messages, props.notes, state.pending, state.hasMoreBefore, timeZone),
+    [state.messages, props.notes, state.pending, state.hasMoreBefore, timeZone],
   );
   const byId = useMemo(() => new Map(state.messages.map((m) => [m.id, m])), [state.messages]);
   const reactions = useMemo(() => agentReactions(state.messages), [state.messages]);
+  // The stage changes someone already put back: their line loses its Undo.
+  const undoneStages = useMemo(() => {
+    const ids = new Set<string>();
+    for (const m of state.messages) {
+      if (m.systemEvent?.event === 'stage_change' && m.systemEvent.action === 'undone') {
+        ids.add(m.systemEvent.suggestionId);
+      }
+    }
+    return ids;
+  }, [state.messages]);
   const newestSeq = lastSeq(state.messages);
 
   // Follow rules, applied after the list changed and before the browser paints.
@@ -249,11 +265,11 @@ export function MessageStream(props: MessageStreamProps) {
                   <li
                     key={item.key}
                     role="separator"
-                    aria-label={dayLabel(item.at, props.nowMs, locale)}
+                    aria-label={dayLabel(item.at, props.nowMs, locale, timeZone)}
                     className="flex justify-center py-1"
                   >
                     <span className="rounded-full bg-background px-3 py-0.5 text-[11px] font-medium capitalize text-muted-foreground shadow-sm">
-                      {dayLabel(item.at, props.nowMs, locale)}
+                      {dayLabel(item.at, props.nowMs, locale, timeZone)}
                     </span>
                   </li>
                 );
@@ -268,6 +284,11 @@ export function MessageStream(props: MessageStreamProps) {
                     agentReaction={reactions.get(item.message.id) ?? null}
                     onRetry={props.onRetryMessage}
                     canManageChannel={props.canManageChannel}
+                    onOpenLog={setLogMessageId}
+                    stageUndone={
+                      item.message.systemEvent?.event === 'stage_change' &&
+                      undoneStages.has(item.message.systemEvent.suggestionId)
+                    }
                   />
                 );
               case 'note':
@@ -293,6 +314,12 @@ export function MessageStream(props: MessageStreamProps) {
           })}
         </ul>
       </div>
+
+      <MessageLogDialog
+        messageId={logMessageId}
+        onClose={() => setLogMessageId(null)}
+        canExport={props.canExportLogs === true}
+      />
 
       <div role="status" aria-live="polite" className="sr-only" data-testid="inbox-live">
         {announcement}

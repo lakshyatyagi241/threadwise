@@ -1,0 +1,390 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Chiudi"
+    },
+    "hub": {
+      "kicker": "Canali",
+      "title": "Caselle",
+      "titleAccent": "di posta",
+      "intro": "Collega il tuo Gmail, Microsoft 365 o qualsiasi casella IMAP. Le email dei clienti arrivano nella posta in arrivo del team, una conversazione per thread, e le tue risposte partono dallo stesso indirizzo.",
+      "inbox": "Apri l’inbox",
+      "channels": "Canali",
+      "loadError": "Impossibile caricare le tue caselle di posta. Riprova tra un attimo.",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
+      "connectedCount": "{count, plural, one {# casella collegata} other {# caselle collegate}}",
+      "notConnected": "Non collegata",
+      "usageLabel": "Caselle utilizzate",
+      "usage": "{used} di {limit} caselle",
+      "usageUnlimited": "{used, plural, one {# casella} other {# caselle}}, nessun limite",
+      "howTitle": "Come funziona",
+      "how": {
+        "connect": {
+          "title": "Collega una casella",
+          "body": "Accedi con Google o Microsoft, oppure inserisci le impostazioni del tuo server di posta, e consenti a Threadwise di leggere e inviare email per quell'indirizzo."
+        },
+        "inbox": {
+          "title": "Le email arrivano nell’inbox",
+          "body": "Le nuove email vengono recuperate ogni minuto. Ogni thread di email diventa una conversazione e ogni casella è un’inbox a sé."
+        },
+        "reply": {
+          "title": "Rispondi dall’inbox",
+          "body": "La tua risposta parte dalla casella nello stesso thread, con Cc e Ccn se li aggiungi."
+        },
+        "limit": {
+          "title": "Le caselle dipendono dal tuo piano",
+          "body": "Il tuo piano stabilisce quante caselle puoi collegare. Le email non vengono conteggiate nella quota di messaggi."
+        }
+      },
+      "connectedTitle": "Caselle collegate",
+      "total": "{count, plural, one {# casella} other {# caselle}}",
+      "empty": "Nessuna casella collegata. Collegane una qui sotto per iniziare a ricevere email nella posta in arrivo.",
+      "addTitle": "Aggiungi una casella",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Accedi con l’account Google proprietario della casella, ad esempio support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Altra posta (IMAP / SMTP)",
+          "hint": "Qualsiasi altro provider di posta con nome utente e password."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Accedi con un account Microsoft aziendale o dell’istituto scolastico."
+        }
+      },
+      "notReady": "{provider} non è ancora configurato su questa piattaforma. Chiedi all'amministratore della piattaforma di aggiungere le credenziali.",
+      "limitReached": "Hai usato tutte le {limit, plural, one {# casella} other {# caselle}} consentite dal tuo piano. Rimuovi una casella oppure chiedi all’amministratore di passare a un piano superiore.",
+      "noPermission": "Puoi vedere le caselle, ma solo chi ha il permesso di gestirle può collegarne una.",
+      "connectFailed": "Impossibile avviare l'accesso. Riprova.",
+      "connect": {
+        "google": "Collega Gmail",
+        "microsoft": "Collega Microsoft 365",
+        "imap": "Collega IMAP / SMTP"
+      },
+      "imapConnected": "Casella collegata. Le email degli ultimi 7 giorni vengono scaricate nella posta in arrivo.",
+      "imapReconnected": "Casella ricollegata.",
+      "scope": {
+        "title": "Per chi è questa casella?",
+        "shared": "Condivisa",
+        "sharedHint": "Una casella aziendale come support@. Tutto il team può gestire le sue conversazioni.",
+        "personal": "Personale",
+        "personalHint": "La tua casella. Solo tu puoi leggere le sue conversazioni.",
+        "onlyPersonal": "Puoi collegare la tua casella personale. Solo tu puoi leggere le sue conversazioni."
+      }
+    },
+    "card": {
+      "status": {
+        "connected": "Collegata",
+        "needs_reauth": "Da ricollegare",
+        "error": "Errore",
+        "disconnected": "Scollegata"
+      },
+      "sendsAs": "Le risposte partono come",
+      "displayName": "Nome visualizzato",
+      "edit": "Modifica",
+      "save": "Salva",
+      "cancel": "Annulla",
+      "renamed": "Nome visualizzato salvato.",
+      "needsReauthHint": "Il provider non ci permette più di leggere questa casella. Ricollegala per ricevere e inviare di nuovo email.",
+      "lastError": "Ultimo problema: {error}",
+      "lastSynced": "Ultima sincronizzazione",
+      "neverSynced": "Non ancora sincronizzata",
+      "conversations": "Conversazioni",
+      "openInbox": "Apri nell’inbox",
+      "sync": "Sincronizza ora",
+      "syncStarted": "Sincronizzazione avviata. Le nuove email compaiono nell’inbox tra un attimo.",
+      "reconnect": "Ricollega",
+      "remove": "Rimuovi",
+      "removeTitle": "Rimuovi casella",
+      "removeConfirm": "Rimuovere {address}? Le sue conversazioni restano nell’inbox come cronologia di sola lettura e non vengono più ricevute né inviate email da questo indirizzo. Puoi collegare di nuovo lo stesso indirizzo in seguito.",
+      "removed": "Casella rimossa.",
+      "failed": "Impossibile aggiornare la casella. Riprova.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Condivisa",
+        "personal": "Personale",
+        "personalOf": "Personale · {name}"
+      },
+      "push": "Aggiornamenti in tempo reale",
+      "pushHint": "Le nuove email arrivano appena il provider le segnala.",
+      "signature": "Firma",
+      "signatureHint": "Le risposte da questa casella hanno la sua firma.",
+      "summaryNote": "Questa è la casella personale di un'altra persona. Solo il proprietario può leggerla e gestirla.",
+      "sendLimit": "Limite di invii all'ora",
+      "limitDefault": "Predefinito della piattaforma",
+      "limitPerHour": "{count, plural, one {# email all'ora} other {# email all'ora}}",
+      "limitSaved": "Limite di invii salvato.",
+      "needsReauthImap": "Il server di posta ha rifiutato la password salvata. Ricollega e inserisci di nuovo la password."
+    },
+    "outcome": {
+      "connected": "Casella collegata. Le email degli ultimi 7 giorni vengono recuperate nell’inbox.",
+      "denied": "L'accesso è stato annullato, quindi non è stato collegato nulla.",
+      "missing_scope": "Non è stato concesso l'accesso per leggere e inviare email. Collega di nuovo e consenti tutti i permessi nella schermata di accesso.",
+      "limit": "Hai raggiunto il limite di caselle del tuo piano, quindi questa casella non è stata collegata.",
+      "not_configured": "L'accesso per questo provider non è ancora configurato su questa piattaforma. Chiedi all'amministratore della piattaforma.",
+      "wrong_account": "Hai effettuato l'accesso con un account diverso da quello della casella da ricollegare. Accedi con lo stesso indirizzo.",
+      "failed": "Si è verificato un problema durante il collegamento della casella. Riprova."
+    },
+    "errors": {
+      "notConfigured": "L'accesso per questo provider non è ancora configurato su questa piattaforma. Chiedi all'amministratore della piattaforma.",
+      "limit": "Hai raggiunto il limite di caselle del tuo piano.",
+      "unavailable": "Questa casella è scollegata o deve prima essere ricollegata.",
+      "sendRefused": "Il provider di posta ha rifiutato di inviare questa email. Controlla gli indirizzi e la dimensione, poi riprova.",
+      "wrongAccount": "È un account diverso da quello di questa casella. Accedi con lo stesso indirizzo.",
+      "locked": "L'integrazione email non è inclusa nel tuo piano.",
+      "changed": "Questa casella è stata modificata altrove. L’elenco è stato ricaricato, riprova.",
+      "personalDisabled": "Le caselle personali sono disattivate per questo spazio di lavoro.",
+      "personalNotAllowed": "Non hai il permesso di collegare una casella personale.",
+      "providerUnsupported": "Questo provider di posta non è disponibile.",
+      "rateLimited": "Questa casella ha raggiunto il limite di invio. Riprova più tardi."
+    },
+    "guide": {
+      "title": "Guida alla configurazione",
+      "google": {
+        "title": "Collega Gmail o Google Workspace",
+        "p1": "Scegli Collega Gmail e accedi con l’account proprietario della casella, ad esempio un indirizzo condiviso come support@ o sales@.",
+        "p2": "Nella schermata di Google, consenti la lettura e l’invio delle email. Senza entrambi, le email non possono essere ricevute né inviate.",
+        "p3": "Torni qui e le email dei primi 7 giorni vengono recuperate nell’inbox senza avvisare nessuno.",
+        "p4": "Aggiungi altre caselle nello stesso modo, fino al numero consentito dal tuo piano. Ognuna compare come inbox a sé."
+      },
+      "consent": {
+        "title": "Cosa leggiamo e inviamo",
+        "p1": "Leggiamo le email della tua posta in arrivo per mostrarle nell’inbox del team. Spam, cestino e bozze vengono ignorati.",
+        "p2": "Le email che abbiamo inviato noi stessi dal tuo account altrove non vengono copiate nell’inbox.",
+        "p3": "Le risposte automatiche, i messaggi respinti e le email delle liste di distribuzione vengono salvati e contrassegnati come Automatico.",
+        "p4": "Rimuovere una casella interrompe la lettura e l’invio. Le conversazioni passate restano come cronologia di sola lettura."
+      },
+      "trouble": {
+        "title": "Se qualcosa non va",
+        "p1": "Da ricollegare significa che il provider ha revocato o fatto scadere l'accesso, oppure che il server di posta ha rifiutato la password. Seleziona Ricollega.",
+        "p2": "Errore mostra l’ultimo problema. Seleziona Sincronizza ora per riprovare; se continua a fallire, ricollega la casella.",
+        "p3": "Collega è disattivato quando la piattaforma non ha configurato l'accesso per quel provider o il limite di caselle del tuo piano è raggiunto.",
+        "p4": "Le immagini di un’email restano nascoste finché non scegli Carica immagini nella conversazione."
+      },
+      "other": {
+        "title": "Collega Microsoft 365 o un altro provider di posta",
+        "p1": "Per Microsoft 365 o Outlook, scegli Collega Microsoft 365 e accedi con l'account di lavoro o scuola che possiede la casella.",
+        "p2": "Per qualsiasi altro provider, scegli Collega IMAP / SMTP e inserisci server, porta, sicurezza, nome utente e password del tuo provider.",
+        "p3": "Accediamo prima sia al server in arrivo sia a quello in uscita. Se uno rifiuta, il messaggio indica quale.",
+        "p4": "Alcuni provider richiedono una password per app al posto della password normale. Creala nelle impostazioni di sicurezza del tuo provider."
+      },
+      "personal": {
+        "title": "Caselle personali e condivisione",
+        "p1": "Un amministratore attiva le caselle personali in Condivisione email e sceglie chi può collegarne una.",
+        "p2": "Quando colleghi una casella, scegli Personale. Solo tu puoi leggere le sue conversazioni nella posta in arrivo.",
+        "p3": "Gli amministratori vedono solo un riepilogo della tua casella, a meno che lo spazio di lavoro consenta loro di leggere le caselle personali.",
+        "p4": "Disattivare le caselle personali non apre mai una casella personale esistente ad altre persone."
+      }
+    },
+    "thread": {
+      "noSubject": "(nessun oggetto)",
+      "automated": "Automatico",
+      "from": "Da",
+      "to": "A",
+      "cc": "Cc",
+      "date": "Data",
+      "imagesBlocked": "Le immagini da Internet sono nascoste.",
+      "loadImages": "Carica immagini",
+      "frameTitle": "Email: {subject}",
+      "truncated": "Questa email era lunga, quindi viene mostrata solo la prima parte.",
+      "noBody": "Questa email non contiene testo.",
+      "attachments": "{count, plural, one {# allegato} other {# allegati}}",
+      "tooLarge": "troppo grande per essere conservato ({size})",
+      "download": "Scarica {name} ({size})",
+      "bounce": {
+        "title": "Non recapitata a {address}.",
+        "reason": "Motivo: {reason}",
+        "hard": "L'indirizzo è stato rifiutato in modo definitivo. Controlla che non ci siano errori e invia una nuova e-mail all'indirizzo corretto.",
+        "soft": "Sembra un problema temporaneo, per esempio una casella piena. Potrebbe funzionare se invii più tardi, oppure modifica l'indirizzo."
+      }
+    },
+    "composer": {
+      "toggle": "Cc, Ccn e oggetto",
+      "cc": "Cc",
+      "bcc": "Ccn",
+      "subject": "Oggetto",
+      "subjectPlaceholder": "Oggetto",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Questi indirizzi Cc non sono validi: {list}",
+        "bccInvalid": "Questi indirizzi Ccn non sono validi: {list}",
+        "ccTooMany": "Cc accetta al massimo 20 indirizzi.",
+        "bccTooMany": "Ccn accetta al massimo 20 indirizzi.",
+        "subjectTooLong": "L’oggetto può contenere al massimo 998 caratteri."
+      },
+      "editor": {
+        "toolbar": "Formattazione del testo",
+        "bold": "Grassetto",
+        "italic": "Corsivo",
+        "underline": "Sottolineato",
+        "bulletList": "Elenco puntato",
+        "numberedList": "Elenco numerato",
+        "quote": "Citazione",
+        "link": "Aggiungi link",
+        "clear": "Rimuovi formattazione",
+        "linkAddress": "Indirizzo del link",
+        "linkApply": "Aggiungi",
+        "linkInvalid": "Inserisci un indirizzo web, e-mail o telefonico.",
+        "label": "Risposta e-mail",
+        "toPlain": "Passa al testo semplice",
+        "toRich": "Passa al testo formattato",
+        "hint": "Premi Ctrl+Invio (Cmd+Invio su Mac) per inviare. Invio va a capo."
+      },
+      "attach": {
+        "dismiss": "Chiudi",
+        "list": "File allegati ({count})",
+        "uploading": "Caricamento di {name}",
+        "ready": "Allegato",
+        "failed": "Caricamento non riuscito",
+        "retry": "Riprova",
+        "remove": "Rimuovi {name}",
+        "waiting": "In attesa che i file finiscano di caricarsi.",
+        "fixFailed": "Riprova o rimuovi i file che non sono stati caricati.",
+        "refused": {
+          "empty": "{name} è vuoto e non è stato aggiunto.",
+          "tooLarge": "{name} supera {max} e non è stato aggiunto.",
+          "tooMany": "In una e-mail entrano solo {count} file. {name} non è stato aggiunto.",
+          "totalTooLarge": "Con {name} l'e-mail sarebbe troppo grande e non è stato aggiunto.",
+          "blocked": "{name} è un tipo di file che l'e-mail non può trasportare e non è stato aggiunto."
+        }
+      },
+      "error": {
+        "rateLimited": "Questa casella ha raggiunto il limite di invii orario. {seconds, plural, =0 {Riprova tra un po'.} other {Riprova tra # s.}}",
+        "attachmentTooLarge": "Un file è troppo grande da allegare. Ogni file può pesare al massimo 10 MB e tutti insieme 20 MB.",
+        "tooManyAttachments": "Troppi file. Una e-mail ne accetta al massimo 10.",
+        "attachmentGone": "Un allegato è scaduto o è stato rimosso. Allegalo di nuovo.",
+        "signatureGone": "La firma scelta non esiste più. Sceglierne un'altra.",
+        "sendRefused": "Il provider di posta ha rifiutato questa e-mail. Controlla gli indirizzi e le dimensioni, poi riprova.",
+        "unavailable": "Questa casella è scollegata o va prima ricollegata.",
+        "attachmentBlocked": "Questo tipo di file non può essere inviato per e-mail.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "generic": "Impossibile inviare l'e-mail. Riprova.",
+        "bodyTooLong": "Questa e-mail è troppo lunga per essere inviata. Accorciala e riprova."
+      },
+      "signature": {
+        "label": "Firma",
+        "auto": "Predefinita ({name})",
+        "autoNone": "Predefinita (nessuna)",
+        "none": "Nessuna firma",
+        "mine": "{name} (mia)",
+        "shared": "{name} (casella)",
+        "preview": "Anteprima della firma",
+        "noneShown": "Non verrà aggiunta nessuna firma."
+      }
+    },
+    "inbox": {
+      "group": "Email"
+    },
+    "imap": {
+      "eyebrow": "Altra posta",
+      "title": "Collega casella IMAP / SMTP",
+      "reconnectTitle": "Ricollega casella IMAP / SMTP",
+      "close": "Chiudi",
+      "intro": "Inserisci le impostazioni che il tuo provider di posta indica per questo indirizzo. Accediamo a entrambi i server prima di salvare qualsiasi cosa.",
+      "reconnectIntro": "Inserisci di nuovo la password. Accediamo a entrambi i server prima di salvare qualsiasi cosa.",
+      "address": "Indirizzo della casella",
+      "displayName": "Nome visualizzato",
+      "preset": "Provider di posta",
+      "presetHint": "Sceglierne uno compila le impostazioni del server. Puoi comunque modificarle.",
+      "presetCustom": "Altro (inserisci le impostazioni)",
+      "incoming": "Posta in arrivo (IMAP)",
+      "outgoing": "Posta in uscita (SMTP)",
+      "host": "Server",
+      "port": "Porta",
+      "securityLabel": "Sicurezza",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Nessuna"
+      },
+      "username": "Nome utente",
+      "password": "Password",
+      "passwordHint": "Salvata cifrata e mai più mostrata.",
+      "passwordAgain": "Digita di nuovo la password. Non viene mai mostrata.",
+      "showPassword": "Mostra password",
+      "hidePassword": "Nascondi password",
+      "sameCredentials": "Usa lo stesso nome utente e la stessa password per l'invio",
+      "noEncryption": "Questa connessione non è cifrata. Chiunque sulla rete potrebbe leggere la password e le email.",
+      "verifyNote": "Il certificato del server viene sempre verificato.",
+      "cancel": "Annulla",
+      "submit": "Verifica e collega",
+      "reconnectSubmit": "Verifica e ricollega",
+      "verifying": "Verifica in corso",
+      "errors": {
+        "required": "Questo campo è obbligatorio.",
+        "invalid": "Questo valore non è valido."
+      },
+      "failure": {
+        "imapAuth": "Il server in arrivo (IMAP) ha rifiutato nome utente o password. Controllali e riprova.",
+        "smtpAuth": "Il server in uscita (SMTP) ha rifiutato nome utente o password. Controllali e riprova.",
+        "unreachable": "Impossibile raggiungere il server di posta o il suo certificato non è valido. Controlla server, porta e sicurezza.",
+        "generic": "Impossibile collegare la casella. Riprova."
+      }
+    },
+    "sharing": {
+      "title": "Condivisione email",
+      "intro": "Decidi se le persone possono collegare la propria casella e chi può vederla.",
+      "enabled": {
+        "title": "Caselle personali",
+        "body": "Consenti alle persone di collegare la propria casella. Le sue conversazioni sono visibili solo a loro."
+      },
+      "who": {
+        "title": "Chi può collegarne una",
+        "body": "Solo le persone con il permesso di gestire le caselle personali.",
+        "admins": "Solo amministratori",
+        "agents": "Amministratori e agenti"
+      },
+      "admins": {
+        "title": "Gli amministratori possono leggere le caselle personali",
+        "body": "Gli amministratori possono aprire le conversazioni delle caselle personali altrui. Se disattivato, vedono solo un riepilogo."
+      },
+      "offNote": "Disattivare le caselle personali nasconde solo l'opzione di collegamento. Le caselle personali esistenti restano private per i loro proprietari.",
+      "save": "Salva",
+      "reset": "Annulla modifiche",
+      "saved": "Condivisione email salvata.",
+      "failed": "Impossibile salvare. Riprova."
+    },
+    "signatures": {
+      "title": "Firme",
+      "intro": "Una firma viene aggiunta in fondo alle tue risposte. Ogni casella può avere una firma condivisa e tu puoi averne una tua, usata per prima.",
+      "new": "Nuova firma",
+      "edit": "Modifica firma",
+      "scope": "A chi appartiene",
+      "scopes": {
+        "user": "A me",
+        "mailbox": "A una casella",
+        "userBadge": "Mia",
+        "mailboxBadge": "Casella"
+      },
+      "mailbox": "Casella",
+      "pickMailbox": "Scegli una casella",
+      "mailboxRequired": "Scegli una casella.",
+      "name": "Nome",
+      "nameRequired": "Dai un nome alla firma.",
+      "body": "Firma",
+      "bodyPlaceholder": "Il tuo nome, ruolo, telefono, link...",
+      "variables": "Puoi usare {name}, {title} e {phone}. Vengono sostituiti con i dati di chi invia.",
+      "tooLong": "La firma è troppo lunga.",
+      "defaultUser": "Usa come mia firma predefinita",
+      "defaultMailbox": "Usa come predefinita di questa casella",
+      "save": "Salva",
+      "cancel": "Annulla",
+      "loading": "Caricamento delle firme...",
+      "loadError": "Impossibile caricare le firme. Riprova tra un attimo.",
+      "empty": "Ancora nessuna firma.",
+      "default": "Predefinita",
+      "editShort": "Modifica",
+      "delete": "Elimina",
+      "confirmDelete": "Elimina definitivamente",
+      "noPermission": "Non hai il permesso di gestire le firme.",
+      "changed": "Questa firma è stata modificata altrove. L'elenco è stato ricaricato, riprova.",
+      "failed": "Impossibile salvare la firma. Riprova."
+    }
+  }
+}

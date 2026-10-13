@@ -83,6 +83,10 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'form_submissions_monthly', group: 'content' },
   // AI form builder generations per calendar month, a repair retry included (counted from the AI builder's phase 2; registered now so plans carry it). 0 = unlimited.
   { key: 'ai_form_generations_monthly', group: 'ai' },
+  // SMS messages sent per calendar month, counted per message (a three-segment text counts once), failed sends not counted (TW-SMS-026). 0 = unlimited.
+  { key: 'sms_monthly', group: 'messaging' },
+  // Connected Gmail mailboxes the workspace holds (the Email add-on; not disconnected ones). Default for a plan that has it: 3 (DEFAULT_EMAIL_MAILBOXES). 0 = unlimited.
+  { key: 'email_mailboxes', group: 'messaging' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -145,6 +149,13 @@ export const PLAN_FEATURE_DEFS = [
   // WhatsApp Groups on a Cloud API number (BL-094, docs/specs/waba-groups-management.md 13). Reference had NO plan gate on its Groups page; the
   // owner decided (2026-10-08) it is a plan feature and not in every plan, so it defaults to FALSE and a plan must be given it.
   { key: 'waba_groups', group: 'messaging', default: false },
+  // The SMS channel (Twilio and MSG91, send-only; TW-SMS-025). Default false: Reference's `access_sms` column default.
+  { key: 'sms', group: 'messaging', default: false },
+  // The in-app assistant that guides or does a task on the person's own session (docs/specs/help-agent-assistant.md). Default false: it
+  // spends AI tokens, so the owner hands it to chosen plans; the workspace switch and the `help.agent.use` permission are separate gates.
+  { key: 'help_agent', group: 'aiCalling', default: false },
+  // The Email (Gmail) channel add-on: connect Gmail mailboxes into the team inbox. Default FALSE: the Marketplace app `email` owns this key (`grants_plan_features`).
+  { key: 'email_channel', group: 'messaging', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -180,6 +191,9 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   extra_channels: 'Telegram, Facebook and Instagram channels',
   form_builder: 'Forms',
   waba_groups: 'WhatsApp groups',
+  sms: 'SMS channel',
+  help_agent: 'Help assistant',
+  email_channel: 'Email (Gmail) channel',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -218,6 +232,9 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'extra_channels',
   'form_builder',
   'waba_groups',
+  'sms',
+  'help_agent',
+  'email_channel',
 ];
 export const PLAN_CHIP_MAX = 3;
 

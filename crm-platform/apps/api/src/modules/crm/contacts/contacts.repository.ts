@@ -55,6 +55,10 @@ export interface ContactRow {
   wonAt: Date | null;
   lostAt: Date | null;
   leadScore: number | null;
+  leadScoreSource: string | null;
+  leadScoreReasons: string[] | null;
+  leadScoredAt: Date | null;
+  leadScoreModel: string | null;
   whatsappSubscriptionStatus: string | null;
   smsSubscriptionStatus: string | null;
   emailSubscriptionStatus: string | null;
@@ -169,6 +173,10 @@ export class ContactsRepository {
       wonAt: contacts.wonAt,
       lostAt: contacts.lostAt,
       leadScore: contacts.leadScore,
+      leadScoreSource: contacts.leadScoreSource,
+      leadScoreReasons: contacts.leadScoreReasons,
+      leadScoredAt: contacts.leadScoredAt,
+      leadScoreModel: contacts.leadScoreModel,
       whatsappSubscriptionStatus: contacts.whatsappSubscriptionStatus,
       smsSubscriptionStatus: contacts.smsSubscriptionStatus,
       emailSubscriptionStatus: contacts.emailSubscriptionStatus,
@@ -456,6 +464,8 @@ export class ContactsRepository {
         wonAt: values.wonAt ?? null,
         lostAt: values.lostAt ?? null,
         leadScore: values.leadScore ?? null,
+        // A score given with the contact was typed by a person (or imported): the AI scorer never overwrites it.
+        leadScoreSource: values.leadScore == null ? null : 'manual',
         whatsappSubscriptionStatus: values.whatsappSubscriptionStatus ?? null,
         smsSubscriptionStatus: values.smsSubscriptionStatus ?? null,
         emailSubscriptionStatus: values.emailSubscriptionStatus ?? null,
@@ -520,6 +530,15 @@ export class ContactsRepository {
       .select({ id: users.id })
       .from(users)
       .where(and(eq(users.orgId, orgId), eq(users.uuid, uuid)));
+    return rows[0]?.id;
+  }
+
+  /** The internal id of an ACTIVE member of this org (a bulk reassignment must not hand records to a disabled login). */
+  async resolveActiveUserId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
+    const rows = await tx
+      .select({ id: users.id })
+      .from(users)
+      .where(and(eq(users.orgId, orgId), eq(users.uuid, uuid), eq(users.status, 'active')));
     return rows[0]?.id;
   }
 
@@ -864,13 +883,28 @@ export class ContactsRepository {
   async listAssignable(
     tx: Tx,
     orgId: number,
-  ): Promise<Array<{ id: string; fullName: string; email: string }>> {
+    scope: RecordScope,
+    actorUserId: number | null,
+  ): Promise<Array<{ id: string; fullName: string; email: string; canAssign: boolean }>> {
+    // Mirrors assertOwnerWithinScope: all = anyone; team = me or someone who shares a team with me; own = me.
+    const canAssign =
+      scope === 'all'
+        ? sql<boolean>`true`
+        : !actorUserId
+          ? sql<boolean>`false`
+          : scope === 'own'
+            ? sql<boolean>`${users.id} = ${actorUserId}`
+            : sql<boolean>`(${users.id} = ${actorUserId} OR EXISTS (
+                SELECT 1 FROM ${teamMembers} tm1
+                JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
+                WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${users.id}
+              ))`;
     const rows = await tx
-      .select({ id: users.uuid, fullName: users.fullName, email: users.email })
+      .select({ id: users.uuid, fullName: users.fullName, email: users.email, canAssign })
       .from(users)
       .where(and(eq(users.orgId, orgId), eq(users.status, 'active')))
       .orderBy(asc(users.fullName));
-    return rows as Array<{ id: string; fullName: string; email: string }>;
+    return rows as Array<{ id: string; fullName: string; email: string; canAssign: boolean }>;
   }
 
   /** Called by contact-notes/activities/meetings on write — backs the list "Last Activity" column. */

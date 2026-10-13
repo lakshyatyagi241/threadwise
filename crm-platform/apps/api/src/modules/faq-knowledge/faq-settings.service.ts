@@ -19,11 +19,13 @@ export interface EffectiveSettings {
   threshold: number;
   minMargin: number;
   logQueries: boolean;
+  verifyMode: 'off' | 'borderline';
+  verifyBand: number;
 }
 
 export const SETTINGS_MODULE_KEY = 'faq_settings';
 
-/** The workspace's switch and matching knobs; a workspace that never saved runs on the platform defaults, switched off. */
+/** One flow's switch and matching knobs; a flow that never saved runs on the platform defaults, switched off. */
 @Injectable()
 export class FaqSettingsService {
   constructor(
@@ -38,40 +40,50 @@ export class FaqSettingsService {
   /** What the matcher and the inbound listener use: the saved row, else defaults. Works with or without a request context. */
   async effective(
     orgId: number,
+    flowId: number,
     tx?: Tx,
     opts: { fresh?: boolean } = {},
   ): Promise<EffectiveSettings & { engineEnabled: boolean }> {
     const cfg = opts.fresh ? await this.config.getFresh() : await this.config.get();
     const row = tx
-      ? await this.logs.getSettings(tx, orgId)
-      : await this.db.txAs({ orgId, userId: null }, (t) => this.logs.getSettings(t, orgId));
+      ? await this.logs.getSettings(tx, orgId, flowId)
+      : await this.db.txAs({ orgId, userId: null }, (t) => this.logs.getSettings(t, orgId, flowId));
     return {
       engineEnabled: cfg.engineEnabled,
       enabled: row?.enabled ?? false,
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
+      verifyMode: row?.verifyMode ?? 'off',
+      verifyBand: row?.verifyBand ?? 0.1,
     };
   }
 
-  async get(): Promise<FaqSettings> {
+  async get(flowUuid: string): Promise<FaqSettings> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
-    const { row, usage } = await this.db.tx(async (tx) => ({
-      row: await this.logs.getSettings(tx, orgId),
-      usage: await this.faqs.usage(tx, orgId),
-    }));
+    const { row, usage } = await this.db.tx(async (tx) => {
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
+      return {
+        row: await this.logs.getSettings(tx, orgId, flow.id),
+        usage: await this.faqs.usage(tx, orgId, flow.id),
+      };
+    });
     return {
       enabled: row?.enabled ?? false,
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
+      verifyMode: row?.verifyMode ?? 'off',
+      verifyBand: row?.verifyBand ?? 0.1,
+      verifyAvailable: cfg.verifyEnabled,
+      verifyModel: cfg.verifyModel,
       isDefault: row === null,
       engineEnabled: cfg.engineEnabled,
       embeddingModel: cfg.embeddingModel,
       recommendedThreshold: faqRecommendedThreshold(cfg.embeddingModel),
       tunedForModel: row?.tunedModel ?? null,
-      // Only a workspace that saved has a number tuned for some model; one that never saved follows the platform default.
+      // Only a flow that saved has a number tuned for some model; one that never saved follows the platform default.
       modelChanged: row !== null && row.tunedModel !== cfg.embeddingModel,
       limits: { maxFaqs: cfg.maxFaqs, maxVariationsPerFaq: cfg.maxVariationsPerFaq },
       usage,
@@ -80,11 +92,12 @@ export class FaqSettingsService {
     };
   }
 
-  async update(input: UpdateFaqSettingsInput): Promise<FaqSettings> {
+  async update(flowUuid: string, input: UpdateFaqSettingsInput): Promise<FaqSettings> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     await this.db.tx(async (tx) => {
-      const before = await this.logs.getSettings(tx, orgId);
+      const flow = await this.faqs.requireFlow(tx, orgId, flowUuid);
+      const before = await this.logs.getSettings(tx, orgId, flow.id);
       // The first save has no version; once a row exists a save without one is a stale form (it never read the row).
       if (before && input.rowVersion === undefined)
         throw AppError.rowVersionConflict('FAQ settings');
@@ -93,11 +106,15 @@ export class FaqSettingsService {
       const ok = await this.logs.saveSettings(
         tx,
         orgId,
+        flow.id,
         {
           enabled: input.enabled,
           threshold: input.threshold,
           minMargin: input.minMargin,
           logQueries: input.logQueries,
+          // A client that does not know the check yet keeps what is saved.
+          verifyMode: input.verifyMode ?? before?.verifyMode ?? 'off',
+          verifyBand: input.verifyBand ?? before?.verifyBand ?? 0.1,
           // Saving is the owner's confirmation that the numbers suit the model in force now.
           tunedModel: cfg.embeddingModel,
         },
@@ -105,23 +122,34 @@ export class FaqSettingsService {
       );
       if (!ok) throw AppError.rowVersionConflict('FAQ settings');
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      const was = before ?? { enabled: false, threshold: null, minMargin: null, logQueries: true };
+      const was = before ?? {
+        enabled: false,
+        threshold: null,
+        minMargin: null,
+        logQueries: true,
+        verifyMode: 'off',
+        verifyBand: 0.1,
+      };
       for (const k of ['enabled', 'threshold', 'minMargin', 'logQueries'] as const) {
         if (was[k] !== input[k]) delta[k] = { old: was[k], new: input[k] };
       }
+      for (const k of ['verifyMode', 'verifyBand'] as const) {
+        if (input[k] !== undefined && was[k] !== input[k])
+          delta[k] = { old: was[k], new: input[k] };
+      }
       await this.audit.record(tx, {
         module: SETTINGS_MODULE_KEY,
-        recordId: orgId,
+        recordId: flow.id,
         action: before ? 'update' : 'insert',
         delta: Object.keys(delta).length ? delta : undefined,
       });
       await this.outbox.emit(tx, {
         aggregateModule: SETTINGS_MODULE_KEY,
-        aggregateId: orgId,
+        aggregateId: flow.id,
         eventType: 'faq.settings_changed',
-        payload: { enabled: input.enabled },
+        payload: { flowId: flowUuid, enabled: input.enabled },
       });
     });
-    return this.get();
+    return this.get(flowUuid);
   }
 }

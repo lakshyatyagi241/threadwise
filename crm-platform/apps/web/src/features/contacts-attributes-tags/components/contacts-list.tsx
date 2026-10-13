@@ -3,11 +3,14 @@
 import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Fragment, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { MenuItem, MenuSeparator, cn } from '@crm/ui';
+import { ScoreBadge, SparkleIcon } from '@/features/lead-scoring';
 import { isAttrId, sortKeyOf, type ColumnDef, type ColumnId } from '../lib/columns';
 import { formatDateTime } from '../lib/format';
 import type { Choice } from '../lib/option-sets';
 import { menuActions, quickActions } from '../lib/row-actions';
+import type { SendChannel } from '../lib/single-send';
 import type { CheckState } from '../lib/selection';
 import type { RowView } from '../lib/row-view';
 import {
@@ -37,6 +40,7 @@ import {
   UserIcon,
   UsersIcon,
   UsersPlusIcon,
+  SmsIcon,
   WhatsAppIcon,
 } from './icons';
 import { RowMenu } from './row-menu';
@@ -56,6 +60,8 @@ export interface ListHandlers {
   /** What moving a contact holding `status` to `stage` does to its status ("Status becomes X"); null = nothing. */
   stageStatusHint?: (status: string, stage: string) => string | null;
   statusLabel: (value: string) => string;
+  /** The owner's display name for the Owner column (text while loading, and for a person who has left). */
+  ownerLabel?: (ownerId: string) => string;
   onToggle: (id: string) => void;
   onView: (id: string) => void;
   onEdit: (id: string) => void;
@@ -64,6 +70,8 @@ export interface ListHandlers {
   onAddToGroup: (id: string) => void;
   /** Open the tag picker for this one contact. */
   onTag: (id: string) => void;
+  /** Opens the single-send drawer for one contact and channel. Without it the icons stay plain tel: / wa.me / mailto: links. */
+  onSend?: (row: RowView, channel: SendChannel) => void;
   /** Tag chips become filter links when the API can filter by tag. */
   onFilterTag?: (tagId: string) => void;
 }
@@ -80,6 +88,8 @@ const WIDTH: Record<string, number> = {
   tags: 240,
   groups: 220,
   stage: 180,
+  owner: 190,
+  leadScore: 130,
   language: 130,
   memo: 220,
   createdOn: 190,
@@ -109,6 +119,10 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <FlagIcon className={cls} />;
     case 'status':
       return <FlagIcon className={cls} />;
+    case 'owner':
+      return <UserIcon className={cls} />;
+    case 'leadScore':
+      return <SparkleIcon className={cls} />;
     case 'language':
       return <GlobeIcon className={cls} />;
     case 'memo':
@@ -193,31 +207,146 @@ function QuickLink({
 }
 
 /**
+ * A tooltip that shows on hover and keyboard focus. It is `fixed` and placed from the trigger's rectangle, so the list's scroll area
+ * cannot clip it, and it is portalled to <body> so no row's stacking context (the sticky name cells) can paint over it. Wraps the trigger in a span because a disabled
+ * button gets no mouse events.
+ */
+function HoverTip({ text, children }: { text: string; children: ReactNode }) {
+  const [at, setAt] = useState<{ x: number; y: number } | null>(null);
+  const show = (el: HTMLElement) => {
+    const r = el.getBoundingClientRect();
+    setAt({ x: r.left + r.width / 2, y: r.bottom + 6 });
+  };
+  return (
+    <span
+      className="inline-flex"
+      onMouseEnter={(e) => show(e.currentTarget)}
+      onMouseLeave={() => setAt(null)}
+      onFocus={(e) => show(e.currentTarget)}
+      onBlur={() => setAt(null)}
+    >
+      {children}
+      {at &&
+        createPortal(
+          <span
+            role="tooltip"
+            style={{ left: at.x, top: at.y }}
+            className="pointer-events-none fixed z-[60] -translate-x-1/2 whitespace-nowrap rounded-md bg-foreground px-2 py-1 text-xs font-medium text-background shadow-lg"
+          >
+            {text}
+          </span>,
+          document.body,
+        )}
+    </span>
+  );
+}
+
+/** The same round icon as `QuickLink`, but it opens the single-send drawer; disabled (with the reason) when there is nowhere to send. */
+function QuickButton({
+  enabled,
+  label,
+  tip,
+  missing,
+  color,
+  onClick,
+  children,
+}: {
+  enabled: boolean;
+  label: string;
+  /** The operation, shown on hover (Call, Send WhatsApp message ...). */
+  tip: string;
+  missing: string;
+  color?: string;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <HoverTip text={enabled ? tip : missing}>
+      <button
+        type="button"
+        disabled={!enabled}
+        aria-label={enabled ? label : missing}
+        onClick={onClick}
+        className={cn(quickBtn, enabled ? quickOn : quickOff, enabled && color)}
+      >
+        {children}
+      </button>
+    </HoverTip>
+  );
+}
+
+/**
  * The compact cluster beside a contact's name: call, WhatsApp, email and the "..." menu (view, edit, add to group,
  * tag, delete). Calling, WhatsApp and email are disabled, not hidden, when the contact has no number or address.
  */
 function QuickActions({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
+  const ts = useTranslations('contacts-attributes-tags.singleSend');
   const links = quickActions(row);
   const name = row.name || t('unnamed');
   const items = menuActions({ edit: h.canEdit, delete: h.canDelete });
+  // Shown while the row is hovered or has keyboard focus; always shown on touch screens (no hover there). The row is the `group`.
   return (
-    <div className="flex shrink-0 items-center gap-0.5">
-      <QuickLink href={links.call} label={t('callNamed', { name })} missing={t('noPhone')}>
-        <PhoneIcon className="size-4" />
-      </QuickLink>
-      <QuickLink
-        href={links.whatsapp}
-        label={t('whatsappNamed', { name })}
-        missing={t('noWhatsapp')}
-        color="text-[#16a34a] hover:text-[#15803d] dark:text-[#4ade80]"
-        external
-      >
-        <WhatsAppIcon className="size-4" />
-      </QuickLink>
-      <QuickLink href={links.email} label={t('emailNamed', { name })} missing={t('noEmail')}>
-        <MailIcon className="size-4" />
-      </QuickLink>
+    <div className="flex shrink-0 items-center gap-0.5 transition-opacity focus-within:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
+      {h.onSend ? (
+        <>
+          <QuickButton
+            enabled={Boolean(links.call)}
+            label={t('callNamed', { name })}
+            missing={t('noPhone')}
+            tip={ts('title.call')}
+            onClick={() => h.onSend?.(row, 'call')}
+          >
+            <PhoneIcon className="size-4" />
+          </QuickButton>
+          <QuickButton
+            enabled={Boolean(links.whatsapp)}
+            label={t('whatsappNamed', { name })}
+            missing={t('noWhatsapp')}
+            color="text-[#16a34a] hover:text-[#15803d] dark:text-[#4ade80]"
+            tip={ts('title.whatsapp')}
+            onClick={() => h.onSend?.(row, 'whatsapp')}
+          >
+            <WhatsAppIcon className="size-4" />
+          </QuickButton>
+          <QuickButton
+            enabled={Boolean(links.call)}
+            label={t('smsNamed', { name })}
+            missing={t('noSms')}
+            tip={ts('title.sms')}
+            onClick={() => h.onSend?.(row, 'sms')}
+          >
+            <SmsIcon className="size-4" />
+          </QuickButton>
+          <QuickButton
+            enabled={Boolean(links.email)}
+            label={t('emailNamed', { name })}
+            missing={t('noEmail')}
+            tip={ts('title.email')}
+            onClick={() => h.onSend?.(row, 'email')}
+          >
+            <MailIcon className="size-4" />
+          </QuickButton>
+        </>
+      ) : (
+        <>
+          <QuickLink href={links.call} label={t('callNamed', { name })} missing={t('noPhone')}>
+            <PhoneIcon className="size-4" />
+          </QuickLink>
+          <QuickLink
+            href={links.whatsapp}
+            label={t('whatsappNamed', { name })}
+            missing={t('noWhatsapp')}
+            color="text-[#16a34a] hover:text-[#15803d] dark:text-[#4ade80]"
+            external
+          >
+            <WhatsAppIcon className="size-4" />
+          </QuickLink>
+          <QuickLink href={links.email} label={t('emailNamed', { name })} missing={t('noEmail')}>
+            <MailIcon className="size-4" />
+          </QuickLink>
+        </>
+      )}
       <RowMenu label={t('moreFor', { name })}>
         {(close) => (
           <>
@@ -393,6 +522,27 @@ function Pill({ value, icon }: { value: string; icon: ReactNode }) {
   );
 }
 
+/** Initials avatar and name; a contact nobody owns says so in muted text instead of leaving a dash. */
+function OwnerCell({
+  ownerId,
+  label,
+}: {
+  ownerId: string | null;
+  label: ListHandlers['ownerLabel'];
+}) {
+  const t = useTranslations('contacts-attributes-tags.list');
+  if (!ownerId) return <span className="text-muted-foreground">{t('unassigned')}</span>;
+  const name = label?.(ownerId) ?? '';
+  return (
+    <span className="inline-flex min-w-0 max-w-full items-center gap-2">
+      <ContactAvatar id={ownerId} name={name} />
+      <span className="truncate" title={name || undefined}>
+        {name}
+      </span>
+    </span>
+  );
+}
+
 function NameCell({ row, h }: { row: RowView; h: ListHandlers }) {
   const t = useTranslations('contacts-attributes-tags.list');
   return (
@@ -442,6 +592,18 @@ function Cell({
       return <StatusCell row={row} h={h} showStatus={false} />;
     case 'status':
       return row.status ? <StatusChip value={h.statusLabel(row.status)} /> : <Dash />;
+    case 'owner':
+      return <OwnerCell ownerId={row.ownerId} label={h.ownerLabel} />;
+    case 'leadScore':
+      return row.leadScore === null ? (
+        <Dash />
+      ) : (
+        <ScoreBadge
+          score={row.leadScore}
+          source={row.leadScoreSource}
+          scoredAt={row.leadScoredAt}
+        />
+      );
     case 'language':
       return row.language ? <OutlineTag value={row.language} /> : <Dash />;
     case 'memo':

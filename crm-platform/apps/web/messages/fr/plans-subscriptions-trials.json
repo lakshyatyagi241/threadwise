@@ -43,7 +43,9 @@
       "ai_token_limit_monthly": "Jetons IA par mois",
       "forms": "Formulaires web",
       "form_submissions_monthly": "Soumissions de formulaire par mois",
-      "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois"
+      "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois",
+      "sms_monthly": "SMS par mois",
+      "email_mailboxes": "Boîtes e-mail"
     },
     "features": {
       "automation": "Automatisation",
@@ -74,7 +76,10 @@
       "forms_and_links": "Formulaires et liens",
       "extra_channels": "Telegram, Facebook et Instagram",
       "form_builder": "Formulaires",
-      "waba_groups": "Groupes WhatsApp"
+      "waba_groups": "Groupes WhatsApp",
+      "sms": "Canal SMS",
+      "help_agent": "Assistant d’aide",
+      "email_channel": "Canal e-mail (Gmail)"
     },
     "limitGroups": {
       "messaging": "Messagerie",
@@ -124,7 +129,9 @@
       "ai_token_limit_monthly": "Jetons utilisés par les assistants IA au cours du mois civil avec les clés de la plateforme. Les espaces de travail utilisant leurs propres clés ne sont pas plafonnés.",
       "forms": "Formulaires web actifs (application Formulaires). Archiver un formulaire libère sa place. 0 = illimité.",
       "form_submissions_monthly": "Soumissions de formulaire acceptées au cours du mois civil, spam exclu. Au-delà du plafond, une soumission reste enregistrée pour examen et n’est jamais supprimée. 0 = illimité.",
-      "ai_form_generations_monthly": "Générations du créateur de formulaires IA au cours du mois civil, nouvelles tentatives de réparation incluses. 0 = illimité."
+      "ai_form_generations_monthly": "Générations du créateur de formulaires IA au cours du mois civil, nouvelles tentatives de réparation incluses. 0 = illimité.",
+      "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
+      "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité."
     },
     "planAddons": {
       "title": "Modules complémentaires disponibles avec votre forfait",

@@ -48,6 +48,7 @@ export type LimitUnit = 'perMonth' | 'perBroadcast' | 'perMinute' | 'perPlanPeri
  */
 export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   monthly_messages: 'perMonth',
+  sms_monthly: 'perMonth',
   broadcasts: 'total',
   scheduled_messages: 'total',
   total_campaigns: 'perPlanPeriod',
@@ -81,6 +82,7 @@ export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   forms: 'total',
   form_submissions_monthly: 'perMonth',
   ai_form_generations_monthly: 'perMonth',
+  email_mailboxes: 'total',
 };
 
 /** The api rate limit is the one cap where 0 does not mean unlimited: its checkbox says "Platform default". */

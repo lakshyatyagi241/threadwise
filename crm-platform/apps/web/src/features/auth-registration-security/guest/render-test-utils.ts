@@ -80,6 +80,7 @@ export function makeSession(over: Partial<SessionResponse> = {}): SessionRespons
       displayName: null,
       phone: null,
       locale: null,
+      timezone: null,
       theme: 'paper',
       avatarUrl: null,
       emailVerified: true,
@@ -106,6 +107,7 @@ export function makeSession(over: Partial<SessionResponse> = {}): SessionRespons
       passwordChangeRequired: false,
     },
     sessionId: '3a6c9e1f-7b2d-4c85-8e0a-1d4f5b6c7a33',
+    effectiveTimezone: 'UTC',
     ...over,
   };
 }

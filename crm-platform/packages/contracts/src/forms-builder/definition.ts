@@ -11,6 +11,9 @@ import { z } from 'zod';
 
 export const FORM_SCHEMA_VERSION = 1;
 
+/** The largest single payment a form takes, in minor units (10 million major units at 2 decimals). */
+export const FORM_PAYMENT_MAX_MINOR = 1_000_000_000;
+
 export const FORM_LIMITS = {
   maxBlocks: 100,
   /** The schema allows 10 steps (the spec's number); v0.9 refuses more than `maxStepsNow`. */
@@ -69,15 +72,40 @@ export const FORM_BIND_OBJECTS = ['contact', 'company'] as const;
 export const formBindObjectSchema = z.enum(FORM_BIND_OBJECTS);
 export type FormBindObject = z.infer<typeof formBindObjectSchema>;
 
+/**
+ * An address typed as separate fields. The CRM keeps one address line per contact and company, so the parts are joined into it when
+ * the submission is written (`composeAddress`); a field bound to the whole `address` wins over the parts.
+ */
+export const FORM_ADDRESS_PARTS = [
+  'address_line',
+  'address_city',
+  'address_state',
+  'address_postal_code',
+  'address_country',
+] as const;
+export type FormAddressPart = (typeof FORM_ADDRESS_PARTS)[number];
+
+/** "Street, City, State Postal, Country": empty parts drop out with their separators. Null when nothing was given. */
+export function composeAddress(parts: Partial<Record<FormAddressPart, string | undefined>>): string | null {
+  const t = (k: FormAddressPart): string => (parts[k] ?? '').trim();
+  const region = [t('address_state'), t('address_postal_code')].filter(Boolean).join(' ');
+  const out = [t('address_line'), t('address_city'), region, t('address_country')]
+    .filter(Boolean)
+    .join(', ');
+  return out === '' ? null : out;
+}
+
 /** Contact properties a field may be bound to without a registry entry (columns of the contact). */
 export const CONTACT_BUILTIN_PROPERTIES = [
   'name',
   'first_name',
+  'middle_name',
   'last_name',
   'email',
   'phone',
   'title',
   'address',
+  ...FORM_ADDRESS_PARTS,
   'message',
 ] as const;
 export type ContactBuiltinProperty = (typeof CONTACT_BUILTIN_PROPERTIES)[number];
@@ -91,6 +119,7 @@ export const COMPANY_BUILTIN_PROPERTIES = [
   'industry',
   'size_range',
   'address',
+  ...FORM_ADDRESS_PARTS,
   'notes',
 ] as const;
 export type CompanyBuiltinProperty = (typeof COMPANY_BUILTIN_PROPERTIES)[number];
@@ -158,6 +187,8 @@ export type FormValidation = z.infer<typeof formValidationSchema>;
 export const formOptionSchema = z.object({
   value: z.string().trim().min(1).max(100),
   label,
+  /** Payment `from_field` only: what choosing this option costs, in minor units (paise, cents). Never read from a visitor. */
+  amountMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
 });
 export type FormOption = z.infer<typeof formOptionSchema>;
 
@@ -333,6 +364,36 @@ export const formAfterSchema = z
   .strict();
 export type FormAfter = z.infer<typeof formAfterSchema>;
 
+/**
+ * Payment collection (spec section 10): the SERVER computes the amount from this frozen block and the validated answers; a number the
+ * browser sends is never read. One currency per form. The visitor pays on a hosted link of the workspace's gateway after the answers are
+ * stored; the form is `paid` only when the gateway's verified notification arrives, never on the redirect back.
+ */
+export const FORM_PAYMENT_AMOUNT_TYPES = ['fixed', 'from_field', 'pay_what_you_want'] as const;
+export const formPaymentAmountTypeSchema = z.enum(FORM_PAYMENT_AMOUNT_TYPES);
+export type FormPaymentAmountType = z.infer<typeof formPaymentAmountTypeSchema>;
+
+export const formPaymentSchema = z
+  .object({
+    enabled: z.boolean().default(false),
+    amountType: formPaymentAmountTypeSchema.default('fixed'),
+    /** `fixed`: the price. */
+    amountMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
+    /** `from_field`: a dropdown or radio whose options carry amounts. `pay_what_you_want`: a number or currency field (major units). */
+    fieldId: blockIdSchema.optional(),
+    /** `pay_what_you_want`: the smallest and largest amount the visitor may pay, in minor units. */
+    minMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
+    maxMinor: z.number().int().min(1).max(FORM_PAYMENT_MAX_MINOR).optional(),
+    currency: z
+      .string()
+      .regex(/^[A-Z]{3}$/, 'must be an ISO 4217 code such as INR')
+      .default('INR'),
+    /** What the payer sees on the gateway's page. */
+    description: z.string().trim().max(120).optional(),
+  })
+  .strict();
+export type FormPayment = z.infer<typeof formPaymentSchema>;
+
 // --- the document -------------------------------------------------------------------------------------------------------------------------
 
 export const formDefinitionSchema = z
@@ -351,6 +412,7 @@ export const formDefinitionSchema = z
     rules: z.array(z.never()).max(0, 'Conditional logic arrives in a later version').default([]),
     mapping: formMappingSchema.default({}),
     after: formAfterSchema.default({}),
+    payment: formPaymentSchema.default({}),
   })
   .strict()
   .superRefine((def, ctx) => {
@@ -443,6 +505,50 @@ export const formDefinitionSchema = z
         path: ['settings', 'redirectUrl'],
         message: 'redirect_url_required',
       });
+    }
+    const pay = def.payment;
+    if (pay.enabled) {
+      const payField = def.steps
+        .flatMap((st) => st.blocks)
+        .find((b) => b.type === 'field' && b.id === pay.fieldId);
+      const bad = (path: string, message: string) =>
+        ctx.addIssue({ code: 'custom', path: ['payment', path], message });
+      if (pay.amountType === 'fixed' && pay.amountMinor === undefined) {
+        bad('amountMinor', 'payment_amount_required');
+      }
+      if (pay.amountType === 'from_field') {
+        if (
+          !payField ||
+          payField.type !== 'field' ||
+          !['dropdown', 'radio'].includes(payField.kind)
+        ) {
+          bad('fieldId', 'payment_field_must_be_choice');
+        } else if (
+          !payField.required ||
+          (payField.options ?? []).some((o) => o.amountMinor === undefined)
+        ) {
+          bad('fieldId', 'payment_options_need_amounts');
+        }
+      }
+      if (pay.amountType === 'pay_what_you_want') {
+        if (
+          !payField ||
+          payField.type !== 'field' ||
+          !['number', 'currency'].includes(payField.kind)
+        ) {
+          bad('fieldId', 'payment_field_must_be_number');
+        } else if (!payField.required) {
+          bad('fieldId', 'payment_field_must_be_required');
+        }
+        if (pay.minMinor === undefined) bad('minMinor', 'payment_min_required');
+        if (
+          pay.minMinor !== undefined &&
+          pay.maxMinor !== undefined &&
+          pay.minMinor > pay.maxMinor
+        ) {
+          bad('minMinor', 'min_above_max');
+        }
+      }
     }
     if (JSON.stringify(def).length > FORM_LIMITS.maxDefinitionBytes) {
       ctx.addIssue({ code: 'custom', path: [], message: 'definition_too_large' });

@@ -10,7 +10,8 @@
       "webchat": "Web sitesi sohbeti",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "E-posta (Gmail)"
     },
     "page": {
       "back": "Otomasyon ve yapay zekâ",
@@ -81,7 +82,10 @@
       "lastFired": "son: {when}",
       "edit": "Düzenle",
       "duplicate": "Çoğalt",
-      "delete": "Sil"
+      "delete": "Sil",
+      "startsFlow": "{name} akışını da başlatır",
+      "flowOff": "Akış kapalı",
+      "flowGone": "Silinmiş bir akışı da başlatır"
     },
     "form": {
       "back": "Otomatik atama",
@@ -170,7 +174,107 @@
       "cancel": "İptal",
       "save": "Kaydet",
       "saveActivate": "Kaydet ve etkinleştir",
-      "openCount": "{open} açık"
+      "openCount": "{open} açık",
+      "flow": {
+        "title": "Ayrıca bir akış başlat",
+        "hint": "İsteğe bağlı. Bu kural çalıştığında akış, aynı kanalda görüşme için başlar. Yalnızca açık olması gerekir; yayımlanmış olması gerekmez.",
+        "none": "Akış yok",
+        "offOption": "{name} (kapalı)",
+        "goneOption": "Artık var olmayan bir akış",
+        "loadFailed": "Akışlar yüklenemedi, bu yüzden liste eksik olabilir."
+      }
+    },
+    "sla": {
+      "back": "Ayarlara dön",
+      "title": "Yanıt hedefleri (SLA)",
+      "intro": "Müşterilerin ilk yanıt için ne kadar bekleyebileceğini ve bir görüşmenin ne kadar çözümsüz kalabileceğini belirleyin. Hedefi kaçıran görüşme işaretlenir ve sorumlu kişiye bildirim gider.",
+      "howTitle": "Nasıl çalışır",
+      "how1": "Müşterinin mesajı, varsayılan politikayla sayacı başlatır.",
+      "how2": "Ekibinizden gelen yanıt, ilk yanıt sayacını durdurur.",
+      "how3": "Hedefi kaçıran görüşme, gelen kutusunda SLA rozeti gösterir.",
+      "how4": "Hedefler yalnızca çalışma saatlerinizi sayabilir.",
+      "newTitle": "Politika ekle",
+      "editTitle": "Politikayı düzenle",
+      "name": "Ad",
+      "firstResponse": "İlk yanıt süresi (dakika)",
+      "resolution": "Çözüm süresi (dakika)",
+      "minutesHint": "Hedef istemiyorsanız boş bırakın. 60 bir saat, 1440 bir gündür.",
+      "minutesInvalid": "1'den başlayan tam sayılar kullanın.",
+      "pause": "Müşteri beklenirken duraklat",
+      "pauseHint": "Beklemede olarak ayarlanan görüşme işaretlenmez.",
+      "businessHours": "Yalnızca çalışma saatlerini say",
+      "businessHoursHint": "Çalışma alanı ayarlarınızdaki saatleri ve saat dilimini kullanır.",
+      "makeDefault": "Bunu varsayılan politika yap",
+      "defaultChip": "Varsayılan",
+      "overridesTitle": "Önceliğe göre hedefler",
+      "overridesHint": "Bir önceliğin hedefleri politikanınkilerin yerine geçer. Politikanın kendi hedeflerini korumak için boş bırakın.",
+      "priority": {
+        "low": "Düşük",
+        "normal": "Normal",
+        "high": "Yüksek",
+        "urgent": "Acil"
+      },
+      "create": "Politika oluştur",
+      "save": "Değişiklikleri kaydet",
+      "cancel": "İptal",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "deleteTitle": "Bu politika silinsin mi?",
+      "deleteMessage": "\"{name}\" kaldırılacak. Onu zaten kullanan görüşmelerin çalışan sayaçları korunur.",
+      "emptyTitle": "Henüz politika yok",
+      "emptyMessage": "Yanıt sürelerini ölçmeye başlamak için bir politika ekleyin. İlk politika varsayılan olur.",
+      "inUse": "{count, plural, one {# görüşme} other {# görüşme}}",
+      "firstShort": "İlk yanıt: {minutes} dk",
+      "resolutionShort": "Çözüm: {minutes} dk",
+      "noTarget": "Hedef yok",
+      "saved": "Politika kaydedildi",
+      "created": "Politika oluşturuldu",
+      "deleted": "Politika silindi",
+      "conflict": "Başka biri bu politikayı önce değiştirdi. Liste yeniden yüklendi.",
+      "loading": "Politikalar yükleniyor…",
+      "loadFailed": "Politikalar yüklenemedi."
+    },
+    "performance": {
+      "eyebrow": "Ekip gelen kutusu · Raporlar",
+      "title": "Ekibiniz ne kadar hızlı yanıt verdi?",
+      "subtitle": "Her temsilcinin yanıtlarını, çözümlerini ve ilk yanıt sürelerini görün.",
+      "summary": "{replies} yanıt, {resolved} çözüldü, ortalama ilk yanıt {avg}",
+      "live": "Canlı",
+      "backToInbox": "Gelen kutusuna dön",
+      "rangeLabel": "Dönem",
+      "ranges": {
+        "today": "Bugün",
+        "week": "Bu hafta",
+        "month": "Bu ay"
+      },
+      "channelLabel": "Kanal",
+      "allChannels": "Tüm kanallar",
+      "loadFailed": "Rapor yüklenemedi. Birazdan yeniden denenecek.",
+      "noAccess": "Ekip performansı raporuna erişiminiz yok.",
+      "loading": "Rapor yükleniyor…",
+      "empty": "Bu dönemde temsilci etkinliği yok.",
+      "unknown": "Bilinmiyor",
+      "tiles": {
+        "replies": "Gönderilen yanıtlar",
+        "resolved": "Çözüldü",
+        "inbounds": "Gelen",
+        "avgFirstReply": "Ort. ilk yanıt"
+      },
+      "columns": {
+        "agent": "Temsilci",
+        "status": "Durum",
+        "load": "Yük",
+        "replies": "Yanıtlar",
+        "resolved": "Çözüldü",
+        "avgReply": "Ort. yanıt",
+        "lastSeen": "Son görülme"
+      },
+      "statuses": {
+        "online": "Çevrimiçi",
+        "away": "Uzakta",
+        "busy": "Meşgul",
+        "offline": "Çevrimdışı"
+      }
     }
   }
 }

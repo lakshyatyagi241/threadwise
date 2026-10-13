@@ -63,7 +63,6 @@
       "whatsapp_ai": "IA do WhatsApp"
     },
     "errors": {
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente",
       "network": {
         "title": "Não foi possível acessar o servidor",

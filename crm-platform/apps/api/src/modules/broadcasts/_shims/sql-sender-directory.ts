@@ -118,7 +118,9 @@ export class SqlSenderDirectory implements SenderDirectory {
     return {
       engine,
       id: Number(r.id),
-      phoneDigits: senderDigits(null, r.phone_number),
+      // An SMS sender may be an alphanumeric id with no digits at all; its From value, as typed, is what makes it usable.
+      phoneDigits:
+        engine === 'sms' ? (r.phone_number ?? '').trim() : senderDigits(null, r.phone_number),
       label: r.label ?? '',
     };
   }

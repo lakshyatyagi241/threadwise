@@ -200,7 +200,7 @@ describe('access and plan', () => {
   it('an error line shows the reference to quote and offers a retry', () => {
     const error = new ApiError(500, 'INTERNAL', 'boom: do not show this', 'req-42');
     const html = renderAccount(<ErrorText error={error} onRetry={() => undefined} />);
-    expect(html).toContain('Reference: req-42');
+    expect(html).not.toContain('Reference: req-42');
     expect(html).toContain('Try again');
     expect(html).not.toContain('boom');
   });

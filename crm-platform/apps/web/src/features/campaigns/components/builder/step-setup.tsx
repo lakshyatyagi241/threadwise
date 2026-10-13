@@ -1,11 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Field, Input, Select, Switch } from '@crm/ui';
-import type { ComposeSender } from '@crm/contracts';
+import type { ComposeSender, SenderHidden } from '@crm/contracts';
 import { editorType, type BuilderForm } from '../../lib/builder-model';
-import { kindsFor } from '../../lib/engine-gate';
+import { isSmsEngine, kindsFor } from '../../lib/engine-gate';
+import { SenderEmptyNotice, SenderLoading } from '../sender-empty';
 import { BubbleIcon, ChoiceCard, FlowIcon, LabelRow, StepCard, TemplateIcon } from './parts';
 
 /** Step 1 (TW-CAMP-003): the name, the sender, what kind of campaign it is, and whether to split-test it. */
@@ -16,6 +16,8 @@ export function StepSetup({
   engine,
   onSender,
   notVerified,
+  hidden,
+  loading,
 }: {
   form: BuilderForm;
   patch: (p: Partial<BuilderForm>) => void;
@@ -26,6 +28,10 @@ export function StepSetup({
   onSender: (key: string) => void;
   /** The picked number is a Meta number that is not verified: say why the guided flow is not offered. */
   notVerified: boolean;
+  /** The numbers the server left out, so an empty list can say why. */
+  hidden?: readonly SenderHidden[] | undefined;
+  /** The numbers (or the platform switch) are still loading: a skeleton, not an empty list. */
+  loading?: boolean | undefined;
 }) {
   const t = useTranslations('campaigns.builder');
   const offered = kindsFor(engine);
@@ -39,6 +45,9 @@ export function StepSetup({
         onSender={onSender}
         senders={senders}
         notVerified={notVerified}
+        hidden={hidden}
+        loading={loading}
+        sms={isSmsEngine(engine)}
       />
 
       <TypeCards
@@ -53,12 +62,15 @@ export function StepSetup({
         onSelect={(type) => patch({ type })}
       />
 
-      <AbToggle
-        checked={form.abTesting}
-        split={form.abSplit}
-        onChecked={(abTesting) => patch({ abTesting })}
-        onSplit={(abSplit) => patch({ abSplit })}
-      />
+      {/* The SMS runner sends one text to everyone, so a split test would do nothing: it is not offered. */}
+      {!isSmsEngine(engine) && (
+        <AbToggle
+          checked={form.abTesting}
+          split={form.abSplit}
+          onChecked={(abTesting) => patch({ abTesting })}
+          onSplit={(abSplit) => patch({ abSplit })}
+        />
+      )}
     </StepCard>
   );
 }
@@ -71,6 +83,9 @@ export function SetupFields({
   onSender,
   senders,
   notVerified,
+  hidden,
+  loading,
+  sms,
 }: {
   name: string;
   onName: (name: string) => void;
@@ -79,6 +94,12 @@ export function SetupFields({
   senders: readonly ComposeSender[];
   /** The picked number is a Meta number that is not verified: say why the guided flow is not offered. */
   notVerified: boolean;
+  /** The numbers the server left out, so an empty list can say why. */
+  hidden?: readonly SenderHidden[] | undefined;
+  /** The numbers (or the platform switch) are still loading: a skeleton, not an empty list. */
+  loading?: boolean | undefined;
+  /** The SMS card: the empty list points at the SMS screen. */
+  sms?: boolean | undefined;
 }) {
   const t = useTranslations('campaigns.builder');
   return (
@@ -93,16 +114,10 @@ export function SetupFields({
         />
       </Field>
       <Field label={`${t('setup.sender')} *`} htmlFor="camp-sender" hint={t('setup.senderHint')}>
-        {senders.length === 0 ? (
-          <div
-            id="camp-sender"
-            className="flex min-h-9 items-center gap-1.5 rounded-lg border border-danger/40 bg-danger/5 px-3 text-[12px] text-danger"
-          >
-            {t('setup.noSenders')}
-            <Link href="/channels" className="font-semibold text-brand hover:underline">
-              {t('setup.connectOne')}
-            </Link>
-          </div>
+        {loading ? (
+          <SenderLoading id="camp-sender" />
+        ) : senders.length === 0 ? (
+          <SenderEmptyNotice id="camp-sender" hidden={hidden} sms={sms ?? false} />
         ) : (
           <Select id="camp-sender" value={senderKey} onChange={(e) => onSender(e.target.value)}>
             <option value="">{t('setup.pickSender')}</option>

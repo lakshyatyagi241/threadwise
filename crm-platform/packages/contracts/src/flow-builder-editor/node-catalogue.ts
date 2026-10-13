@@ -134,6 +134,8 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('code', 'Run code (JS)', 'Logic', 'Sandboxed JavaScript transform', ['chat', 'call']),
   def('mysql', 'MySQL Query', 'Logic', 'Run a read-only SQL query'),
   def('ai', 'AI assistant', 'AI', 'Reply with ChatGPT or Gemini', WEB_CAPABLE),
+  // Not a Reference node: the FAQ knowledge base (ADR-0021) as a step. Matches by meaning, answers or branches.
+  def('faq', 'Answer from FAQ', 'AI', 'Match a message to your FAQs', SOCIAL_AND_CHAT),
   def('tag', 'Tag contact', 'Contact', 'Add or remove a tag'),
   def('assign', 'Assign agent', 'Contact', 'Hand off to a human'),
   def('subflow', 'Run sub-flow', 'Logic', 'Call another flow'),
@@ -615,6 +617,14 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
       };
     case 'api_library':
       return { apiId: '', apiName: '', inputs: [], save: 'api_response' };
+    case 'faq':
+      return {
+        query: '{{user_message}}',
+        category: '',
+        minScore: null,
+        sendAnswer: true,
+        save: 'faq',
+      };
     case 'google_sheets':
       return {
         mode: 'write',
@@ -705,6 +715,7 @@ export const FLB_TRIGGER_KINDS = [
   'comment_to_dm',
   'group_leave',
   'segment_join',
+  'segment_leave',
   'contact_updated',
   'field_match',
   'date_field_match',
@@ -729,6 +740,7 @@ export const FLB_TRIGGER_PORT_LABELS: Record<string, string> = {
   manual_enroll: 'on enroll',
   group_leave: 'on list leave',
   segment_join: 'on segment join',
+  segment_leave: 'on segment leave',
   contact_updated: 'on contact update',
   field_match: 'on field match',
   date_field_match: 'on date match',
@@ -950,6 +962,8 @@ export function flbPortsFor(
       return out('submitted');
     case 'api_library':
       return yesNo(['success', 'success'], ['error', 'error']);
+    case 'faq':
+      return yesNo(['matched', 'answered'], ['no_match', 'no match']);
     case 'google_sheets':
       return out(d.mode === 'read' ? 'row loaded' : 'row written');
     case 'google_docs':
@@ -980,6 +994,7 @@ const HANDLE_PORT: Record<string, Record<string, number>> = {
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
   api_library: { success: 1, error: 2 },
+  faq: { matched: 1, no_match: 2 },
   in_list: { yes: 1, no: 2 },
   in_segment: { yes: 1, no: 2 },
   wa_session: { yes: 1, no: 2 },

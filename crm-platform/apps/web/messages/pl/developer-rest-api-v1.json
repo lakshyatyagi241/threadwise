@@ -96,8 +96,7 @@
       "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie za chwilę.",
       "loadFailed": "Nie udało się wczytać klucza API.",
       "retry": "Ponów",
-      "upgrade": "Zobacz plany",
-      "requestId": "Identyfikator żądania: {id}"
+      "upgrade": "Zobacz plany"
     }
   }
 }

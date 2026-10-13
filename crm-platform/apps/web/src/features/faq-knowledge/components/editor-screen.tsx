@@ -37,7 +37,8 @@ import {
   type FaqDraft,
 } from '../lib/model';
 import { clearPrefill, readPrefill, type Prefill } from '../lib/prefill';
-import { FlowPicker } from './flow-picker';
+import { AnswerTarget } from './answer-target';
+import { useFaqFlow } from './faq-flow';
 import { FaqIcon, TrashIcon } from './icons';
 import { LoadError, NoAccess, PageHeader, SectionCard, SkeletonRows } from './parts';
 import { TryIt } from './try-it';
@@ -54,10 +55,11 @@ const rowOf = (v: FaqVariation): VariationRow => ({
   rowVersion: v.rowVersion,
 });
 
-/** `/faq/new` and `/faq/<id>`: the question and its answer on the left, every phrasing and its indexing state on the right. */
+/** A new FAQ or one FAQ of the flow: the question and its answer on the left, every phrasing and its indexing state on the right. */
 export function FaqEditorScreen({ id }: { id?: string }) {
   const t = useTranslations('faq.editor');
   const router = useRouter();
+  const { href } = useFaqFlow();
   const canRead = useCan('faq.entries.read');
   const canCreate = useCan('faq.entries.create');
   const canUpdate = useCan('faq.entries.update');
@@ -76,7 +78,7 @@ export function FaqEditorScreen({ id }: { id?: string }) {
             error={entry.error}
             onRetry={() => void entry.refetch()}
           />
-          <Link href="/faq" className="text-sm underline">
+          <Link href={href('list')} className="text-sm underline">
             {t('backToList')}
           </Link>
         </section>
@@ -109,6 +111,7 @@ function EditorBody({
   const te = useTranslations('faq.errors');
   const { toast } = useToast();
   const qc = useQueryClient();
+  const { flowId, flowName, href } = useFaqFlow();
   const canAddVariations = useCan('faq.entries.create');
   const canEditVariations = useCan('faq.entries.update');
   const canRemoveVariations = useCan('faq.entries.delete');
@@ -174,6 +177,7 @@ function EditorBody({
     mutationFn: async () => {
       if (isNew) {
         return faqApi.create(
+          flowId,
           toCreateInput(
             draft,
             localRows.map((r) => r.text),
@@ -181,7 +185,7 @@ function EditorBody({
           ),
         );
       }
-      return faqApi.update(entry.id, toUpdateInput(draft, version));
+      return faqApi.update(flowId, entry.id, toUpdateInput(draft, version));
     },
     onSuccess: (e) => {
       void refreshFaqs(qc);
@@ -189,7 +193,7 @@ function EditorBody({
       toast(t(isNew ? 'created' : 'saved'));
       if (isNew) {
         setLeaving(true);
-        router.replace(`/faq/${e.id}`);
+        router.replace(href({ faqId: e.id }));
       } else {
         put(e);
         setBaseline(draft);
@@ -202,6 +206,11 @@ function EditorBody({
       const key = errorKey(err);
       if (key === 'duplicateQuestion') fields.question = te('duplicateQuestion');
       if (key === 'flowNotFound') fields.flowId = te('flowNotFound');
+      if (key === 'flowNodeNotFound') {
+        fields.flowNodeId = te('flowNodeNotFound');
+        // The step may have been removed since the list was read: show the flow as it is now.
+        if (draft.flowId) void qc.invalidateQueries({ queryKey: KEYS.flowNodes(draft.flowId) });
+      }
       setServerFields(fields);
       setFormError(Object.keys(fields).length > 0 && key !== 'limitReached' ? null : err);
       if (Object.keys(fields).length > 0) focusFirstInvalid();
@@ -234,7 +243,7 @@ function EditorBody({
   });
 
   const keepMine = useMutation({
-    mutationFn: () => faqApi.get(entry!.id),
+    mutationFn: () => faqApi.get(flowId, entry!.id),
     onSuccess: (fresh) => {
       put(fresh);
       setVersion(fresh.rowVersion);
@@ -245,7 +254,7 @@ function EditorBody({
     onError: (err) => setFormError(err),
   });
   const loadLatest = useMutation({
-    mutationFn: () => faqApi.get(entry!.id),
+    mutationFn: () => faqApi.get(flowId, entry!.id),
     onSuccess: (fresh) => {
       put(fresh);
       const d = draftFromEntry(fresh);
@@ -258,7 +267,7 @@ function EditorBody({
     onError: (err) => setFormError(err),
   });
   const remove = useMutation({
-    mutationFn: () => faqApi.remove(entry!.id),
+    mutationFn: () => faqApi.remove(flowId, entry!.id),
     onSuccess: () => {
       setLeaving(true);
       // Everything is stale except the entry that was just deleted: asking for it again would only be a 404.
@@ -269,7 +278,7 @@ function EditorBody({
         predicate: (q) => !(q.queryKey[1] === 'entry' && q.queryKey[2] === gone[2]),
       });
       toast(t('deleted'));
-      router.replace('/faq');
+      router.replace(href('list'));
     },
     onError: (err) => {
       setConfirmDelete(false);
@@ -288,7 +297,7 @@ function EditorBody({
       return;
     }
     for (let i = 0; i < texts.length; i += FAQ_LIMITS.variationsPerRequest) {
-      await faqApi.addVariations(entry.id, {
+      await faqApi.addVariations(flowId, entry.id, {
         texts: texts.slice(i, i + FAQ_LIMITS.variationsPerRequest),
         source,
       });
@@ -300,7 +309,7 @@ function EditorBody({
       setLocalRows((cur) => cur.map((r) => (r.key === row.key ? { ...r, key: text, text } : r)));
       return;
     }
-    await faqApi.updateVariation(entry.id, row.id, { text, rowVersion: row.rowVersion });
+    await faqApi.updateVariation(flowId, entry.id, row.id, { text, rowVersion: row.rowVersion });
     await refreshEntry();
   };
   const onRemove = async (row: VariationRow) => {
@@ -308,13 +317,14 @@ function EditorBody({
       setLocalRows((cur) => cur.filter((r) => r.key !== row.key));
       return;
     }
-    await faqApi.removeVariation(entry.id, row.id);
+    await faqApi.removeVariation(flowId, entry.id, row.id);
     await refreshEntry();
   };
   const onSuggest = isNew
     ? null
     : async () =>
-        (await faqApi.generate(entry.id, { count: FAQ_LIMITS.generateDefault })).suggestions;
+        (await faqApi.generate(flowId, entry.id, { count: FAQ_LIMITS.generateDefault }))
+          .suggestions;
 
   const fieldError = (f: DraftField): string | undefined => {
     const server = serverFields[f];
@@ -342,7 +352,7 @@ function EditorBody({
   return (
     <form onSubmit={submit} className="space-y-4" noValidate>
       <PageHeader
-        back={{ href: '/faq', label: t('back') }}
+        back={{ href: href('list'), label: t('back') }}
         icon={<FaqIcon className="size-5" />}
         title={isNew ? t('newTitle') : t('editTitle')}
         subtitle={isNew ? t('newSubtitle') : undefined}
@@ -362,7 +372,7 @@ function EditorBody({
               </Button>
             )}
             <Link
-              href="/faq"
+              href={href('list')}
               className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
             >
               {t('cancel')}
@@ -469,7 +479,16 @@ function EditorBody({
           <SectionCard id="faq-a" title={t('answer.title')} hint={t('answer.hint')}>
             <Tabs
               value={answerTab}
-              onValueChange={(v) => !readOnly && set({ answerType: v as FaqDraft['answerType'] })}
+              onValueChange={(v) => {
+                if (readOnly) return;
+                const type = v as FaqDraft['answerType'];
+                // "Go to a step" starts on a step of this flow, the common case; "another flow" is the picker's second choice.
+                set(
+                  type === 'flow' && !draft.flowId
+                    ? { answerType: type, flowId, flowName, flowNodeId: null }
+                    : { answerType: type },
+                );
+              }}
               items={[
                 {
                   id: 'text',
@@ -522,32 +541,15 @@ function EditorBody({
                   id: 'flow',
                   label: t('answer.flow'),
                   content: (
-                    <div className="space-y-2" id="faq-flow">
-                      <p className="text-sm font-medium">{t('answer.flowLabel')}</p>
-                      {readOnly ? (
-                        <p className="text-sm">{draft.flowName ?? t('answer.noFlow')}</p>
-                      ) : (
-                        <FlowPicker
-                          value={
-                            draft.flowId ? { id: draft.flowId, name: draft.flowName ?? '' } : null
-                          }
-                          missing={flowMissing}
-                          invalid={!!fieldError('flowId')}
-                          describedBy="faq-flow-error"
-                          onChange={(f) => set({ flowId: f.id, flowName: f.name })}
-                        />
-                      )}
-                      {fieldError('flowId') && (
-                        <p
-                          id="faq-flow-error"
-                          role="alert"
-                          tabIndex={-1}
-                          className="text-xs text-danger"
-                        >
-                          {fieldError('flowId')}
-                        </p>
-                      )}
-                    </div>
+                    <AnswerTarget
+                      draft={draft}
+                      entry={entry}
+                      readOnly={readOnly}
+                      flowMissing={flowMissing}
+                      flowError={fieldError('flowId')}
+                      stepError={fieldError('flowNodeId')}
+                      onChange={set}
+                    />
                   ),
                 },
               ]}

@@ -60,7 +60,7 @@ export function BuildTab(props: BuildTabProps) {
     if (
       lastAdded.current &&
       selected === lastAdded.current &&
-      window.matchMedia('(max-width: 1023px)').matches
+      window.matchMedia('(max-width: 1279px)').matches
     ) {
       inspectorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -86,6 +86,15 @@ export function BuildTab(props: BuildTabProps) {
           : newDivider(),
     );
   const addProperty = (p: CrmProperty) => add(fieldFromProperty(p));
+  /** Several properties in one go (all the address fields): they land in order, the first one selected. */
+  const addProperties = (list: CrmProperty[]) => {
+    const blocks = list.map(fieldFromProperty);
+    if (blocks.length === 0) return;
+    setDraft((d) => blocks.reduce((acc, b) => addBlock(acc, b), d));
+    lastAdded.current = blocks[0]!.id;
+    setSelected(blocks[0]!.id);
+    setPaletteOpen(false);
+  };
 
   const palette = (
     <BuildPalette
@@ -98,6 +107,7 @@ export function BuildTab(props: BuildTabProps) {
       onHidden={addHidden}
       onBlock={addBlockOf}
       onProperty={addProperty}
+      onProperties={addProperties}
     />
   );
 
@@ -105,8 +115,8 @@ export function BuildTab(props: BuildTabProps) {
   const problemIds = new Set(problems.flatMap((p) => ('blockId' in p ? [p.blockId] : [])));
 
   return (
-    <div className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)_320px]">
-      <aside className="hidden lg:block" aria-label={t('palette.title')}>
+    <div className="grid gap-5 xl:grid-cols-[260px_minmax(0,1fr)_320px]">
+      <aside className="hidden xl:block" aria-label={t('palette.title')}>
         <div className="sticky top-4 max-h-[calc(100dvh-8rem)] overflow-y-auto rounded-md border border-border bg-background p-3">
           {palette}
         </div>
@@ -142,7 +152,7 @@ export function BuildTab(props: BuildTabProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3 lg:hidden">
+        <div className="flex items-center justify-between gap-3 xl:hidden">
           <span className="text-sm font-medium">{t('list.count', { count: blocks.length })}</span>
           <Button variant="secondary" disabled={!canEdit} onClick={() => setPaletteOpen(true)}>
             {t('palette.open')}
@@ -157,7 +167,7 @@ export function BuildTab(props: BuildTabProps) {
               canEdit ? (
                 <Button
                   variant="secondary"
-                  className="lg:hidden"
+                  className="xl:hidden"
                   onClick={() => setPaletteOpen(true)}
                 >
                   {t('palette.open')}
@@ -272,7 +282,7 @@ export function BuildTab(props: BuildTabProps) {
                     )}
                   </div>
                   {active && (
-                    <div className="border-t border-border p-3 lg:hidden">
+                    <div className="border-t border-border p-3 xl:hidden">
                       <BlockInspector
                         block={b}
                         properties={properties}
@@ -289,7 +299,7 @@ export function BuildTab(props: BuildTabProps) {
         )}
       </section>
 
-      <aside className="hidden lg:block" aria-label={t('inspector.title')}>
+      <aside className="hidden xl:block" aria-label={t('inspector.title')}>
         <div
           ref={inspectorRef}
           className="sticky top-4 max-h-[calc(100dvh-8rem)] overflow-y-auto rounded-md border border-border bg-background p-4"

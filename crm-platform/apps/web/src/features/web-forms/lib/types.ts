@@ -4,6 +4,7 @@
  * (a visitor's answers while they type, the issues found before sending).
  */
 import type {
+  PublicForm,
   FormBlock,
   FormDefinition,
   FormFieldBlock,
@@ -73,6 +74,7 @@ export type IssueCode =
   | 'too_long'
   | 'pattern'
   | 'invalid_option'
+  | 'invalid_amount'
   | 'consent_required';
 
 export interface FieldIssue {
@@ -93,6 +95,8 @@ export interface RenderableForm {
   };
   consent: Pick<Definition['consent'], 'enabled' | 'text' | 'privacyUrl' | 'required' | 'version'>;
   theme: ThemeTokens;
+  /** What the visitor is asked to pay: the public form's summary, or (in the builder's preview) the draft's own block. Absent = no payment. */
+  payment?: PublicForm['payment'] | Definition['payment'];
 }
 
 export type FormShape = Pick<RenderableForm, 'steps' | 'consent'>;

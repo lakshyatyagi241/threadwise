@@ -1,5 +1,3 @@
-import { UnsupportedSendError, type SendCommand } from '../node-bridge-runtime';
-
 /** The columns of `scheduled_messages` a run reads. */
 export interface ScheduledRow {
   id: number | string;
@@ -14,6 +12,8 @@ export interface ScheduledRow {
   days_of_week: unknown;
   end_date: string | Date | null;
   template_type: string;
+  template_id: number | string | null;
+  template_overrides: unknown;
   message_content: string | null;
   media_file: string | null;
   latitude: string | number | null;
@@ -21,6 +21,8 @@ export interface ScheduledRow {
   provider: string | null;
   device_id: number | string | null;
   send_attempts: number;
+  /** The last occurrence's recipients are kept until the next run starts (see the run). */
+  recipients_spent?: boolean;
 }
 
 export const isRecurring = (row: Pick<ScheduledRow, 'schedule_type'>) =>
@@ -37,42 +39,3 @@ export const dateOnly = (v: string | Date | null): string | null =>
 /** The days of the week as numbers; the column is free JSON, so anything else is ignored. */
 export const weekdays = (v: unknown): number[] =>
   Array.isArray(v) ? v.map(Number).filter((n) => Number.isInteger(n) && n >= 0 && n <= 6) : [];
-
-/**
- * What to send one recipient, from the schedule's message kind (Reference `messageType`). Plain text, media with or without a
- * caption, and a location. Templates are sent by the template pipeline, which is not here yet: a template schedule is
- * refused up front, with the reason, instead of failing every recipient one by one.
- */
-export function commandFor(row: ScheduledRow, to: string, body: string): SendCommand {
-  switch (row.template_type) {
-    case 'text':
-      return { type: 'text', to, body };
-    case 'media':
-    case 'media_with_caption': {
-      const url = row.media_file ?? '';
-      if (!/^https?:\/\//i.test(url)) {
-        throw new UnsupportedSendError(
-          "This schedule's media is stored as a file, and file storage is not available to the sender yet.",
-        );
-      }
-      return {
-        type: 'media',
-        to,
-        mediaUrl: url,
-        ...(row.template_type === 'media_with_caption' && body ? { caption: body } : {}),
-      };
-    }
-    case 'location': {
-      const latitude = Number(row.latitude);
-      const longitude = Number(row.longitude);
-      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-        throw new UnsupportedSendError('This location schedule has no coordinates.');
-      }
-      return { type: 'location', to, latitude, longitude, ...(body ? { name: body } : {}) };
-    }
-    default:
-      throw new UnsupportedSendError(
-        `Scheduled ${row.template_type} messages are sent by the template pipeline, which is not available yet.`,
-      );
-  }
-}

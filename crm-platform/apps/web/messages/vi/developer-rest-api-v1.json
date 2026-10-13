@@ -96,8 +96,7 @@
       "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại sau giây lát.",
       "loadFailed": "Không thể tải khóa API của bạn.",
       "retry": "Thử lại",
-      "upgrade": "Xem các gói",
-      "requestId": "Mã yêu cầu: {id}"
+      "upgrade": "Xem các gói"
     }
   }
 }

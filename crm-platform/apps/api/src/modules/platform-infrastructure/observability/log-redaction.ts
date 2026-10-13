@@ -24,6 +24,7 @@ export const SECRET_HEADERS = [
   'x-wc-webhook-signature',
   'x-razorpay-signature',
   'x-invoice-signature',
+  'x-twilio-signature',
   'x-signature',
   'stripe-signature',
 ] as const;

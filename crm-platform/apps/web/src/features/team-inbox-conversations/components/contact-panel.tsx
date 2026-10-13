@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, Select, Spinner, Tabs, Textarea, cn } from '@crm/ui';
 import {
   NOTE_BODY_MAX,
@@ -11,12 +12,14 @@ import {
   type InboxConversationDetail,
 } from '@crm/contracts';
 import { LinkedAppointments } from '@/features/appointments';
+import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedTasks } from '@/features/tasks';
-import { useAssignees, useTimeline } from '../api/hooks';
+import { KEYS, useAssignees, useTimeline } from '../api/hooks';
 import { eventLabel } from '../lib/timeline';
 import { fullStamp, listTime } from '../lib/time';
 import { CheckCircleIcon, ExternalIcon, NoteIcon, TrashIcon, UserPlusIcon } from './icons';
 import { Avatar, ChannelTag, useErrorText } from './parts';
+import { TagGroups, type TagGroupsProps } from './tag-groups';
 
 export interface ContactPanelProps {
   detail: InboxConversationDetail;
@@ -36,12 +39,16 @@ export interface ContactPanelProps {
   onDeleteNote: (id: string) => void;
   canDeleteNote: (note: ConversationNote) => boolean;
   onOpenConversation: (id: string) => void;
+  /** May the person edit the contact (`record.contacts.update`): the contact tags then link to it. */
+  canEditContact?: boolean;
+  /** Conversation-tag controls: present when the person may put tags on threads (`inbox.conversation.tag`). */
+  tags?: TagGroupsProps['tags'];
 }
 
 /**
- * The right pane: who the customer is (the contact summary, linked to their record), who has the conversation, their other
- * conversations, and tabs for the internal notes and the timeline. The tasks and bookings of that contact are the same panels
- * the contact page shows.
+ * The right pane: who the customer is (the contact summary, linked to their record), the contact's AI lead score and what the AI
+ * made of the chat, who has the conversation, their other conversations, and tabs for the internal notes and the timeline. The
+ * score, the tasks and the bookings of that contact are the same panels the contact page shows.
  */
 export function ContactPanel(props: ContactPanelProps) {
   const t = useTranslations('team-inbox-conversations.panel');
@@ -51,6 +58,15 @@ export function ContactPanel(props: ContactPanelProps) {
   return (
     <div className="space-y-4 p-4" data-testid="inbox-contact-panel">
       <ContactSummary detail={detail} contactId={contactId} />
+
+      <TagGroups
+        detail={detail}
+        contactId={contactId}
+        canEditContact={props.canEditContact ?? false}
+        tags={props.tags}
+      />
+
+      <LeadScoreSection detail={detail} contactId={contactId} />
 
       <AssigneeSection {...props} />
 
@@ -105,6 +121,7 @@ function ContactSummary({
 }) {
   const t = useTranslations('team-inbox-conversations.panel');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const c = detail.contactSummary;
   const name = c?.name ?? detail.contact?.name ?? detail.title;
 
@@ -142,7 +159,7 @@ function ContactSummary({
           {c.status && <Row label={t('status')} value={c.status} />}
           {c.ownerName && <Row label={t('owner')} value={c.ownerName} />}
           {c.source && <Row label={t('source')} value={c.source} />}
-          <Row label={t('since')} value={fullStamp(c.createdAt, locale)} />
+          <Row label={t('since')} value={fullStamp(c.createdAt, locale, timeZone)} />
           {c.isUnsubscribed && (
             <p className="pt-1">
               <Badge tone="warning">{t('optedOut')}</Badge>
@@ -151,6 +168,41 @@ function ContactSummary({
         </dl>
       )}
     </section>
+  );
+}
+
+/**
+ * The contact's lead score (with the Score with AI button, the reasons and the history) and, in a workspace that reads
+ * conversations, what the AI made of this chat. Only for a caller who may read the contact: the summary is empty for anyone else, so
+ * the section is too. A new score or a decided suggestion refreshes the conversation, so the summary above and the score agree.
+ */
+function LeadScoreSection({
+  detail,
+  contactId,
+}: {
+  detail: InboxConversationDetail;
+  contactId: string | null;
+}) {
+  const qc = useQueryClient();
+  const summary = detail.contactSummary;
+  if (!contactId || !summary) return null;
+  const refresh = () => qc.invalidateQueries({ queryKey: KEYS.conversation(detail.id) });
+  return (
+    <div className="space-y-3" data-testid="inbox-lead-score">
+      <ScoreCard
+        contactId={contactId}
+        contact={{
+          ...summary,
+          // The wire type is a plain string; the card knows the two sources.
+          leadScoreSource:
+            summary.leadScoreSource === 'manual' || summary.leadScoreSource === 'ai'
+              ? summary.leadScoreSource
+              : null,
+        }}
+        onScored={refresh}
+      />
+      <ChatInsightCard contactId={contactId} onChanged={refresh} />
+    </div>
   );
 }
 
@@ -325,6 +377,7 @@ function NotesTab(props: ContactPanelProps) {
   const t = useTranslations('team-inbox-conversations.panel.notes');
   const errorText = useErrorText();
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -410,7 +463,7 @@ function NotesTab(props: ContactPanelProps) {
                 <span className="font-medium text-foreground">
                   {n.author.name ?? t('unknownAuthor')}
                 </span>
-                <span>· {fullStamp(n.createdAt, locale)}</span>
+                <span>· {fullStamp(n.createdAt, locale, timeZone)}</span>
                 {props.canDeleteNote(n) && (
                   <button
                     type="button"
@@ -436,6 +489,7 @@ function NotesTab(props: ContactPanelProps) {
 function TimelineTab({ conversationId }: { conversationId: string }) {
   const t = useTranslations('team-inbox-conversations.panel.timeline');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useTimeline(conversationId, true);
   const events: ConversationEvent[] = q.data?.data ?? [];
   // Newest first, whatever order the server answers in.
@@ -481,7 +535,9 @@ function TimelineTab({ conversationId }: { conversationId: string }) {
                 ? t(`events.${label.key}`, { actor })
                 : t('events.unknown', { what: label.text, actor })}
             </p>
-            <p className="text-[11px] text-muted-foreground">{fullStamp(e.createdAt, locale)}</p>
+            <p className="text-[11px] text-muted-foreground">
+              {fullStamp(e.createdAt, locale, timeZone)}
+            </p>
           </li>
         );
       })}
@@ -501,6 +557,7 @@ function PastConversations({
 }) {
   const t = useTranslations('team-inbox-conversations.panel.past');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   if (items.length === 0) return null;
   return (
     <section aria-label={t('title')} className="space-y-2" data-testid="inbox-past">
@@ -519,7 +576,7 @@ function PastConversations({
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm">{p.preview ?? t('noMessages')}</span>
                 <span className="block text-[11px] text-muted-foreground">
-                  {t(`status.${p.status}`)} · {listTime(p.lastMessageAt, nowMs, locale)}
+                  {t(`status.${p.status}`)} · {listTime(p.lastMessageAt, nowMs, locale, timeZone)}
                 </span>
               </span>
             </button>

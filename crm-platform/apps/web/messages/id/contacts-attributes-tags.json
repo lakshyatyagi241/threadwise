@@ -21,7 +21,6 @@
       "unavailable": "Bagian API ini belum tersedia.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "unexpected": "Terjadi kesalahan. Coba lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "reservedKey": "Kunci itu dicadangkan untuk token bawaan. Pilih yang lain.",
       "attributeInUse": "Beberapa kontak memiliki nilai untuk atribut ini.",
@@ -121,6 +120,12 @@
       "selectedActionsNone": "Kontak terpilih (pilih baris terlebih dahulu)",
       "modifyColumns": "Ubah Kolom",
       "resetColumns": "Reset ke default",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nama Kontak",
       "colPhone": "Nomor Telepon",
       "colEmailId": "ID Email",
@@ -170,7 +175,20 @@
       "import": "Impor",
       "columns": "Kolom",
       "addColumnField": "Tambah kolom kustom sebagai kolom tabel",
-      "kanbanView": "Tampilan papan (berdasarkan tahap)"
+      "kanbanView": "Tampilan papan (berdasarkan tahap)",
+      "colLeadScore": "Skor prospek",
+      "colOwner": "Pemilik",
+      "unassigned": "Belum ditetapkan",
+      "ownerFilter": "Filter berdasarkan pemilik",
+      "selectOwner": "Pemilik",
+      "allOwners": "Semua pemilik",
+      "myContacts": "Kontak saya",
+      "ownersCount": "{count} pemilik",
+      "ownerMe": "{name} (saya)",
+      "ownerFormer": "Mantan anggota",
+      "reassignView": "Tetapkan ulang kontak milik {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Tidak ada nomor telepon untuk SMS"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -215,7 +233,6 @@
       "exportStarted": "Ekspor Anda telah diunduh.",
       "exportTooLarge": "Terlalu banyak kontak untuk diekspor sekaligus. Persempit filter lalu coba lagi.",
       "update": "Perbarui",
-      "updateNeedsRows": "Pilih baris",
       "updated": "{count, plural, other {# kontak diperbarui.}}"
     },
     "form": {
@@ -304,7 +321,13 @@
       "statusNoticeReset": "Status direset ke {status}.",
       "statusNoticeSet": "Status diatur ke {status}, default untuk tahap ini.",
       "statusNoticeCleared": "Status dikosongkan: tidak berlaku untuk tahap ini.",
-      "statusNoneForStage": "Belum ada status yang diatur untuk tahap ini."
+      "statusNoneForStage": "Belum ada status yang diatur untuk tahap ini.",
+      "owner": "Pemilik",
+      "ownerNone": "Belum ditetapkan",
+      "ownerMe": "{name} (saya)",
+      "ownerFormer": "Mantan anggota",
+      "ownerHelp": "Siapa yang menangani kontak ini. Anda hanya dapat memilih orang yang diizinkan oleh akses Anda.",
+      "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut."
     },
     "tags": {
       "title": "Tag",
@@ -406,7 +429,8 @@
         "address": "Alamat",
         "memo": "Memo",
         "status": "Status",
-        "source": "Sumber"
+        "source": "Sumber",
+        "consent": "Persetujuan pemasaran (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",
@@ -431,7 +455,7 @@
       "imported": "{count, plural, other {# kontak diimpor.}}",
       "importedUpdated": "{count, plural, other {# kontak yang ada diperbarui.}}",
       "importedInvalid": "{count, plural, other {# baris tidak valid dilewati.}}",
-      "downloadRejects": "Unduh baris yang ditolak",
+      "downloadRejects": "Unduh kesalahan dan baris yang dilewati",
       "fileTooLarge": "File itu lebih besar dari {mb} MB.",
       "checking": "Memeriksa file...",
       "errorFile": "File itu tidak dapat dibaca sebagai CSV kontak. Pastikan ada baris header dan setidaknya satu kontak.",
@@ -462,7 +486,8 @@
         "group_name_too_long": "nama grup terlalu panjang",
         "tag_name_too_long": "nama tag terlalu panjang",
         "plan_limit_reached": "batas kontak paket tercapai",
-        "tag_limit_reached": "batas tag paket tercapai"
+        "tag_limit_reached": "batas tag paket tercapai",
+        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",
@@ -512,7 +537,17 @@
       "noActivity": "Belum ada aktivitas untuk kontak ini.",
       "loadMore": "Muat lebih banyak",
       "yes": "Ya",
-      "no": "Tidak"
+      "no": "Tidak",
+      "owner": "Pemilik",
+      "ownerNone": "Belum ditetapkan",
+      "ownerChange": "Ubah pemilik",
+      "ownerChanged": "Pemilik diatur ke {name}.",
+      "ownerCleared": "Pemilik dihapus.",
+      "ownerConflict": "Orang lain mengubah kontak ini lebih dulu. Kontak dimuat ulang; coba lagi.",
+      "ownerForbidden": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
+      "ownerFailed": "Pemilik tidak dapat diubah. Coba lagi.",
+      "ownerMe": "{name} (saya)",
+      "ownerFormer": "Mantan anggota"
     },
     "attributes": {
       "eyebrow": "Lainnya / Atribut",
@@ -1137,7 +1172,11 @@
         "willClear": "Akan dikosongkan pada {count, plural, one {kontak yang dipilih} other {semua # kontak yang dipilih}}.",
         "requiredNoClear": "Properti wajib tidak dapat dikosongkan.",
         "problemEmpty": "Masukkan nilai, atau pilih Kosongkan."
-      }
+      },
+      "titleAll": "Perbarui semua kontak yang cocok",
+      "hintAll": "Terapkan nilai yang sama ke setiap kontak yang cocok dengan filter saat ini. Kolom yang tetap Pertahankan tidak diubah.",
+      "applyAll": "Perbarui semua kontak yang cocok",
+      "ownerOnlyNote": "Untuk setiap kontak yang cocok, hanya pemilik yang dapat diubah di sini. Untuk mengubah tahap, status, atau properti, centang barisnya."
     },
     "kanban": {
       "board": "Kontak menurut tahap",
@@ -1164,17 +1203,18 @@
         "updated": "Diperbarui",
         "rejected": "Ditolak",
         "actions": "Aksi",
-        "downloadRejects": "Unduh yang ditolak",
+        "downloadRejects": "Unduh kesalahan dan baris yang dilewati",
         "statuses": {
           "queued": "Dalam antrean",
           "running": "Berjalan",
           "completed": "Selesai",
           "failed": "Gagal"
-        }
+        },
+        "by": "Diimpor oleh"
       },
       "exports": {
         "title": "Ekspor",
-        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. File yang diunduh tidak disimpan.",
+        "hint": "Ekspor kontak dari Hub, terbaru lebih dulu. Setiap file disimpan 30 hari agar Anda dan rekan yang boleh mengekspor dapat mengunduhnya lagi.",
         "empty": "Belum ada ekspor.",
         "by": "Oleh",
         "rows": "Kontak",
@@ -1183,7 +1223,153 @@
         "selections": {
           "ids": "Kontak yang dicentang",
           "filter": "Semua yang cocok"
-        }
+        },
+        "download": "Unduh",
+        "noFile": "Tidak disimpan",
+        "keptUntil": "Disimpan hingga {date}",
+        "downloadFailed": "File tidak dapat diunduh. Mungkin sudah kedaluwarsa."
+      }
+    },
+    "singleSend": {
+      "close": "Tutup",
+      "cancel": "Batal",
+      "send": "Kirim",
+      "sending": "Mengirim",
+      "contact": "Kontak",
+      "name": "Nama",
+      "phone": "Ponsel",
+      "email": "Email",
+      "title": {
+        "whatsapp": "Kirim pesan WhatsApp",
+        "sms": "Kirim SMS",
+        "email": "Kirim email",
+        "call": "Telepon"
+      },
+      "optedOut": "Kontak ini telah berhenti menerima komunikasi. Pesan tidak dapat dikirim.",
+      "noPhone": "Kontak ini tidak memiliki nomor telepon.",
+      "noEmail": "Kontak ini tidak memiliki alamat email.",
+      "number": "Kirim dari",
+      "numberHint": "Nomor WhatsApp yang digunakan untuk mengirim pesan.",
+      "noChannel": "Belum ada nomor WhatsApp yang terhubung. Hubungkan satu di Saluran terlebih dahulu.",
+      "template": "Templat WhatsApp",
+      "templatePlaceholder": "Pilih templat",
+      "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
+      "notSendable": "Templat ini tidak dapat diisi di sini ({reason}).",
+      "variables": "Variabel templat",
+      "preview": "Pratinjau",
+      "slot": "Variabel {key}",
+      "loading": "Memuat",
+      "openFailed": "Tidak dapat membuka percakapan: {message}",
+      "sent": "Pesan untuk {name} masuk antrean.",
+      "failed": "Tidak dapat mengirim: {message}",
+      "callIntro": "Lakukan panggilan WhatsApp ke kontak ini dari browser.",
+      "callOff": "Panggilan belum diaktifkan untuk nomor WhatsApp ini. Aktifkan di pengaturan nomor.",
+      "callPermission": "Kontak belum mengizinkan panggilan. Izin mereka akan diminta lebih dulu sebelum menelepon.",
+      "callReady": "Siap menelepon {phone}.",
+      "later": {
+        "sms": "Pengiriman SMS dari CRM belum tersedia.",
+        "email": "Pengiriman email dari CRM belum tersedia."
+      },
+      "openApp": {
+        "sms": "Buka di aplikasi pesan Anda",
+        "email": "Buka di aplikasi email Anda"
+      }
+    },
+    "views": {
+      "label": "Tampilan",
+      "all": "Semua kontak",
+      "add": "Tambah tampilan",
+      "changed": "Filter berubah sejak tampilan ini disimpan",
+      "more": "Opsi lainnya untuk {name}",
+      "picker": {
+        "title": "Pilih tampilan",
+        "create": "Buat tampilan baru",
+        "search": "Cari tampilan...",
+        "chipAll": "Semua",
+        "chipPinned": "Di tab",
+        "chipShared": "Dibagikan",
+        "empty": "Tampilan tidak ditemukan",
+        "pinned": "Di tab"
+      },
+      "menu": {
+        "rename": "Ubah nama tampilan",
+        "update": "Simpan filter saat ini",
+        "unpin": "Hapus dari tab",
+        "pin": "Tampilkan sebagai tab",
+        "delete": "Hapus tampilan",
+        "edit": "Edit tampilan"
+      },
+      "drawer": {
+        "editTitle": "Ubah nama tampilan",
+        "name": "Nama tampilan",
+        "namePlaceholder": "Tampilan tanpa judul",
+        "shareWith": "Bagikan ke",
+        "justMe": "Hanya saya",
+        "everyone": "Semua orang",
+        "save": "Perbarui",
+        "cancel": "Batal",
+        "close": "Tutup"
+      },
+      "toast": {
+        "created": "Tampilan \"{name}\" dibuat.",
+        "updated": "Tampilan diperbarui.",
+        "filtersSaved": "Filter disimpan ke \"{name}\".",
+        "deleted": "Tampilan \"{name}\" dihapus.",
+        "failed": "Tidak dapat menyimpan tampilan: {message}",
+        "conflict": "Orang lain telah mengubah tampilan ini. Muat ulang lalu coba lagi."
+      },
+      "delete": {
+        "title": "Hapus tampilan ini?",
+        "message": "\"{name}\" akan dihapus untuk semua orang yang diberi akses. Kontak tidak berubah.",
+        "confirm": "Hapus tampilan",
+        "cancel": "Pertahankan tampilan"
+      },
+      "editor": {
+        "title": {
+          "create": "Buat Tampilan Baru",
+          "edit": "Edit Tampilan"
+        },
+        "close": "Tutup",
+        "back": "Kembali ke kontak",
+        "name": "Nama Tampilan",
+        "namePlaceholder": "Masukkan nama tampilan",
+        "favorite": "Tandai sebagai Favorit",
+        "favoriteHint": "Tampilan favorit mendapat tab sendiri.",
+        "shareWith": "Bagikan ke",
+        "justMe": "Hanya Saya",
+        "everyone": "Semua Orang",
+        "filterTitle": "Filter Kontak",
+        "filterHint": "Cocokkan semua atau salah satu kondisi, dan tambahkan grup untuk filter yang lebih rumit.",
+        "columnsTitle": "Preferensi Kolom",
+        "locked": "Selalu ditampilkan",
+        "cancel": "Batal",
+        "create": "Buat Tampilan",
+        "save": "Simpan Tampilan",
+        "saving": "Menyimpan",
+        "needName": "Masukkan nama tampilan.",
+        "needFilter": "Tambahkan setidaknya satu kondisi yang lengkap.",
+        "notFound": "Tampilan ini tidak ditemukan atau sudah dihapus.",
+        "noPermission": "Anda tidak memiliki izin untuk melakukan ini.",
+        "loading": "Memuat",
+        "columnsHint": "Cari dan centang kolom yang ditampilkan tampilan ini, lalu seret kolom terpilih untuk mengatur urutannya.",
+        "drag": "Seret untuk mengurutkan ulang {name}",
+        "selectedUsers": "Pengguna terpilih",
+        "accessLevel": "Tingkat akses",
+        "canView": "Dapat melihat",
+        "canEdit": "Dapat melihat dan mengedit",
+        "peoplePlaceholder": "Cari orang",
+        "noPeople": "Orang tidak ditemukan",
+        "removePerson": "Hapus {name}",
+        "clearPeople": "Hapus semua orang",
+        "needPeople": "Pilih setidaknya satu orang.",
+        "onlyCreator": "Hanya pembuat tampilan ini yang dapat mengubah siapa saja yang diberi akses.",
+        "searchColumns": "Cari kolom",
+        "noColumnMatch": "Tidak ada kolom yang cocok.",
+        "available": "Kolom tersedia",
+        "selected": "Kolom terpilih",
+        "selectAll": "Pilih Semua",
+        "reorder": "Seret untuk mengurutkan ulang kolom",
+        "remove": "Hapus {name}"
       }
     }
   }

@@ -14,7 +14,6 @@
       "copy": "复制",
       "copied": "已复制",
       "copyFailed": "无法复制。请选中密钥后手动复制。",
-      "reference": "支持参考编号：{id}",
       "back": "返回集成"
     },
     "page": {

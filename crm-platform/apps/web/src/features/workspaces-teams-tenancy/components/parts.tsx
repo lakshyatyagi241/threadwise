@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { WSP_INVITE_TTL_DAYS } from '@crm/contracts';
-import { errorKind, planLimitOf, requestIdOf } from '../lib/errors';
+import { errorKind, planLimitOf } from '../lib/errors';
 import { initials } from '../lib/roles';
 import { CloseIcon } from './icons';
 
@@ -33,7 +33,6 @@ export function ErrorNote({ error }: { error: unknown }) {
   const t = useTranslations('workspaces-teams-tenancy');
   const text = useErrorText();
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone="danger" className="space-y-1.5">
       <p>{text(error)}</p>
@@ -42,11 +41,6 @@ export function ErrorNote({ error }: { error: unknown }) {
           <Link href="/account/plans" className="font-semibold underline underline-offset-2">
             {t('invite.upgrade')}
           </Link>
-        </p>
-      )}
-      {kind === 'unexpected' && requestId && (
-        <p className="text-xs opacity-80">
-          {t('common.requestId')}: <span className="font-mono">{requestId}</span>
         </p>
       )}
     </Alert>

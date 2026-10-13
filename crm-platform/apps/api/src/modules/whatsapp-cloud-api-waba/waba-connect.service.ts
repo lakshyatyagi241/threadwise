@@ -9,6 +9,8 @@ import {
   type ConnectManualInput,
   type ConnectResult,
   type RegisterNumberInput,
+  type RequestVerificationCodeInput,
+  type VerifyCodeInput,
   type SetTokenInput,
   type UpdateBusinessProfileInput,
   type VerifyTokenInput,
@@ -559,6 +561,39 @@ export class WabaConnectService {
       if (!/already/i.test(err.message)) throw this.rejected(translateRegisterError(err), 'pin', e);
     }
     const updated = await this.saveCredentials(row, { ...creds, register_pin: pin }, 'register');
+    return toDto(updated);
+  }
+
+  /** Meta texts or calls the number with a 6-digit ownership code (step one of verifying it). */
+  async requestVerificationCode(
+    uuid: string,
+    input: RequestVerificationCodeInput,
+  ): Promise<WabaConnectionDto> {
+    const row = await this.require(uuid);
+    const conn = this.connOf(row);
+    await this.meta('Meta could not send the code', () =>
+      this.admin.requestVerificationCode(conn, input.method, 'en_US'),
+    );
+    return toDto(row);
+  }
+
+  /** Confirms the number with the code Meta sent, then re-reads it so `code_verification_status` and the guided flow catch up. */
+  async verifyCode(uuid: string, input: VerifyCodeInput): Promise<WabaConnectionDto> {
+    const row = await this.require(uuid);
+    const conn = this.connOf(row);
+    try {
+      await this.admin.verifyCode(conn, input.code);
+    } catch (e) {
+      throw this.rejected(
+        `Meta rejected the code: ${translateConnectError(asApiError(e))}`,
+        'code',
+        e,
+      );
+    }
+    const phone = await this.admin.getPhone(authFor(conn), conn.phoneNumberId);
+    const updated = await this.touch(row, phoneMeta(phone), 'verify_code', {
+      lastHealthAt: new Date(),
+    });
     return toDto(updated);
   }
 

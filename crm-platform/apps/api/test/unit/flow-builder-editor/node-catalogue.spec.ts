@@ -16,9 +16,9 @@ import {
 const ids = (mode: FlowType) => flbPaletteFor(mode).map((d) => d.id);
 
 describe('node catalogue: palette and per-channel availability (TW-FLB-016)', () => {
-  it('a WhatsApp flow lists the 35 nodes Reference lists plus the Ask for file / location additions and the five CRM additions and the API Library node, including Template, List, Sequence, MySQL and the Google nodes', () => {
+  it('a WhatsApp flow lists the 35 nodes Reference lists plus the Ask for file / location additions and the five CRM additions and the API Library node and the FAQ node, including Template, List, Sequence, MySQL and the Google nodes', () => {
     const chat = ids('chat');
-    expect(chat).toHaveLength(45);
+    expect(chat).toHaveLength(46);
     for (const t of [
       'template',
       'list',
@@ -29,6 +29,7 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
       'google_form',
       'deal',
       'api_library',
+      'faq',
     ]) {
       expect(chat).toContain(t);
     }
@@ -49,6 +50,7 @@ describe('node catalogue: palette and per-channel availability (TW-FLB-016)', ()
         'delay',
         'webhook',
         'ai',
+        'faq',
         'end',
         'update_contact',
         'list_member',

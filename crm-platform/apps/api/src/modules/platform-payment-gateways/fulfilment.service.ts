@@ -9,6 +9,7 @@ import { nextPlanEnd, type BillingUnit } from './fulfilment-rules';
 import { recordOrderEvent } from './order-events';
 import { OrdersRepository, type OrderRow } from './orders.repository';
 import { PaygwStore } from './paygw.store';
+import { SubscriptionCancelService } from './subscription-cancel.service';
 
 export interface PaidFacts {
   gatewayPaymentId?: string;
@@ -38,10 +39,32 @@ export class FulfilmentService {
     private readonly wallet: WalletLedgerService,
     private readonly walletSettings: WalletSettingsService,
     private readonly audit: AuthAuditService,
+    private readonly cancel: SubscriptionCancelService,
   ) {}
 
   /** `applied` is false when the order was already paid (a replay), in which case nothing was changed. */
   async fulfil(order: OrderRow, facts: PaidFacts): Promise<{ applied: boolean }> {
+    const outcome = await this.fulfilIn(order, facts);
+    // A paid plan REPLACES whatever plan the workspace was renewing: the old subscription ends now, or the workspace pays both. After
+    // commit (a provider call must not hold the payment's transaction) and never fatal: the payment is already applied.
+    if (outcome.applied && order.kind === 'plan') {
+      try {
+        await this.cancel.endPlanSubscriptions(order.orgId, {
+          atCycleEnd: false,
+          reason: 'superseded',
+          exceptOrderNumber: order.orderNumber,
+        });
+      } catch (err) {
+        this.logger.error(
+          { err, order: order.orderNumber },
+          'ending the replaced subscription failed',
+        );
+      }
+    }
+    return outcome;
+  }
+
+  private async fulfilIn(order: OrderRow, facts: PaidFacts): Promise<{ applied: boolean }> {
     return this.store.tx(async (tx) => {
       const paid = await this.orders.markPaid(
         tx,

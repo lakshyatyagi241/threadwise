@@ -11,8 +11,7 @@
       "copied": "কপি হয়েছে",
       "retry": "আবার চেষ্টা করুন",
       "loadMore": "আরও লোড করুন",
-      "loadingMore": "লোড হচ্ছে",
-      "requestId": "অনুরোধ আইডি"
+      "loadingMore": "লোড হচ্ছে"
     },
     "tiers": {
       "owner": "মালিক",

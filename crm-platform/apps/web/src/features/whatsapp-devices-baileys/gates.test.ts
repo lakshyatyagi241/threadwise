@@ -51,3 +51,34 @@ describe('Personal WhatsApp exists only for workspaces the operator allowed', ()
     expect(resolveNav(nav, unknown).map((n) => n.id)).toEqual(['devices']);
   });
 });
+
+describe('the Groups tab of the personal numbers', () => {
+  const groups = nav.find((n) => n.id === 'devices-groups');
+
+  it('is a route entry behind the same engine gate and its own read key, not a menu entry or a tile', () => {
+    expect(groups?.href).toBe('/devices/groups');
+    expect(groups?.gates).toEqual({ permission: 'wa.groups.read', app: 'unofficial_whatsapp' });
+    expect(groups?.inMenu).toBe(false);
+    expect(settings.map((t) => t.href)).not.toContain('/devices/groups');
+  });
+
+  it('is removed while the engine is not allowed for the workspace', () => {
+    const off = caps(['wa.devices.read', 'wa.groups.read'], ['automation']);
+    expect(resolveNav(nav, off)).toEqual([]);
+  });
+
+  it('is removed for a member without wa.groups.read, even where the engine is allowed and the numbers are readable', () => {
+    const noKey = caps(['wa.devices.read'], ['unofficial_whatsapp']);
+    expect(resolveNav(nav, noKey).map((n) => n.id)).toEqual(['devices']);
+  });
+
+  it('is drawn beside the numbers once the workspace is allowed and the member may read groups', () => {
+    const on = caps(['wa.devices.read', 'wa.groups.read'], ['unofficial_whatsapp']);
+    expect(resolveNav(nav, on).map((n) => n.id)).toEqual(['devices', 'devices-groups']);
+  });
+
+  it('is longer than /devices, so its own gate wins on /devices/groups and /devices keeps its own', () => {
+    expect(groups!.href.startsWith(nav[0]!.href)).toBe(true);
+    expect(groups!.href.length).toBeGreaterThan(nav[0]!.href.length);
+  });
+});

@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Pagamento",
+      "description": "Addebita il pagamento al visitatore sul tuo gateway dopo l'invio. Il modulo risulta pagato solo quando il gateway lo conferma.",
+      "enabled": "Richiedi il pagamento",
+      "enabledHint": "Dopo il salvataggio delle risposte, il visitatore viene indirizzato alla pagina di pagamento del tuo gateway.",
+      "gateway": {
+        "checking": "Verifica del gateway di pagamento in corso...",
+        "failed": "Impossibile verificare il gateway di pagamento. Riprova tra un attimo.",
+        "ready": "I pagamenti vanno a {name} ({mode}).",
+        "mode": {
+          "test": "modalità test",
+          "live": "modalità live"
+        },
+        "none": "Nessun gateway di pagamento collegato: questo modulo non può ancora accettare pagamenti.",
+        "noLink": "{name} non può creare un link di pagamento ospitato, quindi non può essere usato in un modulo. Collega Razorpay o Stripe.",
+        "open": "Apri i gateway di pagamento"
+      },
+      "amountType": "Come viene stabilito l'importo",
+      "amountTypes": {
+        "fixed": "Prezzo fisso",
+        "from_field": "Da un campo a scelta",
+        "pay_what_you_want": "Il visitatore inserisce l'importo"
+      },
+      "amountTypeHints": {
+        "fixed": "Ogni visitatore paga lo stesso prezzo.",
+        "from_field": "Ogni opzione di un menu a tendina o di un campo radio ha il proprio prezzo.",
+        "pay_what_you_want": "Per donazioni e mance. Imposti tu l'importo minimo e massimo."
+      },
+      "currency": "Valuta",
+      "currencyHint": "Tre lettere, ad esempio INR o USD. Il tuo gateway deve supportarla.",
+      "amount": "Prezzo",
+      "amountHint": "In {currency}, scritto come lo diresti, ad esempio 499.00.",
+      "fieldChoice": "Campo a scelta",
+      "fieldNumber": "Campo importo",
+      "fieldNone": "Scegli un campo",
+      "noChoiceFields": "Aggiungi prima al modulo un menu a tendina o un campo radio.",
+      "noNumberFields": "Aggiungi prima al modulo un campo numerico o di valuta.",
+      "optionPrices": "Prezzo di ogni opzione",
+      "optionPrice": "Prezzo per «{label}»",
+      "min": "Importo minimo",
+      "minHint": "Qualsiasi importo inferiore viene rifiutato.",
+      "max": "Importo massimo (facoltativo)",
+      "maxHint": "Lascia vuoto per non avere un limite massimo.",
+      "descriptionLabel": "Mostrato nella pagina di pagamento",
+      "descriptionHint": "Una breve nota per chi paga, ad esempio per cosa sta pagando.",
+      "issues": {
+        "amountRequired": "Inserisci il prezzo.",
+        "fieldRequired": "Scegli il campo da cui deriva l'importo.",
+        "fieldNotRequired": "Rendi obbligatorio questo campo, così ogni visitatore indica un importo.",
+        "optionsNeedAmounts": "Assegna un prezzo a ogni opzione.",
+        "minRequired": "Inserisci l'importo minimo.",
+        "minAboveMax": "L'importo minimo non può superare quello massimo."
+      }
+    }
+  }
+}

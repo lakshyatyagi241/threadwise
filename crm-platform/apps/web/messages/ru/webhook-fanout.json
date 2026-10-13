@@ -7,7 +7,6 @@
     "common": {
       "loading": "Загрузка",
       "retry": "Повторить",
-      "requestId": "ID запроса",
       "dash": "-",
       "errors": {
         "forbidden": "У вас нет прав на это действие.",

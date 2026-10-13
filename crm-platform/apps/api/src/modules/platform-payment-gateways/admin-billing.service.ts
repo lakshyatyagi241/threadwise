@@ -119,7 +119,7 @@ export class AdminBillingService {
   // ---- order history ---------------------------------------------------------------------------------------------------
 
   async listOrders(q: AdminOrdersQuery): Promise<AdminOrdersResponse> {
-    const range = orderRange(q.window);
+    const range = orderRange(q.window, new Date(), q);
     return this.store.tx(async (tx) => {
       const rep = await this.reporting(tx);
       const [page, kpi, awaiting] = await Promise.all([
@@ -206,7 +206,7 @@ export class AdminBillingService {
   }
 
   async orderAnalytics(q: OrderAnalyticsQuery): Promise<OrderAnalyticsResponse> {
-    const range = orderRange(q.window);
+    const range = orderRange(q.window, new Date(), q);
     const now = new Date();
     return this.store.tx(async (tx) => {
       const rep = await this.reporting(tx);
@@ -378,7 +378,7 @@ export class AdminBillingService {
   }
 
   async billingHistory(q: BillingHistoryQuery): Promise<BillingHistoryResponse> {
-    const range = billingRange(q.window);
+    const range = billingRange(q.window, new Date(), q);
     return this.store.tx(async (tx) => {
       const rep = await this.reporting(tx);
       const [list, gateways, now, prev, days] = await Promise.all([
@@ -434,7 +434,7 @@ export class AdminBillingService {
   }
 
   async billingAnalytics(q: BillingAnalyticsQuery): Promise<BillingAnalyticsResponse> {
-    const range = billingRange(q.window);
+    const range = billingRange(q.window, new Date(), q);
     return this.store.tx(async (tx) => {
       const rep = await this.reporting(tx);
       const [now, prev, days, mix, status, top] = await Promise.all([
@@ -806,7 +806,7 @@ export class AdminBillingService {
   // ---- CSV exports (Reference's buttons had no handler) -------------------------------------------------------------------
 
   async exportOrders(q: AdminOrdersQuery): Promise<ExportResponse> {
-    const range = orderRange(q.window);
+    const range = orderRange(q.window, new Date(), q);
     const rows = await this.store.tx((tx) =>
       this.repo.exportOrders(
         tx,
@@ -846,7 +846,7 @@ export class AdminBillingService {
       );
     }
     return {
-      filename: `order-history-${q.window}.csv`,
+      filename: `order-history-${q.window === 'custom' ? `${q.from}_${q.to}` : q.window}.csv`,
       csv: `${lines.join('\n')}\n`,
       rows: Math.min(rows.length, EXPORT_CAP),
       truncated: rows.length > EXPORT_CAP,
@@ -854,7 +854,7 @@ export class AdminBillingService {
   }
 
   async exportBilling(q: BillingHistoryQuery): Promise<ExportResponse> {
-    const range = billingRange(q.window);
+    const range = billingRange(q.window, new Date(), q);
     const list = await this.store.tx((tx) =>
       this.repo.listEvents(tx, {
         from: range.from,
@@ -895,7 +895,7 @@ export class AdminBillingService {
       );
     }
     return {
-      filename: `billing-history-${q.window}.csv`,
+      filename: `billing-history-${q.window === 'custom' ? `${q.from}_${q.to}` : q.window}.csv`,
       csv: `${lines.join('\n')}\n`,
       rows: Math.min(list.rows.length, EXPORT_CAP),
       truncated: list.rows.length > EXPORT_CAP,

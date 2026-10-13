@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { hasGrantedConsentSql } from '../contact-consent';
 import { PERMANENT_FAILURE_SQL_REGEX } from './retry-policy';
 
 /** `IN (...)` lists are chunked so a 100k-contact audience never builds one giant statement. */
@@ -153,12 +154,19 @@ export class BroadcastsRepository {
    * Of these contact ids, the ones that may be messaged: they exist in this organization, are not archived, and have
    * not opted out (STOP keyword or manual unsubscribe). Returned as a set; the caller keeps its own order.
    */
-  async sendableIds(tx: Tx, orgId: number, ids: readonly number[]): Promise<Set<number>> {
+  async sendableIds(
+    tx: Tx,
+    orgId: number,
+    ids: readonly number[],
+    requireConsent = false,
+  ): Promise<Set<number>> {
     const ok = new Set<number>();
     for (const part of chunks(ids)) {
+      // With the workspace switch "Require recorded consent for marketing sends" ON, a contact also needs a recorded grant.
       const res = await tx.execute(sql`
-        SELECT id FROM contacts
-        WHERE org_id = ${orgId} AND id IN (${list(part, 'bigint')}) AND NOT is_unsubscribed AND NOT is_archived`);
+        SELECT c.id FROM contacts c
+        WHERE c.org_id = ${orgId} AND c.id IN (${list(part, 'bigint')}) AND NOT c.is_unsubscribed AND NOT c.is_archived
+          ${requireConsent ? sql`AND ${hasGrantedConsentSql('c')}` : sql``}`);
       for (const r of res.rows as Array<{ id: number | string }>) ok.add(Number(r.id));
     }
     return ok;
@@ -199,9 +207,10 @@ export class BroadcastsRepository {
   /** The row, locked, so a concurrent retry, delete or run waits for this decision. */
   async lock(tx: Tx, orgId: number, uuid: string) {
     const res = await tx.execute(sql`
-      SELECT id, status FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
-    const r = res.rows[0] as { id: number | string; status: string } | undefined;
-    return r ? { id: Number(r.id), status: r.status } : undefined;
+      SELECT id, status, provider FROM broadcasts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid FOR UPDATE`);
+    const r = res.rows[0] as
+      { id: number | string; status: string; provider: string | null } | undefined;
+    return r ? { id: Number(r.id), status: r.status, provider: r.provider } : undefined;
   }
 
   /** Recipients go with it (foreign key cascade). */

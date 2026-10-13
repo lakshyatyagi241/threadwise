@@ -30,6 +30,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
     planFeatures: {},
     state: 'paid_active',
     visibleApps: { all: true, appIds: new Set<number>() },
+    appWithheld: {},
     ...over,
   };
 }
@@ -63,6 +64,8 @@ const OTHER_ENFORCEMENT: PlanLimitKey[] = [
   'total_campaigns',
   'broadcast_recipients',
   'ai_token_limit_monthly',
+  // SMS sent this month: reserved atomically per message by the SMS sender (plan_usage, metric `sms_sent`).
+  'sms_monthly',
 ];
 // The request-rate cap is read by the API-key guard, it counts nothing in the database.
 const NO_METER: PlanLimitKey[] = ['api_rate_limit_per_minute'];

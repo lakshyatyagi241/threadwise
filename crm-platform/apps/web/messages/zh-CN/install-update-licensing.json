@@ -193,7 +193,6 @@
         "outOfOrder": "步骤顺序有误。请重新加载页面后再次开始。",
         "step": "安装步骤失败。请检查您的信息和服务器日志，然后重试。",
         "unknown": "出现问题，请重试。",
-        "requestId": "请求 ID {id}",
         "prerequisites": "服务器尚未准备好进行安装：{items}。",
         "licence": {
           "empty": "请输入您的 CodeCanyon 购买代码。",
@@ -265,7 +264,6 @@
       "loading": "加载中",
       "errorForbidden": "您无权查看此页面。",
       "errorUnexpected": "无法加载更新程序。",
-      "requestId": "请求 ID",
       "retry": "重试",
       "licence": {
         "kicker": "第 1 步 · 许可证",

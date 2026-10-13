@@ -1,0 +1,79 @@
+{
+  "sql": {
+    "ai_token_usage": ["org_id"],
+    "ai_training_sources": ["error", "status"],
+    "channels": [
+      "capabilities",
+      "credential_hints",
+      "credentials_enc",
+      "display_address",
+      "external_id",
+      "kind",
+      "name",
+      "org_id",
+      "settings",
+      "status",
+      "uuid",
+      "webhook_token_hash"
+    ],
+    "event_outbox": ["aggregate_id", "aggregate_module", "event_type", "org_id", "payload"],
+    "faq_settings": ["enabled", "flow_id", "org_id"],
+    "message_ledger": [
+      "channel_id",
+      "conversation_id",
+      "key",
+      "kind",
+      "message_created_at",
+      "message_id",
+      "org_id"
+    ],
+    "org_plan_state": [
+      "billing_cycle",
+      "org_id",
+      "plan_ends_at",
+      "row_version",
+      "trial_ends_at",
+      "updated_at"
+    ],
+    "organizations": ["name", "plan", "roles_version", "settings", "slug", "updated_at", "uuid"],
+    "sequence_counters": ["current_value", "module_key", "org_id"],
+    "usage_charge_keys": [
+      "charge_created_at",
+      "charge_id",
+      "org_id",
+      "provider_message_id",
+      "status",
+      "uuid"
+    ],
+    "usage_charges": ["org_id"],
+    "user_profiles": ["org_id", "user_id"],
+    "user_roles": ["org_id", "role_id", "user_id"],
+    "user_security": ["email_verified_at", "org_id", "user_id"],
+    "users": ["email", "full_name", "invited_at", "joined_at", "org_id", "password_hash", "status"],
+    "wallet_transactions": [
+      "actor_label",
+      "actor_type",
+      "amount",
+      "balance_after",
+      "created_at",
+      "description",
+      "direction",
+      "idempotency_key",
+      "kind",
+      "meta",
+      "note",
+      "org_id",
+      "source",
+      "type",
+      "unit",
+      "updated_at",
+      "user_id",
+      "uuid"
+    ],
+    "wallets": ["balance", "org_id", "reserved", "row_version", "unit", "updated_at"],
+    "workspace_settings": ["org_id"]
+  },
+  "specs": {
+    "conversations": "load/inbox:CONVERSATION_SPEC"
+  }
+}

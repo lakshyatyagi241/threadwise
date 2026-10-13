@@ -82,9 +82,19 @@ export class WorkspaceSwitchService {
   async list(): Promise<WorkspaceListResponse> {
     const me = await this.currentIdentity();
     // An unverified address cannot be used to discover other workspaces.
-    const others = me.verified ? await this.tenants.orgsForVerifiedEmail(me.email) : [];
-    const items = new Map(
-      others.map((o) => [o.slug, { slug: o.slug, name: o.name, current: o.slug === me.orgSlug }]),
+    // Workspaces where the address is not verified yet are listed (login shows them too) but marked, so the
+    // menu can say why they cannot be opened instead of silently hiding them. Switching still needs a verified one.
+    const others = me.verified ? await this.tenants.orgsForEmailWithVerification(me.email) : [];
+    const items = new Map<string, WorkspaceListResponse['data'][number]>(
+      others.map((o) => [
+        o.slug,
+        {
+          slug: o.slug,
+          name: o.name,
+          current: o.slug === me.orgSlug,
+          ...(o.verified || o.slug === me.orgSlug ? {} : { unverified: true }),
+        },
+      ]),
     );
     if (!items.has(me.orgSlug)) {
       const org = await this.tenants.findOrgBySlug(me.orgSlug);

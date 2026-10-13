@@ -4,8 +4,7 @@
       "title": "Шаблоны"
     },
     "common": {
-      "dismiss": "Скрыть",
-      "requestId": "ID запроса"
+      "dismiss": "Скрыть"
     },
     "status": {
       "draft": "Черновик",

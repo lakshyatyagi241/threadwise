@@ -92,9 +92,9 @@ the device idle-logout consumer (037), a WebKit/Safari pass and a signed-in Refe
 | storefront-builder                                | STORE  | not started                      |          |       |
 | checkout-orders-merchant-payments                 | CHK    | not started                      |          |       |
 | shopify-woocommerce                               | ECOM   | not started                      |          |       |
-| channel-facebook                                  | FB     | not started                      |          |       |
-| channel-instagram                                 | IG     | not started                      |          |       |
-| channel-telegram                                  | TG     | not started                      |          |       |
+| channel-facebook                                  | FB     | API + web built, e2e green       |          |       |
+| channel-instagram                                 | IG     | API + web built, e2e green       |          |       |
+| channel-telegram                                  | TG     | API + web built, e2e green       |          |       |
 | channel-tiktok                                    | TT     | not started                      |          |       |
 | channel-line                                      | LINE   | not started                      |          |       |
 | channel-wechat                                    | WECH   | not started                      |          |       |

@@ -1,6 +1,12 @@
 import type {
+  ApplyConversationTagInput,
   AssignConversationInput,
+  CreateInboxTagInput,
+  UpdateInboxTagInput,
+  BulkConversationsInput,
   CreateConversationNoteInput,
+  CreateMessageLogExportInput,
+  ConversationPriority,
   CreateSimulatorChannelInput,
   InboxMediaUpload,
   SendMessageInput,
@@ -12,9 +18,13 @@ import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import { listQuery, type ListFilters } from '../lib/list';
 import {
+  bulkConversationsResponseSchema,
+  inboxTagListSchema,
+  inboxTagSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
+  conversationGroupMembersSchema,
   conversationListResponseSchema,
   conversationNoteSchema,
   conversationSummarySchema,
@@ -25,13 +35,47 @@ import {
   inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
+  messageLogExportListSchema,
+  messageLogExportSchema,
+  messageLogResponseSchema,
   messageResponseSchema,
   noteListSchema,
   simulatorInboundResponseSchema,
 } from './schemas';
 
+/** The finished export as a file. It needs the session, so it is fetched (a bare link carries no auth) and the body handed to the browser. */
+export async function downloadMessageLogExport(
+  exportId: string,
+): Promise<{ blob: Blob; fileName: string }> {
+  const res = await fetch(`/api/v2/inbox/message-logs/exports/${exportId}/download`, {
+    headers: { Accept: 'text/csv', 'X-Request-Id': crypto.randomUUID() },
+    credentials: 'same-origin',
+  });
+  if (!res.ok) {
+    let body: unknown;
+    try {
+      body = await res.json();
+    } catch {
+      body = undefined;
+    }
+    throw toApiError(res.status, body, res.headers.get('x-request-id'));
+  }
+  const named = /filename="?([^";]+)"?/i.exec(res.headers.get('content-disposition') ?? '');
+  return { blob: await res.blob(), fileName: named?.[1] ?? 'message-log.csv' };
+}
+
 /** Every inbox call. Paths are the plan's endpoint list (section 4.2); the proxy adds the session token. */
 export const inboxApi = {
+  messageLog: (messageId: string, signal?: AbortSignal) =>
+    apiFetch(`/inbox/messages/${messageId}/log`, { schema: messageLogResponseSchema, signal }),
+  logExports: (signal?: AbortSignal) =>
+    apiFetch('/inbox/message-logs/exports', { schema: messageLogExportListSchema, signal }),
+  requestLogExport: (input: CreateMessageLogExportInput) =>
+    apiFetch('/inbox/message-logs/exports', {
+      method: 'POST',
+      body: input,
+      schema: messageLogExportSchema,
+    }),
   conversations: (filters: ListFilters, cursor: string | null, signal?: AbortSignal) =>
     apiFetch('/inbox/conversations', {
       query: { limit: 30, ...listQuery(filters), cursor: cursor ?? undefined },
@@ -61,6 +105,13 @@ export const inboxApi = {
       schema: messageResponseSchema,
       idempotencyKey: input.clientMessageId,
     }),
+  /** The members of a personal-number group thread, for the composer's @mention picker (read from the directory; `q` is a name or number). */
+  groupMembers: (conversationId: string, q: string, signal?: AbortSignal) =>
+    apiFetch(`/inbox/conversations/${conversationId}/group-members`, {
+      query: { q: q || undefined, limit: 20 },
+      schema: conversationGroupMembersSchema,
+      signal,
+    }),
   /** The approved templates the conversation's WhatsApp number can send (the picker of the composer). */
   templates: (conversationId: string, q: string, signal?: AbortSignal) =>
     apiFetch(`/inbox/conversations/${conversationId}/templates`, {
@@ -88,6 +139,42 @@ export const inboxApi = {
       method: 'POST',
       body: input,
       schema: conversationSummarySchema,
+    }),
+  setPriority: (conversationId: string, rowVersion: number, priority: ConversationPriority) =>
+    apiFetch(`/inbox/conversations/${conversationId}/priority`, {
+      method: 'POST',
+      body: { rowVersion, priority },
+      schema: conversationSummarySchema,
+    }),
+  snooze: (conversationId: string, rowVersion: number, until: string) =>
+    apiFetch(`/inbox/conversations/${conversationId}/snooze`, {
+      method: 'POST',
+      body: { rowVersion, until },
+      schema: conversationSummarySchema,
+    }),
+  tags: (signal?: AbortSignal) => apiFetch('/inbox/tags', { schema: inboxTagListSchema, signal }),
+  createTag: (input: CreateInboxTagInput) =>
+    apiFetch('/inbox/tags', { method: 'POST', body: input, schema: inboxTagSchema }),
+  updateTag: (id: string, input: UpdateInboxTagInput) =>
+    apiFetch(`/inbox/tags/${id}`, { method: 'PATCH', body: input, schema: inboxTagSchema }),
+  deleteTag: (id: string) => apiFetch(`/inbox/tags/${id}`, { method: 'DELETE' }),
+  applyTag: (conversationId: string, input: ApplyConversationTagInput) =>
+    apiFetch(`/inbox/conversations/${conversationId}/tags`, {
+      method: 'POST',
+      body: input,
+      schema: conversationSummarySchema,
+    }),
+  withdrawTag: (conversationId: string, tagId: string) =>
+    apiFetch(`/inbox/conversations/${conversationId}/tags/${tagId}`, {
+      method: 'DELETE',
+      schema: conversationSummarySchema,
+    }),
+  /** One action on up to 200 conversations; the answer names each one's outcome. */
+  bulk: (input: BulkConversationsInput) =>
+    apiFetch('/inbox/conversations/bulk', {
+      method: 'POST',
+      body: input,
+      schema: bulkConversationsResponseSchema,
     }),
   setStatus: (conversationId: string, rowVersion: number, status: 'open' | 'resolved') =>
     apiFetch(`/inbox/conversations/${conversationId}/status`, {

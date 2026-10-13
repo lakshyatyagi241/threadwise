@@ -4,6 +4,9 @@ import { ChatConversationsModule } from '../chat-conversations';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { CallActionsService } from './call-actions.service';
+import { CallLogsController } from './call-logs.controller';
+import { CallLogsRepository } from './call-logs.repository';
+import { CallLogsService } from './call-logs.service';
 import { CallEventsService } from './call-events.service';
 import { CallPermissionService } from './call-permission.service';
 import { CallRecordingsService } from './call-recordings.service';
@@ -25,11 +28,13 @@ import { CallsRepository } from './calls.repository';
  */
 @Module({
   imports: [ChatConversationsModule, WabaModule, PlansCoreModule],
-  controllers: [CallingController, CallingWebhookController],
+  controllers: [CallingController, CallLogsController, CallingWebhookController],
   providers: [
     CallingGraphClient,
     { provide: CALLING_GRAPH, useExisting: CallingGraphClient },
     CallsRepository,
+    CallLogsRepository,
+    CallLogsService,
     CallingNumbersService,
     CallPermissionService,
     CallActionsService,

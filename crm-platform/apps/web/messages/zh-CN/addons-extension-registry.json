@@ -19,7 +19,6 @@
       "optional": "可选",
       "required": "必填",
       "readOnly": "你可以查看此页面，但只有超级管理员可以修改。",
-      "requestId": "请求 ID",
       "errors": {
         "forbidden": "你无权访问此页面。",
         "request": "无法完成请求。",

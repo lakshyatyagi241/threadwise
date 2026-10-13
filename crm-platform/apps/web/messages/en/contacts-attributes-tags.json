@@ -21,7 +21,6 @@
       "unavailable": "This part of the API is not available yet.",
       "rateLimited": "Too many requests. Wait a moment and try again.",
       "unexpected": "Something went wrong. Try again.",
-      "requestId": "Request id",
       "retry": "Try again",
       "reservedKey": "That key is reserved for a built-in token. Choose another.",
       "attributeInUse": "Some contacts hold a value for this attribute.",
@@ -121,11 +120,18 @@
       "selectedActionsNone": "Selected contacts (select rows first)",
       "modifyColumns": "Modify Columns",
       "resetColumns": "Reset to default",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Contact Name",
       "colPhone": "Phone Number",
       "colEmailId": "Email ID",
       "colStage": "Stage",
       "colStatus": "Status",
+      "colLeadScore": "Lead score",
       "colLanguage": "Language",
       "colCreatedOn": "Created On",
       "pagination": "Pagination",
@@ -170,7 +176,19 @@
       "import": "Import",
       "columns": "Columns",
       "addColumnField": "Add a custom field as a column",
-      "kanbanView": "Board view (by stage)"
+      "kanbanView": "Board view (by stage)",
+      "colOwner": "Owner",
+      "unassigned": "Unassigned",
+      "ownerFilter": "Filter by owner",
+      "selectOwner": "Owner",
+      "allOwners": "All owners",
+      "myContacts": "My contacts",
+      "ownersCount": "{count} owners",
+      "ownerMe": "{name} (me)",
+      "ownerFormer": "Former member",
+      "reassignView": "Reassign the contacts of {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "No phone number for SMS"
     },
     "bulk": {
       "label": "Actions for the selected contacts",
@@ -215,7 +233,6 @@
       "exportStarted": "Your export has been downloaded.",
       "exportTooLarge": "That is too many contacts to export at once. Narrow the filter and try again.",
       "update": "Update",
-      "updateNeedsRows": "Pick rows",
       "updated": "{count, plural, one {Updated # contact.} other {Updated # contacts.}}"
     },
     "form": {
@@ -304,7 +321,13 @@
       "statusNoticeReset": "Status reset to {status}.",
       "statusNoticeSet": "Status set to {status}, the default for this stage.",
       "statusNoticeCleared": "Status cleared: it does not apply to this stage.",
-      "statusNoneForStage": "No status is set up for this stage."
+      "statusNoneForStage": "No status is set up for this stage.",
+      "owner": "Owner",
+      "ownerNone": "Unassigned",
+      "ownerMe": "{name} (me)",
+      "ownerFormer": "Former member",
+      "ownerHelp": "Who looks after this contact. You can only pick people your access allows.",
+      "ownerOutOfScope": "Your access does not let you assign this contact to that person."
     },
     "tags": {
       "title": "Tags",
@@ -406,7 +429,8 @@
         "address": "Address",
         "memo": "Memo",
         "status": "Status",
-        "source": "Source"
+        "source": "Source",
+        "consent": "Marketing consent (yes / no)"
       },
       "notInFile": "Not in file",
       "columnN": "Column {n}",
@@ -431,7 +455,7 @@
       "imported": "{count, plural, one {Imported # contact.} other {Imported # contacts.}}",
       "importedUpdated": "{count, plural, one {# existing contact updated.} other {# existing contacts updated.}}",
       "importedInvalid": "{count, plural, one {# invalid row skipped.} other {# invalid rows skipped.}}",
-      "downloadRejects": "Download rejected rows",
+      "downloadRejects": "Download errors and skipped rows",
       "fileTooLarge": "That file is larger than {mb} MB.",
       "checking": "Checking the file...",
       "errorFile": "That file could not be read as a contacts CSV. Check it has a header row and at least one contact.",
@@ -462,7 +486,8 @@
         "group_name_too_long": "group name too long",
         "tag_name_too_long": "tag name too long",
         "plan_limit_reached": "plan contact limit reached",
-        "tag_limit_reached": "plan tag limit reached"
+        "tag_limit_reached": "plan tag limit reached",
+        "duplicate_in_file": "repeated number, merged into an earlier row"
       },
       "statusHint": "Applied to contacts this file creates.",
       "queued": "Waiting to start...",
@@ -512,7 +537,17 @@
       "noActivity": "No activity yet for this contact.",
       "loadMore": "Load more",
       "yes": "Yes",
-      "no": "No"
+      "no": "No",
+      "owner": "Owner",
+      "ownerNone": "Unassigned",
+      "ownerChange": "Change owner",
+      "ownerChanged": "Owner set to {name}.",
+      "ownerCleared": "Owner removed.",
+      "ownerConflict": "Someone else changed this contact first. It was reloaded; try again.",
+      "ownerForbidden": "Your access does not let you assign this contact to that person.",
+      "ownerFailed": "The owner could not be changed. Try again.",
+      "ownerMe": "{name} (me)",
+      "ownerFormer": "Former member"
     },
     "attributes": {
       "eyebrow": "More / Attributes",
@@ -1137,7 +1172,11 @@
         "willClear": "Will be emptied on {count, plural, one {the selected contact} other {all # selected contacts}}.",
         "requiredNoClear": "A required property cannot be cleared.",
         "problemEmpty": "Enter a value, or choose Clear."
-      }
+      },
+      "titleAll": "Update all matching contacts",
+      "hintAll": "Set the same values on every contact matching the current filters. Fields left on Keep are not changed.",
+      "applyAll": "Update all matching contacts",
+      "ownerOnlyNote": "For every matching contact only the owner can be changed here. To change the stage, status or properties, tick the rows instead."
     },
     "kanban": {
       "board": "Contacts by stage",
@@ -1164,17 +1203,18 @@
         "updated": "Updated",
         "rejected": "Rejected",
         "actions": "Actions",
-        "downloadRejects": "Download rejects",
+        "downloadRejects": "Download errors and skipped rows",
         "statuses": {
           "queued": "Queued",
           "running": "Running",
           "completed": "Completed",
           "failed": "Failed"
-        }
+        },
+        "by": "Imported by"
       },
       "exports": {
         "title": "Exports",
-        "hint": "Contact exports from the Hub, newest first. The downloaded file is not kept.",
+        "hint": "Contact exports from the Hub, newest first. Each file is kept for 30 days so you and teammates who can export can download it again.",
         "empty": "No exports yet.",
         "by": "By",
         "rows": "Contacts",
@@ -1183,7 +1223,159 @@
         "selections": {
           "ids": "Ticked contacts",
           "filter": "Everything matching"
-        }
+        },
+        "download": "Download",
+        "noFile": "Not saved",
+        "keptUntil": "Kept until {date}",
+        "downloadFailed": "The file could not be downloaded. It may have expired."
+      }
+    },
+    "singleSend": {
+      "close": "Close",
+      "cancel": "Cancel",
+      "send": "Send",
+      "sending": "Sending",
+      "contact": "Contact",
+      "name": "Name",
+      "phone": "Mobile",
+      "email": "Email",
+      "title": {
+        "whatsapp": "Send WhatsApp message",
+        "sms": "Send SMS",
+        "email": "Send email",
+        "call": "Call"
+      },
+      "optedOut": "This contact has opted out of communication. Messages cannot be sent.",
+      "noPhone": "This contact has no phone number.",
+      "noEmail": "This contact has no email address.",
+      "number": "Send from",
+      "numberHint": "The WhatsApp number the message goes out on.",
+      "noChannel": "No WhatsApp number is connected. Connect one in Channels first.",
+      "template": "WhatsApp template",
+      "templatePlaceholder": "Select a template",
+      "noTemplates": "No approved templates for this number.",
+      "notSendable": "This template cannot be filled in here ({reason}).",
+      "variables": "Template variables",
+      "preview": "Preview",
+      "slot": "Variable {key}",
+      "loading": "Loading",
+      "openFailed": "Could not open the conversation: {message}",
+      "sent": "Message queued for {name}.",
+      "failed": "Could not send: {message}",
+      "callIntro": "Place a WhatsApp call to this contact from the browser.",
+      "callOff": "Calling is not turned on for this WhatsApp number. Turn it on in the number's settings.",
+      "callPermission": "The contact has not allowed calls yet. Calling asks for their permission first.",
+      "callReady": "Ready to call {phone}.",
+      "later": {
+        "sms": "Sending SMS from the CRM is not available yet.",
+        "email": "Sending email from the CRM is not available yet."
+      },
+      "openApp": {
+        "sms": "Open in your messages app",
+        "email": "Open in your mail app"
+      }
+    },
+    "views": {
+      "label": "Views",
+      "all": "All contacts",
+      "add": "Add a view",
+      "changed": "Filters changed since this view was saved",
+      "more": "More for {name}",
+      "picker": {
+        "favorites": "Favorites",
+        "defaultFilters": "Default filters",
+        "createdViews": "Created views",
+        "addView": "Add view",
+        "markFavorite": "Mark as favorite",
+        "unmarkFavorite": "Remove from favorites",
+        "title": "Select a view",
+        "create": "Create new view",
+        "search": "Search views...",
+        "chipAll": "All",
+        "chipPinned": "On tabs",
+        "chipShared": "Shared",
+        "empty": "No views found",
+        "pinned": "On tabs"
+      },
+      "menu": {
+        "rename": "Rename view",
+        "update": "Save current filters",
+        "unpin": "Remove from tabs",
+        "pin": "Show as a tab",
+        "delete": "Delete view",
+        "edit": "Edit view"
+      },
+      "drawer": {
+        "editTitle": "Rename view",
+        "name": "Name of view",
+        "namePlaceholder": "Untitled view",
+        "shareWith": "Share with",
+        "justMe": "Just me",
+        "everyone": "Everyone",
+        "save": "Update",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "toast": {
+        "created": "View \"{name}\" created.",
+        "updated": "View updated.",
+        "filtersSaved": "Filters saved to \"{name}\".",
+        "deleted": "View \"{name}\" deleted.",
+        "failed": "Could not save the view: {message}",
+        "conflict": "Someone else changed this view. Reload and try again."
+      },
+      "delete": {
+        "title": "Delete this view?",
+        "message": "\"{name}\" will be deleted for everyone it is shared with. Contacts are not changed.",
+        "confirm": "Delete view",
+        "cancel": "Keep view"
+      },
+      "editor": {
+        "title": {
+          "create": "Create New View",
+          "edit": "Edit View"
+        },
+        "close": "Close",
+        "back": "Back to contacts",
+        "name": "View Name",
+        "namePlaceholder": "Enter view name",
+        "favorite": "Mark as Favorite",
+        "favoriteHint": "A favorite view gets its own tab.",
+        "shareWith": "Share with",
+        "justMe": "Just Me",
+        "everyone": "Everyone",
+        "filterTitle": "Filter Contacts",
+        "filterHint": "Match all or any of your conditions, and add groups for more complex filters.",
+        "columnsTitle": "Column Preferences",
+        "locked": "Always shown",
+        "cancel": "Cancel",
+        "create": "Create View",
+        "save": "Save View",
+        "saving": "Saving",
+        "needName": "Enter a view name.",
+        "needFilter": "Add at least one complete condition.",
+        "notFound": "This view was not found, or it was deleted.",
+        "noPermission": "You do not have permission to do this.",
+        "loading": "Loading",
+        "columnsHint": "Search and tick the columns this view shows, then drag the chosen ones to set their order.",
+        "drag": "Drag to reorder {name}",
+        "selectedUsers": "Selected users",
+        "accessLevel": "Access level",
+        "canView": "Can view",
+        "canEdit": "Can view and edit",
+        "peoplePlaceholder": "Search people",
+        "noPeople": "No people found",
+        "removePerson": "Remove {name}",
+        "clearPeople": "Clear all people",
+        "needPeople": "Choose at least one person.",
+        "onlyCreator": "Only the person who made this view can change who it is shared with.",
+        "searchColumns": "Search columns",
+        "noColumnMatch": "No column matches.",
+        "available": "Available columns",
+        "selected": "Selected columns",
+        "selectAll": "Select All",
+        "reorder": "Drag to re-order columns",
+        "remove": "Remove {name}"
       }
     }
   }

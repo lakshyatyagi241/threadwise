@@ -137,7 +137,8 @@
         "recipients": "{count} ontvangers",
         "scheduled": "Gepland: {date}",
         "instant": "Verzenden: direct",
-        "template": "Sjabloon {name}"
+        "template": "Sjabloon {name}",
+        "cost": "Kosten"
       },
       "createBroadcast": "Broadcast maken",
       "noData": "Geen gegevens gevonden",
@@ -227,8 +228,6 @@
         "senderHint": "Op standaard laten staan, gaat de campagne via de hoofdengine van je workspace.",
         "defaultSender": "Standaardafzender",
         "nameHint": "Interne naam voor rapporten en wachtrijgeschiedenis.",
-        "noSenders": "Geen gekoppelde afzenders.",
-        "connectOne": "Koppel er een →",
         "type": "Campagnetype",
         "types": {
           "custom": {
@@ -650,7 +649,9 @@
         "read": "Gelezen",
         "replies": "Antwoorden",
         "clicks": "Klikken",
-        "failed": "Mislukt"
+        "failed": "Mislukt",
+        "cost": "Kosten",
+        "costHint": "Tot nu toe van de portemonnee afgeschreven"
       },
       "tabs": {
         "overview": "Overzicht",
@@ -827,7 +828,6 @@
         "notFound": "Dit is niet gevonden. Mogelijk is het verwijderd.",
         "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
         "unexpected": "Er ging iets mis aan onze kant. Probeer het opnieuw.",
-        "requestId": "Verzoek-id",
         "retry": "Opnieuw proberen"
       },
       "categories": {
@@ -897,8 +897,7 @@
         "previewEmpty": "Kies een sjabloon om te zien hoe het bericht eruitziet.",
         "senderLabel": "Verzenden vanaf",
         "senderHint": "Het WhatsApp-nummer waarvanaf deze broadcast wordt verzonden.",
-        "pickSender": "Kies een nummer",
-        "noSenders": "Er is geen WhatsApp-nummer verbonden. Verbind er eerst een."
+        "pickSender": "Kies een nummer"
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",
@@ -932,6 +931,7 @@
         "optedOut": "Afgemeld",
         "invalidNumbers": "Ongeldige nummers",
         "alwaysSkipped": "Afgemelde contacten en ongeldige nummers worden altijd overgeslagen.",
+        "noConsent": "Geen toestemming vastgelegd (overgeslagen)",
         "willBeMessaged": "Krijgen een bericht",
         "about": "ongeveer {count}",
         "approximate": "Dit is een schatting: de doelgroep is te groot om op tijd exact te tellen.",
@@ -1403,6 +1403,41 @@
         "runs": "Uitvoeringen",
         "noRuns": "Er is nog geen uitvoering gestart.",
         "cancel": "Reeks annuleren"
+      }
+    },
+    "senderEmpty": {
+      "loading": "Je nummers worden geladen…",
+      "none": {
+        "title": "Er is geen WhatsApp-nummer gekoppeld",
+        "body": "Koppel een WhatsApp Business-nummer om te kiezen van welk nummer deze campagne wordt verzonden.",
+        "action": "WhatsApp-nummer koppelen"
+      },
+      "sms": {
+        "none": {
+          "title": "Er is geen sms-afzender gekoppeld",
+          "body": "Koppel een sms-afzender om te kiezen van welke afzender deze campagne wordt verzonden.",
+          "action": "Sms-afzender koppelen"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# nummer wordt nog gekoppeld} other {# nummers worden nog gekoppeld}}",
+        "body": "Een nummer kan campagnes verzenden zodra de koppeling is voltooid. Open de status om de installatie af te ronden.",
+        "action": "Status van het nummer bekijken"
+      },
+      "error": {
+        "title": "{count, plural, one {De koppeling van # nummer is mislukt} other {De koppeling van # nummers is mislukt}}",
+        "body": "Koppel het nummer opnieuw via de statuspagina, dan verschijnt het hier.",
+        "action": "Koppeling herstellen"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# nummer is losgekoppeld} other {# nummers zijn losgekoppeld}}",
+        "body": "Koppel het opnieuw om er campagnes mee te verzenden. Gekoppelde nummers verschijnen hier.",
+        "action": "Nummer opnieuw koppelen"
+      },
+      "personal_off": {
+        "title": "Persoonlijke nummers staan uit voor deze werkruimte",
+        "body": "{count, plural, one {Je persoonlijke (QR-)nummer kan} other {Je # persoonlijke (QR-)nummers kunnen}} geen campagnes verzenden zolang dit uitstaat. Een platformbeheerder kan dit voor deze werkruimte inschakelen, of je koppelt een officieel WhatsApp Business-nummer.",
+        "action": "Officieel nummer koppelen"
       }
     }
   }

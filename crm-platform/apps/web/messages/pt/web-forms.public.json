@@ -33,9 +33,32 @@
         "too_short": "Informe pelo menos {min} caracteres.",
         "too_long": "Informe no máximo {max} caracteres.",
         "pattern": "Não corresponde ao formato esperado.",
-        "invalid_option": "Escolha uma das opções listadas."
+        "invalid_option": "Escolha uma das opções listadas.",
+        "invalid_amount": "Informe um valor dentro do intervalo permitido."
       },
-      "closedTitle": "Este formulário está fechado"
+      "closedTitle": "Este formulário está fechado",
+      "payTitle": "Mais uma etapa",
+      "payTotal": "Valor a pagar",
+      "payFromChoice": "O valor depende do que você escolher acima.",
+      "payEnter": "Informe acima o valor que deseja pagar.",
+      "payNote": "Depois de enviar, você irá para uma página de pagamento segura.",
+      "payRedirecting": "Suas respostas foram salvas. Levando você à página de pagamento...",
+      "payContinue": "Continuar para o pagamento",
+      "paymentUnavailable": "Este formulário não pode receber pagamento agora. Tente novamente mais tarde.",
+      "payReturn": {
+        "confirmingTitle": "Confirmando seu pagamento",
+        "confirmingBody": "Estamos aguardando a confirmação do provedor de pagamento. Isso costuma levar alguns segundos. Não pague novamente.",
+        "slowTitle": "Ainda aguardando confirmação",
+        "slowBody": "Se você já pagou, a confirmação chegará em breve e você pode fechar esta página. Se não pagou, volte e tente novamente.",
+        "paidTitle": "Pagamento recebido",
+        "expiredTitle": "O link de pagamento expirou",
+        "expiredBody": "Nenhum valor foi cobrado. Peça a quem enviou o formulário um novo link de pagamento.",
+        "failedTitle": "O pagamento não foi concluído",
+        "failedBody": "Nenhum valor foi cobrado. Você pode tentar novamente.",
+        "tryAgain": "Tentar pagar novamente",
+        "missingTitle": "Não encontramos este pagamento",
+        "missingBody": "O link pode estar errado ou ser muito antigo."
+      }
     }
   }
 }

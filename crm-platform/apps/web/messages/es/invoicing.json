@@ -40,7 +40,6 @@
       "planDisabled": "Tu plan no incluye facturación.",
       "invalidState": "Eso no es posible en el estado actual de la factura. Recarga y comprueba su estado.",
       "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo.",
-      "requestId": "Id de solicitud",
       "retry": "Reintentar"
     },
     "picker": {

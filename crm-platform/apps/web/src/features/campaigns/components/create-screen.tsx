@@ -2,12 +2,14 @@
 
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { WizardSender } from '@crm/contracts';
+import type { SenderHidden, WizardSender } from '@crm/contracts';
 import { EmptyState } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { offerSenders } from '@/lib/unofficial-whatsapp';
-import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
+import { offerSendersFor } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsappState } from '@/lib/use-unofficial-whatsapp';
 import { createPath, flowFor } from '../lib/create-flow';
+import { withClientHidden } from '../lib/sender-empty';
+import { engineOf } from '../lib/engine-gate';
 import { useWizardDraft, useWizardSenders } from '../wizard/api/wizard';
 import { ErrorBlock, Skeleton } from '../wizard/components/parts';
 import { LaunchedNotice } from '../wizard/components/wizard-screen';
@@ -35,11 +37,16 @@ export function CreateScreen({
 }) {
   const t = useTranslations('campaigns.create');
   const canCreate = useCan('camp.campaigns.create');
-  const unofficial = useUnofficialWhatsapp();
+  const unofficialState = useUnofficialWhatsappState();
   const query = useWizardSenders();
-  const senders = useMemo(
-    () => offerSenders(query.data?.data ?? [], unofficial),
-    [query.data, unofficial],
+  const offered = useMemo(
+    () => offerSendersFor(query.data?.data, unofficialState),
+    [query.data, unofficialState],
+  );
+  const senders = useMemo(() => offered ?? [], [offered]);
+  const hidden = useMemo(
+    () => withClientHidden(query.data?.data, offered, query.data?.hidden),
+    [query.data, offered],
   );
   const [state, setState] = useState<{ key: string | null; draft: string; name: string }>({
     key: sender || null,
@@ -54,8 +61,9 @@ export function CreateScreen({
       </Frame>
     );
   }
-  // The number decides which sections the builder shows, so the screen waits for the numbers.
-  if (query.isPending) {
+  // The number decides which sections the builder shows, so the screen waits for the numbers and for the answer on the platform switch
+  // (a list that is empty only because that answer has not come yet would open the classic builder on no number at all).
+  if (query.isPending || unofficialState === 'pending') {
     return (
       <Frame>
         <Skeleton label={t('loading')} lines={4} />
@@ -71,11 +79,14 @@ export function CreateScreen({
   const guidedKeys = new Set(senders.filter((s) => s.guided).map((s) => s.key));
   const initial =
     senders.find((s) => s.isDefault && s.guided) ?? senders.find((s) => s.isDefault) ?? senders[0];
+  // An SMS number is not in the WhatsApp number list (it has its own card, TW-SMS-018): its key comes from the address.
   const key =
-    state.key && senders.some((s) => s.key === state.key) ? state.key : (initial?.key ?? '');
+    state.key && (engineOf(state.key) === 'sms' || senders.some((s) => s.key === state.key))
+      ? state.key
+      : (initial?.key ?? '');
 
   if (state.draft) {
-    return <Resume draftId={state.draft} senders={senders} onClassic={open} />;
+    return <Resume draftId={state.draft} senders={senders} hidden={hidden} onClassic={open} />;
   }
   if (flowFor(senders, key) === 'wizard') {
     return (
@@ -83,6 +94,7 @@ export function CreateScreen({
         key={`guided-${key}`}
         initial={null}
         senders={senders}
+        hidden={hidden}
         preferredSenderKey={key}
         initialName={state.name}
         onClassic={open}
@@ -104,10 +116,12 @@ export function CreateScreen({
 function Resume({
   draftId,
   senders,
+  hidden,
   onClassic,
 }: {
   draftId: string;
   senders: readonly WizardSender[];
+  hidden: readonly SenderHidden[];
   onClassic: (key: string, name: string) => void;
 }) {
   const tw = useTranslations('campaigns.wizard');
@@ -135,6 +149,7 @@ function Resume({
       key={draft.data.id}
       initial={draft.data}
       senders={senders}
+      hidden={hidden}
       onClassic={onClassic}
     />
   );

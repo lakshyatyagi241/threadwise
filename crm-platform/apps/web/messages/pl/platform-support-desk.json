@@ -63,8 +63,7 @@
       "closed": "To zgłoszenie jest zamknięte. Otwórz nowe zgłoszenie, aby kontynuować.",
       "notFound": "Nie znaleziono tego zgłoszenia.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
-      "retry": "Spróbuj ponownie",
-      "requestId": "Identyfikator żądania"
+      "retry": "Spróbuj ponownie"
     },
     "customer": {
       "title": "W czym możemy pomóc?",

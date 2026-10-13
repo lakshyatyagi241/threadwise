@@ -1,0 +1,42 @@
+{
+  "web-forms": {
+    "popup": {
+      "title": "Hiển thị dạng cửa sổ bật lên",
+      "description": "Mở biểu mẫu trong cửa sổ bật lên trên website của bạn thay vì đặt trong trang. Chọn thời điểm mở, rồi sao chép mã.",
+      "trigger": "Mở cửa sổ bật lên",
+      "triggers": {
+        "delay": "Sau một khoảng trễ",
+        "scroll_down": "Khi khách cuộn xuống",
+        "scroll_up": "Khi khách cuộn ngược lên",
+        "click": "Khi ai đó bấm một nút"
+      },
+      "triggerHints": {
+        "delay": "Mở sau một khoảng thời gian đặt trước kể từ khi trang tải xong.",
+        "scroll_down": "Mở khi khách đã cuộn xuống đến mức này của trang.",
+        "scroll_up": "Mở khi khách đã đọc xuống trang rồi cuộn ngược lên, dấu hiệu họ có thể sắp rời đi.",
+        "click": "Chỉ mở khi ai đó bấm vào nút hoặc liên kết có gắn mã hiển thị bên dưới."
+      },
+      "delay": "Số giây trước khi mở",
+      "delayHint": "Từ {min} đến {max}.",
+      "scroll": "Cuộn xuống bao nhiêu của trang (phần trăm)",
+      "scrollHint": "Từ {min} đến {max}.",
+      "position": "Vị trí hiển thị",
+      "positions": {
+        "center": "Giữa màn hình, làm mờ trang",
+        "bottom_right": "Góc dưới, không làm mờ trang"
+      },
+      "days": "Hiện lại sau (ngày)",
+      "daysHint": "Nhập 0 để hiện ở mọi lượt truy cập. Khi ai đó đã gửi biểu mẫu, họ sẽ không thấy nó nữa.",
+      "note": "Hãy thêm website của bạn vào Website được phép bên dưới trước, nếu không cửa sổ bật lên sẽ trống.",
+      "code": {
+        "title": "Mã cửa sổ bật lên",
+        "description": "Dán mã này vào nơi cửa sổ bật lên cần tải, thường là ngay trước thẻ đóng body."
+      },
+      "button": {
+        "title": "Nút để mở biểu mẫu",
+        "description": "Thêm mã này vào bất kỳ trang nào để mọi người tự mở cửa sổ bật lên. Dùng được với mọi cách kích hoạt."
+      },
+      "copy": "Sao chép mã"
+    }
+  }
+}

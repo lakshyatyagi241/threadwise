@@ -554,7 +554,12 @@
           "cardGallery": "Thư viện thẻ",
           "cardCount": "{count} thẻ",
           "payLink": "Liên kết thanh toán",
-          "invoice": "Hóa đơn"
+          "invoice": "Hóa đơn",
+          "faqAllFaqs": "Tất cả FAQ",
+          "faqCategory": "FAQ: {name}",
+          "faqScore": "điểm tối thiểu {score}",
+          "faqNotSent": "không gửi",
+          "faqWorkspaceScore": "điểm của luồng"
         },
         "overlays": {
           "startPinned": "Đây là điểm bắt đầu (nhấn để bỏ ghim)",
@@ -711,9 +716,11 @@
             "send": "Gửi",
             "ask": "Hỏi khách",
             "handoff": "Chuyển giao",
-            "logic": "Quyết định"
+            "logic": "Quyết định",
+            "answer": "Trả lời"
           },
-          "blockedTitle": "Nhóm nút và danh sách kết thúc luồng, nên chỉ có thể đặt ở cuối."
+          "blockedTitle": "Nhóm nút và danh sách kết thúc luồng, nên chỉ có thể đặt ở cuối.",
+          "blockedTitleFaq": "Trả lời từ FAQ có hai lối ra nên chỉ có thể đặt ở cuối."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -722,7 +729,11 @@
           "moveUp": "Di chuyển lên",
           "moveDown": "Di chuyển xuống",
           "duplicate": "Nhân bản",
-          "deleteStep": "Xóa bước"
+          "deleteStep": "Xóa bước",
+          "faqExits": {
+            "matched": "Đã trả lời",
+            "no_match": "Không khớp"
+          }
         },
         "editors": {
           "linkLabel": "Nơi này dẫn tới",
@@ -879,9 +890,20 @@
           },
           "handoff": {
             "hint": "Khách truy cập được chuyển cho nhóm này kèm ghi chú của bạn. Không cần nối gì sau nút này."
+          },
+          "faq": {
+            "exits": {
+              "matched": "Nếu có FAQ trả lời, chuyển đến",
+              "no_match": "Nếu không có FAQ nào trả lời, chuyển đến"
+            },
+            "exitsHint": {
+              "matched": "Lúc này câu trả lời dạng văn bản đã được gửi. FAQ bắt đầu một luồng sẽ tiếp tục trong luồng đó.",
+              "no_match": "Không có gì đủ gần, hoặc tính năng tự động trả lời bằng FAQ đang tắt."
+            }
           }
         },
-        "branchAdd": "Thêm bước cho “{title}”"
+        "branchAdd": "Thêm bước cho “{title}”",
+        "faqEnds": "Bước này kết thúc phần này: nội dung được gửi tiếp theo phụ thuộc vào việc có FAQ trả lời hay không."
       },
       "formsCore": {
         "helpers": {
@@ -1814,6 +1836,45 @@
           "afterSending": "Sau khi gửi",
           "afterSendingHint": "Bật: luồng tạm dừng tại đây và chỉ tiếp tục qua cổng \"đi ra\" khi khách hàng thanh toán (số tiền sẽ là {paidAmount} {paidCurrency}). Tắt: hóa đơn được gửi và luồng tiếp tục ngay.",
           "waitUntilPaid": "Chờ đến khi thanh toán, rồi tiếp tục"
+        },
+        "faq": {
+          "intro": {
+            "body": "So khớp tin nhắn với FAQ của luồng này theo ý nghĩa và trả lời. Thoát qua <mono>answered</mono> khi một FAQ đã trả lời, và qua <mono>no match</mono> trong các trường hợp còn lại.",
+            "sub": "Hoạt động mà không cần bật trả lời FAQ tự động của luồng này. <link>Quản lý FAQ của luồng này</link>"
+          },
+          "exitsLabel": "Lối ra",
+          "exitMatchedName": "Đã trả lời",
+          "exitMatched": "một FAQ đã trả lời: văn bản của nó đã được gửi (trừ khi tắt gửi), hoặc luồng của nó tiếp quản và không quay lại.",
+          "exitNoMatchName": "Không khớp",
+          "exitNoMatch": "không có gì đủ gần, tự động trả lời bằng FAQ bị tắt cho nền tảng, luồng hoặc bước được liên kết không còn, hoặc tin nhắn trống.",
+          "query": "Tin nhắn cần so khớp",
+          "queryHint": "Mặc định là tin nhắn cuối cùng của khách hàng. Biến do bước Câu hỏi lưu cũng dùng được, ví dụ <mono>{variable}</mono>. Nhập / để chèn.",
+          "category": "Chỉ các FAQ này",
+          "allFaqs": "Tất cả FAQ",
+          "loadingCategories": "Đang tải danh mục…",
+          "categoryGone": "{name} (không có FAQ nào dùng)",
+          "retry": "Thử lại",
+          "minScore": "Điểm tối thiểu",
+          "sendAnswer": "Gửi câu trả lời cho khách hàng",
+          "sendAnswerToggle": "Gửi câu trả lời văn bản khớp dưới dạng tin nhắn",
+          "sendAnswerOnHint": "FAQ văn bản khớp sẽ được gửi cho khách hàng. FAQ bắt đầu một luồng sẽ tiếp tục trong luồng đó.",
+          "sendAnswerOffHint": "Không gửi gì: câu trả lời chỉ được lưu vào các biến bên dưới để bước sau tự soạn phản hồi. FAQ bắt đầu một luồng vẫn tiếp tục trong luồng đó.",
+          "save": "Lưu kết quả với tên",
+          "saveHint": "Tên dùng để lưu kết quả. Các bước sau đọc nó như hiển thị bên dưới.",
+          "variables": {
+            "answer": "nội dung câu trả lời",
+            "matched": "có hoặc không",
+            "question": "câu hỏi của FAQ khớp",
+            "score": "mức độ khớp",
+            "id": "id của FAQ khớp"
+          },
+          "noFaqs": "Luồng này chưa có FAQ nào, nên bước này luôn thoát qua no match. <link>Thêm FAQ đầu tiên cho luồng này</link>",
+          "useWorkspaceScore": "Dùng cài đặt của luồng này",
+          "minScoreInvalid": "Nhập một số từ {min} đến {max}, hoặc dùng cài đặt của luồng này.",
+          "saveFlowFirst": "Hãy lưu luồng trước. FAQ của luồng được chỉnh sửa ở tab FAQ của trình tạo đơn giản, và bước này trả lời từ đó.",
+          "categoryHint": "Chỉ FAQ thuộc danh mục này mới có thể trả lời. Các danh mục lấy từ FAQ của luồng này.",
+          "categoriesFailed": "Không thể tải danh mục FAQ của luồng này.",
+          "minScoreHint": "Thay thế điểm của luồng này chỉ cho bước này, từ {min} đến {max}. Điểm phụ thuộc vào mô hình embedding của nền tảng, nên hãy thử một tin nhắn trong <link>kiểm tra FAQ</link> của luồng này trước khi chọn số."
         }
       },
       "attrPicker": {
@@ -1876,14 +1937,16 @@
         }
       },
       "webBot": {
-        "aria": "Các phần của bot",
+        "aria": "Các phần của luồng",
         "build": "Xây dựng",
         "customize": "Tùy chỉnh",
-        "saveFirst": "Hãy lưu bot trước.",
-        "needsCustomizing": "Phần Tùy chỉnh chưa được lưu. Hãy mở Tùy chỉnh.",
+        "saveFirst": "Hãy lưu luồng trước.",
+        "needsCustomizing": "Widget vẫn dùng giao diện mặc định. Hãy mở Tùy chỉnh.",
         "customizeFirst": "Hãy tùy chỉnh widget chat và lưu một lần trước khi xuất bản.",
         "deploy": "Triển khai",
-        "customizeFirstWhatsapp": "Hãy tùy chỉnh nút WhatsApp và lưu một lần trước khi xuất bản."
+        "customizeFirstWhatsapp": "Hãy tùy chỉnh nút WhatsApp và lưu một lần trước khi xuất bản.",
+        "faqs": "FAQ",
+        "install": "Cài đặt"
       },
       "buttonIcon": {
         "label": "Biểu tượng (tùy chọn)",
@@ -2168,6 +2231,10 @@
         "carousel": {
           "label": "Băng chuyền",
           "description": "Thẻ cuộn được có hình ảnh và nút"
+        },
+        "faq": {
+          "label": "Trả lời từ FAQ",
+          "description": "So khớp tin nhắn với các FAQ của bạn"
         }
       },
       "groups": {
@@ -2311,7 +2378,8 @@
         "wrongChannel": "\"{node}\" không hoạt động trên {channel} — hãy xóa hoặc bật lại kênh ở nút Kích hoạt.",
         "noSenderInstagram": "Nút Kích hoạt chưa chọn tài khoản Instagram — hãy chọn ở bước Kích hoạt.",
         "noSenderFacebook": "Nút Kích hoạt chưa chọn Trang Facebook — hãy chọn ở bước Kích hoạt.",
-        "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt."
+        "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt.",
+        "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của luồng."
       }
     },
     "simpleModel": {
@@ -2398,6 +2466,10 @@
         "condition": {
           "label": "Điều kiện",
           "help": "Rẽ nhánh theo điều gì khách đã nói hoặc lưu, với quy tắc AND / OR"
+        },
+        "faq": {
+          "label": "Trả lời từ FAQ",
+          "help": "So khớp tin nhắn của khách hàng với các FAQ của bạn. Kết thúc luồng này: một lối ra nếu có FAQ trả lời, một lối khác nếu không"
         }
       },
       "typeLabel": {
@@ -2414,7 +2486,8 @@
         "cta": "Nút liên kết",
         "assign": "Gán cho nhân viên",
         "carousel": "Băng chuyền",
-        "condition": "Điều kiện"
+        "condition": "Điều kiện",
+        "faq": "Trả lời từ FAQ"
       },
       "stepLabel": {
         "questionOf": "Câu hỏi · {kind}"
@@ -2454,8 +2527,10 @@
         "variableUsed": "Bước {stage}: \"{name}\" đã được bước {other} sử dụng; hãy đặt tên riêng cho từng đáp án.",
         "carouselCards": "Bước {stage}: thêm ít nhất một thẻ và đặt tiêu đề cho mỗi thẻ.",
         "carouselButtons": "Bước {stage}: đặt tên cho mỗi nút, cùng liên kết, số hoặc địa chỉ ở nút mở ra điều gì đó.",
-        "conditionIncomplete": "Bước {stage}: hoàn thành các quy tắc của điều kiện (mỗi quy tắc có một biến và một giá trị)."
-      }
+        "conditionIncomplete": "Bước {stage}: hoàn thành các quy tắc của điều kiện (mỗi quy tắc có một biến và một giá trị).",
+        "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của luồng."
+      },
+      "faqSummary": "{hasCategory, select, true {Từ FAQ của bạn · {category}} other {Từ FAQ của bạn}}"
     },
     "waboImport": {
       "notes": {
@@ -2566,7 +2641,9 @@
       "optionNotConnected": "Cổng \"{port}\" (lựa chọn {n}) chưa được kết nối — dừng lại.",
       "buttonNotConnected": "Nút \"{label}\" chưa được kết nối — dừng lại.",
       "simPurchase": "Mô phỏng giao dịch mua: {name} → cổng \"đã mua\"",
-      "simAbandon": "Mô phỏng bỏ dở → cổng \"bỏ dở\""
+      "simAbandon": "Mô phỏng bỏ dở → cổng \"bỏ dở\"",
+      "faqAnswered": "(mô phỏng) Trả lời từ FAQ cho \"{query}\": chat thử không tra cứu FAQ của bạn, nên không gửi gì và {ref} vẫn trống. Đi theo lối \"đã trả lời\".",
+      "faqNoMatch": "(mô phỏng) Trả lời từ FAQ cho \"{query}\": chat thử không tra cứu FAQ của bạn, và lối \"đã trả lời\" chưa được nối, nên đi theo \"không khớp\". {ref} vẫn trống."
     }
   }
 }

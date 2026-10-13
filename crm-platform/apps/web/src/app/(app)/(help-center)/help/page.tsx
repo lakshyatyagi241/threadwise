@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { AskAssistantCard } from '@/features/help-agent/components/ask-assistant-card';
 import { HelpHome } from '@/features/help-center/help-home';
 import { getVisibleHelp } from '@/features/help-center/server';
 
@@ -16,5 +17,11 @@ export default async function HelpPage({ searchParams }: { searchParams: SearchP
   const view = await getVisibleHelp();
   if (!view) notFound();
   const { area } = await searchParams;
-  return <HelpHome entries={view.entries} area={Array.isArray(area) ? area[0] : area} />;
+  return (
+    <HelpHome
+      entries={view.entries}
+      area={Array.isArray(area) ? area[0] : area}
+      assistant={<AskAssistantCard />}
+    />
+  );
 }

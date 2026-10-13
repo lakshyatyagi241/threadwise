@@ -2,15 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
+import { PERM_MAIL_SETTINGS_MANAGE, adminsCanReadPersonal } from './channel-owner';
 import type { ConversationViewer } from './conversation-visibility';
 
 /** How long a workspace's member list is reused. A grant changed inside this window reaches the live signals this much late. */
+const PERM_CONVERSATION_READ_KEY = 'inbox.conversation.read';
 const CACHE_TTL_MS = 30_000;
 const CACHE_MAX_ENTRIES = 500;
 
+/** A viewer as cached: `mailAdmin` (holds `mail.settings.manage`) waits for the workspace policy, which is read fresh on every call. */
+type CachedViewer = ConversationViewer & { mailAdmin: boolean };
+
 interface Entry {
   at: number;
-  viewers: Promise<ConversationViewer[]>;
+  viewers: Promise<CachedViewer[]>;
 }
 
 /**
@@ -31,7 +36,25 @@ export class MemberDirectory {
   ) {}
 
   /** Every active staff user of the workspace with their scope for `permission` (null: no allow grant) and their teams. */
-  viewers(orgId: number, permission: string): Promise<ConversationViewer[]> {
+  async viewers(orgId: number, permission: string): Promise<ConversationViewer[]> {
+    const cached = await this.cachedViewers(orgId, permission);
+    // The personal-mailbox policy is never cached: an admin switched off must stop receiving at once, in every process.
+    const adminsRead = cached.some((v) => v.mailAdmin)
+      ? await this.db.txAs({ orgId }, (tx) => adminsCanReadPersonal(tx, orgId))
+      : false;
+    return cached.map(({ mailAdmin, ...viewer }) => ({
+      ...viewer,
+      readsPersonalMail: mailAdmin && adminsRead,
+    }));
+  }
+
+  /** The staff users who hold `mail.settings.manage` (the admins of the personal-mailbox rule), from the 30 second member cache. */
+  async mailAdminIds(orgId: number): Promise<number[]> {
+    const cached = await this.cachedViewers(orgId, PERM_CONVERSATION_READ_KEY);
+    return cached.filter((v) => v.mailAdmin).map((v) => v.userId);
+  }
+
+  private cachedViewers(orgId: number, permission: string): Promise<CachedViewer[]> {
     const key = `${orgId}:${permission}`;
     const now = Date.now();
     const hit = this.cache.get(key);
@@ -53,7 +76,11 @@ export class MemberDirectory {
     const grants = await this.rbac.grantsForUser(orgId, userId);
     const can = this.rbac.can(grants, permission);
     const teamIds = await this.teamIdsOf(orgId, userId);
-    return { userId, scope: can.allowed ? can.scope : null, teamIds };
+    const mailAdmin = this.rbac.can(grants, PERM_MAIL_SETTINGS_MANAGE).allowed;
+    const readsPersonalMail = mailAdmin
+      ? await this.db.txAs({ orgId, userId }, (tx) => adminsCanReadPersonal(tx, orgId))
+      : false;
+    return { userId, scope: can.allowed ? can.scope : null, teamIds, readsPersonalMail };
   }
 
   /** The internal id of a team named by uuid, and whether the user belongs to it. Null when the team is not in this workspace. */
@@ -82,7 +109,7 @@ export class MemberDirectory {
     for (const key of this.cache.keys()) if (key.startsWith(`${orgId}:`)) this.cache.delete(key);
   }
 
-  private async load(orgId: number, permission: string): Promise<ConversationViewer[]> {
+  private async load(orgId: number, permission: string): Promise<CachedViewer[]> {
     const { users, teams } = await this.db.txAs({ orgId }, async (tx) => {
       const u = await tx.execute(
         sql`SELECT id FROM users WHERE org_id = ${orgId} AND status = 'active'`,
@@ -106,11 +133,13 @@ export class MemberDirectory {
     return Promise.all(
       users.map(async ({ id }) => {
         const userId = Number(id);
-        const can = this.rbac.can(await this.rbac.grantsForUser(orgId, userId), permission);
+        const grants = await this.rbac.grantsForUser(orgId, userId);
+        const can = this.rbac.can(grants, permission);
         return {
           userId,
           scope: can.allowed ? can.scope : null,
           teamIds: teamsByUser.get(userId) ?? [],
+          mailAdmin: this.rbac.can(grants, PERM_MAIL_SETTINGS_MANAGE).allowed,
         };
       }),
     );

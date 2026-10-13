@@ -7,7 +7,6 @@
       "dismiss": "Bỏ qua",
       "cancel": "Hủy",
       "close": "Đóng",
-      "requestId": "Yêu cầu {id}",
       "unknown": "—"
     },
     "numbers": {
@@ -34,7 +33,8 @@
         "registered": "Đã đăng ký \"{name}\" trên Cloud API.",
         "disconnected": "Đã ngắt kết nối \"{name}\".",
         "removed": "Đã xóa \"{name}\".",
-        "warningsTitle": "Đã kết nối, nhưng hãy kiểm tra điều này:"
+        "warningsTitle": "Đã kết nối, nhưng hãy kiểm tra điều này:",
+        "verified": "Đã xác minh \"{name}\"."
       },
       "notReady": {
         "title": "Embedded Signup chưa được cấu hình",
@@ -81,7 +81,8 @@
         "register": "Đăng ký",
         "meta": "Meta",
         "disconnect": "Ngắt kết nối",
-        "remove": "Xóa"
+        "remove": "Xóa",
+        "verify": "Xác minh số"
       },
       "confirm": {
         "fixInboundTitle": "Sửa nhận tin?",
@@ -100,6 +101,17 @@
         "pin": "Mã PIN hai bước (không bắt buộc)",
         "pinError": "Mã PIN gồm 6 chữ số",
         "submit": "Đăng ký"
+      },
+      "verifyDialog": {
+        "title": "Xác minh số này",
+        "message": "Meta sẽ gửi mã 6 chữ số đến {phone}. Hãy chọn cách nhận mã.",
+        "enterCode": "Nhập mã 6 chữ số mà Meta đã gửi đến {phone}.",
+        "sendSms": "Gửi mã qua SMS",
+        "sendVoice": "Gửi mã qua cuộc gọi",
+        "code": "Mã xác minh",
+        "codeError": "Mã gồm 6 chữ số",
+        "submit": "Xác minh",
+        "resend": "Gửi mã mới"
       }
     },
     "connect": {

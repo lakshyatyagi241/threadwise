@@ -168,6 +168,13 @@ export const envSchema = z.object({
   FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
   FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),
+  /**
+   * AI lead scoring's AI vendor: `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline stand-in for
+   * tests and demos that needs no key or network. A production process that sets `fixture` does not boot.
+   */
+  LEAD_SCORING_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
+  /** Overrides OpenRouter's base URL for lead scoring (a gateway, a local stub). */
+  LEAD_SCORING_OPENROUTER_BASE_URL: z.string().url().optional(),
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),

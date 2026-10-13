@@ -5,7 +5,6 @@
     "loading": "Chargement",
     "empty": "Rien ici pour l’instant",
     "retry": "Réessayer",
-    "requestId": "ID de requête",
     "search": "Rechercher",
     "unexpected": "Un problème est survenu",
     "fatal": {

@@ -10,13 +10,13 @@
       "install": "Cài đặt · Marketplace",
       "installed": "Đã cài đặt · Marketplace",
       "manage": "Quản lý ứng dụng · Marketplace",
-      "requests": "Yêu cầu · Marketplace"
+      "requests": "Yêu cầu · Marketplace",
+      "addons": "Tiện ích bổ sung · Marketplace"
     },
     "common": {
       "dismiss": "Bỏ qua",
       "loading": "Đang tải",
       "errorTitle": "Không tải được mục này",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại",
       "upgrade": "Xem các gói và nâng cấp",
       "opensNewTab": "(mở trong tab mới)",
@@ -124,7 +124,8 @@
       "moreLabel": "Đã cài đặt và yêu cầu",
       "tabs": {
         "mini_app": "Ứng dụng mini",
-        "integration": "Tích hợp"
+        "integration": "Tích hợp",
+        "addon": "Tiện ích bổ sung"
       },
       "installed": "Đã cài đặt",
       "installedLimit": "Đã cài đặt ({installed} trên {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "Đang xử lý",
       "noCheckout": "Hiện không thể thanh toán cho ứng dụng này. Thử lại sau ít phút."
+    },
+    "tools": {
+      "open": "Mở",
+      "empty": {
+        "title": "Không có tiện ích bổ sung nào",
+        "message": "Các tiện ích bổ sung có trong vai trò và gói của bạn sẽ xuất hiện ở đây."
+      },
+      "soon": "Sắp ra mắt",
+      "upgrade": "Nâng cấp"
     }
   }
 }

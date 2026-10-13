@@ -96,8 +96,7 @@
       "unexpected": "Un problème est survenu de notre côté. Réessayez dans un instant.",
       "loadFailed": "Impossible de charger votre clé API.",
       "retry": "Réessayer",
-      "upgrade": "Voir les forfaits",
-      "requestId": "ID de requête : {id}"
+      "upgrade": "Voir les forfaits"
     }
   }
 }

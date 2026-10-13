@@ -257,7 +257,6 @@
       "ownerInvalid": "负责人必须是工作区的活跃成员。",
       "invoicingUnavailable": "发票功能暂不可用，因此无法转换此文档。",
       "unexpected": "出现问题，请重试。",
-      "requestId": "请求 ID",
       "retry": "重试"
     },
     "link": {

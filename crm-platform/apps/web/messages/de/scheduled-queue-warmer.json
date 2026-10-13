@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "Sie haben das Limit Ihres Tarifs erreicht.",
       "WA_UNOFFICIAL_DISABLED": "Der Versand über persönliche WhatsApp-Nummern (inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp Business API-Nummer.",
       "AUTH_SEND_HALTED": "Der Versand ist für diesen Workspace gestoppt.",
-      "upgrade": "Tarife ansehen und upgraden",
-      "requestId": "Anfrage {id}"
+      "upgrade": "Tarife ansehen und upgraden"
     },
     "actions": {
       "done": {

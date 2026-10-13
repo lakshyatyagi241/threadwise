@@ -78,6 +78,11 @@
       "payments": "Pagamenti"
     },
     "help": "Aiuto",
-    "unreadCount": "{count, plural, one {# non letto} other {# non letti}}"
+    "unreadCount": "{count, plural, one {# non letto} other {# non letti}}",
+    "backgroundError": {
+      "message": "Impossibile aggiornare alcuni dati in tempo reale, come notifiche, saldo o contatori della posta in arrivo. Quello che vedi potrebbe non essere aggiornato.",
+      "retry": "Riprova",
+      "dismiss": "Chiudi"
+    }
   }
 }

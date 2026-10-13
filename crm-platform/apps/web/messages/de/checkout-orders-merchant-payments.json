@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp-KI"
     },
     "errors": {
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen",
       "network": {
         "title": "Der Server ist nicht erreichbar",

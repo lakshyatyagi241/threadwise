@@ -9,7 +9,6 @@
       "breadcrumb": "Trilha de navegação",
       "loading": "Carregando…",
       "retry": "Tentar novamente",
-      "requestId": "ID da solicitação",
       "cancel": "Cancelar",
       "close": "Fechar",
       "dismiss": "Dispensar",
@@ -102,7 +101,8 @@
         "added": "{name} foi adicionado ao espaço de trabalho.",
         "rolesUpdated": "Funções atualizadas para {name}.",
         "deactivated": "{name} foi desativado.",
-        "reactivated": "{name} foi reativado."
+        "reactivated": "{name} foi reativado.",
+        "invited": "Convite enviado para {name}."
       },
       "deactivate": {
         "action": "Desativar",
@@ -123,7 +123,13 @@
         "passwordShort": "A senha deve ter pelo menos 8 caracteres.",
         "generate": "Gerar",
         "role": "Função",
-        "submit": "Adicionar membro"
+        "submit": "Adicionar membro",
+        "inviteHint": "Enviamos por e-mail um link para a pessoa definir a própria senha. O link funciona uma vez e expira em alguns dias.",
+        "submitInvite": "Enviar convite",
+        "linkNotSent": "Não foi possível enviar o e-mail para {email}. Copie este link e entregue-o; ele não será exibido novamente.",
+        "copyLink": "Copiar link",
+        "copied": "Copiado",
+        "done": "Concluído"
       },
       "changeRole": {
         "title": "Alterar funções de {name}",

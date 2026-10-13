@@ -9,7 +9,12 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
-import { MemberDirectory, PERM_CONVERSATION_READ, type ConversationRecord } from '../../realtime';
+import {
+  MemberDirectory,
+  PERM_CONVERSATION_READ,
+  channelOwnerSql,
+  type ConversationRecord,
+} from '../../realtime';
 import { ConversationReadState } from './conversation-read-state';
 import {
   assignedCopy,
@@ -407,7 +412,8 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
     uuid: string,
   ): Promise<ConversationFacts | null> {
     const res = await tx.execute(sql`
-        SELECT c.assignee_user_id, c.assignee_team_id, c.muted_at, c.title, c.peer_name, c.peer_key, ch.kind AS channel_kind
+        SELECT c.assignee_user_id, c.assignee_team_id, c.muted_at, c.title, c.peer_name, c.peer_key, ch.kind AS channel_kind,
+               ${channelOwnerSql('c')} AS channel_owner_user_id
         FROM conversations c
         JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
         WHERE c.org_id = ${orgId} AND c.uuid = ${uuid}::uuid
@@ -421,6 +427,7 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
           peer_name: string | null;
           peer_key: string;
           channel_kind: string;
+          channel_owner_user_id: string | number | null;
         }
       | undefined;
     if (!r) return null;
@@ -428,6 +435,7 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
       uuid,
       assigneeUserId: r.assignee_user_id === null ? null : Number(r.assignee_user_id),
       assigneeTeamId: r.assignee_team_id === null ? null : Number(r.assignee_team_id),
+      channelOwnerUserId: r.channel_owner_user_id === null ? null : Number(r.channel_owner_user_id),
       mutedAt: r.muted_at === null ? null : new Date(r.muted_at),
       name: senderName(r),
       channelKind: r.channel_kind,

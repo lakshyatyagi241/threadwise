@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -8,9 +9,11 @@ import { WorkspaceSwitcher } from '@/features/auth-registration-security/account
 import { ImpersonationBanner } from '@/features/workspaces-teams-tenancy';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { TrialBar } from '@/features/plans-subscriptions-trials/components/trial-bar';
+import { BackgroundErrorBanner } from '@/components/shell/background-error-banner';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
 import { fetchConnectedChannels } from '@/features/whatsapp-cloud-api-waba/server';
 import { HelpProvider } from '@/features/help-center';
+import { HelpAgentRoot } from '@/features/help-agent/components/assistant-root';
 import { helpFor } from '@/features/help-center/view';
 import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
 import { InboxNavCounts } from '@/features/team-inbox-conversations';
@@ -68,54 +71,61 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <SessionProvider session={session}>
-      {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
+      {/* Every date and time below is shown in the person's zone: their own choice, else the workspace's, else UTC. */}
+      <NextIntlClientProvider timeZone={session.effectiveTimezone}>
+        {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
           The address is read here, on the server, so it can be set per deployment without rebuilding. */}
-      <RealtimeProvider
-        key={`${session.org.id}:${session.user.id}`}
-        url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
-      >
-        {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
-        <LiveNotifications />
-        <HelpProvider entries={help.entries}>
-          {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
-          <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
-            <WalletAppShell
-              user={{
-                fullName: session.user.displayName ?? session.user.fullName,
-                email: session.user.email,
-                avatarUrl: session.user.avatarUrl,
-              }}
-              nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
-              settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
-              theme={theme}
-              navFooter={<WorkspaceSwitcher />}
-              banners={
-                <>
-                  {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
-                  <ImpersonationBanner key="impersonation" />
-                  <TrialBar />
-                  <AccountBanners key="banners" />
-                </>
-              }
-              bell={<NotificationBell key="bell" />}
-            >
-              <AccountGate>
-                <AppGate
-                  gates={appGates}
+        <RealtimeProvider
+          key={`${session.org.id}:${session.user.id}`}
+          url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
+        >
+          {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
+          <LiveNotifications />
+          <HelpProvider entries={help.entries}>
+            {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
+            <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
+              <WalletAppShell
+                user={{
+                  fullName: session.user.displayName ?? session.user.fullName,
+                  email: session.user.email,
+                  avatarUrl: session.user.avatarUrl,
+                }}
+                nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
+                settings={resolveSettings(SETTINGS, capabilities, { planned: PLANNED_SETTINGS })}
+                theme={theme}
+                navFooter={<WorkspaceSwitcher />}
+                banners={
+                  <>
+                    {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
+                    <ImpersonationBanner key="impersonation" />
+                    <TrialBar />
+                    <BackgroundErrorBanner key="background-error" />
+                    <AccountBanners key="banners" />
+                  </>
+                }
+                bell={<NotificationBell key="bell" />}
+              >
+                <AccountGate>
+                  <AppGate
+                    gates={appGates}
+                    enabled={enabledFeatures ? [...enabledFeatures] : null}
+                    marketplaceHref={marketplaceHref}
+                  >
+                    {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
+                    <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
+                      {children}
+                    </HelpAgentRoot>
+                  </AppGate>
+                </AccountGate>
+                <PlanPaywall
+                  gates={paywallGates}
                   enabled={enabledFeatures ? [...enabledFeatures] : null}
-                  marketplaceHref={marketplaceHref}
-                >
-                  {children}
-                </AppGate>
-              </AccountGate>
-              <PlanPaywall
-                gates={paywallGates}
-                enabled={enabledFeatures ? [...enabledFeatures] : null}
-              />
-            </WalletAppShell>
-          </InboxNavCounts>
-        </HelpProvider>
-      </RealtimeProvider>
+                />
+              </WalletAppShell>
+            </InboxNavCounts>
+          </HelpProvider>
+        </RealtimeProvider>
+      </NextIntlClientProvider>
     </SessionProvider>
   );
 }

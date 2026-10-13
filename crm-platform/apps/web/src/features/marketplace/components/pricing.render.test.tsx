@@ -557,7 +557,7 @@ describe('install page for a paid app', () => {
         locale,
       });
       expect(html).toContain(`href="${PACK_PATH}"`);
-      expect(html).toContain('req-5');
+      expect(html).not.toContain('req-5');
     }
     const en = renderMarket(<FailureView failed={mktError(e)} error={e} alreadyId={null} />);
     expect(en).toContain('This is a paid app. Subscribe to install it.');

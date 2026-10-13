@@ -43,3 +43,9 @@ export const RecordIcon = (p: SVGProps<SVGSVGElement>) => (
     <circle cx="8" cy="8" r="2" fill="currentColor" />
   </svg>
 );
+
+export const PlayIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M5 3l8 5-8 5Z" />
+  </svg>
+);

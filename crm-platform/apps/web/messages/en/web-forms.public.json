@@ -33,9 +33,32 @@
         "too_short": "Enter at least {min} characters.",
         "too_long": "Enter at most {max} characters.",
         "pattern": "This does not match the expected format.",
-        "invalid_option": "Choose one of the listed options."
+        "invalid_option": "Choose one of the listed options.",
+        "invalid_amount": "Enter an amount within the allowed range."
       },
-      "closedTitle": "This form is closed"
+      "closedTitle": "This form is closed",
+      "payTitle": "One more step",
+      "payTotal": "Amount to pay",
+      "payFromChoice": "The amount depends on what you choose above.",
+      "payEnter": "Enter the amount you wish to pay above.",
+      "payNote": "After you send, you will go to a secure payment page.",
+      "payRedirecting": "Your answers are saved. Taking you to the payment page...",
+      "payContinue": "Continue to payment",
+      "paymentUnavailable": "This form cannot take payment right now. Please try again later.",
+      "payReturn": {
+        "confirmingTitle": "Confirming your payment",
+        "confirmingBody": "We are waiting for the payment provider to confirm. This usually takes a few seconds. Please do not pay again.",
+        "slowTitle": "Still waiting for confirmation",
+        "slowBody": "If you have paid, the confirmation will arrive shortly and you can close this page. If you have not paid, go back and try again.",
+        "paidTitle": "Payment received",
+        "expiredTitle": "The payment link has expired",
+        "expiredBody": "No money was taken. Ask the sender of the form for a new payment link.",
+        "failedTitle": "The payment did not go through",
+        "failedBody": "No money was taken. You can try again.",
+        "tryAgain": "Try paying again",
+        "missingTitle": "We could not find this payment",
+        "missingBody": "The link may be wrong or too old."
+      }
     }
   }
 }

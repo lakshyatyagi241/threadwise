@@ -341,11 +341,6 @@ function SocialCaptchaForm({ settings }: { settings: SocialCaptchaSettingsRespon
       {saveError && (
         <Alert tone="danger" className="space-y-1">
           <p>{t('errors.unexpected')}</p>
-          {saveError.requestId && (
-            <p className="text-xs opacity-80">
-              {t('requestId')}: <span className="font-mono">{saveError.requestId}</span>
-            </p>
-          )}
         </Alert>
       )}
 

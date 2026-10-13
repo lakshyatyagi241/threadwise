@@ -35,7 +35,6 @@
       "notFound": "That deal could not be found. It may have been deleted.",
       "planDisabled": "Your plan does not include the sales pipeline. Upgrade to unlock it.",
       "unexpected": "Something went wrong. Try again in a moment.",
-      "requestId": "Request id",
       "retry": "Try again",
       "planLimit": "You have reached the limit of your plan.",
       "lostReasonRequired": "Choose a reason to mark the deal as lost.",

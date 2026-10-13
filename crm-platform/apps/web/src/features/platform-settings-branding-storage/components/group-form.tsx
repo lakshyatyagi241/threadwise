@@ -604,6 +604,16 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
           {fieldsGrid(s)}
         </div>
       );
+    else if (s.custom === 'microsoftCallback')
+      body = (
+        <div className="space-y-4">
+          <GoogleCallback
+            uri={String(data.extra?.redirectUri ?? '')}
+            ns="platform-settings-branding-storage.microsoftCallback"
+          />
+          {fieldsGrid(s)}
+        </div>
+      );
     else if (s.custom === 'signupLink') {
       body = (
         <div className="space-y-3 text-sm text-muted-foreground">
@@ -724,11 +734,6 @@ function GroupForm({ spec, data }: { spec: GroupSpec; data: SetGroupResponse }) 
       {fatal && (
         <Alert tone="danger" className="space-y-1">
           <p>{t('common.unexpected')}</p>
-          {fatal.requestId && (
-            <p className="text-xs opacity-80">
-              {t('common.requestId')}: <span className="font-mono">{fatal.requestId}</span>
-            </p>
-          )}
         </Alert>
       )}
       {tested && (

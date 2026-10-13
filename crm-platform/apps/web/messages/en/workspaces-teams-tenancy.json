@@ -11,8 +11,7 @@
       "copied": "Copied",
       "retry": "Try again",
       "loadMore": "Load more",
-      "loadingMore": "Loading",
-      "requestId": "Request id"
+      "loadingMore": "Loading"
     },
     "tiers": {
       "owner": "Owner",

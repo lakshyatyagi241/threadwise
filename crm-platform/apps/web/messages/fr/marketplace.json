@@ -10,13 +10,13 @@
       "install": "Installer · Marketplace",
       "installed": "Installée · Marketplace",
       "manage": "Gérer l’application · Marketplace",
-      "requests": "Demandes · Marketplace"
+      "requests": "Demandes · Marketplace",
+      "addons": "Modules complémentaires · Marketplace"
     },
     "common": {
       "dismiss": "Fermer",
       "loading": "Chargement",
       "errorTitle": "Impossible de charger ceci",
-      "requestId": "Identifiant de la demande",
       "retry": "Réessayer",
       "upgrade": "Voir les forfaits et passer à un forfait supérieur",
       "opensNewTab": "(s’ouvre dans un nouvel onglet)",
@@ -124,7 +124,8 @@
       "moreLabel": "Installées et demandes",
       "tabs": {
         "mini_app": "Mini-applications",
-        "integration": "Intégrations"
+        "integration": "Intégrations",
+        "addon": "Modules complémentaires"
       },
       "installed": "Installées",
       "installedLimit": "Installées ({installed} sur {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "En cours",
       "noCheckout": "Le paiement n’est pas disponible pour cette application pour le moment. Réessayez dans un instant."
+    },
+    "tools": {
+      "open": "Ouvrir",
+      "empty": {
+        "title": "Aucun module complémentaire disponible",
+        "message": "Les modules inclus dans votre rôle et votre forfait apparaîtront ici."
+      },
+      "soon": "Bientôt",
+      "upgrade": "Mettre à niveau"
     }
   }
 }

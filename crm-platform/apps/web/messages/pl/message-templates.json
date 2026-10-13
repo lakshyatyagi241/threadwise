@@ -4,8 +4,7 @@
       "title": "Szablony"
     },
     "common": {
-      "dismiss": "Odrzuć",
-      "requestId": "Identyfikator żądania"
+      "dismiss": "Odrzuć"
     },
     "status": {
       "draft": "Wersja robocza",

@@ -61,26 +61,30 @@ see its form **or** owns the contact it made. A form or submission outside the c
 All mutations take `rowVersion` (the value read; 409 `ROW_VERSION_CONFLICT` when stale) and accept `Idempotency-Key`. Literal paths are declared
 before `:id`.
 
-| Method and path                                      | Permission                       | Request, response (contract names)                                                                                                              |
-| ---------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /forms/templates`                               | `record.forms.read`              | `FormTemplateList` (five templates, static, validated at build)                                                                                 |
-| `GET /forms/meta/properties?object=contact\|company` | `record.forms.read`              | `FormPropertiesQuery` -> `FormPropertyList` (built-ins and custom properties of the registry, typed, with options)                              |
-| `GET /forms`                                         | `record.forms.read`              | `ListFormsQuery` (`status`, `includeArchived`, `q`, cursor) -> page of `FormSummary`                                                            |
-| `POST /forms`                                        | `record.forms.create`            | `CreateFormInput` (`name`, `templateKey` or `definition`, `settings`) -> `FormDetail` (201)                                                     |
-| `GET /forms/:id`                                     | `record.forms.read`              | `FormDetail` (draft document, live settings, share links)                                                                                       |
-| `PATCH /forms/:id`                                   | `record.forms.update`            | `UpdateFormInput` (`name`, `definition`, `settings`, `rowVersion`) -> `FormDetail`                                                              |
-| `DELETE /forms/:id`                                  | `record.forms.delete`            | 204; only a draft or archived form (409 `FORMS_STATE_INVALID`); cascades versions, submissions, events                                          |
-| `POST /forms/:id/publish`                            | `record.forms.update`            | `FormActionInput` -> `FormDetail`; 422 `FORMS_PUBLISH_INVALID` with `errors: [{ path, message: reason }]`                                       |
-| `POST /forms/:id/pause`, `/resume`, `/archive`       | `record.forms.update`            | `FormActionInput` -> `FormDetail`                                                                                                               |
-| `POST /forms/:id/duplicate`                          | `record.forms.create`            | `DuplicateFormInput` -> `FormDetail` (201): "Copy of X", new key, draft and settings, not published                                             |
-| `POST /forms/:id/rotate-key`                         | `record.forms.update`            | `FormActionInput` -> `FormDetail`; the old URL, embed and loader answer 404 at once                                                             |
-| `GET /forms/:id/versions`                            | `record.forms.read`              | `FormVersionList` (newest first, `isLive`)                                                                                                      |
-| `POST /forms/:id/versions/:n/restore`                | `record.forms.update`            | `RestoreFormVersionInput` -> `FormDetail`; copies the version into the draft (not republished); 404 `FORMS_VERSION_UNKNOWN`                     |
-| `GET /forms/:id/submissions`                         | `record.form-submissions.read`   | `ListFormSubmissionsQuery` (`status`, `tab`, `from`, `to`, `q`, `contactId`, cursor, `order`) -> `FormSubmissionList`                           |
-| `GET /forms/:id/submissions/:sid`                    | `record.form-submissions.read`   | `FormSubmissionDetail` (answers with the labels of the version they were made against; **audited** `read`)                                      |
-| `POST /forms/:id/submissions/:sid/retry`             | `record.form-submissions.update` | `FormSubmissionSummary`; for `needs_review`, `failed`, `spam` ("not spam"); 409 `FORMS_SUBMISSION_NOT_RETRYABLE`, 410 `FORMS_SUBMISSION_PURGED` |
-| `DELETE /forms/:id/submissions/:sid`                 | `record.form-submissions.delete` | 204; erase (below)                                                                                                                              |
-| `POST /forms/:id/submissions/export`                 | `record.form-submissions.export` | `ExportFormSubmissionsInput` -> `text/csv` attachment; `X-Export-Truncated`, `X-Export-Rows`                                                    |
+| Method and path                                      | Permission                       | Request, response (contract names)                                                                                                                                                                                                                |
+| ---------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /forms/templates`                               | `record.forms.read`              | `FormTemplateList` (five templates, static, validated at build)                                                                                                                                                                                   |
+| `GET /forms/meta/properties?object=contact\|company` | `record.forms.read`              | `FormPropertiesQuery` -> `FormPropertyList` (built-ins and custom properties of the registry, typed, with options)                                                                                                                                |
+| `GET /forms`                                         | `record.forms.read`              | `ListFormsQuery` (`status`, `includeArchived`, `q`, cursor) -> page of `FormSummary`                                                                                                                                                              |
+| `POST /forms`                                        | `record.forms.create`            | `CreateFormInput` (`name`, `templateKey` or `definition`, `settings`) -> `FormDetail` (201)                                                                                                                                                       |
+| `GET /forms/:id`                                     | `record.forms.read`              | `FormDetail` (draft document, live settings, share links)                                                                                                                                                                                         |
+| `PATCH /forms/:id`                                   | `record.forms.update`            | `UpdateFormInput` (`name`, `definition`, `settings`, `rowVersion`) -> `FormDetail`                                                                                                                                                                |
+| `DELETE /forms/:id`                                  | `record.forms.delete`            | 204; only a draft or archived form (409 `FORMS_STATE_INVALID`); cascades versions, submissions, events                                                                                                                                            |
+| `POST /forms/:id/publish`                            | `record.forms.update`            | `FormActionInput` -> `FormDetail`; 422 `FORMS_PUBLISH_INVALID` with `errors: [{ path, message: reason }]`                                                                                                                                         |
+| `POST /forms/:id/pause`, `/resume`, `/archive`       | `record.forms.update`            | `FormActionInput` -> `FormDetail`                                                                                                                                                                                                                 |
+| `POST /forms/:id/duplicate`                          | `record.forms.create`            | `DuplicateFormInput` -> `FormDetail` (201): "Copy of X", new key, draft and settings, not published                                                                                                                                               |
+| `POST /forms/:id/rotate-key`                         | `record.forms.update`            | `FormActionInput` -> `FormDetail`; the old URL, embed and loader answer 404 at once                                                                                                                                                               |
+| `GET /forms/:id/versions`                            | `record.forms.read`              | `FormVersionList` (newest first, `isLive`)                                                                                                                                                                                                        |
+| `POST /forms/:id/versions/:n/restore`                | `record.forms.update`            | `RestoreFormVersionInput` -> `FormDetail`; copies the version into the draft (not republished); 404 `FORMS_VERSION_UNKNOWN`                                                                                                                       |
+| `GET /forms/:id/submissions`                         | `record.form-submissions.read`   | `ListFormSubmissionsQuery` (`status`, `tab`, `from`, `to`, `q`, `contactId`, cursor, `order`) -> `FormSubmissionList`                                                                                                                             |
+| `GET /forms/:id/submissions/:sid`                    | `record.form-submissions.read`   | `FormSubmissionDetail` (answers with the labels of the version they were made against; **audited** `read`)                                                                                                                                        |
+| `GET /forms/meta/protection`                         | `record.forms.read`              | `FormProtection { captcha: { available, version }, blockedThisMonth, heldAsSpam }`: whether the PLATFORM has a CAPTCHA provider (a workspace cannot configure one), the bots the hidden trap dropped this month, and the submissions held as spam |
+| `GET /forms/meta/payment-gateway`                    | `record.forms.read`              | `FormPaymentGateway { ready, slug, name, mode, reason }`: can the workspace take payment on a form (the shared gateway exists and can make a hosted link)                                                                                         |
+| `POST /forms/:id/submissions/:sid/payment-link`      | `record.form-submissions.update` | a fresh attempt and hosted link for a submission `awaiting_payment` -> `{ url \| null }`; 409 `FORMS_PAYMENT_STATE`, 422 `FORMS_PAYMENT_UNAVAILABLE`, 410 when the answers were purged                                                            |
+| `POST /forms/:id/submissions/:sid/mark-paid`         | `record.form-submissions.update` | money that arrived outside the gateway; audited under the caller; `FormSubmissionSummary`; 409 `FORMS_PAYMENT_STATE` unless `awaiting_payment`                                                                                                    |
+| `POST /forms/:id/submissions/:sid/retry`             | `record.form-submissions.update` | `FormSubmissionSummary`; for `needs_review`, `failed`, `spam` ("not spam"); 409 `FORMS_SUBMISSION_NOT_RETRYABLE`, 410 `FORMS_SUBMISSION_PURGED`                                                                                                   |
+| `DELETE /forms/:id/submissions/:sid`                 | `record.form-submissions.delete` | 204; erase (below)                                                                                                                                                                                                                                |
+| `POST /forms/:id/submissions/export`                 | `record.form-submissions.export` | `ExportFormSubmissionsInput` -> `text/csv` attachment; `X-Export-Truncated`, `X-Export-Rows`                                                                                                                                                      |
 
 `GET /forms/:id/analytics`, `GET/PUT /forms/settings`, `POST /forms/ai/*` are spec phase 2 and are not built.
 
@@ -125,11 +129,12 @@ nothing). It is refused with 422 `FORMS_PUBLISH_INVALID`, one `{ path, message }
 `/v2/public/forms/:publicKey` (version `2`). The key is 22 random letters and digits. **Unknown, malformed, archived, plan-locked: one 404 body.** A
 `paused` form is returned by GET with `closed: true` (and no steps); a submit to it is a 404. The origin is judged only after the key proved to exist.
 
-| Method and path           | What                                                                                                                                                                                                                                                                                     |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /:publicKey`         | `PublicForm`: steps (bindings removed, rich text sanitised), theme, consent line, honeypot input name, captcha need and **public** site key, `poweredBy`, `frameAncestors`. `Cache-Control: public, max-age=30`, `ETag`, `If-None-Match` -> 304, `X-Robots-Tag: noindex`, `Vary: Origin` |
-| `POST /:publicKey/events` | `PublicFormEventInput` (`visitId`, `kind` view/start/step/submit/complete, `step`) -> **204 always** (also for an unknown key); nothing personal is stored                                                                                                                               |
-| `POST /:publicKey/submit` | `PublicFormSubmitInput` -> **201** `PublicFormSubmitResponse { submissionToken, next: { type: 'message' \| 'redirect' } }`; JSON only (415 otherwise); body class `public-form` (256 KiB)                                                                                                |
+| Method and path                      | What                                                                                                                                                                                                                                                                                     |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /:publicKey`                    | `PublicForm`: steps (bindings removed, rich text sanitised), theme, consent line, honeypot input name, captcha need and **public** site key, `poweredBy`, `frameAncestors`. `Cache-Control: public, max-age=30`, `ETag`, `If-None-Match` -> 304, `X-Robots-Tag: noindex`, `Vary: Origin` |
+| `POST /:publicKey/events`            | `PublicFormEventInput` (`visitId`, `kind` view/start/step/submit/complete, `step`) -> **204 always** (also for an unknown key); nothing personal is stored                                                                                                                               |
+| `GET /:publicKey/submissions/:token` | `PublicFormSubmissionStatus { payment: not_required \| awaiting_payment \| paid \| expired \| failed, next, payUrl }` for the page the visitor returns to from the gateway; `Cache-Control: no-store`; 404 for any token that is not this form's receipt                                 |
+| `POST /:publicKey/submit`            | `PublicFormSubmitInput` -> **201** `PublicFormSubmitResponse { submissionToken, next: { type: 'message' \| 'redirect' \| 'pay' } }`; JSON only (415 otherwise); body class `public-form` (256 KiB)                                                                                       |
 
 `PublicForm.frameAncestors` carries the `Content-Security-Policy: frame-ancestors` value the web page must answer with: `'none'` for the hosted page,
 the form's allow-list for `?embed=1`. The API computes it so the web app never decides what may frame a form.
@@ -195,6 +200,17 @@ actor of the workspace the key proved:
 An unexpected error rolls the whole transaction back, is recorded `failed` in a transaction of its own (`form.submission_failed`), the sender gets a
 generic 500, and the **same idempotency key** retried recovers it.
 
+**Popup mode.** An element with `data-forms-mode="popup"` opens the same hosted page in a dialog instead of inline. Options are attributes the Share tab
+writes (the loader clamps each to the same limits): `data-forms-trigger` = `delay` (default) | `scroll_down` | `scroll_up` | `click`;
+`data-forms-delay` seconds 0 to 600 (default 5); `data-forms-scroll` percent 5 to 100 (default 50); `data-forms-position` = `center` (dims the page,
+click outside closes) | `bottom_right` (no dimming); `data-forms-days` 0 to 365 (default 7; 0 = every visit); `data-forms-title`, `data-forms-close` (labels).
+`scroll_up` opens after the visitor went at least 200px down and then back up by 80px or more. Any element with `data-forms-open="<publicKey>"`, or
+`FormsPopup[<publicKey>].open()`, opens it on demand whatever the trigger. The dialog has `role="dialog"` and `aria-modal`, closes on its button, Escape or
+(centre only) the backdrop, locks page scroll while centred, returns focus on close, rises from the bottom as a full-width sheet at 480px and below, and
+uses the same one-way, origin-checked message channel. The "seen" state is in `localStorage` (`forms:popup:<key>`: an expiry time, or `done` after a
+submit); a blocked storage only means it may show again. The Design tab and the Preview dialog have a **Popup** preview (the page dimmed, a dialog, a close
+button).
+
 ### Spam and abuse controls
 
 - **Honeypot** (`form.honeypot`, default on): any text in the input named by `honeypotField` is a bot. Silent 201, **nothing stored**, a counter
@@ -250,3 +266,49 @@ by `PlanEntitlementService` right after, as the lead hook does); `webhook_url` i
 `web_form_deliveries` are later phases; the workspace defaults route and its `forms.settings.manage` key (spec 7.1) are not built; the export is
 synchronous with a row cap. See [the wiring map](../threadwise-port/wiring/forms-builder.md) and the parity note in
 [product-extensions.md](../threadwise-port/parity/product-extensions.md).
+
+## Payments (spec section 10, phase 3)
+
+A form with `payment.enabled` charges the visitor on the workspace's shared gateway (`WorkspaceGatewayResolver`, a hosted payment link made by
+`GatewayLinkService`; Razorpay and Stripe are the verified drivers). Card data never touches this app.
+
+- **Definition.** `payment { enabled, amountType: fixed | from_field | pay_what_you_want, amountMinor, fieldId, minMinor, maxMinor, currency, description }`;
+  a `from_field` option carries `amountMinor`. The contract refuses a payment block without its price, a choice field whose options lack a price,
+  or a pay-what-you-want field that is not a required number. Publish adds `payment_no_gateway` when no usable gateway exists.
+- **The server decides the amount** (`computeAmount`, `form-payment-rules.ts`) from the frozen version and the validated answers; no amount the
+  browser sends is read. An answer that does not name a priced option, or an amount outside the limits, is a 422 `invalid_amount` on the field. Money is
+  `bigint` minor units with the currency's exponent; no float.
+- **Submit.** With payment on and no usable gateway the door answers 422 `FORMS_PAYMENT_UNAVAILABLE` and stores nothing (closed, never a free pass).
+  Otherwise one transaction stores the submission, writes the CRM, inserts a `web_form_payments` attempt `pending` (reference `FRM-<uuid>`, 48-hour
+  expiry) and sets the submission `awaiting_payment`; after commit the link is minted and the visitor gets `next: { type: 'pay', url }`. The same
+  idempotency key again returns the open attempt's link (re-minted when it lapsed). A gateway that refuses leaves the attempt pending: staff use
+  _new payment link_.
+- **Settle.** The gateway's verified notification reaches `FormPaymentsService.settle` by the `FRM-` prefix (`GatewayPaymentRegistry`). The
+  attempt must exist in this workspace, on this gateway, with the same amount and currency (a provider that states no amount is refused, outbox
+  `form.payment_rejected`); a replay is `duplicate`; money that arrives for an expired attempt is still recorded. The attempt and the submission become
+  `paid`, the contact timeline gets _Paid ..._, outbox `form.payment_succeeded`. A second paid attempt for a submission is recorded and flags
+  `duplicatePayment` (refund by hand; there is no gateway refund call).
+- **The redirect back is never proof.** `/f/<key>/pay-return?s=<receipt>` only reads `GET .../submissions/:token` and polls until `paid`.
+- **Expiry.** `FormPaymentSweepService` (worker, every 30 minutes) marks attempts past `expires_at` `expired`; the submission stays `awaiting_payment`.
+- **Not built (recorded):** per-item and deposit amounts, tax, coupon field, invoice and receipt (phase 3b), resend link by email or WhatsApp, in-app
+  notification for a payment, failed-payment and refund webhooks (the shared gateway only handles "paid").
+
+**Payment notifications.** `FormNotificationConsumer` also reads `form.payment_succeeded` and `form.payment_duplicate` (payload carries `contactName`, `amount`
+(major units), `currency`, `paymentId`, `ownerId`, `notify`, `notifyEmails`). The people are the same as for a submission (the contact's owner when the form
+says so, plus the listed users still active). In-app types `form_payment` and `form_payment_duplicate` (link to the submission, deduplicated on the payment
+attempt, so a redelivery tells nobody twice); the listed addresses get one mail per payment (not for a duplicate), with the name, the amount and a link, no answers.
+
+**CAPTCHA is the platform's, not the workspace's.** `captchaMode` is `inherit` (check when the platform has a provider), `on` (the same check, but the form
+cannot be PUBLISHED without a provider: 422 `FORMS_PUBLISH_INVALID`, `settings.captchaMode: captcha_not_configured`) or `off` (skip). A form already
+live whose provider is later removed degrades to the hidden trap, rate limits and spam score rather than refusing every lead. The builder always shows
+whether the platform has a provider (`GET /forms/meta/protection`) and warns when `on` would do nothing.
+
+**Notification links.** Every in-app notification and notification email links to `/forms/<formId>/submissions?submission=<submissionId>`; the screen
+opens that submission even when it is not in the first page of the list.
+
+**Mapping to CRM properties.** `GET /v2/forms/meta/properties?object=contact|company` lists the built-in columns plus the workspace's writable custom
+properties. Contact built-ins: `name`, `first_name`, `middle_name`, `last_name`, `email`, `phone`, `title`, `address` ("Full address"), the address parts
+`address_line`, `address_city`, `address_state`, `address_postal_code`, `address_country`, and `message`. Company built-ins: `name`, `domain`, `email`, `phone`,
+`industry`, `size_range`, `address` and the same five address parts, `notes`. The CRM keeps ONE address line per contact and company, so the parts are
+joined (`composeAddress`: `street, city, state postal, country`, empty parts skipped) when the submission is mapped, and a field bound to the whole
+`address` wins over the parts. The address, like every other built-in, fills blanks only on a returning contact. `middle_name` is contact only.

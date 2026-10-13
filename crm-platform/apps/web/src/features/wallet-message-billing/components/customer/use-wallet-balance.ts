@@ -10,6 +10,7 @@ import {
   type WalletSummary,
 } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { BACKGROUND_META } from '@/lib/api/background';
 import { useRealtimeClient, type RealtimeClient } from '@/lib/realtime';
 import { KEYS, customerApi } from '../../api';
 import { formatMinor } from '../../lib/money';
@@ -81,6 +82,7 @@ export function useWalletBalance() {
   const query = useQuery({
     queryKey: KEYS.summary,
     queryFn: ({ signal }) => customerApi.summary(signal),
+    meta: BACKGROUND_META,
     enabled: allowed,
     refetchInterval: BALANCE_REFRESH_MS,
     refetchOnWindowFocus: true,

@@ -18,7 +18,6 @@
       "planDisabled": "Your plan does not include companies. Upgrade to unlock them.",
       "ownerInvalid": "The owner must be an active member of this workspace.",
       "unexpected": "Something went wrong. Try again in a moment.",
-      "requestId": "Request id",
       "retry": "Try again"
     },
     "list": {

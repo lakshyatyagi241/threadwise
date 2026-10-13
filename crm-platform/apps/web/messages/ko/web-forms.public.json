@@ -33,9 +33,32 @@
         "too_short": "{min}자 이상 입력하세요.",
         "too_long": "{max}자 이하로 입력하세요.",
         "pattern": "예상된 형식과 일치하지 않습니다.",
-        "invalid_option": "나열된 옵션 중 하나를 선택하세요."
+        "invalid_option": "나열된 옵션 중 하나를 선택하세요.",
+        "invalid_amount": "허용 범위 내의 금액을 입력하세요."
       },
-      "closedTitle": "이 폼은 마감되었습니다"
+      "closedTitle": "이 폼은 마감되었습니다",
+      "payTitle": "마지막 단계",
+      "payTotal": "결제 금액",
+      "payFromChoice": "금액은 위에서 선택한 항목에 따라 달라집니다.",
+      "payEnter": "결제할 금액을 위에 입력하세요.",
+      "payNote": "제출하면 보안 결제 페이지로 이동합니다.",
+      "payRedirecting": "답변이 저장되었습니다. 결제 페이지로 이동하는 중...",
+      "payContinue": "결제 계속하기",
+      "paymentUnavailable": "현재 이 양식은 결제를 받을 수 없습니다. 나중에 다시 시도하세요.",
+      "payReturn": {
+        "confirmingTitle": "결제 확인 중",
+        "confirmingBody": "결제 대행사의 확인을 기다리고 있습니다. 보통 몇 초 걸립니다. 다시 결제하지 마세요.",
+        "slowTitle": "아직 확인을 기다리는 중",
+        "slowBody": "결제하셨다면 곧 확인되니 이 페이지를 닫으셔도 됩니다. 결제하지 않으셨다면 돌아가서 다시 시도하세요.",
+        "paidTitle": "결제 완료",
+        "expiredTitle": "결제 링크가 만료되었습니다",
+        "expiredBody": "요금이 청구되지 않았습니다. 양식 발송자에게 새 결제 링크를 요청하세요.",
+        "failedTitle": "결제가 완료되지 않았습니다",
+        "failedBody": "요금이 청구되지 않았습니다. 다시 시도할 수 있습니다.",
+        "tryAgain": "다시 결제하기",
+        "missingTitle": "결제 내역을 찾을 수 없습니다",
+        "missingBody": "링크가 잘못되었거나 너무 오래되었을 수 있습니다."
+      }
     }
   }
 }

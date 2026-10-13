@@ -13,6 +13,7 @@ export const KEYS = {
   notes: (id: string) => ['inbox', 'notes', id] as const,
   events: (id: string) => ['inbox', 'events', id] as const,
   assignees: ['inbox', 'assignees'] as const,
+  tags: ['inbox', 'tags'] as const,
   channels: ['inbox', 'channels'] as const,
   templates: (id: string, q: string) => ['inbox', 'templates', id, q] as const,
 };
@@ -35,6 +36,18 @@ export function useConversationTemplates(conversationId: string, enabled: boolea
   return useQuery({
     queryKey: KEYS.templates(conversationId, q),
     queryFn: ({ signal }) => inboxApi.templates(conversationId, q, signal),
+    enabled,
+    staleTime: 60_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
+
+/** The workspace tag library (the picker, the list filter, the bulk bar, the settings screen). */
+export function useTags(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.tags,
+    queryFn: ({ signal }) => inboxApi.tags(signal),
     enabled,
     staleTime: 60_000,
     retry: transientRetry,

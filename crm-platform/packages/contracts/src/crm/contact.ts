@@ -42,6 +42,12 @@ export const contactResponseSchema = z.object({
   wonAt: z.string().datetime().nullable(),
   lostAt: z.string().datetime().nullable(),
   leadScore: z.number().int().nullable(),
+  /** Who set the score: a person ('manual', or null on a score typed before AI scoring existed) or the AI lead scorer ('ai'). */
+  leadScoreSource: z.enum(['manual', 'ai']).nullable(),
+  /** For an AI score: the short reasons the model gave. */
+  leadScoreReasons: z.array(z.string()).nullable(),
+  leadScoredAt: z.string().datetime().nullable(),
+  leadScoreModel: z.string().nullable(),
   /** Values are org-configurable via status_options, not a fixed enum here. */
   whatsappSubscriptionStatus: z.string().nullable(),
   smsSubscriptionStatus: z.string().nullable(),
@@ -75,7 +81,8 @@ export const createContactSchema = z
     email: emailSchema.optional(),
     phone: phoneSchema.optional(),
     companyId: uuidSchema.optional(),
-    ownerId: uuidSchema.optional(),
+    /** Omitted: the creator. `null`: nobody (refused to a caller whose record scope would hide the contact). */
+    ownerId: uuidSchema.nullish(),
     lifecycleStage: lifecycleStageSchema.or(z.string().min(1)).optional(),
     status: z.string().max(64).optional(),
     lostReason: z.string().max(255).optional(),
@@ -242,6 +249,11 @@ export const assigneeResponseSchema = z.object({
   id: uuidSchema,
   fullName: z.string(),
   email: z.string(),
+  /**
+   * Whether the caller's record scope lets them hand a contact to this person (`all`: anyone; `team`: themselves and
+   * teammates; `own`: themselves). The owner picker offers only these; the server enforces it again on every write.
+   */
+  canAssign: z.boolean(),
 });
 export type AssigneeResponse = z.infer<typeof assigneeResponseSchema>;
 

@@ -165,11 +165,11 @@
       "messagingNote": "WhatsApp、Instagram、Facebook。チャネルはトリガーノードで切り替えます",
       "call": "通話",
       "callNote": "AI音声IVR。読み上げ、聞き取り、転送",
-      "subtitleSimple": "すべてのコンポーネントがすべてのチャネルで動作するわけではないため、ボットは1つのチャネル向けに作成します。",
+      "subtitleSimple": "すべてのコンポーネントがすべてのチャネルで動作するわけではないため、ボットは1つのチャネル向けに作成されます。",
       "whatsapp": "WhatsApp",
       "whatsappNote": "接続済みのWhatsApp番号でお客様に返信します",
-      "web": "Webサイトチャット",
-      "webNote": "Webサイトに追加するチャットウィジェット"
+      "web": "ウェブサイトチャット",
+      "webNote": "ウェブサイトに追加するチャットウィジェット"
     },
     "rename": {
       "title": "フロー名を変更",
@@ -554,7 +554,12 @@
           "cardGallery": "カードギャラリー",
           "cardCount": "カード{count}枚",
           "payLink": "支払いリンク",
-          "invoice": "請求書"
+          "invoice": "請求書",
+          "faqAllFaqs": "すべてのFAQ",
+          "faqCategory": "FAQ: {name}",
+          "faqScore": "最小スコア {score}",
+          "faqNotSent": "送信しない",
+          "faqWorkspaceScore": "フロースコア"
         },
         "overlays": {
           "startPinned": "これが開始点です(クリックで固定を解除)",
@@ -711,9 +716,11 @@
             "send": "送信",
             "ask": "顧客に質問",
             "handoff": "引き継ぎ",
-            "logic": "判断"
+            "logic": "判断",
+            "answer": "回答"
           },
-          "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。"
+          "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。",
+          "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -722,7 +729,11 @@
           "moveUp": "上へ移動",
           "moveDown": "下へ移動",
           "duplicate": "複製",
-          "deleteStep": "ステップを削除"
+          "deleteStep": "ステップを削除",
+          "faqExits": {
+            "matched": "回答済み",
+            "no_match": "一致なし"
+          }
         },
         "editors": {
           "linkLabel": "この後の移動先",
@@ -879,9 +890,20 @@
           },
           "handoff": {
             "hint": "訪問者はメモ付きでこのチームに引き継がれます。このボタンの後に何かを接続する必要はありません。"
+          },
+          "faq": {
+            "exits": {
+              "matched": "FAQが回答した場合の移動先",
+              "no_match": "どのFAQも回答しなかった場合の移動先"
+            },
+            "exitsHint": {
+              "matched": "この時点でテキストの回答は送信済みです。フローを開始するFAQは、そのフローで続行されます。",
+              "no_match": "十分に近いFAQがなかったか、FAQの自動回答がオフになっています。"
+            }
           }
         },
-        "branchAdd": "「{title}」のステップを追加"
+        "branchAdd": "「{title}」のステップを追加",
+        "faqEnds": "このステップでこの部分は終了します。次に送信される内容は、FAQが回答したかどうかで変わります。"
       },
       "formsCore": {
         "helpers": {
@@ -1814,6 +1836,45 @@
           "afterSending": "送信後",
           "afterSendingHint": "オン: 顧客が支払うまでフローはここで一時停止し、「out」ポートにのみ進みます（支払額は{paidAmount} {paidCurrency}として届きます）。オフ: 請求書を送信後、フローはすぐに進みます。",
           "waitUntilPaid": "支払い完了まで待ってから続行"
+        },
+        "faq": {
+          "intro": {
+            "body": "メッセージを意味でこのフローのFAQと照合して回答します。FAQが回答した場合は<mono>回答済み</mono>から、それ以外は<mono>一致なし</mono>から出ます。",
+            "sub": "このフローのFAQ自動回答をオンにしなくても動作します。<link>このフローのFAQを管理</link>"
+          },
+          "exitsLabel": "出口",
+          "exitMatchedName": "回答済み",
+          "exitMatched": "FAQが回答しました。そのテキストが送信されたか(送信がオフの場合を除く)、そのフローが引き継がれ、元には戻りません。",
+          "exitNoMatchName": "一致なし",
+          "exitNoMatch": "十分に近いFAQがない、プラットフォームでFAQの自動回答がオフ、リンク先のフローまたはステップが存在しない、またはメッセージが空でした。",
+          "query": "照合するメッセージ",
+          "queryHint": "既定ではお客様の最後のメッセージです。質問ステップで保存した変数(例: <mono>{variable}</mono>)も使えます。/ を入力すると挿入できます。",
+          "category": "これらのFAQのみ",
+          "allFaqs": "すべてのFAQ",
+          "loadingCategories": "カテゴリを読み込み中…",
+          "categoryGone": "{name}(使用しているFAQなし)",
+          "retry": "再試行",
+          "minScore": "最小スコア",
+          "sendAnswer": "お客様に回答を送信",
+          "sendAnswerToggle": "一致したテキスト回答をメッセージとして送信",
+          "sendAnswerOnHint": "一致したテキストFAQがお客様に送信されます。フローを開始するFAQは、そのフローで続行されます。",
+          "sendAnswerOffHint": "何も送信されません。回答は下の変数に保存されるだけなので、後のステップで返信文を自由に作成できます。フローを開始するFAQは、引き続きそのフローで続行されます。",
+          "save": "結果の保存名",
+          "saveHint": "結果を保存する名前です。後のステップでは下の形式で参照します。",
+          "variables": {
+            "answer": "回答テキスト",
+            "matched": "はい または いいえ",
+            "question": "一致したFAQの質問",
+            "score": "一致の近さ",
+            "id": "一致したFAQのID"
+          },
+          "noFaqs": "このフローにはまだFAQがないため、このステップは常に一致なしから出ます。<link>このフローの最初のFAQを追加</link>",
+          "useWorkspaceScore": "このフローの設定を使用",
+          "minScoreInvalid": "{min}から{max}の数値を入力するか、このフローの設定を使用してください。",
+          "saveFlowFirst": "先にフローを保存してください。FAQはシンプルビルダーのFAQタブで編集し、このステップはそこから回答します。",
+          "categoryHint": "このカテゴリのFAQのみが回答できます。カテゴリはこのフローのFAQから取得されます。",
+          "categoriesFailed": "このフローのFAQカテゴリを読み込めませんでした。",
+          "minScoreHint": "このステップに限り、このフローのスコアを{min}から{max}の範囲で置き換えます。スコアはプラットフォームの埋め込みモデルによって異なるため、数値を選ぶ前にこのフローの<link>FAQテスト</link>でメッセージを試してください。"
         }
       },
       "attrPicker": {
@@ -1876,14 +1937,16 @@
         }
       },
       "webBot": {
-        "aria": "ボットのセクション",
-        "build": "ビルド",
+        "aria": "フローのセクション",
+        "build": "作成",
         "customize": "カスタマイズ",
-        "saveFirst": "先にボットを保存してください。",
-        "needsCustomizing": "カスタマイズがまだ保存されていません。カスタマイズを開いてください。",
+        "saveFirst": "先にフローを保存してください。",
+        "needsCustomizing": "ウィジェットはまだ既定の外観です。「カスタマイズ」を開いてください。",
         "customizeFirst": "公開する前に、チャットウィジェットをカスタマイズして一度保存してください。",
         "deploy": "デプロイ",
-        "customizeFirstWhatsapp": "公開する前に、WhatsAppボタンをカスタマイズして一度保存してください。"
+        "customizeFirstWhatsapp": "公開する前に、WhatsAppボタンをカスタマイズして一度保存してください。",
+        "faqs": "FAQ",
+        "install": "インストール"
       },
       "buttonIcon": {
         "label": "アイコン(任意)",
@@ -2168,6 +2231,10 @@
         "carousel": {
           "label": "カルーセル",
           "description": "画像とボタン付きのスクロールカード"
+        },
+        "faq": {
+          "label": "FAQから回答",
+          "description": "メッセージをFAQと照合"
         }
       },
       "groups": {
@@ -2217,7 +2284,7 @@
         "wechat": "WeChat",
         "viber": "Viber",
         "email": "メール",
-        "web": "Webサイトチャット"
+        "web": "ウェブサイトチャット"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2311,7 +2378,8 @@
         "wrongChannel": "「{node}」は{channel}では動作しません。削除するか、トリガーノードでチャンネルを切り替えてください。",
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
-        "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。"
+        "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
+        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。"
       }
     },
     "simpleModel": {
@@ -2398,6 +2466,10 @@
         "condition": {
           "label": "条件",
           "help": "お客様の発言や保存した内容で分岐します（AND / OR ルール）"
+        },
+        "faq": {
+          "label": "FAQから回答",
+          "help": "お客様のメッセージをFAQと照合します。このフローを終了します。FAQが回答した場合と回答しなかった場合で出口が分かれます"
         }
       },
       "typeLabel": {
@@ -2414,7 +2486,8 @@
         "cta": "リンクボタン",
         "assign": "担当者に割り当て",
         "carousel": "カルーセル",
-        "condition": "条件"
+        "condition": "条件",
+        "faq": "FAQから回答"
       },
       "stepLabel": {
         "questionOf": "質問 · {kind}"
@@ -2454,8 +2527,10 @@
         "variableUsed": "ステップ {stage}: 「{name}」はステップ {other} で既に使用されています。回答ごとに別の名前を付けてください。",
         "carouselCards": "ステップ {stage}: カードを1枚以上追加し、すべてのカードにタイトルを付けてください。",
         "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
-        "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。"
-      }
+        "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。",
+        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。"
+      },
+      "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },
     "waboImport": {
       "notes": {
@@ -2566,7 +2641,9 @@
       "optionNotConnected": "ポート「{port}」（選択肢 {n}）が接続されていません。終了します。",
       "buttonNotConnected": "ボタン「{label}」が接続されていません。終了します。",
       "simPurchase": "購入をシミュレート: {name} → 「purchased」ポート",
-      "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート"
+      "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート",
+      "faqAnswered": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索しないため、何も送信されず、{ref} は空のままです。「回答済み」の出口に進みます。",
+      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。"
     }
   }
 }

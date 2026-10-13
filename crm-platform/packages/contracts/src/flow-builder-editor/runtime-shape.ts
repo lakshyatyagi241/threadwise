@@ -317,6 +317,14 @@ const SHAPERS: Record<string, Shaper> = {
     variable: variableFrom(d, 'save', 'api_response'),
   }),
 
+  faq: (d) => ({
+    query: s(d.query, '{{user_message}}'),
+    category: s(d.category).trim(),
+    minScore: isNil(d.minScore) || d.minScore === '' ? null : Number(d.minScore),
+    sendAnswer: isNil(d.sendAnswer) ? true : toBool(d.sendAnswer),
+    variable: variableFrom(d, 'save', 'faq'),
+  }),
+
   google_sheets: (d) => ({
     mode: s(d.mode, 'write'),
     sheetId: s(d.sheetId),

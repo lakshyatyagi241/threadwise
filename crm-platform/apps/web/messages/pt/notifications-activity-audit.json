@@ -149,6 +149,16 @@
         "title": "{name} está ativo novamente",
         "titleNoName": "Um grupo do WhatsApp está ativo novamente",
         "body": "O WhatsApp restaurou este grupo. Você pode enviar mensagens novamente."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Alguém quer entrar em {name}} many {# pessoas querem entrar em {name}} other {# pessoas querem entrar em {name}}}",
+        "titleNoName": "{count, plural, one {Alguém quer entrar em um grupo do WhatsApp} many {# pessoas querem entrar em um grupo do WhatsApp} other {# pessoas querem entrar em um grupo do WhatsApp}}",
+        "body": "Abra Grupos para aprovar ou recusar."
+      },
+      "device_group_removed": {
+        "title": "Seu número foi removido de {name}",
+        "titleNoName": "Seu número foi removido de um grupo do WhatsApp",
+        "body": "Alguém removeu seu número pessoal deste grupo. O grupo é mantido aqui, somente leitura."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Nova mensagem direta",
         "waba_group_join_request": "Pedido para entrar em um grupo",
         "waba_group_suspended": "Grupo do WhatsApp suspenso",
-        "waba_group_suspension_cleared": "Grupo do WhatsApp ativo novamente"
+        "waba_group_suspension_cleared": "Grupo do WhatsApp ativo novamente",
+        "device_group_join_request": "Solicitação para entrar em um grupo",
+        "device_group_removed": "Removido de um grupo do WhatsApp"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "Números do WhatsApp",
         "broadcasts": "Transmissões e campanhas",
         "team_chat": "Chat da equipe",
-        "whatsapp_groups": "Grupos do WhatsApp"
+        "whatsapp_groups": "Grupos do WhatsApp",
+        "billing": "Faturamento e assinaturas"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "Documento de venda decidido",
           "hint": "Um orçamento ou fatura foi aceito ou recusado."
         },
+        "email_bounced": {
+          "label": "E-mail não entregue",
+          "hint": "Um e-mail que você enviou foi devolvido ou atrasou."
+        },
         "wallet_credited": {
           "label": "Carteira recarregada",
           "hint": "A carteira do espaço de trabalho recebeu um crédito."
@@ -313,6 +330,34 @@
         "waba_group_suspension_cleared": {
           "label": "Grupo ativo novamente",
           "hint": "O WhatsApp restaurou um grupo que havia suspendido. Apenas se você foi informado sobre a suspensão."
+        },
+        "form_payment": {
+          "label": "Pagamento de formulário recebido",
+          "hint": "Um visitante pagou em um dos seus formulários."
+        },
+        "form_payment_duplicate": {
+          "label": "Formulário pago duas vezes",
+          "hint": "Um visitante pagou uma segunda vez e o pagamento extra precisa ser reembolsado."
+        },
+        "billing_payment_failed": {
+          "label": "Falha no pagamento da assinatura",
+          "hint": "Uma cobrança de renovação não foi concluída e precisa da sua atenção."
+        },
+        "billing_subscription_canceled": {
+          "label": "Assinatura cancelada",
+          "hint": "Seu provedor de pagamento encerrou uma assinatura deste espaço de trabalho."
+        },
+        "device_group_join_request": {
+          "label": "Solicitação para entrar em um grupo de número pessoal",
+          "hint": "Pessoas pedem para entrar em um grupo de um número pessoal do WhatsApp que você gerencia. Dez solicitações formam uma linha."
+        },
+        "device_group_removed": {
+          "label": "Removido de um grupo de número pessoal",
+          "hint": "Alguém removeu um dos seus números pessoais do WhatsApp de um grupo. Pode ser sinal de que o número foi denunciado."
+        },
+        "sla_breached": {
+          "label": "SLA descumprido",
+          "hint": "Uma conversa sua não cumpriu a meta de primeira resposta ou de resolução."
         }
       },
       "loading": "Carregando suas preferências",

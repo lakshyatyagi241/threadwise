@@ -11,6 +11,8 @@ export const sessionUserSchema = z.object({
   displayName: z.string().nullable(),
   phone: z.string().nullable(),
   locale: z.string().nullable(),
+  /** The person's own time zone; null = follow the workspace. */
+  timezone: z.string().nullable(),
   theme: z.enum(['paper', 'bright', 'dark']),
   /** Same-origin proxy path, or null when no avatar is set. */
   avatarUrl: z.string().nullable(),
@@ -45,6 +47,8 @@ export const sessionResponseSchema = z.object({
   flags: accountFlagsSchema,
   /** This session's id (uuid), for "this device" in the sessions list. */
   sessionId: uuidSchema,
+  /** The zone dates are shown in: the person's own, else the workspace's, else UTC. */
+  effectiveTimezone: z.string(),
 });
 export type SessionResponse = z.infer<typeof sessionResponseSchema>;
 
@@ -52,6 +56,8 @@ export const workspaceItemSchema = z.object({
   slug: z.string(),
   name: z.string(),
   current: z.boolean(),
+  /** The email is not verified in that workspace yet, so it is listed but cannot be switched to. */
+  unverified: z.boolean().optional(),
 });
 export const workspaceListResponseSchema = z.object({ data: z.array(workspaceItemSchema) });
 export type WorkspaceListResponse = z.infer<typeof workspaceListResponseSchema>;

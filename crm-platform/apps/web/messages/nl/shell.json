@@ -78,6 +78,11 @@
       "payments": "Betalingen"
     },
     "help": "Hulp",
-    "unreadCount": "{count, plural, one {# ongelezen} other {# ongelezen}}"
+    "unreadCount": "{count, plural, one {# ongelezen} other {# ongelezen}}",
+    "backgroundError": {
+      "message": "Sommige live cijfers, zoals meldingen, saldo of inboxtellers, konden niet worden vernieuwd. Wat je ziet kan verouderd zijn.",
+      "retry": "Opnieuw proberen",
+      "dismiss": "Sluiten"
+    }
   }
 }

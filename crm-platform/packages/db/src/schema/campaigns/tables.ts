@@ -358,6 +358,12 @@ export const wpCampaignContacts = pgTable(
     index('idx_wp_campaign_contacts_contact_id').on(t.orgId, t.contactId),
     index('idx_wp_campaign_contacts_next_attempt_at').on(t.orgId, t.nextAttemptAt),
     index('idx_wp_campaign_contacts_tracking_id').on(t.orgId, t.trackingId),
+    // The Message History feed, newest send first (20261126090000).
+    index('idx_wp_campaign_contacts_org_at').on(
+      t.orgId,
+      sql`(COALESCE(${t.sentAt}, ${t.createdAt})) DESC`,
+      t.id.desc(),
+    ),
   ],
 );
 

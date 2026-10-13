@@ -21,9 +21,11 @@ const viewer = (
 const record = (
   assigneeUserId: number | null,
   assigneeTeamId: number | null = null,
+  channelOwnerUserId: number | null = null,
 ): ConversationRecord => ({
   assigneeUserId,
   assigneeTeamId,
+  channelOwnerUserId,
 });
 
 describe('conversationVisible: who may see a conversation (plan 3.7)', () => {
@@ -75,6 +77,52 @@ describe('conversationVisible: who may see a conversation (plan 3.7)', () => {
       expect(conversationVisible(viewer('own', [MY_TEAM]), record(null))).toBe(false);
       expect(conversationVisible(viewer('own', [MY_TEAM]), record(null, MY_TEAM))).toBe(false);
       expect(conversationVisible(viewer('own', [MY_TEAM]), record(OTHER, MY_TEAM))).toBe(false);
+    });
+  });
+
+  describe('a personal mailbox (TW-MAIL-035)', () => {
+    const asAdmin = (
+      scope: ConversationViewer['scope'],
+      teamIds: number[] = [],
+    ): ConversationViewer => ({
+      ...viewer(scope, teamIds),
+      readsPersonalMail: true,
+    });
+
+    it('is visible to its owner whatever their assignment scope, even unassigned or assigned to a colleague', () => {
+      for (const scope of ['all', 'team', 'own'] as const) {
+        expect(conversationVisible(viewer(scope), record(null, null, ME))).toBe(true);
+        expect(conversationVisible(viewer(scope), record(OTHER, OTHER_TEAM, ME))).toBe(true);
+      }
+    });
+    it('is invisible to a colleague, even one who sees everything and even when it is assigned to them', () => {
+      for (const scope of ['all', 'team', 'own'] as const) {
+        expect(conversationVisible(viewer(scope, [MY_TEAM]), record(null, null, OTHER))).toBe(
+          false,
+        );
+        expect(conversationVisible(viewer(scope, [MY_TEAM]), record(ME, MY_TEAM, OTHER))).toBe(
+          false,
+        );
+      }
+    });
+    it('an admin reads it only when the policy lets admins (readsPersonalMail), and then by their scope as usual', () => {
+      expect(conversationVisible(viewer('all'), record(null, null, OTHER))).toBe(false);
+      expect(conversationVisible(asAdmin('all'), record(null, null, OTHER))).toBe(true);
+      expect(conversationVisible(asAdmin('own'), record(null, null, OTHER))).toBe(false);
+      expect(conversationVisible(asAdmin('own'), record(ME, null, OTHER))).toBe(true);
+    });
+    it('the owner without any read grant sees nothing, a mailbox is not a grant', () => {
+      expect(conversationVisible(viewer(null), record(null, null, ME))).toBe(false);
+    });
+    it("an email channel whose mailbox row is gone (owner -1) is nobody's: only the admin reading right opens it", () => {
+      expect(conversationVisible(viewer('all'), record(null, null, -1))).toBe(false);
+      expect(conversationVisible(asAdmin('all'), record(null, null, -1))).toBe(true);
+    });
+    it('a shared channel (no owner) is unchanged by the admin flag', () => {
+      expect(conversationVisible(asAdmin('team', [MY_TEAM]), record(OTHER, OTHER_TEAM))).toBe(
+        false,
+      );
+      expect(conversationVisible(viewer('team', [MY_TEAM]), record(null))).toBe(true);
     });
   });
 });

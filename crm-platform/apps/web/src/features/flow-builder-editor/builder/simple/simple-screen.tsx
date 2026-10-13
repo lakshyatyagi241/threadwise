@@ -1,9 +1,9 @@
 'use client';
 
-import { FlowEditorContext } from '../../lib/flow-editor-context';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FlowEditorContext } from '../../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, Field, Input, Select, useToast } from '@crm/ui';
@@ -14,6 +14,7 @@ import { flowsApi } from '../../api/flows';
 import { FLB_KEYS, useBuilderContext } from '../../api/hooks';
 import {
   BRANCHING,
+  FIXED_EXITS,
   stepKindsFor,
   stepLabel,
   addJourney,
@@ -45,12 +46,14 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
+import { FaqLeaveConfirm } from '@/features/faq-knowledge/components/faq-leave-confirm';
+import { FaqPanel } from '@/features/faq-knowledge/components/faq-panel';
 import {
+  BuilderTabs,
   WebBotPanels,
-  WebBotTabs,
-  useInitialTab,
+  useBuilderTab,
   whatsappDefaultsFrom,
-  type WebBotTab,
+  type BuilderTab,
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
 import '../builder.css';
@@ -222,11 +225,23 @@ function Editor({
   const [published, setPublished] = useState(initial?.isPublished ?? false);
   const [dirty, setDirty] = useState(!initial);
   const [busy, setBusy] = useState(false);
-  // A website chat bot has Customize and Install beside Build; the others only build.
-  const initialTab = useInitialTab(!!initial);
-  const [tab, setTab] = useState<WebBotTab>(initialTab);
-  // Another channel has no tabs, whatever the link asked for.
-  const shownTab: WebBotTab = tab;
+  // Every saved flow has FAQs beside Build (for a person who may read them); a website chat or WhatsApp bot also has Customize and Deploy.
+  const canFaqs = useCan('faq.entries.read');
+  const tabSet = useMemo(() => ({ faqs: canFaqs, web: true }), [canFaqs]);
+  const [tab, setTab] = useBuilderTab(!!flowId, tabSet);
+  // A tab this flow does not offer (FAQs before the first save, Customize on a chat flow) is never shown, whatever the link asked for.
+  const shownTab: BuilderTab = tab === 'faqs' ? (flowId && canFaqs ? 'faqs' : 'build') : tab;
+  // The FAQs panel tells us when one of its screens holds unsaved edits: leaving the tab asks first. The flow's own unsaved
+  // edits are untouched by a tab change (the Build page stays mounted underneath).
+  const faqDirty = useRef(false);
+  const [leaveTo, setLeaveTo] = useState<BuilderTab | null>(null);
+  const onFaqDirty = useCallback((d: boolean) => {
+    faqDirty.current = d;
+  }, []);
+  const requestTab = (next: BuilderTab) => {
+    if (shownTab === 'faqs' && next !== 'faqs' && faqDirty.current) setLeaveTo(next);
+    else setTab(next);
+  };
   const canEditFlow = useCan('flb.flows.update');
   const widgetQuery = useFlowWidget(flowId);
   const needsCustomizing = !!flowId && widgetQuery.data?.widget === null;
@@ -607,11 +622,13 @@ function Editor({
           </div>
         </header>
 
-        <WebBotTabs
+        <BuilderTabs
           tab={shownTab}
-          onTab={setTab}
+          onTab={requestTab}
           saved={!!flowId}
           needsCustomizing={needsCustomizing}
+          faqs={canFaqs}
+          web
         />
 
         {importFailed.length > 0 ? (
@@ -877,6 +894,7 @@ function Editor({
                           step={s}
                           doc={doc}
                           ctx={ctx}
+                          flowId={flowId}
                           stage={stageIn(doc, ci, si)}
                           active={activeId === s.id}
                           bad={badSteps.has(s.id)}
@@ -894,39 +912,43 @@ function Editor({
                         />
                         {BRANCHING.has(s.type) ? (
                           <p className="my-3 text-center text-[11.5px] text-muted-foreground">
-                            {t('branchingEnds', { kind: s.type === 'list' ? 'list' : 'buttons' })}
+                            {s.type === 'faq'
+                              ? t('faqEnds')
+                              : t('branchingEnds', {
+                                  kind: s.type === 'list' ? 'list' : 'buttons',
+                                })}
                           </p>
                         ) : null}
-                        {BRANCHING.has(s.type) ? (
-                          <div
-                            className="mb-3 flex flex-wrap justify-center gap-2"
-                            data-testid="branch-adders"
-                          >
-                            {(Array.isArray(s.data.options) ? s.data.options : []).map(
-                              (o: unknown, i: number) => {
-                                // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
-                                if (s.links[i]) return null;
-                                const label =
-                                  typeof o === 'string'
-                                    ? o
-                                    : str((o as Record<string, unknown>).title);
-                                return (
-                                  <button
-                                    key={i}
-                                    type="button"
-                                    onClick={() => link(s.id, i, NEW_JOURNEY)}
-                                    className="rounded-full border border-dashed border-border px-3.5 py-1.5 text-[12px] font-semibold text-brand hover:bg-muted"
-                                  >
-                                    + {t('branchAdd', { title: label || `#${i + 1}` })}
-                                  </button>
-                                );
-                              },
-                            )}
-                          </div>
-                        ) : null}
-                        {BRANCHING.has(s.type) ? (
-                          <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
-                        ) : (
+                        {s.type === 'buttons' || s.type === 'list' ? (
+                          <>
+                            <div
+                              className="mb-3 flex flex-wrap justify-center gap-2"
+                              data-testid="branch-adders"
+                            >
+                              {(Array.isArray(s.data.options) ? s.data.options : []).map(
+                                (o: unknown, i: number) => {
+                                  // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
+                                  if (s.links[i]) return null;
+                                  const label =
+                                    typeof o === 'string'
+                                      ? o
+                                      : str((o as Record<string, unknown>).title);
+                                  return (
+                                    <button
+                                      key={i}
+                                      type="button"
+                                      onClick={() => link(s.id, i, NEW_JOURNEY)}
+                                      className="rounded-full border border-dashed border-border px-3.5 py-1.5 text-[12px] font-semibold text-brand hover:bg-muted"
+                                    >
+                                      + {t('branchAdd', { title: label || `#${i + 1}` })}
+                                    </button>
+                                  );
+                                },
+                              )}
+                            </div>
+                            <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
+                          </>
+                        ) : BRANCHING.has(s.type) ? null : (
                           <>
                             <AddMenu
                               channel={channel}
@@ -970,6 +992,31 @@ function Editor({
           onConfirm={() => {
             if (pendingImport) finishImport(pendingImport);
             setPendingImport(null);
+          }}
+        />
+
+        {flowId && canFaqs ? (
+          <div
+            role="tabpanel"
+            id="web-bot-panel-faqs"
+            aria-labelledby="web-bot-tab-faqs"
+            className={`min-h-0 flex-1 overflow-y-auto bg-background ${shownTab === 'faqs' ? '' : 'hidden'}`}
+          >
+            {shownTab === 'faqs' ? (
+              <div className="mx-auto w-full max-w-6xl p-4 sm:p-6">
+                <FaqPanel flowId={flowId} flowName={name} onDirtyChange={onFaqDirty} />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        <FaqLeaveConfirm
+          open={leaveTo !== null}
+          onStay={() => setLeaveTo(null)}
+          onLeave={() => {
+            const next = leaveTo;
+            setLeaveTo(null);
+            faqDirty.current = false;
+            if (next) setTab(next);
           }}
         />
 
@@ -1132,7 +1179,7 @@ function AddMenu({
           role="menu"
           className="absolute top-12 z-20 max-h-[70vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-background p-2 shadow-xl"
         >
-          {(['send', 'ask', 'logic', 'handoff'] as const).map((group) => (
+          {(['send', 'ask', 'logic', 'answer', 'handoff'] as const).map((group) => (
             <div key={group} className="mb-1 last:mb-0">
               <div className="px-2.5 pt-1.5 pb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t(`groups.${group}`)}
@@ -1148,7 +1195,11 @@ function AddMenu({
                         type="button"
                         role="menuitem"
                         disabled={blocked}
-                        title={blocked ? t('blockedTitle') : undefined}
+                        title={
+                          blocked
+                            ? t(k.type === 'faq' ? 'blockedTitleFaq' : 'blockedTitle')
+                            : undefined
+                        }
                         onClick={() => {
                           setOpen(false);
                           onPick(k);
@@ -1173,6 +1224,8 @@ function StepCard(p: {
   step: SimpleStep;
   doc: SimpleDoc;
   ctx: FlbBuilderContext;
+  /** The saved flow (null before the first save): the FAQ step reads this flow's FAQs. */
+  flowId: string | null;
   stage: string;
   active: boolean;
   bad: boolean;
@@ -1197,13 +1250,21 @@ function StepCard(p: {
     }
     return null;
   };
-  const labels: string[] = BRANCHING.has(s.type)
-    ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
-        const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
-        const to = stageOf(s.links[i] ?? null);
-        return t('branchLabel', { title: label || `#${i + 1}`, target: to ?? t('ends') });
-      })
-    : [];
+  const fixed = FIXED_EXITS[s.type];
+  const labels: string[] = fixed
+    ? fixed.map((handle, i) =>
+        t('branchLabel', {
+          title: t(`faqExits.${handle}`),
+          target: stageOf(s.links[i] ?? null) ?? t('ends'),
+        }),
+      )
+    : BRANCHING.has(s.type)
+      ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
+          const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
+          const to = stageOf(s.links[i] ?? null);
+          return t('branchLabel', { title: label || `#${i + 1}`, target: to ?? t('ends') });
+        })
+      : [];
   return (
     <section
       id={`step-${s.id}`}
@@ -1256,7 +1317,14 @@ function StepCard(p: {
       ) : null}
       {p.active ? (
         <div className="border-t border-border p-4">
-          <StepEditor step={s} doc={p.doc} ctx={p.ctx} set={p.onSet} link={p.onLink} />
+          <StepEditor
+            step={s}
+            doc={p.doc}
+            ctx={p.ctx}
+            flowId={p.flowId}
+            set={p.onSet}
+            link={p.onLink}
+          />
         </div>
       ) : null}
     </section>

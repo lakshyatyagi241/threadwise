@@ -1,0 +1,216 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "IA",
+      "scoring": "Pontuação de leads com IA"
+    },
+    "common": {
+      "loading": "Carregando",
+      "retry": "Tentar novamente",
+      "dash": "-",
+      "cancel": "Cancelar",
+      "errors": {
+        "forbidden": "Você não tem permissão para fazer isso.",
+        "request": "Não foi possível concluir a solicitação.",
+        "unexpected": "Algo deu errado do nosso lado. Tente novamente em instantes.",
+        "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+        "validation": "Alguns valores não são válidos. Verifique os campos destacados.",
+        "notFound": "Esse item não existe mais."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · IA · Pontuação de leads",
+      "title": "Pontuação de leads com IA",
+      "description": "Controla se os workspaces podem pontuar seus contatos com um modelo de IA, qual modelo faz isso, os limites e quanto custa.",
+      "superOnly": "Somente um superadministrador pode ver ou alterar a pontuação de leads com IA."
+    },
+    "status": {
+      "label": "Status da pontuação de leads",
+      "switch": {
+        "title": "Chave geral da plataforma",
+        "on": "Ativado",
+        "off": "Desativado",
+        "hintOn": "Workspaces que aderiram podem pontuar seus contatos.",
+        "hintOff": "Nenhum workspace pode pontuar contatos, independentemente da própria configuração."
+      },
+      "model": {
+        "title": "Modelo",
+        "custom": "Um modelo digitado manualmente, que não está na lista."
+      },
+      "key": {
+        "title": "Chave OpenRouter da plataforma",
+        "ready": "Pronta",
+        "missing": "Ausente",
+        "explainReady": "Workspaces sem chave OpenRouter própria são pontuados com esta, e você paga por essas pontuações.",
+        "explainMissing": "Sem uma chave da plataforma, apenas workspaces que salvaram a própria chave OpenRouter podem pontuar contatos.",
+        "link": "Abrir chaves de IA"
+      },
+      "reach": {
+        "title": "Alcance",
+        "workspaces": "Workspaces que aderiram",
+        "contacts": "Contatos pontuados"
+      }
+    },
+    "settings": {
+      "title": "Configurações",
+      "description": "As alterações valem para todos os workspaces ao mesmo tempo. Apenas os campos que você alterar são salvos.",
+      "enabled": {
+        "label": "Pontuação de leads com IA",
+        "hint": "Desativada por padrão. Quando ativada, os workspaces que aderiram enviam dados anonimizados dos contatos ao OpenRouter para obter uma pontuação de 0 a 100. Desative para interromper toda a pontuação."
+      },
+      "model": {
+        "label": "Modelo",
+        "hint": "Os preços são em dólares americanos por milhão de tokens, conforme a lista do OpenRouter.",
+        "option": "{label} · {input} entrada / {output} saída",
+        "other": "Outro ID de modelo do OpenRouter",
+        "details": "{input} por milhão de tokens de entrada, {output} por milhão de tokens de saída.",
+        "customLabel": "ID do modelo OpenRouter",
+        "customHint": "Qualquer ID de modelo do OpenRouter que aceite saída estruturada.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limites",
+        "scoresPerHour": "Pontuações por workspace por hora",
+        "scoresPerHourHint": "Uma proteção de custo para workspaces que usam a chave da plataforma. 0 significa sem limite.",
+        "retentionDays": "Manter o registro por (dias)",
+        "retentionDaysHint": "Execuções mais antigas e seu histórico de custos são excluídos. De 7 a 730 dias."
+      },
+      "saving": "Salvando",
+      "save": "Salvar alterações",
+      "reset": "Descartar alterações",
+      "changed": "{count, plural, one {# alteração pronta para salvar} many {# alterações prontas para salvar} other {# alterações prontas para salvar}}",
+      "unchanged": "Nenhuma alteração para salvar.",
+      "saved": "Configurações de pontuação de leads salvas.",
+      "errors": {
+        "range": "Digite um valor entre {min} e {max}.",
+        "integer": "Digite um número inteiro.",
+        "modelId": "Use um ID de modelo do OpenRouter, como openai/gpt-6-luna.",
+        "invalid": "Este valor não é válido."
+      },
+      "confirm": {
+        "title": "Confirmar a alteração",
+        "turnOn": "Isso permite que workspaces que aderiram enviem dados anonimizados dos contatos ao OpenRouter e gastem o crédito da chave da sua plataforma.",
+        "turnOff": "Isso interrompe toda a pontuação de leads com IA em todos os workspaces. As pontuações já salvas permanecem.",
+        "confirm": "Salvar alterações"
+      }
+    },
+    "cost": {
+      "title": "Quanto custa pontuar",
+      "description": "Totais do registro de pontuação, em dólares americanos.",
+      "last24h": "Últimas 24 horas",
+      "last30d": "Últimos 30 dias",
+      "scores": "Pontuações gravadas",
+      "failed": "Execuções com falha",
+      "tokens": "Tokens",
+      "tokensSplit": "Tokens de entrada / saída",
+      "total": "Custo total",
+      "average": "Média por pontuação",
+      "platform": "Pago pela chave da plataforma",
+      "footnote": "Os custos são o valor informado pelo OpenRouter, ou uma estimativa com base na contagem de tokens quando nenhum foi informado. Execuções cobradas na chave própria de um workspace fazem parte do total, mas não da parcela da plataforma."
+    },
+    "workspaces": {
+      "title": "Workspaces",
+      "description": "Quem usa a pontuação de leads com IA e quanto custou para eles nos últimos 30 dias, do maior para o menor.",
+      "search": "Pesquisar workspaces",
+      "searchPlaceholder": "Nome do workspace",
+      "limit": "Linhas",
+      "limitOption": "{count} linhas",
+      "noMatchTitle": "Nenhum workspace corresponde",
+      "noMatchMessage": "Tente outro nome.",
+      "clearSearch": "Limpar pesquisa",
+      "emptyTitle": "Ainda não há workspaces",
+      "emptyMessage": "Os workspaces aparecem aqui assim que existirem.",
+      "tableLabel": "Workspaces por custo de pontuação",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "Pontuação",
+        "contacts": "Contatos pontuados",
+        "scores": "Pontuações, 30 dias",
+        "cost": "Custo, 30 dias"
+      },
+      "enabled": "Ativada",
+      "disabled": "Desativada"
+    },
+    "runs": {
+      "title": "Registro de pontuação",
+      "description": "Cada tentativa de pontuação em todos os workspaces, da mais recente para a mais antiga, com tokens, custo e quem pagou.",
+      "refresh": "Atualizar",
+      "filters": {
+        "status": "Status",
+        "anyStatus": "Qualquer status",
+        "workspace": "Workspace",
+        "anyWorkspace": "Todos os workspaces",
+        "clear": "Limpar filtros"
+      },
+      "status": {
+        "ok": "Pontuado",
+        "kept": "Mantido",
+        "failed": "Com falha",
+        "skipped": "Ignorado"
+      },
+      "trigger": {
+        "created": "Contato criado",
+        "updated": "Contato atualizado",
+        "manual": "Botão de pontuar",
+        "backfill": "Preenchimento retroativo"
+      },
+      "scoreWas": "{score} (era {previous})",
+      "tokensTitle": "{input} de entrada, {output} de saída",
+      "costSource": {
+        "vendor": "Informado",
+        "estimate": "Estimativa",
+        "none": "Sem chamada"
+      },
+      "costSourceHelp": {
+        "vendor": "O custo que o OpenRouter informou para esta chamada.",
+        "estimate": "Nenhum custo foi informado, então este é a contagem de tokens vezes o preço de tabela do modelo.",
+        "none": "Nenhuma chamada foi feita, então nada foi cobrado."
+      },
+      "paidBy": {
+        "admin": "Plataforma",
+        "workspace": "Workspace",
+        "none": "Ninguém"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "A chave geral da plataforma está desativada",
+        "not_enabled": "O workspace não aderiu",
+        "contact_gone": "O contato foi excluído",
+        "manual_score": "O contato tem uma pontuação digitada",
+        "no_key": "Sem chave OpenRouter",
+        "token_allowance": "Cota de tokens esgotada",
+        "hourly_limit": "Limite por hora atingido",
+        "auth": "O OpenRouter recusou a chave",
+        "rate_limited": "Limite de taxa do OpenRouter",
+        "provider": "Erro do OpenRouter",
+        "timeout": "O OpenRouter excedeu o tempo limite",
+        "bad_response": "A resposta não era uma pontuação válida"
+      },
+      "noMatchTitle": "Nenhuma execução corresponde",
+      "noMatchMessage": "Nenhuma execução de pontuação corresponde a estes filtros.",
+      "emptyTitle": "Ainda não há execuções",
+      "emptyMessage": "As execuções aparecem aqui assim que um workspace pontuar um contato.",
+      "tableLabel": "Execuções de pontuação",
+      "columns": {
+        "time": "Hora",
+        "workspace": "Workspace",
+        "contact": "Contato",
+        "trigger": "Gatilho",
+        "status": "Status",
+        "score": "Pontuação",
+        "model": "Modelo",
+        "tokens": "Tokens",
+        "cost": "Custo",
+        "paidBy": "Pago por",
+        "duration": "Duração",
+        "error": "Motivo"
+      },
+      "costLegend": "Um ~ antes de um custo indica uma estimativa com base na contagem de tokens, em vez do valor informado pelo OpenRouter.",
+      "loadMore": "Carregar mais",
+      "loadingMore": "Carregando"
+    }
+  }
+}

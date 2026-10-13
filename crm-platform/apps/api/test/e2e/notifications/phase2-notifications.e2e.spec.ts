@@ -2,7 +2,7 @@ import { IoAdapter } from '@nestjs/platform-socket.io';
 import { createAdapter } from '@socket.io/redis-adapter';
 import type { AddressInfo } from 'node:net';
 import { Redis } from 'ioredis';
-import type { ServerOptions } from 'socket.io';
+import type { Server, ServerOptions } from 'socket.io';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { REALTIME_EVENT, realtimeEventSchemas } from '@crm/contracts';
 import { DatabaseService } from '../../../src/infra/db/database.service';
@@ -29,10 +29,10 @@ class TestRedisIoAdapter extends IoAdapter {
     adapterRedis.push(pub, sub);
     this.ctor = createAdapter(pub, sub);
   }
-  override createIOServer(port: number, options?: ServerOptions): unknown {
+  override createIOServer(port: number, options?: ServerOptions): Server {
     const server = super.createIOServer(port, options) as { adapter: (a: unknown) => void };
     if (this.ctor) server.adapter(this.ctor);
-    return server;
+    return server as unknown as Server;
   }
 }
 
@@ -755,6 +755,55 @@ describe('broadcast, campaign and scheduled message outcomes', () => {
       [t.orgId],
     );
     workspacePrefs.clear();
+  });
+
+  it('a campaign that finishes again before the bell is read updates ONE row with the newest counts; once read, the next finish writes a new row', async () => {
+    const c = (
+      await p.h.owner.query(
+        `INSERT INTO wpcampaigns (org_id, campaign_name, created_by, status, total_recipients, sent_count, failed_count)
+         VALUES ($1,'A/B test',$2,'completed',13,7,6) RETURNING id, uuid`,
+        [t.orgId, maker.userId],
+      )
+    ).rows[0];
+    const finish = () =>
+      emit(t, 'campaigns', c.id, 'campaign.status_updated', {
+        uuid: c.uuid,
+        name: 'A/B test',
+        status: 'completed',
+        previousStatus: 'running',
+      });
+    const mine = async () =>
+      (await rowsOf(maker.token, 'campaign_completed')).filter((r) => r.subject?.id === c.uuid);
+
+    await finish();
+    await deliver();
+    expect(await mine()).toHaveLength(1);
+    expect((await mine())[0]!.body).toBe('Campaign "A/B test" finished. 7 sent, 6 failed.');
+
+    // Finished again with new counts, unread: still one row, the newest counts, run count 2.
+    await p.h.owner.query(
+      `UPDATE wpcampaigns SET sent_count = 9, failed_count = 4 WHERE id = $1`,
+      [c.id],
+    );
+    await finish();
+    await deliver();
+    await finish();
+    await deliver();
+    const rows = await mine();
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.body).toBe('Campaign "A/B test" finished. 9 sent, 4 failed.');
+    expect(rows[0]!.data).toMatchObject({ id: c.uuid, sent: 9, failed: 4, runs: 3 });
+    expect(rows[0]!.readAt).toBeNull();
+
+    // Read: the next finish is news again, so it is a second row.
+    const read = await api.as(maker.token).post(`/v2/notifications/${rows[0]!.id}/read`).send({});
+    expect(read.status, JSON.stringify(read.body)).toBe(200);
+    await finish();
+    await deliver();
+    const after = await mine();
+    expect(after).toHaveLength(2);
+    expect(after.filter((r) => r.readAt === null)).toHaveLength(1);
+    expect(after.find((r) => r.readAt === null)!.data).toMatchObject({ runs: 1 });
   });
 
   it('a scheduled message that finishes or fails notifies its starter (the new scheduled.status_changed event)', async () => {

@@ -46,7 +46,6 @@
         "copyFailed": "Kopieren nicht möglich",
         "loading": "Wird geladen",
         "retry": "Erneut versuchen",
-        "requestId": "Anfrage-ID",
         "errors": {
           "forbidden": "Ihre Rolle erlaubt dies nicht.",
           "request": "Die Anfrage wurde abgelehnt. Laden Sie die Seite neu und versuchen Sie es erneut.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Betreiber-Anmeldung",
         "intro": "Diese Konsole ist für die Personen gedacht, die die Plattform betreiben. Workspace-Nutzer melden sich auf der Hauptanmeldeseite an.",
-        "requestId": "Anfrage-ID",
         "submit": "Anmelden",
         "submitting": "Anmeldung läuft",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Ihr Konto",
         "title": "Zwei-Faktor-Authentifizierung",
         "description": "Schützen Sie {email} mit einer Authenticator-App. Betreiberkonten sind die Konten mit dem höchsten Vertrauensniveau auf der Plattform.",
-        "requestId": "Anfrage-ID",
         "status": {
           "title": "Authenticator-App",
           "on": "Ein",
@@ -181,7 +178,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Wird verarbeitet",
             "close": "Schließen",
             "signInAgain": "Erneut anmelden",
-            "requestId": "Anfrage-ID",
             "errors": {
               "forbidden": "Nur ein Super-Admin kann diese Aktion ausführen.",
               "unexpected": "Die Aktion wurde nicht abgeschlossen. Prüfen Sie das Ereignisprotokoll, bevor Sie es erneut versuchen."
@@ -731,7 +726,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "Ein Testcode wurde an {to} gesendet.",
             "remaining": "{count, plural, one {# Test in dieser Stunde übrig.} other {# Tests in dieser Stunde übrig.}}",
             "notShown": "Der Code wird hier nicht angezeigt; lesen Sie ihn auf dem Telefon ab.",
-            "requestId": "Anfrage-ID",
             "errors": {
               "invalidNumber": "Geben Sie die Nummer mit Landesvorwahl ein, zum Beispiel +49 151 23456789.",
               "rateLimited": "Zu viele Testcodes in dieser Stunde. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
@@ -1045,7 +1038,6 @@
           "saved": "Absender gespeichert",
           "removed": "Absender entfernt",
           "secretRemoved": "Gespeichertes Geheimnis entfernt",
-          "requestId": "Anfrage-ID",
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
             "tooLong": "Höchstens {max} Zeichen.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Diese Fußzeile wurde nicht akzeptiert.",
             "unexpected": "Die Fußzeile konnte nicht gespeichert werden. Versuchen Sie es gleich noch einmal."
-          },
-          "requestId": "Anfrage-ID"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "Abbrechen",
           "working": "Wird entfernt",
           "error": "Das Geheimnis konnte nicht entfernt werden. Versuchen Sie es gleich noch einmal.",
-          "requestId": "Anfrage-ID",
           "done": "Das gespeicherte Geheimnis für {name} wurde entfernt.",
           "names": {
             "google": "Google",
@@ -1418,7 +1407,10 @@
             "forms_and_links": "Formulare zur Lead-Erfassung und teilbare Links.",
             "extra_channels": "Die Kanäle Telegram, Facebook und Instagram.",
             "form_builder": "Gehostete und eingebettete Webformulare, die Kontakte im CRM erstellen. Die kostenpflichtige App Formulare steuert diesen Schalter.",
-            "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein."
+            "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein.",
+            "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden.",
+            "help_agent": "Der Hilfe-Assistent in der App: Nutzer beschreiben eine Aufgabe in einfachen Worten, und er führt sie an oder erledigt sie in der eigenen Sitzung – bei Risiken fragt er vorher nach. Verbraucht KI-Tokens.",
+            "email_channel": "Gmail- und Google-Workspace-Postfächer mit dem Team-Posteingang verbinden. Die kostenpflichtige E-Mail-App steuert diesen Schalter."
           },
           "units": {
             "days": "Tage",
@@ -1559,7 +1551,9 @@
             "ai_token_limit_monthly": "KI-Tokens pro Monat (Plattformschlüssel)",
             "forms": "Webformulare",
             "form_submissions_monthly": "Formulareinsendungen pro Monat",
-            "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen pro Monat"
+            "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen pro Monat",
+            "sms_monthly": "SMS pro Monat",
+            "email_mailboxes": "E-Mail-Postfächer"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1596,7 +1590,10 @@
             "forms_and_links": "Formulare, Click-to-Chat-Links und Gruppen",
             "extra_channels": "Telegram-, Facebook- und Instagram-Kanäle",
             "form_builder": "Formulare (Webformular-Builder)",
-            "waba_groups": "WhatsApp-Gruppen (Cloud API)"
+            "waba_groups": "WhatsApp-Gruppen (Cloud API)",
+            "sms": "SMS-Kanal",
+            "help_agent": "Hilfe-Assistent (KI, verbraucht Tokens)",
+            "email_channel": "E-Mail-Kanal (Gmail)"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
@@ -1648,7 +1645,9 @@
             "ai_token_limit_monthly": "Tokens, die die KI-Assistenten im Kalendermonat mit den Schlüsseln der Plattform verbrauchen. Workspaces mit eigenen Schlüsseln sind nicht begrenzt.",
             "forms": "Aktive Webformulare (App Formulare). Beim Archivieren eines Formulars wird der Platz frei. 0 = unbegrenzt.",
             "form_submissions_monthly": "Im Kalendermonat angenommene Formulareinsendungen, ohne Spam. Über dem Limit wird eine Einsendung weiterhin zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
-            "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen im Kalendermonat, einschließlich eines Reparaturversuchs. 0 = unbegrenzt."
+            "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen im Kalendermonat, einschließlich eines Reparaturversuchs. 0 = unbegrenzt.",
+            "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
+            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt."
           }
         }
       },
@@ -1660,7 +1659,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {

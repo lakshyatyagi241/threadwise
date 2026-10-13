@@ -5,8 +5,7 @@
       "loading": "Chargement",
       "retry": "Réessayer",
       "copied": "Copié",
-      "copyFailed": "Copie impossible : sélectionnez le texte et copiez-le manuellement",
-      "requestId": "Référence : {id}"
+      "copyFailed": "Copie impossible : sélectionnez le texte et copiez-le manuellement"
     },
     "states": {
       "noAccessTitle": "Vous n’avez pas accès à Social leads",

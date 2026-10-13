@@ -119,6 +119,8 @@
       "colStarted": "Başlangıç",
       "colActivity": "Son etkinlik",
       "colSteps": "Adımlar",
+      "colReplies": "Yanıtlar",
+      "repliesHint": "Bu çalıştırmanın bekleme düğümüne ulaşan müşteri mesajları",
       "colActions": "İşlemler",
       "open": "Çalıştırmayı aç",
       "cancel": "İptal",
@@ -192,7 +194,24 @@
       "retention": "Günlükler, bir çalıştırma bittikten {days} gün sonra silinir.",
       "pathTitle": "İzlenen yol",
       "notReached": "Ulaşılmadı",
-      "noErrors": "Bu çalıştırmada hata yok."
+      "noErrors": "Bu çalıştırmada hata yok.",
+      "factNext": "Sonraki: {node}",
+      "factWaiting": "Bekleme noktası: {node}",
+      "factDelay": "{time} bekler",
+      "factReplied": "Müşteri yanıtladı: {text}",
+      "factEnded": "Sona erdi: {reason}",
+      "ioInput": "Girdi",
+      "ioOutput": "Çıktı",
+      "ioKind": {
+        "message": "Gönderilen mesaj",
+        "reply": "Müşteri yanıtı",
+        "variable": "Değişken",
+        "request": "İstek",
+        "response": "Yanıt",
+        "result": "Sonuç"
+      },
+      "factMenuKept": "Burada sonraki adım yok. {node} seçenekleri etkin kalır.",
+      "factAnswered": "{time} sonra yanıtlandı"
     },
     "event": {
       "step": "Adım",
@@ -498,7 +517,9 @@
       "error": "Hata",
       "skipped": "Atlandı",
       "waiting": "Bekliyor",
-      "timeout": "Zaman aşımı"
+      "timeout": "Zaman aşımı",
+      "answered": "Yanıtlandı",
+      "gaveUp": "Yanıt yok"
     }
   }
 }

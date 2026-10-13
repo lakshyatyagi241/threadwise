@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { renderIntl } from '../test-utils/intl';
-import { WebBotTabs, tabFromParam, whatsappDefaultsFrom } from './web-bot-tabs';
+import { BuilderTabs, tabFromParam, tabsOf, whatsappDefaultsFrom } from './web-bot-tabs';
 
 // The panels pull in the widget screens; the tab bar alone is under test.
 vi.mock('@/features/chatbot-widget/components/flow-widget-customize', () => ({
@@ -10,18 +10,37 @@ vi.mock('@/features/chatbot-widget/components/flow-widget-deploy', () => ({
   FlowWidgetDeploy: () => null,
 }));
 
-const render = (over: Partial<Parameters<typeof WebBotTabs>[0]> = {}) =>
+const render = (over: Partial<Parameters<typeof BuilderTabs>[0]> = {}) =>
   renderIntl(
-    <WebBotTabs tab="build" onTab={() => undefined} saved needsCustomizing={false} {...over} />,
+    <BuilderTabs
+      tab="build"
+      onTab={() => undefined}
+      saved
+      needsCustomizing={false}
+      faqs
+      web
+      {...over}
+    />,
   );
 
-describe('Build · Customize · Deploy tabs', () => {
-  it('shows the three tabs with the current one selected', () => {
+describe('Build · FAQs · Customize · Deploy tabs', () => {
+  it('shows all four for a website bot, in order, with the current one selected', () => {
     const out = render({ tab: 'customize' });
-    expect(out).toMatch(/>Build</);
-    expect(out).toMatch(/>Customize</);
-    expect(out).toMatch(/>Deploy</);
+    const names = [...out.matchAll(/role="tab"[^>]*id="web-bot-tab-(\w+)"/g)].map((m) => m[1]);
+    expect(names).toEqual(['build', 'faqs', 'customize', 'deploy']);
+    expect(out).toMatch(/>FAQs</);
     expect(out).toMatch(/id="web-bot-tab-customize"[^>]*aria-selected="true"/);
+  });
+
+  it('gives every other flow Build and FAQs only', () => {
+    const out = render({ web: false, tab: 'faqs' });
+    expect(out).toMatch(/id="web-bot-tab-faqs"[^>]*aria-selected="true"/);
+    expect(out).not.toContain('web-bot-tab-customize');
+    expect(out).not.toContain('web-bot-tab-deploy');
+  });
+
+  it('shows no bar at all when Build is the only page (Advanced builder, chat flow)', () => {
+    expect(render({ web: false, faqs: false })).toBe('');
   });
 
   it('keeps the amber dot on Customize until the widget has been saved', () => {
@@ -29,22 +48,43 @@ describe('Build · Customize · Deploy tabs', () => {
     expect(render({ needsCustomizing: false })).not.toContain('needs-customizing');
   });
 
-  it('locks Customize and Deploy until the bot has been saved once', () => {
+  it('locks FAQs, Customize and Deploy until the flow has been saved once, with a "save first" title', () => {
     const out = render({ saved: false });
-    expect(out).toMatch(/id="web-bot-tab-customize"[^>]*disabled=""/);
-    expect(out).toMatch(/id="web-bot-tab-deploy"[^>]*disabled=""/);
+    for (const k of ['faqs', 'customize', 'deploy'])
+      expect(out).toMatch(new RegExp(`id="web-bot-tab-${k}"[^>]*disabled=""`));
+    expect(out).toContain('title="Save the flow first."');
     expect(out).not.toMatch(/id="web-bot-tab-build"[^>]*disabled=""/);
+  });
+
+  it('unlocks FAQs once the flow has an id', () => {
+    expect(render({ saved: true })).not.toMatch(/id="web-bot-tab-faqs"[^>]*disabled=""/);
+  });
+});
+
+describe('which tabs a builder offers', () => {
+  it('lists them in order', () => {
+    expect(tabsOf({ faqs: true, web: true })).toEqual(['build', 'faqs', 'customize', 'deploy']);
+    expect(tabsOf({ faqs: true, web: false })).toEqual(['build', 'faqs']);
+    expect(tabsOf({ faqs: false, web: true })).toEqual(['build', 'customize', 'deploy']);
+    expect(tabsOf({ faqs: false, web: false })).toEqual(['build']);
   });
 });
 
 describe('the tab a link asks for', () => {
-  it('opens Customize or Deploy when asked, and Build otherwise', () => {
+  it('opens FAQs, Customize or Deploy when asked, and Build otherwise', () => {
+    expect(tabFromParam('faqs')).toBe('faqs');
     expect(tabFromParam('customize')).toBe('customize');
     expect(tabFromParam('deploy')).toBe('deploy');
     // The old name of Deploy still works in an old link.
-    expect(tabFromParam('install')).toBe('deploy');
+    expect(tabFromParam('deploy')).toBe('deploy');
     expect(tabFromParam(null)).toBe('build');
     expect(tabFromParam('settings')).toBe('build');
+  });
+
+  it('ignores a tab the builder does not offer', () => {
+    expect(tabFromParam('faqs', { faqs: false, web: true })).toBe('build');
+    expect(tabFromParam('customize', { faqs: true, web: false })).toBe('build');
+    expect(tabFromParam('faqs', { faqs: true, web: false })).toBe('faqs');
   });
 });
 

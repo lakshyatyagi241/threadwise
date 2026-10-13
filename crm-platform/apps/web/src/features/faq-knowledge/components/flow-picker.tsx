@@ -20,13 +20,14 @@ export interface PickedFlow {
   name: string;
 }
 
-/** Searchable single choice of a workspace flow. The FAQ starts the chosen flow from its trigger. */
+/** Searchable single choice of another workspace flow, the target of "Go to a step". */
 export function FlowPicker({
   value,
   onChange,
   invalid,
   describedBy,
   missing,
+  exclude,
 }: {
   value: PickedFlow | null;
   onChange: (flow: PickedFlow) => void;
@@ -34,6 +35,8 @@ export function FlowPicker({
   describedBy?: string;
   /** The saved flow no longer exists. */
   missing?: boolean;
+  /** A flow the list leaves out (the flow the FAQ itself belongs to: it has its own choice above). */
+  exclude?: string;
 }) {
   const t = useTranslations('faq.flowPicker');
   const te = useTranslations('faq.errors');
@@ -84,34 +87,36 @@ export function FlowPicker({
           </p>
         ) : flows.isPending ? (
           <p className="p-3 text-sm text-muted-foreground">{t('loading')}</p>
-        ) : flows.data.data.length === 0 ? (
+        ) : flows.data.data.filter((f) => f.id !== exclude).length === 0 ? (
           <p className="p-3 text-sm text-muted-foreground">
-            {debounced ? t('noMatch') : t('none')}
+            {debounced ? t('noMatch') : exclude ? t('noOthers') : t('none')}
           </p>
         ) : (
           <ul role="listbox" aria-label={t('listLabel')} className="divide-y divide-border">
-            {flows.data.data.map((f) => {
-              const state = flowState(f);
-              const on = value?.id === f.id;
-              return (
-                <li key={f.id} role="option" aria-selected={on}>
-                  <button
-                    type="button"
-                    onClick={() => onChange({ id: f.id, name: f.name })}
-                    className={cn(
-                      'flex w-full items-center gap-2 px-3 py-2 text-start text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-                      on && 'bg-primary/5',
-                    )}
-                  >
-                    <span className="min-w-0 flex-1 truncate">{f.name}</span>
-                    <Badge tone={state === 'live' ? 'success' : 'warning'}>
-                      {t(`state.${state}`)}
-                    </Badge>
-                    {on && <CheckIcon className="text-primary" />}
-                  </button>
-                </li>
-              );
-            })}
+            {flows.data.data
+              .filter((f) => f.id !== exclude)
+              .map((f) => {
+                const state = flowState(f);
+                const on = value?.id === f.id;
+                return (
+                  <li key={f.id} role="option" aria-selected={on}>
+                    <button
+                      type="button"
+                      onClick={() => onChange({ id: f.id, name: f.name })}
+                      className={cn(
+                        'flex w-full items-center gap-2 px-3 py-2 text-start text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+                        on && 'bg-primary/5',
+                      )}
+                    >
+                      <span className="min-w-0 flex-1 truncate">{f.name}</span>
+                      <Badge tone={state === 'live' ? 'success' : 'warning'}>
+                        {t(`state.${state}`)}
+                      </Badge>
+                      {on && <CheckIcon className="text-primary" />}
+                    </button>
+                  </li>
+                );
+              })}
           </ul>
         )}
       </div>

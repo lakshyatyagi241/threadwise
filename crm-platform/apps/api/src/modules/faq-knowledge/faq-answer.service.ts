@@ -7,12 +7,21 @@ import {
 } from '../chat-conversations';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
-import { FlowLaunchService } from '../flow-runtime-engine';
+import { FlowLaunchService, FlowTriggerService, KINDS_OF_PROVIDER } from '../flow-runtime-engine';
+import { FaqConfigService } from './faq-config.service';
 import { FaqLogRepository, type LogWrite } from './faq-log.repository';
-import { FaqMatchService } from './faq-match.service';
-import { FaqSettingsService } from './faq-settings.service';
+import { FaqMatchService, type MatchResult } from './faq-match.service';
+import { FaqSettingsService, type EffectiveSettings } from './faq-settings.service';
 import { FaqRepository } from './faq.repository';
-import { LOG_QUERY_MAX, answerId } from './faq.rules';
+import { LOG_QUERY_MAX, answerId, candidateFlows, pickAttempt } from './faq.rules';
+
+interface Attempt {
+  flowId: number;
+  outcome: MatchResult['outcome'];
+  score: number | null;
+  result: MatchResult;
+  s: EffectiveSettings;
+}
 
 /**
  * What happens after a customer's message matched (or did not): the answer is queued through the inbox's own send path (so the
@@ -30,18 +39,50 @@ export class FaqAnswerService {
     private readonly faqs: FaqRepository,
     private readonly logs: FaqLogRepository,
     private readonly launch: FlowLaunchService,
+    private readonly triggers: FlowTriggerService,
+    private readonly config: FaqConfigService,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
-  /** True when an FAQ answered (a text was queued or a flow started), so nothing else answers the same message. */
+  /**
+   * True when an FAQ answered (a text was queued or a flow started), so nothing else answers the same message.
+   *
+   * Which FAQs may answer: those of the flows that are published and active, have the switch on and an active FAQ, and sit on the
+   * channel the message came in on. The customer's live run's flow is tried first; every candidate runs its own matcher with its own
+   * settings, and the best answered score wins (a tie goes to the live run's flow, then the lowest flow id). One log row is written,
+   * for the winner, or for the nearest candidate when none answered.
+   */
   async handleInbound(e: InboundStoredEvent): Promise<boolean> {
     const body = e.message.body?.trim() ?? '';
     if (!body) return false;
     // Fresh platform config: right after the operator switches the engine back on, no customer message may be dropped on a cached "off".
-    const s = await this.settings.effective(e.orgId, undefined, { fresh: true });
-    if (!s.engineEnabled || !s.enabled) return false;
+    const cfg = await this.config.getFresh();
+    if (!cfg.engineEnabled) return false;
 
-    const result = await this.matcher.match(e.orgId, body, s);
+    const bound = await this.db.txAs({ orgId: e.orgId, userId: null }, (tx) =>
+      this.faqs.answeringFlows(tx, e.orgId),
+    );
+    if (bound.length === 0) return false;
+    const liveFlowId = await this.triggers.liveFlowId(e.orgId, e.channelId, e.peerKey);
+    const flowIds = candidateFlows(
+      bound,
+      { channelId: e.channelId, channelKind: e.channelKind },
+      KINDS_OF_PROVIDER,
+      liveFlowId,
+    );
+
+    const attempts: Attempt[] = [];
+    for (const flowId of flowIds) {
+      const s = await this.settings.effective(e.orgId, flowId, undefined, { fresh: true });
+      // Switched off between the list and now: that flow stays silent.
+      if (!s.enabled) continue;
+      const result = await this.matcher.match(e.orgId, flowId, body, s);
+      attempts.push({ flowId, outcome: result.outcome, score: result.score, result, s });
+    }
+    const picked = pickAttempt(attempts, liveFlowId);
+    if (!picked) return false;
+    const { flowId, result, s } = picked;
+
     let outcome = result.outcome;
     let error: string | null = null;
     let consumed = false;
@@ -58,7 +99,7 @@ export class FaqAnswerService {
           outcome = 'not_sent';
           error = 'The flow this FAQ starts no longer exists.';
         } else {
-          const started = await this.startFlow(e, answer.flowId, body);
+          const started = await this.startFlow(e, answer.flowId, body, answer.flowNodeId);
           outcome = started.ok ? 'flow_started' : 'not_sent';
           error = started.ok ? null : started.error;
           consumed = started.ok;
@@ -75,6 +116,7 @@ export class FaqAnswerService {
     }
 
     const write: LogWrite = {
+      flowId,
       origin: 'inbound',
       conversationId: e.conversationId,
       channelId: e.channelId,
@@ -89,17 +131,20 @@ export class FaqAnswerService {
       score: result.score,
       secondScore: result.secondScore,
       matchedText: result.winnerText,
-      // What the screens show must respect the workspace's choice not to keep customer text.
+      // What the screens show must respect the flow's choice not to keep customer text.
       candidates: s.logQueries
         ? result.candidates
         : result.candidates.map((c) => ({ ...c, matchedText: '' })),
       embeddingModel: result.embeddingModel,
       latencyMs: result.latencyMs,
       error: error ?? (outcome === 'provider_error' ? result.note : null),
+      verify: result.verify,
     };
     await this.db
       .txAs({ orgId: e.orgId, userId: null }, (tx) => this.logs.insert(tx, e.orgId, write))
-      .catch((err) => this.logger.warn({ orgId: e.orgId, err }, 'faq match log not written'));
+      .catch((err) =>
+        this.logger.warn({ orgId: e.orgId, flowId, err }, 'faq match log not written'),
+      );
     return consumed;
   }
 
@@ -137,10 +182,12 @@ export class FaqAnswerService {
     e: InboundStoredEvent,
     flowId: number,
     typed: string,
+    startNodeId: string | null,
   ): Promise<{ ok: true } | { ok: false; error: string }> {
     try {
       const out = await this.launch.start(e.orgId, {
         flowId,
+        startNodeId,
         contactId: e.contactId,
         channelId: e.channelId,
         peerKey: e.peerKey,

@@ -97,13 +97,13 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Senden und empfangen Sie Textnachrichten mit Ihrem eigenen Absender.",
+        "description": "Senden Sie Textnachrichten mit Ihrer eigenen Twilio-Nummer oder Ihrem MSG91-Absender.",
         "keywords": "textnachricht, absender-id, dlt, twilio, mobil"
       },
       "email": {
         "label": "E-Mail",
-        "description": "Verbinden Sie ein Postfach, um E-Mails im Posteingang zu senden und zu empfangen.",
-        "keywords": "postfach, smtp, imap, gmail, outlook, absender"
+        "description": "Verbinden Sie Gmail- oder Google-Workspace-Postfächer, damit Ihr Team Kunden-E-Mails im gemeinsamen Posteingang lesen und beantworten kann.",
+        "keywords": "postfach, gmail, google workspace, gemeinsamer posteingang, support-e-mail, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -312,9 +312,55 @@
       },
       "web": {
         "label": "Website-Chat",
-        "description": "Bots für Ihren Website-Chat und das Widget, in dem sie jeweils laufen.",
-        "keywords": "Web, Website, Widget, Chatbot, Einbettung, Live-Chat"
+        "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
+        "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
+      },
+      "message-logs": {
+        "label": "Nachrichtenprotokolle",
+        "description": "Exportieren Sie das Zustellprotokoll Ihrer Nachrichten bis zu einem Jahr rückwirkend als Datei, die an Ihre E-Mail-Adresse gesendet wird.",
+        "keywords": "Export, Zustellprotokoll, Verlauf, Archiv, CSV, Nachrichten"
+      },
+      "billing-subscriptions": {
+        "label": "Abonnements",
+        "description": "Was sich verlängert, bis wann bezahlt ist, und Kündigung.",
+        "keywords": "Abonnement, Verlängerung, automatische Verlängerung, kündigen, Lastschrift, fehlgeschlagene Zahlung, Zahlungen"
+      },
+      "lead-scoring": {
+        "label": "KI-Lead-Scoring",
+        "description": "Bewerten Sie jeden Kontakt mit KI, legen Sie fest, was gesendet wird, und sehen Sie die Kosten.",
+        "keywords": "lead-score, scoring, bewertung, ki, heiß, warm, kalt, openrouter, kosten, qualifizieren"
+      },
+      "help-assistant": {
+        "label": "Hilfe-Assistent",
+        "description": "Schalten Sie den Assistenten ein, der Ihr Team anleitet oder die Schritte für es erledigt.",
+        "keywords": "ki, assistent, agent, anleitung, hilfe, automatisierung"
+      },
+      "consent": {
+        "label": "Einwilligung und STOP-Antworten",
+        "description": "Legen Sie die STOP- und START-Wörter, die Bestätigungsantworten, die Abmeldezeile und die Einwilligungspflicht für Marketing fest.",
+        "keywords": "einwilligung, abmeldung, anmeldung, abmelden, stop, start, dsgvo, compliance, datenschutz, marketing"
+      },
+      "inbox-tags": {
+        "label": "Unterhaltungs-Tags",
+        "description": "Erstellen Sie die Tags, die Ihr Team Unterhaltungen zuweist und nach denen es den Posteingang filtert. Es sind dieselben Tags wie bei den Kontakten.",
+        "keywords": "Tags, Unterhaltungs-Tags, Kategorien, organisieren, filtern"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Hot Leads, Zielgruppen, Kampagnenantworten und weitere Dinge, die Ihr Team aus Chats und Kampagnen ableiten und angehen kann.",
+        "keywords": "growth, hot lead, zielgruppe, engagement, inaktiv, kampagnenantworten, conversion-wahrscheinlichkeit, opt-out, pilot"
+      },
+      "sla-policies": {
+        "label": "Antwortziele (SLA)",
+        "description": "Legen Sie fest, wie schnell Ihr Team antworten und lösen soll, und werden Sie benachrichtigt, wenn eine Unterhaltung ihr Ziel verfehlt.",
+        "keywords": "sla, Antwortzeit, erste Antwort, Lösung, Verletzung, Ziele, Geschäftszeiten"
+      },
+      "team-performance": {
+        "label": "Teamleistung",
+        "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
+        "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
       }
-    }
+    },
+    "backToMarketplace": "Zurück zum Marketplace"
   }
 }

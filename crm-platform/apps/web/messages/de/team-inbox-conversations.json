@@ -1,7 +1,9 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Posteingang"
+      "inbox": "Posteingang",
+      "messageLogs": "Nachrichtenprotokolle",
+      "savedReplies": "Gespeicherte Antworten"
     },
     "common": {
       "dismiss": "Ausblenden"
@@ -23,7 +25,11 @@
       "pickTitle": "Unterhaltung auswählen",
       "pickMessage": "Wählen Sie eine Unterhaltung aus der Liste, um sie zu lesen und zu antworten. Neue Nachrichten erscheinen hier automatisch.",
       "shortcuts": "Tastenkürzel: j und k bewegen sich durch die Liste, e löst, / sucht.",
-      "teamChanged": "Team aktualisiert."
+      "teamChanged": "Team aktualisiert.",
+      "priorityChanged": "Priorität aktualisiert",
+      "snoozed": "Unterhaltung zurückgestellt",
+      "tagAdded": "Tag hinzugefügt",
+      "tagRemoved": "Tag entfernt"
     },
     "list": {
       "title": "Posteingang",
@@ -99,7 +105,9 @@
           "title": "Sie sind auf dem neuesten Stand",
           "message": "Unterhaltungen mit neuen Nachrichten von Kunden werden hier aufgelistet."
         }
-      }
+      },
+      "select": "Auswählen",
+      "selectDone": "Fertig"
     },
     "status": {
       "received": "Empfangen",
@@ -129,9 +137,22 @@
       "unsupported": "Dieser Kanal kann diese Art von Nachricht oder Datei nicht senden.",
       "network": "Der Server konnte nicht erreicht werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
-      "genericWithId": "Etwas ist schiefgelaufen. Versuchen Sie es erneut. Referenz: {id}",
       "templateNotSendable": "Diese Vorlage kann in dieser Unterhaltung nicht gesendet werden. Wählen Sie eine andere.",
-      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App."
+      "groupSendUnavailable": "Das Senden an WhatsApp-Gruppen ist noch nicht verfügbar. Antworten Sie über die WhatsApp Business App.",
+      "logRange": "Wählen Sie Daten innerhalb des letzten Jahres, wobei der Beginn vor dem Ende liegt und nicht in der Zukunft.",
+      "logBusy": "Ein Export wird bereits vorbereitet. Warten Sie auf die E-Mail dazu und fordern Sie dann einen weiteren an.",
+      "logNotReady": "Dieser Export ist nicht bereit oder abgelaufen. Fordern Sie ihn erneut an.",
+      "groupSuspended": "Meta hat diese Gruppe gesperrt. Sie kann erst wieder angeschrieben werden, wenn Meta die Sperre aufhebt.",
+      "groupLeft": "Diese Nummer hat die Gruppe verlassen und kann dort keine Nachrichten mehr senden.",
+      "groupAnnounceOnly": "Nur Admins dürfen in dieser Gruppe Nachrichten senden, und diese Nummer ist kein Admin.",
+      "groupRateLimited": "Zu viele Gruppennachrichten von dieser Nummer in kurzer Zeit. Warten Sie eine Minute und versuchen Sie es dann erneut.",
+      "groupUnavailable": "WhatsApp hat diese Gruppennachricht nicht akzeptiert. Versuchen Sie es in einigen Minuten erneut.",
+      "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut.",
+      "groupPlanLocked": "Ihr Tarif enthält keine WhatsApp-Gruppen, daher kann an diese Gruppe nicht geschrieben werden. Bitten Sie einen Admin, den Tarif zu erweitern.",
+      "savedReplyGone": "Diese gespeicherte Antwort existiert nicht mehr.",
+      "savedReplyChannel": "Diese gespeicherte Antwort ist nicht für diese Art von Kanal gedacht.",
+      "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits.",
+      "importInvalid": "Diese Datei kann nicht als Antwortvorlagen gelesen werden. Die erste Zeile muss die Spalten title, shortcut und body enthalten, und es dürfen höchstens 1.000 Zeilen sein."
     },
     "bubble": {
       "kind": {
@@ -196,6 +217,19 @@
         "takeBack": "Tippen, um deine Reaktion zurückzunehmen",
         "takeBackLabel": "Deine Reaktion {emoji}. Zurücknehmen",
         "failed": "Diese Reaktion wurde nicht gesendet"
+      },
+      "deliveryLog": "Zustellprotokoll",
+      "groupMember": "Gruppenmitglied",
+      "groupTally": "Zugestellt an {delivered} von {members}{read, plural, =0 {} other {, gelesen von #}}{failed, plural, =0 {} other {, # fehlgeschlagen}}",
+      "groupTallyNoTotal": "Zugestellt an {delivered, plural, one {# Mitglied} other {# Mitglieder}}{read, plural, =0 {} other {, gelesen von #}}{failed, plural, =0 {} other {, # fehlgeschlagen}}",
+      "groupTallyBilled": "{billable} berechnet, {free} kostenlos",
+      "stageLine": {
+        "auto": "Die KI hat den Chat gelesen und diesen Kontakt von {from} nach {to} verschoben.",
+        "undo": "Rückgängig",
+        "wasUndone": "Rückgängig gemacht",
+        "undone": "Phasenwechsel rückgängig gemacht: zurück bei {stage}.",
+        "undoneToast": "Phase auf {stage} zurückgesetzt.",
+        "couldNotUndo": "Diese Änderung lässt sich nicht mehr rückgängig machen: Der Kontakt ist weitergerückt oder sie wurde schon rückgängig gemacht."
       }
     },
     "media": {
@@ -248,6 +282,44 @@
       "attachment": "ein Anhang",
       "jumpLatest": "Zur neuesten Nachricht springen",
       "jumpLatestNew": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}"
+    },
+    "groupThread": {
+      "openGroup": "Gruppe öffnen",
+      "readOnly": {
+        "left": {
+          "title": "Diese Nummer hat die Gruppe verlassen",
+          "message": "Die Unterhaltung bleibt unverändert erhalten. Sie können sie lesen und interne Notizen hinzufügen, aber keine Nachrichten senden."
+        },
+        "announceOnly": {
+          "title": "Nur Admins dürfen in dieser Gruppe senden",
+          "message": "Diese Nummer ist kein Admin der Gruppe, daher würde WhatsApp keine Nachricht zustellen. Interne Notizen können Sie weiterhin hinzufügen."
+        }
+      },
+      "mention": {
+        "label": "Gruppenmitglieder",
+        "loading": "Mitglieder werden gesucht",
+        "none": "Kein Mitglied passt"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta hat diese Gruppe gesperrt",
+          "message": "WhatsApp stellt keine Nachrichten an eine gesperrte Gruppe zu. Sie können den Verlauf lesen und interne Notizen hinzufügen, bis Meta die Sperre aufhebt."
+        },
+        "plan": {
+          "title": "Ihr Tarif enthält keine WhatsApp-Gruppen",
+          "message": "Sie können diesen Verlauf lesen und interne Notizen hinzufügen, aber zum Senden an die Gruppe ist ein Tarif mit Gruppen nötig. Bitten Sie einen Admin um ein Upgrade."
+        },
+        "ineligible": {
+          "title": "Diese Nummer kann keine WhatsApp-Gruppen nutzen",
+          "message": "Meta hat Gruppen für diese Nummer bei der letzten Prüfung nicht erlaubt (erforderlich ist ein offizielles Business-Konto). Sie können den Verlauf lesen und interne Notizen hinzufügen. Öffnen Sie Meta-Gruppen, um erneut zu prüfen."
+        }
+      },
+      "cost": {
+        "members": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. Geschätzte Kosten {cost}: WhatsApp berechnet jedes Mitglied, das sie erhält.",
+        "membersNoEstimate": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. WhatsApp berechnet jedes Mitglied, das sie erhält.",
+        "sizeUnknown": "Die Mitgliederzahl ist noch nicht bekannt. WhatsApp berechnet jedes Mitglied, das diese Nachricht erhält.",
+        "walletShort": "Ihr Guthaben reicht für diese Nachricht möglicherweise nicht aus. Laden Sie es vor dem Senden auf."
+      }
     },
     "composer": {
       "modeLabel": "Nachrichtentyp",
@@ -345,7 +417,9 @@
           "url": "Geben Sie einen Link ein, der mit http:// oder https:// beginnt",
           "tooManyRows": "Eine Liste enthält insgesamt höchstens 10 Zeilen"
         }
-      }
+      },
+      "savedReplies": "Gespeicherte Antworten",
+      "savedReplyIssues": "Nicht ausgefüllt und unverändert belassen ({count}): {list}. Vor dem Senden korrigieren."
     },
     "panel": {
       "tabsLabel": "Notizen und Verlauf",
@@ -414,8 +488,8 @@
           "snoozed": "Zurückgestellt von {actor}",
           "auto_unsnoozed": "Zurückstellung beendet",
           "priority_changed": "Priorität geändert von {actor}",
-          "tag_added": "Label hinzugefügt von {actor}",
-          "tag_removed": "Label entfernt von {actor}",
+          "tag_added": "Tag hinzugefügt von {actor}",
+          "tag_removed": "Tag entfernt von {actor}",
           "first_response": "Erste Antwort gesendet",
           "sla_breach": "Antwortfrist verpasst",
           "unknown": "{what} von {actor}"
@@ -554,6 +628,378 @@
         "named_variables": "Verwendet benannte Variablen, die der Posteingang noch nicht unterstützt."
       },
       "hasMore": "Es werden die ersten {count} Vorlagen angezeigt. Suchen Sie nach Name oder Text, um die übrigen zu finden."
+    },
+    "log": {
+      "title": "Zustellprotokoll",
+      "close": "Schließen",
+      "loading": "Protokoll wird geladen",
+      "tryAgain": "Erneut versuchen",
+      "statusNow": "Aktueller Status",
+      "createdAt": "Erstellt",
+      "providerId": "Nachrichten-ID des Anbieters",
+      "failedNoReason": "Diese Nachricht wurde nicht zugestellt.",
+      "expired": "Diese Nachricht ist älter als {days} Tage. Ihr Protokoll wird nicht mehr aufbewahrt.",
+      "empty": "Für diese Nachricht wurde kein Protokoll aufgezeichnet. Nachrichten, die vor Einführung der Protokolle gesendet wurden, haben keines.",
+      "archived": "Einträge, die älter als {days} Tage sind, werden aus dem Archiv gelesen.",
+      "exportLink": "Nachrichtenprotokolle exportieren",
+      "source": {
+        "system": "Unser System",
+        "provider": "Empfangsbestätigung des Anbieters"
+      },
+      "event": {
+        "queued": "In Sendewarteschlange",
+        "attempt": "Sendeversuch {attempt}",
+        "accepted": "Vom Anbieter angenommen",
+        "sentReceipt": "Anbieter hat den Versand bestätigt",
+        "delivered": "Auf dem Telefon des Kunden zugestellt",
+        "read": "Vom Kunden gelesen",
+        "failedReceipt": "Anbieter hat sie als nicht zugestellt gemeldet",
+        "failedSend": "Konnte nicht gesendet werden",
+        "retryAuto": "Wird automatisch erneut versucht",
+        "retryManual": "Ein Teammitglied hat auf „Erneut senden“ geklickt"
+      },
+      "notApplied": "Diese Meldung kam zu spät oder gehörte zu einem früheren Versand. Sie hat die Nachricht nicht verändert.",
+      "replayed": "Es wurde keine neue Anfrage gestellt: Die frühere Antwort des Anbieters wurde wiederverwendet.",
+      "resent": "Als neue Nachricht erneut an den Anbieter gesendet."
+    },
+    "logs": {
+      "back": "Zurück zum Posteingang",
+      "title": "Nachrichtenprotokolle",
+      "intro": "Jede Nachricht behält ihr Zustellprotokoll: {hot} Tage im Posteingang, danach im Archiv bis {days} Tage nach dem Ereignis. Fordern Sie einen Export für einen Zeitraum an; er wird im Hintergrund vorbereitet und Ihnen per E-Mail geschickt, sobald er bereit ist.",
+      "requested": "Export angefordert. Wir senden Ihnen eine E-Mail, sobald er bereit ist.",
+      "requestedTo": "Export angefordert. Wir senden eine E-Mail an {email}, sobald er bereit ist.",
+      "form": {
+        "title": "Export anfordern",
+        "from": "Von",
+        "to": "Bis",
+        "status": "Nur Nachrichten mit aktuellem Status",
+        "anyStatus": "Beliebiger Status",
+        "hint": "Die Daten gelten in UTC. Sie können bis zu {days} Tage zurückgehen. Es wird jeweils nur ein Export vorbereitet.",
+        "submit": "Export anfordern",
+        "sending": "Wird angefordert"
+      },
+      "problem": {
+        "order": "Das Startdatum darf nicht nach dem Enddatum liegen.",
+        "future": "Das Enddatum darf nicht in der Zukunft liegen.",
+        "tooOld": "Protokolle werden {days} Tage aufbewahrt. Wählen Sie ein späteres Startdatum.",
+        "invalid": "Geben Sie beide Daten ein."
+      },
+      "history": {
+        "title": "Ihre Exporte",
+        "loading": "Exporte werden geladen",
+        "tryAgain": "Erneut versuchen",
+        "empty": "Noch keine Exporte.",
+        "onlyStatus": "Nur Nachrichten mit Status {status}",
+        "requestedAt": "Angefordert {date}",
+        "lines": "{count, plural, one {# Zeile} other {# Zeilen}}",
+        "until": "Verfügbar bis {date}",
+        "download": "Herunterladen",
+        "status": {
+          "queued": "Wartend",
+          "running": "Wird vorbereitet",
+          "ready": "Bereit",
+          "failed": "Fehlgeschlagen",
+          "expired": "Abgelaufen"
+        }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulator (Test)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Website-Chat",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-Mail"
+      },
+      "variableGroup": {
+        "contact": "Kontakt",
+        "agent": "Sie",
+        "workspace": "Workspace",
+        "conversation": "Unterhaltung"
+      },
+      "variable": {
+        "first_name": "Vorname des Kontakts",
+        "last_name": "Nachname des Kontakts",
+        "name": "Vollständiger Name des Kontakts",
+        "email": "E-Mail des Kontakts",
+        "phone": "Telefonnummer des Kontakts",
+        "agent_name": "Ihr vollständiger Name",
+        "agent_first_name": "Ihr Vorname",
+        "workspace_name": "Name des Workspace",
+        "company_name": "Firmenname",
+        "today": "Heutiges Datum",
+        "device_name": "Name des Kanals",
+        "device_phone": "Telefonnummer des Kanals"
+      },
+      "picker": {
+        "title": "Gespeicherte Antworten",
+        "close": "Gespeicherte Antworten schließen",
+        "searchLabel": "Gespeicherte Antworten durchsuchen",
+        "searchPlaceholder": "Nach Kürzel, Titel oder Text suchen",
+        "listLabel": "Gespeicherte Antworten",
+        "loading": "Gespeicherte Antworten werden geladen",
+        "loadFailed": "Gespeicherte Antworten konnten nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "empty": "Es gibt noch keine gespeicherten Antworten.",
+        "emptyForChannel": "Keine gespeicherte Antwort ist für diesen Kanal gedacht.",
+        "createFirst": "Die erste erstellen",
+        "noMatch": "Keine gespeicherte Antwort passt zu „{q}“.",
+        "mine": "Meine",
+        "hint": "Pfeiltasten navigieren, Enter fügt ein, Esc schließt.",
+        "manage": "Gespeicherte Antworten verwalten",
+        "tooLong": "Diese Antwort ist zu lang für das Nachrichtenlimit dieses Kanals und wurde daher nicht eingefügt."
+      },
+      "screen": {
+        "back": "Einstellungen",
+        "title": "Gespeicherte Antworten",
+        "subtitle": "Wiederverwendbare Antworten, die Ihr Team in eine Antwort einfügt. Geben Sie in einer Unterhaltung / ein, um eine zu finden.",
+        "create": "Neue gespeicherte Antwort",
+        "noAccess": "Sie haben keine Berechtigung, gespeicherte Antworten zu verwalten.",
+        "meter": "{used} von {limit} gespeicherten Antworten verwendet",
+        "meterLabel": "In Ihrem Tarif verwendete gespeicherte Antworten",
+        "meterNote": "Geteilte und persönliche Antworten zählen beide zum Limit.",
+        "atLimit": "Sie haben das Limit Ihres Tarifs von {limit} gespeicherten Antworten erreicht. Löschen Sie eine oder wechseln Sie zu einem höheren Tarif.",
+        "nearLimit": "Sie nähern sich dem Limit Ihres Tarifs von {limit} gespeicherten Antworten.",
+        "upgrade": "Tarife ansehen",
+        "tabsLabel": "Anzeigen",
+        "tab": {
+          "all": "Alle ({count})",
+          "shared": "Geteilt ({count})",
+          "mine": "Meine ({count})"
+        },
+        "categoryFilter": "Nach Kategorie filtern",
+        "allCategories": "Alle Kategorien",
+        "searchLabel": "Gespeicherte Antworten durchsuchen",
+        "searchPlaceholder": "Nach Kürzel, Titel oder Text suchen",
+        "howItWorks": "Geben Sie im Posteingang / ins Nachrichtenfeld ein oder nutzen Sie die Schaltfläche Gespeicherte Antworten. Variablen wie '{{first_name}}' werden aus der Unterhaltung befüllt, bevor der Text im Feld erscheint. Es wird nichts gesendet, bis der Mitarbeiter auf Senden klickt.",
+        "loading": "Gespeicherte Antworten werden geladen",
+        "loadFailed": "Gespeicherte Antworten konnten nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "loadMore": "Mehr laden",
+        "list": "Gespeicherte Antworten",
+        "emptyTitle": "Noch keine gespeicherten Antworten",
+        "empty": "Schreiben Sie die Antworten, die Ihr Team immer wieder gibt, und fügen Sie sie mit einem Tastendruck ein.",
+        "noMatchTitle": "Nichts gefunden",
+        "noMatch": "Keine gespeicherte Antwort passt zu „{q}“.",
+        "noMatchCategory": "Keine gespeicherte Antwort in dieser Kategorie.",
+        "scope": {
+          "shared": "Geteilt",
+          "mine": "Meine"
+        },
+        "allChannels": "Alle Kanäle",
+        "neverUsed": "Noch nicht verwendet",
+        "used": "{count, plural, one {# Mal} other {# Mal}} verwendet",
+        "lastUsed": "Zuletzt verwendet {when}",
+        "createdBy": "Erstellt von {name}",
+        "readOnly": "Nur Personen, die gespeicherte Antworten verwalten, können eine geteilte Antwort ändern.",
+        "edit": "Bearbeiten",
+        "duplicate": "Duplizieren",
+        "delete": "Löschen",
+        "cancel": "Abbrechen",
+        "deleteTitle": "Diese gespeicherte Antwort löschen?",
+        "deleteShared": "/{shortcut} wird für alle im Workspace entfernt.",
+        "deleteMine": "/{shortcut} wird aus Ihren Antworten entfernt.",
+        "deleted": "Gespeicherte Antwort gelöscht.",
+        "duplicated": "Gespeicherte Antwort dupliziert.",
+        "created": "Gespeicherte Antwort /{shortcut} erstellt.",
+        "saved": "Gespeicherte Antwort aktualisiert."
+      },
+      "form": {
+        "eyebrow": "Gespeicherte Antwort",
+        "titleNew": "Neue gespeicherte Antwort",
+        "titleEdit": "Gespeicherte Antwort bearbeiten",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "saving": "Wird gespeichert…",
+        "shortcut": "Kürzel",
+        "shortcutPlaceholder": "danke",
+        "shortcutHint": "Buchstaben, Zahlen und Unterstriche, bis zu {max} Zeichen.",
+        "shortcutStored": "Mitarbeiter geben /{shortcut} ein",
+        "shortcutEmpty": "Geben Sie ein Kürzel aus Buchstaben, Zahlen oder Unterstrichen ein.",
+        "shortcutTaken": "/{shortcut} wird bereits von einer anderen Antwort verwendet. Wählen Sie ein anderes Kürzel.",
+        "title": "Titel",
+        "titlePlaceholder": "Danke für Ihre Nachricht",
+        "titleEmpty": "Geben Sie einen Titel ein.",
+        "titleLong": "Der Titel darf höchstens {max} Zeichen lang sein.",
+        "body": "Text",
+        "bodyHint": "Reiner Text. Verwenden Sie *fett* und _kursiv_ wie in WhatsApp.",
+        "bodyPlaceholder": "Hallo '{{first_name}}', danke für Ihre Nachricht. Wie können wir helfen?",
+        "bodyEmpty": "Geben Sie den Text der Antwort ein.",
+        "bodyLong": "Der Text darf höchstens {max} Zeichen lang sein.",
+        "count": "{n} von {max}",
+        "variables": "Variable einfügen",
+        "variablesHint": "Klicken Sie auf eine, um sie an der Cursorposition einzufügen. Eine Variable, die nicht befüllt werden kann, bleibt unverändert, damit der Mitarbeiter sie sieht.",
+        "preview": "Vorschau",
+        "previewHint": "Mit Beispieldaten eines Kunden.",
+        "previewEmpty": "Geben Sie den Text ein, um die Darstellung zu sehen.",
+        "previewIssues": "In der Vorschau nicht ausgefüllt: {list}. Wenn eine Antwort verwendet wird, werden die Attribute Ihres Kontakts eingesetzt, sofern vorhanden; alles andere bleibt unverändert.",
+        "category": "Kategorie (optional)",
+        "categoryPlaceholder": "Begrüßung, Abrechnung, Support",
+        "language": "Sprache (optional)",
+        "languageHint": "Ein Code wie en oder pt-BR, zu Ihrer eigenen Orientierung.",
+        "languageFormat": "Verwenden Sie einen Sprachcode wie en oder pt-BR.",
+        "channels": "Nur in diesen Kanälen",
+        "channelsHint": "Lassen Sie alle abgewählt, um sie in jedem Kanal anzubieten.",
+        "scope": "Wer darf sie verwenden",
+        "scopeOption": {
+          "shared": "Alle im Workspace",
+          "mine": "Nur ich"
+        },
+        "scopeLocked": "Eine Antwort kann nach dem Speichern nicht mehr zwischen geteilt und persönlich wechseln.",
+        "planLimit": "Sie haben das Limit Ihres Tarifs für gespeicherte Antworten erreicht.",
+        "upgrade": "Tarife ansehen",
+        "conflict": "Jemand anderes hat diese Antwort zuerst geändert. Schließen Sie dieses Fenster und öffnen Sie es erneut.",
+        "invalid": "Einige Ihrer Eingaben sind ungültig."
+      },
+      "transfer": {
+        "export": "CSV exportieren",
+        "import": "CSV importieren",
+        "title": "Antwortvorlagen importieren",
+        "intro": "Lade eine CSV-Datei mit den Spalten title, shortcut, body und optional category, language und channel hoch (Kanalarten durch | getrennt, leer für alle Kanäle). Bis zu 1.000 Zeilen und {maxKb} KB. Importierte Antworten werden mit dem gesamten Team geteilt. Der Export hat dieselben Spalten.",
+        "file": "CSV-Datei",
+        "tooBig": "Diese Datei ist zu groß.",
+        "duplicates": "Wenn eine geteilte Antwort den Shortcut bereits verwendet",
+        "policy": {
+          "skip": "Vorhandene Antwort behalten",
+          "overwrite": "Text ersetzen"
+        },
+        "policyHint": {
+          "skip": "Die Zeile wird übersprungen und die Antwort bleibt unverändert.",
+          "overwrite": "Titel, Text, Kategorie, Sprache und Kanäle werden ersetzt. Die Anzahl der Verwendungen bleibt erhalten."
+        },
+        "check": "Datei prüfen",
+        "go": "Importieren ({count})",
+        "cancel": "Abbrechen",
+        "summary": "{create} zum Erstellen, {update} zum Ersetzen, {skip} übersprungen, {invalid} mit einem Problem. Noch nichts ist gespeichert.",
+        "plan": "Dein Tarif: {used} von {limit} Antworten.",
+        "row": "Zeile {line}: /{shortcut}",
+        "truncated": "Es werden nur die ersten Zeilen mit einem Problem oder einer Änderung aufgelistet.",
+        "done": "Importiert: {created} erstellt, {updated} ersetzt.",
+        "issue": {
+          "update": "wird ersetzt",
+          "skip": "übersprungen",
+          "invalid": "hat ein Problem",
+          "duplicate": "Shortcut wird bereits verwendet, übersprungen",
+          "missing_shortcut": "kein Shortcut",
+          "shortcut_invalid": "der Shortcut enthält keine verwendbaren Buchstaben oder Zahlen",
+          "missing_title": "kein Titel",
+          "title_too_long": "der Titel ist zu lang",
+          "missing_body": "kein Text",
+          "body_too_long": "der Text ist zu lang",
+          "control_characters": "enthält Steuerzeichen",
+          "category_too_long": "die Kategorie ist zu lang",
+          "language_invalid": "die Sprache ist kein Code wie en oder pt-BR",
+          "channel_unknown": "ein unbekannter Kanal",
+          "duplicate_in_file": "der Shortcut kommt weiter oben in der Datei vor",
+          "plan_limit_reached": "über dem Limit deines Tarifs"
+        }
+      }
+    },
+    "triage": {
+      "priority": "Priorität",
+      "snooze": "Zurückstellen",
+      "wake": "Jetzt reaktivieren"
+    },
+    "bulk": {
+      "barLabel": "Massenaktionen",
+      "selected": "{count, plural, one {# Unterhaltung ausgewählt} other {# Unterhaltungen ausgewählt}}",
+      "selectAllInView": "Alle {count} in der Ansicht auswählen",
+      "done": "Fertig",
+      "markRead": "Als gelesen markieren",
+      "resolve": "Als gelöst markieren",
+      "close": "Schließen",
+      "reopen": "Wieder öffnen",
+      "assign": "Zuweisen",
+      "assignToMe": "Mir zuweisen",
+      "unassign": "Zuweisung aufheben",
+      "removeTeam": "Team entfernen",
+      "priority": "Priorität",
+      "snooze": "Zurückstellen",
+      "snoozePreset": {
+        "oneHour": "1 Stunde",
+        "threeHours": "3 Stunden",
+        "tomorrow": "Morgen, 9:00",
+        "nextWeek": "Nächsten Montag, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# Unterhaltung aktualisiert} other {# Unterhaltungen aktualisiert}}.",
+        "nothingChanged": "Nichts zu ändern: Die ausgewählten Unterhaltungen sind bereits auf dem neuesten Stand.",
+        "partial": "{done} aktualisiert, {unchanged} bereits aktuell, {failed} konnten nicht geändert werden. Die fehlgeschlagenen bleiben ausgewählt.",
+        "allFailed": "Keine der {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} konnte geändert werden."
+      },
+      "tag": "Tag",
+      "tagAdd": "Tag hinzufügen",
+      "tagRemove": "Tag entfernen"
+    },
+    "tags": {
+      "tag": "Tag",
+      "loading": "Tags werden geladen…",
+      "loadFailed": "Die Tags konnten nicht geladen werden.",
+      "none": "Noch keine Tags.",
+      "newTag": "Neuer Tag",
+      "add": "Hinzufügen",
+      "filter": "Tags",
+      "filterActive": "{count, plural, one {# Tag} other {# Tags}}",
+      "clearFilter": "Tag-Filter zurücksetzen",
+      "scope": {
+        "label": "Tags abgleichen bei",
+        "conversation": "Unterhaltungs-Tags",
+        "contact": "Kontakt-Tags"
+      },
+      "groups": {
+        "title": "Tags",
+        "helpFor": "Info zu {title}",
+        "rule": "Beide Arten stammen aus derselben Tag-Bibliothek des Workspaces.",
+        "contactTitle": "Kontakt-Tags",
+        "contactHelp": "Ein Kontakt-Tag beschreibt die Person (VIP, Lead, Region). Er begleitet sie in jede Unterhaltung.",
+        "contactNone": "Dieser Kontakt hat keine Tags.",
+        "contactEdit": "Beim Kontakt bearbeiten",
+        "conversationTitle": "Unterhaltungs-Tags",
+        "conversationHelp": "Ein Unterhaltungs-Tag beschreibt diesen Verlauf (Abrechnung, Erstattung, dringend).",
+        "conversationNone": "Diese Unterhaltung hat noch keine Tags.",
+        "remove": "Tag {name} entfernen"
+      },
+      "screen": {
+        "back": "Zurück zum Posteingang",
+        "title": "Unterhaltungs-Tags",
+        "intro": "Unterhaltungs-Tags kennzeichnen einen Verlauf (Abrechnung, Erstattung, dringend), damit Ihr Team den Posteingang sortieren und filtern kann. Sie stammen aus derselben Tag-Bibliothek wie die Kontakt-Tags, die die Person beschreiben.",
+        "newTitle": "Neuer Tag",
+        "editTitle": "Tag bearbeiten",
+        "name": "Name",
+        "color": "Farbe",
+        "colorInvalid": "Verwenden Sie eine Hex-Farbe wie #075E54 oder einen Farbnamen.",
+        "description": "Beschreibung (optional)",
+        "create": "Tag erstellen",
+        "save": "Änderungen speichern",
+        "cancel": "Abbrechen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "inUse": "{count, plural, one {# Unterhaltung} other {# Unterhaltungen}}",
+        "emptyTitle": "Noch keine Tags",
+        "emptyMessage": "Erstellen Sie oben Ihren ersten Tag und weisen Sie ihn dann im Posteingang Unterhaltungen zu.",
+        "deleteTitle": "Diesen Tag löschen?",
+        "deleteMessage": "\"{name}\" ist bei {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} gesetzt. Beim Löschen wird er dort und bei allen Kontakten entfernt, die ihn tragen. Das lässt sich nicht rückgängig machen.",
+        "nameTaken": "Ein Tag mit diesem Namen existiert bereits.",
+        "conflict": "Jemand anderes hat diesen Tag zuerst geändert. Die Liste wurde neu geladen.",
+        "saved": "Tag gespeichert",
+        "created": "Tag erstellt",
+        "deleted": "Tag gelöscht"
+      }
+    },
+    "sla": {
+      "breached": "SLA verletzt",
+      "atRisk": "SLA fällig in {minutes} Min.",
+      "ok": "SLA fällig {time}",
+      "kind": {
+        "first_response": "Ziel für erste Antwort",
+        "resolution": "Ziel für Lösung"
+      },
+      "titleBreached": "{kind}: verfehlt (fällig war {time})",
+      "titleOpen": "{kind}: fällig {time}"
     }
   }
 }

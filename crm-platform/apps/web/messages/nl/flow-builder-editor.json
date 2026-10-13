@@ -568,6 +568,45 @@
           "afterSending": "Na verzenden",
           "afterSendingHint": "Aan: de flow pauzeert hier en gaat pas via “uit” verder zodra de klant betaalt (het bedrag komt binnen als {paidAmount} {paidCurrency}). Uit: de factuur wordt verzonden en de flow gaat meteen door.",
           "waitUntilPaid": "Wacht tot betaald, ga dan verder"
+        },
+        "faq": {
+          "intro": {
+            "body": "Vergelijkt een bericht op betekenis met de FAQs van deze flow en beantwoordt het. Het verlaat de stap via <mono>answered</mono> als een FAQ antwoordde, en anders via <mono>no match</mono>.",
+            "sub": "Werkt ook zonder dat automatische FAQ-beantwoording van deze flow aan staat. <link>FAQs van deze flow beheren</link>"
+          },
+          "exitsLabel": "Uitgangen",
+          "exitMatchedName": "Beantwoord",
+          "exitMatched": "een FAQ heeft geantwoord: de tekst is verzonden (tenzij verzenden uit staat), of de flow van de FAQ heeft het overgenomen en komt niet terug.",
+          "exitNoMatchName": "Geen match",
+          "exitNoMatch": "niets kwam dichtbij genoeg, FAQ-beantwoorden is voor het platform uitgeschakeld, de gekoppelde flow of stap bestaat niet meer, of het bericht was leeg.",
+          "query": "Bericht om te vergelijken",
+          "queryHint": "Standaard het laatste bericht van de klant. Een variabele die een Vraag-stap heeft opgeslagen werkt ook, bijvoorbeeld <mono>{variable}</mono>. Typ / om er een in te voegen.",
+          "category": "Alleen deze FAQ's",
+          "allFaqs": "Alle FAQ's",
+          "loadingCategories": "Categorieën laden…",
+          "categoryGone": "{name} (geen FAQ gebruikt deze)",
+          "retry": "Opnieuw proberen",
+          "minScore": "Minimale score",
+          "sendAnswer": "Antwoord naar de klant sturen",
+          "sendAnswerToggle": "Een passend tekstantwoord als bericht sturen",
+          "sendAnswerOnHint": "Een passende tekst-FAQ wordt naar de klant gestuurd. Een FAQ die een flow start, gaat verder in die flow.",
+          "sendAnswerOffHint": "Er wordt niets verzonden: het antwoord wordt alleen opgeslagen in de onderstaande variabelen, zodat een latere stap het antwoord zelf kan formuleren. Een FAQ die een flow start, gaat nog steeds verder in die flow.",
+          "save": "Resultaat opslaan als",
+          "saveHint": "De naam waaronder het resultaat wordt opgeslagen. Latere stappen lezen het zoals hieronder getoond.",
+          "variables": {
+            "answer": "de antwoordtekst",
+            "matched": "ja of nee",
+            "question": "de vraag van de FAQ die overeenkwam",
+            "score": "hoe goed de match was",
+            "id": "de ID van de FAQ die overeenkwam"
+          },
+          "noFaqs": "Deze flow heeft nog geen FAQs, dus deze stap verlaat altijd via no match. <link>Voeg de eerste FAQ van deze flow toe</link>",
+          "useWorkspaceScore": "Instelling van deze flow gebruiken",
+          "minScoreInvalid": "Voer een getal in van {min} tot {max}, of gebruik de instelling van deze flow.",
+          "saveFlowFirst": "Sla eerst de flow op. De FAQs ervan bewerk je op het tabblad FAQs van de eenvoudige builder, en deze stap antwoordt daaruit.",
+          "categoryHint": "Alleen FAQs van deze categorie kunnen antwoorden. De categorieën komen uit de FAQs van deze flow.",
+          "categoriesFailed": "De FAQ-categorieën van deze flow konden niet worden geladen.",
+          "minScoreHint": "Vervangt de score van deze flow alleen voor deze stap, van {min} tot {max}. Scores hangen af van het embeddingmodel van het platform, dus probeer een bericht op de <link>FAQ-test</link> van deze flow voordat je een getal kiest."
         }
       },
       "attrPicker": {
@@ -894,7 +933,12 @@
           "cardGallery": "Kaartengalerij",
           "cardCount": "{count} kaart(en)",
           "payLink": "Betaallink",
-          "invoice": "Factuur"
+          "invoice": "Factuur",
+          "faqAllFaqs": "Alle FAQ's",
+          "faqCategory": "FAQ's: {name}",
+          "faqScore": "min. score {score}",
+          "faqNotSent": "niet verzonden",
+          "faqWorkspaceScore": "flowscore"
         },
         "overlays": {
           "startPinned": "Dit is het startpunt (klik om los te maken)",
@@ -1051,9 +1095,11 @@
             "send": "Verzenden",
             "ask": "Vraag de klant",
             "handoff": "Doorgeven",
-            "logic": "Beslissen"
+            "logic": "Beslissen",
+            "answer": "Antwoord"
           },
-          "blockedTitle": "Knoppen en lijsten beëindigen een flow, dus ze kunnen alleen als laatste komen."
+          "blockedTitle": "Knoppen en lijsten beëindigen een flow, dus ze kunnen alleen als laatste komen.",
+          "blockedTitleFaq": "Antwoord uit FAQ heeft twee uitgangen en kan daarom alleen als laatste staan."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -1062,7 +1108,11 @@
           "moveUp": "Omhoog",
           "moveDown": "Omlaag",
           "duplicate": "Dupliceren",
-          "deleteStep": "Stap verwijderen"
+          "deleteStep": "Stap verwijderen",
+          "faqExits": {
+            "matched": "Beantwoord",
+            "no_match": "Geen match"
+          }
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
@@ -1219,9 +1269,20 @@
           },
           "handoff": {
             "hint": "De bezoeker gaat met je notitie naar dit team. Na deze knop hoeft niets te worden gekoppeld."
+          },
+          "faq": {
+            "exits": {
+              "matched": "Als een FAQ heeft geantwoord, ga naar",
+              "no_match": "Als geen FAQ heeft geantwoord, ga naar"
+            },
+            "exitsHint": {
+              "matched": "Op dat moment is een tekstantwoord verzonden. Een FAQ die een flow start, gaat in plaats daarvan verder in die flow.",
+              "no_match": "Niets kwam dichtbij genoeg, of automatisch FAQ-beantwoorden staat uit."
+            }
           }
         },
-        "branchAdd": "Stap toevoegen voor “{title}”"
+        "branchAdd": "Stap toevoegen voor “{title}”",
+        "faqEnds": "Deze stap sluit dit deel af: wat daarna wordt verzonden hangt ervan af of een FAQ heeft geantwoord."
       },
       "formsCore": {
         "helpers": {
@@ -1734,14 +1795,16 @@
         }
       },
       "webBot": {
-        "aria": "Botonderdelen",
+        "aria": "Flow-secties",
         "build": "Bouwen",
         "customize": "Aanpassen",
-        "saveFirst": "Sla de bot eerst op.",
-        "needsCustomizing": "Aanpassen is nog niet opgeslagen. Open Aanpassen.",
+        "saveFirst": "Sla eerst de flow op.",
+        "needsCustomizing": "De widget gebruikt nog de standaardlook. Open Aanpassen.",
         "customizeFirst": "Pas je chatwidget aan en sla hem één keer op voordat je publiceert.",
         "deploy": "Implementeren",
-        "customizeFirstWhatsapp": "Pas je WhatsApp-knop aan en sla hem één keer op voordat je publiceert."
+        "customizeFirstWhatsapp": "Pas je WhatsApp-knop aan en sla hem één keer op voordat je publiceert.",
+        "faqs": "FAQs",
+        "install": "Installeren"
       },
       "buttonIcon": {
         "label": "Pictogram (optioneel)",
@@ -2026,6 +2089,10 @@
         "carousel": {
           "label": "Carrousel",
           "description": "Scrollbare kaarten met afbeeldingen en knoppen"
+        },
+        "faq": {
+          "label": "Antwoord uit FAQ",
+          "description": "Koppel een bericht aan je FAQ's"
         }
       },
       "groups": {
@@ -2169,7 +2236,8 @@
         "wrongChannel": "“{node}” werkt niet op {channel} — verwijder hem of zet het kanaal weer aan in de Trigger-node.",
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",
         "noSenderFacebook": "De Trigger-node heeft geen Facebook-pagina geselecteerd — kies er een in de triggerstap.",
-        "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap."
+        "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap.",
+        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken."
       }
     },
     "simpleModel": {
@@ -2256,6 +2324,10 @@
         "condition": {
           "label": "Voorwaarde",
           "help": "Vertakken op wat de klant zei of opsloeg, met AND-/OR-regels"
+        },
+        "faq": {
+          "label": "Antwoord uit FAQ",
+          "help": "Koppel het bericht van de klant aan je FAQ's. Beëindigt deze flow: één uitgang als een FAQ heeft geantwoord, een andere zo niet"
         }
       },
       "typeLabel": {
@@ -2272,7 +2344,8 @@
         "cta": "Linkknop",
         "assign": "Toewijzen aan een medewerker",
         "carousel": "Carrousel",
-        "condition": "Voorwaarde"
+        "condition": "Voorwaarde",
+        "faq": "Antwoord uit FAQ"
       },
       "stepLabel": {
         "questionOf": "Vraag · {kind}"
@@ -2312,8 +2385,10 @@
         "variableUsed": "Stap {stage}: “{name}” wordt al gebruikt door stap {other}; geef elk antwoord een eigen naam.",
         "carouselCards": "Stap {stage}: voeg minstens één kaart toe en geef elke kaart een titel.",
         "carouselButtons": "Stap {stage}: geef elke knop een naam, en een link, nummer of adres waar hij iets opent.",
-        "conditionIncomplete": "Stap {stage}: maak de regels van de voorwaarde af (in elk een variabele en een waarde)."
-      }
+        "conditionIncomplete": "Stap {stage}: maak de regels van de voorwaarde af (in elk een variabele en een waarde).",
+        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow."
+      },
+      "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },
     "templates": {
       "eyebrow": "Startsjablonen",
@@ -2336,7 +2411,7 @@
       "callNote": "AI-spraak-IVR — zeggen, luisteren, doorverbinden",
       "subtitleSimple": "Elke bot wordt voor één kanaal gebouwd, omdat niet elk onderdeel op elk kanaal werkt.",
       "whatsapp": "WhatsApp",
-      "whatsappNote": "Beantwoordt klanten op een gekoppeld WhatsApp-nummer",
+      "whatsappNote": "Beantwoordt klanten via een gekoppeld WhatsApp-nummer",
       "web": "Websitechat",
       "webNote": "Een chatwidget die je aan je website toevoegt"
     },
@@ -2566,7 +2641,9 @@
       "optionNotConnected": "Uitgang “{port}” (optie {n}) niet verbonden — stop.",
       "buttonNotConnected": "Knop “{label}” niet verbonden — stop.",
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
-      "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”"
+      "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
+      "faqAnswered": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op, dus er wordt niets verzonden en {ref} blijft leeg. Uitgang \"beantwoord\" wordt genomen.",
+      "faqNoMatch": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op en de uitgang \"beantwoord\" is niet verbonden, dus \"geen match\" wordt genomen. {ref} blijft leeg."
     }
   }
 }

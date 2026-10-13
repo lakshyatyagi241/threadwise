@@ -2,6 +2,7 @@ import { decideClose, isMismatch, QR_MIN_GAP_MS, QR_STALL_MS, shortStatus } from
 import type { DeviceStateReason } from '@crm/contracts';
 import type { RuntimeStatus } from './device-status';
 import type {
+  GroupEvent,
   GroupSnapshot,
   ReceiptUpdate,
 } from '../../../infra/providers/node-bridge-runtime/inbound.port';
@@ -59,7 +60,10 @@ export interface SessionHost {
   /** What the socket delivered (TW-NODE-016, 018, 020, 021). The runtime hands each to whoever consumes it. */
   inbound?(message: Normalized, media?: Buffer): Promise<void>;
   receipt?(receipt: ReceiptUpdate): Promise<void>;
-  groups?(groups: GroupSnapshot[]): Promise<void>;
+  /** `complete` false: only these groups were re-read after a change; true (the default): the full list the account is in. */
+  groups?(groups: GroupSnapshot[], opts?: { complete: boolean }): Promise<void>;
+  /** One change in one group, as it happened. */
+  groupEvent?(event: GroupEvent): Promise<void>;
 }
 
 /** A send was asked of a device that is not connected (Reference: HTTP 503 `Sender device is not connected.`). */
@@ -266,7 +270,9 @@ export class DeviceSession {
       case 'receipt':
         return this.host.receipt?.(e.receipt);
       case 'groups':
-        return this.host.groups?.(e.groups);
+        return this.host.groups?.(e.groups, { complete: e.complete !== false });
+      case 'group_event':
+        return this.host.groupEvent?.(e.event);
     }
   }
 

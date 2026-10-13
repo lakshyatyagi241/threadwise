@@ -31,6 +31,7 @@ export const IMPORT_FIELDS = [
   'memo',
   'status',
   'source',
+  'consent',
 ] as const;
 export type ImportField = (typeof IMPORT_FIELDS)[number];
 export const importFieldSchema = z.enum(IMPORT_FIELDS);
@@ -68,6 +69,17 @@ export const IMPORT_ALIASES: Record<ImportField, readonly string[]> = {
   memo: ['memo', 'note', 'notes', 'comment', 'comments'],
   status: ['status'],
   source: ['source'],
+  /** Marketing consent per row (yes / no). Applied only when the person importing ticks the consent confirmation. */
+  consent: [
+    'consent',
+    'optin',
+    'optedin',
+    'marketingconsent',
+    'whatsappconsent',
+    'whatsappoptin',
+    'subscribed',
+    'marketingoptin',
+  ],
 };
 
 /** Scan order: the leftmost column wins a field, and a field takes one column. */
@@ -86,6 +98,7 @@ const DETECTION_ORDER: readonly ImportField[] = [
   'memo',
   'status',
   'source',
+  'consent',
 ];
 
 export function normalizeImportHeader(header: string): string {
@@ -123,6 +136,89 @@ export const IMPORT_SAMPLE_ROWS: readonly (readonly string[])[] = [
   ['Priya Patel', 'Patel', '91', '9898765432', 'priya@example.com', 'Customers', 'en'],
 ];
 
+// --- consent column ----------------------------------------------------------------------
+
+/** What one cell of the consent column means. `blank` is not granted and is not counted as a surprise; `unrecognised` is not granted. */
+export type ImportConsentValue = 'granted' | 'not_granted' | 'unrecognised' | 'blank';
+
+const CONSENT_YES = new Set([
+  'yes',
+  'y',
+  'true',
+  't',
+  '1',
+  'granted',
+  'consent',
+  'consented',
+  'agreed',
+  'accept',
+  'accepted',
+  'optin',
+  'optedin',
+  'subscribed',
+  'subscribe',
+  'ok',
+  'نعم',
+  'اجل',
+  'موافق',
+  'si',
+  'oui',
+  'ja',
+  'sim',
+  'да',
+  'はい',
+  '是',
+  '예',
+  'evet',
+  'ya',
+  'हाँ',
+  'हां',
+]);
+const CONSENT_NO = new Set([
+  'no',
+  'n',
+  'false',
+  'f',
+  '0',
+  'notgranted',
+  'withdrawn',
+  'declined',
+  'refused',
+  'rejected',
+  'optout',
+  'optedout',
+  'unsubscribed',
+  'unsubscribe',
+  'none',
+  'null',
+  'لا',
+  'غيرموافق',
+  'non',
+  'nein',
+  'nao',
+  'нет',
+  'いいえ',
+  '否',
+  '아니요',
+  'hayir',
+  'tidak',
+  'नहीं',
+]);
+
+/** Yes / no spellings of a consent cell: case, spaces, hyphens and accents do not matter. Anything else is `unrecognised` (not granted). */
+export function parseImportConsent(cell: string): ImportConsentValue {
+  const raw = cell.trim();
+  if (raw === '') return 'blank';
+  const key = raw
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/[\s_\-.!]+/g, '');
+  if (CONSENT_YES.has(key)) return 'granted';
+  if (CONSENT_NO.has(key)) return 'not_granted';
+  return 'unrecognised';
+}
+
 // --- request -----------------------------------------------------------------------------
 
 export const contactImportOptionsSchema = z.object({
@@ -145,6 +241,13 @@ export const contactImportOptionsSchema = z.object({
    * automations; on, it is the caller's explicit choice.
    */
   triggerAutomations: queryBoolean().default(false),
+  /**
+   * The person importing confirms "I have consent to message these contacts". Every contact in the file then gets a `granted`
+   * marketing event in the consent ledger (source `import`, the file name as evidence). With a column mapped to `consent`, only the
+   * rows that say yes get one (a no, a blank or an unknown word records nothing). Off by default: an import without the
+   * confirmation records NO consent (the column is ignored), and a contact that opted out is never turned back on by a file.
+   */
+  consentConfirmed: queryBoolean().default(false),
 });
 export type ContactImportOptions = z.infer<typeof contactImportOptionsSchema>;
 
@@ -168,6 +271,8 @@ export const IMPORT_REJECT_REASONS = [
   'tag_name_too_long',
   'plan_limit_reached',
   'tag_limit_reached',
+  /** Not an error: the row repeats a number from earlier in the file and was merged into that contact. */
+  'duplicate_in_file',
 ] as const;
 export type ImportRejectReason = (typeof IMPORT_REJECT_REASONS)[number];
 
@@ -205,6 +310,20 @@ export const contactImportPreviewSchema = z.object({
   quota: importQuotaSchema,
   /** Larger than the synchronous limit: the import will run as a background job. */
   runsAsJob: z.boolean(),
+  /**
+   * What the consent column says, per valid row, when one is mapped (null: no column, so the confirmation covers every contact).
+   * `unrecognised` rows are shown so the person can fix the file; they are treated as not granted.
+   */
+  consent: z
+    .object({
+      granted: z.number().int(),
+      notGranted: z.number().int(),
+      unrecognised: z.number().int(),
+      /** Up to 5 values that are not yes or no, as written. */
+      unrecognisedSamples: z.array(z.string()),
+    })
+    .nullable()
+    .optional(),
 });
 export type ContactImportPreview = z.infer<typeof contactImportPreviewSchema>;
 
@@ -227,6 +346,8 @@ export const contactImportJobSchema = z.object({
   /** New contacts the plan's contact limit stopped. */
   limitExceeded: z.number().int(),
   error: z.string().nullable(),
+  /** Who started the import; null for a deleted user. */
+  createdBy: z.string().nullable(),
   startedAt: z.string().datetime().nullable(),
   finishedAt: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),
@@ -236,7 +357,10 @@ export type ContactImportJob = z.infer<typeof contactImportJobSchema>;
 export const listImportJobsQuerySchema = paginationQuerySchema;
 export type ListImportJobsQuery = z.infer<typeof listImportJobsQuerySchema>;
 
-/** Past exports of contacts (the audit trail keeps who, when and how many; the file itself is not kept). */
+/** Past exports of contacts: who, when and how many from the audit trail, plus the saved file while it is still kept. */
+/** How long a saved export stays downloadable. */
+export const EXPORT_KEEP_DAYS = 30;
+
 export const exportHistoryQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(50),
 });
@@ -249,6 +373,10 @@ export const exportHistoryItemSchema = z.object({
   rows: z.number().int(),
   /** `ids`: the rows ticked; `filter`: everything the filter matched ("select all N matching" or Export all). */
   selection: z.enum(['ids', 'filter']),
+  /** The saved file's id while it can still be downloaded (30 days, and only for exports made since files were kept). */
+  fileId: z.string().uuid().nullable(),
+  fileBytes: z.number().int().nullable(),
+  expiresAt: z.string().datetime().nullable(),
 });
 export type ExportHistoryItem = z.infer<typeof exportHistoryItemSchema>;
 

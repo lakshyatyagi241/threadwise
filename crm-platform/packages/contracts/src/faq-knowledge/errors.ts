@@ -11,6 +11,8 @@ export const FAQ_ERROR_CODES = {
   FAQ_DUPLICATE_QUESTION: 'FAQ_DUPLICATE_QUESTION',
   /** The flow an FAQ should start is not in this workspace. 422. */
   FAQ_FLOW_NOT_FOUND: 'FAQ_FLOW_NOT_FOUND',
+  /** The node an FAQ should start its flow at is not in that flow (any more). 422. */
+  FAQ_FLOW_NODE_NOT_FOUND: 'FAQ_FLOW_NODE_NOT_FOUND',
   /** No AI key resolves for the embedding provider, or the provider refused or timed out. 422 for a missing key, 502 otherwise. */
   FAQ_EMBEDDING_UNAVAILABLE: 'FAQ_EMBEDDING_UNAVAILABLE',
   /**

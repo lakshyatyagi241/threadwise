@@ -22,7 +22,6 @@
         "signedOut": "La sessione è terminata. Accedi di nuovo.",
         "rateLimited": "Troppi tentativi. Attendi un momento e riprova.",
         "rateLimitedWait": "Troppi tentativi. Riprova tra {seconds, plural, one {# secondo} other {# secondi}}.",
-        "requestId": "ID richiesta",
         "locked": "Troppi tentativi falliti. Attendi un po' prima di riprovare.",
         "lockedWait": "Troppi tentativi falliti. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Fuso orario",
         "workspaceTimezoneHint": "Si applica a {workspace}. Solo i proprietari e gli amministratori possono modificarlo.",
+        "myTimezone": "Il mio fuso orario",
+        "myTimezoneHint": "Date e orari ti vengono mostrati in {zone}. Lascia vuoto per seguire il fuso orario dell’area di lavoro (UTC se non ne ha uno).",
+        "myTimezoneUseWorkspace": "Usa quello dell’area di lavoro",
         "saved": "Profilo salvato.",
         "errors": {
           "fullNameRequired": "Inserisci il tuo nome completo.",
@@ -367,7 +369,8 @@
         "failed": "Impossibile cambiare workspace. Riprova.",
         "notAvailable": "Non puoi passare a questo workspace.",
         "rateLimited": "Troppi tentativi. Attendi un momento e riprova.",
-        "rateLimitedWait": "Troppi tentativi. Riprova tra {seconds, plural, one {# secondo} other {# secondi}}."
+        "rateLimitedWait": "Troppi tentativi. Riprova tra {seconds, plural, one {# secondo} other {# secondi}}.",
+        "unverified": "Verifica la tua email in questo spazio di lavoro per poter passare a esso."
       },
       "mfaChallenge": {
         "title": "Conferma la tua identità",
@@ -551,7 +554,10 @@
             "forms_and_links": "Moduli e link",
             "extra_channels": "Telegram, Facebook e Instagram",
             "form_builder": "Moduli",
-            "waba_groups": "Gruppi WhatsApp"
+            "waba_groups": "Gruppi WhatsApp",
+            "sms": "SMS",
+            "help_agent": "Assistente di aiuto",
+            "email_channel": "Canale e-mail (Gmail)"
           },
           "cta": {
             "continueFree": "Continua gratis",

@@ -1,0 +1,214 @@
+{
+  "sms": {
+    "common": {
+      "dismiss": "Kapat",
+      "close": "Kapat",
+      "cancel": "İptal"
+    },
+    "hub": {
+      "kicker": "Kanallar",
+      "title": "SMS",
+      "titleAccent": "gönderenleri",
+      "intro": "Kendi Twilio numaralarınızdan ve MSG91 gönderenlerinizden kısa mesaj gönderin. Buradaki SMS yalnızca gönderim içindir: kişilerinize toplu gönderimler ve kampanyalar üzerinden ulaşırsınız.",
+      "campaigns": "Kampanyalar",
+      "broadcasts": "Toplu gönderimler",
+      "channels": "Kanallar",
+      "loadError": "SMS numaralarınız yüklenemedi. Biraz sonra tekrar deneyin.",
+      "cardCaption": "Twilio · MSG91",
+      "activeCount": "{count, plural, one {# numara etkin} other {# numara etkin}}",
+      "notConnected": "Bağlı değil",
+      "howTitle": "Nasıl çalışır",
+      "how": {
+        "connect": {
+          "title": "Bir gönderen bağlayın",
+          "body": "Bir Twilio numarası veya MSG91 göndereni ekleyin. Kaydetmeden önce kimlik bilgilerini sağlayıcıyla doğrularız."
+        },
+        "report": {
+          "title": "Teslim raporu adresini yapıştırın",
+          "body": "MSG91 veya Twilio panelinize ekleyin; teslim edilen ve başarısız olan mesajlar raporlarınızda görünsün."
+        },
+        "send": {
+          "title": "Toplu gönderim ve kampanya gönderin",
+          "body": "Toplu gönderim veya kampanya oluştururken bu göndereni seçin. Her alıcı bir mesaj alır."
+        },
+        "billing": {
+          "title": "SMS kotanızdan düşer",
+          "body": "Mesajlar planınızın aylık SMS kotasından düşer ve WhatsApp cüzdanından asla ücret alınmaz."
+        }
+      },
+      "reportTitle": "Unutmayın: bunu sağlayıcınıza yapıştırın",
+      "reportBody": "Mesajları teslim edildi veya başarısız olarak işaretleyebilmemiz için bu teslim raporu adresini sağlayıcınızın paneline ekleyin.",
+      "reportLabel": "Teslim raporu URL’si",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "copyFailed": "Kopyalanamadı. Adresi seçip elle kopyalayın.",
+      "connectedTitle": "Bağlı numaralar",
+      "total": "Toplam {count}",
+      "empty": "Henüz bağlı bir SMS numarası yok.",
+      "connectFirst": "İlk numaranızı bağlayın"
+    },
+    "card": {
+      "active": "Etkin",
+      "inactive": "Etkin değil",
+      "rate": "Ücret / segment",
+      "dltSender": "DLT gönderen",
+      "dltTemplate": "DLT şablonu",
+      "alphanumeric": "Gönderen kimliği: tek yönlüdür ve her ülkede kabul edilmez.",
+      "activate": "Etkinleştir",
+      "deactivate": "Devre dışı bırak",
+      "remove": "Kaldır",
+      "removeTitle": "SMS numarasını kaldır",
+      "removeConfirm": "Bu SMS numarası kaldırılsın mı?",
+      "activated": "SMS numarası etkinleştirildi.",
+      "deactivated": "SMS numarası devre dışı bırakıldı.",
+      "removed": "SMS numarası kaldırıldı.",
+      "failed": "SMS numarası güncellenemedi. Tekrar deneyin.",
+      "changed": "Bu numara başka bir yerde değiştirildi. Liste yeniden yüklendi, tekrar deneyin.",
+      "notAvailable": "SMS planınızda yok veya kapatılmış.",
+      "cancel": "İptal"
+    },
+    "connect": {
+      "title": "Numara bağlayın",
+      "intro": "İhtiyacınız kadar ekleyin. Birden fazla Twilio numarası ve MSG91 göndereni aynı anda çalışabilir.",
+      "provider": "SMS sağlayıcısı",
+      "providerTwilio": "Twilio (global)",
+      "providerMsg91": "MSG91 (Hindistan / DLT)",
+      "providerHint": "Çoğu ülke için Twilio; Hindistan’a güvenilir teslimat için MSG91.",
+      "from": "Gönderen numara / Gönderen kimliği",
+      "fromPlaceholder": "+17372508034",
+      "fromHint": "Uluslararası biçimde bir numara (Twilio) veya kayıtlı gönderiniz (MSG91). Harflerden oluşan bir gönderen tek yönlüdür: yanıt alınamaz.",
+      "sid": "Twilio Hesap SID’si",
+      "sidPlaceholder": "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "sidHint": "Yalnızca Twilio. WhatsApp için zaten bağlı anahtarları yeniden kullanmak üzere boş bırakın.",
+      "token": "Auth Token / MSG91 Auth Key",
+      "tokenHint": "Şifrelenerek kaydedilir. Twilio için, WhatsApp için zaten bağlı anahtarları yeniden kullanmak üzere boş bırakın.",
+      "dltOptions": "MSG91 / Hindistan (DLT) seçenekleri",
+      "senderId": "DLT Gönderen Kimliği",
+      "senderIdPlaceholder": "ACMEIN",
+      "senderIdHint": "Yalnızca MSG91. DLT’ye kayıtlı 6 harfli göndereniniz.",
+      "dltTemplate": "DLT Şablon Kimliği",
+      "dltTemplateHint": "Yalnızca MSG91. Hindistan teslimatında kullanılan onaylı DLT şablon kimliği.",
+      "reportBoxTitle": "MSG91 paneli teslim raporları",
+      "reportBoxBody": "MSG91 panelinizde bu adresi teslim raporu (DLR) URL’si olarak yapıştırın:",
+      "rate": "Segment başına ücret",
+      "ratePlaceholder": "0.0075",
+      "rateHint": "Yalnızca SMS harcama raporlaması içindir. WhatsApp cüzdanından asla ücret alınmaz.",
+      "currency": "Para birimi",
+      "submit": "SMS’i doğrula ve bağla",
+      "submitting": "Doğrulanıyor…",
+      "errorTitle": "SMS numarası bağlanamadı:",
+      "providerError": "Sağlayıcı şunu bildirdi: {reason}",
+      "connected": "SMS numarası bağlandı. Artık göndermeye başlayabilirsiniz.",
+      "failed": "SMS numarası bağlanamadı. Tekrar deneyin.",
+      "errors": {
+        "fromRequired": "Gönderen numara alanı zorunludur.",
+        "fromTooLong": "Gönderen numara 32 karakterden uzun olamaz.",
+        "sidTooLong": "Hesap SID’si 64 karakterden uzun olamaz.",
+        "sidShape": "Bu bir Hesap SID’si değil. AC ile başlamalıdır; SK ile başlayan bir API anahtarı çalışmaz.",
+        "tokenRequired": "Bir MSG91 Auth Key gereklidir.",
+        "tokenTooLong": "Auth Token 255 karakterden uzun olamaz.",
+        "senderIdTooLong": "Gönderen kimliği 16 karakterden uzun olamaz.",
+        "dltTemplateTooLong": "DLT şablon kimliği 64 karakterden uzun olamaz.",
+        "rateInvalid": "Segment başına ücret sıfır veya daha büyük bir sayı olmalıdır.",
+        "currencyTooLong": "Para birimi 8 karakterden uzun olamaz."
+      },
+      "api": {
+        "notAvailable": "SMS planınızda yok veya platform tarafından kapatılmış.",
+        "unavailable": "Bu SMS numarasının bağlantısı kopmuş veya kimlik bilgisi yok. Önce yeniden bağlayın."
+      }
+    },
+    "lookup": {
+      "title": "Mesaj göndermeden önce numarayı kontrol edin",
+      "hint": "SMS, ulaştığında değil gönderildiğinde ücretlendirilir; bu yüzden göndermeden önce numaranın gerçek bir cep telefonu olduğunu kontrol edin.",
+      "label": "Telefon numarası",
+      "placeholder": "+1 555 123 4567",
+      "check": "Numarayı kontrol et",
+      "checking": "Kontrol ediliyor…",
+      "unreachable": "Sorgulama hizmetine ulaşılamadı.",
+      "carrier": "Operatör: {carrier}.",
+      "kind": {
+        "mobile": "Cep telefonu — SMS alabilir.",
+        "landline": "Sabit hat — SMS alamaz. Mesaj göndermek ücretlendirilir ve kaybolur.",
+        "voip": "VoIP — SMS’leri güvenilir şekilde alamayabilir.",
+        "invalid": "Geçerli bir numara değil — mesaj göndermek ücretlendirilir ve asla ulaşmaz."
+      }
+    },
+    "guide": {
+      "title": "Kurulum rehberi",
+      "twilio": {
+        "title": "Twilio (global)",
+        "p1": "Twilio konsolunun ana sayfasından Hesap SID’sini (AC ile başlar) ve Auth Token’ı kopyalayın. SK ile başlayan bir API anahtarı çalışmaz.",
+        "p2": "SMS destekli bir numara satın alın veya deneme numaranızı kullanın ve uluslararası biçimde Gönderen numara olarak yapıştırın.",
+        "p3": "Twilio numarasının ayarlarında, yukarıdaki teslim raporu adresini durum geri çağrı URL’si olarak yapıştırın.",
+        "p4": "Deneme hesapları yalnızca doğrulanmış numaralara mesaj gönderebilir ve özel metni reddeder."
+      },
+      "msg91": {
+        "title": "MSG91 (Hindistan / DLT)",
+        "p1": "Hint operatörleri yabancı uzun kodlu numaraları filtreler; bu yüzden Hindistan’a güvenilir teslimat için MSG91 kullanın.",
+        "p2": "MSG91 Auth Key’inizi Auth Token alanına yapıştırın.",
+        "p3": "DLT portalında 6 harfli bir gönderen kimliği ve bir mesaj şablonu kaydedin, ardından ikisini de DLT seçeneklerine yapıştırın.",
+        "p4": "DLT şablon kimliği varsa gönderen MSG91’in şablon yolunu kullanır; yoksa düz metin gönderir."
+      },
+      "billing": {
+        "title": "Segmentler, maliyet ve faturalama",
+        "p1": "160 düz karaktere kadar bir mesaj tek segmenttir (GSM-7). Tek bir emoji veya Latin olmayan karakter sınırı 70’e (UCS-2) düşürür ve maliyeti üç katına çıkarabilir.",
+        "p2": "Daha uzun mesajlar 153 karakterlik (UCS-2 ile 67) segmentlere bölünür ve her segment ücretlendirilir.",
+        "p3": "Girdiğiniz ücret yalnızca harcama raporlaması içindir. Mesajlar planınızın aylık SMS kotasıyla ölçülür, WhatsApp cüzdanıyla asla.",
+        "p4": "Harflerden oluşan bir gönderen kimliği tek yönlüdür ve her ülkede kabul edilmez; örneğin ABD ve Kanada."
+      }
+    },
+    "segments": {
+      "summary": "{units} karakter · {segments, plural, one {# segment} other {# segment}} · {encoding}",
+      "remaining": "Bu segmentte {remaining} karakter kaldı",
+      "ucs2": "Bu mesaj GSM alfabesi dışında karakterler (emoji veya Latin olmayan yazı) içeriyor; bu yüzden SMS başına {perSegment} karakterle sınırlıdır ve {segments} mesaj olarak ücretlendirilecektir.",
+      "gsm": "Bu mesaj {units} karakterdir ve {segments} mesaj olarak ücretlendirilecektir."
+    },
+    "compose": {
+      "note": "SMS yalnızca düz metin gönderir. Üst bilgi, alt bilgi, ek, düğmeler ve bölünmüş test kullanılmaz, bu yüzden gizlenir.",
+      "bodyHint": "Kısa tutun: her 160 karakter bir segment daha demektir ve her segment ücretlendirilir."
+    },
+    "chooser": {
+      "name": "SMS",
+      "hint": "Kişilerinize bir Twilio numarasından veya MSG91 gönderenden mesaj gönderin.",
+      "cta": "SMS kampanyası oluştur"
+    },
+    "operator": {
+      "nav": {
+        "group": "Kanallar",
+        "item": "SMS"
+      },
+      "title": "SMS kanalı",
+      "eyebrow": "platform anahtarı",
+      "superOnly": "SMS anahtarını yalnızca süper yönetici değiştirebilir. Durumunu görebilirsiniz.",
+      "loading": "Yükleniyor",
+      "retry": "Tekrar dene",
+      "status": {
+        "enabled": "Açık",
+        "disabled": "Kapalı"
+      },
+      "explanation": "SMS kanalını tüm çalışma alanları için açar veya kapatır. Yalnızca giriş noktalarını (SMS menüsü, gönderen seçicileri ve SMS şablon kanalı) gösterir veya gizler. Gönderenler, şablonlar ve devam eden gönderimler asla silinmez veya durdurulmaz.",
+      "state": {
+        "enabled": "SMS açık. Planında SMS bulunan çalışma alanları gönderen bağlayabilir ve toplu gönderimler ile kampanyalardan kısa mesaj gönderebilir.",
+        "disabled": "SMS kapalı. Çalışma alanları SMS menüsünü, gönderen seçicilerini ve SMS şablonlarını görmez. Kanalı sunmaya hazır olduğunuzda açın."
+      },
+      "enable": "SMS'i aç",
+      "disable": "SMS'i kapat",
+      "cancel": "İptal",
+      "enabledToast": "SMS artık platform için açık.",
+      "disabledToast": "SMS artık platform için kapalı.",
+      "disableDialog": {
+        "title": "SMS kapatılsın mı?",
+        "body": "Tüm çalışma alanları SMS menüsünü, gönderen seçicilerini ve SMS şablonlarını hemen görmeyi bırakır. Hiçbir şey silinmez ve mevcut gönderenler çalışmaya devam eder. İstediğiniz zaman yeniden açabilirsiniz.",
+        "confirm": "SMS'i kapat"
+      },
+      "errors": {
+        "forbidden": "Bunu yapmaya izniniz yok.",
+        "conflict": "Başka biri bu ayarı değiştirdi. Sayfa yenilendi; tekrar deneyin.",
+        "validation": "Değeri kontrol edip tekrar deneyin.",
+        "request": "Bu istek tamamlanamadı.",
+        "unexpected": "Bizim tarafımızda bir sorun oluştu. Birazdan tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edin."
+      }
+    }
+  }
+}

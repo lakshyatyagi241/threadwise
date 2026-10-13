@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "הגעתם למגבלת התוכנית שלכם.",
       "WA_UNOFFICIAL_DISABLED": "שליחה דרך מספרי וואטסאפ אישיים (API לא רשמי) אינה מופעלת בסביבת העבודה שלכם. בחרו מספר רשמי של WhatsApp Business API.",
       "AUTH_SEND_HALTED": "השליחה מושהית עבור סביבת העבודה הזו.",
-      "upgrade": "צפייה בתוכניות ושדרוג",
-      "requestId": "בקשה {id}"
+      "upgrade": "צפייה בתוכניות ושדרוג"
     },
     "actions": {
       "done": {

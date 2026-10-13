@@ -7,7 +7,6 @@
     "common": {
       "loading": "Đang tải",
       "retry": "Thử lại",
-      "requestId": "Mã yêu cầu",
       "dash": "-",
       "errors": {
         "forbidden": "Bạn không có quyền thực hiện việc này.",

@@ -37,7 +37,11 @@ export class FaqGenerateService {
     @Inject(FAQ_AI_PORT) private readonly ai: FaqAiPort,
   ) {}
 
-  async suggest(uuid: string, input: GenerateFaqVariationsInput): Promise<FaqGenerateResult> {
+  async suggest(
+    flowUuid: string,
+    uuid: string,
+    input: GenerateFaqVariationsInput,
+  ): Promise<FaqGenerateResult> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     if (!cfg.engineEnabled) {
@@ -48,7 +52,8 @@ export class FaqGenerateService {
       );
     }
     const { faq, existing } = await this.db.tx(async (tx) => {
-      const row = await this.repo.findByUuid(tx, orgId, uuid, cfg.embeddingModel);
+      const owner = await this.repo.requireFlow(tx, orgId, flowUuid);
+      const row = await this.repo.findByUuid(tx, orgId, owner.id, uuid, cfg.embeddingModel);
       if (!row) throw AppError.notFound('FAQ', uuid);
       const vars = await this.repo.listVariations(tx, orgId, row.id, cfg.embeddingModel);
       return { faq: row, existing: vars.map((v) => v.text) };

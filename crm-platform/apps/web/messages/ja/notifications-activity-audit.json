@@ -149,6 +149,16 @@
         "title": "{name}が再び有効になりました",
         "titleNoName": "WhatsAppグループが再び有効になりました",
         "body": "WhatsAppによってこのグループが復旧されました。再びメッセージを送信できます。"
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, other {#人が{name}への参加を希望しています}}",
+        "titleNoName": "{count, plural, other {#人がWhatsAppグループへの参加を希望しています}}",
+        "body": "グループを開いて承認または拒否してください。"
+      },
+      "device_group_removed": {
+        "title": "あなたの番号が{name}から削除されました",
+        "titleNoName": "あなたの番号がWhatsAppグループから削除されました",
+        "body": "誰かがこのグループからあなたの個人番号を削除しました。グループは読み取り専用でここに保存されています。"
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "新しいダイレクトメッセージ",
         "waba_group_join_request": "グループへの参加リクエスト",
         "waba_group_suspended": "WhatsAppグループ停止",
-        "waba_group_suspension_cleared": "WhatsAppグループ再開"
+        "waba_group_suspension_cleared": "WhatsAppグループ再開",
+        "device_group_join_request": "グループへの参加リクエスト",
+        "device_group_removed": "WhatsAppグループから削除されました"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "WhatsApp番号",
         "broadcasts": "一斉送信とキャンペーン",
         "team_chat": "チームチャット",
-        "whatsapp_groups": "WhatsAppグループ"
+        "whatsapp_groups": "WhatsAppグループ",
+        "billing": "請求とサブスクリプション"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "販売書類の結果が決定",
           "hint": "見積書または請求書が承認または辞退されたとき。"
         },
+        "email_bounced": {
+          "label": "メールが配信されませんでした",
+          "hint": "送信したメールが返送されたか、配信が遅れています。"
+        },
         "wallet_credited": {
           "label": "ウォレットにチャージ",
           "hint": "ワークスペースのウォレットに入金されたとき。"
@@ -313,6 +330,34 @@
         "waba_group_suspension_cleared": {
           "label": "グループ再開",
           "hint": "WhatsAppが停止していたグループを復旧しました。停止の通知を受け取っていた場合のみ表示されます。"
+        },
+        "form_payment": {
+          "label": "フォームの支払いを受領",
+          "hint": "訪問者がいずれかのフォームで支払いました。"
+        },
+        "form_payment_duplicate": {
+          "label": "フォームの二重支払い",
+          "hint": "訪問者が2回支払ったため、追加分の返金が必要です。"
+        },
+        "billing_payment_failed": {
+          "label": "サブスクリプションの支払いに失敗しました",
+          "hint": "更新の請求が完了しませんでした。ご確認ください。"
+        },
+        "billing_subscription_canceled": {
+          "label": "サブスクリプションがキャンセルされました",
+          "hint": "決済プロバイダーがこのワークスペースのサブスクリプションを終了しました。"
+        },
+        "device_group_join_request": {
+          "label": "個人番号グループへの参加リクエスト",
+          "hint": "あなたが管理している個人WhatsApp番号のグループに、参加を希望する人がいます。10件のリクエストで1行にまとめられます。"
+        },
+        "device_group_removed": {
+          "label": "個人番号グループから削除されました",
+          "hint": "誰かがあなたの個人WhatsApp番号をグループから削除しました。番号が通報された兆候の可能性があります。"
+        },
+        "sla_breached": {
+          "label": "SLA違反",
+          "hint": "あなたが担当する会話が、初回返信または解決の目標を達成できませんでした。"
         }
       },
       "loading": "設定を読み込み中",

@@ -19,7 +19,6 @@
       "optional": "optional",
       "required": "erforderlich",
       "readOnly": "Sie können diese Seite ansehen, aber nur ein Super-Admin kann sie ändern.",
-      "requestId": "Anfrage-ID",
       "errors": {
         "forbidden": "Sie haben keinen Zugriff auf diese Seite.",
         "request": "Die Anfrage konnte nicht abgeschlossen werden.",

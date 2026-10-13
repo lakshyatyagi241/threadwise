@@ -42,6 +42,8 @@ const overview = (pending: number) => ({
     matches30d: 0,
     answered30d: 0,
     embeddingTokens30d: 0,
+    verified30d: 0,
+    vetoed30d: 0,
   },
 });
 
@@ -105,6 +107,67 @@ describe('diffConfig', () => {
       expect(ok(min - 1)).toBe(false);
       expect(ok(max + 1)).toBe(false);
     }
+  });
+});
+
+describe('diffConfig: the second check', () => {
+  it('starts from the saved switch, model and hourly cap', () => {
+    expect(draftFromConfig(config)).toMatchObject({
+      verifyEnabled: FAQ_PLATFORM_DEFAULTS.verifyEnabled,
+      verifyModel: FAQ_PLATFORM_DEFAULTS.verifyModel,
+      verifyPerHour: String(FAQ_PLATFORM_DEFAULTS.verifyPerHour),
+    });
+    expect(diffConfig(config, draftFromConfig(config)).changed).toEqual([]);
+  });
+  it('sends the switch, the trimmed model and the cap, and only those', () => {
+    const r = diffConfig(config, {
+      ...draftFromConfig(config),
+      verifyEnabled: false,
+      verifyModel: ' openai/gpt-4o ',
+      verifyPerHour: '50',
+    });
+    expect(r.ok && r.body).toEqual({
+      verifyEnabled: false,
+      verifyModel: 'openai/gpt-4o',
+      verifyPerHour: 50,
+    });
+    expect(r.changed.sort()).toEqual(['verifyEnabled', 'verifyModel', 'verifyPerHour']);
+  });
+  it('accepts 0 (never check) and the top of the range, and refuses beyond either edge', () => {
+    const at = (verifyPerHour: string) =>
+      diffConfig(config, { ...draftFromConfig(config), verifyPerHour });
+    expect(at('0').ok && (at('0') as { body: unknown }).body).toEqual({ verifyPerHour: 0 });
+    expect(at('100000').ok).toBe(true);
+    const over = at('100001');
+    expect(!over.ok && over.errors.verifyPerHour).toEqual({
+      kind: 'range',
+      ...LIMIT_RANGES.verifyPerHour,
+    });
+    const text = at('-1');
+    expect(!text.ok && text.errors.verifyPerHour).toEqual({ kind: 'integer' });
+    const frac = at('2.5');
+    expect(!frac.ok && frac.errors.verifyPerHour).toEqual({ kind: 'integer' });
+  });
+  it('validates the model slug like the generation model', () => {
+    for (const bad of ['not a model!', 'ab', '']) {
+      const r = diffConfig(config, { ...draftFromConfig(config), verifyModel: bad });
+      expect(!r.ok && r.errors.verifyModel).toEqual({ kind: 'modelId' });
+    }
+    const good = diffConfig(config, {
+      ...draftFromConfig(config),
+      verifyModel: 'google/gemini-2.5-flash:free',
+    });
+    expect(good.ok && good.body).toEqual({ verifyModel: 'google/gemini-2.5-flash:free' });
+  });
+  it('maps server problems on the new fields onto them', () => {
+    const e = new ApiError(422, ERROR_CODES.VALIDATION_FAILED, 'x', 'req-1', [
+      { path: 'verifyModel', message: 'a' },
+      { path: 'verifyPerHour', message: 'b' },
+    ]);
+    expect(fieldErrorsFromApi(e)).toEqual({
+      verifyModel: { kind: 'invalid' },
+      verifyPerHour: { kind: 'invalid' },
+    });
   });
 });
 

@@ -17,7 +17,6 @@
       "delete": "Sil",
       "edit": "Düzenle",
       "loadMore": "Daha fazla yükle",
-      "requestId": "İstek kimliği",
       "errors": {
         "forbidden": "Bunu yalnızca süper yönetici değiştirebilir.",
         "conflict": "Düzenlerken başka biri bunu değiştirdi. Yeniden yükleyip tekrar deneyin.",

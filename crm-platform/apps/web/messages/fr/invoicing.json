@@ -40,7 +40,6 @@
       "planDisabled": "Votre offre ne comprend pas la facturation.",
       "invalidState": "Action impossible dans l’état actuel de la facture. Rechargez la page et vérifiez son statut.",
       "unexpected": "Une erreur s’est produite de notre côté. Réessayez.",
-      "requestId": "Identifiant de requête",
       "retry": "Réessayer"
     },
     "picker": {

@@ -10,7 +10,6 @@
     },
     "common": {
       "dismiss": "Bỏ qua",
-      "requestId": "Yêu cầu {id}",
       "unofficial": "Không chính thức",
       "reminder": "Kết nối không chính thức. WhatsApp có thể hạn chế số này.",
       "readGuide": "Đọc hướng dẫn",
@@ -296,7 +295,6 @@
       "WA_WORKER_UNAVAILABLE": "Dịch vụ kết nối hiện không khả dụng. Thử lại sau vài phút.",
       "RATE_LIMITED": "Quá nhiều yêu cầu. Vui lòng đợi một lát.",
       "upgrade": "Xem các gói và nâng cấp",
-      "requestId": "Yêu cầu {id}",
       "DEVICE_PILOT_CAP_REACHED": "Không gian làm việc của bạn đã đạt số lượng số WhatsApp cá nhân được phép trong giai đoạn thử nghiệm. Xóa một số để kết nối số khác.",
       "DEVICE_CREATE_RATE_LIMITED": "Đã thêm quá nhiều số trong giờ vừa qua. Thử lại sau.",
       "DEVICE_CREATE_RATE_LIMITED_WAIT": "Đã thêm quá nhiều số trong giờ vừa qua. Thử lại sau {minutes, plural, other {# phút}}.",

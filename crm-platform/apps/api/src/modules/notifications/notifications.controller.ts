@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -76,6 +77,15 @@ export class NotificationsController {
     return this.preferences.update(body);
   }
 
+  @Get('summary')
+  @ApiOperation({
+    summary:
+      'The numbers around the Notifications page: unread, last 24 hours, last 7 days, count per type',
+  })
+  async summary() {
+    return this.notifications.summary();
+  }
+
   @Post('read-all')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -95,6 +105,15 @@ export class NotificationsController {
   })
   async markSubjectRead(@Body(zodPipe(readSubjectRequestSchema)) body: ReadSubjectRequest) {
     return this.notifications.markSubjectRead(body);
+  }
+
+  @Delete(':id')
+  @ApiOperation({
+    summary: 'Dismiss one of my notifications',
+    description: "Removes it for good. Someone else's notification, or an unknown id, is 404.",
+  })
+  async dismiss(@Param('id', ParseUUIDPipe) id: string) {
+    return this.notifications.dismiss(id);
   }
 
   @Post(':id/read')

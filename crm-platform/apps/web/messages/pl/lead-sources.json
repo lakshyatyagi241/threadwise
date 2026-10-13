@@ -376,8 +376,7 @@
       "loading": "Wczytywanie",
       "retry": "Spróbuj ponownie",
       "copied": "Skopiowano",
-      "copyFailed": "Nie udało się skopiować: zaznacz tekst i skopiuj go ręcznie",
-      "requestId": "Referencja: {id}"
+      "copyFailed": "Nie udało się skopiować: zaznacz tekst i skopiuj go ręcznie"
     },
     "states": {
       "noAccessTitle": "Nie masz dostępu do leadów z mediów społecznościowych",

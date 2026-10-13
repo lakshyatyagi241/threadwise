@@ -83,6 +83,12 @@ export function CountPanel({
                 <dt>{t('optedOut')}</dt>
                 <dd className="tabular-nums">{about(data.optedOut, data.approximate)}</dd>
               </div>
+              {data.noConsent > 0 && (
+                <div className="flex justify-between gap-3 text-muted-foreground">
+                  <dt>{t('noConsent')}</dt>
+                  <dd className="tabular-nums">{about(data.noConsent, data.approximate)}</dd>
+                </div>
+              )}
               <div className="flex justify-between gap-3 text-muted-foreground">
                 <dt>{t('invalidNumbers')}</dt>
                 <dd className="tabular-nums">{about(data.invalidNumber, data.approximate)}</dd>

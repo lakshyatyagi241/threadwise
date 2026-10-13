@@ -148,7 +148,10 @@
         "required": "Must be ticked to submit",
         "requiredHint": "Turn this off if consent is optional.",
         "marketing": "Marketing opt-in",
-        "marketingHint": "Ticking the box records marketing consent on the contact. An unticked box never subscribes anyone."
+        "marketingHint": "Ticking the box records marketing consent on the contact. An unticked box never subscribes anyone.",
+        "whatsappHint": "Will you message these contacts on WhatsApp? Use wording that says so and how to stop. The ticked box is kept as proof, with this exact text and its version.",
+        "whatsappInsert": "Use the WhatsApp opt-in wording",
+        "whatsappWording": "I agree to receive updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe."
       },
       "crm": {
         "title": "In the CRM",
@@ -253,8 +256,8 @@
           "off": "Off"
         },
         "captchaHints": {
-          "inherit": "Uses whatever your workspace has set for public forms.",
-          "on": "Visitors must pass the check before they can submit.",
+          "inherit": "Uses the CAPTCHA your platform administrator has set up for public forms, if there is one.",
+          "on": "Visitors must pass the check before they can submit. Needs a CAPTCHA set up on the platform, and publishing is refused without one.",
           "off": "No check. Rely on the hidden trap field and the rate limits."
         },
         "retention": "Keep answers for (days)",
@@ -271,6 +274,17 @@
           "perFormPerMinuteHint": "Submissions to this form from anywhere.",
           "perContactPerHour": "Per contact, per hour",
           "perContactPerHourHint": "Submissions with the same email or phone number."
+        },
+        "captchaStatus": {
+          "available": "A CAPTCHA is set up on this platform (reCAPTCHA {version}).",
+          "none": "No CAPTCHA is set up on this platform, so nothing is checked here. Ask your platform administrator to add one, or rely on the hidden trap field and the rate limits.",
+          "noneOn": "This form is set to always check, but the platform has no CAPTCHA, so it checks nothing and cannot be published. Ask your platform administrator to add one, or choose another setting.",
+          "failed": "Could not check whether a CAPTCHA is set up."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {The hidden trap field has not stopped any bots this month.} one {The hidden trap field stopped 1 bot this month.} other {The hidden trap field stopped # bots this month.}}",
+          "held": "{count, plural, one {1 submission is held as spam.} other {# submissions are held as spam.}}",
+          "review": "Review them"
         }
       }
     }

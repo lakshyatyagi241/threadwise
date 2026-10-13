@@ -22,7 +22,6 @@
         "signedOut": "เซสชันของคุณสิ้นสุดแล้ว โปรดลงชื่อเข้าใช้อีกครั้ง",
         "rateLimited": "พยายามมากเกินไป โปรดรอสักครู่แล้วลองอีกครั้ง",
         "rateLimitedWait": "พยายามมากเกินไป ลองอีกครั้งใน {seconds, plural, other {# วินาที}}",
-        "requestId": "รหัสคำขอ",
         "locked": "ล้มเหลวหลายครั้งเกินไป โปรดรอสักครู่ก่อนลองอีกครั้ง",
         "lockedWait": "ล้มเหลวหลายครั้งเกินไป ลองอีกครั้งใน {minutes, plural, other {# นาที}}"
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "เขตเวลา",
         "workspaceTimezoneHint": "ใช้กับ {workspace} เฉพาะเจ้าของและผู้ดูแลระบบเท่านั้นที่เปลี่ยนได้",
+        "myTimezone": "เขตเวลาของฉัน",
+        "myTimezoneHint": "วันที่และเวลาจะแสดงให้คุณตามเขตเวลา {zone} เว้นว่างไว้เพื่อใช้เขตเวลาของพื้นที่ทำงาน (ใช้ UTC หากพื้นที่ทำงานไม่ได้ตั้งค่าไว้)",
+        "myTimezoneUseWorkspace": "ใช้ค่าเริ่มต้นของพื้นที่ทำงาน",
         "saved": "บันทึกโปรไฟล์แล้ว",
         "errors": {
           "fullNameRequired": "ป้อนชื่อ-นามสกุลของคุณ",
@@ -367,7 +369,8 @@
         "failed": "ไม่สามารถสลับเวิร์กสเปซได้ โปรดลองอีกครั้ง",
         "notAvailable": "คุณไม่สามารถสลับไปยังเวิร์กสเปซนั้นได้",
         "rateLimited": "พยายามหลายครั้งเกินไป โปรดรอสักครู่แล้วลองอีกครั้ง",
-        "rateLimitedWait": "พยายามหลายครั้งเกินไป ลองอีกครั้งใน {seconds, plural, other {# วินาที}}"
+        "rateLimitedWait": "พยายามหลายครั้งเกินไป ลองอีกครั้งใน {seconds, plural, other {# วินาที}}",
+        "unverified": "ยืนยันอีเมลของคุณในเวิร์กสเปซนี้ก่อนจึงจะสลับไปได้"
       },
       "mfaChallenge": {
         "title": "ยืนยันว่าเป็นคุณ",
@@ -551,7 +554,10 @@
             "forms_and_links": "แบบฟอร์มและลิงก์",
             "extra_channels": "Telegram, Facebook และ Instagram",
             "form_builder": "แบบฟอร์ม",
-            "waba_groups": "กลุ่ม WhatsApp"
+            "waba_groups": "กลุ่ม WhatsApp",
+            "sms": "SMS",
+            "help_agent": "ผู้ช่วยด้านความช่วยเหลือ",
+            "email_channel": "ช่องทางอีเมล (Gmail)"
           },
           "cta": {
             "continueFree": "ใช้ฟรีต่อ",

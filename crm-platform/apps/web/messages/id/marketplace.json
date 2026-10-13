@@ -10,13 +10,13 @@
       "install": "Pasang · Marketplace",
       "installed": "Terpasang · Marketplace",
       "manage": "Kelola aplikasi · Marketplace",
-      "requests": "Permintaan · Marketplace"
+      "requests": "Permintaan · Marketplace",
+      "addons": "Pengaya · Marketplace"
     },
     "common": {
       "dismiss": "Tutup",
       "loading": "Memuat",
       "errorTitle": "Tidak dapat memuat ini",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "upgrade": "Lihat paket dan tingkatkan",
       "opensNewTab": "(dibuka di tab baru)",
@@ -124,7 +124,8 @@
       "moreLabel": "Terpasang dan permintaan",
       "tabs": {
         "mini_app": "Aplikasi mini",
-        "integration": "Integrasi"
+        "integration": "Integrasi",
+        "addon": "Pengaya"
       },
       "installed": "Terpasang",
       "installedLimit": "Terpasang ({installed} dari {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "Memproses",
       "noCheckout": "Checkout untuk aplikasi ini sedang tidak tersedia. Coba lagi sebentar lagi."
+    },
+    "tools": {
+      "open": "Buka",
+      "empty": {
+        "title": "Tidak ada pengaya tersedia",
+        "message": "Pengaya yang disertakan peran dan paket Anda akan muncul di sini."
+      },
+      "soon": "Segera hadir",
+      "upgrade": "Tingkatkan"
     }
   }
 }

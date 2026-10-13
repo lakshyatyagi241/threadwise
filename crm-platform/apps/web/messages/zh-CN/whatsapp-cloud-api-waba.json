@@ -7,7 +7,6 @@
       "dismiss": "关闭",
       "cancel": "取消",
       "close": "关闭",
-      "requestId": "请求 {id}",
       "unknown": "—"
     },
     "numbers": {
@@ -34,7 +33,8 @@
         "registered": "已在 Cloud API 上注册 \"{name}\"。",
         "disconnected": "已断开 \"{name}\"。",
         "removed": "已删除 \"{name}\"。",
-        "warningsTitle": "已连接，但请检查以下内容："
+        "warningsTitle": "已连接，但请检查以下内容：",
+        "verified": "已验证“{name}”。"
       },
       "notReady": {
         "title": "未配置嵌入式注册",
@@ -81,7 +81,8 @@
         "register": "注册",
         "meta": "Meta",
         "disconnect": "断开连接",
-        "remove": "移除"
+        "remove": "移除",
+        "verify": "验证号码"
       },
       "confirm": {
         "fixInboundTitle": "修复入站？",
@@ -100,6 +101,17 @@
         "pin": "两步验证 PIN（可选）",
         "pinError": "PIN 为 6 位数字",
         "submit": "注册"
+      },
+      "verifyDialog": {
+        "title": "验证此号码",
+        "message": "Meta 将向 {phone} 发送 6 位验证码，请选择接收方式。",
+        "enterCode": "请输入 Meta 发送到 {phone} 的 6 位验证码。",
+        "sendSms": "通过短信发送验证码",
+        "sendVoice": "通过电话发送验证码",
+        "code": "验证码",
+        "codeError": "验证码为 6 位数字",
+        "submit": "验证",
+        "resend": "重新发送验证码"
       }
     },
     "connect": {

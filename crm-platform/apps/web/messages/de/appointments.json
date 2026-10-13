@@ -36,7 +36,6 @@
       "slotTaken": "Dieser Zeitpunkt wurde gerade vergeben. Bitte wählen Sie einen anderen.",
       "gone": "Diese Buchung kann nicht mehr geändert werden.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen",
       "invalidTransition": "Diese Buchung befindet sich nicht in einem Zustand, in dem dies möglich ist. Laden Sie neu, um den aktuellen Stand zu sehen.",
       "notStarted": "Dies ist erst möglich, nachdem die Buchung begonnen hat.",

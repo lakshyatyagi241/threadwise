@@ -5,8 +5,7 @@
       "loading": "Laden",
       "retry": "Opnieuw proberen",
       "copied": "Gekopieerd",
-      "copyFailed": "Kopiëren mislukt: selecteer de tekst en kopieer hem met de hand",
-      "requestId": "Referentie: {id}"
+      "copyFailed": "Kopiëren mislukt: selecteer de tekst en kopieer hem met de hand"
     },
     "states": {
       "noAccessTitle": "Je hebt geen toegang tot Social leads",

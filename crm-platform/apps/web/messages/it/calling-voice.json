@@ -3,7 +3,8 @@
     "nav": {
       "title": "Chiamate",
       "description": "Attiva o disattiva le chiamate WhatsApp per ogni numero.",
-      "keywords": "chiamata, chiamate, voce, telefono, chiamate whatsapp, pulsante chiamata"
+      "keywords": "chiamata, chiamate, voce, telefono, chiamate whatsapp, pulsante chiamata",
+      "callLogs": "Registro chiamate"
     },
     "common": {
       "dismiss": "Chiudi"
@@ -25,7 +26,7 @@
     "toast": {
       "noPhone": "Nessun numero di telefono per questo contatto.",
       "noNumber": "Le chiamate non sono abilitate su nessun numero WABA.",
-      "alreadyPermitted": "Questo contatto consente già le chiamate: avvio della chiamata in corso...",
+      "alreadyPermitted": "Questo contatto consente già le chiamate. Premi Chiama per avviare la chiamata.",
       "permissionSent": "Richiesta di autorizzazione inviata. Vedrà Accetta/Rifiuta in WhatsApp: riprova a chiamare dopo la sua risposta.",
       "permissionFailed": "Impossibile inviare la richiesta di autorizzazione: {message}",
       "startFailed": "Impossibile avviare la chiamata: {message}",
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Non hai l'autorizzazione a usare le chiamate.",
       "PLAN_FEATURE_LOCKED": "Il tuo piano non include le chiamate WhatsApp.",
       "NETWORK": "Errore di rete: riprova.",
-      "UNEXPECTED": "Qualcosa è andato storto. Riprova."
+      "UNEXPECTED": "Qualcosa è andato storto. Riprova.",
+      "CALL_PLAYBACK_LINK_INVALID": "Questo link della registrazione è scaduto. Premi di nuovo riproduci per ottenerne uno nuovo.",
+      "CALL_RANGE_INVALID": "Queste date non sono valide: l'inizio non può essere successivo alla fine, un intervallo può coprire al massimo un anno e il fuso orario deve essere reale."
     },
     "settings": {
       "title": "Chiamate",

@@ -8,6 +8,13 @@ import {
   type ScheduleSummary,
 } from '@crm/contracts';
 import {
+  TEMPLATE_DIRECTORY,
+  effectiveCategory,
+  templateEngine,
+  type TemplateDirectory,
+} from '../broadcasts';
+import { ScheduleMediaService } from './schedule-media.service';
+import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
@@ -66,6 +73,8 @@ export class ScheduleReadService {
   constructor(
     private readonly db: DatabaseService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
+    @Inject(TEMPLATE_DIRECTORY) private readonly templateDir: TemplateDirectory,
+    private readonly media: ScheduleMediaService,
   ) {}
 
   async list(q: ListSchedulesQuery): Promise<ScheduleList> {
@@ -130,8 +139,12 @@ export class ScheduleReadService {
       const res = await tx.execute(sql`
         SELECT ${SELECT}, m.id, m.message_content, m.media_file, m.latitude, m.longitude, m.repeat_every, m.days_of_week,
                to_char(m.end_date, 'YYYY-MM-DD') AS end_date, to_char(m.send_date, 'YYYY-MM-DD') AS send_date, m.send_time,
-               m.failure_reason, m.send_attempts
-          FROM scheduled_messages m WHERE m.org_id = ${orgId} AND m.uuid = ${uuid}::uuid`);
+               m.failure_reason, m.send_attempts, t.uuid AS template_uuid, t.template_name, t.language AS template_language,
+               (m.status IN ('scheduled', 'paused') AND (m.schedule_type = 'recurring' OR NOT EXISTS (
+                  SELECT 1 FROM scheduled_message_contacts x
+                   WHERE x.org_id = m.org_id AND x.scheduled_message_id = m.id AND x.status <> 'pending'))) AS editable
+          FROM scheduled_messages m LEFT JOIN wa_templates t ON t.org_id = m.org_id AND t.id = m.template_id
+         WHERE m.org_id = ${orgId} AND m.uuid = ${uuid}::uuid`);
       const r = res.rows[0] as Raw | undefined;
       if (!r) throw AppError.notFound('Schedule', uuid);
       const labels = await this.labels(tx, orgId, [r]);
@@ -147,7 +160,8 @@ export class ScheduleReadService {
       return {
         ...summary(r, labels.get(`${r.provider}:${r.device_id}`) ?? null),
         message: (r.message_content as string | null) ?? null,
-        media: (r.media_file as string | null) ?? null,
+        // A pasted link is shown as typed; an uploaded file is described by `mediaFile`, never by its storage key.
+        media: /^https?:\/\//i.test(String(r.media_file ?? '')) ? (r.media_file as string) : null,
         latitude: r.latitude === null ? null : Number(r.latitude),
         longitude: r.longitude === null ? null : Number(r.longitude),
         repeatEvery: num(r.repeat_every) || 1,
@@ -170,6 +184,15 @@ export class ScheduleReadService {
           readAt: iso(p.read_at),
         })),
         recipientsTruncated: (people.rows as Raw[]).length > RECIPIENT_PREVIEW,
+        template: r.template_uuid
+          ? {
+              id: String(r.template_uuid),
+              name: String(r.template_name),
+              language: String(r.template_language ?? ''),
+            }
+          : null,
+        mediaFile: await this.media.describe(tx, orgId, (r.media_file as string | null) ?? null),
+        editable: Boolean(r.editable),
       };
     });
   }
@@ -200,9 +223,15 @@ export class ScheduleReadService {
           FROM broadcasts b LEFT JOIN broadcast_contacts bc ON bc.org_id = b.org_id AND bc.broadcast_id = b.id
          WHERE b.org_id = ${orgId} AND b.status IN ('completed', 'completed_with_errors')
          GROUP BY b.id, b.uuid, b.name ORDER BY b.id DESC LIMIT 100`);
+      // An authentication (OTP) template needs a unique code per person, so it can never be scheduled and is not offered.
       const templates = await tx.execute(sql`
-        SELECT uuid, template_name AS name, language FROM wa_templates
-         WHERE org_id = ${orgId} ORDER BY template_name LIMIT 200`);
+        SELECT t.uuid, t.template_name, t.header, t.template_body, t.footer, t.category, t.meta_category, t.template_type, t.language,
+               t.buttons, t.variable_map, t.attachment_type, t.attachment_file, t.twilio_content_sid, t.meta_template_id, t.meta_status,
+               t.status, (t.paused_until IS NOT NULL AND t.paused_until > now()) AS paused, t.provider_config_id, t.channel,
+               c.uuid AS config_uuid, c.status AS config_status, coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
+          FROM wa_templates t LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
+         WHERE t.org_id = ${orgId} AND coalesce(t.channel, 'waba') <> 'sms' AND t.template_type <> 'auth'
+         ORDER BY t.template_name LIMIT 300`);
       return {
         senders: [
           ...(devices.rows as Raw[]).map((d) => ({
@@ -235,11 +264,44 @@ export class ScheduleReadService {
           name: String(b.name ?? ''),
           recipients: num(b.recipients),
         })),
-        templates: (templates.rows as Raw[]).map((t) => ({
-          id: String(t.uuid),
-          name: String(t.name),
-          language: String(t.language ?? ''),
-        })),
+        templates: (templates.rows as Raw[]).map((t) => {
+          const connected = t.provider_config_id === null || t.config_status === 'connected';
+          const meta =
+            Boolean(t.meta_template_id) && t.meta_status === 'APPROVED' && !t.paused && connected;
+          const local = t.status === 'approved' || t.status === 'public';
+          return {
+            id: String(t.uuid),
+            name: String(t.template_name),
+            header: (t.header as string | null) ?? null,
+            body: String(t.template_body ?? ''),
+            footer: (t.footer as string | null) ?? null,
+            category: effectiveCategory(
+              t.meta_category as string | null,
+              t.category as string | null,
+            ),
+            type: String(t.template_type ?? ''),
+            engine: templateEngine({
+              channel: t.channel as string | null,
+              twilio_content_sid: t.twilio_content_sid as string | null,
+              meta_template_id: t.meta_template_id as string | null,
+              provider_config_id: t.provider_config_id as number | string | null,
+            }),
+            language: String(t.language ?? ''),
+            buttons: t.buttons ?? [],
+            variableMap: t.variable_map ?? {},
+            attachmentType: (t.attachment_type as string | null) ?? null,
+            attachmentUrl: t.attachment_file
+              ? this.templateDir.mediaUrl(String(t.attachment_file))
+              : null,
+            senderLabel: (t.sender_label as string | null) ?? null,
+            twilioReady: Boolean(t.twilio_content_sid),
+            usableOn: [
+              ...(meta ? (['waba'] as const) : []),
+              ...(local ? (['twilio', 'baileys'] as const) : []),
+            ],
+            senderKey: t.config_uuid ? `waba:${String(t.config_uuid)}` : null,
+          };
+        }),
         minLeadMinutes,
       };
     });

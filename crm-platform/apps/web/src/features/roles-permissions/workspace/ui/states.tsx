@@ -68,11 +68,6 @@ export function ErrorNote({ error, onRetry }: { error: unknown; onRetry?: () => 
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{info.detail ?? te(info.key, info.values)}</p>
-      {info.requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{info.requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}

@@ -21,6 +21,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { refreshFaqs, useFaqList } from '../api/hooks';
 import { faqApi } from '../api/service';
 import { errorKey } from '../lib/errors';
+import { stepDisplayName } from '../lib/model';
 import {
   EMPTY_FILTERS,
   bulkAllowed,
@@ -28,10 +29,12 @@ import {
   hasFilters,
   indexingShares,
   pruneSelection,
+  stepMissing,
   toggleAll,
   type BulkAction,
   type ListFilters,
 } from '../lib/list-model';
+import { useFaqFlow } from './faq-flow';
 import { EditIcon, FaqIcon, FlowIcon, PlusIcon, SearchIcon, TrashIcon, WarnIcon } from './icons';
 import {
   CARD,
@@ -48,12 +51,13 @@ import {
 const TH =
   'px-3 py-2.5 text-start text-xs font-medium uppercase tracking-wide text-muted-foreground';
 
-/** `/faq`: every FAQ with its answer, how many of its phrasings are live, how often it answered, and bulk and row actions. */
+/** The flow's FAQs: every FAQ with its answer, how many of its phrasings are live, how often it answered, and bulk and row actions. */
 export function FaqListScreen() {
   const t = useTranslations('faq.list');
   const te = useTranslations('faq.errors');
   const { toast } = useToast();
   const qc = useQueryClient();
+  const { flowId, flowName, href } = useFaqFlow();
   const canRead = useCan('faq.entries.read');
   const canCreate = useCan('faq.entries.create');
   const canUpdate = useCan('faq.entries.update');
@@ -80,7 +84,7 @@ export function FaqListScreen() {
   const fail = (e: unknown) => toast(te(errorKey(e)), 'danger');
 
   const bulk = useMutation({
-    mutationFn: (action: BulkAction) => faqApi.bulk({ action, ids: [...selected] }),
+    mutationFn: (action: BulkAction) => faqApi.bulk(flowId, { action, ids: [...selected] }),
     onSuccess: (r, action) => {
       setSelected(new Set());
       setConfirm(null);
@@ -95,12 +99,12 @@ export function FaqListScreen() {
   const setStatus = useMutation({
     // The list holds a preview of the answer only, so a status change goes through the bulk route, which needs no full entry.
     mutationFn: (v: { row: FaqEntrySummary; action: 'pause' | 'activate' }) =>
-      faqApi.bulk({ action: v.action, ids: [v.row.id] }),
+      faqApi.bulk(flowId, { action: v.action, ids: [v.row.id] }),
     onSuccess: (_r, v) => done(t(v.action === 'pause' ? 'paused' : 'activated')),
     onError: fail,
   });
   const remove = useMutation({
-    mutationFn: (row: FaqEntrySummary) => faqApi.remove(row.id),
+    mutationFn: (row: FaqEntrySummary) => faqApi.remove(flowId, row.id),
     onSuccess: () => {
       setConfirm(null);
       done(t('deleted'));
@@ -122,10 +126,10 @@ export function FaqListScreen() {
       <PageHeader
         icon={<FaqIcon className="size-5" />}
         title={t('title')}
-        subtitle={t('subtitle')}
+        subtitle={t('subtitle', { flow: flowName })}
         actions={
           canCreate && (
-            <LinkButton href="/faq/new" variant="brand">
+            <LinkButton href={href('new')} variant="brand">
               <PlusIcon />
               {t('add')}
             </LinkButton>
@@ -293,7 +297,7 @@ export function FaqListScreen() {
           }
           actions={
             canCreate ? (
-              <LinkButton href="/faq/new" variant="brand">
+              <LinkButton href={href('new')} variant="brand">
                 <PlusIcon />
                 {t('empty.cta')}
               </LinkButton>
@@ -481,7 +485,9 @@ export function FaqRow({
   onShowFailed: () => void;
 }) {
   const t = useTranslations('faq.list');
+  const { flowId, href } = useFaqFlow();
   const missing = flowMissing(row);
+  const stepGone = stepMissing(row);
   return (
     <tr className={cn('align-top', selected && 'bg-primary/5')}>
       <td className="ps-4 pt-3.5">
@@ -496,7 +502,7 @@ export function FaqRow({
       </td>
       <td className="max-w-xs px-3 py-3">
         <Link
-          href={`/faq/${row.id}`}
+          href={href({ faqId: row.id })}
           className="font-medium text-foreground underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
         >
           {row.question}
@@ -517,10 +523,28 @@ export function FaqRow({
             {t('flowMissing')}
           </Badge>
         ) : (
-          <span className="inline-flex items-center gap-1.5">
-            <FlowIcon className="text-muted-foreground" />
-            <span className="line-clamp-2">{row.flowName}</span>
-          </span>
+          <div className="space-y-1">
+            <span className="inline-flex items-center gap-1.5">
+              <FlowIcon className="text-muted-foreground" />
+              <span className="line-clamp-2">{row.flowName}</span>
+              {row.flowId === flowId && <Badge>{t('thisFlow')}</Badge>}
+            </span>
+            {stepGone ? (
+              <div>
+                <Badge tone="danger" className="gap-1">
+                  <WarnIcon className="size-3" />
+                  {t('stepMissing')}
+                </Badge>
+              </div>
+            ) : (
+              row.flowNodeId &&
+              row.flowNodeLabel && (
+                <p className="text-xs text-muted-foreground">
+                  {t('startsAt', { step: stepDisplayName(row.flowNodeLabel) })}
+                </p>
+              )
+            )}
+          </div>
         )}
       </td>
       <td className="px-3 py-3">
@@ -546,7 +570,7 @@ export function FaqRow({
       <td className="px-3 py-3">
         <div className="flex items-center justify-end gap-1">
           <Link
-            href={`/faq/${row.id}`}
+            href={href({ faqId: row.id })}
             aria-label={t('edit', { question: row.question })}
             title={t('editShort')}
             className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"

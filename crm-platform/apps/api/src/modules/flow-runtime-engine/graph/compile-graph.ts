@@ -67,6 +67,7 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   google_form: 'GoogleForm',
   deal: 'Deal',
   api_library: 'ApiLibrary',
+  faq: 'Faq',
   trigger: 'Trigger',
   end: 'End',
   // Instagram and Messenger nodes that are the shared nodes under another name (TW-FLR-061, 062): same executor, the editor's own fields.
@@ -97,6 +98,7 @@ const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
   api_library: { success: 1, error: 2 },
+  faq: { matched: 1, no_match: 2 },
   in_list: { yes: 1, no: 2 },
   in_segment: { yes: 1, no: 2 },
   wa_session: { yes: 1, no: 2 },

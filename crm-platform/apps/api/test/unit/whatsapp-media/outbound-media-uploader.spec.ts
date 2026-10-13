@@ -136,6 +136,16 @@ describe('the Interakt route: no upload endpoint, so the file goes by public lin
     graph.auth = bspHeaders(BSP_TOKEN, '555');
   });
 
+  it('refuses early, with the cause, when the store makes links on a private address', async () => {
+    const store = bucketStore({
+      url: 'http://minio:9000/crm-media/chat/11/e.png?X-Amz-Signature=abc',
+      expiresAt: new Date(Date.now() + 900_000),
+    });
+    await expect(
+      new WhatsappOutboundMediaUploader(store, wabaHttpFor(graph)).prepare(bspChannel(), file),
+    ).rejects.toMatchObject({ code: 'WA_MEDIA_LINK_NOT_PUBLIC' });
+  });
+
   it('with a store that can make a temporary link (a cloud bucket), the message carries the link and nothing is uploaded', async () => {
     const expiresAt = new Date(Date.now() + 900_000);
     const store = bucketStore({

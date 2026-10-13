@@ -33,9 +33,32 @@
         "too_short": "Inserisci almeno {min} caratteri.",
         "too_long": "Inserisci al massimo {max} caratteri.",
         "pattern": "Il formato non è quello previsto.",
-        "invalid_option": "Scegli una delle opzioni elencate."
+        "invalid_option": "Scegli una delle opzioni elencate.",
+        "invalid_amount": "Inserisci un importo compreso nell'intervallo consentito."
       },
-      "closedTitle": "Questo modulo è chiuso"
+      "closedTitle": "Questo modulo è chiuso",
+      "payTitle": "Un ultimo passaggio",
+      "payTotal": "Importo da pagare",
+      "payFromChoice": "L'importo dipende da quanto scegli sopra.",
+      "payEnter": "Inserisci sopra l'importo che desideri pagare.",
+      "payNote": "Dopo l'invio, passerai a una pagina di pagamento sicura.",
+      "payRedirecting": "Le tue risposte sono state salvate. Ti stiamo portando alla pagina di pagamento...",
+      "payContinue": "Continua con il pagamento",
+      "paymentUnavailable": "Questo modulo non può accettare pagamenti al momento. Riprova più tardi.",
+      "payReturn": {
+        "confirmingTitle": "Conferma del pagamento in corso",
+        "confirmingBody": "Stiamo aspettando la conferma del fornitore di pagamenti. Di solito bastano pochi secondi. Non pagare di nuovo.",
+        "slowTitle": "Conferma ancora in attesa",
+        "slowBody": "Se hai pagato, la conferma arriverà a breve e puoi chiudere questa pagina. Se non hai pagato, torna indietro e riprova.",
+        "paidTitle": "Pagamento ricevuto",
+        "expiredTitle": "Il link di pagamento è scaduto",
+        "expiredBody": "Non è stato addebitato nulla. Chiedi a chi ti ha inviato il modulo un nuovo link di pagamento.",
+        "failedTitle": "Il pagamento non è andato a buon fine",
+        "failedBody": "Non è stato addebitato nulla. Puoi riprovare.",
+        "tryAgain": "Riprova a pagare",
+        "missingTitle": "Non abbiamo trovato questo pagamento",
+        "missingBody": "Il link potrebbe essere errato o troppo vecchio."
+      }
     }
   }
 }

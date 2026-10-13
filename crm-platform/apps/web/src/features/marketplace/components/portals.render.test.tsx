@@ -590,7 +590,7 @@ describe('Sync now: the answer and the problems', () => {
   it('tells someone without the permission, and gives the request id for support', () => {
     const html = shows(problem(403, ERROR_CODES.FORBIDDEN));
     expect(html).toContain('You do not have permission to do this.');
-    expect(html).toContain('req-9');
+    expect(html).not.toContain('req-9');
   });
 
   for (const locale of LOCALES) {

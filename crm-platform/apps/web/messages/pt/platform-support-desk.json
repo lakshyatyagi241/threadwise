@@ -63,8 +63,7 @@
       "closed": "Este ticket está fechado. Abra um novo ticket para continuar.",
       "notFound": "Não foi possível encontrar este ticket.",
       "unexpected": "Algo deu errado. Tente novamente.",
-      "retry": "Tente novamente",
-      "requestId": "ID da solicitação"
+      "retry": "Tente novamente"
     },
     "customer": {
       "title": "Como podemos ajudar?",

@@ -10,17 +10,17 @@ keywords: [team, members, add member, invite, deactivate, reactivate, roles, sta
 
 ## What it is for
 
-This is the Team members screen in Settings. Here you add people to the workspace with a password you hand over, change which roles they hold, and turn their access off or on. The list can be filtered by role and searched by name or email.
+This is the Team members screen in Settings. Here you add people to the workspace by sending them an invite link, change which roles they hold, and turn their access off or on. The list can be filtered by role and searched by name or email.
 
 ## How to use it
 
 1. Open **Settings**, go to **Team and permissions** and select **Team members**.
-2. To add someone, select **Add member**. Enter their full name and email, set a password (at least 8 characters, or select **Generate**) and choose a role. The default is Agent. Then select **Add member**.
+2. To add someone, select **Add member**. Enter their full name and email and choose a role. The default is Agent. Then select **Send invite**. They get an email with a one-time link to set their own password.
 3. To change roles, select **Change role** on the member's row, tick the roles they should hold (at least one) and select **Save roles**.
 4. To deactivate someone, select **Deactivate** and confirm. They can no longer sign in. Select **Reactivate** to restore access.
 5. Use the role filters above the list to show only one role, or type in the search box.
 
-> Share the password with the new member in person. They can change it after signing in.
+> If the email cannot be sent, the screen shows the invite link once. Copy it and hand it over; it is not shown again.
 
 ## Options and settings
 
@@ -36,4 +36,4 @@ Opening this screen needs the permission to manage users. Adding a member needs 
 
 - **The role list is missing or unavailable.** Your role cannot list roles, so you can read the members but cannot add members or change roles.
 - **Add member says the seat limit is reached.** Your plan limits the number of team seats. Deactivated members do not count; an Owner can upgrade the plan.
-- **The password policy message appears.** The password does not meet the workspace policy. Each rule is listed under the field.
+- **The invite email did not arrive.** The screen shows the link when the mail could not be sent. Otherwise check the spam folder, or resend the invite from the Team members page.

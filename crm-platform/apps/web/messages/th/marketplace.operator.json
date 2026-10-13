@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "กำลังโหลด...",
-        "requestId": "รหัสคำขอ",
         "retry": "ลองอีกครั้ง",
         "noPermissions": "ไม่มีสิทธิ์"
       },

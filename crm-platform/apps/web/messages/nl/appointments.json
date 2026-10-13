@@ -36,7 +36,6 @@
       "slotTaken": "Dat tijdstip is zojuist bezet. Kies een ander.",
       "gone": "Deze boeking kan niet meer worden gewijzigd.",
       "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen",
       "invalidTransition": "Die boeking heeft niet de status waarin dit kan. Laad opnieuw om te zien waar ze staat.",
       "notStarted": "Dit kan pas nadat de boeking is begonnen.",

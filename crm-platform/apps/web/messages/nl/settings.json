@@ -81,13 +81,13 @@
       },
       "sms": {
         "label": "SMS",
-        "description": "Verstuur en ontvang sms-berichten met je eigen afzender.",
+        "description": "Verstuur sms-berichten met je eigen Twilio-nummer of MSG91-afzender.",
         "keywords": "sms, afzender-id, dlt, twilio, mobiel"
       },
       "email": {
         "label": "E-mail",
-        "description": "Verbind een mailbox om e-mail te verzenden en ontvangen in de inbox.",
-        "keywords": "mailbox, smtp, imap, gmail, outlook, afzender"
+        "description": "Verbind Gmail- of Google Workspace-mailboxen zodat je team klant-e-mail in de gedeelde inbox kan lezen en beantwoorden.",
+        "keywords": "mailbox, gmail, google workspace, gedeelde inbox, support-e-mail, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -296,8 +296,53 @@
       },
       "web": {
         "label": "Websitechat",
-        "description": "Bots gebouwd voor je websitechat en de widget waarin elk ervan draait.",
-        "keywords": "web, website, widget, chatbot, embedden, livechat"
+        "description": "Bots die zijn gemaakt voor de chat op je website en de widget waarin elk daarvan draait.",
+        "keywords": "web, website, widget, chatbot, insluiten, livechat"
+      },
+      "message-logs": {
+        "label": "Berichtlogboeken",
+        "description": "Exporteer het bezorglogboek van je berichten, tot een jaar terug, als bestand dat naar je e-mail wordt gestuurd.",
+        "keywords": "export, bezorglogboek, geschiedenis, archief, csv, berichten"
+      },
+      "billing-subscriptions": {
+        "label": "Abonnementen",
+        "description": "Wat wordt verlengd, tot wanneer het betaald is, en annuleren.",
+        "keywords": "abonnement, verlengen, automatisch verlengen, annuleren, automatische betaling, mislukte betaling, afschrijvingen"
+      },
+      "lead-scoring": {
+        "label": "AI-leadscoring",
+        "description": "Score elk contact met AI, kies wat er wordt gestuurd en zie wat het kost.",
+        "keywords": "leadscore, scoren, scoring, ai, heet, warm, koud, openrouter, kosten, kwalificeren"
+      },
+      "help-assistant": {
+        "label": "Hulpassistent",
+        "description": "Zet de assistent aan die je team begeleidt of de stappen voor hen uitvoert.",
+        "keywords": "ai, assistent, agent, gids, hulp, automatisering"
+      },
+      "consent": {
+        "label": "Toestemming en STOP-antwoorden",
+        "description": "Kies de STOP- en START-woorden, de bevestigingsantwoorden, de afmeldregel en of marketing een vastgelegde toestemming vereist.",
+        "keywords": "toestemming, afmelden, aanmelden, uitschrijven, stop, start, avg, gdpr, compliance, privacy, marketing"
+      },
+      "inbox-tags": {
+        "label": "Gesprekstags",
+        "description": "Maak de tags aan die je team op gesprekken zet en waarmee de inbox wordt gefilterd. Het zijn dezelfde tags als bij contacten.",
+        "keywords": "tags, categorieën, ordenen, filter, gesprekstags"
+      },
+      "growth": {
+        "label": "Groei",
+        "description": "Hete leads, doelgroepen, campagnereacties en andere zaken waar je team op kan reageren, afgeleid uit chats en campagnes.",
+        "keywords": "groei, hete lead, doelgroep, betrokkenheid, afgehaakt, campagnereacties, conversiekans, opt-out, pilot"
+      },
+      "sla-policies": {
+        "label": "Reactiedoelen",
+        "description": "Stel in hoe snel je team moet reageren en oplossen (SLA) en krijg een melding wanneer een gesprek zijn doel mist.",
+        "keywords": "sla, reactietijd, eerste reactie, oplossing, schending, doelen, kantooruren"
+      },
+      "team-performance": {
+        "label": "Teamprestaties",
+        "description": "Zie hoe snel elke agent vandaag, deze week of deze maand reageerde en oploste.",
+        "keywords": "rapporten, analyses, agenten, reactietijd, eerste antwoord, opgelost, werkdruk, prestaties"
       }
     },
     "title": "Instellingen",
@@ -315,6 +360,7 @@
     "noResults": {
       "title": "Geen instellingen komen overeen met “{query}”",
       "message": "Controleer de spelling of probeer een breder woord, zoals “btw”, “team” of “WhatsApp”."
-    }
+    },
+    "backToMarketplace": "Terug naar Marketplace"
   }
 }

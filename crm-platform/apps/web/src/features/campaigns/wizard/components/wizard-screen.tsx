@@ -6,8 +6,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useContactFields, isUsableProperty } from '@/features/contacts-attributes-tags';
-import { offerSenders } from '@/lib/unofficial-whatsapp';
-import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
+import { offerSendersFor } from '@/lib/unofficial-whatsapp';
+import { useUnofficialWhatsappState } from '@/lib/use-unofficial-whatsapp';
 import { useUnsavedGuard } from '@/features/segments/components/use-unsaved-guard';
 import { Alert, Button, ConfirmDialog, EmptyState } from '@crm/ui';
 import type { WizardDraftResponse, WizardSender } from '@crm/contracts';
@@ -20,6 +20,7 @@ import {
   useWizardTemplates,
 } from '../api/wizard';
 import { createPath } from '../../lib/create-flow';
+import { classicFallback, withClientHidden } from '../../lib/sender-empty';
 import { countableAudience } from '../lib/audience';
 import { decideNext, launchPreflight, previousStep } from '../lib/flow';
 import { stepIssues, type IssueCode, type StepIssue } from '../lib/issues';
@@ -147,7 +148,7 @@ function WizardBody({
   const w = useWizard(initial);
   const session = useSession();
   const canTest = useCan('camp.campaigns.test');
-  const zone = defaultTimeZone(session.org.timezone);
+  const zone = defaultTimeZone(session.effectiveTimezone);
   const { draft, view } = w.state;
 
   const templates = useWizardTemplates();
@@ -162,11 +163,16 @@ function WizardBody({
   );
 
   // The number defaults to the workspace's default engine's first one; a draft whose number is gone gets the default again.
-  const unofficial = useUnofficialWhatsapp();
+  const unofficialState = useUnofficialWhatsappState();
   const allSenders = senders.data?.data;
+  // Undefined while the numbers or the answer on the platform switch are still loading: the picker is a skeleton, not an empty list.
   const sendersList = useMemo(
-    () => (allSenders ? offerSenders(allSenders, unofficial) : undefined),
-    [allSenders, unofficial],
+    () => offerSendersFor(allSenders, unofficialState),
+    [allSenders, unofficialState],
+  );
+  const hidden = useMemo(
+    () => withClientHidden(allSenders, sendersList, senders.data?.hidden),
+    [allSenders, sendersList, senders.data?.hidden],
   );
   const dispatch = w.dispatch;
   useEffect(() => {
@@ -184,6 +190,15 @@ function WizardBody({
   const router = useRouter();
   const [switchTo, setSwitchTo] = useState<WizardSender | null>(null);
   const [switching, setSwitching] = useState(false);
+  // Only numbers the guided flow cannot send from: nothing would ever be picked here and Next would stay blocked, so the switch to the
+  // classic builder is offered at once, on the default number (else the first).
+  const classic = useMemo(() => (sendersList ? classicFallback(sendersList) : null), [sendersList]);
+  const offeredSwitch = useRef(false);
+  useEffect(() => {
+    if (offeredSwitch.current || !classic) return;
+    offeredSwitch.current = true;
+    setSwitchTo(classic);
+  }, [classic]);
   const pickSender = (key: string) => {
     const picked = sendersList?.find((x) => x.key === key);
     if (picked?.guided) return w.dispatch({ type: 'sender', senderKey: key });
@@ -342,6 +357,7 @@ function WizardBody({
             templateId={draft.templateId}
             senderKey={draft.senderKey}
             senders={sendersList}
+            hidden={hidden}
             templates={templates}
             issues={visible}
             onName={(name) => w.dispatch({ type: 'name', name })}

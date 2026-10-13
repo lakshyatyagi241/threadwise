@@ -1,0 +1,133 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Ask",
+      "shortcut": "Ask the assistant (Ctrl or Cmd + Shift + L)"
+    },
+    "panel": {
+      "title": "Ask the assistant",
+      "subtitle": "Say what you want to do. I read this page and click for you, and I ask before anything is saved, sent, deleted or paid.",
+      "close": "Close",
+      "taskLabel": "What do you want to do?",
+      "taskPlaceholder": "For example: add the tag VIP to a contact",
+      "tooLong": "Keep it under {max} characters.",
+      "doItForMe": "Do it for me",
+      "showMe": "Show me instead",
+      "stop": "Stop",
+      "stopping": "Stopping...",
+      "newTask": "New task",
+      "tryAgain": "Try again",
+      "openGuide": "Open guide",
+      "showSteps": "Show steps",
+      "guidesTitle": "From the Help guides",
+      "examplesTitle": "Try asking",
+      "disabledHere": "The assistant is off on this screen because it shows messages and details written by customers. Open another screen to use it."
+    },
+    "notice": {
+      "title": "Before you start",
+      "sent": "To do a task, the assistant sends your request and the text of the page you are on to an AI provider.",
+      "masked": "Phone numbers, e-mail addresses and secrets are hidden first. Names and other text on the page are not.",
+      "asks": "It uses your own account, so it can only do what you can do. It asks you before it saves, sends, deletes, pays, invites people or changes settings.",
+      "limits": "It never types passwords or card details, never opens other websites, and you can stop it at any moment.",
+      "accept": "I understand"
+    },
+    "status": {
+      "progress": "Step {n} of {max}",
+      "thinking": "Thinking...",
+      "starting": "Starting..."
+    },
+    "activity": {
+      "click": "Clicking: {label}",
+      "type": "Typing in: {label}",
+      "select": "Choosing in: {label}",
+      "blocked": "Skipped: {label}",
+      "declined": "You declined: {label}",
+      "shown": "Showing: {label}"
+    },
+    "confirm": {
+      "title": "Allow this?",
+      "clickBody": "The assistant is about to click \"{label}\".",
+      "selectBody": "The assistant is about to choose \"{detail}\" in \"{label}\".",
+      "allow": "Allow once",
+      "deny": "Deny",
+      "reasons": {
+        "marked": "This is one of the most sensitive buttons in the app.",
+        "submit": "This saves or submits what is on the page.",
+        "delete": "This deletes, removes or disconnects something.",
+        "send": "This sends, publishes or starts something others will see.",
+        "pay": "This may spend money or change what you pay.",
+        "invite": "This invites someone to your workspace.",
+        "connect": "This connects or disconnects a channel or an app.",
+        "access": "This changes who can do what, or a secret or billing detail.",
+        "settings": "This turns something on or off.",
+        "toggle": "This switch takes effect at once.",
+        "dialog": "This confirms what the window is asking.",
+        "signout": "This signs you out."
+      }
+    },
+    "question": {
+      "title": "The assistant asks",
+      "answerLabel": "Your answer",
+      "send": "Send"
+    },
+    "result": {
+      "completedTitle": "Done",
+      "failedTitle": "I could not finish this",
+      "stoppedTitle": "Stopped",
+      "summary": "{steps, plural, one {# step} other {# steps}}, {confirmed} allowed, {denied} declined."
+    },
+    "stopped": {
+      "person": "You stopped the task.",
+      "budget": "The task reached its step limit and stopped. Try a smaller request.",
+      "location": "The task stopped because it reached a screen the assistant is not allowed to use."
+    },
+    "errors": {
+      "disabled": "The assistant is turned off for this workspace or on this screen.",
+      "planLocked": "The assistant is not part of your plan.",
+      "forbidden": "You do not have permission to use the assistant.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "taskLimit": "You have started as many tasks as are allowed for now. Try again later.",
+      "stepLimit": "This task used up its steps. Start a new one with a smaller request.",
+      "closed": "This task has ended. Start a new one.",
+      "providerDown": "The AI service did not answer. Try again in a moment, or ask the platform owner if it keeps happening.",
+      "monthlyLimit": "Your workspace has used this month's AI allowance.",
+      "signedOut": "Your session ended. Sign in again.",
+      "network": "Could not reach the server. Check your connection and try again.",
+      "generic": "Something went wrong. Try again.",
+      "retryIn": "Try again in {seconds} seconds."
+    },
+    "examples": {
+      "howDo": "How do I use {title}?",
+      "showMe": "Show me where to start in {title}",
+      "whereIs": "Where do I find {title}?",
+      "generic1": "How do I connect my WhatsApp number?",
+      "generic2": "Where do I change my business profile?",
+      "generic3": "How do I invite a teammate?"
+    },
+    "helpCard": {
+      "title": "Ask the assistant",
+      "body": "Tell it what you want to do. It finds the right guide, shows you where to click, or does the steps for you and asks before anything important.",
+      "button": "Open the assistant"
+    },
+    "settingsPage": {
+      "title": "Help assistant",
+      "description": "Let your team ask for what they want to do and have the app guide them or do the steps on their own account.",
+      "loading": "Loading",
+      "loadFailed": "The setting could not be loaded.",
+      "shareTitle": "What is shared when someone uses it",
+      "share1": "The request the person typed, and the visible text of the page they are on, are sent to the AI provider the platform uses.",
+      "share2": "Phone numbers, e-mail addresses, secrets and the personal fields of forms are hidden first. Names and other free text on a page are not.",
+      "share3": "Customer messages and team chat are never read: the assistant is off on those screens.",
+      "share4": "The assistant acts with the signed-in person's own permissions and asks before it saves, sends, deletes, pays or changes settings. Only counts and the outcome of each task are stored, never the request text.",
+      "optIn": "By turning it on you confirm your workspace agrees to share this with the AI provider.",
+      "switchLabel": "Turn on the Help assistant for this workspace",
+      "stateOn": "On. People with the permission see the Ask button.",
+      "stateOff": "Off. Nobody sees the assistant.",
+      "saveFailed": "The setting could not be saved.",
+      "savedOn": "The assistant is on.",
+      "savedOff": "The assistant is off.",
+      "whoCanUse": "Only roles with the permission \"Use the Help assistant\" see it. Owners and admins have it.",
+      "rolesLink": "Open roles"
+    }
+  }
+}

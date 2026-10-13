@@ -11,7 +11,6 @@
     "common": {
       "loading": "Đang tải",
       "retry": "Thử lại",
-      "requestId": "ID yêu cầu",
       "loadFailed": "Không thể tải nội dung này.",
       "forbidden": "Bạn không có quyền truy cập nội dung này.",
       "cancel": "Hủy",

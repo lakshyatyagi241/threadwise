@@ -9,7 +9,7 @@ import { storeOverviewSchema } from '@crm/contracts';
 import { Alert, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import { apiFetch } from '@/lib/api/client';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 import { TONE_CLASS, orderTone, paymentTone, type Tone } from '../lib/status';
 
 /** The selected shop of the store area (`?shop=`), or undefined: the sidebar and every screen read the same address. */
@@ -113,16 +113,10 @@ export function PageHeader({
 export function ErrorPanel({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const t = useTranslations('checkout-orders-merchant-payments.errors');
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <div className="font-medium">{t(`${kind}.title`)}</div>
       <p className="text-sm">{t(`${kind}.message`)}</p>
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')} <span className="font-mono">{requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}

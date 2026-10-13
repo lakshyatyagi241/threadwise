@@ -1,8 +1,12 @@
 import { Module, type MiddlewareConsumer, type NestModule } from '@nestjs/common';
+import { CheckoutOrdersMerchantPaymentsModule } from '../checkout-orders-merchant-payments';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { FormCatalogueService } from './form-catalogue.service';
 import { FormLookupService } from './form-lookup.service';
+import { FormPaymentsRepository } from './form-payments.repository';
+import { FormPaymentsService } from './form-payments.service';
 import { FormsPlan } from './form-plan';
 import { FormPublicService } from './form-public.service';
 import { FormSubmissionsController } from './form-submissions.controller';
@@ -26,7 +30,8 @@ import { FormEmbedController, PublicFormsController } from './public-forms.contr
  */
 @Module({
   // CrmModule: contacts (find-or-create by identity), companies, tags, the timeline. PlansCoreModule: the feature flag and the caps.
-  imports: [CrmModule, PlansCoreModule],
+  // CheckoutOrdersMerchantPaymentsModule: the workspace's shared payment gateway (hosted link, `FRM-` settler registration).
+  imports: [CrmModule, PlansCoreModule, CheckoutOrdersMerchantPaymentsModule, ContactConsentModule],
   controllers: [
     // `templates` and `meta/properties` are literal paths declared before `:id` inside FormsController; `export` before `:sid`.
     FormsController,
@@ -38,6 +43,8 @@ import { FormEmbedController, PublicFormsController } from './public-forms.contr
     FormsRepository,
     FormSubmissionsRepository,
     FormsPlan,
+    FormPaymentsRepository,
+    FormPaymentsService,
     FormThrottle,
     FormLookupService,
     FormsService,

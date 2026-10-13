@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlbCommerceProductsQuery } from '@crm/contracts';
+import { faqForFlowApi } from './faq';
 import { flowsApi } from './flows';
 
 export const EMPTY_CONTEXT: FlbBuilderContext = {
@@ -76,4 +77,23 @@ export function useGoogleFiles(kind: 'sheets' | 'docs' | 'forms') {
     queryFn: ({ signal }) => flowsApi.googleFiles(kind, signal),
     retry: false,
   });
+}
+
+/**
+ * The FAQ categories of THIS flow and how many FAQs it has, for the "Answer from FAQ" node: the node answers from the FAQs of the
+ * flow it sits in. Read through the flow's FAQ list (`limit=1`) whose `stats` carry both. Needs `faq.entries.read`: without it the
+ * query fails and the form keeps what the node already holds. A flow that has not been saved yet (`null`) has no FAQs and nothing
+ * to ask: the query stays off and `isPending` is false.
+ */
+export function useFaqSummary(flowId: string | null) {
+  const q = useQuery({
+    queryKey: ['flb', 'faq-summary', flowId],
+    enabled: flowId !== null,
+    queryFn: ({ signal }) => faqForFlowApi.summary(flowId!, signal),
+    retry: false,
+    staleTime: 30_000,
+    select: (r) => ({ categories: r.stats.categories, total: r.stats.total }),
+  });
+  // A disabled query reports `isPending`; an unsaved flow is not loading anything.
+  return flowId === null ? { ...q, isPending: false } : q;
 }

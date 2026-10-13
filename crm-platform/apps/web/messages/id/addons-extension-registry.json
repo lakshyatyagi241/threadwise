@@ -19,7 +19,6 @@
       "optional": "opsional",
       "required": "wajib",
       "readOnly": "Anda dapat melihat halaman ini, tetapi hanya super admin yang dapat mengubahnya.",
-      "requestId": "ID permintaan",
       "errors": {
         "forbidden": "Anda tidak memiliki akses ke halaman ini.",
         "request": "Permintaan tidak dapat diselesaikan.",

@@ -96,8 +96,7 @@
       "unexpected": "Terjadi kesalahan di pihak kami. Coba lagi sebentar lagi.",
       "loadFailed": "Kunci API Anda tidak dapat dimuat.",
       "retry": "Coba lagi",
-      "upgrade": "Lihat paket",
-      "requestId": "ID permintaan: {id}"
+      "upgrade": "Lihat paket"
     }
   }
 }

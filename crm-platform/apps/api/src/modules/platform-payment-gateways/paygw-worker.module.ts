@@ -1,6 +1,8 @@
 import { Injectable, Logger, Module } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { PlatformPaymentGatewaysModule } from './paygw.module';
+import { NotificationPublisher, NotificationsRepository } from '../notifications';
+import { SubscriptionNotificationsConsumer } from './subscription-notifications.consumer';
 import { SubscriptionReconcilerService } from './subscription-reconciler.service';
 
 const TICK_MS = 10 * 60_000;
@@ -34,6 +36,11 @@ export class SubscriptionReconcileScheduler {
 /** Imported ONLY by WorkersModule: the HTTP app never runs the sweep. */
 @Module({
   imports: [PlatformPaymentGatewaysModule],
-  providers: [SubscriptionReconcileScheduler],
+  providers: [
+    SubscriptionReconcileScheduler,
+    NotificationsRepository,
+    NotificationPublisher,
+    SubscriptionNotificationsConsumer,
+  ],
 })
 export class PaygwWorkerModule {}

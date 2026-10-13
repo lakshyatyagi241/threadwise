@@ -1,7 +1,9 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Hộp thư"
+      "inbox": "Hộp thư",
+      "messageLogs": "Nhật ký tin nhắn",
+      "savedReplies": "Trả lời nhanh"
     },
     "common": {
       "dismiss": "Bỏ qua"
@@ -23,7 +25,11 @@
       "pickTitle": "Chọn một cuộc trò chuyện",
       "pickMessage": "Chọn một cuộc trò chuyện trong danh sách để đọc và trả lời. Tin nhắn mới sẽ tự động xuất hiện tại đây.",
       "shortcuts": "Phím tắt: j và k để di chuyển trong danh sách, e để giải quyết, / để tìm kiếm.",
-      "teamChanged": "Đã cập nhật nhóm."
+      "teamChanged": "Đã cập nhật nhóm.",
+      "priorityChanged": "Đã cập nhật mức ưu tiên",
+      "snoozed": "Đã tạm ẩn cuộc trò chuyện",
+      "tagAdded": "Đã thêm thẻ",
+      "tagRemoved": "Đã bỏ thẻ"
     },
     "list": {
       "title": "Hộp thư",
@@ -99,7 +105,9 @@
           "title": "Bạn đã xử lý hết",
           "message": "Các cuộc trò chuyện có tin nhắn mới từ khách hàng sẽ được liệt kê tại đây."
         }
-      }
+      },
+      "select": "Chọn",
+      "selectDone": "Xong"
     },
     "status": {
       "received": "Đã nhận",
@@ -129,9 +137,22 @@
       "unsupported": "Kênh này không thể gửi loại tin nhắn hoặc tệp đó.",
       "network": "Không thể kết nối đến máy chủ. Kiểm tra kết nối và thử lại.",
       "generic": "Đã xảy ra lỗi. Thử lại.",
-      "genericWithId": "Đã xảy ra lỗi. Thử lại. Mã tham chiếu: {id}",
       "templateNotSendable": "Mẫu này không thể gửi vào cuộc trò chuyện này. Chọn mẫu khác.",
-      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business."
+      "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business.",
+      "logRange": "Chọn ngày trong vòng một năm qua, ngày bắt đầu phải trước ngày kết thúc và không ở tương lai.",
+      "logBusy": "Một bản xuất đang được chuẩn bị. Hãy chờ email của bản đó rồi mới yêu cầu bản khác.",
+      "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại.",
+      "groupSuspended": "Meta đã tạm ngưng nhóm này nên không thể nhắn tin cho nhóm cho đến khi Meta gỡ bỏ.",
+      "groupLeft": "Số này đã rời nhóm nên không thể gửi tin nhắn ở đó nữa.",
+      "groupAnnounceOnly": "Chỉ quản trị viên mới có thể gửi tin nhắn trong nhóm này, và số này không phải quản trị viên.",
+      "groupRateLimited": "Số này đã gửi quá nhiều tin nhắn nhóm trong thời gian ngắn. Hãy chờ một phút rồi thử lại.",
+      "groupUnavailable": "WhatsApp không chấp nhận tin nhắn nhóm này. Hãy thử lại sau vài phút.",
+      "walletEmpty": "Ví tin nhắn của bạn không đủ cho tin nhắn nhóm này (tính phí cho mỗi thành viên). Hãy nạp tiền rồi thử lại.",
+      "groupPlanLocked": "Gói của bạn không có nhóm WhatsApp nên không thể nhắn vào nhóm này. Hãy nhờ quản trị viên nâng cấp gói.",
+      "savedReplyGone": "Trả lời nhanh này không còn tồn tại.",
+      "savedReplyChannel": "Trả lời nhanh này không dành cho loại kênh này.",
+      "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó.",
+      "importInvalid": "Không thể đọc tệp này dưới dạng câu trả lời đã lưu. Tệp cần có hàng đầu tiên với các cột title, shortcut và body, và tối đa 1.000 hàng."
     },
     "bubble": {
       "kind": {
@@ -196,6 +217,19 @@
         "takeBack": "Nhấn để thu hồi cảm xúc của bạn",
         "takeBackLabel": "Cảm xúc của bạn {emoji}. Thu hồi",
         "failed": "Chưa gửi được cảm xúc này"
+      },
+      "deliveryLog": "Nhật ký gửi",
+      "groupMember": "Thành viên nhóm",
+      "groupTally": "Đã gửi tới {delivered} trong {members} người{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
+      "groupTallyNoTotal": "Đã gửi tới {delivered, plural, other {# thành viên}}{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
+      "groupTallyBilled": "{billable} tính phí, {free} miễn phí",
+      "stageLine": {
+        "auto": "AI đã đọc cuộc trò chuyện và chuyển liên hệ này từ {from} sang {to}.",
+        "undo": "Hoàn tác",
+        "wasUndone": "Đã hoàn tác",
+        "undone": "Đã hoàn tác thay đổi giai đoạn: quay lại {stage}.",
+        "undoneToast": "Đã đưa giai đoạn về {stage}.",
+        "couldNotUndo": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển tiếp hoặc đã được hoàn tác."
       }
     },
     "media": {
@@ -248,6 +282,44 @@
       "attachment": "một tệp đính kèm",
       "jumpLatest": "Đến tin nhắn mới nhất",
       "jumpLatestNew": "{count, plural, other {# tin nhắn mới}}"
+    },
+    "groupThread": {
+      "openGroup": "Mở nhóm",
+      "readOnly": {
+        "left": {
+          "title": "Số này đã rời nhóm",
+          "message": "Cuộc trò chuyện được giữ nguyên. Bạn có thể đọc và thêm ghi chú nội bộ nhưng không thể gửi tin nhắn."
+        },
+        "announceOnly": {
+          "title": "Chỉ quản trị viên mới có thể gửi trong nhóm này",
+          "message": "Số này không phải quản trị viên của nhóm nên WhatsApp sẽ không chuyển tin nhắn. Bạn vẫn có thể thêm ghi chú nội bộ."
+        }
+      },
+      "mention": {
+        "label": "Thành viên nhóm",
+        "loading": "Đang tìm thành viên",
+        "none": "Không có thành viên nào phù hợp"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta đã tạm ngưng nhóm này",
+          "message": "WhatsApp không gửi tin nhắn tới nhóm bị tạm ngưng. Bạn vẫn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ cho đến khi Meta gỡ bỏ."
+        },
+        "plan": {
+          "title": "Gói của bạn không có nhóm WhatsApp",
+          "message": "Bạn có thể đọc cuộc trò chuyện này và thêm ghi chú nội bộ, nhưng gửi vào nhóm cần gói có tính năng nhóm. Hãy nhờ quản trị viên nâng cấp."
+        },
+        "ineligible": {
+          "title": "Số này không thể dùng nhóm WhatsApp",
+          "message": "Lần kiểm tra gần nhất, Meta không cho phép nhóm trên số này (cần tài khoản doanh nghiệp chính thức). Bạn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ. Mở Nhóm Meta để kiểm tra lại."
+        }
+      },
+      "cost": {
+        "members": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. Chi phí ước tính {cost}: WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "membersNoEstimate": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "sizeUnknown": "Chưa biết số thành viên. WhatsApp tính phí cho mỗi thành viên nhận tin nhắn này.",
+        "walletShort": "Ví của bạn có thể không đủ cho tin nhắn này. Hãy nạp tiền trước khi gửi."
+      }
     },
     "composer": {
       "modeLabel": "Loại tin nhắn",
@@ -345,7 +417,9 @@
           "url": "Nhập liên kết bắt đầu bằng http:// hoặc https://",
           "tooManyRows": "Một danh sách có tối đa 10 dòng trong tổng số"
         }
-      }
+      },
+      "savedReplies": "Trả lời nhanh",
+      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi."
     },
     "panel": {
       "tabsLabel": "Ghi chú và dòng thời gian",
@@ -414,8 +488,8 @@
           "snoozed": "Đã tạm hoãn bởi {actor}",
           "auto_unsnoozed": "Hết thời gian tạm hoãn",
           "priority_changed": "Đã đổi mức ưu tiên bởi {actor}",
-          "tag_added": "Đã thêm nhãn bởi {actor}",
-          "tag_removed": "Đã gỡ nhãn bởi {actor}",
+          "tag_added": "Thẻ được thêm bởi {actor}",
+          "tag_removed": "Thẻ được bỏ bởi {actor}",
           "first_response": "Đã gửi phản hồi đầu tiên",
           "sla_breach": "Đã quá hạn phản hồi",
           "unknown": "{what} bởi {actor}"
@@ -554,6 +628,378 @@
         "named_variables": "Dùng biến có tên, hiện hộp thư chưa hỗ trợ."
       },
       "hasMore": "Đang hiển thị {count} mẫu đầu tiên. Tìm theo tên hoặc nội dung để xem các mẫu khác."
+    },
+    "log": {
+      "title": "Nhật ký gửi",
+      "close": "Đóng",
+      "loading": "Đang tải nhật ký",
+      "tryAgain": "Thử lại",
+      "statusNow": "Trạng thái hiện tại",
+      "createdAt": "Thời điểm tạo",
+      "providerId": "ID tin nhắn của nhà cung cấp",
+      "failedNoReason": "Tin nhắn này chưa được gửi đến nơi.",
+      "expired": "Tin nhắn này đã quá {days} ngày. Nhật ký của nó không còn được lưu.",
+      "empty": "Không có nhật ký nào được ghi cho tin nhắn này. Các tin nhắn gửi trước khi bắt đầu lưu nhật ký sẽ không có.",
+      "archived": "Các mục cũ hơn {days} ngày được đọc từ kho lưu trữ.",
+      "exportLink": "Xuất nhật ký tin nhắn",
+      "source": {
+        "system": "Hệ thống của chúng tôi",
+        "provider": "Biên nhận từ nhà cung cấp"
+      },
+      "event": {
+        "queued": "Đã xếp hàng chờ gửi",
+        "attempt": "Lần gửi thứ {attempt}",
+        "accepted": "Nhà cung cấp đã tiếp nhận",
+        "sentReceipt": "Nhà cung cấp xác nhận đã gửi",
+        "delivered": "Đã đến điện thoại của khách hàng",
+        "read": "Khách hàng đã đọc",
+        "failedReceipt": "Nhà cung cấp báo chưa gửi đến nơi",
+        "failedSend": "Không thể gửi",
+        "retryAuto": "Sẽ tự động thử lại",
+        "retryManual": "Một đồng nghiệp đã nhấn Thử lại"
+      },
+      "notApplied": "Báo cáo này đến muộn hoặc thuộc về lần gửi trước đó. Nó không làm thay đổi tin nhắn.",
+      "replayed": "Không có yêu cầu mới nào được gửi: đã dùng lại phản hồi trước đó của nhà cung cấp.",
+      "resent": "Đã gửi lại cho nhà cung cấp dưới dạng tin nhắn mới."
+    },
+    "logs": {
+      "back": "Quay lại hộp thư",
+      "title": "Nhật ký tin nhắn",
+      "intro": "Mỗi tin nhắn đều có nhật ký gửi: {hot} ngày trong hộp thư, sau đó nằm trong kho lưu trữ đến {days} ngày kể từ khi sự việc xảy ra. Hãy yêu cầu xuất theo khoảng ngày; bản xuất được chuẩn bị ở chế độ nền và gửi đến email của bạn khi sẵn sàng.",
+      "requested": "Đã yêu cầu xuất. Chúng tôi sẽ gửi email cho bạn khi bản xuất sẵn sàng.",
+      "requestedTo": "Đã yêu cầu xuất. Chúng tôi sẽ gửi email đến {email} khi bản xuất sẵn sàng.",
+      "form": {
+        "title": "Yêu cầu xuất",
+        "from": "Từ",
+        "to": "Đến",
+        "status": "Chỉ tin nhắn hiện có trạng thái",
+        "anyStatus": "Mọi trạng thái",
+        "hint": "Ngày tính theo UTC. Bạn có thể lùi lại tối đa {days} ngày. Mỗi lần chỉ chuẩn bị một bản xuất.",
+        "submit": "Yêu cầu xuất",
+        "sending": "Đang yêu cầu"
+      },
+      "problem": {
+        "order": "Ngày bắt đầu không được sau ngày kết thúc.",
+        "future": "Ngày kết thúc không được ở tương lai.",
+        "tooOld": "Nhật ký được lưu trong {days} ngày. Hãy chọn ngày bắt đầu muộn hơn.",
+        "invalid": "Hãy nhập cả hai ngày."
+      },
+      "history": {
+        "title": "Các bản xuất của bạn",
+        "loading": "Đang tải các bản xuất",
+        "tryAgain": "Thử lại",
+        "empty": "Chưa có bản xuất nào.",
+        "onlyStatus": "Chỉ tin nhắn {status}",
+        "requestedAt": "Yêu cầu lúc {date}",
+        "lines": "{count, plural, other {# dòng}}",
+        "until": "Có sẵn đến {date}",
+        "download": "Tải xuống",
+        "status": {
+          "queued": "Đang chờ",
+          "running": "Đang chuẩn bị",
+          "ready": "Sẵn sàng",
+          "failed": "Thất bại",
+          "expired": "Hết hạn"
+        }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Trình mô phỏng (thử nghiệm)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Chat trên website",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "Email"
+      },
+      "variableGroup": {
+        "contact": "Liên hệ",
+        "agent": "Bạn",
+        "workspace": "Không gian làm việc",
+        "conversation": "Cuộc trò chuyện"
+      },
+      "variable": {
+        "first_name": "Tên của liên hệ",
+        "last_name": "Họ của liên hệ",
+        "name": "Họ tên đầy đủ của liên hệ",
+        "email": "Email của liên hệ",
+        "phone": "Số điện thoại của liên hệ",
+        "agent_name": "Họ tên đầy đủ của bạn",
+        "agent_first_name": "Tên của bạn",
+        "workspace_name": "Tên không gian làm việc",
+        "company_name": "Tên công ty",
+        "today": "Ngày hôm nay",
+        "device_name": "Tên của kênh",
+        "device_phone": "Số điện thoại của kênh"
+      },
+      "picker": {
+        "title": "Trả lời nhanh",
+        "close": "Đóng trả lời nhanh",
+        "searchLabel": "Tìm trả lời nhanh",
+        "searchPlaceholder": "Tìm theo phím tắt, tiêu đề hoặc nội dung",
+        "listLabel": "Trả lời nhanh",
+        "loading": "Đang tải trả lời nhanh",
+        "loadFailed": "Không thể tải trả lời nhanh.",
+        "retry": "Thử lại",
+        "empty": "Chưa có trả lời nhanh nào.",
+        "emptyForChannel": "Không có trả lời nhanh nào dành cho kênh này.",
+        "createFirst": "Tạo cái đầu tiên",
+        "noMatch": "Không có trả lời nhanh nào khớp với \"{q}\".",
+        "mine": "Của tôi",
+        "hint": "Phím mũi tên để di chuyển, Enter để chèn, Esc để đóng.",
+        "manage": "Quản lý trả lời nhanh",
+        "tooLong": "Câu trả lời đó quá dài so với giới hạn tin nhắn của kênh này nên chưa được chèn."
+      },
+      "screen": {
+        "back": "Cài đặt",
+        "title": "Trả lời nhanh",
+        "subtitle": "Các câu trả lời dùng lại mà nhóm của bạn chèn vào tin trả lời. Gõ / trong cuộc trò chuyện để tìm.",
+        "create": "Trả lời nhanh mới",
+        "noAccess": "Bạn không có quyền quản lý trả lời nhanh.",
+        "meter": "Đã dùng {used}/{limit} trả lời nhanh",
+        "meterLabel": "Trả lời nhanh đã dùng theo gói của bạn",
+        "meterNote": "Cả câu trả lời dùng chung và cá nhân đều được tính vào giới hạn.",
+        "atLimit": "Bạn đã đạt giới hạn {limit} trả lời nhanh của gói. Hãy xóa một cái hoặc nâng cấp để thêm.",
+        "nearLimit": "Bạn sắp đạt giới hạn {limit} trả lời nhanh của gói.",
+        "upgrade": "Xem các gói",
+        "tabsLabel": "Hiển thị",
+        "tab": {
+          "all": "Tất cả ({count})",
+          "shared": "Dùng chung ({count})",
+          "mine": "Của tôi ({count})"
+        },
+        "categoryFilter": "Lọc theo danh mục",
+        "allCategories": "Tất cả danh mục",
+        "searchLabel": "Tìm trả lời nhanh",
+        "searchPlaceholder": "Tìm theo phím tắt, tiêu đề hoặc nội dung",
+        "howItWorks": "Trong hộp thư đến, gõ / vào ô tin nhắn hoặc dùng nút Trả lời nhanh. Các biến như '{{first_name}}' được điền từ cuộc trò chuyện trước khi nội dung vào ô tin nhắn. Không có gì được gửi cho đến khi nhân viên bấm Gửi.",
+        "loading": "Đang tải trả lời nhanh",
+        "loadFailed": "Không thể tải trả lời nhanh.",
+        "retry": "Thử lại",
+        "loadMore": "Tải thêm",
+        "list": "Trả lời nhanh",
+        "emptyTitle": "Chưa có trả lời nhanh nào",
+        "empty": "Viết những câu trả lời nhóm của bạn hay dùng, rồi chèn chỉ bằng một lần bấm phím.",
+        "noMatchTitle": "Không tìm thấy gì",
+        "noMatch": "Không có trả lời nhanh nào khớp với \"{q}\".",
+        "noMatchCategory": "Không có trả lời nhanh nào trong danh mục này.",
+        "scope": {
+          "shared": "Dùng chung",
+          "mine": "Của tôi"
+        },
+        "allChannels": "Tất cả kênh",
+        "neverUsed": "Chưa được dùng",
+        "used": "{count, plural, other {Đã dùng # lần}}",
+        "lastUsed": "Dùng lần cuối {when}",
+        "createdBy": "Tạo bởi {name}",
+        "readOnly": "Chỉ những người quản lý trả lời nhanh mới có thể thay đổi câu trả lời dùng chung.",
+        "edit": "Sửa",
+        "duplicate": "Nhân bản",
+        "delete": "Xóa",
+        "cancel": "Hủy",
+        "deleteTitle": "Xóa trả lời nhanh này?",
+        "deleteShared": "/{shortcut} sẽ bị xóa với mọi người trong không gian làm việc.",
+        "deleteMine": "/{shortcut} sẽ bị xóa khỏi các câu trả lời của bạn.",
+        "deleted": "Đã xóa trả lời nhanh.",
+        "duplicated": "Đã nhân bản trả lời nhanh.",
+        "created": "Đã tạo trả lời nhanh /{shortcut}.",
+        "saved": "Đã cập nhật trả lời nhanh."
+      },
+      "form": {
+        "eyebrow": "Trả lời nhanh",
+        "titleNew": "Trả lời nhanh mới",
+        "titleEdit": "Sửa trả lời nhanh",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "saving": "Đang lưu…",
+        "shortcut": "Phím tắt",
+        "shortcutPlaceholder": "camon",
+        "shortcutHint": "Chữ cái, số và dấu gạch dưới, tối đa {max} ký tự.",
+        "shortcutStored": "Nhân viên gõ /{shortcut}",
+        "shortcutEmpty": "Nhập phím tắt gồm chữ cái, số hoặc dấu gạch dưới.",
+        "shortcutTaken": "/{shortcut} đã được một câu trả lời khác dùng. Hãy chọn phím tắt khác.",
+        "title": "Tiêu đề",
+        "titlePlaceholder": "Cảm ơn bạn đã liên hệ",
+        "titleEmpty": "Nhập tiêu đề.",
+        "titleLong": "Tiêu đề tối đa {max} ký tự.",
+        "body": "Nội dung",
+        "bodyHint": "Văn bản thuần. Dùng *đậm* và _nghiêng_ như trong WhatsApp.",
+        "bodyPlaceholder": "Chào '{{first_name}}', cảm ơn bạn đã liên hệ. Chúng tôi có thể giúp gì cho bạn?",
+        "bodyEmpty": "Nhập nội dung câu trả lời.",
+        "bodyLong": "Nội dung tối đa {max} ký tự.",
+        "count": "{n}/{max}",
+        "variables": "Chèn biến",
+        "variablesHint": "Bấm vào một biến để thêm vào vị trí con trỏ. Biến không thể điền sẽ giữ nguyên như đã viết để nhân viên nhìn thấy.",
+        "preview": "Xem trước",
+        "previewHint": "Với dữ liệu khách hàng mẫu.",
+        "previewEmpty": "Nhập nội dung để xem hiển thị ra sao.",
+        "previewIssues": "Chưa điền trong bản xem trước: {list}. Khi dùng câu trả lời, các thuộc tính liên hệ của bạn sẽ được điền nếu liên hệ có; phần còn lại giữ nguyên như đã viết.",
+        "category": "Danh mục (không bắt buộc)",
+        "categoryPlaceholder": "Chào hỏi, thanh toán, hỗ trợ",
+        "language": "Ngôn ngữ (không bắt buộc)",
+        "languageHint": "Mã như en hoặc pt-BR, để bạn tham khảo.",
+        "languageFormat": "Hãy dùng mã ngôn ngữ như en hoặc pt-BR.",
+        "channels": "Chỉ trên các kênh này",
+        "channelsHint": "Để trống tất cả để hiển thị trên mọi kênh.",
+        "scope": "Ai có thể dùng",
+        "scopeOption": {
+          "shared": "Mọi người trong không gian làm việc",
+          "mine": "Chỉ mình tôi"
+        },
+        "scopeLocked": "Sau khi lưu, không thể đổi câu trả lời giữa dùng chung và cá nhân.",
+        "planLimit": "Bạn đã đạt giới hạn trả lời nhanh của gói.",
+        "upgrade": "Xem các gói",
+        "conflict": "Người khác đã thay đổi câu trả lời này trước. Hãy đóng cửa sổ này và mở lại.",
+        "invalid": "Một số nội dung bạn nhập không hợp lệ."
+      },
+      "transfer": {
+        "export": "Xuất CSV",
+        "import": "Nhập CSV",
+        "title": "Nhập câu trả lời đã lưu",
+        "intro": "Tải lên tệp CSV có các cột title, shortcut, body và, nếu muốn, category, language và channel (các loại kênh cách nhau bằng |, để trống cho mọi kênh). Tối đa 1.000 hàng và {maxKb} KB. Các câu trả lời đã nhập sẽ được chia sẻ cho cả nhóm. Tệp xuất có cùng các cột.",
+        "file": "Tệp CSV",
+        "tooBig": "Tệp này quá lớn.",
+        "duplicates": "Khi một câu trả lời chung đã dùng shortcut này",
+        "policy": {
+          "skip": "Giữ câu trả lời hiện có",
+          "overwrite": "Thay nội dung"
+        },
+        "policyHint": {
+          "skip": "Hàng này sẽ bị bỏ qua và câu trả lời giữ nguyên.",
+          "overwrite": "Tiêu đề, nội dung, danh mục, ngôn ngữ và kênh sẽ được thay thế. Số lần sử dụng được giữ nguyên."
+        },
+        "check": "Kiểm tra tệp",
+        "go": "Nhập ({count})",
+        "cancel": "Hủy",
+        "summary": "{create} sẽ được tạo, {update} sẽ được thay thế, {skip} bị bỏ qua, {invalid} có lỗi. Chưa có gì được lưu.",
+        "plan": "Gói của bạn: {used} trên {limit} câu trả lời.",
+        "row": "Dòng {line}: /{shortcut}",
+        "truncated": "Chỉ hiển thị các hàng đầu tiên có lỗi hoặc có thay đổi.",
+        "done": "Đã nhập: {created} tạo mới, {updated} được thay thế.",
+        "issue": {
+          "update": "sẽ được thay thế",
+          "skip": "bị bỏ qua",
+          "invalid": "có lỗi",
+          "duplicate": "shortcut đã được dùng, bị bỏ qua",
+          "missing_shortcut": "thiếu shortcut",
+          "shortcut_invalid": "shortcut không có chữ hoặc số hợp lệ",
+          "missing_title": "thiếu tiêu đề",
+          "title_too_long": "tiêu đề quá dài",
+          "missing_body": "thiếu nội dung",
+          "body_too_long": "nội dung quá dài",
+          "control_characters": "chứa ký tự điều khiển",
+          "category_too_long": "danh mục quá dài",
+          "language_invalid": "ngôn ngữ không phải mã như en hoặc pt-BR",
+          "channel_unknown": "kênh không xác định",
+          "duplicate_in_file": "shortcut đã xuất hiện trước đó trong tệp",
+          "plan_limit_reached": "vượt quá giới hạn gói của bạn"
+        }
+      }
+    },
+    "triage": {
+      "priority": "Ưu tiên",
+      "snooze": "Tạm ẩn",
+      "wake": "Hiện lại ngay"
+    },
+    "bulk": {
+      "barLabel": "Thao tác hàng loạt",
+      "selected": "{count, plural, one {Đã chọn # cuộc trò chuyện} other {Đã chọn # cuộc trò chuyện}}",
+      "selectAllInView": "Chọn tất cả {count} mục đang hiển thị",
+      "done": "Xong",
+      "markRead": "Đánh dấu đã đọc",
+      "resolve": "Giải quyết",
+      "close": "Đóng",
+      "reopen": "Mở lại",
+      "assign": "Phân công",
+      "assignToMe": "Giao cho tôi",
+      "unassign": "Bỏ phân công",
+      "removeTeam": "Gỡ nhóm",
+      "priority": "Ưu tiên",
+      "snooze": "Tạm ẩn",
+      "snoozePreset": {
+        "oneHour": "1 giờ",
+        "threeHours": "3 giờ",
+        "tomorrow": "Ngày mai, 9:00",
+        "nextWeek": "Thứ Hai tới, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {Đã cập nhật # cuộc trò chuyện} other {Đã cập nhật # cuộc trò chuyện}}.",
+        "nothingChanged": "Không có gì cần thay đổi: các cuộc trò chuyện đã chọn đều đã được cập nhật.",
+        "partial": "Đã cập nhật {done}, {unchanged} đã ở trạng thái mới nhất, không thể thay đổi {failed}. Các mục thất bại vẫn được chọn.",
+        "allFailed": "Không thể thay đổi {count, plural, one {# cuộc trò chuyện nào} other {# cuộc trò chuyện nào}}."
+      },
+      "tag": "Gắn thẻ",
+      "tagAdd": "Thêm thẻ",
+      "tagRemove": "Bỏ thẻ"
+    },
+    "tags": {
+      "tag": "Thẻ",
+      "loading": "Đang tải thẻ…",
+      "loadFailed": "Không thể tải thẻ.",
+      "none": "Chưa có thẻ nào.",
+      "newTag": "Thẻ mới",
+      "add": "Thêm",
+      "filter": "Thẻ",
+      "filterActive": "{count, plural, other {# thẻ}}",
+      "clearFilter": "Xóa bộ lọc thẻ",
+      "scope": {
+        "label": "Khớp thẻ trên",
+        "conversation": "Thẻ cuộc trò chuyện",
+        "contact": "Thẻ liên hệ"
+      },
+      "groups": {
+        "title": "Thẻ",
+        "helpFor": "Giới thiệu về {title}",
+        "rule": "Cả hai loại đều lấy từ cùng một thư viện thẻ của không gian làm việc.",
+        "contactTitle": "Thẻ liên hệ",
+        "contactHelp": "Thẻ liên hệ mô tả con người (VIP, khách tiềm năng, khu vực). Thẻ theo họ vào mọi cuộc trò chuyện.",
+        "contactNone": "Liên hệ này chưa có thẻ.",
+        "contactEdit": "Sửa trên liên hệ",
+        "conversationTitle": "Thẻ cuộc trò chuyện",
+        "conversationHelp": "Thẻ cuộc trò chuyện mô tả luồng này (thanh toán, hoàn tiền, khẩn cấp).",
+        "conversationNone": "Cuộc trò chuyện này chưa có thẻ.",
+        "remove": "Bỏ thẻ {name}"
+      },
+      "screen": {
+        "back": "Quay lại hộp thư",
+        "title": "Thẻ cuộc trò chuyện",
+        "intro": "Thẻ cuộc trò chuyện đánh dấu một luồng (thanh toán, hoàn tiền, khẩn cấp) để nhóm của bạn sắp xếp và lọc hộp thư. Chúng lấy từ cùng thư viện thẻ với thẻ liên hệ, vốn mô tả con người.",
+        "newTitle": "Thẻ mới",
+        "editTitle": "Sửa thẻ",
+        "name": "Tên",
+        "color": "Màu",
+        "colorInvalid": "Dùng mã màu hex như #075E54 hoặc tên màu.",
+        "description": "Mô tả (không bắt buộc)",
+        "create": "Tạo thẻ",
+        "save": "Lưu thay đổi",
+        "cancel": "Hủy",
+        "edit": "Sửa",
+        "delete": "Xóa",
+        "inUse": "{count, plural, other {# cuộc trò chuyện}}",
+        "emptyTitle": "Chưa có thẻ nào",
+        "emptyMessage": "Hãy tạo thẻ đầu tiên ở trên, rồi gắn vào cuộc trò chuyện từ hộp thư.",
+        "deleteTitle": "Xóa thẻ này?",
+        "deleteMessage": "\"{name}\" đang được dùng cho {count, plural, other {# cuộc trò chuyện}}. Xóa sẽ gỡ thẻ khỏi các cuộc trò chuyện đó và khỏi mọi liên hệ đang mang thẻ này. Không thể hoàn tác.",
+        "nameTaken": "Đã có thẻ với tên này.",
+        "conflict": "Người khác đã thay đổi thẻ này trước. Danh sách đã được tải lại.",
+        "saved": "Đã lưu thẻ",
+        "created": "Đã tạo thẻ",
+        "deleted": "Đã xóa thẻ"
+      }
+    },
+    "sla": {
+      "breached": "SLA bị vi phạm",
+      "atRisk": "SLA đến hạn sau {minutes} phút",
+      "ok": "SLA đến hạn {time}",
+      "kind": {
+        "first_response": "Mục tiêu phản hồi đầu tiên",
+        "resolution": "Mục tiêu giải quyết"
+      },
+      "titleBreached": "{kind}: đã lỡ (hạn là {time})",
+      "titleOpen": "{kind}: hạn {time}"
     }
   }
 }

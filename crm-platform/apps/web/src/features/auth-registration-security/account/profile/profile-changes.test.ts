@@ -1,6 +1,6 @@
 import type { ProfileResponse } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
-import { profileChanges, savedZone, type ProfileDraft } from './profile-changes';
+import { profileChanges, savedMyZone, savedZone, type ProfileDraft } from './profile-changes';
 
 const profile: ProfileResponse = {
   fullName: 'Asha Rao',
@@ -10,6 +10,8 @@ const profile: ProfileResponse = {
   pendingEmail: null,
   phone: '+919876543210',
   locale: 'en',
+  timezone: null,
+  effectiveTimezone: 'Asia/Calcutta',
   theme: 'paper',
   avatarUrl: null,
   workspaceTimezone: 'Asia/Calcutta',
@@ -22,6 +24,7 @@ const same: ProfileDraft = {
   locale: 'en',
   theme: 'paper',
   zone: 'Asia/Kolkata',
+  myZone: '',
 };
 
 describe('profileChanges', () => {
@@ -72,5 +75,19 @@ describe('profileChanges', () => {
     expect(profileChanges({ ...profile, workspaceTimezone: null }, { ...same, zone: '' })).toEqual(
       {},
     );
+  });
+
+  it("sends the person's own zone, and null when they go back to the workspace's", () => {
+    expect(profileChanges(profile, { ...same, myZone: 'America/New_York' })).toEqual({
+      timezone: 'America/New_York',
+    });
+    const own = { ...profile, timezone: 'America/New_York' };
+    expect(savedMyZone(own)).toBe('America/New_York');
+    expect(profileChanges(own, { ...same, myZone: 'America/New_York' })).toEqual({});
+    expect(profileChanges(own, { ...same, myZone: '' })).toEqual({ timezone: null });
+    // The workspace zone and the person's own zone are separate settings.
+    expect(
+      profileChanges(profile, { ...same, zone: 'Asia/Dubai', myZone: 'Europe/London' }),
+    ).toEqual({ workspaceTimezone: 'Asia/Dubai', timezone: 'Europe/London' });
   });
 });

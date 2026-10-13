@@ -128,7 +128,6 @@
       "planLimit": "您的套餐不允许创建更多此类内容。",
       "unavailable": "此服务器暂不支持细分。",
       "unexpected": "出现错误，请重试。",
-      "requestId": "请求 ID",
       "retry": "重试",
       "shareEmpty": "请至少选择一位人员或一个团队来共享此细分。",
       "shareInvalid": "部分所选人员或团队已不在此工作区中，请移除后重新保存。"

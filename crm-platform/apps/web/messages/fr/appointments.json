@@ -36,7 +36,6 @@
       "slotTaken": "Ce créneau vient d’être pris. Veuillez en choisir un autre.",
       "gone": "Cette réservation ne peut plus être modifiée.",
       "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
-      "requestId": "ID de requête",
       "retry": "Réessayer",
       "invalidTransition": "Cette réservation n’est pas dans un état permettant cette action. Rechargez pour voir où elle en est.",
       "notStarted": "Cela n’est possible qu’une fois la réservation commencée.",

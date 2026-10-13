@@ -6,9 +6,9 @@ import {
   hasDriver,
   type DriverContext,
   type DriverOrder,
+  type HttpFetch,
   type HttpResponse,
   type PinnedFetch,
-  type HttpResponse,
 } from '../../../src/infra/providers/platform-payment-gateways';
 import { sslcommerzSign } from '../../../src/infra/providers/platform-payment-gateways/asia.drivers';
 import {

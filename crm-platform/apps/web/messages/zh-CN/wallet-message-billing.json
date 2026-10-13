@@ -8,7 +8,6 @@
     "common": {
       "loading": "加载中",
       "retry": "重试",
-      "requestId": "请求 ID",
       "cancel": "取消",
       "back": "返回",
       "close": "关闭",

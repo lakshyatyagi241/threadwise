@@ -1,7 +1,11 @@
 import {
+  bulkConversationsResponseSchema,
+  inboxTagListSchema,
+  inboxTagSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
+  conversationGroupMembersSchema,
   conversationListResponseSchema,
   conversationNoteSchema,
   conversationSummarySchema,
@@ -12,6 +16,9 @@ import {
   inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
+  messageLogExportListSchema,
+  messageLogExportSchema,
+  messageLogResponseSchema,
   messageResponseSchema,
   pageResponseSchema,
   simulatorInboundResponseSchema,
@@ -25,9 +32,13 @@ import {
  */
 
 export {
+  bulkConversationsResponseSchema,
+  inboxTagListSchema,
+  inboxTagSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
+  conversationGroupMembersSchema,
   conversationListResponseSchema,
   conversationNoteSchema,
   conversationSummarySchema,
@@ -38,6 +49,9 @@ export {
   inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
+  messageLogExportListSchema,
+  messageLogExportSchema,
+  messageLogResponseSchema,
   messageResponseSchema,
   simulatorInboundResponseSchema,
 };

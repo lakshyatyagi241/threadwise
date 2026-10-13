@@ -8,7 +8,6 @@
         "dismiss": "닫기"
       },
       "errors": {
-        "requestId": "요청 ID",
         "retry": "다시 시도",
         "network": {
           "title": "서버에 연결할 수 없습니다",

@@ -1,0 +1,11 @@
+{
+  "tool": "0.1.0",
+  "gitSha": "abc1234",
+  "gitDirty": false,
+  "builtAt": "2026-10-12T08:00:00Z",
+  "files": {
+    "waboo-migrate.cjs": {
+      "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  }
+}

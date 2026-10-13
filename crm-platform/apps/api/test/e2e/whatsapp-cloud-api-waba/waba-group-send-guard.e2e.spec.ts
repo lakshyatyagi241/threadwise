@@ -16,10 +16,11 @@ import {
 } from '../chat-conversations/pipeline-support';
 
 /**
- * WABA_GROUP_SEND_UNAVAILABLE end to end (docs/specs/waba-groups-management.md 4.3, 12.1, phase 0). A WhatsApp group thread is keyed
+ * Sending to a WhatsApp group end to end (docs/specs/waba-groups-management.md 4.3, 12.1, phase 3). A group thread is keyed
  * `g:<group id>`; the old path stripped the key to digits and addressed an unrelated phone number. Through the real API, a real
  * Postgres and Redis and the real send worker, with only Meta's Graph faked at the HTTP edge: a manual reply on a group thread is
- * refused (422, typed code), nothing is stored, queued or sent to Meta; a normal thread still sends.
+ * sent to Meta as a group (the id verbatim, never as digits); a suspended group is refused (422, typed code) with nothing stored,
+ * queued or sent; a normal thread still sends.
  */
 let p: Pipeline;
 let calls: Array<{ method: string; url: string; body: Record<string, unknown> | null }> = [];
@@ -73,7 +74,7 @@ async function arrange(label: string) {
         [t.orgId, channel.id, peer, title],
       )
     ).rows[0] as { id: number | string; uuid: string };
-  return { t, channel, thread, phoneNumberId };
+  return { t, channel, thread, phoneNumberId, configId: Number(row.rows[0].id) };
 }
 
 const GROUP = 'g:Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2';
@@ -91,48 +92,45 @@ const count = async (conversationId: number | string) =>
 const sends = () => calls.filter((c) => c.method === 'POST' && /\/messages$/.test(c.url));
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-describe('a manual reply on a WhatsApp group thread (phase 0 send guard)', () => {
-  it('is refused with 422 WABA_GROUP_SEND_UNAVAILABLE: nothing is stored, queued or sent to Meta', async () => {
+describe('a manual reply on a WhatsApp group thread', () => {
+  it('is sent to Meta as a group: recipient_type group and the id verbatim', async () => {
     const x = await arrange('gs1');
     const g = await x.thread(GROUP, 'Neighbours');
     calls = [];
 
     const res = await reply(x.t.admin, g.uuid, text());
-    expect(res.status, JSON.stringify(res.body)).toBe(422);
-    expect(res.body.code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
-    expect(JSON.stringify(res.body)).toMatch(/not available yet/i);
-
-    // Not stored, and (give the worker time) nothing reached the fake Meta.
-    expect(await count(g.id)).toBe(0);
-    await pause(1_000);
-    expect(sends()).toHaveLength(0);
-    expect(calls).toHaveLength(0);
+    expect(res.status, JSON.stringify(res.body)).toBe(202);
+    const sent = await until('the send to reach Meta', () =>
+      sends().length > 0 ? sends() : undefined,
+    );
+    expect(sent).toHaveLength(1);
+    expect(sent[0]!.url).toContain(`/${x.phoneNumberId}/messages`);
+    expect(sent[0]!.body).toMatchObject({
+      messaging_product: 'whatsapp',
+      recipient_type: 'group',
+      to: 'Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2',
+      type: 'text',
+    });
   }, 60_000);
 
-  it('a retry of a failed message on a group thread is refused too, and nothing is sent', async () => {
+  it('is refused with 422 WABA_GROUP_SUSPENDED when Meta suspended the group: nothing is stored, queued or sent', async () => {
     const x = await arrange('gs3');
     const g = await x.thread(GROUP, 'Neighbours');
-    // A message that failed before the guard existed (or arrived any other way) sits on the group thread.
-    const m = (
-      await p.h.owner.query(
-        `INSERT INTO messages (org_id, conversation_id, seq, direction, sender_kind, status, body, kind, failure_code)
-         VALUES ($1,$2,1,'out','agent','failed','old reply','text','RECIPIENT_NOT_ALLOWED') RETURNING uuid`,
-        [x.t.orgId, g.id],
-      )
-    ).rows[0] as { uuid: string };
-    await p.h.owner.query(`UPDATE conversations SET msg_seq = 1 WHERE id = $1`, [g.id]);
+    await p.h.owner.query(
+      `INSERT INTO waba_groups (org_id, provider_config_id, group_id, subject, participant_count, suspended)
+       VALUES ($1,$2,$3,'Neighbours', 12, true)`,
+      [x.t.orgId, x.configId, GROUP.slice(2)],
+    );
     calls = [];
-    const res = await p.api.as(x.t.admin).post(`/v2/inbox/messages/${m.uuid}/retry`);
+    const res = await reply(x.t.admin, g.uuid, text());
     expect(res.status, JSON.stringify(res.body)).toBe(422);
-    expect(res.body.code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
+    expect(res.body.code).toBe('WABA_GROUP_SUSPENDED');
+    expect(await count(g.id)).toBe(0);
     await pause(800);
     expect(calls).toHaveLength(0);
-    const row = (await p.h.owner.query(`SELECT status FROM messages WHERE uuid = $1`, [m.uuid]))
-      .rows[0];
-    expect(row.status).toBe('failed');
   }, 60_000);
 
-  it('a message already queued on a group thread fails at the worker with the typed code, never calling Meta', async () => {
+  it('a message already queued on a group thread is sent by the worker as a group', async () => {
     const x = await arrange('gs4');
     const g = await x.thread(GROUP, 'Neighbours');
     const m = (
@@ -145,14 +143,13 @@ describe('a manual reply on a WhatsApp group thread (phase 0 send guard)', () =>
     await p.h.owner.query(`UPDATE conversations SET msg_seq = 1 WHERE id = $1`, [g.id]);
     calls = [];
     await p.h.app.get(OutboundService).enqueueJob(x.t.orgId, m.uuid, 1);
-    const failed = await until('the message to fail', async () => {
-      const r = (
-        await p.h.owner.query(`SELECT status, failure_code FROM messages WHERE uuid = $1`, [m.uuid])
-      ).rows[0];
-      return r?.status === 'failed' ? r : undefined;
+    const sent = await until('the send to reach Meta', () =>
+      sends().length > 0 ? sends() : undefined,
+    );
+    expect(sent[0]!.body).toMatchObject({
+      recipient_type: 'group',
+      to: 'Y2FwaV9ncm91cDoxMjM0NTY3ODkwMTIzNDU2',
     });
-    expect(failed.failure_code).toBe('WABA_GROUP_SEND_UNAVAILABLE');
-    expect(calls).toHaveLength(0);
   }, 60_000);
 
   it('group INBOUND is untouched: a message posted in the group is still read from the thread', async () => {

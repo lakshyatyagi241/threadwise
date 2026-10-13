@@ -46,7 +46,6 @@
         "copyFailed": "Kopyalanamadı",
         "loading": "Yükleniyor",
         "retry": "Tekrar dene",
-        "requestId": "İstek kimliği",
         "errors": {
           "forbidden": "Rolünüz buna izin vermiyor.",
           "request": "İstek reddedildi. Sayfayı yenileyip tekrar deneyin.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Operatör girişi",
         "intro": "Bu konsol platformu yöneten kişiler içindir. Çalışma alanı kullanıcıları ana oturum açma sayfasından giriş yapar.",
-        "requestId": "İstek kimliği",
         "submit": "Oturum aç",
         "submitting": "Oturum açılıyor",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Hesabınız",
         "title": "İki adımlı doğrulama",
         "description": "{email} hesabını bir kimlik doğrulama uygulamasıyla koruyun. Operatör hesapları platformdaki en yüksek güvenli hesaplardır.",
-        "requestId": "İstek kimliği",
         "status": {
           "title": "Kimlik doğrulama uygulaması",
           "on": "Açık",
@@ -181,7 +178,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "İşleniyor",
             "close": "Kapat",
             "signInAgain": "Yeniden oturum aç",
-            "requestId": "İstek kimliği",
             "errors": {
               "forbidden": "Bu işlemi yalnızca bir süper yönetici çalıştırabilir.",
               "unexpected": "İşlem tamamlanmadı. Tekrar denemeden önce olay günlüğünü kontrol edin."
@@ -731,7 +726,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "{to} numarasına bir test kodu gönderildi.",
             "remaining": "{count, plural, one {Bu saat # test hakkı kaldı.} other {Bu saat # test hakkı kaldı.}}",
             "notShown": "Kod burada gösterilmez; telefondan okuyun.",
-            "requestId": "İstek kimliği",
             "errors": {
               "invalidNumber": "Numarayı ülke koduyla girin, örneğin +91 98765 43221.",
               "rateLimited": "Bu saat çok fazla test kodu. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin.",
@@ -1045,7 +1038,6 @@
           "saved": "Gönderen kaydedildi",
           "removed": "Gönderen kaldırıldı",
           "secretRemoved": "Kayıtlı sır kaldırıldı",
-          "requestId": "İstek kimliği",
           "problems": {
             "required": "Bu alan zorunludur.",
             "tooLong": "En fazla {max} karakter.",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "Bu alt bilgi kabul edilmedi.",
             "unexpected": "Alt bilgi kaydedilemedi. Biraz sonra tekrar deneyin."
-          },
-          "requestId": "İstek kimliği"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "İptal",
           "working": "Kaldırılıyor",
           "error": "Sır kaldırılamadı. Biraz sonra tekrar deneyin.",
-          "requestId": "İstek kimliği",
           "done": "Kayıtlı {name} sırrı kaldırıldı.",
           "names": {
             "google": "Google",
@@ -1418,7 +1407,10 @@
             "forms_and_links": "Potansiyel müşteri toplama formları ve paylaşılabilir bağlantılar.",
             "extra_channels": "Telegram, Facebook ve Instagram kanalları.",
             "form_builder": "CRM'de kişi oluşturan barındırılan ve gömülü web formları. Bu anahtar ücretli Formlar uygulamasına aittir.",
-            "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır."
+            "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır.",
+            "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin.",
+            "help_agent": "Uygulama içi Yardım asistanı: kullanıcılar yapmak istediklerini sade kelimelerle yazar, asistan kendi oturumlarında yol gösterir veya işi yapar, riskli bir şeyden önce sorar. Yapay zeka jetonu harcar.",
+            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir."
           },
           "units": {
             "days": "Gün",
@@ -1559,7 +1551,9 @@
             "ai_token_limit_monthly": "Aylık yapay zeka belirteçleri (platform anahtarları)",
             "forms": "Web formları",
             "form_submissions_monthly": "Aylık form gönderimleri",
-            "ai_form_generations_monthly": "Aylık yapay zeka form oluşturucu üretimleri"
+            "ai_form_generations_monthly": "Aylık yapay zeka form oluşturucu üretimleri",
+            "sms_monthly": "Aylık SMS",
+            "email_mailboxes": "E-posta kutuları"
           },
           "featureGroups": {
             "messaging": "Mesajlaşma",
@@ -1596,7 +1590,10 @@
             "forms_and_links": "Formlar, tıkla ve sohbet et bağlantıları ve gruplar",
             "extra_channels": "Telegram, Facebook ve Instagram kanalları",
             "form_builder": "Formlar (web formu oluşturucu)",
-            "waba_groups": "WhatsApp grupları (Cloud API)"
+            "waba_groups": "WhatsApp grupları (Cloud API)",
+            "sms": "SMS kanalı",
+            "help_agent": "Yardım asistanı (yapay zeka, jeton harcar)",
+            "email_channel": "E-posta (Gmail) kanalı"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1648,7 +1645,9 @@
             "ai_token_limit_monthly": "Yapay zeka asistanlarının takvim ayında platform anahtarlarıyla kullandığı belirteçler. Kendi anahtarlarını kullanan çalışma alanları sınırlanmaz.",
             "forms": "Etkin web formları (Formlar uygulaması). Bir formu arşivlemek yerini serbest bırakır. 0 = sınırsız.",
             "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınır aşıldığında gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
-            "ai_form_generations_monthly": "Takvim ayındaki yapay zeka form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız."
+            "ai_form_generations_monthly": "Takvim ayındaki yapay zeka form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
+            "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
+            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız."
           }
         }
       },
@@ -1660,7 +1659,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {

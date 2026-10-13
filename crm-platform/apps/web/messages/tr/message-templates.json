@@ -4,8 +4,7 @@
       "title": "Şablonlar"
     },
     "common": {
-      "dismiss": "Kapat",
-      "requestId": "İstek kimliği"
+      "dismiss": "Kapat"
     },
     "status": {
       "draft": "Taslak",

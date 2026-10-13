@@ -10,13 +10,13 @@
       "install": "安装 · 应用市场",
       "installed": "已安装 · 应用市场",
       "manage": "管理应用 · 应用市场",
-      "requests": "请求 · 应用市场"
+      "requests": "请求 · 应用市场",
+      "addons": "附加功能 · 应用市场"
     },
     "common": {
       "dismiss": "关闭",
       "loading": "正在加载",
       "errorTitle": "无法加载此内容",
-      "requestId": "请求 ID",
       "retry": "重试",
       "upgrade": "查看套餐并升级",
       "opensNewTab": "（在新标签页中打开）",
@@ -124,7 +124,8 @@
       "moreLabel": "已安装与请求",
       "tabs": {
         "mini_app": "迷你应用",
-        "integration": "集成"
+        "integration": "集成",
+        "addon": "附加功能"
       },
       "installed": "已安装",
       "installedLimit": "已安装（{installed}/{limit}）",
@@ -865,6 +866,15 @@
       },
       "working": "处理中",
       "noCheckout": "此应用目前无法结账。请稍后再试。"
+    },
+    "tools": {
+      "open": "打开",
+      "empty": {
+        "title": "没有可用的附加功能",
+        "message": "您的角色和套餐包含的附加功能将显示在这里。"
+      },
+      "soon": "即将推出",
+      "upgrade": "升级"
     }
   }
 }

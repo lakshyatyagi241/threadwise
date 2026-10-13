@@ -168,8 +168,8 @@
       "subtitleSimple": "Chaque bot est conçu pour un seul canal, car tous les composants ne fonctionnent pas sur tous les canaux.",
       "whatsapp": "WhatsApp",
       "whatsappNote": "Répond aux clients sur un numéro WhatsApp connecté",
-      "web": "Chat de site web",
-      "webNote": "Un widget de chat à ajouter à votre site web"
+      "web": "Chat du site web",
+      "webNote": "Un widget de chat que vous ajoutez à votre site web"
     },
     "rename": {
       "title": "Renommer le flux",
@@ -554,7 +554,12 @@
           "cardGallery": "Galerie de cartes",
           "cardCount": "{count} carte(s)",
           "payLink": "Lien de paiement",
-          "invoice": "Facture"
+          "invoice": "Facture",
+          "faqAllFaqs": "Toutes les FAQ",
+          "faqCategory": "FAQ : {name}",
+          "faqScore": "score min. {score}",
+          "faqNotSent": "non envoyée",
+          "faqWorkspaceScore": "score du flux"
         },
         "overlays": {
           "startPinned": "Ceci est le point de départ (cliquez pour le retirer)",
@@ -711,9 +716,11 @@
             "send": "Envoyer",
             "ask": "Interroger le client",
             "handoff": "Transférer",
-            "logic": "Décider"
+            "logic": "Décider",
+            "answer": "Réponse"
           },
-          "blockedTitle": "Les boutons et listes terminent un flux, ils ne peuvent donc être placés qu’en dernier."
+          "blockedTitle": "Les boutons et listes terminent un flux, ils ne peuvent donc être placés qu’en dernier.",
+          "blockedTitleFaq": "« Réponse depuis la FAQ » a deux sorties, elle ne peut donc venir qu'en dernier."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -722,7 +729,11 @@
           "moveUp": "Monter",
           "moveDown": "Descendre",
           "duplicate": "Dupliquer",
-          "deleteStep": "Supprimer l’étape"
+          "deleteStep": "Supprimer l’étape",
+          "faqExits": {
+            "matched": "Répondu",
+            "no_match": "Aucune correspondance"
+          }
         },
         "editors": {
           "linkLabel": "Où cela mène",
@@ -879,9 +890,20 @@
           },
           "handoff": {
             "hint": "Le visiteur est transmis à cette équipe avec votre note. Rien n'est à connecter après ce bouton."
+          },
+          "faq": {
+            "exits": {
+              "matched": "Si une FAQ a répondu, aller à",
+              "no_match": "Si aucune FAQ n'a répondu, aller à"
+            },
+            "exitsHint": {
+              "matched": "À ce stade, une réponse texte a été envoyée. Une FAQ qui lance un flux se poursuit dans ce flux.",
+              "no_match": "Rien n'était assez proche, ou la réponse automatique par FAQ est désactivée."
+            }
           }
         },
-        "branchAdd": "Ajouter une étape pour « {title} »"
+        "branchAdd": "Ajouter une étape pour « {title} »",
+        "faqEnds": "Cette étape termine cette partie : ce qui est envoyé ensuite dépend de la réponse ou non d'une FAQ."
       },
       "formsCore": {
         "helpers": {
@@ -1814,6 +1836,45 @@
           "afterSending": "Après l’envoi",
           "afterSendingHint": "Activé : le flux se met en pause ici et ne continue par la sortie « sortie » qu’une fois le client payé (le montant arrive sous la forme {paidAmount} {paidCurrency}). Désactivé : la facture est envoyée et le flux continue immédiatement.",
           "waitUntilPaid": "Attendre le paiement, puis continuer"
+        },
+        "faq": {
+          "intro": {
+            "body": "Compare un message aux FAQ de ce flux selon le sens et y répond. Sort par <mono>répondu</mono> quand une FAQ a répondu, et par <mono>aucune correspondance</mono> sinon.",
+            "sub": "Fonctionne sans activer la réponse FAQ automatique de ce flux. <link>Gérer les FAQ de ce flux</link>"
+          },
+          "exitsLabel": "Sorties",
+          "exitMatchedName": "Répondu",
+          "exitMatched": "une FAQ a répondu : son texte a été envoyé (sauf si l'envoi est désactivé), ou son flux a pris le relais et ne revient pas.",
+          "exitNoMatchName": "Aucune correspondance",
+          "exitNoMatch": "rien n'était assez proche, la réponse automatique par FAQ est désactivée pour la plateforme, le flux ou l'étape lié n'existe plus, ou le message était vide.",
+          "query": "Message à comparer",
+          "queryHint": "Par défaut, le dernier message du client. Une variable enregistrée par une étape Question fonctionne aussi, par exemple <mono>{variable}</mono>. Tapez / pour en insérer une.",
+          "category": "Uniquement ces FAQ",
+          "allFaqs": "Toutes les FAQ",
+          "loadingCategories": "Chargement des catégories…",
+          "categoryGone": "{name} (aucune FAQ ne l'utilise)",
+          "retry": "Réessayer",
+          "minScore": "Score minimum",
+          "sendAnswer": "Envoyer la réponse au client",
+          "sendAnswerToggle": "Envoyer la réponse texte trouvée comme message",
+          "sendAnswerOnHint": "Une FAQ texte correspondante est envoyée au client. Une FAQ qui lance un flux se poursuit dans ce flux.",
+          "sendAnswerOffHint": "Rien n'est envoyé : la réponse est seulement enregistrée dans les variables ci-dessous, pour qu'une étape suivante formule elle-même la réponse. Une FAQ qui lance un flux se poursuit quand même dans ce flux.",
+          "save": "Enregistrer le résultat sous",
+          "saveHint": "Le nom sous lequel le résultat est enregistré. Les étapes suivantes le lisent comme indiqué ci-dessous.",
+          "variables": {
+            "answer": "le texte de la réponse",
+            "matched": "oui ou non",
+            "question": "la question de la FAQ trouvée",
+            "score": "la proximité de la correspondance",
+            "id": "l'identifiant de la FAQ trouvée"
+          },
+          "noFaqs": "Ce flux n’a pas encore de FAQ, donc cette étape sort toujours par aucune correspondance. <link>Ajouter la première FAQ de ce flux</link>",
+          "useWorkspaceScore": "Utiliser le réglage de ce flux",
+          "minScoreInvalid": "Saisissez un nombre de {min} à {max}, ou utilisez le réglage de ce flux.",
+          "saveFlowFirst": "Enregistrez d’abord le flux. Ses FAQ se modifient dans l’onglet FAQ du constructeur simple, et cette étape répond à partir d’elles.",
+          "categoryHint": "Seules les FAQ de cette catégorie peuvent répondre. Les catégories proviennent des FAQ de ce flux.",
+          "categoriesFailed": "Impossible de charger les catégories de FAQ de ce flux.",
+          "minScoreHint": "Remplace le score de ce flux pour cette étape uniquement, de {min} à {max}. Les scores dépendent du modèle d’embedding de la plateforme : essayez un message dans le <link>test FAQ</link> de ce flux avant de choisir un nombre."
         }
       },
       "attrPicker": {
@@ -1876,14 +1937,16 @@
         }
       },
       "webBot": {
-        "aria": "Sections du bot",
+        "aria": "Sections du flux",
         "build": "Créer",
         "customize": "Personnaliser",
-        "saveFirst": "Enregistrez d'abord le bot.",
-        "needsCustomizing": "La personnalisation n'est pas encore enregistrée. Ouvrez Personnaliser.",
+        "saveFirst": "Enregistrez d’abord le flux.",
+        "needsCustomizing": "Le widget utilise encore l’apparence par défaut. Ouvrez Personnaliser.",
         "customizeFirst": "Personnalisez votre widget de chat et enregistrez-le une fois avant de publier.",
         "deploy": "Déployer",
-        "customizeFirstWhatsapp": "Personnalisez votre bouton WhatsApp et enregistrez-le une fois avant de publier."
+        "customizeFirstWhatsapp": "Personnalisez votre bouton WhatsApp et enregistrez-le une fois avant de publier.",
+        "faqs": "FAQ",
+        "install": "Installer"
       },
       "buttonIcon": {
         "label": "Icône (facultatif)",
@@ -2168,6 +2231,10 @@
         "carousel": {
           "label": "Carrousel",
           "description": "Cartes défilantes avec images et boutons"
+        },
+        "faq": {
+          "label": "Réponse depuis la FAQ",
+          "description": "Comparer un message à vos FAQ"
         }
       },
       "groups": {
@@ -2217,7 +2284,7 @@
         "wechat": "WeChat",
         "viber": "Viber",
         "email": "E-mail",
-        "web": "Chat de site web"
+        "web": "Chat du site web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "JJ-MM-AAAA",
@@ -2311,7 +2378,8 @@
         "wrongChannel": "« {node} » ne fonctionne pas sur {channel} : supprimez-le ou réactivez le canal sur le nœud Déclencheur.",
         "noSenderInstagram": "Le nœud Déclencheur n’a aucun compte Instagram sélectionné : choisissez-en un à l’étape Déclencheur.",
         "noSenderFacebook": "Le nœud Déclencheur n’a aucune Page Facebook sélectionnée : choisissez-en une à l’étape Déclencheur.",
-        "noSenderNumber": "Le nœud Déclencheur n’a aucun numéro sélectionné : choisissez-en un à l’étape Déclencheur."
+        "noSenderNumber": "Le nœud Déclencheur n’a aucun numéro sélectionné : choisissez-en un à l’étape Déclencheur.",
+        "faqMinScore": "« {node} » a un score minimum hors de la plage 0.05 à 0.99. Corrigez-le ou laissez-le vide pour utiliser le réglage du flux."
       }
     },
     "simpleModel": {
@@ -2398,6 +2466,10 @@
         "condition": {
           "label": "Condition",
           "help": "Brancher selon ce que le client a dit ou enregistré, avec des règles AND / OR"
+        },
+        "faq": {
+          "label": "Réponse depuis la FAQ",
+          "help": "Compare le message du client à vos FAQ. Termine ce flux : une sortie si une FAQ a répondu, une autre sinon"
         }
       },
       "typeLabel": {
@@ -2414,7 +2486,8 @@
         "cta": "Bouton lien",
         "assign": "Assigner à un agent",
         "carousel": "Carrousel",
-        "condition": "Condition"
+        "condition": "Condition",
+        "faq": "Réponse depuis la FAQ"
       },
       "stepLabel": {
         "questionOf": "Question · {kind}"
@@ -2454,8 +2527,10 @@
         "variableUsed": "Étape {stage} : « {name} » est déjà utilisé par l’étape {other} ; donnez un nom distinct à chaque réponse.",
         "carouselCards": "Étape {stage} : ajoutez au moins une carte et donnez un titre à chaque carte.",
         "carouselButtons": "Étape {stage} : donnez un nom à chaque bouton, et un lien, un numéro ou une adresse là où il ouvre quelque chose.",
-        "conditionIncomplete": "Étape {stage} : terminez les règles de la condition (une variable et une valeur dans chacune)."
-      }
+        "conditionIncomplete": "Étape {stage} : terminez les règles de la condition (une variable et une valeur dans chacune).",
+        "faqMinScore": "Étape {stage} : le score minimum doit être compris entre 0.05 et 0.99, ou utilisez le réglage du flux."
+      },
+      "faqSummary": "{hasCategory, select, true {Depuis vos FAQ · {category}} other {Depuis vos FAQ}}"
     },
     "waboImport": {
       "notes": {
@@ -2566,7 +2641,9 @@
       "optionNotConnected": "Sortie « {port} » (option {n}) non reliée — arrêt.",
       "buttonNotConnected": "Bouton « {label} » non relié — arrêt.",
       "simPurchase": "Achat simulé : {name} → sortie « achetée »",
-      "simAbandon": "Abandon simulé → sortie « abandonnée »"
+      "simAbandon": "Abandon simulé → sortie « abandonnée »",
+      "faqAnswered": "(simulé) Réponse depuis la FAQ pour « {query} » : le chat de test ne consulte pas vos FAQ, donc rien n'est envoyé et {ref} reste vide. Sortie « Répondu » empruntée.",
+      "faqNoMatch": "(simulé) Réponse depuis la FAQ pour « {query} » : le chat de test ne consulte pas vos FAQ, et la sortie « Répondu » n'est pas connectée, donc sortie « Aucune correspondance » empruntée. {ref} reste vide."
     }
   }
 }

@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import type { MarketAppKind, MarketCategory } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { fetchShelves, mktKeys } from '../api';
-import { categoryItems, type BrowseFilters } from '../lib/browse';
+import { BROWSE_RETRY, categoryItems, type BrowseFilters } from '../lib/browse';
 import { mktRoutes } from '../lib/routes';
 import { AppCard } from './app-card';
 import { ErrorPanel, LINK_BUTTON, LoadingBlock } from './ui';
@@ -86,6 +86,7 @@ export function Shelves({ kind }: { kind: MarketAppKind }) {
     queryKey: mktKeys.shelves(kind),
     queryFn: ({ signal }) => fetchShelves(kind, signal),
     staleTime: 30_000,
+    ...BROWSE_RETRY,
   });
   if (q.isPending) return <LoadingBlock />;
   if (q.isError) return <ErrorPanel error={q.error} onRetry={() => void q.refetch()} />;

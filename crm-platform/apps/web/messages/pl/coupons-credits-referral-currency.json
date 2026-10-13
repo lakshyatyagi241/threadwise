@@ -14,7 +14,6 @@
       "dismiss": "Odrzuć",
       "admin": "Administrator",
       "readOnly": "Możesz przeglądać tę stronę, ale zmieniać ją może tylko superadministrator.",
-      "requestId": "Identyfikator żądania",
       "errors": {
         "forbidden": "Nie masz dostępu do tej strony.",
         "request": "Nie udało się zrealizować żądania.",
@@ -404,7 +403,6 @@
         "validation": "Nie udało się zastosować tych filtrów. Zresetuj je i spróbuj ponownie.",
         "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
         "generic": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-        "requestId": "Identyfikator żądania",
         "retry": "Spróbuj ponownie"
       }
     }

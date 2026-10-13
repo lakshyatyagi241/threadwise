@@ -7,7 +7,6 @@
     "common": {
       "loading": "Yükleniyor",
       "retry": "Tekrar dene",
-      "requestId": "İstek kimliği",
       "dash": "-",
       "cancel": "İptal",
       "errors": {
@@ -61,7 +60,9 @@
         "matches": "Kontrol edilen müşteri mesajları",
         "answered": "Yanıtlanan",
         "rate": "Yanıt oranı",
-        "tokens": "Gömme token sayısı"
+        "tokens": "Gömme token sayısı",
+        "verified": "İkinci kontroller",
+        "vetoed": "Tutulan yanıtlar"
       }
     },
     "settings": {
@@ -86,17 +87,18 @@
       },
       "threshold": {
         "label": "Varsayılan eşleşme eşiği",
-        "hint": "Bir mesaj, skoru en az bu değerde olduğunda eşleşir. Yalnızca kendi eşiğini hiç kaydetmemiş çalışma alanlarında kullanılır. Skorlar gömme modeline bağlıdır.",
         "value": "{value}",
         "follow": "Modeli izle",
-        "followHint": "Varsayılan hassasiyet modelin önerilen değeridir ({value}) ve model değişince o da değişir. Sabit bir sayı için kapatın."
+        "followHint": "Varsayılan hassasiyet modelin önerilen değeridir ({value}) ve model değişince o da değişir. Sabit bir sayı için kapatın.",
+        "hint": "Bir mesajın puanı en az bu değerse eşleşir. Yalnızca kendi eşiğini hiç kaydetmemiş akışlar kullanır. Puanlar gömme modeline bağlıdır."
       },
       "limits": {
         "title": "Sınırlar",
-        "maxFaqs": "Çalışma alanı başına en fazla SSS",
         "maxVariationsPerFaq": "SSS başına en fazla varyasyon",
         "semanticPerHour": "Çalışma alanı başına saatlik anlam eşleşmesi",
-        "semanticPerHourHint": "Bunun üzerinde çalışma alanı, saatin geri kalanında yazım benzerliğine döner. 0 her zaman yazım benzerliği demektir."
+        "semanticPerHourHint": "Bunun üzerinde çalışma alanı, saatin geri kalanında yazım benzerliğine döner. 0 her zaman yazım benzerliği demektir.",
+        "verifyPerHour": "Çalışma alanı başına saatlik ikinci kontrol sayısı",
+        "maxFaqs": "Akış başına en fazla SSS"
       },
       "errors": {
         "integer": "Bir tam sayı girin.",
@@ -114,7 +116,20 @@
         "title": "Kaydetmeden önce gözden geçirin",
         "confirm": "Değişiklikleri kaydet",
         "engineOff": "Motoru kapatmak, hiçbir çalışma alanının müşterilere SSS ile yanıt vermesine izin vermez ve siz yeniden açana kadar SSS düzenlemelerini engeller.",
-        "modelChange": "Gömme modelini {from} modelinden {to} modeline değiştirmek, saklanan tüm vektörlerin yeniden üretilmesini sağlar. Bu bitene kadar eşleştirme yalnızca yazım benzerliğini kullanır. Sabit bir değer belirlemediyseniz varsayılan hassasiyet yeni modeli izler (önerilen {threshold}). Skorlar modelle değiştiği için ayrı kaydedilmiş çalışma alanı eşiklerinin yeniden ayarlanması gerekebilir."
+        "modelChange": "Gömme modelini {from} modelinden {to} modeline değiştirmek, saklanan tüm vektörlerin yeniden oluşturulmasına yol açar. Bu bitene kadar eşleştirme yalnızca yazım benzerliğini kullanır. Sabit bir değer belirlemezseniz varsayılan hassasiyet yeni modeli izler (önerilen {threshold}). Akışların kendi kaydettiği eşiklerin, puanlar modelle değiştiği için yeniden ayarlanması gerekebilir."
+      },
+      "verify": {
+        "title": "Sınırdaki eşleşmeler için ikinci kontrol",
+        "enabled": {
+          "label": "İkinci kontrole izin ver",
+          "hint": "Çalışma alanlarının ayarından bağımsız olarak kontrolü tüm çalışma alanları için durdurmak üzere kapatın."
+        },
+        "model": {
+          "label": "Kontrol modeli",
+          "hint": "Sınırdaki eşleşmeleri değerlendiren OpenRouter model kimliği, örneğin openai/gpt-4o-mini. Küçük ve hızlı bir model yeterlidir."
+        },
+        "perHourHint": "Bu sayıdan sonra, saatin geri kalanında sınırdaki eşleşmeler kontrol edilmeden geçerli kalır. 0 hiçbir zaman kontrol etme anlamına gelir.",
+        "description": "Küçük bir sohbet modeli, bir akışın eşiğini ancak geçen eşleşmeleri yeniden kontrol eder. Yalnızca yanıtı durdurabilir. Akışlar bunu kendi SSS ayarlarından açar."
       }
     },
     "maintenance": {

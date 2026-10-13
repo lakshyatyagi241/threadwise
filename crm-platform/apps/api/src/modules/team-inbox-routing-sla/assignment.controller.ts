@@ -9,11 +9,17 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { assignConversationSchema, type AssignConversationInput } from '@crm/contracts';
+import {
+  assignConversationSchema,
+  bulkConversationsSchema,
+  type AssignConversationInput,
+  type BulkConversationsInput,
+} from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { AssigneesService } from './assignees.service';
 import { AssignmentService } from './assignment.service';
+import { BulkActionsService } from './bulk-actions.service';
 
 /**
  * Who a conversation is assigned to (TW-TIB2-021, 022). The paths sit under `/inbox` with the conversation routes the web calls
@@ -26,6 +32,7 @@ export class AssignmentController {
   constructor(
     private readonly assignment: AssignmentService,
     private readonly assignees: AssigneesService,
+    private readonly bulk: BulkActionsService,
   ) {}
 
   @Get('assignees')
@@ -37,6 +44,20 @@ export class AssignmentController {
   })
   async list() {
     return this.assignees.list();
+  }
+
+  @Post('conversations/bulk')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.bulk')
+  @ApiOperation({
+    summary:
+      'Apply one action to up to 200 conversations (status, assign, mark read, priority, snooze)',
+    description:
+      'Needs `inbox.conversation.bulk` and the permission of the action itself. Each conversation is checked on its own (visibility, scope, state machine); the answer lists every conversation as done, unchanged or failed with the problem code. A failure never undoes the others.',
+  })
+  async bulkAction(@Body(zodPipe(bulkConversationsSchema)) body: BulkConversationsInput) {
+    return this.bulk.run(body);
   }
 
   @Post('conversations/:id/assign')

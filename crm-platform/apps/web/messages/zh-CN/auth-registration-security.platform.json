@@ -46,7 +46,6 @@
         "copyFailed": "无法复制",
         "loading": "加载中",
         "retry": "重试",
-        "requestId": "请求 ID",
         "errors": {
           "forbidden": "你的角色无权执行此操作。",
           "request": "请求被拒绝。请刷新页面后重试。",
@@ -61,7 +60,6 @@
       "login": {
         "title": "运维人员登录",
         "intro": "此控制台供平台运维人员使用。工作区用户请在主登录页面登录。",
-        "requestId": "请求 ID",
         "submit": "登录",
         "submitting": "正在登录",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "你的账户",
         "title": "双重验证",
         "description": "使用验证器应用保护 {email}。运维人员账户是平台上信任级别最高的账户。",
-        "requestId": "请求 ID",
         "status": {
           "title": "验证器应用",
           "on": "已开启",
@@ -181,7 +178,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "处理中",
             "close": "关闭",
             "signInAgain": "重新登录",
-            "requestId": "请求 ID",
             "errors": {
               "forbidden": "只有超级管理员可以执行此操作。",
               "unexpected": "操作未完成。重试之前请先查看事件日志。"
@@ -731,7 +726,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {
@@ -941,7 +935,6 @@
             "sent": "测试验证码已发送至 {to}。",
             "remaining": "{count, plural, other {本小时还剩 # 次测试。}}",
             "notShown": "验证码不在此处显示；请在手机上查看。",
-            "requestId": "请求 ID",
             "errors": {
               "invalidNumber": "请输入带国家/地区区号的号码，例如 +91 98765 43221。",
               "rateLimited": "本小时测试验证码过多。请在 {minutes, plural, other {# 分钟}}后重试。",
@@ -1045,7 +1038,6 @@
           "saved": "发送方已保存",
           "removed": "发送方已移除",
           "secretRemoved": "已保存的密钥已移除",
-          "requestId": "请求 ID",
           "problems": {
             "required": "此字段为必填项。",
             "tooLong": "最多 {max} 个字符。",
@@ -1076,8 +1068,7 @@
           "errors": {
             "invalid": "该页脚未被接受。",
             "unexpected": "无法保存页脚。请稍后重试。"
-          },
-          "requestId": "请求 ID"
+          }
         }
       },
       "social": {
@@ -1088,7 +1079,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {
@@ -1206,7 +1196,6 @@
           "cancel": "取消",
           "working": "正在移除",
           "error": "无法移除密钥。请稍后重试。",
-          "requestId": "请求 ID",
           "done": "已保存的 {name} 密钥已移除。",
           "names": {
             "google": "Google",
@@ -1418,7 +1407,10 @@
             "forms_and_links": "线索收集表单和可分享的链接。",
             "extra_channels": "Telegram、Facebook 和 Instagram 渠道。",
             "form_builder": "托管和嵌入式网页表单，可在 CRM 中创建联系人。此开关由付费的表单应用掌管。",
-            "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。"
+            "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。",
+            "sms": "通过 Twilio 或 MSG91 发送的仅发送短信：连接发送方，发送短信群发和营销活动。",
+            "help_agent": "应用内帮助助手：用户用平常的话说出要做的事，助手在其自己的会话中指引或代为操作，执行有风险的操作前会先询问。会消耗 AI 额度。",
+            "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。"
           },
           "units": {
             "days": "天",
@@ -1559,7 +1551,9 @@
             "ai_token_limit_monthly": "每月 AI 令牌数（平台密钥）",
             "forms": "网页表单",
             "form_submissions_monthly": "每月表单提交数",
-            "ai_form_generations_monthly": "每月 AI 表单构建器生成次数"
+            "ai_form_generations_monthly": "每月 AI 表单构建器生成次数",
+            "sms_monthly": "每月短信数",
+            "email_mailboxes": "邮箱数量"
           },
           "featureGroups": {
             "messaging": "消息",
@@ -1596,7 +1590,10 @@
             "forms_and_links": "表单、点击聊天链接和群组",
             "extra_channels": "Telegram、Facebook 和 Instagram 渠道",
             "form_builder": "表单（网页表单构建器）",
-            "waba_groups": "WhatsApp 群组（Cloud API）"
+            "waba_groups": "WhatsApp 群组（Cloud API）",
+            "sms": "SMS 渠道",
+            "help_agent": "帮助助手（AI，消耗额度）",
+            "email_channel": "电子邮件(Gmail)渠道"
           },
           "problems": {
             "required": "此字段为必填项。",
@@ -1648,7 +1645,9 @@
             "ai_token_limit_monthly": "AI 助手在日历月内使用平台密钥消耗的令牌数。使用自有密钥的工作区不受限制。",
             "forms": "有效的网页表单（表单应用）。归档表单即可释放其名额。0 = 不限。",
             "form_submissions_monthly": "日历月内接受的表单提交数，不含垃圾信息。超出上限后，提交仍会保存以供审核，不会被丢弃。0 = 不限。",
-            "ai_form_generations_monthly": "日历月内 AI 表单构建器的生成次数，包括修复重试。0 = 不限。"
+            "ai_form_generations_monthly": "日历月内 AI 表单构建器的生成次数，包括修复重试。0 = 不限。",
+            "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
+            "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。"
           }
         }
       },
@@ -1660,7 +1659,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {

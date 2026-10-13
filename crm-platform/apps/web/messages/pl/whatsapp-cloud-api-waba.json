@@ -7,7 +7,6 @@
       "dismiss": "Odrzuć",
       "cancel": "Anuluj",
       "close": "Zamknij",
-      "requestId": "Żądanie {id}",
       "unknown": "—"
     },
     "numbers": {
@@ -34,7 +33,8 @@
         "registered": "Zarejestrowano „{name}” w Cloud API.",
         "disconnected": "Rozłączono „{name}”.",
         "removed": "Usunięto „{name}”.",
-        "warningsTitle": "Połączono, ale sprawdź to:"
+        "warningsTitle": "Połączono, ale sprawdź to:",
+        "verified": "Zweryfikowano „{name}”."
       },
       "notReady": {
         "title": "Embedded Signup nie jest skonfigurowany",
@@ -81,7 +81,8 @@
         "register": "Zarejestruj",
         "meta": "Meta",
         "disconnect": "Rozłącz",
-        "remove": "Usuń"
+        "remove": "Usuń",
+        "verify": "Zweryfikuj numer"
       },
       "confirm": {
         "fixInboundTitle": "Naprawić odbiór?",
@@ -100,6 +101,17 @@
         "pin": "PIN weryfikacji dwuetapowej (opcjonalnie)",
         "pinError": "PIN ma 6 cyfr",
         "submit": "Zarejestruj"
+      },
+      "verifyDialog": {
+        "title": "Zweryfikuj ten numer",
+        "message": "Meta wyśle 6-cyfrowy kod na numer {phone}. Wybierz, jak go odebrać.",
+        "enterCode": "Wpisz 6-cyfrowy kod, który Meta wysłała na numer {phone}.",
+        "sendSms": "Wyślij kod SMS-em",
+        "sendVoice": "Wyślij kod połączeniem",
+        "code": "Kod weryfikacyjny",
+        "codeError": "Kod ma 6 cyfr",
+        "submit": "Zweryfikuj",
+        "resend": "Wyślij nowy kod"
       }
     },
     "connect": {

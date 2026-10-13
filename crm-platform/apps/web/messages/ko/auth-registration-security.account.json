@@ -22,7 +22,6 @@
         "signedOut": "세션이 종료되었습니다. 다시 로그인해 주세요.",
         "rateLimited": "시도 횟수가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
         "rateLimitedWait": "시도 횟수가 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요.",
-        "requestId": "요청 ID",
         "locked": "실패한 시도가 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
         "lockedWait": "실패한 시도가 너무 많습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "시간대",
         "workspaceTimezoneHint": "{workspace}에 적용됩니다. 소유자와 관리자만 변경할 수 있습니다.",
+        "myTimezone": "내 시간대",
+        "myTimezoneHint": "날짜와 시간은 {zone} 기준으로 표시됩니다. 비워 두면 워크스페이스 시간대를 따릅니다(워크스페이스에 없으면 UTC).",
+        "myTimezoneUseWorkspace": "워크스페이스 기본값 사용",
         "saved": "프로필이 저장되었습니다.",
         "errors": {
           "fullNameRequired": "이름을 입력하세요.",
@@ -367,7 +369,8 @@
         "failed": "워크스페이스를 전환할 수 없습니다. 다시 시도하세요.",
         "notAvailable": "해당 워크스페이스로 전환할 수 없습니다.",
         "rateLimited": "시도 횟수가 너무 많습니다. 잠시 후 다시 시도하세요.",
-        "rateLimitedWait": "시도 횟수가 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요."
+        "rateLimitedWait": "시도 횟수가 너무 많습니다. {seconds, plural, other {#초}} 후에 다시 시도하세요.",
+        "unverified": "이 워크스페이스로 전환하려면 먼저 이 워크스페이스에서 이메일을 인증하세요."
       },
       "mfaChallenge": {
         "title": "본인 확인",
@@ -551,7 +554,10 @@
             "forms_and_links": "양식 및 링크",
             "extra_channels": "Telegram, Facebook, Instagram",
             "form_builder": "양식",
-            "waba_groups": "WhatsApp 그룹"
+            "waba_groups": "WhatsApp 그룹",
+            "sms": "SMS",
+            "help_agent": "도움말 어시스턴트",
+            "email_channel": "이메일(Gmail) 채널"
           },
           "cta": {
             "continueFree": "무료로 계속",

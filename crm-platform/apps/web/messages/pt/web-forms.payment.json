@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Pagamento",
+      "description": "Cobre o visitante no seu gateway de pagamento depois que ele enviar o formulário. O formulário só conta como pago quando o gateway confirma.",
+      "enabled": "Cobrar pagamento",
+      "enabledHint": "Depois que as respostas forem salvas, o visitante é levado à página de pagamento hospedada do seu gateway.",
+      "gateway": {
+        "checking": "Verificando seu gateway de pagamento...",
+        "failed": "Não foi possível verificar seu gateway de pagamento. Tente novamente em instantes.",
+        "ready": "Os pagamentos vão para {name} ({mode}).",
+        "mode": {
+          "test": "modo de teste",
+          "live": "modo real"
+        },
+        "none": "Nenhum gateway de pagamento está conectado, então este formulário ainda não pode receber pagamento.",
+        "noLink": "{name} não consegue criar um link de pagamento hospedado, então não pode ser usado em um formulário. Conecte Razorpay ou Stripe.",
+        "open": "Abrir gateways de pagamento"
+      },
+      "amountType": "Como o valor é definido",
+      "amountTypes": {
+        "fixed": "Preço fixo",
+        "from_field": "A partir de um campo de escolha",
+        "pay_what_you_want": "O visitante informa o valor"
+      },
+      "amountTypeHints": {
+        "fixed": "Todos os visitantes pagam o mesmo preço.",
+        "from_field": "Cada opção de um campo de lista suspensa ou de seleção única tem o próprio preço.",
+        "pay_what_you_want": "Para doações e gorjetas. Você define o menor e o maior valor."
+      },
+      "currency": "Moeda",
+      "currencyHint": "Três letras, como INR ou USD. Seu gateway precisa aceitá-la.",
+      "amount": "Preço",
+      "amountHint": "Em {currency}, escrito como você diria, por exemplo 499.00.",
+      "fieldChoice": "Campo de escolha",
+      "fieldNumber": "Campo de valor",
+      "fieldNone": "Escolha um campo",
+      "noChoiceFields": "Antes, adicione ao formulário um campo de lista suspensa ou de seleção única.",
+      "noNumberFields": "Antes, adicione ao formulário um campo numérico ou de moeda.",
+      "optionPrices": "Preço de cada opção",
+      "optionPrice": "Preço de “{label}”",
+      "min": "Menor valor",
+      "minHint": "Qualquer valor menor é recusado.",
+      "max": "Maior valor (opcional)",
+      "maxHint": "Deixe vazio para não ter limite máximo.",
+      "descriptionLabel": "Exibido na página de pagamento",
+      "descriptionHint": "Uma nota curta para quem paga, como o motivo do pagamento.",
+      "issues": {
+        "amountRequired": "Informe o preço.",
+        "fieldRequired": "Escolha o campo de onde vem o valor.",
+        "fieldNotRequired": "Torne este campo obrigatório, para que todo visitante informe um valor.",
+        "optionsNeedAmounts": "Dê um preço a cada opção.",
+        "minRequired": "Informe o menor valor.",
+        "minAboveMax": "O menor valor não pode ser maior que o maior."
+      }
+    }
+  }
+}

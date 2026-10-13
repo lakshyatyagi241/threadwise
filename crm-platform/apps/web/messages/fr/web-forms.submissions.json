@@ -126,7 +126,9 @@
         "exporting": "Export en cours",
         "exportHintAttention": "Choisissez un seul statut à exporter pour ce groupe, ou utilisez Toutes.",
         "exportHintSearch": "L’export ne tient pas compte du texte de recherche.",
-        "notSpam": "Pas du spam : traiter"
+        "notSpam": "Pas du spam : traiter",
+        "newPaymentLink": "Obtenir un nouveau lien de paiement",
+        "markPaid": "Marquer comme payé"
       },
       "confirmDelete": {
         "title": "Supprimer ces réponses ?",
@@ -143,7 +145,11 @@
         "deleteFailed": "Les réponses n’ont pas pu être supprimées. Veuillez réessayer.",
         "exported": "Le CSV a été téléchargé.",
         "exportTruncated": "L’export a été limité aux {max} lignes les plus récentes. Affinez les dates pour obtenir le reste.",
-        "exportFailed": "L’export n’a pas pu être généré. Veuillez réessayer."
+        "exportFailed": "L’export n’a pas pu être généré. Veuillez réessayer.",
+        "linkReady": "Un nouveau lien de paiement est prêt.",
+        "linkFailed": "La passerelle n'a pas fourni de lien. Réessayez dans un instant.",
+        "markedPaid": "Marqué comme payé.",
+        "markPaidFailed": "Impossible de marquer cette soumission comme payée."
       },
       "state": {
         "loading": "Chargement des réponses",
@@ -164,6 +170,29 @@
       "cap": {
         "notice": "Certaines réponses ont été enregistrées pour examen, la limite mensuelle de réponses de votre forfait ayant été atteinte.",
         "upgrade": "Mettre à niveau votre forfait"
+      },
+      "payments": {
+        "title": "Paiement",
+        "status": {
+          "pending": "En attente de paiement",
+          "paid": "Payé",
+          "failed": "Échoué",
+          "expired": "Expiré"
+        },
+        "via": {
+          "gateway": "via la passerelle",
+          "manual": "marqué manuellement"
+        },
+        "gateway": "Passerelle",
+        "paidAt": "Payé le",
+        "expiresAt": "Le lien expire",
+        "reference": "Référence",
+        "duplicate": "Un second paiement est arrivé pour cette soumission. Remboursez-le depuis votre passerelle de paiement.",
+        "freshLink": "Nouveau lien de paiement (à envoyer au visiteur) :",
+        "copy": "Copier le lien",
+        "markPaidConfirm": "Marquer cette soumission comme payée ? À utiliser uniquement si l'argent est arrivé hors de la passerelle, par exemple par virement bancaire ou en espèces. L'action est enregistrée à votre nom.",
+        "markPaidYes": "Oui, marquer comme payé",
+        "cancel": "Annuler"
       }
     }
   }

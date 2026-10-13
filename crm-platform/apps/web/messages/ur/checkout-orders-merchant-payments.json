@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp AI"
     },
     "errors": {
-      "requestId": "درخواست ID",
       "retry": "دوبارہ کوشش کریں",
       "network": {
         "title": "سرور تک رسائی نہیں ہو سکتی",

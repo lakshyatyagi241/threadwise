@@ -96,8 +96,7 @@
       "unexpected": "Qualcosa è andato storto da parte nostra. Riprova tra un momento.",
       "loadFailed": "Non è stato possibile caricare la tua chiave API.",
       "retry": "Riprova",
-      "upgrade": "Vedi i piani",
-      "requestId": "ID richiesta: {id}"
+      "upgrade": "Vedi i piani"
     }
   }
 }

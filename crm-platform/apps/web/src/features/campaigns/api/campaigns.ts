@@ -52,12 +52,20 @@ export function useCampaignList(state: ListState) {
   });
 }
 
-export function useBuilder() {
+/** `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018). */
+export function useBuilder(channel?: 'sms') {
   return useQuery({
-    queryKey: KEYS.builder,
+    queryKey: channel ? ([...KEYS.builder, channel] as const) : KEYS.builder,
     queryFn: ({ signal }) =>
-      apiFetch('/campaigns/builder', { schema: campaignBuilderSchema, signal }),
+      apiFetch(channel ? `/campaigns/builder?channel=${channel}` : '/campaigns/builder', {
+        schema: campaignBuilderSchema,
+        signal,
+      }),
     retry: false,
+    // The numbers come and go (a number connected a moment ago, one that just disconnected): read them again on every visit and when
+    // the window regains focus, so the "Send from" list is never a minute behind.
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
 }
 

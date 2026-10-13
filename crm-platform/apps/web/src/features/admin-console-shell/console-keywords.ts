@@ -24,6 +24,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
 
   'billing-history': 'billing transactions payments history paid',
   'order-history': 'orders purchases checkout history',
+  subscriptions:
+    'subscriptions razorpay recurring renewals autopay cancel refund past due failed payment',
   invoices: 'invoice receipts pdf tax bills paid',
   'payment-gateways': 'stripe razorpay paypal paystack gateway payments cards checkout keys',
   'checkout-settings':
@@ -53,8 +55,11 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'wap-providers': 'whatsapp providers bsp meta cloud interakt gupshup registry credentials',
   'wap-switch': 'switch provider number migrate whatsapp number change',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',
+  'sms-channel': 'sms text message twilio msg91 channel switch enable disable platform',
   'webhook-forwarding':
     'webhook forwarding fanout relay forward meta whatsapp events targets url failures retry',
+  'waboo-migration':
+    'waboo migration migrate move client import dry run load pipeline whatsapp database report',
 
   'market-catalogue': 'marketplace apps catalogue listings integrations publish review',
   'market-categories': 'categories marketplace tags groups',
@@ -85,11 +90,16 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-whatsapp': 'whatsapp waba meta app embedded signup credentials business cloud api',
   'settings-campaigns': 'campaigns broadcast sending limits rate',
   'settings-google-calendar': 'google calendar oauth appointments sync',
+  'settings-microsoft-mail':
+    'microsoft outlook office 365 microsoft 365 exchange graph entra azure email mailbox oauth inbox add-on credentials',
+  'settings-google-mail': 'google gmail email mailbox oauth inbox add-on credentials push pubsub',
   'settings-flow-builder': 'flow builder simple advanced canvas automation chatbot step by step',
   'settings-catalog': 'catalog catalogue whatsapp commerce products meta',
   'ai-keys': 'ai keys api keys openai anthropic gemini llm provider token voice',
   'faq-engine':
     'faq faqs knowledge base questions answers embedding embeddings vector semantic matching openrouter threshold reindex',
+  'lead-scoring':
+    'ai lead scoring score leads contacts openrouter model cost spend usd tokens runs log opt in',
   'settings-privacy': 'privacy gdpr ada cookies consent accessibility data protection',
   'settings-analytics': 'analytics google analytics tag manager pixel tracking facebook',
   'settings-custom': 'custom code css javascript scripts head body snippet',

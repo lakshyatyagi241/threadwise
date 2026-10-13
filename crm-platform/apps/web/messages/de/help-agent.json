@@ -1,0 +1,133 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Fragen",
+      "shortcut": "Assistenten fragen (Strg oder Cmd + Umschalt + L)"
+    },
+    "panel": {
+      "title": "Assistenten fragen",
+      "subtitle": "Sagen Sie, was Sie tun möchten. Ich lese diese Seite und klicke für Sie, und ich frage nach, bevor etwas gespeichert, gesendet, gelöscht oder bezahlt wird.",
+      "close": "Schließen",
+      "taskLabel": "Was möchten Sie tun?",
+      "taskPlaceholder": "Zum Beispiel: Tag VIP zu einem Kontakt hinzufügen",
+      "tooLong": "Bitte höchstens {max} Zeichen.",
+      "doItForMe": "Für mich erledigen",
+      "showMe": "Stattdessen zeigen",
+      "stop": "Stopp",
+      "stopping": "Wird angehalten ...",
+      "newTask": "Neue Aufgabe",
+      "tryAgain": "Erneut versuchen",
+      "openGuide": "Anleitung öffnen",
+      "showSteps": "Schritte anzeigen",
+      "guidesTitle": "Aus den Hilfe-Anleitungen",
+      "examplesTitle": "Zum Beispiel fragen",
+      "disabledHere": "Der Assistent ist auf diesem Bildschirm aus, weil hier Nachrichten und Details von Kunden angezeigt werden. Öffnen Sie einen anderen Bildschirm, um ihn zu nutzen."
+    },
+    "notice": {
+      "title": "Bevor Sie starten",
+      "sent": "Für eine Aufgabe sendet der Assistent Ihre Anfrage und den Text der aktuellen Seite an einen KI-Anbieter.",
+      "masked": "Telefonnummern, E-Mail-Adressen und Geheimnisse werden zuvor ausgeblendet. Namen und anderer Text auf der Seite nicht.",
+      "asks": "Er nutzt Ihr eigenes Konto und kann daher nur tun, was auch Sie dürfen. Er fragt nach, bevor er speichert, sendet, löscht, bezahlt, Personen einlädt oder Einstellungen ändert.",
+      "limits": "Er tippt nie Passwörter oder Kartendaten ein, öffnet nie andere Websites, und Sie können ihn jederzeit stoppen.",
+      "accept": "Verstanden"
+    },
+    "status": {
+      "progress": "Schritt {n} von {max}",
+      "thinking": "Denkt nach ...",
+      "starting": "Startet ..."
+    },
+    "activity": {
+      "click": "Klickt: {label}",
+      "type": "Tippt in: {label}",
+      "select": "Wählt in: {label}",
+      "blocked": "Übersprungen: {label}",
+      "declined": "Sie haben abgelehnt: {label}",
+      "shown": "Zeigt: {label}"
+    },
+    "confirm": {
+      "title": "Erlauben?",
+      "clickBody": "Der Assistent möchte auf \"{label}\" klicken.",
+      "selectBody": "Der Assistent möchte \"{detail}\" in \"{label}\" auswählen.",
+      "allow": "Einmal erlauben",
+      "deny": "Ablehnen",
+      "reasons": {
+        "marked": "Das ist eine der sensibelsten Schaltflächen der App.",
+        "submit": "Dies speichert oder sendet, was auf der Seite steht.",
+        "delete": "Dies löscht, entfernt oder trennt etwas.",
+        "send": "Dies sendet, veröffentlicht oder startet etwas, das andere sehen werden.",
+        "pay": "Dies kann Geld kosten oder ändern, was Sie zahlen.",
+        "invite": "Dies lädt jemanden in Ihren Workspace ein.",
+        "connect": "Dies verbindet oder trennt einen Kanal oder eine App.",
+        "access": "Dies ändert, wer was tun darf, oder ein Geheimnis oder Abrechnungsdetail.",
+        "settings": "Dies schaltet etwas ein oder aus.",
+        "toggle": "Dieser Schalter wirkt sofort.",
+        "dialog": "Dies bestätigt, was das Fenster fragt.",
+        "signout": "Dies meldet Sie ab."
+      }
+    },
+    "question": {
+      "title": "Der Assistent fragt",
+      "answerLabel": "Ihre Antwort",
+      "send": "Senden"
+    },
+    "result": {
+      "completedTitle": "Fertig",
+      "failedTitle": "Ich konnte das nicht abschließen",
+      "stoppedTitle": "Angehalten",
+      "summary": "{steps, plural, one {# Schritt} other {# Schritte}}, {confirmed} erlaubt, {denied} abgelehnt."
+    },
+    "stopped": {
+      "person": "Sie haben die Aufgabe gestoppt.",
+      "budget": "Die Aufgabe hat das Schrittlimit erreicht und wurde gestoppt. Versuchen Sie eine kleinere Anfrage.",
+      "location": "Die Aufgabe wurde gestoppt, weil sie einen Bildschirm erreicht hat, den der Assistent nicht nutzen darf."
+    },
+    "errors": {
+      "disabled": "Der Assistent ist für diesen Workspace oder auf diesem Bildschirm ausgeschaltet.",
+      "planLocked": "Der Assistent ist nicht Teil Ihres Tarifs.",
+      "forbidden": "Sie haben keine Berechtigung, den Assistenten zu nutzen.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "taskLimit": "Sie haben vorerst so viele Aufgaben gestartet wie erlaubt. Versuchen Sie es später erneut.",
+      "stepLimit": "Diese Aufgabe hat ihre Schritte aufgebraucht. Starten Sie eine neue mit einer kleineren Anfrage.",
+      "closed": "Diese Aufgabe ist beendet. Starten Sie eine neue.",
+      "providerDown": "Der KI-Dienst hat nicht geantwortet. Versuchen Sie es gleich erneut oder fragen Sie den Plattformbetreiber, falls es weiter auftritt.",
+      "monthlyLimit": "Ihr Workspace hat das KI-Kontingent dieses Monats aufgebraucht.",
+      "signedOut": "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.",
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "retryIn": "Versuchen Sie es in {seconds} Sekunden erneut."
+    },
+    "examples": {
+      "howDo": "Wie verwende ich {title}?",
+      "showMe": "Zeig mir, wo ich bei {title} anfange",
+      "whereIs": "Wo finde ich {title}?",
+      "generic1": "Wie verbinde ich meine WhatsApp-Nummer?",
+      "generic2": "Wo ändere ich mein Unternehmensprofil?",
+      "generic3": "Wie lade ich ein Teammitglied ein?"
+    },
+    "helpCard": {
+      "title": "Assistenten fragen",
+      "body": "Sagen Sie, was Sie tun möchten. Er findet die passende Anleitung, zeigt, wo Sie klicken müssen, oder erledigt die Schritte für Sie und fragt vor allem Wichtigen nach.",
+      "button": "Assistenten öffnen"
+    },
+    "settingsPage": {
+      "title": "Hilfe-Assistent",
+      "description": "Lassen Sie Ihr Team sagen, was es tun möchte, und die App führt es an oder erledigt die Schritte im eigenen Konto.",
+      "loading": "Wird geladen",
+      "loadFailed": "Die Einstellung konnte nicht geladen werden.",
+      "shareTitle": "Was bei der Nutzung geteilt wird",
+      "share1": "Die eingegebene Anfrage und der sichtbare Text der aktuellen Seite werden an den KI-Anbieter der Plattform gesendet.",
+      "share2": "Telefonnummern, E-Mail-Adressen, Geheimnisse und die persönlichen Felder von Formularen werden zuvor ausgeblendet. Namen und anderer freier Text auf einer Seite nicht.",
+      "share3": "Kundennachrichten und Team-Chat werden nie gelesen: Auf diesen Bildschirmen ist der Assistent aus.",
+      "share4": "Der Assistent handelt mit den eigenen Berechtigungen der angemeldeten Person und fragt nach, bevor er speichert, sendet, löscht, bezahlt oder Einstellungen ändert. Gespeichert werden nur Anzahlen und das Ergebnis jeder Aufgabe, nie der Text der Anfrage.",
+      "optIn": "Mit dem Einschalten bestätigen Sie, dass Ihr Workspace dem Teilen mit dem KI-Anbieter zustimmt.",
+      "switchLabel": "Hilfe-Assistent für diesen Workspace einschalten",
+      "stateOn": "An. Personen mit der Berechtigung sehen die Schaltfläche „Fragen“.",
+      "stateOff": "Aus. Niemand sieht den Assistenten.",
+      "saveFailed": "Die Einstellung konnte nicht gespeichert werden.",
+      "savedOn": "Der Assistent ist an.",
+      "savedOff": "Der Assistent ist aus.",
+      "whoCanUse": "Nur Rollen mit der Berechtigung \"Hilfe-Assistent verwenden\" sehen ihn. Inhaber und Admins haben sie.",
+      "rolesLink": "Rollen öffnen"
+    }
+  }
+}

@@ -148,7 +148,10 @@
         "required": "Debe marcarse para enviar",
         "requiredHint": "Desactívalo si el consentimiento es opcional.",
         "marketing": "Consentimiento para marketing",
-        "marketingHint": "Marcar la casilla registra el consentimiento de marketing en el contacto. Una casilla sin marcar nunca suscribe a nadie."
+        "marketingHint": "Marcar la casilla registra el consentimiento de marketing en el contacto. Una casilla sin marcar nunca suscribe a nadie.",
+        "whatsappHint": "¿Vas a enviar mensajes a estos contactos por WhatsApp? Usa un texto que lo indique y explique cómo darse de baja. La casilla marcada se guarda como prueba, con este texto exacto y su versión.",
+        "whatsappInsert": "Usar el texto de consentimiento de WhatsApp",
+        "whatsappWording": "Acepto recibir novedades y ofertas por WhatsApp. Puedo responder STOP en cualquier momento para darme de baja."
       },
       "crm": {
         "title": "En el CRM",
@@ -253,8 +256,8 @@
           "off": "Desactivado"
         },
         "captchaHints": {
-          "inherit": "Usa lo que tenga configurado tu espacio de trabajo para los formularios públicos.",
-          "on": "Los visitantes deben superar la comprobación antes de poder enviar.",
+          "inherit": "Usa el CAPTCHA que el administrador de tu plataforma haya configurado para los formularios públicos, si existe.",
+          "on": "Los visitantes deben superar la verificación antes de enviar. Requiere un CAPTCHA configurado en la plataforma, y no se puede publicar sin uno.",
           "off": "Sin comprobación. Confía en el campo trampa oculto y en los límites de frecuencia."
         },
         "retention": "Conservar las respuestas (días)",
@@ -271,6 +274,17 @@
           "perFormPerMinuteHint": "Envíos a este formulario desde cualquier lugar.",
           "perContactPerHour": "Por contacto, por hora",
           "perContactPerHourHint": "Envíos con el mismo correo o número de teléfono."
+        },
+        "captchaStatus": {
+          "available": "Hay un CAPTCHA configurado en esta plataforma (reCAPTCHA {version}).",
+          "none": "No hay ningún CAPTCHA configurado en esta plataforma, así que aquí no se comprueba nada. Pide a tu administrador que añada uno, o confía en el campo trampa oculto y los límites de frecuencia.",
+          "noneOn": "Este formulario está configurado para comprobar siempre, pero la plataforma no tiene CAPTCHA, así que no comprueba nada y no se puede publicar. Pide a tu administrador que añada uno, o elige otra opción.",
+          "failed": "No se pudo comprobar si hay un CAPTCHA configurado."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {El campo trampa oculto no ha detenido ningún bot este mes.} one {El campo trampa oculto detuvo 1 bot este mes.} other {El campo trampa oculto detuvo # bots este mes.}}",
+          "held": "{count, plural, one {1 envío está retenido como spam.} other {# envíos están retenidos como spam.}}",
+          "review": "Revisarlos"
         }
       }
     }

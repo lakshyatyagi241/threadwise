@@ -60,6 +60,10 @@ export const contactViews = pgTable(
     filter: jsonb('filter').$type<Record<string, unknown>>().notNull().default({}),
     position: integer('position').notNull().default(0),
     isShared: boolean('is_shared').notNull().default(false),
+    /** 'me' | 'everyone' | 'selected' (the people in `contact_view_users`). `isShared` is true for any mode but 'me'. */
+    shareMode: text('share_mode').notNull().default('me'),
+    /** What people it is shared with may do: 'can_view' | 'can_edit'. */
+    accessType: text('access_type').notNull().default('can_view'),
     createdBy: idColumn('created_by'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
@@ -83,6 +87,20 @@ export const contactViewFavorites = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.viewId, t.userId] }),
     index('idx_contact_view_favorites_view').on(t.orgId, t.viewId),
+  ],
+);
+
+export const contactViewUsers = pgTable(
+  'contact_view_users',
+  {
+    orgId: orgIdColumn(),
+    viewId: idColumn('view_id').notNull(),
+    userId: idColumn('user_id').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.viewId, t.userId] }),
+    index('idx_contact_view_users_user').on(t.orgId, t.userId),
   ],
 );
 

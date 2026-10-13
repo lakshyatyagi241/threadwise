@@ -45,12 +45,16 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   memo: 'Met at the fair',
   status: '',
   stage: 'qualified',
+  ownerId: null,
   optedOut: false,
   groups: [{ id: 'g1', name: 'VIP', color: '#7C3AED' }],
   tags: [{ id: 't1', name: 'Hot lead', color: '#2E7D32' }],
   attributes: [{ key: 'order_id', label: 'Order Id', text: 'A12', full: 'Order Id: A12' }],
   custom: { order_id: 'A12' },
   createdAt: '2026-03-05T12:00:00.000Z',
+  leadScore: null,
+  leadScoreSource: null,
+  leadScoredAt: null,
   ...over,
 });
 
@@ -273,6 +277,48 @@ describe('ContactsTable', () => {
   });
 });
 
+describe('Owner column', () => {
+  const ASHA = '11111111-1111-4111-8111-111111111111';
+  const cols = visibleColumns(['name', 'owner'], ATTRS);
+  const render = (rows: RowView[], over: Partial<ListHandlers> = {}) =>
+    html(
+      <ContactsTable
+        rows={rows}
+        columns={cols}
+        headerState="none"
+        onToggleAll={() => undefined}
+        {...handlers(over)}
+      />,
+    );
+
+  it('shows the owner with initials and name', () => {
+    const out = render([row({ ownerId: ASHA })], { ownerLabel: () => 'Asha Rao' });
+    expect(out).toContain('>Owner<');
+    expect(out).toContain('Asha Rao');
+    expect(out).toContain('>AR<');
+  });
+
+  it('says Unassigned, muted, for a contact nobody owns', () => {
+    const out = render([row({ ownerId: null })]);
+    expect(out).toContain('text-muted-foreground">Unassigned<');
+  });
+
+  it('is not sortable', () => {
+    const out = html(
+      <ContactsTable
+        rows={[row()]}
+        columns={cols}
+        headerState="none"
+        onToggleAll={() => undefined}
+        sort={{ key: 'email', order: 'desc' }}
+        onSort={() => undefined}
+        {...handlers()}
+      />,
+    );
+    expect(out).not.toContain('Sort by Owner');
+  });
+});
+
 describe('ContactsKanban', () => {
   const noop = () => undefined;
   const stages = [
@@ -427,7 +473,25 @@ describe('ContactsToolbar', () => {
     createGroups: false,
     createTags: false,
   };
-  const toolbar = (can: Partial<ContactsToolbarProps['can']>) =>
+  const OWNERS = [
+    {
+      id: '11111111-1111-4111-8111-111111111111',
+      fullName: 'Asha Rao',
+      email: 'asha@x.test',
+      canAssign: true,
+    },
+    {
+      id: '22222222-2222-4222-8222-222222222222',
+      fullName: 'Ravi Nair',
+      email: 'ravi@x.test',
+      canAssign: false,
+    },
+  ];
+  const toolbar = (
+    can: Partial<ContactsToolbarProps['can']>,
+    owner = '',
+    reassign: (() => void) | undefined = undefined,
+  ) =>
     html(
       <QueryClientProvider client={new QueryClient()}>
         <ContactsToolbar
@@ -444,10 +508,14 @@ describe('ContactsToolbar', () => {
           rules=""
           onRules={noop}
           onUpdateSelected={noop}
-          updateDisabled={false}
           tag=""
           onTag={noop}
           tags={[]}
+          owner={owner}
+          onOwner={noop}
+          owners={OWNERS}
+          meId={OWNERS[0]!.id}
+          onReassignView={reassign}
           stage=""
           onStage={noop}
           stages={[]}
@@ -473,8 +541,8 @@ describe('ContactsToolbar', () => {
           onGroup={async () => true}
           onTagApply={async () => true}
           allColumns={allColumns([])}
-          visibleIds={new Set<ColumnId>(['name'])}
-          onColumn={noop}
+          columnIds={['name'] as ColumnId[]}
+          onApplyColumns={noop}
           onResetColumns={noop}
           view="list"
           onView={noop}
@@ -498,6 +566,14 @@ describe('ContactsToolbar', () => {
   it('shows "More Actions" as soon as one action is allowed', () => {
     expect(toolbar({ export: true })).toContain('More Actions');
     expect(toolbar({ delete: true })).toContain('More Actions');
+  });
+
+  it('offers an Owner filter that reads Owner, then the person, "My contacts", "Unassigned" or a count', () => {
+    expect(toolbar({})).toContain('>Owner<');
+    expect(toolbar({}, OWNERS[1]!.id)).toContain('Ravi Nair');
+    expect(toolbar({}, OWNERS[0]!.id)).toContain('My contacts');
+    expect(toolbar({}, 'none')).toContain('>Unassigned<');
+    expect(toolbar({}, `${OWNERS[0]!.id},${OWNERS[1]!.id},none`)).toContain('3 owners');
   });
 });
 

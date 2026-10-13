@@ -159,7 +159,6 @@ function FieldProblemLine({ error }: { error: unknown }) {
   return (
     <p role="alert" className="text-sm text-danger">
       {view.kind === 'credentialMissing' ? t('missing') : t('invalid')}
-      {view.requestId && <span className="ms-2 font-mono text-[11px]">{view.requestId}</span>}
     </p>
   );
 }

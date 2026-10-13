@@ -11,7 +11,6 @@
     "common": {
       "loading": "加载中",
       "retry": "重试",
-      "requestId": "请求 ID",
       "loadFailed": "无法加载此内容。",
       "forbidden": "您没有访问此内容的权限。",
       "cancel": "取消",

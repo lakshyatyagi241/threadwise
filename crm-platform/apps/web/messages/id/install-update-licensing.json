@@ -193,7 +193,6 @@
         "outOfOrder": "Langkah berjalan tidak berurutan. Muat ulang halaman dan mulai lagi.",
         "step": "Langkah instalasi gagal. Periksa detail dan log server, lalu coba lagi.",
         "unknown": "Terjadi kesalahan. Coba lagi.",
-        "requestId": "ID permintaan {id}",
         "prerequisites": "Server belum siap untuk pengaturan: {items}.",
         "licence": {
           "empty": "Masukkan kode pembelian CodeCanyon Anda.",
@@ -265,7 +264,6 @@
       "loading": "Memuat",
       "errorForbidden": "Anda tidak dapat melihat halaman ini.",
       "errorUnexpected": "Pembaru tidak dapat dimuat.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "licence": {
         "kicker": "langkah 1 · lisensi",

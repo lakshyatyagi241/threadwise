@@ -214,7 +214,6 @@
         "sessionExpired": "Tu sesión ha caducado por seguridad. Inténtalo de nuevo.",
         "network": "No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
         "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo.",
-        "requestId": "ID de solicitud",
         "signupExpired": "Empieza el registro de nuevo.",
         "policyRules": {
           "min_length": "Usa al menos {min, plural, one {# carácter} many {# de caracteres} other {# caracteres}}.",

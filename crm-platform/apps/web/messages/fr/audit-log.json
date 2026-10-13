@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Journal d'audit",
+    "description": "Qui a modifié quoi dans cet espace de travail, quand, et de quelle valeur à quelle valeur. Utilisez-le pour savoir « qui a fait ça ? », examiner les modifications de votre équipe et vérifier ce que le support de la plateforme a fait lorsque vous avez demandé de l'aide.",
+    "tile": {
+      "label": "Journal d'audit",
+      "description": "Voyez qui a modifié quoi dans votre espace de travail, quand, et de quelle valeur à quelle valeur. Filtrez-le et exportez-le.",
+      "keywords": "journal d'activité, audit, historique, modifications, qui a modifié, sécurité, conformité, export, accès du support"
+    },
+    "retention": {
+      "days": "Les entrées sont conservées {days, plural, one {# jour} many {# jours} other {# jours}}, puis supprimées. Cette durée est définie par la plateforme.",
+      "forever": "Les entrées sont conservées sans date de fin. Cette politique est définie par la plateforme.",
+      "unknown": "Les entrées sont conservées pendant la durée définie par la plateforme, puis supprimées."
+    },
+    "forbidden": {
+      "title": "Vous n'avez pas accès au journal d'audit",
+      "body": "Demandez à un Propriétaire ou à un Admin de l'espace de travail d'accorder à votre rôle l'autorisation de consulter le journal d'audit."
+    },
+    "filters": {
+      "label": "Filtres du journal d'audit",
+      "range": "Période",
+      "from": "Du",
+      "to": "Au",
+      "actor": "Personne",
+      "allActors": "Tout le monde",
+      "actorType": "Auteur de l'action",
+      "allActorTypes": "Tous",
+      "module": "Domaine",
+      "allModules": "Tous les domaines",
+      "action": "Action",
+      "allActions": "Toutes les actions",
+      "search": "Rechercher des domaines et des actions",
+      "searchHint": "Porte uniquement sur le domaine et l'action, jamais sur les valeurs modifiées.",
+      "recordId": "Numéro d'enregistrement",
+      "requestId": "ID de requête",
+      "supportOnly": "Sessions du support de la plateforme uniquement",
+      "apply": "Appliquer les filtres",
+      "refresh": "Actualiser",
+      "reset": "Réinitialiser les filtres"
+    },
+    "ranges": {
+      "24h": "Dernières 24 heures",
+      "7d": "7 derniers jours",
+      "30d": "30 derniers jours",
+      "90d": "90 derniers jours",
+      "custom": "Choisir des dates"
+    },
+    "actorTypes": {
+      "user": "Une personne",
+      "system": "Le système",
+      "api_key": "Une clé API",
+      "bot": "Un bot",
+      "partner_agent": "Un agent partenaire",
+      "candidate": "Un candidat",
+      "other": "Autre chose"
+    },
+    "actors": {
+      "system": "Système",
+      "api_key": "Clé API",
+      "apiKeyNamed": "Clé API : {name}",
+      "bot": "Bot",
+      "partner_agent": "Agent partenaire",
+      "candidate": "Candidat",
+      "other": "Autre",
+      "removedUser": "Un utilisateur supprimé",
+      "support": "Support de la plateforme",
+      "actingAs": "agissant en tant que {name}",
+      "supportBadge": "Support de la plateforme"
+    },
+    "actions": {
+      "insert": "Créé",
+      "update": "Modifié",
+      "delete": "Supprimé",
+      "merge": "Fusionné",
+      "login": "Connexion",
+      "export": "Exporté",
+      "read": "Consulté"
+    },
+    "modules": {
+      "contacts": "Contacts",
+      "contact_groups": "Groupes de contacts",
+      "contact_notes": "Notes de contact",
+      "companies": "Entreprises",
+      "deals": "Affaires",
+      "tags": "Étiquettes",
+      "members": "Membres de l'équipe",
+      "teams": "Équipes",
+      "conversation_notes": "Notes de conversation",
+      "broadcasts": "Diffusions",
+      "campaigns": "Campagnes",
+      "faqs": "FAQ",
+      "api_keys": "Clés API",
+      "audit-log": "Journal d'audit",
+      "audit-log-exports": "Exports du journal d'audit",
+      "contact_consent_exports": "Exports de preuves de consentement"
+    },
+    "table": {
+      "caption": "Entrées d'audit, les plus récentes en premier. Les heures sont affichées dans votre fuseau horaire ({zone}).",
+      "zone": "Les heures sont affichées dans votre fuseau horaire : {zone}.",
+      "time": "Quand",
+      "actor": "Qui",
+      "action": "Quoi",
+      "record": "Enregistrement",
+      "changed": "Champs modifiés",
+      "request": "Requête",
+      "details": "Détails",
+      "openDetails": "Détails de cette modification : {what}"
+    },
+    "states": {
+      "loading": "Chargement du journal d'audit",
+      "empty": "Rien d'enregistré sur cette période",
+      "emptyHint": "Les modifications faites par votre équipe apparaîtront ici.",
+      "emptyFiltered": "Aucune entrée ne correspond à ces filtres",
+      "emptyFilteredHint": "Essayez une période plus longue ou retirez un filtre.",
+      "retry": "Réessayer",
+      "showing": "{count, plural, one {# entrée chargée} many {# d'entrées chargées} other {# entrées chargées}}",
+      "loadMore": "Charger plus",
+      "end": "Fin de la liste"
+    },
+    "detail": {
+      "title": "Entrée d'audit",
+      "when": "Quand",
+      "who": "Qui",
+      "what": "Quoi",
+      "record": "Enregistrement",
+      "openRecord": "Ouvrir l'enregistrement",
+      "request": "ID de requête",
+      "changes": "Ce qui a changé",
+      "field": "Champ",
+      "before": "Avant",
+      "after": "Après",
+      "noChanges": "Cette entrée ne liste pas de modifications de champs.",
+      "supportTitle": "Le support de la plateforme est intervenu dans votre espace de travail",
+      "supportBody": "Un membre du support de la plateforme a utilisé une session de support en tant que {name}. Il pouvait faire tout ce que cette personne peut faire.",
+      "supportReason": "Motif indiqué : {reason}",
+      "supportNoReason": "Le motif de cette session n'est plus disponible.",
+      "supportReadOnly": "La session était en lecture seule.",
+      "secret": "Secret masqué",
+      "secretHint": "Les mots de passe, clés et jetons ne sont jamais affichés.",
+      "maskedHint": "Les données personnelles sont partiellement masquées.",
+      "maskedNote": "Les données personnelles telles que les numéros de téléphone, adresses e-mail, noms et notes sont partiellement masquées. Les secrets ne sont jamais affichés.",
+      "maskedNoteOwner": "Les secrets tels que les mots de passe, clés et jetons sont masqués pour tout le monde.",
+      "audited": "L'ouverture de cette entrée est consignée dans le journal d'audit."
+    },
+    "export": {
+      "title": "Exporter",
+      "note": "Prépare un fichier CSV des entrées correspondant aux filtres ci-dessus. Il est conservé {days} jours et masque toujours les données personnelles.",
+      "button": "Exporter en CSV",
+      "preparing": "Préparation du fichier",
+      "requested": "L'export est en cours de préparation. Nous vous enverrons un e-mail lorsqu'il sera prêt.",
+      "none": "Aucun export pour le moment.",
+      "status": {
+        "queued": "En attente",
+        "running": "Préparation",
+        "ready": "Prêt",
+        "failed": "Échec",
+        "expired": "Expiré"
+      },
+      "rows": "{count, plural, one {# entrée} many {# d'entrées} other {# entrées}}",
+      "expires": "conservé jusqu'au {date}",
+      "download": "Télécharger",
+      "failed": "Cet export n'a pas pu être généré. Demandez-le à nouveau."
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+      "notFound": "Cette entrée ou cet export est introuvable.",
+      "rangeInvalid": "Choisissez une période d'au plus 400 jours, dont la fin est postérieure au début.",
+      "exportInProgress": "Un export est déjà en cours de préparation. Attendez son e-mail, puis demandez-en un autre.",
+      "exportNotReady": "Cet export n'est pas prêt ou a expiré.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "validation": "L'un des filtres n'est pas valide.",
+      "unexpected": "Une erreur s'est produite. Réessayez."
+    },
+    "common": {
+      "close": "Fermer",
+      "dismiss": "Ignorer"
+    }
+  }
+}

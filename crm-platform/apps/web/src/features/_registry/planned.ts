@@ -26,14 +26,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     order: 10,
     icon: 'analytics',
   },
-  {
-    id: 'notifications',
-    group: 'overview',
-    labelKey: L('notifications'),
-    href: '/notifications',
-    order: 20,
-    icon: 'bell',
-  },
 
   // Inbox & Chat
   {
@@ -43,14 +35,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     href: '/chat',
     order: 10,
     icon: 'chat',
-  },
-  {
-    id: 'call-logs',
-    group: 'inbox',
-    labelKey: L('callLogs'),
-    href: '/call-logs',
-    order: 20,
-    icon: 'phone',
   },
   {
     id: 'team-chat',
@@ -99,14 +83,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     href: '/scheduled',
     order: 20,
     icon: 'clock',
-  },
-  {
-    id: 'history',
-    group: 'campaigns',
-    labelKey: L('history'),
-    href: '/message-history',
-    order: 40,
-    icon: 'history',
   },
 
   // Automation (Appointments is a real screen in features/appointments)

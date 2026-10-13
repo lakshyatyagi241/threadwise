@@ -12,11 +12,16 @@ import { ChannelVault } from './channel-vault';
 import { ChannelWebhooksController } from './channel-webhooks.controller';
 import { ChannelWebhooksService } from './channel-webhooks.service';
 import { ChatRealtimePublisher } from './chat-realtime.publisher';
+import { DeviceGroupThreadTitleService } from './device-group-thread-title.service';
+import { CloudGroupThreadReader } from './cloud-group-thread.reader';
+import { PersonalGroupThreadReader } from './personal-group-thread.reader';
 import { WabaGroupThreadTitleService } from './waba-group-thread-title.service';
 import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { CONVERSATIONS_FACADE } from './conversations.facade';
 import { ConversationsRepository } from './conversations.repository';
 import { ConversationsService } from './conversations.service';
+import { EmailDeliveryService } from './email-delivery.service';
+import { EmailMessageAccess } from './email-message-access.service';
 import { ExternalChannelIngest } from './external-channel-ingest.service';
 import { InboundMessageHooks } from './inbound-hooks';
 import { InboundIngestService } from './inbound-ingest.service';
@@ -24,8 +29,14 @@ import { InboundTranslationListener } from './inbound-translation.listener';
 import { MediaFetchPublisher } from './media-fetch.publisher';
 import { MediaFetchService } from './media-fetch.service';
 import { MessageDispatchService } from './message-dispatch.service';
+import { MESSAGE_LOG_FACADE } from './message-log.facade';
+import { MessageLogExportPublisher } from './message-log-export.publisher';
+import { MessageHistoryRepository } from './message-history.repository';
+import { MessageLogRepository } from './message-log.repository';
+import { MessageLogService } from './message-log.service';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository } from './messages.repository';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { OutboundService } from './outbound.service';
 import { DeliveryReporter } from './delivery-reporter';
 import { ReceiptsService } from './receipts.service';
@@ -50,7 +61,13 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
  * door are global.
  */
 @Module({
-  imports: [ChatChannelProvidersModule, PlansCoreModule, CrmModule, LocalizationTranslationModule],
+  imports: [
+    ChatChannelProvidersModule,
+    PlansCoreModule,
+    CrmModule,
+    LocalizationTranslationModule,
+    WalletMessageBillingModule,
+  ],
   controllers: [
     ChannelsController,
     SimulatorController,
@@ -69,6 +86,9 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ChannelWebhooksService,
     WabaChannelLinkService,
     WabaGroupThreadTitleService,
+    DeviceGroupThreadTitleService,
+    PersonalGroupThreadReader,
+    CloudGroupThreadReader,
     SimulatorService,
     ChannelsFacade,
     ConversationsRepository,
@@ -87,7 +107,14 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     MessageDispatchService,
     MediaFetchService,
     ConversationsService,
+    EmailMessageAccess,
+    EmailDeliveryService,
     { provide: CONVERSATIONS_FACADE, useExisting: ConversationsService },
+    MessageLogRepository,
+    MessageHistoryRepository,
+    MessageLogExportPublisher,
+    MessageLogService,
+    { provide: MESSAGE_LOG_FACADE, useExisting: MessageLogService },
   ],
   exports: [
     ChannelAdapterRegistry,
@@ -97,8 +124,20 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ChannelIngestPublisher,
     ExternalChannelIngest,
     CONVERSATIONS_FACADE,
+    // The email module's door to a message's `meta.email` (attachment download): visibility-checked.
+    EmailMessageAccess,
+    // Where the email module reports a bounce of a sent mail (TW-MAIL-032).
+    EmailDeliveryService,
+    MESSAGE_LOG_FACADE,
+    MessageLogRepository,
+    MessageHistoryRepository,
     WabaChannelLinkService,
     WabaGroupThreadTitleService,
+    DeviceGroupThreadTitleService,
+    // The inbox's read of a personal-number group thread: send state and the @mention members.
+    PersonalGroupThreadReader,
+    // The inbox's read of a Cloud API group thread: whether the composer may be on, the member count and the cost estimate.
+    CloudGroupThreadReader,
     // Where the flow runtime (and any later reader of inbound traffic) listens.
     InboundMessageHooks,
     // The pipelines the workers drive.

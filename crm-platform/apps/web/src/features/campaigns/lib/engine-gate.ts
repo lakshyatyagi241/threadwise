@@ -9,6 +9,8 @@ import type { BuilderForm } from './builder-model';
  * - **waba**: only approved templates can be sent to people outside the 24-hour window, so the Custom message and Flow builder types are
  *   not offered and the campaign is a template. Templates are those of that one number.
  * - **twilio**: a custom message is text and media only (buttons need a template); templates are Twilio's.
+ * - **sms** (Twilio or MSG91 text messages, send-only): plain text, a custom message or a template, never a flow; no header, footer,
+ *   attachment, buttons or split test (the SMS runner ignores them, so the builder does not offer them).
  * - **baileys**: everything; templates are the unofficial ones.
  * - **none picked**: everything and every template, until a number is chosen.
  */
@@ -31,13 +33,20 @@ export function senderOf(
   return senderKey === '' ? undefined : senders.find((s) => s.key === senderKey);
 }
 
-/** Twilio and Meta's API cannot carry buttons on a custom message. */
+/** Twilio (WhatsApp), Meta's API and SMS cannot carry buttons on a custom message. */
 export const isLimitedEngine = (engine: string): boolean =>
-  engine === 'twilio' || engine === 'waba';
+  engine === 'twilio' || engine === 'waba' || engine === 'sms';
+
+/** An SMS number: text only, so the builder hides everything a text cannot carry. */
+export const isSmsEngine = (engine: string): boolean => engine === 'sms';
 
 /** The campaign types the number can send. */
 export const kindsFor = (engine: string): EngineKind[] =>
-  engine === 'waba' ? ['template'] : ['custom', 'template', 'flow'];
+  engine === 'waba'
+    ? ['template']
+    : engine === 'sms'
+      ? ['custom', 'template']
+      : ['custom', 'template', 'flow'];
 
 /**
  * The templates the number can use: those of its engine, and for a Meta number only the ones of that number (a workspace with two Meta
@@ -67,6 +76,7 @@ export function coerceForEngine(
 ): Partial<BuilderForm> {
   const out: Partial<BuilderForm> = {};
   if (engine === 'waba' && form.type !== 'template') out.type = 'template';
+  if (engine === 'sms' && form.type === 'flow') out.type = 'custom';
   const ids = new Set(usable.map((t) => t.id));
   if (form.templateId !== '' && !ids.has(form.templateId)) {
     out.templateId = '';
@@ -77,5 +87,13 @@ export function coerceForEngine(
     out.templateOverridesB = null;
   }
   if (isLimitedEngine(engine) && form.buttons.length > 0) out.buttons = [];
+  if (isSmsEngine(engine)) {
+    // A text carries none of these; clearing them keeps what is saved equal to what is sent.
+    if (form.customHeader !== '') out.customHeader = '';
+    if (form.customFooter !== '') out.customFooter = '';
+    if (form.mediaUrl !== '') out.mediaUrl = '';
+    if (form.abTesting) out.abTesting = false;
+    if (form.flowId !== '') out.flowId = '';
+  }
   return out;
 }

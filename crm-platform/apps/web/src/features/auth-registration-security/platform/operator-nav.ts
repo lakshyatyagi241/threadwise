@@ -16,12 +16,14 @@ import { SET_OPERATOR_NAV } from '../../platform-settings-branding-storage/opera
 import { WSHUB_OPERATOR_NAV } from '../../workspaces-hub/operator-nav';
 import { PLAN_OPERATOR_NAV } from '../../plans-subscriptions-trials/operator-nav';
 import { NODE_OPERATOR_NAV } from '../../node-bridge-runtime/operator-nav';
+import { SMS_OPERATOR_NAV } from '../../channel-sms/operator/operator-nav';
 import { ROLES_OPERATOR_NAV } from '../../roles-permissions/operator-nav';
 import { WAP_OPERATOR_NAV } from '../../whatsapp-providers/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
 import { FAQ_OPERATOR_NAV } from '../../faq-knowledge/platform/operator-nav';
+import { LSC_OPERATOR_NAV } from '../../lead-scoring/platform/operator-nav';
 
 const NS = 'auth-registration-security.platform.nav';
 const BSP = 'bsp-billing-engine.nav';
@@ -76,6 +78,8 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   ...ROLES_OPERATOR_NAV,
   // Node bridge domain (NODE): address, token and sender pacing
   ...NODE_OPERATOR_NAV,
+  // SMS channel (SMS domain): the platform switch
+  ...SMS_OPERATOR_NAV,
   // WhatsApp provider registry (WAP): providers, workspace assignments and the number switch
   ...WAP_OPERATOR_NAV,
   // catalog domain (CAT): the platform's WhatsApp Catalog settings
@@ -135,12 +139,21 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
   },
   // FAQ engine (FAQ, not a Reference feature): messages/en/faq-knowledge-admin.json
   ...FAQ_OPERATOR_NAV,
+  // AI lead scoring (LSC, not a Reference feature): messages/en/lead-scoring-admin.json
+  ...LSC_OPERATOR_NAV,
   // Webhook forwarding (WFWD, not a Reference feature): messages/en/webhook-fanout.json
   {
     id: 'webhook-forwarding',
     href: '/admin/webhook-forwarding',
     labelKey: 'webhook-fanout.nav.forwarding',
     groupKey: 'webhook-fanout.nav.group',
+  },
+  // Waboo migration (WMIG, not a WaDesk feature): messages/en/waboo-migration.json
+  {
+    id: 'waboo-migration',
+    href: '/admin/waboo-migration',
+    labelKey: 'waboo-migration.nav.panel',
+    groupKey: 'waboo-migration.nav.group',
   },
   {
     id: 'cms-frontend',
@@ -201,6 +214,12 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     id: 'order-history',
     href: '/admin/order-history',
     labelKey: 'platform-payment-gateways.nav.orders',
+    groupKey: `${BSP}.groups.billing`,
+  },
+  {
+    id: 'subscriptions',
+    href: '/admin/subscriptions',
+    labelKey: 'platform-payment-gateways.nav.subscriptions',
     groupKey: `${BSP}.groups.billing`,
   },
   {

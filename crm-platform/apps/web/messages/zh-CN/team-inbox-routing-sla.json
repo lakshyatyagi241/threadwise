@@ -10,7 +10,8 @@
       "webchat": "网站聊天",
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
-      "instagram": "Instagram"
+      "instagram": "Instagram",
+      "email": "电子邮件 (Gmail)"
     },
     "page": {
       "back": "自动化与 AI",
@@ -81,7 +82,10 @@
       "lastFired": "上次使用时间：{when}",
       "edit": "编辑",
       "duplicate": "复制",
-      "delete": "删除"
+      "delete": "删除",
+      "startsFlow": "同时启动流程 {name}",
+      "flowOff": "流程已关闭",
+      "flowGone": "同时启动一个已被删除的流程"
     },
     "form": {
       "back": "自动分配",
@@ -170,7 +174,107 @@
       "cancel": "取消",
       "save": "保存",
       "saveActivate": "保存并启用",
-      "openCount": "{open} 个未完成"
+      "openCount": "{open} 个未完成",
+      "flow": {
+        "title": "同时启动一个流程",
+        "hint": "可选。此规则触发时，会在同一渠道为该对话启动该流程。流程只需处于开启状态，无需发布。",
+        "none": "无流程",
+        "offOption": "{name}（已关闭）",
+        "goneOption": "已不存在的流程",
+        "loadFailed": "无法加载流程，所以列表可能不完整。"
+      }
+    },
+    "sla": {
+      "back": "返回设置",
+      "title": "响应目标（SLA）",
+      "intro": "设置客户等待首次回复的最长时间，以及会话可保持未解决的最长时间。错过目标的会话会被标记，并通知负责人。",
+      "howTitle": "工作原理",
+      "how1": "客户发来消息后开始计时，使用默认策略。",
+      "how2": "团队回复后，首次回复计时停止。",
+      "how3": "错过目标的会话会在收件箱中显示 SLA 标记。",
+      "how4": "目标可以仅按您的营业时间计算。",
+      "newTitle": "添加策略",
+      "editTitle": "编辑策略",
+      "name": "名称",
+      "firstResponse": "首次回复时限（分钟）",
+      "resolution": "解决时限（分钟）",
+      "minutesHint": "留空表示无目标。60 为一小时，1440 为一天。",
+      "minutesInvalid": "请输入不小于 1 的整数。",
+      "pause": "等待客户期间暂停",
+      "pauseHint": "设为待处理的会话不会被标记。",
+      "businessHours": "仅计算营业时间",
+      "businessHoursHint": "使用工作区设置中的营业时间和时区。",
+      "makeDefault": "设为默认策略",
+      "defaultChip": "默认",
+      "overridesTitle": "按优先级设置目标",
+      "overridesHint": "优先级的目标会替代策略的目标。留空则沿用策略自身的目标。",
+      "priority": {
+        "low": "低",
+        "normal": "普通",
+        "high": "高",
+        "urgent": "紧急"
+      },
+      "create": "创建策略",
+      "save": "保存更改",
+      "cancel": "取消",
+      "edit": "编辑",
+      "delete": "删除",
+      "deleteTitle": "删除此策略？",
+      "deleteMessage": "将移除“\"{name}\"”。已使用该策略的会话会保留其正在运行的计时。",
+      "emptyTitle": "暂无策略",
+      "emptyMessage": "添加策略以开始衡量响应时间。第一个策略将成为默认策略。",
+      "inUse": "{count, plural, one {# 个会话} other {# 个会话}}",
+      "firstShort": "首次回复：{minutes} 分钟",
+      "resolutionShort": "解决：{minutes} 分钟",
+      "noTarget": "无目标",
+      "saved": "策略已保存",
+      "created": "策略已创建",
+      "deleted": "策略已删除",
+      "conflict": "其他人已先更改了此策略。列表已重新加载。",
+      "loading": "正在加载策略…",
+      "loadFailed": "无法加载策略。"
+    },
+    "performance": {
+      "eyebrow": "团队收件箱 · 报表",
+      "title": "您的团队响应有多快？",
+      "subtitle": "查看每位客服的回复数、解决数和首次回复时间。",
+      "summary": "回复 {replies} 条，已解决 {resolved} 个，平均首次回复 {avg}",
+      "live": "实时",
+      "backToInbox": "返回收件箱",
+      "rangeLabel": "时间范围",
+      "ranges": {
+        "today": "今天",
+        "week": "本周",
+        "month": "本月"
+      },
+      "channelLabel": "渠道",
+      "allChannels": "所有渠道",
+      "loadFailed": "无法加载报表，稍后将重试。",
+      "noAccess": "您无权查看团队绩效报表。",
+      "loading": "正在加载报表…",
+      "empty": "此时间段内没有客服活动。",
+      "unknown": "未知",
+      "tiles": {
+        "replies": "已发送回复",
+        "resolved": "已解决",
+        "inbounds": "收到",
+        "avgFirstReply": "平均首次回复"
+      },
+      "columns": {
+        "agent": "客服",
+        "status": "状态",
+        "load": "负载",
+        "replies": "回复",
+        "resolved": "已解决",
+        "avgReply": "平均回复",
+        "lastSeen": "最后在线"
+      },
+      "statuses": {
+        "online": "在线",
+        "away": "离开",
+        "busy": "忙碌",
+        "offline": "离线"
+      }
     }
   }
 }

@@ -22,7 +22,6 @@
         "signedOut": "ההפעלה שלך הסתיימה. היכנס שוב.",
         "rateLimited": "יותר מדי ניסיונות. המתן רגע ונסה שוב.",
         "rateLimitedWait": "יותר מדי ניסיונות. נסה שוב בעוד {seconds, plural, one {שנייה #} two {# שניות} other {# שניות}}.",
-        "requestId": "מזהה בקשה",
         "locked": "יותר מדי ניסיונות כושלים. המתן זמן מה לפני שתנסה שוב.",
         "lockedWait": "יותר מדי ניסיונות כושלים. נסה שוב בעוד {minutes, plural, one {דקה #} two {# דקות} other {# דקות}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "אזור זמן",
         "workspaceTimezoneHint": "חל על {workspace}. רק בעלים ומנהלים יכולים לשנות זאת.",
+        "myTimezone": "אזור הזמן שלי",
+        "myTimezoneHint": "תאריכים ושעות מוצגים לך לפי {zone}. השאירו ריק כדי לעקוב אחר אזור הזמן של סביבת העבודה (UTC אם אין לה).",
+        "myTimezoneUseWorkspace": "שימוש בברירת המחדל של סביבת העבודה",
         "saved": "הפרופיל נשמר.",
         "errors": {
           "fullNameRequired": "הזינו את שמכם המלא.",
@@ -367,7 +369,8 @@
         "failed": "לא הצלחנו להחליף סביבת עבודה. נסו שוב.",
         "notAvailable": "אי אפשר לעבור לסביבת העבודה הזו.",
         "rateLimited": "יותר מדי ניסיונות. המתינו רגע ונסו שוב.",
-        "rateLimitedWait": "יותר מדי ניסיונות. נסו שוב בעוד {seconds, plural, one {שנייה #} other {# שניות}}."
+        "rateLimitedWait": "יותר מדי ניסיונות. נסו שוב בעוד {seconds, plural, one {שנייה #} other {# שניות}}.",
+        "unverified": "אמתו את האימייל שלכם בסביבת העבודה הזו כדי לעבור אליה."
       },
       "mfaChallenge": {
         "title": "אשרו שזה אתם",
@@ -551,7 +554,10 @@
             "forms_and_links": "טפסים וקישורים",
             "extra_channels": "Telegram, Facebook ו-Instagram",
             "form_builder": "טפסים",
-            "waba_groups": "קבוצות WhatsApp"
+            "waba_groups": "קבוצות WhatsApp",
+            "sms": "SMS",
+            "help_agent": "עוזר העזרה",
+            "email_channel": "ערוץ דוא\"ל (Gmail)"
           },
           "cta": {
             "continueFree": "המשך בחינם",

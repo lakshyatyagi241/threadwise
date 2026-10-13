@@ -119,6 +119,8 @@
       "colStarted": "開始日時",
       "colActivity": "最終アクティビティ",
       "colSteps": "ステップ",
+      "colReplies": "返信",
+      "repliesHint": "この実行の待機ノードに届いた顧客のメッセージ",
       "colActions": "操作",
       "open": "実行を開く",
       "cancel": "キャンセル",
@@ -192,7 +194,24 @@
       "retention": "ログは実行終了の {days} 日後に削除されます。",
       "pathTitle": "たどった経路",
       "notReached": "未到達",
-      "noErrors": "この実行にエラーはありません。"
+      "noErrors": "この実行にエラーはありません。",
+      "factNext": "次: {node}",
+      "factWaiting": "待機中: {node}",
+      "factDelay": "{time} 待機",
+      "factReplied": "顧客の返信: {text}",
+      "factEnded": "終了: {reason}",
+      "ioInput": "入力",
+      "ioOutput": "出力",
+      "ioKind": {
+        "message": "送信メッセージ",
+        "reply": "顧客の返信",
+        "variable": "変数",
+        "request": "リクエスト",
+        "response": "レスポンス",
+        "result": "結果"
+      },
+      "factMenuKept": "ここから先のステップはありません。{node} の選択肢は有効なままです。",
+      "factAnswered": "{time} 後に返信"
     },
     "event": {
       "step": "ステップ",
@@ -498,7 +517,9 @@
       "error": "エラー",
       "skipped": "スキップ",
       "waiting": "待機中",
-      "timeout": "タイムアウト"
+      "timeout": "タイムアウト",
+      "answered": "返信あり",
+      "gaveUp": "返信なし"
     }
   }
 }

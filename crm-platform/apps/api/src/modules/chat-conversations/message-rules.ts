@@ -1,4 +1,10 @@
-import { canAdvanceMessageStatus, type MessageKind, type MessageStatus } from '@crm/contracts';
+import {
+  canAdvanceMessageStatus,
+  emailMetaSchema,
+  type EmailMeta,
+  type MessageKind,
+  type MessageStatus,
+} from '@crm/contracts';
 import type { NormalisedInbound } from '../../infra/providers/chat-conversations';
 
 /** Length of the plain-text preview a thread keeps for the list. */
@@ -109,6 +115,7 @@ const CHANNEL_META_KEYS = [
   'referral',
   'rawType',
   'forwarded',
+  'mentions',
   'referredProduct',
   'buttonPayload',
   'flowName',
@@ -121,16 +128,61 @@ const CHANNEL_META_KEYS = [
   'reason',
 ] as const;
 const CHANNEL_META_MAX_BYTES = 16_384;
+/**
+ * An email message's `meta.email` carries the sanitised HTML (up to 64K characters, which JSON escaping can roughly double) beside its
+ * header fields, so a message of kind `email` gets this larger budget for its `email` block only. Every other key, and every other
+ * kind, keeps the 16K cap.
+ */
+export const EMAIL_META_MAX_BYTES = 131_072;
+const EMAIL_FALLBACK_LIST_MAX = 20;
+
+const jsonSize = (v: unknown): number => JSON.stringify(v).length;
+
+/**
+ * The email block as it is stored: validated against `emailMetaSchema` (unknown keys and bad shapes do not pass), and when still over
+ * {@link EMAIL_META_MAX_BYTES} trimmed in steps, from the least to the most important part: the HTML first (kept flagged
+ * `htmlTruncated`, the plain-text body is the message body and stays), then the address and reference lists, then the attachment list.
+ * Null when it cannot be made to fit or is not an email block at all (the message is then stored without it, never rejected).
+ */
+export function emailMetaOf(raw: unknown): EmailMeta | null {
+  const parsed = emailMetaSchema.safeParse(raw);
+  if (!parsed.success) return null;
+  let email = parsed.data;
+  if (jsonSize(email) <= EMAIL_META_MAX_BYTES) return email;
+  email = { ...email, html: null, htmlTruncated: email.htmlTruncated || email.html !== null };
+  if (jsonSize(email) <= EMAIL_META_MAX_BYTES) return email;
+  email = {
+    ...email,
+    to: email.to.slice(0, EMAIL_FALLBACK_LIST_MAX),
+    cc: email.cc.slice(0, EMAIL_FALLBACK_LIST_MAX),
+    bcc: email.bcc.slice(0, EMAIL_FALLBACK_LIST_MAX),
+    references: email.references.slice(-EMAIL_FALLBACK_LIST_MAX),
+  };
+  if (jsonSize(email) <= EMAIL_META_MAX_BYTES) return email;
+  email = { ...email, attachments: email.attachments.slice(0, EMAIL_FALLBACK_LIST_MAX) };
+  return jsonSize(email) <= EMAIL_META_MAX_BYTES ? email : null;
+}
 
 /**
  * What of an adapter's `meta` goes on the message row: only the known keys, and nothing at all when it is oversized. The adapter is
  * trusted to be ours, but its input is a customer's, and a row is not a place to keep whatever a webhook happened to carry.
+ *
+ * `email` is accepted only for a channel of kind `email`, and is budgeted on its own (see {@link emailMetaOf}); the other keys stay under
+ * the 16K cap whatever the kind.
  */
-export function channelMetaOf(meta: Record<string, unknown> | undefined): Record<string, unknown> {
+export function channelMetaOf(
+  meta: Record<string, unknown> | undefined,
+  kind?: string,
+): Record<string, unknown> {
   if (!meta) return {};
   const picked: Record<string, unknown> = {};
   for (const k of CHANNEL_META_KEYS) if (meta[k] !== undefined) picked[k] = meta[k];
-  return JSON.stringify(picked).length > CHANNEL_META_MAX_BYTES ? {} : picked;
+  if (jsonSize(picked) > CHANNEL_META_MAX_BYTES) return {};
+  if (kind === 'email' && meta.email !== undefined) {
+    const email = emailMetaOf(meta.email);
+    if (email) picked.email = email;
+  }
+  return picked;
 }
 
 /** A failure reason is one short line. */

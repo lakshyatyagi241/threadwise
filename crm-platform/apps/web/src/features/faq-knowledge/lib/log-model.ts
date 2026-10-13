@@ -1,6 +1,6 @@
 import type { InfiniteData } from '@tanstack/react-query';
 import type { FaqLogItem, FaqLogResponse } from '@crm/contracts';
-import { isUnansweredOutcome } from './decision';
+import { isUnansweredOutcome, isVetoed } from './decision';
 
 export type LogView = 'all' | 'answered' | 'unanswered' | 'errors';
 export const LOG_VIEWS: readonly LogView[] = ['all', 'answered', 'unanswered', 'errors'];
@@ -19,6 +19,7 @@ export function withoutLog(
 
 export type WhyKey =
   | 'belowThreshold'
+  | 'vetoed'
   | 'lowMargin'
   | 'noFaqs'
   | 'providerError'
@@ -27,7 +28,10 @@ export type WhyKey =
   | 'flowStarted';
 
 /** Why a message was (not) answered, in the message-file vocabulary. */
-export function whyKey(row: Pick<FaqLogItem, 'outcome'>): WhyKey {
+export function whyKey(
+  row: Pick<FaqLogItem, 'outcome'> & Partial<Pick<FaqLogItem, 'verify'>>,
+): WhyKey {
+  if (row.outcome === 'below_threshold' && isVetoed(row)) return 'vetoed';
   switch (row.outcome) {
     case 'below_threshold':
       return 'belowThreshold';

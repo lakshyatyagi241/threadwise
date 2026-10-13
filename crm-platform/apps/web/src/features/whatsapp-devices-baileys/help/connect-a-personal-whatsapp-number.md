@@ -14,11 +14,11 @@ Personal WhatsApp links a number you already use to this workspace the way Whats
 
 > This is not an approved way to automate WhatsApp. WhatsApp can restrict or permanently ban the number at any time, including for normal use, and we cannot prevent it or get a banned number back. For serious or long-term use, the official WhatsApp Business route is the lower-risk one: see [Connect WhatsApp Business](help:whatsapp-numbers-overview).
 
-Every private chat on a linked number, not only business chats, appears in this workspace's shared inbox for members who can read the inbox. Messages you type on the phone are copied there too.
+Every private chat on a linked number, not only business chats, appears in this workspace's shared inbox for members who can read the inbox. Messages you type on the phone are copied there too. The groups the number is in appear there as well, and the **Groups** tab manages them: see [Groups of a personal WhatsApp number](help:personal-whatsapp-groups).
 
 ## How to connect a number
 
-1. Open **Settings**, then **Channels**, and select **Unofficial WhatsApp API**. The **Numbers** tab lists your linked numbers.
+1. Open **Settings**, then **Channels**, and select **Unofficial WhatsApp API**. The **Numbers** tab lists your linked numbers. The **Groups** and **Warmer** tabs sit next to it.
 2. Select **Connect a number**.
 3. Read **Before you connect** and tick all three boxes. Each person who connects a number accepts the notice for themselves. If the notice changes, you are asked again.
 4. Select **I accept and continue**.

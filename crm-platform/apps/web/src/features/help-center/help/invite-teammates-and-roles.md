@@ -18,7 +18,7 @@ Every person in the workspace has a role, and the role decides what they can see
 
 - **Owner**: full access, including billing.
 - **Admin**: full workspace access except billing.
-- **Manager**: sees all teams' conversations, can assign and resolve them, and works with contacts, templates, labels and the dashboards.
+- **Manager**: sees all teams' conversations, can assign and resolve them, and works with contacts, templates, tags and the dashboards.
 - **Agent**: handles conversations and the day-to-day records such as contacts, deals and tasks, but not workspace settings.
 - **Viewer**: read-only. A Viewer can read the conversations of their own teams and nothing else.
 
@@ -34,7 +34,7 @@ Most support staff only need **Agent**. You can always change a role later. To s
 4. They receive an email with an invite link. The link works once and expires after a few days. On the page it opens, they choose a password (at least 8 characters) and select **Accept invitation**.
 5. If your server cannot send email, the screen shows a one-time link instead. Copy it straight away, because it is shown only once, and send it to them yourself.
 
-There is also a second **Team members** screen at `/settings/team`. There you select **Add member** and set the person's password yourself instead of sending a link. Use it when the person cannot receive email, and hand over the password in person.
+There is also a second **Team members** screen at `/settings/team`. There you select **Add member**, enter the name, email and role, and select **Send invite**. The person gets the same one-time link to set their own password. If the email cannot be sent, the screen shows the link once so you can hand it over.
 
 ## Check that it worked
 

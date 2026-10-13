@@ -27,16 +27,20 @@ import {
   useToast,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
 import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
   deleteSubmission,
   exportSubmissions,
   retrySubmission,
+  markSubmissionPaid,
+  newPaymentLink,
   useForm,
   useSubmission,
   useSubmissions,
 } from '../api/forms';
+import { formatMinor } from '../lib/payment';
 import {
   SUBMISSION_TABS,
   answerView,
@@ -55,6 +59,7 @@ import {
   type SubmissionView,
 } from '../lib/submission-model';
 
+const UUID_PARAM = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const UPDATE_PERM = 'record.form-submissions.update';
 const DELETE_PERM = 'record.form-submissions.delete';
 const EXPORT_PERM = 'record.form-submissions.export';
@@ -107,7 +112,18 @@ export function SubmissionsScreen({ formId }: { formId: string }) {
 
   const [openId, setOpenId] = useState<string | null>(null);
   const opener = useRef<HTMLElement | null>(null);
-  const open = openId ? (rows.find((r) => r.id === openId) ?? null) : null;
+  // A notification links here with `?submission=<id>`: open that submission, even when it is not in the first page of the list (a
+  // detail carries everything a list row does, so it stands in for the row).
+  // Adjusted while rendering, when the link changes, rather than in an effect (which would render the stale state first).
+  const linked = params.get('submission');
+  const [seenLink, setSeenLink] = useState<string | null>(null);
+  if (linked !== seenLink) {
+    setSeenLink(linked);
+    if (linked && UUID_PARAM.test(linked)) setOpenId(linked);
+  }
+  const listed = openId ? (rows.find((r) => r.id === openId) ?? null) : null;
+  const fetched = useSubmission(formId, openId && !listed ? openId : null);
+  const open = listed ?? (openId ? (fetched.data ?? null) : null);
 
   const [exporting, setExporting] = useState(false);
   const exportBody = exportInput(view);
@@ -496,7 +512,7 @@ function Preview({ s }: { s: FormSubmissionSummary }) {
   const t = useTranslations('web-forms.submissions');
   const { name, email, phone } = s.preview;
   return (
-    <span className="block min-w-0 text-start">
+    <span {...AGENT_PII} className="block min-w-0 text-start">
       {name ? (
         <span className="block truncate font-medium" dir="auto">
           {name}
@@ -775,8 +791,10 @@ export function SubmissionDrawer({
   const dialog = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const detail = useSubmission(formId, summary.id);
-  const [busy, setBusy] = useState<'retry' | 'delete' | null>(null);
+  const [busy, setBusy] = useState<'retry' | 'delete' | 'link' | 'paid' | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const [confirmingPaid, setConfirmingPaid] = useState(false);
+  const [freshLink, setFreshLink] = useState<string | null>(null);
 
   useEffect(() => {
     const el = dialog.current;
@@ -804,6 +822,39 @@ export function SubmissionDrawer({
     }
   };
 
+  const getLink = async () => {
+    setBusy('link');
+    try {
+      const r = await newPaymentLink(formId, summary.id);
+      if (r.url) {
+        setFreshLink(r.url);
+        toast(t('toast.linkReady'), 'success');
+      } else {
+        toast(t('toast.linkFailed'), 'danger');
+      }
+      onChanged(summary.id);
+    } catch {
+      toast(t('toast.linkFailed'), 'danger');
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const markPaid = async () => {
+    setBusy('paid');
+    try {
+      await markSubmissionPaid(formId, summary.id);
+      toast(t('toast.markedPaid'), 'success');
+      setConfirmingPaid(false);
+      onChanged(summary.id);
+    } catch {
+      toast(t('toast.markPaidFailed'), 'danger');
+      setConfirmingPaid(false);
+    } finally {
+      setBusy(null);
+    }
+  };
+
   const erase = async () => {
     setBusy('delete');
     try {
@@ -822,6 +873,7 @@ export function SubmissionDrawer({
 
   const showRetry = canUpdate && canRetry(status, removed);
   const showDelete = canErase && canDelete(removed);
+  const showPay = canUpdate && status === 'awaiting_payment';
 
   return (
     <dialog
@@ -862,7 +914,7 @@ export function SubmissionDrawer({
           </Alert>
         )}
 
-        {(showRetry || showDelete) && (
+        {(showRetry || showDelete || showPay) && (
           <div className="flex flex-wrap gap-2" aria-label={t('drawer.actions')} role="group">
             {showRetry && (
               <Button onClick={() => void retry()} disabled={busy !== null} data-testid="retry">
@@ -873,6 +925,26 @@ export function SubmissionDrawer({
                     ? t('actions.notSpam')
                     : t('actions.retry')}
               </Button>
+            )}
+            {showPay && (
+              <>
+                <Button
+                  onClick={() => void getLink()}
+                  disabled={busy !== null}
+                  data-testid="new-payment-link"
+                >
+                  {busy === 'link' && <Spinner />}
+                  {t('actions.newPaymentLink')}
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={() => setConfirmingPaid(true)}
+                  disabled={busy !== null}
+                  data-testid="mark-paid"
+                >
+                  {t('actions.markPaid')}
+                </Button>
+              </>
             )}
             {showDelete && (
               <Button
@@ -885,6 +957,39 @@ export function SubmissionDrawer({
               </Button>
             )}
           </div>
+        )}
+
+        {freshLink && (
+          <Alert tone="info" className="space-y-1" data-testid="fresh-payment-link">
+            <p className="font-medium">{t('payments.freshLink')}</p>
+            <p className="[overflow-wrap:anywhere]" dir="ltr">
+              {freshLink}
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => void navigator.clipboard?.writeText(freshLink)}
+            >
+              {t('payments.copy')}
+            </Button>
+          </Alert>
+        )}
+        {confirmingPaid && (
+          <Alert tone="warning" className="space-y-2" data-testid="mark-paid-confirm">
+            <p>{t('payments.markPaidConfirm')}</p>
+            <div className="flex gap-2">
+              <Button onClick={() => void markPaid()} disabled={busy !== null}>
+                {busy === 'paid' && <Spinner />}
+                {t('payments.markPaidYes')}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setConfirmingPaid(false)}
+                disabled={busy !== null}
+              >
+                {t('payments.cancel')}
+              </Button>
+            </div>
+          </Alert>
         )}
 
         {detail.isPending ? (
@@ -912,7 +1017,7 @@ export function SubmissionDrawer({
                 {d.answers.length === 0 ? (
                   <p className="text-sm text-muted-foreground">{t('drawer.noAnswers')}</p>
                 ) : (
-                  <dl className="space-y-3" data-testid="answers">
+                  <dl {...AGENT_IGNORE} className="space-y-3" data-testid="answers">
                     {d.answers.map((a) => {
                       const v = answerView(a.value);
                       return (
@@ -940,6 +1045,53 @@ export function SubmissionDrawer({
                 {d.error && <Row label={t('drawer.error')}>{d.error}</Row>}
               </dl>
             </Section>
+
+            {d.payments.length > 0 && (
+              <Section title={t('payments.title')}>
+                {d.duplicatePayment && (
+                  <Alert tone="warning" data-testid="duplicate-payment">
+                    {t('payments.duplicate')}
+                  </Alert>
+                )}
+                <ul className="space-y-3" data-testid="payments">
+                  {d.payments.map((p) => (
+                    <li key={p.id} className="space-y-1 text-sm">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium" dir="ltr">
+                          {formatMinor(BigInt(p.amountMinor), p.currency)}
+                        </span>
+                        <Badge
+                          tone={
+                            p.status === 'paid'
+                              ? 'success'
+                              : p.status === 'pending'
+                                ? 'warning'
+                                : 'neutral'
+                          }
+                        >
+                          {t(`payments.status.${p.status}`)}
+                        </Badge>
+                      </div>
+                      <dl className="space-y-1 text-muted-foreground">
+                        <Row label={t('payments.gateway')}>{p.gateway}</Row>
+                        {p.paidAt && (
+                          <Row label={t('payments.paidAt')}>
+                            {dateTime(p.paidAt)}
+                            {p.settledVia ? ` (${t(`payments.via.${p.settledVia}`)})` : ''}
+                          </Row>
+                        )}
+                        {p.status === 'pending' && (
+                          <Row label={t('payments.expiresAt')}>{dateTime(p.expiresAt)}</Row>
+                        )}
+                        <Row label={t('payments.reference')}>
+                          <span dir="ltr">{p.reference}</span>
+                        </Row>
+                      </dl>
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
 
             <Section title={t('drawer.links')}>
               <dl className="space-y-2">

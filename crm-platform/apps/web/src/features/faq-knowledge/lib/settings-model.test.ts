@@ -2,11 +2,13 @@ import { describe, expect, it } from 'vitest';
 import type { FaqSettings } from '@crm/contracts';
 import {
   activePreset,
+  clampBand,
   clampThreshold,
   formFromSettings,
   presetsFor,
   settingsDirty,
   toSettingsInput,
+  verifyRange,
 } from './settings-model';
 
 const base: FaqSettings = {
@@ -14,6 +16,10 @@ const base: FaqSettings = {
   threshold: 0.45,
   minMargin: 0,
   logQueries: true,
+  verifyMode: 'off',
+  verifyBand: 0.1,
+  verifyAvailable: true,
+  verifyModel: 'openai/gpt-4o-mini',
   isDefault: true,
   engineEnabled: true,
   embeddingModel: 'openai/text-embedding-3-large',
@@ -29,7 +35,14 @@ const base: FaqSettings = {
 describe('toSettingsInput', () => {
   it('the first save sends no rowVersion', () => {
     const input = toSettingsInput({ ...formFromSettings(base), enabled: true }, base);
-    expect(input).toEqual({ enabled: true, threshold: 0.45, minMargin: 0, logQueries: true });
+    expect(input).toEqual({
+      enabled: true,
+      threshold: 0.45,
+      minMargin: 0,
+      logQueries: true,
+      verifyMode: 'off',
+      verifyBand: 0.1,
+    });
     expect('rowVersion' in input).toBe(false);
   });
   it('a later save sends the version it read', () => {
@@ -67,5 +80,39 @@ describe('presets', () => {
     expect(
       settingsDirty(formFromSettings(base), { ...formFromSettings(base), logQueries: false }),
     ).toBe(true);
+  });
+});
+
+describe('the second check', () => {
+  it('is part of the form, the dirty check and the saved body', () => {
+    const form = formFromSettings({ ...base, verifyMode: 'borderline', verifyBand: 0.2 });
+    expect(form).toMatchObject({ verifyMode: 'borderline', verifyBand: 0.2 });
+    expect(settingsDirty(form, formFromSettings(base))).toBe(true);
+    expect(settingsDirty(form, { ...form, verifyBand: 0.1 })).toBe(true);
+    expect(settingsDirty(form, { ...form })).toBe(false);
+    // The slider's float noise is not an edit.
+    expect(settingsDirty(form, { ...form, verifyBand: 0.2000001 })).toBe(false);
+    expect(toSettingsInput(form, { ...base, rowVersion: 2 })).toMatchObject({
+      verifyMode: 'borderline',
+      verifyBand: 0.2,
+      rowVersion: 2,
+    });
+  });
+  it('keeps the band inside what the API accepts, at both edges', () => {
+    expect(clampBand(0)).toBe(0.01);
+    expect(clampBand(0.01)).toBe(0.01);
+    expect(clampBand(0.3)).toBe(0.3);
+    expect(clampBand(0.9)).toBe(0.3);
+    expect(clampBand(0.1000001)).toBe(0.1);
+    const edge = { ...formFromSettings(base), verifyBand: 5 };
+    expect(toSettingsInput(edge, base).verifyBand).toBe(0.3);
+  });
+  it('says which scores are checked: from the bar up to the bar plus the band, at most 100%', () => {
+    expect(verifyRange(0.5, 0.1)).toEqual({ from: 50, to: 60 });
+    expect(verifyRange(0.45, 0.01)).toEqual({ from: 45, to: 46 });
+    expect(verifyRange(0.45, 0.3)).toEqual({ from: 45, to: 75 });
+    expect(verifyRange(0.99, 0.3)).toEqual({ from: 99, to: 100 });
+    // A band outside the offered range is read as the nearest edge.
+    expect(verifyRange(0.5, 0)).toEqual({ from: 50, to: 51 });
   });
 });

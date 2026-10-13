@@ -72,3 +72,68 @@ export function pathOf(run: Pick<FlowRunDetail, 'graph' | 'log' | 'removedNodeId
     .map((n) => make(n.id, n.label, n.type));
   return { reached, unreached };
 }
+
+/** What a log row says beyond its summary, as facts the screen words in the viewer's language. No raw `detail` keys reach the screen. */
+export type StepFact =
+  | { kind: 'next'; node: string }
+  | { kind: 'waitingAt'; node: string }
+  /** The run had no next step here, so the options of an earlier menu stay active for taps. */
+  | { kind: 'menuKept'; node: string }
+  | { kind: 'answered'; ms: number }
+  | { kind: 'delay'; seconds: number }
+  | { kind: 'ended'; reason: string }
+  | { kind: 'replied'; text: string };
+
+const text = (v: unknown): string => (typeof v === 'string' ? v : '');
+
+/** The node's name for a step: the flow's current graph for the run, else what the log itself copied at run time. */
+export function nodeNames(run: Pick<FlowRunDetail, 'graph' | 'log'>): (id: string) => string {
+  const names = new Map<string, string>();
+  for (const s of run.log) if (s.nodeId && s.nodeLabel) names.set(s.nodeId, s.nodeLabel);
+  for (const n of run.graph?.nodes ?? []) if (!names.has(n.id)) names.set(n.id, n.label);
+  return (id) => names.get(id) ?? id;
+}
+
+export function stepFacts(s: FlowRunStep, nameOf: (id: string) => string): StepFact[] {
+  const d = s.detail;
+  const facts: StepFact[] = [];
+  if (s.event === 'reply' && text(d.text)) facts.push({ kind: 'replied', text: text(d.text) });
+  if (text(d.next)) facts.push({ kind: 'next', node: nameOf(text(d.next)) });
+  if (text(d.waitingOn)) {
+    const at = nameOf(text(d.waitingOn));
+    // A wait on another node than the one that ran is a menu kept alive after a dead end, not this node asking.
+    facts.push(
+      s.nodeId && text(d.waitingOn) !== s.nodeId
+        ? { kind: 'menuKept', node: at }
+        : { kind: 'waitingAt', node: at },
+    );
+  }
+  if (typeof d.seconds === 'number') facts.push({ kind: 'delay', seconds: d.seconds });
+  if (s.event === 'end' && text(d.reason)) facts.push({ kind: 'ended', reason: text(d.reason) });
+  return facts;
+}
+
+export type WaitState =
+  /** The customer replied: how long the run waited for it. */
+  | { state: 'answered'; ms: number }
+  /** Nobody replied and the run is over (idle timeout, cancelled). */
+  | { state: 'gaveUp' }
+  /** Still parked on this wait. */
+  | { state: 'waiting' };
+
+/**
+ * What became of each wait row. A node that asks a question logs a `waiting` row when it parks; the answer is a later row. Left alone
+ * that row stays amber for ever and a finished conversation looks stuck, so each wait is settled by the next customer reply after it.
+ */
+export function waitStates(log: FlowRunStep[], runLive: boolean): Map<FlowRunStep, WaitState> {
+  const out = new Map<FlowRunStep, WaitState>();
+  log.forEach((row, i) => {
+    if (row.event !== 'wait' || row.outcome !== 'waiting') return;
+    const reply = log.slice(i + 1).find((r) => r.event === 'reply');
+    if (reply) {
+      const ms = Math.max(0, Date.parse(reply.at) - Date.parse(row.at));
+      out.set(row, { state: 'answered', ms: Number.isFinite(ms) ? ms : 0 });
+    } else out.set(row, { state: runLive ? 'waiting' : 'gaveUp' });
+  });
+  return out;
+}

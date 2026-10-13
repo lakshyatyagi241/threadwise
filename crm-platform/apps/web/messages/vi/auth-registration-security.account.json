@@ -22,7 +22,6 @@
         "signedOut": "Phiên của bạn đã kết thúc. Vui lòng đăng nhập lại.",
         "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
         "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}.",
-        "requestId": "ID yêu cầu",
         "locked": "Quá nhiều lần thử thất bại. Hãy đợi một lúc trước khi thử lại.",
         "lockedWait": "Quá nhiều lần thử thất bại. Hãy thử lại sau {minutes, plural, other {# phút}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Múi giờ",
         "workspaceTimezoneHint": "Áp dụng cho {workspace}. Chỉ chủ sở hữu và quản trị viên mới có thể thay đổi.",
+        "myTimezone": "Múi giờ của tôi",
+        "myTimezoneHint": "Ngày và giờ được hiển thị cho bạn theo {zone}. Để trống để theo múi giờ của không gian làm việc (UTC nếu không gian làm việc chưa đặt).",
+        "myTimezoneUseWorkspace": "Dùng mặc định của không gian làm việc",
         "saved": "Đã lưu hồ sơ.",
         "errors": {
           "fullNameRequired": "Nhập họ và tên của bạn.",
@@ -367,7 +369,8 @@
         "failed": "Không thể chuyển không gian làm việc. Vui lòng thử lại.",
         "notAvailable": "Bạn không thể chuyển sang không gian làm việc đó.",
         "rateLimited": "Quá nhiều lần thử. Vui lòng đợi một lát rồi thử lại.",
-        "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}."
+        "rateLimitedWait": "Quá nhiều lần thử. Hãy thử lại sau {seconds, plural, other {# giây}}.",
+        "unverified": "Hãy xác minh email của bạn trong không gian làm việc này để chuyển sang đó."
       },
       "mfaChallenge": {
         "title": "Xác nhận là bạn",
@@ -551,7 +554,10 @@
             "forms_and_links": "Biểu mẫu và liên kết",
             "extra_channels": "Telegram, Facebook và Instagram",
             "form_builder": "Biểu mẫu",
-            "waba_groups": "Nhóm WhatsApp"
+            "waba_groups": "Nhóm WhatsApp",
+            "sms": "SMS",
+            "help_agent": "Trợ lý trợ giúp",
+            "email_channel": "Kênh email (Gmail)"
           },
           "cta": {
             "continueFree": "Tiếp tục miễn phí",

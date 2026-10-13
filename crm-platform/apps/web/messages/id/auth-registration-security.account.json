@@ -22,7 +22,6 @@
         "signedOut": "Sesi Anda telah berakhir. Silakan masuk lagi.",
         "rateLimited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
         "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}.",
-        "requestId": "ID permintaan",
         "locked": "Terlalu banyak percobaan gagal. Tunggu beberapa saat sebelum mencoba lagi.",
         "lockedWait": "Terlalu banyak percobaan gagal. Coba lagi dalam {minutes, plural, other {# menit}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Zona waktu",
         "workspaceTimezoneHint": "Berlaku untuk {workspace}. Hanya pemilik dan administrator yang dapat mengubahnya.",
+        "myTimezone": "Zona waktu saya",
+        "myTimezoneHint": "Tanggal dan waktu ditampilkan kepada Anda dalam {zone}. Biarkan kosong untuk mengikuti zona waktu ruang kerja (UTC jika ruang kerja tidak memilikinya).",
+        "myTimezoneUseWorkspace": "Gunakan default ruang kerja",
         "saved": "Profil disimpan.",
         "errors": {
           "fullNameRequired": "Masukkan nama lengkap Anda.",
@@ -367,7 +369,8 @@
         "failed": "Kami tidak dapat mengganti ruang kerja. Silakan coba lagi.",
         "notAvailable": "Anda tidak dapat beralih ke ruang kerja itu.",
         "rateLimited": "Terlalu banyak percobaan. Harap tunggu sebentar lalu coba lagi.",
-        "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}."
+        "rateLimitedWait": "Terlalu banyak percobaan. Coba lagi dalam {seconds, plural, other {# detik}}.",
+        "unverified": "Verifikasi email Anda di ruang kerja ini untuk beralih ke sana."
       },
       "mfaChallenge": {
         "title": "Konfirmasi bahwa ini Anda",
@@ -551,7 +554,10 @@
             "forms_and_links": "Formulir dan tautan",
             "extra_channels": "Telegram, Facebook, dan Instagram",
             "form_builder": "Formulir",
-            "waba_groups": "Grup WhatsApp"
+            "waba_groups": "Grup WhatsApp",
+            "sms": "SMS",
+            "help_agent": "Asisten Bantuan",
+            "email_channel": "Kanal email (Gmail)"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

@@ -149,6 +149,16 @@
         "title": "{name} פעילה שוב",
         "titleNoName": "קבוצת WhatsApp פעילה שוב",
         "body": "WhatsApp שחזרה את הקבוצה הזו. אפשר לשלוח לה הודעות שוב."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {מישהו רוצה להצטרף ל-{name}} two {# אנשים רוצים להצטרף ל-{name}} other {# אנשים רוצים להצטרף ל-{name}}}",
+        "titleNoName": "{count, plural, one {מישהו רוצה להצטרף לקבוצת WhatsApp} two {# אנשים רוצים להצטרף לקבוצת WhatsApp} other {# אנשים רוצים להצטרף לקבוצת WhatsApp}}",
+        "body": "פתחו את קבוצות כדי לאשר או לדחות."
+      },
+      "device_group_removed": {
+        "title": "המספר שלכם הוסר מ-{name}",
+        "titleNoName": "המספר שלכם הוסר מקבוצת WhatsApp",
+        "body": "מישהו הסיר את המספר האישי שלכם מהקבוצה הזו. הקבוצה נשמרת כאן לקריאה בלבד."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "הודעה פרטית חדשה",
         "waba_group_join_request": "בקשה להצטרף לקבוצה",
         "waba_group_suspended": "קבוצת WhatsApp הושעתה",
-        "waba_group_suspension_cleared": "קבוצת WhatsApp פעילה שוב"
+        "waba_group_suspension_cleared": "קבוצת WhatsApp פעילה שוב",
+        "device_group_join_request": "בקשה להצטרף לקבוצה",
+        "device_group_removed": "הוסרתם מקבוצת WhatsApp"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "מספרי WhatsApp",
         "broadcasts": "שידורים וקמפיינים",
         "team_chat": "צ׳אט צוות",
-        "whatsapp_groups": "קבוצות WhatsApp"
+        "whatsapp_groups": "קבוצות WhatsApp",
+        "billing": "חיוב ומנויים"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "מסמך מכירה הוכרע",
           "hint": "הצעת מחיר או חשבונית אושרה או נדחתה."
         },
+        "email_bounced": {
+          "label": "האימייל לא נמסר",
+          "hint": "אימייל ששלחת הוחזר או מתעכב."
+        },
         "wallet_credited": {
           "label": "הארנק מולא",
           "hint": "זוכה הארנק של סביבת העבודה."
@@ -313,6 +330,34 @@
         "waba_group_suspension_cleared": {
           "label": "הקבוצה פעילה שוב",
           "hint": "WhatsApp שחזרה קבוצה שהושעתה. מוצג רק אם קיבלתם הודעה על ההשעיה."
+        },
+        "form_payment": {
+          "label": "התקבל תשלום מטופס",
+          "hint": "מבקר שילם באחד הטפסים שלך."
+        },
+        "form_payment_duplicate": {
+          "label": "טופס שולם פעמיים",
+          "hint": "מבקר שילם פעם שנייה ויש להחזיר את התשלום העודף."
+        },
+        "billing_payment_failed": {
+          "label": "תשלום המנוי נכשל",
+          "hint": "חיוב חידוש לא הושלם ודורש את תשומת לבך."
+        },
+        "billing_subscription_canceled": {
+          "label": "המנוי בוטל",
+          "hint": "ספק התשלומים שלך סיים מנוי של סביבת עבודה זו."
+        },
+        "device_group_join_request": {
+          "label": "בקשה להצטרף לקבוצה של מספר אישי",
+          "hint": "אנשים מבקשים להצטרף לקבוצה של מספר WhatsApp אישי שאתם מנהלים. עשר בקשות הופכות לשורה אחת."
+        },
+        "device_group_removed": {
+          "label": "הוסרתם מקבוצה של מספר אישי",
+          "hint": "מישהו הסיר אחד ממספרי ה-WhatsApp האישיים שלכם מקבוצה. זה יכול להיות סימן שהמספר דווח."
+        },
+        "sla_breached": {
+          "label": "חריגה מ-SLA",
+          "hint": "שיחה שבבעלותך פספסה את יעד התגובה הראשונה או הפתרון."
         }
       },
       "loading": "טוען את ההעדפות שלך",

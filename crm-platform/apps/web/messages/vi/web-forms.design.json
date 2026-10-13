@@ -106,7 +106,8 @@
         "light": "Sáng",
         "dark": "Tối",
         "schemeHint": "Chế độ màu đang là Sáng nên không có phiên bản tối để xem trước.",
-        "frameTitle": "Xem trước trực tiếp biểu mẫu"
+        "frameTitle": "Xem trước trực tiếp biểu mẫu",
+        "popup": "Cửa sổ bật lên"
       }
     }
   }

@@ -12,6 +12,7 @@ import {
 } from '@crm/contracts';
 import { conditionTreeOf } from './condition-tree';
 import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
+import { minScoreOutOfRange } from './faq-node';
 import { dedupeMsgs, msg, renderMsg, type Msg, type Translate } from './msg';
 
 /**
@@ -39,11 +40,27 @@ export const SIMPLE_TYPES = [
   'template',
   'cta',
   'assign',
+  'faq',
 ] as const;
 export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
-/** The steps that end their journey: what happens next depends on what the customer taps. */
-export const BRANCHING: ReadonlySet<string> = new Set(['buttons', 'list', 'carousel', 'condition']);
+/**
+ * The steps that end their journey: what happens next depends on what the customer taps (buttons, list, a carousel's reply buttons),
+ * on a condition's answer, or on whether an FAQ answered (`faq`, "Answer from FAQ").
+ */
+export const BRANCHING: ReadonlySet<string> = new Set(['buttons', 'list', 'carousel', 'condition', 'faq']);
+
+/**
+ * A branching step whose exits are fixed by the step, not written by the author: the graph port each exit leaves by, in the order of
+ * the step's `links`. The other branching steps have one exit per button / row, on ports `p0`, `p1`, ...
+ */
+export const FIXED_EXITS: Readonly<Record<string, readonly string[]>> = {
+  faq: ['matched', 'no_match'],
+  condition: ['yes', 'no'],
+};
+
+/** The graph port exit `i` of a branching step leaves by. */
+export const exitHandle = (type: string, i: number): string => FIXED_EXITS[type]?.[i] ?? `p${i}`;
 
 export const LIMITS = {
   buttons: 3,
@@ -91,25 +108,13 @@ const str = (v: unknown): string =>
   typeof v === 'string' ? v : v === null || v === undefined ? '' : String(v);
 const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 
-/** The exit a branching step's `i`-th link leaves by: Yes and No for a Condition, `p<i>` for the others. */
-export const exitId = (type: string, i: number): string =>
-  type === 'condition' ? (i === 0 ? 'yes' : 'no') : `p${i}`;
-
-/** The link position an exit handle stands for, or null when the handle is not an exit of this kind of step. */
-export function exitIndex(type: string, handle: string): number | null {
-  if (type === 'condition') return handle === 'yes' ? 0 : handle === 'no' ? 1 : null;
-  const m = /^p(\d+)$/.exec(handle);
-  return m ? Number(m[1]) : null;
-}
-
 export const optionCount = (s: Pick<SimpleStep, 'type' | 'data'>): number =>
-  s.type === 'condition'
-    ? 2
-    : s.type === 'carousel'
-      ? flbCarouselReplies(s.data.cards).length
-      : BRANCHING.has(s.type)
-        ? arr(s.data.options).length
-        : 0;
+  FIXED_EXITS[s.type]?.length ??
+  (s.type === 'carousel'
+    ? flbCarouselReplies(s.data.cards).length
+    : BRANCHING.has(s.type)
+      ? arr(s.data.options).length
+      : 0);
 
 export const MAIN_NAME = 'Main flow';
 
@@ -222,8 +227,10 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
       continue;
     }
     const branching = BRANCHING.has(src.type);
-    const exit = branching ? exitIndex(src.type, e.sourceHandle) : null;
-    if (branching && exit !== null) {
+    const fixed = FIXED_EXITS[src.type];
+    const m = fixed ? null : /^p(\d+)$/.exec(e.sourceHandle);
+    const exit = fixed ? fixed.indexOf(e.sourceHandle) : m ? Number(m[1]) : -1;
+    if (branching && exit >= 0) {
       const i = exit;
       const list = option.get(src.id) ?? [];
       if (list[i] !== undefined) reasons.push(msg('simpleModel.reasons.multiLink'));
@@ -346,7 +353,7 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto)) edge(s.id, 'out', s.goto);
       if (BRANCHING.has(s.type)) {
         s.links.forEach((target, i) => {
-          if (target && known.has(target)) edge(s.id, exitId(s.type, i), target);
+          if (target && known.has(target)) edge(s.id, exitHandle(s.type, i), target);
         });
       }
     });
@@ -389,7 +396,7 @@ export interface StepKind {
   preset?: string;
   label: Msg;
   help: Msg;
-  group: 'send' | 'ask' | 'logic' | 'handoff';
+  group: 'send' | 'ask' | 'logic' | 'answer' | 'handoff';
 }
 
 const kind = (
@@ -410,6 +417,7 @@ const kind = (
 };
 
 export const STEP_KINDS: readonly StepKind[] = [
+  kind('faq', 'faq', 'answer'),
   kind('assign', 'assign', 'handoff'),
   kind('message', 'message', 'send'),
   kind('media', 'media', 'send'),
@@ -505,6 +513,7 @@ export function newStep(
     data.options = [{ title: 'Item 1', description: '', section: '' }];
   }
   if (type === 'message') data.text = '';
+  // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
   if (type === 'location') Object.assign(data, { lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
   if (type === 'condition')
@@ -799,6 +808,7 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         )
           bad('carouselButtons');
       }
+      if (s.type === 'faq' && minScoreOutOfRange(d.minScore)) bad('faqMinScore');
       if (s.type === 'cta') {
         const list = arr(d.actions) as Array<Record<string, unknown>>;
         if (list.length === 0 || list.some((a) => !str(a.label).trim() || !str(a.value).trim()))
@@ -914,7 +924,12 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                         ? delaySummary(t, d)
                         : s.type === 'assign'
                           ? str(d.message)
-                          : '';
+                          : s.type === 'faq'
+                            ? t('simpleModel.faqSummary', {
+                                hasCategory: str(d.category).trim() ? 'true' : 'false',
+                                category: str(d.category).trim(),
+                              })
+                            : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
@@ -934,4 +949,5 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   carousel: msg('simpleModel.typeLabel.carousel'),
   condition: msg('simpleModel.typeLabel.condition'),
   assign: msg('simpleModel.typeLabel.assign'),
+  faq: msg('simpleModel.typeLabel.faq'),
 };

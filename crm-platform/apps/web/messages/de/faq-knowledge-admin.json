@@ -7,7 +7,6 @@
     "common": {
       "loading": "Wird geladen",
       "retry": "Erneut versuchen",
-      "requestId": "Anfrage-ID",
       "dash": "-",
       "cancel": "Abbrechen",
       "errors": {
@@ -61,7 +60,9 @@
         "matches": "Geprüfte Kundennachrichten",
         "answered": "Beantwortet",
         "rate": "Antwortquote",
-        "tokens": "Tokens für den Abgleich"
+        "tokens": "Tokens für den Abgleich",
+        "verified": "Zweitprüfungen",
+        "vetoed": "Zurückgehaltene Antworten"
       }
     },
     "settings": {
@@ -86,17 +87,18 @@
       },
       "threshold": {
         "label": "Standard-Schwellenwert für Treffer",
-        "hint": "Eine Nachricht passt, wenn ihre Punktzahl mindestens so hoch ist. Gilt nur für Workspaces, die nie einen eigenen Schwellenwert gespeichert haben. Die Werte hängen vom KI-Modell ab.",
         "value": "{value}",
         "follow": "Dem Modell folgen",
-        "followHint": "Die Standard-Empfindlichkeit ist der empfohlene Wert des Modells ({value}) und ändert sich mit dem Modell. Schalten Sie aus, um eine feste Zahl zu setzen."
+        "followHint": "Die Standard-Empfindlichkeit ist der empfohlene Wert des Modells ({value}) und ändert sich mit dem Modell. Schalten Sie aus, um eine feste Zahl zu setzen.",
+        "hint": "Eine Nachricht passt, wenn ihr Score mindestens so hoch ist. Wird nur von Flows genutzt, die keinen eigenen Schwellenwert gespeichert haben. Die Scores hängen vom Embedding-Modell ab."
       },
       "limits": {
         "title": "Limits",
-        "maxFaqs": "Maximale FAQs pro Workspace",
         "maxVariationsPerFaq": "Maximale Varianten pro FAQ",
         "semanticPerHour": "Inhaltliche Treffer pro Workspace und Stunde",
-        "semanticPerHourHint": "Darüber fällt ein Workspace für den Rest der Stunde auf Schreibweisen-Ähnlichkeit zurück. 0 bedeutet immer Schreibweisen-Ähnlichkeit."
+        "semanticPerHourHint": "Darüber fällt ein Workspace für den Rest der Stunde auf Schreibweisen-Ähnlichkeit zurück. 0 bedeutet immer Schreibweisen-Ähnlichkeit.",
+        "verifyPerHour": "Zweitprüfungen pro Workspace und Stunde",
+        "maxFaqs": "Maximale FAQs pro Flow"
       },
       "errors": {
         "integer": "Geben Sie eine ganze Zahl ein.",
@@ -114,7 +116,20 @@
         "title": "Vor dem Speichern prüfen",
         "confirm": "Änderungen speichern",
         "engineOff": "Wenn Sie die Engine ausschalten, antwortet kein Workspace mehr per FAQ, und FAQ-Änderungen sind gesperrt, bis Sie sie wieder einschalten.",
-        "modelChange": "Wenn Sie das KI-Modell von {from} auf {to} ändern, werden alle gespeicherten Vektoren neu erstellt. Bis dahin nutzt der Abgleich nur Schreibweisen-Ähnlichkeit. Die Standard-Empfindlichkeit folgt dem neuen Modell (empfohlen {threshold}), sofern Sie keinen festen Wert setzen. Schwellenwerte, die ein Workspace selbst gespeichert hat, müssen eventuell neu eingestellt werden, da sich die Werte mit dem Modell ändern."
+        "modelChange": "Wenn Sie das Embedding-Modell von {from} auf {to} ändern, werden alle gespeicherten Vektoren neu erstellt. Bis das abgeschlossen ist, nutzt der Abgleich nur die Schreibähnlichkeit. Die Standard-Empfindlichkeit folgt dem neuen Modell (empfohlen {threshold}), sofern Sie keinen festen Wert setzen. Schwellenwerte, die Flows selbst gespeichert haben, müssen eventuell neu abgestimmt werden, da sich die Scores mit dem Modell ändern."
+      },
+      "verify": {
+        "title": "Zweitprüfung bei knappen Treffern",
+        "enabled": {
+          "label": "Zweitprüfung zulassen",
+          "hint": "Schalten Sie sie aus, um die Prüfung für alle Workspaces zu stoppen, unabhängig von deren Einstellung."
+        },
+        "model": {
+          "label": "Prüfmodell",
+          "hint": "Die OpenRouter-Modell-ID, die knappe Treffer beurteilt, zum Beispiel openai/gpt-4o-mini. Ein kleines, schnelles Modell genügt."
+        },
+        "perHourHint": "Darüber hinaus gilt ein knapper Treffer für den Rest der Stunde ungeprüft. 0 bedeutet nie prüfen.",
+        "description": "Ein kleines Chat-Modell prüft Treffer, die die Schwelle eines Flows nur knapp erreicht haben, noch einmal. Es kann eine Antwort nur zurückhalten. Flows schalten es in ihren eigenen FAQ-Einstellungen ein."
       }
     },
     "maintenance": {

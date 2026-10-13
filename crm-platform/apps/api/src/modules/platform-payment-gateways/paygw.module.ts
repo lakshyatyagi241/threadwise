@@ -18,6 +18,9 @@ import { OrdersRepository } from './orders.repository';
 import { OrdersService } from './orders.service';
 import { PaymentConfirmationService } from './payment-confirmation.service';
 import { ProofService } from './proof.service';
+import { PlatformSubscriptionsService } from './platform-subscriptions.service';
+import { RefundService } from './refund.service';
+import { SubscriptionCancelService } from './subscription-cancel.service';
 import { SubscriptionLifecycleService } from './subscription-lifecycle.service';
 import { SubscriptionReconcilerService } from './subscription-reconciler.service';
 import { PaygwStore } from './paygw.store';
@@ -49,7 +52,10 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     OrdersService,
     FulfilmentService,
     SubscriptionLifecycleService,
+    SubscriptionCancelService,
     SubscriptionReconcilerService,
+    PlatformSubscriptionsService,
+    RefundService,
     PaymentConfirmationService,
     ProofService,
     BuyerInvoiceService,
@@ -61,6 +67,7 @@ import { PlatformGatewaysController } from './platform-gateways.controller';
     GatewayService,
     PaymentConfirmationService,
     SubscriptionLifecycleService,
+    SubscriptionCancelService,
     SubscriptionReconcilerService,
   ],
 })

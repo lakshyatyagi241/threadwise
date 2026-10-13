@@ -161,3 +161,20 @@ changed plan clears it unless given) and `overrides.dataRetentionDays` (0..3650 
 - A paid plan whose `plan_ends_at` has passed stays active, with the paid plan's limits and flags, for that many days while a live autopay subscription (`status` `active` or `past_due`) exists for it. State `paid_grace`; `GET /v2/billing/status` and `/v2/billing/usage` then carry `graceEndsAt` and `daysLeft` counted to it. After the grace, or with no live subscription or 0 days, it is `paid_lapsed` as before.
 - A recovered charge (`subscription.charged`) moves the period forward and the state back to `paid_active`. The setting is cached for 30 seconds per process.
 - `POST /v2/billing/subscription/cancel` acts on the workspace plan subscription only. `POST /v2/billing/subscription/addons/:id/cancel` (`:id` = the workspace add-on uuid, same permission) stops one add-on from renewing; the paid term keeps running to its end date. 422 `PLAN_NO_SUBSCRIPTION` when none is live.
+
+## Managing subscriptions through the payment provider (Razorpay)
+
+Workspace routes, all `plan.subscription.manage`; mutations are `@Idempotent()`:
+
+- `GET /v2/billing/subscriptions`: this workspace's plan and add-on subscriptions (`status` active/past_due/pending/canceled/expired, `amount`, `billingCycle`, `currentPeriodEnd`, `autoRenew`, `paymentFailed`, `canceledAt`).
+- `GET /v2/billing/subscriptions/:id/charges`: what the provider charged, cycle by cycle (`source: 'provider'`, receipt URLs only when `https`); `source: 'orders'` (the paid orders) when the provider cannot be asked.
+- `POST /v2/billing/subscriptions/:id/sync`: asks the provider and applies the answer through the reconciler (`outcome` `up_to_date`/`renewed`/`gateway_canceled`/`gateway_expired`). 404 for another workspace's id.
+- `POST /v2/billing/subscriptions/:id/cancel`: tells the provider to stop at the cycle end (`cancel_at_cycle_end: 1`); the paid period keeps running. 422 when already ended.
+
+Never double-charged: `FulfilmentService` ends every other live plan subscription of the workspace, immediately (`cancel_at_cycle_end: 0`, `meta.cancel.reason_code = 'superseded'`), once a new plan order is applied; `POST /v2/billing/plan` to a cheaper plan ends the old one at the cycle end (`downgrade`). A provider failure never undoes the change: the row is ended locally and flagged (`meta.cancel.result = 'failed'`, shown to the operator as "Provider cancel failed").
+
+Failed renewals: `subscription.pending`/`halted` set `past_due` once (a repeat is a no-op) and emit `paygw.subscription.past_due`; the worker's `SubscriptionNotificationsConsumer` sends each workspace owner an in-app `billing_payment_failed` notification and one email. A provider-side cancel emits `paygw.subscription.canceled` (`billing_subscription_canceled`); our own cancel does not notify. `subscription.activated`/`updated` webhooks stay ignored on purpose (the first charge arrives as `subscription.charged`; counting both would double the first period).
+
+Operator (`/v2/platform/billing`, writes `super_admin`): `GET subscriptions` (filters `status`, `kind`, `gateway`, `q`; KPIs), `POST subscriptions/:id/cancel` (`{atCycleEnd}`), `POST subscriptions/:id/sync`, `GET subscriptions/:id/charges`; refunds `POST orders/:id/refund` and `POST subscriptions/:id/refund` (`paymentId` must be a paid charge in the provider's own list for that subscription; optional `endSubscription`), `GET .../refunds`. Refunds go through the provider (`POST /payments/:id/refund`), are recorded in `order_refunds` (`pending` claim row first, counted against the paid amount, so two operators cannot over-refund), audited and emitted as `paygw.refund.created|failed`. Refused: unpaid order, wallet top-up, subscription payment on the order route, more than paid (422 `PAYGW_REFUND_REFUSED`); a provider refusal keeps the row `failed` with its reason and frees the amount (`PAYGW_REFUND_FAILED` semantics in the row).
+
+Not built yet: refunds of wallet top-ups, pausing/resuming a subscription, changing the payment method inside the app (the provider's page does that).

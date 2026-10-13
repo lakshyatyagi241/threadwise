@@ -7,7 +7,6 @@
     "common": {
       "loading": "Caricamento",
       "retry": "Riprova",
-      "requestId": "ID richiesta",
       "dash": "-",
       "cancel": "Annulla",
       "errors": {
@@ -61,7 +60,9 @@
         "matches": "Messaggi dei clienti analizzati",
         "answered": "Con risposta",
         "rate": "Tasso di risposta",
-        "tokens": "Token di embedding"
+        "tokens": "Token di embedding",
+        "verified": "Secondi controlli",
+        "vetoed": "Risposte trattenute"
       }
     },
     "settings": {
@@ -86,17 +87,18 @@
       },
       "threshold": {
         "label": "Soglia di corrispondenza predefinita",
-        "hint": "Un messaggio corrisponde quando il suo punteggio è almeno pari a questo valore. Usata solo dagli spazi di lavoro che non hanno mai salvato una propria soglia. I punteggi dipendono dal modello di embedding.",
         "value": "{value}",
         "follow": "Segui il modello",
-        "followHint": "La sensibilità predefinita è il valore consigliato dal modello ({value}) e cambia quando cambia il modello. Disattiva per fissare un numero."
+        "followHint": "La sensibilità predefinita è il valore consigliato dal modello ({value}) e cambia quando cambia il modello. Disattiva per fissare un numero.",
+        "hint": "Un messaggio corrisponde quando il suo punteggio è almeno pari a questo. Usato solo dai flussi che non hanno mai salvato una propria soglia. I punteggi dipendono dal modello di embedding."
       },
       "limits": {
         "title": "Limiti",
-        "maxFaqs": "Massimo di FAQ per spazio di lavoro",
         "maxVariationsPerFaq": "Massimo di varianti per FAQ",
         "semanticPerHour": "Confronti semantici per spazio di lavoro all'ora",
-        "semanticPerHourHint": "Oltre questo valore, uno spazio di lavoro ripiega sulla somiglianza ortografica per il resto dell'ora. 0 significa sempre somiglianza ortografica."
+        "semanticPerHourHint": "Oltre questo valore, uno spazio di lavoro ripiega sulla somiglianza ortografica per il resto dell'ora. 0 significa sempre somiglianza ortografica.",
+        "verifyPerHour": "Secondi controlli per spazio di lavoro all'ora",
+        "maxFaqs": "Numero massimo di FAQ per flusso"
       },
       "errors": {
         "integer": "Inserisci un numero intero.",
@@ -114,7 +116,20 @@
         "title": "Controlla prima di salvare",
         "confirm": "Salva modifiche",
         "engineOff": "Disattivando il motore, nessuno spazio di lavoro potrà rispondere ai clienti con le FAQ e le modifiche alle FAQ saranno bloccate finché non lo riattivi.",
-        "modelChange": "Cambiando il modello di embedding da {from} a {to}, ogni vettore salvato viene rigenerato. Fino al termine, il confronto usa solo la somiglianza ortografica. La sensibilità predefinita seguirà il nuovo modello (consigliato {threshold}) a meno che tu non imposti un valore fisso. Le soglie degli spazi di lavoro salvate separatamente potrebbero richiedere una nuova regolazione perché i punteggi cambiano con il modello."
+        "modelChange": "Cambiare il modello di embedding da {from} a {to} rigenera tutti i vettori memorizzati. Fino al termine, la corrispondenza usa solo la somiglianza ortografica. La sensibilità predefinita seguirà il nuovo modello (consigliato {threshold}) a meno che tu non imposti un valore fisso. Le soglie che i flussi hanno salvato da soli potrebbero richiedere una nuova taratura perché i punteggi cambiano con il modello."
+      },
+      "verify": {
+        "title": "Secondo controllo per i casi al limite",
+        "enabled": {
+          "label": "Consenti il secondo controllo",
+          "hint": "Disattivalo per fermare il controllo in ogni spazio di lavoro, a prescindere dalle loro impostazioni."
+        },
+        "model": {
+          "label": "Modello di controllo",
+          "hint": "L'ID del modello OpenRouter che valuta i casi al limite, ad esempio openai/gpt-4o-mini. Basta un modello piccolo e veloce."
+        },
+        "perHourHint": "Oltre questo valore, un caso al limite resta senza controllo per il resto dell'ora. 0 significa non controllare mai.",
+        "description": "Un piccolo modello di chat ricontrolla le corrispondenze che hanno appena raggiunto la soglia di un flusso. Può solo trattenere una risposta. I flussi lo attivano nelle proprie impostazioni FAQ."
       }
     },
     "maintenance": {

@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQ",
       "label": "Mục FAQ",
       "tab": {
         "faqs": "FAQ",
@@ -13,9 +12,7 @@
       "unansweredCount": "{count, plural, other {# tin nhắn chưa trả lời}}"
     },
     "common": {
-      "dismiss": "Đóng",
       "retry": "Thử lại",
-      "requestId": "Yêu cầu {id}",
       "noAccessTitle": "Bạn không có quyền truy cập màn hình này",
       "noAccess": "Hãy nhờ quản trị viên workspace cấp quyền {permission} cho vai trò của bạn."
     },
@@ -26,28 +23,28 @@
       "conflict": "Có người khác đã thay đổi nội dung này khi bạn đang chỉnh sửa.",
       "duplicateQuestion": "Một FAQ khác đã có câu hỏi này.",
       "duplicateVariation": "FAQ này đã có cách diễn đạt này.",
-      "limitReached": "Workspace của bạn đã đạt giới hạn FAQ. Hãy xóa các FAQ hoặc biến thể không dùng, hoặc nhờ quản trị viên nền tảng tăng giới hạn.",
       "flowNotFound": "Luồng đã chọn không còn tồn tại trong workspace này. Hãy chọn luồng khác.",
       "embeddingUnavailable": "Nhà cung cấp AI không khả dụng. Hãy thêm khóa OpenRouter vào workspace, hoặc nhờ quản trị viên nền tảng bật khóa dùng chung, rồi thử lại.",
       "engineDisabled": "Tính năng trả lời FAQ hiện đang tắt trên toàn nền tảng.",
       "modelNotAllowed": "Mô hình embedding của nền tảng không được phép. Hãy liên hệ quản trị viên nền tảng.",
       "validation": "Một số trường cần được xem lại.",
       "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
-      "unexpected": "Đã xảy ra lỗi. Hãy thử lại, và gửi mã yêu cầu cho bộ phận hỗ trợ nếu lỗi vẫn tiếp diễn."
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại, và gửi mã yêu cầu cho bộ phận hỗ trợ nếu lỗi vẫn tiếp diễn.",
+      "flowNodeNotFound": "Bước đã chọn không còn trong luồng này. Hãy chọn bước khác hoặc bắt đầu từ điểm khởi đầu của luồng.",
+      "limitReached": "Luồng này đã đạt giới hạn FAQ. Hãy xóa các FAQ hoặc biến thể không dùng, hoặc nhờ quản trị viên nền tảng nâng giới hạn."
     },
     "banner": {
       "enabledToast": "Trả lời FAQ đang bật.",
       "engineOff": "Nền tảng đã tắt tính năng trả lời FAQ. Khách hàng sẽ không nhận được câu trả lời FAQ cho đến khi bật lại.",
       "modelChanged": "Nền tảng đã đổi mô hình AI sau khi bạn điều chỉnh ngưỡng này. Điểm số đã thay đổi, nên hãy xem lại độ nhạy.",
       "reviewSensitivity": "Xem lại độ nhạy",
-      "offTitle": "Trả lời FAQ đang TẮT với khách hàng",
-      "offBody": "Bạn có thể viết và thử FAQ, nhưng khách hàng sẽ không nhận được câu trả lời cho đến khi bạn bật tính năng này.",
       "offNoRight": "Hãy nhờ người có quyền faq.settings.manage (thường là quản trị viên workspace) bật tính năng này.",
-      "enable": "Bật trả lời FAQ"
+      "enable": "Bật trả lời FAQ",
+      "offTitle": "Trả lời bằng FAQ đang TẮT cho luồng này",
+      "offBody": "Bạn có thể viết và thử FAQ của luồng này, nhưng khách hàng sẽ không nhận được câu trả lời cho đến khi bạn bật tính năng."
     },
     "list": {
       "title": "FAQ",
-      "subtitle": "Những câu khách hàng hay hỏi và câu bot trả lời. Khách hàng không cần dùng đúng từ ngữ của bạn.",
       "add": "Thêm FAQ",
       "stats": {
         "label": "Tổng số FAQ",
@@ -97,10 +94,10 @@
       "deleted": "Đã xóa FAQ.",
       "empty": {
         "title": "Dạy bot trả lời các câu hỏi thường gặp",
-        "body": "Chỉ cần viết câu hỏi và câu trả lời một lần. Bot sẽ khớp với những gì khách hàng viết, theo cách nói của họ, rồi trả lời hoặc bắt đầu một luồng.",
         "how": "Thêm vài cách hỏi khác cho cùng một ý (cách diễn đạt) và thử trước khi khách hàng nhìn thấy.",
         "cta": "Thêm FAQ đầu tiên",
-        "noRight": "Hãy nhờ quản trị viên workspace cấp quyền thêm FAQ."
+        "noRight": "Hãy nhờ quản trị viên workspace cấp quyền thêm FAQ.",
+        "body": "Viết một câu hỏi và câu trả lời một lần. Bot sẽ khớp những gì khách hàng viết bằng lời của họ, rồi trả lời hoặc chuyển họ đến một bước của luồng."
       },
       "noMatch": {
         "title": "Không có FAQ nào khớp bộ lọc này",
@@ -139,7 +136,11 @@
         "ready": "{count} hoạt động",
         "pending": "{count} đang lập chỉ mục",
         "failed": "{count} lỗi"
-      }
+      },
+      "stepMissing": "Thiếu bước",
+      "subtitle": "Những câu hỏi khách hàng đặt trong {flow} và câu trả lời của bot. Các FAQ này chỉ trả lời bên trong luồng này.",
+      "thisFlow": "Luồng này",
+      "startsAt": "Chuyển đến: {step}"
     },
     "editor": {
       "back": "Quay lại FAQ",
@@ -156,7 +157,6 @@
       "saved": "Đã lưu FAQ.",
       "deleted": "Đã xóa FAQ.",
       "readOnly": "Bạn có thể xem FAQ này nhưng vai trò của bạn không thể thay đổi nó.",
-      "faqLimit": "Workspace của bạn đã đạt giới hạn {max} FAQ. Hãy xóa một FAQ để thêm cái mới.",
       "prefilled": "Câu hỏi được điền từ một tin nhắn chưa trả lời của khách hàng. Lưu FAQ này cũng sẽ đánh dấu tin nhắn đó là đã xử lý.",
       "tryItSaveFirst": "Hãy lưu FAQ trước, sau đó bạn có thể thử xem tin nhắn của khách hàng khớp với nó như thế nào.",
       "conflict": {
@@ -186,21 +186,30 @@
         "title": "Câu trả lời",
         "hint": "Nội dung khách hàng nhận được khi FAQ này khớp.",
         "text": "Trả lời bằng văn bản",
-        "flow": "Bắt đầu một luồng",
         "textLabel": "Nội dung trả lời",
         "count": "{count} / {max} ký tự",
         "preview": "Hiển thị trên WhatsApp",
         "previewEmpty": "Câu trả lời của bạn sẽ hiện ở đây",
-        "flowLabel": "Luồng sẽ bắt đầu",
-        "noFlow": "Chưa chọn luồng"
+        "noFlow": "Chưa chọn luồng",
+        "flow": "Chuyển đến một bước",
+        "flowLabel": "Đi đến đâu",
+        "startsAt": "Chuyển đến bước: {step}",
+        "stepGone": "Bước mà FAQ này chuyển đến không còn tồn tại, nên khách hàng không nhận được câu trả lời.",
+        "thisFlowNamed": "Một bước của luồng này ({name})",
+        "target": {
+          "here": "Một bước của luồng này",
+          "hereHint": "Khách hàng tiếp tục bên trong {name}. Đây là lựa chọn thông thường.",
+          "other": "Một bước của luồng khác",
+          "otherHint": "Chuyển cuộc trò chuyện sang một luồng khác."
+        }
       },
       "advanced": {
         "title": "Nâng cao: độ nhạy riêng cho FAQ này",
-        "body": "Mặc định mọi FAQ dùng độ nhạy của workspace. Hãy dùng giá trị riêng khi FAQ này khớp quá dễ (tăng lên) hoặc quá khó (giảm xuống).",
         "custom": "Dùng độ nhạy riêng cho FAQ này",
         "sliderLabel": "Khớp từ mức",
-        "workspace": "Độ nhạy của workspace là {value}%.",
-        "following": "Đang theo độ nhạy của workspace ({value}%)."
+        "body": "Theo mặc định, mọi FAQ dùng độ nhạy của luồng này. Dùng giá trị tùy chỉnh khi FAQ khớp quá dễ (tăng lên) hoặc quá hiếm (giảm xuống).",
+        "workspace": "Độ nhạy của luồng này là {value}%.",
+        "following": "Theo độ nhạy của luồng này ({value}%)."
       },
       "problem": {
         "question": {
@@ -214,9 +223,9 @@
           "invalid": "Câu trả lời này không hợp lệ."
         },
         "flowId": {
-          "required": "Hãy chọn luồng để bắt đầu.",
-          "tooLong": "Hãy chọn luồng để bắt đầu.",
-          "invalid": "Hãy chọn luồng để bắt đầu."
+          "required": "Chọn luồng để chuyển đến.",
+          "tooLong": "Chọn luồng để chuyển đến.",
+          "invalid": "Chọn luồng để chuyển đến."
         },
         "category": {
           "required": "Hãy viết danh mục hoặc để trống.",
@@ -227,6 +236,11 @@
           "required": "Hãy chọn giá trị từ 5% đến 99%.",
           "tooLong": "Hãy chọn giá trị từ 5% đến 99%.",
           "invalid": "Hãy chọn giá trị từ 5% đến 99%."
+        },
+        "flowNodeId": {
+          "required": "Hãy chọn một bước của luồng này hoặc điểm khởi đầu của luồng.",
+          "tooLong": "Hãy chọn một bước của luồng này hoặc điểm khởi đầu của luồng.",
+          "invalid": "Hãy chọn một bước của luồng này hoặc điểm khởi đầu của luồng."
         }
       },
       "deleteConfirm": {
@@ -239,11 +253,11 @@
         "body": "Các thay đổi với FAQ này chưa được lưu.",
         "leave": "Rời đi",
         "stay": "Tiếp tục chỉnh sửa"
-      }
+      },
+      "faqLimit": "Luồng này đã đạt giới hạn {max} FAQ. Hãy xóa một FAQ để thêm cái khác."
     },
     "flowPicker": {
       "noAccess": "Bạn cần quyền xem luồng (flb.flows.read) để chọn luồng tại đây.",
-      "missing": "Luồng mà FAQ này bắt đầu không còn tồn tại. Hãy chọn luồng khác, nếu không FAQ này không thể trả lời.",
       "selected": "Đã chọn",
       "search": "Tìm luồng",
       "searchPlaceholder": "Tìm luồng theo tên",
@@ -257,7 +271,9 @@
         "off": "Không hoạt động",
         "draft": "Bản nháp"
       },
-      "note": "Luồng bắt đầu từ điều kiện kích hoạt. Chỉ các luồng đã xuất bản và đang hoạt động mới chạy được."
+      "missing": "Luồng mà FAQ này chuyển đến không còn tồn tại. Hãy chọn luồng khác, nếu không FAQ này không thể trả lời.",
+      "noOthers": "Không có luồng nào khác trong không gian làm việc này.",
+      "note": "Khách hàng tiếp tục tại bước bạn chọn bên dưới, hoặc tại phần bắt đầu của luồng. Chỉ các luồng đã xuất bản và đang hoạt động mới chạy được."
     },
     "variations": {
       "title": "Các biến thể câu hỏi",
@@ -333,7 +349,7 @@
       "verdict": {
         "answer": {
           "title": "Sẽ trả lời",
-          "body": "Một FAQ đã khớp đủ tốt. Khách hàng nhận được câu trả lời của nó (hoặc luồng của nó bắt đầu)."
+          "body": "Một FAQ đã khớp đủ tốt. Khách hàng nhận câu trả lời của FAQ, hoặc được chuyển đến bước mà FAQ chỉ định."
         },
         "below": {
           "title": "Dưới ngưỡng",
@@ -354,6 +370,10 @@
         "notSent": {
           "title": "Khớp nhưng không gửi",
           "body": "Một FAQ đã khớp nhưng câu trả lời không được gửi, ví dụ vì trả lời FAQ đang tắt."
+        },
+        "vetoed": {
+          "title": "Đã giữ lại câu trả lời",
+          "body": "Kết quả khớp đạt đủ điểm, nhưng lần kiểm tra lại cho là \"không\", nên sẽ không gửi gì."
         }
       },
       "tier": {
@@ -383,8 +403,8 @@
       "winner": {
         "title": "Những gì khách hàng sẽ nhận được",
         "unavailable": "Không tải được FAQ này.",
-        "flow": "Bắt đầu luồng {name}",
-        "flowMissing": "Bắt đầu một luồng không còn tồn tại"
+        "flow": "Chuyển đến một bước của {name}",
+        "flowMissing": "Chuyển đến một luồng không còn tồn tại"
       },
       "candidates": {
         "title": "Kết quả khớp hàng đầu",
@@ -401,16 +421,16 @@
     },
     "playground": {
       "title": "Bot của tôi sẽ trả lời câu này thế nào?",
-      "subtitle": "Chạy một tin nhắn của khách hàng qua cùng cơ chế khớp mà bot đang dùng. Sẽ không gửi gì và không tính vào thống kê.",
       "label": "Tin nhắn của khách hàng",
       "placeholder": "Đơn hàng của tôi đang ở đâu?",
       "run": "Chạy",
-      "hint": "Chỉ các FAQ đã lưu mới được khớp. Các FAQ đang bật có cách diễn đạt hoạt động sẽ tham gia.",
       "empty": "Gõ một tin nhắn ở trên rồi chạy để xem kết quả.",
       "history": {
         "title": "Phiên này",
         "empty": "10 lần thử gần nhất của bạn sẽ hiện ở đây."
-      }
+      },
+      "subtitle": "Chạy một tin nhắn của khách hàng qua cơ chế khớp mà {flow} sử dụng. Không có gì được gửi và không có gì được tính vào số liệu phân tích.",
+      "hint": "Chỉ các FAQ đã lưu của luồng này được so khớp. Các FAQ đang hoạt động có cách diễn đạt đang hoạt động sẽ tham gia."
     },
     "unanswered": {
       "title": "Tin nhắn chưa trả lời",
@@ -478,7 +498,6 @@
       "loadingMore": "Đang tải",
       "why": {
         "answered": "Đã trả lời bằng “{faq}” với điểm {score}%.",
-        "flowStarted": "Đã bắt đầu luồng của “{faq}” với điểm {score}%.",
         "belowThreshold": "Kết quả khớp tốt nhất đạt {score}%, thấp hơn mức {threshold}%, nên không gửi gì.",
         "belowThresholdNoBar": "Kết quả khớp tốt nhất đạt {score}%, chưa đủ, nên không gửi gì.",
         "lowMargin": "Hai FAQ quá sát nhau ({score}% và {second}%), nên bot không đoán.",
@@ -486,8 +505,12 @@
         "providerError": "Nhà cung cấp AI bị lỗi, nên bot chỉ có thể khớp theo chính tả.",
         "notSent": "Một FAQ đã khớp nhưng câu trả lời không được gửi.",
         "tier": "Được quyết định ở cấp {tier}.",
-        "error": "Lỗi: {error}"
-      }
+        "error": "Lỗi: {error}",
+        "vetoed": "Kết quả khớp tốt nhất đạt {score}%, cao hơn mức {threshold}%, nhưng lần kiểm tra lại cho rằng nó không trả lời đúng tin nhắn, nên không gửi gì.",
+        "vetoedNoBar": "Kết quả khớp tốt nhất đạt {score}%, nhưng lần kiểm tra lại cho rằng nó không trả lời đúng tin nhắn, nên không gửi gì.",
+        "flowStarted": "Đã chuyển khách hàng đến bước của \"{faq}\" với {score}%."
+      },
+      "flowRun": "(từ một luồng)"
     },
     "insights": {
       "title": "Thống kê FAQ",
@@ -548,7 +571,6 @@
     },
     "settings": {
       "title": "Cài đặt FAQ",
-      "subtitle": "Bật trả lời FAQ và điều chỉnh mức độ khớp của tin nhắn.",
       "unsaved": "Thay đổi chưa lưu",
       "discard": "Bỏ qua",
       "save": "Lưu cài đặt",
@@ -563,11 +585,11 @@
       },
       "enable": {
         "title": "Trả lời FAQ",
-        "label": "Trả lời khách hàng bằng FAQ",
         "on": "Bật",
         "off": "Tắt",
-        "onBody": "Khi khách hàng nhắn tin, bot so sánh tin nhắn với các FAQ của bạn và trả lời bằng câu trả lời tốt nhất, hoặc bắt đầu luồng của nó. Luồng hoặc từ khóa kích hoạt đã xử lý tin nhắn sẽ được ưu tiên.",
-        "offBody": "Khách hàng không nhận được câu trả lời FAQ. Bạn vẫn có thể viết và thử FAQ."
+        "label": "Trả lời khách hàng bằng FAQ của luồng này",
+        "onBody": "Khi luồng này đang hoạt động, tin nhắn của khách hàng mà không trình kích hoạt từ khóa hay luồng đang chạy nào xử lý sẽ được so sánh với FAQ của luồng này. Bot trả lời bằng câu trả lời tốt nhất, hoặc chuyển khách hàng đến bước mà FAQ chỉ định.",
+        "offBody": "FAQ của luồng này không trả lời khách hàng. Bạn vẫn có thể viết và thử chúng."
       },
       "sens": {
         "title": "Độ nhạy",
@@ -612,7 +634,8 @@
         "exact": "Chính xác: tin nhắn giống một cách diễn đạt đã lưu, không phân biệt hoa thường và khoảng trắng.",
         "semantic": "Ý nghĩa: tin nhắn được so sánh theo ý nghĩa với mọi cách diễn đạt đang hoạt động, nên từ ngữ khác nhau vẫn có thể khớp.",
         "trigram": "Dự phòng theo chính tả: nếu nhà cung cấp AI không khả dụng, các chữ cái sẽ được so sánh, chỉ bắt được lỗi gõ.",
-        "threshold": "Điểm tốt nhất được so với độ nhạy. Cao hơn thì FAQ trả lời; thấp hơn thì tin nhắn được liệt kê trong mục Chưa trả lời."
+        "threshold": "Điểm tốt nhất được so với độ nhạy. Cao hơn thì FAQ trả lời; thấp hơn thì tin nhắn được liệt kê trong mục Chưa trả lời.",
+        "verify": "Kiểm tra lại (tùy chọn): kết quả khớp chỉ vừa đạt độ nhạy có thể được một mô hình chat nhỏ kiểm tra lại, và mô hình này chỉ có thể giữ lại câu trả lời."
       },
       "who": "Thay đổi các cài đặt này cần quyền faq.settings.manage.",
       "leave": {
@@ -620,6 +643,62 @@
         "body": "Các thay đổi với cài đặt này chưa được lưu.",
         "leave": "Rời đi",
         "stay": "Ở lại"
+      },
+      "verify": {
+        "title": "Kiểm tra lại các kết quả sát ngưỡng",
+        "hint": "Một mô hình chat nhỏ kiểm tra lại các kết quả khớp chỉ vừa đạt mức cần đạt.",
+        "unavailable": "Nền tảng đã tắt tính năng kiểm tra lại, nên dù bạn bật ở đây thì nó vẫn không chạy. Hãy liên hệ quản trị viên nền tảng.",
+        "label": "Kiểm tra lại các kết quả sát ngưỡng",
+        "on": "Bật",
+        "off": "Tắt",
+        "onBody": "Khi một kết quả khớp chỉ vừa vượt mức cần đạt, một mô hình chat nhỏ sẽ đọc tin nhắn của khách hàng và FAQ rồi cho biết câu trả lời có phù hợp không. Mô hình chỉ có thể trả lời \"không\": nó không bao giờ khiến một câu trả lời được gửi đi.",
+        "offBody": "Mọi kết quả khớp đạt mức cần đạt đều được trả lời mà không kiểm tra lại.",
+        "bandLabel": "Thế nào là sát ngưỡng",
+        "bandValue": "+{value}%",
+        "explainOn": "Các kết quả khớp có điểm từ {from}% đến {to}% sẽ được {model} kiểm tra. Nếu kết quả là \"không\", sẽ không gửi câu trả lời và tin nhắn sẽ xuất hiện trong mục Chưa trả lời.",
+        "explainOff": "Mọi kết quả khớp có điểm từ {threshold}% trở lên đều được trả lời. Hãy bật tính năng kiểm tra lại để các kết quả sát ngưỡng nhất được kiểm tra thêm.",
+        "cost": "Mỗi lần kiểm tra sẽ gửi tin nhắn của khách hàng và câu hỏi của FAQ tới mô hình: vài trăm token, và làm chậm một câu trả lời sát ngưỡng khoảng một giây. Các kết quả nằm ngoài khoảng này không bao giờ bị kiểm tra. Nếu việc kiểm tra thất bại, không khả dụng hoặc đã đạt giới hạn theo giờ, kết quả khớp vẫn được giữ như khi không có kiểm tra."
+      },
+      "subtitle": "Bật trả lời bằng FAQ cho {flow} và điều chỉnh mức độ khớp cần có của một tin nhắn."
+    },
+    "flowNode": {
+      "start": "Điểm khởi đầu của luồng",
+      "loading": "Đang tải các bước của luồng này",
+      "empty": "Luồng này không có bước nào khác, nên sẽ bắt đầu từ đầu.",
+      "retry": "Thử lại",
+      "deletedOption": "Bước đã xóa (hãy chọn bước khác)",
+      "missing": {
+        "body": "Bước đó đã bị xóa khỏi luồng. Cho đến khi bạn chọn bước khác, khách hàng khớp với FAQ này sẽ không nhận được câu trả lời. Hãy chọn một bước bên dưới hoặc bắt đầu từ điểm khởi đầu của luồng.",
+        "fix": "Bắt đầu từ điểm khởi đầu của luồng",
+        "title": "Bước mà FAQ này chuyển đến đã bị mất"
+      },
+      "label": "Chuyển đến",
+      "hint": "Chọn một bước để bỏ qua phần đầu của luồng. Khách hàng tiếp tục tại bước bạn chọn.",
+      "hintOwn": "Chọn một bước của luồng này. Các bước bạn thêm kể từ lần lưu gần nhất sẽ xuất hiện sau khi bạn lưu luồng."
+    },
+    "verify": {
+      "title": "Kiểm tra lại",
+      "chip": {
+        "confirmed": "Kiểm tra lại: có",
+        "vetoed": "Kiểm tra lại: không",
+        "failed": "Kiểm tra lại thất bại",
+        "skipped": "Đã bỏ qua kiểm tra lại"
+      },
+      "model": "Được kiểm tra bởi",
+      "reason": "Lý do",
+      "body": {
+        "confirmed": "Kết quả khớp sát ngưỡng, nên một mô hình chat nhỏ đã đọc tin nhắn và FAQ rồi đồng ý rằng câu trả lời phù hợp.",
+        "vetoed": "Kết quả khớp sát ngưỡng và lần kiểm tra lại cho rằng FAQ này không trả lời đúng tin nhắn. Câu trả lời đã bị giữ lại, không gửi gì, và tin nhắn xuất hiện trong mục Chưa trả lời.",
+        "failed": "Kết quả khớp sát ngưỡng, nhưng việc kiểm tra không hoàn tất, nên kết quả khớp vẫn được giữ và câu trả lời đã được gửi như khi không có kiểm tra lại.",
+        "skipped": "Lần kiểm tra lại không chạy cho kết quả khớp này, nên kết quả được giữ nguyên."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "Rời khỏi FAQ mà không lưu?",
+        "body": "Bạn có thay đổi chưa lưu trong FAQ. Nếu rời khỏi tab này, các thay đổi sẽ mất.",
+        "leave": "Rời đi",
+        "stay": "Tiếp tục chỉnh sửa"
       }
     }
   }

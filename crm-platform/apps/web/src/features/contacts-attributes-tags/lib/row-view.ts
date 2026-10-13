@@ -18,6 +18,8 @@ export interface RowView {
   memo: string;
   status: string;
   stage: string;
+  /** The owner's id, or null when the contact belongs to nobody. */
+  ownerId: string | null;
   optedOut: boolean;
   groups: Array<{ id: string; name: string; color: string | null }>;
   tags: RowTag[];
@@ -26,6 +28,10 @@ export interface RowView {
   custom: Record<string, string>;
   /** ISO timestamp the contact was created. */
   createdAt: string;
+  /** The lead score and who set it ('ai' = the AI lead scorer); null when the contact has none. */
+  leadScore: number | null;
+  leadScoreSource: 'manual' | 'ai' | null;
+  leadScoredAt: string | null;
 }
 
 const text = (v: unknown) => (typeof v === 'string' ? v : '');
@@ -50,6 +56,7 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     memo: text(row.customFields[EXTRA_KEYS.memo]),
     status: row.status ?? '',
     stage: row.lifecycleStage ?? '',
+    ownerId: row.ownerId ?? null,
     optedOut: isOptedOut(row),
     // The list asks for `expand=groups,tags`, so the chips arrive with the row (a deleted group simply is not there).
     groups: (row.groups ?? []).map((g) => ({ id: g.id, name: g.name, color: g.color })),
@@ -57,5 +64,8 @@ export function rowView(row: ContactRow, attributeLabels: ReadonlyMap<string, st
     attributes: attributeChips(row.customFields, attributeLabels),
     custom: customValues(row.customFields),
     createdAt: row.createdAt,
+    leadScore: row.leadScore,
+    leadScoreSource: row.leadScoreSource,
+    leadScoredAt: row.leadScoredAt,
   };
 }

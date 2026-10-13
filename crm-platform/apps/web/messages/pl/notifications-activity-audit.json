@@ -149,6 +149,16 @@
         "title": "{name} jest znów aktywny",
         "titleNoName": "Grupa WhatsApp jest znów aktywna",
         "body": "WhatsApp przywrócił tę grupę. Możesz znów do niej pisać."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Ktoś chce dołączyć do grupy {name}} few {# osoby chcą dołączyć do grupy {name}} many {# osób chce dołączyć do grupy {name}} other {# osoby chcą dołączyć do grupy {name}}}",
+        "titleNoName": "{count, plural, one {Ktoś chce dołączyć do grupy WhatsApp} few {# osoby chcą dołączyć do grupy WhatsApp} many {# osób chce dołączyć do grupy WhatsApp} other {# osoby chcą dołączyć do grupy WhatsApp}}",
+        "body": "Otwórz Grupy, aby zatwierdzić lub odrzucić."
+      },
+      "device_group_removed": {
+        "title": "Twój numer został usunięty z grupy {name}",
+        "titleNoName": "Twój numer został usunięty z grupy WhatsApp",
+        "body": "Ktoś usunął Twój numer osobisty z tej grupy. Grupa jest tu zachowana tylko do odczytu."
       }
     },
     "live": {
@@ -177,7 +187,9 @@
         "teamchat_message": "Nowa wiadomość prywatna",
         "waba_group_join_request": "Prośba o dołączenie do grupy",
         "waba_group_suspended": "Grupa WhatsApp zawieszona",
-        "waba_group_suspension_cleared": "Grupa WhatsApp znów aktywna"
+        "waba_group_suspension_cleared": "Grupa WhatsApp znów aktywna",
+        "device_group_join_request": "Prośba o dołączenie do grupy",
+        "device_group_removed": "Usunięto z grupy WhatsApp"
       }
     },
     "prefs": {
@@ -199,7 +211,8 @@
         "devices": "Numery WhatsApp",
         "broadcasts": "Wiadomości masowe i kampanie",
         "team_chat": "Czat zespołu",
-        "whatsapp_groups": "Grupy WhatsApp"
+        "whatsapp_groups": "Grupy WhatsApp",
+        "billing": "Płatności i subskrypcje"
       },
       "types": {
         "new_chat": {
@@ -298,6 +311,10 @@
           "label": "Dokument sprzedażowy rozstrzygnięty",
           "hint": "Oferta lub faktura została zaakceptowana albo odrzucona."
         },
+        "email_bounced": {
+          "label": "E-mail niedostarczony",
+          "hint": "Wysłana przez Ciebie wiadomość e-mail wróciła lub jest opóźniona."
+        },
         "wallet_credited": {
           "label": "Portfel doładowany",
           "hint": "Portfel przestrzeni roboczej został zasilony."
@@ -313,6 +330,34 @@
         "waba_group_suspension_cleared": {
           "label": "Grupa znów aktywna",
           "hint": "WhatsApp przywrócił grupę, którą wcześniej zawiesił. Tylko jeśli zostałeś o zawieszeniu poinformowany."
+        },
+        "form_payment": {
+          "label": "Otrzymano płatność z formularza",
+          "hint": "Odwiedzający zapłacił w jednym z Twoich formularzy."
+        },
+        "form_payment_duplicate": {
+          "label": "Formularz opłacony dwukrotnie",
+          "hint": "Odwiedzający zapłacił po raz drugi, a dodatkową płatność trzeba zwrócić."
+        },
+        "billing_payment_failed": {
+          "label": "Płatność za subskrypcję nie powiodła się",
+          "hint": "Opłata za odnowienie nie została zrealizowana i wymaga Twojej uwagi."
+        },
+        "billing_subscription_canceled": {
+          "label": "Subskrypcja anulowana",
+          "hint": "Twój operator płatności zakończył subskrypcję tego obszaru roboczego."
+        },
+        "device_group_join_request": {
+          "label": "Prośba o dołączenie do grupy numeru osobistego",
+          "hint": "Ktoś prosi o dołączenie do grupy osobistego numeru WhatsApp, którym zarządzasz. Dziesięć próśb tworzy jeden wiersz."
+        },
+        "device_group_removed": {
+          "label": "Usunięto z grupy numeru osobistego",
+          "hint": "Ktoś usunął jeden z Twoich osobistych numerów WhatsApp z grupy. Może to oznaczać, że numer został zgłoszony."
+        },
+        "sla_breached": {
+          "label": "Przekroczono SLA",
+          "hint": "Twoja rozmowa nie spełniła celu pierwszej odpowiedzi lub rozwiązania."
         }
       },
       "loading": "Wczytywanie Twoich preferencji",

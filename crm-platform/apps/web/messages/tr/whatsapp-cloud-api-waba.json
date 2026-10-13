@@ -7,7 +7,6 @@
       "dismiss": "Kapat",
       "cancel": "Vazgeç",
       "close": "Kapat",
-      "requestId": "İstek {id}",
       "unknown": "—"
     },
     "numbers": {
@@ -34,7 +33,8 @@
         "registered": "\"{name}\" Cloud API'de kaydedildi.",
         "disconnected": "\"{name}\" bağlantısı kesildi.",
         "removed": "\"{name}\" kaldırıldı.",
-        "warningsTitle": "Bağlandı, ancak şunu kontrol edin:"
+        "warningsTitle": "Bağlandı, ancak şunu kontrol edin:",
+        "verified": "\"{name}\" doğrulandı."
       },
       "notReady": {
         "title": "Gömülü Kayıt yapılandırılmadı",
@@ -81,7 +81,8 @@
         "register": "Kaydet",
         "meta": "Meta",
         "disconnect": "Bağlantıyı kes",
-        "remove": "Kaldır"
+        "remove": "Kaldır",
+        "verify": "Numarayı doğrula"
       },
       "confirm": {
         "fixInboundTitle": "Gelen mesajlar düzelsin mi?",
@@ -100,6 +101,17 @@
         "pin": "İki adımlı PIN (isteğe bağlı)",
         "pinError": "PIN 6 haneli olmalıdır",
         "submit": "Kaydet"
+      },
+      "verifyDialog": {
+        "title": "Bu numarayı doğrula",
+        "message": "Meta, {phone} numarasına 6 haneli bir kod gönderecek. Nasıl alacağınızı seçin.",
+        "enterCode": "Meta'nın {phone} numarasına gönderdiği 6 haneli kodu girin.",
+        "sendSms": "Kodu SMS ile gönder",
+        "sendVoice": "Kodu arama ile gönder",
+        "code": "Doğrulama kodu",
+        "codeError": "Kod 6 haneli olmalıdır",
+        "submit": "Doğrula",
+        "resend": "Yeni kod gönder"
       }
     },
     "connect": {

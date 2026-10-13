@@ -1,19 +1,19 @@
 import {
   customerSays,
   expect,
-  go,
-  login,
   logCount,
+  login,
   newWorkspace,
   open,
+  openFaqs,
+  type OpenOptions,
   putSettings,
   seedFaq,
   seedFlow,
   simulator,
+  type State,
   test,
   waitIndexed,
-  type OpenOptions,
-  type State,
   type Workspace,
 } from './support';
 import type { Page } from '@playwright/test';
@@ -22,7 +22,8 @@ import type { Page } from '@playwright/test';
 let ws: Workspace;
 let state: State;
 let faqId: string;
-let paths: string[];
+/** The screens of the flow's FAQs tab: the `view` of each (undefined is the list). */
+let paths: Array<string | undefined>;
 
 test.beforeAll(async ({ browser }) => {
   test.setTimeout(240_000);
@@ -48,20 +49,12 @@ test.beforeAll(async ({ browser }) => {
     await customerSays(ws, sim, text, `9194${String(Date.now()).slice(-7)}`);
   }
   await expect.poll(() => logCount(ws), { timeout: 40_000 }).toBe(3);
-  paths = [
-    '/faq',
-    '/faq/new',
-    `/faq/${faqId}`,
-    '/faq/test',
-    '/faq/unanswered',
-    '/faq/insights',
-    '/faq/settings',
-  ];
+  paths = [undefined, 'new', faqId, 'test', 'unanswered', 'insights', 'settings'];
 });
 
 /** Elements a person can operate that have no accessible name (read from the browser's own accessibility tree). */
 async function unnamedControls(page: Page): Promise<string[]> {
-  const snapshot = await page.locator('body').ariaSnapshot();
+  const snapshot = await panel(page).ariaSnapshot();
   return snapshot
     .split('\n')
     .map((l) => l.trim())
@@ -72,11 +65,14 @@ async function unnamedControls(page: Page): Promise<string[]> {
     );
 }
 
-async function ready(page: Page, path: string) {
-  await go(page, path);
+async function ready(page: Page, view?: string) {
+  await openFaqs(page, ws, view);
   // Let the data on the screen arrive (skeletons and spinners are gone).
-  await expect(page.locator('.animate-pulse')).toHaveCount(0, { timeout: 20_000 });
+  await expect(panel(page).locator('.animate-pulse')).toHaveCount(0, { timeout: 20_000 });
 }
+
+/** The FAQs tab of the flow builder: what these checks judge (the builder around it is another domain's screen). */
+const panel = (page: Page) => page.locator('#web-bot-panel-faqs');
 
 test('every screen opens with a clean console, no failed request and every control named', async ({
   browser,
@@ -85,19 +81,19 @@ test('every screen opens with a clean console, no failed request and every contr
   const { page } = await open(browser, state, watch);
   for (const path of paths) {
     await ready(page, path);
-    expect(await unnamedControls(page), `unnamed controls on ${path}`).toEqual([]);
+    expect(await unnamedControls(page), `unnamed controls on ${path ?? 'list'}`).toEqual([]);
   }
   // The same, with the screens' own dialogs and panels open.
-  await ready(page, '/faq');
+  await ready(page);
   await page.getByRole('button', { name: 'Delete Paused example' }).click();
   expect(await unnamedControls(page), 'delete dialog').toEqual([]);
   await page.getByRole('dialog').getByRole('button', { name: 'Cancel' }).click();
-  await ready(page, `/faq/${faqId}`);
+  await ready(page, faqId);
   await page.getByRole('button', { name: 'Paste many' }).click();
   await page.getByText('Advanced: sensitivity for this FAQ only').click();
   await page.getByLabel('Use a custom sensitivity for this FAQ').check();
   expect(await unnamedControls(page), 'editor panels').toEqual([]);
-  await ready(page, '/faq/unanswered');
+  await ready(page, 'unanswered');
   await page.getByRole('button', { name: 'Add to an FAQ' }).first().click();
   expect(await unnamedControls(page), 'picker').toEqual([]);
 });
@@ -114,7 +110,7 @@ for (const [name, viewport] of [
     const overflow = () =>
       page.evaluate(() => ({
         page: document.documentElement.scrollWidth - window.innerWidth,
-        wide: Array.from(document.querySelectorAll<HTMLElement>('main *, body > div *'))
+        wide: Array.from(document.querySelectorAll<HTMLElement>('#web-bot-panel-faqs *'))
           .filter((el) => {
             const r = el.getBoundingClientRect();
             if (r.width === 0 || r.height === 0 || getComputedStyle(el).position === 'fixed')
@@ -130,25 +126,25 @@ for (const [name, viewport] of [
     for (const path of paths) {
       await ready(page, path);
       const o = await overflow();
-      expect(o.page, `sideways scroll on ${path}`).toBeLessThanOrEqual(0);
-      expect(o.wide, `content past the edge on ${path}`).toEqual([]);
+      expect(o.page, `sideways scroll on ${path ?? 'list'}`).toBeLessThanOrEqual(0);
+      expect(o.wide, `content past the edge on ${path ?? 'list'}`).toEqual([]);
     }
     // The primary action of each screen is on screen after scrolling, and usable.
-    await ready(page, '/faq');
+    await ready(page);
     await page.getByRole('link', { name: 'Add FAQ' }).scrollIntoViewIfNeeded();
     await expect(page.getByRole('link', { name: 'Add FAQ' })).toBeInViewport();
-    await ready(page, '/faq/new');
+    await ready(page, 'new');
     await page.getByRole('textbox', { name: 'Question', exact: true }).fill(`${name} made FAQ`);
     await page.getByLabel('Answer text').fill('Typed on a phone.');
     await page.getByRole('button', { name: 'Create FAQ' }).scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: 'Create FAQ' })).toBeInViewport();
     await page.getByRole('button', { name: 'Create FAQ' }).click();
     await expect(page.getByText('FAQ created.')).toBeVisible();
-    await ready(page, '/faq/settings');
+    await ready(page, 'settings');
     await page.getByRole('switch', { name: 'Keep customer messages in the match log' }).click();
     await page.getByRole('button', { name: 'Save settings' }).scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: 'Save settings' })).toBeInViewport();
-    await ready(page, '/faq/test');
+    await ready(page, 'test');
     await expect(page.getByRole('button', { name: 'Run' })).toBeInViewport();
     // The sections of the FAQ area stay reachable: the tab bar scrolls inside itself.
     await page
@@ -159,7 +155,7 @@ for (const [name, viewport] of [
       .getByRole('navigation', { name: 'FAQ sections' })
       .getByRole('link', { name: 'Insights' })
       .click();
-    await expect(page).toHaveURL(/\/faq\/insights$/);
+    await expect(page).toHaveURL(/[?&]view=insights$/);
   });
 }
 
@@ -183,7 +179,9 @@ test('dark mode keeps text readable on every screen', async ({ browser, watch })
       const out: string[] = [];
       const bg = lum(backdrop(document.body));
       if (bg > 0.3) out.push(`page background is light (${bg.toFixed(2)})`);
-      for (const el of Array.from(document.querySelectorAll<HTMLElement>('main *, body > div *'))) {
+      for (const el of Array.from(
+        document.querySelectorAll<HTMLElement>('#web-bot-panel-faqs *'),
+      )) {
         if (
           el.childNodes.length === 0 ||
           !Array.from(el.childNodes).some((n) => n.nodeType === 3 && n.textContent?.trim())
@@ -205,7 +203,7 @@ test('dark mode keeps text readable on every screen', async ({ browser, watch })
       }
       return out.slice(0, 8);
     });
-    expect(bad, `dark mode on ${path}`).toEqual([]);
+    expect(bad, `dark mode on ${path ?? 'list'}`).toEqual([]);
   }
 });
 
@@ -219,13 +217,16 @@ test('right-to-left: the page turns around, nothing scrolls sideways and no cont
   });
   for (const path of paths) {
     await ready(page, path);
-    expect(await page.evaluate(() => document.documentElement.dir), `dir on ${path}`).toBe('rtl');
+    expect(
+      await page.evaluate(() => document.documentElement.dir),
+      `dir on ${path ?? 'list'}`,
+    ).toBe('rtl');
     const probs = await page.evaluate(() => {
       const out: string[] = [];
       if (document.documentElement.scrollWidth > window.innerWidth + 1) out.push('sideways scroll');
       for (const el of Array.from(
         document.querySelectorAll<HTMLElement>(
-          'main button, main a, main input, main select, main textarea, main label',
+          '#web-bot-panel-faqs button, #web-bot-panel-faqs a, #web-bot-panel-faqs input, #web-bot-panel-faqs select, #web-bot-panel-faqs textarea, #web-bot-panel-faqs label',
         ),
       )) {
         const r = el.getBoundingClientRect();
@@ -242,11 +243,12 @@ test('right-to-left: the page turns around, nothing scrolls sideways and no cont
       }
       return out.slice(0, 8);
     });
-    expect(probs, `rtl on ${path}`).toEqual([]);
+    expect(probs, `rtl on ${path ?? 'list'}`).toEqual([]);
   }
   // The back arrow and the progress marker mirror: the editor's back link points the other way.
-  await ready(page, `/faq/${faqId}`);
-  const arrow = page.getByRole('link', { name: 'Back to FAQs' }).locator('svg');
+  await ready(page, faqId);
+  // (The back link is the one with an arrow; its name is translated.)
+  const arrow = panel(page).locator('a[href$="?tab=faqs"]:has(svg)').first().locator('svg').first();
   expect(await arrow.evaluate((el) => getComputedStyle(el).rotate)).toBe('180deg');
 });
 
@@ -257,7 +259,7 @@ test.describe('focus does not get lost', () => {
       variations: ['focus one', 'focus two'],
     });
     const { page } = await open(browser, state, watch);
-    await ready(page, `/faq/${faq.id}`);
+    await ready(page, faq.id);
     await page.getByRole('button', { name: 'Remove focus one' }).click();
     await page.getByRole('dialog').getByRole('button', { name: 'Remove' }).click();
     await expect(page.getByRole('list', { name: 'Phrasings' }).getByText('focus one')).toHaveCount(
@@ -273,7 +275,7 @@ test.describe('focus does not get lost', () => {
     watch,
   }) => {
     const { page } = await open(browser, state, watch);
-    await ready(page, '/faq/unanswered');
+    await ready(page, 'unanswered');
     const items = page.getByRole('list', { name: 'Unanswered messages' }).getByRole('listitem');
     const before = await items.count();
     expect(before).toBeGreaterThan(1);
@@ -299,7 +301,7 @@ test.describe('focus does not get lost', () => {
   }) => {
     const faq = await seedFaq(ws, { question: 'Delete from editor', answerText: 'Gone.' });
     const { page } = await open(browser, state, watch);
-    await ready(page, `/faq/${faq.id}`);
+    await ready(page, faq.id);
     await page.getByRole('button', { name: 'Delete', exact: true }).click();
     const dialog = page.getByRole('dialog', { name: 'Delete this FAQ?' });
     await dialog.getByRole('button', { name: 'Cancel' }).click();
@@ -308,7 +310,7 @@ test.describe('focus does not get lost', () => {
     await page.getByRole('button', { name: 'Delete', exact: true }).click();
     await dialog.getByRole('button', { name: 'Delete' }).click();
     await expect(page.getByText('FAQ deleted.')).toBeVisible();
-    await expect(page).toHaveURL(/\/faq$/);
+    await expect(page).toHaveURL(/\?tab=faqs$/);
     await expect(page.getByRole('link', { name: 'Delete from editor', exact: true })).toHaveCount(
       0,
     );
@@ -316,7 +318,7 @@ test.describe('focus does not get lost', () => {
 
   test('the leave dialog returns focus to where the person was', async ({ browser, watch }) => {
     const { page } = await open(browser, state, watch);
-    await ready(page, '/faq/new');
+    await ready(page, 'new');
     await page.getByRole('textbox', { name: 'Question', exact: true }).fill('Dirty');
     const tab = page
       .getByRole('navigation', { name: 'FAQ sections' })
@@ -326,7 +328,7 @@ test.describe('focus does not get lost', () => {
     await expect(dialog).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
-    await expect(page).toHaveURL(/\/faq\/new$/);
+    await expect(page).toHaveURL(/[?&]view=new$/);
     await expect
       .poll(() => page.evaluate(() => document.activeElement?.tagName ?? 'none'))
       .not.toBe('BODY');

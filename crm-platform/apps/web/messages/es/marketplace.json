@@ -10,13 +10,13 @@
       "install": "Instalar · Marketplace",
       "installed": "Instalada · Marketplace",
       "manage": "Gestionar app · Marketplace",
-      "requests": "Solicitudes · Marketplace"
+      "requests": "Solicitudes · Marketplace",
+      "addons": "Complementos · Marketplace"
     },
     "common": {
       "dismiss": "Descartar",
       "loading": "Cargando",
       "errorTitle": "No se pudo cargar esto",
-      "requestId": "ID de la solicitud",
       "retry": "Intentar de nuevo",
       "upgrade": "Ver planes y mejorar",
       "opensNewTab": "(se abre en una pestaña nueva)",
@@ -124,7 +124,8 @@
       "moreLabel": "Instaladas y solicitudes",
       "tabs": {
         "mini_app": "Mini apps",
-        "integration": "Integraciones"
+        "integration": "Integraciones",
+        "addon": "Complementos"
       },
       "installed": "Instaladas",
       "installedLimit": "Instaladas ({installed} de {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "Procesando",
       "noCheckout": "El pago no está disponible para esta app ahora mismo. Inténtalo de nuevo en unos minutos."
+    },
+    "tools": {
+      "open": "Abrir",
+      "empty": {
+        "title": "No hay complementos disponibles",
+        "message": "Los complementos que incluyen tu rol y tu plan aparecerán aquí."
+      },
+      "soon": "Pronto",
+      "upgrade": "Mejorar plan"
     }
   }
 }

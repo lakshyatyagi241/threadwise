@@ -1,0 +1,58 @@
+{
+  "web-forms": {
+    "payment": {
+      "title": "Betaling",
+      "description": "Laat de bezoeker betalen via uw betaalgateway nadat hij het formulier heeft verstuurd. Het formulier geldt pas als betaald wanneer de gateway dit bevestigt.",
+      "enabled": "Betaling innen",
+      "enabledHint": "Nadat de antwoorden zijn opgeslagen, wordt de bezoeker doorgestuurd naar de gehoste betaalpagina van uw gateway.",
+      "gateway": {
+        "checking": "Uw betaalgateway wordt gecontroleerd...",
+        "failed": "Uw betaalgateway kon niet worden gecontroleerd. Probeer het zo meteen opnieuw.",
+        "ready": "Betalingen gaan naar {name} ({mode}).",
+        "mode": {
+          "test": "testmodus",
+          "live": "livemodus"
+        },
+        "none": "Er is geen betaalgateway gekoppeld, dus dit formulier kan nog geen betalingen aannemen.",
+        "noLink": "{name} kan geen gehoste betaallink maken en kan daarom niet in een formulier worden gebruikt. Koppel Razorpay of Stripe.",
+        "open": "Betaalgateways openen"
+      },
+      "amountType": "Hoe het bedrag wordt bepaald",
+      "amountTypes": {
+        "fixed": "Vaste prijs",
+        "from_field": "Uit een keuzeveld",
+        "pay_what_you_want": "De bezoeker vult het bedrag in"
+      },
+      "amountTypeHints": {
+        "fixed": "Elke bezoeker betaalt dezelfde prijs.",
+        "from_field": "Elke optie van een keuzelijst of radioveld heeft een eigen prijs.",
+        "pay_what_you_want": "Voor donaties en fooien. U stelt het laagste en hoogste bedrag in."
+      },
+      "currency": "Valuta",
+      "currencyHint": "Drie letters, zoals INR of USD. Uw gateway moet de valuta accepteren.",
+      "amount": "Prijs",
+      "amountHint": "In {currency}, zoals u het uitspreekt, bijvoorbeeld 499.00.",
+      "fieldChoice": "Keuzeveld",
+      "fieldNumber": "Bedragveld",
+      "fieldNone": "Kies een veld",
+      "noChoiceFields": "Voeg eerst een keuzelijst of radioveld toe aan het formulier.",
+      "noNumberFields": "Voeg eerst een getal- of valutaveld toe aan het formulier.",
+      "optionPrices": "Prijs per optie",
+      "optionPrice": "Prijs voor \"{label}\"",
+      "min": "Laagste bedrag",
+      "minHint": "Lagere bedragen worden geweigerd.",
+      "max": "Hoogste bedrag (optioneel)",
+      "maxHint": "Laat leeg voor geen bovengrens.",
+      "descriptionLabel": "Getoond op de betaalpagina",
+      "descriptionHint": "Een korte notitie voor de betaler, bijvoorbeeld waarvoor wordt betaald.",
+      "issues": {
+        "amountRequired": "Vul de prijs in.",
+        "fieldRequired": "Kies het veld waaruit het bedrag komt.",
+        "fieldNotRequired": "Maak dit veld verplicht, zodat elke bezoeker een bedrag opgeeft.",
+        "optionsNeedAmounts": "Geef elke optie een prijs.",
+        "minRequired": "Vul het laagste bedrag in.",
+        "minAboveMax": "Het laagste bedrag mag niet hoger zijn dan het hoogste."
+      }
+    }
+  }
+}
