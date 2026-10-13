@@ -164,7 +164,7 @@ and one help guide.
 and message counts as one ZIP, built by the same worker queue as the proof export (`consent-export`, a `kind` column on
 `contact_consent_exports`), kept 7 days, audited. Erasure keeps working as today: the events are anonymised, never deleted.
 
-The platform-wide privacy plan that generalises this ledger (purposes registry, ConsentGate for every channel and modality, voice, rights requests, retention) is [privacy-and-data-governance.md](privacy-and-data-governance.md); backlog BL-111 to BL-124. Double opt-in, the preference center and the DSAR export above are tasks there (BL-114, BL-116).
+The platform-wide privacy plan that generalises this ledger (purposes registry, ConsentGate for every channel and modality, voice, rights requests, retention) is [privacy-and-data-governance.md](privacy-and-data-governance.md); backlog BL-140 to BL-153. Double opt-in, the preference center and the DSAR export above are tasks there (BL-143, BL-145).
 
 ## 12. As built (differences from the plan above, for the record)
 
@@ -233,4 +233,4 @@ With "Marketing opt-in" on, the Forms settings show a button that fills the cons
 updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe.") in the editor's language, through the same
 version-bumping path as typing, so the wording version and the stored proof stay honest.
 
-Platform-wide follow-up: the consent gate, purposes beyond marketing/utility, voice and email unsubscribe are designed in [privacy-and-data-governance.md](privacy-and-data-governance.md) (BL-111, BL-112, BL-116, BL-119).
+Platform-wide follow-up: the consent gate, purposes beyond marketing/utility, voice and email unsubscribe are designed in [privacy-and-data-governance.md](privacy-and-data-governance.md) (BL-140, BL-141, BL-145, BL-148).

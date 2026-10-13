@@ -60,7 +60,7 @@ is a design assumption that counsel must confirm (spec section 10).
     [sub-processor register](subprocessor-register.md) before use; the data they receive, retention they apply and training-on-data terms
     are recorded.
 18. **Security.** Recordings in a private bucket with per-object access, signed short-lived URLs, playback and download audited
-    (already the pattern), and encryption keys per object as a P2 item (BL-124).
+    (already the pattern), and encryption keys per object as a P2 item (BL-153).
 19. **Testing.** Contract tests for: first utterance contains the disclosure; no audio is stored before consent; a withdrawn contact is
     never dialled; a refusal leaves no recording; erasure removes objects.
 

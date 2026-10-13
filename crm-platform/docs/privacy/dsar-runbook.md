@@ -1,6 +1,6 @@
 # Data subject request (DSAR) runbook
 
-Interim manual procedure until the rights service (BL-114) exists, and the process the service will automate. Design:
+Interim manual procedure until the rights service (BL-143) exists, and the process the service will automate. Design:
 [privacy-and-data-governance.md](../specs/privacy-and-data-governance.md) section 4.5. Not legal advice; deadlines need counsel
 confirmation.
 
@@ -32,7 +32,7 @@ receipt date, verification date, due date. Escalate at 15 and 25 days.
      `GET /v2/contact-consent/...`, see [contact-consent.md](../api/contact-consent.md)). Deliver as an archive over a verified channel,
      expire the link in 7 days.
    - Erasure: today deleting a contact does not remove messages, files, recordings, leads, orders or call logs (spec gap G2). Until
-     BL-114, an operator-run script per table is needed; do not run ad hoc deletes without review. Replace identifiers on records you
+     BL-143, an operator-run script per table is needed; do not run ad hoc deletes without review. Replace identifiers on records you
      must keep with a token.
    - Rectification: edit the contact; the audit log records the change.
    - Withdrawal/objection: record a `withdrawn` event for every channel and purpose the person names.

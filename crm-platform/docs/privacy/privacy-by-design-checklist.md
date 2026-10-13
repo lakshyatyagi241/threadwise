@@ -9,7 +9,7 @@ list into the pull request and answer each line (yes, no, not applicable with a 
 - [ ] Which data subject (contact, lead, end customer, staff, visitor)? Which categories (identifiers, contact, content, financial,
       voice, location, special-category risk)?
 - [ ] Which purpose from the purpose registry? If none fits, propose a new one (name, lawful basis, retention, modalities, evidence).
-      Until the registry exists (BL-111) write the purpose in the wiring file.
+      Until the registry exists (BL-140) write the purpose in the wiring file.
 - [ ] Is each field needed? Drop what you do not use. No free-text fields that invite sensitive data without a reason.
 - [ ] Collected from a public form or endpoint? Add a visible notice, a rate limit, no account enumeration, and decide the consent line
       and where its text and version are stored.

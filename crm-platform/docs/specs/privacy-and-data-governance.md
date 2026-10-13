@@ -1,6 +1,6 @@
 # Privacy and data governance: platform-wide design and audit
 
-Status: design + audit (spec). No product code, no migration comes with this document. Backlog: BL-111 to BL-124
+Status: design + audit (spec). No product code, no migration comes with this document. Backlog: BL-140 to BL-153
 ([backlog.md](../backlog.md) section O). Not legal advice: see section 10.
 
 ## How to read the evidence
@@ -381,27 +381,27 @@ decisions the gate and registry must encode so a voice bot adds a provider, not 
 
 | Phase | Item                                                                                                         | Backlog        | Size | Unblocks                           |
 | ----- | ------------------------------------------------------------------------------------------------------------ | -------------- | ---- | ---------------------------------- |
-| P0    | Purpose registry + ConsentGate service + first adopters (flows, inbox send, REST send, scheduled, reminders) | BL-111, BL-112 | L    | voice bot, email, everything below |
-| P0    | Personal-data registry + manifest + failing test                                                             | BL-113         | M    | DSAR, erasure                      |
-| P0    | Contact erasure and export (all modules incl. storage), `privacy_requests` core                              | BL-114         | L    | rights                             |
-| P0    | Call recording consent line, announcement, retention, erasure (existing calling module)                      | BL-115         | M    | voice bot                          |
-| P1    | Email unsubscribe (link, header, public endpoint) + double opt-in + preference center                        | BL-116         | M    | email marketing                    |
-| P1    | Retention engine + report; webhook log, widget visitor, audit retention                                      | BL-117         | L    | storage limitation                 |
-| P1    | Privacy Center screens + public DSAR form + cookie proof + terms acceptance                                  | BL-118         | L    | tenant self-service                |
-| P1    | Voice bot prerequisites: modality/scopes/regime columns, DNC, calling windows, spoken opt-out                | BL-119         | L    | voice bot                          |
-| P1    | AI use switches, notices, vendor allow-list per workspace; translation lock-down                             | BL-120         | M    | AI consent                         |
-| P1    | PII annotation + log redaction + audit diff scrub + webhook minimisation                                     | BL-121         | M    | G7, G9                             |
-| P1    | Breach runbook finalised, operator-access notice, impersonation time-box                                     | BL-122         | S    | G13, G14                           |
-| P2    | Data residency options, region pinning                                                                       | BL-123         | XL   | EU/KSA/UAE sales                   |
-| P2    | Field-level encryption (recordings keys, optional contact blind index), backup erasure re-apply tooling      | BL-124         | L    | defence in depth                   |
+| P0    | Purpose registry + ConsentGate service + first adopters (flows, inbox send, REST send, scheduled, reminders) | BL-140, BL-141 | L    | voice bot, email, everything below |
+| P0    | Personal-data registry + manifest + failing test                                                             | BL-142         | M    | DSAR, erasure                      |
+| P0    | Contact erasure and export (all modules incl. storage), `privacy_requests` core                              | BL-143         | L    | rights                             |
+| P0    | Call recording consent line, announcement, retention, erasure (existing calling module)                      | BL-144         | M    | voice bot                          |
+| P1    | Email unsubscribe (link, header, public endpoint) + double opt-in + preference center                        | BL-145         | M    | email marketing                    |
+| P1    | Retention engine + report; webhook log, widget visitor, audit retention                                      | BL-146         | L    | storage limitation                 |
+| P1    | Privacy Center screens + public DSAR form + cookie proof + terms acceptance                                  | BL-147         | L    | tenant self-service                |
+| P1    | Voice bot prerequisites: modality/scopes/regime columns, DNC, calling windows, spoken opt-out                | BL-148         | L    | voice bot                          |
+| P1    | AI use switches, notices, vendor allow-list per workspace; translation lock-down                             | BL-149         | M    | AI consent                         |
+| P1    | PII annotation + log redaction + audit diff scrub + webhook minimisation                                     | BL-150         | M    | G7, G9                             |
+| P1    | Breach runbook finalised, operator-access notice, impersonation time-box                                     | BL-151         | S    | G13, G14                           |
+| P2    | Data residency options, region pinning                                                                       | BL-152         | XL   | EU/KSA/UAE sales                   |
+| P2    | Field-level encryption (recordings keys, optional contact blind index), backup erasure re-apply tooling      | BL-153         | L    | defence in depth                   |
 
-Order that unblocks the voice bot: BL-111/112 (gate) -> BL-113 (registry) -> BL-115 (recording consent in current calls) -> BL-119
-(modality, DNC, windows) -> BL-114 (erasure for audio and transcripts). Sizes are rough (S days, M 1-2 weeks, L 3-5 weeks, XL longer).
+Order that unblocks the voice bot: BL-140/112 (gate) -> BL-142 (registry) -> BL-144 (recording consent in current calls) -> BL-148
+(modality, DNC, windows) -> BL-143 (erasure for audio and transcripts). Sizes are rough (S days, M 1-2 weeks, L 3-5 weeks, XL longer).
 
 ## 7. Privacy-by-design for a new feature
 
 Authors follow [../privacy/privacy-by-design-checklist.md](../privacy/privacy-by-design-checklist.md) and add their module's rows to
-[wiring/privacy-and-data.md](../threadwise-port/wiring/privacy-and-data.md) in the same change. Until BL-113 exists the review is manual.
+[wiring/privacy-and-data.md](../threadwise-port/wiring/privacy-and-data.md) in the same change. Until BL-142 exists the review is manual.
 
 ## 8. Operating model notes
 
@@ -426,7 +426,7 @@ TCPA, TRAI, DPDP, PDPL or WhatsApp policy. The text states design intent and eng
 | --- | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | D1  | Default regimes supported at launch         | GDPR/ePrivacy, India DPDP + TRAI, WhatsApp Business policy, TCPA/CTIA (US), UAE and KSA PDPL as hints; start with strictest default, relax per workspace |
 | D2  | Controller or processor in our contracts    | Processor for contact/lead/end-customer data; controller for staff, billing, security; DPA with processor terms                                          |
-| D3  | Residency (EU / India / Gulf)               | Document single region now; build region-pinning only after the first regulated customer asks (BL-123)                                                   |
+| D3  | Residency (EU / India / Gulf)               | Document single region now; build region-pinning only after the first regulated customer asks (BL-152)                                                   |
 | D4  | Retention defaults                          | Table in 4.6; recordings 90 days; workspaces keep messages unless they set a rule                                                                        |
 | D5  | Store IP and user agent                     | Not raw: keep a keyed hash for abuse control, raw only for security events, 30-90 days; widget visitors coarsened after 30 days                          |
 | D6  | Allowed AI vendors                          | An allow-list at platform level, per-workspace opt-in, tenant BYO key by default; no vendor that trains on prompts without a signed term                 |

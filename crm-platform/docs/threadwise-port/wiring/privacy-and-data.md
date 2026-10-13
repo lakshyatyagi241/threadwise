@@ -67,12 +67,12 @@ Handlers do not exist yet for any row: every Export and Erase cell says `none` u
 Chat media, contact files, call recordings, consent export files, training files, branding, invoice PDFs. The purge queue is the
 delete mechanism; the registry will name each prefix and the owning key.
 
-## Tables with a contact link to verify first (BL-113)
+## Tables with a contact link to verify first (BL-142)
 
 Run, then paste the result here: every `packages/db/migrations/*.sql` table that references `contacts`, with its `ON DELETE` action.
-The test in BL-113 produces the same list from the live schema and fails when a row is missing above.
+The test in BL-142 produces the same list from the live schema and fails when a row is missing above.
 
 ## Consumers
 
-The register feeds: DSAR export/erase (BL-114), retention engine (BL-117), Help assistant masking (BL-121), the privacy-by-design
+The register feeds: DSAR export/erase (BL-143), retention engine (BL-146), Help assistant masking (BL-150), the privacy-by-design
 checklist ([privacy-by-design-checklist.md](../../../docs/privacy/privacy-by-design-checklist.md)), and the sub-processor register.
