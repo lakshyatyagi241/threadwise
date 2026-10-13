@@ -119,6 +119,8 @@
       "colStarted": "शुरू हुआ",
       "colActivity": "आखिरी गतिविधि",
       "colSteps": "स्टेप",
+      "colReplies": "जवाब",
+      "repliesHint": "इस रन के प्रतीक्षा नोड तक पहुँचे ग्राहक संदेश",
       "colActions": "कार्रवाइयाँ",
       "open": "रन खोलें",
       "cancel": "रद्द करें",

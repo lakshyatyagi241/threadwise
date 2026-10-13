@@ -119,6 +119,8 @@
       "colStarted": "Bắt đầu",
       "colActivity": "Hoạt động gần nhất",
       "colSteps": "Bước",
+      "colReplies": "Phản hồi",
+      "repliesHint": "Tin nhắn của khách đã đến nút chờ của lượt chạy này",
       "colActions": "Thao tác",
       "open": "Mở lần chạy",
       "cancel": "Hủy",

@@ -119,6 +119,8 @@
       "colStarted": "התחיל",
       "colActivity": "פעילות אחרונה",
       "colSteps": "שלבים",
+      "colReplies": "תגובות",
+      "repliesHint": "הודעות לקוח שהגיעו לצומת המתנה של ההרצה הזו",
       "colActions": "פעולות",
       "open": "פתיחת הרצה",
       "cancel": "ביטול",
