@@ -184,3 +184,13 @@ export const inboxMediaUploadSchema = z.object({
   expiresAt: z.string().datetime(),
 });
 export type InboxMediaUpload = z.infer<typeof inboxMediaUploadSchema>;
+
+/**
+ * `POST /v2/inbox/conversations/open`: the conversation for a contact on a channel, created when there is none yet (a phone channel
+ * and a contact with a number). The first message to a contact outside the 24 hour window must then be a template.
+ */
+export const openConversationSchema = z.object({
+  contactId: z.string().uuid(),
+  channelId: z.string().uuid(),
+});
+export type OpenConversationInput = z.infer<typeof openConversationSchema>;

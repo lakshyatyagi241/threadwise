@@ -40,6 +40,8 @@ import {
   type MarkConversationReadInput,
   type SendMessageInput,
   type SetConversationStatusInput,
+  openConversationSchema,
+  type OpenConversationInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -168,6 +170,19 @@ export class InboxController {
   }
 
   // --- one conversation ----------------------------------------------------------------------------------------------------------
+
+  @Post('conversations/open')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.reply')
+  @ApiOperation({
+    summary: 'Open (or create) the conversation for a contact on a channel',
+    description:
+      'Answers `{ id }`. Creates the thread when the contact has none on that phone channel; 422 when the channel cannot start one or the contact has no number. The first message outside the 24 hour window must be a template.',
+  })
+  async open(@Body(zodPipe(openConversationSchema)) body: OpenConversationInput) {
+    return this.thread.open(body.contactId, body.channelId);
+  }
 
   @Get('conversations/:id')
   @RequirePermission('inbox.conversation.read')
