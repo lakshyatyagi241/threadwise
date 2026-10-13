@@ -25,7 +25,11 @@
       "pickTitle": "Pilih percakapan",
       "pickMessage": "Pilih percakapan dari daftar untuk membacanya dan membalas. Pesan baru akan muncul di sini dengan sendirinya.",
       "shortcuts": "Pintasan: j dan k untuk bergerak dalam daftar, e untuk menyelesaikan, / untuk mencari.",
-      "teamChanged": "Tim diperbarui."
+      "teamChanged": "Tim diperbarui.",
+      "priorityChanged": "Prioritas diperbarui",
+      "snoozed": "Percakapan ditunda",
+      "labelAdded": "Label ditambahkan",
+      "labelRemoved": "Label dihapus"
     },
     "list": {
       "title": "Inbox",
@@ -101,7 +105,9 @@
           "title": "Semua sudah beres",
           "message": "Percakapan dengan pesan baru dari pelanggan tercantum di sini."
         }
-      }
+      },
+      "select": "Pilih",
+      "selectDone": "Selesai"
     },
     "status": {
       "received": "Diterima",
@@ -884,6 +890,79 @@
           "duplicate_in_file": "shortcut sudah muncul sebelumnya di file",
           "plan_limit_reached": "melebihi batas paket Anda"
         }
+      }
+    },
+    "bulk": {
+      "barLabel": "Tindakan massal",
+      "selected": "{count, plural, one {# percakapan dipilih} other {# percakapan dipilih}}",
+      "selectAllInView": "Pilih semua {count} yang tampil",
+      "done": "Selesai",
+      "markRead": "Tandai sudah dibaca",
+      "resolve": "Selesaikan",
+      "close": "Tutup",
+      "reopen": "Buka kembali",
+      "assign": "Tugaskan",
+      "assignToMe": "Tugaskan ke saya",
+      "unassign": "Batalkan penugasan",
+      "removeTeam": "Hapus tim",
+      "priority": "Prioritas",
+      "snooze": "Tunda",
+      "snoozePreset": {
+        "oneHour": "1 jam",
+        "threeHours": "3 jam",
+        "tomorrow": "Besok, 09.00",
+        "nextWeek": "Senin depan, 09.00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# percakapan diperbarui} other {# percakapan diperbarui}}.",
+        "nothingChanged": "Tidak ada yang perlu diubah: percakapan yang dipilih sudah yang terbaru.",
+        "partial": "{done} diperbarui, {unchanged} sudah yang terbaru, {failed} tidak dapat diubah. Yang gagal tetap terpilih.",
+        "allFailed": "Tidak ada dari {count, plural, one {# percakapan} other {# percakapan}} yang dapat diubah."
+      },
+      "label": "Label",
+      "labelAdd": "Tambah label",
+      "labelRemove": "Hapus label"
+    },
+    "triage": {
+      "priority": "Prioritas",
+      "snooze": "Tunda",
+      "wake": "Aktifkan sekarang"
+    },
+    "labels": {
+      "label": "Label",
+      "loading": "Memuat label…",
+      "loadFailed": "Tidak dapat memuat label.",
+      "none": "Belum ada label.",
+      "newLabel": "Label baru",
+      "add": "Tambah",
+      "filter": "Label",
+      "filterActive": "{count, plural, one {# label} other {# label}}",
+      "clearFilter": "Hapus filter label",
+      "screen": {
+        "back": "Kembali ke kotak masuk",
+        "title": "Label",
+        "intro": "Label menandai percakapan agar tim Anda dapat mengurutkan dan memfilternya. Label ini sama dengan yang digunakan pada kontak.",
+        "newTitle": "Label baru",
+        "editTitle": "Edit label",
+        "name": "Nama",
+        "color": "Warna",
+        "colorInvalid": "Gunakan warna hex seperti #075E54 atau nama warna.",
+        "description": "Deskripsi (opsional)",
+        "create": "Buat label",
+        "save": "Simpan perubahan",
+        "cancel": "Batal",
+        "edit": "Edit",
+        "delete": "Hapus",
+        "inUse": "{count, plural, one {# percakapan} other {# percakapan}}",
+        "emptyTitle": "Belum ada label",
+        "emptyMessage": "Buat label pertama Anda di atas, lalu pasang pada percakapan dari kotak masuk.",
+        "deleteTitle": "Hapus label ini?",
+        "deleteMessage": "\"{name}\" dipakai pada {count, plural, one {# percakapan} other {# percakapan}}. Menghapusnya akan melepasnya dari percakapan tersebut dan dari kontak mana pun yang memilikinya. Tindakan ini tidak dapat dibatalkan.",
+        "nameTaken": "Label dengan nama itu sudah ada.",
+        "conflict": "Orang lain mengubah label ini lebih dulu. Daftar telah dimuat ulang.",
+        "saved": "Label disimpan",
+        "created": "Label dibuat",
+        "deleted": "Label dihapus"
       }
     }
   }

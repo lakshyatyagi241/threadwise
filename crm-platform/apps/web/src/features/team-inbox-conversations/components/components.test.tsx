@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -24,9 +25,11 @@ const messagesAr = JSON.parse(
 
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
-    <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
-      {el}
-    </NextIntlClientProvider>,
+    <QueryClientProvider client={new QueryClient()}>
+      <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
+        {el}
+      </NextIntlClientProvider>
+    </QueryClientProvider>,
   );
 
 /** The attribute, not the `disabled:` utility classes every textarea carries. */

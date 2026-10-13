@@ -25,7 +25,11 @@
       "pickTitle": "대화 선택",
       "pickMessage": "목록에서 대화를 선택하여 읽고 답장하세요. 새 메시지는 자동으로 여기에 표시됩니다.",
       "shortcuts": "단축키: j와 k로 목록 이동, e로 완료 처리, /로 검색",
-      "teamChanged": "팀이 업데이트되었습니다."
+      "teamChanged": "팀이 업데이트되었습니다.",
+      "priorityChanged": "우선순위가 업데이트되었습니다",
+      "snoozed": "대화를 일시 중지했습니다",
+      "labelAdded": "라벨을 추가했습니다",
+      "labelRemoved": "라벨을 제거했습니다"
     },
     "list": {
       "title": "수신함",
@@ -101,7 +105,9 @@
           "title": "모든 대화를 확인했습니다",
           "message": "고객의 새 메시지가 있는 대화가 여기에 표시됩니다."
         }
-      }
+      },
+      "select": "선택",
+      "selectDone": "완료"
     },
     "status": {
       "received": "수신됨",
@@ -884,6 +890,79 @@
           "duplicate_in_file": "같은 shortcut이 파일 앞부분에 이미 있습니다",
           "plan_limit_reached": "요금제 한도를 초과했습니다"
         }
+      }
+    },
+    "bulk": {
+      "barLabel": "일괄 작업",
+      "selected": "{count, plural, one {대화 #개 선택됨} other {대화 #개 선택됨}}",
+      "selectAllInView": "표시된 {count}개 모두 선택",
+      "done": "완료",
+      "markRead": "읽음으로 표시",
+      "resolve": "해결됨으로 표시",
+      "close": "닫기",
+      "reopen": "다시 열기",
+      "assign": "배정",
+      "assignToMe": "나에게 배정",
+      "unassign": "배정 해제",
+      "removeTeam": "팀 제거",
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "snoozePreset": {
+        "oneHour": "1시간",
+        "threeHours": "3시간",
+        "tomorrow": "내일 오전 9:00",
+        "nextWeek": "다음 주 월요일 오전 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {대화 #개를 업데이트했습니다} other {대화 #개를 업데이트했습니다}}.",
+        "nothingChanged": "변경할 내용이 없습니다. 선택한 대화는 이미 최신 상태입니다.",
+        "partial": "{done}개 업데이트됨, {unchanged}개는 이미 최신 상태, {failed}개는 변경할 수 없습니다. 실패한 항목은 선택된 상태로 유지됩니다.",
+        "allFailed": "{count, plural, one {대화 #개를} other {대화 #개를}} 변경할 수 없습니다."
+      },
+      "label": "라벨",
+      "labelAdd": "라벨 추가",
+      "labelRemove": "라벨 제거"
+    },
+    "triage": {
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "wake": "지금 다시 표시"
+    },
+    "labels": {
+      "label": "라벨",
+      "loading": "라벨을 불러오는 중…",
+      "loadFailed": "라벨을 불러오지 못했습니다.",
+      "none": "아직 라벨이 없습니다.",
+      "newLabel": "새 라벨",
+      "add": "추가",
+      "filter": "라벨",
+      "filterActive": "{count, plural, one {라벨 #개} other {라벨 #개}}",
+      "clearFilter": "라벨 필터 지우기",
+      "screen": {
+        "back": "받은편지함으로 돌아가기",
+        "title": "라벨",
+        "intro": "라벨은 대화에 태그를 붙여 팀이 정렬하고 필터링할 수 있게 해 줍니다. 연락처에 쓰는 태그와 같습니다.",
+        "newTitle": "새 라벨",
+        "editTitle": "라벨 수정",
+        "name": "이름",
+        "color": "색상",
+        "colorInvalid": "#075E54 같은 16진수 색상 또는 색상 이름을 사용하세요.",
+        "description": "설명 (선택 사항)",
+        "create": "라벨 만들기",
+        "save": "변경 사항 저장",
+        "cancel": "취소",
+        "edit": "수정",
+        "delete": "삭제",
+        "inUse": "{count, plural, one {대화 #개} other {대화 #개}}",
+        "emptyTitle": "아직 라벨이 없습니다",
+        "emptyMessage": "위에서 첫 라벨을 만든 다음 받은편지함에서 대화에 붙여 보세요.",
+        "deleteTitle": "이 라벨을 삭제할까요?",
+        "deleteMessage": "\"{name}\" 라벨이 {count, plural, one {대화 #개} other {대화 #개}}에 붙어 있습니다. 삭제하면 해당 대화와 이 라벨을 가진 연락처에서 모두 제거됩니다. 이 작업은 되돌릴 수 없습니다.",
+        "nameTaken": "같은 이름의 라벨이 이미 있습니다.",
+        "conflict": "다른 사람이 먼저 이 라벨을 변경했습니다. 목록을 다시 불러왔습니다.",
+        "saved": "라벨을 저장했습니다",
+        "created": "라벨을 만들었습니다",
+        "deleted": "라벨을 삭제했습니다"
       }
     }
   }

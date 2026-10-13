@@ -10,13 +10,18 @@ import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
 import { InboxController } from './inbox.controller';
+import { InboxLabelsController } from './inbox-labels.controller';
+import { InboxLabelsService } from './inbox-labels.service';
 import { InboxSystemNotes } from './inbox-system-notes.service';
 import { InboxMediaService } from './inbox-media.service';
 import { InboxMessageLogService } from './inbox-message-log.service';
 import { InboxNotesService } from './inbox-notes.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
+import { InboxSnoozeWakeService } from './inbox-snooze-wake.service';
 import { InboxThreadService } from './inbox-thread.service';
 import { InboxTimelineService } from './inbox-timeline.service';
+import { InboxTriageService } from './inbox-triage.service';
+import { LabelsRepository } from './labels.repository';
 import { MediaUploadsRepository } from './media-uploads.repository';
 import { NotesRepository } from './notes.repository';
 import { SavedRepliesController } from './saved-replies/saved-replies.controller';
@@ -42,7 +47,12 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     PlansCoreModule,
   ],
   // The transfer controller first: `export` and `import` must not be read as a reply id.
-  controllers: [InboxController, SavedRepliesTransferController, SavedRepliesController],
+  controllers: [
+    InboxController,
+    InboxLabelsController,
+    SavedRepliesTransferController,
+    SavedRepliesController,
+  ],
   providers: [
     ConversationsRepository,
     ConversationEventsRepository,
@@ -53,6 +63,9 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxSystemNotes,
     InboxConversationsService,
     InboxThreadService,
+    InboxTriageService,
+    LabelsRepository,
+    InboxLabelsService,
     InboxNotesService,
     InboxTimelineService,
     InboxMediaService,
@@ -69,7 +82,16 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxRealtimePublisher,
     InboxSystemNotes,
     InboxConversationsService,
+    InboxTriageService,
+    InboxLabelsService,
     SharedSavedRepliesReader,
   ],
 })
 export class TeamInboxConversationsModule {}
+
+/** What only the worker runs for the inbox core: the sweep that wakes snoozed conversations. Imported ONLY by WorkersModule. */
+@Module({
+  imports: [TeamInboxConversationsModule],
+  providers: [InboxSnoozeWakeService],
+})
+export class TeamInboxConversationsWorkerModule {}

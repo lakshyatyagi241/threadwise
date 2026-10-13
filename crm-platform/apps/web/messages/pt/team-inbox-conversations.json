@@ -25,7 +25,11 @@
       "pickTitle": "Escolha uma conversa",
       "pickMessage": "Escolha uma conversa na lista para lê-la e responder. Novas mensagens aparecem aqui automaticamente.",
       "shortcuts": "Atalhos: j e k navegam pela lista, e resolve, / pesquisa.",
-      "teamChanged": "Equipe atualizada."
+      "teamChanged": "Equipe atualizada.",
+      "priorityChanged": "Prioridade atualizada",
+      "snoozed": "Conversa adiada",
+      "labelAdded": "Etiqueta adicionada",
+      "labelRemoved": "Etiqueta removida"
     },
     "list": {
       "title": "Caixa de entrada",
@@ -101,7 +105,9 @@
           "title": "Você está em dia",
           "message": "Aqui aparecem as conversas com novas mensagens de clientes."
         }
-      }
+      },
+      "select": "Selecionar",
+      "selectDone": "Concluído"
     },
     "status": {
       "received": "Recebida",
@@ -884,6 +890,79 @@
           "duplicate_in_file": "o atalho aparece antes no arquivo",
           "plan_limit_reached": "acima do limite do seu plano"
         }
+      }
+    },
+    "bulk": {
+      "barLabel": "Ações em massa",
+      "selected": "{count, plural, one {# conversa selecionada} other {# conversas selecionadas}}",
+      "selectAllInView": "Selecionar todas as {count} na tela",
+      "done": "Concluído",
+      "markRead": "Marcar como lida",
+      "resolve": "Resolver",
+      "close": "Fechar",
+      "reopen": "Reabrir",
+      "assign": "Atribuir",
+      "assignToMe": "Atribuir a mim",
+      "unassign": "Remover atribuição",
+      "removeTeam": "Remover equipe",
+      "priority": "Prioridade",
+      "snooze": "Adiar",
+      "snoozePreset": {
+        "oneHour": "1 hora",
+        "threeHours": "3 horas",
+        "tomorrow": "Amanhã, 9:00",
+        "nextWeek": "Próxima segunda, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversa atualizada} other {# conversas atualizadas}}.",
+        "nothingChanged": "Nada a alterar: as conversas selecionadas já estão atualizadas.",
+        "partial": "{done} atualizadas, {unchanged} já estavam atualizadas, {failed} não puderam ser alteradas. As que falharam continuam selecionadas.",
+        "allFailed": "Nenhuma {count, plural, one {das # conversa pôde} other {das # conversas pôde}} ser alterada."
+      },
+      "label": "Etiqueta",
+      "labelAdd": "Adicionar etiqueta",
+      "labelRemove": "Remover etiqueta"
+    },
+    "triage": {
+      "priority": "Prioridade",
+      "snooze": "Adiar",
+      "wake": "Reativar agora"
+    },
+    "labels": {
+      "label": "Etiqueta",
+      "loading": "Carregando etiquetas…",
+      "loadFailed": "Não foi possível carregar as etiquetas.",
+      "none": "Nenhuma etiqueta ainda.",
+      "newLabel": "Nova etiqueta",
+      "add": "Adicionar",
+      "filter": "Etiquetas",
+      "filterActive": "{count, plural, one {# etiqueta} other {# etiquetas}}",
+      "clearFilter": "Limpar filtro de etiquetas",
+      "screen": {
+        "back": "Voltar para a caixa de entrada",
+        "title": "Etiquetas",
+        "intro": "As etiquetas marcam as conversas para que sua equipe possa organizá-las e filtrá-las. São as mesmas usadas nos contatos.",
+        "newTitle": "Nova etiqueta",
+        "editTitle": "Editar etiqueta",
+        "name": "Nome",
+        "color": "Cor",
+        "colorInvalid": "Use uma cor hexadecimal como #075E54 ou um nome de cor.",
+        "description": "Descrição (opcional)",
+        "create": "Criar etiqueta",
+        "save": "Salvar alterações",
+        "cancel": "Cancelar",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "inUse": "{count, plural, one {# conversa} other {# conversas}}",
+        "emptyTitle": "Nenhuma etiqueta ainda",
+        "emptyMessage": "Crie sua primeira etiqueta acima e depois aplique-a às conversas na caixa de entrada.",
+        "deleteTitle": "Excluir esta etiqueta?",
+        "deleteMessage": "\"{name}\" está em {count, plural, one {# conversa} other {# conversas}}. Excluí-la a remove delas e de todos os contatos que a possuem. Esta ação não pode ser desfeita.",
+        "nameTaken": "Já existe uma etiqueta com esse nome.",
+        "conflict": "Outra pessoa alterou esta etiqueta primeiro. A lista foi recarregada.",
+        "saved": "Etiqueta salva",
+        "created": "Etiqueta criada",
+        "deleted": "Etiqueta excluída"
       }
     }
   }

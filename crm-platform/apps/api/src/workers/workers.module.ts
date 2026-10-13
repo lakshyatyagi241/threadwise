@@ -10,6 +10,7 @@ import { CatalogProductsWorkerModule } from '../modules/catalog-products';
 import { StorefrontBuilderWorkerModule } from '../modules/storefront-builder';
 import { StoreOrdersSalesWorkerModule } from '../modules/store-orders-sales';
 import { ChatConversationsWorkerModule } from '../modules/chat-conversations';
+import { TeamInboxConversationsWorkerModule } from '../modules/team-inbox-conversations';
 import { TeamInboxRoutingSlaWorkerModule } from '../modules/team-inbox-routing-sla';
 import { CampaignsWorkerModule } from '../modules/campaigns';
 import { ChannelFacebookWorkerModule } from '../modules/channel-facebook';
@@ -98,6 +99,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     StoreOrdersSalesWorkerModule,
     MessageTemplatesWorkerModule,
     ChatConversationsWorkerModule,
+    TeamInboxConversationsWorkerModule,
     TeamInboxRoutingSlaWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,

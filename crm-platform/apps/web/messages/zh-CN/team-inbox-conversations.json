@@ -25,7 +25,11 @@
       "pickTitle": "选择一个会话",
       "pickMessage": "从列表中选择会话以阅读并回复。新消息会自动显示在此处。",
       "shortcuts": "快捷键：j 和 k 切换列表，e 标记解决，/ 搜索。",
-      "teamChanged": "团队已更新。"
+      "teamChanged": "团队已更新。",
+      "priorityChanged": "优先级已更新",
+      "snoozed": "对话已暂时搁置",
+      "labelAdded": "已添加标签",
+      "labelRemoved": "已移除标签"
     },
     "list": {
       "title": "收件箱",
@@ -101,7 +105,9 @@
           "title": "您已处理完所有会话",
           "message": "客户有新消息的会话会列在此处。"
         }
-      }
+      },
+      "select": "选择",
+      "selectDone": "完成"
     },
     "status": {
       "received": "已接收",
@@ -884,6 +890,79 @@
           "duplicate_in_file": "该快捷指令在文件前面已出现",
           "plan_limit_reached": "超出套餐限制"
         }
+      }
+    },
+    "bulk": {
+      "barLabel": "批量操作",
+      "selected": "{count, plural, one {已选择 # 个对话} other {已选择 # 个对话}}",
+      "selectAllInView": "选择当前视图中的全部 {count} 个",
+      "done": "完成",
+      "markRead": "标为已读",
+      "resolve": "标为已解决",
+      "close": "关闭",
+      "reopen": "重新打开",
+      "assign": "分配",
+      "assignToMe": "分配给我",
+      "unassign": "取消分配",
+      "removeTeam": "移除团队",
+      "priority": "优先级",
+      "snooze": "暂时搁置",
+      "snoozePreset": {
+        "oneHour": "1 小时",
+        "threeHours": "3 小时",
+        "tomorrow": "明天 9:00",
+        "nextWeek": "下周一 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {已更新 # 个对话} other {已更新 # 个对话}}。",
+        "nothingChanged": "无需更改：所选对话已是最新状态。",
+        "partial": "已更新 {done} 个，{unchanged} 个已是最新，{failed} 个无法更改。失败的对话仍保持选中。",
+        "allFailed": "{count, plural, one {# 个对话} other {# 个对话}}均无法更改。"
+      },
+      "label": "标签",
+      "labelAdd": "添加标签",
+      "labelRemove": "移除标签"
+    },
+    "triage": {
+      "priority": "优先级",
+      "snooze": "暂时搁置",
+      "wake": "立即恢复"
+    },
+    "labels": {
+      "label": "标签",
+      "loading": "正在加载标签…",
+      "loadFailed": "无法加载标签。",
+      "none": "暂无标签。",
+      "newLabel": "新建标签",
+      "add": "添加",
+      "filter": "标签",
+      "filterActive": "{count, plural, one {# 个标签} other {# 个标签}}",
+      "clearFilter": "清除标签筛选",
+      "screen": {
+        "back": "返回收件箱",
+        "title": "标签",
+        "intro": "标签用于标记会话，方便团队分类和筛选。它们与联系人上使用的标签相同。",
+        "newTitle": "新建标签",
+        "editTitle": "编辑标签",
+        "name": "名称",
+        "color": "颜色",
+        "colorInvalid": "请使用十六进制颜色（如 #075E54）或颜色名称。",
+        "description": "描述（可选）",
+        "create": "创建标签",
+        "save": "保存更改",
+        "cancel": "取消",
+        "edit": "编辑",
+        "delete": "删除",
+        "inUse": "{count, plural, one {# 个会话} other {# 个会话}}",
+        "emptyTitle": "暂无标签",
+        "emptyMessage": "请先在上方创建第一个标签，然后在收件箱中将其添加到会话。",
+        "deleteTitle": "删除此标签？",
+        "deleteMessage": "\"{name}\" 已用于 {count, plural, one {# 个会话} other {# 个会话}}。删除后，它将从这些会话以及带有该标签的所有联系人中移除。此操作无法撤销。",
+        "nameTaken": "已存在同名标签。",
+        "conflict": "其他人已先修改了此标签。列表已重新加载。",
+        "saved": "标签已保存",
+        "created": "标签已创建",
+        "deleted": "标签已删除"
       }
     }
   }

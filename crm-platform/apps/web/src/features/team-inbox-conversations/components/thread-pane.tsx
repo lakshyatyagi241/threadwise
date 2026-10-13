@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import type {
+  ConversationPriority,
   ChannelResponse,
   EmailReplyExtras,
   ConversationNote,
@@ -31,11 +32,15 @@ import {
   personalGroupBlock,
 } from '../lib/group-thread';
 import type { MentionMember } from '../lib/mentions';
+import type { SnoozePreset } from '../lib/selection';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { GroupCostLine } from './group-cost-line';
 import { ShareDialog, type ShareKind } from './share-dialog';
+import { LabelChip } from './label-chip';
+import { LabelMenu } from './label-menu';
 import { TemplatePicker } from './template-picker';
+import { TriageMenu } from './triage-menu';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
 import { MessageStream } from './message-stream';
 import { Avatar, ChannelTag } from './parts';
@@ -50,7 +55,14 @@ export interface ThreadPaneProps {
   notes: ConversationNote[];
   channel: ChannelResponse | undefined;
   nowMs: number;
-  can: { reply: boolean; note: boolean; resolve: boolean; assignSelf: boolean };
+  can: {
+    reply: boolean;
+    note: boolean;
+    resolve: boolean;
+    assignSelf: boolean;
+    priority?: boolean;
+    snooze?: boolean;
+  };
   mode: ComposerMode;
   onMode: (mode: ComposerMode) => void;
   composerRef: Ref<ComposerHandle>;
@@ -76,6 +88,20 @@ export interface ThreadPaneProps {
   onRetryMessage: (messageId: string) => Promise<void>;
   resolving: boolean;
   onAssignSelf: () => void;
+  /** Priority, snooze and wake-up of the open conversation (the screen runs the call and shows the refusal). */
+  triage?: {
+    busy: boolean;
+    onPriority: (priority: ConversationPriority) => void;
+    onSnooze: (preset: SnoozePreset) => void;
+    onWake: () => void;
+  };
+  /** Labels of the open conversation: present when the caller may put labels on threads. */
+  labels?: {
+    busy: boolean;
+    canCreate: boolean;
+    onApply: (input: { tagId: string } | { name: string }) => void;
+    onWithdraw: (tagId: string) => void;
+  };
   onRetryDetail: () => void;
 }
 
@@ -206,6 +232,13 @@ export function ThreadPane(props: ThreadPaneProps) {
                 )}
                 <TypingLine conversationId={detail.id} />
               </p>
+              {detail.labels.length > 0 && (
+                <div className="mt-1 flex flex-wrap gap-1" data-testid="inbox-thread-labels">
+                  {detail.labels.map((l) => (
+                    <LabelChip key={l.id} label={l} />
+                  ))}
+                </div>
+              )}
             </div>
           </>
         ) : (
@@ -239,6 +272,28 @@ export function ThreadPane(props: ThreadPaneProps) {
             >
               {t('assignToMe')}
             </Button>
+          )}
+          {detail && props.labels && (
+            <LabelMenu
+              applied={detail.labels}
+              busy={props.labels.busy}
+              canCreate={props.labels.canCreate}
+              onApply={props.labels.onApply}
+              onWithdraw={props.labels.onWithdraw}
+            />
+          )}
+          {detail && props.triage && (
+            <TriageMenu
+              priority={detail.priority}
+              snoozed={detail.status === 'snoozed'}
+              canPriority={props.can.priority ?? false}
+              canSnooze={props.can.snooze ?? false}
+              canWake={props.can.resolve}
+              busy={props.triage.busy}
+              onPriority={props.triage.onPriority}
+              onSnooze={props.triage.onSnooze}
+              onWake={props.triage.onWake}
+            />
           )}
           {detail && props.can.resolve && (
             <Button

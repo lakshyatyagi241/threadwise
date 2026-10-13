@@ -340,6 +340,11 @@
         "description": "Choisissez les mots STOP et START, les réponses de confirmation, la ligne de désinscription et si le marketing exige un consentement enregistré.",
         "keywords": "consentement, désinscription, réinscription, se désabonner, stop, start, rgpd, conformité, confidentialité, marketing"
       },
+      "inbox-labels": {
+        "label": "Étiquettes",
+        "description": "Créez les étiquettes que votre équipe applique aux conversations et avec lesquelles elle filtre la boîte de réception.",
+        "keywords": "tags, étiquettes, catégories, organiser, filtrer"
+      },
       "growth": {
         "label": "Growth",
         "description": "Leads chauds, audiences, réponses aux campagnes et autres éléments exploitables par votre équipe, déduits des discussions et des campagnes.",

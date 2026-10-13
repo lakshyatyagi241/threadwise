@@ -28,7 +28,9 @@ import {
   listMessagesQuerySchema,
   markConversationReadSchema,
   sendMessageSchema,
+  setConversationPrioritySchema,
   setConversationStatusSchema,
+  snoozeConversationSchema,
   type CreateConversationNoteInput,
   type CreateMessageLogExportInput,
   type ListConversationEventsQuery,
@@ -39,7 +41,9 @@ import {
   type ListMessagesQuery,
   type MarkConversationReadInput,
   type SendMessageInput,
+  type SetConversationPriorityInput,
   type SetConversationStatusInput,
+  type SnoozeConversationInput,
   openConversationSchema,
   type OpenConversationInput,
 } from '@crm/contracts';
@@ -52,6 +56,7 @@ import { InboxMediaService, type UploadedFile as UploadedFileShape } from './inb
 import { InboxNotesService } from './inbox-notes.service';
 import { InboxThreadService } from './inbox-thread.service';
 import { InboxTimelineService } from './inbox-timeline.service';
+import { InboxTriageService } from './inbox-triage.service';
 
 const upload = FileInterceptor('file', {
   limits: { fileSize: Math.max(...Object.values(chatMediaConfig().maxBytes)), files: 1 },
@@ -76,6 +81,7 @@ export class InboxController {
     private readonly timeline: InboxTimelineService,
     private readonly media: InboxMediaService,
     private readonly messageLogs: InboxMessageLogService,
+    private readonly triage: InboxTriageService,
   ) {}
 
   // --- the list ---------------------------------------------------------------------------------------------------------------
@@ -281,6 +287,38 @@ export class InboxController {
     @Body(zodPipe(setConversationStatusSchema)) body: SetConversationStatusInput,
   ) {
     return this.conversations.setStatus(id, body);
+  }
+
+  @Post('conversations/:id/priority')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.priority')
+  @ApiOperation({
+    summary: 'Set the priority (low, normal, high, urgent)',
+    description:
+      'Requires the rowVersion you read (409 ROW_VERSION_CONFLICT otherwise). The priority the thread already has is a no-op.',
+  })
+  async priority(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(setConversationPrioritySchema)) body: SetConversationPriorityInput,
+  ) {
+    return this.triage.setPriority(id, body);
+  }
+
+  @Post('conversations/:id/snooze')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('inbox.conversation.snooze')
+  @ApiOperation({
+    summary: 'Park an open or pending conversation until a time (it reopens by itself)',
+    description:
+      '`until` is 1 minute to 365 days ahead. A resolved, closed or spam thread is 422 CONVERSATION_STATUS_INVALID. To wake it now, move it to open with the status route.',
+  })
+  async snooze(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(snoozeConversationSchema)) body: SnoozeConversationInput,
+  ) {
+    return this.triage.snooze(id, body);
   }
 
   // --- notes and the timeline ---------------------------------------------------------------------------------------------------

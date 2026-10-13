@@ -25,7 +25,11 @@
       "pickTitle": "Choisissez une conversation",
       "pickMessage": "Sélectionnez une conversation dans la liste pour la lire et répondre. Les nouveaux messages apparaissent ici automatiquement.",
       "shortcuts": "Raccourcis : j et k parcourent la liste, e résout, / recherche.",
-      "teamChanged": "Équipe mise à jour."
+      "teamChanged": "Équipe mise à jour.",
+      "priorityChanged": "Priorité mise à jour",
+      "snoozed": "Conversation mise en veille",
+      "labelAdded": "Étiquette ajoutée",
+      "labelRemoved": "Étiquette retirée"
     },
     "list": {
       "title": "Boîte de réception",
@@ -101,7 +105,9 @@
           "title": "Vous êtes à jour",
           "message": "Les conversations contenant de nouveaux messages de clients apparaissent ici."
         }
-      }
+      },
+      "select": "Sélectionner",
+      "selectDone": "Terminé"
     },
     "status": {
       "received": "Reçu",
@@ -884,6 +890,79 @@
           "duplicate_in_file": "le raccourci apparaît plus haut dans le fichier",
           "plan_limit_reached": "dépasse la limite de votre offre"
         }
+      }
+    },
+    "bulk": {
+      "barLabel": "Actions groupées",
+      "selected": "{count, plural, one {# conversation sélectionnée} other {# conversations sélectionnées}}",
+      "selectAllInView": "Sélectionner les {count} de la vue",
+      "done": "Terminé",
+      "markRead": "Marquer comme lu",
+      "resolve": "Résoudre",
+      "close": "Fermer",
+      "reopen": "Rouvrir",
+      "assign": "Assigner",
+      "assignToMe": "M'assigner",
+      "unassign": "Désassigner",
+      "removeTeam": "Retirer l'équipe",
+      "priority": "Priorité",
+      "snooze": "Mettre en veille",
+      "snoozePreset": {
+        "oneHour": "1 heure",
+        "threeHours": "3 heures",
+        "tomorrow": "Demain, 9:00",
+        "nextWeek": "Lundi prochain, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversation mise à jour} other {# conversations mises à jour}}.",
+        "nothingChanged": "Rien à modifier : les conversations sélectionnées sont déjà à jour.",
+        "partial": "{done} mises à jour, {unchanged} déjà à jour, {failed} n'ont pas pu être modifiées. Celles en échec restent sélectionnées.",
+        "allFailed": "Aucune des {count, plural, one {# conversation} other {# conversations}} n'a pu être modifiée."
+      },
+      "label": "Étiquette",
+      "labelAdd": "Ajouter une étiquette",
+      "labelRemove": "Retirer une étiquette"
+    },
+    "triage": {
+      "priority": "Priorité",
+      "snooze": "Mettre en veille",
+      "wake": "Réactiver maintenant"
+    },
+    "labels": {
+      "label": "Étiquette",
+      "loading": "Chargement des étiquettes…",
+      "loadFailed": "Impossible de charger les étiquettes.",
+      "none": "Aucune étiquette pour le moment.",
+      "newLabel": "Nouvelle étiquette",
+      "add": "Ajouter",
+      "filter": "Étiquettes",
+      "filterActive": "{count, plural, one {# étiquette} other {# étiquettes}}",
+      "clearFilter": "Effacer le filtre d'étiquettes",
+      "screen": {
+        "back": "Retour à la boîte de réception",
+        "title": "Étiquettes",
+        "intro": "Les étiquettes marquent les conversations pour que votre équipe puisse les trier et les filtrer. Ce sont les mêmes que celles des contacts.",
+        "newTitle": "Nouvelle étiquette",
+        "editTitle": "Modifier l'étiquette",
+        "name": "Nom",
+        "color": "Couleur",
+        "colorInvalid": "Utilisez une couleur hexadécimale comme #075E54 ou un nom de couleur.",
+        "description": "Description (facultatif)",
+        "create": "Créer l'étiquette",
+        "save": "Enregistrer les modifications",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "inUse": "{count, plural, one {# conversation} other {# conversations}}",
+        "emptyTitle": "Aucune étiquette pour le moment",
+        "emptyMessage": "Créez votre première étiquette ci-dessus, puis appliquez-la aux conversations depuis la boîte de réception.",
+        "deleteTitle": "Supprimer cette étiquette ?",
+        "deleteMessage": "\"{name}\" est appliquée à {count, plural, one {# conversation} other {# conversations}}. La supprimer la retire de celles-ci et de tous les contacts qui l'ont. Cette action est irréversible.",
+        "nameTaken": "Une étiquette portant ce nom existe déjà.",
+        "conflict": "Quelqu'un d'autre a modifié cette étiquette avant vous. La liste a été rechargée.",
+        "saved": "Étiquette enregistrée",
+        "created": "Étiquette créée",
+        "deleted": "Étiquette supprimée"
       }
     }
   }

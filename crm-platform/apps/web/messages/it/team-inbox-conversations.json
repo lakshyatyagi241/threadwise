@@ -25,7 +25,11 @@
       "pickTitle": "Scegli una conversazione",
       "pickMessage": "Scegli una conversazione dall’elenco per leggerla e rispondere. I nuovi messaggi compaiono qui automaticamente.",
       "shortcuts": "Scorciatoie: j e k scorrono l’elenco, e risolve, / cerca.",
-      "teamChanged": "Team aggiornato."
+      "teamChanged": "Team aggiornato.",
+      "priorityChanged": "Priorità aggiornata",
+      "snoozed": "Conversazione posticipata",
+      "labelAdded": "Etichetta aggiunta",
+      "labelRemoved": "Etichetta rimossa"
     },
     "list": {
       "title": "Inbox",
@@ -101,7 +105,9 @@
           "title": "Sei aggiornato su tutto",
           "message": "Qui sono elencate le conversazioni con nuovi messaggi dai clienti."
         }
-      }
+      },
+      "select": "Seleziona",
+      "selectDone": "Fine"
     },
     "status": {
       "received": "Ricevuto",
@@ -884,6 +890,79 @@
           "duplicate_in_file": "lo shortcut compare già prima nel file",
           "plan_limit_reached": "oltre il limite del tuo piano"
         }
+      }
+    },
+    "bulk": {
+      "barLabel": "Azioni di gruppo",
+      "selected": "{count, plural, one {# conversazione selezionata} other {# conversazioni selezionate}}",
+      "selectAllInView": "Seleziona tutte le {count} visualizzate",
+      "done": "Fine",
+      "markRead": "Segna come letta",
+      "resolve": "Risolvi",
+      "close": "Chiudi",
+      "reopen": "Riapri",
+      "assign": "Assegna",
+      "assignToMe": "Assegna a me",
+      "unassign": "Rimuovi assegnazione",
+      "removeTeam": "Rimuovi team",
+      "priority": "Priorità",
+      "snooze": "Posticipa",
+      "snoozePreset": {
+        "oneHour": "1 ora",
+        "threeHours": "3 ore",
+        "tomorrow": "Domani, 9:00",
+        "nextWeek": "Lunedì prossimo, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversazione aggiornata} other {# conversazioni aggiornate}}.",
+        "nothingChanged": "Nessuna modifica: le conversazioni selezionate sono già aggiornate.",
+        "partial": "{done} aggiornate, {unchanged} già aggiornate, {failed} non modificabili. Quelle non riuscite restano selezionate.",
+        "allFailed": "Impossibile modificare {count, plural, one {# conversazione} other {# conversazioni}}."
+      },
+      "label": "Etichetta",
+      "labelAdd": "Aggiungi etichetta",
+      "labelRemove": "Rimuovi etichetta"
+    },
+    "triage": {
+      "priority": "Priorità",
+      "snooze": "Posticipa",
+      "wake": "Riattiva ora"
+    },
+    "labels": {
+      "label": "Etichetta",
+      "loading": "Caricamento etichette…",
+      "loadFailed": "Impossibile caricare le etichette.",
+      "none": "Ancora nessuna etichetta.",
+      "newLabel": "Nuova etichetta",
+      "add": "Aggiungi",
+      "filter": "Etichette",
+      "filterActive": "{count, plural, one {# etichetta} other {# etichette}}",
+      "clearFilter": "Cancella filtro etichette",
+      "screen": {
+        "back": "Torna alla posta in arrivo",
+        "title": "Etichette",
+        "intro": "Le etichette contrassegnano le conversazioni così il tuo team può ordinarle e filtrarle. Sono gli stessi tag usati nei contatti.",
+        "newTitle": "Nuova etichetta",
+        "editTitle": "Modifica etichetta",
+        "name": "Nome",
+        "color": "Colore",
+        "colorInvalid": "Usa un colore esadecimale come #075E54 o il nome di un colore.",
+        "description": "Descrizione (facoltativa)",
+        "create": "Crea etichetta",
+        "save": "Salva modifiche",
+        "cancel": "Annulla",
+        "edit": "Modifica",
+        "delete": "Elimina",
+        "inUse": "{count, plural, one {# conversazione} other {# conversazioni}}",
+        "emptyTitle": "Ancora nessuna etichetta",
+        "emptyMessage": "Crea la tua prima etichetta qui sopra, poi applicala alle conversazioni dalla posta in arrivo.",
+        "deleteTitle": "Eliminare questa etichetta?",
+        "deleteMessage": "\"{name}\" è applicata a {count, plural, one {# conversazione} other {# conversazioni}}. Eliminandola viene rimossa da queste e da tutti i contatti che la hanno. L'operazione non può essere annullata.",
+        "nameTaken": "Esiste già un'etichetta con questo nome.",
+        "conflict": "Qualcun altro ha modificato prima questa etichetta. L'elenco è stato ricaricato.",
+        "saved": "Etichetta salvata",
+        "created": "Etichetta creata",
+        "deleted": "Etichetta eliminata"
       }
     }
   }
