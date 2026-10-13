@@ -137,7 +137,8 @@
         "recipients": "{count, plural, one {# odbiorca} few {# odbiorców} many {# odbiorców} other {# odbiorcy}}",
         "scheduled": "Zaplanowano: {date}",
         "instant": "Wysyłka: natychmiast",
-        "template": "Szablon {name}"
+        "template": "Szablon {name}",
+        "cost": "Koszt"
       },
       "createBroadcast": "Utwórz wiadomość masową",
       "noData": "Brak danych",
@@ -648,7 +649,9 @@
         "read": "Odczytane",
         "replies": "Odpowiedzi",
         "clicks": "Kliknięcia",
-        "failed": "Nieudane"
+        "failed": "Nieudane",
+        "cost": "Koszt",
+        "costHint": "Dotychczas pobrano z portfela"
       },
       "tabs": {
         "overview": "Przegląd",
