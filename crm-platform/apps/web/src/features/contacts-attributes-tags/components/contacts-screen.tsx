@@ -38,7 +38,6 @@ import { useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
 import {
   allColumns,
-  defaultColumns,
   parseStoredColumns,
   serializeColumns,
   STORAGE_KEY as COLUMNS_KEY,
