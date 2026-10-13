@@ -29,6 +29,15 @@ keywords: [customers, people, leads, import, csv, export, duplicates, tags, bulk
 - **Remove duplicates** merges contacts sharing a phone number into the oldest one. It cannot be undone.
 - **Save as segment** turns the current filters into a [segment](help:segments-overview).
 
+## Tags: contact tags vs conversation tags
+
+Tags come from one workspace library and are used in two places, with two different meanings.
+
+- A **contact tag** describes the person: VIP, lead, region. You put it on contacts from this screen (**More Actions**, then **Tag**) or from the contact page. It follows the customer into every chat; the Team inbox shows it read-only under **Contact tags**.
+- A **conversation tag** describes one chat thread: billing, refund, urgent. You put it on a conversation in the Team inbox, under **Conversation tags**.
+
+A tag you create in one place is available in the other, and a tag deleted from either place is gone from both. See [Conversation tags](help:inbox-tags) and [Team inbox](help:team-inbox-overview).
+
 ## Plan and access
 
 Opening the screen needs permission to read contacts. Creating, editing, deleting, exporting, importing and merging each need their own permission. Your plan can cap the number of contacts; at the cap, adding says so.

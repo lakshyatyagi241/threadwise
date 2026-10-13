@@ -18,7 +18,7 @@ Every person in the workspace has a role, and the role decides what they can see
 
 - **Owner**: full access, including billing.
 - **Admin**: full workspace access except billing.
-- **Manager**: sees all teams' conversations, can assign and resolve them, and works with contacts, templates, labels and the dashboards.
+- **Manager**: sees all teams' conversations, can assign and resolve them, and works with contacts, templates, tags and the dashboards.
 - **Agent**: handles conversations and the day-to-day records such as contacts, deals and tasks, but not workspace settings.
 - **Viewer**: read-only. A Viewer can read the conversations of their own teams and nothing else.
 

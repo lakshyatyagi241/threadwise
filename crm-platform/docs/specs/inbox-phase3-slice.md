@@ -1,7 +1,7 @@
 # Inbox phase 3 and beyond: gap table, first slice, the rest (BL-036)
 
 Written 2026-10-14 on `lakshya/partial/inbox3`. Evidence is the code at `origin/main` before this change. Inventory entries:
-TW-TIB1-035 (priority), 036 and 037 (labels), 039 (bulk), 016 (24-hour window), TW-TIB2-024 to 029 (SLA). Wiring map:
+TW-TIB1-035 (priority), 036 and 037 (tags, once called labels here), 039 (bulk), 016 (24-hour window), TW-TIB2-024 to 029 (SLA). Wiring map:
 [team-inbox-routing-sla](../threadwise-port/wiring/team-inbox-routing-sla.md).
 
 ## 1. Gap table (before this change)
@@ -13,8 +13,8 @@ TW-TIB1-035 (priority), 036 and 037 (labels), 039 (bulk), 016 (24-hour window), 
 | Bulk actions on the list                            | missing                    | No route, no UI. `inbox.conversation.bulk` was in the AWAITING list of `key-coverage.spec.ts`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | Snooze (`inbox.conversation.snooze`)                | missing                    | Column `conversations.snoozed_until`, status `snoozed`, index `idx_conversations_snooze_due`, timeline types `snoozed` and `auto_unsnoozed`, status chip in the row and header existed; no route set it and no job woke a thread.                                                                                                                                                                                                                                                                                                                                  |
 | Priority (`inbox.conversation.priority`)            | partial                    | Column `conversations.priority` and the row chip existed; no route changed it from the inbox (only the contract and the timeline type `priority_changed`).                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Conversation labels (`inbox.conversation.tag`)      | built (2nd milestone, 2.5) | Table `conversation_tag` (RLS, composite FK to `tags`) exists in `packages/db/src/schema/team-inbox-conversations/tables.ts`; nothing reads or writes it; no picker, no list filter, no chip.                                                                                                                                                                                                                                                                                                                                                                      |
-| Workspace label master list (`inbox.tag.manage`)    | missing                    | `tags` table belongs to contacts (`contacts-attributes-tags`); no inbox route manages it. In Reference there is no standalone screen either (TW-TIB1-037).                                                                                                                                                                                                                                                                                                                                                                                                         |
+| Conversation tags (`inbox.conversation.tag`)        | built (2nd milestone, 2.5) | Table `conversation_tag` (RLS, composite FK to `tags`) exists in `packages/db/src/schema/team-inbox-conversations/tables.ts`; nothing reads or writes it; no picker, no list filter, no chip.                                                                                                                                                                                                                                                                                                                                                                      |
+| Workspace tag master list (`inbox.tag.manage`)      | missing                    | `tags` table belongs to contacts (`contacts-attributes-tags`); no inbox route manages it. In Reference there is no standalone screen either (TW-TIB1-037).                                                                                                                                                                                                                                                                                                                                                                                                         |
 | SLA policies (`inbox.sla.manage`, plan `inbox_sla`) | built (3rd milestone, 2.6) | Tables `sla_policies` (first response, resolution, pause when waiting, business hours, priority overrides, default) and conversation columns `sla_policy_id`, `sla_first_response_due`, `sla_resolution_due`, `sla_breached` plus partial indexes exist; the detail response already returns `sla`; plan feature `inbox_sla` is defined (`plans-subscriptions-trials/catalogue.ts`) but gates nothing. No CRUD, no due-date computation, no sweep, no badge, no notification, no screen. `sla_breaches` is keyed by support-desk `ticket_id`, not by conversation. |
 | Routing engine (auto-assignment)                    | built                      | `team-inbox-routing-sla` module, `inbox_routing` gate, `routing_rules` limit (wiring map). Out of scope here.                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | Saved replies, consent                              | built                      | Merged; untouched by this change. Opt-out STOP detection still runs first in inbound ingest (no ingest file changed).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
@@ -66,27 +66,44 @@ Items 2 and 3 of the brief, in full. Item 1 was already built (see the table); o
 | Snooze with a past date is accepted                                         | 422 unless the time is at least a minute ahead                                                                | Reference quirk, fixed                                     |
 | Bulk snooze with no date means one hour                                     | The client always sends a time (presets 1 h, 3 h, tomorrow 09:00, next Monday 09:00); no free date picker yet | Presets cover the common case; a date picker is open below |
 
-### 2.5 Conversation labels (second milestone)
+### 2.5 Conversation tags (second milestone; renamed from "labels")
 
-Reference first: TW-TIB1-036 (labels on a conversation) and 037 (the workspace list). The library is the `tags` table the contacts domain
-already uses (Reference shares it as well: a label is a tag), so no migration: `conversation_tag` (RLS, composite FKs, cascade) and
-`tags.description` existed. Creating a label goes through the contacts `TagsService`, which already holds the plan `tags` limit, the
+**Naming decision (owner approved): one concept, one word.** The reference calls them tags (`conversation_tag` pivot, `Tag` model). The earlier
+name "labels" was ours, confused users ("tags can also be used in chat, but we built labels") and is retired: every visible string, menu, aria label,
+help guide and timeline line says tag, in all 21 locales. What was kept for compatibility is listed under "Kept as aliases" below. No data
+migration: same tables.
+
+Reference first: TW-TIB1-036 (tags on a conversation) and 037 (the workspace list). The library is the `tags` table the contacts domain
+already uses (Reference shares it as well), so no migration: `conversation_tag` (RLS, composite FKs, cascade) and
+`tags.description` existed. Creating a tag goes through the contacts `TagsService`, which already holds the plan `tags` limit, the
 case-insensitive unique name and the audit and outbox rows.
 
-- API `GET /inbox/labels` (read the inbox; with usage counts), `POST /inbox/labels`, `PATCH /inbox/labels/:id` (rowVersion), `DELETE /inbox/labels/:id`
-  (all `inbox.tag.manage`); `POST /inbox/conversations/:id/labels` (`tagId` or `name`) and `DELETE .../labels/:tagId` (`inbox.conversation.tag`,
+- API `GET /inbox/tags` (read the inbox; with usage counts), `POST /inbox/tags`, `PATCH /inbox/tags/:id` (rowVersion), `DELETE /inbox/tags/:id`
+  (all `inbox.tag.manage`); `POST /inbox/conversations/:id/tags` (`tagId` or `name`) and `DELETE .../tags/:tagId` (`inbox.conversation.tag`,
   visibility and scope checked). Adding is idempotent; a change writes `tag_added` or `tag_removed` on the timeline, the outbox event
-  `conversation.tag_added|tag_removed`, an audit row, bumps the row version and publishes the realtime upsert (`changed: ['labels']`).
-- The list row and the detail carry `labels` (one subselect, no N+1) and the list takes `?labels=<id>,<id>` (any of them).
-- Bulk: action `{type: 'label', mode: 'add'|'remove', tagId}`, also needing `inbox.conversation.tag`.
-- Web: chips on rows and in the thread header, the header's Label menu (tick to add or remove; typing a new name creates it for label
-  managers), a multi-select Labels filter above the list kept in the address (`?labels=`), a Label entry in the bulk bar, and the Settings tile
-  "Labels" at `/inbox/labels` (create, edit, delete with the usage count). Colors are validated on write and again before they reach a style.
+  `conversation.tag_added|tag_removed`, an audit row, bumps the row version and publishes the realtime upsert (`changed: ['tags', 'labels']`).
+- The list row and the detail carry the thread's tags (one subselect, no N+1; the JSON field keeps its original name `labels`) and the list takes
+  `?tags=<id>,<id>` (any of them) with `tagScope=conversation|contact`. `contact` matches the tags of the conversation's contact:
+  `EXISTS (contact_tags JOIN tags)` on `(org_id, contact_id)`, indexed by `idx_contact_tags_contact`, with the same `org_id` match as every other
+  filter (a small RLS-safe join, so it shipped). A thread with no contact never matches the contact scope. The detail also returns
+  `contactSummary.contactTags`.
+- Bulk: action `{type: 'tag', mode: 'add'|'remove', tagId}`, also needing `inbox.conversation.tag`.
+- Web: chips on rows and in the thread header, the header's Tag menu (tick to add or remove; typing a new name creates it for tag
+  managers), the side panel's two groups (**Contact tags**, read-only with an "Edit on contact" link for people who may edit contacts, and
+  **Conversation tags**, add and remove), each with its own heading and a one-line "?" help (a contact tag describes the PERSON: VIP, lead,
+  region; a conversation tag describes this THREAD: billing, refund, urgent; both come from the same library), a multi-select Tags filter above
+  the list with a Conversation tags / Contact tags switch kept in the address (`?tags=&tagScope=`), a Tag entry in the bulk bar, and the Settings tile
+  "Conversation tags" (`inbox-tags`) at `/inbox/tags` (create, edit, delete with the usage count). Colors are validated on write and again before they reach a style.
+- **Kept as aliases (nothing breaks):** the routes `/v2/inbox/labels*` and `/v2/inbox/conversations/:id/labels*`; the list parameter `?labels=`
+  (merged with `?tags=`; the web page reads it and rewrites it to `tags`); the bulk action type `label`; the page `/inbox/labels` (redirects to
+  `/inbox/tags`); the JSON field `labels` on conversations; the error codes `INBOX_LABEL_NOT_FOUND` and `INBOX_LABEL_CREATE_FORBIDDEN`; `labels` in
+  the realtime `changed` list. Permission keys (`inbox.conversation.tag`, `inbox.tag.manage`), the timeline types and the outbox event names
+  already said tag and are unchanged. Retiring the aliases is BL-111.
 - Intended differences from Reference: a name that does not exist yet is created only by someone with `inbox.tag.manage` (Reference let any
   agent create through the thread and skipped the plan limit); the plan limit applies everywhere; the library can be renamed, recolored and
   described (Reference could not); an empty request is a 422 (Reference created an empty tag). Not built from Reference: the five "quick label"
   chips that also change the priority, and the flow enrolment on "tag added" (blocked on the flow triggers, FLR).
-- Deleting a label removes it from contacts too (same tag); the screen says how many conversations carry it.
+- Deleting a tag removes it from contacts too (same tag); the screen says how many conversations carry it.
 
 ### 2.6 SLA policies and response clocks (third milestone, branch `lakshya/partial/sla`)
 
@@ -131,7 +148,7 @@ columns exist (`archived`, `pinned_at`) and fit the same bulk action union; dele
 
 ## 3. Design for what is left
 
-### 3.1 Labels: built, see 2.5 (design notes kept)
+### 3.1 Tags (first designed as "labels"): built, see 2.5 (design notes kept)
 
 - Reuse `tags` (contacts domain, workspace master list) and `conversation_tag` (exists, RLS, composite FKs). No migration expected; check that
   `tags` has a `kind`/scope that allows conversation use, else add one column in a migration (add-migration skill).
