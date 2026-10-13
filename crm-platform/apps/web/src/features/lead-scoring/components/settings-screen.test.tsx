@@ -39,6 +39,7 @@ const settings = (over: Partial<LscSettings> = {}): LscSettings => ({
   autoScore: false,
   chatDigest: false,
   stageSuggestions: false,
+  stageAutoApply: true,
   chatDigestAvailable: false,
   pendingSuggestions: 0,
   platformEnabled: true,
@@ -356,6 +357,7 @@ describe('reading conversations (a pilot)', () => {
       autoScore: true,
       chatDigest: true,
       stageSuggestions: true,
+      stageAutoApply: true,
       rowVersion: 2,
     });
   });
@@ -371,6 +373,7 @@ describe('reading conversations (a pilot)', () => {
       autoScore: true,
       chatDigest: false,
       stageSuggestions: false,
+      stageAutoApply: true,
       rowVersion: 2,
     });
   });

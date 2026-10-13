@@ -261,7 +261,7 @@
         "offBody": "As conversas não são lidas. As pontuações usam apenas dados do contato e números de engajamento.",
         "needsScoring": "Ative primeiro a pontuação de leads com IA.",
         "stageLabel": "Sugerir etapas do ciclo de vida",
-        "stageBody": "Quando a conversa mostra claramente que um contato avançou, a IA sugere a próxima etapa. Uma pessoa aceita ou dispensa; nada muda sozinho, e as etapas Ganho e Perdido nunca são sugeridas.",
+        "stageBody": "Quando a conversa mostra claramente que um contato avançou, a IA escolhe a próxima etapa. A IA nunca define as etapas Ganho e Perdido. Escolha abaixo se a mudança é aplicada sozinha ou espera por uma pessoa.",
         "masked": {
           "title": "Como os dados pessoais são mascarados",
           "phone": "Os números de telefone mantêm apenas o primeiro dígito e os dois últimos (+91 ***** ***10)",
@@ -281,6 +281,17 @@
           "body": "Depois de ativado, as mensagens recentes de um contato são enviadas a um provedor de IA por meio do OpenRouter quando o chat fica em silêncio. Telefones, e-mails, números de cartão e nomes são parcialmente mascarados antes, então o que é enviado não serve para contatar a pessoa. Você pode desativar a qualquer momento.",
           "yes": "Ativar",
           "no": "Cancelar"
+        },
+        "stageMode": {
+          "title": "Como a etapa é alterada",
+          "auto": {
+            "label": "Automático",
+            "body": "O contato é movido na hora e a conversa mostra uma linha com Desfazer."
+          },
+          "manual": {
+            "label": "Manual",
+            "body": "A sugestão fica em Sugestões de etapa até uma pessoa aceitar ou dispensar."
+          }
         }
       }
     },
