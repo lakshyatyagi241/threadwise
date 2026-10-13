@@ -1,7 +1,9 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { InfiniteData } from '@tanstack/react-query';
 import type { MessageListResponse, SetConversationStatusInput } from '@crm/contracts';
+import * as Crypto from 'expo-crypto';
 import {
+  assignConversation,
   fetchConversation,
   fetchConversations,
   fetchMessages,
@@ -10,6 +12,7 @@ import {
   sendTextMessage,
   setConversationStatus,
 } from './api';
+import type { AssignInput } from './api';
 import type { InboxFilters } from './filters';
 import { withMessage } from './thread-model';
 
@@ -72,6 +75,15 @@ export function useSetStatus(id: string) {
   const refresh = useRefreshInbox(id);
   return useMutation({
     mutationFn: (input: SetConversationStatusInput) => setConversationStatus(id, input),
+    // Success and conflict both leave the screen holding a stale row version; reading again is right either way.
+    onSettled: refresh,
+  });
+}
+
+export function useAssign(id: string) {
+  const refresh = useRefreshInbox(id);
+  return useMutation({
+    mutationFn: (input: AssignInput) => assignConversation(id, input, Crypto.randomUUID()),
     // Success and conflict both leave the screen holding a stale row version; reading again is right either way.
     onSettled: refresh,
   });

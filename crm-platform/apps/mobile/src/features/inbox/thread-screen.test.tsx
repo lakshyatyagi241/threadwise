@@ -17,9 +17,11 @@ import {
 import { renderApp } from '@/test/render';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
+import * as labels from './labels-api';
 import { ThreadScreen } from './thread-screen';
 
 jest.mock('./api');
+jest.mock('./labels-api');
 jest.mock('@/lib/session/api');
 jest.mock('expo-router', () => {
   const { useEffect } = jest.requireActual<typeof import('react')>('react');
@@ -38,6 +40,11 @@ const sendCall = jest.mocked(api.sendTextMessage);
 const readCall = jest.mocked(api.markConversationRead);
 const statusCall = jest.mocked(api.setConversationStatus);
 const retryCall = jest.mocked(api.retryMessage);
+const assignCall = jest.mocked(api.assignConversation);
+const tagsCall = jest.mocked(labels.fetchAllTags);
+const contactTagsCall = jest.mocked(labels.fetchContactTags);
+const attachCall = jest.mocked(labels.attachContactTag);
+const detachCall = jest.mocked(labels.detachContactTag);
 const back = jest.fn();
 
 let client: QueryClient | undefined;
@@ -95,12 +102,14 @@ afterEach(async () => {
 });
 
 describe('ThreadScreen', () => {
-  it('shows the conversation title, its status and the messages on the right side', async () => {
+  it('shows who the conversation is with, its channel and the messages on the right side', async () => {
     arrange();
     await show();
     await loaded();
     expect(screen.getByRole('header', { name: 'Rohan Mehta' })).toBeTruthy();
-    expect(screen.getAllByText('Open').length).toBeGreaterThan(0);
+    // The channel is named by its kind; an open conversation does not repeat "Open" (a thread in any other status says so).
+    expect(screen.getByText('WhatsApp')).toBeTruthy();
+    expect(screen.queryByText('Open')).toBeNull();
     expect(screen.getByText('Hello there')).toBeTruthy();
     expect(screen.getByLabelText(/^Received: Hello there/)).toBeTruthy();
     expect(screen.getByLabelText(/^Sent by you: Hi Rohan, .*, Sent$/)).toBeTruthy();
@@ -346,5 +355,315 @@ describe('ThreadScreen', () => {
     expect(await screen.findByText('This conversation is no longer available.')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     await loaded();
+  });
+});
+
+// --- the Geta-style header, menu, bot bar and labels ---------------------------------------------------------------------------
+
+const ME = inboxSession.user.id;
+const OTHER_USER = '22222222-2222-4222-8222-222222222222';
+const AI_AGENT = '77777777-7777-4777-8777-777777777777';
+const CONTACT_ID = '88888888-8888-4888-8888-888888888888';
+const BASE = ['inbox.conversation.read', 'inbox.conversation.reply', 'inbox.conversation.resolve'];
+const as = (...extra: string[]) =>
+  sessionCall.mockResolvedValue(withPermissions([...BASE, ...extra]));
+const assigned = (id: string) => ({ user: { id, name: 'Someone' }, team: null, aiAgent: null });
+const minutesAhead = (minutes: number) =>
+  new Date(Date.now() + minutes * 60_000 + 30_000).toISOString();
+const tag = (id: string, name: string) => ({
+  id,
+  name,
+  color: null,
+  rowVersion: 1,
+  createdAt: '2026-09-01T08:00:00.000Z',
+  updatedAt: '2026-09-01T08:00:00.000Z',
+});
+const VIP = tag('aaaaaaaa-0000-4000-8000-000000000001', 'VIP');
+const COLD = tag('aaaaaaaa-0000-4000-8000-000000000002', 'Cold');
+
+describe('ThreadScreen: the header', () => {
+  it('shows the reply window as a ring with the time left, and says it to a screen reader', async () => {
+    arrange({ detail: detail({ window: { open: true, expiresAt: minutesAhead(99) } }) });
+    await show();
+    await loaded();
+    expect(screen.getByText('1:39')).toBeTruthy();
+    expect(screen.getByLabelText('Reply window: 1 h 39 min left')).toBeTruthy();
+    // 99 minutes of 24 hours: a few of the 48 bars are lit.
+    expect(screen.getAllByTestId('timer-tick-on')).toHaveLength(4);
+  });
+
+  it('shows an empty ring and says so when the window has closed', async () => {
+    const past = new Date(Date.now() - 3_600_000).toISOString();
+    arrange({ detail: detail({ window: { open: false, expiresAt: past } }) });
+    await show();
+    await loaded();
+    expect(screen.getByText('0:00')).toBeTruthy();
+    expect(screen.getByLabelText('Reply window closed')).toBeTruthy();
+    expect(screen.queryAllByTestId('timer-tick-on')).toHaveLength(0);
+  });
+
+  it('draws no timer for a channel with no reply window', async () => {
+    arrange({ detail: detail({ window: { open: true, expiresAt: null } }) });
+    await show();
+    await loaded();
+    expect(screen.queryByText(/^\d+:\d\d$/)).toBeNull();
+  });
+
+  it('says so in the header when the conversation is not open', async () => {
+    arrange({ detail: detail({ status: 'pending' }) });
+    await show();
+    await loaded();
+    expect(screen.getByText('Pending')).toBeTruthy();
+  });
+});
+
+describe('ThreadScreen: the three dots', () => {
+  const dots = () => screen.findByRole('button', { name: 'More actions' });
+  const choose = async (name: string) =>
+    await fireEvent.press(await screen.findByRole('menuitem', { name }));
+
+  it('lists what can be done with the conversation, for what the person may do', async () => {
+    as('inbox.conversation.assign');
+    arrange({ detail: detail({ assignment: assigned(OTHER_USER) }) });
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    for (const name of ['Assign to me', 'Unassign', 'Mark as pending', 'Close conversation']) {
+      expect(await screen.findByRole('menuitem', { name })).toBeTruthy();
+    }
+  });
+
+  it('claims the conversation for the person, with the row version it read', async () => {
+    as('inbox.conversation.assign_self');
+    arrange({ detail: detail({ assignment: assigned(OTHER_USER) }) });
+    assignCall.mockResolvedValue(summary({ rowVersion: 5 }));
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    // A person who may only claim is not offered "Unassign".
+    expect(screen.queryByRole('menuitem', { name: 'Unassign' })).toBeNull();
+    await choose('Assign to me');
+    await waitFor(() =>
+      expect(assignCall).toHaveBeenCalledWith(
+        CONVERSATION_ID,
+        { rowVersion: 4, userId: ME },
+        expect.any(String),
+      ),
+    );
+  });
+
+  it('takes the conversation from the person who has it', async () => {
+    as('inbox.conversation.assign');
+    arrange({ detail: detail({ assignment: assigned(ME) }) });
+    assignCall.mockResolvedValue(summary({ rowVersion: 5 }));
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    expect(screen.queryByRole('menuitem', { name: 'Assign to me' })).toBeNull();
+    await choose('Unassign');
+    await waitFor(() =>
+      expect(assignCall).toHaveBeenCalledWith(
+        CONVERSATION_ID,
+        { rowVersion: 4, userId: null },
+        expect.any(String),
+      ),
+    );
+  });
+
+  it('parks the conversation as pending, and closes it', async () => {
+    as();
+    arrange();
+    statusCall.mockResolvedValue(summary({ status: 'pending', rowVersion: 5 }));
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    await choose('Mark as pending');
+    await waitFor(() =>
+      expect(statusCall).toHaveBeenCalledWith(CONVERSATION_ID, {
+        rowVersion: 4,
+        status: 'pending',
+      }),
+    );
+    await fireEvent.press(await dots());
+    await choose('Close conversation');
+    await waitFor(() =>
+      expect(statusCall).toHaveBeenLastCalledWith(CONVERSATION_ID, {
+        rowVersion: 4,
+        status: 'closed',
+      }),
+    );
+  });
+
+  it('says why a change was refused', async () => {
+    as();
+    arrange();
+    statusCall.mockRejectedValue(new ApiError(409, 'ROW_VERSION_CONFLICT', 'stale'));
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    await choose('Close conversation');
+    expect(await screen.findByText(/Someone else changed this conversation/)).toBeTruthy();
+  });
+
+  it('has no three dots for a person who may neither assign nor resolve', async () => {
+    sessionCall.mockResolvedValue(
+      withPermissions(['inbox.conversation.read', 'inbox.conversation.reply']),
+    );
+    arrange();
+    await show();
+    await loaded();
+    expect(screen.queryByRole('button', { name: 'More actions' })).toBeNull();
+  });
+});
+
+describe('ThreadScreen: a conversation an AI agent has', () => {
+  const bot = { user: null, team: null, aiAgent: { id: AI_AGENT, name: 'Sales bot' } };
+
+  it('says it is a bot conversation in place of the message box, and offers to take it over', async () => {
+    as('inbox.conversation.assign_self');
+    arrange({ detail: detail({ assignment: bot }) });
+    assignCall.mockResolvedValue(summary({ rowVersion: 5 }));
+    await show();
+    await loaded();
+    expect(await screen.findByText('This is a bot conversation.')).toBeTruthy();
+    expect(screen.queryByLabelText('Message')).toBeNull();
+    // Taking it over: the box comes back once a person has the conversation.
+    detailCall.mockResolvedValue(
+      detail({ assignment: { ...bot, user: { id: ME, name: 'Asha Verma' } }, rowVersion: 5 }),
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Assign to yourself' }));
+    await waitFor(() =>
+      expect(assignCall).toHaveBeenCalledWith(
+        CONVERSATION_ID,
+        { rowVersion: 4, userId: ME },
+        expect.any(String),
+      ),
+    );
+    expect(await screen.findByLabelText('Message')).toBeTruthy();
+    expect(screen.queryByText('This is a bot conversation.')).toBeNull();
+  });
+
+  it('only says so, with no button, to a person who may not take conversations', async () => {
+    as();
+    arrange({ detail: detail({ assignment: bot }) });
+    await show();
+    await loaded();
+    expect(await screen.findByText('This is a bot conversation.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Assign to yourself' })).toBeNull();
+    expect(screen.queryByLabelText('Message')).toBeNull();
+  });
+
+  it('keeps the message box for a conversation nobody and no bot has', async () => {
+    as('inbox.conversation.assign_self');
+    arrange();
+    await show();
+    await loaded();
+    expect(screen.getByLabelText('Message')).toBeTruthy();
+    expect(screen.queryByText('This is a bot conversation.')).toBeNull();
+  });
+});
+
+describe('ThreadScreen: labels', () => {
+  const withContact = () => detail({ contact: { id: CONTACT_ID, name: 'Rohan Mehta' } });
+  const open = async () =>
+    await fireEvent.press(await screen.findByRole('button', { name: 'Assign labels' }));
+
+  beforeEach(() => {
+    tagsCall.mockResolvedValue([VIP, COLD]);
+    contactTagsCall.mockResolvedValue([VIP]);
+  });
+
+  it('is offered for a conversation with a contact, to a person who may change contacts and read tags', async () => {
+    as('record.contacts.update', 'record.tags.read');
+    arrange({ detail: withContact() });
+    await show();
+    await loaded();
+    expect(await screen.findByRole('button', { name: 'Assign labels' })).toBeTruthy();
+    // Nothing is asked of the API until the sheet opens.
+    expect(tagsCall).not.toHaveBeenCalled();
+  });
+
+  it('is not offered without a contact, or without the permissions', async () => {
+    as('record.contacts.update', 'record.tags.read');
+    arrange();
+    await show();
+    await loaded();
+    expect(screen.queryByRole('button', { name: 'Assign labels' })).toBeNull();
+  });
+
+  it('is not offered to a person who may only read contacts', async () => {
+    as('record.tags.read');
+    arrange({ detail: withContact() });
+    await show();
+    await loaded();
+    expect(screen.queryByRole('button', { name: 'Assign labels' })).toBeNull();
+  });
+
+  it('ticks the labels the contact has, and puts one on or takes one off', async () => {
+    as('record.contacts.update', 'record.tags.read');
+    arrange({ detail: withContact() });
+    attachCall.mockResolvedValue(COLD);
+    detachCall.mockResolvedValue(undefined as never);
+    await show();
+    await loaded();
+    await open();
+    const vip = await screen.findByRole('checkbox', { name: 'VIP' });
+    expect(vip.props.accessibilityState.checked).toBe(true);
+    expect(screen.getByRole('checkbox', { name: 'Cold' }).props.accessibilityState.checked).toBe(
+      false,
+    );
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'Cold' }));
+    await waitFor(() =>
+      expect(attachCall).toHaveBeenCalledWith(CONTACT_ID, { tagId: COLD.id }, expect.any(String)),
+    );
+    await fireEvent.press(screen.getByRole('checkbox', { name: 'VIP' }));
+    await waitFor(() => expect(detachCall).toHaveBeenCalledWith(CONTACT_ID, VIP.id));
+  });
+
+  it('makes a new label from a name, for a person who may create labels', async () => {
+    as('record.contacts.update', 'record.tags.read', 'record.tags.create');
+    arrange({ detail: withContact() });
+    attachCall.mockResolvedValue(tag('aaaaaaaa-0000-4000-8000-000000000003', 'Hot'));
+    await show();
+    await loaded();
+    await open();
+    await fireEvent.changeText(await screen.findByLabelText('New label'), '  Hot ');
+    await fireEvent.press(screen.getByRole('button', { name: 'Add' }));
+    await waitFor(() =>
+      expect(attachCall).toHaveBeenCalledWith(CONTACT_ID, { name: 'Hot' }, expect.any(String)),
+    );
+  });
+
+  it('has no box for a new label without the permission to create one', async () => {
+    as('record.contacts.update', 'record.tags.read');
+    arrange({ detail: withContact() });
+    await show();
+    await loaded();
+    await open();
+    await screen.findByRole('checkbox', { name: 'VIP' });
+    expect(screen.queryByLabelText('New label')).toBeNull();
+  });
+
+  it('says so when a label could not be changed', async () => {
+    as('record.contacts.update', 'record.tags.read');
+    arrange({ detail: withContact() });
+    attachCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    await show();
+    await loaded();
+    await open();
+    await fireEvent.press(await screen.findByRole('checkbox', { name: 'Cold' }));
+    expect(await screen.findByText("Couldn't change the labels. Try again.")).toBeTruthy();
+  });
+
+  it('says when the labels could not be loaded, and loads them on retry', async () => {
+    as('record.contacts.update', 'record.tags.read');
+    arrange({ detail: withContact() });
+    tagsCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    await show();
+    await loaded();
+    await open();
+    expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+    expect(await screen.findByRole('checkbox', { name: 'VIP' })).toBeTruthy();
   });
 });

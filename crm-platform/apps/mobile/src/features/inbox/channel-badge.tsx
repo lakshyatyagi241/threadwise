@@ -18,6 +18,10 @@ const BADGES: Readonly<Record<string, { icon: IconName; color: keyof ThemeColors
 /** A channel kind this app has not heard of still gets a mark. */
 const FALLBACK = { icon: 'chatbubble', color: 'textMuted' } as const;
 
+/** The glyph and theme colour of a channel kind (a kind this app has not heard of gets a neutral chat bubble). */
+export const channelMark = (kind: string): { icon: IconName; color: keyof ThemeColors } =>
+  BADGES[kind] ?? FALLBACK;
+
 /**
  * The small round mark on the corner of an avatar that says which channel a conversation came in on (WhatsApp, web chat...). It is
  * decorative: the channel is named in the thread itself, and the row already has its own spoken label. `ring` is the colour of
@@ -25,7 +29,7 @@ const FALLBACK = { icon: 'chatbubble', color: 'textMuted' } as const;
  */
 export function ChannelBadge({ kind, ring }: { kind: string; ring: keyof ThemeColors }) {
   const { colors } = useTheme();
-  const badge = BADGES[kind] ?? FALLBACK;
+  const badge = channelMark(kind);
   return (
     <View
       testID="channel-badge"

@@ -1,4 +1,5 @@
 import {
+  assignConversationResponseSchema,
   conversationListResponseSchema,
   conversationSummarySchema,
   inboxConversationDetailSchema,
@@ -73,4 +74,23 @@ export const retryMessage = (messageId: string) =>
   apiFetch(`/v2/inbox/messages/${messageId}/retry`, {
     method: 'POST',
     schema: messageResponseSchema,
+  });
+
+/** What an assignment sends: the version that was read, and who gets the conversation (`null` takes it from them). */
+export interface AssignInput {
+  rowVersion: number;
+  userId?: string | null;
+  teamId?: string | null;
+}
+
+/**
+ * Gives the conversation to someone, or to no one with `userId: null`. A person's own id is a claim, which is all that
+ * `inbox.conversation.assign_self` allows. A stale `rowVersion` is 409 ROW_VERSION_CONFLICT.
+ */
+export const assignConversation = (id: string, input: AssignInput, idempotencyKey?: string) =>
+  apiFetch(`/v2/inbox/conversations/${id}/assign`, {
+    method: 'POST',
+    body: input,
+    schema: assignConversationResponseSchema,
+    idempotencyKey,
   });

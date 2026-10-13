@@ -506,13 +506,41 @@
       "reopen": "Reopen",
       "windowClosed": "The 24-hour reply window is closed. Send a template instead.",
       "conflict": "Someone else changed this conversation. The latest version is loaded, please try again.",
-      "statusInvalid": "This conversation can't be moved to that status."
+      "statusInvalid": "This conversation can't be moved to that status.",
+      "window": {
+        "left": "Reply window: {{hours}} h {{minutes}} min left",
+        "closed": "Reply window closed"
+      },
+      "menu": {
+        "open": "More actions",
+        "close": "Close menu",
+        "assignToMe": "Assign to me",
+        "unassign": "Unassign",
+        "pending": "Mark as pending",
+        "closeConversation": "Close conversation"
+      },
+      "bot": {
+        "notice": "This is a bot conversation.",
+        "assignSelf": "Assign to yourself"
+      },
+      "labels": {
+        "open": "Assign labels",
+        "title": "Assign labels",
+        "close": "Close",
+        "empty": "There are no labels yet.",
+        "emptyCreate": "There are no labels yet. Type a name below to make one.",
+        "newLabel": "New label",
+        "add": "Add",
+        "failed": "Couldn't change the labels. Try again."
+      }
     },
     "message": {
       "labelIn": "Received: {{text}}, {{time}}",
       "labelOut": "Sent by you: {{text}}, {{time}}, {{status}}",
       "deleted": "This message was deleted",
-      "retry": "Retry sending"
+      "retry": "Retry sending",
+      "mediaPending": "The file is still being downloaded.",
+      "mediaFailed": "The file couldn't be downloaded."
     },
     "kind": {
       "text": "Message",
@@ -549,6 +577,14 @@
       "planLimit": "Your plan's message limit has been reached.",
       "forbidden": "You don't have permission to do that.",
       "notFound": "This conversation is no longer available."
+    },
+    "channel": {
+      "whatsapp": "WhatsApp",
+      "webchat": "Web chat",
+      "telegram": "Telegram",
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "simulator": "Simulator"
     }
   },
   "contacts": {

@@ -1,27 +1,43 @@
-import { canMoveConversationStatus, ERROR_CODES, type ConversationStatus } from '@crm/contracts';
+import {
+  canMoveConversationStatus,
+  ERROR_CODES,
+  type ConversationStatus,
+  type SetConversationStatusInput,
+} from '@crm/contracts';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import * as Crypto from 'expo-crypto';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, FlatList, KeyboardAvoidingView, StyleSheet, View } from 'react-native';
-import { Avatar } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import {
+  ActivityIndicator,
+  FlatList,
+  KeyboardAvoidingView,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
-import { HeaderIconButton, ScreenHeader } from '@/components/ui/screen-header';
+import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { isApiError } from '@/lib/api';
 import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { BotBar } from './bot-bar';
 import { Composer } from './composer';
+import { LabelsSheet } from './labels-sheet';
 import { Bubble, MessageBubble } from './message-bubble';
-import { STATUS_TONE } from './status';
+import { isBotConversation, menuActionsFor, type MenuAction } from './thread-actions';
 import { sendErrorMessage } from './thread-errors';
+import { ThreadHeader } from './thread-header';
+import type { ThreadMenuItem } from './thread-menu';
 import { flattenMessages, REFUSED_SEND_CODES, type PendingMessage } from './thread-model';
+import { useNow } from './use-now';
 import {
+  useAssign,
   useConversationDetail,
   useMarkRead,
   useRetryMessage,
@@ -39,8 +55,10 @@ const nextStatus = (from: ConversationStatus): 'resolved' | 'open' =>
   from === 'resolved' || from === 'closed' || from === 'spam' ? 'open' : 'resolved';
 
 /**
- * One conversation (route /conversation/[id]): the messages, a box to answer, and resolve or reopen in the header. Opening the
- * thread marks it read. While the screen is in front it asks for news every 15 seconds (realtime replaces that later).
+ * One conversation (route /conversation/[id]): the header (who, which channel, the reply-window timer, resolve or reopen, and the
+ * three dots), the labels button, the messages, and a box to answer. While an AI agent has the conversation the box is replaced by
+ * a bar that offers to take it over. Opening the thread marks it read. While the screen is in front it asks for news every 15
+ * seconds (realtime replaces that later).
  */
 export function ThreadScreen() {
   const { t } = useTranslation();
@@ -53,6 +71,14 @@ export function ThreadScreen() {
   const canRead = can(session.data, 'inbox.conversation.read');
   const canReply = can(session.data, 'inbox.conversation.reply');
   const canResolve = can(session.data, 'inbox.conversation.resolve');
+  const canAssign = can(session.data, 'inbox.conversation.assign');
+  const canAssignSelf = can(session.data, 'inbox.conversation.assign_self');
+  // Labels are the contact's tags: the person must be able to read tags and to change the contact.
+  const canLabel =
+    can(session.data, 'record.contacts.update') && can(session.data, 'record.tags.read');
+  const canMakeLabels = can(session.data, 'record.tags.create');
+  const meId = session.data?.user.id ?? '';
+  const now = useNow(30_000);
 
   const [focused, setFocused] = useState(true);
   useFocusEffect(
@@ -67,11 +93,13 @@ export function ThreadScreen() {
   const send = useSendMessage(id);
   const retry = useRetryMessage(id);
   const setStatus = useSetStatus(id);
+  const assign = useAssign(id);
   const markRead = useMarkRead(id);
 
   const [draft, setDraft] = useState('');
   const [pending, setPending] = useState<PendingMessage[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
+  const [labelsOpen, setLabelsOpen] = useState(false);
 
   const messages = useMemo(() => flattenMessages(thread.data), [thread.data]);
   const lastSeq = messages.at(-1)?.seq ?? 0;
@@ -139,21 +167,27 @@ export function ThreadScreen() {
     void attempt(item.clientMessageId, item.body);
   };
 
-  const changeStatus = async () => {
-    if (!conversation) return;
+  /** Runs a change to the conversation; the hook reads it again either way, so the next press carries the current row version. */
+  const change = async (action: () => Promise<unknown>) => {
     setNotice(null);
     try {
-      await setStatus.mutateAsync({
-        rowVersion: conversation.rowVersion,
-        status: nextStatus(conversation.status),
-      });
+      await action();
     } catch (error) {
-      // The hook reads the conversation again either way, so the next press carries the current row version.
       setNotice(
         isApiError(error) && error.code === ERROR_CODES.ROW_VERSION_CONFLICT
           ? t('inbox.thread.conflict')
           : sendErrorMessage(error, t),
       );
+    }
+  };
+  const moveTo = (status: SetConversationStatusInput['status']) => {
+    if (conversation) {
+      void change(() => setStatus.mutateAsync({ rowVersion: conversation.rowVersion, status }));
+    }
+  };
+  const assignTo = (userId: string | null) => {
+    if (conversation) {
+      void change(() => assign.mutateAsync({ rowVersion: conversation.rowVersion, userId }));
     }
   };
 
@@ -168,40 +202,63 @@ export function ThreadScreen() {
     if (thread.hasNextPage && !thread.isFetchingNextPage) void thread.fetchNextPage();
   };
 
+  const MENU_ITEM: Record<
+    MenuAction,
+    Omit<ThreadMenuItem, 'key' | 'onPress'> & { run: () => void }
+  > = {
+    assignToMe: {
+      label: t('inbox.thread.menu.assignToMe'),
+      icon: 'person-add-outline',
+      run: () => assignTo(meId),
+    },
+    unassign: {
+      label: t('inbox.thread.menu.unassign'),
+      icon: 'person-remove-outline',
+      run: () => assignTo(null),
+    },
+    pending: {
+      label: t('inbox.thread.menu.pending'),
+      icon: 'time-outline',
+      run: () => moveTo('pending'),
+    },
+    close: {
+      label: t('inbox.thread.menu.closeConversation'),
+      icon: 'lock-closed-outline',
+      run: () => moveTo('closed'),
+    },
+  };
+  const menuItems: ThreadMenuItem[] = conversation
+    ? menuActionsFor({
+        status: conversation.status,
+        assignment: conversation.assignment,
+        meId,
+        canAssign,
+        canAssignSelf,
+        canResolve,
+      }).map((action) => ({
+        key: action,
+        label: MENU_ITEM[action].label,
+        icon: MENU_ITEM[action].icon,
+        onPress: MENU_ITEM[action].run,
+      }))
+    : [];
+
   const header = (
-    <ScreenHeader
-      actions={
-        showStatusAction && target ? (
-          <HeaderIconButton
-            icon={target === 'resolved' ? 'checkmark-circle-outline' : 'refresh-outline'}
-            label={target === 'resolved' ? t('inbox.thread.resolve') : t('inbox.thread.reopen')}
-            onPress={() => void changeStatus()}
-          />
-        ) : undefined
+    <ThreadHeader
+      conversation={conversation}
+      now={now}
+      onBack={() => router.back()}
+      primary={
+        showStatusAction && target
+          ? {
+              icon: target === 'resolved' ? 'checkmark-circle-outline' : 'refresh-outline',
+              label: target === 'resolved' ? t('inbox.thread.resolve') : t('inbox.thread.reopen'),
+              onPress: () => moveTo(target),
+            }
+          : null
       }
-    >
-      <View style={styles.titleRow}>
-        <HeaderIconButton
-          icon="arrow-back"
-          label={t('common.back')}
-          onPress={() => router.back()}
-        />
-        {conversation ? (
-          <>
-            <Avatar name={conversation.title} seed={conversation.id} size={36} />
-            <View style={styles.titleText}>
-              <Text variant="subheading" numberOfLines={1} accessibilityRole="header">
-                {conversation.title}
-              </Text>
-              <Badge
-                label={t(`inbox.status.${conversation.status}`)}
-                tone={STATUS_TONE[conversation.status]}
-              />
-            </View>
-          </>
-        ) : null}
-      </View>
-    </ScreenHeader>
+      menu={menuItems}
+    />
   );
 
   const body = () => {
@@ -315,9 +372,39 @@ export function ThreadScreen() {
           <Banner tone="danger" message={notice} />
         </View>
       ) : null}
+      {canLabel && conversation?.contact ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('inbox.thread.labels.open')}
+          onPress={() => setLabelsOpen(true)}
+          style={[
+            styles.strip,
+            { backgroundColor: colors.surface, borderBottomColor: colors.border },
+          ]}
+        >
+          <Icon name="pricetag-outline" size={20} color="primary" />
+          <Text variant="label">{t('inbox.thread.labels.open')}</Text>
+        </Pressable>
+      ) : null}
       <View style={styles.screen}>{body()}</View>
-      {canRead && canReply && conversation ? (
-        <Composer value={draft} onChange={setDraft} onSend={onSend} closed={windowClosed} />
+      {canRead && conversation ? (
+        isBotConversation(conversation.assignment) ? (
+          <BotBar
+            canAssign={canAssign || canAssignSelf}
+            assigning={assign.isPending}
+            onAssign={() => assignTo(meId)}
+          />
+        ) : canReply ? (
+          <Composer value={draft} onChange={setDraft} onSend={onSend} closed={windowClosed} />
+        ) : null
+      ) : null}
+      {conversation?.contact ? (
+        <LabelsSheet
+          visible={labelsOpen}
+          contactId={conversation.contact.id}
+          canCreate={canMakeLabels}
+          onClose={() => setLabelsOpen(false)}
+        />
       ) : null}
     </KeyboardAvoidingView>
   );
@@ -326,8 +413,14 @@ export function ThreadScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   pad: { padding: spacing.sm },
-  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  titleText: { flex: 1, gap: 2, alignItems: 'flex-start' },
+  strip: {
+    minHeight: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
   messages: { paddingVertical: spacing.sm },
   flip: { transform: [{ scaleY: -1 }] },
 });
