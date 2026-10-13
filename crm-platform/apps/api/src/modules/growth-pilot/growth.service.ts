@@ -29,10 +29,10 @@ import {
 import { AuditService } from '../../kernel/audit/audit.service';
 import { CampaignsRepository } from '../campaigns';
 import { ContactGroupsService, ContactsService } from '../crm';
+import { LeadStageLineService } from '../lead-scoring';
 import { auc } from './growth.rules';
 import { GrowthGateService, type GrowthContext } from './growth-gate.service';
 import { GrowthRepository } from './growth.repository';
-import { GrowthStageLineService } from './growth-stage-line.service';
 import {
   applyConfigPatch,
   buildPropensity,
@@ -77,7 +77,7 @@ export class GrowthService {
     private readonly audit: AuditService,
     private readonly groups: ContactGroupsService,
     private readonly contacts: ContactsService,
-    private readonly stageLines: GrowthStageLineService,
+    private readonly stageLines: LeadStageLineService,
     private readonly campaigns: CampaignsRepository,
     @Inject(GROWTH_ENRICHMENT_PORT) private readonly enrichment: GrowthEnrichmentPort,
   ) {}

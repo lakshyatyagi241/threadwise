@@ -2,12 +2,15 @@ import { Injectable, Logger } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { ContactsService } from '../crm';
-import { LeadChatDigestRepository, LeadChatDigestService } from '../lead-scoring';
+import {
+  LeadChatDigestRepository,
+  LeadChatDigestService,
+  LeadStageLineService,
+} from '../lead-scoring';
 import { InboxSystemNotes } from '../team-inbox-conversations';
 import { GrowthActionsService } from './growth-actions.service';
 import { GrowthGateService, type GrowthContext } from './growth-gate.service';
 import { GrowthRepository, type Stage } from './growth.repository';
-import { GrowthStageLineService } from './growth-stage-line.service';
 import { serviceRuleGroupName } from './growth.rules';
 
 const LIST_CAP = 25;
@@ -34,7 +37,7 @@ export class GrowthAutomationService {
     private readonly digests: LeadChatDigestService,
     private readonly digestRepo: LeadChatDigestRepository,
     private readonly systemNotes: InboxSystemNotes,
-    private readonly stageLines: GrowthStageLineService,
+    private readonly stageLines: LeadStageLineService,
   ) {}
 
   // --- the engagement stage rule: no chat needed --------------------------------------------------------------------

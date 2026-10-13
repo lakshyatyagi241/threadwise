@@ -261,7 +261,7 @@
         "offBody": "Rozmowy nie są czytane. Oceny opierają się wyłącznie na danych kontaktu i wskaźnikach zaangażowania.",
         "needsScoring": "Najpierw włącz ocenę leadów przez AI.",
         "stageLabel": "Sugeruj etapy cyklu życia",
-        "stageBody": "Gdy z rozmowy wyraźnie wynika, że kontakt przeszedł dalej, AI sugeruje kolejny etap. Osoba akceptuje lub odrzuca sugestię; nic nie zmienia się samo, a etapy Wygrany i Przegrany nigdy nie są sugerowane.",
+        "stageBody": "Gdy rozmowa wyraźnie pokazuje, że kontakt poszedł dalej, AI wybiera następny etap. AI nigdy nie ustawia etapów Wygrany i Przegrany. Wybierz poniżej, czy zmiana ma być zastosowana automatycznie, czy czekać na osobę.",
         "masked": {
           "title": "Jak maskowane są dane osobowe",
           "phone": "Numery telefonów zachowują tylko pierwszą cyfrę i dwie ostatnie (+91 ***** ***10)",
@@ -281,6 +281,17 @@
           "body": "Po włączeniu ostatnie wiadomości kontaktu są wysyłane do dostawcy AI przez OpenRouter, gdy rozmowa ucichnie. Numery telefonów, adresy e-mail, numery kart i imiona są wcześniej częściowo maskowane, więc wysyłanych danych nie można użyć do skontaktowania się z osobą. Możesz to wyłączyć w dowolnej chwili.",
           "yes": "Włącz",
           "no": "Anuluj"
+        },
+        "stageMode": {
+          "title": "Jak zmienia się etap",
+          "auto": {
+            "label": "Automatycznie",
+            "body": "Kontakt jest przenoszony od razu, a czat pokazuje wiersz z przyciskiem Cofnij."
+          },
+          "manual": {
+            "label": "Ręcznie",
+            "body": "Sugestia czeka w Sugestiach etapów, aż osoba ją zaakceptuje lub odrzuci."
+          }
         }
       }
     },

@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CONVERSATIONS_FACADE, type ConversationsFacade } from '../chat-conversations';
-import { GrowthRepository } from './growth.repository';
+import { LeadChatDigestRepository } from './lead-chat-digest.repository';
 
 export interface StageLine {
   /** The stage suggestion this line is about (its uuid): the Undo button and the "undone" line both carry it. */
@@ -21,17 +21,17 @@ export function stageLineBody(l: Pick<StageLine, 'action' | 'fromLabel' | 'toLab
 }
 
 /**
- * Tells the people in the chat that the stage moved by itself, or that someone put it back. A `system` line like the consent line:
+ * Tells the people in the chat that the stage moved by itself (the AI after reading the chat), or that someone put it back. A `system` line like the consent line:
  * it touches only the thread's preview and sequence, never the unread count, the wait clock, assignment or notifications. The stage
  * is already changed (or restored) when this runs, so a failure is logged and never undoes it.
  */
 @Injectable()
-export class GrowthStageLineService {
-  private readonly logger = new Logger(GrowthStageLineService.name);
+export class LeadStageLineService {
+  private readonly logger = new Logger(LeadStageLineService.name);
 
   constructor(
     private readonly db: DatabaseService,
-    private readonly repo: GrowthRepository,
+    private readonly repo: LeadChatDigestRepository,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 

@@ -625,21 +625,6 @@ export class GrowthRepository {
     }));
   }
 
-  /** The thread a contact's stage line goes into: the newest one-to-one conversation, as its channel and peer. */
-  async threadOf(
-    tx: Tx,
-    orgId: number,
-    contactId: number,
-  ): Promise<{ channelUuid: string; peerKey: string } | null> {
-    const res = await tx.execute(sql`
-      SELECT ch.uuid AS channel_uuid, cv.peer_key FROM conversations cv
-        JOIN channels ch ON ch.org_id = cv.org_id AND ch.id = cv.channel_id
-       WHERE cv.org_id = ${orgId} AND cv.contact_id = ${contactId} AND cv.peer_key NOT LIKE '%@g.us'
-       ORDER BY cv.last_message_at DESC NULLS LAST, cv.id DESC LIMIT 1`);
-    const r = res.rows[0] as Raw | undefined;
-    return r ? { channelUuid: String(r.channel_uuid), peerKey: String(r.peer_key) } : null;
-  }
-
   async markSuggestion(
     tx: Tx,
     orgId: number,

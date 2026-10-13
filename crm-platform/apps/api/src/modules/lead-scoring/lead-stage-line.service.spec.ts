@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { stageLineBody } from './growth-stage-line.service';
+import { stageLineBody } from './lead-stage-line.service';
 
 describe('stageLineBody', () => {
   it('says the AI moved the contact, with both stages', () => {

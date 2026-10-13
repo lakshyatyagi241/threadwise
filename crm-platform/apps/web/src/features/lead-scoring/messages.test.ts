@@ -70,6 +70,7 @@ const DYNAMIC = [
   `${ROOT}.settings.notSent.`,
   `${ROOT}.settings.chat.masked.`,
   `${ROOT}.settings.chat.rules.`,
+  `${ROOT}.settings.chat.stageMode.`,
   `${ROOT}.insight.intent.`,
   `${ROOT}.insight.signal.`,
   `${ROOT}.settings.cost.payerBy.`,
@@ -118,6 +119,10 @@ describe('lead-scoring messages', () => {
       ...['name', 'email', 'phone', 'messages', 'messagesChat'].map((k) => `settings.notSent.${k}`),
       ...['phone', 'email', 'card', 'name'].map((k) => `settings.chat.masked.${k}`),
       ...['quiet', 'enough', 'person', 'closing'].map((k) => `settings.chat.rules.${k}`),
+      ...['auto', 'manual'].flatMap((m) => [
+        `settings.chat.stageMode.${m}.label`,
+        `settings.chat.stageMode.${m}.body`,
+      ]),
       ...LSC_INTENTS.map((k) => `insight.intent.${k}`),
       ...['askedPrice', 'readyToBuy', 'objection', 'urgent'].map((k) => `insight.signal.${k}`),
       ...['workspace', 'admin', 'none'].map((k) => `settings.cost.payerBy.${k}`),
