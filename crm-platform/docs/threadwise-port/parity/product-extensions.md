@@ -401,3 +401,20 @@ Reference's `/call-logs` is a list of the AI assistant's calls with a time range
 
 Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
 later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).
+
+## Message History: delivered, read, cost, more filters and the delivery timeline (TW-CHAT-039 to 042)
+
+Reference's `/message-history` is kept as it is (see [message-history.md](message-history.md) for the differences that fix its bugs). The project owner's brief for this screen asked for these additions, which Reference does not have:
+
+- **Delivered, Read, Delivery rate and Cost cards** under Reference's five. Delivered and read come from the receipts; the delivery rate is delivered over what left the queue; the cost is what the wallet charged for those
+  messages (`usage_charges`), per currency, shown only to a caller who may read the wallet statement.
+- **More filters:** status (queued, sent, delivered, read, failed), sent by (inbox, flow, auto-reply, AI assistant, API, broadcast, campaign, scheduled), channel, and custom dates (up to a year back). The template, campaign,
+  broadcast and scheduled-message filters exist in the API and work from the address.
+- **The delivery timeline** in the drawer: every step of the message from the delivery log (including archived days), the failure in plain words, the provider id, the cost, and links to the conversation, the contact and the
+  broadcast / campaign / scheduled message.
+- **The export honours the filters** and runs in the background (Reference exported the date range only, synchronously).
+- **A key of its own, `msg.history.read`**, instead of a workspace role, plus the inbox's record scope over which messages a person sees.
+
+Decisions for the owner: (1) whether a narrower inbox scope (`team`, `own`) should see the broadcast, campaign and scheduled recipients of what it can open (today only scope `all` sees recipient rows); (2) whether the
+Manager preset should read the cost (today only roles with `wallet.statement.read`); (3) whether the export should be limited to the caller's visible rows instead of requiring scope `all`; (4) whether campaign,
+broadcast and template screens should link to a filtered history; (5) whether `mask_customer_numbers` should become a real workspace setting (today the rule is by contact permission only).
