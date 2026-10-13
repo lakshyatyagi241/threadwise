@@ -3,7 +3,8 @@
     "nav": {
       "title": "Appels",
       "description": "Activez ou désactivez les appels WhatsApp pour chaque numéro.",
-      "keywords": "appel, appels, voix, téléphone, appels whatsapp, bouton d’appel"
+      "keywords": "appel, appels, voix, téléphone, appels whatsapp, bouton d’appel",
+      "callLogs": "Journal des appels"
     },
     "common": {
       "dismiss": "Fermer"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Vous n’avez pas l’autorisation d’utiliser les appels.",
       "PLAN_FEATURE_LOCKED": "Votre forfait n’inclut pas les appels WhatsApp.",
       "NETWORK": "Erreur réseau : veuillez réessayer.",
-      "UNEXPECTED": "Une erreur s’est produite. Veuillez réessayer."
+      "UNEXPECTED": "Une erreur s’est produite. Veuillez réessayer.",
+      "CALL_PLAYBACK_LINK_INVALID": "Ce lien d'enregistrement a expiré. Appuyez à nouveau sur lecture pour en obtenir un nouveau.",
+      "CALL_RANGE_INVALID": "Ces dates sont incohérentes : le début ne doit pas être après la fin, la période ne peut pas dépasser un an et le fuseau horaire doit être valide."
     },
     "settings": {
       "title": "Appels",

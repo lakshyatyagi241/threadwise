@@ -325,6 +325,10 @@ export const waCalls = pgTable(
       .on(t.orgId, t.startedAt.desc())
       .where(sql`${t.status} = 'ringing'`),
     index('idx_wa_calls_provider').on(t.orgId, t.provider),
+    index('idx_wa_calls_org_started_at').on(t.orgId, t.startedAt.desc(), t.id.desc()),
+    index('idx_wa_calls_handler_started_at')
+      .on(t.orgId, t.handlerUserId, t.startedAt.desc())
+      .where(sql`${t.handlerUserId} is not null`),
   ],
 );
 

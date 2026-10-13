@@ -296,3 +296,7 @@ a mapping can be fixed and the lead retried. A connector source (`kind: connecto
   (`auth/maintenance/reencrypt-secrets.ts`), the same as the other domains' sealed columns.
 - Verified: the API's own tests against a real Postgres and Redis (`apps/api/test/e2e/leads/`). Not verified: any real portal or ad platform; no
   live Meta, TikTok, LinkedIn or IndiaMART exists here, so the doors that will call this port are untested against the real thing.
+
+## Flow of a source (`defaults.flowId`)
+
+A source may name a flow (uuid, validated against the workspace, 422 `unknown_flow`). `lead.created` / `lead.updated` carry `flowId`; the flow runtime enrols the contact once (source `webhook_lead`). Test leads start nothing.

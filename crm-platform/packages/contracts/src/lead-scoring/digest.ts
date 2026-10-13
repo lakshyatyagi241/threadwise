@@ -49,6 +49,9 @@ export interface LscDigest {
   /** USD, decimal string. */
   costUsd: string;
   trigger: 'chat' | 'manual';
+  /** The language the contact writes in (ISO 639-1) and the kind of problem it reported, when the reading said. */
+  language: string | null;
+  issue: string | null;
 }
 
 export const LSC_SUGGESTION_STATUSES = [
@@ -57,6 +60,8 @@ export const LSC_SUGGESTION_STATUSES = [
   'dismissed',
   'superseded',
   'expired',
+  'auto_applied',
+  'undone',
 ] as const;
 export type LscSuggestionStatus = (typeof LSC_SUGGESTION_STATUSES)[number];
 
@@ -71,6 +76,8 @@ export interface LscSuggestion {
   confidence: number;
   reasons: string[];
   status: LscSuggestionStatus;
+  /** A reading of the chat, or the engagement rule (no chat needed). */
+  source: 'chat' | 'engagement';
   createdAt: string;
   decidedAt: string | null;
 }

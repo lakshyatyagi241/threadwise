@@ -2,12 +2,14 @@ import { createScheduleInputSchema } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import {
   audienceCount,
+  draftFromSchedule,
   firstInvalidStep,
   initialDraft,
   parseNumbers,
   serverFieldError,
   stepOfServerErrors,
   toCreateInput,
+  toUpdateInput,
   validateStep,
   type CheckContext,
   type Draft,
@@ -15,6 +17,7 @@ import {
 
 const NOW = Date.UTC(2026, 9, 10, 10, 0);
 const G1 = '11111111-1111-4111-8111-111111111111';
+const G2 = '22222222-2222-4222-8222-222222222222';
 const ctx: CheckContext = {
   now: NOW,
   options: {
@@ -22,6 +25,46 @@ const ctx: CheckContext = {
     senders: [
       { key: 'baileys:a', engine: 'baileys', label: 'Shop', phone: null, warming: false },
       { key: 'waba:b', engine: 'waba', label: 'Cloud', phone: null, warming: false },
+    ],
+    templates: [
+      {
+        id: G1,
+        name: 'cloud_ok',
+        header: null,
+        body: 'Hi',
+        footer: null,
+        category: 'marketing',
+        type: 'standard',
+        engine: 'waba',
+        language: 'en',
+        buttons: [],
+        variableMap: {},
+        attachmentType: null,
+        attachmentUrl: null,
+        senderLabel: null,
+        twilioReady: false,
+        usableOn: ['waba', 'baileys'],
+        senderKey: null,
+      },
+      {
+        id: G2,
+        name: 'text_only',
+        header: null,
+        body: 'Hi',
+        footer: null,
+        category: 'utility',
+        type: 'standard',
+        engine: 'baileys',
+        language: 'en',
+        buttons: [],
+        variableMap: {},
+        attachmentType: null,
+        attachmentUrl: null,
+        senderLabel: null,
+        twilioReady: false,
+        usableOn: ['baileys', 'twilio'],
+        senderKey: null,
+      },
     ],
   },
 };
@@ -133,15 +176,75 @@ describe('draft to request', () => {
 });
 
 describe('step checks', () => {
-  it('step 1: name, a sender, and no template on a Cloud API number', () => {
+  it('step 1: name, a sender, and a template every ticked number can send', () => {
     expect(validateStep(draft({ name: ' ', senders: [] }), 1, ctx)).toEqual({
       name: 'nameRequired',
       senders: 'senderRequired',
     });
-    expect(validateStep(draft({ messageType: 'template', senders: ['waba:b'] }), 1, ctx)).toEqual({
-      senders: 'wabaTemplate',
-    });
+    // a Cloud API number takes a template when Meta approved it, not a text-only one
+    expect(
+      validateStep(draft({ messageType: 'template', templateId: G1, senders: ['waba:b'] }), 1, ctx),
+    ).toEqual({});
+    expect(
+      validateStep(draft({ messageType: 'template', templateId: G2, senders: ['waba:b'] }), 1, ctx),
+    ).toEqual({ senders: 'templateNotForSender' });
+    expect(
+      validateStep(
+        draft({ messageType: 'template', templateId: G2, senders: ['baileys:a'] }),
+        1,
+        ctx,
+      ),
+    ).toEqual({});
     expect(validateStep(draft({ messageType: 'plain', senders: ['waba:b'] }), 1, ctx)).toEqual({});
+  });
+  it('step 3: an uploaded file is checked against the channel of every ticked number', () => {
+    const file = (size: number, kind: 'image' | 'video' = 'image', mime = 'image/png') => ({
+      id: G1,
+      name: 'a.png',
+      mime,
+      kind,
+      size,
+      url: 'https://files.test/a',
+    });
+    const big = file(6 * 1024 * 1024);
+    expect(
+      validateStep(draft({ messageType: 'media', senders: ['waba:b'], mediaFile: big }), 3, ctx),
+    ).toEqual({ media: 'mediaTooLarge' });
+    expect(
+      validateStep(draft({ messageType: 'media', senders: ['baileys:a'], mediaFile: big }), 3, ctx),
+    ).toEqual({});
+    // one Cloud API number among the ticked ones is enough to refuse it
+    expect(
+      validateStep(
+        draft({ messageType: 'media', senders: ['baileys:a', 'waba:b'], mediaFile: big }),
+        3,
+        ctx,
+      ),
+    ).toEqual({ media: 'mediaTooLarge' });
+    expect(
+      validateStep(
+        draft({
+          messageType: 'media',
+          senders: ['waba:b'],
+          mediaFile: file(1000, 'image', 'image/webp'),
+        }),
+        3,
+        ctx,
+      ),
+    ).toEqual({ media: 'mediaType' });
+    // no link needed once a file is attached
+    expect(
+      validateStep(
+        draft({ messageType: 'media', senders: ['waba:b'], mediaFile: file(1000), media: '' }),
+        3,
+        ctx,
+      ),
+    ).toEqual({});
+  });
+  it('step 4: an edit that leaves the time alone may keep a time that has already passed', () => {
+    const past = draft({ sendDate: '2026-10-10', sendTime: '09:00' });
+    expect(validateStep(past, 4, ctx)).toEqual({ sendTime: 'tooSoon' });
+    expect(validateStep(past, 4, { ...ctx, skipLead: true })).toEqual({});
   });
   it('step 2: something chosen for the source', () => {
     expect(validateStep(draft({ groupIds: [] }), 2, ctx)).toEqual({ groupIds: 'audienceRequired' });
@@ -232,5 +335,86 @@ describe('server field errors', () => {
     expect(serverFieldError(errs, 'senders')).toBe('No such sender');
     expect(serverFieldError(errs, 'name')).toBe('Too long');
     expect(serverFieldError(errs, 'media')).toBeUndefined();
+  });
+});
+
+describe('the edit request', () => {
+  const stored = {
+    id: G1,
+    rowVersion: 4,
+    name: 'Spring promo',
+    scheduleType: 'recurring' as const,
+    sendDate: '2031-03-10',
+    sendTime: '10:30',
+    timezone: 'UTC',
+    repeatInterval: 'weekly' as const,
+    repeatEvery: 2,
+    daysOfWeek: [1, 3],
+    endDate: '2031-06-01',
+    sender: 'baileys:a',
+    messageType: 'template' as const,
+    message: '',
+    templateId: G2,
+    templateOverrides: { body: ['VIP'] },
+    media: null,
+    mediaFile: null,
+    latitude: null,
+    longitude: null,
+    recipientType: 'number' as const,
+    groupIds: [],
+    tagIds: [],
+    queueIds: [],
+    numbers: ['919822000001', '919822000002'],
+    totalRecipients: 2,
+  };
+
+  it('opens a stored schedule as the composer draft and sends the same schedule back with its version', () => {
+    const d = draftFromSchedule(stored);
+    expect(d).toMatchObject({
+      senders: ['baileys:a'],
+      templateId: G2,
+      templateOverrides: { body: ['VIP'] },
+      endMode: 'date',
+      endDate: '2031-06-01',
+      numbersText: '919822000001\n919822000002',
+      repeatEvery: '2',
+    });
+    const body = toUpdateInput(d, 4);
+    expect(body).toMatchObject({
+      rowVersion: 4,
+      sender: 'baileys:a',
+      messageType: 'template',
+      templateId: G2,
+      templateOverrides: { body: ['VIP'] },
+      scheduleType: 'recurring',
+      repeatInterval: 'weekly',
+      repeatEvery: 2,
+      daysOfWeek: [1, 3],
+      endDate: '2031-06-01',
+      recipientType: 'number',
+      numbers: ['919822000001', '919822000002'],
+    });
+    // one schedule is one number, and an edit sends no test message
+    expect(body).not.toHaveProperty('senders');
+    expect(body).not.toHaveProperty('testNumber');
+  });
+
+  it('removes the end date by sending null, and sends a file by its id', () => {
+    const d = draftFromSchedule({ ...stored, endDate: null });
+    expect(toUpdateInput(d, 1).endDate).toBeNull();
+    const file = {
+      id: G1,
+      name: 'a.png',
+      mime: 'image/png',
+      kind: 'image' as const,
+      size: 10,
+      url: 'https://files.test/a',
+    };
+    const media = toUpdateInput(
+      { ...d, messageType: 'media', mediaFile: file, media: 'https://old.test/x.png' },
+      1,
+    );
+    expect(media.mediaId).toBe(G1);
+    expect(media.media).toBeUndefined();
   });
 });

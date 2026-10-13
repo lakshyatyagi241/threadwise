@@ -122,6 +122,8 @@ export interface ComposerProps {
   canAttach: boolean;
   /** A WhatsApp group thread: sending is not available yet, so the Reply tab can neither type, attach, pick a template nor send. */
   groupSendBlocked?: boolean;
+  /** Why a Cloud API group is blocked (suspended, plan, not eligible): replaces the generic "not available" line under the box. */
+  groupBlockedHint?: string;
   /** The channel sends templates and the agent may reply: the "Template" button is shown (it works with the window closed). */
   canTemplate?: boolean;
   /** Opens the template picker. */
@@ -858,7 +860,13 @@ export function Composer(props: ComposerProps) {
         data-testid={groupBlocked ? 'inbox-group-send-unavailable' : undefined}
         className="px-3 pb-2 text-[11px] text-muted-foreground"
       >
-        {groupBlocked ? t('groupSendUnavailable') : richEmail ? <EmailEditorHint /> : t('hint')}
+        {groupBlocked ? (
+          (props.groupBlockedHint ?? t('groupSendUnavailable'))
+        ) : richEmail ? (
+          <EmailEditorHint />
+        ) : (
+          t('hint')
+        )}
         {limited && !isNote && !groupBlocked && props.canAttach && (
           <>
             {' '}

@@ -11,6 +11,7 @@ export {
 export { SharedSavedRepliesReader } from './saved-replies/shared-saved-replies.reader';
 export { InboxConversationsService } from './inbox-conversations.service';
 export { InboxRealtimePublisher } from './inbox-realtime.publisher';
+export { InboxSystemNotes } from './inbox-system-notes.service';
 export {
   ConversationEventsRepository,
   type AppendEventInput,

@@ -382,3 +382,22 @@ ticked), the campaign wizard's recipient list filtered by the consent switch, an
 Reference has a flat list of quick replies with two variables. Ours is a library: server-filled variables from the open conversation (contact, agent, workspace,
 channel), an optional channel restriction and language, a duplicate action, a category filter, a plan meter with an upgrade link, and a keyboard-driven
 picker. The rules that differ from Reference are listed one by one in [team-inbox-conversations.md](team-inbox-conversations.md#saved-replies-tw-tib1-024).
+
+## Call logs: filters, totals for a selection and call analytics (TW-CALL-022, 036)
+
+Reference's `/call-logs` is a list of the AI assistant's calls with a time range, a status and an assistant filter and four totals (see
+[calling-voice.md](calling-voice.md)). This port keeps that page and adds, because the product asked for the visible half of WhatsApp calling:
+
+- **More filters.** A custom range of days (in the person's time zone), direction (inbound or outbound), the WhatsApp number, the teammate who
+  handled the call, and a search that also finds the contact's name.
+- **Totals for what the filters select.** Calls, answered, missed, average length and total minutes, under Reference's four all-time cards.
+- **A record scope on the log.** `call.logs.read` is `all`, `team` or `own` over who handled the call; the Manager preset reads its own calls.
+  Playing a recording is its own key, `call.recordings.play`, and every play is audited.
+- **Call analytics** (`/call-logs/analytics`, `GET /v2/calling/call-logs/analytics`): calls per day, the share answered, calls and handle time per
+  teammate, and a heat map of the hours of the week, counted in the person's time zone. Definitions: answered is a call that ended with talk
+  time; missed is a customer's call with none; the answered rate is over finished calls; average handle time is the talk time of answered calls
+  (wrap-up time is not recorded).
+- **A live refresh** on the existing `call.changed` push.
+
+Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
+later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).

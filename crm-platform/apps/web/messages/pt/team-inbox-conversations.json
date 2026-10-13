@@ -139,6 +139,7 @@
       "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente.",
       "groupSuspended": "A Meta suspendeu este grupo, então ele não pode receber mensagens até que a Meta o libere.",
       "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente.",
+      "groupPlanLocked": "O seu plano não inclui grupos do WhatsApp, por isso não é possível enviar mensagens a este grupo. Peça a um administrador para atualizar o plano.",
       "groupLeft": "Este número saiu do grupo, por isso não pode mais enviar mensagens nele.",
       "groupAnnounceOnly": "Somente admins podem enviar mensagens neste grupo, e este número não é admin.",
       "groupRateLimited": "Mensagens de grupo demais deste número em pouco tempo. Aguarde um minuto e tente novamente.",
@@ -214,7 +215,9 @@
       },
       "deliveryLog": "Registro de entrega",
       "groupMember": "Membro do grupo",
-      "groupTally": "Entregue a {delivered, plural, one {# membro} other {# membros}}: {billable} cobrados, {free} grátis"
+      "groupTally": "Entregue a {delivered} de {members}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
+      "groupTallyNoTotal": "Entregue a {delivered, plural, one {# membro} other {# membros}}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
+      "groupTallyBilled": "{billable} cobradas, {free} gratuitas"
     },
     "media": {
       "openImage": "Abrir imagem {name}",
@@ -665,6 +668,26 @@
         "label": "Participantes do grupo",
         "loading": "Procurando participantes",
         "none": "Nenhum participante corresponde"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "A Meta suspendeu este grupo",
+          "message": "O WhatsApp não entrega mensagens a um grupo suspenso. Pode ler a conversa e adicionar notas internas até a Meta o repor."
+        },
+        "plan": {
+          "title": "O seu plano não inclui grupos do WhatsApp",
+          "message": "Pode ler esta conversa e adicionar notas internas, mas enviar para o grupo exige um plano com grupos. Peça a um administrador para atualizar."
+        },
+        "ineligible": {
+          "title": "Este número não pode usar grupos do WhatsApp",
+          "message": "A Meta não permitiu grupos neste número na última verificação (exige uma conta comercial oficial). Pode ler a conversa e adicionar notas internas. Abra Grupos da Meta para verificar de novo."
+        }
+      },
+      "cost": {
+        "members": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. Custo estimado {cost}: o WhatsApp cobra por cada membro que a recebe.",
+        "membersNoEstimate": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. O WhatsApp cobra por cada membro que a recebe.",
+        "sizeUnknown": "O número de membros ainda não é conhecido. O WhatsApp cobra por cada membro que recebe esta mensagem.",
+        "walletShort": "A sua carteira pode não cobrir esta mensagem. Recarregue antes de enviar."
       }
     },
     "savedReplies": {

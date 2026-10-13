@@ -1,5 +1,13 @@
 # Weekly dependency updates, grouped so a week's minor and patch bumps arrive as one PR rather than thirty.
-# Majors are one PR each: they are the ones that need a person.
+#
+# MAJOR VERSIONS ARE NEVER OPENED BY DEPENDABOT (npm, docker). Two auto-merged majors (zod 3 -> 4, https-proxy-agent 7 -> 9) broke
+# main for a day: a major changes the API or the type resolution, and a green dependency PR proves nothing about that.
+# How a major is done on purpose: someone creates a branch (`chore/deps-<package>-<major>`), bumps the package by hand, fixes every
+# call site and type error in the same branch, runs the full gate (`bash .claude/skills/pre-pr/scripts/gate.sh`), and opens a
+# migration PR that a reviewer approves. Nothing here auto-merges, and no workflow in .github/workflows approves or merges a
+# Dependabot PR. (The check workflows were removed in #328 while Actions is unavailable; when they return, require a job that builds
+# @crm/contracts and runs tsc for api and web, with branch protection on main and "Allow auto-merge" off.)
+# GitHub Actions majors (checkout v6 -> v7) are the exception: they are low risk and arrive as ONE group PR (group `actions-major`, labels dependencies + ci).
 # Keep this file at the repository root: GitHub ignores it anywhere else.
 version: 2
 updates:
@@ -9,6 +17,7 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 5
+    labels: ['dependencies']
     groups:
       # The Nest framework packages share one major version; @nestjs/testing must match @nestjs/common or
       # test suites fail with "Cannot find module .../@nestjs/common/internal". They move together, majors included.
@@ -28,6 +37,9 @@ updates:
       minor-and-patch:
         update-types: [minor, patch]
     ignore:
+      # Every major, for every package (see the header). Minor and patch still arrive in the groups above.
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
       # Mobile app: the Expo SDK pins these together. They move in an SDK upgrade (docs/adr/0022), never one by one.
       - dependency-name: 'expo'
       - dependency-name: 'expo-*'
@@ -61,6 +73,13 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 3
+    labels: ['dependencies', 'ci']
+    groups:
+      actions-minor-and-patch:
+        update-types: [minor, patch]
+      # Majors of an action are one clearly labelled PR that a person reviews; never auto-merged.
+      actions-major:
+        update-types: [major]
     commit-message:
       prefix: 'chore(ci)'
 
@@ -70,6 +89,11 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    open-pull-requests-limit: 2
+    labels: ['dependencies', 'docker']
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore(deps)'
   - package-ecosystem: docker
@@ -77,5 +101,10 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    open-pull-requests-limit: 2
+    labels: ['dependencies', 'docker']
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore(deps)'

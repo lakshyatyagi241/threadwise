@@ -143,6 +143,7 @@
       "groupRateLimited": "Too many group messages from this number in a short time. Wait a minute, then try again.",
       "groupUnavailable": "WhatsApp did not accept this group message. Try again in a few minutes.",
       "walletEmpty": "Your message wallet cannot cover this group message (one charge per member). Top up and try again.",
+      "groupPlanLocked": "Your plan does not include WhatsApp Groups, so this group cannot be messaged. Ask an admin to upgrade the plan.",
       "savedReplyGone": "This saved reply no longer exists.",
       "savedReplyChannel": "This saved reply is not meant for this kind of channel.",
       "shortcutTaken": "Another saved reply already uses that shortcut.",
@@ -214,7 +215,9 @@
       },
       "deliveryLog": "Delivery log",
       "groupMember": "Group member",
-      "groupTally": "Delivered to {delivered, plural, one {# member} other {# members}}: {billable} billed, {free} free"
+      "groupTally": "Delivered to {delivered} of {members}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyNoTotal": "Delivered to {delivered, plural, one {# member} other {# members}}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyBilled": "{billable} billed, {free} free"
     },
     "media": {
       "openImage": "Open image {name}",
@@ -283,6 +286,26 @@
         "label": "Group members",
         "loading": "Looking for members",
         "none": "No member matches"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta suspended this group",
+          "message": "WhatsApp does not deliver messages to a suspended group. You can read the thread and add internal notes until Meta clears it."
+        },
+        "plan": {
+          "title": "Your plan does not include WhatsApp Groups",
+          "message": "You can read this thread and add internal notes, but sending to the group needs a plan with Groups. Ask an admin to upgrade."
+        },
+        "ineligible": {
+          "title": "This number cannot use WhatsApp Groups",
+          "message": "Meta did not allow Groups on this number when it was last checked (it needs an Official Business Account). You can read the thread and add internal notes. Open Meta Groups to check again."
+        }
+      },
+      "cost": {
+        "members": "This message goes to {count, plural, one {# member} other {# members}}. Estimated cost {cost}: WhatsApp bills each member who receives it.",
+        "membersNoEstimate": "This message goes to {count, plural, one {# member} other {# members}}. WhatsApp bills each member who receives it.",
+        "sizeUnknown": "The member count is not known yet. WhatsApp bills each member who receives this message.",
+        "walletShort": "Your wallet may not cover this message. Top up before sending."
       }
     },
     "composer": {

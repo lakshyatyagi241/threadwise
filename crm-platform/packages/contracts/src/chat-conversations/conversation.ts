@@ -149,6 +149,27 @@ export const conversationPersonalGroupSchema = z.object({
 });
 export type ConversationPersonalGroup = z.infer<typeof conversationPersonalGroupSchema>;
 
+/**
+ * A thread of a WhatsApp group on the Cloud API: what the composer needs before it lets anyone write (docs/specs/waba-groups-management.md
+ * 12 and 20, D8 and D10). `block` is why the composer is off: `suspended` (Meta suspended the group, D10), `plan` (the plan has no
+ * `waba_groups`), `ineligible` (the number was last probed as not allowed to use Groups). A wallet that cannot cover the send does NOT
+ * disable the composer: `walletShort` warns, and the API decides at send time (`WALLET_EMPTY`). `memberCount` is 0 until Meta's lifecycle
+ * webhook has filled the group row; the estimate then counts one recipient. The estimate is an upper bound (marketing rate, per member).
+ */
+export const conversationCloudGroupSchema = z.object({
+  /** The group's bare WhatsApp id (the part after `g:` in `peerKey`). */
+  groupId: z.string(),
+  subject: z.string().nullable(),
+  memberCount: z.number().int().nonnegative(),
+  suspended: z.boolean(),
+  block: z.enum(['suspended', 'plan', 'ineligible']).nullable(),
+  canSend: z.boolean(),
+  /** What one message to every member costs, hundredths of `currency`; null when it cannot be estimated. */
+  estimate: z.object({ minor: z.number().int().nonnegative(), currency: z.string() }).nullable(),
+  walletShort: z.boolean(),
+});
+export type ConversationCloudGroup = z.infer<typeof conversationCloudGroupSchema>;
+
 /** One member offered by the composer's @mention picker (`GET /inbox/conversations/:id/group-members`). */
 export const conversationGroupMemberSchema = z.object({
   /** WhatsApp's id for the member: what `mentions[].jid` of a send takes (may be a `...@lid` id). */
@@ -187,6 +208,8 @@ export const conversationDetailSchema = conversationSummarySchema.extend({
   resolvedAt: z.string().datetime().nullable(),
   /** Set only for a thread of a group on a personal number (peer key `g:<id>` on a `whatsapp_qr` channel). */
   personalGroup: conversationPersonalGroupSchema.nullable().optional(),
+  /** Set only for a thread of a group on the Cloud API (peer key `g:<id>` on a `whatsapp_cloud` channel). */
+  cloudGroup: conversationCloudGroupSchema.nullable().optional(),
   /** Placeholder for the SLA domain: the due times of the current turn. */
   sla: z.object({
     firstResponseDueAt: z.string().datetime().nullable(),

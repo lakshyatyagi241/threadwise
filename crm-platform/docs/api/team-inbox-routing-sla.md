@@ -64,3 +64,7 @@ message committed and never in a request. It reacts to the first message of a ne
 
 The write goes through `AssignmentService.assignInTx` (actor `system`, strategy `round_robin|least_busy|specific|contact_agent`, `ruleId`/`ruleName` in the timeline and outbox
 payload), then `afterCommit`, so the timeline, audit, `conversation.assigned` outbox event, realtime signals and mine/unassigned counters are those of a manual assignment.
+
+## Start a flow (`triggerFlowId`)
+
+Create and update accept `triggerFlowId` (a flow uuid of the workspace, `null` clears it); rules return `triggerFlow { id, name, isActive }`. A firing rule writes `routing.flow_requested`; the flow runtime starts the flow for the conversation (source `routing`, no subscriber, 600 s). A rule that names a flow fires even when nobody is available.

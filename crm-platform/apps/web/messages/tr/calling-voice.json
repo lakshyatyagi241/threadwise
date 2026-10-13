@@ -3,7 +3,8 @@
     "nav": {
       "title": "Arama",
       "description": "Her numara için WhatsApp aramasını açın veya kapatın.",
-      "keywords": "arama, aramalar, sesli, telefon, whatsapp araması, arama düğmesi"
+      "keywords": "arama, aramalar, sesli, telefon, whatsapp araması, arama düğmesi",
+      "callLogs": "Çağrı kayıtları"
     },
     "common": {
       "dismiss": "Kapat"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Aramayı kullanma izniniz yok.",
       "PLAN_FEATURE_LOCKED": "Planınız WhatsApp aramasını içermiyor.",
       "NETWORK": "Ağ hatası - lütfen tekrar deneyin.",
-      "UNEXPECTED": "Bir şeyler ters gitti. Lütfen tekrar deneyin."
+      "UNEXPECTED": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+      "CALL_PLAYBACK_LINK_INVALID": "Bu kayıt bağlantısının süresi doldu. Yeni bir bağlantı almak için tekrar oynat'a basın.",
+      "CALL_RANGE_INVALID": "Bu tarihler geçerli değil: başlangıç bitişten sonra olamaz, aralık en fazla bir yıl olabilir ve saat dilimi geçerli bir dilim olmalıdır."
     },
     "settings": {
       "title": "Arama",

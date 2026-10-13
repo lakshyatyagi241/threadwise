@@ -18,6 +18,7 @@ export class FixtureLeadScoringAiAdapter implements LeadScoringAiPort {
   async complete(req: LeadScoreRequest): Promise<LeadScoreCompletion> {
     this.requests.push(req);
     if (req.system.includes('conversation reader')) return this.digest(req);
+    if (req.system.includes('campaign planner')) return this.plan(req);
     let h = 0;
     for (const ch of req.user) h = (h * 31 + ch.charCodeAt(0)) % 41;
     const won = /"dealsWon":\s*[1-9]/.test(req.user);
@@ -72,6 +73,36 @@ export class FixtureLeadScoringAiAdapter implements LeadScoringAiPort {
       suggestedStage: wants && offered.length > 0 ? offered[0] : null,
       confidence: wants ? 0.82 : 0.2,
       evidence,
+      language: /\b(kitna|hai|nahi|aap|chahiye)\b/.test(said) ? 'hi' : 'en',
+      issue: /\b(no|not|didn't|did not)\b.{0,30}\bconfirmation\b/.test(said)
+        ? 'missing_confirmation'
+        : 'none',
+    });
+    const promptTokens = Math.ceil((req.system.length + req.user.length) / 4);
+    const completionTokens = Math.ceil(text.length / 4);
+    return {
+      text,
+      promptTokens,
+      completionTokens,
+      costUsd: (promptTokens * 0.1 + completionTokens * 0.5) / 1_000_000,
+    };
+  }
+
+  /** The campaign planner: the audience listed first and the template with the best real reply rate (else the first). */
+  private plan(req: LeadScoreRequest): LeadScoreCompletion {
+    const u = JSON.parse(req.user) as {
+      audiences: Array<{ id: string }>;
+      templates: Array<{ id: string; replyRate24hPercent: number | null }>;
+    };
+    const best = [...u.templates].sort(
+      (a, b) => (b.replyRate24hPercent ?? -1) - (a.replyRate24hPercent ?? -1),
+    )[0];
+    const text = JSON.stringify({
+      audienceId: u.audiences[0]?.id,
+      templateId: best?.id,
+      sendHour: 9,
+      subject: 'Fixture campaign',
+      reasons: ['Largest audience', 'Best real reply rate'],
     });
     const promptTokens = Math.ceil((req.system.length + req.user.length) / 4);
     const completionTokens = Math.ceil(text.length / 4);

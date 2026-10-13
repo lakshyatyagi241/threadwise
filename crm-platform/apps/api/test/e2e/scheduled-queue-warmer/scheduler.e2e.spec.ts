@@ -25,6 +25,7 @@ import {
 import { ScheduledDueService } from '../../../src/modules/scheduled-queue-warmer/scheduled-due.service';
 import { WarmerService } from '../../../src/modules/scheduled-queue-warmer';
 import { ScheduledRunService } from '../../../src/modules/scheduled-queue-warmer/scheduled-run.service';
+import { ScheduleMessageBuilder } from '../../../src/modules/scheduled-queue-warmer/schedule-message-builder.service';
 import { SchedulerService } from '../../../src/modules/scheduled-queue-warmer';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 
@@ -77,6 +78,7 @@ beforeAll(async () => {
     h.app.get(SenderResolver),
     registry,
     h.app.get(MergeTagService, { strict: false }),
+    h.app.get(ScheduleMessageBuilder),
     pacing as never,
     runtime,
     cap,
@@ -189,7 +191,7 @@ const inContext = <T>(t: Tenant, fn: () => Promise<T>) =>
 const row = async (id: number) =>
   (
     await h.owner.query(
-      `SELECT status, total_sent, total_failed, failure_reason, next_run_at, last_run_at, completed_at, failed_at,
+      `SELECT status, total_sent, total_failed, failure_reason, recipients_spent, next_run_at, last_run_at, completed_at, failed_at,
               next_attempt_at, node_schedule_id, send_attempts
          FROM scheduled_messages WHERE id = $1`,
       [id],
@@ -284,11 +286,12 @@ describe('a one-off run (TW-NODE-031)', () => {
     expect(sent).toHaveLength(0);
   });
 
-  it('refuses a message kind it cannot send once, up front, with the reason', async () => {
+  it('refuses a message it cannot send once, up front, with the reason', async () => {
     const t = await arrange('tpl');
+    // A template schedule whose template is gone (deleted after it was scheduled).
     const id = await schedule(t, 3, { template_type: 'template' });
     await run(t, id);
-    expect((await row(id)).failure_reason).toMatch(/template pipeline/);
+    expect((await row(id)).failure_reason).toMatch(/template of this schedule was deleted/);
     expect(sent).toHaveLength(0);
     expect((await contacts(id)).every((r) => r.status === 'pending')).toBe(true);
   });
@@ -356,7 +359,7 @@ describe('crash safety (Reference sent again after a restart)', () => {
 });
 
 describe('recurring (TW-NODE-032)', () => {
-  it('after each run the audience is pending again and the next run is set; totals add up', async () => {
+  it('after each run the next run is set and the audience starts over when it begins; totals add up', async () => {
     const t = await arrange('recur');
     const first = new Date('2026-10-05T03:30:00Z');
     const id = await schedule(t, 2, {
@@ -372,9 +375,12 @@ describe('recurring (TW-NODE-032)', () => {
     expect(r.status).toBe('scheduled');
     expect(new Date(r.next_run_at).toISOString()).toBe('2026-10-07T03:30:00.000Z'); // every 2 days, 09:00 in Kolkata
     expect(r.total_sent).toBe(2);
-    expect(
-      (await contacts(id)).every((c) => c.status === 'pending' && c.wa_message_id === null),
-    ).toBe(true);
+    // The recipients keep what the run did (and their message ids, which the provider's late delivery reports are matched by) until
+    // the next occurrence begins.
+    expect((await contacts(id)).every((c) => c.status === 'sent' && c.wa_message_id !== null)).toBe(
+      true,
+    );
+    expect(r.recipients_spent).toBe(true);
     await run(t, id);
     r = await row(id);
     expect(r.total_sent).toBe(4);

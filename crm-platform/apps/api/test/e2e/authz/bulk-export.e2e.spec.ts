@@ -11,7 +11,6 @@ import {
 import { ContactImportEngine } from '../../../src/modules/crm';
 import {
   Api,
-  bearer,
   startHarness,
   type Grant,
   type Harness,
@@ -107,7 +106,7 @@ async function seed(
 
 /** RFC 4180 reader: enough for the exports (quoted cells, doubled quotes, CRLF). */
 function parseCsv(text: string): string[][] {
-  const src = text.replace(/^﻿/, '');
+  const src = text.replace(/^\uFEFF/, '');
   const rows: string[][] = [];
   let row: string[] = [];
   let cell = '';

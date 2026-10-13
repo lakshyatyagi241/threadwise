@@ -52,9 +52,7 @@ one, the loop guard stays at 20, a flow ends only at an End node or when nothing
   the editor saves one.
 - **Other-channel engines and the call flow (060 to 069).** The runtime sends through the inbox's channels (WhatsApp Cloud API, QR, Telegram,
   web chat, simulator). Facebook, Instagram, TikTok, LINE, Viber, WeChat, email and voice have no inbox channel adapter yet.
-- **Producers that do not exist yet:** `order.placed` (commerce), `contact.opt_in` with `optedIn: true` (a person re-subscribing), the routing
-  rule's `trigger_flow`, the lead webhook's flow, the Instagram and Facebook hand-off. Each is one call to `FlowTriggerService` or
-  `FlowLaunchService.start`; the consumer for the two events is in place.
+- **Producers (all wired, see the wiring map):** store-webhook orders, the contact-record re-subscribe, the routing rule's `trigger_flow`, the lead source's flow. Intended differences: routing starts on every channel (Reference: unofficial WhatsApp only) and only for a new or reopened conversation (the port's routing runs once per conversation); a rule needs an agent or team to assign to, so a flow-only rule is not possible (BL-040); store imports do not fire the order trigger; a chain of five flow-started flows stops; a proactive run whose messages the 24 hour window refused is `failed`. Instagram/Facebook flows: the hand-off node and consumer are built, but the runtime's `KINDS_OF_PROVIDER` has no instagram/facebook engine, so an IG/FB thread only runs a flow pinned to its channel; not verified end to end on a real Instagram or Messenger channel (blocked: IG-FB).
 - **A customer's file as an answer** is held as `chatmedia:<key>` in the variable (Reference stored a public link). A Media node can send it back;
   a webhook or a sheet cannot read it until those nodes exist.
 

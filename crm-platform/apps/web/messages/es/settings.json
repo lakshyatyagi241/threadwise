@@ -339,6 +339,11 @@
         "label": "Consentimiento y respuestas STOP",
         "description": "Elige las palabras STOP y START, las respuestas de confirmación, la línea de baja y si el marketing requiere consentimiento registrado.",
         "keywords": "consentimiento, baja, alta, cancelar suscripción, stop, start, rgpd, cumplimiento, privacidad, marketing"
+      },
+      "growth": {
+        "label": "Crecimiento",
+        "description": "Leads calientes, audiencias, respuestas a campañas y otras cosas sobre las que tu equipo puede actuar, obtenidas de chats y campañas.",
+        "keywords": "crecimiento, lead caliente, audiencia, interacción, inactivo, respuestas a campañas, propensión, baja, piloto"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

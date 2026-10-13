@@ -80,11 +80,13 @@ export class RoutingRulesService {
     await this.usage.assertCanAdd(orgId, 'routing_rules');
     return this.db.tx(async (tx) => {
       await this.assertTargets(tx, orgId, input.assign);
+      await this.assertFlow(tx, orgId, input.triggerFlowId);
       const created = await this.repo.insert(tx, orgId, {
         name: input.name,
         conditions: input.conditions,
         actions: encodeActions({
           assign: input.assign,
+          triggerFlowId: input.triggerFlowId,
           description: input.description,
           cursor: null,
         }),
@@ -118,6 +120,11 @@ export class RoutingRulesService {
       // The form sends the whole assign action; the cursor is the server's and survives an edit of the same agents.
       const assign = input.assign ?? stored.assign;
       if (input.assign) await this.assertTargets(tx, orgId, input.assign);
+      // `null` takes the flow off the rule; absent keeps it.
+      const triggerFlowId =
+        input.triggerFlowId === undefined ? stored.triggerFlowId : input.triggerFlowId;
+      if (input.triggerFlowId && input.triggerFlowId !== stored.triggerFlowId)
+        await this.assertFlow(tx, orgId, input.triggerFlowId);
       const nextConditions = input.conditions ?? before.conditions;
       const isFallback = input.isFallback ?? before.isFallback;
       // The fallback is the catch-all: a normal rule without any condition would catch everything, so it is refused here too.
@@ -135,10 +142,13 @@ export class RoutingRulesService {
       const ok = await this.repo.update(tx, orgId, Number(row.id), input.rowVersion, {
         ...(input.name !== undefined ? { name: input.name } : {}),
         ...(input.conditions !== undefined ? { conditions: input.conditions } : {}),
-        ...(input.assign !== undefined || input.description !== undefined
+        ...(input.assign !== undefined ||
+        input.description !== undefined ||
+        input.triggerFlowId !== undefined
           ? {
               actions: encodeActions({
                 assign,
+                triggerFlowId,
                 description: input.description ?? stored.description,
                 cursor:
                   input.assign && !sameTargets(input.assign, stored.assign) ? null : stored.cursor,
@@ -162,6 +172,7 @@ export class RoutingRulesService {
           stopOnMatch: before.stopOnMatch,
           conditions: before.conditions,
           assign: before.assign,
+          triggerFlowId: stored.triggerFlowId,
         },
         {
           name: after.name,
@@ -171,6 +182,7 @@ export class RoutingRulesService {
           stopOnMatch: after.stopOnMatch,
           conditions: after.conditions,
           assign: after.assign,
+          triggerFlowId: after.triggerFlow?.id ?? null,
         },
       );
       await this.audit.record(tx, {
@@ -220,7 +232,12 @@ export class RoutingRulesService {
       const created = await this.repo.insert(tx, orgId, {
         name: `${src.name} (copy)`.slice(0, 128),
         conditions: src.conditions,
-        actions: encodeActions({ assign: src.assign, description: src.description, cursor: null }),
+        actions: encodeActions({
+          assign: src.assign,
+          triggerFlowId: src.triggerFlow?.id ?? null,
+          description: src.description,
+          cursor: null,
+        }),
         stopOnMatch: src.stopOnMatch,
         isActive: false,
         isFallback: false,
@@ -312,7 +329,11 @@ export class RoutingRulesService {
 
   /** Rows as the API returns them, with how many of each rule's targets can no longer take a conversation (one lookup for the page). */
   private async present(tx: Tx, orgId: number, rows: RuleRow[]): Promise<RoutingRule[]> {
-    const actions = rows.map((r) => decodeActions(r.actions).assign);
+    const decoded = rows.map((r) => decodeActions(r.actions));
+    const actions = decoded.map((d) => d.assign);
+    const flows = await this.repo.flowsByUuid(tx, orgId, [
+      ...new Set(decoded.flatMap((d) => (d.triggerFlowId ? [d.triggerFlowId] : []))),
+    ]);
     const users = await this.repo.activeUsers(tx, orgId, [
       ...new Set(actions.flatMap((a) => a.userIds)),
     ]);
@@ -322,8 +343,18 @@ export class RoutingRulesService {
       const gone =
         a.userIds.filter((u) => !users.has(u)).length +
         a.teamIds.filter((t) => !teams.has(t)).length;
-      return toRoutingRule(r, gone);
+      return toRoutingRule(r, gone, flows);
     });
+  }
+
+  /** The flow a rule starts must be one of this workspace's (the friendly 422); whether it is switched on is read when the rule fires. */
+  private async assertFlow(tx: Tx, orgId: number, flowId: string | null): Promise<void> {
+    if (!flowId) return;
+    if (!(await this.repo.flowsByUuid(tx, orgId, [flowId])).has(flowId)) {
+      throw AppError.validation('That flow is not part of this workspace.', [
+        { path: 'triggerFlowId', message: 'That flow is not part of this workspace.' },
+      ]);
+    }
   }
 
   /** Agents must be active members who may open the inbox; teams must belong to the workspace (the friendly 422 of TW-TIB2-005). */
