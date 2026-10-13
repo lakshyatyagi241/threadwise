@@ -3,6 +3,7 @@
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {
+  boolean,
   check,
   date,
   foreignKey,
@@ -74,6 +75,7 @@ export const scheduledMessages = pgTable(
     chargedSent: integer('charged_sent').notNull().default(0),
     warmerReserved: integer('warmer_reserved').notNull().default(0),
     warmerReservedDay: date('warmer_reserved_day'),
+    recipientsSpent: boolean('recipients_spent').notNull().default(false),
     source: text('source').notNull().default('manual'),
     externalKey: text('external_key'),
     provider: text('provider'),
@@ -211,3 +213,42 @@ export const warmerDailySends = pgTable(
 
 export type WarmerDailySendsRow = typeof warmerDailySends.$inferSelect;
 export type NewWarmerDailySendsRow = typeof warmerDailySends.$inferInsert;
+
+export const scheduledMedia = pgTable(
+  'scheduled_media',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id'),
+    storageKey: text('storage_key').notNull(),
+    fileName: text('file_name').notNull(),
+    mime: text('mime').notNull(),
+    kind: text('kind').notNull(),
+    sizeBytes: integer('size_bytes').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_scheduled_media_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'scheduled_media_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_scheduled_media_storage_key').on(t.orgId, t.storageKey),
+    check('chk_scheduled_media_kind', sql`${t.kind} in ('image', 'video', 'audio', 'document')`),
+    check('chk_scheduled_media_size', sql`${t.sizeBytes} > 0`),
+    foreignKey({
+      name: 'fk_scheduled_media_user_id',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_scheduled_media_user_id').on(t.orgId, t.userId),
+  ],
+);
+
+export type ScheduledMediaRow = typeof scheduledMedia.$inferSelect;
+export type NewScheduledMediaRow = typeof scheduledMedia.$inferInsert;

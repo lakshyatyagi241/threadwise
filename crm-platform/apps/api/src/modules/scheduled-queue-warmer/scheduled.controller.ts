@@ -10,16 +10,22 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  SCHEDULE_MEDIA_MAX_BYTES,
   SCHEDULE_MIN_LEAD_MINUTES,
   createScheduleInputSchema,
+  listScheduleRecipientsQuerySchema,
   listSchedulesQuerySchema,
   previewAudienceInputSchema,
   retryScheduleInputSchema,
   updateScheduleInputSchema,
   type CreateScheduleInput,
+  type ListScheduleRecipientsQuery,
   type ListSchedulesQuery,
   type RetryScheduleInput,
   type UpdateScheduleInput,
@@ -31,6 +37,9 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { ScheduleActionsService } from './schedule-actions.service';
 import { ScheduleAudienceService } from './audience/schedule-audience.service';
 import { ScheduleCreateService } from './schedule-create.service';
+import { ScheduleEditService } from './schedule-edit.service';
+import { ScheduleEngagementService } from './schedule-engagement.service';
+import { ScheduleMediaService } from './schedule-media.service';
 import { ScheduleReadService } from './schedule-read.service';
 
 /**
@@ -47,6 +56,9 @@ export class ScheduledController {
     private readonly read: ScheduleReadService,
     private readonly actions: ScheduleActionsService,
     private readonly audience: ScheduleAudienceService,
+    private readonly editor: ScheduleEditService,
+    private readonly engagement: ScheduleEngagementService,
+    private readonly media: ScheduleMediaService,
     private readonly db: DatabaseService,
   ) {}
 
@@ -93,6 +105,23 @@ export class ScheduledController {
     return this.create.create(body);
   }
 
+  @Post('media')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('sched.schedules.manage')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: SCHEDULE_MEDIA_MAX_BYTES, files: 1 } }),
+  )
+  @ApiOperation({
+    summary:
+      'Upload the file a schedule sends; returns its id for the schedule and a link to look at it',
+    description:
+      '422 for a type or content the upload policy refuses, and when media storage is local disk (nothing the provider could fetch).',
+  })
+  upload(@UploadedFile() file: { originalname: string; buffer: Buffer } | undefined) {
+    return this.media.upload(file);
+  }
+
   @Get(':id')
   @RequirePermission('sched.schedules.read')
   @ApiOperation({ summary: 'One schedule with its recipients and progress' })
@@ -100,9 +129,47 @@ export class ScheduledController {
     return this.read.detail(id);
   }
 
+  @Get(':id/draft')
+  @RequirePermission('sched.schedules.manage')
+  @ApiOperation({
+    summary: 'The composer prefilled with a schedule that has not started (the edit screen)',
+    description:
+      '409 when the schedule is no longer waiting or paused, or a one-off has begun sending.',
+  })
+  draft(@Param('id', ParseUUIDPipe) id: string) {
+    return this.editor.draft(id);
+  }
+
+  @Get(':id/recipients')
+  @RequirePermission('sched.schedules.read')
+  @ApiOperation({
+    summary: 'The recipients of a schedule, filtered by status and search, a page at a time',
+  })
+  recipients(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(listScheduleRecipientsQuerySchema)) q: ListScheduleRecipientsQuery,
+  ) {
+    return this.engagement.recipients(id, q);
+  }
+
+  @Get(':id/funnel')
+  @RequirePermission('sched.schedules.read')
+  @ApiOperation({
+    summary:
+      'Queued, sent, delivered, read and failed over time, from the stored recipient statuses',
+  })
+  funnel(@Param('id', ParseUUIDPipe) id: string) {
+    return this.engagement.funnel(id);
+  }
+
   @Patch(':id')
   @RequirePermission('sched.schedules.manage')
-  @ApiOperation({ summary: 'Change the name, time or message of a waiting or paused schedule' })
+  @ApiOperation({
+    summary:
+      'Change a schedule that has not started: any field of the composer, with the version that was opened',
+    description:
+      '409 for a stale version, a schedule that is not waiting or paused, or a one-off that has begun.',
+  })
   async edit(
     @Param('id', ParseUUIDPipe) id: string,
     @Body(zodPipe(updateScheduleInputSchema)) body: UpdateScheduleInput,

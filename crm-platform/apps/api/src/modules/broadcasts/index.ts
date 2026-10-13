@@ -7,15 +7,22 @@ export { BroadcastsService } from './broadcasts.service';
 export { BroadcastsReadService } from './broadcasts-read.service';
 export { BroadcastsRepository } from './broadcasts.repository';
 export { BroadcastProgressService } from './broadcast-progress.service';
-export { mapBaileysAck, mapTwilioStatus } from './receipt-rules';
+export { counterDelta, failureText, mapBaileysAck, mapTwilioStatus } from './receipt-rules';
+export { shouldAdvance } from './recipient-status';
 
 /**
  * The shared sending kit, for the sibling messaging domain (campaigns): sender and template directories, engine senders, pacing,
  * the sender lease and daily cap, link tracking, the compose lookups and the pure rules they all share.
  */
-export { BroadcastsComposeService } from './broadcasts-compose.service';
+export {
+  BroadcastsComposeService,
+  effectiveCategory,
+  templateEngine,
+} from './broadcasts-compose.service';
 export {
   EngineSenderRegistry,
+  commandForText,
+  renderPlainBody,
   type EngineSender,
   type OpenedSender,
   type OutgoingMessage,
