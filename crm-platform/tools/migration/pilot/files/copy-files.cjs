@@ -7,7 +7,8 @@
  *   node copy-files.cjs copy   ... (same; read-only) |  copy --apply --confirm-org-slug S --max-files N --max-gb G [--concurrency 3]
  *   node copy-files.cjs verify ... [--head-only]
  *
- * What it moves: every file the migrated rows of ONE organization still reference by a Waboo URL:
+ * What it moves: every file the migrated rows of ONE organization still reference by a Waboo URL (messages: only rows of a media kind; the url of a
+ * text or interactive message, e.g. a maps link in its text, is a link and not a file):
  *   - messages.meta.legacy.mediaUrl (media_key NULL, or media_key holding a URL)  -> bucket S3_BUCKET_MEDIA,     UPDATE messages
  *   - contact_files.storage_key holding a URL                                    -> bucket S3_BUCKET_DOCUMENTS, UPDATE contact_files
  *   The dump's `attachments` registry (--attachments, NDJSON) only adds the expected size / content type and the plan statistics; a
@@ -479,7 +480,7 @@ async function collectRefs(db, org, rekey = false) {
         : await db.query(
             `SELECT id, created_at::text AS created_at, COALESCE(meta->'legacy'->>'mediaUrl', media_key) AS url
                FROM messages
-              WHERE org_id = $1 AND (media_key IS NULL OR media_key ~* '^https?://')
+              WHERE org_id = $1 AND (media_key IS NULL OR media_key ~* '^https?://') AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker')
                 AND COALESCE(meta->'legacy'->>'mediaUrl', media_key) ~* '^https?://'`,
             [org.id],
           );
@@ -675,7 +676,7 @@ async function runVerify(ctx) {
       (await db.query(`SELECT storage_key AS key, file_size_bytes AS size FROM contact_files WHERE org_id = $1 AND storage_key LIKE $2`, [org.id, `contact-files/${org.id}/waboo/%`])).rows,
       (await db.query(
         `SELECT 'messages' AS t, COALESCE(meta->'legacy'->>'mediaUrl', media_key) AS url FROM messages
-          WHERE org_id = $1 AND (media_key IS NULL OR media_key ~* '^https?://') AND COALESCE(meta->'legacy'->>'mediaUrl', media_key) ~* '^https?://'
+          WHERE org_id = $1 AND (media_key IS NULL OR media_key ~* '^https?://') AND kind IN ('image', 'video', 'audio', 'voice', 'document', 'sticker') AND COALESCE(meta->'legacy'->>'mediaUrl', media_key) ~* '^https?://'
          UNION ALL SELECT 'contact_files', storage_key FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`,
         [org.id],
       )).rows,
