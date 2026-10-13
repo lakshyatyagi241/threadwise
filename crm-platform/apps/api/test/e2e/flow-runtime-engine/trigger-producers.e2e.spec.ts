@@ -224,3 +224,49 @@ describe('the guards every trigger shares', () => {
     expect(subs[0]!.failure_reason).toContain('Nothing reached the customer');
   });
 });
+
+describe('order.placed from a store sync (TW-FLR-006)', () => {
+  it('starts the order flow once with the order as variables, for the contact the sync linked', async () => {
+    const t = await p.api.signup('flrstoreord');
+    const ch = await openChannel(p, t);
+    const phone = nextPhone();
+    const f = await addFlow(p, t, {
+      graph: graph(
+        [
+          node('a', 'message', {
+            text: 'Hi {{first_name}}, {{order_name}} is {{total}} ({{status}})',
+          }),
+        ],
+        [],
+      ),
+      trigger: { kind: 'order_placed', value: 0 },
+    });
+    const [cid] = await p.api.seedContacts(t, [{ name: 'Ada Lovelace', phone: `+${phone}` }]);
+    const internal = (await p.h.owner.query(`SELECT id FROM contacts WHERE uuid = $1`, [cid]))
+      .rows[0].id;
+    // Exactly what the store webhook pipeline writes (shopify-woocommerce `announceOrder`).
+    const event = {
+      type: 'order.placed',
+      id: 'store-sync-1',
+      payload: {
+        orderId: '8f0c2f3e-1111-4222-8333-444455556666',
+        via: 'shopify',
+        contactId: Number(internal),
+        phone,
+        name: 'Ada Lovelace',
+        email: 'ada@example.com',
+        orderNumber: '1001',
+        totalMinor: 2500,
+        currency: 'USD',
+        status: 'paid',
+      },
+    };
+    await deliver(t, event);
+    expect(await untilSent(p, t, ch, phone, 1)).toEqual(['Hi Ada, #1001 is 25.00 USD (paid)']);
+    await untilRun(p, t, f.id, 'done', (r) => r.status === 'completed');
+    await deliver(t, event); // redelivery
+    await quiet();
+    expect(await runsOf(p, t, f.id)).toHaveLength(1);
+    expect((await runsOf(p, t, f.id))[0]!.source).toBe('order_placed');
+  });
+});
