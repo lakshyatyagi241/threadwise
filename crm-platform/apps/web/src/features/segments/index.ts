@@ -6,4 +6,5 @@ export { invalidateSegments, segmentFromFilters, useSegments } from './api/segme
 export { ROUTES as SEGMENT_ROUTES, cleanSegmentParam } from './lib/url';
 export type { Segment } from './api/schemas';
 export { AdvancedFilter, appliedConditionCount } from './components/advanced-filter';
+export { RulesEditor, useRulesDraft, type RulesDraft } from './components/rules-editor';
 export { usePeople } from './api/lookups';

@@ -69,7 +69,7 @@ function NavRow({
   const t = useTranslations('storefront-builder.admin.sidebar');
   const locale = useLocale();
   const label = t(`items.${entry.key}`);
-  const base = 'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm';
+  const base = 'flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm';
   if (entry.state === 'soon') {
     return (
       <span
@@ -180,10 +180,14 @@ export function StoreSidebar() {
   const entries = visibleEntries(MAIN_ENTRIES, (p) => p in session.permissions);
 
   return (
-    <aside aria-label={t('label')} className="space-y-3 lg:sticky lg:top-6 lg:self-start">
-      <div className={cn(CARD, 'p-4')}>
+    // Pinned under the 56px top bar and capped to the viewport, so the whole menu stays in view while the page scrolls (it scrolls inside only on a short screen).
+    <aside
+      aria-label={t('label')}
+      className="thin-scrollbar space-y-2 lg:sticky lg:top-[4.25rem] lg:max-h-[calc(100dvh-5rem)] lg:self-start lg:overflow-y-auto"
+    >
+      <div className={cn(CARD, 'p-3')}>
         <div className="flex items-start justify-between gap-2">
-          <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <StoreIcon className="size-5" />
           </span>
           {live ? (
@@ -198,7 +202,7 @@ export function StoreSidebar() {
             </span>
           )}
         </div>
-        <div className="mt-3 text-lg font-semibold leading-tight">{name}</div>
+        <div className="mt-2 text-base font-semibold leading-tight">{name}</div>
         <div className="mt-0.5 truncate text-xs text-muted-foreground" dir="auto">
           {connectionLine}
         </div>
@@ -251,9 +255,9 @@ export function StoreSidebar() {
 
       <nav
         aria-label={t('navLabel')}
-        className="space-y-0.5 rounded-xl border border-border bg-background p-2 shadow-sm"
+        className="space-y-0.5 rounded-xl border border-border bg-background p-1.5 shadow-sm"
       >
-        <Eyebrow className="px-3 pb-1.5 pt-2">{t('section')}</Eyebrow>
+        <Eyebrow className="px-3 pb-1 pt-1.5">{t('section')}</Eyebrow>
         {entries.map((e) => (
           <NavRow
             key={e.key}
@@ -263,14 +267,14 @@ export function StoreSidebar() {
             badge={countFor(e.key, counts)}
           />
         ))}
-        <Eyebrow className="px-3 pb-1.5 pt-3">{t('settings')}</Eyebrow>
+        <Eyebrow className="px-3 pb-1 pt-2">{t('settings')}</Eyebrow>
         {SETTINGS_ENTRIES.map((e) => (
           <NavRow key={e.key} entry={e} active={active === e.key} shopId={shop.id} />
         ))}
       </nav>
 
       {live && (
-        <div className="rounded-xl border border-success/30 bg-success/5 p-4 text-sm leading-relaxed">
+        <div className="rounded-xl border border-success/30 bg-success/5 p-3 text-sm leading-relaxed">
           <div className="mb-1 flex items-center gap-2 font-semibold">
             <span className="size-2 rounded-full bg-success" />
             {t('providerLive')}
