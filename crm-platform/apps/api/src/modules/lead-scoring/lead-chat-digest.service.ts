@@ -27,6 +27,7 @@ import {
   toSuggestion,
   type DigestCandidate,
 } from './lead-chat-digest.repository';
+import { ChatDigestListeners, type ChatDigestEvent } from './lead-chat-digest.listeners';
 import {
   CHAT_WINDOW_DAYS,
   DIGEST_MAX_COMPLETION_TOKENS,
@@ -85,6 +86,7 @@ export class LeadChatDigestService {
     private readonly meter: AiTokenMeter,
     private readonly audit: AuditService,
     private readonly contacts: ContactsService,
+    private readonly listeners: ChatDigestListeners,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadDigestJob>,
   ) {}
@@ -170,13 +172,41 @@ export class LeadChatDigestService {
         stages: await this.chat.stages(tx, orgId),
         lastThrough: await this.chat.lastThrough(tx, orgId, contactId),
         scoring: await this.repo.contactForScoring(tx, orgId, contactId),
+        conversation: await this.chat.latestConversation(tx, orgId, contactId),
+        growth: await this.chat.growthChatConfig(tx, orgId),
       };
     });
     if (!loaded?.scoring) return { status: 'skipped', reason: 'contact_gone' };
     const { brief, stages, scoring } = loaded;
 
-    const mask = { names: nameParts(brief.name) };
-    const prepared = prepareChat(loaded.messages, mask);
+    // The workspace's own words to mask and its own button taps (the growth pilot's settings; empty elsewhere).
+    const mask = { names: [...nameParts(brief.name), ...loaded.growth.extraMaskTerms] };
+    const prepared = prepareChat(loaded.messages, {
+      ...mask,
+      customPhrases: loaded.growth.customPhrases,
+    });
+    const announce = (e: Pick<ChatDigestEvent, 'digestId' | 'source'> & Partial<ChatDigestEvent>) =>
+      this.listeners.emit({
+        orgId,
+        contactId,
+        contactUuid: brief.uuid,
+        contactName: brief.name,
+        lifecycleStage: brief.lifecycleStage,
+        conversation: loaded.conversation,
+        trigger,
+        intent: 'other',
+        signals: { askedPrice: false, readyToBuy: false, objection: false, urgent: false },
+        summary: null,
+        score: null,
+        reasons: [],
+        suggestedStage: null,
+        stageConfidence: null,
+        language: null,
+        issue: null,
+        phraseIntents: prepared.phraseIntents,
+        optOut: prepared.phraseIntents.includes('not_interested'),
+        ...e,
+      });
     const plan = planChat(prepared);
     if (plan === 'none' || prepared.throughAt === null) {
       return stop(
@@ -191,8 +221,8 @@ export class LeadChatDigestService {
 
     // Button and keyword taps the phrase table understands: answered for free, no model, no cost.
     if (plan === 'rules') {
-      await this.db.txAs({ orgId, userId: null }, async (tx) => {
-        await this.chat.insertDigest(tx, orgId, {
+      const digestId = await this.db.txAs({ orgId, userId: null }, async (tx) => {
+        return this.chat.insertDigest(tx, orgId, {
           contactId,
           throughAt: prepared.throughAt!,
           messagesRead: prepared.messagesRead,
@@ -215,6 +245,12 @@ export class LeadChatDigestService {
           durationMs: null,
           trigger,
         });
+      });
+      await announce({
+        digestId,
+        source: 'rules',
+        intent: strongestIntent(prepared.phraseIntents),
+        signals: signalsFromIntents(prepared.phraseIntents),
       });
       return { status: 'digest', source: 'rules' };
     }
@@ -360,12 +396,14 @@ export class LeadChatDigestService {
         })
       : null;
 
-    await this.db.txAs({ orgId, userId: null }, async (tx) => {
+    const savedDigestId = await this.db.txAs({ orgId, userId: null }, async (tx) => {
       const digestId = await this.chat.insertDigest(tx, orgId, {
         contactId,
         throughAt: prepared.throughAt!,
         messagesRead: prepared.messagesRead,
         inboundRead: prepared.inboundRead,
+        language: parsed.language,
+        issue: parsed.issue,
         source: 'ai',
         intent: parsed.intent,
         signals: parsed.signals,
@@ -438,6 +476,22 @@ export class LeadChatDigestService {
           },
         });
       }
+      return digestId;
+    });
+    await announce({
+      digestId: savedDigestId,
+      source: 'ai',
+      intent: parsed.intent,
+      signals: parsed.signals,
+      summary: parsed.summary,
+      score: parsed.score,
+      reasons: parsed.reasons,
+      suggestedStage: parsed.suggestedStage,
+      stageConfidence: parsed.suggestedStage ? parsed.confidence : null,
+      language: parsed.language,
+      issue: parsed.issue,
+      optOut:
+        prepared.phraseIntents.includes('not_interested') || parsed.intent === 'not_interested',
     });
     return { status: 'digest', source: 'ai' };
   }

@@ -42,6 +42,8 @@ const digest: NonNullable<LscInsight['digest']> = {
   model: 'openai/gpt-6-luna-pro',
   costUsd: '0.00010000',
   trigger: 'chat',
+  language: 'en',
+  issue: null,
 };
 const suggestion: NonNullable<LscInsight['suggestion']> = {
   id: 's1',
@@ -54,6 +56,7 @@ const suggestion: NonNullable<LscInsight['suggestion']> = {
   confidence: 0.9,
   reasons: ['Wants to buy today'],
   status: 'pending',
+  source: 'chat',
   createdAt: '2026-10-12T10:00:00.000Z',
   decidedAt: null,
 };

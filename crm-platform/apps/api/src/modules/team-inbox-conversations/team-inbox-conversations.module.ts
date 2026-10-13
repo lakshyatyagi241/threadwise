@@ -10,6 +10,7 @@ import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
 import { InboxController } from './inbox.controller';
+import { InboxSystemNotes } from './inbox-system-notes.service';
 import { InboxMediaService } from './inbox-media.service';
 import { InboxMessageLogService } from './inbox-message-log.service';
 import { InboxNotesService } from './inbox-notes.service';
@@ -45,6 +46,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     MediaUploadsRepository,
     InboxAccess,
     InboxRealtimePublisher,
+    InboxSystemNotes,
     InboxConversationsService,
     InboxThreadService,
     InboxNotesService,
@@ -59,6 +61,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     ConversationEventsRepository,
     InboxAccess,
     InboxRealtimePublisher,
+    InboxSystemNotes,
     InboxConversationsService,
   ],
 })

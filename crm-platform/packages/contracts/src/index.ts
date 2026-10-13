@@ -92,4 +92,5 @@ export * from './chrome-extension-sheets-addon';
 export * from './api-library';
 export * from './faq-knowledge';
 export * from './lead-scoring';
+export * from './growth';
 export * from './contact-consent';

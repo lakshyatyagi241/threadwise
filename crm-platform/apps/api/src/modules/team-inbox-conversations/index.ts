@@ -10,6 +10,7 @@ export {
 } from './inbox-access.service';
 export { InboxConversationsService } from './inbox-conversations.service';
 export { InboxRealtimePublisher } from './inbox-realtime.publisher';
+export { InboxSystemNotes } from './inbox-system-notes.service';
 export {
   ConversationEventsRepository,
   type AppendEventInput,

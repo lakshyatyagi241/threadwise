@@ -47,6 +47,8 @@ export interface DigestWrite {
   billedAgainst: 'admin' | 'workspace' | 'none';
   durationMs: number | null;
   trigger: 'chat' | 'manual';
+  language?: string | null;
+  issue?: string | null;
 }
 
 export interface ContactBrief {
@@ -68,6 +70,7 @@ export interface SuggestionRow {
   confidence: number;
   reasons: string[];
   status: LscSuggestionStatus;
+  source: 'chat' | 'engagement';
   createdAt: Date;
   decidedAt: Date | null;
 }
@@ -91,6 +94,8 @@ const toDigest = (r: Raw): LscDigest => ({
     urgent: (r.signals as Partial<LscSignals> | null)?.urgent === true,
   },
   summary: str(r.summary),
+  language: str(r.language),
+  issue: str(r.issue),
   score: r.score === null ? null : num(r.score),
   reasons: Array.isArray(r.reasons) ? (r.reasons as string[]) : [],
   suggestedStage: str(r.suggested_stage),
@@ -113,6 +118,7 @@ const toSuggestionRow = (r: Raw): SuggestionRow => ({
   confidence: num(r.confidence),
   reasons: Array.isArray(r.reasons) ? (r.reasons as string[]) : [],
   status: r.status as LscSuggestionStatus,
+  source: r.source === 'engagement' ? 'engagement' : 'chat',
   createdAt: date(r.created_at),
   decidedAt: r.decided_at ? date(r.decided_at) : null,
 });
@@ -132,13 +138,14 @@ export const toSuggestion = (
   confidence: s.confidence,
   reasons: s.reasons,
   status: s.status,
+  source: s.source,
   createdAt: s.createdAt.toISOString(),
   decidedAt: s.decidedAt ? s.decidedAt.toISOString() : null,
 });
 
 const SUGGESTION_SELECT = sql`
   s.id, s.uuid, s.contact_id, c.uuid AS contact_uuid, c.name AS contact_name, s.from_stage, s.to_stage, s.confidence, s.reasons,
-  s.status, s.created_at, s.decided_at`;
+  s.status, s.source, s.created_at, s.decided_at`;
 
 /** All SQL of reading a conversation for lead scoring and of the stage suggestions. Every method takes the caller's transaction. */
 @Injectable()
@@ -223,13 +230,55 @@ export class LeadChatDigestRepository {
     const res = await tx.execute(sql`
       INSERT INTO lead_chat_digests (org_id, contact_id, through_at, messages_read, inbound_read, source, intent, signals, summary, score,
         reasons, suggested_stage, stage_confidence, evidence, model, prompt_tokens, completion_tokens, cost_usd, cost_source,
-        billed_against, duration_ms, trigger)
+        billed_against, duration_ms, trigger, language, issue)
       VALUES (${orgId}, ${w.contactId}, ${w.throughAt.toISOString()}::timestamptz, ${w.messagesRead}, ${w.inboundRead}, ${w.source},
         ${w.intent}, ${JSON.stringify(w.signals)}::jsonb, ${w.summary}, ${w.score}, ${JSON.stringify(w.reasons)}::jsonb,
         ${w.suggestedStage}, ${w.stageConfidence}, ${JSON.stringify(w.evidence)}::jsonb, ${w.model}, ${w.promptTokens},
-        ${w.completionTokens}, ${w.costUsd}, ${w.costSource}, ${w.billedAgainst}, ${w.durationMs}, ${w.trigger})
+        ${w.completionTokens}, ${w.costUsd}, ${w.costSource}, ${w.billedAgainst}, ${w.durationMs}, ${w.trigger},
+        ${w.language ?? null}, ${w.issue ?? null})
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
+  }
+
+  /** The workspace's own phrases and extra masked words, from the growth pilot's settings; empty for a workspace outside it. */
+  async growthChatConfig(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{
+    customPhrases: Array<{ phrase: string; intent: LscIntent }>;
+    extraMaskTerms: string[];
+  }> {
+    const res = await tx.execute(sql`
+      SELECT config -> 'customPhrases' AS phrases, config -> 'extraMaskTerms' AS terms FROM growth_settings WHERE org_id = ${orgId}`);
+    const r = res.rows[0] as Raw | undefined;
+    const phrases = Array.isArray(r?.phrases) ? (r!.phrases as Array<Record<string, unknown>>) : [];
+    const terms = Array.isArray(r?.terms) ? (r!.terms as unknown[]) : [];
+    return {
+      customPhrases: phrases
+        .filter((p) => typeof p.phrase === 'string' && typeof p.intent === 'string')
+        .map((p) => ({ phrase: String(p.phrase), intent: p.intent as LscIntent })),
+      extraMaskTerms: terms.filter((t): t is string => typeof t === 'string'),
+    };
+  }
+
+  /** The contact's most recently active thread (not a group), with who holds it. */
+  async latestConversation(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+  ): Promise<{ id: number; uuid: string; assigneeUserId: number | null } | null> {
+    const res = await tx.execute(sql`
+      SELECT id, uuid, assignee_user_id FROM conversations
+       WHERE org_id = ${orgId} AND contact_id = ${contactId} AND peer_key NOT LIKE '%@g.us'
+       ORDER BY last_message_at DESC NULLS LAST, id DESC LIMIT 1`);
+    const r = res.rows[0] as Raw | undefined;
+    return r
+      ? {
+          id: num(r.id),
+          uuid: String(r.uuid),
+          assigneeUserId: r.assignee_user_id === null ? null : num(r.assignee_user_id),
+        }
+      : null;
   }
 
   async latestDigest(tx: Tx, orgId: number, contactUuid: string): Promise<LscDigest | null> {
@@ -255,14 +304,17 @@ export class LeadChatDigestRepository {
       toStage: string;
       confidence: number;
       reasons: string[];
+      /** Where the suggestion came from: a reading of the chat (default) or the engagement rule. */
+      source?: 'chat' | 'engagement';
     },
   ): Promise<number> {
     await tx.execute(sql`
       UPDATE lifecycle_stage_suggestions SET status = 'superseded'
        WHERE org_id = ${orgId} AND contact_id = ${w.contactId} AND status = 'pending'`);
     const res = await tx.execute(sql`
-      INSERT INTO lifecycle_stage_suggestions (org_id, contact_id, digest_id, from_stage, to_stage, confidence, reasons)
-      VALUES (${orgId}, ${w.contactId}, ${w.digestId}, ${w.fromStage}, ${w.toStage}, ${w.confidence}, ${JSON.stringify(w.reasons)}::jsonb)
+      INSERT INTO lifecycle_stage_suggestions (org_id, contact_id, digest_id, from_stage, to_stage, confidence, reasons, source)
+      VALUES (${orgId}, ${w.contactId}, ${w.digestId}, ${w.fromStage}, ${w.toStage}, ${w.confidence}, ${JSON.stringify(w.reasons)}::jsonb,
+        ${w.source ?? 'chat'})
       RETURNING id`);
     return num((res.rows[0] as Raw).id);
   }
