@@ -407,7 +407,8 @@
         "address": "Adresse",
         "memo": "Mémo",
         "status": "Statut",
-        "source": "Source"
+        "source": "Source",
+        "consent": "Consentement marketing (oui / non)"
       },
       "notInFile": "Absent du fichier",
       "columnN": "Colonne {n}",

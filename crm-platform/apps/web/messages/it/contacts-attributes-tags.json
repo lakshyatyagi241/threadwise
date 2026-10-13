@@ -407,7 +407,8 @@
         "address": "Indirizzo",
         "memo": "Memo",
         "status": "Stato",
-        "source": "Origine"
+        "source": "Origine",
+        "consent": "Consenso marketing (sì / no)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",

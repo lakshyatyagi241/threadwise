@@ -148,7 +148,10 @@
         "required": "Phải đánh dấu để gửi",
         "requiredHint": "Tắt tùy chọn này nếu việc đồng ý là không bắt buộc.",
         "marketing": "Đăng ký nhận tiếp thị",
-        "marketingHint": "Đánh dấu ô sẽ ghi nhận sự đồng ý nhận tiếp thị cho liên hệ. Ô không đánh dấu sẽ không đăng ký ai cả."
+        "marketingHint": "Đánh dấu ô sẽ ghi nhận sự đồng ý nhận tiếp thị cho liên hệ. Ô không đánh dấu sẽ không đăng ký ai cả.",
+        "whatsappHint": "Bạn có định nhắn tin cho các liên hệ này qua WhatsApp không? Hãy dùng nội dung nói rõ điều đó và cách hủy đăng ký. Ô đã chọn được lưu làm bằng chứng, kèm đúng nội dung này và phiên bản của nó.",
+        "whatsappInsert": "Dùng nội dung đồng ý nhận tin WhatsApp",
+        "whatsappWording": "Tôi đồng ý nhận cập nhật và ưu đãi qua WhatsApp. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký."
       },
       "crm": {
         "title": "Trong CRM",

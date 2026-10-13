@@ -407,7 +407,8 @@
         "address": "Adresse",
         "memo": "Memo",
         "status": "Status",
-        "source": "Quelle"
+        "source": "Quelle",
+        "consent": "Marketing-Einverständnis (ja / nein)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",

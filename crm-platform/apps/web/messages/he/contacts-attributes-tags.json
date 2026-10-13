@@ -407,7 +407,8 @@
         "address": "כתובת",
         "memo": "תזכיר",
         "status": "סטטוס",
-        "source": "מקור"
+        "source": "מקור",
+        "consent": "הסכמה לשיווק (כן / לא)"
       },
       "notInFile": "לא בקובץ",
       "columnN": "עמודה {n}",

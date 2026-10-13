@@ -14,7 +14,9 @@
       "settingsInvalid": "Kata kunci harus memiliki setidaknya satu huruf atau angka, dan minimal satu kata kunci STOP harus tetap ada selama deteksi aktif.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
-      "unexpected": "Terjadi kesalahan. Coba lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "exportInProgress": "Berkas bukti sedang disiapkan. Tunggu hingga selesai, lalu coba lagi.",
+      "exportNotReady": "Berkas itu belum siap atau sudah kedaluwarsa. Siapkan yang baru."
     },
     "settings": {
       "title": "Persetujuan dan balasan STOP",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Persetujuan",
       "label": "Saya memiliki persetujuan untuk mengirim pesan ke kontak ini",
-      "hint": "Jika dicentang, semua kontak dalam file dicatat telah menyetujui pemasaran, dengan nama file sebagai bukti. Jika tidak dicentang, impor tidak mencatat persetujuan apa pun. Kontak yang berhenti berlangganan tetap berhenti berlangganan."
+      "hint": "Jika dicentang, semua kontak dalam file dicatat telah menyetujui pemasaran, dengan nama file sebagai bukti. Jika tidak dicentang, impor tidak mencatat persetujuan apa pun. Kontak yang berhenti berlangganan tetap berhenti berlangganan.",
+      "hintColumn": "Kolom yang dipetakan ke persetujuan pemasaran menentukan siapa yang dicatat: hanya baris yang berisi ya yang mendapat persetujuan, dengan nama file sebagai bukti. Tidak, sel kosong, atau kata yang tidak dikenal tidak mencatat apa pun. Kontak yang sudah berhenti berlangganan tetap berhenti.",
+      "columnSummary": "{granted} baris berisi ya dan akan dicatat. {notGranted} berisi tidak atau kosong dan tidak mendapat catatan persetujuan.",
+      "unrecognised": "{count, plural, one {# baris memiliki} other {# baris memiliki}} nilai persetujuan yang bukan ya atau tidak ({values}). Nilai itu dianggap tidak disetujui. Gunakan ya / tidak, true / false, atau 1 / 0.",
+      "columnIgnored": "Kolom persetujuan tidak berpengaruh sampai Anda mencentang kotak di atas."
+    },
+    "systemLine": {
+      "withdrawn": "Kontak membalas {keyword}: berhenti berlangganan pemasaran",
+      "granted": "Kontak membalas {keyword}: berlangganan pemasaran lagi"
+    },
+    "proof": {
+      "title": "Berkas bukti yang sudah disiapkan",
+      "prepare": "Siapkan berkas bukti lengkap",
+      "preparing": "Menyiapkan berkas bukti",
+      "largeHint": "Catatan lebih dari {max} peristiwa, jadi berkas disiapkan di latar belakang",
+      "large": "Catatan berisi lebih dari {max} peristiwa, lebih dari yang bisa diunduh langsung. Siapkan berkas lengkap: berkas dibuat di latar belakang dan Anda akan mendapat email saat sudah siap.",
+      "none": "Belum ada berkas yang disiapkan.",
+      "keptFor": "Berkas yang sudah disiapkan bisa diunduh selama {days} hari, lalu dihapus. Hanya satu berkas yang disiapkan dalam satu waktu.",
+      "rows": "{count, plural, one {# peristiwa} other {# peristiwa}}",
+      "expires": "tersedia hingga {date}",
+      "download": "Unduh CSV",
+      "failed": "Berkas tidak bisa dibuat. Siapkan lagi.",
+      "status": {
+        "queued": "Menunggu",
+        "running": "Sedang dibuat",
+        "ready": "Siap",
+        "failed": "Gagal",
+        "expired": "Kedaluwarsa"
+      }
     }
   }
 }

@@ -407,7 +407,8 @@
         "address": "Địa chỉ",
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
-        "source": "Nguồn"
+        "source": "Nguồn",
+        "consent": "Đồng ý tiếp thị (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",

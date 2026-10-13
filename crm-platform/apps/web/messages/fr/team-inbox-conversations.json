@@ -145,7 +145,8 @@
       "groupUnavailable": "WhatsApp n'a pas accepté ce message de groupe. Réessayez dans quelques minutes.",
       "savedReplyGone": "Cette réponse enregistrée n'existe plus.",
       "savedReplyChannel": "Cette réponse enregistrée n'est pas prévue pour ce type de canal.",
-      "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci."
+      "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci.",
+      "importInvalid": "Ce fichier ne peut pas être lu comme réponses enregistrées. Il doit comporter une première ligne avec les colonnes title, shortcut et body, et au maximum 1 000 lignes."
     },
     "bubble": {
       "kind": {
@@ -817,6 +818,49 @@
         "upgrade": "Voir les forfaits",
         "conflict": "Quelqu'un d'autre a modifié cette réponse en premier. Fermez cette fenêtre et rouvrez-la.",
         "invalid": "Certaines informations saisies ne sont pas valides."
+      },
+      "transfer": {
+        "export": "Exporter le CSV",
+        "import": "Importer le CSV",
+        "title": "Importer des réponses enregistrées",
+        "intro": "Importez un CSV avec les colonnes title, shortcut, body et, si vous le souhaitez, category, language et channel (types de canaux séparés par |, vide pour tous les canaux). Jusqu'à 1 000 lignes et {maxKb} Ko. Les réponses importées sont partagées avec toute l'équipe. L'export a les mêmes colonnes.",
+        "file": "Fichier CSV",
+        "tooBig": "Ce fichier est trop volumineux.",
+        "duplicates": "Lorsqu'une réponse partagée utilise déjà le raccourci",
+        "policy": {
+          "skip": "Conserver la réponse existante",
+          "overwrite": "Remplacer son texte"
+        },
+        "policyHint": {
+          "skip": "La ligne est ignorée et la réponse reste telle quelle.",
+          "overwrite": "Le titre, le texte, la catégorie, la langue et les canaux sont remplacés. Son nombre d'utilisations est conservé."
+        },
+        "check": "Vérifier le fichier",
+        "go": "Importer ({count})",
+        "cancel": "Annuler",
+        "summary": "{create} à créer, {update} à remplacer, {skip} ignorées, {invalid} avec un problème. Rien n'est encore enregistré.",
+        "plan": "Votre offre : {used} réponses sur {limit}.",
+        "row": "Ligne {line} : /{shortcut}",
+        "truncated": "Seules les premières lignes avec un problème ou une modification sont listées.",
+        "done": "Importées : {created} créées, {updated} remplacées.",
+        "issue": {
+          "update": "sera remplacée",
+          "skip": "ignorée",
+          "invalid": "présente un problème",
+          "duplicate": "raccourci déjà utilisé, ignorée",
+          "missing_shortcut": "aucun raccourci",
+          "shortcut_invalid": "le raccourci ne contient aucune lettre ou chiffre utilisable",
+          "missing_title": "aucun titre",
+          "title_too_long": "le titre est trop long",
+          "missing_body": "aucun texte",
+          "body_too_long": "le texte est trop long",
+          "control_characters": "contient des caractères de contrôle",
+          "category_too_long": "la catégorie est trop longue",
+          "language_invalid": "la langue n'est pas un code tel que en ou pt-BR",
+          "channel_unknown": "un canal inconnu",
+          "duplicate_in_file": "le raccourci apparaît plus haut dans le fichier",
+          "plan_limit_reached": "dépasse la limite de votre offre"
+        }
       }
     }
   }

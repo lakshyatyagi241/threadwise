@@ -145,7 +145,8 @@
       "groupUnavailable": "WhatsApp không chấp nhận tin nhắn nhóm này. Hãy thử lại sau vài phút.",
       "savedReplyGone": "Trả lời nhanh này không còn tồn tại.",
       "savedReplyChannel": "Trả lời nhanh này không dành cho loại kênh này.",
-      "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó."
+      "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó.",
+      "importInvalid": "Không thể đọc tệp này dưới dạng câu trả lời đã lưu. Tệp cần có hàng đầu tiên với các cột title, shortcut và body, và tối đa 1.000 hàng."
     },
     "bubble": {
       "kind": {
@@ -817,6 +818,49 @@
         "upgrade": "Xem các gói",
         "conflict": "Người khác đã thay đổi câu trả lời này trước. Hãy đóng cửa sổ này và mở lại.",
         "invalid": "Một số nội dung bạn nhập không hợp lệ."
+      },
+      "transfer": {
+        "export": "Xuất CSV",
+        "import": "Nhập CSV",
+        "title": "Nhập câu trả lời đã lưu",
+        "intro": "Tải lên tệp CSV có các cột title, shortcut, body và, nếu muốn, category, language và channel (các loại kênh cách nhau bằng |, để trống cho mọi kênh). Tối đa 1.000 hàng và {maxKb} KB. Các câu trả lời đã nhập sẽ được chia sẻ cho cả nhóm. Tệp xuất có cùng các cột.",
+        "file": "Tệp CSV",
+        "tooBig": "Tệp này quá lớn.",
+        "duplicates": "Khi một câu trả lời chung đã dùng shortcut này",
+        "policy": {
+          "skip": "Giữ câu trả lời hiện có",
+          "overwrite": "Thay nội dung"
+        },
+        "policyHint": {
+          "skip": "Hàng này sẽ bị bỏ qua và câu trả lời giữ nguyên.",
+          "overwrite": "Tiêu đề, nội dung, danh mục, ngôn ngữ và kênh sẽ được thay thế. Số lần sử dụng được giữ nguyên."
+        },
+        "check": "Kiểm tra tệp",
+        "go": "Nhập ({count})",
+        "cancel": "Hủy",
+        "summary": "{create} sẽ được tạo, {update} sẽ được thay thế, {skip} bị bỏ qua, {invalid} có lỗi. Chưa có gì được lưu.",
+        "plan": "Gói của bạn: {used} trên {limit} câu trả lời.",
+        "row": "Dòng {line}: /{shortcut}",
+        "truncated": "Chỉ hiển thị các hàng đầu tiên có lỗi hoặc có thay đổi.",
+        "done": "Đã nhập: {created} tạo mới, {updated} được thay thế.",
+        "issue": {
+          "update": "sẽ được thay thế",
+          "skip": "bị bỏ qua",
+          "invalid": "có lỗi",
+          "duplicate": "shortcut đã được dùng, bị bỏ qua",
+          "missing_shortcut": "thiếu shortcut",
+          "shortcut_invalid": "shortcut không có chữ hoặc số hợp lệ",
+          "missing_title": "thiếu tiêu đề",
+          "title_too_long": "tiêu đề quá dài",
+          "missing_body": "thiếu nội dung",
+          "body_too_long": "nội dung quá dài",
+          "control_characters": "chứa ký tự điều khiển",
+          "category_too_long": "danh mục quá dài",
+          "language_invalid": "ngôn ngữ không phải mã như en hoặc pt-BR",
+          "channel_unknown": "kênh không xác định",
+          "duplicate_in_file": "shortcut đã xuất hiện trước đó trong tệp",
+          "plan_limit_reached": "vượt quá giới hạn gói của bạn"
+        }
       }
     }
   }

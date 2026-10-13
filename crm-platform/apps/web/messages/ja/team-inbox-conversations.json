@@ -145,7 +145,8 @@
       "groupUnavailable": "WhatsAppがこのグループメッセージを受け付けませんでした。数分後にもう一度お試しください。",
       "savedReplyGone": "この返信テンプレートは存在しなくなりました。",
       "savedReplyChannel": "この返信テンプレートは、この種類のチャネル向けではありません。",
-      "shortcutTaken": "そのショートカットは別の返信テンプレートで既に使われています。"
+      "shortcutTaken": "そのショートカットは別の返信テンプレートで既に使われています。",
+      "importInvalid": "このファイルは保存済みの返信として読み込めません。1行目に title、shortcut、body の列が必要で、行数は 1,000 行までです。"
     },
     "bubble": {
       "kind": {
@@ -817,6 +818,49 @@
         "upgrade": "プランを見る",
         "conflict": "他の人が先にこの返信を変更しました。このウィンドウを閉じて、もう一度開いてください。",
         "invalid": "入力内容の一部が正しくありません。"
+      },
+      "transfer": {
+        "export": "CSV をエクスポート",
+        "import": "CSV をインポート",
+        "title": "保存済みの返信をインポート",
+        "intro": "title、shortcut、body の列を含む CSV をアップロードしてください。必要に応じて category、language、channel の列も使えます（channel は | 区切りで指定し、空欄にするとすべてのチャネルが対象になります）。1,000 行まで、{maxKb} KB までです。インポートした返信はチーム全体で共有されます。エクスポートも同じ列です。",
+        "file": "CSV ファイル",
+        "tooBig": "このファイルは大きすぎます。",
+        "duplicates": "共有の返信がすでに同じショートカットを使っている場合",
+        "policy": {
+          "skip": "既存の返信を残す",
+          "overwrite": "本文を置き換える"
+        },
+        "policyHint": {
+          "skip": "この行はスキップされ、返信はそのまま残ります。",
+          "overwrite": "タイトル、本文、カテゴリ、言語、チャネルが置き換えられます。使用回数は引き継がれます。"
+        },
+        "check": "ファイルを確認",
+        "go": "インポート ({count})",
+        "cancel": "キャンセル",
+        "summary": "作成 {create} 件、置き換え {update} 件、スキップ {skip} 件、問題あり {invalid} 件。まだ何も保存されていません。",
+        "plan": "ご利用プラン: {limit} 件中 {used} 件の返信。",
+        "row": "{line} 行目: /{shortcut}",
+        "truncated": "問題がある行または変更される行のうち、先頭の行のみを表示しています。",
+        "done": "インポート完了: {created} 件作成、{updated} 件置き換え。",
+        "issue": {
+          "update": "置き換えられます",
+          "skip": "スキップ",
+          "invalid": "問題があります",
+          "duplicate": "ショートカットはすでに使用中のためスキップ",
+          "missing_shortcut": "ショートカットなし",
+          "shortcut_invalid": "ショートカットに使える英字や数字がありません",
+          "missing_title": "タイトルなし",
+          "title_too_long": "タイトルが長すぎます",
+          "missing_body": "本文なし",
+          "body_too_long": "本文が長すぎます",
+          "control_characters": "制御文字が含まれています",
+          "category_too_long": "カテゴリが長すぎます",
+          "language_invalid": "言語が en や pt-BR のようなコードではありません",
+          "channel_unknown": "不明なチャネル",
+          "duplicate_in_file": "同じショートカットがファイル内の前の行にあります",
+          "plan_limit_reached": "プランの上限を超えています"
+        }
       }
     }
   }
