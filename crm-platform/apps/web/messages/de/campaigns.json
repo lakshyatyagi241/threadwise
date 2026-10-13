@@ -137,7 +137,8 @@
         "recipients": "{count} Empfänger",
         "scheduled": "Geplant: {date}",
         "instant": "Versand: sofort",
-        "template": "Vorlage {name}"
+        "template": "Vorlage {name}",
+        "cost": "Kosten"
       },
       "createBroadcast": "Broadcast erstellen",
       "noData": "Keine Daten gefunden",
@@ -648,7 +649,9 @@
         "read": "Gelesen",
         "replies": "Antworten",
         "clicks": "Klicks",
-        "failed": "Fehlgeschlagen"
+        "failed": "Fehlgeschlagen",
+        "cost": "Kosten",
+        "costHint": "Bisher vom Guthaben abgebucht"
       },
       "tabs": {
         "overview": "Übersicht",

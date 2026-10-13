@@ -42,6 +42,9 @@ export interface Counts {
 }
 
 export interface CampaignRow {
+  /** Charged to the wallet for this campaign's delivered messages (hundredths of `costCurrency`). */
+  costMinor: number;
+  costCurrency: string | null;
   id: number;
   uuid: string;
   name: string;
@@ -188,6 +191,8 @@ function toRow(r: Raw): CampaignRow {
     occurrenceNo: num(r.occurrence_no),
     retryEnabled: Boolean(r.retry_enabled),
     retryUntil: date(r.retry_until),
+    costMinor: Number(r.cost_minor ?? 0),
+    costCurrency: (r.cost_currency as string | null | undefined) ?? null,
     counts: {
       sent: Number(r.a_sent ?? 0),
       delivered: Number(r.a_delivered ?? 0),
@@ -203,7 +208,7 @@ function toRow(r: Raw): CampaignRow {
 
 const SELECT = sql`
   SELECT c.*, t.uuid AS template_uuid, t.template_name, ta.uuid AS template_a_uuid, tb.uuid AS template_b_uuid,
-         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, agg.*
+         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, agg.*, cost.cost_minor, cost.cost_currency
   FROM wpcampaigns c
   LEFT JOIN wa_templates t  ON t.org_id  = c.org_id AND t.id  = c.template_id
   LEFT JOIN wa_templates ta ON ta.org_id = c.org_id AND ta.id = c.template_id_a
@@ -212,7 +217,15 @@ const SELECT = sql`
   LEFT JOIN flows fb ON fb.org_id = c.org_id AND fb.id = c.flow_id_b
   LEFT JOIN LATERAL (
     SELECT ${AGG} FROM wp_campaign_contacts r WHERE r.org_id = c.org_id AND r.campaign_id = c.id
-  ) agg ON true`;
+  ) agg ON true
+  LEFT JOIN LATERAL (
+    -- What the delivered messages were charged to the wallet (refunded charges excluded), matched on the provider message id.
+    SELECT coalesce(sum(u.credits) FILTER (WHERE u.status = 'charged'), 0)::bigint AS cost_minor,
+           coalesce(max(u.currency), (SELECT w.unit FROM wallets w WHERE w.org_id = c.org_id ORDER BY w.id LIMIT 1)) AS cost_currency
+      FROM wp_campaign_contacts r
+      JOIN usage_charges u ON u.org_id = r.org_id AND u.wamid = r.whatsapp_message_id
+     WHERE r.org_id = c.org_id AND r.campaign_id = c.id AND r.whatsapp_message_id IS NOT NULL
+  ) cost ON true`;
 
 export interface NewCampaign {
   name: string;

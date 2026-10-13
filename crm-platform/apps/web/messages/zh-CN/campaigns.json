@@ -137,7 +137,8 @@
         "recipients": "{count} 位收件人",
         "scheduled": "计划时间：{date}",
         "instant": "发送：即时",
-        "template": "模板 {name}"
+        "template": "模板 {name}",
+        "cost": "费用"
       },
       "createBroadcast": "创建群发",
       "noData": "未找到数据",
@@ -648,7 +649,9 @@
         "read": "已读",
         "replies": "回复",
         "clicks": "点击",
-        "failed": "失败"
+        "failed": "失败",
+        "cost": "费用",
+        "costHint": "目前已从钱包扣除"
       },
       "tabs": {
         "overview": "概览",
