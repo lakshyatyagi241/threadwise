@@ -119,6 +119,8 @@
       "colStarted": "Gestart",
       "colActivity": "Laatste activiteit",
       "colSteps": "Stappen",
+      "colReplies": "Antwoorden",
+      "repliesHint": "Klantberichten die een wachtknooppunt van deze run bereikten",
       "colActions": "Acties",
       "open": "Run openen",
       "cancel": "Annuleren",

@@ -5,8 +5,8 @@
 # How a major is done on purpose: someone creates a branch (`chore/deps-<package>-<major>`), bumps the package by hand, fixes every
 # call site and type error in the same branch, runs the full gate (`bash .claude/skills/pre-pr/scripts/gate.sh`), and opens a
 # migration PR that a reviewer approves. Nothing here auto-merges, and no workflow in .github/workflows approves or merges a
-# Dependabot PR. Owner settings that back this up: branch protection on main requiring `build-and-typecheck`, `api-and-web` and the CI jobs,
-# and "Allow auto-merge" off (or never enabled on a Dependabot PR).
+# Dependabot PR. (The check workflows were removed in #328 while Actions is unavailable; when they return, require a job that builds
+# @crm/contracts and runs tsc for api and web, with branch protection on main and "Allow auto-merge" off.)
 # GitHub Actions majors (checkout v6 -> v7) are the exception: they are low risk and arrive as ONE group PR (group `actions-major`, labels dependencies + ci).
 # Keep this file at the repository root: GitHub ignores it anywhere else.
 version: 2

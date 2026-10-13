@@ -119,6 +119,8 @@
       "colStarted": "بدأ",
       "colActivity": "آخر نشاط",
       "colSteps": "الخطوات",
+      "colReplies": "الردود",
+      "repliesHint": "رسائل العميل التي وصلت إلى عقدة انتظار في هذا التشغيل",
       "colActions": "الإجراءات",
       "open": "فتح التشغيل",
       "cancel": "إلغاء",
