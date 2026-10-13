@@ -223,7 +223,15 @@
       "groupMember": "그룹 멤버",
       "groupTally": "{members}명 중 {delivered}명에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
       "groupTallyNoTotal": "{delivered, plural, other {#명의 멤버}}에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
-      "groupTallyBilled": "과금 {billable}, 무료 {free}"
+      "groupTallyBilled": "과금 {billable}, 무료 {free}",
+      "stageLine": {
+        "auto": "AI가 채팅을 읽고 이 연락처를 {from}에서 {to}(으)로 옮겼습니다.",
+        "undo": "실행 취소",
+        "wasUndone": "취소됨",
+        "undone": "단계 변경을 취소했습니다: {stage}(으)로 돌아갔습니다.",
+        "undoneToast": "단계를 {stage}(으)로 되돌렸습니다.",
+        "couldNotUndo": "이 변경은 더 이상 취소할 수 없습니다. 연락처가 이미 다음 단계로 갔거나 이미 취소되었습니다."
+      }
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -964,6 +972,17 @@
         "created": "라벨을 만들었습니다",
         "deleted": "라벨을 삭제했습니다"
       }
+    },
+    "sla": {
+      "breached": "SLA 위반",
+      "atRisk": "SLA 마감까지 {minutes}분",
+      "ok": "SLA 마감 {time}",
+      "kind": {
+        "first_response": "첫 답변 목표",
+        "resolution": "해결 목표"
+      },
+      "titleBreached": "{kind}: 미달성 (마감 {time})",
+      "titleOpen": "{kind}: 마감 {time}"
     }
   }
 }

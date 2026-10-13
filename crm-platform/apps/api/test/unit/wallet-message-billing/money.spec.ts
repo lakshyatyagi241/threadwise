@@ -68,15 +68,12 @@ describe('adjustWalletSchema: the note is mandatory', () => {
 });
 
 describe('which delivery reports charge (TW-WALLET-012)', () => {
-  it('WABA and Twilio charge on delivered or read, not on sent', () => {
-    expect(isBillableStatus('waba', 'delivered')).toBe(true);
-    expect(isBillableStatus('waba', 'read')).toBe(true);
-    expect(isBillableStatus('waba', 'sent')).toBe(false);
-    expect(isBillableStatus('twilio', 'sent')).toBe(false);
-  });
-
-  it('Baileys cannot report delivery reliably, so sent charges too', () => {
-    expect(isBillableStatus('baileys', 'sent')).toBe(true);
+  it('every engine charges from sent (refunded on failed), and on delivered or read', () => {
+    for (const p of ['waba', 'twilio', 'baileys'] as const) {
+      expect(isBillableStatus(p, 'sent')).toBe(true);
+      expect(isBillableStatus(p, 'delivered')).toBe(true);
+      expect(isBillableStatus(p, 'read')).toBe(true);
+    }
   });
 
   it('failed and undelivered are failures, and never billable', () => {

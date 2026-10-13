@@ -5,6 +5,7 @@ export interface SettingsForm {
   autoScore: boolean;
   chatDigest: boolean;
   stageSuggestions: boolean;
+  stageAutoApply: boolean;
 }
 
 export const formFromSettings = (s: LscSettings): SettingsForm => ({
@@ -12,13 +13,15 @@ export const formFromSettings = (s: LscSettings): SettingsForm => ({
   autoScore: s.autoScore,
   chatDigest: s.chatDigest,
   stageSuggestions: s.stageSuggestions,
+  stageAutoApply: s.stageAutoApply,
 });
 
 export const settingsDirty = (a: SettingsForm, b: SettingsForm): boolean =>
   a.enabled !== b.enabled ||
   a.autoScore !== b.autoScore ||
   a.chatDigest !== b.chatDigest ||
-  a.stageSuggestions !== b.stageSuggestions;
+  a.stageSuggestions !== b.stageSuggestions ||
+  a.stageAutoApply !== b.stageAutoApply;
 
 /**
  * The first save has no row yet (rowVersion is null) and sends none; every later save must send the version it read, so a
@@ -33,7 +36,11 @@ export function toSettingsInput(
     autoScore: form.autoScore,
     // Reading conversations is a pilot: a workspace outside it never sends the two switches (the API refuses turning them on).
     ...(s.chatDigestAvailable
-      ? { chatDigest: form.chatDigest, stageSuggestions: form.chatDigest && form.stageSuggestions }
+      ? {
+          chatDigest: form.chatDigest,
+          stageSuggestions: form.chatDigest && form.stageSuggestions,
+          stageAutoApply: form.stageAutoApply,
+        }
       : {}),
     ...(s.rowVersion !== null ? { rowVersion: s.rowVersion } : {}),
   };

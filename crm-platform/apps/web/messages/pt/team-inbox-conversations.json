@@ -223,7 +223,15 @@
       "groupMember": "Membro do grupo",
       "groupTally": "Entregue a {delivered} de {members}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
       "groupTallyNoTotal": "Entregue a {delivered, plural, one {# membro} other {# membros}}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
-      "groupTallyBilled": "{billable} cobradas, {free} gratuitas"
+      "groupTallyBilled": "{billable} cobradas, {free} gratuitas",
+      "stageLine": {
+        "auto": "A IA leu a conversa e moveu este contato de {from} para {to}.",
+        "undo": "Desfazer",
+        "wasUndone": "Desfeito",
+        "undone": "Mudança de etapa desfeita: de volta a {stage}.",
+        "undoneToast": "Etapa restaurada para {stage}.",
+        "couldNotUndo": "Esta mudança não pode mais ser desfeita: o contato avançou ou já foi desfeita."
+      }
     },
     "media": {
       "openImage": "Abrir imagem {name}",
@@ -964,6 +972,17 @@
         "created": "Etiqueta criada",
         "deleted": "Etiqueta excluída"
       }
+    },
+    "sla": {
+      "breached": "SLA descumprido",
+      "atRisk": "SLA vence em {minutes} min",
+      "ok": "SLA vence {time}",
+      "kind": {
+        "first_response": "Meta de primeira resposta",
+        "resolution": "Meta de resolução"
+      },
+      "titleBreached": "{kind}: descumprida (venceu {time})",
+      "titleOpen": "{kind}: vence {time}"
     }
   }
 }

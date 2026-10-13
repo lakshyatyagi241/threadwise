@@ -271,6 +271,8 @@ export const IMPORT_REJECT_REASONS = [
   'tag_name_too_long',
   'plan_limit_reached',
   'tag_limit_reached',
+  /** Not an error: the row repeats a number from earlier in the file and was merged into that contact. */
+  'duplicate_in_file',
 ] as const;
 export type ImportRejectReason = (typeof IMPORT_REJECT_REASONS)[number];
 
@@ -344,6 +346,8 @@ export const contactImportJobSchema = z.object({
   /** New contacts the plan's contact limit stopped. */
   limitExceeded: z.number().int(),
   error: z.string().nullable(),
+  /** Who started the import; null for a deleted user. */
+  createdBy: z.string().nullable(),
   startedAt: z.string().datetime().nullable(),
   finishedAt: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),

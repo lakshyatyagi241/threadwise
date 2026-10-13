@@ -137,7 +137,8 @@
         "recipients": "{count} ontvangers",
         "scheduled": "Gepland: {date}",
         "instant": "Verzenden: direct",
-        "template": "Sjabloon {name}"
+        "template": "Sjabloon {name}",
+        "cost": "Kosten"
       },
       "createBroadcast": "Broadcast maken",
       "noData": "Geen gegevens gevonden",
@@ -648,7 +649,9 @@
         "read": "Gelezen",
         "replies": "Antwoorden",
         "clicks": "Klikken",
-        "failed": "Mislukt"
+        "failed": "Mislukt",
+        "cost": "Kosten",
+        "costHint": "Tot nu toe van de portemonnee afgeschreven"
       },
       "tabs": {
         "overview": "Overzicht",

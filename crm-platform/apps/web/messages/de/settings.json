@@ -349,6 +349,16 @@
         "label": "Growth",
         "description": "Hot Leads, Zielgruppen, Kampagnenantworten und weitere Dinge, die Ihr Team aus Chats und Kampagnen ableiten und angehen kann.",
         "keywords": "growth, hot lead, zielgruppe, engagement, inaktiv, kampagnenantworten, conversion-wahrscheinlichkeit, opt-out, pilot"
+      },
+      "sla-policies": {
+        "label": "Antwortziele (SLA)",
+        "description": "Legen Sie fest, wie schnell Ihr Team antworten und lösen soll, und werden Sie benachrichtigt, wenn eine Unterhaltung ihr Ziel verfehlt.",
+        "keywords": "sla, Antwortzeit, erste Antwort, Lösung, Verletzung, Ziele, Geschäftszeiten"
+      },
+      "team-performance": {
+        "label": "Teamleistung",
+        "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
+        "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

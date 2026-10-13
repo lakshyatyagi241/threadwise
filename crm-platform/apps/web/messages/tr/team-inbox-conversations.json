@@ -223,7 +223,15 @@
       "groupMember": "Grup üyesi",
       "groupTally": "{members} kişiden {delivered} kişiye iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
       "groupTallyNoTotal": "{delivered, plural, one {# üyeye} other {# üyeye}} iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
-      "groupTallyBilled": "{billable} ücretlendirildi, {free} ücretsiz"
+      "groupTallyBilled": "{billable} ücretlendirildi, {free} ücretsiz",
+      "stageLine": {
+        "auto": "Yapay zekâ sohbeti okudu ve bu kişiyi {from} aşamasından {to} aşamasına taşıdı.",
+        "undo": "Geri al",
+        "wasUndone": "Geri alındı",
+        "undone": "Aşama değişikliği geri alındı: tekrar {stage}.",
+        "undoneToast": "Aşama {stage} olarak geri yüklendi.",
+        "couldNotUndo": "Bu değişiklik artık geri alınamaz: kişi ilerledi veya değişiklik zaten geri alındı."
+      }
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -964,6 +972,17 @@
         "created": "Etiket oluşturuldu",
         "deleted": "Etiket silindi"
       }
+    },
+    "sla": {
+      "breached": "SLA aşıldı",
+      "atRisk": "SLA bitimine {minutes} dk kaldı",
+      "ok": "SLA bitiş: {time}",
+      "kind": {
+        "first_response": "İlk yanıt hedefi",
+        "resolution": "Çözüm hedefi"
+      },
+      "titleBreached": "{kind}: kaçırıldı (son zaman {time})",
+      "titleOpen": "{kind}: son zaman {time}"
     }
   }
 }

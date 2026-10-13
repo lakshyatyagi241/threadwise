@@ -137,7 +137,8 @@
         "recipients": "{count} destinatários",
         "scheduled": "Agendada: {date}",
         "instant": "Envio: imediato",
-        "template": "Modelo {name}"
+        "template": "Modelo {name}",
+        "cost": "Custo"
       },
       "createBroadcast": "Criar transmissão",
       "noData": "Nenhum dado encontrado",
@@ -648,7 +649,9 @@
         "read": "Lidas",
         "replies": "Respostas",
         "clicks": "Cliques",
-        "failed": "Com falha"
+        "failed": "Com falha",
+        "cost": "Custo",
+        "costHint": "Cobrado da carteira até agora"
       },
       "tabs": {
         "overview": "Visão geral",

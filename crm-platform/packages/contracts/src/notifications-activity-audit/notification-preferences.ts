@@ -82,6 +82,8 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   // suspension is news to read; a person who wants the OS notification turns the push on.
   // TW-MAIL-032: a reply that did not reach someone. Quiet like the send outcomes; the push stays on (the sender wants to fix the address).
   email_bounced: { group: 'conversations', toast: true, sound: false, push: false },
+  // BL-036: a breach is news for the person who owns the conversation; quiet by default (no sound, no push) like the other alerts of the group.
+  sla_breached: { group: 'conversations', toast: true, sound: false, push: false },
   waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspended: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspension_cleared: {

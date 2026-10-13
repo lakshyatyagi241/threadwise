@@ -137,7 +137,8 @@
         "recipients": "Получателей: {count}",
         "scheduled": "Запланирована: {date}",
         "instant": "Отправка: сразу",
-        "template": "Шаблон {name}"
+        "template": "Шаблон {name}",
+        "cost": "Стоимость"
       },
       "createBroadcast": "Создать рассылку",
       "noData": "Данные не найдены",
@@ -648,7 +649,9 @@
         "read": "Прочитано",
         "replies": "Ответы",
         "clicks": "Клики",
-        "failed": "Ошибки"
+        "failed": "Ошибки",
+        "cost": "Стоимость",
+        "costHint": "Списано с кошелька на данный момент"
       },
       "tabs": {
         "overview": "Обзор",

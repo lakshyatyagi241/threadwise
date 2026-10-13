@@ -223,7 +223,15 @@
       "groupMember": "Участник группы",
       "groupTally": "Доставлено {delivered} из {members}{read, plural, =0 {} other {, прочитали: #}}{failed, plural, =0 {} other {, ошибок: #}}",
       "groupTallyNoTotal": "Доставлено: {delivered, plural, one {# участнику} other {# участникам}}{read, plural, =0 {} other {, прочитали: #}}{failed, plural, =0 {} other {, ошибок: #}}",
-      "groupTallyBilled": "платных {billable}, бесплатных {free}"
+      "groupTallyBilled": "платных {billable}, бесплатных {free}",
+      "stageLine": {
+        "auto": "ИИ прочитал чат и перевёл этот контакт с этапа «{from}» на «{to}».",
+        "undo": "Отменить",
+        "wasUndone": "Отменено",
+        "undone": "Смена этапа отменена: снова «{stage}».",
+        "undoneToast": "Этап возвращён на «{stage}».",
+        "couldNotUndo": "Это изменение больше нельзя отменить: контакт уже перешёл дальше или изменение уже отменено."
+      }
     },
     "media": {
       "openImage": "Открыть изображение {name}",
@@ -964,6 +972,17 @@
         "created": "Метка создана",
         "deleted": "Метка удалена"
       }
+    },
+    "sla": {
+      "breached": "SLA нарушен",
+      "atRisk": "SLA истекает через {minutes} мин",
+      "ok": "SLA до {time}",
+      "kind": {
+        "first_response": "Цель по первому ответу",
+        "resolution": "Цель по решению"
+      },
+      "titleBreached": "{kind}: нарушена (срок был {time})",
+      "titleOpen": "{kind}: срок {time}"
     }
   }
 }

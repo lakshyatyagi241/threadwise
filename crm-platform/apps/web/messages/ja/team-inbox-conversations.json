@@ -223,7 +223,15 @@
       "groupMember": "グループメンバー",
       "groupTally": "{members}人中{delivered}人に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
       "groupTallyNoTotal": "{delivered, plural, other {#人のメンバー}}に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
-      "groupTallyBilled": "課金 {billable}、無料 {free}"
+      "groupTallyBilled": "課金 {billable}、無料 {free}",
+      "stageLine": {
+        "auto": "AI がチャットを読み、この連絡先を「{from}」から「{to}」へ移しました。",
+        "undo": "元に戻す",
+        "wasUndone": "元に戻しました",
+        "undone": "ステージの変更を取り消しました:「{stage}」に戻りました。",
+        "undoneToast": "ステージを「{stage}」に戻しました。",
+        "couldNotUndo": "この変更はもう取り消せません。連絡先が先に進んだか、すでに取り消されています。"
+      }
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -964,6 +972,17 @@
         "created": "ラベルを作成しました",
         "deleted": "ラベルを削除しました"
       }
+    },
+    "sla": {
+      "breached": "SLA違反",
+      "atRisk": "SLA期限まで{minutes}分",
+      "ok": "SLA期限 {time}",
+      "kind": {
+        "first_response": "初回返信の目標",
+        "resolution": "解決の目標"
+      },
+      "titleBreached": "{kind}：未達成（期限 {time}）",
+      "titleOpen": "{kind}：期限 {time}"
     }
   }
 }

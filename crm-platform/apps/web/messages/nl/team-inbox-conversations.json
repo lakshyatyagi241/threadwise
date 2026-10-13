@@ -223,7 +223,15 @@
       "groupMember": "Groepslid",
       "groupTally": "Afgeleverd bij {delivered} van {members}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
       "groupTallyNoTotal": "Afgeleverd bij {delivered, plural, one {# lid} other {# leden}}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
-      "groupTallyBilled": "{billable} aangerekend, {free} gratis"
+      "groupTallyBilled": "{billable} aangerekend, {free} gratis",
+      "stageLine": {
+        "auto": "De AI las de chat en verplaatste dit contact van {from} naar {to}.",
+        "undo": "Ongedaan maken",
+        "wasUndone": "Ongedaan gemaakt",
+        "undone": "Fasewijziging ongedaan gemaakt: terug naar {stage}.",
+        "undoneToast": "Fase teruggezet naar {stage}.",
+        "couldNotUndo": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is doorgegaan of het is al ongedaan gemaakt."
+      }
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -964,6 +972,17 @@
         "created": "Label aangemaakt",
         "deleted": "Label verwijderd"
       }
+    },
+    "sla": {
+      "breached": "SLA overschreden",
+      "atRisk": "SLA verloopt over {minutes} min",
+      "ok": "SLA uiterlijk {time}",
+      "kind": {
+        "first_response": "Doel eerste reactie",
+        "resolution": "Oplossingsdoel"
+      },
+      "titleBreached": "{kind}: gemist (was uiterlijk {time})",
+      "titleOpen": "{kind}: uiterlijk {time}"
     }
   }
 }

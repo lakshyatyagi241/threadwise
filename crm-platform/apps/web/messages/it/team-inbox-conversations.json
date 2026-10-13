@@ -223,7 +223,15 @@
       "groupMember": "Membro del gruppo",
       "groupTally": "Consegnato a {delivered} su {members}{read, plural, =0 {} other {, letto da #}}{failed, plural, =0 {} other {, # non riusciti}}",
       "groupTallyNoTotal": "Consegnato a {delivered, plural, one {# membro} other {# membri}}{read, plural, =0 {} other {, letto da #}}{failed, plural, =0 {} other {, # non riusciti}}",
-      "groupTallyBilled": "{billable} addebitati, {free} gratuiti"
+      "groupTallyBilled": "{billable} addebitati, {free} gratuiti",
+      "stageLine": {
+        "auto": "L’IA ha letto la chat e ha spostato questo contatto da {from} a {to}.",
+        "undo": "Annulla",
+        "wasUndone": "Annullato",
+        "undone": "Cambio di fase annullato: di nuovo in {stage}.",
+        "undoneToast": "Fase ripristinata a {stage}.",
+        "couldNotUndo": "Questa modifica non può più essere annullata: il contatto è andato avanti o è già stata annullata."
+      }
     },
     "media": {
       "openImage": "Apri immagine {name}",
@@ -964,6 +972,17 @@
         "created": "Etichetta creata",
         "deleted": "Etichetta eliminata"
       }
+    },
+    "sla": {
+      "breached": "SLA violato",
+      "atRisk": "SLA in scadenza tra {minutes} min",
+      "ok": "SLA in scadenza {time}",
+      "kind": {
+        "first_response": "Obiettivo di prima risposta",
+        "resolution": "Obiettivo di risoluzione"
+      },
+      "titleBreached": "{kind}: mancato (scadenza {time})",
+      "titleOpen": "{kind}: scadenza {time}"
     }
   }
 }

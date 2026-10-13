@@ -1,5 +1,6 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
+import { randomUUID } from 'node:crypto';
 import type { Queue } from 'bullmq';
 import {
   ERROR_CODES,
@@ -25,6 +26,7 @@ import {
 import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { AiChargeService } from '../wallet-message-billing';
 import { LeadChatDigestRepository } from './lead-chat-digest.repository';
 import { isChatDigestPilot } from './lead-chat-digest.rules';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
@@ -87,6 +89,7 @@ export class LeadScoringService {
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
     private readonly audit: AuditService,
+    private readonly wallet: AiChargeService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadScoreJob>,
   ) {}
@@ -235,6 +238,27 @@ export class LeadScoringService {
       }
     }
 
+    // The platform's key is paid for from the workspace wallet: an empty wallet means no call (no cost to the platform). A workspace
+    // on its own key pays its vendor directly and is not charged here.
+    if (billedAgainst === 'admin') {
+      try {
+        await this.wallet.assertCanAfford(orgId);
+      } catch (err) {
+        if (err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY && !manual) {
+          return this.skip(
+            orgId,
+            base,
+            false,
+            'wallet_empty',
+            ERROR_CODES.WALLET_EMPTY,
+            err.message,
+            billedAgainst,
+          );
+        }
+        throw err;
+      }
+    }
+
     const prompt = scoringPrompt(contact.facts);
     const started = Date.now();
     let completion;
@@ -290,6 +314,7 @@ export class LeadScoringService {
       // The call was paid for and the answer is unusable: log it with its cost, write nothing, do not retry (a retry pays again).
       await this.logRun(orgId, { ...base, ...spent, status: 'failed', error: 'bad_response' });
       await this.recordTokens(orgId, cfg.model, spent, billedAgainst);
+      await this.chargeWallet(orgId, contactId, spent.costUsd, billedAgainst);
       if (manual) {
         throw new AppError(
           ERROR_CODES.LSC_PROVIDER_FAILED,
@@ -325,6 +350,13 @@ export class LeadScoringService {
         },
         tx,
       );
+      if (billedAgainst === 'admin') {
+        await this.wallet.charge(
+          tx,
+          { orgId, label: 'AI lead scoring', costUsd: spent.costUsd, source: 'ai.lead_scoring' },
+          `ai-lsc:${orgId}:${contactId}:${randomUUID()}`,
+        );
+      }
       if (written) {
         await this.audit.record(tx, {
           module: CONTACTS_MODULE_KEY,
@@ -387,6 +419,7 @@ export class LeadScoringService {
       autoScore: row?.autoScore ?? true,
       chatDigest: row?.chatDigest ?? false,
       stageSuggestions: row?.stageSuggestions ?? false,
+      stageAutoApply: row?.stageAutoApply ?? true,
       chatDigestAvailable: isChatDigestPilot(slug),
       pendingSuggestions: pending,
       platformEnabled: cfg.platformEnabled,
@@ -416,6 +449,8 @@ export class LeadScoringService {
         // A stage is suggested from a reading of the chat, so it cannot be on without it.
         stageSuggestions:
           chatDigest && (input.stageSuggestions ?? before?.stageSuggestions ?? false),
+        // Automatic is the default; the choice is kept while suggestions are off, so turning them back on remembers it.
+        stageAutoApply: input.stageAutoApply ?? before?.stageAutoApply ?? true,
       };
       // Reading conversations sends masked chat text to the vendor, which is only offered to the pilot workspaces.
       const turningOn =
@@ -436,9 +471,16 @@ export class LeadScoringService {
         autoScore: before?.autoScore ?? true,
         chatDigest: before?.chatDigest ?? false,
         stageSuggestions: before?.stageSuggestions ?? false,
+        stageAutoApply: before?.stageAutoApply ?? true,
       };
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      for (const k of ['enabled', 'autoScore', 'chatDigest', 'stageSuggestions'] as const) {
+      for (const k of [
+        'enabled',
+        'autoScore',
+        'chatDigest',
+        'stageSuggestions',
+        'stageAutoApply',
+      ] as const) {
         if (was[k] !== next[k]) delta[k] = { old: was[k], new: next[k] };
       }
       await this.audit.record(tx, {
@@ -515,6 +557,25 @@ export class LeadScoringService {
     if (manual) throw new AppError(code, message, HttpStatus.UNPROCESSABLE_ENTITY);
     await this.logRun(orgId, { ...base, status: 'skipped', billedAgainst, error: reason });
     return { status: 'skipped', reason };
+  }
+
+  /** Charges a call that was paid for but produced no score (its own transaction). A failure is logged, never thrown. */
+  private async chargeWallet(
+    orgId: number,
+    contactId: number,
+    costUsd: number,
+    billedAgainst: 'admin' | 'workspace',
+  ): Promise<void> {
+    if (billedAgainst !== 'admin') return;
+    await this.db
+      .txAs({ orgId, userId: null }, (tx) =>
+        this.wallet.charge(
+          tx,
+          { orgId, label: 'AI lead scoring', costUsd, source: 'ai.lead_scoring' },
+          `ai-lsc:${orgId}:${contactId}:${randomUUID()}`,
+        ),
+      )
+      .catch((err) => this.logger.warn({ orgId, err }, 'lead scoring wallet charge failed'));
   }
 
   private async logRun(orgId: number, w: RunWrite): Promise<void> {

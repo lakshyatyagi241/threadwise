@@ -206,13 +206,24 @@ export type MessageFailure = z.infer<typeof messageFailureSchema>;
 /**
  * What a system line reports, for the lines the web app writes in the reader's language (the line's `body` stays the English text for
  * exports and old clients). `consent`: the contact replied with a STOP / START keyword and the ledger changed state.
+ * `stage_change`: the AI moved the contact to another lifecycle stage after reading the chat (`auto`, with an Undo while the contact is
+ * still there), or someone put it back (`undone`). `suggestionId` ties the two lines together; the labels are the workspace's own words.
  */
-export const messageSystemEventSchema = z.object({
-  event: z.literal('consent'),
-  action: z.enum(['withdrawn', 'granted']),
-  /** The configured keyword the contact typed (`stop`), upper-cased by the writer; never the contact's own free text. */
-  keyword: z.string().max(40).nullable().optional(),
-});
+export const messageSystemEventSchema = z.discriminatedUnion('event', [
+  z.object({
+    event: z.literal('consent'),
+    action: z.enum(['withdrawn', 'granted']),
+    /** The configured keyword the contact typed (`stop`), upper-cased by the writer; never the contact's own free text. */
+    keyword: z.string().max(40).nullable().optional(),
+  }),
+  z.object({
+    event: z.literal('stage_change'),
+    action: z.enum(['auto', 'undone']),
+    suggestionId: uuidSchema,
+    fromStage: z.string().max(120),
+    toStage: z.string().max(120),
+  }),
+]);
 export type MessageSystemEvent = z.infer<typeof messageSystemEventSchema>;
 
 export const messageResponseSchema = z.object({

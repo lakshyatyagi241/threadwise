@@ -137,7 +137,8 @@
         "recipients": "{count} destinatari",
         "scheduled": "Programmata: {date}",
         "instant": "Invio: immediato",
-        "template": "Template {name}"
+        "template": "Template {name}",
+        "cost": "Costo"
       },
       "createBroadcast": "Crea broadcast",
       "noData": "Nessun dato trovato",
@@ -648,7 +649,9 @@
         "read": "Letti",
         "replies": "Risposte",
         "clicks": "Clic",
-        "failed": "Non riusciti"
+        "failed": "Non riusciti",
+        "cost": "Costo",
+        "costHint": "Addebitato finora al portafoglio"
       },
       "tabs": {
         "overview": "Panoramica",

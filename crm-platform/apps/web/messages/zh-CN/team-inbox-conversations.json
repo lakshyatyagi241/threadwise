@@ -223,7 +223,15 @@
       "groupMember": "群成员",
       "groupTally": "已送达 {delivered}/{members} 人{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
       "groupTallyNoTotal": "已送达 {delivered, plural, other {#位成员}}{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
-      "groupTallyBilled": "计费 {billable}，免费 {free}"
+      "groupTallyBilled": "计费 {billable}，免费 {free}",
+      "stageLine": {
+        "auto": "AI 阅读了聊天，并将此联系人从“{from}”移至“{to}”。",
+        "undo": "撤销",
+        "wasUndone": "已撤销",
+        "undone": "阶段变更已撤销：已恢复为“{stage}”。",
+        "undoneToast": "阶段已恢复为“{stage}”。",
+        "couldNotUndo": "此更改已无法撤销：联系人已进入后续阶段，或已被撤销。"
+      }
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -964,6 +972,17 @@
         "created": "标签已创建",
         "deleted": "标签已删除"
       }
+    },
+    "sla": {
+      "breached": "SLA 已超时",
+      "atRisk": "SLA 将在 {minutes} 分钟后到期",
+      "ok": "SLA 到期时间 {time}",
+      "kind": {
+        "first_response": "首次回复目标",
+        "resolution": "解决目标"
+      },
+      "titleBreached": "{kind}：已错过（应于 {time} 完成）",
+      "titleOpen": "{kind}：{time} 到期"
     }
   }
 }

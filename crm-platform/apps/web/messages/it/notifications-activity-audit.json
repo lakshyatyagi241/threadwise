@@ -354,6 +354,10 @@
         "device_group_removed": {
           "label": "Rimosso da un gruppo di numeri personali",
           "hint": "Qualcuno ha rimosso uno dei tuoi numeri WhatsApp personali da un gruppo. Può essere un segnale che il numero è stato segnalato."
+        },
+        "sla_breached": {
+          "label": "SLA violato",
+          "hint": "Una conversazione di tua competenza ha mancato l'obiettivo di prima risposta o di risoluzione."
         }
       },
       "loading": "Caricamento delle tue preferenze",

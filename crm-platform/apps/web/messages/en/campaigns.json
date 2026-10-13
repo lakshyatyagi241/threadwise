@@ -128,7 +128,8 @@
         "recipients": "{count} recipients",
         "scheduled": "Scheduled: {date}",
         "instant": "Send: instant",
-        "template": "Template {name}"
+        "template": "Template {name}",
+        "cost": "Cost"
       },
       "noData": "No data found",
       "noDataHint": "No WhatsApp campaigns match the current filters. Try clearing filters or launch your first campaign.",
@@ -675,7 +676,9 @@
         "read": "Read",
         "replies": "Replies",
         "clicks": "Clicks",
-        "failed": "Failed"
+        "failed": "Failed",
+        "cost": "Cost",
+        "costHint": "Charged to the wallet so far"
       },
       "tabs": {
         "overview": "Overview",

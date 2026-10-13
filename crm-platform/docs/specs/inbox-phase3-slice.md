@@ -15,7 +15,7 @@ TW-TIB1-035 (priority), 036 and 037 (labels), 039 (bulk), 016 (24-hour window), 
 | Priority (`inbox.conversation.priority`)            | partial                    | Column `conversations.priority` and the row chip existed; no route changed it from the inbox (only the contract and the timeline type `priority_changed`).                                                                                                                                                                                                                                                                                                                                                                                                         |
 | Conversation labels (`inbox.conversation.tag`)      | built (2nd milestone, 2.5) | Table `conversation_tag` (RLS, composite FK to `tags`) exists in `packages/db/src/schema/team-inbox-conversations/tables.ts`; nothing reads or writes it; no picker, no list filter, no chip.                                                                                                                                                                                                                                                                                                                                                                      |
 | Workspace label master list (`inbox.tag.manage`)    | missing                    | `tags` table belongs to contacts (`contacts-attributes-tags`); no inbox route manages it. In Reference there is no standalone screen either (TW-TIB1-037).                                                                                                                                                                                                                                                                                                                                                                                                         |
-| SLA policies (`inbox.sla.manage`, plan `inbox_sla`) | partial                    | Tables `sla_policies` (first response, resolution, pause when waiting, business hours, priority overrides, default) and conversation columns `sla_policy_id`, `sla_first_response_due`, `sla_resolution_due`, `sla_breached` plus partial indexes exist; the detail response already returns `sla`; plan feature `inbox_sla` is defined (`plans-subscriptions-trials/catalogue.ts`) but gates nothing. No CRUD, no due-date computation, no sweep, no badge, no notification, no screen. `sla_breaches` is keyed by support-desk `ticket_id`, not by conversation. |
+| SLA policies (`inbox.sla.manage`, plan `inbox_sla`) | built (3rd milestone, 2.6) | Tables `sla_policies` (first response, resolution, pause when waiting, business hours, priority overrides, default) and conversation columns `sla_policy_id`, `sla_first_response_due`, `sla_resolution_due`, `sla_breached` plus partial indexes exist; the detail response already returns `sla`; plan feature `inbox_sla` is defined (`plans-subscriptions-trials/catalogue.ts`) but gates nothing. No CRUD, no due-date computation, no sweep, no badge, no notification, no screen. `sla_breaches` is keyed by support-desk `ticket_id`, not by conversation. |
 | Routing engine (auto-assignment)                    | built                      | `team-inbox-routing-sla` module, `inbox_routing` gate, `routing_rules` limit (wiring map). Out of scope here.                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | Saved replies, consent                              | built                      | Merged; untouched by this change. Opt-out STOP detection still runs first in inbound ingest (no ingest file changed).                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | Retention settings                                  | missing                    | Plan: forever in v1, a per-workspace `message_retention_days` later as a batched delete (`plan-inbox-chat.md` decision 5). Only the message-log archive exists (90 days live, archive one year: `message-log-archive.service.ts`). No setting, no sweep.                                                                                                                                                                                                                                                                                                           |
@@ -88,6 +88,42 @@ case-insensitive unique name and the audit and outbox rows.
   chips that also change the priority, and the flow enrolment on "tag added" (blocked on the flow triggers, FLR).
 - Deleting a label removes it from contacts too (same tag); the screen says how many conversations carry it.
 
+### 2.6 SLA policies and response clocks (third milestone, branch `lakshya/partial/sla`)
+
+Reference first: TW-TIB2-024 to 028. The tables (`sla_policies`, and the SLA columns of `conversations` with their partial indexes) existed, so
+no migration.
+
+- **Policies.** `GET|POST /v2/inbox/sla/policies`, `PATCH|DELETE .../:id`. Every route needs the plan feature `inbox_sla` (422
+  `PLAN_FEATURE_LOCKED`); reads `inbox.settings.read`, writes `inbox.sla.manage`. Targets in minutes (first reply 1 to 100000, resolution 1 to
+  1000000, either may be empty), pause while waiting on the customer, count business hours only, per-priority overrides (key by key), one
+  default (exclusive inside one transaction; the workspace's first policy is the default). `rowVersion`, audit and outbox
+  (`inbox.sla_policy.created|updated|deleted`).
+- **Start (`SlaInboundListener` > `SlaClockService`, worker).** On the first message of a new conversation, and on the one that reopens a resolved or
+  closed conversation, the default policy gives the due times, anchored at `waiting_since`. Priority override applies; with business hours
+  the minutes count only open time in the workspace's time zone (`common/sla-time.ts`: `addBusinessMinutes`, minute-accurate, DST and overnight
+  shifts handled, a workspace with every day off is treated as always open). No default policy, no targets or no `inbox_sla` means no clock. The
+  opt-out STOP detection and the other listeners are untouched (this one only reads the stored-message event).
+- **Sweep (`SlaSweepService`, worker, every minute, `SKIP LOCKED`, only workspaces with `inbox_sla`).** (1) A first-reply clock whose customer was
+  answered (`waiting_since` clear) is closed and a `first_response` event records `withinSla`; a late answer is a breach. (2) An open (or
+  pending, unless the policy pauses) conversation past its first-reply target while the customer waits, or past its resolution target, is flagged
+  once: `sla_breached`, a `sla_breach` event (`kind`, `dueAt`), outbox `conversation.sla_breached`, realtime. Snoozed, resolved, closed and spam
+  are skipped.
+- **Notification.** New type `sla_breached` (preferences row, group Conversations, in-app toast on, sound and push off by default, en and 21
+  locales): to the assignee, else the assigned team's members, else the holders of `inbox.sla.manage`; one row per person and event; the push
+  carries the title only (no customer name).
+- **Badge.** `slaStatus` on every list row and the detail: `breached`, `at_risk` (within 30 minutes of the due time) or `ok`, computed from the
+  stored due times at read time, so it never lags the once-a-minute sweep. The row shows only a clock in trouble; the thread header shows the clock
+  that matters now (first reply while the customer waits, then resolution).
+- **Web.** Settings > Automation > "Response targets" at `/sla-policies` (list, create, edit, delete, priority overrides; the paywall sheet on a plan
+  without the feature), the row and header badges, the notification preference row, help guide `sla-policies`.
+- **Intended differences from Reference.** A new cycle starts when a customer writes after a resolve (Reference ran one clock per conversation for
+  ever); no default policy means no clock (Reference applied "any" policy); business hours and the pause flag are real (Reference stored but ignored
+  them); a late first reply is a breach; the breach notifies (Reference did not); policy writes are validated, versioned, audited and gated by
+  the plan; delete is available and leaves running clocks alone; the flag is one per cycle (kept).
+- **Not built.** Device-scoped policies (`device_ids`, the column is left null), crediting the time spent pending (a pending conversation is not
+  flagged, its due time is not moved), the routing action "set SLA", a kanban/performance report on breaches, an SLA breach tab in the list,
+  and a `sla_met` / `sla_missed` event on resolve.
+
 ### 2.4 Not in the slice (still open, recorded in BL-036)
 
 Bulk actions of Reference not built: **spam, archive and unarchive, pin and unpin, mute and unmute, delete**. The archive and pin
@@ -106,7 +142,7 @@ columns exist (`archived`, `pinned_at`) and fit the same bulk action union; dele
 - Web: chips on the row and header, a picker with search in the header and a Label entry in the bulk bar. `data-agent-ignore` is not needed
   (labels are staff-written), but a customer name next to them stays inside the existing ignored regions.
 
-### 3.2 SLA policies (`inbox.sla.manage`, plan feature `inbox_sla`)
+### 3.2 SLA policies: built, see 2.6 (original design kept)
 
 - Gate: `@RequirePlanFeature('inbox_sla')` on the policy routes (as `inbox_routing` does for rules); reads with `inbox.settings.read`, writes with
   `inbox.sla.manage`. The conversation columns and badge show only when the feature is on.

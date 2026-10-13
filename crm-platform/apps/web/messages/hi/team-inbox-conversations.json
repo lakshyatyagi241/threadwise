@@ -223,7 +223,15 @@
       "groupMember": "समूह सदस्य",
       "groupTally": "{members} में से {delivered} को डिलीवर हुआ{read, plural, =0 {} other {, # ने पढ़ा}}{failed, plural, =0 {} other {, # विफल}}",
       "groupTallyNoTotal": "{delivered, plural, one {# सदस्य} other {# सदस्यों}} को डिलीवर हुआ{read, plural, =0 {} other {, # ने पढ़ा}}{failed, plural, =0 {} other {, # विफल}}",
-      "groupTallyBilled": "{billable} बिल किए गए, {free} मुफ़्त"
+      "groupTallyBilled": "{billable} बिल किए गए, {free} मुफ़्त",
+      "stageLine": {
+        "auto": "AI ने चैट पढ़ी और इस संपर्क को {from} से {to} में ले गया।",
+        "undo": "पूर्ववत करें",
+        "wasUndone": "पूर्ववत किया गया",
+        "undone": "चरण बदलाव पूर्ववत: वापस {stage} पर।",
+        "undoneToast": "चरण वापस {stage} पर कर दिया गया।",
+        "couldNotUndo": "यह बदलाव अब पूर्ववत नहीं हो सकता: संपर्क आगे बढ़ चुका है या पहले ही पूर्ववत हो चुका है।"
+      }
     },
     "media": {
       "openImage": "इमेज {name} खोलें",
@@ -964,6 +972,17 @@
         "created": "लेबल बनाया गया",
         "deleted": "लेबल हटाया गया"
       }
+    },
+    "sla": {
+      "breached": "SLA का उल्लंघन",
+      "atRisk": "SLA {minutes} मिनट में समाप्त",
+      "ok": "SLA की समय-सीमा {time}",
+      "kind": {
+        "first_response": "पहले जवाब का लक्ष्य",
+        "resolution": "समाधान का लक्ष्य"
+      },
+      "titleBreached": "{kind}: चूक गया (समय-सीमा {time} थी)",
+      "titleOpen": "{kind}: समय-सीमा {time}"
     }
   }
 }

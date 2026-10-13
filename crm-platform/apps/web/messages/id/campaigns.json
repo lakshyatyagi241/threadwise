@@ -137,7 +137,8 @@
         "recipients": "{count} penerima",
         "scheduled": "Dijadwalkan: {date}",
         "instant": "Kirim: langsung",
-        "template": "Template {name}"
+        "template": "Template {name}",
+        "cost": "Biaya"
       },
       "createBroadcast": "Buat broadcast",
       "noData": "Data tidak ditemukan",
@@ -648,7 +649,9 @@
         "read": "Terbaca",
         "replies": "Balasan",
         "clicks": "Klik",
-        "failed": "Gagal"
+        "failed": "Gagal",
+        "cost": "Biaya",
+        "costHint": "Sejauh ini dipotong dari dompet"
       },
       "tabs": {
         "overview": "Ringkasan",

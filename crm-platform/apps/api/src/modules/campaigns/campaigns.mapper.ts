@@ -29,6 +29,7 @@ export function toCampaign(r: CampaignRow): Campaign {
       clicks: effectiveClicks(r.counts.clicked, r.metaClickedCount),
       failed: r.counts.failed,
     },
+    cost: { amountMinor: r.costMinor, currency: r.costCurrency },
     lastRunAt: r.lastRunAt?.toISOString() ?? null,
     completedAt: r.completedAt?.toISOString() ?? null,
     createdAt: r.createdAt.toISOString(),

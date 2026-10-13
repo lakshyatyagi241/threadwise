@@ -100,6 +100,7 @@ function Imports() {
             <tr>
               <th className={TH}>{t('imports.file')}</th>
               <th className={TH}>{t('when')}</th>
+              <th className={TH}>{t('imports.by')}</th>
               <th className={TH}>{t('imports.status')}</th>
               <th className={cn(TH, 'text-end')}>{t('imports.created')}</th>
               <th className={cn(TH, 'text-end')}>{t('imports.updated')}</th>
@@ -120,6 +121,7 @@ function Imports() {
                   <td className={cn(TD, 'whitespace-nowrap tabular-nums')}>
                     {formatDateTime(j.createdAt, locale, timeZone)}
                   </td>
+                  <td className={TD}>{j.createdBy ?? t('exports.unknown')}</td>
                   <td className={TD}>
                     <span
                       className={cn(
@@ -138,7 +140,7 @@ function Imports() {
                   <td className={cn(TD, 'text-end tabular-nums')}>{j.updated}</td>
                   <td className={cn(TD, 'text-end tabular-nums')}>{rejected}</td>
                   <td className={cn(TD, 'text-end')}>
-                    {j.invalid > 0 && (
+                    {rejected > 0 && (
                       <Button
                         variant="secondary"
                         size="sm"

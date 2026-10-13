@@ -261,7 +261,7 @@
         "offBody": "Unterhaltungen werden nicht gelesen. Scores basieren nur auf Kontaktdaten und Interaktionswerten.",
         "needsScoring": "Aktivieren Sie zuerst das KI-Lead-Scoring.",
         "stageLabel": "Lebenszyklusphasen vorschlagen",
-        "stageBody": "Wenn die Unterhaltung eindeutig zeigt, dass ein Kontakt weitergekommen ist, schlägt die KI die nächste Phase vor. Eine Person akzeptiert oder verwirft den Vorschlag; nichts wird automatisch verschoben, und die Phasen Gewonnen und Verloren werden nie vorgeschlagen.",
+        "stageBody": "Wenn das Gespräch klar zeigt, dass ein Kontakt weitergekommen ist, wählt die KI die nächste Phase. Die Phasen Gewonnen und Verloren setzt die KI nie. Wählen Sie unten, ob die Änderung automatisch erfolgt oder auf eine Person wartet.",
         "masked": {
           "title": "So werden persönliche Daten maskiert",
           "phone": "Bei Telefonnummern bleiben nur die ersten Ziffern und die letzten zwei Ziffern erhalten (+91 ***** ***10)",
@@ -281,6 +281,17 @@
           "body": "Sobald die Funktion aktiv ist, werden die letzten Nachrichten eines Kontakts nach dem Verstummen des Chats über OpenRouter an einen KI-Anbieter gesendet. Telefonnummern, E-Mail-Adressen, Kartennummern und Namen werden vorher teilweise maskiert, sodass die gesendeten Daten nicht verwendet werden können, um die Person zu erreichen. Sie können die Funktion jederzeit ausschalten.",
           "yes": "Aktivieren",
           "no": "Abbrechen"
+        },
+        "stageMode": {
+          "title": "Wie eine Phase geändert wird",
+          "auto": {
+            "label": "Automatisch",
+            "body": "Der Kontakt wird sofort verschoben, und der Chat zeigt eine Zeile mit Rückgängig."
+          },
+          "manual": {
+            "label": "Manuell",
+            "body": "Der Vorschlag wartet unter Phasenvorschläge, bis eine Person ihn annimmt oder ablehnt."
+          }
         }
       }
     },

@@ -223,7 +223,15 @@
       "groupMember": "Gruppenmitglied",
       "groupTally": "Zugestellt an {delivered} von {members}{read, plural, =0 {} other {, gelesen von #}}{failed, plural, =0 {} other {, # fehlgeschlagen}}",
       "groupTallyNoTotal": "Zugestellt an {delivered, plural, one {# Mitglied} other {# Mitglieder}}{read, plural, =0 {} other {, gelesen von #}}{failed, plural, =0 {} other {, # fehlgeschlagen}}",
-      "groupTallyBilled": "{billable} berechnet, {free} kostenlos"
+      "groupTallyBilled": "{billable} berechnet, {free} kostenlos",
+      "stageLine": {
+        "auto": "Die KI hat den Chat gelesen und diesen Kontakt von {from} nach {to} verschoben.",
+        "undo": "Rückgängig",
+        "wasUndone": "Rückgängig gemacht",
+        "undone": "Phasenwechsel rückgängig gemacht: zurück bei {stage}.",
+        "undoneToast": "Phase auf {stage} zurückgesetzt.",
+        "couldNotUndo": "Diese Änderung lässt sich nicht mehr rückgängig machen: Der Kontakt ist weitergerückt oder sie wurde schon rückgängig gemacht."
+      }
     },
     "media": {
       "openImage": "Bild {name} öffnen",
@@ -964,6 +972,17 @@
         "created": "Label erstellt",
         "deleted": "Label gelöscht"
       }
+    },
+    "sla": {
+      "breached": "SLA verletzt",
+      "atRisk": "SLA fällig in {minutes} Min.",
+      "ok": "SLA fällig {time}",
+      "kind": {
+        "first_response": "Ziel für erste Antwort",
+        "resolution": "Ziel für Lösung"
+      },
+      "titleBreached": "{kind}: verfehlt (fällig war {time})",
+      "titleOpen": "{kind}: fällig {time}"
     }
   }
 }

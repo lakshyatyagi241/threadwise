@@ -1,3 +1,4 @@
+import { slaStatus } from '../../common/sla-time';
 import type {
   ConversationStatus,
   ConversationSummary,
@@ -54,6 +55,16 @@ export function toConversationSummary(row: InboxConversationRow): ConversationSu
     },
     snoozedUntil: iso(row.snoozedUntil),
     labels: row.labels,
+    slaStatus: slaStatus(
+      {
+        status: row.status,
+        waitingSince: row.waitingSince,
+        firstResponseDue: row.slaFirstResponseDue,
+        resolutionDue: row.slaResolutionDue,
+        breached: row.slaBreached,
+      },
+      new Date(),
+    ),
     lastMessageAt: iso(row.lastMessageAt),
     lastInboundAt: iso(row.lastInboundAt),
     lastOutboundAt: iso(row.lastOutboundAt),

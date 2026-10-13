@@ -24,6 +24,7 @@ export interface SettingsRow {
   autoScore: boolean;
   chatDigest: boolean;
   stageSuggestions: boolean;
+  stageAutoApply: boolean;
   rowVersion: number;
   updatedAt: Date;
 }
@@ -82,7 +83,7 @@ export class LeadScoringRepository {
 
   async getSettings(tx: Tx, orgId: number): Promise<SettingsRow | null> {
     const res = await tx.execute(
-      sql`SELECT enabled, auto_score, chat_digest, stage_suggestions, row_version, updated_at FROM lead_scoring_settings WHERE org_id = ${orgId}`,
+      sql`SELECT enabled, auto_score, chat_digest, stage_suggestions, stage_auto_apply, row_version, updated_at FROM lead_scoring_settings WHERE org_id = ${orgId}`,
     );
     const r = res.rows[0] as Raw | undefined;
     if (!r) return null;
@@ -91,6 +92,7 @@ export class LeadScoringRepository {
       autoScore: r.auto_score as boolean,
       chatDigest: r.chat_digest as boolean,
       stageSuggestions: r.stage_suggestions as boolean,
+      stageAutoApply: r.stage_auto_apply as boolean,
       rowVersion: num(r.row_version),
       updatedAt: date(r.updated_at),
     };
@@ -100,19 +102,26 @@ export class LeadScoringRepository {
   async saveSettings(
     tx: Tx,
     orgId: number,
-    w: { enabled: boolean; autoScore: boolean; chatDigest: boolean; stageSuggestions: boolean },
+    w: {
+      enabled: boolean;
+      autoScore: boolean;
+      chatDigest: boolean;
+      stageSuggestions: boolean;
+      stageAutoApply: boolean;
+    },
     rowVersion: number | undefined,
   ): Promise<boolean> {
     if (rowVersion === undefined) {
       const res = await tx.execute(sql`
-        INSERT INTO lead_scoring_settings (org_id, enabled, auto_score, chat_digest, stage_suggestions)
-        VALUES (${orgId}, ${w.enabled}, ${w.autoScore}, ${w.chatDigest}, ${w.stageSuggestions})
+        INSERT INTO lead_scoring_settings (org_id, enabled, auto_score, chat_digest, stage_suggestions, stage_auto_apply)
+        VALUES (${orgId}, ${w.enabled}, ${w.autoScore}, ${w.chatDigest}, ${w.stageSuggestions}, ${w.stageAutoApply})
         ON CONFLICT (org_id) DO NOTHING RETURNING org_id`);
       return res.rows.length > 0;
     }
     const res = await tx.execute(sql`
       UPDATE lead_scoring_settings SET enabled = ${w.enabled}, auto_score = ${w.autoScore},
-             chat_digest = ${w.chatDigest}, stage_suggestions = ${w.stageSuggestions}
+             chat_digest = ${w.chatDigest}, stage_suggestions = ${w.stageSuggestions},
+             stage_auto_apply = ${w.stageAutoApply}
       WHERE org_id = ${orgId} AND row_version = ${rowVersion} RETURNING org_id`);
     return res.rows.length > 0;
   }

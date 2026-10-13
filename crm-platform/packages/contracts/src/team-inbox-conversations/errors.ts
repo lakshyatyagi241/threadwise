@@ -5,6 +5,8 @@
  * CHANNEL_DISCONNECTED keep their existing names.
  */
 export const INBOX_ERROR_CODES = {
+  /** No such SLA policy in this workspace. */
+  SLA_POLICY_NOT_FOUND: 'SLA_POLICY_NOT_FOUND',
   /** No such label in this workspace (a label of another workspace is the same answer). */
   INBOX_LABEL_NOT_FOUND: 'INBOX_LABEL_NOT_FOUND',
   /** Naming a label that does not exist yet creates it, which needs `inbox.tag.manage`. */

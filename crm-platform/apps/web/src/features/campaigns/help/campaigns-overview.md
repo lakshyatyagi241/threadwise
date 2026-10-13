@@ -10,7 +10,7 @@ keywords: [campaign, bulk, send, schedule, recurring, a/b test, csv, audience, d
 
 ## What it is for
 
-A campaign sends one message to an audience of contacts, groups, tags or phone numbers: plain text, a rich message, an approved template or a flow. The Campaigns screen shows sent, delivered, read, replied, clicked and failed counts for each one.
+A campaign sends one message to an audience of contacts, groups, tags or phone numbers: plain text, a rich message, an approved template or a flow. The Campaigns screen shows sent, delivered, read, replied, clicked and failed counts for each one, and its **Cost**: what was charged to your wallet for the messages delivered so far (it grows while the campaign runs, and stays 0 for messages covered by your plan).
 
 ## How to use it
 

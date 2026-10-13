@@ -223,7 +223,15 @@
       "groupMember": "Anggota grup",
       "groupTally": "Terkirim ke {delivered} dari {members}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
       "groupTallyNoTotal": "Terkirim ke {delivered, plural, other {# anggota}}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
-      "groupTallyBilled": "{billable} ditagih, {free} gratis"
+      "groupTallyBilled": "{billable} ditagih, {free} gratis",
+      "stageLine": {
+        "auto": "AI membaca obrolan dan memindahkan kontak ini dari {from} ke {to}.",
+        "undo": "Urungkan",
+        "wasUndone": "Diurungkan",
+        "undone": "Perubahan tahap diurungkan: kembali ke {stage}.",
+        "undoneToast": "Tahap dikembalikan ke {stage}.",
+        "couldNotUndo": "Perubahan ini tidak bisa diurungkan lagi: kontak sudah berpindah tahap atau sudah diurungkan."
+      }
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -964,6 +972,17 @@
         "created": "Label dibuat",
         "deleted": "Label dihapus"
       }
+    },
+    "sla": {
+      "breached": "SLA terlampaui",
+      "atRisk": "SLA jatuh tempo dalam {minutes} mnt",
+      "ok": "SLA jatuh tempo {time}",
+      "kind": {
+        "first_response": "Target balasan pertama",
+        "resolution": "Target penyelesaian"
+      },
+      "titleBreached": "{kind}: terlewat (jatuh tempo {time})",
+      "titleOpen": "{kind}: jatuh tempo {time}"
     }
   }
 }

@@ -439,7 +439,7 @@
       "imported": "{count, plural, one {יובא איש קשר #.} two {יובאו # אנשי קשר.} other {יובאו # אנשי קשר.}}",
       "importedUpdated": "{count, plural, one {איש קשר קיים # עודכן.} two {# אנשי קשר קיימים עודכנו.} other {# אנשי קשר קיימים עודכנו.}}",
       "importedInvalid": "{count, plural, one {שורה לא תקינה # דולגה.} two {# שורות לא תקינות דולגו.} other {# שורות לא תקינות דולגו.}}",
-      "downloadRejects": "הורד שורות שנדחו",
+      "downloadRejects": "הורדת שגיאות ושורות שדולגו",
       "fileTooLarge": "הקובץ גדול מ-{mb} MB.",
       "checking": "בודק את הקובץ...",
       "errorFile": "לא ניתן היה לקרוא את הקובץ כקובץ CSV של אנשי קשר. בדוק שיש בו שורת כותרת ואיש קשר אחד לפחות.",
@@ -470,7 +470,8 @@
         "group_name_too_long": "שם הקבוצה ארוך מדי",
         "tag_name_too_long": "שם התגית ארוך מדי",
         "plan_limit_reached": "הגעת למגבלת אנשי הקשר של התוכנית",
-        "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית"
+        "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית",
+        "duplicate_in_file": "מספר חוזר, מוזג לשורה קודמת"
       },
       "statusHint": "חל על אנשי הקשר שהקובץ יוצר.",
       "queued": "ממתין להתחלה...",
@@ -1172,13 +1173,14 @@
         "updated": "עודכן",
         "rejected": "נדחו",
         "actions": "פעולות",
-        "downloadRejects": "הורד שורות שנדחו",
+        "downloadRejects": "הורדת שגיאות ושורות שדולגו",
         "statuses": {
           "queued": "בתור",
           "running": "פועל",
           "completed": "הושלם",
           "failed": "נכשל"
-        }
+        },
+        "by": "יובא על ידי"
       },
       "exports": {
         "title": "ייצואים",

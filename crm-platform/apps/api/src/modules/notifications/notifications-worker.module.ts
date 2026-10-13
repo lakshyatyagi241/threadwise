@@ -19,6 +19,7 @@ import { WebPushProcessor } from './web-push.processor';
 import { WebPushSender } from './web-push.sender';
 import { SalesDocNotificationConsumer } from './salesdoc-notification.consumer';
 import { EmailBounceNotificationConsumer } from './email-bounce-notification.consumer';
+import { SlaNotificationConsumer } from './sla-notification.consumer';
 import { SendOutcomeNotificationConsumer } from './send-outcome-notification.consumer';
 import { TaskNotificationConsumer } from './task-notification.consumer';
 import { TeamChatNotificationConsumer } from './team-chat-notification.consumer';
@@ -42,6 +43,7 @@ import { WabaGroupNotificationConsumer } from './waba-group-notification.consume
     DeviceNotificationConsumer,
     SendOutcomeNotificationConsumer,
     EmailBounceNotificationConsumer,
+    SlaNotificationConsumer,
     TeamChatNotificationConsumer,
     WabaGroupNotificationConsumer,
     DeviceGroupNotificationConsumer,

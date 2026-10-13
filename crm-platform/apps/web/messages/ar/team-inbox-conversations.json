@@ -223,7 +223,15 @@
       "groupMember": "عضو المجموعة",
       "groupTally": "تم التسليم إلى {delivered} من {members}{read, plural, =0 {} one {، قرأها #} two {، قرأها #} few {، قرأها #} many {، قرأها #} other {، قرأها #}}{failed, plural, =0 {} one {، فشل #} two {، فشل #} few {، فشل #} many {، فشل #} other {، فشل #}}",
       "groupTallyNoTotal": "تم التسليم إلى {delivered, plural, zero {# عضو} one {عضو واحد} two {عضوين} few {# أعضاء} many {# عضوًا} other {# عضو}}{read, plural, =0 {} one {، قرأها #} two {، قرأها #} few {، قرأها #} many {، قرأها #} other {، قرأها #}}{failed, plural, =0 {} one {، فشل #} two {، فشل #} few {، فشل #} many {، فشل #} other {، فشل #}}",
-      "groupTallyBilled": "{billable} مدفوعة، {free} مجانية"
+      "groupTallyBilled": "{billable} مدفوعة، {free} مجانية",
+      "stageLine": {
+        "auto": "قرأ الذكاء الاصطناعي المحادثة ونقل جهة الاتصال هذه من {from} إلى {to}.",
+        "undo": "تراجع",
+        "wasUndone": "تم التراجع",
+        "undone": "تم التراجع عن تغيير المرحلة: عادت إلى {stage}.",
+        "undoneToast": "أُعيدت المرحلة إلى {stage}.",
+        "couldNotUndo": "لم يعد بالإمكان التراجع عن هذا التغيير: انتقلت جهة الاتصال أو تم التراجع عنه بالفعل."
+      }
     },
     "media": {
       "openImage": "فتح الصورة {name}",
@@ -964,6 +972,17 @@
         "created": "تم إنشاء التصنيف",
         "deleted": "تم حذف التصنيف"
       }
+    },
+    "sla": {
+      "breached": "تجاوز SLA",
+      "atRisk": "SLA ينتهي خلال {minutes} د",
+      "ok": "SLA ينتهي {time}",
+      "kind": {
+        "first_response": "هدف الرد الأول",
+        "resolution": "هدف الحل"
+      },
+      "titleBreached": "{kind}: فات الموعد (كان مستحقًا {time})",
+      "titleOpen": "{kind}: مستحق {time}"
     }
   }
 }
