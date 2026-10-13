@@ -1,0 +1,204 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Migration",
+      "panel": "Waboo migration"
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "requestId": "Request id",
+      "dash": "-",
+      "errors": {
+        "forbidden": "You do not have permission to do this.",
+        "request": "That request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again in a moment.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "validation": "Some values are not valid. Check the highlighted fields.",
+        "notFound": "That run or batch no longer exists.",
+        "active": "A run for one of these organizations is already queued or running. Wait for it to finish.",
+        "dryRequired": "A migration needs a green dry run from the last 24 hours for every organization. Run a dry run first.",
+        "confirm": "What you typed does not match.",
+        "notCancellable": "Only a queued or scheduled run can be cancelled. A running migration cannot be stopped.",
+        "collision": "That organization id gives a client key that is already used by a different organization, or appears twice in the list.",
+        "schedule": "Pick a time in the future, at most 90 days ahead."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin / System / Migration",
+      "title": "Waboo migration",
+      "description": "Move Waboo organizations into WaDesk with the existing migration pipeline, now or at a chosen time, and follow each one from here.",
+      "banner": "This panel never connects WhatsApp and never writes to Waboo. Run a dry run first: a migration is only allowed after a green dry run for the same organization from the last 24 hours. Organizations run one after another.",
+      "superOnly": "Only a super admin can run migrations.",
+      "tabSingle": "One organization",
+      "tabBulk": "Bulk"
+    },
+    "form": {
+      "title": "Start a run",
+      "org": "Organization ID",
+      "orgHint": "The Waboo organization (workspace) id, which is the Waboo database name. Letters, digits and underscore.",
+      "orgInvalid": "Use letters, digits or underscore (up to 128).",
+      "derived": "Client key: {client} (derived from the id).",
+      "dryRun": "Dry run",
+      "dryRunning": "Starting",
+      "scheduleDry": "Schedule dry run",
+      "migrate": "Migrate",
+      "scheduleMigrate": "Schedule migration",
+      "migrateHint": "Enabled only when the latest dry run for this organization is green and under 24 hours old.",
+      "queued": "Run queued.",
+      "scheduled": "Run scheduled."
+    },
+    "confirm": {
+      "title": "Migrate {org}",
+      "body": "This loads organization {org} into WaDesk. It cannot be stopped once it starts, and it is checked again against the latest dry run right before it begins. Type the organization id to confirm.",
+      "label": "Type {org} to confirm",
+      "cancel": "Cancel",
+      "submit": "Migrate"
+    },
+    "bulk": {
+      "title": "Bulk migration",
+      "ids": "Organization IDs",
+      "idsHint": "One organization id per line, at most {max}.",
+      "invalid": "Not a valid id: {ids}.",
+      "duplicates": "Listed twice: {ids}.",
+      "collisions": "Same client key as another id: {ids}.",
+      "tooMany": "At most {max} organizations at a time.",
+      "count": "{count} of {max} organizations",
+      "stopOnFailure": "Stop on first failure",
+      "stopHint": "Off by default: a failed organization does not stop the rest.",
+      "sequential": "Organizations run one after another, never two at once, because the staging server cannot run two migrations together.",
+      "notReady": "{count, plural, one {# organization has} other {# organizations have}} no green dry run from the last 24 hours, so Migrate all is off.",
+      "dryAll": "Dry-run all",
+      "dryRunning": "Starting",
+      "migrateAll": "Migrate all",
+      "migrateHint": "Enabled only when every organization has a green dry run from the last 24 hours.",
+      "queued": "Batch queued.",
+      "scheduled": "Batch scheduled."
+    },
+    "bulkConfirm": {
+      "title": "Migrate {count} organizations",
+      "body": "This loads {count} organizations into WaDesk, one after another. Each one is checked again against its latest dry run right before it starts, and is skipped if that is no longer green. Type the number of organizations to confirm.",
+      "label": "Type {count} to confirm",
+      "cancel": "Cancel",
+      "submit": "Migrate all"
+    },
+    "readiness": {
+      "ok": "Latest dry run is green and recent. You can migrate.",
+      "okReview": "Latest dry run is green but raised alarms to review. You can migrate once you have reviewed them.",
+      "no_dry": "No dry run yet. Run a dry run first.",
+      "not_green": "The latest dry run is not green. Fix it and run a dry run again.",
+      "stale": "The last green dry run is more than 24 hours old. Run a new dry run."
+    },
+    "schedule": {
+      "label": "Run at (optional)",
+      "hint": "Your time zone: {tz}. Leave empty to start now.",
+      "utc": "Your time zone: {tz}. That is {utc} UTC.",
+      "error": {
+        "invalid": "Enter a valid date and time.",
+        "past": "Pick a time in the future.",
+        "tooFar": "At most 90 days ahead."
+      }
+    },
+    "runs": {
+      "title": "Runs",
+      "empty": "No runs yet.",
+      "emptyHint": "Start a dry run above.",
+      "open": "Open",
+      "client": "Client",
+      "database": "Database",
+      "mode": "Mode",
+      "status": "Status",
+      "created": "Created"
+    },
+    "batches": {
+      "title": "Bulk batches",
+      "empty": "No batches yet.",
+      "emptyHint": "Use the Bulk tab above.",
+      "open": "Open",
+      "orgs": "{count, plural, one {# organization} other {# organizations}}"
+    },
+    "batch": {
+      "title": "Batch of {count, plural, one {# organization} other {# organizations}}",
+      "back": "Close",
+      "cancel": "Cancel batch",
+      "cancelling": "Cancelling",
+      "cancelled": "Batch cancelled.",
+      "progress": "Finished",
+      "runAt": "Scheduled for",
+      "started": "Started",
+      "finished": "Finished at",
+      "stopOn": "Stops at the first failure.",
+      "stopOff": "A failed organization does not stop the rest.",
+      "polling": "Updating while the batch is active."
+    },
+    "batchStatus": {
+      "queued": "Queued",
+      "running": "Running",
+      "completed": "Completed",
+      "failed": "Finished with problems",
+      "cancelled": "Cancelled"
+    },
+    "detail": {
+      "title": "Run {org}",
+      "back": "Close",
+      "cancel": "Cancel run",
+      "cancelling": "Cancelling",
+      "cancelled": "Run cancelled.",
+      "clientKey": "Client key",
+      "runAt": "Scheduled for",
+      "started": "Started",
+      "finished": "Finished",
+      "steps": "Steps",
+      "noSteps": "No steps reported yet.",
+      "report": "Verifier result",
+      "error": "Error",
+      "polling": "Updating while the run is active.",
+      "counts": "Counts"
+    },
+    "verdict": {
+      "green": "Green: nothing unaccounted for, no integrity errors",
+      "amber": "Review alarms: no data is missing, but the verifier raised alarms to look at",
+      "red": "Red: needs attention. Do not treat this run as done",
+      "unaccounted": "Unaccounted",
+      "integrityErrors": "Integrity errors",
+      "alarms": "Alarms",
+      "short": {
+        "green": "Green",
+        "amber": "Review alarms",
+        "red": "Red"
+      }
+    },
+    "mode": {
+      "dry": "Dry run",
+      "load": "Migration"
+    },
+    "status": {
+      "queued": "Queued",
+      "scheduled": "Scheduled",
+      "running": "Running",
+      "completed": "Completed",
+      "completedReview": "Completed, review alarms",
+      "completedRed": "Finished with errors",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "blocked": "Blocked, not loaded"
+    },
+    "step": {
+      "export": "Export",
+      "preflight": "Preflight checks",
+      "backup": "Backup",
+      "dry": "Dry load",
+      "load": "Load",
+      "core-load": "Core load",
+      "flow-state": "Flow state",
+      "reconcile": "Reconcile",
+      "report": "Report"
+    },
+    "stepStatus": {
+      "running": "Running",
+      "done": "Done",
+      "failed": "Failed",
+      "skipped": "Skipped"
+    }
+  }
+}

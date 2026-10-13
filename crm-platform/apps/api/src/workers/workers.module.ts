@@ -36,6 +36,7 @@ import {
 } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
+import { WabooMigrationWorkerModule } from '../modules/waboo-migration';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { ApiLibraryWorkerModule } from '../modules/api-library';
 import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge-worker.module';
@@ -86,6 +87,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CouponsCreditsReferralCurrencyWorkerModule,
     WabaWorkerModule,
     WebhookFanoutWorkerModule,
+    WabooMigrationWorkerModule,
     OutboundWebhooksWorkerModule,
     ApiLibraryWorkerModule,
     FaqKnowledgeWorkerModule,
