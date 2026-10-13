@@ -1,7 +1,9 @@
 import type {
   AssignConversationInput,
+  BulkConversationsInput,
   CreateConversationNoteInput,
   CreateMessageLogExportInput,
+  ConversationPriority,
   CreateSimulatorChannelInput,
   InboxMediaUpload,
   SendMessageInput,
@@ -13,6 +15,7 @@ import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import { listQuery, type ListFilters } from '../lib/list';
 import {
+  bulkConversationsResponseSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
@@ -131,6 +134,25 @@ export const inboxApi = {
       method: 'POST',
       body: input,
       schema: conversationSummarySchema,
+    }),
+  setPriority: (conversationId: string, rowVersion: number, priority: ConversationPriority) =>
+    apiFetch(`/inbox/conversations/${conversationId}/priority`, {
+      method: 'POST',
+      body: { rowVersion, priority },
+      schema: conversationSummarySchema,
+    }),
+  snooze: (conversationId: string, rowVersion: number, until: string) =>
+    apiFetch(`/inbox/conversations/${conversationId}/snooze`, {
+      method: 'POST',
+      body: { rowVersion, until },
+      schema: conversationSummarySchema,
+    }),
+  /** One action on up to 200 conversations; the answer names each one's outcome. */
+  bulk: (input: BulkConversationsInput) =>
+    apiFetch('/inbox/conversations/bulk', {
+      method: 'POST',
+      body: input,
+      schema: bulkConversationsResponseSchema,
     }),
   setStatus: (conversationId: string, rowVersion: number, status: 'open' | 'resolved') =>
     apiFetch(`/inbox/conversations/${conversationId}/status`, {

@@ -22,6 +22,9 @@ The Team inbox gathers every customer conversation from your connected channels 
 6. Select **Assign to me** to take the conversation, or pick a teammate or team in the contact panel. **Unassign** releases it.
 7. Select **Resolve** when it is done. **Reopen** brings it back.
 
+8. To act on several conversations at once, select **Select** above the list. Click rows to pick them, or hold Shift and click to pick the run between two rows. **Select all** takes every conversation loaded in the list, and the bar shows how many are selected. Choose **Mark as read**, **Resolve**, **Close**, **Reopen**, **Assign**, **Priority** or **Snooze**; the action is applied to each conversation on its own, and the message that follows says how many were updated, how many were already up to date and how many could not be changed. The ones that failed stay selected so you can see them and try again. A bulk action needs the bulk right plus the right for the action itself (for example resolve). Up to 200 conversations are changed per request; a longer selection is sent in several.
+9. To set one conversation aside, use **Snooze** in its header and pick 1 hour, 3 hours, tomorrow at 9:00 or next Monday at 9:00. It leaves the Open list and comes back by itself at that time, with an entry in its timeline. **Wake now** brings it back early. Use the **Priority** menu in the header to mark it Low, Normal, High or Urgent.
+
 Keyboard shortcuts work when you are not typing: `j` and `k` move through the list, `e` resolves or reopens, and `/` jumps to search.
 
 ## Options and settings

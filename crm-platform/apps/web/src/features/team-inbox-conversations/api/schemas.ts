@@ -1,4 +1,5 @@
 import {
+  bulkConversationsResponseSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
@@ -29,6 +30,7 @@ import {
  */
 
 export {
+  bulkConversationsResponseSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,

@@ -16,6 +16,10 @@ export interface ConversationRowProps {
   nowMs: number;
   showChannel: boolean;
   onOpen: (id: string) => void;
+  /** Selection mode: a click picks the row (shift picks the run up to it) instead of opening it. */
+  selecting?: boolean;
+  selected?: boolean;
+  onSelect?: (id: string, shift: boolean) => void;
 }
 
 /** True when the last message in the thread went out (so the preview starts with "You:"). */
@@ -37,6 +41,9 @@ export const ConversationRow = memo(function ConversationRow({
   nowMs,
   showChannel,
   onOpen,
+  selecting = false,
+  selected = false,
+  onSelect,
 }: ConversationRowProps) {
   const t = useTranslations('team-inbox-conversations.list');
   const locale = useLocale();
@@ -60,14 +67,30 @@ export const ConversationRow = memo(function ConversationRow({
         type="button"
         data-testid="inbox-row"
         data-conversation-id={row.id}
-        aria-current={active ? 'true' : undefined}
+        {...(selecting
+          ? { role: 'checkbox' as const, 'aria-checked': selected }
+          : { 'aria-current': active ? ('true' as const) : undefined })}
         aria-label={label}
-        onClick={() => onOpen(row.id)}
+        onClick={(e) => (selecting ? onSelect?.(row.id, e.shiftKey) : onOpen(row.id))}
         className={cn(
           'flex w-full items-start gap-3 border-b border-border px-3 py-2.5 text-start transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-          active ? 'bg-muted' : 'hover:bg-muted/60',
+          selected ? 'bg-primary/10' : active && !selecting ? 'bg-muted' : 'hover:bg-muted/60',
         )}
       >
+        {selecting && (
+          <span
+            aria-hidden="true"
+            data-testid="inbox-row-check"
+            className={cn(
+              'mt-2.5 flex size-4 shrink-0 items-center justify-center rounded border text-[10px] leading-none',
+              selected
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border bg-background',
+            )}
+          >
+            {selected ? '✓' : ''}
+          </span>
+        )}
         <Avatar id={row.id} name={row.title} />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">

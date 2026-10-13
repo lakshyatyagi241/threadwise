@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore
 import { ConfirmDialog, cn, useToast } from '@crm/ui';
 import {
   uuidSchema,
+  type ConversationPriority,
   type EmailReplyExtras,
   type MessageResponse,
   type WaGroupMention,
@@ -16,16 +17,19 @@ import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent } from '@/lib/realtime';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { KEYS, useChannels, useNotes, useNowMs, useOpenConversation } from '../api/hooks';
+import { useBulkSelection } from '../api/use-bulk';
+import { snoozeUntil, type SnoozePreset } from '../lib/selection';
 import { offerChannels } from '@/lib/unofficial-whatsapp';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { inboxApi } from '../api/service';
 import { useThread } from '../api/use-thread';
 import { useConversationList } from '../api/use-list';
 import { isGroupSendBlocked } from '../lib/group-thread';
-import { DEFAULT_FILTERS, type ListFilters } from '../lib/list';
+import { DEFAULT_FILTERS, filtersKey, type ListFilters } from '../lib/list';
 import { isTypingTarget, shortcutAction } from '../lib/shortcuts';
 import type { ComposerHandle, ComposerMode } from './composer';
 import { ContactPanel } from './contact-panel';
+import { BulkBar } from './bulk-bar';
 import { ConversationList } from './conversation-list';
 import { InboxIcon } from './icons';
 import { Drawer, useErrorText } from './parts';
@@ -71,6 +75,9 @@ export function InboxScreen() {
     assign: useCan('inbox.conversation.assign'),
     assignSelf: useCan('inbox.conversation.assign_self'),
     resolve: useCan('inbox.conversation.resolve'),
+    bulk: useCan('inbox.conversation.bulk'),
+    priority: useCan('inbox.conversation.priority'),
+    snooze: useCan('inbox.conversation.snooze'),
     manageChannels: useCan('inbox.channel.manage'),
   };
 
@@ -90,6 +97,7 @@ export function InboxScreen() {
     [],
   );
   const list = useConversationList(filters, meId);
+  const bulk = useBulkSelection(list.state.rows, filtersKey(filters), list.refresh);
   const channelsQ = useChannels();
   const channels = channelsQ.data?.data;
   const unofficial = useUnofficialWhatsapp();
@@ -258,6 +266,42 @@ export function InboxScreen() {
     );
     setResolving(false);
     if (ok) toast(reopen ? t('reopened') : t('resolved'));
+  }, [detail.detail, can.resolve, guarded, toast, t]);
+
+  const [triaging, setTriaging] = useState(false);
+  const setPriority = useCallback(
+    async (priority: ConversationPriority) => {
+      const d = detail.detail;
+      if (!d || !can.priority || d.priority === priority) return;
+      setTriaging(true);
+      const ok = await guarded(async () => {
+        list.placeRow(await inboxApi.setPriority(d.id, d.rowVersion, priority));
+      });
+      setTriaging(false);
+      if (ok) toast(t('priorityChanged'));
+    },
+    [detail.detail, can.priority, guarded, list, toast, t],
+  );
+  const snooze = useCallback(
+    async (preset: SnoozePreset) => {
+      const d = detail.detail;
+      if (!d || !can.snooze) return;
+      setTriaging(true);
+      const ok = await guarded(async () => {
+        list.placeRow(await inboxApi.snooze(d.id, d.rowVersion, snoozeUntil(preset, new Date())));
+      });
+      setTriaging(false);
+      if (ok) toast(t('snoozed'));
+    },
+    [detail.detail, can.snooze, guarded, list, toast, t],
+  );
+  const wake = useCallback(async () => {
+    const d = detail.detail;
+    if (!d || !can.resolve) return;
+    setTriaging(true);
+    const ok = await guarded(() => inboxApi.setStatus(d.id, d.rowVersion, 'open'));
+    setTriaging(false);
+    if (ok) toast(t('reopened'));
   }, [detail.detail, can.resolve, guarded, toast, t]);
 
   const addNote = useCallback(
@@ -446,6 +490,35 @@ export function InboxScreen() {
             canManageChannels={can.manageChannels}
             simulatorAvailable={simulatorAvailable}
             onOpenSimulator={() => setSimulatorOpen((v) => !v)}
+            bulk={
+              can.bulk
+                ? {
+                    selecting: bulk.selecting,
+                    selection: bulk.selection,
+                    onToggleSelecting: bulk.toggleSelecting,
+                    onSelect: bulk.select,
+                    bar: (
+                      <BulkBar
+                        count={bulk.selection.size}
+                        inView={list.state.rows.length}
+                        allInViewSelected={bulk.allInView}
+                        busy={bulk.busy}
+                        can={{
+                          resolve: can.resolve,
+                          assign: can.assign,
+                          assignSelf: can.assignSelf,
+                          priority: can.priority,
+                          snooze: can.snooze,
+                        }}
+                        meId={meId}
+                        onSelectAll={bulk.selectAll}
+                        onClear={bulk.toggleSelecting}
+                        onRun={bulk.run}
+                      />
+                    ),
+                  }
+                : undefined
+            }
           />
         </aside>
 
@@ -469,6 +542,14 @@ export function InboxScreen() {
                 note: can.note,
                 resolve: can.resolve,
                 assignSelf: can.assignSelf || can.assign,
+                priority: can.priority,
+                snooze: can.snooze,
+              }}
+              triage={{
+                busy: triaging,
+                onPriority: (p) => void setPriority(p),
+                onSnooze: (p) => void snooze(p),
+                onWake: () => void wake(),
               }}
               mode={mode}
               onMode={setMode}
