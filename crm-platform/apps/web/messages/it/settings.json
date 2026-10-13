@@ -349,6 +349,11 @@
         "label": "Growth",
         "description": "Lead caldi, audience, risposte alle campagne e altro su cui il tuo team può agire, ricavato da chat e campagne.",
         "keywords": "growth, lead caldo, audience, coinvolgimento, inattivo, risposte alle campagne, probabilità di conversione, opt-out, pilota"
+      },
+      "sla-policies": {
+        "label": "Obiettivi di risposta (SLA)",
+        "description": "Imposta con quanta rapidità il tuo team deve rispondere e risolvere, e ricevi avvisi quando una conversazione manca il suo obiettivo.",
+        "keywords": "sla, tempo di risposta, prima risposta, risoluzione, violazione, obiettivi, orario lavorativo"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

@@ -964,6 +964,17 @@
         "created": "Etiqueta creada",
         "deleted": "Etiqueta eliminada"
       }
+    },
+    "sla": {
+      "breached": "SLA incumplido",
+      "atRisk": "SLA vence en {minutes} min",
+      "ok": "SLA vence {time}",
+      "kind": {
+        "first_response": "Objetivo de primera respuesta",
+        "resolution": "Objetivo de resolución"
+      },
+      "titleBreached": "{kind}: incumplido (vencía {time})",
+      "titleOpen": "{kind}: vence {time}"
     }
   }
 }

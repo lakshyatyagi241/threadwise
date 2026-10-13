@@ -354,6 +354,10 @@
         "device_group_removed": {
           "label": "Verwijderd uit een groep van een persoonlijk nummer",
           "hint": "Iemand heeft een van je persoonlijke WhatsApp-nummers uit een groep verwijderd. Dit kan een teken zijn dat het nummer is gerapporteerd."
+        },
+        "sla_breached": {
+          "label": "SLA overschreden",
+          "hint": "Een gesprek van jou heeft het doel voor de eerste reactie of de oplossing gemist."
         }
       },
       "loading": "Je voorkeuren laden",

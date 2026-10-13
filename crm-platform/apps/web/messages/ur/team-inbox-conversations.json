@@ -964,6 +964,17 @@
         "created": "لیبل بن گیا",
         "deleted": "لیبل حذف ہو گیا"
       }
+    },
+    "sla": {
+      "breached": "SLA کی خلاف ورزی",
+      "atRisk": "SLA {minutes} منٹ میں مکمل ہونا ہے",
+      "ok": "SLA کی مقررہ مدت {time}",
+      "kind": {
+        "first_response": "پہلے جواب کا ہدف",
+        "resolution": "حل کا ہدف"
+      },
+      "titleBreached": "{kind}: چوک گیا (مقررہ وقت {time} تھا)",
+      "titleOpen": "{kind}: مقررہ وقت {time}"
     }
   }
 }

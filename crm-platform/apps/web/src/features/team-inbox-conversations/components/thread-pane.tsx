@@ -38,6 +38,7 @@ import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { GroupCostLine } from './group-cost-line';
 import { ShareDialog, type ShareKind } from './share-dialog';
 import { LabelChip } from './label-chip';
+import { SlaBadge } from './sla-badge';
 import { LabelMenu } from './label-menu';
 import { TemplatePicker } from './template-picker';
 import { TriageMenu } from './triage-menu';
@@ -214,6 +215,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                 {detail.status === 'spam' && <Badge tone="danger">{t('status.spam')}</Badge>}
                 {detail.status === 'snoozed' && <Badge tone="warning">{t('status.snoozed')}</Badge>}
                 {win && <WindowBadge view={win} />}
+                <SlaBadge status={detail.slaStatus} nowMs={props.nowMs} />
               </div>
               <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
                 <span dir="ltr" className="font-mono">

@@ -964,6 +964,17 @@
         "created": "התווית נוצרה",
         "deleted": "התווית נמחקה"
       }
+    },
+    "sla": {
+      "breached": "חריגה מ-SLA",
+      "atRisk": "SLA פג בעוד {minutes} דק׳",
+      "ok": "SLA עד {time}",
+      "kind": {
+        "first_response": "יעד תגובה ראשונה",
+        "resolution": "יעד פתרון"
+      },
+      "titleBreached": "{kind}: הוחמץ (היה אמור עד {time})",
+      "titleOpen": "{kind}: עד {time}"
     }
   }
 }

@@ -964,6 +964,17 @@
         "created": "लेबल बनाया गया",
         "deleted": "लेबल हटाया गया"
       }
+    },
+    "sla": {
+      "breached": "SLA का उल्लंघन",
+      "atRisk": "SLA {minutes} मिनट में समाप्त",
+      "ok": "SLA की समय-सीमा {time}",
+      "kind": {
+        "first_response": "पहले जवाब का लक्ष्य",
+        "resolution": "समाधान का लक्ष्य"
+      },
+      "titleBreached": "{kind}: चूक गया (समय-सीमा {time} थी)",
+      "titleOpen": "{kind}: समय-सीमा {time}"
     }
   }
 }

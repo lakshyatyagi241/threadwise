@@ -964,6 +964,17 @@
         "created": "লেবেল তৈরি হয়েছে",
         "deleted": "লেবেল মুছে ফেলা হয়েছে"
       }
+    },
+    "sla": {
+      "breached": "SLA লঙ্ঘিত",
+      "atRisk": "SLA {minutes} মিনিটে শেষ হবে",
+      "ok": "SLA শেষ হবে {time}",
+      "kind": {
+        "first_response": "প্রথম উত্তরের লক্ষ্য",
+        "resolution": "সমাধানের লক্ষ্য"
+      },
+      "titleBreached": "{kind}: মিস হয়েছে (সময়সীমা ছিল {time})",
+      "titleOpen": "{kind}: সময়সীমা {time}"
     }
   }
 }

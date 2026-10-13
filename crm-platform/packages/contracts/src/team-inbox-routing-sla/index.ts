@@ -4,3 +4,4 @@
  */
 export * from './assignment';
 export * from './routing-rules';
+export * from './sla';

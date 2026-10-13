@@ -349,6 +349,11 @@
         "label": "Pertumbuhan",
         "description": "Lead panas, audiens, balasan kampanye, dan hal lain yang dapat ditindaklanjuti tim Anda, disimpulkan dari obrolan dan kampanye.",
         "keywords": "pertumbuhan, lead panas, audiens, keterlibatan, tidak aktif, balasan kampanye, kecenderungan konversi, opt-out, pilot"
+      },
+      "sla-policies": {
+        "label": "Target respons",
+        "description": "Atur seberapa cepat tim Anda harus membalas dan menyelesaikan (SLA), dan dapatkan peringatan saat percakapan melewati target.",
+        "keywords": "sla, waktu respons, balasan pertama, penyelesaian, pelanggaran, target, jam kerja"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

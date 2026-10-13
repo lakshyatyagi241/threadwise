@@ -349,6 +349,11 @@
         "label": "Growth",
         "description": "Leads chauds, audiences, réponses aux campagnes et autres éléments exploitables par votre équipe, déduits des discussions et des campagnes.",
         "keywords": "growth, lead chaud, audience, engagement, inactif, réponses aux campagnes, probabilité de conversion, désabonnement, pilote"
+      },
+      "sla-policies": {
+        "label": "Objectifs de réponse (SLA)",
+        "description": "Définissez la rapidité de réponse et de résolution de votre équipe, et soyez alerté lorsqu'une conversation manque son objectif.",
+        "keywords": "sla, temps de réponse, première réponse, résolution, non-respect, objectifs, heures ouvrables"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

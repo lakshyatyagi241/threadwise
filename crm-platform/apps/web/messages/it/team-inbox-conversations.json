@@ -964,6 +964,17 @@
         "created": "Etichetta creata",
         "deleted": "Etichetta eliminata"
       }
+    },
+    "sla": {
+      "breached": "SLA violato",
+      "atRisk": "SLA in scadenza tra {minutes} min",
+      "ok": "SLA in scadenza {time}",
+      "kind": {
+        "first_response": "Obiettivo di prima risposta",
+        "resolution": "Obiettivo di risoluzione"
+      },
+      "titleBreached": "{kind}: mancato (scadenza {time})",
+      "titleOpen": "{kind}: scadenza {time}"
     }
   }
 }

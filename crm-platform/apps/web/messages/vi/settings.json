@@ -349,6 +349,11 @@
         "label": "Tăng trưởng",
         "description": "Khách tiềm năng nóng, đối tượng, phản hồi chiến dịch và những việc khác nhóm của bạn có thể hành động, được rút ra từ các cuộc trò chuyện và chiến dịch.",
         "keywords": "tăng trưởng, khách tiềm năng nóng, đối tượng, tương tác, đã rời bỏ, phản hồi chiến dịch, xu hướng chuyển đổi, ngừng nhận tin, thí điểm"
+      },
+      "sla-policies": {
+        "label": "Mục tiêu phản hồi",
+        "description": "Đặt tốc độ phản hồi và giải quyết của nhóm (SLA), và nhận cảnh báo khi cuộc trò chuyện lỡ mục tiêu.",
+        "keywords": "sla, thời gian phản hồi, phản hồi đầu tiên, giải quyết, vi phạm, mục tiêu, giờ làm việc"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

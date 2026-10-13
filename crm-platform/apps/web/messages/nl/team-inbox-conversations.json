@@ -964,6 +964,17 @@
         "created": "Label aangemaakt",
         "deleted": "Label verwijderd"
       }
+    },
+    "sla": {
+      "breached": "SLA overschreden",
+      "atRisk": "SLA verloopt over {minutes} min",
+      "ok": "SLA uiterlijk {time}",
+      "kind": {
+        "first_response": "Doel eerste reactie",
+        "resolution": "Oplossingsdoel"
+      },
+      "titleBreached": "{kind}: gemist (was uiterlijk {time})",
+      "titleOpen": "{kind}: uiterlijk {time}"
     }
   }
 }
