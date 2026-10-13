@@ -383,6 +383,8 @@ export class AuthSettingsService {
       trialDays: registration.trialDays,
       rememberMeEnabled: security.rememberMeEnabled,
       otp: { enabled: (await this.otp.statusFor(registration)).active },
+      businessEmailOnly: registration.businessEmailOnly,
+      phoneRequired: registration.requirePhoneVerification,
       captcha: captcha ? { version: captcha.version, siteKey: captcha.siteKey } : null,
       social: { google: google !== null, facebook: facebook !== null },
       defaultCountryIso: registration.defaultCountryIso,

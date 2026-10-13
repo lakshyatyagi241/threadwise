@@ -579,6 +579,34 @@ describe('social sign-in', () => {
     }
   });
 
+  it('refuses a social sign-up while a verified mobile number is required, and one from a free mail domain', async () => {
+    const email = uniqueEmail('socpol');
+    h.socialProfiles.set('pol-1', profile('g-pol-1', { email, emailVerified: true }));
+    try {
+      await patchRegistration({ requirePhoneVerification: true });
+      const noPhone = await callback(
+        stateOf((await start({ mode: 'signup', orgName: 'Policy Co' })).body.url),
+        'pol-1',
+      );
+      expect(noPhone.status, JSON.stringify(noPhone.body)).toBe(422);
+      expect(noPhone.body.errors[0]).toMatchObject({ path: 'phone' });
+
+      await patchRegistration({ requirePhoneVerification: false, businessEmailOnly: true });
+      h.socialProfiles.set(
+        'pol-2',
+        profile('g-pol-2', { email: 'someone@gmail.com', emailVerified: true }),
+      );
+      const free = await callback(
+        stateOf((await start({ mode: 'signup', orgName: 'Policy Co' })).body.url),
+        'pol-2',
+      );
+      expect(free.status, JSON.stringify(free.body)).toBe(422);
+      expect(free.body.errors[0]).toMatchObject({ path: 'email' });
+    } finally {
+      await patchRegistration({ requirePhoneVerification: false, businessEmailOnly: false });
+    }
+  });
+
   it('remembers a social sign-up too, and records the sign-up as a social login', async () => {
     const email = uniqueEmail('soc');
     h.socialProfiles.set('new-soc', profile('g-new-soc', { email, emailVerified: true }));
