@@ -1,3 +1,7 @@
+# LF in the working tree on every OS, matching .prettierrc (endOfLine: lf) and the committed blobs. Without this, a Windows checkout
+# with core.autocrlf=true gets CRLF and `pnpm format:check` reports thousands of false positives. Binary files are auto-detected.
+* text=auto eol=lf
+
 # Shell scripts must keep LF line endings, or bash fails on a Windows checkout with autocrlf.
 *.sh text eol=lf
 
