@@ -42,7 +42,6 @@ import {
   ORDER_STORAGE_KEY as COLUMN_ORDER_KEY,
   moveColumn,
   nudgeColumn,
-  toggleColumn,
   visibleColumns,
 } from '../lib/columns';
 import { displayName } from '../lib/contact-model';
@@ -224,13 +223,11 @@ export function ContactsScreen() {
     [attributes.data],
   );
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
-  const baseColumns = stored ?? defaultColumns(attributeColumns);
   const columns = useMemo(
     () => visibleColumns(stored, attributeColumns, parseStoredColumns(storedOrder)),
     [stored, attributeColumns, storedOrder],
   );
   const allCols = useMemo(() => allColumns(attributeColumns), [attributeColumns]);
-  const visibleIds = useMemo(() => new Set(columns.map((c) => c.id)), [columns]);
 
   // selection
   const [sel, dispatch] = useReducer(selectionReducer, EMPTY_SELECTION);
@@ -570,8 +567,12 @@ export function ContactsScreen() {
         onGroup={onBulkGroup}
         onTagApply={onBulkTag}
         allColumns={allCols}
-        visibleIds={visibleIds}
-        onColumn={(id, on) => setStoredColumns(serializeColumns(toggleColumn(baseColumns, id, on)))}
+        columnIds={columns.map((c) => c.id)}
+        onApplyColumns={(ids) => {
+          // The chosen set and its order.
+          setStoredColumns(serializeColumns(ids));
+          setStoredOrder(serializeColumns(ids));
+        }}
         onResetColumns={() => {
           setStoredColumns(null);
           setStoredOrder(null);
