@@ -27,7 +27,10 @@ export function isSafeSvg(buffer: Buffer): boolean {
   if (buffer.length === 0 || buffer.length > MAX_BYTES) return false;
   const text = buffer.toString('utf8');
   if (text.includes('\u0000')) return false;
-  const head = (text.charCodeAt(0) === 0xfeff ? text.slice(1) : text).replace(/^\s*(<\?xml[^>]*\?>\s*|<!--[\s\S]*?-->\s*)*/, '');
+  const head = (text.charCodeAt(0) === 0xfeff ? text.slice(1) : text).replace(
+    /^\s*(<\?xml[^>]*\?>\s*|<!--[\s\S]*?-->\s*)*/,
+    '',
+  );
   if (!/^<svg[\s>]/i.test(head)) return false;
   if (FORBIDDEN.some((re) => re.test(text))) return false;
   for (const m of text.matchAll(REFERENCE)) {

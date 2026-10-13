@@ -171,7 +171,9 @@ const UNIT_SECONDS: Record<string, number> = {
   days: 86400,
 };
 
-function ctaActionsOf(d: Bag): Array<{ type: string; label: string; value: string; icon?: string }> {
+function ctaActionsOf(
+  d: Bag,
+): Array<{ type: string; label: string; value: string; icon?: string }> {
   let raw: unknown[];
   if (Array.isArray(d.actions)) raw = d.actions;
   else if (Array.isArray(d.ctaActions))
@@ -188,7 +190,12 @@ function ctaActionsOf(d: Bag): Array<{ type: string; label: string; value: strin
     const r = isRecord(a) ? a : {};
     let type = s(r.type, 'url').toLowerCase();
     if (!CTA_TYPES.includes(type)) type = 'url';
-    return { type, label: s(r.label), value: s(r.value), ...(s(r.icon) ? { icon: s(r.icon) } : {}) };
+    return {
+      type,
+      label: s(r.label),
+      value: s(r.value),
+      ...(s(r.icon) ? { icon: s(r.icon) } : {}),
+    };
   });
 }
 

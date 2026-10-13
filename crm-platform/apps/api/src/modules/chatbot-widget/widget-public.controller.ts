@@ -296,7 +296,10 @@ export class WidgetAssetsPublicController {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     // An SVG opened at its own address runs nothing: no script, no fetch, and the page is a sandbox of its own.
-    res.setHeader('Content-Security-Policy', "default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox");
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox",
+    );
     res.send(found.bytes);
   }
 }

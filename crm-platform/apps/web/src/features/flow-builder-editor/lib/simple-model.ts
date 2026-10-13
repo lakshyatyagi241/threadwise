@@ -48,7 +48,13 @@ export type SimpleType = (typeof SIMPLE_TYPES)[number];
  * The steps that end their journey: what happens next depends on what the customer taps (buttons, list, a carousel's reply buttons),
  * on a condition's answer, or on whether an FAQ answered (`faq`, "Answer from FAQ").
  */
-export const BRANCHING: ReadonlySet<string> = new Set(['buttons', 'list', 'carousel', 'condition', 'faq']);
+export const BRANCHING: ReadonlySet<string> = new Set([
+  'buttons',
+  'list',
+  'carousel',
+  'condition',
+  'faq',
+]);
 
 /**
  * A branching step whose exits are fixed by the step, not written by the author: the graph port each exit leaves by, in the order of

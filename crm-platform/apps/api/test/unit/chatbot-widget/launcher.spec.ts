@@ -728,7 +728,9 @@ describe('the conversation tools of a website chat window', () => {
       'https://player.vimeo.com/video/123456789',
     );
     expect(
-      chatVideoEmbedFrom('<iframe width="560" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="x"></iframe>'),
+      chatVideoEmbedFrom(
+        '<iframe width="560" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="x"></iframe>',
+      ),
     ).toBe('https://www.youtube.com/embed/dQw4w9WgXcQ');
     expect(chatVideoEmbedFrom('https://evil.example/video')).toBe('');
     expect(isChatVideoEmbed('https://evil.example/embed/abcdefgh')).toBe(false);
@@ -737,9 +739,27 @@ describe('the conversation tools of a website chat window', () => {
   it('keeps cards, menu entries and slides, and refuses a script address or a foreign video', () => {
     const ok = widgetLauncherSchema.safeParse({
       chat: {
-        notice: { enabled: true, icon: 3, items: [{ title: 'Sale', description: 'Ends soon', buttonTitle: 'Shop', buttonUrl: 'https://example.com' }] },
-        quickMenu: { enabled: true, view: 'blocks', items: [{ title: 'Track order', url: 'mailto:help@example.com' }] },
-        banners: { enabled: true, items: [{ kind: 'video', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }] },
+        notice: {
+          enabled: true,
+          icon: 3,
+          items: [
+            {
+              title: 'Sale',
+              description: 'Ends soon',
+              buttonTitle: 'Shop',
+              buttonUrl: 'https://example.com',
+            },
+          ],
+        },
+        quickMenu: {
+          enabled: true,
+          view: 'blocks',
+          items: [{ title: 'Track order', url: 'mailto:help@example.com' }],
+        },
+        banners: {
+          enabled: true,
+          items: [{ kind: 'video', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }],
+        },
         fontSize: 16,
         hoverBg: '#aabbcc',
       },

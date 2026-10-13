@@ -471,7 +471,13 @@ describe('cleanChat: what the conversation tools send', () => {
         enabled: true,
         items: [
           { kind: 'image', image: '', video: '', url: '', node: '' },
-          { kind: 'video', image: '', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ', url: '', node: '' },
+          {
+            kind: 'video',
+            image: '',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            url: '',
+            node: '',
+          },
         ],
       },
     });

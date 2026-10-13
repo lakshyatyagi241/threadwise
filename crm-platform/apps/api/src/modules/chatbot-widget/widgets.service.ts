@@ -507,8 +507,7 @@ export class WidgetsService {
     slot: string,
     file: { originalname: string; buffer: Buffer } | undefined,
   ): Promise<{ slot: string; url: string }> {
-    if (!isAssetSlot(slot))
-      throw AppError.notFound('Image slot', slot);
+    if (!isAssetSlot(slot)) throw AppError.notFound('Image slot', slot);
     if (!file)
       throw AppError.validation('Choose an image to upload.', [
         { path: 'file', message: 'required' },
@@ -557,8 +556,7 @@ export class WidgetsService {
   }
 
   async removeAsset(flowUuid: string, slot: string): Promise<void> {
-    if (!isAssetSlot(slot))
-      throw AppError.notFound('Image slot', slot);
+    if (!isAssetSlot(slot)) throw AppError.notFound('Image slot', slot);
     const orgId = RequestContextStore.orgId();
     await this.db.tx(async (tx) => {
       const flow = await this.requireWidgetFlow(tx, orgId, flowUuid);

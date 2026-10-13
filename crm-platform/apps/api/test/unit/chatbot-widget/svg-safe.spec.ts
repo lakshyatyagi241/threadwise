@@ -17,7 +17,9 @@ describe('isSafeSvg: an uploaded SVG is only ever a picture', () => {
     expect(
       isSafeSvg(svg('<image href="data:image/png;base64,iVBORw0KGgo=" width="4" height="4"/>')),
     ).toBe(true);
-    expect(isSafeSvg(Buffer.from('<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg"/>'))).toBe(true);
+    expect(
+      isSafeSvg(Buffer.from('<?xml version="1.0"?>\n<svg xmlns="http://www.w3.org/2000/svg"/>')),
+    ).toBe(true);
   });
 
   it.each([
@@ -34,7 +36,11 @@ describe('isSafeSvg: an uploaded SVG is only ever a picture', () => {
   });
 
   it('refuses a doctype or entity, a file that is not an SVG, an empty file and an oversized one', () => {
-    expect(isSafeSvg(Buffer.from('<!DOCTYPE svg [<!ENTITY a "b">]><svg xmlns="http://www.w3.org/2000/svg"/>'))).toBe(false);
+    expect(
+      isSafeSvg(
+        Buffer.from('<!DOCTYPE svg [<!ENTITY a "b">]><svg xmlns="http://www.w3.org/2000/svg"/>'),
+      ),
+    ).toBe(false);
     expect(isSafeSvg(Buffer.from('<html><svg/></html>'))).toBe(false);
     expect(isSafeSvg(Buffer.alloc(0))).toBe(false);
     expect(isSafeSvg(svg('<!--' + 'a'.repeat(1_048_600) + '-->'))).toBe(false);

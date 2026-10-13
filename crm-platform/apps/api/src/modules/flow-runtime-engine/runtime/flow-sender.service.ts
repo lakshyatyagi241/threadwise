@@ -319,11 +319,13 @@ function webButtons(
   if (channelKind === 'webchat' && r.kind === 'interactive' && r.interactive.type === 'buttons') {
     return {
       body: r.interactive.body,
-      meta: { widget_buttons: r.interactive.buttons.map((b) => ({
+      meta: {
+        widget_buttons: r.interactive.buttons.map((b) => ({
           id: b.id,
           title: b.title,
           ...(b.icon ? { icon: b.icon } : {}),
-        })) },
+        })),
+      },
     };
   }
   return { body: threadTextOf(r) };

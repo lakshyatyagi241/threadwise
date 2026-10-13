@@ -305,7 +305,12 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
       return {
         text: '',
         cards: [
-          { image: '', title: '', text: '', buttons: [{ type: 'reply', label: 'Choose', value: '' }] },
+          {
+            image: '',
+            title: '',
+            text: '',
+            buttons: [{ type: 'reply', label: 'Choose', value: '' }],
+          },
         ],
         var: 'choice',
       };

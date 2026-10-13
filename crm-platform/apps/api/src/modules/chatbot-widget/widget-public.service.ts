@@ -231,11 +231,11 @@ export class WidgetPublicService {
       const flowUuid =
         widget.flowId === null
           ? null
-          : (
+          : ((
               (await tx.execute(
                 sql`SELECT uuid FROM flows WHERE org_id = ${orgId} AND id = ${widget.flowId}`,
               )) as unknown as { rows: Array<{ uuid: string }> }
-            ).rows[0]?.uuid ?? null;
+            ).rows[0]?.uuid ?? null);
       const lines: InboxLine[] =
         visitor.conversationId === null
           ? []

@@ -77,9 +77,11 @@ export const CHAT_SIZE_PX: Record<(typeof CHAT_SIZES)[number], { w: number; h: n
 };
 
 /** A button address a visitor may follow: a web page, a phone call or an email. */
-export const chatActionUrl = (v: string): boolean => v === '' || /^(https?:\/\/|tel:|mailto:)[^\s'"<>\\]{1,1000}$/i.test(v);
+export const chatActionUrl = (v: string): boolean =>
+  v === '' || /^(https?:\/\/|tel:|mailto:)[^\s'"<>\\]{1,1000}$/i.test(v);
 
-const VIDEO_EMBED = /^https:\/\/(www\.youtube(-nocookie)?\.com\/embed\/[\w-]{6,20}|player\.vimeo\.com\/video\/\d{4,12})(\?[\w=&%.-]*)?$/;
+const VIDEO_EMBED =
+  /^https:\/\/(www\.youtube(-nocookie)?\.com\/embed\/[\w-]{6,20}|player\.vimeo\.com\/video\/\d{4,12})(\?[\w=&%.-]*)?$/;
 /** The only video addresses the banner may frame: a YouTube or Vimeo embed. */
 export const isChatVideoEmbed = (v: string): boolean => v === '' || VIDEO_EMBED.test(v);
 
@@ -91,20 +93,37 @@ export function chatVideoEmbedFrom(input: string): string {
   const text = input.trim();
   const src = /src\s*=\s*["']([^"']+)["']/i.exec(text)?.[1] ?? text;
   if (isChatVideoEmbed(src) && src !== '') return src;
-  const yt = /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|live\/)|youtu\.be\/)([\w-]{6,20})/i.exec(src)?.[1];
+  const yt =
+    /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|live\/)|youtu\.be\/)([\w-]{6,20})/i.exec(
+      src,
+    )?.[1];
   if (yt) return `https://www.youtube.com/embed/${yt}`;
   const vm = /vimeo\.com\/(?:video\/)?(\d{4,12})/i.exec(src)?.[1];
   return vm ? `https://player.vimeo.com/video/${vm}` : '';
 }
 
 /** A step of the bot's own flow a tap jumps to (empty: no jump). */
-const chatNode = z.string().trim().max(64).refine((v) => v === '' || /^[\w-]+$/.test(v), 'Pick a step of the bot.').default('');
+const chatNode = z
+  .string()
+  .trim()
+  .max(64)
+  .refine((v) => v === '' || /^[\w-]+$/.test(v), 'Pick a step of the bot.')
+  .default('');
 
-const chatAction = z.string().trim().max(1024).refine(chatActionUrl, 'Use an http(s), tel: or mailto: address.').default('');
+const chatAction = z
+  .string()
+  .trim()
+  .max(1024)
+  .refine(chatActionUrl, 'Use an http(s), tel: or mailto: address.')
+  .default('');
 
 const chatNoticeIcon = z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]);
 export const chatNoticeItemSchema = z.object({
-  image: z.string().max(LAUNCHER_LIMITS.avatar).refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.').default(''),
+  image: z
+    .string()
+    .max(LAUNCHER_LIMITS.avatar)
+    .refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.')
+    .default(''),
   title: z.string().trim().min(1).max(CHAT_NOTICE_LIMITS.title),
   description: z.string().trim().min(1).max(CHAT_NOTICE_LIMITS.description),
   buttonTitle: z.string().trim().max(CHAT_NOTICE_LIMITS.button).default(''),
@@ -112,7 +131,11 @@ export const chatNoticeItemSchema = z.object({
   footer: z.string().trim().max(CHAT_NOTICE_LIMITS.footer).default(''),
 });
 export const chatMenuItemSchema = z.object({
-  image: z.string().max(LAUNCHER_LIMITS.avatar).refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.').default(''),
+  image: z
+    .string()
+    .max(LAUNCHER_LIMITS.avatar)
+    .refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.')
+    .default(''),
   title: z.string().trim().min(1).max(CHAT_MENU_LABEL_MAX),
   /** A page to open; empty sends the title as the visitor's message, which the bot answers. */
   url: chatAction,
@@ -121,7 +144,11 @@ export const chatMenuItemSchema = z.object({
 });
 export const chatBannerItemSchema = z.object({
   kind: z.enum(['image', 'video']).default('image'),
-  image: z.string().max(LAUNCHER_LIMITS.avatar).refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.').default(''),
+  image: z
+    .string()
+    .max(LAUNCHER_LIMITS.avatar)
+    .refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.')
+    .default(''),
   video: z.string().max(300).refine(isChatVideoEmbed, 'Use a YouTube or Vimeo video.').default(''),
   url: chatAction,
   /** Or a step of the bot's flow a tap on the slide starts from (used when there is no link). */
@@ -134,7 +161,10 @@ export type ChatBannerItem = z.infer<typeof chatBannerItemSchema>;
 const chatImage = z
   .string()
   .max(LAUNCHER_LIMITS.avatar)
-  .refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image or an http(s) image address.')
+  .refine(
+    (v) => v === '' || launcherImageUrl(v) !== null,
+    'Use an uploaded image or an http(s) image address.',
+  )
   .default('');
 export const widgetChatOptionsSchema = z.object({
   fill: z.enum(CHAT_FILLS).default('outline'),
@@ -153,7 +183,16 @@ export const widgetChatOptionsSchema = z.object({
   /** Quick replies on or off; the lines are kept when off. */
   suggestionsOn: z.boolean().default(true),
   /** For each suggestion, by position, the step of the flow a tap starts from; empty sends the line as a message. */
-  suggestionNodes: z.array(z.string().trim().max(64).refine((v) => v === '' || /^[\w-]+$/.test(v), 'Pick a step of the bot.')).max(CHAT_SUGGESTIONS_MAX).default([]),
+  suggestionNodes: z
+    .array(
+      z
+        .string()
+        .trim()
+        .max(64)
+        .refine((v) => v === '' || /^[\w-]+$/.test(v), 'Pick a step of the bot.'),
+    )
+    .max(CHAT_SUGGESTIONS_MAX)
+    .default([]),
   /** Copy, helpful and not helpful under a bot's line. */
   actions: z.boolean().default(true),
   /** The panel's expand button. */
@@ -193,7 +232,10 @@ export const widgetChatOptionsSchema = z.object({
     .default({}),
   fontSize: z.number().int().min(CHAT_FONT_SIZE_MIN).max(CHAT_FONT_SIZE_MAX).default(14),
   /** Reply buttons' background while the pointer is on them; empty keeps the tint. */
-  hoverBg: z.string().refine((v) => v === '' || LAUNCHER_HEX.test(v), 'Use a hex colour.').default(''),
+  hoverBg: z
+    .string()
+    .refine((v) => v === '' || LAUNCHER_HEX.test(v), 'Use a hex colour.')
+    .default(''),
   /** The volume of the new-line sound, 0 to 100. */
   soundVolume: z.number().int().min(0).max(100).default(70),
   /** Read the bot's lines aloud with the browser's own voice. */
@@ -202,7 +244,11 @@ export const widgetChatOptionsSchema = z.object({
   pip: z.boolean().default(false),
   /** Where the widget shows at all. */
   devices: z
-    .object({ desktop: z.boolean().default(true), tablet: z.boolean().default(true), mobile: z.boolean().default(true) })
+    .object({
+      desktop: z.boolean().default(true),
+      tablet: z.boolean().default(true),
+      mobile: z.boolean().default(true),
+    })
     .default({}),
 });
 export type WidgetChatOptions = z.infer<typeof widgetChatOptionsSchema>;
@@ -499,8 +545,16 @@ export const widgetLauncherViewSchema = z.object({
     corner: z.enum(CHAT_CORNERS),
     autoOpen: z.number().int(),
     sound: z.boolean(),
-    notice: z.object({ enabled: z.boolean(), icon: chatNoticeIcon, items: z.array(chatNoticeItemSchema) }),
-    quickMenu: z.object({ enabled: z.boolean(), view: z.enum(CHAT_MENU_VIEWS), items: z.array(chatMenuItemSchema) }),
+    notice: z.object({
+      enabled: z.boolean(),
+      icon: chatNoticeIcon,
+      items: z.array(chatNoticeItemSchema),
+    }),
+    quickMenu: z.object({
+      enabled: z.boolean(),
+      view: z.enum(CHAT_MENU_VIEWS),
+      items: z.array(chatMenuItemSchema),
+    }),
     banners: z.object({ enabled: z.boolean(), items: z.array(chatBannerItemSchema) }),
     fontSize: z.number().int(),
     hoverBg: z.string(),
@@ -563,8 +617,16 @@ export const widgetPublicLauncherSchema = z.object({
     corner: z.enum(CHAT_CORNERS),
     autoOpen: z.number().int(),
     sound: z.boolean(),
-    notice: z.object({ enabled: z.boolean(), icon: chatNoticeIcon, items: z.array(chatNoticeItemSchema) }),
-    quickMenu: z.object({ enabled: z.boolean(), view: z.enum(CHAT_MENU_VIEWS), items: z.array(chatMenuItemSchema) }),
+    notice: z.object({
+      enabled: z.boolean(),
+      icon: chatNoticeIcon,
+      items: z.array(chatNoticeItemSchema),
+    }),
+    quickMenu: z.object({
+      enabled: z.boolean(),
+      view: z.enum(CHAT_MENU_VIEWS),
+      items: z.array(chatMenuItemSchema),
+    }),
     banners: z.object({ enabled: z.boolean(), items: z.array(chatBannerItemSchema) }),
     fontSize: z.number().int(),
     hoverBg: z.string(),
