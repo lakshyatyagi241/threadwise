@@ -29,6 +29,8 @@ import { useTheme } from '@/lib/theme/use-theme';
 import { BotBar } from './bot-bar';
 import { Composer } from './composer';
 import { LabelsSheet } from './labels-sheet';
+import { TemplateBar } from './template-bar';
+import { TemplateSheet } from './template-sheet';
 import { Bubble, MessageBubble } from './message-bubble';
 import { isBotConversation, menuActionsFor, type MenuAction } from './thread-actions';
 import { sendErrorMessage } from './thread-errors';
@@ -99,6 +101,7 @@ export function ThreadScreen() {
   const [pending, setPending] = useState<PendingMessage[]>([]);
   const [notice, setNotice] = useState<string | null>(null);
   const [labelsOpen, setLabelsOpen] = useState(false);
+  const [templatesOpen, setTemplatesOpen] = useState(false);
 
   const messages = useMemo(() => flattenMessages(thread.data), [thread.data]);
   const lastSeq = messages.at(-1)?.seq ?? 0;
@@ -298,6 +301,19 @@ export function ThreadScreen() {
     if (thread.isPending) {
       return <ActivityIndicator accessibilityLabel={t('common.loading')} style={styles.pad} />;
     }
+    // Not the list's own empty slot: an inverted list is drawn upside down and its flip of that slot differs per platform (on Android the
+    // text came out upside down), so an empty conversation is drawn as a plain view.
+    if (rows.length === 0) {
+      return (
+        <View style={styles.empty}>
+          <EmptyState
+            icon="chatbubbles-outline"
+            title={t('inbox.thread.emptyTitle')}
+            hint={t('inbox.thread.emptyHint')}
+          />
+        </View>
+      );
+    }
     return (
       <FlatList
         testID="thread-list"
@@ -342,16 +358,6 @@ export function ThreadScreen() {
             />
           ) : null
         }
-        ListEmptyComponent={
-          // An inverted list draws its empty state upside down; turn it back.
-          <View style={styles.flip}>
-            <EmptyState
-              icon="chatbubbles-outline"
-              title={t('inbox.thread.emptyTitle')}
-              hint={t('inbox.thread.emptyHint')}
-            />
-          </View>
-        }
       />
     );
   };
@@ -362,11 +368,6 @@ export function ThreadScreen() {
       style={[styles.screen, { backgroundColor: colors.background }]}
     >
       {header}
-      {windowClosed && canReply ? (
-        <View style={styles.pad}>
-          <Banner tone="warning" message={t('inbox.thread.windowClosed')} />
-        </View>
-      ) : null}
       {notice && !(windowClosed && notice === t('inbox.thread.windowClosed')) ? (
         <View style={styles.pad}>
           <Banner tone="danger" message={notice} />
@@ -401,8 +402,19 @@ export function ThreadScreen() {
             onAssign={() => assignTo(meId)}
           />
         ) : canReply ? (
-          <Composer value={draft} onChange={setDraft} onSend={onSend} closed={windowClosed} />
+          windowClosed ? (
+            <TemplateBar onOpen={() => setTemplatesOpen(true)} />
+          ) : (
+            <Composer value={draft} onChange={setDraft} onSend={onSend} />
+          )
         ) : null
+      ) : null}
+      {conversation && canReply ? (
+        <TemplateSheet
+          visible={templatesOpen}
+          conversationId={conversation.id}
+          onClose={() => setTemplatesOpen(false)}
+        />
       ) : null}
       {conversation ? (
         <LabelsSheet
@@ -431,5 +443,5 @@ const styles = StyleSheet.create({
   },
   labelNames: { flexShrink: 1 },
   messages: { paddingVertical: spacing.sm },
-  flip: { transform: [{ scaleY: -1 }] },
+  empty: { flex: 1, justifyContent: 'center' },
 });

@@ -3,6 +3,7 @@ import {
   conversationListResponseSchema,
   conversationSummarySchema,
   inboxConversationDetailSchema,
+  inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
   messageResponseSchema,
@@ -51,6 +52,31 @@ export const sendTextMessage = (id: string, clientMessageId: string, body: strin
   apiFetch(`/v2/inbox/conversations/${id}/messages`, {
     method: 'POST',
     body: { kind: 'text', clientMessageId, body },
+    idempotencyKey: clientMessageId,
+    schema: messageResponseSchema,
+  });
+
+/**
+ * The approved templates this conversation's WhatsApp number can send, narrowed by the search words. A template the app cannot fill
+ * in yet comes back with `sendable: false` and the reason, so the picker can say why it is greyed out.
+ */
+export const fetchInboxTemplates = (id: string, q: string, signal?: AbortSignal) =>
+  apiFetch(`/v2/inbox/conversations/${id}/templates`, {
+    query: { q: q.trim() || undefined },
+    schema: inboxTemplateListResponseSchema,
+    signal,
+  });
+
+/** Sends a template with the values for its `{{n}}` slots (by slot key). Allowed when the 24-hour window is closed; same idempotency as a text. */
+export const sendTemplateMessage = (
+  id: string,
+  clientMessageId: string,
+  templateId: string,
+  variables: Record<string, string>,
+) =>
+  apiFetch(`/v2/inbox/conversations/${id}/messages`, {
+    method: 'POST',
+    body: { kind: 'template', clientMessageId, templateId, variables },
     idempotencyKey: clientMessageId,
     schema: messageResponseSchema,
   });

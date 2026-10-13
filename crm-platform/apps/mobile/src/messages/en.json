@@ -569,9 +569,29 @@
     "composer": {
       "label": "Message",
       "placeholder": "Type a message",
-      "closedPlaceholder": "Replies are paused",
       "send": "Send",
       "tooLong": "Messages can be up to {{max}} characters."
+    },
+    "template": {
+      "closedNotice": "The customer has not spoken to you in the last 24 hours. You can only send pre-approved templates.",
+      "send": "Send Template",
+      "title": "Send a template",
+      "close": "Close",
+      "search": "Search templates",
+      "empty": "No approved templates for this number yet.",
+      "emptySearch": "No templates match your search.",
+      "more": "There are more templates. Type in the search box to find them.",
+      "fillTitle": "Fill in the details",
+      "back": "Back to templates",
+      "submit": "Send",
+      "reason": {
+        "paused": "Paused by WhatsApp for quality. Try again later.",
+        "media_header": "Has an image, video or document header, which the app can't send yet.",
+        "header_variable": "Has a variable in its header, which the app can't fill in yet.",
+        "dynamic_button": "Has a button link with a variable, which the app can't fill in yet.",
+        "authentication": "One-time-password templates are sent by the system.",
+        "named_variables": "Uses named variables, which the app can't fill in yet."
+      }
     },
     "errors": {
       "channelDisconnected": "This channel is disconnected. Reconnect it on the web, then try again.",

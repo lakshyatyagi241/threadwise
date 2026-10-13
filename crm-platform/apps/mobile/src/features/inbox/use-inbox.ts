@@ -6,9 +6,11 @@ import {
   assignConversation,
   fetchConversation,
   fetchConversations,
+  fetchInboxTemplates,
   fetchMessages,
   markConversationRead,
   retryMessage,
+  sendTemplateMessage,
   sendTextMessage,
   setConversationStatus,
 } from './api';
@@ -108,6 +110,34 @@ export function useSendMessage(id: string) {
       );
     },
     // A refused send (window closed, channel down) changes what the detail says, so it is read again either way.
+    onSettled: refresh,
+  });
+}
+
+/** The templates the conversation's number can send. Only asked for while the picker is open; the list changes rarely, so it is kept a minute. */
+export const useInboxTemplates = (id: string, q: string, enabled: boolean) =>
+  useQuery({
+    queryKey: ['inbox', 'templates', id, q.trim()],
+    queryFn: ({ signal }) => fetchInboxTemplates(id, q, signal),
+    staleTime: 60_000,
+    enabled,
+  });
+
+/** Sends a template. Like a text, the stored message goes straight into the thread and the detail is read again either way. */
+export function useSendTemplate(id: string) {
+  const queryClient = useQueryClient();
+  const refresh = useRefreshInbox(id);
+  return useMutation({
+    mutationFn: (draft: {
+      clientMessageId: string;
+      templateId: string;
+      variables: Record<string, string>;
+    }) => sendTemplateMessage(id, draft.clientMessageId, draft.templateId, draft.variables),
+    onSuccess: (stored) => {
+      queryClient.setQueryData<InfiniteData<MessageListResponse>>(messagesKey(id), (data) =>
+        withMessage(data, stored),
+      );
+    },
     onSettled: refresh,
   });
 }

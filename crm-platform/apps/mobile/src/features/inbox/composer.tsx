@@ -11,18 +11,16 @@ interface Props {
   value: string;
   onChange: (value: string) => void;
   onSend: () => void;
-  /** The service window is closed: only a template may be sent, so typing is switched off. */
-  closed: boolean;
 }
 
-/** The box at the bottom of a thread. Sending is possible only for a non-empty message within the length limit. */
-export function Composer({ value, onChange, onSend, closed }: Props) {
+/** The box at the bottom of a thread with an open reply window. Sending is possible only for a non-empty message within the length limit. */
+export function Composer({ value, onChange, onSend }: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const trimmed = value.trim();
   const tooLong = trimmed.length > MESSAGE_BODY_MAX;
-  const canSend = !closed && trimmed.length > 0 && !tooLong;
+  const canSend = trimmed.length > 0 && !tooLong;
   return (
     <View
       style={[
@@ -37,12 +35,9 @@ export function Composer({ value, onChange, onSend, closed }: Props) {
       <View style={styles.field}>
         <TextField
           label={t('inbox.composer.label')}
-          placeholder={
-            closed ? t('inbox.composer.closedPlaceholder') : t('inbox.composer.placeholder')
-          }
+          placeholder={t('inbox.composer.placeholder')}
           value={value}
           onChangeText={onChange}
-          editable={!closed}
           multiline
           error={tooLong ? t('inbox.composer.tooLong', { max: MESSAGE_BODY_MAX }) : null}
         />
