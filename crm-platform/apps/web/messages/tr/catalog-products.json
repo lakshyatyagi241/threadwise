@@ -34,7 +34,10 @@
       "sendFailed": "Mesaj gönderilemedi: {detail}",
       "collectionProducts": "Seçilen ürünlerin hiçbiri bu çalışma alanına ait değil.",
       "providerFailed": "WhatsApp veya Meta isteği tamamlayamadı: {detail}",
-      "unexpected": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin.",
+      "alreadyConnected": "Zaten bağlı bir katalog var. Yenisini oluşturmak için önce bağlantısını kesin.",
+      "confirmMismatch": "Girdiğiniz katalog kimliği bağlı katalogla eşleşmiyor.",
+      "setNotSyncable": "Bu koleksiyonda Meta ürün setine eklenecek etkin ürün yok."
     },
     "paywall": {
       "kicker": "Premium özellik",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "Açıklama çok uzun.",
           "noProducts": "En az bir ürün seçin."
         }
+      },
+      "meta": {
+        "onMeta": "Meta'da",
+        "notOnMeta": "Meta'da değil",
+        "push": "Meta'ya gönder",
+        "update": "Meta'da güncelle",
+        "remove": "Meta'dan kaldır",
+        "pushed": "Koleksiyon Meta'ya gönderildi.",
+        "removed": "Koleksiyon Meta'dan kaldırıldı."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "Alkol / yetişkin / düzenlemeye tabi ürün yok",
           "verification": "Üretim için İşletme Doğrulaması gerekir"
         }
+      }
+    },
+    "manage": {
+      "title": "Kataloğu Meta'da yönet",
+      "create": {
+        "title": "Meta'da yeni katalog oluştur",
+        "intro": "WhatsApp Business hesabınızda boş bir katalog oluşturur, bağlar ve burada bağlantı kurar.",
+        "name": "Katalog adı",
+        "placeholder": "örn. Mağazam",
+        "button": "Katalog oluştur",
+        "needName": "Bir katalog adı girin.",
+        "done": "Katalog oluşturuldu ve bağlandı."
+      },
+      "rename": {
+        "label": "Katalog adı",
+        "button": "Meta'da yeniden adlandır",
+        "done": "Katalog Meta'da yeniden adlandırıldı."
+      },
+      "delete": {
+        "title": "Kataloğu Meta'da sil",
+        "warning": "Meta'daki kataloğu ve ürünlerini kalıcı olarak siler. Geri alınamaz.",
+        "confirmLabel": "Onaylamak için {id} katalog kimliğini yazın",
+        "button": "Meta'da sil",
+        "dialogTitle": "Katalog Meta'da silinsin mi?",
+        "dialogMessage": "Katalog Meta'da silinir ve burada bağlantısı kesilir. Geri alınamaz.",
+        "cancel": "İptal",
+        "done": "Katalog Meta'da silindi."
       }
     }
   }

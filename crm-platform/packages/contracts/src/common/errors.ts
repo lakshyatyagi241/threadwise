@@ -634,6 +634,12 @@ export const ERROR_CODES = {
   CAT_SEND_FAILED: 'CAT_SEND_FAILED',
   CAT_COLLECTION_PRODUCTS_INVALID: 'CAT_COLLECTION_PRODUCTS_INVALID',
   CAT_PROVIDER_FAILED: 'CAT_PROVIDER_FAILED',
+  /** Creating a catalog needs the workspace to have none connected yet; remove or disconnect the current one first. */
+  CAT_ALREADY_CONNECTED: 'CAT_ALREADY_CONNECTED',
+  /** Deleting the catalog on Meta needs the catalog id typed back exactly. */
+  CAT_CONFIRM_MISMATCH: 'CAT_CONFIRM_MISMATCH',
+  /** The product set could not be pushed: it has no product with a retailer id on Meta, or no catalog is connected. */
+  CAT_SET_NOT_SYNCABLE: 'CAT_SET_NOT_SYNCABLE',
   /** The catalog has no phone number id: commerce settings and Meta sends need one (TW-CAT-005, 034). */
   CAT_NO_PHONE_NUMBER: 'CAT_NO_PHONE_NUMBER',
   /** A catalog link without a Meta catalog sends the shop link, and the workspace has no shop (TW-CAT-015). */

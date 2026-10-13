@@ -34,7 +34,10 @@
       "sendFailed": "메시지를 보낼 수 없습니다: {detail}",
       "collectionProducts": "선택한 제품 중 이 워크스페이스에 속한 제품이 없습니다.",
       "providerFailed": "WhatsApp 또는 Meta가 요청을 완료할 수 없습니다: {detail}",
-      "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도하세요."
+      "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+      "alreadyConnected": "이미 연결된 카탈로그가 있습니다. 새로 만들려면 먼저 연결을 해제하세요.",
+      "confirmMismatch": "입력한 카탈로그 ID가 연결된 카탈로그와 일치하지 않습니다.",
+      "setNotSyncable": "이 컬렉션에는 Meta 제품 세트에 넣을 활성 제품이 없습니다."
     },
     "paywall": {
       "kicker": "프리미엄 기능",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "설명이 너무 깁니다.",
           "noProducts": "제품을 하나 이상 선택하세요."
         }
+      },
+      "meta": {
+        "onMeta": "Meta에 있음",
+        "notOnMeta": "Meta에 없음",
+        "push": "Meta로 보내기",
+        "update": "Meta에서 업데이트",
+        "remove": "Meta에서 제거",
+        "pushed": "컬렉션을 Meta로 보냈습니다.",
+        "removed": "컬렉션을 Meta에서 제거했습니다."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "주류 / 성인 / 규제 상품 불가",
           "verification": "운영 환경에는 비즈니스 인증 필요"
         }
+      }
+    },
+    "manage": {
+      "title": "Meta에서 카탈로그 관리",
+      "create": {
+        "title": "Meta에서 새 카탈로그 만들기",
+        "intro": "WhatsApp Business 계정에 빈 카탈로그를 만들고 연결하여 여기에 연동합니다.",
+        "name": "카탈로그 이름",
+        "placeholder": "예: 내 상점",
+        "button": "카탈로그 만들기",
+        "needName": "카탈로그 이름을 입력하세요.",
+        "done": "카탈로그를 만들고 연결했습니다."
+      },
+      "rename": {
+        "label": "카탈로그 이름",
+        "button": "Meta에서 이름 변경",
+        "done": "Meta에서 카탈로그 이름을 변경했습니다."
+      },
+      "delete": {
+        "title": "Meta에서 카탈로그 삭제",
+        "warning": "Meta의 카탈로그와 제품을 영구 삭제합니다. 되돌릴 수 없습니다.",
+        "confirmLabel": "확인하려면 카탈로그 ID {id}을(를) 입력하세요",
+        "button": "Meta에서 삭제",
+        "dialogTitle": "Meta에서 카탈로그를 삭제할까요?",
+        "dialogMessage": "카탈로그가 Meta에서 삭제되고 여기서도 연결이 해제됩니다. 되돌릴 수 없습니다.",
+        "cancel": "취소",
+        "done": "Meta에서 카탈로그를 삭제했습니다."
       }
     }
   }

@@ -34,7 +34,10 @@
       "sendFailed": "Não foi possível enviar a mensagem: {detail}",
       "collectionProducts": "Nenhum dos produtos selecionados pertence a este espaço de trabalho.",
       "providerFailed": "O WhatsApp ou a Meta não conseguiu concluir a solicitação: {detail}",
-      "unexpected": "Algo deu errado. Tente novamente em instantes."
+      "unexpected": "Algo deu errado. Tente novamente em instantes.",
+      "alreadyConnected": "Já existe um catálogo conectado. Desconecte-o primeiro para criar um novo.",
+      "confirmMismatch": "O ID do catálogo digitado não corresponde ao catálogo conectado.",
+      "setNotSyncable": "Esta coleção não tem produtos ativos para incluir em um conjunto de produtos da Meta."
     },
     "paywall": {
       "kicker": "Recurso premium",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "A descrição é longa demais.",
           "noProducts": "Escolha pelo menos um produto."
         }
+      },
+      "meta": {
+        "onMeta": "Na Meta",
+        "notOnMeta": "Fora da Meta",
+        "push": "Enviar para a Meta",
+        "update": "Atualizar na Meta",
+        "remove": "Remover da Meta",
+        "pushed": "Coleção enviada para a Meta.",
+        "removed": "Coleção removida da Meta."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "Sem álcool / conteúdo adulto / produtos regulamentados",
           "verification": "Verificação da empresa obrigatória para produção"
         }
+      }
+    },
+    "manage": {
+      "title": "Gerenciar catálogo na Meta",
+      "create": {
+        "title": "Criar um novo catálogo na Meta",
+        "intro": "Cria um catálogo vazio na sua conta do WhatsApp Business, vincula e conecta aqui.",
+        "name": "Nome do catálogo",
+        "placeholder": "ex.: Minha loja",
+        "button": "Criar catálogo",
+        "needName": "Digite um nome para o catálogo.",
+        "done": "Catálogo criado e conectado."
+      },
+      "rename": {
+        "label": "Nome do catálogo",
+        "button": "Renomear na Meta",
+        "done": "Catálogo renomeado na Meta."
+      },
+      "delete": {
+        "title": "Excluir catálogo na Meta",
+        "warning": "Exclui permanentemente o catálogo e seus produtos na Meta. Não é possível desfazer.",
+        "confirmLabel": "Digite o ID do catálogo {id} para confirmar",
+        "button": "Excluir na Meta",
+        "dialogTitle": "Excluir o catálogo na Meta?",
+        "dialogMessage": "O catálogo é excluído na Meta e desconectado aqui. Não é possível desfazer.",
+        "cancel": "Cancelar",
+        "done": "Catálogo excluído na Meta."
       }
     }
   }

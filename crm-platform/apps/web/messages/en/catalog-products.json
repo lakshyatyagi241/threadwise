@@ -34,7 +34,10 @@
       "sendFailed": "The message could not be sent: {detail}",
       "collectionProducts": "None of the selected products belong to this workspace.",
       "providerFailed": "WhatsApp or Meta could not complete the request: {detail}",
-      "unexpected": "Something went wrong. Try again in a moment."
+      "unexpected": "Something went wrong. Try again in a moment.",
+      "alreadyConnected": "A catalog is already connected. Disconnect it first to create a new one.",
+      "confirmMismatch": "The catalog ID you typed does not match the connected catalog.",
+      "setNotSyncable": "This collection has no active products to put in a Meta product set."
     },
     "paywall": {
       "kicker": "Premium feature",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "The description is too long.",
           "noProducts": "Pick at least one product."
         }
+      },
+      "meta": {
+        "onMeta": "On Meta",
+        "notOnMeta": "Not on Meta",
+        "push": "Push to Meta",
+        "update": "Update on Meta",
+        "remove": "Remove from Meta",
+        "pushed": "Collection pushed to Meta.",
+        "removed": "Collection removed from Meta."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "No alcohol / adult / regulated goods",
           "verification": "Business Verification required for production"
         }
+      }
+    },
+    "manage": {
+      "title": "Manage catalog on Meta",
+      "create": {
+        "title": "Create a new catalog on Meta",
+        "intro": "Creates an empty catalog under your WhatsApp Business account, links it and connects it here.",
+        "name": "Catalog name",
+        "placeholder": "e.g. My shop",
+        "button": "Create catalog",
+        "needName": "Enter a catalog name.",
+        "done": "Catalog created and connected."
+      },
+      "rename": {
+        "label": "Catalog name",
+        "button": "Rename on Meta",
+        "done": "Catalog renamed on Meta."
+      },
+      "delete": {
+        "title": "Delete catalog on Meta",
+        "warning": "Permanently deletes the catalog and its products on Meta. This cannot be undone.",
+        "confirmLabel": "Type the catalog ID {id} to confirm",
+        "button": "Delete on Meta",
+        "dialogTitle": "Delete the catalog on Meta?",
+        "dialogMessage": "The catalog is deleted on Meta and disconnected here. This cannot be undone.",
+        "cancel": "Cancel",
+        "done": "Catalog deleted on Meta."
       }
     }
   }

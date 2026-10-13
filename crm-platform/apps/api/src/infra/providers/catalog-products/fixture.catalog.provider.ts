@@ -59,6 +59,10 @@ export class FixtureCatalogState {
   wabaCatalogs = new Map<string, string[]>();
   createdCatalogs: Array<{ businessId: string; name: string; id: string }> = [];
   linked: Array<{ wabaId: string; catalogId: string }> = [];
+  renamedCatalogs: Array<{ catalogId: string; name: string }> = [];
+  deletedCatalogs: string[] = [];
+  /** Product sets on Meta by set id. */
+  productSets = new Map<string, { catalogId: string; name: string; retailerIds: string[] }>();
   private seq = 0;
 
   nextId(prefix: string): string {
@@ -79,6 +83,9 @@ export class FixtureCatalogState {
     this.wabaCatalogs.clear();
     this.createdCatalogs = [];
     this.linked = [];
+    this.renamedCatalogs = [];
+    this.deletedCatalogs = [];
+    this.productSets.clear();
   }
 
   takeFailure(op: string): void {
@@ -238,6 +245,47 @@ export class FixtureCatalogProvider implements CatalogProvider {
   async catalogName(a: GraphAuth, catalogId: string): Promise<string | null> {
     this.guard('catalogName', a);
     return `Fixture catalog ${catalogId}`;
+  }
+
+  async renameCatalog(b: CatalogBinding, name: string): Promise<void> {
+    this.guard('renameCatalog', b);
+    this.state.renamedCatalogs.push({ catalogId: b.catalogId, name });
+  }
+  async deleteCatalog(b: CatalogBinding): Promise<void> {
+    this.guard('deleteCatalog', b);
+    this.state.deletedCatalogs.push(b.catalogId);
+  }
+  async createProductSet(
+    b: CatalogBinding,
+    name: string,
+    retailerIds: readonly string[],
+  ): Promise<string> {
+    this.guard('createProductSet', b);
+    const id = this.state.nextId('set');
+    this.state.productSets.set(id, { catalogId: b.catalogId, name, retailerIds: [...retailerIds] });
+    return id;
+  }
+  async updateProductSet(
+    b: CatalogBinding,
+    setId: string,
+    name: string,
+    retailerIds: readonly string[],
+  ): Promise<void> {
+    this.guard('updateProductSet', b);
+    if (!this.state.productSets.has(setId)) {
+      throw metaError('(#100) Unsupported post request. Object does not exist.', 100);
+    }
+    this.state.productSets.set(setId, {
+      catalogId: b.catalogId,
+      name,
+      retailerIds: [...retailerIds],
+    });
+  }
+  async deleteProductSet(b: CatalogBinding, setId: string): Promise<void> {
+    this.guard('deleteProductSet', b);
+    if (!this.state.productSets.delete(setId)) {
+      throw metaError('(#100) Unsupported delete request. Object does not exist.', 100);
+    }
   }
 }
 

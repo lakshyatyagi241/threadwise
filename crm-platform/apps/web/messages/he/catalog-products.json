@@ -34,7 +34,10 @@
       "sendFailed": "לא ניתן היה לשלוח את ההודעה: {detail}",
       "collectionProducts": "אף אחד מהמוצרים שנבחרו אינו שייך לסביבת עבודה זו.",
       "providerFailed": "WhatsApp או Meta לא הצליחו להשלים את הבקשה: {detail}",
-      "unexpected": "משהו השתבש. נסו שוב בעוד רגע."
+      "unexpected": "משהו השתבש. נסו שוב בעוד רגע.",
+      "alreadyConnected": "כבר מחובר קטלוג. נתקו אותו תחילה כדי ליצור חדש.",
+      "confirmMismatch": "מזהה הקטלוג שהוקלד אינו תואם לקטלוג המחובר.",
+      "setNotSyncable": "באוסף הזה אין מוצרים פעילים להכנסה לסט מוצרים של Meta."
     },
     "paywall": {
       "kicker": "תכונת פרימיום",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "התיאור ארוך מדי.",
           "noProducts": "בחרו לפחות מוצר אחד."
         }
+      },
+      "meta": {
+        "onMeta": "ב-Meta",
+        "notOnMeta": "לא ב-Meta",
+        "push": "שליחה ל-Meta",
+        "update": "עדכון ב-Meta",
+        "remove": "הסרה מ-Meta",
+        "pushed": "האוסף נשלח ל-Meta.",
+        "removed": "האוסף הוסר מ-Meta."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "ללא אלכוהול / תוכן למבוגרים / סחורה מוסדרת",
           "verification": "נדרש אימות עסק לסביבת ייצור"
         }
+      }
+    },
+    "manage": {
+      "title": "ניהול הקטלוג ב-Meta",
+      "create": {
+        "title": "יצירת קטלוג חדש ב-Meta",
+        "intro": "יוצר קטלוג ריק בחשבון WhatsApp Business שלכם, מקשר אותו ומחבר אותו כאן.",
+        "name": "שם הקטלוג",
+        "placeholder": "לדוגמה: החנות שלי",
+        "button": "יצירת קטלוג",
+        "needName": "הזינו שם לקטלוג.",
+        "done": "הקטלוג נוצר וחובר."
+      },
+      "rename": {
+        "label": "שם הקטלוג",
+        "button": "שינוי שם ב-Meta",
+        "done": "שם הקטלוג שונה ב-Meta."
+      },
+      "delete": {
+        "title": "מחיקת הקטלוג ב-Meta",
+        "warning": "מוחק לצמיתות את הקטלוג והמוצרים שלו ב-Meta. אי אפשר לבטל.",
+        "confirmLabel": "הקלידו את מזהה הקטלוג {id} לאישור",
+        "button": "מחיקה ב-Meta",
+        "dialogTitle": "למחוק את הקטלוג ב-Meta?",
+        "dialogMessage": "הקטלוג יימחק ב-Meta ויתנתק כאן. אי אפשר לבטל.",
+        "cancel": "ביטול",
+        "done": "הקטלוג נמחק ב-Meta."
       }
     }
   }

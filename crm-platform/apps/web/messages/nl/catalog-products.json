@@ -34,7 +34,10 @@
       "sendFailed": "Het bericht kon niet worden verzonden: {detail}",
       "collectionProducts": "Geen van de geselecteerde producten hoort bij deze workspace.",
       "providerFailed": "WhatsApp of Meta kon het verzoek niet voltooien: {detail}",
-      "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+      "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw.",
+      "alreadyConnected": "Er is al een catalogus verbonden. Verbreek die eerst om een nieuwe te maken.",
+      "confirmMismatch": "De ingevoerde catalogus-ID komt niet overeen met de verbonden catalogus.",
+      "setNotSyncable": "Deze collectie heeft geen actieve producten voor een Meta-productset."
     },
     "paywall": {
       "kicker": "Premiumfunctie",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "De beschrijving is te lang.",
           "noProducts": "Kies minstens één product."
         }
+      },
+      "meta": {
+        "onMeta": "Bij Meta",
+        "notOnMeta": "Niet bij Meta",
+        "push": "Naar Meta sturen",
+        "update": "Bijwerken bij Meta",
+        "remove": "Verwijderen van Meta",
+        "pushed": "Collectie naar Meta gestuurd.",
+        "removed": "Collectie van Meta verwijderd."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "Geen alcohol / volwassenen- / gereguleerde goederen",
           "verification": "Bedrijfsverificatie vereist voor productie"
         }
+      }
+    },
+    "manage": {
+      "title": "Catalogus beheren bij Meta",
+      "create": {
+        "title": "Nieuwe catalogus maken bij Meta",
+        "intro": "Maakt een lege catalogus in je WhatsApp Business-account, koppelt die en verbindt hem hier.",
+        "name": "Catalogusnaam",
+        "placeholder": "bijv. Mijn winkel",
+        "button": "Catalogus maken",
+        "needName": "Voer een catalogusnaam in.",
+        "done": "Catalogus gemaakt en verbonden."
+      },
+      "rename": {
+        "label": "Catalogusnaam",
+        "button": "Hernoemen bij Meta",
+        "done": "Catalogus hernoemd bij Meta."
+      },
+      "delete": {
+        "title": "Catalogus verwijderen bij Meta",
+        "warning": "Verwijdert de catalogus en de producten definitief bij Meta. Dit kan niet ongedaan worden gemaakt.",
+        "confirmLabel": "Typ catalogus-ID {id} ter bevestiging",
+        "button": "Verwijderen bij Meta",
+        "dialogTitle": "Catalogus verwijderen bij Meta?",
+        "dialogMessage": "De catalogus wordt bij Meta verwijderd en hier losgekoppeld. Dit kan niet ongedaan worden gemaakt.",
+        "cancel": "Annuleren",
+        "done": "Catalogus verwijderd bij Meta."
       }
     }
   }

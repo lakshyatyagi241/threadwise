@@ -34,7 +34,10 @@
       "sendFailed": "Le message n’a pas pu être envoyé : {detail}",
       "collectionProducts": "Aucun des produits sélectionnés n’appartient à cet espace de travail.",
       "providerFailed": "WhatsApp ou Meta n’a pas pu mener la requête à terme : {detail}",
-      "unexpected": "Une erreur s’est produite. Réessayez dans un instant."
+      "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
+      "alreadyConnected": "Un catalogue est déjà connecté. Déconnectez-le d'abord pour en créer un nouveau.",
+      "confirmMismatch": "L'ID de catalogue saisi ne correspond pas au catalogue connecté.",
+      "setNotSyncable": "Cette collection n'a aucun produit actif à mettre dans un ensemble de produits Meta."
     },
     "paywall": {
       "kicker": "Fonctionnalité premium",
@@ -400,6 +403,15 @@
           "descriptionTooLong": "La description est trop longue.",
           "noProducts": "Choisissez au moins un produit."
         }
+      },
+      "meta": {
+        "onMeta": "Sur Meta",
+        "notOnMeta": "Pas sur Meta",
+        "push": "Envoyer à Meta",
+        "update": "Mettre à jour sur Meta",
+        "remove": "Retirer de Meta",
+        "pushed": "Collection envoyée à Meta.",
+        "removed": "Collection retirée de Meta."
       }
     },
     "activity": {
@@ -723,6 +735,33 @@
           "goods": "Pas d’alcool, de contenu pour adultes ni de produits réglementés",
           "verification": "Vérification de l’entreprise requise pour la production"
         }
+      }
+    },
+    "manage": {
+      "title": "Gérer le catalogue sur Meta",
+      "create": {
+        "title": "Créer un nouveau catalogue sur Meta",
+        "intro": "Crée un catalogue vide dans votre compte WhatsApp Business, le lie et le connecte ici.",
+        "name": "Nom du catalogue",
+        "placeholder": "ex. Ma boutique",
+        "button": "Créer le catalogue",
+        "needName": "Saisissez un nom de catalogue.",
+        "done": "Catalogue créé et connecté."
+      },
+      "rename": {
+        "label": "Nom du catalogue",
+        "button": "Renommer sur Meta",
+        "done": "Catalogue renommé sur Meta."
+      },
+      "delete": {
+        "title": "Supprimer le catalogue sur Meta",
+        "warning": "Supprime définitivement le catalogue et ses produits sur Meta. Action irréversible.",
+        "confirmLabel": "Saisissez l'ID du catalogue {id} pour confirmer",
+        "button": "Supprimer sur Meta",
+        "dialogTitle": "Supprimer le catalogue sur Meta ?",
+        "dialogMessage": "Le catalogue est supprimé sur Meta et déconnecté ici. Action irréversible.",
+        "cancel": "Annuler",
+        "done": "Catalogue supprimé sur Meta."
       }
     }
   }
