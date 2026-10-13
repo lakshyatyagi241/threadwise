@@ -82,7 +82,10 @@
       "lastFired": "ostatnio {when}",
       "edit": "Edytuj",
       "duplicate": "Duplikuj",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "startsFlow": "Uruchamia także przepływ {name}",
+      "flowOff": "Przepływ jest wyłączony",
+      "flowGone": "Uruchamia także usunięty przepływ"
     },
     "form": {
       "back": "Automatyczne przypisywanie",
@@ -171,7 +174,15 @@
       "cancel": "Anuluj",
       "save": "Zapisz",
       "saveActivate": "Zapisz i aktywuj",
-      "openCount": "{open} otwarte"
+      "openCount": "{open} otwarte",
+      "flow": {
+        "title": "Uruchom także przepływ",
+        "hint": "Opcjonalnie. Przepływ uruchamia się dla rozmowy, gdy ta reguła zadziała, w tym samym kanale. Musi być tylko włączony; nie musi być opublikowany.",
+        "none": "Brak przepływu",
+        "offOption": "{name} (wyłączony)",
+        "goneOption": "Przepływ, który już nie istnieje",
+        "loadFailed": "Nie udało się wczytać przepływów, więc lista może być niepełna."
+      }
     }
   }
 }

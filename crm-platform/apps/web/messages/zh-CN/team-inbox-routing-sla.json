@@ -82,7 +82,10 @@
       "lastFired": "上次使用时间：{when}",
       "edit": "编辑",
       "duplicate": "复制",
-      "delete": "删除"
+      "delete": "删除",
+      "startsFlow": "同时启动流程 {name}",
+      "flowOff": "流程已关闭",
+      "flowGone": "同时启动一个已被删除的流程"
     },
     "form": {
       "back": "自动分配",
@@ -171,7 +174,15 @@
       "cancel": "取消",
       "save": "保存",
       "saveActivate": "保存并启用",
-      "openCount": "{open} 个未完成"
+      "openCount": "{open} 个未完成",
+      "flow": {
+        "title": "同时启动一个流程",
+        "hint": "可选。此规则触发时，会在同一渠道为该对话启动该流程。流程只需处于开启状态，无需发布。",
+        "none": "无流程",
+        "offOption": "{name}（已关闭）",
+        "goneOption": "已不存在的流程",
+        "loadFailed": "无法加载流程，所以列表可能不完整。"
+      }
     }
   }
 }

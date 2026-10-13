@@ -82,7 +82,10 @@
       "lastFired": "last on {when}",
       "edit": "Edit",
       "duplicate": "Duplicate",
-      "delete": "Delete"
+      "delete": "Delete",
+      "startsFlow": "Also starts the flow {name}",
+      "flowOff": "Flow is switched off",
+      "flowGone": "Also starts a flow that was deleted"
     },
     "form": {
       "back": "Auto-assignment",
@@ -171,7 +174,15 @@
       "cancel": "Cancel",
       "save": "Save",
       "saveActivate": "Save and activate",
-      "openCount": "{open} open"
+      "openCount": "{open} open",
+      "flow": {
+        "title": "Also start a flow",
+        "hint": "Optional. The flow starts for the conversation when this rule fires, on the same channel. It only has to be switched on; it does not have to be published.",
+        "none": "No flow",
+        "offOption": "{name} (switched off)",
+        "goneOption": "A flow that no longer exists",
+        "loadFailed": "The flows could not be loaded, so the choice may be incomplete."
+      }
     }
   }
 }

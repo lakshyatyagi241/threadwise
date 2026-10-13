@@ -609,3 +609,66 @@ describe('compiling a builder graph', () => {
     expect(odd.nodes[0]!.props.delaySeconds).toBe(300);
   });
 });
+
+describe('the 24 hour window on a run nobody asked for', () => {
+  const closed = {
+    ok: false as const,
+    code: 'SERVICE_WINDOW_CLOSED',
+    error: 'The window is closed.',
+    halt: false,
+  };
+  const two = {
+    nodes: [n('a', 'message', { text: 'one' }), n('b', 'message', { text: 'two' })],
+    edges: [e('a', 'b')],
+  };
+
+  /** Steps the whole flow; `outcomes` is what each send answers, in order. */
+  async function walk(source: RunState['source'], outcomes: Array<{ ok: true } | typeof closed>) {
+    const run = newRun(two);
+    run.source = source;
+    let i = 0;
+    const deps: StepDeps = {
+      send: async () => outcomes[Math.min(i++, outcomes.length - 1)]!,
+      paceMs: () => 0,
+      now: () => new Date(0),
+    };
+    let t = (await executeCurrent(run, deps)).transition;
+    while (t.t === 'goto') {
+      run.currentNodeId = t.nodeId;
+      t = (await executeCurrent(run, deps)).transition;
+    }
+    return { t, run };
+  }
+
+  it('ends failed with the window code when nothing was delivered', async () => {
+    const { t } = await walk('order_placed', [closed]);
+    expect(t).toMatchObject({
+      t: 'end',
+      status: 'failed',
+      reason: 'send_failed',
+      failureCode: 'SERVICE_WINDOW_CLOSED',
+    });
+    expect((t as { failureReason: string }).failureReason).toContain(
+      'Nothing reached the customer (The window is closed)',
+    );
+  });
+
+  it('stays completed when the customer started the run (their message opened the window)', async () => {
+    for (const source of ['keyword', 'any_message', 'away', 'out_of_hours'] as const) {
+      const { t } = await walk(source, [closed]);
+      expect(t).toMatchObject({ t: 'end', status: 'completed' });
+    }
+  });
+
+  it('stays completed when a message got through first (a template that opened the conversation)', async () => {
+    const { t, run } = await walk('opt_in', [{ ok: true }, closed]);
+    expect(t).toMatchObject({ t: 'end', status: 'completed' });
+    expect(run.vars.__delivered).toBe(1);
+  });
+
+  it('is the same for every launch path that is not a customer message', async () => {
+    for (const source of ['routing', 'webhook_lead', 'handoff', 'manual', 'campaign'] as const) {
+      expect((await walk(source, [closed])).t).toMatchObject({ t: 'end', status: 'failed' });
+    }
+  });
+});

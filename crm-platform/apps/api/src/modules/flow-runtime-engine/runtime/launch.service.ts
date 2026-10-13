@@ -128,6 +128,36 @@ export class FlowLaunchService {
     return result;
   }
 
+  /**
+   * Refuses a start that must not happen (a trigger loop, TW-FLR-010): no run is written, and the contact's subscriber row for the flow
+   * shows `failed` with the reason where an operator reads it (a start with no contact is only logged). Never silent.
+   */
+  async refuse(
+    orgId: number,
+    input: LaunchInput,
+    code: string,
+    reason: string,
+  ): Promise<LaunchOutcome> {
+    this.logger.warn(
+      { orgId, flowId: input.flowId, source: input.source, code },
+      `[FLR] start refused: ${reason}`,
+    );
+    const subscriberId = await this.db.txAs({ orgId }, async (tx) => {
+      const flow = await this.loadFlow(tx, orgId, input.flowId);
+      if (!flow || !input.withSubscriber || !input.contactId) return null;
+      const got = await this.subscribers.firstOrCreate(
+        tx,
+        orgId,
+        flow.id,
+        input.contactId,
+        input.source,
+      );
+      await this.subscribers.markRefused(tx, orgId, got.row.id, reason);
+      return got.row.id;
+    });
+    return { outcome: 'failed', reason, code, subscriberId };
+  }
+
   /** Starts inside the caller's transaction. The caller must queue step 0 of a `started` run after it commits (`publisher.schedule`). */
   async startIn(tx: Tx, orgId: number, input: LaunchInput): Promise<LaunchOutcome> {
     const flow = await this.loadFlow(tx, orgId, input.flowId);

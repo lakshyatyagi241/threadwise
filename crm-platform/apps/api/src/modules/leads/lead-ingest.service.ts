@@ -273,6 +273,8 @@ export class LeadIngestService implements LeadIngestPort {
         leadSourceId: source.uuid,
         sourceName: source.name,
         platform: label,
+        // The source's flow (uuid), for the flow runtime's worker to put the lead into (TW-FLR-010 rule 4).
+        flowId: defaults.flowId ?? null,
         contactId: found.uuid,
         contactName: row.name ?? resolved.name,
         ownerId: ownerUuid,

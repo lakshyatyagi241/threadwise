@@ -11,6 +11,7 @@ import {
 } from '@crm/contracts';
 import { z } from 'zod';
 import { apiFetch } from '@/lib/api/client';
+import { flowsApi } from '@/features/flow-builder-editor/api/flows';
 
 export const KEYS = {
   rules: ['routing-rules'] as const,
@@ -64,6 +65,17 @@ export const routingApi = {
   assignees: (signal?: AbortSignal) =>
     apiFetch('/inbox/assignees', { schema: inboxAssigneesResponseSchema, signal }),
 };
+
+/** The workspace's flows (the first 100, newest activity first) for the rule's "also start a flow" choice. A person without access to flows gets an empty choice, never an error page. */
+export function useFlowChoices() {
+  return useQuery({
+    queryKey: [...KEYS.rules, 'flows'] as const,
+    retry: false,
+    staleTime: 60_000,
+    queryFn: ({ signal }) => flowsApi.list({ limit: 100 }, signal),
+    select: (r) => r.data.map((f) => ({ id: f.id, name: f.name, isActive: f.isActive })),
+  });
+}
 
 export const refresh = (qc: QueryClient) => qc.invalidateQueries({ queryKey: KEYS.rules });
 

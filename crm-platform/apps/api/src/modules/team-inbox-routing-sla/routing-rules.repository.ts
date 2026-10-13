@@ -185,6 +185,23 @@ export class RoutingRulesRepository {
     return new Map(rowsOf(res).map((r) => [r.uuid as string, Number(r.id)]));
   }
 
+  /** The flows a rule can start, by uuid: the name to show and whether the flow is switched on. A deleted flow is not in the map. */
+  async flowsByUuid(
+    tx: Tx,
+    orgId: number,
+    uuids: readonly string[],
+  ): Promise<Map<string, { name: string; isActive: boolean }>> {
+    if (uuids.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT uuid, flow_name, is_active FROM flows WHERE org_id = ${orgId} AND uuid IN (${uuidList(uuids)})`);
+    return new Map(
+      rowsOf(res).map((r) => [
+        r.uuid as string,
+        { name: r.flow_name as string, isActive: r.is_active === true },
+      ]),
+    );
+  }
+
   // --- settings ------------------------------------------------------------------------------------------------------------------
 
   async keepContactAgent(tx: Tx, orgId: number): Promise<boolean> {
