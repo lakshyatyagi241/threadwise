@@ -310,6 +310,11 @@
         "description": "Automatycznie przydzielaj nowe rozmowy właściwemu agentowi, po kolei lub według reguł.",
         "keywords": "routing, round robin, przydział, agenci, reguły skrzynki, rozdziel, właściciel"
       },
+      "web": {
+        "label": "Czat na stronie",
+        "description": "Boty stworzone dla czatu na Twojej stronie internetowej i widżet, w którym każdy z nich działa.",
+        "keywords": "web, strona internetowa, widżet, chatbot, osadzanie, czat na żywo"
+      },
       "message-logs": {
         "label": "Dzienniki wiadomości",
         "description": "Wyeksportuj dziennik dostarczania swoich wiadomości do roku wstecz jako plik wysłany na Twój e-mail.",
@@ -319,11 +324,6 @@
         "label": "Subskrypcje",
         "description": "Co się odnawia, do kiedy jest opłacone, oraz anulowanie.",
         "keywords": "subskrypcja, odnowienie, automatyczne odnawianie, anulowanie, automatyczna płatność, nieudana płatność, opłaty"
-      },
-      "web": {
-        "label": "Czat na stronie",
-        "description": "Boty stworzone dla czatu na Twojej stronie internetowej i widżet, w którym każdy z nich działa.",
-        "keywords": "web, strona internetowa, widżet, chatbot, osadzanie, czat na żywo"
       },
       "lead-scoring": {
         "label": "Ocenianie leadów przez AI",

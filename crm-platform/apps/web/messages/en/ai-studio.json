@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "AI Studio"
+    },
+    "title": "AI Studio",
+    "lead": "Start something that talks to your customers for you: an AI agent, a chatbot or a workflow.",
+    "noAccess": "You do not have the right to start this one. Ask a workspace admin.",
+    "agent": {
+      "title": "AI agent",
+      "body": "Answers from your own documents and web pages, in your tone.",
+      "create": "Create an AI agent",
+      "open": "Your AI agents"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "body": "A guided conversation with buttons, questions, cards and files, for your website or WhatsApp.",
+      "web": "Website chat bot",
+      "whatsapp": "WhatsApp bot"
+    },
+    "workflow": {
+      "title": "Workflow",
+      "body": "The advanced canvas: conditions, tags, webhooks and CRM steps that run on their own.",
+      "create": "Create a workflow",
+      "open": "Your flows"
+    },
+    "deployNote": "Every chatbot has Build, Customize and Deploy tabs. Publish it, then copy its embed code or link from Deploy."
+  }
+}

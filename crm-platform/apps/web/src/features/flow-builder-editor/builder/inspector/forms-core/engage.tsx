@@ -1,5 +1,6 @@
 'use client';
 
+import { ButtonIcon } from '../../button-icon';
 import { useTranslations } from 'next-intl';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { Field, RowCard, TextArea, TextInput } from '../kit';
@@ -86,6 +87,7 @@ export function CtaForm({ data: d, set, env }: FormProps) {
               <div className="text-[10.5px] leading-snug text-muted-foreground">
                 {t(`ctaHint.${ctaHintKey(type, unofficial)}`)}
               </div>
+              <ButtonIcon value={a.icon ?? ''} onChange={(v) => patch(i, { icon: v })} />
             </div>
           </RowCard>
         );

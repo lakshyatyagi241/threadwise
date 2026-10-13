@@ -310,6 +310,11 @@
         "description": "Yeni konuşmaları sıra ile veya kurallara göre otomatik olarak doğru temsilciye verin.",
         "keywords": "yönlendirme, sırayla dağıtım, ata, temsilciler, gelen kutusu kuralları, dağıt, sahip"
       },
+      "web": {
+        "label": "Web sitesi sohbeti",
+        "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",
+        "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
+      },
       "message-logs": {
         "label": "Mesaj günlükleri",
         "description": "Mesajlarınızın teslimat günlüğünü bir yıla kadar geriye dönük olarak e-postanıza gönderilen bir dosya şeklinde dışa aktarın.",
@@ -319,11 +324,6 @@
         "label": "Abonelikler",
         "description": "Nelerin yenilendiği, ne zamana kadar ödendiği ve iptal.",
         "keywords": "abonelik, yenileme, otomatik yenileme, iptal, otomatik ödeme, başarısız ödeme, tahsilatlar"
-      },
-      "web": {
-        "label": "Web sitesi sohbeti",
-        "description": "Web sitenizin sohbeti için oluşturulan botlar ve her birinin çalıştığı widget.",
-        "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
       },
       "lead-scoring": {
         "label": "Yapay zeka ile potansiyel müşteri puanlama",

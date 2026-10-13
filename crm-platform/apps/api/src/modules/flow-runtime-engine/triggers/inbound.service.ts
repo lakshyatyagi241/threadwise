@@ -6,7 +6,8 @@ import {
 } from '../../chat-conversations';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { FlowEngine } from '../runtime/engine.service';
-import { FlowLaunchService } from '../runtime/launch.service';
+import { sql } from 'drizzle-orm';
+import { FlowLaunchService, KINDS_OF_PROVIDER } from '../runtime/launch.service';
 import { decodeInbound } from '../runtime/reply-router';
 import { RunRepository } from '../runtime/run.repository';
 import { CHAT_MEDIA_PREFIX } from '../runtime/flow-sender.service';
@@ -59,6 +60,12 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
     const live = await this.db.txAs({ orgId: e.orgId }, (tx) =>
       this.runs.liveByPeer(tx, e.orgId, e.channelId, e.peerKey),
     );
+
+    // A tap on a button the author tied to a step of the bot (a quick reply, a menu entry or a banner): start the bot from that step.
+    if (reply?.kind === 'tap') {
+      const jump = /^go:([0-9a-f-]{36}):([\w-]{1,64})$/i.exec(reply.id);
+      if (jump && (await this.startAt(e, jump[1]!, jump[2]!))) return { consumed: true };
+    }
 
     // Typed text, never a tap: a tap is an answer to a menu, not a keyword.
     const typed = reply && reply.kind !== 'tap' ? reply.text.trim() : '';
@@ -121,6 +128,44 @@ export class FlowInboundService implements InboundMessageListener, OnModuleInit 
       e.peerKey,
     );
     return { consumed: started > 0 };
+  }
+
+  /**
+   * Starts the bot named by a jump tap at the step the tap names, replacing any run in progress. Only a live bot of this workspace that
+   * runs on this channel can be jumped into; anything else is left to the normal handling of the message.
+   */
+  private async startAt(e: InboundStoredEvent, flowUuid: string, nodeId: string): Promise<boolean> {
+    try {
+      const flow = await this.db.txAs({ orgId: e.orgId }, async (tx) => {
+        const res = (await tx.execute(
+          sql`SELECT id, provider, trigger_channel_id, is_published, is_active FROM flows WHERE org_id = ${e.orgId} AND uuid = ${flowUuid}::uuid`,
+        )) as unknown as { rows: Array<Record<string, unknown>> };
+        return res.rows[0] ?? null;
+      });
+      if (!flow || !flow.is_published || !flow.is_active) return false;
+      const kinds = KINDS_OF_PROVIDER[String(flow.provider)] ?? [];
+      const tied = flow.trigger_channel_id === null ? null : Number(flow.trigger_channel_id);
+      if (tied !== null ? tied !== e.channelId : !kinds.includes(e.channelKind)) return false;
+      const out = await this.launch.start(e.orgId, {
+        flowId: Number(flow.id),
+        contactId: e.contactId,
+        channelId: e.channelId,
+        peerKey: e.peerKey,
+        source: 'any_message',
+        pushName: e.peerName,
+        conversationId: e.conversationId,
+        requirePublished: true,
+        withSubscriber: false,
+        startNodeId: nodeId,
+      });
+      return out.outcome === 'started';
+    } catch (err) {
+      this.logger.warn(
+        { orgId: e.orgId, flowUuid, err: (err as Error).message },
+        '[FLR] a jump to a step failed',
+      );
+      return false;
+    }
   }
 
   private async startKeyword(

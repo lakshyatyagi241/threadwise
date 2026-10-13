@@ -310,6 +310,11 @@
         "description": "Berikan percakapan baru ke agen yang tepat secara otomatis, bergiliran atau berdasarkan aturan.",
         "keywords": "routing, round robin, tetapkan, agen, aturan inbox, distribusikan, pemilik"
       },
+      "web": {
+        "label": "Obrolan situs web",
+        "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
+        "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
+      },
       "message-logs": {
         "label": "Log pesan",
         "description": "Ekspor log pengiriman pesan Anda, hingga satu tahun ke belakang, sebagai file yang dikirim ke email Anda.",
@@ -319,11 +324,6 @@
         "label": "Langganan",
         "description": "Apa yang diperpanjang, dibayar hingga kapan, dan pembatalan.",
         "keywords": "langganan, perpanjangan, perpanjangan otomatis, batalkan, autodebet, pembayaran gagal, tagihan"
-      },
-      "web": {
-        "label": "Obrolan situs web",
-        "description": "Bot yang dibuat untuk obrolan situs web Anda dan widget tempat masing-masing berjalan.",
-        "keywords": "web, situs web, widget, chatbot, sematkan, obrolan langsung"
       },
       "lead-scoring": {
         "label": "Penilaian prospek dengan AI",

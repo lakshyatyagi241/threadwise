@@ -11,6 +11,8 @@ import type { VariableBag } from './variables';
 export interface MenuItem {
   id: string;
   text: string;
+  /** A small picture in front of the button, drawn by the website chat window only (an https address). */
+  icon?: string;
 }
 
 /**
@@ -104,8 +106,38 @@ export interface RunState {
 }
 
 /** A message in the flow's own vocabulary; the sender renders it for the channel or degrades it (TW-FLR-019). */
+/**
+ * What kind of answer a question waits for, for a channel that draws its own input (the website chat window picks the keyboard, a date
+ * picker or an attach button from it). `type` is an Ask node's "validate as" (`text`, `name`, `email`, `phone`, `number`,
+ * `alphanumeric`, `date`) or `file`; `format` is the date shape; `accept` the file extensions a file question allows.
+ */
+export interface InputHint {
+  type: string;
+  format?: string;
+  accept?: string[];
+}
+
+/** A button that opens something outside the chat (a page, a call, an email); only the website chat window draws these. */
+export interface WebLink {
+  label: string;
+  url: string;
+  /** A small picture in front of the button (an https address). */
+  icon?: string;
+}
+
+/** One card of a carousel as the website chat window draws it. */
+export interface CarouselCard {
+  title: string;
+  text: string;
+  image?: string;
+  buttons: Array<
+    { kind: 'reply'; id: string; title: string } | { kind: 'link'; label: string; url: string }
+  >;
+}
+
 export type OutboundMessage =
-  | { kind: 'text'; body: string }
+  | { kind: 'text'; body: string; input?: InputHint; links?: WebLink[] }
+  | { kind: 'carousel'; body: string; cards: CarouselCard[] }
   | {
       kind: 'media';
       mediaKind: 'image' | 'video' | 'audio' | 'document';

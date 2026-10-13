@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "AI Studio"
+    },
+    "title": "AI Studio",
+    "lead": "Bắt đầu thứ nói chuyện với khách hàng thay bạn: tác nhân AI, chatbot hoặc quy trình.",
+    "noAccess": "Bạn không có quyền bắt đầu mục này. Hãy hỏi quản trị viên không gian làm việc.",
+    "agent": {
+      "title": "Tác nhân AI",
+      "body": "Trả lời từ tài liệu và trang web của riêng bạn, theo giọng của bạn.",
+      "create": "Tạo tác nhân AI",
+      "open": "Các tác nhân AI của bạn"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "body": "Cuộc trò chuyện có hướng dẫn với nút, câu hỏi, thẻ và tệp, cho website hoặc WhatsApp của bạn.",
+      "web": "Chatbot website",
+      "whatsapp": "Bot WhatsApp"
+    },
+    "workflow": {
+      "title": "Quy trình",
+      "body": "Canvas nâng cao: điều kiện, thẻ, webhook và bước CRM tự chạy.",
+      "create": "Tạo quy trình",
+      "open": "Các luồng của bạn"
+    },
+    "deployNote": "Mỗi chatbot có các tab Xây dựng, Tùy chỉnh và Triển khai. Hãy xuất bản, rồi sao chép mã nhúng hoặc liên kết từ Triển khai."
+  }
+}

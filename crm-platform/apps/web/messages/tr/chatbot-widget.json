@@ -276,7 +276,14 @@
           "iconOnly": "Yalnızca simge",
           "buttonColor": "Düğme rengi",
           "pickCustom": "Özel bir renk seçin",
-          "custom": "Özel {hex}"
+          "custom": "Özel {hex}",
+          "animation": "Düğme animasyonu",
+          "animationHint": "Sohbet kapalıyken dikkati düğmeye çeker.",
+          "animations": {
+            "none": "Kapalı",
+            "bounce": "Zıplama",
+            "ripple": "Dalga"
+          }
         },
         "2": {
           "title": "Mesajlaşma penceresini tasarlayın",
@@ -289,7 +296,9 @@
             "person": "Kişi"
           },
           "url": "Veya kendi görsel adresinizi kullanın",
-          "urlHint": "Kare bir görselin adresini yapıştırın (https://...). Dosya yükleme henüz kullanılamıyor."
+          "urlHint": "Kare bir görselin adresini yapıştırın (https://...). Dosya yükleme henüz kullanılamıyor.",
+          "botName": "Bot adı",
+          "botNameHint": "Sohbet penceresinin başlığında gösterilir. Botunuzun adını kullanmak için boş bırakın."
         },
         "3": {
           "title": "Karşılama mesajınızı ayarlayın",
@@ -297,7 +306,13 @@
           "greeting": "Selamlama",
           "greetingHint": "Müşteriler mesajlaşma penceresini açtığında onlara merhaba deyin",
           "intro": "Tanıtım mesajı",
-          "introHint": "İşletmenizi tanıtın ve müşterilere nasıl yardımcı olabileceğinizi söyleyin"
+          "introHint": "İşletmenizi tanıtın ve müşterilere nasıl yardımcı olabileceğinizi söyleyin",
+          "subHeader": "Alt başlık metni",
+          "subHeaderHint": "Adın altındaki satır, örneğin ne kadar hızlı yanıt verdiğiniz.",
+          "cta": "Düğme metni",
+          "ctaHint": "WhatsApp'ı açan düğmenin üzerindeki metin.",
+          "prefilled": "Önceden doldurulmuş mesaj",
+          "prefilledHint": "Düğmeye dokunulduğunda gönderilen mesaj. Botunuzun anahtar kelimesiyle başlar, böylece bot çalışmaya başlar."
         },
         "4": {
           "title": "Sohbet düğmesi konumunu ayarlayın",
@@ -322,6 +337,19 @@
           "numberHint": "Mesajlaşma penceresi müşterilerinizi bu WhatsApp numarasına yönlendirir",
           "prefilled": "Önceden doldurulmuş mesaj",
           "prefilledHint": "Bu, varsayılan ilk mesaj metni olacak"
+        },
+        "6": {
+          "title": "Açılır mesaj göster",
+          "subtitle": "Ziyaretçileri sohbete davet eden küçük bir balon",
+          "visibility": "Açılır mesajın görünürlüğü",
+          "visibilityHint": "Açılır mesajı, ziyaretçi kapatana kadar düğmenin yanında göster.",
+          "position": "Açılır mesajın konumu",
+          "side": "Yan",
+          "top": "Üst",
+          "text": "Açılır mesaj metni",
+          "textHint": "Kısa bir davet, örneğin: Merhaba! Yardımcı olabilir miyim?",
+          "image": "Açılır mesaj görseli (isteğe bağlı)",
+          "imageHint": "Bir görsel adresi girin veya aşağıdan bir resim yükleyin."
         }
       },
       "install": {
@@ -335,7 +363,11 @@
         "greeting": "Bir selamlama ekleyin.",
         "intro": "Bir tanıtım mesajı ekleyin.",
         "spacing": "Boşluk, 0 ile 500 arasında tam sayı piksel olmalıdır.",
-        "whatsapp": "Tam bir WhatsApp numarası ekleyin: ülke kodu ve rakamlar."
+        "whatsapp": "Tam bir WhatsApp numarası ekleyin: ülke kodu ve rakamlar.",
+        "cta": "Düğme metnini ekleyin.",
+        "prefilled": "Düğmeye dokunulduğunda gönderilecek mesajı ekleyin.",
+        "popupText": "Açılır mesaj metnini ekleyin veya açılır mesajı kapatın.",
+        "popupImage": "Yerleşik bir görsel veya http(s) görsel adresi kullanın."
       },
       "preview": {
         "title": "Canlı önizleme",
@@ -344,7 +376,333 @@
         "frameTitle": "WhatsApp widget'ınızın canlı önizlemesi",
         "hint": "Paneli yuvarlak düğmeyle daraltın, başlatıcıdan yeniden açın ve Görüşmeyi başlat'ı deneyin.",
         "businessName": "İşletmeniz"
+      },
+      "upload": {
+        "choose": "Görsel yükle",
+        "replace": "Görseli değiştir",
+        "remove": "Kaldır",
+        "uploading": "Yükleniyor…",
+        "hint": "SVG, PNG, JPG, WebP veya GIF, 1 MB kadar.",
+        "failed": "Görsel yüklenemedi. Tekrar deneyin.",
+        "tooLarge": "Görsel 1 MB'tan büyük."
       }
+    },
+    "flowBot": {
+      "customize": {
+        "loading": "Widget yükleniyor…",
+        "loadError": "Widget yüklenemedi. Tekrar denemek için sayfayı yenileyin.",
+        "untouched": "Hâlâ varsayılan görünümü kullanıyorsunuz. Gözden geçirin, ardından Yayına al ve Yayınla seçeneklerinin kilidini açmak için kaydedin.",
+        "position": "Sohbet düğmesinin konumu",
+        "right": "Sağ alt",
+        "left": "Sol alt",
+        "save": "Özelleştirmeyi kaydet",
+        "saved": "Özelleştirme kaydedildi",
+        "saveFailed": "Widget kaydedilemedi. Tekrar deneyin.",
+        "launcher": {
+          "title": "Kapalı başlatıcı",
+          "hint": "Ziyaretçilerin sohbeti açmadan önce gördükleri: bir çağrı, bir animasyon ve okunmamış noktası.",
+          "calloutOn": "Başlatıcının yanında çağrı göster",
+          "style": "Çağrı stili",
+          "styles": {
+            "bubble": "Üstte balon",
+            "pill": "Yanda hap",
+            "avatar": "Avatarlı hap",
+            "media": "Resimli kart",
+            "bar": "Giriş çubuğu"
+          },
+          "text": "Çağrı metni",
+          "image": "Resim",
+          "animation": "Başlatıcı animasyonu",
+          "animations": {
+            "none": "Yok",
+            "bounce": "Zıplama",
+            "ripple": "Dalga"
+          },
+          "badge": "Okunmamış noktasını göster",
+          "popupTextRequired": "Çağrı metnini ekleyin veya çağrıyı kapatın.",
+          "gaps": {
+            "title": "Ekran kenarından uzaklık (px)",
+            "desktop": {
+              "side": "Masaüstü: yandan",
+              "bottom": "Masaüstü: alttan"
+            },
+            "mobile": {
+              "side": "Telefon: yandan",
+              "bottom": "Telefon: alttan"
+            }
+          }
+        },
+        "chat": {
+          "title": "Sohbet penceresi",
+          "hint": "Pencerenin görünümü ve davranışı. Renkleri yukarıda ayarlanır.",
+          "fill": "Yanıt düğmelerinin dolgusu",
+          "fills": {
+            "outline": "Çerçeve",
+            "tinted": "Tonlu",
+            "solid": "Dolu"
+          },
+          "shape": "Yanıt düğmelerinin biçimi",
+          "shapes": {
+            "pill": "Hap",
+            "rounded": "Yuvarlak",
+            "soft": "Yumuşak",
+            "square": "Kare"
+          },
+          "font": "Yazı tipi",
+          "fonts": {
+            "system": "Sistem",
+            "serif": "Serif",
+            "rounded": "Yuvarlatılmış",
+            "humanist": "Hümanist",
+            "mono": "Tek aralıklı"
+          },
+          "size": "Pencere boyutu",
+          "sizes": {
+            "compact": "Kompakt",
+            "standard": "Standart",
+            "tall": "Uzun",
+            "wide": "Geniş"
+          },
+          "suggestions": "Konuşmanın altındaki öneriler",
+          "suggestionsHint": "En fazla 4 kısa satır. Ziyaretçi yazınca kaybolur.",
+          "suggestionPlaceholder": "Ziyaretçilerin sık sorduğu bir soru",
+          "addSuggestion": "Öneri ekle",
+          "removeSuggestion": "Öneriyi kaldır",
+          "actions": "Her bot satırının altında kopyala ve başparmak simgeleri",
+          "expand": "Genişlet düğmesi",
+          "voice": "Sesli konuşma (tarayıcının konuşma araçlarını kullanır)",
+          "header": "Başlık arka planı",
+          "headers": {
+            "solid": "Düz",
+            "diagonal": "Çapraz",
+            "vivid": "Canlı",
+            "dusk": "Alacakaranlık",
+            "soft": "Yumuşak Geçiş"
+          },
+          "direction": "Metin yönü",
+          "directions": {
+            "auto": "Ziyaretçinin dilini takip et",
+            "ltr": "Soldan sağa",
+            "rtl": "Sağdan sola"
+          },
+          "icons": "Her yanıt düğmesinin önünde yuvarlak simge",
+          "fontSize": "Metin boyutu: {value}px",
+          "hoverBg": "Yanıt düğmesi üzerine gelme rengi",
+          "hoverBgReset": "Tonu kullan"
+        },
+        "preview": {
+          "title": "Canlı önizleme",
+          "loading": "Önizleme yükleniyor…",
+          "error": "Önizleme yüklenemedi. Yeniden denemek için sayfayı yenileyin.",
+          "frame": "Sohbet penceresi önizlemesi",
+          "hint": "Bu, kaydedilmemiş ayarlarınızla gerçek sohbet penceresidir. Konuşma ve düğmeler örnektir.",
+          "launcherFrame": "Kapalı başlatıcı önizlemesi"
+        },
+        "groups": {
+          "look": "Görünüm ve marka",
+          "voice": "Ses ve hoşgeldiniz",
+          "window": "Sohbet penceresi",
+          "launcher": "Başlatıcı ve çağrı",
+          "launch": "Başlat",
+          "chat": "Sohbet araçları",
+          "behave": "Davranış"
+        },
+        "surfaces": {
+          "chat": "Sohbet penceresi",
+          "expanded": "Genişletilmiş",
+          "mobile": "Telefon",
+          "closed": "Kapalı başlatıcı"
+        },
+        "brand": {
+          "title": "Marka resimleri ve ekstralar",
+          "logo": {
+            "label": "Şirket logosu",
+            "hint": "Sohbet başlığında gösterilir."
+          },
+          "avatar": {
+            "label": "Sohbet botu avatarı",
+            "hint": "Botun gönderdiği her mesajın yanında gösterilir."
+          },
+          "background": {
+            "label": "Sohbet arka planı",
+            "hint": "Konuşmanın arkasında bir resim. İsteğe bağlı."
+          },
+          "corner": "Gövde köşeleri",
+          "corners": {
+            "rounded": "Yuvarlak",
+            "soft": "Yumuşak",
+            "square": "Kare"
+          },
+          "autoOpen": "Sonra otomatik aç (saniye)",
+          "autoOpenHint": "0 sohbeti ziyaretçi açana kadar kapalı tutar. Ziyaret başına bir kez açılır.",
+          "sound": "Yeni bot satırları için yumuşak bir ses çal",
+          "soundVolume": "Ses: {value}%",
+          "speak": "Botun cümlelerini sesli oku (tarayıcı sesi)",
+          "devices": {
+            "title": "Widget'ı şurada göster",
+            "desktop": "Masaüstü",
+            "tablet": "Tablet",
+            "mobile": "Telefon",
+            "hint": "Telefon en fazla 768 px, tablet en fazla 1024 px genişliğindedir."
+          },
+          "pictures": "Görseller · SVG, PNG, GIF",
+          "botName": "Bot adı",
+          "primary": "Ana renk",
+          "primaryCustom": "Özel renk",
+          "fineTune": "Her rengi ince ayarlayın",
+          "pip": "Ziyaretçi sekme değiştirdiğinde yüzen bir sohbet penceresi sun",
+          "pipHint": "Görüntülü arama gibi, sohbet diğer sekmelerin ve uygulamaların üzerinde yüzebilir (Chrome ve Edge). Ziyaretçiden bildirimlere izin vermesi yalnızca bir kez istenir ve bir pencerenin ne zaman açılabileceğine tarayıcı karar verir.",
+          "domains": {
+            "label": "Sohbeti yalnızca bu web sitelerinde göster",
+            "hint": "Başka sitelerdeki ziyaretçiler sohbeti görmez. Site adresini girin, örneğin example.com. Bir sitenin alt alan adları, siz eklemedikçe dahil edilmez.",
+            "placeholder": "example.com",
+            "add": "Web sitesi ekle",
+            "remove": "Web sitesini kaldır"
+          }
+        },
+        "rail": {
+          "label": "Bölümleri Özelleştir",
+          "look": "Marka",
+          "voice": "Hoşgeldin",
+          "window": "Pencere",
+          "launcher": "Başlatıcı",
+          "launch": "Başlat",
+          "chat": "Ekstralar",
+          "behave": "Davranış"
+        },
+        "leads": {
+          "look": "Logo, resimler, renkler ve başlık görünümü.",
+          "voice": "Ad, hoşgeldin satırı ve gönder düğmesi.",
+          "window": "Boyut, yazı tipi, yanıt düğmeleri ve yardımcılar.",
+          "launcher": "Ziyaretçilerin sohbeti açmadan önce gördüğü şeyler.",
+          "launch": "Araç nereden açılıyor ve sitenize nasıl yerleştirilir.",
+          "chat": "Bildirim kartları, hızlı menü, afiş ve hızlı yanıtlar.",
+          "behave": "Sohbetin ne zaman açıldığı, nasıl konuştuğu ve kimin gördüğü."
+        },
+        "footer": "Değişiklikler ön izlemede yapılırken gösterilir.",
+        "conversation": {
+          "title": "Sohbet araçları",
+          "tabs": {
+            "notice": "Bildirim bloğu",
+            "menu": "Hızlı menü",
+            "banner": "Afiş",
+            "replies": "Hızlı yanıtlar"
+          },
+          "enable": {
+            "notice": "Bildirim zilini göster",
+            "menu": "Hızlı menüyü göster",
+            "banner": "Afişi göster",
+            "replies": "Hızlı yanıtları göster"
+          },
+          "icon": "Zil stili",
+          "icons": {
+            "1": "Zil",
+            "2": "Bilet",
+            "3": "Kutu",
+            "4": "Mesaj"
+          },
+          "view": "Görünüm",
+          "views": {
+            "list": "Listeler",
+            "blocks": "Bloklar"
+          },
+          "card": "Kart {n}",
+          "entry": "Menü öğesi {n}",
+          "slide": "Slayt {n}",
+          "remove": "Kaldır",
+          "max": "En fazla {count}.",
+          "addCard": "Kart ekle",
+          "addEntry": "Menü öğesi ekle",
+          "addSlide": "Slayt ekle",
+          "kinds": {
+            "image": "Resim",
+            "video": "Video"
+          },
+          "fields": {
+            "title": "Başlık",
+            "description": "Açıklama",
+            "buttonTitle": "Düğme başlığı",
+            "buttonUrl": "Düğme adresi",
+            "urlHint": "Bir web sayfası, tel: veya mailto: adresi. Düğme istemiyorsanız boş bırakın.",
+            "footer": "Alt bilgi metni",
+            "menuTitle": "Menü başlığı",
+            "menuUrl": "Açar (isteğe bağlı)",
+            "menuUrlHint": "Başlığı botun yanıtlayacağı bir mesaj olarak göndermek için boş bırakın.",
+            "video": "Video bağlantısı",
+            "videoHint": "Bir YouTube veya Vimeo bağlantısı ya da gömme kodunu yapıştırın.",
+            "videoOk": "Video bulundu.",
+            "bannerUrl": "Dokunulduğunda bağlantı (isteğe bağlı)"
+          },
+          "action": "Düğme eylemi",
+          "step": "Botun adımı",
+          "stepPlaceholder": "Bir adım seçin",
+          "noSteps": "Bu botun henüz adımı yok. Oluştur sekmesinden ekleyin ve kaydedin.",
+          "replyStep": "Dokunulduğunda",
+          "replyAsMessage": "Satırı mesaj olarak gönder",
+          "actions": {
+            "link": "Bağlantı ekle",
+            "flow": "Akışa bağla"
+          }
+        },
+        "launchNote": "Sitenize yapıştıracağınız yerleştirme kodu Dağıt sekmesindedir."
+      },
+      "deploy": {
+        "loading": "Yayına alma seçenekleriniz yükleniyor…",
+        "locked": "Önce Özelleştir sekmesini kaydedin. Widget oluşturulduktan sonra gömme kodunuz burada görünür.",
+        "lockedWhatsapp": "Önce Özelleştir sekmesini kaydedin. Oluşturulduktan sonra web sitesi düğmeniz ve WhatsApp bağlantınız burada görünür.",
+        "title": "Yayına al",
+        "lead": "Sohbet penceresini web sitenize ekleyin. Bot, yayınladığınızda canlıya geçer.",
+        "leadWhatsapp": "WhatsApp düğmenizi web sitenize ekleyin veya doğrudan bağlantıyı istediğiniz yerde paylaşın. Bot, yayınlandıktan sonra WhatsApp numarasından yanıt verir.",
+        "notPublished": "Bu bot henüz yayınlanmadı, bu yüzden ziyaretçilere yanıt vermez. Oluştur sekmesinden yayınlayın.",
+        "notPublishedWhatsapp": "Bu bot henüz yayınlanmadı, bu yüzden WhatsApp'ta yanıt vermez. Oluştur sekmesinden yayınlayın.",
+        "embedTitle": "Web sitenize ekleyin",
+        "embedBody": "Görünmesini istediğiniz her sayfada kapanış body etiketinin hemen öncesine yapıştırın.",
+        "copy": "Kodu kopyala",
+        "copied": "Gömme kodu kopyalandı",
+        "clipboardBlocked": "Tarayıcınız kopyalamayı engelledi. Metni seçip elle kopyalayın.",
+        "preview": "Önizleme",
+        "linkTitle": "Doğrudan WhatsApp bağlantısı",
+        "linkBody": "Botun numarasıyla ve belirlediğiniz mesajla bir WhatsApp sohbeti açar. E-postalarda, sosyal medya biyografilerinde, QR kodlarda ve reklamlarda kullanın.",
+        "copyLink": "Bağlantıyı kopyala",
+        "linkCopied": "WhatsApp bağlantısı kopyalandı",
+        "openLink": "Bağlantıyı aç",
+        "qrTitle": "QR kodu",
+        "qrBody": "Yazdırın veya bir ekranda gösterin. Taranınca botunuzla bir WhatsApp sohbeti açılır.",
+        "downloadQr": "QR kodunu indir",
+        "statusLive": "Yayında",
+        "statusDraft": "Yayınlanmadı",
+        "codeLabel": "HTML",
+        "localNote": "Bu kod bu bilgisayardaki bir adresi (localhost) gösterir, bu yüzden yalnızca burada açılan sayfalarda çalışır. Canlı bir web sitesinde yayınladığınız adresi kullanın."
+      },
+      "whatsapp": {
+        "loading": "Düğme yükleniyor…",
+        "loadError": "Düğme yüklenemedi. Tekrar denemek için sayfayı yenileyin.",
+        "untouched": "WhatsApp düğmeniz henüz ayarlanmadı. Botunuzun numarası ve anahtar kelimesiyle başlar. Gözden geçirin, ardından Yayına al ve Yayınla seçeneklerinin kilidini açmak için kaydedin.",
+        "saved": "WhatsApp düğmesi kaydedildi",
+        "saveFailed": "Düğme kaydedilemedi. Tekrar deneyin.",
+        "fromBot": "Düğme, bu botun çalıştığı numara olan {number} üzerinden WhatsApp'ı açar. Numarayı Oluştur sekmesindeki Tetikleyici'den değiştirin.",
+        "noNumber": "Bu botun henüz bir WhatsApp numarası yok. Oluştur sekmesindeki tetikleyiciden bir numara seçin, sonra düğmeyi kaydetmek için geri dönün."
+      }
+    },
+    "webBots": {
+      "title": "Web sitesi sohbet botları",
+      "intro": "Web sitesi sohbeti için oluşturduğunuz tüm botlar ve çalıştıkları widget. Widget'ın görünümünü değiştirmek veya gömme kodunu kopyalamak için bir satırı açın.",
+      "create": "Yeni web sitesi botu",
+      "loading": "Web sitesi botlarınız yükleniyor…",
+      "loadError": "Web sitesi botları yüklenemedi. Tekrar denemek için sayfayı yenileyin.",
+      "emptyTitle": "Henüz web sitesi sohbet botu yok",
+      "emptyBody": "Web sitesi sohbeti için bir bot oluşturun, widget'ı burada görünsün.",
+      "widgetLine": "Widget: {title}",
+      "noWidget": "Henüz widget yok. Oluşturmak için özelleştirin.",
+      "customize": "Özelleştir",
+      "more": "{total} botun {shown} tanesi gösteriliyor. Kalanları Akışlar'dan açın.",
+      "state": {
+        "needs_customizing": "Özelleştirme gerekiyor",
+        "draft": "Taslak",
+        "live": "Canlı",
+        "paused": "Duraklatıldı"
+      },
+      "deploy": "Yayına al"
     }
   }
 }

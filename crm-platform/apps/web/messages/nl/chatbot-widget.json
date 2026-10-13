@@ -276,7 +276,14 @@
           "iconOnly": "Alleen pictogram",
           "buttonColor": "Knopkleur",
           "pickCustom": "Kies een eigen kleur",
-          "custom": "Eigen {hex}"
+          "custom": "Eigen {hex}",
+          "animation": "Knopanimatie",
+          "animationHint": "Trekt de aandacht naar de knop zolang de chat gesloten is.",
+          "animations": {
+            "none": "Uit",
+            "bounce": "Stuiteren",
+            "ripple": "Rimpeling"
+          }
         },
         "2": {
           "title": "Ontwerp je messenger",
@@ -289,7 +296,9 @@
             "person": "Persoon"
           },
           "url": "Of gebruik je eigen afbeeldingsadres",
-          "urlHint": "Plak het adres van een vierkante afbeelding (https://...). Een bestand uploaden is nog niet beschikbaar."
+          "urlHint": "Plak het adres van een vierkante afbeelding (https://...). Een bestand uploaden is nog niet beschikbaar.",
+          "botName": "Botnaam",
+          "botNameHint": "Wordt getoond in de header van het chatvenster. Laat leeg om de naam van je bot te gebruiken."
         },
         "3": {
           "title": "Stel je welkomstbericht in",
@@ -297,7 +306,13 @@
           "greeting": "Begroeting",
           "greetingHint": "Zeg hallo tegen je klanten wanneer ze de messenger openen",
           "intro": "Introductiebericht",
-          "introHint": "Stel je bedrijf voor en vertel klanten hoe je kunt helpen"
+          "introHint": "Stel je bedrijf voor en vertel klanten hoe je kunt helpen",
+          "subHeader": "Subkoptekst",
+          "subHeaderHint": "De regel onder de naam, bijvoorbeeld hoe snel je antwoordt.",
+          "cta": "Knoptekst",
+          "ctaHint": "De tekst op de knop die WhatsApp opent.",
+          "prefilled": "Vooraf ingevuld bericht",
+          "prefilledHint": "Wat er wordt verstuurd als iemand op de knop tikt. Het begint met het trefwoord van je bot, zodat de bot start."
         },
         "4": {
           "title": "Stel de positie van je chatknop in",
@@ -322,6 +337,19 @@
           "numberHint": "De messenger stuurt je klanten naar dit WhatsApp-nummer",
           "prefilled": "Vooraf ingevuld bericht",
           "prefilledHint": "Dit wordt de eerste standaardberichttekst"
+        },
+        "6": {
+          "title": "Een pop-upbericht tonen",
+          "subtitle": "Een kleine bubbel die bezoekers uitnodigt om te chatten",
+          "visibility": "Zichtbaarheid van pop-up",
+          "visibilityHint": "Toon de pop-up naast de knop totdat een bezoeker hem sluit.",
+          "position": "Positie van pop-up",
+          "side": "Zijkant",
+          "top": "Boven",
+          "text": "Pop-uptekst",
+          "textHint": "Een korte uitnodiging, bijvoorbeeld: Hallo! Kan ik je helpen?",
+          "image": "Pop-upafbeelding (optioneel)",
+          "imageHint": "Een afbeeldingsadres, of upload hieronder een afbeelding."
         }
       },
       "install": {
@@ -335,7 +363,11 @@
         "greeting": "Voeg een begroeting toe.",
         "intro": "Voeg een introductiebericht toe.",
         "spacing": "De marge moet een geheel aantal pixels van 0 tot 500 zijn.",
-        "whatsapp": "Voeg een volledig WhatsApp-nummer toe: landcode en cijfers."
+        "whatsapp": "Voeg een volledig WhatsApp-nummer toe: landcode en cijfers.",
+        "cta": "Voeg de knoptekst toe.",
+        "prefilled": "Voeg het bericht toe dat wordt verstuurd als iemand op de knop tikt.",
+        "popupText": "Voeg de pop-uptekst toe of schakel de pop-up uit.",
+        "popupImage": "Gebruik een ingebouwde afbeelding of een http(s)-afbeeldingsadres."
       },
       "preview": {
         "title": "Live voorvertoning",
@@ -344,7 +376,333 @@
         "frameTitle": "Live voorvertoning van je WhatsApp-widget",
         "hint": "Klap het paneel in met de ronde knop, open het opnieuw vanaf de launcher en probeer Gesprek starten.",
         "businessName": "Jouw bedrijf"
+      },
+      "upload": {
+        "choose": "Afbeelding uploaden",
+        "replace": "Afbeelding vervangen",
+        "remove": "Verwijderen",
+        "uploading": "Uploaden…",
+        "hint": "SVG, PNG, JPG, WebP of GIF, maximaal 1 MB.",
+        "failed": "De afbeelding kon niet worden geüpload. Probeer het opnieuw.",
+        "tooLarge": "De afbeelding is groter dan 1 MB."
       }
+    },
+    "flowBot": {
+      "customize": {
+        "loading": "Widget laden…",
+        "loadError": "De widget kon niet worden geladen. Vernieuw de pagina en probeer het opnieuw.",
+        "untouched": "Je gebruikt nog de standaardlook. Bekijk hem en sla op om Implementeren en Publiceren te ontgrendelen.",
+        "position": "Positie van de chatknop",
+        "right": "Rechtsonder",
+        "left": "Linksonder",
+        "save": "Aanpassing opslaan",
+        "saved": "Aanpassing opgeslagen",
+        "saveFailed": "De widget kon niet worden opgeslagen. Probeer het opnieuw.",
+        "launcher": {
+          "title": "Gesloten launcher",
+          "hint": "Wat bezoekers zien voordat ze de chat openen: een melding, een animatie en een ongelezen-stip.",
+          "calloutOn": "Een melding naast de launcher tonen",
+          "style": "Meldingsstijl",
+          "styles": {
+            "bubble": "Bel bovenaan",
+            "pill": "Pil opzij",
+            "avatar": "Pil met avatar",
+            "media": "Afbeeldingskaart",
+            "bar": "Invoerbalk"
+          },
+          "text": "Meldingstekst",
+          "image": "Afbeelding",
+          "animation": "Launcher-animatie",
+          "animations": {
+            "none": "Geen",
+            "bounce": "Stuiteren",
+            "ripple": "Rimpel"
+          },
+          "badge": "De ongelezen-stip tonen",
+          "popupTextRequired": "Voeg de meldingstekst toe of zet de melding uit.",
+          "gaps": {
+            "title": "Afstand tot schermrand (px)",
+            "desktop": {
+              "side": "Desktop: van de zijkant",
+              "bottom": "Desktop: van onderaf"
+            },
+            "mobile": {
+              "side": "Telefoon: van de zijkant",
+              "bottom": "Telefoon: van onderaf"
+            }
+          }
+        },
+        "chat": {
+          "title": "Chatvenster",
+          "hint": "Hoe het venster eruitziet en zich gedraagt. De kleuren stel je hierboven in.",
+          "fill": "Vulling van de antwoordknoppen",
+          "fills": {
+            "outline": "Omtrek",
+            "tinted": "Getint",
+            "solid": "Vol"
+          },
+          "shape": "Vorm van de antwoordknoppen",
+          "shapes": {
+            "pill": "Pil",
+            "rounded": "Afgerond",
+            "soft": "Zacht",
+            "square": "Vierkant"
+          },
+          "font": "Lettertype",
+          "fonts": {
+            "system": "Systeem",
+            "serif": "Serif",
+            "rounded": "Afgerond",
+            "humanist": "Humanistisch",
+            "mono": "Monospace"
+          },
+          "size": "Venstergrootte",
+          "sizes": {
+            "compact": "Compact",
+            "standard": "Standaard",
+            "tall": "Hoog",
+            "wide": "Breed"
+          },
+          "suggestions": "Suggesties onder het gesprek",
+          "suggestionsHint": "Maximaal 4 korte regels. Ze verdwijnen zodra de bezoeker schrijft.",
+          "suggestionPlaceholder": "Een vraag die bezoekers vaak stellen",
+          "addSuggestion": "Suggestie toevoegen",
+          "removeSuggestion": "Suggestie verwijderen",
+          "actions": "Kopieer- en duimpictogrammen onder elke botregel",
+          "expand": "Uitbreidknop",
+          "voice": "Spraakgesprek (gebruikt de spraaktools van de browser)",
+          "header": "Koptekst achtergrond",
+          "headers": {
+            "solid": "Effen",
+            "diagonal": "Diagonaal",
+            "vivid": "Levendig",
+            "dusk": "Schemering",
+            "soft": "Zachte overgang"
+          },
+          "direction": "Tekstrichting",
+          "directions": {
+            "auto": "Taal van de bezoeker volgen",
+            "ltr": "Van links naar rechts",
+            "rtl": "Van rechts naar links"
+          },
+          "icons": "Rond pictogram voor elke antwoordknop",
+          "fontSize": "Tekstgrootte: {value}px",
+          "hoverBg": "Kleur knophover",
+          "hoverBgReset": "Gebruik de tint"
+        },
+        "preview": {
+          "title": "Live voorbeeld",
+          "loading": "Voorbeeld laden…",
+          "error": "Het voorbeeld kon niet worden geladen. Vernieuw om het opnieuw te proberen.",
+          "frame": "Voorbeeld van het chatvenster",
+          "hint": "Dit is het echte chatvenster met je niet-opgeslagen instellingen. Gesprek en knoppen zijn voorbeelden.",
+          "launcherFrame": "Voorbeeld van gesloten launcher"
+        },
+        "groups": {
+          "look": "Uiterlijk en merk",
+          "voice": "Stem en welkom",
+          "window": "Chatvenster",
+          "launcher": "Launcher en callout",
+          "launch": "Start",
+          "chat": "Gesprekstools",
+          "behave": "Gedrag"
+        },
+        "surfaces": {
+          "chat": "Chatvenster",
+          "expanded": "Uitgevouwen",
+          "mobile": "Telefoon",
+          "closed": "Gesloten launcher"
+        },
+        "brand": {
+          "title": "Merkafbeeldingen en extra's",
+          "logo": {
+            "label": "Bedrijfslogo",
+            "hint": "Wordt getoond in de chatkop."
+          },
+          "avatar": {
+            "label": "Chatbot-avatar",
+            "hint": "Wordt getoond naast elk bericht dat de bot verstuurt."
+          },
+          "background": {
+            "label": "Chatachtergrond",
+            "hint": "Een afbeelding achter het gesprek. Optioneel."
+          },
+          "corner": "Hoeken van het venster",
+          "corners": {
+            "rounded": "Afgerond",
+            "soft": "Zacht",
+            "square": "Vierkant"
+          },
+          "autoOpen": "Automatisch openen na (seconden)",
+          "autoOpenHint": "0 houdt de chat gesloten totdat de bezoeker deze opent. Het opent eenmaal per bezoek.",
+          "sound": "Een zacht geluid afspelen voor nieuwe botregels",
+          "soundVolume": "Volume: {value}%",
+          "speak": "Lees de zinnen van de bot hardop voor (browsergeluid)",
+          "devices": {
+            "title": "Toon de widget op",
+            "desktop": "Desktop",
+            "tablet": "Tablet",
+            "mobile": "Telefoon",
+            "hint": "Een telefoon is tot 768 px breed, een tablet tot 1024 px."
+          },
+          "pictures": "Afbeeldingen · SVG, PNG, GIF",
+          "botName": "Botnaam",
+          "primary": "Primaire kleur",
+          "primaryCustom": "Aangepaste kleur",
+          "fineTune": "Stem elke kleur af",
+          "pip": "Een zwevend chatvenster aanbieden wanneer de bezoeker van tabblad wisselt",
+          "pipHint": "Net als bij een videogesprek kan de chat boven andere tabbladen en apps zweven (Chrome en Edge). De bezoeker wordt eenmalig gevraagd meldingen toe te staan, en de browser bepaalt wanneer een venster mag openen.",
+          "domains": {
+            "label": "Chat alleen tonen op deze websites",
+            "hint": "Bezoekers van andere sites zien geen chat. Voer het siteadres in, bijvoorbeeld example.com. Subdomeinen van een site zijn niet inbegrepen tenzij je ze toevoegt.",
+            "placeholder": "example.com",
+            "add": "Website toevoegen",
+            "remove": "Website verwijderen"
+          }
+        },
+        "rail": {
+          "label": "Secties aanpassen",
+          "look": "Merk",
+          "voice": "Welkom",
+          "window": "Venster",
+          "launcher": "Launcher",
+          "launch": "Starten",
+          "chat": "Extra's",
+          "behave": "Gedrag"
+        },
+        "leads": {
+          "look": "Logo, afbeeldingen, kleuren en koppelingsuiterlijk.",
+          "voice": "Naam, welkomlijn en verzendknop.",
+          "window": "Grootte, lettertype, antwoordknoppen en helpers.",
+          "launcher": "Wat bezoekers zien voordat ze de chat openen.",
+          "launch": "Waar de widget opent en hoe u deze op uw site plaatst.",
+          "chat": "Meldingskaarten, snelmenu, banner en snelle antwoorden.",
+          "behave": "Wanneer de chat opent, hoe hij klinkt en wie hem ziet."
+        },
+        "footer": "Wijzigingen verschijnen in de voorvertoning terwijl u deze aanbrengt.",
+        "conversation": {
+          "title": "Gesprekstools",
+          "tabs": {
+            "notice": "Meldingsblok",
+            "menu": "Snelmenu",
+            "banner": "Banner",
+            "replies": "Snelle antwoorden"
+          },
+          "enable": {
+            "notice": "Toon de meldingsbel",
+            "menu": "Toon het snelmenu",
+            "banner": "Toon de banner",
+            "replies": "Snelle antwoorden tonen"
+          },
+          "icon": "Belstijl",
+          "icons": {
+            "1": "Bel",
+            "2": "Kaartje",
+            "3": "Doos",
+            "4": "Bericht"
+          },
+          "view": "Weergave",
+          "views": {
+            "list": "Lijsten",
+            "blocks": "Blokken"
+          },
+          "card": "Kaart {n}",
+          "entry": "Menüinvoer {n}",
+          "slide": "Dia {n}",
+          "remove": "Verwijderen",
+          "max": "Tot {count}.",
+          "addCard": "Voeg een kaart toe",
+          "addEntry": "Voeg een menüinvoer toe",
+          "addSlide": "Voeg een dia toe",
+          "kinds": {
+            "image": "Afbeelding",
+            "video": "Video"
+          },
+          "fields": {
+            "title": "Titel",
+            "description": "Beschrijving",
+            "buttonTitle": "Knoptitel",
+            "buttonUrl": "Knopadres",
+            "urlHint": "Een webpagina, tel: of mailto: adres. Laat leeg voor geen knop.",
+            "footer": "Voettekst",
+            "menuTitle": "Menutitel",
+            "menuUrl": "Opent (optioneel)",
+            "menuUrlHint": "Laat leeg om de titel als bericht in te sturen die de bot beantwoordt.",
+            "video": "Videolink",
+            "videoHint": "Plak een YouTube of Vimeo link, of zijn insluitcode.",
+            "videoOk": "Video gevonden.",
+            "bannerUrl": "Link bij tikken (optioneel)"
+          },
+          "action": "Knopactie",
+          "step": "Stap van de bot",
+          "stepPlaceholder": "Selecteer een stap",
+          "noSteps": "Deze bot heeft nog geen stappen. Voeg ze toe in het tabblad Bouwen en sla op.",
+          "replyStep": "Bij tikken",
+          "replyAsMessage": "Stuur de regel als bericht",
+          "actions": {
+            "link": "Link toevoegen",
+            "flow": "Koppelen aan flow"
+          }
+        },
+        "launchNote": "De insluitcode om op je site te plakken staat op het tabblad Implementeren."
+      },
+      "deploy": {
+        "loading": "Je implementatieopties laden…",
+        "locked": "Sla eerst het tabblad Aanpassen op. Je embedcode verschijnt hier zodra de widget bestaat.",
+        "lockedWhatsapp": "Sla eerst het tabblad Aanpassen op. Je websiteknop en WhatsApp-link verschijnen hier zodra die bestaan.",
+        "title": "Implementeren",
+        "lead": "Plaats je chatvenster op je website. De bot gaat live zodra je hem publiceert.",
+        "leadWhatsapp": "Plaats je WhatsApp-knop op je website of deel de directe link overal. De bot antwoordt op zijn WhatsApp-nummer zodra hij is gepubliceerd.",
+        "notPublished": "Deze bot is nog niet gepubliceerd, dus bezoekers krijgen geen antwoorden. Publiceer hem via het tabblad Bouwen.",
+        "notPublishedWhatsapp": "Deze bot is nog niet gepubliceerd, dus hij antwoordt niet op WhatsApp. Publiceer hem via het tabblad Bouwen.",
+        "embedTitle": "Toevoegen aan je website",
+        "embedBody": "Plak dit vlak voor de afsluitende body-tag op elke pagina waar de widget moet verschijnen.",
+        "copy": "Code kopiëren",
+        "copied": "Embedcode gekopieerd",
+        "clipboardBlocked": "Je browser blokkeerde het kopiëren. Selecteer de tekst en kopieer hem handmatig.",
+        "preview": "Voorbeeld",
+        "linkTitle": "Directe WhatsApp-link",
+        "linkBody": "Opent een WhatsApp-chat met het nummer van de bot en het bericht dat je hebt ingesteld. Gebruik de link in e-mails, social-mediabio's, QR-codes en advertenties.",
+        "copyLink": "Link kopiëren",
+        "linkCopied": "WhatsApp-link gekopieerd",
+        "openLink": "Link openen",
+        "qrTitle": "QR-code",
+        "qrBody": "Print de code of toon hem op een scherm. Wie hem scant, opent een WhatsApp-chat met je bot.",
+        "downloadQr": "QR-code downloaden",
+        "statusLive": "Live",
+        "statusDraft": "Niet gepubliceerd",
+        "codeLabel": "HTML",
+        "localNote": "Deze code verwijst naar een adres op deze computer (localhost) en werkt dus alleen op pagina's die hier zijn geopend. Gebruik op een live website je gepubliceerde adres."
+      },
+      "whatsapp": {
+        "loading": "Knop laden…",
+        "loadError": "De knop kon niet worden geladen. Vernieuw de pagina en probeer het opnieuw.",
+        "untouched": "Je WhatsApp-knop is nog niet ingesteld. Hij start met het nummer en het trefwoord van je bot. Bekijk hem en sla op om Implementeren en Publiceren te ontgrendelen.",
+        "saved": "WhatsApp-knop opgeslagen",
+        "saveFailed": "De knop kon niet worden opgeslagen. Probeer het opnieuw.",
+        "fromBot": "De knop opent WhatsApp op {number}, het nummer waarop deze bot draait. Wijzig het nummer bij de trigger op het tabblad Bouwen.",
+        "noNumber": "Deze bot heeft nog geen WhatsApp-nummer. Kies er een bij de trigger op het tabblad Bouwen en kom terug om de knop op te slaan."
+      }
+    },
+    "webBots": {
+      "title": "Chatbots voor websites",
+      "intro": "Alle bots die je hebt gebouwd voor websitechat en de widget waarin ze draaien. Open een rij om de look van de widget te wijzigen of de embedcode te kopiëren.",
+      "create": "Nieuwe websitebot",
+      "loading": "Je websitebots laden…",
+      "loadError": "De websitebots konden niet worden geladen. Vernieuw de pagina en probeer het opnieuw.",
+      "emptyTitle": "Nog geen chatbots voor websites",
+      "emptyBody": "Maak een bot voor websitechat en de widget verschijnt hier.",
+      "widgetLine": "Widget: {title}",
+      "noWidget": "Nog geen widget. Pas hem aan om er een te maken.",
+      "customize": "Aanpassen",
+      "more": "{shown} van {total} bots weergegeven. Open de rest via Flows.",
+      "state": {
+        "needs_customizing": "Moet nog worden aangepast",
+        "draft": "Concept",
+        "live": "Live",
+        "paused": "Gepauzeerd"
+      },
+      "deploy": "Implementeren"
     }
   }
 }

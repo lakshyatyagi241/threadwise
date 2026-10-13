@@ -6,7 +6,11 @@ import {
   type FlowGraph,
   type FlowNode,
   type FlowVar,
+  flbCarouselReplies,
+  flbCleanCarouselCards,
+  flbCondProblems,
 } from '@crm/contracts';
+import { conditionTreeOf } from './condition-tree';
 import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
 import { minScoreOutOfRange } from './faq-node';
 import { dedupeMsgs, msg, renderMsg, type Msg, type Translate } from './msg';
@@ -25,6 +29,8 @@ export const SIMPLE_TYPES = [
   'message',
   'media',
   'buttons',
+  'carousel',
+  'condition',
   'list',
   'ask',
   'ask_file',
@@ -39,10 +45,16 @@ export const SIMPLE_TYPES = [
 export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
 /**
- * The steps that end their journey: what happens next depends on what the customer taps (buttons, list) or on whether an FAQ answered
- * (`faq`, "Answer from FAQ").
+ * The steps that end their journey: what happens next depends on what the customer taps (buttons, list, a carousel's reply buttons),
+ * on a condition's answer, or on whether an FAQ answered (`faq`, "Answer from FAQ").
  */
-export const BRANCHING: ReadonlySet<string> = new Set(['buttons', 'list', 'faq']);
+export const BRANCHING: ReadonlySet<string> = new Set([
+  'buttons',
+  'list',
+  'carousel',
+  'condition',
+  'faq',
+]);
 
 /**
  * A branching step whose exits are fixed by the step, not written by the author: the graph port each exit leaves by, in the order of
@@ -50,6 +62,7 @@ export const BRANCHING: ReadonlySet<string> = new Set(['buttons', 'list', 'faq']
  */
 export const FIXED_EXITS: Readonly<Record<string, readonly string[]>> = {
   faq: ['matched', 'no_match'],
+  condition: ['yes', 'no'],
 };
 
 /** The graph port exit `i` of a branching step leaves by. */
@@ -95,12 +108,19 @@ export type ToSimple = { ok: true; doc: SimpleDoc } | { ok: false; reasons: Msg[
 
 const isSimpleType = (t: string): t is SimpleType =>
   (SIMPLE_TYPES as readonly string[]).includes(t);
+const rec = (v: unknown): Record<string, unknown> =>
+  typeof v === 'object' && v !== null ? (v as Record<string, unknown>) : {};
 const str = (v: unknown): string =>
   typeof v === 'string' ? v : v === null || v === undefined ? '' : String(v);
 const arr = (v: unknown): unknown[] => (Array.isArray(v) ? v : []);
 
 export const optionCount = (s: Pick<SimpleStep, 'type' | 'data'>): number =>
-  FIXED_EXITS[s.type]?.length ?? (BRANCHING.has(s.type) ? arr(s.data.options).length : 0);
+  FIXED_EXITS[s.type]?.length ??
+  (s.type === 'carousel'
+    ? flbCarouselReplies(s.data.cards).length
+    : BRANCHING.has(s.type)
+      ? arr(s.data.options).length
+      : 0);
 
 export const MAIN_NAME = 'Main flow';
 
@@ -382,7 +402,7 @@ export interface StepKind {
   preset?: string;
   label: Msg;
   help: Msg;
-  group: 'send' | 'ask' | 'answer' | 'handoff';
+  group: 'send' | 'ask' | 'logic' | 'answer' | 'handoff';
 }
 
 const kind = (
@@ -408,6 +428,8 @@ export const STEP_KINDS: readonly StepKind[] = [
   kind('message', 'message', 'send'),
   kind('media', 'media', 'send'),
   kind('buttons', 'buttons', 'send'),
+  kind('carousel', 'carousel', 'send'),
+  kind('condition', 'condition', 'logic'),
   kind('list', 'list', 'send'),
   kind('cta', 'cta', 'send'),
   kind('template', 'template', 'send'),
@@ -425,11 +447,23 @@ export const STEP_KINDS: readonly StepKind[] = [
 ];
 
 /** The step types the website chat widget can show today (the Advanced catalogue's web list, as Simple steps). */
-const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set(['message', 'buttons', 'ask', 'delay']);
+const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
+  'message',
+  'media',
+  'buttons',
+  'carousel',
+  'condition',
+  'ask',
+  'ask_file',
+  'delay',
+  'cta',
+]);
 
 /** The "+" menu entries for a channel: a website chat bot only offers what the widget can render. */
 export const stepKindsFor = (channel: 'chat' | 'web'): readonly StepKind[] =>
-  channel === 'web' ? STEP_KINDS.filter((k) => WEB_STEP_TYPES.has(k.type)) : STEP_KINDS;
+  channel === 'web'
+    ? STEP_KINDS.filter((k) => WEB_STEP_TYPES.has(k.type))
+    : STEP_KINDS.filter((k) => k.type !== 'carousel');
 
 const PRESET_VAR: Record<string, string> = {
   text: 'answer',
@@ -472,6 +506,7 @@ export function newStep(
   }
   if (type === 'ask_file' || type === 'ask_location')
     data.var = fresh(type === 'ask_file' ? 'file' : 'location');
+  if (type === 'carousel') data.var = fresh('choice');
   if (type === 'buttons') {
     data.var = fresh('choice');
     data.prompt = '';
@@ -487,11 +522,11 @@ export function newStep(
   // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
   if (type === 'location') Object.assign(data, { lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
-  const links = FIXED_EXITS[type]
-    ? FIXED_EXITS[type].map(() => null)
-    : BRANCHING.has(type)
-      ? [null]
-      : [];
+  if (type === 'condition')
+    data.conditionGroup = { op: 'and', items: [{ variable: '', operator: 'equals', value: '' }] };
+  const links = BRANCHING.has(type)
+    ? Array.from({ length: optionCount({ type, data }) }, () => null)
+    : [];
   return { id: flbNewNodeId(), type, data, links };
 }
 
@@ -748,10 +783,42 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
       if (s.type === 'assign' && !str(d.team).trim()) bad('chooseTeam');
+      if (
+        s.type === 'buttons' &&
+        Object.values(rec(d.handoffs)).some((h) => !str(rec(h).team).trim())
+      )
+        bad('chooseTeam');
+      if (
+        s.type === 'carousel' &&
+        flbCleanCarouselCards(d.cards).some((c) =>
+          c.buttons.some((b) => b.type === 'agent' && !b.team),
+        )
+      )
+        bad('chooseTeam');
+      if (s.type === 'condition') {
+        const tree = conditionTreeOf(d)?.tree;
+        const p = tree ? flbCondProblems(tree) : null;
+        if (!tree || !p || p.incompleteRules + p.emptyGroups > 0 || tree.items.length === 0)
+          bad('conditionIncomplete');
+      }
+      if (s.type === 'carousel') {
+        const cards = flbCleanCarouselCards(d.cards);
+        if (cards.length === 0 || cards.some((c) => c.title.trim() === '')) bad('carouselCards');
+        else if (
+          cards.some((c) =>
+            c.buttons.some(
+              (b) =>
+                !b.label.trim() || (b.type !== 'reply' && b.type !== 'agent' && !b.value.trim()),
+            ),
+          )
+        )
+          bad('carouselButtons');
+      }
       if (s.type === 'faq' && minScoreOutOfRange(d.minScore)) bad('faqMinScore');
       if (s.type === 'cta') {
-        const a = arr(d.actions)[0] as Record<string, unknown> | undefined;
-        if (!a || !str(a.label).trim() || !str(a.value).trim()) bad('ctaLabelLink');
+        const list = arr(d.actions) as Array<Record<string, unknown>>;
+        if (list.length === 0 || list.some((a) => !str(a.label).trim() || !str(a.value).trim()))
+          bad('ctaLabelLink');
       }
       if (
         (s.type === 'buttons' || s.type === 'list') &&
@@ -820,6 +887,21 @@ const delaySummary = (t: Translate, d: Record<string, unknown>): string =>
   });
 
 /** A step label for pickers: `2.3 · Message · "Hello there…"`. */
+/** The first rule of a Condition, written plainly (`plan equals pro`), for the step's card. */
+function conditionSummary(d: Record<string, unknown>): string {
+  const first = (function find(items: unknown[]): Record<string, unknown> | null {
+    for (const it of items) {
+      const r = it as Record<string, unknown>;
+      if (Array.isArray(r.items)) {
+        const f = find(r.items);
+        if (f) return f;
+      } else return r;
+    }
+    return null;
+  })(arr(((conditionTreeOf(d)?.tree ?? { items: [] }) as { items: unknown[] }).items));
+  return first ? [str(first.variable), str(first.operator), str(first.value)].join(' ').trim() : '';
+}
+
 export function stepSummary(s: SimpleStep, t: Translate): string {
   const d = s.data;
   const raw =
@@ -835,18 +917,25 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
               ? str(d.title) || str(d.address)
               : s.type === 'template'
                 ? str(d.tpl)
-                : s.type === 'cta'
-                  ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
-                  : s.type === 'delay'
-                    ? delaySummary(t, d)
-                    : s.type === 'assign'
-                      ? str(d.message)
-                      : s.type === 'faq'
-                        ? t('simpleModel.faqSummary', {
-                            hasCategory: str(d.category).trim() ? 'true' : 'false',
-                            category: str(d.category).trim(),
-                          })
-                        : '';
+                : s.type === 'condition'
+                  ? conditionSummary(d)
+                  : s.type === 'carousel'
+                    ? arr(d.cards)
+                        .map((c) => str((c as Record<string, unknown>).title))
+                        .filter(Boolean)
+                        .join(' · ')
+                    : s.type === 'cta'
+                      ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
+                      : s.type === 'delay'
+                        ? delaySummary(t, d)
+                        : s.type === 'assign'
+                          ? str(d.message)
+                          : s.type === 'faq'
+                            ? t('simpleModel.faqSummary', {
+                                hasCategory: str(d.category).trim() ? 'true' : 'false',
+                                category: str(d.category).trim(),
+                              })
+                            : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
@@ -863,6 +952,8 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   location: msg('simpleModel.typeLabel.location'),
   template: msg('simpleModel.typeLabel.template'),
   cta: msg('simpleModel.typeLabel.cta'),
+  carousel: msg('simpleModel.typeLabel.carousel'),
+  condition: msg('simpleModel.typeLabel.condition'),
   assign: msg('simpleModel.typeLabel.assign'),
   faq: msg('simpleModel.typeLabel.faq'),
 };
