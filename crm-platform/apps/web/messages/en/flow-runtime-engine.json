@@ -119,6 +119,8 @@
       "colStarted": "Started",
       "colActivity": "Last activity",
       "colSteps": "Steps",
+      "colReplies": "Replies",
+      "repliesHint": "Customer messages that reached a wait node of this run",
       "colActions": "Actions",
       "open": "Open run",
       "cancel": "Cancel",
