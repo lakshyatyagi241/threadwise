@@ -340,10 +340,10 @@
         "description": "Legen Sie die STOP- und START-Wörter, die Bestätigungsantworten, die Abmeldezeile und die Einwilligungspflicht für Marketing fest.",
         "keywords": "einwilligung, abmeldung, anmeldung, abmelden, stop, start, dsgvo, compliance, datenschutz, marketing"
       },
-      "inbox-labels": {
-        "label": "Labels",
-        "description": "Erstellen Sie die Labels, die Ihr Team Unterhaltungen zuweist und nach denen es den Posteingang filtert.",
-        "keywords": "Tags, Labels, Kategorien, organisieren, filtern"
+      "inbox-tags": {
+        "label": "Unterhaltungs-Tags",
+        "description": "Erstellen Sie die Tags, die Ihr Team Unterhaltungen zuweist und nach denen es den Posteingang filtert. Es sind dieselben Tags wie bei den Kontakten.",
+        "keywords": "Tags, Unterhaltungs-Tags, Kategorien, organisieren, filtern"
       },
       "growth": {
         "label": "Growth",

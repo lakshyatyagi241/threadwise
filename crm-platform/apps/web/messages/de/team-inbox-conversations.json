@@ -28,8 +28,8 @@
       "teamChanged": "Team aktualisiert.",
       "priorityChanged": "Priorität aktualisiert",
       "snoozed": "Unterhaltung zurückgestellt",
-      "labelAdded": "Label hinzugefügt",
-      "labelRemoved": "Label entfernt"
+      "tagAdded": "Tag hinzugefügt",
+      "tagRemoved": "Tag entfernt"
     },
     "list": {
       "title": "Posteingang",
@@ -144,12 +144,12 @@
       "logBusy": "Ein Export wird bereits vorbereitet. Warten Sie auf die E-Mail dazu und fordern Sie dann einen weiteren an.",
       "logNotReady": "Dieser Export ist nicht bereit oder abgelaufen. Fordern Sie ihn erneut an.",
       "groupSuspended": "Meta hat diese Gruppe gesperrt. Sie kann erst wieder angeschrieben werden, wenn Meta die Sperre aufhebt.",
-      "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut.",
-      "groupPlanLocked": "Ihr Tarif enthält keine WhatsApp-Gruppen, daher kann an diese Gruppe nicht geschrieben werden. Bitten Sie einen Admin, den Tarif zu erweitern.",
       "groupLeft": "Diese Nummer hat die Gruppe verlassen und kann dort keine Nachrichten mehr senden.",
       "groupAnnounceOnly": "Nur Admins dürfen in dieser Gruppe Nachrichten senden, und diese Nummer ist kein Admin.",
       "groupRateLimited": "Zu viele Gruppennachrichten von dieser Nummer in kurzer Zeit. Warten Sie eine Minute und versuchen Sie es dann erneut.",
       "groupUnavailable": "WhatsApp hat diese Gruppennachricht nicht akzeptiert. Versuchen Sie es in einigen Minuten erneut.",
+      "walletEmpty": "Dein Nachrichten-Guthaben reicht für diese Gruppennachricht nicht aus (eine Gebühr pro Mitglied). Lade es auf und versuche es erneut.",
+      "groupPlanLocked": "Ihr Tarif enthält keine WhatsApp-Gruppen, daher kann an diese Gruppe nicht geschrieben werden. Bitten Sie einen Admin, den Tarif zu erweitern.",
       "savedReplyGone": "Diese gespeicherte Antwort existiert nicht mehr.",
       "savedReplyChannel": "Diese gespeicherte Antwort ist nicht für diese Art von Kanal gedacht.",
       "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits.",
@@ -275,6 +275,44 @@
       "attachment": "ein Anhang",
       "jumpLatest": "Zur neuesten Nachricht springen",
       "jumpLatestNew": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}"
+    },
+    "groupThread": {
+      "openGroup": "Gruppe öffnen",
+      "readOnly": {
+        "left": {
+          "title": "Diese Nummer hat die Gruppe verlassen",
+          "message": "Die Unterhaltung bleibt unverändert erhalten. Sie können sie lesen und interne Notizen hinzufügen, aber keine Nachrichten senden."
+        },
+        "announceOnly": {
+          "title": "Nur Admins dürfen in dieser Gruppe senden",
+          "message": "Diese Nummer ist kein Admin der Gruppe, daher würde WhatsApp keine Nachricht zustellen. Interne Notizen können Sie weiterhin hinzufügen."
+        }
+      },
+      "mention": {
+        "label": "Gruppenmitglieder",
+        "loading": "Mitglieder werden gesucht",
+        "none": "Kein Mitglied passt"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta hat diese Gruppe gesperrt",
+          "message": "WhatsApp stellt keine Nachrichten an eine gesperrte Gruppe zu. Sie können den Verlauf lesen und interne Notizen hinzufügen, bis Meta die Sperre aufhebt."
+        },
+        "plan": {
+          "title": "Ihr Tarif enthält keine WhatsApp-Gruppen",
+          "message": "Sie können diesen Verlauf lesen und interne Notizen hinzufügen, aber zum Senden an die Gruppe ist ein Tarif mit Gruppen nötig. Bitten Sie einen Admin um ein Upgrade."
+        },
+        "ineligible": {
+          "title": "Diese Nummer kann keine WhatsApp-Gruppen nutzen",
+          "message": "Meta hat Gruppen für diese Nummer bei der letzten Prüfung nicht erlaubt (erforderlich ist ein offizielles Business-Konto). Sie können den Verlauf lesen und interne Notizen hinzufügen. Öffnen Sie Meta-Gruppen, um erneut zu prüfen."
+        }
+      },
+      "cost": {
+        "members": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. Geschätzte Kosten {cost}: WhatsApp berechnet jedes Mitglied, das sie erhält.",
+        "membersNoEstimate": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. WhatsApp berechnet jedes Mitglied, das sie erhält.",
+        "sizeUnknown": "Die Mitgliederzahl ist noch nicht bekannt. WhatsApp berechnet jedes Mitglied, das diese Nachricht erhält.",
+        "walletShort": "Ihr Guthaben reicht für diese Nachricht möglicherweise nicht aus. Laden Sie es vor dem Senden auf."
+      }
     },
     "composer": {
       "modeLabel": "Nachrichtentyp",
@@ -443,8 +481,8 @@
           "snoozed": "Zurückgestellt von {actor}",
           "auto_unsnoozed": "Zurückstellung beendet",
           "priority_changed": "Priorität geändert von {actor}",
-          "tag_added": "Label hinzugefügt von {actor}",
-          "tag_removed": "Label entfernt von {actor}",
+          "tag_added": "Tag hinzugefügt von {actor}",
+          "tag_removed": "Tag entfernt von {actor}",
           "first_response": "Erste Antwort gesendet",
           "sla_breach": "Antwortfrist verpasst",
           "unknown": "{what} von {actor}"
@@ -658,44 +696,6 @@
         }
       }
     },
-    "groupThread": {
-      "openGroup": "Gruppe öffnen",
-      "readOnly": {
-        "left": {
-          "title": "Diese Nummer hat die Gruppe verlassen",
-          "message": "Die Unterhaltung bleibt unverändert erhalten. Sie können sie lesen und interne Notizen hinzufügen, aber keine Nachrichten senden."
-        },
-        "announceOnly": {
-          "title": "Nur Admins dürfen in dieser Gruppe senden",
-          "message": "Diese Nummer ist kein Admin der Gruppe, daher würde WhatsApp keine Nachricht zustellen. Interne Notizen können Sie weiterhin hinzufügen."
-        }
-      },
-      "mention": {
-        "label": "Gruppenmitglieder",
-        "loading": "Mitglieder werden gesucht",
-        "none": "Kein Mitglied passt"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta hat diese Gruppe gesperrt",
-          "message": "WhatsApp stellt keine Nachrichten an eine gesperrte Gruppe zu. Sie können den Verlauf lesen und interne Notizen hinzufügen, bis Meta die Sperre aufhebt."
-        },
-        "plan": {
-          "title": "Ihr Tarif enthält keine WhatsApp-Gruppen",
-          "message": "Sie können diesen Verlauf lesen und interne Notizen hinzufügen, aber zum Senden an die Gruppe ist ein Tarif mit Gruppen nötig. Bitten Sie einen Admin um ein Upgrade."
-        },
-        "ineligible": {
-          "title": "Diese Nummer kann keine WhatsApp-Gruppen nutzen",
-          "message": "Meta hat Gruppen für diese Nummer bei der letzten Prüfung nicht erlaubt (erforderlich ist ein offizielles Business-Konto). Sie können den Verlauf lesen und interne Notizen hinzufügen. Öffnen Sie Meta-Gruppen, um erneut zu prüfen."
-        }
-      },
-      "cost": {
-        "members": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. Geschätzte Kosten {cost}: WhatsApp berechnet jedes Mitglied, das sie erhält.",
-        "membersNoEstimate": "Diese Nachricht geht an {count, plural, one {# Mitglied} other {# Mitglieder}}. WhatsApp berechnet jedes Mitglied, das sie erhält.",
-        "sizeUnknown": "Die Mitgliederzahl ist noch nicht bekannt. WhatsApp berechnet jedes Mitglied, das diese Nachricht erhält.",
-        "walletShort": "Ihr Guthaben reicht für diese Nachricht möglicherweise nicht aus. Laden Sie es vor dem Senden auf."
-      }
-    },
     "savedReplies": {
       "channelKind": {
         "simulator": "Simulator (Test)",
@@ -892,6 +892,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Priorität",
+      "snooze": "Zurückstellen",
+      "wake": "Jetzt reaktivieren"
+    },
     "bulk": {
       "barLabel": "Massenaktionen",
       "selected": "{count, plural, one {# Unterhaltung ausgewählt} other {# Unterhaltungen ausgewählt}}",
@@ -919,50 +924,63 @@
         "partial": "{done} aktualisiert, {unchanged} bereits aktuell, {failed} konnten nicht geändert werden. Die fehlgeschlagenen bleiben ausgewählt.",
         "allFailed": "Keine der {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} konnte geändert werden."
       },
-      "label": "Label",
-      "labelAdd": "Label hinzufügen",
-      "labelRemove": "Label entfernen"
+      "tag": "Tag",
+      "tagAdd": "Tag hinzufügen",
+      "tagRemove": "Tag entfernen"
     },
-    "triage": {
-      "priority": "Priorität",
-      "snooze": "Zurückstellen",
-      "wake": "Jetzt reaktivieren"
-    },
-    "labels": {
-      "label": "Label",
-      "loading": "Labels werden geladen…",
-      "loadFailed": "Die Labels konnten nicht geladen werden.",
-      "none": "Noch keine Labels.",
-      "newLabel": "Neues Label",
+    "tags": {
+      "tag": "Tag",
+      "loading": "Tags werden geladen…",
+      "loadFailed": "Die Tags konnten nicht geladen werden.",
+      "none": "Noch keine Tags.",
+      "newTag": "Neuer Tag",
       "add": "Hinzufügen",
-      "filter": "Labels",
-      "filterActive": "{count, plural, one {# Label} other {# Labels}}",
-      "clearFilter": "Label-Filter zurücksetzen",
+      "filter": "Tags",
+      "filterActive": "{count, plural, one {# Tag} other {# Tags}}",
+      "clearFilter": "Tag-Filter zurücksetzen",
+      "scope": {
+        "label": "Tags abgleichen bei",
+        "conversation": "Unterhaltungs-Tags",
+        "contact": "Kontakt-Tags"
+      },
+      "groups": {
+        "title": "Tags",
+        "helpFor": "Info zu {title}",
+        "rule": "Beide Arten stammen aus derselben Tag-Bibliothek des Workspaces.",
+        "contactTitle": "Kontakt-Tags",
+        "contactHelp": "Ein Kontakt-Tag beschreibt die Person (VIP, Lead, Region). Er begleitet sie in jede Unterhaltung.",
+        "contactNone": "Dieser Kontakt hat keine Tags.",
+        "contactEdit": "Beim Kontakt bearbeiten",
+        "conversationTitle": "Unterhaltungs-Tags",
+        "conversationHelp": "Ein Unterhaltungs-Tag beschreibt diesen Verlauf (Abrechnung, Erstattung, dringend).",
+        "conversationNone": "Diese Unterhaltung hat noch keine Tags.",
+        "remove": "Tag {name} entfernen"
+      },
       "screen": {
         "back": "Zurück zum Posteingang",
-        "title": "Labels",
-        "intro": "Labels markieren Unterhaltungen, damit Ihr Team sie sortieren und filtern kann. Es sind dieselben Tags wie bei den Kontakten.",
-        "newTitle": "Neues Label",
-        "editTitle": "Label bearbeiten",
+        "title": "Unterhaltungs-Tags",
+        "intro": "Unterhaltungs-Tags kennzeichnen einen Verlauf (Abrechnung, Erstattung, dringend), damit Ihr Team den Posteingang sortieren und filtern kann. Sie stammen aus derselben Tag-Bibliothek wie die Kontakt-Tags, die die Person beschreiben.",
+        "newTitle": "Neuer Tag",
+        "editTitle": "Tag bearbeiten",
         "name": "Name",
         "color": "Farbe",
         "colorInvalid": "Verwenden Sie eine Hex-Farbe wie #075E54 oder einen Farbnamen.",
         "description": "Beschreibung (optional)",
-        "create": "Label erstellen",
+        "create": "Tag erstellen",
         "save": "Änderungen speichern",
         "cancel": "Abbrechen",
         "edit": "Bearbeiten",
         "delete": "Löschen",
         "inUse": "{count, plural, one {# Unterhaltung} other {# Unterhaltungen}}",
-        "emptyTitle": "Noch keine Labels",
-        "emptyMessage": "Erstellen Sie oben Ihr erstes Label und weisen Sie es dann im Posteingang Unterhaltungen zu.",
-        "deleteTitle": "Dieses Label löschen?",
-        "deleteMessage": "\"{name}\" ist bei {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} gesetzt. Beim Löschen wird es dort und bei allen Kontakten entfernt, die es tragen. Das lässt sich nicht rückgängig machen.",
-        "nameTaken": "Ein Label mit diesem Namen existiert bereits.",
-        "conflict": "Jemand anderes hat dieses Label zuerst geändert. Die Liste wurde neu geladen.",
-        "saved": "Label gespeichert",
-        "created": "Label erstellt",
-        "deleted": "Label gelöscht"
+        "emptyTitle": "Noch keine Tags",
+        "emptyMessage": "Erstellen Sie oben Ihren ersten Tag und weisen Sie ihn dann im Posteingang Unterhaltungen zu.",
+        "deleteTitle": "Diesen Tag löschen?",
+        "deleteMessage": "\"{name}\" ist bei {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} gesetzt. Beim Löschen wird er dort und bei allen Kontakten entfernt, die ihn tragen. Das lässt sich nicht rückgängig machen.",
+        "nameTaken": "Ein Tag mit diesem Namen existiert bereits.",
+        "conflict": "Jemand anderes hat diesen Tag zuerst geändert. Die Liste wurde neu geladen.",
+        "saved": "Tag gespeichert",
+        "created": "Tag erstellt",
+        "deleted": "Tag gelöscht"
       }
     },
     "sla": {

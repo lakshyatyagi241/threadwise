@@ -1,5 +1,5 @@
-import { LabelsScreen } from '@/features/team-inbox-conversations';
+import { TagsScreen } from '@/features/team-inbox-conversations';
 
-export default function LabelsPage() {
-  return <LabelsScreen />;
+export default function TagsPage() {
+  return <TagsScreen />;
 }

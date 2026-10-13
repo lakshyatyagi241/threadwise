@@ -28,8 +28,8 @@
       "teamChanged": "Equipe atualizada.",
       "priorityChanged": "Prioridade atualizada",
       "snoozed": "Conversa adiada",
-      "labelAdded": "Etiqueta adicionada",
-      "labelRemoved": "Etiqueta removida"
+      "tagAdded": "Tag adicionada",
+      "tagRemoved": "Tag removida"
     },
     "list": {
       "title": "Caixa de entrada",
@@ -144,12 +144,12 @@
       "logBusy": "Uma exportação já está sendo preparada. Aguarde o e-mail dela e depois solicite outra.",
       "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente.",
       "groupSuspended": "A Meta suspendeu este grupo, então ele não pode receber mensagens até que a Meta o libere.",
-      "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente.",
-      "groupPlanLocked": "O seu plano não inclui grupos do WhatsApp, por isso não é possível enviar mensagens a este grupo. Peça a um administrador para atualizar o plano.",
       "groupLeft": "Este número saiu do grupo, por isso não pode mais enviar mensagens nele.",
       "groupAnnounceOnly": "Somente admins podem enviar mensagens neste grupo, e este número não é admin.",
       "groupRateLimited": "Mensagens de grupo demais deste número em pouco tempo. Aguarde um minuto e tente novamente.",
       "groupUnavailable": "O WhatsApp não aceitou esta mensagem de grupo. Tente novamente em alguns minutos.",
+      "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente.",
+      "groupPlanLocked": "O seu plano não inclui grupos do WhatsApp, por isso não é possível enviar mensagens a este grupo. Peça a um administrador para atualizar o plano.",
       "savedReplyGone": "Esta resposta salva não existe mais.",
       "savedReplyChannel": "Esta resposta salva não se destina a este tipo de canal.",
       "shortcutTaken": "Outra resposta salva já usa esse atalho.",
@@ -275,6 +275,44 @@
       "attachment": "um anexo",
       "jumpLatest": "Ir para a mais recente",
       "jumpLatestNew": "{count, plural, one {# nova mensagem} other {# novas mensagens}}"
+    },
+    "groupThread": {
+      "openGroup": "Abrir grupo",
+      "readOnly": {
+        "left": {
+          "title": "Este número saiu do grupo",
+          "message": "A conversa foi mantida como estava. Você pode lê-la e adicionar notas internas, mas não pode enviar mensagens."
+        },
+        "announceOnly": {
+          "title": "Somente admins podem enviar neste grupo",
+          "message": "Este número não é admin do grupo, por isso o WhatsApp não entregaria a mensagem. Você ainda pode adicionar notas internas."
+        }
+      },
+      "mention": {
+        "label": "Participantes do grupo",
+        "loading": "Procurando participantes",
+        "none": "Nenhum participante corresponde"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "A Meta suspendeu este grupo",
+          "message": "O WhatsApp não entrega mensagens a um grupo suspenso. Pode ler a conversa e adicionar notas internas até a Meta o repor."
+        },
+        "plan": {
+          "title": "O seu plano não inclui grupos do WhatsApp",
+          "message": "Pode ler esta conversa e adicionar notas internas, mas enviar para o grupo exige um plano com grupos. Peça a um administrador para atualizar."
+        },
+        "ineligible": {
+          "title": "Este número não pode usar grupos do WhatsApp",
+          "message": "A Meta não permitiu grupos neste número na última verificação (exige uma conta comercial oficial). Pode ler a conversa e adicionar notas internas. Abra Grupos da Meta para verificar de novo."
+        }
+      },
+      "cost": {
+        "members": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. Custo estimado {cost}: o WhatsApp cobra por cada membro que a recebe.",
+        "membersNoEstimate": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. O WhatsApp cobra por cada membro que a recebe.",
+        "sizeUnknown": "O número de membros ainda não é conhecido. O WhatsApp cobra por cada membro que recebe esta mensagem.",
+        "walletShort": "A sua carteira pode não cobrir esta mensagem. Recarregue antes de enviar."
+      }
     },
     "composer": {
       "modeLabel": "Tipo de mensagem",
@@ -443,8 +481,8 @@
           "snoozed": "Adiada por {actor}",
           "auto_unsnoozed": "Adiamento encerrado",
           "priority_changed": "Prioridade alterada por {actor}",
-          "tag_added": "Marcador adicionado por {actor}",
-          "tag_removed": "Marcador removido por {actor}",
+          "tag_added": "Tag adicionada por {actor}",
+          "tag_removed": "Tag removida por {actor}",
           "first_response": "Primeira resposta enviada",
           "sla_breach": "Prazo de resposta perdido",
           "unknown": "{what} por {actor}"
@@ -658,44 +696,6 @@
         }
       }
     },
-    "groupThread": {
-      "openGroup": "Abrir grupo",
-      "readOnly": {
-        "left": {
-          "title": "Este número saiu do grupo",
-          "message": "A conversa foi mantida como estava. Você pode lê-la e adicionar notas internas, mas não pode enviar mensagens."
-        },
-        "announceOnly": {
-          "title": "Somente admins podem enviar neste grupo",
-          "message": "Este número não é admin do grupo, por isso o WhatsApp não entregaria a mensagem. Você ainda pode adicionar notas internas."
-        }
-      },
-      "mention": {
-        "label": "Participantes do grupo",
-        "loading": "Procurando participantes",
-        "none": "Nenhum participante corresponde"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "A Meta suspendeu este grupo",
-          "message": "O WhatsApp não entrega mensagens a um grupo suspenso. Pode ler a conversa e adicionar notas internas até a Meta o repor."
-        },
-        "plan": {
-          "title": "O seu plano não inclui grupos do WhatsApp",
-          "message": "Pode ler esta conversa e adicionar notas internas, mas enviar para o grupo exige um plano com grupos. Peça a um administrador para atualizar."
-        },
-        "ineligible": {
-          "title": "Este número não pode usar grupos do WhatsApp",
-          "message": "A Meta não permitiu grupos neste número na última verificação (exige uma conta comercial oficial). Pode ler a conversa e adicionar notas internas. Abra Grupos da Meta para verificar de novo."
-        }
-      },
-      "cost": {
-        "members": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. Custo estimado {cost}: o WhatsApp cobra por cada membro que a recebe.",
-        "membersNoEstimate": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. O WhatsApp cobra por cada membro que a recebe.",
-        "sizeUnknown": "O número de membros ainda não é conhecido. O WhatsApp cobra por cada membro que recebe esta mensagem.",
-        "walletShort": "A sua carteira pode não cobrir esta mensagem. Recarregue antes de enviar."
-      }
-    },
     "savedReplies": {
       "channelKind": {
         "simulator": "Simulador (testes)",
@@ -892,6 +892,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Prioridade",
+      "snooze": "Adiar",
+      "wake": "Reativar agora"
+    },
     "bulk": {
       "barLabel": "Ações em massa",
       "selected": "{count, plural, one {# conversa selecionada} other {# conversas selecionadas}}",
@@ -919,50 +924,63 @@
         "partial": "{done} atualizadas, {unchanged} já estavam atualizadas, {failed} não puderam ser alteradas. As que falharam continuam selecionadas.",
         "allFailed": "Nenhuma {count, plural, one {das # conversa pôde} other {das # conversas pôde}} ser alterada."
       },
-      "label": "Etiqueta",
-      "labelAdd": "Adicionar etiqueta",
-      "labelRemove": "Remover etiqueta"
+      "tag": "Tag",
+      "tagAdd": "Adicionar tag",
+      "tagRemove": "Remover tag"
     },
-    "triage": {
-      "priority": "Prioridade",
-      "snooze": "Adiar",
-      "wake": "Reativar agora"
-    },
-    "labels": {
-      "label": "Etiqueta",
-      "loading": "Carregando etiquetas…",
-      "loadFailed": "Não foi possível carregar as etiquetas.",
-      "none": "Nenhuma etiqueta ainda.",
-      "newLabel": "Nova etiqueta",
+    "tags": {
+      "tag": "Tag",
+      "loading": "Carregando tags…",
+      "loadFailed": "Não foi possível carregar as tags.",
+      "none": "Nenhuma tag ainda.",
+      "newTag": "Nova tag",
       "add": "Adicionar",
-      "filter": "Etiquetas",
-      "filterActive": "{count, plural, one {# etiqueta} other {# etiquetas}}",
-      "clearFilter": "Limpar filtro de etiquetas",
+      "filter": "Tags",
+      "filterActive": "{count, plural, one {# tag} other {# tags}}",
+      "clearFilter": "Limpar filtro de tags",
+      "scope": {
+        "label": "Correspondência de tags em",
+        "conversation": "Tags da conversa",
+        "contact": "Tags do contato"
+      },
+      "groups": {
+        "title": "Tags",
+        "helpFor": "Sobre {title}",
+        "rule": "Os dois tipos vêm da mesma biblioteca de tags do workspace.",
+        "contactTitle": "Tags do contato",
+        "contactHelp": "Uma tag do contato descreve a pessoa (VIP, lead, região). Ela acompanha o contato em todas as conversas.",
+        "contactNone": "Este contato não tem tags.",
+        "contactEdit": "Editar no contato",
+        "conversationTitle": "Tags da conversa",
+        "conversationHelp": "Uma tag da conversa descreve este assunto (cobrança, reembolso, urgente).",
+        "conversationNone": "Esta conversa ainda não tem tags.",
+        "remove": "Remover a tag {name}"
+      },
       "screen": {
         "back": "Voltar para a caixa de entrada",
-        "title": "Etiquetas",
-        "intro": "As etiquetas marcam as conversas para que sua equipe possa organizá-las e filtrá-las. São as mesmas usadas nos contatos.",
-        "newTitle": "Nova etiqueta",
-        "editTitle": "Editar etiqueta",
+        "title": "Tags da conversa",
+        "intro": "As tags da conversa marcam um assunto (cobrança, reembolso, urgente) para que sua equipe possa organizar e filtrar a caixa de entrada. Elas vêm da mesma biblioteca de tags dos contatos, que descrevem a pessoa.",
+        "newTitle": "Nova tag",
+        "editTitle": "Editar tag",
         "name": "Nome",
         "color": "Cor",
         "colorInvalid": "Use uma cor hexadecimal como #075E54 ou um nome de cor.",
         "description": "Descrição (opcional)",
-        "create": "Criar etiqueta",
+        "create": "Criar tag",
         "save": "Salvar alterações",
         "cancel": "Cancelar",
         "edit": "Editar",
         "delete": "Excluir",
         "inUse": "{count, plural, one {# conversa} other {# conversas}}",
-        "emptyTitle": "Nenhuma etiqueta ainda",
-        "emptyMessage": "Crie sua primeira etiqueta acima e depois aplique-a às conversas na caixa de entrada.",
-        "deleteTitle": "Excluir esta etiqueta?",
+        "emptyTitle": "Nenhuma tag ainda",
+        "emptyMessage": "Crie sua primeira tag acima e depois aplique-a às conversas na caixa de entrada.",
+        "deleteTitle": "Excluir esta tag?",
         "deleteMessage": "\"{name}\" está em {count, plural, one {# conversa} other {# conversas}}. Excluí-la a remove delas e de todos os contatos que a possuem. Esta ação não pode ser desfeita.",
-        "nameTaken": "Já existe uma etiqueta com esse nome.",
-        "conflict": "Outra pessoa alterou esta etiqueta primeiro. A lista foi recarregada.",
-        "saved": "Etiqueta salva",
-        "created": "Etiqueta criada",
-        "deleted": "Etiqueta excluída"
+        "nameTaken": "Já existe uma tag com esse nome.",
+        "conflict": "Outra pessoa alterou esta tag primeiro. A lista foi recarregada.",
+        "saved": "Tag salva",
+        "created": "Tag criada",
+        "deleted": "Tag excluída"
       }
     },
     "sla": {

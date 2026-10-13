@@ -23,7 +23,7 @@ vi.mock('next/link', () => ({
 }));
 vi.mock('../api/service', () => ({
   inboxApi: {
-    labels: async () => ({
+    tags: async () => ({
       data: [
         {
           id: 'l-1',
@@ -43,21 +43,21 @@ vi.mock('../api/service', () => ({
         },
       ],
     }),
-    createLabel: async (b: unknown) => {
+    createTag: async (b: unknown) => {
       state.created.push(b);
       return {};
     },
-    updateLabel: async (id: string, b: unknown) => {
+    updateTag: async (id: string, b: unknown) => {
       state.updated.push({ id, ...(b as object) });
       return {};
     },
-    deleteLabel: async (id: string) => {
+    deleteTag: async (id: string) => {
       state.deleted.push(id);
     },
   },
 }));
 
-import { LabelsScreen } from './labels-screen';
+import { TagsScreen } from './tags-screen';
 
 const messages = (locale: string) =>
   JSON.parse(
@@ -97,7 +97,7 @@ const render = async (locale = 'en') => {
       >
         <NextIntlClientProvider locale={locale} messages={messages(locale)} timeZone="UTC">
           <ToastProvider>
-            <LabelsScreen />
+            <TagsScreen />
           </ToastProvider>
         </NextIntlClientProvider>
       </QueryClientProvider>,
@@ -116,10 +116,10 @@ const type = (testId: string, value: string) =>
     el.dispatchEvent(new Event('input', { bubbles: true }));
   });
 
-describe('the labels settings screen', () => {
-  it('lists every label with its usage, and never lets a bad stored color reach a style', async () => {
+describe('the tags settings screen', () => {
+  it('lists every tag with its usage, and never lets a bad stored color reach a style', async () => {
     await render();
-    const items = [...host.querySelectorAll('[data-testid="labels-list"] li')];
+    const items = [...host.querySelectorAll('[data-testid="tags-list"] li')];
     expect(items).toHaveLength(2);
     expect(items[0]!.textContent).toContain('VIP');
     expect(items[0]!.textContent).toContain('Big spenders');
@@ -128,15 +128,15 @@ describe('the labels settings screen', () => {
     expect(host.innerHTML).not.toContain('red;x');
   });
 
-  it('creates a label from the form, and refuses an invalid color or an empty name', async () => {
+  it('creates a tag from the form, and refuses an invalid color or an empty name', async () => {
     await render();
-    const save = () => host.querySelector('[data-testid="labels-save"]') as HTMLButtonElement;
+    const save = () => host.querySelector('[data-testid="tags-save"]') as HTMLButtonElement;
     expect(save().disabled).toBe(true);
-    type('labels-name', 'Follow up');
+    type('tags-name', 'Follow up');
     expect(save().disabled).toBe(false);
-    type('labels-color', 'red;x');
+    type('tags-color', 'red;x');
     expect(save().disabled).toBe(true);
-    type('labels-color', '#7B5A14');
+    type('tags-color', '#7B5A14');
     await act(async () => {
       save().click();
     });
@@ -145,17 +145,15 @@ describe('the labels settings screen', () => {
 
   it('edits with the version it read, and asks before deleting, naming how many conversations it is on', async () => {
     await render();
-    const row = [...host.querySelectorAll('[data-testid="labels-list"] li')][0]!;
+    const row = [...host.querySelectorAll('[data-testid="tags-list"] li')][0]!;
     const buttons = row.querySelectorAll('button');
     await act(async () => {
       (buttons[0] as HTMLButtonElement).click();
     });
-    expect((host.querySelector('[data-testid="labels-name"]') as HTMLInputElement).value).toBe(
-      'VIP',
-    );
-    type('labels-name', 'VIP customer');
+    expect((host.querySelector('[data-testid="tags-name"]') as HTMLInputElement).value).toBe('VIP');
+    type('tags-name', 'VIP customer');
     await act(async () => {
-      (host.querySelector('[data-testid="labels-save"]') as HTMLButtonElement).click();
+      (host.querySelector('[data-testid="tags-save"]') as HTMLButtonElement).click();
     });
     expect(state.updated).toEqual([
       {
