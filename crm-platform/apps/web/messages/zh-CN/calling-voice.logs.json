@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "工作区",
+      "title": "通话记录",
+      "subtitle": "您的团队拨打或接听的每一通 WhatsApp 通话，包括时长、处理人和录音。",
+      "sideTip": "所有打入或打出您号码的 WhatsApp 通话。可按日期、状态、号码或队友筛选，以找到特定通话。",
+      "loading": "正在加载通话",
+      "loadFailed": "无法加载通话记录。",
+      "retry": "重试",
+      "emptyTitle": "暂无通话",
+      "emptyMessage": "当客户呼叫您的某个 WhatsApp 号码，或您的团队从收件箱发起通话后，通话将显示在此处，包括时长、处理人和录音。",
+      "emptyFilteredTitle": "没有符合这些筛选条件的通话",
+      "emptyFilteredMessage": "请尝试更长的时间范围或清除筛选条件。",
+      "clearFilters": "清除筛选",
+      "tabs": {
+        "label": "通话视图",
+        "log": "通话记录",
+        "analytics": "分析"
+      },
+      "range": {
+        "title": "时间范围",
+        "last24h": "最近 24 小时",
+        "last7d": "最近 7 天",
+        "last30d": "最近 30 天",
+        "custom": "自定义范围",
+        "from": "从",
+        "to": "到",
+        "apply": "应用"
+      },
+      "status": {
+        "title": "状态",
+        "all": "全部",
+        "completed": "已完成",
+        "in-progress": "正在进行",
+        "no-answer": "无人接听",
+        "declined": "已拒绝",
+        "failed": "失败"
+      },
+      "kpi": {
+        "total": "总计",
+        "last24h": "最近 24 小时",
+        "minutes": "{count} 分钟",
+        "completed": "已完成",
+        "failed": "失败",
+        "selection": "当前所选范围",
+        "calls": "通话",
+        "answered": "已接听",
+        "missed": "未接",
+        "avgDuration": "平均时长",
+        "totalMinutes": "总分钟数"
+      },
+      "filters": {
+        "label": "筛选通话",
+        "searchLabel": "搜索通话",
+        "searchPlaceholder": "电话号码或联系人姓名...",
+        "direction": "方向",
+        "allDirections": "所有通话",
+        "inbound": "呼入",
+        "outbound": "呼出",
+        "number": "号码",
+        "allNumbers": "所有号码",
+        "agent": "处理人",
+        "allAgents": "所有人",
+        "apply": "筛选",
+        "clear": "清除"
+      },
+      "table": {
+        "caption": "通话，最新的在前",
+        "customer": "客户",
+        "number": "号码",
+        "handledBy": "处理人",
+        "started": "开始时间",
+        "duration": "时长",
+        "status": "状态",
+        "actions": "操作",
+        "open": "打开",
+        "inbound": "呼入",
+        "outbound": "呼出",
+        "none": "-"
+      },
+      "paging": {
+        "label": "页码",
+        "showing": "显示第 {from}-{to} 条，共 {total} 通通话",
+        "beyond": "此页超出了最后一页（共 {pages} 页）。",
+        "previous": "上一页",
+        "next": "下一页",
+        "page": "第 {page} 页，共 {pages} 页"
+      },
+      "detail": {
+        "breadcrumb": "面包屑导航",
+        "back": "通话记录",
+        "loading": "正在加载通话",
+        "loadFailed": "无法加载此通话。",
+        "notFound": "找不到此通话。它可能属于其他工作区，或不在您可查看的通话范围内。",
+        "retry": "重试",
+        "handledBy": "由 {name} 处理",
+        "handler": {
+          "none": "无人处理",
+          "ai": "AI 助手",
+          "voicemail": "语音信箱"
+        },
+        "openContact": "打开联系人",
+        "openInbox": "在收件箱中打开",
+        "tiles": {
+          "duration": "时长",
+          "number": "号码",
+          "answered": "已接听",
+          "ended": "已结束"
+        },
+        "reasons": {
+          "unknown": "通话失败。",
+          "COMPLETED": "已完成",
+          "REJECTED": "通话已被拒绝。",
+          "DECLINED": "通话已被拒绝。",
+          "BUSY": "客户正在通话中。",
+          "NO_ANSWER": "无人接听。",
+          "MISSED": "客户未接听此通话。",
+          "CANCELLED": "通话已取消。",
+          "FAILED": "WhatsApp 报告通话失败。",
+          "NO_PERMISSION": "客户尚未允许通话，因此未发起通话。",
+          "META_REFUSED": "WhatsApp 拒绝发起通话。"
+        },
+        "timeline": {
+          "title": "时间线",
+          "count": "{count, plural, one {# 个步骤} other {# 个步骤}}",
+          "empty": "此通话没有记录任何步骤。"
+        },
+        "steps": {
+          "dial_sent": "已发起通话",
+          "dial_failed": "无法发起通话",
+          "connect": "通话已连接到 WhatsApp",
+          "pre_accept_sent": "正在准备接听",
+          "accept_sent": "通话已接听",
+          "accept_failed": "接听失败",
+          "reject_sent": "通话已拒绝",
+          "terminate_sent": "已发送挂断请求",
+          "terminate": "通话已结束",
+          "recording_stored": "录音已保存"
+        },
+        "noRecording": {
+          "title": "录音",
+          "message": "此通话没有录音。"
+        }
+      },
+      "recording": {
+        "title": "录音",
+        "notice": "此通话已录音。",
+        "privacy": "只有拥有录音访问权限的人才能播放，且每次播放都会被记录。",
+        "noAccess": "您可以看到此通话已录音，但您没有播放录音的权限。",
+        "play": "播放录音",
+        "loading": "正在获取录音",
+        "playerLabel": "通话录音",
+        "linkUntil": "此链接在 {time} 前有效。之后请再次点击播放。",
+        "playFailed": "无法播放录音。",
+        "retry": "重试"
+      }
+    },
+    "analytics": {
+      "eyebrow": "工作区",
+      "title": "通话分析",
+      "subtitle": "通话随时间的变化、接听数量、接听人以及线路最繁忙的时段。",
+      "loading": "正在加载通话分析",
+      "loadFailed": "无法加载通话分析。",
+      "retry": "重试",
+      "emptyTitle": "此期间没有通话",
+      "emptyMessage": "请选择更长的时间范围，或在有首批通话后再来查看。",
+      "number": "号码",
+      "allNumbers": "所有号码",
+      "period": "{from} 至 {to}，时区 {tz}",
+      "kpi": {
+        "total": "通话",
+        "answeredRate": "已接听",
+        "answeredOf": "已接听 {answered} 通",
+        "missed": "未接",
+        "avgHandle": "平均处理时长",
+        "avgHandleHint": "已接听通话的通话时长",
+        "totalMinutes": "总分钟数"
+      },
+      "overTime": {
+        "title": "通话随时间变化",
+        "hint": "每天一根柱形。绿色部分是已接听的通话。",
+        "summary": "{days} 天内共 {total} 通通话",
+        "answered": "已接听",
+        "other": "未接听",
+        "missed": "未接",
+        "day": "日期",
+        "calls": "通话"
+      },
+      "byAgent": {
+        "title": "按队友",
+        "agent": "队友",
+        "calls": "通话",
+        "answered": "已接听",
+        "avgHandle": "平均处理时长",
+        "minutes": "分钟",
+        "unassigned": "无人处理"
+      },
+      "heatmap": {
+        "title": "按一周内各小时统计的通话",
+        "hint": "颜色越深表示该小时开始的通话越多。小时按时区 {tz} 计。",
+        "weekday": "星期",
+        "cell": "{day}，{hour}:00：{calls, plural, =0 {无通话} one {# 通通话} other {# 通通话}}"
+      }
+    }
+  }
+}

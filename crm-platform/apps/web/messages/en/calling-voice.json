@@ -3,7 +3,8 @@
     "nav": {
       "title": "Calling",
       "description": "Turn WhatsApp calling on or off for each number.",
-      "keywords": "call, calls, voice, phone, whatsapp calling, call button"
+      "keywords": "call, calls, voice, phone, whatsapp calling, call button",
+      "callLogs": "Call logs"
     },
     "common": {
       "dismiss": "Dismiss"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "You do not have permission to use calling.",
       "PLAN_FEATURE_LOCKED": "Your plan does not include WhatsApp calling.",
       "NETWORK": "Network error - please try again.",
-      "UNEXPECTED": "Something went wrong. Please try again."
+      "UNEXPECTED": "Something went wrong. Please try again.",
+      "CALL_PLAYBACK_LINK_INVALID": "This recording link has expired. Press play again to get a new one.",
+      "CALL_RANGE_INVALID": "These dates do not make sense: the start must not be after the end, a range can cover at most a year, and the time zone must be a real one."
     },
     "settings": {
       "title": "Calling",
