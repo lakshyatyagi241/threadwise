@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "_comment": "Waboo role id (either key) -> decision, per client. A role with no entry becomes a CUSTOM role holding only the REVIEWED, in-plan, non-admin-class grants. Allowed targets: custom, preset:manager, preset:agent, preset:viewer, preset:workspace_admin. Every preset target needs approvedBy and evidence. preset:admin (the Owner role) is refused outright. EMPTY until the manager has reviewed the pilot roles (OQ-9).",
+  "clients": {}
+}
