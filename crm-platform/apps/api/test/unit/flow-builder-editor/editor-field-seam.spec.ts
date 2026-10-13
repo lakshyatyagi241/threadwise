@@ -280,6 +280,26 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
     save: { options: ['A'] },
     reads: { buttons: [{ id: 'p0', title: 'A' }], variable: 'choice' },
   },
+  carousel: {
+    save: {
+      text: 'Pick one',
+      cards: [
+        {
+          title: 'T',
+          text: 'x',
+          buttons: [
+            { type: 'reply', label: 'A' },
+            { type: 'url', label: 'U', value: 'https://x.test' },
+          ],
+        },
+      ],
+    },
+    reads: {
+      bodyText: 'Pick one',
+      buttons: [{ id: 'p0', title: 'A' }],
+      variable: 'choice',
+    },
+  },
   list: {
     save: { options: ['A'] },
     reads: { items: [{ id: 'p0', title: 'A', description: '', section: '' }], variable: 'choice' },

@@ -309,6 +309,11 @@
         "label": "Automatische Zuweisung",
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
+      },
+      "web": {
+        "label": "Website-Chat",
+        "description": "Bots für Ihren Website-Chat und das Widget, in dem sie jeweils laufen.",
+        "keywords": "Web, Website, Widget, Chatbot, Einbettung, Live-Chat"
       }
     }
   }

@@ -209,7 +209,7 @@ export function FlowsScreen() {
         _threadwise_flow_export: 1,
         exported_at: new Date().toISOString(),
         name: file.name.replace(/\.json$/i, '').slice(0, 120) || 'Imported flow',
-        flow_type: 'chat',
+        flow_type: w.channel,
         category: null,
         flow_data: w.graph,
       };

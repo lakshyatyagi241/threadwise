@@ -37,6 +37,48 @@ describe('the launcher draft', () => {
       avatar: 'preset:support',
       greeting: 'HI THERE!',
       introMessage: 'We are here to help you! Chat with us on WhatsApp for any queries.',
+      botName: '',
+      subHeader: 'Typically replies within 5 mins',
+      ctaText: 'Start Conversation',
+      popup: {
+        enabled: false,
+        position: 'top',
+        style: 'bubble',
+        text: 'Hi! May I assist you?',
+        image: '',
+      },
+      animation: 'none',
+      badge: true,
+      chat: {
+        fill: 'outline',
+        shape: 'pill',
+        font: 'system',
+        size: 'standard',
+        header: 'diagonal',
+        direction: 'auto',
+        icons: true,
+        suggestions: [],
+        suggestionNodes: [],
+        suggestionsOn: true,
+        actions: true,
+        expand: true,
+        voice: false,
+        logo: '',
+        avatar: '',
+        background: '',
+        corner: 'rounded',
+        autoOpen: 0,
+        sound: false,
+        notice: { enabled: false, icon: 1, items: [] },
+        quickMenu: { enabled: false, view: 'list', items: [] },
+        banners: { enabled: false, items: [] },
+        fontSize: 14,
+        hoverBg: '',
+        soundVolume: 70,
+        speak: false,
+        pip: false,
+        devices: { desktop: true, tablet: true, mobile: true },
+      },
       desktop: { side: 'right', sideSpacing: '10', bottomSpacing: '10' },
       mobile: { side: 'right', sideSpacing: '10', bottomSpacing: '60' },
     });
@@ -78,6 +120,100 @@ describe('the launcher draft', () => {
     expect(ai.position).toBe('bottom_left');
     expect(ai.buttonColor).toBe('#112233');
     expect(ai.launcher).toBeDefined();
+  });
+});
+
+describe('the button options of a WhatsApp bot', () => {
+  const launcherOf = (patch: Partial<BuilderState['launcher']>): BuilderState =>
+    ready({ launcher: { ...newState().launcher, ...patch } });
+
+  it('needs the button text', () => {
+    const p = validateWhatsapp(launcherOf({ ctaText: '  ' }));
+    expect(p).toMatchObject({ ok: false, key: 'cta', card: 3, field: 'ctaText' });
+  });
+
+  it('needs the popup text only while the popup is on', () => {
+    const popup = {
+      enabled: true,
+      position: 'top' as const,
+      style: 'bubble' as const,
+      text: ' ',
+      image: '',
+    };
+    expect(validateWhatsapp(launcherOf({ popup }))).toMatchObject({
+      ok: false,
+      key: 'popupText',
+      card: 6,
+      field: 'popupText',
+    });
+    expect(validateWhatsapp(launcherOf({ popup: { ...popup, enabled: false } })).ok).toBe(true);
+  });
+
+  it('refuses a popup image that is not an image address', () => {
+    const popup = {
+      enabled: false,
+      position: 'top' as const,
+      style: 'bubble' as const,
+      text: 'Hi',
+      image: 'javascript:alert(1)',
+    };
+    expect(validateWhatsapp(launcherOf({ popup }))).toMatchObject({
+      ok: false,
+      key: 'popupImage',
+      card: 6,
+    });
+  });
+
+  it("a bot's button needs the message a tap sends, and does not ask for a number", () => {
+    const noMessage = ready({
+      prefilledMessage: ' ',
+      targetWhatsappCc: '',
+      targetWhatsappNumber: '',
+    });
+    expect(validateWhatsapp(noMessage, { bot: true })).toMatchObject({
+      ok: false,
+      key: 'prefilled',
+      card: 3,
+      field: 'prefilledMessage',
+    });
+    const noNumber = ready({
+      prefilledMessage: 'join',
+      targetWhatsappCc: '',
+      targetWhatsappNumber: '',
+    });
+    expect(validateWhatsapp(noNumber, { bot: true }).ok).toBe(true);
+    // The Chat widget page still wants the number.
+    expect(validateWhatsapp(noNumber)).toMatchObject({ ok: false, key: 'whatsapp' });
+  });
+
+  it('the payload carries every new option through the contract', () => {
+    const state = launcherOf({
+      botName: ' Acme help ',
+      subHeader: 'We reply fast',
+      ctaText: 'Chat now',
+      popup: {
+        enabled: true,
+        position: 'side',
+        style: 'bubble',
+        text: ' Need a hand? ',
+        image: '',
+      },
+      animation: 'ripple',
+    });
+    const p = launcherPayload(state.launcher);
+    expect(p).toMatchObject({
+      botName: 'Acme help',
+      subHeader: 'We reply fast',
+      ctaText: 'Chat now',
+      popup: { enabled: true, position: 'side', style: 'bubble', text: 'Need a hand?' },
+      animation: 'ripple',
+    });
+    expect(widgetLauncherSchema.safeParse(p).success).toBe(true);
+  });
+
+  it('the preview never breaks on an empty button text', () => {
+    const preview = previewLauncher(launcherOf({ ctaText: '' }).launcher);
+    expect(preview.ctaText).toBe('Start Conversation');
   });
 });
 
@@ -297,5 +433,51 @@ describe('one preview for every engine', () => {
       expect(doc).toContain('"device":"mobile"');
       expect(doc).toContain('Start Conversation');
     }
+  });
+});
+
+describe('cleanChat: what the conversation tools send', () => {
+  it('leaves out items still being typed and blank lines, and keeps complete ones', async () => {
+    const { cleanChat, launcherDraft } = await import('./builder-model');
+    const { DEFAULT_LAUNCHER } = await import('@crm/contracts');
+    const base = launcherDraft(DEFAULT_LAUNCHER).chat;
+    const out = cleanChat({
+      ...base,
+      suggestions: ['  Hi  ', ' '],
+      notice: {
+        enabled: true,
+        icon: 1,
+        items: [
+          {
+            image: '',
+            title: 'Sale',
+            description: 'Ends Friday',
+            buttonTitle: '',
+            buttonUrl: '',
+            footer: '',
+          },
+          { image: '', title: '', description: '', buttonTitle: '', buttonUrl: '', footer: '' },
+        ],
+      },
+      quickMenu: {
+        enabled: true,
+        view: 'list',
+        items: [
+          { image: '', title: '', url: '', node: '' },
+          { image: '', title: 'Track', url: '', node: '' },
+        ],
+      },
+      banners: {
+        enabled: true,
+        items: [
+          { kind: 'image', image: '', video: '', url: '', node: '' },
+          { kind: 'video', image: '', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ', url: '', node: '' },
+        ],
+      },
+    });
+    expect(out.suggestions).toEqual(['Hi']);
+    expect(out.notice.items).toHaveLength(1);
+    expect(out.quickMenu.items.map((i) => i.title)).toEqual(['Track']);
+    expect(out.banners.items).toHaveLength(1);
   });
 });

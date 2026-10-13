@@ -164,7 +164,12 @@
       "messaging": "メッセージングフロー",
       "messagingNote": "WhatsApp、Instagram、Facebook。チャネルはトリガーノードで切り替えます",
       "call": "通話",
-      "callNote": "AI音声IVR。読み上げ、聞き取り、転送"
+      "callNote": "AI音声IVR。読み上げ、聞き取り、転送",
+      "subtitleSimple": "すべてのコンポーネントがすべてのチャネルで動作するわけではないため、ボットは1つのチャネル向けに作成します。",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "接続済みのWhatsApp番号でお客様に返信します",
+      "web": "Webサイトチャット",
+      "webNote": "Webサイトに追加するチャットウィジェット"
     },
     "rename": {
       "title": "フロー名を変更",
@@ -697,14 +702,16 @@
           "wordsPlaceholder": "こんにちは, hello, メニュー",
           "whatsappNumber": "WhatsApp番号",
           "noNumberHint": "WhatsApp番号がまだ接続されていません。設定で接続してから、ここで選択してください。",
-          "chooseNumber": "番号を選択…"
+          "chooseNumber": "番号を選択…",
+          "connectedNumber": "接続済みの WhatsApp 番号で返信します: {number}"
         },
         "add": {
           "addStep": "ステップを追加",
           "groups": {
             "send": "送信",
             "ask": "顧客に質問",
-            "handoff": "引き継ぎ"
+            "handoff": "引き継ぎ",
+            "logic": "判断"
           },
           "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。"
         },
@@ -747,7 +754,8 @@
             "placeholder": "ボタン{n}",
             "remove": "ボタンを削除",
             "add": "ボタンを追加",
-            "saveIn": "タップされたボタンの保存先"
+            "saveIn": "タップされたボタンの保存先",
+            "handoff": "担当者に引き継ぐ（有人対応）"
           },
           "list": {
             "above": "リストの上のメッセージ",
@@ -779,7 +787,9 @@
             "dateFormat": "日付の形式",
             "dateFormatHint": "顧客が日付を入力する形式です。入力されたまま保存され、年-月-日形式のコピーが_iso変数に保存されます。",
             "saveIn": "回答の保存先",
-            "retriesHint": "0の場合は、正しい回答が得られるまで尋ね続けます。"
+            "retriesHint": "0の場合は、正しい回答が得られるまで尋ね続けます。",
+            "verifyOtp": "ワンタイムコードで番号を確認",
+            "verifyOtpHint": "番号にコードが送られ（国番号が必要）、訪問者がチャットに入力します。コードが正しいときだけ番号を保存し、_verified で終わる変数が yes か no を示します。"
           },
           "askFile": {
             "accepted": "受け付けるファイル",
@@ -830,9 +840,48 @@
           },
           "cta": {
             "buttonText": "ボタンのテキスト",
-            "opens": "開く(リンク)"
+            "opens": "開く(リンク)",
+            "type": "開く内容",
+            "kinds": {
+              "url": "ウェブページ",
+              "phone": "電話",
+              "email": "メール"
+            },
+            "add": "ボタンを追加",
+            "remove": "ボタンを削除",
+            "opensPhone": "電話番号",
+            "opensEmail": "メールアドレス"
+          },
+          "carousel": {
+            "intro": "カードの上のメッセージ",
+            "card": "カード {n}",
+            "image": "画像のリンク（任意）",
+            "title": "タイトル",
+            "text": "テキスト",
+            "buttons": "ボタン（最大2つ）",
+            "label": "ボタンのテキスト",
+            "addCard": "カードを追加",
+            "removeCard": "カードを削除",
+            "addButton": "ボタンを追加",
+            "removeButton": "ボタンを削除",
+            "btnKinds": {
+              "reply": "チャットで返信",
+              "url": "Webページを開く",
+              "phone": "番号に電話",
+              "email": "メールを送る",
+              "agent": "担当者と話す"
+            }
+          },
+          "condition": {
+            "info": "ルール（変数、比較、値）を追加します。AND または OR で結び、必要ならグループを入れ子にできます。",
+            "yes": "ルールを満たす場合の移動先",
+            "no": "満たさない場合の移動先"
+          },
+          "handoff": {
+            "hint": "訪問者はメモ付きでこのチームに引き継がれます。このボタンの後に何かを接続する必要はありません。"
           }
-        }
+        },
+        "branchAdd": "「{title}」のステップを追加"
       },
       "formsCore": {
         "helpers": {
@@ -1825,6 +1874,21 @@
           "sampleName": "テスト用の場所",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "ボットのセクション",
+        "build": "ビルド",
+        "customize": "カスタマイズ",
+        "saveFirst": "先にボットを保存してください。",
+        "needsCustomizing": "カスタマイズがまだ保存されていません。カスタマイズを開いてください。",
+        "customizeFirst": "公開する前に、チャットウィジェットをカスタマイズして一度保存してください。",
+        "deploy": "デプロイ",
+        "customizeFirstWhatsapp": "公開する前に、WhatsAppボタンをカスタマイズして一度保存してください。"
+      },
+      "buttonIcon": {
+        "label": "アイコン(任意)",
+        "add": "アイコンを追加",
+        "saveFirst": "アイコンを追加するには、ボットを一度保存してください。"
       }
     },
     "contracts": {
@@ -2100,6 +2164,10 @@
         "api_library": {
           "label": "API（ライブラリから）",
           "description": "API ライブラリから保存済みの API を呼び出す"
+        },
+        "carousel": {
+          "label": "カルーセル",
+          "description": "画像とボタン付きのスクロールカード"
         }
       },
       "groups": {
@@ -2148,7 +2216,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "メール"
+        "email": "メール",
+        "web": "Webサイトチャット"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2321,6 +2390,14 @@
         "askLocation": {
           "label": "位置情報",
           "help": "顧客の位置情報の共有を待機"
+        },
+        "carousel": {
+          "label": "カルーセル",
+          "help": "画像とボタン付きのスクロールカード"
+        },
+        "condition": {
+          "label": "条件",
+          "help": "お客様の発言や保存した内容で分岐します（AND / OR ルール）"
         }
       },
       "typeLabel": {
@@ -2335,7 +2412,9 @@
         "location": "位置情報",
         "template": "テンプレート",
         "cta": "リンクボタン",
-        "assign": "担当者に割り当て"
+        "assign": "担当者に割り当て",
+        "carousel": "カルーセル",
+        "condition": "条件"
       },
       "stepLabel": {
         "questionOf": "質問 · {kind}"
@@ -2372,7 +2451,10 @@
         "addRow": "ステップ {stage}: 行を1つ以上追加してください。",
         "rowTitle": "ステップ {stage}: すべての行に{max}文字以内のタイトルが必要です。",
         "rowDescriptionTooLong": "ステップ {stage}: 行の説明が{max}文字を超えています。",
-        "variableUsed": "ステップ {stage}: 「{name}」はステップ {other} で既に使用されています。回答ごとに別の名前を付けてください。"
+        "variableUsed": "ステップ {stage}: 「{name}」はステップ {other} で既に使用されています。回答ごとに別の名前を付けてください。",
+        "carouselCards": "ステップ {stage}: カードを1枚以上追加し、すべてのカードにタイトルを付けてください。",
+        "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
+        "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。"
       }
     },
     "waboImport": {
@@ -2381,7 +2463,11 @@
         "buttonNoTarget": "「{type}」ボタン（「{text}」）の移行先がシンプルでは未設定です。",
         "skippedStep": "「{sub}」ステップをスキップしました。シンプルには同等の機能がありません。",
         "leadsOutside": "「{text}」はこのファイルに含まれないフローにつながっています。リンクするまでそこで終了します。",
-        "connectsOutside": "あるステップが、このファイルにないノード（{id}）に接続しています。接続はされないままになります。"
+        "connectsOutside": "あるステップが、このファイルにないノード（{id}）に接続しています。接続はされないままになります。",
+        "dateLimits": "日付の質問は形式を保ちますが、範囲（最早・最遅・除外日）は引き継ぎません。",
+        "tooManyButtons": "ボタンメッセージに収まりきらない数の選択肢がありました。余分なボタンは省きました。",
+        "agentTeam": "有人対応ボタンを残しました。会話を受け取るチームを選んでください。",
+        "tooManySlides": "カルーセルに10枚を超えるカードがありました。余分なカードは省きました。"
       },
       "reasons": {
         "notExport": "このファイルはフローのエクスポートではありません。フローからエクスポートした .json ファイル、またはwaboコンソールからエクスポートしたフローを使用してください。",

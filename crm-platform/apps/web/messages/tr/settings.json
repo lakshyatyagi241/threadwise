@@ -309,6 +309,11 @@
         "label": "Otomatik atama",
         "description": "Yeni konuşmaları sıra ile veya kurallara göre otomatik olarak doğru temsilciye verin.",
         "keywords": "yönlendirme, sırayla dağıtım, ata, temsilciler, gelen kutusu kuralları, dağıt, sahip"
+      },
+      "web": {
+        "label": "Web sitesi sohbeti",
+        "description": "Web sitesi sohbetiniz için oluşturulan botlar ve her birinin çalıştığı widget.",
+        "keywords": "web, web sitesi, widget, chatbot, gömme, canlı sohbet"
       }
     }
   }

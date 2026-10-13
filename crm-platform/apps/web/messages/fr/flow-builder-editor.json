@@ -164,7 +164,12 @@
       "messaging": "Flux de messagerie",
       "messagingNote": "WhatsApp, Instagram ou Facebook : changez de canal sur le nœud Déclencheur",
       "call": "Appel",
-      "callNote": "SVI vocal IA : dire, écouter, transférer"
+      "callNote": "SVI vocal IA : dire, écouter, transférer",
+      "subtitleSimple": "Chaque bot est conçu pour un seul canal, car tous les composants ne fonctionnent pas sur tous les canaux.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Répond aux clients sur un numéro WhatsApp connecté",
+      "web": "Chat de site web",
+      "webNote": "Un widget de chat à ajouter à votre site web"
     },
     "rename": {
       "title": "Renommer le flux",
@@ -697,14 +702,16 @@
           "wordsPlaceholder": "salut, bonjour, menu",
           "whatsappNumber": "Numéro WhatsApp",
           "noNumberHint": "Aucun numéro WhatsApp n’est encore connecté : connectez-en un dans Réglages, puis choisissez-le ici.",
-          "chooseNumber": "Choisir un numéro…"
+          "chooseNumber": "Choisir un numéro…",
+          "connectedNumber": "Répond depuis votre numéro WhatsApp connecté : {number}"
         },
         "add": {
           "addStep": "Ajouter une étape",
           "groups": {
             "send": "Envoyer",
             "ask": "Interroger le client",
-            "handoff": "Transférer"
+            "handoff": "Transférer",
+            "logic": "Décider"
           },
           "blockedTitle": "Les boutons et listes terminent un flux, ils ne peuvent donc être placés qu’en dernier."
         },
@@ -747,7 +754,8 @@
             "placeholder": "Bouton {n}",
             "remove": "Supprimer le bouton",
             "add": "Ajouter un bouton",
-            "saveIn": "Enregistrer le bouton touché dans"
+            "saveIn": "Enregistrer le bouton touché dans",
+            "handoff": "Passer à une personne (agent en direct)"
           },
           "list": {
             "above": "Message au-dessus de la liste",
@@ -779,7 +787,9 @@
             "dateFormat": "Format de date",
             "dateFormatHint": "Façon dont le client écrit la date. Elle est enregistrée telle que saisie, et une copie au format année-mois-jour dans la variable _iso.",
             "saveIn": "Enregistrer la réponse dans",
-            "retriesHint": "0 redemande jusqu’à ce que la réponse soit correcte."
+            "retriesHint": "0 redemande jusqu’à ce que la réponse soit correcte.",
+            "verifyOtp": "Vérifier le numéro avec un code à usage unique",
+            "verifyOtpHint": "Un code est envoyé au numéro (indicatif du pays requis) et le visiteur le saisit dans le chat. Le numéro n'est conservé que si le code est bon ; la variable finissant par _verified indique oui ou non."
           },
           "askFile": {
             "accepted": "Fichiers acceptés",
@@ -830,9 +840,48 @@
           },
           "cta": {
             "buttonText": "Texte du bouton",
-            "opens": "Ouvre (lien)"
+            "opens": "Ouvre (lien)",
+            "type": "Ouvre",
+            "kinds": {
+              "url": "Une page web",
+              "phone": "Un appel téléphonique",
+              "email": "Un e-mail"
+            },
+            "add": "Ajouter un autre bouton",
+            "remove": "Retirer le bouton",
+            "opensPhone": "Numéro de téléphone",
+            "opensEmail": "Adresse e-mail"
+          },
+          "carousel": {
+            "intro": "Message au-dessus des cartes",
+            "card": "Carte {n}",
+            "image": "Lien de l'image (facultatif)",
+            "title": "Titre",
+            "text": "Texte",
+            "buttons": "Boutons (jusqu'à 2)",
+            "label": "Texte du bouton",
+            "addCard": "Ajouter une carte",
+            "removeCard": "Retirer la carte",
+            "addButton": "Ajouter un bouton",
+            "removeButton": "Retirer le bouton",
+            "btnKinds": {
+              "reply": "Répondre dans le chat",
+              "url": "Ouvrir une page web",
+              "phone": "Appeler un numéro",
+              "email": "Envoyer un e-mail",
+              "agent": "Parler à une personne"
+            }
+          },
+          "condition": {
+            "info": "Ajoutez des règles (une variable, une comparaison et une valeur). Reliez-les par AND ou OR et imbriquez des groupes si besoin.",
+            "yes": "Quand les règles sont remplies, aller à",
+            "no": "Quand elles ne le sont pas, aller à"
+          },
+          "handoff": {
+            "hint": "Le visiteur est transmis à cette équipe avec votre note. Rien n'est à connecter après ce bouton."
           }
-        }
+        },
+        "branchAdd": "Ajouter une étape pour « {title} »"
       },
       "formsCore": {
         "helpers": {
@@ -1825,6 +1874,21 @@
           "sampleName": "Lieu de test",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Sections du bot",
+        "build": "Créer",
+        "customize": "Personnaliser",
+        "saveFirst": "Enregistrez d'abord le bot.",
+        "needsCustomizing": "La personnalisation n'est pas encore enregistrée. Ouvrez Personnaliser.",
+        "customizeFirst": "Personnalisez votre widget de chat et enregistrez-le une fois avant de publier.",
+        "deploy": "Déployer",
+        "customizeFirstWhatsapp": "Personnalisez votre bouton WhatsApp et enregistrez-le une fois avant de publier."
+      },
+      "buttonIcon": {
+        "label": "Icône (facultatif)",
+        "add": "Ajouter une icône",
+        "saveFirst": "Enregistrez le bot une fois pour ajouter une icône."
       }
     },
     "contracts": {
@@ -2100,6 +2164,10 @@
         "api_library": {
           "label": "API (depuis la bibliothèque)",
           "description": "Appeler une API enregistrée depuis la bibliothèque d'API"
+        },
+        "carousel": {
+          "label": "Carrousel",
+          "description": "Cartes défilantes avec images et boutons"
         }
       },
       "groups": {
@@ -2148,7 +2216,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-mail"
+        "email": "E-mail",
+        "web": "Chat de site web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "JJ-MM-AAAA",
@@ -2321,6 +2390,14 @@
         "askLocation": {
           "label": "Sa localisation",
           "help": "Attendre que le client partage une localisation"
+        },
+        "carousel": {
+          "label": "Carrousel",
+          "help": "Cartes défilantes avec images et boutons"
+        },
+        "condition": {
+          "label": "Condition",
+          "help": "Brancher selon ce que le client a dit ou enregistré, avec des règles AND / OR"
         }
       },
       "typeLabel": {
@@ -2335,7 +2412,9 @@
         "location": "Localisation",
         "template": "Modèle",
         "cta": "Bouton lien",
-        "assign": "Assigner à un agent"
+        "assign": "Assigner à un agent",
+        "carousel": "Carrousel",
+        "condition": "Condition"
       },
       "stepLabel": {
         "questionOf": "Question · {kind}"
@@ -2372,7 +2451,10 @@
         "addRow": "Étape {stage} : ajoutez au moins une ligne.",
         "rowTitle": "Étape {stage} : chaque ligne a besoin d’un titre de {max} caractères maximum.",
         "rowDescriptionTooLong": "Étape {stage} : une description de ligne dépasse {max} caractères.",
-        "variableUsed": "Étape {stage} : « {name} » est déjà utilisé par l’étape {other} ; donnez un nom distinct à chaque réponse."
+        "variableUsed": "Étape {stage} : « {name} » est déjà utilisé par l’étape {other} ; donnez un nom distinct à chaque réponse.",
+        "carouselCards": "Étape {stage} : ajoutez au moins une carte et donnez un titre à chaque carte.",
+        "carouselButtons": "Étape {stage} : donnez un nom à chaque bouton, et un lien, un numéro ou une adresse là où il ouvre quelque chose.",
+        "conditionIncomplete": "Étape {stage} : terminez les règles de la condition (une variable et une valeur dans chacune)."
       }
     },
     "waboImport": {
@@ -2381,7 +2463,11 @@
         "buttonNoTarget": "Un bouton « {type} » (« {text} ») n’a aucune cible dans le mode simple.",
         "skippedStep": "Étape « {sub} » ignorée : le mode simple n’a rien d’équivalent.",
         "leadsOutside": "« {text} » mène à un flux absent de ce fichier ; il s’arrête là tant que vous ne l’avez pas relié.",
-        "connectsOutside": "Une étape est reliée à un nœud absent de ce fichier ({id}) ; elle reste non reliée."
+        "connectsOutside": "Une étape est reliée à un nœud absent de ce fichier ({id}) ; elle reste non reliée.",
+        "dateLimits": "Une question de date garde son format mais pas ses limites (plus tôt, plus tard, jours exclus).",
+        "tooManyButtons": "Un message à boutons avait plus de choix que la place disponible ; les boutons en trop ont été omis.",
+        "agentTeam": "Un bouton d'agent en direct a été conservé : choisissez l'équipe qui reçoit la conversation.",
+        "tooManySlides": "Un carrousel avait plus de 10 cartes ; les cartes en trop ont été omises."
       },
       "reasons": {
         "notExport": "Ce fichier n’est pas un export de flux. Utilisez un fichier .json exporté depuis Flux, ou un flux exporté depuis la console wabo.",

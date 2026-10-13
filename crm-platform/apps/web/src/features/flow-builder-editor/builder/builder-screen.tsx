@@ -1,5 +1,6 @@
 'use client';
 
+import { FlowEditorContext } from '../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -22,7 +23,13 @@ import { validateGraph } from '../lib/validation-text';
 import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
 import { GetaPublishStatus } from '../geta-publish/sync-status';
-import { WebBotPanels, WebBotTabs, useInitialTab, type WebBotTab } from './web-bot-tabs';
+import {
+  WebBotPanels,
+  WebBotTabs,
+  useInitialTab,
+  whatsappDefaultsFrom,
+  type WebBotTab,
+} from './web-bot-tabs';
 import { FLB_KEYS, useBuilderContext } from '../api/hooks';
 import {
   ZOOM_DEFAULT,
@@ -237,22 +244,25 @@ function BuilderInner({
     return () => ro.disconnect();
   }, []);
 
-  // The channel the flow was opened as: a call flow stays call; a messaging channel only if this workspace can run it.
+  // The channel the flow was opened as: a call flow stays call; a messaging channel only if this workspace can run it. The link's
+  // `?type=` is read once: the first save rewrites the address to the saved flow's, and the channel must not follow that.
+  const [openedType] = useState(typeParam);
   const openedAs: FlowType = useMemo(() => {
-    const t = initial?.flowType ?? (flbIsFlowType(typeParam) ? typeParam : 'chat');
+    const t = initial?.flowType ?? (flbIsFlowType(openedType) ? openedType : 'chat');
     if (t === 'call' || t === 'web') return t;
     return ctx.channels.includes(t) ? t : 'chat';
-  }, [initial, typeParam, ctx.channels]);
+  }, [initial, openedType, ctx.channels]);
   const mode = flbFlowTypeOf(state.nodes, openedAs, ctx.channels);
-  // A website chat bot has Customize and Install beside the canvas; the others only build.
-  const isWeb = mode === 'web';
+  // A website chat or WhatsApp bot has Customize and Deploy beside the canvas; the other channels only build.
+  const widgetChannel: 'web' | 'chat' | null =
+    mode === 'web' ? 'web' : mode === 'chat' ? 'chat' : null;
   const initialTab = useInitialTab(!!initial);
   const [tab, setTab] = useState<WebBotTab>(initialTab);
   // Another channel has no tabs, whatever the link asked for.
-  const shownTab: WebBotTab = isWeb ? tab : 'build';
+  const shownTab: WebBotTab = widgetChannel ? tab : 'build';
   const canEditFlow = useCan('flb.flows.update');
-  const widgetQuery = useFlowWidget(isWeb ? flowId : null);
-  const needsCustomizing = isWeb && !!flowId && widgetQuery.data?.widget === null;
+  const widgetQuery = useFlowWidget(widgetChannel ? flowId : null);
+  const needsCustomizing = !!widgetChannel && !!flowId && widgetQuery.data?.widget === null;
   const portCtx = useMemo<FlbPortContext>(
     () => ({ templateButtons: (node) => templateQuickReplies(ctx.templates, node) }),
     [ctx.templates],
@@ -480,14 +490,14 @@ function BuilderInner({
         const saved = await persist(name.trim() || tb('newFlow'));
         id = saved.id;
       }
-      if (isWeb) {
-        // A website bot goes live with the look its owner chose, so Customize has to be saved once first.
+      if (widgetChannel) {
+        // A bot goes live with the widget its owner chose (the chat window, or the WhatsApp button), so Customize has to be saved once first.
         const widget = !flowId
           ? null
           : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
         if (!widget) {
           setTab('customize');
-          toast(tw('customizeFirst'));
+          toast(tw(widgetChannel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'));
           return;
         }
       }
@@ -555,257 +565,270 @@ function BuilderInner({
   );
 
   return (
-    <div
-      className="flb-root fixed inset-0 z-40 flex flex-col bg-background text-foreground"
-      data-testid="flow-builder"
-    >
-      <BuilderFonts />
-      <ShellHidden />
-      <Toolbar
-        flowId={flowId}
-        flowName={name}
-        setFlowName={(v) => {
-          setName(v);
-          markDirty();
-        }}
-        status={status}
-        busy={busy}
-        onSave={onSave}
-        onPublish={() => void onPublish()}
-        onTest={() => {
-          setTestOpen(true);
-          setRunNonce((n) => n + 1);
-        }}
-        onAIGen={() => setAiOpen(true)}
-        remoteStatus={
-          <GetaPublishStatus
-            view={viewOf(geta, { published, justPublished })}
-            retrying={retrying}
-            onRetry={() => void onGetaRetry()}
-          />
-        }
-      />
-
-      {isWeb ? (
-        <WebBotTabs
-          tab={shownTab}
-          onTab={setTab}
-          saved={!!flowId}
-          needsCustomizing={needsCustomizing}
-        />
-      ) : null}
-
-      <div className={`relative flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
-        {sidebarOpen ? (
-          <>
-            <Palette mode={mode} query={query} onSearch={setQuery} onAddCenter={addAtCenter} />
-            <div className="flow-palette-backdrop" onClick={() => setSidebarOpen(false)} />
-          </>
-        ) : null}
-
-        <Canvas
-          state={state}
-          ctx={ctx}
-          portCtx={portCtx}
-          selectedId={selectedId}
-          invalidIds={invalid}
-          pan={pan}
-          zoom={zoom}
-          setPan={setPan}
-          setZoom={setZoom}
-          onSelect={setSelectedId}
-          onOpenNode={(id) => {
-            setSelectedId(id);
-            setInsOpen(true);
-          }}
-          onLive={live}
-          onMoved={(next) => {
-            setHist((h) => pushHistory(h, next));
-            markDirty();
-          }}
-          onConnect={(from, target) => {
-            // A self connection is ignored: no history entry, no "unsaved".
-            const next = connect(state, from, target);
-            if (next !== state) commit(next);
-          }}
-          onDropNode={doAdd}
-          onDeleteEdge={(id) => commit(deleteEdge(state, id))}
-          onPatchNode={(id, patch) => commit(updateData(state, id, patch))}
-          wrapperRef={wrapperRef}
-        >
-          {selectedNode ? (
-            <NodeActionBar
-              node={selectedNode}
-              pan={pan}
-              zoom={zoom}
-              onEdit={() => setInsOpen(true)}
-              onDelete={() => doDelete(selectedNode.id)}
-              onDuplicate={() => doDuplicate(selectedNode.id)}
-              onPin={() => commit(pinStart(state, selectedNode.id))}
-            />
-          ) : null}
-
-          <button
-            type="button"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="absolute top-1/2 left-0 z-20 grid h-12 w-5 -translate-y-1/2 place-items-center rounded-r-md border border-l-0 border-border bg-background hover:bg-muted"
-            title={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
-            aria-label={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
-          >
-            <Icon
-              d={sidebarOpen ? 'M9 4l-3 4 3 4' : 'M7 4l3 4-3 4'}
-              className="h-3 w-3 text-muted-foreground"
-            />
-          </button>
-
-          {!sidebarOpen ? (
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-[13px] font-semibold text-brand-foreground shadow-lg md:hidden"
-              title={tb('addNodeTitle')}
-            >
-              <Icon d="M8 3v10M3 8h10" />
-              {tb('addNode')}
-            </button>
-          ) : null}
-
-          <Minimap nodes={state.nodes} pan={pan} zoom={zoom} setPan={setPan} viewport={viewport} />
-
-          <div className="absolute right-4 bottom-4 z-20 flex items-center gap-2">
-            <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
-              <button
-                type="button"
-                onClick={doUndo}
-                disabled={!canUndo(hist)}
-                className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                title={tb('undoTitle')}
-                aria-label={tb('undo')}
-              >
-                <Icon d="M4 8h6a3 3 0 0 1 0 6M4 8l3-3M4 8l3 3" className="h-3.5 w-3.5" />
-              </button>
-              <div className="h-5 w-px bg-border" />
-              <button
-                type="button"
-                onClick={doRedo}
-                disabled={!canRedo(hist)}
-                className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                title={tb('redoTitle')}
-                aria-label={tb('redo')}
-              >
-                <Icon d="M12 8H6a3 3 0 0 0 0 6M12 8L9 5M12 8l-3 3" className="h-3.5 w-3.5" />
-              </button>
-            </div>
-            <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
-              <button
-                type="button"
-                onClick={() => setZoom(Math.min(1.8, zoom + 0.1))}
-                className="grid h-9 w-9 place-items-center hover:bg-muted"
-                title={tb('zoomIn')}
-                aria-label={tb('zoomIn')}
-              >
-                <Icon d="M8 4v8M4 8h8" className="h-3.5 w-3.5" />
-              </button>
-              <div
-                className="grid h-9 min-w-[44px] place-items-center border-x border-border px-2 text-center font-mono text-[10.5px] text-foreground/70"
-                data-testid="zoom-level"
-              >
-                {Math.round(zoom * 100)}%
-              </div>
-              <button
-                type="button"
-                onClick={() => setZoom(Math.max(0.4, zoom - 0.1))}
-                className="grid h-9 w-9 place-items-center hover:bg-muted"
-                title={tb('zoomOut')}
-                aria-label={tb('zoomOut')}
-              >
-                <Icon d="M4 8h8" className="h-3.5 w-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setZoom(1);
-                  setPan({ x: 40, y: 40 });
-                }}
-                className="grid h-9 w-9 place-items-center border-l border-border hover:bg-muted"
-                title={tb('reset')}
-                aria-label={tb('resetView')}
-              >
-                <Icon d="M3 8a5 5 0 1 0 1.5-3.5L3 6M3 3v3h3" className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-        </Canvas>
-
-        <InspectorPanel
-          node={selectedNode}
-          open={insOpen}
-          env={env}
-          onClose={() => setInsOpen(false)}
-          onDelete={() => selectedNode && doDelete(selectedNode.id)}
-          onSet={(k, v) => selectedNode && commit(updateData(state, selectedNode.id, { [k]: v }))}
-          onSetMany={(patch) => selectedNode && commit(updateData(state, selectedNode.id, patch))}
-          onAddOption={() => {
-            if (!selectedNode) return;
-            const r = addOption(state, selectedNode.id);
-            if (!r.ok) return toast(r.message);
-            commit(r.state);
-          }}
-          onRemoveOption={(i) => selectedNode && commit(removeOption(state, selectedNode.id, i))}
-        />
-      </div>
-
-      {isWeb && flowId ? (
-        <WebBotPanels
-          tab={shownTab}
+    <FlowEditorContext.Provider value={{ flowId, web: mode === 'web' }}>
+      <div
+        className="flb-root fixed inset-0 z-40 flex flex-col bg-background text-foreground"
+        data-testid="flow-builder"
+      >
+        <BuilderFonts />
+        <ShellHidden />
+        <Toolbar
           flowId={flowId}
           flowName={name}
-          published={published}
-          canEdit={canEditFlow}
+          setFlowName={(v) => {
+            setName(v);
+            markDirty();
+          }}
+          status={status}
+          busy={busy}
+          onSave={onSave}
+          onPublish={() => void onPublish()}
+          onTest={() => {
+            setTestOpen(true);
+            setRunNonce((n) => n + 1);
+          }}
+          onAIGen={() => setAiOpen(true)}
+          remoteStatus={
+            <GetaPublishStatus
+              view={viewOf(geta, { published, justPublished })}
+              retrying={retrying}
+              onRetry={() => void onGetaRetry()}
+            />
+          }
         />
-      ) : null}
 
-      <SaveConfirmModal
-        open={saveOpen}
-        busy={busy}
-        initialName={name}
-        onClose={() => !busy && setSaveOpen(false)}
-        onSave={(n) => void saveFlow(n)}
-      />
-      {validationItems ? (
-        <ValidationPopup
-          items={validationItems}
-          onClose={() => setVres((v) => (v ? { ...v, popup: false } : v))}
-        />
-      ) : null}
-      <AIGenModal
-        open={aiOpen}
-        models={ctx.aiModels}
-        initialPrompt={aiPrompt}
-        flowType={mode}
-        onClose={() => setAiOpen(false)}
-        onGenerate={applyGenerated}
-      />
-      <TestPanel
-        open={testOpen}
-        onClose={() => setTestOpen(false)}
-        nodes={state.nodes}
-        edges={state.edges}
-        runNonce={runNonce}
-        templateButtons={(node) => templateQuickReplies(ctx.templates, node)}
-        templateExists={(node) =>
-          ctx.templates.some((tpl) => tpl.name === String(node.data?.tpl ?? '').trim())
-        }
-        flowName={(id) => ctx.flows.find((f) => f.id === id)?.name}
-      />
-      {toastMsg ? (
-        <div
-          className="fixed top-20 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-[12px] font-medium text-background shadow-lg"
-          role="status"
-        >
-          {toastMsg}
+        {widgetChannel ? (
+          <WebBotTabs
+            tab={shownTab}
+            onTab={setTab}
+            saved={!!flowId}
+            needsCustomizing={needsCustomizing}
+          />
+        ) : null}
+
+        <div className={`relative flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
+          {sidebarOpen ? (
+            <>
+              <Palette mode={mode} query={query} onSearch={setQuery} onAddCenter={addAtCenter} />
+              <div className="flow-palette-backdrop" onClick={() => setSidebarOpen(false)} />
+            </>
+          ) : null}
+
+          <Canvas
+            state={state}
+            ctx={ctx}
+            portCtx={portCtx}
+            selectedId={selectedId}
+            invalidIds={invalid}
+            pan={pan}
+            zoom={zoom}
+            setPan={setPan}
+            setZoom={setZoom}
+            onSelect={setSelectedId}
+            onOpenNode={(id) => {
+              setSelectedId(id);
+              setInsOpen(true);
+            }}
+            onLive={live}
+            onMoved={(next) => {
+              setHist((h) => pushHistory(h, next));
+              markDirty();
+            }}
+            onConnect={(from, target) => {
+              // A self connection is ignored: no history entry, no "unsaved".
+              const next = connect(state, from, target);
+              if (next !== state) commit(next);
+            }}
+            onDropNode={doAdd}
+            onDeleteEdge={(id) => commit(deleteEdge(state, id))}
+            onPatchNode={(id, patch) => commit(updateData(state, id, patch))}
+            wrapperRef={wrapperRef}
+          >
+            {selectedNode ? (
+              <NodeActionBar
+                node={selectedNode}
+                pan={pan}
+                zoom={zoom}
+                onEdit={() => setInsOpen(true)}
+                onDelete={() => doDelete(selectedNode.id)}
+                onDuplicate={() => doDuplicate(selectedNode.id)}
+                onPin={() => commit(pinStart(state, selectedNode.id))}
+              />
+            ) : null}
+
+            <button
+              type="button"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="absolute top-1/2 left-0 z-20 grid h-12 w-5 -translate-y-1/2 place-items-center rounded-r-md border border-l-0 border-border bg-background hover:bg-muted"
+              title={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
+              aria-label={sidebarOpen ? tb('hideSidebar') : tb('showSidebar')}
+            >
+              <Icon
+                d={sidebarOpen ? 'M9 4l-3 4 3 4' : 'M7 4l3 4-3 4'}
+                className="h-3 w-3 text-muted-foreground"
+              />
+            </button>
+
+            {!sidebarOpen ? (
+              <button
+                type="button"
+                onClick={() => setSidebarOpen(true)}
+                className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-[13px] font-semibold text-brand-foreground shadow-lg md:hidden"
+                title={tb('addNodeTitle')}
+              >
+                <Icon d="M8 3v10M3 8h10" />
+                {tb('addNode')}
+              </button>
+            ) : null}
+
+            <Minimap
+              nodes={state.nodes}
+              pan={pan}
+              zoom={zoom}
+              setPan={setPan}
+              viewport={viewport}
+            />
+
+            <div className="absolute right-4 bottom-4 z-20 flex items-center gap-2">
+              <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
+                <button
+                  type="button"
+                  onClick={doUndo}
+                  disabled={!canUndo(hist)}
+                  className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                  title={tb('undoTitle')}
+                  aria-label={tb('undo')}
+                >
+                  <Icon d="M4 8h6a3 3 0 0 1 0 6M4 8l3-3M4 8l3 3" className="h-3.5 w-3.5" />
+                </button>
+                <div className="h-5 w-px bg-border" />
+                <button
+                  type="button"
+                  onClick={doRedo}
+                  disabled={!canRedo(hist)}
+                  className="grid h-9 w-9 place-items-center hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+                  title={tb('redoTitle')}
+                  aria-label={tb('redo')}
+                >
+                  <Icon d="M12 8H6a3 3 0 0 0 0 6M12 8L9 5M12 8l-3 3" className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <div className="flex items-center overflow-hidden rounded-full border border-border bg-background/95 shadow">
+                <button
+                  type="button"
+                  onClick={() => setZoom(Math.min(1.8, zoom + 0.1))}
+                  className="grid h-9 w-9 place-items-center hover:bg-muted"
+                  title={tb('zoomIn')}
+                  aria-label={tb('zoomIn')}
+                >
+                  <Icon d="M8 4v8M4 8h8" className="h-3.5 w-3.5" />
+                </button>
+                <div
+                  className="grid h-9 min-w-[44px] place-items-center border-x border-border px-2 text-center font-mono text-[10.5px] text-foreground/70"
+                  data-testid="zoom-level"
+                >
+                  {Math.round(zoom * 100)}%
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setZoom(Math.max(0.4, zoom - 0.1))}
+                  className="grid h-9 w-9 place-items-center hover:bg-muted"
+                  title={tb('zoomOut')}
+                  aria-label={tb('zoomOut')}
+                >
+                  <Icon d="M4 8h8" className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setZoom(1);
+                    setPan({ x: 40, y: 40 });
+                  }}
+                  className="grid h-9 w-9 place-items-center border-l border-border hover:bg-muted"
+                  title={tb('reset')}
+                  aria-label={tb('resetView')}
+                >
+                  <Icon d="M3 8a5 5 0 1 0 1.5-3.5L3 6M3 3v3h3" className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          </Canvas>
+
+          <InspectorPanel
+            node={selectedNode}
+            open={insOpen}
+            env={env}
+            onClose={() => setInsOpen(false)}
+            onDelete={() => selectedNode && doDelete(selectedNode.id)}
+            onSet={(k, v) => selectedNode && commit(updateData(state, selectedNode.id, { [k]: v }))}
+            onSetMany={(patch) => selectedNode && commit(updateData(state, selectedNode.id, patch))}
+            onAddOption={() => {
+              if (!selectedNode) return;
+              const r = addOption(state, selectedNode.id);
+              if (!r.ok) return toast(r.message);
+              commit(r.state);
+            }}
+            onRemoveOption={(i) => selectedNode && commit(removeOption(state, selectedNode.id, i))}
+          />
         </div>
-      ) : null}
-    </div>
+
+        {widgetChannel && flowId ? (
+          <WebBotPanels
+            tab={shownTab}
+            channel={widgetChannel}
+            whatsapp={whatsappDefaultsFrom(
+              state.nodes.find((n) => n.type === 'trigger'),
+              ctx.senders.chat,
+            )}
+            flowId={flowId}
+            flowName={name}
+            published={published}
+            canEdit={canEditFlow}
+          />
+        ) : null}
+
+        <SaveConfirmModal
+          open={saveOpen}
+          busy={busy}
+          initialName={name}
+          onClose={() => !busy && setSaveOpen(false)}
+          onSave={(n) => void saveFlow(n)}
+        />
+        {validationItems ? (
+          <ValidationPopup
+            items={validationItems}
+            onClose={() => setVres((v) => (v ? { ...v, popup: false } : v))}
+          />
+        ) : null}
+        <AIGenModal
+          open={aiOpen}
+          models={ctx.aiModels}
+          initialPrompt={aiPrompt}
+          flowType={mode}
+          onClose={() => setAiOpen(false)}
+          onGenerate={applyGenerated}
+        />
+        <TestPanel
+          open={testOpen}
+          onClose={() => setTestOpen(false)}
+          nodes={state.nodes}
+          edges={state.edges}
+          runNonce={runNonce}
+          templateButtons={(node) => templateQuickReplies(ctx.templates, node)}
+          templateExists={(node) =>
+            ctx.templates.some((tpl) => tpl.name === String(node.data?.tpl ?? '').trim())
+          }
+          flowName={(id) => ctx.flows.find((f) => f.id === id)?.name}
+        />
+        {toastMsg ? (
+          <div
+            className="fixed top-20 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-[12px] font-medium text-background shadow-lg"
+            role="status"
+          >
+            {toastMsg}
+          </div>
+        ) : null}
+      </div>
+    </FlowEditorContext.Provider>
   );
 }

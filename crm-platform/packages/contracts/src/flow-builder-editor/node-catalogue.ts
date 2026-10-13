@@ -7,6 +7,8 @@
  * The visual side (icon, colour chip) is the web feature's; this file is data and pure functions only.
  */
 
+import { flbCarouselReplies } from './carousel';
+
 /** The eleven channels a flow can run on. `chat` is WhatsApp (any engine); `web` is the website chat widget. */
 export const FLOW_TYPES = [
   'chat',
@@ -92,7 +94,7 @@ export interface FlbNodeTypeDef {
 
 const ALL = FLOW_TYPES;
 const SOCIAL_AND_CHAT = ['chat', ...SOCIAL_FLOW_TYPES] as const;
-/** What the website chat widget renders today: plain text, tap-to-pick replies, a question and the AI reply. Media, lists and carousels wait for the widget to render them. */
+/** What the website chat widget renders today: plain text, tap-to-pick replies, a question, the AI reply and files (image, video, audio, document). Lists and carousels wait for the widget to render them. */
 const WEB_CAPABLE = [...SOCIAL_AND_CHAT, 'web'] as const;
 const CHAT = ['chat'] as const;
 const CALL = ['call'] as const;
@@ -111,15 +113,19 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('trigger', 'Trigger', 'Start', 'Where the flow starts', ALL, { singleton: true }),
   def('message', 'Send message', 'Send', 'Plain text message', WEB_CAPABLE),
   def('template', 'Send template', 'Send', 'Approved template'),
-  def('media', 'Send media', 'Send', 'Image, video, doc, audio', SOCIAL_AND_CHAT),
+  def('media', 'Send media', 'Send', 'Image, video, doc, audio', WEB_CAPABLE),
   def('notify_number', 'Copy to number', 'Send', 'Send a copy to a fixed number'),
   def('wa_to_instagram', 'Hand off to Instagram', 'Engage', 'Send the user an Instagram DM link'),
   def('sequence', 'Send sequence', 'Send', 'Stack text + media in one node'),
   def('buttons', 'Quick replies', 'Send', 'Tap-to-pick reply buttons', WEB_CAPABLE),
+  def('carousel', 'Carousel', 'Send', 'Scrolling cards with pictures and buttons', ['web']),
   def('list', 'List message', 'Send', 'Interactive list picker'),
   def('ask', 'Ask question', 'Listen', 'Save user reply to a var', WEB_CAPABLE),
   // Not Reference nodes: an addition the project owner asked for (TW-FLB-081, 082). WhatsApp only: they wait for a media / location message.
-  def('ask_file', 'Ask for file / image', 'Listen', 'Wait for a photo, document, video or audio'),
+  def('ask_file', 'Ask for file / image', 'Listen', 'Wait for a photo, document, video or audio', [
+    'chat',
+    'web',
+  ]),
   def('ask_location', 'Ask for location', 'Listen', 'Wait for the customer to share a location'),
   def('condition', 'Condition', 'Logic', 'If / else branch', ALL),
   def('delay', 'Wait', 'Logic', 'Pause for X minutes', ALL),
@@ -132,7 +138,7 @@ export const FLB_NODE_TYPE_LIST: readonly FlbNodeTypeDef[] = [
   def('assign', 'Assign agent', 'Contact', 'Hand off to a human'),
   def('subflow', 'Run sub-flow', 'Logic', 'Call another flow'),
   def('end', 'End', 'Start', 'Stop the flow here', ALL, { terminal: true }),
-  def('cta', 'Call to action', 'Engage', 'Send a CTA button'),
+  def('cta', 'Call to action', 'Engage', 'Send a CTA button', ['chat', 'web']),
   def('location', 'Location', 'Engage', 'Send a map pin'),
   def('poll', 'Poll', 'Engage', 'Send a poll'),
   def('chatbot', 'Chatbot', 'Engage', 'Trigger another chatbot'),
@@ -293,6 +299,14 @@ export type FlbNodeData = Record<string, unknown>;
 /** What a fresh node of `type` carries (Reference `defaultData`). Unknown types start empty. */
 export function flbDefaultNodeData(type: string): FlbNodeData {
   switch (type) {
+    case 'carousel':
+      return {
+        text: '',
+        cards: [
+          { image: '', title: '', text: '', buttons: [{ type: 'reply', label: 'Choose', value: '' }] },
+        ],
+        var: 'choice',
+      };
     case 'trigger':
       return {
         kind: 'keyword',
@@ -811,6 +825,16 @@ export function flbPortsFor(
       return out('sent');
     case 'wa_to_instagram':
       return out('link sent');
+    case 'carousel': {
+      const replies = flbCarouselReplies(d.cards);
+      return replies.length === 0
+        ? out('next')
+        : replies.map((r, i) => ({
+            id: `p${i}`,
+            label: r.label || `Button ${i + 1}`,
+            kind: 'flow' as const,
+          }));
+    }
     case 'buttons':
     case 'poll': {
       const opts = asArray(d.options);

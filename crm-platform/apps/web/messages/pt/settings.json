@@ -309,6 +309,11 @@
         "label": "Atribuição automática",
         "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
         "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
+      },
+      "web": {
+        "label": "Chat do site",
+        "description": "Bots criados para o chat do seu site e o widget em que cada um funciona.",
+        "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
       }
     }
   }

@@ -164,7 +164,12 @@
       "messaging": "Mesajlaşma akışı",
       "messagingNote": "WhatsApp, Instagram veya Facebook — kanalı Tetikleyici düğümünde değiştirin",
       "call": "Arama",
-      "callNote": "Yapay zekâ sesli IVR — söyle, dinle, aktar"
+      "callNote": "Yapay zekâ sesli IVR — söyle, dinle, aktar",
+      "subtitleSimple": "Her bot tek bir kanal için oluşturulur, çünkü her bileşen her kanalda çalışmaz.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Bağlı bir WhatsApp numarası üzerinden müşterilere yanıt verir",
+      "web": "Web sitesi sohbeti",
+      "webNote": "Web sitenize eklediğiniz bir sohbet widget'ı"
     },
     "rename": {
       "title": "Akışı yeniden adlandır",
@@ -697,14 +702,16 @@
           "wordsPlaceholder": "merhaba, selam, menü",
           "whatsappNumber": "WhatsApp numarası",
           "noNumberHint": "Henüz bağlı bir WhatsApp numarası yok: Ayarlar altında bir numara bağlayın, ardından burada seçin.",
-          "chooseNumber": "Bir numara seçin…"
+          "chooseNumber": "Bir numara seçin…",
+          "connectedNumber": "Bağlı WhatsApp numaranızdan yanıt verir: {number}"
         },
         "add": {
           "addStep": "Adım ekle",
           "groups": {
             "send": "Gönder",
             "ask": "Müşteriye sor",
-            "handoff": "Devret"
+            "handoff": "Devret",
+            "logic": "Karar ver"
           },
           "blockedTitle": "Düğmeler ve listeler akışı sonlandırır, bu yüzden yalnızca en sona konabilirler."
         },
@@ -747,7 +754,8 @@
             "placeholder": "Düğme {n}",
             "remove": "Düğmeyi kaldır",
             "add": "Düğme ekle",
-            "saveIn": "Dokunulan düğmeyi şuraya kaydet"
+            "saveIn": "Dokunulan düğmeyi şuraya kaydet",
+            "handoff": "Bir kişiye devret (canlı temsilci)"
           },
           "list": {
             "above": "Listenin üstündeki mesaj",
@@ -779,7 +787,9 @@
             "dateFormat": "Tarih biçimi",
             "dateFormatHint": "Müşterinin tarihi nasıl yazacağı. Yazıldığı gibi kaydedilir ve _iso değişkeninde yıl-ay-gün biçiminde bir kopyası tutulur.",
             "saveIn": "Yanıtı şuraya kaydet",
-            "retriesHint": "0, yanıt doğru olana kadar sormaya devam eder."
+            "retriesHint": "0, yanıt doğru olana kadar sormaya devam eder.",
+            "verifyOtp": "Numarayı tek kullanımlık kodla doğrula",
+            "verifyOtpHint": "Numaraya bir kod gönderilir (ülke kodu gerekir) ve ziyaretçi sohbette yazar. Numara yalnızca kod doğruysa saklanır; _verified ile biten değişken evet ya da hayır der."
           },
           "askFile": {
             "accepted": "Kabul edilen dosyalar",
@@ -830,9 +840,48 @@
           },
           "cta": {
             "buttonText": "Düğme metni",
-            "opens": "Açar (bağlantı)"
+            "opens": "Açar (bağlantı)",
+            "type": "Açar",
+            "kinds": {
+              "url": "Bir web sayfası",
+              "phone": "Bir telefon araması",
+              "email": "Bir e-posta"
+            },
+            "add": "Başka bir düğme ekle",
+            "remove": "Düğmeyi kaldır",
+            "opensPhone": "Telefon numarası",
+            "opensEmail": "E-posta adresi"
+          },
+          "carousel": {
+            "intro": "Kartların üstündeki mesaj",
+            "card": "Kart {n}",
+            "image": "Görsel bağlantısı (isteğe bağlı)",
+            "title": "Başlık",
+            "text": "Metin",
+            "buttons": "Düğmeler (en fazla 2)",
+            "label": "Düğme metni",
+            "addCard": "Kart ekle",
+            "removeCard": "Kartı kaldır",
+            "addButton": "Düğme ekle",
+            "removeButton": "Düğmeyi kaldır",
+            "btnKinds": {
+              "reply": "Sohbette yanıtla",
+              "url": "Bir web sayfası aç",
+              "phone": "Bir numarayı ara",
+              "email": "E-posta gönder",
+              "agent": "Bir kişiyle konuş"
+            }
+          },
+          "condition": {
+            "info": "Kurallar ekleyin (bir değişken, bir karşılaştırma ve bir değer). AND veya OR ile birleştirin, gerekirse grupları iç içe koyun.",
+            "yes": "Kurallar sağlanırsa şuraya git",
+            "no": "Sağlanmazsa şuraya git"
+          },
+          "handoff": {
+            "hint": "Ziyaretçi, notunuzla birlikte bu ekibe aktarılır. Bu düğmeden sonra hiçbir şey bağlamanız gerekmez."
           }
-        }
+        },
+        "branchAdd": "“{title}” için adım ekle"
       },
       "formsCore": {
         "helpers": {
@@ -1825,6 +1874,21 @@
           "sampleName": "Test yeri",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Bot bölümleri",
+        "build": "Oluştur",
+        "customize": "Özelleştir",
+        "saveFirst": "Önce botu kaydedin.",
+        "needsCustomizing": "Özelleştirme henüz kaydedilmedi. Özelleştir'i açın.",
+        "customizeFirst": "Yayınlamadan önce sohbet widget'ınızı özelleştirin ve bir kez kaydedin.",
+        "deploy": "Yayına al",
+        "customizeFirstWhatsapp": "Yayınlamadan önce WhatsApp düğmenizi özelleştirin ve bir kez kaydedin."
+      },
+      "buttonIcon": {
+        "label": "Simge (isteğe bağlı)",
+        "add": "Simge ekle",
+        "saveFirst": "Simge eklemek için botu bir kez kaydedin."
       }
     },
     "contracts": {
@@ -2100,6 +2164,10 @@
         "api_library": {
           "label": "API (kitaplıktan)",
           "description": "API Kitaplığı'ndaki kayıtlı bir API'yi çağır"
+        },
+        "carousel": {
+          "label": "Karusel",
+          "description": "Görsel ve düğmeli kaydırılabilir kartlar"
         }
       },
       "groups": {
@@ -2148,7 +2216,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-posta"
+        "email": "E-posta",
+        "web": "Web sitesi sohbeti"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2321,6 +2390,14 @@
         "askLocation": {
           "label": "Konumu",
           "help": "Müşterinin konum paylaşmasını bekle"
+        },
+        "carousel": {
+          "label": "Karusel",
+          "help": "Görsel ve düğmeli kaydırılabilir kartlar"
+        },
+        "condition": {
+          "label": "Koşul",
+          "help": "Müşterinin söylediğine veya kaydettiğine göre dallanın, AND / OR kurallarıyla"
         }
       },
       "typeLabel": {
@@ -2335,7 +2412,9 @@
         "location": "Konum",
         "template": "Şablon",
         "cta": "Bağlantı düğmesi",
-        "assign": "Bir temsilciye ata"
+        "assign": "Bir temsilciye ata",
+        "carousel": "Karusel",
+        "condition": "Koşul"
       },
       "stepLabel": {
         "questionOf": "Soru · {kind}"
@@ -2372,7 +2451,10 @@
         "addRow": "Adım {stage}: en az bir satır ekleyin.",
         "rowTitle": "Adım {stage}: her satırın en fazla {max} karakterlik bir başlığı olmalı.",
         "rowDescriptionTooLong": "Adım {stage}: bir satır açıklaması {max} karakterden uzun.",
-        "variableUsed": "Adım {stage}: \"{name}\" zaten {other} adımında kullanılıyor; her yanıta kendi adını verin."
+        "variableUsed": "Adım {stage}: \"{name}\" zaten {other} adımında kullanılıyor; her yanıta kendi adını verin.",
+        "carouselCards": "Adım {stage}: en az bir kart ekleyin ve her karta bir başlık verin.",
+        "carouselButtons": "Adım {stage}: her düğmeye bir ad verin, bir şey açan düğmeye de bağlantı, numara veya adres girin.",
+        "conditionIncomplete": "Adım {stage}: koşulun kurallarını tamamlayın (her birinde bir değişken ve bir değer)."
       }
     },
     "waboImport": {
@@ -2381,7 +2463,11 @@
         "buttonNoTarget": "\"{type}\" düğmesinin (\"{text}\") Basit'te bir hedefi yok.",
         "skippedStep": "\"{sub}\" adımı atlandı: Basit'te buna benzer bir şey yok.",
         "leadsOutside": "\"{text}\" bu dosyada olmayan bir akışa gidiyor; bağlayana kadar orada biter.",
-        "connectsOutside": "Bir adım bu dosyada olmayan bir düğüme ({id}) bağlanıyor; bağlantısız kalır."
+        "connectsOutside": "Bir adım bu dosyada olmayan bir düğüme ({id}) bağlanıyor; bağlantısız kalır.",
+        "dateLimits": "Tarih sorusu biçimini korur ama sınırlarını (en erken, en geç, hariç günler) korumaz.",
+        "tooManyButtons": "Bir düğme mesajında sığandan fazla seçenek vardı; fazla düğmeler atlandı.",
+        "agentTeam": "Bir canlı temsilci düğmesi korundu: görüşmeyi alacak ekibi seçin.",
+        "tooManySlides": "Bir karuselde 10'dan fazla kart vardı; fazla kartlar atlandı."
       },
       "reasons": {
         "notExport": "Bu dosya bir akış dışa aktarımı değil. Akışlar'dan dışa aktarılmış bir .json dosyası veya wabo konsolundan dışa aktarılmış bir akış kullanın.",

@@ -164,7 +164,12 @@
       "messaging": "Luồng tin nhắn",
       "messagingNote": "WhatsApp, Instagram hoặc Facebook — đổi kênh ở nút Kích hoạt",
       "call": "Cuộc gọi",
-      "callNote": "IVR thoại AI — nói, lắng nghe, chuyển máy"
+      "callNote": "IVR thoại AI — nói, lắng nghe, chuyển máy",
+      "subtitleSimple": "Mỗi bot được xây dựng cho một kênh, vì không phải thành phần nào cũng hoạt động trên mọi kênh.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Trả lời khách hàng trên số WhatsApp đã kết nối",
+      "web": "Chat trên website",
+      "webNote": "Một widget chat bạn thêm vào website của mình"
     },
     "rename": {
       "title": "Đổi tên luồng",
@@ -697,14 +702,16 @@
           "wordsPlaceholder": "hi, hello, menu",
           "whatsappNumber": "Số WhatsApp",
           "noNumberHint": "Chưa kết nối số WhatsApp nào: hãy kết nối một số trong Cài đặt, rồi chọn tại đây.",
-          "chooseNumber": "Chọn số…"
+          "chooseNumber": "Chọn số…",
+          "connectedNumber": "Trả lời bằng số WhatsApp đã kết nối của bạn: {number}"
         },
         "add": {
           "addStep": "Thêm bước",
           "groups": {
             "send": "Gửi",
             "ask": "Hỏi khách",
-            "handoff": "Chuyển giao"
+            "handoff": "Chuyển giao",
+            "logic": "Quyết định"
           },
           "blockedTitle": "Nhóm nút và danh sách kết thúc luồng, nên chỉ có thể đặt ở cuối."
         },
@@ -747,7 +754,8 @@
             "placeholder": "Nút {n}",
             "remove": "Xóa nút",
             "add": "Thêm nút",
-            "saveIn": "Lưu nút đã chạm vào"
+            "saveIn": "Lưu nút đã chạm vào",
+            "handoff": "Chuyển cho một người (nhân viên trực tiếp)"
           },
           "list": {
             "above": "Tin nhắn phía trên danh sách",
@@ -779,7 +787,9 @@
             "dateFormat": "Định dạng ngày",
             "dateFormatHint": "Cách khách nhập ngày. Được lưu đúng như đã nhập, và bản sao theo dạng năm-tháng-ngày trong biến _iso.",
             "saveIn": "Lưu câu trả lời vào",
-            "retriesHint": "0 sẽ tiếp tục hỏi cho đến khi trả lời đúng."
+            "retriesHint": "0 sẽ tiếp tục hỏi cho đến khi trả lời đúng.",
+            "verifyOtp": "Xác minh số bằng mã dùng một lần",
+            "verifyOtpHint": "Một mã được gửi tới số (cần mã quốc gia) và khách nhập nó trong chat. Số chỉ được giữ khi mã đúng; biến kết thúc bằng _verified cho biết có hoặc không."
           },
           "askFile": {
             "accepted": "Tệp được chấp nhận",
@@ -830,9 +840,48 @@
           },
           "cta": {
             "buttonText": "Văn bản nút",
-            "opens": "Mở (liên kết)"
+            "opens": "Mở (liên kết)",
+            "type": "Mở",
+            "kinds": {
+              "url": "Một trang web",
+              "phone": "Một cuộc gọi",
+              "email": "Một email"
+            },
+            "add": "Thêm nút khác",
+            "remove": "Xóa nút",
+            "opensPhone": "Số điện thoại",
+            "opensEmail": "Địa chỉ email"
+          },
+          "carousel": {
+            "intro": "Tin nhắn phía trên các thẻ",
+            "card": "Thẻ {n}",
+            "image": "Liên kết hình ảnh (không bắt buộc)",
+            "title": "Tiêu đề",
+            "text": "Văn bản",
+            "buttons": "Nút (tối đa 2)",
+            "label": "Chữ trên nút",
+            "addCard": "Thêm thẻ",
+            "removeCard": "Xóa thẻ",
+            "addButton": "Thêm nút",
+            "removeButton": "Xóa nút",
+            "btnKinds": {
+              "reply": "Trả lời trong chat",
+              "url": "Mở một trang web",
+              "phone": "Gọi một số",
+              "email": "Gửi email",
+              "agent": "Nói chuyện với một người"
+            }
+          },
+          "condition": {
+            "info": "Thêm quy tắc (một biến, một phép so sánh và một giá trị). Nối bằng AND hoặc OR và lồng nhóm khi cần.",
+            "yes": "Khi quy tắc đúng, đi tới",
+            "no": "Khi không đúng, đi tới"
+          },
+          "handoff": {
+            "hint": "Khách truy cập được chuyển cho nhóm này kèm ghi chú của bạn. Không cần nối gì sau nút này."
           }
-        }
+        },
+        "branchAdd": "Thêm bước cho “{title}”"
       },
       "formsCore": {
         "helpers": {
@@ -1825,6 +1874,21 @@
           "sampleName": "Địa điểm thử nghiệm",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Các phần của bot",
+        "build": "Xây dựng",
+        "customize": "Tùy chỉnh",
+        "saveFirst": "Hãy lưu bot trước.",
+        "needsCustomizing": "Phần Tùy chỉnh chưa được lưu. Hãy mở Tùy chỉnh.",
+        "customizeFirst": "Hãy tùy chỉnh widget chat và lưu một lần trước khi xuất bản.",
+        "deploy": "Triển khai",
+        "customizeFirstWhatsapp": "Hãy tùy chỉnh nút WhatsApp và lưu một lần trước khi xuất bản."
+      },
+      "buttonIcon": {
+        "label": "Biểu tượng (tùy chọn)",
+        "add": "Thêm biểu tượng",
+        "saveFirst": "Hãy lưu bot một lần để thêm biểu tượng."
       }
     },
     "contracts": {
@@ -2100,6 +2164,10 @@
         "api_library": {
           "label": "API (từ thư viện)",
           "description": "Gọi API đã lưu từ Thư viện API"
+        },
+        "carousel": {
+          "label": "Băng chuyền",
+          "description": "Thẻ cuộn được có hình ảnh và nút"
         }
       },
       "groups": {
@@ -2148,7 +2216,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Email"
+        "email": "Email",
+        "web": "Chat trên website"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2321,6 +2390,14 @@
         "askLocation": {
           "label": "Vị trí của họ",
           "help": "Chờ khách hàng chia sẻ vị trí"
+        },
+        "carousel": {
+          "label": "Băng chuyền",
+          "help": "Thẻ cuộn được có hình ảnh và nút"
+        },
+        "condition": {
+          "label": "Điều kiện",
+          "help": "Rẽ nhánh theo điều gì khách đã nói hoặc lưu, với quy tắc AND / OR"
         }
       },
       "typeLabel": {
@@ -2335,7 +2412,9 @@
         "location": "Vị trí",
         "template": "Mẫu",
         "cta": "Nút liên kết",
-        "assign": "Gán cho nhân viên"
+        "assign": "Gán cho nhân viên",
+        "carousel": "Băng chuyền",
+        "condition": "Điều kiện"
       },
       "stepLabel": {
         "questionOf": "Câu hỏi · {kind}"
@@ -2372,7 +2451,10 @@
         "addRow": "Bước {stage}: thêm ít nhất một dòng.",
         "rowTitle": "Bước {stage}: mỗi dòng cần tiêu đề tối đa {max} ký tự.",
         "rowDescriptionTooLong": "Bước {stage}: mô tả dòng dài hơn {max} ký tự.",
-        "variableUsed": "Bước {stage}: \"{name}\" đã được bước {other} sử dụng; hãy đặt tên riêng cho từng đáp án."
+        "variableUsed": "Bước {stage}: \"{name}\" đã được bước {other} sử dụng; hãy đặt tên riêng cho từng đáp án.",
+        "carouselCards": "Bước {stage}: thêm ít nhất một thẻ và đặt tiêu đề cho mỗi thẻ.",
+        "carouselButtons": "Bước {stage}: đặt tên cho mỗi nút, cùng liên kết, số hoặc địa chỉ ở nút mở ra điều gì đó.",
+        "conditionIncomplete": "Bước {stage}: hoàn thành các quy tắc của điều kiện (mỗi quy tắc có một biến và một giá trị)."
       }
     },
     "waboImport": {
@@ -2381,7 +2463,11 @@
         "buttonNoTarget": "Nút \"{type}\" (\"{text}\") không có đích trong chế độ Đơn giản.",
         "skippedStep": "Đã bỏ qua bước \"{sub}\": chế độ Đơn giản không có bước tương tự.",
         "leadsOutside": "\"{text}\" dẫn đến một luồng không có trong tệp này; luồng sẽ kết thúc tại đó cho đến khi bạn liên kết.",
-        "connectsOutside": "Một bước kết nối đến nút không có trong tệp này ({id}); nó vẫn chưa được liên kết."
+        "connectsOutside": "Một bước kết nối đến nút không có trong tệp này ({id}); nó vẫn chưa được liên kết.",
+        "dateLimits": "Câu hỏi ngày giữ định dạng nhưng không giữ giới hạn (sớm nhất, muộn nhất, ngày loại trừ).",
+        "tooManyButtons": "Một tin nhắn nút có nhiều lựa chọn hơn mức chứa được; các nút thừa đã bị bỏ.",
+        "agentTeam": "Một nút nhân viên trực tiếp đã được giữ: hãy chọn nhóm nhận cuộc trò chuyện.",
+        "tooManySlides": "Một băng chuyền có hơn 10 thẻ; các thẻ thừa đã bị bỏ."
       },
       "reasons": {
         "notExport": "Tệp này không phải là tệp xuất luồng. Hãy dùng tệp .json xuất từ Flows, hoặc luồng xuất từ bảng điều khiển wabo.",

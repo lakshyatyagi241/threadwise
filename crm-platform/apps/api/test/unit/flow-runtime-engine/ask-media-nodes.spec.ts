@@ -130,7 +130,10 @@ describe('ask_file: the prompt and the parked wait', () => {
     const run = runOf(g, { vars: { name: 'Sam' } });
     const h = harness();
     const out = await executeCurrent(run, h.deps);
-    expect(h.sent).toEqual([{ kind: 'text', body: 'Send your ID, Sam' }]);
+    // The question says it waits for a file, so the website chat window shows its attach button.
+    expect(h.sent).toEqual([
+      { kind: 'text', body: 'Send your ID, Sam', input: { type: 'file', accept: [] } },
+    ]);
     expect(out.transition).toMatchObject({
       t: 'wait',
       wait: { kind: 'Custom', handler: 'AskFile', variable: 'id_card', data: { attempts: 0 } },
@@ -239,7 +242,11 @@ describe('ask_file: the reply', () => {
     run.vars.name = 'Sam';
     const out = await answer(run, h, reply({ kind: 'text', body: 'no thanks' }));
     expect(out.transition).toMatchObject({ t: 'wait', wait: { data: { attempts: 1 } } });
-    expect(h.sent.at(-1)).toEqual({ kind: 'text', body: 'Please attach a file, Sam' });
+    expect(h.sent.at(-1)).toEqual({
+      kind: 'text',
+      body: 'Please attach a file, Sam',
+      input: { type: 'file', accept: [] },
+    });
     expect(run.wait?.data).toEqual({ attempts: 1 });
   });
 

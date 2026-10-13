@@ -309,6 +309,11 @@
         "label": "Assegnazione automatica",
         "description": "Assegna automaticamente le nuove conversazioni all’agente giusto, a turno o secondo regole.",
         "keywords": "instradamento, round robin, assegna, agenti, regole inbox, distribuisci, proprietario"
+      },
+      "web": {
+        "label": "Chat sul sito web",
+        "description": "Bot creati per la chat del tuo sito web e il widget in cui funziona ciascuno.",
+        "keywords": "web, sito web, widget, chatbot, incorporare, chat dal vivo"
       }
     }
   }

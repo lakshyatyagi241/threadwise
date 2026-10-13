@@ -164,7 +164,12 @@
       "messaging": "Nachrichten-Flow",
       "messagingNote": "WhatsApp, Instagram oder Facebook: Kanal im Auslöser-Knoten wechseln",
       "call": "Anruf",
-      "callNote": "KI-Sprach-IVR: sagen, zuhören, weiterleiten"
+      "callNote": "KI-Sprach-IVR: sagen, zuhören, weiterleiten",
+      "subtitleSimple": "Jeder Bot wird für einen Kanal erstellt, da nicht jede Komponente auf jedem Kanal funktioniert.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Antwortet Kunden auf einer verbundenen WhatsApp-Nummer",
+      "web": "Website-Chat",
+      "webNote": "Ein Chat-Widget, das Sie Ihrer Website hinzufügen"
     },
     "rename": {
       "title": "Flow umbenennen",
@@ -697,14 +702,16 @@
           "wordsPlaceholder": "hi, hallo, menü",
           "whatsappNumber": "WhatsApp-Nummer",
           "noNumberHint": "Es ist noch keine WhatsApp-Nummer verbunden: Verbinden Sie eine unter Einstellungen und wählen Sie sie dann hier aus.",
-          "chooseNumber": "Nummer auswählen ..."
+          "chooseNumber": "Nummer auswählen ...",
+          "connectedNumber": "Antwortet über Ihre verbundene WhatsApp-Nummer: {number}"
         },
         "add": {
           "addStep": "Schritt hinzufügen",
           "groups": {
             "send": "Senden",
             "ask": "Den Kunden fragen",
-            "handoff": "Übergeben"
+            "handoff": "Übergeben",
+            "logic": "Entscheiden"
           },
           "blockedTitle": "Schaltflächen und Listen beenden einen Flow, daher können sie nur am Ende stehen."
         },
@@ -747,7 +754,8 @@
             "placeholder": "Schaltfläche {n}",
             "remove": "Schaltfläche entfernen",
             "add": "Schaltfläche hinzufügen",
-            "saveIn": "Die angetippte Schaltfläche speichern in"
+            "saveIn": "Die angetippte Schaltfläche speichern in",
+            "handoff": "An eine Person übergeben (Live-Agent)"
           },
           "list": {
             "above": "Nachricht über der Liste",
@@ -779,7 +787,9 @@
             "dateFormat": "Datumsformat",
             "dateFormatHint": "So schreibt der Kunde das Datum. Es wird wie eingegeben gespeichert, eine Kopie als Jahr-Monat-Tag in der Variablen _iso.",
             "saveIn": "Antwort speichern in",
-            "retriesHint": "0 fragt so lange weiter, bis die Antwort stimmt."
+            "retriesHint": "0 fragt so lange weiter, bis die Antwort stimmt.",
+            "verifyOtp": "Nummer mit einem Einmalcode bestätigen",
+            "verifyOtpHint": "Ein Code wird an die Nummer gesendet (Ländervorwahl nötig) und der Besucher tippt ihn im Chat ein. Die Nummer wird nur gespeichert, wenn der Code stimmt; die Variable mit der Endung _verified sagt ja oder nein."
           },
           "askFile": {
             "accepted": "Akzeptierte Dateien",
@@ -830,9 +840,48 @@
           },
           "cta": {
             "buttonText": "Schaltflächentext",
-            "opens": "Öffnet (Link)"
+            "opens": "Öffnet (Link)",
+            "type": "Öffnet",
+            "kinds": {
+              "url": "Eine Webseite",
+              "phone": "Einen Anruf",
+              "email": "Eine E-Mail"
+            },
+            "add": "Weitere Schaltfläche hinzufügen",
+            "remove": "Schaltfläche entfernen",
+            "opensPhone": "Telefonnummer",
+            "opensEmail": "E-Mail-Adresse"
+          },
+          "carousel": {
+            "intro": "Nachricht über den Karten",
+            "card": "Karte {n}",
+            "image": "Bildlink (optional)",
+            "title": "Titel",
+            "text": "Text",
+            "buttons": "Schaltflächen (bis zu 2)",
+            "label": "Text der Schaltfläche",
+            "addCard": "Karte hinzufügen",
+            "removeCard": "Karte entfernen",
+            "addButton": "Schaltfläche hinzufügen",
+            "removeButton": "Schaltfläche entfernen",
+            "btnKinds": {
+              "reply": "Im Chat antworten",
+              "url": "Webseite öffnen",
+              "phone": "Nummer anrufen",
+              "email": "E-Mail senden",
+              "agent": "Mit einer Person sprechen"
+            }
+          },
+          "condition": {
+            "info": "Fügen Sie Regeln hinzu (eine Variable, einen Vergleich und einen Wert). Verknüpfen Sie sie mit AND oder OR und verschachteln Sie bei Bedarf Gruppen.",
+            "yes": "Wenn die Regeln zutreffen, weiter zu",
+            "no": "Wenn sie nicht zutreffen, weiter zu"
+          },
+          "handoff": {
+            "hint": "Der Besucher wird mit Ihrer Notiz an dieses Team übergeben. Nach dieser Schaltfläche muss nichts verbunden werden."
           }
-        }
+        },
+        "branchAdd": "Schritt für „{title}“ hinzufügen"
       },
       "formsCore": {
         "helpers": {
@@ -1825,6 +1874,21 @@
           "sampleName": "Testort",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Bot-Bereiche",
+        "build": "Erstellen",
+        "customize": "Anpassen",
+        "saveFirst": "Speichern Sie zuerst den Bot.",
+        "needsCustomizing": "„Anpassen“ ist noch nicht gespeichert. Öffnen Sie „Anpassen“.",
+        "customizeFirst": "Passen Sie Ihr Chat-Widget an und speichern Sie es einmal, bevor Sie veröffentlichen.",
+        "deploy": "Bereitstellen",
+        "customizeFirstWhatsapp": "Passen Sie Ihren WhatsApp-Button an und speichern Sie ihn einmal, bevor Sie veröffentlichen."
+      },
+      "buttonIcon": {
+        "label": "Symbol (optional)",
+        "add": "Symbol hinzufügen",
+        "saveFirst": "Speichere den Bot einmal, um ein Symbol hinzuzufügen."
       }
     },
     "contracts": {
@@ -2100,6 +2164,10 @@
         "api_library": {
           "label": "API (aus Bibliothek)",
           "description": "Eine gespeicherte API aus der API-Bibliothek aufrufen"
+        },
+        "carousel": {
+          "label": "Karussell",
+          "description": "Scrollbare Karten mit Bildern und Schaltflächen"
         }
       },
       "groups": {
@@ -2148,7 +2216,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-Mail"
+        "email": "E-Mail",
+        "web": "Website-Chat"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2321,6 +2390,14 @@
         "askLocation": {
           "label": "Standort des Kunden",
           "help": "Warten, bis der Kunde einen Standort teilt"
+        },
+        "carousel": {
+          "label": "Karussell",
+          "help": "Scrollbare Karten mit Bildern und Schaltflächen"
+        },
+        "condition": {
+          "label": "Bedingung",
+          "help": "Verzweigen nach dem, was der Kunde gesagt oder gespeichert hat, mit AND-/OR-Regeln"
         }
       },
       "typeLabel": {
@@ -2335,7 +2412,9 @@
         "location": "Standort",
         "template": "Vorlage",
         "cta": "Link-Schaltfläche",
-        "assign": "Einem Agenten zuweisen"
+        "assign": "Einem Agenten zuweisen",
+        "carousel": "Karussell",
+        "condition": "Bedingung"
       },
       "stepLabel": {
         "questionOf": "Frage · {kind}"
@@ -2372,7 +2451,10 @@
         "addRow": "Schritt {stage}: Fügen Sie mindestens eine Zeile hinzu.",
         "rowTitle": "Schritt {stage}: Jede Zeile braucht einen Titel mit bis zu {max} Zeichen.",
         "rowDescriptionTooLong": "Schritt {stage}: Eine Zeilenbeschreibung ist länger als {max} Zeichen.",
-        "variableUsed": "Schritt {stage}: „{name}“ wird bereits von Schritt {other} verwendet. Geben Sie jeder Antwort einen eigenen Namen."
+        "variableUsed": "Schritt {stage}: „{name}“ wird bereits von Schritt {other} verwendet. Geben Sie jeder Antwort einen eigenen Namen.",
+        "carouselCards": "Schritt {stage}: Fügen Sie mindestens eine Karte hinzu und geben Sie jeder Karte einen Titel.",
+        "carouselButtons": "Schritt {stage}: Geben Sie jeder Schaltfläche einen Namen sowie einen Link, eine Nummer oder eine Adresse, wo sie etwas öffnet.",
+        "conditionIncomplete": "Schritt {stage}: Vervollständigen Sie die Regeln der Bedingung (jeweils eine Variable und ein Wert)."
       }
     },
     "waboImport": {
@@ -2381,7 +2463,11 @@
         "buttonNoTarget": "Eine Schaltfläche vom Typ „{type}“ („{text}“) hat in Simple kein Ziel.",
         "skippedStep": "Der Schritt „{sub}“ wurde übersprungen: Simple kennt nichts Vergleichbares.",
         "leadsOutside": "„{text}“ führt zu einem Flow, der nicht in dieser Datei enthalten ist. Er endet dort, bis Sie ihn verknüpfen.",
-        "connectsOutside": "Ein Schritt ist mit einem Knoten verbunden, der nicht in dieser Datei enthalten ist ({id}). Er bleibt unverknüpft."
+        "connectsOutside": "Ein Schritt ist mit einem Knoten verbunden, der nicht in dieser Datei enthalten ist ({id}). Er bleibt unverknüpft.",
+        "dateLimits": "Eine Datumsfrage behält ihr Format, aber nicht ihre Grenzen (frühestens, spätestens, ausgeschlossene Tage).",
+        "tooManyButtons": "Eine Schaltflächen-Nachricht hatte mehr Auswahlmöglichkeiten, als passen; die überzähligen Schaltflächen wurden weggelassen.",
+        "agentTeam": "Eine Live-Agent-Schaltfläche wurde übernommen: Wählen Sie das Team, das das Gespräch erhält.",
+        "tooManySlides": "Ein Karussell hatte mehr als 10 Karten; die überzähligen Karten wurden weggelassen."
       },
       "reasons": {
         "notExport": "Diese Datei ist kein Flow-Export. Verwenden Sie eine .json-Datei aus Flows oder einen Flow, der aus der wabo-Konsole exportiert wurde.",

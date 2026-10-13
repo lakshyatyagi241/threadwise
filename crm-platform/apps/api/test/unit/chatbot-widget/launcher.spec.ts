@@ -24,6 +24,48 @@ describe('the config shape', () => {
       avatar: 'preset:support',
       greeting: 'HI THERE!',
       introMessage: 'We are here to help you! Chat with us on WhatsApp for any queries.',
+      botName: '',
+      subHeader: 'Typically replies within 5 mins',
+      ctaText: 'Start Conversation',
+      popup: {
+        enabled: false,
+        position: 'top',
+        style: 'bubble',
+        text: 'Hi! May I assist you?',
+        image: '',
+      },
+      animation: 'none',
+      badge: true,
+      chat: {
+        fill: 'outline',
+        shape: 'pill',
+        font: 'system',
+        size: 'standard',
+        header: 'diagonal',
+        direction: 'auto',
+        icons: true,
+        suggestions: [],
+        suggestionNodes: [],
+        suggestionsOn: true,
+        actions: true,
+        expand: true,
+        voice: false,
+        logo: '',
+        avatar: '',
+        background: '',
+        corner: 'rounded',
+        autoOpen: 0,
+        sound: false,
+        notice: { enabled: false, icon: 1, items: [] },
+        quickMenu: { enabled: false, view: 'list', items: [] },
+        banners: { enabled: false, items: [] },
+        fontSize: 14,
+        hoverBg: '',
+        soundVolume: 70,
+        speak: false,
+        pip: false,
+        devices: { desktop: true, tablet: true, mobile: true },
+      },
       desktop: { side: 'right', sideSpacing: 10, bottomSpacing: 10 },
       mobile: { side: 'right', sideSpacing: 10, bottomSpacing: 60 },
     });
@@ -281,11 +323,13 @@ describe('the loader script', () => {
     const r = run();
     const wrap = r.body.children[0]!;
     expect(wrap.className).toBe(`wgt-${SHORT}`);
+    // The launcher sits in a dock (with the popup, when there is one), so it can be placed beside or under it.
     expect(wrap.children.map((c) => c.id)).toEqual([
       `wgt-panel-${SHORT}`,
-      `wgt-launch-${SHORT}`,
+      '',
       `wgt-close-${SHORT}`,
     ]);
+    expect(wrap.children[1]!.children.map((c) => c.id)).toEqual([`wgt-launch-${SHORT}`]);
   });
   it('the pill launcher says Chat With Us; the icon launcher is a round button with no text', () => {
     const pill = run().byId(`wgt-launch-${SHORT}`);
@@ -552,5 +596,162 @@ describe('the builder preview flags', () => {
     inert.click(start);
     expect(inert.opened).toEqual([]);
     expect(run({ whatsappUrl: null }).byId(`wgt-start-${SHORT}`).disabled).toBe(true);
+  });
+});
+
+describe('the button options: bot name, sub-header, button text, popup and animation', () => {
+  const launcher = (over: Record<string, unknown>) => widgetLauncherSchema.parse(over);
+  const textOf = (r: ReturnType<typeof run>, text: string) =>
+    r.created.some((e) => e.textContent === text);
+
+  it("shows the bot name set for the button in the header, else the bot's own name", () => {
+    const named = run({ launcher: launcher({ botName: 'Acme help' }) });
+    expect(named.created.find((e) => e.attrs['data-testid'] === 'wgt-name')!.textContent).toBe(
+      'Acme help',
+    );
+    const plain = run();
+    expect(plain.created.find((e) => e.attrs['data-testid'] === 'wgt-name')!.textContent).toBe(
+      'Acme Shop',
+    );
+  });
+
+  it('draws the sub-header and the button text from the settings', () => {
+    const r = run({ launcher: launcher({ subHeader: 'We reply fast', ctaText: 'Chat now' }) });
+    expect(textOf(r, 'We reply fast')).toBe(true);
+    expect(textOf(r, 'Chat now')).toBe(true);
+    expect(textOf(r, 'Typically replies within 5 mins')).toBe(false);
+    expect(textOf(r, 'Start Conversation')).toBe(false);
+  });
+
+  it('has no popup unless it is switched on', () => {
+    const r = run();
+    expect(r.created.some((e) => e.attrs['data-testid'] === 'wgt-popup')).toBe(false);
+  });
+
+  it('shows the popup beside the closed launcher, hides it while the panel is open, and a visitor can dismiss it', () => {
+    const r = run({
+      launcher: launcher({ popup: { enabled: true, text: 'Need a hand?', position: 'side' } }),
+    });
+    const pop = r.created.find((e) => e.attrs['data-testid'] === 'wgt-popup')!;
+    expect(pop.children.some((c) => c.textContent === 'Need a hand?')).toBe(true);
+    expect(pop.style.display).toBe('flex');
+    r.click(r.byId(`wgt-launch-${SHORT}`));
+    expect(pop.style.display).toBe('none');
+    r.click(r.byId(`wgt-close-${SHORT}`));
+    expect(pop.style.display).toBe('flex');
+    r.click(r.created.find((e) => e.attrs['data-testid'] === 'wgt-popup-close')!);
+    expect(pop.style.display).toBe('none');
+  });
+
+  it('puts the popup above the launcher or beside it, on the side the launcher is not', () => {
+    const dockOf = (r: ReturnType<typeof run>) => r.body.children[0]!.children[1]!;
+    expect(
+      dockOf(run({ launcher: launcher({ popup: { enabled: true, position: 'top' } }) })).style
+        .flexDirection,
+    ).toBe('column');
+    expect(
+      dockOf(run({ launcher: launcher({ popup: { enabled: true, position: 'side' } }) })).style
+        .flexDirection,
+    ).toBe('row');
+    const left = launcher({
+      popup: { enabled: true, position: 'side' },
+      desktop: { side: 'left' },
+    });
+    expect(dockOf(run({ launcher: left })).style.flexDirection).toBe('row-reverse');
+  });
+
+  it('shows the popup picture only when there is one, and never draws an empty popup', () => {
+    const withImage = run({
+      launcher: launcher({ popup: { enabled: true, image: 'https://example.com/p.png' } }),
+    });
+    expect(
+      withImage.created.some((e) => e.tag === 'img' && e.src === 'https://example.com/p.png'),
+    ).toBe(true);
+    const emptyText = run({ launcher: launcher({ popup: { enabled: true, text: '' } }) });
+    expect(emptyText.created.some((e) => e.attrs['data-testid'] === 'wgt-popup')).toBe(false);
+  });
+
+  it('animates the closed launcher with a bounce or a ripple, and stays still by default and for people who prefer less motion', () => {
+    const still = run();
+    expect(still.byId(`wgt-launch-${SHORT}`).style.animation).toBeUndefined();
+    const ripple = run({ launcher: launcher({ animation: 'ripple' }) });
+    expect(ripple.byId(`wgt-launch-${SHORT}`).style.animation).toContain('-ripple');
+    const bounce = run({ launcher: launcher({ animation: 'bounce' }) });
+    expect(bounce.byId(`wgt-launch-${SHORT}`).style.animation).toContain('-bounce');
+    const css = bounce.head.children[0]!.textContent;
+    expect(css).toContain('prefers-reduced-motion');
+  });
+
+  it.each([
+    [{ botName: 'n'.repeat(25) }, 'bot name over 24'],
+    [{ subHeader: 's'.repeat(37) }, 'sub-header over 36'],
+    [{ ctaText: 'c'.repeat(21) }, 'button text over 20'],
+    [{ ctaText: '  ' }, 'blank button text'],
+    [{ popup: { text: 'p'.repeat(201) } }, 'popup text over 200'],
+    [{ popup: { position: 'bottom' } }, 'unknown popup position'],
+    [{ popup: { image: 'javascript:alert(1)' } }, 'script address as the popup image'],
+    [{ animation: 'spin' }, 'unknown animation'],
+  ])('refuses %j (%s)', (input) => {
+    expect(widgetLauncherSchema.safeParse(input).success).toBe(false);
+  });
+
+  it('gives the public config the same options, with the popup picture as a ready address', () => {
+    const pub = toPublicLauncher(
+      launcher({
+        botName: 'A',
+        subHeader: 'B',
+        ctaText: 'C',
+        popup: { enabled: true, image: 'preset:store' },
+        animation: 'bounce',
+      }),
+    );
+    expect(pub).toMatchObject({
+      bot_name: 'A',
+      sub_header: 'B',
+      cta_text: 'C',
+      animation: 'bounce',
+    });
+    expect(pub.popup.image_url).toMatch(/^data:image\/svg\+xml/);
+  });
+});
+
+describe('the conversation tools of a website chat window', () => {
+  it('turns a pasted video link or iframe code into an embed address, and refuses anything else', async () => {
+    const { chatVideoEmbedFrom, isChatVideoEmbed } = await import('@crm/contracts');
+    expect(chatVideoEmbedFrom('https://www.youtube.com/watch?v=dQw4w9WgXcQ')).toBe(
+      'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    );
+    expect(chatVideoEmbedFrom('https://youtu.be/dQw4w9WgXcQ')).toBe(
+      'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    );
+    expect(chatVideoEmbedFrom('https://vimeo.com/123456789')).toBe(
+      'https://player.vimeo.com/video/123456789',
+    );
+    expect(
+      chatVideoEmbedFrom('<iframe width="560" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="x"></iframe>'),
+    ).toBe('https://www.youtube.com/embed/dQw4w9WgXcQ');
+    expect(chatVideoEmbedFrom('https://evil.example/video')).toBe('');
+    expect(isChatVideoEmbed('https://evil.example/embed/abcdefgh')).toBe(false);
+  });
+
+  it('keeps cards, menu entries and slides, and refuses a script address or a foreign video', () => {
+    const ok = widgetLauncherSchema.safeParse({
+      chat: {
+        notice: { enabled: true, icon: 3, items: [{ title: 'Sale', description: 'Ends soon', buttonTitle: 'Shop', buttonUrl: 'https://example.com' }] },
+        quickMenu: { enabled: true, view: 'blocks', items: [{ title: 'Track order', url: 'mailto:help@example.com' }] },
+        banners: { enabled: true, items: [{ kind: 'video', video: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }] },
+        fontSize: 16,
+        hoverBg: '#aabbcc',
+      },
+    });
+    expect(ok.success).toBe(true);
+    for (const chat of [
+      { notice: { items: [{ title: 'a', description: 'b', buttonUrl: 'javascript:alert(1)' }] } },
+      { banners: { items: [{ kind: 'video', video: 'https://evil.example/x' }] } },
+      { quickMenu: { items: [{ title: 'a', url: 'data:text/html,x' }] } },
+      { fontSize: 40 },
+      { notice: { items: Array.from({ length: 6 }, () => ({ title: 'a', description: 'b' })) } },
+    ])
+      expect(widgetLauncherSchema.safeParse({ chat }).success).toBe(false);
   });
 });

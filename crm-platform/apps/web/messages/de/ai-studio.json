@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "KI-Studio"
+    },
+    "title": "KI-Studio",
+    "lead": "Starten Sie etwas, das für Sie mit Ihren Kunden spricht: einen KI-Agenten, einen Chatbot oder einen Workflow.",
+    "noAccess": "Sie haben nicht das Recht, dies zu starten. Fragen Sie einen Workspace-Admin.",
+    "agent": {
+      "title": "KI-Agent",
+      "body": "Antwortet aus Ihren eigenen Dokumenten und Webseiten, in Ihrem Ton.",
+      "create": "KI-Agenten erstellen",
+      "open": "Ihre KI-Agenten"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "body": "Ein geführtes Gespräch mit Schaltflächen, Fragen, Karten und Dateien, für Ihre Website oder WhatsApp.",
+      "web": "Website-Chatbot",
+      "whatsapp": "WhatsApp-Bot"
+    },
+    "workflow": {
+      "title": "Workflow",
+      "body": "Die erweiterte Arbeitsfläche: Bedingungen, Tags, Webhooks und CRM-Schritte, die von selbst laufen.",
+      "create": "Workflow erstellen",
+      "open": "Ihre Flows"
+    },
+    "deployNote": "Jeder Chatbot hat die Tabs Erstellen, Anpassen und Bereitstellen. Veröffentlichen Sie ihn und kopieren Sie dann den Einbettungscode oder Link unter Bereitstellen."
+  }
+}

@@ -11,6 +11,7 @@ import {
   insertStep,
   moveStep,
   newStep,
+  optionCount,
   problems,
   removeGroup,
   removeJourney,
@@ -504,10 +505,203 @@ describe('the list of flows (groups)', () => {
 describe('steps per channel', () => {
   it('a website chat bot offers only what the widget can show', () => {
     const keys = stepKindsFor('web').map((k) => k.type);
-    expect(new Set(keys)).toEqual(new Set(['message', 'buttons', 'ask', 'delay']));
+    expect(new Set(keys)).toEqual(
+      new Set([
+        'message',
+        'media',
+        'buttons',
+        'carousel',
+        'condition',
+        'ask',
+        'ask_file',
+        'delay',
+        'cta',
+      ]),
+    );
   });
 
-  it('a WhatsApp bot keeps every step', () => {
-    expect(stepKindsFor('chat')).toEqual(STEP_KINDS);
+  it('a WhatsApp bot keeps every step except the website-only carousel', () => {
+    expect(stepKindsFor('chat')).toEqual(STEP_KINDS.filter((k) => k.type !== 'carousel'));
+  });
+});
+
+describe('the carousel step', () => {
+  const two = (extra: Record<string, unknown> = {}) => ({
+    text: 'Pick one',
+    cards: [
+      {
+        image: '',
+        title: 'Pune',
+        text: 'Open',
+        buttons: [
+          { type: 'reply', label: 'Book Pune', value: '' },
+          { type: 'url', label: 'Details', value: 'https://x.test' },
+        ],
+      },
+      {
+        image: '',
+        title: 'Mumbai',
+        text: '',
+        buttons: [{ type: 'reply', label: 'Book Mumbai', value: '' }],
+      },
+    ],
+    ...extra,
+  });
+
+  it('starts with one card and one reply, so one exit', () => {
+    const s = newStep('carousel', []);
+    expect(s.links).toEqual([null]);
+    expect(optionCount(s)).toBe(1);
+  });
+
+  it('has one exit per reply button, in card order, not per card or per link button', () => {
+    expect(optionCount({ type: 'carousel', data: two() })).toBe(2);
+  });
+
+  it('keeps its exits in step with the replies when buttons change', () => {
+    let d = emptyDoc();
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, { data: two() });
+    expect(allSteps(d).find((x) => x.id === c.id)!.links).toHaveLength(2);
+  });
+
+  it('round-trips through the graph: each reply exit is wired to its own step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, { data: two() });
+    const a = newStep('message', allSteps(d));
+    d = addJourney(d, a);
+    const b = newStep('message', allSteps(d));
+    d = addJourney(d, b);
+    d = updateStep(d, c.id, { links: [a.id, b.id] });
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['p0', a.id],
+      ['p1', b.id],
+    ]);
+  });
+
+  it('asks for a card with a title, and for a name and an address on every button', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: add at least one card and give every card a title.',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [{ title: 'A', buttons: [{ type: 'url', label: 'Open', value: '' }] }],
+      },
+    });
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: give every button a name, and a link, number or address where it opens one.',
+    ]);
+  });
+});
+
+describe('the condition step', () => {
+  it('has two exits, Yes then No, wired to the handles the runtime reads', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('condition', []);
+    expect(c.links).toEqual([null, null]);
+    expect(optionCount(c)).toBe(2);
+    d = insertStep(d, 0, 0, c);
+    const a = newStep('message', allSteps(d));
+    d = addJourney(d, a);
+    const b = newStep('message', allSteps(d));
+    d = addJourney(d, b);
+    d = updateStep(d, c.id, { links: [a.id, b.id] });
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['yes', a.id],
+      ['no', b.id],
+    ]);
+    // and back: a saved Yes/No condition opens with both exits wired
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) expect(allSteps(back.doc).find((x) => x.id === c.id)!.links).toEqual([a.id, b.id]);
+  });
+
+  it('asks for complete rules, and takes nested AND / OR groups', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('condition', []);
+    d = insertStep(d, 0, 0, c);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: finish the rules of the condition (a variable and a value in each).',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        conditionGroup: {
+          op: 'or',
+          items: [
+            { variable: 'plan', operator: 'equals', value: 'pro' },
+            { op: 'and', items: [{ variable: 'age', operator: 'greater_than', value: '30' }] },
+          ],
+        },
+      },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+});
+
+describe('a button that hands the visitor to a person', () => {
+  it('counts as an exit of a carousel, and needs a team, but no step after it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          { title: 'Billing', buttons: [{ type: 'agent', label: 'Talk to billing', team: '' }] },
+        ],
+      },
+    });
+    expect(optionCount(allSteps(d)[0]!)).toBe(1);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: choose the team the conversation goes to.',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          {
+            title: 'Billing',
+            buttons: [{ type: 'agent', label: 'Talk to billing', team: 'team-1' }],
+          },
+        ],
+      },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+
+  it('on a quick reply, is kept per button and needs a team', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const b = newStep('buttons', []);
+    d = insertStep(d, 0, 0, b);
+    d = updateStep(d, b.id, {
+      data: {
+        prompt: 'p',
+        options: ['Pricing', 'Talk to a person'],
+        handoffs: { '1': { team: '', message: '' } },
+      },
+    });
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: choose the team the conversation goes to.',
+    ]);
+    d = updateStep(d, b.id, {
+      data: { handoffs: { '1': { team: 'team-1', message: 'Asked for a person' } } },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
   });
 });

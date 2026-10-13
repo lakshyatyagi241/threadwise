@@ -21,13 +21,200 @@ export const LAUNCHER_LIMITS = {
   /** Pixels; a launcher further than this from an edge is off most screens. */
   spacing: 500,
   avatar: 1024,
+  /** The name in the panel header, the line under it, and the text of the start button. */
+  botName: 24,
+  subHeader: 36,
+  cta: 20,
+  popupText: 200,
 } as const;
+
+/** What draws the eye to a closed launcher: nothing, a bounce, or a ripple ring. */
+export const LAUNCHER_ANIMATIONS = ['none', 'bounce', 'ripple'] as const;
+export type LauncherAnimation = (typeof LAUNCHER_ANIMATIONS)[number];
+/** Where the popup bubble sits: beside the launcher or above it. */
+export const POPUP_POSITIONS = ['side', 'top'] as const;
+export type PopupPosition = (typeof POPUP_POSITIONS)[number];
+/**
+ * How a website chat bot's callout looks beside its closed launcher: a bubble above it, a pill beside it, a pill with an avatar, a card
+ * with a picture, or a bar that looks like the chat's input. The WhatsApp button draws only its `position` (above or beside).
+ */
+export const POPUP_STYLES = ['bubble', 'pill', 'avatar', 'media', 'bar'] as const;
+export type PopupStyle = (typeof POPUP_STYLES)[number];
+/**
+ * How a website chat bot's chat window looks and behaves beyond its colours: how reply buttons are filled and shaped, the typeface and
+ * size, the suggestions under the conversation, the copy / like / dislike icons under a bot line, the expand button and the voice
+ * conversation. The typefaces are the visitor's own system faces: the window loads nothing from another site.
+ */
+export const CHAT_FILLS = ['outline', 'tinted', 'solid'] as const;
+export const CHAT_SHAPES = ['pill', 'rounded', 'soft', 'square'] as const;
+export const CHAT_FONTS = ['system', 'serif', 'rounded', 'humanist', 'mono'] as const;
+export const CHAT_SIZES = ['compact', 'standard', 'tall', 'wide'] as const;
+/** The header's fill: the colour flat, or a gradient from it. */
+export const CHAT_HEADERS = ['solid', 'diagonal', 'vivid', 'dusk', 'soft'] as const;
+/** The text direction: follow the visitor's language, or force one. */
+export const CHAT_DIRECTIONS = ['auto', 'ltr', 'rtl'] as const;
+/** The body's corners: the chat window and its bubbles. */
+export const CHAT_CORNERS = ['rounded', 'soft', 'square'] as const;
+export const CHAT_ITEMS_MAX = 5;
+/** Limits of a notification card (Geta console: 60, 100, 28, 20). */
+export const CHAT_NOTICE_LIMITS = { title: 60, description: 100, button: 28, footer: 20 } as const;
+export const CHAT_MENU_LABEL_MAX = 40;
+export const CHAT_MENU_VIEWS = ['list', 'blocks'] as const;
+/** The four bell styles of the notification block. */
+export const CHAT_NOTICE_ICONS = [1, 2, 3, 4] as const;
+export const CHAT_FONT_SIZE_MIN = 12;
+export const CHAT_FONT_SIZE_MAX = 18;
+/** Seconds to wait before the window opens by itself; 0 keeps it closed. */
+export const CHAT_AUTO_OPEN_MAX = 120;
+export const CHAT_SUGGESTIONS_MAX = 4;
+export const CHAT_SUGGESTION_MAX_CHARS = 60;
+/** The panel's width and height in pixels for each size. */
+export const CHAT_SIZE_PX: Record<(typeof CHAT_SIZES)[number], { w: number; h: number }> = {
+  compact: { w: 372, h: 560 },
+  standard: { w: 404, h: 672 },
+  tall: { w: 404, h: 780 },
+  wide: { w: 468, h: 700 },
+};
+
+/** A button address a visitor may follow: a web page, a phone call or an email. */
+export const chatActionUrl = (v: string): boolean => v === '' || /^(https?:\/\/|tel:|mailto:)[^\s'"<>\\]{1,1000}$/i.test(v);
+
+const VIDEO_EMBED = /^https:\/\/(www\.youtube(-nocookie)?\.com\/embed\/[\w-]{6,20}|player\.vimeo\.com\/video\/\d{4,12})(\?[\w=&%.-]*)?$/;
+/** The only video addresses the banner may frame: a YouTube or Vimeo embed. */
+export const isChatVideoEmbed = (v: string): boolean => v === '' || VIDEO_EMBED.test(v);
+
+/**
+ * A pasted video link, or the iframe code a video site hands out, as the embed address the banner frames. YouTube watch, short and
+ * youtu.be links and Vimeo links are turned into their embed form; anything else comes back empty.
+ */
+export function chatVideoEmbedFrom(input: string): string {
+  const text = input.trim();
+  const src = /src\s*=\s*["']([^"']+)["']/i.exec(text)?.[1] ?? text;
+  if (isChatVideoEmbed(src) && src !== '') return src;
+  const yt = /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|live\/)|youtu\.be\/)([\w-]{6,20})/i.exec(src)?.[1];
+  if (yt) return `https://www.youtube.com/embed/${yt}`;
+  const vm = /vimeo\.com\/(?:video\/)?(\d{4,12})/i.exec(src)?.[1];
+  return vm ? `https://player.vimeo.com/video/${vm}` : '';
+}
+
+/** A step of the bot's own flow a tap jumps to (empty: no jump). */
+const chatNode = z.string().trim().max(64).refine((v) => v === '' || /^[\w-]+$/.test(v), 'Pick a step of the bot.').default('');
+
+const chatAction = z.string().trim().max(1024).refine(chatActionUrl, 'Use an http(s), tel: or mailto: address.').default('');
+
+const chatNoticeIcon = z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]);
+export const chatNoticeItemSchema = z.object({
+  image: z.string().max(LAUNCHER_LIMITS.avatar).refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.').default(''),
+  title: z.string().trim().min(1).max(CHAT_NOTICE_LIMITS.title),
+  description: z.string().trim().min(1).max(CHAT_NOTICE_LIMITS.description),
+  buttonTitle: z.string().trim().max(CHAT_NOTICE_LIMITS.button).default(''),
+  buttonUrl: chatAction,
+  footer: z.string().trim().max(CHAT_NOTICE_LIMITS.footer).default(''),
+});
+export const chatMenuItemSchema = z.object({
+  image: z.string().max(LAUNCHER_LIMITS.avatar).refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.').default(''),
+  title: z.string().trim().min(1).max(CHAT_MENU_LABEL_MAX),
+  /** A page to open; empty sends the title as the visitor's message, which the bot answers. */
+  url: chatAction,
+  /** Or a step of the bot's flow the tap starts from (used when there is no page address). */
+  node: chatNode,
+});
+export const chatBannerItemSchema = z.object({
+  kind: z.enum(['image', 'video']).default('image'),
+  image: z.string().max(LAUNCHER_LIMITS.avatar).refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image.').default(''),
+  video: z.string().max(300).refine(isChatVideoEmbed, 'Use a YouTube or Vimeo video.').default(''),
+  url: chatAction,
+  /** Or a step of the bot's flow a tap on the slide starts from (used when there is no link). */
+  node: chatNode,
+});
+export type ChatNoticeItem = z.infer<typeof chatNoticeItemSchema>;
+export type ChatMenuItem = z.infer<typeof chatMenuItemSchema>;
+export type ChatBannerItem = z.infer<typeof chatBannerItemSchema>;
+
+const chatImage = z
+  .string()
+  .max(LAUNCHER_LIMITS.avatar)
+  .refine((v) => v === '' || launcherImageUrl(v) !== null, 'Use an uploaded image or an http(s) image address.')
+  .default('');
+export const widgetChatOptionsSchema = z.object({
+  fill: z.enum(CHAT_FILLS).default('outline'),
+  shape: z.enum(CHAT_SHAPES).default('pill'),
+  font: z.enum(CHAT_FONTS).default('system'),
+  size: z.enum(CHAT_SIZES).default('standard'),
+  header: z.enum(CHAT_HEADERS).default('diagonal'),
+  direction: z.enum(CHAT_DIRECTIONS).default('auto'),
+  /** The round icon in front of each reply button. */
+  icons: z.boolean().default(true),
+  /** Lines of text offered under the conversation until the visitor writes (up to four). */
+  suggestions: z
+    .array(z.string().trim().min(1).max(CHAT_SUGGESTION_MAX_CHARS))
+    .max(CHAT_SUGGESTIONS_MAX)
+    .default([]),
+  /** Quick replies on or off; the lines are kept when off. */
+  suggestionsOn: z.boolean().default(true),
+  /** For each suggestion, by position, the step of the flow a tap starts from; empty sends the line as a message. */
+  suggestionNodes: z.array(z.string().trim().max(64).refine((v) => v === '' || /^[\w-]+$/.test(v), 'Pick a step of the bot.')).max(CHAT_SUGGESTIONS_MAX).default([]),
+  /** Copy, helpful and not helpful under a bot's line. */
+  actions: z.boolean().default(true),
+  /** The panel's expand button. */
+  expand: z.boolean().default(true),
+  /** The microphone: talk to the bot, and hear it answer, with the browser's own speech tools. */
+  voice: z.boolean().default(false),
+  /** The company logo in the header, the bot's picture beside its lines and a picture behind the conversation: an uploaded image's address, or empty. */
+  logo: chatImage,
+  avatar: chatImage,
+  background: chatImage,
+  corner: z.enum(CHAT_CORNERS).default('rounded'),
+  autoOpen: z.number().int().min(0).max(CHAT_AUTO_OPEN_MAX).default(0),
+  /** A soft sound when a bot line arrives while the window is open. */
+  sound: z.boolean().default(false),
+  /** The bell in the header: cards with a picture, a title, a line, a button and a footer. */
+  notice: z
+    .object({
+      enabled: z.boolean().default(false),
+      icon: chatNoticeIcon.default(1),
+      items: z.array(chatNoticeItemSchema).max(CHAT_ITEMS_MAX).default([]),
+    })
+    .default({}),
+  /** The menu in the header: rows or blocks, each opens a page or sends its title as the visitor's message. */
+  quickMenu: z
+    .object({
+      enabled: z.boolean().default(false),
+      view: z.enum(CHAT_MENU_VIEWS).default('list'),
+      items: z.array(chatMenuItemSchema).max(CHAT_ITEMS_MAX).default([]),
+    })
+    .default({}),
+  /** A picture or video strip above the conversation, one slide at a time. */
+  banners: z
+    .object({
+      enabled: z.boolean().default(false),
+      items: z.array(chatBannerItemSchema).max(CHAT_ITEMS_MAX).default([]),
+    })
+    .default({}),
+  fontSize: z.number().int().min(CHAT_FONT_SIZE_MIN).max(CHAT_FONT_SIZE_MAX).default(14),
+  /** Reply buttons' background while the pointer is on them; empty keeps the tint. */
+  hoverBg: z.string().refine((v) => v === '' || LAUNCHER_HEX.test(v), 'Use a hex colour.').default(''),
+  /** The volume of the new-line sound, 0 to 100. */
+  soundVolume: z.number().int().min(0).max(100).default(70),
+  /** Read the bot's lines aloud with the browser's own voice. */
+  speak: z.boolean().default(false),
+  /** Offer a floating chat window (picture-in-picture) when the visitor switches to another tab mid-conversation. */
+  pip: z.boolean().default(false),
+  /** Where the widget shows at all. */
+  devices: z
+    .object({ desktop: z.boolean().default(true), tablet: z.boolean().default(true), mobile: z.boolean().default(true) })
+    .default({}),
+});
+export type WidgetChatOptions = z.infer<typeof widgetChatOptionsSchema>;
+
+export const DEFAULT_POPUP_TEXT = 'Hi! May I assist you?';
 
 /** Fixed copy of the launcher and the panel. */
 export const LAUNCHER_TEXT = {
   pill: 'Chat With Us',
   openLabel: 'Open chat',
   closeLabel: 'Close chat',
+  dismissLabel: 'Dismiss',
   reply: 'Typically replies within 5 mins',
   start: 'Start Conversation',
   noNumber: 'Add a WhatsApp number to start conversations',
@@ -233,6 +420,36 @@ export const widgetLauncherSchema = z.object({
     .min(1, 'Add an intro message.')
     .max(LAUNCHER_LIMITS.intro)
     .default('We are here to help you! Chat with us on WhatsApp for any queries.'),
+  /** The name in the panel header; empty shows the bot's own name. */
+  botName: z.string().trim().max(LAUNCHER_LIMITS.botName).default(''),
+  /** The line under the name. */
+  subHeader: z.string().trim().max(LAUNCHER_LIMITS.subHeader).default(LAUNCHER_TEXT.reply),
+  /** The text of the button that opens WhatsApp. */
+  ctaText: z
+    .string()
+    .trim()
+    .min(1, 'Add the button text.')
+    .max(LAUNCHER_LIMITS.cta)
+    .default(LAUNCHER_TEXT.start),
+  /** The small bubble beside or above the closed launcher. Off by default, so a widget saved before it existed looks as it did. */
+  popup: z
+    .object({
+      enabled: z.boolean().default(false),
+      position: z.enum(POPUP_POSITIONS).default('top'),
+      style: z.enum(POPUP_STYLES).default('bubble'),
+      text: z.string().trim().max(LAUNCHER_LIMITS.popupText).default(DEFAULT_POPUP_TEXT),
+      /** Optional image: `preset:<key>`, an http(s) address, or empty for none. */
+      image: z
+        .string()
+        .max(LAUNCHER_LIMITS.avatar)
+        .refine(isLauncherAvatar, 'Use a built-in image or an http(s) image address.')
+        .default(''),
+    })
+    .default({}),
+  animation: z.enum(LAUNCHER_ANIMATIONS).default('none'),
+  /** The unread dot on a website chat bot's closed launcher. */
+  badge: z.boolean().default(true),
+  chat: widgetChatOptionsSchema.default({}),
   desktop: placement(10),
   mobile: placement(60),
 });
@@ -250,6 +467,48 @@ export const widgetLauncherViewSchema = z.object({
   avatar: z.string(),
   greeting: z.string(),
   introMessage: z.string(),
+  botName: z.string(),
+  subHeader: z.string(),
+  ctaText: z.string(),
+  popup: z.object({
+    enabled: z.boolean(),
+    position: z.enum(POPUP_POSITIONS),
+    style: z.enum(POPUP_STYLES),
+    text: z.string(),
+    image: z.string(),
+  }),
+  animation: z.enum(LAUNCHER_ANIMATIONS),
+  badge: z.boolean(),
+  chat: z.object({
+    fill: z.enum(CHAT_FILLS),
+    shape: z.enum(CHAT_SHAPES),
+    font: z.enum(CHAT_FONTS),
+    size: z.enum(CHAT_SIZES),
+    header: z.enum(CHAT_HEADERS),
+    direction: z.enum(CHAT_DIRECTIONS),
+    icons: z.boolean(),
+    suggestions: z.array(z.string()),
+    suggestionNodes: z.array(z.string()),
+    suggestionsOn: z.boolean(),
+    actions: z.boolean(),
+    expand: z.boolean(),
+    voice: z.boolean(),
+    logo: z.string(),
+    avatar: z.string(),
+    background: z.string(),
+    corner: z.enum(CHAT_CORNERS),
+    autoOpen: z.number().int(),
+    sound: z.boolean(),
+    notice: z.object({ enabled: z.boolean(), icon: chatNoticeIcon, items: z.array(chatNoticeItemSchema) }),
+    quickMenu: z.object({ enabled: z.boolean(), view: z.enum(CHAT_MENU_VIEWS), items: z.array(chatMenuItemSchema) }),
+    banners: z.object({ enabled: z.boolean(), items: z.array(chatBannerItemSchema) }),
+    fontSize: z.number().int(),
+    hoverBg: z.string(),
+    soundVolume: z.number().int(),
+    speak: z.boolean(),
+    pip: z.boolean(),
+    devices: z.object({ desktop: z.boolean(), tablet: z.boolean(), mobile: z.boolean() }),
+  }),
   desktop: placementView,
   mobile: placementView,
 });
@@ -272,6 +531,48 @@ export const widgetPublicLauncherSchema = z.object({
   avatar_url: z.string(),
   greeting: z.string(),
   intro_message: z.string(),
+  bot_name: z.string(),
+  sub_header: z.string(),
+  cta_text: z.string(),
+  popup: z.object({
+    enabled: z.boolean(),
+    position: z.enum(POPUP_POSITIONS),
+    style: z.enum(POPUP_STYLES),
+    text: z.string(),
+    image_url: z.string(),
+  }),
+  animation: z.enum(LAUNCHER_ANIMATIONS),
+  badge: z.boolean(),
+  chat: z.object({
+    fill: z.enum(CHAT_FILLS),
+    shape: z.enum(CHAT_SHAPES),
+    font: z.enum(CHAT_FONTS),
+    size: z.enum(CHAT_SIZES),
+    header: z.enum(CHAT_HEADERS),
+    direction: z.enum(CHAT_DIRECTIONS),
+    icons: z.boolean(),
+    suggestions: z.array(z.string()),
+    suggestionNodes: z.array(z.string()),
+    suggestionsOn: z.boolean(),
+    actions: z.boolean(),
+    expand: z.boolean(),
+    voice: z.boolean(),
+    logo: z.string(),
+    avatar: z.string(),
+    background: z.string(),
+    corner: z.enum(CHAT_CORNERS),
+    autoOpen: z.number().int(),
+    sound: z.boolean(),
+    notice: z.object({ enabled: z.boolean(), icon: chatNoticeIcon, items: z.array(chatNoticeItemSchema) }),
+    quickMenu: z.object({ enabled: z.boolean(), view: z.enum(CHAT_MENU_VIEWS), items: z.array(chatMenuItemSchema) }),
+    banners: z.object({ enabled: z.boolean(), items: z.array(chatBannerItemSchema) }),
+    fontSize: z.number().int(),
+    hoverBg: z.string(),
+    soundVolume: z.number().int(),
+    speak: z.boolean(),
+    pip: z.boolean(),
+    devices: z.object({ desktop: z.boolean(), tablet: z.boolean(), mobile: z.boolean() }),
+  }),
   desktop: z.object({
     side: z.enum(LAUNCHER_SIDES),
     side_spacing: z.number().int(),
@@ -292,6 +593,19 @@ export function toPublicLauncher(l: WidgetLauncher): WidgetPublicLauncher {
     avatar_url: launcherAvatarSrc(l.avatar),
     greeting: l.greeting,
     intro_message: l.introMessage,
+    bot_name: l.botName,
+    sub_header: l.subHeader,
+    cta_text: l.ctaText,
+    popup: {
+      enabled: l.popup.enabled,
+      position: l.popup.position,
+      style: l.popup.style,
+      text: l.popup.text,
+      image_url: l.popup.image === '' ? '' : launcherAvatarSrc(l.popup.image),
+    },
+    animation: l.animation,
+    badge: l.badge,
+    chat: JSON.parse(JSON.stringify(l.chat)) as typeof l.chat,
     desktop: {
       side: l.desktop.side,
       side_spacing: l.desktop.sideSpacing,
@@ -342,6 +656,12 @@ const RUNTIME = `
   var K = 'wgt-' + C.id;
   var grad = 'linear-gradient(135deg,' + C.from + ',' + C.to + ')';
 
+  function rgba(hex, a) {
+    var h = String(hex).replace('#', '');
+    if (h.length === 3) h = h.replace(/./g, '$&$&');
+    var n = parseInt(h, 16);
+    return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
   var style = d.createElement('style');
   function place(dev, p) {
     return '.' + K + '[data-dev="' + dev + '"]{' + (p.side === 'left' ? 'left:' + p.s + 'px;right:auto;align-items:flex-start;' : 'right:' + p.s + 'px;left:auto;align-items:flex-end;') + 'bottom:' + p.b + 'px;--wb:' + p.b + 'px}';
@@ -350,7 +670,10 @@ const RUNTIME = `
     + '.' + K + ' *{box-sizing:border-box}'
     + place('d', C.desktop) + place('m', C.mobile)
     + '.' + K + ' button{font-family:inherit}'
-    + '.' + K + ' button:focus-visible{outline:3px solid #fff;box-shadow:0 0 0 5px #1d4ed8}';
+    + '.' + K + ' button:focus-visible{outline:3px solid #fff;box-shadow:0 0 0 5px #1d4ed8}'
+    + '@keyframes ' + K + '-bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-12px)}60%{transform:translateY(-6px)}}'
+    + '@keyframes ' + K + '-ripple{0%{box-shadow:0 8px 26px rgba(0,0,0,.25),0 0 0 0 ' + rgba(C.from, .55) + '}100%{box-shadow:0 8px 26px rgba(0,0,0,.25),0 0 0 20px ' + rgba(C.from, 0) + '}}'
+    + '@media (prefers-reduced-motion:reduce){.' + K + ' button{animation:none!important}}';
   d.head.appendChild(style);
 
   function el(tag, css, text) {
@@ -439,6 +762,39 @@ const RUNTIME = `
   launch.setAttribute('aria-expanded', 'false');
   launch.appendChild(svg(WA, C.type === 'pill' ? 28 : 34));
   if (C.type === 'pill') launch.appendChild(el('span', '', C.text.pill));
+  if (C.animation === 'bounce') launch.style.animation = K + '-bounce 2.2s ease-in-out infinite';
+  else if (C.animation === 'ripple') launch.style.animation = K + '-ripple 1.8s ease-out infinite';
+
+  // --- the popup: a small bubble beside or above the closed launcher, dismissed for the rest of the visit
+  var dismissed = false;
+  try { dismissed = !C.preview && win.sessionStorage.getItem(K + '-pop') === '1'; } catch (e) { dismissed = false; }
+  var pop = null;
+  if (C.popup.enabled) {
+    pop = el('div', 'position:relative;display:flex;align-items:center;gap:10px;max-width:260px;background:#fff;color:#111b21;border-radius:14px;padding:10px 30px 10px 12px;box-shadow:0 8px 26px rgba(0,0,0,.2);font-size:14px;overflow-wrap:anywhere');
+    pop.setAttribute('data-testid', 'wgt-popup');
+    pop.setAttribute('role', 'status');
+    if (C.popup.image) {
+      var popImg = el('img', 'width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none');
+      popImg.alt = '';
+      popImg.src = C.popup.image;
+      pop.appendChild(popImg);
+    }
+    pop.appendChild(el('span', '', C.popup.text));
+    var popX = el('button', 'position:absolute;top:4px;right:6px;border:0;background:transparent;cursor:pointer;font-size:16px;line-height:1;color:#667781;padding:2px 4px');
+    popX.type = 'button';
+    popX.setAttribute('data-testid', 'wgt-popup-close');
+    popX.setAttribute('aria-label', C.text.dismiss);
+    popX.textContent = '\u00d7';
+    popX.addEventListener('click', function () {
+      dismissed = true;
+      try { win.sessionStorage.setItem(K + '-pop', '1'); } catch (e) {}
+      syncPop();
+    });
+    pop.appendChild(popX);
+  }
+  var dock = el('div', 'display:flex;align-items:center;gap:10px');
+  if (pop) dock.appendChild(pop);
+  dock.appendChild(launch);
 
   var close = el('button', 'display:none;border:0;cursor:pointer;width:50px;height:50px;padding:0;border-radius:50%;align-items:center;justify-content:center;box-shadow:0 8px 26px rgba(0,0,0,.25);background:' + grad);
   close.type = 'button';
@@ -448,17 +804,19 @@ const RUNTIME = `
   close.appendChild(svg(DOWN, 26));
 
   wrap.appendChild(panel);
-  wrap.appendChild(launch);
+  wrap.appendChild(dock);
   wrap.appendChild(close);
   d.body.appendChild(wrap);
 
   var open = false;
+  function syncPop() { if (pop) pop.style.display = !open && !dismissed ? 'flex' : 'none'; }
   function show(next) {
     open = next;
     panel.style.display = open ? 'flex' : 'none';
     launch.style.display = open ? 'none' : 'flex';
     close.style.display = open ? 'flex' : 'none';
     launch.setAttribute('aria-expanded', open ? 'true' : 'false');
+    syncPop();
     if (C.preview && win.parent && win.parent !== win) win.parent.postMessage({ wgt: 'toggle', open: open }, '*');
     if (open) start.focus({ preventScroll: true }); else launch.focus({ preventScroll: true });
   }
@@ -472,12 +830,23 @@ const RUNTIME = `
     if (C.device === 'desktop') return 'd';
     return mq && mq.matches ? 'm' : 'd';
   }
-  function apply() { wrap.setAttribute('data-dev', device()); }
+  function apply() {
+    wrap.setAttribute('data-dev', device());
+    // The popup sits above the launcher, or beside it on the side the page has room for (left of a right-hand launcher).
+    var side = (device() === 'm' ? C.mobile : C.desktop).side;
+    if (C.popup.position === 'side') {
+      dock.style.flexDirection = side === 'left' ? 'row-reverse' : 'row';
+    } else {
+      dock.style.flexDirection = 'column';
+      dock.style.alignItems = side === 'left' ? 'flex-start' : 'flex-end';
+    }
+  }
   apply();
   if (mq && C.device === 'auto') { if (mq.addEventListener) mq.addEventListener('change', apply); else if (mq.addListener) mq.addListener(apply); }
 
   if (C.startOpen) { panel.style.display = 'flex'; launch.style.display = 'none'; close.style.display = 'flex'; open = true; launch.setAttribute('aria-expanded', 'true'); }
   else if (C.autoOpen) setTimeout(function () { if (!open) show(true); }, 1200);
+  syncPop();
 })
 `;
 
@@ -487,8 +856,16 @@ export function buildLauncherScript(i: LauncherScriptInput): string {
   const data = {
     guard: `__wgtWidget_${i.id}`,
     id: i.id.replace(/[^A-Za-z0-9]/g, '').slice(0, 12),
-    name: i.name,
+    // The header shows the name set for the button, else the bot's own.
+    name: i.launcher.botName || i.name,
     type: i.launcher.buttonType,
+    animation: i.launcher.animation,
+    popup: {
+      enabled: i.launcher.popup.enabled && i.launcher.popup.text !== '',
+      position: i.launcher.popup.position,
+      text: i.launcher.popup.text,
+      image: i.launcher.popup.image === '' ? '' : launcherAvatarSrc(i.launcher.popup.image),
+    },
     from: colour.from,
     to: colour.to,
     avatar: launcherAvatarSrc(i.launcher.avatar),
@@ -514,8 +891,9 @@ export function buildLauncherScript(i: LauncherScriptInput): string {
       pill: LAUNCHER_TEXT.pill,
       open: LAUNCHER_TEXT.openLabel,
       close: LAUNCHER_TEXT.closeLabel,
-      reply: LAUNCHER_TEXT.reply,
-      start: LAUNCHER_TEXT.start,
+      dismiss: LAUNCHER_TEXT.dismissLabel,
+      reply: i.launcher.subHeader,
+      start: i.launcher.ctaText,
       noNumber: LAUNCHER_TEXT.noNumber,
     },
   };

@@ -44,7 +44,7 @@ const bot = (over: Partial<WebBotItem> & { flowId: string }): WebBotItem => ({
 });
 
 describe('Settings > Channels > Web', () => {
-  it('lists each bot with its state and links to its Customize and Install tabs', () => {
+  it('lists each bot with its state and links to its Customize and Deploy tabs', () => {
     state.mode = 'simple';
     state.list = {
       isPending: false,
@@ -63,9 +63,9 @@ describe('Settings > Channels > Web', () => {
     expect(out).toContain('>Live<');
     expect(out).toContain('>Needs customizing<');
     expect(out).toContain('href="/flows/simple/f-live?tab=customize"');
-    expect(out).toContain('href="/flows/simple/f-live?tab=install"');
-    // A bot with no widget has nothing to install yet.
-    expect(out).not.toContain('href="/flows/simple/f-new?tab=install"');
+    expect(out).toContain('href="/flows/simple/f-live?tab=deploy"');
+    // A bot with no widget has nothing to deploy yet.
+    expect(out).not.toContain('href="/flows/simple/f-new?tab=deploy"');
     expect(out).toContain('href="/flows/simple/f-new?tab=customize"');
   });
 

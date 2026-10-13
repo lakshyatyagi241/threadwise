@@ -309,6 +309,11 @@
         "label": "Tự động phân công",
         "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
         "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
+      },
+      "web": {
+        "label": "Chat trên website",
+        "description": "Các bot được xây dựng cho chat trên website và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, chat trực tiếp"
       }
     }
   }

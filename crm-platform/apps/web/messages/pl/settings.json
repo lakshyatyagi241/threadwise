@@ -309,6 +309,11 @@
         "label": "Automatyczne przydzielanie",
         "description": "Automatycznie przydzielaj nowe rozmowy właściwemu agentowi, po kolei lub według reguł.",
         "keywords": "routing, round robin, przydział, agenci, reguły skrzynki, rozdziel, właściciel"
+      },
+      "web": {
+        "label": "Czat na stronie",
+        "description": "Boty utworzone dla czatu na Twojej stronie wraz z widżetem, w którym każdy działa.",
+        "keywords": "web, strona, witryna, widżet, chatbot, osadzenie, czat na żywo"
       }
     }
   }

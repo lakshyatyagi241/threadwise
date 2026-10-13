@@ -1,7 +1,14 @@
 import { flbSanitizeConditionGroup } from '@crm/contracts';
 import { evaluateConditions, evaluateConditionTree } from './condition';
 import { askItems, buttonItems, listRows, REPLY_BUTTONS_MAX } from './menus';
-import type { NodeContext, NodeExecutor, NodeResult, OutboundMessage, SendOutcome } from './types';
+import type {
+  CarouselCard,
+  NodeContext,
+  NodeExecutor,
+  NodeResult,
+  OutboundMessage,
+  SendOutcome,
+} from './types';
 
 const obj = (v: unknown): Record<string, unknown> =>
   v !== null && typeof v === 'object' ? (v as Record<string, unknown>) : {};
@@ -141,6 +148,57 @@ const ask: NodeExecutor = {
         kind: 'Question',
         answerItems: items,
         acceptMedia: p.acceptMedia === true,
+      },
+    };
+  },
+};
+
+/**
+ * The Carousel node (website chat only): cards with a picture, a title, a line of text and up to two buttons. A reply button is one of
+ * the node's exits (`p0`, `p1`, ... in card order, the same scoped ids as Quick replies, so a tap on any card continues the flow down
+ * that button's exit); a link button opens a page, a call or an email in the visitor's browser. The cards stay tappable after a tap.
+ */
+const carousel: NodeExecutor = {
+  types: ['Carousel'],
+  async execute(ctx) {
+    const p = ctx.node.props;
+    const items = buttonItems(ctx.node, ctx.render);
+    const cards = arr(p.cards)
+      .map(obj)
+      .map((c) => ({
+        title: ctx.render(c.title).trim(),
+        text: ctx.render(c.text).trim(),
+        ...(/^https?:\/\/\S+$/i.test(str(c.image).trim()) ? { image: str(c.image).trim() } : {}),
+        buttons: arr(c.buttons)
+          .map(obj)
+          .flatMap((b): CarouselCard['buttons'] => {
+            if (b.kind === 'reply') {
+              const item = items[Number(b.index)];
+              return item ? [{ kind: 'reply', id: item.id, title: item.text }] : [];
+            }
+            const url = webLinkUrl(str(b.type), ctx.render(b.value));
+            return url ? [{ kind: 'link', label: ctx.render(b.label).trim() || 'Open', url }] : [];
+          }),
+      }))
+      .filter((c) => c.title !== '' || c.text !== '' || c.image !== undefined);
+    if (cards.length === 0) {
+      ctx.note('the carousel has no cards: moving on');
+      return advance;
+    }
+    const out = await ctx.send({ kind: 'carousel', body: ctx.render(p.bodyText), cards });
+    if (!out.ok) return failed(out, 'end', ctx)!;
+    if (items.length === 0) return advance;
+    const variable = str(p.variable) || 'choice';
+    ctx.run.menus.byNode[ctx.node.id] = items;
+    ctx.run.menus.latest = { nodeId: ctx.node.id, variable, answerItems: items };
+    return {
+      kind: 'wait',
+      wait: {
+        nodeId: ctx.node.id,
+        variable,
+        kind: 'Question',
+        answerItems: items,
+        persistent: true,
       },
     };
   },
@@ -331,7 +389,20 @@ const cta: NodeExecutor = {
         ['url', 'visit'].includes(str(a.type) || 'url') && /^https?:\/\//.test(ctx.render(a.value)),
     );
     let msg: OutboundMessage;
-    if (urlAction) {
+    if (ctx.run.channelKind === 'webchat') {
+      // The website chat window draws up to three buttons that open a page, a call or an email.
+      const links = actions
+        .slice(0, 3)
+        .map((a) => ({
+          label: (str(a.label) || 'Open').slice(0, 40),
+          url: webLinkUrl(str(a.type) || 'url', ctx.render(a.value).trim()),
+          ...(/^https?:\/\/\S+$/i.test(str(a.icon).trim()) ? { icon: str(a.icon).trim() } : {}),
+        }))
+        .filter((l): l is { label: string; url: string; icon?: string } => l.url !== null);
+      const text = [header, body, footer].filter(Boolean).join('\n\n').trim();
+      if (links.length === 0 && !text) return advance;
+      msg = { kind: 'text', body: text || links[0]!.label, ...(links.length ? { links } : {}) };
+    } else if (urlAction) {
       const extra = actions
         .filter((a) => a !== urlAction)
         .slice(0, 2)
@@ -365,6 +436,22 @@ const cta: NodeExecutor = {
     return advance;
   },
 };
+
+/** The address a website chat button opens, or null when the value is not one the window may open (a script, a file, a wrong shape). */
+export function webLinkUrl(type: string, value: string): string | null {
+  const v = value.trim();
+  if (v === '' || v.length > 2000) return null;
+  if (type === 'phone' || type === 'call_now') {
+    const digits = v.replace(/^tel:/i, '').replace(/[^\d+]/g, '');
+    return /^\+?\d{5,15}$/.test(digits) ? `tel:${digits}` : null;
+  }
+  if (type === 'email') {
+    const mail = v.replace(/^mailto:/i, '');
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? `mailto:${mail}` : null;
+  }
+  if (type === 'url' || type === 'visit') return /^https?:\/\/\S+$/i.test(v) ? v : null;
+  return null;
+}
 
 /** Location (TW-FLR-027): the pin, or a text with a maps link when the channel cannot send one. */
 const location: NodeExecutor = {
@@ -417,6 +504,7 @@ export const CORE_EXECUTORS: readonly NodeExecutor[] = [
   media,
   ask,
   buttons,
+  carousel,
   list,
   poll,
   condition,

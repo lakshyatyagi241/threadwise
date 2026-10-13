@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "AI Studio"
+    },
+    "title": "AI Studio",
+    "lead": "启动能替您与客户交谈的东西：AI 智能体、聊天机器人或工作流。",
+    "noAccess": "您无权启动此项。请联系工作区管理员。",
+    "agent": {
+      "title": "AI 智能体",
+      "body": "根据您自己的文档和网页，以您的语气作答。",
+      "create": "创建 AI 智能体",
+      "open": "您的 AI 智能体"
+    },
+    "chatbot": {
+      "title": "聊天机器人",
+      "body": "带按钮、问题、卡片和文件的引导式对话，适用于您的网站或 WhatsApp。",
+      "web": "网站聊天机器人",
+      "whatsapp": "WhatsApp 机器人"
+    },
+    "workflow": {
+      "title": "工作流",
+      "body": "高级画布：自动运行的条件、标签、Webhook 和 CRM 步骤。",
+      "create": "创建工作流",
+      "open": "您的流程"
+    },
+    "deployNote": "每个聊天机器人都有“构建”“自定义”“部署”标签。发布后，在“部署”中复制嵌入代码或链接。"
+  }
+}

@@ -1,8 +1,9 @@
 'use client';
 
+import { FlowEditorContext } from '../../lib/flow-editor-context';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, Field, Input, Select, useToast } from '@crm/ui';
@@ -24,6 +25,7 @@ import {
   groupText,
   insertStep,
   moveStep,
+  LIMITS,
   newStep,
   problems,
   removeGroup,
@@ -43,7 +45,13 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
-import { WebBotPanels, WebBotTabs, useInitialTab, type WebBotTab } from '../web-bot-tabs';
+import {
+  WebBotPanels,
+  WebBotTabs,
+  useInitialTab,
+  whatsappDefaultsFrom,
+  type WebBotTab,
+} from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
 import '../builder.css';
 
@@ -113,12 +121,11 @@ function SimpleInner({
   const t = useTranslations('flb.builder.simple');
   const m = useMsg();
   const { toast } = useToast();
-  // A bot is built for one channel, chosen when it is created; it never changes afterwards.
-  const channel: 'chat' | 'web' = initial
-    ? initial.flowType === 'web'
-      ? 'web'
-      : 'chat'
-    : newChannel;
+  // A bot is built for one channel, chosen when it is created; it never changes afterwards. It is read once: the first save rewrites
+  // the address from `?type=web` to the saved bot's, and the channel must not follow that.
+  const [channel] = useState<'chat' | 'web'>(() =>
+    initial ? (initial.flowType === 'web' ? 'web' : 'chat') : newChannel,
+  );
   const parsed = useMemo(() => {
     if (!initial) {
       const d = emptyDoc();
@@ -203,6 +210,7 @@ function Editor({
 }) {
   const t = useTranslations('flb.builder.simple');
   const tw = useTranslations('flb.builder.webBot');
+  const tEd = useTranslations('flb.builder.simple.editors');
   const tCommon = useTranslations('flb.common');
   const m = useMsg();
   const tf = useFlb();
@@ -218,10 +226,10 @@ function Editor({
   const initialTab = useInitialTab(!!initial);
   const [tab, setTab] = useState<WebBotTab>(initialTab);
   // Another channel has no tabs, whatever the link asked for.
-  const shownTab: WebBotTab = channel === 'web' ? tab : 'build';
+  const shownTab: WebBotTab = tab;
   const canEditFlow = useCan('flb.flows.update');
-  const widgetQuery = useFlowWidget(channel === 'web' ? flowId : null);
-  const needsCustomizing = channel === 'web' && !!flowId && widgetQuery.data?.widget === null;
+  const widgetQuery = useFlowWidget(flowId);
+  const needsCustomizing = !!flowId && widgetQuery.data?.widget === null;
   const [gi, setGi] = useState(0);
   const [query, setQuery] = useState('');
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -305,6 +313,36 @@ function Editor({
     const links = step.links.slice();
     links[i] = to;
     change(updateStep(next, id, { links }));
+  };
+
+  /**
+   * The "+" under a set of buttons or a list: the chosen step starts a new part, tied to the first button that leads nowhere yet. When
+   * every button already leads somewhere, a new button (or row) is added for it, up to the limit.
+   */
+  const addBranch = (stepId: string, kind: StepKind) => {
+    const step = allSteps(doc).find((x) => x.id === stepId);
+    if (!step) return;
+    const options = Array.isArray(step.data.options) ? (step.data.options as unknown[]) : [];
+    let idx = options.findIndex((_, i) => !step.links[i]);
+    let data: Record<string, unknown> | undefined;
+    if (idx < 0) {
+      const max = step.type === 'list' ? LIMITS.rows : LIMITS.buttons;
+      if (options.length >= max) return;
+      idx = options.length;
+      const added =
+        step.type === 'list'
+          ? { title: `Item ${idx + 1}`, description: '', section: '' }
+          : tEd('buttons.placeholder', { n: idx + 1 });
+      data = { options: [...options, added] };
+    }
+    const first = newStep(kind.type, allSteps(doc), kind.preset);
+    let next = addJourney(doc, first);
+    const links = step.links.slice();
+    links[idx] = first.id;
+    next = updateStep(next, stepId, { ...(data ? { data } : {}), links });
+    change(next);
+    setGi(groupsOf(next).length - 1);
+    setActiveId(first.id);
   };
 
   /** Where the last step of a part carries on (a "node to node" connection). */
@@ -405,6 +443,42 @@ function Editor({
     }
   };
 
+  // Clicking outside the step being edited closes it and saves what was changed (a menu, picker or dialog opened from the step does
+  // not count as outside). A failed save says so; a good one stays quiet, the Save button and the badge show the state.
+  const closeAndSave = useRef<() => void>(() => undefined);
+  useEffect(() => {
+    closeAndSave.current = () => {
+      setActiveId(null);
+      if (!dirty || busy || !canEditFlow) return;
+      setBusy(true);
+      persist()
+        .catch((e: unknown) =>
+          toast(t('saveFailed', { error: errMessage(e, t('genericError')) }), 'danger'),
+        )
+        .finally(() => setBusy(false));
+    };
+  });
+
+  useEffect(() => {
+    if (!activeId) return;
+    const onOutside = (e: MouseEvent) => {
+      const target = e.target instanceof Element ? e.target : null;
+      if (!target || !target.isConnected) return;
+      if (target.closest(`#step-${activeId}`)) return;
+      if (
+        target.closest(
+          '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
+        )
+      )
+        return;
+      closeAndSave.current();
+    };
+    // The click, not the press: closing the step moves what is below it, and a press-time close would send the click to the wrong place
+    // (the + under the step, or the next step's header).
+    document.addEventListener('click', onOutside, true);
+    return () => document.removeEventListener('click', onOutside, true);
+  }, [activeId]);
+
   const onPublish = async () => {
     if (busy) return;
     if (found.length > 0) {
@@ -414,15 +488,15 @@ function Editor({
     setBusy(true);
     try {
       const saved = dirty || !flowId ? await persist() : null;
-      if (channel === 'web') {
-        // A website bot goes live with the look its owner chose, so Customize has to be saved once first.
-        // A bot saved just now has no widget yet; for a saved one, ask if the page has not loaded the answer.
+      {
+        // A bot goes live with the widget its owner chose (the chat window, or the WhatsApp button), so Customize has to be saved
+        // once first. A bot saved just now has no widget yet; for a saved one, ask if the page has not loaded the answer.
         const widget = !flowId
           ? null
           : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
         if (!widget) {
           setTab('customize');
-          toast(tw('customizeFirst'), 'danger');
+          toast(tw(channel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'), 'danger');
           return;
         }
       }
@@ -446,304 +520,195 @@ function Editor({
       : t('status.draft');
 
   return (
-    <div className="flb-root fixed inset-0 z-40 flex flex-col bg-muted text-foreground">
-      <BuilderFonts />
-      <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
-        <Link
-          href="/flows"
-          aria-label={t('backToFlows')}
-          title={t('backToFlows')}
-          className="grid h-9 w-9 place-items-center rounded-full border border-border hover:bg-muted"
-        >
-          ←
-        </Link>
-        <input
-          aria-label={t('flowName')}
-          value={name}
-          maxLength={120}
-          onChange={(e) => {
-            setName(e.target.value);
-            setDirty(true);
-          }}
-          className="h-9 min-w-0 max-w-sm flex-1 rounded-lg border border-transparent bg-transparent px-2 font-serif text-[18px] hover:border-border focus:border-border focus:outline-none"
-        />
-        <Badge tone={published && !dirty ? 'success' : dirty ? 'warning' : 'neutral'}>
-          {status}
-        </Badge>
-        <Badge>{t('simpleBuilder')}</Badge>
-        <div className="ml-auto flex items-center gap-2">
-          {found.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => setShowProblems((v) => !v)}
-              className="rounded-full border border-warning/40 bg-warning/10 px-3 py-1.5 text-[12px] font-medium text-warning"
-            >
-              {t('toFix', { count: found.length })}
-            </button>
-          ) : null}
-          {notReached.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => setShowUnreached((v) => !v)}
-              className="rounded-full border border-border px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:bg-muted"
-              title={t('notReachedTitle')}
-            >
-              {t('notReachedCount', { count: notReached.length })}
-            </button>
-          ) : null}
+    <FlowEditorContext.Provider value={{ flowId, web: channel === 'web' }}>
+      <div className="flb-root fixed inset-0 z-40 flex flex-col bg-muted text-foreground">
+        <BuilderFonts />
+        <header className="relative z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-4">
+          <Link
+            href="/flows"
+            aria-label={t('backToFlows')}
+            title={t('backToFlows')}
+            className="grid h-9 w-9 place-items-center rounded-full border border-border hover:bg-muted"
+          >
+            ←
+          </Link>
           <input
-            ref={fileRef}
-            type="file"
-            accept="application/json,.json"
-            className="hidden"
-            data-simple-import-input
-            onChange={(e) => void onImportFile(e.target.files?.[0])}
+            aria-label={t('flowName')}
+            value={name}
+            maxLength={120}
+            onChange={(e) => {
+              setName(e.target.value);
+              setDirty(true);
+            }}
+            className="h-9 min-w-0 max-w-sm flex-1 rounded-lg border border-transparent bg-transparent px-2 font-serif text-[18px] hover:border-border focus:border-border focus:outline-none"
           />
-          <button
-            type="button"
-            data-simple-import
-            disabled={busy}
-            onClick={() => fileRef.current?.click()}
-            className="rounded-full border border-border px-3 py-1.5 text-[12px] font-medium hover:bg-muted"
-            title={t('importTitle')}
-          >
-            {t('import')}
-          </button>
-          {advancedAllowed && flowId ? (
-            <Link
-              href={`/flows/builder/${flowId}`}
-              className="hidden rounded-full border border-border px-3 py-1.5 text-[12px] font-medium hover:bg-muted sm:block"
-              title={t('openOnCanvas')}
+          <Badge tone={published && !dirty ? 'success' : dirty ? 'warning' : 'neutral'}>
+            {status}
+          </Badge>
+          <Badge>{t('simpleBuilder')}</Badge>
+          <div className="ml-auto flex items-center gap-2">
+            {found.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => setShowProblems((v) => !v)}
+                className="rounded-full border border-warning/40 bg-warning/10 px-3 py-1.5 text-[12px] font-medium text-warning"
+              >
+                {t('toFix', { count: found.length })}
+              </button>
+            ) : null}
+            {notReached.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => setShowUnreached((v) => !v)}
+                className="rounded-full border border-border px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:bg-muted"
+                title={t('notReachedTitle')}
+              >
+                {t('notReachedCount', { count: notReached.length })}
+              </button>
+            ) : null}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              data-simple-import-input
+              onChange={(e) => void onImportFile(e.target.files?.[0])}
+            />
+            <button
+              type="button"
+              data-simple-import
+              disabled={busy}
+              onClick={() => fileRef.current?.click()}
+              className="rounded-full border border-border px-3 py-1.5 text-[12px] font-medium hover:bg-muted"
+              title={t('importTitle')}
             >
-              {t('openAdvanced')}
-            </Link>
-          ) : null}
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={busy || !dirty}
-            onClick={() => void onSave()}
-          >
-            {t('save')}
-          </Button>
-          <Button variant="brand" size="sm" disabled={busy} onClick={() => void onPublish()}>
-            {published ? t('publishChanges') : t('publish')}
-          </Button>
-        </div>
-      </header>
+              {t('import')}
+            </button>
+            {advancedAllowed && flowId ? (
+              <Link
+                href={`/flows/builder/${flowId}`}
+                className="hidden rounded-full border border-border px-3 py-1.5 text-[12px] font-medium hover:bg-muted sm:block"
+                title={t('openOnCanvas')}
+              >
+                {t('openAdvanced')}
+              </Link>
+            ) : null}
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={busy || !dirty}
+              onClick={() => void onSave()}
+            >
+              {t('save')}
+            </Button>
+            <Button variant="brand" size="sm" disabled={busy} onClick={() => void onPublish()}>
+              {published ? t('publishChanges') : t('publish')}
+            </Button>
+          </div>
+        </header>
 
-      {channel === 'web' ? (
         <WebBotTabs
           tab={shownTab}
           onTab={setTab}
           saved={!!flowId}
           needsCustomizing={needsCustomizing}
         />
-      ) : null}
 
-      {importFailed.length > 0 ? (
-        <div
-          role="alert"
-          className="shrink-0 border-b border-danger/30 bg-danger/10 px-4 py-2 text-[12.5px]"
-        >
-          <div className="mb-1 flex items-center justify-between font-medium">
-            <span>{t('importFailedTitle')}</span>
-            <button
-              type="button"
-              className="text-[12px] underline"
-              onClick={() => setImportFailed([])}
-            >
-              {tCommon('dismiss')}
-            </button>
-          </div>
-          <ul className="list-disc space-y-0.5 pl-5">
-            {importFailed.map((r) => (
-              <li key={r}>{r}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-      {importNotes.length > 0 ? (
-        <div className="shrink-0 border-b border-border bg-background px-4 py-2 text-[12.5px]">
-          <div className="mb-1 flex items-center justify-between font-medium">
-            <span>{t('importNotesTitle')}</span>
-            <button
-              type="button"
-              className="text-[12px] underline"
-              onClick={() => setImportNotes([])}
-            >
-              {tCommon('dismiss')}
-            </button>
-          </div>
-          <ul className="list-disc space-y-0.5 pl-5 text-muted-foreground">
-            {importNotes.map((r) => (
-              <li key={r}>{r}</li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {showProblems && found.length > 0 ? (
-        <div className="shrink-0 border-b border-warning/30 bg-warning/10 px-4 py-2 text-[12.5px]">
-          <div className="mb-1 font-medium">{t('fixBeforePublishing')}</div>
-          <ul className="list-disc space-y-0.5 pl-5">
-            {found.map((p, i) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  className="text-left underline-offset-2 hover:underline"
-                  onClick={() => openStep(p.stepId)}
-                >
-                  {m(p.message)}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      {showUnreached && notReached.length > 0 ? (
-        <div className="max-h-40 shrink-0 overflow-y-auto border-b border-border bg-background px-4 py-2 text-[12.5px]">
-          <div className="mb-1 flex items-center justify-between font-medium">
-            <span>{t('notReachedPanel')}</span>
-            <button
-              type="button"
-              className="text-[12px] underline"
-              onClick={() => setShowUnreached(false)}
-            >
-              {t('hide')}
-            </button>
-          </div>
-          <ul className="list-disc space-y-0.5 pl-5 text-muted-foreground">
-            {notReached.map((p) => (
-              <li key={p.stepId}>
-                <button
-                  type="button"
-                  className="text-left underline-offset-2 hover:underline"
-                  onClick={() => openStep(p.stepId)}
-                >
-                  {p.message}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-
-      <div className={`flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
-        <aside className="hidden w-72 shrink-0 flex-col border-r border-border bg-background md:flex">
-          <div className="flex items-center justify-between px-4 pt-3">
-            <span className="text-[15px] font-semibold">{t('flows')}</span>
-            <button
-              type="button"
-              onClick={() => {
-                const first = newStep('message', allSteps(doc));
-                const next = addJourney(doc, first);
-                change(next);
-                setGi(groupsOf(next).length - 1);
-                setActiveId(first.id);
-              }}
-              className="rounded-lg border border-border px-3 py-1 text-[12px] font-medium hover:bg-muted"
-            >
-              {t('newFlowSidebar')}
-            </button>
-          </div>
-          <div className="px-4 py-3">
-            <Input
-              aria-label={t('searchFlows')}
-              placeholder={t('search')}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-          <nav className="min-h-0 flex-1 overflow-y-auto px-2 pb-3" aria-label={t('flows')}>
-            {groups.map((g, i) => {
-              if (
-                query.trim() &&
-                !groupText(g, tf).toLowerCase().includes(query.trim().toLowerCase())
-              )
-                return null;
-              const head = doc.journeys[g.chains[0]!]!.steps[0];
-              const lost = i > 0 && head && unreachable(doc).some((s) => s.id === head.id);
-              return (
-                <div
-                  key={g.key}
-                  className={`mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
-                    i === gIndex ? 'bg-muted font-semibold' : 'hover:bg-muted/60'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    data-flow-entry
-                    onClick={() => {
-                      setGi(i);
-                      setActiveId(null);
-                    }}
-                    className="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left text-[13px]"
-                  >
-                    <span className="w-5 shrink-0 text-right font-mono text-[12px] text-muted-foreground">
-                      {i + 1}
-                    </span>
-                    <span className="min-w-0 flex-1 truncate">{groupText(g, tf)}</span>
-                    {lost ? (
-                      <span title={t('nothingLeadsHere')} className="text-warning">
-                        !
-                      </span>
-                    ) : null}
-                  </button>
-                  <button
-                    type="button"
-                    aria-label={t('duplicateNamed', { name: groupText(g, tf) })}
-                    title={t('duplicateFlow')}
-                    onClick={() => {
-                      const r = duplicateGroup(doc, i);
-                      change(r.doc);
-                      setGi(r.group);
-                      setActiveId(null);
-                    }}
-                    className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-brand hover:bg-background"
-                  >
-                    <svg
-                      viewBox="0 0 16 16"
-                      className="h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    >
-                      <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
-                      <path d="M10.5 3.5v-.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h.5" />
-                    </svg>
-                  </button>
-                  <span className="w-6 shrink-0 text-right font-mono text-[12px] text-muted-foreground">
-                    {String(g.steps).padStart(2, '0')}
-                  </span>
-                </div>
-              );
-            })}
-          </nav>
-        </aside>
-
-        <main className="min-w-0 flex-1 overflow-y-auto">
-          <div className="mx-auto w-full max-w-xl px-4 py-6">
-            <div className="mb-4 flex flex-wrap items-center gap-2 md:hidden">
-              <Select
-                aria-label={t('flowSelect')}
-                value={gIndex}
-                onChange={(e) => {
-                  setGi(Number(e.target.value));
-                  setActiveId(null);
-                }}
-                className="h-9 flex-1"
+        {importFailed.length > 0 ? (
+          <div
+            role="alert"
+            className="shrink-0 border-b border-danger/30 bg-danger/10 px-4 py-2 text-[12.5px]"
+          >
+            <div className="mb-1 flex items-center justify-between font-medium">
+              <span>{t('importFailedTitle')}</span>
+              <button
+                type="button"
+                className="text-[12px] underline"
+                onClick={() => setImportFailed([])}
               >
-                {groups.map((g, i) => (
-                  <option key={g.key} value={i}>
-                    {i + 1}. {groupText(g, tf)}
-                  </option>
-                ))}
-              </Select>
-              <Button
-                size="sm"
-                variant="secondary"
+                {tCommon('dismiss')}
+              </button>
+            </div>
+            <ul className="list-disc space-y-0.5 pl-5">
+              {importFailed.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {importNotes.length > 0 ? (
+          <div className="shrink-0 border-b border-border bg-background px-4 py-2 text-[12.5px]">
+            <div className="mb-1 flex items-center justify-between font-medium">
+              <span>{t('importNotesTitle')}</span>
+              <button
+                type="button"
+                className="text-[12px] underline"
+                onClick={() => setImportNotes([])}
+              >
+                {tCommon('dismiss')}
+              </button>
+            </div>
+            <ul className="list-disc space-y-0.5 pl-5 text-muted-foreground">
+              {importNotes.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {showProblems && found.length > 0 ? (
+          <div className="shrink-0 border-b border-warning/30 bg-warning/10 px-4 py-2 text-[12.5px]">
+            <div className="mb-1 font-medium">{t('fixBeforePublishing')}</div>
+            <ul className="list-disc space-y-0.5 pl-5">
+              {found.map((p, i) => (
+                <li key={i}>
+                  <button
+                    type="button"
+                    className="text-left underline-offset-2 hover:underline"
+                    onClick={() => openStep(p.stepId)}
+                  >
+                    {m(p.message)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {showUnreached && notReached.length > 0 ? (
+          <div className="max-h-40 shrink-0 overflow-y-auto border-b border-border bg-background px-4 py-2 text-[12.5px]">
+            <div className="mb-1 flex items-center justify-between font-medium">
+              <span>{t('notReachedPanel')}</span>
+              <button
+                type="button"
+                className="text-[12px] underline"
+                onClick={() => setShowUnreached(false)}
+              >
+                {t('hide')}
+              </button>
+            </div>
+            <ul className="list-disc space-y-0.5 pl-5 text-muted-foreground">
+              {notReached.map((p) => (
+                <li key={p.stepId}>
+                  <button
+                    type="button"
+                    className="text-left underline-offset-2 hover:underline"
+                    onClick={() => openStep(p.stepId)}
+                  >
+                    {p.message}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <div className={`flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
+          <aside className="hidden w-72 shrink-0 flex-col border-r border-border bg-background md:flex">
+            <div className="flex items-center justify-between px-4 pt-3">
+              <span className="text-[15px] font-semibold">{t('flows')}</span>
+              <button
+                type="button"
                 onClick={() => {
                   const first = newStep('message', allSteps(doc));
                   const next = addJourney(doc, first);
@@ -751,153 +716,294 @@ function Editor({
                   setGi(groupsOf(next).length - 1);
                   setActiveId(first.id);
                 }}
+                className="rounded-lg border border-border px-3 py-1 text-[12px] font-medium hover:bg-muted"
               >
-                {t('newFlowMobile')}
-              </Button>
+                {t('newFlowSidebar')}
+              </button>
             </div>
-
-            <div className="mb-4 flex items-end gap-2">
-              <Field label={t('flowName')} className="flex-1" eyebrow>
-                <Input
-                  value={group.placeholder && gIndex > 0 ? '' : groupText(group, tf)}
-                  placeholder={t('flowPlaceholder', { n: gIndex + 1 })}
-                  onChange={(e) => change(renameGroup(doc, gIndex, e.target.value))}
-                />
-              </Field>
-              {gIndex > 0 ? (
-                <Button variant="secondary" size="sm" onClick={() => setConfirmDelete(gIndex)}>
-                  {t('deleteFlow')}
-                </Button>
-              ) : null}
-            </div>
-
-            {gIndex === 0 ? (
-              <TriggerCard
-                doc={doc}
-                ctx={ctx}
-                channel={channel}
-                set={setTrigger}
-                bad={showProblems && found.some((p) => p.stepId === null)}
+            <div className="px-4 py-3">
+              <Input
+                aria-label={t('searchFlows')}
+                placeholder={t('search')}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
               />
-            ) : null}
+            </div>
+            <nav className="min-h-0 flex-1 overflow-y-auto px-2 pb-3" aria-label={t('flows')}>
+              {groups.map((g, i) => {
+                if (
+                  query.trim() &&
+                  !groupText(g, tf).toLowerCase().includes(query.trim().toLowerCase())
+                )
+                  return null;
+                const head = doc.journeys[g.chains[0]!]!.steps[0];
+                const lost = i > 0 && head && unreachable(doc).some((s) => s.id === head.id);
+                return (
+                  <div
+                    key={g.key}
+                    className={`mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
+                      i === gIndex ? 'bg-muted font-semibold' : 'hover:bg-muted/60'
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      data-flow-entry
+                      onClick={() => {
+                        setGi(i);
+                        setActiveId(null);
+                      }}
+                      className="flex min-w-0 flex-1 items-center gap-2 py-1.5 text-left text-[13px]"
+                    >
+                      <span className="w-5 shrink-0 text-right font-mono text-[12px] text-muted-foreground">
+                        {i + 1}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate">{groupText(g, tf)}</span>
+                      {lost ? (
+                        <span title={t('nothingLeadsHere')} className="text-warning">
+                          !
+                        </span>
+                      ) : null}
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={t('duplicateNamed', { name: groupText(g, tf) })}
+                      title={t('duplicateFlow')}
+                      onClick={() => {
+                        const r = duplicateGroup(doc, i);
+                        change(r.doc);
+                        setGi(r.group);
+                        setActiveId(null);
+                      }}
+                      className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-brand hover:bg-background"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      >
+                        <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" />
+                        <path d="M10.5 3.5v-.5a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h.5" />
+                      </svg>
+                    </button>
+                    <span className="w-6 shrink-0 text-right font-mono text-[12px] text-muted-foreground">
+                      {String(g.steps).padStart(2, '0')}
+                    </span>
+                  </div>
+                );
+              })}
+            </nav>
+          </aside>
 
-            {group.chains.map((ci, part) => {
-              const journey = doc.journeys[ci]!;
-              const head = journey.steps[0];
-              const lostPart = part > 0 && head && unreachable(doc).some((s) => s.id === head.id);
-              return (
-                <div key={head?.id ?? `chain-${ci}`}>
-                  {part > 0 ? (
-                    <p className="my-4 rounded-xl border border-dashed border-border px-3 py-2 text-center text-[11.5px] text-muted-foreground">
-                      {t('anotherPart', { lost: lostPart ? 'true' : 'false' })}
-                    </p>
-                  ) : null}
-                  <AddMenu
-                    channel={channel}
-                    onPick={(k) => add(ci, 0, k)}
-                    atEnd={journey.steps.length === 0}
-                    hint={journey.steps.length === 0 ? t('addFirstStep') : undefined}
-                  />
-                  {journey.steps.map((s, si) => (
-                    <div key={s.id}>
-                      <StepCard
-                        step={s}
-                        doc={doc}
-                        ctx={ctx}
-                        stage={stageIn(doc, ci, si)}
-                        active={activeId === s.id}
-                        bad={badSteps.has(s.id)}
-                        first={si === 0}
-                        last={si === journey.steps.length - 1}
-                        onToggle={() => setActiveId(activeId === s.id ? null : s.id)}
-                        onSet={(patch) => setData(s.id, patch)}
-                        onLink={(i, target) => link(s.id, i, target)}
-                        onMove={(d) => change(moveStep(doc, s.id, d))}
-                        onCopy={() => change(duplicateStep(doc, s.id))}
-                        onDelete={() => {
-                          change(removeStep(doc, s.id));
-                          setActiveId(null);
-                        }}
-                      />
-                      {BRANCHING.has(s.type) ? (
-                        <p className="my-3 text-center text-[11.5px] text-muted-foreground">
-                          {t('branchingEnds', { kind: s.type === 'list' ? 'list' : 'buttons' })}
-                        </p>
-                      ) : (
-                        <>
-                          <AddMenu
-                            channel={channel}
-                            onPick={(k) => add(ci, si + 1, k)}
-                            atEnd={si === journey.steps.length - 1}
-                          />
-                          {si === journey.steps.length - 1 ? (
-                            <div className="mb-3 flex items-center gap-2">
-                              <span className="shrink-0 text-[12px] text-muted-foreground">
-                                {t('thenGoTo')}
-                              </span>
-                              <div className="min-w-0 flex-1">
-                                <LinkSelect
-                                  doc={doc}
-                                  stepId={s.id}
-                                  value={s.goto ?? null}
-                                  onChange={(target) => setGoto(s.id, target)}
-                                />
-                              </div>
-                            </div>
-                          ) : null}
-                        </>
-                      )}
-                    </div>
+          <main className="min-w-0 flex-1 overflow-y-auto">
+            <div className="mx-auto w-full max-w-xl px-4 py-6">
+              <div className="mb-4 flex flex-wrap items-center gap-2 md:hidden">
+                <Select
+                  aria-label={t('flowSelect')}
+                  value={gIndex}
+                  onChange={(e) => {
+                    setGi(Number(e.target.value));
+                    setActiveId(null);
+                  }}
+                  className="h-9 flex-1"
+                >
+                  {groups.map((g, i) => (
+                    <option key={g.key} value={i}>
+                      {i + 1}. {groupText(g, tf)}
+                    </option>
                   ))}
-                </div>
-              );
-            })}
-          </div>
-        </main>
-      </div>
+                </Select>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => {
+                    const first = newStep('message', allSteps(doc));
+                    const next = addJourney(doc, first);
+                    change(next);
+                    setGi(groupsOf(next).length - 1);
+                    setActiveId(first.id);
+                  }}
+                >
+                  {t('newFlowMobile')}
+                </Button>
+              </div>
 
-      <ConfirmDialog
-        open={pendingImport !== null}
-        title={t('confirmImport.title')}
-        message={t('confirmImport.message')}
-        confirmLabel={t('confirmImport.confirm')}
-        cancelLabel={tCommon('cancel')}
-        tone="danger"
-        onClose={() => setPendingImport(null)}
-        onConfirm={() => {
-          if (pendingImport) finishImport(pendingImport);
-          setPendingImport(null);
-        }}
-      />
+              <div className="mb-4 flex items-end gap-2">
+                <Field label={t('flowName')} className="flex-1" eyebrow>
+                  <Input
+                    value={group.placeholder && gIndex > 0 ? '' : groupText(group, tf)}
+                    placeholder={t('flowPlaceholder', { n: gIndex + 1 })}
+                    onChange={(e) => change(renameGroup(doc, gIndex, e.target.value))}
+                  />
+                </Field>
+                {gIndex > 0 ? (
+                  <Button variant="secondary" size="sm" onClick={() => setConfirmDelete(gIndex)}>
+                    {t('deleteFlow')}
+                  </Button>
+                ) : null}
+              </div>
 
-      {channel === 'web' && flowId ? (
-        <WebBotPanels
-          tab={shownTab}
-          flowId={flowId}
-          flowName={name}
-          published={published}
-          canEdit={canEditFlow}
+              {gIndex === 0 ? (
+                <TriggerCard
+                  doc={doc}
+                  ctx={ctx}
+                  channel={channel}
+                  set={setTrigger}
+                  bad={showProblems && found.some((p) => p.stepId === null)}
+                />
+              ) : null}
+
+              {group.chains.map((ci, part) => {
+                const journey = doc.journeys[ci]!;
+                const head = journey.steps[0];
+                const lostPart = part > 0 && head && unreachable(doc).some((s) => s.id === head.id);
+                return (
+                  <div key={head?.id ?? `chain-${ci}`}>
+                    {part > 0 ? (
+                      <p className="my-4 rounded-xl border border-dashed border-border px-3 py-2 text-center text-[11.5px] text-muted-foreground">
+                        {t('anotherPart', { lost: lostPart ? 'true' : 'false' })}
+                      </p>
+                    ) : null}
+                    <AddMenu
+                      channel={channel}
+                      onPick={(k) => add(ci, 0, k)}
+                      atEnd={journey.steps.length === 0}
+                      hint={journey.steps.length === 0 ? t('addFirstStep') : undefined}
+                    />
+                    {journey.steps.map((s, si) => (
+                      <div key={s.id}>
+                        <StepCard
+                          step={s}
+                          doc={doc}
+                          ctx={ctx}
+                          stage={stageIn(doc, ci, si)}
+                          active={activeId === s.id}
+                          bad={badSteps.has(s.id)}
+                          first={si === 0}
+                          last={si === journey.steps.length - 1}
+                          onToggle={() => setActiveId(activeId === s.id ? null : s.id)}
+                          onSet={(patch) => setData(s.id, patch)}
+                          onLink={(i, target) => link(s.id, i, target)}
+                          onMove={(d) => change(moveStep(doc, s.id, d))}
+                          onCopy={() => change(duplicateStep(doc, s.id))}
+                          onDelete={() => {
+                            change(removeStep(doc, s.id));
+                            setActiveId(null);
+                          }}
+                        />
+                        {BRANCHING.has(s.type) ? (
+                          <p className="my-3 text-center text-[11.5px] text-muted-foreground">
+                            {t('branchingEnds', { kind: s.type === 'list' ? 'list' : 'buttons' })}
+                          </p>
+                        ) : null}
+                        {BRANCHING.has(s.type) ? (
+                          <div
+                            className="mb-3 flex flex-wrap justify-center gap-2"
+                            data-testid="branch-adders"
+                          >
+                            {(Array.isArray(s.data.options) ? s.data.options : []).map(
+                              (o: unknown, i: number) => {
+                                // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
+                                if (s.links[i]) return null;
+                                const label =
+                                  typeof o === 'string'
+                                    ? o
+                                    : str((o as Record<string, unknown>).title);
+                                return (
+                                  <button
+                                    key={i}
+                                    type="button"
+                                    onClick={() => link(s.id, i, NEW_JOURNEY)}
+                                    className="rounded-full border border-dashed border-border px-3.5 py-1.5 text-[12px] font-semibold text-brand hover:bg-muted"
+                                  >
+                                    + {t('branchAdd', { title: label || `#${i + 1}` })}
+                                  </button>
+                                );
+                              },
+                            )}
+                          </div>
+                        ) : null}
+                        {BRANCHING.has(s.type) ? (
+                          <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
+                        ) : (
+                          <>
+                            <AddMenu
+                              channel={channel}
+                              onPick={(k) => add(ci, si + 1, k)}
+                              atEnd={si === journey.steps.length - 1}
+                            />
+                            {si === journey.steps.length - 1 ? (
+                              <div className="mb-3 flex items-center gap-2">
+                                <span className="shrink-0 text-[12px] text-muted-foreground">
+                                  {t('thenGoTo')}
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                  <LinkSelect
+                                    doc={doc}
+                                    stepId={s.id}
+                                    value={s.goto ?? null}
+                                    onChange={(target) => setGoto(s.id, target)}
+                                  />
+                                </div>
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </main>
+        </div>
+
+        <ConfirmDialog
+          open={pendingImport !== null}
+          title={t('confirmImport.title')}
+          message={t('confirmImport.message')}
+          confirmLabel={t('confirmImport.confirm')}
+          cancelLabel={tCommon('cancel')}
+          tone="danger"
+          onClose={() => setPendingImport(null)}
+          onConfirm={() => {
+            if (pendingImport) finishImport(pendingImport);
+            setPendingImport(null);
+          }}
         />
-      ) : null}
 
-      <ConfirmDialog
-        open={confirmDelete !== null}
-        title={t('confirmDelete.title')}
-        message={t('confirmDelete.message')}
-        confirmLabel={t('deleteFlow')}
-        cancelLabel={tCommon('cancel')}
-        tone="danger"
-        onClose={() => setConfirmDelete(null)}
-        onConfirm={() => {
-          if (confirmDelete !== null) {
-            change(removeGroup(doc, confirmDelete));
-            setGi(0);
-            setActiveId(null);
-          }
-          setConfirmDelete(null);
-        }}
-      />
-    </div>
+        {flowId ? (
+          <WebBotPanels
+            tab={shownTab}
+            channel={channel}
+            whatsapp={whatsappDefaultsFrom(doc.trigger, ctx.senders.chat)}
+            flowId={flowId}
+            flowName={name}
+            published={published}
+            canEdit={canEditFlow}
+          />
+        ) : null}
+
+        <ConfirmDialog
+          open={confirmDelete !== null}
+          title={t('confirmDelete.title')}
+          message={t('confirmDelete.message')}
+          confirmLabel={t('deleteFlow')}
+          cancelLabel={tCommon('cancel')}
+          tone="danger"
+          onClose={() => setConfirmDelete(null)}
+          onConfirm={() => {
+            if (confirmDelete !== null) {
+              change(removeGroup(doc, confirmDelete));
+              setGi(0);
+              setActiveId(null);
+            }
+            setConfirmDelete(null);
+          }}
+        />
+      </div>
+    </FlowEditorContext.Provider>
   );
 }
 
@@ -918,6 +1024,11 @@ function TriggerCard({
   const d = doc.trigger.data;
   const kind = str(d.kind) || 'keyword';
   const any = str(d.keywordMode) === 'any';
+  // One connected number is the bot's number: it is not asked for, only shown.
+  const only = ctx.senders.chat.length === 1 ? ctx.senders.chat[0]! : null;
+  useEffect(() => {
+    if (channel !== 'web' && only && str(d.deviceId) !== only.key) set({ deviceId: only.key });
+  }, [channel, only, d.deviceId, set]);
   return (
     <section
       className={`rounded-2xl border bg-background p-4 ${bad ? 'border-danger' : 'border-border'}`}
@@ -955,7 +1066,16 @@ function TriggerCard({
           ) : null}
         </div>
       )}
-      {channel === 'web' ? null : (
+      {channel === 'web' ? null : only ? (
+        <p
+          data-testid="trigger-connected-number"
+          className="mt-3 rounded-lg bg-muted p-2.5 text-[12.5px] text-muted-foreground"
+        >
+          {t('connectedNumber', {
+            number: `${only.label}${only.phone ? ` · ${only.phone}` : ''}`,
+          })}
+        </p>
+      ) : (
         <Field
           className="mt-3"
           label={t('whatsappNumber')}
@@ -1012,7 +1132,7 @@ function AddMenu({
           role="menu"
           className="absolute top-12 z-20 max-h-[70vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-background p-2 shadow-xl"
         >
-          {(['send', 'ask', 'handoff'] as const).map((group) => (
+          {(['send', 'ask', 'logic', 'handoff'] as const).map((group) => (
             <div key={group} className="mb-1 last:mb-0">
               <div className="px-2.5 pt-1.5 pb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 {t(`groups.${group}`)}

@@ -17,7 +17,7 @@ import {
 } from './_shims/tokens';
 import { EntitlementWidgetPlanGate } from './widget-plan';
 import { WidgetAiReplyService } from './widget-ai-reply.service';
-import { WidgetPublicController } from './widget-public.controller';
+import { WidgetAssetsPublicController, WidgetPublicController } from './widget-public.controller';
 import { WidgetPublicService } from './widget-public.service';
 import { WidgetThrottleService } from './widget-throttle.service';
 import { WidgetVisitorsRepository } from './widget-visitors.repository';
@@ -33,7 +33,12 @@ import { WidgetsService } from './widgets.service';
  */
 @Module({
   imports: [PlansCoreModule, LocalizationTranslationModule, ChatConversationsModule],
-  controllers: [WidgetsController, FlowWidgetController, WidgetPublicController],
+  controllers: [
+    WidgetsController,
+    FlowWidgetController,
+    WidgetPublicController,
+    WidgetAssetsPublicController,
+  ],
   providers: [
     WidgetsService,
     WidgetsRepository,

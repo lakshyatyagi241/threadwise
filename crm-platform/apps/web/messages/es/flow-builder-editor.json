@@ -164,7 +164,12 @@
       "messaging": "Flujo de mensajería",
       "messagingNote": "WhatsApp, Instagram o Facebook: cambia de canal en el nodo Disparador",
       "call": "Llamada",
-      "callNote": "IVR de voz con IA: decir, escuchar, transferir"
+      "callNote": "IVR de voz con IA: decir, escuchar, transferir",
+      "subtitleSimple": "Cada bot se crea para un solo canal, porque no todos los componentes funcionan en todos los canales.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Responde a los clientes en un número de WhatsApp conectado",
+      "web": "Chat del sitio web",
+      "webNote": "Un widget de chat que añades a tu sitio web"
     },
     "rename": {
       "title": "Renombrar flujo",
@@ -697,14 +702,16 @@
           "wordsPlaceholder": "hola, buenas, menú",
           "whatsappNumber": "Número de WhatsApp",
           "noNumberHint": "Aún no hay ningún número de WhatsApp conectado: conecta uno en Ajustes y elígelo aquí.",
-          "chooseNumber": "Elige un número…"
+          "chooseNumber": "Elige un número…",
+          "connectedNumber": "Responde desde tu número de WhatsApp conectado: {number}"
         },
         "add": {
           "addStep": "Añadir un paso",
           "groups": {
             "send": "Enviar",
             "ask": "Preguntar al cliente",
-            "handoff": "Derivar"
+            "handoff": "Derivar",
+            "logic": "Decidir"
           },
           "blockedTitle": "Los botones y las listas cierran un flujo, así que solo pueden ir al final."
         },
@@ -747,7 +754,8 @@
             "placeholder": "Botón {n}",
             "remove": "Quitar botón",
             "add": "Añadir un botón",
-            "saveIn": "Guardar el botón pulsado en"
+            "saveIn": "Guardar el botón pulsado en",
+            "handoff": "Pasar a una persona (agente en vivo)"
           },
           "list": {
             "above": "Mensaje sobre la lista",
@@ -779,7 +787,9 @@
             "dateFormat": "Formato de fecha",
             "dateFormatHint": "Cómo escribe el cliente la fecha. Se guarda tal como se escribe, y una copia en formato año-mes-día en la variable _iso.",
             "saveIn": "Guardar la respuesta en",
-            "retriesHint": "0 sigue preguntando hasta que la respuesta sea correcta."
+            "retriesHint": "0 sigue preguntando hasta que la respuesta sea correcta.",
+            "verifyOtp": "Verificar el número con un código de un solo uso",
+            "verifyOtpHint": "Se envía un código al número (hace falta el prefijo del país) y el visitante lo escribe en el chat. El número solo se guarda si el código es correcto; la variable que termina en _verified dice sí o no."
           },
           "askFile": {
             "accepted": "Archivos aceptados",
@@ -830,9 +840,48 @@
           },
           "cta": {
             "buttonText": "Texto del botón",
-            "opens": "Abre (enlace)"
+            "opens": "Abre (enlace)",
+            "type": "Abre",
+            "kinds": {
+              "url": "Una página web",
+              "phone": "Una llamada",
+              "email": "Un correo electrónico"
+            },
+            "add": "Añadir otro botón",
+            "remove": "Quitar botón",
+            "opensPhone": "Número de teléfono",
+            "opensEmail": "Dirección de correo"
+          },
+          "carousel": {
+            "intro": "Mensaje sobre las tarjetas",
+            "card": "Tarjeta {n}",
+            "image": "Enlace de la imagen (opcional)",
+            "title": "Título",
+            "text": "Texto",
+            "buttons": "Botones (hasta 2)",
+            "label": "Texto del botón",
+            "addCard": "Añadir una tarjeta",
+            "removeCard": "Quitar tarjeta",
+            "addButton": "Añadir un botón",
+            "removeButton": "Quitar botón",
+            "btnKinds": {
+              "reply": "Responder en el chat",
+              "url": "Abrir una página web",
+              "phone": "Llamar a un número",
+              "email": "Enviar un correo",
+              "agent": "Hablar con una persona"
+            }
+          },
+          "condition": {
+            "info": "Añade reglas (una variable, una comparación y un valor). Únelas con AND u OR y anida grupos cuando lo necesites.",
+            "yes": "Cuando se cumplan las reglas, ir a",
+            "no": "Cuando no se cumplan, ir a"
+          },
+          "handoff": {
+            "hint": "El visitante pasa a este equipo con tu nota. No hace falta conectar nada después de este botón."
           }
-        }
+        },
+        "branchAdd": "Añadir un paso para “{title}”"
       },
       "formsCore": {
         "helpers": {
@@ -1825,6 +1874,21 @@
           "sampleName": "Lugar de prueba",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Secciones del bot",
+        "build": "Crear",
+        "customize": "Personalizar",
+        "saveFirst": "Guarda primero el bot.",
+        "needsCustomizing": "Aún no se guardó la personalización. Abre Personalizar.",
+        "customizeFirst": "Personaliza tu widget de chat y guárdalo una vez antes de publicar.",
+        "deploy": "Implementar",
+        "customizeFirstWhatsapp": "Personaliza tu botón de WhatsApp y guárdalo una vez antes de publicar."
+      },
+      "buttonIcon": {
+        "label": "Icono (opcional)",
+        "add": "Añadir icono",
+        "saveFirst": "Guarda el bot una vez para añadir un icono."
       }
     },
     "contracts": {
@@ -2100,6 +2164,10 @@
         "api_library": {
           "label": "API (de la biblioteca)",
           "description": "Llamar a una API guardada desde la Biblioteca de API"
+        },
+        "carousel": {
+          "label": "Carrusel",
+          "description": "Tarjetas deslizables con imágenes y botones"
         }
       },
       "groups": {
@@ -2148,7 +2216,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Correo"
+        "email": "Correo",
+        "web": "Chat del sitio web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-AAAA",
@@ -2321,6 +2390,14 @@
         "askLocation": {
           "label": "Su ubicación",
           "help": "Espera a que el cliente comparta una ubicación"
+        },
+        "carousel": {
+          "label": "Carrusel",
+          "help": "Tarjetas deslizables con imágenes y botones"
+        },
+        "condition": {
+          "label": "Condición",
+          "help": "Bifurca según lo que el cliente dijo o guardó, con reglas AND / OR"
         }
       },
       "typeLabel": {
@@ -2335,7 +2412,9 @@
         "location": "Ubicación",
         "template": "Plantilla",
         "cta": "Botón de enlace",
-        "assign": "Asignar a un agente"
+        "assign": "Asignar a un agente",
+        "carousel": "Carrusel",
+        "condition": "Condición"
       },
       "stepLabel": {
         "questionOf": "Pregunta · {kind}"
@@ -2372,7 +2451,10 @@
         "addRow": "Paso {stage}: añade al menos una fila.",
         "rowTitle": "Paso {stage}: todas las filas necesitan un título de hasta {max} caracteres.",
         "rowDescriptionTooLong": "Paso {stage}: la descripción de una fila supera los {max} caracteres.",
-        "variableUsed": "Paso {stage}: el paso {other} ya usa «{name}»; da a cada respuesta su propio nombre."
+        "variableUsed": "Paso {stage}: el paso {other} ya usa «{name}»; da a cada respuesta su propio nombre.",
+        "carouselCards": "Paso {stage}: añade al menos una tarjeta y dale un título a cada una.",
+        "carouselButtons": "Paso {stage}: dale un nombre a cada botón, y un enlace, número o dirección donde abra algo.",
+        "conditionIncomplete": "Paso {stage}: completa las reglas de la condición (una variable y un valor en cada una)."
       }
     },
     "waboImport": {
@@ -2381,7 +2463,11 @@
         "buttonNoTarget": "Un botón «{type}» («{text}») no tiene destino en Sencillo.",
         "skippedStep": "Se omitió un paso «{sub}»: Sencillo no tiene nada parecido.",
         "leadsOutside": "«{text}» conduce a un flujo que no está en este archivo; termina ahí hasta que lo enlaces.",
-        "connectsOutside": "Un paso se conecta a un nodo que no está en este archivo ({id}); queda sin enlazar."
+        "connectsOutside": "Un paso se conecta a un nodo que no está en este archivo ({id}); queda sin enlazar.",
+        "dateLimits": "Una pregunta de fecha conserva su formato pero no sus límites (más temprana, más tardía, días excluidos).",
+        "tooManyButtons": "Un mensaje de botones tenía más opciones de las que caben; se omitieron los botones sobrantes.",
+        "agentTeam": "Se conservó un botón de agente en vivo: elige el equipo que recibe la conversación.",
+        "tooManySlides": "Un carrusel tenía más de 10 tarjetas; se omitieron las sobrantes."
       },
       "reasons": {
         "notExport": "Este archivo no es una exportación de flujo. Usa un archivo .json exportado desde Flujos o un flujo exportado desde la consola de wabo.",

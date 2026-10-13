@@ -293,6 +293,11 @@
         "label": "Automatisch toewijzen",
         "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
         "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
+      },
+      "web": {
+        "label": "Websitechat",
+        "description": "Bots gebouwd voor je websitechat en de widget waarin elk ervan draait.",
+        "keywords": "web, website, widget, chatbot, embedden, livechat"
       }
     },
     "title": "Instellingen",

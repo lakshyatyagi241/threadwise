@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "AI Studio"
+    },
+    "title": "AI Studio",
+    "lead": "Mulai sesuatu yang berbicara dengan pelanggan Anda untuk Anda: agen AI, chatbot, atau alur kerja.",
+    "noAccess": "Anda tidak berhak memulai ini. Tanyakan kepada admin ruang kerja.",
+    "agent": {
+      "title": "Agen AI",
+      "body": "Menjawab dari dokumen dan halaman web Anda sendiri, dengan gaya Anda.",
+      "create": "Buat agen AI",
+      "open": "Agen AI Anda"
+    },
+    "chatbot": {
+      "title": "Chatbot",
+      "body": "Percakapan terpandu dengan tombol, pertanyaan, kartu, dan file, untuk situs web atau WhatsApp Anda.",
+      "web": "Bot chat situs web",
+      "whatsapp": "Bot WhatsApp"
+    },
+    "workflow": {
+      "title": "Alur kerja",
+      "body": "Kanvas lanjutan: kondisi, tag, webhook, dan langkah CRM yang berjalan sendiri.",
+      "create": "Buat alur kerja",
+      "open": "Alur Anda"
+    },
+    "deployNote": "Setiap chatbot memiliki tab Bangun, Sesuaikan, dan Terapkan. Publikasikan, lalu salin kode sematan atau tautannya dari Terapkan."
+  }
+}

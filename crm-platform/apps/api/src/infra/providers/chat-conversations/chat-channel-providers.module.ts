@@ -5,6 +5,7 @@ import {
   simulatorAllowed,
 } from '../../../config/domains/chat-conversations.env';
 import { CHANNEL_ADAPTERS, type ChannelAdapter } from './channel.port';
+import { ChatMediaStore } from './media';
 import { SimulatorAdapter } from './simulator.adapter';
 import { TelegramChannelAdapter } from './telegram-channel.adapter';
 import { WebchatChannelAdapter } from './webchat-channel.adapter';
@@ -20,12 +21,12 @@ import { WebchatChannelAdapter } from './webchat-channel.adapter';
   providers: [
     {
       provide: CHANNEL_ADAPTERS,
-      inject: [MetaCloudChannelAdapter],
-      useFactory: (meta: MetaCloudChannelAdapter): ChannelAdapter[] => {
+      inject: [MetaCloudChannelAdapter, ChatMediaStore],
+      useFactory: (meta: MetaCloudChannelAdapter, media: ChatMediaStore): ChannelAdapter[] => {
         assertSimulatorBootSafe();
         const adapters: ChannelAdapter[] = [
           meta,
-          new WebchatChannelAdapter(),
+          new WebchatChannelAdapter(media),
           new TelegramChannelAdapter(),
         ];
         if (simulatorAllowed()) adapters.push(new SimulatorAdapter());

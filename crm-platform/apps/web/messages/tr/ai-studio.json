@@ -1,0 +1,29 @@
+{
+  "aiStudio": {
+    "nav": {
+      "studio": "AI Studio"
+    },
+    "title": "AI Studio",
+    "lead": "Müşterilerinizle sizin yerinize konuşacak bir şey başlatın: yapay zekâ ajanı, sohbet botu veya iş akışı.",
+    "noAccess": "Bunu başlatma yetkiniz yok. Çalışma alanı yöneticisine sorun.",
+    "agent": {
+      "title": "Yapay zekâ ajanı",
+      "body": "Kendi belgelerinizden ve web sayfalarınızdan, sizin tonunuzla yanıt verir.",
+      "create": "Yapay zekâ ajanı oluştur",
+      "open": "Yapay zekâ ajanlarınız"
+    },
+    "chatbot": {
+      "title": "Sohbet botu",
+      "body": "Düğmeler, sorular, kartlar ve dosyalarla yönlendirmeli bir konuşma; web siteniz veya WhatsApp için.",
+      "web": "Web sitesi sohbet botu",
+      "whatsapp": "WhatsApp botu"
+    },
+    "workflow": {
+      "title": "İş akışı",
+      "body": "Gelişmiş tuval: kendiliğinden çalışan koşullar, etiketler, webhook'lar ve CRM adımları.",
+      "create": "İş akışı oluştur",
+      "open": "Akışlarınız"
+    },
+    "deployNote": "Her sohbet botunun Oluştur, Özelleştir ve Yayınla sekmeleri vardır. Yayınlayın, ardından Dağıt'tan gömme kodunu veya bağlantısını kopyalayın."
+  }
+}

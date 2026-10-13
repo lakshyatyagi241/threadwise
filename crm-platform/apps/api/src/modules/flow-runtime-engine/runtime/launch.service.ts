@@ -77,6 +77,8 @@ export interface LaunchInput {
   /** A retry of a failed run: the same subscriber row, a new run. */
   retry?: boolean;
   conversationId?: number | null;
+  /** Start at this step instead of the first one (a tap on a button that jumps into the flow). Ignored when the flow has no such step. */
+  startNodeId?: string | null;
 }
 
 export type LaunchOutcome =
@@ -209,7 +211,9 @@ export class FlowLaunchService {
       triggerRef: input.triggerRef ?? null,
       triggerText: input.triggerText ? input.triggerText.trim().toLowerCase() : null,
       graph: graph as RuntimeGraph,
-      currentNodeId: graph.nodes[0]!.id,
+      currentNodeId:
+        (input.startNodeId && graph.nodes.find((n) => n.id === input.startNodeId)?.id) ||
+        graph.nodes[0]!.id,
       vars,
       timeoutSeconds:
         input.timeoutSeconds ??

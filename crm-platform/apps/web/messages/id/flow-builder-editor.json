@@ -164,7 +164,12 @@
       "messaging": "Alur pesan",
       "messagingNote": "WhatsApp, Instagram, atau Facebook — ganti channel di node Trigger",
       "call": "Call",
-      "callNote": "IVR suara AI — ucapkan, dengarkan, alihkan"
+      "callNote": "IVR suara AI — ucapkan, dengarkan, alihkan",
+      "subtitleSimple": "Setiap bot dibuat untuk satu kanal, karena tidak semua komponen berfungsi di setiap kanal.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Membalas pelanggan di nomor WhatsApp yang terhubung",
+      "web": "Chat situs web",
+      "webNote": "Widget chat yang Anda tambahkan ke situs web"
     },
     "rename": {
       "title": "Ganti nama alur",
@@ -697,14 +702,16 @@
           "wordsPlaceholder": "hai, halo, menu",
           "whatsappNumber": "Nomor WhatsApp",
           "noNumberHint": "Belum ada nomor WhatsApp yang terhubung: hubungkan di Pengaturan, lalu pilih di sini.",
-          "chooseNumber": "Pilih nomor…"
+          "chooseNumber": "Pilih nomor…",
+          "connectedNumber": "Membalas lewat nomor WhatsApp Anda yang terhubung: {number}"
         },
         "add": {
           "addStep": "Tambahkan langkah",
           "groups": {
             "send": "Kirim",
             "ask": "Tanya pelanggan",
-            "handoff": "Serahkan"
+            "handoff": "Serahkan",
+            "logic": "Putuskan"
           },
           "blockedTitle": "Tombol dan daftar mengakhiri alur, sehingga hanya boleh di posisi terakhir."
         },
@@ -747,7 +754,8 @@
             "placeholder": "Tombol {n}",
             "remove": "Hapus tombol",
             "add": "Tambahkan tombol",
-            "saveIn": "Simpan tombol yang diketuk di"
+            "saveIn": "Simpan tombol yang diketuk di",
+            "handoff": "Alihkan ke orang (agen langsung)"
           },
           "list": {
             "above": "Pesan di atas daftar",
@@ -779,7 +787,9 @@
             "dateFormat": "Format tanggal",
             "dateFormatHint": "Cara pelanggan menulis tanggal. Disimpan sesuai ketikan, dan salinannya tahun-bulan-hari di variabel _iso.",
             "saveIn": "Simpan jawaban di",
-            "retriesHint": "0 terus bertanya sampai jawabannya benar."
+            "retriesHint": "0 terus bertanya sampai jawabannya benar.",
+            "verifyOtp": "Verifikasi nomor dengan kode sekali pakai",
+            "verifyOtpHint": "Kode dikirim ke nomor (kode negara diperlukan) dan pengunjung mengetiknya di chat. Nomor hanya disimpan bila kodenya benar; variabel berakhiran _verified berisi ya atau tidak."
           },
           "askFile": {
             "accepted": "Berkas yang diterima",
@@ -830,9 +840,48 @@
           },
           "cta": {
             "buttonText": "Teks tombol",
-            "opens": "Membuka (tautan)"
+            "opens": "Membuka (tautan)",
+            "type": "Membuka",
+            "kinds": {
+              "url": "Halaman web",
+              "phone": "Panggilan telepon",
+              "email": "Email"
+            },
+            "add": "Tambah tombol lain",
+            "remove": "Hapus tombol",
+            "opensPhone": "Nomor telepon",
+            "opensEmail": "Alamat email"
+          },
+          "carousel": {
+            "intro": "Pesan di atas kartu",
+            "card": "Kartu {n}",
+            "image": "Tautan gambar (opsional)",
+            "title": "Judul",
+            "text": "Teks",
+            "buttons": "Tombol (maksimal 2)",
+            "label": "Teks tombol",
+            "addCard": "Tambah kartu",
+            "removeCard": "Hapus kartu",
+            "addButton": "Tambah tombol",
+            "removeButton": "Hapus tombol",
+            "btnKinds": {
+              "reply": "Balas di chat",
+              "url": "Buka halaman web",
+              "phone": "Telepon sebuah nomor",
+              "email": "Kirim email",
+              "agent": "Bicara dengan seseorang"
+            }
+          },
+          "condition": {
+            "info": "Tambahkan aturan (variabel, perbandingan, dan nilai). Gabungkan dengan AND atau OR, dan susun grup bersarang bila perlu.",
+            "yes": "Jika aturan terpenuhi, pergi ke",
+            "no": "Jika tidak terpenuhi, pergi ke"
+          },
+          "handoff": {
+            "hint": "Pengunjung diteruskan ke tim ini dengan catatan Anda. Tidak perlu menyambungkan apa pun setelah tombol ini."
           }
-        }
+        },
+        "branchAdd": "Tambah langkah untuk “{title}”"
       },
       "formsCore": {
         "helpers": {
@@ -1825,6 +1874,21 @@
           "sampleName": "Lokasi uji",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Bagian bot",
+        "build": "Build",
+        "customize": "Kustomisasi",
+        "saveFirst": "Simpan bot terlebih dahulu.",
+        "needsCustomizing": "Kustomisasi belum disimpan. Buka Kustomisasi.",
+        "customizeFirst": "Kustomisasi widget chat Anda dan simpan sekali sebelum mempublikasikan.",
+        "deploy": "Deploy",
+        "customizeFirstWhatsapp": "Kustomisasi tombol WhatsApp Anda dan simpan sekali sebelum mempublikasikan."
+      },
+      "buttonIcon": {
+        "label": "Ikon (opsional)",
+        "add": "Tambah ikon",
+        "saveFirst": "Simpan bot sekali untuk menambahkan ikon."
       }
     },
     "contracts": {
@@ -2100,6 +2164,10 @@
         "api_library": {
           "label": "API (dari pustaka)",
           "description": "Panggil API tersimpan dari Pustaka API"
+        },
+        "carousel": {
+          "label": "Carousel",
+          "description": "Kartu yang bisa digeser dengan gambar dan tombol"
         }
       },
       "groups": {
@@ -2148,7 +2216,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Email"
+        "email": "Email",
+        "web": "Chat situs web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2321,6 +2390,14 @@
         "askLocation": {
           "label": "Lokasi mereka",
           "help": "Tunggu pelanggan membagikan lokasi"
+        },
+        "carousel": {
+          "label": "Carousel",
+          "help": "Kartu yang bisa digeser dengan gambar dan tombol"
+        },
+        "condition": {
+          "label": "Kondisi",
+          "help": "Bercabang berdasarkan apa yang dikatakan atau disimpan pelanggan, dengan aturan AND / OR"
         }
       },
       "typeLabel": {
@@ -2335,7 +2412,9 @@
         "location": "Lokasi",
         "template": "Templat",
         "cta": "Tombol tautan",
-        "assign": "Tugaskan ke agen"
+        "assign": "Tugaskan ke agen",
+        "carousel": "Carousel",
+        "condition": "Kondisi"
       },
       "stepLabel": {
         "questionOf": "Pertanyaan · {kind}"
@@ -2372,7 +2451,10 @@
         "addRow": "Langkah {stage}: tambahkan minimal satu baris.",
         "rowTitle": "Langkah {stage}: setiap baris memerlukan judul maksimal {max} karakter.",
         "rowDescriptionTooLong": "Langkah {stage}: deskripsi baris lebih panjang dari {max} karakter.",
-        "variableUsed": "Langkah {stage}: \"{name}\" sudah dipakai oleh langkah {other}; beri setiap jawaban nama sendiri."
+        "variableUsed": "Langkah {stage}: \"{name}\" sudah dipakai oleh langkah {other}; beri setiap jawaban nama sendiri.",
+        "carouselCards": "Langkah {stage}: tambahkan minimal satu kartu dan beri setiap kartu judul.",
+        "carouselButtons": "Langkah {stage}: beri setiap tombol nama, serta tautan, nomor, atau alamat di tempat tombol membuka sesuatu.",
+        "conditionIncomplete": "Langkah {stage}: lengkapi aturan kondisi (variabel dan nilai di setiap aturan)."
       }
     },
     "waboImport": {
@@ -2381,7 +2463,11 @@
         "buttonNoTarget": "Tombol \"{type}\" (\"{text}\") tidak memiliki tujuan di Simple.",
         "skippedStep": "Langkah \"{sub}\" dilewati: Simple tidak memiliki yang serupa.",
         "leadsOutside": "\"{text}\" mengarah ke alur yang tidak ada di file ini; alur berakhir di sana sampai Anda menautkannya.",
-        "connectsOutside": "Sebuah langkah terhubung ke node yang tidak ada di file ini ({id}); tetap tidak tertaut."
+        "connectsOutside": "Sebuah langkah terhubung ke node yang tidak ada di file ini ({id}); tetap tidak tertaut.",
+        "dateLimits": "Pertanyaan tanggal mempertahankan formatnya tetapi tidak batasnya (paling awal, paling akhir, hari yang dikecualikan).",
+        "tooManyButtons": "Pesan tombol memiliki pilihan lebih banyak dari yang muat; tombol berlebih dihilangkan.",
+        "agentTeam": "Tombol agen langsung dipertahankan: pilih tim yang menerima percakapan.",
+        "tooManySlides": "Carousel memiliki lebih dari 10 kartu; kartu berlebih dihilangkan."
       },
       "reasons": {
         "notExport": "File ini bukan ekspor alur. Gunakan file .json yang diekspor dari Flows, atau alur yang diekspor dari konsol wabo.",

@@ -25,7 +25,7 @@ export function importToSimple(raw: unknown): SimpleImport {
       ok: false,
       reasons: [msg('waboImport.reasons.notExport')],
     };
-  if (file.flow_type && file.flow_type !== 'chat')
+  if (file.flow_type && file.flow_type !== 'chat' && file.flow_type !== 'web')
     return {
       ok: false,
       reasons: [msg('waboImport.reasons.otherFlowType', { type: String(file.flow_type) })],
