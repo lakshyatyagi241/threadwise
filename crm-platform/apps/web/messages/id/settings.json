@@ -340,10 +340,10 @@
         "description": "Pilih kata STOP dan START, balasan konfirmasi, baris berhenti berlangganan, dan apakah pemasaran memerlukan persetujuan yang tercatat.",
         "keywords": "persetujuan, berhenti berlangganan, berlangganan kembali, unsubscribe, stop, start, gdpr, kepatuhan, privasi, pemasaran"
       },
-      "inbox-labels": {
-        "label": "Label",
-        "description": "Buat label yang dipasang tim Anda pada percakapan dan digunakan untuk memfilter kotak masuk.",
-        "keywords": "tag, label, kategori, atur, filter"
+      "inbox-tags": {
+        "label": "Tag percakapan",
+        "description": "Buat tag yang dipasang tim Anda pada percakapan dan dipakai untuk memfilter kotak masuk. Tag ini sama dengan yang digunakan pada kontak.",
+        "keywords": "tag, kategori, atur, filter, tag percakapan"
       },
       "growth": {
         "label": "Pertumbuhan",

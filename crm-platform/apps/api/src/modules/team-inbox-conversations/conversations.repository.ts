@@ -59,7 +59,7 @@ export interface InboxConversationRow {
   slaFirstResponseDue: string | null;
   slaResolutionDue: string | null;
   slaBreached: boolean;
-  /** Labels on the thread, by name. */
+  /** Tags on the thread, by name (exposed as `labels` on the wire, its original name). */
   labels: Array<{ id: string; name: string; color: string | null }>;
 }
 
@@ -83,8 +83,10 @@ export interface ListFilter {
   /** `undefined`: the open and pending threads. `'all'`: no filter. */
   status?: string;
   channelId?: number;
-  /** Label uuids: threads that carry any of them. */
-  labelIds?: string[];
+  /** Tag uuids: threads that carry any of them. */
+  tagIds?: string[];
+  /** What `tagIds` is matched against: the thread's own tags (default) or its contact's tags. */
+  tagScope?: 'conversation' | 'contact';
   q?: string;
   archived: boolean;
   limit: number;
@@ -257,12 +259,20 @@ export class ConversationsRepository {
       if (tab) where.push(tab);
     }
     if (f.channelId !== undefined) where.push(sql`c.channel_id = ${f.channelId}`);
-    if (f.labelIds && f.labelIds.length > 0) {
-      where.push(sql`EXISTS (SELECT 1 FROM conversation_tag fx JOIN tags ft ON ft.org_id = fx.org_id AND ft.id = fx.tag_id
-        WHERE fx.org_id = c.org_id AND fx.conversation_id = c.id AND ft.uuid IN (${sql.join(
-          f.labelIds.map((u) => sql`${u}::uuid`),
-          sql`, `,
-        )}))`);
+    if (f.tagIds && f.tagIds.length > 0) {
+      const ids = sql.join(
+        f.tagIds.map((u) => sql`${u}::uuid`),
+        sql`, `,
+      );
+      // The contact's tags are `contact_tags` (indexed on org_id + contact_id); the thread's own are `conversation_tag`. Both joins
+      // carry org_id, so the row-level security of the surrounding transaction and the explicit tenant match agree.
+      where.push(
+        f.tagScope === 'contact'
+          ? sql`EXISTS (SELECT 1 FROM contact_tags fx JOIN tags ft ON ft.org_id = fx.org_id AND ft.id = fx.tag_id
+        WHERE fx.org_id = c.org_id AND fx.contact_id = c.contact_id AND ft.uuid IN (${ids}))`
+          : sql`EXISTS (SELECT 1 FROM conversation_tag fx JOIN tags ft ON ft.org_id = fx.org_id AND ft.id = fx.tag_id
+        WHERE fx.org_id = c.org_id AND fx.conversation_id = c.id AND ft.uuid IN (${ids}))`,
+      );
     }
     if (f.q) where.push(this.searchCondition(f.q));
     if (f.cursor) where.push(this.cursorCondition(f.cursor));

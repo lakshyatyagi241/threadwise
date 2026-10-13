@@ -402,6 +402,22 @@ Reference's `/call-logs` is a list of the AI assistant's calls with a time range
 Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
 later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).
 
+## Conversation tags: one word, and two clearly separated groups (BL-036, naming decision)
+
+The reference calls the markers on a conversation **tags** (the `conversation_tag` pivot, the `Tag` model, the same list as contact tags). The
+earlier name **labels** was ours and is retired: users asked why the inbox said "Label" where contacts and campaigns said "Tag". Every visible
+string, aria label, help guide and timeline line now says tag, in all 21 locales, using each locale's existing word for contact tags.
+
+What is added on top of the reference, and why:
+
+- **Two groups in the thread's side panel.** **Contact tags** (read-only, with an "Edit on contact" link for people who may edit contacts)
+  and **Conversation tags** (add and remove), each with a heading and a one-line help. Rule: a contact tag describes the PERSON (VIP, lead, region);
+  a conversation tag describes this THREAD (billing, refund, urgent); both come from the same workspace tag library.
+- **A Conversation tags / Contact tags switch on the list's tag filter**, kept in the address (`?tags=&tagScope=`), so a team can find every thread
+  with a given tag, or every thread with a person who has it. Reference filtered by the conversation's own tags only.
+- The old names keep working (routes `/labels`, `?labels=`, bulk type `label`, the page `/inbox/labels`, the JSON field `labels`, the
+  `INBOX_LABEL_*` error codes); the list is in [inbox-phase3-slice.md](../../specs/inbox-phase3-slice.md#25-conversation-tags-second-milestone-renamed-from-labels).
+
 ## Contact owner (BL-111): visible and editable on every contact screen, not in Reference
 
 Reference keeps the creator of a contact in `user_id` and shows it nowhere. Here the owner is a first-class field of the contact: an Owner select in the form (a new contact starts as its creator), an optional Owner column (hidden until turned on), an Owner filter in the Hub (several people, Unassigned, My contacts), the owner on the profile with Change owner, `owner_email` in the CSV export, and a reassignment of "all N matching" in one request. Who may be named follows the record scope. Details, the screen-by-screen table and what is not verified: [contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contact owner"), wiring [contact-owner.md](../wiring/contact-owner.md). The owner on leave, delegation and auto-assignment are a design only: [specs/contact-owner-leave-and-delegation.md](../../specs/contact-owner-leave-and-delegation.md).

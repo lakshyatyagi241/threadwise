@@ -4,7 +4,7 @@ import type { Tx } from '@crm/db';
 
 type Raw = Record<string, unknown>;
 
-export interface LabelRow {
+export interface InboxTagRow {
   id: number;
   uuid: string;
   name: string;
@@ -19,7 +19,7 @@ const SELECT = sql`
          (SELECT count(*)::int FROM conversation_tag x WHERE x.org_id = t.org_id AND x.tag_id = t.id) AS conversation_count
   FROM tags t`;
 
-const toRow = (r: Raw): LabelRow => ({
+const toRow = (r: Raw): InboxTagRow => ({
   id: Number(r.id),
   uuid: r.uuid as string,
   name: r.name as string,
@@ -30,24 +30,24 @@ const toRow = (r: Raw): LabelRow => ({
 });
 
 /**
- * The workspace label library as the inbox reads it (the `tags` table, shared with contacts) and the labels on conversations
+ * The workspace tag library as the inbox reads it (the `tags` table, shared with contacts) and the tags on conversations
  * (`conversation_tag`). Creating and deleting a tag go through the contacts domain's `TagsService` (plan limit, uniqueness, audit);
  * what is here is the inbox's own: the list with usage counts, the description, the edit with a version check, and the attach table.
  */
 @Injectable()
-export class LabelsRepository {
-  async list(tx: Tx, orgId: number): Promise<LabelRow[]> {
+export class InboxTagsRepository {
+  async list(tx: Tx, orgId: number): Promise<InboxTagRow[]> {
     const res = await tx.execute(sql`${SELECT} WHERE t.org_id = ${orgId} ORDER BY t.name`);
     return (res.rows as Raw[]).map(toRow);
   }
 
-  async byUuid(tx: Tx, orgId: number, uuid: string): Promise<LabelRow | null> {
+  async byUuid(tx: Tx, orgId: number, uuid: string): Promise<InboxTagRow | null> {
     const res = await tx.execute(sql`${SELECT} WHERE t.org_id = ${orgId} AND t.uuid = ${uuid}`);
     const row = (res.rows as Raw[])[0];
     return row ? toRow(row) : null;
   }
 
-  async byId(tx: Tx, orgId: number, id: number): Promise<LabelRow | null> {
+  async byId(tx: Tx, orgId: number, id: number): Promise<InboxTagRow | null> {
     const res = await tx.execute(sql`${SELECT} WHERE t.org_id = ${orgId} AND t.id = ${id}`);
     const row = (res.rows as Raw[])[0];
     return row ? toRow(row) : null;
@@ -80,7 +80,7 @@ export class LabelsRepository {
     return res.rows.length > 0;
   }
 
-  /** True when the label was put on the thread now, false when it was already there. */
+  /** True when the tag was put on the thread now, false when it was already there. */
   async attach(
     tx: Tx,
     orgId: number,
@@ -96,7 +96,7 @@ export class LabelsRepository {
     return res.rows.length > 0;
   }
 
-  /** True when the label was on the thread and is gone now. */
+  /** True when the tag was on the thread and is gone now. */
   async detach(tx: Tx, orgId: number, conversationId: number, tagId: number): Promise<boolean> {
     const res = await tx.execute(sql`
       DELETE FROM conversation_tag

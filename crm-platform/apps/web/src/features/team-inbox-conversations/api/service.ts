@@ -1,8 +1,8 @@
 import type {
-  ApplyConversationLabelInput,
+  ApplyConversationTagInput,
   AssignConversationInput,
-  CreateInboxLabelInput,
-  UpdateInboxLabelInput,
+  CreateInboxTagInput,
+  UpdateInboxTagInput,
   BulkConversationsInput,
   CreateConversationNoteInput,
   CreateMessageLogExportInput,
@@ -19,8 +19,8 @@ import { toApiError } from '@/lib/api/errors';
 import { listQuery, type ListFilters } from '../lib/list';
 import {
   bulkConversationsResponseSchema,
-  inboxLabelListSchema,
-  inboxLabelSchema,
+  inboxTagListSchema,
+  inboxTagSchema,
   channelListResponseSchema,
   channelResponseSchema,
   conversationEventListResponseSchema,
@@ -152,21 +152,20 @@ export const inboxApi = {
       body: { rowVersion, until },
       schema: conversationSummarySchema,
     }),
-  labels: (signal?: AbortSignal) =>
-    apiFetch('/inbox/labels', { schema: inboxLabelListSchema, signal }),
-  createLabel: (input: CreateInboxLabelInput) =>
-    apiFetch('/inbox/labels', { method: 'POST', body: input, schema: inboxLabelSchema }),
-  updateLabel: (id: string, input: UpdateInboxLabelInput) =>
-    apiFetch(`/inbox/labels/${id}`, { method: 'PATCH', body: input, schema: inboxLabelSchema }),
-  deleteLabel: (id: string) => apiFetch(`/inbox/labels/${id}`, { method: 'DELETE' }),
-  applyLabel: (conversationId: string, input: ApplyConversationLabelInput) =>
-    apiFetch(`/inbox/conversations/${conversationId}/labels`, {
+  tags: (signal?: AbortSignal) => apiFetch('/inbox/tags', { schema: inboxTagListSchema, signal }),
+  createTag: (input: CreateInboxTagInput) =>
+    apiFetch('/inbox/tags', { method: 'POST', body: input, schema: inboxTagSchema }),
+  updateTag: (id: string, input: UpdateInboxTagInput) =>
+    apiFetch(`/inbox/tags/${id}`, { method: 'PATCH', body: input, schema: inboxTagSchema }),
+  deleteTag: (id: string) => apiFetch(`/inbox/tags/${id}`, { method: 'DELETE' }),
+  applyTag: (conversationId: string, input: ApplyConversationTagInput) =>
+    apiFetch(`/inbox/conversations/${conversationId}/tags`, {
       method: 'POST',
       body: input,
       schema: conversationSummarySchema,
     }),
-  withdrawLabel: (conversationId: string, tagId: string) =>
-    apiFetch(`/inbox/conversations/${conversationId}/labels/${tagId}`, {
+  withdrawTag: (conversationId: string, tagId: string) =>
+    apiFetch(`/inbox/conversations/${conversationId}/tags/${tagId}`, {
       method: 'DELETE',
       schema: conversationSummarySchema,
     }),

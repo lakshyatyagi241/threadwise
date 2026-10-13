@@ -285,6 +285,11 @@ Reasons: `missing_name`, `missing_phone`, `invalid_phone`, `invalid_email`, `gro
 | `DELETE /contacts/:id/tags/:tagId` | `record.contacts.update`, scope | 204; `contact.tag_removed` only when something was removed                                                                                                                                |
 | `GET /contacts/:id/tags`           | `record.contacts.read`, scope   | the contact's tags                                                                                                                                                                        |
 
+One library, two meanings. A **contact tag** describes the person (VIP, lead, region). A **conversation tag** describes one inbox thread (billing,
+refund, urgent) and lives in `conversation_tag`; it uses the same `tags` rows, the same unique name and the same plan `tags` limit, so a tag created in
+either place is available in the other and a delete removes it from both. The inbox routes for conversation tags (`/inbox/tags*`) are in
+[team-inbox-conversations.md](team-inbox-conversations.md#tags-contact-tags-and-conversation-tags).
+
 ## Attributes (merge variables)
 
 Rows of the contact field registry (`fields`, `module_key = "contacts"`, section "Custom attributes"). Management needs the Contact Properties capabilities.
