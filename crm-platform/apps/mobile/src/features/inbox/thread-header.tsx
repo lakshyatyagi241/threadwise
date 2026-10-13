@@ -1,7 +1,7 @@
 import type { InboxConversationDetail } from '@crm/contracts';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Icon, type IconName } from '@/components/ui/icon';
@@ -29,6 +29,8 @@ interface Props {
   /** The clock the reply-window timer counts down against. */
   now: Date;
   onBack: () => void;
+  /** Tapping the person's name or avatar opens their chat details. */
+  onOpenDetails: () => void;
   /** The one-tap action beside the three dots (resolve, or reopen); null when the person may not or it does not apply. */
   primary: { icon: IconName; label: string; onPress: () => void } | null;
   menu: readonly ThreadMenuItem[];
@@ -38,7 +40,7 @@ interface Props {
  * The top of a thread: back, the person's avatar and name, which channel the chat is on (its logo and name), the reply-window
  * timer, the resolve button and the three dots. A thread that is not open also says so next to the channel.
  */
-export function ThreadHeader({ conversation, now, onBack, primary, menu }: Props) {
+export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary, menu }: Props) {
   const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const mark = conversation ? channelMark(conversation.channel.kind) : null;
@@ -77,7 +79,13 @@ export function ThreadHeader({ conversation, now, onBack, primary, menu }: Props
       <View style={styles.row}>
         <HeaderIconButton icon="arrow-back" label={t('common.back')} onPress={onBack} />
         {conversation && mark ? (
-          <>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={t('inbox.thread.menu.details')}
+            accessibilityHint={conversation.title}
+            onPress={onOpenDetails}
+            style={styles.who}
+          >
             <Avatar name={conversation.title} seed={conversation.id} size={44} />
             <View style={styles.text}>
               <Text variant="subheading" numberOfLines={1} accessibilityRole="header">
@@ -96,7 +104,7 @@ export function ThreadHeader({ conversation, now, onBack, primary, menu }: Props
                 ) : null}
               </View>
             </View>
-          </>
+          </Pressable>
         ) : null}
       </View>
       <ThreadMenu visible={menuOpen} items={menu} onClose={() => setMenuOpen(false)} />
@@ -106,6 +114,7 @@ export function ThreadHeader({ conversation, now, onBack, primary, menu }: Props
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  who: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   text: { flex: 1, gap: 2 },
   channel: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   channelName: { flexShrink: 1 },

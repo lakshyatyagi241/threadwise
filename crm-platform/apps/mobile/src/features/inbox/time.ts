@@ -28,3 +28,10 @@ export function formatConversationTime(iso: string | null, now: Date, t: TFuncti
   if (sameDay(d, yesterday)) return t('inbox.time.yesterday');
   return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${pad(d.getFullYear() % 100)}`;
 }
+
+/** "13/10/26, 4:40 PM": the day and the clock, for a note or an event that may be days old. */
+export function formatDateTime(iso: string, t: TFunction): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${pad(d.getFullYear() % 100)}, ${formatClock(iso, t)}`;
+}

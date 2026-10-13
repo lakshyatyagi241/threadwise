@@ -1,4 +1,5 @@
 import type {
+  ChannelResponse,
   ConversationSummary,
   InboxConversationDetail,
   ConversationListResponse,
@@ -137,4 +138,32 @@ export const list = (
 export const thread = (rows: MessageResponse[], hasMoreBefore = false): MessageListResponse => ({
   data: rows,
   page: { hasMoreBefore, hasMoreAfter: false, limit: 30 },
+});
+
+/** A connected WhatsApp number, as `GET /channels` lists it. */
+export const channelRow = (over: Partial<ChannelResponse> = {}): ChannelResponse => ({
+  id: CHANNEL_ID,
+  kind: 'whatsapp_cloud',
+  name: 'Support line',
+  status: 'connected',
+  externalId: null,
+  displayAddress: '+91 98000 00001',
+  capabilities: {
+    windowHours: 24,
+    templates: true,
+    media: ['image', 'document'],
+    reactions: false,
+    editDelete: false,
+    receipts: ['sent', 'delivered', 'read'],
+    typing: false,
+  },
+  settings: { metered: true },
+  hasCredentials: true,
+  credentialHints: {},
+  webhookUrl: null,
+  lastEventAt: null,
+  createdAt: '2026-09-01T08:00:00.000Z',
+  updatedAt: '2026-09-01T08:00:00.000Z',
+  rowVersion: 1,
+  ...over,
 });

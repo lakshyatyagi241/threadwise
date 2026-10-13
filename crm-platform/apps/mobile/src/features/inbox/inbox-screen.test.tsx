@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { ApiError } from '@/lib/api';
 import { fetchSession } from '@/lib/session/api';
 import {
+  channelRow,
   CONVERSATION_ID,
   inboxSession,
   list,
@@ -13,10 +14,14 @@ import {
 import { renderApp } from '@/test/render';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
+import * as bulkApi from './bulk-api';
+import * as labelsApi from './labels-api';
 import { InboxScreen } from './inbox-screen';
 import { INBOX_POLL_MS } from './use-inbox';
 
 jest.mock('./api');
+jest.mock('./labels-api');
+jest.mock('./bulk-api');
 jest.mock('@/lib/session/api');
 jest.mock('expo-router', () => {
   const { useEffect: runEffect } = jest.requireActual<typeof import('react')>('react');
@@ -29,6 +34,10 @@ jest.mock('expo-router', () => {
 
 const sessionCall = jest.mocked(fetchSession);
 const listCall = jest.mocked(api.fetchConversations);
+const channelsCall = jest.mocked(api.fetchChannels);
+const assigneesCall = jest.mocked(api.fetchAssignees);
+const bulkCall = jest.mocked(bulkApi.runBulkAction);
+const libraryCall = jest.mocked(labelsApi.fetchLabelLibrary);
 const push = jest.fn();
 
 const rohan = summary({
@@ -61,6 +70,8 @@ beforeEach(() => {
   jest.mocked(useRouter).mockReturnValue({ push } as unknown as ReturnType<typeof useRouter>);
   sessionCall.mockResolvedValue(inboxSession);
   listCall.mockResolvedValue(list([rohan, meera]));
+  channelsCall.mockResolvedValue({ data: [channelRow()] });
+  libraryCall.mockResolvedValue([]);
 });
 afterEach(async () => {
   if (client) {
@@ -171,8 +182,9 @@ describe('InboxScreen', () => {
   it('filters by status and clears the chip', async () => {
     await show();
     await screen.findByText('Rohan Mehta');
-    await fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
     await fireEvent.press(await screen.findByRole('radio', { name: 'Pending' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'pending' }));
     const chip = await screen.findByRole('button', { name: 'Remove filter: Status: Pending' });
     await fireEvent.press(chip);
@@ -186,8 +198,9 @@ describe('InboxScreen', () => {
   it('clears the status and the search together with Clear all', async () => {
     await show();
     await screen.findByText('Rohan Mehta');
-    await fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
     await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Search conversations' }));
     await fireEvent.changeText(screen.getByLabelText('Search'), 'meera');
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'resolved', q: 'meera' }));
@@ -201,8 +214,9 @@ describe('InboxScreen', () => {
     await show();
     expect(await screen.findByText('No conversations')).toBeTruthy();
     expect(screen.getByText('Messages from your customers will show up here.')).toBeTruthy();
-    await fireEvent.press(screen.getByRole('button', { name: 'Filter by status' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
     await fireEvent.press(await screen.findByRole('radio', { name: 'Closed' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
     expect(
       await screen.findByText('Nothing matches these filters. Try clearing them.'),
     ).toBeTruthy();
@@ -275,6 +289,319 @@ describe('InboxScreen', () => {
       });
       expect(await screen.findByText('Kabir Rao')).toBeTruthy();
       expect(listCall).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('the filter sheet', () => {
+    const open = async () => {
+      await show();
+      await screen.findByText('Rohan Mehta');
+      await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
+    };
+    const save = async () =>
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+
+    it('narrows the list to one channel, and names it in the chip', async () => {
+      await open();
+      await fireEvent.press(
+        await screen.findByRole('radio', { name: 'Support line, +91 98000 00001' }),
+      );
+      await save();
+      await waitFor(() => expect(lastFilters()).toMatchObject({ channelId: channelRow().id }));
+      const chip = await screen.findByRole('button', {
+        name: 'Remove filter: Channel: Support line',
+      });
+      await fireEvent.press(chip);
+      await waitFor(() => expect(lastFilters()).toMatchObject({ channelId: '' }));
+    });
+
+    it('narrows the list to conversations with any of the chosen labels', async () => {
+      libraryCall.mockResolvedValue([
+        {
+          id: 'aaaaaaaa-0000-4000-8000-000000000001',
+          name: 'VIP',
+          color: null,
+          description: null,
+          conversationCount: 2,
+          rowVersion: 1,
+        },
+        {
+          id: 'aaaaaaaa-0000-4000-8000-000000000002',
+          name: 'Cold',
+          color: null,
+          description: null,
+          conversationCount: 1,
+          rowVersion: 1,
+        },
+      ]);
+      await open();
+      await fireEvent.press(await screen.findByRole('checkbox', { name: 'VIP' }));
+      await fireEvent.press(screen.getByRole('checkbox', { name: 'Cold' }));
+      await save();
+      await waitFor(() =>
+        expect(lastFilters()?.labels).toEqual([
+          'aaaaaaaa-0000-4000-8000-000000000001',
+          'aaaaaaaa-0000-4000-8000-000000000002',
+        ]),
+      );
+      expect(
+        await screen.findByRole('button', { name: 'Remove filter: Labels: VIP, Cold' }),
+      ).toBeTruthy();
+    });
+
+    it('switches to the archive and back with Clear all', async () => {
+      await open();
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Archived' }));
+      await save();
+      await waitFor(() => expect(lastFilters()).toMatchObject({ archived: true }));
+      expect(await screen.findByRole('button', { name: 'Remove filter: Archived' })).toBeTruthy();
+      await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
+      await waitFor(() => expect(lastFilters()).toMatchObject({ archived: false }));
+    });
+
+    it('has no channel or label group when the workspace has neither, and cannot save without a change', async () => {
+      channelsCall.mockResolvedValue({ data: [] });
+      await open();
+      await screen.findByRole('radio', { name: 'Pending' });
+      expect(screen.queryByText('All channels')).toBeNull();
+      expect(
+        screen.getByRole('button', { name: 'Save changes' }).props.accessibilityState.disabled,
+      ).toBe(true);
+    });
+
+    it('says when the channels could not be loaded, and still lets the rest be chosen', async () => {
+      channelsCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+      await open();
+      expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+      expect(screen.getByRole('radio', { name: 'Pending' })).toBeTruthy();
+    });
+  });
+
+  describe('choosing several conversations', () => {
+    const BULK_RIGHTS = [
+      'inbox.conversation.read',
+      'inbox.conversation.bulk',
+      'inbox.conversation.resolve',
+      'inbox.conversation.assign',
+      'inbox.conversation.tag',
+      'inbox.conversation.priority',
+      'inbox.conversation.snooze',
+    ];
+    const ROHAN_ROW = 'Rohan Mehta, 2 unread messages, Is my order on its way?';
+    const MEERA_ROW = 'Meera Joshi, No messages yet';
+    const result = (over: Partial<Awaited<ReturnType<typeof bulkApi.runBulkAction>>> = {}) => ({
+      requested: 2,
+      done: 2,
+      unchanged: 0,
+      failed: 0,
+      results: [],
+      ...over,
+    });
+    /** Long-presses Rohan's row, then ticks Meera's. */
+    const chooseBoth = async () => {
+      await show();
+      const rohanRow = await screen.findByRole('button', { name: ROHAN_ROW });
+      await fireEvent(rohanRow, 'longPress');
+      await fireEvent.press(await screen.findByRole('checkbox', { name: MEERA_ROW }));
+    };
+
+    beforeEach(() => {
+      sessionCall.mockResolvedValue(withPermissions(BULK_RIGHTS));
+    });
+
+    it('starts with a long press, counts the chosen, and a press ticks instead of opening the thread', async () => {
+      await chooseBoth();
+      expect(await screen.findByText('2 selected')).toBeTruthy();
+      expect(
+        screen.getByRole('checkbox', { name: ROHAN_ROW }).props.accessibilityState.checked,
+      ).toBe(true);
+      expect(push).not.toHaveBeenCalled();
+      // Pressing a chosen row takes it off again.
+      await fireEvent.press(screen.getByRole('checkbox', { name: MEERA_ROW }));
+      expect(await screen.findByText('1 selected')).toBeTruthy();
+    });
+
+    it('keeps the row chosen when the finger lifts after the long press (Android sends a press then)', async () => {
+      await show();
+      const row = await screen.findByRole('button', { name: ROHAN_ROW });
+      await fireEvent(row, 'longPress');
+      await fireEvent.press(await screen.findByRole('checkbox', { name: ROHAN_ROW }));
+      expect(await screen.findByText('1 selected')).toBeTruthy();
+      expect(
+        screen.getByRole('checkbox', { name: ROHAN_ROW }).props.accessibilityState.checked,
+      ).toBe(true);
+      // The next press is a real one: it takes the row off.
+      await fireEvent.press(screen.getByRole('checkbox', { name: ROHAN_ROW }));
+      await waitFor(() => expect(screen.queryByText('1 selected')).toBeNull());
+    });
+
+    it('is not offered to a person without the right to act on several', async () => {
+      sessionCall.mockResolvedValue(withPermissions(['inbox.conversation.read']));
+      await show();
+      const row = await screen.findByRole('button', { name: ROHAN_ROW });
+      await fireEvent(row, 'longPress');
+      expect(screen.queryByText('1 selected')).toBeNull();
+      expect(screen.getByRole('button', { name: ROHAN_ROW })).toBeTruthy();
+    });
+
+    it('ends with the close button, and chooses every loaded conversation with Select all', async () => {
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Select all' }));
+      expect(await screen.findByText('2 selected')).toBeTruthy();
+      await fireEvent.press(screen.getByRole('button', { name: 'Cancel selection' }));
+      await waitFor(() => expect(screen.queryByText('2 selected')).toBeNull());
+      expect(screen.getByRole('button', { name: ROHAN_ROW })).toBeTruthy();
+    });
+
+    it('offers only the actions the person may do', async () => {
+      sessionCall.mockResolvedValue(
+        withPermissions([
+          'inbox.conversation.read',
+          'inbox.conversation.bulk',
+          'inbox.conversation.resolve',
+        ]),
+      );
+      await chooseBoth();
+      await screen.findByText('2 selected');
+      expect(screen.getByRole('button', { name: 'Mark as read' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Status' })).toBeTruthy();
+      for (const name of ['Assign', 'Labels', 'Priority', 'Snooze']) {
+        expect(screen.queryByRole('button', { name })).toBeNull();
+      }
+    });
+
+    it('marks every chosen conversation as read at once, and says what happened', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as read' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'mark_read' },
+          expect.any(String),
+        ),
+      );
+      expect(await screen.findByText('2 updated, 0 unchanged, 0 failed')).toBeTruthy();
+      // The choosing is over and the list was read again.
+      expect(screen.queryByText('2 selected')).toBeNull();
+    });
+
+    it('changes the status of all of them: pick, then Save', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Status' }));
+      expect(await screen.findByText('Change status of 2 conversations')).toBeTruthy();
+      await fireEvent.press(screen.getByRole('radio', { name: 'Resolved' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'status', status: 'resolved' },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('takes the conversations from whoever has them with "Unassigned"', async () => {
+      assigneesCall.mockResolvedValue({
+        users: [
+          {
+            id: 'u-1',
+            name: 'Kabir Rao',
+            email: 'k@example.test',
+            availability: 'online',
+            openConversations: 1,
+            isMe: false,
+          },
+        ],
+        teams: [],
+      });
+      bulkCall.mockResolvedValue(result());
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Assign' }));
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Unassigned' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'assign', userId: null },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('puts a label on all of them, and needs a label chosen before it can be saved', async () => {
+      libraryCall.mockResolvedValue([
+        {
+          id: 'aaaaaaaa-0000-4000-8000-000000000001',
+          name: 'VIP',
+          color: null,
+          description: null,
+          conversationCount: 2,
+          rowVersion: 1,
+        },
+      ]);
+      bulkCall.mockResolvedValue(result());
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Labels' }));
+      await screen.findByRole('radio', { name: 'VIP' });
+      // Taking the label off instead changes the mode, but there is still no label.
+      await fireEvent.press(screen.getByRole('radio', { name: 'Take the label off' }));
+      expect(
+        screen.getByRole('button', { name: 'Save changes' }).props.accessibilityState.disabled,
+      ).toBe(true);
+      await fireEvent.press(screen.getByRole('radio', { name: 'VIP' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'label', mode: 'remove', tagId: 'aaaaaaaa-0000-4000-8000-000000000001' },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('sets a priority and snoozes, the snooze to a time ahead of now', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Priority' }));
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Urgent' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'priority', priority: 'urgent' },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('says how many failed when some did, and keeps the list in front', async () => {
+      bulkCall.mockResolvedValue(
+        result({
+          done: 1,
+          failed: 1,
+          results: [{ id: meera.id, outcome: 'failed', code: 'FORBIDDEN' }],
+        }),
+      );
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as read' }));
+      expect(await screen.findByText('1 updated, 0 unchanged, 1 failed')).toBeTruthy();
+      await fireEvent.press(screen.getByRole('button', { name: 'Dismiss' }));
+      await waitFor(() =>
+        expect(screen.queryByText('1 updated, 0 unchanged, 1 failed')).toBeNull(),
+      );
+    });
+
+    it('stays open and says why when the whole request failed', async () => {
+      bulkCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Status' }));
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Closed' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Save changes' })).toBeTruthy();
+      expect(screen.getByText('2 selected')).toBeTruthy();
     });
   });
 });

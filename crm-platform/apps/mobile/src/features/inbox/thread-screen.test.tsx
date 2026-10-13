@@ -19,10 +19,14 @@ import { renderApp } from '@/test/render';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
 import * as labels from './labels-api';
+import * as notesApi from './notes-api';
+import * as savedApi from './saved-replies-api';
 import { ThreadScreen } from './thread-screen';
 
 jest.mock('./api');
 jest.mock('./labels-api');
+jest.mock('./notes-api');
+jest.mock('./saved-replies-api');
 jest.mock('@/lib/session/api');
 jest.mock('expo-router', () => {
   const { useEffect } = jest.requireActual<typeof import('react')>('react');
@@ -44,6 +48,13 @@ const readCall = jest.mocked(api.markConversationRead);
 const statusCall = jest.mocked(api.setConversationStatus);
 const retryCall = jest.mocked(api.retryMessage);
 const assignCall = jest.mocked(api.assignConversation);
+const assigneesCall = jest.mocked(api.fetchAssignees);
+const notesCall = jest.mocked(notesApi.fetchNotes);
+const addNoteCall = jest.mocked(notesApi.addNote);
+const repliesCall = jest.mocked(savedApi.fetchSavedReplies);
+const fillCall = jest.mocked(savedApi.fillSavedReply);
+const priorityCall = jest.mocked(api.setConversationPriority);
+const snoozeCall = jest.mocked(api.snoozeConversation);
 const libraryCall = jest.mocked(labels.fetchLabelLibrary);
 const applyCall = jest.mocked(labels.applyLabel);
 const withdrawCall = jest.mocked(labels.withdrawLabel);
@@ -80,6 +91,8 @@ function arrange(
     ),
   );
   readCall.mockResolvedValue({ conversationId: CONVERSATION_ID, unreadCount: 0 });
+  // The thread shows the private notes between the messages; most tests have none.
+  notesCall.mockResolvedValue({ data: [], page: { nextCursor: null, hasMore: false, limit: 100 } });
 }
 
 async function loaded() {
@@ -663,14 +676,18 @@ describe('ThreadScreen: the three dots', () => {
     expect(await screen.findByText(/Someone else changed this conversation/)).toBeTruthy();
   });
 
-  it('has no three dots for a person who may neither assign nor resolve', async () => {
+  it('offers only the chat details to a person who may neither assign nor resolve', async () => {
     sessionCall.mockResolvedValue(
       withPermissions(['inbox.conversation.read', 'inbox.conversation.reply']),
     );
     arrange();
     await show();
     await loaded();
-    expect(screen.queryByRole('button', { name: 'More actions' })).toBeNull();
+    await fireEvent.press(await dots());
+    expect(await screen.findByRole('menuitem', { name: 'Chat details' })).toBeTruthy();
+    for (const name of ['Assign to me', 'Change agent', 'Unassign', 'Mark as pending']) {
+      expect(screen.queryByRole('menuitem', { name })).toBeNull();
+    }
   });
 });
 
@@ -849,5 +866,626 @@ describe('ThreadScreen: labels', () => {
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     expect(await screen.findByRole('checkbox', { name: 'VIP' })).toBeTruthy();
+  });
+});
+
+// --- who has the conversation: the strip, the agent picker, priority, snooze, the details ------------------------------------------
+
+describe('ThreadScreen: who has the conversation', () => {
+  const push = jest.fn();
+  const dots = () => screen.findByRole('button', { name: 'More actions' });
+  const choose = async (name: string) =>
+    await fireEvent.press(await screen.findByRole('menuitem', { name }));
+  const KABIR = '33333333-3333-4333-8333-333333333333';
+  const SUPPORT = '44444444-4444-4444-8444-444444444444';
+  const staff = () =>
+    assigneesCall.mockResolvedValue({
+      users: [
+        {
+          id: KABIR,
+          name: 'Kabir Rao',
+          email: 'kabir@example.test',
+          availability: 'away',
+          openConversations: 1,
+          isMe: false,
+        },
+        {
+          id: ME,
+          name: 'Asha Verma',
+          email: 'asha@example.test',
+          availability: 'online',
+          openConversations: 3,
+          isMe: true,
+        },
+      ],
+      teams: [
+        { id: SUPPORT, name: 'Support', color: null, memberCount: 4, assignmentStrategy: 'manual' },
+      ],
+    });
+
+  beforeEach(() => {
+    push.mockReset();
+    jest
+      .mocked(useRouter)
+      .mockReturnValue({ back, push } as unknown as ReturnType<typeof useRouter>);
+  });
+
+  describe('the line above the message box', () => {
+    it('says nobody has it, and takes it for the person who may', async () => {
+      as('inbox.conversation.assign_self');
+      arrange();
+      assignCall.mockResolvedValue(summary({ rowVersion: 5 }));
+      await show();
+      await loaded();
+      expect(await screen.findByText('Not assigned')).toBeTruthy();
+      await fireEvent.press(screen.getByRole('button', { name: 'Assign to me' }));
+      await waitFor(() =>
+        expect(assignCall).toHaveBeenCalledWith(
+          CONVERSATION_ID,
+          { rowVersion: 4, userId: ME },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('names a colleague who has it, and still offers to take it', async () => {
+      as('inbox.conversation.assign_self');
+      arrange({ detail: detail({ assignment: assigned(OTHER_USER) }) });
+      await show();
+      await loaded();
+      expect(await screen.findByText('Assigned to Someone')).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Assign to me' })).toBeTruthy();
+      // The box is still there: the web inbox lets anyone with the right reply.
+      expect(screen.getByLabelText('Message')).toBeTruthy();
+    });
+
+    it('says "you" and offers nothing when the person has it', async () => {
+      as('inbox.conversation.assign_self');
+      arrange({ detail: detail({ assignment: assigned(ME) }) });
+      await show();
+      await loaded();
+      expect(await screen.findByText('Assigned to you')).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Assign to me' })).toBeNull();
+    });
+
+    it('names the team when only a team has it', async () => {
+      as();
+      arrange({
+        detail: detail({
+          assignment: {
+            user: null,
+            team: { id: SUPPORT, name: 'Support', color: null },
+            aiAgent: null,
+          },
+        }),
+      });
+      await show();
+      await loaded();
+      expect(await screen.findByText('Team: Support')).toBeTruthy();
+    });
+
+    it('offers no claim to a person without the right', async () => {
+      as();
+      arrange();
+      await show();
+      await loaded();
+      expect(await screen.findByText('Not assigned')).toBeTruthy();
+      expect(screen.queryByRole('button', { name: 'Assign to me' })).toBeNull();
+    });
+  });
+
+  describe('Change agent', () => {
+    it('lists the staff with their availability and open conversations, and the teams', async () => {
+      as('inbox.conversation.assign');
+      staff();
+      arrange();
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      await choose('Change agent');
+      expect(
+        await screen.findByRole('radio', { name: 'Asha Verma (you), Online · 3 open' }),
+      ).toBeTruthy();
+      expect(screen.getByRole('radio', { name: 'Kabir Rao, Away · 1 open' })).toBeTruthy();
+      expect(
+        screen.getByRole('radio', { name: 'Unassigned' }).props.accessibilityState.checked,
+      ).toBe(true);
+      expect(screen.getByRole('radio', { name: 'Support, 4 members' })).toBeTruthy();
+      expect(screen.getByRole('radio', { name: 'No team' })).toBeTruthy();
+    });
+
+    it('saves only what was changed: the person, with the row version it read', async () => {
+      as('inbox.conversation.assign');
+      staff();
+      arrange();
+      assignCall.mockResolvedValue(summary({ rowVersion: 5 }));
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      await choose('Change agent');
+      // Nothing to save before something is picked.
+      expect(
+        (await screen.findByRole('button', { name: 'Save changes' })).props.accessibilityState
+          .disabled,
+      ).toBe(true);
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Kabir Rao, Away · 1 open' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(assignCall).toHaveBeenCalledWith(
+          CONVERSATION_ID,
+          { rowVersion: 4, userId: KABIR },
+          expect.any(String),
+        ),
+      );
+      // The sheet closes once it worked.
+      await waitFor(() =>
+        expect(screen.queryByRole('button', { name: 'Save changes' })).toBeNull(),
+      );
+    });
+
+    it('gives the conversation to a team without touching the person', async () => {
+      as('inbox.conversation.assign');
+      staff();
+      arrange({ detail: detail({ assignment: assigned(ME) }) });
+      assignCall.mockResolvedValue(summary({ rowVersion: 5 }));
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      await choose('Change agent');
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Support, 4 members' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(assignCall).toHaveBeenCalledWith(
+          CONVERSATION_ID,
+          { rowVersion: 4, teamId: SUPPORT },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('takes the conversation from the person with "Unassigned"', async () => {
+      as('inbox.conversation.assign');
+      staff();
+      arrange({ detail: detail({ assignment: assigned(KABIR) }) });
+      assignCall.mockResolvedValue(summary({ rowVersion: 5 }));
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      await choose('Change agent');
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Unassigned' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(assignCall).toHaveBeenCalledWith(
+          CONVERSATION_ID,
+          { rowVersion: 4, userId: null },
+          expect.any(String),
+        ),
+      );
+    });
+
+    it('stays open and says why when someone else changed the conversation first', async () => {
+      as('inbox.conversation.assign');
+      staff();
+      arrange();
+      assignCall.mockRejectedValue(new ApiError(409, 'ROW_VERSION_CONFLICT', 'stale'));
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      await choose('Change agent');
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Kabir Rao, Away · 1 open' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      expect(await screen.findByText(/Someone else changed this conversation/)).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Save changes' })).toBeTruthy();
+    });
+
+    it('says when the staff could not be loaded, and tries again', async () => {
+      as('inbox.conversation.assign');
+      staff();
+      assigneesCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+      arrange();
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      await choose('Change agent');
+      expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+      await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+      expect(await screen.findByRole('radio', { name: 'Kabir Rao, Away · 1 open' })).toBeTruthy();
+    });
+
+    it('is not offered to a person who may only claim', async () => {
+      as('inbox.conversation.assign_self');
+      arrange({ detail: detail({ assignment: assigned(OTHER_USER) }) });
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      expect(screen.queryByRole('menuitem', { name: 'Change agent' })).toBeNull();
+      expect(assigneesCall).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('priority and snooze', () => {
+    it('sets the priority, from what it is now', async () => {
+      as('inbox.conversation.priority');
+      arrange();
+      priorityCall.mockResolvedValue(summary({ priority: 'urgent', rowVersion: 5 }));
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      await choose('Set priority');
+      expect(
+        (await screen.findByRole('radio', { name: 'Normal' })).props.accessibilityState.checked,
+      ).toBe(true);
+      await fireEvent.press(screen.getByRole('radio', { name: 'Urgent' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() =>
+        expect(priorityCall).toHaveBeenCalledWith(CONVERSATION_ID, {
+          rowVersion: 4,
+          priority: 'urgent',
+        }),
+      );
+    });
+
+    it('snoozes for an hour, a time that is ahead of now', async () => {
+      as('inbox.conversation.snooze');
+      arrange();
+      snoozeCall.mockResolvedValue(summary({ status: 'snoozed', rowVersion: 5 }));
+      await show();
+      await loaded();
+      const before = Date.now();
+      await fireEvent.press(await dots());
+      await choose('Snooze');
+      await fireEvent.press(await screen.findByRole('radio', { name: 'In 1 hour' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      await waitFor(() => expect(snoozeCall).toHaveBeenCalledTimes(1));
+      const input = snoozeCall.mock.calls[0]?.[1];
+      expect(input?.rowVersion).toBe(4);
+      const gap = Date.parse(input?.until ?? '') - before;
+      expect(gap).toBeGreaterThan(59 * 60_000);
+      expect(gap).toBeLessThan(61 * 60_000);
+    });
+
+    it('offers neither without the rights, and no snooze for a finished conversation', async () => {
+      as();
+      arrange();
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      expect(screen.queryByRole('menuitem', { name: 'Set priority' })).toBeNull();
+      expect(screen.queryByRole('menuitem', { name: 'Snooze' })).toBeNull();
+    });
+
+    it('wakes a snoozed conversation by moving it to open', async () => {
+      as('inbox.conversation.snooze');
+      arrange({ detail: detail({ status: 'snoozed' }) });
+      statusCall.mockResolvedValue(summary({ status: 'open', rowVersion: 5 }));
+      await show();
+      await loaded();
+      await fireEvent.press(await dots());
+      expect(screen.queryByRole('menuitem', { name: 'Snooze' })).toBeNull();
+      await choose('Wake up now');
+      await waitFor(() =>
+        expect(statusCall).toHaveBeenCalledWith(CONVERSATION_ID, { rowVersion: 4, status: 'open' }),
+      );
+    });
+  });
+
+  describe('the chat details', () => {
+    it('open from the person at the top, and from the three dots', async () => {
+      as();
+      arrange();
+      await show();
+      await loaded();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Chat details' }));
+      expect(push).toHaveBeenCalledWith({
+        pathname: '/conversation-details',
+        params: { id: CONVERSATION_ID },
+      });
+      push.mockClear();
+      await fireEvent.press(await dots());
+      await choose('Chat details');
+      expect(push).toHaveBeenCalledWith({
+        pathname: '/conversation-details',
+        params: { id: CONVERSATION_ID },
+      });
+    });
+  });
+});
+
+// --- the message box: saved replies and private notes --------------------------------------------------------------------------
+
+const savedReply = (id: string, title: string, shortcut: string, body: string) => ({
+  id,
+  shortcut,
+  title,
+  body,
+  category: null,
+  language: null,
+  channelKinds: [],
+  scope: 'shared' as const,
+  usedCount: 0,
+  lastUsedAt: null,
+  createdByName: null,
+  canEdit: false,
+  rowVersion: 1,
+  createdAt: '2026-09-01T08:00:00.000Z',
+  updatedAt: '2026-09-01T08:00:00.000Z',
+});
+const THANKS = savedReply(
+  'dddddddd-0000-4000-8000-000000000001',
+  'Thanks',
+  'thanks',
+  'Thank you {{first_name}}!',
+);
+const HOURS = savedReply(
+  'dddddddd-0000-4000-8000-000000000002',
+  'Opening hours',
+  'hours',
+  'We are open 9 to 6.',
+);
+const repliesPage = (data: ReturnType<typeof savedReply>[]) => ({
+  data,
+  page: { nextCursor: null, hasMore: false, limit: 20 },
+  counts: { all: data.length, shared: data.length, mine: 0 },
+  categories: [],
+  total: data.length,
+  limit: null,
+});
+const aNote = (id: string, body: string, createdAt: string) => ({
+  id,
+  conversationId: CONVERSATION_ID,
+  author: { userId: OTHER_USER, name: 'Kabir Rao' },
+  body,
+  mentions: [],
+  isPinned: false,
+  editedAt: null,
+  createdAt,
+  rowVersion: 1,
+});
+
+describe('ThreadScreen: saved replies', () => {
+  const open = async () =>
+    await fireEvent.press(await screen.findByRole('button', { name: 'Saved replies' }));
+
+  beforeEach(() => {
+    repliesCall.mockResolvedValue(repliesPage([THANKS, HOURS]));
+  });
+
+  it('opens a list of the replies, asking only for the ones this channel may use', async () => {
+    arrange();
+    await show();
+    await loaded();
+    expect(repliesCall).not.toHaveBeenCalled();
+    await open();
+    expect(await screen.findByRole('button', { name: 'Thanks' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Opening hours' })).toBeTruthy();
+    expect(screen.getByText('/thanks')).toBeTruthy();
+    expect(repliesCall.mock.calls[0]?.[0]).toBe('');
+    expect(repliesCall.mock.calls[0]?.[1]).toBe('whatsapp_cloud');
+  });
+
+  it('fills the reply in for this conversation and puts it in the box without sending it', async () => {
+    arrange();
+    fillCall.mockResolvedValue({
+      id: THANKS.id,
+      text: 'Thank you Rohan!',
+      issues: [],
+      usedCount: 1,
+    });
+    await show();
+    await loaded();
+    await open();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Thanks' }));
+    await waitFor(() => expect(fillCall).toHaveBeenCalledWith(THANKS.id, CONVERSATION_ID));
+    await waitFor(() =>
+      expect(screen.getByLabelText('Message').props.value).toBe('Thank you Rohan!'),
+    );
+    // The sheet closes, and nothing was sent.
+    expect(screen.queryByRole('button', { name: 'Opening hours' })).toBeNull();
+    expect(sendCall).not.toHaveBeenCalled();
+  });
+
+  it('adds a second reply on a new line after what is already typed', async () => {
+    arrange();
+    fillCall.mockResolvedValue({
+      id: HOURS.id,
+      text: 'We are open 9 to 6.',
+      issues: [],
+      usedCount: 1,
+    });
+    await show();
+    await loaded();
+    await type('Hello Rohan');
+    await open();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Opening hours' }));
+    await waitFor(() =>
+      expect(screen.getByLabelText('Message').props.value).toBe('Hello Rohan\nWe are open 9 to 6.'),
+    );
+  });
+
+  it('warns about a variable that could not be filled', async () => {
+    arrange();
+    fillCall.mockResolvedValue({
+      id: THANKS.id,
+      text: 'Thank you {{first_name}}!',
+      issues: [{ token: '{{first_name}}', key: 'first_name', reason: 'empty' }],
+      usedCount: 1,
+    });
+    await show();
+    await loaded();
+    await open();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Thanks' }));
+    expect(
+      await screen.findByText("Check the message: {{first_name}} couldn't be filled in."),
+    ).toBeTruthy();
+  });
+
+  it('narrows the list by what is typed', async () => {
+    arrange();
+    await show();
+    await loaded();
+    await open();
+    await screen.findByRole('button', { name: 'Thanks' });
+    repliesCall.mockResolvedValue(repliesPage([THANKS]));
+    await fireEvent.changeText(screen.getByLabelText('Search saved replies'), ' than ');
+    await waitFor(() =>
+      expect(repliesCall).toHaveBeenLastCalledWith('than', 'whatsapp_cloud', expect.anything()),
+    );
+    await waitFor(() => expect(screen.queryByRole('button', { name: 'Opening hours' })).toBeNull());
+  });
+
+  it('says when there are none, and when none match', async () => {
+    arrange();
+    repliesCall.mockResolvedValue(repliesPage([]));
+    await show();
+    await loaded();
+    await open();
+    expect(await screen.findByText('No saved replies yet.')).toBeTruthy();
+    await fireEvent.changeText(screen.getByLabelText('Search saved replies'), 'zzz');
+    expect(await screen.findByText('No saved replies match your search.')).toBeTruthy();
+  });
+
+  it('stays open and says so when the reply could not be used', async () => {
+    arrange();
+    fillCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    await show();
+    await loaded();
+    await open();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Thanks' }));
+    expect(await screen.findByText("Couldn't use this reply. Try again.")).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Opening hours' })).toBeTruthy();
+  });
+
+  it('says why the list could not be loaded, and loads it on retry', async () => {
+    arrange();
+    repliesCall.mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    await show();
+    await loaded();
+    await open();
+    expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+    expect(await screen.findByRole('button', { name: 'Thanks' })).toBeTruthy();
+  });
+
+  it('is not offered when the reply window is closed (a template is the only way) or to a person who may not reply', async () => {
+    arrange({ detail: detail({ window: { open: false, expiresAt: null } }) });
+    await show();
+    await screen.findByText('Send Template');
+    expect(screen.queryByRole('button', { name: 'Saved replies' })).toBeNull();
+  });
+});
+
+describe('ThreadScreen: private notes', () => {
+  it('shows the notes between the messages where they were written', async () => {
+    arrange({
+      messages: [
+        message(1, { createdAt: '2026-10-11T09:00:00.000Z' }),
+        outgoing(2, { body: 'Hi Rohan', createdAt: '2026-10-11T09:10:00.000Z' }),
+        message(3, { body: 'Thanks', createdAt: '2026-10-11T09:30:00.000Z' }),
+      ],
+    });
+    notesCall.mockResolvedValue({
+      data: [
+        aNote(
+          'eeeeeeee-0000-4000-8000-000000000001',
+          'Refund approved',
+          '2026-10-11T09:20:00.000Z',
+        ),
+      ],
+      page: { nextCursor: null, hasMore: false, limit: 100 },
+    });
+    await show();
+    const noted = await screen.findByTestId('thread-note-eeeeeeee-0000-4000-8000-000000000001');
+    expect(noted.props.accessibilityLabel).toMatch(/^Private note by Kabir Rao: Refund approved/);
+    expect(screen.getByText('Private note')).toBeTruthy();
+    // Between "Hi Rohan" and "Thanks": the list is drawn newest first, so the order in the tree is Thanks, note, Hi Rohan.
+    const order = screen
+      .getAllByTestId(/^(message-|thread-note-)/)
+      .map((n) => n.props.testID as string);
+    expect(order).toEqual([
+      'message-3',
+      'thread-note-eeeeeeee-0000-4000-8000-000000000001',
+      'message-2',
+      'message-1',
+    ]);
+  });
+
+  it('offers the Reply and Note switch to a person who may write notes', async () => {
+    as('inbox.conversation.note');
+    arrange();
+    await show();
+    await loaded();
+    expect(
+      (await screen.findByRole('radio', { name: 'Reply' })).props.accessibilityState.checked,
+    ).toBe(true);
+    expect(screen.getByRole('radio', { name: 'Note' })).toBeTruthy();
+  });
+
+  it('has no switch for a person who may not write notes', async () => {
+    arrange();
+    await show();
+    await loaded();
+    expect(screen.queryByRole('radio', { name: 'Note' })).toBeNull();
+  });
+
+  it('writes a note, not a message, in note mode; and keeps each draft apart', async () => {
+    as('inbox.conversation.note');
+    arrange();
+    addNoteCall.mockResolvedValue(
+      aNote('eeeeeeee-0000-4000-8000-000000000002', 'Call tomorrow', '2026-10-11T10:00:00.000Z'),
+    );
+    await show();
+    await loaded();
+    await type('Hello Rohan');
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Note' }));
+    expect(screen.getByLabelText('Private note')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Saved replies' })).toBeNull();
+    await fireEvent.changeText(screen.getByLabelText('Private note'), '  Call tomorrow ');
+    await fireEvent.press(screen.getByRole('button', { name: 'Add note' }));
+    await waitFor(() =>
+      expect(addNoteCall).toHaveBeenCalledWith(
+        CONVERSATION_ID,
+        { body: 'Call tomorrow', mentions: [] },
+        expect.any(String),
+      ),
+    );
+    expect(sendCall).not.toHaveBeenCalled();
+    await waitFor(() => expect(screen.getByLabelText('Private note').props.value).toBe(''));
+    // Back to replying: the message that was being typed is still there.
+    await fireEvent.press(screen.getByRole('radio', { name: 'Reply' }));
+    expect(screen.getByLabelText('Message').props.value).toBe('Hello Rohan');
+  });
+
+  it('says so when the note could not be saved, and keeps what was typed', async () => {
+    as('inbox.conversation.note');
+    arrange();
+    addNoteCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
+    await show();
+    await loaded();
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Note' }));
+    await fireEvent.changeText(screen.getByLabelText('Private note'), 'Call tomorrow');
+    await fireEvent.press(screen.getByRole('button', { name: 'Add note' }));
+    expect(await screen.findByText("Couldn't save the note. Try again.")).toBeTruthy();
+    expect(screen.getByLabelText('Private note').props.value).toBe('Call tomorrow');
+  });
+
+  it('still works when the reply window is closed, as the web inbox does', async () => {
+    as('inbox.conversation.note');
+    arrange({ detail: detail({ window: { open: false, expiresAt: null } }) });
+    await show();
+    await screen.findByText('Send Template');
+    await fireEvent.press(screen.getByRole('radio', { name: 'Note' }));
+    expect(await screen.findByLabelText('Private note')).toBeTruthy();
+  });
+
+  it('gives a person who may write notes but not reply the note box alone', async () => {
+    sessionCall.mockResolvedValue(
+      withPermissions(['inbox.conversation.read', 'inbox.conversation.note']),
+    );
+    arrange();
+    await show();
+    await loaded();
+    expect(await screen.findByLabelText('Private note')).toBeTruthy();
+    expect(screen.queryByLabelText('Message')).toBeNull();
+    expect(screen.queryByRole('radio', { name: 'Note' })).toBeNull();
   });
 });

@@ -1,9 +1,16 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { InfiniteData } from '@tanstack/react-query';
-import type { MessageListResponse, SetConversationStatusInput } from '@crm/contracts';
+import type {
+  MessageListResponse,
+  SetConversationPriorityInput,
+  SetConversationStatusInput,
+  SnoozeConversationInput,
+} from '@crm/contracts';
 import * as Crypto from 'expo-crypto';
 import {
   assignConversation,
+  fetchAssignees,
+  fetchChannels,
   fetchConversation,
   fetchConversations,
   fetchInboxTemplates,
@@ -12,7 +19,9 @@ import {
   retryMessage,
   sendTemplateMessage,
   sendTextMessage,
+  setConversationPriority,
   setConversationStatus,
+  snoozeConversation,
 } from './api';
 import type { AssignInput } from './api';
 import type { InboxFilters } from './filters';
@@ -34,7 +43,15 @@ const messagesKey = (id: string) => ['inbox', 'messages', id] as const;
  */
 export const useConversations = (filters: InboxFilters, enabled: boolean, polling = false) =>
   useInfiniteQuery({
-    queryKey: [...listKey, filters.tab, filters.status, filters.q],
+    queryKey: [
+      ...listKey,
+      filters.tab,
+      filters.status,
+      filters.q,
+      filters.channelId,
+      filters.labels.join(','),
+      filters.archived,
+    ],
     queryFn: ({ pageParam, signal }) => fetchConversations(filters, pageParam, signal),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (page) =>
@@ -97,6 +114,45 @@ export function useAssign(id: string) {
     onSettled: refresh,
   });
 }
+
+/** Low, normal, high or urgent. The lists and the open thread read again either way, so the next press carries the current row version. */
+export function useSetPriority(id: string) {
+  const refresh = useRefreshInbox(id);
+  return useMutation({
+    mutationFn: (input: SetConversationPriorityInput) => setConversationPriority(id, input),
+    onSettled: refresh,
+  });
+}
+
+/** Parks the conversation until a time; it reopens by itself. */
+export function useSnooze(id: string) {
+  const refresh = useRefreshInbox(id);
+  return useMutation({
+    mutationFn: (input: SnoozeConversationInput) => snoozeConversation(id, input),
+    onSettled: refresh,
+  });
+}
+
+/**
+ * The staff and teams a conversation can be given to. Only asked for by a person who may hand a conversation to anyone, and only
+ * while the picker is open; the list is kept five minutes (the counts beside the names are as old as that).
+ */
+export const useAssignees = (enabled: boolean) =>
+  useQuery({
+    queryKey: ['inbox', 'assignees'],
+    queryFn: ({ signal }) => fetchAssignees(signal),
+    staleTime: 5 * 60_000,
+    enabled,
+  });
+
+/** The workspace's channels, for the filter sheet. Only asked for while the sheet is open; they change rarely. */
+export const useChannels = (enabled: boolean) =>
+  useQuery({
+    queryKey: ['inbox', 'channels'],
+    queryFn: ({ signal }) => fetchChannels(signal),
+    staleTime: 5 * 60_000,
+    enabled,
+  });
 
 export function useSendMessage(id: string) {
   const queryClient = useQueryClient();

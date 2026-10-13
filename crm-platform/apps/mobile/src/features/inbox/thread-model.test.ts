@@ -1,7 +1,7 @@
 import type { InfiniteData } from '@tanstack/react-query';
 import type { MessageListResponse } from '@crm/contracts';
 import { message, outgoing, thread } from '@/test/inbox-fixtures';
-import { flattenMessages, REFUSED_SEND_CODES, withMessage } from './thread-model';
+import { flattenMessages, mergeThread, REFUSED_SEND_CODES, withMessage } from './thread-model';
 
 const pages = (...list: MessageListResponse[]): InfiniteData<MessageListResponse> => ({
   pages: list,
@@ -47,5 +47,57 @@ describe('REFUSED_SEND_CODES', () => {
     expect(REFUSED_SEND_CODES.has('CHANNEL_DISCONNECTED')).toBe(true);
     expect(REFUSED_SEND_CODES.has('PLAN_LIMIT_REACHED')).toBe(true);
     expect(REFUSED_SEND_CODES.has('CLIENT_NETWORK')).toBe(false);
+  });
+});
+
+describe('mergeThread', () => {
+  const at = (minute: number) => `2026-10-11T09:${String(minute).padStart(2, '0')}:00.000Z`;
+  const note = (id: string, createdAt: string) => ({
+    id,
+    conversationId: '11111111-1111-4111-8111-111111111111',
+    author: { userId: null, name: 'Kabir Rao' },
+    body: `note ${id}`,
+    mentions: [],
+    isPinned: false,
+    editedAt: null,
+    createdAt,
+    rowVersion: 1,
+  });
+  const kinds = (items: ReturnType<typeof mergeThread>) =>
+    items.map((i) => (i.kind === 'note' ? `note:${i.note.id}` : `msg:${i.message.seq}`));
+
+  it('puts a note after the last message written before it', () => {
+    const merged = mergeThread(
+      [
+        message(1, { createdAt: at(0) }),
+        message(2, { createdAt: at(10) }),
+        message(3, { createdAt: at(30) }),
+      ],
+      [note('a', at(20))],
+    );
+    expect(kinds(merged)).toEqual(['msg:1', 'msg:2', 'note:a', 'msg:3']);
+  });
+
+  it('puts notes before the first message and after the last, and keeps several in order', () => {
+    const merged = mergeThread(
+      [message(1, { createdAt: at(10) }), message(2, { createdAt: at(20) })],
+      [note('late2', at(50)), note('early', at(1)), note('late1', at(40))],
+    );
+    expect(kinds(merged)).toEqual(['note:early', 'msg:1', 'msg:2', 'note:late1', 'note:late2']);
+  });
+
+  it('keeps the message first when a note and a message are from the same instant', () => {
+    expect(kinds(mergeThread([message(1, { createdAt: at(5) })], [note('a', at(5))]))).toEqual([
+      'msg:1',
+      'note:a',
+    ]);
+  });
+
+  it('is just the messages when there are no notes, and just the notes when there are no messages', () => {
+    expect(kinds(mergeThread([message(1), message(2)], []))).toEqual(['msg:1', 'msg:2']);
+    expect(kinds(mergeThread([], [note('a', at(1)), note('b', at(2))]))).toEqual([
+      'note:a',
+      'note:b',
+    ]);
   });
 });

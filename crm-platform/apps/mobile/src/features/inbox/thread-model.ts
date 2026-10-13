@@ -1,5 +1,10 @@
 import type { InfiniteData } from '@tanstack/react-query';
-import { ERROR_CODES, type MessageListResponse, type MessageResponse } from '@crm/contracts';
+import {
+  ERROR_CODES,
+  type ConversationNote,
+  type MessageListResponse,
+  type MessageResponse,
+} from '@crm/contracts';
 
 /** A message the person just sent that the server has not answered for yet (or refused in a way worth a retry). */
 export interface PendingMessage {
@@ -40,3 +45,33 @@ export const REFUSED_SEND_CODES: ReadonlySet<string> = new Set([
   ERROR_CODES.CONVERSATION_NOT_FOUND,
   ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
 ]);
+
+/** One thing in the thread: a message, or a private note written between messages. */
+export type ThreadItem =
+  { kind: 'message'; message: MessageResponse } | { kind: 'note'; note: ConversationNote };
+
+/**
+ * The messages (oldest first) and the notes in one thread, oldest first: a note stands after the last message written before it.
+ * A note and a message from the same instant keep the message first.
+ */
+export function mergeThread(
+  messages: readonly MessageResponse[],
+  notes: readonly ConversationNote[],
+): ThreadItem[] {
+  const pending = [...notes].sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt));
+  const merged: ThreadItem[] = [];
+  let next = 0;
+  for (const message of messages) {
+    const at = Date.parse(message.createdAt);
+    while (next < pending.length && Date.parse(pending[next]!.createdAt) < at) {
+      merged.push({ kind: 'note', note: pending[next]! });
+      next += 1;
+    }
+    merged.push({ kind: 'message', message });
+  }
+  while (next < pending.length) {
+    merged.push({ kind: 'note', note: pending[next]! });
+    next += 1;
+  }
+  return merged;
+}

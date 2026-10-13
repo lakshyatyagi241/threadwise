@@ -5,7 +5,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import type { StatusFilter } from './filters';
+import type { InboxFilters } from './filters';
 
 interface ChipProps {
   text: string;
@@ -33,42 +33,85 @@ function Chip({ text, removeLabel, onRemove }: ChipProps) {
 }
 
 interface Props {
-  status: StatusFilter;
-  q: string;
+  filters: InboxFilters;
+  /** The channel's name, when a channel is chosen (the filter holds only its id). */
+  channelName: string | null;
+  /** The names of the chosen labels, in the order chosen. */
+  labelNames: readonly string[];
   onClearStatus: () => void;
   onClearSearch: () => void;
+  onClearChannel: () => void;
+  onClearLabels: () => void;
+  onClearArchived: () => void;
   onClearAll: () => void;
 }
 
 /** What is narrowing the list right now, each with a way to take it off, and one button for all of them. */
-export function FilterStrip({ status, q, onClearStatus, onClearSearch, onClearAll }: Props) {
+export function FilterStrip({
+  filters,
+  channelName,
+  labelNames,
+  onClearStatus,
+  onClearSearch,
+  onClearChannel,
+  onClearLabels,
+  onClearArchived,
+  onClearAll,
+}: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const statusText =
-    status === 'default'
-      ? null
-      : t('inbox.filter.statusChip', { name: t(`inbox.statusFilter.${status}`) });
-  const searchText = q.trim() ? t('inbox.filter.searchChip', { q: q.trim() }) : null;
+  const chips: { key: string; text: string; onRemove: () => void }[] = [];
+  if (filters.status !== 'default') {
+    chips.push({
+      key: 'status',
+      text: t('inbox.filter.statusChip', { name: t(`inbox.statusFilter.${filters.status}`) }),
+      onRemove: onClearStatus,
+    });
+  }
+  if (filters.archived) {
+    chips.push({
+      key: 'archived',
+      text: t('inbox.filter.archivedChip'),
+      onRemove: onClearArchived,
+    });
+  }
+  if (filters.channelId) {
+    chips.push({
+      key: 'channel',
+      text: t('inbox.filter.channelChip', { name: channelName ?? t('inbox.filter.channel') }),
+      onRemove: onClearChannel,
+    });
+  }
+  if (filters.labels.length > 0) {
+    chips.push({
+      key: 'labels',
+      text: t('inbox.filter.labelsChip', {
+        names: labelNames.length > 0 ? labelNames.join(', ') : String(filters.labels.length),
+      }),
+      onRemove: onClearLabels,
+    });
+  }
+  if (filters.q.trim()) {
+    chips.push({
+      key: 'search',
+      text: t('inbox.filter.searchChip', { q: filters.q.trim() }),
+      onRemove: onClearSearch,
+    });
+  }
   return (
     <View
       accessibilityLabel={t('inbox.filter.applied')}
       style={[styles.strip, { borderBottomColor: colors.border }]}
     >
       <View style={styles.chips}>
-        {statusText ? (
+        {chips.map((chip) => (
           <Chip
-            text={statusText}
-            removeLabel={t('inbox.filter.remove', { name: statusText })}
-            onRemove={onClearStatus}
+            key={chip.key}
+            text={chip.text}
+            removeLabel={t('inbox.filter.remove', { name: chip.text })}
+            onRemove={chip.onRemove}
           />
-        ) : null}
-        {searchText ? (
-          <Chip
-            text={searchText}
-            removeLabel={t('inbox.filter.remove', { name: searchText })}
-            onRemove={onClearSearch}
-          />
-        ) : null}
+        ))}
       </View>
       <Button variant="link" label={t('inbox.filter.clearAll')} onPress={onClearAll} />
     </View>

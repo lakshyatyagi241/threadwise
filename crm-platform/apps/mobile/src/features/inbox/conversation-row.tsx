@@ -1,6 +1,6 @@
 import type { ConversationSummary } from '@crm/contracts';
 import { useRouter } from 'expo-router';
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar } from '@/components/ui/avatar';
@@ -17,6 +17,12 @@ interface Props {
   item: ConversationSummary;
   /** The clock the time on the right is measured against. */
   now: Date;
+  /** Some conversations are being chosen: a press ticks this row instead of opening it. */
+  selecting?: boolean;
+  selected?: boolean;
+  /** A long press starts choosing (given only to a person who may act on several at once). */
+  onStartSelecting?: (id: string) => void;
+  onToggle?: (id: string) => void;
 }
 
 /**
@@ -24,10 +30,19 @@ interface Props {
  * the last message. A thread that is not open also says so, and an unread one has a dot and a bolder name. The whole row opens
  * the thread.
  */
-export const ConversationRow = memo(function ConversationRow({ item, now }: Props) {
+export const ConversationRow = memo(function ConversationRow({
+  item,
+  now,
+  selecting,
+  selected,
+  onStartSelecting,
+  onToggle,
+}: Props) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const router = useRouter();
+  // On Android the release that ends a long press is also a press. Without this the row just chosen would be un-chosen at once.
+  const afterLongPress = useRef(false);
   const unread = item.unreadCount > 0;
   // A message with no words (a photo, a file) has no preview; the thread still has something in it.
   const media = item.preview === null && item.lastMessageAt !== null;
@@ -42,14 +57,44 @@ export const ConversationRow = memo(function ConversationRow({ item, now }: Prop
 
   return (
     <Pressable
-      accessibilityRole="button"
+      accessibilityRole={selecting ? 'checkbox' : 'button'}
       accessibilityLabel={label}
-      onPress={() => router.push({ pathname: '/conversation/[id]', params: { id: item.id } })}
+      accessibilityState={selecting ? { checked: Boolean(selected) } : undefined}
+      accessibilityHint={!selecting && onStartSelecting ? t('inbox.bulk.hint') : undefined}
+      onPress={() => {
+        if (afterLongPress.current) {
+          afterLongPress.current = false;
+          return;
+        }
+        if (selecting) onToggle?.(item.id);
+        else router.push({ pathname: '/conversation/[id]', params: { id: item.id } });
+      }}
+      onLongPress={
+        onStartSelecting && !selecting
+          ? () => {
+              afterLongPress.current = true;
+              onStartSelecting(item.id);
+            }
+          : undefined
+      }
       style={({ pressed }) => [
         styles.row,
-        { backgroundColor: pressed ? colors.surfaceMuted : colors.surface },
+        {
+          backgroundColor: selected
+            ? colors.primarySoft
+            : pressed
+              ? colors.surfaceMuted
+              : colors.surface,
+        },
       ]}
     >
+      {selecting ? (
+        <Icon
+          name={selected ? 'checkmark-circle' : 'ellipse-outline'}
+          size={24}
+          color={selected ? 'primary' : 'textMuted'}
+        />
+      ) : null}
       <View>
         <Avatar name={item.title} seed={item.id} size={40} />
         <ChannelBadge kind={item.channel.kind} ring="surface" />

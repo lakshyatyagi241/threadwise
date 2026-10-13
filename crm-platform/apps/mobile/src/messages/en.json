@@ -446,14 +446,24 @@
       "placeholder": "Name, number or message"
     },
     "filter": {
-      "open": "Filter by status",
+      "open": "Filters",
       "sheet": "Conversation status",
       "close": "Close",
       "applied": "Applied filters",
       "clearAll": "Clear all",
       "remove": "Remove filter: {{name}}",
       "statusChip": "Status: {{name}}",
-      "searchChip": "Search: {{q}}"
+      "searchChip": "Search: {{q}}",
+      "title": "Filters",
+      "view": "View",
+      "viewActive": "Conversations",
+      "viewArchived": "Archived",
+      "channel": "Channel",
+      "allChannels": "All channels",
+      "labels": "Labels",
+      "channelChip": "Channel: {{name}}",
+      "labelsChip": "Labels: {{names}}",
+      "archivedChip": "Archived"
     },
     "statusFilter": {
       "default": "Open & pending",
@@ -518,7 +528,12 @@
         "assignToMe": "Assign to me",
         "unassign": "Unassign",
         "pending": "Mark as pending",
-        "closeConversation": "Close conversation"
+        "closeConversation": "Close conversation",
+        "changeAgent": "Change agent",
+        "priority": "Set priority",
+        "snooze": "Snooze",
+        "wake": "Wake up now",
+        "details": "Chat details"
       },
       "bot": {
         "notice": "This is a bot conversation.",
@@ -533,6 +548,13 @@
         "newLabel": "New label",
         "add": "Add",
         "failed": "Couldn't change the labels. Try again."
+      },
+      "assignment": {
+        "none": "Not assigned",
+        "team": "Team: {{name}}",
+        "failed": "Couldn't change the conversation. Try again.",
+        "you": "Assigned to you",
+        "to": "Assigned to {{name}}"
       }
     },
     "message": {
@@ -570,7 +592,13 @@
       "label": "Message",
       "placeholder": "Type a message",
       "send": "Send",
-      "tooLong": "Messages can be up to {{max}} characters."
+      "tooLong": "Messages can be up to {{max}} characters.",
+      "noteLabel": "Private note",
+      "notePlaceholder": "Write a note only your team sees",
+      "addNote": "Add note",
+      "mode": "Message type",
+      "reply": "Reply",
+      "note": "Note"
     },
     "template": {
       "closedNotice": "The customer has not spoken to you in the last 24 hours. You can only send pre-approved templates.",
@@ -606,6 +634,160 @@
       "facebook": "Facebook",
       "instagram": "Instagram",
       "simulator": "Simulator"
+    },
+    "sheet": {
+      "close": "Close",
+      "save": "Save changes",
+      "noMatch": "No matches."
+    },
+    "assign": {
+      "title": "Change agent",
+      "search": "Search agents",
+      "agents": "Agents",
+      "teams": "Teams",
+      "unassigned": "Unassigned",
+      "noTeam": "No team",
+      "you": "{{name}} (you)",
+      "availability": {
+        "online": "Online",
+        "away": "Away",
+        "busy": "Busy",
+        "offline": "Offline"
+      },
+      "open_one": "{{count}} open",
+      "open_other": "{{count}} open",
+      "members_one": "{{count}} member",
+      "members_other": "{{count}} members",
+      "failed": "Couldn't change who has this conversation. Try again."
+    },
+    "priority": {
+      "title": "Set priority",
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "snooze": {
+      "title": "Snooze until",
+      "hour": "In 1 hour",
+      "threeHours": "In 3 hours",
+      "tomorrow": "Tomorrow, 9:00 am",
+      "nextWeek": "Next Monday, 9:00 am"
+    },
+    "statusSheet": {
+      "title": "Change status"
+    },
+    "details": {
+      "title": "Chat details",
+      "contact": "Contact",
+      "openContact": "Open contact",
+      "call": "Call",
+      "noContact": "This conversation has no contact record yet.",
+      "email": "Email",
+      "stage": "Stage",
+      "contactStatus": "Status",
+      "owner": "Owner",
+      "source": "Source",
+      "since": "Contact since",
+      "optedOut": "Opted out of messages",
+      "leadScore": "Lead score",
+      "actions": "Actions",
+      "status": "Status",
+      "priority": "Priority",
+      "labels": "Labels",
+      "none": "None",
+      "agent": "Assigned agent",
+      "team": "Team",
+      "you": "You",
+      "bot": "Bot",
+      "unassigned": "Unassigned",
+      "info": "Conversation",
+      "channel": "Channel",
+      "window": "Reply window",
+      "windowOpen": "Open until {{time}}",
+      "windowClosed": "Closed",
+      "windowNone": "No time limit",
+      "snoozedUntil": "Snoozed until {{time}}",
+      "notes": {
+        "title": "Internal notes",
+        "empty": "No notes yet. Only your team sees notes.",
+        "label": "Write a note",
+        "add": "Add note",
+        "delete": "Delete",
+        "deleteFor": "Delete note by {{name}}",
+        "failed": "Couldn't save the note. Try again.",
+        "deleteFailed": "Couldn't delete the note. Try again.",
+        "unknownAuthor": "Someone",
+        "tooLong": "Notes can be up to {{max}} characters."
+      },
+      "timeline": {
+        "title": "Timeline",
+        "empty": "Nothing has happened yet.",
+        "system": "System"
+      },
+      "past": {
+        "title": "Previous conversations",
+        "empty": "No other conversations with this contact."
+      }
+    },
+    "event": {
+      "created": "Conversation started",
+      "assigned": "Assigned",
+      "reassigned": "Reassigned",
+      "unassigned": "Unassigned",
+      "ai_handoff": "Handed over by the AI agent",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "reopened": "Reopened",
+      "status_changed": "Status changed",
+      "note_added": "Note added",
+      "snoozed": "Snoozed",
+      "auto_unsnoozed": "Woke up on time",
+      "priority_changed": "Priority changed",
+      "tag_added": "Label added",
+      "tag_removed": "Label removed",
+      "first_response": "First reply sent",
+      "sla_breach": "Reply time missed"
+    },
+    "replies": {
+      "open": "Saved replies",
+      "title": "Saved replies",
+      "search": "Search saved replies",
+      "empty": "No saved replies yet.",
+      "noMatch": "No saved replies match your search.",
+      "failed": "Couldn't use this reply. Try again.",
+      "unfilled": "Check the message: {{list}} couldn't be filled in."
+    },
+    "note": {
+      "title": "Private note",
+      "label": "Private note by {{name}}: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "Long press to select conversations",
+      "selected_one": "{{count}} selected",
+      "selected_other": "{{count}} selected",
+      "close": "Cancel selection",
+      "selectAll": "Select all",
+      "read": "Mark as read",
+      "status": "Status",
+      "assign": "Assign",
+      "label": "Labels",
+      "priority": "Priority",
+      "snooze": "Snooze",
+      "statusTitle_one": "Change status of {{count}} conversation",
+      "statusTitle_other": "Change status of {{count}} conversations",
+      "labelTitle_one": "Labels for {{count}} conversation",
+      "labelTitle_other": "Labels for {{count}} conversations",
+      "labelMode": "Action",
+      "labelAdd": "Add the label",
+      "labelRemove": "Take the label off",
+      "labelSearch": "Search labels",
+      "priorityTitle_one": "Priority of {{count}} conversation",
+      "priorityTitle_other": "Priority of {{count}} conversations",
+      "snoozeTitle_one": "Snooze {{count}} conversation until",
+      "snoozeTitle_other": "Snooze {{count}} conversations until",
+      "result": "{{done}} updated, {{unchanged}} unchanged, {{failed}} failed",
+      "resultDismiss": "Dismiss"
     }
   },
   "contacts": {

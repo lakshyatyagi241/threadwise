@@ -5,6 +5,8 @@ import { Text } from './text';
 
 interface Props extends Omit<PressableProps, 'children' | 'style'> {
   label: string;
+  /** What a screen reader says when the visible `label` is not enough alone (a "Delete" inside a list says whose). */
+  accessibilityLabel?: string;
   /** `primary` is the one action of a screen, `secondary` an alternative, `link` a quiet text action (it sits inside a sentence of UI). */
   variant?: 'primary' | 'secondary' | 'link';
   loading?: boolean;
@@ -18,6 +20,7 @@ export function Button({
   loading = false,
   align = 'center',
   disabled,
+  accessibilityLabel,
   ...rest
 }: Props) {
   const { colors } = useTheme();
@@ -29,7 +32,7 @@ export function Button({
     <Pressable
       {...rest}
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={accessibilityLabel ?? label}
       accessibilityState={{ disabled: inactive, busy: loading }}
       disabled={inactive}
       style={({ pressed }) => [

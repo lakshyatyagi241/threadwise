@@ -9,6 +9,19 @@ describe('Button', () => {
     expect(screen.getByText('खाते तयार करा')).toBeTruthy();
   });
 
+  it('lets a screen reader hear more than the visible label, when the caller says so', async () => {
+    await render(
+      <Button
+        label="Delete"
+        accessibilityLabel="Delete note by Asha"
+        variant="link"
+        onPress={() => undefined}
+      />,
+    );
+    expect(screen.getByRole('button', { name: 'Delete note by Asha' })).toBeTruthy();
+    expect(screen.getByText('Delete')).toBeTruthy();
+  });
+
   it('calls onPress, in every variant', async () => {
     const onPress = jest.fn();
     await render(

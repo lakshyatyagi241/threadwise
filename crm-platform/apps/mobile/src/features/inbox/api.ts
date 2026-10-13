@@ -1,13 +1,17 @@
 import {
   assignConversationResponseSchema,
+  channelListResponseSchema,
   conversationListResponseSchema,
   conversationSummarySchema,
+  inboxAssigneesResponseSchema,
   inboxConversationDetailSchema,
   inboxTemplateListResponseSchema,
   markConversationReadResponseSchema,
   messageListResponseSchema,
   messageResponseSchema,
+  type SetConversationPriorityInput,
   type SetConversationStatusInput,
+  type SnoozeConversationInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api';
 import type { InboxFilters } from './filters';
@@ -15,7 +19,7 @@ import type { InboxFilters } from './filters';
 export const CONVERSATIONS_PAGE_SIZE = 20;
 export const MESSAGES_PAGE_SIZE = 30;
 
-/** One page of the conversation list (WD-INBOX): the tab, the status filter and the search words go to the API as they are. */
+/** One page of the conversation list (WD-INBOX): the tab, the status, channel, labels, archive view and the search words go to the API as they are. */
 export const fetchConversations = (
   filters: InboxFilters,
   cursor: string | undefined,
@@ -26,6 +30,9 @@ export const fetchConversations = (
       limit: CONVERSATIONS_PAGE_SIZE,
       tab: filters.tab,
       status: filters.status === 'default' ? undefined : filters.status,
+      channelId: filters.channelId || undefined,
+      labels: filters.labels.length > 0 ? filters.labels.join(',') : undefined,
+      archived: filters.archived ? 'true' : undefined,
       q: filters.q.trim() || undefined,
       cursor,
     },
@@ -120,3 +127,30 @@ export const assignConversation = (id: string, input: AssignInput, idempotencyKe
     schema: assignConversationResponseSchema,
     idempotencyKey,
   });
+
+/** The people and teams a conversation can be given to, with how many open conversations each person has right now. */
+export const fetchAssignees = (signal?: AbortSignal) =>
+  apiFetch('/v2/inbox/assignees', { schema: inboxAssigneesResponseSchema, signal });
+
+/** Low, normal, high or urgent (`inbox.conversation.priority`). A stale `rowVersion` is 409 ROW_VERSION_CONFLICT. */
+export const setConversationPriority = (id: string, input: SetConversationPriorityInput) =>
+  apiFetch(`/v2/inbox/conversations/${id}/priority`, {
+    method: 'POST',
+    body: input,
+    schema: conversationSummarySchema,
+  });
+
+/**
+ * Parks an open or pending conversation until a time (`inbox.conversation.snooze`); it reopens by itself. To wake it sooner, move
+ * it to open with the status route.
+ */
+export const snoozeConversation = (id: string, input: SnoozeConversationInput) =>
+  apiFetch(`/v2/inbox/conversations/${id}/snooze`, {
+    method: 'POST',
+    body: input,
+    schema: conversationSummarySchema,
+  });
+
+/** The channels the workspace has connected (`inbox.conversation.read`): what the list can be narrowed to. */
+export const fetchChannels = (signal?: AbortSignal) =>
+  apiFetch('/v2/channels', { schema: channelListResponseSchema, signal });

@@ -446,14 +446,24 @@
       "placeholder": "नाम, नंबर या संदेश"
     },
     "filter": {
-      "open": "स्थिति के अनुसार फ़िल्टर करें",
+      "open": "फ़िल्टर",
       "sheet": "बातचीत की स्थिति",
       "close": "बंद करें",
       "applied": "लागू किए गए फ़िल्टर",
       "clearAll": "सभी हटाएँ",
       "remove": "फ़िल्टर हटाएँ: {{name}}",
       "statusChip": "स्थिति: {{name}}",
-      "searchChip": "खोज: {{q}}"
+      "searchChip": "खोज: {{q}}",
+      "title": "फ़िल्टर",
+      "view": "दृश्य",
+      "viewActive": "बातचीतें",
+      "viewArchived": "संग्रहित",
+      "channel": "चैनल",
+      "allChannels": "सभी चैनल",
+      "labels": "लेबल",
+      "channelChip": "चैनल: {{name}}",
+      "labelsChip": "लेबल: {{names}}",
+      "archivedChip": "संग्रहित"
     },
     "statusFilter": {
       "default": "खुली और लंबित",
@@ -518,7 +528,12 @@
         "assignToMe": "मुझे असाइन करें",
         "unassign": "असाइन हटाएँ",
         "pending": "लंबित के रूप में चिह्नित करें",
-        "closeConversation": "बातचीत बंद करें"
+        "closeConversation": "बातचीत बंद करें",
+        "changeAgent": "एजेंट बदलें",
+        "priority": "प्राथमिकता तय करें",
+        "snooze": "टालें",
+        "wake": "अभी जगाएँ",
+        "details": "चैट का विवरण"
       },
       "bot": {
         "notice": "यह बॉट की बातचीत है।",
@@ -533,6 +548,13 @@
         "newLabel": "नया लेबल",
         "add": "जोड़ें",
         "failed": "लेबल बदले नहीं जा सके। फिर कोशिश करें।"
+      },
+      "assignment": {
+        "none": "किसी को नहीं सौंपा गया",
+        "team": "टीम: {{name}}",
+        "failed": "बातचीत में बदलाव नहीं हो सका। फिर कोशिश करें।",
+        "you": "आपको सौंपी गई",
+        "to": "{{name}} को सौंपी गई"
       }
     },
     "message": {
@@ -570,7 +592,13 @@
       "label": "संदेश",
       "placeholder": "संदेश लिखें",
       "send": "भेजें",
-      "tooLong": "संदेश अधिकतम {{max}} अक्षरों का हो सकता है।"
+      "tooLong": "संदेश अधिकतम {{max}} अक्षरों का हो सकता है।",
+      "noteLabel": "निजी नोट",
+      "notePlaceholder": "सिर्फ़ आपकी टीम को दिखने वाला नोट लिखें",
+      "addNote": "नोट जोड़ें",
+      "mode": "संदेश का प्रकार",
+      "reply": "जवाब",
+      "note": "नोट"
     },
     "template": {
       "closedNotice": "ग्राहक ने पिछले 24 घंटों में आपसे बात नहीं की है। आप केवल पहले से स्वीकृत टेम्पलेट भेज सकते हैं।",
@@ -606,6 +634,160 @@
       "facebook": "फ़ेसबुक",
       "instagram": "इंस्टाग्राम",
       "simulator": "सिम्युलेटर"
+    },
+    "sheet": {
+      "close": "बंद करें",
+      "save": "बदलाव सहेजें",
+      "noMatch": "कोई मेल नहीं मिला।"
+    },
+    "assign": {
+      "title": "एजेंट बदलें",
+      "search": "एजेंट खोजें",
+      "agents": "एजेंट",
+      "teams": "टीम",
+      "unassigned": "किसी को नहीं सौंपा",
+      "noTeam": "कोई टीम नहीं",
+      "you": "{{name}} (आप)",
+      "availability": {
+        "online": "ऑनलाइन",
+        "away": "दूर",
+        "busy": "व्यस्त",
+        "offline": "ऑफ़लाइन"
+      },
+      "open_one": "{{count}} खुली",
+      "open_other": "{{count}} खुली",
+      "members_one": "{{count}} सदस्य",
+      "members_other": "{{count}} सदस्य",
+      "failed": "बातचीत किसे सौंपी गई है, यह बदला नहीं जा सका। फिर कोशिश करें।"
+    },
+    "priority": {
+      "title": "प्राथमिकता तय करें",
+      "low": "कम",
+      "normal": "सामान्य",
+      "high": "ज़्यादा",
+      "urgent": "अत्यावश्यक"
+    },
+    "snooze": {
+      "title": "इतने समय तक टालें",
+      "hour": "1 घंटे बाद",
+      "threeHours": "3 घंटे बाद",
+      "tomorrow": "कल, सुबह 9:00 बजे",
+      "nextWeek": "अगले सोमवार, सुबह 9:00 बजे"
+    },
+    "statusSheet": {
+      "title": "स्थिति बदलें"
+    },
+    "details": {
+      "title": "चैट का विवरण",
+      "contact": "संपर्क",
+      "openContact": "संपर्क खोलें",
+      "call": "कॉल करें",
+      "noContact": "इस बातचीत का अभी कोई संपर्क रिकॉर्ड नहीं है।",
+      "email": "ईमेल",
+      "stage": "चरण",
+      "contactStatus": "स्थिति",
+      "owner": "मालिक",
+      "source": "स्रोत",
+      "since": "संपर्क कब से",
+      "optedOut": "संदेश पाने से बाहर हो चुके हैं",
+      "leadScore": "लीड स्कोर",
+      "actions": "कार्रवाइयाँ",
+      "status": "स्थिति",
+      "priority": "प्राथमिकता",
+      "labels": "लेबल",
+      "none": "कोई नहीं",
+      "agent": "सौंपा गया एजेंट",
+      "team": "टीम",
+      "you": "आप",
+      "bot": "बॉट",
+      "unassigned": "किसी को नहीं सौंपा",
+      "info": "बातचीत",
+      "channel": "चैनल",
+      "window": "जवाब देने की समय-सीमा",
+      "windowOpen": "{{time}} तक खुली",
+      "windowClosed": "बंद",
+      "windowNone": "कोई समय-सीमा नहीं",
+      "snoozedUntil": "{{time}} तक टाली गई",
+      "notes": {
+        "title": "आंतरिक नोट",
+        "empty": "अभी कोई नोट नहीं। नोट सिर्फ़ आपकी टीम देखती है।",
+        "label": "नोट लिखें",
+        "add": "नोट जोड़ें",
+        "delete": "हटाएँ",
+        "deleteFor": "{{name}} का नोट हटाएँ",
+        "failed": "नोट सहेजा नहीं जा सका। फिर कोशिश करें।",
+        "deleteFailed": "नोट हटाया नहीं जा सका। फिर कोशिश करें।",
+        "unknownAuthor": "कोई",
+        "tooLong": "नोट अधिकतम {{max}} अक्षरों के हो सकते हैं।"
+      },
+      "timeline": {
+        "title": "गतिविधि का क्रम",
+        "empty": "अभी तक कुछ नहीं हुआ।",
+        "system": "सिस्टम"
+      },
+      "past": {
+        "title": "पिछली बातचीतें",
+        "empty": "इस संपर्क के साथ कोई और बातचीत नहीं।"
+      }
+    },
+    "event": {
+      "created": "बातचीत शुरू हुई",
+      "assigned": "सौंपी गई",
+      "reassigned": "दोबारा सौंपी गई",
+      "unassigned": "सौंपना हटाया गया",
+      "ai_handoff": "AI एजेंट ने सौंपी",
+      "resolved": "सुलझाई गई",
+      "closed": "बंद की गई",
+      "reopened": "फिर खोली गई",
+      "status_changed": "स्थिति बदली",
+      "note_added": "नोट जोड़ा गया",
+      "snoozed": "टाली गई",
+      "auto_unsnoozed": "समय पर वापस आई",
+      "priority_changed": "प्राथमिकता बदली",
+      "tag_added": "लेबल जोड़ा गया",
+      "tag_removed": "लेबल हटाया गया",
+      "first_response": "पहला जवाब भेजा गया",
+      "sla_breach": "जवाब का समय चूक गया"
+    },
+    "replies": {
+      "open": "सहेजे गए जवाब",
+      "title": "सहेजे गए जवाब",
+      "search": "सहेजे गए जवाब खोजें",
+      "empty": "अभी कोई सहेजा हुआ जवाब नहीं।",
+      "noMatch": "आपकी खोज से कोई सहेजा हुआ जवाब नहीं मिला।",
+      "failed": "यह जवाब इस्तेमाल नहीं हो सका। फिर कोशिश करें।",
+      "unfilled": "संदेश जाँच लें: {{list}} भरे नहीं जा सके।"
+    },
+    "note": {
+      "title": "निजी नोट",
+      "label": "{{name}} का निजी नोट: {{text}}, {{time}}"
+    },
+    "bulk": {
+      "hint": "चुनने के लिए देर तक दबाएँ",
+      "selected_one": "{{count}} चुनी गई",
+      "selected_other": "{{count}} चुनी गईं",
+      "close": "चयन रद्द करें",
+      "selectAll": "सभी चुनें",
+      "read": "पढ़ा हुआ चिह्नित करें",
+      "status": "स्थिति",
+      "assign": "सौंपें",
+      "label": "लेबल",
+      "priority": "प्राथमिकता",
+      "snooze": "टालें",
+      "statusTitle_one": "{{count}} बातचीत की स्थिति बदलें",
+      "statusTitle_other": "{{count}} बातचीतों की स्थिति बदलें",
+      "labelTitle_one": "{{count}} बातचीत के लिए लेबल",
+      "labelTitle_other": "{{count}} बातचीतों के लिए लेबल",
+      "labelMode": "कार्रवाई",
+      "labelAdd": "लेबल जोड़ें",
+      "labelRemove": "लेबल हटाएँ",
+      "labelSearch": "लेबल खोजें",
+      "priorityTitle_one": "{{count}} बातचीत की प्राथमिकता",
+      "priorityTitle_other": "{{count}} बातचीतों की प्राथमिकता",
+      "snoozeTitle_one": "{{count}} बातचीत को इतने समय तक टालें",
+      "snoozeTitle_other": "{{count}} बातचीतों को इतने समय तक टालें",
+      "result": "{{done}} बदलीं, {{unchanged}} जस की तस, {{failed}} विफल",
+      "resultDismiss": "बंद करें"
     }
   },
   "contacts": {
