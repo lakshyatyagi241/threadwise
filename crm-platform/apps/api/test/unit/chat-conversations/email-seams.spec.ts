@@ -169,14 +169,14 @@ describe('outbound email envelope', () => {
 
     const email = emailEnvelopeOf(mail(), fields.meta.emailReply as never, 't');
     const env = envelopeOf(
+      // A deliberately partial row: a text envelope reads only these fields, the media and location columns are irrelevant here.
       {
-        ...({} as never),
         kind: 'text',
         body: 'Thanks',
         meta: fields.meta,
         clientMessageId: 'c1',
         uuid: 'u1',
-      },
+      } as Parameters<typeof envelopeOf>[0],
       't:18c0ffee',
       null,
       2,

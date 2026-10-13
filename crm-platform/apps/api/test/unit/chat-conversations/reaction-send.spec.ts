@@ -16,6 +16,8 @@ const row = (body: string | null) => ({
   mediaMime: null,
   mediaName: null,
   mediaSha256: null,
+  latitude: null,
+  longitude: null,
   meta: {},
   clientMessageId: cid,
   uuid: cid,

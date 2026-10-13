@@ -81,8 +81,11 @@ describe('conversationVisible: who may see a conversation (plan 3.7)', () => {
   });
 
   describe('a personal mailbox (TW-MAIL-035)', () => {
-    const asAdmin = (scope: ConversationViewer['scope']): ConversationViewer => ({
-      ...viewer(scope),
+    const asAdmin = (
+      scope: ConversationViewer['scope'],
+      teamIds: number[] = [],
+    ): ConversationViewer => ({
+      ...viewer(scope, teamIds),
       readsPersonalMail: true,
     });
 

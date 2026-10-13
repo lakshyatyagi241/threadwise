@@ -145,13 +145,15 @@ const appRedis = () => h.app.get<Redis>(REDIS_CLIENT, { strict: false });
 
 async function restoreRedis() {
   const rc = appRedis();
-  if (rc.status === 'ready') return;
-  if (rc.status !== 'connecting' && rc.status !== 'connect' && rc.status !== 'reconnecting') {
+  // Read through a function: the status changes behind TypeScript's back, so its narrowing must not stick.
+  const status = (): string => rc.status;
+  if (status() === 'ready') return;
+  if (status() !== 'connecting' && status() !== 'connect' && status() !== 'reconnecting') {
     await rc.connect().catch(() => undefined);
   }
-  for (let i = 0; i < 200 && rc.status !== 'ready'; i++) await sleep(50);
-  if (rc.status !== 'ready')
-    throw new Error(`the application's Redis client did not come back: ${rc.status}`);
+  for (let i = 0; i < 200 && status() !== 'ready'; i++) await sleep(50);
+  if (status() !== 'ready')
+    throw new Error(`the application's Redis client did not come back: ${status()}`);
 }
 
 /** Runs `fn` with the application's Redis connection closed (every command fails at once), then restores it. */

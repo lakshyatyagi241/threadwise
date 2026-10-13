@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { EMAIL_HTML_MAX } from '@crm/contracts';
-import { htmlToText, sanitizeEmailHtml } from '../../../src/infra/providers/channel-email';
+import {
+  htmlToText,
+  sanitizeEmailHtml,
+  type SanitizeOptions,
+} from '../../../src/infra/providers/channel-email';
 
-const opts = { blockRemoteImages: true, inputMaxChars: 1_000_000 };
+const opts: SanitizeOptions = { blockRemoteImages: true, inputMaxChars: 1_000_000 };
 const clean = (html: string, o = opts) => sanitizeEmailHtml(html, o).html;
 
 describe('TW-MAIL-026: the HTML body is made safe', () => {
