@@ -43,6 +43,7 @@
       "scheduleDry": "Schedule dry run",
       "migrate": "Migrate",
       "scheduleMigrate": "Schedule migration",
+      "catchUp": "Catch up",
       "migrateHint": "Enabled only when the latest dry run for this organization is green and under 24 hours old.",
       "queued": "Run queued.",
       "scheduled": "Run scheduled."
@@ -52,7 +53,10 @@
       "body": "This loads organization {org} into WaDesk. It cannot be stopped once it starts, and it is checked again against the latest dry run right before it begins. Type the organization id to confirm.",
       "label": "Type {org} to confirm",
       "cancel": "Cancel",
-      "submit": "Migrate"
+      "submit": "Migrate",
+      "catchupTitle": "Catch up {org}",
+      "catchupBody": "This brings the already-loaded organization {org} up to date: it re-exports from Waboo, loads new rows only, syncs the wallet and verifies the result. It stops if its own dry run is not clean and cannot be stopped once it starts. Type the organization id to confirm.",
+      "catchupSubmit": "Catch up"
     },
     "bulk": {
       "title": "Bulk migration",
@@ -169,7 +173,8 @@
     },
     "mode": {
       "dry": "Dry run",
-      "load": "Migration"
+      "load": "Migration",
+      "catchup": "Catch-up"
     },
     "status": {
       "queued": "Queued",

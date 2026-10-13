@@ -30,6 +30,7 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
   const [org, setOrg] = useState('');
   const [runAt, setRunAt] = useState('');
   const [confirming, setConfirming] = useState(false);
+  const [confirmMode, setConfirmMode] = useState<'load' | 'catchup'>('load');
   const [typed, setTyped] = useState('');
   const [problem, setProblem] = useState<string | null>(null);
 
@@ -41,13 +42,13 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
   const canLoad = valid && ready?.canLoad === true;
 
   const start = useMutation({
-    mutationFn: (mode: 'dry' | 'load') =>
+    mutationFn: (mode: 'dry' | 'load' | 'catchup') =>
       operatorFetch('/waboo-migration/runs', {
         method: 'POST',
         body: {
           organizationId: org,
           mode,
-          ...(mode === 'load' ? { confirm: typed } : {}),
+          ...(mode !== 'dry' ? { confirm: typed } : {}),
           ...(runAt ? { runAt: localToIso(runAt) } : {}),
         },
         schema: wabooMigrationRunSchema,
@@ -113,11 +114,24 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
           onClick={() => {
             setProblem(null);
             setTyped('');
+            setConfirmMode('load');
             setConfirming(true);
           }}
           disabled={!canLoad || busy}
         >
           {runAt ? t('scheduleMigrate') : t('migrate')}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            setProblem(null);
+            setTyped('');
+            setConfirmMode('catchup');
+            setConfirming(true);
+          }}
+          disabled={!valid || busy}
+        >
+          {t('catchUp')}
         </Button>
         <p className="min-w-0 basis-full text-xs text-muted-foreground sm:basis-auto">
           {t('migrateHint')}
@@ -127,20 +141,20 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
       <Modal
         open={confirming}
         onClose={() => !busy && setConfirming(false)}
-        title={tc('title', { org })}
+        title={tc(confirmMode === 'catchup' ? 'catchupTitle' : 'title', { org })}
         footer={
           <>
             <Button variant="secondary" onClick={() => setConfirming(false)} disabled={busy}>
               {tc('cancel')}
             </Button>
-            <Button onClick={() => start.mutate('load')} disabled={busy || typed !== org}>
-              {tc('submit')}
+            <Button onClick={() => start.mutate(confirmMode)} disabled={busy || typed !== org}>
+              {tc(confirmMode === 'catchup' ? 'catchupSubmit' : 'submit')}
             </Button>
           </>
         }
       >
         <div className="space-y-4">
-          <p className="text-sm">{tc('body', { org })}</p>
+          <p className="text-sm">{tc(confirmMode === 'catchup' ? 'catchupBody' : 'body', { org })}</p>
           <Field label={tc('label', { org })} htmlFor={`${id}-confirm`}>
             <Input
               id={`${id}-confirm`}
