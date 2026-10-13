@@ -10,6 +10,8 @@ import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
 import { InboxController } from './inbox.controller';
+import { MessageHistoryController } from './message-history.controller';
+import { MessageHistoryService } from './message-history.service';
 import { InboxTagsController } from './inbox-tags.controller';
 import { InboxTagsService } from './inbox-tags.service';
 import { InboxSystemNotes } from './inbox-system-notes.service';
@@ -49,6 +51,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
   // The transfer controller first: `export` and `import` must not be read as a reply id.
   controllers: [
     InboxController,
+    MessageHistoryController,
     InboxTagsController,
     SavedRepliesTransferController,
     SavedRepliesController,
@@ -70,6 +73,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxTimelineService,
     InboxMediaService,
     InboxMessageLogService,
+    MessageHistoryService,
     SavedRepliesRepository,
     SavedRepliesService,
     SavedRepliesTransferService,

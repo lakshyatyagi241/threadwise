@@ -178,6 +178,12 @@ export const scheduledMessageContacts = pgTable(
       t.status,
     ),
     index('idx_scheduled_message_contacts_wa_message_id').on(t.orgId, t.waMessageId),
+    // The Message History feed, newest send first (20261126090000).
+    index('idx_scheduled_message_contacts_org_at').on(
+      t.orgId,
+      sql`(COALESCE(${t.sentAt}, ${t.createdAt})) DESC`,
+      t.id.desc(),
+    ),
   ],
 );
 
