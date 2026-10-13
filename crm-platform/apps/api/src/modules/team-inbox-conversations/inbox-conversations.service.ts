@@ -395,7 +395,9 @@ export class InboxConversationsService {
         isUnsubscribed: contact.isUnsubscribed,
         whatsappSubscriptionStatus: contact.whatsappSubscriptionStatus,
         leadScore: contact.leadScore,
-        leadScoreSource: contact.leadScoreSource,
+        // Same normalisation as the contact page (contacts.mapper): anything that is not 'ai' is a manual score.
+        leadScoreSource:
+          contact.leadScoreSource === 'ai' ? 'ai' : contact.leadScore === null ? null : 'manual',
         leadScoreReasons: contact.leadScoreReasons,
         leadScoredAt: contact.leadScoredAt,
         leadScoreModel: contact.leadScoreModel,
