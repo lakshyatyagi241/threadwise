@@ -4,7 +4,7 @@ import { Linking, StyleSheet } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { env } from '@/config/env';
 import { log } from '@/lib/observability/logger';
-import { resolveLegalUrl } from './legal-url';
+import { resolveLegalUrl } from '@/lib/links/legal-url';
 
 type Links = RegistrationConfigResponse['links'];
 

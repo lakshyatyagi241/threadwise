@@ -380,7 +380,6 @@
     "title": "Account",
     "profileLabel": "{{name}}, {{email}}",
     "workspace": "Workspace",
-    "summary": "Summary",
     "inbox": "Inbox",
     "contacts": "Contacts",
     "noAccess": "You don't have access to this. Ask your workspace admin to unlock it.",
@@ -390,8 +389,40 @@
     "signOutConfirm": "Are you sure you want to sign out?",
     "signOutNo": "No",
     "signOutYes": "Yes, sign out",
-    "tasks": "My tasks",
-    "addTask": "Add task"
+    "tasks": "Tasks",
+    "dashboard": "Dashboard",
+    "allContacts": "All contacts",
+    "newContact": "New contact",
+    "sectionAccount": "Account",
+    "manageProfile": "Manage profile",
+    "preferences": "Preferences",
+    "devicePermissions": "Device permissions",
+    "devicePermissionsHint": "Open this app's settings on your phone",
+    "about": "About",
+    "dataSecurity": "Data & Security",
+    "checkUpdates": "Check for updates",
+    "updates": {
+      "off": "This version of the app doesn't receive updates on its own. Install the newest version to get changes.",
+      "latest": "You have the latest version.",
+      "ready": "An update is ready. Tap again to restart and use it.",
+      "failed": "Couldn't check for updates. Try again in a moment."
+    },
+    "profile": {
+      "title": "Manage profile",
+      "fullName": "Full name",
+      "displayName": "Display name",
+      "displayNameHint": "Shown to your team instead of your full name. Leave empty to use your full name.",
+      "phone": "Phone",
+      "phoneHint": "With the country code, for example +919876543210.",
+      "email": "Email",
+      "pendingEmail": "A change to {{email}} is waiting for your confirmation.",
+      "timezone": "Workspace time zone",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "nameRequired": "Enter your name.",
+      "nameTooLong": "Use up to 120 characters.",
+      "phoneInvalid": "Enter the phone number with the country code, for example +919876543210."
+    }
   },
   "inbox": {
     "tabs": {

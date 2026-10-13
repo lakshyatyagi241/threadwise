@@ -23,7 +23,11 @@ jest.mock('./api');
 jest.mock('@/lib/session/api');
 jest.mock('@/lib/auth/sign-out', () => ({ signOut: jest.fn() }));
 jest.mock('@/lib/observability/sentry', () => ({ identifyUser: jest.fn() }));
-jest.mock('expo-router', () => ({ useRouter: () => ({ navigate: jest.fn(), push: jest.fn() }) }));
+const mockParams: { view?: string; at?: string } = {};
+jest.mock('expo-router', () => ({
+  useRouter: () => ({ navigate: jest.fn(), push: jest.fn() }),
+  useLocalSearchParams: () => mockParams,
+}));
 
 const sessionCall = jest.mocked(fetchSession);
 const summaryCall = jest.mocked(api.fetchSummary);
@@ -96,6 +100,8 @@ beforeAll(async () => {
 beforeEach(() => {
   jest.resetAllMocks();
   client = undefined;
+  delete mockParams.view;
+  delete mockParams.at;
 });
 afterEach(async () => {
   // A request that finishes after the test would update an unmounted screen; wait for the stragglers instead.
@@ -439,6 +445,23 @@ describe('DashboardScreen', () => {
       expect(screen.getByLabelText('Subscribers in all flows: 1,200')).toBeTruthy();
       expect(screen.queryByRole('button', { name: /^Date range/ })).toBeNull();
       expect(screen.queryByTestId('card-sent')).toBeNull();
+    });
+
+    it('opens on the view the Menu asked for', async () => {
+      arrange();
+      mockParams.view = 'bot';
+      mockParams.at = '1';
+      await show();
+      expect(await screen.findByText('Order follow-up')).toBeTruthy();
+      expect(screen.queryByTestId('card-sent')).toBeNull();
+    });
+
+    it('treats a view name it does not know as the summary', async () => {
+      arrange();
+      mockParams.view = 'nonsense';
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      expect(screen.getByTestId('card-sent')).toBeTruthy();
     });
 
     it('goes back to the summary cards', async () => {

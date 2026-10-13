@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
@@ -19,7 +19,7 @@ import { AgentView } from './agent-view';
 import { BotView } from './bot-view';
 import { CampaignsCard, TemplatesCard } from './campaign-cards';
 import { DevicesCard, InstagramBand, IntegrationsCard } from './channel-cards';
-import { DASH_VIEWS, type DashView } from './dash-views';
+import { asDashView, DASH_VIEWS, type DashView } from './dash-views';
 import { DEFAULT_PRESET, presetRange, todayIn, type DateRange } from './date-range';
 import { DateRangePill, DateRangeSheet } from './date-range-sheet';
 import { isForbidden, isPlanLocked } from './format';
@@ -71,7 +71,16 @@ export function DashboardScreen() {
   const today = useMemo(() => todayIn(timezone, now), [timezone, now]);
   const [picked, setPicked] = useState<DateRange | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [view, setView] = useState<DashView>('summary');
+  // The Menu opens a view by name (`view`); `at` changes with every tap so the same choice made twice still lands here.
+  const params = useLocalSearchParams<{ view?: string; at?: string }>();
+  const asked = `${String(params.view)}|${String(params.at)}`;
+  const [view, setView] = useState<DashView>(() => asDashView(params.view));
+  const [seen, setSeen] = useState(asked);
+  if (seen !== asked) {
+    // A new request from the Menu: take it once, here, so the screen never paints the old view first.
+    setSeen(asked);
+    if (params.view !== undefined) setView(asDashView(params.view));
+  }
   const win = useMemo(() => picked ?? presetRange(DEFAULT_PRESET, today), [picked, today]);
 
   const canContacts = can(session.data, 'record.contacts.read');
