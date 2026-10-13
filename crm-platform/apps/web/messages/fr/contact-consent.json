@@ -14,7 +14,9 @@
       "settingsInvalid": "Un mot-clé doit contenir au moins une lettre ou un chiffre, et au moins un mot-clé STOP doit rester tant que la détection est activée.",
       "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
       "validation": "Certaines valeurs ne sont pas valides. Vérifiez le formulaire et réessayez.",
-      "unexpected": "Une erreur s'est produite. Réessayez."
+      "unexpected": "Une erreur s'est produite. Réessayez.",
+      "exportInProgress": "Un fichier de preuve est déjà en cours de préparation. Patientez jusqu'à la fin, puis réessayez.",
+      "exportNotReady": "Ce fichier n'est pas prêt ou a expiré. Préparez-en un nouveau."
     },
     "settings": {
       "title": "Consentement et réponses STOP",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Consentement",
       "label": "J'ai le consentement pour envoyer des messages à ces contacts",
-      "hint": "Si la case est cochée, tous les contacts du fichier sont enregistrés comme ayant accepté le marketing, avec le nom du fichier comme preuve. Si elle est décochée, l'import n'enregistre aucun consentement. Les contacts qui se sont désinscrits le restent."
+      "hint": "Si la case est cochée, tous les contacts du fichier sont enregistrés comme ayant accepté le marketing, avec le nom du fichier comme preuve. Si elle est décochée, l'import n'enregistre aucun consentement. Les contacts qui se sont désinscrits le restent.",
+      "hintColumn": "La colonne associée au consentement marketing détermine qui est enregistré : seules les lignes qui disent oui obtiennent un consentement, avec le nom du fichier comme preuve. Un non, une cellule vide ou un mot inconnu n'enregistre rien. Les contacts désabonnés restent désabonnés.",
+      "columnSummary": "{granted} lignes disent oui et seront enregistrées. {notGranted} disent non ou sont vides et ne reçoivent aucun enregistrement de consentement.",
+      "unrecognised": "{count, plural, one {# ligne contient} other {# lignes contiennent}} une valeur de consentement qui n'est ni oui ni non ({values}). {count, plural, one {Elle est considérée} other {Elles sont considérées}} comme non accordée. Utilisez yes / no, true / false ou 1 / 0.",
+      "columnIgnored": "La colonne de consentement n'a aucun effet tant que vous ne cochez pas la case ci-dessus."
+    },
+    "systemLine": {
+      "withdrawn": "Le contact a répondu {keyword} : désabonné du marketing",
+      "granted": "Le contact a répondu {keyword} : réabonné au marketing"
+    },
+    "proof": {
+      "title": "Fichiers de preuve préparés",
+      "prepare": "Préparer le fichier de preuve complet",
+      "preparing": "Préparation du fichier de preuve",
+      "largeHint": "Le journal contient plus de {max} événements, le fichier est donc préparé en arrière-plan",
+      "large": "Le journal contient plus de {max} événements, au-delà de ce qu'un téléchargement direct permet. Préparez le fichier complet : il est généré en arrière-plan et vous recevez un e-mail lorsqu'il est prêt.",
+      "none": "Aucun fichier préparé pour le moment.",
+      "keptFor": "Un fichier préparé peut être téléchargé pendant {days} jours, puis il est supprimé. Un seul fichier est préparé à la fois.",
+      "rows": "{count, plural, one {# événement} other {# événements}}",
+      "expires": "disponible jusqu'au {date}",
+      "download": "Télécharger le CSV",
+      "failed": "Le fichier n'a pas pu être généré. Préparez-le à nouveau.",
+      "status": {
+        "queued": "En attente",
+        "running": "Génération",
+        "ready": "Prêt",
+        "failed": "Échec",
+        "expired": "Expiré"
+      }
     }
   }
 }

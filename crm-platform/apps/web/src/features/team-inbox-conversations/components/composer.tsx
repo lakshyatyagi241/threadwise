@@ -36,7 +36,11 @@ import {
   type ExtrasDraft,
 } from '@/features/channel-email/lib/composer-extras';
 import { AttachmentTray } from '@/features/channel-email/components/attachment-tray';
-import { RichEditor, type RichEditorHandle } from '@/features/channel-email/components/rich-editor';
+import {
+  RichEditor,
+  plainFromHtml,
+  type RichEditorHandle,
+} from '@/features/channel-email/components/rich-editor';
 import { SignaturePicker } from '@/features/channel-email/components/signature-picker';
 import {
   EmailComposerFooter,
@@ -270,10 +274,10 @@ export function Composer(props: ComposerProps) {
   const groupBlocked = !isNote && props.groupSendBlocked === true;
   const disabled = isNote ? !props.canNote : props.replyDisabled || !props.canReply || groupBlocked;
   const isEmail = props.email !== undefined;
-  // The picker types into the plain box: the rich email editor does not have it yet.
-  const showSavedReplies =
-    props.savedReplies !== undefined && !isNote && !groupBlocked && !richEmail;
-  const stillUnfilled = unfilled.filter((token) => text.includes(token));
+  // The picker's button also works in the rich email editor (it types the text at the caret); the `/` shortcut is the plain box's.
+  const showSavedReplies = props.savedReplies !== undefined && !isNote && !groupBlocked;
+  const typed = richEmail ? plainFromHtml(html) : text;
+  const stillUnfilled = unfilled.filter((token) => typed.includes(token));
   const max = isNote ? NOTE_BODY_MAX : isEmail ? EMAIL_BODY_MAX : MESSAGE_BODY_MAX;
   const trimmed = text.trim();
   const emailBlocked = isEmail && !isNote && (staged.uploading || staged.failed);
@@ -300,6 +304,10 @@ export function Composer(props: ComposerProps) {
 
   /** Puts a filled-in saved reply in the box (never sends it): in place of the typed `/query`, or at the caret. False when it does not fit. */
   function insertSavedReply(reply: string, range: { start: number; end: number } | null): boolean {
+    if (richEmail) {
+      editor.current?.insertText(reply);
+      return true;
+    }
     const el = area.current;
     const at = range ?? {
       start: el?.selectionStart ?? textRef.current.length,
@@ -626,7 +634,7 @@ export function Composer(props: ComposerProps) {
             handleRef={pickerRef}
             onInsert={insertSavedReply}
             onIssues={(issues) => setUnfilled(issues.map((i) => i.token))}
-            onClosed={() => area.current?.focus()}
+            onClosed={() => (richEmail ? editor.current?.focus() : area.current?.focus())}
             onState={setPicker}
           />
         )}

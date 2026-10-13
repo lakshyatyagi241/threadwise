@@ -413,7 +413,8 @@
         "address": "Alamat",
         "memo": "Memo",
         "status": "Status",
-        "source": "Sumber"
+        "source": "Sumber",
+        "consent": "Persetujuan pemasaran (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",

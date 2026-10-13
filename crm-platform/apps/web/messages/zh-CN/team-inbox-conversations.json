@@ -146,7 +146,8 @@
       "groupUnavailable": "WhatsApp 未接受此群组消息。请几分钟后重试。",
       "savedReplyGone": "此快捷回复已不存在。",
       "savedReplyChannel": "此快捷回复不适用于这类渠道。",
-      "shortcutTaken": "另一条快捷回复已使用该快捷方式。"
+      "shortcutTaken": "另一条快捷回复已使用该快捷方式。",
+      "importInvalid": "无法将此文件读取为快捷回复。第一行需要包含 title、shortcut 和 body 列，最多 1,000 行。"
     },
     "bubble": {
       "kind": {
@@ -840,6 +841,49 @@
         "upgrade": "查看套餐",
         "conflict": "有人先更改了此回复。请关闭此窗口并重新打开。",
         "invalid": "你输入的部分内容无效。"
+      },
+      "transfer": {
+        "export": "导出 CSV",
+        "import": "导入 CSV",
+        "title": "导入快捷回复",
+        "intro": "上传包含 title、shortcut、body 列的 CSV，也可以选填 category、language 和 channel 列（多个渠道类型用 | 分隔，留空表示所有渠道）。最多 1,000 行，{maxKb} KB。导入的快捷回复会与整个团队共享。导出文件使用相同的列。",
+        "file": "CSV 文件",
+        "tooBig": "文件太大。",
+        "duplicates": "当共享快捷回复已使用该快捷指令时",
+        "policy": {
+          "skip": "保留现有快捷回复",
+          "overwrite": "替换其文本"
+        },
+        "policyHint": {
+          "skip": "将跳过该行，快捷回复保持不变。",
+          "overwrite": "标题、文本、分类、语言和渠道都会被替换。使用次数保持不变。"
+        },
+        "check": "检查文件",
+        "go": "导入 ({count})",
+        "cancel": "取消",
+        "summary": "{create} 条待创建，{update} 条待替换，{skip} 条已跳过，{invalid} 条有问题。尚未保存任何内容。",
+        "plan": "你的套餐：{used}/{limit} 条快捷回复。",
+        "row": "第 {line} 行：/{shortcut}",
+        "truncated": "仅列出前几条有问题或有变更的行。",
+        "done": "已导入：创建 {created} 条，替换 {updated} 条。",
+        "issue": {
+          "update": "将被替换",
+          "skip": "已跳过",
+          "invalid": "有问题",
+          "duplicate": "快捷指令已被使用，已跳过",
+          "missing_shortcut": "没有快捷指令",
+          "shortcut_invalid": "快捷指令中没有可用的字母或数字",
+          "missing_title": "没有标题",
+          "title_too_long": "标题过长",
+          "missing_body": "没有文本",
+          "body_too_long": "文本过长",
+          "control_characters": "包含控制字符",
+          "category_too_long": "分类过长",
+          "language_invalid": "语言不是 en 或 pt-BR 之类的代码",
+          "channel_unknown": "未知渠道",
+          "duplicate_in_file": "该快捷指令在文件前面已出现",
+          "plan_limit_reached": "超出套餐限制"
+        }
       }
     }
   }

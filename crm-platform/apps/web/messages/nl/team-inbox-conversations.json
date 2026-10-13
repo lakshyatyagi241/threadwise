@@ -146,7 +146,8 @@
       "groupUnavailable": "WhatsApp heeft dit groepsbericht niet geaccepteerd. Probeer het over een paar minuten opnieuw.",
       "savedReplyGone": "Dit opgeslagen antwoord bestaat niet meer.",
       "savedReplyChannel": "Dit opgeslagen antwoord is niet bedoeld voor dit soort kanaal.",
-      "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al."
+      "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al.",
+      "importInvalid": "Dit bestand kan niet als opgeslagen antwoorden worden gelezen. Het heeft een eerste rij nodig met de kolommen title, shortcut en body, en maximaal 1.000 rijen."
     },
     "bubble": {
       "kind": {
@@ -840,6 +841,49 @@
         "upgrade": "Abonnementen bekijken",
         "conflict": "Iemand anders heeft dit antwoord eerder gewijzigd. Sluit dit venster en open het opnieuw.",
         "invalid": "Een deel van wat u hebt ingevoerd is ongeldig."
+      },
+      "transfer": {
+        "export": "CSV exporteren",
+        "import": "CSV importeren",
+        "title": "Opgeslagen antwoorden importeren",
+        "intro": "Upload een CSV met de kolommen title, shortcut, body en desgewenst category, language en channel (kanaaltypes gescheiden door |, leeg voor alle kanalen). Maximaal 1.000 rijen en {maxKb} KB. Geïmporteerde antwoorden worden gedeeld met het hele team. De export heeft dezelfde kolommen.",
+        "file": "CSV-bestand",
+        "tooBig": "Dit bestand is te groot.",
+        "duplicates": "Wanneer een gedeeld antwoord de shortcut al gebruikt",
+        "policy": {
+          "skip": "Bestaand antwoord behouden",
+          "overwrite": "Tekst vervangen"
+        },
+        "policyHint": {
+          "skip": "De rij wordt overgeslagen en het antwoord blijft ongewijzigd.",
+          "overwrite": "Titel, tekst, categorie, taal en kanalen worden vervangen. Het aantal keren dat het is gebruikt, blijft behouden."
+        },
+        "check": "Bestand controleren",
+        "go": "Importeren ({count})",
+        "cancel": "Annuleren",
+        "summary": "{create} om aan te maken, {update} om te vervangen, {skip} overgeslagen, {invalid} met een probleem. Er is nog niets opgeslagen.",
+        "plan": "Jouw abonnement: {used} van {limit} antwoorden.",
+        "row": "Regel {line}: /{shortcut}",
+        "truncated": "Alleen de eerste rijen met een probleem of wijziging worden getoond.",
+        "done": "Geïmporteerd: {created} aangemaakt, {updated} vervangen.",
+        "issue": {
+          "update": "wordt vervangen",
+          "skip": "overgeslagen",
+          "invalid": "heeft een probleem",
+          "duplicate": "shortcut al in gebruik, overgeslagen",
+          "missing_shortcut": "geen shortcut",
+          "shortcut_invalid": "de shortcut bevat geen bruikbare letters of cijfers",
+          "missing_title": "geen titel",
+          "title_too_long": "de titel is te lang",
+          "missing_body": "geen tekst",
+          "body_too_long": "de tekst is te lang",
+          "control_characters": "bevat besturingstekens",
+          "category_too_long": "de categorie is te lang",
+          "language_invalid": "de taal is geen code zoals en of pt-BR",
+          "channel_unknown": "een onbekend kanaal",
+          "duplicate_in_file": "de shortcut staat eerder in het bestand",
+          "plan_limit_reached": "boven de limiet van jouw abonnement"
+        }
       }
     }
   }

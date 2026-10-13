@@ -413,7 +413,8 @@
         "address": "Adres",
         "memo": "Not",
         "status": "Durum",
-        "source": "Kaynak"
+        "source": "Kaynak",
+        "consent": "Pazarlama izni (evet / hayır)"
       },
       "notInFile": "Dosyada yok",
       "columnN": "Sütun {n}",

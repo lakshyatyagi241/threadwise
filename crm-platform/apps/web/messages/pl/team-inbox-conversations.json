@@ -146,7 +146,8 @@
       "groupUnavailable": "WhatsApp nie przyjął tej wiadomości grupowej. Spróbuj ponownie za kilka minut.",
       "savedReplyGone": "Ten szablon odpowiedzi już nie istnieje.",
       "savedReplyChannel": "Ten szablon odpowiedzi nie jest przeznaczony dla tego rodzaju kanału.",
-      "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu."
+      "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu.",
+      "importInvalid": "Tego pliku nie można odczytać jako zapisanych odpowiedzi. Pierwszy wiersz musi zawierać kolumny title, shortcut i body, a plik może mieć najwyżej 1000 wierszy."
     },
     "bubble": {
       "kind": {
@@ -840,6 +841,49 @@
         "upgrade": "Zobacz plany",
         "conflict": "Ktoś inny zmienił tę odpowiedź wcześniej. Zamknij to okno i otwórz je ponownie.",
         "invalid": "Część wprowadzonych danych jest nieprawidłowa."
+      },
+      "transfer": {
+        "export": "Eksportuj CSV",
+        "import": "Importuj CSV",
+        "title": "Importuj zapisane odpowiedzi",
+        "intro": "Prześlij plik CSV z kolumnami title, shortcut, body oraz, jeśli chcesz, category, language i channel (rodzaje kanałów oddzielone znakiem |, puste dla wszystkich kanałów). Do 1000 wierszy i {maxKb} KB. Zaimportowane odpowiedzi są udostępniane całemu zespołowi. Eksport ma te same kolumny.",
+        "file": "Plik CSV",
+        "tooBig": "Ten plik jest za duży.",
+        "duplicates": "Gdy udostępniona odpowiedź już używa skrótu",
+        "policy": {
+          "skip": "Zachowaj istniejącą odpowiedź",
+          "overwrite": "Zastąp jej treść"
+        },
+        "policyHint": {
+          "skip": "Wiersz zostanie pominięty, a odpowiedź pozostanie bez zmian.",
+          "overwrite": "Tytuł, treść, kategoria, język i kanały zostaną zastąpione. Licznik użyć zostaje zachowany."
+        },
+        "check": "Sprawdź plik",
+        "go": "Importuj ({count})",
+        "cancel": "Anuluj",
+        "summary": "{create} do utworzenia, {update} do zastąpienia, {skip} pominięte, {invalid} z problemem. Nic jeszcze nie zostało zapisane.",
+        "plan": "Twój plan: {used} z {limit} odpowiedzi.",
+        "row": "Wiersz {line}: /{shortcut}",
+        "truncated": "Wyświetlono tylko pierwsze wiersze z problemem lub zmianą.",
+        "done": "Zaimportowano: utworzono {created}, zastąpiono {updated}.",
+        "issue": {
+          "update": "zostanie zastąpiona",
+          "skip": "pominięta",
+          "invalid": "ma problem",
+          "duplicate": "skrót jest już używany, pominięto",
+          "missing_shortcut": "brak skrótu",
+          "shortcut_invalid": "skrót nie zawiera użytecznych liter ani cyfr",
+          "missing_title": "brak tytułu",
+          "title_too_long": "tytuł jest za długi",
+          "missing_body": "brak treści",
+          "body_too_long": "treść jest za długa",
+          "control_characters": "zawiera znaki sterujące",
+          "category_too_long": "kategoria jest za długa",
+          "language_invalid": "język nie jest kodem takim jak en lub pt-BR",
+          "channel_unknown": "nieznany kanał",
+          "duplicate_in_file": "skrót pojawia się wcześniej w pliku",
+          "plan_limit_reached": "przekroczono limit Twojego planu"
+        }
       }
     }
   }

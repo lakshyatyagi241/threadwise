@@ -146,7 +146,8 @@
       "groupUnavailable": "WhatsApp hat diese Gruppennachricht nicht akzeptiert. Versuchen Sie es in einigen Minuten erneut.",
       "savedReplyGone": "Diese gespeicherte Antwort existiert nicht mehr.",
       "savedReplyChannel": "Diese gespeicherte Antwort ist nicht für diese Art von Kanal gedacht.",
-      "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits."
+      "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits.",
+      "importInvalid": "Diese Datei kann nicht als Antwortvorlagen gelesen werden. Die erste Zeile muss die Spalten title, shortcut und body enthalten, und es dürfen höchstens 1.000 Zeilen sein."
     },
     "bubble": {
       "kind": {
@@ -840,6 +841,49 @@
         "upgrade": "Tarife ansehen",
         "conflict": "Jemand anderes hat diese Antwort zuerst geändert. Schließen Sie dieses Fenster und öffnen Sie es erneut.",
         "invalid": "Einige Ihrer Eingaben sind ungültig."
+      },
+      "transfer": {
+        "export": "CSV exportieren",
+        "import": "CSV importieren",
+        "title": "Antwortvorlagen importieren",
+        "intro": "Lade eine CSV-Datei mit den Spalten title, shortcut, body und optional category, language und channel hoch (Kanalarten durch | getrennt, leer für alle Kanäle). Bis zu 1.000 Zeilen und {maxKb} KB. Importierte Antworten werden mit dem gesamten Team geteilt. Der Export hat dieselben Spalten.",
+        "file": "CSV-Datei",
+        "tooBig": "Diese Datei ist zu groß.",
+        "duplicates": "Wenn eine geteilte Antwort den Shortcut bereits verwendet",
+        "policy": {
+          "skip": "Vorhandene Antwort behalten",
+          "overwrite": "Text ersetzen"
+        },
+        "policyHint": {
+          "skip": "Die Zeile wird übersprungen und die Antwort bleibt unverändert.",
+          "overwrite": "Titel, Text, Kategorie, Sprache und Kanäle werden ersetzt. Die Anzahl der Verwendungen bleibt erhalten."
+        },
+        "check": "Datei prüfen",
+        "go": "Importieren ({count})",
+        "cancel": "Abbrechen",
+        "summary": "{create} zum Erstellen, {update} zum Ersetzen, {skip} übersprungen, {invalid} mit einem Problem. Noch nichts ist gespeichert.",
+        "plan": "Dein Tarif: {used} von {limit} Antworten.",
+        "row": "Zeile {line}: /{shortcut}",
+        "truncated": "Es werden nur die ersten Zeilen mit einem Problem oder einer Änderung aufgelistet.",
+        "done": "Importiert: {created} erstellt, {updated} ersetzt.",
+        "issue": {
+          "update": "wird ersetzt",
+          "skip": "übersprungen",
+          "invalid": "hat ein Problem",
+          "duplicate": "Shortcut wird bereits verwendet, übersprungen",
+          "missing_shortcut": "kein Shortcut",
+          "shortcut_invalid": "der Shortcut enthält keine verwendbaren Buchstaben oder Zahlen",
+          "missing_title": "kein Titel",
+          "title_too_long": "der Titel ist zu lang",
+          "missing_body": "kein Text",
+          "body_too_long": "der Text ist zu lang",
+          "control_characters": "enthält Steuerzeichen",
+          "category_too_long": "die Kategorie ist zu lang",
+          "language_invalid": "die Sprache ist kein Code wie en oder pt-BR",
+          "channel_unknown": "ein unbekannter Kanal",
+          "duplicate_in_file": "der Shortcut kommt weiter oben in der Datei vor",
+          "plan_limit_reached": "über dem Limit deines Tarifs"
+        }
       }
     }
   }

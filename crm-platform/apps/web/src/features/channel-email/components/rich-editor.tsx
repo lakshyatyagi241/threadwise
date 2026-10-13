@@ -15,6 +15,8 @@ import { htmlToText, isBlankHtml, safeHref, sanitizeHtml } from '../lib/rich-tex
 
 export interface RichEditorHandle {
   focus: () => void;
+  /** Types plain text at the caret (or over the selection) as the person would: the text is escaped, never read as HTML. */
+  insertText: (text: string) => void;
 }
 
 type Command = 'bold' | 'italic' | 'underline' | 'insertUnorderedList' | 'insertOrderedList';
@@ -69,8 +71,6 @@ export function RichEditor({
   const [link, setLink] = useState('');
   const [linkBad, setLinkBad] = useState(false);
 
-  useImperativeHandle(handleRef, () => ({ focus: () => box.current?.focus() }));
-
   // Load the starting HTML (already clean) on mount and whenever the reset key changes.
   useEffect(() => {
     if (box.current) box.current.innerHTML = sanitizeHtml(initialHtml);
@@ -83,6 +83,16 @@ export function RichEditor({
     const html = sanitizeHtml(el.innerHTML);
     onChange(isBlankHtml(html) ? '' : html);
   };
+
+  useImperativeHandle(handleRef, () => ({
+    focus: () => box.current?.focus(),
+    insertText: (text: string) => {
+      box.current?.focus();
+      restore();
+      document.execCommand('insertText', false, text);
+      report();
+    },
+  }));
 
   const run = (command: string, value?: string) => {
     box.current?.focus();
@@ -263,7 +273,10 @@ export function RichEditor({
         suppressContentEditableWarning
         dir="auto"
         onInput={report}
-        onBlur={report}
+        onBlur={() => {
+          remember();
+          report();
+        }}
         onPaste={onPaste}
         onKeyDown={onKey}
         className={cn(

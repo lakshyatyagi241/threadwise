@@ -148,7 +148,10 @@
         "required": "Gönderebilmek için işaretlenmelidir",
         "requiredHint": "Onay isteğe bağlıysa bunu kapatın.",
         "marketing": "Pazarlama onayı",
-        "marketingHint": "Kutuyu işaretlemek kişiye pazarlama onayı kaydeder. İşaretlenmemiş kutu hiç kimseyi abone yapmaz."
+        "marketingHint": "Kutuyu işaretlemek kişiye pazarlama onayı kaydeder. İşaretlenmemiş kutu hiç kimseyi abone yapmaz.",
+        "whatsappHint": "Bu kişilere WhatsApp üzerinden mesaj gönderecek misiniz? Bunu belirten ve nasıl abonelikten çıkılacağını açıklayan bir metin kullanın. İşaretlenen kutu, bu tam metin ve sürümüyle birlikte kanıt olarak saklanır.",
+        "whatsappInsert": "WhatsApp onay metnini kullan",
+        "whatsappWording": "WhatsApp üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim."
       },
       "crm": {
         "title": "CRM'de",

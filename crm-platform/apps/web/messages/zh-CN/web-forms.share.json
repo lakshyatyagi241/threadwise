@@ -148,7 +148,10 @@
         "required": "必须勾选才能提交",
         "requiredHint": "如果同意是可选的，请关闭此项。",
         "marketing": "营销订阅",
-        "marketingHint": "勾选此框会在联系人上记录营销同意。未勾选则不会订阅任何人。"
+        "marketingHint": "勾选此框会在联系人上记录营销同意。未勾选则不会订阅任何人。",
+        "whatsappHint": "你是否会通过 WhatsApp 给这些联系人发消息？请使用明确说明这一点并告知如何退订的措辞。勾选的复选框会连同这段准确文字及其版本一起作为证明保存。",
+        "whatsappInsert": "使用 WhatsApp 订阅同意文案",
+        "whatsappWording": "我同意通过 WhatsApp 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。"
       },
       "crm": {
         "title": "在 CRM 中",

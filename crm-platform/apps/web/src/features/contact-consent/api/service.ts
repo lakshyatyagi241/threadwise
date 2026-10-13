@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import type {
+  ConsentExport,
+  ConsentExportList,
   ConsentSettings,
   ContactConsent,
   RecordConsentInput,
@@ -30,6 +32,9 @@ export interface ComposerConsentConfig {
 }
 const composer = shape<ComposerConsentConfig>('footerText', 'footerDefaultOn');
 
+const exportsList = shape<ConsentExportList>('data', 'needsAsync');
+const oneExport = shape<ConsentExport>('id', 'status');
+
 const BASE = '/contact-consent';
 const enc = encodeURIComponent;
 
@@ -41,6 +46,8 @@ export const consentApi = {
     apiFetch(`${BASE}/settings/test`, { method: 'POST', body: input, schema: tested }),
   composerConfig: (signal?: AbortSignal) =>
     apiFetch(`${BASE}/composer-config`, { schema: composer, signal }),
+  exports: (signal?: AbortSignal) => apiFetch(`${BASE}/exports`, { schema: exportsList, signal }),
+  requestExport: () => apiFetch(`${BASE}/exports`, { method: 'POST', body: {}, schema: oneExport }),
   forContact: (contactId: string, signal?: AbortSignal) =>
     apiFetch(`${BASE}/contacts/${enc(contactId)}`, { schema: contactConsent, signal }),
   record: (
@@ -53,6 +60,10 @@ export const consentApi = {
       schema: contactConsent,
     }),
 };
+
+/** The finished asynchronous export, as a same-origin download link. */
+export const consentExportFileUrl = (exportId: string) =>
+  `/api/v2${BASE}/exports/${enc(exportId)}/download`;
 
 /** Same-origin download links (the proxy attaches the session): the CSV proof of a contact and of the workspace. */
 export const consentExportUrl = (contactId?: string) =>

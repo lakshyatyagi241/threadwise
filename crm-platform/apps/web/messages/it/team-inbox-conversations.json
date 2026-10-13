@@ -146,7 +146,8 @@
       "groupUnavailable": "WhatsApp non ha accettato questo messaggio di gruppo. Riprova tra qualche minuto.",
       "savedReplyGone": "Questa risposta salvata non esiste più.",
       "savedReplyChannel": "Questa risposta salvata non è prevista per questo tipo di canale.",
-      "shortcutTaken": "Un'altra risposta salvata usa già questa scorciatoia."
+      "shortcutTaken": "Un'altra risposta salvata usa già questa scorciatoia.",
+      "importInvalid": "Questo file non può essere letto come risposte salvate. Deve avere una prima riga con le colonne title, shortcut e body, e al massimo 1.000 righe."
     },
     "bubble": {
       "kind": {
@@ -840,6 +841,49 @@
         "upgrade": "Vedi i piani",
         "conflict": "Qualcun altro ha modificato prima questa risposta. Chiudi questa finestra e riaprila.",
         "invalid": "Alcuni dei dati inseriti non sono validi."
+      },
+      "transfer": {
+        "export": "Esporta CSV",
+        "import": "Importa CSV",
+        "title": "Importa risposte salvate",
+        "intro": "Carica un CSV con le colonne title, shortcut, body e, se vuoi, category, language e channel (tipi di canale separati da |, vuoto per tutti i canali). Fino a 1.000 righe e {maxKb} KB. Le risposte importate sono condivise con tutto il team. L'esportazione ha le stesse colonne.",
+        "file": "File CSV",
+        "tooBig": "Questo file è troppo grande.",
+        "duplicates": "Quando una risposta condivisa usa già lo shortcut",
+        "policy": {
+          "skip": "Mantieni la risposta esistente",
+          "overwrite": "Sostituisci il suo testo"
+        },
+        "policyHint": {
+          "skip": "La riga viene saltata e la risposta resta com'è.",
+          "overwrite": "Titolo, testo, categoria, lingua e canali vengono sostituiti. Il numero di utilizzi viene mantenuto."
+        },
+        "check": "Controlla il file",
+        "go": "Importa ({count})",
+        "cancel": "Annulla",
+        "summary": "{create} da creare, {update} da sostituire, {skip} saltate, {invalid} con un problema. Non è ancora salvato nulla.",
+        "plan": "Il tuo piano: {used} risposte su {limit}.",
+        "row": "Riga {line}: /{shortcut}",
+        "truncated": "Vengono mostrate solo le prime righe con un problema o una modifica.",
+        "done": "Importate: {created} create, {updated} sostituite.",
+        "issue": {
+          "update": "sarà sostituita",
+          "skip": "saltata",
+          "invalid": "presenta un problema",
+          "duplicate": "shortcut già in uso, saltata",
+          "missing_shortcut": "nessuno shortcut",
+          "shortcut_invalid": "lo shortcut non contiene lettere o numeri utilizzabili",
+          "missing_title": "nessun titolo",
+          "title_too_long": "il titolo è troppo lungo",
+          "missing_body": "nessun testo",
+          "body_too_long": "il testo è troppo lungo",
+          "control_characters": "contiene caratteri di controllo",
+          "category_too_long": "la categoria è troppo lunga",
+          "language_invalid": "la lingua non è un codice come en o pt-BR",
+          "channel_unknown": "un canale sconosciuto",
+          "duplicate_in_file": "lo shortcut compare già prima nel file",
+          "plan_limit_reached": "oltre il limite del tuo piano"
+        }
       }
     }
   }

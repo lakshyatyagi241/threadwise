@@ -413,7 +413,8 @@
         "address": "Endereço",
         "memo": "Memorando",
         "status": "Status",
-        "source": "Origem"
+        "source": "Origem",
+        "consent": "Consentimento de marketing (sim / não)"
       },
       "notInFile": "Não está no arquivo",
       "columnN": "Coluna {n}",

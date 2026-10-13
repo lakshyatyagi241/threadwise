@@ -413,7 +413,8 @@
         "address": "주소",
         "memo": "메모",
         "status": "상태",
-        "source": "출처"
+        "source": "출처",
+        "consent": "마케팅 동의(예 / 아니요)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",

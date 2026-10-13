@@ -146,7 +146,8 @@
       "groupUnavailable": "WhatsApp bu grup mesajını kabul etmedi. Birkaç dakika sonra tekrar deneyin.",
       "savedReplyGone": "Bu hazır yanıt artık mevcut değil.",
       "savedReplyChannel": "Bu hazır yanıt bu tür bir kanal için uygun değil.",
-      "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor."
+      "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor.",
+      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır."
     },
     "bubble": {
       "kind": {
@@ -840,6 +841,49 @@
         "upgrade": "Planları gör",
         "conflict": "Bu yanıtı başka biri önce değiştirdi. Bu pencereyi kapatıp yeniden açın.",
         "invalid": "Girdiklerinizin bir kısmı geçerli değil."
+      },
+      "transfer": {
+        "export": "CSV dışa aktar",
+        "import": "CSV içe aktar",
+        "title": "Kayıtlı yanıtları içe aktar",
+        "intro": "title, shortcut, body sütunlarını ve isterseniz category, language ve channel sütunlarını içeren bir CSV yükleyin (kanal türleri | ile ayrılır, tüm kanallar için boş bırakın). En fazla 1.000 satır ve {maxKb} KB. İçe aktarılan yanıtlar tüm ekiple paylaşılır. Dışa aktarma aynı sütunlara sahiptir.",
+        "file": "CSV dosyası",
+        "tooBig": "Bu dosya çok büyük.",
+        "duplicates": "Paylaşılan bir yanıt zaten bu kısayolu kullanıyorsa",
+        "policy": {
+          "skip": "Mevcut yanıtı koru",
+          "overwrite": "Metnini değiştir"
+        },
+        "policyHint": {
+          "skip": "Satır atlanır ve yanıt olduğu gibi kalır.",
+          "overwrite": "Başlık, metin, kategori, dil ve kanallar değiştirilir. Kullanım sayısı korunur."
+        },
+        "check": "Dosyayı kontrol et",
+        "go": "İçe aktar ({count})",
+        "cancel": "İptal",
+        "summary": "{create} oluşturulacak, {update} değiştirilecek, {skip} atlanacak, {invalid} sorunlu. Henüz hiçbir şey kaydedilmedi.",
+        "plan": "Planın: {used} / {limit} yanıt kullanılıyor.",
+        "row": "Satır {line}: /{shortcut}",
+        "truncated": "Yalnızca sorunu olan veya değişecek ilk satırlar listelenir.",
+        "done": "İçe aktarıldı: {created} oluşturuldu, {updated} değiştirildi.",
+        "issue": {
+          "update": "değiştirilecek",
+          "skip": "atlandı",
+          "invalid": "bir sorunu var",
+          "duplicate": "kısayol zaten kullanımda, atlandı",
+          "missing_shortcut": "kısayol yok",
+          "shortcut_invalid": "kısayolda kullanılabilir harf veya rakam yok",
+          "missing_title": "başlık yok",
+          "title_too_long": "başlık çok uzun",
+          "missing_body": "metin yok",
+          "body_too_long": "metin çok uzun",
+          "control_characters": "denetim karakterleri içeriyor",
+          "category_too_long": "kategori çok uzun",
+          "language_invalid": "dil en veya pt-BR gibi bir kod değil",
+          "channel_unknown": "bilinmeyen bir kanal",
+          "duplicate_in_file": "kısayol dosyada daha önce geçiyor",
+          "plan_limit_reached": "planınızın limitini aşıyor"
+        }
       }
     }
   }

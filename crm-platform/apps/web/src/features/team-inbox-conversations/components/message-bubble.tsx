@@ -311,15 +311,25 @@ export const MessageBubble = memo(function MessageBubble({
   onOpenLog,
 }: MessageBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
+  const tConsent = useTranslations('contact-consent.systemLine');
   const locale = useLocale();
   const [retrying, setRetrying] = useState(false);
   const [reactOpen, setReactOpen] = useState(false);
 
   if (m.kind === 'system') {
+    // The consent line is worded in the reader's language; every other system line is the server's text.
+    const consent = m.systemEvent?.event === 'consent' ? m.systemEvent : null;
     return (
       <li data-testid="inbox-message" className="flex justify-center">
-        <p className="max-w-[80%] rounded-md bg-muted px-3 py-1 text-center text-xs text-muted-foreground">
-          {m.body}
+        <p
+          data-testid={consent ? 'inbox-consent-line' : undefined}
+          className="max-w-[80%] rounded-md bg-muted px-3 py-1 text-center text-xs text-muted-foreground"
+        >
+          {consent
+            ? tConsent(consent.action === 'withdrawn' ? 'withdrawn' : 'granted', {
+                keyword: (consent.keyword ?? '').toUpperCase(),
+              })
+            : m.body}
         </p>
       </li>
     );

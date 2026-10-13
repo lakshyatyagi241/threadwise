@@ -462,9 +462,11 @@ export class ContactImportEngine {
     }
 
     // 5b. consent: the importer confirmed they have it, so each contact in the batch gets a ledger grant (never over an opt-out).
+    //     With a consent column mapped, only the rows that say yes are granted; no, blank and unknown words record nothing.
     if (options.consentConfirmed) {
       for (const o of ops.values()) {
         if (o.contactId === undefined) continue;
+        if (o.row.consentColumn && o.row.consent !== 'granted') continue;
         await this.consent.recordInTx(tx, orgId, {
           contactId: o.contactId,
           channel: 'whatsapp',
@@ -607,5 +609,7 @@ function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
   ] as const) {
     if (b[key]) (out as unknown as Record<string, unknown>)[key] = b[key];
   }
+  // A later row for the same number refines the answer, except with a blank cell.
+  if (b.consent) out.consent = b.consent;
   return out;
 }

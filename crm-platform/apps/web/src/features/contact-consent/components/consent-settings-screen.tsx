@@ -7,7 +7,8 @@ import type { ConsentSettings, TestConsentMessageResult } from '@crm/contracts';
 import { Alert, Button, Field, Input, Spinner, Switch, Textarea, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { KEYS, useConsentSettings } from '../api/hooks';
-import { consentApi, consentExportUrl } from '../api/service';
+import { consentApi } from '../api/service';
+import { ProofExportButton, ProofExports } from './proof-export';
 import { errorKey, isRowVersionConflict } from '../lib/errors';
 import {
   formFromSettings,
@@ -147,13 +148,7 @@ function Body({
           <p className="mt-0.5 max-w-3xl text-sm text-muted-foreground">{t('settings.subtitle')}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <a
-            href={consentExportUrl()}
-            download
-            className="inline-flex h-9 items-center rounded-md border border-border px-3 text-sm hover:bg-muted"
-          >
-            {t('settings.exportProof')}
-          </a>
+          <ProofExportButton />
           <Button
             variant="secondary"
             disabled={!dirty || save.isPending}
@@ -171,6 +166,8 @@ function Body({
           </Button>
         </div>
       </header>
+
+      <ProofExports />
 
       {error !== null && (
         <Alert tone="danger" role="alert">

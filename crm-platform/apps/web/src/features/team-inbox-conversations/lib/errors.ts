@@ -34,6 +34,7 @@ export const ERROR_KINDS = [
   'savedReplyGone',
   'savedReplyChannel',
   'shortcutTaken',
+  'importInvalid',
   'network',
   'generic',
 ] as const;
@@ -83,6 +84,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   SAVED_REPLY_NOT_EDITABLE: 'forbidden',
   SAVED_REPLY_CHANNEL_MISMATCH: 'savedReplyChannel',
   SAVED_REPLY_SHORTCUT_TAKEN: 'shortcutTaken',
+  SAVED_REPLY_IMPORT_INVALID: 'importInvalid',
   NETWORK: 'network',
 };
 

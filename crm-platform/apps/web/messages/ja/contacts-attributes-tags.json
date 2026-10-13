@@ -413,7 +413,8 @@
         "address": "住所",
         "memo": "メモ",
         "status": "ステータス",
-        "source": "ソース"
+        "source": "ソース",
+        "consent": "マーケティング同意（はい / いいえ）"
       },
       "notInFile": "ファイルにありません",
       "columnN": "列 {n}",
