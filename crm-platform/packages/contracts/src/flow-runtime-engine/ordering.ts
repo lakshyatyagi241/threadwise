@@ -26,14 +26,19 @@ export const orderLineSchema = z.object({
   qty: z.number().int(),
   price_minor: z.number().int(),
   currency: z.string().nullable(),
+  /** The variant bought (its uuid) and its title ("M / Red"); absent for a product without variants and for older carts. */
+  variant_id: z.string().nullish(),
+  variant_title: z.string().nullish(),
 });
 export type OrderLine = z.infer<typeof orderLineSchema>;
 
 export const orderUnavailableSchema = z.object({
   name: z.string(),
   qty: z.number().int(),
-  reason: z.enum(['not_found', 'out_of_stock']),
+  reason: z.enum(['not_found', 'out_of_stock', 'option_required']),
   available: z.number().int().nullable().optional(),
+  /** `option_required`: the options the customer has to pick, e.g. [{ name: "Size", values: ["S","M"] }]. */
+  options: z.array(z.object({ name: z.string(), values: z.array(z.string()) })).optional(),
 });
 
 export const savedShippingSchema = z.object({

@@ -458,7 +458,8 @@
       "cancel": "Cancel",
       "deleted": "Product removed.",
       "deleteTitle": "Delete this product?",
-      "deleteBody": "\"{name}\" will be deleted. It stays on Meta until you remove it there."
+      "deleteBody": "\"{name}\" will be deleted. It stays on Meta until you remove it there.",
+      "variantsBadge": "{count, plural, one {# variant} other {# variants}}"
     },
     "share": {
       "eyebrow": "Share product",
@@ -563,6 +564,91 @@
         "badUrl": "Enter a full link starting with https://",
         "outOfRange": "This number is out of range.",
         "tooMany": "Too many images."
+      },
+      "variants": {
+        "title": "Variants",
+        "hint": "Sell this product in more than one form, such as size or colour. Each combination gets its own SKU, price and stock.",
+        "toggle": "This product has variants",
+        "removeOnSave": "The variants of this product will be removed when you save.",
+        "optionName": "Option {n} name",
+        "optionNamePlaceholder": "Size, Colour...",
+        "suggest": {
+          "size": "Size",
+          "colour": "Colour",
+          "material": "Material",
+          "style": "Style"
+        },
+        "values": "Values",
+        "valuesHint": "Press Enter or type a comma after each value. Up to {max} characters each.",
+        "valuesPlaceholder": "Type a value, for example M",
+        "valuesMore": "Add another value",
+        "quickAdd": "Quick add:",
+        "preset": {
+          "clothing": "Clothing sizes ({values})",
+          "shoes": "Shoe sizes ({values})"
+        },
+        "addOption": "Add option",
+        "maxOptions": "At most {max} options.",
+        "removeOption": "Remove option {n}",
+        "moveOptionUp": "Move option {n} up",
+        "moveOptionDown": "Move option {n} down",
+        "removeValue": "Remove value {value}",
+        "moveValueEarlier": "Move {value} earlier",
+        "moveValueLater": "Move {value} later",
+        "refused": {
+          "tooLong": "This value is too long.",
+          "dup": "This value is already in the list.",
+          "tooMany": "You reached the limit of values for this option."
+        },
+        "tableTitle": "Variants",
+        "count": "{count, plural, one {# variant} other {# variants}}",
+        "tableEmpty": "Give every option a name and at least one value to generate the variants.",
+        "totalStock": "Total stock",
+        "fromPrice": "From price",
+        "fromPreview": "From {price}",
+        "unlimited": "Unlimited",
+        "priceHint": "The lowest price among the active variants. Variants without their own price use this one.",
+        "stockHint": "The total of the active variants, set by the table above.",
+        "bulkPrice": "Price for all variants",
+        "bulkStock": "Stock for all variants",
+        "bulkApplyPrice": "Apply price",
+        "bulkApplyStock": "Apply stock",
+        "pricePlaceholder": "Product price",
+        "stockPlaceholder": "Unlimited",
+        "col": {
+          "variant": "Variant",
+          "sku": "SKU",
+          "price": "Price",
+          "stock": "Stock",
+          "image": "Image link",
+          "active": "Active"
+        },
+        "rowSku": "SKU for {title}",
+        "rowPrice": "Price for {title}",
+        "rowStock": "Stock for {title}",
+        "rowImage": "Image link for {title}",
+        "rowActive": "{title} is active",
+        "confirm": {
+          "title": "Remove variants?",
+          "body": "{count, plural, one {# variant that has data} other {# variants that have data}} will be removed because that combination no longer exists.",
+          "remove": "Remove",
+          "keep": "Keep"
+        },
+        "problem": {
+          "required": "This field is required.",
+          "tooLong": "This text is too long.",
+          "dupName": "Two options have the same name.",
+          "dupValue": "This value appears twice.",
+          "needOption": "Add at least one option.",
+          "needValue": "Add at least one value.",
+          "tooManyValues": "Too many values for this option.",
+          "tooManyVariants": "These options make too many variants. The limit is 100.",
+          "notNumber": "Enter a number, like 499 or 499.50.",
+          "tooBig": "The amount is too large.",
+          "notWhole": "Enter a whole number.",
+          "outOfRange": "This number is out of range.",
+          "badUrl": "Enter a full link starting with https://"
+        }
       }
     },
     "reviews": {

@@ -458,7 +458,8 @@
       "cancel": "Abbrechen",
       "deleted": "Produkt entfernt.",
       "deleteTitle": "Dieses Produkt löschen?",
-      "deleteBody": "„{name}“ wird gelöscht. Es bleibt bei Meta, bis Sie es dort entfernen."
+      "deleteBody": "„{name}“ wird gelöscht. Es bleibt bei Meta, bis Sie es dort entfernen.",
+      "variantsBadge": "{count, plural, one {# Variante} other {# Varianten}}"
     },
     "share": {
       "eyebrow": "Produkt teilen",
@@ -563,6 +564,91 @@
         "badUrl": "Geben Sie einen vollständigen Link ein, der mit https:// beginnt",
         "outOfRange": "Diese Zahl liegt außerhalb des zulässigen Bereichs.",
         "tooMany": "Zu viele Bilder."
+      },
+      "variants": {
+        "title": "Varianten",
+        "hint": "Verkaufe dieses Produkt in mehreren Ausführungen, etwa Größe oder Farbe. Jede Kombination hat eigene SKU, eigenen Preis und eigenen Bestand.",
+        "toggle": "Dieses Produkt hat Varianten",
+        "removeOnSave": "Die Varianten dieses Produkts werden beim Speichern entfernt.",
+        "optionName": "Name der Option {n}",
+        "optionNamePlaceholder": "Größe, Farbe...",
+        "suggest": {
+          "size": "Größe",
+          "colour": "Farbe",
+          "material": "Material",
+          "style": "Stil"
+        },
+        "values": "Werte",
+        "valuesHint": "Drücke die Eingabetaste oder tippe nach jedem Wert ein Komma. Je höchstens {max} Zeichen.",
+        "valuesPlaceholder": "Wert eingeben, zum Beispiel M",
+        "valuesMore": "Weiteren Wert hinzufügen",
+        "quickAdd": "Schnell hinzufügen:",
+        "preset": {
+          "clothing": "Kleidergrößen ({values})",
+          "shoes": "Schuhgrößen ({values})"
+        },
+        "addOption": "Option hinzufügen",
+        "maxOptions": "Höchstens {max} Optionen.",
+        "removeOption": "Option {n} entfernen",
+        "moveOptionUp": "Option {n} nach oben",
+        "moveOptionDown": "Option {n} nach unten",
+        "removeValue": "Wert {value} entfernen",
+        "moveValueEarlier": "{value} nach vorn",
+        "moveValueLater": "{value} nach hinten",
+        "refused": {
+          "tooLong": "Dieser Wert ist zu lang.",
+          "dup": "Dieser Wert steht bereits in der Liste.",
+          "tooMany": "Das Limit an Werten für diese Option ist erreicht."
+        },
+        "tableTitle": "Varianten",
+        "count": "{count, plural, one {# Variante} other {# Varianten}}",
+        "tableEmpty": "Gib jeder Option einen Namen und mindestens einen Wert an, um die Varianten zu erzeugen.",
+        "totalStock": "Gesamtbestand",
+        "fromPrice": "Ab-Preis",
+        "fromPreview": "Ab {price}",
+        "unlimited": "Unbegrenzt",
+        "priceHint": "Der niedrigste Preis der aktiven Varianten. Varianten ohne eigenen Preis verwenden diesen.",
+        "stockHint": "Die Summe der aktiven Varianten, festgelegt in der Tabelle oben.",
+        "bulkPrice": "Preis für alle Varianten",
+        "bulkStock": "Bestand für alle Varianten",
+        "bulkApplyPrice": "Preis anwenden",
+        "bulkApplyStock": "Bestand anwenden",
+        "pricePlaceholder": "Produktpreis",
+        "stockPlaceholder": "Unbegrenzt",
+        "col": {
+          "variant": "Variante",
+          "sku": "SKU",
+          "price": "Preis",
+          "stock": "Bestand",
+          "image": "Bildlink",
+          "active": "Aktiv"
+        },
+        "rowSku": "SKU für {title}",
+        "rowPrice": "Preis für {title}",
+        "rowStock": "Bestand für {title}",
+        "rowImage": "Bildlink für {title}",
+        "rowActive": "{title} ist aktiv",
+        "confirm": {
+          "title": "Varianten entfernen?",
+          "body": "{count, plural, one {# Variante mit Daten wird} other {# Varianten mit Daten werden}} entfernt, weil diese Kombination nicht mehr existiert.",
+          "remove": "Entfernen",
+          "keep": "Behalten"
+        },
+        "problem": {
+          "required": "Dieses Feld ist erforderlich.",
+          "tooLong": "Dieser Text ist zu lang.",
+          "dupName": "Zwei Optionen haben denselben Namen.",
+          "dupValue": "Dieser Wert kommt doppelt vor.",
+          "needOption": "Füge mindestens eine Option hinzu.",
+          "needValue": "Füge mindestens einen Wert hinzu.",
+          "tooManyValues": "Zu viele Werte für diese Option.",
+          "tooManyVariants": "Diese Optionen ergeben zu viele Varianten. Das Limit liegt bei 100.",
+          "notNumber": "Gib eine Zahl ein, etwa 499 oder 499.50.",
+          "tooBig": "Der Betrag ist zu groß.",
+          "notWhole": "Gib eine ganze Zahl ein.",
+          "outOfRange": "Diese Zahl liegt außerhalb des Bereichs.",
+          "badUrl": "Gib einen vollständigen Link ein, der mit https:// beginnt"
+        }
       }
     },
     "reviews": {

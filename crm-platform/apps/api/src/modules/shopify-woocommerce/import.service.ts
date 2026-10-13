@@ -25,6 +25,7 @@ import {
   type StoreKind,
 } from './mirror-rules';
 import { StoresRepository } from './stores.repository';
+import { readWooProducts } from './woo-variations';
 
 export interface ImportJob {
   orgId: number;
@@ -123,7 +124,8 @@ export class ImportService {
       groupKey: 'woo_group_id',
       cachedGroup: typeof meta?.woo_group_id === 'number' ? meta.woo_group_id : null,
       read: {
-        products: () => api.products(),
+        // A variable product's variations are read with it, so each becomes a variant of the product.
+        products: () => readWooProducts(api),
         orders: () => api.orders(),
         customers: () => api.customers(),
       },

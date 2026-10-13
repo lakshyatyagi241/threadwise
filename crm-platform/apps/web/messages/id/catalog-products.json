@@ -458,7 +458,8 @@
       "cancel": "Batal",
       "deleted": "Produk dihapus.",
       "deleteTitle": "Hapus produk ini?",
-      "deleteBody": "\"{name}\" akan dihapus. Produk tetap ada di Meta sampai Anda menghapusnya di sana."
+      "deleteBody": "\"{name}\" akan dihapus. Produk tetap ada di Meta sampai Anda menghapusnya di sana.",
+      "variantsBadge": "{count, plural, other {# varian}}"
     },
     "share": {
       "eyebrow": "Bagikan produk",
@@ -563,6 +564,91 @@
         "badUrl": "Masukkan tautan lengkap yang diawali https://",
         "outOfRange": "Angka ini di luar rentang.",
         "tooMany": "Terlalu banyak gambar."
+      },
+      "variants": {
+        "title": "Varian",
+        "hint": "Jual produk ini dalam lebih dari satu bentuk, seperti ukuran atau warna. Setiap kombinasi punya SKU, harga, dan stok sendiri.",
+        "toggle": "Produk ini memiliki varian",
+        "removeOnSave": "Varian produk ini akan dihapus saat Anda menyimpan.",
+        "optionName": "Nama opsi {n}",
+        "optionNamePlaceholder": "Ukuran, Warna...",
+        "suggest": {
+          "size": "Ukuran",
+          "colour": "Warna",
+          "material": "Bahan",
+          "style": "Gaya"
+        },
+        "values": "Nilai",
+        "valuesHint": "Tekan Enter atau ketik koma setelah setiap nilai. Maksimal {max} karakter per nilai.",
+        "valuesPlaceholder": "Ketik nilai, misalnya M",
+        "valuesMore": "Tambah nilai lain",
+        "quickAdd": "Tambah cepat:",
+        "preset": {
+          "clothing": "Ukuran pakaian ({values})",
+          "shoes": "Ukuran sepatu ({values})"
+        },
+        "addOption": "Tambah opsi",
+        "maxOptions": "Maksimal {max} opsi.",
+        "removeOption": "Hapus opsi {n}",
+        "moveOptionUp": "Naikkan opsi {n}",
+        "moveOptionDown": "Turunkan opsi {n}",
+        "removeValue": "Hapus nilai {value}",
+        "moveValueEarlier": "Majukan {value}",
+        "moveValueLater": "Mundurkan {value}",
+        "refused": {
+          "tooLong": "Nilai ini terlalu panjang.",
+          "dup": "Nilai ini sudah ada dalam daftar.",
+          "tooMany": "Anda mencapai batas nilai untuk opsi ini."
+        },
+        "tableTitle": "Varian",
+        "count": "{count, plural, other {# varian}}",
+        "tableEmpty": "Beri nama setiap opsi dan minimal satu nilai untuk membuat varian.",
+        "totalStock": "Total stok",
+        "fromPrice": "Harga mulai dari",
+        "fromPreview": "Mulai {price}",
+        "unlimited": "Tak terbatas",
+        "priceHint": "Harga terendah di antara varian aktif. Varian tanpa harga sendiri memakai harga ini.",
+        "stockHint": "Total varian aktif, diatur oleh tabel di atas.",
+        "bulkPrice": "Harga untuk semua varian",
+        "bulkStock": "Stok untuk semua varian",
+        "bulkApplyPrice": "Terapkan harga",
+        "bulkApplyStock": "Terapkan stok",
+        "pricePlaceholder": "Harga produk",
+        "stockPlaceholder": "Tak terbatas",
+        "col": {
+          "variant": "Varian",
+          "sku": "SKU",
+          "price": "Harga",
+          "stock": "Stok",
+          "image": "Tautan gambar",
+          "active": "Aktif"
+        },
+        "rowSku": "SKU untuk {title}",
+        "rowPrice": "Harga untuk {title}",
+        "rowStock": "Stok untuk {title}",
+        "rowImage": "Tautan gambar untuk {title}",
+        "rowActive": "{title} aktif",
+        "confirm": {
+          "title": "Hapus varian?",
+          "body": "{count, plural, other {# varian yang memiliki data}} akan dihapus karena kombinasi tersebut sudah tidak ada.",
+          "remove": "Hapus",
+          "keep": "Simpan"
+        },
+        "problem": {
+          "required": "Kolom ini wajib diisi.",
+          "tooLong": "Teks ini terlalu panjang.",
+          "dupName": "Dua opsi memiliki nama yang sama.",
+          "dupValue": "Nilai ini muncul dua kali.",
+          "needOption": "Tambahkan minimal satu opsi.",
+          "needValue": "Tambahkan minimal satu nilai.",
+          "tooManyValues": "Terlalu banyak nilai untuk opsi ini.",
+          "tooManyVariants": "Opsi ini menghasilkan terlalu banyak varian. Batasnya 100.",
+          "notNumber": "Masukkan angka, seperti 499 atau 499,50.",
+          "tooBig": "Jumlahnya terlalu besar.",
+          "notWhole": "Masukkan bilangan bulat.",
+          "outOfRange": "Angka ini di luar rentang.",
+          "badUrl": "Masukkan tautan lengkap yang diawali https://"
+        }
       }
     },
     "reviews": {

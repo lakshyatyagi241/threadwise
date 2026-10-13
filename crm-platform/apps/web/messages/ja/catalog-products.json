@@ -458,7 +458,8 @@
       "cancel": "キャンセル",
       "deleted": "商品を削除しました。",
       "deleteTitle": "この商品を削除しますか?",
-      "deleteBody": "「{name}」を削除します。Meta上では、そちらで削除するまで残ります。"
+      "deleteBody": "「{name}」を削除します。Meta上では、そちらで削除するまで残ります。",
+      "variantsBadge": "{count, plural, other {#件のバリエーション}}"
     },
     "share": {
       "eyebrow": "商品を共有",
@@ -563,6 +564,91 @@
         "badUrl": "https://で始まる完全なリンクを入力してください",
         "outOfRange": "この数値は範囲外です。",
         "tooMany": "画像が多すぎます。"
+      },
+      "variants": {
+        "title": "バリエーション",
+        "hint": "サイズや色など、複数の種類でこの商品を販売できます。組み合わせごとに SKU、価格、在庫を設定します。",
+        "toggle": "この商品にはバリエーションがある",
+        "removeOnSave": "保存すると、この商品のバリエーションは削除されます。",
+        "optionName": "オプション{n}の名前",
+        "optionNamePlaceholder": "サイズ、色...",
+        "suggest": {
+          "size": "サイズ",
+          "colour": "色",
+          "material": "素材",
+          "style": "スタイル"
+        },
+        "values": "値",
+        "valuesHint": "値を入力するごとに Enter キーを押すか、カンマを入力してください。1つにつき最大{max}文字です。",
+        "valuesPlaceholder": "値を入力（例：M）",
+        "valuesMore": "値を追加",
+        "quickAdd": "クイック追加：",
+        "preset": {
+          "clothing": "服のサイズ（{values}）",
+          "shoes": "靴のサイズ（{values}）"
+        },
+        "addOption": "オプションを追加",
+        "maxOptions": "オプションは最大{max}個までです。",
+        "removeOption": "オプション{n}を削除",
+        "moveOptionUp": "オプション{n}を上へ移動",
+        "moveOptionDown": "オプション{n}を下へ移動",
+        "removeValue": "値「{value}」を削除",
+        "moveValueEarlier": "{value}を前へ移動",
+        "moveValueLater": "{value}を後ろへ移動",
+        "refused": {
+          "tooLong": "この値は長すぎます。",
+          "dup": "この値はすでにリストにあります。",
+          "tooMany": "このオプションの値の上限に達しました。"
+        },
+        "tableTitle": "バリエーション",
+        "count": "{count, plural, other {#件のバリエーション}}",
+        "tableEmpty": "バリエーションを生成するには、すべてのオプションに名前を付け、値を1つ以上入力してください。",
+        "totalStock": "合計在庫",
+        "fromPrice": "最低価格",
+        "fromPreview": "{price}から",
+        "unlimited": "無制限",
+        "priceHint": "有効なバリエーションの中で最も低い価格です。独自の価格がないバリエーションにはこの価格が適用されます。",
+        "stockHint": "有効なバリエーションの合計で、上の表で設定されます。",
+        "bulkPrice": "全バリエーションの価格",
+        "bulkStock": "全バリエーションの在庫",
+        "bulkApplyPrice": "価格を適用",
+        "bulkApplyStock": "在庫を適用",
+        "pricePlaceholder": "商品価格",
+        "stockPlaceholder": "無制限",
+        "col": {
+          "variant": "バリエーション",
+          "sku": "SKU",
+          "price": "価格",
+          "stock": "在庫",
+          "image": "画像リンク",
+          "active": "有効"
+        },
+        "rowSku": "{title}のSKU",
+        "rowPrice": "{title}の価格",
+        "rowStock": "{title}の在庫",
+        "rowImage": "{title}の画像リンク",
+        "rowActive": "{title}は有効",
+        "confirm": {
+          "title": "バリエーションを削除しますか？",
+          "body": "その組み合わせがなくなったため、{count, plural, other {データのある#件のバリエーション}}が削除されます。",
+          "remove": "削除",
+          "keep": "残す"
+        },
+        "problem": {
+          "required": "この項目は必須です。",
+          "tooLong": "このテキストは長すぎます。",
+          "dupName": "2つのオプションが同じ名前です。",
+          "dupValue": "この値が重複しています。",
+          "needOption": "オプションを1つ以上追加してください。",
+          "needValue": "値を1つ以上追加してください。",
+          "tooManyValues": "このオプションの値が多すぎます。",
+          "tooManyVariants": "このオプションではバリエーションが多くなりすぎます。上限は100件です。",
+          "notNumber": "499 や 499.50 のように数値を入力してください。",
+          "tooBig": "金額が大きすぎます。",
+          "notWhole": "整数を入力してください。",
+          "outOfRange": "この数値は範囲外です。",
+          "badUrl": "https:// で始まる完全なリンクを入力してください"
+        }
       }
     },
     "reviews": {

@@ -69,6 +69,8 @@ describe('a Shopify product (TW-ECOM-011)', () => {
       brand: 'Acme',
       productUrl: 'https://my-store.myshopify.com/products/blue-shirt',
       tags: ['summer', 'cotton'],
+      options: [],
+      variants: [],
     });
   });
 

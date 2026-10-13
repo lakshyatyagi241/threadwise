@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { CONTACT_RESOLVER, type ContactResolverPort } from '../../crm/contact-resolver.port';
+import { recomputeProductAggregate } from '../../catalog-products';
 import {
   CUSTOMER_GROUP,
   type MirrorCustomer,
@@ -60,15 +61,111 @@ export class SqlStoreMirror implements StoreMirror {
                in_stock = ${p.inStock}, availability = ${availability}, status = ${p.status}, category = ${p.category},
                brand = ${p.brand}, product_url = ${p.productUrl}, tags_json = ${JSON.stringify(p.tags)}::jsonb
         WHERE org_id = ${orgId} AND id = ${Number(existing.id)}`);
+      await this.syncVariants(tx, orgId, Number(existing.id), p, true);
       return;
     }
-    await tx.execute(sql`
+    const made = await tx.execute(sql`
       INSERT INTO wa_products (org_id, ${col}, user_id, sku, name, slug, description, body_html, price_minor, compare_price_minor,
                                currency_code, image_url, gallery_json, in_stock, availability, status, category, brand,
                                product_url, tags_json)
       VALUES (${orgId}, ${p.storeId}, ${userId}, ${p.sku}, ${p.name}, ${slug}, ${p.description}, ${p.bodyHtml}, ${p.priceMinor},
               ${p.comparePriceMinor}, ${p.currency}, ${p.imageUrl}, ${JSON.stringify(p.gallery)}::jsonb, ${p.inStock},
-              ${availability}, ${p.status}, ${p.category}, ${p.brand}, ${p.productUrl}, ${JSON.stringify(p.tags)}::jsonb)`);
+              ${availability}, ${p.status}, ${p.category}, ${p.brand}, ${p.productUrl}, ${JSON.stringify(p.tags)}::jsonb)
+      RETURNING id`);
+    await this.syncVariants(
+      tx,
+      orgId,
+      Number((made.rows[0] as { id: number | string }).id),
+      p,
+      false,
+    );
+  }
+
+  /**
+   * The store's variants (Shopify variants, WooCommerce variations) as `wa_product_variants`, with the product's options. Variants are
+   * matched to the stored ones by title, then SKU, so their holds (`reserved_qty`) and ids survive a re-import; the store's price,
+   * stock, image and weight win; one the store no longer has is removed. The product row is then re-derived as the aggregate
+   * (invariant 1) in the same transaction. A product the store sells without variants is a plain product again.
+   */
+  private async syncVariants(
+    tx: Tx,
+    orgId: number,
+    productId: number,
+    p: MirrorProduct,
+    existed: boolean,
+  ): Promise<void> {
+    if (p.keepVariants) return;
+    if (p.variants.length === 0) {
+      if (!existed) return;
+      await tx.execute(
+        sql`DELETE FROM wa_product_variants WHERE org_id = ${orgId} AND product_id = ${productId}`,
+      );
+      await tx.execute(
+        sql`UPDATE wa_products SET options_json = NULL WHERE org_id = ${orgId} AND id = ${productId} AND options_json IS NOT NULL`,
+      );
+      return;
+    }
+    await tx.execute(
+      sql`UPDATE wa_products SET options_json = ${JSON.stringify(p.options)}::jsonb WHERE org_id = ${orgId} AND id = ${productId}`,
+    );
+    const stored = (
+      await tx.execute(sql`
+        SELECT id, title, sku FROM wa_product_variants
+        WHERE org_id = ${orgId} AND product_id = ${productId} ORDER BY id FOR UPDATE`)
+    ).rows as Array<{ id: number | string; title: string; sku: string | null }>;
+    // A SKU another product's variant already holds stays free of this one (SKUs are unique per workspace).
+    const skus = p.variants.map((v) => v.sku);
+    const taken = new Set<string>();
+    if (skus.length > 0) {
+      const clash = await tx.execute(sql`
+        SELECT sku FROM wa_product_variants
+        WHERE org_id = ${orgId} AND product_id <> ${productId}
+          AND sku IN (${sql.join(
+            skus.map((k) => sql`${k}`),
+            sql`, `,
+          )})`);
+      for (const r of clash.rows as Array<{ sku: string }>) taken.add(r.sku);
+    }
+    // Free the unique title and SKU of every stored variant first, so two variants can swap values in one pass.
+    await tx.execute(sql`
+      UPDATE wa_product_variants SET title = uuid::text, sku = NULL
+      WHERE org_id = ${orgId} AND product_id = ${productId}`);
+    const byTitle = new Map(stored.map((s) => [s.title.toLowerCase(), s]));
+    const bySku = new Map(stored.filter((s) => s.sku).map((s) => [String(s.sku), s]));
+    const claimed = new Set<number>();
+    let position = 0;
+    for (const v of p.variants) {
+      const match =
+        [byTitle.get(v.title.toLowerCase()), bySku.get(v.sku)].find(
+          (s) => s && !claimed.has(Number(s.id)),
+        ) ?? undefined;
+      const sku = taken.has(v.sku) ? null : v.sku;
+      if (match) {
+        claimed.add(Number(match.id));
+        await tx.execute(sql`
+          UPDATE wa_product_variants
+          SET option_values_json = ${JSON.stringify(v.optionValues)}::jsonb, title = ${v.title}, sku = ${sku},
+              price_minor = ${v.priceMinor}, compare_price_minor = ${v.comparePriceMinor}, image_url = ${v.imageUrl},
+              weight_grams = ${v.weightGrams}, stock_qty = ${v.stockQty}, active = ${v.active}, position = ${position}
+          WHERE org_id = ${orgId} AND id = ${Number(match.id)}`);
+      } else {
+        await tx.execute(sql`
+          INSERT INTO wa_product_variants (org_id, product_id, option_values_json, title, sku, price_minor, compare_price_minor,
+                                           image_url, weight_grams, stock_qty, active, position)
+          VALUES (${orgId}, ${productId}, ${JSON.stringify(v.optionValues)}::jsonb, ${v.title}, ${sku}, ${v.priceMinor},
+                  ${v.comparePriceMinor}, ${v.imageUrl}, ${v.weightGrams}, ${v.stockQty}, ${v.active}, ${position})`);
+      }
+      position += 1;
+    }
+    const gone = stored.filter((s) => !claimed.has(Number(s.id))).map((s) => Number(s.id));
+    if (gone.length > 0) {
+      await tx.execute(sql`
+        DELETE FROM wa_product_variants WHERE org_id = ${orgId} AND id IN (${sql.join(
+          gone.map((i) => sql`${i}`),
+          sql`, `,
+        )})`);
+    }
+    await recomputeProductAggregate(tx, orgId, productId);
   }
 
   async upsertOrder(tx: Tx, orgId: number, kind: StoreKind, o: MirrorOrder): Promise<number> {

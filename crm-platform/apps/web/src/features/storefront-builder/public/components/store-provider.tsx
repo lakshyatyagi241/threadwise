@@ -1,6 +1,6 @@
 'use client';
 
-import type { PublicProduct, PublicShop } from '@crm/contracts';
+import type { PublicProduct, PublicShop, PublicVariant } from '@crm/contracts';
 import { useTranslations } from 'next-intl';
 import {
   createContext,
@@ -8,10 +8,12 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useSyncExternalStore,
   type ReactNode,
 } from 'react';
+import { fetchMoreProducts } from '../api/client';
 import {
   addOne,
   addQty,
@@ -19,6 +21,7 @@ import {
   cartSubtotal,
   parseStoredCart,
   parseStoredIds,
+  reconcileCart,
   removeLine,
   setQty,
   storageKeys,
@@ -29,6 +32,7 @@ import {
 import { mergeProducts } from '../lib/catalog';
 import { readPersisted, subscribe, writePersisted } from '../lib/persist';
 import { resolveTheme, type ResolvedTheme } from '../lib/themes';
+import { hasVariants } from '../lib/variants';
 
 export const MAX_COMPARE = 4;
 
@@ -62,11 +66,14 @@ export interface StoreApi {
   wish: readonly string[];
   compare: readonly string[];
   bumps: Readonly<Record<BadgeKind, number>>;
-  addToCart: (product: PublicProduct) => void;
-  addQuantity: (product: PublicProduct, qty: number) => void;
+  /** A product with variants needs the chosen `variant`; without one nothing is added (the card links to the product page). */
+  addToCart: (product: PublicProduct, variant?: PublicVariant | null) => void;
+  addQuantity: (product: PublicProduct, qty: number, variant?: PublicVariant | null) => void;
   /** Returns the quantity the line really has afterwards (clamped to the stock cap, at least 1). */
-  setLineQty: (id: string, qty: number) => number;
-  removeFromCart: (id: string) => void;
+  setLineQty: (id: string, qty: number, variantId?: string | null) => number;
+  removeFromCart: (id: string, variantId?: string | null) => void;
+  /** Re-reads the catalog from the server and fixes the cart against it (after a 422 STORE_ITEMS_UNAVAILABLE). */
+  refreshCart: () => Promise<void>;
   clearCart: () => void;
   toggleWish: (id: string) => void;
   toggleCompare: (id: string) => void;
@@ -190,8 +197,9 @@ export function StoreProvider({
   );
 
   const addToCart = useCallback(
-    (product: PublicProduct) => {
-      const out = addOne(readCart(), product);
+    (product: PublicProduct, variant?: PublicVariant | null) => {
+      if (hasVariants(product) && !variant) return;
+      const out = addOne(readCart(), product, variant);
       if (out.kind === 'capped') {
         setModal({ kind: 'message', ...stockMessage(out.cap) });
         return;
@@ -208,8 +216,9 @@ export function StoreProvider({
   );
 
   const addQuantity = useCallback(
-    (product: PublicProduct, qty: number) => {
-      const out = addQty(readCart(), product, qty);
+    (product: PublicProduct, qty: number, variant?: PublicVariant | null) => {
+      if (hasVariants(product) && !variant) return;
+      const out = addQty(readCart(), product, qty, variant);
       if (out.full) {
         setModal({ kind: 'message', title: t('cart.fullTitle'), body: t('cart.fullBody') });
         return;
@@ -222,20 +231,56 @@ export function StoreProvider({
   );
 
   const setLineQty = useCallback(
-    (id: string, qty: number) => {
-      const out = setQty(readCart(), id, qty, catalog[id]);
+    (id: string, qty: number, variantId?: string | null) => {
+      const out = setQty(readCart(), id, qty, catalog[id], variantId);
       if (out.clamped) flash(stockMessage(out.clamped).title);
       writeCart(out.cart);
-      return out.cart.find((l) => l.id === id)?.qty ?? 0;
+      return (
+        out.cart.find((l) => l.id === id && (l.variantId ?? null) === (variantId ?? null))?.qty ?? 0
+      );
     },
     [readCart, writeCart, catalog, stockMessage, flash],
   );
 
   const removeFromCart = useCallback(
-    (id: string) => writeCart(removeLine(readCart(), id)),
+    (id: string, variantId?: string | null) => writeCart(removeLine(readCart(), id, variantId)),
     [readCart, writeCart],
   );
   const clearCart = useCallback(() => writeCart([]), [writeCart]);
+
+  // Keeps the stored cart valid against the catalog the browser holds: old lines of a product that has variants now, removed or
+  // sold-out variants, fallen stock. A dropped line is announced once.
+  const reconciled = useRef('');
+  useEffect(() => {
+    const out = reconcileCart(cart, catalog);
+    if (!out.changed) return;
+    const sig = JSON.stringify(out.cart);
+    if (reconciled.current === sig) return;
+    reconciled.current = sig;
+    writeCart(out.cart);
+    if (out.dropped > 0)
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- one-off notice, guarded by `reconciled` so it cannot loop
+      setModal({
+        kind: 'message',
+        title: t('cart.variantDroppedTitle'),
+        body: t('cart.variantDroppedBody', { count: out.dropped }),
+      });
+  }, [cart, catalog, writeCart, t]);
+
+  const refreshCart = useCallback(async () => {
+    // The cart's products may sit on any "Show more" page: read pages until every cart product is seen (bounded).
+    const wanted = new Set(readCart().map((l) => l.id));
+    const fresh: PublicProduct[] = [];
+    for (let page = 1; page <= 20 && wanted.size > 0; page += 1) {
+      const res = await fetchMoreProducts(shop.slug, page);
+      if (!res.ok) break;
+      fresh.push(...res.data.products);
+      for (const p of res.data.products) wanted.delete(p.id);
+      if (!res.data.hasMore) break;
+    }
+    if (fresh.length > 0)
+      setCatalog((c) => ({ ...c, ...Object.fromEntries(fresh.map((p) => [p.id, p])) }));
+  }, [readCart, shop.slug]);
 
   const toggleWish = useCallback(
     (id: string) => {
@@ -307,6 +352,7 @@ export function StoreProvider({
     addQuantity,
     setLineQty,
     removeFromCart,
+    refreshCart,
     clearCart,
     toggleWish,
     toggleCompare,

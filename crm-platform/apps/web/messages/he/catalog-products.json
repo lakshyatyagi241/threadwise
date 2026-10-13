@@ -458,7 +458,8 @@
       "cancel": "ביטול",
       "deleted": "המוצר הוסר.",
       "deleteTitle": "למחוק את המוצר הזה?",
-      "deleteBody": "\"{name}\" יימחק. הוא יישאר ב-Meta עד שתסירו אותו משם."
+      "deleteBody": "\"{name}\" יימחק. הוא יישאר ב-Meta עד שתסירו אותו משם.",
+      "variantsBadge": "{count, plural, one {# וריאציה} two {# וריאציות} other {# וריאציות}}"
     },
     "share": {
       "eyebrow": "שיתוף מוצר",
@@ -563,6 +564,91 @@
         "badUrl": "הזינו קישור מלא המתחיל ב-https://",
         "outOfRange": "המספר מחוץ לטווח.",
         "tooMany": "יותר מדי תמונות."
+      },
+      "variants": {
+        "title": "וריאציות",
+        "hint": "מכרו את המוצר הזה ביותר מצורה אחת, כמו מידה או צבע. לכל שילוב יש SKU, מחיר ומלאי משלו.",
+        "toggle": "למוצר הזה יש וריאציות",
+        "removeOnSave": "הוריאציות של המוצר הזה יימחקו בעת השמירה.",
+        "optionName": "שם אפשרות {n}",
+        "optionNamePlaceholder": "מידה, צבע...",
+        "suggest": {
+          "size": "מידה",
+          "colour": "צבע",
+          "material": "חומר",
+          "style": "סגנון"
+        },
+        "values": "ערכים",
+        "valuesHint": "לחצו Enter או הקלידו פסיק אחרי כל ערך. עד {max} תווים לכל ערך.",
+        "valuesPlaceholder": "הקלידו ערך, למשל M",
+        "valuesMore": "הוספת ערך נוסף",
+        "quickAdd": "הוספה מהירה:",
+        "preset": {
+          "clothing": "מידות ביגוד ({values})",
+          "shoes": "מידות נעליים ({values})"
+        },
+        "addOption": "הוספת אפשרות",
+        "maxOptions": "עד {max} אפשרויות.",
+        "removeOption": "הסרת אפשרות {n}",
+        "moveOptionUp": "העברת אפשרות {n} למעלה",
+        "moveOptionDown": "העברת אפשרות {n} למטה",
+        "removeValue": "הסרת הערך {value}",
+        "moveValueEarlier": "העברת {value} קדימה",
+        "moveValueLater": "העברת {value} אחורה",
+        "refused": {
+          "tooLong": "הערך הזה ארוך מדי.",
+          "dup": "הערך הזה כבר ברשימה.",
+          "tooMany": "הגעתם למגבלת הערכים של האפשרות הזו."
+        },
+        "tableTitle": "וריאציות",
+        "count": "{count, plural, one {# וריאציה} two {# וריאציות} other {# וריאציות}}",
+        "tableEmpty": "תנו שם לכל אפשרות והוסיפו ערך אחד לפחות כדי ליצור וריאציות.",
+        "totalStock": "מלאי כולל",
+        "fromPrice": "מחיר התחלתי",
+        "fromPreview": "החל מ-{price}",
+        "unlimited": "ללא הגבלה",
+        "priceHint": "המחיר הנמוך ביותר בין הוריאציות הפעילות. וריאציות ללא מחיר משלהן משתמשות במחיר הזה.",
+        "stockHint": "סך הוריאציות הפעילות, כפי שנקבע בטבלה שלמעלה.",
+        "bulkPrice": "מחיר לכל הוריאציות",
+        "bulkStock": "מלאי לכל הוריאציות",
+        "bulkApplyPrice": "החלת מחיר",
+        "bulkApplyStock": "החלת מלאי",
+        "pricePlaceholder": "מחיר המוצר",
+        "stockPlaceholder": "ללא הגבלה",
+        "col": {
+          "variant": "וריאציה",
+          "sku": "SKU",
+          "price": "מחיר",
+          "stock": "מלאי",
+          "image": "קישור לתמונה",
+          "active": "פעיל"
+        },
+        "rowSku": "SKU עבור {title}",
+        "rowPrice": "מחיר עבור {title}",
+        "rowStock": "מלאי עבור {title}",
+        "rowImage": "קישור לתמונה עבור {title}",
+        "rowActive": "{title} פעיל",
+        "confirm": {
+          "title": "להסיר וריאציות?",
+          "body": "{count, plural, one {# וריאציה שיש בה נתונים תוסר} two {# וריאציות שיש בהן נתונים יוסרו} other {# וריאציות שיש בהן נתונים יוסרו}} כי השילוב הזה כבר לא קיים.",
+          "remove": "הסרה",
+          "keep": "השארה"
+        },
+        "problem": {
+          "required": "שדה חובה.",
+          "tooLong": "הטקסט הזה ארוך מדי.",
+          "dupName": "לשתי אפשרויות יש אותו שם.",
+          "dupValue": "הערך הזה מופיע פעמיים.",
+          "needOption": "הוסיפו אפשרות אחת לפחות.",
+          "needValue": "הוסיפו ערך אחד לפחות.",
+          "tooManyValues": "יותר מדי ערכים באפשרות הזו.",
+          "tooManyVariants": "האפשרויות האלה יוצרות יותר מדי וריאציות. המגבלה היא 100.",
+          "notNumber": "הזינו מספר, למשל 499 או 499.50.",
+          "tooBig": "הסכום גדול מדי.",
+          "notWhole": "הזינו מספר שלם.",
+          "outOfRange": "המספר הזה מחוץ לטווח.",
+          "badUrl": "הזינו קישור מלא שמתחיל ב-https://"
+        }
       }
     },
     "reviews": {

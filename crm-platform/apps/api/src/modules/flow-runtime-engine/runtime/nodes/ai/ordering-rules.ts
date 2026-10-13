@@ -8,9 +8,15 @@ import { formatProductMoney, type OrderLine } from '@crm/contracts';
 export interface Unavailable {
   name: string;
   qty: number;
-  reason: 'not_found' | 'out_of_stock';
+  reason: 'not_found' | 'out_of_stock' | 'option_required';
   available?: number | null;
+  /** `option_required`: what the customer still has to choose. */
+  options?: Array<{ name: string; values: string[] }>;
 }
+
+/** An order line as the customer reads it: "Hoodie (M / Red)" for a variant, the plain name otherwise. */
+export const lineName = (li: { name: string; variant_title?: string | null }): string =>
+  li.variant_title ? `${li.name} (${li.variant_title})` : li.name;
 
 export const digitsOf = (s: string): string => s.replace(/\D+/g, '');
 
@@ -18,8 +24,14 @@ export const digitsOf = (s: string): string => s.replace(/\D+/g, '');
 export const cartRef = (orgId: number, customerPhone: string): string =>
   `ord:${orgId}:${digitsOf(customerPhone)}`;
 
-/** "only 2 in stock", "out of stock" or "not found". */
+/** "only 2 in stock", "out of stock", "please choose Size: S, M, L" or "not found". */
 export function reasonText(u: Unavailable): string {
+  if (u.reason === 'option_required') {
+    const asks = (u.options ?? []).map((o) => `${o.name}: ${o.values.join(', ')}`);
+    return asks.length > 0
+      ? `please tell us the ${asks.join(' and ')}`
+      : 'please tell us which option';
+  }
   if (u.reason !== 'out_of_stock') return 'not found';
   const left = Math.trunc(u.available ?? 0);
   return left > 0 ? `only ${left} in stock` : 'out of stock';
@@ -41,7 +53,7 @@ export function buildSummary(
   const lines = ['*Your order*'];
   for (const li of items) {
     lines.push(
-      `• ${li.qty} × ${li.name} — ${formatProductMoney(li.price_minor * li.qty, li.currency ?? currency)}`,
+      `• ${li.qty} × ${lineName(li)} — ${formatProductMoney(li.price_minor * li.qty, li.currency ?? currency)}`,
     );
   }
   lines.push('', `*Total: ${formatProductMoney(totalMinor, currency)}*`);
@@ -61,7 +73,7 @@ export function buildConfirmedText(
   ship: { name?: string | null; company?: string | null; address?: string | null } = {},
 ): string {
   const lines = [`*New order #${orderId}*`];
-  for (const li of items) lines.push(`• ${li.qty} × ${li.name}`);
+  for (const li of items) lines.push(`• ${li.qty} × ${lineName(li)}`);
   lines.push(`*Total: ${formatProductMoney(totalMinor, currency)}*`);
   const where = [ship.name, ship.company, ship.address]
     .map((v) => (v ?? '').trim())
@@ -152,7 +164,8 @@ export function looksLikePlaceholder(text: string): boolean {
 export const ORDER_PARSE_SYSTEM =
   "You convert a customer's WhatsApp message into a product order. " +
   'Respond with ONLY a single valid JSON object of the form ' +
-  '{"items":[{"name":"<product as the customer wrote it, any language>","qty":<number>}]}. ' +
+  '{"items":[{"name":"<product as the customer wrote it, any language>","qty":<number>,"variant":"<size, colour or other option the customer named for it, or empty>"}]}. ' +
+  'Put only the option words (size, colour, pack...) in "variant", not in "name". ' +
   'Default qty to 1 when unspecified. If there is no order, return {"items":[]}. ' +
   'No markdown, no commentary, JSON only.';
 
@@ -165,17 +178,26 @@ export const SHIPPING_SYSTEM =
   "When they provided an address, set use_saved=false and fill the fields (keep the address in the customer's original language/script; if unsure put the whole reply in address). " +
   'No markdown, JSON only.';
 
-/** The model's `{items:[{name,qty}]}` as `[{name, qty}]`: names trimmed and non-empty, quantity at least 1 (also `product`, `item`, `quantity`). */
-export function normalizeItems(json: unknown): Array<{ name: string; qty: number }> {
+/**
+ * The model's `{items:[{name,qty,variant}]}` as `[{name, qty, variant}]`: names trimmed and non-empty, quantity at least 1 (also
+ * `product`, `item`, `quantity`), `variant` the option words the customer named for the item ('' when none).
+ */
+export function normalizeItems(
+  json: unknown,
+): Array<{ name: string; qty: number; variant: string }> {
   const items = (json as { items?: unknown } | null)?.items;
   if (!Array.isArray(items)) return [];
-  const out: Array<{ name: string; qty: number }> = [];
+  const out: Array<{ name: string; qty: number; variant: string }> = [];
   for (const raw of items) {
     if (!raw || typeof raw !== 'object') continue;
     const i = raw as Record<string, unknown>;
     const name = String(i.name ?? i.product ?? i.item ?? '').trim();
     if (name === '') continue;
-    out.push({ name, qty: Math.max(1, Math.trunc(Number(i.qty ?? i.quantity ?? 1)) || 1) });
+    out.push({
+      name,
+      qty: Math.max(1, Math.trunc(Number(i.qty ?? i.quantity ?? 1)) || 1),
+      variant: String(i.variant ?? i.option ?? i.options ?? '').trim(),
+    });
   }
   return out;
 }

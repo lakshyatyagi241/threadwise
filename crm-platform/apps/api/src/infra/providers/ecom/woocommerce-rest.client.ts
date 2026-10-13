@@ -141,6 +141,10 @@ class WooStore implements WooStoreApi {
     return this.readAll('/products', 'date');
   }
 
+  variations(productId: string): Promise<StoreRead> {
+    return this.readAll(`/products/${encodeURIComponent(productId)}/variations`, 'id');
+  }
+
   orders(): Promise<StoreRead> {
     return this.readAll('/orders', 'date');
   }
@@ -199,13 +203,23 @@ class WooStore implements WooStoreApi {
   }
 
   async createPendingOrder(
-    items: ReadonlyArray<{ reference: string; qty: number }>,
+    items: ReadonlyArray<{
+      reference: string;
+      qty: number;
+      productId?: string;
+      variationId?: string;
+    }>,
     flowSessionId: string | null,
   ): Promise<{ url: string; orderId: string } | null> {
-    // WooCommerce accepts a product id or a sku per line; a reference that is only digits is the id.
+    // WooCommerce accepts a product id or a sku per line; a reference that is only digits is the id. A variation line is the
+    // parent product plus the variation id.
     const line_items = items.map((i) => ({
       quantity: Math.max(1, i.qty),
-      ...(/^\d+$/.test(i.reference) ? { product_id: Number(i.reference) } : { sku: i.reference }),
+      ...(i.variationId && i.productId && /^\d+$/.test(i.variationId) && /^\d+$/.test(i.productId)
+        ? { product_id: Number(i.productId), variation_id: Number(i.variationId) }
+        : /^\d+$/.test(i.reference)
+          ? { product_id: Number(i.reference) }
+          : { sku: i.reference }),
     }));
     const meta_data = [
       ...(flowSessionId ? [{ key: '_wa_flow_session', value: flowSessionId }] : []),

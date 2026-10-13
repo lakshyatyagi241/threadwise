@@ -54,6 +54,7 @@ beforeAll(async () => {
     },
     recent: () => Promise.resolve([]),
     salesReport: () => Promise.resolve({}),
+    variations: () => Promise.resolve({ items: [], complete: true }),
     createPendingOrder: (items) => {
       created.push([...items]);
       return Promise.resolve(link);

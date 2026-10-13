@@ -15,11 +15,11 @@ export class CartPricingService {
   async price(
     tx: Tx,
     handle: ShopHandle,
-    items: ReadonlyArray<{ id: string; qty: number }>,
+    items: ReadonlyArray<{ id: string; variantId?: string | undefined; qty: number }>,
   ): Promise<{ lines: PricedLine[]; subtotalMinor: number }> {
     const requested = mergeRequested(items);
     const found = await this.products.findAvailableByUuids(tx, handle.orgId, handle.storefrontId, [
-      ...requested.keys(),
+      ...new Set([...requested.values()].map((r) => r.productUuid)),
     ]);
     const byUuid = new Map<string, StorefrontProduct>(found.map((p) => [p.uuid, p]));
     return priceLines(byUuid, requested);

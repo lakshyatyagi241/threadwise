@@ -3,6 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
 import { waString, waTag } from './text';
+import { productVariantsFieldsSchema, productVariantsResponseSchema } from './variant';
 
 /**
  * Products (TW-CAT-019..026). Reference kept the money of a product in `price_minor`, always the major amount times 100 whatever
@@ -108,7 +109,7 @@ export const PRODUCT_GALLERY_MAX = 12;
 export const PRODUCTS_PAGE_SIZE = 25;
 export const PRODUCT_PICKER_LIMIT = 120;
 
-export const productResponseSchema = z.object({
+export const productResponseSchema = productVariantsResponseSchema.extend({
   id: uuidSchema,
   sku: z.string().nullable(),
   name: z.string(),
@@ -194,12 +195,12 @@ export const productFieldsSchema = z.object({
     .default([]),
 });
 
-export const createProductSchema = productFieldsSchema;
+export const createProductSchema = productFieldsSchema.and(productVariantsFieldsSchema);
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 
-export const updateProductSchema = productFieldsSchema.extend({
-  rowVersion: z.number().int().min(1),
-});
+export const updateProductSchema = productFieldsSchema
+  .extend({ rowVersion: z.number().int().min(1) })
+  .and(productVariantsFieldsSchema);
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;
 
 export const listProductsQuerySchema = paginationQuerySchema.omit({ order: true }).extend({

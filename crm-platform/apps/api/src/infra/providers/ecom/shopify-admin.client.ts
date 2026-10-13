@@ -157,7 +157,7 @@ class ShopifyStore implements ShopifyStoreApi {
     return this.readAll(
       'products',
       'products',
-      'limit=250&fields=id,title,handle,body_html,tags,vendor,product_type,status,images,image,variants,created_at',
+      'limit=250&fields=id,title,handle,body_html,tags,vendor,product_type,status,images,image,options,variants,created_at',
     );
   }
 

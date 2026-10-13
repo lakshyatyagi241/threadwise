@@ -75,7 +75,9 @@
       "removeWish": "{name} をお気に入りから削除",
       "quickView": "{name} のクイックビュー",
       "quickViewTitle": "クイックビュー",
-      "was": "元の価格"
+      "was": "元の価格",
+      "chooseOptions": "オプションを選択",
+      "chooseOptionsNamed": "{name}のオプションを選択"
     },
     "quick": {
       "details": "詳細を見る →"
@@ -162,7 +164,9 @@
       "increase": "数量を増やす",
       "remove": "{name} をカートから削除",
       "fullTitle": "カートがいっぱいです",
-      "fullBody": "カートには最大100種類の商品を入れられます。先にこちらを注文してから、新しいカートを作成してください。"
+      "fullBody": "カートには最大100種類の商品を入れられます。先にこちらを注文してから、新しいカートを作成してください。",
+      "variantDroppedTitle": "カートを更新しました",
+      "variantDroppedBody": "{count, plural, other {#点の商品はオプションの再選択が必要なため、カートから削除されました。}}"
     },
     "wish": {
       "title": "お気に入り",
@@ -233,9 +237,9 @@
       "couponFallback": "無効なコードです。"
     },
     "errors": {
-      "itemsUnavailable": "これらの商品はもう購入できません。再読み込みして、もう一度お試しください。",
       "notAvailable": "このストアは利用できません。",
-      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。"
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "itemsRefreshed": "一部の商品が変更または売り切れになったため、カートを更新しました。内容を確認してもう一度お試しください。"
     },
     "placed": {
       "title": "注文を受け付けました",
@@ -331,6 +335,13 @@
       "help": "お困りですか？",
       "support": "サポートに問い合わせる",
       "metaTitle": "ページが見つかりません"
+    },
+    "variant": {
+      "from": "{price}から",
+      "optionsCount": "{count, plural, other {#個のオプション}}",
+      "select": "{option}を選択してください",
+      "unavailable": "この組み合わせは選択できません",
+      "soldOutValue": "売り切れ"
     }
   }
 }
