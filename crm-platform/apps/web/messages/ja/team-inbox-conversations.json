@@ -139,6 +139,7 @@
       "logNotReady": "このエクスポートはまだ準備できていないか、有効期限が切れています。もう一度リクエストしてください。",
       "groupSuspended": "Metaがこのグループを停止したため、解除されるまでメッセージを送信できません。",
       "walletEmpty": "メッセージウォレットの残高がこのグループメッセージ（メンバーごとに課金）に足りません。チャージしてもう一度お試しください。",
+      "groupPlanLocked": "ご利用のプランにはWhatsAppグループが含まれていないため、このグループにメッセージを送れません。管理者にプランのアップグレードを依頼してください。",
       "groupLeft": "この番号はグループから退出したため、メッセージを送信できなくなりました。",
       "groupAnnounceOnly": "このグループでは管理者のみメッセージを送信でき、この番号は管理者ではありません。",
       "groupRateLimited": "短時間にこの番号からのグループメッセージが多すぎます。1分待ってからもう一度お試しください。",
@@ -213,7 +214,9 @@
       },
       "deliveryLog": "配信ログ",
       "groupMember": "グループメンバー",
-      "groupTally": "{delivered, plural, other {#人のメンバー}}に配信済み: 課金 {billable}、無料 {free}"
+      "groupTally": "{members}人中{delivered}人に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
+      "groupTallyNoTotal": "{delivered, plural, other {#人のメンバー}}に配信済み{read, plural, =0 {} other {、既読 #人}}{failed, plural, =0 {} other {、失敗 #件}}",
+      "groupTallyBilled": "課金 {billable}、無料 {free}"
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -664,6 +667,26 @@
         "label": "グループのメンバー",
         "loading": "メンバーを検索中",
         "none": "該当するメンバーがいません"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Metaがこのグループを停止しました",
+          "message": "WhatsAppは停止中のグループにメッセージを配信しません。Metaが解除するまで、スレッドの閲覧と社内メモの追加はできます。"
+        },
+        "plan": {
+          "title": "ご利用のプランにはWhatsAppグループが含まれていません",
+          "message": "このスレッドの閲覧と社内メモの追加はできますが、グループへの送信にはグループ対応のプランが必要です。管理者にアップグレードを依頼してください。"
+        },
+        "ineligible": {
+          "title": "この番号ではWhatsAppグループを利用できません",
+          "message": "前回の確認で、Metaはこの番号でのグループを許可しませんでした（公式ビジネスアカウントが必要です）。スレッドの閲覧と社内メモの追加はできます。再確認するにはMetaグループを開いてください。"
+        }
+      },
+      "cost": {
+        "members": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。概算費用 {cost}：WhatsAppは受信したメンバー1人ごとに課金します。",
+        "membersNoEstimate": "このメッセージは{count, plural, other {#人のメンバー}}に届きます。WhatsAppは受信したメンバー1人ごとに課金します。",
+        "sizeUnknown": "メンバー数はまだ分かりません。WhatsAppはこのメッセージを受信したメンバー1人ごとに課金します。",
+        "walletShort": "ウォレットの残高がこのメッセージに足りない可能性があります。送信前にチャージしてください。"
       }
     },
     "savedReplies": {

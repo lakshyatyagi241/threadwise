@@ -139,6 +139,7 @@
       "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại.",
       "groupSuspended": "Meta đã tạm ngưng nhóm này nên không thể nhắn tin cho nhóm cho đến khi Meta gỡ bỏ.",
       "walletEmpty": "Ví tin nhắn của bạn không đủ cho tin nhắn nhóm này (tính phí cho mỗi thành viên). Hãy nạp tiền rồi thử lại.",
+      "groupPlanLocked": "Gói của bạn không có nhóm WhatsApp nên không thể nhắn vào nhóm này. Hãy nhờ quản trị viên nâng cấp gói.",
       "groupLeft": "Số này đã rời nhóm nên không thể gửi tin nhắn ở đó nữa.",
       "groupAnnounceOnly": "Chỉ quản trị viên mới có thể gửi tin nhắn trong nhóm này, và số này không phải quản trị viên.",
       "groupRateLimited": "Số này đã gửi quá nhiều tin nhắn nhóm trong thời gian ngắn. Hãy chờ một phút rồi thử lại.",
@@ -213,7 +214,9 @@
       },
       "deliveryLog": "Nhật ký gửi",
       "groupMember": "Thành viên nhóm",
-      "groupTally": "Đã gửi tới {delivered, plural, other {# thành viên}}: {billable} tính phí, {free} miễn phí"
+      "groupTally": "Đã gửi tới {delivered} trong {members} người{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
+      "groupTallyNoTotal": "Đã gửi tới {delivered, plural, other {# thành viên}}{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
+      "groupTallyBilled": "{billable} tính phí, {free} miễn phí"
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -664,6 +667,26 @@
         "label": "Thành viên nhóm",
         "loading": "Đang tìm thành viên",
         "none": "Không có thành viên nào phù hợp"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta đã tạm ngưng nhóm này",
+          "message": "WhatsApp không gửi tin nhắn tới nhóm bị tạm ngưng. Bạn vẫn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ cho đến khi Meta gỡ bỏ."
+        },
+        "plan": {
+          "title": "Gói của bạn không có nhóm WhatsApp",
+          "message": "Bạn có thể đọc cuộc trò chuyện này và thêm ghi chú nội bộ, nhưng gửi vào nhóm cần gói có tính năng nhóm. Hãy nhờ quản trị viên nâng cấp."
+        },
+        "ineligible": {
+          "title": "Số này không thể dùng nhóm WhatsApp",
+          "message": "Lần kiểm tra gần nhất, Meta không cho phép nhóm trên số này (cần tài khoản doanh nghiệp chính thức). Bạn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ. Mở Nhóm Meta để kiểm tra lại."
+        }
+      },
+      "cost": {
+        "members": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. Chi phí ước tính {cost}: WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "membersNoEstimate": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "sizeUnknown": "Chưa biết số thành viên. WhatsApp tính phí cho mỗi thành viên nhận tin nhắn này.",
+        "walletShort": "Ví của bạn có thể không đủ cho tin nhắn này. Hãy nạp tiền trước khi gửi."
       }
     },
     "savedReplies": {
