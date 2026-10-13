@@ -172,9 +172,16 @@ export const messageGroupAuthorSchema = z.object({
 });
 export type MessageGroupAuthor = z.infer<typeof messageGroupAuthorSchema>;
 
-/** What Meta reported for a message sent to a group: how many members it reached, and how many of those were billed or free. */
+/**
+ * What Meta reported for a message sent to a group, rolled up over the members (each member's status only moves forward):
+ * `members` is the group's size when the message was queued (0 when unknown), `deliveredTo` the members it reached (delivered or read),
+ * `readBy` those who read it, `failed` those it could not reach; `billable` and `free` split the members Meta has reported on.
+ */
 export const messageGroupDeliverySchema = z.object({
+  members: z.number().int().nonnegative().optional(),
   deliveredTo: z.number().int().nonnegative(),
+  readBy: z.number().int().nonnegative().optional(),
+  failed: z.number().int().nonnegative().optional(),
   billable: z.number().int().nonnegative(),
   free: z.number().int().nonnegative(),
 });
