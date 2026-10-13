@@ -315,6 +315,9 @@ export function InboxScreen() {
     [thread, toast, errorText],
   );
 
+  // Read once, outside the callback: the compiler can then keep the memoization exactly as written.
+  const openPeerKey = detail.detail?.peerKey;
+  const openChannelKind = detail.detail?.channel.kind;
   const onSend = useCallback(
     (draft: {
       body: string;
@@ -325,7 +328,7 @@ export function InboxScreen() {
     }) => {
       // A group thread on a channel that cannot send to a group is never sent to (the composer is off; this is the belt to that braces).
       // A personal-number group is not one of them; its own refusals (left, admins only) come from the API.
-      if (isGroupSendBlocked(detail.detail?.peerKey, detail.detail?.channel.kind)) return;
+      if (isGroupSendBlocked(openPeerKey, openChannelKind)) return;
       // The simulator's one-shot fault goes in as a prefix on the text (or the caption of a file).
       const body = withFault(draft.body, fault);
       if (fault !== 'none') setFault('none');
@@ -337,7 +340,7 @@ export function InboxScreen() {
         ...(draft.mentions ? { mentions: draft.mentions } : {}),
       });
     },
-    [fault, thread, detail.detail?.peerKey, detail.detail?.channel.kind],
+    [fault, thread, openPeerKey, openChannelKind],
   );
 
   // --- presence ---
