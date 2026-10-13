@@ -8,6 +8,13 @@ set -uo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 cd "$REPO_ROOT"
 
+# Windows: SWC needs a writable native-binding cache (else ERR_SWC_NATIVE_CACHE; turbo.json passes it through), and the type-aware
+# ESLint of apps/api runs out of the default Node heap, as it does on a CI runner.
+if [ -z "${SWC_NATIVE_BINDING_CACHE:-}" ]; then
+  case "$(uname -s)" in MINGW*|MSYS*|CYGWIN*) export SWC_NATIVE_BINDING_CACHE="$HOME/.swc-native-cache"; mkdir -p "$SWC_NATIVE_BINDING_CACHE" ;; esac
+fi
+export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=6144}"
+
 c_reset=$'\033[0m'; c_bold=$'\033[1m'; c_green=$'\033[32m'; c_red=$'\033[31m'; c_blue=$'\033[34m'
 step() { echo "${c_bold}${c_blue}==>${c_reset} $*"; }
 ok()   { echo "${c_green}  ok${c_reset}  $*"; }
@@ -37,7 +44,15 @@ echo "Changed files since $BASE:"
 echo "$CHANGED" | sed 's/^/  /'
 echo
 
-run "format check"  pnpm format:check
+# Same as CI (ci.yml): only the files this branch changes must be formatted (the whole-tree backlog is not this PR's to fix).
+# --end-of-line auto tolerates a CRLF working copy on Windows; CI runs on LF and checks strictly.
+format_files() {
+  local files
+  files="$(echo "$CHANGED" | grep -E '\.(ts|tsx|mts|cts|js|mjs|cjs|json|md|css|ya?ml)$' | while read -r f; do [ -f "$f" ] && echo "$f"; done)"
+  [ -z "$files" ] && { echo "no formattable files changed"; return 0; }
+  echo "$files" | xargs pnpm exec prettier --check --ignore-unknown --end-of-line auto
+}
+run "format check (changed files)" format_files
 run "lint"          pnpm lint
 run "typecheck"     pnpm typecheck
 run "architecture boundaries" pnpm arch:check
