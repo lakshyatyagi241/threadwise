@@ -519,3 +519,140 @@ describe('delivered, uninstall and the privacy webhooks (TW-ECOM-018, 021, 022)'
     expect(await logs(t, 'shopify', s.id)).toHaveLength(0);
   });
 });
+
+describe('a new store order is announced for the order flow trigger (TW-FLR-006)', () => {
+  /** Posts a signed Shopify delivery and runs it through the pipeline the way the worker does. */
+  const shopifyRun = async (
+    t: Tenant,
+    s: { id: number; secret: string },
+    topic: string,
+    data: Record<string, unknown>,
+  ) => {
+    await shopifyPost(s.secret, topic, data);
+    const [row] = (
+      await h.owner.query(
+        `SELECT id, created_at FROM shopify_integration_logs WHERE org_id = $1 AND event_type = $2 ORDER BY id DESC LIMIT 1`,
+        [t.orgId, topic],
+      )
+    ).rows;
+    await pipeline.run(
+      job(t, 'shopify', s.id, topic, data, Number(row.id), new Date(row.created_at).toISOString()),
+    );
+  };
+  const announced = async (t: Tenant) =>
+    (
+      await h.owner.query(
+        `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'order.placed' ORDER BY id`,
+        [t.orgId],
+      )
+    ).rows.map((r) => r.payload as Record<string, unknown>);
+
+  it('writes one order.placed with the order, in the transaction that wrote the order', async () => {
+    const t = await api.signup('ewhop1');
+    const s = await store(t, 'shopify');
+    await shopifyRun(t, s, 'orders/create', order);
+    const [w] = (
+      await h.owner.query(`SELECT uuid, contact_id FROM wa_orders WHERE org_id = $1`, [t.orgId])
+    ).rows;
+    const events = await announced(t);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      orderId: w.uuid,
+      via: 'shopify',
+      contactId: Number(w.contact_id),
+      phone: '15550109999',
+      name: 'Ada L',
+      orderNumber: '1001',
+      totalMinor: 2500,
+      currency: 'USD',
+      status: 'paid',
+    });
+  });
+
+  it('announces an order once: a repeat delivery, the paid and updated topics of the same order add nothing', async () => {
+    const t = await api.signup('ewhop2');
+    const s = await store(t, 'shopify');
+    await shopifyRun(t, s, 'orders/create', order);
+    await shopifyRun(t, s, 'orders/create', order);
+    await shopifyRun(t, s, 'orders/paid', order);
+    await shopifyRun(t, s, 'orders/updated', { ...order, financial_status: 'refunded' });
+    expect(await announced(t)).toHaveLength(1);
+  });
+
+  it('does not announce an order first seen through an update (it is older than the connection), or one with no number', async () => {
+    const t = await api.signup('ewhop3');
+    const s = await store(t, 'shopify');
+    await shopifyRun(t, s, 'orders/updated', { ...order, id: 2002 });
+    await shopifyRun(t, s, 'orders/create', {
+      ...order,
+      id: 2003,
+      customer: { first_name: 'No Phone' },
+    });
+    expect(await announced(t)).toHaveLength(0);
+    const rows = await h.owner.query(`SELECT count(*)::int AS n FROM wa_orders WHERE org_id = $1`, [
+      t.orgId,
+    ]);
+    expect(rows.rows[0].n).toBe(2);
+  });
+
+  it('announces a WooCommerce order.created once and not its order.updated', async () => {
+    const t = await api.signup('ewhop4');
+    const w = await store(t, 'woocommerce');
+    const data = {
+      id: 77,
+      number: '77',
+      total: '12.50',
+      currency: 'USD',
+      status: 'processing',
+      billing: { first_name: 'Bo', phone: '08012345678', country: 'NG' },
+    };
+    const run = async (topic: string) => {
+      const raw = JSON.stringify(data);
+      await api
+        .http()
+        .post(`/v2/woocommerce/webhook/${w.secret}`)
+        .set('content-type', 'application/json')
+        .set('x-wc-webhook-topic', topic)
+        .set('x-wc-webhook-delivery-id', randomBytes(5).toString('hex'))
+        .set('x-wc-webhook-signature', sign(raw, w.secret))
+        .send(raw);
+      const [row] = (
+        await h.owner.query(
+          `SELECT id, created_at FROM woocommerce_integration_logs WHERE org_id = $1 AND event_type = $2 ORDER BY id DESC LIMIT 1`,
+          [t.orgId, topic],
+        )
+      ).rows;
+      await pipeline.run(
+        job(
+          t,
+          'woocommerce',
+          w.id,
+          topic,
+          data,
+          Number(row.id),
+          new Date(row.created_at).toISOString(),
+        ),
+      );
+    };
+    await run('order.created');
+    await run('order.updated');
+    const events = await announced(t);
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      via: 'woocommerce',
+      phone: '2348012345678',
+      orderNumber: '77',
+      totalMinor: 1250,
+      status: 'paid',
+    });
+  });
+
+  it('never announces into another workspace', async () => {
+    const a = await api.signup('ewhop5a');
+    const b = await api.signup('ewhop5b');
+    const s = await store(a, 'shopify');
+    await shopifyRun(a, s, 'orders/create', order);
+    expect(await announced(a)).toHaveLength(1);
+    expect(await announced(b)).toHaveLength(0);
+  });
+});

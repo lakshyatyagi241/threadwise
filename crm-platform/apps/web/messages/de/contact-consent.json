@@ -14,7 +14,9 @@
       "settingsInvalid": "Ein Schlüsselwort braucht mindestens einen Buchstaben oder eine Ziffer, und bei aktivierter Erkennung muss mindestens ein STOP-Schlüsselwort bleiben.",
       "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
       "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "exportInProgress": "Eine Nachweisdatei wird bereits erstellt. Warte, bis sie fertig ist, und versuche es dann erneut.",
+      "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Erstelle eine neue."
     },
     "settings": {
       "title": "Einwilligung und STOP-Antworten",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Einwilligung",
       "label": "Ich habe die Einwilligung, diesen Kontakten Nachrichten zu senden",
-      "hint": "Wenn aktiviert, wird jeder Kontakt in der Datei als mit Marketing einverstanden erfasst, mit dem Dateinamen als Nachweis. Wenn nicht aktiviert, erfasst der Import keine Einwilligung. Kontakte, die sich abgemeldet haben, bleiben abgemeldet."
+      "hint": "Wenn aktiviert, wird jeder Kontakt in der Datei als mit Marketing einverstanden erfasst, mit dem Dateinamen als Nachweis. Wenn nicht aktiviert, erfasst der Import keine Einwilligung. Kontakte, die sich abgemeldet haben, bleiben abgemeldet.",
+      "hintColumn": "Die Spalte, die dem Marketing-Einverständnis zugeordnet ist, bestimmt, wer erfasst wird: Nur Zeilen mit ja erhalten eine Einwilligung, mit dem Dateinamen als Nachweis. Nein, eine leere Zelle oder ein unbekanntes Wort erfasst nichts. Kontakte, die sich abgemeldet haben, bleiben abgemeldet.",
+      "columnSummary": "{granted} Zeilen sagen ja und werden erfasst. {notGranted} sagen nein oder sind leer und erhalten keinen Einwilligungseintrag.",
+      "unrecognised": "{count, plural, one {# Zeile hat} other {# Zeilen haben}} einen Einwilligungswert, der weder ja noch nein ist ({values}). {count, plural, one {Er wird} other {Sie werden}} als nicht erteilt behandelt. Verwende ja / nein, true / false oder 1 / 0.",
+      "columnIgnored": "Die Einwilligungsspalte hat keine Wirkung, bis du das Kästchen oben aktivierst."
+    },
+    "systemLine": {
+      "withdrawn": "Kontakt hat {keyword} geantwortet: Marketing abbestellt",
+      "granted": "Kontakt hat {keyword} geantwortet: Marketing wieder abonniert"
+    },
+    "proof": {
+      "title": "Erstellte Nachweisdateien",
+      "prepare": "Vollständige Nachweisdatei erstellen",
+      "preparing": "Nachweisdatei wird erstellt",
+      "largeHint": "Das Protokoll hat mehr als {max} Ereignisse, daher wird die Datei im Hintergrund erstellt",
+      "large": "Das Protokoll enthält mehr als {max} Ereignisse, mehr als ein direkter Download umfasst. Erstelle die vollständige Datei: Sie wird im Hintergrund erstellt, und du erhältst eine E-Mail, sobald sie fertig ist.",
+      "none": "Noch keine Nachweisdateien erstellt.",
+      "keptFor": "Eine erstellte Datei kann {days} Tage lang heruntergeladen werden und wird danach gelöscht. Es wird immer nur eine Datei gleichzeitig erstellt.",
+      "rows": "{count, plural, one {# Ereignis} other {# Ereignisse}}",
+      "expires": "verfügbar bis {date}",
+      "download": "CSV herunterladen",
+      "failed": "Die Datei konnte nicht erstellt werden. Erstelle sie erneut.",
+      "status": {
+        "queued": "Wartet",
+        "running": "Wird erstellt",
+        "ready": "Bereit",
+        "failed": "Fehlgeschlagen",
+        "expired": "Abgelaufen"
+      }
     }
   }
 }

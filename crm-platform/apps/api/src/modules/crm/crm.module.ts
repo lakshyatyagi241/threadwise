@@ -334,6 +334,8 @@ import { TagsService } from './tags/tags.service';
   exports: [
     ContactsService,
     ContactsRepository,
+    // The growth pilot writes its chat summary as a note (modules/growth-pilot).
+    ContactNotesRepository,
     ContactQuotaService,
     ContactResolverService,
     CONTACT_RESOLVER,

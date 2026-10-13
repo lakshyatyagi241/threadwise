@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { and, asc, eq, inArray, or, sql } from 'drizzle-orm';
+import type { ViewAccessType, ViewShareMode } from '@crm/contracts';
 import { schema, type Tx } from '@crm/db';
 
-const { contactViews, contactViewFavorites, users } = schema;
+const { contactViews, contactViewFavorites, contactViewUsers, users } = schema;
 
 export interface ContactViewRow {
   id: number;
@@ -11,6 +12,8 @@ export interface ContactViewRow {
   filter: Record<string, unknown>;
   position: number;
   isShared: boolean;
+  shareMode: ViewShareMode;
+  accessType: ViewAccessType;
   createdBy: number | null;
   createdByUuid: string | null;
   rowVersion: number;
@@ -29,6 +32,8 @@ export class ContactViewsRepository {
       filter: contactViews.filter,
       position: contactViews.position,
       isShared: contactViews.isShared,
+      shareMode: contactViews.shareMode,
+      accessType: contactViews.accessType,
       createdBy: contactViews.createdBy,
       createdByUuid: users.uuid,
       rowVersion: contactViews.rowVersion,
@@ -47,16 +52,81 @@ export class ContactViewsRepository {
       );
   }
 
-  /** Every view visible to `userId`: their own, plus every org-shared one. */
+  /** Every view visible to `userId`: their own, the ones shared with everyone, and the ones shared with them by name. */
   async listVisible(tx: Tx, orgId: number, userId: number | null): Promise<ContactViewRow[]> {
     const visibility = userId
-      ? or(eq(contactViews.isShared, true), eq(contactViews.createdBy, userId))!
-      : eq(contactViews.isShared, true);
+      ? or(
+          eq(contactViews.shareMode, 'everyone'),
+          eq(contactViews.createdBy, userId),
+          and(
+            eq(contactViews.shareMode, 'selected'),
+            sql`exists (select 1 from ${contactViewUsers} cvu
+                 where cvu.org_id = ${contactViews.orgId} and cvu.view_id = ${contactViews.id} and cvu.user_id = ${userId})`,
+          ),
+        )!
+      : eq(contactViews.shareMode, 'everyone');
 
     const rows = await this.baseQuery(tx)
       .where(and(eq(contactViews.orgId, orgId), visibility))
       .orderBy(asc(contactViews.position), asc(contactViews.id));
     return rows as ContactViewRow[];
+  }
+
+  /** Is this 'selected' view shared with this person by name? */
+  async isSharedWith(tx: Tx, orgId: number, viewId: number, userId: number): Promise<boolean> {
+    const rows = await tx
+      .select({ userId: contactViewUsers.userId })
+      .from(contactViewUsers)
+      .where(
+        and(
+          eq(contactViewUsers.orgId, orgId),
+          eq(contactViewUsers.viewId, viewId),
+          eq(contactViewUsers.userId, userId),
+        ),
+      );
+    return rows.length > 0;
+  }
+
+  /** The people each given view is shared with, as user uuids. */
+  async sharedUserUuids(tx: Tx, orgId: number, viewIds: number[]): Promise<Map<number, string[]>> {
+    const out = new Map<number, string[]>();
+    if (viewIds.length === 0) return out;
+    const rows = await tx
+      .select({ viewId: contactViewUsers.viewId, uuid: users.uuid })
+      .from(contactViewUsers)
+      .innerJoin(
+        users,
+        and(eq(users.orgId, contactViewUsers.orgId), eq(users.id, contactViewUsers.userId)),
+      )
+      .where(and(eq(contactViewUsers.orgId, orgId), inArray(contactViewUsers.viewId, viewIds)));
+    for (const r of rows) out.set(r.viewId, [...(out.get(r.viewId) ?? []), r.uuid]);
+    return out;
+  }
+
+  /** User uuids to ids; an id that is not a person of this workspace is simply missing from the answer. */
+  async userIdsByUuid(tx: Tx, orgId: number, uuids: string[]): Promise<Map<string, number>> {
+    if (uuids.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: users.id, uuid: users.uuid })
+      .from(users)
+      .where(and(eq(users.orgId, orgId), inArray(users.uuid, uuids)));
+    return new Map(rows.map((r) => [r.uuid, r.id]));
+  }
+
+  /** Makes the people a view is shared with exactly `userIds`. */
+  async replaceSharedUsers(
+    tx: Tx,
+    orgId: number,
+    viewId: number,
+    userIds: number[],
+  ): Promise<void> {
+    await tx
+      .delete(contactViewUsers)
+      .where(and(eq(contactViewUsers.orgId, orgId), eq(contactViewUsers.viewId, viewId)));
+    if (userIds.length > 0)
+      await tx
+        .insert(contactViewUsers)
+        .values(userIds.map((userId) => ({ orgId, viewId, userId })));
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<ContactViewRow | undefined> {
@@ -88,6 +158,8 @@ export class ContactViewsRepository {
       name: string;
       filter: Record<string, unknown>;
       isShared: boolean;
+      shareMode: ViewShareMode;
+      accessType: ViewAccessType;
       position: number;
       createdBy: number | null;
     },

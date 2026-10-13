@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Espacio de trabajo",
+      "title": "Registro de llamadas",
+      "subtitle": "Todas las llamadas de WhatsApp que tu equipo hizo o contestó, con su duración, quién las atendió y su grabación.",
+      "sideTip": "Todas las llamadas de WhatsApp desde o hacia tus números. Filtra por fecha, estado, número o compañero para encontrar una llamada concreta.",
+      "loading": "Cargando llamadas",
+      "loadFailed": "No se pudo cargar el registro de llamadas.",
+      "retry": "Reintentar",
+      "emptyTitle": "Aún no hay llamadas",
+      "emptyMessage": "Cuando un cliente llame a uno de tus números de WhatsApp, o tu equipo haga una llamada desde la bandeja de entrada, aparecerá aquí con su duración, quién la atendió y su grabación.",
+      "emptyFilteredTitle": "Ninguna llamada coincide con estos filtros",
+      "emptyFilteredMessage": "Prueba con un rango de tiempo más amplio o borra los filtros.",
+      "clearFilters": "Borrar filtros",
+      "tabs": {
+        "label": "Vistas de llamadas",
+        "log": "Registro de llamadas",
+        "analytics": "Analítica"
+      },
+      "range": {
+        "title": "Rango de tiempo",
+        "last24h": "Últimas 24 h",
+        "last7d": "Últimos 7 días",
+        "last30d": "Últimos 30 días",
+        "custom": "Rango personalizado",
+        "from": "Desde",
+        "to": "Hasta",
+        "apply": "Aplicar"
+      },
+      "status": {
+        "title": "Estado",
+        "all": "Todas",
+        "completed": "Completada",
+        "in-progress": "En curso",
+        "no-answer": "Sin respuesta",
+        "declined": "Rechazada",
+        "failed": "Fallida"
+      },
+      "kpi": {
+        "total": "Total",
+        "last24h": "Últimas 24 h",
+        "minutes": "{count} min",
+        "completed": "Completada",
+        "failed": "Fallida",
+        "selection": "En esta selección",
+        "calls": "Llamadas",
+        "answered": "Contestadas",
+        "missed": "Perdidas",
+        "avgDuration": "Duración media",
+        "totalMinutes": "Minutos totales"
+      },
+      "filters": {
+        "label": "Filtrar llamadas",
+        "searchLabel": "Buscar llamadas",
+        "searchPlaceholder": "Número de teléfono o nombre del contacto...",
+        "direction": "Dirección",
+        "allDirections": "Todas las llamadas",
+        "inbound": "Entrante",
+        "outbound": "Saliente",
+        "number": "Número",
+        "allNumbers": "Todos los números",
+        "agent": "Atendida por",
+        "allAgents": "Todos",
+        "apply": "Filtrar",
+        "clear": "Borrar"
+      },
+      "table": {
+        "caption": "Llamadas, las más recientes primero",
+        "customer": "Cliente",
+        "number": "Número",
+        "handledBy": "Atendida por",
+        "started": "Inicio",
+        "duration": "Duración",
+        "status": "Estado",
+        "actions": "Acciones",
+        "open": "Abrir",
+        "inbound": "Entrante",
+        "outbound": "Saliente",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Páginas",
+        "showing": "Mostrando {from}-{to} de {total} llamadas",
+        "beyond": "Esta página está más allá de la última ({pages} páginas).",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "page": "Página {page} de {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Ruta de navegación",
+        "back": "Registro de llamadas",
+        "loading": "Cargando la llamada",
+        "loadFailed": "No se pudo cargar esta llamada.",
+        "notFound": "No se encontró esta llamada. Puede pertenecer a otro espacio de trabajo o estar fuera de las llamadas que puedes ver.",
+        "retry": "Reintentar",
+        "handledBy": "Atendida por {name}",
+        "handler": {
+          "none": "No la atendió nadie",
+          "ai": "Asistente de IA",
+          "voicemail": "Buzón de voz"
+        },
+        "openContact": "Abrir contacto",
+        "openInbox": "Abrir en la bandeja de entrada",
+        "tiles": {
+          "duration": "Duración",
+          "number": "Número",
+          "answered": "Contestada",
+          "ended": "Finalizada"
+        },
+        "reasons": {
+          "unknown": "La llamada falló.",
+          "COMPLETED": "Completada",
+          "REJECTED": "La llamada fue rechazada.",
+          "DECLINED": "La llamada fue rechazada.",
+          "BUSY": "El cliente estaba en otra llamada.",
+          "NO_ANSWER": "Nadie contestó.",
+          "MISSED": "El cliente perdió la llamada.",
+          "CANCELLED": "La llamada fue cancelada.",
+          "FAILED": "WhatsApp informó de que la llamada falló.",
+          "NO_PERMISSION": "El cliente aún no había permitido llamadas, así que no se realizó la llamada.",
+          "META_REFUSED": "WhatsApp se negó a realizar la llamada."
+        },
+        "timeline": {
+          "title": "Cronología",
+          "count": "{count, plural, one {# paso} other {# pasos}}",
+          "empty": "No se registró ningún paso para esta llamada."
+        },
+        "steps": {
+          "dial_sent": "Llamada realizada",
+          "dial_failed": "No se pudo realizar la llamada",
+          "connect": "Llamada conectada a WhatsApp",
+          "pre_accept_sent": "Preparando la respuesta",
+          "accept_sent": "Llamada contestada",
+          "accept_failed": "Falló al contestar",
+          "reject_sent": "Llamada rechazada",
+          "terminate_sent": "Colgado enviado",
+          "terminate": "Llamada finalizada",
+          "recording_stored": "Grabación guardada"
+        },
+        "noRecording": {
+          "title": "Grabación",
+          "message": "Esta llamada no tiene grabación."
+        }
+      },
+      "recording": {
+        "title": "Grabación",
+        "notice": "Esta llamada fue grabada.",
+        "privacy": "Solo las personas con acceso a grabaciones pueden reproducirla, y cada reproducción queda registrada.",
+        "noAccess": "Puedes ver que esta llamada fue grabada, pero no tienes permiso para reproducir grabaciones.",
+        "play": "Reproducir grabación",
+        "loading": "Obteniendo la grabación",
+        "playerLabel": "Grabación de la llamada",
+        "linkUntil": "Este enlace funciona hasta {time}. Pulsa reproducir de nuevo después.",
+        "playFailed": "No se pudo reproducir la grabación.",
+        "retry": "Reintentar"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Espacio de trabajo",
+      "title": "Analítica de llamadas",
+      "subtitle": "Llamadas a lo largo del tiempo, cuántas se contestaron, quién las atendió y cuándo están más ocupadas tus líneas.",
+      "loading": "Cargando la analítica de llamadas",
+      "loadFailed": "No se pudo cargar la analítica de llamadas.",
+      "retry": "Reintentar",
+      "emptyTitle": "No hay llamadas en este periodo",
+      "emptyMessage": "Elige un rango de tiempo más amplio o vuelve después de tus primeras llamadas.",
+      "number": "Número",
+      "allNumbers": "Todos los números",
+      "period": "{from} a {to}, en la zona horaria {tz}",
+      "kpi": {
+        "total": "Llamadas",
+        "answeredRate": "Contestadas",
+        "answeredOf": "{answered} contestadas",
+        "missed": "Perdidas",
+        "avgHandle": "Tiempo medio de gestión",
+        "avgHandleHint": "Tiempo de conversación de las llamadas contestadas",
+        "totalMinutes": "Minutos totales"
+      },
+      "overTime": {
+        "title": "Llamadas a lo largo del tiempo",
+        "hint": "Una barra por día. La parte verde son las llamadas contestadas.",
+        "summary": "{total} llamadas en {days} días",
+        "answered": "Contestadas",
+        "other": "Sin contestar",
+        "missed": "Perdidas",
+        "day": "Día",
+        "calls": "Llamadas"
+      },
+      "byAgent": {
+        "title": "Por compañero",
+        "agent": "Compañero",
+        "calls": "Llamadas",
+        "answered": "Contestadas",
+        "avgHandle": "Tiempo medio de gestión",
+        "minutes": "Minutos",
+        "unassigned": "No la atendió nadie"
+      },
+      "heatmap": {
+        "title": "Llamadas por hora de la semana",
+        "hint": "Más oscuro significa más llamadas iniciadas en esa hora. Las horas están en la zona horaria {tz}.",
+        "weekday": "Día de la semana",
+        "cell": "{day}, {hour}:00: {calls, plural, =0 {sin llamadas} one {# llamada} other {# llamadas}}"
+      }
+    }
+  }
+}

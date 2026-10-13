@@ -344,6 +344,11 @@
         "label": "Etiquetas",
         "description": "Crie as etiquetas que sua equipe coloca nas conversas e usa para filtrar a caixa de entrada.",
         "keywords": "tags, etiquetas, categorias, organizar, filtrar"
+      },
+      "growth": {
+        "label": "Crescimento",
+        "description": "Leads quentes, audiências, respostas às campanhas e outras coisas em que sua equipe pode agir, obtidas de conversas e campanhas.",
+        "keywords": "crescimento, lead quente, audiência, engajamento, inativo, respostas às campanhas, propensão, opt-out, piloto"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

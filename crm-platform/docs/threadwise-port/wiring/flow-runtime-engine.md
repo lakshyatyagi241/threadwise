@@ -102,6 +102,20 @@ Screen `/flow-runtime/analytics` (tabs Overview, Execution history, Error logs, 
 | Retry one                 | `POST /v2/flow-runtime/subscribers/:id/retry` | `FlowRuntimeService.retry`       | `flow_subscribers`, `flow_retry_logs`              | built |
 | Retry named runs (max 50) | `POST /v2/flow-runtime/retry`                 | `FlowRuntimeService.retryMany`   | same                                               | built |
 
+## Producers of flow triggers (TW-FLR-005, 006, 010)
+
+Every producer writes an outbox event in the transaction of its cause; a worker consumer turns it into `FlowLaunchService.start`. Start is idempotent per (flow, reason); the loop guard and the 24 hour window rule below apply to all.
+
+| Trigger | Producer (event) | Consumer | Reason / idempotency | Data on the run |
+| --- | --- | --- | --- | --- |
+| `order_placed` | storefront checkout and AI ordering (`store.order_placed`), WhatsApp catalog cart (`whatsapp.order.received`), Shopify/WooCommerce order created by its own webhook (`order.placed`, `ShopifyWoocommerce` `announceOrder`; imports and later updates announce nothing, an intended difference: Reference fired for imports too) | `FlowTriggerEventsConsumer` | `order:<order uuid>`, a repeat buyer runs again | name, first_name, email, order_number, order_name, total, total_price, currency, status, invoice_url, order_url, payment_link |
+| `opt_in` | the STOP/START words and the Consent card (ledger, `contact.opt_in`), the contact record toggle (`ContactsService.update`, new), a form tick | `FlowTriggerEventsConsumer` (`optedIn: true` only) | `opt_in:<event id>`; a contact is in an opt-in flow once (Reference) | contact fields |
+| routing `trigger_flow` | `RoutingEngine` (`routing.flow_requested`, same transaction as the firing) | `RoutingFlowConsumer` | `route:<inbound message uuid>` per flow; flow only needs `is_active`; source `routing`, no subscriber row, 600 s timeout (Reference) | contact fields |
+| lead source flow | `LeadIngestService` (`lead.created` / `lead.updated` with `flowId`) | `LeadFlowConsumer` | enrolment: the contact is in the flow once; test leads start nothing; source `webhook_lead` | contact fields, `lead_source`, `lead_platform` |
+| IG/FB hand-off | `SocialHandoffNode` (`flow.whatsapp_handoff_requested`) | `SocialHandoffConsumer` | enrolment | the Instagram flow's variables |
+
+**Loop guard.** Events written while a run's step executes carry its request id `flr-<run>-<seq>`; the consumer reads that run's `__trigger_hops` and the next run gets +1. At 5 the start is refused: no run, the subscriber shows `failed` ("flows started each other"). **24 hour window.** A run that was not started by a customer message (everything above) whose free-form messages were all refused ends `failed` with code `SERVICE_WINDOW_CLOSED`; a template that got through keeps it `completed`. **Plan:** the `automation` flag gates editing only, never a start (Reference parity); routing keeps `inbox_routing`.
+
 ## Order events (TW-FLR-006)
 
 The order trigger starts on three events, all read back by the order's uuid from `wa_orders` and handled as `order.placed`, so a repeat is the same enrolment (`order:<uuid>`):

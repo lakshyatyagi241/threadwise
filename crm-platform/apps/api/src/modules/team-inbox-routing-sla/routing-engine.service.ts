@@ -1,8 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { hasRoutingConditions, type RoutingAssign, type RoutingConditions } from '@crm/contracts';
+import {
+  hasRoutingConditions,
+  ROUTING_FLOW_REQUESTED,
+  type RoutingAssign,
+  type RoutingConditions,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { isOutsideBusinessHours } from '../../common/business-hours';
 import { DatabaseService } from '../../infra/db/database.service';
+import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { MemberDirectory, PERM_CONVERSATION_READ } from '../../realtime';
 import { collectRuleRefs, compileRules, loadRuleContext } from '../crm';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
@@ -26,6 +32,8 @@ export interface RoutingInput {
 export type RoutingOutcome =
   | { outcome: 'skipped'; reason: 'plan' | 'not_found' | 'already_routed' | 'not_eligible' }
   | { outcome: 'unmatched' }
+  /** A rule fired and only started a flow: nobody was available to assign (or the rule assigns, and the agents were all away). */
+  | { outcome: 'triggered'; ruleIds: string[] }
   | { outcome: 'assigned'; via: 'contact_agent' | 'rule'; ruleIds: string[] };
 
 type Done = { result: RoutingOutcome; change?: AssignmentChange | null };
@@ -58,6 +66,8 @@ interface Pick {
  *     counts (`fired_count`, `last_fired_at`) and stores the round robin cursor under a row lock, so two conversations arriving at once
  *     take two different turns. `stop_on_match` (default on) ends evaluation at the first firing rule; with it off a later firing rule
  *     takes over the assignment (Reference ran every matching rule's actions in order too).
+ *     A rule that also names a flow writes `routing.flow_requested` in the same transaction (the flow runtime's worker starts it, see
+ *     `RoutingFlowConsumer`); it fires even when nobody is available to take the conversation.
  *  4. If no primary rule fired, the fallback rule (conditions, when it has any, still apply). Otherwise the conversation stays unassigned.
  */
 @Injectable()
@@ -71,6 +81,7 @@ export class RoutingEngine {
     private readonly assignment: AssignmentService,
     private readonly directory: MemberDirectory,
     private readonly entitlements: PlanEntitlementService,
+    private readonly outbox: OutboxService,
   ) {}
 
   async route(input: RoutingInput, now: Date = new Date()): Promise<RoutingOutcome> {
@@ -164,9 +175,27 @@ export class RoutingEngine {
         ) {
           return false;
         }
-        const pick = await this.fire(tx, orgId, rule, canOpen);
-        if (!pick) return false;
-        await apply(pick, { ruleId: rule.uuid as string, ruleName: rule.name as string });
+        const turn = await this.fire(tx, orgId, rule, canOpen);
+        if (!turn) return false;
+        if (turn.pick)
+          await apply(turn.pick, { ruleId: rule.uuid as string, ruleName: rule.name as string });
+        if (turn.flowId) {
+          // The flow starts in the flow runtime's worker (the event is committed with the rule's firing, so a crash cannot lose it).
+          // Reference started it on the next Baileys inbound only; here it starts on every channel.
+          await this.outbox.emit(tx, {
+            aggregateModule: 'conversations',
+            aggregateId: locked.id,
+            orgId,
+            eventType: ROUTING_FLOW_REQUESTED,
+            payload: {
+              conversationId: locked.uuid,
+              flowId: turn.flowId,
+              ruleId: rule.uuid as string,
+              ruleName: rule.name as string,
+              messageUuid: input.messageUuid,
+            },
+          });
+        }
         fired.push(rule.uuid as string);
         return true;
       };
@@ -179,6 +208,7 @@ export class RoutingEngine {
         }
       }
       if (fired.length === 0) return { result: { outcome: 'unmatched' } };
+      if (change === null) return { result: { outcome: 'triggered', ruleIds: fired } };
       return { result: { outcome: 'assigned', via: 'rule', ruleIds: fired }, change };
     });
 
@@ -213,25 +243,29 @@ export class RoutingEngine {
 
   /**
    * A matching rule's turn: lock it, read the cursor as it is now, pick, and record the firing. Null when the rule has nobody to give
-   * the conversation to (it does not fire: no count, no cursor move).
+   * the conversation to and no flow to start (it does not fire: no count, no cursor move). A rule that also starts a flow fires even
+   * when nobody is available: that is the case a flow answers ("we will be right with you").
    */
   private async fire(
     tx: Tx,
     orgId: number,
     rule: RuleRow,
     canOpen: ReadonlySet<number>,
-  ): Promise<Pick | null> {
+  ): Promise<{ pick: Pick | null; flowId: string | null } | null> {
     const ruleId = Number(rule.id);
     const stored = decodeActions(await this.repo.lockActions(tx, orgId, ruleId));
     const pick = await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen);
-    if (!pick) return null;
+    if (!pick && !stored.triggerFlowId) return null;
     await this.repo.markFired(
       tx,
       orgId,
       ruleId,
-      encodeActions({ ...stored, cursor: pick.userId !== null ? pick.cursor : stored.cursor }),
+      encodeActions({
+        ...stored,
+        cursor: pick && pick.userId !== null ? pick.cursor : stored.cursor,
+      }),
     );
-    return pick;
+    return { pick, flowId: stored.triggerFlowId };
   }
 
   /**

@@ -145,13 +145,15 @@
       "logNotReady": "Deze export is niet gereed of is verlopen. Vraag hem opnieuw aan.",
       "groupSuspended": "Meta heeft deze groep opgeschort, dus er kunnen geen berichten naartoe worden gestuurd totdat Meta dit opheft.",
       "walletEmpty": "Je berichtenportemonnee dekt dit groepsbericht niet (één kost per lid). Waardeer op en probeer het opnieuw.",
+      "groupPlanLocked": "Je abonnement bevat geen WhatsApp-groepen, dus je kunt deze groep geen berichten sturen. Vraag een beheerder om het abonnement te upgraden.",
       "groupLeft": "Dit nummer heeft de groep verlaten, dus kan er geen berichten meer sturen.",
       "groupAnnounceOnly": "Alleen beheerders kunnen berichten sturen in deze groep en dit nummer is geen beheerder.",
       "groupRateLimited": "Te veel groepsberichten van dit nummer in korte tijd. Wacht een minuut en probeer het opnieuw.",
       "groupUnavailable": "WhatsApp heeft dit groepsbericht niet geaccepteerd. Probeer het over een paar minuten opnieuw.",
       "savedReplyGone": "Dit opgeslagen antwoord bestaat niet meer.",
       "savedReplyChannel": "Dit opgeslagen antwoord is niet bedoeld voor dit soort kanaal.",
-      "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al."
+      "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al.",
+      "importInvalid": "Dit bestand kan niet als opgeslagen antwoorden worden gelezen. Het heeft een eerste rij nodig met de kolommen title, shortcut en body, en maximaal 1.000 rijen."
     },
     "bubble": {
       "kind": {
@@ -219,7 +221,9 @@
       },
       "deliveryLog": "Bezorglogboek",
       "groupMember": "Groepslid",
-      "groupTally": "Bezorgd bij {delivered, plural, one {# lid} other {# leden}}: {billable} berekend, {free} gratis"
+      "groupTally": "Afgeleverd bij {delivered} van {members}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
+      "groupTallyNoTotal": "Afgeleverd bij {delivered, plural, one {# lid} other {# leden}}{read, plural, =0 {} other {, gelezen door #}}{failed, plural, =0 {} other {, # mislukt}}",
+      "groupTallyBilled": "{billable} aangerekend, {free} gratis"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -670,6 +674,26 @@
         "label": "Groepsleden",
         "loading": "Leden zoeken",
         "none": "Geen lid gevonden"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta heeft deze groep geschorst",
+          "message": "WhatsApp levert geen berichten af in een geschorste groep. Je kunt het gesprek lezen en interne notities toevoegen totdat Meta de schorsing opheft."
+        },
+        "plan": {
+          "title": "Je abonnement bevat geen WhatsApp-groepen",
+          "message": "Je kunt dit gesprek lezen en interne notities toevoegen, maar versturen naar de groep vereist een abonnement met groepen. Vraag een beheerder om te upgraden."
+        },
+        "ineligible": {
+          "title": "Dit nummer kan geen WhatsApp-groepen gebruiken",
+          "message": "Bij de laatste controle stond Meta geen groepen toe op dit nummer (een officieel zakelijk account is vereist). Je kunt het gesprek lezen en interne notities toevoegen. Open Meta-groepen om opnieuw te controleren."
+        }
+      },
+      "cost": {
+        "members": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. Geschatte kosten {cost}: WhatsApp rekent elk lid aan dat het ontvangt.",
+        "membersNoEstimate": "Dit bericht gaat naar {count, plural, one {# lid} other {# leden}}. WhatsApp rekent elk lid aan dat het ontvangt.",
+        "sizeUnknown": "Het aantal leden is nog niet bekend. WhatsApp rekent elk lid aan dat dit bericht ontvangt.",
+        "walletShort": "Je saldo dekt dit bericht mogelijk niet. Waardeer op voordat je verstuurt."
       }
     },
     "savedReplies": {
@@ -823,6 +847,49 @@
         "upgrade": "Abonnementen bekijken",
         "conflict": "Iemand anders heeft dit antwoord eerder gewijzigd. Sluit dit venster en open het opnieuw.",
         "invalid": "Een deel van wat u hebt ingevoerd is ongeldig."
+      },
+      "transfer": {
+        "export": "CSV exporteren",
+        "import": "CSV importeren",
+        "title": "Opgeslagen antwoorden importeren",
+        "intro": "Upload een CSV met de kolommen title, shortcut, body en desgewenst category, language en channel (kanaaltypes gescheiden door |, leeg voor alle kanalen). Maximaal 1.000 rijen en {maxKb} KB. Geïmporteerde antwoorden worden gedeeld met het hele team. De export heeft dezelfde kolommen.",
+        "file": "CSV-bestand",
+        "tooBig": "Dit bestand is te groot.",
+        "duplicates": "Wanneer een gedeeld antwoord de shortcut al gebruikt",
+        "policy": {
+          "skip": "Bestaand antwoord behouden",
+          "overwrite": "Tekst vervangen"
+        },
+        "policyHint": {
+          "skip": "De rij wordt overgeslagen en het antwoord blijft ongewijzigd.",
+          "overwrite": "Titel, tekst, categorie, taal en kanalen worden vervangen. Het aantal keren dat het is gebruikt, blijft behouden."
+        },
+        "check": "Bestand controleren",
+        "go": "Importeren ({count})",
+        "cancel": "Annuleren",
+        "summary": "{create} om aan te maken, {update} om te vervangen, {skip} overgeslagen, {invalid} met een probleem. Er is nog niets opgeslagen.",
+        "plan": "Jouw abonnement: {used} van {limit} antwoorden.",
+        "row": "Regel {line}: /{shortcut}",
+        "truncated": "Alleen de eerste rijen met een probleem of wijziging worden getoond.",
+        "done": "Geïmporteerd: {created} aangemaakt, {updated} vervangen.",
+        "issue": {
+          "update": "wordt vervangen",
+          "skip": "overgeslagen",
+          "invalid": "heeft een probleem",
+          "duplicate": "shortcut al in gebruik, overgeslagen",
+          "missing_shortcut": "geen shortcut",
+          "shortcut_invalid": "de shortcut bevat geen bruikbare letters of cijfers",
+          "missing_title": "geen titel",
+          "title_too_long": "de titel is te lang",
+          "missing_body": "geen tekst",
+          "body_too_long": "de tekst is te lang",
+          "control_characters": "bevat besturingstekens",
+          "category_too_long": "de categorie is te lang",
+          "language_invalid": "de taal is geen code zoals en of pt-BR",
+          "channel_unknown": "een onbekend kanaal",
+          "duplicate_in_file": "de shortcut staat eerder in het bestand",
+          "plan_limit_reached": "boven de limiet van jouw abonnement"
+        }
       }
     },
     "bulk": {

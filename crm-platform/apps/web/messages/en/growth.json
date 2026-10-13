@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Dismiss",
+      "retry": "Try again",
+      "requestId": "Request {id}",
+      "noAccessTitle": "You can’t open this screen",
+      "noAccess": "Ask an admin for the “{permission}” permission."
+    },
+    "errors": {
+      "network": "We couldn’t reach the server. Check your connection and try again.",
+      "forbidden": "Your role isn’t allowed to do this.",
+      "notAvailable": "The growth pilot isn’t available to this workspace.",
+      "featureOff": "This part of the growth pilot is switched off. Turn it on under Controls.",
+      "actionGone": "Someone already decided this one.",
+      "assistantFailed": "The assistant couldn’t suggest anything. Make sure you have an audience and an approved template, then try again.",
+      "undoRefused": "This change can’t be undone any more: the contact moved on, or it was already undone.",
+      "conflict": "Someone saved these settings first. The latest version has been loaded.",
+      "notFound": "That no longer exists.",
+      "validation": "Some of the values aren’t valid. Check them and try again.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "unexpected": "Something went wrong. Try again, and tell support if it keeps happening."
+    },
+    "page": {
+      "title": "Growth",
+      "subtitle": "What your campaigns and conversations tell you, turned into things your team can act on. Nothing here messages a contact by itself.",
+      "notAvailableTitle": "Not part of the pilot",
+      "notAvailable": "The growth pilot is only switched on for selected workspaces. Yours isn’t one of them yet.",
+      "tabs": {
+        "inbox": "Inbox",
+        "audiences": "Audiences",
+        "campaigns": "Campaigns",
+        "insights": "Insights",
+        "autoStage": "Automatic stage changes",
+        "assistant": "Broadcast assistant",
+        "controls": "Controls"
+      }
+    },
+    "digest": {
+      "title": "Today",
+      "quiet": "Nothing needs your attention right now.",
+      "highlights": {
+        "hotLeads": "{count, plural, one {# hot lead is ready to buy} other {# hot leads are ready to buy}}",
+        "unanswered": "{count, plural, one {# buying question has not been answered} other {# buying questions have not been answered}}",
+        "optOuts": "{count, plural, one {# contact asked to stop} other {# contacts asked to stop}}",
+        "suggestionsPending": "{count, plural, one {# stage change is waiting for a decision} other {# stage changes are waiting for a decision}}",
+        "campaignReplies": "{count, plural, one {# contact wrote back within a day of a campaign} other {# contacts wrote back within a day of a campaign}}",
+        "lapsed": "{count, plural, one {# customer has gone quiet} other {# customers have gone quiet}}"
+      }
+    },
+    "inbox": {
+      "title": "Growth inbox",
+      "hint": "Things worth a look. Accepting does the work of its kind; dismissing only closes it.",
+      "filter": "Show",
+      "all": "All ({count})",
+      "empty": "Nothing waiting. New items show up here as chats are read and the daily checks run.",
+      "more": "Show more",
+      "doneAccept": "{count, plural, one {# item done} other {# items done}}",
+      "doneDismiss": "{count, plural, one {# item dismissed} other {# items dismissed}}",
+      "someFailed": "{count, plural, one {# item couldn’t be done} other {# items couldn’t be done}}",
+      "openContact": "Open contact",
+      "someone": "A contact",
+      "dismiss": "Dismiss",
+      "types": {
+        "hot_lead": "Hot lead",
+        "unanswered_intent": "Unanswered",
+        "registration_issue": "Registration problem",
+        "purchase_route": "Route to a person",
+        "opt_out": "Asked to stop",
+        "lapsed": "Gone quiet",
+        "service_due": "Service due",
+        "status_reply": "Order status"
+      },
+      "titles": {
+        "hot_lead": "{name} is ready to buy",
+        "unanswered_intent": "{name} asked about buying and nobody answered",
+        "registration_issue": "{name} reports a problem with their registration",
+        "purchase_route": "Give {name} to {user}",
+        "opt_out": "{name} asked to stop",
+        "lapsed": "{name} has gone quiet",
+        "service_due": "{name}: {rule} is due",
+        "status_reply": "{name} asked about their order"
+      },
+      "accept": {
+        "hot_lead": "Mark as handled",
+        "unanswered_intent": "Mark as handled",
+        "registration_issue": "Mark as handled",
+        "purchase_route": "Assign the chat",
+        "opt_out": "Record the opt-out",
+        "lapsed": "Done",
+        "service_due": "Done",
+        "status_reply": "Done"
+      },
+      "facts": {
+        "routeOwner": "{name} owns this contact.",
+        "routeLeastBusy": "{name} has the fewest open chats.",
+        "lapsedDays": "No opens or messages for {count, plural, one {# day} other {# days}}.",
+        "issue": {
+          "missing_confirmation": "Did not receive a confirmation.",
+          "payment_problem": "Reports a payment problem.",
+          "wrong_info": "Says some details are wrong."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Audiences",
+      "hint": "Groups of contacts worked out from what they really did. Sync one to fill a contact group you can send a campaign to.",
+      "empty": "No audiences yet. Turn a part on under Controls.",
+      "synced": "“{name}” now has {count, plural, one {# contact} other {# contacts}}.",
+      "lastSync": "Group “{name}”, last synced {when}.",
+      "notSynced": "Group “{name}” will be created on the first sync.",
+      "sync": "Sync to a group",
+      "resync": "Sync again",
+      "errors": {
+        "forbidden": "Your role isn’t allowed to sync audiences.",
+        "failed": "The audience couldn’t be synced. Try again."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Engaged",
+          "description": "Opened several campaigns recently."
+        },
+        "silent": {
+          "label": "Silent",
+          "description": "Received campaigns but opened none of them."
+        },
+        "lapsed": {
+          "label": "Lapsed",
+          "description": "Customers with no opens or messages for a long time."
+        },
+        "hot_chat": {
+          "label": "Hot in chat",
+          "description": "Contacts whose latest chat reading says they are ready to buy."
+        },
+        "high_propensity": {
+          "label": "Likely to convert",
+          "description": "The top tenth by the conversion model."
+        },
+        "service_due": {
+          "label": "Service due",
+          "description": "Contacts whose service date is due."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Campaign replies",
+      "hint": "Contacts who wrote back within 24 and 72 hours of a send, counted from the inbox.",
+      "stamp": "Record replies now",
+      "stamped": "{count, plural, one {# reply recorded} other {# replies recorded}}.",
+      "stampFailed": "The replies couldn’t be recorded. Try again.",
+      "empty": "No campaigns have been sent yet.",
+      "totals": {
+        "sent": "Sent",
+        "read": "Read",
+        "replied24h": "Replied in 24 hours",
+        "replied72h": "Replied in 72 hours"
+      },
+      "cols": {
+        "campaign": "Campaign",
+        "sent": "Sent",
+        "read": "Read",
+        "replied24h": "24 h",
+        "replied72h": "72 h",
+        "replyRate": "Reply rate"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Best time to send",
+        "hint": "When your contacts read campaigns and write to you, in your workspace time zone.",
+        "empty": "Not enough activity yet to say.",
+        "best": "Best hours: {hours} ({zone}).",
+        "quiet": "Quietest hours: {hours}.",
+        "chart": "Activity by hour of the day",
+        "sample": "Based on {count, plural, one {# event} other {# events}}."
+      },
+      "propensity": {
+        "title": "Conversion model",
+        "hint": "Learns from the contacts who became customers which behaviour goes with converting, and scores everyone.",
+        "recompute": "Learn again now",
+        "done": "The model was updated.",
+        "failed": "The model couldn’t be updated. Try again.",
+        "contacts": "Contacts scored",
+        "converted": "Converted",
+        "auc": "How well it ranks",
+        "capture": "Converted in the top tenth",
+        "captureHint": "A random ranking would be 10%",
+        "none": "Not measured",
+        "trained": "The model has learned from your converted contacts.",
+        "notTrained": "Too few converted contacts to learn from yet, so fixed weights are used.",
+        "computedAt": "Updated {when}.",
+        "drivers": "What drives the score",
+        "features": {
+          "campaigns_opened_30d": "Campaigns opened (30 days)",
+          "campaigns_received_30d": "Campaigns received (30 days)",
+          "messages_from_contact_30d": "Messages they wrote (30 days)",
+          "links_clicked_30d": "Links clicked (30 days)",
+          "groups": "Groups they are in",
+          "has_email": "Has an email address",
+          "chat_messages_total": "Messages in the chat",
+          "age_days": "Days since they were added"
+        }
+      },
+      "quality": {
+        "title": "How well it is working",
+        "hint": "Whether the suggestions are used, how well the lead score separates the contacts who converted, and what the AI cost, over the last 30 days.",
+        "none": "Not measured",
+        "scoreAuc": "Lead score quality",
+        "scoreAucHint": "{scored} scored, {converted} converted",
+        "calls": "AI calls",
+        "cost": "AI cost",
+        "autoApplied": "Changed automatically",
+        "undone": "{count} undone",
+        "suggestions": {
+          "chat": "Stage suggestions from chats",
+          "engagement": "Stage suggestions from campaigns"
+        },
+        "suggestionLine": "{accepted} accepted, {dismissed} dismissed, {pending} waiting.",
+        "cols": {
+          "type": "Inbox item",
+          "done": "Done",
+          "dismissed": "Dismissed",
+          "open": "Open"
+        },
+        "actionTypes": {
+          "hot_lead": "Hot lead",
+          "unanswered_intent": "Unanswered",
+          "registration_issue": "Registration problem",
+          "purchase_route": "Route to a person",
+          "opt_out": "Asked to stop",
+          "lapsed": "Gone quiet",
+          "service_due": "Service due",
+          "status_reply": "Order status"
+        }
+      },
+      "enrichment": {
+        "title": "Company details",
+        "hint": "Looks up company details for contacts with a business email address and shows them on the contact.",
+        "run": "Look up the next batch",
+        "asked": "{count, plural, one {# contact looked up} other {# contacts looked up}}.",
+        "failed": "The lookup failed. Try again.",
+        "status": "{provider}: {found} found, {notFound} not found, {failed} failed.",
+        "notConfigured": "No lookup service is connected on the server, so this switch has no effect yet."
+      }
+    },
+    "autoStage": {
+      "title": "Automatic stage changes",
+      "hint": "Only readings the AI is very sure about, up to a daily limit. Each can be put back as long as nobody moved the contact since.",
+      "today": "{done} of {cap} used today.",
+      "empty": "Nothing has been changed automatically yet.",
+      "contact": "A contact",
+      "moved": "Moved from {from} to {to}.",
+      "confidence": "{percent}% sure",
+      "undone": "Put back",
+      "undo": "Put back",
+      "undoDone": "The contact is back where it was.",
+      "undoRefused": "This change can’t be undone any more: the contact moved on.",
+      "undoFailed": "The change couldn’t be undone. Try again."
+    },
+    "assistant": {
+      "title": "Broadcast assistant",
+      "hint": "Say what you want to achieve. It suggests one of your audiences and one of your approved templates, weighing the replies each template really got. It sends and creates nothing.",
+      "goal": "What do you want to achieve?",
+      "goalHint": "For example: remind everyone who registered about Saturday’s event.",
+      "placeholder": "Remind registered contacts about the event on Saturday",
+      "ask": "Suggest a campaign",
+      "audience": "Audience",
+      "audienceValue": "{name} ({count} contacts)",
+      "template": "Template",
+      "replyRate": "{percent} reply within a day",
+      "sendAt": "Send around",
+      "considered": "Chosen from {audiences, plural, one {# audience} other {# audiences}} and {templates, plural, one {# template} other {# templates}}."
+    },
+    "controls": {
+      "readOnly": "You can see these settings but not change them.",
+      "saved": "Settings saved.",
+      "discard": "Discard changes",
+      "save": "Save",
+      "problem": {
+        "numbers": "One of the numbers is out of range. Check the thresholds.",
+        "serviceRules": "Service rule on line {line} isn’t in the form: label | date property | days after | days until.",
+        "customPhrases": "Phrase on line {line} isn’t in the form: phrase = intent."
+      },
+      "groups": {
+        "measure": {
+          "title": "Measure",
+          "hint": "Read-only measurements. They change nothing."
+        },
+        "audiences": {
+          "title": "Audiences and stages",
+          "hint": "Work out who to talk to, and suggest stage changes from what contacts do with campaigns."
+        },
+        "chats": {
+          "title": "Reading chats",
+          "hint": "Uses the chat reading of AI lead scoring, so it needs that to be on. Personal data is partly masked before a chat is read."
+        },
+        "assist": {
+          "title": "Assistants",
+          "hint": "Help with decisions. Nothing is sent to a contact."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Real campaign replies",
+          "hint": "Count the contacts who wrote back after a campaign and fix the response numbers."
+        },
+        "send_times": {
+          "label": "Best time to send",
+          "hint": "Show the hours when your contacts read and write."
+        },
+        "propensity": {
+          "label": "Conversion model",
+          "hint": "Score every contact on how likely they are to convert."
+        },
+        "quality": {
+          "label": "Quality dashboard",
+          "hint": "Show how often suggestions are used and what the AI costs."
+        },
+        "daily_digest": {
+          "label": "Daily summary",
+          "hint": "A short summary of the workspace at the top of this screen."
+        },
+        "engagement_audiences": {
+          "label": "Engagement audiences",
+          "hint": "Engaged, silent and lapsed contacts, ready to send campaigns to."
+        },
+        "engagement_stage_rules": {
+          "label": "Stage suggestions from campaigns",
+          "hint": "Suggest moving a contact on when they keep opening campaigns."
+        },
+        "service_rules": {
+          "label": "Service reminders and follow-ups",
+          "hint": "Find contacts whose service or purchase date makes them due, using your own rules."
+        },
+        "enrichment": {
+          "label": "Company details",
+          "hint": "Look up company details for contacts with a business email address."
+        },
+        "intent_fields": {
+          "label": "Chat intent on the contact",
+          "hint": "Write what the chat is about to the “AI intent” property, so a flow can react to it."
+        },
+        "language_detect": {
+          "label": "Chat language",
+          "hint": "Note which language each chat is in."
+        },
+        "auto_notes": {
+          "label": "Chat summary notes",
+          "hint": "Add a short summary of the chat to the contact as a note."
+        },
+        "hot_lead_alerts": {
+          "label": "Hot lead alerts",
+          "hint": "Raise an alert and notify the owner when a contact is clearly ready to buy."
+        },
+        "unanswered_watch": {
+          "label": "Unanswered buying questions",
+          "hint": "Flag buying or price questions that nobody answered."
+        },
+        "handover_summary": {
+          "label": "Summary on handover",
+          "hint": "When a chat is handed to a person, put a summary of it at the top."
+        },
+        "purchase_routing": {
+          "label": "Route buyers to a person",
+          "hint": "Suggest who should take a chat when the contact wants to buy."
+        },
+        "registration_check": {
+          "label": "Registration problems",
+          "hint": "Flag contacts who say they paid or registered but got no confirmation."
+        },
+        "status_reply": {
+          "label": "Order and repair status",
+          "hint": "Prepare the status of an order or repair when a customer asks about it."
+        },
+        "optout_detection": {
+          "label": "Opt-out requests",
+          "hint": "Flag contacts who ask to stop; accepting records it in the consent ledger."
+        },
+        "broadcast_assistant": {
+          "label": "Broadcast assistant",
+          "hint": "Suggest an audience and a template for a goal."
+        },
+        "auto_stage": {
+          "label": "Automatic stage changes",
+          "hint": "Move a contact on when the AI is very sure, up to a daily limit, with undo."
+        }
+      },
+      "thresholds": {
+        "title": "Thresholds",
+        "hint": "The numbers the parts above use.",
+        "hotLeadConfidence": "Hot lead confidence",
+        "hotLeadConfidenceHint": "How sure the reading must be, from 0.5 to 1.",
+        "unansweredHours": "Hours before a question counts as unanswered",
+        "unansweredHoursHint": "From 1 to 168.",
+        "lapsedDays": "Days before a customer counts as lapsed",
+        "lapsedDaysHint": "From 7 to 730.",
+        "engagedOpens": "Campaigns opened to count as engaged",
+        "engagedOpensHint": "Within 30 days.",
+        "stageMinOpens": "Campaigns opened to suggest a stage change",
+        "stageWindowDays": "Days to look back for that",
+        "autoMinConfidence": "Confidence for an automatic change",
+        "autoMinConfidenceHint": "From 0.8 to 1.",
+        "autoDailyCap": "Automatic changes per day",
+        "autoDailyCapHint": "The limit for the whole workspace.",
+        "requireGroup": "Only suggest a stage change for contacts that are in a group"
+      },
+      "rules": {
+        "title": "Your own rules and words",
+        "hint": "One entry per line.",
+        "statusFields": "Status properties",
+        "statusFieldsHint": "Contact properties that hold an order or repair status, such as repair_status.",
+        "serviceRules": "Service rules",
+        "serviceRulesHint": "Label | date property | days after | days until (optional).",
+        "serviceRulesExample": "Battery change | purchase_date | 700 | 760",
+        "customPhrases": "Button and keyword taps",
+        "customPhrasesHint": "Phrase = intent. Intents: {intents}.",
+        "customPhrasesExample": "View warranty slip = post_purchase",
+        "extraMaskTerms": "Words to always hide",
+        "extraMaskTermsHint": "A brand, an address or a name that must never be sent to the AI."
+      },
+      "confirmEnrich": {
+        "title": "Look up company details?",
+        "body": "To find company details, the business email address of a contact is sent to the lookup service. Personal email addresses are not sent.",
+        "yes": "Turn it on",
+        "no": "Not now"
+      }
+    },
+    "contactCard": {
+      "title": "Growth",
+      "propensity": "Likelihood to convert: {score} out of 100.",
+      "computedAt": "Updated {when}."
+    }
+  }
+}

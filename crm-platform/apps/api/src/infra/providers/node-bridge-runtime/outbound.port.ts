@@ -55,7 +55,19 @@ type SendCommandBody =
    * Text into a group. `groupJid` is the bare id or `...@g.us`. `mentions` are WhatsApp ids of members (a participant's `jid`); the body must
    * contain `@<user part of the id>` for WhatsApp to draw the tag (see `mentionToken` in group-mapping.ts).
    */
-  | { type: 'group_text'; groupJid: string; body: string; mentions?: string[] };
+  | { type: 'group_text'; groupJid: string; body: string; mentions?: string[] }
+  /**
+   * A Meta-approved template (WhatsApp Cloud API only; the 24-hour customer window does not apply to it). `components` are the Cloud
+   * API components already built for this recipient. The other engines refuse it: they are given the template's rendered text.
+   */
+  | {
+      type: 'template';
+      to: string;
+      templateName: string;
+      language: string;
+      category?: string;
+      components: unknown[];
+    };
 
 export interface SendContext {
   /** Correlates the provider's later receipts back to our row. */

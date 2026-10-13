@@ -32,3 +32,7 @@ person paused it; it tries again by itself unless paused), then `completed`, `fa
 
 What other domains call: `FlowLaunchService.start(orgId, input)` (every launch path), `FlowTriggerService` (`onOrderPlaced`, `onTagAdded`, ...), and the
 `InboundMessageHooks` listener answer (`consumed`) that an auto reply or an AI agent must read before it answers.
+
+## Trigger producers
+
+Events consumed by the worker: `order.placed`, `store.order_placed`, `whatsapp.order.received`, `contact.opt_in` (`optedIn: true`), `routing.flow_requested`, `lead.created` / `lead.updated` (with `flowId`). See the wiring map for the reason of each start. A start caused by a run's own step carries `__trigger_hops`; five in a row are refused (subscriber `failed`, code `FLR_TRIGGER_LOOP`). A run not started by a customer message whose free-form messages the 24 hour window refused ends `failed` with `SERVICE_WINDOW_CLOSED`.

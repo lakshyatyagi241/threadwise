@@ -147,6 +147,12 @@ export const leadSourceDefaultsSchema = z.object({
   lifecycleStage: z.string().trim().min(1).max(60).nullish(),
   /** A tag put on the contact (Reference tags every webhook lead "Lead"). `null` for none. */
   tag: z.string().trim().min(1).max(60).nullish(),
+  /**
+   * A flow every lead of this source is put into (Reference's "enroll the captured lead in a flow": a welcome or qualifying chat). It
+   * must be one of the workspace's flows and switched on when the lead arrives; publishing is not required. A returning lead is not put
+   * into it again (a contact is in a flow once). `null` for none.
+   */
+  flowId: uuidSchema.nullish(),
   owner: leadOwnerRuleSchema.default({ mode: 'unassigned', userIds: [] }),
   deal: leadDealRuleSchema.default({ enabled: false, title: '{{name}} ({{source}})' }),
   notify: leadNotifyRuleSchema.default({ owner: true, userIds: [] }),

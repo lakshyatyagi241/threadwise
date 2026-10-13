@@ -145,13 +145,15 @@
       "logNotReady": "Questa esportazione non è pronta oppure è scaduta. Richiedila di nuovo.",
       "groupSuspended": "Meta ha sospeso questo gruppo, quindi non è possibile scrivergli finché Meta non lo ripristina.",
       "walletEmpty": "Il tuo portafoglio messaggi non copre questo messaggio di gruppo (un addebito per membro). Ricaricalo e riprova.",
+      "groupPlanLocked": "Il tuo piano non include i gruppi WhatsApp, quindi non è possibile scrivere a questo gruppo. Chiedi a un amministratore di passare a un piano superiore.",
       "groupLeft": "Questo numero ha lasciato il gruppo, quindi non può più inviare messaggi lì.",
       "groupAnnounceOnly": "Solo gli admin possono inviare messaggi in questo gruppo, e questo numero non è admin.",
       "groupRateLimited": "Troppi messaggi di gruppo da questo numero in poco tempo. Attendi un minuto, poi riprova.",
       "groupUnavailable": "WhatsApp non ha accettato questo messaggio di gruppo. Riprova tra qualche minuto.",
       "savedReplyGone": "Questa risposta salvata non esiste più.",
       "savedReplyChannel": "Questa risposta salvata non è prevista per questo tipo di canale.",
-      "shortcutTaken": "Un'altra risposta salvata usa già questa scorciatoia."
+      "shortcutTaken": "Un'altra risposta salvata usa già questa scorciatoia.",
+      "importInvalid": "Questo file non può essere letto come risposte salvate. Deve avere una prima riga con le colonne title, shortcut e body, e al massimo 1.000 righe."
     },
     "bubble": {
       "kind": {
@@ -219,7 +221,9 @@
       },
       "deliveryLog": "Registro di consegna",
       "groupMember": "Membro del gruppo",
-      "groupTally": "Consegnato a {delivered, plural, one {# membro} other {# membri}}: {billable} addebitati, {free} gratis"
+      "groupTally": "Consegnato a {delivered} su {members}{read, plural, =0 {} other {, letto da #}}{failed, plural, =0 {} other {, # non riusciti}}",
+      "groupTallyNoTotal": "Consegnato a {delivered, plural, one {# membro} other {# membri}}{read, plural, =0 {} other {, letto da #}}{failed, plural, =0 {} other {, # non riusciti}}",
+      "groupTallyBilled": "{billable} addebitati, {free} gratuiti"
     },
     "media": {
       "openImage": "Apri immagine {name}",
@@ -670,6 +674,26 @@
         "label": "Partecipanti del gruppo",
         "loading": "Ricerca di partecipanti",
         "none": "Nessun partecipante corrisponde"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta ha sospeso questo gruppo",
+          "message": "WhatsApp non consegna messaggi a un gruppo sospeso. Puoi leggere la conversazione e aggiungere note interne finché Meta non lo ripristina."
+        },
+        "plan": {
+          "title": "Il tuo piano non include i gruppi WhatsApp",
+          "message": "Puoi leggere questa conversazione e aggiungere note interne, ma per scrivere al gruppo serve un piano con i gruppi. Chiedi a un amministratore di passare a un piano superiore."
+        },
+        "ineligible": {
+          "title": "Questo numero non può usare i gruppi WhatsApp",
+          "message": "All'ultimo controllo Meta non ha consentito i gruppi su questo numero (serve un account aziendale ufficiale). Puoi leggere la conversazione e aggiungere note interne. Apri Gruppi Meta per ricontrollare."
+        }
+      },
+      "cost": {
+        "members": "Questo messaggio arriva a {count, plural, one {# membro} other {# membri}}. Costo stimato {cost}: WhatsApp addebita ogni membro che lo riceve.",
+        "membersNoEstimate": "Questo messaggio arriva a {count, plural, one {# membro} other {# membri}}. WhatsApp addebita ogni membro che lo riceve.",
+        "sizeUnknown": "Il numero di membri non è ancora noto. WhatsApp addebita ogni membro che riceve questo messaggio.",
+        "walletShort": "Il tuo portafoglio potrebbe non coprire questo messaggio. Ricarica prima di inviare."
       }
     },
     "savedReplies": {
@@ -823,6 +847,49 @@
         "upgrade": "Vedi i piani",
         "conflict": "Qualcun altro ha modificato prima questa risposta. Chiudi questa finestra e riaprila.",
         "invalid": "Alcuni dei dati inseriti non sono validi."
+      },
+      "transfer": {
+        "export": "Esporta CSV",
+        "import": "Importa CSV",
+        "title": "Importa risposte salvate",
+        "intro": "Carica un CSV con le colonne title, shortcut, body e, se vuoi, category, language e channel (tipi di canale separati da |, vuoto per tutti i canali). Fino a 1.000 righe e {maxKb} KB. Le risposte importate sono condivise con tutto il team. L'esportazione ha le stesse colonne.",
+        "file": "File CSV",
+        "tooBig": "Questo file è troppo grande.",
+        "duplicates": "Quando una risposta condivisa usa già lo shortcut",
+        "policy": {
+          "skip": "Mantieni la risposta esistente",
+          "overwrite": "Sostituisci il suo testo"
+        },
+        "policyHint": {
+          "skip": "La riga viene saltata e la risposta resta com'è.",
+          "overwrite": "Titolo, testo, categoria, lingua e canali vengono sostituiti. Il numero di utilizzi viene mantenuto."
+        },
+        "check": "Controlla il file",
+        "go": "Importa ({count})",
+        "cancel": "Annulla",
+        "summary": "{create} da creare, {update} da sostituire, {skip} saltate, {invalid} con un problema. Non è ancora salvato nulla.",
+        "plan": "Il tuo piano: {used} risposte su {limit}.",
+        "row": "Riga {line}: /{shortcut}",
+        "truncated": "Vengono mostrate solo le prime righe con un problema o una modifica.",
+        "done": "Importate: {created} create, {updated} sostituite.",
+        "issue": {
+          "update": "sarà sostituita",
+          "skip": "saltata",
+          "invalid": "presenta un problema",
+          "duplicate": "shortcut già in uso, saltata",
+          "missing_shortcut": "nessuno shortcut",
+          "shortcut_invalid": "lo shortcut non contiene lettere o numeri utilizzabili",
+          "missing_title": "nessun titolo",
+          "title_too_long": "il titolo è troppo lungo",
+          "missing_body": "nessun testo",
+          "body_too_long": "il testo è troppo lungo",
+          "control_characters": "contiene caratteri di controllo",
+          "category_too_long": "la categoria è troppo lunga",
+          "language_invalid": "la lingua non è un codice come en o pt-BR",
+          "channel_unknown": "un canale sconosciuto",
+          "duplicate_in_file": "lo shortcut compare già prima nel file",
+          "plan_limit_reached": "oltre il limite del tuo piano"
+        }
       }
     },
     "bulk": {

@@ -121,6 +121,12 @@
       "selectedActionsNone": "Kontak terpilih (pilih baris terlebih dahulu)",
       "modifyColumns": "Ubah Kolom",
       "resetColumns": "Reset ke default",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Nama Kontak",
       "colPhone": "Nomor Telepon",
       "colEmailId": "ID Email",
@@ -407,7 +413,8 @@
         "address": "Alamat",
         "memo": "Memo",
         "status": "Status",
-        "source": "Sumber"
+        "source": "Sumber",
+        "consent": "Persetujuan pemasaran (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",

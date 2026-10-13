@@ -422,6 +422,16 @@ function ScheduleRow({
         </Link>
         {canManage && (
           <>
+            {(s.status === 'scheduled' || s.status === 'paused') && (
+              <Link
+                href={`/scheduled/${s.id}/edit`}
+                title={t('actions.edit')}
+                aria-label={t('actions.edit')}
+                className="inline-flex size-7 items-center justify-center rounded-full hover:bg-muted"
+              >
+                <Icon name="edit" className="size-4" />
+              </Link>
+            )}
             {a.pause && btn('pause', t('actions.pause'), () => act('pause', target))}
             {a.resume && btn('resume', t('actions.resume'), () => act('resume', target))}
             {a.runNow && btn('runNow', t('actions.runNow'), () => act('run-now', target))}

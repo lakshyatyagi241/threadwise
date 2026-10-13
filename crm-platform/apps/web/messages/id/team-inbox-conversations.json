@@ -145,13 +145,15 @@
       "logNotReady": "Ekspor ini belum siap atau sudah kedaluwarsa. Minta lagi.",
       "groupSuspended": "Meta menangguhkan grup ini, sehingga tidak dapat dikirimi pesan sampai Meta memulihkannya.",
       "walletEmpty": "Dompet pesan Anda tidak cukup untuk pesan grup ini (satu tagihan per anggota). Isi saldo lalu coba lagi.",
+      "groupPlanLocked": "Paket Anda tidak menyertakan grup WhatsApp, sehingga grup ini tidak dapat dikirimi pesan. Minta admin untuk meningkatkan paket.",
       "groupLeft": "Nomor ini sudah keluar dari grup, jadi tidak dapat lagi mengirim pesan di sana.",
       "groupAnnounceOnly": "Hanya admin yang dapat mengirim pesan di grup ini, dan nomor ini bukan admin.",
       "groupRateLimited": "Terlalu banyak pesan grup dari nomor ini dalam waktu singkat. Tunggu semenit, lalu coba lagi.",
       "groupUnavailable": "WhatsApp tidak menerima pesan grup ini. Coba lagi dalam beberapa menit.",
       "savedReplyGone": "Balasan tersimpan ini sudah tidak ada.",
       "savedReplyChannel": "Balasan tersimpan ini tidak ditujukan untuk jenis kanal ini.",
-      "shortcutTaken": "Balasan tersimpan lain sudah memakai pintasan itu."
+      "shortcutTaken": "Balasan tersimpan lain sudah memakai pintasan itu.",
+      "importInvalid": "File ini tidak bisa dibaca sebagai balasan tersimpan. Baris pertama harus berisi kolom title, shortcut dan body, dengan maksimal 1.000 baris."
     },
     "bubble": {
       "kind": {
@@ -219,7 +221,9 @@
       },
       "deliveryLog": "Log pengiriman",
       "groupMember": "Anggota grup",
-      "groupTally": "Terkirim ke {delivered, plural, other {# anggota}}: {billable} ditagih, {free} gratis"
+      "groupTally": "Terkirim ke {delivered} dari {members}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
+      "groupTallyNoTotal": "Terkirim ke {delivered, plural, other {# anggota}}{read, plural, =0 {} other {, dibaca oleh #}}{failed, plural, =0 {} other {, # gagal}}",
+      "groupTallyBilled": "{billable} ditagih, {free} gratis"
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -670,6 +674,26 @@
         "label": "Anggota grup",
         "loading": "Mencari anggota",
         "none": "Tidak ada anggota yang cocok"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta menangguhkan grup ini",
+          "message": "WhatsApp tidak mengirim pesan ke grup yang ditangguhkan. Anda dapat membaca percakapan dan menambahkan catatan internal sampai Meta memulihkannya."
+        },
+        "plan": {
+          "title": "Paket Anda tidak menyertakan grup WhatsApp",
+          "message": "Anda dapat membaca percakapan ini dan menambahkan catatan internal, tetapi mengirim ke grup memerlukan paket dengan grup. Minta admin untuk meningkatkan paket."
+        },
+        "ineligible": {
+          "title": "Nomor ini tidak dapat menggunakan grup WhatsApp",
+          "message": "Pada pemeriksaan terakhir, Meta tidak mengizinkan grup di nomor ini (perlu akun bisnis resmi). Anda dapat membaca percakapan dan menambahkan catatan internal. Buka Grup Meta untuk memeriksa lagi."
+        }
+      },
+      "cost": {
+        "members": "Pesan ini dikirim ke {count, plural, other {# anggota}}. Perkiraan biaya {cost}: WhatsApp menagih setiap anggota yang menerimanya.",
+        "membersNoEstimate": "Pesan ini dikirim ke {count, plural, other {# anggota}}. WhatsApp menagih setiap anggota yang menerimanya.",
+        "sizeUnknown": "Jumlah anggota belum diketahui. WhatsApp menagih setiap anggota yang menerima pesan ini.",
+        "walletShort": "Saldo dompet Anda mungkin tidak cukup untuk pesan ini. Isi saldo sebelum mengirim."
       }
     },
     "savedReplies": {
@@ -823,6 +847,49 @@
         "upgrade": "Lihat paket",
         "conflict": "Orang lain mengubah balasan ini lebih dulu. Tutup jendela ini dan buka kembali.",
         "invalid": "Sebagian isian Anda tidak valid."
+      },
+      "transfer": {
+        "export": "Ekspor CSV",
+        "import": "Impor CSV",
+        "title": "Impor balasan tersimpan",
+        "intro": "Unggah CSV dengan kolom title, shortcut, body dan, jika mau, category, language dan channel (jenis channel dipisah |, kosongkan untuk semua channel). Maksimal 1.000 baris dan {maxKb} KB. Balasan yang diimpor dibagikan ke seluruh tim. Ekspor memakai kolom yang sama.",
+        "file": "File CSV",
+        "tooBig": "File ini terlalu besar.",
+        "duplicates": "Jika balasan bersama sudah memakai shortcut tersebut",
+        "policy": {
+          "skip": "Pertahankan balasan yang ada",
+          "overwrite": "Ganti teksnya"
+        },
+        "policyHint": {
+          "skip": "Baris dilewati dan balasan tetap seperti semula.",
+          "overwrite": "Judul, teks, kategori, bahasa dan channel diganti. Jumlah penggunaannya tetap disimpan."
+        },
+        "check": "Periksa file",
+        "go": "Impor ({count})",
+        "cancel": "Batal",
+        "summary": "{create} akan dibuat, {update} akan diganti, {skip} dilewati, {invalid} bermasalah. Belum ada yang disimpan.",
+        "plan": "Paket Anda: {used} dari {limit} balasan.",
+        "row": "Baris {line}: /{shortcut}",
+        "truncated": "Hanya baris pertama yang bermasalah atau berubah yang ditampilkan.",
+        "done": "Diimpor: {created} dibuat, {updated} diganti.",
+        "issue": {
+          "update": "akan diganti",
+          "skip": "dilewati",
+          "invalid": "bermasalah",
+          "duplicate": "shortcut sudah dipakai, dilewati",
+          "missing_shortcut": "tidak ada shortcut",
+          "shortcut_invalid": "shortcut tidak memiliki huruf atau angka yang bisa dipakai",
+          "missing_title": "tidak ada judul",
+          "title_too_long": "judul terlalu panjang",
+          "missing_body": "tidak ada teks",
+          "body_too_long": "teks terlalu panjang",
+          "control_characters": "berisi karakter kontrol",
+          "category_too_long": "kategori terlalu panjang",
+          "language_invalid": "bahasa bukan kode seperti en atau pt-BR",
+          "channel_unknown": "channel tidak dikenal",
+          "duplicate_in_file": "shortcut sudah muncul sebelumnya di file",
+          "plan_limit_reached": "melebihi batas paket Anda"
+        }
       }
     },
     "bulk": {

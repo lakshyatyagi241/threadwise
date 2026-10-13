@@ -145,13 +145,15 @@
       "logNotReady": "Cet export n'est pas prêt ou a expiré. Demandez-le à nouveau.",
       "groupSuspended": "Meta a suspendu ce groupe : il ne peut plus recevoir de messages tant que Meta ne l'a pas rétabli.",
       "walletEmpty": "Votre portefeuille de messages ne couvre pas ce message de groupe (un débit par membre). Rechargez-le et réessayez.",
+      "groupPlanLocked": "Votre forfait n'inclut pas les groupes WhatsApp : ce groupe ne peut pas recevoir de messages. Demandez à un administrateur de faire évoluer le forfait.",
       "groupLeft": "Ce numéro a quitté le groupe, il ne peut donc plus y envoyer de messages.",
       "groupAnnounceOnly": "Seuls les admins peuvent envoyer des messages dans ce groupe, et ce numéro n'est pas admin.",
       "groupRateLimited": "Trop de messages de groupe depuis ce numéro en peu de temps. Patientez une minute, puis réessayez.",
       "groupUnavailable": "WhatsApp n'a pas accepté ce message de groupe. Réessayez dans quelques minutes.",
       "savedReplyGone": "Cette réponse enregistrée n'existe plus.",
       "savedReplyChannel": "Cette réponse enregistrée n'est pas prévue pour ce type de canal.",
-      "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci."
+      "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci.",
+      "importInvalid": "Ce fichier ne peut pas être lu comme réponses enregistrées. Il doit comporter une première ligne avec les colonnes title, shortcut et body, et au maximum 1 000 lignes."
     },
     "bubble": {
       "kind": {
@@ -219,7 +221,9 @@
       },
       "deliveryLog": "Journal de livraison",
       "groupMember": "Membre du groupe",
-      "groupTally": "Remis à {delivered, plural, one {# membre} other {# membres}} : {billable} facturés, {free} gratuits"
+      "groupTally": "Remis à {delivered} sur {members}{read, plural, =0 {} other {, lu par #}}{failed, plural, =0 {} other {, # en échec}}",
+      "groupTallyNoTotal": "Remis à {delivered, plural, one {# membre} other {# membres}}{read, plural, =0 {} other {, lu par #}}{failed, plural, =0 {} other {, # en échec}}",
+      "groupTallyBilled": "{billable} facturés, {free} gratuits"
     },
     "media": {
       "openImage": "Ouvrir l’image {name}",
@@ -670,6 +674,26 @@
         "label": "Membres du groupe",
         "loading": "Recherche de membres",
         "none": "Aucun membre ne correspond"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta a suspendu ce groupe",
+          "message": "WhatsApp ne remet pas de messages à un groupe suspendu. Vous pouvez lire la conversation et ajouter des notes internes jusqu'à ce que Meta lève la suspension."
+        },
+        "plan": {
+          "title": "Votre forfait n'inclut pas les groupes WhatsApp",
+          "message": "Vous pouvez lire cette conversation et ajouter des notes internes, mais l'envoi au groupe nécessite un forfait avec groupes. Demandez à un administrateur de faire évoluer le forfait."
+        },
+        "ineligible": {
+          "title": "Ce numéro ne peut pas utiliser les groupes WhatsApp",
+          "message": "Lors de la dernière vérification, Meta n'a pas autorisé les groupes sur ce numéro (un compte professionnel officiel est requis). Vous pouvez lire la conversation et ajouter des notes internes. Ouvrez Groupes Meta pour revérifier."
+        }
+      },
+      "cost": {
+        "members": "Ce message part vers {count, plural, one {# membre} other {# membres}}. Coût estimé {cost} : WhatsApp facture chaque membre qui le reçoit.",
+        "membersNoEstimate": "Ce message part vers {count, plural, one {# membre} other {# membres}}. WhatsApp facture chaque membre qui le reçoit.",
+        "sizeUnknown": "Le nombre de membres n'est pas encore connu. WhatsApp facture chaque membre qui reçoit ce message.",
+        "walletShort": "Votre portefeuille peut ne pas couvrir ce message. Rechargez-le avant d'envoyer."
       }
     },
     "savedReplies": {
@@ -823,6 +847,49 @@
         "upgrade": "Voir les forfaits",
         "conflict": "Quelqu'un d'autre a modifié cette réponse en premier. Fermez cette fenêtre et rouvrez-la.",
         "invalid": "Certaines informations saisies ne sont pas valides."
+      },
+      "transfer": {
+        "export": "Exporter le CSV",
+        "import": "Importer le CSV",
+        "title": "Importer des réponses enregistrées",
+        "intro": "Importez un CSV avec les colonnes title, shortcut, body et, si vous le souhaitez, category, language et channel (types de canaux séparés par |, vide pour tous les canaux). Jusqu'à 1 000 lignes et {maxKb} Ko. Les réponses importées sont partagées avec toute l'équipe. L'export a les mêmes colonnes.",
+        "file": "Fichier CSV",
+        "tooBig": "Ce fichier est trop volumineux.",
+        "duplicates": "Lorsqu'une réponse partagée utilise déjà le raccourci",
+        "policy": {
+          "skip": "Conserver la réponse existante",
+          "overwrite": "Remplacer son texte"
+        },
+        "policyHint": {
+          "skip": "La ligne est ignorée et la réponse reste telle quelle.",
+          "overwrite": "Le titre, le texte, la catégorie, la langue et les canaux sont remplacés. Son nombre d'utilisations est conservé."
+        },
+        "check": "Vérifier le fichier",
+        "go": "Importer ({count})",
+        "cancel": "Annuler",
+        "summary": "{create} à créer, {update} à remplacer, {skip} ignorées, {invalid} avec un problème. Rien n'est encore enregistré.",
+        "plan": "Votre offre : {used} réponses sur {limit}.",
+        "row": "Ligne {line} : /{shortcut}",
+        "truncated": "Seules les premières lignes avec un problème ou une modification sont listées.",
+        "done": "Importées : {created} créées, {updated} remplacées.",
+        "issue": {
+          "update": "sera remplacée",
+          "skip": "ignorée",
+          "invalid": "présente un problème",
+          "duplicate": "raccourci déjà utilisé, ignorée",
+          "missing_shortcut": "aucun raccourci",
+          "shortcut_invalid": "le raccourci ne contient aucune lettre ou chiffre utilisable",
+          "missing_title": "aucun titre",
+          "title_too_long": "le titre est trop long",
+          "missing_body": "aucun texte",
+          "body_too_long": "le texte est trop long",
+          "control_characters": "contient des caractères de contrôle",
+          "category_too_long": "la catégorie est trop longue",
+          "language_invalid": "la langue n'est pas un code tel que en ou pt-BR",
+          "channel_unknown": "un canal inconnu",
+          "duplicate_in_file": "le raccourci apparaît plus haut dans le fichier",
+          "plan_limit_reached": "dépasse la limite de votre offre"
+        }
       }
     },
     "bulk": {

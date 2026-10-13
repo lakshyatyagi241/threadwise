@@ -27,12 +27,14 @@ export const ERROR_KINDS = [
   'groupRateLimited',
   'groupUnavailable',
   'walletEmpty',
+  'groupPlanLocked',
   'logRange',
   'logBusy',
   'logNotReady',
   'savedReplyGone',
   'savedReplyChannel',
   'shortcutTaken',
+  'importInvalid',
   'network',
   'generic',
 ] as const;
@@ -72,6 +74,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   WA_GROUP_UNAVAILABLE: 'groupUnavailable',
   WA_GROUP_NOT_ADMIN: 'groupAnnounceOnly',
   WALLET_EMPTY: 'walletEmpty',
+  PLAN_FEATURE_LOCKED: 'groupPlanLocked',
   MESSAGE_LOG_EXPORT_RANGE_INVALID: 'logRange',
   MESSAGE_LOG_EXPORT_IN_PROGRESS: 'logBusy',
   MESSAGE_LOG_EXPORT_NOT_FOUND: 'notFound',
@@ -81,6 +84,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   SAVED_REPLY_NOT_EDITABLE: 'forbidden',
   SAVED_REPLY_CHANNEL_MISMATCH: 'savedReplyChannel',
   SAVED_REPLY_SHORTCUT_TAKEN: 'shortcutTaken',
+  SAVED_REPLY_IMPORT_INVALID: 'importInvalid',
   NETWORK: 'network',
 };
 

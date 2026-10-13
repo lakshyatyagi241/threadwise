@@ -344,6 +344,11 @@
         "label": "Etichette",
         "description": "Crea le etichette che il tuo team applica alle conversazioni e con cui filtra la posta in arrivo.",
         "keywords": "tag, etichette, categorie, organizzare, filtrare"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Lead caldi, audience, risposte alle campagne e altro su cui il tuo team può agire, ricavato da chat e campagne.",
+        "keywords": "growth, lead caldo, audience, coinvolgimento, inattivo, risposte alle campagne, probabilità di conversione, opt-out, pilota"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

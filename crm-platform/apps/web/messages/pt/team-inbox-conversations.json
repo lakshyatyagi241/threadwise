@@ -145,13 +145,15 @@
       "logNotReady": "Esta exportação não está pronta ou expirou. Solicite-a novamente.",
       "groupSuspended": "A Meta suspendeu este grupo, então ele não pode receber mensagens até que a Meta o libere.",
       "walletEmpty": "Sua carteira de mensagens não cobre esta mensagem de grupo (uma cobrança por membro). Recarregue e tente novamente.",
+      "groupPlanLocked": "O seu plano não inclui grupos do WhatsApp, por isso não é possível enviar mensagens a este grupo. Peça a um administrador para atualizar o plano.",
       "groupLeft": "Este número saiu do grupo, por isso não pode mais enviar mensagens nele.",
       "groupAnnounceOnly": "Somente admins podem enviar mensagens neste grupo, e este número não é admin.",
       "groupRateLimited": "Mensagens de grupo demais deste número em pouco tempo. Aguarde um minuto e tente novamente.",
       "groupUnavailable": "O WhatsApp não aceitou esta mensagem de grupo. Tente novamente em alguns minutos.",
       "savedReplyGone": "Esta resposta salva não existe mais.",
       "savedReplyChannel": "Esta resposta salva não se destina a este tipo de canal.",
-      "shortcutTaken": "Outra resposta salva já usa esse atalho."
+      "shortcutTaken": "Outra resposta salva já usa esse atalho.",
+      "importInvalid": "Não é possível ler este arquivo como respostas salvas. Ele precisa de uma primeira linha com as colunas title, shortcut e body, e no máximo 1.000 linhas."
     },
     "bubble": {
       "kind": {
@@ -219,7 +221,9 @@
       },
       "deliveryLog": "Registro de entrega",
       "groupMember": "Membro do grupo",
-      "groupTally": "Entregue a {delivered, plural, one {# membro} other {# membros}}: {billable} cobrados, {free} grátis"
+      "groupTally": "Entregue a {delivered} de {members}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
+      "groupTallyNoTotal": "Entregue a {delivered, plural, one {# membro} other {# membros}}{read, plural, =0 {} other {, lida por #}}{failed, plural, =0 {} other {, # com falha}}",
+      "groupTallyBilled": "{billable} cobradas, {free} gratuitas"
     },
     "media": {
       "openImage": "Abrir imagem {name}",
@@ -670,6 +674,26 @@
         "label": "Participantes do grupo",
         "loading": "Procurando participantes",
         "none": "Nenhum participante corresponde"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "A Meta suspendeu este grupo",
+          "message": "O WhatsApp não entrega mensagens a um grupo suspenso. Pode ler a conversa e adicionar notas internas até a Meta o repor."
+        },
+        "plan": {
+          "title": "O seu plano não inclui grupos do WhatsApp",
+          "message": "Pode ler esta conversa e adicionar notas internas, mas enviar para o grupo exige um plano com grupos. Peça a um administrador para atualizar."
+        },
+        "ineligible": {
+          "title": "Este número não pode usar grupos do WhatsApp",
+          "message": "A Meta não permitiu grupos neste número na última verificação (exige uma conta comercial oficial). Pode ler a conversa e adicionar notas internas. Abra Grupos da Meta para verificar de novo."
+        }
+      },
+      "cost": {
+        "members": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. Custo estimado {cost}: o WhatsApp cobra por cada membro que a recebe.",
+        "membersNoEstimate": "Esta mensagem vai para {count, plural, one {# membro} other {# membros}}. O WhatsApp cobra por cada membro que a recebe.",
+        "sizeUnknown": "O número de membros ainda não é conhecido. O WhatsApp cobra por cada membro que recebe esta mensagem.",
+        "walletShort": "A sua carteira pode não cobrir esta mensagem. Recarregue antes de enviar."
       }
     },
     "savedReplies": {
@@ -823,6 +847,49 @@
         "upgrade": "Ver planos",
         "conflict": "Outra pessoa alterou esta resposta primeiro. Feche esta janela e abra-a novamente.",
         "invalid": "Parte do que você informou não é válida."
+      },
+      "transfer": {
+        "export": "Exportar CSV",
+        "import": "Importar CSV",
+        "title": "Importar respostas salvas",
+        "intro": "Envie um CSV com as colunas title, shortcut, body e, se quiser, category, language e channel (tipos de canal separados por |, vazio para todos os canais). Até 1.000 linhas e {maxKb} KB. As respostas importadas são compartilhadas com toda a equipe. A exportação tem as mesmas colunas.",
+        "file": "Arquivo CSV",
+        "tooBig": "Este arquivo é grande demais.",
+        "duplicates": "Quando uma resposta compartilhada já usa o atalho",
+        "policy": {
+          "skip": "Manter a resposta existente",
+          "overwrite": "Substituir o texto"
+        },
+        "policyHint": {
+          "skip": "A linha é ignorada e a resposta permanece como está.",
+          "overwrite": "Título, texto, categoria, idioma e canais são substituídos. O número de usos é mantido."
+        },
+        "check": "Verificar o arquivo",
+        "go": "Importar ({count})",
+        "cancel": "Cancelar",
+        "summary": "{create} para criar, {update} para substituir, {skip} ignoradas, {invalid} com problema. Nada foi salvo ainda.",
+        "plan": "Seu plano: {used} de {limit} respostas.",
+        "row": "Linha {line}: /{shortcut}",
+        "truncated": "Somente as primeiras linhas com problema ou alteração são listadas.",
+        "done": "Importadas: {created} criadas, {updated} substituídas.",
+        "issue": {
+          "update": "será substituída",
+          "skip": "ignorada",
+          "invalid": "tem um problema",
+          "duplicate": "atalho já em uso, ignorada",
+          "missing_shortcut": "sem atalho",
+          "shortcut_invalid": "o atalho não tem letras ou números utilizáveis",
+          "missing_title": "sem título",
+          "title_too_long": "o título é muito longo",
+          "missing_body": "sem texto",
+          "body_too_long": "o texto é muito longo",
+          "control_characters": "contém caracteres de controle",
+          "category_too_long": "a categoria é muito longa",
+          "language_invalid": "o idioma não é um código como en ou pt-BR",
+          "channel_unknown": "um canal desconhecido",
+          "duplicate_in_file": "o atalho aparece antes no arquivo",
+          "plan_limit_reached": "acima do limite do seu plano"
+        }
       }
     },
     "bulk": {

@@ -3,7 +3,8 @@
     "nav": {
       "title": "Chamadas",
       "description": "Ative ou desative as chamadas do WhatsApp para cada número.",
-      "keywords": "chamada, chamadas, voz, telefone, chamadas do whatsapp, botão de chamada"
+      "keywords": "chamada, chamadas, voz, telefone, chamadas do whatsapp, botão de chamada",
+      "callLogs": "Registro de chamadas"
     },
     "common": {
       "dismiss": "Dispensar"
@@ -86,7 +87,9 @@
       "FORBIDDEN": "Você não tem permissão para usar chamadas.",
       "PLAN_FEATURE_LOCKED": "Seu plano não inclui chamadas do WhatsApp.",
       "NETWORK": "Erro de rede - tente novamente.",
-      "UNEXPECTED": "Algo deu errado. Tente novamente."
+      "UNEXPECTED": "Algo deu errado. Tente novamente.",
+      "CALL_PLAYBACK_LINK_INVALID": "O link desta gravação expirou. Toque em reproduzir novamente para obter um novo.",
+      "CALL_RANGE_INVALID": "Estas datas não fazem sentido: o início não pode ser depois do fim, o intervalo pode abranger no máximo um ano e o fuso horário deve ser válido."
     },
     "settings": {
       "title": "Chamadas",

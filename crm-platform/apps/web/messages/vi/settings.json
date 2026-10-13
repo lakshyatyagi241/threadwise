@@ -344,6 +344,11 @@
         "label": "Nhãn",
         "description": "Tạo các nhãn mà nhóm của bạn gắn vào cuộc trò chuyện và dùng để lọc hộp thư.",
         "keywords": "thẻ, nhãn, danh mục, sắp xếp, lọc"
+      },
+      "growth": {
+        "label": "Tăng trưởng",
+        "description": "Khách tiềm năng nóng, đối tượng, phản hồi chiến dịch và những việc khác nhóm của bạn có thể hành động, được rút ra từ các cuộc trò chuyện và chiến dịch.",
+        "keywords": "tăng trưởng, khách tiềm năng nóng, đối tượng, tương tác, đã rời bỏ, phản hồi chiến dịch, xu hướng chuyển đổi, ngừng nhận tin, thí điểm"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

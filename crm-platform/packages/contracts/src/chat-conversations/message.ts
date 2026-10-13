@@ -172,9 +172,16 @@ export const messageGroupAuthorSchema = z.object({
 });
 export type MessageGroupAuthor = z.infer<typeof messageGroupAuthorSchema>;
 
-/** What Meta reported for a message sent to a group: how many members it reached, and how many of those were billed or free. */
+/**
+ * What Meta reported for a message sent to a group, rolled up over the members (each member's status only moves forward):
+ * `members` is the group's size when the message was queued (0 when unknown), `deliveredTo` the members it reached (delivered or read),
+ * `readBy` those who read it, `failed` those it could not reach; `billable` and `free` split the members Meta has reported on.
+ */
 export const messageGroupDeliverySchema = z.object({
+  members: z.number().int().nonnegative().optional(),
   deliveredTo: z.number().int().nonnegative(),
+  readBy: z.number().int().nonnegative().optional(),
+  failed: z.number().int().nonnegative().optional(),
   billable: z.number().int().nonnegative(),
   free: z.number().int().nonnegative(),
 });
@@ -196,6 +203,18 @@ export const messageFailureSchema = z.object({
 });
 export type MessageFailure = z.infer<typeof messageFailureSchema>;
 
+/**
+ * What a system line reports, for the lines the web app writes in the reader's language (the line's `body` stays the English text for
+ * exports and old clients). `consent`: the contact replied with a STOP / START keyword and the ledger changed state.
+ */
+export const messageSystemEventSchema = z.object({
+  event: z.literal('consent'),
+  action: z.enum(['withdrawn', 'granted']),
+  /** The configured keyword the contact typed (`stop`), upper-cased by the writer; never the contact's own free text. */
+  keyword: z.string().max(40).nullable().optional(),
+});
+export type MessageSystemEvent = z.infer<typeof messageSystemEventSchema>;
+
 export const messageResponseSchema = z.object({
   id: uuidSchema,
   conversationId: uuidSchema,
@@ -216,6 +235,8 @@ export const messageResponseSchema = z.object({
   sentInteractive: messageSentInteractiveSchema.nullable().optional(),
   /** Email channel only: subject, addresses, sanitised HTML, attachments (TW-MAIL-026). Absent on every other channel. */
   email: emailMetaSchema.nullable().optional(),
+  /** A system line that has a translated wording of its own (the consent line); the bubble prefers it to `body`. Absent on every other message. */
+  systemEvent: messageSystemEventSchema.nullable().optional(),
   /** The customer sent something the channel cannot show (a poll, an unknown type): the body says so, the bubble marks it. */
   unsupported: z.boolean().optional(),
   /** A message a member posted in a WhatsApp group (inbound only). */

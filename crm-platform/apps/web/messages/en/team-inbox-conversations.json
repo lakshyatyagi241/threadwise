@@ -149,9 +149,11 @@
       "groupRateLimited": "Too many group messages from this number in a short time. Wait a minute, then try again.",
       "groupUnavailable": "WhatsApp did not accept this group message. Try again in a few minutes.",
       "walletEmpty": "Your message wallet cannot cover this group message (one charge per member). Top up and try again.",
+      "groupPlanLocked": "Your plan does not include WhatsApp Groups, so this group cannot be messaged. Ask an admin to upgrade the plan.",
       "savedReplyGone": "This saved reply no longer exists.",
       "savedReplyChannel": "This saved reply is not meant for this kind of channel.",
-      "shortcutTaken": "Another saved reply already uses that shortcut."
+      "shortcutTaken": "Another saved reply already uses that shortcut.",
+      "importInvalid": "That file cannot be read as saved replies. It needs a first row with the columns title, shortcut and body, and at most 1,000 rows."
     },
     "bubble": {
       "kind": {
@@ -219,7 +221,9 @@
       },
       "deliveryLog": "Delivery log",
       "groupMember": "Group member",
-      "groupTally": "Delivered to {delivered, plural, one {# member} other {# members}}: {billable} billed, {free} free"
+      "groupTally": "Delivered to {delivered} of {members}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyNoTotal": "Delivered to {delivered, plural, one {# member} other {# members}}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyBilled": "{billable} billed, {free} free"
     },
     "media": {
       "openImage": "Open image {name}",
@@ -288,6 +292,26 @@
         "label": "Group members",
         "loading": "Looking for members",
         "none": "No member matches"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta suspended this group",
+          "message": "WhatsApp does not deliver messages to a suspended group. You can read the thread and add internal notes until Meta clears it."
+        },
+        "plan": {
+          "title": "Your plan does not include WhatsApp Groups",
+          "message": "You can read this thread and add internal notes, but sending to the group needs a plan with Groups. Ask an admin to upgrade."
+        },
+        "ineligible": {
+          "title": "This number cannot use WhatsApp Groups",
+          "message": "Meta did not allow Groups on this number when it was last checked (it needs an Official Business Account). You can read the thread and add internal notes. Open Meta Groups to check again."
+        }
+      },
+      "cost": {
+        "members": "This message goes to {count, plural, one {# member} other {# members}}. Estimated cost {cost}: WhatsApp bills each member who receives it.",
+        "membersNoEstimate": "This message goes to {count, plural, one {# member} other {# members}}. WhatsApp bills each member who receives it.",
+        "sizeUnknown": "The member count is not known yet. WhatsApp bills each member who receives this message.",
+        "walletShort": "Your wallet may not cover this message. Top up before sending."
       }
     },
     "composer": {
@@ -823,6 +847,49 @@
         "upgrade": "See plans",
         "conflict": "Someone else changed this reply first. Close this window and open it again.",
         "invalid": "Some of what you entered is not valid."
+      },
+      "transfer": {
+        "export": "Export CSV",
+        "import": "Import CSV",
+        "title": "Import saved replies",
+        "intro": "Upload a CSV with the columns title, shortcut, body and, if you like, category, language and channel (channel kinds separated by |, empty for every channel). Up to 1,000 rows and {maxKb} KB. Imported replies are shared with the whole team. The export has the same columns.",
+        "file": "CSV file",
+        "tooBig": "This file is too large.",
+        "duplicates": "When a shared reply already uses the shortcut",
+        "policy": {
+          "skip": "Keep the existing reply",
+          "overwrite": "Replace its text"
+        },
+        "policyHint": {
+          "skip": "The row is skipped and the reply stays as it is.",
+          "overwrite": "Title, text, category, language and channels are replaced. Its use count is kept."
+        },
+        "check": "Check the file",
+        "go": "Import ({count})",
+        "cancel": "Cancel",
+        "summary": "{create} to create, {update} to replace, {skip} skipped, {invalid} with a problem. Nothing is saved yet.",
+        "plan": "Your plan: {used} of {limit} replies.",
+        "row": "Line {line}: /{shortcut}",
+        "truncated": "Only the first rows with a problem or a change are listed.",
+        "done": "Imported: {created} created, {updated} replaced.",
+        "issue": {
+          "update": "will be replaced",
+          "skip": "skipped",
+          "invalid": "has a problem",
+          "duplicate": "shortcut already in use, skipped",
+          "missing_shortcut": "no shortcut",
+          "shortcut_invalid": "the shortcut has no usable letters or numbers",
+          "missing_title": "no title",
+          "title_too_long": "the title is too long",
+          "missing_body": "no text",
+          "body_too_long": "the text is too long",
+          "control_characters": "contains control characters",
+          "category_too_long": "the category is too long",
+          "language_invalid": "the language is not a code such as en or pt-BR",
+          "channel_unknown": "an unknown channel",
+          "duplicate_in_file": "the shortcut appears earlier in the file",
+          "plan_limit_reached": "over your plan's limit"
+        }
       }
     },
     "triage": {

@@ -7,6 +7,8 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { isKnownTimeZone, wallTimeToUtc } from '../broadcasts';
 import { normaliseTime } from './schedule-create.service';
+import { ScheduleEditService } from './schedule-edit.service';
+import { ScheduleMediaService } from './schedule-media.service';
 import { SchedulerService } from './scheduler.service';
 import { WarmerService } from './warmer/warmer.service';
 
@@ -23,6 +25,7 @@ interface Facts {
   timezone: string;
   schedule_type: string;
   row_version: number;
+  media_file: string | null;
 }
 
 const conflict = (message: string): AppError => new AppError(ERROR_CODES.CONFLICT, message, 409);
@@ -40,6 +43,8 @@ export class ScheduleActionsService {
     private readonly db: DatabaseService,
     private readonly scheduler: SchedulerService,
     private readonly warmer: WarmerService,
+    private readonly editor: ScheduleEditService,
+    private readonly media: ScheduleMediaService,
   ) {}
 
   async pause(uuid: string): Promise<void> {
@@ -80,41 +85,12 @@ export class ScheduleActionsService {
     );
   }
 
-  /** Name, time and message only, while it is waiting or paused. A new time must still be 2 minutes ahead. */
+  /**
+   * Changes a schedule that has not started (TW-SCHED-016): anything the composer sets, checked as a new schedule is, with the version
+   * the person opened. The rules are `ScheduleEditService`'s.
+   */
   async edit(uuid: string, input: UpdateScheduleInput): Promise<void> {
-    const f = await this.facts(uuid);
-    if (!['scheduled', 'paused'].includes(f.status)) {
-      throw conflict('Only a waiting or paused schedule can be edited.');
-    }
-    const date = input.sendDate ?? f.send_date;
-    const time = input.sendTime ? normaliseTime(input.sendTime) : f.send_time;
-    const zone = input.timezone ?? f.timezone;
-    const timeChanged = input.sendDate || input.sendTime || input.timezone;
-    let at: Date | null = null;
-    if (timeChanged) {
-      if (!isKnownTimeZone(zone))
-        throw AppError.validation('Choose a valid timezone.', [
-          { path: 'timezone', message: 'Invalid timezone' },
-        ]);
-      at = wallTimeToUtc(date, time, zone);
-      if (at.getTime() < this.now().getTime() + 2 * 60_000) {
-        throw AppError.validation('Schedule must be at least 2 minutes from now.', [
-          { path: 'sendTime', message: 'Too soon' },
-        ]);
-      }
-    }
-    const done = await this.db.tx((tx) =>
-      tx.execute(sql`
-        UPDATE scheduled_messages SET
-          schedule_name = coalesce(${input.name ?? null}, schedule_name),
-          message_content = coalesce(${input.message ?? null}, message_content),
-          send_date = ${date}::date, send_time = ${time}, timezone = ${zone},
-          scheduled_time = coalesce(${at ? at.toISOString() : null}::timestamptz, scheduled_time),
-          next_run_at = CASE WHEN ${at !== null} THEN ${at ? at.toISOString() : null}::timestamptz ELSE next_run_at END
-        WHERE org_id = ${this.org()} AND id = ${f.id} AND row_version = ${input.rowVersion}
-        RETURNING id`),
-    );
-    if (done.rows.length === 0) throw AppError.rowVersionConflict('Schedule');
+    await this.editor.edit(uuid, input);
   }
 
   /**
@@ -162,6 +138,8 @@ export class ScheduleActionsService {
         sql`DELETE FROM scheduled_messages WHERE org_id = ${this.org()} AND id = ${f.id}`,
       );
     });
+    // An uploaded file goes with the last schedule that used it.
+    await this.media.releaseIfUnused(this.org(), f.media_file);
   }
 
   // --- internals ---------------------------------------------------------------------------------
@@ -175,7 +153,7 @@ export class ScheduleActionsService {
     const res = await this.db.tx((tx) =>
       tx.execute(sql`
         SELECT id, status, provider, device_id, warmer_reserved, to_char(warmer_reserved_day, 'YYYY-MM-DD') AS warmer_reserved_day,
-               total_sent, to_char(send_date, 'YYYY-MM-DD') AS send_date, send_time, timezone, schedule_type, row_version
+               total_sent, to_char(send_date, 'YYYY-MM-DD') AS send_date, send_time, timezone, schedule_type, row_version, media_file
           FROM scheduled_messages WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`),
     );
     const r = res.rows[0] as unknown as Facts | undefined;

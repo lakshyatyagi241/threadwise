@@ -121,6 +121,12 @@
       "selectedActionsNone": "Geselecteerde contacten (selecteer eerst rijen)",
       "modifyColumns": "Kolommen aanpassen",
       "resetColumns": "Standaard herstellen",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsClose": "Close",
+      "columnsSave": "Save",
       "colContactName": "Contactnaam",
       "colPhone": "Telefoonnummer",
       "colEmailId": "E-mailadres",
@@ -407,7 +413,8 @@
         "address": "Adres",
         "memo": "Memo",
         "status": "Status",
-        "source": "Bron"
+        "source": "Bron",
+        "consent": "Marketingtoestemming (ja / nee)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",

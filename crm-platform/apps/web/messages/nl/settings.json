@@ -328,6 +328,11 @@
         "label": "Labels",
         "description": "Maak de labels die je team op gesprekken zet en waarmee de inbox wordt gefilterd.",
         "keywords": "tags, labels, categorieën, ordenen, filter"
+      },
+      "growth": {
+        "label": "Groei",
+        "description": "Hete leads, doelgroepen, campagnereacties en andere zaken waar je team op kan reageren, afgeleid uit chats en campagnes.",
+        "keywords": "groei, hete lead, doelgroep, betrokkenheid, afgehaakt, campagnereacties, conversiekans, opt-out, pilot"
       }
     },
     "title": "Instellingen",

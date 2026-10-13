@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "ワークスペース",
+      "title": "通話ログ",
+      "subtitle": "チームが発信または応答したすべてのWhatsApp通話を、通話時間、対応者、録音とともに表示します。",
+      "sideTip": "お客様の番号に関するすべてのWhatsApp通話です。日付、ステータス、番号、チームメンバーで絞り込んで特定の通話を探せます。",
+      "loading": "通話を読み込み中",
+      "loadFailed": "通話ログを読み込めませんでした。",
+      "retry": "再試行",
+      "emptyTitle": "通話はまだありません",
+      "emptyMessage": "お客様がWhatsApp番号に電話をかけた場合や、チームが受信トレイから発信した場合、通話時間、対応者、録音とともにここに表示されます。",
+      "emptyFilteredTitle": "この条件に一致する通話はありません",
+      "emptyFilteredMessage": "期間を広げるか、フィルターをクリアしてください。",
+      "clearFilters": "フィルターをクリア",
+      "tabs": {
+        "label": "通話ビュー",
+        "log": "通話ログ",
+        "analytics": "分析"
+      },
+      "range": {
+        "title": "期間",
+        "last24h": "過去24時間",
+        "last7d": "過去7日間",
+        "last30d": "過去30日間",
+        "custom": "期間を指定",
+        "from": "開始",
+        "to": "終了",
+        "apply": "適用"
+      },
+      "status": {
+        "title": "ステータス",
+        "all": "すべて",
+        "completed": "完了",
+        "in-progress": "通話中",
+        "no-answer": "応答なし",
+        "declined": "拒否",
+        "failed": "失敗"
+      },
+      "kpi": {
+        "total": "合計",
+        "last24h": "過去24時間",
+        "minutes": "{count}分",
+        "completed": "完了",
+        "failed": "失敗",
+        "selection": "この選択内",
+        "calls": "通話",
+        "answered": "応答済み",
+        "missed": "不在",
+        "avgDuration": "平均通話時間",
+        "totalMinutes": "合計分数"
+      },
+      "filters": {
+        "label": "通話を絞り込む",
+        "searchLabel": "通話を検索",
+        "searchPlaceholder": "電話番号または連絡先名...",
+        "direction": "方向",
+        "allDirections": "すべての通話",
+        "inbound": "着信",
+        "outbound": "発信",
+        "number": "番号",
+        "allNumbers": "すべての番号",
+        "agent": "対応者",
+        "allAgents": "全員",
+        "apply": "絞り込む",
+        "clear": "クリア"
+      },
+      "table": {
+        "caption": "通話（新しい順）",
+        "customer": "顧客",
+        "number": "番号",
+        "handledBy": "対応者",
+        "started": "開始",
+        "duration": "通話時間",
+        "status": "ステータス",
+        "actions": "操作",
+        "open": "開く",
+        "inbound": "着信",
+        "outbound": "発信",
+        "none": "-"
+      },
+      "paging": {
+        "label": "ページ",
+        "showing": "{total}件中 {from}-{to}件の通話を表示",
+        "beyond": "このページは最後のページ（全{pages}ページ）を超えています。",
+        "previous": "前へ",
+        "next": "次へ",
+        "page": "{page} / {pages}ページ"
+      },
+      "detail": {
+        "breadcrumb": "パンくずリスト",
+        "back": "通話ログ",
+        "loading": "通話を読み込み中",
+        "loadFailed": "この通話を読み込めませんでした。",
+        "notFound": "この通話が見つかりません。別のワークスペースのものか、表示できる通話の範囲外の可能性があります。",
+        "retry": "再試行",
+        "handledBy": "対応者: {name}",
+        "handler": {
+          "none": "対応者なし",
+          "ai": "AIアシスタント",
+          "voicemail": "ボイスメール"
+        },
+        "openContact": "連絡先を開く",
+        "openInbox": "受信トレイで開く",
+        "tiles": {
+          "duration": "通話時間",
+          "number": "番号",
+          "answered": "応答",
+          "ended": "終了"
+        },
+        "reasons": {
+          "unknown": "通話に失敗しました。",
+          "COMPLETED": "完了",
+          "REJECTED": "通話は拒否されました。",
+          "DECLINED": "通話は拒否されました。",
+          "BUSY": "お客様は別の通話中でした。",
+          "NO_ANSWER": "誰も応答しませんでした。",
+          "MISSED": "お客様が通話に応答しませんでした。",
+          "CANCELLED": "通話はキャンセルされました。",
+          "FAILED": "WhatsAppが通話の失敗を通知しました。",
+          "NO_PERMISSION": "お客様が通話をまだ許可していないため、発信されませんでした。",
+          "META_REFUSED": "WhatsAppが発信を拒否しました。"
+        },
+        "timeline": {
+          "title": "タイムライン",
+          "count": "{count, plural, one {#ステップ} other {#ステップ}}",
+          "empty": "この通話にはステップが記録されていません。"
+        },
+        "steps": {
+          "dial_sent": "発信しました",
+          "dial_failed": "発信できませんでした",
+          "connect": "WhatsAppに接続しました",
+          "pre_accept_sent": "応答の準備中",
+          "accept_sent": "応答しました",
+          "accept_failed": "応答に失敗しました",
+          "reject_sent": "通話を拒否しました",
+          "terminate_sent": "切断を送信しました",
+          "terminate": "通話が終了しました",
+          "recording_stored": "録音を保存しました"
+        },
+        "noRecording": {
+          "title": "録音",
+          "message": "この通話には録音がありません。"
+        }
+      },
+      "recording": {
+        "title": "録音",
+        "notice": "この通話は録音されました。",
+        "privacy": "録音へのアクセス権を持つ人だけが再生でき、再生はすべて記録されます。",
+        "noAccess": "この通話が録音されたことは確認できますが、録音を再生する権限がありません。",
+        "play": "録音を再生",
+        "loading": "録音を取得中",
+        "playerLabel": "通話の録音",
+        "linkUntil": "このリンクは{time}まで有効です。その後はもう一度再生を押してください。",
+        "playFailed": "録音を再生できませんでした。",
+        "retry": "再試行"
+      }
+    },
+    "analytics": {
+      "eyebrow": "ワークスペース",
+      "title": "通話分析",
+      "subtitle": "通話数の推移、応答数、対応者、回線が最も混み合う時間帯を確認できます。",
+      "loading": "通話分析を読み込み中",
+      "loadFailed": "通話分析を読み込めませんでした。",
+      "retry": "再試行",
+      "emptyTitle": "この期間の通話はありません",
+      "emptyMessage": "期間を広げるか、最初の通話の後にもう一度ご確認ください。",
+      "number": "番号",
+      "allNumbers": "すべての番号",
+      "period": "{from}～{to}（タイムゾーン: {tz}）",
+      "kpi": {
+        "total": "通話",
+        "answeredRate": "応答済み",
+        "answeredOf": "応答 {answered}件",
+        "missed": "不在",
+        "avgHandle": "平均対応時間",
+        "avgHandleHint": "応答した通話の通話時間",
+        "totalMinutes": "合計分数"
+      },
+      "overTime": {
+        "title": "通話数の推移",
+        "hint": "1日につき1本のバーです。緑の部分は応答した通話です。",
+        "summary": "{days}日間で{total}件の通話",
+        "answered": "応答済み",
+        "other": "未応答",
+        "missed": "不在",
+        "day": "日",
+        "calls": "通話"
+      },
+      "byAgent": {
+        "title": "チームメンバー別",
+        "agent": "チームメンバー",
+        "calls": "通話",
+        "answered": "応答済み",
+        "avgHandle": "平均対応時間",
+        "minutes": "分",
+        "unassigned": "対応者なし"
+      },
+      "heatmap": {
+        "title": "曜日・時間帯別の通話",
+        "hint": "色が濃いほど、その時間に開始された通話が多いことを示します。時刻はタイムゾーン{tz}です。",
+        "weekday": "曜日",
+        "cell": "{day} {hour}:00: {calls, plural, =0 {通話なし} one {#件の通話} other {#件の通話}}"
+      }
+    }
+  }
+}

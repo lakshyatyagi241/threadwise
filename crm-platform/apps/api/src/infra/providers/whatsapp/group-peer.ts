@@ -76,3 +76,10 @@ export function personalGroupSendBlock(
     };
   return null;
 }
+
+/**
+ * Where the Groups screen caches whether a number may use Groups at all (`'1'` yes, `'0'` not eligible; absent: never probed or expired).
+ * The inbox reads it, read-only, to switch a group composer off for a number Meta refused (131215) instead of letting each send fail.
+ */
+export const wabaGroupsEligibleKey = (orgId: number, configId: number): string =>
+  `waba:groups:eligible:${orgId}:${configId}`;

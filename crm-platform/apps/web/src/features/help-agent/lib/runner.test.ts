@@ -53,7 +53,11 @@ interface Harness {
  */
 function harness(
   steps: Array<ScriptedStep | { click?: string; type?: [string, string]; goal?: string }>,
-  opts: { allow?: boolean | ((r: ConfirmRequest) => boolean); mode?: 'do' | 'show' } = {},
+  opts: {
+    allow?: boolean | ((r: ConfirmRequest) => boolean);
+    mode?: 'do' | 'show';
+    maxSteps?: number;
+  } = {},
 ): Harness {
   const clicked: string[] = [];
   const onClick = (e: Event) => {
@@ -90,7 +94,7 @@ function harness(
   const options: RunnerOptions = {
     taskId: 'task-1',
     locale: 'en',
-    maxSteps: 6,
+    maxSteps: opts.maxSteps ?? 6,
     mode: opts.mode ?? 'do',
     confirm: async (request) => {
       confirms.push(request);
@@ -233,12 +237,15 @@ describe('help agent: the library really drives the page through our gate', () =
   });
 
   it('stops after its step budget even if the model never finishes', async () => {
-    const h = harness([{ click: 'open' }]); // the script repeats its last step forever
+    // Each step of the real page-agent loop waits on the page; a small budget keeps the wall-clock time short and independent of how
+    // loaded the machine is, and the assertion is the same: it stops by itself, within the budget (plus the closing request).
+    const maxSteps = 2;
+    const h = harness([{ click: 'open' }], { maxSteps }); // the script repeats its last step forever
     const result = await h.run();
     expect(result.stoppedBy).toBe('budget');
     expect(result.outcome).toBe('stopped');
-    expect(h.model.requests.length).toBeLessThanOrEqual(7);
-  });
+    expect(h.model.requests.length).toBeLessThanOrEqual(maxSteps + 1);
+  }, 30_000);
 
   it('stops at once when the person presses Stop, and releases a pending confirmation', async () => {
     let release!: () => void;

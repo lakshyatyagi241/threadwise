@@ -14,7 +14,9 @@
       "settingsInvalid": "Een trefwoord heeft minstens één letter of cijfer nodig, en er moet minstens één STOP-trefwoord overblijven zolang de herkenning aan staat.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
-      "unexpected": "Er is iets misgegaan. Probeer het opnieuw."
+      "unexpected": "Er is iets misgegaan. Probeer het opnieuw.",
+      "exportInProgress": "Er wordt al een bewijsbestand voorbereid. Wacht tot het klaar is en probeer het dan opnieuw.",
+      "exportNotReady": "Dat bestand is niet klaar of verlopen. Bereid een nieuw bestand voor."
     },
     "settings": {
       "title": "Toestemming en STOP-antwoorden",
@@ -169,7 +171,35 @@
     "import": {
       "legend": "Toestemming",
       "label": "Ik heb toestemming om deze contacten te berichten",
-      "hint": "Als dit is aangevinkt, wordt elk contact in het bestand vastgelegd als akkoord met marketing, met de bestandsnaam als bewijs. Als het niet is aangevinkt, legt de import geen toestemming vast. Contacten die zich hebben afgemeld, blijven afgemeld."
+      "hint": "Als dit is aangevinkt, wordt elk contact in het bestand vastgelegd als akkoord met marketing, met de bestandsnaam als bewijs. Als het niet is aangevinkt, legt de import geen toestemming vast. Contacten die zich hebben afgemeld, blijven afgemeld.",
+      "hintColumn": "De kolom die is gekoppeld aan marketingtoestemming bepaalt wie wordt vastgelegd: alleen rijen met ja krijgen een toestemming, met de bestandsnaam als bewijs. Nee, een lege cel of een onbekend woord legt niets vast. Contacten die zich hebben afgemeld, blijven afgemeld.",
+      "columnSummary": "{granted} rijen zeggen ja en worden vastgelegd. {notGranted} zeggen nee of zijn leeg en krijgen geen toestemmingsrecord.",
+      "unrecognised": "{count, plural, one {# rij heeft} other {# rijen hebben}} een toestemmingswaarde die geen ja of nee is ({values}). {count, plural, one {Die wordt} other {Ze worden}} behandeld als niet verleend. Gebruik ja / nee, true / false of 1 / 0.",
+      "columnIgnored": "De toestemmingskolom doet niets totdat je het vakje hierboven aanvinkt."
+    },
+    "systemLine": {
+      "withdrawn": "Contact heeft {keyword} geantwoord: afgemeld voor marketing",
+      "granted": "Contact heeft {keyword} geantwoord: opnieuw aangemeld voor marketing"
+    },
+    "proof": {
+      "title": "Voorbereide bewijsbestanden",
+      "prepare": "Volledig bewijsbestand voorbereiden",
+      "preparing": "Bewijsbestand wordt voorbereid",
+      "largeHint": "Het logboek bevat meer dan {max} gebeurtenissen, dus het bestand wordt op de achtergrond voorbereid",
+      "large": "Het logboek bevat meer dan {max} gebeurtenissen, meer dan een directe download aankan. Bereid het volledige bestand voor: het wordt op de achtergrond gemaakt en je krijgt een e-mail zodra het klaar is.",
+      "none": "Nog geen voorbereide bestanden.",
+      "keptFor": "Een voorbereid bestand kan {days} dagen worden gedownload en wordt daarna verwijderd. Er wordt maar één bestand tegelijk voorbereid.",
+      "rows": "{count, plural, one {# gebeurtenis} other {# gebeurtenissen}}",
+      "expires": "beschikbaar tot {date}",
+      "download": "CSV downloaden",
+      "failed": "Het bestand kon niet worden gemaakt. Bereid het opnieuw voor.",
+      "status": {
+        "queued": "In wachtrij",
+        "running": "Wordt gemaakt",
+        "ready": "Klaar",
+        "failed": "Mislukt",
+        "expired": "Verlopen"
+      }
     }
   }
 }

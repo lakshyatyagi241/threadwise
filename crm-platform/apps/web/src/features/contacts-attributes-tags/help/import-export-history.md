@@ -36,3 +36,7 @@ The imports list needs the permission to import contacts, and the exports list n
 - **No imports or exports are listed.** Nothing has been imported or exported yet in this workspace.
 - **An import stays on Queued.** Large files run in the background; wait a moment and the page updates.
 - **Download rejects does nothing.** Try again; if it keeps failing, re-run the import with a corrected file.
+
+## Marketing consent column
+
+If your file has a column that says whether each person agreed to marketing, map it to **Marketing consent (yes / no)**. Only the rows that say yes get a recorded consent, and only when you tick **I have consent to message these contacts**. See "Consent, STOP and START replies" for what is recorded.

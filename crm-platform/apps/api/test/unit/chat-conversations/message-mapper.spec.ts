@@ -193,3 +193,53 @@ describe('toMessageResponse: rows stored before the adapter understood a type', 
     expect(wire.forwarded).toBe(true);
   });
 });
+
+describe('toMessageResponse: the delivery tally of a message sent to a WhatsApp group', () => {
+  const sent = (meta: Record<string, unknown>) =>
+    toMessageResponse(
+      row({ direction: 'out', kind: 'text', status: 'delivered', meta }),
+      () => null,
+    );
+
+  it('rolls the per-member statuses up: delivered counts the members who read it too, failed is apart, no phone number on the wire', () => {
+    const wire = sent({
+      group_members: 8,
+      group_delivery: {
+        participants: {
+          '919900000001': { status: 'read', billable: true },
+          '919900000002': { status: 'read', billable: true },
+          '919900000003': { status: 'delivered', billable: true },
+          '919900000004': { status: 'delivered', billable: false },
+          '919900000005': { status: 'sent', billable: true },
+          '919900000006': { status: 'failed', billable: true },
+        },
+        delivered_to: 6,
+        billable_count: 5,
+        free_count: 1,
+      },
+    });
+    expect(messageResponseSchema.parse(wire)).toEqual(wire);
+    expect(wire.groupDelivery).toEqual({
+      members: 8,
+      deliveredTo: 4,
+      readBy: 2,
+      failed: 1,
+      billable: 5,
+      free: 1,
+    });
+    expect(JSON.stringify(wire)).not.toContain('9199000000');
+  });
+
+  it('a row from before the per-member map keeps its counters; members is 0 when the group size was not known', () => {
+    const wire = sent({ group_delivery: { delivered_to: 3, billable_count: 2, free_count: 1 } });
+    expect(wire.groupDelivery).toMatchObject({ members: 0, deliveredTo: 3, readBy: 0, failed: 0 });
+  });
+
+  it('is absent on an inbound message and on a message with no group tally', () => {
+    expect(
+      toMessageResponse(row({ meta: { group_delivery: { delivered_to: 1 } } }), () => null)
+        .groupDelivery,
+    ).toBeUndefined();
+    expect(sent({}).groupDelivery).toBeUndefined();
+  });
+});

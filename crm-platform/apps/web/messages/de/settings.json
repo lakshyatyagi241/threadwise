@@ -344,6 +344,11 @@
         "label": "Labels",
         "description": "Erstellen Sie die Labels, die Ihr Team Unterhaltungen zuweist und nach denen es den Posteingang filtert.",
         "keywords": "Tags, Labels, Kategorien, organisieren, filtern"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Hot Leads, Zielgruppen, Kampagnenantworten und weitere Dinge, die Ihr Team aus Chats und Kampagnen ableiten und angehen kann.",
+        "keywords": "growth, hot lead, zielgruppe, engagement, inaktiv, kampagnenantworten, conversion-wahrscheinlichkeit, opt-out, pilot"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

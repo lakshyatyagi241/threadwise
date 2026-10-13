@@ -344,6 +344,11 @@
         "label": "Étiquettes",
         "description": "Créez les étiquettes que votre équipe applique aux conversations et avec lesquelles elle filtre la boîte de réception.",
         "keywords": "tags, étiquettes, catégories, organiser, filtrer"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Leads chauds, audiences, réponses aux campagnes et autres éléments exploitables par votre équipe, déduits des discussions et des campagnes.",
+        "keywords": "growth, lead chaud, audience, engagement, inactif, réponses aux campagnes, probabilité de conversion, désabonnement, pilote"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

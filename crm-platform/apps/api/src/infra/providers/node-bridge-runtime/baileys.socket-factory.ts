@@ -71,7 +71,7 @@ const groupJid = toGroupJid;
 const addressOf = (command: SendCommand): string =>
   command.type === 'group_text'
     ? groupJid(command.groupJid)
-    : command.toGroup
+    : command.type !== 'template' && command.toGroup
       ? groupJid(command.to)
       : jidOf(command.to);
 

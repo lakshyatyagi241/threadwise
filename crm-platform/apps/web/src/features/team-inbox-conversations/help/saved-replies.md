@@ -55,3 +55,21 @@ Your plan may cap how many saved replies the workspace holds. Shared and persona
 - **The shortcut is taken**: another reply of the same owner already uses it. Pick a different one.
 - **Someone else changed this reply first**: close the window and open the reply again.
 - **Nothing appears when you type `/`**: the `/` must start the box or follow a space or a new line, and you need the right to reply in that conversation.
+
+## Import and export
+
+On the Saved replies screen, **Export CSV** downloads the shared replies as a file with the columns title, shortcut, body, category, language and channel (channel kinds separated by `|`; empty means every channel). Personal replies stay with their owners and are not exported.
+
+**Import CSV** adds or updates shared replies from a file with the same columns (title, shortcut and body are required; up to 1,000 rows and 1 MB):
+
+1. Choose the file and what happens when a shared reply already uses a shortcut: **Keep the existing reply** (the row is skipped) or **Replace its text** (title, text, category, language and channels change; the use count stays).
+2. Press **Check the file**. Nothing is saved yet: you see how many replies would be created, replaced, skipped or have a problem, with the line and the reason for each problem (a missing title, a shortcut repeated in the file, an unknown channel, a reply over your plan's limit).
+3. Press **Import**. Rows with a problem are left out; the others are saved. If you change the file or the choice, check again.
+
+A spreadsheet never runs a cell as a formula: a text that starts with `=`, `+`, `-` or `@` is saved with a leading apostrophe in the export and read back correctly when imported.
+
+## AI agents and the email editor
+
+An AI agent with **Use saved replies** switched on is shown your team's most used shared replies (never personal ones, at most 15) as examples of tone. Replies with variables such as the customer's name are left out, because the agent has no customer to fill them for.
+
+In an email reply, the **Saved replies** button inserts the text where your cursor is. The `/` shortcut works in the plain message box only.

@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Không gian làm việc",
+      "title": "Nhật ký cuộc gọi",
+      "subtitle": "Mọi cuộc gọi WhatsApp mà nhóm của bạn đã gọi hoặc trả lời, kèm thời lượng, người xử lý và bản ghi âm.",
+      "sideTip": "Mọi cuộc gọi WhatsApp đến hoặc đi từ số của bạn. Lọc theo ngày, trạng thái, số hoặc đồng đội để tìm một cuộc gọi cụ thể.",
+      "loading": "Đang tải cuộc gọi",
+      "loadFailed": "Không thể tải nhật ký cuộc gọi.",
+      "retry": "Thử lại",
+      "emptyTitle": "Chưa có cuộc gọi nào",
+      "emptyMessage": "Khi khách hàng gọi đến một trong các số WhatsApp của bạn, hoặc nhóm của bạn gọi từ hộp thư đến, cuộc gọi sẽ hiện ở đây kèm thời lượng, người xử lý và bản ghi âm.",
+      "emptyFilteredTitle": "Không có cuộc gọi nào khớp với các bộ lọc này",
+      "emptyFilteredMessage": "Hãy thử khoảng thời gian rộng hơn hoặc xóa bộ lọc.",
+      "clearFilters": "Xóa bộ lọc",
+      "tabs": {
+        "label": "Chế độ xem cuộc gọi",
+        "log": "Nhật ký cuộc gọi",
+        "analytics": "Phân tích"
+      },
+      "range": {
+        "title": "Khoảng thời gian",
+        "last24h": "24 giờ qua",
+        "last7d": "7 ngày qua",
+        "last30d": "30 ngày qua",
+        "custom": "Khoảng tùy chỉnh",
+        "from": "Từ",
+        "to": "Đến",
+        "apply": "Áp dụng"
+      },
+      "status": {
+        "title": "Trạng thái",
+        "all": "Tất cả",
+        "completed": "Hoàn tất",
+        "in-progress": "Đang diễn ra",
+        "no-answer": "Không trả lời",
+        "declined": "Bị từ chối",
+        "failed": "Thất bại"
+      },
+      "kpi": {
+        "total": "Tổng",
+        "last24h": "24 giờ qua",
+        "minutes": "{count} phút",
+        "completed": "Hoàn tất",
+        "failed": "Thất bại",
+        "selection": "Trong lựa chọn này",
+        "calls": "Cuộc gọi",
+        "answered": "Đã trả lời",
+        "missed": "Nhỡ",
+        "avgDuration": "Thời lượng trung bình",
+        "totalMinutes": "Tổng số phút"
+      },
+      "filters": {
+        "label": "Lọc cuộc gọi",
+        "searchLabel": "Tìm cuộc gọi",
+        "searchPlaceholder": "Số điện thoại hoặc tên liên hệ...",
+        "direction": "Hướng",
+        "allDirections": "Tất cả cuộc gọi",
+        "inbound": "Gọi đến",
+        "outbound": "Gọi đi",
+        "number": "Số",
+        "allNumbers": "Tất cả số",
+        "agent": "Người xử lý",
+        "allAgents": "Mọi người",
+        "apply": "Lọc",
+        "clear": "Xóa"
+      },
+      "table": {
+        "caption": "Cuộc gọi, mới nhất trước",
+        "customer": "Khách hàng",
+        "number": "Số",
+        "handledBy": "Người xử lý",
+        "started": "Bắt đầu",
+        "duration": "Thời lượng",
+        "status": "Trạng thái",
+        "actions": "Thao tác",
+        "open": "Mở",
+        "inbound": "Gọi đến",
+        "outbound": "Gọi đi",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Trang",
+        "showing": "Hiển thị {from}-{to} trong {total} cuộc gọi",
+        "beyond": "Trang này vượt quá trang cuối ({pages} trang).",
+        "previous": "Trước",
+        "next": "Sau",
+        "page": "Trang {page} / {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Đường dẫn điều hướng",
+        "back": "Nhật ký cuộc gọi",
+        "loading": "Đang tải cuộc gọi",
+        "loadFailed": "Không thể tải cuộc gọi này.",
+        "notFound": "Không tìm thấy cuộc gọi này. Cuộc gọi có thể thuộc không gian làm việc khác hoặc nằm ngoài các cuộc gọi bạn có thể xem.",
+        "retry": "Thử lại",
+        "handledBy": "Do {name} xử lý",
+        "handler": {
+          "none": "Chưa ai xử lý",
+          "ai": "Trợ lý AI",
+          "voicemail": "Thư thoại"
+        },
+        "openContact": "Mở liên hệ",
+        "openInbox": "Mở trong hộp thư đến",
+        "tiles": {
+          "duration": "Thời lượng",
+          "number": "Số",
+          "answered": "Đã trả lời",
+          "ended": "Đã kết thúc"
+        },
+        "reasons": {
+          "unknown": "Cuộc gọi thất bại.",
+          "COMPLETED": "Hoàn tất",
+          "REJECTED": "Cuộc gọi bị từ chối.",
+          "DECLINED": "Cuộc gọi bị từ chối.",
+          "BUSY": "Khách hàng đang bận cuộc gọi khác.",
+          "NO_ANSWER": "Không ai nhấc máy.",
+          "MISSED": "Khách hàng đã nhỡ cuộc gọi.",
+          "CANCELLED": "Cuộc gọi đã bị hủy.",
+          "FAILED": "WhatsApp báo cuộc gọi thất bại.",
+          "NO_PERMISSION": "Khách hàng chưa cho phép cuộc gọi nên không có cuộc gọi nào được thực hiện.",
+          "META_REFUSED": "WhatsApp từ chối thực hiện cuộc gọi."
+        },
+        "timeline": {
+          "title": "Dòng thời gian",
+          "count": "{count, plural, one {# bước} other {# bước}}",
+          "empty": "Không có bước nào được ghi lại cho cuộc gọi này."
+        },
+        "steps": {
+          "dial_sent": "Đã thực hiện cuộc gọi",
+          "dial_failed": "Không thể thực hiện cuộc gọi",
+          "connect": "Cuộc gọi đã kết nối với WhatsApp",
+          "pre_accept_sent": "Đang chuẩn bị trả lời",
+          "accept_sent": "Cuộc gọi đã được trả lời",
+          "accept_failed": "Trả lời thất bại",
+          "reject_sent": "Cuộc gọi bị từ chối",
+          "terminate_sent": "Đã gửi lệnh cúp máy",
+          "terminate": "Cuộc gọi đã kết thúc",
+          "recording_stored": "Đã lưu bản ghi âm"
+        },
+        "noRecording": {
+          "title": "Bản ghi âm",
+          "message": "Cuộc gọi này không có bản ghi âm."
+        }
+      },
+      "recording": {
+        "title": "Bản ghi âm",
+        "notice": "Cuộc gọi này đã được ghi âm.",
+        "privacy": "Chỉ những người có quyền truy cập bản ghi âm mới phát được, và mọi lượt phát đều được ghi lại.",
+        "noAccess": "Bạn có thể thấy cuộc gọi này đã được ghi âm, nhưng bạn không có quyền phát bản ghi âm.",
+        "play": "Phát bản ghi âm",
+        "loading": "Đang lấy bản ghi âm",
+        "playerLabel": "Bản ghi âm cuộc gọi",
+        "linkUntil": "Liên kết này có hiệu lực đến {time}. Sau đó hãy nhấn phát lại.",
+        "playFailed": "Không thể phát bản ghi âm.",
+        "retry": "Thử lại"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Không gian làm việc",
+      "title": "Phân tích cuộc gọi",
+      "subtitle": "Cuộc gọi theo thời gian, số cuộc đã trả lời, ai tiếp nhận và khi nào đường dây của bạn bận nhất.",
+      "loading": "Đang tải phân tích cuộc gọi",
+      "loadFailed": "Không thể tải phân tích cuộc gọi.",
+      "retry": "Thử lại",
+      "emptyTitle": "Không có cuộc gọi nào trong khoảng này",
+      "emptyMessage": "Hãy chọn khoảng thời gian rộng hơn, hoặc quay lại sau những cuộc gọi đầu tiên.",
+      "number": "Số",
+      "allNumbers": "Tất cả số",
+      "period": "{from} đến {to}, múi giờ {tz}",
+      "kpi": {
+        "total": "Cuộc gọi",
+        "answeredRate": "Đã trả lời",
+        "answeredOf": "{answered} đã trả lời",
+        "missed": "Nhỡ",
+        "avgHandle": "Thời gian xử lý trung bình",
+        "avgHandleHint": "Thời gian đàm thoại của các cuộc gọi đã trả lời",
+        "totalMinutes": "Tổng số phút"
+      },
+      "overTime": {
+        "title": "Cuộc gọi theo thời gian",
+        "hint": "Mỗi ngày một cột. Phần màu xanh là các cuộc gọi đã được trả lời.",
+        "summary": "{total} cuộc gọi trong {days} ngày",
+        "answered": "Đã trả lời",
+        "other": "Chưa trả lời",
+        "missed": "Nhỡ",
+        "day": "Ngày",
+        "calls": "Cuộc gọi"
+      },
+      "byAgent": {
+        "title": "Theo đồng đội",
+        "agent": "Đồng đội",
+        "calls": "Cuộc gọi",
+        "answered": "Đã trả lời",
+        "avgHandle": "Thời gian xử lý trung bình",
+        "minutes": "Phút",
+        "unassigned": "Chưa ai xử lý"
+      },
+      "heatmap": {
+        "title": "Cuộc gọi theo giờ trong tuần",
+        "hint": "Màu đậm hơn nghĩa là có nhiều cuộc gọi bắt đầu hơn trong giờ đó. Giờ theo múi giờ {tz}.",
+        "weekday": "Ngày trong tuần",
+        "cell": "{day}, {hour}:00: {calls, plural, =0 {không có cuộc gọi} one {# cuộc gọi} other {# cuộc gọi}}"
+      }
+    }
+  }
+}
