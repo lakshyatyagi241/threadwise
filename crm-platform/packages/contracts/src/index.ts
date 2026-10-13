@@ -94,4 +94,5 @@ export * from './faq-knowledge';
 export * from './lead-scoring';
 export * from './growth';
 export * from './contact-consent';
+export * from './privacy';
 export * from './waboo-migration';
