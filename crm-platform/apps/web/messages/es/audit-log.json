@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Registro de auditoría",
+    "description": "Quién cambió qué en este espacio de trabajo, cuándo y de qué valor a cuál. Úsalo para responder \"¿quién hizo esto?\", revisar los cambios de tu equipo y comprobar qué hizo el soporte de la plataforma cuando pediste ayuda.",
+    "tile": {
+      "label": "Registro de auditoría",
+      "description": "Consulta quién cambió qué en tu espacio de trabajo, cuándo y de qué valor a cuál. Fíltralo y expórtalo.",
+      "keywords": "registro de actividad, auditoría, historial, cambios, quién cambió, seguridad, cumplimiento, exportar, acceso de soporte"
+    },
+    "retention": {
+      "days": "Las entradas se conservan durante {days, plural, one {# día} many {# de días} other {# días}} y después se eliminan. La plataforma define este plazo.",
+      "forever": "Las entradas se conservan sin fecha de caducidad. La plataforma define esta política.",
+      "unknown": "Las entradas se conservan durante el plazo que define la plataforma y después se eliminan."
+    },
+    "forbidden": {
+      "title": "No tienes acceso al registro de auditoría",
+      "body": "Pide a un Propietario o Administrador del espacio de trabajo que dé a tu rol el permiso para ver el registro de auditoría."
+    },
+    "filters": {
+      "label": "Filtros del registro de auditoría",
+      "range": "Periodo",
+      "from": "Desde",
+      "to": "Hasta",
+      "actor": "Persona",
+      "allActors": "Todos",
+      "actorType": "Quién actuó",
+      "allActorTypes": "Cualquiera",
+      "module": "Área",
+      "allModules": "Todas las áreas",
+      "action": "Acción",
+      "allActions": "Todas las acciones",
+      "search": "Buscar áreas y acciones",
+      "searchHint": "Solo coincide con el área y la acción, nunca con los valores modificados.",
+      "recordId": "Número de registro",
+      "requestId": "ID de solicitud",
+      "supportOnly": "Solo sesiones de soporte de la plataforma",
+      "apply": "Aplicar filtros",
+      "refresh": "Actualizar",
+      "reset": "Restablecer filtros"
+    },
+    "ranges": {
+      "24h": "Últimas 24 horas",
+      "7d": "Últimos 7 días",
+      "30d": "Últimos 30 días",
+      "90d": "Últimos 90 días",
+      "custom": "Elegir fechas"
+    },
+    "actorTypes": {
+      "user": "Una persona",
+      "system": "El sistema",
+      "api_key": "Una API key",
+      "bot": "Un bot",
+      "partner_agent": "Un agente asociado",
+      "candidate": "Un candidato",
+      "other": "Otro"
+    },
+    "actors": {
+      "system": "Sistema",
+      "api_key": "API key",
+      "apiKeyNamed": "API key: {name}",
+      "bot": "Bot",
+      "partner_agent": "Agente asociado",
+      "candidate": "Candidato",
+      "other": "Otro",
+      "removedUser": "Un usuario eliminado",
+      "support": "Soporte de la plataforma",
+      "actingAs": "actuando como {name}",
+      "supportBadge": "Soporte de la plataforma"
+    },
+    "actions": {
+      "insert": "Creado",
+      "update": "Actualizado",
+      "delete": "Eliminado",
+      "merge": "Combinado",
+      "login": "Sesión iniciada",
+      "export": "Exportado",
+      "read": "Visto"
+    },
+    "modules": {
+      "contacts": "Contactos",
+      "contact_groups": "Grupos de contactos",
+      "contact_notes": "Notas de contactos",
+      "companies": "Empresas",
+      "deals": "Negocios",
+      "tags": "Etiquetas",
+      "members": "Miembros del equipo",
+      "teams": "Equipos",
+      "conversation_notes": "Notas de conversaciones",
+      "broadcasts": "Difusiones",
+      "campaigns": "Campañas",
+      "faqs": "Preguntas frecuentes",
+      "api_keys": "API keys",
+      "audit-log": "Registro de auditoría",
+      "audit-log-exports": "Exportaciones del registro de auditoría",
+      "contact_consent_exports": "Exportaciones de prueba de consentimiento"
+    },
+    "table": {
+      "caption": "Entradas de auditoría, de la más reciente a la más antigua. Las horas se muestran en tu zona horaria ({zone}).",
+      "zone": "Las horas se muestran en tu zona horaria: {zone}.",
+      "time": "Cuándo",
+      "actor": "Quién",
+      "action": "Qué",
+      "record": "Registro",
+      "changed": "Campos modificados",
+      "request": "Solicitud",
+      "details": "Detalles",
+      "openDetails": "Detalles de este cambio: {what}"
+    },
+    "states": {
+      "loading": "Cargando el registro de auditoría",
+      "empty": "No hay nada registrado en este periodo",
+      "emptyHint": "Los cambios que haga tu equipo aparecerán aquí.",
+      "emptyFiltered": "Ninguna entrada coincide con estos filtros",
+      "emptyFilteredHint": "Prueba con un periodo más largo o quita algún filtro.",
+      "retry": "Reintentar",
+      "showing": "{count, plural, one {# entrada cargada} many {# de entradas cargadas} other {# entradas cargadas}}",
+      "loadMore": "Cargar más",
+      "end": "Fin de la lista"
+    },
+    "detail": {
+      "title": "Entrada de auditoría",
+      "when": "Cuándo",
+      "who": "Quién",
+      "what": "Qué",
+      "record": "Registro",
+      "openRecord": "Abrir el registro",
+      "request": "ID de solicitud",
+      "changes": "Qué cambió",
+      "field": "Campo",
+      "before": "Antes",
+      "after": "Después",
+      "noChanges": "Esta entrada no detalla cambios de campos.",
+      "supportTitle": "El soporte de la plataforma actuó en tu espacio de trabajo",
+      "supportBody": "Un miembro del soporte de la plataforma usó una sesión de soporte como {name}. Pudo hacer lo mismo que puede hacer esa persona.",
+      "supportReason": "Motivo indicado: {reason}",
+      "supportNoReason": "El motivo de esta sesión ya no está disponible.",
+      "supportReadOnly": "La sesión era de solo lectura.",
+      "secret": "Secreto oculto",
+      "secretHint": "Las contraseñas, claves y tokens nunca se muestran.",
+      "maskedHint": "Los datos personales están parcialmente ocultos.",
+      "maskedNote": "Los datos personales, como teléfonos, correos electrónicos, nombres y notas, están parcialmente ocultos. Los secretos nunca se muestran.",
+      "maskedNoteOwner": "Los secretos, como contraseñas, claves y tokens, están ocultos para todos.",
+      "audited": "Abrir esta entrada queda registrado en el registro de auditoría."
+    },
+    "export": {
+      "title": "Exportar",
+      "note": "Prepara un CSV con las entradas que coinciden con los filtros de arriba. Se conserva durante {days} días y siempre oculta los datos personales.",
+      "button": "Exportar CSV",
+      "preparing": "Preparando el archivo",
+      "requested": "Se está preparando la exportación. Te avisaremos por correo cuando esté lista.",
+      "none": "Aún no hay exportaciones.",
+      "status": {
+        "queued": "En espera",
+        "running": "Preparando",
+        "ready": "Lista",
+        "failed": "Fallida",
+        "expired": "Caducada"
+      },
+      "rows": "{count, plural, one {# entrada} many {# de entradas} other {# entradas}}",
+      "expires": "se conserva hasta el {date}",
+      "download": "Descargar",
+      "failed": "No se pudo generar esta exportación. Solicítala de nuevo."
+    },
+    "errors": {
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "No tienes permiso para hacer esto.",
+      "notFound": "No se encontró esa entrada o exportación.",
+      "rangeInvalid": "Elige un periodo de 400 días como máximo, que termine después de empezar.",
+      "exportInProgress": "Ya se está preparando una exportación. Espera su correo y solicita otra.",
+      "exportNotReady": "Esta exportación no está lista o ha caducado.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "validation": "Alguno de los filtros no es válido.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "common": {
+      "close": "Cerrar",
+      "dismiss": "Descartar"
+    }
+  }
+}

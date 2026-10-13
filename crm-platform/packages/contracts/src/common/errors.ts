@@ -32,12 +32,14 @@ import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 import { LSC_ERROR_CODES } from '../lead-scoring/errors';
 import { CONSENT_ERROR_CODES } from '../contact-consent/errors';
 import { GROWTH_ERROR_CODES } from '../growth';
+import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log';
 
 export const ERROR_CODES = {
   ...FAQ_ERROR_CODES,
   ...LSC_ERROR_CODES,
   ...GROWTH_ERROR_CODES,
   ...CONSENT_ERROR_CODES,
+  ...AUDIT_LOG_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,

@@ -38,6 +38,5 @@ export const PLANNED_SETTINGS: readonly SettingsTile[] = [
   // Integrations is now the Marketplace tile (features/marketplace/settings.ts).
 
   // Data and security
-  tile('security', 'activity-log', '/activity-log', 'history', 20),
   tile('security', 'privacy', '/privacy', 'lock', 40),
 ];

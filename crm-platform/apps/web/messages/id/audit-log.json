@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Log audit",
+    "description": "Siapa mengubah apa di workspace ini, kapan, dan dari apa menjadi apa. Gunakan untuk menjawab \"siapa yang melakukan ini?\", meninjau perubahan yang dibuat tim Anda, dan memeriksa apa yang dilakukan dukungan platform saat Anda meminta bantuan.",
+    "tile": {
+      "label": "Log audit",
+      "description": "Lihat siapa mengubah apa di workspace Anda, kapan, dan dari apa menjadi apa. Filter dan ekspor.",
+      "keywords": "log aktivitas, audit, riwayat, perubahan, siapa mengubah, keamanan, kepatuhan, ekspor, akses dukungan"
+    },
+    "retention": {
+      "days": "Entri disimpan selama {days, plural, other {# hari}}, lalu dihapus. Periode ini ditentukan oleh platform.",
+      "forever": "Entri disimpan tanpa batas waktu. Kebijakan ini ditentukan oleh platform.",
+      "unknown": "Entri disimpan selama periode yang ditentukan platform, lalu dihapus."
+    },
+    "forbidden": {
+      "title": "Anda tidak memiliki akses ke log audit",
+      "body": "Minta Owner atau Admin workspace untuk memberi peran Anda izin melihat log audit."
+    },
+    "filters": {
+      "label": "Filter log audit",
+      "range": "Periode",
+      "from": "Dari",
+      "to": "Sampai",
+      "actor": "Orang",
+      "allActors": "Semua orang",
+      "actorType": "Pelaku",
+      "allActorTypes": "Siapa saja",
+      "module": "Area",
+      "allModules": "Semua area",
+      "action": "Tindakan",
+      "allActions": "Semua tindakan",
+      "search": "Cari area dan tindakan",
+      "searchHint": "Hanya mencocokkan area dan tindakan, bukan nilai yang diubah.",
+      "recordId": "Nomor record",
+      "requestId": "Request ID",
+      "supportOnly": "Hanya sesi dukungan platform",
+      "apply": "Terapkan filter",
+      "refresh": "Segarkan",
+      "reset": "Reset filter"
+    },
+    "ranges": {
+      "24h": "24 jam terakhir",
+      "7d": "7 hari terakhir",
+      "30d": "30 hari terakhir",
+      "90d": "90 hari terakhir",
+      "custom": "Pilih tanggal"
+    },
+    "actorTypes": {
+      "user": "Seseorang",
+      "system": "Sistem",
+      "api_key": "Kunci API",
+      "bot": "Bot",
+      "partner_agent": "Agen mitra",
+      "candidate": "Kandidat",
+      "other": "Lainnya"
+    },
+    "actors": {
+      "system": "Sistem",
+      "api_key": "Kunci API",
+      "apiKeyNamed": "Kunci API: {name}",
+      "bot": "Bot",
+      "partner_agent": "Agen mitra",
+      "candidate": "Kandidat",
+      "other": "Lainnya",
+      "removedUser": "Pengguna yang telah dihapus",
+      "support": "Dukungan platform",
+      "actingAs": "bertindak sebagai {name}",
+      "supportBadge": "Dukungan platform"
+    },
+    "actions": {
+      "insert": "Dibuat",
+      "update": "Diperbarui",
+      "delete": "Dihapus",
+      "merge": "Digabungkan",
+      "login": "Masuk",
+      "export": "Diekspor",
+      "read": "Dilihat"
+    },
+    "modules": {
+      "contacts": "Kontak",
+      "contact_groups": "Grup kontak",
+      "contact_notes": "Catatan kontak",
+      "companies": "Perusahaan",
+      "deals": "Deal",
+      "tags": "Tag",
+      "members": "Anggota tim",
+      "teams": "Tim",
+      "conversation_notes": "Catatan percakapan",
+      "broadcasts": "Siaran",
+      "campaigns": "Kampanye",
+      "faqs": "FAQ",
+      "api_keys": "Kunci API",
+      "audit-log": "Log audit",
+      "audit-log-exports": "Ekspor log audit",
+      "contact_consent_exports": "Ekspor bukti persetujuan"
+    },
+    "table": {
+      "caption": "Entri audit, terbaru lebih dulu. Waktu ditampilkan dalam zona waktu Anda ({zone}).",
+      "zone": "Waktu ditampilkan dalam zona waktu Anda: {zone}.",
+      "time": "Kapan",
+      "actor": "Siapa",
+      "action": "Apa",
+      "record": "Record",
+      "changed": "Kolom yang diubah",
+      "request": "Permintaan",
+      "details": "Detail",
+      "openDetails": "Detail perubahan ini: {what}"
+    },
+    "states": {
+      "loading": "Memuat log audit",
+      "empty": "Tidak ada catatan pada periode ini",
+      "emptyHint": "Perubahan yang dibuat tim Anda akan muncul di sini.",
+      "emptyFiltered": "Tidak ada entri yang cocok dengan filter ini",
+      "emptyFilteredHint": "Coba periode yang lebih panjang atau hapus salah satu filter.",
+      "retry": "Coba lagi",
+      "showing": "{count, plural, other {# entri dimuat}}",
+      "loadMore": "Muat lebih banyak",
+      "end": "Akhir daftar"
+    },
+    "detail": {
+      "title": "Entri audit",
+      "when": "Kapan",
+      "who": "Siapa",
+      "what": "Apa",
+      "record": "Record",
+      "openRecord": "Buka record",
+      "request": "Request ID",
+      "changes": "Apa yang berubah",
+      "field": "Kolom",
+      "before": "Sebelum",
+      "after": "Sesudah",
+      "noChanges": "Entri ini tidak mencantumkan perubahan kolom.",
+      "supportTitle": "Dukungan platform bertindak di workspace Anda",
+      "supportBody": "Anggota dukungan platform menggunakan sesi dukungan sebagai {name}. Mereka dapat melakukan apa yang dapat dilakukan orang tersebut.",
+      "supportReason": "Alasan yang diberikan: {reason}",
+      "supportNoReason": "Alasan sesi ini tidak lagi tersedia.",
+      "supportReadOnly": "Sesi ini hanya-baca.",
+      "secret": "Rahasia disembunyikan",
+      "secretHint": "Kata sandi, kunci, dan token tidak pernah ditampilkan.",
+      "maskedHint": "Data pribadi disembunyikan sebagian.",
+      "maskedNote": "Data pribadi seperti nomor telepon, alamat email, nama, dan catatan disembunyikan sebagian. Rahasia tidak pernah ditampilkan.",
+      "maskedNoteOwner": "Rahasia seperti kata sandi, kunci, dan token disembunyikan untuk semua orang.",
+      "audited": "Membuka entri ini dicatat di log audit."
+    },
+    "export": {
+      "title": "Ekspor",
+      "note": "Menyiapkan CSV dari entri yang cocok dengan filter di atas. File disimpan selama {days} hari dan selalu menyembunyikan data pribadi.",
+      "button": "Ekspor CSV",
+      "preparing": "Menyiapkan file",
+      "requested": "Ekspor sedang disiapkan. Kami akan mengirim email saat sudah siap.",
+      "none": "Belum ada ekspor.",
+      "status": {
+        "queued": "Menunggu",
+        "running": "Menyiapkan",
+        "ready": "Siap",
+        "failed": "Gagal",
+        "expired": "Kedaluwarsa"
+      },
+      "rows": "{count, plural, other {# entri}}",
+      "expires": "disimpan sampai {date}",
+      "download": "Unduh",
+      "failed": "Ekspor ini tidak dapat dibuat. Minta lagi."
+    },
+    "errors": {
+      "network": "Tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+      "notFound": "Entri atau ekspor itu tidak ditemukan.",
+      "rangeInvalid": "Pilih periode maksimal 400 hari, dengan tanggal akhir setelah tanggal mulai.",
+      "exportInProgress": "Sebuah ekspor sedang disiapkan. Tunggu emailnya, lalu minta ekspor lain.",
+      "exportNotReady": "Ekspor ini belum siap, atau sudah kedaluwarsa.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "validation": "Salah satu filter tidak valid.",
+      "unexpected": "Terjadi kesalahan. Coba lagi."
+    },
+    "common": {
+      "close": "Tutup",
+      "dismiss": "Abaikan"
+    }
+  }
+}

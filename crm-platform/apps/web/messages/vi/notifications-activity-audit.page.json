@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Thông báo",
+      "description": "Mọi việc cần bạn chú ý, mới nhất trước. Chọn những sự kiện gửi đến bạn trong phần cài đặt thông báo.",
+      "markAll": "Đánh dấu tất cả đã đọc",
+      "clearAll": "Xóa tất cả",
+      "preferences": "Cài đặt thông báo",
+      "clearTitle": "Xóa tất cả thông báo?",
+      "clearBody": "Thao tác này xóa vĩnh viễn mọi thông báo của bạn. Thông báo của người khác vẫn được giữ nguyên. Không thể hoàn tác.",
+      "clearConfirm": "Xóa tất cả",
+      "cancel": "Hủy",
+      "dismiss": "Bỏ qua thông báo này",
+      "tiles": {
+        "unread": "Chưa đọc",
+        "unreadHint": "Chọn để chỉ hiện thông báo chưa đọc",
+        "day": "24 giờ qua",
+        "dayHint": "Nhận hôm nay",
+        "week": "7 ngày qua",
+        "weekHint": "Nhận trong tuần này",
+        "total": "Đã lưu",
+        "totalHint": "Thông báo cũ hơn sẽ tự động bị xóa"
+      },
+      "filters": {
+        "label": "Bộ lọc thông báo",
+        "readLabel": "Hiển thị",
+        "all": "Tất cả",
+        "unread": "Chưa đọc",
+        "type": "Loại",
+        "allTypes": "Tất cả loại",
+        "otherTypes": "Khác",
+        "search": "Tìm thông báo",
+        "reset": "Đặt lại bộ lọc"
+      },
+      "sections": {
+        "today": "Hôm nay",
+        "yesterday": "Hôm qua",
+        "thisWeek": "Đầu tuần này",
+        "older": "Cũ hơn"
+      },
+      "loading": "Đang tải thông báo",
+      "failed": "Không thể tải thông báo của bạn.",
+      "retry": "Thử lại",
+      "empty": "Chưa có thông báo nào",
+      "emptyHint": "Cuộc trò chuyện mới, việc được giao, lượt nhắc đến và kết quả các lần gửi của bạn sẽ xuất hiện ở đây.",
+      "emptyFiltered": "Không có thông báo nào khớp với các bộ lọc này",
+      "emptyFilteredHint": "Hãy bỏ bớt một bộ lọc hoặc tìm nội dung khác.",
+      "showing": "{count, plural, other {Đã tải # thông báo}}",
+      "loadMore": "Tải thêm",
+      "end": "Hết danh sách"
+    }
+  }
+}

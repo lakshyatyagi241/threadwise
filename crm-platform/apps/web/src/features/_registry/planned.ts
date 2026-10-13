@@ -26,14 +26,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     order: 10,
     icon: 'analytics',
   },
-  {
-    id: 'notifications',
-    group: 'overview',
-    labelKey: L('notifications'),
-    href: '/notifications',
-    order: 20,
-    icon: 'bell',
-  },
 
   // Inbox & Chat
   {
