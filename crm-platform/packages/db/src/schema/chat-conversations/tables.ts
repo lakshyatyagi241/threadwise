@@ -533,6 +533,9 @@ export const messageLogExports = pgTable(
     rangeFrom: date('range_from').notNull(),
     rangeTo: date('range_to').notNull(),
     messageStatus: text('message_status'),
+    /** 'events': the delivery log; 'messages': the Message History feed with `filters` (20261126090000). */
+    kind: text('kind').notNull().default('events'),
+    filters: jsonb('filters').$type<Record<string, unknown>>(),
     status: text('status')
       .$type<(typeof MESSAGE_LOG_EXPORT_STATUSES)[number]>()
       .notNull()

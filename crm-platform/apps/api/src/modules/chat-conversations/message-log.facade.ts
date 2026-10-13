@@ -2,6 +2,7 @@ import type { Readable } from 'node:stream';
 import type {
   CreateMessageLogExportInput,
   MessageLogExport,
+  MessageLogExportKind,
   MessageLogExportList,
   MessageLogResponse,
 } from '@crm/contracts';
@@ -24,11 +25,24 @@ export interface MessageLogFacade {
    */
   requestExport(input: CreateMessageLogExportInput): Promise<MessageLogExport>;
 
-  /** `GET /inbox/message-logs/exports`: the workspace's latest exports, newest first. */
-  listExports(): Promise<MessageLogExportList>;
+  /**
+   * `POST /message-history/exports`: queues the export of the Message History feed with the screen's filters (the caller has resolved
+   * the window and checked that the person may export everything in it). `MESSAGE_LOG_EXPORT_IN_PROGRESS`.
+   */
+  requestHistoryExport(input: HistoryExportRequest): Promise<MessageLogExport>;
+
+  /** `GET /inbox/message-logs/exports`: the workspace's latest exports of one kind (default the delivery log), newest first. */
+  listExports(kind?: MessageLogExportKind): Promise<MessageLogExportList>;
 
   /** `GET /inbox/message-logs/exports/:id/download`: the CSV. `MESSAGE_LOG_EXPORT_NOT_FOUND`, `MESSAGE_LOG_EXPORT_NOT_READY` (not built yet, failed or expired). */
   downloadExport(exportUuid: string): Promise<{ stream: Readable; fileName: string }>;
+}
+
+/** What a history export is: the UTC days it spans and the filters, with the window as the instants the person meant. */
+export interface HistoryExportRequest {
+  from: string;
+  to: string;
+  filters: Record<string, unknown>;
 }
 
 export const MESSAGE_LOG_FACADE = Symbol('MESSAGE_LOG_FACADE');

@@ -10,8 +10,10 @@ import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
 import { InboxController } from './inbox.controller';
-import { InboxLabelsController } from './inbox-labels.controller';
-import { InboxLabelsService } from './inbox-labels.service';
+import { MessageHistoryController } from './message-history.controller';
+import { MessageHistoryService } from './message-history.service';
+import { InboxTagsController } from './inbox-tags.controller';
+import { InboxTagsService } from './inbox-tags.service';
 import { InboxSystemNotes } from './inbox-system-notes.service';
 import { InboxMediaService } from './inbox-media.service';
 import { InboxMessageLogService } from './inbox-message-log.service';
@@ -21,7 +23,7 @@ import { InboxSnoozeWakeService } from './inbox-snooze-wake.service';
 import { InboxThreadService } from './inbox-thread.service';
 import { InboxTimelineService } from './inbox-timeline.service';
 import { InboxTriageService } from './inbox-triage.service';
-import { LabelsRepository } from './labels.repository';
+import { InboxTagsRepository } from './inbox-tags.repository';
 import { MediaUploadsRepository } from './media-uploads.repository';
 import { NotesRepository } from './notes.repository';
 import { SavedRepliesController } from './saved-replies/saved-replies.controller';
@@ -49,7 +51,8 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
   // The transfer controller first: `export` and `import` must not be read as a reply id.
   controllers: [
     InboxController,
-    InboxLabelsController,
+    MessageHistoryController,
+    InboxTagsController,
     SavedRepliesTransferController,
     SavedRepliesController,
   ],
@@ -64,12 +67,13 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxConversationsService,
     InboxThreadService,
     InboxTriageService,
-    LabelsRepository,
-    InboxLabelsService,
+    InboxTagsRepository,
+    InboxTagsService,
     InboxNotesService,
     InboxTimelineService,
     InboxMediaService,
     InboxMessageLogService,
+    MessageHistoryService,
     SavedRepliesRepository,
     SavedRepliesService,
     SavedRepliesTransferService,
@@ -83,7 +87,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxSystemNotes,
     InboxConversationsService,
     InboxTriageService,
-    InboxLabelsService,
+    InboxTagsService,
     SharedSavedRepliesReader,
   ],
 })

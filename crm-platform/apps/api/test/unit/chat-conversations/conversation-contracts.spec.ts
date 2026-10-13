@@ -205,6 +205,8 @@ describe('response shapes', () => {
       contact: null,
       assignment: { user: null, team: null, aiAgent: null },
       snoozedUntil: null,
+      labels: [],
+      slaStatus: null,
       lastMessageAt: null,
       lastInboundAt: null,
       lastOutboundAt: null,

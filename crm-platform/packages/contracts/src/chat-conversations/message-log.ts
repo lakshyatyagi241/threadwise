@@ -98,8 +98,13 @@ export const createMessageLogExportSchema = z
   .strict();
 export type CreateMessageLogExportInput = z.infer<typeof createMessageLogExportSchema>;
 
+/** `events`: the delivery log (one line per event). `messages`: the Message History feed (one line per message), with the screen's filters. */
+export const messageLogExportKindSchema = z.enum(['events', 'messages']);
+export type MessageLogExportKind = z.infer<typeof messageLogExportKindSchema>;
+
 export const messageLogExportSchema = z.object({
   id: uuidSchema,
+  kind: messageLogExportKindSchema,
   status: messageLogExportStatusSchema,
   from: dayStringSchema,
   to: dayStringSchema,
@@ -117,6 +122,12 @@ export const messageLogExportSchema = z.object({
   emailedTo: z.string().nullable(),
 });
 export type MessageLogExport = z.infer<typeof messageLogExportSchema>;
+
+/** `GET .../exports`: which exports to list. Omitted: the delivery log exports (`events`), which the Message logs page shows. */
+export const listMessageLogExportsQuerySchema = z.object({
+  kind: messageLogExportKindSchema.default('events'),
+});
+export type ListMessageLogExportsQuery = z.infer<typeof listMessageLogExportsQuerySchema>;
 
 export const messageLogExportListSchema = z.object({
   data: z.array(messageLogExportSchema),

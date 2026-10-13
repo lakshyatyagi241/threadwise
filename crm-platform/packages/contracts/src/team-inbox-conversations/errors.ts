@@ -7,9 +7,9 @@
 export const INBOX_ERROR_CODES = {
   /** No such SLA policy in this workspace. */
   SLA_POLICY_NOT_FOUND: 'SLA_POLICY_NOT_FOUND',
-  /** No such label in this workspace (a label of another workspace is the same answer). */
+  /** No such tag in this workspace (a tag of another workspace is the same answer). The code keeps its original name `INBOX_LABEL_*` so clients that branch on it keep working. */
   INBOX_LABEL_NOT_FOUND: 'INBOX_LABEL_NOT_FOUND',
-  /** Naming a label that does not exist yet creates it, which needs `inbox.tag.manage`. */
+  /** Naming a tag that does not exist yet creates it, which needs `inbox.tag.manage`. */
   INBOX_LABEL_CREATE_FORBIDDEN: 'INBOX_LABEL_CREATE_FORBIDDEN',
   /** No such note on this conversation (a note of another conversation or workspace is the same answer). */
   CONVERSATION_NOTE_NOT_FOUND: 'CONVERSATION_NOTE_NOT_FOUND',
