@@ -196,6 +196,7 @@ export const savedReplySchema = z.object({
 });
 export type SavedReply = z.infer<typeof savedReplySchema>;
 
+// eslint-disable-next-line no-control-regex -- control characters are exactly what is refused
 const noControlChars = (v: string) => !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(v);
 
 const shortcutInput = z
