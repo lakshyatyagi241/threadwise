@@ -60,7 +60,9 @@ export function useContactActions(
     },
     {
       key: 'chat',
-      icon: 'chatbubble-ellipses-outline',
+      // Chat is WhatsApp (the thread or the contact's own chat), so it wears the WhatsApp mark.
+      icon: 'logo-whatsapp',
+      color: 'whatsapp',
       label: t('contacts.detail.actions.chat'),
       disabled: !phone,
       busy: looking,

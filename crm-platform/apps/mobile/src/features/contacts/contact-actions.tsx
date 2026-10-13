@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
+import { MIN_TOUCH_TARGET, spacing, type ThemeColors } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
 /** The width of one icon button when the shortcuts share a line with the name: a full finger wide. */
@@ -10,6 +10,8 @@ const COMPACT_WIDTH = MIN_TOUCH_TARGET;
 export interface ContactAction {
   key: string;
   icon: IconName;
+  /** The icon's colour when it is not the app's accent (chat is the WhatsApp green). */
+  color?: keyof ThemeColors;
   label: string;
   /** Faded and not pressable: there is nothing to dial, or the person may not use it. */
   disabled?: boolean;
@@ -45,12 +47,12 @@ export function ContactActions({ actions, compact, describe }: Props) {
         >
           {compact ? (
             <View style={styles.inline}>
-              <Icon name={a.icon} size={22} color="primary" />
+              <Icon name={a.icon} size={22} color={a.color ?? 'primary'} />
             </View>
           ) : (
             <>
               <View style={[styles.circle, { backgroundColor: colors.primarySoft }]}>
-                <Icon name={a.icon} size={22} color="primary" />
+                <Icon name={a.icon} size={22} color={a.color ?? 'primary'} />
               </View>
               <Text variant="caption" muted numberOfLines={1}>
                 {a.label}
