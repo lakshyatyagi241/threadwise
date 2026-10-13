@@ -25,7 +25,9 @@
       "pickTitle": "Escolha uma conversa",
       "pickMessage": "Escolha uma conversa na lista para lê-la e responder. Novas mensagens aparecem aqui automaticamente.",
       "shortcuts": "Atalhos: j e k navegam pela lista, e resolve, / pesquisa.",
-      "teamChanged": "Equipe atualizada."
+      "teamChanged": "Equipe atualizada.",
+      "priorityChanged": "Prioridade atualizada",
+      "snoozed": "Conversa adiada"
     },
     "list": {
       "title": "Caixa de entrada",
@@ -101,7 +103,9 @@
           "title": "Você está em dia",
           "message": "Aqui aparecem as conversas com novas mensagens de clientes."
         }
-      }
+      },
+      "select": "Selecionar",
+      "selectDone": "Concluído"
     },
     "status": {
       "received": "Recebida",
@@ -818,6 +822,39 @@
         "conflict": "Outra pessoa alterou esta resposta primeiro. Feche esta janela e abra-a novamente.",
         "invalid": "Parte do que você informou não é válida."
       }
+    },
+    "bulk": {
+      "barLabel": "Ações em massa",
+      "selected": "{count, plural, one {# conversa selecionada} other {# conversas selecionadas}}",
+      "selectAllInView": "Selecionar todas as {count} na tela",
+      "done": "Concluído",
+      "markRead": "Marcar como lida",
+      "resolve": "Resolver",
+      "close": "Fechar",
+      "reopen": "Reabrir",
+      "assign": "Atribuir",
+      "assignToMe": "Atribuir a mim",
+      "unassign": "Remover atribuição",
+      "removeTeam": "Remover equipe",
+      "priority": "Prioridade",
+      "snooze": "Adiar",
+      "snoozePreset": {
+        "oneHour": "1 hora",
+        "threeHours": "3 horas",
+        "tomorrow": "Amanhã, 9:00",
+        "nextWeek": "Próxima segunda, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversa atualizada} other {# conversas atualizadas}}.",
+        "nothingChanged": "Nada a alterar: as conversas selecionadas já estão atualizadas.",
+        "partial": "{done} atualizadas, {unchanged} já estavam atualizadas, {failed} não puderam ser alteradas. As que falharam continuam selecionadas.",
+        "allFailed": "Nenhuma {count, plural, one {das # conversa pôde} other {das # conversas pôde}} ser alterada."
+      }
+    },
+    "triage": {
+      "priority": "Prioridade",
+      "snooze": "Adiar",
+      "wake": "Reativar agora"
     }
   }
 }

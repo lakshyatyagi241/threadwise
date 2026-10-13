@@ -25,7 +25,9 @@
       "pickTitle": "대화 선택",
       "pickMessage": "목록에서 대화를 선택하여 읽고 답장하세요. 새 메시지는 자동으로 여기에 표시됩니다.",
       "shortcuts": "단축키: j와 k로 목록 이동, e로 완료 처리, /로 검색",
-      "teamChanged": "팀이 업데이트되었습니다."
+      "teamChanged": "팀이 업데이트되었습니다.",
+      "priorityChanged": "우선순위가 업데이트되었습니다",
+      "snoozed": "대화를 일시 중지했습니다"
     },
     "list": {
       "title": "수신함",
@@ -101,7 +103,9 @@
           "title": "모든 대화를 확인했습니다",
           "message": "고객의 새 메시지가 있는 대화가 여기에 표시됩니다."
         }
-      }
+      },
+      "select": "선택",
+      "selectDone": "완료"
     },
     "status": {
       "received": "수신됨",
@@ -818,6 +822,39 @@
         "conflict": "다른 사람이 먼저 이 답변을 변경했습니다. 이 창을 닫고 다시 여세요.",
         "invalid": "입력한 내용 중 일부가 올바르지 않습니다."
       }
+    },
+    "bulk": {
+      "barLabel": "일괄 작업",
+      "selected": "{count, plural, one {대화 #개 선택됨} other {대화 #개 선택됨}}",
+      "selectAllInView": "표시된 {count}개 모두 선택",
+      "done": "완료",
+      "markRead": "읽음으로 표시",
+      "resolve": "해결됨으로 표시",
+      "close": "닫기",
+      "reopen": "다시 열기",
+      "assign": "배정",
+      "assignToMe": "나에게 배정",
+      "unassign": "배정 해제",
+      "removeTeam": "팀 제거",
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "snoozePreset": {
+        "oneHour": "1시간",
+        "threeHours": "3시간",
+        "tomorrow": "내일 오전 9:00",
+        "nextWeek": "다음 주 월요일 오전 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {대화 #개를 업데이트했습니다} other {대화 #개를 업데이트했습니다}}.",
+        "nothingChanged": "변경할 내용이 없습니다. 선택한 대화는 이미 최신 상태입니다.",
+        "partial": "{done}개 업데이트됨, {unchanged}개는 이미 최신 상태, {failed}개는 변경할 수 없습니다. 실패한 항목은 선택된 상태로 유지됩니다.",
+        "allFailed": "{count, plural, one {대화 #개를} other {대화 #개를}} 변경할 수 없습니다."
+      }
+    },
+    "triage": {
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "wake": "지금 다시 표시"
     }
   }
 }

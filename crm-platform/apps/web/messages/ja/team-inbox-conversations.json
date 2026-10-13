@@ -25,7 +25,9 @@
       "pickTitle": "会話を選択",
       "pickMessage": "リストから会話を選ぶと内容を確認して返信できます。新しいメッセージはここに自動で表示されます。",
       "shortcuts": "ショートカット: j と k でリストを移動、e で解決、/ で検索。",
-      "teamChanged": "チームを更新しました。"
+      "teamChanged": "チームを更新しました。",
+      "priorityChanged": "優先度を更新しました",
+      "snoozed": "会話をスヌーズしました"
     },
     "list": {
       "title": "受信箱",
@@ -101,7 +103,9 @@
           "title": "すべて確認済みです",
           "message": "お客様から新しいメッセージが届いた会話がここに表示されます。"
         }
-      }
+      },
+      "select": "選択",
+      "selectDone": "完了"
     },
     "status": {
       "received": "受信済み",
@@ -818,6 +822,39 @@
         "conflict": "他の人が先にこの返信を変更しました。このウィンドウを閉じて、もう一度開いてください。",
         "invalid": "入力内容の一部が正しくありません。"
       }
+    },
+    "bulk": {
+      "barLabel": "一括操作",
+      "selected": "{count, plural, one {#件の会話を選択中} other {#件の会話を選択中}}",
+      "selectAllInView": "表示中の{count}件をすべて選択",
+      "done": "完了",
+      "markRead": "既読にする",
+      "resolve": "解決済みにする",
+      "close": "閉じる",
+      "reopen": "再開する",
+      "assign": "割り当て",
+      "assignToMe": "自分に割り当て",
+      "unassign": "割り当て解除",
+      "removeTeam": "チームを外す",
+      "priority": "優先度",
+      "snooze": "スヌーズ",
+      "snoozePreset": {
+        "oneHour": "1時間後",
+        "threeHours": "3時間後",
+        "tomorrow": "明日 9:00",
+        "nextWeek": "来週月曜 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {#件の会話を更新しました} other {#件の会話を更新しました}}。",
+        "nothingChanged": "変更はありません。選択した会話はすでに最新です。",
+        "partial": "{done}件を更新、{unchanged}件はすでに最新、{failed}件は変更できませんでした。失敗した会話は選択されたままです。",
+        "allFailed": "{count, plural, one {#件の会話} other {#件の会話}}のいずれも変更できませんでした。"
+      }
+    },
+    "triage": {
+      "priority": "優先度",
+      "snooze": "スヌーズ",
+      "wake": "今すぐ再開"
     }
   }
 }

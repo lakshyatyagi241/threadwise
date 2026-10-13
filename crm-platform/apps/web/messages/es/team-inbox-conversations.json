@@ -25,7 +25,9 @@
       "pickTitle": "Elige una conversación",
       "pickMessage": "Elige una conversación de la lista para leerla y responder. Los mensajes nuevos aparecen aquí solos.",
       "shortcuts": "Atajos: j y k recorren la lista, e resuelve, / busca.",
-      "teamChanged": "Equipo actualizado."
+      "teamChanged": "Equipo actualizado.",
+      "priorityChanged": "Prioridad actualizada",
+      "snoozed": "Conversación pospuesta"
     },
     "list": {
       "title": "Bandeja de entrada",
@@ -101,7 +103,9 @@
           "title": "Estás al día",
           "message": "Aquí aparecen las conversaciones con mensajes nuevos de clientes."
         }
-      }
+      },
+      "select": "Seleccionar",
+      "selectDone": "Listo"
     },
     "status": {
       "received": "Recibido",
@@ -818,6 +822,39 @@
         "conflict": "Alguien más cambió esta respuesta primero. Cierra esta ventana y ábrela de nuevo.",
         "invalid": "Algo de lo que introdujiste no es válido."
       }
+    },
+    "bulk": {
+      "barLabel": "Acciones masivas",
+      "selected": "{count, plural, one {# conversación seleccionada} other {# conversaciones seleccionadas}}",
+      "selectAllInView": "Seleccionar las {count} en pantalla",
+      "done": "Listo",
+      "markRead": "Marcar como leído",
+      "resolve": "Resolver",
+      "close": "Cerrar",
+      "reopen": "Reabrir",
+      "assign": "Asignar",
+      "assignToMe": "Asignarme",
+      "unassign": "Quitar asignación",
+      "removeTeam": "Quitar equipo",
+      "priority": "Prioridad",
+      "snooze": "Posponer",
+      "snoozePreset": {
+        "oneHour": "1 hora",
+        "threeHours": "3 horas",
+        "tomorrow": "Mañana, 9:00",
+        "nextWeek": "Próximo lunes, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversación actualizada} other {# conversaciones actualizadas}}.",
+        "nothingChanged": "Nada que cambiar: las conversaciones seleccionadas ya están al día.",
+        "partial": "{done} actualizadas, {unchanged} ya estaban al día, {failed} no se pudieron cambiar. Las que fallaron siguen seleccionadas.",
+        "allFailed": "No se pudo cambiar ninguna de {count, plural, one {la # conversación} other {las # conversaciones}}."
+      }
+    },
+    "triage": {
+      "priority": "Prioridad",
+      "snooze": "Posponer",
+      "wake": "Reactivar ahora"
     }
   }
 }

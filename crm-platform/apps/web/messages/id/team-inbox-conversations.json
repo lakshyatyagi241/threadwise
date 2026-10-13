@@ -25,7 +25,9 @@
       "pickTitle": "Pilih percakapan",
       "pickMessage": "Pilih percakapan dari daftar untuk membacanya dan membalas. Pesan baru akan muncul di sini dengan sendirinya.",
       "shortcuts": "Pintasan: j dan k untuk bergerak dalam daftar, e untuk menyelesaikan, / untuk mencari.",
-      "teamChanged": "Tim diperbarui."
+      "teamChanged": "Tim diperbarui.",
+      "priorityChanged": "Prioritas diperbarui",
+      "snoozed": "Percakapan ditunda"
     },
     "list": {
       "title": "Inbox",
@@ -101,7 +103,9 @@
           "title": "Semua sudah beres",
           "message": "Percakapan dengan pesan baru dari pelanggan tercantum di sini."
         }
-      }
+      },
+      "select": "Pilih",
+      "selectDone": "Selesai"
     },
     "status": {
       "received": "Diterima",
@@ -818,6 +822,39 @@
         "conflict": "Orang lain mengubah balasan ini lebih dulu. Tutup jendela ini dan buka kembali.",
         "invalid": "Sebagian isian Anda tidak valid."
       }
+    },
+    "bulk": {
+      "barLabel": "Tindakan massal",
+      "selected": "{count, plural, one {# percakapan dipilih} other {# percakapan dipilih}}",
+      "selectAllInView": "Pilih semua {count} yang tampil",
+      "done": "Selesai",
+      "markRead": "Tandai sudah dibaca",
+      "resolve": "Selesaikan",
+      "close": "Tutup",
+      "reopen": "Buka kembali",
+      "assign": "Tugaskan",
+      "assignToMe": "Tugaskan ke saya",
+      "unassign": "Batalkan penugasan",
+      "removeTeam": "Hapus tim",
+      "priority": "Prioritas",
+      "snooze": "Tunda",
+      "snoozePreset": {
+        "oneHour": "1 jam",
+        "threeHours": "3 jam",
+        "tomorrow": "Besok, 09.00",
+        "nextWeek": "Senin depan, 09.00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# percakapan diperbarui} other {# percakapan diperbarui}}.",
+        "nothingChanged": "Tidak ada yang perlu diubah: percakapan yang dipilih sudah yang terbaru.",
+        "partial": "{done} diperbarui, {unchanged} sudah yang terbaru, {failed} tidak dapat diubah. Yang gagal tetap terpilih.",
+        "allFailed": "Tidak ada dari {count, plural, one {# percakapan} other {# percakapan}} yang dapat diubah."
+      }
+    },
+    "triage": {
+      "priority": "Prioritas",
+      "snooze": "Tunda",
+      "wake": "Aktifkan sekarang"
     }
   }
 }

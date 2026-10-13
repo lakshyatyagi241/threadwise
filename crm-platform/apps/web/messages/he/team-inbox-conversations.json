@@ -25,7 +25,9 @@
       "pickTitle": "בחר שיחה",
       "pickMessage": "בחר שיחה מהרשימה כדי לקרוא ולהשיב. הודעות חדשות יופיעו כאן אוטומטית.",
       "shortcuts": "קיצורים: j ו-k לניווט ברשימה, e לסימון כנפתרה, / לחיפוש.",
-      "teamChanged": "הצוות עודכן."
+      "teamChanged": "הצוות עודכן.",
+      "priorityChanged": "העדיפות עודכנה",
+      "snoozed": "השיחה נדחתה"
     },
     "list": {
       "title": "תיבת הודעות",
@@ -101,7 +103,9 @@
           "title": "אין לך עוד דברים לטפל בהם",
           "message": "כאן מופיעות שיחות עם הודעות חדשות מלקוחות."
         }
-      }
+      },
+      "select": "בחירה",
+      "selectDone": "סיום"
     },
     "status": {
       "received": "התקבלה",
@@ -818,6 +822,39 @@
         "conflict": "מישהו אחר שינה את התגובה הזו קודם. סגרו את החלון ופתחו אותו מחדש.",
         "invalid": "חלק מהנתונים שהזנתם אינם תקינים."
       }
+    },
+    "bulk": {
+      "barLabel": "פעולות מרוכזות",
+      "selected": "{count, plural, one {שיחה אחת נבחרה} other {# שיחות נבחרו}}",
+      "selectAllInView": "בחר את כל {count} בתצוגה",
+      "done": "סיום",
+      "markRead": "סמן כנקרא",
+      "resolve": "סמן כפתור",
+      "close": "סגור",
+      "reopen": "פתח מחדש",
+      "assign": "הקצה",
+      "assignToMe": "הקצה לי",
+      "unassign": "בטל הקצאה",
+      "removeTeam": "הסר צוות",
+      "priority": "עדיפות",
+      "snooze": "דחה",
+      "snoozePreset": {
+        "oneHour": "שעה",
+        "threeHours": "3 שעות",
+        "tomorrow": "מחר, 9:00",
+        "nextWeek": "יום שני הבא, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {שיחה אחת עודכנה} other {# שיחות עודכנו}}.",
+        "nothingChanged": "אין מה לשנות: השיחות שנבחרו כבר מעודכנות.",
+        "partial": "{done} עודכנו, {unchanged} כבר מעודכנות, {failed} לא ניתן היה לשנות. אלו שנכשלו יישארו נבחרות.",
+        "allFailed": "לא ניתן היה לשנות אף אחת מ{count, plural, one {השיחה} other {# השיחות}}."
+      }
+    },
+    "triage": {
+      "priority": "עדיפות",
+      "snooze": "דחייה",
+      "wake": "החזר עכשיו"
     }
   }
 }

@@ -25,7 +25,9 @@
       "pickTitle": "Unterhaltung auswählen",
       "pickMessage": "Wählen Sie eine Unterhaltung aus der Liste, um sie zu lesen und zu antworten. Neue Nachrichten erscheinen hier automatisch.",
       "shortcuts": "Tastenkürzel: j und k bewegen sich durch die Liste, e löst, / sucht.",
-      "teamChanged": "Team aktualisiert."
+      "teamChanged": "Team aktualisiert.",
+      "priorityChanged": "Priorität aktualisiert",
+      "snoozed": "Unterhaltung zurückgestellt"
     },
     "list": {
       "title": "Posteingang",
@@ -101,7 +103,9 @@
           "title": "Sie sind auf dem neuesten Stand",
           "message": "Unterhaltungen mit neuen Nachrichten von Kunden werden hier aufgelistet."
         }
-      }
+      },
+      "select": "Auswählen",
+      "selectDone": "Fertig"
     },
     "status": {
       "received": "Empfangen",
@@ -818,6 +822,39 @@
         "conflict": "Jemand anderes hat diese Antwort zuerst geändert. Schließen Sie dieses Fenster und öffnen Sie es erneut.",
         "invalid": "Einige Ihrer Eingaben sind ungültig."
       }
+    },
+    "bulk": {
+      "barLabel": "Massenaktionen",
+      "selected": "{count, plural, one {# Unterhaltung ausgewählt} other {# Unterhaltungen ausgewählt}}",
+      "selectAllInView": "Alle {count} in der Ansicht auswählen",
+      "done": "Fertig",
+      "markRead": "Als gelesen markieren",
+      "resolve": "Als gelöst markieren",
+      "close": "Schließen",
+      "reopen": "Wieder öffnen",
+      "assign": "Zuweisen",
+      "assignToMe": "Mir zuweisen",
+      "unassign": "Zuweisung aufheben",
+      "removeTeam": "Team entfernen",
+      "priority": "Priorität",
+      "snooze": "Zurückstellen",
+      "snoozePreset": {
+        "oneHour": "1 Stunde",
+        "threeHours": "3 Stunden",
+        "tomorrow": "Morgen, 9:00",
+        "nextWeek": "Nächsten Montag, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# Unterhaltung aktualisiert} other {# Unterhaltungen aktualisiert}}.",
+        "nothingChanged": "Nichts zu ändern: Die ausgewählten Unterhaltungen sind bereits auf dem neuesten Stand.",
+        "partial": "{done} aktualisiert, {unchanged} bereits aktuell, {failed} konnten nicht geändert werden. Die fehlgeschlagenen bleiben ausgewählt.",
+        "allFailed": "Keine der {count, plural, one {# Unterhaltung} other {# Unterhaltungen}} konnte geändert werden."
+      }
+    },
+    "triage": {
+      "priority": "Priorität",
+      "snooze": "Zurückstellen",
+      "wake": "Jetzt reaktivieren"
     }
   }
 }

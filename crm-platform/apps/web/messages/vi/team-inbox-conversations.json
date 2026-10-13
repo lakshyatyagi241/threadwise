@@ -25,7 +25,9 @@
       "pickTitle": "Chọn một cuộc trò chuyện",
       "pickMessage": "Chọn một cuộc trò chuyện trong danh sách để đọc và trả lời. Tin nhắn mới sẽ tự động xuất hiện tại đây.",
       "shortcuts": "Phím tắt: j và k để di chuyển trong danh sách, e để giải quyết, / để tìm kiếm.",
-      "teamChanged": "Đã cập nhật nhóm."
+      "teamChanged": "Đã cập nhật nhóm.",
+      "priorityChanged": "Đã cập nhật mức ưu tiên",
+      "snoozed": "Đã tạm ẩn cuộc trò chuyện"
     },
     "list": {
       "title": "Hộp thư",
@@ -101,7 +103,9 @@
           "title": "Bạn đã xử lý hết",
           "message": "Các cuộc trò chuyện có tin nhắn mới từ khách hàng sẽ được liệt kê tại đây."
         }
-      }
+      },
+      "select": "Chọn",
+      "selectDone": "Xong"
     },
     "status": {
       "received": "Đã nhận",
@@ -818,6 +822,39 @@
         "conflict": "Người khác đã thay đổi câu trả lời này trước. Hãy đóng cửa sổ này và mở lại.",
         "invalid": "Một số nội dung bạn nhập không hợp lệ."
       }
+    },
+    "bulk": {
+      "barLabel": "Thao tác hàng loạt",
+      "selected": "{count, plural, one {Đã chọn # cuộc trò chuyện} other {Đã chọn # cuộc trò chuyện}}",
+      "selectAllInView": "Chọn tất cả {count} mục đang hiển thị",
+      "done": "Xong",
+      "markRead": "Đánh dấu đã đọc",
+      "resolve": "Giải quyết",
+      "close": "Đóng",
+      "reopen": "Mở lại",
+      "assign": "Phân công",
+      "assignToMe": "Giao cho tôi",
+      "unassign": "Bỏ phân công",
+      "removeTeam": "Gỡ nhóm",
+      "priority": "Ưu tiên",
+      "snooze": "Tạm ẩn",
+      "snoozePreset": {
+        "oneHour": "1 giờ",
+        "threeHours": "3 giờ",
+        "tomorrow": "Ngày mai, 9:00",
+        "nextWeek": "Thứ Hai tới, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {Đã cập nhật # cuộc trò chuyện} other {Đã cập nhật # cuộc trò chuyện}}.",
+        "nothingChanged": "Không có gì cần thay đổi: các cuộc trò chuyện đã chọn đều đã được cập nhật.",
+        "partial": "Đã cập nhật {done}, {unchanged} đã ở trạng thái mới nhất, không thể thay đổi {failed}. Các mục thất bại vẫn được chọn.",
+        "allFailed": "Không thể thay đổi {count, plural, one {# cuộc trò chuyện nào} other {# cuộc trò chuyện nào}}."
+      }
+    },
+    "triage": {
+      "priority": "Ưu tiên",
+      "snooze": "Tạm ẩn",
+      "wake": "Hiện lại ngay"
     }
   }
 }

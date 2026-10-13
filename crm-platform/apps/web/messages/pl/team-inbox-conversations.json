@@ -25,7 +25,9 @@
       "pickTitle": "Wybierz rozmowę",
       "pickMessage": "Wybierz rozmowę z listy, aby ją przeczytać i odpowiedzieć. Nowe wiadomości pojawiają się tutaj automatycznie.",
       "shortcuts": "Skróty: j i k przechodzą po liście, e kończy rozmowę, / wyszukuje.",
-      "teamChanged": "Zespół zaktualizowany."
+      "teamChanged": "Zespół zaktualizowany.",
+      "priorityChanged": "Zaktualizowano priorytet",
+      "snoozed": "Rozmowa została odłożona"
     },
     "list": {
       "title": "Skrzynka odbiorcza",
@@ -101,7 +103,9 @@
           "title": "Wszystko przeczytane",
           "message": "Tutaj wyświetlane są rozmowy z nowymi wiadomościami od klientów."
         }
-      }
+      },
+      "select": "Wybierz",
+      "selectDone": "Gotowe"
     },
     "status": {
       "received": "Odebrano",
@@ -818,6 +822,39 @@
         "conflict": "Ktoś inny zmienił tę odpowiedź wcześniej. Zamknij to okno i otwórz je ponownie.",
         "invalid": "Część wprowadzonych danych jest nieprawidłowa."
       }
+    },
+    "bulk": {
+      "barLabel": "Działania zbiorcze",
+      "selected": "{count, plural, one {Wybrano # rozmowę} few {Wybrano # rozmowy} many {Wybrano # rozmów} other {Wybrano # rozmowy}}",
+      "selectAllInView": "Wybierz wszystkie widoczne ({count})",
+      "done": "Gotowe",
+      "markRead": "Oznacz jako przeczytane",
+      "resolve": "Rozwiąż",
+      "close": "Zamknij",
+      "reopen": "Otwórz ponownie",
+      "assign": "Przypisz",
+      "assignToMe": "Przypisz do mnie",
+      "unassign": "Cofnij przypisanie",
+      "removeTeam": "Usuń zespół",
+      "priority": "Priorytet",
+      "snooze": "Odłóż",
+      "snoozePreset": {
+        "oneHour": "1 godzina",
+        "threeHours": "3 godziny",
+        "tomorrow": "Jutro, 9:00",
+        "nextWeek": "W przyszły poniedziałek, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {Zaktualizowano # rozmowę} few {Zaktualizowano # rozmowy} many {Zaktualizowano # rozmów} other {Zaktualizowano # rozmowy}}.",
+        "nothingChanged": "Nic do zmiany: wybrane rozmowy są już aktualne.",
+        "partial": "Zaktualizowano: {done}, już aktualne: {unchanged}, nie udało się zmienić: {failed}. Te, które się nie udały, pozostają zaznaczone.",
+        "allFailed": "Nie udało się zmienić żadnej z {count, plural, one {# rozmowy} few {# rozmów} many {# rozmów} other {# rozmów}}."
+      }
+    },
+    "triage": {
+      "priority": "Priorytet",
+      "snooze": "Odłóż",
+      "wake": "Przywróć teraz"
     }
   }
 }

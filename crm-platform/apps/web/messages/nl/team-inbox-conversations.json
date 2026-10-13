@@ -25,7 +25,9 @@
       "pickTitle": "Kies een gesprek",
       "pickMessage": "Kies een gesprek uit de lijst om het te lezen en te beantwoorden. Nieuwe berichten verschijnen hier vanzelf.",
       "shortcuts": "Sneltoetsen: j en k bewegen door de lijst, e lost op, / zoekt.",
-      "teamChanged": "Team bijgewerkt."
+      "teamChanged": "Team bijgewerkt.",
+      "priorityChanged": "Prioriteit bijgewerkt",
+      "snoozed": "Gesprek uitgesteld"
     },
     "list": {
       "title": "Inbox",
@@ -101,7 +103,9 @@
           "title": "Je bent helemaal bij",
           "message": "Gesprekken met nieuwe berichten van klanten staan hier."
         }
-      }
+      },
+      "select": "Selecteren",
+      "selectDone": "Klaar"
     },
     "status": {
       "received": "Ontvangen",
@@ -818,6 +822,39 @@
         "conflict": "Iemand anders heeft dit antwoord eerder gewijzigd. Sluit dit venster en open het opnieuw.",
         "invalid": "Een deel van wat u hebt ingevoerd is ongeldig."
       }
+    },
+    "bulk": {
+      "barLabel": "Bulkacties",
+      "selected": "{count, plural, one {# gesprek geselecteerd} other {# gesprekken geselecteerd}}",
+      "selectAllInView": "Alle {count} in beeld selecteren",
+      "done": "Klaar",
+      "markRead": "Markeren als gelezen",
+      "resolve": "Oplossen",
+      "close": "Sluiten",
+      "reopen": "Heropenen",
+      "assign": "Toewijzen",
+      "assignToMe": "Aan mij toewijzen",
+      "unassign": "Toewijzing opheffen",
+      "removeTeam": "Team verwijderen",
+      "priority": "Prioriteit",
+      "snooze": "Uitstellen",
+      "snoozePreset": {
+        "oneHour": "1 uur",
+        "threeHours": "3 uur",
+        "tomorrow": "Morgen, 9:00",
+        "nextWeek": "Volgende maandag, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# gesprek bijgewerkt} other {# gesprekken bijgewerkt}}.",
+        "nothingChanged": "Niets te wijzigen: de geselecteerde gesprekken zijn al up-to-date.",
+        "partial": "{done} bijgewerkt, {unchanged} al up-to-date, {failed} konden niet worden gewijzigd. De mislukte blijven geselecteerd.",
+        "allFailed": "Geen van de {count, plural, one {# gesprek} other {# gesprekken}} kon worden gewijzigd."
+      }
+    },
+    "triage": {
+      "priority": "Prioriteit",
+      "snooze": "Uitstellen",
+      "wake": "Nu terugzetten"
     }
   }
 }

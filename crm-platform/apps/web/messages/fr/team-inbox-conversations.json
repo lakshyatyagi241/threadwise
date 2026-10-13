@@ -25,7 +25,9 @@
       "pickTitle": "Choisissez une conversation",
       "pickMessage": "Sélectionnez une conversation dans la liste pour la lire et répondre. Les nouveaux messages apparaissent ici automatiquement.",
       "shortcuts": "Raccourcis : j et k parcourent la liste, e résout, / recherche.",
-      "teamChanged": "Équipe mise à jour."
+      "teamChanged": "Équipe mise à jour.",
+      "priorityChanged": "Priorité mise à jour",
+      "snoozed": "Conversation mise en veille"
     },
     "list": {
       "title": "Boîte de réception",
@@ -101,7 +103,9 @@
           "title": "Vous êtes à jour",
           "message": "Les conversations contenant de nouveaux messages de clients apparaissent ici."
         }
-      }
+      },
+      "select": "Sélectionner",
+      "selectDone": "Terminé"
     },
     "status": {
       "received": "Reçu",
@@ -818,6 +822,39 @@
         "conflict": "Quelqu'un d'autre a modifié cette réponse en premier. Fermez cette fenêtre et rouvrez-la.",
         "invalid": "Certaines informations saisies ne sont pas valides."
       }
+    },
+    "bulk": {
+      "barLabel": "Actions groupées",
+      "selected": "{count, plural, one {# conversation sélectionnée} other {# conversations sélectionnées}}",
+      "selectAllInView": "Sélectionner les {count} de la vue",
+      "done": "Terminé",
+      "markRead": "Marquer comme lu",
+      "resolve": "Résoudre",
+      "close": "Fermer",
+      "reopen": "Rouvrir",
+      "assign": "Assigner",
+      "assignToMe": "M'assigner",
+      "unassign": "Désassigner",
+      "removeTeam": "Retirer l'équipe",
+      "priority": "Priorité",
+      "snooze": "Mettre en veille",
+      "snoozePreset": {
+        "oneHour": "1 heure",
+        "threeHours": "3 heures",
+        "tomorrow": "Demain, 9:00",
+        "nextWeek": "Lundi prochain, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversation mise à jour} other {# conversations mises à jour}}.",
+        "nothingChanged": "Rien à modifier : les conversations sélectionnées sont déjà à jour.",
+        "partial": "{done} mises à jour, {unchanged} déjà à jour, {failed} n'ont pas pu être modifiées. Celles en échec restent sélectionnées.",
+        "allFailed": "Aucune des {count, plural, one {# conversation} other {# conversations}} n'a pu être modifiée."
+      }
+    },
+    "triage": {
+      "priority": "Priorité",
+      "snooze": "Mettre en veille",
+      "wake": "Réactiver maintenant"
     }
   }
 }

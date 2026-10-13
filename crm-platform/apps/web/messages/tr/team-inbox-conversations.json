@@ -25,7 +25,9 @@
       "pickTitle": "Bir konuşma seçin",
       "pickMessage": "Okumak ve yanıtlamak için listeden bir konuşma seçin. Yeni mesajlar otomatik olarak burada görünür.",
       "shortcuts": "Kısayollar: listede gezinmek için j ve k, çözmek için e, aramak için / kullanın.",
-      "teamChanged": "Ekip güncellendi."
+      "teamChanged": "Ekip güncellendi.",
+      "priorityChanged": "Öncelik güncellendi",
+      "snoozed": "Konuşma ertelendi"
     },
     "list": {
       "title": "Gelen kutusu",
@@ -101,7 +103,9 @@
           "title": "Her şey güncel",
           "message": "Müşterilerden yeni mesaj alan konuşmalar burada listelenir."
         }
-      }
+      },
+      "select": "Seç",
+      "selectDone": "Bitti"
     },
     "status": {
       "received": "Alındı",
@@ -818,6 +822,39 @@
         "conflict": "Bu yanıtı başka biri önce değiştirdi. Bu pencereyi kapatıp yeniden açın.",
         "invalid": "Girdiklerinizin bir kısmı geçerli değil."
       }
+    },
+    "bulk": {
+      "barLabel": "Toplu işlemler",
+      "selected": "{count, plural, one {# konuşma seçildi} other {# konuşma seçildi}}",
+      "selectAllInView": "Görünümdeki {count} konuşmanın tümünü seç",
+      "done": "Bitti",
+      "markRead": "Okundu olarak işaretle",
+      "resolve": "Çözüldü olarak işaretle",
+      "close": "Kapat",
+      "reopen": "Yeniden aç",
+      "assign": "Ata",
+      "assignToMe": "Bana ata",
+      "unassign": "Atamayı kaldır",
+      "removeTeam": "Ekibi kaldır",
+      "priority": "Öncelik",
+      "snooze": "Ertele",
+      "snoozePreset": {
+        "oneHour": "1 saat",
+        "threeHours": "3 saat",
+        "tomorrow": "Yarın, 9:00",
+        "nextWeek": "Gelecek Pazartesi, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# konuşma güncellendi} other {# konuşma güncellendi}}.",
+        "nothingChanged": "Değiştirilecek bir şey yok: seçilen konuşmalar zaten güncel.",
+        "partial": "{done} güncellendi, {unchanged} zaten güncel, {failed} değiştirilemedi. Başarısız olanlar seçili kalır.",
+        "allFailed": "{count, plural, one {# konuşma} other {# konuşma}} değiştirilemedi."
+      }
+    },
+    "triage": {
+      "priority": "Öncelik",
+      "snooze": "Ertele",
+      "wake": "Şimdi göster"
     }
   }
 }

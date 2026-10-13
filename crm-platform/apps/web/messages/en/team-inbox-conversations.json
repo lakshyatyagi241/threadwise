@@ -25,7 +25,9 @@
       "pickTitle": "Pick a conversation",
       "pickMessage": "Choose a conversation from the list to read it and reply. New messages appear here by themselves.",
       "shortcuts": "Shortcuts: j and k move through the list, e resolves, / searches.",
-      "teamChanged": "Team updated."
+      "teamChanged": "Team updated.",
+      "priorityChanged": "Priority updated",
+      "snoozed": "Conversation snoozed"
     },
     "list": {
       "title": "Inbox",
@@ -101,7 +103,9 @@
           "title": "You are all caught up",
           "message": "Conversations with new messages from customers are listed here."
         }
-      }
+      },
+      "select": "Select",
+      "selectDone": "Done"
     },
     "status": {
       "received": "Received",
@@ -817,6 +821,39 @@
         "upgrade": "See plans",
         "conflict": "Someone else changed this reply first. Close this window and open it again.",
         "invalid": "Some of what you entered is not valid."
+      }
+    },
+    "triage": {
+      "priority": "Priority",
+      "snooze": "Snooze",
+      "wake": "Wake now"
+    },
+    "bulk": {
+      "barLabel": "Bulk actions",
+      "selected": "{count, plural, one {# conversation selected} other {# conversations selected}}",
+      "selectAllInView": "Select all {count} in view",
+      "done": "Done",
+      "markRead": "Mark as read",
+      "resolve": "Resolve",
+      "close": "Close",
+      "reopen": "Reopen",
+      "assign": "Assign",
+      "assignToMe": "Assign to me",
+      "unassign": "Unassign",
+      "removeTeam": "Remove team",
+      "priority": "Priority",
+      "snooze": "Snooze",
+      "snoozePreset": {
+        "oneHour": "1 hour",
+        "threeHours": "3 hours",
+        "tomorrow": "Tomorrow, 9:00",
+        "nextWeek": "Next Monday, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversation updated} other {# conversations updated}}.",
+        "nothingChanged": "Nothing to change: the selected conversations are already up to date.",
+        "partial": "{done} updated, {unchanged} already up to date, {failed} could not be changed. The ones that failed stay selected.",
+        "allFailed": "None of the {count, plural, one {# conversation} other {# conversations}} could be changed."
       }
     }
   }
