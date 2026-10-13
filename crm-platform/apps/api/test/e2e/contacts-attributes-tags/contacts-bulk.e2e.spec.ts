@@ -261,7 +261,7 @@ describe('export (TW-CON-021, 022)', () => {
     const lines = text.trimEnd().split('\n');
     expect(lines).toHaveLength(3);
     expect(lines[0]).toBe(
-      'name,first_name,last_name,phone,country_code,email,groups,tags,language,title,address,memo,status,source,unsubscribed,created_at',
+      'name,first_name,last_name,phone,country_code,email,groups,tags,language,title,address,memo,status,source,unsubscribed,created_at,owner_email',
     );
     // newest first
     expect(lines[1]!.startsWith('Priya Patel,')).toBe(true);

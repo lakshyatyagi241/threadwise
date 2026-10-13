@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useStoredValue } from '@/lib/use-stored-value';
 import { useAttributes, useStatusOptions } from '../api/attributes';
+import { useOwnerNames } from '../api/owners';
 import type { ContactRow } from '../api/schemas';
 import { parseStoredColumns, STORAGE_KEY as COLUMNS_KEY, visibleColumns } from '../lib/columns';
 import { stageChoices, statusChoices } from '../lib/option-sets';
@@ -24,6 +25,7 @@ export function ContactsReadonlyTable({ rows }: { rows: readonly ContactRow[] })
   const router = useRouter();
   const attributes = useAttributes();
   const statusOptions = useStatusOptions();
+  const { nameOf: ownerName } = useOwnerNames();
   const [storedColumns] = useStoredValue(COLUMNS_KEY);
   const attributeColumns = useMemo(
     () =>
@@ -58,6 +60,7 @@ export function ContactsReadonlyTable({ rows }: { rows: readonly ContactRow[] })
       stageLabel={(v) => stages.find((x) => x.value === v)?.label ?? v}
       stageChoices={stages}
       statusLabel={(v) => statuses.find((x) => x.value === v)?.label ?? v}
+      ownerLabel={(id) => ownerName(id) ?? ''}
       onToggle={noop}
       onView={(id) => router.push(`/contacts/${id}`)}
       onEdit={noop}

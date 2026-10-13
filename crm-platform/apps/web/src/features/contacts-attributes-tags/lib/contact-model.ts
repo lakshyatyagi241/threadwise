@@ -164,6 +164,8 @@ export interface ContactFormValues {
   lostReason: string;
   lostText: string;
   source: string;
+  /** The owner's id (uuid); '' = nobody. A new contact starts as the person creating it (the form sets that). */
+  ownerId: string;
   /** Group ids (uuid). Empty array = no groups, which clears them on save. */
   groupIds: string[];
   /**
@@ -191,6 +193,7 @@ export const EMPTY_FORM: ContactFormValues = {
   lostReason: '',
   lostText: '',
   source: '',
+  ownerId: '',
   groupIds: [],
   attributes: {},
   optedOut: false,
@@ -228,6 +231,7 @@ export function contactToForm(
     lostReason: c.lostReason ? c.lostReason : c.otherLostReason ? OTHER_REASON : '',
     lostText: c.otherLostReason ?? '',
     source: c.source ?? str(cf[EXTRA_KEYS.source]),
+    ownerId: c.ownerId ?? '',
     groupIds: [...groupIds],
     attributes,
     optedOut: isOptedOut(c),
@@ -287,6 +291,8 @@ export function toCreatePayload(
     ...lost,
     ...(clean(v.status) ? { status: clean(v.status) } : {}),
     ...(clean(v.source) ? { source: clean(v.source) } : {}),
+    // Always explicit: '' is "nobody" (null), not "the creator" which is what omitting it would mean.
+    ownerId: v.ownerId || null,
     ...(v.optedOut ? { isUnsubscribed: true } : {}),
     ...(typeof newScore === 'number' ? { leadScore: newScore } : {}),
     customFields: withoutNulls(customFieldsFromForm(v, attributeKeys, fields)),
@@ -304,6 +310,8 @@ export function toUpdatePayload(
   lost?: ReturnType<typeof lostReasonPayload>,
   /** The score the contact has now: the typed score is sent only when it differs (undefined = unchanged, null = cleared). */
   previousLeadScore: number | null = null,
+  /** The owner the contact has now: sent only when the form changed it, so saving an unrelated field never re-assigns. */
+  previousOwnerId: string | null = null,
 ) {
   const name = composeName(v);
   const lead = scoreChange(v.leadScore, previousLeadScore);
@@ -317,6 +325,7 @@ export function toUpdatePayload(
     ...lost,
     status: orNull(v.status),
     source: orNull(v.source),
+    ...(v.ownerId !== (previousOwnerId ?? '') ? { ownerId: v.ownerId || null } : {}),
     // Only a change to the switch touches the consent flag; saving an unrelated field must not flip it.
     ...(v.optedOut !== wasOptedOut ? { isUnsubscribed: v.optedOut } : {}),
     // Only a typed change touches the score: saving an unrelated field must not turn an AI score into a manual one.

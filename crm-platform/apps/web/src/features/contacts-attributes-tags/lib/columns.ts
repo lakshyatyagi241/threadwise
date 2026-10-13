@@ -11,6 +11,7 @@ export const FIXED_COLUMN_IDS = [
   'groups',
   'stage',
   'status',
+  'owner',
   'leadScore',
   'language',
   'memo',
@@ -22,7 +23,11 @@ export type ColumnId = FixedColumnId | `attr:${string}`;
 /** The name column cannot be hidden: it is the row's link to the contact. */
 export const LOCKED_COLUMNS: readonly ColumnId[] = ['name'];
 
-/** Visible on first visit (plus the first two custom attributes, see `defaultColumns`). */
+/**
+ * Visible on first visit (plus the first two custom attributes, see `defaultColumns`). The owner column is offered but starts
+ * hidden: Reference's contact list has no owner column (its `user_id` is the creator and is never shown), so a workspace that
+ * does not use owners sees the table it always had.
+ */
 export const DEFAULT_FIXED: readonly FixedColumnId[] = [
   'name',
   'phone',
@@ -64,6 +69,7 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   groups: 'colGroups',
   stage: 'colStage',
   status: 'colStatus',
+  owner: 'colOwner',
   leadScore: 'colLeadScore',
   language: 'colLanguage',
   memo: 'colMemo',
@@ -89,6 +95,7 @@ export function allColumns(attributes: readonly AttributeColumn[]): ColumnDef[] 
     fixed('groups'),
     fixed('stage'),
     fixed('status'),
+    fixed('owner'),
     fixed('leadScore'),
     fixed('language'),
     fixed('memo'),
@@ -172,10 +179,12 @@ export function nudgeColumn(visible: readonly ColumnId[], id: ColumnId, step: -1
 export function sortKeyOf(id: ColumnId): string | null {
   if (isAttrId(id)) return /^attr:[a-z0-9_]{1,64}$/.test(id) ? id : null;
   switch (id) {
-    // Many values per contact, or (lead score) not orderable by the API yet.
+    // Many values per contact, or (lead score, owner) not orderable by the API yet: an owner sort needs the person's name
+    // from another table and has no index, so it waits for a need.
     case 'tags':
     case 'groups':
     case 'leadScore':
+    case 'owner':
       return null;
     case 'createdOn':
       return 'createdAt';

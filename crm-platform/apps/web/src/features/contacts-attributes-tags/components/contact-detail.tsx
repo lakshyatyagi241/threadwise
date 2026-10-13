@@ -44,6 +44,7 @@ import { ContactAvatar, GroupChip, TagPill } from './chips';
 import { StageMenu } from './stage-menu';
 import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
+import { OwnerControl } from './owner-control';
 import { LostReasonDialog, type LostPrompt } from './lost-reason';
 import { isLostStage } from '../lib/stage-flow';
 import { statusAfterMove, statusNotice } from '../lib/status-scope';
@@ -315,6 +316,14 @@ export function ContactDetail({ id }: { id: string }) {
             {t('details')}
           </h2>
           <dl className="space-y-3 text-sm">
+            <Detail label={t('owner')}>
+              <OwnerControl
+                contactId={id}
+                ownerId={c.ownerId}
+                rowVersion={c.rowVersion}
+                canEdit={canUpdate}
+              />
+            </Detail>
             <Detail label={t('language')}>{text(EXTRA_KEYS.language)}</Detail>
             <Detail label={t('source')}>{c.source ?? text(EXTRA_KEYS.source)}</Detail>
             <Detail label={t('address')}>{text(EXTRA_KEYS.address)}</Detail>
