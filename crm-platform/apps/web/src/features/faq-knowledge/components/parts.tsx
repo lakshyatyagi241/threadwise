@@ -188,13 +188,13 @@ export function RelativeTime({ iso }: { iso: string }) {
   );
 }
 
-/** A failed load with the reason, the request id for support and a retry. */
+/** A failed load with the reason and a retry. */
 export function LoadError({
   errorKey,
-  error,
   onRetry,
 }: {
   errorKey: ErrorKey;
+  /** Still passed by callers; the request id is no longer shown (#362). */
   error?: unknown;
   onRetry?: () => void;
 }) {

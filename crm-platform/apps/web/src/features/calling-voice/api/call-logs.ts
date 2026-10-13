@@ -96,7 +96,7 @@ export function useCallLogsLive(): void {
   const realtime = useRealtimeClient();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const refresh = useRef(() => {});
+  const refresh = useRef<() => void>(() => undefined);
   useEffect(() => {
     refresh.current = () => {
       if (timer.current) return;
