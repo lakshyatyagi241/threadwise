@@ -20,9 +20,9 @@ export const settings = [
     gates: { permission: 'inbox.savedreply.manage' },
   }),
   settingsTile({
-    id: 'inbox-labels',
+    id: 'inbox-tags',
     section: 'data',
-    href: '/inbox/labels',
+    href: '/inbox/tags',
     icon: 'tag',
     order: 52,
     shortcutFrom: ['/inbox'],

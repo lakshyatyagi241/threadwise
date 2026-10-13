@@ -25,7 +25,7 @@ import { inboxApi } from '../api/service';
 import { useThread } from '../api/use-thread';
 import { useConversationList } from '../api/use-list';
 import { cloudGroupBlock, isGroupSendBlocked } from '../lib/group-thread';
-import { DEFAULT_FILTERS, filtersKey, labelsFromParam, type ListFilters } from '../lib/list';
+import { DEFAULT_FILTERS, filtersKey, tagsFromParam, type ListFilters } from '../lib/list';
 import { isTypingTarget, shortcutAction } from '../lib/shortcuts';
 import type { ComposerHandle, ComposerMode } from './composer';
 import { ContactPanel } from './contact-panel';
@@ -36,7 +36,7 @@ import { Drawer, useErrorText } from './parts';
 import { SimulatorDrawer, withFault, type SendFault } from './simulator-drawer';
 import { ThreadPane } from './thread-pane';
 
-/** The current query string with one parameter set (or removed with null), so opening a thread keeps the label filter. */
+/** The current query string with one parameter set (or removed with null), so opening a thread keeps the tag filter. */
 function withParam(key: string, value: string | null): string {
   const next = new URLSearchParams(window.location.search);
   if (value === null) next.delete(key);
@@ -88,6 +88,7 @@ export function InboxScreen() {
     snooze: useCan('inbox.conversation.snooze'),
     tag: useCan('inbox.conversation.tag'),
     tagManage: useCan('inbox.tag.manage'),
+    editContact: useCan('record.contacts.update'),
     manageChannels: useCan('inbox.channel.manage'),
   };
 
@@ -98,21 +99,33 @@ export function InboxScreen() {
   // `/inbox?channel=<id>` (the "Open in inbox" link of a mailbox, TW-MAIL-024) starts filtered by that channel.
   const [filters, setFilters] = useState<ListFilters>(() => {
     const channel = params.get('channel');
-    // `/inbox?labels=<id>,<id>`: the label filter lives in the address, so a filtered view can be shared or reloaded.
-    const labels = labelsFromParam(params.get('labels'));
+    // `/inbox?tags=<id>,<id>&tagScope=conversation|contact`: the tag filter lives in the address, so a filtered view can be shared or
+    // reloaded. `labels` is the original name of `tags`: saved links that use it keep working.
+    const tags = tagsFromParam(
+      [params.get('tags'), params.get('labels')].filter(Boolean).join(','),
+    );
     return {
       ...DEFAULT_FILTERS,
-      labels,
+      tags,
+      tagScope:
+        params.get('tagScope') === 'contact' ? ('contact' as const) : ('conversation' as const),
       ...(channel && /^[0-9a-f-]{36}$/i.test(channel) ? { channelId: channel } : {}),
     };
   });
   const patchFilters = useCallback(
     (patch: Partial<ListFilters>) => {
       setFilters((f) => ({ ...f, ...patch }));
-      if (patch.labels) {
+      if (patch.tags || patch.tagScope) {
         const next = new URLSearchParams(window.location.search);
-        if (patch.labels.length > 0) next.set('labels', patch.labels.join(','));
-        else next.delete('labels');
+        next.delete('labels');
+        if (patch.tags) {
+          if (patch.tags.length > 0) next.set('tags', patch.tags.join(','));
+          else next.delete('tags');
+        }
+        if (patch.tagScope) {
+          if (patch.tagScope === 'contact') next.set('tagScope', 'contact');
+          else next.delete('tagScope');
+        }
         const qs = next.toString();
         router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
       }
@@ -333,31 +346,31 @@ export function InboxScreen() {
     if (ok) toast(t('reopened'));
   }, [detail.detail, can.resolve, guarded, toast, t]);
 
-  const [labelling, setLabelling] = useState(false);
-  const applyLabel = useCallback(
+  const [tagging, setTagging] = useState(false);
+  const applyTag = useCallback(
     async (input: { tagId: string } | { name: string }) => {
       const d = detail.detail;
       if (!d || !can.tag) return;
-      setLabelling(true);
+      setTagging(true);
       const ok = await guarded(async () => {
-        list.placeRow(await inboxApi.applyLabel(d.id, input));
-        if ('name' in input) await qc.invalidateQueries({ queryKey: KEYS.labels });
+        list.placeRow(await inboxApi.applyTag(d.id, input));
+        if ('name' in input) await qc.invalidateQueries({ queryKey: KEYS.tags });
       });
-      setLabelling(false);
-      if (ok) toast(t('labelAdded'));
+      setTagging(false);
+      if (ok) toast(t('tagAdded'));
     },
     [detail.detail, can.tag, guarded, list, qc, toast, t],
   );
-  const withdrawLabel = useCallback(
+  const withdrawTag = useCallback(
     async (tagId: string) => {
       const d = detail.detail;
       if (!d || !can.tag) return;
-      setLabelling(true);
+      setTagging(true);
       const ok = await guarded(async () => {
-        list.placeRow(await inboxApi.withdrawLabel(d.id, tagId));
+        list.placeRow(await inboxApi.withdrawTag(d.id, tagId));
       });
-      setLabelling(false);
-      if (ok) toast(t('labelRemoved'));
+      setTagging(false);
+      if (ok) toast(t('tagRemoved'));
     },
     [detail.detail, can.tag, guarded, list, toast, t],
   );
@@ -519,6 +532,17 @@ export function InboxScreen() {
       onDeleteNote={setNoteToDelete}
       canDeleteNote={canDeleteNote}
       onOpenConversation={(id) => open(id, { focus: false })}
+      canEditContact={can.editContact}
+      tags={
+        can.tag
+          ? {
+              busy: tagging,
+              canCreate: can.tagManage,
+              onApply: (input) => void applyTag(input),
+              onWithdraw: (tagId) => void withdrawTag(tagId),
+            }
+          : undefined
+      }
     />
   ) : null;
 
@@ -609,13 +633,13 @@ export function InboxScreen() {
                 priority: can.priority,
                 snooze: can.snooze,
               }}
-              labels={
+              tags={
                 can.tag
                   ? {
-                      busy: labelling,
+                      busy: tagging,
                       canCreate: can.tagManage,
-                      onApply: (input) => void applyLabel(input),
-                      onWithdraw: (tagId) => void withdrawLabel(tagId),
+                      onApply: (input) => void applyTag(input),
+                      onWithdraw: (tagId) => void withdrawTag(tagId),
                     }
                   : undefined
               }

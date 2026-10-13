@@ -5,12 +5,12 @@ import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState, type FormEvent } from 'react';
 import { Button, ConfirmDialog, EmptyState, Field, Input, Spinner, useToast } from '@crm/ui';
-import { LABEL_COLOR_PATTERN, LABEL_NAME_MAX, type InboxLabel } from '@crm/contracts';
+import { INBOX_TAG_COLOR_PATTERN, INBOX_TAG_NAME_MAX, type InboxTag } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
-import { KEYS, useLabels } from '../api/hooks';
+import { KEYS, useTags } from '../api/hooks';
 import { inboxApi } from '../api/service';
 import { BackIcon } from './icons';
-import { DEFAULT_LABEL_COLOR, LabelChip, safeLabelColor } from './label-chip';
+import { DEFAULT_TAG_COLOR, TagChip, safeTagColor } from './tag-chip';
 import { useErrorText } from './parts';
 
 interface Draft {
@@ -18,26 +18,26 @@ interface Draft {
   color: string;
   description: string;
 }
-const EMPTY: Draft = { name: '', color: DEFAULT_LABEL_COLOR, description: '' };
+const EMPTY: Draft = { name: '', color: DEFAULT_TAG_COLOR, description: '' };
 
 /**
- * Settings, "Labels" (`/inbox/labels`): the workspace label library used to tag conversations and filter the inbox. Anyone who may
- * manage labels can add, rename, recolour, describe and delete them. The labels are the same tags contacts use, so a deletion also
- * takes the label off contacts; the screen says how many conversations carry it before it asks.
+ * Settings, "Conversation tags" (`/inbox/tags`): the workspace tag library used to tag conversations and filter the inbox. Anyone who may
+ * manage tags can add, rename, recolour, describe and delete them. The tags are the same ones contacts use, so a deletion also
+ * takes the tag off contacts; the screen says how many conversations carry it before it asks.
  */
-export function LabelsScreen() {
-  const t = useTranslations('team-inbox-conversations.labels');
+export function TagsScreen() {
+  const t = useTranslations('team-inbox-conversations.tags');
   const errorText = useErrorText();
   const { toast } = useToast();
   const qc = useQueryClient();
-  const library = useLabels(true);
+  const library = useTags(true);
   const [draft, setDraft] = useState<Draft>(EMPTY);
-  const [editing, setEditing] = useState<InboxLabel | null>(null);
+  const [editing, setEditing] = useState<InboxTag | null>(null);
   const [saving, setSaving] = useState(false);
-  const [toDelete, setToDelete] = useState<InboxLabel | null>(null);
+  const [toDelete, setToDelete] = useState<InboxTag | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  const colorOk = LABEL_COLOR_PATTERN.test(draft.color.trim());
+  const colorOk = INBOX_TAG_COLOR_PATTERN.test(draft.color.trim());
   const nameOk = draft.name.trim().length > 0;
 
   const fail = (e: unknown) => {
@@ -53,7 +53,7 @@ export function LabelsScreen() {
     setSaving(true);
     try {
       if (editing) {
-        await inboxApi.updateLabel(editing.id, {
+        await inboxApi.updateTag(editing.id, {
           rowVersion: editing.rowVersion,
           name: draft.name.trim(),
           color: draft.color.trim(),
@@ -61,7 +61,7 @@ export function LabelsScreen() {
         });
         toast(t('screen.saved'));
       } else {
-        await inboxApi.createLabel({
+        await inboxApi.createTag({
           name: draft.name.trim(),
           color: draft.color.trim(),
           ...(draft.description.trim() ? { description: draft.description.trim() } : {}),
@@ -70,10 +70,10 @@ export function LabelsScreen() {
       }
       setDraft(EMPTY);
       setEditing(null);
-      await qc.invalidateQueries({ queryKey: KEYS.labels });
+      await qc.invalidateQueries({ queryKey: KEYS.tags });
     } catch (e) {
       fail(e);
-      await qc.invalidateQueries({ queryKey: KEYS.labels });
+      await qc.invalidateQueries({ queryKey: KEYS.tags });
     } finally {
       setSaving(false);
     }
@@ -83,10 +83,10 @@ export function LabelsScreen() {
     if (!toDelete) return;
     setDeleting(true);
     try {
-      await inboxApi.deleteLabel(toDelete.id);
+      await inboxApi.deleteTag(toDelete.id);
       toast(t('screen.deleted'));
       setToDelete(null);
-      await qc.invalidateQueries({ queryKey: KEYS.labels });
+      await qc.invalidateQueries({ queryKey: KEYS.tags });
     } catch (e) {
       fail(e);
     } finally {
@@ -110,7 +110,7 @@ export function LabelsScreen() {
       <form
         onSubmit={(e) => void submit(e)}
         className="space-y-3 rounded-lg border border-border p-4"
-        data-testid="labels-form"
+        data-testid="tags-form"
       >
         <h2 className="text-sm font-medium">
           {editing ? t('screen.editTitle') : t('screen.newTitle')}
@@ -119,9 +119,9 @@ export function LabelsScreen() {
           <Field label={t('screen.name')}>
             <Input
               value={draft.name}
-              maxLength={LABEL_NAME_MAX}
+              maxLength={INBOX_TAG_NAME_MAX}
               onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-              data-testid="labels-name"
+              data-testid="tags-name"
             />
           </Field>
           <Field label={t('screen.color')} error={colorOk ? undefined : t('screen.colorInvalid')}>
@@ -129,14 +129,14 @@ export function LabelsScreen() {
               <span
                 aria-hidden="true"
                 className="size-5 shrink-0 rounded-full border border-border"
-                style={{ backgroundColor: safeLabelColor(colorOk ? draft.color : null) }}
+                style={{ backgroundColor: safeTagColor(colorOk ? draft.color : null) }}
               />
               <Input
                 dir="ltr"
                 value={draft.color}
                 maxLength={16}
                 onChange={(e) => setDraft({ ...draft, color: e.target.value })}
-                data-testid="labels-color"
+                data-testid="tags-color"
               />
             </div>
           </Field>
@@ -149,7 +149,7 @@ export function LabelsScreen() {
           />
         </Field>
         <div className="flex gap-2">
-          <Button type="submit" disabled={!nameOk || !colorOk || saving} data-testid="labels-save">
+          <Button type="submit" disabled={!nameOk || !colorOk || saving} data-testid="tags-save">
             {saving ? <Spinner /> : null}
             {editing ? t('screen.save') : t('screen.create')}
           </Button>
@@ -184,11 +184,11 @@ export function LabelsScreen() {
       {library.data && library.data.data.length > 0 && (
         <ul
           className="divide-y divide-border rounded-lg border border-border"
-          data-testid="labels-list"
+          data-testid="tags-list"
         >
           {library.data.data.map((l) => (
             <li key={l.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
-              <LabelChip label={l} className="max-w-[14rem] text-xs" />
+              <TagChip tag={l} className="max-w-[14rem] text-xs" />
               <span className="min-w-0 flex-1 truncate text-sm text-muted-foreground" dir="auto">
                 {l.description}
               </span>
@@ -202,7 +202,7 @@ export function LabelsScreen() {
                   setEditing(l);
                   setDraft({
                     name: l.name,
-                    color: l.color ?? DEFAULT_LABEL_COLOR,
+                    color: l.color ?? DEFAULT_TAG_COLOR,
                     description: l.description ?? '',
                   });
                 }}

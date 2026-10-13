@@ -340,10 +340,10 @@
         "description": "Elige las palabras STOP y START, las respuestas de confirmación, la línea de baja y si el marketing requiere consentimiento registrado.",
         "keywords": "consentimiento, baja, alta, cancelar suscripción, stop, start, rgpd, cumplimiento, privacidad, marketing"
       },
-      "inbox-labels": {
-        "label": "Etiquetas",
-        "description": "Crea las etiquetas que tu equipo pone en las conversaciones y por las que filtra la bandeja.",
-        "keywords": "tags, etiquetas, categorías, organizar, filtrar"
+      "inbox-tags": {
+        "label": "Etiquetas de conversación",
+        "description": "Crea las etiquetas que tu equipo pone en las conversaciones y con las que filtra la bandeja. Son las mismas etiquetas que se usan en los contactos.",
+        "keywords": "tags, etiquetas, etiquetas de conversación, categorías, organizar, filtrar"
       },
       "growth": {
         "label": "Crecimiento",

@@ -177,7 +177,19 @@
       "columns": "Colunas",
       "addColumnField": "Adicionar um campo personalizado como coluna",
       "kanbanView": "Visualização em quadro (por estágio)",
-      "colLeadScore": "Pontuação do lead"
+      "colLeadScore": "Pontuação do lead",
+      "colOwner": "Responsável",
+      "unassigned": "Sem responsável",
+      "ownerFilter": "Filtrar por responsável",
+      "selectOwner": "Responsável",
+      "allOwners": "Todos os responsáveis",
+      "myContacts": "Meus contatos",
+      "ownersCount": "{count} responsáveis",
+      "ownerMe": "{name} (eu)",
+      "ownerFormer": "Ex-membro",
+      "reassignView": "Reatribuir os contatos de {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Sem número de telefone para SMS"
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",
@@ -222,7 +234,6 @@
       "exportStarted": "Sua exportação foi baixada.",
       "exportTooLarge": "São contatos demais para exportar de uma só vez. Restrinja o filtro e tente novamente.",
       "update": "Atualizar",
-      "updateNeedsRows": "Escolher linhas",
       "updated": "{count, plural, one {# contato atualizado.} other {# contatos atualizados.}}"
     },
     "form": {
@@ -311,7 +322,13 @@
       "statusNoticeReset": "Status redefinido para {status}.",
       "statusNoticeSet": "Status definido como {status}, o padrão deste estágio.",
       "statusNoticeCleared": "Status removido: não se aplica a este estágio.",
-      "statusNoneForStage": "Nenhum status está configurado para este estágio."
+      "statusNoneForStage": "Nenhum status está configurado para este estágio.",
+      "owner": "Responsável",
+      "ownerNone": "Sem responsável",
+      "ownerMe": "{name} (eu)",
+      "ownerFormer": "Ex-membro",
+      "ownerHelp": "Quem cuida deste contato. Você só pode escolher pessoas que seu acesso permite.",
+      "ownerOutOfScope": "Seu acesso não permite atribuir este contato a essa pessoa."
     },
     "tags": {
       "title": "Tags",
@@ -521,7 +538,17 @@
       "noActivity": "Ainda não há atividade para este contato.",
       "loadMore": "Carregar mais",
       "yes": "Sim",
-      "no": "Não"
+      "no": "Não",
+      "owner": "Responsável",
+      "ownerNone": "Sem responsável",
+      "ownerChange": "Alterar responsável",
+      "ownerChanged": "Responsável definido como {name}.",
+      "ownerCleared": "Responsável removido.",
+      "ownerConflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
+      "ownerForbidden": "Seu acesso não permite atribuir este contato a essa pessoa.",
+      "ownerFailed": "Não foi possível alterar o responsável. Tente novamente.",
+      "ownerMe": "{name} (eu)",
+      "ownerFormer": "Ex-membro"
     },
     "attributes": {
       "eyebrow": "Mais / Atributos",
@@ -1146,7 +1173,11 @@
         "willClear": "Será esvaziada em {count, plural, one {o contato selecionado} other {todos os # contatos selecionados}}.",
         "requiredNoClear": "Uma propriedade obrigatória não pode ser limpa.",
         "problemEmpty": "Informe um valor ou escolha Limpar."
-      }
+      },
+      "titleAll": "Atualizar todos os contatos correspondentes",
+      "hintAll": "Defina os mesmos valores em todos os contatos que correspondem aos filtros atuais. Os campos em Manter não são alterados.",
+      "applyAll": "Atualizar todos os contatos correspondentes",
+      "ownerOnlyNote": "Para todos os contatos correspondentes, aqui só é possível alterar o responsável. Para alterar a etapa, o status ou as propriedades, marque as linhas."
     },
     "kanban": {
       "board": "Contatos por estágio",
@@ -1198,6 +1229,148 @@
         "noFile": "Não salvo",
         "keptUntil": "Mantido até {date}",
         "downloadFailed": "Não foi possível baixar o arquivo. Ele pode ter expirado."
+      }
+    },
+    "singleSend": {
+      "close": "Fechar",
+      "cancel": "Cancelar",
+      "send": "Enviar",
+      "sending": "Enviando",
+      "contact": "Contato",
+      "name": "Nome",
+      "phone": "Celular",
+      "email": "E-mail",
+      "title": {
+        "whatsapp": "Enviar mensagem do WhatsApp",
+        "sms": "Enviar SMS",
+        "email": "Enviar e-mail",
+        "call": "Ligar"
+      },
+      "optedOut": "Este contato optou por não receber comunicações. Não é possível enviar mensagens.",
+      "noPhone": "Este contato não tem número de telefone.",
+      "noEmail": "Este contato não tem endereço de e-mail.",
+      "number": "Enviar de",
+      "numberHint": "O número do WhatsApp pelo qual a mensagem é enviada.",
+      "noChannel": "Nenhum número do WhatsApp conectado. Conecte um em Canais primeiro.",
+      "template": "Modelo do WhatsApp",
+      "templatePlaceholder": "Selecione um modelo",
+      "noTemplates": "Nenhum modelo aprovado para este número.",
+      "notSendable": "Este modelo não pode ser preenchido aqui ({reason}).",
+      "variables": "Variáveis do modelo",
+      "preview": "Pré-visualização",
+      "slot": "Variável {key}",
+      "loading": "Carregando",
+      "openFailed": "Não foi possível abrir a conversa: {message}",
+      "sent": "Mensagem na fila para {name}.",
+      "failed": "Não foi possível enviar: {message}",
+      "callIntro": "Faça uma chamada de WhatsApp para este contato pelo navegador.",
+      "callOff": "As chamadas não estão ativadas para este número do WhatsApp. Ative nas configurações do número.",
+      "callPermission": "O contato ainda não permitiu chamadas. Antes de ligar, é pedida a permissão dele.",
+      "callReady": "Pronto para ligar para {phone}.",
+      "later": {
+        "sms": "O envio de SMS pelo CRM ainda não está disponível.",
+        "email": "O envio de e-mail pelo CRM ainda não está disponível."
+      },
+      "openApp": {
+        "sms": "Abrir no app de mensagens",
+        "email": "Abrir no app de e-mail"
+      }
+    },
+    "views": {
+      "label": "Visualizações",
+      "all": "Todos os contatos",
+      "add": "Adicionar uma visualização",
+      "changed": "Os filtros mudaram desde que esta visualização foi salva",
+      "more": "Mais para {name}",
+      "picker": {
+        "title": "Selecione uma visualização",
+        "create": "Criar nova visualização",
+        "search": "Pesquisar visualizações...",
+        "chipAll": "Todas",
+        "chipPinned": "Nas abas",
+        "chipShared": "Compartilhadas",
+        "empty": "Nenhuma visualização encontrada",
+        "pinned": "Nas abas"
+      },
+      "menu": {
+        "rename": "Renomear visualização",
+        "update": "Salvar filtros atuais",
+        "unpin": "Remover das abas",
+        "pin": "Mostrar como aba",
+        "delete": "Excluir visualização",
+        "edit": "Editar visualização"
+      },
+      "drawer": {
+        "editTitle": "Renomear visualização",
+        "name": "Nome da visualização",
+        "namePlaceholder": "Visualização sem título",
+        "shareWith": "Compartilhar com",
+        "justMe": "Só eu",
+        "everyone": "Todos",
+        "save": "Atualizar",
+        "cancel": "Cancelar",
+        "close": "Fechar"
+      },
+      "toast": {
+        "created": "Visualização \"{name}\" criada.",
+        "updated": "Visualização atualizada.",
+        "filtersSaved": "Filtros salvos em \"{name}\".",
+        "deleted": "Visualização \"{name}\" excluída.",
+        "failed": "Não foi possível salvar a visualização: {message}",
+        "conflict": "Outra pessoa alterou esta visualização. Recarregue e tente novamente."
+      },
+      "delete": {
+        "title": "Excluir esta visualização?",
+        "message": "\"{name}\" será excluída para todos com quem é compartilhada. Os contatos não são alterados.",
+        "confirm": "Excluir visualização",
+        "cancel": "Manter visualização"
+      },
+      "editor": {
+        "title": {
+          "create": "Criar nova visualização",
+          "edit": "Editar visualização"
+        },
+        "close": "Fechar",
+        "back": "Voltar aos contatos",
+        "name": "Nome da visualização",
+        "namePlaceholder": "Digite o nome da visualização",
+        "favorite": "Marcar como favorita",
+        "favoriteHint": "Uma visualização favorita tem sua própria aba.",
+        "shareWith": "Compartilhar com",
+        "justMe": "Só eu",
+        "everyone": "Todos",
+        "filterTitle": "Filtrar contatos",
+        "filterHint": "Corresponda a todas ou a qualquer uma das condições e adicione grupos para filtros mais complexos.",
+        "columnsTitle": "Preferências de colunas",
+        "locked": "Sempre exibida",
+        "cancel": "Cancelar",
+        "create": "Criar visualização",
+        "save": "Salvar visualização",
+        "saving": "Salvando",
+        "needName": "Digite um nome para a visualização.",
+        "needFilter": "Adicione pelo menos uma condição completa.",
+        "notFound": "Esta visualização não foi encontrada ou foi excluída.",
+        "noPermission": "Você não tem permissão para fazer isso.",
+        "loading": "Carregando",
+        "columnsHint": "Pesquise e marque as colunas que esta visualização mostra e arraste as escolhidas para definir a ordem.",
+        "drag": "Arraste para reordenar {name}",
+        "selectedUsers": "Usuários selecionados",
+        "accessLevel": "Nível de acesso",
+        "canView": "Pode ver",
+        "canEdit": "Pode ver e editar",
+        "peoplePlaceholder": "Pesquisar pessoas",
+        "noPeople": "Nenhuma pessoa encontrada",
+        "removePerson": "Remover {name}",
+        "clearPeople": "Remover todas as pessoas",
+        "needPeople": "Escolha pelo menos uma pessoa.",
+        "onlyCreator": "Somente quem criou esta visualização pode alterar com quem ela é compartilhada.",
+        "searchColumns": "Pesquisar colunas",
+        "noColumnMatch": "Nenhuma coluna corresponde.",
+        "available": "Colunas disponíveis",
+        "selected": "Colunas selecionadas",
+        "selectAll": "Selecionar tudo",
+        "reorder": "Arraste para reordenar as colunas",
+        "remove": "Remover {name}"
       }
     }
   }

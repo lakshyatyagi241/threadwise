@@ -115,7 +115,9 @@ export class InboxConversationsService {
         tab: query.tab,
         status: query.status,
         channelId,
-        labelIds: query.labels,
+        // `labels` is the original name of the `tags` query parameter; both are read.
+        tagIds: [...new Set([...query.tags, ...query.labels])],
+        tagScope: query.tagScope,
         q: query.q,
         archived: query.archived,
         limit: query.limit,
@@ -393,6 +395,14 @@ export class InboxConversationsService {
       ownerName = ((res.rows[0] as { full_name?: string } | undefined)?.full_name ?? null) as
         string | null;
     }
+    const tagRes = await tx.execute(
+      sql`SELECT t.uuid, t.name::text AS name, t.color FROM contact_tags ct
+          JOIN tags t ON t.org_id = ct.org_id AND t.id = ct.tag_id
+          WHERE ct.org_id = ${ctx.orgId} AND ct.contact_id = ${row.contactId} ORDER BY t.name`,
+    );
+    const contactTags = (
+      tagRes.rows as Array<{ uuid: string; name: string; color: string | null }>
+    ).map((r) => ({ id: r.uuid, name: r.name, color: r.color ?? null }));
     return toContactSummary(
       {
         uuid: contact.uuid,
@@ -414,6 +424,7 @@ export class InboxConversationsService {
         createdAt: contact.createdAt,
       },
       ownerName,
+      contactTags,
     );
   }
 }

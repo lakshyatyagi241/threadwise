@@ -8,7 +8,7 @@ import { Button, ConfirmDialog, Drawer, Input, Popover, cn, useToast } from '@cr
 import type { ContactFilters } from '../api/contacts';
 import { useContactViews, useViewMutations } from '../api/views';
 import { pickerViews, tabViews, viewChanged, viewFilterOf, type ViewKind } from '../lib/views';
-import { PlusIcon } from './icons';
+import { ChevronDownIcon, PlusIcon } from './icons';
 import { RowMenu, RowMenuItem, RowMenuSeparator } from './row-menu';
 
 const NS = 'contacts-attributes-tags.views';
@@ -56,147 +56,21 @@ export function ViewsBar({
   const failed = (e: unknown) =>
     toast(t('toast.failed', { message: e instanceof Error ? e.message : String(e) }), 'danger');
 
-  const tab = (active: boolean) =>
-    cn(
-      'shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition outline-none focus-visible:ring-2 focus-visible:ring-primary',
-      active
-        ? 'border-primary text-foreground'
-        : 'border-transparent text-muted-foreground hover:text-foreground',
-    );
-
   return (
-    <div className="flex items-end gap-1 border-b border-border">
-      <nav aria-label={t('label')} className="-mb-px flex min-w-0 items-end overflow-x-auto">
-        <button
-          type="button"
-          aria-current={activeId === '' ? 'page' : undefined}
-          className={tab(activeId === '')}
-          onClick={() => onSelect(null)}
-        >
-          {t('all')}
-        </button>
-        {tabs.map((v) => {
-          const active = v.id === activeId;
-          const changed = active && viewChanged(v, filters, columnIds, defaultLimit);
-          return (
-            <div
-              key={v.id}
-              className={cn(
-                'flex shrink-0 items-center border-b-2 transition',
-                active ? 'border-primary' : 'border-transparent',
-              )}
-            >
-              <button
-                type="button"
-                aria-current={active ? 'page' : undefined}
-                className={cn(
-                  'px-3 py-2 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                  active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
-                  active && 'pe-1',
-                )}
-                onClick={() => onSelect(v)}
-              >
-                {v.name}
-                {changed && (
-                  <span
-                    role="img"
-                    aria-label={t('changed')}
-                    title={t('changed')}
-                    className="ms-1.5 inline-block size-1.5 rounded-full bg-warning align-middle"
-                  />
-                )}
-              </button>
-              {active && (
-                <span className="me-1 flex">
-                  <RowMenu label={t('more', { name: v.name })}>
-                    {(close) => (
-                      <>
-                        {can.update && v.canEdit && (
-                          <>
-                            <RowMenuItem
-                              onSelect={() => {
-                                close();
-                                router.push(`/contacts/views/${v.id}`);
-                              }}
-                            >
-                              {t('menu.edit')}
-                            </RowMenuItem>
-                            <RowMenuItem
-                              onSelect={() => {
-                                close();
-                                setDrawing({ mode: 'edit', view: v });
-                              }}
-                            >
-                              {t('menu.rename')}
-                            </RowMenuItem>
-                            <RowMenuItem
-                              onSelect={() => {
-                                close();
-                                update.mutate(
-                                  {
-                                    view: v,
-                                    patch: {
-                                      filter: viewFilterOf(
-                                        filters,
-                                        keepsColumns ? columnIds : null,
-                                      ),
-                                    },
-                                  },
-                                  {
-                                    onSuccess: () =>
-                                      toast(t('toast.filtersSaved', { name: v.name }), 'success'),
-                                    onError: failed,
-                                  },
-                                );
-                              }}
-                            >
-                              {t('menu.update')}
-                            </RowMenuItem>
-                          </>
-                        )}
-                        <RowMenuItem
-                          onSelect={() => {
-                            close();
-                            pin.mutate({ id: v.id, pinned: !v.isFavorite }, { onError: failed });
-                          }}
-                        >
-                          {v.isFavorite ? t('menu.unpin') : t('menu.pin')}
-                        </RowMenuItem>
-                        {can.delete && v.canManage && (
-                          <>
-                            <RowMenuSeparator />
-                            <RowMenuItem
-                              danger
-                              onSelect={() => {
-                                close();
-                                setDeleting(v);
-                              }}
-                            >
-                              {t('menu.delete')}
-                            </RowMenuItem>
-                          </>
-                        )}
-                      </>
-                    )}
-                  </RowMenu>
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </nav>
-
-      <div className="relative mb-1 shrink-0">
+    <div className="flex items-center gap-2">
+      <div className="relative shrink-0">
         <button
           type="button"
           aria-haspopup="dialog"
           aria-expanded={pickerOpen}
-          aria-label={t('add')}
-          title={t('add')}
+          aria-label={t('picker.title')}
           onClick={() => setPickerOpen((o) => !o)}
-          className="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <PlusIcon className="size-4" />
+          <span className="truncate">
+            {activeId === '' ? t('all') : (all.find((v) => v.id === activeId)?.name ?? t('all'))}
+          </span>
+          <ChevronDownIcon className="size-3.5" />
         </button>
         <Popover
           open={pickerOpen}
@@ -220,6 +94,93 @@ export function ViewsBar({
           />
         </Popover>
       </div>
+      {tabs
+        .filter((v) => v.id === activeId)
+        .map((v) => {
+          const changed = viewChanged(v, filters, columnIds, defaultLimit);
+          return (
+            <div key={v.id} className="flex items-center">
+              {changed && (
+                <span
+                  role="img"
+                  aria-label={t('changed')}
+                  title={t('changed')}
+                  className="me-1.5 inline-block size-1.5 rounded-full bg-warning align-middle"
+                />
+              )}
+              <span className="flex">
+                <RowMenu label={t('more', { name: v.name })}>
+                  {(close) => (
+                    <>
+                      {can.update && v.canEdit && (
+                        <>
+                          <RowMenuItem
+                            onSelect={() => {
+                              close();
+                              router.push(`/contacts/views/${v.id}`);
+                            }}
+                          >
+                            {t('menu.edit')}
+                          </RowMenuItem>
+                          <RowMenuItem
+                            onSelect={() => {
+                              close();
+                              setDrawing({ mode: 'edit', view: v });
+                            }}
+                          >
+                            {t('menu.rename')}
+                          </RowMenuItem>
+                          <RowMenuItem
+                            onSelect={() => {
+                              close();
+                              update.mutate(
+                                {
+                                  view: v,
+                                  patch: {
+                                    filter: viewFilterOf(filters, keepsColumns ? columnIds : null),
+                                  },
+                                },
+                                {
+                                  onSuccess: () =>
+                                    toast(t('toast.filtersSaved', { name: v.name }), 'success'),
+                                  onError: failed,
+                                },
+                              );
+                            }}
+                          >
+                            {t('menu.update')}
+                          </RowMenuItem>
+                        </>
+                      )}
+                      <RowMenuItem
+                        onSelect={() => {
+                          close();
+                          pin.mutate({ id: v.id, pinned: !v.isFavorite }, { onError: failed });
+                        }}
+                      >
+                        {v.isFavorite ? t('menu.unpin') : t('menu.pin')}
+                      </RowMenuItem>
+                      {can.delete && v.canManage && (
+                        <>
+                          <RowMenuSeparator />
+                          <RowMenuItem
+                            danger
+                            onSelect={() => {
+                              close();
+                              setDeleting(v);
+                            }}
+                          >
+                            {t('menu.delete')}
+                          </RowMenuItem>
+                        </>
+                      )}
+                    </>
+                  )}
+                </RowMenu>
+              </span>
+            </div>
+          );
+        })}
 
       <ViewDrawer
         key={drawing ? drawing.view.id : 'closed'}
