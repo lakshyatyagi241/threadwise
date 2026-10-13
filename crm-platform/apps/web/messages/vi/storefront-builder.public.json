@@ -75,7 +75,9 @@
       "removeWish": "Xóa {name} khỏi danh sách yêu thích",
       "quickView": "Xem nhanh {name}",
       "quickViewTitle": "Xem nhanh",
-      "was": "Giá cũ"
+      "was": "Giá cũ",
+      "chooseOptions": "Chọn tùy chọn",
+      "chooseOptionsNamed": "Chọn tùy chọn cho {name}"
     },
     "quick": {
       "details": "Xem chi tiết đầy đủ →"
@@ -162,7 +164,9 @@
       "increase": "Tăng số lượng",
       "remove": "Xóa {name} khỏi giỏ hàng",
       "fullTitle": "Giỏ hàng của bạn đã đầy",
-      "fullBody": "Một giỏ hàng chứa tối đa 100 sản phẩm khác nhau. Hãy đặt các sản phẩm này trước, rồi tạo giỏ hàng mới."
+      "fullBody": "Một giỏ hàng chứa tối đa 100 sản phẩm khác nhau. Hãy đặt các sản phẩm này trước, rồi tạo giỏ hàng mới.",
+      "variantDroppedTitle": "Giỏ hàng đã được cập nhật",
+      "variantDroppedBody": "{count, plural, other {# sản phẩm cần chọn lại tùy chọn và đã được xóa khỏi giỏ hàng.}}"
     },
     "wish": {
       "title": "Danh sách yêu thích",
@@ -233,9 +237,9 @@
       "couponFallback": "Mã không hợp lệ."
     },
     "errors": {
-      "itemsUnavailable": "Các sản phẩm này không còn khả dụng. Vui lòng làm mới trang và thử lại.",
       "notAvailable": "Cửa hàng này hiện không khả dụng.",
-      "rateLimited": "Quá nhiều yêu cầu. Vui lòng đợi một lát rồi thử lại."
+      "rateLimited": "Quá nhiều yêu cầu. Vui lòng đợi một lát rồi thử lại.",
+      "itemsRefreshed": "Một số sản phẩm đã thay đổi hoặc hết hàng nên chúng tôi đã cập nhật giỏ hàng. Vui lòng kiểm tra và thử lại."
     },
     "placed": {
       "title": "Đã đặt hàng",
@@ -331,6 +335,13 @@
       "help": "Cần trợ giúp?",
       "support": "Liên hệ bộ phận hỗ trợ",
       "metaTitle": "Không tìm thấy trang"
+    },
+    "variant": {
+      "from": "Từ {price}",
+      "optionsCount": "{count, plural, other {# tùy chọn}}",
+      "select": "Chọn {option}",
+      "unavailable": "Tổ hợp này không có sẵn",
+      "soldOutValue": "hết hàng"
     }
   }
 }

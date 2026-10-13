@@ -36,6 +36,26 @@ export function toPublicProduct(p: StorefrontProduct): PublicProduct {
     isNew: p.createdAt ? p.createdAt.getTime() > Date.now() - NEW_WINDOW_MS : false,
     weightGrams: p.weightGrams ?? null,
     tags: p.tags ?? [],
+    ...(p.options && p.variants
+      ? {
+          options: p.options,
+          variants: p.variants.map((v) => ({
+            id: v.uuid,
+            title: v.title,
+            optionValues: v.optionValues,
+            sku: v.sku,
+            priceMinor: v.priceMinor,
+            priceDisplay: formatProductMoney(v.priceMinor, p.currencyCode),
+            comparePriceMinor: v.comparePriceMinor,
+            comparePriceDisplay:
+              v.comparePriceMinor === null
+                ? null
+                : formatProductMoney(v.comparePriceMinor, p.currencyCode),
+            imageUrl: v.imageUrl,
+            stockQty: v.stockQty,
+          })),
+        }
+      : {}),
   };
 }
 

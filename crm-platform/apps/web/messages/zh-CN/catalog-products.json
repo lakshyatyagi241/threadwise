@@ -446,7 +446,8 @@
       "cancel": "取消",
       "deleted": "商品已移除。",
       "deleteTitle": "删除此商品？",
-      "deleteBody": "“{name}”将被删除。在您于 Meta 上将其移除之前，它会保留在 Meta 上。"
+      "deleteBody": "“{name}”将被删除。在您于 Meta 上将其移除之前，它会保留在 Meta 上。",
+      "variantsBadge": "{count, plural, other {# 个规格}}"
     },
     "share": {
       "eyebrow": "分享商品",
@@ -551,6 +552,91 @@
         "badUrl": "请输入以 https:// 开头的完整链接",
         "outOfRange": "此数字超出范围。",
         "tooMany": "图片过多。"
+      },
+      "variants": {
+        "title": "规格",
+        "hint": "以多种形式销售此商品，例如尺码或颜色。每种组合都有各自的 SKU、价格和库存。",
+        "toggle": "此商品有规格",
+        "removeOnSave": "保存时将删除此商品的规格。",
+        "optionName": "选项 {n} 名称",
+        "optionNamePlaceholder": "尺码、颜色...",
+        "suggest": {
+          "size": "尺码",
+          "colour": "颜色",
+          "material": "材质",
+          "style": "款式"
+        },
+        "values": "值",
+        "valuesHint": "每输入一个值后按回车键或输入逗号。每个值最多 {max} 个字符。",
+        "valuesPlaceholder": "输入一个值，例如 M",
+        "valuesMore": "添加其他值",
+        "quickAdd": "快速添加：",
+        "preset": {
+          "clothing": "服装尺码（{values}）",
+          "shoes": "鞋码（{values}）"
+        },
+        "addOption": "添加选项",
+        "maxOptions": "最多 {max} 个选项。",
+        "removeOption": "删除选项 {n}",
+        "moveOptionUp": "上移选项 {n}",
+        "moveOptionDown": "下移选项 {n}",
+        "removeValue": "删除值 {value}",
+        "moveValueEarlier": "将 {value} 前移",
+        "moveValueLater": "将 {value} 后移",
+        "refused": {
+          "tooLong": "此值太长。",
+          "dup": "此值已在列表中。",
+          "tooMany": "已达到此选项的值数量上限。"
+        },
+        "tableTitle": "规格",
+        "count": "{count, plural, other {# 个规格}}",
+        "tableEmpty": "请为每个选项命名并至少添加一个值，以生成规格。",
+        "totalStock": "总库存",
+        "fromPrice": "起始价",
+        "fromPreview": "{price} 起",
+        "unlimited": "不限",
+        "priceHint": "启用规格中的最低价格。没有单独价格的规格使用此价格。",
+        "stockHint": "启用规格的合计，由上方表格设置。",
+        "bulkPrice": "所有规格的价格",
+        "bulkStock": "所有规格的库存",
+        "bulkApplyPrice": "应用价格",
+        "bulkApplyStock": "应用库存",
+        "pricePlaceholder": "商品价格",
+        "stockPlaceholder": "不限",
+        "col": {
+          "variant": "规格",
+          "sku": "SKU",
+          "price": "价格",
+          "stock": "库存",
+          "image": "图片链接",
+          "active": "启用"
+        },
+        "rowSku": "{title} 的 SKU",
+        "rowPrice": "{title} 的价格",
+        "rowStock": "{title} 的库存",
+        "rowImage": "{title} 的图片链接",
+        "rowActive": "{title} 已启用",
+        "confirm": {
+          "title": "删除规格？",
+          "body": "由于该组合已不存在，{count, plural, other {# 个含数据的规格}}将被删除。",
+          "remove": "删除",
+          "keep": "保留"
+        },
+        "problem": {
+          "required": "此字段为必填项。",
+          "tooLong": "此文本太长。",
+          "dupName": "有两个选项名称相同。",
+          "dupValue": "此值出现了两次。",
+          "needOption": "请至少添加一个选项。",
+          "needValue": "请至少添加一个值。",
+          "tooManyValues": "此选项的值过多。",
+          "tooManyVariants": "这些选项生成的规格过多，上限为 100 个。",
+          "notNumber": "请输入数字，例如 499 或 499.50。",
+          "tooBig": "金额过大。",
+          "notWhole": "请输入整数。",
+          "outOfRange": "此数字超出范围。",
+          "badUrl": "请输入以 https:// 开头的完整链接。"
+        }
       }
     },
     "reviews": {

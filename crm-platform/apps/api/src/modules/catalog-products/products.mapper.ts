@@ -3,11 +3,41 @@ import {
   type ProductPickerItem,
   type ProductResponse,
   type ProductStatus,
+  type ProductVariantResponse,
 } from '@crm/contracts';
 import { aliasStrings } from './product-matcher';
 import { minorToMajorString } from './catalog-money';
 import { availableQty, effectiveAvailability, retailerIdOf } from './catalog-rules';
-import type { ProductRow } from './products.repository';
+import type { ProductRow, VariantRow } from './products.repository';
+import { variantRetailerId } from './variant-rules';
+
+function toVariantResponse(v: VariantRow, p: ProductRow): ProductVariantResponse {
+  // A row without its own price reads as the product's (the API always stores one).
+  const priceMinor = v.priceMinor ?? p.priceMinor;
+  return {
+    id: v.uuid,
+    optionValues: v.optionValues,
+    title: v.title,
+    sku: v.sku,
+    priceMinor,
+    priceMajor: minorToMajorString(priceMinor),
+    priceDisplay: formatProductMoney(priceMinor, p.currencyCode),
+    priceOverrideMajor: v.priceMinor === null ? null : minorToMajorString(v.priceMinor),
+    comparePriceMinor: v.comparePriceMinor,
+    comparePriceMajor: v.comparePriceMinor === null ? null : minorToMajorString(v.comparePriceMinor),
+    comparePriceDisplay:
+      v.comparePriceMinor === null ? null : formatProductMoney(v.comparePriceMinor, p.currencyCode),
+    imageUrl: v.imageUrl,
+    weightGrams: v.weightGrams,
+    stockQty: v.stockQty,
+    reservedQty: v.reservedQty,
+    availableQty: availableQty(v.stockQty, v.reservedQty),
+    active: v.active,
+    position: v.position,
+    retailerId: variantRetailerId(v, retailerIdOf(p)),
+    rowVersion: v.rowVersion,
+  };
+}
 
 /** The only place a product row becomes its wire shape: ids become uuids, money gets its readable forms. */
 export function toProductResponse(p: ProductRow): ProductResponse {
@@ -52,6 +82,9 @@ export function toProductResponse(p: ProductRow): ProductResponse {
     metaSyncStatus: p.metaSyncStatus,
     metaSyncedAt: p.metaSyncedAt ? p.metaSyncedAt.toISOString() : null,
     metaLastError: p.metaLastError,
+    options: p.options,
+    variants: p.variants.map((v) => toVariantResponse(v, p)),
+    hasVariants: p.variants.length > 0,
     rowVersion: p.rowVersion,
     createdAt: p.createdAt.toISOString(),
     updatedAt: p.updatedAt.toISOString(),

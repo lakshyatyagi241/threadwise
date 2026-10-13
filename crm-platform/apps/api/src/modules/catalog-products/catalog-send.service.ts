@@ -38,10 +38,10 @@ import {
   mergeRecipients,
   ownedInSubmittedOrder,
   parseManualNumbers,
-  retailerIdOf,
 } from './catalog-rules';
 import { CatalogSendsRepository } from './catalog-sends.repository';
 import { CatalogsRepository, type CatalogRow } from './catalogs.repository';
+import { shareRetailerId } from './catalog-variants';
 import { ProductsRepository, type ProductRow } from './products.repository';
 
 export const CATALOG_SEND_MODULE = 'catalog_sends';
@@ -135,7 +135,7 @@ export class CatalogSendService {
               imageUrl: p.imageUrl,
               priceMinor: p.priceMinor,
               currency: p.currencyCode,
-              retailerId: retailerIdOf(p),
+              retailerId: shareRetailerId(p, p.variants),
             })),
           });
         }
@@ -250,7 +250,13 @@ export class CatalogSendService {
   ): Promise<SentMessage> {
     if (mode === 'spm') {
       // One card: extra products are ignored for a single-product message.
-      return this.provider.sendSPM(binding, to, retailerIdOf(products[0]!), t.body, t.footer);
+      return this.provider.sendSPM(
+        binding,
+        to,
+        shareRetailerId(products[0]!, products[0]!.variants),
+        t.body,
+        t.footer,
+      );
     }
     if (mode === 'mpm') {
       return this.provider.sendMPM(
@@ -259,7 +265,10 @@ export class CatalogSendService {
         t.header ?? 'Our catalog',
         t.body ?? 'Tap a product to learn more',
         buildMpmSections(
-          products.map((p) => ({ retailerId: retailerIdOf(p), category: p.category })),
+          products.map((p) => ({
+            retailerId: shareRetailerId(p, p.variants),
+            category: p.category,
+          })),
         ),
         t.footer,
       );
@@ -288,7 +297,7 @@ export class CatalogSendService {
     // SPM sends the first product only, like Meta's single-product card.
     const chosen = mode === 'spm' ? plan.products.slice(0, 1) : plan.products;
     const cards: BaileysCard[] = chosen.map((p) => ({
-      retailer_id: retailerIdOf(p),
+      retailer_id: shareRetailerId(p, p.variants),
       id: p.uuid,
       name: p.name,
       description: p.description,

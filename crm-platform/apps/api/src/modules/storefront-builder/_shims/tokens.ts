@@ -10,8 +10,11 @@ export interface OrderLine {
   qty: number;
   price_minor: number;
   image: string | null;
-  /** The Meta retailer id, else the SKU, else null. */
+  /** The Meta retailer id, else the SKU, else null; for a variant line the variant's retailer id. */
   retailer_id: string | null;
+  /** Variant lines only: the variant uuid and its title ("M / Red"). Older lines have neither. */
+  variant_id?: string;
+  variant_title?: string;
 }
 
 /** The order a storefront checkout writes (TW-STORE-013): status is always `new`, source always `storefront`. */

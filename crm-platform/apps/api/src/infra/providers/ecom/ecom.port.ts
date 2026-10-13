@@ -121,6 +121,8 @@ export interface WooStoreApi {
   test(): Promise<EcomResult<WooStoreInfo>>;
   counts(): Promise<StoreCounts>;
   products(): Promise<StoreRead>;
+  /** The variations of a variable product (`/products/<id>/variations`), read to the end of their pages like the other resources. */
+  variations(productId: string): Promise<StoreRead>;
   orders(): Promise<StoreRead>;
   customers(): Promise<StoreRead>;
   registerWebhooks(a: {
@@ -141,7 +143,13 @@ export interface WooStoreApi {
    * pays at. Null when the store refused or gave no link.
    */
   createPendingOrder(
-    items: ReadonlyArray<{ reference: string; qty: number }>,
+    items: ReadonlyArray<{
+      reference: string;
+      qty: number;
+      /** A variation line names both ids: the parent product and the variation (WooCommerce wants both). */
+      productId?: string;
+      variationId?: string;
+    }>,
     flowSessionId: string | null,
   ): Promise<{ url: string; orderId: string } | null>;
 }

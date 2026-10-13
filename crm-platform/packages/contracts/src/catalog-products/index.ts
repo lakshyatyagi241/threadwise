@@ -3,6 +3,7 @@
  * See docs/threadwise-port/inventory/catalog-products.md and docs/api/catalog-products.md.
  */
 export * from './product';
+export * from './variant';
 export * from './catalog';
 export * from './collection';
 export * from './review';

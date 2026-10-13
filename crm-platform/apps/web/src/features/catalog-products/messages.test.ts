@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { CATALOG_PROVIDERS, PRODUCT_CURRENCIES } from '@crm/contracts';
 import { ERROR_KINDS } from './lib/errors';
 import { PROBLEM_KEYS, STATUS_OPTIONS } from './lib/product-form';
+import { OPTION_NAME_SUGGESTIONS, PRESET_KEYS, VARIANT_PROBLEM_KEYS } from './lib/variants-model';
 import { SYNC_STATUSES } from './lib/format';
 import { RECIPIENT_MODES } from './lib/send-model';
 import { REVIEW_TABS } from './lib/pages';
@@ -143,6 +144,10 @@ describe('message keys used in code', () => {
       ),
       ...PROBLEM_KEYS.map((s) => `form.problem.${s}`),
       ...STATUS_OPTIONS.map((s) => `form.status.${s}`),
+      ...VARIANT_PROBLEM_KEYS.map((s) => `form.variants.problem.${s}`),
+      ...PRESET_KEYS.map((s) => `form.variants.preset.${s}`),
+      ...OPTION_NAME_SUGGESTIONS.map((s) => `form.variants.suggest.${s}`),
+      ...(['tooLong', 'dup', 'tooMany'] as const).map((s) => `form.variants.refused.${s}`),
       ...REVIEW_TABS.flatMap((s) => [`reviews.tab.${s}`, `reviews.empty.${s}`]),
       'reviews.approved',
       'reviews.rejected',

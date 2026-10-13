@@ -6,6 +6,7 @@ import { useRef, type ReactNode } from 'react';
 import { cartTotal, shippingRow } from '../lib/cart';
 import { formatMinor } from '../lib/money';
 import { productPath } from '../lib/links';
+import { fromPrice, hasVariants } from '../lib/variants';
 import { BagIcon, BigCompareIcon, BigHeartIcon } from './icons';
 import { ProductImage } from './product-image';
 import { useStore, type DrawerKind } from './store-provider';
@@ -155,12 +156,15 @@ export function CartDrawer() {
       ) : (
         <ul className="sf-lines">
           {cart.map((line) => (
-            <li key={line.id} className="sf-cart-row">
+            <li key={`${line.id}:${line.variantId ?? ''}`} className="sf-cart-row">
               <div className="sf-cart-img">
                 <ProductImage src={line.image} alt="" emoji />
               </div>
               <div className="sf-cart-meta">
                 <div className="sf-cart-name">{line.name}</div>
+                {line.variantTitle ? (
+                  <div className="sf-cart-variant">{line.variantTitle}</div>
+                ) : null}
                 <div className="sf-cart-price">
                   {money(line.price)} × {line.qty}
                 </div>
@@ -172,7 +176,7 @@ export function CartDrawer() {
                   <button
                     type="button"
                     aria-label={t('cart.decrease')}
-                    onClick={() => setLineQty(line.id, line.qty - 1)}
+                    onClick={() => setLineQty(line.id, line.qty - 1, line.variantId)}
                   >
                     −
                   </button>
@@ -186,7 +190,9 @@ export function CartDrawer() {
                       const n = Number.parseInt(e.target.value, 10);
                       // Show what the cart really holds afterwards (a typed 10 on a stock of 3 reads 3).
                       const at =
-                        n !== line.qty ? setLineQty(line.id, Number.isFinite(n) ? n : 1) : line.qty;
+                        n !== line.qty
+                          ? setLineQty(line.id, Number.isFinite(n) ? n : 1, line.variantId)
+                          : line.qty;
                       e.target.value = String(at);
                     }}
                     onKeyDown={(e) => {
@@ -196,7 +202,7 @@ export function CartDrawer() {
                   <button
                     type="button"
                     aria-label={t('cart.increase')}
-                    onClick={() => setLineQty(line.id, line.qty + 1)}
+                    onClick={() => setLineQty(line.id, line.qty + 1, line.variantId)}
                   >
                     +
                   </button>
@@ -206,7 +212,7 @@ export function CartDrawer() {
                 type="button"
                 className="sf-cart-remove"
                 aria-label={t('cart.remove', { name: line.name })}
-                onClick={() => removeFromCart(line.id)}
+                onClick={() => removeFromCart(line.id, line.variantId)}
               >
                 ×
               </button>
@@ -237,10 +243,22 @@ export function WishDrawer() {
                 <a className="sf-cart-name" href={productPath(shop.slug, p.slug)}>
                   {p.name}
                 </a>
-                <div className="sf-cart-price">{p.priceDisplay}</div>
-                <button type="button" className="sf-mini-btn" onClick={() => addToCart(p)}>
-                  {t('card.addToCart')}
-                </button>
+                <div className="sf-cart-price">
+                  {hasVariants(p) && fromPrice(p).varies
+                    ? t('variant.from', { price: fromPrice(p).display })
+                    : hasVariants(p)
+                      ? fromPrice(p).display
+                      : p.priceDisplay}
+                </div>
+                {hasVariants(p) ? (
+                  <a className="sf-mini-btn" href={productPath(shop.slug, p.slug)}>
+                    {t('card.chooseOptions')}
+                  </a>
+                ) : (
+                  <button type="button" className="sf-mini-btn" onClick={() => addToCart(p)}>
+                    {t('card.addToCart')}
+                  </button>
+                )}
               </div>
               <button
                 type="button"
@@ -316,7 +334,13 @@ export function CompareDrawer() {
               <tr>
                 <th scope="row">{t('compare.rows.price')}</th>
                 {cols.map((p) => (
-                  <td key={p.id}>{p.priceDisplay}</td>
+                  <td key={p.id}>
+                    {hasVariants(p) && fromPrice(p).varies
+                      ? t('variant.from', { price: fromPrice(p).display })
+                      : hasVariants(p)
+                        ? fromPrice(p).display
+                        : p.priceDisplay}
+                  </td>
                 ))}
               </tr>
               <tr>

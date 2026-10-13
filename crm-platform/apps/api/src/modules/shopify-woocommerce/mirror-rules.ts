@@ -32,6 +32,24 @@ export const slugify = (s: string): string =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 
+/** One sellable combination of a store product: a Shopify variant or a WooCommerce variation. */
+export interface MirrorVariant {
+  /** The store's id for the variant (Shopify variant id, WooCommerce variation id). */
+  storeVariantId: string;
+  /** One value per product option, in option order. */
+  optionValues: string[];
+  title: string;
+  /** The store's SKU, else a stable `SHOPIFY-V<id>` / `WOO-V<id>` so checkout can find the variant again. */
+  sku: string;
+  priceMinor: number;
+  comparePriceMinor: number | null;
+  imageUrl: string | null;
+  weightGrams: number | null;
+  /** Null: the store does not track this inventory (unlimited). */
+  stockQty: number | null;
+  active: boolean;
+}
+
 export interface MirrorProduct {
   /** The store's own id for the product. */
   storeId: string;
@@ -52,6 +70,12 @@ export interface MirrorProduct {
   brand: string | null;
   productUrl: string;
   tags: string[];
+  /** Up to 3 named options; empty for a product with a single (default) variant. */
+  options: Array<{ name: string; values: string[] }>;
+  /** Empty for a product with no variants of its own: it is then one plain product. */
+  variants: MirrorVariant[];
+  /** True when the store says the product is variable but its variations were not read: the stored variants are left as they are. */
+  keepVariants?: boolean;
 }
 
 export interface MirrorOrder {
@@ -112,6 +136,78 @@ const tagList = (tags: unknown): string[] => {
     : [];
 };
 
+const MAX_OPTIONS = 3;
+const MAX_VARIANTS = 100;
+const title = (values: readonly string[]): string => values.join(' / ');
+/** A value as the form's rules want it: trimmed, at most 60 characters. */
+const clip = (v: string, n = 60): string => v.trim().slice(0, n);
+
+/**
+ * The options and variants of a Shopify product. A product with only the default variant ("Title" / "Default Title") is one plain
+ * product. Shopify allows 3 options and 100 variants, the same limits as ours. A variant whose inventory Shopify does not track
+ * (`inventory_management` null) is unlimited here; a tracked one carries its quantity (below zero reads as 0).
+ */
+export function shopifyVariants(p: Json): {
+  options: MirrorProduct['options'];
+  variants: MirrorVariant[];
+} {
+  const raw = arr(p.variants).map(obj);
+  const options = arr(p.options)
+    .map(obj)
+    .slice(0, MAX_OPTIONS)
+    .map((o) => ({
+      name: clip(str(o.name) ?? '', 40),
+      values: arr(o.values)
+        .map((v) => clip(str(v) ?? ''))
+        .filter(Boolean),
+    }));
+  const single =
+    raw.length <= 1 &&
+    (options.length === 0 ||
+      (options.length === 1 &&
+        options[0]!.name.toLowerCase() === 'title' &&
+        options[0]!.values.every((v) => v.toLowerCase() === 'default title')));
+  if (raw.length === 0 || single || options.some((o) => o.name === '' || o.values.length === 0))
+    return { options: [], variants: [] };
+  const images = new Map(
+    arr(p.images)
+      .map(obj)
+      .map((i) => [str(i.id) ?? '', str(i.src)] as const),
+  );
+  const seen = new Set<string>();
+  const variants: MirrorVariant[] = [];
+  for (const v of raw.slice(0, MAX_VARIANTS)) {
+    const id = str(v.id) ?? '';
+    const values = options.map((_, i) => clip(str(v[`option${i + 1}`]) ?? ''));
+    if (id === '' || values.some((x) => x === '')) continue;
+    const t = title(values);
+    if (seen.has(t.toLowerCase())) continue;
+    seen.add(t.toLowerCase());
+    const tracked =
+      v.inventory_management !== null &&
+      v.inventory_management !== undefined &&
+      v.inventory_management !== '';
+    const qty = v.inventory_quantity;
+    const grams = Number(v.grams);
+    variants.push({
+      storeVariantId: id,
+      optionValues: values,
+      title: t,
+      sku: (str(v.sku) ?? '').trim() || `SHOPIFY-V${id}`,
+      priceMinor: toMinor(v.price),
+      comparePriceMinor: toMinor(v.compare_at_price) || null,
+      imageUrl: images.get(str(v.image_id) ?? '') ?? null,
+      weightGrams: Number.isFinite(grams) && grams > 0 ? Math.round(grams) : null,
+      stockQty:
+        tracked && qty !== null && qty !== undefined
+          ? Math.max(0, Math.trunc(Number(qty) || 0))
+          : null,
+      active: true,
+    });
+  }
+  return variants.length === 0 ? { options: [], variants: [] } : { options, variants };
+}
+
 export function shopifyProduct(
   p: Json,
   ctx: { storeUrl: string; currency: string | null },
@@ -142,6 +238,7 @@ export function shopifyProduct(
     brand: str(p.vendor),
     productUrl: `https://${ctx.storeUrl}/products/${handle ?? ''}`,
     tags: tagList(p.tags),
+    ...shopifyVariants(p),
   };
 }
 
@@ -219,6 +316,79 @@ const wooTags = (tags: unknown): string[] =>
     .map((t) => (typeof t === 'object' && t !== null ? str(obj(t).name) : str(t)))
     .filter((t): t is string => !!t);
 
+/**
+ * The options and variants of a WooCommerce variable product. The product record only lists its variation ids, so the importer
+ * reads the variations (`/products/<id>/variations`) and hands them in as `_variations`. Options are the attributes used for
+ * variations; a variation that leaves an attribute on "any" gets no combination of its own and is skipped (we cannot invent one).
+ * A variation with managed stock carries its quantity; one that does not is unlimited unless the store marks it out of stock (0).
+ */
+export function wooVariants(p: Json): {
+  options: MirrorProduct['options'];
+  variants: MirrorVariant[];
+} {
+  const variations = arr(p._variations).map(obj);
+  if ((str(p.type) ?? '') !== 'variable' || variations.length === 0)
+    return { options: [], variants: [] };
+  const attrs = arr(p.attributes)
+    .map(obj)
+    .filter((a) => a.variation === true)
+    .slice(0, MAX_OPTIONS)
+    .map((a) => ({
+      name: clip(str(a.name) ?? '', 40),
+      values: arr(a.options)
+        .map((v) => clip(str(v) ?? ''))
+        .filter(Boolean),
+    }))
+    .filter((a) => a.name !== '' && a.values.length > 0);
+  if (attrs.length === 0) return { options: [], variants: [] };
+  const seen = new Set<string>();
+  const variants: MirrorVariant[] = [];
+  for (const v of variations.slice(0, MAX_VARIANTS)) {
+    const id = str(v.id) ?? '';
+    const chosen = arr(v.attributes).map(obj);
+    const values = attrs.map((a) => {
+      const hit = chosen.find(
+        (c) => (str(c.name) ?? '').trim().toLowerCase() === a.name.toLowerCase(),
+      );
+      return clip(str(hit?.option) ?? '');
+    });
+    if (id === '' || values.some((x) => x === '')) continue;
+    // The variation's value is the option's value however the store cased it; one the product does not list is added to it.
+    values.forEach((val, i) => {
+      const known = attrs[i]!.values.find((x) => x.toLowerCase() === val.toLowerCase());
+      if (known) values[i] = known;
+      else attrs[i]!.values.push(val);
+    });
+    const t = title(values);
+    if (seen.has(t.toLowerCase())) continue;
+    seen.add(t.toLowerCase());
+    const price = toMinor(v.price ?? v.regular_price);
+    const regular = toMinor(v.regular_price);
+    const status = (str(v.stock_status) ?? '').toLowerCase();
+    const managed =
+      v.manage_stock === true && v.stock_quantity !== null && v.stock_quantity !== undefined;
+    const weight = Number.parseFloat(str(v.weight) ?? '');
+    variants.push({
+      storeVariantId: id,
+      optionValues: values,
+      title: t,
+      sku: (str(v.sku) ?? '').trim() || `WOO-V${id}`,
+      priceMinor: price,
+      comparePriceMinor: regular > price ? regular : null,
+      imageUrl: str(obj(v.image).src),
+      // WooCommerce weights are kilograms by default; the product mirror keeps none, so a variant weight is left out unless clear.
+      weightGrams: Number.isFinite(weight) && weight > 0 ? Math.round(weight * 1000) : null,
+      stockQty: managed
+        ? Math.max(0, Math.trunc(Number(v.stock_quantity) || 0))
+        : status === 'outofstock'
+          ? 0
+          : null,
+      active: (str(v.status) ?? 'publish') === 'publish',
+    });
+  }
+  return variants.length === 0 ? { options: [], variants: [] } : { options: attrs, variants };
+}
+
 export function wooProduct(
   p: Json,
   ctx: { storeUrl: string; currency: string | null },
@@ -250,6 +420,8 @@ export function wooProduct(
     brand: firstName(p.brands),
     productUrl: str(p.permalink) ?? `${ctx.storeUrl}/?p=${id}`,
     tags: wooTags(p.tags),
+    ...wooVariants(p),
+    ...(str(p.type) === 'variable' && !Array.isArray(p._variations) ? { keepVariants: true } : {}),
   };
 }
 

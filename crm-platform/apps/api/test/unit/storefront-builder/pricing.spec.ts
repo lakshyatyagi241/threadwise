@@ -172,13 +172,15 @@ describe('cart re-pricing (TW-STORE-013)', () => {
   ]);
 
   it('duplicate lines add up', () => {
-    expect([
-      ...mergeRequested([
-        { id: 'a', qty: 1 },
-        { id: 'a', qty: 2 },
-        { id: 'b', qty: 1 },
-      ]),
-    ]).toEqual([
+    expect(
+      [
+        ...mergeRequested([
+          { id: 'a', qty: 1 },
+          { id: 'a', qty: 2 },
+          { id: 'b', qty: 1 },
+        ]),
+      ].map(([, l]) => [l.productUuid, l.qty]),
+    ).toEqual([
       ['a', 3],
       ['b', 1],
     ]);
@@ -237,5 +239,68 @@ describe('cart re-pricing (TW-STORE-013)', () => {
       mergeRequested([{ id: 'a', qty: 1, price: 1 } as never]),
     );
     expect(subtotalMinor).toBe(100_00);
+  });
+});
+
+describe('variant lines', () => {
+  const variant = (id: number, over: Record<string, unknown> = {}) => ({
+    id,
+    uuid: `v-${id}`,
+    title: `V${id}`,
+    optionValues: [`V${id}`],
+    sku: null,
+    priceMinor: 100_00 + id * 10_00,
+    comparePriceMinor: null,
+    imageUrl: null,
+    stockQty: 5 as number | null,
+    retailerId: `R-${id}`,
+    ...over,
+  });
+  const shirt = product({
+    id: 1,
+    uuid: 'p-1',
+    options: [{ name: 'Size', values: ['V1', 'V2'] }],
+    variants: [variant(1), variant(2, { stockQty: null })],
+  });
+  const products = new Map([['p-1', shirt]]);
+
+  it('keeps the same product in two variants as two lines, priced by the variant', () => {
+    const merged = mergeRequested([
+      { id: 'p-1', variantId: 'v-1', qty: 1 },
+      { id: 'p-1', variantId: 'v-2', qty: 2 },
+      { id: 'p-1', variantId: 'v-1', qty: 1 },
+    ]);
+    expect(merged.size).toBe(2);
+    const r = priceLines(products, merged);
+    expect(r.lines.map((l) => [l.variant?.uuid, l.qty, l.unitPriceMinor])).toEqual([
+      ['v-1', 2, 110_00],
+      ['v-2', 2, 120_00],
+    ]);
+    expect(r.subtotalMinor).toBe(2 * 110_00 + 2 * 120_00);
+  });
+
+  it('clamps to the variant stock, and a null stock is unlimited', () => {
+    const r = priceLines(
+      products,
+      mergeRequested([
+        { id: 'p-1', variantId: 'v-1', qty: 9 },
+        { id: 'p-1', variantId: 'v-2', qty: 99 },
+      ]),
+    );
+    expect(r.lines.map((l) => l.qty)).toEqual([5, 99]);
+  });
+
+  it('rejects a variants product sent without a variant; drops an unknown variant', () => {
+    expect(() => priceLines(products, mergeRequested([{ id: 'p-1', qty: 1 }]))).toThrow();
+    expect(
+      priceLines(products, mergeRequested([{ id: 'p-1', variantId: 'nope', qty: 1 }])).lines,
+    ).toEqual([]);
+  });
+
+  it('ignores a variant sent for a plain product', () => {
+    const plain = new Map([['p-2', product({ id: 2, uuid: 'p-2' })]]);
+    const r = priceLines(plain, mergeRequested([{ id: 'p-2', variantId: 'x', qty: 1 }]));
+    expect(r.lines[0]!.variant).toBeUndefined();
+    expect(r.lines[0]!.unitPriceMinor).toBe(100_00);
   });
 });

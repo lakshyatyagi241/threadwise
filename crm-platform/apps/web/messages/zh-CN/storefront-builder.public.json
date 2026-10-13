@@ -75,7 +75,9 @@
       "removeWish": "将 {name} 移出心愿单",
       "quickView": "{name} 快速预览",
       "quickViewTitle": "快速预览",
-      "was": "原价"
+      "was": "原价",
+      "chooseOptions": "选择规格",
+      "chooseOptionsNamed": "选择{name}的规格"
     },
     "quick": {
       "details": "查看详情 →"
@@ -162,7 +164,9 @@
       "increase": "增加数量",
       "remove": "将 {name} 移出购物车",
       "fullTitle": "您的购物车已满",
-      "fullBody": "购物车最多可容纳 100 种不同的商品。请先下单这些商品，然后再开始新的购物车。"
+      "fullBody": "购物车最多可容纳 100 种不同的商品。请先下单这些商品，然后再开始新的购物车。",
+      "variantDroppedTitle": "购物车已更新",
+      "variantDroppedBody": "{count, plural, other {# 件商品需要重新选择规格，已从购物车中移除。}}"
     },
     "wish": {
       "title": "心愿单",
@@ -233,9 +237,9 @@
       "couponFallback": "优惠码无效。"
     },
     "errors": {
-      "itemsUnavailable": "这些商品已不可购买。请刷新后重试。",
       "notAvailable": "此店铺不可用。",
-      "rateLimited": "请求过于频繁，请稍候片刻后重试。"
+      "rateLimited": "请求过于频繁，请稍候片刻后重试。",
+      "itemsRefreshed": "部分商品已变更或售罄，我们已更新购物车。请核对后重试。"
     },
     "placed": {
       "title": "订单已提交",
@@ -331,6 +335,13 @@
       "help": "需要帮助？",
       "support": "联系支持",
       "metaTitle": "页面不存在"
+    },
+    "variant": {
+      "from": "{price}起",
+      "optionsCount": "{count, plural, other {# 个选项}}",
+      "select": "请选择{option}",
+      "unavailable": "该组合暂不可选",
+      "soldOutValue": "已售罄"
     }
   }
 }

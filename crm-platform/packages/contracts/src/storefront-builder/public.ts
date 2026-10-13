@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 
+
 /**
  * The public shop (TW-STORE-009..021). Nothing here needs a sign-in: the buyer is anonymous, the shop is named by its slug (or
  * its own domain), and every price and quantity in a request is re-derived on the server.
@@ -9,6 +10,22 @@ import { uuidSchema } from '../common/ids';
 export const STORE_PAGE_SIZE = 48;
 export const STORE_CART_MAX_LINES = 100;
 export const STORE_CART_MAX_QTY = 999;
+
+/** One buyable variant of a product (size, colour...). The price is always set: its own, else the product's. */
+export const publicVariantSchema = z.object({
+  id: uuidSchema,
+  title: z.string(),
+  optionValues: z.array(z.string()),
+  sku: z.string().nullable(),
+  priceMinor: z.number().int(),
+  priceDisplay: z.string(),
+  comparePriceMinor: z.number().int().nullable(),
+  comparePriceDisplay: z.string().nullable(),
+  imageUrl: z.string().nullable(),
+  /** Null means unlimited. A variant with 0 is shown as sold out and cannot be added. */
+  stockQty: z.number().int().nullable(),
+});
+export type PublicVariant = z.infer<typeof publicVariantSchema>;
 
 /** One product as a theme draws it (a card or the product page). */
 export const publicProductSchema = z.object({
@@ -35,6 +52,9 @@ export const publicProductSchema = z.object({
   /** Shown in the product page's meta list; absent when unset. */
   weightGrams: z.number().int().nullable().optional(),
   tags: z.array(z.string()).optional(),
+  /** Present only for a product with variants: the options the buyer picks and the active variants. A card shows "from priceMinor". */
+  options: z.array(z.object({ name: z.string(), values: z.array(z.string()) })).optional(),
+  variants: z.array(publicVariantSchema).optional(),
 });
 export type PublicProduct = z.infer<typeof publicProductSchema>;
 
@@ -106,6 +126,8 @@ export type PublicProductPage = z.infer<typeof publicProductPageSchema>;
 
 export const cartLineSchema = z.object({
   id: uuidSchema,
+  /** Required for a product with variants (the server answers 422 without it); ignored for one without. */
+  variantId: uuidSchema.optional(),
   qty: z.number().int().min(1).max(STORE_CART_MAX_QTY),
 });
 const cartItems = z.array(cartLineSchema).min(1).max(STORE_CART_MAX_LINES);
@@ -180,6 +202,8 @@ export const publicOrderSchema = z.object({
     items: z.array(
       z.object({
         name: z.string(),
+        /** "M / Red" for a variant line. */
+        variantTitle: z.string().nullable().optional(),
         qty: z.number().int(),
         priceMinor: z.number().int(),
         image: z.string().nullable(),

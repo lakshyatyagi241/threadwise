@@ -446,7 +446,8 @@
       "cancel": "Hủy",
       "deleted": "Đã gỡ sản phẩm.",
       "deleteTitle": "Xóa sản phẩm này?",
-      "deleteBody": "\"{name}\" sẽ bị xóa. Sản phẩm vẫn ở trên Meta cho đến khi bạn gỡ nó ở đó."
+      "deleteBody": "\"{name}\" sẽ bị xóa. Sản phẩm vẫn ở trên Meta cho đến khi bạn gỡ nó ở đó.",
+      "variantsBadge": "{count, plural, other {# biến thể}}"
     },
     "share": {
       "eyebrow": "Chia sẻ sản phẩm",
@@ -551,6 +552,91 @@
         "badUrl": "Nhập liên kết đầy đủ bắt đầu bằng https://",
         "outOfRange": "Số này nằm ngoài phạm vi.",
         "tooMany": "Quá nhiều ảnh."
+      },
+      "variants": {
+        "title": "Biến thể",
+        "hint": "Bán sản phẩm này dưới nhiều dạng, chẳng hạn kích cỡ hoặc màu sắc. Mỗi tổ hợp có SKU, giá và tồn kho riêng.",
+        "toggle": "Sản phẩm này có biến thể",
+        "removeOnSave": "Các biến thể của sản phẩm này sẽ bị xóa khi bạn lưu.",
+        "optionName": "Tên tùy chọn {n}",
+        "optionNamePlaceholder": "Kích cỡ, Màu sắc...",
+        "suggest": {
+          "size": "Kích cỡ",
+          "colour": "Màu sắc",
+          "material": "Chất liệu",
+          "style": "Kiểu dáng"
+        },
+        "values": "Giá trị",
+        "valuesHint": "Nhấn Enter hoặc nhập dấu phẩy sau mỗi giá trị. Tối đa {max} ký tự mỗi giá trị.",
+        "valuesPlaceholder": "Nhập một giá trị, ví dụ M",
+        "valuesMore": "Thêm giá trị khác",
+        "quickAdd": "Thêm nhanh:",
+        "preset": {
+          "clothing": "Cỡ quần áo ({values})",
+          "shoes": "Cỡ giày ({values})"
+        },
+        "addOption": "Thêm tùy chọn",
+        "maxOptions": "Tối đa {max} tùy chọn.",
+        "removeOption": "Xóa tùy chọn {n}",
+        "moveOptionUp": "Chuyển tùy chọn {n} lên",
+        "moveOptionDown": "Chuyển tùy chọn {n} xuống",
+        "removeValue": "Xóa giá trị {value}",
+        "moveValueEarlier": "Đưa {value} lên trước",
+        "moveValueLater": "Đưa {value} ra sau",
+        "refused": {
+          "tooLong": "Giá trị này quá dài.",
+          "dup": "Giá trị này đã có trong danh sách.",
+          "tooMany": "Bạn đã đạt giới hạn số giá trị cho tùy chọn này."
+        },
+        "tableTitle": "Biến thể",
+        "count": "{count, plural, other {# biến thể}}",
+        "tableEmpty": "Hãy đặt tên cho mỗi tùy chọn và thêm ít nhất một giá trị để tạo biến thể.",
+        "totalStock": "Tổng tồn kho",
+        "fromPrice": "Giá từ",
+        "fromPreview": "Từ {price}",
+        "unlimited": "Không giới hạn",
+        "priceHint": "Giá thấp nhất trong các biến thể đang bật. Biến thể không có giá riêng sẽ dùng giá này.",
+        "stockHint": "Tổng của các biến thể đang bật, được đặt từ bảng phía trên.",
+        "bulkPrice": "Giá cho tất cả biến thể",
+        "bulkStock": "Tồn kho cho tất cả biến thể",
+        "bulkApplyPrice": "Áp dụng giá",
+        "bulkApplyStock": "Áp dụng tồn kho",
+        "pricePlaceholder": "Giá sản phẩm",
+        "stockPlaceholder": "Không giới hạn",
+        "col": {
+          "variant": "Biến thể",
+          "sku": "SKU",
+          "price": "Giá",
+          "stock": "Tồn kho",
+          "image": "Liên kết ảnh",
+          "active": "Đang bật"
+        },
+        "rowSku": "SKU của {title}",
+        "rowPrice": "Giá của {title}",
+        "rowStock": "Tồn kho của {title}",
+        "rowImage": "Liên kết ảnh của {title}",
+        "rowActive": "{title} đang bật",
+        "confirm": {
+          "title": "Xóa biến thể?",
+          "body": "{count, plural, other {# biến thể có dữ liệu}} sẽ bị xóa vì tổ hợp đó không còn tồn tại.",
+          "remove": "Xóa",
+          "keep": "Giữ lại"
+        },
+        "problem": {
+          "required": "Trường này là bắt buộc.",
+          "tooLong": "Văn bản này quá dài.",
+          "dupName": "Hai tùy chọn có cùng tên.",
+          "dupValue": "Giá trị này xuất hiện hai lần.",
+          "needOption": "Thêm ít nhất một tùy chọn.",
+          "needValue": "Thêm ít nhất một giá trị.",
+          "tooManyValues": "Quá nhiều giá trị cho tùy chọn này.",
+          "tooManyVariants": "Các tùy chọn này tạo ra quá nhiều biến thể. Giới hạn là 100.",
+          "notNumber": "Nhập một số, như 499 hoặc 499,50.",
+          "tooBig": "Số tiền quá lớn.",
+          "notWhole": "Nhập một số nguyên.",
+          "outOfRange": "Số này nằm ngoài phạm vi.",
+          "badUrl": "Nhập liên kết đầy đủ bắt đầu bằng https://"
+        }
       }
     },
     "reviews": {

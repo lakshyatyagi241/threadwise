@@ -7,6 +7,7 @@ import {
   type ListProductsResponse,
   type ProductPickerQuery,
   type ProductCurrency,
+  type ProductOption,
   type ProductPickerResponse,
   type ProductResponse,
   type ProductShareLinks,
@@ -48,10 +49,12 @@ import {
   waOrderText,
 } from './catalog-rules';
 import { toPickerItem, toProductResponse } from './products.mapper';
+import { diffVariants, toVariantWrite, type StoredVariant } from './variant-rules';
 import {
   decodeProductCursor,
   encodeProductCursor,
   ProductsRepository,
+  recomputeProductAggregate,
   type ProductPatch,
   type ProductRow,
 } from './products.repository';
@@ -137,6 +140,10 @@ function currentValue(row: ProductRow, column: string): unknown {
       return row.inStock;
     case 'stock_qty':
       return row.stockQty;
+    case 'reserved_qty':
+      return row.reservedQty;
+    case 'options_json':
+      return row.options.length > 0 ? row.options : null;
     case 'sort_order':
       return row.sortOrder;
     case 'weight_grams':
@@ -155,6 +162,23 @@ function currentValue(row: ProductRow, column: string): unknown {
 }
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+const isUniqueViolation = (err: unknown): boolean => {
+  const e = err as { code?: string; cause?: { code?: string } };
+  return e?.code === '23505' || e?.cause?.code === '23505';
+};
+
+/** The columns the aggregate owns while a product has variants (invariant 1): the form's values for them are not stored. */
+const AGGREGATE_COLUMNS = ['price_minor', 'stock_qty', 'in_stock', 'reserved_qty'] as const;
+
+/** Whether the saved product will have variants: what the form says, else what it has now. */
+function willHaveVariants(input: FormInput, hadVariants: boolean): boolean {
+  return input.options !== undefined ? input.options.length > 0 : hadVariants;
+}
+
+/** The `options_json` column of the form's options (null when none). */
+const optionsColumn = (options: readonly ProductOption[]): ProductOption[] | null =>
+  options.length > 0 ? options.map((o) => ({ name: o.name, values: [...o.values] })) : null;
 
 /**
  * Products (TW-CAT-019..024). Every write is one transaction holding the change, its audit row and its outbox event. A
@@ -258,11 +282,18 @@ export class ProductsService {
     const { id, pushNeeded } = await this.db.tx(async (tx) => {
       const base = slugify(input.name) || 'product';
       const slug = nextFreeSlug(base, await this.repo.slugsLike(tx, ctx.orgId, base));
+      const patch = formPatch(input);
+      const hasVariants = (input.options?.length ?? 0) > 0;
       const newId = await this.repo.insert(tx, ctx.orgId, {
-        ...formPatch(input),
+        ...patch,
+        ...(hasVariants ? { options_json: optionsColumn(input.options!) } : {}),
         slug,
         user_id: ctx.userId,
       });
+      if (hasVariants) {
+        await this.applyVariants(tx, ctx.orgId, newId, Number(patch.price_minor), input);
+        await recomputeProductAggregate(tx, ctx.orgId, newId);
+      }
       const row = (await this.repo.findById(tx, ctx.orgId, newId))!;
       await this.audit.record(tx, {
         module: PRODUCT_MODULE,
@@ -302,21 +333,46 @@ export class ProductsService {
       if (input.rowVersion !== before.rowVersion) throw AppError.rowVersionConflict('Product');
 
       const patch = formPatch(input);
+      const hasVariants = willHaveVariants(input, before.variants.length > 0);
+      // While the product has variants its price, stock and "in stock" are the aggregate's, not the form's (invariant 1).
+      if (hasVariants) for (const c of AGGREGATE_COLUMNS) delete patch[c];
+      if (input.options !== undefined) {
+        patch.options_json = optionsColumn(input.options);
+        // Clearing the options removes the variants and their holds: the form's own price and stock apply again.
+        if (!hasVariants) patch.reserved_qty = 0;
+      }
+      const variantsChanged = await this.applyVariants(
+        tx,
+        ctx.orgId,
+        before.id,
+        majorStringToMinor(input.priceMajor),
+        input,
+      );
       const changedColumns = Object.keys(patch).filter(
         (c) => !same(patch[c], currentValue(before, c)),
       );
-      if (changedColumns.length === 0) return { id: before.id, pushNeeded: false };
+      if (changedColumns.length === 0 && !variantsChanged)
+        return { id: before.id, pushNeeded: false };
 
       const changedPatch = Object.fromEntries(
         changedColumns.map((c) => [c, patch[c]]),
       ) as ProductPatch;
+      // A variants-only change still touches the product row, so its version moves and a stale form is refused.
+      if (changedColumns.length === 0) changedPatch.options_json = patch.options_json ?? null;
       if (!(await this.repo.update(tx, ctx.orgId, before.id, input.rowVersion, changedPatch))) {
         throw AppError.rowVersionConflict('Product');
       }
+      if (variantsChanged) changedColumns.push('variants');
+      if (hasVariants) await recomputeProductAggregate(tx, ctx.orgId, before.id);
       const after = (await this.repo.findById(tx, ctx.orgId, before.id))!;
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      for (const c of changedColumns)
+      for (const c of changedColumns) {
+        if (c === 'variants') {
+          delta[c] = { old: before.variants.length, new: after.variants.length };
+          continue;
+        }
         delta[c] = { old: currentValue(before, c), new: currentValue(after, c) };
+      }
       await this.audit.record(tx, {
         module: PRODUCT_MODULE,
         recordId: before.id,
@@ -329,7 +385,8 @@ export class ProductsService {
         eventType: 'product.updated',
         payload: { uuid: after.uuid, changed: changedColumns },
       });
-      const sync = changedSyncFields(before, after);
+      const sync: string[] = changedSyncFields(before, after);
+      if (variantsChanged && !sync.includes('variants')) sync.push('variants');
       if (sync.length > 0) {
         await this.outbox.emit(tx, {
           aggregateModule: PRODUCT_MODULE,
@@ -417,6 +474,91 @@ export class ProductsService {
       });
       await this.repo.delete(tx, ctx.orgId, row.id);
     });
+  }
+
+  /**
+   * Writes the form's variants for one product (create and update): diffs by variant uuid (a kept variant is updated, a new one
+   * inserted, a missing one deleted along with its holds), resolves each price at write time (invariant 2: the variant's own, else
+   * the form's price) and returns whether anything changed. The aggregate is recomputed by the caller right after.
+   * `options: []` removes every variant; absent options leave them as they are.
+   */
+  private async applyVariants(
+    tx: Tx,
+    orgId: number,
+    productId: number,
+    productPriceMinor: number,
+    input: FormInput,
+  ): Promise<boolean> {
+    if (input.options === undefined) return false;
+    const storedRows = (await this.repo.variantsOf(tx, orgId, [productId], true)).get(productId) ?? [];
+    const stored: StoredVariant[] = storedRows.map((v) => ({
+      id: v.id,
+      uuid: v.uuid,
+      title: v.title,
+      optionValues: v.optionValues,
+      sku: v.sku,
+      priceMinor: v.priceMinor ?? productPriceMinor,
+      comparePriceMinor: v.comparePriceMinor,
+      imageUrl: v.imageUrl,
+      weightGrams: v.weightGrams,
+      stockQty: v.stockQty,
+      active: v.active,
+      position: v.position,
+    }));
+    if (input.options.length === 0) {
+      await this.repo.deleteVariants(
+        tx,
+        orgId,
+        stored.map((v) => v.id),
+      );
+      return stored.length > 0;
+    }
+    if (input.variants === undefined) {
+      throw AppError.validation('Add at least one variant.', [
+        { path: 'variants', message: 'Add at least one variant.' },
+      ]);
+    }
+    const diff = diffVariants(
+      stored,
+      input.variants.map((v, i) => ({
+        id: v.id,
+        write: toVariantWrite(v, i, productPriceMinor, majorStringToMinor),
+      })),
+    );
+    if (diff.unknownIds.length > 0) {
+      throw AppError.validation('A variant of this form no longer exists. Reload and try again.', [
+        { path: 'variants', message: 'A variant of this form no longer exists.' },
+      ]);
+    }
+    const changedKept = diff.keep.filter((k) => k.changed);
+    const changed = changedKept.length > 0 || diff.insert.length > 0 || diff.remove.length > 0;
+    try {
+      await this.repo.deleteVariants(
+        tx,
+        orgId,
+        diff.remove.map((v) => v.id),
+      );
+      await this.repo.parkVariantKeys(
+        tx,
+        orgId,
+        changedKept
+          .filter((k) => k.stored.title !== k.next.title || k.stored.sku !== k.next.sku)
+          .map((k) => k.stored.id),
+      );
+      for (const k of changedKept) await this.repo.updateVariant(tx, orgId, k.stored.id, k.next);
+      for (const i of diff.insert) await this.repo.insertVariant(tx, orgId, productId, i.next);
+    } catch (err) {
+      if (isUniqueViolation(err)) {
+        throw new AppError(
+          ERROR_CODES.CONFLICT,
+          'Another variant already uses this SKU.',
+          HttpStatus.CONFLICT,
+          [{ path: 'variants', message: 'Another variant already uses this SKU.' }],
+        );
+      }
+      throw err;
+    }
+    return changed;
   }
 
   private reload(orgId: number, id: number): Promise<ProductResponse> {

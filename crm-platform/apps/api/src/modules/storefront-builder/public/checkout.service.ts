@@ -23,7 +23,7 @@ import {
 } from '../_shims/tokens';
 import { CartRecoveryService } from '../recovery/cart-recovery.service';
 import { digitsOnly, hasValidPhone, storedPhone } from '../rules/phone';
-import { computeTotals, type PricedLine } from '../rules/pricing';
+import { compareLines, computeTotals, lineKey, type PricedLine } from '../rules/pricing';
 import { scoreRto } from '../rules/rto';
 import { buildWaUrl, trackPath } from '../rules/shop-url';
 import { randomToken } from '../rules/token';
@@ -143,19 +143,26 @@ export class CheckoutService {
       // 2. Take the stock under a row lock, in a fixed order (no deadlock between two carts). Someone else may have taken
       //    units since the read: the line shrinks to what was really taken, and a line left with nothing is dropped.
       const lines: PricedLine[] = [];
-      for (const line of [...priced.lines].sort((a, b) => a.product.id - b.product.id)) {
-        if (line.product.stockQty === null) {
+      for (const line of [...priced.lines].sort(compareLines)) {
+        const stock = line.variant ? line.variant.stockQty : line.product.stockQty;
+        if (stock === null) {
           lines.push(line);
           continue;
         }
-        const taken = await this.products.takeStock(tx, orgId, line.product.id, line.qty);
+        const taken = await this.products.takeStock(
+          tx,
+          orgId,
+          line.product.id,
+          line.qty,
+          line.variant?.id,
+        );
         if (taken >= 1) lines.push({ ...line, qty: Math.min(taken, line.qty) });
       }
       if (lines.length === 0) throw itemsUnavailable();
       // The buyer's own order of lines is kept.
-      const order = new Map(priced.lines.map((l, i) => [l.product.id, i]));
-      lines.sort((a, b) => (order.get(a.product.id) ?? 0) - (order.get(b.product.id) ?? 0));
-      const subtotalMinor = lines.reduce((s, l) => s + l.product.priceMinor * l.qty, 0);
+      const order = new Map(priced.lines.map((l, i) => [lineKey(l), i]));
+      lines.sort((a, b) => (order.get(lineKey(a)) ?? 0) - (order.get(lineKey(b)) ?? 0));
+      const subtotalMinor = lines.reduce((s, l) => s + l.unitPriceMinor * l.qty, 0);
 
       // 3. Coupon, row-locked and re-checked against the locked row. An unknown or ineligible code is IGNORED, not an error.
       const coupon = input.coupon
@@ -296,8 +303,11 @@ function toOrderLine(l: PricedLine): OrderLine {
     product_id: l.product.id,
     name: l.product.name,
     qty: l.qty,
-    price_minor: l.product.priceMinor,
-    image: l.product.imageUrl,
-    retailer_id: l.product.metaRetailerId || l.product.sku || null,
+    price_minor: l.unitPriceMinor,
+    image: l.variant?.imageUrl || l.product.imageUrl,
+    retailer_id: l.variant ? l.variant.retailerId : l.product.metaRetailerId || l.product.sku || null,
+    ...(l.variant
+      ? { variant_id: l.variant.uuid, variant_title: l.variant.title }
+      : {}),
   };
 }

@@ -302,6 +302,7 @@ describe('how an order is shown', () => {
       lineTotalMinor: 99800,
       image: 'https://i/k.png',
       retailerId: 'SKU1',
+      variantTitle: null,
     });
     expect(lines[1]).toMatchObject({ name: 'Mug', qty: 1, lineTotalMinor: 20000, productId: null });
     expect(lines[2]).toMatchObject({ name: 'Item', qty: 1 });
