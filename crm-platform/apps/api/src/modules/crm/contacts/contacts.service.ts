@@ -583,6 +583,79 @@ export class ContactsService {
   }
 
   /** One field of a contact as text, for the flow triggers and conditions: an own column or a custom property; null when it is blank. */
+  /**
+   * A stage change made by the system, not by a person: the guarded automatic mode of the growth pilot, and its undo. The edit's own
+   * rules hold (the won stamp, the status kept valid for the stage, audit, the stage-changed event), with two refusals: a contact that
+   * is no longer in `expectFrom` (a person moved it first) and a lost stage (it needs a reason a person gives). Returns whether it moved.
+   */
+  async changeStageAsSystem(
+    orgId: number,
+    contactId: number,
+    args: { expectFrom: string; to: string },
+  ): Promise<boolean> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const existing = await this.repo.findById(tx, orgId, contactId);
+      if (
+        !existing ||
+        existing.lifecycleStage !== args.expectFrom ||
+        args.to === existing.lifecycleStage
+      ) {
+        return false;
+      }
+      const flags = await this.repo.stageFlags(tx, orgId, args.to);
+      if (flags.isLost) return false;
+      const now = new Date();
+      const values: Record<string, unknown> = {
+        lifecycleStage: args.to,
+        lifecycleStageDate: now,
+        previousLifecycleStage: existing.lifecycleStage,
+        previousLifecycleStageDate: existing.lifecycleStageDate,
+        ...stageEntryValues({ flags, current: existing, now }),
+      };
+      const statusCtx = await this.repo.statusContext(tx, orgId);
+      const plan = planStatus({
+        scope: statusCtx.scope,
+        stage: args.to,
+        stageLabel: statusCtx.stageLabels.get(args.to) ?? null,
+        stageChanged: true,
+        current: existing.status,
+        requested: undefined,
+      });
+      if (plan.status !== undefined) values.status = plan.status;
+      const updated = await this.repo.updateWithVersion(
+        tx,
+        orgId,
+        existing.id,
+        existing.rowVersion,
+        values,
+      );
+      if (!updated) return false;
+      const after = await this.repo.findById(tx, orgId, existing.id);
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'update',
+        delta: this.audit.diff(
+          existing as unknown as Record<string, unknown>,
+          after as unknown as Record<string, unknown>,
+        ),
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: MODULE_KEY,
+        aggregateId: existing.id,
+        eventType: 'contact.stage_changed',
+        payload: {
+          uuid: existing.uuid,
+          previousStage: existing.lifecycleStage,
+          stage: args.to,
+          via: 'growth',
+        },
+      });
+      return true;
+    });
+  }
+
   async readFieldForFlow(orgId: number, contactId: number, key: string): Promise<string | null> {
     const clean = key.trim();
     if (clean === '') return null;

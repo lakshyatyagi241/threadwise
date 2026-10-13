@@ -1,0 +1,434 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Ignorer",
+      "retry": "Réessayer",
+      "requestId": "Requête {id}",
+      "noAccessTitle": "Vous ne pouvez pas ouvrir cet écran",
+      "noAccess": "Demandez à un administrateur l’autorisation « {permission} »."
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Votre rôle n’autorise pas cette action.",
+      "notAvailable": "Le pilote Growth n’est pas disponible pour cet espace de travail.",
+      "featureOff": "Cette partie du pilote Growth est désactivée. Activez-la dans Contrôles.",
+      "actionGone": "Quelqu’un a déjà statué sur cet élément.",
+      "assistantFailed": "L’assistant n’a rien pu suggérer. Vérifiez que vous avez une audience et un modèle approuvé, puis réessayez.",
+      "undoRefused": "Cette modification ne peut plus être annulée : le contact a changé d’étape ou la modification a déjà été annulée.",
+      "conflict": "Quelqu’un a enregistré ces paramètres avant vous. La dernière version a été chargée.",
+      "notFound": "Cet élément n’existe plus.",
+      "validation": "Certaines valeurs ne sont pas valides. Vérifiez-les et réessayez.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "unexpected": "Une erreur est survenue. Réessayez et contactez le support si le problème persiste."
+    },
+    "page": {
+      "title": "Growth",
+      "subtitle": "Ce que vos campagnes et vos conversations vous apprennent, transformé en actions pour votre équipe. Rien ici n’envoie de message à un contact de lui-même.",
+      "notAvailableTitle": "Hors du pilote",
+      "notAvailable": "Le pilote Growth n’est activé que pour certains espaces de travail. Le vôtre n’en fait pas encore partie.",
+      "tabs": {
+        "inbox": "Boîte de réception",
+        "audiences": "Audiences",
+        "campaigns": "Campagnes",
+        "insights": "Analyses",
+        "autoStage": "Changements d’étape automatiques",
+        "assistant": "Assistant de diffusion",
+        "controls": "Contrôles"
+      }
+    },
+    "digest": {
+      "title": "Aujourd’hui",
+      "quiet": "Rien ne demande votre attention pour le moment.",
+      "highlights": {
+        "hotLeads": "{count, plural, one {# lead chaud est prêt à acheter} other {# leads chauds sont prêts à acheter}}",
+        "unanswered": "{count, plural, one {# question d’achat est restée sans réponse} other {# questions d’achat sont restées sans réponse}}",
+        "optOuts": "{count, plural, one {# contact a demandé l’arrêt des messages} other {# contacts ont demandé l’arrêt des messages}}",
+        "suggestionsPending": "{count, plural, one {# changement d’étape attend une décision} other {# changements d’étape attendent une décision}}",
+        "campaignReplies": "{count, plural, one {# contact a répondu dans la journée suivant une campagne} other {# contacts ont répondu dans la journée suivant une campagne}}",
+        "lapsed": "{count, plural, one {# client est devenu inactif} other {# clients sont devenus inactifs}}"
+      }
+    },
+    "inbox": {
+      "title": "Boîte de réception Growth",
+      "hint": "Des éléments qui méritent un coup d’œil. Accepter effectue l’action correspondante ; ignorer ne fait que fermer l’élément.",
+      "filter": "Afficher",
+      "all": "Tous ({count})",
+      "empty": "Rien en attente. De nouveaux éléments apparaîtront ici à mesure que les discussions sont analysées et que les vérifications quotidiennes s’exécutent.",
+      "more": "Afficher plus",
+      "doneAccept": "{count, plural, one {# élément traité} other {# éléments traités}}",
+      "doneDismiss": "{count, plural, one {# élément ignoré} other {# éléments ignorés}}",
+      "someFailed": "{count, plural, one {# élément n’a pas pu être traité} other {# éléments n’ont pas pu être traités}}",
+      "openContact": "Ouvrir le contact",
+      "someone": "Un contact",
+      "dismiss": "Ignorer",
+      "types": {
+        "hot_lead": "Lead chaud",
+        "unanswered_intent": "Sans réponse",
+        "registration_issue": "Problème d’inscription",
+        "purchase_route": "Orienter vers une personne",
+        "opt_out": "A demandé l’arrêt",
+        "lapsed": "Devenu inactif",
+        "service_due": "Entretien à prévoir",
+        "status_reply": "Statut de commande"
+      },
+      "titles": {
+        "hot_lead": "{name} est prêt à acheter",
+        "unanswered_intent": "{name} a posé une question sur un achat et personne n’a répondu",
+        "registration_issue": "{name} signale un problème avec son inscription",
+        "purchase_route": "Confier {name} à {user}",
+        "opt_out": "{name} a demandé l’arrêt des messages",
+        "lapsed": "{name} est devenu inactif",
+        "service_due": "{name} : {rule} est à prévoir",
+        "status_reply": "{name} a demandé où en est sa commande"
+      },
+      "accept": {
+        "hot_lead": "Marquer comme traité",
+        "unanswered_intent": "Marquer comme traité",
+        "registration_issue": "Marquer comme traité",
+        "purchase_route": "Attribuer la discussion",
+        "opt_out": "Enregistrer le désabonnement",
+        "lapsed": "Terminé",
+        "service_due": "Terminé",
+        "status_reply": "Terminé"
+      },
+      "facts": {
+        "routeOwner": "{name} est responsable de ce contact.",
+        "routeLeastBusy": "{name} a le moins de discussions ouvertes.",
+        "lapsedDays": "Aucune ouverture ni aucun message depuis {count, plural, one {# jour} other {# jours}}.",
+        "issue": {
+          "missing_confirmation": "N’a pas reçu de confirmation.",
+          "payment_problem": "Signale un problème de paiement.",
+          "wrong_info": "Indique que certaines informations sont erronées."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Audiences",
+      "hint": "Des groupes de contacts établis d’après ce qu’ils ont réellement fait. Synchronisez-en un pour alimenter un groupe de contacts auquel vous pouvez envoyer une campagne.",
+      "empty": "Aucune audience pour l’instant. Activez une fonction dans Contrôles.",
+      "synced": "« {name} » compte maintenant {count, plural, one {# contact} other {# contacts}}.",
+      "lastSync": "Groupe « {name} », dernière synchronisation {when}.",
+      "notSynced": "Le groupe « {name} » sera créé lors de la première synchronisation.",
+      "sync": "Synchroniser avec un groupe",
+      "resync": "Synchroniser à nouveau",
+      "errors": {
+        "forbidden": "Votre rôle n’autorise pas la synchronisation des audiences.",
+        "failed": "L’audience n’a pas pu être synchronisée. Réessayez."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Engagés",
+          "description": "Ont ouvert plusieurs campagnes récemment."
+        },
+        "silent": {
+          "label": "Silencieux",
+          "description": "Ont reçu des campagnes mais n’en ont ouvert aucune."
+        },
+        "lapsed": {
+          "label": "Inactifs",
+          "description": "Clients sans ouverture ni message depuis longtemps."
+        },
+        "hot_chat": {
+          "label": "Chauds en discussion",
+          "description": "Contacts dont la dernière analyse de discussion indique qu’ils sont prêts à acheter."
+        },
+        "high_propensity": {
+          "label": "Forte probabilité de conversion",
+          "description": "Le premier dixième selon le modèle de conversion."
+        },
+        "service_due": {
+          "label": "Entretien à prévoir",
+          "description": "Contacts dont la date d’entretien est arrivée."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Réponses aux campagnes",
+      "hint": "Contacts ayant répondu dans les 24 et 72 heures suivant un envoi, comptés à partir de la boîte de réception.",
+      "stamp": "Enregistrer les réponses maintenant",
+      "stamped": "{count, plural, one {# réponse enregistrée} other {# réponses enregistrées}}.",
+      "stampFailed": "Les réponses n’ont pas pu être enregistrées. Réessayez.",
+      "empty": "Aucune campagne n’a encore été envoyée.",
+      "totals": {
+        "sent": "Envoyés",
+        "read": "Lus",
+        "replied24h": "Réponses en 24 heures",
+        "replied72h": "Réponses en 72 heures"
+      },
+      "cols": {
+        "campaign": "Campagne",
+        "sent": "Envoyés",
+        "read": "Lus",
+        "replied24h": "24 h",
+        "replied72h": "72 h",
+        "replyRate": "Taux de réponse"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Meilleur moment pour envoyer",
+        "hint": "Quand vos contacts lisent les campagnes et vous écrivent, dans le fuseau horaire de votre espace de travail.",
+        "empty": "Pas encore assez d’activité pour se prononcer.",
+        "best": "Meilleures heures : {hours} ({zone}).",
+        "quiet": "Heures les plus calmes : {hours}.",
+        "chart": "Activité par heure de la journée",
+        "sample": "Basé sur {count, plural, one {# événement} other {# événements}}."
+      },
+      "propensity": {
+        "title": "Modèle de conversion",
+        "hint": "Apprend, à partir des contacts devenus clients, quels comportements vont de pair avec la conversion, et attribue un score à chacun.",
+        "recompute": "Réapprendre maintenant",
+        "done": "Le modèle a été mis à jour.",
+        "failed": "Le modèle n’a pas pu être mis à jour. Réessayez.",
+        "contacts": "Contacts notés",
+        "converted": "Convertis",
+        "auc": "Qualité du classement",
+        "capture": "Convertis dans le premier dixième",
+        "captureHint": "Un classement aléatoire donnerait 10 %",
+        "none": "Non mesuré",
+        "trained": "Le modèle a appris à partir de vos contacts convertis.",
+        "notTrained": "Trop peu de contacts convertis pour apprendre pour le moment ; des pondérations fixes sont utilisées.",
+        "computedAt": "Mis à jour {when}.",
+        "drivers": "Ce qui détermine le score",
+        "features": {
+          "campaigns_opened_30d": "Campagnes ouvertes (30 jours)",
+          "campaigns_received_30d": "Campagnes reçues (30 jours)",
+          "messages_from_contact_30d": "Messages écrits par le contact (30 jours)",
+          "links_clicked_30d": "Liens cliqués (30 jours)",
+          "groups": "Groupes auxquels il appartient",
+          "has_email": "A une adresse e-mail",
+          "chat_messages_total": "Messages dans la discussion",
+          "age_days": "Jours depuis l’ajout"
+        }
+      },
+      "quality": {
+        "title": "Efficacité",
+        "hint": "Si les suggestions sont utilisées, dans quelle mesure le score de lead distingue les contacts convertis, et ce que l’IA a coûté, sur les 30 derniers jours.",
+        "none": "Non mesuré",
+        "scoreAuc": "Qualité du score de lead",
+        "scoreAucHint": "{scored} notés, {converted} convertis",
+        "calls": "Appels à l’IA",
+        "cost": "Coût de l’IA",
+        "autoApplied": "Modifiés automatiquement",
+        "undone": "{count} annulés",
+        "suggestions": {
+          "chat": "Suggestions d’étape issues des discussions",
+          "engagement": "Suggestions d’étape issues des campagnes"
+        },
+        "suggestionLine": "{accepted} acceptées, {dismissed} ignorées, {pending} en attente.",
+        "cols": {
+          "type": "Élément de la boîte de réception",
+          "done": "Traités",
+          "dismissed": "Ignorés",
+          "open": "Ouverts"
+        },
+        "actionTypes": {
+          "hot_lead": "Lead chaud",
+          "unanswered_intent": "Sans réponse",
+          "registration_issue": "Problème d’inscription",
+          "purchase_route": "Orienter vers une personne",
+          "opt_out": "A demandé l’arrêt",
+          "lapsed": "Devenu inactif",
+          "service_due": "Entretien à prévoir",
+          "status_reply": "Statut de commande"
+        }
+      },
+      "enrichment": {
+        "title": "Informations sur l’entreprise",
+        "hint": "Recherche les informations sur l’entreprise des contacts ayant une adresse e-mail professionnelle et les affiche sur le contact.",
+        "run": "Rechercher le lot suivant",
+        "asked": "{count, plural, one {# contact recherché} other {# contacts recherchés}}.",
+        "failed": "La recherche a échoué. Réessayez.",
+        "status": "{provider} : {found} trouvés, {notFound} non trouvés, {failed} en échec.",
+        "notConfigured": "Aucun service de recherche n’est connecté côté serveur ; cet interrupteur n’a donc pas encore d’effet."
+      }
+    },
+    "autoStage": {
+      "title": "Changements d’étape automatiques",
+      "hint": "Uniquement les analyses dont l’IA est très sûre, dans la limite quotidienne. Chaque changement peut être annulé tant que le contact n’a pas été déplacé depuis.",
+      "today": "{done} sur {cap} utilisés aujourd’hui.",
+      "empty": "Rien n’a encore été modifié automatiquement.",
+      "contact": "Un contact",
+      "moved": "Passé de {from} à {to}.",
+      "confidence": "Sûr à {percent} %",
+      "undone": "Rétabli",
+      "undo": "Rétablir",
+      "undoDone": "Le contact est revenu à son étape précédente.",
+      "undoRefused": "Cette modification ne peut plus être annulée : le contact a changé d’étape.",
+      "undoFailed": "La modification n’a pas pu être annulée. Réessayez."
+    },
+    "assistant": {
+      "title": "Assistant de diffusion",
+      "hint": "Dites ce que vous voulez atteindre. Il suggère l’une de vos audiences et l’un de vos modèles approuvés, en tenant compte des réponses réellement obtenues par chaque modèle. Il n’envoie ni ne crée rien.",
+      "goal": "Que voulez-vous accomplir ?",
+      "goalHint": "Par exemple : rappeler à toutes les personnes inscrites l’événement de samedi.",
+      "placeholder": "Rappeler aux contacts inscrits l’événement de samedi",
+      "ask": "Suggérer une campagne",
+      "audience": "Audience",
+      "audienceValue": "{name} ({count} contacts)",
+      "template": "Modèle",
+      "replyRate": "{percent} de réponses dans la journée",
+      "sendAt": "Envoyer vers",
+      "considered": "Choix effectué parmi {audiences, plural, one {# audience} other {# audiences}} et {templates, plural, one {# modèle} other {# modèles}}."
+    },
+    "controls": {
+      "readOnly": "Vous pouvez consulter ces paramètres mais pas les modifier.",
+      "saved": "Paramètres enregistrés.",
+      "discard": "Annuler les modifications",
+      "save": "Enregistrer",
+      "problem": {
+        "numbers": "L’un des nombres est hors limites. Vérifiez les seuils.",
+        "serviceRules": "La règle d’entretien de la ligne {line} n’a pas la forme : libellé | propriété de date | jours après | jours avant.",
+        "customPhrases": "L’expression de la ligne {line} n’a pas la forme : expression = intention."
+      },
+      "groups": {
+        "measure": {
+          "title": "Mesure",
+          "hint": "Des mesures en lecture seule. Elles ne modifient rien."
+        },
+        "audiences": {
+          "title": "Audiences et étapes",
+          "hint": "Déterminer à qui s’adresser et suggérer des changements d’étape d’après ce que les contacts font avec les campagnes."
+        },
+        "chats": {
+          "title": "Analyse des discussions",
+          "hint": "Utilise l’analyse des discussions du scoring de leads par IA ; celui-ci doit donc être activé. Les données personnelles sont en partie masquées avant l’analyse d’une discussion."
+        },
+        "assist": {
+          "title": "Assistants",
+          "hint": "Une aide à la décision. Rien n’est envoyé à un contact."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Vraies réponses aux campagnes",
+          "hint": "Compter les contacts qui ont répondu après une campagne et corriger les chiffres de réponse."
+        },
+        "send_times": {
+          "label": "Meilleur moment pour envoyer",
+          "hint": "Afficher les heures auxquelles vos contacts lisent et écrivent."
+        },
+        "propensity": {
+          "label": "Modèle de conversion",
+          "hint": "Noter chaque contact selon sa probabilité de conversion."
+        },
+        "quality": {
+          "label": "Tableau de bord de qualité",
+          "hint": "Afficher la fréquence d’utilisation des suggestions et le coût de l’IA."
+        },
+        "daily_digest": {
+          "label": "Résumé quotidien",
+          "hint": "Un court résumé de l’espace de travail en haut de cet écran."
+        },
+        "engagement_audiences": {
+          "label": "Audiences d’engagement",
+          "hint": "Contacts engagés, silencieux et inactifs, prêts à recevoir des campagnes."
+        },
+        "engagement_stage_rules": {
+          "label": "Suggestions d’étape issues des campagnes",
+          "hint": "Suggérer de faire avancer un contact lorsqu’il ouvre régulièrement les campagnes."
+        },
+        "service_rules": {
+          "label": "Rappels d’entretien et relances",
+          "hint": "Repérer les contacts dont la date d’entretien ou d’achat appelle une action, selon vos propres règles."
+        },
+        "enrichment": {
+          "label": "Informations sur l’entreprise",
+          "hint": "Rechercher les informations sur l’entreprise des contacts ayant une adresse e-mail professionnelle."
+        },
+        "intent_fields": {
+          "label": "Intention de discussion sur le contact",
+          "hint": "Écrire le sujet de la discussion dans la propriété « Intention IA », pour qu’un flux puisse y réagir."
+        },
+        "language_detect": {
+          "label": "Langue de la discussion",
+          "hint": "Noter dans quelle langue se déroule chaque discussion."
+        },
+        "auto_notes": {
+          "label": "Notes de résumé de discussion",
+          "hint": "Ajouter au contact un court résumé de la discussion sous forme de note."
+        },
+        "hot_lead_alerts": {
+          "label": "Alertes de leads chauds",
+          "hint": "Déclencher une alerte et prévenir le responsable lorsqu’un contact est clairement prêt à acheter."
+        },
+        "unanswered_watch": {
+          "label": "Questions d’achat sans réponse",
+          "hint": "Signaler les questions d’achat ou de prix restées sans réponse."
+        },
+        "handover_summary": {
+          "label": "Résumé lors du transfert",
+          "hint": "Lorsqu’une discussion est confiée à une personne, en placer un résumé tout en haut."
+        },
+        "purchase_routing": {
+          "label": "Orienter les acheteurs vers une personne",
+          "hint": "Suggérer qui devrait prendre en charge une discussion lorsque le contact veut acheter."
+        },
+        "registration_check": {
+          "label": "Problèmes d’inscription",
+          "hint": "Signaler les contacts qui disent avoir payé ou s’être inscrits sans avoir reçu de confirmation."
+        },
+        "status_reply": {
+          "label": "Statut des commandes et réparations",
+          "hint": "Préparer le statut d’une commande ou d’une réparation lorsqu’un client le demande."
+        },
+        "optout_detection": {
+          "label": "Demandes de désabonnement",
+          "hint": "Signaler les contacts qui demandent l’arrêt des messages ; l’acceptation l’enregistre dans le registre des consentements."
+        },
+        "broadcast_assistant": {
+          "label": "Assistant de diffusion",
+          "hint": "Suggérer une audience et un modèle pour un objectif."
+        },
+        "auto_stage": {
+          "label": "Changements d’étape automatiques",
+          "hint": "Faire avancer un contact lorsque l’IA est très sûre, dans la limite quotidienne, avec possibilité d’annuler."
+        }
+      },
+      "thresholds": {
+        "title": "Seuils",
+        "hint": "Les valeurs utilisées par les fonctions ci-dessus.",
+        "hotLeadConfidence": "Confiance pour un lead chaud",
+        "hotLeadConfidenceHint": "Degré de certitude requis de l’analyse, de 0,5 à 1.",
+        "unansweredHours": "Heures avant qu’une question soit considérée sans réponse",
+        "unansweredHoursHint": "De 1 à 168.",
+        "lapsedDays": "Jours avant qu’un client soit considéré inactif",
+        "lapsedDaysHint": "De 7 à 730.",
+        "engagedOpens": "Campagnes ouvertes pour être considéré engagé",
+        "engagedOpensHint": "Sur 30 jours.",
+        "stageMinOpens": "Campagnes ouvertes pour suggérer un changement d’étape",
+        "stageWindowDays": "Jours à examiner pour cela",
+        "autoMinConfidence": "Confiance pour un changement automatique",
+        "autoMinConfidenceHint": "De 0,8 à 1.",
+        "autoDailyCap": "Changements automatiques par jour",
+        "autoDailyCapHint": "La limite s’applique à tout l’espace de travail.",
+        "requireGroup": "Ne suggérer un changement d’étape que pour les contacts appartenant à un groupe"
+      },
+      "rules": {
+        "title": "Vos propres règles et mots",
+        "hint": "Une entrée par ligne.",
+        "statusFields": "Propriétés de statut",
+        "statusFieldsHint": "Propriétés de contact qui contiennent un statut de commande ou de réparation, comme repair_status.",
+        "serviceRules": "Règles d’entretien",
+        "serviceRulesHint": "Libellé | propriété de date | jours après | jours avant (facultatif).",
+        "serviceRulesExample": "Changement de batterie | purchase_date | 700 | 760",
+        "customPhrases": "Boutons et mots-clés tapés",
+        "customPhrasesHint": "Expression = intention. Intentions : {intents}.",
+        "customPhrasesExample": "Voir le bon de garantie = post_purchase",
+        "extraMaskTerms": "Mots à toujours masquer",
+        "extraMaskTermsHint": "Une marque, une adresse ou un nom qui ne doit jamais être envoyé à l’IA."
+      },
+      "confirmEnrich": {
+        "title": "Rechercher les informations sur l’entreprise ?",
+        "body": "Pour trouver les informations sur l’entreprise, l’adresse e-mail professionnelle d’un contact est envoyée au service de recherche. Les adresses e-mail personnelles ne sont pas envoyées.",
+        "yes": "Activer",
+        "no": "Pas maintenant"
+      }
+    },
+    "contactCard": {
+      "title": "Growth",
+      "propensity": "Probabilité de conversion : {score} sur 100.",
+      "computedAt": "Mis à jour {when}."
+    }
+  }
+}

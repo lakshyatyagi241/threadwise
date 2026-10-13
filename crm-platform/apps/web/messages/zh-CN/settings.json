@@ -339,6 +339,11 @@
         "label": "同意与 STOP 回复",
         "description": "设置 STOP 和 START 词语、确认回复、退订提示行，以及营销是否需要已记录的同意。",
         "keywords": "同意, 退订, 重新订阅, 取消订阅, stop, start, gdpr, 合规, 隐私, 营销"
+      },
+      "growth": {
+        "label": "增长",
+        "description": "高意向线索、受众、营销活动回复，以及其他团队可据以行动的事项，均由对话和营销活动分析得出。",
+        "keywords": "增长, 高意向线索, 受众, 互动, 已流失, 营销活动回复, 转化倾向, 退订, 试点"
       }
     },
     "backToMarketplace": "返回应用市场"

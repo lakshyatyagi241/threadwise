@@ -339,6 +339,11 @@
         "label": "Consentement et réponses STOP",
         "description": "Choisissez les mots STOP et START, les réponses de confirmation, la ligne de désinscription et si le marketing exige un consentement enregistré.",
         "keywords": "consentement, désinscription, réinscription, se désabonner, stop, start, rgpd, conformité, confidentialité, marketing"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Leads chauds, audiences, réponses aux campagnes et autres éléments exploitables par votre équipe, déduits des discussions et des campagnes.",
+        "keywords": "growth, lead chaud, audience, engagement, inactif, réponses aux campagnes, probabilité de conversion, désabonnement, pilote"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

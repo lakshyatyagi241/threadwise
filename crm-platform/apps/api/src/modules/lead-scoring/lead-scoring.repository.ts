@@ -155,6 +155,7 @@ export class LeadScoringRepository {
       Math.max(0, Math.floor((now - date(d).getTime()) / DAY_MS));
     const email = str(r.email);
     const engagement = await this.engagementFor(tx, orgId, contactId);
+    const enrichment = await this.enrichmentFor(tx, orgId, contactId);
     return {
       id: num(r.id),
       uuid: String(r.uuid),
@@ -185,8 +186,32 @@ export class LeadScoringRepository {
         openDealValue: Math.round(num(r.open_value_minor) / 100),
         daysInStage: days(r.lifecycle_stage_date ?? r.created_at),
         engagement,
+        ...(enrichment ? { enrichment } : {}),
       },
     };
+  }
+
+  /** What the growth pilot's enrichment found about the contact's company; null for every workspace that has none. */
+  private async enrichmentFor(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+  ): Promise<ScoringFacts['enrichment'] | null> {
+    const res = await tx.execute(sql`
+      SELECT data FROM contact_enrichment WHERE org_id = ${orgId} AND contact_id = ${contactId} AND status = 'found'`);
+    const d = (res.rows[0] as Raw | undefined)?.data as Record<string, unknown> | undefined;
+    if (!d) return null;
+    const pick = (k: string): string | undefined =>
+      typeof d[k] === 'string' && (d[k] as string).trim() !== ''
+        ? (d[k] as string).slice(0, 60)
+        : undefined;
+    const out = {
+      ...(pick('companySize') ? { companySize: pick('companySize') } : {}),
+      ...(pick('industry') ? { industry: pick('industry') } : {}),
+      ...(pick('seniority') ? { seniority: pick('seniority') } : {}),
+      ...(pick('country') ? { country: pick('country') } : {}),
+    };
+    return Object.keys(out).length > 0 ? out : null;
   }
 
   /**
