@@ -119,6 +119,8 @@
       "colStarted": "Avviato",
       "colActivity": "Ultima attività",
       "colSteps": "Passi",
+      "colReplies": "Risposte",
+      "repliesHint": "Messaggi del cliente arrivati a un nodo di attesa di questa esecuzione",
       "colActions": "Azioni",
       "open": "Apri esecuzione",
       "cancel": "Annulla",
