@@ -122,8 +122,8 @@ importers:
         specifier: ^6.3.12
         version: 6.3.12(ioredis@6.0.0)(pg@8.23.1)
       dotenv:
-        specifier: ^18.0.6
-        version: 18.0.6
+        specifier: ^18.0.7
+        version: 18.0.7
       drizzle-orm:
         specifier: ^0.45.4
         version: 0.45.4(@opentelemetry/api@1.9.1)(@types/pg@8.23.1)(pg@8.23.1)
@@ -522,8 +522,8 @@ importers:
         specifier: ^8.11.10
         version: 8.23.1
       dotenv:
-        specifier: ^18.0.6
-        version: 18.0.6
+        specifier: ^18.0.7
+        version: 18.0.7
       tsx:
         specifier: ^4.23.15
         version: 4.23.15
@@ -5987,8 +5987,8 @@ packages:
     engines: {node: '>=12'}
     hasBin: true
 
-  dotenv@18.0.6:
-    resolution: {integrity: sha512-ZMVmohV6CvAJtj++pZNyggluUt6hbRdQAxc2+Z635RL6/AG/ruXv5lHnybUFoxMPL/yrTL/tsF4paZu2l7RA6Q==}
+  dotenv@18.0.7:
+    resolution: {integrity: sha512-QEvMEF8ca3GNZJJnAbOgxpj5ULhBvnMcURp+XKrtvqFNPgjBvYoswQ0Jl2cO7JzCjxZjJhr9ZuIEhlrRxMft/Q==}
     engines: {node: '>=12'}
     hasBin: true
 
@@ -16467,7 +16467,7 @@ snapshots:
 
   dotenv@18.0.3: {}
 
-  dotenv@18.0.6: {}
+  dotenv@18.0.7: {}
 
   drizzle-orm@0.45.4(@opentelemetry/api@1.9.1)(@types/pg@8.23.1)(pg@8.23.1):
     optionalDependencies:

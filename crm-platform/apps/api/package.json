@@ -54,7 +54,7 @@
     "@socket.io/redis-emitter": "^5.1.0",
     "baileys": "6.7.24",
     "bullmq": "^6.3.12",
-    "dotenv": "^18.0.6",
+    "dotenv": "^18.0.7",
     "drizzle-orm": "^0.45.4",
     "express": "^5.3.0",
     "https-proxy-agent": "7.0.6",
