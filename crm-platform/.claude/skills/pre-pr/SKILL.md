@@ -14,6 +14,8 @@ description: >-
 
 # Pre-PR gate
 
+First invoke the `security-review-gate` skill (mandatory); run this gate after it is clean.
+
 ```bash
 bash .claude/skills/pre-pr/scripts/gate.sh
 ```
