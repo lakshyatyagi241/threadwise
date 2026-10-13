@@ -342,6 +342,27 @@ export class ContactImportEngine {
     const keys = [...new Set(valid.map((r) => r.phone))].filter((k) => !state.fileMap.has(k));
     const existing = await this.findExisting(tx, orgId, keys);
 
+    // A repeated number is merged, not lost, but it is listed in the report so the person sees what was folded in.
+    const cellsByLine = new Map(slice.map((rec) => [rec.line, rec.cells]));
+    const noteDuplicate = (line: number) => {
+      // At most half the report goes to merged duplicates, so a file full of them cannot hide the real errors.
+      if (
+        state.rejects.length >= IMPORT_REJECTS_MAX ||
+        state.counters.duplicatesInFile > IMPORT_REJECTS_MAX / 2
+      )
+        return;
+      const cells = cellsByLine.get(line) ?? [];
+      state.rejects.push({
+        row: line,
+        reason: 'duplicate_in_file',
+        values: Object.fromEntries(
+          header
+            .slice(0, 20)
+            .map((h, i) => [h || `column_${i + 1}`, (cells[i] ?? '').slice(0, 200)]),
+        ),
+      });
+    };
+
     // 3. one operation per distinct number in the batch; a later row for the same number
     //    refines the earlier one (its non-empty cells win)
     const ops = new Map<string, Op>();
@@ -349,6 +370,7 @@ export class ContactImportEngine {
       const seen = ops.get(row.phone);
       if (seen) {
         state.counters.duplicatesInFile += 1;
+        noteDuplicate(row.line);
         seen.row = mergeRows(seen.row, row);
         row.groups.forEach((g) => seen.groups.add(g));
         row.tags.forEach((t) => seen.tags.add(t));
@@ -356,8 +378,10 @@ export class ContactImportEngine {
       }
       const knownId = state.fileMap.get(row.phone) ?? existing.get(row.phone);
       if (knownId !== undefined) {
-        if (state.fileMap.has(row.phone)) state.counters.duplicatesInFile += 1;
-        else state.counters.updated += 1;
+        if (state.fileMap.has(row.phone)) {
+          state.counters.duplicatesInFile += 1;
+          noteDuplicate(row.line);
+        } else state.counters.updated += 1;
         ops.set(row.phone, {
           kind: 'update',
           contactId: knownId,

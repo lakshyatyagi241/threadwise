@@ -439,7 +439,7 @@
       "imported": "{count, plural, one {# kişi içe aktarıldı.} other {# kişi içe aktarıldı.}}",
       "importedUpdated": "{count, plural, one {# mevcut kişi güncellendi.} other {# mevcut kişi güncellendi.}}",
       "importedInvalid": "{count, plural, one {# geçersiz satır atlandı.} other {# geçersiz satır atlandı.}}",
-      "downloadRejects": "Reddedilen satırları indir",
+      "downloadRejects": "Hataları ve atlanan satırları indir",
       "fileTooLarge": "Bu dosya {mb} MB'tan büyük.",
       "checking": "Dosya kontrol ediliyor...",
       "errorFile": "Bu dosya kişiler CSV'si olarak okunamadı. Bir başlık satırı ve en az bir kişi olduğundan emin olun.",
@@ -470,7 +470,8 @@
         "group_name_too_long": "grup adı çok uzun",
         "tag_name_too_long": "etiket adı çok uzun",
         "plan_limit_reached": "plan kişi sınırına ulaşıldı",
-        "tag_limit_reached": "plan etiket sınırına ulaşıldı"
+        "tag_limit_reached": "plan etiket sınırına ulaşıldı",
+        "duplicate_in_file": "tekrarlanan numara, önceki satırla birleştirildi"
       },
       "statusHint": "Bu dosyanın oluşturduğu kişilere uygulanır.",
       "queued": "Başlatılması bekleniyor...",
@@ -1172,13 +1173,14 @@
         "updated": "Güncellenen",
         "rejected": "Reddedilen",
         "actions": "İşlemler",
-        "downloadRejects": "Reddedilenleri indir",
+        "downloadRejects": "Hataları ve atlanan satırları indir",
         "statuses": {
           "queued": "Sırada",
           "running": "Çalışıyor",
           "completed": "Tamamlandı",
           "failed": "Başarısız"
-        }
+        },
+        "by": "İçe aktaran"
       },
       "exports": {
         "title": "Dışa aktarmalar",

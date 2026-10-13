@@ -439,7 +439,7 @@
       "imported": "{count, plural, other {# kontak diimpor.}}",
       "importedUpdated": "{count, plural, other {# kontak yang ada diperbarui.}}",
       "importedInvalid": "{count, plural, other {# baris tidak valid dilewati.}}",
-      "downloadRejects": "Unduh baris yang ditolak",
+      "downloadRejects": "Unduh kesalahan dan baris yang dilewati",
       "fileTooLarge": "File itu lebih besar dari {mb} MB.",
       "checking": "Memeriksa file...",
       "errorFile": "File itu tidak dapat dibaca sebagai CSV kontak. Pastikan ada baris header dan setidaknya satu kontak.",
@@ -470,7 +470,8 @@
         "group_name_too_long": "nama grup terlalu panjang",
         "tag_name_too_long": "nama tag terlalu panjang",
         "plan_limit_reached": "batas kontak paket tercapai",
-        "tag_limit_reached": "batas tag paket tercapai"
+        "tag_limit_reached": "batas tag paket tercapai",
+        "duplicate_in_file": "nomor berulang, digabung ke baris sebelumnya"
       },
       "statusHint": "Diterapkan ke kontak yang dibuat file ini.",
       "queued": "Menunggu untuk dimulai...",
@@ -1172,13 +1173,14 @@
         "updated": "Diperbarui",
         "rejected": "Ditolak",
         "actions": "Aksi",
-        "downloadRejects": "Unduh yang ditolak",
+        "downloadRejects": "Unduh kesalahan dan baris yang dilewati",
         "statuses": {
           "queued": "Dalam antrean",
           "running": "Berjalan",
           "completed": "Selesai",
           "failed": "Gagal"
-        }
+        },
+        "by": "Diimpor oleh"
       },
       "exports": {
         "title": "Ekspor",

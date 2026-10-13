@@ -299,7 +299,10 @@ describe('importing (TW-CON-027)', () => {
       404,
     );
     expect((await api.as(b.admin).get('/v2/contacts/import/jobs')).body.data).toEqual([]);
-    expect((await api.as(a.admin).get('/v2/contacts/import/jobs')).body.data).toHaveLength(1);
+    const listed = (await api.as(a.admin).get('/v2/contacts/import/jobs')).body.data;
+    expect(listed).toHaveLength(1);
+    // the history says who imported
+    expect(typeof listed[0].createdBy).toBe('string');
   });
 });
 
@@ -325,6 +328,11 @@ describe('duplicates (TW-CON-030)', () => {
       'name,mobile,email\nFirst,+919812300101,\nSecond,+919812300101,second@example.com\n',
     );
     expect(res.body).toMatchObject({ created: 1, updated: 0, duplicatesInFile: 1 });
+    // the merged repeat is listed in the report, with its cells, so nothing is silently folded away
+    const dupReport = (await api.as(t.admin).get(`/v2/contacts/import/jobs/${res.body.id}/rejects`))
+      .text;
+    expect(dupReport).toContain('duplicate_in_file');
+    expect(dupReport).toContain('second@example.com');
     // the later row's cells win
     const rows = await h.owner.query(
       `SELECT name, email FROM contacts WHERE org_id = $1 AND phone = '+919812300101'`,
