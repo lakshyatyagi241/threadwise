@@ -764,6 +764,16 @@ export const wizardControlResponseSchema = z.object({
 });
 export type WizardControlResponse = z.infer<typeof wizardControlResponseSchema>;
 
+/** Delete a launched broadcast: a one-off campaign, or a recurring series with the (unsent) runs it had planned. */
+export const wizardDeleteResponseSchema = z.object({
+  id: uuidSchema,
+  kind: z.enum(['campaign', 'series']),
+  /** Runs removed with it (1 for a one-off broadcast). */
+  runs: z.number().int(),
+  message: z.string(),
+});
+export type WizardDeleteResponse = z.infer<typeof wizardDeleteResponseSchema>;
+
 /** "Retry failed" on a launched broadcast: the failed recipients go back in the queue (a series: those of every finished run). */
 export const wizardRetryFailedResponseSchema = wizardControlResponseSchema.extend({
   /** Recipients put back in the queue. */

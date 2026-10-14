@@ -370,6 +370,8 @@ export const ERROR_CODES = {
   CAMP_NOT_RESENDABLE: 'CAMP_NOT_RESENDABLE',
   /** Resend: nobody matches the scope. */
   CAMP_NOTHING_TO_RESEND: 'CAMP_NOTHING_TO_RESEND',
+  /** A recurring broadcast that already sent messages keeps its history: it can be cancelled, not deleted. */
+  CAMP_SERIES_HAS_HISTORY: 'CAMP_SERIES_HAS_HISTORY',
   /** The template cannot be used for a campaign (not approved, OTP, quality, media). */
   CAMP_TEMPLATE_NOT_ALLOWED: 'CAMP_TEMPLATE_NOT_ALLOWED',
   /** The auto-end date is not after the send date. */

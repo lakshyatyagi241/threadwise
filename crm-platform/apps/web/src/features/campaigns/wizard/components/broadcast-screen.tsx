@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
@@ -11,11 +12,14 @@ import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
   controlBroadcast,
+  deleteBroadcast,
+  exportBroadcastPath,
   retryFailedBroadcast,
   useBroadcast,
   type BroadcastAction,
 } from '../api/wizard';
-import { controlsFor, retryableFailed, runPath, statusTone } from '../lib/broadcast';
+import { download } from '../../api/campaigns';
+import { controlsFor, deletable, retryableFailed, runPath, statusTone } from '../lib/broadcast';
 import { scheduleZone } from '../lib/schedule';
 import { DirectorSummary } from '../../components/director-summary';
 import { Chip, ErrorBlock, Skeleton, WizardCard } from './parts';
@@ -148,10 +152,15 @@ export function BroadcastScreen({ id }: { id: string }) {
   const q = useBroadcast(id);
   const qc = useQueryClient();
   const { toast } = useToast();
+  const router = useRouter();
   const canControl = useCan('camp.campaigns.control');
+  const canExport = useCan('camp.campaigns.export');
+  const canDelete = useCan('camp.campaigns.delete');
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [confirmRetry, setConfirmRetry] = useState(false);
   const [retrying, setRetrying] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [busy, setBusy] = useState<BroadcastAction | null>(null);
   const b = q.data;
 
@@ -179,6 +188,32 @@ export function BroadcastScreen({ id }: { id: string }) {
     } finally {
       setRetrying(false);
       void qc.invalidateQueries({ queryKey: KEYS.broadcast(id) });
+    }
+  };
+
+  const exportRows = async () => {
+    try {
+      const { blob, filename } = await download(exportBroadcastPath(id));
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      toast(e instanceof ApiError ? e.message : t('exportFailed'), 'danger');
+    }
+  };
+  const remove = async () => {
+    setDeleting(true);
+    try {
+      await deleteBroadcast(id);
+      toast(t('done.delete'), 'success');
+      void qc.invalidateQueries({ queryKey: ['camp'] });
+      router.push('/campaigns');
+    } catch (e) {
+      toast(e instanceof ApiError ? e.message : t('failed'), 'danger');
+      setDeleting(false);
     }
   };
 
@@ -213,9 +248,9 @@ export function BroadcastScreen({ id }: { id: string }) {
                 {b.templateName && <Chip tone="brand">{b.templateName}</Chip>}
               </div>
             </div>
-            {canControl && (
+            {(canControl || canExport || canDelete) && (
               <div className="flex flex-wrap gap-2">
-                {failedCount > 0 && (
+                {canControl && failedCount > 0 && (
                   <Button
                     variant="secondary"
                     disabled={busy !== null || retrying}
@@ -225,17 +260,33 @@ export function BroadcastScreen({ id }: { id: string }) {
                     {t('action.retryFailed', { count: failedCount })}
                   </Button>
                 )}
-                {controlsFor(b).map((a) => (
-                  <Button
-                    key={a}
-                    variant={a === 'cancel' ? 'danger' : a === 'resume' ? 'brand' : 'secondary'}
-                    disabled={busy !== null}
-                    onClick={() => (a === 'cancel' ? setConfirmCancel(true) : void run(a))}
-                  >
-                    {busy === a && <Spinner />}
-                    {t(`action.${a}`)}
+                {canControl &&
+                  controlsFor(b).map((a) => (
+                    <Button
+                      key={a}
+                      variant={a === 'cancel' ? 'danger' : a === 'resume' ? 'brand' : 'secondary'}
+                      disabled={busy !== null}
+                      onClick={() => (a === 'cancel' ? setConfirmCancel(true) : void run(a))}
+                    >
+                      {busy === a && <Spinner />}
+                      {t(`action.${a}`)}
+                    </Button>
+                  ))}
+                {canExport && (
+                  <Button variant="secondary" onClick={() => void exportRows()}>
+                    {t('action.export')}
                   </Button>
-                ))}
+                )}
+                {canDelete && deletable(b) && (
+                  <Button
+                    variant="danger"
+                    disabled={busy !== null || deleting}
+                    onClick={() => setConfirmDelete(true)}
+                  >
+                    {deleting && <Spinner />}
+                    {t('action.delete')}
+                  </Button>
+                )}
               </div>
             )}
           </header>
@@ -294,6 +345,22 @@ export function BroadcastScreen({ id }: { id: string }) {
           onConfirm={() => {
             setConfirmRetry(false);
             void retryFailed();
+          }}
+        />
+      )}
+      {canDelete && b && deletable(b) && (
+        <ConfirmDialog
+          open={confirmDelete}
+          tone="danger"
+          busy={deleting}
+          title={t('deleteTitle')}
+          message={b.kind === 'series' ? t('deleteSeries') : t('deleteOne')}
+          confirmLabel={t('action.delete')}
+          cancelLabel={t('keep')}
+          onClose={() => setConfirmDelete(false)}
+          onConfirm={() => {
+            setConfirmDelete(false);
+            void remove();
           }}
         />
       )}

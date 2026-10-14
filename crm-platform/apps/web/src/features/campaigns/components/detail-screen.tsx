@@ -513,6 +513,11 @@ export function DetailScreen({ id }: { id: string }) {
                 {t('actions.sendNow')}
               </button>
             )}
+          {c.wizard && c.status !== 'draft' && (
+            <Link href={`/campaigns/wizard/broadcasts/${c.seriesId ?? c.id}`} className={btn}>
+              {t('actions.broadcastStatus')}
+            </Link>
+          )}
           {canUpdate && can.edit(c.status) && (
             <Link href={`/campaigns/${id}/edit`} className={btn}>
               <EditIcon className="size-3.5" />

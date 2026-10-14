@@ -689,7 +689,8 @@
         "edit": "Edit",
         "resendAll": "Kirim ulang ke semua",
         "export": "Ekspor baris",
-        "delete": "Hapus"
+        "delete": "Hapus",
+        "broadcastStatus": "Status siaran"
       },
       "kpi": {
         "recipients": "Penerima",
@@ -1525,13 +1526,16 @@
           "pause": "Jeda",
           "resume": "Lanjutkan",
           "cancel": "Batalkan broadcast",
-          "retryFailed": "Coba lagi yang gagal ({count})"
+          "retryFailed": "Coba lagi yang gagal ({count})",
+          "export": "Ekspor baris",
+          "delete": "Hapus"
         },
         "done": {
           "pause": "Broadcast dijeda.",
           "resume": "Broadcast dilanjutkan.",
           "cancel": "Broadcast dibatalkan.",
-          "retryFailed": "Mencoba ulang {count, plural, other {# penerima yang gagal}}."
+          "retryFailed": "Mencoba ulang {count, plural, other {# penerima yang gagal}}.",
+          "delete": "Siaran dihapus."
         },
         "failed": "Gagal. Coba lagi.",
         "noControl": "Anda tidak memiliki izin untuk menjeda, melanjutkan, atau membatalkan broadcast.",
@@ -1552,7 +1556,11 @@
           "ended": "Berakhir"
         },
         "retryTitle": "Coba lagi pesan yang gagal?",
-        "retryMessage": "Mengirim ulang ke {count, plural, other {# penerima}} yang pesannya gagal. Penerima yang sudah menerimanya tidak disentuh, dan pesan hanya ditagih saat terkirim."
+        "retryMessage": "Mengirim ulang ke {count, plural, other {# penerima}} yang pesannya gagal. Penerima yang sudah menerimanya tidak disentuh, dan pesan hanya ditagih saat terkirim.",
+        "exportFailed": "Ekspor tidak dapat diunduh.",
+        "deleteTitle": "Hapus siaran ini?",
+        "deleteOne": "Menghapus siaran ini beserta penerimanya. Tindakan ini tidak dapat dibatalkan.",
+        "deleteSeries": "Menghapus siaran berulang ini beserta eksekusi yang telah direncanakan. Belum ada yang terkirim, jadi tidak ada riwayat yang hilang. Tindakan ini tidak dapat dibatalkan."
       },
       "panel": {
         "title": "Dibuat dengan Buat broadcast",

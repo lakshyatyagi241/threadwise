@@ -689,7 +689,8 @@
         "edit": "Editar",
         "resendAll": "Reenviar para todos",
         "export": "Exportar linhas",
-        "delete": "Excluir"
+        "delete": "Excluir",
+        "broadcastStatus": "Status da transmissão"
       },
       "kpi": {
         "recipients": "Destinatários",
@@ -1525,13 +1526,16 @@
           "pause": "Pausar",
           "resume": "Retomar",
           "cancel": "Cancelar transmissão",
-          "retryFailed": "Tentar novamente as falhas ({count})"
+          "retryFailed": "Tentar novamente as falhas ({count})",
+          "export": "Exportar linhas",
+          "delete": "Excluir"
         },
         "done": {
           "pause": "Transmissão pausada.",
           "resume": "Transmissão retomada.",
           "cancel": "Transmissão cancelada.",
-          "retryFailed": "Tentando novamente {count, plural, one {# destinatário com falha} other {# destinatários com falha}}."
+          "retryFailed": "Tentando novamente {count, plural, one {# destinatário com falha} other {# destinatários com falha}}.",
+          "delete": "Transmissão excluída."
         },
         "failed": "Não funcionou. Tente novamente.",
         "noControl": "Você não tem permissão para pausar, retomar ou cancelar transmissões.",
@@ -1552,7 +1556,11 @@
           "ended": "Encerrada"
         },
         "retryTitle": "Tentar novamente as mensagens com falha?",
-        "retryMessage": "Envia de novo para {count, plural, one {# destinatário} other {# destinatários}} cuja mensagem falhou. Quem já recebeu não é afetado, e a mensagem só é cobrada quando é entregue."
+        "retryMessage": "Envia de novo para {count, plural, one {# destinatário} other {# destinatários}} cuja mensagem falhou. Quem já recebeu não é afetado, e a mensagem só é cobrada quando é entregue.",
+        "exportFailed": "Não foi possível baixar a exportação.",
+        "deleteTitle": "Excluir esta transmissão?",
+        "deleteOne": "Exclui esta transmissão e seus destinatários. Não é possível desfazer.",
+        "deleteSeries": "Exclui esta transmissão recorrente e as execuções que ela tinha planejadas. Nada foi enviado, então nenhum histórico é perdido. Não é possível desfazer."
       },
       "panel": {
         "title": "Criadas com Criar transmissão",

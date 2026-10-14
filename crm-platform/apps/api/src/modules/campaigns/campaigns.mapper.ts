@@ -12,6 +12,7 @@ export function toCampaign(r: CampaignRow): Campaign {
     provider: r.provider,
     abTesting: r.abTesting,
     wizard: r.wizard !== null,
+    seriesId: r.seriesUuid,
     scheduleType: r.scheduleType as Campaign['scheduleType'],
     sendDate: r.sendDate,
     sendTime: r.sendTime ? r.sendTime.slice(0, 5) : null,

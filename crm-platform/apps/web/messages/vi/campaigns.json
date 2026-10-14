@@ -689,7 +689,8 @@
         "edit": "Sửa",
         "resendAll": "Gửi lại cho tất cả",
         "export": "Xuất các dòng",
-        "delete": "Xóa"
+        "delete": "Xóa",
+        "broadcastStatus": "Trạng thái chiến dịch gửi"
       },
       "kpi": {
         "recipients": "Người nhận",
@@ -1525,13 +1526,16 @@
           "pause": "Tạm dừng",
           "resume": "Tiếp tục",
           "cancel": "Hủy đợt gửi hàng loạt",
-          "retryFailed": "Thử lại các tin thất bại ({count})"
+          "retryFailed": "Thử lại các tin thất bại ({count})",
+          "export": "Xuất các dòng",
+          "delete": "Xóa"
         },
         "done": {
           "pause": "Đã tạm dừng đợt gửi hàng loạt.",
           "resume": "Đã tiếp tục đợt gửi hàng loạt.",
           "cancel": "Đã hủy đợt gửi hàng loạt.",
-          "retryFailed": "Đang thử lại {count, plural, other {# người nhận thất bại}}."
+          "retryFailed": "Đang thử lại {count, plural, other {# người nhận thất bại}}.",
+          "delete": "Đã xóa chiến dịch gửi."
         },
         "failed": "Không thành công. Hãy thử lại.",
         "noControl": "Bạn không có quyền tạm dừng, tiếp tục hoặc hủy gửi hàng loạt.",
@@ -1552,7 +1556,11 @@
           "ended": "Đã kết thúc"
         },
         "retryTitle": "Thử lại các tin nhắn thất bại?",
-        "retryMessage": "Gửi lại cho {count, plural, other {# người nhận}} có tin nhắn bị lỗi. Những người đã nhận được sẽ không bị gửi lại, và tin nhắn chỉ bị tính phí khi được gửi thành công."
+        "retryMessage": "Gửi lại cho {count, plural, other {# người nhận}} có tin nhắn bị lỗi. Những người đã nhận được sẽ không bị gửi lại, và tin nhắn chỉ bị tính phí khi được gửi thành công.",
+        "exportFailed": "Không tải được tệp xuất.",
+        "deleteTitle": "Xóa chiến dịch gửi này?",
+        "deleteOne": "Xóa chiến dịch gửi này và người nhận của nó. Không thể hoàn tác.",
+        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác."
       },
       "panel": {
         "title": "Được tạo bằng Tạo gửi hàng loạt",

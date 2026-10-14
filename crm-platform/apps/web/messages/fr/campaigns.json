@@ -689,7 +689,8 @@
         "edit": "Modifier",
         "resendAll": "Renvoyer à tous",
         "export": "Exporter les lignes",
-        "delete": "Supprimer"
+        "delete": "Supprimer",
+        "broadcastStatus": "État de la diffusion"
       },
       "kpi": {
         "recipients": "Destinataires",
@@ -1525,13 +1526,16 @@
           "pause": "Mettre en pause",
           "resume": "Reprendre",
           "cancel": "Annuler la diffusion",
-          "retryFailed": "Réessayer les échecs ({count})"
+          "retryFailed": "Réessayer les échecs ({count})",
+          "export": "Exporter les lignes",
+          "delete": "Supprimer"
         },
         "done": {
           "pause": "Diffusion mise en pause.",
           "resume": "Diffusion reprise.",
           "cancel": "Diffusion annulée.",
-          "retryFailed": "Nouvel essai pour {count, plural, one {# destinataire en échec} other {# destinataires en échec}}."
+          "retryFailed": "Nouvel essai pour {count, plural, one {# destinataire en échec} other {# destinataires en échec}}.",
+          "delete": "Diffusion supprimée."
         },
         "failed": "Cela n’a pas fonctionné. Réessayez.",
         "noControl": "Vous n’avez pas l’autorisation de mettre en pause, reprendre ou annuler des diffusions.",
@@ -1552,7 +1556,11 @@
           "ended": "Terminée"
         },
         "retryTitle": "Réessayer les messages en échec ?",
-        "retryMessage": "Renvoie à {count, plural, one {# destinataire} other {# destinataires}} dont le message a échoué. Ceux qui l’ont déjà reçu ne sont pas concernés, et un message n’est facturé que lorsqu’il est distribué."
+        "retryMessage": "Renvoie à {count, plural, one {# destinataire} other {# destinataires}} dont le message a échoué. Ceux qui l’ont déjà reçu ne sont pas concernés, et un message n’est facturé que lorsqu’il est distribué.",
+        "exportFailed": "L’export n’a pas pu être téléchargé.",
+        "deleteTitle": "Supprimer cette diffusion ?",
+        "deleteOne": "Supprime cette diffusion et ses destinataires. Cette action est irréversible.",
+        "deleteSeries": "Supprime cette diffusion récurrente et les exécutions qu’elle avait planifiées. Rien n’a été envoyé, aucun historique n’est donc perdu. Cette action est irréversible."
       },
       "panel": {
         "title": "Créées avec Créer une diffusion",

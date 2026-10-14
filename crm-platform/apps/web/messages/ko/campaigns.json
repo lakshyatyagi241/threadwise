@@ -689,7 +689,8 @@
         "edit": "편집",
         "resendAll": "모두에게 다시 보내기",
         "export": "행 내보내기",
-        "delete": "삭제"
+        "delete": "삭제",
+        "broadcastStatus": "브로드캐스트 상태"
       },
       "kpi": {
         "recipients": "수신자",
@@ -1525,13 +1526,16 @@
           "pause": "일시 중지",
           "resume": "재개",
           "cancel": "브로드캐스트 취소",
-          "retryFailed": "실패 건 재시도 ({count})"
+          "retryFailed": "실패 건 재시도 ({count})",
+          "export": "행 내보내기",
+          "delete": "삭제"
         },
         "done": {
           "pause": "브로드캐스트를 일시 중지했습니다.",
           "resume": "브로드캐스트를 재개했습니다.",
           "cancel": "브로드캐스트를 취소했습니다.",
-          "retryFailed": "실패한 {count, plural, other {#명}}에게 다시 보내는 중입니다."
+          "retryFailed": "실패한 {count, plural, other {#명}}에게 다시 보내는 중입니다.",
+          "delete": "브로드캐스트를 삭제했습니다."
         },
         "failed": "작업이 실패했습니다. 다시 시도하세요.",
         "noControl": "브로드캐스트를 일시 중지, 재개 또는 취소할 권한이 없습니다.",
@@ -1552,7 +1556,11 @@
           "ended": "종료됨"
         },
         "retryTitle": "실패한 메시지를 다시 시도할까요?",
-        "retryMessage": "메시지가 실패한 {count, plural, other {#명}}에게 다시 보냅니다. 이미 받은 사람은 건드리지 않으며, 메시지 요금은 전달된 경우에만 청구됩니다."
+        "retryMessage": "메시지가 실패한 {count, plural, other {#명}}에게 다시 보냅니다. 이미 받은 사람은 건드리지 않으며, 메시지 요금은 전달된 경우에만 청구됩니다.",
+        "exportFailed": "내보내기 파일을 다운로드하지 못했습니다.",
+        "deleteTitle": "이 브로드캐스트를 삭제할까요?",
+        "deleteOne": "이 브로드캐스트와 수신자를 삭제합니다. 되돌릴 수 없습니다.",
+        "deleteSeries": "이 반복 브로드캐스트와 예정된 실행을 삭제합니다. 아직 아무것도 발송되지 않았으므로 기록은 사라지지 않습니다. 되돌릴 수 없습니다."
       },
       "panel": {
         "title": "브로드캐스트 만들기로 생성됨",
