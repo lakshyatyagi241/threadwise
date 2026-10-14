@@ -28,7 +28,11 @@ const VERBS: Record<number, NegRoute['method'] | undefined> = {
 };
 
 const join = (...parts: string[]) =>
-  '/' + parts.flatMap((p) => String(p ?? '').split('/')).filter(Boolean).join('/');
+  '/' +
+  parts
+    .flatMap((p) => String(p ?? '').split('/'))
+    .filter(Boolean)
+    .join('/');
 
 /** Every route the running app serves with its auth flag and body schema, read from the controllers' own metadata. */
 export async function negativeRoutes(app: INestApplication): Promise<NegRoute[]> {
@@ -39,8 +43,14 @@ export async function negativeRoutes(app: INestApplication): Promise<NegRoute[]>
       const type = wrapper.metatype as (new (...a: unknown[]) => object) | null;
       if (!type || Reflect.getMetadata(PATH_METADATA, type) === undefined) continue;
       const base = Reflect.getMetadata(PATH_METADATA, type) as string | string[];
-      const version = Reflect.getMetadata(VERSION_METADATA, type) as string | string[] | symbol | undefined;
-      const prefix = typeof version === 'string' ? `v${version}` : Array.isArray(version) ? `v${version[0]}` : '';
+      const version = Reflect.getMetadata(VERSION_METADATA, type) as
+        string | string[] | symbol | undefined;
+      const prefix =
+        typeof version === 'string'
+          ? `v${version}`
+          : Array.isArray(version)
+            ? `v${version[0]}`
+            : '';
       const proto = type.prototype as Record<string, unknown>;
       for (const name of Object.getOwnPropertyNames(proto)) {
         const fn = proto[name];
@@ -48,8 +58,15 @@ export async function negativeRoutes(app: INestApplication): Promise<NegRoute[]>
         const verb = VERBS[Reflect.getMetadata(METHOD_METADATA, fn) as number];
         if (!verb) continue;
         const sub = Reflect.getMetadata(PATH_METADATA, fn) as string | string[];
-        const path = join(prefix, Array.isArray(base) ? base[0]! : base, Array.isArray(sub) ? sub[0]! : sub);
-        const args = (Reflect.getMetadata(ROUTE_ARGS, type, name) ?? {}) as Record<string, { pipes?: unknown[] }>;
+        const path = join(
+          prefix,
+          Array.isArray(base) ? base[0]! : base,
+          Array.isArray(sub) ? sub[0]! : sub,
+        );
+        const args = (Reflect.getMetadata(ROUTE_ARGS, type, name) ?? {}) as Record<
+          string,
+          { pipes?: unknown[] }
+        >;
         let bodySchema: ZodTypeAny | null = null;
         for (const [key, meta] of Object.entries(args)) {
           if (!key.startsWith(`${BODY}:`)) continue;
@@ -59,7 +76,9 @@ export async function negativeRoutes(app: INestApplication): Promise<NegRoute[]>
           route: `${verb} ${path}`,
           method: verb,
           path,
-          isPublic: Boolean(Reflect.getMetadata(IS_PUBLIC_KEY, fn) ?? Reflect.getMetadata(IS_PUBLIC_KEY, type)),
+          isPublic: Boolean(
+            Reflect.getMetadata(IS_PUBLIC_KEY, fn) ?? Reflect.getMetadata(IS_PUBLIC_KEY, type),
+          ),
           bodySchema,
         });
       }

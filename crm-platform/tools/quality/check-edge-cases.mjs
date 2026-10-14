@@ -22,32 +22,61 @@ export function validateFile(doc, fileName) {
   const errs = [];
   const at = (m) => errs.push(`${fileName}: ${m}`);
   if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return [`${fileName}: not an object`];
-  for (const k of Object.keys(doc)) if (!['module', 'tier', 'owner', 'cases'].includes(k)) at(`unknown key "${k}"`);
+  for (const k of Object.keys(doc))
+    if (!['module', 'tier', 'owner', 'cases'].includes(k)) at(`unknown key "${k}"`);
   if (typeof doc.module !== 'string' || !doc.module) at('module is required');
-  else if (`${doc.module}.json` !== fileName) at(`module "${doc.module}" does not match the file name`);
+  else if (`${doc.module}.json` !== fileName)
+    at(`module "${doc.module}" does not match the file name`);
   if (!ENUMS.tier.includes(doc.tier)) at('tier must be P0, P1 or P2');
   if (!Array.isArray(doc.cases)) return [...errs, `${fileName}: cases must be an array`];
-  const allowed = ['id', 'feature', 'category', 'scenario', 'expected', 'priority', 'status', 'source', 'tests', 'note'];
+  const allowed = [
+    'id',
+    'feature',
+    'category',
+    'scenario',
+    'expected',
+    'priority',
+    'status',
+    'source',
+    'tests',
+    'note',
+  ];
   doc.cases.forEach((c, i) => {
     const w = (m) => errs.push(`${fileName} case #${i + 1}${c && c.id ? ` (${c.id})` : ''}: ${m}`);
     if (!c || typeof c !== 'object') return w('not an object');
     for (const k of Object.keys(c)) if (!allowed.includes(k)) w(`unknown key "${k}"`);
-    for (const k of ['id', 'feature', 'scenario', 'expected']) if (typeof c[k] !== 'string' || !c[k].trim()) w(`${k} is required`);
+    for (const k of ['id', 'feature', 'scenario', 'expected'])
+      if (typeof c[k] !== 'string' || !c[k].trim()) w(`${k} is required`);
     if (typeof c.id === 'string' && !ID_RE.test(c.id)) w('id must look like EC-<module>-<nnn>');
-    if (typeof c.id === 'string' && doc.module && !c.id.startsWith(`EC-${doc.module}-`)) w(`id must start with EC-${doc.module}-`);
-    for (const k of ['category', 'priority', 'status']) if (!ENUMS[k].includes(c[k])) w(`${k} must be one of ${ENUMS[k].join(', ')}`);
-    if (c.status === 'covered' && !(Array.isArray(c.tests) && c.tests.length)) w('covered needs at least one entry in tests');
-    if (c.status === 'gap' && c.tests && c.tests.length) w('a gap must not list tests (mark it covered)');
+    if (typeof c.id === 'string' && doc.module && !c.id.startsWith(`EC-${doc.module}-`))
+      w(`id must start with EC-${doc.module}-`);
+    for (const k of ['category', 'priority', 'status'])
+      if (!ENUMS[k].includes(c[k])) w(`${k} must be one of ${ENUMS[k].join(', ')}`);
+    if (c.status === 'covered' && !(Array.isArray(c.tests) && c.tests.length))
+      w('covered needs at least one entry in tests');
+    if (c.status === 'gap' && c.tests && c.tests.length)
+      w('a gap must not list tests (mark it covered)');
     for (const t of c.tests ?? []) {
       if (!t || typeof t.file !== 'string' || !t.file) w('every test needs a file');
-      else for (const k of Object.keys(t)) if (!['file', 'match'].includes(k)) w(`unknown key "${k}" in a test entry`);
+      else
+        for (const k of Object.keys(t))
+          if (!['file', 'match'].includes(k)) w(`unknown key "${k}" in a test entry`);
     }
   });
   return errs;
 }
 
 /** Checks the whole catalogue. `fs` lets the unit tests run without a disk. */
-export function checkCatalogue({ strict = false, root, catalogueDir, modulesDir, readJson, listDir, exists, readText }) {
+export function checkCatalogue({
+  strict = false,
+  root,
+  catalogueDir,
+  modulesDir,
+  readJson,
+  listDir,
+  exists,
+  readText,
+}) {
   const errors = [];
   const warnings = [];
   const files = listDir(catalogueDir).filter((f) => f.endsWith('.json') && f !== 'schema.json');
@@ -55,7 +84,8 @@ export function checkCatalogue({ strict = false, root, catalogueDir, modulesDir,
   const seen = new Map();
   const rows = [];
   for (const m of modules) {
-    if (!files.includes(`${m}.json`)) errors.push(`module "${m}" has no ${m}.json in the catalogue`);
+    if (!files.includes(`${m}.json`))
+      errors.push(`module "${m}" has no ${m}.json in the catalogue`);
   }
   for (const f of files) {
     let doc;
@@ -66,7 +96,8 @@ export function checkCatalogue({ strict = false, root, catalogueDir, modulesDir,
       continue;
     }
     errors.push(...validateFile(doc, f));
-    if (!modules.includes(f.replace(/\.json$/, ''))) errors.push(`${f}: no such module under ${modulesDir}`);
+    if (!modules.includes(f.replace(/\.json$/, '')))
+      errors.push(`${f}: no such module under ${modulesDir}`);
     let covered = 0;
     let gaps = 0;
     let p0gaps = 0;
@@ -84,26 +115,49 @@ export function checkCatalogue({ strict = false, root, catalogueDir, modulesDir,
           }
           const text = readText(path);
           const needle = t.match ?? c.id;
-          if (!text.includes(needle)) errors.push(`${c.id}: ${t.file} does not contain ${t.match ? `the title "${t.match}"` : 'the id'}`);
+          if (!text.includes(needle))
+            errors.push(
+              `${c.id}: ${t.file} does not contain ${t.match ? `the title "${t.match}"` : 'the id'}`,
+            );
         }
       } else if (c.status === 'gap') {
         gaps++;
         if (c.priority === 'P0') p0gaps++;
       }
     }
-    if (doc?.tier === 'P0' && p0gaps > 0) (strict ? errors : warnings).push(`${f}: P0 module has ${p0gaps} untested P0 case(s)`);
-    rows.push({ module: doc?.module ?? f, tier: doc?.tier ?? '?', total: covered + gaps, covered, gaps, p0gaps });
+    if (doc?.tier === 'P0' && p0gaps > 0)
+      (strict ? errors : warnings).push(`${f}: P0 module has ${p0gaps} untested P0 case(s)`);
+    rows.push({
+      module: doc?.module ?? f,
+      tier: doc?.tier ?? '?',
+      total: covered + gaps,
+      covered,
+      gaps,
+      p0gaps,
+    });
   }
   return { errors, warnings, rows };
 }
 
 export function renderReport(rows) {
-  const lines = ['# Edge-case catalogue coverage', '', '_Generated by `tools/quality/check-edge-cases.mjs`. Do not edit by hand._', '',
-    '| Module | Tier | Cases | Covered | Gaps | P0 gaps |', '| --- | --- | ---: | ---: | ---: | ---: |'];
-  const sorted = [...rows].sort((a, b) => a.tier.localeCompare(b.tier) || a.module.localeCompare(b.module));
-  for (const r of sorted) lines.push(`| ${r.module} | ${r.tier} | ${r.total} | ${r.covered} | ${r.gaps} | ${r.p0gaps} |`);
+  const lines = [
+    '# Edge-case catalogue coverage',
+    '',
+    '_Generated by `tools/quality/check-edge-cases.mjs`. Do not edit by hand._',
+    '',
+    '| Module | Tier | Cases | Covered | Gaps | P0 gaps |',
+    '| --- | --- | ---: | ---: | ---: | ---: |',
+  ];
+  const sorted = [...rows].sort(
+    (a, b) => a.tier.localeCompare(b.tier) || a.module.localeCompare(b.module),
+  );
+  for (const r of sorted)
+    lines.push(`| ${r.module} | ${r.tier} | ${r.total} | ${r.covered} | ${r.gaps} | ${r.p0gaps} |`);
   const sum = (k) => rows.reduce((n, r) => n + r[k], 0);
-  lines.push(`| **Total (${rows.length} modules)** | | **${sum('total')}** | **${sum('covered')}** | **${sum('gaps')}** | **${sum('p0gaps')}** |`, '');
+  lines.push(
+    `| **Total (${rows.length} modules)** | | **${sum('total')}** | **${sum('covered')}** | **${sum('gaps')}** | **${sum('p0gaps')}** |`,
+    '',
+  );
   return lines.join('\n');
 }
 
@@ -117,7 +171,10 @@ if (isMain) {
     catalogueDir,
     modulesDir: join(root, 'apps/api/src/modules'),
     readJson: (p) => JSON.parse(readFileSync(p, 'utf8')),
-    listDir: (d) => readdirSync(d).filter((n) => !n.startsWith('.') && (n.endsWith('.json') || statSync(join(d, n)).isDirectory())),
+    listDir: (d) =>
+      readdirSync(d).filter(
+        (n) => !n.startsWith('.') && (n.endsWith('.json') || statSync(join(d, n)).isDirectory()),
+      ),
     exists: existsSync,
     readText: (p) => readFileSync(p, 'utf8'),
   });
@@ -125,7 +182,10 @@ if (isMain) {
   const i = process.argv.indexOf('--report');
   if (i > -1) writeFileSync(resolve(process.argv[i + 1]), report);
   else console.log(report);
-  if (res.warnings.length) console.warn(`\n${res.warnings.length} warning(s) (errors with --strict):\n- ${res.warnings.join('\n- ')}`);
+  if (res.warnings.length)
+    console.warn(
+      `\n${res.warnings.length} warning(s) (errors with --strict):\n- ${res.warnings.join('\n- ')}`,
+    );
   if (res.errors.length) {
     console.error(`\n${res.errors.length} problem(s):\n- ${res.errors.join('\n- ')}`);
     process.exit(1);

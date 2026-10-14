@@ -6,7 +6,10 @@
   "additionalProperties": false,
   "properties": {
     "module": { "type": "string", "description": "Folder name under apps/api/src/modules" },
-    "tier": { "enum": ["P0", "P1", "P2"], "description": "How important the module is. P0 modules must have no untested P0 case." },
+    "tier": {
+      "enum": ["P0", "P1", "P2"],
+      "description": "How important the module is. P0 modules must have no untested P0 case."
+    },
     "owner": { "type": "string" },
     "cases": {
       "type": "array",
@@ -15,14 +18,23 @@
         "required": ["id", "feature", "category", "scenario", "expected", "priority", "status"],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string", "pattern": "^EC-[a-z0-9-]+-[0-9]{3}$", "description": "EC-<module>-<nnn>, unique across the catalogue" },
+          "id": {
+            "type": "string",
+            "pattern": "^EC-[a-z0-9-]+-[0-9]{3}$",
+            "description": "EC-<module>-<nnn>, unique across the catalogue"
+          },
           "feature": { "type": "string" },
-          "category": { "enum": ["input", "state", "permission", "time", "concurrency", "integration", "data"] },
+          "category": {
+            "enum": ["input", "state", "permission", "time", "concurrency", "integration", "data"]
+          },
           "scenario": { "type": "string" },
           "expected": { "type": "string" },
           "priority": { "enum": ["P0", "P1", "P2"] },
           "status": { "enum": ["covered", "gap"] },
-          "source": { "type": "string", "description": "Where the case came from: a parity note, a contract limit, an error code" },
+          "source": {
+            "type": "string",
+            "description": "Where the case came from: a parity note, a contract limit, an error code"
+          },
           "tests": {
             "type": "array",
             "description": "Required when status is covered. Each entry is a test file; `match` is a title substring that must appear in the file. Without `match` the file must contain the case id (in a title or a `covers:` comment).",
