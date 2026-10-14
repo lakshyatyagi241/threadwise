@@ -24,7 +24,12 @@ import {
 export type ImportOptions = Pick<
   ContactImportOptions,
   'mapping' | 'status' | 'source' | 'groupId' | 'tagIds' | 'defaultCountryCode'
-> & { consentConfirmed?: boolean };
+> & {
+  consentConfirmed?: boolean;
+  /** The notice the file's contacts agreed under, and its version (kept as proof with each recorded consent). */
+  consentNoticeText?: string;
+  consentNoticeVersion?: string;
+};
 
 async function upload<T>(
   path: string,

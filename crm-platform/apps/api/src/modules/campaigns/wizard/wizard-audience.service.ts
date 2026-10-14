@@ -45,6 +45,8 @@ export interface AudienceWhere {
   invalid: WizardAudienceCount['invalidConditions'];
   /** The stored CSV upload the audience names (its numbers that are not contacts yet are counted apart), when it still exists. */
   csvUploadId: number | null;
+  /** The person who uploaded that CSV confirmed they hold consent for its numbers (BL-170): they are granted at launch, so they count as consented. */
+  csvConsentConfirmed: boolean;
 }
 
 export interface SampleContact {
@@ -165,10 +167,12 @@ export class WizardAudienceService {
     }
 
     let csvUploadId: number | null = null;
+    let csvConsentConfirmed = false;
     if (audience.csv) {
       const up = await this.csv.find(tx, orgId, audience.csv.id);
       if (up) {
         csvUploadId = up.id;
+        csvConsentConfirmed = up.consentConfirmed;
         sources.push(csvContactsWhere(orgId, up.id));
       } else {
         invalid.push({
@@ -181,7 +185,12 @@ export class WizardAudienceService {
     }
 
     const rulesSql = sources.length === 0 ? sql`false` : sql`(${sql.join(sources, sql` OR `)})`;
-    return { where: segmentContactsWhere(orgId, rulesSql), invalid, csvUploadId };
+    return {
+      where: segmentContactsWhere(orgId, rulesSql),
+      invalid,
+      csvUploadId,
+      csvConsentConfirmed,
+    };
   }
 
   /** The workspace switch "Require recorded consent for marketing sends". Off when the consent module is not wired in. */
@@ -193,15 +202,32 @@ export class WizardAudienceService {
    * The condition the written recipient list (and the sample) adds on `contacts`: with the switch ON only a contact with a recorded
    * marketing grant, so the list is the same set the count shows and nobody is written just to be skipped at dispatch. `true` otherwise.
    */
-  private async consentWhere(orgId: number): Promise<SQL> {
-    return (await this.requiresConsent(orgId)) ? hasGrantedConsentSql('contacts') : sql`true`;
+  private async consentWhere(orgId: number, w: AudienceWhere): Promise<SQL> {
+    return (await this.requiresConsent(orgId)) ? this.grantedSql(orgId, w) : sql`true`;
+  }
+
+  /**
+   * "Has a recorded marketing grant", for the audience. A CSV whose uploader confirmed consent (BL-170) is granted to its numbers at
+   * launch, before the list is written, so those contacts count as consented here too: the number on screen stays the list that is messaged.
+   */
+  private grantedSql(
+    orgId: number,
+    w: Pick<AudienceWhere, 'csvUploadId' | 'csvConsentConfirmed'>,
+  ): SQL {
+    return w.csvConsentConfirmed && w.csvUploadId !== null
+      ? sql`(${hasGrantedConsentSql('contacts')} OR ${csvContactsWhere(orgId, w.csvUploadId)})`
+      : hasGrantedConsentSql('contacts');
   }
 
   async count(tx: Tx, orgId: number, audience: WizardAudience): Promise<WizardAudienceCount> {
-    const { where, invalid, csvUploadId } = await this.where(tx, orgId, audience);
+    const aw = await this.where(tx, orgId, audience);
+    const { where, invalid, csvUploadId } = aw;
     const fresh = await this.newCsvNumbers(tx, orgId, csvUploadId);
     // With the workspace switch ON, a contact with no recorded consent is counted apart and not among the recipients.
     const requireConsent = await this.requiresConsent(orgId);
+    const granted = this.grantedSql(orgId, aw);
+    // The numbers of a CSV that is not a contact yet have no grant either, unless the uploader confirmed consent for the file.
+    const freshHasNoConsent = requireConsent && !aw.csvConsentConfirmed;
     // The count runs in a savepoint: a cancelled statement aborts only that, and the timeout is undone with it.
     const before = (await tx.execute(sql`SELECT current_setting('statement_timeout') AS v`))
       .rows[0] as {
@@ -217,8 +243,8 @@ export class WizardAudienceService {
             SELECT count(*)::int AS matching,
                    count(*) FILTER (WHERE contacts.is_unsubscribed)::int AS opted_out,
                    count(*) FILTER (WHERE NOT contacts.is_unsubscribed AND NOT ${VALID_NUMBER})::int AS invalid_number,
-                   count(*) FILTER (WHERE ${ELIGIBLE} AND ${requireConsent ? sql`NOT ${hasGrantedConsentSql('contacts')}` : sql`false`})::int AS no_consent,
-                   count(*) FILTER (WHERE ${ELIGIBLE} AND ${requireConsent ? hasGrantedConsentSql('contacts') : sql`true`})::int AS recipients
+                   count(*) FILTER (WHERE ${ELIGIBLE} AND ${requireConsent ? sql`NOT ${granted}` : sql`false`})::int AS no_consent,
+                   count(*) FILTER (WHERE ${ELIGIBLE} AND ${requireConsent ? granted : sql`true`})::int AS recipients
             FROM contacts WHERE ${where}`)
         ).rows[0] as {
           matching: number;
@@ -241,8 +267,8 @@ export class WizardAudienceService {
         matching: Number(out.totals.matching) + fresh.total,
         optedOut: Number(out.totals.opted_out),
         invalidNumber: Number(out.totals.invalid_number),
-        noConsent: Number(out.totals.no_consent) + (requireConsent ? fresh.total : 0),
-        recipients: Number(out.totals.recipients) + (requireConsent ? 0 : fresh.total),
+        noConsent: Number(out.totals.no_consent) + (freshHasNoConsent ? fresh.total : 0),
+        recipients: Number(out.totals.recipients) + (freshHasNoConsent ? 0 : fresh.total),
         newContacts: fresh.total,
         approximate: false,
         countries: this.countries([...out.byPrefix, ...fresh.byPrefix]),
@@ -297,10 +323,11 @@ export class WizardAudienceService {
     limit: number,
   ): Promise<string[]> {
     if (!audience.csv) return [];
-    // With the switch ON these numbers have no consent, so they are not messaged and not charged for.
-    if (await this.requiresConsent(orgId)) return [];
     const up = await this.csv.find(tx, orgId, audience.csv.id);
     if (!up) return [];
+    // With the switch ON these numbers have no consent unless the uploader confirmed it for the file (granted at launch), so they are
+    // not messaged and not charged for.
+    if ((await this.requiresConsent(orgId)) && !up.consentConfirmed) return [];
     const rows = await this.csv.newNumbers(tx, orgId, up.id, 0, limit);
     return rows.map((r) => r.phone);
   }
@@ -334,6 +361,9 @@ export class WizardAudienceService {
       }
       after = rows[rows.length - 1]!.line;
     }
+    // The uploader confirmed consent for the file (BL-170): every contact the file's numbers belong to, new or old, gets a recorded
+    // grant with the file and the stated notice as proof. Never over an opt-out. Idempotent, so a recurring run writes nothing twice.
+    await this.csv.grantConsent(tx, orgId, up);
     return out;
   }
 
@@ -372,8 +402,9 @@ export class WizardAudienceService {
     audience: WizardAudience,
     limit: number,
   ): Promise<SampleContact[]> {
-    const { where } = await this.where(tx, orgId, audience);
-    const consent = await this.consentWhere(orgId);
+    const aw = await this.where(tx, orgId, audience);
+    const { where } = aw;
+    const consent = await this.consentWhere(orgId, aw);
     const res = await tx.execute(sql`
       SELECT contacts.id, contacts.uuid, contacts.name, contacts.phone
       FROM contacts WHERE ${where} AND ${ELIGIBLE} AND ${consent}
@@ -396,8 +427,9 @@ export class WizardAudienceService {
     afterId: number,
     limit: number,
   ): Promise<number[]> {
-    const { where } = await this.where(tx, orgId, audience);
-    const consent = await this.consentWhere(orgId);
+    const aw = await this.where(tx, orgId, audience);
+    const { where } = aw;
+    const consent = await this.consentWhere(orgId, aw);
     const res = await tx.execute(sql`
       SELECT contacts.id FROM contacts
       WHERE ${where} AND ${ELIGIBLE} AND ${consent} AND contacts.id > ${afterId}::bigint

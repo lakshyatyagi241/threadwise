@@ -177,16 +177,23 @@ export function analyzeCsv(text: string, options: ContactImportOptions): Analysi
 /** The consent column's yes / no / unknown counts for the preview; null when no column is mapped. */
 export function consentSummary(
   a: Pick<Analysis, 'mapping' | 'valid'>,
+  channel: 'whatsapp' | 'sms' | 'email' = 'whatsapp',
 ): ContactImportPreview['consent'] {
-  if (a.mapping.consent === undefined) return null;
+  const field = channel === 'sms' ? 'consentSms' : channel === 'email' ? 'consentEmail' : 'consent';
+  if (a.mapping[field] === undefined) return null;
+  const value = (r: ParsedRow) =>
+    channel === 'sms' ? r.consentSms : channel === 'email' ? r.consentEmail : r.consent;
+  const raw = (r: ParsedRow) =>
+    channel === 'sms' ? r.consentSmsRaw : channel === 'email' ? r.consentEmailRaw : r.consentRaw;
   let granted = 0;
   let unrecognised = 0;
   const samples = new Set<string>();
   for (const r of a.valid) {
-    if (r.consent === 'granted') granted += 1;
-    else if (r.consent === 'unrecognised') {
+    if (value(r) === 'granted') granted += 1;
+    else if (value(r) === 'unrecognised') {
       unrecognised += 1;
-      if (r.consentRaw && samples.size < 5) samples.add(r.consentRaw);
+      const text = raw(r);
+      if (text && samples.size < 5) samples.add(text);
     }
   }
   return {
@@ -262,6 +269,8 @@ export class ContactImportService {
         },
         invalidSamples: a.invalid,
         consent,
+        consentSms: consentSummary(a, 'sms'),
+        consentEmail: consentSummary(a, 'email'),
         newGroups: newGroups.slice(0, NAME_LIST_MAX),
         newTags: newTags.slice(0, NAME_LIST_MAX),
         quota: usage,
