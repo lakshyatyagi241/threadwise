@@ -441,3 +441,12 @@ Reference's `/message-history` is kept as it is (see [message-history.md](messag
 Decisions for the owner: (1) whether a narrower inbox scope (`team`, `own`) should see the broadcast, campaign and scheduled recipients of what it can open (today only scope `all` sees recipient rows); (2) whether the
 Manager preset should read the cost (today only roles with `wallet.statement.read`); (3) whether the export should be limited to the caller's visible rows instead of requiring scope `all`; (4) whether campaign,
 broadcast and template screens should link to a filtered history; (5) whether `mask_customer_numbers` should become a real workspace setting (today the rule is by contact permission only).
+
+
+## Data requests and the personal-data registry (BL-142, BL-143)
+
+Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 4.5; API: [privacy.md](../../api/privacy.md).
+
+- **New:** Settings > Privacy > Data requests (`/privacy-requests`): log, verify, hold, export (ZIP), preview and execute an erasure, proof; keys `privacy.requests.read`, `privacy.requests.manage`, `privacy.erase.execute`.
+- **Intended difference from the reference (contact delete):** the reference deletes the contact row and leaves messages and files to its own foreign keys. Here deleting a contact (single, bulk, REST v1) also erases its conversation history, media, files, recordings and call logs by default; `eraseHistory=false` keeps conversations without the person's identity. Leads, deals, tasks and invoices stay unless a data request anonymises them.
+- Owner decisions open: message delete versus anonymise as the default, SLA default (30 days), legal-hold periods per country (D9), who verifies identity.
