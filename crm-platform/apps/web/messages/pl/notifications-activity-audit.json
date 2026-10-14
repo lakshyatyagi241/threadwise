@@ -358,6 +358,14 @@
         "sla_breached": {
           "label": "Przekroczono SLA",
           "hint": "Twoja rozmowa nie spełniła celu pierwszej odpowiedzi lub rozwiązania."
+        },
+        "member_leave_started": {
+          "label": "Członek zespołu poszedł na urlop",
+          "hint": "Członek Twojego zespołu poszedł na urlop. Pokazuje, czym się opiekuje, i link do przypisania od nowa."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Czat, którego nikt nie mógł przejąć",
+          "hint": "Routing nie znalazł nikogo dla nowego czatu, bo wybrane osoby są na urlopie. Przypisz go ręcznie."
         }
       },
       "loading": "Wczytywanie Twoich preferencji",

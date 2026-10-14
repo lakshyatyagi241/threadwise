@@ -20,6 +20,14 @@ export const settings = [
     gates: { permission: 'inbox.settings.read', planFeature: 'inbox_routing' },
   }),
   settingsTile({
+    id: 'contact-assignment',
+    section: 'automation',
+    href: '/contact-assignment',
+    icon: 'transfer',
+    order: 26,
+    gates: { permission: 'crm.assignment.read', planFeature: 'inbox_routing' },
+  }),
+  settingsTile({
     id: 'sla-policies',
     section: 'automation',
     href: '/sla-policies',

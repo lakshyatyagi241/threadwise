@@ -27,17 +27,20 @@ export function useChannels(enabled: boolean) {
   });
 }
 
+/** Opens (or creates) the conversation for this contact on this number. */
+export const openConversation = (contactId: string, channelId: string, signal?: AbortSignal) =>
+  apiFetch('/inbox/conversations/open', {
+    method: 'POST',
+    body: { contactId, channelId },
+    schema: openedSchema,
+    signal,
+  });
+
 /** The conversation for this contact on this number: the API creates it when there is none yet. */
 export function useOpenConversation(contactId: string, channelId: string) {
   return useQuery({
     queryKey: sendKeys.conversation(contactId, channelId),
-    queryFn: ({ signal }) =>
-      apiFetch('/inbox/conversations/open', {
-        method: 'POST',
-        body: { contactId, channelId },
-        schema: openedSchema,
-        signal,
-      }),
+    queryFn: ({ signal }) => openConversation(contactId, channelId, signal),
     enabled: Boolean(contactId && channelId),
     staleTime: Infinity,
     retry: false,

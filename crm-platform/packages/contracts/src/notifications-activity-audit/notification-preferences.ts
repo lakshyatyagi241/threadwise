@@ -84,6 +84,10 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   email_bounced: { group: 'conversations', toast: true, sound: false, push: false },
   // BL-036: a breach is news for the person who owns the conversation; quiet by default (no sound, no push) like the other alerts of the group.
   sla_breached: { group: 'conversations', toast: true, sound: false, push: false },
+  // BL-112: news for the people who run the team; quiet like the SLA alert.
+  member_leave_started: { group: 'conversations', toast: true, sound: false, push: false },
+  // BL-112: a chat nobody could take is news for the leads; the push stays on because a customer is waiting.
+  assignment_blocked_by_leave: { group: 'conversations', toast: true, sound: false, push: true },
   waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspended: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspension_cleared: {

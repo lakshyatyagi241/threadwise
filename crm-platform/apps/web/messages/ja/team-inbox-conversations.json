@@ -450,7 +450,9 @@
         "unassign": "割り当てを解除",
         "open": "未対応 {count} 件",
         "pickTeam": "この会話のチームを選択",
-        "noTeam": "チームなし"
+        "noTeam": "チームなし",
+        "onLeave": "休暇中",
+        "onLeaveUntil": "{date}まで休暇中"
       },
       "presence": {
         "online": "オンライン",
@@ -602,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "テンプレートを送信",
       "close": "閉じる",
-      "cancel": "キャンセル",
-      "back": "テンプレートに戻る",
       "search": "名前またはテキストで検索",
       "searchLabel": "テンプレートを検索",
       "loading": "テンプレートを読み込んでいます",
@@ -612,9 +612,7 @@
       "empty": "この WhatsApp 番号には承認済みのテンプレートがまだありません。テンプレートで作成し、Meta の承認をお待ちください。",
       "noResults": "検索に一致するテンプレートはありません。",
       "windowHint": "テンプレートは、24時間の返信期間が終了していても送信できます。",
-      "variables": "変数を入力",
       "preview": "お客様に表示される内容",
-      "send": "テンプレートを送信",
       "sending": "送信中",
       "sent": "テンプレートを送信しました",
       "problem": {
@@ -629,7 +627,31 @@
         "authentication": "ワンタイムパスワードのテンプレートはシステムが送信するもので、受信箱からは送信しません。",
         "named_variables": "名前付き変数を使用しています。受信箱ではまだサポートされていません。"
       },
-      "hasMore": "最初の {count} 件のテンプレートを表示しています。他のテンプレートは名前またはテキストで検索してください。"
+      "hasMore": "最初の {count} 件のテンプレートを表示しています。他のテンプレートは名前またはテキストで検索してください。",
+      "previewEmpty": "テンプレートにカーソルを合わせると、お客様のスマートフォンでの表示を確認できます。",
+      "previewCustomer": "お客様",
+      "noVariables": "このテンプレートには入力する項目がありません。スマートフォンを確認して送信してください。",
+      "sendTo": "{name}に送信",
+      "refresh": "リストを更新",
+      "device": "スマートフォンのプレビュー",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "本文の変数を設定",
+      "or": "または",
+      "mapField": "{key} にフィールドを割り当て",
+      "mapNone": "この連絡先には割り当てる情報がありません。",
+      "typeMessage": "メッセージを入力",
+      "fields": {
+        "name": "名前",
+        "phone": "電話番号",
+        "email": "メール"
+      },
+      "create": "新しいテンプレートを作成",
+      "actions": "テンプレートの操作",
+      "edit": "テンプレートを編集",
+      "duplicate": "テンプレートを複製"
     },
     "log": {
       "title": "配信ログ",
@@ -935,7 +957,9 @@
       },
       "tag": "タグ",
       "tagAdd": "タグを追加",
-      "tagRemove": "タグを外す"
+      "tagRemove": "タグを外す",
+      "onLeave": "休暇中",
+      "onLeaveUntil": "{date}まで休暇中"
     },
     "tags": {
       "tag": "タグ",

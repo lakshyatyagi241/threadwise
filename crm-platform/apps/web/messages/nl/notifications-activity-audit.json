@@ -358,6 +358,14 @@
         "sla_breached": {
           "label": "SLA overschreden",
           "hint": "Een gesprek van jou heeft het doel voor de eerste reactie of de oplossing gemist."
+        },
+        "member_leave_started": {
+          "label": "Teamlid is met verlof",
+          "hint": "Een teamlid is met verlof gegaan. Toont wat diegene beheert en een link om opnieuw toe te wijzen."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Chat die niemand kon oppakken",
+          "hint": "De routering vond niemand voor een nieuwe chat omdat de gekozen personen met verlof zijn. Wijs hem handmatig toe."
         }
       },
       "loading": "Je voorkeuren laden",

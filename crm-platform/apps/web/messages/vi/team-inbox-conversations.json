@@ -450,7 +450,9 @@
         "unassign": "Bỏ giao",
         "open": "{count} đang mở",
         "pickTeam": "Chọn nhóm cho cuộc trò chuyện này",
-        "noTeam": "Không có nhóm"
+        "noTeam": "Không có nhóm",
+        "onLeave": "Đang nghỉ phép",
+        "onLeaveUntil": "Nghỉ phép đến {date}"
       },
       "presence": {
         "online": "Trực tuyến",
@@ -602,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Gửi mẫu tin nhắn",
       "close": "Đóng",
-      "cancel": "Hủy",
-      "back": "Quay lại mẫu",
       "search": "Tìm theo tên hoặc nội dung",
       "searchLabel": "Tìm mẫu",
       "loading": "Đang tải mẫu",
@@ -612,9 +612,7 @@
       "empty": "Số WhatsApp này chưa có mẫu nào được duyệt. Tạo mẫu trong mục Mẫu và đợi Meta phê duyệt.",
       "noResults": "Không có mẫu nào khớp với tìm kiếm.",
       "windowHint": "Mẫu vẫn gửi được ngay cả khi đã hết cửa sổ trả lời 24 giờ.",
-      "variables": "Điền các biến",
       "preview": "Nội dung khách hàng sẽ đọc",
-      "send": "Gửi mẫu",
       "sending": "Đang gửi",
       "sent": "Đã gửi mẫu",
       "problem": {
@@ -629,7 +627,31 @@
         "authentication": "Mẫu mã OTP do hệ thống gửi, không gửi từ hộp thư.",
         "named_variables": "Dùng biến có tên, hiện hộp thư chưa hỗ trợ."
       },
-      "hasMore": "Đang hiển thị {count} mẫu đầu tiên. Tìm theo tên hoặc nội dung để xem các mẫu khác."
+      "hasMore": "Đang hiển thị {count} mẫu đầu tiên. Tìm theo tên hoặc nội dung để xem các mẫu khác.",
+      "previewEmpty": "Trỏ vào một mẫu để xem nó sẽ hiển thị thế nào trên điện thoại của khách hàng.",
+      "previewCustomer": "Khách hàng",
+      "noVariables": "Mẫu này không có gì cần điền. Hãy kiểm tra điện thoại rồi gửi.",
+      "sendTo": "Gửi cho {name}",
+      "refresh": "Làm mới danh sách",
+      "device": "Xem trước điện thoại",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Cấu hình biến nội dung",
+      "or": "hoặc",
+      "mapField": "Ánh xạ trường cho {key}",
+      "mapNone": "Liên hệ này không có thông tin để ánh xạ.",
+      "typeMessage": "Nhập tin nhắn",
+      "fields": {
+        "name": "Tên",
+        "phone": "Điện thoại",
+        "email": "Email"
+      },
+      "create": "Tạo mẫu mới",
+      "actions": "Thao tác với mẫu",
+      "edit": "Chỉnh sửa mẫu",
+      "duplicate": "Nhân bản mẫu"
     },
     "log": {
       "title": "Nhật ký gửi",
@@ -935,7 +957,9 @@
       },
       "tag": "Gắn thẻ",
       "tagAdd": "Thêm thẻ",
-      "tagRemove": "Bỏ thẻ"
+      "tagRemove": "Bỏ thẻ",
+      "onLeave": "đang nghỉ phép",
+      "onLeaveUntil": "nghỉ phép đến {date}"
     },
     "tags": {
       "tag": "Thẻ",

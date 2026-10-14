@@ -11,7 +11,8 @@
       "copied": "Tersalin",
       "retry": "Coba lagi",
       "loadMore": "Muat lainnya",
-      "loadingMore": "Memuat"
+      "loadingMore": "Memuat",
+      "loading": "Memuat"
     },
     "tiers": {
       "owner": "Pemilik",
@@ -95,7 +96,11 @@
       "linkReset": "Email belum dikonfigurasi di server ini, jadi bagikan tautan ini langsung kepada mereka. Tautan hanya bisa digunakan sekali.",
       "linkInvite": "Email belum dikonfigurasi di server ini, jadi bagikan tautan ini langsung kepada mereka. Tautan hanya bisa digunakan sekali dan kedaluwarsa dalam {days, plural, other {# hari}}.",
       "linkLabel": "Tautan sekali pakai",
-      "linkEmail": "Email"
+      "linkEmail": "Email",
+      "onLeaveUntil": "Cuti hingga {date}",
+      "onLeaveOpen": "Sedang cuti",
+      "leaveFrom": "Cuti mulai {date}",
+      "leaveAction": "Cuti dan delegasi"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -214,7 +219,13 @@
       "teamNameTaken": "Tim dengan nama itu sudah ada.",
       "teamMemberUnknown": "Salah satu orang yang Anda pilih tidak ada di workspace ini.",
       "orgSuspended": "Workspace ini ditangguhkan.",
-      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+      "leaveOverlap": "Orang ini sudah punya cuti yang berbagi hari dengan tanggal ini.",
+      "leaveInvalid": "Tanggal tersebut tidak dapat digunakan. Hari pertama tidak boleh di masa lalu, dan cuti yang sudah dimulai mempertahankan hari pertamanya.",
+      "delegateInvalid": "Delegasi harus anggota aktif lain di workspace ini.",
+      "delegateCycle": "Itu akan membentuk lingkaran: orang yang dipilih sudah menjadikan orang ini sebagai delegasinya.",
+      "reassignInvalid": "Tidak ada yang dapat ditugaskan ulang. Pastikan orang tersebut memegang kontak atau deal terbuka dan target dapat menerimanya.",
+      "reassignNotRestorable": "Penugasan ulang ini tidak dapat lagi dibatalkan."
     },
     "accept": {
       "title": "Bergabung dengan workspace Anda",
@@ -234,6 +245,81 @@
       "submit": "Terima undangan",
       "submitting": "Bergabung",
       "invalidHeading": "Tautan undangan"
+    },
+    "leave": {
+      "eyebrow": "Cuti dan delegasi",
+      "calendarNote": "Tanggal adalah hari di kalender workspace Anda ({timezone}).",
+      "nowTitle": "Sedang cuti",
+      "upcomingTitle": "Akan datang",
+      "notAway": "Tidak sedang cuti saat ini.",
+      "range": "{from} sampai {to}",
+      "rangeOpen": "Mulai {from}, tanpa tanggal akhir",
+      "reasonShown": "Alasan (hanya terlihat oleh manajer): {reason}",
+      "endNow": "Akhiri cuti sekarang",
+      "cancelLeave": "Batalkan cuti",
+      "endTitle": "Akhiri cuti ini sekarang?",
+      "endMessage": "Orang ini kembali hari ini. Penugasan otomatis akan mulai memilihnya lagi.",
+      "cancelTitle": "Batalkan cuti ini?",
+      "cancelMessage": "Cuti belum dimulai. Cuti ini akan dihapus.",
+      "ended": "Cuti berakhir.",
+      "added": "Cuti disimpan.",
+      "readOnly": "Hanya orang yang bersangkutan dan manajer yang dapat mengubah cuti.",
+      "addTitle": "Tambah cuti",
+      "firstDay": "Hari pertama",
+      "lastDay": "Hari terakhir",
+      "openEnded": "Belum ada tanggal akhir (sampai seseorang mengakhirinya)",
+      "reason": "Alasan (opsional)",
+      "reasonHint": "Hanya orang tersebut dan manajernya yang melihat ini.",
+      "addSubmit": "Simpan cuti",
+      "problems": {
+        "startRequired": "Pilih hari pertama.",
+        "startPast": "Hari pertama tidak boleh di masa lalu.",
+        "endRequired": "Pilih hari terakhir, atau centang \"Tanpa tanggal akhir\".",
+        "endBeforeStart": "Hari terakhir tidak boleh sebelum hari pertama."
+      },
+      "delegateTitle": "Delegasi",
+      "delegateHelp": "Selama orang ini cuti, chat baru dan penugasan otomatis diteruskan ke delegasinya jika tersedia, jika tidak ke tim.",
+      "noDelegate": "Tanpa delegasi",
+      "delegateSaved": "Delegasi disimpan.",
+      "delegateRemoved": "Delegasi dihapus.",
+      "delegateAway": "{name} juga sedang cuti, jadi belum bisa menggantikan saat ini."
+    },
+    "reassign": {
+      "title": "Tugaskan ulang kontak dan deal",
+      "holds": "{name} memiliki {contacts, plural, one {# kontak} other {# kontak}} dan {chats, plural, one {# chat terbuka} other {# chat terbuka}}.",
+      "target": "Berikan kepada",
+      "kindUser": "Seseorang",
+      "kindDelegate": "Delegasinya",
+      "kindTeam": "Sebuah tim, round robin",
+      "person": "Orang",
+      "team": "Tim",
+      "teamHint": "Dibagi bergiliran di antara anggota yang hadir dan tidak sedang cuti.",
+      "choose": "Pilih",
+      "includeDeals": "Sertakan deal terbuka",
+      "returnOn": "Kembalikan pada {date}, saat orang tersebut kembali",
+      "returnUnavailable": "Kembalikan saat orang tersebut kembali (perlu cuti dengan hari terakhir)",
+      "returnHelp": "Hanya kontak dan deal yang belum diubah siapa pun sejak itu yang dikembalikan. Anda juga dapat membatalkan selama {days} hari.",
+      "reason": "Catatan (opsional)",
+      "submit": "Tinjau dan tugaskan ulang",
+      "confirmTitle": "Tugaskan ulang sekarang?",
+      "confirmMessage": "{name} memiliki {contacts, plural, one {# kontak} other {# kontak}} dan {deals, plural, one {# deal terbuka} other {# deal terbuka}} yang akan dipindahkan.",
+      "confirm": "Tugaskan ulang",
+      "done": "{contacts, plural, one {# kontak} other {# kontak}} dan {deals, plural, one {# deal} other {# deal}} dipindahkan.",
+      "history": "Penugasan ulang sebelumnya",
+      "historyEmpty": "Belum ada yang ditugaskan ulang.",
+      "status": {
+        "applied": "Dipindahkan",
+        "restored": "Dikembalikan",
+        "restore_blocked": "Tidak dikembalikan"
+      },
+      "summary": "{contacts} kontak dan {deals} deal ke {target}",
+      "returnsOn": "kembali pada {date}",
+      "restoredSummary": "{restored} dikembalikan, {skipped} tetap di tempatnya",
+      "remaining": "{count} lagi yang harus dipindahkan: jalankan lagi",
+      "undo": "Urungkan",
+      "undoTitle": "Urungkan penugasan ulang ini?",
+      "undoMessage": "Kontak dan deal yang belum diubah siapa pun sejak itu kembali ke pemilik sebelumnya. Sisanya tetap di tempatnya.",
+      "restored": "{count} dikembalikan, {skipped} tetap di tempatnya."
     }
   }
 }

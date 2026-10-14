@@ -358,6 +358,14 @@
         "sla_breached": {
           "label": "SLA terlampaui",
           "hint": "Percakapan yang Anda tangani melewati target balasan pertama atau penyelesaian."
+        },
+        "member_leave_started": {
+          "label": "Anggota mulai cuti",
+          "hint": "Seorang anggota tim Anda mulai cuti. Menampilkan apa yang dipegangnya dan tautan untuk menugaskan ulang."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Obrolan yang tidak bisa diambil siapa pun",
+          "hint": "Perutean tidak menemukan siapa pun untuk obrolan baru karena orang yang dipilih sedang cuti. Tugaskan secara manual."
         }
       },
       "loading": "Memuat preferensi Anda",

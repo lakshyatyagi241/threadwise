@@ -9,6 +9,9 @@ import { InvitationsService } from './invitations.service';
 import { MembersController } from './members.controller';
 import { MembersRepository } from './members.repository';
 import { MembersService } from './members.service';
+import { LeaveController } from './leave/leave.controller';
+import { LeaveRepository } from './leave/leave.repository';
+import { LeaveService } from './leave/leave.service';
 import { LifecycleRepository } from './lifecycle/lifecycle.repository';
 import { LifecycleService } from './lifecycle/lifecycle.service';
 import { PlatformWorkspaceLifecycleController } from './platform-workspace-lifecycle.controller';
@@ -35,6 +38,7 @@ import { TeamsService } from './teams.service';
   ],
   controllers: [
     MembersController,
+    LeaveController,
     TeamsController,
     InvitationsController,
     PlatformWorkspacesController,
@@ -43,6 +47,8 @@ import { TeamsService } from './teams.service';
   providers: [
     MembersRepository,
     MembersService,
+    LeaveRepository,
+    LeaveService,
     TeamsRepository,
     TeamsService,
     InvitationsService,

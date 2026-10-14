@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { conversationSummarySchema } from '../chat-conversations/conversation';
+import { onLeaveMarkSchema } from '../workspaces-teams-tenancy/leave';
 
 /**
  * team-inbox-routing-sla: who a conversation is assigned to (plan-inbox-chat.md sections 3.7 and 4.2, Phase 1: manual assignment).
@@ -57,6 +58,11 @@ export const inboxAssigneeSchema = z.object({
   openConversations: z.number().int().nonnegative(),
   /** The caller: the picker offers "Assign to me" for this one. */
   isMe: z.boolean(),
+  /**
+   * Away right now (BL-112): shown greyed with "On leave until <date>"; automatic routing never picks them. A manual assignment is still
+   * allowed (a warning, not a block). Null = not on leave.
+   */
+  onLeave: onLeaveMarkSchema.nullable(),
 });
 export type InboxAssignee = z.infer<typeof inboxAssigneeSchema>;
 

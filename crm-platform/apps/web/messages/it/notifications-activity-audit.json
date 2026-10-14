@@ -358,6 +358,14 @@
         "sla_breached": {
           "label": "SLA violato",
           "hint": "Una conversazione di tua competenza ha mancato l'obiettivo di prima risposta o di risoluzione."
+        },
+        "member_leave_started": {
+          "label": "Un membro è in ferie",
+          "hint": "Un membro del tuo team è andato in ferie. Mostra cosa gestisce e un link per riassegnare."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Chat che nessuno ha potuto prendere",
+          "hint": "L'instradamento non ha trovato nessuno per una nuova chat perché le persone scelte sono in ferie. Assegnala a mano."
         }
       },
       "loading": "Caricamento delle tue preferenze",

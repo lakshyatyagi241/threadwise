@@ -360,6 +360,11 @@
         "description": "Mira qué tan rápido respondió y resolvió cada agente hoy, esta semana o este mes.",
         "keywords": "informes, analítica, agentes, tiempo de respuesta, primera respuesta, resueltas, carga, rendimiento"
       },
+      "contact-assignment": {
+        "label": "Asignación de contactos",
+        "description": "Asigna automáticamente los contactos y negocios nuevos a la persona adecuada, sin contar a quienes están de baja o vacaciones.",
+        "keywords": "asignar, propietario, round robin, rotación, nuevo contacto, nuevo negocio, ausencia, vacaciones, enrutamiento de leads"
+      },
       "privacy-requests": {
         "label": "Solicitudes de datos",
         "description": "Responde a quienes preguntan qué datos tienes de ellos: comprobación de identidad, exportación, supresión con vista previa y una prueba que puedes conservar.",

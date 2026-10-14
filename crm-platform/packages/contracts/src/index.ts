@@ -14,6 +14,7 @@ export * from './common/errors';
 export * from './common/enums';
 export * from './common/dates';
 export * from './crm/contact';
+export * from './crm/contact-assignment';
 export * from './crm/crm-dashboard';
 export * from './crm/contact-activity';
 export * from './crm/contact-file';
