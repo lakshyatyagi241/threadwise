@@ -270,6 +270,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Erlaubt: Der Hinweis wurde zuerst übermittelt.",
+        "consent_evidence_recorded": "Erlaubt: Der Hinweis wurde übermittelt und die Person hat zugestimmt.",
+        "purpose_not_enabled": "Nicht erlaubt: Der Arbeitsbereich hat dies nicht eingeschaltet.",
+        "consent_declined": "Nicht erlaubt: Die Person hat abgelehnt.",
         "notice_required": "A notice must be delivered first."
       }
     }

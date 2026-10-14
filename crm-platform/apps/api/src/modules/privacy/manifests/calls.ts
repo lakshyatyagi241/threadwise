@@ -41,7 +41,8 @@ export const callsLogs = defineHolder({
         'meta_payload',
       ],
       storage: [{ column: 'recording_path', note: 'the call recording (audio)' }],
-      retention: 'Forever today (no recording retention rule yet, backlog BL-144 and BL-146).',
+      retention:
+        'The call row is kept (billing, the log). The recording file is deleted by the daily sweep after the workspace window (default 90 days, 7 to 365; BL-144) unless a legal hold is set, by hand with call.recordings.manage, or when the person declines recording; an erasure also removes it. The consent evidence on the row (answer, method, time, notice version and hash) holds no personal value and stays. Transcripts: none stored yet (BL-146).',
     },
     {
       table: 'ai_call_logs',

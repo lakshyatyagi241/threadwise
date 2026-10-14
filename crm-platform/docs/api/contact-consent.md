@@ -85,6 +85,11 @@ there is no recorded grant). There is no override.
 | Growth pilot digests `growth-pilot`                                                           | none (creates tasks and notes, sends nothing)                                       | n/a                    | the flows it starts are gated by the flow sender                      |
 | Web push                                                                                      | staff-facing                                                                        | n/a                    | not gated (registry entry `push_notifications` only)                  |
 
+Notice-first purposes (`call_recording`, `voice_ai_conversation`) answer `needs_notice` until the caller passes `options.noticeEvidence = { delivered, consent? }`. With the
+evidence: a consent-based purpose (`call_recording`) is `allow` (`consent_evidence_recorded`) only when `consent` is `granted` and `deny` (`consent_declined`) when it is `declined`; a
+notice-only purpose is `allow` (`notice_delivered`). `options.purposeEnabled = false` answers `deny` / `purpose_not_enabled` first (the workspace switch; call recording is off by
+default). The adopter is `calling-voice/call-recording-consent.service.ts` (BL-144).
+
 Not yet on the gate (allow-list entries marked KNOWN GAP): Telegram, Facebook and Instagram broadcasts, commerce (Shopify / WooCommerce)
 broadcasts, the send-time re-check inside the broadcast dispatcher, the campaign wizard preview counts, `ai_content_processing` and
 `third_party_sharing` as workspace switches, quiet hours and calling windows.

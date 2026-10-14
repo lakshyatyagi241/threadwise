@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Nagrywanie rozmów",
+        "intro": "Nagrywanie jest wyłączone, dopóki go nie włączysz. Gdy jest włączone, członek zespołu odczytuje komunikat, osoba odpowiada i dopiero wtedy rusza nagrywanie. Nagrania są usuwane po upływie okresu przechowywania.",
+        "loading": "Wczytywanie zasad nagrywania",
+        "loadFailed": "Nie udało się wczytać zasad nagrywania.",
+        "retry": "Spróbuj ponownie",
+        "viewOnly": "Możesz zobaczyć te zasady, ale zmienić je może tylko właściciel lub administrator.",
+        "enabled": "Nagrywaj rozmowy",
+        "enabledOn": "Włączone: członkowie zespołu mogą nagrać rozmowę po wyrażeniu zgody przez osobę.",
+        "enabledOff": "Wyłączone: żadna rozmowa nie jest nagrywana.",
+        "mode": "Jak osoba wyraża zgodę",
+        "modeHint": {
+          "confirmed": "Osoba mówi „tak” nagrywaniu, a członek zespołu zapisuje odpowiedź. Najbezpieczniejszy wybór.",
+          "announcement": "Członek zespołu odczytuje komunikat i rozmowa trwa dalej. Używaj tylko tam, gdzie doradca prawny potwierdzi, że wystarczy zapowiedź."
+        },
+        "modeOption": {
+          "confirmed": "Osoba mówi „tak”",
+          "announcement": "Zapowiedź, potem dalej"
+        },
+        "retention": "Przechowuj nagrania przez (dni)",
+        "retentionHint": "Od {min} do {max} dni. Starsze nagrania są usuwane co noc; sama rozmowa zostaje w rejestrze.",
+        "retentionInvalid": "Wpisz całkowitą liczbę dni z dozwolonego zakresu.",
+        "notice": "Komunikat o nagrywaniu",
+        "noticeHint": "Członek zespołu odczytuje go przed nagraniem. Do {max} znaków. Każda zmiana jest zapisywana jako nowa wersja.",
+        "noticeRequired": "Napisz komunikat (co najmniej {min} znaków), aby włączyć nagrywanie.",
+        "noticeVersion": "Wersja komunikatu {version}",
+        "noticeNone": "Nie zapisano jeszcze komunikatu",
+        "updatedAt": "zapisano {date}",
+        "noticeSuggestion": "Ta rozmowa może być nagrywana w celu poprawy jakości i szkoleń. Czy zgadzasz się na nagrywanie?",
+        "useSuggestion": "Użyj proponowanego tekstu",
+        "saved": "Zasady nagrywania zapisane.",
+        "saving": "Zapisywanie",
+        "save": "Zapisz zasady"
+      },
+      "consent": {
+        "title": "Zapytaj przed nagraniem",
+        "askConfirmed": "Odczytaj komunikat. Naciśnij pierwszy przycisk tylko wtedy, gdy osoba powie „tak”.",
+        "askAnnouncement": "Odczytaj komunikat, a potem rozpocznij nagrywanie.",
+        "grantConfirmed": "Powiedziała „tak”: rozpocznij nagrywanie",
+        "grantAnnouncement": "Komunikat odczytany: rozpocznij nagrywanie",
+        "decline": "Nie: kontynuuj bez nagrywania",
+        "declinedNote": "Nie nagrywam: osoba nie wyraziła zgody.",
+        "off": "Nagrywanie rozmów jest wyłączone w tej przestrzeni roboczej.",
+        "failed": "Nie udało się zapisać odpowiedzi, więc nic nie jest nagrywane: {message}"
+      },
+      "lifecycle": {
+        "title": "Nagranie i zgoda",
+        "consent": "Zgoda na nagrywanie",
+        "consentGranted": "Zgodziła się na nagrywanie",
+        "consentDeclined": "Odmówiła nagrywania",
+        "consentNone": "Brak zapisanej odpowiedzi",
+        "method": {
+          "announcement_continue": "Komunikat odczytany, rozmowa trwała dalej",
+          "spoken_yes": "Powiedziała „tak”"
+        },
+        "noticeVersion": "Wersja komunikatu {version}",
+        "storedAt": "Zapisano",
+        "expiresAt": "Automatycznie usunięte dnia",
+        "heldNoExpiry": "Nie usunięte: blokada prawna",
+        "none": "Nie ustawiono",
+        "deleted": "Nagranie usunięte",
+        "deletedReason": {
+          "retention": "okres przechowywania minął",
+          "manual": "usunięte przez członka zespołu",
+          "consent_withdrawn": "zgoda wycofana"
+        },
+        "holdOn": "Blokada prawna",
+        "placeHold": "Nałóż blokadę prawną",
+        "liftHold": "Zdejmij blokadę prawną",
+        "holdLifted": "Blokada prawna zdjęta.",
+        "holdPlaced": "Blokada prawna nałożona.",
+        "holdReasonLabel": "Dlaczego jest przechowywane?",
+        "cancel": "Anuluj",
+        "delete": "Usuń nagranie",
+        "deleteBlockedByHold": "Najpierw zdejmij blokadę prawną.",
+        "deleteTitle": "Usunąć to nagranie?",
+        "deleteMessage": "Plik audio zostanie usunięty na stałe. Rozmowa zostaje w rejestrze.",
+        "deletedToast": "Nagranie usunięte."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "Nagrywanie rozmów jest wyłączone w tej przestrzeni roboczej.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Ta rozmowa nie może być nagrywana: osoba nie wyraziła zgody.",
+      "CALL_RECORDING_CONSENT_INVALID": "Tej odpowiedzi nie można zapisać dla tej rozmowy.",
+      "CALL_RECORDING_ON_HOLD": "To nagranie jest objęte blokadą prawną. Najpierw zdejmij blokadę.",
+      "CALL_RECORDING_SETTINGS_INVALID": "Zasady nagrywania są nieprawidłowe: najpierw napisz komunikat."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "Osoba zgodziła się na nagrywanie",
+          "recording_consent_declined": "Osoba odmówiła nagrywania",
+          "recording_deleted": "Nagranie usunięte",
+          "recording_hold_set": "Blokada prawna nałożona",
+          "recording_hold_lifted": "Blokada prawna zdjęta"
+        }
+      }
+    }
+  }
+}

@@ -10,8 +10,12 @@ is a design assumption that counsel must confirm (spec section 10).
   `apps/api/src/modules/calling-voice/call-logs.service.ts`), recordings in private storage with signed, audited playback
   (`apps/api/src/modules/calling-voice/call-recordings.service.ts`), wiring map
   [calling-voice.md](../threadwise-port/wiring/calling-voice.md).
-- Not present (audit): a recording announcement or consent line, a retention rule or erasure for recordings, calling windows, DNC checks,
-  any link between calls and the consent ledger, any transcript store (the AI half of the call log is BL-108/BL-109, not built).
+- Built for operator calls (BL-144): recording is off by default; a versioned notice and the person's recorded answer are required before any audio
+  is kept, through `ConsentGate.check(... 'call_recording' ...)`; evidence on the call (method, time, notice version and sha-256); retention sweep
+  (default 90 days), manual delete and legal hold; erasure and export via the rights registry. API: [calling-voice.md](../api/calling-voice.md).
+  Requirements 2 (partly), 4 (without audio hash), 5, 11 and 12 are met for these calls; 1, 3, 6 to 10 and 13 to 16 belong to the bot.
+- Not present (audit): calling windows, DNC checks, any link between calls and the consent ledger, any transcript store (the AI half of the call
+  log is BL-108/BL-109, not built), a region rule engine, DTMF capture.
 - The AI call assistant and Node bridge are not built, so none of the below is implemented. It is a gate list.
 
 ## Requirements
@@ -75,11 +79,11 @@ ConsentGate.check({ subject, channel: 'voice', purpose: 'marketing_messaging',  
 ## Acceptance checklist for a voice release
 
 - [ ] Disclosure script versioned per language and played first.
-- [ ] Recording off by default; notice and consent mechanism per region configured.
-- [ ] Evidence recorded for every consent decision.
+- [ ] Recording off by default; notice and consent mechanism per region configured. (Operator calls: done, one text per workspace; per region open.)
+- [ ] Evidence recorded for every consent decision. (Operator calls: done.)
 - [ ] Spoken and DTMF opt-out work and write ledger events.
 - [ ] Calling windows, DNC and STOP enforced by the gate.
 - [ ] PCI pause tested.
-- [ ] Retention sweep and erasure handlers registered and tested.
+- [ ] Retention sweep and erasure handlers registered and tested. (Recordings: done, `test/e2e/calling-voice/call-recording-consent.e2e.spec.ts`; transcripts: none stored yet.)
 - [ ] Vendors in the sub-processor register with DPA status.
 - [ ] Counsel has reviewed scripts and regional rules.

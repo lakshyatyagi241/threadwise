@@ -270,6 +270,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "허용: 안내문이 먼저 전달되었습니다.",
+        "consent_evidence_recorded": "허용: 안내문이 전달되었고 상대가 동의했습니다.",
+        "purpose_not_enabled": "허용되지 않음: 워크스페이스에서 켜지 않았습니다.",
+        "consent_declined": "허용되지 않음: 상대가 거부했습니다.",
         "notice_required": "A notice must be delivered first."
       }
     }

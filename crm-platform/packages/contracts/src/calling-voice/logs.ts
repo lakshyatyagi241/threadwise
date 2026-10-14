@@ -4,6 +4,7 @@
  */
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { callRecordingLifecycleSchema } from './recording';
 
 // --- vocabulary --------------------------------------------------------------------------------------------------------
 
@@ -155,6 +156,8 @@ export const callLogDetailSchema = z.object({
     available: z.boolean(),
     mime: z.string().nullable(),
     sizeBytes: z.number().int().nonnegative().nullable(),
+    /** The consent evidence, the retention clock, the legal hold and, once removed, when and why (BL-144). */
+    lifecycle: callRecordingLifecycleSchema,
   }),
 });
 export type CallLogDetail = z.infer<typeof callLogDetailSchema>;

@@ -5,7 +5,9 @@ import {
   addNumber,
   callRow,
   deliver,
+  enableRecording,
   events,
+  grantConsentRow,
   metaError,
   startCallPipeline,
   type CallNumber,
@@ -690,6 +692,8 @@ describe('recordings', () => {
       .post('/v2/calling/calls/dial')
       .send({ numberId: number.uuid, to: CUSTOMER, sdpOffer: SDP_OFFER });
     const id = call.body.callId as string;
+    await enableRecording(p, t);
+    await grantConsentRow(p, t, id);
 
     const empty = await p.api
       .as(t.admin)

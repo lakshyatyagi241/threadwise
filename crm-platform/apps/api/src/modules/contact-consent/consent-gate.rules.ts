@@ -7,6 +7,7 @@ import {
   type ConsentGateReason,
   type ConsentGateResult,
   type ConsentModality,
+  type ConsentNoticeEvidence,
   type PurposeDefinition,
   type PurposeInput,
 } from '@crm/contracts';
@@ -33,6 +34,10 @@ export interface DecideInput {
   requireConsent: boolean;
   /** The message answers an inbound message from this contact and the customer-service window is open. */
   replyWindowOpen?: boolean;
+  /** The workspace has the purpose switched off (call recording is off by default). Omitted = no such switch for this purpose. */
+  purposeEnabled?: boolean;
+  /** What the caller holds for a notice-first purpose: the delivered notice and the person's answer. */
+  noticeEvidence?: ConsentNoticeEvidence;
   facts: ConsentFacts;
 }
 
@@ -42,8 +47,10 @@ const deny = (reason: ConsentGateReason): ConsentGateResult => ({ decision: 'den
 /**
  * The ConsentGate's rule. In order:
  *
- *  1. The purpose must apply to the channel and modality.
- *  2. A purpose with a notice to deliver first (a recording announcement, an AI disclosure) answers `needs_notice`.
+ *  1. The purpose must apply to the channel and modality, and the workspace must not have switched it off (`purpose_not_enabled`).
+ *  2. A purpose with a notice to deliver first (a recording announcement, an AI disclosure) answers `needs_notice` until the caller
+ *     presents the evidence that the versioned notice was delivered; a consent-based one (a call recording) then needs the person's
+ *     answer too: `granted` allows, `declined` denies, no answer is still `needs_notice`. No evidence is the old behaviour, unchanged.
  *  3. Service (`utility`): a reply inside the customer-service window is allowed (`inbound_reply_window`); otherwise only an
  *     explicit withdrawal of the service purpose on that channel blocks it. STOP withdraws MARKETING only, so a contact who sent
  *     STOP still gets order, appointment and support messages.
@@ -58,8 +65,19 @@ export function decideConsent(input: DecideInput): ConsentGateResult {
   const modality = input.modality ?? (channel ? modalityOfChannel(channel) : 'text');
 
   if (channel && !purposeAppliesTo(def, channel, modality)) return deny('purpose_not_applicable');
+  if (input.purposeEnabled === false) return deny('purpose_not_enabled');
   if (def.noticeRequired && def.noticeKey) {
-    return { decision: 'needs_notice', reason: 'notice_required', noticeKey: def.noticeKey };
+    const ev = input.noticeEvidence;
+    const pending: ConsentGateResult = {
+      decision: 'needs_notice',
+      reason: 'notice_required',
+      noticeKey: def.noticeKey,
+    };
+    if (!ev?.delivered) return pending;
+    if (!def.consentMandatory) return allow('notice_delivered');
+    if (ev.consent === 'granted') return allow('consent_evidence_recorded');
+    if (ev.consent === 'declined') return deny('consent_declined');
+    return pending;
   }
 
   if (def.ledgerPurpose === 'utility') {
