@@ -163,7 +163,11 @@ export function CrmDashboardScreen() {
               {data.deals && (
                 <div className="grid gap-4 lg:grid-cols-2">
                   <FunnelPanel funnel={data.deals.funnel} currency={currency} />
-                  <TrendPanel trend={data.deals.trend} wonValue={data.deals.won.value} currency={currency} />
+                  <TrendPanel
+                    trend={data.deals.trend}
+                    wonValue={data.deals.won.value}
+                    currency={currency}
+                  />
                 </div>
               )}
               {(data.contacts || data.deals) && (
@@ -175,7 +179,9 @@ export function CrmDashboardScreen() {
                       currency={currency}
                     />
                   )}
-                  {data.contacts && <SourcesPanel rows={data.contacts.sources} currency={currency} />}
+                  {data.contacts && (
+                    <SourcesPanel rows={data.contacts.sources} currency={currency} />
+                  )}
                 </div>
               )}
               {(data.tasks || data.invoices) && (

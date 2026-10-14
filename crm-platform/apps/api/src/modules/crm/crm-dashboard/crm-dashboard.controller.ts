@@ -1,10 +1,6 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import {
-  crmDashboardQuerySchema,
-  type CrmDashboardQuery,
-  type RecordScope,
-} from '@crm/contracts';
+import { crmDashboardQuerySchema, type CrmDashboardQuery, type RecordScope } from '@crm/contracts';
 import { ActorKinds, GrantedScope, RequirePermission } from '../../../common/decorators';
 import { zodPipe } from '../../../common/pipes/zod-validation.pipe';
 import { SalesPipelineGuard } from '../deals/deals-plan';

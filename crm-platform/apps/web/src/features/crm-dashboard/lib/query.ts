@@ -63,7 +63,8 @@ export function filtersToSearch(f: DashFilters): string {
 }
 
 /** Anything beyond the period narrows the numbers (the period is not a filter, it is the window). */
-export const hasNarrowing = (f: DashFilters): boolean => f.pipeline !== '' || f.owner !== '' || f.team !== '';
+export const hasNarrowing = (f: DashFilters): boolean =>
+  f.pipeline !== '' || f.owner !== '' || f.team !== '';
 
 /** The query the API takes. `convertTo` is the currency the figures are shown in. */
 export function apiQuery(f: DashFilters, convertTo: string): Record<string, string | undefined> {
@@ -80,7 +81,9 @@ export function apiQuery(f: DashFilters, convertTo: string): Record<string, stri
 
 /** Drill-down addresses. The target screens already read these from their own address. */
 export const links = {
-  deals: (o: { pipeline?: string; stage?: string; status?: 'open' | 'won' | 'lost'; owner?: string } = {}): string => {
+  deals: (
+    o: { pipeline?: string; stage?: string; status?: 'open' | 'won' | 'lost'; owner?: string } = {},
+  ): string => {
     const p = new URLSearchParams();
     if (o.pipeline) p.set('pipeline', o.pipeline);
     if (o.owner) p.set('owner', o.owner);

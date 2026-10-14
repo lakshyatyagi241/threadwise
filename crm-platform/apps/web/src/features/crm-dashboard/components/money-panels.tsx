@@ -29,7 +29,9 @@ export function AgingPanel({ aging }: { aging: Invoices['aging'] }) {
           {aging.map((block) => (
             <div key={block.currency}>
               {aging.length > 1 && (
-                <div className="mb-1 text-xs font-medium text-muted-foreground">{block.currency}</div>
+                <div className="mb-1 text-xs font-medium text-muted-foreground">
+                  {block.currency}
+                </div>
               )}
               <dl className="space-y-1.5">
                 {block.buckets.map((b) => (
@@ -38,7 +40,9 @@ export function AgingPanel({ aging }: { aging: Invoices['aging'] }) {
                     <dd
                       className={cn(
                         'font-mono tabular-nums',
-                        b.bucket === 'd90_plus' && Number(b.amount) > 0 && 'font-medium text-danger',
+                        b.bucket === 'd90_plus' &&
+                          Number(b.amount) > 0 &&
+                          'font-medium text-danger',
                       )}
                     >
                       {formatAmount(b.amount, block.currency, locale)}

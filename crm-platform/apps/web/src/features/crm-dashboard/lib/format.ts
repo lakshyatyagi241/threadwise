@@ -66,7 +66,11 @@ export function changePercent(current: number, previous: number): number | null 
 }
 
 /** `2026-10-13` as a short label in the viewer's language. The dates are calendar days, so they are formatted in UTC. */
-export function dayLabel(ymd: string, locale: string, opts: { month?: boolean; year?: boolean } = {}): string {
+export function dayLabel(
+  ymd: string,
+  locale: string,
+  opts: { month?: boolean; year?: boolean } = {},
+): string {
   const [y, m, d] = ymd.split('-').map(Number) as [number, number, number];
   const date = new Date(Date.UTC(y, m - 1, d));
   try {
@@ -81,6 +85,10 @@ export function dayLabel(ymd: string, locale: string, opts: { month?: boolean; y
 }
 
 /** Bars of the trend: the label of each bucket. */
-export function bucketLabel(start: string, bucket: 'day' | 'week' | 'month', locale: string): string {
+export function bucketLabel(
+  start: string,
+  bucket: 'day' | 'week' | 'month',
+  locale: string,
+): string {
   return bucket === 'month' ? dayLabel(start, locale, { month: true }) : dayLabel(start, locale);
 }

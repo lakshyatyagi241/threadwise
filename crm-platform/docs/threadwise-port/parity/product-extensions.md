@@ -441,3 +441,7 @@ Reference's `/message-history` is kept as it is (see [message-history.md](messag
 Decisions for the owner: (1) whether a narrower inbox scope (`team`, `own`) should see the broadcast, campaign and scheduled recipients of what it can open (today only scope `all` sees recipient rows); (2) whether the
 Manager preset should read the cost (today only roles with `wallet.statement.read`); (3) whether the export should be limited to the caller's visible rows instead of requiring scope `all`; (4) whether campaign,
 broadcast and template screens should link to a filtered history; (5) whether `mask_customer_numbers` should become a real workspace setting (today the rule is by contact permission only).
+
+## CRM dashboard (`/crm`)
+
+Beyond Reference's eight counters: period selector (this month, 7/30/90 days, custom) in the viewer's zone; pipeline, owner and team filters in the address; pipeline funnel by stage with step conversion and drill-down to the deals list (`/deals?view=list&stage=`); won/lost trend; lead sources performance (leads, to deal, to won, won value); owner leaderboard; tasks by assignee; recent activity. Backend: `GET /v2/crm/dashboard`. Differences from Reference: parity/crm-dashboard.md.

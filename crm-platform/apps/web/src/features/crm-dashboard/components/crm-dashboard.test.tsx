@@ -22,7 +22,10 @@ import { changePercent, moneyText } from '../lib/format';
 import { filtersToSearch, parseFilters, DEFAULT_FILTERS, links } from '../lib/query';
 
 const load = (locale: string, file: string) =>
-  JSON.parse(readFileSync(join(process.cwd(), 'messages', locale, file), 'utf8')) as Record<string, unknown>;
+  JSON.parse(readFileSync(join(process.cwd(), 'messages', locale, file), 'utf8')) as Record<
+    string,
+    unknown
+  >;
 const messagesFor = (locale: string) => ({
   ...load(locale, 'crm-dashboard.json'),
   ...load(locale, 'dashboards-analytics-charts.json'),
@@ -34,7 +37,10 @@ const html = (el: ReactElement, locale = 'en') =>
     </NextIntlClientProvider>,
   );
 
-const usd = (amount: string) => ({ byCurrency: [{ currency: 'USD', amount }], converted: { currency: 'USD', amount } });
+const usd = (amount: string) => ({
+  byCurrency: [{ currency: 'USD', amount }],
+  converted: { currency: 'USD', amount },
+});
 const none = { byCurrency: [], converted: { currency: 'USD', amount: '0.00' } };
 
 const deals = (): NonNullable<CrmDashboardResponse['deals']> => ({
@@ -78,7 +84,14 @@ const deals = (): NonNullable<CrmDashboardResponse['deals']> => ({
     ],
   },
   leaderboard: [
-    { owner: { id: 'u1', name: 'Alice' }, wonCount: 2, wonValue: usd('900.00'), lostCount: 1, openCount: 2, activities: 5 },
+    {
+      owner: { id: 'u1', name: 'Alice' },
+      wonCount: 2,
+      wonValue: usd('900.00'),
+      lostCount: 1,
+      openCount: 2,
+      activities: 5,
+    },
   ],
 });
 
@@ -125,8 +138,12 @@ describe('the CRM dashboard pieces', () => {
 
   it('the funnel says so when no deal was created or there is no pipeline', () => {
     const f = deals().funnel;
-    expect(html(<FunnelPanel funnel={{ ...f, cohortSize: 0 }} currency="USD" />)).toContain('No deals were created');
-    expect(html(<FunnelPanel funnel={{ ...f, pipeline: null }} currency="USD" />)).toContain('no pipeline yet');
+    expect(html(<FunnelPanel funnel={{ ...f, cohortSize: 0 }} currency="USD" />)).toContain(
+      'No deals were created',
+    );
+    expect(html(<FunnelPanel funnel={{ ...f, pipeline: null }} currency="USD" />)).toContain(
+      'no pipeline yet',
+    );
   });
 
   it('the trend draws a chart with an accessible table, and the leaderboard links an owner to their deals', () => {
@@ -164,7 +181,13 @@ describe('the address and the formatting', () => {
   it('keeps the plain dashboard address plain and round-trips the filters', () => {
     expect(filtersToSearch(DEFAULT_FILTERS)).toBe('');
     const id = '0b9a7f06-4c7a-4f0e-8d1d-6a0a8f3f6a11';
-    const f = { ...DEFAULT_FILTERS, range: 'custom' as const, from: '2026-09-01', to: '2026-09-30', owner: id };
+    const f = {
+      ...DEFAULT_FILTERS,
+      range: 'custom' as const,
+      from: '2026-09-01',
+      to: '2026-09-30',
+      owner: id,
+    };
     expect(parseFilters(new URLSearchParams(filtersToSearch(f)))).toEqual(f);
   });
 
@@ -183,7 +206,14 @@ describe('the address and the formatting', () => {
   it('change is a whole percent and null against nothing; money with several currencies and no total joins them', () => {
     expect(changePercent(150, 100)).toBe(50);
     expect(changePercent(5, 0)).toBeNull();
-    const mixed = { byCurrency: [{ currency: 'EUR', amount: '10.00' }, { currency: 'USD', amount: '5.00' }], converted: null, unconverted: ['EUR'] };
+    const mixed = {
+      byCurrency: [
+        { currency: 'EUR', amount: '10.00' },
+        { currency: 'USD', amount: '5.00' },
+      ],
+      converted: null,
+      unconverted: ['EUR'],
+    };
     expect(moneyText(mixed, 'en', 'USD')).toBe('€10.00 + $5.00');
     expect(moneyText({ byCurrency: [] }, 'en', 'USD')).toBe('$0.00');
   });

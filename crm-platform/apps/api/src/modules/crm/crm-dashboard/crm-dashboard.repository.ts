@@ -73,7 +73,10 @@ export interface DashScopes {
 }
 
 const where = (conds: Array<SQL | undefined>): SQL =>
-  sql.join(conds.filter((c): c is SQL => c !== undefined), sql` AND `);
+  sql.join(
+    conds.filter((c): c is SQL => c !== undefined),
+    sql` AND `,
+  );
 
 /** Grouped, index-friendly reads behind the CRM dashboard. Everything is aggregated in SQL; nothing is paged in memory. */
 @Injectable()
@@ -462,9 +465,7 @@ export class CrmDashboardRepository {
     scopes: Pick<DashScopes, 'deals' | 'contacts'>,
     cur: Span,
     limit: number,
-  ): Promise<
-    Array<{ source: string; leads: number; withDeal: number; withWon: number }>
-  > {
+  ): Promise<Array<{ source: string; leads: number; withDeal: number; withWon: number }>> {
     // The deal filter inside the lateral join must not reapply the owner / team filter (that one is on the contact).
     const dealSide = where([
       sql`d.org_id = c.org_id`,
@@ -707,12 +708,7 @@ export class CrmDashboardRepository {
   }
 
   /** Invoices that became paid in the window. */
-  async paidInvoices(
-    tx: Tx,
-    f: DashFilter,
-    scope: SQL | undefined,
-    cur: Span,
-  ): Promise<number> {
+  async paidInvoices(tx: Tx, f: DashFilter, scope: SQL | undefined, cur: Span): Promise<number> {
     const res = await tx.execute(sql`
       SELECT count(*)::int AS n FROM invoices i
       WHERE ${where([

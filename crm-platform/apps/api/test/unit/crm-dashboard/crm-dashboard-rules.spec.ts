@@ -21,7 +21,10 @@ describe('resolvePeriod', () => {
   });
 
   it('7d / 30d / 90d end today and include it', () => {
-    expect(resolvePeriod('7d', 'UTC', '2026-10-14')).toMatchObject({ fromDate: '2026-10-08', days: 7 });
+    expect(resolvePeriod('7d', 'UTC', '2026-10-14')).toMatchObject({
+      fromDate: '2026-10-08',
+      days: 7,
+    });
     expect(resolvePeriod('30d', 'UTC', '2026-10-14')).toMatchObject({
       fromDate: '2026-09-15',
       days: 30,

@@ -10,13 +10,7 @@ type Entry = NonNullable<CrmDashboardResponse['activity']>[number];
 const DEAL_TYPES = new Set(['note', 'stage_change', 'call', 'message', 'email', 'meeting', 'task']);
 
 /** The newest things people did on deals and contacts. A row opens the deal or the contact. */
-export function ActivityPanel({
-  entries,
-  timezone,
-}: {
-  entries: Entry[];
-  timezone: string;
-}) {
+export function ActivityPanel({ entries, timezone }: { entries: Entry[]; timezone: string }) {
   const t = useTranslations('crm-dashboard.activity');
   const locale = useLocale();
   const when = (iso: string) => {
@@ -46,7 +40,10 @@ export function ActivityPanel({
       ) : (
         <ul className="divide-y divide-border">
           {entries.map((e, i) => (
-            <li key={`${e.kind}-${e.subjectId}-${e.at}-${i}`} className="flex items-start justify-between gap-3 py-2 text-sm">
+            <li
+              key={`${e.kind}-${e.subjectId}-${e.at}-${i}`}
+              className="flex items-start justify-between gap-3 py-2 text-sm"
+            >
               <div className="min-w-0">
                 <div className="truncate">
                   <span className="font-medium">{what(e)}</span>
@@ -54,7 +51,11 @@ export function ActivityPanel({
                     <>
                       <span className="text-muted-foreground"> · </span>
                       <Link
-                        href={e.kind === 'deal' ? `/deals?deal=${e.subjectId}` : `/contacts/${e.subjectId}`}
+                        href={
+                          e.kind === 'deal'
+                            ? `/deals?deal=${e.subjectId}`
+                            : `/contacts/${e.subjectId}`
+                        }
                         className="hover:underline"
                       >
                         {e.subject}

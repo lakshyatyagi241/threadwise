@@ -28,8 +28,17 @@ export function FiltersBar({
   const t = useTranslations('crm-dashboard.filters');
   const picker = 'min-w-0 sm:w-48';
   return (
-    <div className="flex flex-wrap items-end gap-3" role="group" aria-label={t('label')} aria-busy={busy}>
-      <div role="group" aria-label={t('period')} className="inline-flex overflow-hidden rounded-md border border-border">
+    <div
+      className="flex flex-wrap items-end gap-3"
+      role="group"
+      aria-label={t('label')}
+      aria-busy={busy}
+    >
+      <div
+        role="group"
+        aria-label={t('period')}
+        className="inline-flex overflow-hidden rounded-md border border-border"
+      >
         {CRM_DASH_RANGES.map((r) => (
           <button
             key={r}
@@ -38,7 +47,9 @@ export function FiltersBar({
             onClick={() => onChange({ range: r satisfies CrmDashRange })}
             className={cn(
               'h-10 px-3 text-sm font-medium focus-visible:ring-2 focus-visible:ring-primary',
-              filters.range === r ? 'bg-primary text-primary-foreground' : 'bg-background hover:bg-muted',
+              filters.range === r
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-background hover:bg-muted',
             )}
           >
             {t(`range.${r}`)}

@@ -245,7 +245,13 @@ describe('the CRM dashboard against seeded data', () => {
       ymdOf(ago(1)),
     ]);
     // the deal timeline: D6 went through Qualified before it was lost; notes and calls by people
-    const act = (dealId: number | undefined, userId: number | null, type: string, at: string, meta?: unknown) =>
+    const act = (
+      dealId: number | undefined,
+      userId: number | null,
+      type: string,
+      at: string,
+      meta?: unknown,
+    ) =>
       h.owner.query(
         `INSERT INTO deal_activities (org_id, deal_id, user_id, type, meta, created_at) VALUES ($1,$2,$3,$4,$5::jsonb,$6::timestamptz)`,
         [t.orgId, dealId, userId, type, meta ? JSON.stringify(meta) : null, at],
@@ -277,9 +283,18 @@ describe('the CRM dashboard against seeded data', () => {
     ]);
     const contactId = async (uuid: string) =>
       Number((await h.owner.query(`SELECT id FROM contacts WHERE uuid = $1`, [uuid])).rows[0].id);
-    await h.owner.query(`UPDATE deals SET contact_id = $2 WHERE id = $1`, [d4, await contactId(ids[0]!)]);
-    await h.owner.query(`UPDATE deals SET contact_id = $2 WHERE id = $1`, [d5, await contactId(ids[2]!)]);
-    await h.owner.query(`UPDATE deals SET contact_id = $2 WHERE id = $1`, [d1, await contactId(ids[1]!)]);
+    await h.owner.query(`UPDATE deals SET contact_id = $2 WHERE id = $1`, [
+      d4,
+      await contactId(ids[0]!),
+    ]);
+    await h.owner.query(`UPDATE deals SET contact_id = $2 WHERE id = $1`, [
+      d5,
+      await contactId(ids[2]!),
+    ]);
+    await h.owner.query(`UPDATE deals SET contact_id = $2 WHERE id = $1`, [
+      d1,
+      await contactId(ids[1]!),
+    ]);
 
     // tasks: A has one overdue, one later today and one next week; B one next week; one unassigned overdue; one done
     const dayEnd = new Date(Math.floor(NOW / DAY) * DAY + DAY - 1000).toISOString();
@@ -334,7 +349,10 @@ describe('the CRM dashboard against seeded data', () => {
       ['New Lead', 10_000],
       ['Qualified', 20_000],
       ['Proposal', 30_000],
-    ].reduce((a, [name, v]) => a + Math.round(((v as number) * stage[name as string]!.probability) / 100), 0);
+    ].reduce(
+      (a, [name, v]) => a + Math.round(((v as number) * stage[name as string]!.probability) / 100),
+      0,
+    );
     expect(amount(d.deals!.open.forecast, 'USD')).toBe((weighted / 100).toFixed(2));
     expect(d.deals!.won.count).toBe(3);
     expect(amount(d.deals!.won.value, 'USD')).toBe('1000.00');
@@ -403,15 +421,28 @@ describe('the CRM dashboard against seeded data', () => {
     expect(c.newContacts).toEqual({ current: 5, previous: 1 });
     expect(c.newLeads).toEqual({ current: 4, previous: 1 });
     expect(c.sources.map((s) => s.source)).toEqual(['meta', 'webhook']);
-    expect(c.sources[0]).toMatchObject({ leads: 3, withDeal: 3, withWonDeal: 2, dealRate: 100, wonRate: 67 });
+    expect(c.sources[0]).toMatchObject({
+      leads: 3,
+      withDeal: 3,
+      withWonDeal: 2,
+      dealRate: 100,
+      wonRate: 67,
+    });
     expect(amount(c.sources[0]!.wonValue, 'USD')).toBe('1000.00');
-    expect(c.sources[1]).toMatchObject({ leads: 1, withDeal: 0, withWonDeal: 0, dealRate: 0, wonRate: 0 });
+    expect(c.sources[1]).toMatchObject({
+      leads: 1,
+      withDeal: 0,
+      withWonDeal: 0,
+      dealRate: 0,
+      wonRate: 0,
+    });
   });
 
   it('tasks: totals, due later today, overdue and per assignee (done tasks are not counted)', async () => {
     const k = (await get(t.admin)).tasks!;
     expect(k).toMatchObject({ open: 5, overdue: 2, dueToday: 1 });
-    const by = (name: string | null) => k.byAssignee.find((r) => (r.assignee?.name ?? null) === name)!;
+    const by = (name: string | null) =>
+      k.byAssignee.find((r) => (r.assignee?.name ?? null) === name)!;
     expect(by('alice')).toMatchObject({ open: 3, overdue: 1, dueToday: 1 });
     expect(by('bob')).toMatchObject({ open: 1, overdue: 0, dueToday: 0 });
     expect(by(null)).toMatchObject({ open: 1, overdue: 1, dueToday: 0 });
@@ -435,7 +466,15 @@ describe('the CRM dashboard against seeded data', () => {
     expect(v.paidInvoices).toBe(0);
     const buckets = Object.fromEntries(v.aging[0]!.buckets.map((b) => [b.bucket, b.amount]));
     expect(buckets).toMatchObject({ current: '60.00', d1_30: '100.00' });
-    expect(v.recentPayments).toEqual([{ id: expect.any(String), amount: '40.00', currency, paidAt: expect.any(String), contact: null }]);
+    expect(v.recentPayments).toEqual([
+      {
+        id: expect.any(String),
+        amount: '40.00',
+        currency,
+        paidAt: expect.any(String),
+        contact: null,
+      },
+    ]);
   });
 
   it('recent activity lists the newest timeline rows with the deal title', async () => {
@@ -485,7 +524,12 @@ describe('the CRM dashboard against seeded data', () => {
         .post('/v2/pipelines')
         .send({ name: 'Second board', stages: [{ name: 'Only stage' }] })
     ).body as Pipeline;
-    await api.deal(t.admin, { title: 'In second', pipelineId: other.id, value: '12.50', currency: 'USD' });
+    await api.deal(t.admin, {
+      title: 'In second',
+      pipelineId: other.id,
+      value: '12.50',
+      currency: 'USD',
+    });
     const second = await get(t.admin, `range=30d&pipelineId=${other.id}`);
     expect(second.deals!.open.count).toBe(1);
     expect(amount(second.deals!.open.value, 'USD')).toBe('12.50');
@@ -555,7 +599,10 @@ describe('the CRM dashboard against seeded data', () => {
     expect(long.status).toBe(422);
     expect(long.body.code).toBe('VALIDATION_FAILED');
     expect((await api.as(t.admin).get('/v2/crm/dashboard?range=forever')).status).toBe(422);
-    expect((await api.as(t.admin).get('/v2/crm/dashboard?range=custom&from=2026-03-02&to=2026-03-01')).status).toBe(422);
+    expect(
+      (await api.as(t.admin).get('/v2/crm/dashboard?range=custom&from=2026-03-02&to=2026-03-01'))
+        .status,
+    ).toBe(422);
   });
 });
 
@@ -610,7 +657,9 @@ describe('permissions, the plan gate, tenant isolation and the empty workspace',
     expect(theirs.contacts!.sources).toEqual([]);
     const aUser = await api.userUuid(a.adminUserId);
     expect((await api.as(b.admin).get(`/v2/crm/dashboard?ownerId=${aUser}`)).status).toBe(404);
-    expect((await api.as(b.admin).get(`/v2/crm/dashboard?pipelineId=${pa.pipeline.id}`)).status).toBe(404);
+    expect(
+      (await api.as(b.admin).get(`/v2/crm/dashboard?pipelineId=${pa.pipeline.id}`)).status,
+    ).toBe(404);
   });
 
   it('an empty workspace answers zeros and empty lists, never an error', async () => {
@@ -626,10 +675,18 @@ describe('permissions, the plan gate, tenant isolation and the empty workspace',
     });
     expect(d.deals!.won.averageSize.byCurrency).toEqual([]);
     expect(d.deals!.funnel.cohortSize).toBe(0);
-    expect(d.deals!.funnel.stages.every((s) => s.reached === 0 && s.conversionFromPrevious === null)).toBe(true);
+    expect(
+      d.deals!.funnel.stages.every((s) => s.reached === 0 && s.conversionFromPrevious === null),
+    ).toBe(true);
     expect(d.deals!.trend.points.every((p) => p.wonCount === 0 && p.lostCount === 0)).toBe(true);
     expect(d.contacts).toMatchObject({ newContacts: { current: 0 }, sources: [] });
-    expect(d.tasks).toMatchObject({ open: 0, overdue: 0, dueToday: 0, byAssignee: [], upcoming: [] });
+    expect(d.tasks).toMatchObject({
+      open: 0,
+      overdue: 0,
+      dueToday: 0,
+      byAssignee: [],
+      upcoming: [],
+    });
     expect(d.invoices).toMatchObject({ openInvoices: 0, paidInvoices: 0, recentPayments: [] });
   });
 });

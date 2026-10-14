@@ -72,7 +72,8 @@ const sumsOf = (rows: MoneyCount[]): CurrencySums => {
  */
 function averages(rows: MoneyCount[], convertTo: string | null, rates: RateTable): DealTotals {
   const per: CurrencySums = new Map();
-  for (const r of rows) if (r.n > 0) addTo(per, r.currency, (2n * r.total + BigInt(r.n)) / (2n * BigInt(r.n)));
+  for (const r of rows)
+    if (r.n > 0) addTo(per, r.currency, (2n * r.total + BigInt(r.n)) / (2n * BigInt(r.n)));
   const byCurrency = moneyList(per);
   if (!convertTo) return { byCurrency };
   const count = rows.reduce((a, r) => a + r.n, 0);
@@ -86,7 +87,11 @@ function averages(rows: MoneyCount[], convertTo: string | null, rates: RateTable
   unconverted.sort();
   if (unconverted.length > 0 || count === 0) return { byCurrency, converted: null, unconverted };
   const avg = (2n * converted + BigInt(count)) / (2n * BigInt(count));
-  return { byCurrency, converted: { currency: convertTo, amount: minorToMajor(avg, convertTo) }, unconverted };
+  return {
+    byCurrency,
+    converted: { currency: convertTo, amount: minorToMajor(avg, convertTo) },
+    unconverted,
+  };
 }
 
 /**
@@ -112,7 +117,8 @@ export class CrmDashboardService {
   ): Promise<CrmDashboardResponse> {
     const ctx = RequestContextStore.require();
     const grants = ctx.grants;
-    const can = (key: string) => (grants ? this.rbac.can(grants, key) : { allowed: false, scope: 'own' as RecordScope });
+    const can = (key: string) =>
+      grants ? this.rbac.can(grants, key) : { allowed: false, scope: 'own' as RecordScope };
     const contactsCan = can(PERM.contacts);
     const tasksCan = can(PERM.tasks);
     const paymentsCan = can(PERM.payments);
@@ -121,7 +127,9 @@ export class CrmDashboardService {
 
     return this.db.tx(async (tx) => {
       const org = await this.deals.orgSettings(tx, ctx.orgId);
-      const tz = resolveTimezone((await this.repo.profileZone(tx, ctx.orgId, ctx.userId)) ?? org.timezone);
+      const tz = resolveTimezone(
+        (await this.repo.profileZone(tx, ctx.orgId, ctx.userId)) ?? org.timezone,
+      );
       const today = todayIn(tz, now);
       const period = resolvePeriod(query.range, tz, today, { from: query.from, to: query.to });
       const cur = { from: period.from, to: period.toExclusive };
@@ -214,12 +222,19 @@ export class CrmDashboardService {
           filter.pipelineId === funnelPipeline.id
             ? open
             : await this.repo.openByStage(tx, funnelFilter, scopes.deals, today);
-        const reached = fStages.map((s) => f.rows.filter((r) => r.stageId === s.id).reduce((a, r) => a + r.n, 0));
+        const reached = fStages.map((s) =>
+          f.rows.filter((r) => r.stageId === s.id).reduce((a, r) => a + r.n, 0),
+        );
         // Reached never rises from one stage to the next (guard; the query already counts a skipped stage as reached).
-        for (let i = 1; i < reached.length; i++) reached[i] = Math.min(reached[i]!, reached[i - 1]!);
+        for (let i = 1; i < reached.length; i++)
+          reached[i] = Math.min(reached[i]!, reached[i - 1]!);
         const conversions = funnelConversions(reached);
         funnel = {
-          pipeline: { id: funnelPipeline.uuid, name: funnelPipeline.name, currency: funnelPipeline.currency },
+          pipeline: {
+            id: funnelPipeline.uuid,
+            name: funnelPipeline.name,
+            currency: funnelPipeline.currency,
+          },
           cohortSize: f.cohort,
           stages: fStages.map((s, i) => {
             const mine = live.filter((r) => r.stageId === s.id);
@@ -253,14 +268,26 @@ export class CrmDashboardService {
       });
 
       const leaderRows = await this.repo.leaders(tx, filter, scopes.deals, cur);
-      const activityBy = await this.repo.activityCounts(tx, filter, scopes, cur, contactsCan.allowed);
+      const activityBy = await this.repo.activityCounts(
+        tx,
+        filter,
+        scopes,
+        cur,
+        contactsCan.allowed,
+      );
       const byOwner = new Map<
         string,
         { name: string | null; won: CurrencySums; wonN: number; lostN: number; openN: number }
       >();
       for (const r of leaderRows) {
         const key = r.ownerUuid ?? '';
-        const e = byOwner.get(key) ?? { name: r.ownerName, won: new Map(), wonN: 0, lostN: 0, openN: 0 };
+        const e = byOwner.get(key) ?? {
+          name: r.ownerName,
+          won: new Map(),
+          wonN: 0,
+          lostN: 0,
+          openN: 0,
+        };
         e.wonN += r.wonN;
         e.lostN += r.lostN;
         e.openN += r.openN;
@@ -385,7 +412,8 @@ export class CrmDashboardService {
           tz,
         );
         const byCurrency = new Map<string, typeof agingRows>();
-        for (const r of agingRows) byCurrency.set(r.currency, [...(byCurrency.get(r.currency) ?? []), r]);
+        for (const r of agingRows)
+          byCurrency.set(r.currency, [...(byCurrency.get(r.currency) ?? []), r]);
         const sumOf = (rows: Array<{ currency: string; total: bigint }>) => {
           const m: CurrencySums = new Map();
           for (const r of rows) addTo(m, r.currency, r.total);
@@ -402,16 +430,21 @@ export class CrmDashboardService {
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([currency, list]) => ({
               currency,
-              total: minorToMajor(list.reduce((a, r) => a + r.amount, 0n), currency),
+              total: minorToMajor(
+                list.reduce((a, r) => a + r.amount, 0n),
+                currency,
+              ),
               invoices: list.reduce((a, r) => a + r.invoices, 0),
-              buckets: (['current', 'd1_30', 'd31_60', 'd61_90', 'd90_plus'] as const).map((bucket) => {
-                const r = list.find((x) => x.bucket === bucket);
-                return {
-                  bucket,
-                  amount: minorToMajor(r?.amount ?? 0n, currency),
-                  invoices: r?.invoices ?? 0,
-                };
-              }),
+              buckets: (['current', 'd1_30', 'd31_60', 'd61_90', 'd90_plus'] as const).map(
+                (bucket) => {
+                  const r = list.find((x) => x.bucket === bucket);
+                  return {
+                    bucket,
+                    amount: minorToMajor(r?.amount ?? 0n, currency),
+                    invoices: r?.invoices ?? 0,
+                  };
+                },
+              ),
             })),
           recentPayments: recent.map((p) => ({
             id: p.uuid,

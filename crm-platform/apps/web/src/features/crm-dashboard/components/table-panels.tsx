@@ -113,10 +113,12 @@ export function SourcesPanel({
                 <td className="px-3 py-2 font-medium">{r.source ?? t('none')}</td>
                 <td className={cn(TD, 'text-end')}>{r.leads}</td>
                 <td className={cn(TD, 'text-end')}>
-                  {r.dealRate}%<span className="ms-1 text-xs text-muted-foreground">({r.withDeal})</span>
+                  {r.dealRate}%
+                  <span className="ms-1 text-xs text-muted-foreground">({r.withDeal})</span>
                 </td>
                 <td className={cn(TD, 'text-end')}>
-                  {r.wonRate}%<span className="ms-1 text-xs text-muted-foreground">({r.withWonDeal})</span>
+                  {r.wonRate}%
+                  <span className="ms-1 text-xs text-muted-foreground">({r.withWonDeal})</span>
                 </td>
                 <td className={cn(TD, 'text-end')}>
                   {moneyText(r.wonValue, locale, currency, { compact: true })}

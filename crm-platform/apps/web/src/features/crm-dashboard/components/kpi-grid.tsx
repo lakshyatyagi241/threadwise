@@ -51,7 +51,10 @@ function Card({ kpi }: { kpi: Kpi }) {
     'block rounded-xl border bg-background p-4 transition-colors ' +
     (kpi.tone === 'warning' ? 'border-warning/40' : 'border-border');
   return kpi.href ? (
-    <Link href={kpi.href} className={cn(box, 'hover:border-primary focus-visible:ring-2 focus-visible:ring-primary')}>
+    <Link
+      href={kpi.href}
+      className={cn(box, 'hover:border-primary focus-visible:ring-2 focus-visible:ring-primary')}
+    >
       {body}
     </Link>
   ) : (
@@ -213,7 +216,10 @@ export function KpiGrid({
   }
 
   return (
-    <section aria-label={t('title')} className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+    <section
+      aria-label={t('title')}
+      className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4"
+    >
       {cards.map((k) => (
         <Card key={k.id} kpi={k} />
       ))}

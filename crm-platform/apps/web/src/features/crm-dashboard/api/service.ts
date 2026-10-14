@@ -31,7 +31,11 @@ export const crmDashboardApi = {
     return apiFetch('/pipelines', { schema: z.array(pipelineSchema), signal });
   },
   async members(signal?: AbortSignal): Promise<Option[]> {
-    const page = await apiFetch('/users', { query: { limit: 200 }, schema: memberPageSchema, signal });
+    const page = await apiFetch('/users', {
+      query: { limit: 200 },
+      schema: memberPageSchema,
+      signal,
+    });
     return page.data.map((m) => ({ id: m.id, name: m.fullName }));
   },
   async teams(signal?: AbortSignal): Promise<Option[]> {
