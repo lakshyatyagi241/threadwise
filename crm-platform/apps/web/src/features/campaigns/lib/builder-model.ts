@@ -27,6 +27,7 @@ export interface BuilderForm {
   abTesting: boolean;
   abSplit: number;
   trackingEnabled: boolean;
+  retryFailed: boolean;
   scheduleType: 'now' | 'scheduled' | 'recurring';
   sendDate: string;
   sendTime: string;
@@ -68,6 +69,7 @@ export const EMPTY_FORM: BuilderForm = {
   abTesting: false,
   abSplit: 50,
   trackingEnabled: true,
+  retryFailed: true,
   scheduleType: 'now',
   sendDate: '',
   sendTime: '',
@@ -152,6 +154,7 @@ export function fromConfig(c: CampaignConfig, zone: string): BuilderForm {
     abTesting: c.abTesting,
     abSplit: c.abSplit,
     trackingEnabled: c.trackingEnabled,
+    retryFailed: c.retryFailed,
     scheduleType: c.scheduleType,
     sendDate: c.sendDate ?? '',
     sendTime: c.sendTime ?? '',
@@ -209,6 +212,7 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
     flowIdB: f.type === 'flow' && f.abTesting && f.flowIdB ? f.flowIdB : null,
     useAttributes: false,
     trackingEnabled: f.trackingEnabled,
+    retryFailed: f.retryFailed,
     scheduleType: f.scheduleType,
     sendDate: scheduled && f.sendDate ? f.sendDate : null,
     sendTime: scheduled && f.sendTime ? f.sendTime : null,

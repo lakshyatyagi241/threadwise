@@ -403,7 +403,9 @@
         "smartIntro": "Laissez vide pour utiliser le rythme par défaut de l'espace de travail. Ces règles espacent les envois pour qu'une grande liste paraisse humaine et reste sous le radar de blocage de WhatsApp.",
         "smartZone": "Heures en {zone}.",
         "throttleMaxHint": "Le délai d'attente le plus long avant un message.",
-        "batchPauseHint": "Minutes de pause après chaque lot."
+        "batchPauseHint": "Minutes de pause après chaque lot.",
+        "retryFailed": "Réessayer automatiquement les messages en échec",
+        "retryFailedHint": "Un message qui échoue pour une raison temporaire est renvoyé plusieurs fois, avec une pause entre les essais. Désactivez pour envoyer chaque message une seule fois."
       },
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
       "draftChip": "Brouillon / non enregistré",
@@ -707,7 +709,8 @@
         "replies": "Réponses ({count})",
         "failures": "Échecs ({count})",
         "optouts": "Désabonnements ({count})",
-        "summary": "Résumé"
+        "summary": "Résumé",
+        "statistics": "Statistiques"
       },
       "cancel": "Annuler",
       "deleted": "Campagne supprimée.",
@@ -963,6 +966,41 @@
           "retry": "Réessayer"
         },
         "latestRun": "Affichage de l’envoi {occurrence}, le plus récent de cette série."
+      },
+      "live": {
+        "badge": "En direct",
+        "updated": "mis à jour {time}",
+        "queued": "{count} en attente d’envoi",
+        "processing": "{count} en cours d’envoi"
+      },
+      "statistics": {
+        "loadFailed": "Impossible de charger les statistiques.",
+        "rates": {
+          "delivered": "Taux de livraison",
+          "deliveredHint": "de l’audience",
+          "read": "Taux de lecture",
+          "readHint": "des messages livrés",
+          "replies": "Taux de réponse",
+          "clicks": "Taux de clics",
+          "failed": "Taux d’échec"
+        },
+        "breakdown": {
+          "title": "Où en est chaque destinataire",
+          "hint": "Chacun des {total} destinataires est compté une fois, dans son statut actuel.",
+          "empty": "Cette campagne n’a pas encore de destinataires."
+        },
+        "timeline": {
+          "title": "Chronologie",
+          "created": "Créée",
+          "scheduled": "Départ prévu",
+          "firstSent": "Premier message envoyé",
+          "lastRun": "Dernière exécution",
+          "finished": "Terminée",
+          "notYet": "Pas encore"
+        },
+        "live": "Suivi en direct",
+        "atRest": "Chiffres définitifs",
+        "updated": "Mis à jour {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1294,7 @@
         "messages": "Messages",
         "modePlan": "{count, plural, one {Votre forfait couvre les premiers messages ; le portefeuille paie # message au-delà.} other {Votre forfait couvre les premiers messages ; le portefeuille paie # messages au-delà.}}",
         "modeWallet": "{count, plural, one {Chaque message distribué est débité de votre portefeuille : # message.} other {Chaque message distribué est débité de votre portefeuille : # messages.}}",
+        "platformOwned": "Cet espace de travail n'est pas facturé pour les envois, rien n'est donc débité de votre portefeuille.",
         "breakdown": "Coût par pays",
         "country": "Pays",
         "unitPrice": "Par message",
@@ -1485,12 +1524,14 @@
         "action": {
           "pause": "Mettre en pause",
           "resume": "Reprendre",
-          "cancel": "Annuler la diffusion"
+          "cancel": "Annuler la diffusion",
+          "retryFailed": "Réessayer les échecs ({count})"
         },
         "done": {
           "pause": "Diffusion mise en pause.",
           "resume": "Diffusion reprise.",
-          "cancel": "Diffusion annulée."
+          "cancel": "Diffusion annulée.",
+          "retryFailed": "Nouvel essai pour {count, plural, one {# destinataire en échec} other {# destinataires en échec}}."
         },
         "failed": "Cela n’a pas fonctionné. Réessayez.",
         "noControl": "Vous n’avez pas l’autorisation de mettre en pause, reprendre ou annuler des diffusions.",
@@ -1509,7 +1550,9 @@
           "cancelled": "Annulée",
           "active": "Active",
           "ended": "Terminée"
-        }
+        },
+        "retryTitle": "Réessayer les messages en échec ?",
+        "retryMessage": "Renvoie à {count, plural, one {# destinataire} other {# destinataires}} dont le message a échoué. Ceux qui l’ont déjà reçu ne sont pas concernés, et un message n’est facturé que lorsqu’il est distribué."
       },
       "panel": {
         "title": "Créées avec Créer une diffusion",

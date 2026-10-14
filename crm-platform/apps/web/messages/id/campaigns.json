@@ -403,7 +403,9 @@
         "smartIntro": "Kosongkan untuk memakai pengaturan kecepatan default ruang kerja. Aturan ini memberi jeda antar-pengiriman agar daftar besar terlihat manusiawi dan tetap di bawah radar pemblokiran WhatsApp.",
         "smartZone": "Waktu dalam {zone}.",
         "throttleMaxHint": "Jeda terpanjang sebelum sebuah pesan.",
-        "batchPauseHint": "Menit istirahat setelah setiap batch."
+        "batchPauseHint": "Menit istirahat setelah setiap batch.",
+        "retryFailed": "Coba ulang pesan yang gagal secara otomatis",
+        "retryFailedHint": "Pesan yang gagal karena alasan sementara dicoba lagi beberapa kali, dengan jeda di antara percobaan. Matikan untuk mengirim setiap pesan sekali saja."
       },
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
       "draftChip": "Draf / belum disimpan",
@@ -707,7 +709,8 @@
         "replies": "Balasan ({count})",
         "failures": "Kegagalan ({count})",
         "optouts": "Berhenti berlangganan ({count})",
-        "summary": "Ringkasan"
+        "summary": "Ringkasan",
+        "statistics": "Statistik"
       },
       "cancel": "Batal",
       "deleted": "Kampanye dihapus.",
@@ -963,6 +966,41 @@
           "retry": "Coba lagi"
         },
         "latestRun": "Menampilkan pengiriman {occurrence}, yang terbaru dalam rangkaian ini."
+      },
+      "live": {
+        "badge": "Langsung",
+        "updated": "diperbarui {time}",
+        "queued": "{count} menunggu dikirim",
+        "processing": "{count} sedang dikirim sekarang"
+      },
+      "statistics": {
+        "loadFailed": "Statistik tidak dapat dimuat.",
+        "rates": {
+          "delivered": "Tingkat pengiriman",
+          "deliveredHint": "dari audiens",
+          "read": "Tingkat dibaca",
+          "readHint": "dari yang terkirim",
+          "replies": "Tingkat balasan",
+          "clicks": "Tingkat klik",
+          "failed": "Tingkat gagal"
+        },
+        "breakdown": {
+          "title": "Posisi setiap penerima sekarang",
+          "hint": "Tiap dari {total} penerima dihitung satu kali, sesuai statusnya.",
+          "empty": "Kampanye ini belum memiliki penerima."
+        },
+        "timeline": {
+          "title": "Linimasa",
+          "created": "Dibuat",
+          "scheduled": "Dijadwalkan mulai",
+          "firstSent": "Pesan pertama terkirim",
+          "lastRun": "Eksekusi terakhir",
+          "finished": "Selesai",
+          "notYet": "Belum"
+        },
+        "live": "Mengikuti secara langsung",
+        "atRest": "Angka akhir",
+        "updated": "Diperbarui {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1294,7 @@
         "messages": "Pesan",
         "modePlan": "{count, plural, other {Paket Anda mencakup pesan pertama; dompet membayar # pesan di luar itu.}}",
         "modeWallet": "{count, plural, other {Setiap pesan yang tersampaikan dikenakan ke dompet Anda: # pesan.}}",
+        "platformOwned": "Ruang kerja ini tidak ditagih untuk pengiriman, jadi tidak ada yang dipotong dari dompet Anda.",
         "breakdown": "Biaya per negara",
         "country": "Negara",
         "unitPrice": "Per pesan",
@@ -1485,12 +1524,14 @@
         "action": {
           "pause": "Jeda",
           "resume": "Lanjutkan",
-          "cancel": "Batalkan broadcast"
+          "cancel": "Batalkan broadcast",
+          "retryFailed": "Coba lagi yang gagal ({count})"
         },
         "done": {
           "pause": "Broadcast dijeda.",
           "resume": "Broadcast dilanjutkan.",
-          "cancel": "Broadcast dibatalkan."
+          "cancel": "Broadcast dibatalkan.",
+          "retryFailed": "Mencoba ulang {count, plural, other {# penerima yang gagal}}."
         },
         "failed": "Gagal. Coba lagi.",
         "noControl": "Anda tidak memiliki izin untuk menjeda, melanjutkan, atau membatalkan broadcast.",
@@ -1509,7 +1550,9 @@
           "cancelled": "Dibatalkan",
           "active": "Aktif",
           "ended": "Berakhir"
-        }
+        },
+        "retryTitle": "Coba lagi pesan yang gagal?",
+        "retryMessage": "Mengirim ulang ke {count, plural, other {# penerima}} yang pesannya gagal. Penerima yang sudah menerimanya tidak disentuh, dan pesan hanya ditagih saat terkirim."
       },
       "panel": {
         "title": "Dibuat dengan Buat broadcast",

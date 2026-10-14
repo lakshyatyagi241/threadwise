@@ -403,7 +403,9 @@
         "smartIntro": "空欄にするとワークスペースの既定のペースを使用します。これらのルールは送信間隔を空けることで、大量のリストでも人間らしく見え、WhatsAppのアカウント停止の監視対象になりにくくします。",
         "smartZone": "時刻は{zone}基準です。",
         "throttleMaxHint": "メッセージ送信前の最長待機時間です。",
-        "batchPauseHint": "各バッチの後に休止する分数です。"
+        "batchPauseHint": "各バッチの後に休止する分数です。",
+        "retryFailed": "失敗したメッセージを自動で再試行",
+        "retryFailedHint": "一時的な理由で失敗したメッセージは、間隔をあけて数回再送されます。各メッセージを1回だけ送るには、オフにしてください。"
       },
       "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
       "draftChip": "下書き / 未保存",
@@ -707,7 +709,8 @@
         "replies": "返信({count})",
         "failures": "失敗({count})",
         "optouts": "配信停止({count})",
-        "summary": "サマリー"
+        "summary": "サマリー",
+        "statistics": "統計"
       },
       "cancel": "キャンセル",
       "deleted": "キャンペーンを削除しました。",
@@ -963,6 +966,41 @@
           "retry": "もう一度試す"
         },
         "latestRun": "このシリーズで最新の実行{occurrence}を表示しています。"
+      },
+      "live": {
+        "badge": "ライブ",
+        "updated": "更新 {time}",
+        "queued": "{count} 件が送信待ち",
+        "processing": "{count} 件を送信中"
+      },
+      "statistics": {
+        "loadFailed": "統計を読み込めませんでした。",
+        "rates": {
+          "delivered": "配信率",
+          "deliveredHint": "対象全体に対して",
+          "read": "開封率",
+          "readHint": "配信済みに対して",
+          "replies": "返信率",
+          "clicks": "クリック率",
+          "failed": "失敗率"
+        },
+        "breakdown": {
+          "title": "現在の各宛先の状態",
+          "hint": "{total} 件の宛先それぞれを、現在のステータスで1回ずつ数えています。",
+          "empty": "このキャンペーンにはまだ宛先がありません。"
+        },
+        "timeline": {
+          "title": "タイムライン",
+          "created": "作成",
+          "scheduled": "開始予定",
+          "firstSent": "最初のメッセージ送信",
+          "lastRun": "前回の実行",
+          "finished": "完了",
+          "notYet": "まだ"
+        },
+        "live": "ライブで更新中",
+        "atRest": "最終結果",
+        "updated": "更新 {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1294,7 @@
         "messages": "メッセージ",
         "modePlan": "{count, plural, other {プランで最初のメッセージはまかなわれます。それを超える#件のメッセージはウォレットから支払われます。}}",
         "modeWallet": "{count, plural, other {配信されたメッセージはすべてウォレットに課金されます: #件。}}",
+        "platformOwned": "このワークスペースは送信が課金されないため、ウォレットから料金は引かれません。",
         "breakdown": "国別コスト",
         "country": "国",
         "unitPrice": "1通あたり",
@@ -1485,12 +1524,14 @@
         "action": {
           "pause": "一時停止",
           "resume": "再開",
-          "cancel": "一斉配信をキャンセル"
+          "cancel": "一斉配信をキャンセル",
+          "retryFailed": "失敗分を再試行 ({count})"
         },
         "done": {
           "pause": "一斉配信を一時停止しました。",
           "resume": "一斉配信を再開しました。",
-          "cancel": "一斉配信をキャンセルしました。"
+          "cancel": "一斉配信をキャンセルしました。",
+          "retryFailed": "失敗した{count, plural, other {#件の宛先}}に再送信しています。"
         },
         "failed": "うまくいきませんでした。もう一度お試しください。",
         "noControl": "一斉配信を一時停止、再開、キャンセルする権限がありません。",
@@ -1509,7 +1550,9 @@
           "cancelled": "キャンセル済み",
           "active": "有効",
           "ended": "終了"
-        }
+        },
+        "retryTitle": "失敗したメッセージを再試行しますか？",
+        "retryMessage": "メッセージが失敗した{count, plural, other {#件の宛先}}にもう一度送信します。すでに受け取った人には送られず、料金は配信された時点でのみ発生します。"
       },
       "panel": {
         "title": "一斉配信の作成で作成",

@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CAMPAIGN_PAGE_SIZE,
+  CAMPAIGN_RECIPIENT_STATUSES,
+  CAMPAIGN_IN_FLIGHT_STATUSES,
   RECIPIENT_PAGE_SIZE,
   TEXT_FILTER_TYPES,
   type CampaignBuilder,
@@ -9,6 +11,7 @@ import {
   type CampaignDetail,
   type CampaignListResponse,
   type CampaignLive,
+  type CampaignStatistics,
   type CampaignRecipientsResponse,
   type CampaignStatus,
   type ListCampaignsQuery,
@@ -293,7 +296,10 @@ export class CampaignsReadService {
     });
   }
 
-  /** The 15-second refresh of the detail page. */
+  /**
+   * Live stats: the light read the detail page polls while the campaign is in flight. Recounts from the recipient rows (so the numbers
+   * never lag the delivery reports), settles a finished campaign's status, and adds what is still waiting and what a run holds now.
+   */
   async live(uuid: string): Promise<CampaignLive> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
@@ -303,10 +309,16 @@ export class CampaignsReadService {
       await this.reconcile(tx, orgId, found);
       const c = (await this.repo.findById(tx, orgId, found.id)) ?? found;
       const n = toCampaign(c).counts;
+      const held = Object.fromEntries(
+        (await this.repo.statusBreakdown(tx, orgId, c.id)).map((x) => [x.status, x.count]),
+      ) as Record<string, number>;
       const failures = await this.repo.failures(tx, orgId, c.id, 10);
       return {
         status: c.status as CampaignStatus,
+        inFlight: (CAMPAIGN_IN_FLIGHT_STATUSES as readonly string[]).includes(c.status),
         counts: n,
+        queued: held.queued ?? 0,
+        processing: held.pending ?? 0,
         rates: {
           delivered: pct(n.delivered, n.recipients),
           read: pct(n.read, n.delivered),
@@ -316,6 +328,57 @@ export class CampaignsReadService {
         },
         failures: failures.map((f) => ({ ...f, at: f.at.toISOString() })),
         failureSummary: await this.repo.failureSummary(tx, orgId, c.id, 5),
+        fetchedAt: new Date().toISOString(),
+      };
+    });
+  }
+
+  /**
+   * Statistics: every recipient once, at the status it holds (it adds up to the audience), the funnel's cumulative figures, and the
+   * campaign's own timeline. Read from the recipient rows like the live stats.
+   */
+  async statistics(uuid: string): Promise<CampaignStatistics> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const found = await this.repo.findByUuid(tx, orgId, uuid);
+      if (!found) throw AppError.notFound('Campaign', uuid);
+      await this.repo.recount(tx, orgId, found.id);
+      await this.reconcile(tx, orgId, found);
+      const c = (await this.repo.findById(tx, orgId, found.id)) ?? found;
+      const n = toCampaign(c).counts;
+      const held = Object.fromEntries(
+        (await this.repo.statusBreakdown(tx, orgId, c.id)).map((x) => [x.status, x.count]),
+      ) as Record<string, number>;
+      const total = Object.values(held).reduce((a, b) => a + b, 0);
+      const firstSentAt = await this.repo.firstSentAt(tx, orgId, c.id);
+      return {
+        status: c.status,
+        inFlight: (CAMPAIGN_IN_FLIGHT_STATUSES as readonly string[]).includes(c.status),
+        total,
+        breakdown: CAMPAIGN_RECIPIENT_STATUSES.map((key) => ({
+          key,
+          count: held[key] ?? 0,
+          pct: pct(held[key] ?? 0, total),
+        })),
+        counts: n,
+        rates: {
+          delivered: pct(n.delivered, n.recipients),
+          read: pct(n.read, n.delivered),
+          replies: pct(n.replies, n.recipients),
+          clicks: pct(n.clicks, n.recipients),
+          failed: pct(n.failed, n.recipients),
+        },
+        lifecycle: {
+          createdAt: c.createdAt.toISOString(),
+          scheduledFor:
+            c.scheduleType !== 'now' && c.sendDate
+              ? { date: c.sendDate, time: c.sendTime, timezone: c.timezone }
+              : null,
+          firstSentAt: firstSentAt ? firstSentAt.toISOString() : null,
+          lastRunAt: c.lastRunAt ? c.lastRunAt.toISOString() : null,
+          completedAt: c.completedAt ? c.completedAt.toISOString() : null,
+        },
+        fetchedAt: new Date().toISOString(),
       };
     });
   }

@@ -403,7 +403,9 @@
         "smartIntro": "Lascia vuoto per usare il ritmo predefinito del workspace. Queste regole distanziano gli invii così che un elenco numeroso sembri naturale e resti sotto il radar anti-ban di WhatsApp.",
         "smartZone": "Orari in {zone}.",
         "throttleMaxHint": "Attesa massima prima di un messaggio.",
-        "batchPauseHint": "Minuti di pausa dopo ogni lotto."
+        "batchPauseHint": "Minuti di pausa dopo ogni lotto.",
+        "retryFailed": "Riprova automaticamente i messaggi falliti",
+        "retryFailedHint": "Un messaggio che fallisce per un motivo temporaneo viene riprovato alcune volte, con una pausa tra i tentativi. Disattiva per inviare ogni messaggio una sola volta."
       },
       "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
       "draftChip": "Bozza / non salvata",
@@ -707,7 +709,8 @@
         "replies": "Risposte ({count})",
         "failures": "Errori ({count})",
         "optouts": "Disiscrizioni ({count})",
-        "summary": "Riepilogo"
+        "summary": "Riepilogo",
+        "statistics": "Statistiche"
       },
       "cancel": "Annulla",
       "deleted": "Campagna eliminata.",
@@ -963,6 +966,41 @@
           "retry": "Riprova"
         },
         "latestRun": "Stai vedendo l'invio {occurrence}, il più recente di questa serie."
+      },
+      "live": {
+        "badge": "In diretta",
+        "updated": "aggiornato {time}",
+        "queued": "{count} in attesa di invio",
+        "processing": "{count} in invio ora"
+      },
+      "statistics": {
+        "loadFailed": "Impossibile caricare le statistiche.",
+        "rates": {
+          "delivered": "Tasso di consegna",
+          "deliveredHint": "del pubblico",
+          "read": "Tasso di lettura",
+          "readHint": "dei consegnati",
+          "replies": "Tasso di risposta",
+          "clicks": "Tasso di clic",
+          "failed": "Tasso di errore"
+        },
+        "breakdown": {
+          "title": "Dove si trova ogni destinatario ora",
+          "hint": "Ciascuno dei {total} destinatari è contato una volta, nello stato in cui si trova.",
+          "empty": "Questa campagna non ha ancora destinatari."
+        },
+        "timeline": {
+          "title": "Cronologia",
+          "created": "Creata",
+          "scheduled": "Avvio programmato",
+          "firstSent": "Primo messaggio inviato",
+          "lastRun": "Ultima esecuzione",
+          "finished": "Conclusa",
+          "notYet": "Non ancora"
+        },
+        "live": "Aggiornamento in diretta",
+        "atRest": "Numeri finali",
+        "updated": "Aggiornato {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1294,7 @@
         "messages": "Messaggi",
         "modePlan": "{count, plural, one {Il tuo piano copre i primi messaggi; il wallet paga # messaggio oltre quelli.} other {Il tuo piano copre i primi messaggi; il wallet paga # messaggi oltre quelli.}}",
         "modeWallet": "{count, plural, one {Ogni messaggio consegnato viene addebitato sul tuo wallet: # messaggio.} other {Ogni messaggio consegnato viene addebitato sul tuo wallet: # messaggi.}}",
+        "platformOwned": "Questo spazio di lavoro non viene fatturato per gli invii, quindi non viene addebitato nulla al tuo portafoglio.",
         "breakdown": "Costo per paese",
         "country": "Paese",
         "unitPrice": "Per messaggio",
@@ -1485,12 +1524,14 @@
         "action": {
           "pause": "Pausa",
           "resume": "Riprendi",
-          "cancel": "Annulla broadcast"
+          "cancel": "Annulla broadcast",
+          "retryFailed": "Riprova i falliti ({count})"
         },
         "done": {
           "pause": "Broadcast messo in pausa.",
           "resume": "Broadcast ripreso.",
-          "cancel": "Broadcast annullato."
+          "cancel": "Broadcast annullato.",
+          "retryFailed": "Nuovo tentativo per {count, plural, one {# destinatario fallito} other {# destinatari falliti}}."
         },
         "failed": "Non ha funzionato. Riprova.",
         "noControl": "Non hai l'autorizzazione a mettere in pausa, riprendere o annullare i broadcast.",
@@ -1509,7 +1550,9 @@
           "cancelled": "Annullato",
           "active": "Attivo",
           "ended": "Terminato"
-        }
+        },
+        "retryTitle": "Riprovare i messaggi falliti?",
+        "retryMessage": "Invia di nuovo a {count, plural, one {# destinatario} other {# destinatari}} il cui messaggio non è andato a buon fine. Chi lo ha già ricevuto non viene toccato e un messaggio viene addebitato solo quando è consegnato."
       },
       "panel": {
         "title": "Creato con Crea broadcast",

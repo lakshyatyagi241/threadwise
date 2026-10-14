@@ -403,7 +403,9 @@
         "smartIntro": "Leer lassen, um die Workspace-Standardtaktung zu verwenden. Diese Regeln verteilen den Versand, damit eine große Liste menschlich wirkt und unter WhatsApps Sperrschwelle bleibt.",
         "smartZone": "Zeiten in {zone}.",
         "throttleMaxHint": "Die längste Wartezeit vor einer Nachricht.",
-        "batchPauseHint": "Minuten Pause nach jeder Charge."
+        "batchPauseHint": "Minuten Pause nach jeder Charge.",
+        "retryFailed": "Fehlgeschlagene Nachrichten automatisch wiederholen",
+        "retryFailedHint": "Eine Nachricht, die aus einem vorübergehenden Grund fehlschlägt, wird mehrmals mit Pause dazwischen erneut versucht. Ausschalten, um jede Nachricht nur einmal zu senden."
       },
       "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer.",
       "draftChip": "Entwurf / nicht gespeichert",
@@ -707,7 +709,8 @@
         "replies": "Antworten ({count})",
         "failures": "Fehlschläge ({count})",
         "optouts": "Abmeldungen ({count})",
-        "summary": "Zusammenfassung"
+        "summary": "Zusammenfassung",
+        "statistics": "Statistik"
       },
       "cancel": "Abbrechen",
       "deleted": "Kampagne gelöscht.",
@@ -963,6 +966,41 @@
           "retry": "Erneut versuchen"
         },
         "latestRun": "Angezeigt wird Durchlauf {occurrence}, der neueste dieser Serie."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "aktualisiert {time}",
+        "queued": "{count} warten auf den Versand",
+        "processing": "{count} werden gerade gesendet"
+      },
+      "statistics": {
+        "loadFailed": "Die Statistik konnte nicht geladen werden.",
+        "rates": {
+          "delivered": "Zustellrate",
+          "deliveredHint": "der Zielgruppe",
+          "read": "Leserate",
+          "readHint": "der Zugestellten",
+          "replies": "Antwortrate",
+          "clicks": "Klickrate",
+          "failed": "Fehlerrate"
+        },
+        "breakdown": {
+          "title": "Wo sich alle gerade befinden",
+          "hint": "Jeder der {total} Empfänger wird einmal gezählt, in dem Status, den er hat.",
+          "empty": "Diese Kampagne hat noch keine Empfänger."
+        },
+        "timeline": {
+          "title": "Zeitverlauf",
+          "created": "Erstellt",
+          "scheduled": "Startzeit",
+          "firstSent": "Erste Nachricht gesendet",
+          "lastRun": "Letzter Lauf",
+          "finished": "Beendet",
+          "notYet": "Noch nicht"
+        },
+        "live": "Live-Verfolgung",
+        "atRest": "Endgültige Zahlen",
+        "updated": "Aktualisiert {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1294,7 @@
         "messages": "Nachrichten",
         "modePlan": "{count, plural, one {Ihr Tarif deckt die ersten Nachrichten ab; das Wallet bezahlt # Nachricht darüber hinaus.} other {Ihr Tarif deckt die ersten Nachrichten ab; das Wallet bezahlt # Nachrichten darüber hinaus.}}",
         "modeWallet": "{count, plural, one {Jede zugestellte Nachricht wird Ihrem Wallet belastet: # Nachricht.} other {Jede zugestellte Nachricht wird Ihrem Wallet belastet: # Nachrichten.}}",
+        "platformOwned": "Für Sendungen in diesem Arbeitsbereich fallen keine Kosten an, daher wird nichts von Ihrem Guthaben abgebucht.",
         "breakdown": "Kosten nach Land",
         "country": "Land",
         "unitPrice": "Pro Nachricht",
@@ -1485,12 +1524,14 @@
         "action": {
           "pause": "Pausieren",
           "resume": "Fortsetzen",
-          "cancel": "Broadcast abbrechen"
+          "cancel": "Broadcast abbrechen",
+          "retryFailed": "Fehlgeschlagene wiederholen ({count})"
         },
         "done": {
           "pause": "Broadcast pausiert.",
           "resume": "Broadcast fortgesetzt.",
-          "cancel": "Broadcast abgebrochen."
+          "cancel": "Broadcast abgebrochen.",
+          "retryFailed": "{count, plural, one {# fehlgeschlagener Empfänger wird} other {# fehlgeschlagene Empfänger werden}} erneut versucht."
         },
         "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
         "noControl": "Sie haben keine Berechtigung, Broadcasts zu pausieren, fortzusetzen oder abzubrechen.",
@@ -1509,7 +1550,9 @@
           "cancelled": "Abgebrochen",
           "active": "Aktiv",
           "ended": "Beendet"
-        }
+        },
+        "retryTitle": "Fehlgeschlagene Nachrichten wiederholen?",
+        "retryMessage": "Sendet erneut an {count, plural, one {# Empfänger} other {# Empfänger}}, bei denen die Nachricht fehlgeschlagen ist. Wer sie schon erhalten hat, bleibt unberührt, und eine Nachricht wird nur bei Zustellung berechnet."
       },
       "panel": {
         "title": "Erstellt mit Broadcast erstellen",

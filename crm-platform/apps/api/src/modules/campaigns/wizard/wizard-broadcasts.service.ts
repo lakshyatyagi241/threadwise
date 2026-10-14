@@ -11,6 +11,7 @@ import {
   type WizardBroadcastList,
   type WizardControlResponse,
   type WizardDraft,
+  type WizardRetryFailedResponse,
   type WizardRetrySummary,
   type WizardRun,
   type CampaignStatus,
@@ -23,6 +24,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PacingRuntime, WALLET_GATE, type WalletGate } from '../../broadcasts';
 import { CampaignEvents } from '../campaign-events';
+import { CampaignsActionsService } from '../campaigns-actions.service';
 import { CampaignJobs } from '../campaign-jobs';
 import { CampaignsRepository } from '../campaigns.repository';
 import { draftOf } from './wizard-drafts.service';
@@ -55,6 +57,7 @@ export class WizardBroadcastsService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly runtime: PacingRuntime,
+    private readonly actions: CampaignsActionsService,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
 
@@ -253,6 +256,58 @@ export class WizardBroadcastsService {
       createdAt: s.createdAt.toISOString(),
       updatedAt: s.updatedAt.toISOString(),
       rowVersion: s.rowVersion,
+    };
+  }
+
+  /**
+   * Retry failed: the failed recipients of a launched broadcast go back in the queue and the run starts again. Only the failed rows
+   * are touched, so nobody who got the message is messaged twice. A series retries every run that ended on its own and has failed rows;
+   * a run still in progress, or one that was cancelled, is left alone. Each run is its own transaction (the wallet is checked per run), so a refusal on one stops there and
+   * the runs already queued stay queued.
+   */
+  async retryFailed(uuid: string): Promise<WizardRetryFailedResponse> {
+    const { orgId } = RequestContextStore.require();
+    const targets = await this.db.tx(async (tx) => {
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (series) {
+        const out: Array<{ uuid: string }> = [];
+        for (const c of await this.repo.seriesChildren(tx, orgId, series.id)) {
+          // A run the person cancelled (or that a cancelled series stopped) stays stopped: only runs that ended on their own retry.
+          if (c.status !== 'completed' && c.status !== 'failed') continue;
+          if ((await this.repo.runCounts(tx, orgId, c.id)).failed > 0) out.push({ uuid: c.uuid });
+        }
+        return { kind: 'series' as const, id: series.uuid, seriesStatus: series.status, runs: out };
+      }
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
+      return {
+        kind: 'campaign' as const,
+        id: c.uuid,
+        seriesStatus: null,
+        runs: [{ uuid: c.uuid }],
+      };
+    });
+    if (targets.runs.length === 0) {
+      throw new AppError(
+        ERROR_CODES.CAMP_NOTHING_TO_RESEND,
+        'Nothing to retry: no finished run has failed recipients.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    let recipients = 0;
+    let status = 'running';
+    for (const run of targets.runs) {
+      const res = await this.actions.resend(run.uuid, { scope: 'failed', contactIds: [] });
+      recipients += res.recipients;
+      status = res.status;
+    }
+    return {
+      id: targets.id,
+      kind: targets.kind,
+      status: targets.seriesStatus ?? status,
+      message: `Retrying ${recipients} failed recipient${recipients === 1 ? '' : 's'}.`,
+      recipients,
+      runs: targets.runs.length,
     };
   }
 

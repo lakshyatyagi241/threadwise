@@ -15,6 +15,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { MergeTagService } from '../../crm';
 import { WALLET_GATE, type WalletGate } from '../../broadcasts';
+import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import {
   BillingCurrencyService,
   RateCardService,
@@ -46,6 +47,7 @@ export class WizardReviewService {
     private readonly wallet: WalletQueryService,
     private readonly rates: RateCardService,
     private readonly currency: BillingCurrencyService,
+    private readonly plans: PlanEntitlementService,
     @Inject(WALLET_GATE) private readonly gate: WalletGate,
   ) {}
 
@@ -85,6 +87,7 @@ export class WizardReviewService {
     });
     const category = templateCategory(prepared.template.metaCategory, prepared.template.category);
     const summary = await this.wallet.summary();
+    const platformOwned = (await this.plans.forOrg(orgId))?.platformOwned ?? false;
 
     const lines = await this.db.tx((tx) =>
       this.priceLines(tx, orgId, prepared.count, category, summary.currency),
@@ -123,6 +126,7 @@ export class WizardReviewService {
       chargeableMessages: chargeable,
       estimatedCostMinor: cost.totalMinor,
       fullCostMinor: full.totalMinor,
+      platformOwned,
       lines: lines.map((l, i) => ({
         ...l,
         subtotalMinor: cost.subtotals[i]!,

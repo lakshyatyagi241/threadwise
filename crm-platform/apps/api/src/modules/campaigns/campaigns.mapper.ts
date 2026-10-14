@@ -72,6 +72,7 @@ export function toConfig(
     flowIdB: r.flowBUuid,
     useAttributes: r.useAttributes,
     trackingEnabled: r.trackingEnabled,
+    retryFailed: r.retryFailed,
     expiresAtLocal: extra.expiresAtLocal,
     repeatUntil: r.repeatUntil,
     throttleMinSec: r.throttleMinSec,

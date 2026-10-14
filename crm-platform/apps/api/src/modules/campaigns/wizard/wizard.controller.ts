@@ -321,6 +321,17 @@ export class WizardController {
     return this.broadcasts.resume(id);
   }
 
+  @Post('broadcasts/:id/retry-failed')
+  @Idempotent()
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('camp.campaigns.control')
+  @ApiOperation({
+    summary: 'Send again to the recipients that failed (a series: in every finished run)',
+  })
+  retryFailed(@Param('id', ParseUUIDPipe) id: string) {
+    return this.broadcasts.retryFailed(id);
+  }
+
   @Post('broadcasts/:id/cancel')
   @Idempotent()
   @HttpCode(HttpStatus.OK)

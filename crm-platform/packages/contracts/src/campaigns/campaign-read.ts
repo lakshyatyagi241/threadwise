@@ -259,12 +259,49 @@ export const campaignRecipientsResponseSchema = z.object({
 });
 export type CampaignRecipientsResponse = z.infer<typeof campaignRecipientsResponseSchema>;
 
-/** The numbers the detail page repaints every 15 seconds. */
+/**
+ * Live stats: the light read the detail page polls (every 12 seconds while the campaign is in flight, never when it is at rest).
+ * `queued` waits to be sent and `processing` is claimed by a run right now, so `queued + processing + sent-or-further + failed + skipped
+ * + opted out` is the audience.
+ */
 export const campaignLiveSchema = z.object({
   status: z.string(),
+  /** Scheduled or running: still moving, so the page keeps asking. */
+  inFlight: z.boolean(),
   counts: campaignCountsSchema,
+  queued: z.number().int(),
+  processing: z.number().int(),
   rates: z.object({ delivered: pct, read: pct, replies: pct, clicks: pct, failed: pct }),
   failures: z.array(z.object({ id: uuidSchema, error: z.string(), at: z.string().datetime() })),
   failureSummary: z.array(z.object({ error: z.string(), count: z.number().int() })),
+  fetchedAt: z.string().datetime(),
 });
 export type CampaignLive = z.infer<typeof campaignLiveSchema>;
+
+/**
+ * Statistics: where every recipient is right now, and the campaign's own timeline. `breakdown` counts each recipient once, at the status
+ * it holds (so it adds up to `total`); `counts` and `rates` are the cumulative figures of the funnel (a read message is also delivered
+ * and sent). Every figure comes from the recipient rows.
+ */
+export const campaignStatisticsSchema = z.object({
+  status: z.string(),
+  inFlight: z.boolean(),
+  total: z.number().int(),
+  breakdown: z.array(
+    z.object({ key: z.enum(CAMPAIGN_RECIPIENT_STATUSES), count: z.number().int(), pct }),
+  ),
+  counts: campaignCountsSchema,
+  rates: z.object({ delivered: pct, read: pct, replies: pct, clicks: pct, failed: pct }),
+  lifecycle: z.object({
+    createdAt: z.string().datetime(),
+    /** The date and time the campaign was set to start, read in its own zone; null for a send-now campaign. */
+    scheduledFor: z
+      .object({ date: z.string(), time: z.string().nullable(), timezone: z.string().nullable() })
+      .nullable(),
+    firstSentAt: z.string().datetime().nullable(),
+    lastRunAt: z.string().datetime().nullable(),
+    completedAt: z.string().datetime().nullable(),
+  }),
+  fetchedAt: z.string().datetime(),
+});
+export type CampaignStatistics = z.infer<typeof campaignStatisticsSchema>;
