@@ -359,6 +359,11 @@
         "label": "Performance de l'équipe",
         "description": "Voyez la rapidité de chaque agent à répondre et résoudre aujourd'hui, cette semaine ou ce mois-ci.",
         "keywords": "rapports, analyses, agents, temps de réponse, première réponse, résolues, charge, performance"
+      },
+      "privacy-requests": {
+        "label": "Demandes de données",
+        "description": "Répondez aux personnes qui demandent ce que vous détenez sur elles : vérification d'identité, export, effacement avec aperçu et une preuve à conserver.",
+        "keywords": "confidentialité, RGPD, GDPR, demande de données, DSR, droit d'accès, exporter les données, effacer, droit à l'oubli, supprimer des données personnelles, blocage légal"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

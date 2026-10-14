@@ -359,6 +359,11 @@
         "label": "Ekip performansı",
         "description": "Her temsilcinin bugün, bu hafta veya bu ay ne kadar hızlı yanıtlayıp çözdüğünü görün.",
         "keywords": "raporlar, analiz, temsilciler, yanıt süresi, ilk yanıt, çözüldü, iş yükü, performans"
+      },
+      "privacy-requests": {
+        "label": "Veri talepleri",
+        "description": "Haklarında ne tuttuğunuzu soranlara yanıt verin: kimlik kontrolü, dışa aktarma, önizlemeli silme ve saklayabileceğiniz bir kanıt.",
+        "keywords": "gizlilik, gdpr, veri talebi, dsar, veri erişimi, verileri dışa aktar, sil, unutulma hakkı, kişisel verileri sil, yasal bekletme"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

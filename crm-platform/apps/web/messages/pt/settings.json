@@ -359,6 +359,11 @@
         "label": "Desempenho da equipe",
         "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
         "keywords": "relatórios, análises, agentes, tempo de resposta, primeira resposta, resolvidas, carga, desempenho"
+      },
+      "privacy-requests": {
+        "label": "Solicitações de dados",
+        "description": "Responda a quem pergunta o que você mantém sobre elas: verificação de identidade, exportação, exclusão com prévia e um comprovante que você pode guardar.",
+        "keywords": "privacidade, gdpr, solicitação de dados, dsar, acesso do titular, exportar dados, apagar, direito ao esquecimento, excluir dados pessoais, bloqueio legal"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

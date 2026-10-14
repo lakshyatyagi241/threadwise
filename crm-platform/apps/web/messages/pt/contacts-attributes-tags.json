@@ -1373,6 +1373,12 @@
         "reorder": "Arraste para reordenar as colunas",
         "remove": "Remover {name}"
       }
+    },
+    "erase": {
+      "scope": "Excluir um contato também apaga suas conversas, mensagens, mídias, arquivos, gravações de chamadas e registros de chamadas. Leads, negócios, tarefas e faturas permanecem.",
+      "scopeMany": "Excluir contatos também apaga suas conversas, mensagens, mídias, arquivos, gravações de chamadas e registros de chamadas. Leads, negócios, tarefas e faturas permanecem.",
+      "keepHistory": "Manter o histórico de conversas sem a identidade da pessoa",
+      "keepHistoryHint": "As conversas permanecem nos seus registros, mas não apontam mais para a pessoa."
     }
   }
 }

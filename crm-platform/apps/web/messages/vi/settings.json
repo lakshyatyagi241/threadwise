@@ -359,6 +359,11 @@
         "label": "Hiệu suất nhóm",
         "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
         "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
+      },
+      "privacy-requests": {
+        "label": "Yêu cầu dữ liệu",
+        "description": "Trả lời những người hỏi bạn đang giữ gì về họ: kiểm tra danh tính, xuất, xóa có xem trước và bằng chứng bạn có thể lưu giữ.",
+        "keywords": "quyền riêng tư, gdpr, yêu cầu dữ liệu, dsar, truy cập dữ liệu cá nhân, xuất dữ liệu, xóa, quyền được lãng quên, xóa dữ liệu cá nhân, lưu giữ pháp lý"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

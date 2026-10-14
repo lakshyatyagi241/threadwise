@@ -343,6 +343,11 @@
         "label": "Teamprestaties",
         "description": "Zie hoe snel elke agent vandaag, deze week of deze maand reageerde en oploste.",
         "keywords": "rapporten, analyses, agenten, reactietijd, eerste antwoord, opgelost, werkdruk, prestaties"
+      },
+      "privacy-requests": {
+        "label": "Gegevensverzoeken",
+        "description": "Beantwoord mensen die vragen wat je van hen bewaart: identiteitscontrole, export, wissen met voorvertoning en een bewijs dat je kunt bewaren.",
+        "keywords": "privacy, gdpr, gegevensverzoek, dsar, inzage, gegevens exporteren, wissen, recht op vergetelheid, persoonsgegevens verwijderen, legal hold"
       }
     },
     "title": "Instellingen",

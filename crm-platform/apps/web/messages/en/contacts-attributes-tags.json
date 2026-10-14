@@ -1373,6 +1373,12 @@
         "reorder": "Drag to re-order columns",
         "remove": "Remove {name}"
       }
+    },
+    "erase": {
+      "scope": "Deleting a contact also erases their conversations, messages, media, files, call recordings and call logs. Leads, deals, tasks and invoices stay.",
+      "scopeMany": "Deleting contacts also erases their conversations, messages, media, files, call recordings and call logs. Leads, deals, tasks and invoices stay.",
+      "keepHistory": "Keep conversation history without the person identity",
+      "keepHistoryHint": "The conversations stay for your records but no longer point to the person."
     }
   }
 }

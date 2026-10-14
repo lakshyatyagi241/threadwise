@@ -1373,6 +1373,12 @@
         "reorder": "Ziehen, um Spalten neu anzuordnen",
         "remove": "{name} entfernen"
       }
+    },
+    "erase": {
+      "scope": "Das Löschen eines Kontakts löscht auch seine Gespräche, Nachrichten, Medien, Dateien, Anrufaufzeichnungen und Anrufprotokolle. Leads, Deals, Aufgaben und Rechnungen bleiben erhalten.",
+      "scopeMany": "Das Löschen von Kontakten löscht auch deren Gespräche, Nachrichten, Medien, Dateien, Anrufaufzeichnungen und Anrufprotokolle. Leads, Deals, Aufgaben und Rechnungen bleiben erhalten.",
+      "keepHistory": "Gesprächsverlauf ohne die Identität der Person behalten",
+      "keepHistoryHint": "Die Gespräche bleiben für Ihre Unterlagen erhalten, verweisen aber nicht mehr auf die Person."
     }
   }
 }

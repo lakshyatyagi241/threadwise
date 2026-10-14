@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Descartar",
+      "retry": "Reintentar",
+      "loading": "Cargando...",
+      "cancel": "Cancelar",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "close": "Cerrar",
+      "save": "Guardar"
+    },
+    "errors": {
+      "network": "No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "No tienes permiso para hacer esto.",
+      "notFound": "Esta solicitud ya no existe.",
+      "subjectNotFound": "Esa persona ya no existe en este espacio de trabajo.",
+      "stateInvalid": "Esta solicitud no está en un estado que permita hacer eso. Recarga y revisa su estado.",
+      "notVerified": "Verifica primero la identidad de la persona.",
+      "legalHold": "Esta solicitud tiene una retención legal. Levanta la retención antes de borrar.",
+      "confirmationRequired": "Ejecuta primero la vista previa y escribe la frase de confirmación exactamente.",
+      "exportInProgress": "Ya se está preparando una exportación de esta solicitud.",
+      "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara una nueva exportación.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "validation": "Algunos valores no son válidos. Revisa el formulario e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "type": {
+      "access": "Acceso",
+      "export": "Exportación",
+      "erasure": "Supresión",
+      "rectification": "Rectificación",
+      "restriction": "Limitación",
+      "objection": "Oposición",
+      "withdrawal": "Retirada del consentimiento",
+      "portability": "Portabilidad"
+    },
+    "typeHint": {
+      "access": "La persona pregunta qué datos tenemos sobre ella. Termina en un archivo.",
+      "export": "Una copia de los datos de la persona. Termina en un archivo.",
+      "erasure": "Borra los datos de la persona. Primero ves una vista previa.",
+      "rectification": "Corrige datos erróneos. Los arreglas a mano y cierras la solicitud.",
+      "restriction": "Deja de usar los datos por ahora. Lo gestionas a mano y cierras la solicitud.",
+      "objection": "La persona se opone a un uso de sus datos. Lo gestionas a mano y cierras la solicitud.",
+      "withdrawal": "La persona retira su consentimiento. Lo gestionas a mano y cierras la solicitud.",
+      "portability": "Una copia legible por máquina para llevarla a otro lugar. Termina en un archivo."
+    },
+    "status": {
+      "received": "Recibida",
+      "verifying": "Verificando identidad",
+      "in_progress": "En curso",
+      "completed": "Completada",
+      "rejected": "Rechazada",
+      "expired": "Caducada"
+    },
+    "channel": {
+      "email": "Correo electrónico",
+      "whatsapp": "WhatsApp",
+      "phone": "Teléfono",
+      "in_person": "En persona",
+      "portal": "Portal",
+      "staff": "Introducida por el equipo",
+      "other": "Otro"
+    },
+    "method": {
+      "channel_code": "Código enviado al canal de la persona",
+      "email_link": "Enlace enviado por correo electrónico",
+      "known_contact": "Contactada en el número o correo que ya tenemos",
+      "existing_session": "Sesión iniciada en su cuenta",
+      "id_document_checked": "Documento de identidad comprobado",
+      "other": "Otro"
+    },
+    "disposition": {
+      "deleted": "Eliminado",
+      "anonymised": "Anonimizado",
+      "cascaded": "En cascada",
+      "retained": "Conservado",
+      "unlinked": "Desvinculado"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {Queda # día} other {Quedan # días}}",
+      "dueToday": "Vence hoy",
+      "overdue": "{count, plural, one {# día de retraso} other {# días de retraso}}",
+      "closed": "Cerrada",
+      "dueOn": "Vence el {date}"
+    },
+    "list": {
+      "title": "Solicitudes de datos",
+      "subtitle": "Solicitudes de personas sobre los datos que tienes de ellas: acceso, exportación, supresión y más. Cada una tiene un plazo y un registro de lo que se hizo.",
+      "newRequest": "Nueva solicitud",
+      "settings": "Ajustes",
+      "empty": "Aún no hay solicitudes de datos.",
+      "emptyFiltered": "Ninguna solicitud coincide con estos filtros.",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando...",
+      "columns": {
+        "reference": "Referencia",
+        "type": "Tipo",
+        "subject": "Persona",
+        "status": "Estado",
+        "due": "Plazo"
+      },
+      "filters": {
+        "label": "Filtros",
+        "status": "Estado",
+        "type": "Tipo",
+        "any": "Cualquiera",
+        "overdue": "Solo vencidas"
+      },
+      "open": "Abrir solicitud {reference}"
+    },
+    "settings": {
+      "title": "Plazo",
+      "slaDays": "Días para responder a una solicitud",
+      "slaHint": "Cuántos días después de recibirla vence una solicitud. Por defecto son 30.",
+      "saved": "Ajustes guardados.",
+      "invalid": "Introduce un número entero de días entre 1 y 90."
+    },
+    "wizard": {
+      "title": "Nueva solicitud de datos",
+      "step": "Paso {current} de {total}",
+      "person": {
+        "title": "Buscar a la persona",
+        "search": "Busca por nombre, teléfono o correo",
+        "searchHint": "Escribe al menos 2 caracteres.",
+        "searching": "Buscando...",
+        "none": "No se encontró a nadie. Abajo puedes usar un teléfono o un correo.",
+        "pick": "Seleccionar a {name}",
+        "unnamed": "Sin nombre",
+        "kindContact": "Contacto",
+        "kindLead": "Lead",
+        "selected": "Seleccionada: {name}",
+        "other": "No está en tus contactos",
+        "otherValue": "Teléfono o correo electrónico",
+        "otherHint": "Para alguien que no está guardado. Buscamos sus datos con este valor.",
+        "useOther": "Usar este valor",
+        "clear": "Elegir a otra persona"
+      },
+      "kind": {
+        "title": "¿Qué pide la persona?"
+      },
+      "details": {
+        "title": "Detalles",
+        "channel": "¿Cómo te llegó la solicitud?",
+        "note": "Nota interna",
+        "noteHint": "Opcional. Solo la ve tu equipo. No escribas datos personales aquí.",
+        "history": "Historial de conversaciones",
+        "historyHint": "Qué pasa con las conversaciones de la persona cuando se borran sus datos.",
+        "historyDelete": "Borrar las conversaciones, los mensajes y los archivos",
+        "historyAnonymise": "Conservar las conversaciones sin la identidad de la persona"
+      },
+      "create": "Crear solicitud",
+      "creating": "Creando...",
+      "created": "Solicitud {reference} creada."
+    },
+    "detail": {
+      "back": "Solicitudes de datos",
+      "loading": "Cargando...",
+      "received": "Recibida el {date}",
+      "channel": "Canal: {channel}",
+      "history": {
+        "delete": "Al suprimir: se borran las conversaciones",
+        "anonymise": "Al suprimir: se conservan las conversaciones sin la identidad de la persona"
+      },
+      "note": "Nota interna",
+      "legalHoldBadge": "Retención legal",
+      "timeline": {
+        "title": "Cronología",
+        "empty": "Aún no hay nada registrado.",
+        "by": "por {actor}",
+        "system": "el sistema",
+        "event": {
+          "created": "Solicitud creada",
+          "verification_started": "Comprobación de identidad iniciada",
+          "verified": "Identidad verificada",
+          "verification_failed": "Identidad no verificada",
+          "hold_set": "Retención legal aplicada",
+          "hold_released": "Retención legal levantada",
+          "rejected": "Solicitud rechazada",
+          "export_requested": "Exportación solicitada",
+          "export_downloaded": "Exportación descargada",
+          "erase_previewed": "Supresión previsualizada",
+          "erased": "Datos borrados",
+          "completed": "Solicitud completada",
+          "other": "Actualizar"
+        }
+      },
+      "verify": {
+        "title": "Verificación de identidad",
+        "intro": "Comprueba que quien lo pide es quien dice ser antes de exportar o borrar nada.",
+        "state": {
+          "none": "Aún sin comprobar.",
+          "verified": "Verificada el {date} ({method}).",
+          "evidence": "Referencia de la evidencia: {ref}"
+        },
+        "method": "¿Cómo se comprobó?",
+        "evidence": "ID de referencia de la evidencia",
+        "evidenceHint": "Solo el ID de referencia, nunca subas documentos. Usa un número de ticket o un ID de mensaje.",
+        "note": "Nota",
+        "outcome": "Resultado",
+        "pending": "Comprobación iniciada",
+        "verified": "Verificada",
+        "notVerified": "No verificada",
+        "submit": "Registrar resultado",
+        "notVerifiedWarn": "La solicitud de una persona no verificada se rechaza.",
+        "saved": "Verificación registrada."
+      },
+      "hold": {
+        "title": "Retención legal",
+        "intro": "Mientras hay una retención activa, no se permite borrar. Úsala cuando la ley o una disputa exija conservar los datos.",
+        "toggle": "Retención legal",
+        "reason": "Motivo",
+        "reasonHint": "Al menos 3 caracteres.",
+        "apply": "Aplicar retención",
+        "release": "Levantar retención",
+        "active": "Retenida: {reason}",
+        "saved": "Retención actualizada."
+      },
+      "export": {
+        "title": "Exportar",
+        "intro": "Prepara un archivo ZIP con los datos que tenemos de esta persona.",
+        "expiry": "Un archivo terminado está disponible {days} días y después se borra.",
+        "noEmail": "No se envía nada a la persona. Descarga el archivo y entrégaselo por un canal seguro.",
+        "request": "Preparar exportación",
+        "requesting": "Preparando...",
+        "requested": "Exportación iniciada.",
+        "none": "Aún no hay exportaciones.",
+        "download": "Descargar",
+        "size": "{size} KB",
+        "expires": "Caduca el {date}",
+        "status": {
+          "queued": "En espera",
+          "running": "Generando",
+          "ready": "Lista",
+          "failed": "Fallida",
+          "expired": "Caducada"
+        }
+      },
+      "erase": {
+        "title": "Borrar",
+        "intro": "Borra los datos de la persona de todos los módulos. Primero la vista previa: no cambia nada hasta que confirmes.",
+        "preview": "Vista previa",
+        "previewing": "Contando...",
+        "previewTitle": "Qué pasaría",
+        "previewNote": "Solo vista previa. No se cambió nada.",
+        "files": "{count, plural, one {# archivo almacenado en cola para borrar} other {# archivos almacenados en cola para borrar}}",
+        "totals": "{deleted} eliminados, {anonymised} anonimizados, {retained} conservados",
+        "colTable": "Tabla",
+        "colWhat": "Qué pasa",
+        "colCount": "Filas",
+        "colReason": "Por qué",
+        "confirmLabel": "Escribe {phrase} para confirmar",
+        "confirmHint": "Esto no se puede deshacer.",
+        "execute": "Borrar ahora",
+        "executing": "Borrando...",
+        "done": "Supresión realizada.",
+        "blocked": "La supresión está disponible cuando se verifica la identidad y no hay retención legal."
+      },
+      "proof": {
+        "title": "Prueba de supresión",
+        "executedAt": "Ejecutada el {date}",
+        "executedBy": "Por {actor}",
+        "totals": "{deleted} eliminados, {anonymised} anonimizados, {retained} conservados, {files} archivos",
+        "registryDigest": "Resumen del registro",
+        "sha256": "SHA-256",
+        "notes": "Límites de esta supresión",
+        "download": "Descargar prueba"
+      },
+      "close": {
+        "title": "Cerrar la solicitud",
+        "complete": "Marcar como completada",
+        "completeHint": "Úsalo cuando la persona ya recibió respuesta o el trabajo se hizo a mano.",
+        "completed": "Solicitud completada.",
+        "rejectReason": "Motivo del rechazo",
+        "reject": "Rechazar solicitud",
+        "rejectConfirm": "Rechazar",
+        "rejected": "Solicitud rechazada.",
+        "rejectedWith": "Rechazada: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Privacidad",
+      "export": "Exportar los datos de esta persona",
+      "erase": "Borrar a esta persona",
+      "created": "Solicitud {reference} creada.",
+      "failed": "No se pudo crear la solicitud."
+    }
+  }
+}

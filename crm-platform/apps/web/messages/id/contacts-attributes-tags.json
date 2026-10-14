@@ -1373,6 +1373,12 @@
         "reorder": "Seret untuk mengurutkan ulang kolom",
         "remove": "Hapus {name}"
       }
+    },
+    "erase": {
+      "scope": "Menghapus kontak juga menghapus percakapan, pesan, media, file, rekaman panggilan, dan log panggilan mereka. Prospek, transaksi, tugas, dan faktur tetap ada.",
+      "scopeMany": "Menghapus kontak juga menghapus percakapan, pesan, media, file, rekaman panggilan, dan log panggilan mereka. Prospek, transaksi, tugas, dan faktur tetap ada.",
+      "keepHistory": "Simpan riwayat percakapan tanpa identitas orang tersebut",
+      "keepHistoryHint": "Percakapan tetap tersimpan sebagai arsip Anda tetapi tidak lagi mengarah ke orang tersebut."
     }
   }
 }

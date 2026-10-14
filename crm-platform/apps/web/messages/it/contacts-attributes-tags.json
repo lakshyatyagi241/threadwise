@@ -1373,6 +1373,12 @@
         "reorder": "Trascina per riordinare le colonne",
         "remove": "Rimuovi {name}"
       }
+    },
+    "erase": {
+      "scope": "Eliminare un contatto cancella anche le sue conversazioni, i messaggi, i contenuti multimediali, i file, le registrazioni delle chiamate e i registri chiamate. Lead, trattative, attività e fatture restano.",
+      "scopeMany": "Eliminare dei contatti cancella anche le loro conversazioni, i messaggi, i contenuti multimediali, i file, le registrazioni delle chiamate e i registri chiamate. Lead, trattative, attività e fatture restano.",
+      "keepHistory": "Conserva la cronologia delle conversazioni senza l'identità della persona",
+      "keepHistoryHint": "Le conversazioni restano nei tuoi archivi ma non rimandano più alla persona."
     }
   }
 }
