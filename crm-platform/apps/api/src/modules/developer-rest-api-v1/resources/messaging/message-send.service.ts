@@ -266,6 +266,8 @@ export class MessageSendService {
         },
         lastInboundAt,
         source: 'api',
+        // A location pin is a free-form reply: it only goes through while the window is open, so it is service.
+        consent: { purpose: 'service_messaging' },
       });
       if (!sent.replayed) await this.dispatcher.scheduleReceipts(runtime, sent);
       const recorded = await this.conversations.recordOutbound({

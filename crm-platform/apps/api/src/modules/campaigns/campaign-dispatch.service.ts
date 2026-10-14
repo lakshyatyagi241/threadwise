@@ -5,7 +5,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { ConsentPolicyService } from '../contact-consent';
+import { ConsentGate, ConsentPolicyService } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
@@ -121,6 +121,7 @@ export class CampaignDispatchService {
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
     @Inject(CAMPAIGN_SETTINGS) private readonly settingsSource: CampaignSettingsSource,
     @Optional() private readonly consentPolicy?: ConsentPolicyService,
+    @Optional() private readonly consentGate?: ConsentGate,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -153,8 +154,38 @@ export class CampaignDispatchService {
         t,
         orgId,
         campaignId,
-        (await this.consentPolicy?.requiresConsent(orgId)) ?? false,
+        // With the gate present it decides the grant requirement below; the repository keeps the flag, duplicates and counts.
+        this.consentGate ? false : ((await this.consentPolicy?.requiresConsent(orgId)) ?? false),
       );
+      if (this.consentGate) {
+        const ids = await this.repo.screenCandidates(t, orgId, campaignId);
+        const verdict = await this.consentGate.checkMany(
+          orgId,
+          ids.map((r) => r.contactId),
+          'whatsapp',
+          'marketing_messaging',
+          undefined,
+          { tx: t },
+        );
+        const withdrawn = ids.filter(
+          (r) => verdict.decisions.get(r.contactId)?.reason === 'withdrawn',
+        );
+        const missing = ids.filter(
+          (r) => verdict.decisions.get(r.contactId)?.decision === 'deny' && !withdrawn.includes(r),
+        );
+        await this.repo.markScreened(
+          t,
+          orgId,
+          withdrawn.map((r) => r.id),
+          'unsubscribed',
+        );
+        await this.repo.markScreened(
+          t,
+          orgId,
+          missing.map((r) => r.id),
+          'skipped',
+        );
+      }
       return { c, settings };
     });
     if (!prep) return 'skipped';

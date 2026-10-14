@@ -7,6 +7,7 @@ import {
   type FlbScheduleConfig,
 } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { ConsentGate } from '../../contact-consent';
 import { SegmentsService } from '../../crm';
 import { dueDay, dueOccurrence, localMoment } from './schedule-rules';
 import { FlowTriggerService } from './trigger.service';
@@ -40,6 +41,7 @@ export class FlowScheduleSweeper {
     private readonly db: DatabaseService,
     private readonly triggers: FlowTriggerService,
     private readonly segments: SegmentsService,
+    private readonly consentGate: ConsentGate,
   ) {}
 
   @Interval(60_000)
@@ -96,10 +98,14 @@ export class FlowScheduleSweeper {
         });
         if (!claimed) continue;
         fired++;
-        const people =
+        const everyone =
           kind === 'schedule'
             ? await this.audience(orgId, cfg as FlbScheduleConfig)
             : await this.dateMatches(orgId, cfg as FlbDateFieldMatchConfig, at.date);
+        // A flow the clock starts is a message the business chose to send: marketing. The ConsentGate keeps out the contacts who
+        // unsubscribed (the SQL above already does) and, with the workspace switch on, those with no recorded grant. Each message the
+        // run sends is checked again by the flow sender.
+        const people = await this.consentedOnly(orgId, everyone);
         started += await this.triggers.enrolContacts(
           orgId,
           flowId,
@@ -115,6 +121,12 @@ export class FlowScheduleSweeper {
       }
     }
     return { fired, started };
+  }
+
+  private async consentedOnly(orgId: number, ids: readonly number[]): Promise<number[]> {
+    if (ids.length === 0) return [];
+    const verdict = await this.consentGate.checkMany(orgId, ids, 'whatsapp', 'marketing_messaging');
+    return ids.filter((id) => verdict.allowed.has(id));
   }
 
   private async audience(orgId: number, cfg: FlbScheduleConfig): Promise<number[]> {

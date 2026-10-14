@@ -547,6 +547,43 @@ export class CampaignsRepository {
     };
   }
 
+  /** Recipients not yet settled, with their contact, for the ConsentGate pass that follows `screenRecipients`. */
+  async screenCandidates(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<Array<{ id: number; contactId: number }>> {
+    const res = await tx.execute(sql`
+      SELECT r.id, r.contact_id FROM wp_campaign_contacts r
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND r.contact_id IS NOT NULL
+        AND r.status NOT IN ('sent','delivered','read','responded','unsubscribed','skipped')`);
+    return (res.rows as Array<{ id: number | string; contact_id: number | string }>).map((r) => ({
+      id: Number(r.id),
+      contactId: Number(r.contact_id),
+    }));
+  }
+
+  /** Stamps recipients the ConsentGate refused: `unsubscribed` (withdrawn) or `skipped` (no recorded consent). */
+  async markScreened(
+    tx: Tx,
+    orgId: number,
+    recipientIds: readonly number[],
+    status: 'unsubscribed' | 'skipped',
+  ): Promise<void> {
+    if (recipientIds.length === 0) return;
+    const ids = sql.join(
+      recipientIds.map((n) => sql`${n}::bigint`),
+      sql`, `,
+    );
+    await tx.execute(
+      status === 'unsubscribed'
+        ? sql`UPDATE wp_campaign_contacts SET status = 'unsubscribed', is_unsubscribed = true, unsubscribed = true
+              WHERE org_id = ${orgId} AND id IN (${ids})`
+        : sql`UPDATE wp_campaign_contacts SET status = 'skipped', error_message = 'no recorded consent'
+              WHERE org_id = ${orgId} AND id IN (${ids})`,
+    );
+  }
+
   /**
    * The next recipients to send: queued ones, and failed ones with attempts left whose next attempt is due. They are marked
    * `pending` (claimed) in the same statement, so two workers never take the same row. Oldest first.

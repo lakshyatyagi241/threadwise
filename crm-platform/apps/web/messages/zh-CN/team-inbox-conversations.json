@@ -152,7 +152,9 @@
       "savedReplyGone": "此快捷回复已不存在。",
       "savedReplyChannel": "此快捷回复不适用于这类渠道。",
       "shortcutTaken": "另一条快捷回复已使用该快捷方式。",
-      "importInvalid": "无法将此文件读取为快捷回复。第一行需要包含 title、shortcut 和 body 列，最多 1,000 行。"
+      "importInvalid": "无法将此文件读取为快捷回复。第一行需要包含 title、shortcut 和 body 列，最多 1,000 行。",
+      "contactOptedOut": "该联系人已退订营销消息，因此消息未发送。",
+      "consentRequired": "此工作区要求营销消息必须有已记录的同意，而该联系人没有，因此消息未发送。"
     },
     "bubble": {
       "kind": {

@@ -151,28 +151,34 @@ export class OutboundService {
         );
       }
 
+      const envelope = envelopeOf(
+        {
+          kind: fields.kind,
+          body: fields.body,
+          mediaKey: fields.media?.key ?? null,
+          mediaMime: fields.media?.mime ?? null,
+          mediaName: fields.media?.name ?? null,
+          mediaSha256: fields.media?.sha256 ?? null,
+          meta: fields.meta,
+          latitude: fields.latitude ?? null,
+          longitude: fields.longitude ?? null,
+          clientMessageId: input.clientMessageId,
+          uuid: input.clientMessageId,
+        },
+        conv.peerKey,
+        replyTo?.providerMessageId ?? null,
+        1,
+      );
       const request = {
         channel: runtime,
-        envelope: envelopeOf(
-          {
-            kind: fields.kind,
-            body: fields.body,
-            mediaKey: fields.media?.key ?? null,
-            mediaMime: fields.media?.mime ?? null,
-            mediaName: fields.media?.name ?? null,
-            mediaSha256: fields.media?.sha256 ?? null,
-            meta: fields.meta,
-            latitude: fields.latitude ?? null,
-            longitude: fields.longitude ?? null,
-            clientMessageId: input.clientMessageId,
-            uuid: input.clientMessageId,
-          },
-          conv.peerKey,
-          replyTo?.providerMessageId ?? null,
-          1,
-        ),
+        envelope,
         lastInboundAt: conv.lastInboundAt,
         source: 'inbox',
+        // A reply or a utility template is service; a MARKETING template to a contact who unsubscribed is refused here, with no row.
+        consent: {
+          purpose: await this.dispatcher.purposeFor(orgId, envelope, tx),
+          contactId: conv.contactId,
+        },
       };
       const groupMembers = await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
       await this.dispatcher.assertCanQueue(request, {
@@ -279,12 +285,17 @@ export class OutboundService {
         ? await this.messages.byUuid(tx, orgId, row.replyToMessageUuid)
         : null;
       await this.assertGroupSendable(tx, orgId, runtime, conv.peerKey);
+      const retryEnvelope = envelopeOf(row, conv.peerKey, replyTo?.providerMessageId ?? null, 1);
       await this.dispatcher.assertCanQueue(
         {
           channel: runtime,
-          envelope: envelopeOf(row, conv.peerKey, replyTo?.providerMessageId ?? null, 1),
+          envelope: retryEnvelope,
           lastInboundAt: conv.lastInboundAt,
           source: 'inbox',
+          consent: {
+            purpose: await this.dispatcher.purposeFor(orgId, retryEnvelope, tx),
+            contactId: conv.contactId,
+          },
         },
         { monthlyUsed: await this.monthlyUsed(tx, orgId, runtime) },
       );

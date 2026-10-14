@@ -30,6 +30,7 @@ import { ScheduledRunService } from '../../../src/modules/scheduled-queue-warmer
 import { ScheduleMessageBuilder } from '../../../src/modules/scheduled-queue-warmer/schedule-message-builder.service';
 import { SchedulerService } from '../../../src/modules/scheduled-queue-warmer';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import { ConsentGate } from '../../../src/modules/contact-consent';
 
 /**
  * The scheduled-messages engine (TW-NODE-030 to 036, 031 to 033 and 035 in particular): the real app and a real Postgres and
@@ -89,6 +90,7 @@ beforeAll(async () => {
     h.app.get(UNOFFICIAL_WHATSAPP_GATE),
     h.app.get(OutboxService),
     h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
+    h.app.get(ConsentGate),
   );
   dueService = new ScheduledDueService(
     db,

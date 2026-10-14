@@ -59,3 +59,15 @@ still emitted (flows' `opt_in` trigger and the `contact_opt_in` webhook), includ
 Settings tile `consent` (Security) -> `/contact-consent`; Consent card in `contact-detail.tsx`; opt-out line in the campaign builder
 (`step-compose.tsx`) and a template hint in the broadcast composer; consent box and column summary in `import-modal.tsx`; proof exports panel in the settings screen (`proof-export.tsx`); the consent system line in `message-bubble.tsx`; the WhatsApp wording button in the Forms settings; count row in the wizard
 `count-panel.tsx`. Help guide `contact-consent`.
+
+## ConsentGate, purpose registry and email unsubscribe (BL-140, BL-141)
+
+| Piece                 | Where                                                                                                                                                                                                                              |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Registry              | `packages/contracts/src/privacy/purposes.ts`; `GET /v2/consent/purposes` (`consent-purposes.controller.ts`)                                                                                                                        |
+| Gate                  | `ConsentGate` (`consent-gate.service.ts`), rule `consent-gate.rules.ts`; exported by `ContactConsentModule`                                                                                                                        |
+| Unsubscribe           | `consent-unsubscribe.{tokens,service,controller}.ts`; web `/u/[token]`, relay `/api/public/consent/*`; no new table, no migration                                                                                                  |
+| Guard                 | `consent-gate.allowlist.ts` + `test/unit/contact-consent/consent-gate-guard.spec.ts`                                                                                                                                               |
+| Consumers of the gate | chat-conversations (dispatcher, outbound, message dispatch), flow-runtime-engine (sender, schedule sweeper), scheduled-queue-warmer, appointments-booking worker, channel-sms, broadcasts, campaigns, calling-voice, channel-email |
+| Error codes           | `CONSENT_OPTED_OUT`, `CONSENT_SEND_DENIED`, `CONSENT_UNSUBSCRIBE_LINK_INVALID`                                                                                                                                                     |
+| Purposes used         | `marketing_messaging` (broadcasts, campaigns, schedules, SMS, MARKETING templates, business-started flows), `service_messaging` (replies, notices, dial)                                                                           |

@@ -10,6 +10,9 @@ import { AppError } from '../../../src/common/errors/app-error';
 import { ChannelAdapterRegistry } from '../../../src/modules/chat-conversations/channel-adapter.registry';
 import { ChannelDispatcher } from '../../../src/modules/chat-conversations/channel-dispatcher.service';
 
+/** What every send in this file is, for the ConsentGate. */
+const SERVICE_CONSENT = { purpose: 'service_messaging' as const };
+
 /** A Redis with just the commands the dispatcher uses: get, set EX/NX, eval (release if owner). */
 class FakeRedis {
   store = new Map<string, string>();
@@ -68,6 +71,10 @@ function build(adapter: ChannelAdapter = sim) {
   };
   const publisher = { enqueueReceipt: vi.fn(async () => 'job') };
   const plans = { assertWithinLimit: vi.fn(async () => undefined) };
+  const gate = {
+    check: vi.fn(async (..._args: unknown[]) => ({ decision: 'allow', reason: 'utility_exempt' })),
+    purposeOfTemplate: vi.fn(async () => 'service_messaging'),
+  };
   const registry = new ChannelAdapterRegistry([adapter]);
   const dispatcher = new ChannelDispatcher(
     registry,
@@ -75,8 +82,9 @@ function build(adapter: ChannelAdapter = sim) {
     plans as never,
     guard,
     redis as never,
+    gate as never,
   );
-  return { dispatcher, redis, guard, publisher, plans };
+  return { dispatcher, redis, guard, publisher, plans, gate };
 }
 
 const recent = new Date(Date.now() - 3_600_000);
@@ -84,6 +92,7 @@ const req = (over: Record<string, unknown> = {}) => ({
   channel: channel(),
   envelope: text(),
   lastInboundAt: recent,
+  consent: SERVICE_CONSENT,
   ...over,
 });
 const code = async (p: Promise<unknown>) => ((await p.catch((e: unknown) => e)) as AppError).code;
@@ -107,12 +116,12 @@ describe('ChannelDispatcher.assertCanQueue: what is refused before anything is s
   it('SERVICE_WINDOW_CLOSED for free-form text after 24 hours, or with no customer message yet', async () => {
     const { dispatcher } = build();
     const old = new Date(Date.now() - 25 * 3_600_000);
-    expect(await code(dispatcher.assertCanQueue(req({ lastInboundAt: old })))).toBe(
-      'SERVICE_WINDOW_CLOSED',
-    );
-    expect(await code(dispatcher.assertCanQueue(req({ lastInboundAt: null })))).toBe(
-      'SERVICE_WINDOW_CLOSED',
-    );
+    expect(
+      await code(dispatcher.assertCanQueue(req({ lastInboundAt: old, consent: SERVICE_CONSENT }))),
+    ).toBe('SERVICE_WINDOW_CLOSED');
+    expect(
+      await code(dispatcher.assertCanQueue(req({ lastInboundAt: null, consent: SERVICE_CONSENT }))),
+    ).toBe('SERVICE_WINDOW_CLOSED');
   });
 
   it('a template is allowed with the window closed; media, reactions and locations are not', async () => {
@@ -125,7 +134,9 @@ describe('ChannelDispatcher.assertCanQueue: what is refused before anything is s
       template: { name: 'order_update', language: 'en', variables: {} },
     };
     await expect(
-      dispatcher.assertCanQueue(req({ envelope: template, lastInboundAt: old })),
+      dispatcher.assertCanQueue(
+        req({ envelope: template, lastInboundAt: old, consent: SERVICE_CONSENT }),
+      ),
     ).resolves.toBeTruthy();
     const media = {
       kind: 'media',
@@ -134,7 +145,11 @@ describe('ChannelDispatcher.assertCanQueue: what is refused before anything is s
       media: { key: 'k', mediaKind: 'image', mime: 'image/png' },
     };
     expect(
-      await code(dispatcher.assertCanQueue(req({ envelope: media, lastInboundAt: old }))),
+      await code(
+        dispatcher.assertCanQueue(
+          req({ envelope: media, lastInboundAt: old, consent: SERVICE_CONSENT }),
+        ),
+      ),
     ).toBe('SERVICE_WINDOW_CLOSED');
   });
 
@@ -146,7 +161,9 @@ describe('ChannelDispatcher.assertCanQueue: what is refused before anything is s
     );
     const open = channel({ settings: settings('open') });
     await expect(
-      dispatcher.assertCanQueue(req({ channel: open, lastInboundAt: null })),
+      dispatcher.assertCanQueue(
+        req({ channel: open, lastInboundAt: null, consent: SERVICE_CONSENT }),
+      ),
     ).resolves.toBeTruthy();
   });
 
@@ -256,7 +273,9 @@ describe('ChannelDispatcher.send: the worker side', () => {
       'CHANNEL_DISCONNECTED',
     );
     const old = new Date(Date.now() - 30 * 3_600_000);
-    expect(await code(dispatcher.send(req({ lastInboundAt: old })))).toBe('SERVICE_WINDOW_CLOSED');
+    expect(await code(dispatcher.send(req({ lastInboundAt: old, consent: SERVICE_CONSENT })))).toBe(
+      'SERVICE_WINDOW_CLOSED',
+    );
   });
 
   it('is idempotent on the client reference: the same message twice calls the provider once and answers the same', async () => {
@@ -421,7 +440,12 @@ describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
     'a %s is accepted on the Cloud API channel',
     async (_k, envelope) => {
       const { dispatcher } = build(whatsapp);
-      const q = await dispatcher.assertCanQueue({ channel: wa(), envelope, lastInboundAt: recent });
+      const q = await dispatcher.assertCanQueue({
+        channel: wa(),
+        envelope,
+        lastInboundAt: recent,
+        consent: SERVICE_CONSENT,
+      });
       expect(q.window.open).toBe(true);
     },
   );
@@ -431,13 +455,18 @@ describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
     async (_k, envelope) => {
       const { dispatcher, guard } = build(whatsapp);
       const queue = await dispatcher
-        .assertCanQueue({ channel: wa(), envelope, lastInboundAt: recent })
+        .assertCanQueue({
+          channel: wa(),
+          envelope,
+          lastInboundAt: recent,
+          consent: SERVICE_CONSENT,
+        })
         .catch((e: unknown) => e as AppError);
       expect(queue).toBeInstanceOf(AppError);
       expect((queue as AppError).code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
       expect((queue as AppError).getStatus()).toBe(422);
       const sent = await dispatcher
-        .send({ channel: wa(), envelope, lastInboundAt: recent })
+        .send({ channel: wa(), envelope, lastInboundAt: recent, consent: SERVICE_CONSENT })
         .catch((e: unknown) => e as AppError);
       expect((sent as AppError).code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
       expect(send).not.toHaveBeenCalled();
@@ -478,6 +507,7 @@ describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
           channel: qrChannel(),
           envelope,
           lastInboundAt: recent,
+          consent: SERVICE_CONSENT,
         });
         expect(q.window.open).toBe(true);
       },
@@ -490,7 +520,12 @@ describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
         to('interactive', { interactive: { type: 'location_request', body: 'Where?' } }),
       ]) {
         const e = await dispatcher
-          .assertCanQueue({ channel: qrChannel(), envelope, lastInboundAt: recent })
+          .assertCanQueue({
+            channel: qrChannel(),
+            envelope,
+            lastInboundAt: recent,
+            consent: SERVICE_CONSENT,
+          })
           .catch((x: unknown) => x as AppError);
         expect((e as AppError).code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');
         expect((e as AppError).getStatus()).toBe(422);
@@ -505,6 +540,7 @@ describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
           channel: { ...qrChannel(), status: 'disconnected' } as ChannelRuntime,
           envelope: to('text', { body: 'hi' }),
           lastInboundAt: recent,
+          consent: SERVICE_CONSENT,
         }),
       );
       expect(r).toBe('CHANNEL_DISCONNECTED');
@@ -514,10 +550,105 @@ describe('ChannelDispatcher: a WhatsApp group thread (g:<group id>)', () => {
   it('a normal phone thread on the same channel still sends through the adapter once', async () => {
     const { dispatcher } = build(whatsapp);
     const envelope = { ...text('hello', 'ref-phone'), attempt: 1 };
-    const q = await dispatcher.assertCanQueue({ channel: wa(), envelope, lastInboundAt: recent });
+    const q = await dispatcher.assertCanQueue({
+      channel: wa(),
+      envelope,
+      lastInboundAt: recent,
+      consent: SERVICE_CONSENT,
+    });
     expect(q.window.open).toBe(true);
-    const r = await dispatcher.send({ channel: wa(), envelope, lastInboundAt: recent });
+    const r = await dispatcher.send({
+      channel: wa(),
+      envelope,
+      lastInboundAt: recent,
+      consent: SERVICE_CONSENT,
+    });
     expect(r.providerMessageId).toBe('wamid.1');
     expect(send).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('ChannelDispatcher: the ConsentGate (BL-141)', () => {
+  const deny = (reason: string) => ({ decision: 'deny', reason });
+
+  it('a withdrawn contact is refused CONSENT_OPTED_OUT at queue time and at send time, and nothing is sent', async () => {
+    const { dispatcher, gate } = build();
+    const sendSpy = vi.spyOn(sim, 'send');
+    gate.check.mockResolvedValue(deny('withdrawn') as never);
+    const marketing = { purpose: 'marketing_messaging' as const, contactId: 7 };
+    expect(await code(dispatcher.assertCanQueue(req({ consent: marketing })))).toBe(
+      'CONSENT_OPTED_OUT',
+    );
+    expect(await code(dispatcher.send(req({ consent: marketing })))).toBe('CONSENT_OPTED_OUT');
+    expect(sendSpy).not.toHaveBeenCalled();
+  });
+
+  it('a missing grant under the strict switch is CONSENT_SEND_DENIED (422, no override)', async () => {
+    const { dispatcher, gate } = build();
+    gate.check.mockResolvedValue(deny('no_consent_recorded') as never);
+    const e = (await dispatcher
+      .send(req({ consent: { purpose: 'marketing_messaging' } }))
+      .catch((x: unknown) => x)) as AppError;
+    expect(e.code).toBe('CONSENT_SEND_DENIED');
+    expect(e.getStatus()).toBe(422);
+  });
+
+  it('asks the gate with the contact, the channel kind and the purpose; a free-form reply in the window is a reply', async () => {
+    const { dispatcher, gate } = build();
+    await dispatcher.send(req({ consent: { purpose: 'service_messaging', contactId: 9 } }));
+    expect(gate.check).toHaveBeenCalledWith(
+      7,
+      { type: 'contact', id: 9 },
+      'simulator',
+      'service_messaging',
+      undefined,
+      { replyWindowOpen: true },
+    );
+  });
+
+  it('without a contact id the recipient key finds the contact; a template is never a reply', async () => {
+    const { dispatcher, gate } = build();
+    await dispatcher.send(req({ envelope: text('hi', 'ref-p') }));
+    expect((gate.check.mock.calls as unknown as unknown[][]).at(-1)?.[1]).toEqual({
+      type: 'phone',
+      phone: '919876543210',
+    });
+    await dispatcher.send(
+      req({
+        envelope: {
+          kind: 'template',
+          to: '919876543210',
+          clientReference: 'ref-t',
+          template: { name: 'a', language: 'en' },
+        },
+        consent: { purpose: 'service_messaging' },
+      }),
+    );
+    expect((gate.check.mock.calls as unknown as unknown[][]).at(-1)?.[5]).toEqual({
+      replyWindowOpen: false,
+    });
+  });
+
+  it('a replayed send returns the stored answer without asking again', async () => {
+    const { dispatcher, gate } = build();
+    await dispatcher.send(req({ envelope: text('hi', 'ref-same') }));
+    const calls = gate.check.mock.calls.length;
+    const again = await dispatcher.send(req({ envelope: text('hi', 'ref-same') }));
+    expect(again.replayed).toBe(true);
+    expect(gate.check.mock.calls.length).toBe(calls);
+  });
+
+  it('the purpose of an envelope: a template takes its category, everything else is service', async () => {
+    const { dispatcher, gate } = build();
+    gate.purposeOfTemplate.mockResolvedValue('marketing_messaging' as never);
+    expect(await dispatcher.purposeFor(7, text())).toBe('service_messaging');
+    expect(
+      await dispatcher.purposeFor(7, {
+        kind: 'template',
+        to: '919876543210',
+        clientReference: 'r',
+        template: { name: 'promo', language: 'en' },
+      }),
+    ).toBe('marketing_messaging');
   });
 });

@@ -1,4 +1,5 @@
 import { Module, type OnModuleInit } from '@nestjs/common';
+import { ContactConsentModule } from '../contact-consent';
 import { BroadcastReceiptsService, BroadcastsModule } from '../broadcasts';
 import { CampaignReceiptsService, CampaignsModule } from '../campaigns';
 import { CrmModule } from '../crm';
@@ -18,6 +19,7 @@ import { ScheduledRunService } from './scheduled-run.service';
 @Module({
   imports: [
     NodeBridgeRuntimeModule,
+    ContactConsentModule,
     BroadcastsModule,
     CampaignsModule,
     CrmModule,

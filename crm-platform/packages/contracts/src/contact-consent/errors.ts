@@ -8,6 +8,10 @@ export const CONSENT_ERROR_CODES = {
   CONSENT_IDEMPOTENCY_MISMATCH: 'CONSENT_IDEMPOTENCY_MISMATCH',
   /** The keyword lists or replies are not valid (empty keyword, too long, same word in both lists is allowed: opt-out wins). 422. */
   CONSENT_SETTINGS_INVALID: 'CONSENT_SETTINGS_INVALID',
+  /** The ConsentGate refused a send: the contact withdrew or no consent is recorded. 422. The message says which; no override exists. */
+  CONSENT_SEND_DENIED: 'CONSENT_SEND_DENIED',
+  /** The unsubscribe link is not valid (altered or unknown). 404. */
+  CONSENT_UNSUBSCRIBE_LINK_INVALID: 'CONSENT_UNSUBSCRIBE_LINK_INVALID',
   /** An asynchronous export of the consent proof is already being prepared for this workspace. 409. */
   CONSENT_EXPORT_IN_PROGRESS: 'CONSENT_EXPORT_IN_PROGRESS',
   /** No such export in this workspace. 404. */
