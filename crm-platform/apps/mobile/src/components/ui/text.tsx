@@ -11,6 +11,12 @@ interface Props extends TextProps {
   danger?: boolean;
   /** A theme colour by name, for text on a coloured surface (the brand band, a banner). Wins over `muted` and `danger`. */
   color?: keyof ThemeColors;
+  /**
+   * Forces the trailing-space fix below even for a non-shaped (e.g. English) locale. For a label whose box is sized tight to its
+   * content and can turn bold (the bottom tab bar is exactly this), the same Android measure-vs-draw mismatch that motivated the
+   * fix for Devanagari can clip the last letter of ordinary Latin text too, depending on the phone's system font.
+   */
+  preventClip?: boolean;
 }
 
 /**
@@ -33,10 +39,19 @@ function withSlack(children: ReactNode): ReactNode {
 const LATIN_OVERLINE = { textTransform: 'uppercase', letterSpacing: 1.2 } as const;
 
 /** Every piece of text in the app. Honours the phone's font-size setting (no `allowFontScaling={false}`). */
-export function Text({ variant = 'body', muted, danger, color, style, children, ...rest }: Props) {
+export function Text({
+  variant = 'body',
+  muted,
+  danger,
+  color,
+  preventClip,
+  style,
+  children,
+  ...rest
+}: Props) {
   const { colors } = useTheme();
   const { i18n } = useTranslation();
-  const shaped = usesShapedScript(i18n.language);
+  const shaped = usesShapedScript(i18n.language) || preventClip === true;
   const resolved = color
     ? colors[color]
     : danger

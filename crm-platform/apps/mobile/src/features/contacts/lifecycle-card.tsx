@@ -204,9 +204,10 @@ function LifecycleSheet({ contact, options, onClose }: SheetProps) {
 }
 
 /**
- * Where the contact stands: its lifecycle stage and status, with a pencil for people who may update contacts. The stage and status
- * lists are the workspace's own (the property-read permission); when the person may not read them, or the workspace has none,
- * the card only shows the current values and offers no pencil.
+ * Where the contact stands: its lifecycle stage and status, with a pencil for people who may update contacts, plus its lead
+ * score (read-only here; scoring itself is a separate concern). The stage and status lists are the workspace's own (the
+ * property-read permission); when the person may not read them, or the workspace has none, the card only shows the current
+ * values and offers no pencil.
  */
 export function LifecycleCard({ contact }: { contact: ContactResponse }) {
   const { t } = useTranslation();
@@ -231,6 +232,7 @@ export function LifecycleCard({ contact }: { contact: ContactResponse }) {
   const statusText = contact.status
     ? (statuses.find((o) => o.value === contact.status)?.label ?? contact.status)
     : NO_VALUE;
+  const scoreText = contact.leadScore !== null ? String(contact.leadScore) : NO_VALUE;
 
   return (
     <>
@@ -247,6 +249,12 @@ export function LifecycleCard({ contact }: { contact: ContactResponse }) {
               {t('contactProps.lifecycle.status')}
             </Text>
             <Text>{statusText}</Text>
+          </View>
+          <View style={styles.cell}>
+            <Text variant="caption" muted>
+              {t('contacts.detail.score')}
+            </Text>
+            <Text>{scoreText}</Text>
           </View>
           {editable ? (
             <Pressable

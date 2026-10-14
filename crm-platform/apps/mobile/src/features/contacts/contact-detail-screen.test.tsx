@@ -19,11 +19,32 @@ import { ContactDetailScreen } from './contact-detail-screen';
 
 jest.mock('./api');
 jest.mock('./chat-api');
-// The tabs and the lifecycle card have their own tests; here each is a marker, so this file is about the frame around them.
-jest.mock('./about-tab', () => ({ AboutTab: () => mockMarker('about tab') }));
+// The tabs, the lifecycle card and the activity summary have their own tests; here each is a marker, so this file is about
+// the frame around them.
+jest.mock('./about-tab', () => ({
+  // The real tab has its own tests; what matters here is that the screen hands it the contact's tags and that they can be changed.
+  AboutTab: ({ contact, tags }: { contact: { id: string }; tags: never[] }) => {
+    /* eslint-disable @typescript-eslint/no-require-imports */
+    const { ContactTags } = require('./contact-tags');
+    const { can, useSession } = require('@/lib/session/use-session');
+    /* eslint-enable @typescript-eslint/no-require-imports */
+    const session = useSession();
+    return (
+      <>
+        {mockMarker('about tab')}
+        <ContactTags
+          contactId={contact.id}
+          tags={tags}
+          editable={can(session.data, 'record.contacts.update')}
+        />
+      </>
+    );
+  },
+}));
 jest.mock('./activity-tab', () => ({ ActivityTab: () => mockMarker('activity tab') }));
-jest.mock('./files-tab', () => ({ FilesTab: () => mockMarker('files tab') }));
+jest.mock('./more-tab', () => ({ MoreTab: () => mockMarker('more tab') }));
 jest.mock('./lifecycle-card', () => ({ LifecycleCard: () => mockMarker('lifecycle card') }));
+jest.mock('./activity-summary', () => ({ ActivitySummary: () => mockMarker('activity summary') }));
 jest.mock('@/lib/session/api');
 jest.mock('expo-router', () => ({ useRouter: jest.fn(), useLocalSearchParams: jest.fn() }));
 jest.mock('expo-linking', () => ({ openURL: jest.fn() }));
@@ -53,6 +74,10 @@ const sessionAll = {
   },
 } as typeof sessionFull;
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
+
+/** The tags live on the Contact details tab, which is not the one the screen opens on. */
+const openDetails = async () =>
+  await fireEvent.press(await screen.findByRole('radio', { name: 'Contact details' }));
 
 const settled = (queryClient: QueryClient) =>
   waitFor(() => expect(queryClient.isFetching()).toBe(0));
@@ -86,19 +111,21 @@ describe('ContactDetailScreen', () => {
     await show();
     expect(await screen.findByRole('header', { name: 'Aarav Sharma' })).toBeTruthy();
     expect(getCall).toHaveBeenCalledWith(aarav.id, expect.anything());
-    expect(await screen.findByText('VIP')).toBeTruthy();
     expect(screen.getByText('lifecycle card')).toBeTruthy();
+    expect(await screen.findByText('activity summary')).toBeTruthy();
+    await openDetails();
+    expect(await screen.findByText('VIP')).toBeTruthy();
     expect(screen.getByText('about tab')).toBeTruthy();
   });
 
-  it('switches between the About, Activity and Files tabs', async () => {
+  it('switches between the Activities, Contact details and More tabs', async () => {
     await show();
-    await screen.findByText('about tab');
-    await fireEvent.press(screen.getByRole('radio', { name: 'Activity' }));
-    expect(screen.getByText('activity tab')).toBeTruthy();
-    expect(screen.queryByText('about tab')).toBeNull();
-    await fireEvent.press(screen.getByRole('radio', { name: 'Files' }));
-    expect(screen.getByText('files tab')).toBeTruthy();
+    await screen.findByText('activity summary');
+    await fireEvent.press(screen.getByRole('radio', { name: 'Contact details' }));
+    expect(screen.getByText('about tab')).toBeTruthy();
+    expect(screen.queryByText('activity summary')).toBeNull();
+    await fireEvent.press(screen.getByRole('radio', { name: 'More' }));
+    expect(screen.getByText('more tab')).toBeTruthy();
   });
 
   it('leaves out what the contact does not have', async () => {
@@ -106,11 +133,12 @@ describe('ContactDetailScreen', () => {
     tagsCall.mockResolvedValue([]);
     jest.mocked(useLocalSearchParams).mockReturnValue({ id: phoneOnly.id });
     await show();
-    expect(await screen.findByText('No tags yet.')).toBeTruthy();
-    const email = screen.getByRole('button', { name: 'Email' });
+    const email = await screen.findByRole('button', { name: 'Email' });
     expect(email.props.accessibilityState.disabled).toBe(true);
     await fireEvent.press(email);
     expect(Linking.openURL).not.toHaveBeenCalled();
+    await openDetails();
+    expect(await screen.findByText('No tags yet.')).toBeTruthy();
   });
 
   describe('shortcuts', () => {
@@ -359,6 +387,7 @@ describe('ContactDetailScreen', () => {
       sessionCall.mockResolvedValue(sessionReadOnly);
       await show();
       await screen.findByRole('header', { name: 'Aarav Sharma' });
+      await openDetails();
       expect(screen.queryByRole('button', { name: 'Edit contact' })).toBeNull();
       expect(screen.queryByLabelText('Add a tag')).toBeNull();
       expect(screen.queryByRole('button', { name: 'Remove tag VIP' })).toBeNull();
@@ -369,6 +398,7 @@ describe('ContactDetailScreen', () => {
     it('adds a tag by name', async () => {
       attachCall.mockResolvedValue({ ...vipTag, name: 'Hot' });
       await show();
+      await openDetails();
       await screen.findByText('VIP');
       await fireEvent.changeText(screen.getByLabelText('Add a tag'), ' Hot ');
       await fireEvent.press(screen.getByRole('button', { name: 'Add tag' }));
@@ -381,6 +411,7 @@ describe('ContactDetailScreen', () => {
     it('removes a tag', async () => {
       detachCall.mockResolvedValue(undefined);
       await show();
+      await openDetails();
       await fireEvent.press(await screen.findByRole('button', { name: 'Remove tag VIP' }));
       await waitFor(() => expect(detachCall).toHaveBeenCalledWith(aarav.id, vipTag.id));
     });
@@ -388,6 +419,7 @@ describe('ContactDetailScreen', () => {
     it('says when a tag could not be added', async () => {
       attachCall.mockRejectedValue(new ApiError(403, 'FORBIDDEN', 'no'));
       await show();
+      await openDetails();
       await screen.findByText('VIP');
       await fireEvent.changeText(screen.getByLabelText('Add a tag'), 'Hot');
       await act(async () => await fireEvent.press(screen.getByRole('button', { name: 'Add tag' })));

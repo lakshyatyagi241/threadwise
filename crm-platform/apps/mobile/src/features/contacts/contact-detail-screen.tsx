@@ -10,7 +10,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { Avatar } from '@/components/ui/avatar';
 import { Banner } from '@/components/ui/banner';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,15 +24,14 @@ import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { AboutTab } from './about-tab';
-import { ActivityTab } from './activity-tab';
-import { ContactActions } from './contact-actions';
+import { ActivitiesTab } from './activities-tab';
 import { ContactForm, valuesOf } from './contact-form';
 import { contactLine, displayName } from './contact-display';
 import { describeContactFailure } from './contact-errors';
-import { ContactTags } from './contact-tags';
+import { ContactHero } from './contact-hero';
 import { normalisePhone, type ContactFormValues } from './contact-validation';
-import { FilesTab } from './files-tab';
 import { LifecycleCard } from './lifecycle-card';
+import { MoreTab } from './more-tab';
 import { useContactActions } from './use-contact-actions';
 import { StackHeader } from '@/components/ui/stack-header';
 import {
@@ -80,7 +78,7 @@ export function ContactDetailScreen() {
   const update = useUpdateContact(id);
   const remove = useDeleteContact(id);
   const canDelete = can(session.data, 'record.contacts.delete');
-  const [tab, setTab] = useState<'about' | 'activity' | 'files'>('about');
+  const [tab, setTab] = useState<'about' | 'activity' | 'files'>('activity');
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [removeError, setRemoveError] = useState<string | null>(null);
   const [editing, setEditing] = useState(params.edit === '1');
@@ -190,40 +188,28 @@ export function ContactDetailScreen() {
     const line = contactLine(data);
     body = (
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <View style={styles.hero}>
-          <Avatar name={name} size={72} />
-          <Text variant="title" accessibilityRole="header" style={styles.center}>
-            {name}
-          </Text>
-          {line && line !== name ? (
-            <Text muted style={styles.center}>
-              {line}
-            </Text>
-          ) : null}
-        </View>
+        <ContactHero name={name} line={line && line !== name ? line : null} style={styles.hero} />
 
         {notice ? <Banner tone="warning" message={notice} /> : null}
         {removeError ? <Banner tone="danger" message={removeError} /> : null}
 
-        <ContactActions actions={actions} />
-
         <LifecycleCard contact={data} />
-
-        <ContactTags contactId={data.id} tags={tags.data ?? []} editable={canUpdate} />
 
         <SegmentedControl
           label={t('contacts.detail.tabsLabel')}
           options={[
-            { value: 'about', label: t('contacts.detail.tabs.about') },
             { value: 'activity', label: t('contacts.detail.tabs.activity') },
+            { value: 'about', label: t('contacts.detail.tabs.about') },
             { value: 'files', label: t('contacts.detail.tabs.files') },
           ]}
           value={tab}
           onChange={setTab}
         />
-        {tab === 'about' ? <AboutTab contact={data} /> : null}
-        {tab === 'activity' ? <ActivityTab contactId={data.id} canUpdate={canUpdate} /> : null}
-        {tab === 'files' ? <FilesTab contactId={data.id} canUpdate={canUpdate} /> : null}
+        {tab === 'activity' ? (
+          <ActivitiesTab contactId={data.id} canUpdate={canUpdate} actions={actions} />
+        ) : null}
+        {tab === 'about' ? <AboutTab contact={data} tags={tags.data ?? []} /> : null}
+        {tab === 'files' ? <MoreTab contact={data} canUpdate={canUpdate} /> : null}
       </ScrollView>
     );
   }
@@ -274,6 +260,6 @@ const styles = StyleSheet.create({
   content: { padding: spacing.lg, gap: spacing.lg },
   pad: { padding: spacing.lg },
   loading: { marginTop: spacing.xxl },
-  hero: { alignItems: 'center', gap: spacing.sm, paddingVertical: spacing.md },
-  center: { textAlign: 'center' },
+  // Cancels the ScrollView's padding so the band reaches both edges, flush under the header.
+  hero: { marginHorizontal: -spacing.lg, marginTop: -spacing.lg },
 });

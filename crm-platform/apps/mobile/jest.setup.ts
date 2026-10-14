@@ -75,6 +75,30 @@ jest.mock('@react-native-community/netinfo', () =>
   require('@react-native-community/netinfo/jest/netinfo-mock.js'),
 );
 
+// The gesture library's own buttons need its jest setup; the swipe row below is replaced by a simpler stand-in.
+require('react-native-gesture-handler/jestSetup');
+
+// The swipe library draws with native animation code that jest does not have. This stand-in draws a row with its left actions always
+// shown, so a test can press them.
+jest.mock('react-native-gesture-handler/ReanimatedSwipeable', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  const Swipeable = React.forwardRef(
+    (
+      {
+        children,
+        renderLeftActions,
+      }: { children: unknown; renderLeftActions?: (...a: unknown[]) => unknown },
+      ref: unknown,
+    ) => {
+      const methods = { close: jest.fn(), open: jest.fn(), reset: jest.fn() };
+      React.useImperativeHandle(ref, () => methods);
+      return React.createElement(View, null, renderLeftActions?.({}, {}, methods), children);
+    },
+  );
+  return { __esModule: true, default: Swipeable };
+});
+
 beforeEach(() => {
   mockSecureStore.clear();
 });

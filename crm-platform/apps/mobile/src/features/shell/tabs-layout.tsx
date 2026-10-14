@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { View } from 'react-native';
 import { Icon, type IconName } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { can, useSession } from '@/lib/session/use-session';
@@ -8,6 +9,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 /** A tab whose module the person cannot read stays visible but faded; its screen explains why (the API refuses regardless). */
 const FADED = 0.4;
+
+/**
+ * The bar is the theme's blue (`primary`), with `onPrimary` for the icons and words on it. A tab that is not the current one is drawn
+ * a little softer than the current one, and only the current one has bold words; 0.8 keeps its text above 4.5:1 contrast on the blue in both the light and the dark theme.
+ */
+const INACTIVE = 0.8;
 
 interface TabSpec {
   name: string;
@@ -63,14 +70,13 @@ export function TabsLayout() {
       backBehavior={BACK_BEHAVIOR}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
+        tabBarActiveTintColor: colors.onPrimary,
+        tabBarInactiveTintColor: colors.onPrimary,
         tabBarStyle: {
           height: 56 + insets.bottom,
           paddingHorizontal: 8,
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-          borderTopWidth: 1,
+          backgroundColor: colors.primary,
+          borderTopWidth: 0,
         },
         tabBarItemStyle: { paddingBottom: 8, gap: 3 },
         tabBarLabelPosition: 'below-icon',
@@ -90,17 +96,19 @@ export function TabsLayout() {
               title: label,
               tabBarAccessibilityLabel: label,
               tabBarIcon: ({ focused }) => (
-                <Icon
-                  name={focused ? tab.iconFocused : tab.icon}
-                  size={22}
-                  color={focused ? 'primary' : 'textMuted'}
-                />
+                <View style={{ opacity: focused ? 1 : INACTIVE }}>
+                  <Icon name={focused ? tab.iconFocused : tab.icon} size={22} color="onPrimary" />
+                </View>
               ),
               tabBarLabel: ({ focused }) => (
                 <Text
                   variant="caption"
-                  color={focused ? 'primary' : 'textMuted'}
-                  style={faded ? { opacity: FADED } : undefined}
+                  color="onPrimary"
+                  preventClip
+                  style={{
+                    fontWeight: focused ? '700' : undefined,
+                    opacity: (focused ? 1 : INACTIVE) * (faded ? FADED : 1),
+                  }}
                 >
                   {label}
                 </Text>

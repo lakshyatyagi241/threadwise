@@ -1,6 +1,7 @@
 import type { InboxTemplateOption, MessageResponse } from '@crm/contracts';
 import type { QueryClient } from '@tanstack/react-query';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
+import * as Linking from 'expo-linking';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import { ApiError } from '@/lib/api';
@@ -28,6 +29,7 @@ jest.mock('./labels-api');
 jest.mock('./notes-api');
 jest.mock('./saved-replies-api');
 jest.mock('@/lib/session/api');
+jest.mock('expo-linking', () => ({ openURL: jest.fn() }));
 jest.mock('expo-router', () => {
   const { useEffect } = jest.requireActual<typeof import('react')>('react');
   return {
@@ -126,6 +128,43 @@ describe('ThreadScreen', () => {
     expect(screen.getByText('Hello there')).toBeTruthy();
     expect(screen.getByLabelText(/^Received: Hello there/)).toBeTruthy();
     expect(screen.getByLabelText(/^Sent by you: Hi Rohan, .*, Sent$/)).toBeTruthy();
+  });
+
+  it("offers a call button in the header to the contact's phone, and hides it with no contact phone", async () => {
+    arrange({
+      detail: detail({
+        contactSummary: {
+          id: '88888888-8888-4888-8888-888888888888',
+          displayId: 'CON-0001',
+          name: 'Rohan Mehta',
+          email: null,
+          phone: '+919800000001',
+          lifecycleStage: null,
+          status: null,
+          ownerName: null,
+          source: null,
+          isUnsubscribed: false,
+          whatsappSubscriptionStatus: null,
+          leadScore: null,
+          leadScoreSource: null,
+          leadScoreReasons: null,
+          leadScoredAt: null,
+          leadScoreModel: null,
+          createdAt: '2026-09-01T08:00:00.000Z',
+        },
+      }),
+    });
+    await show();
+    await loaded();
+    await fireEvent.press(screen.getByRole('button', { name: 'Call +919800000001' }));
+    expect(Linking.openURL).toHaveBeenCalledWith('tel:+919800000001');
+  });
+
+  it('has no call button in the header when the conversation has no contact phone', async () => {
+    arrange();
+    await show();
+    await loaded();
+    expect(screen.queryByRole('button', { name: /^Call /i })).toBeNull();
   });
 
   it('draws an empty conversation right way up, as a plain view and not in the inverted list', async () => {

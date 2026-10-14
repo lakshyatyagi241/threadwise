@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
@@ -41,21 +42,23 @@ function RootLayout() {
   if (!ready || auth.status === 'loading') return null;
 
   return (
-    <SafeAreaProvider>
-      <I18nextProvider i18n={i18n}>
-        <QueryClientProvider client={queryClient}>
-          <StatusBar style="auto" />
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Protected guard={auth.status === 'signedIn'}>
-              <Stack.Screen name="(app)" />
-            </Stack.Protected>
-            <Stack.Protected guard={auth.status === 'signedOut'}>
-              <Stack.Screen name="(auth)" />
-            </Stack.Protected>
-          </Stack>
-        </QueryClientProvider>
-      </I18nextProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <I18nextProvider i18n={i18n}>
+          <QueryClientProvider client={queryClient}>
+            <StatusBar style="auto" />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Protected guard={auth.status === 'signedIn'}>
+                <Stack.Screen name="(app)" />
+              </Stack.Protected>
+              <Stack.Protected guard={auth.status === 'signedOut'}>
+                <Stack.Screen name="(auth)" />
+              </Stack.Protected>
+            </Stack>
+          </QueryClientProvider>
+        </I18nextProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
 

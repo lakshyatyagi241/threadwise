@@ -1,3 +1,4 @@
+import type { FieldResponse } from '@crm/contracts';
 import { i18n } from '@/lib/i18n';
 import {
   bare,
@@ -43,6 +44,7 @@ import {
   draftOf,
   editorKindOf,
   formatPropertyValue,
+  groupRows,
   initialDraftOf,
   isEmptyValue,
   keyboardFor,
@@ -53,6 +55,7 @@ import {
   parseEdit,
   parseStandard,
   sameValue,
+  searchRows,
   standardText,
   statusFitsStage,
   statusScope,
@@ -622,5 +625,70 @@ describe('lifecycleChanges', () => {
     expect(lifecycleChanges(contact, { ...lost, reason: OTHER_REASON }, true, true)).toEqual({
       ok: false,
     });
+  });
+});
+
+describe('groupRows and searchRows', () => {
+  const sectionOf = (id: string, name: string, position: number, isActive = true) => ({
+    id,
+    moduleKey: 'contacts' as const,
+    name,
+    position,
+    isActive,
+    rowVersion: 1,
+    createdAt: '2026-09-01T08:00:00.000Z',
+    updatedAt: '2026-09-01T08:00:00.000Z',
+  });
+  const row = (id: string, label: string, text: string | null) => ({
+    id,
+    label,
+    text,
+    edit: { kind: 'locked', reason: 'readonly' } as const,
+  });
+  const defined = (key: string, sectionId: string | null) =>
+    ({ key, sectionId }) as unknown as FieldResponse;
+
+  it('puts the fixed rows first, then each section in its set order, then what sits in none', () => {
+    const rows = [
+      row('email', 'Email', 'a@b.test'),
+      row('field:city', 'City', 'Pune'),
+      row('field:plan', 'Plan', 'Pro'),
+      row('field:stray', 'stray', 'kept'),
+    ];
+    const groups = groupRows(
+      rows,
+      [defined('city', 'b'), defined('plan', 'a')],
+      [sectionOf('b', 'Location', 2), sectionOf('a', 'Billing', 1)],
+    );
+    expect(groups.map((g) => [g.title, g.rows.map((r) => r.id)])).toEqual([
+      [null, ['email']],
+      ['Billing', ['field:plan']],
+      ['Location', ['field:city']],
+      [null, ['field:stray']],
+    ]);
+  });
+
+  it('leaves out a section with nothing to show and treats a switched-off section as none', () => {
+    const groups = groupRows(
+      [row('field:city', 'City', 'Pune')],
+      [defined('city', 'off')],
+      [sectionOf('off', 'Old', 1, false), sectionOf('empty', 'Empty', 2)],
+    );
+    expect(groups).toEqual([
+      { title: null, rows: [expect.objectContaining({ id: 'field:city' })] },
+    ]);
+  });
+
+  it('keeps every row in one headerless group when nothing is known about sections', () => {
+    const rows = [row('email', 'Email', 'x'), row('field:city', 'City', 'Pune')];
+    expect(groupRows(rows, undefined, undefined).map((g) => g.title)).toEqual([null, null]);
+  });
+
+  it('searches the name and the value, ignoring case, and keeps all rows for an empty search', () => {
+    const rows = [row('a', 'City', 'Pune'), row('b', 'Plan', 'Pro'), row('c', 'Empty', null)];
+    expect(searchRows(rows, 'pun').map((r) => r.id)).toEqual(['a']);
+    expect(searchRows(rows, ' PLAN ').map((r) => r.id)).toEqual(['b']);
+    expect(searchRows(rows, 'nothing')).toEqual([]);
+    expect(searchRows(rows, '  ').map((r) => r.id)).toEqual(['a', 'b', 'c']);
   });
 });

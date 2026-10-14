@@ -11,6 +11,7 @@ import {
   listContactFields,
   listContactStatusOptions,
   listFieldOptions,
+  listFieldSections,
   setContactAssignee,
 } from './properties-api';
 import { contactKey, contactsKey } from './use-contacts';
@@ -36,6 +37,17 @@ export const useContactFields = (enabled: boolean) =>
   useQuery({
     queryKey: fieldsKey,
     queryFn: ({ signal }) => listContactFields(signal),
+    enabled,
+    staleTime: FIVE_MINUTES,
+  });
+
+export const fieldSectionsKey = ['field-sections', 'contacts'] as const;
+
+/** The workspace's named property groups, for the About tab's section headers. No request when `enabled` is false. */
+export const useFieldSections = (enabled: boolean) =>
+  useQuery({
+    queryKey: fieldSectionsKey,
+    queryFn: ({ signal }) => listFieldSections(signal),
     enabled,
     staleTime: FIVE_MINUTES,
   });

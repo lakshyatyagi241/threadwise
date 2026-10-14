@@ -2,9 +2,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack, router } from 'expo-router';
 import { act, fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import { I18nextProvider } from 'react-i18next';
-import { Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { i18n, initI18n } from '@/lib/i18n';
 import { fetchSession } from '@/lib/session/api';
+import { palette } from '@/lib/theme/tokens';
 import { session } from '@/test/dashboard-fixtures';
 import { TabsLayout } from './tabs-layout';
 
@@ -86,5 +87,43 @@ describe('the tabs and the Back button', () => {
   it('leaves the app from the first tab when there is nothing earlier', async () => {
     await renderRouter(structure, { initialUrl: '/' });
     expect(await back()).toBe('leaves the app');
+  });
+});
+
+describe('the look of the tab bar', () => {
+  it('is the theme blue, with the words on it in the colour made for that blue', async () => {
+    await renderRouter(structure, { initialUrl: '/' });
+    const backgrounds: unknown[] = [];
+    for (let node = screen.getByLabelText('Inbox').parent; node; node = node.parent) {
+      if (typeof node.type !== 'string') continue;
+      backgrounds.push(StyleSheet.flatten(node.props.style)?.backgroundColor);
+    }
+    expect(backgrounds).toContain(palette.light.primary);
+    const label = StyleSheet.flatten(screen.getByText('Inbox').props.style);
+    expect(label.color).toBe(palette.light.onPrimary);
+  });
+
+  it('draws the tab that is not open a little softer than the open one', async () => {
+    await renderRouter(structure, { initialUrl: '/' });
+    const opacityOf = (name: string) =>
+      StyleSheet.flatten(screen.getByText(name).props.style).opacity as number;
+    expect(opacityOf('Dashboard')).toBe(1);
+    expect(opacityOf('Inbox')).toBeLessThan(1);
+    expect(opacityOf('Inbox')).toBeGreaterThanOrEqual(0.8);
+    await tab('Inbox');
+    expect(opacityOf('Inbox')).toBe(1);
+    expect(opacityOf('Dashboard')).toBeLessThan(1);
+  });
+
+  it('shows the words of the tab that is open in bold, and only those', async () => {
+    await renderRouter(structure, { initialUrl: '/' });
+    const weightOf = (name: string) =>
+      StyleSheet.flatten(screen.getByText(name).props.style).fontWeight;
+    expect(weightOf('Dashboard')).toBe('700');
+    expect(weightOf('Inbox')).not.toBe('700');
+    await tab('Inbox');
+    expect(weightOf('Inbox')).toBe('700');
+    expect(weightOf('Dashboard')).not.toBe('700');
+    expect(weightOf('Contacts')).not.toBe('700');
   });
 });

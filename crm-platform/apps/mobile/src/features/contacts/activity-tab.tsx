@@ -34,6 +34,8 @@ interface Props {
   contactId: string;
   /** Whether the person may log an activity (`record.contacts.update`). */
   canUpdate: boolean;
+  /** Leaves out the notes and tasks tiles, for a screen that already lists them above. */
+  hideTiles?: boolean;
 }
 
 /** What a new entry is called until the person types another word: the API takes any text up to 100 characters. */
@@ -240,7 +242,7 @@ function AddActivityModal({ contactId, onClose }: { contactId: string; onClose: 
  * The API has no totals: the notes tile counts what has been loaded ("20+" when there are more) and the tasks tile, which shows
  * only to people who may read tasks, has no number.
  */
-export function ActivityTab({ contactId, canUpdate }: Props) {
+export function ActivityTab({ contactId, canUpdate, hideTiles }: Props) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const session = useSession();
@@ -297,25 +299,27 @@ export function ActivityTab({ contactId, canUpdate }: Props) {
 
   return (
     <View style={styles.root}>
-      <View style={styles.tiles}>
-        <Tile
-          icon="document-text-outline"
-          label={t('contactNotes.activity.notes')}
-          total={notesTotal}
-          onPress={() => router.push({ pathname: '/contact-notes', params: { contactId } })}
-        />
-        {canReadTasks ? (
+      {hideTiles ? null : (
+        <View style={styles.tiles}>
           <Tile
-            icon="checkbox-outline"
-            label={t('contactNotes.activity.tasks')}
-            total={null}
-            // The Tasks screen is its own feature and registers its own route; typed routes do not know it yet.
-            onPress={() =>
-              router.push({ pathname: '/tasks', params: { contactId } } as unknown as Href)
-            }
+            icon="document-text-outline"
+            label={t('contactNotes.activity.notes')}
+            total={notesTotal}
+            onPress={() => router.push({ pathname: '/contact-notes', params: { contactId } })}
           />
-        ) : null}
-      </View>
+          {canReadTasks ? (
+            <Tile
+              icon="checkbox-outline"
+              label={t('contactNotes.activity.tasks')}
+              total={null}
+              // The Tasks screen is its own feature and registers its own route; typed routes do not know it yet.
+              onPress={() =>
+                router.push({ pathname: '/tasks', params: { contactId } } as unknown as Href)
+              }
+            />
+          ) : null}
+        </View>
+      )}
 
       <Text variant="subheading" accessibilityRole="header">
         {t('contactNotes.activity.timeline')}

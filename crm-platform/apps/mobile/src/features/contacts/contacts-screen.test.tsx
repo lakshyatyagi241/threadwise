@@ -343,6 +343,79 @@ describe('ContactsScreen', () => {
     });
   });
 
+  describe('sliding a row to the right', () => {
+    // The two buttons sit behind the row for a finger only (a screen reader gets them as actions on the row), so they are looked up
+    // as hidden elements.
+    const swipeButton = async (name: 'Edit' | 'Delete') =>
+      (await screen.findAllByRole('button', { name, hidden: true }))[0]!;
+
+    it('shows Edit and Delete behind every row for a person who may update and delete', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await screen.findByRole('button', { name: 'Aarav Sharma' });
+      expect(screen.getAllByRole('button', { name: 'Edit', hidden: true })).toHaveLength(
+        contacts.length,
+      );
+      expect(screen.getAllByRole('button', { name: 'Delete', hidden: true })).toHaveLength(
+        contacts.length,
+      );
+    });
+
+    it('shows only Edit to a person who may update but not delete', async () => {
+      sessionCall.mockResolvedValue(sessionFull);
+      await show();
+      await screen.findByRole('button', { name: 'Aarav Sharma' });
+      expect(screen.getAllByRole('button', { name: 'Edit', hidden: true }).length).toBeGreaterThan(
+        0,
+      );
+      expect(screen.queryByRole('button', { name: 'Delete', hidden: true })).toBeNull();
+    });
+
+    it('shows nothing behind a row for a person who may only read', async () => {
+      sessionCall.mockResolvedValue(sessionReadOnly);
+      await show();
+      await screen.findByRole('button', { name: 'Aarav Sharma' });
+      expect(screen.queryByRole('button', { name: 'Edit', hidden: true })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Delete', hidden: true })).toBeNull();
+    });
+
+    it('opens the contact ready to edit from the Edit button of that row', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      await fireEvent.press(await swipeButton('Edit'));
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/contact/[id]',
+        params: { id: aarav.id, edit: '1' },
+      });
+    });
+
+    it('asks first and then deletes from the Delete button of that row', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      deleteCall.mockResolvedValue(undefined);
+      await show();
+      await fireEvent.press(await swipeButton('Delete'));
+      expect(await screen.findByText('Delete Aarav Sharma? This cannot be undone.')).toBeTruthy();
+      expect(deleteCall).not.toHaveBeenCalled();
+      await fireEvent.press(screen.getByRole('button', { name: 'Delete' }));
+      await waitFor(() => expect(deleteCall).toHaveBeenCalledWith(aarav.id));
+    });
+
+    it('gives a screen reader the same two things as actions on the row', async () => {
+      sessionCall.mockResolvedValue(sessionAll);
+      await show();
+      const row = await screen.findByRole('button', { name: 'Aarav Sharma' });
+      expect(row.props.accessibilityActions).toEqual([
+        { name: 'edit', label: 'Edit' },
+        { name: 'delete', label: 'Delete' },
+      ]);
+      await fireEvent(row, 'accessibilityAction', { nativeEvent: { actionName: 'edit' } });
+      expect(router.push).toHaveBeenCalledWith({
+        pathname: '/contact/[id]',
+        params: { id: aarav.id, edit: '1' },
+      });
+    });
+  });
+
   describe('the view picker', () => {
     const savedView = {
       id: '77777777-7777-4777-8777-777777777777',

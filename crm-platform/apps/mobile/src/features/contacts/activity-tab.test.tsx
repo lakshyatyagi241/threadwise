@@ -34,8 +34,10 @@ const notesCall = jest.mocked(notesApi.listContactNotes);
 const router = { push: jest.fn(), replace: jest.fn(), back: jest.fn(), canGoBack: jest.fn() };
 
 let client: QueryClient | undefined;
-async function show(canUpdate = true) {
-  const view = await renderApp(<ActivityTab contactId={contactId} canUpdate={canUpdate} />);
+async function show(canUpdate = true, hideTiles = false) {
+  const view = await renderApp(
+    <ActivityTab contactId={contactId} canUpdate={canUpdate} hideTiles={hideTiles} />,
+  );
   client = view.queryClient;
   return view;
 }
@@ -97,6 +99,15 @@ describe('ActivityTab: the tiles', () => {
     await show(false);
     await screen.findByRole('button', { name: /^Notes/ });
     expect(screen.queryByRole('button', { name: 'Tasks' })).toBeNull();
+  });
+});
+
+describe('ActivityTab: without the tiles', () => {
+  it('leaves the notes and tasks tiles out and keeps the timeline', async () => {
+    await show(true, true);
+    expect(await screen.findByText('Timeline')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /^Notes/ })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^Tasks/ })).toBeNull();
   });
 });
 

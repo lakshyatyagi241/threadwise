@@ -133,6 +133,7 @@ export default [
     files: [
       'apps/mobile/src/components/ui/text.tsx',
       'apps/mobile/src/components/ui/text-field.tsx',
+      'apps/mobile/src/components/ui/search-field.tsx',
     ],
     rules: { 'no-restricted-imports': 'off' },
   },

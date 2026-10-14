@@ -70,10 +70,17 @@ describe('LifecycleCard', () => {
     expect(statusCall).toHaveBeenCalledTimes(1);
   });
 
-  it('shows -- for a contact without a stage or a status', async () => {
-    getCall.mockResolvedValue({ ...profile, lifecycleStage: null, status: null });
+  it('shows -- for a contact without a stage, a status or a score', async () => {
+    getCall.mockResolvedValue({ ...profile, lifecycleStage: null, status: null, leadScore: null });
     await show();
-    expect(await screen.findAllByText('--')).toHaveLength(2);
+    expect(await screen.findAllByText('--')).toHaveLength(3);
+  });
+
+  it('shows the lead score beside the stage and the status', async () => {
+    getCall.mockResolvedValue({ ...profile, leadScore: 82 });
+    await show();
+    expect(await screen.findByText('82')).toBeTruthy();
+    expect(screen.getByText('Score')).toBeTruthy();
   });
 
   it('shows the values and no pencil to a person who may only read', async () => {

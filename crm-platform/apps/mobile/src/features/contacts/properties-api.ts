@@ -4,9 +4,11 @@ import {
   fieldDependencyResponseSchema,
   fieldOptionResponseSchema,
   fieldResponseSchema,
+  fieldSectionResponseSchema,
   pageResponseSchema,
   statusOptionResponseSchema,
   type FieldResponse,
+  type FieldSectionResponse,
   type PageResponse,
   type SetContactAssigneeInput,
   type StatusOptionResponse,
@@ -24,6 +26,7 @@ const MAX_PAGES = 20;
 const PAGE_LIMIT = 200;
 
 const fieldPageSchema = pageResponseSchema(fieldResponseSchema);
+const fieldSectionPageSchema = pageResponseSchema(fieldSectionResponseSchema);
 const statusOptionPageSchema = pageResponseSchema(statusOptionResponseSchema);
 
 async function allPages<Item>(
@@ -60,6 +63,15 @@ export const listContactFields = (signal?: AbortSignal) =>
   );
 
 const dependencyListSchema = z.array(fieldDependencyResponseSchema);
+
+/** The workspace's named groups for the contacts module, in the order they were set (the About tab's section headers). */
+export const listFieldSections = (signal?: AbortSignal) =>
+  allPages<FieldSectionResponse>(
+    '/v2/field-sections',
+    { moduleKey: 'contacts' },
+    fieldSectionPageSchema,
+    signal,
+  );
 
 /** Which property shows (and is asked for) only when another one holds a value: the rule a new contact's required properties follow. */
 export const listContactFieldDependencies = (signal?: AbortSignal) =>

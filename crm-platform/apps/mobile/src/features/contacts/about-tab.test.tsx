@@ -34,11 +34,12 @@ const optionsCall = jest.mocked(propertiesApi.listFieldOptions);
 const assigneesCall = jest.mocked(propertiesApi.listAssignees);
 const statusCall = jest.mocked(propertiesApi.listContactStatusOptions);
 const ownerCall = jest.mocked(propertiesApi.setContactAssignee);
+const sectionsCall = jest.mocked(propertiesApi.listFieldSections);
 
 /** The parent screen in miniature: it reads the contact and hands it to the tab, so a saved change comes back through the cache. */
 function Page() {
   const contact = useContact(profile.id);
-  return contact.data ? <AboutTab contact={contact.data} /> : null;
+  return contact.data ? <AboutTab tags={[]} contact={contact.data} /> : null;
 }
 
 let client: QueryClient | undefined;
@@ -63,6 +64,7 @@ beforeEach(() => {
     assigneesCall,
     statusCall,
     ownerCall,
+    sectionsCall,
   ]) {
     fake.mockReset();
   }
@@ -72,6 +74,7 @@ beforeEach(() => {
   fieldsCall.mockResolvedValue(fieldDefinitions);
   assigneesCall.mockResolvedValue(assignees);
   statusCall.mockResolvedValue(statusOptions);
+  sectionsCall.mockResolvedValue([]);
 });
 afterEach(async () => {
   if (client) await settled(client);
@@ -225,6 +228,46 @@ describe('AboutTab rows', () => {
     assigneesCall.mockResolvedValue([rohan]);
     await show();
     expect(await row('Contact owner', '--')).toBeTruthy();
+  });
+});
+
+describe('AboutTab sections and search', () => {
+  const section = {
+    id: 'cccccccc-0000-4000-8000-000000000001',
+    moduleKey: 'contacts' as const,
+    name: 'Location',
+    position: 1,
+    isActive: true,
+    rowVersion: 1,
+    createdAt: '2026-09-01T08:00:00.000Z',
+    updatedAt: '2026-09-01T08:00:00.000Z',
+  };
+
+  it('puts a property under the name of the section the workspace gave it', async () => {
+    sectionsCall.mockResolvedValue([section]);
+    fieldsCall.mockResolvedValue(
+      fieldDefinitions.map((f) => (f.key === 'city' ? { ...f, sectionId: section.id } : f)),
+    );
+    await show();
+    expect(await screen.findByRole('header', { name: 'Location' })).toBeTruthy();
+    expect(screen.getByText('Pune')).toBeTruthy();
+  });
+
+  it('keeps showing the values when the sections cannot be read', async () => {
+    sectionsCall.mockRejectedValue(new ApiError(403, 'FORBIDDEN', 'no'));
+    await show();
+    expect(await screen.findByText('Pune')).toBeTruthy();
+    expect(screen.queryByRole('header', { name: 'Location' })).toBeNull();
+  });
+
+  it('narrows the rows to what was typed, by name or by value', async () => {
+    await show();
+    await screen.findByText('Pune');
+    await fireEvent.changeText(screen.getByLabelText('Search fields'), 'pun');
+    expect(screen.getByText('Pune')).toBeTruthy();
+    expect(screen.queryByText('Email')).toBeNull();
+    await fireEvent.changeText(screen.getByLabelText('Search fields'), '');
+    expect(await screen.findByText('Email')).toBeTruthy();
   });
 });
 

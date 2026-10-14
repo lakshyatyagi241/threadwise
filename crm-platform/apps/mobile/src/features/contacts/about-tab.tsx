@@ -1,4 +1,4 @@
-import type { ContactResponse } from '@crm/contracts';
+import type { ContactResponse, TagResponse } from '@crm/contracts';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Switch, View } from 'react-native';
@@ -7,21 +7,25 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import { SearchField } from '@/components/ui/search-field';
 import { messageForError } from '@/lib/api/error-message';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { ContactTags } from './contact-tags';
 import { FieldEditor } from './field-editor';
 import { OwnerPicker } from './owner-picker';
 import {
   MASKED,
   NO_VALUE,
   buildRows,
+  groupRows,
+  searchRows,
   visibleRows,
   type Editable,
   type PropertyRow,
 } from './property-values';
-import { isDenied, useAssignees, useContactFields } from './use-properties';
+import { isDenied, useAssignees, useContactFields, useFieldSections } from './use-properties';
 
 /** How long "You can't edit X" stays on screen. */
 const NOTICE_MS = 4000;
@@ -82,7 +86,14 @@ function RowView({
  * contacts get a pencil on every row that can be edited and a short notice on one that cannot. Reading the property list needs
  * the property-read permission; without it the tab still shows the values, under their keys.
  */
-export function AboutTab({ contact }: { contact: ContactResponse }) {
+export function AboutTab({
+  contact,
+  tags,
+}: {
+  contact: ContactResponse;
+  /** The contact's tags, shown (and edited, for people who may update contacts) at the end of the tab. */
+  tags: readonly TagResponse[];
+}) {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
   const session = useSession();
@@ -90,9 +101,11 @@ export function AboutTab({ contact }: { contact: ContactResponse }) {
   const canReadFields = can(session.data, 'record.contact-properties.read');
   const fields = useContactFields(canReadFields);
   const assignees = useAssignees(can(session.data, 'record.contacts.read'));
+  const sections = useFieldSections(canReadFields);
 
   const [open, setOpen] = useState(true);
   const [showEmpty, setShowEmpty] = useState(false);
+  const [search, setSearch] = useState('');
   const [notice, setNotice] = useState<string | null>(null);
   const [editing, setEditing] = useState<Editable | 'owner' | null>(null);
 
@@ -103,20 +116,27 @@ export function AboutTab({ contact }: { contact: ContactResponse }) {
   }, [notice]);
 
   const ownerName = assignees.data?.find((a) => a.id === contact.ownerId)?.fullName ?? null;
-  const rows = useMemo(
+  const groups = useMemo(
     () =>
-      visibleRows(
-        buildRows({
-          contact,
-          // A refused read (403) leaves no definitions; the values are then shown under their keys.
-          fields: fields.data,
-          ownerName,
-          locale: i18n.language,
-          t,
-        }),
-        showEmpty,
+      groupRows(
+        searchRows(
+          visibleRows(
+            buildRows({
+              contact,
+              // A refused read (403) leaves no definitions; the values are then shown under their keys.
+              fields: fields.data,
+              ownerName,
+              locale: i18n.language,
+              t,
+            }),
+            showEmpty,
+          ),
+          search,
+        ),
+        fields.data,
+        sections.data,
       ),
-    [contact, fields.data, ownerName, i18n.language, t, showEmpty],
+    [contact, fields.data, sections.data, ownerName, i18n.language, t, showEmpty, search],
   );
   const fieldsFailed = fields.isError && !isDenied(fields.error);
 
@@ -152,6 +172,13 @@ export function AboutTab({ contact }: { contact: ContactResponse }) {
 
         {open ? (
           <>
+            <SearchField
+              label={t('contactProps.search')}
+              placeholder={t('contactProps.search')}
+              clearLabel={t('common.clear')}
+              value={search}
+              onChangeText={setSearch}
+            />
             <View style={styles.switchRow}>
               <Text style={styles.grow}>{t('contactProps.showEmpty')}</Text>
               <Switch
@@ -174,17 +201,31 @@ export function AboutTab({ contact }: { contact: ContactResponse }) {
                 />
               </View>
             ) : null}
-            <View>
-              {rows.map((row) => (
-                <RowView key={row.id} row={row} tappable={canUpdate} onPress={() => press(row)} />
-              ))}
-            </View>
+            {groups.map((group, index) => (
+              <View key={group.title ?? `rest-${index}`}>
+                {group.title ? (
+                  <Text
+                    variant="overline"
+                    muted
+                    accessibilityRole="header"
+                    style={styles.sectionTitle}
+                  >
+                    {group.title}
+                  </Text>
+                ) : null}
+                {group.rows.map((row) => (
+                  <RowView key={row.id} row={row} tappable={canUpdate} onPress={() => press(row)} />
+                ))}
+              </View>
+            ))}
             {canReadFields && fields.isPending ? (
               <ActivityIndicator accessibilityLabel={t('common.loading')} />
             ) : null}
           </>
         ) : null}
       </Card>
+
+      <ContactTags contactId={contact.id} tags={tags} editable={canUpdate} />
 
       <Text variant="caption" muted style={styles.footer}>
         {t('contactProps.footer')}
@@ -224,4 +265,5 @@ const styles = StyleSheet.create({
   },
   rowText: { flex: 1, gap: spacing.xs },
   footer: { paddingHorizontal: spacing.xs },
+  sectionTitle: { paddingTop: spacing.md, paddingBottom: spacing.xs },
 });

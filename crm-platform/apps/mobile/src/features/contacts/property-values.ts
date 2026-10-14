@@ -5,6 +5,7 @@ import {
   type ContactResponse,
   type FieldOptionResponse,
   type FieldResponse,
+  type FieldSectionResponse,
   type StatusOptionResponse,
   type StatusScopeRule,
   type UpdateContactInput,
@@ -688,4 +689,66 @@ export function lifecycleChanges(
     }
   }
   return { ok: true, changes };
+}
+
+// --- sections ---------------------------------------------------------------------------------------------------------------
+
+export interface RowGroup {
+  /** The workspace's name for the group; null for the rows that belong to none (the fixed ones, and values without a definition). */
+  title: string | null;
+  rows: PropertyRow[];
+}
+
+/**
+ * The rows under the workspace's section headers: the fixed rows first with no header, then one group per section in the
+ * order the workspace set (a section with no row to show is left out), then the properties that sit in no section.
+ */
+export function groupRows(
+  rows: readonly PropertyRow[],
+  fields: readonly FieldResponse[] | undefined,
+  sections: readonly FieldSectionResponse[] | undefined,
+): RowGroup[] {
+  const sectionOfKey = new Map<string, string>();
+  for (const field of fields ?? []) {
+    if (field.sectionId) sectionOfKey.set(`field:${field.key}`, field.sectionId);
+  }
+  const ordered = [...(sections ?? [])]
+    .filter((s) => s.isActive)
+    .sort((a, b) => a.position - b.position);
+  const known = new Set(ordered.map((s) => s.id));
+
+  const fixed: PropertyRow[] = [];
+  const loose: PropertyRow[] = [];
+  const bySection = new Map<string, PropertyRow[]>();
+  for (const row of rows) {
+    if (!row.id.startsWith('field:')) {
+      fixed.push(row);
+      continue;
+    }
+    const sectionId = sectionOfKey.get(row.id);
+    if (sectionId && known.has(sectionId)) {
+      bySection.set(sectionId, [...(bySection.get(sectionId) ?? []), row]);
+    } else {
+      loose.push(row);
+    }
+  }
+
+  const groups: RowGroup[] = [];
+  if (fixed.length > 0) groups.push({ title: null, rows: fixed });
+  for (const section of ordered) {
+    const inSection = bySection.get(section.id);
+    if (inSection && inSection.length > 0) groups.push({ title: section.name, rows: inSection });
+  }
+  if (loose.length > 0) groups.push({ title: null, rows: loose });
+  return groups;
+}
+
+/** The rows whose name or value contains what was typed, ignoring case; an empty search keeps every row. */
+export function searchRows(rows: readonly PropertyRow[], query: string): PropertyRow[] {
+  const needle = query.trim().toLowerCase();
+  if (needle === '') return [...rows];
+  return rows.filter(
+    (row) =>
+      row.label.toLowerCase().includes(needle) || (row.text ?? '').toLowerCase().includes(needle),
+  );
 }

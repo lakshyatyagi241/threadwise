@@ -1,6 +1,8 @@
 {
   "hi": [
     "auth.emailPlaceholder",
+    "contacts.detail.summary.atLeast",
+    "contacts.detail.summary.rowLabel",
     "dashboard.activity.by",
     "dashboard.instagram.title",
     "dashboard.integrations.name.google_sheets",
@@ -14,6 +16,8 @@
   ],
   "mr": [
     "auth.emailPlaceholder",
+    "contacts.detail.summary.atLeast",
+    "contacts.detail.summary.rowLabel",
     "dashboard.activity.by",
     "dashboard.instagram.title",
     "dashboard.integrations.name.google_sheets",

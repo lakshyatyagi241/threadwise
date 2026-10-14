@@ -1,7 +1,10 @@
 import type {
+  CompanyResponse,
   ContactActivityResponse,
   ContactFileResponse,
+  ContactMeetingResponse,
   ContactNoteResponse,
+  DealResponse,
   SessionResponse,
 } from '@crm/contracts';
 import { aarav } from './contacts-fixtures';
@@ -89,6 +92,31 @@ export const mysteryFile: ContactFileResponse = {
 
 export const files: ContactFileResponse[] = [pdfFile, mysteryFile];
 
+export const meetingA: ContactMeetingResponse = {
+  id: '11112222-1111-4111-8111-111122223333',
+  contactId,
+  title: 'Kickoff call',
+  startsAt: '2026-10-15T10:00:00.000Z',
+  endsAt: '2026-10-15T10:30:00.000Z',
+  location: 'Google Meet',
+  createdBy: '6f1c3f0e-6f5c-4d3a-9a4e-2f6f1b0d9a11',
+  rowVersion: 1,
+  createdAt: '2026-10-10T09:00:00.000Z',
+  updatedAt: '2026-10-10T09:00:00.000Z',
+};
+
+/** No date and no location set. */
+export const meetingB: ContactMeetingResponse = {
+  ...meetingA,
+  id: '22223333-2222-4222-8222-222233334444',
+  title: 'Renewal discussion',
+  startsAt: null,
+  endsAt: null,
+  location: null,
+};
+
+export const meetings: ContactMeetingResponse[] = [meetingA, meetingB];
+
 const withPermissions = (permissions: SessionResponse['permissions']): SessionResponse => ({
   ...baseSession,
   permissions,
@@ -105,3 +133,61 @@ export const sessionFull = withPermissions({
 export const sessionReadOnly = withPermissions({ 'record.contacts.read': 'all' });
 
 export const sessionNoContacts = withPermissions({ 'dash.dashboard.read': 'all' });
+
+export const dealA: DealResponse = {
+  id: '33334444-3333-4333-8333-333344445555',
+  title: 'Annual plan',
+  pipeline: { id: '44445555-4444-4444-8444-444455556666', name: 'Sales' },
+  stage: {
+    id: '55556666-5555-4555-8555-555566667777',
+    name: 'Proposal',
+    color: '#1A56DB',
+    probability: 50,
+    kind: 'open',
+  },
+  status: 'open',
+  value: '1200.00',
+  currency: 'INR',
+  owner: null,
+  contact: null,
+  company: null,
+  expectedCloseDate: null,
+  source: 'manual',
+  lostReason: null,
+  lostReasonId: null,
+  notes: null,
+  wonAt: null,
+  lostAt: null,
+  rowVersion: 1,
+  createdAt: '2026-10-01T09:00:00.000Z',
+  updatedAt: '2026-10-01T09:00:00.000Z',
+};
+
+export const contactDeals = {
+  deals: [dealA],
+  rollup: {
+    openCount: 1,
+    openValue: [{ currency: 'INR', amount: '1200.00' }],
+    wonCount: 2,
+    wonValue: [],
+  },
+};
+
+export const companyA: CompanyResponse = {
+  id: '66667777-6666-4666-8666-666677778888',
+  displayId: null,
+  name: 'Apex IQ',
+  website: 'https://apex.example.test',
+  email: null,
+  phone: '+14155550100',
+  industry: 'Software',
+  sizeRange: '11-50',
+  address: null,
+  notes: null,
+  owner: null,
+  createdBy: null,
+  rollup: { contacts: 1, deals: null },
+  rowVersion: 1,
+  createdAt: '2026-09-01T09:00:00.000Z',
+  updatedAt: '2026-09-01T09:00:00.000Z',
+};

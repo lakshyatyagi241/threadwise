@@ -1,6 +1,6 @@
 import type { ContactResponse } from '@crm/contracts';
 import { useRouter } from 'expo-router';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
@@ -30,6 +30,7 @@ import { ContactRow } from './contact-row';
 import { ContactSkeleton } from './contact-skeleton';
 import { FilterModal } from './filter-modal';
 import { NO_FILTERS, activeFilterCount, cleanFilters } from './filters';
+import type { RowCloser } from './swipe-row';
 import { useContactList, useDebounced, useDeleteContact } from './use-contacts';
 import { ViewsDrawer } from './views-drawer';
 import { ALL_CONTACTS, isAllContacts, viewFilters, type ChosenView } from './views';
@@ -52,6 +53,8 @@ export function ContactsScreen() {
   const session = useSession();
   const allowed = can(session.data, 'record.contacts.read');
   const canCreate = can(session.data, 'record.contacts.create');
+  const canUpdate = can(session.data, 'record.contacts.update');
+  const canDelete = can(session.data, 'record.contacts.delete');
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -82,6 +85,21 @@ export function ContactsScreen() {
     (id: string) => router.push({ pathname: '/contact/[id]', params: { id } }),
     [router],
   );
+  const edit = useCallback(
+    (contact: ContactResponse) =>
+      router.push({ pathname: '/contact/[id]', params: { id: contact.id, edit: '1' } }),
+    [router],
+  );
+  const askDelete = useCallback((contact: ContactResponse) => {
+    setDeleteError(null);
+    setDeleting(contact);
+  }, []);
+  // Only one row is slid open at a time: opening another closes the first.
+  const openRow = useRef<RowCloser | null>(null);
+  const onSwipeOpen = useCallback((row: RowCloser) => {
+    if (openRow.current && openRow.current !== row) openRow.current.close();
+    openRow.current = row;
+  }, []);
   const refresh = async () => {
     setRefreshing(true);
     await list.refetch();
@@ -118,7 +136,16 @@ export function ContactsScreen() {
         testID="contacts-list"
         data={contacts}
         keyExtractor={(contact) => contact.id}
-        renderItem={({ item }) => <ContactRow contact={item} onPress={open} onMore={setSheetFor} />}
+        renderItem={({ item }) => (
+          <ContactRow
+            contact={item}
+            onPress={open}
+            onMore={setSheetFor}
+            onEdit={canUpdate ? edit : undefined}
+            onDelete={canDelete ? askDelete : undefined}
+            onSwipeOpen={onSwipeOpen}
+          />
+        )}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} />}
         onEndReachedThreshold={0.5}
         onEndReached={() => {
@@ -236,12 +263,11 @@ export function ContactsScreen() {
         onClose={() => setSheetFor(null)}
         onEdit={(contact) => {
           setSheetFor(null);
-          router.push({ pathname: '/contact/[id]', params: { id: contact.id, edit: '1' } });
+          edit(contact);
         }}
         onDelete={(contact) => {
           setSheetFor(null);
-          setDeleteError(null);
-          setDeleting(contact);
+          askDelete(contact);
         }}
       />
       <ConfirmDialog

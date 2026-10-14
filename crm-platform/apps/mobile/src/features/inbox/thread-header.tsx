@@ -1,4 +1,5 @@
 import type { InboxConversationDetail } from '@crm/contracts';
+import * as Linking from 'expo-linking';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -38,7 +39,8 @@ interface Props {
 
 /**
  * The top of a thread: back, the person's avatar and name, which channel the chat is on (its logo and name), the reply-window
- * timer, the resolve button and the three dots. A thread that is not open also says so next to the channel.
+ * timer, a call button when the contact has a phone number, the resolve button and the three dots. A thread that is not open
+ * also says so next to the channel.
  */
 export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary, menu }: Props) {
   const { t } = useTranslation();
@@ -47,6 +49,9 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
   const labelKey = conversation
     ? CHANNEL_LABEL[conversation.channel.kind as keyof typeof CHANNEL_LABEL]
     : undefined;
+  // The device's own dialer, not WhatsApp Business Calling (that needs a WebRTC peer this app does not have yet):
+  // the same shortcut the contact and chat-details screens already give, one tap earlier.
+  const phone = conversation?.contactSummary?.phone ?? null;
 
   return (
     <ScreenHeader
@@ -58,6 +63,14 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
               windowHours={conversation.capabilities.windowHours}
               now={now}
             />
+            {phone ? (
+              <HeaderIconButton
+                icon="call-outline"
+                label={t('inbox.thread.call', { phone })}
+                onPress={() => void Linking.openURL(`tel:${phone}`)}
+                testID="thread-call-button"
+              />
+            ) : null}
             {primary ? (
               <HeaderIconButton
                 icon={primary.icon}

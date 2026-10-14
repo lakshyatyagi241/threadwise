@@ -3,6 +3,7 @@
     "loading": "Loading…",
     "retry": "Try again",
     "signOut": "Sign out",
+    "clear": "Clear",
     "back": "Back"
   },
   "errors": {
@@ -515,6 +516,7 @@
       "noAccessBody": "Your role cannot read conversations.",
       "resolve": "Resolve",
       "reopen": "Reopen",
+      "call": "Call {{phone}}",
       "windowClosed": "The 24-hour reply window is closed. Send a template instead.",
       "conflict": "Someone else changed this conversation. The latest version is loaded, please try again.",
       "statusInvalid": "This conversation can't be moved to that status.",
@@ -878,6 +880,7 @@
       "mail": "Write to {{email}}",
       "stage": "Lifecycle stage",
       "status": "Status",
+      "score": "Score",
       "source": "Source",
       "whatsapp": "WhatsApp subscription",
       "marketing": "Marketing messages",
@@ -897,9 +900,23 @@
       },
       "tabsLabel": "Contact sections",
       "tabs": {
-        "about": "About",
-        "activity": "Activity",
-        "files": "Files"
+        "about": "Contact details",
+        "activity": "Activities",
+        "files": "More"
+      },
+      "activities": {
+        "label": "Activity views",
+        "all": "All activities",
+        "timeline": "Activity timeline"
+      },
+      "more": { "account": "Account", "deals": "Deals" },
+      "summary": {
+        "title": "Activity",
+        "notes": "Notes",
+        "tasks": "Tasks",
+        "meetings": "Meetings",
+        "rowLabel": "{{label}}, {{count}}",
+        "atLeast": "{{count}}+"
       },
       "delete": {
         "open": "Delete contact",
@@ -919,7 +936,9 @@
     },
     "row": {
       "more": "More actions for {{name}}",
-      "actionFor": "{{action}} {{name}}"
+      "actionFor": "{{action}} {{name}}",
+      "swipeEdit": "Edit",
+      "swipeDelete": "Delete"
     },
     "sheet": {
       "close": "Close"
@@ -1164,8 +1183,47 @@
       "deleteMessage": "Are you sure you want to delete this file?"
     }
   },
+  "contactMeetings": {
+    "title": "Meetings",
+    "loadMore": "Load more",
+    "contactMissing": "This contact no longer exists.",
+    "noDate": "No date set",
+    "denied": {
+      "title": "You can't view meetings",
+      "hint": "Ask a workspace admin to give your role access to contacts."
+    },
+    "empty": {
+      "title": "No meetings logged."
+    }
+  },
+  "contactDeals": {
+    "title": "Deals",
+    "contactMissing": "This contact no longer exists.",
+    "denied": {
+      "title": "You can't view deals",
+      "hint": "Ask a workspace admin to give your role access to deals."
+    },
+    "empty": { "title": "No deals yet." }
+  },
+  "contactCompany": {
+    "title": "Account",
+    "missing": "This account no longer exists.",
+    "denied": {
+      "title": "You can't view accounts",
+      "hint": "Ask a workspace admin to give your role access to companies."
+    },
+    "industry": "Industry",
+    "size": "Size",
+    "phone": "Phone",
+    "email": "Email",
+    "website": "Website",
+    "address": "Address",
+    "owner": "Owner",
+    "notes": "Notes"
+  },
   "contactProps": {
     "title": "Contact information",
+    "search": "Search fields",
     "showEmpty": "Show empty fields",
     "footer": "You can customize the properties you see here from your web app.",
     "close": "Close",
