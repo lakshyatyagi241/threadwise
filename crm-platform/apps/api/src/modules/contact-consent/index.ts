@@ -21,3 +21,4 @@ export {
   isAllowed,
   type ConsentFacts,
 } from './consent-gate.rules';
+export { CONSENT_GATE_ALLOWLIST, SEND_PRIMITIVES } from './consent-gate.allowlist';
