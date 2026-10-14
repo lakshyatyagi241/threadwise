@@ -71,6 +71,27 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
     path: 'modules/channel-telegram/bots.service.ts',
     reason: 'Bot setup (webhook registration); sends nothing to a customer.',
   },
+  {
+    path: 'modules/channel-line/line-channel.adapter.ts',
+    reason: 'Adapter behind the dispatcher (the gate runs in ChannelDispatcher.send).',
+  },
+  {
+    path: 'modules/channel-line/line-sender.service.ts',
+    reason: 'Reply sender used by the LINE adapter, behind the dispatcher.',
+  },
+  {
+    path: 'modules/channel-line/inbound.service.ts',
+    reason: 'Inbound handling; reads the sender profile and sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-line/channels.service.ts',
+    reason: 'Channel setup (bot info, webhook registration); sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-line/line-token.service.ts',
+    reason:
+      'Issues the rotated channel access token (LINE token endpoint); sends nothing to a customer.',
+  },
   // --- staff-side, setup and test sends -------------------------------------------------------------------------------------------
   {
     path: 'modules/channel-sms/sms-senders.service.ts',
