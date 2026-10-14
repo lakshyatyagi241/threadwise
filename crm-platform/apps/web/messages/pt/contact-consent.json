@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "inscrito",
-        "withdrawn": "cancelou a inscrição"
+        "withdrawn": "cancelou a inscrição",
+        "utilityGranted": "aceitou mensagens de serviço",
+        "utilityWithdrawn": "mensagens de serviço interrompidas"
       },
       "action": {
         "granted": "Inscrito",
-        "withdrawn": "Cancelou a inscrição"
+        "withdrawn": "Cancelou a inscrição",
+        "utilityGranted": "Aceitou ser contactado sobre o seu pedido",
+        "utilityWithdrawn": "Parou as mensagens de serviço"
       },
       "source": {
         "form": "Formulário",
@@ -191,7 +195,14 @@
       "hintColumn": "A coluna mapeada para o consentimento de marketing define quem é registrado: somente as linhas que dizem sim recebem um consentimento, com o nome do arquivo como comprovação. Um não, uma célula vazia ou uma palavra desconhecida não registram nada. Contatos que cancelaram continuam cancelados.",
       "columnSummary": "{granted} linhas dizem sim e serão registradas. {notGranted} dizem não ou estão em branco e não recebem registro de consentimento.",
       "unrecognised": "{count, plural, one {# linha tem} other {# linhas têm}} um valor de consentimento que não é sim nem não ({values}). {count, plural, one {Ele é tratado} other {Eles são tratados}} como não concedido. Use yes / no, true / false ou 1 / 0.",
-      "columnIgnored": "A coluna de consentimento não faz nada até você marcar a caixa acima."
+      "columnIgnored": "A coluna de consentimento não faz nada até você marcar a caixa acima.",
+      "noticeText": "Aviso ou base legal (opcional)",
+      "noticeTextHint": "A que estes contactos concordaram e onde, por exemplo: aderiram no checkout com o aviso de privacidade v3. É guardado como prova em cada consentimento registado.",
+      "noticeVersion": "Versão do aviso (opcional)",
+      "smsSummary": "Coluna de consentimento SMS: {granted} linhas dizem sim e serão registadas como consentimento SMS. {notGranted} dizem não ou estão em branco.",
+      "emailSummary": "Coluna de consentimento de e-mail: {granted} linhas dizem sim e serão registadas como consentimento de e-mail (a linha também precisa de um endereço de e-mail). {notGranted} dizem não ou estão em branco.",
+      "labelNumbers": "Tenho consentimento para enviar mensagens a estes números",
+      "hintNumbers": "Marcada, cada número do ficheiro é registado como tendo aceitado marketing ao lançar a difusão, com o nome do ficheiro como prova. Desmarcada, nenhum consentimento é registado. Quem cancelou continua cancelado."
     },
     "systemLine": {
       "withdrawn": "O contato respondeu {keyword}: cancelou a inscrição em marketing",

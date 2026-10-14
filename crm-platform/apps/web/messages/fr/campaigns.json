@@ -1278,7 +1278,9 @@
           "invalid_phone": "Numéro invalide",
           "duplicate": "Doublon"
         },
-        "csvIssuesMore": "{count} autres figurent dans le téléchargement."
+        "csvIssuesMore": "{count} autres figurent dans le téléchargement.",
+        "csvConsentOn": "Vous avez confirmé le consentement pour ces numéros. Ils sont enregistrés comme ayant accepté au lancement de la diffusion.",
+        "csvConsentVersion": "Version de la mention : {version}."
       },
       "review": {
         "intro": "Vérifiez le coût, indiquez par quoi chaque variable du modèle est remplie et examinez la diffusion.",

@@ -1278,7 +1278,9 @@
           "invalid_phone": "Không phải số hợp lệ",
           "duplicate": "Trùng lặp"
         },
-        "csvIssuesMore": "Còn {count} mục nữa trong tệp tải xuống."
+        "csvIssuesMore": "Còn {count} mục nữa trong tệp tải xuống.",
+        "csvConsentOn": "Bạn đã xác nhận sự đồng ý cho các số này. Chúng được ghi nhận là đã đồng ý khi chiến dịch khởi chạy.",
+        "csvConsentVersion": "Phiên bản thông báo: {version}."
       },
       "review": {
         "intro": "Kiểm tra chi phí, cho chúng tôi biết mỗi biến của mẫu được điền bằng gì, và xem lại đợt gửi hàng loạt.",

@@ -1278,7 +1278,9 @@
           "invalid_phone": "Geen geldig nummer",
           "duplicate": "Duplicaat"
         },
-        "csvIssuesMore": "Nog {count} staan in de download."
+        "csvIssuesMore": "Nog {count} staan in de download.",
+        "csvConsentOn": "U hebt de toestemming voor deze nummers bevestigd. Ze worden bij het starten van de verzending vastgelegd als akkoord.",
+        "csvConsentVersion": "Versie van de mededeling: {version}."
       },
       "review": {
         "intro": "Controleer de kosten, geef aan waarmee elke sjabloonvariabele wordt gevuld en bekijk de broadcast.",

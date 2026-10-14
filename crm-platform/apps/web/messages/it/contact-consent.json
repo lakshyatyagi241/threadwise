@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "iscritto",
-        "withdrawn": "disiscritto"
+        "withdrawn": "disiscritto",
+        "utilityGranted": "ha accettato i messaggi di servizio",
+        "utilityWithdrawn": "messaggi di servizio interrotti"
       },
       "action": {
         "granted": "Iscritto",
-        "withdrawn": "Disiscritto"
+        "withdrawn": "Disiscritto",
+        "utilityGranted": "Ha accettato di essere contattato per la sua richiesta",
+        "utilityWithdrawn": "Ha interrotto i messaggi di servizio"
       },
       "source": {
         "form": "Modulo",
@@ -191,7 +195,14 @@
       "hintColumn": "La colonna associata al consenso marketing decide chi viene registrato: solo le righe che dicono sì ottengono un consenso, con il nome del file come prova. Un no, una cella vuota o una parola sconosciuta non registrano nulla. I contatti che hanno annullato l'iscrizione restano disiscritti.",
       "columnSummary": "{granted} righe dicono sì e verranno registrate. {notGranted} dicono no o sono vuote e non ricevono alcun registro di consenso.",
       "unrecognised": "{count, plural, one {# riga contiene} other {# righe contengono}} un valore di consenso che non è sì né no ({values}). {count, plural, one {Viene trattato} other {Vengono trattati}} come non concesso. Usa yes / no, true / false o 1 / 0.",
-      "columnIgnored": "La colonna del consenso non ha effetto finché non selezioni la casella qui sopra."
+      "columnIgnored": "La colonna del consenso non ha effetto finché non selezioni la casella qui sopra.",
+      "noticeText": "Informativa o base giuridica (facoltativo)",
+      "noticeTextHint": "A cosa hanno acconsentito questi contatti e dove, ad esempio: iscritti al checkout con l'informativa privacy v3. Viene conservato come prova con ogni consenso registrato.",
+      "noticeVersion": "Versione dell'informativa (facoltativo)",
+      "smsSummary": "Colonna del consenso SMS: {granted} righe dicono sì e saranno registrate come consenso SMS. {notGranted} dicono no o sono vuote.",
+      "emailSummary": "Colonna del consenso email: {granted} righe dicono sì e saranno registrate come consenso email (la riga deve avere anche un indirizzo email). {notGranted} dicono no o sono vuote.",
+      "labelNumbers": "Ho il consenso per scrivere a questi numeri",
+      "hintNumbers": "Selezionata, ogni numero del file viene registrato come consenziente al marketing al lancio della trasmissione, con il nome del file come prova. Non selezionata, non viene registrato alcun consenso. Chi si è disiscritto resta disiscritto."
     },
     "systemLine": {
       "withdrawn": "Il contatto ha risposto {keyword}: disiscritto dal marketing",

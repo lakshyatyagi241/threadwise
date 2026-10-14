@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Source",
-        "consent": "Marketing consent (yes / no)"
+        "consent": "Marketing consent (yes / no)",
+        "consentSms": "SMS marketing consent (yes / no)",
+        "consentEmail": "Email marketing consent (yes / no)"
       },
       "notInFile": "Not in file",
       "columnN": "Column {n}",

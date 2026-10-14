@@ -1278,7 +1278,9 @@
           "invalid_phone": "Número no válido",
           "duplicate": "Duplicado"
         },
-        "csvIssuesMore": "Hay {count} más en la descarga."
+        "csvIssuesMore": "Hay {count} más en la descarga.",
+        "csvConsentOn": "Confirmaste el consentimiento de estos números. Se registran como aceptados cuando se lanza la difusión.",
+        "csvConsentVersion": "Versión del aviso: {version}."
       },
       "review": {
         "intro": "Revisa el coste, indica con qué se rellena cada variable de la plantilla y comprueba la difusión.",

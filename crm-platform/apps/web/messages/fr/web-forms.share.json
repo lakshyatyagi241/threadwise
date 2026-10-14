@@ -151,7 +151,10 @@
         "marketingHint": "Cocher la case enregistre le consentement marketing sur le contact. Une case non cochée n’inscrit jamais personne.",
         "whatsappHint": "Allez-vous envoyer des messages à ces contacts sur WhatsApp ? Utilisez une formulation qui le précise et indique comment se désabonner. La case cochée est conservée comme preuve, avec ce texte exact et sa version.",
         "whatsappInsert": "Utiliser la formulation d'acceptation WhatsApp",
-        "whatsappWording": "J'accepte de recevoir des actualités et des offres sur WhatsApp. Je peux répondre STOP à tout moment pour me désabonner."
+        "whatsappWording": "J'accepte de recevoir des actualités et des offres sur WhatsApp. Je peux répondre STOP à tout moment pour me désabonner.",
+        "coversSms": "Le texte couvre les SMS",
+        "coversSmsHint": "À activer uniquement si le texte ci-dessus indique qu'on peut contacter par SMS. Quand un téléphone est collecté, le SMS est enregistré avec WhatsApp et l'e-mail.",
+        "serviceHint": "Cette ligne n'est pas du marketing. Une case cochée est conservée comme preuve que la personne a accepté d'être contactée au sujet de sa demande (messages de service uniquement), avec ce texte exact et sa version. Elle n'abonne jamais personne au marketing."
       },
       "crm": {
         "title": "Dans le CRM",

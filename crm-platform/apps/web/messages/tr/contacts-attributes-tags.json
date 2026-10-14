@@ -456,7 +456,9 @@
         "memo": "Not",
         "status": "Durum",
         "source": "Kaynak",
-        "consent": "Pazarlama izni (evet / hayır)"
+        "consent": "Pazarlama izni (evet / hayır)",
+        "consentSms": "SMS pazarlama onayı (evet / hayır)",
+        "consentEmail": "E-posta pazarlama onayı (evet / hayır)"
       },
       "notInFile": "Dosyada yok",
       "columnN": "Sütun {n}",

@@ -151,7 +151,10 @@
         "marketingHint": "Đánh dấu ô sẽ ghi nhận sự đồng ý nhận tiếp thị cho liên hệ. Ô không đánh dấu sẽ không đăng ký ai cả.",
         "whatsappHint": "Bạn có định nhắn tin cho các liên hệ này qua WhatsApp không? Hãy dùng nội dung nói rõ điều đó và cách hủy đăng ký. Ô đã chọn được lưu làm bằng chứng, kèm đúng nội dung này và phiên bản của nó.",
         "whatsappInsert": "Dùng nội dung đồng ý nhận tin WhatsApp",
-        "whatsappWording": "Tôi đồng ý nhận cập nhật và ưu đãi qua WhatsApp. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký."
+        "whatsappWording": "Tôi đồng ý nhận cập nhật và ưu đãi qua WhatsApp. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
+        "coversSms": "Nội dung bao gồm SMS",
+        "coversSmsHint": "Chỉ bật khi nội dung phía trên cho biết có thể liên hệ qua SMS. Khi thu thập số điện thoại, SMS được ghi nhận cùng với WhatsApp và email.",
+        "serviceHint": "Dòng này không phải tiếp thị. Ô được chọn được lưu làm bằng chứng người đó đồng ý được liên hệ về yêu cầu của họ (chỉ tin nhắn dịch vụ), với đúng nội dung này và phiên bản của nó. Không bao giờ đăng ký ai vào tiếp thị."
       },
       "crm": {
         "title": "Trong CRM",

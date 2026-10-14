@@ -1278,7 +1278,9 @@
           "invalid_phone": "유효하지 않은 번호",
           "duplicate": "중복"
         },
-        "csvIssuesMore": "{count}개가 더 다운로드 파일에 있습니다."
+        "csvIssuesMore": "{count}개가 더 다운로드 파일에 있습니다.",
+        "csvConsentOn": "이 번호들의 동의를 확인했습니다. 브로드캐스트를 시작할 때 동의한 것으로 기록됩니다.",
+        "csvConsentVersion": "고지 버전: {version}."
       },
       "review": {
         "intro": "비용을 확인하고, 각 템플릿 변수를 무엇으로 채울지 알려 주시고, 브로드캐스트를 검토하세요.",

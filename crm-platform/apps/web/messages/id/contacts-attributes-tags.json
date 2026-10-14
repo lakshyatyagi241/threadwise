@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Sumber",
-        "consent": "Persetujuan pemasaran (ya / tidak)"
+        "consent": "Persetujuan pemasaran (ya / tidak)",
+        "consentSms": "Persetujuan pemasaran SMS (ya / tidak)",
+        "consentEmail": "Persetujuan pemasaran email (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",

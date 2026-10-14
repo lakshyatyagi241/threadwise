@@ -1278,7 +1278,9 @@
           "invalid_phone": "有効な番号ではありません",
           "duplicate": "重複"
         },
-        "csvIssuesMore": "さらに{count}件がダウンロードに含まれています。"
+        "csvIssuesMore": "さらに{count}件がダウンロードに含まれています。",
+        "csvConsentOn": "これらの番号の同意を確認しました。配信開始時に同意済みとして記録されます。",
+        "csvConsentVersion": "通知のバージョン: {version}。"
       },
       "review": {
         "intro": "コストを確認し、各テンプレート変数に何を入力するかを指定して、一斉配信を確認します。",

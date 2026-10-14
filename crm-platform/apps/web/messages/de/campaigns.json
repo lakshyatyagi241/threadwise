@@ -1278,7 +1278,9 @@
           "invalid_phone": "Keine gültige Nummer",
           "duplicate": "Duplikat"
         },
-        "csvIssuesMore": "{count} weitere sind im Download enthalten."
+        "csvIssuesMore": "{count} weitere sind im Download enthalten.",
+        "csvConsentOn": "Sie haben die Einwilligung für diese Nummern bestätigt. Sie werden beim Start des Versands als zugestimmt erfasst.",
+        "csvConsentVersion": "Version des Hinweises: {version}."
       },
       "review": {
         "intro": "Prüfen Sie die Kosten, legen Sie fest, womit jede Vorlagenvariable gefüllt wird, und kontrollieren Sie den Broadcast.",

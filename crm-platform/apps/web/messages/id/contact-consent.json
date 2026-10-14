@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "berlangganan",
-        "withdrawn": "berhenti berlangganan"
+        "withdrawn": "berhenti berlangganan",
+        "utilityGranted": "menyetujui pesan layanan",
+        "utilityWithdrawn": "pesan layanan dihentikan"
       },
       "action": {
         "granted": "Berlangganan",
-        "withdrawn": "Berhenti berlangganan"
+        "withdrawn": "Berhenti berlangganan",
+        "utilityGranted": "Menyetujui dihubungi terkait permintaannya",
+        "utilityWithdrawn": "Menghentikan pesan layanan"
       },
       "source": {
         "form": "Formulir",
@@ -191,7 +195,14 @@
       "hintColumn": "Kolom yang dipetakan ke persetujuan pemasaran menentukan siapa yang dicatat: hanya baris yang berisi ya yang mendapat persetujuan, dengan nama file sebagai bukti. Tidak, sel kosong, atau kata yang tidak dikenal tidak mencatat apa pun. Kontak yang sudah berhenti berlangganan tetap berhenti.",
       "columnSummary": "{granted} baris berisi ya dan akan dicatat. {notGranted} berisi tidak atau kosong dan tidak mendapat catatan persetujuan.",
       "unrecognised": "{count, plural, one {# baris memiliki} other {# baris memiliki}} nilai persetujuan yang bukan ya atau tidak ({values}). Nilai itu dianggap tidak disetujui. Gunakan ya / tidak, true / false, atau 1 / 0.",
-      "columnIgnored": "Kolom persetujuan tidak berpengaruh sampai Anda mencentang kotak di atas."
+      "columnIgnored": "Kolom persetujuan tidak berpengaruh sampai Anda mencentang kotak di atas.",
+      "noticeText": "Pemberitahuan atau dasar hukum (opsional)",
+      "noticeTextHint": "Apa yang disetujui kontak ini dan di mana, misalnya: mendaftar saat checkout dengan pemberitahuan privasi v3. Disimpan sebagai bukti pada setiap persetujuan yang dicatat.",
+      "noticeVersion": "Versi pemberitahuan (opsional)",
+      "smsSummary": "Kolom persetujuan SMS: {granted} baris berisi ya dan akan dicatat sebagai persetujuan SMS. {notGranted} berisi tidak atau kosong.",
+      "emailSummary": "Kolom persetujuan email: {granted} baris berisi ya dan akan dicatat sebagai persetujuan email (baris juga harus punya alamat email). {notGranted} berisi tidak atau kosong.",
+      "labelNumbers": "Saya memiliki persetujuan untuk mengirim pesan ke nomor-nomor ini",
+      "hintNumbers": "Jika dicentang, setiap nomor dalam file dicatat telah menyetujui pemasaran saat siaran diluncurkan, dengan nama file sebagai bukti. Jika tidak, tidak ada persetujuan yang dicatat. Orang yang berhenti berlangganan tetap berhenti."
     },
     "systemLine": {
       "withdrawn": "Kontak membalas {keyword}: berhenti berlangganan pemasaran",
