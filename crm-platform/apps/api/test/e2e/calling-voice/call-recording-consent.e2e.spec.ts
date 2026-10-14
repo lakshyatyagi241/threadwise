@@ -22,7 +22,10 @@ afterAll(async () => {
 });
 
 const WEBM = Buffer.concat([
-  Buffer.from('1a45dfa39f4286810142f7810142f2810442f3810842820477656' + '26d4287810442858102', 'hex'),
+  Buffer.from(
+    '1a45dfa39f4286810142f7810142f2810442f3810842820477656' + '26d4287810442858102',
+    'hex',
+  ),
   Buffer.alloc(400, 0x7f),
 ]);
 let seq = 0;
@@ -53,8 +56,12 @@ async function setup(label: string) {
 
 const upload = (token: string, id: string) =>
   p.api.as(token).post(`/v2/calling/calls/${id}/recording`).attach('recording', WEBM, 'call.webm');
-const consent = (token: string, id: string, decision: 'granted' | 'declined', method = 'spoken_yes') =>
-  p.api.as(token).post(`/v2/calling/calls/${id}/recording-consent`).send({ decision, method });
+const consent = (
+  token: string,
+  id: string,
+  decision: 'granted' | 'declined',
+  method = 'spoken_yes',
+) => p.api.as(token).post(`/v2/calling/calls/${id}/recording-consent`).send({ decision, method });
 const row = async (id: string) =>
   (await p.h.owner.query(`SELECT * FROM wa_calls WHERE uuid = $1::uuid`, [id])).rows[0];
 
@@ -283,7 +290,10 @@ describe('the lifecycle', () => {
   it('the default window is 90 days for a workspace that never chose one', async () => {
     const { t, number } = await setup('rcdefsweep');
     const id = await liveCall(t, number);
-    await p.h.owner.query(`UPDATE wa_calls SET recording_path = 'chat/x/none.webm' WHERE uuid = $1::uuid`, [id]);
+    await p.h.owner.query(
+      `UPDATE wa_calls SET recording_path = 'chat/x/none.webm' WHERE uuid = $1::uuid`,
+      [id],
+    );
     await age(id, 89);
     await sweep();
     expect((await row(id)).recording_path).toBeTruthy();
@@ -310,10 +320,7 @@ describe('the lifecycle', () => {
     const del = await p.api.as(t.admin).delete(`/v2/calling/calls/${id}/recording`);
     expect(del.status).toBe(409);
     expect(del.body.code).toBe('CALL_RECORDING_ON_HOLD');
-    await p.api
-      .as(t.admin)
-      .put(`/v2/calling/call-logs/${id}/recording-hold`)
-      .send({ hold: false });
+    await p.api.as(t.admin).put(`/v2/calling/call-logs/${id}/recording-hold`).send({ hold: false });
     await sweep();
     expect((await row(id)).recording_path).toBeNull();
   });

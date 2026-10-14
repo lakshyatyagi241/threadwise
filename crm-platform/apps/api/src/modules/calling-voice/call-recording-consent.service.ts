@@ -36,11 +36,7 @@ export class CallRecordingConsentService {
   ) {}
 
   /** The gate's answer for one call, from the evidence on its row. Also used by the upload. */
-  async decide(
-    orgId: number,
-    state: RecordingState,
-    enabled: boolean,
-  ): Promise<ConsentGateResult> {
+  async decide(orgId: number, state: RecordingState, enabled: boolean): Promise<ConsentGateResult> {
     return this.gate.check(
       orgId,
       state.contactId !== null

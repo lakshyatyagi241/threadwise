@@ -69,7 +69,8 @@ export class CallRecordingsService {
     }
     const before = await this.db.tx((tx) => this.recRepo.stateByUuid(tx, orgId, callUuid));
     if (!before) throw notFound('CALL_NOT_FOUND', 'Call');
-    if ((await this.consent.decide(orgId, before, true)).decision !== 'allow') throw consentRequired();
+    if ((await this.consent.decide(orgId, before, true)).decision !== 'allow')
+      throw consentRequired();
     if (before.legalHold && before.recordingPath) {
       throw new AppError(
         ERROR_CODES.CALL_RECORDING_ON_HOLD,

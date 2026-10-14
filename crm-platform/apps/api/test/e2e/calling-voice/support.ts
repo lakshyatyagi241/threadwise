@@ -205,7 +205,8 @@ export async function enableRecording(
       noticeText: o.notice ?? RECORDING_NOTICE,
       ...(cur.body.rowVersion ? { rowVersion: cur.body.rowVersion } : {}),
     });
-  if (res.status !== 200) throw new Error(`enableRecording: ${res.status} ${JSON.stringify(res.body)}`);
+  if (res.status !== 200)
+    throw new Error(`enableRecording: ${res.status} ${JSON.stringify(res.body)}`);
   return res.body as { noticeVersion: number; rowVersion: number };
 }
 

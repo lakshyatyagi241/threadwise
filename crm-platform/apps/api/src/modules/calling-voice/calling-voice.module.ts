@@ -49,6 +49,13 @@ import { CallsRepository } from './calls.repository';
     CallRecordingConsentService,
     CallingWabaSink,
   ],
-  exports: [CallsRepository, CallRecordingRepository, CallingWabaSink, CallActionsService, CallPermissionService, CallEventsService],
+  exports: [
+    CallsRepository,
+    CallRecordingRepository,
+    CallingWabaSink,
+    CallActionsService,
+    CallPermissionService,
+    CallEventsService,
+  ],
 })
 export class CallingVoiceModule {}

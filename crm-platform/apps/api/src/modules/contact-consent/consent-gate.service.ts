@@ -86,7 +86,9 @@ export class ConsentGate {
           ...(modality ? { modality } : {}),
           requireConsent: false,
           replyWindowOpen: true,
-          ...(options.purposeEnabled === undefined ? {} : { purposeEnabled: options.purposeEnabled }),
+          ...(options.purposeEnabled === undefined
+            ? {}
+            : { purposeEnabled: options.purposeEnabled }),
           facts: NO_FACTS,
         });
       }

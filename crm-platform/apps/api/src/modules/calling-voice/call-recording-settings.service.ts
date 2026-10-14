@@ -56,7 +56,9 @@ export class CallRecordingSettingsService {
 
   /** For the gate and the sweep: no request context, no plan check. */
   async read(orgId: number): Promise<CallRecordingSettings> {
-    const row = await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.getSettings(tx, orgId));
+    const row = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      this.repo.getSettings(tx, orgId),
+    );
     return mergeRecordingSettings(row);
   }
 
@@ -105,7 +107,9 @@ export class CallRecordingSettingsService {
         action: before ? 'update' : 'insert',
         // Field names and values of switches only; the notice text is a workspace document, referenced by its version.
         delta: {
-          ...(was.enabled !== input.enabled && { enabled: { old: was.enabled, new: input.enabled } }),
+          ...(was.enabled !== input.enabled && {
+            enabled: { old: was.enabled, new: input.enabled },
+          }),
           ...(was.consentMode !== input.consentMode && {
             consentMode: { old: was.consentMode, new: input.consentMode },
           }),

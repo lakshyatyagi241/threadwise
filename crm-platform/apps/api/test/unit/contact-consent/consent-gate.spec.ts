@@ -159,9 +159,9 @@ describe('ConsentGate truth table', () => {
       reason: 'consent_declined',
     });
     // a grant with no delivered notice is not evidence
-    expect(decide({ ...rec, noticeEvidence: { delivered: false, consent: 'granted' } }).decision).toBe(
-      'needs_notice',
-    );
+    expect(
+      decide({ ...rec, noticeEvidence: { delivered: false, consent: 'granted' } }).decision,
+    ).toBe('needs_notice');
   });
   it('the workspace switch is checked before anything else, even with a grant on the record', () => {
     const r = decide({

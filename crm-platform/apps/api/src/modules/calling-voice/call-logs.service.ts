@@ -53,7 +53,8 @@ export function toLifecycle(r: Row): CallRecordingLifecycle {
       status: (r.recording_consent_status as 'granted' | 'declined' | null) ?? null,
       method: (r.recording_consent_method as CallRecordingConsentMethod | null) ?? null,
       at: iso(r.recording_consent_at),
-      noticeVersion: r.recording_notice_version === null ? null : Number(r.recording_notice_version),
+      noticeVersion:
+        r.recording_notice_version === null ? null : Number(r.recording_notice_version),
       noticeSha256: (r.recording_notice_sha256 as string | null) ?? null,
     },
   };
