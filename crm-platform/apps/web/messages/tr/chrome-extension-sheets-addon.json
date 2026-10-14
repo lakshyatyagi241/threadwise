@@ -18,7 +18,7 @@
     },
     "page": {
       "title": "Google Sheets eklentisi",
-      "subtitle": "Bir elektronik tablo ile çalışma alanınız arasında kişileri çekin ve gönderin, ürünleri senkronize edin.",
+      "subtitle": "Sayfadaki yeni ve değişen satırları kişi olarak çalışma alanınıza gönderin, kişileri bir sayfaya çekin ve ürünleri eşitleyin.",
       "loading": "Eklenti kurulumu yükleniyor",
       "retry": "Yeniden dene",
       "status": {
@@ -50,7 +50,7 @@
     },
     "key": {
       "title": "Anahtarınız",
-      "intro": "Eklenti, sizin adınıza işlem yapmak için kişisel anahtarınızı kullanır. Yalnızca rolünüzün izin verdiklerini görür.",
+      "intro": "Eklenti, sizin adınıza işlem yapmak için kişisel anahtarınızı kullanır. Yalnızca rolünüzün izin verdiklerini görür. Anahtar, Webhook URL’nizin son bölümüdür.",
       "none": "Henüz anahtarınız yok.",
       "generate": "Anahtar oluştur",
       "rotate": "Yeni anahtar oluştur",
@@ -60,8 +60,8 @@
       "created": "Oluşturulma: {when}",
       "lastUsed": "Son kullanım: {when}",
       "neverUsed": "Hiç kullanılmadı",
-      "newTitle": "Yeni anahtarınız",
-      "newWarning": "Şimdi kopyalayın. Yalnızca bir kez gösterilir ve tekrar gösterilemez. Bu anahtara sahip herkes eklentide sizin adınıza işlem yapabilir.",
+      "newTitle": "Yeni anahtarınız ve Webhook URL’niz",
+      "newWarning": "Şimdi kopyalayın. Anahtar ve Webhook URL yalnızca bir kez gösterilir ve tekrar gösterilemez. Bunlara sahip olan herkes eklentide sizin adınıza işlem yapabilir.",
       "rotatedNote": "Önceki anahtarınız çalışmayı bıraktı.",
       "keyLabel": "Yeni anahtar",
       "confirmRotate": {
@@ -85,7 +85,8 @@
         "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
         "network": "Sunucuya ulaşamadık. Bağlantınızı kontrol edip tekrar deneyin.",
         "unexpected": "Bizim tarafta bir şeyler ters gitti. Tekrar deneyin."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Anahtarınızın yapabilecekleri",
@@ -107,13 +108,13 @@
       "failed": "{name} indirilemedi. Tekrar deneyin."
     },
     "steps": {
-      "title": "Bir elektronik tabloda kurun",
-      "one": "Bir elektronik tablo açın, ardından Uzantılar, sonra Apps Script.",
-      "two": "Yukarıdaki altı dosyayı indirin. Proje Ayarları'nda appsscript.json dosyasını gösterin ve düzenleyicideki dosyaların üzerine appsscript.json ile Code.gs içeriklerini yapıştırın.",
-      "three": "Dialog, Settings ve Help adlı üç HTML dosyası ekleyin ve indirilen dosyaları içlerine yapıştırın.",
-      "four": "Kaydedin ve elektronik tabloyu yeniden yükleyin. Bir CRM menüsü görünür. Google'ın istediği üç izne izin verin.",
-      "five": "CRM'yi, ardından Ayarlar'ı seçin, anahtarınızı yapıştırın ve Kaydet ve kontrol et'i seçin.",
-      "six": "Sayfanızın 1. satırı sütun adlarını içerir. Ardından CRM menüsünden Kişileri çek, Kişileri gönder veya Ürünleri senkronize et'i kullanın."
+      "title": "Bir e-tabloda kurun",
+      "one": "Anahtarınızı oluştururken Webhook URL’nizi kopyalayın. Yalnızca bir kez gösterilir.",
+      "two": "Bir e-tabloda Extensions, ardından Add-ons, ardından Get add-ons seçin ve eklentiyi Google Workspace Marketplace’ten yükleyin. Orada listelenene kadar aşağıdaki altı dosyayı Extensions, Apps Script içine yapıştırın.",
+      "three": "E-tabloyu yeniden yükleyin. Extensions, ardından eklenti, ardından Initial Setup seçin ve Webhook URL’yi yapıştırın.",
+      "four": "Sayfayı ve tetikleyici sütunu seçin. O hücre doldurulduğunda veya değiştirildiğinde satır gönderilir.",
+      "five": "Bağlantıyı denetlemek için Send Test seçin. Hiçbir şey kaydedilmez; CRM’in aldığı sütunları görürsünüz. Ardından Submit seçin.",
+      "six": "Send on event (bir satır düzenlediğiniz anda gönderilir) ve/veya Send on schedule (her saat, bir form veya başka bir uygulamanın değiştirdiği satırlar) seçeneğini açın. Her satır bir kişi olarak gelir ve sonucu bir CRM status sütununa yazılır."
     },
     "columns": {
       "title": "Eklentinin okuduğu sütunlar",
@@ -133,6 +134,22 @@
       "title": "Son ürünler",
       "empty": "Henüz ürün yok. Eklemek için bir sayfayı senkronize edin.",
       "count": "{count, plural, one {Çalışma alanınızda # ürün} other {Çalışma alanınızda # ürün}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Bunu eklentide Initial Setup içine yapıştırın. Anahtarınızı içerir, bu yüzden gizli tutun.",
+      "none": "Webhook URL’nizi almak için bir anahtar oluşturun.",
+      "capture": {
+        "title": "Son alınan veriler",
+        "none": "Henüz bir şey alınmadı. Eklentide Initial Setup, ardından Send Test seçin.",
+        "when": "{sheet} sayfasından {event}, {when}. {rows, plural, one {# satır} other {# satır}}.",
+        "noSheet": "adsız bir sayfa",
+        "events": {
+          "test": "Test",
+          "edit": "Düzenleme",
+          "schedule": "Saatlik tarama"
+        }
+      }
     }
   }
 }

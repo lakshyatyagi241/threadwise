@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { ExtSheetsKeyIssued, ExtSheetsKeyStatus } from '@crm/contracts';
+import { readSheetsAddonEnv } from '../../config/domains/chrome-extension-sheets-addon.env';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -12,6 +14,7 @@ import {
   hashSheetsKey,
   maskedSheetsKey,
   sheetsKeySuffix,
+  sheetsWebhookUrl,
 } from './sheets-key.rules';
 
 export const SHEETS_KEY_MODULE = 'ext_sheets_key';
@@ -40,6 +43,7 @@ export class SheetsKeyService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly access: SheetsAppAccess,
+    private readonly config: ConfigService,
   ) {}
 
   async status(): Promise<ExtSheetsKeyStatus> {
@@ -72,7 +76,8 @@ export class SheetsKeyService {
         payload: { user: before.userUuid, rotated },
       });
       const after = await this.repo.read(tx, ctx.orgId, ctx.userId!);
-      return { ...toKeyStatus(after), key, rotated };
+      const webhookUrl = sheetsWebhookUrl(readSheetsAddonEnv(this.config).apiBase, key);
+      return { ...toKeyStatus(after), key, webhookUrl, rotated };
     });
   }
 

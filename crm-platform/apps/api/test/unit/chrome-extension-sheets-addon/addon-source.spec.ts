@@ -28,6 +28,11 @@ function load(): Record<string, Fn> {
     'contactLine_',
     'contactColumns_',
     'validShopOptions_',
+    'parseConnection_',
+    'columnIndex_',
+    'rowHash_',
+    'changedRows_',
+    'buildWebhookBody_',
   ];
   // Top-level `const` and `function` of a script are visible to a later script in the same context.
   runInNewContext(`${read('Code.gs')}\nthis.__api = { ${exportNames.join(', ')} };`, sandbox);
@@ -46,7 +51,7 @@ describe('add-on source folder', () => {
     expect(code.match(rewrite)).toEqual(["const CRM_BASE = 'https://api.example.com';"]);
   });
 
-  it('asks Google for the three narrow scopes only, on the V8 runtime', () => {
+  it('asks Google for the four narrow scopes only, on the V8 runtime', () => {
     const manifest = JSON.parse(read('appsscript.json')) as {
       runtimeVersion: string;
       oauthScopes: string[];
@@ -55,6 +60,7 @@ describe('add-on source folder', () => {
     expect(manifest.oauthScopes.sort()).toEqual([
       'https://www.googleapis.com/auth/script.container.ui',
       'https://www.googleapis.com/auth/script.external_request',
+      'https://www.googleapis.com/auth/script.scriptapp',
       'https://www.googleapis.com/auth/spreadsheets.currentonly',
     ]);
   });
@@ -197,7 +203,7 @@ describe('reading answers', () => {
 
   it.each([
     [401, 'EXT_KEY_INVALID', /Create a new one/],
-    [401, 'EXT_KEY_MISSING', /Settings/],
+    [401, 'EXT_KEY_MISSING', /Initial Setup/],
     [403, 'EXT_APP_NOT_INSTALLED', /admin to install/],
     [413, 'PAYLOAD_TOO_LARGE', /fewer rows/],
   ])('turns %i %s into a readable message', (status, code, text) => {
@@ -291,5 +297,98 @@ describe('contact lines and shop form', () => {
     const ok = api.validShopOptions_!({ shopName: ' Corner ', currency: 'inr' });
     expect(ok.errors).toEqual({});
     expect([ok.name, ok.currency]).toEqual(['Corner', 'INR']);
+  });
+});
+
+describe('webhook trigger helpers', () => {
+  const KEY = `wsn_live_${'0123456789abcdef'.repeat(2)}`;
+
+  it('reads the pasted Webhook URL into the server and the key, or a bare key, and nothing else', () => {
+    expect(
+      api.parseConnection_(`https://api.example.com/api/v1/sheets-addon/webhook/${KEY}`),
+    ).toEqual({
+      base: 'https://api.example.com',
+      key: KEY,
+    });
+    expect(api.parseConnection_(`  https://x.io/api/v1/sheets-addon/webhook/${KEY}/ `)).toEqual({
+      base: 'https://x.io',
+      key: KEY,
+    });
+    expect(api.parseConnection_(KEY)).toEqual({ base: '', key: KEY });
+    expect(api.parseConnection_(`http://x.io/api/v1/sheets-addon/webhook/${KEY}`)).toBeNull();
+    expect(
+      api.parseConnection_('https://x.io/api/v1/sheets-addon/webhook/wsn_live_short'),
+    ).toBeNull();
+    expect(api.parseConnection_('')).toBeNull();
+    expect(api.parseConnection_(undefined)).toBeNull();
+  });
+
+  it('turns a trigger column given as a letter or a heading into an index', () => {
+    const headers = ['Name', 'Email', 'Phone number'];
+    expect(api.columnIndex_('A', headers)).toBe(0);
+    expect(api.columnIndex_('c', headers)).toBe(2);
+    expect(api.columnIndex_('AA', headers)).toBe(26);
+    expect(api.columnIndex_('phone number', headers)).toBe(2);
+    expect(api.columnIndex_('Missing', headers)).toBe(-1);
+    expect(api.columnIndex_('', headers)).toBe(-1);
+  });
+
+  it('hashes a row the same way twice and differently once a cell changes', () => {
+    expect(api.rowHash_(['a', 1])).toBe(api.rowHash_(['a', 1]));
+    expect(api.rowHash_(['a', 1])).not.toBe(api.rowHash_(['a', 2]));
+  });
+
+  it('picks only new or changed rows with a filled trigger cell for the hourly sweep', () => {
+    const lines = [
+      ['Ann', 'ann@x.io', 'done'],
+      ['Bob', 'bob@x.io', ''],
+      ['', '', ''],
+      ['Cy', 'cy@x.io', 'done'],
+    ];
+    const state = { 'Sheet1!2': api.rowHash_(lines[0]) };
+    expect(api.changedRows_(lines, 'Sheet1', 2, state).map((r: { row: number }) => r.row)).toEqual([
+      5,
+    ]);
+    state['Sheet1!5'] = api.rowHash_(lines[3]);
+    lines[0][0] = 'Anne';
+    expect(api.changedRows_(lines, 'Sheet1', 2, state).map((r: { row: number }) => r.row)).toEqual([
+      2,
+    ]);
+    expect(api.changedRows_(lines, 'Sheet1', -1, {}).map((r: { row: number }) => r.row)).toEqual([
+      2, 3, 5,
+    ]);
+  });
+
+  it('builds a test body from the raw cells and a data body with each row as a contact', () => {
+    const headers = ['Name', 'Email', 'CRM status'];
+    const test = api.buildWebhookBody_(
+      'test',
+      'Leads',
+      headers,
+      [['Ann', 'ann@x.io', 'created']],
+      [2],
+      '',
+    );
+    expect(test.problem).toBe('');
+    expect(test.body.rows).toEqual([{ ref: 2, values: { Name: 'Ann', Email: 'ann@x.io' } }]);
+
+    const data = api.buildWebhookBody_(
+      'edit',
+      'Leads',
+      headers,
+      [['Ann', 'ann@x.io', '']],
+      [7],
+      '+91',
+    );
+    expect(data.body).toMatchObject({
+      event: 'edit',
+      sheet_name: 'Leads',
+      default_country_code: '+91',
+    });
+    expect(data.body.rows[0]).toMatchObject({ ref: 7, name: 'Ann', email: 'ann@x.io' });
+    expect(data.body.rows[0].values).toEqual({ Name: 'Ann', Email: 'ann@x.io' });
+
+    const bad = api.buildWebhookBody_('edit', 'Leads', ['Name'], [['Ann']], [2], '');
+    expect(bad.problem).toMatch(/email or phone/);
   });
 });

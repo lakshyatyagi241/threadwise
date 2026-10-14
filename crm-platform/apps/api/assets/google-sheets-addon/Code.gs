@@ -1,9 +1,14 @@
 /**
  * CRM add-on for Google Sheets (server side).
  *
- * A custom menu in the sheet, a settings dialog for the member's personal key, and four actions: check the connection, pull contacts
- * into a sheet, push contacts from a sheet, and sync products to a storefront shop. Every call goes to the CRM's add-on API at
- * CRM_BASE + '/api/v1/sheets-addon' with `Authorization: Bearer <key>`.
+ * Initial Setup (paste the Webhook URL from the CRM, pick the trigger column, Send Test, Submit), then the sheet sends new or changed
+ * rows to the CRM as contacts: on every edit of the trigger column ("Send on event") and/or in an hourly sweep for rows that were
+ * changed from elsewhere ("Send on schedule"). The older actions stay: check the connection, pull contacts into a sheet, push contacts
+ * from a sheet, and sync products to a storefront shop.
+ *
+ * Every call goes to the CRM's add-on API at <server>/api/v1/sheets-addon with `Authorization: Bearer <key>`. The server and the key both
+ * come from the pasted Webhook URL (<server>/api/v1/sheets-addon/webhook/<key>), so one published add-on serves every CRM installation;
+ * a copy downloaded from the CRM falls back to CRM_BASE when only a key is pasted.
  *
  * The key lives only in the member's own user properties. It is never written to the sheet, never to the document properties (a sheet
  * can be shared), never to a log, and it is never sent back to the dialogs: they only ever see a masked copy.
@@ -20,6 +25,17 @@ const PROP_KEY = 'CRM_SHEETS_KEY';
 const PROP_CAN = 'CRM_SHEETS_CAN';
 const PROP_SHOP_ID = 'CRM_SHOP_ID';
 const PROP_SHOP_NAME = 'CRM_SHOP_NAME';
+const PROP_BASE = 'CRM_SHEETS_BASE';
+const PROP_HOOK_SHEET = 'CRM_HOOK_SHEET';
+const PROP_HOOK_COLUMN = 'CRM_HOOK_COLUMN';
+const PROP_HOOK_EVENT = 'CRM_HOOK_EVENT';
+const PROP_HOOK_SCHEDULE = 'CRM_HOOK_SCHEDULE';
+const HOOK_PATH_PATTERN =
+  /^(https:\/\/[^\s\/?#]+(?:\/[^\s?#]*?)?)\/api\/v1\/sheets-addon\/webhook\/(wsn_live_[0-9a-f]{32})\/?$/;
+const STATE_SHEET = 'CRM sync state';
+const EVENT_HANDLER = 'crmOnEditSend';
+const SCHEDULE_HANDLER = 'crmScheduledSend';
+const MAX_EVENT_ROWS = 50;
 const MAX_ROWS = 500;
 const PULL_PAGE = 500;
 const PULL_MAX_PAGES = 100;
@@ -65,7 +81,15 @@ function onInstall() {
 /** Builds the menu. `can` is what the last connection check said the key may do (null = not checked yet: show everything). */
 function buildMenu_(can) {
   const ui = SpreadsheetApp.getUi();
-  const menu = ui.createMenu(MENU_TITLE);
+  let menu;
+  try {
+    // Shown under Extensions when this runs as an installed add-on; a copied project has no add-on menu and gets its own.
+    menu = ui.createAddonMenu();
+  } catch (e) {
+    menu = ui.createMenu(MENU_TITLE);
+  }
+  menu.addItem('Initial Setup', 'openSetup');
+  menu.addItem('Send a test row', 'sendTestMenu');
   menu.addItem('Check connection', 'checkConnectionMenu');
   const allowed = function (flag) {
     return !can || can[flag] === true;
@@ -83,14 +107,17 @@ function buildMenu_(can) {
     groups++;
   }
   menu.addSeparator();
-  menu.addItem('Settings', 'openSettings');
   menu.addItem('Help', 'openHelp');
   menu.addToUi();
   return groups;
 }
 
+function openSetup() {
+  showDialog_('Settings', 'Initial Setup', 520, 640);
+}
+
 function openSettings() {
-  showDialog_('Settings', 'Settings', 460, 420);
+  openSetup();
 }
 
 function openHelp() {
@@ -142,6 +169,40 @@ function readKey_() {
   return userProps_().getProperty(PROP_KEY) || '';
 }
 
+/** The server this member's CRM lives at: learned from the pasted Webhook URL, else the address written into a downloaded copy. */
+function readBase_() {
+  return (userProps_().getProperty(PROP_BASE) || CRM_BASE).replace(/\/+$/, '');
+}
+
+/**
+ * Reads what the member pasted: the Webhook URL (<server>/api/v1/sheets-addon/webhook/<key>) or just a key. Returns { base, key } or
+ * null. A bare key uses the address of this copy of the add-on.
+ */
+function parseConnection_(text) {
+  const value = typeof text === 'string' ? text.trim() : '';
+  const hook = HOOK_PATH_PATTERN.exec(value);
+  if (hook) return { base: hook[1], key: hook[2] };
+  if (isValidKey_(value)) return { base: '', key: value };
+  return null;
+}
+
+/** A column given as a letter (F) or as the text of its heading in row 1 becomes a 0-based index; -1 when blank or not found. */
+function columnIndex_(spec, headers) {
+  const text = typeof spec === 'string' ? spec.trim() : '';
+  if (text === '') return -1;
+  if (/^[A-Za-z]{1,3}$/.test(text)) {
+    let n = 0;
+    const upper = text.toUpperCase();
+    for (let i = 0; i < upper.length; i++) n = n * 26 + (upper.charCodeAt(i) - 64);
+    return n - 1;
+  }
+  const wanted = normalizeHeader_(text);
+  for (let i = 0; i < headers.length; i++) {
+    if (normalizeHeader_(headers[i]) === wanted) return i;
+  }
+  return -1;
+}
+
 function readCan_() {
   try {
     const raw = userProps_().getProperty(PROP_CAN);
@@ -164,11 +225,25 @@ function maskKey_(value) {
 /** What Settings may show: whether a key is saved and its masked form. */
 function getSettingsState() {
   const key = readKey_();
+  const props = docProps_();
+  const sheets = SpreadsheetApp.getActiveSpreadsheet()
+    .getSheets()
+    .map(function (s) {
+      return s.getName();
+    })
+    .filter(function (name) {
+      return name !== STATE_SHEET && name !== PULL_SHEET;
+    });
   return {
     hasKey: key !== '',
     masked: maskKey_(key),
     can: readCan_(),
-    base: CRM_BASE,
+    base: readBase_(),
+    sheets: sheets,
+    sheet: props.getProperty(PROP_HOOK_SHEET) || SpreadsheetApp.getActiveSheet().getName(),
+    column: props.getProperty(PROP_HOOK_COLUMN) || '',
+    onEvent: props.getProperty(PROP_HOOK_EVENT) === 'on',
+    onSchedule: props.getProperty(PROP_HOOK_SCHEDULE) === 'on',
   };
 }
 
@@ -176,24 +251,29 @@ function getSettingsState() {
 function saveKey(pasted) {
   const candidate = typeof pasted === 'string' ? pasted.trim() : '';
   if (candidate === '') {
-    return failure_('EXT_KEY_MISSING', 0, 'Paste your key first.');
+    return failure_('EXT_KEY_MISSING', 0, 'Paste your Webhook URL first.');
   }
-  if (!isValidKey_(candidate)) {
+  const connection = parseConnection_(candidate);
+  if (!connection) {
     return failure_(
       'EXT_KEY_INVALID',
       0,
-      'This does not look like a key. It starts with ' +
+      'This does not look like a Webhook URL. Copy it from the CRM (Settings > Google Sheets add-on). It ends with ' +
         KEY_PREFIX +
-        ' and has 32 more characters.',
+        ' and 32 more characters.',
     );
   }
   const props = userProps_();
-  const previous = props.getProperty(PROP_KEY);
-  props.setProperty(PROP_KEY, candidate);
+  const previousKey = props.getProperty(PROP_KEY);
+  const previousBase = props.getProperty(PROP_BASE);
+  props.setProperty(PROP_KEY, connection.key);
+  if (connection.base) props.setProperty(PROP_BASE, connection.base);
   const result = checkConnection();
   if (!result.ok) {
-    if (previous) props.setProperty(PROP_KEY, previous);
+    if (previousKey) props.setProperty(PROP_KEY, previousKey);
     else props.deleteProperty(PROP_KEY);
+    if (previousBase) props.setProperty(PROP_BASE, previousBase);
+    else props.deleteProperty(PROP_BASE);
     return result;
   }
   return result;
@@ -204,6 +284,8 @@ function clearKey() {
   const props = userProps_();
   props.deleteProperty(PROP_KEY);
   props.deleteProperty(PROP_CAN);
+  props.deleteProperty(PROP_BASE);
+  stopSending_();
   try {
     buildMenu_(null);
   } catch (e) {
@@ -229,9 +311,9 @@ function describeFailure_(status, code, serverMessage, retryAfter) {
   const base = serverMessage || 'The CRM could not complete the request.';
   switch (code) {
     case 'EXT_KEY_MISSING':
-      return 'No key is saved yet. Open CRM > Settings and paste your key.';
+      return 'No Webhook URL is saved yet. Open Initial Setup and paste the Webhook URL from the CRM.';
     case 'EXT_KEY_INVALID':
-      return 'The key is not valid any more. Create a new one in the CRM (Settings > Google Sheets add-on), then paste it in CRM > Settings.';
+      return 'The key in your Webhook URL is not valid any more. Create a new one in the CRM (Settings > Google Sheets add-on), then paste the new Webhook URL in Initial Setup.';
     case 'EXT_APP_NOT_INSTALLED':
       return 'The Google Sheets add-on is not installed in this workspace. Ask an admin to install it from the Marketplace.';
     case 'EXT_SCOPE_NOT_GRANTED':
@@ -298,8 +380,8 @@ function interpretResponse_(status, text, headers) {
 }
 
 /** One API call with up to two short waits when the answer is 429 with a small Retry-After. */
-function callApi_(method, path, query, body) {
-  const key = readKey_();
+function callApi_(method, path, query, body, creds) {
+  const key = creds ? creds.key : readKey_();
   if (!key) return failure_('EXT_KEY_MISSING', 0, describeFailure_(0, 'EXT_KEY_MISSING', '', 0));
   const options = {
     method: method,
@@ -311,7 +393,8 @@ function callApi_(method, path, query, body) {
     options.contentType = 'application/json';
     options.payload = JSON.stringify(body);
   }
-  const url = CRM_BASE.replace(/\/+$/, '') + API_PATH + path + buildQuery_(query);
+  const base = creds && creds.base ? creds.base.replace(/\/+$/, '') : readBase_();
+  const url = base + API_PATH + path + buildQuery_(query);
   let attempt = 0;
   for (;;) {
     let result;
@@ -326,7 +409,7 @@ function callApi_(method, path, query, body) {
       return failure_(
         'NETWORK',
         0,
-        'Could not reach the CRM at ' + CRM_BASE + '. Check your connection and try again.',
+        'Could not reach the CRM at ' + base + '. Check your connection and try again.',
       );
     }
     if (result.ok || result.status !== 429) return result;
@@ -903,4 +986,306 @@ function forgetShop() {
   props.deleteProperty(PROP_SHOP_ID);
   props.deleteProperty(PROP_SHOP_NAME);
   return { ok: true };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// Webhook trigger: Initial Setup, Send Test, send on event, send on schedule
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+/** Small stable text hash (FNV-1a) of a row, used to tell a changed row from one that was already sent. */
+function rowHash_(line) {
+  const text = JSON.stringify(
+    (line || []).map(function (c) {
+      return cellValue_(c);
+    }),
+  );
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0;
+  }
+  return h.toString(16);
+}
+
+/**
+ * Which data rows the hourly sweep must send. `lines` are the sheet's rows from row 2 down, `state` maps "sheet!row" to the hash last sent.
+ * A row counts when it is not blank, its trigger cell (if a trigger column is set) is filled, and it is new or its hash changed.
+ * Returns [{ row, hash }].
+ */
+function changedRows_(lines, sheetName, triggerIndex, state) {
+  const out = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    let empty = true;
+    for (let c = 0; c < line.length; c++) {
+      if (!isBlank_(line[c])) {
+        empty = false;
+        break;
+      }
+    }
+    if (empty) continue;
+    if (triggerIndex >= 0 && isBlank_(line[triggerIndex])) continue;
+    const row = i + 2;
+    const hash = rowHash_(line);
+    if (state[sheetName + '!' + row] !== hash) out.push({ row: row, hash: hash });
+  }
+  return out;
+}
+
+/** The body of one webhook call. A test carries the raw cells by heading only; a data call also carries each row as a contact. */
+function buildWebhookBody_(event, sheetName, headers, lines, rowNumbers, countryCode) {
+  const grid = [headers].concat(lines);
+  const contacts = rowsFromValues_(grid, 'contacts');
+  const byRef = {};
+  for (let i = 0; i < contacts.rows.length; i++) byRef[contacts.rows[i].ref] = contacts.rows[i];
+  const rows = [];
+  for (let i = 0; i < lines.length; i++) {
+    const values = {};
+    for (let c = 0; c < headers.length; c++) {
+      const heading = String(
+        headers[c] === undefined || headers[c] === null ? '' : headers[c],
+      ).trim();
+      if (heading === '' || normalizeHeader_(heading) === 'crmstatus') continue;
+      values[heading] = cellValue_(lines[i][c]);
+    }
+    const row = event === 'test' ? {} : byRef[i + 2] || null;
+    if (row === null) continue;
+    row.ref = rowNumbers[i];
+    row.values = values;
+    rows.push(row);
+  }
+  const body = { event: event, sheet_name: sheetName, rows: rows };
+  if (countryCode) body.default_country_code = countryCode;
+  return { body: body, problem: event === 'test' ? '' : contacts.problem };
+}
+
+function hookSheet_() {
+  const name = docProps_().getProperty(PROP_HOOK_SHEET) || '';
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  return (name && spreadsheet.getSheetByName(name)) || spreadsheet.getActiveSheet();
+}
+
+function readState_() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(STATE_SHEET);
+  const state = {};
+  if (!sheet || sheet.getLastRow() < 1) return state;
+  const values = sheet.getRange(1, 1, sheet.getLastRow(), 2).getValues();
+  for (let i = 0; i < values.length; i++) state[values[i][0]] = String(values[i][1]);
+  return state;
+}
+
+function writeState_(state) {
+  const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = spreadsheet.getSheetByName(STATE_SHEET);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(STATE_SHEET);
+    sheet.hideSheet();
+  }
+  const lines = [];
+  for (const key in state) lines.push([key, state[key]]);
+  sheet.clear();
+  if (lines.length) sheet.getRange(1, 1, lines.length, 2).setValues(lines);
+}
+
+/**
+ * Sends the given rows of the configured sheet to the CRM. `event` is 'edit', 'schedule' or 'test'. Writes each row's result to the
+ * CRM status column and remembers what was sent, so the hourly sweep does not send it again.
+ */
+function sendRows_(event, sheet, rowNumbers) {
+  const lastColumn = sheet.getLastColumn();
+  if (rowNumbers.length === 0 || lastColumn < 1) return { ok: true, sent: 0 };
+  const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  const lines = rowNumbers.map(function (r) {
+    return sheet.getRange(r, 1, 1, lastColumn).getValues()[0];
+  });
+  const built = buildWebhookBody_(event, sheet.getName(), headers, lines, rowNumbers, '');
+  if (built.problem) return failure_('BAD_HEADERS', 0, built.problem);
+  if (built.body.rows.length === 0) return { ok: true, sent: 0 };
+  const result = callApi_('post', '/webhook', undefined, built.body);
+  if (!result.ok || event === 'test') return result;
+  const mapping = mapHeaders_(headers, CONTACT_FIELDS, true);
+  const totals = emptyTotals_();
+  const applied = applyResults_(totals, built.body.rows, result.data.results);
+  const statusIndex = ensureStatusColumn_(sheet, mapping);
+  writeStatuses_(sheet, statusIndex, applied.texts);
+  const state = readState_();
+  for (let i = 0; i < built.body.rows.length; i++) {
+    const line = lines[rowNumbers.indexOf(built.body.rows[i].ref)];
+    state[sheet.getName() + '!' + built.body.rows[i].ref] = rowHash_(line);
+  }
+  writeState_(state);
+  return { ok: true, sent: built.body.rows.length, totals: totals, problems: applied.problems };
+}
+
+/** Initial Setup: Send Test. Checks the pasted URL without saving it, then sends the first data row (or the headers alone). */
+function testWebhook(url, column, sheetName) {
+  const connection = parseConnection_(url);
+  if (!connection) return saveKey(url);
+  const creds = {
+    base: connection.base || readBase_(),
+    key: connection.key,
+  };
+  const health = callApi_('get', '/health', undefined, undefined, creds);
+  if (!health.ok) return health;
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName) || hookSheet_();
+  const lastColumn = Math.max(sheet.getLastColumn(), 1);
+  const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  const hasRow = sheet.getLastRow() >= 2;
+  const line = hasRow
+    ? sheet.getRange(2, 1, 1, lastColumn).getValues()[0]
+    : headers.map(function () {
+        return '';
+      });
+  const built = buildWebhookBody_('test', sheet.getName(), headers, [line], [2], '');
+  const sent = callApi_('post', '/webhook', undefined, built.body, creds);
+  if (!sent.ok) return sent;
+  const index = columnIndex_(column, headers);
+  return {
+    ok: true,
+    user: health.data.user || {},
+    workspace: health.data.workspace || {},
+    fields: sent.data.fields || [],
+    sheet: sheet.getName(),
+    sampleRow: hasRow,
+    triggerFound: column === '' || index >= 0,
+  };
+}
+
+/** Initial Setup: Submit. Saves the connection and the trigger settings and turns the event and schedule senders on or off. */
+function submitSetup(settings) {
+  const input = settings || {};
+  const saved = saveKey(input.url);
+  if (!saved.ok) return saved;
+  const column = typeof input.column === 'string' ? input.column.trim() : '';
+  const sheetName = typeof input.sheet === 'string' ? input.sheet : '';
+  const props = docProps_();
+  props.setProperty(PROP_HOOK_SHEET, sheetName);
+  props.setProperty(PROP_HOOK_COLUMN, column);
+  props.setProperty(PROP_HOOK_EVENT, input.onEvent === true ? 'on' : 'off');
+  props.setProperty(PROP_HOOK_SCHEDULE, input.onSchedule === true ? 'on' : 'off');
+  try {
+    syncTriggers_(input.onEvent === true, input.onSchedule === true);
+  } catch (e) {
+    return failure_(
+      'TRIGGERS',
+      0,
+      'Saved, but Google did not let the add-on create its triggers: ' +
+        (e && e.message ? e.message : 'unknown error') +
+        '. Allow the add-on and submit again.',
+    );
+  }
+  saved.triggers = { onEvent: input.onEvent === true, onSchedule: input.onSchedule === true };
+  return saved;
+}
+
+function syncTriggers_(wantEvent, wantSchedule) {
+  const existing = ScriptApp.getProjectTriggers();
+  let hasEvent = false;
+  let hasSchedule = false;
+  for (let i = 0; i < existing.length; i++) {
+    const handler = existing[i].getHandlerFunction();
+    if (handler === EVENT_HANDLER) {
+      if (wantEvent && !hasEvent) hasEvent = true;
+      else ScriptApp.deleteTrigger(existing[i]);
+    } else if (handler === SCHEDULE_HANDLER) {
+      if (wantSchedule && !hasSchedule) hasSchedule = true;
+      else ScriptApp.deleteTrigger(existing[i]);
+    }
+  }
+  if (wantEvent && !hasEvent) {
+    ScriptApp.newTrigger(EVENT_HANDLER)
+      .forSpreadsheet(SpreadsheetApp.getActiveSpreadsheet())
+      .onEdit()
+      .create();
+  }
+  if (wantSchedule && !hasSchedule) {
+    ScriptApp.newTrigger(SCHEDULE_HANDLER).timeBased().everyHours(1).create();
+  }
+}
+
+function stopSending_() {
+  try {
+    syncTriggers_(false, false);
+    const props = docProps_();
+    props.setProperty(PROP_HOOK_EVENT, 'off');
+    props.setProperty(PROP_HOOK_SCHEDULE, 'off');
+  } catch (e) {
+    // nothing to stop, or Google refused; the next Submit sets it right
+  }
+}
+
+function sendTestMenu() {
+  const ui = SpreadsheetApp.getUi();
+  const state = getSettingsState();
+  const key = readKey_();
+  if (!key) {
+    ui.alert('Send a test row', describeFailure_(0, 'EXT_KEY_MISSING', '', 0), ui.ButtonSet.OK);
+    return;
+  }
+  const url = readBase_() + API_PATH + '/webhook/' + key;
+  const result = testWebhook(url, state.column, state.sheet);
+  ui.alert(
+    'Send a test row',
+    result.ok
+      ? 'The CRM received the test and saw these columns: ' + (result.fields.join(', ') || '(none)')
+      : result.message,
+    ui.ButtonSet.OK,
+  );
+}
+
+/** Installable edit trigger ("Send on event"): sends the rows just edited when the trigger column was among the edited cells. */
+function crmOnEditSend(e) {
+  try {
+    const props = docProps_();
+    if (props.getProperty(PROP_HOOK_EVENT) !== 'on' || !e || !e.range) return;
+    const sheet = e.range.getSheet();
+    const configured = props.getProperty(PROP_HOOK_SHEET) || '';
+    if (sheet.getName() === STATE_SHEET || (configured && sheet.getName() !== configured)) return;
+    const first = e.range.getRow();
+    const last = Math.min(e.range.getLastRow(), first + MAX_EVENT_ROWS - 1);
+    if (last < 2) return;
+    const lastColumn = sheet.getLastColumn();
+    const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+    const trigger = columnIndex_(props.getProperty(PROP_HOOK_COLUMN) || '', headers);
+    if (
+      trigger >= 0 &&
+      (trigger + 1 < e.range.getColumn() || trigger + 1 > e.range.getLastColumn())
+    )
+      return;
+    const rows = [];
+    for (let r = Math.max(first, 2); r <= last; r++) {
+      const line = sheet.getRange(r, 1, 1, lastColumn).getValues()[0];
+      if (trigger >= 0 && isBlank_(line[trigger])) continue;
+      rows.push(r);
+    }
+    sendRows_('edit', sheet, rows);
+  } catch (err) {
+    // a trigger has nobody to show an error to; the CRM status column carries the per-row outcome
+  }
+}
+
+/** Installable hourly trigger ("Send on schedule"): sends rows that are new or changed since they were last sent, wherever the change came from. */
+function crmScheduledSend() {
+  try {
+    const props = docProps_();
+    if (props.getProperty(PROP_HOOK_SCHEDULE) !== 'on') return;
+    const sheet = hookSheet_();
+    const lastRow = sheet.getLastRow();
+    const lastColumn = sheet.getLastColumn();
+    if (lastRow < 2 || lastColumn < 1) return;
+    const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+    const trigger = columnIndex_(props.getProperty(PROP_HOOK_COLUMN) || '', headers);
+    const lines = sheet.getRange(2, 1, lastRow - 1, lastColumn).getValues();
+    const changed = changedRows_(lines, sheet.getName(), trigger, readState_());
+    const rows = changed.map(function (c) {
+      return c.row;
+    });
+    const chunks = chunk_(rows, MAX_ROWS);
+    for (let i = 0; i < chunks.length; i++) {
+      const result = sendRows_('schedule', sheet, chunks[i]);
+      if (!result.ok) break;
+    }
+  } catch (err) {
+    // retried at the next hour
+  }
 }

@@ -18,7 +18,7 @@
     },
     "page": {
       "title": "Module complémentaire Google Sheets",
-      "subtitle": "Importez et exportez des contacts, et synchronisez des produits entre une feuille de calcul et votre espace de travail.",
+      "subtitle": "Envoyez les lignes nouvelles et modifiées d’une feuille vers votre espace de travail sous forme de contacts, importez des contacts dans une feuille et synchronisez les produits.",
       "loading": "Chargement de la configuration du module complémentaire",
       "retry": "Réessayer",
       "status": {
@@ -50,7 +50,7 @@
     },
     "key": {
       "title": "Votre clé",
-      "intro": "Le module complémentaire utilise votre clé personnelle pour agir en votre nom. Il ne voit que ce que votre rôle autorise.",
+      "intro": "Le module complémentaire utilise votre clé personnelle pour agir en votre nom. Il ne voit que ce que votre rôle autorise. La clé est la dernière partie de votre Webhook URL.",
       "none": "Vous n’avez pas encore de clé.",
       "generate": "Générer une clé",
       "rotate": "Générer une nouvelle clé",
@@ -60,8 +60,8 @@
       "created": "Créée {when}",
       "lastUsed": "Dernière utilisation {when}",
       "neverUsed": "Jamais utilisée",
-      "newTitle": "Votre nouvelle clé",
-      "newWarning": "Copiez-la maintenant. Elle n’est affichée qu’une seule fois et ne pourra plus l’être. Toute personne disposant de cette clé peut agir en votre nom dans le module complémentaire.",
+      "newTitle": "Votre nouvelle clé et votre Webhook URL",
+      "newWarning": "Copiez-les maintenant. La clé et le Webhook URL ne sont affichés qu’une seule fois et ne pourront plus l’être. Toute personne qui les possède peut agir en votre nom dans le module complémentaire.",
       "rotatedNote": "Votre clé précédente a cessé de fonctionner.",
       "keyLabel": "Nouvelle clé",
       "confirmRotate": {
@@ -85,7 +85,8 @@
         "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
         "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
         "unexpected": "Un problème est survenu de notre côté. Réessayez."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Ce que votre clé peut faire",
@@ -107,13 +108,13 @@
       "failed": "Impossible de télécharger {name}. Réessayez."
     },
     "steps": {
-      "title": "Le configurer dans une feuille de calcul",
-      "one": "Ouvrez une feuille de calcul, puis Extensions, puis Apps Script.",
-      "two": "Téléchargez les six fichiers ci-dessus. Dans Paramètres du projet, affichez le fichier appsscript.json, puis collez appsscript.json et Code.gs à la place de ceux de l’éditeur.",
-      "three": "Ajoutez trois fichiers HTML nommés Dialog, Settings et Help et collez-y les fichiers téléchargés.",
-      "four": "Enregistrez et rechargez la feuille de calcul. Un menu CRM apparaît. Accordez les trois autorisations que Google demande.",
-      "five": "Choisissez CRM, puis Paramètres, collez votre clé et sélectionnez Enregistrer et vérifier.",
-      "six": "La ligne 1 de votre feuille contient les noms des colonnes. Utilisez ensuite Importer des contacts, Exporter des contacts ou Synchroniser les produits dans le menu CRM."
+      "title": "Configurez-le dans une feuille de calcul",
+      "one": "Copiez votre Webhook URL lorsque vous créez votre clé. Il n’est affiché qu’une fois.",
+      "two": "Dans une feuille de calcul, choisissez Extensions, puis Add-ons, puis Get add-ons, et installez le module complémentaire depuis le Google Workspace Marketplace. Tant qu’il n’y figure pas, collez les six fichiers ci-dessous dans Extensions, Apps Script.",
+      "three": "Rechargez la feuille de calcul. Choisissez Extensions, puis le module complémentaire, puis Initial Setup, et collez le Webhook URL.",
+      "four": "Choisissez la feuille et la colonne déclencheur. Une ligne est envoyée lorsque cette cellule est remplie ou modifiée.",
+      "five": "Sélectionnez Send Test pour vérifier la connexion. Rien n’est enregistré ; vous voyez les colonnes reçues par le CRM. Sélectionnez ensuite Submit.",
+      "six": "Activez Send on event (une ligne est envoyée dès que vous la modifiez) et/ou Send on schedule (toutes les heures, lignes modifiées par un formulaire ou une autre application). Chaque ligne arrive comme un contact et son résultat est écrit dans une colonne CRM status."
     },
     "columns": {
       "title": "Colonnes lues par le module complémentaire",
@@ -133,6 +134,22 @@
       "title": "Produits récents",
       "empty": "Aucun produit pour l’instant. Synchronisez une feuille pour en ajouter.",
       "count": "{count, plural, one {# produit dans votre espace de travail} other {# produits dans votre espace de travail}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Collez-le dans Initial Setup, dans le module complémentaire. Il contient votre clé, gardez-le donc privé.",
+      "none": "Créez une clé pour obtenir votre Webhook URL.",
+      "capture": {
+        "title": "Dernières données reçues",
+        "none": "Rien reçu pour l’instant. Dans le module complémentaire, choisissez Initial Setup, puis Send Test.",
+        "when": "{event} de {sheet}, {when}. {rows, plural, one {# ligne} other {# lignes}}.",
+        "noSheet": "une feuille sans nom",
+        "events": {
+          "test": "Test",
+          "edit": "Modification",
+          "schedule": "Balayage horaire"
+        }
+      }
     }
   }
 }

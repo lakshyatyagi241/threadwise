@@ -19,6 +19,8 @@ const overview = (over: Partial<ExtSheetsOverview> = {}): ExtSheetsOverview => (
   blockers: [],
   marketplaceUrl: null,
   apiBase: 'https://api.example.com',
+  webhookUrl: null,
+  lastCapture: null,
   key: { active: false, suffix: null, masked: null, createdAt: null, lastUsedAt: null },
   can: { readContacts: true, writeContacts: true, readCatalog: true, writeCatalog: false },
   files: [],

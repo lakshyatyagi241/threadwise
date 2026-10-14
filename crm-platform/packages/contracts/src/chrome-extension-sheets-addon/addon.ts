@@ -275,3 +275,52 @@ export const extSheetsContactsSyncResponseSchema = z.object({
   results: z.array(extSheetsRowResultSchema),
 });
 export type ExtSheetsContactsSyncResponse = z.infer<typeof extSheetsContactsSyncResponseSchema>;
+
+// --- webhook trigger (new in this port; the Pabbly-style "send new or changed rows" mode of the add-on) -----------------------------------
+
+/** Why the add-on sent this call: a test from Initial Setup, a row typed in the sheet, or the hourly sweep for rows changed from elsewhere. */
+export const EXT_SHEETS_WEBHOOK_EVENTS = ['test', 'edit', 'schedule'] as const;
+export type ExtSheetsWebhookEvent = (typeof EXT_SHEETS_WEBHOOK_EVENTS)[number];
+
+/** `POST /webhook` (and `POST /webhook/:key`). Rows are the contact row shape, plus the raw `values` by column heading for the test capture. */
+export const extSheetsWebhookRequestSchema = z.object({
+  event: z.enum(EXT_SHEETS_WEBHOOK_EVENTS),
+  sheet_name: z.string().trim().max(255).optional(),
+  default_country_code: z
+    .string()
+    .trim()
+    .max(8)
+    .nullish()
+    .transform((v) => (v ? v : undefined)),
+  rows: z
+    .array(z.unknown())
+    .min(1, 'Send at least one row')
+    .max(EXT_SHEETS_MAX_ROWS, `Send at most ${EXT_SHEETS_MAX_ROWS} rows at a time`),
+});
+export type ExtSheetsWebhookRequest = z.infer<typeof extSheetsWebhookRequestSchema>;
+
+/** What the last webhook call carried, kept for a day so the setup page can show the columns the sheet sends (the "capture" step). */
+export const extSheetsCaptureSchema = z.object({
+  receivedAt: z.string().datetime(),
+  event: z.enum(EXT_SHEETS_WEBHOOK_EVENTS),
+  sheetName: z.string().nullable(),
+  rows: z.number().int(),
+  /** Column headings of the first row, in sheet order. */
+  fields: z.array(z.string()),
+  /** The first row's raw values by heading, cut to short text. */
+  sample: z.record(z.string()),
+});
+export type ExtSheetsCapture = z.infer<typeof extSheetsCaptureSchema>;
+
+export const extSheetsWebhookResponseSchema = z.object({
+  ok: z.literal(true),
+  event: z.enum(EXT_SHEETS_WEBHOOK_EVENTS),
+  /** Rows the call carried. */
+  received: z.number().int(),
+  /** A test only checks the connection and records the columns; no contact is written. */
+  written: z.boolean(),
+  summary: extSheetsRowSummarySchema.optional(),
+  results: z.array(extSheetsRowResultSchema).optional(),
+  fields: z.array(z.string()),
+});
+export type ExtSheetsWebhookResponse = z.infer<typeof extSheetsWebhookResponseSchema>;

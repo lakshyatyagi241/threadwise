@@ -143,6 +143,8 @@ export function sizeLabel(bytes: number): string {
 /** The one-time secret. It lives only in the screen's memory: a reload or a navigation ends it, and nothing stores it. */
 export interface OneTimeKey {
   secret: string;
+  /** `<api>/api/v1/sheets-addon/webhook/<key>`: what Initial Setup in the add-on asks for. Shown once, like the key. */
+  webhookUrl: string;
   rotated: boolean;
 }
 
