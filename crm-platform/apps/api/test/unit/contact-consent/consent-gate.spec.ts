@@ -145,6 +145,43 @@ describe('ConsentGate truth table', () => {
       expect(r.noticeKey).toBe(PURPOSE_REGISTRY[purpose].noticeKey);
     }
   });
+  it('a call recording is allowed only with the delivered notice AND the recorded answer (BL-144)', () => {
+    const rec = { purpose: 'call_recording', channel: 'voice', modality: 'voice' } as const;
+    expect(decide({ ...rec, noticeEvidence: { delivered: false } }).decision).toBe('needs_notice');
+    // the notice alone is not consent
+    expect(decide({ ...rec, noticeEvidence: { delivered: true } }).decision).toBe('needs_notice');
+    expect(decide({ ...rec, noticeEvidence: { delivered: true, consent: 'granted' } })).toEqual({
+      decision: 'allow',
+      reason: 'consent_evidence_recorded',
+    });
+    expect(decide({ ...rec, noticeEvidence: { delivered: true, consent: 'declined' } })).toEqual({
+      decision: 'deny',
+      reason: 'consent_declined',
+    });
+    // a grant with no delivered notice is not evidence
+    expect(decide({ ...rec, noticeEvidence: { delivered: false, consent: 'granted' } }).decision).toBe(
+      'needs_notice',
+    );
+  });
+  it('the workspace switch is checked before anything else, even with a grant on the record', () => {
+    const r = decide({
+      purpose: 'call_recording',
+      channel: 'voice',
+      modality: 'voice',
+      purposeEnabled: false,
+      noticeEvidence: { delivered: true, consent: 'granted' },
+    });
+    expect(r).toEqual({ decision: 'deny', reason: 'purpose_not_enabled' });
+  });
+  it('a notice-first purpose with no grant duty is allowed once its notice is delivered', () => {
+    const r = decide({
+      purpose: 'voice_ai_conversation',
+      channel: 'voice',
+      modality: 'voice',
+      noticeEvidence: { delivered: true },
+    });
+    expect(r).toEqual({ decision: 'allow', reason: 'notice_delivered' });
+  });
   it('a purpose that does not apply to the channel or modality is denied', () => {
     expect(decide({ purpose: 'call_recording', channel: 'sms' }).reason).toBe(
       'purpose_not_applicable',
@@ -188,6 +225,18 @@ describe('ConsentGate truth table', () => {
       { purpose: 'marketing', requireConsent: true, channel: 'x' },
       { purpose: 'call_recording', channel: 'sms' },
       { purpose: 'call_recording', channel: 'voice' },
+      { purpose: 'call_recording', channel: 'voice', purposeEnabled: false },
+      {
+        purpose: 'call_recording',
+        channel: 'voice',
+        noticeEvidence: { delivered: true, consent: 'granted' },
+      },
+      {
+        purpose: 'call_recording',
+        channel: 'voice',
+        noticeEvidence: { delivered: true, consent: 'declined' },
+      },
+      { purpose: 'voice_ai_conversation', channel: 'voice', noticeEvidence: { delivered: true } },
     ];
     for (const i of all) seen.add(decide(i).reason);
     seen.add(failureResult(PURPOSE_REGISTRY.marketing_messaging).reason);
