@@ -19,6 +19,16 @@ export default defineConfig({
       reportOnFailure: true,
       reporter: ['text-summary', 'json-summary', 'json', 'lcov'],
       include: ['src/**/*.ts'],
+      // Floors set a little under the first measurement (14 Oct 2026: rules 97.7% lines and 91.5% branches, common 81.4% and 85.9%,
+      // mappers 34.4% and 77.0%) so nothing slips back; raise them as tests land, never lower them to get green. They are checked on a
+      // full run (`pnpm --filter @crm/api test:coverage`), not on a run of one file. Services and repositories need a database and are
+      // not gated here.
+      thresholds: {
+        'src/**/*-rules.ts': { lines: 95, branches: 88 },
+        'src/**/*.rules.ts': { lines: 95, branches: 88 },
+        'src/common/**/*.ts': { lines: 78, branches: 82 },
+        'src/**/*.mapper.ts': { lines: 30, branches: 70 },
+      },
       exclude: [
         '**/*.module.ts',
         '**/main.ts',
