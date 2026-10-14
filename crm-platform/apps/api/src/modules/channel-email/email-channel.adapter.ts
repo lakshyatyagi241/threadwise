@@ -134,6 +134,7 @@ export class EmailChannelAdapter implements ChannelAdapter {
         // not a contact has nobody to unsubscribe, so the mail is refused rather than sent without a way out.
         let unsubHeaders: Record<string, string> = {};
         let body = envelope.body;
+        let unsubscribeUrl: string | undefined;
         if (email.marketing) {
           const link = await this.unsubscribe.linkForAddress(channel.orgId, to[0]!);
           if (!link) {
@@ -144,6 +145,7 @@ export class EmailChannelAdapter implements ChannelAdapter {
             );
           }
           unsubHeaders = link.headers;
+          unsubscribeUrl = link.pageUrl;
           body = `${envelope.body}
 
 Unsubscribe: ${link.pageUrl}`;
@@ -168,12 +170,15 @@ Unsubscribe: ${link.pageUrl}`;
           },
           attempt: envelope.attempt,
         };
-        const mail = await this.preparer.prepare({ orgId: channel.orgId, mailbox, email }, draft);
+        const mail = await this.preparer.prepare(
+          { orgId: channel.orgId, mailbox, email, unsubscribeUrl },
+          draft,
+        );
         const sent = await this.drivers
           .get(mailbox.provider)
           .send({ orgId: channel.orgId, mailbox, access }, mail);
         await this.guard.recordSent(channel.orgId, mailbox, everyone);
-        const meta = await this.preparer.sent({ orgId: channel.orgId, mailbox, email }, mail, {
+        const meta = await this.preparer.sent({ orgId: channel.orgId, mailbox, email, unsubscribeUrl }, mail, {
           providerMessageId: sent.providerMessageId,
           threadKey: sent.threadKey ?? null,
         });

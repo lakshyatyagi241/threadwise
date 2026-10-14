@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { emailMetaSchema } from '@crm/contracts';
+import { emailMetaSchema, escapeEmailHtml } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -11,6 +11,7 @@ import {
   type OutgoingMail,
 } from '../../infra/providers/channel-email';
 import { ChannelError, type OutboundEmail } from '../../infra/providers/chat-conversations';
+import { EmailTemplatesReader } from '../email-templates';
 import { attachmentIdOfKey } from './mail-ingest.service';
 import { MailOutboundAttachments } from './mail-outbound-attachments.service';
 import { MailSignaturesRepository } from './mail-signatures.repository';
@@ -20,6 +21,8 @@ export interface PrepareContext {
   orgId: number;
   mailbox: MailboxRow;
   email: OutboundEmail;
+  /** Marketing mail: the signed unsubscribe page, which the visible footer of both parts links to (the headers carry it too). */
+  unsubscribeUrl?: string | undefined;
 }
 
 /** An `AppError` raised while preparing is a refusal the agent can act on: it ends the send (no retry) with our wording. */
@@ -41,6 +44,7 @@ export class MailOutboundPreparer {
     private readonly db: DatabaseService,
     private readonly signatures: MailSignaturesRepository,
     private readonly files: MailOutboundAttachments,
+    private readonly templates: EmailTemplatesReader,
   ) {}
 
   async prepare(ctx: PrepareContext, mail: OutgoingMail): Promise<OutgoingMail> {
@@ -90,6 +94,17 @@ export class MailOutboundPreparer {
       }
     }
 
+    // 2b. Marketing mail ends with the way out, in both parts: the rich body replaces the text the adapter wrote, so the link is put back.
+    if (ctx.unsubscribeUrl) {
+      const url = ctx.unsubscribeUrl;
+      if (!text.includes(url)) text = `${text}
+
+Unsubscribe: ${url}`;
+      if (html !== null && !html.includes(url)) {
+        html = `${html}<p><a href="${escapeEmailHtml(url)}">Unsubscribe</a></p>`;
+      }
+    }
+
     // 3. The files.
     let attachments = mail.attachments;
     if (email.attachmentIds?.length) {
@@ -135,6 +150,16 @@ export class MailOutboundPreparer {
         { orgId: ctx.orgId, err: (err as Error).message },
         'staged files not marked as sent',
       );
+    }
+    if (ctx.email.templateId) {
+      try {
+        await this.templates.recordUse(ctx.orgId, ctx.email.sentBy ?? null, ctx.email.templateId);
+      } catch (err) {
+        this.logger.warn(
+          { orgId: ctx.orgId, err: (err as Error).message },
+          'template use not counted',
+        );
+      }
     }
     try {
       const shown = mail.html

@@ -88,5 +88,11 @@ export const emailReplyExtrasSchema = z.object({
   signatureId: uuidSchema.optional(),
   /** `false` sends without any signature (the composer's "remove signature"). */
   signature: z.boolean().optional(),
+  /**
+   * The email template (`/v2/email/templates`) the composer filled the reply from. The server checks the sender may use it; a `marketing`
+   * template makes this reply marketing mail (ConsentGate, signed unsubscribe link), whatever the client says, and a sent reply counts
+   * one use of the template.
+   */
+  templateId: uuidSchema.optional(),
 });
 export type EmailReplyExtras = z.infer<typeof emailReplyExtrasSchema>;

@@ -89,6 +89,8 @@ export const outboundEmailSchema = z.object({
   marketing: z.boolean().optional(),
   /** The composer's rich-text body (raw: the email adapter sanitises it before it goes out); the envelope `body` is its plain text. */
   bodyHtml: z.string().max(200_000).optional(),
+  /** The email template (`email_templates.uuid`) the reply was filled from: a sent reply counts one use of it. */
+  templateId: z.string().uuid().optional(),
 });
 export type OutboundEmail = z.infer<typeof outboundEmailSchema>;
 export const OUTBOUND_CAPTION_MAX = 1024;

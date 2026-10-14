@@ -72,6 +72,7 @@ function setup(
       },
       findByUuid: async () => (opts.found === undefined ? template() : opts.found),
     } as never,
+    {} as never,
     { enqueueOutbound } as never,
   );
   const send = (input: Partial<Extract<SendMessageInput, { kind: 'template' }>> = {}) =>

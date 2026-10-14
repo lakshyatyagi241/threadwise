@@ -32,7 +32,12 @@ function makePreparer(
     },
   };
   const db = { txAs: (_t: unknown, fn: (tx: unknown) => Promise<unknown>) => fn({}) };
-  return new MailOutboundPreparer(db as never, signatures as never, files as never);
+  return new MailOutboundPreparer(
+    db as never,
+    signatures as never,
+    files as never,
+    { recordUse: async () => undefined } as never,
+  );
 }
 
 const mailbox = { id: 7, address: 'support@acme.test' } as never;
