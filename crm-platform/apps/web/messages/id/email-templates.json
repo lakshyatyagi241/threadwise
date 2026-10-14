@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Templat email"
+    },
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Templat email",
+      "subtitle": "Email yang dapat dipakai ulang dengan subjek, teks berformat, dan variabel. Sisipkan ke balasan dari editor email.",
+      "newTemplate": "Templat baru",
+      "loading": "Memuat templat…",
+      "emptyTitle": "Belum ada templat email",
+      "empty": "Tulis email sekali saja, dengan variabel seperti nama depan kontak, lalu pakai ulang di percakapan email mana pun.",
+      "emptyFilteredTitle": "Tidak ada templat yang cocok",
+      "emptyFiltered": "Coba pencarian lain atau hapus filter.",
+      "clearFilters": "Hapus filter",
+      "unavailableTitle": "Templat email tidak tersedia",
+      "unavailable": "Workspace ini tidak dapat terhubung ke layanan templat email saat ini.",
+      "showing": "{count, plural, other {Menampilkan # templat}}",
+      "loadMore": "Muat lebih banyak",
+      "loadingMore": "Memuat…",
+      "noPermission": "Anda dapat memakai templat yang dibagikan workspace dan menyimpan templat milik sendiri. Hubungi admin jika perlu mengubah templat bersama."
+    },
+    "toolbar": {
+      "search": "Cari templat",
+      "searchPlaceholder": "Cari berdasarkan nama, subjek, atau kategori",
+      "scope": "Milik siapa",
+      "scopes": {
+        "all": "Semua",
+        "shared": "Bersama",
+        "mine": "Milik saya"
+      },
+      "purpose": "Jenis",
+      "anyPurpose": "Semua jenis",
+      "purposes": {
+        "general": "Umum",
+        "marketing": "Pemasaran"
+      },
+      "status": "Status",
+      "statuses": {
+        "active": "Aktif",
+        "archived": "Diarsipkan",
+        "all": "Semua"
+      },
+      "category": "Kategori",
+      "anyCategory": "Semua kategori",
+      "refresh": "Segarkan"
+    },
+    "card": {
+      "subject": "Subjek",
+      "noSubject": "Tanpa subjek: balasan memakai subjeknya sendiri",
+      "badges": {
+        "shared": "Bersama",
+        "mine": "Milik saya",
+        "marketing": "Pemasaran",
+        "archived": "Diarsipkan"
+      },
+      "used": "{count, plural, =0 {Belum pernah dipakai} other {Dipakai # kali}}",
+      "lastUsed": "Terakhir dipakai {date}",
+      "by": "Oleh {name}",
+      "variables": "Variabel: {list}",
+      "edit": "Ubah",
+      "archive": "Arsipkan",
+      "restore": "Pulihkan",
+      "delete": "Hapus",
+      "preview": "Tampilkan pratinjau",
+      "hidePreview": "Sembunyikan pratinjau"
+    },
+    "delete": {
+      "title": "Hapus templat ini?",
+      "message": "\"{name}\" akan dihapus untuk semua orang yang dapat memakainya. Email yang sudah terkirim dari templat ini tidak terpengaruh.",
+      "confirm": "Hapus",
+      "cancel": "Batal"
+    },
+    "editor": {
+      "eyebrow": "Templat email",
+      "newTitle": "Templat email baru",
+      "editTitle": "Ubah templat email",
+      "close": "Tutup",
+      "name": "Nama",
+      "namePlaceholder": "Sambutan setelah pendaftaran",
+      "subject": "Subjek",
+      "subjectPlaceholder": "Selamat datang di {workspace}, {name}",
+      "subjectHint": "Opsional. Jika kosong, balasan memakai subjeknya sendiri.",
+      "body": "Pesan",
+      "bodyPlaceholder": "Tulis emailnya. Gunakan variabel di bawah untuk mempersonalisasi.",
+      "category": "Kategori",
+      "categoryPlaceholder": "Orientasi",
+      "categoryList": "Kategori yang dipakai",
+      "purpose": "Jenis",
+      "purposes": {
+        "general": {
+          "label": "Umum",
+          "hint": "Jawaban dan email satu lawan satu. Dikirim seperti balasan biasa."
+        },
+        "marketing": {
+          "label": "Pemasaran",
+          "hint": "Email promosi. Memerlukan persetujuan pemasaran kontak jika workspace Anda mewajibkannya, dan selalu menyertakan tautan berhenti berlangganan."
+        }
+      },
+      "scope": "Siapa yang dapat memakai",
+      "scopes": {
+        "shared": {
+          "label": "Semua orang di workspace",
+          "hint": "Templat bersama. Hanya pengelola templat yang dapat mengubahnya."
+        },
+        "mine": {
+          "label": "Hanya saya",
+          "hint": "Templat pribadi. Orang lain tidak dapat melihatnya."
+        }
+      },
+      "variables": "Sisipkan variabel",
+      "variablesHint": "Variabel diisi dari data kontak, Anda, dan workspace saat templat dipakai. Variabel tanpa nilai dibiarkan apa adanya agar Anda dapat memperbaikinya.",
+      "variableGroups": {
+        "contact": "Kontak",
+        "agent": "Anda",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Disisipkan ke {field}",
+      "fields": {
+        "subject": "subjek",
+        "body": "pesan"
+      },
+      "save": "Simpan perubahan",
+      "create": "Buat templat",
+      "cancel": "Batal",
+      "problems": {
+        "required": "Wajib diisi.",
+        "tooLong": "Terlalu panjang (maksimal {limit} karakter).",
+        "subjectLines": "Subjek harus satu baris."
+      }
+    },
+    "preview": {
+      "title": "Pratinjau dengan data contoh",
+      "subjectLabel": "Subjek",
+      "noSubject": "(tanpa subjek)",
+      "empty": "Tulis pesan untuk melihat pratinjau.",
+      "loading": "Memperbarui pratinjau…",
+      "failed": "Pratinjau tidak dapat diperbarui.",
+      "issues": "{count, plural, other {Variabel berikut tidak punya nilai contoh dan dibiarkan apa adanya: {list}}}",
+      "sampleNote": "Hanya nilai contoh. Nilai sebenarnya diambil dari kontak saat Anda memakai templat."
+    },
+    "picker": {
+      "button": "Templat",
+      "title": "Templat email",
+      "search": "Cari templat",
+      "searchPlaceholder": "Cari templat",
+      "loading": "Memuat templat…",
+      "empty": "Belum ada templat. Buat di Templat email pada menu CRM.",
+      "emptyFiltered": "Tidak ada templat yang cocok dengan pencarian Anda.",
+      "loadError": "Templat tidak dapat dimuat.",
+      "marketing": "Pemasaran",
+      "mine": "Milik saya",
+      "replaceTitle": "Ganti yang sudah Anda tulis?",
+      "replaceMessage": "Memakai \"{name}\" akan mengganti pesan di kotak, dan subjek jika templat memilikinya.",
+      "replaceConfirm": "Ganti",
+      "replaceCancel": "Batal",
+      "used": "Memakai templat \"{name}\"",
+      "marketingNote": "Ini email pemasaran: mengikuti aturan persetujuan Anda dan menyertakan tautan berhenti berlangganan.",
+      "forget": "Berhenti memakai templat ini",
+      "more": "Muat lebih banyak"
+    },
+    "toast": {
+      "created": "Templat dibuat",
+      "updated": "Templat disimpan",
+      "archived": "Templat diarsipkan",
+      "restored": "Templat dipulihkan",
+      "deleted": "Templat dihapus"
+    },
+    "errors": {
+      "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukannya.",
+      "signedOut": "Sesi Anda telah berakhir. Masuk lagi untuk melanjutkan.",
+      "conflict": "Orang lain mengubah templat ini. Versi mereka sudah dimuat; tinjau lalu coba lagi.",
+      "validation": "Sebagian isian tidak valid. Periksa kolomnya dan coba lagi.",
+      "unavailable": "Templat email sedang tidak tersedia.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "notFound": "Templat ini sudah tidak ada.",
+      "planDisabled": "Paket Anda tidak mencakup email. Tingkatkan paket untuk memakai templat email.",
+      "nameTaken": "Anda sudah punya templat dengan nama ini. Pilih nama lain.",
+      "notEditable": "Hanya pengelola templat email yang dapat mengubah templat bersama.",
+      "archived": "Templat ini diarsipkan. Pulihkan untuk memakainya.",
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "retry": "Coba lagi"
+    }
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Email templates"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Email templates",
+      "subtitle": "Reusable emails with a subject, formatted text and variables. Insert one into a reply from the email composer.",
+      "newTemplate": "New template",
+      "loading": "Loading templates…",
+      "emptyTitle": "No email templates yet",
+      "empty": "Write an email once, with variables such as the contact's first name, and reuse it in any email conversation.",
+      "emptyFilteredTitle": "No templates match",
+      "emptyFiltered": "Try a different search or clear the filters.",
+      "clearFilters": "Clear filters",
+      "unavailableTitle": "Email templates are not available",
+      "unavailable": "This workspace cannot reach the email templates service right now.",
+      "showing": "{count, plural, one {Showing # template} other {Showing # templates}}",
+      "loadMore": "Load more",
+      "loadingMore": "Loading…",
+      "noPermission": "You can use the templates your workspace shares and keep your own. Ask an admin if you need to change the shared ones."
+    },
+    "toolbar": {
+      "search": "Search templates",
+      "searchPlaceholder": "Search by name, subject or category",
+      "scope": "Whose",
+      "scopes": {
+        "all": "All",
+        "shared": "Shared",
+        "mine": "Mine"
+      },
+      "purpose": "Type",
+      "anyPurpose": "Any type",
+      "purposes": {
+        "general": "General",
+        "marketing": "Marketing"
+      },
+      "status": "Status",
+      "statuses": {
+        "active": "Active",
+        "archived": "Archived",
+        "all": "All"
+      },
+      "category": "Category",
+      "anyCategory": "Any category",
+      "refresh": "Refresh"
+    },
+    "card": {
+      "subject": "Subject",
+      "noSubject": "No subject: the reply keeps its own",
+      "badges": {
+        "shared": "Shared",
+        "mine": "Mine",
+        "marketing": "Marketing",
+        "archived": "Archived"
+      },
+      "used": "{count, plural, =0 {Never used} one {Used once} other {Used # times}}",
+      "lastUsed": "Last used {date}",
+      "by": "By {name}",
+      "variables": "Variables: {list}",
+      "edit": "Edit",
+      "archive": "Archive",
+      "restore": "Restore",
+      "delete": "Delete",
+      "preview": "Show preview",
+      "hidePreview": "Hide preview"
+    },
+    "delete": {
+      "title": "Delete this template?",
+      "message": "\"{name}\" will be removed for everyone who can use it. Emails already sent from it are not affected.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "editor": {
+      "eyebrow": "Email template",
+      "newTitle": "New email template",
+      "editTitle": "Edit email template",
+      "close": "Close",
+      "name": "Name",
+      "namePlaceholder": "Welcome after sign-up",
+      "subject": "Subject",
+      "subjectPlaceholder": "Welcome to {workspace}, {name}",
+      "subjectHint": "Optional. Left empty, a reply keeps its own subject.",
+      "body": "Message",
+      "bodyPlaceholder": "Write the email. Use the variables below to personalise it.",
+      "category": "Category",
+      "categoryPlaceholder": "Onboarding",
+      "categoryList": "Categories in use",
+      "purpose": "Type",
+      "purposes": {
+        "general": {
+          "label": "General",
+          "hint": "Answers and one-to-one mail. Sent like any reply."
+        },
+        "marketing": {
+          "label": "Marketing",
+          "hint": "Promotional mail. Needs the contact's marketing consent where your workspace requires it, and always carries an unsubscribe link."
+        }
+      },
+      "scope": "Who can use it",
+      "scopes": {
+        "shared": {
+          "label": "Everyone in the workspace",
+          "hint": "A shared template. Only people who manage templates can change it."
+        },
+        "mine": {
+          "label": "Only me",
+          "hint": "A personal template. Nobody else sees it."
+        }
+      },
+      "variables": "Insert a variable",
+      "variablesHint": "Variables are filled from the contact, you and the workspace when the template is used. One that has no value is left as written so you can fix it.",
+      "variableGroups": {
+        "contact": "Contact",
+        "agent": "You",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Inserts into the {field}",
+      "fields": {
+        "subject": "subject",
+        "body": "message"
+      },
+      "save": "Save changes",
+      "create": "Create template",
+      "cancel": "Cancel",
+      "problems": {
+        "required": "This is required.",
+        "tooLong": "This is too long (at most {limit} characters).",
+        "subjectLines": "The subject must be one line."
+      }
+    },
+    "preview": {
+      "title": "Preview with sample data",
+      "subjectLabel": "Subject",
+      "noSubject": "(no subject)",
+      "empty": "Write the message to see a preview.",
+      "loading": "Updating the preview…",
+      "failed": "The preview could not be updated.",
+      "issues": "{count, plural, one {This variable has no sample value and stays as written: {list}} other {These variables have no sample value and stay as written: {list}}}",
+      "sampleNote": "Sample values only. The real values come from the contact when you use the template."
+    },
+    "picker": {
+      "button": "Templates",
+      "title": "Email templates",
+      "search": "Search templates",
+      "searchPlaceholder": "Search templates",
+      "loading": "Loading templates…",
+      "empty": "No templates yet. Create them under Email templates in the CRM menu.",
+      "emptyFiltered": "No template matches your search.",
+      "loadError": "Templates could not be loaded.",
+      "marketing": "Marketing",
+      "mine": "Mine",
+      "replaceTitle": "Replace what you have written?",
+      "replaceMessage": "Using \"{name}\" replaces the message in the box, and the subject if the template has one.",
+      "replaceConfirm": "Replace",
+      "replaceCancel": "Cancel",
+      "used": "Using the template \"{name}\"",
+      "marketingNote": "This is marketing mail: it goes through your consent rules and carries an unsubscribe link.",
+      "forget": "Stop using this template",
+      "more": "Load more"
+    },
+    "toast": {
+      "created": "Template created",
+      "updated": "Template saved",
+      "archived": "Template archived",
+      "restored": "Template restored",
+      "deleted": "Template deleted"
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do that.",
+      "signedOut": "Your session has ended. Sign in again to continue.",
+      "conflict": "Someone else changed this template. Their version is loaded; review it and try again.",
+      "validation": "Some of what you entered is not valid. Check the fields and try again.",
+      "unavailable": "Email templates are not available right now.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "notFound": "This template no longer exists.",
+      "planDisabled": "Your plan does not include email. Upgrade your plan to use email templates.",
+      "nameTaken": "You already have a template with this name. Choose a different name.",
+      "notEditable": "Only people who manage email templates can change a shared template.",
+      "archived": "This template is archived. Restore it to use it.",
+      "unexpected": "Something went wrong. Try again.",
+      "retry": "Try again"
+    }
+  }
+}

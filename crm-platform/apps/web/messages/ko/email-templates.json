@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "이메일 템플릿"
+    },
+    "common": {
+      "dismiss": "닫기"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "이메일 템플릿",
+      "subtitle": "제목, 서식 있는 본문, 변수를 갖춘 재사용 가능한 이메일입니다. 이메일 작성기에서 답장에 삽입할 수 있습니다.",
+      "newTemplate": "새 템플릿",
+      "loading": "템플릿을 불러오는 중…",
+      "emptyTitle": "아직 이메일 템플릿이 없습니다",
+      "empty": "연락처 이름 같은 변수를 넣어 이메일을 한 번만 작성하고, 모든 이메일 대화에서 다시 사용하세요.",
+      "emptyFilteredTitle": "일치하는 템플릿이 없습니다",
+      "emptyFiltered": "다른 검색어를 입력하거나 필터를 해제해 보세요.",
+      "clearFilters": "필터 해제",
+      "unavailableTitle": "이메일 템플릿을 사용할 수 없습니다",
+      "unavailable": "이 워크스페이스에서 지금은 이메일 템플릿 서비스에 연결할 수 없습니다.",
+      "showing": "{count, plural, other {템플릿 #개 표시 중}}",
+      "loadMore": "더 보기",
+      "loadingMore": "불러오는 중…",
+      "noPermission": "워크스페이스에서 공유한 템플릿을 사용하고 내 템플릿을 관리할 수 있습니다. 공유 템플릿을 변경하려면 관리자에게 문의하세요."
+    },
+    "toolbar": {
+      "search": "템플릿 검색",
+      "searchPlaceholder": "이름, 제목 또는 카테고리로 검색",
+      "scope": "소유",
+      "scopes": {
+        "all": "전체",
+        "shared": "공유됨",
+        "mine": "내 템플릿"
+      },
+      "purpose": "유형",
+      "anyPurpose": "모든 유형",
+      "purposes": {
+        "general": "일반",
+        "marketing": "마케팅"
+      },
+      "status": "상태",
+      "statuses": {
+        "active": "활성",
+        "archived": "보관됨",
+        "all": "전체"
+      },
+      "category": "카테고리",
+      "anyCategory": "모든 카테고리",
+      "refresh": "새로고침"
+    },
+    "card": {
+      "subject": "제목",
+      "noSubject": "제목 없음: 답장의 기존 제목이 유지됩니다",
+      "badges": {
+        "shared": "공유됨",
+        "mine": "내 템플릿",
+        "marketing": "마케팅",
+        "archived": "보관됨"
+      },
+      "used": "{count, plural, =0 {사용 안 함} other {#회 사용}}",
+      "lastUsed": "마지막 사용 {date}",
+      "by": "작성자 {name}",
+      "variables": "변수: {list}",
+      "edit": "수정",
+      "archive": "보관",
+      "restore": "복원",
+      "delete": "삭제",
+      "preview": "미리보기 표시",
+      "hidePreview": "미리보기 숨기기"
+    },
+    "delete": {
+      "title": "이 템플릿을 삭제할까요?",
+      "message": "\"{name}\" 템플릿이 사용할 수 있는 모든 사람에게서 제거됩니다. 이미 이 템플릿으로 보낸 이메일에는 영향이 없습니다.",
+      "confirm": "삭제",
+      "cancel": "취소"
+    },
+    "editor": {
+      "eyebrow": "이메일 템플릿",
+      "newTitle": "새 이메일 템플릿",
+      "editTitle": "이메일 템플릿 수정",
+      "close": "닫기",
+      "name": "이름",
+      "namePlaceholder": "가입 후 환영 메일",
+      "subject": "제목",
+      "subjectPlaceholder": "{workspace}에 오신 것을 환영합니다, {name}님",
+      "subjectHint": "선택 사항입니다. 비워 두면 답장의 기존 제목이 유지됩니다.",
+      "body": "메시지",
+      "bodyPlaceholder": "이메일을 작성하세요. 아래 변수를 사용해 개인화할 수 있습니다.",
+      "category": "카테고리",
+      "categoryPlaceholder": "온보딩",
+      "categoryList": "사용 중인 카테고리",
+      "purpose": "유형",
+      "purposes": {
+        "general": {
+          "label": "일반",
+          "hint": "답변 및 일대일 메일입니다. 일반 답장과 동일하게 발송됩니다."
+        },
+        "marketing": {
+          "label": "마케팅",
+          "hint": "프로모션 메일입니다. 워크스페이스에서 요구하는 경우 연락처의 마케팅 수신 동의가 필요하며, 항상 수신 거부 링크가 포함됩니다."
+        }
+      },
+      "scope": "사용 가능 대상",
+      "scopes": {
+        "shared": {
+          "label": "워크스페이스의 모든 사용자",
+          "hint": "공유 템플릿입니다. 템플릿을 관리하는 사용자만 변경할 수 있습니다."
+        },
+        "mine": {
+          "label": "나만",
+          "hint": "개인 템플릿입니다. 다른 사람에게는 보이지 않습니다."
+        }
+      },
+      "variables": "변수 삽입",
+      "variablesHint": "템플릿을 사용할 때 변수는 연락처, 나, 워크스페이스의 정보로 채워집니다. 값이 없는 변수는 입력한 그대로 남아 직접 수정할 수 있습니다.",
+      "variableGroups": {
+        "contact": "연락처",
+        "agent": "나",
+        "workspace": "워크스페이스"
+      },
+      "insertingIn": "{field}에 삽입됩니다",
+      "fields": {
+        "subject": "제목",
+        "body": "메시지"
+      },
+      "save": "변경사항 저장",
+      "create": "템플릿 만들기",
+      "cancel": "취소",
+      "problems": {
+        "required": "필수 항목입니다.",
+        "tooLong": "너무 깁니다(최대 {limit}자).",
+        "subjectLines": "제목은 한 줄이어야 합니다."
+      }
+    },
+    "preview": {
+      "title": "샘플 데이터로 미리보기",
+      "subjectLabel": "제목",
+      "noSubject": "(제목 없음)",
+      "empty": "메시지를 작성하면 미리보기가 표시됩니다.",
+      "loading": "미리보기를 업데이트하는 중…",
+      "failed": "미리보기를 업데이트하지 못했습니다.",
+      "issues": "{count, plural, other {다음 변수에는 샘플 값이 없어 입력한 그대로 남습니다: {list}}}",
+      "sampleNote": "샘플 값일 뿐입니다. 템플릿을 사용할 때 실제 값은 연락처에서 가져옵니다."
+    },
+    "picker": {
+      "button": "템플릿",
+      "title": "이메일 템플릿",
+      "search": "템플릿 검색",
+      "searchPlaceholder": "템플릿 검색",
+      "loading": "템플릿을 불러오는 중…",
+      "empty": "아직 템플릿이 없습니다. CRM 메뉴의 이메일 템플릿에서 만드세요.",
+      "emptyFiltered": "검색과 일치하는 템플릿이 없습니다.",
+      "loadError": "템플릿을 불러오지 못했습니다.",
+      "marketing": "마케팅",
+      "mine": "내 템플릿",
+      "replaceTitle": "작성한 내용을 바꿀까요?",
+      "replaceMessage": "\"{name}\" 템플릿을 사용하면 입력란의 메시지가 바뀌고, 템플릿에 제목이 있으면 제목도 바뀝니다.",
+      "replaceConfirm": "바꾸기",
+      "replaceCancel": "취소",
+      "used": "\"{name}\" 템플릿 사용 중",
+      "marketingNote": "마케팅 메일입니다. 수신 동의 규칙이 적용되며 수신 거부 링크가 포함됩니다.",
+      "forget": "이 템플릿 사용 중지",
+      "more": "더 보기"
+    },
+    "toast": {
+      "created": "템플릿을 만들었습니다",
+      "updated": "템플릿을 저장했습니다",
+      "archived": "템플릿을 보관했습니다",
+      "restored": "템플릿을 복원했습니다",
+      "deleted": "템플릿을 삭제했습니다"
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "signedOut": "세션이 종료되었습니다. 계속하려면 다시 로그인하세요.",
+      "conflict": "다른 사용자가 이 템플릿을 변경했습니다. 해당 버전을 불러왔으니 확인한 후 다시 시도하세요.",
+      "validation": "입력한 내용 중 올바르지 않은 항목이 있습니다. 필드를 확인하고 다시 시도하세요.",
+      "unavailable": "지금은 이메일 템플릿을 사용할 수 없습니다.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
+      "notFound": "이 템플릿은 더 이상 존재하지 않습니다.",
+      "planDisabled": "현재 요금제에는 이메일이 포함되어 있지 않습니다. 이메일 템플릿을 사용하려면 요금제를 업그레이드하세요.",
+      "nameTaken": "같은 이름의 템플릿이 이미 있습니다. 다른 이름을 입력하세요.",
+      "notEditable": "이메일 템플릿을 관리하는 사용자만 공유 템플릿을 변경할 수 있습니다.",
+      "archived": "이 템플릿은 보관되어 있습니다. 사용하려면 복원하세요.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
+      "retry": "다시 시도"
+    }
+  }
+}

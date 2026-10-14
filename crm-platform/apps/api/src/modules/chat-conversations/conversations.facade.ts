@@ -102,7 +102,10 @@ export type OutboundContent =
   | {
       kind: 'text';
       body: string;
-      email?: EmailReplyExtras;
+      email?: EmailReplyExtras & {
+        /** Set by the server for a reply from a marketing email template (never taken from the client). */
+        marketing?: boolean;
+      };
       /** Personal-number group threads only: the members @mentioned in the body. Dropped for any other thread. */
       mentions?: { jid: string; name?: string | undefined }[];
     }

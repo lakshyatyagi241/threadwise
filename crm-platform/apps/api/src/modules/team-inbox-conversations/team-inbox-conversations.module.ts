@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
+import { EmailTemplatesModule } from '../email-templates';
 import { MessageTemplatesModule } from '../message-templates';
 import { NotificationsModule } from '../notifications';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -26,6 +27,8 @@ import { InboxTriageService } from './inbox-triage.service';
 import { InboxTagsRepository } from './inbox-tags.repository';
 import { MediaUploadsRepository } from './media-uploads.repository';
 import { NotesRepository } from './notes.repository';
+import { InboxEmailTemplatesController } from './email-templates/inbox-email-templates.controller';
+import { InboxEmailTemplatesService } from './email-templates/inbox-email-templates.service';
 import { SavedRepliesController } from './saved-replies/saved-replies.controller';
 import { SavedRepliesTransferController } from './saved-replies/saved-replies-transfer.controller';
 import { SavedRepliesTransferService } from './saved-replies/saved-replies-transfer.service';
@@ -44,6 +47,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     ChatConversationsModule,
     ChatChannelProvidersModule,
     CrmModule,
+    EmailTemplatesModule,
     MessageTemplatesModule,
     NotificationsModule,
     PlansCoreModule,
@@ -55,6 +59,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxTagsController,
     SavedRepliesTransferController,
     SavedRepliesController,
+    InboxEmailTemplatesController,
   ],
   providers: [
     ConversationsRepository,
@@ -78,6 +83,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     SavedRepliesService,
     SavedRepliesTransferService,
     SharedSavedRepliesReader,
+    InboxEmailTemplatesService,
   ],
   exports: [
     ConversationsRepository,
