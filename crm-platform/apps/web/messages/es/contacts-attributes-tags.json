@@ -364,7 +364,12 @@
       "addPlaceholder": "Añade o elige una etiqueta...",
       "addLabel": "Nombre de la etiqueta",
       "add": "Añadir etiqueta",
-      "failed": "No se pudo cambiar la etiqueta. Inténtalo de nuevo."
+      "failed": "No se pudo cambiar la etiqueta. Inténtalo de nuevo.",
+      "quickPlaceholder": "Busca o crea una etiqueta",
+      "create": "Crear la etiqueta «{name}»",
+      "noMatch": "Ninguna etiqueta coincide",
+      "quickHint": "Elige varias etiquetas o escribe un nombre y pulsa Enter para crear una nueva.",
+      "quickHintPick": "Elige varias etiquetas de la lista."
     },
     "groups": {
       "eyebrow": "Espacio de trabajo · {workspace}",

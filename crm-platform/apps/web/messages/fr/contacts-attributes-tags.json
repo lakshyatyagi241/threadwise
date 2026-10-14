@@ -364,7 +364,12 @@
       "addPlaceholder": "Ajoutez ou choisissez une étiquette...",
       "addLabel": "Nom de l’étiquette",
       "add": "Ajouter l’étiquette",
-      "failed": "L’étiquette n’a pas pu être modifiée. Réessayez."
+      "failed": "L’étiquette n’a pas pu être modifiée. Réessayez.",
+      "quickPlaceholder": "Rechercher ou créer un tag",
+      "create": "Créer le tag « {name} »",
+      "noMatch": "Aucun tag ne correspond",
+      "quickHint": "Choisissez plusieurs tags, ou tapez un nom et appuyez sur Entrée pour créer un nouveau tag.",
+      "quickHintPick": "Choisissez plusieurs tags dans la liste."
     },
     "groups": {
       "eyebrow": "Espace de travail · {workspace}",

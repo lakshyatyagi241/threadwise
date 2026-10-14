@@ -364,7 +364,12 @@
       "addPlaceholder": "タグを追加または選択...",
       "addLabel": "タグ名",
       "add": "タグを追加",
-      "failed": "タグを変更できませんでした。もう一度お試しください。"
+      "failed": "タグを変更できませんでした。もう一度お試しください。",
+      "quickPlaceholder": "タグを検索または作成",
+      "create": "タグ「{name}」を作成",
+      "noMatch": "一致するタグがありません",
+      "quickHint": "複数のタグを選択するか、名前を入力して Enter で新しいタグを作成します。",
+      "quickHintPick": "一覧から複数のタグを選択できます。"
     },
     "groups": {
       "eyebrow": "ワークスペース · {workspace}",

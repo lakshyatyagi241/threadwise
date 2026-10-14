@@ -364,7 +364,12 @@
       "addPlaceholder": "Add or pick a tag...",
       "addLabel": "Tag name",
       "add": "Add tag",
-      "failed": "The tag could not be changed. Try again."
+      "failed": "The tag could not be changed. Try again.",
+      "quickPlaceholder": "Search or create a tag",
+      "create": "Create tag “{name}”",
+      "noMatch": "No matching tags",
+      "quickHint": "Pick several tags, or type a name and press Enter to create a new one.",
+      "quickHintPick": "Pick several tags from the list."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
