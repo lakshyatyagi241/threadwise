@@ -46,7 +46,8 @@ export const publicBookingTypeSchema = z.object({
    */
   consent: z
     .object({ text: z.string(), version: z.number().int().min(1), url: z.string().nullable() })
-    .nullable(),
+    .nullable()
+    .default(null),
 });
 export type PublicBookingType = z.infer<typeof publicBookingTypeSchema>;
 

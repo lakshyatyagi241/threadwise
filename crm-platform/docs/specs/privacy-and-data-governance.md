@@ -1,6 +1,6 @@
 # Privacy and data governance: platform-wide design and audit
 
-Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); the rest is still design. Backlog: BL-140 to BL-153
+Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); **BL-165 to BL-167 (consent at intake: policy, grants on contact writes, channel contacts through the contacts service, consent lines for the chat widget, booking page and stores) are built** (section 4.3.2); the rest is still design. Backlog: BL-140 to BL-153
 ([backlog.md](../backlog.md) section O). Not legal advice: see section 10.
 
 ## How to read the evidence
@@ -285,17 +285,17 @@ Plug-in map (each is a backlog task):
 
 Paths that write an intake grant (all through `ConsentIntakeService`, one idempotency key per source event):
 
-| Path                                                                          | Source           | Evidence (besides wording and version)       |
-| ----------------------------------------------------------------------------- | ---------------- | -------------------------------------------- |
-| CRM contact create and update (a status set to `subscribed`, or `consent`)    | `manual`         | actor, note                                  |
-| Customer REST API v1 contact create and update (`consent`)                    | `api`            | `apiKeyId`                                   |
-| Partner agent lead submit (`consent`)                                         | `api`            | `reference: partner_agent:<id>`              |
-| Public lead submit `/public/v1/leads` (`consent`)                             | `api`            | `apiKeyId`                                   |
-| Google Sheets add-on contact rows (`consent` yes + `consent_note`)            | `api`            | `reference: google_sheets`                   |
-| Website chat widget pre-chat consent line                                     | `widget`         | `widgetId`, `noticeVersion`                  |
-| Appointment booking page consent line                                         | `booking`        | `bookingPageId`, `noticeVersion`             |
-| Shopify and WooCommerce customers who accepted marketing in the store         | `commerce`       | `integrationId`, `noticeVersion`, `noticeUrl` |
-| Forms with a ticked marketing line (built before this policy)                 | `form`           | `formId`, `submissionId`                     |
+| Path                                                                       | Source     | Evidence (besides wording and version)        |
+| -------------------------------------------------------------------------- | ---------- | --------------------------------------------- |
+| CRM contact create and update (a status set to `subscribed`, or `consent`) | `manual`   | actor, note                                   |
+| Customer REST API v1 contact create and update (`consent`)                 | `api`      | `apiKeyId`                                    |
+| Partner agent lead submit (`consent`)                                      | `api`      | `reference: partner_agent:<id>`               |
+| Public lead submit `/public/v1/leads` (`consent`)                          | `api`      | `apiKeyId`                                    |
+| Google Sheets add-on contact rows (`consent` yes + `consent_note`)         | `api`      | `reference: google_sheets`                    |
+| Website chat widget pre-chat consent line                                  | `widget`   | `widgetId`, `noticeVersion`                   |
+| Appointment booking page consent line                                      | `booking`  | `bookingPageId`, `noticeVersion`              |
+| Shopify and WooCommerce customers who accepted marketing in the store      | `commerce` | `integrationId`, `noticeVersion`, `noticeUrl` |
+| Forms with a ticked marketing line (built before this policy)              | `form`     | `formId`, `submissionId`                      |
 
 **Later round, not covered here:** lead capture (Meta lead ads, click-to-WhatsApp), the contact import's consent column redesign, and
 the consent line of non-marketing forms. They follow the same rules (source, wording, version, time) when built.
