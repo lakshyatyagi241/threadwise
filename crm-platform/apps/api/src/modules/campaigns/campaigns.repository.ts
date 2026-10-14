@@ -86,6 +86,7 @@ export interface CampaignRow {
   flowBUuid: string | null;
   useAttributes: boolean;
   trackingEnabled: boolean;
+  retryFailed: boolean;
   scheduleType: string;
   sendDate: string | null;
   sendTime: string | null;
@@ -167,6 +168,7 @@ function toRow(r: Raw): CampaignRow {
     flowBUuid: str(r.flow_b_uuid),
     useAttributes: Boolean(r.use_attributes),
     trackingEnabled: Boolean(r.tracking_enabled),
+    retryFailed: r.retry_failed === undefined ? true : Boolean(r.retry_failed),
     scheduleType: String(r.schedule_type),
     sendDate: day(r.send_date),
     sendTime: str(r.send_time),
@@ -257,6 +259,7 @@ export interface NewCampaign {
   flowIdB: number | null;
   useAttributes: boolean;
   trackingEnabled: boolean;
+  retryFailed: boolean;
   scheduleType: string;
   sendDate: string | null;
   sendTime: string | null;
@@ -356,7 +359,7 @@ export class CampaignsRepository {
         custom_message, custom_message_b, custom_header, custom_footer, custom_buttons, custom_quick_replies,
         custom_variable_map, custom_image, custom_video, custom_document,
         template_id, template_id_a, template_id_b, template_overrides, template_overrides_b, flow_id, flow_id_b,
-        use_attributes, tracking_enabled, schedule_type, send_date, send_time, timezone, repeat_interval, repeat_until,
+        use_attributes, tracking_enabled, retry_failed, schedule_type, send_date, send_time, timezone, repeat_interval, repeat_until,
         expires_at, throttle_min_sec, throttle_max_sec, batch_size, batch_pause_min, daily_limit, window_start, window_end,
         total_recipients, created_by)
       VALUES (
@@ -366,7 +369,7 @@ export class CampaignsRepository {
         ${v.customImage}, ${v.customVideo}, ${v.customDocument},
         ${v.templateId}, ${v.templateIdA}, ${v.templateIdB}, ${json(v.templateOverrides)}::jsonb,
         ${json(v.templateOverridesB)}::jsonb, ${v.flowId}, ${v.flowIdB},
-        ${v.useAttributes}, ${v.trackingEnabled}, ${v.scheduleType}, ${v.sendDate}::date, ${v.sendTime}::time,
+        ${v.useAttributes}, ${v.trackingEnabled}, ${v.retryFailed}, ${v.scheduleType}, ${v.sendDate}::date, ${v.sendTime}::time,
         ${v.timezone}, ${v.repeatInterval}, ${v.repeatUntil}::date,
         ${v.expiresAt ? v.expiresAt.toISOString() : null}::timestamptz,
         ${v.throttleMinSec}, ${v.throttleMaxSec}, ${v.batchSize}, ${v.batchPauseMin}, ${v.dailyLimit},
@@ -401,7 +404,7 @@ export class CampaignsRepository {
         template_overrides = CASE WHEN ${v.overrides} THEN ${json(v.templateOverrides)}::jsonb ELSE template_overrides END,
         template_overrides_b = CASE WHEN ${v.overridesB} THEN ${json(v.templateOverridesB)}::jsonb ELSE template_overrides_b END,
         flow_id = ${v.flowId}, flow_id_b = ${v.flowIdB}, use_attributes = ${v.useAttributes},
-        tracking_enabled = ${v.trackingEnabled}, schedule_type = ${v.scheduleType}, send_date = ${v.sendDate}::date,
+        tracking_enabled = ${v.trackingEnabled}, retry_failed = ${v.retryFailed}, schedule_type = ${v.scheduleType}, send_date = ${v.sendDate}::date,
         send_time = ${v.sendTime}::time, timezone = ${v.timezone}, repeat_interval = ${v.repeatInterval},
         repeat_until = ${v.repeatUntil}::date, expires_at = ${v.expiresAt ? v.expiresAt.toISOString() : null}::timestamptz,
         throttle_min_sec = ${v.throttleMinSec}, throttle_max_sec = ${v.throttleMaxSec}, batch_size = ${v.batchSize},
@@ -1066,8 +1069,10 @@ export class CampaignsRepository {
   }
 
   /**
-   * Puts the targeted recipients back to `queued` and clears what the earlier send left (sent time, message id, error, attempts).
-   * Scope `failed` is the failed rows, `all` every row, `selected` the rows of the given contacts. Returns how many were reset.
+   * Puts the targeted recipients back to `queued` and clears what the earlier send left (sent time, message id, error, attempts, and
+   * the wizard's frequency-cap retry state with its attempt log, so a new failure can be armed from a clean slate and the unique
+   * (recipient, attempt) slot is free again). Scope `failed` is the failed rows, `all` every row, `selected` the rows of the given
+   * contacts. A row the retry job holds right now (`sending`) is left alone: its message may be on the wire. Returns how many were reset.
    */
   async resetForResend(
     tx: Tx,
@@ -1084,11 +1089,17 @@ export class CampaignsRepository {
           : sql``;
     const res = await tx.execute(sql`
       UPDATE wp_campaign_contacts
-      SET status = 'queued', sent_at = NULL, whatsapp_message_id = NULL, error_message = NULL, send_attempts = 0,
-          next_attempt_at = NULL
-      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} ${scopeSql}
+      SET status = 'queued', sent_at = NULL, whatsapp_message_id = NULL, error_message = NULL, error_code = NULL, send_attempts = 0,
+          next_attempt_at = NULL, retry_state = NULL, retry_count = 0, retry_first_sent_at = NULL, retry_next_at = NULL
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND retry_state IS DISTINCT FROM 'sending' ${scopeSql}
       RETURNING id`);
-    return res.rows.length;
+    const ids = (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
+    if (ids.length > 0) {
+      await tx.execute(sql`
+        DELETE FROM camp_retry_attempts
+        WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND recipient_id IN (${list(ids, 'bigint')})`);
+    }
+    return ids.length;
   }
 
   async deleteRecipients(tx: Tx, orgId: number, campaignId: number): Promise<void> {

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Field, Input, Select } from '@crm/ui';
 import { timezoneList } from '@/lib/timezones';
 import type { BuilderForm } from '../../lib/builder-model';
-import { AutoEndField, SmartDelivery, TrackClicks } from './delivery-extras';
+import { AutoEndField, RetryFailed, SmartDelivery, TrackClicks } from './delivery-extras';
 import { ChoiceCard, StepCard } from './parts';
 
 const SCHEDULES = ['now', 'scheduled', 'recurring'] as const;
@@ -117,6 +117,8 @@ export function StepSchedule({
         values={form}
         onChange={(key, value) => patch({ [key]: value } as Partial<BuilderForm>)}
       />
+
+      <RetryFailed checked={form.retryFailed} onChange={(retryFailed) => patch({ retryFailed })} />
 
       <TrackClicks
         checked={form.trackingEnabled}

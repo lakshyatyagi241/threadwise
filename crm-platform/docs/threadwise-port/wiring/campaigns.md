@@ -37,6 +37,7 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 | POST/GET     | `/v2/broadcast-wizard/test-send`, `/drafts/:id/test-sends`                                                              | `camp.campaigns.test`                                                                                 |
 | GET          | `/v2/broadcast-wizard/broadcasts`, `/broadcasts/:id`                                                                    | `camp.campaigns.read`                                                                                 |
 | POST         | `/v2/broadcast-wizard/broadcasts/:id/pause`, `/resume`, `/cancel`                                                       | `camp.campaigns.control`                                                                              |
+| POST         | `/v2/broadcast-wizard/broadcasts/:id/retry-failed`                                                                      | `camp.campaigns.control` (ADDITION: Retry failed on the status page; reuses the campaign resend)      |
 | PUT          | `/v2/campaigns/:id`                                                                                                     | `camp.campaigns.update`                                                                               |
 | DELETE       | `/v2/campaigns/:id`                                                                                                     | `camp.campaigns.delete`                                                                               |
 

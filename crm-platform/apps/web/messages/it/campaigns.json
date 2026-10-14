@@ -403,7 +403,9 @@
         "smartIntro": "Lascia vuoto per usare il ritmo predefinito del workspace. Queste regole distanziano gli invii così che un elenco numeroso sembri naturale e resti sotto il radar anti-ban di WhatsApp.",
         "smartZone": "Orari in {zone}.",
         "throttleMaxHint": "Attesa massima prima di un messaggio.",
-        "batchPauseHint": "Minuti di pausa dopo ogni lotto."
+        "batchPauseHint": "Minuti di pausa dopo ogni lotto.",
+        "retryFailed": "Riprova automaticamente i messaggi falliti",
+        "retryFailedHint": "Un messaggio che fallisce per un motivo temporaneo viene riprovato alcune volte, con una pausa tra i tentativi. Disattiva per inviare ogni messaggio una sola volta."
       },
       "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
       "draftChip": "Bozza / non salvata",
@@ -1485,12 +1487,14 @@
         "action": {
           "pause": "Pausa",
           "resume": "Riprendi",
-          "cancel": "Annulla broadcast"
+          "cancel": "Annulla broadcast",
+          "retryFailed": "Riprova i falliti ({count})"
         },
         "done": {
           "pause": "Broadcast messo in pausa.",
           "resume": "Broadcast ripreso.",
-          "cancel": "Broadcast annullato."
+          "cancel": "Broadcast annullato.",
+          "retryFailed": "Nuovo tentativo per {count, plural, one {# destinatario fallito} other {# destinatari falliti}}."
         },
         "failed": "Non ha funzionato. Riprova.",
         "noControl": "Non hai l'autorizzazione a mettere in pausa, riprendere o annullare i broadcast.",
@@ -1509,7 +1513,9 @@
           "cancelled": "Annullato",
           "active": "Attivo",
           "ended": "Terminato"
-        }
+        },
+        "retryTitle": "Riprovare i messaggi falliti?",
+        "retryMessage": "Invia di nuovo a {count, plural, one {# destinatario} other {# destinatari}} il cui messaggio non è andato a buon fine. Chi lo ha già ricevuto non viene toccato e un messaggio viene addebitato solo quando è consegnato."
       },
       "panel": {
         "title": "Creato con Crea broadcast",

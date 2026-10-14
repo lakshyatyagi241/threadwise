@@ -259,12 +259,35 @@ describe('status page', () => {
   });
 
   it('shows no controls for ended work, and hides them without the permission', () => {
-    const ended = page(detail({ status: 'ended' }));
+    const clean = (runs: WizardBroadcastDetail['runList']) =>
+      runs.map((r) => ({ ...r, counts: { ...r.counts, failed: 0 } }));
+    const ended = page(detail({ status: 'ended', runList: clean(detail().runList) }));
     expect(ended).toContain('<div class="flex flex-wrap gap-2"></div>');
     expect(ended).not.toContain('>Pause<');
     const noPerm = page(detail(), ['camp.campaigns.read']);
     expect(noPerm).not.toContain('>Pause<');
     expect(noPerm).toContain('do not have permission to pause, resume or cancel');
+  });
+
+  it('offers Retry failed with the number of failed recipients of the finished runs, behind a confirm', () => {
+    const out = page(detail());
+    expect(out).toContain('Retry failed (10)');
+    expect(out).toContain('Retry the failed messages?');
+    expect(out).toContain('Sends again to the 10 recipients whose message failed.');
+    // It stays available after the series has ended: the failures are still there.
+    expect(page(detail({ status: 'ended' }))).toContain('Retry failed (10)');
+  });
+
+  it('hides Retry failed without the control permission, with nothing failed, or while the failing run is still going', () => {
+    expect(page(detail(), ['camp.campaigns.read'])).not.toContain('Retry failed');
+    const run = detail().runList[0]!;
+    const withRun = (status: typeof run.status, failed: number) =>
+      detail({ runList: [{ ...run, status, counts: { ...run.counts, failed } }] });
+    expect(page(withRun('completed', 0))).not.toContain('Retry failed');
+    expect(page(withRun('running', 10))).not.toContain('Retry failed');
+    // A series never restarts a cancelled run; a one-off campaign can be resent after a cancel.
+    expect(page(withRun('cancelled', 3))).not.toContain('Retry failed');
+    expect(page({ ...withRun('cancelled', 3), kind: 'campaign' })).toContain('Retry failed (3)');
   });
 
   it('a one-off campaign: a single run, no retries', () => {

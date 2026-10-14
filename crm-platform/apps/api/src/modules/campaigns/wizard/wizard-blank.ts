@@ -38,6 +38,7 @@ export const blankCampaignFor = (o: {
   flowIdB: null,
   useAttributes: false,
   trackingEnabled: true,
+  retryFailed: true,
   scheduleType: 'now',
   sendDate: null,
   sendTime: null,
@@ -64,6 +65,7 @@ export type CampaignOptionColumns = Pick<
   | 'abSplit'
   | 'templateIdB'
   | 'trackingEnabled'
+  | 'retryFailed'
   | 'expiresAt'
   | 'throttleMinSec'
   | 'throttleMaxSec'
@@ -89,6 +91,7 @@ export function campaignColumnsOf(
     abSplit: draft.abSplit,
     templateIdB: ab ? templateIdB : null,
     trackingEnabled: draft.trackLinks,
+    retryFailed: draft.retryFailed,
     expiresAt: draft.autoEnd ? localDateTimeToUtc(draft.autoEnd.at, draft.autoEnd.timezone) : null,
     throttleMinSec: p.throttleMinSec ?? null,
     throttleMaxSec: p.throttleMaxSec ?? null,

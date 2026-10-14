@@ -403,7 +403,9 @@
         "smartIntro": "Çalışma alanının varsayılan hızını kullanmak için boş bırakın. Bu kurallar gönderimleri aralıklandırır; böylece büyük bir liste insan gibi görünür ve WhatsApp'ın engelleme radarının altında kalır.",
         "smartZone": "Saatler: {zone}.",
         "throttleMaxHint": "Bir mesajdan önceki en uzun bekleme.",
-        "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika)."
+        "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika).",
+        "retryFailed": "Başarısız mesajları otomatik olarak yeniden dene",
+        "retryFailedHint": "Geçici bir nedenle başarısız olan mesaj, denemeler arasında bekleyerek birkaç kez yeniden denenir. Her mesajı yalnızca bir kez göndermek için kapatın."
       },
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
       "draftChip": "Taslak / kaydedilmemiş",
@@ -1485,12 +1487,14 @@
         "action": {
           "pause": "Duraklat",
           "resume": "Devam et",
-          "cancel": "Toplu gönderimi iptal et"
+          "cancel": "Toplu gönderimi iptal et",
+          "retryFailed": "Başarısızları yeniden dene ({count})"
         },
         "done": {
           "pause": "Toplu gönderim duraklatıldı.",
           "resume": "Toplu gönderim devam ettirildi.",
-          "cancel": "Toplu gönderim iptal edildi."
+          "cancel": "Toplu gönderim iptal edildi.",
+          "retryFailed": "{count, plural, other {# başarısız alıcı}} için yeniden deneniyor."
         },
         "failed": "İşlem başarısız oldu. Tekrar deneyin.",
         "noControl": "Toplu gönderimleri duraklatma, devam ettirme veya iptal etme izniniz yok.",
@@ -1509,7 +1513,9 @@
           "cancelled": "İptal edildi",
           "active": "Etkin",
           "ended": "Sona erdi"
-        }
+        },
+        "retryTitle": "Başarısız mesajlar yeniden denensin mi?",
+        "retryMessage": "Mesajı başarısız olan {count, plural, other {# alıcıya}} yeniden gönderir. Mesajı zaten alanlara dokunulmaz ve mesaj yalnızca teslim edildiğinde ücretlendirilir."
       },
       "panel": {
         "title": "Toplu gönderim oluştur ile oluşturuldu",

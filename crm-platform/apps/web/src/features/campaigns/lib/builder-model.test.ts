@@ -105,6 +105,12 @@ describe('toInput', () => {
     ]);
   });
 
+  it('retries failed messages unless the person switched that off, and says so either way', () => {
+    expect(EMPTY_FORM.retryFailed).toBe(true);
+    expect(toInput(ok).retryFailed).toBe(true);
+    expect(toInput({ ...ok, retryFailed: false }).retryFailed).toBe(false);
+  });
+
   it('a template campaign sends the template and its overrides, not a typed message', () => {
     const body = toInput({
       ...EMPTY_FORM,

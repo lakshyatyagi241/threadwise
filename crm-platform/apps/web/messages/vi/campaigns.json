@@ -403,7 +403,9 @@
         "smartIntro": "Để trống để dùng nhịp gửi mặc định của không gian làm việc. Các quy tắc này giãn cách việc gửi để danh sách lớn trông tự nhiên và tránh bị WhatsApp phát hiện.",
         "smartZone": "Thời gian theo {zone}.",
         "throttleMaxHint": "Thời gian chờ lâu nhất trước một tin nhắn.",
-        "batchPauseHint": "Số phút nghỉ sau mỗi lô."
+        "batchPauseHint": "Số phút nghỉ sau mỗi lô.",
+        "retryFailed": "Tự động thử lại các tin nhắn thất bại",
+        "retryFailedHint": "Tin nhắn thất bại vì lý do tạm thời sẽ được thử lại vài lần, có khoảng nghỉ giữa các lần. Tắt để mỗi tin nhắn chỉ gửi một lần."
       },
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
       "draftChip": "Bản nháp / chưa lưu",
@@ -1485,12 +1487,14 @@
         "action": {
           "pause": "Tạm dừng",
           "resume": "Tiếp tục",
-          "cancel": "Hủy đợt gửi hàng loạt"
+          "cancel": "Hủy đợt gửi hàng loạt",
+          "retryFailed": "Thử lại các tin thất bại ({count})"
         },
         "done": {
           "pause": "Đã tạm dừng đợt gửi hàng loạt.",
           "resume": "Đã tiếp tục đợt gửi hàng loạt.",
-          "cancel": "Đã hủy đợt gửi hàng loạt."
+          "cancel": "Đã hủy đợt gửi hàng loạt.",
+          "retryFailed": "Đang thử lại {count, plural, other {# người nhận thất bại}}."
         },
         "failed": "Không thành công. Hãy thử lại.",
         "noControl": "Bạn không có quyền tạm dừng, tiếp tục hoặc hủy gửi hàng loạt.",
@@ -1509,7 +1513,9 @@
           "cancelled": "Đã hủy",
           "active": "Đang hoạt động",
           "ended": "Đã kết thúc"
-        }
+        },
+        "retryTitle": "Thử lại các tin nhắn thất bại?",
+        "retryMessage": "Gửi lại cho {count, plural, other {# người nhận}} có tin nhắn bị lỗi. Những người đã nhận được sẽ không bị gửi lại, và tin nhắn chỉ bị tính phí khi được gửi thành công."
       },
       "panel": {
         "title": "Được tạo bằng Tạo gửi hàng loạt",

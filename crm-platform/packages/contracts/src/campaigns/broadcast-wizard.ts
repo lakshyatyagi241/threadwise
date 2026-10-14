@@ -250,7 +250,7 @@ export const wizardDraftSchema = z.object({
   /**
    * What the campaign builder adds to a guided send. A/B test: variant A is `templateId`, variant B `templateIdB` with its own variable
    * mapping, and `abSplit` is the percent that gets A. `autoEnd` stops the send at that moment; `pacing` is Smart Delivery;
-   * `trackLinks` wraps links to count clicks. All are carried to every run of a recurring series.
+   * `trackLinks` wraps links to count clicks; `retryFailed` retries a temporary failure. All are carried to every run of a recurring series.
    */
   abTesting: z.boolean().default(false),
   abSplit: z.number().int().min(0).max(100).default(50),
@@ -259,6 +259,8 @@ export const wizardDraftSchema = z.object({
   autoEnd: wizardAutoEndSchema.nullable().default(null),
   pacing: wizardPacingSchema.default({}),
   trackLinks: z.boolean().default(true),
+  /** Retry a message that failed for a temporary reason (the platform's retry settings); false makes the first failure final. */
+  retryFailed: z.boolean().default(true),
   /** The furthest step the person reached (1 to 4), so a resumed draft opens where they stopped. */
   step: z.number().int().min(1).max(WIZARD_STEP_COUNT).default(1),
 });
@@ -759,6 +761,15 @@ export const wizardControlResponseSchema = z.object({
   message: z.string(),
 });
 export type WizardControlResponse = z.infer<typeof wizardControlResponseSchema>;
+
+/** "Retry failed" on a launched broadcast: the failed recipients go back in the queue (a series: those of every finished run). */
+export const wizardRetryFailedResponseSchema = wizardControlResponseSchema.extend({
+  /** Recipients put back in the queue. */
+  recipients: z.number().int(),
+  /** Runs they belong to (always 1 for a one-off broadcast). */
+  runs: z.number().int(),
+});
+export type WizardRetryFailedResponse = z.infer<typeof wizardRetryFailedResponseSchema>;
 
 // ---------------------------------------------------------------------------------------- validation, shared by the steps and the launch
 

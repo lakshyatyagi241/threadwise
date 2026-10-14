@@ -403,7 +403,9 @@
         "smartIntro": "비워 두면 워크스페이스 기본 발송 속도를 사용합니다. 이 규칙은 발송 간격을 두어 대량 목록도 사람이 보내는 것처럼 보이게 하고 WhatsApp의 차단 감시를 피하도록 합니다.",
         "smartZone": "시간은 {zone} 기준입니다.",
         "throttleMaxHint": "메시지 사이의 최대 대기 시간입니다.",
-        "batchPauseHint": "각 묶음 발송 후 쉬는 시간(분)입니다."
+        "batchPauseHint": "각 묶음 발송 후 쉬는 시간(분)입니다.",
+        "retryFailed": "실패한 메시지 자동 재시도",
+        "retryFailedHint": "일시적인 이유로 실패한 메시지는 시도 사이에 간격을 두고 몇 번 다시 보냅니다. 각 메시지를 한 번만 보내려면 끄세요."
       },
       "unofficialDisabled": "개인 WhatsApp 번호(비공식 API)를 통한 발송은 이 워크스페이스에서 사용할 수 없습니다. 공식 WhatsApp Business API 번호를 선택하세요.",
       "draftChip": "초안 / 저장되지 않음",
@@ -1485,12 +1487,14 @@
         "action": {
           "pause": "일시 중지",
           "resume": "재개",
-          "cancel": "브로드캐스트 취소"
+          "cancel": "브로드캐스트 취소",
+          "retryFailed": "실패 건 재시도 ({count})"
         },
         "done": {
           "pause": "브로드캐스트를 일시 중지했습니다.",
           "resume": "브로드캐스트를 재개했습니다.",
-          "cancel": "브로드캐스트를 취소했습니다."
+          "cancel": "브로드캐스트를 취소했습니다.",
+          "retryFailed": "실패한 {count, plural, other {#명}}에게 다시 보내는 중입니다."
         },
         "failed": "작업이 실패했습니다. 다시 시도하세요.",
         "noControl": "브로드캐스트를 일시 중지, 재개 또는 취소할 권한이 없습니다.",
@@ -1509,7 +1513,9 @@
           "cancelled": "취소됨",
           "active": "활성",
           "ended": "종료됨"
-        }
+        },
+        "retryTitle": "실패한 메시지를 다시 시도할까요?",
+        "retryMessage": "메시지가 실패한 {count, plural, other {#명}}에게 다시 보냅니다. 이미 받은 사람은 건드리지 않으며, 메시지 요금은 전달된 경우에만 청구됩니다."
       },
       "panel": {
         "title": "브로드캐스트 만들기로 생성됨",
