@@ -27,7 +27,10 @@ export class InboxEmailTemplatesService {
     private readonly mergeTags: MergeTagService,
   ) {}
 
-  async render(uuid: string, input: RenderEmailTemplateInput): Promise<EmailTemplateRenderResponse> {
+  async render(
+    uuid: string,
+    input: RenderEmailTemplateInput,
+  ): Promise<EmailTemplateRenderResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const viewer = await this.access.viewer(tx, ctx);

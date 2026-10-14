@@ -189,7 +189,10 @@ export class EmailTemplatesService {
           scope: ownerId === null ? 'shared' : 'mine',
         },
       });
-      return toTemplate((await this.repo.byUuid(tx, ctx.orgId, caller.userId, created.uuid))!, caller);
+      return toTemplate(
+        (await this.repo.byUuid(tx, ctx.orgId, caller.userId, created.uuid))!,
+        caller,
+      );
     });
   }
 
@@ -237,7 +240,10 @@ export class EmailTemplatesService {
       if (!ok) throw AppError.rowVersionConflict('Email template');
 
       const before = toTemplate(row, caller);
-      const after = toTemplate((await this.repo.byUuid(tx, ctx.orgId, caller.userId, uuid))!, caller);
+      const after = toTemplate(
+        (await this.repo.byUuid(tx, ctx.orgId, caller.userId, uuid))!,
+        caller,
+      );
       const pick = (t: EmailTemplate) => ({
         name: t.name,
         subject: t.subject,
@@ -256,7 +262,12 @@ export class EmailTemplatesService {
         aggregateModule: MODULE_KEY,
         aggregateId: id,
         eventType: 'mail.email_template.updated',
-        payload: { templateId: uuid, name: after.name, purpose: after.purpose, status: after.status },
+        payload: {
+          templateId: uuid,
+          name: after.name,
+          purpose: after.purpose,
+          status: after.status,
+        },
       });
       return after;
     });
@@ -289,7 +300,13 @@ export class EmailTemplatesService {
   /** Renders unsaved text with the sample data (the editor's live preview). The HTML is sanitised first, so the preview is what would be saved. */
   preview(input: PreviewEmailTemplateInput): EmailTemplateRenderResponse {
     const cleaned = sanitizeOutboundHtml(input.bodyHtml);
-    return this.fill(input.subject, cleaned, outboundText(cleaned), sampleEmailVariableLookup, 'sample');
+    return this.fill(
+      input.subject,
+      cleaned,
+      outboundText(cleaned),
+      sampleEmailVariableLookup,
+      'sample',
+    );
   }
 
   /**
@@ -311,7 +328,8 @@ export class EmailTemplatesService {
       agentName: await this.repo.agentName(tx, ctx.orgId, caller.userId),
     });
     const html = row.body_html as string;
-    const text = (row.body_text as string).trim() !== '' ? (row.body_text as string) : outboundText(html);
+    const text =
+      (row.body_text as string).trim() !== '' ? (row.body_text as string) : outboundText(html);
     return this.fill(row.subject as string, html, text, lookup, 'conversation');
   }
 

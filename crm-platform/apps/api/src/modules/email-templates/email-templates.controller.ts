@@ -57,7 +57,7 @@ export class EmailTemplatesController {
   @ApiOperation({
     summary: 'Render unsaved text with sample data',
     description:
-      'The editor\'s live preview: the body is sanitised exactly as it would be saved, `{{variables}}` are filled with sample values, and the variables that stay as written are listed in `issues`. Stores nothing.',
+      "The editor's live preview: the body is sanitised exactly as it would be saved, `{{variables}}` are filled with sample values, and the variables that stay as written are listed in `issues`. Stores nothing.",
   })
   preview(@Body(zodPipe(previewEmailTemplateSchema)) body: PreviewEmailTemplateInput) {
     return this.templates.preview(body);
@@ -65,7 +65,7 @@ export class EmailTemplatesController {
 
   @Get(':id')
   @RequirePermission('mail.templates.read')
-  @ApiOperation({ summary: 'One template (404 for a colleague\'s personal one)' })
+  @ApiOperation({ summary: "One template (404 for a colleague's personal one)" })
   get(@Param('id', ParseUUIDPipe) id: string) {
     return this.templates.get(id);
   }

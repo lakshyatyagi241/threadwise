@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Szablony e-mail"
+    },
+    "common": {
+      "dismiss": "Zamknij"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Szablony e-mail",
+      "subtitle": "Wiadomości wielokrotnego użytku z tematem, sformatowanym tekstem i zmiennymi. Wstawiaj je do odpowiedzi z edytora e-maili.",
+      "newTemplate": "Nowy szablon",
+      "loading": "Wczytywanie szablonów…",
+      "emptyTitle": "Brak szablonów e-mail",
+      "empty": "Napisz wiadomość raz, ze zmiennymi, np. imieniem kontaktu, i używaj jej w każdej rozmowie e-mail.",
+      "emptyFilteredTitle": "Brak pasujących szablonów",
+      "emptyFiltered": "Spróbuj innego wyszukiwania lub wyczyść filtry.",
+      "clearFilters": "Wyczyść filtry",
+      "unavailableTitle": "Szablony e-mail są niedostępne",
+      "unavailable": "Ten workspace nie może teraz połączyć się z usługą szablonów e-mail.",
+      "showing": "{count, plural, one {Wyświetlono # szablon} few {Wyświetlono # szablony} many {Wyświetlono # szablonów} other {Wyświetlono # szablonu}}",
+      "loadMore": "Wczytaj więcej",
+      "loadingMore": "Wczytywanie…",
+      "noPermission": "Możesz korzystać z szablonów udostępnionych w workspace i tworzyć własne. Jeśli musisz zmienić udostępnione, poproś administratora."
+    },
+    "toolbar": {
+      "search": "Szukaj szablonów",
+      "searchPlaceholder": "Szukaj według nazwy, tematu lub kategorii",
+      "scope": "Czyje",
+      "scopes": {
+        "all": "Wszystkie",
+        "shared": "Udostępnione",
+        "mine": "Moje"
+      },
+      "purpose": "Typ",
+      "anyPurpose": "Dowolny typ",
+      "purposes": {
+        "general": "Ogólne",
+        "marketing": "Marketingowe"
+      },
+      "status": "Status",
+      "statuses": {
+        "active": "Aktywne",
+        "archived": "Zarchiwizowane",
+        "all": "Wszystkie"
+      },
+      "category": "Kategoria",
+      "anyCategory": "Dowolna kategoria",
+      "refresh": "Odśwież"
+    },
+    "card": {
+      "subject": "Temat",
+      "noSubject": "Brak tematu: odpowiedź zachowuje własny",
+      "badges": {
+        "shared": "Udostępniony",
+        "mine": "Mój",
+        "marketing": "Marketingowy",
+        "archived": "Zarchiwizowany"
+      },
+      "used": "{count, plural, =0 {Nigdy nieużyty} one {Użyty raz} few {Użyty # razy} many {Użyty # razy} other {Użyty # razy}}",
+      "lastUsed": "Ostatnio użyty {date}",
+      "by": "Autor: {name}",
+      "variables": "Zmienne: {list}",
+      "edit": "Edytuj",
+      "archive": "Archiwizuj",
+      "restore": "Przywróć",
+      "delete": "Usuń",
+      "preview": "Pokaż podgląd",
+      "hidePreview": "Ukryj podgląd"
+    },
+    "delete": {
+      "title": "Usunąć ten szablon?",
+      "message": "Szablon \"{name}\" zostanie usunięty dla wszystkich, którzy mogą z niego korzystać. Wysłane już wiadomości nie zostaną zmienione.",
+      "confirm": "Usuń",
+      "cancel": "Anuluj"
+    },
+    "editor": {
+      "eyebrow": "Szablon e-mail",
+      "newTitle": "Nowy szablon e-mail",
+      "editTitle": "Edytuj szablon e-mail",
+      "close": "Zamknij",
+      "name": "Nazwa",
+      "namePlaceholder": "Powitanie po rejestracji",
+      "subject": "Temat",
+      "subjectPlaceholder": "Witaj w {workspace}, {name}",
+      "subjectHint": "Opcjonalnie. Jeśli pole jest puste, odpowiedź zachowuje własny temat.",
+      "body": "Wiadomość",
+      "bodyPlaceholder": "Napisz wiadomość. Użyj zmiennych poniżej, aby ją spersonalizować.",
+      "category": "Kategoria",
+      "categoryPlaceholder": "Wdrożenie",
+      "categoryList": "Używane kategorie",
+      "purpose": "Typ",
+      "purposes": {
+        "general": {
+          "label": "Ogólny",
+          "hint": "Odpowiedzi i korespondencja indywidualna. Wysyłany jak zwykła odpowiedź."
+        },
+        "marketing": {
+          "label": "Marketingowy",
+          "hint": "Wiadomość promocyjna. Wymaga zgody kontaktu na marketing, jeśli wymaga tego Twój workspace, i zawsze zawiera link do rezygnacji z subskrypcji."
+        }
+      },
+      "scope": "Kto może go używać",
+      "scopes": {
+        "shared": {
+          "label": "Wszyscy w workspace",
+          "hint": "Szablon udostępniony. Mogą go zmieniać tylko osoby zarządzające szablonami."
+        },
+        "mine": {
+          "label": "Tylko ja",
+          "hint": "Szablon osobisty. Nikt inny go nie widzi."
+        }
+      },
+      "variables": "Wstaw zmienną",
+      "variablesHint": "Zmienne są uzupełniane danymi kontaktu, Twoimi i workspace po użyciu szablonu. Zmienna bez wartości zostaje bez zmian, abyś mógł ją poprawić.",
+      "variableGroups": {
+        "contact": "Kontakt",
+        "agent": "Ty",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Wstawia do pola: {field}",
+      "fields": {
+        "subject": "temat",
+        "body": "wiadomość"
+      },
+      "save": "Zapisz zmiany",
+      "create": "Utwórz szablon",
+      "cancel": "Anuluj",
+      "problems": {
+        "required": "To pole jest wymagane.",
+        "tooLong": "Tekst jest za długi (maksymalnie {limit} znaków).",
+        "subjectLines": "Temat musi mieścić się w jednym wierszu."
+      }
+    },
+    "preview": {
+      "title": "Podgląd z przykładowymi danymi",
+      "subjectLabel": "Temat",
+      "noSubject": "(bez tematu)",
+      "empty": "Napisz wiadomość, aby zobaczyć podgląd.",
+      "loading": "Aktualizowanie podglądu…",
+      "failed": "Nie udało się zaktualizować podglądu.",
+      "issues": "{count, plural, one {Ta zmienna nie ma wartości przykładowej i zostaje bez zmian: {list}} few {Te zmienne nie mają wartości przykładowych i zostają bez zmian: {list}} many {Te zmienne nie mają wartości przykładowych i zostają bez zmian: {list}} other {Te zmienne nie mają wartości przykładowych i zostają bez zmian: {list}}}",
+      "sampleNote": "Tylko wartości przykładowe. Prawdziwe wartości pochodzą z kontaktu, gdy używasz szablonu."
+    },
+    "picker": {
+      "button": "Szablony",
+      "title": "Szablony e-mail",
+      "search": "Szukaj szablonów",
+      "searchPlaceholder": "Szukaj szablonów",
+      "loading": "Wczytywanie szablonów…",
+      "empty": "Brak szablonów. Utwórz je w sekcji Szablony e-mail w menu CRM.",
+      "emptyFiltered": "Żaden szablon nie pasuje do wyszukiwania.",
+      "loadError": "Nie udało się wczytać szablonów.",
+      "marketing": "Marketingowy",
+      "mine": "Mój",
+      "replaceTitle": "Zastąpić napisany tekst?",
+      "replaceMessage": "Użycie szablonu \"{name}\" zastąpi wiadomość w polu, a także temat, jeśli szablon go ma.",
+      "replaceConfirm": "Zastąp",
+      "replaceCancel": "Anuluj",
+      "used": "Używasz szablonu \"{name}\"",
+      "marketingNote": "To wiadomość marketingowa: podlega Twoim zasadom zgód i zawiera link do rezygnacji z subskrypcji.",
+      "forget": "Przestań używać tego szablonu",
+      "more": "Wczytaj więcej"
+    },
+    "toast": {
+      "created": "Szablon utworzony",
+      "updated": "Szablon zapisany",
+      "archived": "Szablon zarchiwizowany",
+      "restored": "Szablon przywrócony",
+      "deleted": "Szablon usunięty"
+    },
+    "errors": {
+      "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "signedOut": "Twoja sesja wygasła. Zaloguj się ponownie, aby kontynuować.",
+      "conflict": "Ktoś inny zmienił ten szablon. Wczytano jego wersję; sprawdź ją i spróbuj ponownie.",
+      "validation": "Część wpisanych danych jest nieprawidłowa. Sprawdź pola i spróbuj ponownie.",
+      "unavailable": "Szablony e-mail są teraz niedostępne.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "notFound": "Ten szablon już nie istnieje.",
+      "planDisabled": "Twój plan nie obejmuje poczty e-mail. Zmień plan, aby korzystać z szablonów e-mail.",
+      "nameTaken": "Masz już szablon o tej nazwie. Wybierz inną nazwę.",
+      "notEditable": "Udostępniony szablon mogą zmieniać tylko osoby zarządzające szablonami e-mail.",
+      "archived": "Ten szablon jest zarchiwizowany. Przywróć go, aby z niego korzystać.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "retry": "Spróbuj ponownie"
+    }
+  }
+}

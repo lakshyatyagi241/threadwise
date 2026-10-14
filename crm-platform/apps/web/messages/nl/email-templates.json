@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Sjablonen voor e-mail"
+    },
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Sjablonen voor e-mail",
+      "subtitle": "Herbruikbare e-mails met een onderwerp, opgemaakte tekst en variabelen. Voeg er een in een antwoord in vanuit de e-maileditor.",
+      "newTemplate": "Nieuw sjabloon",
+      "loading": "Sjablonen laden…",
+      "emptyTitle": "Nog geen e-mailsjablonen",
+      "empty": "Schrijf een e-mail één keer, met variabelen zoals de voornaam van het contact, en gebruik hem opnieuw in elk e-mailgesprek.",
+      "emptyFilteredTitle": "Geen sjablonen gevonden",
+      "emptyFiltered": "Probeer een andere zoekopdracht of wis de filters.",
+      "clearFilters": "Filters wissen",
+      "unavailableTitle": "E-mailsjablonen zijn niet beschikbaar",
+      "unavailable": "Deze workspace kan de service voor e-mailsjablonen nu niet bereiken.",
+      "showing": "{count, plural, one {# sjabloon weergegeven} other {# sjablonen weergegeven}}",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden…",
+      "noPermission": "Je kunt de sjablonen gebruiken die je workspace deelt en je eigen sjablonen bewaren. Vraag een beheerder als je gedeelde sjablonen wilt wijzigen."
+    },
+    "toolbar": {
+      "search": "Sjablonen zoeken",
+      "searchPlaceholder": "Zoeken op naam, onderwerp of categorie",
+      "scope": "Van wie",
+      "scopes": {
+        "all": "Alle",
+        "shared": "Gedeeld",
+        "mine": "Van mij"
+      },
+      "purpose": "Type",
+      "anyPurpose": "Elk type",
+      "purposes": {
+        "general": "Algemeen",
+        "marketing": "Marketing"
+      },
+      "status": "Status",
+      "statuses": {
+        "active": "Actief",
+        "archived": "Gearchiveerd",
+        "all": "Alle"
+      },
+      "category": "Categorie",
+      "anyCategory": "Elke categorie",
+      "refresh": "Vernieuwen"
+    },
+    "card": {
+      "subject": "Onderwerp",
+      "noSubject": "Geen onderwerp: het antwoord behoudt zijn eigen onderwerp",
+      "badges": {
+        "shared": "Gedeeld",
+        "mine": "Van mij",
+        "marketing": "Marketing",
+        "archived": "Gearchiveerd"
+      },
+      "used": "{count, plural, =0 {Nooit gebruikt} one {Eén keer gebruikt} other {# keer gebruikt}}",
+      "lastUsed": "Laatst gebruikt {date}",
+      "by": "Door {name}",
+      "variables": "Variabelen: {list}",
+      "edit": "Bewerken",
+      "archive": "Archiveren",
+      "restore": "Herstellen",
+      "delete": "Verwijderen",
+      "preview": "Voorbeeld tonen",
+      "hidePreview": "Voorbeeld verbergen"
+    },
+    "delete": {
+      "title": "Dit sjabloon verwijderen?",
+      "message": "\"{name}\" wordt verwijderd voor iedereen die het kan gebruiken. E-mails die er al mee zijn verstuurd blijven ongewijzigd.",
+      "confirm": "Verwijderen",
+      "cancel": "Annuleren"
+    },
+    "editor": {
+      "eyebrow": "E-mailsjabloon",
+      "newTitle": "Nieuw e-mailsjabloon",
+      "editTitle": "E-mailsjabloon bewerken",
+      "close": "Sluiten",
+      "name": "Naam",
+      "namePlaceholder": "Welkom na aanmelding",
+      "subject": "Onderwerp",
+      "subjectPlaceholder": "Welkom bij {workspace}, {name}",
+      "subjectHint": "Optioneel. Als je dit leeg laat, behoudt een antwoord zijn eigen onderwerp.",
+      "body": "Bericht",
+      "bodyPlaceholder": "Schrijf de e-mail. Gebruik de variabelen hieronder om hem te personaliseren.",
+      "category": "Categorie",
+      "categoryPlaceholder": "Onboarding",
+      "categoryList": "Categorieën in gebruik",
+      "purpose": "Type",
+      "purposes": {
+        "general": {
+          "label": "Algemeen",
+          "hint": "Antwoorden en persoonlijke e-mail. Wordt verstuurd als elk ander antwoord."
+        },
+        "marketing": {
+          "label": "Marketing",
+          "hint": "Promotionele e-mail. Heeft toestemming voor marketing van het contact nodig waar je workspace dat vereist en bevat altijd een afmeldlink."
+        }
+      },
+      "scope": "Wie kan het gebruiken",
+      "scopes": {
+        "shared": {
+          "label": "Iedereen in de workspace",
+          "hint": "Een gedeeld sjabloon. Alleen mensen die sjablonen beheren kunnen het wijzigen."
+        },
+        "mine": {
+          "label": "Alleen ik",
+          "hint": "Een persoonlijk sjabloon. Niemand anders ziet het."
+        }
+      },
+      "variables": "Een variabele invoegen",
+      "variablesHint": "Variabelen worden ingevuld vanuit het contact, jou en de workspace wanneer het sjabloon wordt gebruikt. Een variabele zonder waarde blijft staan zoals geschreven, zodat je hem kunt aanpassen.",
+      "variableGroups": {
+        "contact": "Contact",
+        "agent": "Jij",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Wordt ingevoegd in het veld {field}",
+      "fields": {
+        "subject": "onderwerp",
+        "body": "bericht"
+      },
+      "save": "Wijzigingen opslaan",
+      "create": "Sjabloon maken",
+      "cancel": "Annuleren",
+      "problems": {
+        "required": "Dit veld is verplicht.",
+        "tooLong": "Dit is te lang (maximaal {limit} tekens).",
+        "subjectLines": "Het onderwerp moet uit één regel bestaan."
+      }
+    },
+    "preview": {
+      "title": "Voorbeeld met voorbeeldgegevens",
+      "subjectLabel": "Onderwerp",
+      "noSubject": "(geen onderwerp)",
+      "empty": "Schrijf het bericht om een voorbeeld te zien.",
+      "loading": "Voorbeeld bijwerken…",
+      "failed": "Het voorbeeld kon niet worden bijgewerkt.",
+      "issues": "{count, plural, one {Deze variabele heeft geen voorbeeldwaarde en blijft staan zoals geschreven: {list}} other {Deze variabelen hebben geen voorbeeldwaarde en blijven staan zoals geschreven: {list}}}",
+      "sampleNote": "Alleen voorbeeldwaarden. De echte waarden komen van het contact wanneer je het sjabloon gebruikt."
+    },
+    "picker": {
+      "button": "Sjablonen",
+      "title": "E-mailsjablonen",
+      "search": "Sjablonen zoeken",
+      "searchPlaceholder": "Sjablonen zoeken",
+      "loading": "Sjablonen laden…",
+      "empty": "Nog geen sjablonen. Maak ze aan onder E-mailsjablonen in het CRM-menu.",
+      "emptyFiltered": "Geen sjabloon komt overeen met je zoekopdracht.",
+      "loadError": "Sjablonen konden niet worden geladen.",
+      "marketing": "Marketing",
+      "mine": "Van mij",
+      "replaceTitle": "Wat je hebt geschreven vervangen?",
+      "replaceMessage": "Als je \"{name}\" gebruikt, vervangt dit het bericht in het vak en het onderwerp als het sjabloon er een heeft.",
+      "replaceConfirm": "Vervangen",
+      "replaceCancel": "Annuleren",
+      "used": "Sjabloon \"{name}\" in gebruik",
+      "marketingNote": "Dit is marketing-e-mail: er gelden je toestemmingsregels en er zit een afmeldlink in.",
+      "forget": "Dit sjabloon niet meer gebruiken",
+      "more": "Meer laden"
+    },
+    "toast": {
+      "created": "Sjabloon gemaakt",
+      "updated": "Sjabloon opgeslagen",
+      "archived": "Sjabloon gearchiveerd",
+      "restored": "Sjabloon hersteld",
+      "deleted": "Sjabloon verwijderd"
+    },
+    "errors": {
+      "network": "Kan de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt hier geen toestemming voor.",
+      "signedOut": "Je sessie is beëindigd. Log opnieuw in om door te gaan.",
+      "conflict": "Iemand anders heeft dit sjabloon gewijzigd. Hun versie is geladen; bekijk die en probeer het opnieuw.",
+      "validation": "Een deel van wat je hebt ingevoerd is ongeldig. Controleer de velden en probeer het opnieuw.",
+      "unavailable": "E-mailsjablonen zijn op dit moment niet beschikbaar.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "notFound": "Dit sjabloon bestaat niet meer.",
+      "planDisabled": "Je abonnement bevat geen e-mail. Upgrade je abonnement om e-mailsjablonen te gebruiken.",
+      "nameTaken": "Je hebt al een sjabloon met deze naam. Kies een andere naam.",
+      "notEditable": "Alleen mensen die e-mailsjablonen beheren kunnen een gedeeld sjabloon wijzigen.",
+      "archived": "Dit sjabloon is gearchiveerd. Herstel het om het te gebruiken.",
+      "unexpected": "Er is iets misgegaan. Probeer het opnieuw.",
+      "retry": "Opnieuw proberen"
+    }
+  }
+}
