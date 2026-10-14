@@ -12,7 +12,9 @@ import {
   PACING_SETTINGS,
   PacingRuntime,
   SenderLease,
+  WALLET_GATE,
   type PacingSettingsSource,
+  type WalletGate,
 } from '../../../src/modules/broadcasts';
 import { MergeTagService } from '../../../src/modules/crm';
 import {
@@ -83,6 +85,7 @@ beforeAll(async () => {
     h.app.get(WarmerService),
     h.app.get(UNOFFICIAL_WHATSAPP_GATE),
     h.app.get(OutboxService),
+    h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
   );
   // An object store in memory behind the real storage service. Until a test turns it on, media is local disk, as on a fresh install.
   const storage = h.app.get(MediaStorageService, { strict: false }) as unknown as Record<

@@ -29,6 +29,7 @@ function setup(assertFeature: ReturnType<typeof vi.fn>) {
     as({ isEnabled: vi.fn() }),
     none,
     as({ assertFeature }),
+    none,
   );
   const resolve = (mode: string, assistantId?: string) =>
     (
