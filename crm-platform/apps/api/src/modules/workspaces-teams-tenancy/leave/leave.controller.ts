@@ -41,7 +41,7 @@ export class LeaveController {
   @ApiOperation({
     summary: 'Who is on leave and who will be (soonest first); `view=all` adds the ended ones',
     description:
-      '`today` is the workspace calendar day the dates are compared with (its own time zone, not the browser\'s).',
+      "`today` is the workspace calendar day the dates are compared with (its own time zone, not the browser's).",
   })
   async list(@Query(zodPipe(listMemberLeavesQuerySchema)) query: ListMemberLeavesQuery) {
     return this.leave.list(query);

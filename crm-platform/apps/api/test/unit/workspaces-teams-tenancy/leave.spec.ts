@@ -115,19 +115,31 @@ describe('leave ranges', () => {
 
   it('a scheduled leave moves like a new one', () => {
     const cur = { status: 'scheduled', startsOn: '2026-10-20' };
-    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-15', endsOn: null }).ok).toBe(true);
-    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-01', endsOn: null }).ok).toBe(false);
+    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-15', endsOn: null }).ok).toBe(
+      true,
+    );
+    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-01', endsOn: null }).ok).toBe(
+      false,
+    );
   });
 
   it('an active leave keeps its first day and cannot end before today', () => {
     const cur = { status: 'active', startsOn: '2026-10-10' };
-    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-10', endsOn: '2026-10-30' }).ok).toBe(true);
-    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-10', endsOn: null }).ok).toBe(true);
-    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-11', endsOn: null })).toMatchObject({
+    expect(
+      checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-10', endsOn: '2026-10-30' }).ok,
+    ).toBe(true);
+    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-10', endsOn: null }).ok).toBe(
+      true,
+    );
+    expect(
+      checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-11', endsOn: null }),
+    ).toMatchObject({
       ok: false,
       path: 'startsOn',
     });
-    expect(checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-10', endsOn: '2026-10-12' })).toMatchObject({
+    expect(
+      checkChangedRange('2026-10-13', cur, { startsOn: '2026-10-10', endsOn: '2026-10-12' }),
+    ).toMatchObject({
       ok: false,
       path: 'endsOn',
     });
@@ -136,7 +148,11 @@ describe('leave ranges', () => {
   it('ended and cancelled leaves cannot be changed', () => {
     for (const status of ['ended', 'cancelled']) {
       expect(
-        checkChangedRange('2026-10-13', { status, startsOn: '2026-10-01' }, { startsOn: '2026-10-01', endsOn: null }).ok,
+        checkChangedRange(
+          '2026-10-13',
+          { status, startsOn: '2026-10-01' },
+          { startsOn: '2026-10-01', endsOn: null },
+        ).ok,
       ).toBe(false);
     }
   });
@@ -172,20 +188,55 @@ describe('pickDelegate: one hop, present and able', () => {
   ]);
 
   it('the delegate stands in when present and eligible', () => {
-    expect(pickDelegate(delegates, 1, () => false, () => true)).toBe(2);
+    expect(
+      pickDelegate(
+        delegates,
+        1,
+        () => false,
+        () => true,
+      ),
+    ).toBe(2);
   });
 
   it('a delegate who is away is skipped, and the chain is NOT followed (3 would be next)', () => {
-    expect(pickDelegate(delegates, 1, (id) => id === 2, () => true)).toBeNull();
+    expect(
+      pickDelegate(
+        delegates,
+        1,
+        (id) => id === 2,
+        () => true,
+      ),
+    ).toBeNull();
   });
 
   it('a delegate who cannot take the work is skipped', () => {
-    expect(pickDelegate(delegates, 1, () => false, (id) => id !== 2)).toBeNull();
+    expect(
+      pickDelegate(
+        delegates,
+        1,
+        () => false,
+        (id) => id !== 2,
+      ),
+    ).toBeNull();
   });
 
   it('nobody named, or oneself, gives nobody', () => {
-    expect(pickDelegate(delegates, 9, () => false, () => true)).toBeNull();
-    expect(pickDelegate(new Map([[5, 5]]), 5, () => false, () => true)).toBeNull();
+    expect(
+      pickDelegate(
+        delegates,
+        9,
+        () => false,
+        () => true,
+      ),
+    ).toBeNull();
+    expect(
+      pickDelegate(
+        new Map([[5, 5]]),
+        5,
+        () => false,
+        () => true,
+      ),
+    ).toBeNull();
   });
 });
 
@@ -218,7 +269,13 @@ describe('leaveStartedCopy', () => {
 
   it('a person who holds nothing says that', () => {
     expect(
-      leaveStartedCopy({ name: 'A', endsOn: null, ownedContacts: 0, openConversations: 0, delegateName: null }).body,
+      leaveStartedCopy({
+        name: 'A',
+        endsOn: null,
+        ownedContacts: 0,
+        openConversations: 0,
+        delegateName: null,
+      }).body,
     ).toContain('hold no contacts or open chats');
   });
 });

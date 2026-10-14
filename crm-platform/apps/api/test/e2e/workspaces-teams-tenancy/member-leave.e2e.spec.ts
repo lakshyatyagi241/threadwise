@@ -9,7 +9,13 @@ import { NotificationFanout, NotificationsRepository } from '../../../src/module
 import { NotificationPrefsResolver } from '../../../src/modules/notifications/notification-prefs.resolver';
 import { MemberLeaveNotificationConsumer } from '../../../src/modules/notifications/member-leave-notification.consumer';
 import { LeaveSweepService } from '../../../src/modules/workspaces-teams-tenancy/leave/leave-sweep.service';
-import { Api, startHarness, type Grant, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import {
+  Api,
+  startHarness,
+  type Grant,
+  type Harness,
+  type Tenant,
+} from '../contacts-attributes-tags/support';
 
 /**
  * Member leave and delegate (BL-112), phase 1: the API with its permissions (own scope for everyone, all for managers), the validation
@@ -51,7 +57,8 @@ const person = async (t: Tenant, name: string, grants: Grant[]): Promise<Person>
 };
 
 const call = (token: string) => ({
-  list: (qs = '') => api.http().get(`/v2/workspace/leaves${qs}`).set('authorization', `Bearer ${token}`),
+  list: (qs = '') =>
+    api.http().get(`/v2/workspace/leaves${qs}`).set('authorization', `Bearer ${token}`),
   overview: (member: string) =>
     api.http().get(`/v2/workspace/members/${member}/leave`).set('authorization', `Bearer ${token}`),
   create: (member: string, body: Record<string, unknown>) =>
@@ -62,7 +69,11 @@ const call = (token: string) => ({
       .set('idempotency-key', randomUUID())
       .send(body),
   update: (id: string, body: Record<string, unknown>) =>
-    api.http().patch(`/v2/workspace/leaves/${id}`).set('authorization', `Bearer ${token}`).send(body),
+    api
+      .http()
+      .patch(`/v2/workspace/leaves/${id}`)
+      .set('authorization', `Bearer ${token}`)
+      .send(body),
   end: (id: string) =>
     api.http().delete(`/v2/workspace/leaves/${id}`).set('authorization', `Bearer ${token}`),
   delegate: (member: string, delegateId: string | null) =>
@@ -114,21 +125,31 @@ describe('the leave API', () => {
     today = await todayOf(t);
   });
 
-  it('permissions: everyone with the manage key sets their own leave; only the all scope sets another person\'s; reading needs its own key', async () => {
-    const own = await call(ag1.token).create(ag1.uuid, { startsOn: addDays(today, 30), endsOn: addDays(today, 32) });
+  it("permissions: everyone with the manage key sets their own leave; only the all scope sets another person's; reading needs its own key", async () => {
+    const own = await call(ag1.token).create(ag1.uuid, {
+      startsOn: addDays(today, 30),
+      endsOn: addDays(today, 32),
+    });
     expect(own.status, JSON.stringify(own.body)).toBe(201);
 
     const forOther = await call(ag1.token).create(ag2.uuid, { startsOn: addDays(today, 30) });
     expect(forOther.status).toBe(403);
 
-    const byManager = await call(mgr.token).create(ag2.uuid, { startsOn: addDays(today, 30), endsOn: addDays(today, 31) });
+    const byManager = await call(mgr.token).create(ag2.uuid, {
+      startsOn: addDays(today, 30),
+      endsOn: addDays(today, 31),
+    });
     expect(byManager.status, JSON.stringify(byManager.body)).toBe(201);
 
     // a reader sees but cannot write; a person with neither key sees nothing
     expect((await call(reader.token).list()).status).toBe(200);
-    expect((await call(reader.token).create(reader.uuid, { startsOn: addDays(today, 60) })).status).toBe(403);
+    expect(
+      (await call(reader.token).create(reader.uuid, { startsOn: addDays(today, 60) })).status,
+    ).toBe(403);
     expect((await call(nobody.token).list()).status).toBe(403);
-    expect((await call(nobody.token).create(nobody.uuid, { startsOn: addDays(today, 60) })).status).toBe(403);
+    expect(
+      (await call(nobody.token).create(nobody.uuid, { startsOn: addDays(today, 60) })).status,
+    ).toBe(403);
 
     // a manager can also end someone else's leave, an agent cannot
     const leave = byManager.body as { id: string };
@@ -147,7 +168,9 @@ describe('the leave API', () => {
     expect(made.status).toBe(201);
     const id = made.body.id as string;
     const seenBy = async (token: string) =>
-      ((await call(token).list()).body.data as Array<{ id: string; reason: string | null }>).find((l) => l.id === id)!.reason;
+      ((await call(token).list()).body.data as Array<{ id: string; reason: string | null }>).find(
+        (l) => l.id === id,
+      )!.reason;
     expect(await seenBy(ag1.token)).toBe('Surgery, please keep private');
     expect(await seenBy(mgr.token)).toBe('Surgery, please keep private');
     expect(await seenBy(t.admin)).toBe('Surgery, please keep private');
@@ -155,7 +178,10 @@ describe('the leave API', () => {
     expect(await seenBy(reader.token)).toBeNull();
     // the panel: workload only for those who may manage
     expect((await call(ag2.token).overview(ag1.uuid)).body.workload).toBeNull();
-    expect((await call(mgr.token).overview(ag1.uuid)).body.workload).toMatchObject({ ownedContacts: 0, openConversations: 0 });
+    expect((await call(mgr.token).overview(ag1.uuid)).body.workload).toMatchObject({
+      ownedContacts: 0,
+      openConversations: 0,
+    });
     expect((await call(ag1.token).end(id)).status).toBe(200);
   });
 
@@ -163,7 +189,10 @@ describe('the leave API', () => {
     const past = await call(ag1.token).create(ag1.uuid, { startsOn: addDays(today, -1) });
     expect(past.status).toBe(422);
     expect(past.body.code).toBe('WSP_LEAVE_INVALID');
-    const backwards = await call(ag1.token).create(ag1.uuid, { startsOn: addDays(today, 5), endsOn: addDays(today, 4) });
+    const backwards = await call(ag1.token).create(ag1.uuid, {
+      startsOn: addDays(today, 5),
+      endsOn: addDays(today, 4),
+    });
     expect(backwards.status).toBe(422);
     const nonsense = await call(ag1.token).create(ag1.uuid, { startsOn: '2026-02-31' });
     expect(nonsense.status).toBe(422);
@@ -173,25 +202,42 @@ describe('the leave API', () => {
     const susp = await call(mgr.token).create(away.uuid, { startsOn: addDays(today, 5) });
     expect(susp.status).toBe(422);
     // an unknown member
-    expect((await call(mgr.token).create(randomUUID(), { startsOn: addDays(today, 5) })).status).toBe(404);
+    expect(
+      (await call(mgr.token).create(randomUUID(), { startsOn: addDays(today, 5) })).status,
+    ).toBe(404);
   });
 
   it('overlap: a second leave sharing a day is refused, a neighbouring day is fine, an ended leave frees its days', async () => {
-    const a = await call(ag2.token).create(ag2.uuid, { startsOn: addDays(today, 100), endsOn: addDays(today, 110) });
+    const a = await call(ag2.token).create(ag2.uuid, {
+      startsOn: addDays(today, 100),
+      endsOn: addDays(today, 110),
+    });
     expect(a.status).toBe(201);
-    const clash = await call(ag2.token).create(ag2.uuid, { startsOn: addDays(today, 110), endsOn: addDays(today, 115) });
+    const clash = await call(ag2.token).create(ag2.uuid, {
+      startsOn: addDays(today, 110),
+      endsOn: addDays(today, 115),
+    });
     expect(clash.status).toBe(409);
     expect(clash.body.code).toBe('WSP_LEAVE_OVERLAP');
     const open = await call(ag2.token).create(ag2.uuid, { startsOn: addDays(today, 105) });
     expect(open.status).toBe(409); // an open-ended leave reaches into the first one
-    const next = await call(ag2.token).create(ag2.uuid, { startsOn: addDays(today, 111), endsOn: addDays(today, 112) });
+    const next = await call(ag2.token).create(ag2.uuid, {
+      startsOn: addDays(today, 111),
+      endsOn: addDays(today, 112),
+    });
     expect(next.status).toBe(201);
     // moving a leave onto another's days is refused as well
-    const move = await call(ag2.token).update(next.body.id, { rowVersion: next.body.rowVersion, startsOn: addDays(today, 109) });
+    const move = await call(ag2.token).update(next.body.id, {
+      rowVersion: next.body.rowVersion,
+      startsOn: addDays(today, 109),
+    });
     expect(move.status).toBe(409);
     // ending the first frees its days
     expect((await call(ag2.token).end(a.body.id)).status).toBe(200);
-    const again = await call(ag2.token).create(ag2.uuid, { startsOn: addDays(today, 100), endsOn: addDays(today, 110) });
+    const again = await call(ag2.token).create(ag2.uuid, {
+      startsOn: addDays(today, 100),
+      endsOn: addDays(today, 110),
+    });
     expect(again.status).toBe(201);
     // the database rule holds without the service: the exclusion constraint refuses an overlapping row
     await expect(
@@ -211,12 +257,18 @@ describe('the leave API', () => {
     );
     const before = (await events(t, 'member.leave.started')).length;
 
-    const future = await call(holder.token).create(holder.uuid, { startsOn: addDays(today, 7), endsOn: addDays(today, 9) });
+    const future = await call(holder.token).create(holder.uuid, {
+      startsOn: addDays(today, 7),
+      endsOn: addDays(today, 9),
+    });
     expect(future.status).toBe(201);
     expect(future.body).toMatchObject({ status: 'scheduled', onLeaveNow: false });
     expect((await events(t, 'member.leave.started')).length).toBe(before);
 
-    const now = await call(holder.token).create(holder.uuid, { startsOn: today, endsOn: addDays(today, 3) });
+    const now = await call(holder.token).create(holder.uuid, {
+      startsOn: today,
+      endsOn: addDays(today, 3),
+    });
     // today..+3 does not share a day with +7..+9
     expect(now.status, JSON.stringify(now.body)).toBe(201);
     expect(now.body).toMatchObject({ status: 'active', onLeaveNow: true });
@@ -240,13 +292,29 @@ describe('the leave API', () => {
     expect(panel.workload).toMatchObject({ ownedContacts: 3 });
 
     // changing it: a stale version is 409; an active leave keeps its first day; its end moves; a scheduled one moved to today begins
-    expect((await call(holder.token).update(now.body.id, { rowVersion: 99, endsOn: addDays(today, 2) })).status).toBe(409);
-    const keep = await call(holder.token).update(now.body.id, { rowVersion: now.body.rowVersion, startsOn: addDays(today, 1) });
+    expect(
+      (await call(holder.token).update(now.body.id, { rowVersion: 99, endsOn: addDays(today, 2) }))
+        .status,
+    ).toBe(409);
+    const keep = await call(holder.token).update(now.body.id, {
+      rowVersion: now.body.rowVersion,
+      startsOn: addDays(today, 1),
+    });
     expect(keep.status).toBe(422);
-    const shorter = await call(holder.token).update(now.body.id, { rowVersion: now.body.rowVersion, endsOn: addDays(today, 2) });
+    const shorter = await call(holder.token).update(now.body.id, {
+      rowVersion: now.body.rowVersion,
+      endsOn: addDays(today, 2),
+    });
     expect(shorter.status, JSON.stringify(shorter.body)).toBe(200);
     expect(shorter.body.endsOn).toBe(addDays(today, 2));
-    expect((await call(holder.token).update(now.body.id, { rowVersion: shorter.body.rowVersion, endsOn: addDays(today, -1) })).status).toBe(422);
+    expect(
+      (
+        await call(holder.token).update(now.body.id, {
+          rowVersion: shorter.body.rowVersion,
+          endsOn: addDays(today, -1),
+        })
+      ).status,
+    ).toBe(422);
     expect((await events(t, 'member.leave.started')).length).toBe(before + 1);
 
     // ending the active one: the person is back today (last day away = yesterday, but never before the first day), event says early
@@ -255,7 +323,10 @@ describe('the leave API', () => {
     expect(ended.body.status).toBe('ended');
     expect(ended.body.endsOn).toBe(today); // started today: the single day stays on record
     expect(ended.body.onLeaveNow).toBe(false);
-    expect((await events(t, 'member.leave.ended')).at(-1)).toMatchObject({ memberId: holder.uuid, early: true });
+    expect((await events(t, 'member.leave.ended')).at(-1)).toMatchObject({
+      memberId: holder.uuid,
+      early: true,
+    });
     expect((await call(holder.token).end(now.body.id)).status).toBe(422); // already over
 
     // cancelling the future one raises no event
@@ -264,14 +335,27 @@ describe('the leave API', () => {
     expect(cancelled.body.status).toBe('cancelled');
     expect((await events(t, 'member.leave.ended')).length).toBe(endedCount);
     // and an ended or cancelled leave cannot be changed
-    expect((await call(holder.token).update(future.body.id, { rowVersion: cancelled.body.rowVersion, endsOn: addDays(today, 20) })).status).toBe(422);
+    expect(
+      (
+        await call(holder.token).update(future.body.id, {
+          rowVersion: cancelled.body.rowVersion,
+          endsOn: addDays(today, 20),
+        })
+      ).status,
+    ).toBe(422);
   });
 
   it('a scheduled leave moved to start today begins at once and is announced', async () => {
     const mover = await person(t, 'lvmover', SELF);
-    const sched = await call(mover.token).create(mover.uuid, { startsOn: addDays(today, 12), endsOn: addDays(today, 14) });
+    const sched = await call(mover.token).create(mover.uuid, {
+      startsOn: addDays(today, 12),
+      endsOn: addDays(today, 14),
+    });
     const before = (await events(t, 'member.leave.started')).length;
-    const moved = await call(mover.token).update(sched.body.id, { rowVersion: sched.body.rowVersion, startsOn: today });
+    const moved = await call(mover.token).update(sched.body.id, {
+      rowVersion: sched.body.rowVersion,
+      startsOn: today,
+    });
     expect(moved.status, JSON.stringify(moved.body)).toBe(200);
     expect(moved.body).toMatchObject({ status: 'active', onLeaveNow: true });
     expect((await events(t, 'member.leave.started')).length).toBe(before + 1);
@@ -279,13 +363,23 @@ describe('the leave API', () => {
   });
 
   it("tenants never see or touch each other's leave", async () => {
-    const mine = await call(ag1.token).create(ag1.uuid, { startsOn: addDays(today, 200), endsOn: addDays(today, 201) });
+    const mine = await call(ag1.token).create(ag1.uuid, {
+      startsOn: addDays(today, 200),
+      endsOn: addDays(today, 201),
+    });
     expect(mine.status).toBe(201);
     const foreign = await call(other.admin).list('?view=all');
-    expect((foreign.body.data as Array<{ id: string }>).some((l) => l.id === mine.body.id)).toBe(false);
+    expect((foreign.body.data as Array<{ id: string }>).some((l) => l.id === mine.body.id)).toBe(
+      false,
+    );
     expect((await call(other.admin).end(mine.body.id)).status).toBe(404);
-    expect((await call(other.admin).update(mine.body.id, { rowVersion: 1, endsOn: addDays(today, 205) })).status).toBe(404);
-    expect((await call(other.admin).create(ag1.uuid, { startsOn: addDays(today, 5) })).status).toBe(404);
+    expect(
+      (await call(other.admin).update(mine.body.id, { rowVersion: 1, endsOn: addDays(today, 205) }))
+        .status,
+    ).toBe(404);
+    expect((await call(other.admin).create(ag1.uuid, { startsOn: addDays(today, 5) })).status).toBe(
+      404,
+    );
     expect((await call(other.admin).overview(ag1.uuid)).status).toBe(404);
     expect((await call(other.admin).delegate(ag1.uuid, null)).status).toBe(404);
     await call(ag1.token).end(mine.body.id);
@@ -309,8 +403,18 @@ describe('the sweep: the workspace calendar decides the day', () => {
     return { t, member, localToday };
   }
   const row = async (id: number) =>
-    (await h.owner.query(`SELECT status, started_at, ended_at FROM member_leaves WHERE id = $1`, [id])).rows[0];
-  const seed = async (orgId: number, userId: number, startsOn: string, endsOn: string | null, status: string) =>
+    (
+      await h.owner.query(`SELECT status, started_at, ended_at FROM member_leaves WHERE id = $1`, [
+        id,
+      ])
+    ).rows[0];
+  const seed = async (
+    orgId: number,
+    userId: number,
+    startsOn: string,
+    endsOn: string | null,
+    status: string,
+  ) =>
     Number(
       (
         await h.owner.query(
@@ -325,8 +429,20 @@ describe('the sweep: the workspace calendar decides the day', () => {
     const west = await workspace('sww', 'Pacific/Pago_Pago');
     expect(east.localToday > west.localToday).toBe(true);
     const date = east.localToday;
-    const eastLeave = await seed(east.t.orgId, east.member.userId, date, addDays(date, 2), 'scheduled');
-    const westLeave = await seed(west.t.orgId, west.member.userId, date, addDays(date, 2), 'scheduled');
+    const eastLeave = await seed(
+      east.t.orgId,
+      east.member.userId,
+      date,
+      addDays(date, 2),
+      'scheduled',
+    );
+    const westLeave = await seed(
+      west.t.orgId,
+      west.member.userId,
+      date,
+      addDays(date, 2),
+      'scheduled',
+    );
 
     const first = await sweeper().sweep();
     expect(first.started).toBeGreaterThanOrEqual(1);
@@ -334,7 +450,9 @@ describe('the sweep: the workspace calendar decides the day', () => {
     expect((await row(eastLeave)).started_at).not.toBeNull();
     expect((await row(westLeave)).status).toBe('scheduled');
 
-    expect((await events(east.t, 'member.leave.started')).map((e) => e.memberId)).toEqual([east.member.uuid]);
+    expect((await events(east.t, 'member.leave.started')).map((e) => e.memberId)).toEqual([
+      east.member.uuid,
+    ]);
     expect(await events(west.t, 'member.leave.started')).toEqual([]);
     expect(await auditActions(east.t, east.member.userId)).toContain('member.leave.started');
 
@@ -350,7 +468,10 @@ describe('the sweep: the workspace calendar decides the day', () => {
     expect((await sweeper().sweep()).ended).toBe(0);
     expect((await row(lastDayToday)).status).toBe('active'); // today is its last day of leave
 
-    await h.owner.query(`UPDATE member_leaves SET ends_on = $2 WHERE id = $1`, [lastDayToday, addDays(d, -1)]);
+    await h.owner.query(`UPDATE member_leaves SET ends_on = $2 WHERE id = $1`, [
+      lastDayToday,
+      addDays(d, -1),
+    ]);
     const swept = await sweeper().sweep();
     expect(swept.ended).toBeGreaterThanOrEqual(1);
     expect((await row(lastDayToday)).status).toBe('ended');
@@ -383,7 +504,8 @@ describe('the sweep: the workspace calendar decides the day', () => {
 
   it('a bad time zone in the settings falls back to UTC instead of stopping the sweep for everyone', async () => {
     const w = await workspace('swbad', 'Not/AZone');
-    const utcToday = (await h.owner.query(`SELECT (now() AT TIME ZONE 'UTC')::date::text AS d`)).rows[0].d as string;
+    const utcToday = (await h.owner.query(`SELECT (now() AT TIME ZONE 'UTC')::date::text AS d`))
+      .rows[0].d as string;
     const id = await seed(w.t.orgId, w.member.userId, utcToday, addDays(utcToday, 1), 'scheduled');
     await sweeper().sweep();
     expect((await row(id)).status).toBe('active');
@@ -410,8 +532,12 @@ describe('the delegate', () => {
   });
 
   const delegateOf = async (userId: number) =>
-    (await h.owner.query(`SELECT delegate_user_id FROM member_delegates WHERE org_id = $1 AND user_id = $2`, [t.orgId, userId]))
-      .rows[0]?.delegate_user_id;
+    (
+      await h.owner.query(
+        `SELECT delegate_user_id FROM member_delegates WHERE org_id = $1 AND user_id = $2`,
+        [t.orgId, userId],
+      )
+    ).rows[0]?.delegate_user_id;
 
   it('a person names a delegate for themselves; changing it and removing it are audited and announced', async () => {
     const set = await call(a.token).delegate(a.uuid, b.uuid);
@@ -436,7 +562,10 @@ describe('the delegate', () => {
     expect(removed.status).toBe(200);
     expect(removed.body.delegate).toBeNull();
     expect(await delegateOf(a.userId)).toBeUndefined();
-    expect((await events(t, 'member.delegate.changed')).at(-1)).toMatchObject({ delegateId: null, previousDelegateId: c.uuid });
+    expect((await events(t, 'member.delegate.changed')).at(-1)).toMatchObject({
+      delegateId: null,
+      previousDelegateId: c.uuid,
+    });
     // removing what is not there is quiet
     const count = (await events(t, 'member.delegate.changed')).length;
     expect((await call(a.token).delegate(a.uuid, null)).status).toBe(200);
@@ -457,9 +586,15 @@ describe('the delegate', () => {
     expect(self.body.code).toBe('WSP_DELEGATE_INVALID');
     const gone = await person(t, 'dggone', SELF);
     await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [gone.userId]);
-    expect((await call(a.token).delegate(a.uuid, gone.uuid)).body.code).toBe('WSP_DELEGATE_INVALID');
-    expect((await call(a.token).delegate(a.uuid, foreign.uuid)).body.code).toBe('WSP_DELEGATE_INVALID');
-    expect((await call(a.token).delegate(a.uuid, randomUUID())).body.code).toBe('WSP_DELEGATE_INVALID');
+    expect((await call(a.token).delegate(a.uuid, gone.uuid)).body.code).toBe(
+      'WSP_DELEGATE_INVALID',
+    );
+    expect((await call(a.token).delegate(a.uuid, foreign.uuid)).body.code).toBe(
+      'WSP_DELEGATE_INVALID',
+    );
+    expect((await call(a.token).delegate(a.uuid, randomUUID())).body.code).toBe(
+      'WSP_DELEGATE_INVALID',
+    );
     expect(await delegateOf(a.userId)).toBeUndefined();
   });
 
@@ -480,19 +615,32 @@ describe('the delegate', () => {
 
   it('the database refuses a self delegate and a delegate from another workspace even without the service', async () => {
     await expect(
-      h.owner.query(`INSERT INTO member_delegates (org_id, user_id, delegate_user_id) VALUES ($1,$2,$2)`, [t.orgId, a.userId]),
+      h.owner.query(
+        `INSERT INTO member_delegates (org_id, user_id, delegate_user_id) VALUES ($1,$2,$2)`,
+        [t.orgId, a.userId],
+      ),
     ).rejects.toMatchObject({ code: '23514' });
     await expect(
-      h.owner.query(`INSERT INTO member_delegates (org_id, user_id, delegate_user_id) VALUES ($1,$2,$3)`, [t.orgId, a.userId, foreign.userId]),
+      h.owner.query(
+        `INSERT INTO member_delegates (org_id, user_id, delegate_user_id) VALUES ($1,$2,$3)`,
+        [t.orgId, a.userId, foreign.userId],
+      ),
     ).rejects.toMatchObject({ code: '23503' });
   });
 
   it('the panel names the delegate and whether they are away themselves', async () => {
     await call(a.token).delegate(a.uuid, b.uuid);
-    expect((await call(a.token).overview(a.uuid)).body.delegate).toEqual({ id: b.uuid, name: 'dgb', onLeaveNow: false });
+    expect((await call(a.token).overview(a.uuid)).body.delegate).toEqual({
+      id: b.uuid,
+      name: 'dgb',
+      onLeaveNow: false,
+    });
     const today = await todayOf(t);
     await call(b.token).create(b.uuid, { startsOn: today, endsOn: addDays(today, 1) });
-    expect((await call(a.token).overview(a.uuid)).body.delegate).toMatchObject({ id: b.uuid, onLeaveNow: true });
+    expect((await call(a.token).overview(a.uuid)).body.delegate).toMatchObject({
+      id: b.uuid,
+      onLeaveNow: true,
+    });
     // a delegate who leaves the workspace takes the arrangement with them
     await h.owner.query(`DELETE FROM users WHERE id = $1`, [b.userId]).catch(() => undefined);
   });
@@ -505,8 +653,14 @@ describe('who is told', () => {
     const away = await person(t, 'ntaway', MANAGER); // a manager going away is told to the OTHER leads only
     const plain = await person(t, 'ntplain', SELF);
     const today = await todayOf(t);
-    await h.owner.query(`INSERT INTO contacts (org_id, name, owner_id) VALUES ($1, 'x', $2), ($1, 'y', $2)`, [t.orgId, away.userId]);
-    const made = await call(away.token).create(away.uuid, { startsOn: today, endsOn: addDays(today, 4) });
+    await h.owner.query(
+      `INSERT INTO contacts (org_id, name, owner_id) VALUES ($1, 'x', $2), ($1, 'y', $2)`,
+      [t.orgId, away.userId],
+    );
+    const made = await call(away.token).create(away.uuid, {
+      startsOn: today,
+      endsOn: addDays(today, 4),
+    });
     expect(made.status).toBe(201);
     const ev = (
       await h.owner.query(

@@ -72,16 +72,19 @@ export class AssigneesService {
         }
       }
       const users: InboxAssignee[] = shown.map((r) => ({
-          id: r.uuid as string,
-          name: (r.full_name as string | null) ?? null,
-          email: r.email as string,
-          availability: r.availability as AgentAvailability,
-          openConversations: Number(r.open_conversations),
-          isMe: Number(r.id) === ctx.userId,
-          onLeave: away.has(Number(r.id))
-            ? { until: away.get(Number(r.id)) ?? null, delegateId: delegates.get(Number(r.id)) ?? null }
-            : null,
-        }));
+        id: r.uuid as string,
+        name: (r.full_name as string | null) ?? null,
+        email: r.email as string,
+        availability: r.availability as AgentAvailability,
+        openConversations: Number(r.open_conversations),
+        isMe: Number(r.id) === ctx.userId,
+        onLeave: away.has(Number(r.id))
+          ? {
+              until: away.get(Number(r.id)) ?? null,
+              delegateId: delegates.get(Number(r.id)) ?? null,
+            }
+          : null,
+      }));
 
       const teamRows = await tx.execute(sql`
         SELECT t.uuid, t.name, t.color, t.assignment_strategy,

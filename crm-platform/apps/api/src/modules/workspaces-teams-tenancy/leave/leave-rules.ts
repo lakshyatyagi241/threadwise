@@ -40,7 +40,11 @@ export function checkChangedRange(
   if (current.status === 'scheduled') return checkNewRange(today, next.startsOn, next.endsOn);
   if (current.status === 'active') {
     if (next.startsOn !== current.startsOn) {
-      return { ok: false, path: 'startsOn', message: 'A leave that has begun keeps its first day.' };
+      return {
+        ok: false,
+        path: 'startsOn',
+        message: 'A leave that has begun keeps its first day.',
+      };
     }
     if (next.endsOn !== null && next.endsOn < today) {
       return {

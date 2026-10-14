@@ -17,7 +17,11 @@ import {
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
-import { leaveCoversDay, loadWorkspaceCalendar, onLeaveMap } from '../../../common/workspace-calendar';
+import {
+  leaveCoversDay,
+  loadWorkspaceCalendar,
+  onLeaveMap,
+} from '../../../common/workspace-calendar';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
@@ -185,11 +189,24 @@ export class LeaveService {
         startsOn: input.startsOn ?? leave.startsOn,
         endsOn: input.endsOn === undefined ? leave.endsOn : input.endsOn,
         reason:
-          input.reason === undefined ? leave.reason : input.reason === null ? null : input.reason.trim() || null,
+          input.reason === undefined
+            ? leave.reason
+            : input.reason === null
+              ? null
+              : input.reason.trim() || null,
       };
       const check = checkChangedRange(cal.today, leave, next);
       if (!check.ok) throw invalid(check.message!, check.path);
-      if (await this.repo.overlapping(tx, ctx.orgId, leave.userId, next.startsOn, next.endsOn, leave.id)) {
+      if (
+        await this.repo.overlapping(
+          tx,
+          ctx.orgId,
+          leave.userId,
+          next.startsOn,
+          next.endsOn,
+          leave.id,
+        )
+      ) {
         throw overlap();
       }
 
@@ -209,7 +226,8 @@ export class LeaveService {
       if (!ok) throw AppError.rowVersionConflict('Leave');
 
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      if (next.startsOn !== leave.startsOn) delta.startsOn = { old: leave.startsOn, new: next.startsOn };
+      if (next.startsOn !== leave.startsOn)
+        delta.startsOn = { old: leave.startsOn, new: next.startsOn };
       if (next.endsOn !== leave.endsOn) delta.endsOn = { old: leave.endsOn, new: next.endsOn };
       if (next.reason !== leave.reason) delta.reason = { old: '(hidden)', new: '(hidden)' };
       await this.audit(tx, ctx, leave.userId, 'member.leave.updated', delta);
@@ -251,7 +269,10 @@ export class LeaveService {
 
   // --- delegate ----------------------------------------------------------------------------------------------------------------
 
-  async setDelegate(memberUuid: string, input: SetMemberDelegateInput): Promise<MemberLeaveOverview['delegate']> {
+  async setDelegate(
+    memberUuid: string,
+    input: SetMemberDelegateInput,
+  ): Promise<MemberLeaveOverview['delegate']> {
     const ctx = RequestContextStore.require();
     const result = await this.db.tx(async (tx) => {
       const member = await this.requireMember(tx, ctx.orgId, memberUuid);
@@ -301,7 +322,13 @@ export class LeaveService {
       await this.audit(tx, ctx, member.id, 'member.delegate.changed', {
         delegate: { old: before?.delegateUuid ?? null, new: delegate.uuid },
       });
-      await this.emitDelegateChanged(tx, ctx.orgId, member, before?.delegateUuid ?? null, delegate.uuid);
+      await this.emitDelegateChanged(
+        tx,
+        ctx.orgId,
+        member,
+        before?.delegateUuid ?? null,
+        delegate.uuid,
+      );
       return { id: delegate.uuid, name: delegate.fullName };
     });
     if (!result) return null;
@@ -453,7 +480,12 @@ export class LeaveService {
 
   private async audit(
     tx: Tx,
-    ctx: { orgId?: number; actorId: number | null; actorType: string; requestId?: string | null } | null,
+    ctx: {
+      orgId?: number;
+      actorId: number | null;
+      actorType: string;
+      requestId?: string | null;
+    } | null,
     recordId: number,
     action: string,
     delta: Record<string, { old: unknown; new: unknown }>,

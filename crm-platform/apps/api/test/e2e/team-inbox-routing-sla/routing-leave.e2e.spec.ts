@@ -110,10 +110,14 @@ describe('routing skips people on leave', () => {
        ON CONFLICT (org_id, user_id) DO UPDATE SET delegate_user_id = EXCLUDED.delegate_user_id`,
       [t.orgId, userId, delegateId],
     );
-  const noDelegates = () => p.h.owner.query(`DELETE FROM member_delegates WHERE org_id = $1`, [t.orgId]);
+  const noDelegates = () =>
+    p.h.owner.query(`DELETE FROM member_delegates WHERE org_id = $1`, [t.orgId]);
   const setStatus = (userId: number, status: string | null) =>
     status === null
-      ? p.h.owner.query(`DELETE FROM agent_statuses WHERE org_id = $1 AND user_id = $2`, [t.orgId, userId])
+      ? p.h.owner.query(`DELETE FROM agent_statuses WHERE org_id = $1 AND user_id = $2`, [
+          t.orgId,
+          userId,
+        ])
       : p.h.owner.query(
           `INSERT INTO agent_statuses (org_id, user_id, status) VALUES ($1,$2,$3)
            ON CONFLICT (org_id, user_id) DO UPDATE SET status = EXCLUDED.status`,
@@ -130,15 +134,23 @@ describe('routing skips people on leave', () => {
     u1 = await uuidOf(a1.userId);
     u3 = await uuidOf(a3.userId);
     team = (
-      await p.h.owner.query(`INSERT INTO teams (org_id, name) VALUES ($1, 'Desk') RETURNING id, uuid`, [t.orgId])
+      await p.h.owner.query(
+        `INSERT INTO teams (org_id, name) VALUES ($1, 'Desk') RETURNING id, uuid`,
+        [t.orgId],
+      )
     ).rows[0];
     for (const a of [a2, a4]) {
-      await p.h.owner.query(`INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1,$2,$3)`, [t.orgId, team.id, a.userId]);
+      await p.h.owner.query(
+        `INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1,$2,$3)`,
+        [t.orgId, team.id, a.userId],
+      );
     }
     const api = rulesApi(t.admin);
     const live = async (body: Record<string, unknown>) => {
       const r = (await api.create(body)).body as { id: string; rowVersion: number };
-      expect((await api.update(r.id, { rowVersion: r.rowVersion, isActive: true })).status).toBe(200);
+      expect((await api.update(r.id, { rowVersion: r.rowVersion, isActive: true })).status).toBe(
+        200,
+      );
     };
     await live({
       name: 'Pool',
@@ -240,7 +252,7 @@ describe('routing skips people on leave', () => {
     await noDelegates();
   });
 
-  it('with no delegate the rule\'s team pool decides; with one, the delegate goes ahead of the team', async () => {
+  it("with no delegate the rule's team pool decides; with one, the delegate goes ahead of the team", async () => {
     await away(a1.userId);
     const viaTeam = new Set<number | null>();
     for (let i = 0; i < 4; i += 1) viaTeam.add((await customer(t, ch, 'deskword hello')).assignee);
@@ -268,7 +280,10 @@ describe('routing skips people on leave', () => {
   });
 
   it('"keep returning contacts with their agent": an owner on leave hands the contact to their delegate, with none the rules decide', async () => {
-    expect((await p.api.as(t.admin).put('/v2/inbox/routing/settings').send({ keepContactAgent: true })).status).toBe(200);
+    expect(
+      (await p.api.as(t.admin).put('/v2/inbox/routing/settings').send({ keepContactAgent: true }))
+        .status,
+    ).toBe(200);
     const mine = phone();
     await p.api.seedContacts(t, [{ name: 'Returning', phone: `+${mine}`, ownerId: a1.userId }]);
     await away(a1.userId);
@@ -276,17 +291,24 @@ describe('routing skips people on leave', () => {
     await delegate(a1.userId, a3.userId);
     const viaDelegate = await customer(t, ch, 'poolword hello', mine);
     expect(viaDelegate.assignee).toBe(a3.userId);
-    expect((await eventsOf(viaDelegate.conv)).find((e) => e.type === 'assigned')!.payload.strategy).toBe('contact_agent');
+    expect(
+      (await eventsOf(viaDelegate.conv)).find((e) => e.type === 'assigned')!.payload.strategy,
+    ).toBe('contact_agent');
 
     await noDelegates();
     const second = phone();
     await p.api.seedContacts(t, [{ name: 'Second', phone: `+${second}`, ownerId: a1.userId }]);
     const viaRules = await customer(t, ch, 'poolword hello', second);
     expect(viaRules.assignee).toBe(a2.userId); // a1 is away: the pool rule gives it to a2
-    expect((await eventsOf(viaRules.conv)).find((e) => e.type === 'assigned')!.payload.strategy).toBe('round_robin');
+    expect(
+      (await eventsOf(viaRules.conv)).find((e) => e.type === 'assigned')!.payload.strategy,
+    ).toBe('round_robin');
 
     await back();
-    expect((await p.api.as(t.admin).put('/v2/inbox/routing/settings').send({ keepContactAgent: false })).status).toBe(200);
+    expect(
+      (await p.api.as(t.admin).put('/v2/inbox/routing/settings').send({ keepContactAgent: false }))
+        .status,
+    ).toBe(200);
   });
 
   it('the picker shows who is on leave until when (and who covers); a person can still be picked by hand', async () => {
@@ -294,7 +316,10 @@ describe('routing skips people on leave', () => {
     await delegate(a1.userId, a3.userId);
     const list = await p.api.as(t.admin).get('/v2/inbox/assignees');
     expect(list.status).toBe(200);
-    const users = list.body.users as Array<{ id: string; onLeave: { until: string | null; delegateId: string | null } | null }>;
+    const users = list.body.users as Array<{
+      id: string;
+      onLeave: { until: string | null; delegateId: string | null } | null;
+    }>;
     const mark = users.find((u) => u.id === u1)!.onLeave!;
     expect(mark.delegateId).toBe(u3);
     expect(mark.until).toMatch(/^\d{4}-\d{2}-\d{2}$/);
@@ -312,7 +337,10 @@ describe('routing skips people on leave', () => {
   });
 
   it('the leads are told when a chat has nobody to take it because of leave', async () => {
-    const lead = await p.api.member(t, 'rlvlead', [['team.leave.manage', 'all'], ['team.leave.read', 'all']]);
+    const lead = await p.api.member(t, 'rlvlead', [
+      ['team.leave.manage', 'all'],
+      ['team.leave.read', 'all'],
+    ]);
     const consumer = new MemberLeaveNotificationConsumer(
       p.h.app.get(DatabaseService, { strict: false }),
       p.h.app.get(OutboxSubscriberRegistry, { strict: false }),
@@ -350,7 +378,9 @@ describe('routing skips people on leave', () => {
     expect(told).toContain(lead.userId);
     expect(told).not.toContain(a2.userId);
     expect(new Set(told).size).toBe(told.length);
-    expect(rows[0]!.link).toBe(`/inbox?c=${(ev.payload as { conversationId: string }).conversationId}`);
+    expect(rows[0]!.link).toBe(
+      `/inbox?c=${(ev.payload as { conversationId: string }).conversationId}`,
+    );
   });
 
   it("another workspace's leave never affects this workspace's routing", async () => {
