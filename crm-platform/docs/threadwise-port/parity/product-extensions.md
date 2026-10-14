@@ -405,6 +405,7 @@ later include ringing and wrap-up time once the inbox records them; whether a CS
 ## Audit log for the workspace and the full Notifications page (TW-NOTIF-007, 008, 029 to 031): partly beyond Reference
 
 Reference's Activity Log (KPIs, charts, table, detail, CSV) is rebuilt as Settings, Audit log at the same route `/activity-log`, without the charts. Deliberate additions and differences: platform support (act-as) sessions are shown to the workspace with their reason; personal values are masked at read time (only the Owner key sees them) and the CSV is always masked; opening an entry and asking for an export are themselves audited; text search covers the module and action only; no IP or user agent is stored. The Notifications page keeps Reference's tabs-as-filters, search, day sections, mark read, dismiss and clear, with SQL search and per-person rows. Not built: charts, top actors, "My activity" scope, do-not-disturb. Spec: [audit-log-tenant.md](../../specs/audit-log-tenant.md). Status: owner-requested, pending sign-off.
+
 ## Conversation tags: one word, and two clearly separated groups (BL-036, naming decision)
 
 The reference calls the markers on a conversation **tags** (the `conversation_tag` pivot, the `Tag` model, the same list as contact tags). The
@@ -442,7 +443,6 @@ Decisions for the owner: (1) whether a narrower inbox scope (`team`, `own`) shou
 Manager preset should read the cost (today only roles with `wallet.statement.read`); (3) whether the export should be limited to the caller's visible rows instead of requiring scope `all`; (4) whether campaign,
 broadcast and template screens should link to a filtered history; (5) whether `mask_customer_numbers` should become a real workspace setting (today the rule is by contact permission only).
 
-
 ## Data requests and the personal-data registry (BL-142, BL-143)
 
 Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 4.5; API: [privacy.md](../../api/privacy.md).
@@ -450,3 +450,7 @@ Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/priv
 - **New:** Settings > Privacy > Data requests (`/privacy-requests`): log, verify, hold, export (ZIP), preview and execute an erasure, proof; keys `privacy.requests.read`, `privacy.requests.manage`, `privacy.erase.execute`.
 - **Intended difference from the reference (contact delete):** the reference deletes the contact row and leaves messages and files to its own foreign keys. Here deleting a contact (single, bulk, REST v1) also erases its conversation history, media, files, recordings and call logs by default; `eraseHistory=false` keeps conversations without the person's identity. Leads, deals, tasks and invoices stay unless a data request anonymises them.
 - Owner decisions open: message delete versus anonymise as the default, SLA default (30 days), legal-hold periods per country (D9), who verifies identity.
+
+## CRM dashboard (`/crm`)
+
+Beyond Reference's eight counters: period selector (this month, 7/30/90 days, custom) in the viewer's zone; pipeline, owner and team filters in the address; pipeline funnel by stage with step conversion and drill-down to the deals list (`/deals?view=list&stage=`); won/lost trend; lead sources performance (leads, to deal, to won, won value); owner leaderboard; tasks by assignee; recent activity. Backend: `GET /v2/crm/dashboard`. Differences from Reference: parity/crm-dashboard.md.

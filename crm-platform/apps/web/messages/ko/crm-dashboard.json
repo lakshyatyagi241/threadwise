@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "CRM 대시보드"
+    },
+    "title": "내 CRM",
+    "subtitle": "딜, 청구서, 결제, 작업 — 비즈니스 전체를 한눈에.",
+    "period": "{from} ~ {to} · 시간대 {zone}",
+    "openBoard": "딜 보드 열기",
+    "loading": "대시보드를 불러오는 중",
+    "retry": "다시 시도",
+    "stale": "새로 고침에 실패했습니다. 마지막으로 받은 수치입니다.",
+    "empty": {
+      "title": "아직 보고할 내용이 없습니다",
+      "message": "연락처와 딜을 추가하면 이 페이지가 채워집니다. 파이프라인 퍼널, 성과 순위, 리드 유입 경로, 작업, 받을 금액을 볼 수 있습니다.",
+      "deals": "딜로 이동",
+      "contacts": "연락처로 이동"
+    },
+    "filters": {
+      "label": "대시보드 필터",
+      "period": "기간",
+      "range": {
+        "month": "이번 달",
+        "7d": "7일",
+        "30d": "30일",
+        "90d": "90일",
+        "custom": "직접 설정"
+      },
+      "from": "시작",
+      "to": "종료",
+      "pipeline": "파이프라인",
+      "allPipelines": "모든 파이프라인",
+      "owner": "담당자",
+      "everyone": "전체",
+      "team": "팀",
+      "allTeams": "모든 팀",
+      "reset": "필터 초기화"
+    },
+    "kpi": {
+      "title": "핵심 수치",
+      "vsPrevious": "같은 길이의 이전 기간과 비교",
+      "open": "진행 중인 파이프라인",
+      "openHint": "{count, plural, other {딜 #건}} · 예상 {forecast}",
+      "won": "성사",
+      "wonHint": "{count, plural, other {딜 #건 마감}}",
+      "collected": "수금",
+      "collectedHint": "받은 결제",
+      "outstanding": "미수금",
+      "outstandingHint": "{count, plural, other {미결 청구서 #건}}",
+      "winRate": "성사율",
+      "winRateHint": "성사 {won}, 실패 {lost}",
+      "avgSize": "평균 딜 규모",
+      "avgSizeHint": "성사된 딜 기준",
+      "avgCycle": "평균 영업 주기",
+      "avgCycleHint": "생성부터 성사까지",
+      "days": "{count, plural, other {#일}}",
+      "lost": "실패한 딜",
+      "lateClose": "예상 마감일 초과",
+      "lateCloseHint": "날짜가 지난 진행 중 딜",
+      "contacts": "연락처",
+      "contactsHint": "오늘 내 보기 기준",
+      "newContacts": "신규 연락처",
+      "newLeads": "신규 리드",
+      "newLeadsHint": "유입 경로와 함께 들어온 연락처",
+      "paid": "결제 완료 청구서",
+      "paidHint": "해당 기간에 결제 완료로 바뀐 건",
+      "tasksOpen": "진행 중인 작업",
+      "tasksOpenHint": "오늘 이따 마감 {count}건",
+      "tasksOverdue": "기한 지난 작업"
+    },
+    "funnel": {
+      "title": "파이프라인 퍼널",
+      "subtitle": "{pipeline} · 기간 내 생성된 딜 {count, plural, other {#건}}",
+      "noPipeline": "아직 파이프라인이 없습니다.",
+      "empty": "이 기간에 생성된 딜이 없습니다.",
+      "conversion": "{percent}% 다음 단계로 이동",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached}건이 이 단계에 도달, 현재 {open}건 진행 중. 열기.",
+      "openNow": "{count, plural, other {현재 #건 진행 중}} · {value}"
+    },
+    "trend": {
+      "title": "성사 및 실패한 딜",
+      "subtitle": {
+        "day": "일별 · 성사 {value}",
+        "week": "주별 · 성사 {value}",
+        "month": "월별 · 성사 {value}"
+      },
+      "chartLabel": "기간 내 성사 및 실패한 딜",
+      "won": "성사",
+      "lost": "실패"
+    },
+    "leaderboard": {
+      "title": "담당자 순위",
+      "subtitle": "기간 내 성사 금액 기준",
+      "empty": "이 보기에는 순위를 매길 딜이 없습니다.",
+      "owner": "담당자",
+      "won": "성사",
+      "value": "금액",
+      "lost": "실패",
+      "open": "진행 중",
+      "activities": "활동",
+      "unowned": "담당자 없음"
+    },
+    "sources": {
+      "title": "리드 유입 경로",
+      "subtitle": "기간 내 들어온 연락처와 진행 정도",
+      "empty": "이 기간에 유입 경로가 있는 연락처가 없습니다.",
+      "source": "유입 경로",
+      "leads": "리드",
+      "toDeal": "딜 전환",
+      "toWon": "성사 전환",
+      "wonValue": "성사 금액",
+      "none": "유입 경로 없음"
+    },
+    "tasks": {
+      "title": "작업",
+      "subtitle": "진행 중 {open} · 기한 지남 {overdue} · 오늘 이따 마감 {today}",
+      "all": "모든 작업",
+      "empty": "진행 중인 작업이 없습니다.",
+      "byAssignee": "담당자별 진행 중인 작업",
+      "assignee": "담당자",
+      "open": "진행 중",
+      "overdue": "기한 지남",
+      "dueToday": "오늘 이따",
+      "unassigned": "미배정",
+      "upcoming": "예정된 작업",
+      "overdueTag": "기한 지남"
+    },
+    "aging": {
+      "title": "미수금 연령 분석",
+      "open": "결제",
+      "empty": "받을 금액이 없습니다.",
+      "bucket": {
+        "current": "아직 만기 전",
+        "d1_30": "1–30일 연체",
+        "d31_60": "31–60일 연체",
+        "d61_90": "61–90일 연체",
+        "d90_plus": "90일 이상 연체"
+      }
+    },
+    "payments": {
+      "title": "최근 결제",
+      "empty": "아직 결제가 없습니다."
+    },
+    "activity": {
+      "title": "최근 활동",
+      "empty": "아직 활동이 없습니다.",
+      "stageMoved": "{from}에서 {to}(으)로 이동",
+      "stagePlaced": "{to}에 배치됨",
+      "by": "{name}님",
+      "system": "시스템",
+      "type": {
+        "note": "메모",
+        "stage_change": "단계 변경",
+        "call": "통화",
+        "message": "메시지",
+        "email": "이메일",
+        "meeting": "미팅",
+        "task": "작업"
+      }
+    }
+  }
+}

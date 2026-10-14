@@ -1,4 +1,5 @@
 import { rowUuid } from '../load/engine';
+import { armedFlowUuids } from '../load/flowstate';
 import { sql, withTenant, type Database } from '../load/db';
 import type { Outcome } from '../transform/types';
 
@@ -6,7 +7,8 @@ import type { Outcome } from '../transform/types';
  * The verifier of the faq_knowledge step, for what the generic row-by-row check cannot see: faq_variations (no uuid, hangs off its FAQ)
  * and faq_settings (keyed by flow, no uuid). The faqs rows themselves are compared column by column by reconcile/index.ts.
  *   - every loaded FAQ carries exactly the variations (text + source) its document says, no more, no fewer
- *   - SAFETY, in SQL: no FAQ of the organization is anything but paused, no flow switch is on, no variation holds a vector or is
+ *   - SAFETY, in SQL: no FAQ of the organization is anything but paused, no flow switch is on (except the FAQs and switches of a
+ *     flow that flow-state armed: those are expected active / on), no variation holds a vector or is
  *     anything but pending, none was tried: the tool copies no vector and makes no call (these checks are off under --allow-extra-rows,
  *     because the application's worker legitimately settles variations and people enable FAQs after the cutover)
  *   - every flow that owns an FAQ has its faq_settings row, and the tables hold nothing the source does not account for
@@ -37,18 +39,21 @@ export async function verifyFaq(a: Args): Promise<void> {
     wantVariations += vars.length;
   }
 
+  const armed = await armedFlowUuids(db, client);
   await withTenant(db, { orgId }, async (tx) => {
     const got = new Map<string, string[]>();
     const unsafe: string[] = [];
     if (want.size > 0) {
       const r = await tx.execute(sql`
-        SELECT f.uuid::text AS uuid, f.status, v.text, v.source, v.embed_state, v.embedding IS NOT NULL AS has_vector,
+        SELECT f.uuid::text AS uuid, f.status, fl.uuid::text AS owner, v.text, v.source, v.embed_state, v.embedding IS NOT NULL AS has_vector,
                v.embedding_model, v.embed_attempts
         FROM faqs f LEFT JOIN faq_variations v ON v.org_id = f.org_id AND v.faq_id = f.id
+        LEFT JOIN flows fl ON fl.org_id = f.org_id AND fl.id = f.owner_flow_id
         WHERE f.org_id = ${orgId} AND f.uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify([...want.keys()])}::jsonb)::uuid)`);
       for (const x of r.rows as Array<{
         uuid: string;
         status: string;
+        owner: string | null;
         text: string | null;
         source: string | null;
         embed_state: string | null;
@@ -68,7 +73,7 @@ export async function verifyFaq(a: Args): Promise<void> {
             Number(x.embed_attempts) !== 0)
         )
           unsafe.push(`a variation of FAQ ${x.uuid.slice(0, 8)} is not pending, or holds a vector or an attempt`);
-        if (!a.allowExtraRows && x.status !== 'paused')
+        if (!a.allowExtraRows && x.status !== 'paused' && !(x.owner && armed.has(x.owner)))
           unsafe.push(`FAQ ${x.uuid.slice(0, 8)} is ${x.status}, not paused`);
       }
     }
@@ -86,13 +91,14 @@ export async function verifyFaq(a: Args): Promise<void> {
     const owned = [...owners];
     if (owned.length > 0) {
       const s = await tx.execute(sql`
-        SELECT flow_id, enabled FROM faq_settings
-        WHERE org_id = ${orgId} AND flow_id IN (SELECT jsonb_array_elements_text(${JSON.stringify(owned)}::jsonb)::bigint)`);
-      const rows = s.rows as Array<{ flow_id: number | string; enabled: boolean }>;
+        SELECT s.flow_id, s.enabled, fl.uuid::text AS owner FROM faq_settings s
+        LEFT JOIN flows fl ON fl.org_id = s.org_id AND fl.id = s.flow_id
+        WHERE s.org_id = ${orgId} AND s.flow_id IN (SELECT jsonb_array_elements_text(${JSON.stringify(owned)}::jsonb)::bigint)`);
+      const rows = s.rows as Array<{ flow_id: number | string; enabled: boolean; owner: string | null }>;
       const have = new Set(rows.map((x) => Number(x.flow_id)));
       const missing = owned.filter((f) => !have.has(f)).length;
       if (missing > 0) alarm(`FAQ_SETTINGS_MISSING: ${missing} flow(s) own a migrated FAQ and have no faq_settings row`);
-      if (!a.allowExtraRows && rows.some((x) => x.enabled))
+      if (!a.allowExtraRows && rows.some((x) => x.enabled && !(x.owner && armed.has(x.owner))))
         alarm('FAQ_SAFETY: a faq_settings row of a migrated flow is enabled (the tool never switches FAQ answering on)');
     }
 
@@ -101,8 +107,8 @@ export async function verifyFaq(a: Args): Promise<void> {
         await tx.execute(sql`
           SELECT (SELECT count(*) FROM faq_variations WHERE org_id = ${orgId})::int AS variations,
                  (SELECT count(*) FROM faq_settings WHERE org_id = ${orgId})::int AS settings,
-                 (SELECT count(*) FROM faq_settings WHERE org_id = ${orgId} AND enabled)::int AS enabled,
-                 (SELECT count(*) FROM faqs WHERE org_id = ${orgId} AND status <> 'paused')::int AS active,
+                 (SELECT count(*) FROM faq_settings s LEFT JOIN flows fl ON fl.org_id = s.org_id AND fl.id = s.flow_id WHERE s.org_id = ${orgId} AND s.enabled AND NOT (fl.uuid::text IN (SELECT jsonb_array_elements_text(${JSON.stringify([...armed])}::jsonb))))::int AS enabled,
+                 (SELECT count(*) FROM faqs f LEFT JOIN flows fl ON fl.org_id = f.org_id AND fl.id = f.owner_flow_id WHERE f.org_id = ${orgId} AND f.status <> 'paused' AND NOT (fl.uuid::text IN (SELECT jsonb_array_elements_text(${JSON.stringify([...armed])}::jsonb))))::int AS active,
                  (SELECT count(*) FROM faq_match_logs WHERE org_id = ${orgId})::int AS logs`)
       ).rows[0] as { variations: number; settings: number; enabled: number; active: number; logs: number };
       if (t.variations !== wantVariations)

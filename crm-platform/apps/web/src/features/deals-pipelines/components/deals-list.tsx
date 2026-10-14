@@ -26,6 +26,7 @@ export function DealsList({
     ...filterQuery(filters),
     pipelineId: pipeline.id,
     status: filters.status || undefined,
+    stageId: filters.stage || undefined,
   });
   const stageOf = (id: string) => pipeline.stages.find((s) => s.id === id);
 
