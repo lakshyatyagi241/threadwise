@@ -600,8 +600,6 @@
       "eyebrow": "WhatsApp",
       "title": "Invia un template",
       "close": "Chiudi",
-      "cancel": "Annulla",
-      "back": "Torna ai template",
       "search": "Cerca per nome o testo",
       "searchLabel": "Cerca template",
       "loading": "Caricamento template in corso",
@@ -610,9 +608,7 @@
       "empty": "Non ci sono ancora template approvati per questo numero WhatsApp. Creane uno in Template e attendi l’approvazione di Meta.",
       "noResults": "Nessun template corrisponde alla ricerca.",
       "windowHint": "Un template funziona anche quando la finestra di risposta di 24 ore è chiusa.",
-      "variables": "Compila le variabili",
       "preview": "Ciò che leggerà il cliente",
-      "send": "Invia template",
       "sending": "Invio in corso",
       "sent": "Template inviato",
       "problem": {
@@ -627,7 +623,31 @@
         "authentication": "I template con password monouso vengono inviati dal sistema, non dall’Inbox.",
         "named_variables": "Usa variabili con nome, che l’Inbox non supporta ancora."
       },
-      "hasMore": "Vengono mostrati i primi {count} template. Cerca per nome o testo per trovare gli altri."
+      "hasMore": "Vengono mostrati i primi {count} template. Cerca per nome o testo per trovare gli altri.",
+      "previewEmpty": "Punta su un modello per vedere come apparirà sul telefono del cliente.",
+      "previewCustomer": "Cliente",
+      "noVariables": "Questo modello non ha nulla da compilare. Controlla il telefono, poi invialo.",
+      "sendTo": "Invia a {name}",
+      "refresh": "Aggiorna elenco",
+      "device": "Anteprima telefono",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Configura le variabili del corpo",
+      "or": "oppure",
+      "mapField": "Associa un campo a {key}",
+      "mapNone": "Questo contatto non ha dettagli da associare.",
+      "typeMessage": "Scrivi un messaggio",
+      "fields": {
+        "name": "Nome",
+        "phone": "Telefono",
+        "email": "Email"
+      },
+      "create": "Crea nuovo modello",
+      "actions": "Azioni del modello",
+      "edit": "Modifica modello",
+      "duplicate": "Duplica modello"
     },
     "log": {
       "title": "Registro di consegna",

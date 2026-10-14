@@ -600,8 +600,6 @@
       "eyebrow": "WhatsApp",
       "title": "Vorlage senden",
       "close": "Schließen",
-      "cancel": "Abbrechen",
-      "back": "Zurück zu den Vorlagen",
       "search": "Nach Name oder Text suchen",
       "searchLabel": "Vorlagen durchsuchen",
       "loading": "Vorlagen werden geladen",
@@ -610,9 +608,7 @@
       "empty": "Für diese WhatsApp-Nummer gibt es noch keine genehmigten Vorlagen. Erstellen Sie eine unter Vorlagen und warten Sie, bis Meta sie genehmigt.",
       "noResults": "Keine Vorlage passt zu Ihrer Suche.",
       "windowHint": "Eine Vorlage funktioniert auch dann, wenn das 24-Stunden-Antwortfenster geschlossen ist.",
-      "variables": "Variablen ausfüllen",
       "preview": "Was der Kunde lesen wird",
-      "send": "Vorlage senden",
       "sending": "Wird gesendet",
       "sent": "Vorlage gesendet",
       "problem": {
@@ -627,7 +623,31 @@
         "authentication": "Vorlagen mit Einmalpasswort werden vom System gesendet, nicht aus dem Posteingang.",
         "named_variables": "Verwendet benannte Variablen, die der Posteingang noch nicht unterstützt."
       },
-      "hasMore": "Es werden die ersten {count} Vorlagen angezeigt. Suchen Sie nach Name oder Text, um die übrigen zu finden."
+      "hasMore": "Es werden die ersten {count} Vorlagen angezeigt. Suchen Sie nach Name oder Text, um die übrigen zu finden.",
+      "previewEmpty": "Zeigen Sie auf eine Vorlage, um zu sehen, wie sie auf dem Handy des Kunden aussieht.",
+      "previewCustomer": "Kunde",
+      "noVariables": "Diese Vorlage hat nichts auszufüllen. Prüfe das Handy und sende sie dann ab.",
+      "sendTo": "An {name} senden",
+      "refresh": "Liste aktualisieren",
+      "device": "Telefonvorschau",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Textvariablen konfigurieren",
+      "or": "oder",
+      "mapField": "Feld {key} zuordnen",
+      "mapNone": "Dieser Kontakt hat keine Details zum Zuordnen.",
+      "typeMessage": "Nachricht schreiben",
+      "fields": {
+        "name": "Name",
+        "phone": "Telefon",
+        "email": "E-Mail"
+      },
+      "create": "Neue Vorlage erstellen",
+      "actions": "Vorlagenaktionen",
+      "edit": "Vorlage bearbeiten",
+      "duplicate": "Vorlage duplizieren"
     },
     "log": {
       "title": "Zustellprotokoll",

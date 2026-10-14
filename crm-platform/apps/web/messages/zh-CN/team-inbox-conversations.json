@@ -600,8 +600,6 @@
       "eyebrow": "WhatsApp",
       "title": "发送模板",
       "close": "关闭",
-      "cancel": "取消",
-      "back": "返回模板",
       "search": "按名称或文本搜索",
       "searchLabel": "搜索模板",
       "loading": "正在加载模板",
@@ -610,9 +608,7 @@
       "empty": "此 WhatsApp 号码暂无已获批准的模板。请在“模板”中创建模板，并等待 Meta 批准。",
       "noResults": "没有符合搜索条件的模板。",
       "windowHint": "即使 24 小时回复窗口已关闭，模板仍可发送。",
-      "variables": "填写变量",
       "preview": "客户将看到的内容",
-      "send": "发送模板",
       "sending": "发送中",
       "sent": "模板已发送",
       "problem": {
@@ -627,7 +623,31 @@
         "authentication": "一次性密码模板由系统发送，不能从收件箱发送。",
         "named_variables": "使用了收件箱暂不支持的命名变量。"
       },
-      "hasMore": "显示前 {count} 个模板。按名称或文本搜索以查找其他模板。"
+      "hasMore": "显示前 {count} 个模板。按名称或文本搜索以查找其他模板。",
+      "previewEmpty": "指向某个模板，即可查看它在客户手机上的显示效果。",
+      "previewCustomer": "客户",
+      "noVariables": "此模板无需填写任何内容。请查看手机预览，然后发送。",
+      "sendTo": "发送给 {name}",
+      "refresh": "刷新列表",
+      "device": "手机预览",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "配置正文变量",
+      "or": "或",
+      "mapField": "将字段映射到 {key}",
+      "mapNone": "该联系人没有可映射的详细信息。",
+      "typeMessage": "输入消息",
+      "fields": {
+        "name": "姓名",
+        "phone": "电话",
+        "email": "邮箱"
+      },
+      "create": "新建模板",
+      "actions": "模板操作",
+      "edit": "编辑模板",
+      "duplicate": "复制模板"
     },
     "log": {
       "title": "投递日志",

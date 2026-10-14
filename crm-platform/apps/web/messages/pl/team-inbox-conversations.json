@@ -600,8 +600,6 @@
       "eyebrow": "WhatsApp",
       "title": "Wyślij szablon",
       "close": "Zamknij",
-      "cancel": "Anuluj",
-      "back": "Wróć do szablonów",
       "search": "Szukaj po nazwie lub treści",
       "searchLabel": "Szukaj szablonów",
       "loading": "Wczytywanie szablonów",
@@ -610,9 +608,7 @@
       "empty": "Dla tego numeru WhatsApp nie ma jeszcze zatwierdzonych szablonów. Utwórz szablon w sekcji Szablony i poczekaj, aż Meta go zatwierdzi.",
       "noResults": "Żaden szablon nie pasuje do wyszukiwania.",
       "windowHint": "Szablon działa nawet wtedy, gdy okno odpowiedzi 24-godzinne jest zamknięte.",
-      "variables": "Uzupełnij zmienne",
       "preview": "Co przeczyta klient",
-      "send": "Wyślij szablon",
       "sending": "Wysyłanie",
       "sent": "Szablon wysłany",
       "problem": {
@@ -627,7 +623,31 @@
         "authentication": "Szablony jednorazowego hasła są wysyłane przez system, a nie ze skrzynki odbiorczej.",
         "named_variables": "Używa nazwanych zmiennych, których skrzynka odbiorcza jeszcze nie obsługuje."
       },
-      "hasMore": "Pokazano pierwsze {count} szablonów. Wyszukaj po nazwie lub treści, aby znaleźć pozostałe."
+      "hasMore": "Pokazano pierwsze {count} szablonów. Wyszukaj po nazwie lub treści, aby znaleźć pozostałe.",
+      "previewEmpty": "Wskaż szablon, aby zobaczyć, jak będzie wyglądał na telefonie klienta.",
+      "previewCustomer": "Klient",
+      "noVariables": "Ten szablon nie wymaga niczego do uzupełnienia. Sprawdź telefon, a potem wyślij.",
+      "sendTo": "Wyślij do {name}",
+      "refresh": "Odśwież listę",
+      "device": "Podgląd telefonu",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Skonfiguruj zmienne treści",
+      "or": "lub",
+      "mapField": "Przypisz pole do {key}",
+      "mapNone": "Ten kontakt nie ma danych do przypisania.",
+      "typeMessage": "Wpisz wiadomość",
+      "fields": {
+        "name": "Imię i nazwisko",
+        "phone": "Telefon",
+        "email": "E-mail"
+      },
+      "create": "Utwórz nowy szablon",
+      "actions": "Akcje szablonu",
+      "edit": "Edytuj szablon",
+      "duplicate": "Duplikuj szablon"
     },
     "log": {
       "title": "Dziennik dostarczania",

@@ -600,8 +600,6 @@
       "eyebrow": "WhatsApp",
       "title": "Send a template",
       "close": "Close",
-      "cancel": "Cancel",
-      "back": "Back to templates",
       "search": "Search by name or text",
       "searchLabel": "Search templates",
       "loading": "Loading templates",
@@ -610,9 +608,7 @@
       "empty": "There are no approved templates for this WhatsApp number yet. Create one in Templates and wait for Meta to approve it.",
       "noResults": "No template matches your search.",
       "windowHint": "A template works even when the 24-hour reply window has closed.",
-      "variables": "Fill in the variables",
       "preview": "What the customer will read",
-      "send": "Send template",
       "sending": "Sending",
       "sent": "Template sent",
       "problem": {
@@ -627,7 +623,31 @@
         "authentication": "One-time-password templates are sent by the system, not from the inbox.",
         "named_variables": "Uses named variables, which the inbox does not support yet."
       },
-      "hasMore": "Showing the first {count} templates. Search by name or text to find the others."
+      "hasMore": "Showing the first {count} templates. Search by name or text to find the others.",
+      "previewEmpty": "Point at a template to see how it will look on the customer’s phone.",
+      "previewCustomer": "Customer",
+      "noVariables": "This template has nothing to fill in. Check the phone, then send it.",
+      "sendTo": "Send to {name}",
+      "refresh": "Refresh list",
+      "device": "Phone preview",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Configure body variables",
+      "or": "or",
+      "mapField": "Map a field to {key}",
+      "mapNone": "This contact has no details to map.",
+      "typeMessage": "Type a message",
+      "fields": {
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "create": "Create new template",
+      "actions": "Template actions",
+      "edit": "Edit template",
+      "duplicate": "Duplicate template"
     },
     "log": {
       "title": "Delivery log",
