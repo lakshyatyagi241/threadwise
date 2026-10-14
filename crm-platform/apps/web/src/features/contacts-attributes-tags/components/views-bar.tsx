@@ -65,7 +65,7 @@ export function ViewsBar({
           aria-expanded={pickerOpen}
           aria-label={t('picker.title')}
           onClick={() => setPickerOpen((o) => !o)}
-          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-primary bg-background px-4 text-sm font-medium text-primary outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           <span className="truncate">
             {activeId === '' ? t('all') : (all.find((v) => v.id === activeId)?.name ?? t('all'))}
