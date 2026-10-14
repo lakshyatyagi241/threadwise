@@ -1,0 +1,94 @@
+{
+  "$comment": "End-to-end journeys (QA task 9). A journey is an ordered list of steps; the runner expands each journey by its variants into runs. Step ids are implemented in apps/api/test/e2e/journeys/steps.ts and checked against this list by a unit test. Add journeys here; the runner needs no change unless a step is new.",
+  "variants": {
+    "role": {
+      "description": "Who is looking at the data after the admin has created it.",
+      "values": ["admin", "reader-all", "reader-own", "no-access"]
+    },
+    "text": {
+      "description": "A name or title from tools/quality/unicode-fixtures.json (the 'valid' list): emoji, accents in two forms, right-to-left scripts, joiners.",
+      "values": "unicode:valid"
+    }
+  },
+  "steps": {
+    "workspace.signup": "A new workspace with its admin signed in.",
+    "session.read": "The admin reads the session and sees their own workspace.",
+    "actor.choose": "The person looking is the admin, or a member with exactly the role's grants.",
+    "contact.create": "The admin creates a contact whose name is the text variant.",
+    "contact.read-as-actor": "The actor reads that contact by id; the role decides whether they may.",
+    "contact.search-as-actor": "The actor searches contacts by the first three characters of the name; the role decides what they see.",
+    "tag.create": "The admin creates a tag whose name is the text variant.",
+    "tag.attach": "The admin attaches the tag to the contact.",
+    "tag.list-on-contact": "The tags on the contact include that tag, as typed.",
+    "company.create": "The admin creates a company whose name is the text variant.",
+    "company.find": "The admin finds the company by search.",
+    "task.create": "The admin creates a task whose title is the text variant.",
+    "task.find": "The admin finds the task by search."
+  },
+  "journeys": [
+    {
+      "id": "J-001",
+      "title": "A new workspace records its first contact and finds it again",
+      "persona": "workspace admin",
+      "priority": "P0",
+      "domains": ["auth-registration-security", "contacts-attributes-tags"],
+      "steps": [
+        "workspace.signup",
+        "session.read",
+        "actor.choose",
+        "contact.create",
+        "contact.read-as-actor",
+        "contact.search-as-actor"
+      ],
+      "vary": { "role": ["admin"], "text": "all" }
+    },
+    {
+      "id": "J-002",
+      "title": "A teammate sees the contact the admin created, according to their role",
+      "persona": "team member",
+      "priority": "P0",
+      "domains": ["roles-permissions", "contacts-attributes-tags"],
+      "steps": [
+        "workspace.signup",
+        "actor.choose",
+        "contact.create",
+        "contact.read-as-actor",
+        "contact.search-as-actor"
+      ],
+      "vary": { "role": "all", "text": ["emoji-plain", "arabic", "hebrew", "cjk"] }
+    },
+    {
+      "id": "J-003",
+      "title": "The admin tags a contact and the tag comes back exactly as typed",
+      "persona": "workspace admin",
+      "priority": "P1",
+      "domains": ["contacts-attributes-tags"],
+      "steps": [
+        "workspace.signup",
+        "contact.create",
+        "tag.create",
+        "tag.attach",
+        "tag.list-on-contact"
+      ],
+      "vary": { "text": "all" }
+    },
+    {
+      "id": "J-004",
+      "title": "A company is created and found by search",
+      "persona": "workspace admin",
+      "priority": "P1",
+      "domains": ["companies"],
+      "steps": ["workspace.signup", "company.create", "company.find"],
+      "vary": { "text": "all" }
+    },
+    {
+      "id": "J-005",
+      "title": "A follow-up task is created and found by search",
+      "persona": "workspace admin",
+      "priority": "P1",
+      "domains": ["tasks"],
+      "steps": ["workspace.signup", "task.create", "task.find"],
+      "vary": { "text": "all" }
+    }
+  ]
+}
