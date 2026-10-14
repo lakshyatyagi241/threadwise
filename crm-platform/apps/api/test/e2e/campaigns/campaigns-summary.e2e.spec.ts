@@ -390,6 +390,21 @@ describe('who may see what', () => {
     expect((await people(reader.token, w.camp.uuid, 'kind=filled_form')).status).toBe(200);
   });
 
+  it("gives the form part only to a form-submissions reader whose scope is all (own and team readers are not shown other people's forms)", async () => {
+    for (const scope of ['own', 'team'] as const) {
+      const narrow = await api.member(w.t, `scoped-${scope}`, [
+        ['camp.campaigns.read'],
+        ['record.form-submissions.read', scope],
+        ['record.forms.read', scope],
+      ]);
+      const s = campaignSummarySchema.parse((await summary(narrow.token, w.camp.uuid)).body);
+      expect(s.filledForm, scope).toBeNull();
+      expect(s.cameBack.count, scope).toBe(4);
+      expect((await people(narrow.token, w.camp.uuid, 'kind=filled_form')).status, scope).toBe(403);
+      expect((await get(narrow.token, '/v2/campaigns/summary/forms')).body.data, scope).toEqual([]);
+    }
+  });
+
   it('needs camp.campaigns.read', async () => {
     const nobody = await api.member(w.t, 'nobody', [['bcast.broadcasts.read']]);
     expect((await summary(nobody.token, w.camp.uuid)).status).toBe(403);

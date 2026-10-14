@@ -459,7 +459,7 @@ Deviations the owner should know (all are honest floors, each carried as a `cave
 - An opted-out recipient who wrote back is not counted (`opted_out_excluded`).
 - Another campaign or broadcast messaging the same people in the window is flagged, not split (`counted_in_other_campaigns`).
 - Not verified against a live WhatsApp account (inbox rows are arranged directly in the tests); WhatsApp forms have no permission key of their own yet
-  (their domain is not ported), so they follow `record.forms.read` in the picker and `record.form-submissions.read` for the figures.
+  (their domain is not ported), so they follow `record.forms.read` in the picker and `record.form-submissions.read` for the figures, both only at `all` scope: those permissions are record-scoped and the summary does not apply the scope, so an `own` or `team` reader gets the campaign figures without the form part.
 
 ## Data requests and the personal-data registry (BL-142, BL-143)
 

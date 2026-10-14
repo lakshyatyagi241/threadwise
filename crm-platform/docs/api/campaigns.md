@@ -104,10 +104,10 @@ How each number is worked out:
   spam, failed, received or needs review) or a WhatsApp form submission, after their send and inside the window, in any form or only the
   picked ones (`formIds`, web and WhatsApp ids together; a pick that matches nothing counts nothing). `viaWebForm` and `viaWhatsappForm` are
   distinct people per source, so a person in both counts in both and once in `count`. The match is by contact only (`contact_match_only`):
-  a different phone or email is a different person. `filledForm` is `null` for a caller without `record.form-submissions.read`, and then
+  a different phone or email is a different person. `filledForm` is `null` for a caller without `record.form-submissions.read` at `all` scope (an `own` or `team` reader is record-scoped, and the summary does not apply that scope, so they are treated like a caller without it; the picker is empty for the same callers), and then
   `formIds` is ignored. `counted_in_other_campaigns` says another campaign or broadcast of the workspace messaged some of the same
   people within the window, so a reply or form may belong to either.
-- **People**: `kind=came_back`, `filled_form` (needs `record.form-submissions.read`, else 403; `formName` is the first form they filled)
+- **People**: `kind=came_back`, `filled_form` (needs `record.form-submissions.read` at `all` scope, else 403; `formName` is the first form they filled)
   or `not_reached` (recipients whose send failed; `at` is when). Names and numbers are what the recipients tab already shows for the same
   permission. A cursor that is not ours is a 422.
 

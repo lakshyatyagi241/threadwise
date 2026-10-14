@@ -17,10 +17,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { pct } from '../campaign-rules';
-import {
-  CampaignSummaryRepository,
-  type SummarySource,
-} from './campaign-summary.repository';
+import { CampaignSummaryRepository, type SummarySource } from './campaign-summary.repository';
 import {
   SUMMARY_CACHE_SECONDS,
   SUMMARY_TIMEOUT_MS,
@@ -60,9 +57,16 @@ export class CampaignSummaryService {
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
+  /**
+   * Form figures and the names behind them are workspace-wide, but `record.form-submissions.read` is a record-scoped permission (a
+   * viewer at `own` or `team` scope sees only the submissions of their own or their team's forms and contacts). The summary does not
+   * apply that scope, so it is given only to a viewer whose scope is `all`: anyone narrower sees the campaign figures without the form
+   * part, exactly as a viewer without the permission does.
+   */
   private canReadSubmissions(): boolean {
     const grants = RequestContextStore.require().grants ?? new Map();
-    return this.rbac.can(grants, PERM_SUBMISSIONS_READ).allowed;
+    const g = this.rbac.can(grants, PERM_SUBMISSIONS_READ);
+    return g.allowed && g.scope === 'all';
   }
 
   // -------------------------------------------------------------------------------------------------------------- summary
@@ -307,8 +311,9 @@ export class CampaignSummaryService {
    */
   async forms(): Promise<SummaryFormsResponse> {
     const { orgId, grants } = RequestContextStore.require();
-    const may = this.rbac.can(grants ?? new Map(), PERM_FORMS_READ).allowed;
-    if (!may) return { data: [] };
+    // Same reason as `canReadSubmissions`: the form list is scoped by who created the form, so only an `all`-scope reader may see every name.
+    const g = this.rbac.can(grants ?? new Map(), PERM_FORMS_READ);
+    if (!g.allowed || g.scope !== 'all') return { data: [] };
     const rows = await this.db.tx((tx) =>
       this.repo.formsOf(tx, orgId, { web: true, whatsapp: true }, PICKER_LIMIT),
     );
