@@ -448,7 +448,9 @@
         "unassign": "إلغاء التعيين",
         "open": "{count} مفتوحة",
         "pickTeam": "اختر فريقًا لهذه المحادثة",
-        "noTeam": "بلا فريق"
+        "noTeam": "بلا فريق",
+        "onLeave": "في إجازة",
+        "onLeaveUntil": "في إجازة حتى {date}"
       },
       "presence": {
         "online": "متصل",
@@ -933,7 +935,9 @@
       },
       "tag": "وسم",
       "tagAdd": "إضافة وسم",
-      "tagRemove": "إزالة وسم"
+      "tagRemove": "إزالة وسم",
+      "onLeave": "في إجازة",
+      "onLeaveUntil": "في إجازة حتى {date}"
     },
     "tags": {
       "tag": "وسم",

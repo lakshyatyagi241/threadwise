@@ -448,7 +448,9 @@
         "unassign": "Atamayı kaldır",
         "open": "{count} açık",
         "pickTeam": "Bu konuşma için bir ekip seçin",
-        "noTeam": "Ekip yok"
+        "noTeam": "Ekip yok",
+        "onLeave": "İzinli",
+        "onLeaveUntil": "{date} tarihine kadar izinli"
       },
       "presence": {
         "online": "Çevrimiçi",
@@ -933,7 +935,9 @@
       },
       "tag": "Etiketle",
       "tagAdd": "Etiket ekle",
-      "tagRemove": "Etiketi kaldır"
+      "tagRemove": "Etiketi kaldır",
+      "onLeave": "izinli",
+      "onLeaveUntil": "{date} tarihine kadar izinli"
     },
     "tags": {
       "tag": "Etiket",

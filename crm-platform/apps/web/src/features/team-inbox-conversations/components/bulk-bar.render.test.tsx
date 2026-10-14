@@ -35,6 +35,7 @@ vi.mock('../api/hooks', () => ({
           availability: 'online',
           openConversations: 0,
           isMe: true,
+          onLeave: null,
         },
         {
           id: 'u-2',
@@ -43,6 +44,7 @@ vi.mock('../api/hooks', () => ({
           availability: 'online',
           openConversations: 2,
           isMe: false,
+          onLeave: null,
         },
       ],
       teams: [

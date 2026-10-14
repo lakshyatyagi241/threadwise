@@ -11,6 +11,7 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { ownersAvailable } from '../../common/leave-owner-pool';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
@@ -863,8 +864,13 @@ export class FormSubmitService {
       userIds?: string[];
     };
     const mode = rule.mode ?? 'unassigned';
-    const active =
-      mode === 'unassigned' ? [] : await this.forms.activeUsers(tx, orgId, rule.userIds ?? []);
+    // People on leave today are never picked (BL-112): a fixed person is replaced by their delegate, a rotation skips them.
+    const active = await ownersAvailable(
+      tx,
+      orgId,
+      mode === 'unassigned' ? [] : await this.forms.activeUsers(tx, orgId, rule.userIds ?? []),
+      mode,
+    );
     if (mode !== 'round_robin' || active.length === 0) return pickOwner({ mode }, active, 0).pick;
     return pickOwner({ mode }, active, await this.forms.takeTurn(tx, orgId, form.id)).pick;
   }

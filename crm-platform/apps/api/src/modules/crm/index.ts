@@ -155,6 +155,8 @@ export type {
 } from './invoicing';
 export type { InvoiceRow } from './invoicing';
 export { InvoicingWorkerModule } from './invoicing/invoicing-worker.module';
+export { OwnerReassignWorkerModule } from './owner-reassign/owner-reassign-worker.module';
+export { ContactAssignmentWorkerModule } from './contact-assignment/contact-assignment-worker.module';
 export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
 export type { PipelineRow, StageRow } from './pipelines';
 export { CONTACT_RESOLVER } from './contact-resolver.port';

@@ -11,7 +11,8 @@
       "copied": "Copiado",
       "retry": "Tentar novamente",
       "loadMore": "Carregar mais",
-      "loadingMore": "Carregando"
+      "loadingMore": "Carregando",
+      "loading": "Carregando"
     },
     "tiers": {
       "owner": "Proprietário",
@@ -95,7 +96,11 @@
       "linkReset": "O e-mail não está configurado neste servidor, então compartilhe este link diretamente com a pessoa. Ele funciona uma única vez.",
       "linkInvite": "O e-mail não está configurado neste servidor, então compartilhe este link diretamente com a pessoa. Ele funciona uma única vez e expira em {days, plural, one {# dia} other {# dias}}.",
       "linkLabel": "Link de uso único",
-      "linkEmail": "E-mail"
+      "linkEmail": "E-mail",
+      "onLeaveUntil": "De licença até {date}",
+      "onLeaveOpen": "De licença",
+      "leaveFrom": "Licença a partir de {date}",
+      "leaveAction": "Licença e substituto"
     },
     "invite": {
       "eyebrow": "Espaço de trabalho",
@@ -214,7 +219,13 @@
       "teamNameTaken": "Já existe uma equipe com esse nome.",
       "teamMemberUnknown": "Uma das pessoas escolhidas não está neste espaço de trabalho.",
       "orgSuspended": "Este espaço de trabalho está suspenso.",
-      "unexpected": "Algo deu errado. Tente novamente em instantes."
+      "unexpected": "Algo deu errado. Tente novamente em instantes.",
+      "leaveOverlap": "Esta pessoa já tem uma licença que coincide em algum dia com estas datas.",
+      "leaveInvalid": "Essas datas não podem ser usadas. O primeiro dia não pode estar no passado, e uma licença já iniciada mantém seu primeiro dia.",
+      "delegateInvalid": "O substituto deve ser outro membro ativo deste espaço de trabalho.",
+      "delegateCycle": "Isso criaria um ciclo: a pessoa escolhida já tem esta pessoa como substituta.",
+      "reassignInvalid": "Nada pôde ser reatribuído. Verifique se a pessoa tem contatos ou negócios em aberto e se o destino pode recebê-los.",
+      "reassignNotRestorable": "Esta reatribuição não pode mais ser desfeita."
     },
     "accept": {
       "title": "Entre no seu espaço de trabalho",
@@ -234,6 +245,81 @@
       "submit": "Aceitar convite",
       "submitting": "Entrando",
       "invalidHeading": "Link do convite"
+    },
+    "leave": {
+      "eyebrow": "Licença e substituto",
+      "calendarNote": "As datas são dias do calendário do seu espaço de trabalho ({timezone}).",
+      "nowTitle": "De licença agora",
+      "upcomingTitle": "Em breve",
+      "notAway": "Não está de licença no momento.",
+      "range": "De {from} a {to}",
+      "rangeOpen": "A partir de {from}, sem data final",
+      "reasonShown": "Motivo (só os gestores veem): {reason}",
+      "endNow": "Encerrar a licença agora",
+      "cancelLeave": "Cancelar a licença",
+      "endTitle": "Encerrar esta licença agora?",
+      "endMessage": "A pessoa volta hoje. A atribuição automática voltará a escolhê-la.",
+      "cancelTitle": "Cancelar esta licença?",
+      "cancelMessage": "Ela ainda não começou. Será removida.",
+      "ended": "Licença encerrada.",
+      "added": "Licença salva.",
+      "readOnly": "Somente a própria pessoa e os gestores podem alterar a licença.",
+      "addTitle": "Adicionar licença",
+      "firstDay": "Primeiro dia",
+      "lastDay": "Último dia",
+      "openEnded": "Sem data final ainda (até alguém encerrar)",
+      "reason": "Motivo (opcional)",
+      "reasonHint": "Somente a pessoa e seus gestores veem isto.",
+      "addSubmit": "Salvar licença",
+      "problems": {
+        "startRequired": "Escolha o primeiro dia.",
+        "startPast": "O primeiro dia não pode estar no passado.",
+        "endRequired": "Escolha o último dia ou marque \"Sem data final\".",
+        "endBeforeStart": "O último dia não pode ser anterior ao primeiro dia."
+      },
+      "delegateTitle": "Substituto",
+      "delegateHelp": "Enquanto esta pessoa está de licença, novos chats e a atribuição automática vão para o substituto se ele estiver disponível; caso contrário, para a equipe.",
+      "noDelegate": "Sem substituto",
+      "delegateSaved": "Substituto salvo.",
+      "delegateRemoved": "Substituto removido.",
+      "delegateAway": "{name} também está de licença, então não pode cobrir agora."
+    },
+    "reassign": {
+      "title": "Reatribuir contatos e negócios",
+      "holds": "{name} é responsável por {contacts, plural, one {# contato} other {# contatos}} e {chats, plural, one {# chat aberto} other {# chats abertos}}.",
+      "target": "Entregar a",
+      "kindUser": "Uma pessoa",
+      "kindDelegate": "O substituto",
+      "kindTeam": "Uma equipe, em rodízio",
+      "person": "Pessoa",
+      "team": "Equipe",
+      "teamHint": "Distribuídos em rodízio entre os membros que estão presentes e não de licença.",
+      "choose": "Escolher",
+      "includeDeals": "Incluir negócios em aberto",
+      "returnOn": "Devolvê-los em {date}, quando a pessoa voltar",
+      "returnUnavailable": "Devolvê-los quando a pessoa voltar (exige uma licença com último dia)",
+      "returnHelp": "Só voltam os contatos e negócios que ninguém alterou desde então. Você também pode desfazer por {days} dias.",
+      "reason": "Observação (opcional)",
+      "submit": "Revisar e reatribuir",
+      "confirmTitle": "Reatribuir agora?",
+      "confirmMessage": "{name} é responsável por {contacts, plural, one {# contato} other {# contatos}} e {deals, plural, one {# negócio em aberto} other {# negócios em aberto}} que serão movidos.",
+      "confirm": "Reatribuir",
+      "done": "{contacts, plural, one {# contato movido} other {# contatos movidos}} e {deals, plural, one {# negócio movido} other {# negócios movidos}}.",
+      "history": "Reatribuições anteriores",
+      "historyEmpty": "Nada foi reatribuído ainda.",
+      "status": {
+        "applied": "Movido",
+        "restored": "Devolvido",
+        "restore_blocked": "Não devolvido"
+      },
+      "summary": "{contacts} contatos e {deals} negócios para {target}",
+      "returnsOn": "volta em {date}",
+      "restoredSummary": "{restored} devolvidos, {skipped} ficam onde estão",
+      "remaining": "Faltam {count} para mover: execute novamente",
+      "undo": "Desfazer",
+      "undoTitle": "Desfazer esta reatribuição?",
+      "undoMessage": "Contatos e negócios que ninguém alterou desde então voltam ao responsável anterior. Os demais ficam onde estão.",
+      "restored": "{count} devolvidos, {skipped} ficam onde estão."
     }
   }
 }

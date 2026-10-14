@@ -360,6 +360,11 @@
         "description": "Her temsilcinin bugün, bu hafta veya bu ay ne kadar hızlı yanıtlayıp çözdüğünü görün.",
         "keywords": "raporlar, analiz, temsilciler, yanıt süresi, ilk yanıt, çözüldü, iş yükü, performans"
       },
+      "contact-assignment": {
+        "label": "Kişi atama",
+        "description": "Yeni kişileri ve fırsatları izinli olanları atlayarak otomatik olarak doğru kişiye verin.",
+        "keywords": "atama, sahip, sıralı dağıtım, yeni kişi, yeni fırsat, izin, potansiyel müşteri yönlendirme"
+      },
       "privacy-requests": {
         "label": "Veri talepleri",
         "description": "Haklarında ne tuttuğunuzu soranlara yanıt verin: kimlik kontrolü, dışa aktarma, önizlemeli silme ve saklayabileceğiniz bir kanıt.",

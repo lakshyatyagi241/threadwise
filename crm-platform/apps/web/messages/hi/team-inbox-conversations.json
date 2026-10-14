@@ -448,7 +448,9 @@
         "unassign": "असाइनमेंट हटाएं",
         "open": "{count} खुली",
         "pickTeam": "इस बातचीत के लिए टीम चुनें",
-        "noTeam": "कोई टीम नहीं"
+        "noTeam": "कोई टीम नहीं",
+        "onLeave": "छुट्टी पर",
+        "onLeaveUntil": "{date} तक छुट्टी पर"
       },
       "presence": {
         "online": "ऑनलाइन",
@@ -933,7 +935,9 @@
       },
       "tag": "टैग",
       "tagAdd": "टैग जोड़ें",
-      "tagRemove": "टैग हटाएँ"
+      "tagRemove": "टैग हटाएँ",
+      "onLeave": "छुट्टी पर",
+      "onLeaveUntil": "{date} तक छुट्टी पर"
     },
     "tags": {
       "tag": "टैग",

@@ -11,7 +11,8 @@
       "copied": "Skopiowano",
       "retry": "Spróbuj ponownie",
       "loadMore": "Wczytaj więcej",
-      "loadingMore": "Wczytywanie"
+      "loadingMore": "Wczytywanie",
+      "loading": "Ładowanie"
     },
     "tiers": {
       "owner": "Właściciel",
@@ -95,7 +96,11 @@
       "linkReset": "E-mail nie jest skonfigurowany na tym serwerze, więc przekaż mu ten link bezpośrednio. Działa jednorazowo.",
       "linkInvite": "E-mail nie jest skonfigurowany na tym serwerze, więc przekaż mu ten link bezpośrednio. Działa jednorazowo i wygasa po {days, plural, one {# dniu} few {# dniach} many {# dniach} other {# dniu}}.",
       "linkLabel": "Link jednorazowy",
-      "linkEmail": "E-mail"
+      "linkEmail": "E-mail",
+      "onLeaveUntil": "Na urlopie do {date}",
+      "onLeaveOpen": "Na urlopie",
+      "leaveFrom": "Urlop od {date}",
+      "leaveAction": "Urlop i zastępstwo"
     },
     "invite": {
       "eyebrow": "Przestrzeń robocza",
@@ -214,7 +219,13 @@
       "teamNameTaken": "Zespół o tej nazwie już istnieje.",
       "teamMemberUnknown": "Jedna z wybranych osób nie jest w tej przestrzeni roboczej.",
       "orgSuspended": "Ta przestrzeń robocza jest zawieszona.",
-      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "leaveOverlap": "Ta osoba ma już urlop, który obejmuje co najmniej jeden dzień z tych dat.",
+      "leaveInvalid": "Tych dat nie można użyć. Pierwszy dzień nie może być w przeszłości, a rozpoczęty urlop zachowuje swój pierwszy dzień.",
+      "delegateInvalid": "Zastępca musi być innym aktywnym członkiem tego obszaru roboczego.",
+      "delegateCycle": "Powstałoby koło zależności: wybrana osoba ma już tę osobę jako swojego zastępcę.",
+      "reassignInvalid": "Nie udało się nic przypisać ponownie. Sprawdź, czy ta osoba ma kontakty lub otwarte transakcje i czy docelowy właściciel może je przejąć.",
+      "reassignNotRestorable": "Tego ponownego przypisania nie można już cofnąć."
     },
     "accept": {
       "title": "Dołącz do swojej przestrzeni roboczej",
@@ -234,6 +245,81 @@
       "submit": "Zaakceptuj zaproszenie",
       "submitting": "Przetwarzanie…",
       "invalidHeading": "Link do zaproszenia"
+    },
+    "leave": {
+      "eyebrow": "Urlop i zastępstwo",
+      "calendarNote": "Daty to dni w kalendarzu Twojego obszaru roboczego ({timezone}).",
+      "nowTitle": "Aktualnie na urlopie",
+      "upcomingTitle": "Nadchodzące",
+      "notAway": "Obecnie nie jest na urlopie.",
+      "range": "{from} do {to}",
+      "rangeOpen": "Od {from}, bez daty końca",
+      "reasonShown": "Powód (widoczny tylko dla menedżerów): {reason}",
+      "endNow": "Zakończ urlop teraz",
+      "cancelLeave": "Anuluj urlop",
+      "endTitle": "Zakończyć ten urlop teraz?",
+      "endMessage": "Osoba wraca dziś. Automatyczne przypisywanie znów zacznie ją wybierać.",
+      "cancelTitle": "Anulować ten urlop?",
+      "cancelMessage": "Jeszcze się nie rozpoczął. Zostanie usunięty.",
+      "ended": "Urlop zakończony.",
+      "added": "Urlop zapisany.",
+      "readOnly": "Urlop mogą zmieniać tylko sama osoba i menedżerowie.",
+      "addTitle": "Dodaj urlop",
+      "firstDay": "Pierwszy dzień",
+      "lastDay": "Ostatni dzień",
+      "openEnded": "Na razie bez daty końca (do czasu, aż ktoś go zakończy)",
+      "reason": "Powód (opcjonalnie)",
+      "reasonHint": "Widoczny tylko dla tej osoby i jej menedżerów.",
+      "addSubmit": "Zapisz urlop",
+      "problems": {
+        "startRequired": "Wybierz pierwszy dzień.",
+        "startPast": "Pierwszy dzień nie może być w przeszłości.",
+        "endRequired": "Wybierz ostatni dzień lub zaznacz „Bez daty końca”.",
+        "endBeforeStart": "Ostatni dzień nie może być przed pierwszym dniem."
+      },
+      "delegateTitle": "Zastępca",
+      "delegateHelp": "Gdy ta osoba jest na urlopie, nowe czaty i automatyczne przypisywanie trafiają do jej zastępcy, jeśli jest dostępny, a w przeciwnym razie do zespołu.",
+      "noDelegate": "Brak zastępcy",
+      "delegateSaved": "Zastępca zapisany.",
+      "delegateRemoved": "Zastępca usunięty.",
+      "delegateAway": "{name} też jest na urlopie, więc nie może teraz zastępować."
+    },
+    "reassign": {
+      "title": "Przypisz ponownie kontakty i transakcje",
+      "holds": "{name} opiekuje się: {contacts, plural, one {# kontaktem} other {# kontaktami}} i {chats, plural, one {# otwartym czatem} other {# otwartymi czatami}}.",
+      "target": "Przekaż do",
+      "kindUser": "Osoba",
+      "kindDelegate": "Jej zastępca",
+      "kindTeam": "Zespół, po kolei",
+      "person": "Osoba",
+      "team": "Zespół",
+      "teamHint": "Rozdzielane po kolei między członków, którzy są obecni i nie są na urlopie.",
+      "choose": "Wybierz",
+      "includeDeals": "Uwzględnij otwarte transakcje",
+      "returnOn": "Przywróć {date}, gdy osoba wróci",
+      "returnUnavailable": "Przywróć, gdy osoba wróci (wymaga urlopu z ostatnim dniem)",
+      "returnHelp": "Wracają tylko kontakty i transakcje, których od tego czasu nikt nie zmienił. Możesz też cofnąć w ciągu {days} dni.",
+      "reason": "Notatka (opcjonalnie)",
+      "submit": "Sprawdź i przypisz ponownie",
+      "confirmTitle": "Przypisać ponownie teraz?",
+      "confirmMessage": "{name} opiekuje się: {contacts, plural, one {# kontaktem} other {# kontaktami}} i {deals, plural, one {# otwartą transakcją} other {# otwartymi transakcjami}}, które zostaną przeniesione.",
+      "confirm": "Przypisz ponownie",
+      "done": "Przeniesiono: {contacts, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}} i {deals, plural, one {# transakcję} few {# transakcje} many {# transakcji} other {# transakcji}}.",
+      "history": "Wcześniejsze przypisania",
+      "historyEmpty": "Nic jeszcze nie zostało przypisane ponownie.",
+      "status": {
+        "applied": "Przeniesiono",
+        "restored": "Przywrócono",
+        "restore_blocked": "Nie przywrócono"
+      },
+      "summary": "Kontakty: {contacts}, transakcje: {deals} — do: {target}",
+      "returnsOn": "wraca {date}",
+      "restoredSummary": "Przywrócono: {restored}, pozostawiono: {skipped}",
+      "remaining": "Do przeniesienia zostało: {count}. Uruchom ponownie",
+      "undo": "Cofnij",
+      "undoTitle": "Cofnąć to ponowne przypisanie?",
+      "undoMessage": "Kontakty i transakcje, których od tego czasu nikt nie zmienił, wrócą do poprzedniego właściciela. Pozostałe zostaną tam, gdzie są.",
+      "restored": "Przywrócono: {count}, pozostawiono: {skipped}."
     }
   }
 }

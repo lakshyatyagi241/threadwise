@@ -11,7 +11,8 @@
       "copied": "コピーしました",
       "retry": "再試行",
       "loadMore": "さらに読み込む",
-      "loadingMore": "読み込み中"
+      "loadingMore": "読み込み中",
+      "loading": "読み込み中"
     },
     "tiers": {
       "owner": "オーナー",
@@ -95,7 +96,11 @@
       "linkReset": "このサーバーではメールが設定されていないため、このリンクを直接共有してください。一度だけ使用できます。",
       "linkInvite": "このサーバーではメールが設定されていないため、このリンクを直接共有してください。一度だけ使用でき、{days, plural, other {# 日}}後に期限切れになります。",
       "linkLabel": "使い捨てリンク",
-      "linkEmail": "メール"
+      "linkEmail": "メール",
+      "onLeaveUntil": "{date}まで休暇中",
+      "onLeaveOpen": "休暇中",
+      "leaveFrom": "{date}から休暇",
+      "leaveAction": "休暇と代理人"
     },
     "invite": {
       "eyebrow": "ワークスペース",
@@ -214,7 +219,13 @@
       "teamNameTaken": "同じ名前のチームが既に存在します。",
       "teamMemberUnknown": "選択した人の1人が、このワークスペースに所属していません。",
       "orgSuspended": "このワークスペースは停止中です。",
-      "unexpected": "問題が発生しました。少し待ってから、もう一度お試しください。"
+      "unexpected": "問題が発生しました。少し待ってから、もう一度お試しください。",
+      "leaveOverlap": "この人には、指定した日付と重なる休暇がすでにあります。",
+      "leaveInvalid": "指定した日付は使用できません。初日は過去にできず、すでに始まっている休暇の初日は変更できません。",
+      "delegateInvalid": "代理人は、このワークスペースの別のアクティブなメンバーである必要があります。",
+      "delegateCycle": "循環してしまいます。選択した人は、すでにこの人を代理人にしています。",
+      "reassignInvalid": "再割り当てできるものがありませんでした。この人がコンタクトまたは未完了の商談を持っていること、移行先が引き受けられることを確認してください。",
+      "reassignNotRestorable": "この再割り当ては元に戻せなくなりました。"
     },
     "accept": {
       "title": "ワークスペースに参加",
@@ -234,6 +245,81 @@
       "submit": "招待を承諾",
       "submitting": "参加中",
       "invalidHeading": "招待リンク"
+    },
+    "leave": {
+      "eyebrow": "休暇と代理人",
+      "calendarNote": "日付はワークスペースのカレンダー（{timezone}）の日です。",
+      "nowTitle": "現在の休暇",
+      "upcomingTitle": "今後の予定",
+      "notAway": "現在は休暇中ではありません。",
+      "range": "{from}から{to}まで",
+      "rangeOpen": "{from}から（終了日なし）",
+      "reasonShown": "理由（マネージャーのみ表示）: {reason}",
+      "endNow": "休暇を今すぐ終了",
+      "cancelLeave": "休暇をキャンセル",
+      "endTitle": "この休暇を今すぐ終了しますか？",
+      "endMessage": "本人は今日から復帰します。自動割り当ての対象に再び含まれます。",
+      "cancelTitle": "この休暇をキャンセルしますか？",
+      "cancelMessage": "まだ始まっていないため、削除されます。",
+      "ended": "休暇を終了しました。",
+      "added": "休暇を保存しました。",
+      "readOnly": "休暇を変更できるのは、本人とマネージャーのみです。",
+      "addTitle": "休暇を追加",
+      "firstDay": "初日",
+      "lastDay": "最終日",
+      "openEnded": "終了日は未定（誰かが終了するまで）",
+      "reason": "理由（任意）",
+      "reasonHint": "本人とそのマネージャーのみに表示されます。",
+      "addSubmit": "休暇を保存",
+      "problems": {
+        "startRequired": "初日を選択してください。",
+        "startPast": "初日は過去にできません。",
+        "endRequired": "最終日を選択するか、「終了日なし」にチェックを入れてください。",
+        "endBeforeStart": "最終日は初日より前にできません。"
+      },
+      "delegateTitle": "代理人",
+      "delegateHelp": "この人が休暇中は、新しいチャットと自動割り当てが、代理人が対応可能であれば代理人に、そうでなければチームに振り分けられます。",
+      "noDelegate": "代理人なし",
+      "delegateSaved": "代理人を保存しました。",
+      "delegateRemoved": "代理人を削除しました。",
+      "delegateAway": "{name}も休暇中のため、現在は代理を務められません。"
+    },
+    "reassign": {
+      "title": "コンタクトと商談を再割り当て",
+      "holds": "{name}は{contacts, plural, other {#件のコンタクト}}と{chats, plural, other {#件の対応中チャット}}を担当しています。",
+      "target": "割り当て先",
+      "kindUser": "個人",
+      "kindDelegate": "その人の代理人",
+      "kindTeam": "チーム（ラウンドロビン）",
+      "person": "担当者",
+      "team": "チーム",
+      "teamHint": "出勤中で休暇中でないメンバーに、順番に振り分けられます。",
+      "choose": "選択",
+      "includeDeals": "未完了の商談も含める",
+      "returnOn": "本人が復帰する{date}に元に戻す",
+      "returnUnavailable": "本人が復帰したときに元に戻す（最終日のある休暇が必要です）",
+      "returnHelp": "それ以降に誰も変更していないコンタクトと商談のみが戻ります。{days}日間は手動で元に戻すこともできます。",
+      "reason": "メモ（任意）",
+      "submit": "確認して再割り当て",
+      "confirmTitle": "今すぐ再割り当てしますか？",
+      "confirmMessage": "{name}の{contacts, plural, other {#件のコンタクト}}と{deals, plural, other {#件の未完了の商談}}が移動します。",
+      "confirm": "再割り当て",
+      "done": "{contacts, plural, other {#件のコンタクト}}と{deals, plural, other {#件の商談}}を移動しました。",
+      "history": "過去の再割り当て",
+      "historyEmpty": "再割り当てはまだありません。",
+      "status": {
+        "applied": "移動済み",
+        "restored": "戻し済み",
+        "restore_blocked": "戻せませんでした"
+      },
+      "summary": "コンタクト{contacts}件と商談{deals}件を{target}へ",
+      "returnsOn": "{date}に戻ります",
+      "restoredSummary": "{restored}件を戻し、{skipped}件はそのままです",
+      "remaining": "あと{count}件を移動する必要があります。もう一度実行してください",
+      "undo": "元に戻す",
+      "undoTitle": "この再割り当てを元に戻しますか？",
+      "undoMessage": "それ以降に誰も変更していないコンタクトと商談は、以前の担当者に戻ります。その他はそのままです。",
+      "restored": "{count}件を戻し、{skipped}件はそのままです。"
     }
   }
 }

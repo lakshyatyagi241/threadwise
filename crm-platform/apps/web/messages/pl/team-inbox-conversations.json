@@ -448,7 +448,9 @@
         "unassign": "Cofnij przypisanie",
         "open": "{count} otwartych",
         "pickTeam": "Wybierz zespół dla tej rozmowy",
-        "noTeam": "Brak zespołu"
+        "noTeam": "Brak zespołu",
+        "onLeave": "Na urlopie",
+        "onLeaveUntil": "Na urlopie do {date}"
       },
       "presence": {
         "online": "Online",
@@ -933,7 +935,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Dodaj tag",
-      "tagRemove": "Usuń tag"
+      "tagRemove": "Usuń tag",
+      "onLeave": "na urlopie",
+      "onLeaveUntil": "na urlopie do {date}"
     },
     "tags": {
       "tag": "Tag",

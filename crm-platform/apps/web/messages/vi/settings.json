@@ -360,6 +360,11 @@
         "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
         "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
       },
+      "contact-assignment": {
+        "label": "Phân công liên hệ",
+        "description": "Tự động giao liên hệ và deal mới cho đúng người, bỏ qua những người đang nghỉ phép.",
+        "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, deal mới, nghỉ phép, định tuyến lead"
+      },
       "privacy-requests": {
         "label": "Yêu cầu dữ liệu",
         "description": "Trả lời những người hỏi bạn đang giữ gì về họ: kiểm tra danh tính, xuất, xóa có xem trước và bằng chứng bạn có thể lưu giữ.",

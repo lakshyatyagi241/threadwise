@@ -22,6 +22,8 @@ import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
+  OwnerReassignWorkerModule,
+  ContactAssignmentWorkerModule,
   SalesDocsWorkerModule,
   SegmentsWorkerModule,
   TasksWorkerModule,
@@ -82,6 +84,8 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     SegmentsWorkerModule,
     SalesDocsWorkerModule,
     InvoicingWorkerModule,
+    OwnerReassignWorkerModule,
+    ContactAssignmentWorkerModule,
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,

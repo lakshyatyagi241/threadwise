@@ -360,6 +360,11 @@
         "description": "Voyez la rapidité de chaque agent à répondre et résoudre aujourd'hui, cette semaine ou ce mois-ci.",
         "keywords": "rapports, analyses, agents, temps de réponse, première réponse, résolues, charge, performance"
       },
+      "contact-assignment": {
+        "label": "Attribution des contacts",
+        "description": "Attribuez automatiquement les nouveaux contacts et affaires à la bonne personne, en ignorant les personnes en congé.",
+        "keywords": "attribuer, propriétaire, round robin, tourniquet, nouveau contact, nouvelle affaire, congé, absence, routage des leads"
+      },
       "privacy-requests": {
         "label": "Demandes de données",
         "description": "Répondez aux personnes qui demandent ce que vous détenez sur elles : vérification d'identité, export, effacement avec aperçu et une preuve à conserver.",

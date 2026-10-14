@@ -1,6 +1,6 @@
 # Contact owner: leave, delegation and auto-assignment (design only)
 
-Status: **spec, nothing built** (backlog BL-112, related BL-013). Written 2026-10-13 next to the owner screens (BL-111), which give every
+Status: **phases 1 to 3 built (leave, delegate, routing integration; reassign batches with opt-in restore; contact and deal auto-assignment)** (backlog BL-112, related BL-013). Written 2026-10-13 next to the owner screens (BL-111), which give every
 contact one owner and a manual way to move many contacts at once. This note is about what the product does when the owner is not there.
 
 ## 1. The problem
@@ -112,3 +112,52 @@ with the record scope rules of `assertOwnerWithinScope`.
    on leave still receive deals already in progress?
 8. **Plans:** is any of this plan-gated (for example assignment rules on the higher plans)?
 9. **Reporting:** is a "workload by owner" view (contacts, open deals, overdue tasks) needed before reassigning?
+
+## 10. Owner decisions (2026-10-14) and what is built
+
+Decisions: (1) reassigning on leave is **manual by default**, with an **optional automatic delegate per person**; (2) a contact keeps a **single owner**
+(no team column, no multi-owner); (3) **restore after leave is opt-in per reassign operation** and returns only the contacts that were NOT changed since.
+Section 7 questions 1 to 3 are answered by these.
+
+### Phase 1: built
+- Tables `member_leaves` (date range in the workspace calendar, open end allowed, reason, status scheduled/active/ended/cancelled, exclusion constraint
+  against overlapping leaves of one person, one active row per member) and `member_delegates` (one per member, composite FKs, no self). Differences from the
+  sketch in section 3: two tables instead of `user_availability`; the existing `agent_statuses` (online/away/busy/offline) is untouched, "on leave" is
+  derived from the dates and combined with it.
+- "On leave now" is **derived from the dates** (`starts_on <= today <= ends_on` in the workspace time zone, UTC when none), never from `status`, so routing is
+  right between two sweeps; the worker sweep (every 5 min) flips the status and writes `member.leave.started|ended`. `member.delegate.changed` on delegate edits.
+- Permissions: `team.leave.read` (all presets), `team.leave.manage` with record scope: `own` for Agent and Viewer (self-service), `all` for Manager and above
+  (`team` scope = teammates). The reason is visible to the person and to whoever may manage that person, not to colleagues (answers question 5).
+- Delegate: another **active** member of the same workspace, not self, **no cycles** (chain walk), one hop only at use time.
+- Routing (`RoutingEngine`, `available()`): people on leave are never picked. A rule that **names** an absent person uses their delegate (active, present,
+  can open the inbox) ahead of the rule's teams; otherwise the team pool; otherwise the chat stays unassigned and the leads get `assignment_blocked_by_leave`
+  (event `routing.blocked_by_leave`). "Keep returning contacts with their agent" hands an absent owner's contact to the delegate, else falls to the rules.
+  A manual assignment to someone on leave stays allowed (the picker greys them: "On leave until <date>"). Unchanged for people not on leave.
+- Notice: `member_leave_started` to holders of `team.leave.manage` (scope all), with owned contacts and open chats and a link to `/team-members?member=<id>&reassign=1`.
+- Intended differences from the sketch: no read access for the delegate to the absent owner's contacts (section 2.3) and no notification forwarding yet;
+  the lightweight cover is routing only. Recorded as follow-ups below.
+
+### Phase 2: reassign on demand with restore (built)
+Design chosen after weighing two ways to know "not changed since": (a) `owner_batch_id` + `owner_changed_at` columns on `contacts` (and `deals`) maintained by a
+BEFORE UPDATE trigger that stamps them whenever `owner_id` changes, reading the batch id from a session setting that only the batch code sets; any other path
+(single edit, bulk, import, merge, auto-assignment) therefore clears it without needing to be edited; (b) reading the audit trail, rejected because audit rows
+can be pruned and not every path writes one. Choose (a). Table `owner_reassign_batches` (who, from user, to user / delegate / team round-robin, subject,
+counts, reason, `restore_on`, undo window of 14 days, status, restored counts and `skipped_changed`). Restore sets the owner back to `from_user` for rows with
+`owner_batch_id = batch` and `owner_id` still the batch target, one audit row and one event per contact (like `POST /contacts/bulk/owner`), under the caller's
+record scope and `assertOwnerWithinScope`; a restore also skips when `from_user` is no longer active. There is no deals bulk-owner path today, so the batch brings its
+own set-based deal statement. Test the "changed meanwhile" case.
+
+### Phase 3: auto-assignment for contacts and deals, BL-013 (built)
+Priority-ordered rules (conditions: source, country, lifecycle stage, tag, channel, custom property; actions: fixed user, team round-robin, least busy by owned
+open deals/contacts via `agent-picker.ts`), skipping people on leave and optionally offline, per-workspace switch default OFF, never overwrites an explicit owner,
+idempotent, audit `contact.auto_assigned` with the rule id, loop guard, dry-run "test this rule", Settings > Automation > Contact assignment. **Found while
+reading the code:** `forms-builder` (form-submit.service.ts) and `leads` (lead-ingest.service.ts) already pick owners from a user list; they do not yet skip
+people on leave and should call the shared helpers (`common/workspace-calendar.ts`, `common/leave-delegate.ts`) when phase 3 unifies them.
+
+### As built, phases 2 and 3 (what differs from the sketch above)
+- **Restore uses a trigger stamp, not an `owner_reassignments` item table.** `contacts` and `deals` gained `owner_changed_at` and `owner_batch_id`; a BEFORE UPDATE trigger stamps both whenever the owner changes, and the batch announces itself with the transaction setting `app.owner_batch_id`. Restore selects rows still stamped with its batch. Consequence: a contact changed by anyone else (single edit, bulk, import, a later batch, auto-assignment) is skipped and counted in `not_restored`, a deleted one too. Restore is refused (`restore_blocked`) when the person is no longer active.
+- Targets: one person, the person's delegate (refused when none, inactive or on leave), or round robin over a team's present members. Undo for 14 days; an opted-in return (`restore_on`, workspace calendar, set from the leave's last day + 1) is restored by `OwnerRestoreSweepService`. One run moves at most 50,000 contacts and 50,000 open deals; `remaining` says how many are left. Only OPEN deals move (won and lost are history). Deals emit `deal.owner_changed` per deal.
+- Permissions are the existing ones: `record.contacts.update` (+ `record.deals.update` for deals) with the same record-scope rules as a single edit, `team.leave.read` for the history. No new key.
+- Auto-assignment: rules in `assignment_rules` (subject contact or deal), switch and import option in `assignment_settings`, keys `crm.assignment.read|manage` (Manager and above), plan feature `inbox_routing` (the one routing rules use; no new feature added). Fires from the outbox events `contact.created`, `deal.created`, `form.submitted` (only when it created the contact) and `lead.created`; writes only where `owner IS NULL AND owner_changed_at IS NULL`; audit action `contact.auto_assigned` (deals: `deal.auto_assigned`) with the rule id; the engine's own `contact.updated` carries `autoAssigned: true` and the consumer never listens to updates (loop guard). Deal value conditions assume two decimal places.
+- Forms and lead sources keep their own owner rule but now skip people on leave (`common/leave-owner-pool.ts`): a fixed person is replaced by their delegate, a rotation skips them.
+- The delegate gets no extra record access (owner decision: no widening of the record scope).

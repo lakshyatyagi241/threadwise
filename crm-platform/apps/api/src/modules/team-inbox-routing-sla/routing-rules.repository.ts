@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { onLeaveOnSql } from '../../common/workspace-calendar';
 
 type Raw = Record<string, unknown>;
 export type RuleRow = Raw;
@@ -331,6 +332,39 @@ export class RoutingRulesRepository {
     return r ? { id: Number(r.id), uuid: r.uuid as string } : null;
   }
 
+  /** Uuids of these people (internal id to uuid). */
+  async userUuids(tx: Tx, orgId: number, ids: readonly number[]): Promise<Map<number, string>> {
+    if (ids.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT id, uuid FROM users WHERE org_id = ${orgId} AND id IN (${sql.join(
+        ids.map((i) => sql`${i}`),
+        sql`, `,
+      )})`);
+    return new Map(rowsOf(res).map((r) => [Number(r.id), r.uuid as string]));
+  }
+
+  /** The delegate each of these people named, as internal ids (people without one are absent). */
+  async delegatesOf(
+    tx: Tx,
+    orgId: number,
+    userIds: readonly number[],
+  ): Promise<Map<number, { id: number; uuid: string }>> {
+    if (userIds.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT d.user_id, d.delegate_user_id, du.uuid
+      FROM member_delegates d JOIN users du ON du.org_id = d.org_id AND du.id = d.delegate_user_id
+      WHERE d.org_id = ${orgId} AND du.status = 'active' AND d.user_id IN (${sql.join(
+        userIds.map((i) => sql`${i}`),
+        sql`, `,
+      )})`);
+    return new Map(
+      rowsOf(res).map((r) => [
+        Number(r.user_id),
+        { id: Number(r.delegate_user_id), uuid: r.uuid as string },
+      ]),
+    );
+  }
+
   /** (team, person) pairs of these teams, for expanding a rule's teams into people. */
   async teamMembers(
     tx: Tx,
@@ -356,6 +390,7 @@ export class RoutingRulesRepository {
     tx: Tx,
     orgId: number,
     userIds: readonly number[],
+    today: string,
   ): Promise<Array<{ id: number; uuid: string; open: number }>> {
     if (userIds.length === 0) return [];
     const res = await tx.execute(sql`
@@ -371,6 +406,8 @@ export class RoutingRulesRepository {
           sql`, `,
         )})
         AND COALESCE(s.status, 'online') NOT IN ('offline', 'busy')
+        -- on leave today (the workspace's calendar): never picked by routing (BL-112)
+        AND NOT ${onLeaveOnSql('u', today)}
       ORDER BY u.id`);
     return rowsOf(res).map((r) => ({
       id: Number(r.id),

@@ -15,6 +15,7 @@ import { LinkedAppointments } from '@/features/appointments';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useAssignees, useTimeline } from '../api/hooks';
+import { leaveDayText } from '../lib/leave-mark';
 import { eventLabel } from '../lib/timeline';
 import { fullStamp, listTime } from '../lib/time';
 import { CheckCircleIcon, ExternalIcon, NoteIcon, TrashIcon, UserPlusIcon } from './icons';
@@ -219,6 +220,7 @@ function Row({ label, value, ltr }: { label: string; value: string; ltr?: boolea
 
 function AssigneeSection(props: ContactPanelProps) {
   const t = useTranslations('team-inbox-conversations.panel');
+  const locale = useLocale();
   const { detail, can } = props;
   // Anyone who may assign loads the staff list; a person who may only claim needs no list.
   const assignees = useAssignees(can.assign);
@@ -227,6 +229,7 @@ function AssigneeSection(props: ContactPanelProps) {
   const current = detail.assignment.user;
   const currentTeam = detail.assignment.team;
   const resolved = detail.status === 'resolved' || detail.status === 'closed';
+  const awayMark = users.find((u) => u.id === current?.id)?.onLeave ?? null;
   const availability =
     (current && props.presence.get(current.id)) ??
     users.find((u) => u.id === current?.id)?.availability;
@@ -268,6 +271,13 @@ function AssigneeSection(props: ContactPanelProps) {
           <span className="text-muted-foreground">{t('assignee.none')}</span>
         )}
       </p>
+      {awayMark && (
+        <p className="text-xs text-warning" data-testid="inbox-assignee-leave">
+          {awayMark.until
+            ? t('assignee.onLeaveUntil', { date: leaveDayText(awayMark.until, locale) })
+            : t('assignee.onLeave')}
+        </p>
+      )}
       {currentTeam && (
         <p className="text-xs text-muted-foreground">
           {t('assignee.team', { name: currentTeam.name })}
@@ -297,6 +307,9 @@ function AssigneeSection(props: ContactPanelProps) {
                   {u.name ?? u.email}
                   {u.isMe ? ` (${t('assignee.you')})` : ''} ·{' '}
                   {t('assignee.open', { count: u.openConversations })}
+                  {u.onLeave
+                    ? ` · ${u.onLeave.until ? t('assignee.onLeaveUntil', { date: leaveDayText(u.onLeave.until, locale) }) : t('assignee.onLeave')}`
+                    : ''}
                 </option>
               ))}
             </Select>

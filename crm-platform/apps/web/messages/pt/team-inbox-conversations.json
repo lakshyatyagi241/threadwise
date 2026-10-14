@@ -448,7 +448,9 @@
         "unassign": "Remover atribuição",
         "open": "{count} em aberto",
         "pickTeam": "Escolha uma equipe para esta conversa",
-        "noTeam": "Sem equipe"
+        "noTeam": "Sem equipe",
+        "onLeave": "De licença",
+        "onLeaveUntil": "De licença até {date}"
       },
       "presence": {
         "online": "Online",
@@ -933,7 +935,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Adicionar tag",
-      "tagRemove": "Remover tag"
+      "tagRemove": "Remover tag",
+      "onLeave": "de licença",
+      "onLeaveUntil": "de licença até {date}"
     },
     "tags": {
       "tag": "Tag",

@@ -448,7 +448,9 @@
         "unassign": "Rimuovi assegnazione",
         "open": "{count} aperte",
         "pickTeam": "Scegli un team per questa conversazione",
-        "noTeam": "Nessun team"
+        "noTeam": "Nessun team",
+        "onLeave": "In ferie",
+        "onLeaveUntil": "In ferie fino al {date}"
       },
       "presence": {
         "online": "Online",
@@ -933,7 +935,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Aggiungi tag",
-      "tagRemove": "Rimuovi tag"
+      "tagRemove": "Rimuovi tag",
+      "onLeave": "in ferie",
+      "onLeaveUntil": "in ferie fino al {date}"
     },
     "tags": {
       "tag": "Tag",

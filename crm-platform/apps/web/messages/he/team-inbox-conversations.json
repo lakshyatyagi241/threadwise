@@ -448,7 +448,9 @@
         "unassign": "בטל שיוך",
         "open": "{count} פתוחות",
         "pickTeam": "בחר צוות לשיחה זו",
-        "noTeam": "ללא צוות"
+        "noTeam": "ללא צוות",
+        "onLeave": "בחופשה",
+        "onLeaveUntil": "בחופשה עד {date}"
       },
       "presence": {
         "online": "מחובר",
@@ -933,7 +935,9 @@
       },
       "tag": "תגית",
       "tagAdd": "הוספת תגית",
-      "tagRemove": "הסרת תגית"
+      "tagRemove": "הסרת תגית",
+      "onLeave": "בחופשה",
+      "onLeaveUntil": "בחופשה עד {date}"
     },
     "tags": {
       "tag": "תגית",

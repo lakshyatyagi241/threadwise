@@ -448,7 +448,9 @@
         "unassign": "Désassigner",
         "open": "{count} en cours",
         "pickTeam": "Choisir une équipe pour cette conversation",
-        "noTeam": "Aucune équipe"
+        "noTeam": "Aucune équipe",
+        "onLeave": "En congé",
+        "onLeaveUntil": "En congé jusqu’au {date}"
       },
       "presence": {
         "online": "En ligne",
@@ -933,7 +935,9 @@
       },
       "tag": "Étiquette",
       "tagAdd": "Ajouter une étiquette",
-      "tagRemove": "Retirer une étiquette"
+      "tagRemove": "Retirer une étiquette",
+      "onLeave": "en congé",
+      "onLeaveUntil": "en congé jusqu’au {date}"
     },
     "tags": {
       "tag": "Étiquette",

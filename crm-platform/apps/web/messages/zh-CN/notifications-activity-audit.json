@@ -358,6 +358,14 @@
         "sla_breached": {
           "label": "SLA 已超时",
           "hint": "您负责的会话错过了首次回复或解决目标。"
+        },
+        "member_leave_started": {
+          "label": "成员已开始休假",
+          "hint": "您团队的一名成员开始休假。显示其负责的内容和重新分配的链接。"
+        },
+        "assignment_blocked_by_leave": {
+          "label": "无人能接的聊天",
+          "hint": "由于所选人员正在休假，路由没有为新聊天找到负责人。请手动分配。"
         }
       },
       "loading": "正在加载你的偏好设置",
