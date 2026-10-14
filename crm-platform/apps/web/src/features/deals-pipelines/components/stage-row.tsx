@@ -103,6 +103,13 @@ export interface StageRowProps {
   onDelete: (stage: Stage) => void;
 }
 
+/**
+ * Column template shared by the header row and every stage row (md and up), so the type select, the win probability and the deal
+ * count sit directly under each other whatever the select's current label is. Below md the row wraps as a flex line.
+ */
+export const STAGE_GRID_COLS =
+  'md:grid md:grid-cols-[1.5rem_2.25rem_minmax(6rem,1fr)_6.5rem_7rem_5rem_2.25rem] md:gap-2';
+
 /** One stage of the pipeline: colour, name, win probability, kind (open, won, lost), order arrows and delete. */
 export function StageRow({
   stage,
@@ -142,14 +149,14 @@ export function StageRow({
   const fixed = stage.kind !== 'open';
   return (
     <li className="rounded-lg border border-border bg-background p-3">
-      <div className="flex flex-wrap items-center gap-2">
+      <div className={`flex flex-wrap items-center gap-2 ${STAGE_GRID_COLS}`}>
         <div className="flex flex-col">
           <button
             type="button"
             disabled={disabled || index === 0}
             aria-label={t('moveUp', { name: stage.name })}
             onClick={() => onMove(index, index - 1)}
-            className="flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30"
+            className="flex size-6 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30"
           >
             <ChevronUpIcon className="size-3.5" />
           </button>
@@ -158,7 +165,7 @@ export function StageRow({
             disabled={disabled || index === count - 1}
             aria-label={t('moveDown', { name: stage.name })}
             onClick={() => onMove(index, index + 1)}
-            className="flex size-5 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30"
+            className="flex size-6 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30"
           >
             <ChevronDownIcon className="size-3.5" />
           </button>
@@ -176,7 +183,7 @@ export function StageRow({
           disabled={disabled}
           aria-label={t('stageName')}
           invalid={problems.includes('nameRequired') || problems.includes('nameTooLong')}
-          className="min-w-40 flex-1"
+          className="min-w-40 flex-1 md:min-w-0"
           onBlur={(e) => commit({ name: e.target.value })}
           onKeyDown={(e) => {
             if (e.key === 'Enter') e.currentTarget.blur();
@@ -187,7 +194,7 @@ export function StageRow({
           title={stage.dealCount > 0 ? t('kindLocked') : undefined}
           disabled={disabled || stage.dealCount > 0}
           value={stage.kind}
-          className="w-auto min-w-28"
+          className="w-auto min-w-28 md:w-full md:min-w-0"
           onChange={(e) => commit({ kind: e.target.value as StageKind })}
         >
           {KINDS.map((k) => (
@@ -197,6 +204,7 @@ export function StageRow({
           ))}
         </Select>
         <div className="flex items-center gap-1">
+          <span className="text-xs text-muted-foreground md:hidden">{t('probability')}</span>
           <Input
             key={`${stage.id}:${stage.probability}`}
             type="number"
@@ -211,7 +219,7 @@ export function StageRow({
           />
           <span className="text-sm text-muted-foreground">%</span>
         </div>
-        <span className="text-xs text-muted-foreground tabular-nums">
+        <span className="text-xs text-muted-foreground whitespace-nowrap tabular-nums border-s border-border ps-3">
           {t('dealCount', { count: stage.dealCount })}
         </span>
         <button
