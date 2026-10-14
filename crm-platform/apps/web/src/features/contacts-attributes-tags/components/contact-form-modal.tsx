@@ -8,7 +8,7 @@ import {
   Button,
   Field,
   Input,
-  Modal,
+  Drawer,
   Select,
   Spinner,
   Switch,
@@ -73,17 +73,26 @@ export interface ContactFormModalProps {
   onSaved?: (contact: ContactRow) => void;
 }
 
-/** Add / edit contact (TW-CON-009, 010). The form is mounted only while open, so it always starts from the contact's saved state. */
+/** Add / edit contact (TW-CON-009, 010), in a drawer from the side. The form is mounted only while open, so it always starts from the contact's saved state. */
 export function ContactFormModal({ open, contact, onClose, onSaved }: ContactFormModalProps) {
   const t = useTranslations('contacts-attributes-tags.form');
   return (
-    <Modal
+    <Drawer
       open={open}
       onClose={onClose}
-      size="lg"
-      eyebrow={contact ? t('editEyebrow') : t('addEyebrow')}
-      title={contact ? t('editTitle') : t('addTitle')}
+      title={
+        <span className="block">
+          <span
+            aria-hidden="true"
+            className="block font-mono text-[10px] font-normal uppercase tracking-[0.14em] text-muted-foreground"
+          >
+            {contact ? t('editEyebrow') : t('addEyebrow')}
+          </span>
+          {contact ? t('editTitle') : t('addTitle')}
+        </span>
+      }
       closeLabel={t('close')}
+      className="w-[min(44rem,100vw)]"
     >
       {open && (
         <ContactForm
@@ -93,7 +102,7 @@ export function ContactFormModal({ open, contact, onClose, onSaved }: ContactFor
           onSaved={onSaved}
         />
       )}
-    </Modal>
+    </Drawer>
   );
 }
 
@@ -750,7 +759,7 @@ function ContactForm({
         }}
       />
 
-      <div className="flex justify-end gap-2 border-t border-border pt-4">
+      <div className="sticky bottom-0 z-10 -mx-5 -mb-4 flex justify-end gap-2 border-t border-border bg-background px-5 py-3">
         <Button variant="secondary" onClick={onClose} disabled={save.isPending}>
           {t('cancel')}
         </Button>
