@@ -5,9 +5,10 @@ import { useTranslations } from 'next-intl';
 import type { CampaignBuilder, ComposeTemplate, WizardTemplate } from '@crm/contracts';
 import type { PreviewModel } from '@/features/message-templates/lib/form-model';
 import { editorType, type BuilderForm } from '../../lib/builder-model';
-import { isLimitedEngine } from '../../lib/engine-gate';
+import { isEmailEngine, isLimitedEngine } from '../../lib/engine-gate';
 import { previewModelOf } from '../../wizard/lib/templates';
 import { BroadcastPreview } from './broadcast-preview';
+import { EmailPreview } from './email-preview';
 
 const BUTTON_KIND: Record<string, PreviewModel['buttons'][number]['kind']> = {
   url: 'url',
@@ -115,6 +116,7 @@ export function LivePreview({
         ? t('recurring')
         : t('scheduled');
   const initial = (senderLabel ?? '').trim().charAt(0) || 'W';
+  const email = isEmailEngine(engine);
 
   return (
     <aside
@@ -125,30 +127,42 @@ export function LivePreview({
           : 'space-y-4 xl:sticky xl:top-20'
       }
     >
-      <BroadcastPreview
-        title={guided ? t('broadcastTitle') : t('title')}
-        subtitle={
-          guided || kind === 'template'
-            ? t('templateMessage')
-            : kind === 'flow'
-              ? t('type.flow')
-              : t('customMessage')
-        }
-        initial={guided ? 'WA' : initial}
-        a={a}
-        {...(b !== undefined ? { b } : {})}
-        placeholder={placeholder}
-      />
+      {email ? (
+        <EmailPreview
+          from={senderLabel}
+          subject={form.customHeader}
+          campaignName={form.name}
+          body={form.customMessage}
+        />
+      ) : (
+        <BroadcastPreview
+          title={guided ? t('broadcastTitle') : t('title')}
+          subtitle={
+            guided || kind === 'template'
+              ? t('templateMessage')
+              : kind === 'flow'
+                ? t('type.flow')
+                : t('customMessage')
+          }
+          initial={guided ? 'WA' : initial}
+          a={a}
+          {...(b !== undefined ? { b } : {})}
+          placeholder={placeholder}
+        />
+      )}
       <p className="px-1 text-[11px] text-muted-foreground">
-        {senderLabel ? t('from', { sender: senderLabel }) : t('note')}
+        {senderLabel ? t('from', { sender: senderLabel }) : email ? t('emailNote') : t('note')}
       </p>
 
       <dl className="grid grid-cols-2 gap-3">
         {[
           [t('recipients'), String(recipients)],
           [t('schedule'), schedule],
-          [t('typeLabel'), typeWord],
-          [t('ab'), form.abTesting ? `${form.abSplit}/${100 - form.abSplit}` : t('off')],
+          [t('typeLabel'), email ? t('typeEmail') : typeWord],
+          // A mail has no split test, so its tile is not shown.
+          ...(email
+            ? []
+            : [[t('ab'), form.abTesting ? `${form.abSplit}/${100 - form.abSplit}` : t('off')]]),
         ].map(([k, v]) => (
           <div key={k} className="rounded-xl border border-border bg-background p-3">
             <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">

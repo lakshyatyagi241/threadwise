@@ -19,6 +19,7 @@ export interface SenderEmpty {
 export const NUMBERS_HREF = '/channels/whatsapp';
 export const DEVICES_HREF = '/devices';
 export const SMS_HREF = '/sms';
+export const EMAIL_HREF = '/email';
 
 const matching = (hidden: readonly SenderHidden[], f: (h: SenderHidden) => boolean) =>
   hidden.filter(f);
@@ -27,13 +28,14 @@ const sum = (rows: readonly SenderHidden[]) => rows.reduce((n, h) => n + h.count
 const hrefOf = (rows: readonly SenderHidden[]) =>
   rows.length > 0 && rows.every((h) => isUnofficialEngine(h.engine)) ? DEVICES_HREF : NUMBERS_HREF;
 
-/** `sms` is the SMS card: every cause is fixed on the SMS screen. */
+/** `sms` is the SMS card: every cause is fixed on the SMS screen. `email` is the Email card: every cause is fixed on the Email screen. */
 export function senderEmpty(
   hidden: readonly SenderHidden[] | undefined,
-  o: { sms?: boolean } = {},
+  o: { sms?: boolean; email?: boolean } = {},
 ): SenderEmpty {
   const list = hidden ?? [];
-  const fallback = o.sms ? SMS_HREF : NUMBERS_HREF;
+  const own = o.sms || o.email;
+  const fallback = o.sms ? SMS_HREF : o.email ? EMAIL_HREF : NUMBERS_HREF;
   const rowsOf = (reason: SenderHidden['reason']) => matching(list, (h) => h.reason === reason);
   const steps: Array<[SenderHidden['reason'], SenderEmptyCause]> = [
     ['pending', 'pending'],
@@ -48,7 +50,7 @@ export function senderEmpty(
     return {
       cause,
       count: sum(rows),
-      href: o.sms || cause === 'personal_off' ? fallback : hrefOf(rows),
+      href: own || cause === 'personal_off' ? fallback : hrefOf(rows),
     };
   }
   return { cause: 'none', count: 0, href: fallback };

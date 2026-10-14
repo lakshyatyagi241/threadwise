@@ -209,7 +209,16 @@
         "customMessage": "Mensagem personalizada",
         "flowTitle": "Fluxo",
         "variants": "Variante exibida",
-        "variant": "Variante {v}"
+        "variant": "Variante {v}",
+        "typeEmail": "E-mail",
+        "emailTitle": "Pré-visualização do e-mail",
+        "emailFrom": "De",
+        "emailSubject": "Assunto",
+        "emailNoSender": "Escolha um remetente",
+        "emailNoSubject": "(sem assunto)",
+        "emailEmpty": "Escreva o corpo da mensagem e ele aparecerá aqui.",
+        "emailUnsubscribe": "Um link para cancelar a inscrição é adicionado ao final de cada e-mail.",
+        "emailNote": "É assim que sua campanha aparecerá na caixa de entrada de cada destinatário."
       },
       "previewEmpty": "Pré-visualização da sua mensagem…",
       "previewTemplate": "Modelo",
@@ -228,7 +237,8 @@
         "throttle": "O intervalo máximo deve ser pelo menos igual ao mínimo.",
         "expiry": "A data de término deve ser posterior à data de envio, caso contrário a campanha expiraria antes de ser enviada.",
         "media": "Informe um endereço completo começando com http:// ou https://.",
-        "sender": "Escolha um remetente."
+        "sender": "Escolha um remetente.",
+        "subject": "Reduza o assunto para 150 caracteres ou menos."
       },
       "submit": {
         "save": "Salvar alterações",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} números no arquivo",
         "numbersPlaceholder": "Um número por linha — inclua o código do país, sem o sinal de mais",
-        "numbersCount": "{count} números"
+        "numbersCount": "{count} números",
+        "emailNote": "Os e-mails vão para o endereço de cada contato. Contatos sem endereço de e-mail, endereços duplicados e contatos que cancelaram a inscrição são ignorados.",
+        "emailSkipped": "{count, plural, one {# destinatário escolhido não tem endereço de e-mail e será ignorado.} other {# destinatários escolhidos não têm endereço de e-mail e serão ignorados.}}",
+        "emailNoAddress": "Números digitados e linhas do CSV não têm endereço de e-mail, por isso são ignorados. Escolha contatos, grupos, tags ou segmentos."
       },
       "message": {
         "title": "Mensagem",
@@ -526,7 +539,13 @@
           "baileys": "Ainda não há modelos da API não oficial. Crie um na página de Modelos."
         },
         "templateIntroApproved": "Escolha um modelo aprovado pela Meta. Os valores das variáveis de cada contato são preenchidos no envio com os atributos do contato.",
-        "templateApproved": "Modelo aprovado"
+        "templateApproved": "Modelo aprovado",
+        "subject": "Assunto",
+        "subjectNote": "Assunto, máximo 150",
+        "subjectPlaceholder": "ex.: Sua oferta de maio já começou",
+        "subjectHint": "Usado como assunto do e-mail. Deixe em branco para usar o nome da campanha.",
+        "emailNote": "Esta campanha é enviada como e-mail a partir da caixa de correio escolhida. Um link para cancelar a inscrição é adicionado ao final de cada e-mail.",
+        "emailBodyHint": "Texto simples. Use '{{name}}' ou '{{first_name}}' para personalizar. Contatos sem endereço de e-mail são ignorados."
       },
       "review": {
         "title": "Revisar",
@@ -568,8 +587,14 @@
           "throttle": "A maior pausa deve ser maior ou igual à menor.",
           "expiry": "A data final deve ser posterior à data de envio; caso contrário, a campanha expiraria antes de ser enviada.",
           "media": "Digite um endereço completo começando com http:// ou https://.",
-          "sender": "Escolha um remetente."
-        }
+          "sender": "Escolha um remetente.",
+          "subject": "Reduza o assunto para 150 caracteres ou menos."
+        },
+        "from": "De",
+        "subject": "Assunto",
+        "subjectFallback": "O nome da campanha",
+        "skippedNoEmail": "Ignorados (sem endereço de e-mail)",
+        "estimateEmail": "É uma estimativa: um contato em dois grupos é contado duas vezes. Contatos sem endereço de e-mail em grupos, tags e segmentos são ignorados quando a campanha é executada."
       },
       "ai": {
         "open": "Criar com IA",
@@ -1706,6 +1731,23 @@
         "title": "Os números pessoais estão desativados neste workspace",
         "body": "{count, plural, one {Seu número pessoal (QR) não pode} other {Seus # números pessoais (QR) não podem}} enviar campanhas enquanto isso estiver desativado. Um administrador da plataforma pode ativá-lo neste workspace, ou você pode conectar um número oficial do WhatsApp Business.",
         "action": "Conectar um número oficial"
+      },
+      "email": {
+        "none": {
+          "title": "Nenhuma caixa de correio conectada",
+          "body": "Conecte uma caixa de correio na página de E-mail para escolher de onde esta campanha é enviada.",
+          "action": "Conectar uma caixa de correio"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# caixa de correio está desconectada} other {# caixas de correio estão desconectadas}}",
+          "body": "Reconecte-a na página de E-mail para enviar campanhas a partir dela.",
+          "action": "Abrir a página de E-mail"
+        },
+        "error": {
+          "title": "{count, plural, one {# caixa de correio precisa ser reconectada} other {# caixas de correio precisam ser reconectadas}}",
+          "body": "O último login falhou. Reconecte-a na página de E-mail e ela aparecerá aqui.",
+          "action": "Abrir a página de E-mail"
+        }
       }
     },
     "create": {

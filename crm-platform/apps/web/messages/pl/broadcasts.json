@@ -296,7 +296,9 @@
       "media": "Podgląd: {kind}",
       "contactsDenied": "Nie masz dostępu do listy kontaktów. Wybierz kontakty przez grupy lub tagi.",
       "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
-      "previewLabel": "Podgląd szablonu"
+      "previewLabel": "Podgląd szablonu",
+      "colEmail": "E-mail",
+      "noEmail": "Brak adresu e-mail"
     },
     "overrides": {
       "title": "Uzupełnij tę wysyłkę",
@@ -358,6 +360,11 @@
         "name": "Facebook",
         "hint": "Wyślij wiadomość w Messengerze do osób, które napisały do Twojej Strony w ciągu ostatnich 24 godzin.",
         "cta": "Utwórz wysyłkę na Facebooku"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Wyślij wiadomość jako e-mail z połączonej skrzynki, z linkiem do rezygnacji z subskrypcji.",
+        "cta": "Utwórz kampanię e-mail"
       }
     }
   }

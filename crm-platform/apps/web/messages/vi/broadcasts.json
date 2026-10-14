@@ -296,7 +296,9 @@
       "media": "Xem trước {kind}",
       "contactsDenied": "Bạn không có quyền truy cập danh sách liên hệ. Hãy chọn liên hệ qua nhóm hoặc thẻ.",
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
-      "previewLabel": "Xem trước mẫu"
+      "previewLabel": "Xem trước mẫu",
+      "colEmail": "Email",
+      "noEmail": "Không có địa chỉ email"
     },
     "overrides": {
       "title": "Điền thông tin cho lần gửi này",
@@ -358,6 +360,11 @@
         "name": "Facebook",
         "hint": "Gửi tin nhắn Messenger cho những người đã nhắn tin cho Trang của bạn trong 24 giờ qua.",
         "cta": "Tạo chiến dịch gửi Facebook"
+      },
+      "email": {
+        "name": "Email",
+        "hint": "Gửi tin nhắn dưới dạng email từ hộp thư đã kết nối, kèm liên kết hủy đăng ký.",
+        "cta": "Tạo chiến dịch email"
       }
     }
   }

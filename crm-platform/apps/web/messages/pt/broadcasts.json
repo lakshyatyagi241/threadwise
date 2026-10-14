@@ -296,7 +296,9 @@
       "media": "Pré-visualização de {kind}",
       "contactsDenied": "Você não tem acesso à lista de contatos. Escolha contatos por meio de grupos ou tags.",
       "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business.",
-      "previewLabel": "Prévia do modelo"
+      "previewLabel": "Prévia do modelo",
+      "colEmail": "E-mail",
+      "noEmail": "Sem endereço de e-mail"
     },
     "overrides": {
       "title": "Preencher este envio",
@@ -358,6 +360,11 @@
         "name": "Facebook",
         "hint": "Envie uma mensagem do Messenger para quem escreveu para a sua Página nas últimas 24 horas.",
         "cta": "Criar transmissão no Facebook"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Envie uma mensagem como e-mail a partir de uma caixa de correio conectada, com um link para cancelar a inscrição.",
+        "cta": "Criar campanha de e-mail"
       }
     }
   }

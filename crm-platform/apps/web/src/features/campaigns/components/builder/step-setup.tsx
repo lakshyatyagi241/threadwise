@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Field, Input, Select, Switch } from '@crm/ui';
 import type { ComposeSender, SenderHidden } from '@crm/contracts';
 import { editorType, type BuilderForm } from '../../lib/builder-model';
-import { isSmsEngine, kindsFor } from '../../lib/engine-gate';
+import { isEmailEngine, isSmsEngine, kindsFor } from '../../lib/engine-gate';
 import { SenderEmptyNotice, SenderLoading } from '../sender-empty';
 import { BubbleIcon, ChoiceCard, FlowIcon, LabelRow, StepCard, TemplateIcon } from './parts';
 
@@ -48,22 +48,26 @@ export function StepSetup({
         hidden={hidden}
         loading={loading}
         sms={isSmsEngine(engine)}
+        email={isEmailEngine(engine)}
       />
 
-      <TypeCards
-        value={
-          editorType(form.type) === 'template'
-            ? 'template'
-            : editorType(form.type) === 'flow'
-              ? 'flow'
-              : 'custom'
-        }
-        offered={offered}
-        onSelect={(type) => patch({ type })}
-      />
+      {/* An email campaign is always a typed message (no template or flow to pick), as in Reference's email builder. */}
+      {!isEmailEngine(engine) && (
+        <TypeCards
+          value={
+            editorType(form.type) === 'template'
+              ? 'template'
+              : editorType(form.type) === 'flow'
+                ? 'flow'
+                : 'custom'
+          }
+          offered={offered}
+          onSelect={(type) => patch({ type })}
+        />
+      )}
 
-      {/* The SMS runner sends one text to everyone, so a split test would do nothing: it is not offered. */}
-      {!isSmsEngine(engine) && (
+      {/* The SMS runner sends one text to everyone, so a split test would do nothing: it is not offered. Nor is it for email. */}
+      {!isSmsEngine(engine) && !isEmailEngine(engine) && (
         <AbToggle
           checked={form.abTesting}
           split={form.abSplit}
@@ -86,6 +90,7 @@ export function SetupFields({
   hidden,
   loading,
   sms,
+  email,
 }: {
   name: string;
   onName: (name: string) => void;
@@ -100,6 +105,8 @@ export function SetupFields({
   loading?: boolean | undefined;
   /** The SMS card: the empty list points at the SMS screen. */
   sms?: boolean | undefined;
+  /** The Email card: the empty list points at the Email screen. */
+  email?: boolean | undefined;
 }) {
   const t = useTranslations('campaigns.builder');
   return (
@@ -117,7 +124,12 @@ export function SetupFields({
         {loading ? (
           <SenderLoading id="camp-sender" />
         ) : senders.length === 0 ? (
-          <SenderEmptyNotice id="camp-sender" hidden={hidden} sms={sms ?? false} />
+          <SenderEmptyNotice
+            id="camp-sender"
+            hidden={hidden}
+            sms={sms ?? false}
+            email={email ?? false}
+          />
         ) : (
           <Select id="camp-sender" value={senderKey} onChange={(e) => onSender(e.target.value)}>
             <option value="">{t('setup.pickSender')}</option>
