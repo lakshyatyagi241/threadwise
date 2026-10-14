@@ -1,0 +1,26 @@
+[
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts",
+    "contains": "FETCH ${batch}",
+    "reason": "batch is a numeric option (default 500) of a maintenance CLI, never request data; reviewed 2026-10-14"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts",
+    "contains": "DISABLE TRIGGER",
+    "reason": "table and trigger names come from a hard-coded list in a dev-only seeder CLI; reviewed 2026-10-14"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts",
+    "contains": "ENABLE TRIGGER",
+    "reason": "same hard-coded list as above; reviewed 2026-10-14"
+  },
+  {
+    "rule": "SECRET-LITERAL",
+    "file": "apps/web/src/features/help-agent/lib/mask.test.ts",
+    "contains": "AKIAIOSFODNN7EXAMPLE",
+    "reason": "AWS's documented example key, used as a masking test fixture; reviewed 2026-10-14"
+  }
+]
