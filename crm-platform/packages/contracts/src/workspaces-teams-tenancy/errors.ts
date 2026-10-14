@@ -12,6 +12,14 @@ export const WSP_ERROR_CODES = {
   WSP_INVITE_NOT_PENDING: 'WSP_INVITE_NOT_PENDING',
   WSP_TEAM_NAME_TAKEN: 'WSP_TEAM_NAME_TAKEN',
   WSP_TEAM_MEMBER_UNKNOWN: 'WSP_TEAM_MEMBER_UNKNOWN',
+  /** Leave: the new dates share a day with another leave of the same person that still counts. */
+  WSP_LEAVE_OVERLAP: 'WSP_LEAVE_OVERLAP',
+  /** Leave: the first day is before today in the workspace calendar, or the change is not allowed in this state. */
+  WSP_LEAVE_INVALID: 'WSP_LEAVE_INVALID',
+  /** Delegate: yourself, someone who is not an active member of this workspace. */
+  WSP_DELEGATE_INVALID: 'WSP_DELEGATE_INVALID',
+  /** Delegate: the choice would close a circle (A stands in for B who stands in for A). */
+  WSP_DELEGATE_CYCLE: 'WSP_DELEGATE_CYCLE',
   WSP_ORG_SUSPENDED: 'WSP_ORG_SUSPENDED',
   WSP_WORKSPACE_LIMIT_REACHED: 'WSP_WORKSPACE_LIMIT_REACHED',
   WSP_SLUG_TAKEN: 'WSP_SLUG_TAKEN',

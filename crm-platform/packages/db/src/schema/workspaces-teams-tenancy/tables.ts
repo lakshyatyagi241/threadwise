@@ -6,6 +6,7 @@ import { sql } from 'drizzle-orm';
 import {
   bigint,
   boolean,
+  date,
   foreignKey,
   index,
   integer,
@@ -402,3 +403,101 @@ export const workspaceSettings = pgTable(
 
 export type WorkspaceSettingsRow = typeof workspaceSettings.$inferSelect;
 export type NewWorkspaceSettingsRow = typeof workspaceSettings.$inferInsert;
+
+/** Member leave (BL-112). Mirrors migrations/20261129090000_member_leave.sql, including the exclusion constraint Drizzle cannot express. */
+export const memberLeaves = pgTable(
+  'member_leaves',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id').notNull(),
+    startsOn: date('starts_on').notNull(),
+    endsOn: date('ends_on'),
+    reason: text('reason'),
+    status: text('status').notNull().default('scheduled'),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    endedAt: timestamp('ended_at', { withTimezone: true }),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('member_leaves_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'member_leaves_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'member_leaves_org_id_user_id_fkey',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'member_leaves_org_id_created_by_fkey',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    uniqueIndex('uq_member_leaves_active')
+      .on(t.orgId, t.userId)
+      .where(sql`${t.status} = 'active'`),
+    index('idx_member_leaves_user').on(t.orgId, t.userId, t.startsOn.desc()),
+    index('idx_member_leaves_sweep_start')
+      .on(t.startsOn)
+      .where(sql`${t.status} = 'scheduled'`),
+    index('idx_member_leaves_sweep_end')
+      .on(t.endsOn)
+      .where(sql`${t.status} = 'active' AND ${t.endsOn} IS NOT NULL`),
+  ],
+);
+
+export type MemberLeavesRow = typeof memberLeaves.$inferSelect;
+export type NewMemberLeavesRow = typeof memberLeaves.$inferInsert;
+
+/** One optional delegate per member (BL-112). */
+export const memberDelegates = pgTable(
+  'member_delegates',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id').notNull(),
+    delegateUserId: idColumn('delegate_user_id').notNull(),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('member_delegates_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('member_delegates_org_id_user_id_key').on(t.orgId, t.userId),
+    foreignKey({
+      name: 'member_delegates_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'member_delegates_org_id_user_id_fkey',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'member_delegates_org_id_delegate_user_id_fkey',
+      columns: [t.orgId, t.delegateUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'member_delegates_org_id_created_by_fkey',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_member_delegates_delegate').on(t.orgId, t.delegateUserId),
+  ],
+);
+
+export type MemberDelegatesRow = typeof memberDelegates.$inferSelect;
+export type NewMemberDelegatesRow = typeof memberDelegates.$inferInsert;
