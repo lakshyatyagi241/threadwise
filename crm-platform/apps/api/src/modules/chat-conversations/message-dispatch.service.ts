@@ -93,6 +93,11 @@ export class MessageDispatchService {
         envelope,
         lastInboundAt: conv.lastInboundAt,
         source: 'inbox',
+        // The gate runs at send time too: a STOP that arrived while a marketing template waited in the queue still stops it.
+        consent: {
+          purpose: await this.dispatcher.purposeFor(orgId, envelope),
+          contactId: conv.contactId,
+        },
       });
     } catch (err) {
       return this.failed(orgId, row, ref, err, options, runtime.uuid);

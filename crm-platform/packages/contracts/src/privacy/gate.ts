@@ -46,6 +46,7 @@ export type ConsentSubject =
   | { type: 'contact'; id: number }
   | { type: 'contact_uuid'; uuid: string }
   | { type: 'phone'; phone: string }
+  | { type: 'email'; email: string }
   | { type: 'anonymous' };
 
 export interface ConsentGateResult {

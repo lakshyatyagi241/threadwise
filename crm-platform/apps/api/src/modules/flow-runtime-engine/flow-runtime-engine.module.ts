@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { ChatConversationsModule } from '../chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
@@ -51,6 +52,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
 @Module({
   imports: [
     ChatConversationsModule,
+    ContactConsentModule,
     PlansCoreModule,
     WalletMessageBillingModule,
     CrmModule,

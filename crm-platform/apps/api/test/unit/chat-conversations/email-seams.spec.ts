@@ -30,6 +30,9 @@ import {
 } from '../../../src/modules/chat-conversations/outbound-envelope';
 import { FakeEmailAdapter } from '../../e2e/chat-conversations/fake-email-adapter';
 
+/** What every send in this file is, for the ConsentGate. */
+const SERVICE_CONSENT = { purpose: 'service_messaging' as const };
+
 const mail = (over: Record<string, unknown> = {}) => ({
   subject: 'Invoice question',
   from: { name: 'Ada', address: 'ada@example.com' },
@@ -240,6 +243,7 @@ describe('ChannelDispatcher with an email channel', () => {
       plans as never,
       { beforeSend: async () => undefined } as never,
       {} as never,
+      { check: async () => ({ decision: 'allow', reason: 'utility_exempt' }) } as never,
     );
     return { adapter, dispatcher, plans };
   };
@@ -256,7 +260,7 @@ describe('ChannelDispatcher with an email channel', () => {
     const { dispatcher, plans } = dispatcherOf();
     for (const lastInboundAt of [null, new Date(Date.now() - 90 * 24 * 3_600_000)]) {
       const r = await dispatcher.assertCanQueue(
-        { channel: channel() as never, envelope: text(), lastInboundAt },
+        { channel: channel() as never, envelope: text(), lastInboundAt, consent: SERVICE_CONSENT },
         { monthlyUsed: 10_000 },
       );
       expect(r.window.open).toBe(true);
@@ -272,6 +276,7 @@ describe('ChannelDispatcher with an email channel', () => {
         channel: channel() as never,
         envelope: long,
         lastInboundAt: null,
+        consent: SERVICE_CONSENT,
       }),
     ).resolves.toBeDefined();
     const sim = new FakeEmailAdapter();
@@ -281,12 +286,14 @@ describe('ChannelDispatcher with an email channel', () => {
       {} as never,
       {} as never,
       {} as never,
+      { check: async () => ({ decision: 'allow', reason: 'utility_exempt' }) } as never,
     );
     const e = await err(
       other.assertCanQueue({
         channel: channel({ kind: 'telegram' }) as never,
         envelope: long,
         lastInboundAt: null,
+        consent: SERVICE_CONSENT,
       }),
     );
     expect(e.code).toBe('VALIDATION_FAILED');
@@ -307,6 +314,7 @@ describe('ChannelDispatcher with an email channel', () => {
             channel: channel() as never,
             envelope: template,
             lastInboundAt: null,
+            consent: SERVICE_CONSENT,
           }),
         )
       ).code,
@@ -324,6 +332,7 @@ describe('ChannelDispatcher with an email channel', () => {
             channel: channel() as never,
             envelope: file,
             lastInboundAt: null,
+            consent: SERVICE_CONSENT,
           }),
         )
       ).code,
@@ -338,6 +347,7 @@ describe('ChannelDispatcher with an email channel', () => {
       {} as never,
       {} as never,
       {} as never,
+      {} as never,
     );
     const envelope = text({
       email: { to: ['a@x.test'], subject: 'S', inReplyTo: null, references: [], threadId: 't' },
@@ -347,6 +357,7 @@ describe('ChannelDispatcher with an email channel', () => {
         channel: channel({ kind: 'telegram' }) as never,
         envelope,
         lastInboundAt: null,
+        consent: SERVICE_CONSENT,
       }),
     );
     expect(e.code).toBe('CHANNEL_CAPABILITY_UNSUPPORTED');

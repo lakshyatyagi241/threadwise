@@ -8,6 +8,7 @@ export { ConsentSettingsService } from './consent-settings.service';
 export { ConsentPolicyService, hasGrantedConsentSql } from './consent-policy.service';
 export {
   ConsentGate,
+  purposeOfCategory,
   type GateManyOptions,
   type GateManyResult,
   type GateOptions,

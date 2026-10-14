@@ -147,6 +147,30 @@ export class ConsentGate {
     return summarise(decisions);
   }
 
+  /**
+   * The purpose of sending this approved template: `marketing_messaging` for a MARKETING template, `service_messaging` otherwise (a
+   * template the workspace does not have is treated as utility, the column's default). A database error counts as marketing.
+   */
+  async purposeOfTemplate(
+    orgId: number,
+    name: string,
+    language: string,
+    tx?: Tx,
+  ): Promise<PurposeInput> {
+    try {
+      const res = await this.run(orgId, tx, (t) =>
+        t.execute(sql`
+          SELECT lower(coalesce(meta_category, category)) AS category FROM wa_templates
+          WHERE org_id = ${orgId} AND template_name = ${name}
+          ORDER BY (language = ${language}) DESC, id LIMIT 1`),
+      );
+      return purposeOfCategory((res.rows[0] as Raw | undefined)?.category as string | undefined);
+    } catch (err) {
+      this.logFailure(orgId, 'template category', err);
+      return 'marketing_messaging';
+    }
+  }
+
   // --- facts ------------------------------------------------------------------------------------------------------------------
 
   private async factsOf(
@@ -156,13 +180,8 @@ export class ConsentGate {
     ledgerPurpose: 'marketing' | 'utility',
     tx?: Tx,
   ): Promise<ConsentFacts> {
-    if (subject.type === 'anonymous') return NO_FACTS;
-    const where: SQL =
-      subject.type === 'contact'
-        ? sql`c.id = ${subject.id}`
-        : subject.type === 'contact_uuid'
-          ? sql`c.uuid = ${subject.uuid}::uuid`
-          : phoneMatch(subject.phone);
+    const where = subjectMatch(subject);
+    if (!where) return NO_FACTS;
     const rows = await this.run(orgId, tx, (t) =>
       this.factRows(t, orgId, where, channel, ledgerPurpose),
     );
@@ -253,9 +272,34 @@ function summarise(decisions: Map<number, ConsentGateResult>): GateManyResult {
   return { decisions, allowed, counts };
 }
 
-/** Contacts whose number is these digits, with or without the country code (the same match the schedule audience uses). */
-function phoneMatch(phone: string): SQL {
-  const digits = phone.replace(/[^0-9]/g, '');
-  return sql`(regexp_replace(coalesce(c.phone, ''), '[^0-9]', '', 'g') = ${digits}
-    OR regexp_replace(coalesce(c.country_code, '') || coalesce(c.phone, ''), '[^0-9]', '', 'g') = ${digits})`;
+/**
+ * How a subject finds its contact row, or null when it names nobody the ledger could know (a visitor, a group, a short or empty key).
+ * A phone is matched on the indexed `normalized_phone` (E.164 with its plus, or the bare digits a peer key carries), an email on
+ * `normalized_email`; an empty value never matches, so an unknown peer cannot match every contact without a number.
+ */
+function subjectMatch(subject: ConsentSubject): SQL | null {
+  switch (subject.type) {
+    case 'contact':
+      return sql`c.id = ${subject.id}`;
+    case 'contact_uuid':
+      return sql`c.uuid = ${subject.uuid}::uuid`;
+    case 'phone': {
+      const digits = subject.phone.replace(/[^0-9]/g, '');
+      if (digits.length < 6 || digits.length > 15) return null;
+      return sql`c.normalized_phone IN (${digits}, ${`+${digits}`})`;
+    }
+    case 'email': {
+      const email = subject.email.trim().toLowerCase();
+      return email.includes('@') ? sql`c.normalized_email = ${email}` : null;
+    }
+    default:
+      return null;
+  }
+}
+
+/** A template's category decides whether sending it is marketing (spec 4.3: the template category chooses the purpose). */
+export function purposeOfCategory(category: string | null | undefined): PurposeInput {
+  return (category ?? '').toLowerCase() === 'marketing'
+    ? 'marketing_messaging'
+    : 'service_messaging';
 }

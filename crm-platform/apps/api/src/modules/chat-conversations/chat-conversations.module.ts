@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { LocalizationTranslationModule } from '../localization-translation';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -65,6 +66,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ChatChannelProvidersModule,
     PlansCoreModule,
     CrmModule,
+    ContactConsentModule,
     LocalizationTranslationModule,
     WalletMessageBillingModule,
   ],
