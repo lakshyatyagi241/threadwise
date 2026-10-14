@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "הקלטת שיחות",
+        "intro": "ההקלטה כבויה עד שתפעיל אותה. כשהיא פועלת, חבר צוות מקריא את ההודעה, האדם עונה, ורק אז ההקלטה מתחילה. הקלטות נמחקות בתום תקופת השמירה.",
+        "loading": "טוען את כללי ההקלטה",
+        "loadFailed": "לא ניתן לטעון את כללי ההקלטה.",
+        "retry": "נסו שוב",
+        "viewOnly": "אפשר לראות את הכללים, אך רק בעלים או מנהל יכולים לשנות אותם.",
+        "enabled": "הקלטת שיחות",
+        "enabledOn": "פועל: חברי צוות יכולים להקליט שיחה לאחר שהאדם הסכים.",
+        "enabledOff": "כבוי: אף שיחה לא מוקלטת.",
+        "mode": "איך האדם מסכים",
+        "modeHint": {
+          "confirmed": "האדם אומר כן להקלטה וחבר הצוות שומר את התשובה. האפשרות הבטוחה ביותר.",
+          "announcement": "חבר הצוות מקריא את ההודעה והשיחה נמשכת. השתמשו בזה רק אם היועץ המשפטי אישר שהכרזה מספיקה."
+        },
+        "modeOption": {
+          "confirmed": "האדם אומר כן",
+          "announcement": "הכרזה ואז המשך"
+        },
+        "retention": "שמירת הקלטות (ימים)",
+        "retentionHint": "בין {min} ל-{max} ימים. הקלטות ישנות נמחקות מדי לילה; השיחה עצמה נשארת ביומן.",
+        "retentionInvalid": "הזינו מספר שלם של ימים בטווח המותר.",
+        "notice": "הודעת הקלטה",
+        "noticeHint": "חבר הצוות מקריא זאת לפני ההקלטה. עד {max} תווים. כל שינוי נשמר כגרסה חדשה.",
+        "noticeRequired": "כתבו הודעה (לפחות {min} תווים) כדי להפעיל הקלטה.",
+        "noticeVersion": "גרסת הודעה {version}",
+        "noticeNone": "עדיין לא נשמרה הודעה",
+        "updatedAt": "נשמר {date}",
+        "noticeSuggestion": "שיחה זו עשויה להיות מוקלטת לצורכי איכות והדרכה. האם אתם מסכימים להקלטה?",
+        "useSuggestion": "שימוש בטקסט המוצע",
+        "saved": "כללי ההקלטה נשמרו.",
+        "saving": "שומר",
+        "save": "שמירת הכללים"
+      },
+      "consent": {
+        "title": "לשאול לפני ההקלטה",
+        "askConfirmed": "הקריאו את ההודעה. לחצו על הכפתור הראשון רק אם האדם אמר כן.",
+        "askAnnouncement": "הקריאו את ההודעה ואז התחילו להקליט.",
+        "grantConfirmed": "אמר כן: התחל הקלטה",
+        "grantAnnouncement": "ההודעה הוקראה: התחל הקלטה",
+        "decline": "לא: המשך בלי הקלטה",
+        "declinedNote": "לא מוקלט: האדם לא הסכים.",
+        "off": "הקלטת שיחות כבויה בסביבת עבודה זו.",
+        "failed": "לא ניתן היה לשמור את התשובה ולכן דבר לא מוקלט: {message}"
+      },
+      "lifecycle": {
+        "title": "הקלטה והסכמה",
+        "consent": "הסכמה להקלטה",
+        "consentGranted": "הסכים להקלטה",
+        "consentDeclined": "סירב להקלטה",
+        "consentNone": "לא נרשמה תשובה",
+        "method": {
+          "announcement_continue": "ההודעה הוקראה והשיחה נמשכה",
+          "spoken_yes": "אמר כן"
+        },
+        "noticeVersion": "גרסת הודעה {version}",
+        "storedAt": "נשמר",
+        "expiresAt": "יימחק אוטומטית ב",
+        "heldNoExpiry": "לא נמחק: עיקול משפטי",
+        "none": "לא הוגדר",
+        "deleted": "ההקלטה נמחקה",
+        "deletedReason": {
+          "retention": "תקופת השמירה הסתיימה",
+          "manual": "נמחק על ידי חבר צוות",
+          "consent_withdrawn": "ההסכמה נסוגה"
+        },
+        "holdOn": "עיקול משפטי",
+        "placeHold": "הטלת עיקול משפטי",
+        "liftHold": "הסרת עיקול משפטי",
+        "holdLifted": "העיקול המשפטי הוסר.",
+        "holdPlaced": "העיקול המשפטי הוטל.",
+        "holdReasonLabel": "למה היא נשמרת?",
+        "cancel": "ביטול",
+        "delete": "מחיקת הקלטה",
+        "deleteBlockedByHold": "הסירו קודם את העיקול המשפטי.",
+        "deleteTitle": "למחוק את ההקלטה?",
+        "deleteMessage": "קובץ השמע יוסר לצמיתות. השיחה נשארת ביומן.",
+        "deletedToast": "ההקלטה נמחקה."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "הקלטת שיחות כבויה בסביבת עבודה זו.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "אי אפשר להקליט שיחה זו: האדם לא הסכים.",
+      "CALL_RECORDING_CONSENT_INVALID": "לא ניתן לשמור תשובה זו עבור השיחה.",
+      "CALL_RECORDING_ON_HOLD": "הקלטה זו תחת עיקול משפטי. הסירו קודם את העיקול.",
+      "CALL_RECORDING_SETTINGS_INVALID": "כללי ההקלטה אינם תקינים: כתבו קודם את ההודעה."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "האדם הסכים להקלטה",
+          "recording_consent_declined": "האדם סירב להקלטה",
+          "recording_deleted": "ההקלטה נמחקה",
+          "recording_hold_set": "הוטל עיקול משפטי",
+          "recording_hold_lifted": "הוסר עיקול משפטי"
+        }
+      }
+    }
+  }
+}

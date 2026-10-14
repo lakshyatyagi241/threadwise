@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Anrufaufzeichnung",
+        "intro": "Die Aufzeichnung ist aus, bis du sie einschaltest. Wenn sie an ist, liest ein Teammitglied den Hinweis vor, die Person antwortet, und erst dann startet die Aufnahme. Aufnahmen werden nach der Aufbewahrungsdauer gelöscht.",
+        "loading": "Aufzeichnungsregeln werden geladen",
+        "loadFailed": "Die Aufzeichnungsregeln konnten nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "viewOnly": "Du kannst diese Regeln sehen, aber nur Inhaber oder Admins können sie ändern.",
+        "enabled": "Anrufe aufzeichnen",
+        "enabledOn": "An: Teammitglieder können einen Anruf aufzeichnen, nachdem die Person zugestimmt hat.",
+        "enabledOff": "Aus: Kein Anruf wird aufgezeichnet.",
+        "mode": "Wie die Person zustimmt",
+        "modeHint": {
+          "confirmed": "Die Person sagt Ja zur Aufzeichnung und das Teammitglied speichert die Antwort. Die sicherste Wahl.",
+          "announcement": "Das Teammitglied liest den Hinweis vor und das Gespräch geht weiter. Nur verwenden, wenn deine Rechtsberatung bestätigt, dass eine Ansage genügt."
+        },
+        "modeOption": {
+          "confirmed": "Die Person sagt Ja",
+          "announcement": "Ansage, dann weiter"
+        },
+        "retention": "Aufnahmen aufbewahren (Tage)",
+        "retentionHint": "Zwischen {min} und {max} Tagen. Ältere Aufnahmen werden jede Nacht gelöscht; der Anruf selbst bleibt im Protokoll.",
+        "retentionInvalid": "Gib eine ganze Zahl von Tagen im erlaubten Bereich ein.",
+        "notice": "Aufzeichnungshinweis",
+        "noticeHint": "Das Teammitglied liest dies vor der Aufnahme vor. Bis zu {max} Zeichen. Jede Änderung wird als neue Version gespeichert.",
+        "noticeRequired": "Schreibe den Hinweis (mindestens {min} Zeichen), um die Aufzeichnung einzuschalten.",
+        "noticeVersion": "Hinweisversion {version}",
+        "noticeNone": "Noch kein Hinweis gespeichert",
+        "updatedAt": "gespeichert {date}",
+        "noticeSuggestion": "Dieses Gespräch kann zu Qualitäts- und Schulungszwecken aufgezeichnet werden. Stimmst du der Aufzeichnung zu?",
+        "useSuggestion": "Vorgeschlagenen Text verwenden",
+        "saved": "Aufzeichnungsregeln gespeichert.",
+        "saving": "Wird gespeichert",
+        "save": "Regeln speichern"
+      },
+      "consent": {
+        "title": "Vor der Aufnahme fragen",
+        "askConfirmed": "Lies den Hinweis vor. Drücke die erste Schaltfläche nur, wenn die Person Ja sagt.",
+        "askAnnouncement": "Lies den Hinweis vor und starte dann die Aufnahme.",
+        "grantConfirmed": "Hat Ja gesagt: Aufnahme starten",
+        "grantAnnouncement": "Hinweis vorgelesen: Aufnahme starten",
+        "decline": "Nein: ohne Aufnahme fortfahren",
+        "declinedNote": "Keine Aufnahme: Die Person hat nicht zugestimmt.",
+        "off": "Die Anrufaufzeichnung ist für diesen Arbeitsbereich ausgeschaltet.",
+        "failed": "Die Antwort konnte nicht gespeichert werden, daher wird nichts aufgezeichnet: {message}"
+      },
+      "lifecycle": {
+        "title": "Aufnahme und Einwilligung",
+        "consent": "Einwilligung zur Aufnahme",
+        "consentGranted": "Mit der Aufnahme einverstanden",
+        "consentDeclined": "Aufnahme abgelehnt",
+        "consentNone": "Keine Antwort erfasst",
+        "method": {
+          "announcement_continue": "Hinweis vorgelesen, Gespräch fortgesetzt",
+          "spoken_yes": "Hat Ja gesagt"
+        },
+        "noticeVersion": "Hinweisversion {version}",
+        "storedAt": "Gespeichert",
+        "expiresAt": "Automatisch gelöscht am",
+        "heldNoExpiry": "Nicht gelöscht: rechtliche Sperre",
+        "none": "Nicht festgelegt",
+        "deleted": "Aufnahme gelöscht",
+        "deletedReason": {
+          "retention": "Aufbewahrungsdauer abgelaufen",
+          "manual": "von einem Teammitglied gelöscht",
+          "consent_withdrawn": "Einwilligung widerrufen"
+        },
+        "holdOn": "Rechtliche Sperre",
+        "placeHold": "Rechtliche Sperre setzen",
+        "liftHold": "Rechtliche Sperre aufheben",
+        "holdLifted": "Rechtliche Sperre aufgehoben.",
+        "holdPlaced": "Rechtliche Sperre gesetzt.",
+        "holdReasonLabel": "Warum wird sie aufbewahrt?",
+        "cancel": "Abbrechen",
+        "delete": "Aufnahme löschen",
+        "deleteBlockedByHold": "Hebe zuerst die rechtliche Sperre auf.",
+        "deleteTitle": "Diese Aufnahme löschen?",
+        "deleteMessage": "Die Audiodatei wird endgültig entfernt. Der Anruf bleibt im Protokoll.",
+        "deletedToast": "Aufnahme gelöscht."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "Die Anrufaufzeichnung ist für diesen Arbeitsbereich ausgeschaltet.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Dieser Anruf kann nicht aufgezeichnet werden: Die Person hat nicht zugestimmt.",
+      "CALL_RECORDING_CONSENT_INVALID": "Diese Antwort kann für diesen Anruf nicht gespeichert werden.",
+      "CALL_RECORDING_ON_HOLD": "Diese Aufnahme unterliegt einer rechtlichen Sperre. Hebe die Sperre zuerst auf.",
+      "CALL_RECORDING_SETTINGS_INVALID": "Die Aufzeichnungsregeln sind ungültig: Schreibe zuerst den Hinweis."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "Person hat der Aufnahme zugestimmt",
+          "recording_consent_declined": "Person hat die Aufnahme abgelehnt",
+          "recording_deleted": "Aufnahme gelöscht",
+          "recording_hold_set": "Rechtliche Sperre gesetzt",
+          "recording_hold_lifted": "Rechtliche Sperre aufgehoben"
+        }
+      }
+    }
+  }
+}

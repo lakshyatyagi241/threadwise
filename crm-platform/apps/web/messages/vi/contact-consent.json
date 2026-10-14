@@ -270,6 +270,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Được phép: thông báo đã được gửi trước.",
+        "consent_evidence_recorded": "Được phép: đã gửi thông báo và người đó đồng ý.",
+        "purpose_not_enabled": "Không được phép: không gian làm việc chưa bật tính năng này.",
+        "consent_declined": "Không được phép: người đó đã từ chối.",
         "notice_required": "A notice must be delivered first."
       }
     }

@@ -270,6 +270,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "İzin verildi: bildirim önce iletildi.",
+        "consent_evidence_recorded": "İzin verildi: bildirim iletildi ve kişi onay verdi.",
+        "purpose_not_enabled": "İzin verilmedi: çalışma alanı bunu açmadı.",
+        "consent_declined": "İzin verilmedi: kişi reddetti.",
         "notice_required": "A notice must be delivered first."
       }
     }

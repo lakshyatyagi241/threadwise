@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Gesprekken opnemen",
+        "intro": "Opnemen staat uit tot je het aanzet. Als het aan staat, leest een teamlid de melding voor, antwoordt de persoon en pas dan start de opname. Opnames worden na de bewaartermijn verwijderd.",
+        "loading": "Opnameregels laden",
+        "loadFailed": "De opnameregels konden niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "viewOnly": "Je kunt deze regels zien, maar alleen een eigenaar of beheerder kan ze wijzigen.",
+        "enabled": "Gesprekken opnemen",
+        "enabledOn": "Aan: teamleden kunnen een gesprek opnemen nadat de persoon akkoord is gegaan.",
+        "enabledOff": "Uit: geen enkel gesprek wordt opgenomen.",
+        "mode": "Hoe de persoon akkoord gaat",
+        "modeHint": {
+          "confirmed": "De persoon zegt ja tegen de opname en het teamlid slaat het antwoord op. De veiligste keuze.",
+          "announcement": "Het teamlid leest de melding voor en het gesprek gaat door. Alleen gebruiken als je juridisch adviseur bevestigt dat een mededeling volstaat."
+        },
+        "modeOption": {
+          "confirmed": "De persoon zegt ja",
+          "announcement": "Mededeling, dan doorgaan"
+        },
+        "retention": "Opnames bewaren (dagen)",
+        "retentionHint": "Tussen {min} en {max} dagen. Oudere opnames worden elke nacht verwijderd; het gesprek zelf blijft in het logboek.",
+        "retentionInvalid": "Voer een geheel aantal dagen binnen het toegestane bereik in.",
+        "notice": "Opnamemelding",
+        "noticeHint": "Het teamlid leest dit voor vóór de opname. Maximaal {max} tekens. Elke wijziging wordt als nieuwe versie opgeslagen.",
+        "noticeRequired": "Schrijf de melding (minstens {min} tekens) om opnemen aan te zetten.",
+        "noticeVersion": "Meldingsversie {version}",
+        "noticeNone": "Nog geen melding opgeslagen",
+        "updatedAt": "opgeslagen {date}",
+        "noticeSuggestion": "Dit gesprek kan worden opgenomen voor kwaliteit en training. Ga je akkoord met de opname?",
+        "useSuggestion": "Voorgestelde tekst gebruiken",
+        "saved": "Opnameregels opgeslagen.",
+        "saving": "Opslaan",
+        "save": "Regels opslaan"
+      },
+      "consent": {
+        "title": "Vragen voor het opnemen",
+        "askConfirmed": "Lees de melding voor. Druk alleen op de eerste knop als de persoon ja zegt.",
+        "askAnnouncement": "Lees de melding voor en start dan de opname.",
+        "grantConfirmed": "Zei ja: opname starten",
+        "grantAnnouncement": "Melding voorgelezen: opname starten",
+        "decline": "Nee: doorgaan zonder opname",
+        "declinedNote": "Geen opname: de persoon ging niet akkoord.",
+        "off": "Gesprekken opnemen staat uit voor deze werkruimte.",
+        "failed": "Het antwoord kon niet worden opgeslagen, dus er wordt niets opgenomen: {message}"
+      },
+      "lifecycle": {
+        "title": "Opname en toestemming",
+        "consent": "Toestemming om op te nemen",
+        "consentGranted": "Ging akkoord met opname",
+        "consentDeclined": "Weigerde opname",
+        "consentNone": "Geen antwoord vastgelegd",
+        "method": {
+          "announcement_continue": "Melding voorgelezen, gesprek ging door",
+          "spoken_yes": "Zei ja"
+        },
+        "noticeVersion": "Meldingsversie {version}",
+        "storedAt": "Opgeslagen",
+        "expiresAt": "Automatisch verwijderd op",
+        "heldNoExpiry": "Niet verwijderd: juridische blokkade",
+        "none": "Niet ingesteld",
+        "deleted": "Opname verwijderd",
+        "deletedReason": {
+          "retention": "bewaartermijn verstreken",
+          "manual": "verwijderd door een teamlid",
+          "consent_withdrawn": "toestemming ingetrokken"
+        },
+        "holdOn": "Juridische blokkade",
+        "placeHold": "Juridische blokkade plaatsen",
+        "liftHold": "Juridische blokkade opheffen",
+        "holdLifted": "Juridische blokkade opgeheven.",
+        "holdPlaced": "Juridische blokkade geplaatst.",
+        "holdReasonLabel": "Waarom wordt het bewaard?",
+        "cancel": "Annuleren",
+        "delete": "Opname verwijderen",
+        "deleteBlockedByHold": "Hef eerst de juridische blokkade op.",
+        "deleteTitle": "Deze opname verwijderen?",
+        "deleteMessage": "Het audiobestand wordt definitief verwijderd. Het gesprek blijft in het logboek.",
+        "deletedToast": "Opname verwijderd."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "Gesprekken opnemen staat uit voor deze werkruimte.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Dit gesprek kan niet worden opgenomen: de persoon is niet akkoord gegaan.",
+      "CALL_RECORDING_CONSENT_INVALID": "Dat antwoord kan niet worden opgeslagen voor dit gesprek.",
+      "CALL_RECORDING_ON_HOLD": "Deze opname staat onder juridische blokkade. Hef de blokkade eerst op.",
+      "CALL_RECORDING_SETTINGS_INVALID": "De opnameregels zijn ongeldig: schrijf eerst de melding."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "Persoon ging akkoord met opname",
+          "recording_consent_declined": "Persoon weigerde opname",
+          "recording_deleted": "Opname verwijderd",
+          "recording_hold_set": "Juridische blokkade geplaatst",
+          "recording_hold_lifted": "Juridische blokkade opgeheven"
+        }
+      }
+    }
+  }
+}

@@ -270,6 +270,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "अनुमत: सूचना पहले दी गई।",
+        "consent_evidence_recorded": "अनुमत: सूचना दी गई और व्यक्ति सहमत हुआ।",
+        "purpose_not_enabled": "अनुमत नहीं: वर्कस्पेस ने इसे चालू नहीं किया है।",
+        "consent_declined": "अनुमत नहीं: व्यक्ति ने मना किया।",
         "notice_required": "A notice must be delivered first."
       }
     }
