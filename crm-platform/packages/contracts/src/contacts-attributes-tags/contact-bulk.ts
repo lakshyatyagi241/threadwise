@@ -36,8 +36,17 @@ export const bulkSelectionResultSchema = z.object({
 });
 export type BulkSelectionResult = z.infer<typeof bulkSelectionResultSchema>;
 
-export const bulkDeleteContactsSchema = withSelection({});
+/**
+ * `eraseHistory` (BL-143): true (the default when absent) removes the contacts' conversations, messages, media, files and call
+ * recordings together with them; false keeps the conversations and call logs without the people's identity (the contact link, name and
+ * number are cleared, media is removed). Leads, deals, tasks and financial records stay as business records either way.
+ */
+export const bulkDeleteContactsSchema = withSelection({ eraseHistory: z.boolean().optional() });
 export type BulkDeleteContactsInput = z.infer<typeof bulkDeleteContactsSchema>;
+
+/** `DELETE /contacts/:id?eraseHistory=false`: see `bulkDeleteContactsSchema`. Absent means true. */
+export const deleteContactQuerySchema = z.object({ eraseHistory: queryBoolean().optional() });
+export type DeleteContactQuery = z.infer<typeof deleteContactQuerySchema>;
 
 export const bulkGroupContactsSchema = withSelection({
   groupId: uuidSchema,
