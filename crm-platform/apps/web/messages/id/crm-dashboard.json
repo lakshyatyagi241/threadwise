@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "Dasbor CRM"
+    },
+    "title": "CRM Anda",
+    "subtitle": "Deal, faktur, pembayaran, dan tugas — seluruh bisnis dalam satu tampilan.",
+    "period": "{from} sampai {to} · zona waktu {zone}",
+    "openBoard": "Buka papan deal",
+    "loading": "Memuat dasbor",
+    "retry": "Coba lagi",
+    "stale": "Penyegaran gagal. Ini adalah angka terakhir yang kami miliki.",
+    "empty": {
+      "title": "Belum ada yang bisa dilaporkan",
+      "message": "Tambahkan kontak dan deal, lalu halaman ini akan terisi: corong pipeline, siapa yang menang, dari mana lead datang, tugas, dan piutang Anda.",
+      "deals": "Buka deal",
+      "contacts": "Buka kontak"
+    },
+    "filters": {
+      "label": "Filter dasbor",
+      "period": "Periode",
+      "range": {
+        "month": "Bulan ini",
+        "7d": "7 hari",
+        "30d": "30 hari",
+        "90d": "90 hari",
+        "custom": "Kustom"
+      },
+      "from": "Dari",
+      "to": "Sampai",
+      "pipeline": "Pipeline",
+      "allPipelines": "Semua pipeline",
+      "owner": "Pemilik",
+      "everyone": "Semua orang",
+      "team": "Tim",
+      "allTeams": "Semua tim",
+      "reset": "Atur ulang filter"
+    },
+    "kpi": {
+      "title": "Angka utama",
+      "vsPrevious": "Dibandingkan dengan periode sebelumnya yang sama panjang",
+      "open": "Pipeline terbuka",
+      "openHint": "{count, plural, other {# deal}} · perkiraan {forecast}",
+      "won": "Menang",
+      "wonHint": "{count, plural, other {# deal ditutup}}",
+      "collected": "Terkumpul",
+      "collectedHint": "Pembayaran diterima",
+      "outstanding": "Belum dibayar",
+      "outstandingHint": "{count, plural, other {# faktur terbuka}}",
+      "winRate": "Tingkat kemenangan",
+      "winRateHint": "{won} menang, {lost} kalah",
+      "avgSize": "Rata-rata ukuran deal",
+      "avgSizeHint": "Dari deal yang menang",
+      "avgCycle": "Rata-rata siklus penjualan",
+      "avgCycleHint": "Dari dibuat sampai menang",
+      "days": "{count, plural, other {# hari}}",
+      "lost": "Deal kalah",
+      "lateClose": "Lewat perkiraan penutupan",
+      "lateCloseHint": "Deal terbuka yang tanggalnya sudah lewat",
+      "contacts": "Kontak",
+      "contactsHint": "Dalam tampilan Anda hari ini",
+      "newContacts": "Kontak baru",
+      "newLeads": "Lead baru",
+      "newLeadsHint": "Kontak yang datang dengan sumber",
+      "paid": "Faktur lunas",
+      "paidHint": "Menjadi lunas dalam periode ini",
+      "tasksOpen": "Tugas terbuka",
+      "tasksOpenHint": "{count} jatuh tempo nanti hari ini",
+      "tasksOverdue": "Tugas terlambat"
+    },
+    "funnel": {
+      "title": "Corong pipeline",
+      "subtitle": "{pipeline} · {count, plural, other {# deal dibuat}} dalam periode ini",
+      "noPipeline": "Belum ada pipeline.",
+      "empty": "Tidak ada deal yang dibuat dalam periode ini.",
+      "conversion": "{percent}% maju",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} mencapai tahap ini, {open} terbuka sekarang. Buka.",
+      "openNow": "{count, plural, other {# terbuka sekarang}} · {value}"
+    },
+    "trend": {
+      "title": "Deal menang dan kalah",
+      "subtitle": {
+        "day": "Per hari · {value} menang",
+        "week": "Per minggu · {value} menang",
+        "month": "Per bulan · {value} menang"
+      },
+      "chartLabel": "Deal menang dan kalah selama periode ini",
+      "won": "Menang",
+      "lost": "Kalah"
+    },
+    "leaderboard": {
+      "title": "Papan peringkat pemilik",
+      "subtitle": "Berdasarkan nilai kemenangan dalam periode ini",
+      "empty": "Tidak ada deal untuk diperingkat dalam tampilan ini.",
+      "owner": "Pemilik",
+      "won": "Menang",
+      "value": "Nilai",
+      "lost": "Kalah",
+      "open": "Terbuka",
+      "activities": "Aktivitas",
+      "unowned": "Tanpa pemilik"
+    },
+    "sources": {
+      "title": "Sumber lead",
+      "subtitle": "Kontak yang datang dalam periode ini dan sejauh mana mereka berkembang",
+      "empty": "Tidak ada kontak bersumber yang datang dalam periode ini.",
+      "source": "Sumber",
+      "leads": "Lead",
+      "toDeal": "Ke deal",
+      "toWon": "Ke menang",
+      "wonValue": "Nilai menang",
+      "none": "Tanpa sumber"
+    },
+    "tasks": {
+      "title": "Tugas",
+      "subtitle": "{open} terbuka · {overdue} terlambat · {today} jatuh tempo nanti hari ini",
+      "all": "Semua tugas",
+      "empty": "Tidak ada tugas terbuka.",
+      "byAssignee": "Tugas terbuka menurut penerima tugas",
+      "assignee": "Penerima tugas",
+      "open": "Terbuka",
+      "overdue": "Terlambat",
+      "dueToday": "Nanti hari ini",
+      "unassigned": "Belum ditugaskan",
+      "upcoming": "Tugas mendatang",
+      "overdueTag": "Terlambat"
+    },
+    "aging": {
+      "title": "Umur piutang",
+      "open": "Pembayaran",
+      "empty": "Tidak ada yang terutang.",
+      "bucket": {
+        "current": "Belum jatuh tempo",
+        "d1_30": "Lewat jatuh tempo 1–30 hari",
+        "d31_60": "Lewat jatuh tempo 31–60 hari",
+        "d61_90": "Lewat jatuh tempo 61–90 hari",
+        "d90_plus": "Lewat jatuh tempo 90+ hari"
+      }
+    },
+    "payments": {
+      "title": "Pembayaran terbaru",
+      "empty": "Belum ada pembayaran."
+    },
+    "activity": {
+      "title": "Aktivitas terbaru",
+      "empty": "Belum ada aktivitas.",
+      "stageMoved": "Dipindahkan dari {from} ke {to}",
+      "stagePlaced": "Ditempatkan di {to}",
+      "by": "oleh {name}",
+      "system": "oleh sistem",
+      "type": {
+        "note": "Catatan",
+        "stage_change": "Perubahan tahap",
+        "call": "Panggilan",
+        "message": "Pesan",
+        "email": "Email",
+        "meeting": "Rapat",
+        "task": "Tugas"
+      }
+    }
+  }
+}

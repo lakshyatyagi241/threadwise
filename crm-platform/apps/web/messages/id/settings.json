@@ -364,6 +364,11 @@
         "label": "Penugasan kontak",
         "description": "Berikan kontak dan deal baru ke orang yang tepat secara otomatis, dengan melewati orang yang sedang cuti.",
         "keywords": "penugasan, pemilik, round robin, kontak baru, deal baru, cuti, perutean lead"
+      },
+      "privacy-requests": {
+        "label": "Permintaan data",
+        "description": "Jawab orang yang menanyakan data apa yang Anda simpan tentang mereka: pemeriksaan identitas, ekspor, penghapusan dengan pratinjau, dan bukti yang dapat Anda simpan.",
+        "keywords": "privasi, gdpr, permintaan data, dsar, akses subjek, ekspor data, hapus, hak untuk dilupakan, hapus data pribadi, penahanan hukum"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

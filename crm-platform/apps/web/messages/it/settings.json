@@ -364,6 +364,11 @@
         "label": "Assegnazione dei contatti",
         "description": "Assegna automaticamente i nuovi contatti e le nuove trattative alla persona giusta, saltando chi è in ferie.",
         "keywords": "assegnare, proprietario, round robin, nuovo contatto, nuova trattativa, ferie, assenza, routing dei lead"
+      },
+      "privacy-requests": {
+        "label": "Richieste sui dati",
+        "description": "Rispondi a chi chiede cosa conservi su di loro: verifica dell'identità, esportazione, cancellazione con anteprima e una prova da conservare.",
+        "keywords": "privacy, gdpr, richiesta sui dati, dsar, accesso ai dati, esportare dati, cancellare, diritto all'oblio, eliminare dati personali, blocco legale"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

@@ -36,6 +36,7 @@ import { assertFormFieldLimits } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import { missingRequired, requiredPropertiesError } from './required-properties';
 import { ContactConsentService } from '../../contact-consent';
+import { PersonalDataErasureService } from '../../privacy';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { assertOwnerWithinScope } from '../owner-scope';
@@ -123,6 +124,7 @@ export class ContactsService {
     private readonly rbac: RbacService,
     private readonly quota: ContactQuotaService,
     private readonly consent: ContactConsentService,
+    private readonly erasure: PersonalDataErasureService,
   ) {}
 
   async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
@@ -895,8 +897,14 @@ export class ContactsService {
     });
   }
 
-  async remove(uuid: string): Promise<void> {
+  /**
+   * Hard delete. With `eraseHistory` (the default) the contact's conversations, messages, media, files, call logs and recordings go
+   * with it (the shared erasure pipeline of the rights service); without it they are kept without the person's identity. Leads,
+   * deals, tasks and invoices stay as business records. Either way nothing is left pointing at the person by number or name.
+   */
+  async remove(uuid: string, opts: { eraseHistory?: boolean } = {}): Promise<void> {
     const ctx = RequestContextStore.require();
+    const eraseHistory = opts.eraseHistory ?? true;
 
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
@@ -911,6 +919,15 @@ export class ContactsService {
         existing.ownerId,
       );
 
+      // The history first, in the same transaction: the conversations are found through the contact link, which the delete below
+      // clears. A call that loses the race below rolls this back with it.
+      await this.erasure.eraseContactHistory(
+        tx,
+        ctx.orgId,
+        [existing.id],
+        eraseHistory ? 'delete' : 'anonymise',
+      );
+
       // Hard delete. The delete itself decides who won a race (AZ-014): `DELETE ... RETURNING` reports a row only to the
       // call that removed it, and a second concurrent call (which waited on the row lock) gets 404 and writes nothing.
       // The audit row and the outbox event follow in the same transaction; the audit trail keeps the record id.
@@ -920,6 +937,7 @@ export class ContactsService {
         module: MODULE_KEY,
         recordId: existing.id,
         action: 'delete',
+        delta: { history: { old: null, new: eraseHistory ? 'erased' : 'anonymised' } },
       });
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,

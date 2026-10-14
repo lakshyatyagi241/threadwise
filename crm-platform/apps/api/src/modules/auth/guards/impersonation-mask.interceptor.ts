@@ -1,4 +1,10 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor, StreamableFile } from '@nestjs/common';
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+  StreamableFile,
+} from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 import { RequestContextStore } from '../../../common/context/request-context';
 import {
@@ -7,7 +13,7 @@ import {
   maskName,
   maskPhone,
   piiKindOfKey,
-} from '../../audit-log/audit-pii';
+} from '../../../common/privacy/pii-mask';
 
 const MAX_DEPTH = 24;
 
@@ -59,8 +65,8 @@ export class ImpersonationMaskInterceptor implements NestInterceptor {
     if (context.getType() !== 'http' || !RequestContextStore.peek()?.impersonation) {
       return next.handle();
     }
-    return next.handle().pipe(
-      map((body) => (body instanceof StreamableFile ? body : maskPersonalData(body))),
-    );
+    return next
+      .handle()
+      .pipe(map((body) => (body instanceof StreamableFile ? body : maskPersonalData(body))));
   }
 }

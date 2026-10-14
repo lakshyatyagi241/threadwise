@@ -364,6 +364,11 @@
         "label": "Atribuição de contatos",
         "description": "Atribui automaticamente novos contatos e negócios à pessoa certa, ignorando quem está de licença.",
         "keywords": "atribuir, responsável, round robin, rodízio, novo contato, novo negócio, licença, férias, roteamento de leads"
+      },
+      "privacy-requests": {
+        "label": "Solicitações de dados",
+        "description": "Responda a quem pergunta o que você mantém sobre elas: verificação de identidade, exportação, exclusão com prévia e um comprovante que você pode guardar.",
+        "keywords": "privacidade, gdpr, solicitação de dados, dsar, acesso do titular, exportar dados, apagar, direito ao esquecimento, excluir dados pessoais, bloqueio legal"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

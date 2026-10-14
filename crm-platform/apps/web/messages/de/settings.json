@@ -364,6 +364,11 @@
         "label": "Kontaktzuweisung",
         "description": "Neue Kontakte und Deals automatisch der richtigen Person zuweisen, ohne Personen im Urlaub.",
         "keywords": "zuweisen, Inhaber, Round Robin, neuer Kontakt, neuer Deal, Abwesenheit, Urlaub, Lead-Routing"
+      },
+      "privacy-requests": {
+        "label": "Datenanfragen",
+        "description": "Beantworten Sie Personen, die wissen wollen, was Sie über sie speichern: Identitätsprüfung, Export, Löschung mit Vorschau und ein Nachweis zum Aufbewahren.",
+        "keywords": "Datenschutz, DSGVO, GDPR, Datenanfrage, DSR, Auskunftsersuchen, Daten exportieren, löschen, Recht auf Vergessenwerden, personenbezogene Daten löschen, Rechtssperre"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

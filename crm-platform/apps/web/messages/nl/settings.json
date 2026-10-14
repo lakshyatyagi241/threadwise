@@ -348,6 +348,11 @@
         "label": "Contacttoewijzing",
         "description": "Geef nieuwe contacten en deals automatisch aan de juiste persoon, en sla mensen met verlof over.",
         "keywords": "toewijzen, eigenaar, round robin, nieuw contact, nieuwe deal, verlof, leadroutering"
+      },
+      "privacy-requests": {
+        "label": "Gegevensverzoeken",
+        "description": "Beantwoord mensen die vragen wat je van hen bewaart: identiteitscontrole, export, wissen met voorvertoning en een bewijs dat je kunt bewaren.",
+        "keywords": "privacy, gdpr, gegevensverzoek, dsar, inzage, gegevens exporteren, wissen, recht op vergetelheid, persoonsgegevens verwijderen, legal hold"
       }
     },
     "title": "Instellingen",

@@ -13,6 +13,7 @@ import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
 import { ConsentCard } from '@/features/contact-consent';
+import { ContactPrivacyMenu } from '@/features/privacy-requests';
 import { ContactGrowthCard } from '@/features/growth';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
@@ -48,6 +49,7 @@ import { OwnerControl } from './owner-control';
 import { LostReasonDialog, type LostPrompt } from './lost-reason';
 import { isLostStage } from '../lib/stage-flow';
 import { statusAfterMove, statusNotice } from '../lib/status-scope';
+import { DeleteHistoryOption } from './delete-history-option';
 import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
 
 /**
@@ -68,6 +70,7 @@ export function ContactDetail({ id }: { id: string }) {
   const statusOptions = useStatusOptions();
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [keepHistory, setKeepHistory] = useState(false);
   const ts = useTranslations('contacts-attributes-tags.stageMenu');
   const tForm = useTranslations('contacts-attributes-tags.form');
   /** A status value as the workspace names it (its configured label, else the platform's). */
@@ -120,7 +123,7 @@ export function ContactDetail({ id }: { id: string }) {
   });
 
   const remove = useMutation({
-    mutationFn: () => deleteContact(id),
+    mutationFn: () => deleteContact(id, { eraseHistory: !keepHistory }),
     onSuccess: async () => {
       await invalidateContacts(qc);
       toast(t('deleted'), 'success');
@@ -247,6 +250,7 @@ export function ContactDetail({ id }: { id: string }) {
           </div>
         </div>
         <div className="flex shrink-0 gap-2">
+          <ContactPrivacyMenu contactId={id} />
           {canUpdate && (
             <Button variant="secondary" onClick={() => setEditing(true)}>
               <PencilIcon /> {t('edit')}
@@ -380,10 +384,18 @@ export function ContactDetail({ id }: { id: string }) {
         tone="danger"
         busy={remove.isPending}
         title={t('deleteTitle')}
-        message={t('deleteMessage', { name })}
+        message={
+          <>
+            <p>{t('deleteMessage', { name })}</p>
+            <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
+          </>
+        }
         confirmLabel={t('delete')}
         cancelLabel={t('keep')}
-        onClose={() => setDeleting(false)}
+        onClose={() => {
+          setDeleting(false);
+          setKeepHistory(false);
+        }}
         onConfirm={() => remove.mutate()}
       />
     </section>

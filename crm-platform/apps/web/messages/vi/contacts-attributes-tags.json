@@ -1373,6 +1373,12 @@
         "reorder": "Kéo để sắp xếp lại các cột",
         "remove": "Gỡ {name}"
       }
+    },
+    "erase": {
+      "scope": "Xóa một liên hệ cũng xóa hội thoại, tin nhắn, phương tiện, tệp, bản ghi âm cuộc gọi và nhật ký cuộc gọi của họ. Khách tiềm năng, giao dịch, công việc và hóa đơn vẫn được giữ.",
+      "scopeMany": "Xóa các liên hệ cũng xóa hội thoại, tin nhắn, phương tiện, tệp, bản ghi âm cuộc gọi và nhật ký cuộc gọi của họ. Khách tiềm năng, giao dịch, công việc và hóa đơn vẫn được giữ.",
+      "keepHistory": "Giữ lịch sử hội thoại nhưng không kèm danh tính của người này",
+      "keepHistoryHint": "Các hội thoại vẫn được giữ làm hồ sơ nhưng không còn liên kết đến người này."
     }
   }
 }

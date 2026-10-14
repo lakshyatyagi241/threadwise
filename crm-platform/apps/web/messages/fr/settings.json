@@ -364,6 +364,11 @@
         "label": "Attribution des contacts",
         "description": "Attribuez automatiquement les nouveaux contacts et affaires à la bonne personne, en ignorant les personnes en congé.",
         "keywords": "attribuer, propriétaire, round robin, tourniquet, nouveau contact, nouvelle affaire, congé, absence, routage des leads"
+      },
+      "privacy-requests": {
+        "label": "Demandes de données",
+        "description": "Répondez aux personnes qui demandent ce que vous détenez sur elles : vérification d'identité, export, effacement avec aperçu et une preuve à conserver.",
+        "keywords": "confidentialité, RGPD, GDPR, demande de données, DSR, droit d'accès, exporter les données, effacer, droit à l'oubli, supprimer des données personnelles, blocage légal"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

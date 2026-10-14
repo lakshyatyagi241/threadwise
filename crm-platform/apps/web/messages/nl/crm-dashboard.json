@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "CRM-dashboard"
+    },
+    "title": "Je CRM",
+    "subtitle": "Deals, facturen, betalingen en taken — het hele bedrijf in één overzicht.",
+    "period": "{from} tot {to} · tijdzone {zone}",
+    "openBoard": "Het dealbord openen",
+    "loading": "Dashboard laden",
+    "retry": "Opnieuw proberen",
+    "stale": "Vernieuwen is mislukt. Dit zijn de laatste cijfers die we hadden.",
+    "empty": {
+      "title": "Nog niets te melden",
+      "message": "Voeg contacten en deals toe en deze pagina vult zich: de pipelinetrechter, wie er wint, waar leads vandaan komen, taken en wat je nog tegoed hebt.",
+      "deals": "Naar deals",
+      "contacts": "Naar contacten"
+    },
+    "filters": {
+      "label": "Dashboardfilters",
+      "period": "Periode",
+      "range": {
+        "month": "Deze maand",
+        "7d": "7 dagen",
+        "30d": "30 dagen",
+        "90d": "90 dagen",
+        "custom": "Aangepast"
+      },
+      "from": "Van",
+      "to": "Tot",
+      "pipeline": "Pipeline",
+      "allPipelines": "Alle pipelines",
+      "owner": "Eigenaar",
+      "everyone": "Iedereen",
+      "team": "Team",
+      "allTeams": "Alle teams",
+      "reset": "Filters resetten"
+    },
+    "kpi": {
+      "title": "Kerncijfers",
+      "vsPrevious": "Vergeleken met de vorige periode van dezelfde lengte",
+      "open": "Open pipeline",
+      "openHint": "{count, plural, one {# deal} other {# deals}} · prognose {forecast}",
+      "won": "Gewonnen",
+      "wonHint": "{count, plural, one {# deal gesloten} other {# deals gesloten}}",
+      "collected": "Geïnd",
+      "collectedHint": "Ontvangen betalingen",
+      "outstanding": "Openstaand",
+      "outstandingHint": "{count, plural, one {# open factuur} other {# open facturen}}",
+      "winRate": "Winstpercentage",
+      "winRateHint": "{won} gewonnen, {lost} verloren",
+      "avgSize": "Gemiddelde dealgrootte",
+      "avgSizeHint": "Van de gewonnen deals",
+      "avgCycle": "Gemiddelde verkoopcyclus",
+      "avgCycleHint": "Van aanmaken tot gewonnen",
+      "days": "{count, plural, one {# dag} other {# dagen}}",
+      "lost": "Verloren deals",
+      "lateClose": "Verwachte sluiting verstreken",
+      "lateCloseHint": "Open deals waarvan de datum voorbij is",
+      "contacts": "Contacten",
+      "contactsHint": "Vandaag in jouw weergave",
+      "newContacts": "Nieuwe contacten",
+      "newLeads": "Nieuwe leads",
+      "newLeadsHint": "Contacten die met een bron binnenkwamen",
+      "paid": "Betaalde facturen",
+      "paidHint": "In de periode betaald geworden",
+      "tasksOpen": "Open taken",
+      "tasksOpenHint": "{count} later vandaag vervallen",
+      "tasksOverdue": "Achterstallige taken"
+    },
+    "funnel": {
+      "title": "Pipelinetrechter",
+      "subtitle": "{pipeline} · {count, plural, one {# deal aangemaakt} other {# deals aangemaakt}} in de periode",
+      "noPipeline": "Er is nog geen pipeline.",
+      "empty": "In deze periode zijn geen deals aangemaakt.",
+      "conversion": "{percent}% ging door",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} bereikten deze fase, {open} nu open. Open ze.",
+      "openNow": "{count, plural, one {# nu open} other {# nu open}} · {value}"
+    },
+    "trend": {
+      "title": "Gewonnen en verloren deals",
+      "subtitle": {
+        "day": "Per dag · {value} gewonnen",
+        "week": "Per week · {value} gewonnen",
+        "month": "Per maand · {value} gewonnen"
+      },
+      "chartLabel": "Gewonnen en verloren deals over de periode",
+      "won": "Gewonnen",
+      "lost": "Verloren"
+    },
+    "leaderboard": {
+      "title": "Ranglijst van eigenaren",
+      "subtitle": "Op gewonnen waarde in de periode",
+      "empty": "Geen deals om te rangschikken in deze weergave.",
+      "owner": "Eigenaar",
+      "won": "Gewonnen",
+      "value": "Waarde",
+      "lost": "Verloren",
+      "open": "Open",
+      "activities": "Activiteiten",
+      "unowned": "Geen eigenaar"
+    },
+    "sources": {
+      "title": "Leadbronnen",
+      "subtitle": "Contacten die in de periode binnenkwamen en hoe ver ze kwamen",
+      "empty": "In deze periode kwam geen contact met een bron binnen.",
+      "source": "Bron",
+      "leads": "Leads",
+      "toDeal": "Naar deal",
+      "toWon": "Naar gewonnen",
+      "wonValue": "Gewonnen waarde",
+      "none": "Geen bron"
+    },
+    "tasks": {
+      "title": "Taken",
+      "subtitle": "{open} open · {overdue} achterstallig · {today} later vandaag vervallen",
+      "all": "Alle taken",
+      "empty": "Geen open taken.",
+      "byAssignee": "Open taken per toegewezene",
+      "assignee": "Toegewezene",
+      "open": "Open",
+      "overdue": "Achterstallig",
+      "dueToday": "Later vandaag",
+      "unassigned": "Niet toegewezen",
+      "upcoming": "Aankomende taken",
+      "overdueTag": "Achterstallig"
+    },
+    "aging": {
+      "title": "Ouderdom van debiteuren",
+      "open": "Betalingen",
+      "empty": "Er staat niets open.",
+      "bucket": {
+        "current": "Nog niet vervallen",
+        "d1_30": "1–30 dagen over tijd",
+        "d31_60": "31–60 dagen over tijd",
+        "d61_90": "61–90 dagen over tijd",
+        "d90_plus": "Meer dan 90 dagen over tijd"
+      }
+    },
+    "payments": {
+      "title": "Recente betalingen",
+      "empty": "Nog geen betalingen."
+    },
+    "activity": {
+      "title": "Recente activiteit",
+      "empty": "Nog geen activiteit.",
+      "stageMoved": "Verplaatst van {from} naar {to}",
+      "stagePlaced": "Geplaatst in {to}",
+      "by": "door {name}",
+      "system": "door het systeem",
+      "type": {
+        "note": "Notitie",
+        "stage_change": "Fasewijziging",
+        "call": "Gesprek",
+        "message": "Bericht",
+        "email": "E-mail",
+        "meeting": "Vergadering",
+        "task": "Taak"
+      }
+    }
+  }
+}

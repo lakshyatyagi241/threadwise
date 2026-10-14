@@ -1373,6 +1373,12 @@
         "reorder": "Sleep om kolommen te herschikken",
         "remove": "{name} verwijderen"
       }
+    },
+    "erase": {
+      "scope": "Als je een contact verwijdert, worden ook de gesprekken, berichten, media, bestanden, gespreksopnamen en gesprekslogboeken gewist. Leads, deals, taken en facturen blijven bestaan.",
+      "scopeMany": "Als je contacten verwijdert, worden ook hun gesprekken, berichten, media, bestanden, gespreksopnamen en gesprekslogboeken gewist. Leads, deals, taken en facturen blijven bestaan.",
+      "keepHistory": "Gespreksgeschiedenis bewaren zonder de identiteit van de persoon",
+      "keepHistoryHint": "De gesprekken blijven bewaard voor je administratie maar verwijzen niet meer naar de persoon."
     }
   }
 }

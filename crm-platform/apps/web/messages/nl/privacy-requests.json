@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Sluiten",
+      "retry": "Opnieuw proberen",
+      "loading": "Laden...",
+      "cancel": "Annuleren",
+      "back": "Terug",
+      "next": "Volgende",
+      "close": "Sluiten",
+      "save": "Opslaan"
+    },
+    "errors": {
+      "network": "We kunnen de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt geen toestemming om dit te doen.",
+      "notFound": "Dit verzoek bestaat niet meer.",
+      "subjectNotFound": "Deze persoon bestaat niet meer in deze werkruimte.",
+      "stateInvalid": "Dit verzoek heeft geen status waarin dit kan. Laad de pagina opnieuw en controleer de status.",
+      "notVerified": "Verifieer eerst de identiteit van de persoon.",
+      "legalHold": "Dit verzoek staat onder legal hold. Hef de hold op voordat je wist.",
+      "confirmationRequired": "Voer eerst de voorvertoning uit en typ de bevestigingszin exact.",
+      "exportInProgress": "Er wordt al een export van dit verzoek voorbereid.",
+      "exportNotReady": "Dat bestand is niet gereed of verlopen. Bereid een nieuwe export voor.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "type": {
+      "access": "Inzage",
+      "export": "Export",
+      "erasure": "Wissen",
+      "rectification": "Rectificatie",
+      "restriction": "Beperking",
+      "objection": "Bezwaar",
+      "withdrawal": "Intrekking van toestemming",
+      "portability": "Overdraagbaarheid"
+    },
+    "typeHint": {
+      "access": "De persoon vraagt welke gegevens wij over hem of haar bewaren. Eindigt in een bestand.",
+      "export": "Een kopie van de gegevens van de persoon. Eindigt in een bestand.",
+      "erasure": "Verwijder de gegevens van de persoon. Je bekijkt eerst een voorvertoning.",
+      "rectification": "Corrigeer onjuiste gegevens. Je past ze handmatig aan en sluit het verzoek.",
+      "restriction": "Stop voorlopig met het gebruik van de gegevens. Je handelt dit handmatig af en sluit het verzoek.",
+      "objection": "De persoon maakt bezwaar tegen een gebruik van zijn of haar gegevens. Je handelt dit handmatig af en sluit het verzoek.",
+      "withdrawal": "De persoon trekt de toestemming in. Je handelt dit handmatig af en sluit het verzoek.",
+      "portability": "Een machineleesbare kopie om elders te gebruiken. Eindigt in een bestand."
+    },
+    "status": {
+      "received": "Ontvangen",
+      "verifying": "Identiteit verifiëren",
+      "in_progress": "In behandeling",
+      "completed": "Afgerond",
+      "rejected": "Afgewezen",
+      "expired": "Verlopen"
+    },
+    "channel": {
+      "email": "E-mail",
+      "whatsapp": "WhatsApp",
+      "phone": "Telefoon",
+      "in_person": "Persoonlijk",
+      "portal": "Portaal",
+      "staff": "Ingevoerd door medewerker",
+      "other": "Overig"
+    },
+    "method": {
+      "channel_code": "Code verstuurd naar het kanaal van de persoon",
+      "email_link": "Link per e-mail verstuurd",
+      "known_contact": "Bereikt op het nummer of e-mailadres dat we al hebben",
+      "existing_session": "Ingelogd op het eigen account",
+      "id_document_checked": "Identiteitsbewijs gecontroleerd",
+      "other": "Overig"
+    },
+    "disposition": {
+      "deleted": "Verwijderd",
+      "anonymised": "Geanonimiseerd",
+      "cascaded": "Doorgevoerd",
+      "retained": "Bewaard",
+      "unlinked": "Ontkoppeld"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {# dag resterend} other {# dagen resterend}}",
+      "dueToday": "Vandaag te beantwoorden",
+      "overdue": "{count, plural, one {# dag te laat} other {# dagen te laat}}",
+      "closed": "Gesloten",
+      "dueOn": "Uiterlijk {date}"
+    },
+    "list": {
+      "title": "Gegevensverzoeken",
+      "subtitle": "Verzoeken van mensen over de gegevens die je van hen bewaart: inzage, export, wissen en meer. Elk verzoek heeft een deadline en een overzicht van wat er is gedaan.",
+      "newRequest": "Nieuw verzoek",
+      "settings": "Instellingen",
+      "empty": "Nog geen gegevensverzoeken.",
+      "emptyFiltered": "Geen verzoeken die bij deze filters passen.",
+      "loadMore": "Meer laden",
+      "loadingMore": "Laden...",
+      "columns": {
+        "reference": "Referentie",
+        "type": "Type",
+        "subject": "Persoon",
+        "status": "Status",
+        "due": "Deadline"
+      },
+      "filters": {
+        "label": "Filters",
+        "status": "Status",
+        "type": "Type",
+        "any": "Alle",
+        "overdue": "Alleen te late"
+      },
+      "open": "Verzoek {reference} openen"
+    },
+    "settings": {
+      "title": "Deadline",
+      "slaDays": "Dagen om een verzoek te beantwoorden",
+      "slaHint": "Hoeveel dagen na ontvangst een verzoek moet zijn afgehandeld. Standaard is 30.",
+      "saved": "Instellingen opgeslagen.",
+      "invalid": "Voer een geheel aantal dagen in van 1 tot 90."
+    },
+    "wizard": {
+      "title": "Nieuw gegevensverzoek",
+      "step": "Stap {current} van {total}",
+      "person": {
+        "title": "Zoek de persoon",
+        "search": "Zoek op naam, telefoonnummer of e-mail",
+        "searchHint": "Typ minstens 2 tekens.",
+        "searching": "Zoeken...",
+        "none": "Niemand gevonden. Hieronder kun je een telefoonnummer of e-mailadres gebruiken.",
+        "pick": "{name} selecteren",
+        "unnamed": "Naamloos",
+        "kindContact": "Contact",
+        "kindLead": "Lead",
+        "selected": "Geselecteerd: {name}",
+        "other": "Niet in je contacten",
+        "otherValue": "Telefoonnummer of e-mail",
+        "otherHint": "Voor iemand die niet is opgeslagen. We zoeken de gegevens op basis van deze waarde.",
+        "useOther": "Deze waarde gebruiken",
+        "clear": "Iemand anders kiezen"
+      },
+      "kind": {
+        "title": "Waar vraagt de persoon om?"
+      },
+      "details": {
+        "title": "Details",
+        "channel": "Hoe heeft het verzoek je bereikt?",
+        "note": "Interne notitie",
+        "noteHint": "Optioneel. Alleen jouw team ziet dit. Schrijf hier geen persoonsgegevens.",
+        "history": "Gespreksgeschiedenis",
+        "historyHint": "Wat er met de gesprekken van de persoon gebeurt als de gegevens worden gewist.",
+        "historyDelete": "De gesprekken, berichten en bestanden verwijderen",
+        "historyAnonymise": "De gesprekken bewaren zonder de identiteit van de persoon"
+      },
+      "create": "Verzoek aanmaken",
+      "creating": "Aanmaken...",
+      "created": "Verzoek {reference} aangemaakt."
+    },
+    "detail": {
+      "back": "Gegevensverzoeken",
+      "loading": "Laden...",
+      "received": "Ontvangen op {date}",
+      "channel": "Kanaal: {channel}",
+      "history": {
+        "delete": "Bij wissen: gesprekken worden verwijderd",
+        "anonymise": "Bij wissen: gesprekken blijven bewaard zonder de identiteit van de persoon"
+      },
+      "note": "Interne notitie",
+      "legalHoldBadge": "Legal hold",
+      "timeline": {
+        "title": "Tijdlijn",
+        "empty": "Nog niets vastgelegd.",
+        "by": "door {actor}",
+        "system": "het systeem",
+        "event": {
+          "created": "Verzoek aangemaakt",
+          "verification_started": "Identiteitscontrole gestart",
+          "verified": "Identiteit geverifieerd",
+          "verification_failed": "Identiteit niet geverifieerd",
+          "hold_set": "Legal hold ingesteld",
+          "hold_released": "Legal hold opgeheven",
+          "rejected": "Verzoek afgewezen",
+          "export_requested": "Export aangevraagd",
+          "export_downloaded": "Export gedownload",
+          "erase_previewed": "Wissen bekeken in voorvertoning",
+          "erased": "Gegevens gewist",
+          "completed": "Verzoek afgerond",
+          "other": "Bijwerken"
+        }
+      },
+      "verify": {
+        "title": "Identiteitsverificatie",
+        "intro": "Controleer of de persoon die het verzoek doet is wie hij of zij zegt te zijn, voordat je iets exporteert of wist.",
+        "state": {
+          "none": "Nog niet gecontroleerd.",
+          "verified": "Geverifieerd op {date} ({method}).",
+          "evidence": "Bewijsreferentie: {ref}"
+        },
+        "method": "Hoe is het gecontroleerd?",
+        "evidence": "Bewijsreferentie-ID",
+        "evidenceHint": "Alleen een referentie-ID, upload nooit documenten. Gebruik een ticketnummer of een bericht-ID.",
+        "note": "Notitie",
+        "outcome": "Uitkomst",
+        "pending": "Controle gestart",
+        "verified": "Geverifieerd",
+        "notVerified": "Niet geverifieerd",
+        "submit": "Uitkomst vastleggen",
+        "notVerifiedWarn": "Het verzoek van een persoon die niet is geverifieerd wordt afgewezen.",
+        "saved": "Verificatie vastgelegd."
+      },
+      "hold": {
+        "title": "Legal hold",
+        "intro": "Zolang een hold actief is, wordt wissen geweigerd. Gebruik dit als de wet of een geschil vereist dat de gegevens bewaard blijven.",
+        "toggle": "Legal hold",
+        "reason": "Reden",
+        "reasonHint": "Minstens 3 tekens.",
+        "apply": "Hold instellen",
+        "release": "Hold opheffen",
+        "active": "Onder hold: {reason}",
+        "saved": "Hold bijgewerkt."
+      },
+      "export": {
+        "title": "Export",
+        "intro": "Maakt een ZIP-bestand met de gegevens die we van deze persoon bewaren.",
+        "expiry": "Een voltooid bestand blijft {days} dagen beschikbaar en wordt dan verwijderd.",
+        "noEmail": "Er wordt niets naar de persoon gestuurd. Download het bestand en bezorg het via een veilig kanaal.",
+        "request": "Export voorbereiden",
+        "requesting": "Voorbereiden...",
+        "requested": "Export gestart.",
+        "none": "Nog geen exports.",
+        "download": "Downloaden",
+        "size": "{size} KB",
+        "expires": "Verloopt op {date}",
+        "status": {
+          "queued": "In wachtrij",
+          "running": "Wordt opgebouwd",
+          "ready": "Gereed",
+          "failed": "Mislukt",
+          "expired": "Verlopen"
+        }
+      },
+      "erase": {
+        "title": "Wissen",
+        "intro": "Verwijdert de gegevens van de persoon uit elke module. Bekijk eerst de voorvertoning: er verandert niets tot je bevestigt.",
+        "preview": "Voorvertoning",
+        "previewing": "Tellen...",
+        "previewTitle": "Wat er zou gebeuren",
+        "previewNote": "Alleen voorvertoning. Er is niets gewijzigd.",
+        "files": "{count, plural, one {# opgeslagen bestand in de wachtrij voor verwijdering} other {# opgeslagen bestanden in de wachtrij voor verwijdering}}",
+        "totals": "{deleted} verwijderd, {anonymised} geanonimiseerd, {retained} bewaard",
+        "colTable": "Tabel",
+        "colWhat": "Wat er gebeurt",
+        "colCount": "Rijen",
+        "colReason": "Waarom",
+        "confirmLabel": "Typ {phrase} om te bevestigen",
+        "confirmHint": "Dit kan niet ongedaan worden gemaakt.",
+        "execute": "Nu wissen",
+        "executing": "Wissen...",
+        "done": "Wissen voltooid.",
+        "blocked": "Wissen is beschikbaar zodra de identiteit is geverifieerd en er geen legal hold actief is."
+      },
+      "proof": {
+        "title": "Bewijs van wissing",
+        "executedAt": "Uitgevoerd op {date}",
+        "executedBy": "Door {actor}",
+        "totals": "{deleted} verwijderd, {anonymised} geanonimiseerd, {retained} bewaard, {files} bestanden",
+        "registryDigest": "Registerhash",
+        "sha256": "SHA-256",
+        "notes": "Beperkingen van deze wissing",
+        "download": "Bewijs downloaden"
+      },
+      "close": {
+        "title": "Het verzoek sluiten",
+        "complete": "Markeren als afgerond",
+        "completeHint": "Gebruik dit als de persoon een antwoord heeft gekregen of het werk handmatig is gedaan.",
+        "completed": "Verzoek afgerond.",
+        "rejectReason": "Reden van afwijzing",
+        "reject": "Verzoek afwijzen",
+        "rejectConfirm": "Afwijzen",
+        "rejected": "Verzoek afgewezen.",
+        "rejectedWith": "Afgewezen: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Privacy",
+      "export": "De gegevens van deze persoon exporteren",
+      "erase": "Deze persoon wissen",
+      "created": "Verzoek {reference} aangemaakt.",
+      "failed": "Het verzoek kon niet worden aangemaakt."
+    }
+  }
+}

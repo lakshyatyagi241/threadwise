@@ -82,6 +82,7 @@ import { FaqKnowledgeModule } from './modules/faq-knowledge';
 import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
+import { PrivacyModule } from './modules/privacy';
 import { AuditLogModule } from './modules/audit-log';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
@@ -237,6 +238,7 @@ import { HealthModule } from './health/health.module';
     LeadScoringModule,
     GrowthPilotModule,
     ContactConsentModule,
+    PrivacyModule,
     AuditLogModule,
     WabaModule,
     WhatsAppProviderAdminModule,

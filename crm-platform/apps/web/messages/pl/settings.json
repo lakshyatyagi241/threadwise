@@ -364,6 +364,11 @@
         "label": "Przypisywanie kontaktów",
         "description": "Automatycznie przydzielaj nowe kontakty i transakcje właściwej osobie, pomijając osoby na urlopie.",
         "keywords": "przypisanie, właściciel, round robin, nowy kontakt, nowa transakcja, urlop, routing leadów"
+      },
+      "privacy-requests": {
+        "label": "Wnioski o dane",
+        "description": "Odpowiadaj osobom pytającym, co o nich przechowujesz: sprawdzenie tożsamości, eksport, usunięcie z podglądem i dowód, który możesz zachować.",
+        "keywords": "prywatność, gdpr, wniosek o dane, dsar, dostęp do danych, eksport danych, usunięcie, prawo do bycia zapomnianym, usunięcie danych osobowych, blokada prawna"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

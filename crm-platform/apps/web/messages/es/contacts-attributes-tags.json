@@ -1373,6 +1373,12 @@
         "reorder": "Arrastra para reordenar las columnas",
         "remove": "Quitar {name}"
       }
+    },
+    "erase": {
+      "scope": "Al eliminar un contacto también se borran sus conversaciones, mensajes, multimedia, archivos, grabaciones de llamadas y registros de llamadas. Los leads, los negocios, las tareas y las facturas se conservan.",
+      "scopeMany": "Al eliminar contactos también se borran sus conversaciones, mensajes, multimedia, archivos, grabaciones de llamadas y registros de llamadas. Los leads, los negocios, las tareas y las facturas se conservan.",
+      "keepHistory": "Conservar el historial de conversaciones sin la identidad de la persona",
+      "keepHistoryHint": "Las conversaciones se conservan para tus registros, pero ya no apuntan a la persona."
     }
   }
 }

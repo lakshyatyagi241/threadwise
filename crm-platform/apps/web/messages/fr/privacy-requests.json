@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Ignorer",
+      "retry": "Réessayer",
+      "loading": "Chargement...",
+      "cancel": "Annuler",
+      "back": "Retour",
+      "next": "Suivant",
+      "close": "Fermer",
+      "save": "Enregistrer"
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+      "notFound": "Cette demande n'existe plus.",
+      "subjectNotFound": "Cette personne n'existe plus dans cet espace de travail.",
+      "stateInvalid": "Cette demande n'est pas dans un état permettant cette action. Rechargez la page et vérifiez son statut.",
+      "notVerified": "Vérifiez d'abord l'identité de la personne.",
+      "legalHold": "Cette demande est sous blocage légal. Levez le blocage avant d'effacer.",
+      "confirmationRequired": "Lancez d'abord l'aperçu et saisissez exactement la phrase de confirmation.",
+      "exportInProgress": "Un export de cette demande est déjà en préparation.",
+      "exportNotReady": "Ce fichier n'est pas prêt ou a expiré. Préparez un nouvel export.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "validation": "Certaines valeurs ne sont pas valides. Vérifiez le formulaire et réessayez.",
+      "unexpected": "Une erreur s'est produite. Réessayez."
+    },
+    "type": {
+      "access": "Accès",
+      "export": "Export",
+      "erasure": "Effacement",
+      "rectification": "Rectification",
+      "restriction": "Limitation",
+      "objection": "Opposition",
+      "withdrawal": "Retrait du consentement",
+      "portability": "Portabilité"
+    },
+    "typeHint": {
+      "access": "La personne demande quelles données nous détenons sur elle. Aboutit à un fichier.",
+      "export": "Une copie des données de la personne. Aboutit à un fichier.",
+      "erasure": "Supprimer les données de la personne. Vous les prévisualisez d'abord.",
+      "rectification": "Corriger des données erronées. Vous les corrigez à la main puis clôturez la demande.",
+      "restriction": "Cesser provisoirement d'utiliser les données. Vous traitez la demande à la main puis la clôturez.",
+      "objection": "La personne s'oppose à une utilisation de ses données. Vous traitez la demande à la main puis la clôturez.",
+      "withdrawal": "La personne retire son consentement. Vous traitez la demande à la main puis la clôturez.",
+      "portability": "Une copie lisible par machine pour la transmettre ailleurs. Aboutit à un fichier."
+    },
+    "status": {
+      "received": "Reçue",
+      "verifying": "Vérification de l'identité",
+      "in_progress": "En cours",
+      "completed": "Terminée",
+      "rejected": "Rejetée",
+      "expired": "Expirée"
+    },
+    "channel": {
+      "email": "E-mail",
+      "whatsapp": "WhatsApp",
+      "phone": "Téléphone",
+      "in_person": "En personne",
+      "portal": "Portail",
+      "staff": "Saisie par l'équipe",
+      "other": "Autre"
+    },
+    "method": {
+      "channel_code": "Code envoyé sur le canal de la personne",
+      "email_link": "Lien envoyé par e-mail",
+      "known_contact": "Joint au numéro ou à l'e-mail que nous avons déjà",
+      "existing_session": "Connecté à son compte",
+      "id_document_checked": "Pièce d'identité vérifiée",
+      "other": "Autre"
+    },
+    "disposition": {
+      "deleted": "Supprimé",
+      "anonymised": "Anonymisé",
+      "cascaded": "Supprimé en cascade",
+      "retained": "Conservé",
+      "unlinked": "Dissocié"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {# jour restant} other {# jours restants}}",
+      "dueToday": "Échéance aujourd'hui",
+      "overdue": "{count, plural, one {# jour de retard} other {# jours de retard}}",
+      "closed": "Clôturée",
+      "dueOn": "Échéance le {date}"
+    },
+    "list": {
+      "title": "Demandes de données",
+      "subtitle": "Demandes de personnes concernant les données que vous détenez sur elles : accès, export, effacement et plus. Chacune a une échéance et un historique des actions menées.",
+      "newRequest": "Nouvelle demande",
+      "settings": "Paramètres",
+      "empty": "Aucune demande de données pour le moment.",
+      "emptyFiltered": "Aucune demande ne correspond à ces filtres.",
+      "loadMore": "Charger plus",
+      "loadingMore": "Chargement...",
+      "columns": {
+        "reference": "Référence",
+        "type": "Type",
+        "subject": "Personne",
+        "status": "Statut",
+        "due": "Échéance"
+      },
+      "filters": {
+        "label": "Filtres",
+        "status": "Statut",
+        "type": "Type",
+        "any": "Tous",
+        "overdue": "En retard uniquement"
+      },
+      "open": "Ouvrir la demande {reference}"
+    },
+    "settings": {
+      "title": "Échéance",
+      "slaDays": "Jours pour répondre à une demande",
+      "slaHint": "Nombre de jours après l'arrivée d'une demande avant son échéance. La valeur par défaut est 30.",
+      "saved": "Paramètres enregistrés.",
+      "invalid": "Saisissez un nombre entier de jours entre 1 et 90."
+    },
+    "wizard": {
+      "title": "Nouvelle demande de données",
+      "step": "Étape {current} sur {total}",
+      "person": {
+        "title": "Trouver la personne",
+        "search": "Rechercher par nom, téléphone ou e-mail",
+        "searchHint": "Saisissez au moins 2 caractères.",
+        "searching": "Recherche...",
+        "none": "Aucune personne trouvée. Vous pouvez utiliser un numéro de téléphone ou un e-mail ci-dessous.",
+        "pick": "Sélectionner {name}",
+        "unnamed": "Sans nom",
+        "kindContact": "Contact",
+        "kindLead": "Lead",
+        "selected": "Sélectionné : {name}",
+        "other": "Absent de vos contacts",
+        "otherValue": "Numéro de téléphone ou e-mail",
+        "otherHint": "Pour une personne non enregistrée. Nous recherchons ses données à partir de cette valeur.",
+        "useOther": "Utiliser cette valeur",
+        "clear": "Choisir quelqu'un d'autre"
+      },
+      "kind": {
+        "title": "Que demande la personne ?"
+      },
+      "details": {
+        "title": "Détails",
+        "channel": "Comment la demande vous est-elle parvenue ?",
+        "note": "Note interne",
+        "noteHint": "Facultatif. Seule votre équipe la voit. N'y écrivez pas de données personnelles.",
+        "history": "Historique des conversations",
+        "historyHint": "Ce qu'il advient des conversations de la personne lorsque ses données sont effacées.",
+        "historyDelete": "Supprimer les conversations, les messages et les fichiers",
+        "historyAnonymise": "Conserver les conversations sans l'identité de la personne"
+      },
+      "create": "Créer la demande",
+      "creating": "Création...",
+      "created": "Demande {reference} créée."
+    },
+    "detail": {
+      "back": "Demandes de données",
+      "loading": "Chargement...",
+      "received": "Reçue le {date}",
+      "channel": "Canal : {channel}",
+      "history": {
+        "delete": "À l'effacement : les conversations sont supprimées",
+        "anonymise": "À l'effacement : les conversations sont conservées sans l'identité de la personne"
+      },
+      "note": "Note interne",
+      "legalHoldBadge": "Blocage légal",
+      "timeline": {
+        "title": "Chronologie",
+        "empty": "Rien d'enregistré pour le moment.",
+        "by": "par {actor}",
+        "system": "le système",
+        "event": {
+          "created": "Demande créée",
+          "verification_started": "Vérification d'identité lancée",
+          "verified": "Identité vérifiée",
+          "verification_failed": "Identité non vérifiée",
+          "hold_set": "Blocage légal posé",
+          "hold_released": "Blocage légal levé",
+          "rejected": "Demande rejetée",
+          "export_requested": "Export demandé",
+          "export_downloaded": "Export téléchargé",
+          "erase_previewed": "Effacement prévisualisé",
+          "erased": "Données effacées",
+          "completed": "Demande terminée",
+          "other": "Mettre à jour"
+        }
+      },
+      "verify": {
+        "title": "Vérification d'identité",
+        "intro": "Vérifiez que la personne qui demande est bien celle qu'elle prétend être avant d'exporter ou d'effacer quoi que ce soit.",
+        "state": {
+          "none": "Pas encore vérifiée.",
+          "verified": "Vérifiée le {date} ({method}).",
+          "evidence": "Référence de la preuve : {ref}"
+        },
+        "method": "Comment a-t-elle été vérifiée ?",
+        "evidence": "ID de référence de la preuve",
+        "evidenceHint": "Un ID de référence uniquement, ne téléversez jamais de documents. Utilisez un numéro de ticket ou un ID de message.",
+        "note": "Note",
+        "outcome": "Résultat",
+        "pending": "Vérification lancée",
+        "verified": "Vérifiée",
+        "notVerified": "Non vérifiée",
+        "submit": "Enregistrer le résultat",
+        "notVerifiedWarn": "La demande d'une personne non vérifiée est rejetée.",
+        "saved": "Vérification enregistrée."
+      },
+      "hold": {
+        "title": "Blocage légal",
+        "intro": "Tant qu'un blocage est actif, l'effacement est refusé. Utilisez-le lorsque la loi ou un litige impose de conserver les données.",
+        "toggle": "Blocage légal",
+        "reason": "Motif",
+        "reasonHint": "Au moins 3 caractères.",
+        "apply": "Poser le blocage",
+        "release": "Lever le blocage",
+        "active": "Sous blocage : {reason}",
+        "saved": "Blocage mis à jour."
+      },
+      "export": {
+        "title": "Export",
+        "intro": "Prépare un fichier ZIP avec les données que nous détenons sur cette personne.",
+        "expiry": "Un fichier terminé reste disponible {days} jours, puis il est supprimé.",
+        "noEmail": "Rien n'est envoyé à la personne. Téléchargez le fichier et remettez-le-lui par un canal sécurisé.",
+        "request": "Préparer l'export",
+        "requesting": "Préparation...",
+        "requested": "Export lancé.",
+        "none": "Aucun export pour le moment.",
+        "download": "Télécharger",
+        "size": "{size} Ko",
+        "expires": "Expire le {date}",
+        "status": {
+          "queued": "En attente",
+          "running": "En cours de création",
+          "ready": "Prêt",
+          "failed": "Échec",
+          "expired": "Expiré"
+        }
+      },
+      "erase": {
+        "title": "Effacer",
+        "intro": "Supprime les données de la personne dans tous les modules. Aperçu d'abord : rien ne change tant que vous ne confirmez pas.",
+        "preview": "Aperçu",
+        "previewing": "Comptage...",
+        "previewTitle": "Ce qui se passerait",
+        "previewNote": "Aperçu uniquement. Rien n'a été modifié.",
+        "files": "{count, plural, one {# fichier stocké mis en file pour suppression} other {# fichiers stockés mis en file pour suppression}}",
+        "totals": "{deleted} supprimés, {anonymised} anonymisés, {retained} conservés",
+        "colTable": "Table",
+        "colWhat": "Ce qui se passe",
+        "colCount": "Lignes",
+        "colReason": "Pourquoi",
+        "confirmLabel": "Saisissez {phrase} pour confirmer",
+        "confirmHint": "Cette action est irréversible.",
+        "execute": "Effacer maintenant",
+        "executing": "Effacement...",
+        "done": "Effacement terminé.",
+        "blocked": "L'effacement est disponible une fois l'identité vérifiée et en l'absence de blocage légal."
+      },
+      "proof": {
+        "title": "Preuve d'effacement",
+        "executedAt": "Exécuté le {date}",
+        "executedBy": "Par {actor}",
+        "totals": "{deleted} supprimés, {anonymised} anonymisés, {retained} conservés, {files} fichiers",
+        "registryDigest": "Empreinte du registre",
+        "sha256": "SHA-256",
+        "notes": "Limites de cet effacement",
+        "download": "Télécharger la preuve"
+      },
+      "close": {
+        "title": "Clôturer la demande",
+        "complete": "Marquer comme terminée",
+        "completeHint": "À utiliser lorsque la personne a reçu une réponse ou que le travail a été fait à la main.",
+        "completed": "Demande terminée.",
+        "rejectReason": "Motif du rejet",
+        "reject": "Rejeter la demande",
+        "rejectConfirm": "Rejeter",
+        "rejected": "Demande rejetée.",
+        "rejectedWith": "Rejetée : {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Confidentialité",
+      "export": "Exporter les données de cette personne",
+      "erase": "Effacer cette personne",
+      "created": "Demande {reference} créée.",
+      "failed": "Impossible de créer la demande."
+    }
+  }
+}
