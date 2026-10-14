@@ -76,6 +76,13 @@ x-api-env: &api-env
   # Google Calendar for workspaces (blank = set the client on the console's Google Calendar page instead).
   GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
   GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+  # Waboo migration panel: "remote" = the pipeline runs on a runner agent on a machine on the Geta VPN (tools/migration/pilot/staging/runner-agent.cjs).
+  # The token (32+ characters) is shared with the agent; empty = the agent endpoints refuse everyone. Runbook: tools/migration/pilot/staging/STAGING-RUNBOOK.md.
+  WABOO_MIGRATE_RUNNER: ${WABOO_MIGRATE_RUNNER:-}
+  WABOO_RUNNER_TOKEN: ${WABOO_RUNNER_TOKEN:-}
+  WABOO_RUNNER_PICKUP_MIN: ${WABOO_RUNNER_PICKUP_MIN:-}
+  WABOO_RUNNER_SILENCE_MIN: ${WABOO_RUNNER_SILENCE_MIN:-}
+  WABOO_MIGRATE_TIMEOUT_MIN: ${WABOO_MIGRATE_TIMEOUT_MIN:-}
 
 services:
   postgres:

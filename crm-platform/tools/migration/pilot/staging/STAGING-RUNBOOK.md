@@ -62,24 +62,61 @@ $CY batch --clients acme,beta --concurrency 2 --yes-load-into-staging --with-dry
 
 ### What is automatic, and what still needs a person per client
 
-| Automatic with `migrate` | A person, per client |
-| --- | --- |
-| export from Mongo to the server (reused if fresh), ship, preflight, `init`, backup, all load steps, reconcile, report fetch, migration-complete, timings | Mongo access to run the export (the kit's `.env`) and the Waboo database name |
-| the dry run and the load gate (clean dry run, or the explicit override) | the written go from the client owner before the load; the decision to use the override |
-| the config and a channel map skeleton (`new-client`) | owner e-mail and name, the real plan, the real WhatsApp phone number id per bot (replace the placeholder), the confirmed opening credit balance (`creditOpening`: generate it with `node pilot/staging/core-opening.cjs --client C --workspace <waboo db>`, which reads geta_core; else `--no-wallet`) |
-| stop at the first failure, with the resume command | reading `reconcile.md` and the migration-complete report, logging what is missing in WaDesk, deciding on quarantined rows |
-| | `set-owner-password` (the person chooses the password), the cutover webhook switch to the new WhatsApp setup, deleting the dumps afterwards (step 11) |
+| Automatic with `migrate`                                                                                                                                 | A person, per client                                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| export from Mongo to the server (reused if fresh), ship, preflight, `init`, backup, all load steps, reconcile, report fetch, migration-complete, timings | Mongo access to run the export (the kit's `.env`) and the Waboo database name                                                                                                                                                                                                                          |
+| the dry run and the load gate (clean dry run, or the explicit override)                                                                                  | the written go from the client owner before the load; the decision to use the override                                                                                                                                                                                                                 |
+| the config and a channel map skeleton (`new-client`)                                                                                                     | owner e-mail and name, the real plan, the real WhatsApp phone number id per bot (replace the placeholder), the confirmed opening credit balance (`creditOpening`: generate it with `node pilot/staging/core-opening.cjs --client C --workspace <waboo db>`, which reads geta_core; else `--no-wallet`) |
+| stop at the first failure, with the resume command                                                                                                       | reading `reconcile.md` and the migration-complete report, logging what is missing in WaDesk, deciding on quarantined rows                                                                                                                                                                              |
+|                                                                                                                                                          | `set-owner-password` (the person chooses the password), the cutover webhook switch to the new WhatsApp setup, deleting the dumps afterwards (step 11)                                                                                                                                                  |
+
+## Running it from the admin panel: the runner agent
+
+The panel (`/admin/waboo-migration`, super admin) starts `pipeline.cjs` for you. Waboo's database only answers over the Geta VPN, so the pipeline cannot run inside WaDesk's own containers. It runs on **a machine on the VPN that has the pipeline's access** (the jump-host key and the staging SSH key, the same as running `cycle.cjs` by hand), through a small agent, `runner-agent.cjs`:
+
+```
+panel (operator) -> API queues the run -> worker marks it running, writes a job
+runner agent (VPN machine) <- asks the API for a running run's job -> runs pipeline.cjs -> reports each step back
+panel shows the steps, the verdict (green / amber / red) and the report live
+```
+
+The agent starts nothing by itself: it only runs the job of a run an operator already started, with exactly that run's three values (client key, Waboo database name, mode), each checked again before a process is started. It carries no Waboo or staging secret to the API; the pipeline reads those from the machine, as when run by hand. Everything the pipeline prints is validated and scrubbed by the API before it is stored.
+
+**One-time setup**
+
+1. Make a token (32+ characters) and put the SAME value on the staging server (`/opt/desk/.env`) and on the agent machine:
+   `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`
+2. On the staging server, in `/opt/desk/.env`, set `WABOO_MIGRATE_RUNNER=remote` and `WABOO_RUNNER_TOKEN=<token>`, and make sure the `api` and `worker` services pass both through (`WABOO_RUNNER_PICKUP_MIN`, `WABOO_RUNNER_SILENCE_MIN` and `WABOO_MIGRATE_TIMEOUT_MIN` are optional). Restart `api` and `worker`. Without a token of 32+ characters the agent endpoints answer 401 to everyone.
+3. On the VPN machine (the repo checked out, VPN connected, `cycle.cjs` working by hand), start the agent and leave it running:
+
+```
+set WABOO_RUNNER_URL=https://desk.wabo.ai
+set WABOO_RUNNER_TOKEN=<token>
+set WABOO_RUNNER_NAME=vedant-laptop
+node tools/migration/pilot/staging/runner-agent.cjs
+```
+
+(Use `export` instead of `set` in bash.) The panel shows "Runner connected: vedant-laptop" within a few seconds.
+
+**How a run behaves**
+
+- No agent claims a run within 10 minutes: the run fails with a message that says to start the agent; nothing was started.
+- The agent stops reporting for 5 minutes mid-run (machine asleep, VPN down): the run is marked failed and the agent stops the pipeline when it can reach the API again (or after 6 minutes without it). Check the last step shown, then run a catch-up.
+- The 90-minute limit (`WABOO_MIGRATE_TIMEOUT_MIN`) applies on both sides.
+- Ctrl+C on the agent stops the pipeline it is running and reports it as stopped.
+- Wrong or missing token: the agent prints "the API refused the runner token" and exits; the token is never printed.
+- One run at a time, as before. Keep the laptop awake and on the VPN for the whole run (the Dhanashree dry run took about an hour).
 
 ## Speed notes (where the time went on staging, and the levers)
 
 Measured on the first real runs (ISKM, 146,190 documents):
 
-| Phase | Time | Notes |
-| --- | --- | --- |
-| Mongo export to the server | ~15 min | streamed through the jump host; scales with the number of documents, network-bound |
-| load: field options | ~8 min for 53k rows (~110 rows/s) | the slowest step per row; one transaction per batch on a 1 GB Postgres |
-| load: contacts, inbox | the rest of the load | inbox is batched per thread (a thread and its messages are one unit) |
-| build, ship, preflight, backup, reconcile, report | seconds to a few minutes | not worth optimising |
+| Phase                                             | Time                              | Notes                                                                              |
+| ------------------------------------------------- | --------------------------------- | ---------------------------------------------------------------------------------- |
+| Mongo export to the server                        | ~15 min                           | streamed through the jump host; scales with the number of documents, network-bound |
+| load: field options                               | ~8 min for 53k rows (~110 rows/s) | the slowest step per row; one transaction per batch on a 1 GB Postgres             |
+| load: contacts, inbox                             | the rest of the load              | inbox is batched per thread (a thread and its messages are one unit)               |
+| build, ship, preflight, backup, reconcile, report | seconds to a few minutes          | not worth optimising                                                               |
 
 Levers, in order of payoff:
 

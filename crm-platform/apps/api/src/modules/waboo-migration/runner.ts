@@ -10,6 +10,8 @@ import {
 } from './waboo-migration.rules';
 
 export interface RunArgs {
+  /** The run's uuid. The local runner ignores it; the remote runner addresses its job by it. */
+  runUuid?: string;
   sourceClient: string;
   sourceDb: string;
   mode: RunMode;
@@ -120,4 +122,12 @@ export class ProcessRunner implements Runner {
       });
     });
   }
+}
+
+/**
+ * Where the pipeline runs. 'remote' = on a runner agent over the Geta VPN (the staging setup: Waboo's database is only reachable from
+ * there); 'local' (default) = the worker starts the script named by WABOO_MIGRATE_PIPELINE itself.
+ */
+export function runnerMode(env: NodeJS.ProcessEnv): 'remote' | 'local' {
+  return env.WABOO_MIGRATE_RUNNER === 'remote' ? 'remote' : 'local';
 }

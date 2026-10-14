@@ -3,7 +3,7 @@ import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { DelayedError, UnrecoverableError, type Job } from 'bullmq';
 import { RequestContextStore } from '../../common/context/request-context';
 import { QUEUES } from '../../infra/queue/queues';
-import { timeoutMs, type Runner } from './runner';
+import { runnerMode, timeoutMs, type Runner } from './runner';
 import { executeRun, recover, runBatch, type ExecOutcome } from './waboo-migration.engine';
 import { WabooMigrationJobs, type MigrateJob } from './waboo-migration.jobs';
 import { WabooMigrationStores } from './waboo-migration.stores';
@@ -38,7 +38,12 @@ export class WabooMigrationProcessor extends WorkerHost implements OnModuleInit 
   async onModuleInit(): Promise<void> {
     try {
       const r = await recover(
-        { store: this.stores.sweep, jobs: this.jobs, timeoutMs: timeoutMs(process.env) },
+        {
+          store: this.stores.sweep,
+          jobs: this.jobs,
+          timeoutMs: timeoutMs(process.env),
+          remote: runnerMode(process.env) === 'remote',
+        },
         delayFor,
       );
       if (r.failed > 0 || r.requeued > 0)

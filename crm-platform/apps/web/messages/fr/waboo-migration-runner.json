@@ -1,0 +1,6 @@
+{
+  "waboo-migration-runner": {
+    "online": "Runner connecté : {name}. Les migrations s'exécutent sur cette machine, qui est sur le VPN Geta.",
+    "offline": "Aucun runner n'est connecté. Les migrations s'exécutent sur une machine du VPN Geta ; démarrez d'abord le runner. Une exécution l'attend quelques minutes, puis échoue sans rien démarrer."
+  }
+}
