@@ -403,7 +403,9 @@
         "smartIntro": "Zostaw puste, aby użyć domyślnego tempa przestrzeni roboczej. Te reguły rozkładają wysyłkę, aby duża lista wyglądała ludzko i pozostała poniżej progu wykrywania blokad WhatsApp.",
         "smartZone": "Godziny w strefie {zone}.",
         "throttleMaxHint": "Najdłuższa przerwa przed wiadomością.",
-        "batchPauseHint": "Minuty odpoczynku po każdej partii."
+        "batchPauseHint": "Minuty odpoczynku po każdej partii.",
+        "retryFailed": "Automatycznie ponawiaj nieudane wiadomości",
+        "retryFailedHint": "Wiadomość, która nie poszła z przyczyn tymczasowych, jest ponawiana kilka razy z przerwą między próbami. Wyłącz, aby wysłać każdą wiadomość tylko raz."
       },
       "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
       "draftChip": "Szkic / niezapisane",
@@ -1486,12 +1488,14 @@
         "action": {
           "pause": "Wstrzymaj",
           "resume": "Wznów",
-          "cancel": "Anuluj wiadomość masową"
+          "cancel": "Anuluj wiadomość masową",
+          "retryFailed": "Ponów nieudane ({count})"
         },
         "done": {
           "pause": "Wstrzymano wiadomość masową.",
           "resume": "Wznowiono wiadomość masową.",
-          "cancel": "Anulowano wiadomość masową."
+          "cancel": "Anulowano wiadomość masową.",
+          "retryFailed": "Ponawianie dla: {count, plural, one {# nieudany odbiorca} few {# nieudanych odbiorców} many {# nieudanych odbiorców} other {# nieudanego odbiorcy}}."
         },
         "failed": "Nie udało się. Spróbuj ponownie.",
         "noControl": "Nie masz uprawnień do wstrzymywania, wznawiania ani anulowania wiadomości masowych.",
@@ -1510,7 +1514,9 @@
           "cancelled": "Anulowana",
           "active": "Aktywna",
           "ended": "Zakończona"
-        }
+        },
+        "retryTitle": "Ponowić nieudane wiadomości?",
+        "retryMessage": "Wysyła ponownie do: {count, plural, one {# odbiorcy} few {# odbiorców} many {# odbiorców} other {# odbiorcy}}, u których wiadomość się nie powiodła. Osoby, które ją już otrzymały, nie są ruszane, a opłata jest naliczana tylko za dostarczoną wiadomość."
       },
       "panel": {
         "title": "Utworzone przez Utwórz wiadomość masową",

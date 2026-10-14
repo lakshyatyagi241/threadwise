@@ -394,7 +394,9 @@
         "smartIntro": "Leave blank to use the workspace default pacing. These rules space out sending so a large list looks human and stays under WhatsApp's ban radar.",
         "smartZone": "Times in {zone}.",
         "throttleMaxHint": "The longest wait before a message.",
-        "batchPauseHint": "Minutes to rest after each batch."
+        "batchPauseHint": "Minutes to rest after each batch.",
+        "retryFailed": "Retry failed messages automatically",
+        "retryFailedHint": "A message that fails for a temporary reason is tried again a few times, with a pause between tries. Turn this off to send each message once."
       },
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "draftChip": "Draft / unsaved",
@@ -1476,12 +1478,14 @@
         "action": {
           "pause": "Pause",
           "resume": "Resume",
-          "cancel": "Cancel campaign"
+          "cancel": "Cancel campaign",
+          "retryFailed": "Retry failed ({count})"
         },
         "done": {
           "pause": "Campaign paused.",
           "resume": "Campaign resumed.",
-          "cancel": "Campaign cancelled."
+          "cancel": "Campaign cancelled.",
+          "retryFailed": "Retrying {count, plural, one {# failed recipient} other {# failed recipients}}."
         },
         "failed": "That did not work. Try again.",
         "noControl": "You do not have permission to pause, resume or cancel campaigns.",
@@ -1500,7 +1504,9 @@
           "cancelled": "Cancelled",
           "active": "Active",
           "ended": "Ended"
-        }
+        },
+        "retryTitle": "Retry the failed messages?",
+        "retryMessage": "Sends again to the {count, plural, one {# recipient} other {# recipients}} whose message failed. Everyone who already got it is left alone, and a message is charged only when it is delivered."
       },
       "panel": {
         "title": "Created with the guided flow",

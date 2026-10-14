@@ -8,8 +8,14 @@ import type { WizardBroadcastDetail, WizardRetrySummary } from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, EmptyState, Spinner, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
-import { KEYS, controlBroadcast, useBroadcast, type BroadcastAction } from '../api/wizard';
-import { controlsFor, runPath, statusTone } from '../lib/broadcast';
+import {
+  KEYS,
+  controlBroadcast,
+  retryFailedBroadcast,
+  useBroadcast,
+  type BroadcastAction,
+} from '../api/wizard';
+import { controlsFor, retryableFailed, runPath, statusTone } from '../lib/broadcast';
 import { scheduleZone } from '../lib/schedule';
 import { DirectorSummary } from '../../components/director-summary';
 import { Chip, ErrorBlock, Skeleton, WizardCard } from './parts';
@@ -144,6 +150,8 @@ export function BroadcastScreen({ id }: { id: string }) {
   const { toast } = useToast();
   const canControl = useCan('camp.campaigns.control');
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [confirmRetry, setConfirmRetry] = useState(false);
+  const [retrying, setRetrying] = useState(false);
   const [busy, setBusy] = useState<BroadcastAction | null>(null);
   const b = q.data;
 
@@ -156,6 +164,20 @@ export function BroadcastScreen({ id }: { id: string }) {
       toast(e instanceof ApiError ? e.message : t('failed'), 'danger');
     } finally {
       setBusy(null);
+      void qc.invalidateQueries({ queryKey: KEYS.broadcast(id) });
+    }
+  };
+
+  const failedCount = b ? retryableFailed(b) : 0;
+  const retryFailed = async () => {
+    setRetrying(true);
+    try {
+      const out = await retryFailedBroadcast(id);
+      toast(t('done.retryFailed', { count: out.recipients }), 'success');
+    } catch (e) {
+      toast(e instanceof ApiError ? e.message : t('failed'), 'danger');
+    } finally {
+      setRetrying(false);
       void qc.invalidateQueries({ queryKey: KEYS.broadcast(id) });
     }
   };
@@ -193,6 +215,16 @@ export function BroadcastScreen({ id }: { id: string }) {
             </div>
             {canControl && (
               <div className="flex flex-wrap gap-2">
+                {failedCount > 0 && (
+                  <Button
+                    variant="secondary"
+                    disabled={busy !== null || retrying}
+                    onClick={() => setConfirmRetry(true)}
+                  >
+                    {retrying && <Spinner />}
+                    {t('action.retryFailed', { count: failedCount })}
+                  </Button>
+                )}
                 {controlsFor(b).map((a) => (
                   <Button
                     key={a}
@@ -249,6 +281,21 @@ export function BroadcastScreen({ id }: { id: string }) {
 
           {!canControl && controlsFor(b).length > 0 && <Alert tone="info">{t('noControl')}</Alert>}
         </>
+      )}
+      {canControl && failedCount > 0 && (
+        <ConfirmDialog
+          open={confirmRetry}
+          busy={retrying}
+          title={t('retryTitle')}
+          message={t('retryMessage', { count: failedCount })}
+          confirmLabel={t('action.retryFailed', { count: failedCount })}
+          cancelLabel={t('keep')}
+          onClose={() => setConfirmRetry(false)}
+          onConfirm={() => {
+            setConfirmRetry(false);
+            void retryFailed();
+          }}
+        />
       )}
       <ConfirmDialog
         open={confirmCancel}

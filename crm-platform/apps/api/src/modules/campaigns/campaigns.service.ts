@@ -296,6 +296,7 @@ export class CampaignsService {
       templateOverridesB: input.templateOverridesB ?? null,
       useAttributes: input.useAttributes ?? false,
       trackingEnabled: input.trackingEnabled ?? true,
+      retryFailed: input.retryFailed ?? true,
       scheduleType: input.scheduleType,
       sendDate: input.sendDate ?? null,
       sendTime: input.sendTime ?? null,

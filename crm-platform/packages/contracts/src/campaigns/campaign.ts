@@ -92,6 +92,8 @@ const campaignFields = {
   flowIdB: uuidSchema.nullish(),
   useAttributes: z.boolean().default(false),
   trackingEnabled: z.boolean().default(true),
+  /** Retry a transient failure under the platform's retry settings (the default); false makes the first failure final. */
+  retryFailed: z.boolean().default(true),
   scheduleType: z.enum(CAMPAIGN_SCHEDULE_TYPES),
   sendDate: dateOnly.nullish(),
   sendTime: timeOfDay.nullish(),
@@ -265,6 +267,7 @@ export const campaignConfigSchema = campaignSchema.extend({
   flowIdB: uuidSchema.nullable(),
   useAttributes: z.boolean(),
   trackingEnabled: z.boolean(),
+  retryFailed: z.boolean(),
   /** As typed in the form: `YYYY-MM-DDTHH:mm` in the campaign's time zone. */
   expiresAtLocal: z.string().nullable(),
   repeatUntil: z.string().nullable(),
