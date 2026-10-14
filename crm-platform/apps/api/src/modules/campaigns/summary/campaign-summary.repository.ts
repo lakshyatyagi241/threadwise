@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { AGG } from '../campaigns.repository';
+import { AGG, AGG_DELIVERED, AGG_READ, AGG_SENT } from '../campaigns.repository';
 import type { SummaryCursor } from './campaign-summary-rules';
 
 /**
@@ -238,16 +238,25 @@ export class CampaignSummaryRepository {
 
   // ---------------------------------------------------------------------------------------------------------------- rollup
 
-  /** The recipients' roll-up (the same `AGG` the list and the detail read) and the send range, in one pass. */
+  /**
+   * The recipients' roll-up and the send range, in one pass. Messaged, delivered and read count distinct PEOPLE (a number listed twice
+   * is one person), with the same conditions as `AGG`, so they share a base with the people-based figures (wrote back, filled a form).
+   * Failed stays the list's row count.
+   */
   async rollup(tx: Tx, orgId: number, source: SummarySource, id: number): Promise<SummaryRollup> {
+    const person = `coalesce(r.contact_id::text, 'p:' || r.digits, 'r:' || r.id::text)`;
     const res = await tx.execute(sql`
       WITH rcp AS MATERIALIZED (${this.rcp(orgId, source, id)})
-      SELECT ${AGG}, min(r.sent_at) AS first_sent_at, max(r.sent_at) AS last_sent_at FROM rcp r`);
+      SELECT ${AGG},
+             count(DISTINCT ${sql.raw(person)}) FILTER (WHERE ${sql.raw(AGG_SENT)})::int AS p_sent,
+             count(DISTINCT ${sql.raw(person)}) FILTER (WHERE ${sql.raw(AGG_DELIVERED)})::int AS p_delivered,
+             count(DISTINCT ${sql.raw(person)}) FILTER (WHERE ${sql.raw(AGG_READ)})::int AS p_read,
+             min(r.sent_at) AS first_sent_at, max(r.sent_at) AS last_sent_at FROM rcp r`);
     const r = res.rows[0] as Record<string, unknown>;
     return {
-      messaged: Number(r.a_sent),
-      delivered: Number(r.a_delivered),
-      read: Number(r.a_read),
+      messaged: Number(r.p_sent),
+      delivered: Number(r.p_delivered),
+      read: Number(r.p_read),
       failed: Number(r.a_failed),
       firstSentAt: date(r.first_sent_at),
       lastSentAt: date(r.last_sent_at),
