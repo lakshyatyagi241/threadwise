@@ -100,9 +100,9 @@ describe('broadcast table', () => {
     }
   });
 
-  it('offers delete only for a scheduled or failed broadcast, and only with the permission', () => {
+  it('offers delete only for a scheduled broadcast, and only with the permission', () => {
     expect(table([item({ status: 'scheduled' })])).toContain('aria-label="Delete"');
-    expect(table([item({ status: 'failed' })])).toContain('aria-label="Delete"');
+    expect(table([item({ status: 'failed' })])).not.toContain('aria-label="Delete"');
     expect(table([item({ status: 'processing' })])).not.toContain('aria-label="Delete"');
     expect(table([item({ status: 'completed' })])).not.toContain('aria-label="Delete"');
     expect(table([item({ status: 'failed' })], true, false)).not.toContain('aria-label="Delete"');

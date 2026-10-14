@@ -152,7 +152,9 @@
       "savedReplyGone": "Esta respuesta guardada ya no existe.",
       "savedReplyChannel": "Esta respuesta guardada no está pensada para este tipo de canal.",
       "shortcutTaken": "Otra respuesta guardada ya usa ese atajo.",
-      "importInvalid": "No se puede leer ese archivo como respuestas guardadas. Necesita una primera fila con las columnas title, shortcut y body, y como máximo 1.000 filas."
+      "importInvalid": "No se puede leer ese archivo como respuestas guardadas. Necesita una primera fila con las columnas title, shortcut y body, y como máximo 1.000 filas.",
+      "contactOptedOut": "Este contacto se dio de baja de los mensajes de marketing, por lo que el mensaje no se envió.",
+      "consentRequired": "Este espacio de trabajo exige un consentimiento registrado para mensajes de marketing y este contacto no lo tiene, por lo que el mensaje no se envió."
     },
     "bubble": {
       "kind": {
@@ -602,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Enviar una plantilla",
       "close": "Cerrar",
-      "cancel": "Cancelar",
-      "back": "Volver a las plantillas",
       "search": "Buscar por nombre o texto",
       "searchLabel": "Buscar plantillas",
       "loading": "Cargando plantillas",
@@ -612,9 +612,7 @@
       "empty": "Aún no hay plantillas aprobadas para este número de WhatsApp. Crea una en Plantillas y espera a que Meta la apruebe.",
       "noResults": "Ninguna plantilla coincide con tu búsqueda.",
       "windowHint": "Una plantilla funciona aunque la ventana de respuesta de 24 horas se haya cerrado.",
-      "variables": "Rellena las variables",
       "preview": "Lo que leerá el cliente",
-      "send": "Enviar plantilla",
       "sending": "Enviando",
       "sent": "Plantilla enviada",
       "problem": {
@@ -629,7 +627,31 @@
         "authentication": "Las plantillas de contraseña de un solo uso las envía el sistema, no la bandeja.",
         "named_variables": "Usa variables con nombre, que la bandeja todavía no admite."
       },
-      "hasMore": "Mostrando las primeras {count} plantillas. Busca por nombre o texto para encontrar las demás."
+      "hasMore": "Mostrando las primeras {count} plantillas. Busca por nombre o texto para encontrar las demás.",
+      "previewEmpty": "Apunta a una plantilla para ver cómo se verá en el teléfono del cliente.",
+      "previewCustomer": "Cliente",
+      "noVariables": "Esta plantilla no tiene nada que completar. Revisa el teléfono y envíala.",
+      "sendTo": "Enviar a {name}",
+      "refresh": "Actualizar lista",
+      "device": "Vista previa del teléfono",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Configurar variables del cuerpo",
+      "or": "o",
+      "mapField": "Asignar un campo a {key}",
+      "mapNone": "Este contacto no tiene datos para asignar.",
+      "typeMessage": "Escribe un mensaje",
+      "fields": {
+        "name": "Nombre",
+        "phone": "Teléfono",
+        "email": "Correo electrónico"
+      },
+      "create": "Crear plantilla nueva",
+      "actions": "Acciones de la plantilla",
+      "edit": "Editar plantilla",
+      "duplicate": "Duplicar plantilla"
     },
     "log": {
       "title": "Registro de entrega",

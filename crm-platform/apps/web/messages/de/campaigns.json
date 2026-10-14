@@ -160,6 +160,17 @@
             "body": "Beginnen Sie mit einem Vorlagen-Update oder einem Reaktivierungs-Broadcast und vergleichen Sie danach die Zahlen für Zustellung, Lesungen und Fehler, bevor Sie skalieren."
           }
         }
+      },
+      "view": {
+        "label": "Ansicht",
+        "list": "Liste",
+        "blocks": "Kacheln"
+      },
+      "col": {
+        "name": "Kampagne",
+        "status": "Status",
+        "schedule": "Zeitplan",
+        "actions": "Aktionen"
       }
     },
     "builder": {
@@ -1601,6 +1612,12 @@
         "noRuns": "Es wurde noch kein Durchlauf gestartet.",
         "cancel": "Serie abbrechen"
       },
+      "view": {
+        "label": "Ansicht",
+        "list": "Liste",
+        "blocks": "Kacheln"
+      },
+      "showing": "{count, plural, one {# Kampagne} other {# Kampagnen}} angezeigt",
       "legacy": "Ältere Broadcasts ({count})"
     },
     "senderEmpty": {

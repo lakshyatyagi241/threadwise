@@ -82,6 +82,11 @@ export const outboundEmailSchema = z.object({
   signature: z.boolean().optional(),
   /** The user who wrote the reply (internal id), for their default signature; null for a bot or flow. */
   sentBy: z.number().int().nullable().optional(),
+  /**
+   * A marketing email (BL-141): the ConsentGate treats it as `marketing_messaging`, and the adapter adds the signed unsubscribe link
+   * and the RFC 8058 `List-Unsubscribe` headers. Replies and transactional mail leave it unset.
+   */
+  marketing: z.boolean().optional(),
   /** The composer's rich-text body (raw: the email adapter sanitises it before it goes out); the envelope `body` is its plain text. */
   bodyHtml: z.string().max(200_000).optional(),
 });

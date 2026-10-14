@@ -1,12 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Button, Drawer, Input, Select, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { CallButton, useCallEligibility } from '@/features/calling-voice';
+import { CallButton, useCallEligibility, useDirectCall } from '@/features/calling-voice';
 import {
+  openConversation,
   sendTemplate,
   useChannels,
   useConversationTemplates,
@@ -48,6 +49,81 @@ export function SingleSendDrawer({
   target: SingleSendTarget | null;
   onClose: () => void;
 }) {
+  // A call has no form to fill: with one connected number the call starts at once, with no drawer in between.
+  if (target?.channel === 'call') return <CallEntry target={target} onClose={onClose} />;
+  return <SendDrawer target={target} onClose={onClose} />;
+}
+
+/**
+ * The call icon of a contact row. With exactly one connected WhatsApp number (and a phone on the contact) the call starts straight
+ * away; with several numbers the person still picks one in the drawer, and a contact with no phone sees why there.
+ */
+function CallEntry({ target, onClose }: { target: SingleSendTarget; onClose: () => void }) {
+  const channels = useChannels(true);
+  const numbers = useMemo(() => whatsappChannels(channels.data?.data ?? []), [channels.data]);
+  // Nothing is drawn while the numbers load, so a call that starts at once never flashes a drawer.
+  if (channels.isPending) return null;
+  if (numbers.length === 1 && !sendBlock('call', target.row))
+    return (
+      <DirectCall key={target.row.id} row={target.row} numberId={numbers[0]!.id} onDone={onClose} />
+    );
+  return <SendDrawer target={target} onClose={onClose} />;
+}
+
+/** Opens the conversation on the number, places the call (or sends the permission request) and closes. Renders nothing. */
+/** One direct call is placed at a time; a second click while it starts is ignored. */
+let directCallRunning = false;
+
+function DirectCall({
+  row,
+  numberId,
+  onDone,
+}: {
+  row: RowView;
+  numberId: string;
+  onDone: () => void;
+}) {
+  const t = useTranslations(NS);
+  const { toast } = useToast();
+  const call = useDirectCall();
+  const canCall = useCan('call.calls.use');
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    if (!canCall) {
+      toast(t('callOff'), 'danger');
+      onDone();
+      return;
+    }
+    if (directCallRunning) {
+      onDone();
+      return;
+    }
+    directCallRunning = true;
+    void (async () => {
+      try {
+        const conversation = await openConversation(row.id, numberId);
+        const result = await call({
+          conversationId: conversation.id,
+          displayName: row.name,
+          contactId: row.id,
+        });
+        if (result === 'disabled') toast(t('callOff'), 'danger');
+      } catch (err) {
+        toast(t('openFailed', { message: err instanceof Error ? err.message : '' }), 'danger');
+      } finally {
+        directCallRunning = false;
+        onDone();
+      }
+    })();
+    // The call starts once for this row.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return null;
+}
+
+function SendDrawer({ target, onClose }: { target: SingleSendTarget | null; onClose: () => void }) {
   const t = useTranslations(NS);
   const Icon = target ? ICON[target.channel] : WhatsAppIcon;
   return (

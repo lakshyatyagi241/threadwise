@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CallingGraphClient, CALLING_GRAPH } from '../../infra/providers/calling-voice';
 import { ChatConversationsModule } from '../chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { WabaModule } from '../whatsapp-cloud-api-waba';
 import { CallActionsService } from './call-actions.service';
@@ -27,7 +28,7 @@ import { CallsRepository } from './calls.repository';
  * Kernel services (audit, outbox, RBAC), the database, Redis, the queues, the WhatsApp HTTP client and the chat media door are global.
  */
 @Module({
-  imports: [ChatConversationsModule, WabaModule, PlansCoreModule],
+  imports: [ChatConversationsModule, ContactConsentModule, WabaModule, PlansCoreModule],
   controllers: [CallingController, CallLogsController, CallingWebhookController],
   providers: [
     CallingGraphClient,

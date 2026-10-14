@@ -1,5 +1,6 @@
 import { Inject, Module, type OnModuleInit } from '@nestjs/common';
 import { CampaignsModule, CAMPAIGN_FLOW_STARTER, NoFlowStarter } from '../campaigns';
+import { ContactConsentModule } from '../contact-consent';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { ShopifyWoocommerceModule } from '../shopify-woocommerce';
@@ -28,6 +29,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
   imports: [
     FlowRuntimeEngineModule,
     ChatConversationsModule,
+    ContactConsentModule,
     CampaignsModule,
     CatalogProductsModule,
     CommerceNodesModule,

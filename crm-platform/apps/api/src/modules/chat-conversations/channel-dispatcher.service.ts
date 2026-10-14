@@ -1,7 +1,8 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, purposeOf, type ConsentSubject, type PurposeInput } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import {
   ChannelError,
@@ -24,10 +25,21 @@ import {
   OUTBOUND_SEND_GUARD,
   type OutboundSendGuard,
 } from '../../infra/providers/whatsapp/send-guard.port';
+import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { effectiveCapabilitiesOf } from './channel-capabilities';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
+
+/**
+ * What the send IS, for the ConsentGate (BL-141). Required on every request, so a new caller cannot forget it: free-form replies and
+ * utility templates are `service_messaging`, a MARKETING template or a promotional flow message is `marketing_messaging`.
+ */
+export interface DispatchConsent {
+  purpose: PurposeInput;
+  /** The contact (internal id) when the caller knows it. Without it the recipient key (a phone or an email) finds the contact. */
+  contactId?: number | null;
+}
 
 /** What the caller knows about the send. */
 export interface DispatchRequest {
@@ -38,6 +50,7 @@ export interface DispatchRequest {
   lastInboundAt: Date | null;
   /** Recorded with a flagged or blocked send: `inbox`, `broadcast`, ... */
   source?: string;
+  consent: DispatchConsent;
 }
 
 export interface QueueCheckOptions {
@@ -97,7 +110,24 @@ export class ChannelDispatcher {
     private readonly plans: PlanEntitlementService,
     @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly consentGate: ConsentGate,
   ) {}
+
+  /**
+   * The purpose of an envelope: a template takes its category (a MARKETING template is marketing), everything else a person writes or a
+   * bot answers is a service message. `tx` is the caller's transaction when it has one.
+   */
+  async purposeFor(orgId: number, envelope: unknown, tx?: Tx): Promise<PurposeInput> {
+    const parsed = outboundEnvelopeSchema.safeParse(envelope);
+    if (parsed.success && parsed.data.kind === 'text' && parsed.data.email?.marketing) {
+      return 'marketing_messaging';
+    }
+    if (parsed.success && parsed.data.kind === 'template') {
+      const t = parsed.data.template;
+      return this.consentGate.purposeOfTemplate(orgId, t.name, t.language, tx);
+    }
+    return 'service_messaging';
+  }
 
   /** Checks that can be made before anything is stored. Throws an AppError with a stable code. */
   async assertCanQueue(
@@ -114,6 +144,8 @@ export class ChannelDispatcher {
       opts.now,
     );
 
+    // Before the plan cap and before any row exists: a refused marketing message costs nothing and tells the agent why.
+    await this.assertConsent(req, envelope, window);
     if (opts.monthlyUsed !== undefined && req.channel.settings.metered) {
       await this.plans.assertWithinLimit(req.channel.orgId, 'monthly_messages', opts.monthlyUsed);
     }
@@ -124,7 +156,7 @@ export class ChannelDispatcher {
   async send(req: DispatchRequest, now: Date = new Date()): Promise<DispatchResult> {
     const envelope = this.parse(req.envelope);
     const adapter = this.adapters.for(req.channel.kind);
-    this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
+    const window = this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
     // An email reply is sent inside a customer's thread: with no mail to answer there is nobody to send to.
     if (req.channel.kind === 'email' && envelope.kind === 'text' && !envelope.email) {
       throw new AppError(
@@ -143,6 +175,8 @@ export class ChannelDispatcher {
     const key = `chat:dispatch:${req.channel.orgId}:${req.channel.uuid}:${envelope.clientReference}`;
     const stored = await this.readStored(key);
     if (stored) return { ...stored, replayed: true };
+    // At send time, not only at queue time: a STOP that arrived while the message waited in the queue still stops it.
+    await this.assertConsent(req, envelope, window);
 
     const owner = randomUUID();
     const locked = await this.redisCall(() =>
@@ -201,6 +235,50 @@ export class ChannelDispatcher {
   async forget(channel: ChannelRuntime, clientReference: string): Promise<void> {
     const key = `chat:dispatch:${channel.orgId}:${channel.uuid}:${clientReference}`;
     await this.redisCall(() => this.redis.del(key));
+  }
+
+  /**
+   * The ConsentGate for this send (BL-141). A deny ends the send with a stable code and a plain message; there is no override. A gate
+   * failure is decided inside the gate (marketing fails closed, service replies fail open), so this never throws for a database error.
+   */
+  private async assertConsent(
+    req: DispatchRequest,
+    envelope: OutboundEnvelope,
+    window: WindowInfo,
+  ): Promise<void> {
+    const { purpose, contactId } = req.consent;
+    const subject: ConsentSubject =
+      contactId != null
+        ? { type: 'contact', id: contactId }
+        : req.channel.kind === 'email'
+          ? { type: 'email', email: envelope.to }
+          : { type: 'phone', phone: envelope.to };
+    const replyWindowOpen =
+      purposeOf(purpose).ledgerPurpose === 'utility' &&
+      envelope.kind !== 'template' &&
+      req.lastInboundAt !== null &&
+      window.open;
+    const verdict = await this.consentGate.check(
+      req.channel.orgId,
+      subject,
+      req.channel.kind,
+      purpose,
+      undefined,
+      { replyWindowOpen },
+    );
+    if (verdict.decision !== 'deny') return;
+    if (verdict.reason === 'withdrawn') {
+      throw new AppError(
+        ERROR_CODES.CONSENT_OPTED_OUT,
+        'This contact has unsubscribed from messages of this kind, so the message was not sent.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    throw new AppError(
+      ERROR_CODES.CONSENT_SEND_DENIED,
+      'The message was not sent: this workspace requires a recorded consent for marketing messages and this contact has none.',
+      HttpStatus.UNPROCESSABLE_ENTITY,
+    );
   }
 
   // --- internals ---------------------------------------------------------------------------------------------------------------

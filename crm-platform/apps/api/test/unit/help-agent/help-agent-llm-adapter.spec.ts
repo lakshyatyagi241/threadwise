@@ -34,6 +34,7 @@ describe('HttpHelpAgentLlmAdapter', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(reply('stop')));
     const adapter = new HttpHelpAgentLlmAdapter(readHelpAgentEnv({}));
     const out = await adapter.complete(request);
-    expect(out.completion.choices[0]?.finish_reason).toBe('stop');
+    const choices = out.completion.choices as { finish_reason?: string }[];
+    expect(choices[0]?.finish_reason).toBe('stop');
   });
 });

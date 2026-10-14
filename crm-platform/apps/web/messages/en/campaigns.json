@@ -151,7 +151,18 @@
           }
         }
       },
-      "createBroadcast": "Create campaign"
+      "createBroadcast": "Create campaign",
+      "view": {
+        "label": "View",
+        "list": "List",
+        "blocks": "Blocks"
+      },
+      "col": {
+        "name": "Campaign",
+        "status": "Status",
+        "schedule": "Schedule",
+        "actions": "Actions"
+      }
     },
     "builder": {
       "loadError": "Could not load this campaign.",
@@ -1591,7 +1602,13 @@
         "noRuns": "No run has started yet.",
         "cancel": "Cancel series"
       },
-      "legacy": "Legacy broadcasts ({count})"
+      "legacy": "Legacy broadcasts ({count})",
+      "view": {
+        "label": "View",
+        "list": "List",
+        "blocks": "Blocks"
+      },
+      "showing": "Showing {count, plural, one {# campaign} other {# campaigns}}"
     },
     "create": {
       "loading": "Loading your numbers",

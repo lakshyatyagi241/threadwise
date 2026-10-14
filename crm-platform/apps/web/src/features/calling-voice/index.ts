@@ -15,6 +15,7 @@
 export { CallingProvider, useCalling } from './components/calling-provider';
 export type { ActiveCall, CallingApi, OutboundCallInput } from './components/calling-provider';
 export { CallButton, type CallButtonProps } from './components/call-button';
+export { useDirectCall, type DirectCallResult } from './components/use-direct-call';
 export { CallingToggleCard } from './components/calling-settings-screen';
 export { IncomingCallToast } from './components/incoming-call-toast';
 export { OnCallPanel } from './components/on-call-panel';

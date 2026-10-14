@@ -123,6 +123,7 @@ export function StatusChip({ status }: { status: string }) {
 }
 
 export function Pager({
+  shown,
   page,
   hasPrev,
   hasNext,
@@ -130,6 +131,8 @@ export function Pager({
   onPrev,
   onNext,
 }: {
+  /** Rows on this page: the pager always says what is shown, even when there is only one page. */
+  shown?: number;
   page: number;
   hasPrev: boolean;
   hasNext: boolean;
@@ -138,12 +141,17 @@ export function Pager({
   onNext: () => void;
 }) {
   const t = useTranslations('campaigns.history');
-  if (!hasPrev && !hasNext) return null;
+  if (!hasPrev && !hasNext && !shown) return null;
   return (
     <nav
       aria-label={t('pager')}
       className="flex items-center justify-end gap-2 border-t border-border px-3 py-2"
     >
+      {shown !== undefined && (
+        <span className="me-auto text-xs text-muted-foreground">
+          {t('showing', { count: shown })}
+        </span>
+      )}
       <span className="text-xs text-muted-foreground">{t('page', { page })}</span>
       <Button variant="secondary" size="sm" disabled={!hasPrev || busy} onClick={onPrev}>
         {t('previous')}

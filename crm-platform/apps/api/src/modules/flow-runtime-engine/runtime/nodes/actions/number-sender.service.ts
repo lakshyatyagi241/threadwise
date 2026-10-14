@@ -75,6 +75,8 @@ export class NumberSender {
         envelope,
         lastInboundAt,
         source: 'flow',
+        // A note to a colleague's number: not a message to a customer, never marketing. The gate still sees it.
+        consent: { purpose: 'service_messaging' },
       });
       if (!sent.replayed) await this.dispatcher.scheduleReceipts(runtime, sent);
       return { ok: true };

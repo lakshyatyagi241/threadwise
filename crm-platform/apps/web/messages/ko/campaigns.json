@@ -160,6 +160,17 @@
             "body": "템플릿 업데이트나 재참여 대량 발송으로 시작한 뒤, 규모를 키우기 전에 전달, 읽음, 실패 건수를 비교하세요."
           }
         }
+      },
+      "view": {
+        "label": "보기",
+        "list": "목록",
+        "blocks": "블록"
+      },
+      "col": {
+        "name": "캠페인",
+        "status": "상태",
+        "schedule": "예약",
+        "actions": "작업"
       }
     },
     "builder": {
@@ -1601,6 +1612,12 @@
         "noRuns": "시작된 실행이 아직 없습니다.",
         "cancel": "시리즈 취소"
       },
+      "view": {
+        "label": "보기",
+        "list": "목록",
+        "blocks": "블록"
+      },
+      "showing": "캠페인 {count}개 표시 중",
       "legacy": "이전 브로드캐스트({count})"
     },
     "senderEmpty": {

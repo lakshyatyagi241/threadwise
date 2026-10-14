@@ -1,4 +1,4 @@
-import { ConsentPolicyService } from '../contact-consent';
+import { ConsentGate, ConsentPolicyService } from '../contact-consent';
 import { SegmentsService } from '../crm';
 import { HttpStatus, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import {
@@ -74,6 +74,7 @@ export class BroadcastsService {
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     private readonly segments: SegmentsService,
     @Optional() private readonly consentPolicy?: ConsentPolicyService,
+    @Optional() private readonly consentGate?: ConsentGate,
   ) {}
 
   /** `body` is validated here, after the plan checks, because Reference answered a plan refusal before a validation error. */
@@ -238,6 +239,20 @@ export class BroadcastsService {
     ];
     const unique = [...new Set(merged)];
     if (unique.length === 0) return [];
+    // The ConsentGate is the one door (BL-141): the same rule as before (withdrawn contacts out; with the workspace switch on, a
+    // recorded grant too), now read from one place. The repository keeps only "exists and not archived".
+    if (this.consentGate) {
+      const exists = await this.repo.sendableIds(tx, orgId, unique, false, false);
+      const verdict = await this.consentGate.checkMany(
+        orgId,
+        [...exists],
+        'whatsapp',
+        'marketing_messaging',
+        undefined,
+        { tx },
+      );
+      return unique.filter((id) => exists.has(id) && verdict.allowed.has(id));
+    }
     const requireConsent = (await this.consentPolicy?.requiresConsent(orgId)) ?? false;
     const sendable = await this.repo.sendableIds(tx, orgId, unique, requireConsent);
     return unique.filter((id) => sendable.has(id));

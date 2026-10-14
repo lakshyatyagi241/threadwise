@@ -24,7 +24,10 @@ import {
 } from './icons';
 
 /** The pill and the round status icon of each status, in Reference's colours. */
-const LOOK: Record<CampaignStatus, { pill: string; dot: string; icon: string; border: string }> = {
+export const LOOK: Record<
+  CampaignStatus,
+  { pill: string; dot: string; icon: string; border: string }
+> = {
   running: {
     pill: 'border-success/30 bg-success/10 text-success',
     dot: 'bg-success',
@@ -69,7 +72,7 @@ const LOOK: Record<CampaignStatus, { pill: string; dot: string; icon: string; bo
   },
 };
 
-const STATUS_ICON: Record<CampaignStatus, typeof PlayIcon> = {
+export const STATUS_ICON: Record<CampaignStatus, typeof PlayIcon> = {
   running: PlayIcon,
   paused: PauseIcon,
   scheduled: ClockIcon,
@@ -79,7 +82,7 @@ const STATUS_ICON: Record<CampaignStatus, typeof PlayIcon> = {
   draft: DraftIcon,
 };
 
-const ROUND =
+export const ROUND =
   'grid size-8 place-items-center rounded-full border border-border bg-background text-success hover:bg-muted disabled:opacity-50';
 
 /** One campaign on the list (TW-CAMP-001): status icon and pill, the actions its status allows, seven numbers and a footer. */
@@ -144,13 +147,17 @@ export function CampaignCard({
       data-campaign-id={c.id}
     >
       <div className="mb-3 flex items-start gap-3">
-        <input
-          type="checkbox"
-          checked={selected}
-          onChange={(e) => onSelect(e.target.checked)}
-          aria-label={t('select', { name: c.name })}
-          className="mt-1.5 size-6 shrink-0 accent-[var(--primary)]"
-        />
+        {canDelete && can.delete(c.status) ? (
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={(e) => onSelect(e.target.checked)}
+            aria-label={t('select', { name: c.name })}
+            className="mt-1.5 size-6 shrink-0 accent-[var(--primary)]"
+          />
+        ) : (
+          canDelete && <span className="size-6 shrink-0" aria-hidden="true" />
+        )}
         <span className={cn('grid size-9 shrink-0 place-items-center rounded-full', look.icon)}>
           <Icon className="size-3.5" />
         </span>
@@ -245,7 +252,7 @@ export function CampaignCard({
               <ResendIcon className="size-3.5" />
             </button>
           )}
-          {canDelete && (
+          {canDelete && can.delete(c.status) && (
             <button
               type="button"
               disabled={busy}

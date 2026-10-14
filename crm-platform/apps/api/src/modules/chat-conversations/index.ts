@@ -15,6 +15,7 @@ export {
 export {
   ChannelDispatcher,
   type DispatchRequest,
+  type DispatchConsent,
   type DispatchResult,
   type QueueCheckOptions,
 } from './channel-dispatcher.service';

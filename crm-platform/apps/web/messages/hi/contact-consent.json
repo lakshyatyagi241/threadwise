@@ -109,7 +109,9 @@
         "email": "ईमेल",
         "facebook": "Facebook",
         "instagram": "Instagram",
-        "webchat": "वेब चैट"
+        "webchat": "वेब चैट",
+        "voice": "वॉइस कॉल",
+        "rcs": "RCS"
       },
       "state": {
         "granted": "सब्सक्राइब किया",
@@ -199,6 +201,76 @@
         "ready": "तैयार",
         "failed": "विफल",
         "expired": "समाप्त"
+      }
+    },
+    "unsubscribe": {
+      "title": "मार्केटिंग ईमेल से सदस्यता रद्द करें",
+      "intro": "पुष्टि करें कि आप इस व्यवसाय से अब मार्केटिंग ईमेल नहीं पाना चाहते। आपके ऑर्डर और अपॉइंटमेंट से जुड़े संदेश आपको मिलते रहेंगे।",
+      "confirm": "सदस्यता रद्द करें",
+      "working": "सदस्यता रद्द हो रही है...",
+      "doneTitle": "आपकी सदस्यता रद्द हो गई है",
+      "doneBody": "अब आपको इस व्यवसाय से मार्केटिंग संदेश नहीं मिलेंगे।",
+      "already": "आपने पहले ही सदस्यता रद्द कर दी थी।",
+      "invalidTitle": "यह लिंक मान्य नहीं है",
+      "invalidBody": "सदस्यता रद्द करने का लिंक अधूरा है या बदला गया है। मिले हुए सबसे नए ईमेल का लिंक इस्तेमाल करें।",
+      "error": "कुछ गड़बड़ हो गई। फिर कोशिश करें।"
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_required": "A notice must be delivered first."
       }
     }
   }

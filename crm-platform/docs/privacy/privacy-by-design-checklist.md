@@ -9,16 +9,15 @@ list into the pull request and answer each line (yes, no, not applicable with a 
 - [ ] Which data subject (contact, lead, end customer, staff, visitor)? Which categories (identifiers, contact, content, financial,
       voice, location, special-category risk)?
 - [ ] Which purpose from the purpose registry? If none fits, propose a new one (name, lawful basis, retention, modalities, evidence).
-      Until the registry exists (BL-140) write the purpose in the wiring file.
+      The registry is `packages/contracts/src/privacy/purposes.ts` (`GET /v2/consent/purposes`); a new purpose is added there in review.
 - [ ] Is each field needed? Drop what you do not use. No free-text fields that invite sensitive data without a reason.
 - [ ] Collected from a public form or endpoint? Add a visible notice, a rate limit, no account enumeration, and decide the consent line
       and where its text and version are stored.
 
 ## 2. Consent and sending
 
-- [ ] Does the feature send a message, place a call, send an email or push, or process content with AI? Then it calls the consent gate
-      (once built) or, until then, the existing check (`consentSendableSql`, `apps/api/src/modules/contact-consent/consent-policy.service.ts`)
-      with the right channel, purpose and modality.
+- [ ] Does the feature send a message, place a call, send an email or push, or process content with AI? Then it asks the ConsentGate
+      (`apps/api/src/modules/contact-consent/consent-gate.service.ts`) with the right channel, purpose and modality.
 - [ ] Does STOP / opt-out apply? It must. Does the feature need a footer or unsubscribe link? Email always does.
 - [ ] Voice or recording involved? Read [voice-bot-consent-requirements.md](voice-bot-consent-requirements.md) first.
 - [ ] Is any consent proof stored without IP address, user agent or message text (as the ledger does)?
@@ -64,3 +63,19 @@ list into the pull request and answer each line (yes, no, not applicable with a 
 - [ ] Help guide says what is stored, for how long, and how to delete it.
 - [ ] If the feature changes what the workspace must tell its customers, update the notice templates.
 - [ ] If the feature adds a product extension, add it to `docs/threadwise-port/parity/product-extensions.md`.
+
+## How a new module plugs into the ConsentGate
+
+1. Import `ContactConsentModule` and inject `ConsentGate`.
+2. One contact: `await gate.check(orgId, { type: 'contact', id }, channelKindOrConsentChannel, 'marketing_messaging' | 'service_messaging', modality?, { replyWindowOpen? })`.
+   A whole audience: `await gate.checkMany(orgId, contactIds, channel, purpose, modality?, { tx })`, once, never in a loop. Use
+   `result.allowed` and count skips with `result.counts` (closed reasons).
+3. Chat channels: do not call an adapter. Go through `ChannelDispatcher`; its request has a required `consent: { purpose, contactId? }`, so
+   the compiler reminds you. A template's purpose comes from `dispatcher.purposeFor(...)`.
+4. Pick the purpose by what the message IS: a reply, a notice the customer expects, an order or appointment message is
+   `service_messaging` (STOP does not stop it); a promotion, a campaign, a drip or a MARKETING template is `marketing_messaging`.
+5. Deny means do not send and tell the person why (`CONSENT_OPTED_OUT`, `CONSENT_SEND_DENIED`); there is no override. The gate fails
+   closed for marketing and open for service replies, so you add no try/catch of your own.
+6. Email marketing: set `email.marketing: true`; the adapter adds the unsubscribe link and the RFC 8058 headers.
+7. Run `pnpm --filter @crm/api test -- consent-gate-guard`. A file that uses a send primitive without the gate fails it unless it is in
+   `consent-gate.allowlist.ts` with a reason.

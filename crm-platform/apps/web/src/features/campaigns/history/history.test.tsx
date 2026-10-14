@@ -91,6 +91,10 @@ describe('the three history screens', () => {
     expect(out).toContain('+91 98765 43210');
     expect(out).toContain('aria-current="true"');
     expect(out).toContain('>New<');
+    // The list is the default view, with the switch to blocks and the count of what is shown.
+    expect(out).toContain('data-testid="history-view-blocks"');
+    expect(out).toContain('aria-pressed="true"');
+    expect(out).toContain('Showing 3 campaigns');
     // No launch just happened: nothing is marked.
     const plain = html(<BroadcastHistoryScreen highlight={null} />, { qc });
     expect(plain).not.toContain('aria-current');

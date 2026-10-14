@@ -160,6 +160,17 @@
             "body": "先从模板更新或唤回群发开始，然后比较送达、已读和失败数量，再逐步扩大规模。"
           }
         }
+      },
+      "view": {
+        "label": "视图",
+        "list": "列表",
+        "blocks": "区块"
+      },
+      "col": {
+        "name": "活动",
+        "status": "状态",
+        "schedule": "排期",
+        "actions": "操作"
       }
     },
     "builder": {
@@ -1601,6 +1612,12 @@
         "noRuns": "尚未开始任何运行。",
         "cancel": "取消系列"
       },
+      "view": {
+        "label": "视图",
+        "list": "列表",
+        "blocks": "区块"
+      },
+      "showing": "显示 {count} 个活动",
       "legacy": "旧版群发（{count}）"
     },
     "senderEmpty": {

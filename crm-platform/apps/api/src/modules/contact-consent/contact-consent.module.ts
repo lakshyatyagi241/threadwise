@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConsentSettingsService } from './consent-settings.service';
+import { ConsentUnsubscribeController } from './consent-unsubscribe.controller';
+import { ConsentUnsubscribeService } from './consent-unsubscribe.service';
+import { ConsentGate } from './consent-gate.service';
 import { ConsentPolicyService } from './consent-policy.service';
+import { ConsentPurposesController } from './consent-purposes.controller';
 import { ConsentExportPublisher } from './consent-export.publisher';
 import { ConsentExportRepository } from './consent-export.repository';
 import { ConsentExportService } from './consent-export.service';
@@ -13,16 +17,24 @@ import { ContactConsentService } from './consent.service';
  * to record consent or to ask the send policy. The inbound STOP listener is in ContactConsentWorkerModule (worker only).
  */
 @Module({
-  controllers: [ContactConsentController],
+  controllers: [ContactConsentController, ConsentPurposesController, ConsentUnsubscribeController],
   providers: [
     ConsentRepository,
     ContactConsentService,
     ConsentSettingsService,
     ConsentPolicyService,
+    ConsentGate,
+    ConsentUnsubscribeService,
     ConsentExportRepository,
     ConsentExportPublisher,
     ConsentExportService,
   ],
-  exports: [ContactConsentService, ConsentSettingsService, ConsentPolicyService],
+  exports: [
+    ContactConsentService,
+    ConsentSettingsService,
+    ConsentPolicyService,
+    ConsentGate,
+    ConsentUnsubscribeService,
+  ],
 })
 export class ContactConsentModule {}

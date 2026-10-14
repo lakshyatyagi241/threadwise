@@ -160,6 +160,17 @@
             "body": "Bir şablon güncellemesi veya yeniden etkileşim toplu gönderimiyle başlayın; ölçeklendirmeden önce iletilen, okunan ve başarısız sayılarını karşılaştırın."
           }
         }
+      },
+      "view": {
+        "label": "Görünüm",
+        "list": "Liste",
+        "blocks": "Bloklar"
+      },
+      "col": {
+        "name": "Kampanya",
+        "status": "Durum",
+        "schedule": "Zamanlama",
+        "actions": "İşlemler"
       }
     },
     "builder": {
@@ -1601,6 +1612,12 @@
         "noRuns": "Henüz çalıştırma başlamadı.",
         "cancel": "Seriyi iptal et"
       },
+      "view": {
+        "label": "Görünüm",
+        "list": "Liste",
+        "blocks": "Bloklar"
+      },
+      "showing": "{count} kampanya gösteriliyor",
       "legacy": "Eski yayınlar ({count})"
     },
     "senderEmpty": {
