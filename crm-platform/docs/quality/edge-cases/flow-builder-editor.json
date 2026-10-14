@@ -1,0 +1,86 @@
+{
+  "module": "flow-builder-editor",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-flow-builder-editor-001",
+      "feature": "flb ask",
+      "category": "input",
+      "scenario": "a value of 11 (one past FLB_ASK_MAX_RETRIES = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/ask-media.ts"
+    },
+    {
+      "id": "EC-flow-builder-editor-002",
+      "feature": "flb carousel",
+      "category": "input",
+      "scenario": "a value of 11 (one past FLB_CAROUSEL_MAX_CARDS = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/carousel.ts"
+    },
+    {
+      "id": "EC-flow-builder-editor-003",
+      "feature": "flb carousel",
+      "category": "input",
+      "scenario": "a value of 3 (one past FLB_CAROUSEL_MAX_BUTTONS = 2) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/carousel.ts"
+    },
+    {
+      "id": "EC-flow-builder-editor-004",
+      "feature": "flb cond",
+      "category": "input",
+      "scenario": "a value of 4 (one past FLB_COND_MAX_DEPTH = 3) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/condition-group.ts"
+    },
+    {
+      "id": "EC-flow-builder-editor-005",
+      "feature": "flb cond",
+      "category": "input",
+      "scenario": "a value of 21 (one past FLB_COND_MAX_RULES = 20) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/condition-group.ts"
+    },
+    {
+      "id": "EC-flow-builder-editor-006",
+      "feature": "flow name",
+      "category": "input",
+      "scenario": "a value of 256 (one past FLOW_NAME_MAX = 255) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/flow.ts"
+    },
+    {
+      "id": "EC-flow-builder-editor-007",
+      "feature": "flow rename",
+      "category": "input",
+      "scenario": "a value of 192 (one past FLOW_RENAME_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/flow.ts"
+    },
+    {
+      "id": "EC-flow-builder-editor-008",
+      "feature": "flow category",
+      "category": "input",
+      "scenario": "a value of 65 (one past FLOW_CATEGORY_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/flow-builder-editor/flow.ts"
+    }
+  ]
+}

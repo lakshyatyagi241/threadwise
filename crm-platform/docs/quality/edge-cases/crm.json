@@ -1,0 +1,195 @@
+{
+  "module": "crm",
+  "tier": "P0",
+  "owner": "Lakshya",
+  "cases": [
+    {
+      "id": "EC-crm-001",
+      "feature": "duplicates",
+      "category": "data",
+      "scenario": "three contacts share one number",
+      "expected": "the oldest stays, two are removed",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-dedupe.e2e.spec.ts",
+          "match": "the oldest stays, two are removed"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-002",
+      "feature": "duplicates",
+      "category": "input",
+      "scenario": "the same number written with spaces, a plus, and a 00 prefix",
+      "expected": "all treated as duplicates",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-dedupe.e2e.spec.ts",
+          "match": "are all duplicates of each other"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-003",
+      "feature": "duplicates",
+      "category": "data",
+      "scenario": "contacts with no number",
+      "expected": "never duplicates of each other",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-dedupe.e2e.spec.ts",
+          "match": "contacts without a number are never duplicates"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-004",
+      "feature": "duplicates",
+      "category": "data",
+      "scenario": "a merge runs on contacts that have notes, deals and conversations",
+      "expected": "everything points at the survivor",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-dedupe.e2e.spec.ts",
+          "match": "points at the survivor afterwards"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-005",
+      "feature": "duplicates",
+      "category": "data",
+      "scenario": "a duplicate had opted out",
+      "expected": "the opt-out survives the merge",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-dedupe.e2e.spec.ts",
+          "match": "an opt-out is never forgotten by a merge"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-006",
+      "feature": "duplicates",
+      "category": "data",
+      "scenario": "a merge happens",
+      "expected": "a merge entry, a delete entry per duplicate and the events are written",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-dedupe.e2e.spec.ts",
+          "match": "leaves the trail"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-007",
+      "feature": "import",
+      "category": "input",
+      "scenario": "rejected rows beyond the cap in an import",
+      "expected": "only the first rows are reported",
+      "priority": "P1",
+      "status": "gap",
+      "source": "IMPORT_REJECTS_MAX in contracts"
+    },
+    {
+      "id": "EC-crm-008",
+      "feature": "bulk",
+      "category": "input",
+      "scenario": "a bulk action with more ids than BULK_IDS_MAX",
+      "expected": "refused with 422, nothing changed",
+      "priority": "P0",
+      "status": "gap",
+      "source": "BULK_IDS_MAX = 5000"
+    },
+    {
+      "id": "EC-crm-009",
+      "feature": "bulk",
+      "category": "input",
+      "scenario": "a filter that matches more than BULK_FILTER_MAX contacts",
+      "expected": "refused or capped as documented",
+      "priority": "P1",
+      "status": "gap",
+      "source": "BULK_FILTER_MAX = 50000"
+    },
+    {
+      "id": "EC-crm-010",
+      "feature": "contacts",
+      "category": "input",
+      "scenario": "a contact name of 192 characters; a name made only of spaces",
+      "expected": "refused with 422",
+      "priority": "P0",
+      "status": "gap"
+    },
+    {
+      "id": "EC-crm-011",
+      "feature": "contacts",
+      "category": "concurrency",
+      "scenario": "a contact is saved with a stale row version",
+      "expected": "the second save gets 409 ROW_VERSION_CONFLICT",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-status-stage.e2e.spec.ts",
+          "match": "a stale rowVersion is still a 409"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-012",
+      "feature": "contacts",
+      "category": "permission",
+      "scenario": "a contact of another workspace is sent in a bulk update",
+      "expected": "never touched",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contacts-attributes-tags/contact-bulk-update-properties.e2e.spec.ts",
+          "match": "another workspace"
+        }
+      ]
+    },
+    {
+      "id": "EC-crm-013",
+      "feature": "contacts",
+      "category": "data",
+      "scenario": "a contact is deleted while a flow run or a broadcast still points at it",
+      "expected": "no broken reference, no 500",
+      "priority": "P1",
+      "status": "gap"
+    },
+    {
+      "id": "EC-crm-014",
+      "feature": "groups",
+      "category": "input",
+      "scenario": "a group name of 192 characters and a note of 501",
+      "expected": "refused",
+      "priority": "P1",
+      "status": "gap",
+      "source": "GROUP_NAME_MAX = 191, GROUP_NOTE_MAX = 500"
+    },
+    {
+      "id": "EC-crm-015",
+      "feature": "attributes",
+      "category": "input",
+      "scenario": "an attribute label of 121 characters, a default of 256",
+      "expected": "refused",
+      "priority": "P1",
+      "status": "gap",
+      "source": "ATTRIBUTE_LABEL_MAX = 120, ATTRIBUTE_DEFAULT_MAX = 255"
+    }
+  ]
+}

@@ -18,6 +18,8 @@ import { AppError } from '../errors/app-error';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 
 const TTL_SECONDS = 24 * 3600;
+/** How long a key stays reserved while its request runs. A crash mid-request frees it after this, not after a day (ADR 0029). */
+const IN_FLIGHT_TTL_SECONDS = 300;
 const IN_FLIGHT = '__in_flight__';
 
 interface StoredEntry {
@@ -42,6 +44,8 @@ type RunResult = { kind: 'value'; value: unknown } | { kind: 'other-actor' };
  *   - on success, store the response body under the key for 24h and replay it
  *     verbatim on any repeat.
  *   - on failure, release the key so a genuine retry can proceed.
+ *
+ * Design record: docs/adr/0029-idempotency.md.
  *
  * Keys are namespaced per org: two tenants generating the same uuid must not
  * collide. Each entry records its slot (actor, method, path) and a body fingerprint.
@@ -103,7 +107,7 @@ export class IdempotencyInterceptor implements NestInterceptor {
     allowOtherActor: boolean,
   ): Observable<RunResult> {
     const inFlight = JSON.stringify({ slot, fp: fingerprint, state: IN_FLIGHT });
-    return from(this.redis.set(cacheKey, inFlight, 'EX', TTL_SECONDS, 'NX')).pipe(
+    return from(this.redis.set(cacheKey, inFlight, 'EX', IN_FLIGHT_TTL_SECONDS, 'NX')).pipe(
       switchMap((reserved): Observable<RunResult> => {
         if (reserved === 'OK') {
           return next.handle().pipe(

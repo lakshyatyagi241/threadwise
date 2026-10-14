@@ -1,0 +1,76 @@
+{
+  "module": "chatbot-widget",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-chatbot-widget-001",
+      "feature": "chat items",
+      "category": "input",
+      "scenario": "a value of 6 (one past CHAT_ITEMS_MAX = 5) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/chatbot-widget/launcher.ts"
+    },
+    {
+      "id": "EC-chatbot-widget-002",
+      "feature": "chat menu label",
+      "category": "input",
+      "scenario": "a value of 41 (one past CHAT_MENU_LABEL_MAX = 40) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/chatbot-widget/launcher.ts"
+    },
+    {
+      "id": "EC-chatbot-widget-003",
+      "feature": "chat font size",
+      "category": "input",
+      "scenario": "a value of 11 (one under CHAT_FONT_SIZE_MIN = 12) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/chatbot-widget/launcher.ts"
+    },
+    {
+      "id": "EC-chatbot-widget-004",
+      "feature": "chat font size",
+      "category": "input",
+      "scenario": "a value of 19 (one past CHAT_FONT_SIZE_MAX = 18) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/chatbot-widget/launcher.ts"
+    },
+    {
+      "id": "EC-chatbot-widget-005",
+      "feature": "chat auto open",
+      "category": "input",
+      "scenario": "a value of 121 (one past CHAT_AUTO_OPEN_MAX = 120) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/chatbot-widget/launcher.ts"
+    },
+    {
+      "id": "EC-chatbot-widget-006",
+      "feature": "chat suggestions",
+      "category": "input",
+      "scenario": "a value of 5 (one past CHAT_SUGGESTIONS_MAX = 4) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/chatbot-widget/launcher.ts"
+    },
+    {
+      "id": "EC-chatbot-widget-007",
+      "feature": "chat suggestion",
+      "category": "input",
+      "scenario": "a value of 61 (one past CHAT_SUGGESTION_MAX_CHARS = 60) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/chatbot-widget/launcher.ts"
+    }
+  ]
+}

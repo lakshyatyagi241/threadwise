@@ -1,0 +1,56 @@
+{
+  "module": "channel-email",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-channel-email-001",
+      "feature": "email html",
+      "category": "input",
+      "scenario": "a value of 65537 (one past EMAIL_HTML_MAX = 65536) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-email/email-meta.ts"
+    },
+    {
+      "id": "EC-channel-email-002",
+      "feature": "mail attachments",
+      "category": "input",
+      "scenario": "a value of 11 (one past MAIL_ATTACHMENTS_MAX_COUNT = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-email/email-meta.ts"
+    },
+    {
+      "id": "EC-channel-email-003",
+      "feature": "mail send limit",
+      "category": "input",
+      "scenario": "a value of 10001 (one past MAIL_SEND_LIMIT_MAX = 10000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-email/mailbox.ts"
+    },
+    {
+      "id": "EC-channel-email-004",
+      "feature": "mail signature html",
+      "category": "input",
+      "scenario": "a value of 20001 (one past MAIL_SIGNATURE_HTML_MAX = 20000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-email/signature.ts"
+    },
+    {
+      "id": "EC-channel-email-005",
+      "feature": "mail signature text",
+      "category": "input",
+      "scenario": "a value of 5001 (one past MAIL_SIGNATURE_TEXT_MAX = 5000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-email/signature.ts"
+    }
+  ]
+}

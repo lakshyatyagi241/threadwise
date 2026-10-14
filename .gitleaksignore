@@ -1,0 +1,2 @@
+# Fingerprints of findings that are reviewed and accepted (gitleaks format: commit:file:rule:line).
+# Empty on purpose. A real secret is rotated first, then listed here only if it must stay in history.

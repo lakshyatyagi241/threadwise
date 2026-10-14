@@ -1,0 +1,66 @@
+{
+  "module": "workspaces-teams-tenancy",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-workspaces-teams-tenancy-001",
+      "feature": "impersonation",
+      "category": "input",
+      "scenario": "a value of 61 (one past IMPERSONATION_MAX_MINUTES = 60) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/workspaces-teams-tenancy/admin-hub.ts"
+    },
+    {
+      "id": "EC-workspaces-teams-tenancy-002",
+      "feature": "member leave reason",
+      "category": "input",
+      "scenario": "a value of 501 (one past MEMBER_LEAVE_REASON_MAX = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/workspaces-teams-tenancy/leave.ts"
+    },
+    {
+      "id": "EC-workspaces-teams-tenancy-003",
+      "feature": "wsp member name",
+      "category": "input",
+      "scenario": "a value of 192 (one past WSP_MEMBER_NAME_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/workspaces-teams-tenancy/members.ts"
+    },
+    {
+      "id": "EC-workspaces-teams-tenancy-004",
+      "feature": "owner reassign run",
+      "category": "input",
+      "scenario": "a value of 50001 (one past OWNER_REASSIGN_RUN_MAX = 50000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/workspaces-teams-tenancy/reassign.ts"
+    },
+    {
+      "id": "EC-workspaces-teams-tenancy-005",
+      "feature": "wsp team name",
+      "category": "input",
+      "scenario": "a value of 65 (one past WSP_TEAM_NAME_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/workspaces-teams-tenancy/teams.ts"
+    },
+    {
+      "id": "EC-workspaces-teams-tenancy-006",
+      "feature": "wsp team description",
+      "category": "input",
+      "scenario": "a value of 256 (one past WSP_TEAM_DESCRIPTION_MAX = 255) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/workspaces-teams-tenancy/teams.ts"
+    }
+  ]
+}

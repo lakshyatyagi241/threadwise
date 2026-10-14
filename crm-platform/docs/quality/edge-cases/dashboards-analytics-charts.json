@@ -1,0 +1,26 @@
+{
+  "module": "dashboards-analytics-charts",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-dashboards-analytics-charts-001",
+      "feature": "analytics",
+      "category": "input",
+      "scenario": "a value of 367 (one past ANALYTICS_MAX_DAYS = 366) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/dashboards-analytics-charts/index.ts"
+    },
+    {
+      "id": "EC-dashboards-analytics-charts-002",
+      "feature": "dash quick access",
+      "category": "input",
+      "scenario": "a value of 11 (one past DASH_QUICK_ACCESS_MAX = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/dashboards-analytics-charts/quick-access.ts"
+    }
+  ]
+}

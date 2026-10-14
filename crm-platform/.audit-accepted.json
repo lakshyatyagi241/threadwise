@@ -1,0 +1,37 @@
+[
+  {
+    "id": "GHSA-5xrq-8626-4rwp",
+    "package": "vitest 2.1.9",
+    "reason": "Only reachable when the Vitest UI server is listening (`vitest --ui`). Nobody runs it and CI never does; vitest is a development dependency and is not in the production images.",
+    "expires": "2026-12-31",
+    "exit": "Move apps/api and packages to vitest >=3.2.6 in its own PR (major version; run all four suites)."
+  },
+  {
+    "id": "GHSA-85c8-ppgw-ccpr",
+    "package": "tinypool 1.1.1 (through vitest 2.1.9)",
+    "reason": "Prototype-pollution gadget in worker options. Needs attacker-controlled options passed to the pool; the tests pass fixed options. Development only.",
+    "expires": "2026-12-31",
+    "exit": "Goes away with the vitest upgrade above."
+  },
+  {
+    "id": "GHSA-5gmw-xhrv-c9v3",
+    "package": "tinypool 1.1.1 (through vitest 2.1.9)",
+    "reason": "Same family as GHSA-85c8-ppgw-ccpr: worker options polluted by attacker input. Development only.",
+    "expires": "2026-12-31",
+    "exit": "Goes away with the vitest upgrade above."
+  },
+  {
+    "id": "GHSA-86w9-cpqp-85rv",
+    "package": "node-forge <=1.4.0 (through apps/mobile: expo, @expo/cli, @expo/code-signing)",
+    "reason": "Reached only through Expo's command-line tooling, which signs and builds the mobile app on a developer machine or in EAS. It is not in the app bundle, the API image or the web image, and the input is Expo's own signing files. No fixed release exists yet.",
+    "expires": "2026-12-31",
+    "exit": "Bump expo when a release depends on a fixed node-forge, or add a pnpm override once one is published."
+  },
+  {
+    "id": "GHSA-vfj7-8cjw-p6xm",
+    "package": "braces <=3.0.3 (through micromatch in lint-staged and react-native tooling)",
+    "reason": "Stack exhaustion on deeply nested glob patterns. Used by file-matching in build and commit tooling on files in this repository, never on request input. No fixed release exists yet.",
+    "expires": "2026-12-31",
+    "exit": "Upgrade micromatch/braces when a fixed release is published."
+  }
+]
