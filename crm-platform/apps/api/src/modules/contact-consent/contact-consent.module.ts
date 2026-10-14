@@ -3,6 +3,7 @@ import { ConsentSettingsService } from './consent-settings.service';
 import { ConsentUnsubscribeController } from './consent-unsubscribe.controller';
 import { ConsentUnsubscribeService } from './consent-unsubscribe.service';
 import { ConsentGate } from './consent-gate.service';
+import { ConsentIntakeService } from './consent-intake.service';
 import { ConsentPolicyService } from './consent-policy.service';
 import { ConsentPurposesController } from './consent-purposes.controller';
 import { ConsentExportPublisher } from './consent-export.publisher';
@@ -21,6 +22,7 @@ import { ContactConsentService } from './consent.service';
   providers: [
     ConsentRepository,
     ContactConsentService,
+    ConsentIntakeService,
     ConsentSettingsService,
     ConsentPolicyService,
     ConsentGate,
@@ -31,6 +33,7 @@ import { ContactConsentService } from './consent.service';
   ],
   exports: [
     ContactConsentService,
+    ConsentIntakeService,
     ConsentSettingsService,
     ConsentPolicyService,
     ConsentGate,

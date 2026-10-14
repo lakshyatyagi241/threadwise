@@ -16,7 +16,7 @@ export {
   contactScopeCondition,
   toContactResponse,
 } from './contacts';
-export type { ContactRow } from './contacts';
+export type { ContactRow, ContactConsentContext } from './contacts';
 export { contactConditions, whereOf } from './contacts';
 export { missingRequired, requiredPropertiesError, isBlank } from './contacts';
 export type { RequiredRule } from './contacts';

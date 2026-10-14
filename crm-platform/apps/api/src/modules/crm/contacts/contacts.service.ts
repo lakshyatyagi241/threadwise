@@ -1,8 +1,12 @@
+import { randomUUID } from 'node:crypto';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES, canonicalizePhone, composeDisplayName } from '@crm/contracts';
 import type {
+  ConsentProof,
+  ConsentSource,
+  IntakeChannel,
   AssigneeResponse,
   BulkResult,
   BulkUpdateContactsInput,
@@ -19,7 +23,7 @@ import type {
   SetContactAssigneeInput,
   UpdateContactInput,
 } from '@crm/contracts';
-import { RequestContextStore } from '../../../common/context/request-context';
+import { RequestContextStore, type RequestContext } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
@@ -35,7 +39,14 @@ import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import { missingRequired, requiredPropertiesError } from './required-properties';
-import { ContactConsentService } from '../../contact-consent';
+import {
+  ConsentIntakeService,
+  ContactConsentService,
+  hasProof,
+  intakeEvidence,
+  planIntakeGrants,
+  type IntakePlan,
+} from '../../contact-consent';
 import { PersonalDataErasureService } from '../../privacy';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
@@ -56,6 +67,41 @@ export const FLOW_CONTACT_COLUMNS: Readonly<Record<string, string>> = {
   address: 'address',
 };
 const DISPLAY_PREFIX = 'CON';
+
+/** The status column of each channel a consent can be granted on at intake. */
+const STATUS_COLUMN = {
+  whatsapp: 'whatsappSubscriptionStatus',
+  sms: 'smsSubscriptionStatus',
+  email: 'emailSubscriptionStatus',
+} as const satisfies Record<IntakeChannel, string>;
+
+/**
+ * Who is agreeing, for the ledger event a contact write may leave behind (`create` and `update` take it as an optional last argument).
+ * A staff session records `manual`, an API key `api`; a caller that stands for the person (a partner agent, a public lead submit) says
+ * `api` and names itself in `evidence.reference`.
+ */
+export interface ContactConsentContext {
+  source?: ConsentSource;
+  evidence?: Record<string, string | undefined>;
+  /**
+   * A stable key for callers that send the same agreement again and again (a sheet re-sent by its add-on): the grant is written once.
+   * Omitted, every write that carries a claim records its own event.
+   */
+  dedupeKey?: string;
+}
+
+/** The statuses a write carries, by channel (undefined: not part of the write). */
+function statusesOf(input: {
+  whatsappSubscriptionStatus?: string | null;
+  smsSubscriptionStatus?: string | null;
+  emailSubscriptionStatus?: string | null;
+}) {
+  return {
+    whatsapp: input.whatsappSubscriptionStatus,
+    sms: input.smsSubscriptionStatus,
+    email: input.emailSubscriptionStatus,
+  };
+}
 
 /** What an inbound message knows about its sender (`ContactsService.resolveOrCreateByIdentity`). */
 export interface ResolveContactInput {
@@ -124,6 +170,7 @@ export class ContactsService {
     private readonly rbac: RbacService,
     private readonly quota: ContactQuotaService,
     private readonly consent: ContactConsentService,
+    private readonly intake: ConsentIntakeService,
     private readonly erasure: PersonalDataErasureService,
   ) {}
 
@@ -223,7 +270,7 @@ export class ContactsService {
     });
   }
 
-  async create(input: CreateContactInput): Promise<ContactResponse> {
+  async create(input: CreateContactInput, via?: ContactConsentContext): Promise<ContactResponse> {
     const ctx = RequestContextStore.require();
 
     // One canonicaliser for create, import and dedupe (TW-CON-013). The contract already insists
@@ -232,6 +279,15 @@ export class ContactsService {
     const phone = input.phone
       ? (canonicalizePhone({ number: input.phone })?.e164 ?? input.phone)
       : undefined;
+
+    // Consent at intake (spec privacy-and-data-governance 4.3.2): a status set to `subscribed`, or a consent block, is a claim that the
+    // person agreed. It needs proof (422 without), and it writes a ledger grant; the status alone never grants anything.
+    const plan = planIntakeGrants({
+      given: statusesOf(input),
+      proof: input.consent,
+      reachable: { phone: Boolean(phone), email: Boolean(input.email) },
+    });
+    this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
 
     return this.db.tx(async (tx) => {
       // Omitted: the creator (Reference stamped `user_id` with the caller). `null`: nobody, which a caller whose
@@ -264,7 +320,13 @@ export class ContactsService {
             { orgId: ctx.orgId, contactId: existingId },
             'contact create matched an existing identity — returning the existing contact',
           );
-          return toContactResponse(existing);
+          // The same person agreeing again is still an agreement: the grant lands on the contact they already are.
+          const regranted = await this.grantOnMatch(tx, ctx, existing, input, via);
+          return toContactResponse(
+            regranted
+              ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
+              : existing,
+          );
         }
       }
 
@@ -325,9 +387,15 @@ export class ContactsService {
         lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
         status: statusPlan.status ?? undefined,
         leadScore: input.leadScore,
-        whatsappSubscriptionStatus: input.whatsappSubscriptionStatus,
-        smsSubscriptionStatus: input.smsSubscriptionStatus,
-        emailSubscriptionStatus: input.emailSubscriptionStatus,
+        whatsappSubscriptionStatus:
+          input.whatsappSubscriptionStatus ??
+          (plan.fillStatus.includes('whatsapp') ? 'subscribed' : undefined),
+        smsSubscriptionStatus:
+          input.smsSubscriptionStatus ??
+          (plan.fillStatus.includes('sms') ? 'subscribed' : undefined),
+        emailSubscriptionStatus:
+          input.emailSubscriptionStatus ??
+          (plan.fillStatus.includes('email') ? 'subscribed' : undefined),
         emailConfirmed: input.emailConfirmed,
         faxNumber: input.faxNumber,
         source: input.source,
@@ -360,6 +428,17 @@ export class ContactsService {
           actorUserId: ctx.userId,
           note: 'Created as unsubscribed',
           idempotencyKey: `create:${created.uuid}`,
+        });
+      }
+      if (plan.grant.length > 0) {
+        await this.intake.grant(tx, ctx.orgId, {
+          contactId: created.id,
+          channels: plan.grant,
+          source: this.grantSource(ctx, via),
+          proof: input.consent,
+          evidence: via?.evidence,
+          actorUserId: ctx.userId,
+          keyBase: via?.dedupeKey ?? `create:${created.uuid}:grant`,
         });
       }
 
@@ -700,7 +779,89 @@ export class ContactsService {
     return (res.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
   }
 
-  async update(uuid: string, input: UpdateContactInput): Promise<ContactResponse> {
+  /** A grant claimed in a write needs proof and cannot sit beside an opt-out in the same write. */
+  private assertIntakeAllowed(
+    plan: IntakePlan,
+    proof: ConsentProof | undefined,
+    optingOut: boolean,
+  ): void {
+    if (plan.grant.length === 0) return;
+    if (optingOut) {
+      throw AppError.validation(
+        'A contact cannot be marked unsubscribed and subscribed in the same change.',
+      );
+    }
+    this.intake.requireProof(proof);
+  }
+
+  private grantSource(ctx: RequestContext, via?: ContactConsentContext): ConsentSource {
+    return via?.source ?? (ctx.actorType === 'api_key' ? 'api' : 'manual');
+  }
+
+  /**
+   * `create` found the person already in the workspace. If the write carried a consent claim, the agreement still happened: the grant
+   * is written on that contact (never over a withdrawal) and a blank status of a granted channel becomes `subscribed`. Nothing else
+   * of the existing contact is touched. Returns whether anything was written.
+   */
+  private async grantOnMatch(
+    tx: Tx,
+    ctx: RequestContext,
+    existing: ContactRow,
+    input: CreateContactInput,
+    via?: ContactConsentContext,
+  ): Promise<boolean> {
+    const plan = planIntakeGrants({
+      given: statusesOf(input),
+      stored: {
+        whatsapp: existing.whatsappSubscriptionStatus,
+        sms: existing.smsSubscriptionStatus,
+        email: existing.emailSubscriptionStatus,
+      },
+      proof: input.consent,
+      reachable: { phone: Boolean(existing.phone), email: Boolean(existing.email) },
+    });
+    if (plan.grant.length === 0) return false;
+    this.intake.requireProof(input.consent);
+    const recorded = await this.intake.grant(tx, ctx.orgId, {
+      contactId: existing.id,
+      channels: plan.grant,
+      source: this.grantSource(ctx, via),
+      proof: input.consent,
+      evidence: via?.evidence,
+      actorUserId: ctx.userId,
+      keyBase: via?.dedupeKey ?? `create:${existing.uuid}:${randomUUID()}:grant`,
+    });
+    const patch: Record<string, unknown> = {};
+    const stored: Record<IntakeChannel, string | null> = {
+      whatsapp: existing.whatsappSubscriptionStatus,
+      sms: existing.smsSubscriptionStatus,
+      email: existing.emailSubscriptionStatus,
+    };
+    for (const ch of recorded as IntakeChannel[]) {
+      if (!(stored[ch] ?? '').trim()) patch[STATUS_COLUMN[ch]] = 'subscribed';
+    }
+    if (Object.keys(patch).length > 0) {
+      await this.repo.updateFieldsById(tx, ctx.orgId, existing.id, {
+        ...patch,
+        updatedBy: ctx.userId,
+      });
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'update',
+        delta: Object.fromEntries(
+          Object.keys(patch).map((k) => [k, { old: null, new: 'subscribed' }]),
+        ),
+      });
+    }
+    return recorded.length > 0;
+  }
+
+  async update(
+    uuid: string,
+    input: UpdateContactInput,
+    via?: ContactConsentContext,
+  ): Promise<ContactResponse> {
     const ctx = RequestContextStore.require();
 
     return this.db.tx(async (tx) => {
@@ -736,6 +897,23 @@ export class ContactsService {
         values.leadScoredAt = null;
         values.leadScoreModel = null;
       }
+      // Consent at intake: a status that changes to `subscribed`, or a consent block, is a claim that the person agreed. It needs proof
+      // and writes a ledger grant below; the status alone never grants anything (spec privacy-and-data-governance 4.3.2).
+      const plan = planIntakeGrants({
+        given: statusesOf(input),
+        stored: {
+          whatsapp: existing.whatsappSubscriptionStatus,
+          sms: existing.smsSubscriptionStatus,
+          email: existing.emailSubscriptionStatus,
+        },
+        proof: input.consent,
+        reachable: {
+          phone: Boolean(input.phone !== undefined ? input.phone : existing.phone),
+          email: Boolean(input.email !== undefined ? input.email : existing.email),
+        },
+      });
+      this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
+      for (const ch of plan.fillStatus) values[STATUS_COLUMN[ch]] = 'subscribed';
       if (input.whatsappSubscriptionStatus !== undefined) {
         values.whatsappSubscriptionStatus = input.whatsappSubscriptionStatus;
       }
@@ -839,14 +1017,19 @@ export class ContactsService {
 
       // The toggle on the contact form / REST API keeps working as before; the ledger records who changed it (a grant here has no
       // required reason: the Consent card on the profile asks for one).
+      // Switching the flag back on while the write carries the person's proof records THAT proof (the wording, the version, the note)
+      // instead of the bare "changed on the record" line, and covers the WhatsApp grant of the consent block.
+      const proofForFlag =
+        values.isUnsubscribed === false && hasProof(input.consent) ? input.consent : undefined;
       if (values.isUnsubscribed !== undefined) {
         await this.consent.recordInTx(tx, ctx.orgId, {
           contactId: existing.id,
           channel: 'whatsapp',
           action: values.isUnsubscribed ? 'withdrawn' : 'granted',
-          source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+          source: this.grantSource(ctx, via),
+          evidence: proofForFlag ? intakeEvidence(proofForFlag, via?.evidence) : undefined,
           actorUserId: ctx.userId,
-          note: 'Changed on the contact record',
+          note: proofForFlag?.note?.trim() || 'Changed on the contact record',
           idempotencyKey: `edit:${existing.uuid}:${existing.rowVersion}`,
         });
         // Switching the flag back on is a person coming back: `contact.opt_in` (optedIn: true), the opt-in flow trigger, in the same
@@ -865,6 +1048,21 @@ export class ContactsService {
             },
           });
         }
+      }
+
+      const grantChannels = proofForFlag
+        ? plan.grant.filter((ch) => ch !== 'whatsapp')
+        : plan.grant;
+      if (grantChannels.length > 0) {
+        await this.intake.grant(tx, ctx.orgId, {
+          contactId: existing.id,
+          channels: grantChannels,
+          source: this.grantSource(ctx, via),
+          proof: input.consent,
+          evidence: via?.evidence,
+          actorUserId: ctx.userId,
+          keyBase: via?.dedupeKey ?? `edit:${existing.uuid}:${existing.rowVersion}:grant`,
+        });
       }
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);

@@ -250,6 +250,12 @@ export const extSheetsContactRowSchema = z.object({
   /** Defaults to `google_sheets`. */
   source: cell(128),
   is_unsubscribed: flag,
+  /**
+   * Yes: the person agreed to marketing messages, and `consent_note` says how (what they said or signed, and where). A row that says yes
+   * without a note is refused. No or blank never changes anything (a cell is not proof of a withdrawal either).
+   */
+  consent: flag,
+  consent_note: cell(500),
   attributes: z.record(z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
 });
 export type ExtSheetsContactRow = z.infer<typeof extSheetsContactRowSchema>;
