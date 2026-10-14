@@ -66,14 +66,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
   },
 
   // Sales (Reference's SalesDocs engine: proposals and estimates are real screens in features/sales-docs; invoices, payments and tax rates are real screens in features/invoicing)
-  {
-    id: 'crm-dashboard',
-    group: 'sales',
-    labelKey: L('crmDashboard'),
-    href: '/crm',
-    order: 0,
-    icon: 'crm',
-  },
 
   // Campaigns
   {
