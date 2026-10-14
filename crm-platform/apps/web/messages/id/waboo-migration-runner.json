@@ -1,0 +1,6 @@
+{
+  "waboo-migration-runner": {
+    "online": "Runner terhubung: {name}. Migrasi dijalankan di mesin tersebut, yang berada di VPN Geta.",
+    "offline": "Tidak ada runner yang terhubung. Migrasi dijalankan di mesin yang berada di VPN Geta; mulai runner di sana terlebih dahulu. Sebuah proses menunggunya beberapa menit lalu gagal tanpa memulai apa pun."
+  }
+}

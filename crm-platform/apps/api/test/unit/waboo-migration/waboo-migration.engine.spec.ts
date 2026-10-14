@@ -563,11 +563,18 @@ describe('WhatsApp / Waboo safety invariant (module source)', () => {
     );
     expect(source).toMatch(/shell: false/);
   });
-  it('the worker writes only to the two panel tables', () => {
+  it('the module writes only to the panel tables (runs, batches) and the two runner hand-over tables', () => {
     const writes = [...source.matchAll(/\b(?:INSERT INTO|UPDATE|DELETE FROM)\s+([a-z_]+)/g)].map(
       (m) => m[1],
     );
-    expect(new Set(writes)).toEqual(new Set(['waboo_migration_runs', 'waboo_migration_batches']));
+    expect(new Set(writes)).toEqual(
+      new Set([
+        'waboo_migration_runs',
+        'waboo_migration_batches',
+        'waboo_migration_runner_jobs',
+        'waboo_migration_runners',
+      ]),
+    );
   });
   it('the API response mapper exposes no internal id, creator, secret or connection string', () => {
     const service = readFileSync(join(dir, 'waboo-migration.service.ts'), 'utf8');

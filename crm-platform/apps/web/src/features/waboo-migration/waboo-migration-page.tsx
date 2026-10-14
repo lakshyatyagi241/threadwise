@@ -10,6 +10,7 @@ import { BatchesList } from './batches-list';
 import { BulkForm } from './bulk-form';
 import { MigrateForm } from './migrate-form';
 import { RunDetail } from './run-detail';
+import { RunnerBanner } from './runner-banner';
 import { RunsList } from './runs-list';
 
 const NS = 'waboo-migration.page';
@@ -31,6 +32,7 @@ export function WabooMigrationPage() {
       ) : (
         <>
           <Alert tone="info">{t('banner')}</Alert>
+          <RunnerBanner />
           <Tabs
             items={[
               {

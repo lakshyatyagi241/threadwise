@@ -83,7 +83,7 @@ export async function executeRun(
   let startError: string | null = null;
   try {
     result = await d.runner.run(
-      { sourceClient: run.sourceClient, sourceDb: run.sourceDb, mode: run.mode },
+      { runUuid: run.uuid, sourceClient: run.sourceClient, sourceDb: run.sourceDb, mode: run.mode },
       async (ev) => {
         if (ev.event !== 'step') return;
         steps = applyStep(steps, ev, now());

@@ -1,0 +1,6 @@
+{
+  "waboo-migration-runner": {
+    "online": "Çalıştırıcı bağlı: {name}. Taşıma işlemleri, Geta VPN'ine bağlı olan bu makinede çalışır.",
+    "offline": "Bağlı çalıştırıcı yok. Taşıma işlemleri Geta VPN'indeki bir makinede çalışır; önce orada çalıştırıcıyı başlatın. Bir çalıştırma onu birkaç dakika bekler, ardından hiçbir şey başlatmadan başarısız olur."
+  }
+}

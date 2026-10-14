@@ -35,7 +35,15 @@ const flag = (n) => (argv.includes(`--${n}`) ? argv[argv.indexOf(`--${n}`) + 1] 
 const emit = (o) => process.stdout.write(JSON.stringify(o) + '\n');
 const fail = (msg, code = 2) => {
   emit({ event: 'step', name: 'preflight', status: 'failed', message: msg });
-  emit({ event: 'report', green: false, unaccounted: 0, integrityErrors: 0, alarms: 0, orgId: null, summary: msg });
+  emit({
+    event: 'report',
+    green: false,
+    unaccounted: 0,
+    integrityErrors: 0,
+    alarms: 0,
+    orgId: null,
+    summary: msg,
+  });
   process.exit(code);
 };
 
@@ -44,8 +52,10 @@ const db = flag('db');
 const client = flag('client') || (db ? db.toLowerCase().slice(0, 64) : undefined);
 const mode = flag('mode') || 'dry';
 const name = flag('name');
-if (!client || !/^[a-z0-9_-]{1,64}$/.test(client)) fail('--client must be a key like "iskm" (a-z, 0-9, _ or -)');
-if (!db || !/^[A-Za-z0-9_]{1,128}$/.test(db)) fail('--db must be a Waboo database name (letters, digits, _)');
+if (!client || !/^[a-z0-9_-]{1,64}$/.test(client))
+  fail('--client must be a key like "iskm" (a-z, 0-9, _ or -)');
+if (!db || !/^[A-Za-z0-9_]{1,128}$/.test(db))
+  fail('--db must be a Waboo database name (letters, digits, _)');
 if (!['dry', 'load', 'catchup'].includes(mode)) fail('--mode must be dry, load or catchup');
 
 const clientsDir = process.env.CYCLE_CLIENTS_DIR || path.join(HERE, 'clients');
@@ -57,24 +67,40 @@ const warn = (m) => {
   if (preNotes.length < 5) preNotes.push(m.slice(0, 200));
 };
 
+/**
+ * The mailbox name of the placeholder owner. `new-client` refuses any plain run of 32+ characters as a possible secret, and a client key (a
+ * name plus Waboo's random suffix) is often longer, so a long key is cut to its first 14 and last 6 characters (the suffix keeps it unique).
+ */
+const ownerLocal = (slug) => (slug.length <= 20 ? slug : `${slug.slice(0, 14)}-${slug.slice(-6)}`);
+
 /** a new client: derive the config from geta_core (read-only) instead of asking a person for it */
 function ensureConfig() {
   if (fs.existsSync(cfgFile)) return null;
-  if (mode === 'catchup') return `catch-up needs the config of an already-loaded client (${cfgFile} is missing): this client was never migrated from here`;
+  if (mode === 'catchup')
+    return `catch-up needs the config of an already-loaded client (${cfgFile} is missing): this client was never migrated from here`;
   // a client with rows on staging must never get a new channel map (its conversation keys come from the old one)
-  const lc = spawnSync(process.execPath, [CYCLE, 'loaded-check', '--client', client], { encoding: 'utf8', timeout: 180000 });
-  if (lc.status !== 0)
-    return lc.status === 2
-      ? (lc.stderr || '').trim().slice(-300) + ' (restore its config file instead of creating a new one)'
-      : `could not check whether ${client} is already loaded (loaded-check exit ${lc.status}); not creating a channel map blind`;
-  fs.mkdirSync(dataDir, { recursive: true });
-  const r = spawnSync(process.execPath, [path.join(HERE, 'core-opening.cjs'), '--client', client, '--workspace', db, '--out', dataDir], {
+  const lc = spawnSync(process.execPath, [CYCLE, 'loaded-check', '--client', client], {
     encoding: 'utf8',
     timeout: 180000,
   });
+  if (lc.status !== 0)
+    return lc.status === 2
+      ? (lc.stderr || '').trim().slice(-300) +
+          ' (restore its config file instead of creating a new one)'
+      : `could not check whether ${client} is already loaded (loaded-check exit ${lc.status}); not creating a channel map blind`;
+  fs.mkdirSync(dataDir, { recursive: true });
+  const r = spawnSync(
+    process.execPath,
+    [path.join(HERE, 'core-opening.cjs'), '--client', client, '--workspace', db, '--out', dataDir],
+    {
+      encoding: 'utf8',
+      timeout: 180000,
+    },
+  );
   const coreFile = path.join(dataDir, `${client}-core.json`);
   const openFile = path.join(dataDir, `${client}-credit-opening.json`);
-  if (r.status !== 0 || !fs.existsSync(coreFile)) return `could not read the workspace from geta_core (core-opening exit ${r.status})`;
+  if (r.status !== 0 || !fs.existsSync(coreFile))
+    return `could not read the workspace from geta_core (core-opening exit ${r.status})`;
   let orgName = name;
   if (!orgName) {
     try {
@@ -89,17 +115,40 @@ function ensureConfig() {
   // the REAL WhatsApp number (phone number id, display number, name) as the channel map from the start; the placeholder only as a loud fallback
   const waFile = path.join(dataDir, `${client}-wa-map.json`);
   fs.rmSync(waFile, { force: true });
-  const wa = spawnSync(process.execPath, [path.join(HERE, 'wa-numbers.cjs'), '--workspace', db, '--name', orgName, '--out', waFile], { encoding: 'utf8', timeout: 180000 });
+  const wa = spawnSync(
+    process.execPath,
+    [path.join(HERE, 'wa-numbers.cjs'), '--workspace', db, '--name', orgName, '--out', waFile],
+    { encoding: 'utf8', timeout: 180000 },
+  );
   for (const l of (wa.stdout || '').split('\n').filter(Boolean)) process.stderr.write(l + '\n');
   const realMap = fs.existsSync(waFile);
-  if (!realMap) warn(`no live WhatsApp number found for ${client} (wa-numbers exit ${wa.status}): the channel map is a PLACEHOLDER, so every chat is quarantined NO_CHANNEL until a person sets the real botid and phone number id`);
-  else if (wa.status === 3) warn('some botids have no live WhatsApp number: their chats are quarantined NO_CHANNEL');
+  if (!realMap)
+    warn(
+      `no live WhatsApp number found for ${client} (wa-numbers exit ${wa.status}): the channel map is a PLACEHOLDER, so every chat is quarantined NO_CHANNEL until a person sets the real botid and phone number id`,
+    );
+  else if (wa.status === 3)
+    warn('some botids have no live WhatsApp number: their chats are quarantined NO_CHANNEL');
   const nc = spawnSync(
     process.execPath,
-    [CYCLE, 'new-client', '--client', client, '--name', orgName, '--slug', slug, '--owner-email', `owner-${slug}@desk.wabo.ai`, '--owner-name', `${orgName} Owner`, ...(realMap ? ['--channel-map-file', waFile] : [])],
+    [
+      CYCLE,
+      'new-client',
+      '--client',
+      client,
+      '--name',
+      orgName,
+      '--slug',
+      slug,
+      '--owner-email',
+      `owner-${ownerLocal(slug)}@desk.wabo.ai`,
+      '--owner-name',
+      `${orgName} Owner`,
+      ...(realMap ? ['--channel-map-file', waFile] : []),
+    ],
     { encoding: 'utf8', timeout: 60000 },
   );
-  if (nc.status !== 0) return `new-client failed (exit ${nc.status}): ${(nc.stderr || nc.stdout || '').slice(-300)}`;
+  if (nc.status !== 0)
+    return `new-client failed (exit ${nc.status}): ${(nc.stderr || nc.stdout || '').slice(-300)}`;
   const cfg = JSON.parse(fs.readFileSync(cfgFile, 'utf8'));
   cfg.mongoDb = db;
   cfg.coreFile = coreFile;
@@ -111,18 +160,51 @@ function ensureConfig() {
 
 // PANEL_STEPS: the step names the panel's parser accepts (packages/contracts WMIG_STEP_NAMES). Other cycle steps (update, files, wallet-sync)
 // run but are not announced. Extend this list and the contract together, or the panel drops the events.
-const PANEL_STEPS = ['export', 'preflight', 'backup', 'dry', 'load', 'core-load', 'flow-state', 'reconcile', 'report'];
-const ORDER = ['export', 'preflight', 'dry', 'backup', 'load', 'core-load', 'flow-state', 'reconcile', 'report'].filter((n) => PANEL_STEPS.includes(n));
+const PANEL_STEPS = [
+  'export',
+  'preflight',
+  'backup',
+  'dry',
+  'load',
+  'core-load',
+  'flow-state',
+  'reconcile',
+  'report',
+];
+const ORDER = [
+  'export',
+  'preflight',
+  'dry',
+  'backup',
+  'load',
+  'core-load',
+  'flow-state',
+  'reconcile',
+  'report',
+].filter((n) => PANEL_STEPS.includes(n));
 const EVENT_OF = { ship: 'preflight', init: 'preflight', complete: 'report' };
 
 const problem = ensureConfig();
 if (problem) fail(problem);
 
-const args = ['migrate', '--client', client, '--db', db, '--yes-load-into-staging', '--with-dry-run'];
+const args = [
+  'migrate',
+  '--client',
+  client,
+  '--db',
+  db,
+  '--yes-load-into-staging',
+  '--with-dry-run',
+];
 if (mode === 'dry') args.push('--force-export', '--stop-after', 'dry');
 if (mode === 'catchup') args.push('--catch-up');
 // catch-up never runs flow-state (the flows are already live); the panel list is otherwise the same
-const wanted = mode === 'dry' ? ORDER.slice(0, ORDER.indexOf('dry') + 1) : mode === 'catchup' ? ORDER.filter((n) => n !== 'flow-state') : ORDER;
+const wanted =
+  mode === 'dry'
+    ? ORDER.slice(0, ORDER.indexOf('dry') + 1)
+    : mode === 'catchup'
+      ? ORDER.filter((n) => n !== 'flow-state')
+      : ORDER;
 
 const done = new Set();
 const markRunning = (n) => {
@@ -131,7 +213,15 @@ const markRunning = (n) => {
 };
 markRunning(mode === 'load' ? 'preflight' : 'export');
 
-const st = { dryOk: null, unaccounted: null, integrity: null, alarms: null, orgId: null, failedStep: null, notes: [...preNotes] };
+const st = {
+  dryOk: null,
+  unaccounted: null,
+  integrity: null,
+  alarms: null,
+  orgId: null,
+  failedStep: null,
+  notes: [...preNotes],
+};
 const child = spawn(process.execPath, [CYCLE, ...args], { stdio: ['ignore', 'pipe', 'pipe'] });
 let buf = '';
 child.stderr.on('data', (d) => process.stderr.write(d));
@@ -152,7 +242,9 @@ child.stdout.on('data', (d) => {
       if (status === 'failed') st.failedStep = step;
       const next = wanted[wanted.indexOf(step) + 1];
       if (status !== 'failed' && next) markRunning(next);
-    } else if ((m = line.match(/dry status: (NOT OK|OK) \(rolled back: (\w+), unaccounted: (\d+)\)/))) {
+    } else if (
+      (m = line.match(/dry status: (NOT OK|OK) \(rolled back: (\w+), unaccounted: (\d+)\)/))
+    ) {
       st.dryOk = m[1] === 'OK' && m[2] === 'true';
       st.unaccounted = Number(m[3]);
     } else if ((m = line.match(/\(unaccounted (\d+), alarms (\d+), integrity (\d+)\)/))) {
@@ -171,14 +263,25 @@ child.on('close', (code) => {
   const ok = code === 0 && !st.failedStep;
   const unaccounted = st.unaccounted ?? 0;
   const integrity = st.integrity ?? 0;
-  const green = ok && unaccounted === 0 && integrity === 0 && (mode === 'dry' ? st.dryOk === true : true);
+  const green =
+    ok && unaccounted === 0 && integrity === 0 && (mode === 'dry' ? st.dryOk === true : true);
   const parts = [
-    mode === 'dry' ? `dry run ${green ? 'clean' : 'NOT clean'}` : `${mode === 'catchup' ? 'catch-up' : 'load'} ${ok ? 'finished' : 'stopped at ' + st.failedStep}`,
+    mode === 'dry'
+      ? `dry run ${green ? 'clean' : 'NOT clean'}`
+      : `${mode === 'catchup' ? 'catch-up' : 'load'} ${ok ? 'finished' : 'stopped at ' + st.failedStep}`,
     `unaccounted ${unaccounted}`,
     `integrity errors ${integrity}`,
     st.alarms !== null ? `${st.alarms} verifier alarms to review` : null,
     ...st.notes,
   ].filter(Boolean);
-  emit({ event: 'report', green, unaccounted, integrityErrors: integrity, alarms: st.alarms ?? 0, orgId: st.orgId, summary: parts.join('; ').slice(0, 900) });
+  emit({
+    event: 'report',
+    green,
+    unaccounted,
+    integrityErrors: integrity,
+    alarms: st.alarms ?? 0,
+    orgId: st.orgId,
+    summary: parts.join('; ').slice(0, 900),
+  });
   process.exit(ok ? 0 : 1);
 });
