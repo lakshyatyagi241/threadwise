@@ -98,7 +98,7 @@ ALTER TABLE wa_calls
   ADD CONSTRAINT ck_wa_calls_recording_consent_status CHECK (recording_consent_status IN ('granted', 'declined')),
   ADD CONSTRAINT ck_wa_calls_recording_consent_method CHECK (recording_consent_method IN ('announcement_continue', 'spoken_yes')),
   ADD CONSTRAINT ck_wa_calls_recording_notice_sha CHECK (recording_notice_sha256 IS NULL OR recording_notice_sha256 ~ '^[0-9a-f]{64}$'),
-  ADD CONSTRAINT ck_wa_calls_recording_deleted_reason CHECK (recording_deleted_reason IN ('retention', 'manual')),
+  ADD CONSTRAINT ck_wa_calls_recording_deleted_reason CHECK (recording_deleted_reason IN ('retention', 'manual', 'consent_withdrawn')),
   ADD CONSTRAINT ck_wa_calls_recording_hold_reason CHECK (NOT recording_legal_hold OR recording_hold_reason IS NOT NULL);
 
 SELECT set_config('app.privileged', 'on', true);

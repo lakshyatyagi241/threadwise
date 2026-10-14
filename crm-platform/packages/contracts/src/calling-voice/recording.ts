@@ -35,7 +35,7 @@ export const CALL_RECORDING_NOTICE_MIN = 10;
 export const CALL_RECORDING_NOTICE_MAX = 600;
 export const CALL_RECORDING_HOLD_REASON_MAX = 200;
 
-export const CALL_RECORDING_DELETE_REASONS = ['retention', 'manual'] as const;
+export const CALL_RECORDING_DELETE_REASONS = ['retention', 'manual', 'consent_withdrawn'] as const;
 export type CallRecordingDeleteReason = (typeof CALL_RECORDING_DELETE_REASONS)[number];
 
 // --- workspace settings ------------------------------------------------------------------------------------------------

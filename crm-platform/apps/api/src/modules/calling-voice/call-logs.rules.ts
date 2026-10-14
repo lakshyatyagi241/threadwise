@@ -249,6 +249,11 @@ export function timelineNote(type: string, payload: unknown): string | null {
       const mime = noteText(p.mime, 60);
       return [mime, size === null ? null : `${size} B`].filter(Boolean).join(', ') || null;
     }
+    case 'recording_consent_granted':
+    case 'recording_consent_declined':
+      return noteText(p.method, 40);
+    case 'recording_deleted':
+      return noteText(p.reason, 40);
     default:
       return null;
   }

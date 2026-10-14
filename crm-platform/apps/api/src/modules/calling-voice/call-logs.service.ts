@@ -10,6 +10,8 @@ import {
   type CallLogRow,
   type CallLogStatus,
   type CallPlayback,
+  type CallRecordingConsentMethod,
+  type CallRecordingLifecycle,
   type CallTimelineEntry,
   type RecordScope,
 } from '@crm/contracts';
@@ -29,6 +31,33 @@ const iso = (v: unknown): string | null => (v ? new Date(v as string).toISOStrin
 /** The key that lets a person play recordings (`call.logs.read` only lets them read the log). */
 export const PERM_RECORDINGS_PLAY = 'call.recordings.play';
 const MODULE = 'wa_calls';
+
+/** The consent evidence, retention clock and hold of a call's recording (BL-144). */
+export function toLifecycle(r: Row): CallRecordingLifecycle {
+  const storedAt = iso(r.recording_stored_at);
+  const stored = typeof r.recording_path === 'string' && r.recording_path !== '';
+  const hold = r.recording_legal_hold === true;
+  return {
+    storedAt,
+    expiresAt:
+      stored && storedAt && !hold
+        ? new Date(
+            new Date(storedAt).getTime() + Number(r.retention_days ?? 90) * 86_400_000,
+          ).toISOString()
+        : null,
+    legalHold: hold,
+    holdReason: (r.recording_hold_reason as string | null) ?? null,
+    deletedAt: iso(r.recording_deleted_at),
+    deletedReason: (r.recording_deleted_reason as CallRecordingLifecycle['deletedReason']) ?? null,
+    consent: {
+      status: (r.recording_consent_status as 'granted' | 'declined' | null) ?? null,
+      method: (r.recording_consent_method as CallRecordingConsentMethod | null) ?? null,
+      at: iso(r.recording_consent_at),
+      noticeVersion: r.recording_notice_version === null ? null : Number(r.recording_notice_version),
+      noticeSha256: (r.recording_notice_sha256 as string | null) ?? null,
+    },
+  };
+}
 
 /** The row of the log as the screens read it. */
 export function toLogRow(r: Row): CallLogRow {
@@ -144,6 +173,7 @@ export class CallLogsService {
         mime: typeof r.recording_path === 'string' ? recordingMime(r.recording_path) : null,
         // The size is read from the store only when the recording is played; the list never touches the disk.
         sizeBytes: null,
+        lifecycle: toLifecycle(r),
       },
     };
   }

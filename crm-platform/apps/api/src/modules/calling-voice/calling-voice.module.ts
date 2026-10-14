@@ -10,6 +10,9 @@ import { CallLogsRepository } from './call-logs.repository';
 import { CallLogsService } from './call-logs.service';
 import { CallEventsService } from './call-events.service';
 import { CallPermissionService } from './call-permission.service';
+import { CallRecordingConsentService } from './call-recording-consent.service';
+import { CallRecordingRepository } from './call-recording.repository';
+import { CallRecordingSettingsService } from './call-recording-settings.service';
 import { CallRecordingsService } from './call-recordings.service';
 import { CallingNumbersService } from './calling-numbers.service';
 import { CallingWabaSink } from './calling-waba.sink';
@@ -41,8 +44,11 @@ import { CallsRepository } from './calls.repository';
     CallActionsService,
     CallEventsService,
     CallRecordingsService,
+    CallRecordingRepository,
+    CallRecordingSettingsService,
+    CallRecordingConsentService,
     CallingWabaSink,
   ],
-  exports: [CallingWabaSink, CallActionsService, CallPermissionService, CallEventsService],
+  exports: [CallsRepository, CallRecordingRepository, CallingWabaSink, CallActionsService, CallPermissionService, CallEventsService],
 })
 export class CallingVoiceModule {}
