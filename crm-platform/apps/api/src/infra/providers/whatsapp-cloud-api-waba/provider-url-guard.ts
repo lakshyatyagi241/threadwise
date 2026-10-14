@@ -1,6 +1,6 @@
 import { lookup } from 'node:dns/promises';
-import { isIP } from 'node:net';
 import { checkProviderBaseUrl } from '@crm/contracts';
+import { isBlockedAddress } from '../../net/blocked-address';
 
 /**
  * The half of the provider base-URL rule that a URL cannot show: where the name POINTS. A registry provider's address is typed by a
@@ -31,53 +31,13 @@ export interface PublicUrlOptions {
 const defaultResolve = async (host: string): Promise<string[]> =>
   (await lookup(host, { all: true, verbatim: true })).map((a) => a.address);
 
-/** True for an address a provider must not live on. */
+/** True for an address a provider must not live on. The rule is the shared one (`infra/net/blocked-address.ts`); text that is not an address is refused. */
 export function isNonPublicAddress(address: string): boolean {
-  const ip = address
-    .trim()
-    .toLowerCase()
-    .replace(/^\[|\]$/g, '');
-  const kind = isIP(ip);
-  if (kind === 4) return nonPublicV4(ip.split('.').map(Number) as [number, number, number, number]);
-  if (kind === 6) return nonPublicV6(ip);
-  return true; // not an address at all: refuse
-}
-
-function nonPublicV4([a, b, c]: [number, number, number, number]): boolean {
-  return (
-    a === 0 || // "this" network
-    a === 10 ||
-    a === 127 ||
-    (a === 100 && b >= 64 && b <= 127) || // carrier-grade NAT
-    (a === 169 && b === 254) || // link-local, cloud metadata
-    (a === 172 && b >= 16 && b <= 31) ||
-    (a === 192 && b === 0 && c === 0) || // IETF protocol assignments
-    (a === 192 && b === 0 && c === 2) || // TEST-NET-1
-    (a === 192 && b === 168) ||
-    (a === 198 && (b === 18 || b === 19)) || // benchmarking
-    (a === 198 && b === 51 && c === 100) || // TEST-NET-2
-    (a === 203 && b === 0 && c === 113) || // TEST-NET-3
-    a >= 224 // multicast, reserved, broadcast
-  );
-}
-
-function nonPublicV6(ip: string): boolean {
-  if (ip === '::' || ip === '::1') return true;
-  // IPv4-mapped (::ffff:1.2.3.4 or ::ffff:0102:0304) and the NAT64 prefix carry an IPv4 address.
-  const mapped = /^(?:::ffff:|64:ff9b::)(\d+\.\d+\.\d+\.\d+)$/.exec(ip);
-  if (mapped) return isNonPublicAddress(mapped[1]!);
-  const hex = /^(?:::ffff:|64:ff9b::)([0-9a-f]{1,4}):([0-9a-f]{1,4})$/.exec(ip);
-  if (hex) {
-    const hi = parseInt(hex[1]!, 16);
-    const lo = parseInt(hex[2]!, 16);
-    return nonPublicV4([hi >> 8, hi & 255, lo >> 8, lo & 255]);
-  }
-  const first = parseInt(ip.split(':')[0] || '0', 16);
-  return (
-    (first & 0xfe00) === 0xfc00 || // unique local fc00::/7
-    (first & 0xffc0) === 0xfe80 || // link-local fe80::/10
-    (first & 0xff00) === 0xff00 || // multicast
-    (first === 0x2001 && ip.startsWith('2001:db8')) // documentation
+  return isBlockedAddress(
+    address
+      .trim()
+      .toLowerCase()
+      .replace(/^\[|\]$/g, ''),
   );
 }
 
