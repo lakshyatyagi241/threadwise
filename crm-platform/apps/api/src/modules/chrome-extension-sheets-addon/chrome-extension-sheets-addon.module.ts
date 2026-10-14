@@ -17,6 +17,7 @@ import { SheetsKeyRepository } from './sheets-key.repository';
 import { SheetsKeyService } from './sheets-key.service';
 import { SheetsRunLog } from './sheets-run-log.service';
 import { SheetsSetupService } from './sheets-setup.service';
+import { SheetsWebhookService } from './sheets-webhook.service';
 
 /**
  * The Google Sheets add-on (EXT, `chrome-extension-sheets-addon`; the Chrome extension is a separate part of the domain). Registered in
@@ -43,6 +44,7 @@ import { SheetsSetupService } from './sheets-setup.service';
     SheetsAddonService,
     SheetsContactsService,
     SheetsCatalogService,
+    SheetsWebhookService,
   ],
   exports: [SheetsKeyService, SheetsAppAccess],
 })

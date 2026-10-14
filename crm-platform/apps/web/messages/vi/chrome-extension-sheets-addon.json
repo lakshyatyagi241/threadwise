@@ -18,7 +18,7 @@
     },
     "page": {
       "title": "Tiện ích Google Sheets",
-      "subtitle": "Kéo và đẩy liên hệ và đồng bộ sản phẩm giữa bảng tính và không gian làm việc của bạn.",
+      "subtitle": "Gửi các hàng mới và đã thay đổi của trang tính tới không gian làm việc của bạn dưới dạng liên hệ, kéo liên hệ vào trang tính và đồng bộ sản phẩm.",
       "loading": "Đang tải thiết lập tiện ích",
       "retry": "Thử lại",
       "status": {
@@ -50,7 +50,7 @@
     },
     "key": {
       "title": "Khóa của bạn",
-      "intro": "Tiện ích dùng khóa cá nhân của bạn để hoạt động thay bạn. Nó chỉ thấy những gì vai trò của bạn cho phép.",
+      "intro": "Tiện ích dùng khóa cá nhân của bạn để hoạt động thay bạn. Tiện ích chỉ thấy những gì vai trò của bạn cho phép. Khóa là phần cuối của Webhook URL của bạn.",
       "none": "Bạn chưa có khóa.",
       "generate": "Tạo khóa",
       "rotate": "Tạo khóa mới",
@@ -60,8 +60,8 @@
       "created": "Tạo {when}",
       "lastUsed": "Dùng lần cuối {when}",
       "neverUsed": "Chưa từng dùng",
-      "newTitle": "Khóa mới của bạn",
-      "newWarning": "Hãy sao chép ngay. Khóa chỉ hiển thị một lần và không thể hiển thị lại. Bất kỳ ai có khóa này đều có thể hoạt động thay bạn trong tiện ích.",
+      "newTitle": "Khóa mới và Webhook URL của bạn",
+      "newWarning": "Hãy sao chép ngay. Khóa và Webhook URL chỉ hiển thị một lần và không thể hiển thị lại. Bất kỳ ai có chúng đều có thể hoạt động thay bạn trong tiện ích.",
       "rotatedNote": "Khóa trước đó của bạn đã ngừng hoạt động.",
       "keyLabel": "Khóa mới",
       "confirmRotate": {
@@ -85,7 +85,8 @@
         "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
         "network": "Chúng tôi không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
         "unexpected": "Đã xảy ra lỗi từ phía chúng tôi. Hãy thử lại."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Khóa của bạn có thể làm gì",
@@ -108,12 +109,12 @@
     },
     "steps": {
       "title": "Thiết lập trong bảng tính",
-      "one": "Mở một bảng tính, rồi chọn Extensions, sau đó Apps Script.",
-      "two": "Tải sáu tệp ở trên. Trong Project Settings, hiển thị tệp appsscript.json, rồi dán appsscript.json và Code.gs đè lên các tệp trong trình soạn thảo.",
-      "three": "Thêm ba tệp HTML tên Dialog, Settings và Help rồi dán các tệp đã tải vào đó.",
-      "four": "Lưu và tải lại bảng tính. Menu CRM sẽ xuất hiện. Hãy cho phép ba quyền mà Google yêu cầu.",
-      "five": "Chọn CRM, rồi Settings, dán khóa của bạn và chọn Save and check.",
-      "six": "Hàng 1 của trang tính chứa tên các cột. Sau đó dùng Pull contacts, Push contacts hoặc Sync products từ menu CRM."
+      "one": "Sao chép Webhook URL khi bạn tạo khóa. URL chỉ hiển thị một lần.",
+      "two": "Trong bảng tính, chọn Extensions, rồi Add-ons, rồi Get add-ons và cài tiện ích từ Google Workspace Marketplace. Cho đến khi tiện ích được đăng ở đó, hãy dán sáu tệp bên dưới vào Extensions, Apps Script.",
+      "three": "Tải lại bảng tính. Chọn Extensions, rồi tiện ích, rồi Initial Setup và dán Webhook URL.",
+      "four": "Chọn trang tính và cột kích hoạt. Một hàng được gửi khi ô đó được điền hoặc thay đổi.",
+      "five": "Chọn Send Test để kiểm tra kết nối. Không có gì được lưu; bạn sẽ thấy các cột CRM đã nhận. Sau đó chọn Submit.",
+      "six": "Bật Send on event (hàng được gửi ngay khi bạn chỉnh sửa) và/hoặc Send on schedule (mỗi giờ, các hàng bị biểu mẫu hoặc ứng dụng khác thay đổi). Mỗi hàng đến dưới dạng một liên hệ và kết quả được ghi vào cột CRM status."
     },
     "columns": {
       "title": "Các cột mà tiện ích đọc",
@@ -133,6 +134,22 @@
       "title": "Sản phẩm gần đây",
       "empty": "Chưa có sản phẩm. Hãy đồng bộ một trang tính để thêm sản phẩm.",
       "count": "{count, plural, other {# sản phẩm trong không gian làm việc của bạn}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Dán URL này vào Initial Setup trong tiện ích. URL chứa khóa của bạn nên hãy giữ riêng tư.",
+      "none": "Tạo khóa để nhận Webhook URL của bạn.",
+      "capture": {
+        "title": "Dữ liệu nhận gần nhất",
+        "none": "Chưa nhận được gì. Trong tiện ích, chọn Initial Setup rồi Send Test.",
+        "when": "{event} từ {sheet}, {when}. {rows, plural, other {# hàng}}.",
+        "noSheet": "một trang tính chưa đặt tên",
+        "events": {
+          "test": "Kiểm tra",
+          "edit": "Chỉnh sửa",
+          "schedule": "Quét mỗi giờ"
+        }
+      }
     }
   }
 }

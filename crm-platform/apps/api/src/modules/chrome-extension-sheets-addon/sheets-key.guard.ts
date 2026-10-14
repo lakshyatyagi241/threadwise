@@ -65,7 +65,9 @@ export class SheetsKeyGuard implements CanActivate {
     const ip = request.ip ?? 'unknown';
     await this.assertNotLockedOut(ip);
 
-    const token = bearerToken(request.header('authorization'));
+    // The webhook URL carries the key as its last segment (`POST /webhook/:key`); every other route reads the bearer header only.
+    const pathKey = (request.params as Record<string, string | undefined> | undefined)?.key;
+    const token = bearerToken(request.header('authorization')) ?? (pathKey?.trim() || null);
     if (!token) {
       throw new AppError(
         ERROR_CODES.EXT_KEY_MISSING,

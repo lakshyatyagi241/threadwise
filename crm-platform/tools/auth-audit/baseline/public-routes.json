@@ -9,6 +9,8 @@
     "GET /v2/api/v1/sheets-addon/health",
     "GET /v2/api/v1/sheets-addon/shops",
     "POST /v2/api/v1/sheets-addon/sync",
+    "POST /v2/api/v1/sheets-addon/webhook",
+    "POST /v2/api/v1/sheets-addon/webhook/:key",
     "GET /v2/api/whatsapp-message-settings",
     "POST /v2/auth/clerk/session",
     "POST /v2/auth/find-workspaces",
