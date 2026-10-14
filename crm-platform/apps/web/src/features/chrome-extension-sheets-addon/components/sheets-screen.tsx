@@ -125,9 +125,9 @@ function Body({ overview }: { overview: ExtSheetsOverview }) {
       )}
       <KeyCard overview={overview} />
       {overview.installed && <WebhookCard overview={overview} />}
-      {overview.installed && <CanCard can={overview.can} />}
-      <FilesCard files={overview.files} />
       <StepsCard />
+      <FilesCard files={overview.files} />
+      {overview.installed && <CanCard can={overview.can} />}
       <ShopsCard overview={overview} />
     </>
   );
