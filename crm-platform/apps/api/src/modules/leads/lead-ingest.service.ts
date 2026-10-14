@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { LeadSourceDefaults } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { ownersAvailable } from '../../common/leave-owner-pool';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
@@ -546,10 +547,15 @@ export class LeadIngestService implements LeadIngestPort {
     defaults: LeadSourceDefaults,
   ): Promise<{ id: number; uuid: string } | null> {
     const rule = defaults.owner;
-    const active =
+    // People on leave today are never picked (BL-112): a fixed person is replaced by their delegate, a rotation skips them.
+    const active = await ownersAvailable(
+      tx,
+      orgId,
       rule.mode === 'unassigned' || rule.userIds.length === 0
         ? []
-        : await this.sources.activeUsers(tx, orgId, rule.userIds);
+        : await this.sources.activeUsers(tx, orgId, rule.userIds),
+      rule.mode,
+    );
     // takeTurn also stamps the last event; the other branches stamp it themselves.
     if (rule.mode !== 'round_robin' || active.length === 0) {
       await this.sources.stampLastEvent(tx, orgId, source.id);

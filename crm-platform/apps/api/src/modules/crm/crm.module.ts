@@ -11,6 +11,13 @@ import { CompaniesController } from './companies/companies.controller';
 import { CompaniesRepository } from './companies/companies.repository';
 import { CompaniesService } from './companies/companies.service';
 import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
+import { ContactAssignmentController } from './contact-assignment/contact-assignment.controller';
+import { ContactAssignmentEngine } from './contact-assignment/contact-assignment.engine';
+import { ContactAssignmentRepository } from './contact-assignment/contact-assignment.repository';
+import { ContactAssignmentService } from './contact-assignment/contact-assignment.service';
+import { OwnerReassignController } from './owner-reassign/owner-reassign.controller';
+import { OwnerReassignRepository } from './owner-reassign/owner-reassign.repository';
+import { OwnerReassignService } from './owner-reassign/owner-reassign.service';
 import { ContactBulkRepository } from './contact-bulk/contact-bulk.repository';
 import { ContactBulkService } from './contact-bulk/contact-bulk.service';
 import { ContactDedupeController } from './contact-dedupe/contact-dedupe.controller';
@@ -179,6 +186,8 @@ import { TagsService } from './tags/tags.service';
     // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`
     // or Express reads "stats" as an id.
     ContactBulkController,
+    OwnerReassignController,
+    ContactAssignmentController,
     ContactDedupeController,
     ContactImportController,
     ContactsController,
@@ -243,6 +252,11 @@ import { TagsService } from './tags/tags.service';
     ContactGroupsService,
     ContactGroupsRepository,
     ContactBulkService,
+    OwnerReassignRepository,
+    OwnerReassignService,
+    ContactAssignmentRepository,
+    ContactAssignmentEngine,
+    ContactAssignmentService,
     ContactBulkRepository,
     ContactDedupeService,
     ContactImportService,
@@ -341,6 +355,9 @@ import { TagsService } from './tags/tags.service';
     CONTACT_RESOLVER,
     ContactGroupsService,
     ContactBulkService,
+    OwnerReassignRepository,
+    OwnerReassignService,
+    ContactAssignmentEngine,
     ContactImportEngine,
     MergeTagService,
     // The API Library lists the contact properties a response can be saved into (modules/api-library).

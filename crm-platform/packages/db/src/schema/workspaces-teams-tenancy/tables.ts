@@ -501,3 +501,134 @@ export const memberDelegates = pgTable(
 
 export type MemberDelegatesRow = typeof memberDelegates.$inferSelect;
 export type NewMemberDelegatesRow = typeof memberDelegates.$inferInsert;
+
+/** Reassign batches (BL-112 phase 2). Mirrors migrations/20261130090000_owner_reassign.sql; the owner stamp columns on contacts and deals are set by a trigger. */
+export const ownerReassignBatches = pgTable(
+  'owner_reassign_batches',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    fromUserId: idColumn('from_user_id').notNull(),
+    toKind: text('to_kind').notNull(),
+    toUserId: idColumn('to_user_id'),
+    toTeamId: idColumn('to_team_id'),
+    includeDeals: boolean('include_deals').notNull().default(true),
+    reason: text('reason'),
+    restoreOn: date('restore_on'),
+    status: text('status').notNull().default('applied'),
+    movedContacts: integer('moved_contacts').notNull().default(0),
+    movedDeals: integer('moved_deals').notNull().default(0),
+    restoredContacts: integer('restored_contacts').notNull().default(0),
+    restoredDeals: integer('restored_deals').notNull().default(0),
+    notRestored: integer('not_restored').notNull().default(0),
+    remaining: integer('remaining').notNull().default(0),
+    undoUntil: timestamp('undo_until', { withTimezone: true }).notNull(),
+    restoredAt: timestamp('restored_at', { withTimezone: true }),
+    restoredBy: idColumn('restored_by'),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('owner_reassign_batches_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'owner_reassign_batches_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'owner_reassign_batches_org_id_from_user_id_fkey',
+      columns: [t.orgId, t.fromUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'owner_reassign_batches_org_id_to_user_id_fkey',
+      columns: [t.orgId, t.toUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'owner_reassign_batches_org_id_created_by_fkey',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'owner_reassign_batches_org_id_restored_by_fkey',
+      columns: [t.orgId, t.restoredBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_owner_reassign_from').on(t.orgId, t.fromUserId, t.createdAt.desc()),
+    index('idx_owner_reassign_sweep')
+      .on(t.restoreOn)
+      .where(sql`${t.status} = 'applied' AND ${t.restoreOn} IS NOT NULL`),
+  ],
+);
+
+export type OwnerReassignBatchesRow = typeof ownerReassignBatches.$inferSelect;
+
+/** Contact and deal auto-assignment (BL-013). Mirrors migrations/20261130090100_contact_assignment.sql. */
+export const assignmentSettings = pgTable(
+  'assignment_settings',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    enabled: boolean('enabled').notNull().default(false),
+    applyToImports: boolean('apply_to_imports').notNull().default(false),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('assignment_settings_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('assignment_settings_org_id_key').on(t.orgId),
+    foreignKey({
+      name: 'assignment_settings_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+export const assignmentRules = pgTable(
+  'assignment_rules',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    name: text('name').notNull(),
+    subject: text('subject').notNull(),
+    conditions: jsonb('conditions').notNull().default({}),
+    strategy: text('strategy').notNull(),
+    userIds: jsonb('user_ids').notNull().default([]),
+    teamIds: jsonb('team_ids').notNull().default([]),
+    skipOffline: boolean('skip_offline').notNull().default(true),
+    rrCursor: bigint('rr_cursor', { mode: 'number' }),
+    sort: integer('sort').notNull().default(0),
+    isActive: boolean('is_active').notNull().default(true),
+    firedCount: bigint('fired_count', { mode: 'number' }).notNull().default(0),
+    lastFiredAt: timestamp('last_fired_at', { withTimezone: true }),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('assignment_rules_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'assignment_rules_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'assignment_rules_org_id_created_by_fkey',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_assignment_rules_order').on(t.orgId, t.subject, t.sort, t.id),
+  ],
+);
