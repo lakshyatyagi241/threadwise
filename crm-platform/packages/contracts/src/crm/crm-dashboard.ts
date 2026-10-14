@@ -137,6 +137,8 @@ export const crmDashboardResponseSchema = z.object({
 
   contacts: z
     .object({
+      /** Contacts in the caller's scope today (Reference's "Contacts" counter), whatever the period. */
+      totalContacts: z.number().int(),
       newContacts: countPairSchema,
       /** New contacts that arrived with a source (a form, an ad, a webhook, an import, a marketplace). */
       newLeads: countPairSchema,

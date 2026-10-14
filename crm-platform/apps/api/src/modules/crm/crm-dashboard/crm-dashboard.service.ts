@@ -313,6 +313,7 @@ export class CrmDashboardService {
       // ---- contacts and lead sources --------------------------------------------------------------------------------------
       let contactsSection: CrmDashboardResponse['contacts'] = null;
       if (contactsCan.allowed) {
+        const total = await this.repo.totalContacts(tx, filter, scopes.contacts);
         const n = await this.repo.newContacts(tx, filter, scopes.contacts, cur, prev);
         const src = await this.repo.sources(tx, filter, scopes, cur, SOURCES);
         const won = await this.repo.sourceWonValue(
@@ -323,6 +324,7 @@ export class CrmDashboardService {
           src.map((s) => s.source),
         );
         contactsSection = {
+          totalContacts: total,
           newContacts: { current: n.cur, previous: n.prev },
           newLeads: { current: n.curLeads, previous: n.prevLeads },
           sources: src.map((s) => ({

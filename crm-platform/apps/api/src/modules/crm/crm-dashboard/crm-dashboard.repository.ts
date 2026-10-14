@@ -417,6 +417,14 @@ export class CrmDashboardRepository {
     ]);
   }
 
+  /** Contacts in scope right now (the owner / team filter applies), whatever the period. */
+  async totalContacts(tx: Tx, f: DashFilter, scope: SQL | undefined): Promise<number> {
+    const res = await tx.execute(
+      sql`SELECT count(*)::int AS n FROM contacts c WHERE ${this.contactConds(f, scope)}`,
+    );
+    return int((res.rows[0] as Raw | undefined)?.n);
+  }
+
   /** New contacts, and new contacts that carry a source, in the current and the previous window. */
   async newContacts(
     tx: Tx,

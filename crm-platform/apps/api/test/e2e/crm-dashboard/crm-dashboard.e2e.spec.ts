@@ -99,6 +99,7 @@ interface Dash {
     }>;
   };
   contacts: null | {
+    totalContacts: number;
     newContacts: { current: number; previous: number };
     newLeads: { current: number; previous: number };
     sources: Array<{
@@ -398,6 +399,7 @@ describe('the CRM dashboard against seeded data', () => {
 
   it('lead sources: leads, how many reached a deal and a won deal, and the won value', async () => {
     const c = (await get(t.admin)).contacts!;
+    expect(c.totalContacts).toBe(6);
     expect(c.newContacts).toEqual({ current: 5, previous: 1 });
     expect(c.newLeads).toEqual({ current: 4, previous: 1 });
     expect(c.sources.map((s) => s.source)).toEqual(['meta', 'webhook']);
@@ -452,6 +454,7 @@ describe('the CRM dashboard against seeded data', () => {
     expect(d.deals!.lost).toEqual({ count: 0, previousCount: 1 });
     expect(d.deals!.leaderboard.map((r) => r.owner!.name)).toEqual(['bob']);
     expect(d.deals!.funnel.cohortSize).toBe(3);
+    expect(d.contacts!.totalContacts).toBe(2);
     expect(d.contacts!.newContacts).toEqual({ current: 2, previous: 0 });
     expect(d.contacts!.sources.map((s) => [s.source, s.leads, s.withWonDeal])).toEqual([
       ['meta', 1, 1],
