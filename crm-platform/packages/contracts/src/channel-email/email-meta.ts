@@ -83,7 +83,10 @@ export const emailReplyExtrasSchema = z.object({
    * The rich-text body the composer wrote (TW-MAIL-027). The server sanitises it with the email allow-list, sends it as the HTML part
    * and takes the reply `body` (plain text, derived by the composer) as the text part. Absent = a plain-text reply.
    */
-  bodyHtml: z.string().max(EMAIL_HTML_MAX * 2).optional(),
+  bodyHtml: z
+    .string()
+    .max(EMAIL_HTML_MAX * 2)
+    .optional(),
   /** A specific signature to append. Absent = the default one for the sender and mailbox. */
   signatureId: uuidSchema.optional(),
   /** `false` sends without any signature (the composer's "remove signature"). */

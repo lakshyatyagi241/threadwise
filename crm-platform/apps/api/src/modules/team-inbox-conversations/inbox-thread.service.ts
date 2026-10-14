@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
   INBOX_TEMPLATE_LIST_MAX,
+  type EmailReplyExtras,
   type InboxTemplateListResponse,
   type InboxTemplateOption,
   type ListInboxTemplatesQuery,
@@ -111,7 +112,7 @@ export class InboxThreadService {
       if (input.kind === 'text') {
         // A reply from a marketing email template is marketing mail: the server decides, so the client cannot send it without the
         // ConsentGate and the unsubscribe link. A template the sender cannot use (or an archived one) refuses the reply.
-        let email = input.email;
+        let email: (EmailReplyExtras & { marketing?: boolean }) | undefined = input.email;
         if (email?.templateId) {
           const purpose = await this.emailTemplates.purposeForReply(
             tx,

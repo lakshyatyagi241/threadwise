@@ -339,12 +339,8 @@ export const emailTemplates = pgTable(
       columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
-    uniqueIndex('uq_email_templates_shared_name')
-      .on(t.orgId, sql`lower(${t.name})`)
-      .where(sql`${t.userId} is null`),
-    uniqueIndex('uq_email_templates_user_name')
-      .on(t.orgId, t.userId, sql`lower(${t.name})`)
-      .where(sql`${t.userId} is not null`),
+    // uq_email_templates_shared_name and uq_email_templates_user_name (a name is unique per owner, ignoring case) are expression
+    // indexes on lower(name): they live in the migration only, which the verifier cannot compare column by column.
     index('idx_email_templates_list').on(t.orgId, t.createdAt.desc(), t.id.desc()),
     index('idx_email_templates_user')
       .on(t.orgId, t.userId)

@@ -178,10 +178,14 @@ Unsubscribe: ${link.pageUrl}`;
           .get(mailbox.provider)
           .send({ orgId: channel.orgId, mailbox, access }, mail);
         await this.guard.recordSent(channel.orgId, mailbox, everyone);
-        const meta = await this.preparer.sent({ orgId: channel.orgId, mailbox, email, unsubscribeUrl }, mail, {
-          providerMessageId: sent.providerMessageId,
-          threadKey: sent.threadKey ?? null,
-        });
+        const meta = await this.preparer.sent(
+          { orgId: channel.orgId, mailbox, email, unsubscribeUrl },
+          mail,
+          {
+            providerMessageId: sent.providerMessageId,
+            threadKey: sent.threadKey ?? null,
+          },
+        );
         return {
           providerMessageId: sent.providerMessageId,
           acceptedAt: new Date(),

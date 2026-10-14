@@ -97,7 +97,8 @@ export class MailOutboundPreparer {
     // 2b. Marketing mail ends with the way out, in both parts: the rich body replaces the text the adapter wrote, so the link is put back.
     if (ctx.unsubscribeUrl) {
       const url = ctx.unsubscribeUrl;
-      if (!text.includes(url)) text = `${text}
+      if (!text.includes(url))
+        text = `${text}
 
 Unsubscribe: ${url}`;
       if (html !== null && !html.includes(url)) {
