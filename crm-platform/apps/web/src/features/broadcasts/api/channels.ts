@@ -4,6 +4,7 @@ import {
   facebookPageListSchema,
   igAccountListSchema,
   mailboxListResponseSchema,
+  lineChannelListResponseSchema,
   smsSenderListResponseSchema,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -20,6 +21,7 @@ export function useBroadcastChannels(): {
   telegram: boolean;
   facebook: boolean;
   instagram: boolean;
+  line: boolean;
   sms: string | null;
   email: string | null;
 } {
@@ -28,6 +30,9 @@ export function useBroadcastChannels(): {
   const canFbBroadcasts = useCan('fb.broadcasts.read');
   const canPages = canPagesRead && canFbBroadcasts;
   const canAccounts = useCan('ig.accounts.read');
+  const canLineChannels = useCan('line.channels.read');
+  const canLineBroadcasts = useCan('line.broadcasts.read');
+  const canLine = canLineChannels && canLineBroadcasts;
   const canSms = useCan('sms.senders.read');
   const bots = useQuery({
     queryKey: ['broadcasts', 'chooser', 'telegram'],
@@ -76,11 +81,20 @@ export function useBroadcastChannels(): {
       !m.contentHidden &&
       (m.scope === 'shared' || m.ownerUserId === userId),
   );
+  const lineChannels = useQuery({
+    queryKey: ['broadcasts', 'chooser', 'line'],
+    enabled: canLine,
+    retry: false,
+    staleTime: 60_000,
+    queryFn: ({ signal }) =>
+      apiFetch('/line/channels', { schema: lineChannelListResponseSchema, signal }),
+  });
   return {
     email: mailbox ? `email:${mailbox.id}` : null,
     sms: (sms.data?.data ?? []).find((s) => s.active)?.senderKey ?? null,
     telegram: (bots.data?.data ?? []).some((b) => b.active),
     facebook: (pages.data?.data ?? []).some((p) => p.status === 'connected'),
     instagram: (accounts.data?.data ?? []).length > 0,
+    line: (lineChannels.data?.data ?? []).some((c) => c.active),
   };
 }
