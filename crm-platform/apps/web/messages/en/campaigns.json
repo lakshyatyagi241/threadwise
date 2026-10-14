@@ -1246,6 +1246,7 @@
         "messages": "Messages",
         "modePlan": "{count, plural, one {Your plan covers the first messages; the wallet pays for # message beyond them.} other {Your plan covers the first messages; the wallet pays for # messages beyond them.}}",
         "modeWallet": "{count, plural, one {Every delivered message is charged to your wallet: # message.} other {Every delivered message is charged to your wallet: # messages.}}",
+        "platformOwned": "This workspace is not billed for sends, so nothing is charged to your wallet.",
         "breakdown": "Cost by country",
         "country": "Country",
         "unitPrice": "Per message",

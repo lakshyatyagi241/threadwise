@@ -1256,6 +1256,7 @@
         "messages": "Berichten",
         "modePlan": "{count, plural, one {Je abonnement dekt de eerste berichten; de wallet betaalt voor # bericht daarboven.} other {Je abonnement dekt de eerste berichten; de wallet betaalt voor # berichten daarboven.}}",
         "modeWallet": "{count, plural, one {Elk afgeleverd bericht wordt van je wallet afgeschreven: # bericht.} other {Elk afgeleverd bericht wordt van je wallet afgeschreven: # berichten.}}",
+        "platformOwned": "Voor verzendingen in deze werkruimte wordt niets gefactureerd, dus er wordt niets van je portemonnee afgeschreven.",
         "breakdown": "Kosten per land",
         "country": "Land",
         "unitPrice": "Per bericht",

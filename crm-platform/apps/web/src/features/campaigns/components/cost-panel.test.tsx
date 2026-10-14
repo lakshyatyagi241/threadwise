@@ -63,4 +63,17 @@ describe('the cost block', () => {
     expect(out).toContain('Balance is not enough: you need $2.50 more.');
     expect(out).toContain('href="/wallet"');
   });
+
+  it('says a platform-owned workspace is not billed and drops the balance warnings', () => {
+    const out = html(
+      <CostPanel
+        credit={check({ platformOwned: true, balanceMinor: 0 })}
+        hasTemplate
+        hasAudience
+      />,
+    );
+    expect(out).toContain('This workspace is not billed for sends');
+    expect(out).not.toContain('Your plan covers');
+    expect(out).not.toContain('data-testid="insufficient"');
+  });
 });
