@@ -1,4 +1,4 @@
-export { LeadScoringModule } from './lead-scoring.module';
+export { LeadScoringModule, leadScoringAiProvider } from './lead-scoring.module';
 export { LeadScoringService } from './lead-scoring.service';
 export { LeadChatDigestService } from './lead-chat-digest.service';
 export { LeadStageLineService } from './lead-stage-line.service';

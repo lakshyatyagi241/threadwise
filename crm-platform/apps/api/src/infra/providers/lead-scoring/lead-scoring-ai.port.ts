@@ -44,3 +44,7 @@ export interface LeadScoringAiPort {
 }
 
 export const LEAD_SCORING_AI_PORT = Symbol('LEAD_SCORING_AI_PORT');
+
+/** How a plain English contact search (PQL) system prompt starts; the offline fixture recognises it by this. */
+export const PQL_SYSTEM_PREFIX =
+  'You turn a plain English contact search into a JSON filter for a CRM.';
