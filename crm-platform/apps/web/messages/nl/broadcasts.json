@@ -365,6 +365,11 @@
         "name": "E-mail",
         "hint": "Verstuur een bericht als e-mail vanuit een gekoppelde mailbox, met een afmeldlink.",
         "cta": "E-mailcampagne maken"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Stuur een bericht naar mensen die al met je LINE-account chatten.",
+        "cta": "LINE-broadcast aanmaken"
       }
     }
   }

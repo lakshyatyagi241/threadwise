@@ -365,6 +365,11 @@
         "name": "Email",
         "hint": "Send a message as an email from a connected mailbox, with an unsubscribe link.",
         "cta": "Create email campaign"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Send a message to the people who already chat with your LINE account.",
+        "cta": "Create LINE broadcast"
       }
     }
   }

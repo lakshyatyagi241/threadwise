@@ -365,6 +365,11 @@
         "name": "Correo electrónico",
         "hint": "Envía un mensaje como correo electrónico desde un buzón conectado, con un enlace para darse de baja.",
         "cta": "Crear campaña de correo"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de LINE.",
+        "cta": "Crear difusión de LINE"
       }
     }
   }
