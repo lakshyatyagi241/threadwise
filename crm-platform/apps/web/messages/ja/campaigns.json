@@ -709,7 +709,8 @@
         "replies": "返信({count})",
         "failures": "失敗({count})",
         "optouts": "配信停止({count})",
-        "summary": "サマリー"
+        "summary": "サマリー",
+        "statistics": "統計"
       },
       "cancel": "キャンセル",
       "deleted": "キャンペーンを削除しました。",
@@ -965,6 +966,41 @@
           "retry": "もう一度試す"
         },
         "latestRun": "このシリーズで最新の実行{occurrence}を表示しています。"
+      },
+      "live": {
+        "badge": "ライブ",
+        "updated": "更新 {time}",
+        "queued": "{count} 件が送信待ち",
+        "processing": "{count} 件を送信中"
+      },
+      "statistics": {
+        "loadFailed": "統計を読み込めませんでした。",
+        "rates": {
+          "delivered": "配信率",
+          "deliveredHint": "対象全体に対して",
+          "read": "開封率",
+          "readHint": "配信済みに対して",
+          "replies": "返信率",
+          "clicks": "クリック率",
+          "failed": "失敗率"
+        },
+        "breakdown": {
+          "title": "現在の各宛先の状態",
+          "hint": "{total} 件の宛先それぞれを、現在のステータスで1回ずつ数えています。",
+          "empty": "このキャンペーンにはまだ宛先がありません。"
+        },
+        "timeline": {
+          "title": "タイムライン",
+          "created": "作成",
+          "scheduled": "開始予定",
+          "firstSent": "最初のメッセージ送信",
+          "lastRun": "前回の実行",
+          "finished": "完了",
+          "notYet": "まだ"
+        },
+        "live": "ライブで更新中",
+        "atRest": "最終結果",
+        "updated": "更新 {time}"
       }
     },
     "wizard": {

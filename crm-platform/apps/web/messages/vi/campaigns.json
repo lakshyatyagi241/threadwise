@@ -709,7 +709,8 @@
         "replies": "Phản hồi ({count})",
         "failures": "Lỗi ({count})",
         "optouts": "Hủy nhận tin ({count})",
-        "summary": "Tóm tắt"
+        "summary": "Tóm tắt",
+        "statistics": "Thống kê"
       },
       "cancel": "Hủy",
       "deleted": "Đã xóa chiến dịch.",
@@ -965,6 +966,41 @@
           "retry": "Thử lại"
         },
         "latestRun": "Đang hiện lần gửi {occurrence}, lần mới nhất của chuỗi này."
+      },
+      "live": {
+        "badge": "Trực tiếp",
+        "updated": "cập nhật {time}",
+        "queued": "{count} đang chờ gửi",
+        "processing": "{count} đang được gửi"
+      },
+      "statistics": {
+        "loadFailed": "Không tải được thống kê.",
+        "rates": {
+          "delivered": "Tỷ lệ gửi thành công",
+          "deliveredHint": "trên tổng đối tượng",
+          "read": "Tỷ lệ đã đọc",
+          "readHint": "trên số đã gửi tới",
+          "replies": "Tỷ lệ phản hồi",
+          "clicks": "Tỷ lệ nhấp",
+          "failed": "Tỷ lệ thất bại"
+        },
+        "breakdown": {
+          "title": "Hiện mỗi người nhận đang ở đâu",
+          "hint": "Mỗi người trong {total} người nhận được tính một lần, theo trạng thái hiện tại.",
+          "empty": "Chiến dịch này chưa có người nhận."
+        },
+        "timeline": {
+          "title": "Dòng thời gian",
+          "created": "Đã tạo",
+          "scheduled": "Dự kiến bắt đầu",
+          "firstSent": "Tin nhắn đầu tiên được gửi",
+          "lastRun": "Lần chạy gần nhất",
+          "finished": "Hoàn tất",
+          "notYet": "Chưa có"
+        },
+        "live": "Đang theo dõi trực tiếp",
+        "atRest": "Số liệu cuối cùng",
+        "updated": "Cập nhật {time}"
       }
     },
     "wizard": {

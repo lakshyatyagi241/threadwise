@@ -49,7 +49,7 @@ The panel on the right shows a live preview of the message and the recipients, s
 - **Smart Delivery** paces sending: gaps between messages, batches, a daily limit and sending hours. Blank fields use the platform default.
 - **Auto-end date** stops the campaign at that moment. **Track link clicks** records clicks on links. **Retry failed messages automatically** (on by default) tries a message again a few times when it fails for a temporary reason; switch it off to send each message once, and use **Resend** later if you need to.
 - The list filters by status and message type. Each card offers the actions its status allows, and you can tick several cards to delete them together.
-- A campaign page has the tabs **Overview**, **Messages**, **Engagement**, **Replies**, **Failures** and **Opt-outs**.
+- A campaign page has the tabs **Overview**, **Statistics**, **Messages**, **Engagement**, **Replies**, **Failures** and **Opt-outs**. While a campaign is scheduled or running, a **Live** line above the numbers shows when they were last read, and the numbers refresh every 12 seconds while the tab is on screen. The **Recipients** tile also says how many are still waiting to send and how many are being sent right now. When the campaign finishes the refresh stops and the final numbers stay. The **Statistics** tab shows where every recipient is right now (each counted once, so the rows add up to the audience), the delivery, read, reply, click and failure rates, and the campaign's timeline: when it was created, when it was set to start, when the first message went out, the last run and when it finished.
 
 ## Plan and access
 

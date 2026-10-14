@@ -709,7 +709,8 @@
         "replies": "Respostas ({count})",
         "failures": "Falhas ({count})",
         "optouts": "Cancelamentos de inscrição ({count})",
-        "summary": "Resumo"
+        "summary": "Resumo",
+        "statistics": "Estatísticas"
       },
       "cancel": "Cancelar",
       "deleted": "Campanha excluída.",
@@ -965,6 +966,41 @@
           "retry": "Tentar novamente"
         },
         "latestRun": "Mostrando a execução {occurrence}, a mais recente desta série."
+      },
+      "live": {
+        "badge": "Ao vivo",
+        "updated": "atualizado {time}",
+        "queued": "{count} aguardando envio",
+        "processing": "{count} sendo enviados agora"
+      },
+      "statistics": {
+        "loadFailed": "Não foi possível carregar as estatísticas.",
+        "rates": {
+          "delivered": "Taxa de entrega",
+          "deliveredHint": "do público",
+          "read": "Taxa de leitura",
+          "readHint": "das entregues",
+          "replies": "Taxa de resposta",
+          "clicks": "Taxa de cliques",
+          "failed": "Taxa de falhas"
+        },
+        "breakdown": {
+          "title": "Onde cada pessoa está agora",
+          "hint": "Cada um dos {total} destinatários é contado uma vez, no status em que está.",
+          "empty": "Esta campanha ainda não tem destinatários."
+        },
+        "timeline": {
+          "title": "Linha do tempo",
+          "created": "Criada",
+          "scheduled": "Programada para",
+          "firstSent": "Primeira mensagem enviada",
+          "lastRun": "Última execução",
+          "finished": "Concluída",
+          "notYet": "Ainda não"
+        },
+        "live": "Acompanhando ao vivo",
+        "atRest": "Números finais",
+        "updated": "Atualizado {time}"
       }
     },
     "wizard": {

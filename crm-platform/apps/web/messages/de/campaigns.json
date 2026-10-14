@@ -709,7 +709,8 @@
         "replies": "Antworten ({count})",
         "failures": "Fehlschläge ({count})",
         "optouts": "Abmeldungen ({count})",
-        "summary": "Zusammenfassung"
+        "summary": "Zusammenfassung",
+        "statistics": "Statistik"
       },
       "cancel": "Abbrechen",
       "deleted": "Kampagne gelöscht.",
@@ -965,6 +966,41 @@
           "retry": "Erneut versuchen"
         },
         "latestRun": "Angezeigt wird Durchlauf {occurrence}, der neueste dieser Serie."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "aktualisiert {time}",
+        "queued": "{count} warten auf den Versand",
+        "processing": "{count} werden gerade gesendet"
+      },
+      "statistics": {
+        "loadFailed": "Die Statistik konnte nicht geladen werden.",
+        "rates": {
+          "delivered": "Zustellrate",
+          "deliveredHint": "der Zielgruppe",
+          "read": "Leserate",
+          "readHint": "der Zugestellten",
+          "replies": "Antwortrate",
+          "clicks": "Klickrate",
+          "failed": "Fehlerrate"
+        },
+        "breakdown": {
+          "title": "Wo sich alle gerade befinden",
+          "hint": "Jeder der {total} Empfänger wird einmal gezählt, in dem Status, den er hat.",
+          "empty": "Diese Kampagne hat noch keine Empfänger."
+        },
+        "timeline": {
+          "title": "Zeitverlauf",
+          "created": "Erstellt",
+          "scheduled": "Startzeit",
+          "firstSent": "Erste Nachricht gesendet",
+          "lastRun": "Letzter Lauf",
+          "finished": "Beendet",
+          "notYet": "Noch nicht"
+        },
+        "live": "Live-Verfolgung",
+        "atRest": "Endgültige Zahlen",
+        "updated": "Aktualisiert {time}"
       }
     },
     "wizard": {

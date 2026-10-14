@@ -709,7 +709,8 @@
         "replies": "Yanıtlar ({count})",
         "failures": "Hatalar ({count})",
         "optouts": "Çıkanlar ({count})",
-        "summary": "Özet"
+        "summary": "Özet",
+        "statistics": "İstatistikler"
       },
       "cancel": "İptal",
       "deleted": "Kampanya silindi.",
@@ -965,6 +966,41 @@
           "retry": "Tekrar dene"
         },
         "latestRun": "{occurrence}. gönderim gösteriliyor; bu serinin en yenisi."
+      },
+      "live": {
+        "badge": "Canlı",
+        "updated": "güncellendi {time}",
+        "queued": "{count} gönderim bekliyor",
+        "processing": "{count} şu anda gönderiliyor"
+      },
+      "statistics": {
+        "loadFailed": "İstatistikler yüklenemedi.",
+        "rates": {
+          "delivered": "Teslim oranı",
+          "deliveredHint": "hedef kitlenin",
+          "read": "Okunma oranı",
+          "readHint": "teslim edilenlerin",
+          "replies": "Yanıt oranı",
+          "clicks": "Tıklama oranı",
+          "failed": "Hata oranı"
+        },
+        "breakdown": {
+          "title": "Herkes şu anda nerede",
+          "hint": "{total} alıcının her biri bulunduğu durumda bir kez sayılır.",
+          "empty": "Bu kampanyada henüz alıcı yok."
+        },
+        "timeline": {
+          "title": "Zaman çizelgesi",
+          "created": "Oluşturuldu",
+          "scheduled": "Başlama zamanı",
+          "firstSent": "İlk mesaj gönderildi",
+          "lastRun": "Son çalıştırma",
+          "finished": "Tamamlandı",
+          "notYet": "Henüz yok"
+        },
+        "live": "Canlı takip ediliyor",
+        "atRest": "Nihai rakamlar",
+        "updated": "Güncellendi {time}"
       }
     },
     "wizard": {

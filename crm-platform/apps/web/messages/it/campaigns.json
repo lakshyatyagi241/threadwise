@@ -709,7 +709,8 @@
         "replies": "Risposte ({count})",
         "failures": "Errori ({count})",
         "optouts": "Disiscrizioni ({count})",
-        "summary": "Riepilogo"
+        "summary": "Riepilogo",
+        "statistics": "Statistiche"
       },
       "cancel": "Annulla",
       "deleted": "Campagna eliminata.",
@@ -965,6 +966,41 @@
           "retry": "Riprova"
         },
         "latestRun": "Stai vedendo l'invio {occurrence}, il più recente di questa serie."
+      },
+      "live": {
+        "badge": "In diretta",
+        "updated": "aggiornato {time}",
+        "queued": "{count} in attesa di invio",
+        "processing": "{count} in invio ora"
+      },
+      "statistics": {
+        "loadFailed": "Impossibile caricare le statistiche.",
+        "rates": {
+          "delivered": "Tasso di consegna",
+          "deliveredHint": "del pubblico",
+          "read": "Tasso di lettura",
+          "readHint": "dei consegnati",
+          "replies": "Tasso di risposta",
+          "clicks": "Tasso di clic",
+          "failed": "Tasso di errore"
+        },
+        "breakdown": {
+          "title": "Dove si trova ogni destinatario ora",
+          "hint": "Ciascuno dei {total} destinatari è contato una volta, nello stato in cui si trova.",
+          "empty": "Questa campagna non ha ancora destinatari."
+        },
+        "timeline": {
+          "title": "Cronologia",
+          "created": "Creata",
+          "scheduled": "Avvio programmato",
+          "firstSent": "Primo messaggio inviato",
+          "lastRun": "Ultima esecuzione",
+          "finished": "Conclusa",
+          "notYet": "Non ancora"
+        },
+        "live": "Aggiornamento in diretta",
+        "atRest": "Numeri finali",
+        "updated": "Aggiornato {time}"
       }
     },
     "wizard": {

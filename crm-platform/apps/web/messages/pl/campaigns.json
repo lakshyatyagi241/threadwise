@@ -709,7 +709,8 @@
         "replies": "Odpowiedzi ({count})",
         "failures": "Niepowodzenia ({count})",
         "optouts": "Rezygnacje ({count})",
-        "summary": "Podsumowanie"
+        "summary": "Podsumowanie",
+        "statistics": "Statystyki"
       },
       "cancel": "Anuluj",
       "deleted": "Usunięto kampanię.",
@@ -965,6 +966,41 @@
           "retry": "Spróbuj ponownie"
         },
         "latestRun": "Wyświetlono wysyłkę {occurrence}, najnowszą z tej serii."
+      },
+      "live": {
+        "badge": "Na żywo",
+        "updated": "zaktualizowano {time}",
+        "queued": "{count} czeka na wysyłkę",
+        "processing": "{count} jest właśnie wysyłanych"
+      },
+      "statistics": {
+        "loadFailed": "Nie udało się wczytać statystyk.",
+        "rates": {
+          "delivered": "Wskaźnik dostarczenia",
+          "deliveredHint": "grupy docelowej",
+          "read": "Wskaźnik odczytu",
+          "readHint": "dostarczonych",
+          "replies": "Wskaźnik odpowiedzi",
+          "clicks": "Wskaźnik kliknięć",
+          "failed": "Wskaźnik błędów"
+        },
+        "breakdown": {
+          "title": "Gdzie jest teraz każdy odbiorca",
+          "hint": "Każdy z {total} odbiorców jest liczony raz, w swoim obecnym statusie.",
+          "empty": "Ta kampania nie ma jeszcze odbiorców."
+        },
+        "timeline": {
+          "title": "Oś czasu",
+          "created": "Utworzono",
+          "scheduled": "Zaplanowany start",
+          "firstSent": "Wysłano pierwszą wiadomość",
+          "lastRun": "Ostatnie uruchomienie",
+          "finished": "Zakończono",
+          "notYet": "Jeszcze nie"
+        },
+        "live": "Śledzenie na żywo",
+        "atRest": "Dane końcowe",
+        "updated": "Zaktualizowano {time}"
       }
     },
     "wizard": {

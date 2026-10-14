@@ -709,7 +709,8 @@
         "replies": "תגובות ({count})",
         "failures": "כשלים ({count})",
         "optouts": "הסרות הסכמה ({count})",
-        "summary": "סיכום"
+        "summary": "סיכום",
+        "statistics": "סטטיסטיקה"
       },
       "cancel": "ביטול",
       "deleted": "הקמפיין נמחק.",
@@ -965,6 +966,41 @@
           "retry": "נסו שוב"
         },
         "latestRun": "מוצגת שליחה {occurrence}, החדשה ביותר בסדרה הזו."
+      },
+      "live": {
+        "badge": "בשידור חי",
+        "updated": "עודכן {time}",
+        "queued": "{count} ממתינים לשליחה",
+        "processing": "{count} נשלחים כרגע"
+      },
+      "statistics": {
+        "loadFailed": "לא ניתן היה לטעון את הסטטיסטיקה.",
+        "rates": {
+          "delivered": "שיעור מסירה",
+          "deliveredHint": "מהקהל",
+          "read": "שיעור קריאה",
+          "readHint": "מההודעות שנמסרו",
+          "replies": "שיעור תגובה",
+          "clicks": "שיעור לחיצות",
+          "failed": "שיעור כשלונות"
+        },
+        "breakdown": {
+          "title": "איפה כל אחד נמצא עכשיו",
+          "hint": "כל אחד מ-{total} הנמענים נספר פעם אחת, בסטטוס שבו הוא נמצא.",
+          "empty": "לקמפיין הזה עדיין אין נמענים."
+        },
+        "timeline": {
+          "title": "ציר זמן",
+          "created": "נוצר",
+          "scheduled": "מועד התחלה מתוכנן",
+          "firstSent": "ההודעה הראשונה נשלחה",
+          "lastRun": "הרצה אחרונה",
+          "finished": "הסתיים",
+          "notYet": "עדיין לא"
+        },
+        "live": "במעקב חי",
+        "atRest": "מספרים סופיים",
+        "updated": "עודכן {time}"
       }
     },
     "wizard": {
