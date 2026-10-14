@@ -84,6 +84,7 @@ import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
 import { PrivacyModule } from './modules/privacy';
 import { AuditLogModule } from './modules/audit-log';
+import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
@@ -240,6 +241,7 @@ import { HealthModule } from './health/health.module';
     ContactConsentModule,
     PrivacyModule,
     AuditLogModule,
+    ContactsPqlModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,

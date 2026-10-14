@@ -11,7 +11,9 @@ import {
   PACING_SETTINGS,
   PacingRuntime,
   SenderLease,
+  WALLET_GATE,
   type PacingSettingsSource,
+  type WalletGate,
 } from '../../../src/modules/broadcasts';
 import { MergeTagService } from '../../../src/modules/crm';
 import {
@@ -33,7 +35,6 @@ import { WalletLogService } from '../../../src/modules/wallet-message-billing/wa
 import type { WalletRealtimePublisher } from '../../../src/modules/wallet-message-billing/wallet-realtime.publisher';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 import { ConsentGate } from '../../../src/modules/contact-consent';
-import { WALLET_GATE } from '../../../src/modules/broadcasts';
 
 /**
  * Does a scheduled send settle the wallet the way a broadcast does (TW-SCHED-024, TW-WALLET-009 to 013)? The whole chain on a real
@@ -97,7 +98,7 @@ beforeAll(async () => {
     h.app.get(WarmerService),
     h.app.get(UNOFFICIAL_WHATSAPP_GATE),
     h.app.get(OutboxService),
-    h.app.get(WALLET_GATE),
+    h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
     h.app.get(ConsentGate),
   );
   receipts = new ScheduledReceiptsService(db, h.app.get(OutboxService));

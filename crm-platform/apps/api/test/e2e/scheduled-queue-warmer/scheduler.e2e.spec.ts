@@ -13,7 +13,9 @@ import {
   PACING_SETTINGS,
   PacingRuntime,
   SenderLease,
+  WALLET_GATE,
   type PacingSettingsSource,
+  type WalletGate,
 } from '../../../src/modules/broadcasts';
 import { MergeTagService } from '../../../src/modules/crm';
 import {
@@ -29,7 +31,6 @@ import { ScheduleMessageBuilder } from '../../../src/modules/scheduled-queue-war
 import { SchedulerService } from '../../../src/modules/scheduled-queue-warmer';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
 import { ConsentGate } from '../../../src/modules/contact-consent';
-import { WALLET_GATE } from '../../../src/modules/broadcasts';
 
 /**
  * The scheduled-messages engine (TW-NODE-030 to 036, 031 to 033 and 035 in particular): the real app and a real Postgres and
@@ -88,7 +89,7 @@ beforeAll(async () => {
     h.app.get(WarmerService),
     h.app.get(UNOFFICIAL_WHATSAPP_GATE),
     h.app.get(OutboxService),
-    h.app.get(WALLET_GATE),
+    h.app.get<WalletGate>(WALLET_GATE as never, { strict: false }),
     h.app.get(ConsentGate),
   );
   dueService = new ScheduledDueService(
