@@ -111,6 +111,8 @@ export interface CampaignRow {
   rowVersion: number;
   /** The broadcast wizard's `{ draft, launch? }`; null on a campaign the classic builder made. */
   wizard: { draft?: unknown; launch?: Record<string, unknown> } | null;
+  /** The recurring broadcast this run belongs to. */
+  seriesUuid: string | null;
   seriesId: number | null;
   occurrenceNo: number | null;
   retryEnabled: boolean;
@@ -192,6 +194,7 @@ function toRow(r: Raw): CampaignRow {
     updatedAt: new Date(r.updated_at as string),
     rowVersion: Number(r.row_version),
     wizard: (r.wizard as CampaignRow['wizard']) ?? null,
+    seriesUuid: str(r.series_uuid),
     seriesId: num(r.series_id),
     occurrenceNo: num(r.occurrence_no),
     retryEnabled: Boolean(r.retry_enabled),
@@ -213,13 +216,14 @@ function toRow(r: Raw): CampaignRow {
 
 const SELECT = sql`
   SELECT c.*, t.uuid AS template_uuid, t.template_name, ta.uuid AS template_a_uuid, tb.uuid AS template_b_uuid,
-         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, agg.*, cost.cost_minor, cost.cost_currency
+         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, cs.uuid AS series_uuid, agg.*, cost.cost_minor, cost.cost_currency
   FROM wpcampaigns c
   LEFT JOIN wa_templates t  ON t.org_id  = c.org_id AND t.id  = c.template_id
   LEFT JOIN wa_templates ta ON ta.org_id = c.org_id AND ta.id = c.template_id_a
   LEFT JOIN wa_templates tb ON tb.org_id = c.org_id AND tb.id = c.template_id_b
   LEFT JOIN flows f  ON f.org_id  = c.org_id AND f.id  = c.flow_id
   LEFT JOIN flows fb ON fb.org_id = c.org_id AND fb.id = c.flow_id_b
+  LEFT JOIN camp_series cs ON cs.org_id = c.org_id AND cs.id = c.series_id
   LEFT JOIN LATERAL (
     SELECT ${AGG} FROM wp_campaign_contacts r WHERE r.org_id = c.org_id AND r.campaign_id = c.id
   ) agg ON true

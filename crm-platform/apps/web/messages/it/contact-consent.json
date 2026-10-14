@@ -280,6 +280,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Consentito: l'avviso è stato dato prima.",
+        "consent_evidence_recorded": "Consentito: l'avviso è stato dato e la persona ha acconsentito.",
+        "purpose_not_enabled": "Non consentito: lo spazio di lavoro non l'ha attivato.",
+        "consent_declined": "Non consentito: la persona ha rifiutato.",
         "notice_required": "A notice must be delivered first."
       }
     },

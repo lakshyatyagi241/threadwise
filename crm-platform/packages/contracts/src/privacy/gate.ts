@@ -24,6 +24,10 @@ export const CONSENT_GATE_REASONS = [
   'no_grant_required_by_policy',
   /** The gate could not decide (a database error) and the purpose is a service one: fail open. */
   'gate_unavailable_open',
+  /** A notice-first purpose (an AI disclosure) whose versioned notice was delivered and that needs no grant. */
+  'notice_delivered',
+  /** A consent-based notice-first purpose (a call recording): the notice was delivered and the person's grant is on the record. */
+  'consent_evidence_recorded',
   // deny
   /** The contact withdrew (STOP, unsubscribe link, manual) for this purpose. */
   'withdrawn',
@@ -35,6 +39,10 @@ export const CONSENT_GATE_REASONS = [
   'gate_unavailable_closed',
   /** The purpose does not apply to this channel or modality. */
   'purpose_not_applicable',
+  /** The workspace has not switched the purpose on (call recording is off until a workspace turns it on, decision D7). */
+  'purpose_not_enabled',
+  /** The notice was delivered and the person declined. */
+  'consent_declined',
   // needs_notice
   /** The purpose needs its versioned notice delivered first (a recording announcement, an AI disclosure). */
   'notice_required',
@@ -48,6 +56,16 @@ export type ConsentSubject =
   | { type: 'phone'; phone: string }
   | { type: 'email'; email: string }
   | { type: 'anonymous' };
+
+/**
+ * What the caller already holds for a purpose with a notice to deliver first. Without it the gate answers `needs_notice`. `consent`
+ * is the person's answer to a consent-based purpose (a call recording); `delivered` is true only when the versioned notice was
+ * presented and its version is on the record.
+ */
+export interface ConsentNoticeEvidence {
+  delivered: boolean;
+  consent?: 'granted' | 'declined';
+}
 
 export interface ConsentGateResult {
   decision: ConsentGateDecision;

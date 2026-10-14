@@ -290,6 +290,56 @@ describe('status page', () => {
     expect(page({ ...withRun('cancelled', 3), kind: 'campaign' })).toContain('Retry failed (3)');
   });
 
+  describe('export and delete', () => {
+    const PERMS = [...ALL_PERMISSIONS, 'camp.campaigns.export', 'camp.campaigns.delete'];
+    const quietRun = (status: 'scheduled' | 'cancelled') => {
+      const r = detail().runList[0]!;
+      return { ...r, status, counts: { ...r.counts, sent: 0, delivered: 0, read: 0, failed: 0 } };
+    };
+
+    it('offers Export rows with the export permission, always', () => {
+      expect(page(detail(), PERMS)).toContain('>Export rows<');
+      expect(page(detail(), ALL_PERMISSIONS)).not.toContain('Export rows');
+    });
+
+    it('a series that has sent keeps its history: no Delete, only Cancel', () => {
+      const out = page(detail(), PERMS);
+      expect(out).not.toContain('>Delete<');
+      expect(out).not.toContain('Delete this broadcast?');
+      expect(out).toContain('Cancel campaign');
+    });
+
+    it('a series that has sent nothing can be deleted, behind a confirm that says no history is lost', () => {
+      const out = page(detail({ runList: [quietRun('scheduled')] }), PERMS);
+      expect(out).toContain('>Delete<');
+      expect(out).toContain('Delete this broadcast?');
+      expect(out).toContain('Nothing has been sent from it, so no history is lost');
+      expect(page(detail({ runList: [] }), PERMS)).toContain('>Delete<');
+    });
+
+    it('a one-off broadcast waiting for its time, or failed, can be deleted; one that ran cannot', () => {
+      const one = (status: string) =>
+        detail({
+          kind: 'campaign',
+          mode: 'scheduled',
+          status,
+          schedule: { mode: 'scheduled', date: '2026-10-09', time: '10:30', timezone: 'UTC' },
+          runList: [],
+        });
+      const out = page(one('scheduled'), PERMS);
+      expect(out).toContain('>Delete<');
+      expect(out).toContain('Deletes this broadcast and its recipients.');
+      expect(page(one('failed'), PERMS)).toContain('>Delete<');
+      expect(page(one('completed'), PERMS)).not.toContain('>Delete<');
+    });
+
+    it('hides Delete without the delete permission', () => {
+      expect(
+        page(detail({ runList: [] }), [...ALL_PERMISSIONS, 'camp.campaigns.export']),
+      ).not.toContain('>Delete<');
+    });
+  });
+
   it('a one-off campaign: a single run, no retries', () => {
     const out = page(
       detail({

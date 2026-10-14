@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Mẫu email"
+    },
+    "common": {
+      "dismiss": "Đóng"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Mẫu email",
+      "subtitle": "Email dùng lại được, gồm tiêu đề, văn bản định dạng và biến. Chèn vào phần trả lời từ trình soạn email.",
+      "newTemplate": "Mẫu mới",
+      "loading": "Đang tải mẫu…",
+      "emptyTitle": "Chưa có mẫu email nào",
+      "empty": "Viết email một lần, kèm các biến như tên của liên hệ, rồi dùng lại trong mọi cuộc trò chuyện email.",
+      "emptyFilteredTitle": "Không có mẫu nào phù hợp",
+      "emptyFiltered": "Hãy thử tìm kiếm khác hoặc xóa bộ lọc.",
+      "clearFilters": "Xóa bộ lọc",
+      "unavailableTitle": "Mẫu email không khả dụng",
+      "unavailable": "Workspace này hiện không thể kết nối tới dịch vụ mẫu email.",
+      "showing": "{count, plural, other {Đang hiển thị # mẫu}}",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải…",
+      "noPermission": "Bạn có thể dùng các mẫu mà workspace chia sẻ và giữ mẫu riêng của mình. Hãy hỏi quản trị viên nếu cần sửa mẫu dùng chung."
+    },
+    "toolbar": {
+      "search": "Tìm mẫu",
+      "searchPlaceholder": "Tìm theo tên, tiêu đề hoặc danh mục",
+      "scope": "Của ai",
+      "scopes": {
+        "all": "Tất cả",
+        "shared": "Dùng chung",
+        "mine": "Của tôi"
+      },
+      "purpose": "Loại",
+      "anyPurpose": "Mọi loại",
+      "purposes": {
+        "general": "Chung",
+        "marketing": "Tiếp thị"
+      },
+      "status": "Trạng thái",
+      "statuses": {
+        "active": "Đang dùng",
+        "archived": "Đã lưu trữ",
+        "all": "Tất cả"
+      },
+      "category": "Danh mục",
+      "anyCategory": "Mọi danh mục",
+      "refresh": "Làm mới"
+    },
+    "card": {
+      "subject": "Tiêu đề",
+      "noSubject": "Không có tiêu đề: phần trả lời giữ tiêu đề riêng",
+      "badges": {
+        "shared": "Dùng chung",
+        "mine": "Của tôi",
+        "marketing": "Tiếp thị",
+        "archived": "Đã lưu trữ"
+      },
+      "used": "{count, plural, =0 {Chưa dùng lần nào} other {Đã dùng # lần}}",
+      "lastUsed": "Dùng lần cuối {date}",
+      "by": "Bởi {name}",
+      "variables": "Biến: {list}",
+      "edit": "Sửa",
+      "archive": "Lưu trữ",
+      "restore": "Khôi phục",
+      "delete": "Xóa",
+      "preview": "Xem trước",
+      "hidePreview": "Ẩn xem trước"
+    },
+    "delete": {
+      "title": "Xóa mẫu này?",
+      "message": "\"{name}\" sẽ bị xóa với tất cả những người có thể dùng nó. Các email đã gửi từ mẫu này không bị ảnh hưởng.",
+      "confirm": "Xóa",
+      "cancel": "Hủy"
+    },
+    "editor": {
+      "eyebrow": "Mẫu email",
+      "newTitle": "Mẫu email mới",
+      "editTitle": "Sửa mẫu email",
+      "close": "Đóng",
+      "name": "Tên",
+      "namePlaceholder": "Chào mừng sau khi đăng ký",
+      "subject": "Tiêu đề",
+      "subjectPlaceholder": "Chào mừng {name} đến với {workspace}",
+      "subjectHint": "Không bắt buộc. Nếu để trống, phần trả lời giữ tiêu đề riêng.",
+      "body": "Nội dung",
+      "bodyPlaceholder": "Viết email. Dùng các biến bên dưới để cá nhân hóa.",
+      "category": "Danh mục",
+      "categoryPlaceholder": "Làm quen",
+      "categoryList": "Danh mục đang dùng",
+      "purpose": "Loại",
+      "purposes": {
+        "general": {
+          "label": "Chung",
+          "hint": "Câu trả lời và thư trao đổi trực tiếp. Gửi như một phần trả lời thông thường."
+        },
+        "marketing": {
+          "label": "Tiếp thị",
+          "hint": "Thư quảng cáo. Cần có sự đồng ý nhận tiếp thị của liên hệ khi workspace của bạn yêu cầu, và luôn kèm liên kết hủy đăng ký."
+        }
+      },
+      "scope": "Ai có thể dùng",
+      "scopes": {
+        "shared": {
+          "label": "Mọi người trong workspace",
+          "hint": "Mẫu dùng chung. Chỉ những người quản lý mẫu mới sửa được."
+        },
+        "mine": {
+          "label": "Chỉ mình tôi",
+          "hint": "Mẫu cá nhân. Không ai khác nhìn thấy."
+        }
+      },
+      "variables": "Chèn biến",
+      "variablesHint": "Biến được điền từ liên hệ, từ bạn và từ workspace khi dùng mẫu. Biến nào không có giá trị sẽ được giữ nguyên để bạn sửa lại.",
+      "variableGroups": {
+        "contact": "Liên hệ",
+        "agent": "Bạn",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Chèn vào {field}",
+      "fields": {
+        "subject": "tiêu đề",
+        "body": "nội dung"
+      },
+      "save": "Lưu thay đổi",
+      "create": "Tạo mẫu",
+      "cancel": "Hủy",
+      "problems": {
+        "required": "Trường này là bắt buộc.",
+        "tooLong": "Quá dài (tối đa {limit} ký tự).",
+        "subjectLines": "Tiêu đề phải nằm trên một dòng."
+      }
+    },
+    "preview": {
+      "title": "Xem trước với dữ liệu mẫu",
+      "subjectLabel": "Tiêu đề",
+      "noSubject": "(không có tiêu đề)",
+      "empty": "Hãy viết nội dung để xem trước.",
+      "loading": "Đang cập nhật bản xem trước…",
+      "failed": "Không thể cập nhật bản xem trước.",
+      "issues": "{count, plural, other {Các biến sau không có giá trị mẫu và được giữ nguyên: {list}}}",
+      "sampleNote": "Chỉ là giá trị mẫu. Giá trị thật được lấy từ liên hệ khi bạn dùng mẫu."
+    },
+    "picker": {
+      "button": "Mẫu",
+      "title": "Mẫu email",
+      "search": "Tìm mẫu",
+      "searchPlaceholder": "Tìm mẫu",
+      "loading": "Đang tải mẫu…",
+      "empty": "Chưa có mẫu nào. Hãy tạo trong mục Mẫu email ở menu CRM.",
+      "emptyFiltered": "Không có mẫu nào khớp với tìm kiếm của bạn.",
+      "loadError": "Không thể tải các mẫu.",
+      "marketing": "Tiếp thị",
+      "mine": "Của tôi",
+      "replaceTitle": "Thay thế nội dung bạn đã viết?",
+      "replaceMessage": "Dùng \"{name}\" sẽ thay nội dung trong khung soạn, và cả tiêu đề nếu mẫu có tiêu đề.",
+      "replaceConfirm": "Thay thế",
+      "replaceCancel": "Hủy",
+      "used": "Đang dùng mẫu \"{name}\"",
+      "marketingNote": "Đây là thư tiếp thị: thư tuân theo quy tắc đồng ý của bạn và kèm liên kết hủy đăng ký.",
+      "forget": "Ngừng dùng mẫu này",
+      "more": "Tải thêm"
+    },
+    "toast": {
+      "created": "Đã tạo mẫu",
+      "updated": "Đã lưu mẫu",
+      "archived": "Đã lưu trữ mẫu",
+      "restored": "Đã khôi phục mẫu",
+      "deleted": "Đã xóa mẫu"
+    },
+    "errors": {
+      "network": "Không thể kết nối tới máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "signedOut": "Phiên của bạn đã kết thúc. Hãy đăng nhập lại để tiếp tục.",
+      "conflict": "Người khác đã thay đổi mẫu này. Phiên bản của họ đã được tải; hãy xem lại rồi thử lại.",
+      "validation": "Một số thông tin bạn nhập không hợp lệ. Hãy kiểm tra các trường và thử lại.",
+      "unavailable": "Mẫu email hiện không khả dụng.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "notFound": "Mẫu này không còn tồn tại.",
+      "planDisabled": "Gói của bạn không bao gồm email. Hãy nâng cấp gói để dùng mẫu email.",
+      "nameTaken": "Bạn đã có một mẫu trùng tên này. Hãy chọn tên khác.",
+      "notEditable": "Chỉ những người quản lý mẫu email mới sửa được mẫu dùng chung.",
+      "archived": "Mẫu này đã được lưu trữ. Hãy khôi phục để dùng.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "retry": "Thử lại"
+    }
+  }
+}

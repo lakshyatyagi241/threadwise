@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
   INBOX_TEMPLATE_LIST_MAX,
+  type EmailReplyExtras,
   type InboxTemplateListResponse,
   type InboxTemplateOption,
   type ListInboxTemplatesQuery,
@@ -20,6 +21,7 @@ import {
   type ConversationsFacade,
   type OutboundContent,
 } from '../chat-conversations';
+import { EmailTemplatesReader } from '../email-templates';
 import { TemplatesRepository } from '../message-templates';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
@@ -52,6 +54,7 @@ export class InboxThreadService {
     private readonly uploads: MediaUploadsRepository,
     private readonly channels: ChannelsFacade,
     private readonly templates: TemplatesRepository,
+    private readonly emailTemplates: EmailTemplatesReader,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -107,10 +110,22 @@ export class InboxThreadService {
     const content = await this.db.tx(async (tx): Promise<OutboundContent> => {
       await this.assertCanReply(tx, ctx, uuid);
       if (input.kind === 'text') {
+        // A reply from a marketing email template is marketing mail: the server decides, so the client cannot send it without the
+        // ConsentGate and the unsubscribe link. A template the sender cannot use (or an archived one) refuses the reply.
+        let email: (EmailReplyExtras & { marketing?: boolean }) | undefined = input.email;
+        if (email?.templateId) {
+          const purpose = await this.emailTemplates.purposeForReply(
+            tx,
+            ctx.orgId,
+            ctx.userId!,
+            email.templateId,
+          );
+          if (purpose === 'marketing') email = { ...email, marketing: true };
+        }
         return {
           kind: 'text',
           body: input.body,
-          ...(input.email ? { email: input.email } : {}),
+          ...(email ? { email } : {}),
           ...(input.mentions?.length ? { mentions: input.mentions } : {}),
         };
       }

@@ -280,6 +280,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "อนุญาต: ส่งประกาศก่อนแล้ว",
+        "consent_evidence_recorded": "อนุญาต: ส่งประกาศแล้วและอีกฝ่ายยินยอม",
+        "purpose_not_enabled": "ไม่อนุญาต: พื้นที่ทำงานยังไม่ได้เปิดใช้งาน",
+        "consent_declined": "ไม่อนุญาต: อีกฝ่ายปฏิเสธ",
         "notice_required": "A notice must be delivered first."
       }
     },

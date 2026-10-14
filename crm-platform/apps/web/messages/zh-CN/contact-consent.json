@@ -280,6 +280,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "允许：提示已先送达。",
+        "consent_evidence_recorded": "允许：提示已送达且对方同意。",
+        "purpose_not_enabled": "不允许：工作区未开启此功能。",
+        "consent_declined": "不允许：对方拒绝。",
         "notice_required": "A notice must be delivered first."
       }
     },

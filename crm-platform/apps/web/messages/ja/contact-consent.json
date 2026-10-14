@@ -280,6 +280,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "許可: 告知が先に届けられました。",
+        "consent_evidence_recorded": "許可: 告知が届けられ、相手が同意しました。",
+        "purpose_not_enabled": "不許可: ワークスペースがこれをオンにしていません。",
+        "consent_declined": "不許可: 相手が拒否しました。",
         "notice_required": "A notice must be delivered first."
       }
     },

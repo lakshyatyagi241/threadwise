@@ -42,6 +42,7 @@ import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelEmailModule } from './modules/channel-email';
+import { EmailTemplatesModule } from './modules/email-templates';
 import { ChannelSmsModule } from './modules/channel-sms';
 import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
@@ -219,6 +220,7 @@ import { HealthModule } from './health/health.module';
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,
+    EmailTemplatesModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
     ShopifyWoocommerceModule,

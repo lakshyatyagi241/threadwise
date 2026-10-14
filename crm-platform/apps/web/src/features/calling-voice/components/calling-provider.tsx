@@ -12,9 +12,14 @@ import {
 } from 'react';
 import { useTranslations } from 'next-intl';
 import { useToast } from '@crm/ui';
-import type { PendingCall } from '@crm/contracts';
+import {
+  CALL_RECORDING_MODE_METHOD,
+  type CallRecordingSettings,
+  type PendingCall,
+} from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { callApi, useIceServers } from '../api/calling';
+import { recordConsent, useRecordingSettings } from '../api/recording';
 import { CallError, digitsOf, elapsedText, isStateConflict, parseIceServers } from '../lib/calls';
 import { isUsableSdp } from '../lib/sdp';
 import { CallPeer, type CallState } from '../lib/webrtc-peer';
@@ -30,6 +35,8 @@ export interface ActiveCall {
   muted: boolean;
   /** Recording is armed: it cannot be stopped mid-call. */
   recording: boolean;
+  /** The person's answer to being recorded (BL-144): `asking` while the notice is on the panel; `declined` leaves no recording. */
+  consent: 'none' | 'asking' | 'saving' | 'granted' | 'declined';
 }
 
 export interface OutboundCallInput {
@@ -52,7 +59,12 @@ export interface CallingApi {
   rejectIncoming(call: PendingCall, reason?: string): Promise<void>;
   hangup(): Promise<void>;
   toggleMute(): void;
+  /** Opens the consent step: no audio is kept before the person has agreed (BL-144). */
   record(): void;
+  /** The workspace's recording rules; `enabled` is false until a workspace turns recording on. */
+  recordingRules: CallRecordingSettings | null;
+  /** The operator records the person's answer; a yes arms the recorder, a no discards anything caught. */
+  answerConsent(decision: 'granted' | 'declined'): Promise<void>;
 }
 
 const CallingContext = createContext<CallingApi | null>(null);
@@ -86,6 +98,9 @@ export function CallingProvider({
   const [now, setNow] = useState(0);
   const canCall = useCan('call.calls.use');
   const served = useIceServers(canCall && iceServers === undefined);
+  const rules = useRecordingSettings(canCall);
+  const rulesRef = useRef<CallRecordingSettings | null>(null);
+  rulesRef.current = rules.data ?? null;
   const source = iceServers ?? served.data?.servers;
   const ice = useMemo(() => parseIceServers(source), [source]);
 
@@ -145,6 +160,7 @@ export function CallingProvider({
         connectedAt: null,
         muted: false,
         recording: false,
+        consent: 'none',
       });
       await peer.dial({
         numberId: input.numberId,
@@ -182,12 +198,13 @@ export function CallingProvider({
         connectedAt: null,
         muted: false,
         recording: false,
+        consent: 'none',
       });
       try {
         await peer.answer(call.id, call.sdpOffer);
         if (peer.state !== 'active') return;
-        // Inbound calls are recorded from the start; the panel says so for as long as it lasts.
-        if (peer.startRecording()) setActive((a) => (a ? { ...a, recording: true } : a));
+        // Nothing is recorded until the person has agreed (BL-144): when the workspace records, the panel asks first.
+        if (rulesRef.current?.enabled) setActive((a) => (a ? { ...a, consent: 'asking' } : a));
       } catch (e) {
         // A teammate took it: their call is live, so do not reject it at Meta.
         if (isStateConflict(e)) {
@@ -220,13 +237,49 @@ export function CallingProvider({
       return;
     }
     if (peer.recording) return;
-    if (!peer.startRecording()) {
-      toast(t('toast.recordUnsupported'), 'danger');
+    if (!rulesRef.current?.enabled) {
+      toast(t('recording.consent.off'), 'info');
       return;
     }
-    setActive((a) => (a ? { ...a, recording: true } : a));
-    toast(t('toast.recordingStarted'), 'success');
+    setActive((a) => (a ? { ...a, consent: 'asking' } : a));
   }, [toast, t]);
+
+  const answerConsent = useCallback(
+    async (decision: 'granted' | 'declined') => {
+      const peer = peerRef.current;
+      const rules = rulesRef.current;
+      const callId = peer?.callId;
+      if (!peer || !rules?.enabled || !callId) {
+        toast(t('toast.noActiveCall'), 'danger');
+        return;
+      }
+      setActive((a) => (a ? { ...a, consent: 'saving' } : a));
+      try {
+        await recordConsent(callId, {
+          decision,
+          method: CALL_RECORDING_MODE_METHOD[rules.consentMode],
+        });
+      } catch (e) {
+        // Nothing was recorded on the server: back to asking, and the recorder stays off.
+        setActive((a) => (a ? { ...a, consent: 'asking' } : a));
+        toast(t('recording.consent.failed', { message: errorText(e) }), 'danger');
+        return;
+      }
+      if (decision === 'declined') {
+        peer.discardRecording();
+        setActive((a) => (a ? { ...a, consent: 'declined', recording: false } : a));
+        return;
+      }
+      if (!peer.startRecording()) {
+        toast(t('toast.recordUnsupported'), 'danger');
+        setActive((a) => (a ? { ...a, consent: 'none' } : a));
+        return;
+      }
+      setActive((a) => (a ? { ...a, consent: 'granted', recording: true } : a));
+      toast(t('toast.recordingStarted'), 'success');
+    },
+    [toast, t, errorText],
+  );
 
   // Leaving the provider ends the call: a peer must never outlive the screen that can hang it up.
   useEffect(
@@ -247,6 +300,8 @@ export function CallingProvider({
       hangup,
       toggleMute,
       record,
+      recordingRules: rules.data ?? null,
+      answerConsent,
     }),
     [
       active,
@@ -258,6 +313,8 @@ export function CallingProvider({
       hangup,
       toggleMute,
       record,
+      rules.data,
+      answerConsent,
     ],
   );
 

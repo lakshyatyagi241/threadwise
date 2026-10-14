@@ -689,7 +689,8 @@
         "edit": "Edytuj",
         "resendAll": "Wyślij ponownie do wszystkich",
         "export": "Eksportuj wiersze",
-        "delete": "Usuń"
+        "delete": "Usuń",
+        "broadcastStatus": "Status wysyłki"
       },
       "kpi": {
         "recipients": "Odbiorcy",
@@ -1525,13 +1526,16 @@
           "pause": "Wstrzymaj",
           "resume": "Wznów",
           "cancel": "Anuluj wiadomość masową",
-          "retryFailed": "Ponów nieudane ({count})"
+          "retryFailed": "Ponów nieudane ({count})",
+          "export": "Eksportuj wiersze",
+          "delete": "Usuń"
         },
         "done": {
           "pause": "Wstrzymano wiadomość masową.",
           "resume": "Wznowiono wiadomość masową.",
           "cancel": "Anulowano wiadomość masową.",
-          "retryFailed": "Ponawianie dla: {count, plural, one {# nieudany odbiorca} few {# nieudanych odbiorców} many {# nieudanych odbiorców} other {# nieudanego odbiorcy}}."
+          "retryFailed": "Ponawianie dla: {count, plural, one {# nieudany odbiorca} few {# nieudanych odbiorców} many {# nieudanych odbiorców} other {# nieudanego odbiorcy}}.",
+          "delete": "Wysyłka usunięta."
         },
         "failed": "Nie udało się. Spróbuj ponownie.",
         "noControl": "Nie masz uprawnień do wstrzymywania, wznawiania ani anulowania wiadomości masowych.",
@@ -1552,7 +1556,11 @@
           "ended": "Zakończona"
         },
         "retryTitle": "Ponowić nieudane wiadomości?",
-        "retryMessage": "Wysyła ponownie do: {count, plural, one {# odbiorcy} few {# odbiorców} many {# odbiorców} other {# odbiorcy}}, u których wiadomość się nie powiodła. Osoby, które ją już otrzymały, nie są ruszane, a opłata jest naliczana tylko za dostarczoną wiadomość."
+        "retryMessage": "Wysyła ponownie do: {count, plural, one {# odbiorcy} few {# odbiorców} many {# odbiorców} other {# odbiorcy}}, u których wiadomość się nie powiodła. Osoby, które ją już otrzymały, nie są ruszane, a opłata jest naliczana tylko za dostarczoną wiadomość.",
+        "exportFailed": "Nie udało się pobrać eksportu.",
+        "deleteTitle": "Usunąć tę wysyłkę?",
+        "deleteOne": "Usuwa tę wysyłkę i jej odbiorców. Tej operacji nie można cofnąć.",
+        "deleteSeries": "Usuwa tę wysyłkę cykliczną i zaplanowane uruchomienia. Nic nie zostało wysłane, więc historia nie przepada. Tej operacji nie można cofnąć."
       },
       "panel": {
         "title": "Utworzone przez Utwórz wiadomość masową",

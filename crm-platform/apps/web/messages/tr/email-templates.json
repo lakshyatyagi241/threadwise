@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "E-posta şablonları"
+    },
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "E-posta şablonları",
+      "subtitle": "Konu, biçimlendirilmiş metin ve değişkenler içeren yeniden kullanılabilir e-postalar. E-posta düzenleyicisinden bir yanıta ekleyin.",
+      "newTemplate": "Yeni şablon",
+      "loading": "Şablonlar yükleniyor…",
+      "emptyTitle": "Henüz e-posta şablonu yok",
+      "empty": "Kişinin adı gibi değişkenlerle e-postayı bir kez yazın ve her e-posta görüşmesinde yeniden kullanın.",
+      "emptyFilteredTitle": "Eşleşen şablon yok",
+      "emptyFiltered": "Farklı bir arama deneyin veya filtreleri temizleyin.",
+      "clearFilters": "Filtreleri temizle",
+      "unavailableTitle": "E-posta şablonları kullanılamıyor",
+      "unavailable": "Bu çalışma alanı şu anda e-posta şablonları hizmetine ulaşamıyor.",
+      "showing": "{count, plural, one {# şablon gösteriliyor} other {# şablon gösteriliyor}}",
+      "loadMore": "Daha fazla yükle",
+      "loadingMore": "Yükleniyor…",
+      "noPermission": "Çalışma alanınızın paylaştığı şablonları kullanabilir ve kendi şablonlarınızı yönetebilirsiniz. Paylaşılanları değiştirmeniz gerekiyorsa bir yöneticiye danışın."
+    },
+    "toolbar": {
+      "search": "Şablonlarda ara",
+      "searchPlaceholder": "Ada, konuya veya kategoriye göre ara",
+      "scope": "Kime ait",
+      "scopes": {
+        "all": "Tümü",
+        "shared": "Paylaşılan",
+        "mine": "Benim"
+      },
+      "purpose": "Tür",
+      "anyPurpose": "Tüm türler",
+      "purposes": {
+        "general": "Genel",
+        "marketing": "Pazarlama"
+      },
+      "status": "Durum",
+      "statuses": {
+        "active": "Etkin",
+        "archived": "Arşivlenmiş",
+        "all": "Tümü"
+      },
+      "category": "Kategori",
+      "anyCategory": "Tüm kategoriler",
+      "refresh": "Yenile"
+    },
+    "card": {
+      "subject": "Konu",
+      "noSubject": "Konu yok: yanıt kendi konusunu korur",
+      "badges": {
+        "shared": "Paylaşılan",
+        "mine": "Benim",
+        "marketing": "Pazarlama",
+        "archived": "Arşivlenmiş"
+      },
+      "used": "{count, plural, =0 {Hiç kullanılmadı} one {Bir kez kullanıldı} other {# kez kullanıldı}}",
+      "lastUsed": "Son kullanım: {date}",
+      "by": "Oluşturan: {name}",
+      "variables": "Değişkenler: {list}",
+      "edit": "Düzenle",
+      "archive": "Arşivle",
+      "restore": "Geri yükle",
+      "delete": "Sil",
+      "preview": "Önizlemeyi göster",
+      "hidePreview": "Önizlemeyi gizle"
+    },
+    "delete": {
+      "title": "Bu şablon silinsin mi?",
+      "message": "\"{name}\" şablonu, kullanabilen herkes için kaldırılacak. Bu şablondan daha önce gönderilen e-postalar etkilenmez.",
+      "confirm": "Sil",
+      "cancel": "İptal"
+    },
+    "editor": {
+      "eyebrow": "E-posta şablonu",
+      "newTitle": "Yeni e-posta şablonu",
+      "editTitle": "E-posta şablonunu düzenle",
+      "close": "Kapat",
+      "name": "Ad",
+      "namePlaceholder": "Kayıt sonrası hoş geldiniz",
+      "subject": "Konu",
+      "subjectPlaceholder": "{workspace} ailesine hoş geldin, {name}",
+      "subjectHint": "İsteğe bağlı. Boş bırakılırsa yanıt kendi konusunu korur.",
+      "body": "İleti",
+      "bodyPlaceholder": "E-postayı yazın. Kişiselleştirmek için aşağıdaki değişkenleri kullanın.",
+      "category": "Kategori",
+      "categoryPlaceholder": "Tanıtım",
+      "categoryList": "Kullanılan kategoriler",
+      "purpose": "Tür",
+      "purposes": {
+        "general": {
+          "label": "Genel",
+          "hint": "Yanıtlar ve birebir yazışmalar. Diğer yanıtlar gibi gönderilir."
+        },
+        "marketing": {
+          "label": "Pazarlama",
+          "hint": "Tanıtım e-postaları. Çalışma alanınızın gerektirdiği yerlerde kişinin pazarlama iznini ister ve her zaman abonelikten çıkma bağlantısı içerir."
+        }
+      },
+      "scope": "Kimler kullanabilir",
+      "scopes": {
+        "shared": {
+          "label": "Çalışma alanındaki herkes",
+          "hint": "Paylaşılan şablon. Yalnızca şablonları yönetenler değiştirebilir."
+        },
+        "mine": {
+          "label": "Yalnızca ben",
+          "hint": "Kişisel şablon. Başka kimse görmez."
+        }
+      },
+      "variables": "Değişken ekle",
+      "variablesHint": "Şablon kullanıldığında değişkenler kişiden, sizden ve çalışma alanından doldurulur. Değeri olmayan değişken yazıldığı gibi kalır, böylece düzeltebilirsiniz.",
+      "variableGroups": {
+        "contact": "Kişi",
+        "agent": "Siz",
+        "workspace": "Çalışma alanı"
+      },
+      "insertingIn": "Şuraya eklenir: {field}",
+      "fields": {
+        "subject": "konu",
+        "body": "ileti"
+      },
+      "save": "Değişiklikleri kaydet",
+      "create": "Şablon oluştur",
+      "cancel": "İptal",
+      "problems": {
+        "required": "Bu alan zorunludur.",
+        "tooLong": "Çok uzun (en fazla {limit} karakter).",
+        "subjectLines": "Konu tek satır olmalıdır."
+      }
+    },
+    "preview": {
+      "title": "Örnek verilerle önizleme",
+      "subjectLabel": "Konu",
+      "noSubject": "(konu yok)",
+      "empty": "Önizleme görmek için iletiyi yazın.",
+      "loading": "Önizleme güncelleniyor…",
+      "failed": "Önizleme güncellenemedi.",
+      "issues": "{count, plural, one {Bu değişkenin örnek değeri yok ve yazıldığı gibi kalır: {list}} other {Bu değişkenlerin örnek değeri yok ve yazıldıkları gibi kalır: {list}}}",
+      "sampleNote": "Yalnızca örnek değerler. Şablonu kullandığınızda gerçek değerler kişiden gelir."
+    },
+    "picker": {
+      "button": "Şablonlar",
+      "title": "E-posta şablonları",
+      "search": "Şablonlarda ara",
+      "searchPlaceholder": "Şablonlarda ara",
+      "loading": "Şablonlar yükleniyor…",
+      "empty": "Henüz şablon yok. CRM menüsündeki E-posta şablonları bölümünden oluşturun.",
+      "emptyFiltered": "Aramanızla eşleşen şablon yok.",
+      "loadError": "Şablonlar yüklenemedi.",
+      "marketing": "Pazarlama",
+      "mine": "Benim",
+      "replaceTitle": "Yazdıklarınız değiştirilsin mi?",
+      "replaceMessage": "\"{name}\" şablonunu kullanmak kutudaki iletiyi, şablonda konu varsa konuyu da değiştirir.",
+      "replaceConfirm": "Değiştir",
+      "replaceCancel": "İptal",
+      "used": "Kullanılan şablon: \"{name}\"",
+      "marketingNote": "Bu bir pazarlama e-postasıdır: izin kurallarınıza tabidir ve abonelikten çıkma bağlantısı içerir.",
+      "forget": "Bu şablonu kullanmayı bırak",
+      "more": "Daha fazla yükle"
+    },
+    "toast": {
+      "created": "Şablon oluşturuldu",
+      "updated": "Şablon kaydedildi",
+      "archived": "Şablon arşivlendi",
+      "restored": "Şablon geri yüklendi",
+      "deleted": "Şablon silindi"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapmaya yetkiniz yok.",
+      "signedOut": "Oturumunuz sona erdi. Devam etmek için tekrar giriş yapın.",
+      "conflict": "Bu şablonu başka biri değiştirdi. Onun sürümü yüklendi; inceleyip tekrar deneyin.",
+      "validation": "Girdiğiniz bazı bilgiler geçerli değil. Alanları kontrol edip tekrar deneyin.",
+      "unavailable": "E-posta şablonları şu anda kullanılamıyor.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "notFound": "Bu şablon artık mevcut değil.",
+      "planDisabled": "Planınız e-posta içermiyor. E-posta şablonlarını kullanmak için planınızı yükseltin.",
+      "nameTaken": "Bu adda bir şablonunuz zaten var. Farklı bir ad seçin.",
+      "notEditable": "Paylaşılan bir şablonu yalnızca e-posta şablonlarını yönetenler değiştirebilir.",
+      "archived": "Bu şablon arşivlenmiş. Kullanmak için geri yükleyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "retry": "Tekrar dene"
+    }
+  }
+}

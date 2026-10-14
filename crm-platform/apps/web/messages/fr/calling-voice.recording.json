@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Enregistrement des appels",
+        "intro": "L'enregistrement est désactivé tant que vous ne l'activez pas. Quand il est activé, un collègue lit l'avis, la personne répond, et seulement alors l'enregistreur démarre. Les enregistrements sont supprimés à la fin de la durée de conservation.",
+        "loading": "Chargement des règles d'enregistrement",
+        "loadFailed": "Impossible de charger les règles d'enregistrement.",
+        "retry": "Réessayer",
+        "viewOnly": "Vous pouvez voir ces règles, mais seul un propriétaire ou un administrateur peut les modifier.",
+        "enabled": "Enregistrer les appels",
+        "enabledOn": "Activé : les collègues peuvent enregistrer un appel après l'accord de la personne.",
+        "enabledOff": "Désactivé : aucun appel n'est enregistré.",
+        "mode": "Comment la personne donne son accord",
+        "modeHint": {
+          "confirmed": "La personne dit oui à l'enregistrement et le collègue enregistre la réponse. Le choix le plus sûr.",
+          "announcement": "Le collègue lit l'avis et l'appel continue. À utiliser uniquement si votre conseiller juridique confirme qu'une annonce suffit."
+        },
+        "modeOption": {
+          "confirmed": "La personne dit oui",
+          "announcement": "Annonce, puis suite de l'appel"
+        },
+        "retention": "Conserver les enregistrements (jours)",
+        "retentionHint": "Entre {min} et {max} jours. Les enregistrements plus anciens sont supprimés chaque nuit ; l'appel reste dans le journal.",
+        "retentionInvalid": "Saisissez un nombre entier de jours dans la plage autorisée.",
+        "notice": "Avis d'enregistrement",
+        "noticeHint": "Le collègue le lit avant d'enregistrer. {max} caractères au maximum. Chaque modification est enregistrée comme une nouvelle version.",
+        "noticeRequired": "Rédigez l'avis (au moins {min} caractères) pour activer l'enregistrement.",
+        "noticeVersion": "Avis version {version}",
+        "noticeNone": "Aucun avis enregistré pour l'instant",
+        "updatedAt": "enregistré {date}",
+        "noticeSuggestion": "Cet appel peut être enregistré à des fins de qualité et de formation. Acceptez-vous l'enregistrement ?",
+        "useSuggestion": "Utiliser le texte proposé",
+        "saved": "Règles d'enregistrement enregistrées.",
+        "saving": "Enregistrement en cours",
+        "save": "Enregistrer les règles"
+      },
+      "consent": {
+        "title": "Demander avant d'enregistrer",
+        "askConfirmed": "Lisez l'avis. N'appuyez sur le premier bouton que si la personne dit oui.",
+        "askAnnouncement": "Lisez l'avis, puis lancez l'enregistrement.",
+        "grantConfirmed": "Elle a dit oui : lancer l'enregistrement",
+        "grantAnnouncement": "Avis lu : lancer l'enregistrement",
+        "decline": "Non : continuer sans enregistrer",
+        "declinedNote": "Pas d'enregistrement : la personne n'a pas donné son accord.",
+        "off": "L'enregistrement des appels est désactivé pour cet espace de travail.",
+        "failed": "La réponse n'a pas pu être enregistrée, donc rien n'est enregistré : {message}"
+      },
+      "lifecycle": {
+        "title": "Enregistrement et consentement",
+        "consent": "Consentement à l'enregistrement",
+        "consentGranted": "A accepté d'être enregistrée",
+        "consentDeclined": "A refusé d'être enregistrée",
+        "consentNone": "Aucune réponse notée",
+        "method": {
+          "announcement_continue": "Avis lu, appel poursuivi",
+          "spoken_yes": "A dit oui"
+        },
+        "noticeVersion": "Avis version {version}",
+        "storedAt": "Stocké",
+        "expiresAt": "Supprimé automatiquement le",
+        "heldNoExpiry": "Non supprimé : conservation légale",
+        "none": "Non défini",
+        "deleted": "Enregistrement supprimé",
+        "deletedReason": {
+          "retention": "durée de conservation terminée",
+          "manual": "supprimé par un collègue",
+          "consent_withdrawn": "consentement retiré"
+        },
+        "holdOn": "Conservation légale",
+        "placeHold": "Placer sous conservation légale",
+        "liftHold": "Lever la conservation légale",
+        "holdLifted": "Conservation légale levée.",
+        "holdPlaced": "Conservation légale placée.",
+        "holdReasonLabel": "Pourquoi est-il conservé ?",
+        "cancel": "Annuler",
+        "delete": "Supprimer l'enregistrement",
+        "deleteBlockedByHold": "Levez d'abord la conservation légale.",
+        "deleteTitle": "Supprimer cet enregistrement ?",
+        "deleteMessage": "Le fichier audio est supprimé définitivement. L'appel reste dans le journal.",
+        "deletedToast": "Enregistrement supprimé."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "L'enregistrement des appels est désactivé pour cet espace de travail.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Cet appel ne peut pas être enregistré : la personne n'a pas donné son accord.",
+      "CALL_RECORDING_CONSENT_INVALID": "Cette réponse ne peut pas être enregistrée pour cet appel.",
+      "CALL_RECORDING_ON_HOLD": "Cet enregistrement est sous conservation légale. Levez d'abord la conservation.",
+      "CALL_RECORDING_SETTINGS_INVALID": "Les règles d'enregistrement ne sont pas valides : rédigez d'abord l'avis."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "La personne a accepté l'enregistrement",
+          "recording_consent_declined": "La personne a refusé l'enregistrement",
+          "recording_deleted": "Enregistrement supprimé",
+          "recording_hold_set": "Conservation légale placée",
+          "recording_hold_lifted": "Conservation légale levée"
+        }
+      }
+    }
+  }
+}

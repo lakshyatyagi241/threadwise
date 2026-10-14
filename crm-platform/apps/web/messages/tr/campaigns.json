@@ -689,7 +689,8 @@
         "edit": "Düzenle",
         "resendAll": "Tümüne yeniden gönder",
         "export": "Satırları dışa aktar",
-        "delete": "Sil"
+        "delete": "Sil",
+        "broadcastStatus": "Yayın durumu"
       },
       "kpi": {
         "recipients": "Alıcılar",
@@ -1525,13 +1526,16 @@
           "pause": "Duraklat",
           "resume": "Devam et",
           "cancel": "Toplu gönderimi iptal et",
-          "retryFailed": "Başarısızları yeniden dene ({count})"
+          "retryFailed": "Başarısızları yeniden dene ({count})",
+          "export": "Satırları dışa aktar",
+          "delete": "Sil"
         },
         "done": {
           "pause": "Toplu gönderim duraklatıldı.",
           "resume": "Toplu gönderim devam ettirildi.",
           "cancel": "Toplu gönderim iptal edildi.",
-          "retryFailed": "{count, plural, other {# başarısız alıcı}} için yeniden deneniyor."
+          "retryFailed": "{count, plural, other {# başarısız alıcı}} için yeniden deneniyor.",
+          "delete": "Yayın silindi."
         },
         "failed": "İşlem başarısız oldu. Tekrar deneyin.",
         "noControl": "Toplu gönderimleri duraklatma, devam ettirme veya iptal etme izniniz yok.",
@@ -1552,7 +1556,11 @@
           "ended": "Sona erdi"
         },
         "retryTitle": "Başarısız mesajlar yeniden denensin mi?",
-        "retryMessage": "Mesajı başarısız olan {count, plural, other {# alıcıya}} yeniden gönderir. Mesajı zaten alanlara dokunulmaz ve mesaj yalnızca teslim edildiğinde ücretlendirilir."
+        "retryMessage": "Mesajı başarısız olan {count, plural, other {# alıcıya}} yeniden gönderir. Mesajı zaten alanlara dokunulmaz ve mesaj yalnızca teslim edildiğinde ücretlendirilir.",
+        "exportFailed": "Dışa aktarma indirilemedi.",
+        "deleteTitle": "Bu yayın silinsin mi?",
+        "deleteOne": "Bu yayını ve alıcılarını siler. Geri alınamaz.",
+        "deleteSeries": "Bu yinelenen yayını ve planlanan çalıştırmalarını siler. Hiçbir şey gönderilmediği için geçmiş kaybolmaz. Geri alınamaz."
       },
       "panel": {
         "title": "Toplu gönderim oluştur ile oluşturuldu",

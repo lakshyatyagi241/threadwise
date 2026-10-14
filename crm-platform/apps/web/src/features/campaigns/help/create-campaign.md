@@ -101,6 +101,8 @@ The last button reads **Send now**, **Schedule** or **Start recurring**. It open
 
 It shows the status, the schedule in words, the next run, the runs with their counts, and the retry summary. If you have the permission to control campaigns, you can **Pause**, **Resume** or **Cancel** it. When a finished run has failed recipients, **Retry failed (N)** sends again to just those recipients (a recurring campaign does it for every finished run); everyone who already got the message is left alone, and a message is charged only when it is delivered. It asks you to confirm first, and it is not offered while the failing run is still going. Each run links to its campaign page. The page refreshes every 15 seconds.
 
+**Export rows** downloads the recipients as a CSV (needs the permission to export campaigns). For a recurring campaign it is one file with a **Run** column, run by run. **Delete** (needs the permission to delete campaigns) removes a one-off campaign that is still waiting for its time or that failed outright, together with its recipients. A recurring campaign can be deleted, with the runs it had planned, only while none of its runs has sent a message; once one has, its history is kept and you cancel it instead. The campaign page of any run has a **Broadcast status** button that opens this page.
+
 ## If something looks wrong
 
 - **Could not save** next to the title means the last change is not saved yet. Press **Retry**; the page asks before you leave with unsaved changes.

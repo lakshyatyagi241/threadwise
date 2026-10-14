@@ -280,6 +280,10 @@
         "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
         "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "অনুমোদিত: বিজ্ঞপ্তি আগে দেওয়া হয়েছে।",
+        "consent_evidence_recorded": "অনুমোদিত: বিজ্ঞপ্তি দেওয়া হয়েছে এবং ব্যক্তি রাজি হয়েছেন।",
+        "purpose_not_enabled": "অনুমোদিত নয়: ওয়ার্কস্পেস এটি চালু করেনি।",
+        "consent_declined": "অনুমোদিত নয়: ব্যক্তি প্রত্যাখ্যান করেছেন।",
         "notice_required": "A notice must be delivered first."
       }
     },

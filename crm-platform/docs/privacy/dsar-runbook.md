@@ -49,3 +49,10 @@ receipt date, verification date, due date. Escalate at 15 and 25 days.
 ## Template replies
 
 To be written with counsel: acknowledgement, identity check, extension notice, refusal with reason, completion.
+
+## Call recordings (BL-144)
+
+A recording is deleted by the daily sweep after the workspace's keeping period (default 90 days). Before that, an erasure through the rights
+service removes the file and clears the path on the call row; **Delete recording** on the call (right `call.recordings.manage`) removes one file
+and keeps the call. A recording on legal hold is skipped by the sweep and cannot be deleted by hand until the hold is lifted (lifting it is
+`privacy.requests.manage`). Backups are not scrubbed (see the backup window above).

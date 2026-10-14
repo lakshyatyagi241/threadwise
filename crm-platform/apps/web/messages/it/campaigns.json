@@ -689,7 +689,8 @@
         "edit": "Modifica",
         "resendAll": "Reinvia a tutti",
         "export": "Esporta righe",
-        "delete": "Elimina"
+        "delete": "Elimina",
+        "broadcastStatus": "Stato della trasmissione"
       },
       "kpi": {
         "recipients": "Destinatari",
@@ -1525,13 +1526,16 @@
           "pause": "Pausa",
           "resume": "Riprendi",
           "cancel": "Annulla broadcast",
-          "retryFailed": "Riprova i falliti ({count})"
+          "retryFailed": "Riprova i falliti ({count})",
+          "export": "Esporta righe",
+          "delete": "Elimina"
         },
         "done": {
           "pause": "Broadcast messo in pausa.",
           "resume": "Broadcast ripreso.",
           "cancel": "Broadcast annullato.",
-          "retryFailed": "Nuovo tentativo per {count, plural, one {# destinatario fallito} other {# destinatari falliti}}."
+          "retryFailed": "Nuovo tentativo per {count, plural, one {# destinatario fallito} other {# destinatari falliti}}.",
+          "delete": "Trasmissione eliminata."
         },
         "failed": "Non ha funzionato. Riprova.",
         "noControl": "Non hai l'autorizzazione a mettere in pausa, riprendere o annullare i broadcast.",
@@ -1552,7 +1556,11 @@
           "ended": "Terminato"
         },
         "retryTitle": "Riprovare i messaggi falliti?",
-        "retryMessage": "Invia di nuovo a {count, plural, one {# destinatario} other {# destinatari}} il cui messaggio non è andato a buon fine. Chi lo ha già ricevuto non viene toccato e un messaggio viene addebitato solo quando è consegnato."
+        "retryMessage": "Invia di nuovo a {count, plural, one {# destinatario} other {# destinatari}} il cui messaggio non è andato a buon fine. Chi lo ha già ricevuto non viene toccato e un messaggio viene addebitato solo quando è consegnato.",
+        "exportFailed": "Non è stato possibile scaricare l’esportazione.",
+        "deleteTitle": "Eliminare questa trasmissione?",
+        "deleteOne": "Elimina questa trasmissione e i suoi destinatari. L’operazione non è reversibile.",
+        "deleteSeries": "Elimina questa trasmissione ricorrente e le esecuzioni pianificate. Non è stato inviato nulla, quindi nessuna cronologia va persa. L’operazione non è reversibile."
       },
       "panel": {
         "title": "Creato con Crea broadcast",

@@ -473,6 +473,30 @@ Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/priv
 
 Beyond Reference's eight counters: period selector (this month, 7/30/90 days, custom) in the viewer's zone; pipeline, owner and team filters in the address; pipeline funnel by stage with step conversion and drill-down to the deals list (`/deals?view=list&stage=`); won/lost trend; lead sources performance (leads, to deal, to won, won value); owner leaderboard; tasks by assignee; recent activity. Backend: `GET /v2/crm/dashboard`. Differences from Reference: parity/crm-dashboard.md.
 
+## Call recording consent and lifecycle (BL-144): a new feature on top of operator recording, not a port
+
+Reference starts recording every inbound call as soon as it is answered (no notice, no consent, no limit), stores the file on the public disk under a
+guessable URL, and never deletes it. The privacy spec (gap G3) and the voice-bot requirements ask for the opposite defaults, so this port changes the
+behaviour of TW-CALL-019 on purpose:
+
+- **Off by default.** Recording is a workspace switch (decision D7). Reference had no switch.
+- **Notice and consent before any audio.** The teammate reads a versioned notice; the person's answer (spoken yes, or announcement then continue) is
+  saved on the call with the method, time, teammate, notice version and the notice's sha-256. The ConsentGate (`call_recording`) is the one decision
+  point; the server refuses an upload without a granted answer (`CALL_RECORDING_CONSENT_REQUIRED`) and the browser does not arm its recorder before it.
+  Inbound calls are no longer recorded automatically.
+- **Retention.** A daily sweep deletes recordings after the workspace's days (default 90, 7 to 365). Reference kept them forever.
+- **Deletion and legal hold.** One recording can be deleted by hand (the call stays), or held; both audited.
+- **Erasure and export** already reach the file through the rights service; the manifest text now says how long it is kept.
+
+What is **not** verified: a real call with a real microphone (no WhatsApp session here), that an announcement is legally enough in any country (counsel),
+and the browser recorder on every browser (only the Chromium path is exercised by tests that stub `MediaRecorder`).
+
+Decisions for the owner: (1) whether `announcement` mode should exist at all or be hidden until counsel confirms it for a region; (2) one notice text
+per workspace today, per language and per region later (requirement 1 and 3); (3) recordings that existed before this change start their 90-day clock
+when the migration runs, not at their original date; (4) whether a legal hold on a recording should block a rights erasure of the same person (today the
+erasure wins and removes the file, as the rights service has no per-call hold); (5) whether consent should also be written to the contact consent
+ledger once BL-140b adds purposes other than marketing and service.
+
 ## Consent at intake (BL-165 to BL-167)
 
 Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 4.3.2; API: [contact-consent.md](../../api/contact-consent.md).

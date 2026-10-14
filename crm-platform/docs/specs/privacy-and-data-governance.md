@@ -302,6 +302,8 @@ the consent line of non-marketing forms. They follow the same rules (source, wor
 
 ### 4.4 Voice bot and call recording
 
+> **Built for operator calls (BL-144).** Recording off by default, notice and recorded answer before any audio through the ConsentGate (`call_recording`, with `noticeEvidence` and `purposeEnabled` options and the reasons `consent_evidence_recorded`, `consent_declined`, `purpose_not_enabled`, `notice_delivered`), evidence on `wa_calls`, versioned notices, retention sweep, manual delete and legal hold. Migration `20261202090000_call_recording_consent.sql`; API in [../api/calling-voice.md](../api/calling-voice.md). The bot items below are still design.
+
 See section 5 and [../privacy/voice-bot-consent-requirements.md](../privacy/voice-bot-consent-requirements.md).
 
 ### 4.5 DSAR and rights service

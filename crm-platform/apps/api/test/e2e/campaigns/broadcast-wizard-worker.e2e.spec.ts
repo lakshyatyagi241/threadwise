@@ -3,12 +3,14 @@ import {
   MESSAGE_DELIVERY_EVENT,
   walletDeliveryReportedSchema,
   wizardRetryFailedResponseSchema,
+  wizardDeleteResponseSchema,
   wizardTestSendResponseSchema,
   wizardTestLogSchema,
 } from '@crm/contracts';
 import { MessageBillingService } from '../../../src/modules/wallet-message-billing';
 import { MISFIRE_GRACE_MS } from '../../../src/modules/campaigns/wizard/wizard-series.service';
 import {
+  bearer,
   balanceMinor,
   buildLab,
   group,
@@ -855,6 +857,195 @@ describe('retry failed (by hand) on a launched broadcast', () => {
       )
     ).rows.map((x) => Number(x.failed));
     expect(left).toEqual([0, 1]);
+  });
+});
+
+describe('export and delete of a launched broadcast', () => {
+  const day = (n: number) =>
+    new Date(lab.clock.now.getTime() + n * 86_400_000).toISOString().slice(0, 10);
+
+  /** A one-off broadcast scheduled two days ahead, with `n` recipients. */
+  async function oneOff(label: string, n = 2) {
+    const w = await world(lab, label);
+    await payPerMessage(lab, w.t, 1_000_000);
+    const ids = await people(
+      lab,
+      w.t,
+      Array.from({ length: n }, () => ({})),
+    );
+    const g = await group(owner(), w.t, 'G', ids);
+    const d = await makeDraft(
+      lab,
+      w,
+      readyDraft(w, g, {
+        schedule: { mode: 'scheduled', date: day(2), time: '09:00', timezone: 'UTC' },
+      }),
+    );
+    lab.clock.now = new Date();
+    const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    return { w, uuid: d.id as string };
+  }
+  const del = (token: string, id: string) =>
+    lab.api.http().delete(`/v2/broadcast-wizard/broadcasts/${id}`).set(bearer(token));
+  const rowsOf = async (table: 'wpcampaigns' | 'camp_series', uuid: string) =>
+    Number(
+      (await owner().query(`SELECT count(*) AS n FROM ${table} WHERE uuid = $1`, [uuid])).rows[0].n,
+    );
+
+  it('deletes a one-off broadcast with its recipients; another workspace gets 404 and nothing is touched', async () => {
+    const b = await oneOff('bwd1', 3);
+    const other = await world(lab, 'bwd1b');
+    expect((await del(other.t.admin, b.uuid)).status).toBe(404);
+    expect(await rowsOf('wpcampaigns', b.uuid)).toBe(1);
+
+    const res = await del(b.w.t.admin, b.uuid);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(wizardDeleteResponseSchema.parse(res.body)).toMatchObject({
+      id: b.uuid,
+      kind: 'campaign',
+      runs: 1,
+    });
+    expect(await rowsOf('wpcampaigns', b.uuid)).toBe(0);
+    expect((await wiz(lab, b.w.t.admin).get(`/broadcasts/${b.uuid}`)).status).toBe(404);
+    expect((await del(b.w.t.admin, b.uuid)).status).toBe(404);
+    const left = await owner().query(
+      `SELECT count(*) AS n FROM wp_campaign_contacts r WHERE r.org_id = $1 AND NOT EXISTS (SELECT 1 FROM wpcampaigns c WHERE c.org_id = r.org_id AND c.id = r.campaign_id)`,
+      [b.w.t.orgId],
+    );
+    expect(Number(left.rows[0].n)).toBe(0);
+  });
+
+  it('exports a one-off broadcast exactly as its campaign export does, and refuses another workspace', async () => {
+    const b = await oneOff('bwd2', 2);
+    const res = await wiz(lab, b.w.t.admin).get(`/broadcasts/${b.uuid}/export`);
+    expect(res.status).toBe(200);
+    expect(res.headers['content-type']).toContain('text/csv');
+    expect(res.headers['content-disposition']).toMatch(
+      /attachment; filename="campaign-.+-recipients-\d{8}-\d{6}\.csv"/,
+    );
+    const lines = res.text.trim().split('\r\n');
+    expect(lines[0]).toBe(
+      'Recipient,Phone,Variant,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
+    );
+    expect(lines).toHaveLength(3);
+    const same = await lab.api
+      .http()
+      .get(`/v2/campaigns/${b.uuid}/export`)
+      .set(bearer(b.w.t.admin));
+    expect(same.text.trim().split('\r\n')[0]).toBe(lines[0]);
+    const other = await world(lab, 'bwd2b');
+    expect((await wiz(lab, other.t.admin).get(`/broadcasts/${b.uuid}/export`)).status).toBe(404);
+  });
+
+  /** A daily series that has planned two runs, each with two recipients. */
+  async function seriesWithRuns(label: string) {
+    const w = await world(lab, label);
+    const s = await launchSeries(w, { startDate: '2028-03-01' });
+    at('2028-03-01T09:00:00Z');
+    await lab.series.tick();
+    at('2028-03-02T09:00:00Z');
+    await lab.series.tick();
+    const runIds = (
+      await owner().query(
+        `SELECT id, uuid FROM wpcampaigns WHERE series_id = $1 ORDER BY occurrence_no`,
+        [s.id],
+      )
+    ).rows;
+    expect(runIds).toHaveLength(2);
+    // The planner starts a due run at once; these tests need the runs quiet, as they are between sends.
+    await owner().query(`UPDATE wpcampaigns SET status = 'scheduled' WHERE series_id = $1`, [s.id]);
+    return { w, s, runIds };
+  }
+
+  it('deletes a recurring series with the runs it had planned while nothing has been sent, and keeps the history of one that has', async () => {
+    const a = await seriesWithRuns('bwd3');
+    const noRuns = await oneSeries('bwd3x');
+    expect((await del(noRuns.w.t.admin, noRuns.uuid)).body).toMatchObject({
+      kind: 'series',
+      runs: 0,
+    });
+    expect(await rowsOf('camp_series', noRuns.uuid)).toBe(0);
+
+    // Nothing sent yet: the series and both runs (with their recipients) go.
+    const res = await del(a.w.t.admin, a.s.uuid);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(wizardDeleteResponseSchema.parse(res.body)).toMatchObject({
+      id: a.s.uuid,
+      kind: 'series',
+      runs: 2,
+    });
+    expect(await rowsOf('camp_series', a.s.uuid)).toBe(0);
+    const left = await owner().query(`SELECT count(*) AS n FROM wpcampaigns WHERE id = ANY($1)`, [
+      a.runIds.map((r) => r.id),
+    ]);
+    expect(Number(left.rows[0].n)).toBe(0);
+
+    // A run that has sent a message: the history is kept, the series stays, and it can still be cancelled.
+    const b = await seriesWithRuns('bwd4');
+    await owner().query(
+      `UPDATE wp_campaign_contacts SET status = 'sent', sent_at = now() WHERE id = (SELECT min(id) FROM wp_campaign_contacts WHERE campaign_id = $1)`,
+      [b.runIds[0]!.id],
+    );
+    const kept = await del(b.w.t.admin, b.s.uuid);
+    expect(kept.status).toBe(409);
+    expect(problem(kept).code).toBe('CAMP_SERIES_HAS_HISTORY');
+    expect(await rowsOf('camp_series', b.s.uuid)).toBe(1);
+    expect((await wiz(lab, b.w.t.admin).post(`/broadcasts/${b.s.uuid}/cancel`)).status).toBe(200);
+
+    // A run that is going right now is never deleted under the worker.
+    const c = await seriesWithRuns('bwd5');
+    await owner().query(`UPDATE wpcampaigns SET status = 'running' WHERE id = $1`, [
+      c.runIds[1]!.id,
+    ]);
+    const busy = await del(c.w.t.admin, c.s.uuid);
+    expect(busy.status).toBe(422);
+    expect(problem(busy).code).toBe('CAMP_BROADCAST_NOT_CONTROLLABLE');
+    expect(await rowsOf('camp_series', c.s.uuid)).toBe(1);
+  });
+
+  /** A launched series that has not planned any run yet. */
+  async function oneSeries(label: string) {
+    const w = await world(lab, label);
+    const s = await launchSeries(w, { startDate: '2028-04-01' });
+    return { w, uuid: s.uuid };
+  }
+
+  it('exports a recurring series as one file with a Run column, run by run; another workspace gets 404', async () => {
+    const a = await seriesWithRuns('bwd6');
+    const res = await wiz(lab, a.w.t.admin).get(`/broadcasts/${a.s.uuid}/export`);
+    expect(res.status).toBe(200);
+    expect(res.headers['content-disposition']).toMatch(/filename="broadcast-.+-recipients-/);
+    const lines = res.text.trim().split('\r\n');
+    expect(lines[0]).toBe(
+      'Run,Recipient,Phone,Variant,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
+    );
+    expect(lines.slice(1).map((l) => l.split(',')[0])).toEqual(['1', '1', '2', '2']);
+    // A run says which series it belongs to (the page behind its export and delete), and a one-off campaign says none.
+    const run = await wiz(lab, a.w.t.admin).get(`/broadcasts/${a.s.uuid}`);
+    const runUuid = run.body.runList[0].id as string;
+    const detail = await lab.api.http().get(`/v2/campaigns/${runUuid}`).set(bearer(a.w.t.admin));
+    expect(detail.body.campaign.seriesId).toBe(a.s.uuid);
+    const other = await world(lab, 'bwd6b');
+    expect((await wiz(lab, other.t.admin).get(`/broadcasts/${a.s.uuid}/export`)).status).toBe(404);
+    // A series with no run yet is a file with only its header.
+    const none = await oneSeries('bwd6x');
+    const empty = await wiz(lab, none.w.t.admin).get(`/broadcasts/${none.uuid}/export`);
+    expect(empty.text.trim().split('\r\n')).toHaveLength(1);
+  });
+
+  it('each route needs its own permission', async () => {
+    const b = await oneOff('bwd7', 1);
+    const reader = await lab.api.member(b.w.t, 'rd7', [['camp.campaigns.read']]);
+    expect((await wiz(lab, reader.token).get(`/broadcasts/${b.uuid}/export`)).status).toBe(403);
+    expect((await del(reader.token, b.uuid)).status).toBe(403);
+    const exporter = await lab.api.member(b.w.t, 'ex7', [['camp.campaigns.export']]);
+    expect((await wiz(lab, exporter.token).get(`/broadcasts/${b.uuid}/export`)).status).toBe(200);
+    expect((await del(exporter.token, b.uuid)).status).toBe(403);
+    const deleter = await lab.api.member(b.w.t, 'de7', [['camp.campaigns.delete']]);
+    expect((await del(deleter.token, b.uuid)).status).toBe(200);
   });
 });
 

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   HttpCode,
@@ -11,6 +12,7 @@ import {
   Put,
   Query,
   Res,
+  StreamableFile,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -330,6 +332,34 @@ export class WizardController {
   })
   retryFailed(@Param('id', ParseUUIDPipe) id: string) {
     return this.broadcasts.retryFailed(id);
+  }
+
+  @Get('broadcasts/:id/export')
+  @RequirePermission('camp.campaigns.export')
+  @ApiOperation({
+    summary:
+      'Download the recipients of a launched broadcast as CSV (a series: every run, with a Run column)',
+  })
+  async exportBroadcast(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const { stream, fileName } = await this.broadcasts.exportBroadcast(id);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    return new StreamableFile(stream);
+  }
+
+  @Delete('broadcasts/:id')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('camp.campaigns.delete')
+  @ApiOperation({
+    summary: 'Delete a launched broadcast, or a recurring series that has not sent anything yet',
+    description:
+      'A one-off broadcast goes with its recipients. A series goes with the runs it had planned, only while none of them has sent a message (409 `CAMP_SERIES_HAS_HISTORY` otherwise: cancel it instead).',
+  })
+  removeBroadcast(@Param('id', ParseUUIDPipe) id: string) {
+    return this.broadcasts.removeBroadcast(id);
   }
 
   @Post('broadcasts/:id/cancel')

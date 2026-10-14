@@ -9,6 +9,7 @@ import {
   type WizardBroadcast,
   type WizardBroadcastDetail,
   type WizardBroadcastList,
+  type WizardDeleteResponse,
   type WizardControlResponse,
   type WizardDraft,
   type WizardRetryFailedResponse,
@@ -16,6 +17,7 @@ import {
   type WizardRun,
   type CampaignStatus,
 } from '@crm/contracts';
+import type { Readable } from 'node:stream';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
@@ -309,6 +311,94 @@ export class WizardBroadcastsService {
       recipients,
       runs: targets.runs.length,
     };
+  }
+
+  /**
+   * The recipients of a launched broadcast as one CSV (streamed): a one-off campaign exactly as its own export, a recurring series as
+   * one file with a `Run` column, run by run in order. Same permission as any campaign export.
+   */
+  async exportBroadcast(uuid: string): Promise<{ stream: Readable; fileName: string }> {
+    const { orgId } = RequestContextStore.require();
+    const found = await this.db.tx(async (tx) => {
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (series) {
+        const runs = (await this.repo.seriesChildren(tx, orgId, series.id))
+          .map((c) => ({ id: c.id, run: (c.occurrenceNo ?? 0) + 1 }))
+          .sort((a, b) => a.run - b.run);
+        return { series, runs };
+      }
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
+      return { series: null, runs: [] };
+    });
+    if (!found.series) return this.actions.export(uuid);
+    const zone = recurrenceRuleSchema.parse(found.series.rule).timezone;
+    return this.actions.exportRuns(found.runs, zone, `broadcast-${found.series.uuid}`);
+  }
+
+  /**
+   * Delete a launched broadcast. A one-off campaign goes with its recipients, as a campaign does. A recurring series goes with the runs
+   * it had planned, but only while none of them has sent a message: once a run has sent, its history is kept and the series can only be
+   * cancelled (409 CAMP_SERIES_HAS_HISTORY). A run that is going right now is never deleted under the worker.
+   */
+  async removeBroadcast(uuid: string): Promise<WizardDeleteResponse> {
+    const { orgId } = RequestContextStore.require();
+    const known = await this.db.tx(async (tx) => {
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (series) return { kind: 'series' as const };
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
+      return { kind: 'campaign' as const };
+    });
+    if (known.kind === 'campaign') {
+      await this.actions.remove(uuid);
+      return { id: uuid, kind: 'campaign', runs: 1, message: 'Broadcast deleted.' };
+    }
+    return this.db.tx(async (tx) => {
+      const s0 = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (!s0) throw AppError.notFound('Broadcast', uuid);
+      const s = (await this.repo.lockSeries(tx, orgId, s0.id)) ?? s0;
+      // The runs' own rows too, so a worker cannot start one between the checks below and the delete.
+      await this.repo.lockSeriesRuns(tx, orgId, s.id);
+      const children = await this.repo.seriesChildren(tx, orgId, s.id);
+      if (children.some((c) => c.status === 'running'))
+        throw notControllable('recurring broadcast', 'running');
+      if (await this.repo.seriesHasSent(tx, orgId, s.id)) {
+        throw new AppError(
+          ERROR_CODES.CAMP_SERIES_HAS_HISTORY,
+          'This recurring broadcast has already sent messages, so its history is kept. Cancel it to stop it.',
+          HttpStatus.CONFLICT,
+        );
+      }
+      for (const c of children) {
+        await this.audit.record(tx, { module: 'campaigns', recordId: c.id, action: 'delete' });
+        await this.outbox.emit(tx, {
+          aggregateModule: 'campaigns',
+          aggregateId: c.id,
+          eventType: 'campaign.deleted',
+          payload: { uuid: c.uuid },
+        });
+      }
+      await this.campaigns.remove(
+        tx,
+        orgId,
+        children.map((c) => c.id),
+      );
+      await this.repo.deleteSeries(tx, orgId, s.id);
+      await this.audit.record(tx, { module: 'camp_series', recordId: s.id, action: 'delete' });
+      await this.outbox.emit(tx, {
+        aggregateModule: 'campaigns',
+        aggregateId: s.id,
+        eventType: 'campaign.series_deleted',
+        payload: { uuid: s.uuid, name: s.name, runs: children.length },
+      });
+      return {
+        id: s.uuid,
+        kind: 'series' as const,
+        runs: children.length,
+        message: 'Recurring broadcast deleted.',
+      };
+    });
   }
 
   // ------------------------------------------------------------------------------------------ controls

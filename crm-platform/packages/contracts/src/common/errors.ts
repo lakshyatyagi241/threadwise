@@ -290,6 +290,14 @@ export const ERROR_CODES = {
   MAIL_ATTACHMENT_NOT_FOUND: 'MAIL_ATTACHMENT_NOT_FOUND',
   /** The signature does not exist or is not one the caller may use. */
   MAIL_SIGNATURE_NOT_FOUND: 'MAIL_SIGNATURE_NOT_FOUND',
+  /** The email template does not exist or is a colleague's personal one. */
+  EMAIL_TEMPLATE_NOT_FOUND: 'EMAIL_TEMPLATE_NOT_FOUND',
+  /** Another template of the same owner (the workspace, or you) already has this name. */
+  EMAIL_TEMPLATE_NAME_TAKEN: 'EMAIL_TEMPLATE_NAME_TAKEN',
+  /** Only people who manage email templates can create or change a shared one. */
+  EMAIL_TEMPLATE_NOT_EDITABLE: 'EMAIL_TEMPLATE_NOT_EDITABLE',
+  /** The template is archived and cannot be used in a reply. */
+  EMAIL_TEMPLATE_ARCHIVED: 'EMAIL_TEMPLATE_ARCHIVED',
 
   // SMS channel (TW-SMS)
   /** The provider refused the credentials at connect time. */
@@ -370,6 +378,8 @@ export const ERROR_CODES = {
   CAMP_NOT_RESENDABLE: 'CAMP_NOT_RESENDABLE',
   /** Resend: nobody matches the scope. */
   CAMP_NOTHING_TO_RESEND: 'CAMP_NOTHING_TO_RESEND',
+  /** A recurring broadcast that already sent messages keeps its history: it can be cancelled, not deleted. */
+  CAMP_SERIES_HAS_HISTORY: 'CAMP_SERIES_HAS_HISTORY',
   /** The template cannot be used for a campaign (not approved, OTP, quality, media). */
   CAMP_TEMPLATE_NOT_ALLOWED: 'CAMP_TEMPLATE_NOT_ALLOWED',
   /** The auto-end date is not after the send date. */

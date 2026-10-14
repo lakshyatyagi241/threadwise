@@ -689,7 +689,8 @@
         "edit": "Editar",
         "resendAll": "Reenviar a todos",
         "export": "Exportar filas",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "broadcastStatus": "Estado de la difusión"
       },
       "kpi": {
         "recipients": "Destinatarios",
@@ -1525,13 +1526,16 @@
           "pause": "Pausar",
           "resume": "Reanudar",
           "cancel": "Cancelar difusión",
-          "retryFailed": "Reintentar fallidos ({count})"
+          "retryFailed": "Reintentar fallidos ({count})",
+          "export": "Exportar filas",
+          "delete": "Eliminar"
         },
         "done": {
           "pause": "Difusión en pausa.",
           "resume": "Difusión reanudada.",
           "cancel": "Difusión cancelada.",
-          "retryFailed": "Reintentando {count, plural, one {# destinatario fallido} other {# destinatarios fallidos}}."
+          "retryFailed": "Reintentando {count, plural, one {# destinatario fallido} other {# destinatarios fallidos}}.",
+          "delete": "Difusión eliminada."
         },
         "failed": "No funcionó. Inténtalo de nuevo.",
         "noControl": "No tienes permiso para pausar, reanudar ni cancelar difusiones.",
@@ -1552,7 +1556,11 @@
           "ended": "Finalizada"
         },
         "retryTitle": "¿Reintentar los mensajes fallidos?",
-        "retryMessage": "Vuelve a enviar a {count, plural, one {# destinatario} other {# destinatarios}} cuyo mensaje falló. Quien ya lo recibió no se toca, y un mensaje solo se cobra cuando se entrega."
+        "retryMessage": "Vuelve a enviar a {count, plural, one {# destinatario} other {# destinatarios}} cuyo mensaje falló. Quien ya lo recibió no se toca, y un mensaje solo se cobra cuando se entrega.",
+        "exportFailed": "No se pudo descargar la exportación.",
+        "deleteTitle": "¿Eliminar esta difusión?",
+        "deleteOne": "Elimina esta difusión y sus destinatarios. No se puede deshacer.",
+        "deleteSeries": "Elimina esta difusión recurrente y las ejecuciones que tenía planificadas. No se ha enviado nada, así que no se pierde historial. No se puede deshacer."
       },
       "panel": {
         "title": "Creadas con Crear difusión",

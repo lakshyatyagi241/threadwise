@@ -689,7 +689,8 @@
         "edit": "Bewerken",
         "resendAll": "Opnieuw naar iedereen",
         "export": "Rijen exporteren",
-        "delete": "Verwijderen"
+        "delete": "Verwijderen",
+        "broadcastStatus": "Status van de verzending"
       },
       "kpi": {
         "recipients": "Ontvangers",
@@ -1525,13 +1526,16 @@
           "pause": "Pauzeren",
           "resume": "Hervatten",
           "cancel": "Broadcast annuleren",
-          "retryFailed": "Mislukte opnieuw proberen ({count})"
+          "retryFailed": "Mislukte opnieuw proberen ({count})",
+          "export": "Rijen exporteren",
+          "delete": "Verwijderen"
         },
         "done": {
           "pause": "Broadcast gepauzeerd.",
           "resume": "Broadcast hervat.",
           "cancel": "Broadcast geannuleerd.",
-          "retryFailed": "Opnieuw proberen voor {count, plural, one {# mislukte ontvanger} other {# mislukte ontvangers}}."
+          "retryFailed": "Opnieuw proberen voor {count, plural, one {# mislukte ontvanger} other {# mislukte ontvangers}}.",
+          "delete": "Verzending verwijderd."
         },
         "failed": "Dat is niet gelukt. Probeer het opnieuw.",
         "noControl": "Je hebt geen toestemming om broadcasts te pauzeren, hervatten of annuleren.",
@@ -1552,7 +1556,11 @@
           "ended": "Beëindigd"
         },
         "retryTitle": "Mislukte berichten opnieuw proberen?",
-        "retryMessage": "Stuurt opnieuw naar {count, plural, one {# ontvanger} other {# ontvangers}} bij wie het bericht mislukte. Wie het al kreeg, blijft met rust en een bericht wordt alleen in rekening gebracht als het is afgeleverd."
+        "retryMessage": "Stuurt opnieuw naar {count, plural, one {# ontvanger} other {# ontvangers}} bij wie het bericht mislukte. Wie het al kreeg, blijft met rust en een bericht wordt alleen in rekening gebracht als het is afgeleverd.",
+        "exportFailed": "De export kon niet worden gedownload.",
+        "deleteTitle": "Deze verzending verwijderen?",
+        "deleteOne": "Verwijdert deze verzending en de ontvangers. Dit kan niet ongedaan worden gemaakt.",
+        "deleteSeries": "Verwijdert deze terugkerende verzending en de geplande runs. Er is niets verstuurd, dus er gaat geen geschiedenis verloren. Dit kan niet ongedaan worden gemaakt."
       },
       "panel": {
         "title": "Gemaakt met Broadcast maken",
