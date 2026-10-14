@@ -364,7 +364,12 @@
       "addPlaceholder": "添加或选择标签...",
       "addLabel": "标签名称",
       "add": "添加标签",
-      "failed": "无法更改标签。请重试。"
+      "failed": "无法更改标签。请重试。",
+      "quickPlaceholder": "搜索或创建标签",
+      "create": "创建标签“{name}”",
+      "noMatch": "没有匹配的标签",
+      "quickHint": "可选择多个标签，或输入名称后按 Enter 创建新标签。",
+      "quickHintPick": "可从列表中选择多个标签。"
     },
     "groups": {
       "eyebrow": "工作区 · {workspace}",

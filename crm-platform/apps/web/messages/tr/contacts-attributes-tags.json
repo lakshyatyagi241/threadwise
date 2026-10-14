@@ -364,7 +364,12 @@
       "addPlaceholder": "Etiket ekleyin veya seçin...",
       "addLabel": "Etiket adı",
       "add": "Etiket ekle",
-      "failed": "Etiket değiştirilemedi. Tekrar deneyin."
+      "failed": "Etiket değiştirilemedi. Tekrar deneyin.",
+      "quickPlaceholder": "Etiket ara veya oluştur",
+      "create": "“{name}” etiketini oluştur",
+      "noMatch": "Eşleşen etiket yok",
+      "quickHint": "Birden çok etiket seçin veya bir ad yazıp Enter'a basarak yeni etiket oluşturun.",
+      "quickHintPick": "Listeden birden çok etiket seçin."
     },
     "groups": {
       "eyebrow": "Çalışma alanı · {workspace}",

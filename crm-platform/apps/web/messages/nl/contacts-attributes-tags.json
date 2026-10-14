@@ -364,7 +364,12 @@
       "addPlaceholder": "Voeg een tag toe of kies er een...",
       "addLabel": "Tagnaam",
       "add": "Tag toevoegen",
-      "failed": "De tag kon niet worden gewijzigd. Probeer het opnieuw."
+      "failed": "De tag kon niet worden gewijzigd. Probeer het opnieuw.",
+      "quickPlaceholder": "Zoek of maak een tag",
+      "create": "Tag “{name}” maken",
+      "noMatch": "Geen overeenkomende tags",
+      "quickHint": "Kies meerdere tags, of typ een naam en druk op Enter om een nieuwe tag te maken.",
+      "quickHintPick": "Kies meerdere tags uit de lijst."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",

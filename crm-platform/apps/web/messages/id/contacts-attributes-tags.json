@@ -364,7 +364,12 @@
       "addPlaceholder": "Tambah atau pilih tag...",
       "addLabel": "Nama tag",
       "add": "Tambah tag",
-      "failed": "Tag tidak dapat diubah. Coba lagi."
+      "failed": "Tag tidak dapat diubah. Coba lagi.",
+      "quickPlaceholder": "Cari atau buat tag",
+      "create": "Buat tag “{name}”",
+      "noMatch": "Tidak ada tag yang cocok",
+      "quickHint": "Pilih beberapa tag, atau ketik nama lalu tekan Enter untuk membuat tag baru.",
+      "quickHintPick": "Pilih beberapa tag dari daftar."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",

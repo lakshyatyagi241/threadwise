@@ -29,7 +29,6 @@ import {
 } from '../api/contacts';
 import { useStatusOptions } from '../api/attributes';
 import { useContactFields, useFieldSections } from '../api/properties';
-import { useContactTags } from '../api/tags';
 import {
   displayName,
   EXTRA_KEYS,
@@ -41,7 +40,8 @@ import {
 import { errorKind } from '../lib/errors';
 import { detailGroups } from '../lib/property-model';
 import { stageChoices, statusChoices } from '../lib/option-sets';
-import { ContactAvatar, GroupChip, TagPill } from './chips';
+import { ContactAvatar, GroupChip } from './chips';
+import { ContactQuickTags } from './contact-quick-tags';
 import { StageMenu } from './stage-menu';
 import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
@@ -64,7 +64,6 @@ export function ContactDetail({ id }: { id: string }) {
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
   const contact = useContact(id);
-  const tags = useContactTags(id);
   const registry = useContactFields();
   const sections = useFieldSections();
   const statusOptions = useStatusOptions();
@@ -243,9 +242,7 @@ export function ContactDetail({ id }: { id: string }) {
               )}
               {c.status && <Badge tone="success">{statusLabelOf(c.status)}</Badge>}
               {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
-              {(tags.data ?? []).map((tag) => (
-                <TagPill key={tag.id} name={tag.name} color={tag.color} />
-              ))}
+              <ContactQuickTags contactId={id} />
             </div>
           </div>
         </div>

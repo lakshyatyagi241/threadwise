@@ -364,7 +364,12 @@
       "addPlaceholder": "태그 추가 또는 선택...",
       "addLabel": "태그 이름",
       "add": "태그 추가",
-      "failed": "태그를 변경할 수 없습니다. 다시 시도하세요."
+      "failed": "태그를 변경할 수 없습니다. 다시 시도하세요.",
+      "quickPlaceholder": "태그 검색 또는 만들기",
+      "create": "태그 “{name}” 만들기",
+      "noMatch": "일치하는 태그가 없습니다",
+      "quickHint": "태그를 여러 개 선택하거나, 이름을 입력하고 Enter를 눌러 새 태그를 만드세요.",
+      "quickHintPick": "목록에서 태그를 여러 개 선택하세요."
     },
     "groups": {
       "eyebrow": "워크스페이스 · {workspace}",

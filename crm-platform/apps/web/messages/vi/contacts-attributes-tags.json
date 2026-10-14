@@ -364,7 +364,12 @@
       "addPlaceholder": "Thêm hoặc chọn thẻ...",
       "addLabel": "Tên thẻ",
       "add": "Thêm thẻ",
-      "failed": "Không thể thay đổi thẻ. Hãy thử lại."
+      "failed": "Không thể thay đổi thẻ. Hãy thử lại.",
+      "quickPlaceholder": "Tìm hoặc tạo thẻ",
+      "create": "Tạo thẻ “{name}”",
+      "noMatch": "Không có thẻ phù hợp",
+      "quickHint": "Chọn nhiều thẻ, hoặc nhập tên rồi nhấn Enter để tạo thẻ mới.",
+      "quickHintPick": "Chọn nhiều thẻ từ danh sách."
     },
     "groups": {
       "eyebrow": "Không gian làm việc · {workspace}",
