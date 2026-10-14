@@ -403,7 +403,9 @@
         "smartIntro": "Déjalo vacío para usar el ritmo predeterminado del espacio de trabajo. Estas reglas espacian los envíos para que una lista grande parezca humana y no llame la atención de los sistemas de bloqueo de WhatsApp.",
         "smartZone": "Horas en {zone}.",
         "throttleMaxHint": "La espera más larga antes de un mensaje.",
-        "batchPauseHint": "Minutos de pausa tras cada lote."
+        "batchPauseHint": "Minutos de pausa tras cada lote.",
+        "retryFailed": "Reintentar automáticamente los mensajes fallidos",
+        "retryFailedHint": "Un mensaje que falla por un motivo temporal se reintenta varias veces, con una pausa entre intentos. Desactívalo para enviar cada mensaje una sola vez."
       },
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
       "draftChip": "Borrador / sin guardar",
@@ -687,7 +689,8 @@
         "edit": "Editar",
         "resendAll": "Reenviar a todos",
         "export": "Exportar filas",
-        "delete": "Eliminar"
+        "delete": "Eliminar",
+        "broadcastStatus": "Estado de la difusión"
       },
       "kpi": {
         "recipients": "Destinatarios",
@@ -707,7 +710,8 @@
         "replies": "Respuestas ({count})",
         "failures": "Fallos ({count})",
         "optouts": "Bajas ({count})",
-        "summary": "Resumen"
+        "summary": "Resumen",
+        "statistics": "Estadísticas"
       },
       "cancel": "Cancelar",
       "deleted": "Campaña eliminada.",
@@ -963,6 +967,41 @@
           "retry": "Intentar de nuevo"
         },
         "latestRun": "Mostrando la ejecución {occurrence}, la más reciente de esta serie."
+      },
+      "live": {
+        "badge": "En vivo",
+        "updated": "actualizado {time}",
+        "queued": "{count} en espera de envío",
+        "processing": "{count} enviándose ahora"
+      },
+      "statistics": {
+        "loadFailed": "No se pudieron cargar las estadísticas.",
+        "rates": {
+          "delivered": "Tasa de entrega",
+          "deliveredHint": "de la audiencia",
+          "read": "Tasa de lectura",
+          "readHint": "de los entregados",
+          "replies": "Tasa de respuesta",
+          "clicks": "Tasa de clics",
+          "failed": "Tasa de fallos"
+        },
+        "breakdown": {
+          "title": "Dónde está cada uno ahora",
+          "hint": "Cada uno de los {total} destinatarios se cuenta una vez, en el estado que tiene.",
+          "empty": "Esta campaña aún no tiene destinatarios."
+        },
+        "timeline": {
+          "title": "Cronología",
+          "created": "Creada",
+          "scheduled": "Programada para",
+          "firstSent": "Primer mensaje enviado",
+          "lastRun": "Última ejecución",
+          "finished": "Finalizada",
+          "notYet": "Todavía no"
+        },
+        "live": "Siguiendo en vivo",
+        "atRest": "Cifras finales",
+        "updated": "Actualizado {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1295,7 @@
         "messages": "Mensajes",
         "modePlan": "{count, plural, one {Tu plan cubre los primeros mensajes; el monedero paga # mensaje más allá de ellos.} other {Tu plan cubre los primeros mensajes; el monedero paga # mensajes más allá de ellos.}}",
         "modeWallet": "{count, plural, one {Cada mensaje entregado se cobra a tu monedero: # mensaje.} other {Cada mensaje entregado se cobra a tu monedero: # mensajes.}}",
+        "platformOwned": "Este espacio de trabajo no se factura por los envíos, así que no se cobra nada de tu monedero.",
         "breakdown": "Coste por país",
         "country": "País",
         "unitPrice": "Por mensaje",
@@ -1485,12 +1525,17 @@
         "action": {
           "pause": "Pausar",
           "resume": "Reanudar",
-          "cancel": "Cancelar difusión"
+          "cancel": "Cancelar difusión",
+          "retryFailed": "Reintentar fallidos ({count})",
+          "export": "Exportar filas",
+          "delete": "Eliminar"
         },
         "done": {
           "pause": "Difusión en pausa.",
           "resume": "Difusión reanudada.",
-          "cancel": "Difusión cancelada."
+          "cancel": "Difusión cancelada.",
+          "retryFailed": "Reintentando {count, plural, one {# destinatario fallido} other {# destinatarios fallidos}}.",
+          "delete": "Difusión eliminada."
         },
         "failed": "No funcionó. Inténtalo de nuevo.",
         "noControl": "No tienes permiso para pausar, reanudar ni cancelar difusiones.",
@@ -1509,7 +1554,13 @@
           "cancelled": "Cancelada",
           "active": "Activa",
           "ended": "Finalizada"
-        }
+        },
+        "retryTitle": "¿Reintentar los mensajes fallidos?",
+        "retryMessage": "Vuelve a enviar a {count, plural, one {# destinatario} other {# destinatarios}} cuyo mensaje falló. Quien ya lo recibió no se toca, y un mensaje solo se cobra cuando se entrega.",
+        "exportFailed": "No se pudo descargar la exportación.",
+        "deleteTitle": "¿Eliminar esta difusión?",
+        "deleteOne": "Elimina esta difusión y sus destinatarios. No se puede deshacer.",
+        "deleteSeries": "Elimina esta difusión recurrente y las ejecuciones que tenía planificadas. No se ha enviado nada, así que no se pierde historial. No se puede deshacer."
       },
       "panel": {
         "title": "Creadas con Crear difusión",

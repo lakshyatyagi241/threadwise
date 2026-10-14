@@ -394,7 +394,9 @@
         "smartIntro": "Leave blank to use the workspace default pacing. These rules space out sending so a large list looks human and stays under WhatsApp's ban radar.",
         "smartZone": "Times in {zone}.",
         "throttleMaxHint": "The longest wait before a message.",
-        "batchPauseHint": "Minutes to rest after each batch."
+        "batchPauseHint": "Minutes to rest after each batch.",
+        "retryFailed": "Retry failed messages automatically",
+        "retryFailedHint": "A message that fails for a temporary reason is tried again a few times, with a pause between tries. Turn this off to send each message once."
       },
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "draftChip": "Draft / unsaved",
@@ -678,7 +680,8 @@
         "edit": "Edit",
         "resendAll": "Resend to all",
         "export": "Export rows",
-        "delete": "Delete"
+        "delete": "Delete",
+        "broadcastStatus": "Broadcast status"
       },
       "kpi": {
         "recipients": "Recipients",
@@ -698,7 +701,8 @@
         "engagement": "Engagement",
         "replies": "Replies ({count})",
         "failures": "Failures ({count})",
-        "optouts": "Opt-outs ({count})"
+        "optouts": "Opt-outs ({count})",
+        "statistics": "Statistics"
       },
       "cancel": "Cancel",
       "deleted": "Campaign deleted.",
@@ -954,6 +958,41 @@
           "retry": "Try again"
         },
         "latestRun": "Showing run {occurrence}, the newest one of this series."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "updated {time}",
+        "queued": "{count} waiting to send",
+        "processing": "{count} sending now"
+      },
+      "statistics": {
+        "loadFailed": "The statistics could not be loaded.",
+        "rates": {
+          "delivered": "Delivery rate",
+          "deliveredHint": "of the audience",
+          "read": "Read rate",
+          "readHint": "of delivered",
+          "replies": "Reply rate",
+          "clicks": "Click rate",
+          "failed": "Failure rate"
+        },
+        "breakdown": {
+          "title": "Where everyone is now",
+          "hint": "Each of the {total} recipients is counted once, at the status it holds.",
+          "empty": "This campaign has no recipients yet."
+        },
+        "timeline": {
+          "title": "Timeline",
+          "created": "Created",
+          "scheduled": "Set to start",
+          "firstSent": "First message sent",
+          "lastRun": "Last run",
+          "finished": "Finished",
+          "notYet": "Not yet"
+        },
+        "live": "Following live",
+        "atRest": "Final numbers",
+        "updated": "Updated {time}"
       }
     },
     "wizard": {
@@ -1246,6 +1285,7 @@
         "messages": "Messages",
         "modePlan": "{count, plural, one {Your plan covers the first messages; the wallet pays for # message beyond them.} other {Your plan covers the first messages; the wallet pays for # messages beyond them.}}",
         "modeWallet": "{count, plural, one {Every delivered message is charged to your wallet: # message.} other {Every delivered message is charged to your wallet: # messages.}}",
+        "platformOwned": "This workspace is not billed for sends, so nothing is charged to your wallet.",
         "breakdown": "Cost by country",
         "country": "Country",
         "unitPrice": "Per message",
@@ -1475,12 +1515,17 @@
         "action": {
           "pause": "Pause",
           "resume": "Resume",
-          "cancel": "Cancel campaign"
+          "cancel": "Cancel campaign",
+          "retryFailed": "Retry failed ({count})",
+          "export": "Export rows",
+          "delete": "Delete"
         },
         "done": {
           "pause": "Campaign paused.",
           "resume": "Campaign resumed.",
-          "cancel": "Campaign cancelled."
+          "cancel": "Campaign cancelled.",
+          "retryFailed": "Retrying {count, plural, one {# failed recipient} other {# failed recipients}}.",
+          "delete": "Broadcast deleted."
         },
         "failed": "That did not work. Try again.",
         "noControl": "You do not have permission to pause, resume or cancel campaigns.",
@@ -1499,7 +1544,13 @@
           "cancelled": "Cancelled",
           "active": "Active",
           "ended": "Ended"
-        }
+        },
+        "retryTitle": "Retry the failed messages?",
+        "retryMessage": "Sends again to the {count, plural, one {# recipient} other {# recipients}} whose message failed. Everyone who already got it is left alone, and a message is charged only when it is delivered.",
+        "exportFailed": "The export could not be downloaded.",
+        "deleteTitle": "Delete this broadcast?",
+        "deleteOne": "Deletes this broadcast and its recipients. This cannot be undone.",
+        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone."
       },
       "panel": {
         "title": "Created with the guided flow",

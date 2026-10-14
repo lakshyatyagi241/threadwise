@@ -5,7 +5,35 @@ summary: Choose the WhatsApp number, then send a template or a message to contac
 area: campaigns
 order: 20
 documents: [nav:campaigns]
-keywords: [campaign, broadcast, create, number, sender, empty, personal number, pending, verified, meta, cloud api, guided, wizard, template, audience, contacts, groups, segments, csv, filter, schedule, recurring, retries, test, variables, credit]
+keywords:
+  [
+    campaign,
+    broadcast,
+    create,
+    number,
+    sender,
+    empty,
+    personal number,
+    pending,
+    verified,
+    meta,
+    cloud api,
+    guided,
+    wizard,
+    template,
+    audience,
+    contacts,
+    groups,
+    segments,
+    csv,
+    filter,
+    schedule,
+    recurring,
+    retries,
+    test,
+    variables,
+    credit,
+  ]
 ---
 
 ## What it is for
@@ -48,7 +76,7 @@ With a verified Meta number the builder walks you through sending an approved Wh
    - **Send to groups** lists your contact groups (your marketing lists) with their member counts. Tick any number.
    - **Send to segments** lists your saved segments. Tick any number.
    - **Send via CSV** takes a file of numbers (up to 2 MB and 10,000 rows) with a column named `phone`, and optionally `first_name`, `last_name` or `name` and `country_code`. Download the template from the panel. The file is checked on the server: numbers are put in international format, repeated numbers are kept once, and rows that cannot be used are listed with their line number (the whole list downloads as a CSV). You see how many numbers are valid, duplicate, invalid, opted out and new. Numbers that are already contacts are matched by phone. New numbers are added as contacts when you launch. The upload is kept for 7 days.
-4. **Schedule.** Choose **When to send** (see below). You can also set an **Auto-end date** (a send stops at that moment; a recurring campaign ends by its own rule instead), turn on **Activate Retries**, tune **Smart Delivery** (a random delay between messages, batches with a pause, a daily limit and the hours it may send in; blank uses the platform default) and untick **Track link clicks** if you do not want links wrapped to count clicks.
+4. **Schedule.** Choose **When to send** (see below). You can also set an **Auto-end date** (a send stops at that moment; a recurring campaign ends by its own rule instead), turn on **Activate Retries**, tune **Smart Delivery** (a random delay between messages, batches with a pause, a daily limit and the hours it may send in; blank uses the platform default) untick **Retry failed messages automatically** to send each message once (it is on by default: a message that fails for a temporary reason is tried again a few times), and untick **Track link clicks** if you do not want links wrapped to count clicks.
 5. **Review.** The credit check compares your wallet with the estimated cost, with a breakdown by country. If the balance is too low, **Next** is blocked and **Top up** takes you to add credit. The summary lists everything, with **Edit** links back to the step that owns each value. You can send a test first (see below). The last button sends, schedules or starts the recurring campaign.
 
 ## Send a test
@@ -71,7 +99,9 @@ The last button reads **Send now**, **Schedule** or **Start recurring**. It open
 
 ## The status page
 
-It shows the status, the schedule in words, the next run, the runs with their counts, and the retry summary. If you have the permission to control campaigns, you can **Pause**, **Resume** or **Cancel** it. Each run links to its campaign page. The page refreshes every 15 seconds.
+It shows the status, the schedule in words, the next run, the runs with their counts, and the retry summary. If you have the permission to control campaigns, you can **Pause**, **Resume** or **Cancel** it. When a finished run has failed recipients, **Retry failed (N)** sends again to just those recipients (a recurring campaign does it for every finished run); everyone who already got the message is left alone, and a message is charged only when it is delivered. It asks you to confirm first, and it is not offered while the failing run is still going. Each run links to its campaign page. The page refreshes every 15 seconds.
+
+**Export rows** downloads the recipients as a CSV (needs the permission to export campaigns). For a recurring campaign it is one file with a **Run** column, run by run. **Delete** (needs the permission to delete campaigns) removes a one-off campaign that is still waiting for its time or that failed outright, together with its recipients. A recurring campaign can be deleted, with the runs it had planned, only while none of its runs has sent a message; once one has, its history is kept and you cancel it instead. The campaign page of any run has a **Broadcast status** button that opens this page.
 
 ## If something looks wrong
 

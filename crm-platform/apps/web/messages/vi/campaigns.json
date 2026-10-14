@@ -403,7 +403,9 @@
         "smartIntro": "Để trống để dùng nhịp gửi mặc định của không gian làm việc. Các quy tắc này giãn cách việc gửi để danh sách lớn trông tự nhiên và tránh bị WhatsApp phát hiện.",
         "smartZone": "Thời gian theo {zone}.",
         "throttleMaxHint": "Thời gian chờ lâu nhất trước một tin nhắn.",
-        "batchPauseHint": "Số phút nghỉ sau mỗi lô."
+        "batchPauseHint": "Số phút nghỉ sau mỗi lô.",
+        "retryFailed": "Tự động thử lại các tin nhắn thất bại",
+        "retryFailedHint": "Tin nhắn thất bại vì lý do tạm thời sẽ được thử lại vài lần, có khoảng nghỉ giữa các lần. Tắt để mỗi tin nhắn chỉ gửi một lần."
       },
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
       "draftChip": "Bản nháp / chưa lưu",
@@ -687,7 +689,8 @@
         "edit": "Sửa",
         "resendAll": "Gửi lại cho tất cả",
         "export": "Xuất các dòng",
-        "delete": "Xóa"
+        "delete": "Xóa",
+        "broadcastStatus": "Trạng thái chiến dịch gửi"
       },
       "kpi": {
         "recipients": "Người nhận",
@@ -707,7 +710,8 @@
         "replies": "Phản hồi ({count})",
         "failures": "Lỗi ({count})",
         "optouts": "Hủy nhận tin ({count})",
-        "summary": "Tóm tắt"
+        "summary": "Tóm tắt",
+        "statistics": "Thống kê"
       },
       "cancel": "Hủy",
       "deleted": "Đã xóa chiến dịch.",
@@ -963,6 +967,41 @@
           "retry": "Thử lại"
         },
         "latestRun": "Đang hiện lần gửi {occurrence}, lần mới nhất của chuỗi này."
+      },
+      "live": {
+        "badge": "Trực tiếp",
+        "updated": "cập nhật {time}",
+        "queued": "{count} đang chờ gửi",
+        "processing": "{count} đang được gửi"
+      },
+      "statistics": {
+        "loadFailed": "Không tải được thống kê.",
+        "rates": {
+          "delivered": "Tỷ lệ gửi thành công",
+          "deliveredHint": "trên tổng đối tượng",
+          "read": "Tỷ lệ đã đọc",
+          "readHint": "trên số đã gửi tới",
+          "replies": "Tỷ lệ phản hồi",
+          "clicks": "Tỷ lệ nhấp",
+          "failed": "Tỷ lệ thất bại"
+        },
+        "breakdown": {
+          "title": "Hiện mỗi người nhận đang ở đâu",
+          "hint": "Mỗi người trong {total} người nhận được tính một lần, theo trạng thái hiện tại.",
+          "empty": "Chiến dịch này chưa có người nhận."
+        },
+        "timeline": {
+          "title": "Dòng thời gian",
+          "created": "Đã tạo",
+          "scheduled": "Dự kiến bắt đầu",
+          "firstSent": "Tin nhắn đầu tiên được gửi",
+          "lastRun": "Lần chạy gần nhất",
+          "finished": "Hoàn tất",
+          "notYet": "Chưa có"
+        },
+        "live": "Đang theo dõi trực tiếp",
+        "atRest": "Số liệu cuối cùng",
+        "updated": "Cập nhật {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1295,7 @@
         "messages": "Tin nhắn",
         "modePlan": "{count, plural, other {Gói của bạn bao gồm các tin nhắn đầu tiên; ví thanh toán cho # tin nhắn vượt mức.}}",
         "modeWallet": "{count, plural, other {Mỗi tin nhắn đã nhận đều bị tính vào ví của bạn: # tin nhắn.}}",
+        "platformOwned": "Không gian làm việc này không bị tính phí khi gửi, nên sẽ không trừ gì từ ví của bạn.",
         "breakdown": "Chi phí theo quốc gia",
         "country": "Quốc gia",
         "unitPrice": "Mỗi tin nhắn",
@@ -1485,12 +1525,17 @@
         "action": {
           "pause": "Tạm dừng",
           "resume": "Tiếp tục",
-          "cancel": "Hủy đợt gửi hàng loạt"
+          "cancel": "Hủy đợt gửi hàng loạt",
+          "retryFailed": "Thử lại các tin thất bại ({count})",
+          "export": "Xuất các dòng",
+          "delete": "Xóa"
         },
         "done": {
           "pause": "Đã tạm dừng đợt gửi hàng loạt.",
           "resume": "Đã tiếp tục đợt gửi hàng loạt.",
-          "cancel": "Đã hủy đợt gửi hàng loạt."
+          "cancel": "Đã hủy đợt gửi hàng loạt.",
+          "retryFailed": "Đang thử lại {count, plural, other {# người nhận thất bại}}.",
+          "delete": "Đã xóa chiến dịch gửi."
         },
         "failed": "Không thành công. Hãy thử lại.",
         "noControl": "Bạn không có quyền tạm dừng, tiếp tục hoặc hủy gửi hàng loạt.",
@@ -1509,7 +1554,13 @@
           "cancelled": "Đã hủy",
           "active": "Đang hoạt động",
           "ended": "Đã kết thúc"
-        }
+        },
+        "retryTitle": "Thử lại các tin nhắn thất bại?",
+        "retryMessage": "Gửi lại cho {count, plural, other {# người nhận}} có tin nhắn bị lỗi. Những người đã nhận được sẽ không bị gửi lại, và tin nhắn chỉ bị tính phí khi được gửi thành công.",
+        "exportFailed": "Không tải được tệp xuất.",
+        "deleteTitle": "Xóa chiến dịch gửi này?",
+        "deleteOne": "Xóa chiến dịch gửi này và người nhận của nó. Không thể hoàn tác.",
+        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác."
       },
       "panel": {
         "title": "Được tạo bằng Tạo gửi hàng loạt",

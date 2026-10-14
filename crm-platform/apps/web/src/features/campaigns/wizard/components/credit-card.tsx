@@ -78,19 +78,27 @@ export function CreditCard({ credit }: { credit: CreditQuery }) {
               </dd>
             </div>
           </dl>
-          <p className="text-sm font-medium" data-testid="charged-now">
-            {c.billingMode === 'plan'
-              ? t('chargedPlan', {
-                  amount: money(c.estimatedCostMinor),
-                  covered: c.recipients - c.chargeableMessages,
-                })
-              : t('chargedWallet', { amount: money(c.estimatedCostMinor) })}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {c.billingMode === 'plan'
-              ? t('modePlan', { count: c.chargeableMessages })
-              : t('modeWallet', { count: c.chargeableMessages })}
-          </p>
+          {c.platformOwned ? (
+            <p className="text-sm font-medium" data-testid="charged-now">
+              {t('platformOwned')}
+            </p>
+          ) : (
+            <>
+              <p className="text-sm font-medium" data-testid="charged-now">
+                {c.billingMode === 'plan'
+                  ? t('chargedPlan', {
+                      amount: money(c.estimatedCostMinor),
+                      covered: c.recipients - c.chargeableMessages,
+                    })
+                  : t('chargedWallet', { amount: money(c.estimatedCostMinor) })}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {c.billingMode === 'plan'
+                  ? t('modePlan', { count: c.chargeableMessages })
+                  : t('modeWallet', { count: c.chargeableMessages })}
+              </p>
+            </>
+          )}
           {c.lines.length > 0 && (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">

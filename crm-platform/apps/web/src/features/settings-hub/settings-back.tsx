@@ -26,14 +26,14 @@ export function SettingsBack({ always = false }: { always?: boolean }) {
   const inMarketplace = tile.section === MARKETPLACE_TOOLS_SECTION;
   const tab = toolTabForTile(tile.id);
   const link =
-    'rounded-sm outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-primary';
+    'inline-flex min-h-6 items-center rounded-sm outline-none hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-primary';
   return (
     <nav aria-label={t('settings.breadcrumb')} className="mb-4">
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
         <li>
           <Link
             href={inMarketplace ? mktRoutes.integrations : '/settings'}
-            className={`inline-flex items-center gap-1 font-medium ${link}`}
+            className={`gap-1 font-medium ${link}`}
           >
             <svg
               viewBox="0 0 16 16"

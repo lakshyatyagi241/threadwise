@@ -403,7 +403,9 @@
         "smartIntro": "Çalışma alanının varsayılan hızını kullanmak için boş bırakın. Bu kurallar gönderimleri aralıklandırır; böylece büyük bir liste insan gibi görünür ve WhatsApp'ın engelleme radarının altında kalır.",
         "smartZone": "Saatler: {zone}.",
         "throttleMaxHint": "Bir mesajdan önceki en uzun bekleme.",
-        "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika)."
+        "batchPauseHint": "Her gruptan sonra dinlenme süresi (dakika).",
+        "retryFailed": "Başarısız mesajları otomatik olarak yeniden dene",
+        "retryFailedHint": "Geçici bir nedenle başarısız olan mesaj, denemeler arasında bekleyerek birkaç kez yeniden denenir. Her mesajı yalnızca bir kez göndermek için kapatın."
       },
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
       "draftChip": "Taslak / kaydedilmemiş",
@@ -687,7 +689,8 @@
         "edit": "Düzenle",
         "resendAll": "Tümüne yeniden gönder",
         "export": "Satırları dışa aktar",
-        "delete": "Sil"
+        "delete": "Sil",
+        "broadcastStatus": "Yayın durumu"
       },
       "kpi": {
         "recipients": "Alıcılar",
@@ -707,7 +710,8 @@
         "replies": "Yanıtlar ({count})",
         "failures": "Hatalar ({count})",
         "optouts": "Çıkanlar ({count})",
-        "summary": "Özet"
+        "summary": "Özet",
+        "statistics": "İstatistikler"
       },
       "cancel": "İptal",
       "deleted": "Kampanya silindi.",
@@ -963,6 +967,41 @@
           "retry": "Tekrar dene"
         },
         "latestRun": "{occurrence}. gönderim gösteriliyor; bu serinin en yenisi."
+      },
+      "live": {
+        "badge": "Canlı",
+        "updated": "güncellendi {time}",
+        "queued": "{count} gönderim bekliyor",
+        "processing": "{count} şu anda gönderiliyor"
+      },
+      "statistics": {
+        "loadFailed": "İstatistikler yüklenemedi.",
+        "rates": {
+          "delivered": "Teslim oranı",
+          "deliveredHint": "hedef kitlenin",
+          "read": "Okunma oranı",
+          "readHint": "teslim edilenlerin",
+          "replies": "Yanıt oranı",
+          "clicks": "Tıklama oranı",
+          "failed": "Hata oranı"
+        },
+        "breakdown": {
+          "title": "Herkes şu anda nerede",
+          "hint": "{total} alıcının her biri bulunduğu durumda bir kez sayılır.",
+          "empty": "Bu kampanyada henüz alıcı yok."
+        },
+        "timeline": {
+          "title": "Zaman çizelgesi",
+          "created": "Oluşturuldu",
+          "scheduled": "Başlama zamanı",
+          "firstSent": "İlk mesaj gönderildi",
+          "lastRun": "Son çalıştırma",
+          "finished": "Tamamlandı",
+          "notYet": "Henüz yok"
+        },
+        "live": "Canlı takip ediliyor",
+        "atRest": "Nihai rakamlar",
+        "updated": "Güncellendi {time}"
       }
     },
     "wizard": {
@@ -1256,6 +1295,7 @@
         "messages": "Mesajlar",
         "modePlan": "{count, plural, one {Planınız ilk mesajları karşılar; bunların ötesindeki # mesajı cüzdan öder.} other {Planınız ilk mesajları karşılar; bunların ötesindeki # mesajı cüzdan öder.}}",
         "modeWallet": "{count, plural, one {İletilen her mesaj cüzdanınızdan ücretlendirilir: # mesaj.} other {İletilen her mesaj cüzdanınızdan ücretlendirilir: # mesaj.}}",
+        "platformOwned": "Bu çalışma alanında gönderimler ücretlendirilmez, bu yüzden cüzdanınızdan hiçbir şey düşülmez.",
         "breakdown": "Ülkeye göre maliyet",
         "country": "Ülke",
         "unitPrice": "Mesaj başına",
@@ -1485,12 +1525,17 @@
         "action": {
           "pause": "Duraklat",
           "resume": "Devam et",
-          "cancel": "Toplu gönderimi iptal et"
+          "cancel": "Toplu gönderimi iptal et",
+          "retryFailed": "Başarısızları yeniden dene ({count})",
+          "export": "Satırları dışa aktar",
+          "delete": "Sil"
         },
         "done": {
           "pause": "Toplu gönderim duraklatıldı.",
           "resume": "Toplu gönderim devam ettirildi.",
-          "cancel": "Toplu gönderim iptal edildi."
+          "cancel": "Toplu gönderim iptal edildi.",
+          "retryFailed": "{count, plural, other {# başarısız alıcı}} için yeniden deneniyor.",
+          "delete": "Yayın silindi."
         },
         "failed": "İşlem başarısız oldu. Tekrar deneyin.",
         "noControl": "Toplu gönderimleri duraklatma, devam ettirme veya iptal etme izniniz yok.",
@@ -1509,7 +1554,13 @@
           "cancelled": "İptal edildi",
           "active": "Etkin",
           "ended": "Sona erdi"
-        }
+        },
+        "retryTitle": "Başarısız mesajlar yeniden denensin mi?",
+        "retryMessage": "Mesajı başarısız olan {count, plural, other {# alıcıya}} yeniden gönderir. Mesajı zaten alanlara dokunulmaz ve mesaj yalnızca teslim edildiğinde ücretlendirilir.",
+        "exportFailed": "Dışa aktarma indirilemedi.",
+        "deleteTitle": "Bu yayın silinsin mi?",
+        "deleteOne": "Bu yayını ve alıcılarını siler. Geri alınamaz.",
+        "deleteSeries": "Bu yinelenen yayını ve planlanan çalıştırmalarını siler. Hiçbir şey gönderilmediği için geçmiş kaybolmaz. Geri alınamaz."
       },
       "panel": {
         "title": "Toplu gönderim oluştur ile oluşturuldu",

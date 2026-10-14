@@ -9,6 +9,8 @@ import {
   wizardBroadcastListSchema,
   wizardContactsPageSchema,
   wizardControlResponseSchema,
+  wizardDeleteResponseSchema,
+  wizardRetryFailedResponseSchema,
   wizardCsvReportSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
@@ -223,6 +225,21 @@ export const controlBroadcast = (id: string, action: BroadcastAction) =>
     method: 'POST',
     body: {},
     schema: wizardControlResponseSchema,
+  });
+
+/** Delete a launched broadcast: a one-off with its recipients, or a recurring series that has not sent anything yet. */
+export const deleteBroadcast = (id: string) =>
+  apiFetch(`${BASE}/broadcasts/${id}`, { method: 'DELETE', schema: wizardDeleteResponseSchema });
+
+/** The recipients of a launched broadcast as a CSV download (a series: every run, with a Run column). */
+export const exportBroadcastPath = (id: string) => `/broadcast-wizard/broadcasts/${id}/export`;
+
+/** Retry failed: the recipients whose message failed go back in the queue (a series: in every finished run). */
+export const retryFailedBroadcast = (id: string) =>
+  apiFetch(`${BASE}/broadcasts/${id}/retry-failed`, {
+    method: 'POST',
+    body: {},
+    schema: wizardRetryFailedResponseSchema,
   });
 
 // ---------------------------------------------------------------------------------------- the audience modes

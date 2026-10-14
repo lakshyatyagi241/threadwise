@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { nav } from './nav';
 import { settings } from './settings';
 
-describe('Email (Gmail) is an integration', () => {
-  it('has its tile in Settings > Integrations, locked (not hidden) when the plan lacks the feature', () => {
+describe('Email (Gmail) is a channel', () => {
+  it('has its tile in Settings > Channels, locked (not hidden) when the plan lacks the feature', () => {
     expect(settings).toHaveLength(1);
     expect(settings[0]).toMatchObject({
       id: 'email',
-      section: 'integrations',
+      section: 'channels',
       href: '/email',
       gates: { permission: 'mail.mailboxes.read', planFeature: 'email_channel' },
     });

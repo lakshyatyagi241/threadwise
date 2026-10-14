@@ -181,6 +181,8 @@ export const wpcampaigns = pgTable(
     flowIdB: idColumn('flow_id_b'),
     useAttributes: boolean('use_attributes').notNull().default(false),
     trackingEnabled: boolean('tracking_enabled').notNull().default(true),
+    /** Retry a transient failure under the platform's retry settings; false makes the first failure final. */
+    retryFailed: boolean('retry_failed').notNull().default(true),
     scheduleType: text('schedule_type').notNull().default('now'),
     sendDate: date('send_date'),
     sendTime: time('send_time'),

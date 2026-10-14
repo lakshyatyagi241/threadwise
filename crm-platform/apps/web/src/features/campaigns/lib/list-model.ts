@@ -78,8 +78,11 @@ export const can = {
   resume: (s: CampaignStatus) => s === 'paused' || s === 'failed' || s === 'cancelled',
   edit: (s: CampaignStatus) => s === 'draft' || s === 'scheduled' || s === 'paused',
   resend: (s: CampaignStatus) => s === 'completed' || s === 'failed' || s === 'cancelled',
-  /** Only a campaign that is still waiting for its time can be deleted; one that has run keeps its history. */
-  delete: (s: CampaignStatus) => s === 'scheduled',
+  /**
+   * Only a campaign that is still waiting for its time, or one that failed outright (Broadcast allowed exactly these two), can be
+   * deleted; one that has run keeps its history.
+   */
+  delete: (s: CampaignStatus) => s === 'scheduled' || s === 'failed',
 };
 
 export const TYPE_LABEL: Record<

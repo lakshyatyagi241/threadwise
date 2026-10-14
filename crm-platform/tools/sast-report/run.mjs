@@ -89,7 +89,7 @@ const RULES = [
     id: 'EVAL',
     sev: 'high',
     title: 'eval / new Function / vm',
-    re: /\beval\(|new Function\(|\bvm\.(runIn|Script)/,
+    re: /(?<![.\w])eval\(|new Function\(|\bvm\.(runIn|Script)|new vm\.Script/,
     prod: true,
     why: 'Executes strings as code.',
     check: 'Confirm the input is never user-influenced.',
@@ -444,6 +444,31 @@ if (have('trivy')) {
   }
 } else tools.push({ name: 'trivy', status: 'not installed', note: 'lockfile scan not run' });
 
+// ---------------------------------------------------------------- baseline
+// tools/sast-report/baseline.json: [{ "rule": "EVAL", "file": "apps/...", "contains": "text on the line", "reason": "why this is not a vulnerability" }]
+// A reviewed exception is listed in the report but does not count, and does not trip --fail-on. A reason is mandatory.
+let baseline = [];
+try {
+  baseline = JSON.parse(readFileSync(join(ROOT, 'tools/sast-report/baseline.json'), 'utf8')).filter(
+    (b) => b.reason,
+  );
+} catch {
+  /* no baseline yet */
+}
+const reviewed = [];
+for (const [id, list] of hits) {
+  hits.set(
+    id,
+    list.filter((h) => {
+      const b = baseline.find(
+        (x) => x.rule === id && x.file === h.file && h.text.includes(x.contains ?? ''),
+      );
+      if (b) reviewed.push({ rule: id, file: h.file, line: h.line, reason: b.reason });
+      return !b;
+    }),
+  );
+}
+
 // ---------------------------------------------------------------- model
 const rules = RULES.map((r) => ({ ...r, re: undefined, hits: hits.get(r.id) })).filter(
   (r) => r.hits.length,
@@ -464,7 +489,7 @@ const meta = {
   filesScanned,
   roots: scanRoots.map((p) => relative(ROOT, p)),
 };
-const model = { meta, tools, sevCount, rules, advisories, externalFindings };
+const model = { meta, tools, sevCount, rules, advisories, externalFindings, reviewed };
 
 // ---------------------------------------------------------------- render
 const esc = (s) =>
@@ -534,6 +559,7 @@ code{font:12px ui-monospace,monospace;word-break:break-all}a{color:inherit}</sty
 <table><tr><th>Tool</th><th>Status</th><th>Note</th></tr>${tools.map((t) => `<tr><td>${t.name}</td><td>${t.status}</td><td>${esc(t.note)}</td></tr>`).join('')}</table>
 <h2>Weak points (pattern rules)</h2>${ruleBlocks || '<p class="muted">No rule matched.</p>'}
 <h2>Dependency advisories</h2>${adv}
+<h2>Reviewed exceptions (${reviewed.length})</h2>${reviewed.length ? `<table><tr><th>Rule</th><th>Location</th><th>Why it is not a vulnerability</th></tr>${reviewed.map((r) => `<tr><td>${r.rule}</td><td><code>${esc(r.file)}:${r.line}</code></td><td>${esc(r.reason)}</td></tr>`).join('')}</table>` : '<p class="muted">None.</p>'}
 <h2>External scanner findings</h2>${ext}
 </body></html>`;
 }
