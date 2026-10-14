@@ -152,15 +152,27 @@ describe.each(ROWS)('creating a $name twice', (row) => {
 });
 
 describe('one key, two different requests', () => {
-  it.fails("the second request must not get the first request's reply", async () => {
-    const t = await api.signup('ds-mismatch');
-    const key = 'k-mismatch';
+  it("a different route under the same key runs on its own and never gets the first request's reply", async () => {
+    const t = await api.signup('ds-mismatch-route');
+    const key = 'k-mismatch-route';
     const first = await post(t, '/v2/tags', { name: 'Original' }, key);
     const second = await post(t, '/v2/companies', { name: 'Different thing' }, key);
     expect(first.status).toBe(201);
-    // DEFECT (reported, fixed in QA task 71): the stored reply is keyed by organisation and key only, so a different route or body
-    // under the same key is answered with the first reply and creates nothing. Expected: a 422 saying the key was used for a
-    // different request. This is marked `fails` so the test turns red the day the defect is fixed, and then the marker comes off.
-    expect(second.status).toBe(422);
+    // The key is scoped to who, which method and which path (ADR 0029), so this is a different operation, not a replay.
+    expect(second.status).toBe(201);
+    expect(second.body).not.toEqual(first.body);
+    expect(second.body).toMatchObject({ name: 'Different thing' });
+  });
+
+  it('the same route and key with a different body is 409 IDEMPOTENCY_KEY_REUSED and creates nothing', async () => {
+    const t = await api.signup('ds-mismatch-body');
+    const key = 'k-mismatch-body';
+    const first = await post(t, '/v2/companies', { name: 'Original co' }, key);
+    const before = await count(t, 'companies');
+    const second = await post(t, '/v2/companies', { name: 'Another co' }, key);
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(409);
+    expect(second.body.code).toBe('IDEMPOTENCY_KEY_REUSED');
+    expect(await count(t, 'companies')).toBe(before);
   });
 });
