@@ -53,6 +53,13 @@ describe('deal filters', () => {
     expect(filtersToSearch({ ...DEFAULT_FILTERS, status: 'won' })).toBe('');
   });
 
+  it('only remembers the stage filter (the CRM dashboard funnel link) for the list, and reads it back', () => {
+    expect(filtersToSearch({ ...DEFAULT_FILTERS, stage: 's1' })).toBe('');
+    const f = { ...DEFAULT_FILTERS, view: 'list' as const, stage: 's1', status: 'open' as const };
+    expect(filtersToSearch(f)).toBe('?status=open&stage=s1&view=list');
+    expect(parseFilters(params(filtersToSearch(f)))).toEqual(f);
+  });
+
   it('knows when a filter is active', () => {
     expect(hasActiveFilter(DEFAULT_FILTERS)).toBe(false);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, q: '  ' })).toBe(false);
