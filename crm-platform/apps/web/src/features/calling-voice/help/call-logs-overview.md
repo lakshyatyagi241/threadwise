@@ -29,7 +29,7 @@ Call logs lists every WhatsApp call to or from your numbers, with its length, wh
 2. Pick a time range on the left: **Last 24h**, **Last 7 days** or **Last 30 days**. For other days, fill in **From** and **To** under Custom range and select **Apply**.
 3. Narrow the list with **Status** on the left, or with the search bar: type part of a phone number or a contact name, and choose a direction, a number or the teammate who handled the call. Select **Filter**.
 4. Select a call's name or **Open** to see its detail. **Open contact** and **Open in inbox** take you to the person and to the conversation.
-5. To listen, select **Play recording** on the call. The player works for a few minutes. If the link has run out, press play again and a new one is made.
+5. To see who agreed to the recording, when, and when it will be deleted, look at the **Recording and consent** card on the call. To listen, select **Play recording** on the call. The player works for a few minutes. If the link has run out, press play again and a new one is made.
 
 The filters are kept in the address of the page, so you can bookmark a view or send it to a teammate, and a reload keeps it.
 
@@ -46,6 +46,7 @@ Select **Analytics** to see the calls of the chosen range as: the share answered
 ## Who sees what
 
 - You need the right to view the call log. Its record scope decides whose calls you see: all calls, your team's, or only the ones you handled. A call outside your scope is not shown, and its address answers as if it did not exist.
+- Recordings are deleted automatically when the keeping period you set in [Recording calls](help:call-recording) ends. An owner or admin can also delete one recording by hand, and the call stays in the log.
 - Playing a recording needs its own right. Every time someone presses **Play recording**, it is written to the audit trail with their name.
 - Call logs follows your plan: it needs the **WhatsApp calling** plan feature, like placing calls. On a plan without it the menu entry shows a lock.
 
