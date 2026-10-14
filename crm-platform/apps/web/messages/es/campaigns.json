@@ -1256,6 +1256,7 @@
         "messages": "Mensajes",
         "modePlan": "{count, plural, one {Tu plan cubre los primeros mensajes; el monedero paga # mensaje más allá de ellos.} other {Tu plan cubre los primeros mensajes; el monedero paga # mensajes más allá de ellos.}}",
         "modeWallet": "{count, plural, one {Cada mensaje entregado se cobra a tu monedero: # mensaje.} other {Cada mensaje entregado se cobra a tu monedero: # mensajes.}}",
+        "platformOwned": "Este espacio de trabajo no se factura por los envíos, así que no se cobra nada de tu monedero.",
         "breakdown": "Coste por país",
         "country": "País",
         "unitPrice": "Por mensaje",

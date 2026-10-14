@@ -184,6 +184,7 @@ export const credit = (over: Partial<WizardCreditCheck> = {}): WizardCreditCheck
   chargeableMessages: 950,
   estimatedCostMinor: 9_500,
   fullCostMinor: 9_500,
+  platformOwned: false,
   lines: [
     {
       country: 'IN',

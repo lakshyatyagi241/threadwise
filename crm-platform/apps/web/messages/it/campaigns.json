@@ -1256,6 +1256,7 @@
         "messages": "Messaggi",
         "modePlan": "{count, plural, one {Il tuo piano copre i primi messaggi; il wallet paga # messaggio oltre quelli.} other {Il tuo piano copre i primi messaggi; il wallet paga # messaggi oltre quelli.}}",
         "modeWallet": "{count, plural, one {Ogni messaggio consegnato viene addebitato sul tuo wallet: # messaggio.} other {Ogni messaggio consegnato viene addebitato sul tuo wallet: # messaggi.}}",
+        "platformOwned": "Questo spazio di lavoro non viene fatturato per gli invii, quindi non viene addebitato nulla al tuo portafoglio.",
         "breakdown": "Costo per paese",
         "country": "Paese",
         "unitPrice": "Per messaggio",
