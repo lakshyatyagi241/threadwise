@@ -105,6 +105,7 @@ import {
   ManualTransferGateway,
 } from '../../infra/providers/invoice-payments/invoice-payment-gateways';
 import { ContactConsentModule } from '../contact-consent';
+import { PrivacyModule } from '../privacy';
 import { CreditNotesController } from './invoicing/credit-notes.controller';
 import { CreditNotesRepository } from './invoicing/credit-notes.repository';
 import { CreditNotesService } from './invoicing/credit-notes.service';
@@ -176,6 +177,7 @@ import { TagsService } from './tags/tags.service';
     CheckoutOrdersMerchantPaymentsModule,
     PlatformSettingsModule,
     ContactConsentModule,
+    PrivacyModule,
   ],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and

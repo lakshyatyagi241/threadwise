@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "閉じる",
+      "retry": "再試行",
+      "loading": "読み込み中...",
+      "cancel": "キャンセル",
+      "back": "戻る",
+      "next": "次へ",
+      "close": "閉じる",
+      "save": "保存"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "この操作を行う権限がありません。",
+      "notFound": "このリクエストは存在しません。",
+      "subjectNotFound": "この人物はこのワークスペースに存在しません。",
+      "stateInvalid": "このリクエストは現在の状態では実行できません。再読み込みして状態を確認してください。",
+      "notVerified": "先に本人確認を行ってください。",
+      "legalHold": "このリクエストは法的保全中です。消去する前に保全を解除してください。",
+      "confirmationRequired": "先にプレビューを実行し、確認用フレーズを正確に入力してください。",
+      "exportInProgress": "このリクエストのエクスポートはすでに準備中です。",
+      "exportNotReady": "ファイルの準備ができていないか、期限が切れています。新しいエクスポートを準備してください。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってからもう一度お試しください。",
+      "validation": "無効な値があります。フォームを確認して、もう一度お試しください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    },
+    "type": {
+      "access": "開示",
+      "export": "エクスポート",
+      "erasure": "消去",
+      "rectification": "訂正",
+      "restriction": "制限",
+      "objection": "異議",
+      "withdrawal": "同意の撤回",
+      "portability": "データポータビリティ"
+    },
+    "typeHint": {
+      "access": "本人が、当社が保有する自分のデータについて問い合わせます。ファイルで完了します。",
+      "export": "本人のデータのコピーです。ファイルで完了します。",
+      "erasure": "本人のデータを削除します。先にプレビューで確認します。",
+      "rectification": "誤ったデータを訂正します。手作業で修正し、リクエストを完了します。",
+      "restriction": "データの利用を一時的に停止します。手作業で対応し、リクエストを完了します。",
+      "objection": "本人がデータの利用に異議を申し立てます。手作業で対応し、リクエストを完了します。",
+      "withdrawal": "本人が同意を撤回します。手作業で対応し、リクエストを完了します。",
+      "portability": "他の場所へ移せる機械可読形式のコピーです。ファイルで完了します。"
+    },
+    "status": {
+      "received": "受付済み",
+      "verifying": "本人確認中",
+      "in_progress": "対応中",
+      "completed": "完了",
+      "rejected": "却下",
+      "expired": "期限切れ"
+    },
+    "channel": {
+      "email": "メール",
+      "whatsapp": "WhatsApp",
+      "phone": "電話",
+      "in_person": "対面",
+      "portal": "ポータル",
+      "staff": "スタッフが入力",
+      "other": "その他"
+    },
+    "method": {
+      "channel_code": "本人のチャネルにコードを送信",
+      "email_link": "メールでリンクを送信",
+      "known_contact": "すでに保有している番号またはメールで連絡",
+      "existing_session": "本人のアカウントでサインイン済み",
+      "id_document_checked": "身分証明書を確認済み",
+      "other": "その他"
+    },
+    "disposition": {
+      "deleted": "削除済み",
+      "anonymised": "匿名化済み",
+      "cascaded": "連鎖削除",
+      "retained": "保持",
+      "unlinked": "関連付け解除"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, other {残り#日}}",
+      "dueToday": "本日期限",
+      "overdue": "{count, plural, other {#日超過}}",
+      "closed": "クローズ",
+      "dueOn": "期限 {date}"
+    },
+    "list": {
+      "title": "データリクエスト",
+      "subtitle": "保有しているデータについて本人から寄せられるリクエストです。開示、エクスポート、消去などがあります。それぞれに期限と対応の記録があります。",
+      "newRequest": "新規リクエスト",
+      "settings": "設定",
+      "empty": "データリクエストはまだありません。",
+      "emptyFiltered": "これらの条件に一致するリクエストはありません。",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中...",
+      "columns": {
+        "reference": "参照番号",
+        "type": "種類",
+        "subject": "本人",
+        "status": "ステータス",
+        "due": "期限"
+      },
+      "filters": {
+        "label": "フィルター",
+        "status": "ステータス",
+        "type": "種類",
+        "any": "すべて",
+        "overdue": "期限超過のみ"
+      },
+      "open": "リクエスト {reference} を開く"
+    },
+    "settings": {
+      "title": "期限",
+      "slaDays": "リクエストへの回答日数",
+      "slaHint": "リクエストを受け付けてから期限までの日数です。既定値は30です。",
+      "saved": "設定を保存しました。",
+      "invalid": "1から90までの整数で日数を入力してください。"
+    },
+    "wizard": {
+      "title": "新規データリクエスト",
+      "step": "ステップ {current} / {total}",
+      "person": {
+        "title": "本人を検索",
+        "search": "名前、電話番号、メールで検索",
+        "searchHint": "2文字以上入力してください。",
+        "searching": "検索中...",
+        "none": "該当する人が見つかりません。下で電話番号またはメールを使用できます。",
+        "pick": "{name} を選択",
+        "unnamed": "名前なし",
+        "kindContact": "連絡先",
+        "kindLead": "リード",
+        "selected": "選択中: {name}",
+        "other": "連絡先に未登録",
+        "otherValue": "電話番号またはメール",
+        "otherHint": "未登録の人向けです。この値でデータを検索します。",
+        "useOther": "この値を使用",
+        "clear": "別の人を選択"
+      },
+      "kind": {
+        "title": "本人は何を求めていますか?"
+      },
+      "details": {
+        "title": "詳細",
+        "channel": "リクエストはどのような経路で届きましたか?",
+        "note": "社内メモ",
+        "noteHint": "任意。チームだけが見られます。個人情報は書かないでください。",
+        "history": "会話履歴",
+        "historyHint": "本人のデータを消去するときの会話の扱いです。",
+        "historyDelete": "会話、メッセージ、ファイルを削除する",
+        "historyAnonymise": "本人を特定できない形で会話を残す"
+      },
+      "create": "リクエストを作成",
+      "creating": "作成中...",
+      "created": "リクエスト {reference} を作成しました。"
+    },
+    "detail": {
+      "back": "データリクエスト",
+      "loading": "読み込み中...",
+      "received": "受付日 {date}",
+      "channel": "チャネル: {channel}",
+      "history": {
+        "delete": "消去時: 会話を削除します",
+        "anonymise": "消去時: 本人を特定できない形で会話を残します"
+      },
+      "note": "社内メモ",
+      "legalHoldBadge": "法的保全",
+      "timeline": {
+        "title": "タイムライン",
+        "empty": "記録はまだありません。",
+        "by": "{actor} による",
+        "system": "システム",
+        "event": {
+          "created": "リクエストを作成",
+          "verification_started": "本人確認を開始",
+          "verified": "本人確認済み",
+          "verification_failed": "本人確認できず",
+          "hold_set": "法的保全を設定",
+          "hold_released": "法的保全を解除",
+          "rejected": "リクエストを却下",
+          "export_requested": "エクスポートを要求",
+          "export_downloaded": "エクスポートをダウンロード",
+          "erase_previewed": "消去をプレビュー",
+          "erased": "データを消去",
+          "completed": "リクエストを完了",
+          "other": "更新"
+        }
+      },
+      "verify": {
+        "title": "本人確認",
+        "intro": "エクスポートや消去を行う前に、リクエストした人が本人であることを確認してください。",
+        "state": {
+          "none": "まだ確認されていません。",
+          "verified": "{date} に確認済み ({method})。",
+          "evidence": "証跡の参照: {ref}"
+        },
+        "method": "どのように確認しましたか?",
+        "evidence": "証跡の参照ID",
+        "evidenceHint": "参照IDのみ入力し、書類は絶対にアップロードしないでください。チケット番号やメッセージIDを使用してください。",
+        "note": "メモ",
+        "outcome": "結果",
+        "pending": "確認を開始",
+        "verified": "確認済み",
+        "notVerified": "確認できず",
+        "submit": "結果を記録",
+        "notVerifiedWarn": "本人確認できなかった場合、リクエストは却下されます。",
+        "saved": "確認結果を記録しました。"
+      },
+      "hold": {
+        "title": "法的保全",
+        "intro": "保全中は消去できません。法律や紛争によりデータの保持が必要な場合に使用します。",
+        "toggle": "法的保全",
+        "reason": "理由",
+        "reasonHint": "3文字以上入力してください。",
+        "apply": "保全を設定",
+        "release": "保全を解除",
+        "active": "保全中: {reason}",
+        "saved": "保全を更新しました。"
+      },
+      "export": {
+        "title": "エクスポート",
+        "intro": "この人物について保有しているデータをZIPファイルにまとめます。",
+        "expiry": "完成したファイルは{days}日間利用でき、その後削除されます。",
+        "noEmail": "本人には何も送信されません。ファイルをダウンロードし、安全な方法で本人に渡してください。",
+        "request": "エクスポートを準備",
+        "requesting": "準備中...",
+        "requested": "エクスポートを開始しました。",
+        "none": "エクスポートはまだありません。",
+        "download": "ダウンロード",
+        "size": "{size} KB",
+        "expires": "有効期限 {date}",
+        "status": {
+          "queued": "待機中",
+          "running": "作成中",
+          "ready": "準備完了",
+          "failed": "失敗",
+          "expired": "期限切れ"
+        }
+      },
+      "erase": {
+        "title": "消去",
+        "intro": "すべてのモジュールから本人のデータを削除します。先にプレビューしてください。確認するまで何も変更されません。",
+        "preview": "プレビュー",
+        "previewing": "集計中...",
+        "previewTitle": "実行した場合の結果",
+        "previewNote": "プレビューのみです。何も変更されていません。",
+        "files": "{count, plural, other {保存済みファイル#件を削除キューに追加}}",
+        "totals": "削除 {deleted} 件、匿名化 {anonymised} 件、保持 {retained} 件",
+        "colTable": "テーブル",
+        "colWhat": "処理内容",
+        "colCount": "行数",
+        "colReason": "理由",
+        "confirmLabel": "確認のため {phrase} と入力してください",
+        "confirmHint": "この操作は元に戻せません。",
+        "execute": "今すぐ消去",
+        "executing": "消去中...",
+        "done": "消去が完了しました。",
+        "blocked": "本人確認が済み、法的保全がない場合に消去できます。"
+      },
+      "proof": {
+        "title": "消去の証明",
+        "executedAt": "実行日 {date}",
+        "executedBy": "実行者: {actor}",
+        "totals": "削除 {deleted} 件、匿名化 {anonymised} 件、保持 {retained} 件、ファイル {files} 件",
+        "registryDigest": "レジストリダイジェスト",
+        "sha256": "SHA-256",
+        "notes": "この消去の制限事項",
+        "download": "証明をダウンロード"
+      },
+      "close": {
+        "title": "リクエストを終了",
+        "complete": "完了にする",
+        "completeHint": "本人に回答済みの場合、または手作業で対応が済んだ場合に使用します。",
+        "completed": "リクエストを完了しました。",
+        "rejectReason": "却下の理由",
+        "reject": "リクエストを却下",
+        "rejectConfirm": "却下",
+        "rejected": "リクエストを却下しました。",
+        "rejectedWith": "却下: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "プライバシー",
+      "export": "この人物のデータをエクスポート",
+      "erase": "この人物を消去",
+      "created": "リクエスト {reference} を作成しました。",
+      "failed": "リクエストを作成できませんでした。"
+    }
+  }
+}

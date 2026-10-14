@@ -263,8 +263,15 @@ export const createContact = (body: unknown): Promise<ContactRow> =>
 export const updateContact = (id: string, body: unknown): Promise<ContactRow> =>
   apiFetch(`/contacts/${id}`, { method: 'PATCH', body, schema: contactResponseSchema });
 
-export const deleteContact = (id: string): Promise<void> =>
-  apiFetch(`/contacts/${id}`, { method: 'DELETE' });
+/**
+ * Deleting a contact erases their conversations, messages, media, files, call recordings and call logs (leads, deals, tasks and
+ * invoices stay). `eraseHistory: false` keeps the conversations without the person's identity; absent means erase.
+ */
+export const deleteContact = (id: string, opts: { eraseHistory?: boolean } = {}): Promise<void> =>
+  apiFetch(`/contacts/${id}`, {
+    method: 'DELETE',
+    query: opts.eraseHistory === false ? { eraseHistory: false } : undefined,
+  });
 
 export function invalidateContacts(qc: QueryClient) {
   return Promise.all([

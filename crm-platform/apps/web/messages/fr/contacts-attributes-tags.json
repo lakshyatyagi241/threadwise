@@ -1373,6 +1373,12 @@
         "reorder": "Faire glisser pour réorganiser les colonnes",
         "remove": "Retirer {name}"
       }
+    },
+    "erase": {
+      "scope": "Supprimer un contact efface aussi ses conversations, messages, médias, fichiers, enregistrements d'appels et journaux d'appels. Les leads, affaires, tâches et factures restent.",
+      "scopeMany": "Supprimer des contacts efface aussi leurs conversations, messages, médias, fichiers, enregistrements d'appels et journaux d'appels. Les leads, affaires, tâches et factures restent.",
+      "keepHistory": "Conserver l'historique des conversations sans l'identité de la personne",
+      "keepHistoryHint": "Les conversations restent dans vos archives mais ne renvoient plus à la personne."
     }
   }
 }

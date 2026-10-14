@@ -359,6 +359,11 @@
         "label": "Prestazioni del team",
         "description": "Scopri quanto è stato veloce ogni agente a rispondere e risolvere oggi, questa settimana o questo mese.",
         "keywords": "report, analisi, agenti, tempo di risposta, prima risposta, risolte, carico, prestazioni"
+      },
+      "privacy-requests": {
+        "label": "Richieste sui dati",
+        "description": "Rispondi a chi chiede cosa conservi su di loro: verifica dell'identità, esportazione, cancellazione con anteprima e una prova da conservare.",
+        "keywords": "privacy, gdpr, richiesta sui dati, dsar, accesso ai dati, esportare dati, cancellare, diritto all'oblio, eliminare dati personali, blocco legale"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

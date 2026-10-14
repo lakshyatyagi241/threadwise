@@ -345,6 +345,11 @@
         "description": "Choose the STOP and START words, the confirmation replies, the opt-out line and whether marketing needs recorded consent.",
         "keywords": "consent, opt out, opt in, unsubscribe, stop, start, gdpr, compliance, privacy, marketing"
       },
+      "privacy-requests": {
+        "label": "Data requests",
+        "description": "Answer people who ask what you hold on them: identity check, export, erasure with a preview, and a proof you can keep.",
+        "keywords": "privacy, gdpr, data request, dsar, subject access, export data, erase, right to be forgotten, delete personal data, legal hold"
+      },
       "inbox-tags": {
         "label": "Conversation tags",
         "description": "Create the tags your team puts on conversations and filters the inbox by. They are the same tags used on contacts.",
