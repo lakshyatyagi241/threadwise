@@ -203,7 +203,9 @@ describe('Code sandbox', () => {
     );
     expect(r.ok).toBe(false);
     expect(r.error).toMatch(/memory|heap|terminated|time/i);
-  });
+    // The sandbox may stop it on the memory cap (fast) or on its own 5 s time limit (a machine that does not enforce the cap quickly);
+    // either way the test needs more than vitest's default 5 s to see the answer.
+  }, 20_000);
 });
 
 describe('Code node', () => {
