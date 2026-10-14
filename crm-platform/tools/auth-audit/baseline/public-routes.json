@@ -147,6 +147,7 @@
     "POST /v2/store-public/webhooks/razorpay",
     "POST /v2/line/inbound/:token",
     "POST /v2/telegram/inbound/:token",
+    "POST /v2/viber/inbound/:token",
     "GET /v2/webhooks/channels/:channelUuid",
     "POST /v2/webhooks/channels/:channelUuid",
     "POST /v2/woocommerce/webhook/:secret",

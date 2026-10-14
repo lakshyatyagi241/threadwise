@@ -20,6 +20,10 @@ import { WebhookController as TelegramWebhookController } from '../../../src/mod
 import { ChannelsController as LineChannelsController } from '../../../src/modules/channel-line/channels.controller';
 import { LineBroadcastsController } from '../../../src/modules/channel-line/line-broadcasts.controller';
 import { WebhookController as LineWebhookController } from '../../../src/modules/channel-line/webhook.controller';
+import { ChannelsController as ViberChannelsController } from '../../../src/modules/channel-viber/channels.controller';
+import { InsightsController as ViberInsightsController } from '../../../src/modules/channel-viber/insights.controller';
+import { VibBroadcastsController } from '../../../src/modules/channel-viber/vib-broadcasts.controller';
+import { WebhookController as ViberWebhookController } from '../../../src/modules/channel-viber/webhook.controller';
 import { SmsSendersController } from '../../../src/modules/channel-sms/sms-senders.controller';
 import { SmsPlatformController } from '../../../src/modules/channel-sms/sms-platform.controller';
 import { SmsStatusController } from '../../../src/modules/channel-sms/sms-status.controller';
@@ -79,6 +83,9 @@ describe('whole-controller plan features', () => {
     ['telegram broadcasts', TgBroadcastsController, 'extra_channels'],
     ['line channels', LineChannelsController, 'extra_channels'],
     ['line broadcasts', LineBroadcastsController, 'extra_channels'],
+    ['viber channels', ViberChannelsController, 'extra_channels'],
+    ['viber broadcasts', VibBroadcastsController, 'extra_channels'],
+    ['viber insights', ViberInsightsController, 'extra_channels'],
     ['sms senders', SmsSendersController, 'sms'],
     ['facebook broadcasts', FbBroadcastsController, 'extra_channels'],
     ['facebook insights', InsightsController, 'extra_channels'],
@@ -120,6 +127,7 @@ describe('routes that must stay open (third parties, visitors, paywall rendering
   const open: Array<[string, Ctor]> = [
     ['telegram inbound webhook', TelegramWebhookController],
     ['line inbound webhook', LineWebhookController],
+    ['viber inbound webhook', ViberWebhookController],
     ['sms delivery reports', SmsStatusController],
     ['sms platform switch (operator console)', SmsPlatformController],
     ['facebook webhook', FacebookPublicController],

@@ -424,6 +424,7 @@
   "POST /v2/templates/:id/refresh",
   "POST /v2/templates/lint",
   "POST /v2/templates/media",
+  "POST /v2/viber/inbound/:token",
   "POST /v2/waba/numbers/:id/disconnect",
   "POST /v2/waba/numbers/:id/primary",
   "POST /v2/waba/numbers/:id/qr-codes",

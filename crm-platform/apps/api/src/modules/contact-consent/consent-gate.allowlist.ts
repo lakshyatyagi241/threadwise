@@ -92,6 +92,14 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
     reason:
       'Issues the rotated channel access token (LINE token endpoint); sends nothing to a customer.',
   },
+  {
+    path: 'modules/channel-viber/viber-sender.service.ts',
+    reason: 'Reply sender used by the Viber adapter, behind the dispatcher.',
+  },
+  {
+    path: 'modules/channel-viber/channels.service.ts',
+    reason: 'Channel setup (account check, webhook registration); sends nothing to a customer.',
+  },
   // --- staff-side, setup and test sends -------------------------------------------------------------------------------------------
   {
     path: 'modules/channel-sms/sms-senders.service.ts',
@@ -196,5 +204,9 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
   {
     path: 'modules/channel-telegram/tg-broadcast-sender.service.ts',
     reason: `${GAP} Telegram broadcasts go to bot subscribers by chat id with no contact link; needs the chat to contact mapping first.`,
+  },
+  {
+    path: 'modules/channel-viber/vib-broadcast-sender.service.ts',
+    reason: `${GAP} Viber broadcasts go to channel subscribers by Viber user id; the contact link exists (contacts.channel_uid) but the send-time consent check is still to do.`,
   },
 ];

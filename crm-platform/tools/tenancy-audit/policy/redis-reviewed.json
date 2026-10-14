@@ -31,6 +31,10 @@
     "status": "reviewed",
     "reason": "per-bot-token rate limit; token is tenant-specific"
   },
+  "modules/channel-viber/inbound.service.ts": {
+    "status": "reviewed",
+    "reason": "per-channel-token rate limit; token is tenant-specific"
+  },
   "modules/chatbot-widget/widget-throttle.service.ts": {
     "status": "reviewed",
     "reason": "per-IP rate limit, global by policy"
