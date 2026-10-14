@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "向已在您 Instagram 私信中的用户发送消息——无需模板审核。",
         "cta": "创建 Instagram 群发"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "向过去 24 小时内给你的主页发过消息的人发送 Messenger 消息。",
+        "cta": "创建 Facebook 群发"
       }
     }
   }

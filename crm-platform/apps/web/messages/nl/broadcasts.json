@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Stuur berichten naar mensen die al in je Instagram-DM's staan, zonder sjabloongoedkeuring.",
         "cta": "Instagram-broadcast maken"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Stuur een Messenger-bericht naar mensen die je Pagina de afgelopen 24 uur een bericht stuurden.",
+        "cta": "Facebook-verzending maken"
       }
     }
   }

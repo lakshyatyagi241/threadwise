@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Instagram DM kutunuzdaki kişilere mesaj gönderin; şablon onayı gerekmez.",
         "cta": "Instagram toplu gönderimi oluştur"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Son 24 saat içinde Sayfanıza mesaj atan kişilere Messenger mesajı gönderin.",
+        "cta": "Facebook yayını oluştur"
       }
     }
   }

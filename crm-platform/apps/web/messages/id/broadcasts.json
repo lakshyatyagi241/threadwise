@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Kirim pesan ke orang yang sudah ada di DM Instagram Anda — tanpa persetujuan template.",
         "cta": "Buat broadcast Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Kirim pesan Messenger ke orang yang mengirim pesan ke Halaman Anda dalam 24 jam terakhir.",
+        "cta": "Buat siaran Facebook"
       }
     }
   }

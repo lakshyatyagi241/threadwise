@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Pisz do osób, które już są w Twoich wiadomościach prywatnych na Instagramie — bez zatwierdzania szablonu.",
         "cta": "Utwórz wiadomość masową Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Wyślij wiadomość w Messengerze do osób, które napisały do Twojej Strony w ciągu ostatnich 24 godzin.",
+        "cta": "Utwórz wysyłkę na Facebooku"
       }
     }
   }

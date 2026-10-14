@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Escribe a personas que ya están en tus mensajes directos de Instagram, sin aprobación de plantilla.",
         "cta": "Crear difusión de Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envía un mensaje de Messenger a quienes escribieron a tu Página en las últimas 24 horas.",
+        "cta": "Crear difusión de Facebook"
       }
     }
   }

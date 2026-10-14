@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Nhắn tin cho những người đã có trong tin nhắn trực tiếp Instagram của bạn — không cần duyệt mẫu.",
         "cta": "Tạo gửi hàng loạt Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Gửi tin nhắn Messenger cho những người đã nhắn tin cho Trang của bạn trong 24 giờ qua.",
+        "cta": "Tạo chiến dịch gửi Facebook"
       }
     }
   }
