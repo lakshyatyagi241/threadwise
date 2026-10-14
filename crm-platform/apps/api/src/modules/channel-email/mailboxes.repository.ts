@@ -139,6 +139,37 @@ export class MailboxesRepository {
     return row ? toRow(row) : undefined;
   }
 
+  async byId(tx: Tx, orgId: number, id: number): Promise<MailboxRow | undefined> {
+    const res = await tx.execute(
+      sql`SELECT * FROM mail_mailboxes WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    const row = rows(res)[0];
+    return row ? toRow(row) : undefined;
+  }
+
+  /**
+   * Mails the workspace sent since `since`: every outbound message of an email thread, replies and campaign mail together (Reference's
+   * `email_monthly_limit` counted the same, outbound email inbox messages of the month). A system line is not a mail.
+   */
+  async sentSince(tx: Tx, orgId: number, since: Date): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n
+        FROM messages m
+        JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+        JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+       WHERE m.org_id = ${orgId} AND ch.kind = 'email' AND m.direction = 'out' AND m.kind <> 'system'
+         AND m.created_at >= ${since.toISOString()}::timestamptz`);
+    return Number(rows(res)[0]?.n ?? 0);
+  }
+
+  /** The public uuid of a contact, for the inbox thread a campaign mail is written to. */
+  async contactUuid(tx: Tx, orgId: number, contactId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid FROM contacts WHERE org_id = ${orgId} AND id = ${contactId}`,
+    );
+    return (rows(res)[0]?.uuid as string | undefined) ?? null;
+  }
+
   async byAddress(
     tx: Tx,
     orgId: number,
