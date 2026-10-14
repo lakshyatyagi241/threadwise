@@ -11,6 +11,7 @@ pnpm --filter @crm/api exec vitest run --dir test/unit \
   test/unit/net \
   test/unit/crypto.spec.ts \
   test/unit/outbound-webhooks/send.spec.ts \
+  test/unit/webhook-fanout/deliver.spec.ts \
   test/unit/node-bridge-runtime/safe-fetch.spec.ts \
   test/unit/auth-registration-security/jwt-hardening.spec.ts \
   test/unit/auth-registration-security/token-expiry.spec.ts \
