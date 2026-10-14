@@ -41,6 +41,81 @@ A campaign: `{ id, name, type, status, provider, abTesting, scheduleType, sendDa
 templateId, templateName, counts { recipients, sent, delivered, read, replies, clicks, failed }, lastRunAt, completedAt, createdAt,
 updatedAt, rowVersion }`. `clicks` is the greater of our click count and Meta's, never the sum.
 
+## Director summary (an addition beyond Reference)
+
+Reference shows sent, delivered, read and failed, and replies from the bridge. The owner asked for the figures a director reads: of the
+people messaged, how many received it, read it, **wrote back** and **filled an application form**, counted as distinct people. Permission
+`camp.campaigns.read` (broadcasts: `bcast.broadcasts.read`); the numbers are read live, not from the stored `responded_at`.
+
+| Method and path                                                            | What it returns                                                                                               |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `GET /campaigns/:id/summary?cameBackDays=3\|7\|14&formIds=uuid,uuid`       | The summary below. `cameBackDays` defaults to 7; any other value is a 422. `formIds` limits which forms count |
+| `GET /campaigns/:id/summary/people?kind&cameBackDays&formIds&cursor&limit` | `{ data, nextCursor, total }`: the people behind a figure, newest first, keyset page (`limit` 25, max 100)    |
+| `GET /campaigns/summary/forms`                                             | The picker: `{ data: [{ id, kind: 'web' \| 'whatsapp', name }] }`, a kind only if the caller may read forms   |
+
+`GET /v2/broadcasts/:id/summary` and `/summary/people` answer the same shapes for the legacy broadcasts (`kind: 'broadcast'`, from
+`broadcast_contacts`, permission `bcast.broadcasts.read`). A wizard campaign, a recurring run and an SMS campaign are campaign rows, so the
+campaign route covers them.
+
+```json
+{
+  "id": "6f0c...",
+  "kind": "campaign",
+  "name": "Admissions push",
+  "status": "completed",
+  "sentAt": "2026-09-10T06:00:00.000Z",
+  "window": { "days": 7, "from": "2026-09-10T06:00:00.000Z", "to": "2026-09-17T06:00:00.000Z" },
+  "people": { "messaged": 11, "delivered": 6, "read": 3, "failed": 1, "notTrackable": 1 },
+  "cameBack": {
+    "count": 4,
+    "pctOfMessaged": 36.4,
+    "pctOfDelivered": 66.7,
+    "medianHoursToReply": 2.5
+  },
+  "filledForm": {
+    "count": 4,
+    "pctOfMessaged": 36.4,
+    "alsoWroteBack": 3,
+    "viaWebForm": 3,
+    "viaWhatsappForm": 2,
+    "formsCounted": [{ "id": "b1d2...", "kind": "web", "name": "Admission form" }],
+    "allForms": true
+  },
+  "cameBackByDay": [
+    { "day": "2026-09-10", "count": 3 },
+    { "day": "2026-09-11", "count": 1 }
+  ],
+  "caveats": ["recipients_without_contact", "contact_match_only", "opted_out_excluded"]
+}
+```
+
+How each number is worked out:
+
+- **messaged, delivered, read, failed** are the recipient roll-up the list and the detail already use (a read recipient is also delivered
+  and sent), so the three screens agree.
+- **Came back**: a person with a customer message in the team inbox after **their own** send and inside `cameBackDays` of it. Reactions,
+  deleted messages, group chats and our own replies do not count; a person who wrote five times counts once; the median is the hours from
+  the send to each person's first reply; `cameBackByDay` is the UTC day of that first reply (31 days at most). A recipient who opted
+  out (`unsubscribed`) is not counted, and the `opted_out_excluded` caveat says so when one of them did write.
+- **Whose thread**: the contact's own conversations, or the conversation whose peer is the recipient's phone digits. A recipient with
+  no contact is matched to one by phone (contact phone, then a phone or WhatsApp identity). One that cannot be matched to a contact and has
+  no thread is `people.notTrackable` (caveat `recipients_without_contact`).
+- **Filled a form**: a contact messaged who has an accepted web form submission (`created`, `updated`, `paid`, `awaiting_payment`; never
+  spam, failed, received or needs review) or a WhatsApp form submission, after their send and inside the window, in any form or only the
+  picked ones (`formIds`, web and WhatsApp ids together; a pick that matches nothing counts nothing). `viaWebForm` and `viaWhatsappForm` are
+  distinct people per source, so a person in both counts in both and once in `count`. The match is by contact only (`contact_match_only`):
+  a different phone or email is a different person. `filledForm` is `null` for a caller without `record.form-submissions.read`, and then
+  `formIds` is ignored. `counted_in_other_campaigns` says another campaign or broadcast of the workspace messaged some of the same
+  people within the window, so a reply or form may belong to either.
+- **People**: `kind=came_back`, `filled_form` (needs `record.form-submissions.read`, else 403; `formName` is the first form they filled)
+  or `not_reached` (recipients whose send failed; `at` is when). Names and numbers are what the recipients tab already shows for the same
+  permission. A cursor that is not ours is a 422.
+
+An id of another workspace is a 404. The finished summary is kept in Redis for 60 seconds per workspace, campaign, window, forms and
+whether the caller may read forms, so reopening the page and a polling screen cost one computation a minute (nothing else invalidates it).
+Each figure is one set-based statement, with a 20-second statement timeout (a 503 if it is ever hit); at 100,000 recipients, 100,000 threads
+and 200,000 messages it answered in about 1.3 seconds and a people page in under 2.
+
 ## Create and edit
 
 `POST /campaigns` (201, `{ campaign, message }`) and `PUT /campaigns/:id` (`{ campaign, message }`). The form:

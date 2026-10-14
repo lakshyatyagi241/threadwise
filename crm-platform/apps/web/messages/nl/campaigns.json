@@ -192,7 +192,13 @@
         "typeLabel": "Type",
         "ab": "A/B",
         "off": "Uit",
-        "step": "Stap {n} van {total}"
+        "step": "Stap {n} van {total}",
+        "broadcastTitle": "Voorbeeld van de broadcast",
+        "templateMessage": "Sjabloonbericht",
+        "customMessage": "Eigen bericht",
+        "flowTitle": "Flow",
+        "variants": "Getoonde variant",
+        "variant": "Variant {v}"
       },
       "previewEmpty": "Voorbeeld van je bericht…",
       "previewTemplate": "Sjabloon",
@@ -247,7 +253,8 @@
         "abHint": "Verdeel ontvangers over twee berichtvarianten.",
         "split": "Variant A-verdeling {a}%",
         "splitHint": "Variant B krijgt het resterende publiek. Stel de inhoud van Variant B in bij de stap Opstellen.",
-        "pickSender": "— Kies een afzender —"
+        "pickSender": "— Kies een afzender —",
+        "notVerified": "Nog niet geverifieerd: de begeleide flow is beschikbaar zodra het nummer is geverifieerd."
       },
       "audience": {
         "title": "Doelgroep",
@@ -604,6 +611,35 @@
         "notesPlaceholder": "Alles wat specifiek is — verplichte zinnen, wat je moet vermijden, kenmerken van de merkstem…",
         "failed": "De campagne kon niet worden gegenereerd. Probeer het opnieuw.",
         "applied": "De campagnetekst is ingevuld. Controleer deze voordat je verdergaat."
+      },
+      "switch": {
+        "title": "De begeleide flow gebruiken?",
+        "body": "Een geverifieerd WhatsApp Cloud API (Meta)-nummer verstuurt via de begeleide flow in vier stappen, die opnieuw begint. Wat je hier hebt ingevuld is niet opgeslagen en wordt niet overgenomen. Gebruik eerst Concept opslaan als je het wilt bewaren.",
+        "confirm": "Begeleide flow openen",
+        "cancel": "Hier blijven"
+      },
+      "guided": {
+        "template": "Sjabloon",
+        "pickTemplate": "— Kies een sjabloon —",
+        "templateHint": "Alleen goedgekeurde sjablonen van het gekozen nummer. De variabelen vul je hieronder in.",
+        "noTemplates": "Dit nummer heeft nog geen goedgekeurde sjablonen. Maak er een aan en wacht op de goedkeuring.",
+        "deliveryTitle": "Verzending",
+        "deliveryTag": "wanneer",
+        "typeBlocked": "Via de WhatsApp Cloud API (Meta) kan vanuit een campagne alleen een goedgekeurd sjabloon worden verzonden: een eigen bericht of een flow bereikt alleen mensen die je in de afgelopen 24 uur hebben geschreven, en de Cloud API kan die niet in bulk versturen. Gebruik een sjabloon of kies een ander type nummer.",
+        "templateA": "Sjabloon variant A",
+        "templateB": "Sjabloon variant B",
+        "variablesA": "Variabelen variant A",
+        "variablesB": "Variabelen variant B",
+        "splitNote": "Variant A gaat naar {a}% van de ontvangers, variant B naar de rest.",
+        "costTitle": "Geschatte kosten",
+        "costNoTemplate": "Kies een sjabloon om de kosten te zien.",
+        "costNoAudience": "Kies wie het ontvangt om de kosten te zien.",
+        "costLoading": "Kosten controleren",
+        "costError": "Het saldo kon niet worden gecontroleerd.",
+        "balanceOk": "Het saldo is genoeg voor de volledige kosten van {full}",
+        "balanceShort": "Het saldo is niet genoeg: je hebt nog {shortfall} nodig.",
+        "balanceLowFull": "Het saldo is lager dan de volledige kosten van {full}: je abonnement dekt het nu, maar niet meer zodra het abonnement afloopt.",
+        "chargedNowLabel": "Nu van je portemonnee afgeschreven"
       }
     },
     "detail": {
@@ -659,7 +695,8 @@
         "engagement": "Betrokkenheid",
         "replies": "Antwoorden ({count})",
         "failures": "Fouten ({count})",
-        "optouts": "Afmeldingen ({count})"
+        "optouts": "Afmeldingen ({count})",
+        "summary": "Samenvatting"
       },
       "cancel": "Annuleren",
       "deleted": "Campagne verwijderd.",
@@ -770,6 +807,151 @@
         "replies": "Antwoorden",
         "optOuts": "Afmeldingen",
         "readRate": "Leesratio"
+      },
+      "summary": {
+        "title": "Samenvatting",
+        "intro": "In gewone woorden: wie je bericht heeft gekregen, wie heeft gereageerd en wie een aanmeldformulier heeft ingevuld.",
+        "loading": "Je samenvatting wordt geladen",
+        "headline": {
+          "none": "Er zijn nog geen berichten verstuurd.",
+          "messaged": "{count, plural, one {Je hebt # persoon een bericht gestuurd.} other {Je hebt # mensen een bericht gestuurd.}}",
+          "notReceived": "{messaged} Nog niemand heeft het ontvangen.",
+          "received": "{count, plural, =0 {nog niemand heeft het ontvangen} one {# heeft het ontvangen} other {# hebben het ontvangen}}",
+          "opened": "{count, plural, =0 {nog niemand heeft het geopend} one {# heeft het geopend} other {# hebben het geopend}}",
+          "wroteBack": "{count, plural, =0 {nog niemand heeft binnen {days, plural, one {# dag} other {# dagen}} gereageerd} one {# heeft binnen {days, plural, one {# dag} other {# dagen}} gereageerd} other {# hebben binnen {days, plural, one {# dag} other {# dagen}} gereageerd}}",
+          "filledForm": "{count, plural, =0 {nog niemand heeft een aanmeldformulier ingevuld} one {# heeft een aanmeldformulier ingevuld} other {# hebben een aanmeldformulier ingevuld}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Tel reacties en formulieren mee die binnenkomen",
+          "hint": "Geteld vanaf het moment dat je het bericht hebt verstuurd.",
+          "option": "Binnen {days, plural, one {# dag} other {# dagen}}"
+        },
+        "forms": {
+          "label": "Welke formulieren tellen als aanmelding?",
+          "hint": "Laat leeg om alle webformulieren en WhatsApp-formulieren mee te tellen.",
+          "placeholder": "Alle formulieren",
+          "empty": "Geen formulieren gevonden",
+          "clear": "Alle formulieren meetellen",
+          "remove": "{name} verwijderen",
+          "web": "{name} (webformulier)",
+          "whatsapp": "{name} (WhatsApp-formulier)",
+          "loadError": "We konden je formulieren niet laden. Voorlopig worden alle formulieren meegeteld."
+        },
+        "tile": {
+          "listLabel": "De cijfers",
+          "unit": "{count, plural, one {persoon} other {mensen}}",
+          "messaged": {
+            "label": "Bericht gestuurd",
+            "explain": "Mensen naar wie we je bericht hebben gestuurd.",
+            "pct": "De mensen die je hebt gekozen om te berichten"
+          },
+          "received": {
+            "label": "Ontvangen",
+            "explain": "Mensen op wier telefoon het bericht is aangekomen."
+          },
+          "opened": {
+            "label": "Geopend",
+            "explain": "Mensen die het bericht hebben geopend en gelezen."
+          },
+          "wroteBack": {
+            "label": "Gereageerd",
+            "explain": "Mensen die je binnen {days, plural, one {# dag} other {# dagen}} na het versturen een bericht hebben gestuurd."
+          },
+          "filledForm": {
+            "label": "Formulier ingevuld",
+            "explainAll": "Mensen die een van je aanmeldformulieren hebben ingevuld.",
+            "explainSome": "{count, plural, one {Mensen die het formulier hebben ingevuld dat je hebt gekozen.} other {Mensen die een van de # formulieren hebben ingevuld die je hebt gekozen.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% van de mensen die je een bericht hebt gestuurd",
+          "less": "Minder dan 1% van de mensen die je een bericht hebt gestuurd",
+          "zero": "Niemand van de mensen die je een bericht hebt gestuurd",
+          "everyone": "Iedereen die je een bericht hebt gestuurd"
+        },
+        "funnel": {
+          "title": "Van bericht tot aanmeldformulier",
+          "alt": "Aantal mensen per stap, van bericht gestuurd tot formulier ingevuld",
+          "note": "Mensen kunnen een stap overslaan. Iemand kan reageren zonder het bericht eerst te openen, dus een balk kan langer zijn dan de balk erboven."
+        },
+        "daily": {
+          "title": "Mensen die per dag reageren",
+          "series": "Mensen die hebben gereageerd",
+          "empty": "Nog niemand heeft gereageerd.",
+          "alt": "{total, plural, one {# persoon heeft} other {# mensen hebben}} gereageerd. De drukste dag was {day}, met {count, plural, one {# persoon} other {# mensen}}."
+        },
+        "people": {
+          "title": "Bekijk wie",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Gereageerd",
+            "hint": "Mensen die je een bericht hebben gestuurd nadat jouw bericht was verstuurd."
+          },
+          "filled_form": {
+            "title": "Formulier ingevuld",
+            "hint": "Mensen die een aanmeldformulier hebben ingevuld."
+          },
+          "not_reached": {
+            "title": "Niet bereikt",
+            "hint": "Mensen die je bericht niet hebben bereikt."
+          },
+          "table": "Mensen in deze lijst",
+          "name": "Naam",
+          "phone": "Telefoon",
+          "when": "Wanneer",
+          "form": "Formulier",
+          "unknown": "Naam onbekend",
+          "noContact": "Niet gekoppeld aan een contact",
+          "open": "{name} openen",
+          "empty": "Nog niemand in deze lijst.",
+          "shown": "{shown} van {total} weergegeven",
+          "more": "Meer tonen",
+          "loading": "De lijst wordt geladen",
+          "error": "We konden deze lijst niet laden.",
+          "retry": "Opnieuw proberen",
+          "forbidden": "Je hebt geen toegang om deze namen te zien."
+        },
+        "download": {
+          "button": "Namen downloaden",
+          "busy": "Het bestand wordt voorbereid",
+          "failed": "We konden het namenbestand niet voorbereiden.",
+          "done": "Het namenbestand staat klaar.",
+          "truncated": "Het bestand bevat de eerste {count} mensen van elke lijst.",
+          "none": "Er zijn nog geen namen om te downloaden.",
+          "csv": {
+            "group": "Lijst",
+            "name": "Naam",
+            "phone": "Telefoon",
+            "when": "Wanneer",
+            "form": "Formulier"
+          }
+        },
+        "print": {
+          "button": "Samenvatting afdrukken",
+          "sent": "Verstuurd op {date}",
+          "notSent": "Nog niet verstuurd",
+          "window": "Reacties en formulieren geteld binnen {days, plural, one {# dag} other {# dagen}} na het versturen",
+          "printed": "Afgedrukt op {date}"
+        },
+        "caveats": {
+          "title": "Goed om te weten",
+          "recipients_without_contact": "{count, plural, one {# persoon kon niet aan een contact worden gekoppeld, dus we kunnen niet zien of die persoon heeft gereageerd.} other {# mensen konden niet aan een contact worden gekoppeld, dus we kunnen niet zien of zij hebben gereageerd.}}",
+          "contact_match_only": "We koppelen mensen aan je contacten via het telefoonnummer. Iemand die vanaf een ander nummer schrijft, wordt niet meegeteld.",
+          "opted_out_excluded": "Mensen die hebben gevraagd geen berichten meer te krijgen, worden niet meegeteld.",
+          "counted_in_other_campaigns": "Iemand die je in meer dan één campagne een bericht hebt gestuurd, kan in elke campagne worden meegeteld."
+        },
+        "notSent": {
+          "title": "Er is nog niets verstuurd",
+          "body": "Zodra de berichten zijn verstuurd, zie je hier wie ze heeft ontvangen, wie heeft gereageerd en wie een aanmeldformulier heeft ingevuld."
+        },
+        "sending": "Nog bezig met versturen, dus deze cijfers blijven nog groeien.",
+        "error": {
+          "title": "We konden deze samenvatting niet laden.",
+          "retry": "Opnieuw proberen"
+        },
+        "latestRun": "Verzending {occurrence} wordt getoond, de nieuwste van deze reeks."
       }
     },
     "wizard": {
@@ -864,7 +1046,12 @@
         "insufficient_balance": "Je wallet-saldo is te laag voor deze broadcast.",
         "checking_balance": "Je wallet-saldo wordt gecontroleerd...",
         "sender_required": "Kies het WhatsApp-nummer om vanaf te verzenden.",
-        "balance_unavailable": "We konden je wallet-saldo niet controleren. Probeer het opnieuw voordat je verzendt."
+        "balance_unavailable": "We konden je wallet-saldo niet controleren. Probeer het opnieuw voordat je verzendt.",
+        "template_b_required": "Kies het sjabloon voor variant B van de A/B-test.",
+        "auto_end_in_past": "De automatische einddatum is al verstreken.",
+        "auto_end_before_send": "De automatische einddatum moet na het verzendmoment liggen.",
+        "auto_end_recurring": "Een terugkerende campagne eindigt volgens haar eigen regel: wis de automatische einddatum.",
+        "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld."
       },
       "template": {
         "previewOnline": "online",
@@ -897,7 +1084,8 @@
         "previewEmpty": "Kies een sjabloon om te zien hoe het bericht eruitziet.",
         "senderLabel": "Verzenden vanaf",
         "senderHint": "Het WhatsApp-nummer waarvanaf deze broadcast wordt verzonden.",
-        "pickSender": "Kies een nummer"
+        "pickSender": "Kies een nummer",
+        "classicOption": "klassieke builder"
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",
@@ -1113,7 +1301,10 @@
         "sumContacts": "{count, plural, one {# contact gekozen in de tabel} other {# contacten gekozen in de tabel}}",
         "sumAllMatching": "Alle contacten die overeenkomen met {what}",
         "sumAllContacts": "Alle contacten",
-        "sumCsv": "CSV-bestand {name}: {count, plural, one {# geldig nummer} other {# geldige nummers}}"
+        "sumCsv": "CSV-bestand {name}: {count, plural, one {# geldig nummer} other {# geldige nummers}}",
+        "estimatedCostFull": "Geschatte kosten (volledig)",
+        "chargedPlan": "Nu van je portemonnee afgeschreven: {amount} (je abonnement dekt {covered} van deze berichten)",
+        "chargedWallet": "Van je portemonnee afgeschreven: {amount}"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1332,6 +1523,12 @@
         "pm": "PM",
         "hour": "Uur",
         "minute": "Minuut"
+      },
+      "switch": {
+        "title": "De klassieke builder gebruiken?",
+        "body": "{number} ({engine}) verstuurt via de klassieke builder, die opnieuw begint. Deze campagne wordt als concept opgeslagen en blijft in je campagnelijst staan, zodat je er later op terug kunt komen.",
+        "confirm": "Klassieke builder openen",
+        "cancel": "Hier blijven"
       }
     },
     "history": {
@@ -1403,7 +1600,8 @@
         "runs": "Uitvoeringen",
         "noRuns": "Er is nog geen uitvoering gestart.",
         "cancel": "Reeks annuleren"
-      }
+      },
+      "legacy": "Oude broadcasts ({count})"
     },
     "senderEmpty": {
       "loading": "Je nummers worden geladen…",
@@ -1439,6 +1637,11 @@
         "body": "{count, plural, one {Je persoonlijke (QR-)nummer kan} other {Je # persoonlijke (QR-)nummers kunnen}} geen campagnes verzenden zolang dit uitstaat. Een platformbeheerder kan dit voor deze werkruimte inschakelen, of je koppelt een officieel WhatsApp Business-nummer.",
         "action": "Officieel nummer koppelen"
       }
+    },
+    "create": {
+      "loading": "Je nummers laden",
+      "noAccessTitle": "Je kunt geen campagnes aanmaken",
+      "noAccess": "Vraag een beheerder van de werkruimte om toestemming om campagnes aan te maken."
     }
   }
 }

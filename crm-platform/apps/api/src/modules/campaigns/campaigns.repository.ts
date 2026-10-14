@@ -20,7 +20,7 @@ const list = (values: readonly (string | number)[], cast: 'uuid' | 'bigint' | 't
  * is also delivered, a reply is also sent, delivered and read. A single definition so the list, the detail and the stored
  * counters can never disagree.
  */
-const AGG = sql.raw(`
+export const AGG = sql.raw(`
   count(*) FILTER (WHERE r.status IN ('sent','delivered','read','responded') OR r.sent_at IS NOT NULL OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)::int AS a_sent,
   count(*) FILTER (WHERE r.status IN ('delivered','read','responded') OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)::int AS a_delivered,
   count(*) FILTER (WHERE r.status IN ('read','responded') OR r.read_at IS NOT NULL)::int AS a_read,

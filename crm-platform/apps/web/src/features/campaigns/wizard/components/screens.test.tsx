@@ -19,6 +19,11 @@ import {
 import { BroadcastScreen } from './broadcast-screen';
 import { WizardScreen } from './wizard-screen';
 
+// The director summary has its own tests (director-summary.test.tsx); here it is a marker so this screen is tested on its own.
+vi.mock('@/features/campaigns/components/director-summary', () => ({
+  DirectorSummary: () => <section data-testid="director-summary" />,
+}));
+
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
   usePathname: () => '/campaigns/wizard',
@@ -226,6 +231,8 @@ describe('status page', () => {
     expect(out).toContain('Oct 12, 2026, 9:00 AM'); // shown on the schedule's own clock
     expect(out).toContain('940');
     expect(out).toContain('#2');
+    // The summary of the newest run is part of the page.
+    expect(out).toContain('data-testid="director-summary"');
   });
 
   it('links every run to the existing campaign page', () => {

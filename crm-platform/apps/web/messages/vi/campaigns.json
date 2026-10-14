@@ -192,7 +192,13 @@
         "typeLabel": "Loại",
         "ab": "A/B",
         "off": "Tắt",
-        "step": "Bước {n} / {total}"
+        "step": "Bước {n} / {total}",
+        "broadcastTitle": "Xem trước chiến dịch gửi hàng loạt",
+        "templateMessage": "Tin nhắn mẫu",
+        "customMessage": "Tin nhắn tùy chỉnh",
+        "flowTitle": "Luồng",
+        "variants": "Biến thể đang hiển thị",
+        "variant": "Biến thể {v}"
       },
       "previewEmpty": "Xem trước tin nhắn của bạn…",
       "previewTemplate": "Mẫu",
@@ -247,7 +253,8 @@
         "abHint": "Chia người nhận giữa hai biến thể tin nhắn.",
         "split": "Biến thể A chiếm {a}%",
         "splitHint": "Biến thể B nhận phần đối tượng còn lại. Đặt nội dung Biến thể B ở bước Soạn.",
-        "pickSender": "— Chọn người gửi —"
+        "pickSender": "— Chọn người gửi —",
+        "notVerified": "Chưa xác minh: luồng hướng dẫn sẽ khả dụng sau khi số được xác minh."
       },
       "audience": {
         "title": "Đối tượng",
@@ -604,6 +611,35 @@
         "notesPlaceholder": "Bất kỳ điều gì cụ thể — cụm từ bắt buộc, điều cần tránh, giọng thương hiệu…",
         "failed": "Không thể tạo chiến dịch. Vui lòng thử lại.",
         "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục."
+      },
+      "switch": {
+        "title": "Dùng luồng hướng dẫn?",
+        "body": "Số WhatsApp Cloud API (Meta) đã xác minh được gửi từ luồng hướng dẫn bốn bước, bắt đầu lại từ đầu. Những gì bạn đã nhập ở đây sẽ không được lưu và không được chuyển sang. Hãy dùng Lưu bản nháp trước nếu bạn muốn giữ lại.",
+        "confirm": "Mở luồng hướng dẫn",
+        "cancel": "Ở lại đây"
+      },
+      "guided": {
+        "template": "Mẫu",
+        "pickTemplate": "— Chọn một mẫu —",
+        "templateHint": "Chỉ gồm các mẫu đã được duyệt của số đã chọn. Các biến của mẫu được điền bên dưới.",
+        "noTemplates": "Số này chưa có mẫu nào được duyệt. Hãy tạo một mẫu và chờ được duyệt.",
+        "deliveryTitle": "Gửi",
+        "deliveryTag": "khi nào",
+        "typeBlocked": "Trên WhatsApp Cloud API (Meta), chiến dịch chỉ có thể gửi mẫu đã được duyệt: tin nhắn tùy chỉnh hoặc luồng chỉ đến được những người đã nhắn cho bạn trong 24 giờ qua, và Cloud API không thể gửi hàng loạt các loại này. Hãy dùng mẫu hoặc chọn loại số khác.",
+        "templateA": "Mẫu của biến thể A",
+        "templateB": "Mẫu của biến thể B",
+        "variablesA": "Biến của biến thể A",
+        "variablesB": "Biến của biến thể B",
+        "splitNote": "Biến thể A gửi cho {a}% người nhận, biến thể B gửi cho phần còn lại.",
+        "costTitle": "Chi phí ước tính",
+        "costNoTemplate": "Chọn một mẫu để xem chi phí.",
+        "costNoAudience": "Chọn người nhận để xem chi phí.",
+        "costLoading": "Đang kiểm tra chi phí",
+        "costError": "Không thể kiểm tra số dư.",
+        "balanceOk": "Số dư đủ cho toàn bộ chi phí {full}",
+        "balanceShort": "Số dư không đủ: bạn cần thêm {shortfall}.",
+        "balanceLowFull": "Số dư thấp hơn toàn bộ chi phí {full}: gói của bạn đang chi trả được lúc này, nhưng sẽ không còn khi gói hết hạn.",
+        "chargedNowLabel": "Trừ vào ví của bạn ngay bây giờ"
       }
     },
     "detail": {
@@ -659,7 +695,8 @@
         "engagement": "Tương tác",
         "replies": "Phản hồi ({count})",
         "failures": "Lỗi ({count})",
-        "optouts": "Hủy nhận tin ({count})"
+        "optouts": "Hủy nhận tin ({count})",
+        "summary": "Tóm tắt"
       },
       "cancel": "Hủy",
       "deleted": "Đã xóa chiến dịch.",
@@ -770,6 +807,151 @@
         "replies": "Phản hồi",
         "optOuts": "Hủy nhận tin",
         "readRate": "Tỷ lệ đọc"
+      },
+      "summary": {
+        "title": "Tóm tắt",
+        "intro": "Nói đơn giản: ai đã nhận được tin nhắn của bạn, ai đã trả lời và ai đã điền đơn đăng ký.",
+        "loading": "Đang tải bản tóm tắt của bạn",
+        "headline": {
+          "none": "Chưa có tin nhắn nào được gửi đi.",
+          "messaged": "{count, plural, other {Bạn đã nhắn tin cho # liên hệ.}}",
+          "notReceived": "{messaged} Chưa có ai nhận được tin.",
+          "received": "{count, plural, =0 {chưa có ai nhận được tin} other {# người đã nhận được tin}}",
+          "opened": "{count, plural, =0 {chưa có ai mở tin} other {# người đã mở tin}}",
+          "wroteBack": "{count, plural, =0 {chưa có ai trả lời trong vòng {days, plural, other {# ngày}}} other {# người đã trả lời trong vòng {days, plural, other {# ngày}}}}",
+          "filledForm": "{count, plural, =0 {chưa có ai điền đơn đăng ký} other {# người đã điền đơn đăng ký}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Tính các phản hồi và đơn gửi về",
+          "hint": "Tính từ lúc bạn gửi tin nhắn.",
+          "option": "Trong vòng {days, plural, other {# ngày}}"
+        },
+        "forms": {
+          "label": "Những biểu mẫu nào được tính là đơn đăng ký?",
+          "hint": "Để trống để tính tất cả biểu mẫu web và biểu mẫu WhatsApp.",
+          "placeholder": "Tất cả biểu mẫu",
+          "empty": "Không tìm thấy biểu mẫu nào",
+          "clear": "Tính tất cả biểu mẫu",
+          "remove": "Bỏ {name}",
+          "web": "{name} (biểu mẫu web)",
+          "whatsapp": "{name} (biểu mẫu WhatsApp)",
+          "loadError": "Chúng tôi không tải được các biểu mẫu của bạn. Tạm thời tất cả biểu mẫu đều được tính."
+        },
+        "tile": {
+          "listLabel": "Các con số",
+          "unit": "{count, plural, other {liên hệ}}",
+          "messaged": {
+            "label": "Đã nhắn tin",
+            "explain": "Những liên hệ mà chúng tôi đã gửi tin nhắn của bạn.",
+            "pct": "Những liên hệ bạn đã chọn để nhắn tin"
+          },
+          "received": {
+            "label": "Đã nhận",
+            "explain": "Những liên hệ có điện thoại đã nhận được tin nhắn."
+          },
+          "opened": {
+            "label": "Đã mở",
+            "explain": "Những liên hệ đã mở và đọc tin nhắn."
+          },
+          "wroteBack": {
+            "label": "Đã trả lời",
+            "explain": "Những liên hệ đã nhắn lại cho bạn trong vòng {days, plural, other {# ngày}} sau khi gửi."
+          },
+          "filledForm": {
+            "label": "Đã điền biểu mẫu",
+            "explainAll": "Những liên hệ đã điền bất kỳ đơn đăng ký nào của bạn.",
+            "explainSome": "{count, plural, other {Những liên hệ đã điền một trong # biểu mẫu bạn đã chọn.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% số liên hệ bạn đã nhắn tin",
+          "less": "Chưa đến 1% số liên hệ bạn đã nhắn tin",
+          "zero": "Không có ai trong số liên hệ bạn đã nhắn tin",
+          "everyone": "Tất cả liên hệ bạn đã nhắn tin"
+        },
+        "funnel": {
+          "title": "Từ tin nhắn đến đơn đăng ký",
+          "alt": "Số liên hệ ở từng bước, từ đã nhắn tin đến đã điền biểu mẫu",
+          "note": "Liên hệ có thể bỏ qua một bước. Có người trả lời mà không mở tin trước, nên một cột có thể dài hơn cột ngay phía trên."
+        },
+        "daily": {
+          "title": "Số liên hệ trả lời mỗi ngày",
+          "series": "Liên hệ đã trả lời",
+          "empty": "Chưa có ai trả lời.",
+          "alt": "{total, plural, other {# liên hệ đã trả lời}}. Ngày nhiều nhất là {day}, với {count, plural, other {# liên hệ}}."
+        },
+        "people": {
+          "title": "Xem là những ai",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Đã trả lời",
+            "hint": "Những liên hệ đã nhắn cho bạn sau khi tin nhắn của bạn được gửi đi."
+          },
+          "filled_form": {
+            "title": "Đã điền biểu mẫu",
+            "hint": "Những liên hệ đã điền đơn đăng ký."
+          },
+          "not_reached": {
+            "title": "Chưa tiếp cận được",
+            "hint": "Những liên hệ chưa nhận được tin nhắn của bạn."
+          },
+          "table": "Liên hệ trong danh sách này",
+          "name": "Tên",
+          "phone": "Điện thoại",
+          "when": "Thời gian",
+          "form": "Biểu mẫu",
+          "unknown": "Không rõ tên",
+          "noContact": "Chưa khớp với liên hệ nào",
+          "open": "Mở {name}",
+          "empty": "Danh sách này chưa có ai.",
+          "shown": "Đang hiện {shown} trong {total}",
+          "more": "Xem thêm",
+          "loading": "Đang tải danh sách",
+          "error": "Chúng tôi không tải được danh sách này.",
+          "retry": "Thử lại",
+          "forbidden": "Bạn không có quyền xem những cái tên này."
+        },
+        "download": {
+          "button": "Tải danh sách tên",
+          "busy": "Đang chuẩn bị tệp",
+          "failed": "Chúng tôi không chuẩn bị được tệp danh sách tên.",
+          "done": "Tệp danh sách tên đã sẵn sàng.",
+          "truncated": "Tệp chứa {count} liên hệ đầu tiên của mỗi danh sách.",
+          "none": "Chưa có tên nào để tải.",
+          "csv": {
+            "group": "Danh sách",
+            "name": "Tên",
+            "phone": "Điện thoại",
+            "when": "Thời gian",
+            "form": "Biểu mẫu"
+          }
+        },
+        "print": {
+          "button": "In bản tóm tắt",
+          "sent": "Đã gửi {date}",
+          "notSent": "Chưa gửi",
+          "window": "Tính phản hồi và đơn trong vòng {days, plural, other {# ngày}} sau khi gửi",
+          "printed": "In ngày {date}"
+        },
+        "caveats": {
+          "title": "Cần lưu ý",
+          "recipients_without_contact": "{count, plural, other {# liên hệ không khớp được với danh bạ, nên chúng tôi không biết họ đã trả lời hay chưa.}}",
+          "contact_match_only": "Chúng tôi khớp người nhận với danh bạ của bạn qua số điện thoại. Người nhắn từ một số khác sẽ không được tính.",
+          "opted_out_excluded": "Những người đã yêu cầu không nhận tin nhắn sẽ không được tính.",
+          "counted_in_other_campaigns": "Người bạn đã nhắn trong nhiều chiến dịch có thể được tính ở từng chiến dịch."
+        },
+        "notSent": {
+          "title": "Chưa có gì được gửi đi",
+          "body": "Khi tin nhắn được gửi đi, bạn sẽ thấy ở đây ai đã nhận, ai đã trả lời và ai đã điền đơn đăng ký."
+        },
+        "sending": "Vẫn đang gửi, nên các con số này sẽ còn tăng.",
+        "error": {
+          "title": "Chúng tôi không tải được bản tóm tắt này.",
+          "retry": "Thử lại"
+        },
+        "latestRun": "Đang hiện lần gửi {occurrence}, lần mới nhất của chuỗi này."
       }
     },
     "wizard": {
@@ -864,7 +1046,12 @@
         "insufficient_balance": "Số dư ví của bạn quá thấp cho đợt gửi hàng loạt này.",
         "checking_balance": "Đang kiểm tra số dư ví của bạn...",
         "sender_required": "Chọn số WhatsApp để gửi.",
-        "balance_unavailable": "Không thể kiểm tra số dư ví của bạn. Hãy thử lại trước khi gửi."
+        "balance_unavailable": "Không thể kiểm tra số dư ví của bạn. Hãy thử lại trước khi gửi.",
+        "template_b_required": "Chọn mẫu của biến thể B cho thử nghiệm A/B.",
+        "auto_end_in_past": "Ngày tự động kết thúc đã qua.",
+        "auto_end_before_send": "Ngày tự động kết thúc phải sau thời điểm gửi.",
+        "auto_end_recurring": "Chiến dịch lặp lại kết thúc theo quy tắc riêng: hãy xóa ngày tự động kết thúc.",
+        "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi."
       },
       "template": {
         "previewOnline": "trực tuyến",
@@ -897,7 +1084,8 @@
         "previewEmpty": "Chọn một mẫu để xem tin nhắn trông như thế nào.",
         "senderLabel": "Gửi từ",
         "senderHint": "Số WhatsApp dùng để gửi đợt gửi hàng loạt này.",
-        "pickSender": "Chọn một số"
+        "pickSender": "Chọn một số",
+        "classicOption": "trình tạo cổ điển"
       },
       "audience": {
         "selectionTitle": "Đã chọn trong Trung tâm liên hệ",
@@ -1113,7 +1301,10 @@
         "sumContacts": "{count, plural, other {# liên hệ được chọn trong bảng}}",
         "sumAllMatching": "Tất cả liên hệ khớp {what}",
         "sumAllContacts": "Tất cả liên hệ",
-        "sumCsv": "Tệp CSV {name}: {count, plural, other {# số hợp lệ}}"
+        "sumCsv": "Tệp CSV {name}: {count, plural, other {# số hợp lệ}}",
+        "estimatedCostFull": "Chi phí ước tính (đầy đủ)",
+        "chargedPlan": "Trừ vào ví của bạn ngay bây giờ: {amount} (gói của bạn chi trả {covered} trong số các tin nhắn này)",
+        "chargedWallet": "Trừ vào ví của bạn: {amount}"
       },
       "test": {
         "title": "Gửi thử tin nhắn WhatsApp",
@@ -1332,6 +1523,12 @@
         "pm": "CH",
         "hour": "Giờ",
         "minute": "Phút"
+      },
+      "switch": {
+        "title": "Dùng trình tạo cổ điển?",
+        "body": "{number} ({engine}) được gửi từ trình tạo cổ điển, bắt đầu lại từ đầu. Chiến dịch này được lưu thành bản nháp và vẫn nằm trong danh sách Chiến dịch của bạn, nên bạn có thể quay lại sau.",
+        "confirm": "Mở trình tạo cổ điển",
+        "cancel": "Ở lại đây"
       }
     },
     "history": {
@@ -1403,7 +1600,8 @@
         "runs": "Lần chạy",
         "noRuns": "Chưa có lần chạy nào bắt đầu.",
         "cancel": "Hủy chuỗi"
-      }
+      },
+      "legacy": "Chiến dịch gửi cũ ({count})"
     },
     "senderEmpty": {
       "loading": "Đang tải các số của bạn…",
@@ -1439,6 +1637,11 @@
         "body": "Khi tính năng này tắt, {count} số cá nhân (QR) không thể gửi chiến dịch. Quản trị viên nền tảng có thể bật cho không gian làm việc này, hoặc bạn có thể kết nối số WhatsApp Business chính thức.",
         "action": "Kết nối số chính thức"
       }
+    },
+    "create": {
+      "loading": "Đang tải các số của bạn",
+      "noAccessTitle": "Bạn không thể tạo chiến dịch",
+      "noAccess": "Hãy nhờ quản trị viên không gian làm việc cấp quyền tạo chiến dịch."
     }
   }
 }
