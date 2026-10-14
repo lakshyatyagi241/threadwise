@@ -241,13 +241,11 @@ export class DevicePairingService {
     const attempt = await this.readAttempt(ctx.orgId, row.id);
     if (!attempt) return { cancelled: false };
     await this.redis.del(attemptKey(ctx.orgId, row.id));
-    // An attempt ended before the scan wants no history; a link that already happened keeps its import running (cancel it on its own).
     if (['awaiting_qr', 'awaiting_pairing_code'].includes(row.connection_state)) {
+      // An attempt ended before the scan wants no history; a link that already happened keeps its import running (cancel it on its own).
       await this.db.tx((tx) =>
         this.history.cancelActiveIn(tx, ctx.orgId, row.id, 'pairing_cancelled'),
       );
-    }
-    if (['awaiting_qr', 'awaiting_pairing_code'].includes(row.connection_state)) {
       // An unfinished pairing holds fewer than 3 session rows: the worker's terminate stops the socket and forgets them.
       await this.control.terminate(ctx.orgId, row.id).catch(() => undefined);
     }

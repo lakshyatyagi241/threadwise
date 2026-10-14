@@ -1,6 +1,8 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { RequestContextStore } from '../../common/context/request-context';
+import { DatabaseService } from '../../infra/db/database.service';
+import { ContactQuotaService } from '../crm';
 import type {
   NormalisedDeliveryEvent,
   NormalisedInboundMessage,
@@ -44,6 +46,8 @@ export class WabaInboxSink implements WabaInboundSink {
     private readonly links: WabaChannelLinkService,
     private readonly publisher: ChannelIngestPublisher,
     @Optional() @Inject(CONVERSATIONS_FACADE) private readonly conversations?: ConversationsFacade,
+    @Optional() private readonly quota?: ContactQuotaService,
+    @Optional() private readonly db?: DatabaseService,
   ) {}
 
   /**
@@ -82,6 +86,9 @@ export class WabaInboxSink implements WabaInboundSink {
   async onHistory(ctx: InboundContext, items: HistoryItem[]): Promise<void> {
     const channel = await this.links.ensure(ctx.orgId, ctx.configId, { create: true });
     if (!channel) return;
+    // Asked once per delivery: when the plan's contact cap is already reached, the rest of this history is stored without trying to link a
+    // contact message after message (each try is a count and a refusal). A later live message of the thread links it when room appears.
+    const withContact = !(await this.contactCapReached(ctx.orgId));
     for (const item of items) {
       await this.publisher.enqueueInbound(ctx.orgId, channel.uuid, {
         providerMessageId: item.providerMessageId,
@@ -89,8 +96,23 @@ export class WabaInboxSink implements WabaInboundSink {
         kind: 'text',
         body: item.text,
         providerTimestamp: item.at,
-        history: { direction: item.outgoing ? 'out' : 'in', contact: true },
+        history: {
+          direction: item.outgoing ? 'out' : 'in',
+          ...(withContact ? { contact: true } : {}),
+        },
       });
+    }
+  }
+
+  /** True when the workspace has no room for one more contact. Unknown (no quota service here, or a read that failed) is "not reached". */
+  private async contactCapReached(orgId: number): Promise<boolean> {
+    if (!this.quota || !this.db) return false;
+    try {
+      const q = await this.db.txAs({ orgId }, (tx) => this.quota!.usage(tx, orgId));
+      return q.remaining === 0;
+    } catch (err) {
+      this.logger.warn({ orgId, err: String(err) }, 'contact cap unreadable for a history import');
+      return false;
     }
   }
 

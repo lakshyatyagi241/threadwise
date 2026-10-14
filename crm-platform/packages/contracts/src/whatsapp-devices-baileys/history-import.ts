@@ -33,6 +33,10 @@ export const HISTORY_IMPORT_ERROR_CODES = [
   'message_cap_reached',
   'chat_cap_reached',
   'contact_limit_reached',
+  /** A running import that WhatsApp stopped feeding was ended by the sweep: not WhatsApp's own "that was all" (`done` with this code). */
+  'ended_idle',
+  /** The socket could not read the import's limits (a deployment fault): the run is failed instead of using a guess. */
+  'limits_unavailable',
   'worker_error',
 ] as const;
 export const historyImportErrorCodeSchema = z.enum(HISTORY_IMPORT_ERROR_CODES);

@@ -67,7 +67,9 @@
         "message_cap_reached": "Am Limit für Nachrichten pro Nummer gestoppt. Bereits Importiertes bleibt erhalten.",
         "chat_cap_reached": "Am Limit für Chats pro Nummer gestoppt. Bereits Importiertes bleibt erhalten.",
         "contact_limit_reached": "Gestoppt, weil das Kontaktlimit Ihres Tarifs erreicht wurde. Geben Sie Kontakte frei oder wechseln Sie den Tarif, verknüpfen Sie die Nummer dann erneut und importieren Sie.",
-        "worker_error": "Der Import wurde wegen eines Fehlers gestoppt. Bereits Importiertes bleibt erhalten. Verknüpfen Sie die Nummer erneut, um es noch einmal zu versuchen."
+        "worker_error": "Der Import wurde wegen eines Fehlers gestoppt. Bereits Importiertes bleibt erhalten. Verknüpfen Sie die Nummer erneut, um es noch einmal zu versuchen.",
+        "ended_idle": "Abgeschlossen. WhatsApp hat keinen Verlauf mehr gesendet, daher wurde der Import mit den bereits eingegangenen Daten beendet.",
+        "limits_unavailable": "Der Import konnte nicht ausgeführt werden, weil der Dienst nicht korrekt eingerichtet ist. Wende dich an den Support und verknüpfe die Nummer anschließend erneut."
       }
     },
     "errors": {

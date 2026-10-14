@@ -15,6 +15,12 @@ import { HistoryImportService } from './history-import.service';
 import { isFinalBatch, planBatch, toIngest, type RunUsage } from './history-import-rules';
 
 const TALLY_TTL_S = 3 * 24 * 3600;
+/** While a long batch is being stored, the run is marked alive at least this often. */
+const TOUCH_EVERY_MS = 15_000;
+/** A batch must have this many attempts before its failure rate says anything about the pipeline. */
+const MIN_FOR_FAILURE_RATE = 10;
+/** The name of an error, never its message (a database error can quote the row). */
+const errorName = (e: unknown): string => (e instanceof Error ? e.name : 'Error');
 const tallyKeys = (orgId: number, runId: number) => ({
   perChat: `wa:hist:${orgId}:${runId}:pc`,
   chats: `wa:hist:${orgId}:${runId}:ch`,
@@ -61,19 +67,30 @@ export class HistoryImportSink implements InboundSink, OnModuleInit {
   async history(ctx: { orgId: number; deviceId: number }, batch: HistoryBatch): Promise<void> {
     const { orgId, deviceId } = ctx;
     if (!(await this.gate.isEnabledFor(orgId))) return;
-    let run = await this.db.txAs({ orgId, userId: null }, (tx) =>
+    const run = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.active(tx, orgId, deviceId),
     );
     // No active run: the person did not opt in, or cancelled. WhatsApp's history is dropped, not stored.
     if (!run) return;
+    if (batch.error) {
+      // The adapter could not do its job (a deployment without the limits provider): fail the run, never guess.
+      this.logger.error(
+        { orgId, deviceId, runId: run.id, code: batch.error },
+        '[HISTORY] the adapter reported a fault: the run is failed',
+      );
+      await this.service.finishAs(orgId, run.id, 'failed', batch.error);
+      return;
+    }
     try {
       await this.process(orgId, run, batch);
     } catch (err) {
       this.logger.error(
-        { orgId, deviceId, err: String(err) },
+        { orgId, deviceId, runId: run.id, err: String(err) },
         '[HISTORY] a batch could not be stored',
       );
-      run = await this.service.finishAs(orgId, run.id, 'failed', 'worker_error');
+      await this.service.finishAs(orgId, run.id, 'failed', 'worker_error');
+      // The tallies of a failed run are not kept for ever either.
+      await this.expire(tallyKeys(orgId, run.id));
     }
   }
 
@@ -81,10 +98,27 @@ export class HistoryImportSink implements InboundSink, OnModuleInit {
     if (run.state === 'idle') {
       await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.markRunning(tx, orgId, run.id));
     }
+    // Alive from the first moment of the batch: the idle sweep measures from here, so a batch that takes long is never "quiet".
+    await this.touch(orgId, run.id);
     const keys = tallyKeys(orgId, run.id);
+    const channelUuid = await this.channelOf(orgId, run.device_id);
+
+    // What the inbox already holds costs no room (a redelivered batch, an overlap between WhatsApp's sync types).
+    const known = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      this.repo.knownProviderIds(
+        tx,
+        orgId,
+        channelUuid,
+        batch.messages.map((n) => n.message.providerMessageId),
+      ),
+    );
+    const fresh = {
+      ...batch,
+      messages: batch.messages.filter((n) => !known.has(n.message.providerMessageId)),
+    };
     const usage = await this.usageOf(run, keys);
     const plan = planBatch(
-      batch,
+      fresh,
       {
         maxMessages: run.max_messages,
         maxMessagesPerChat: run.max_messages_per_chat,
@@ -93,55 +127,84 @@ export class HistoryImportSink implements InboundSink, OnModuleInit {
       usage,
     );
 
-    const channelUuid = await this.channelOf(orgId, run.device_id);
     let stored = 0;
+    let attempted = 0;
+    let failed = 0;
     let chatsCreated = 0;
     let contactsCreated = 0;
     let stopReason: 'limit_reached' | null = null;
+    let cancelled = false;
+    let lastTouch = Date.now();
 
-    for (const chat of plan.chats) {
-      // A cancel lands between chats: stop taking more, keep what is stored.
-      if (!(await this.stillActive(orgId, run.id))) return;
-      if (chat.firstSeen) await this.redis.sadd(keys.chats, chat.peerKey);
-      for (const m of chat.messages) {
-        const out = await RequestContextStore.run(
-          {
-            requestId: `wa-history-${randomUUID()}`,
-            orgId,
-            actorType: 'system',
-            actorId: null,
-            userId: null,
-          },
-          () =>
-            this.ingest.ingest(
-              {
-                orgId,
-                channelUuid,
-                message: (({ providerTimestamp, ...rest }) => ({
-                  ...rest,
-                  providerTimestamp: providerTimestamp.toISOString(),
-                }))(toIngest(m, chat)),
-              },
-              { finalAttempt: true },
-            ),
-        );
-        if (out.outcome !== 'stored') continue;
-        stored++;
-        await this.redis.hincrby(keys.perChat, chat.peerKey, 1);
-        if (out.createdConversation) chatsCreated++;
-        if (out.contactCreated) contactsCreated++;
-        if (out.quotaReached) {
-          stopReason = 'limit_reached';
+    try {
+      for (const chat of plan.chats) {
+        // A cancel lands between chats: stop taking more, keep (and count) what is stored.
+        if (!(await this.stillActive(orgId, run.id))) {
+          cancelled = true;
           break;
         }
+        if (chat.firstSeen) await this.redis.sadd(keys.chats, chat.peerKey);
+        let storedInChat = 0;
+        try {
+          for (const m of chat.messages) {
+            attempted++;
+            let out;
+            try {
+              out = await RequestContextStore.run(
+                {
+                  requestId: `wa-history-${randomUUID()}`,
+                  orgId,
+                  actorType: 'system',
+                  actorId: null,
+                  userId: null,
+                },
+                () =>
+                  this.ingest.ingest(
+                    {
+                      orgId,
+                      channelUuid,
+                      message: (({ providerTimestamp, ...rest }) => ({
+                        ...rest,
+                        providerTimestamp: providerTimestamp.toISOString(),
+                      }))(toIngest(m, chat)),
+                    },
+                    { finalAttempt: true },
+                  ),
+              );
+            } catch (err) {
+              // One bad message must not fail the run: skipped and counted. Ids only in the log, never a name, a number or a text.
+              failed++;
+              this.logger.warn(
+                { orgId, deviceId: run.device_id, runId: run.id, err: errorName(err) },
+                '[HISTORY] a message could not be stored and was skipped',
+              );
+              continue;
+            }
+            if (Date.now() - lastTouch > TOUCH_EVERY_MS) {
+              lastTouch = Date.now();
+              await this.touch(orgId, run.id);
+            }
+            if (out.outcome !== 'stored') continue;
+            stored++;
+            storedInChat++;
+            if (out.createdConversation) chatsCreated++;
+            if (out.contactCreated) contactsCreated++;
+            if (out.quotaReached) {
+              stopReason = 'limit_reached';
+              break;
+            }
+          }
+        } finally {
+          // One write per chat, whatever happened inside it.
+          if (storedInChat > 0) await this.redis.hincrby(keys.perChat, chat.peerKey, storedInChat);
+        }
+        if (stopReason) break;
       }
-      if (stopReason) break;
+    } finally {
+      await this.expire(keys);
     }
-    await Promise.all([
-      this.redis.expire(keys.perChat, TALLY_TTL_S),
-      this.redis.expire(keys.chats, TALLY_TTL_S),
-    ]);
 
+    // Always counted, even when a cancel won: the totals say what is really in the inbox.
     const alive = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.addBatch(tx, orgId, run.id, {
         chats: chatsCreated,
@@ -150,9 +213,17 @@ export class HistoryImportSink implements InboundSink, OnModuleInit {
         progress: batch.progress,
       }),
     );
-    if (!alive) return; // cancelled while this batch was stored
+    if (cancelled || !alive) return; // cancelled: the cancel already ended and cleaned the run
 
-    if (stopReason) {
+    if (attempted >= MIN_FOR_FAILURE_RATE && failed * 2 > attempted) {
+      // More than half of a batch could not be stored: that is the pipeline, not one bad message.
+      this.logger.error(
+        { orgId, deviceId: run.device_id, runId: run.id, attempted, failed },
+        '[HISTORY] most messages of a batch failed: the run is failed',
+      );
+      await this.service.finishAs(orgId, run.id, 'failed', 'worker_error');
+      await this.cleanup(keys);
+    } else if (stopReason) {
       // The plan's contact cap: the run stops here, with what is already stored, and says why.
       await this.service.finishAs(orgId, run.id, 'limit_reached', 'contact_limit_reached');
       await this.cleanup(keys);
@@ -163,6 +234,19 @@ export class HistoryImportSink implements InboundSink, OnModuleInit {
       await this.service.finishAs(orgId, run.id, 'done', null);
       await this.cleanup(keys);
     }
+  }
+
+  private async touch(orgId: number, runId: number): Promise<void> {
+    await this.db
+      .txAs({ orgId, userId: null }, (tx) => this.repo.touch(tx, orgId, runId))
+      .catch(() => undefined);
+  }
+
+  private async expire(keys: ReturnType<typeof tallyKeys>): Promise<void> {
+    await Promise.all([
+      this.redis.expire(keys.perChat, TALLY_TTL_S),
+      this.redis.expire(keys.chats, TALLY_TTL_S),
+    ]).catch(() => undefined);
   }
 
   private async cleanup(keys: ReturnType<typeof tallyKeys>): Promise<void> {

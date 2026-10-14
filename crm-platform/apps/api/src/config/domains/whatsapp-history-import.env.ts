@@ -20,6 +20,13 @@ const schema = z.object({
   WA_HISTORY_IMPORT_BATCH_SIZE: z.coerce.number().int().min(10).max(1_000).default(200),
   /** A running import that gets nothing for this long is finished. */
   WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS: z.coerce.number().int().min(30).max(3_600).default(180),
+  /** The same for a `full` import: WhatsApp's older chunks can come minutes apart, so the window is longer. */
+  WA_HISTORY_IMPORT_FULL_IDLE_FINISH_SECONDS: z.coerce
+    .number()
+    .int()
+    .min(30)
+    .max(7_200)
+    .default(600),
   /** An import that was asked for but whose history never arrived (not linked, or WhatsApp sent none) is given up after this long. */
   WA_HISTORY_IMPORT_AWAIT_MINUTES: z.coerce.number().int().min(5).max(1_440).default(30),
 });
@@ -32,6 +39,7 @@ export interface HistoryImportConfig {
   maxChats: number;
   batchSize: number;
   idleFinishSeconds: number;
+  fullIdleFinishSeconds: number;
   awaitMinutes: number;
 }
 
@@ -45,6 +53,7 @@ export function historyImportConfig(env: NodeJS.ProcessEnv = process.env): Histo
     maxChats: p.WA_HISTORY_IMPORT_MAX_CHATS,
     batchSize: p.WA_HISTORY_IMPORT_BATCH_SIZE,
     idleFinishSeconds: p.WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS,
+    fullIdleFinishSeconds: p.WA_HISTORY_IMPORT_FULL_IDLE_FINISH_SECONDS,
     awaitMinutes: p.WA_HISTORY_IMPORT_AWAIT_MINUTES,
   };
 }

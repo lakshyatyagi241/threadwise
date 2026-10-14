@@ -67,7 +67,9 @@
         "message_cap_reached": "Arrêté à la limite de messages par numéro. Ce qui a été importé est conservé.",
         "chat_cap_reached": "Arrêté à la limite de discussions par numéro. Ce qui a été importé est conservé.",
         "contact_limit_reached": "Arrêté car la limite de contacts de votre forfait a été atteinte. Libérez des contacts ou passez à un forfait supérieur, puis associez de nouveau le numéro et importez.",
-        "worker_error": "L'import s'est arrêté à cause d'une erreur. Ce qui a été importé est conservé. Associez de nouveau le numéro pour réessayer."
+        "worker_error": "L'import s'est arrêté à cause d'une erreur. Ce qui a été importé est conservé. Associez de nouveau le numéro pour réessayer.",
+        "ended_idle": "Terminé. WhatsApp a cessé d'envoyer l'historique, l'importation s'est donc arrêtée avec ce qui était déjà arrivé.",
+        "limits_unavailable": "L'importation n'a pas pu s'exécuter car le service n'est pas configuré correctement. Contactez le support, puis associez à nouveau le numéro."
       }
     },
     "errors": {

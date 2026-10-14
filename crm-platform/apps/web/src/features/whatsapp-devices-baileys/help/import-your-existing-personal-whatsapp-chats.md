@@ -39,7 +39,7 @@ A newly linked personal number starts with an empty shared inbox: only messages 
 
 - **Waiting for WhatsApp**: you chose to import and the number is being linked, or WhatsApp has not started to send yet. After about 30 minutes without history the import ends with a message that WhatsApp sent none.
 - **Importing**: chats are arriving. It can take a few minutes.
-- **Finished**: done. When WhatsApp stops sending for a few minutes the import also finishes by itself.
+- **Finished**: done. When WhatsApp stops sending for a few minutes the import also finishes by itself, and the card says that WhatsApp stopped sending history.
 - **Stopped at your contact limit**: your plan's limit on contacts was reached. What was imported stays. Free some contacts or upgrade, then link the number again and import.
 - **Did not finish**: something went wrong, and the card says what. What was imported stays.
 - **Cancelled**: you stopped it.

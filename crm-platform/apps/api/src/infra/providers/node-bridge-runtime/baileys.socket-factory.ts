@@ -257,10 +257,28 @@ export class BaileysSocketFactory implements WaSocketFactory {
         const handler = historyHandler;
         if (!handler || ended) return;
         try {
+          // No guess: a deployment without the limits provider fails the run loudly instead of importing with a window nobody chose.
+          if (!this.limits) {
+            this.logger.error(
+              { orgId: target.orgId, deviceId: target.deviceId },
+              '[NODE] the history import has no limits provider: the run is failed',
+            );
+            await handler({
+              syncType: 'other',
+              progress: null,
+              chats: [],
+              contacts: [],
+              messages: [],
+              skipped: 0,
+              last: true,
+              error: 'limits_unavailable',
+            });
+            return;
+          }
           const batches = readHistoryEvent(ev as unknown as RawHistoryEvent, {
             now: new Date(),
-            windowDays: this.limits?.windowDays(choice) ?? 90,
-            batchSize: this.limits?.batchSize() ?? 200,
+            windowDays: this.limits.windowDays(choice),
+            batchSize: this.limits.batchSize(),
             selfDigits: target.phoneDigits,
           });
           for (const b of batches) {

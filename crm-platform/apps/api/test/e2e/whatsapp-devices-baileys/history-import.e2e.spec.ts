@@ -1,6 +1,6 @@
 import type { Redis } from 'ioredis';
 import { RequestContextStore } from '../../../src/common/context/request-context';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { PERSONAL_WA_NOTICE_VERSION, REALTIME_EVENT } from '@crm/contracts';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import type { Normalized } from '../../../src/infra/providers/node-bridge-runtime/inbound-normalizer';
@@ -584,7 +584,12 @@ describe('ending a run', () => {
       [t2.orgId],
     );
     expect(await sweep.run()).toBeGreaterThanOrEqual(2);
-    expect(await status(t, a.id)).toMatchObject({ state: 'done' });
+    // Ended by silence, not by WhatsApp: done, with the reason, and the progress WhatsApp reported (never a made-up 100).
+    expect(await status(t, a.id)).toMatchObject({
+      state: 'done',
+      progress: 60,
+      lastError: { code: 'ended_idle' },
+    });
     expect(await status(t2, b.id)).toMatchObject({
       state: 'failed',
       lastError: { code: 'history_not_received' },
@@ -807,5 +812,167 @@ describe('who may do what, and whose it is', () => {
     expect(
       await count(`SELECT count(*)::int AS n FROM contacts WHERE org_id = $1`, [b.orgId]),
     ).toBe(0);
+  });
+});
+
+describe('review fixes: counts, idle windows, bad messages, run-wide caps, limits fault', () => {
+  const ingestSvc = () => p.h.app.get(InboundIngestService);
+  afterEach(() => vi.restoreAllMocks());
+
+  it('a cancel that lands between chats keeps the counts of what was already stored, and the tallies get a TTL', async () => {
+    const t = await tenant('hist-cancelcount');
+    const x = await pairing(t, 'recent');
+    const s = await link(x);
+    const real = (
+      sink as unknown as { stillActive: (o: number, r: number) => Promise<boolean> }
+    ).stillActive.bind(sink);
+    let calls = 0;
+    vi.spyOn(sink as unknown as { stillActive: typeof real }, 'stillActive').mockImplementation(
+      async (o, r) => {
+        calls += 1;
+        if (calls === 2) {
+          // the person presses cancel while the first chat has been stored
+          await post(t.admin, `/v2/devices/${x.id}/history-import/cancel`);
+          return false;
+        }
+        return real(o, r);
+      },
+    );
+    await s.emitHistory(
+      batch([
+        personMsg('919800000001', 'K1', ago(5)),
+        personMsg('919800000001', 'K2', ago(5) + 1000),
+        personMsg('919800000002', 'K3', ago(5)),
+      ]),
+    );
+    const st = await status(t, x.id);
+    expect(st).toMatchObject({ state: 'cancelled', messages: 2, chats: 1, contacts: 1 });
+    const ids = (await r.redis.keys(`wa:hist:${t.orgId}:*`)) as string[];
+    for (const k of ids) expect(await r.redis.ttl(k)).toBeGreaterThan(0);
+  });
+
+  it('a batch marks the run alive when it starts, so the sweep never ends a run that is mid-batch', async () => {
+    const t = await tenant('hist-alive');
+    const x = await pairing(t, 'recent');
+    const s = await link(x);
+    await s.emitHistory(batch([personMsg('919800000001', 'A1', ago(2))], { progress: 10 }));
+    await p.h.owner.query(
+      `UPDATE wa_device_history_imports SET last_batch_at = now() - interval '10 minutes' WHERE org_id = $1`,
+      [t.orgId],
+    );
+    let release: () => void = () => undefined;
+    const gate = new Promise<void>((res) => (release = res));
+    const svc = ingestSvc();
+    const real = svc.ingest.bind(svc);
+    vi.spyOn(svc, 'ingest').mockImplementation(async (job, opts) => {
+      await gate; // a slow database: the batch is being stored
+      return real(job, opts);
+    });
+    const busy = s.emitHistory(batch([personMsg('919800000002', 'A2', ago(2))], { progress: 20 }));
+    await new Promise((res) => setTimeout(res, 300));
+    expect(await sweep.run()).toBe(0); // quiet for 10 minutes before the batch, alive since it started
+    expect((await status(t, x.id)).state).toBe('running');
+    release();
+    await busy;
+    expect((await status(t, x.id)).messages).toBe(2);
+  });
+
+  it('a full import is given a longer idle window than a recent one', async () => {
+    const t = await tenant('hist-fullidle');
+    const x = await pairing(t, 'full');
+    const s = await link(x);
+    await s.emitHistory(
+      batch([personMsg('919800000001', 'F1', ago(2))], { progress: 40, syncType: 'full' }),
+    );
+    await p.h.owner.query(
+      `UPDATE wa_device_history_imports SET last_batch_at = now() - interval '5 minutes' WHERE org_id = $1`,
+      [t.orgId],
+    );
+    expect(await sweep.run()).toBe(0); // 5 minutes of silence: a recent run would have ended at 3
+    expect((await status(t, x.id)).state).toBe('running');
+    await p.h.owner.query(
+      `UPDATE wa_device_history_imports SET last_batch_at = now() - interval '11 minutes' WHERE org_id = $1`,
+      [t.orgId],
+    );
+    expect(await sweep.run()).toBe(1);
+    expect(await status(t, x.id)).toMatchObject({
+      state: 'done',
+      progress: 40,
+      lastError: { code: 'ended_idle' },
+    });
+  });
+
+  it('one bad message is skipped and the rest of the batch is stored; most of a batch failing fails the run', async () => {
+    const t = await tenant('hist-badmsg');
+    const x = await pairing(t, 'recent');
+    const s = await link(x);
+    const svc = ingestSvc();
+    const real = svc.ingest.bind(svc);
+    vi.spyOn(svc, 'ingest').mockImplementation(async (job, opts) => {
+      if (job.message.providerMessageId === 'BAD1') throw new Error('boom with a secret text');
+      return real(job, opts);
+    });
+    await s.emitHistory(
+      batch([
+        personMsg('919800000001', 'OK1', ago(3)),
+        personMsg('919800000001', 'BAD1', ago(3) + 1000),
+        personMsg('919800000001', 'OK2', ago(3) + 2000),
+      ]),
+    );
+    expect(await status(t, x.id)).toMatchObject({ state: 'running', messages: 2 });
+    vi.restoreAllMocks();
+    vi.spyOn(svc, 'ingest').mockRejectedValue(new Error('database down'));
+    await s.emitHistory(
+      batch(
+        Array.from({ length: 12 }, (_, i) => personMsg('919800000003', `DOWN${i}`, ago(3) + i)),
+      ),
+    );
+    expect(await status(t, x.id)).toMatchObject({
+      state: 'failed',
+      lastError: { code: 'worker_error' },
+      messages: 2,
+    });
+  });
+
+  it('messages the inbox already holds cost no room: a per-chat cap spans the run and ignores duplicates', async () => {
+    process.env.WA_HISTORY_IMPORT_MAX_MESSAGES_PER_CHAT = '3';
+    const t = await tenant('hist-duproom');
+    const x = await pairing(t, 'recent');
+    const s = await link(x);
+    const a = personMsg('919800000001', 'D-A', ago(4) + 2000);
+    const b = personMsg('919800000001', 'D-B', ago(4) + 3000);
+    const c = personMsg('919800000001', 'D-C', ago(4)); // older than both, and the only new one
+    await s.emitHistory(batch([a, b]));
+    await s.emitHistory(batch([a, b, c]));
+    const bodies = (
+      await p.h.owner.query(`SELECT body FROM messages WHERE org_id = $1 ORDER BY created_at`, [
+        t.orgId,
+      ])
+    ).rows.map((m) => m.body);
+    expect(bodies).toEqual(['hello D-C', 'hello D-A', 'hello D-B']);
+    // the cap is for the whole run: a fourth message in a later batch is refused
+    await s.emitHistory(batch([personMsg('919800000001', 'D-D', ago(4) + 4000)]));
+    expect(
+      await count(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1`, [t.orgId]),
+    ).toBe(3);
+  });
+
+  it('a socket without its limits fails the run with a code instead of importing with a guessed window', async () => {
+    const t = await tenant('hist-nolimits');
+    const x = await pairing(t, 'recent');
+    const s = await link(x);
+    await s.emitHistory({
+      ...batch([]),
+      syncType: 'other',
+      progress: null,
+      error: 'limits_unavailable',
+    });
+    expect(await status(t, x.id)).toMatchObject({
+      state: 'failed',
+      lastError: { code: 'limits_unavailable' },
+    });
+    expect(
+      (await one(`SELECT history_import_mode AS m FROM devices WHERE uuid = $1`, [x.id]))!.m,
+    ).toBe('none');
   });
 });

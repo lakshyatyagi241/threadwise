@@ -67,7 +67,9 @@
         "message_cap_reached": "Detenida en el límite de mensajes para un número. Lo que se importó permanece.",
         "chat_cap_reached": "Detenida en el límite de chats para un número. Lo que se importó permanece.",
         "contact_limit_reached": "Detenida porque se alcanzó el límite de contactos de tu plan. Libera algunos contactos o mejora tu plan, luego vincula el número de nuevo e importa.",
-        "worker_error": "La importación se detuvo por un error. Lo que se importó permanece. Vincula el número de nuevo para intentarlo otra vez."
+        "worker_error": "La importación se detuvo por un error. Lo que se importó permanece. Vincula el número de nuevo para intentarlo otra vez.",
+        "ended_idle": "Finalizado. WhatsApp dejó de enviar el historial, así que la importación terminó con lo que había llegado.",
+        "limits_unavailable": "No se pudo ejecutar la importación porque el servicio no está configurado correctamente. Contacta con soporte y luego vuelve a vincular el número."
       }
     },
     "errors": {

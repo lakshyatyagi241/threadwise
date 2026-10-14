@@ -67,7 +67,9 @@
         "message_cap_reached": "Interrompida no limite de mensagens para um número. O que foi importado permanece.",
         "chat_cap_reached": "Interrompida no limite de conversas para um número. O que foi importado permanece.",
         "contact_limit_reached": "Interrompida porque o limite de contatos do seu plano foi atingido. Libere alguns contatos ou faça upgrade, depois vincule o número novamente e importe.",
-        "worker_error": "A importação foi interrompida por um erro. O que foi importado permanece. Vincule o número novamente para tentar de novo."
+        "worker_error": "A importação foi interrompida por um erro. O que foi importado permanece. Vincule o número novamente para tentar de novo.",
+        "ended_idle": "Concluído. O WhatsApp parou de enviar o histórico, então a importação terminou com o que já havia chegado.",
+        "limits_unavailable": "Não foi possível executar a importação porque o serviço não está configurado corretamente. Entre em contato com o suporte e depois vincule o número novamente."
       }
     },
     "errors": {

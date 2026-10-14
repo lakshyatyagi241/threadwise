@@ -67,7 +67,9 @@
         "message_cap_reached": "Đã dừng ở giới hạn số tin nhắn cho một số. Những gì đã nhập vẫn được giữ.",
         "chat_cap_reached": "Đã dừng ở giới hạn số cuộc trò chuyện cho một số. Những gì đã nhập vẫn được giữ.",
         "contact_limit_reached": "Đã dừng vì đạt hạn mức liên hệ của gói. Hãy giải phóng bớt liên hệ hoặc nâng cấp, sau đó liên kết lại số và nhập.",
-        "worker_error": "Quá trình nhập dừng do có lỗi. Những gì đã nhập vẫn được giữ. Hãy liên kết lại số để thử lại."
+        "worker_error": "Quá trình nhập dừng do có lỗi. Những gì đã nhập vẫn được giữ. Hãy liên kết lại số để thử lại.",
+        "ended_idle": "Đã hoàn tất. WhatsApp đã ngừng gửi lịch sử, nên quá trình nhập kết thúc với những gì đã nhận được.",
+        "limits_unavailable": "Không thể chạy quá trình nhập vì dịch vụ chưa được thiết lập đúng. Hãy liên hệ bộ phận hỗ trợ, sau đó liên kết lại số này."
       }
     },
     "errors": {

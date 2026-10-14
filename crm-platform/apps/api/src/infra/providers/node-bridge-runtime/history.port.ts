@@ -36,4 +36,6 @@ export interface HistoryBatch {
   /** Messages in the event the adapter left out (outside the window, not importable). */
   skipped: number;
   last: boolean;
+  /** Set instead of messages when the adapter cannot do its job (no limits provider): the importer fails the run with a code. */
+  error?: 'limits_unavailable';
 }

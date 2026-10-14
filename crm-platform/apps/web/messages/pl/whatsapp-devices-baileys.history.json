@@ -67,7 +67,9 @@
         "message_cap_reached": "Zatrzymano na limicie wiadomości dla jednego numeru. To, co zaimportowano, pozostaje.",
         "chat_cap_reached": "Zatrzymano na limicie czatów dla jednego numeru. To, co zaimportowano, pozostaje.",
         "contact_limit_reached": "Zatrzymano, ponieważ osiągnięto limit kontaktów w Twoim planie. Zwolnij część kontaktów lub zmień plan, a następnie połącz numer ponownie i zaimportuj.",
-        "worker_error": "Import został zatrzymany z powodu błędu. To, co zaimportowano, pozostaje. Połącz numer ponownie, aby spróbować jeszcze raz."
+        "worker_error": "Import został zatrzymany z powodu błędu. To, co zaimportowano, pozostaje. Połącz numer ponownie, aby spróbować jeszcze raz.",
+        "ended_idle": "Zakończono. WhatsApp przestał wysyłać historię, więc import zakończył się na tym, co już dotarło.",
+        "limits_unavailable": "Nie udało się uruchomić importu, ponieważ usługa jest nieprawidłowo skonfigurowana. Skontaktuj się z pomocą techniczną, a następnie ponownie połącz numer."
       }
     },
     "errors": {

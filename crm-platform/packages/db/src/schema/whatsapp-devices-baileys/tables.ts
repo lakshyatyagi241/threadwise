@@ -60,7 +60,7 @@ export const devices = pgTable(
     stateChangedAt: timestamp('state_changed_at', { withTimezone: true }),
     /** Country code + local number as digits, kept by the API; unique per workspace where set. */
     phoneDigits: text('phone_digits'),
-    /** The history import chosen for the pairing in progress (20261202090000): `none`, `recent` or `full`. Reset when the run ends. */
+    /** The history import chosen for the pairing in progress (20261204090000): `none`, `recent` or `full`. Reset when the run ends. */
     historyImportMode: text('history_import_mode').notNull().default('none'),
     /** The risk acknowledgement that led to this device. */
     consentId: idColumn('consent_id'),
@@ -275,7 +275,7 @@ export const waDeviceGroups = pgTable(
 export type WaDeviceGroupsRow = typeof waDeviceGroups.$inferSelect;
 export type NewWaDeviceGroupsRow = typeof waDeviceGroups.$inferInsert;
 
-/** One run of the opt-in history import of a personal number. Mirrors 20261202090000_wa_device_history_import.sql. Counts only: no text, no phone. */
+/** One run of the opt-in history import of a personal number. Mirrors 20261204090000_wa_device_history_import.sql. Counts only: no text, no phone. */
 export const waDeviceHistoryImports = pgTable(
   'wa_device_history_imports',
   {

@@ -67,7 +67,9 @@
         "message_cap_reached": "Stopped at the limit of messages for one number. What was imported stays.",
         "chat_cap_reached": "Stopped at the limit of chats for one number. What was imported stays.",
         "contact_limit_reached": "Stopped because your plan's contact limit was reached. Free some contacts or upgrade, then link the number again and import.",
-        "worker_error": "The import stopped because of an error. What was imported stays. Link the number again to try again."
+        "worker_error": "The import stopped because of an error. What was imported stays. Link the number again to try again.",
+        "ended_idle": "Finished. WhatsApp stopped sending history, so the import ended with what had arrived.",
+        "limits_unavailable": "The import could not run because the service is not set up correctly. Contact support, then link the number again."
       }
     },
     "errors": {

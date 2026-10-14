@@ -517,7 +517,7 @@ transaction that starts the attempt, BEFORE the worker is asked for a QR; the so
 | `recent` | false             | INITIAL_BOOTSTRAP, RECENT, PUSH_NAME            | 90 days (`WA_HISTORY_IMPORT_RECENT_DAYS`) |
 | `full`   | true              | the above and FULL                              | 730 days (`WA_HISTORY_IMPORT_FULL_DAYS`)  |
 
-`full` needs the plan feature `personal_history_full` (owner decision 2026-10-14). Migration `20261203090000` switches it on for the plans with an unlimited or at least 3 personal numbers (the demo plans growth and scale) and off elsewhere (starter); the operator can change it in the plan editor. `recent` stays open to every workspace allowed to use personal numbers. The pairing start enforces it on the server (422 `PLAN_FEATURE_LOCKED`, before anything is counted or recorded) and the wizard shows the option disabled with a pointer to the plans.
+`full` needs the plan feature `personal_history_full` (owner decision 2026-10-14). Migration `20261204090100` switches it on for the plans with an unlimited or at least 3 personal numbers (the demo plans growth and scale) and off elsewhere (starter); the operator can change it in the plan editor. `recent` stays open to every workspace allowed to use personal numbers. The pairing start enforces it on the server (422 `PLAN_FEATURE_LOCKED`, before anything is counted or recorded) and the wizard shows the option disabled with a pointer to the plans.
 
 ON_DEMAND is never taken: nothing requests more history later. The choice is spent when the run ends (`devices.history_import_mode` goes back to `none`), so a reconnect never asks WhatsApp again.
 
@@ -526,16 +526,18 @@ ON_DEMAND is never taken: nothing requests more history later. The choice is spe
 `wa_device_history_imports` (one row per run, at most one active per device, RLS forced): `idle` (chosen, waiting for the link and for WhatsApp) -> `running` (first batch) -> `done`, `failed`, `cancelled`, `limit_reached`.
 The caps in force at the request are copied onto the run. Counters count only what this run stored. A re-link imports only if the person chooses again before scanning; a new request ends the previous active run (`cancelled`).
 
-| End of a run                                                                | State           | `lastError.code`        |
-| --------------------------------------------------------------------------- | --------------- | ----------------------- |
-| last slice of the final sync type at progress 100                           | `done`          | none                    |
-| nothing for `WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS` (180)                   | `done`          | none                    |
-| message cap per number reached                                              | `done`          | `message_cap_reached`   |
-| chat cap reached                                                            | `done`          | `chat_cap_reached`      |
-| the plan's contact cap stopped a contact                                    | `limit_reached` | `contact_limit_reached` |
-| asked for, nothing arrived within `WA_HISTORY_IMPORT_AWAIT_MINUTES` (30)    | `failed`        | `history_not_received`  |
-| the importer threw                                                          | `failed`        | `worker_error`          |
-| the person cancelled, a new request, a disconnect, a failed or cancelled QR | `cancelled`     | none                    |
+| End of a run                                                                                                           | State           | `lastError.code`                                                           |
+| ---------------------------------------------------------------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------- |
+| last slice of the final sync type at progress 100                                                                      | `done`          | none                                                                       |
+| nothing for `WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS` (180; `WA_HISTORY_IMPORT_FULL_IDLE_FINISH_SECONDS` 600 for `full`) | `done`          | `ended_idle` (progress stays as WhatsApp reported it, never forced to 100) |
+| message cap per number reached                                                                                         | `done`          | `message_cap_reached`                                                      |
+| chat cap reached                                                                                                       | `done`          | `chat_cap_reached`                                                         |
+| the plan's contact cap stopped a contact                                                                               | `limit_reached` | `contact_limit_reached`                                                    |
+| asked for, nothing arrived within `WA_HISTORY_IMPORT_AWAIT_MINUTES` (30)                                               | `failed`        | `history_not_received`                                                     |
+| the importer threw                                                                                                     | `failed`        | `worker_error`                                                             |
+| more than half of a batch of at least 10 messages could not be stored                                                  | `failed`        | `worker_error`                                                             |
+| the socket has no limits provider (a deployment fault)                                                                 | `failed`        | `limits_unavailable`                                                       |
+| the person cancelled, a new request, a disconnect, a failed or cancelled QR                                            | `cancelled`     | none                                                                       |
 
 ### 23.3 Bridge to API
 
@@ -559,7 +561,7 @@ and counted, an anonymous-id chat gets its number when WhatsApp names it, and th
 ### 23.5 Limits (platform environment, documented defaults)
 
 `WA_HISTORY_IMPORT_RECENT_DAYS` 90, `WA_HISTORY_IMPORT_FULL_DAYS` 730, `WA_HISTORY_IMPORT_MAX_MESSAGES` 50000 per number, `WA_HISTORY_IMPORT_MAX_MESSAGES_PER_CHAT` 500 (the newest of a delivered slice are kept first), `WA_HISTORY_IMPORT_MAX_CHATS` 5000, `WA_HISTORY_IMPORT_BATCH_SIZE` 200,
-`WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS` 180, `WA_HISTORY_IMPORT_AWAIT_MINUTES` 30. Each has a hard ceiling in `config/domains/whatsapp-history-import.env.ts`. Documented in `.env.example`.
+`WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS` 180, `WA_HISTORY_IMPORT_FULL_IDLE_FINISH_SECONDS` 600, `WA_HISTORY_IMPORT_AWAIT_MINUTES` 30. Each has a hard ceiling in `config/domains/whatsapp-history-import.env.ts`. Documented in `.env.example`.
 
 ### 23.6 API and permissions
 
@@ -581,3 +583,7 @@ Nothing here ran against a real WhatsApp account. Not proven: that WhatsApp send
 ### 23.9 Open item for counsel (not changed here)
 
 Importing the past messages of a number that was used personally, and making contacts of the people in them, may need legal review: purpose, notice to the people in the chats, and retention. The wizard lists what happens before the scan, and the existing risk notice is unchanged. **Counsel must review before the feature is offered beyond the pilot, and any change to the legal text is theirs to make**; no legal wording was written or edited in this change. Tracked as open owner decision O1 in `docs/threadwise-port/plan/whatsapp-personal-history-import-build.md`.
+
+### 23.10 Behaviour of the importer, as reviewed
+
+The importer touches the run at the start of every batch and at least every 15 s while it stores a long one, so the idle sweep never ends a run that is busy. One message that cannot be stored is skipped and logged with ids only (organization, number, run; never a name, a number or a text); only when more than half of a batch of 10 or more fails does the run fail. The counts of what was stored are always added to the run, also when a cancel lands mid-batch, and the Redis tallies always get their TTL. Messages the inbox already holds (the ledger) are removed before the caps are applied, so a redelivery costs no room, and the per-chat cap spans the whole run. A sweep end is `done` with `ended_idle`, the card says "Finished. WhatsApp stopped sending history, so the import ended with what had arrived." Cloud API coexistence history asks once per delivery whether the contact cap is already reached and, if so, stores the rest without trying to link contacts.

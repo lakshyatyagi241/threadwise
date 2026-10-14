@@ -67,7 +67,9 @@
         "message_cap_reached": "Gestopt bij de limiet aan berichten voor één nummer. Wat is geïmporteerd, blijft behouden.",
         "chat_cap_reached": "Gestopt bij de limiet aan chats voor één nummer. Wat is geïmporteerd, blijft behouden.",
         "contact_limit_reached": "Gestopt omdat de contactlimiet van je abonnement is bereikt. Maak contacten vrij of upgrade, koppel het nummer daarna opnieuw en importeer.",
-        "worker_error": "De import is gestopt vanwege een fout. Wat is geïmporteerd, blijft behouden. Koppel het nummer opnieuw om het nog eens te proberen."
+        "worker_error": "De import is gestopt vanwege een fout. Wat is geïmporteerd, blijft behouden. Koppel het nummer opnieuw om het nog eens te proberen.",
+        "ended_idle": "Voltooid. WhatsApp stopte met het verzenden van de geschiedenis, dus de import is beëindigd met wat al was binnengekomen.",
+        "limits_unavailable": "De import kon niet worden uitgevoerd omdat de service niet goed is ingesteld. Neem contact op met support en koppel het nummer daarna opnieuw."
       }
     },
     "errors": {

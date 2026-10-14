@@ -29,7 +29,7 @@ Goal: an OPT-IN import of existing chats and people when a personal number (Bail
 
 ## Files
 
-Contracts `packages/contracts/src/whatsapp-devices-baileys/history-import.ts` (+ `devices.ts`, `errors.ts`). Migration `packages/db/migrations/20261202090000_wa_device_history_import.sql`, Drizzle `waDeviceHistoryImports`.
+Contracts `packages/contracts/src/whatsapp-devices-baileys/history-import.ts` (+ `devices.ts`, `errors.ts`). Migration `packages/db/migrations/20261204090000_wa_device_history_import.sql`, Drizzle `waDeviceHistoryImports`.
 Adapter `infra/providers/node-bridge-runtime/history-sync.ts`, `baileys.socket-factory.ts`, `inbound-normalizer.ts` (`history` mode), `inbound.port.ts`, `socket.port.ts`.
 Runtime `modules/node-bridge-runtime/runtime/{device-session,device-runtime.service,routers}.ts`, worker module (limits provider).
 Device module `modules/whatsapp-devices-baileys/history-import-{rules,sweep.service}.ts`, `history-import.{mapper,repository,service,sink}.ts`, `device-pairing.service.ts`, `devices.{controller,mapper,repository,service}.ts`, worker module.
@@ -46,13 +46,31 @@ How the history event is simulated: unit tests mock the `baileys` module and fir
 ## Owner decisions of 2026-10-14 (applied)
 
 - H3 confirmed: defaults stay 90 / 730 days, 500 per chat, 50 000 per number, 5 000 chats.
-- H12 `full` is a plan feature `personal_history_full` (catalogue `PLAN_FEATURE_DEFS`, group messaging, default false; migration `20261203090000_wa_history_import_followups.sql`). `recent` stays open to every workspace with personal numbers. Enforced on the server (pairing start: 422 `PLAN_FEATURE_LOCKED`, `errors[]` names the feature) and in the web (`meta.historyFullAllowed`; the option is shown disabled with an upgrade hint). Switched on for plans with an unlimited or at least 3 personal numbers (demo plans growth and scale); off on starter. Plan labels and hints exist in the plan editor, the account plan card and the plans screens, in 21 locales.
+- H12 `full` is a plan feature `personal_history_full` (catalogue `PLAN_FEATURE_DEFS`, group messaging, default false; migration `20261204090100_wa_history_import_followups.sql`). `recent` stays open to every workspace with personal numbers. Enforced on the server (pairing start: 422 `PLAN_FEATURE_LOCKED`, `errors[]` names the feature) and in the web (`meta.historyFullAllowed`; the option is shown disabled with an upgrade hint). Switched on for plans with an unlimited or at least 3 personal numbers (demo plans growth and scale); off on starter. Plan labels and hints exist in the plan editor, the account plan card and the plans screens, in 21 locales.
 - H13 Cloud API coexistence history now also creates contacts, quietly (no `contact.created`, no consent event, counted against the plan cap, source `whatsapp_coexistence_import`). A behaviour change from TW-WABA-046, noted in the spec (23.4), the WABA parity notes and the coexistence e2e. There is no run to stop in coexistence, so at the cap the thread is kept without a contact (`needs_contact`) and every message is stored.
 - H14 The inbox marks imported chats and messages: `conversations.imported_at` (set once when an import creates the thread) drives `ConversationSummary.imported`; `meta.historySync` drives `MessageResponse.imported`. A small "Imported" tag with a hint, in the row's spoken label too. The mail backfill carries the same flag and so shows it.
 - H15 One realtime hint when an import ends (`inbox.history.imported`: number uuid + final state), never per message; a cancel that stored nothing or a superseded run sends none. The inbox list and the card refetch on it.
 - H16 Counsel review is an explicit open item (O1 below). No legal text was changed.
 
+## Review fixes (2026-10-14, after the code review of the commit)
+
+- R1 Counts of what was stored are always added to the run (also after a cancel); Redis tallies always get a TTL, also when a batch fails.
+- R2 The importer touches the run at batch start and while storing; the idle window for `full` is 600 s (`WA_HISTORY_IMPORT_FULL_IDLE_FINISH_SECONDS`); a sweep end is `done` with `ended_idle` and no forced 100.
+- R3 One failing message is skipped and logged (ids only); a batch of 10 or more fails the run only when more than half failed.
+- R4 Ledger duplicates are removed before the caps are applied; the per-chat cap is run-wide (Redis tally) and written once per chat.
+- R5 Coexistence history asks once per delivery if the contact cap is reached and then stops trying to link contacts.
+- R6 A socket without the limits provider fails the run with `limits_unavailable` instead of using a 90-day guess.
+- R7 The plan-feature migration casts only a JSON number and grants `personal_history_full` only on a numeric `devices` of 0 or less or 3 or more; a missing key grants nothing. Our migrations were renamed to `20261204090000_wa_device_history_import.sql` and `20261204090100_wa_history_import_followups.sql` (the prefix `20261202090000` is also used by `camp_retry_failed_option`). A development database that already applied the old names needs its `_migrations` ids (and the followups checksum) updated, or a reset.
+
+### Known and intended (recorded)
+
+- `conversation.created` is suppressed for ALL history ingests: the personal import, the Cloud API coexistence import and the mail backfill. No consumer of that event exists today.
+- The "Imported" marker (`imported_at`, `meta.historySync`) therefore also appears on mail-backfilled threads and messages.
+- Backdated history is written with the message's original time, so rows older than the partitions that exist land in the default partition of `messages`.
+
 ## Open owner decisions
+
+- O3 **Partitions.** Pre-create the monthly `messages` partitions for the history window (about 24 months back for `full`) before enabling the feature broadly, so imported rows do not pile up in the default partition. Not done here.
 
 - O1 **Counsel review (open).** Importing the past messages of a number used personally and making contacts of the people in them: purpose, notice to those people, retention. The wizard explains what happens; the risk notice text was NOT changed and must not be changed by engineering. Needed before the feature is offered beyond the pilot.
 - O2 Real-account verification: the owner will do the first-link test with the checklist below.

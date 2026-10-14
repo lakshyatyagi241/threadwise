@@ -1,11 +1,12 @@
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { Client } from 'pg';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { runMigrations } from '@crm/db';
 
 /**
- * `wa_device_history_imports` and `devices.history_import_mode` (migration 20261202090000), proven against a real Postgres as the
+ * `wa_device_history_imports` and `devices.history_import_mode` (migration 20261204090000), proven against a real Postgres as the
  * restricted application role: a workspace never sees or writes another workspace's import runs, a run cannot name another workspace's
  * device, a device has at most one active run, the checks hold, and deleting the device removes its runs.
  */
@@ -209,5 +210,43 @@ describe('personal-number history import schema', () => {
     expect(
       (await owner.query(`SELECT 1 FROM wa_device_history_imports WHERE id = $1`, [run])).rows,
     ).toHaveLength(0);
+  });
+
+  it('the plan-feature migration grants personal_history_full only on an explicit unlimited marker or 3 or more devices, and never casts a non-number', async () => {
+    const sqlText = readFileSync(
+      resolve(
+        __dirname,
+        '../../../../../packages/db/migrations/20261204090100_wa_history_import_followups.sql',
+      ),
+      'utf8',
+    );
+    const updates = sqlText.slice(
+      sqlText.indexOf('UPDATE plans'),
+      sqlText.indexOf('ALTER TABLE conversations'),
+    );
+    const variants: Array<[string, string, boolean]> = [
+      ['hz_three', '{"devices": 3}', true],
+      ['hz_ten', '{"devices": 10}', true],
+      ['hz_zero', '{"devices": 0}', true],
+      ['hz_one', '{"devices": 1}', false],
+      ['hz_missing', '{"contacts": 100}', false],
+      ['hz_null', '{"devices": null}', false],
+      ['hz_text', '{"devices": "many"}', false],
+    ];
+    for (const [slug, limits] of variants) {
+      await owner.query(
+        `INSERT INTO plans (slug, name, kind, amount, currency, billing_unit, billing_duration, is_free, limits, features)
+         VALUES ($1, $1, 'plan', 0, 'USD', 'months', 1, true, $2::jsonb, '{}'::jsonb)`,
+        [slug, limits],
+      );
+    }
+    await owner.query(updates); // must not raise on the text and null values
+    const got = await owner.query(
+      `SELECT slug, features -> 'personal_history_full' AS f FROM plans WHERE slug LIKE 'hz%'`,
+    );
+    for (const [slug, , expected] of variants) {
+      expect(got.rows.find((r) => r.slug === slug)?.f, slug).toBe(expected);
+    }
+    await owner.query(`DELETE FROM plans WHERE slug LIKE 'hz%'`);
   });
 });

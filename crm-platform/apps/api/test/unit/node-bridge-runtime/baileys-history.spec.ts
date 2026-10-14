@@ -35,14 +35,18 @@ const limits = {
   batchSize: () => 2,
 };
 
-async function open(historyImport?: 'none' | 'recent' | 'full') {
+async function open(historyImport?: 'none' | 'recent' | 'full', withLimits = true) {
   const ev = new EventEmitter();
   lib.sock = {
     ev: Object.assign(ev, { removeAllListeners: ev.removeAllListeners.bind(ev) }),
     user: { id: '919000000001:5@s.whatsapp.net' },
     end: () => undefined,
   };
-  const socket = await new BaileysSocketFactory(store as never, {} as never, limits).create({
+  const socket = await new BaileysSocketFactory(
+    store as never,
+    {} as never,
+    withLimits ? limits : undefined,
+  ).create({
     orgId: 1,
     deviceId: 2,
     phoneDigits: '919000000001',
@@ -136,5 +140,17 @@ describe('a messaging-history.set event reaches the handler as bounded batches, 
     ev.emit('messaging-history.set', { syncType: SYNC_TYPE.RECENT, messages: [msg('1')] });
     await new Promise((r) => setTimeout(r, 20));
     expect(seen).toHaveLength(0);
+  });
+});
+
+describe('a deployment without the limits provider', () => {
+  it('fails loudly with a code instead of importing with a window nobody chose', async () => {
+    const { socket, ev } = await open('full', false);
+    const seen: HistoryBatch[] = [];
+    socket.subscribeHistory!(async (b) => void seen.push(b));
+    ev.emit('messaging-history.set', { syncType: SYNC_TYPE.FULL, messages: [msg('1')] });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(seen).toHaveLength(1);
+    expect(seen[0]).toMatchObject({ error: 'limits_unavailable', messages: [], last: true });
   });
 });

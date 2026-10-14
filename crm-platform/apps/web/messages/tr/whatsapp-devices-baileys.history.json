@@ -67,7 +67,9 @@
         "message_cap_reached": "Bir numara için mesaj limitinde durdu. İçe aktarılanlar kalır.",
         "chat_cap_reached": "Bir numara için sohbet limitinde durdu. İçe aktarılanlar kalır.",
         "contact_limit_reached": "Planınızın kişi limitine ulaşıldığı için durdu. Bazı kişileri silin veya planınızı yükseltin, ardından numarayı yeniden bağlayıp içe aktarın.",
-        "worker_error": "İçe aktarma bir hata nedeniyle durdu. İçe aktarılanlar kalır. Tekrar denemek için numarayı yeniden bağlayın."
+        "worker_error": "İçe aktarma bir hata nedeniyle durdu. İçe aktarılanlar kalır. Tekrar denemek için numarayı yeniden bağlayın.",
+        "ended_idle": "Tamamlandı. WhatsApp geçmişi göndermeyi durdurdu, bu yüzden içe aktarma o ana kadar gelenlerle sona erdi.",
+        "limits_unavailable": "Hizmet doğru şekilde kurulmadığı için içe aktarma çalıştırılamadı. Destek ekibiyle iletişime geçin, ardından numarayı yeniden bağlayın."
       }
     },
     "errors": {

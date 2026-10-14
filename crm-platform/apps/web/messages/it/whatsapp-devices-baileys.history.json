@@ -67,7 +67,9 @@
         "message_cap_reached": "Interrotta al limite di messaggi per numero. Quanto importato resta.",
         "chat_cap_reached": "Interrotta al limite di chat per numero. Quanto importato resta.",
         "contact_limit_reached": "Interrotta perché è stato raggiunto il limite di contatti del tuo piano. Libera dei contatti o passa a un piano superiore, poi collega di nuovo il numero e importa.",
-        "worker_error": "L'importazione si è interrotta a causa di un errore. Quanto importato resta. Collega di nuovo il numero per riprovare."
+        "worker_error": "L'importazione si è interrotta a causa di un errore. Quanto importato resta. Collega di nuovo il numero per riprovare.",
+        "ended_idle": "Completato. WhatsApp ha smesso di inviare la cronologia, quindi l'importazione è terminata con quanto era già arrivato.",
+        "limits_unavailable": "Impossibile eseguire l'importazione perché il servizio non è configurato correttamente. Contatta il supporto, quindi collega di nuovo il numero."
       }
     },
     "errors": {

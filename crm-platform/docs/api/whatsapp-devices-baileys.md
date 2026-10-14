@@ -112,7 +112,7 @@ The imported threads carry `imported: true` on the inbox's conversation summary 
 
 `PersonalDevice.historyImport` (list and detail) and `GET .../history-import`: `state` (`not_requested`, `idle`, `running`, `done`, `failed`, `cancelled`, `limit_reached`), `mode`, `chats`,
 `contacts`, `messages` (what the run stored; a redelivered batch counts nothing), `progress` 0 to 100, `windowDays`, `startedAt`, `finishedAt`, `lastError.code` (`history_not_received`,
-`message_cap_reached`, `chat_cap_reached`, `contact_limit_reached`, `worker_error`). No name, number or message text is ever in it. The web polls every 3 s while `idle` or `running`.
+`ended_idle` (a `done` run that the idle sweep ended), `limits_unavailable`, `message_cap_reached`, `chat_cap_reached`, `contact_limit_reached`, `worker_error`). No name, number or message text is ever in it. The web polls every 3 s while `idle` or `running`.
 
 `POST .../history-import/cancel`: stops an `idle` or `running` run (`cancelled`), no further batch is accepted, what was stored stays, the choice is reset. 409
 `HISTORY_IMPORT_NOT_ACTIVE` (`errors: [{ path: "state" }]`) when there is nothing to stop. A disconnect also ends a waiting run. Quiet storage rules, caps and the completion rules:

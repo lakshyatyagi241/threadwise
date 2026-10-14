@@ -9,7 +9,8 @@ export const HISTORY_SWEEP_TICK_MS = 30_000;
 
 /**
  * Ends the runs nobody will end (worker, every workspace): a running import that has been quiet for `WA_HISTORY_IMPORT_IDLE_FINISH_SECONDS`
- * is finished (WhatsApp sends no "that was all" marker we can rely on), and one that was asked for but whose history never came
+ * (`WA_HISTORY_IMPORT_FULL_IDLE_FINISH_SECONDS` for a `full` one; the importer touches the run at the start of every batch and while it stores a long one, so a run that is
+ * busy is never quiet) is finished as `done` with `ended_idle` (progress is left as WhatsApp reported it) (WhatsApp sends no "that was all" marker we can rely on), and one that was asked for but whose history never came
  * (`WA_HISTORY_IMPORT_AWAIT_MINUTES`: never linked, or WhatsApp sent none) is failed with `history_not_received`. Both are idempotent: a
  * run that a cancel or another worker already ended is left alone.
  */
@@ -36,11 +37,16 @@ export class HistoryImportSweepService {
   async run(): Promise<number> {
     const cfg = historyImportConfig();
     const due = await this.db.privileged((tx) =>
-      this.repo.dueForSweep(tx, cfg.idleFinishSeconds, cfg.awaitMinutes),
+      this.repo.dueForSweep(
+        tx,
+        { recent: cfg.idleFinishSeconds, full: cfg.fullIdleFinishSeconds },
+        cfg.awaitMinutes,
+      ),
     );
     let ended = 0;
     for (const r of due.quiet) {
-      if (await this.service.finishAs(r.org_id, r.id, 'done', null)) ended++;
+      // WhatsApp did not say it was done (no last slice at progress 100): the run ends as done, but with the reason, and without a made-up 100.
+      if (await this.service.finishAs(r.org_id, r.id, 'done', 'ended_idle')) ended++;
     }
     for (const r of due.stale) {
       if (await this.service.finishAs(r.org_id, r.id, 'failed', 'history_not_received')) ended++;

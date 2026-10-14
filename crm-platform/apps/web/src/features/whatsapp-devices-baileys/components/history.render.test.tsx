@@ -173,6 +173,10 @@ describe('the card on the number page', () => {
     );
     expect(limit).toContain(esc((H.error as Record<string, string>).contact_limit_reached));
     expect(limit).toContain('data-state="limit_reached"');
+    const idle = card(status({ state: 'done', progress: 40, lastError: { code: 'ended_idle' } }));
+    expect(idle).toContain(esc((H.error as Record<string, string>).ended_idle));
+    const noLimits = card(status({ state: 'failed', lastError: { code: 'limits_unavailable' } }));
+    expect(noLimits).toContain(esc((H.error as Record<string, string>).limits_unavailable));
     const failed = card(status({ state: 'failed', lastError: { code: 'history_not_received' } }));
     expect(failed).toContain(esc((H.error as Record<string, string>).history_not_received));
   });

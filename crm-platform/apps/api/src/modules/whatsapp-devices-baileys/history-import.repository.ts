@@ -136,14 +136,44 @@ export class HistoryImportRepository {
     runId: number,
     d: { chats: number; contacts: number; messages: number; progress: number | null },
   ): Promise<boolean> {
+    // The counts of what was really stored are added whatever the state is (a cancel that landed mid-batch must not make the totals lie);
+    // progress and the activity time move only while the run is still active.
     const res = await tx.execute(sql`
       UPDATE wa_device_history_imports SET
         chats_count = chats_count + ${d.chats}, contacts_count = contacts_count + ${d.contacts},
         messages_count = messages_count + ${d.messages}, batches_count = batches_count + 1,
-        progress = GREATEST(progress, ${d.progress ?? 0}), last_batch_at = now()
-       WHERE org_id = ${orgId} AND id = ${runId} AND state IN ('idle', 'running')
-      RETURNING id`);
-    return res.rows.length === 1;
+        progress = CASE WHEN state IN ('idle', 'running') THEN GREATEST(progress, ${d.progress ?? 0}) ELSE progress END,
+        last_batch_at = CASE WHEN state IN ('idle', 'running') THEN now() ELSE last_batch_at END
+       WHERE org_id = ${orgId} AND id = ${runId}
+      RETURNING state`);
+    const state = (res.rows[0] as { state: string } | undefined)?.state;
+    return state === 'idle' || state === 'running';
+  }
+
+  /** The importer is alive: a batch started, or a long one is still being stored. The idle sweep measures from here. */
+  async touch(tx: Tx, orgId: number, runId: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wa_device_history_imports SET last_batch_at = now()
+       WHERE org_id = ${orgId} AND id = ${runId} AND state IN ('idle', 'running')`);
+  }
+
+  /** Which of these provider message ids the inbox already holds on this device's channel (the ledger), so a redelivery costs no room. */
+  async knownProviderIds(
+    tx: Tx,
+    orgId: number,
+    channelUuid: string,
+    ids: string[],
+  ): Promise<Set<string>> {
+    if (ids.length === 0) return new Set();
+    const res = await tx.execute(sql`
+      SELECT l.key FROM message_ledger l
+        JOIN channels ch ON ch.org_id = l.org_id AND ch.id = l.channel_id
+       WHERE l.org_id = ${orgId} AND ch.uuid = ${channelUuid}::uuid AND l.kind = 'provider_id'
+         AND l.key IN (${sql.join(
+           ids.map((i) => sql`${i}`),
+           sql`, `,
+         )})`);
+    return new Set((res.rows as Array<{ key: string }>).map((r) => r.key));
   }
 
   /** Ends an active run in a final state and gives the device its normal socket back. Returns the row, or null when it was not active. */
@@ -169,12 +199,14 @@ export class HistoryImportRepository {
   /** For the sweep (privileged, every workspace): runs that went quiet, and runs whose history never came. */
   async dueForSweep(
     tx: Tx,
-    idleSeconds: number,
+    idleSeconds: { recent: number; full: number },
     awaitMinutes: number,
   ): Promise<{ quiet: HistoryRunRow[]; stale: HistoryRunRow[] }> {
     const quiet = await tx.execute(sql`
       SELECT ${COLUMNS} FROM wa_device_history_imports r
-       WHERE r.state = 'running' AND r.last_batch_at < now() - make_interval(secs => ${idleSeconds}) LIMIT 100`);
+       WHERE r.state = 'running'
+         AND r.last_batch_at < now() - make_interval(secs => CASE WHEN r.mode = 'full' THEN ${idleSeconds.full}::double precision ELSE ${idleSeconds.recent}::double precision END)
+       LIMIT 100`);
     const stale = await tx.execute(sql`
       SELECT ${COLUMNS} FROM wa_device_history_imports r
        WHERE r.state = 'idle' AND r.created_at < now() - make_interval(mins => ${awaitMinutes}) LIMIT 100`);

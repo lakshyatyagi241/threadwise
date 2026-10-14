@@ -67,7 +67,9 @@
         "message_cap_reached": "Berhenti di batas jumlah pesan untuk satu nomor. Yang sudah diimpor tetap ada.",
         "chat_cap_reached": "Berhenti di batas jumlah obrolan untuk satu nomor. Yang sudah diimpor tetap ada.",
         "contact_limit_reached": "Berhenti karena batas kontak paket Anda tercapai. Kosongkan beberapa kontak atau tingkatkan paket, lalu tautkan nomor lagi dan impor.",
-        "worker_error": "Impor berhenti karena terjadi kesalahan. Yang sudah diimpor tetap ada. Tautkan nomor lagi untuk mencoba lagi."
+        "worker_error": "Impor berhenti karena terjadi kesalahan. Yang sudah diimpor tetap ada. Tautkan nomor lagi untuk mencoba lagi.",
+        "ended_idle": "Selesai. WhatsApp berhenti mengirim riwayat, sehingga impor berakhir dengan data yang sudah masuk.",
+        "limits_unavailable": "Impor tidak dapat dijalankan karena layanan belum disiapkan dengan benar. Hubungi dukungan, lalu tautkan kembali nomornya."
       }
     },
     "errors": {
