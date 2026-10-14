@@ -11,14 +11,14 @@
     },
     "web-unit": {
       "files": 779,
-      "failedFiles": 9,
-      "tests": 9420,
-      "passed": 9420,
+      "failedFiles": 0,
+      "tests": 9481,
+      "passed": 9480,
       "failed": 0,
-      "skipped": 0
+      "skipped": 1
     }
   },
-  "runTotal": 18269,
+  "runTotal": 18330,
   "coverageByGroup": {
     "common": {
       "files": 20,
