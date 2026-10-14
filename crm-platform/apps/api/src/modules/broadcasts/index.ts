@@ -23,6 +23,8 @@ export {
   EngineSenderRegistry,
   commandForText,
   renderPlainBody,
+  SenderRefused,
+  SenderThrottled,
   type EngineSender,
   type OpenedSender,
   type OutgoingMessage,
