@@ -6,6 +6,7 @@ import {
   type ConsentGateReason,
   type ConsentGateResult,
   type ConsentModality,
+  type ConsentNoticeEvidence,
   type ConsentSubject,
   type PurposeInput,
 } from '@crm/contracts';
@@ -19,6 +20,10 @@ export interface GateOptions {
   replyWindowOpen?: boolean;
   /** Run inside the caller's transaction (it is already scoped to the workspace). */
   tx?: Tx;
+  /** The workspace switch for the purpose (call recording). False answers `purpose_not_enabled` before anything else. */
+  purposeEnabled?: boolean;
+  /** The delivered notice and the person's answer, for a notice-first purpose (call recording, AI disclosure). */
+  noticeEvidence?: ConsentNoticeEvidence;
 }
 
 export interface GateManyOptions {
@@ -81,6 +86,7 @@ export class ConsentGate {
           ...(modality ? { modality } : {}),
           requireConsent: false,
           replyWindowOpen: true,
+          ...(options.purposeEnabled === undefined ? {} : { purposeEnabled: options.purposeEnabled }),
           facts: NO_FACTS,
         });
       }
@@ -96,6 +102,8 @@ export class ConsentGate {
         ...(modality ? { modality } : {}),
         requireConsent,
         ...(options.replyWindowOpen ? { replyWindowOpen: true } : {}),
+        ...(options.purposeEnabled === undefined ? {} : { purposeEnabled: options.purposeEnabled }),
+        ...(options.noticeEvidence ? { noticeEvidence: options.noticeEvidence } : {}),
         facts,
       });
     } catch (err) {

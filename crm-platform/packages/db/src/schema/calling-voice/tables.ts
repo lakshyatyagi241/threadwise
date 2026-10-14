@@ -264,6 +264,18 @@ export const waCalls = pgTable(
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
+    // BL-144 (migration 20261202090000): the consent evidence, the retention clock, the legal hold and the removal of the recording.
+    recordingConsentStatus: text('recording_consent_status'),
+    recordingConsentMethod: text('recording_consent_method'),
+    recordingConsentAt: timestamp('recording_consent_at', { withTimezone: true }),
+    recordingConsentBy: idColumn('recording_consent_by'),
+    recordingNoticeVersion: integer('recording_notice_version'),
+    recordingNoticeSha256: text('recording_notice_sha256'),
+    recordingStoredAt: timestamp('recording_stored_at', { withTimezone: true }),
+    recordingLegalHold: boolean('recording_legal_hold').notNull().default(false),
+    recordingHoldReason: text('recording_hold_reason'),
+    recordingDeletedAt: timestamp('recording_deleted_at', { withTimezone: true }),
+    recordingDeletedReason: text('recording_deleted_reason'),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
@@ -308,6 +320,11 @@ export const waCalls = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
     foreignKey({
+      name: 'fk_wa_calls_recording_consent_by',
+      columns: [t.orgId, t.recordingConsentBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    foreignKey({
       name: 'fk_wa_calls_assistant_id',
       columns: [t.orgId, t.assistantId],
       foreignColumns: [aiCallAssistants.orgId, aiCallAssistants.id],
@@ -325,6 +342,9 @@ export const waCalls = pgTable(
       .on(t.orgId, t.startedAt.desc())
       .where(sql`${t.status} = 'ringing'`),
     index('idx_wa_calls_provider').on(t.orgId, t.provider),
+    index('idx_wa_calls_recording_stored_at')
+      .on(t.recordingStoredAt)
+      .where(sql`${t.recordingPath} is not null and not ${t.recordingLegalHold}`),
     index('idx_wa_calls_org_started_at').on(t.orgId, t.startedAt.desc(), t.id.desc()),
     index('idx_wa_calls_handler_started_at')
       .on(t.orgId, t.handlerUserId, t.startedAt.desc())
