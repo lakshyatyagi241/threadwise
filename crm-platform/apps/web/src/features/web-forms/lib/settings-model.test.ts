@@ -22,6 +22,7 @@ const consent = (over: Partial<FormConsent> = {}): FormConsent => ({
   text: 'I agree.',
   required: true,
   marketing: false,
+  coversSms: false,
   version: 3,
   ...over,
 });
