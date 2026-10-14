@@ -2,7 +2,7 @@ import type { NavItem } from '../_registry/types';
 
 /**
  * Email (Gmail) is a connection, not daily work, so the sidebar does not list it (`inMenu: false`): its tile is in Settings >
- * Integrations (see `settings.ts`). The entry stays registered so the plan paywall covers `/email` (a workspace without the
+ * Channels (see `settings.ts`). The entry stays registered so the plan paywall covers `/email` (a workspace without the
  * Marketplace integration sees the upgrade screen, like Shopify and WooCommerce), Help can document it and the command palette
  * finds it. The inbox surfaces (the channel filter and tag, the composer) are not gated by this entry.
  */

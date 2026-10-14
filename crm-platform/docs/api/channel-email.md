@@ -1,7 +1,7 @@
 # Email channel API (Gmail)
 
 Everything is under `/v2`, signed in as a user. A mailbox is addressed by its uuid. No response ever carries a token, a scope list or the sync
-cursor. Email is the paid first-party Marketplace **integration** **Email (Gmail)** (kind `integration`, category Messaging and email; plan feature `email_channel`, limit `email_mailboxes`; its tile is in Settings > Integrations); the platform operator
+cursor. Email is the paid first-party Marketplace **integration** **Email (Gmail)** (kind `integration`, category Messaging and email; plan feature `email_channel`, limit `email_mailboxes`; its tile is in Settings > Channels); the platform operator
 gives the platform a Google OAuth client first ([runbooks/google-mail-setup.md](../runbooks/google-mail-setup.md)).
 
 Gates, in this order on every mailbox route: sign-in, the permission, the plan feature `email_channel` (422 `PLAN_FEATURE_LOCKED` on every route,
