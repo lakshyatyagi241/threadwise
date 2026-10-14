@@ -152,7 +152,9 @@
       "savedReplyGone": "Dit opgeslagen antwoord bestaat niet meer.",
       "savedReplyChannel": "Dit opgeslagen antwoord is niet bedoeld voor dit soort kanaal.",
       "shortcutTaken": "Een ander opgeslagen antwoord gebruikt die sneltoets al.",
-      "importInvalid": "Dit bestand kan niet als opgeslagen antwoorden worden gelezen. Het heeft een eerste rij nodig met de kolommen title, shortcut en body, en maximaal 1.000 rijen."
+      "importInvalid": "Dit bestand kan niet als opgeslagen antwoorden worden gelezen. Het heeft een eerste rij nodig met de kolommen title, shortcut en body, en maximaal 1.000 rijen.",
+      "contactOptedOut": "Dit contact heeft zich afgemeld voor marketingberichten, dus het bericht is niet verzonden.",
+      "consentRequired": "Deze werkruimte vereist een vastgelegde toestemming voor marketingberichten en dit contact heeft die niet, dus het bericht is niet verzonden."
     },
     "bubble": {
       "kind": {

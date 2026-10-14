@@ -152,7 +152,9 @@
       "savedReplyGone": "Bu hazır yanıt artık mevcut değil.",
       "savedReplyChannel": "Bu hazır yanıt bu tür bir kanal için uygun değil.",
       "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor.",
-      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır."
+      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır.",
+      "contactOptedOut": "Bu kişi pazarlama iletilerinden çıktığı için ileti gönderilmedi.",
+      "consentRequired": "Bu çalışma alanı pazarlama iletileri için kayıtlı onay gerektiriyor ve bu kişinin onayı yok, bu yüzden ileti gönderilmedi."
     },
     "bubble": {
       "kind": {

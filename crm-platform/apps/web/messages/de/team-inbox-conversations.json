@@ -152,7 +152,9 @@
       "savedReplyGone": "Diese gespeicherte Antwort existiert nicht mehr.",
       "savedReplyChannel": "Diese gespeicherte Antwort ist nicht für diese Art von Kanal gedacht.",
       "shortcutTaken": "Eine andere gespeicherte Antwort verwendet dieses Kürzel bereits.",
-      "importInvalid": "Diese Datei kann nicht als Antwortvorlagen gelesen werden. Die erste Zeile muss die Spalten title, shortcut und body enthalten, und es dürfen höchstens 1.000 Zeilen sein."
+      "importInvalid": "Diese Datei kann nicht als Antwortvorlagen gelesen werden. Die erste Zeile muss die Spalten title, shortcut und body enthalten, und es dürfen höchstens 1.000 Zeilen sein.",
+      "contactOptedOut": "Dieser Kontakt hat Marketing-Nachrichten abbestellt, daher wurde die Nachricht nicht gesendet.",
+      "consentRequired": "Dieser Arbeitsbereich verlangt eine dokumentierte Einwilligung für Marketing-Nachrichten und dieser Kontakt hat keine, daher wurde die Nachricht nicht gesendet."
     },
     "bubble": {
       "kind": {

@@ -119,6 +119,9 @@ export class ChannelDispatcher {
    */
   async purposeFor(orgId: number, envelope: unknown, tx?: Tx): Promise<PurposeInput> {
     const parsed = outboundEnvelopeSchema.safeParse(envelope);
+    if (parsed.success && parsed.data.kind === 'text' && parsed.data.email?.marketing) {
+      return 'marketing_messaging';
+    }
     if (parsed.success && parsed.data.kind === 'template') {
       const t = parsed.data.template;
       return this.consentGate.purposeOfTemplate(orgId, t.name, t.language, tx);

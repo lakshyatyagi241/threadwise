@@ -152,7 +152,9 @@
       "savedReplyGone": "Balasan tersimpan ini sudah tidak ada.",
       "savedReplyChannel": "Balasan tersimpan ini tidak ditujukan untuk jenis kanal ini.",
       "shortcutTaken": "Balasan tersimpan lain sudah memakai pintasan itu.",
-      "importInvalid": "File ini tidak bisa dibaca sebagai balasan tersimpan. Baris pertama harus berisi kolom title, shortcut dan body, dengan maksimal 1.000 baris."
+      "importInvalid": "File ini tidak bisa dibaca sebagai balasan tersimpan. Baris pertama harus berisi kolom title, shortcut dan body, dengan maksimal 1.000 baris.",
+      "contactOptedOut": "Kontak ini telah berhenti berlangganan pesan pemasaran, jadi pesan tidak dikirim.",
+      "consentRequired": "Ruang kerja ini mewajibkan persetujuan tercatat untuk pesan pemasaran dan kontak ini belum memilikinya, jadi pesan tidak dikirim."
     },
     "bubble": {
       "kind": {

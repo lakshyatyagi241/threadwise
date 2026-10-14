@@ -152,7 +152,9 @@
       "savedReplyGone": "This saved reply no longer exists.",
       "savedReplyChannel": "This saved reply is not meant for this kind of channel.",
       "shortcutTaken": "Another saved reply already uses that shortcut.",
-      "importInvalid": "That file cannot be read as saved replies. It needs a first row with the columns title, shortcut and body, and at most 1,000 rows."
+      "importInvalid": "That file cannot be read as saved replies. It needs a first row with the columns title, shortcut and body, and at most 1,000 rows.",
+      "contactOptedOut": "This contact has unsubscribed from marketing messages, so the message was not sent.",
+      "consentRequired": "This workspace requires a recorded consent for marketing messages and this contact has none, so the message was not sent."
     },
     "bubble": {
       "kind": {

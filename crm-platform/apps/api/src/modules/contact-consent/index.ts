@@ -4,6 +4,7 @@ export {
   type RecordEventInput,
   type RecordOutcome,
 } from './consent.service';
+export { ConsentUnsubscribeService, type UnsubscribeLink } from './consent-unsubscribe.service';
 export { ConsentSettingsService } from './consent-settings.service';
 export { ConsentPolicyService, hasGrantedConsentSql } from './consent-policy.service';
 export {

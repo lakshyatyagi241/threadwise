@@ -152,7 +152,9 @@
       "savedReplyGone": "Ten szablon odpowiedzi już nie istnieje.",
       "savedReplyChannel": "Ten szablon odpowiedzi nie jest przeznaczony dla tego rodzaju kanału.",
       "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu.",
-      "importInvalid": "Tego pliku nie można odczytać jako zapisanych odpowiedzi. Pierwszy wiersz musi zawierać kolumny title, shortcut i body, a plik może mieć najwyżej 1000 wierszy."
+      "importInvalid": "Tego pliku nie można odczytać jako zapisanych odpowiedzi. Pierwszy wiersz musi zawierać kolumny title, shortcut i body, a plik może mieć najwyżej 1000 wierszy.",
+      "contactOptedOut": "Ten kontakt wypisał się z wiadomości marketingowych, więc wiadomość nie została wysłana.",
+      "consentRequired": "Ta przestrzeń robocza wymaga zarejestrowanej zgody na wiadomości marketingowe, a ten kontakt jej nie ma, więc wiadomość nie została wysłana."
     },
     "bubble": {
       "kind": {
