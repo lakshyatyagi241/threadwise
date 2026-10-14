@@ -105,9 +105,26 @@ function statusesOf(input: {
 
 /** What an inbound message knows about its sender (`ContactsService.resolveOrCreateByIdentity`). */
 export interface ResolveContactInput {
-  kind: 'phone' | 'email';
-  /** As the channel wrote it: a phone number in any format, or an email address. Canonicalised here. */
+  /**
+   * `phone` and `email` are identities; `channel_uid` is a person a channel knows only by its own id (a Telegram user, a Facebook or
+   * Instagram sender, a website widget visitor): `value` is that id and `channel` names the channel. Such a contact is unique per
+   * (workspace, channel, id).
+   */
+  kind: 'phone' | 'email' | 'channel_uid';
+  /** As the channel wrote it: a phone number in any format, an email address, or (`channel_uid`) the channel's own id. */
   value: string;
+  /** `channel_uid` only: the channel the id belongs to (`telegram`, `facebook`, `instagram`, `chatbot_widget`). */
+  channel?: string;
+  /**
+   * `channel_uid` only: what else the channel knows. With `matchPhoneFirst`, a contact that already holds this phone IS the person
+   * (the widget's pre-chat form) and nothing new is made; otherwise the extras are stored on a contact created here.
+   */
+  phone?: string | null;
+  email?: string | null;
+  firstName?: string | null;
+  matchPhoneFirst?: boolean;
+  /** `channel_uid` only: the contact's note (`contacts.message`), such as "Source: Telegram DM". */
+  message?: string;
   /** The sender's own name (WhatsApp's profile name), kept only when a contact is created. */
   name?: string | null;
   /** Where the contact came from (`contacts.source`). */
@@ -118,6 +135,8 @@ export interface ResolveContactInput {
    * somebody wrote is never replaced).
    */
   quiet?: boolean;
+  /** The name a CREATED contact gets when `name` is empty (a placeholder for a bare number). Never written to an existing contact. */
+  createdName?: string;
   /** The stage a created contact starts in, instead of the workspace default (a lead source's own stage). A lost stage is ignored. */
   lifecycleStage?: string;
   /** The owner of a created contact (an internal user id), for a writer that assigns on arrival (lead sources). */
@@ -472,6 +491,28 @@ export class ContactsService {
     orgId: number,
     input: ResolveContactInput,
   ): Promise<ResolvedContact> {
+    // The audit row names the context's workspace and actor. A worker (a channel webhook, a store import) has none of its own: it acts
+    // as the system actor of THIS workspace; a request of the same workspace keeps its own actor.
+    const current = RequestContextStore.peek();
+    if (current && current.orgId === orgId) return this.resolveInContext(tx, orgId, input);
+    return RequestContextStore.run(
+      {
+        requestId: `resolve-${randomUUID()}`,
+        orgId,
+        actorType: 'system',
+        actorId: null,
+        userId: null,
+      },
+      () => this.resolveInContext(tx, orgId, input),
+    );
+  }
+
+  private async resolveInContext(
+    tx: Tx,
+    orgId: number,
+    input: ResolveContactInput,
+  ): Promise<ResolvedContact> {
+    if (input.kind === 'channel_uid') return this.resolveByChannelUid(tx, orgId, input);
     const phone = input.kind === 'phone' ? canonicalizePhone({ number: input.value }) : null;
     const value = input.kind === 'phone' ? phone?.e164 : input.value.trim().toLowerCase();
     if (!value || (input.kind === 'phone' && !phone)) return { outcome: 'unusable' };
@@ -539,7 +580,7 @@ export class ContactsService {
 
     const displayId = await this.displayIds.next(tx, orgId, MODULE_KEY, DISPLAY_PREFIX);
     const created = await this.repo.insert(tx, orgId, {
-      name: input.name?.trim() || null,
+      name: input.name?.trim() || input.createdName?.trim() || null,
       email: input.kind === 'email' ? value : undefined,
       phone: input.kind === 'phone' ? value : undefined,
       lifecycleStage: stage ?? undefined,
@@ -755,6 +796,106 @@ export class ContactsService {
       const v = (res.rows[0] as { v: string | null } | undefined)?.v;
       return v === null || v === undefined || v.trim() === '' ? null : v;
     });
+  }
+
+  /**
+   * `resolveOrCreateByIdentity` for a person a channel knows only by its own id. The same rules as the phone and email path: one lookup
+   * under an advisory lock (two messages from one new sender make one contact), the plan's contact cap (`quota_reached`, never an
+   * exception: the message must still arrive), the workspace's default stage and status, an identity row for any phone or address the
+   * channel gave, and an audit row. It is quiet: no `contact.created` event, as the raw inserts it replaces never announced one. A blank
+   * name on an existing contact is filled in; a curated one is never replaced. Consent: none is granted, ever.
+   */
+  private async resolveByChannelUid(
+    tx: Tx,
+    orgId: number,
+    input: ResolveContactInput,
+  ): Promise<ResolvedContact> {
+    const channel = input.channel?.trim();
+    const uid = input.value.trim();
+    if (!channel || uid === '') return { outcome: 'unusable' };
+
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`contact-channel:${orgId}:${channel}:${uid}`}, 0))`,
+    );
+
+    const typedPhone = input.phone?.trim() ? input.phone.trim() : null;
+    const phone = typedPhone
+      ? (canonicalizePhone({ number: typedPhone })?.e164 ?? typedPhone)
+      : null;
+    const email = input.email?.trim() ? input.email.trim().toLowerCase() : null;
+
+    if (phone && input.matchPhoneFirst) {
+      const digits = phone.replace(/[^0-9]/g, '');
+      const hit = await tx.execute(sql`
+        SELECT id, uuid FROM contacts
+        WHERE org_id = ${orgId} AND regexp_replace(coalesce(normalized_phone, ''), '[^0-9]', '', 'g') = ${digits}
+        ORDER BY id LIMIT 1`);
+      const row = hit.rows[0] as { id: number | string; uuid: string } | undefined;
+      if (row) return { outcome: 'found', contactId: Number(row.id), uuid: row.uuid };
+    }
+
+    const keyed = await tx.execute(
+      sql`SELECT id, uuid FROM contacts WHERE org_id = ${orgId} AND channel = ${channel} AND channel_uid = ${uid}`,
+    );
+    const known = keyed.rows[0] as { id: number | string; uuid: string } | undefined;
+    if (known) {
+      await this.fillBlankName(tx, orgId, Number(known.id), input.name);
+      return { outcome: 'found', contactId: Number(known.id), uuid: known.uuid };
+    }
+
+    try {
+      await this.quota.assertCanAddOne(tx, orgId);
+    } catch (err) {
+      if (err instanceof AppError && err.code === ERROR_CODES.PLAN_LIMIT_REACHED) {
+        return { outcome: 'quota_reached' };
+      }
+      throw err;
+    }
+
+    let stage =
+      input.lifecycleStage ?? (await this.repo.defaultOptionValue(tx, orgId, 'lifecycle_stage'));
+    const flags = stage ? await this.repo.stageFlags(tx, orgId, stage) : null;
+    if (flags?.isLost) stage = undefined;
+    const stageValues =
+      stage && flags
+        ? stageEntryValues({
+            flags,
+            current: { wonAt: null, lostAt: null, lostReason: null, otherLostReason: null },
+            now: new Date(),
+          })
+        : {};
+    const statusCtx = await this.repo.statusContext(tx, orgId);
+    const statusPlan = planStatus({
+      scope: statusCtx.scope,
+      stage: stage ?? 'new',
+      stageLabel: statusCtx.stageLabels.get(stage ?? 'new') ?? null,
+      stageChanged: true,
+      current: null,
+      requested: undefined,
+    });
+    const displayId = await this.displayIds.next(tx, orgId, MODULE_KEY, DISPLAY_PREFIX);
+    const created = await this.repo.insert(tx, orgId, {
+      name: input.name?.trim() || null,
+      firstName: input.firstName?.trim() || null,
+      email,
+      phone,
+      lifecycleStage: stage ?? undefined,
+      wonAt: (stageValues.wonAt as Date | null | undefined) ?? null,
+      lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
+      status: statusPlan.status ?? undefined,
+      source: input.source ?? null,
+      ownerId: input.ownerId ?? null,
+      channel,
+      channelUid: uid,
+      message: input.message ?? null,
+      data: {},
+      displayId,
+      createdBy: null,
+    });
+    if (email) await this.repo.addIdentity(tx, orgId, created.id, 'email', email);
+    if (phone) await this.repo.addIdentity(tx, orgId, created.id, 'phone', phone);
+    await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
+    return { outcome: 'created', contactId: created.id, uuid: created.uuid };
   }
 
   /** A name nobody has written yet is filled in; a curated one is never replaced. */

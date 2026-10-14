@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { CONTACT_RESOLVER, type ContactResolverPort } from '../../crm/contact-resolver.port';
+import { ContactsService } from '../../crm';
 import { recomputeProductAggregate } from '../../catalog-products';
 import {
   CUSTOMER_GROUP,
@@ -27,7 +28,10 @@ const lock = (tx: Tx, key: string) =>
  */
 @Injectable()
 export class SqlStoreMirror implements StoreMirror {
-  constructor(@Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort) {}
+  constructor(
+    @Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort,
+    private readonly contactsService: ContactsService,
+  ) {}
 
   async upsertProduct(
     tx: Tx,
@@ -235,38 +239,31 @@ export class SqlStoreMirror implements StoreMirror {
   ): Promise<boolean> {
     await lock(tx, `ecom-customer:${orgId}:${c.phone}`);
     // A contact is found by its number, as digits or with a leading `+`: the stored number may be either.
-    const found = await tx.execute(sql`
-      SELECT id FROM contacts WHERE org_id = ${orgId} AND normalized_phone IN (${c.phone}, ${`+${c.phone}`})
-      ORDER BY id LIMIT 1`);
-    const existing = found.rows[0] as { id: number | string } | undefined;
-    let contactId: number;
-    let created = false;
-    if (existing) {
-      contactId = Number(existing.id);
-      // The order that brought the customer may have made the contact first, with no email and no store keys: fill an empty email and
-      // add the store's keys, never replace anything the contact already holds.
-      await tx.execute(sql`
-        UPDATE contacts
-        SET email = coalesce(email, ${c.email || null}),
-            data = ${JSON.stringify({
-              [CUSTOMER_KEY[kind]]: c.storeId,
-              orders_count: c.ordersCount,
-              total_spent: c.totalSpent,
-            })}::jsonb || coalesce(data, '{}'::jsonb)
-        WHERE org_id = ${orgId} AND id = ${contactId}`);
-    } else {
-      const made = await tx.execute(sql`
-        INSERT INTO contacts (org_id, name, email, phone, owner_id, data)
-        VALUES (${orgId}, ${c.name}, ${c.email || null}, ${c.phone}, ${userId},
-                ${JSON.stringify({
-                  [CUSTOMER_KEY[kind]]: c.storeId,
-                  orders_count: c.ordersCount,
-                  total_spent: c.totalSpent,
-                })}::jsonb)
-        RETURNING id`);
-      contactId = Number((made.rows[0] as { id: number | string }).id);
-      created = true;
-    }
+    // Through the contacts service (identity lookup under a lock, the plan's contact cap, default stage and status, audit). Quiet: a
+    // synced store customer is not live engagement, so no `contact.created` flow or notification fires per customer. It grants NO
+    // consent: being a customer is not agreement to marketing (see the commerce marketing flag, `ecom-consent`).
+    const resolved = await this.contactsService.resolveOrCreateByIdentity(tx, orgId, {
+      kind: 'phone',
+      value: `+${c.phone}`,
+      createdName: c.name,
+      ownerId: userId,
+      quiet: true,
+    });
+    // Over the contact cap (or an unusable number) the customer is not mirrored as a contact; the sync carries on.
+    if (resolved.outcome !== 'found' && resolved.outcome !== 'created') return false;
+    const contactId = resolved.contactId;
+    const created = resolved.outcome === 'created';
+    // The order that brought the customer may have made the contact first, with no email and no store keys: fill an empty email and add
+    // the store's keys, never replace anything the contact already holds.
+    await tx.execute(sql`
+      UPDATE contacts
+      SET email = coalesce(email, ${c.email || null}),
+          data = ${JSON.stringify({
+            [CUSTOMER_KEY[kind]]: c.storeId,
+            orders_count: c.ordersCount,
+            total_spent: c.totalSpent,
+          })}::jsonb || coalesce(data, '{}'::jsonb)
+      WHERE org_id = ${orgId} AND id = ${contactId}`);
     await tx.execute(sql`
       INSERT INTO contact_group_members (org_id, contact_id, group_id) VALUES (${orgId}, ${contactId}, ${groupId})
       ON CONFLICT (org_id, contact_id, group_id) DO NOTHING`);

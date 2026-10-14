@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { ContactsService } from '../../crm';
 import {
   AI_SOURCE,
   phoneDigits,
@@ -160,6 +161,8 @@ const toLine = (r: LineRow): InboxLine => ({
 export class SqlInboxGateway implements InboxGateway {
   private readonly logger = new Logger(SqlInboxGateway.name);
 
+  constructor(private readonly contacts: ContactsService) {}
+
   async ensureConversation(
     tx: Tx,
     orgId: number,
@@ -268,29 +271,25 @@ export class SqlInboxGateway implements InboxGateway {
     try {
       await tx.transaction(async (sp) => {
         const digits = phoneDigits(visitor.phone);
-        let contactId: number | null = null;
-        if (digits !== '') {
-          const hit = await sp.execute(sql`
-            SELECT id FROM contacts
-            WHERE org_id = ${orgId} AND regexp_replace(coalesce(normalized_phone, ''), '[^0-9]', '', 'g') = ${digits}
-            ORDER BY id LIMIT 1`);
-          if (hit.rows[0]) contactId = Number((hit.rows[0] as { id: number | string }).id);
-        }
-        if (contactId === null) {
-          const keyed = await sp.execute(sql`
-            SELECT id FROM contacts
-            WHERE org_id = ${orgId} AND channel = 'chatbot_widget' AND channel_uid = ${visitor.visitorUuid}`);
-          if (keyed.rows[0]) contactId = Number((keyed.rows[0] as { id: number | string }).id);
-        }
         const phone = digits === '' ? null : `+${digits}`;
-        if (contactId === null) {
-          const inserted = await sp.execute(sql`
-            INSERT INTO contacts (org_id, name, first_name, email, phone, owner_id, channel, channel_uid, source)
-            VALUES (${orgId}, ${visitor.name}, ${visitor.name}, ${visitor.email}, ${phone}, ${widget.userId},
-                    'chatbot_widget', ${visitor.visitorUuid}, 'chatbot_widget')
-            RETURNING id`);
-          contactId = Number((inserted.rows[0] as { id: number | string }).id);
-        } else {
+        // Through the contacts service: audit and the plan's contact cap apply. A contact that already holds the typed phone IS the
+        // visitor; else the visitor is keyed by the widget channel. Nothing here grants consent: a chat message is not agreement.
+        const r = await this.contacts.resolveOrCreateByIdentity(sp as Tx, orgId, {
+          kind: 'channel_uid',
+          channel: 'chatbot_widget',
+          value: visitor.visitorUuid,
+          name: visitor.name,
+          firstName: visitor.name,
+          email: visitor.email,
+          phone,
+          matchPhoneFirst: true,
+          ownerId: widget.userId,
+          source: 'chatbot_widget',
+          quiet: true,
+        });
+        if (r.outcome !== 'found' && r.outcome !== 'created') return;
+        const contactId = r.contactId;
+        if (r.outcome === 'found') {
           await sp.execute(sql`
             UPDATE contacts SET
               name = COALESCE(name, ${visitor.name}),

@@ -20,6 +20,7 @@ import {
   previewOf,
   type Normalized,
 } from '../ingest-rules';
+import { ContactsService } from '../../crm';
 import type { InstagramInboxIngest, IngestOutcome, ThreadRef } from './tokens';
 
 /** The channel kind an Instagram account's threads live on. */
@@ -74,6 +75,7 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
     private readonly db: DatabaseService,
     private readonly external: ExternalChannelIngest,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly contacts: ContactsService,
   ) {}
 
   /** Keeps an account's inbox channel in step with the link (linked or not). */
@@ -181,19 +183,28 @@ export class ChatInstagramIngest implements InstagramInboxIngest {
       let contactId = conv.contact_id === null ? null : Number(conv.contact_id);
       // The sender becomes a lead, keyed by the sender id (no phone). A test ping, a history message and our own send never do.
       if (isGenuineInbound(n) && n.igsid !== '') {
-        const c = await tx.execute(sql`
-          INSERT INTO contacts (org_id, name, channel, channel_uid, message, image_url)
-          VALUES (${orgId}, ${contactNameOf(n) ?? CONTACT_LABEL}, ${INSTAGRAM_KIND}, ${n.igsid}, ${CONTACT_SOURCE}, ${n.avatar || null})
-          ON CONFLICT (org_id, channel, channel_uid) WHERE channel IS NOT NULL AND channel_uid IS NOT NULL
-          DO UPDATE SET name = coalesce(nullif(contacts.name, ''), EXCLUDED.name),
-                        image_url = coalesce(nullif(contacts.image_url, ''), EXCLUDED.image_url)
-          RETURNING id`);
-        const id = Number((c.rows[0] as { id: number | string }).id);
-        if (contactId === null) {
-          contactId = id;
-          await tx.execute(
-            sql`UPDATE conversations SET contact_id = ${id} WHERE org_id = ${orgId} AND id = ${conversationId}`,
-          );
+        // Through the contacts service: audit and the plan's contact cap apply, and no consent is granted by a first message. Over the
+        // cap the thread simply has no contact (the message is kept).
+        const r = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
+          kind: 'channel_uid',
+          channel: INSTAGRAM_KIND,
+          value: n.igsid,
+          name: contactNameOf(n) ?? CONTACT_LABEL,
+          message: CONTACT_SOURCE,
+          quiet: true,
+        });
+        if (r.outcome === 'found' || r.outcome === 'created') {
+          if (n.avatar) {
+            await tx.execute(sql`
+              UPDATE contacts SET image_url = ${n.avatar}
+              WHERE org_id = ${orgId} AND id = ${r.contactId} AND coalesce(image_url, '') = ''`);
+          }
+          if (contactId === null) {
+            contactId = r.contactId;
+            await tx.execute(
+              sql`UPDATE conversations SET contact_id = ${r.contactId} WHERE org_id = ${orgId} AND id = ${conversationId}`,
+            );
+          }
         }
       }
       return { stored, conversationId, messageId, contactId, newThread };
