@@ -81,3 +81,13 @@ When you import contacts, map a column to **Marketing consent (yes / no)**. Rows
 ## Campaign audiences
 
 With **Require recorded consent for marketing sends** on, the campaign wizard's list of recipients, its count and its sample only include contacts with a recorded consent. Numbers you upload that are not contacts yet have no consent, so they are counted as "no recorded consent" and are not messaged.
+
+## What STOP does and does not stop
+
+A STOP (or an unsubscribe link, or a person marking the contact as opted out) stops **marketing**: campaigns, broadcasts, scheduled promotions, MARKETING templates and flows you start yourself. It does not stop **service messages**: your replies in a conversation, order and appointment notices, and utility templates. If an agent tries to send a MARKETING template to a contact who opted out, the inbox refuses it with a clear message and nothing is sent. There is no override.
+
+With **Require recorded consent for marketing sends** on, a MARKETING template also needs a recorded consent on that channel; replies never do.
+
+## The unsubscribe link in marketing emails
+
+A marketing email carries a personal unsubscribe link and the standard one-click unsubscribe header, so the mail app can show its own Unsubscribe button. The link opens a short page (no login) with one button. Pressing it records that the contact opted out of marketing emails, and every marketing path then skips them, including WhatsApp and SMS. A marketing email can only go to someone who is a contact, so there is always a link that works.
