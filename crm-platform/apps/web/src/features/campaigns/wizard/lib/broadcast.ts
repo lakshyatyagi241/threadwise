@@ -1,4 +1,4 @@
-import type { WizardBroadcastDetail } from '@crm/contracts';
+import { RESENDABLE_STATUSES, type WizardBroadcastDetail } from '@crm/contracts';
 
 export type ControlAction = 'pause' | 'resume' | 'cancel';
 
@@ -20,6 +20,16 @@ export function controlsFor(b: Pick<WizardBroadcastDetail, 'kind' | 'status'>): 
     default:
       return [];
   }
+}
+
+/**
+ * How many failed recipients "Retry failed" would send to. The API refuses a run that is still going, and a series never restarts a
+ * run that was cancelled (a one-off campaign can be resent after a cancel, as it can from its campaign page), so the button counts only
+ * what it can act on. Zero hides the button.
+ */
+export function retryableFailed(b: Pick<WizardBroadcastDetail, 'kind' | 'runList'>): number {
+  const ok: readonly string[] = b.kind === 'series' ? ['completed', 'failed'] : RESENDABLE_STATUSES;
+  return b.runList.filter((r) => ok.includes(r.status)).reduce((n, r) => n + r.counts.failed, 0);
 }
 
 export type StatusTone = 'success' | 'warning' | 'danger' | 'neutral' | 'brand';

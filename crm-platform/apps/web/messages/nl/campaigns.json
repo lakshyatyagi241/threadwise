@@ -403,7 +403,9 @@
         "smartIntro": "Laat leeg om het standaardtempo van de workspace te gebruiken. Deze regels spreiden het verzenden zodat een grote lijst menselijk oogt en onder de radar van WhatsApp blijft.",
         "smartZone": "Tijden in {zone}.",
         "throttleMaxHint": "De langste wachttijd voor een bericht.",
-        "batchPauseHint": "Minuten rust na elke batch."
+        "batchPauseHint": "Minuten rust na elke batch.",
+        "retryFailed": "Mislukte berichten automatisch opnieuw proberen",
+        "retryFailedHint": "Een bericht dat om een tijdelijke reden mislukt, wordt een paar keer opnieuw geprobeerd, met een pauze tussen de pogingen. Zet dit uit om elk bericht maar één keer te sturen."
       },
       "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
       "draftChip": "Concept / niet opgeslagen",
@@ -1485,12 +1487,14 @@
         "action": {
           "pause": "Pauzeren",
           "resume": "Hervatten",
-          "cancel": "Broadcast annuleren"
+          "cancel": "Broadcast annuleren",
+          "retryFailed": "Mislukte opnieuw proberen ({count})"
         },
         "done": {
           "pause": "Broadcast gepauzeerd.",
           "resume": "Broadcast hervat.",
-          "cancel": "Broadcast geannuleerd."
+          "cancel": "Broadcast geannuleerd.",
+          "retryFailed": "Opnieuw proberen voor {count, plural, one {# mislukte ontvanger} other {# mislukte ontvangers}}."
         },
         "failed": "Dat is niet gelukt. Probeer het opnieuw.",
         "noControl": "Je hebt geen toestemming om broadcasts te pauzeren, hervatten of annuleren.",
@@ -1509,7 +1513,9 @@
           "cancelled": "Geannuleerd",
           "active": "Actief",
           "ended": "Beëindigd"
-        }
+        },
+        "retryTitle": "Mislukte berichten opnieuw proberen?",
+        "retryMessage": "Stuurt opnieuw naar {count, plural, one {# ontvanger} other {# ontvangers}} bij wie het bericht mislukte. Wie het al kreeg, blijft met rust en een bericht wordt alleen in rekening gebracht als het is afgeleverd."
       },
       "panel": {
         "title": "Gemaakt met Broadcast maken",

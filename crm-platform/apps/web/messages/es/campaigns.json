@@ -403,7 +403,9 @@
         "smartIntro": "Déjalo vacío para usar el ritmo predeterminado del espacio de trabajo. Estas reglas espacian los envíos para que una lista grande parezca humana y no llame la atención de los sistemas de bloqueo de WhatsApp.",
         "smartZone": "Horas en {zone}.",
         "throttleMaxHint": "La espera más larga antes de un mensaje.",
-        "batchPauseHint": "Minutos de pausa tras cada lote."
+        "batchPauseHint": "Minutos de pausa tras cada lote.",
+        "retryFailed": "Reintentar automáticamente los mensajes fallidos",
+        "retryFailedHint": "Un mensaje que falla por un motivo temporal se reintenta varias veces, con una pausa entre intentos. Desactívalo para enviar cada mensaje una sola vez."
       },
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
       "draftChip": "Borrador / sin guardar",
@@ -1485,12 +1487,14 @@
         "action": {
           "pause": "Pausar",
           "resume": "Reanudar",
-          "cancel": "Cancelar difusión"
+          "cancel": "Cancelar difusión",
+          "retryFailed": "Reintentar fallidos ({count})"
         },
         "done": {
           "pause": "Difusión en pausa.",
           "resume": "Difusión reanudada.",
-          "cancel": "Difusión cancelada."
+          "cancel": "Difusión cancelada.",
+          "retryFailed": "Reintentando {count, plural, one {# destinatario fallido} other {# destinatarios fallidos}}."
         },
         "failed": "No funcionó. Inténtalo de nuevo.",
         "noControl": "No tienes permiso para pausar, reanudar ni cancelar difusiones.",
@@ -1509,7 +1513,9 @@
           "cancelled": "Cancelada",
           "active": "Activa",
           "ended": "Finalizada"
-        }
+        },
+        "retryTitle": "¿Reintentar los mensajes fallidos?",
+        "retryMessage": "Vuelve a enviar a {count, plural, one {# destinatario} other {# destinatarios}} cuyo mensaje falló. Quien ya lo recibió no se toca, y un mensaje solo se cobra cuando se entrega."
       },
       "panel": {
         "title": "Creadas con Crear difusión",

@@ -33,7 +33,10 @@ export type WizardAction =
   | {
       type: 'options';
       patch: Partial<
-        Pick<WizardDraft, 'abTesting' | 'abSplit' | 'autoEnd' | 'pacing' | 'trackLinks'>
+        Pick<
+          WizardDraft,
+          'abTesting' | 'abSplit' | 'autoEnd' | 'pacing' | 'trackLinks' | 'retryFailed'
+        >
       >;
     }
   /** Variant B of an A/B test: its template (its mapping keeps what still fits) and its variable mapping. */

@@ -9,6 +9,7 @@ import {
   wizardBroadcastListSchema,
   wizardContactsPageSchema,
   wizardControlResponseSchema,
+  wizardRetryFailedResponseSchema,
   wizardCsvReportSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
@@ -223,6 +224,14 @@ export const controlBroadcast = (id: string, action: BroadcastAction) =>
     method: 'POST',
     body: {},
     schema: wizardControlResponseSchema,
+  });
+
+/** Retry failed: the recipients whose message failed go back in the queue (a series: in every finished run). */
+export const retryFailedBroadcast = (id: string) =>
+  apiFetch(`${BASE}/broadcasts/${id}/retry-failed`, {
+    method: 'POST',
+    body: {},
+    schema: wizardRetryFailedResponseSchema,
   });
 
 // ---------------------------------------------------------------------------------------- the audience modes

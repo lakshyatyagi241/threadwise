@@ -403,7 +403,9 @@
         "smartIntro": "Kosongkan untuk memakai pengaturan kecepatan default ruang kerja. Aturan ini memberi jeda antar-pengiriman agar daftar besar terlihat manusiawi dan tetap di bawah radar pemblokiran WhatsApp.",
         "smartZone": "Waktu dalam {zone}.",
         "throttleMaxHint": "Jeda terpanjang sebelum sebuah pesan.",
-        "batchPauseHint": "Menit istirahat setelah setiap batch."
+        "batchPauseHint": "Menit istirahat setelah setiap batch.",
+        "retryFailed": "Coba ulang pesan yang gagal secara otomatis",
+        "retryFailedHint": "Pesan yang gagal karena alasan sementara dicoba lagi beberapa kali, dengan jeda di antara percobaan. Matikan untuk mengirim setiap pesan sekali saja."
       },
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
       "draftChip": "Draf / belum disimpan",
@@ -1485,12 +1487,14 @@
         "action": {
           "pause": "Jeda",
           "resume": "Lanjutkan",
-          "cancel": "Batalkan broadcast"
+          "cancel": "Batalkan broadcast",
+          "retryFailed": "Coba lagi yang gagal ({count})"
         },
         "done": {
           "pause": "Broadcast dijeda.",
           "resume": "Broadcast dilanjutkan.",
-          "cancel": "Broadcast dibatalkan."
+          "cancel": "Broadcast dibatalkan.",
+          "retryFailed": "Mencoba ulang {count, plural, other {# penerima yang gagal}}."
         },
         "failed": "Gagal. Coba lagi.",
         "noControl": "Anda tidak memiliki izin untuk menjeda, melanjutkan, atau membatalkan broadcast.",
@@ -1509,7 +1513,9 @@
           "cancelled": "Dibatalkan",
           "active": "Aktif",
           "ended": "Berakhir"
-        }
+        },
+        "retryTitle": "Coba lagi pesan yang gagal?",
+        "retryMessage": "Mengirim ulang ke {count, plural, other {# penerima}} yang pesannya gagal. Penerima yang sudah menerimanya tidak disentuh, dan pesan hanya ditagih saat terkirim."
       },
       "panel": {
         "title": "Dibuat dengan Buat broadcast",
