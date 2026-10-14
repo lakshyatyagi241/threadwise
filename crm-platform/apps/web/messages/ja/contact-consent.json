@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "Webチャット",
         "voice": "音声通話",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "購読中",

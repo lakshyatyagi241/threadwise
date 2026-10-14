@@ -77,6 +77,7 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
             'facebook',
             'instaflow',
             'telegram/inbound',
+            '(?:line|viber|wechat)/inbound',
             'shopify/(?:webhook|compliance)',
             'woocommerce/webhook',
             'campaigns/node',

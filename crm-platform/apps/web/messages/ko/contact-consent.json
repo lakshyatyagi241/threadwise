@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "웹 채팅",
         "voice": "음성 통화",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "수신 중",
