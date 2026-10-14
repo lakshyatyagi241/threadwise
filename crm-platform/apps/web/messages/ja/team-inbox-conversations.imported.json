@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "インポート済み",
+      "importedHint": "このチャットは端末の履歴からインポートされました"
+    },
+    "bubble": {
+      "imported": "インポート済み",
+      "importedHint": "端末のチャット履歴からインポートされました"
+    }
+  }
+}

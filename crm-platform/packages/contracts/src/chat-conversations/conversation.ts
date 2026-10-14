@@ -81,6 +81,8 @@ export const conversationSummarySchema = z.object({
   unreadCount: z.number().int().nonnegative(),
   /** The thread has no contact record because the contact quota was reached. */
   needsContact: z.boolean(),
+  /** The thread was created by an imported history (personal-number import or Cloud API coexistence); the list and the header mark it. */
+  imported: z.boolean().optional(),
   contact: conversationContactSchema.nullable(),
   assignment: conversationAssignmentSchema,
   snoozedUntil: z.string().datetime().nullable(),

@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "Importada",
+      "importedHint": "Esta conversa foi importada do histórico do telefone"
+    },
+    "bubble": {
+      "imported": "Importada",
+      "importedHint": "Importada do histórico de conversas do telefone"
+    }
+  }
+}

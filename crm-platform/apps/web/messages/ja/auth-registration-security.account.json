@@ -557,7 +557,8 @@
             "waba_groups": "WhatsAppグループ",
             "sms": "SMS",
             "help_agent": "ヘルプアシスタント",
-            "email_channel": "メール(Gmail)チャネル"
+            "email_channel": "メール(Gmail)チャネル",
+            "personal_history_full": "全履歴インポート(個人用WhatsApp)"
           },
           "cta": {
             "continueFree": "無料で続ける",

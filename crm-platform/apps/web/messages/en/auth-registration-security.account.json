@@ -596,7 +596,8 @@
             "waba_groups": "WhatsApp groups",
             "sms": "SMS",
             "help_agent": "Help assistant",
-            "email_channel": "Email (Gmail) channel"
+            "email_channel": "Email (Gmail) channel",
+            "personal_history_full": "Full history import (personal WhatsApp)"
           },
           "cta": {
             "continueFree": "Continue free",

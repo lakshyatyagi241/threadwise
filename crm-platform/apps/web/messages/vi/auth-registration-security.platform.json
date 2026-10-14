@@ -1438,7 +1438,8 @@
             "waba_groups": "Tạo và quản lý nhóm WhatsApp từ số Cloud API: liên kết mời, yêu cầu tham gia, thành viên. Số phải là Official Business Account.",
             "sms": "SMS chỉ gửi qua Twilio hoặc MSG91: kết nối người gửi, gửi chiến dịch và tin nhắn hàng loạt qua SMS.",
             "help_agent": "Trợ lý trợ giúp trong ứng dụng: mọi người yêu cầu một việc bằng lời đơn giản, trợ lý hướng dẫn hoặc làm giúp ngay trên phiên của họ và hỏi trước khi làm điều có rủi ro. Tốn token AI.",
-            "email_channel": "Kết nối hộp thư Gmail và Google Workspace với hộp thư đến của nhóm. Ứng dụng Email trả phí điều khiển công tắc này."
+            "email_channel": "Kết nối hộp thư Gmail và Google Workspace với hộp thư đến của nhóm. Ứng dụng Email trả phí điều khiển công tắc này.",
+            "personal_history_full": "Cho phép số WhatsApp cá nhân nhập toàn bộ lịch sử trò chuyện khi liên kết lần đầu. Tính năng nhập các cuộc trò chuyện gần đây có sẵn cho mọi gói có số cá nhân."
           },
           "units": {
             "days": "Ngày",
@@ -1621,7 +1622,8 @@
             "waba_groups": "Nhóm WhatsApp (Cloud API)",
             "sms": "Kênh SMS",
             "help_agent": "Trợ lý trợ giúp (AI, tốn token)",
-            "email_channel": "Kênh email (Gmail)"
+            "email_channel": "Kênh email (Gmail)",
+            "personal_history_full": "Nhập toàn bộ lịch sử trò chuyện (WhatsApp cá nhân)"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",

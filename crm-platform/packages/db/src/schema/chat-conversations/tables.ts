@@ -69,6 +69,8 @@ export const conversations = pgTable(
     /** Start of the current wait for a human answer (SLA anchor). */
     waitingSince: timestamp('waiting_since', { withTimezone: true }),
     needsContact: boolean('needs_contact').notNull().default(false),
+    /** Set once when an imported history message created the thread (20261204090100); the inbox shows an "Imported" marker. */
+    importedAt: timestamp('imported_at', { withTimezone: true }),
     priority: text('priority').notNull().default('normal'),
     assigneeUserId: idColumn('assignee_user_id'),
     assigneeTeamId: idColumn('assignee_team_id'),

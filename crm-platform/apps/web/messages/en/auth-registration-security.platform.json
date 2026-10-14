@@ -1438,7 +1438,8 @@
             "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account.",
             "sms": "Send-only SMS through Twilio or MSG91: connect senders, send SMS broadcasts and campaigns.",
             "help_agent": "The in-app Help assistant: people ask for a task in plain words and it guides or does it on their own session, asking before anything risky. Spends AI tokens.",
-            "email_channel": "Connect Gmail and Google Workspace mailboxes to the team inbox. The paid Email app owns this switch."
+            "email_channel": "Connect Gmail and Google Workspace mailboxes to the team inbox. The paid Email app owns this switch.",
+            "personal_history_full": "Lets a personal WhatsApp number import its full chat history when it is first linked. The recent-chats import is open to every plan that has personal numbers."
           },
           "units": {
             "days": "Days",
@@ -1621,7 +1622,8 @@
             "waba_groups": "WhatsApp groups (Cloud API)",
             "sms": "SMS channel",
             "help_agent": "Help assistant (AI, spends tokens)",
-            "email_channel": "Email (Gmail) channel"
+            "email_channel": "Email (Gmail) channel",
+            "personal_history_full": "Full chat-history import (personal WhatsApp)"
           },
           "problems": {
             "required": "This field is required.",

@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "امپورٹ شدہ",
+      "importedHint": "یہ چیٹ فون کی ہسٹری سے امپورٹ کی گئی ہے"
+    },
+    "bubble": {
+      "imported": "امپورٹ شدہ",
+      "importedHint": "فون کی چیٹ ہسٹری سے امپورٹ کیا گیا"
+    }
+  }
+}

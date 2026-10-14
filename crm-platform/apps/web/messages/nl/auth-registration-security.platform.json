@@ -1438,7 +1438,8 @@
             "waba_groups": "Maak en beheer WhatsApp-groepen vanaf een Cloud API-nummer: uitnodigingslink, deelnameverzoeken, leden. Het nummer moet een Official Business Account zijn.",
             "sms": "Alleen-verzenden-SMS via Twilio of MSG91: koppel afzenders, verstuur SMS-broadcasts en -campagnes.",
             "help_agent": "De Hulpassistent in de app: mensen vragen in gewone woorden om een taak en de assistent begeleidt of voert die uit op hun eigen sessie, en vraagt eerst toestemming bij alles wat risicovol is. Verbruikt AI-tokens.",
-            "email_channel": "Koppel Gmail- en Google Workspace-postvakken aan de teaminbox. De betaalde E-mail-app beheert deze schakelaar."
+            "email_channel": "Koppel Gmail- en Google Workspace-postvakken aan de teaminbox. De betaalde E-mail-app beheert deze schakelaar.",
+            "personal_history_full": "Laat een persoonlijk WhatsApp-nummer de volledige chatgeschiedenis importeren bij de eerste koppeling. Het importeren van recente chats is beschikbaar voor elk abonnement met persoonlijke nummers."
           },
           "units": {
             "days": "Dagen",
@@ -1621,7 +1622,8 @@
             "waba_groups": "WhatsApp-groepen (Cloud API)",
             "sms": "SMS-kanaal",
             "help_agent": "Hulpassistent (AI, verbruikt tokens)",
-            "email_channel": "E-mailkanaal (Gmail)"
+            "email_channel": "E-mailkanaal (Gmail)",
+            "personal_history_full": "Volledige chatgeschiedenis importeren (persoonlijke WhatsApp)"
           },
           "problems": {
             "required": "Dit veld is verplicht.",

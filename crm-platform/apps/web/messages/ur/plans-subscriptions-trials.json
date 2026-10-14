@@ -79,7 +79,8 @@
       "waba_groups": "WhatsApp گروپس",
       "sms": "SMS چینل",
       "help_agent": "مددگار اسسٹنٹ",
-      "email_channel": "ای میل (Gmail) چینل"
+      "email_channel": "ای میل (Gmail) چینل",
+      "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)"
     },
     "limitGroups": {
       "messaging": "میسجنگ",

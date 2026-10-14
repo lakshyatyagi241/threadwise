@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "আপনার প্ল্যানে অন্তর্ভুক্ত নয়। সম্পূর্ণ ইতিহাস ইমপোর্ট করতে আপগ্রেড করুন।",
+        "fullLockedLink": "প্ল্যান দেখুন"
+      }
+    }
+  }
+}

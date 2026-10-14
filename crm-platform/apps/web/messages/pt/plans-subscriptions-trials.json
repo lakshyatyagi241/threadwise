@@ -79,7 +79,8 @@
       "waba_groups": "Grupos do WhatsApp",
       "sms": "Canal SMS",
       "help_agent": "Assistente de ajuda",
-      "email_channel": "Canal de e-mail (Gmail)"
+      "email_channel": "Canal de e-mail (Gmail)",
+      "personal_history_full": "Importação do histórico completo (WhatsApp pessoal)"
     },
     "limitGroups": {
       "messaging": "Mensagens",

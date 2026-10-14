@@ -258,6 +258,8 @@ export const messageResponseSchema = z.object({
   groupDelivery: messageGroupDeliverySchema.nullable().optional(),
   /** The customer forwarded this message from another chat. */
   forwarded: z.boolean().optional(),
+  /** The message was brought in by an imported history (`meta.historySync`): the bubble marks it. Absent on a live message. */
+  imported: z.boolean().optional(),
   /** Set for an inbound media message: whether its file could be stored. */
   mediaState: messageMediaStateSchema.nullable().optional(),
   /** Present while `mediaState` is `failed`: a stable code (`MEDIA_EXPIRED`, `MEDIA_TOO_LARGE`, ...) and a reason an agent can read. */

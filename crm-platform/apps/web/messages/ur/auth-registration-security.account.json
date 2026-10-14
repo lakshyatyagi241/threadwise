@@ -557,7 +557,8 @@
             "waba_groups": "WhatsApp گروپس",
             "sms": "SMS",
             "help_agent": "مددگار اسسٹنٹ",
-            "email_channel": "ای میل (Gmail) چینل"
+            "email_channel": "ای میل (Gmail) چینل",
+            "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

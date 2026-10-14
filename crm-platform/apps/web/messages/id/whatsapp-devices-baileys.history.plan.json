@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "Tidak termasuk dalam paket Anda. Upgrade untuk mengimpor seluruh riwayat.",
+        "fullLockedLink": "Lihat paket"
+      }
+    }
+  }
+}

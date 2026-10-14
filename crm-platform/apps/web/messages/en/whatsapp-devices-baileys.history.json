@@ -1,0 +1,79 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Bring in your existing chats?",
+        "intro": "WhatsApp sends a number's chat history only once, right after the number is first linked. Choose now, before you scan.",
+        "label": "Import existing chats",
+        "none": "No, start empty",
+        "noneHelp": "Only new messages appear in the shared inbox. This is the default.",
+        "recent": "Yes, recent chats and contacts",
+        "recentHelp": "The recent chats WhatsApp sends when a number is first linked, with the people in them.",
+        "full": "Yes, as much as WhatsApp sends",
+        "fullHelp": "Also WhatsApp's older history. It takes longer and uses more of your contact limit.",
+        "pointsTitle": "What to expect",
+        "pointQuiet": "Imported chats are marked read and stay silent: no alerts, no automations and no automatic replies.",
+        "pointNothingSent": "Nothing is sent to anyone.",
+        "pointMedia": "Photos, videos, voice messages and files are not imported. You will see a placeholder such as [Photo].",
+        "pointGroups": "Group chats are saved as group conversations and do not create contacts.",
+        "pointConsent": "Imported people are not marked as having agreed to marketing messages.",
+        "pointLimit": "Imported people count towards your plan's contact limit. The import stops cleanly if it is reached.",
+        "pointTime": "It can take a few minutes. You can keep working, and you can cancel at any time.",
+        "pointOnce": "Linking the number again imports only if you choose to import again before you scan."
+      },
+      "result": {
+        "note": "Your chats are being imported. Follow the progress on the number's page.",
+        "link": "See the import"
+      },
+      "card": {
+        "title": "Imported chats",
+        "state": {
+          "not_requested": "Not requested",
+          "idle": "Waiting for WhatsApp",
+          "running": "Importing",
+          "done": "Finished",
+          "failed": "Did not finish",
+          "cancelled": "Cancelled",
+          "limit_reached": "Stopped at your contact limit"
+        },
+        "body": {
+          "not_requested": "This number did not import its chats. WhatsApp offers history only when a number is first linked, so choose it the next time you link this number.",
+          "idle": "Waiting for the number to be linked and for WhatsApp to send its chats. This can take a few minutes.",
+          "running": "Importing chats. You can leave this page, the import continues.",
+          "done": "The import is finished. The chats are in the shared inbox, marked as read.",
+          "failed": "The import did not finish. What was imported stays in the inbox.",
+          "cancelled": "You stopped the import. What was imported stays in the inbox.",
+          "limit_reached": "The import stopped because your plan's contact limit was reached. What was imported stays in the inbox."
+        },
+        "chats": "{count, plural, one {# chat} other {# chats}}",
+        "contacts": "{count, plural, one {# contact} other {# contacts}}",
+        "messages": "{count, plural, one {# message} other {# messages}}",
+        "progress": "Progress: {percent}%",
+        "window": "Messages from the last {days, plural, one {# day} other {# days}}.",
+        "mediaNote": "Photos, videos, voice messages and files are not imported. Their place shows a placeholder.",
+        "started": "Started",
+        "finished": "Finished",
+        "openInbox": "Open the inbox",
+        "cancel": "Stop the import",
+        "cancelling": "Stopping...",
+        "cancelTitle": "Stop the import?",
+        "cancelMessage": "No more chats will be taken. What was already imported stays in the inbox.",
+        "cancelConfirm": "Stop the import",
+        "cancelKeep": "Keep importing",
+        "cancelDone": "Import stopped. What was imported stays in the inbox."
+      },
+      "error": {
+        "history_not_received": "WhatsApp did not send any chat history. It does so only when a number is first linked. Link the number again and choose to import to try again.",
+        "message_cap_reached": "Stopped at the limit of messages for one number. What was imported stays.",
+        "chat_cap_reached": "Stopped at the limit of chats for one number. What was imported stays.",
+        "contact_limit_reached": "Stopped because your plan's contact limit was reached. Free some contacts or upgrade, then link the number again and import.",
+        "worker_error": "The import stopped because of an error. What was imported stays. Link the number again to try again.",
+        "ended_idle": "Finished. WhatsApp stopped sending history, so the import ended with what had arrived.",
+        "limits_unavailable": "The import could not run because the service is not set up correctly. Contact support, then link the number again."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "There is no import running for this number."
+    }
+  }
+}

@@ -88,6 +88,12 @@ export const REALTIME_EVENT = {
    * invite code or the subject; the screen refetches over REST.
    */
   deviceGroupChanged: 'whatsapp.device_group.changed',
+  /**
+   * An import of a personal number's existing chats ended (finished, cancelled after storing something, or stopped on a limit): ONE hint per
+   * run, never one per message. Room `user`, to the people who can read the inbox or the numbers. The inbox list and the number's
+   * "Imported chats" card refetch over REST; the hint carries the number's uuid and the final state, nothing else.
+   */
+  historyImported: 'inbox.history.imported',
   /** A WhatsApp call rang, was answered, declined or ended: the incoming-call toast refetches (a signal, never the caller's details). */
   callChanged: 'call.changed',
 } as const;
@@ -182,6 +188,11 @@ export const realtimeEventSchemas = {
     deviceId: uuidSchema,
     /** The outbox event it stands for, without the `whatsapp.device_group.` prefix. */
     kind: z.enum(['created', 'updated', 'left', 'join_request', 'participants_changed']),
+  }),
+  [REALTIME_EVENT.historyImported]: z.object({
+    /** `devices.uuid`. */
+    deviceId: uuidSchema,
+    state: z.enum(['done', 'failed', 'cancelled', 'limit_reached']),
   }),
   [REALTIME_EVENT.callChanged]: z.object({ callId: uuidSchema }),
 } as const;

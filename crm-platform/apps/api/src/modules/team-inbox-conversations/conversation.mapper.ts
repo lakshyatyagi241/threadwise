@@ -39,6 +39,7 @@ export function toConversationSummary(row: InboxConversationRow): ConversationSu
     muted: row.mutedAt !== null,
     unreadCount: row.unreadCount,
     needsContact: row.needsContact,
+    ...(row.imported ? { imported: true } : {}),
     contact: row.contactUuid ? { id: row.contactUuid, name: row.contactName } : null,
     assignment: {
       user: row.assigneeUserUuid ? { id: row.assigneeUserUuid, name: row.assigneeUserName } : null,

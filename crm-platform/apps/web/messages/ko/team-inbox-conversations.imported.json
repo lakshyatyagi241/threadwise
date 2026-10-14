@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "가져옴",
+      "importedHint": "이 채팅은 휴대폰 기록에서 가져왔습니다"
+    },
+    "bubble": {
+      "imported": "가져옴",
+      "importedHint": "휴대폰 채팅 기록에서 가져옴"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "Importiert",
+      "importedHint": "Dieser Chat wurde aus dem Verlauf des Telefons importiert"
+    },
+    "bubble": {
+      "imported": "Importiert",
+      "importedHint": "Aus dem Chatverlauf des Telefons importiert"
+    }
+  }
+}

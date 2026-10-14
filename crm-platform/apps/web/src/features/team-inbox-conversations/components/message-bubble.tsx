@@ -415,6 +415,17 @@ export const MessageBubble = memo(function MessageBubble({
                 )}
               </p>
             )}
+            {m.imported && (
+              <p
+                data-testid="inbox-imported"
+                title={t('importedHint')}
+                className="mb-0.5 text-[11px] text-muted-foreground"
+              >
+                <span className="rounded-full bg-muted px-1.5 py-0.5 font-medium">
+                  {t('imported')}
+                </span>
+              </p>
+            )}
             {m.forwarded && (
               <p
                 data-testid="inbox-forwarded"

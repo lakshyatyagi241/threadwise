@@ -1,0 +1,79 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Importare le chat esistenti?",
+        "intro": "WhatsApp invia la cronologia delle chat di un numero una sola volta, subito dopo il primo collegamento del numero. Scegli ora, prima di eseguire la scansione.",
+        "label": "Importa le chat esistenti",
+        "none": "No, inizia da zero",
+        "noneHelp": "Nella casella condivisa compaiono solo i nuovi messaggi. È l'impostazione predefinita.",
+        "recent": "Sì, chat recenti e contatti",
+        "recentHelp": "Le chat recenti che WhatsApp invia al primo collegamento di un numero, con le persone coinvolte.",
+        "full": "Sì, tutto ciò che WhatsApp invia",
+        "fullHelp": "Anche la cronologia più vecchia di WhatsApp. Richiede più tempo e usa una parte maggiore del tuo limite di contatti.",
+        "pointsTitle": "Cosa aspettarsi",
+        "pointQuiet": "Le chat importate sono segnate come lette e restano silenziose: nessun avviso, nessuna automazione e nessuna risposta automatica.",
+        "pointNothingSent": "Non viene inviato nulla a nessuno.",
+        "pointMedia": "Foto, video, messaggi vocali e file non vengono importati. Vedrai un segnaposto come [Foto].",
+        "pointGroups": "Le chat di gruppo vengono salvate come conversazioni di gruppo e non creano contatti.",
+        "pointConsent": "Le persone importate non risultano aver acconsentito ai messaggi di marketing.",
+        "pointLimit": "Le persone importate contano nel limite di contatti del tuo piano. L'importazione si interrompe correttamente se il limite viene raggiunto.",
+        "pointTime": "Può richiedere qualche minuto. Puoi continuare a lavorare e annullare in qualsiasi momento.",
+        "pointOnce": "Se colleghi di nuovo il numero, l'importazione avviene solo se scegli di importare ancora prima della scansione."
+      },
+      "result": {
+        "note": "Le tue chat sono in corso di importazione. Segui l'avanzamento nella pagina del numero.",
+        "link": "Vedi l'importazione"
+      },
+      "card": {
+        "title": "Chat importate",
+        "state": {
+          "not_requested": "Non richiesta",
+          "idle": "In attesa di WhatsApp",
+          "running": "Importazione in corso",
+          "done": "Completata",
+          "failed": "Non completata",
+          "cancelled": "Annullata",
+          "limit_reached": "Interrotta al limite di contatti"
+        },
+        "body": {
+          "not_requested": "Questo numero non ha importato le sue chat. WhatsApp offre la cronologia solo al primo collegamento di un numero, quindi sceglila la prossima volta che colleghi questo numero.",
+          "idle": "In attesa che il numero venga collegato e che WhatsApp invii le sue chat. Può richiedere qualche minuto.",
+          "running": "Importazione delle chat in corso. Puoi lasciare questa pagina, l'importazione continua.",
+          "done": "L'importazione è terminata. Le chat sono nella casella condivisa, segnate come lette.",
+          "failed": "L'importazione non è stata completata. Quanto importato resta nella casella.",
+          "cancelled": "Hai interrotto l'importazione. Quanto importato resta nella casella.",
+          "limit_reached": "L'importazione si è interrotta perché è stato raggiunto il limite di contatti del tuo piano. Quanto importato resta nella casella."
+        },
+        "chats": "{count, plural, one {# chat} other {# chat}}",
+        "contacts": "{count, plural, one {# contatto} other {# contatti}}",
+        "messages": "{count, plural, one {# messaggio} other {# messaggi}}",
+        "progress": "Avanzamento: {percent}%",
+        "window": "Messaggi {days, plural, one {dell'ultimo # giorno} other {degli ultimi # giorni}}.",
+        "mediaNote": "Foto, video, messaggi vocali e file non vengono importati. Al loro posto appare un segnaposto.",
+        "started": "Avviata",
+        "finished": "Terminata",
+        "openInbox": "Apri la casella",
+        "cancel": "Interrompi l'importazione",
+        "cancelling": "Interruzione...",
+        "cancelTitle": "Interrompere l'importazione?",
+        "cancelMessage": "Non verranno prese altre chat. Quanto già importato resta nella casella.",
+        "cancelConfirm": "Interrompi l'importazione",
+        "cancelKeep": "Continua a importare",
+        "cancelDone": "Importazione interrotta. Quanto importato resta nella casella."
+      },
+      "error": {
+        "history_not_received": "WhatsApp non ha inviato alcuna cronologia delle chat. Lo fa solo al primo collegamento di un numero. Collega di nuovo il numero e scegli di importare per riprovare.",
+        "message_cap_reached": "Interrotta al limite di messaggi per numero. Quanto importato resta.",
+        "chat_cap_reached": "Interrotta al limite di chat per numero. Quanto importato resta.",
+        "contact_limit_reached": "Interrotta perché è stato raggiunto il limite di contatti del tuo piano. Libera dei contatti o passa a un piano superiore, poi collega di nuovo il numero e importa.",
+        "worker_error": "L'importazione si è interrotta a causa di un errore. Quanto importato resta. Collega di nuovo il numero per riprovare.",
+        "ended_idle": "Completato. WhatsApp ha smesso di inviare la cronologia, quindi l'importazione è terminata con quanto era già arrivato.",
+        "limits_unavailable": "Impossibile eseguire l'importazione perché il servizio non è configurato correttamente. Contatta il supporto, quindi collega di nuovo il numero."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Per questo numero non c'è nessuna importazione in corso."
+    }
+  }
+}

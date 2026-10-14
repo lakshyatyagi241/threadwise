@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "Diimpor",
+      "importedHint": "Chat ini diimpor dari riwayat ponsel"
+    },
+    "bubble": {
+      "imported": "Diimpor",
+      "importedHint": "Diimpor dari riwayat chat ponsel"
+    }
+  }
+}

@@ -1438,7 +1438,8 @@
             "waba_groups": "Tworzenie grup WhatsApp i zarządzanie nimi z numeru Cloud API: link zaproszenia, prośby o dołączenie, członkowie. Numer musi być Official Business Account.",
             "sms": "SMS tylko do wysyłki przez Twilio lub MSG91: połącz nadawców, wysyłaj transmisje i kampanie SMS.",
             "help_agent": "Asystent pomocy w aplikacji: użytkownicy opisują zadanie zwykłymi słowami, a asystent prowadzi ich przez nie lub wykonuje je w ich sesji, pytając o zgodę przed wszystkim, co ryzykowne. Zużywa tokeny AI.",
-            "email_channel": "Połącz skrzynki Gmail i Google Workspace ze skrzynką odbiorczą zespołu. Tym przełącznikiem steruje płatna aplikacja E-mail."
+            "email_channel": "Połącz skrzynki Gmail i Google Workspace ze skrzynką odbiorczą zespołu. Tym przełącznikiem steruje płatna aplikacja E-mail.",
+            "personal_history_full": "Pozwala osobistemu numerowi WhatsApp zaimportować pełną historię czatów przy pierwszym połączeniu. Import ostatnich czatów jest dostępny w każdym planie z numerami osobistymi."
           },
           "units": {
             "days": "Dni",
@@ -1621,7 +1622,8 @@
             "waba_groups": "Grupy WhatsApp (Cloud API)",
             "sms": "Kanał SMS",
             "help_agent": "Asystent pomocy (AI, zużywa tokeny)",
-            "email_channel": "Kanał e-mail (Gmail)"
+            "email_channel": "Kanał e-mail (Gmail)",
+            "personal_history_full": "Import pełnej historii czatów (osobisty WhatsApp)"
           },
           "problems": {
             "required": "To pole jest wymagane.",

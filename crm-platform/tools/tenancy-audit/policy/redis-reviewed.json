@@ -150,5 +150,9 @@
   "modules/storefront-builder/public/public-rate-limiter.ts": {
     "status": "baseline-unreviewed",
     "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/whatsapp-devices-baileys/history-import.sink.ts": {
+    "status": "reviewed",
+    "reason": "keys wa:hist:<orgId>:<runId>:pc|ch (a hash of per-chat counts and a set of thread keys of one import run); the key is built once by tallyKeys(orgId, runId) and passed around as `keys`, which the heuristic cannot see through"
   }
 }

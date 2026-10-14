@@ -1438,7 +1438,8 @@
             "waba_groups": "Crea y gestiona grupos de WhatsApp desde un número de la API en la nube: enlace de invitación, solicitudes de unión, miembros. El número debe ser una Cuenta de Empresa Oficial.",
             "sms": "SMS solo de envío mediante Twilio o MSG91: conecta remitentes y envía difusiones y campañas por SMS.",
             "help_agent": "El asistente de ayuda dentro de la app: la gente pide una tarea con sus palabras y él la guía o la hace en su propia sesión, preguntando antes de cualquier acción de riesgo. Consume tokens de IA.",
-            "email_channel": "Conecta buzones de Gmail y Google Workspace a la bandeja de equipo. La aplicación de pago Correo controla este interruptor."
+            "email_channel": "Conecta buzones de Gmail y Google Workspace a la bandeja de equipo. La aplicación de pago Correo controla este interruptor.",
+            "personal_history_full": "Permite que un número personal de WhatsApp importe todo su historial de chats al vincularse por primera vez. La importación de chats recientes está disponible en todos los planes que incluyen números personales."
           },
           "units": {
             "days": "Días",
@@ -1621,7 +1622,8 @@
             "waba_groups": "Grupos de WhatsApp (API en la nube)",
             "sms": "Canal SMS",
             "help_agent": "Asistente de ayuda (IA, consume tokens)",
-            "email_channel": "Canal de correo (Gmail)"
+            "email_channel": "Canal de correo (Gmail)",
+            "personal_history_full": "Importación del historial completo de chats (WhatsApp personal)"
           },
           "problems": {
             "required": "Este campo es obligatorio.",

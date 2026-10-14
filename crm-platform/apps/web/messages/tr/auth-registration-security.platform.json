@@ -1438,7 +1438,8 @@
             "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır.",
             "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin.",
             "help_agent": "Uygulama içi Yardım asistanı: kullanıcılar yapmak istediklerini sade kelimelerle yazar, asistan kendi oturumlarında yol gösterir veya işi yapar, riskli bir şeyden önce sorar. Yapay zeka jetonu harcar.",
-            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir."
+            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir.",
+            "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir."
           },
           "units": {
             "days": "Gün",
@@ -1621,7 +1622,8 @@
             "waba_groups": "WhatsApp grupları (Cloud API)",
             "sms": "SMS kanalı",
             "help_agent": "Yardım asistanı (yapay zeka, jeton harcar)",
-            "email_channel": "E-posta (Gmail) kanalı"
+            "email_channel": "E-posta (Gmail) kanalı",
+            "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)"
           },
           "problems": {
             "required": "Bu alan zorunludur.",

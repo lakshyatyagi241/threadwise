@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useReducer, useRef } from 'react';
+import { REALTIME_EVENT } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { useRealtimeEvent, useResync } from '@/lib/realtime';
 import { errorCode } from '../lib/errors';
@@ -154,6 +155,9 @@ export function useConversationList(filters: ListFilters, meId: string | null): 
     dispatch({ type: 'unread', id: e.payload.conversationId, unread: e.payload.unread });
     refreshCounts();
   });
+
+  // An import of a number's chats ended (one hint per run): the imported threads now exist, so the list is read again.
+  useRealtimeEvent(REALTIME_EVENT.historyImported, () => void loadFirst(true));
 
   useResync(() => void loadFirst(true), ['user']);
 
