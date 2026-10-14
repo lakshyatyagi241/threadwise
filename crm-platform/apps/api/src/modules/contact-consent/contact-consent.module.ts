@@ -29,6 +29,12 @@ import { ContactConsentService } from './consent.service';
     ConsentExportPublisher,
     ConsentExportService,
   ],
-  exports: [ContactConsentService, ConsentSettingsService, ConsentPolicyService, ConsentGate, ConsentUnsubscribeService],
+  exports: [
+    ContactConsentService,
+    ConsentSettingsService,
+    ConsentPolicyService,
+    ConsentGate,
+    ConsentUnsubscribeService,
+  ],
 })
 export class ContactConsentModule {}

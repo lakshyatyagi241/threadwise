@@ -19,7 +19,9 @@ export class ConsentUnsubscribeController {
   @Throttle({ limit: 60, windowSeconds: 60, by: 'ip' })
   @Header('Cache-Control', 'no-store')
   @Header('Referrer-Policy', 'no-referrer')
-  @ApiOperation({ summary: 'Is this unsubscribe link valid, and has the person already unsubscribed?' })
+  @ApiOperation({
+    summary: 'Is this unsubscribe link valid, and has the person already unsubscribed?',
+  })
   status(@Param('token') token: string) {
     return this.unsub.status(token);
   }
