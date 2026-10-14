@@ -72,7 +72,9 @@ async function run(path: string, target: BulkTarget, extra: object = {}): Promis
   return total;
 }
 
-export const bulkDelete = (target: BulkTarget) => run('/contacts/bulk/delete', target);
+/** `eraseHistory: false` keeps the conversations without the contacts' identity; absent means they are erased with the contact. */
+export const bulkDelete = (target: BulkTarget, opts: { eraseHistory?: boolean } = {}) =>
+  run('/contacts/bulk/delete', target, opts.eraseHistory === false ? { eraseHistory: false } : {});
 
 export const bulkGroupMembership = (
   target: BulkTarget,

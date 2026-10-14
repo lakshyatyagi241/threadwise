@@ -1373,6 +1373,12 @@
         "reorder": "Sütunları yeniden sıralamak için sürükleyin",
         "remove": "{name} öğesini kaldır"
       }
+    },
+    "erase": {
+      "scope": "Bir kişiyi silmek; konuşmalarını, mesajlarını, medyasını, dosyalarını, arama kayıtlarını ve arama günlüklerini de siler. Potansiyel müşteriler, fırsatlar, görevler ve faturalar kalır.",
+      "scopeMany": "Kişileri silmek; konuşmalarını, mesajlarını, medyalarını, dosyalarını, arama kayıtlarını ve arama günlüklerini de siler. Potansiyel müşteriler, fırsatlar, görevler ve faturalar kalır.",
+      "keepHistory": "Konuşma geçmişini kişinin kimliği olmadan sakla",
+      "keepHistoryHint": "Konuşmalar kayıtlarınız için kalır ancak artık kişiyi göstermez."
     }
   }
 }

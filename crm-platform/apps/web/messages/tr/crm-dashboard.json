@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "CRM paneli"
+    },
+    "title": "CRM'iniz",
+    "subtitle": "Fırsatlar, faturalar, ödemeler ve görevler — tüm iş tek bir görünümde.",
+    "period": "{from} - {to} · saat dilimi {zone}",
+    "openBoard": "Fırsat panosunu aç",
+    "loading": "Panel yükleniyor",
+    "retry": "Tekrar dene",
+    "stale": "Yenileme başarısız oldu. Bunlar elimizdeki son rakamlar.",
+    "empty": {
+      "title": "Henüz bildirilecek bir şey yok",
+      "message": "Kişi ve fırsat ekleyin, bu sayfa dolsun: satış hunisi, kimin kazandığı, potansiyel müşterilerin nereden geldiği, görevler ve alacaklarınız.",
+      "deals": "Fırsatlara git",
+      "contacts": "Kişilere git"
+    },
+    "filters": {
+      "label": "Panel filtreleri",
+      "period": "Dönem",
+      "range": {
+        "month": "Bu ay",
+        "7d": "7 gün",
+        "30d": "30 gün",
+        "90d": "90 gün",
+        "custom": "Özel"
+      },
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "pipeline": "Satış hattı",
+      "allPipelines": "Tüm satış hatları",
+      "owner": "Sahip",
+      "everyone": "Herkes",
+      "team": "Ekip",
+      "allTeams": "Tüm ekipler",
+      "reset": "Filtreleri sıfırla"
+    },
+    "kpi": {
+      "title": "Temel göstergeler",
+      "vsPrevious": "Aynı uzunluktaki önceki dönemle karşılaştırma",
+      "open": "Açık satış hattı",
+      "openHint": "{count, plural, one {# fırsat} other {# fırsat}} · tahmin {forecast}",
+      "won": "Kazanılan",
+      "wonHint": "{count, plural, one {# fırsat kapandı} other {# fırsat kapandı}}",
+      "collected": "Tahsil edilen",
+      "collectedHint": "Alınan ödemeler",
+      "outstanding": "Bekleyen",
+      "outstandingHint": "{count, plural, one {# açık fatura} other {# açık fatura}}",
+      "winRate": "Kazanma oranı",
+      "winRateHint": "{won} kazanıldı, {lost} kaybedildi",
+      "avgSize": "Ortalama fırsat büyüklüğü",
+      "avgSizeHint": "Kazanılan fırsatlardan",
+      "avgCycle": "Ortalama satış döngüsü",
+      "avgCycleHint": "Oluşturmadan kazanmaya",
+      "days": "{count, plural, one {# gün} other {# gün}}",
+      "lost": "Kaybedilen fırsatlar",
+      "lateClose": "Beklenen kapanış geçti",
+      "lateCloseHint": "Tarihi geçmiş açık fırsatlar",
+      "contacts": "Kişiler",
+      "contactsHint": "Bugün görünümünüzde",
+      "newContacts": "Yeni kişiler",
+      "newLeads": "Yeni potansiyel müşteriler",
+      "newLeadsHint": "Kaynakla gelen kişiler",
+      "paid": "Ödenen faturalar",
+      "paidHint": "Dönem içinde ödendi",
+      "tasksOpen": "Açık görevler",
+      "tasksOpenHint": "{count} görev bugün daha sonra",
+      "tasksOverdue": "Gecikmiş görevler"
+    },
+    "funnel": {
+      "title": "Satış hunisi",
+      "subtitle": "{pipeline} · dönemde {count, plural, one {# fırsat oluşturuldu} other {# fırsat oluşturuldu}}",
+      "noPipeline": "Henüz satış hattı yok.",
+      "empty": "Bu dönemde hiç fırsat oluşturulmadı.",
+      "conversion": "%{percent} ilerledi",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} bu aşamaya ulaştı, şu an {open} açık. Aç.",
+      "openNow": "{count, plural, one {şu an # açık} other {şu an # açık}} · {value}"
+    },
+    "trend": {
+      "title": "Kazanılan ve kaybedilen fırsatlar",
+      "subtitle": {
+        "day": "Günlük · {value} kazanıldı",
+        "week": "Haftalık · {value} kazanıldı",
+        "month": "Aylık · {value} kazanıldı"
+      },
+      "chartLabel": "Dönem boyunca kazanılan ve kaybedilen fırsatlar",
+      "won": "Kazanılan",
+      "lost": "Kaybedilen"
+    },
+    "leaderboard": {
+      "title": "Sahip sıralaması",
+      "subtitle": "Dönemde kazanılan tutara göre",
+      "empty": "Bu görünümde sıralanacak fırsat yok.",
+      "owner": "Sahip",
+      "won": "Kazanılan",
+      "value": "Tutar",
+      "lost": "Kaybedilen",
+      "open": "Açık",
+      "activities": "Etkinlikler",
+      "unowned": "Sahipsiz"
+    },
+    "sources": {
+      "title": "Potansiyel müşteri kaynakları",
+      "subtitle": "Dönemde gelen kişiler ve ne kadar ilerledikleri",
+      "empty": "Bu dönemde kaynağı olan hiçbir kişi gelmedi.",
+      "source": "Kaynak",
+      "leads": "Potansiyel müşteriler",
+      "toDeal": "Fırsata",
+      "toWon": "Kazanıma",
+      "wonValue": "Kazanılan tutar",
+      "none": "Kaynak yok"
+    },
+    "tasks": {
+      "title": "Görevler",
+      "subtitle": "{open} açık · {overdue} gecikmiş · {today} bugün daha sonra",
+      "all": "Tüm görevler",
+      "empty": "Açık görev yok.",
+      "byAssignee": "Atanan kişiye göre açık görevler",
+      "assignee": "Atanan",
+      "open": "Açık",
+      "overdue": "Gecikmiş",
+      "dueToday": "Bugün daha sonra",
+      "unassigned": "Atanmamış",
+      "upcoming": "Yaklaşan görevler",
+      "overdueTag": "Gecikmiş"
+    },
+    "aging": {
+      "title": "Alacak yaşlandırma",
+      "open": "Ödemeler",
+      "empty": "Borç yok.",
+      "bucket": {
+        "current": "Vadesi gelmedi",
+        "d1_30": "1–30 gün gecikmiş",
+        "d31_60": "31–60 gün gecikmiş",
+        "d61_90": "61–90 gün gecikmiş",
+        "d90_plus": "90 günden fazla gecikmiş"
+      }
+    },
+    "payments": {
+      "title": "Son ödemeler",
+      "empty": "Henüz ödeme yok."
+    },
+    "activity": {
+      "title": "Son etkinlik",
+      "empty": "Henüz etkinlik yok.",
+      "stageMoved": "{from} aşamasından {to} aşamasına taşındı",
+      "stagePlaced": "{to} aşamasına yerleştirildi",
+      "by": "{name} tarafından",
+      "system": "sistem tarafından",
+      "type": {
+        "note": "Not",
+        "stage_change": "Aşama değişikliği",
+        "call": "Arama",
+        "message": "Mesaj",
+        "email": "E-posta",
+        "meeting": "Toplantı",
+        "task": "Görev"
+      }
+    }
+  }
+}

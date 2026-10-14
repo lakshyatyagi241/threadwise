@@ -1373,6 +1373,12 @@
         "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
         "remove": "Usuń: {name}"
       }
+    },
+    "erase": {
+      "scope": "Usunięcie kontaktu usuwa też jego rozmowy, wiadomości, multimedia, pliki, nagrania połączeń i logi połączeń. Leady, transakcje, zadania i faktury pozostają.",
+      "scopeMany": "Usunięcie kontaktów usuwa też ich rozmowy, wiadomości, multimedia, pliki, nagrania połączeń i logi połączeń. Leady, transakcje, zadania i faktury pozostają.",
+      "keepHistory": "Zachowaj historię rozmów bez tożsamości osoby",
+      "keepHistoryHint": "Rozmowy pozostają w Twoich zapisach, ale nie wskazują już na osobę."
     }
   }
 }

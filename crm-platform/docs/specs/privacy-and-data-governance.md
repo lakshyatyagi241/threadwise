@@ -1,8 +1,6 @@
 # Privacy and data governance: platform-wide design and audit
 
-Status: design + audit (spec). BUILT so far (BL-140, BL-141, first slice): the purpose registry, the extended consent vocabulary and the
-ConsentGate with its adopters (section 4.3.1 below). The rest of the document is still design. No migration came with that slice.
-Backlog: BL-140 to BL-153
+Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); the rest is still design. Backlog: BL-140 to BL-153
 ([backlog.md](../backlog.md) section O). Not legal advice: see section 10.
 
 ## How to read the evidence
@@ -269,6 +267,8 @@ Plug-in map (each is a backlog task):
 See section 5 and [../privacy/voice-bot-consent-requirements.md](../privacy/voice-bot-consent-requirements.md).
 
 ### 4.5 DSAR and rights service
+
+> **Built (BL-142, BL-143).** Code: `apps/api/src/modules/privacy` (registry in `registry/` and `manifests/`, engine in `engine/`, API in `requests/`), tables in migration `20261129090000_privacy_requests.sql`, permissions `privacy.requests.read|manage` and `privacy.erase.execute`, API doc [../api/privacy.md](../api/privacy.md), runbook [../privacy/dsar-runbook.md](../privacy/dsar-runbook.md). Differences from the design below: the subject types built are contact, lead and a free phone/email (staff `user` subject is allow-listed, handlers are a follow-up); the platform-owned erasure log is not built (the proof lives on the request row); backups, search indexes, AI vendors and the public request form are follow-ups.
 
 - Table `privacy_requests`: type (`access`, `export`, `rectification`, `erasure`, `restriction`, `objection`, `portability`,
   `consent_withdrawal`), subject reference, requester channel, identity-verification state, status, `due_at`, assignee, legal-hold flags,

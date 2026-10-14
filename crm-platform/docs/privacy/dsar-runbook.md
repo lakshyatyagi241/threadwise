@@ -1,6 +1,6 @@
 # Data subject request (DSAR) runbook
 
-Interim manual procedure until the rights service (BL-143) exists, and the process the service will automate. Design:
+How a data request is answered. The rights service (BL-143) is built: Settings > Privacy > Data requests (`/privacy-requests`, API [privacy.md](../api/privacy.md)) does steps 1 to 6 and 9; steps 7 and 8 stay manual. Design:
 [privacy-and-data-governance.md](../specs/privacy-and-data-governance.md) section 4.5. Not legal advice; deadlines need counsel
 confirmation.
 
@@ -18,25 +18,25 @@ receipt date, verification date, due date. Escalate at 15 and 25 days.
 
 ## Steps
 
-1. **Log** the request: type (access, export, rectification, erasure, restriction, objection, portability, consent withdrawal), channel,
+1. **Log** the request (Data requests > New request; the clock starts, default 30 days, setting in the same screen): type (access, export, rectification, erasure, restriction, objection, portability, consent withdrawal), channel,
    who, workspace.
-2. **Verify identity** proportionately. Contact: reply from the same channel identity (send a one-time code to the WhatsApp number or
+2. **Verify identity** proportionately (record the method and a reference id on the request; never upload a document). Contact: reply from the same channel identity (send a one-time code to the WhatsApp number or
    the email on file); never reveal whether the identity exists until verified. Staff: logged-in session or email confirmation.
-3. **Find the data** using the module register
+3. **Find the data**: the service does it from the registry; the module register
    [wiring/privacy-and-data.md](../threadwise-port/wiring/privacy-and-data.md). Run the finder per contact id across every listed
    table and storage prefix.
-4. **Decide exceptions:** invoices and payment records (statutory retention), consent proof (legitimate interest in proof; anonymise),
+4. **Decide exceptions** (legal hold toggle on the request, with the reason): invoices and payment records (statutory retention), consent proof (legitimate interest in proof; anonymise),
    open disputes, legal hold. Write the reason.
 5. **Execute**
-   - Access/export: contacts card, messages, notes, files, leads, orders, call logs and recordings, consent ledger (the ledger export:
+   - Access/export (button Export; the workspace admin downloads the ZIP, valid 7 days; nothing is mailed to the person): contacts card, messages, notes, files, leads, orders, call logs and recordings, consent ledger (the ledger export:
      `GET /v2/contact-consent/...`, see [contact-consent.md](../api/contact-consent.md)). Deliver as an archive over a verified channel,
      expire the link in 7 days.
-   - Erasure: today deleting a contact does not remove messages, files, recordings, leads, orders or call logs (spec gap G2). Until
-     BL-143, an operator-run script per table is needed; do not run ad hoc deletes without review. Replace identifiers on records you
-     must keep with a token.
+   - Erasure: preview (counts per table), then type `ERASE <reference>`. Messages, files and recordings are deleted; leads, forms, appointments,
+     calls keep the row without the person; invoices and payments are kept with the buyer replaced. The proof (counts, digest, hash) stays on the request.
+     Deleting a contact in the CRM now also erases its conversation history (option to keep it anonymised).
    - Rectification: edit the contact; the audit log records the change.
    - Withdrawal/objection: record a `withdrawn` event for every channel and purpose the person names.
-6. **Storage and caches:** queue file deletes for media, contact files and recordings; confirm the purge queue drained.
+6. **Storage and caches:** done by the service (files go to the purge queue within a minute); confirm `storage_purge_queue` drained.
 7. **Backups:** erased data remains in backups for up to 14 days local and up to 12 months off-site
    ([backup-restore.md](../runbooks/backup-restore.md)). Say so in the reply. Keep an **erasure log** (subject token, date, tables) and
    re-run it after any restore.

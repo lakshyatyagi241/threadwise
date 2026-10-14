@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "Dashboard CRM"
+    },
+    "title": "Il tuo CRM",
+    "subtitle": "Trattative, fatture, pagamenti e attività: tutta l'azienda in un'unica vista.",
+    "period": "dal {from} al {to} · fuso orario {zone}",
+    "openBoard": "Apri la bacheca delle trattative",
+    "loading": "Caricamento della dashboard",
+    "retry": "Riprova",
+    "stale": "L'aggiornamento non è riuscito. Questi sono gli ultimi numeri disponibili.",
+    "empty": {
+      "title": "Ancora niente da mostrare",
+      "message": "Aggiungi contatti e trattative e questa pagina si riempie: l'imbuto della pipeline, chi sta vincendo, da dove arrivano i lead, le attività e quanto ti devono.",
+      "deals": "Vai alle trattative",
+      "contacts": "Vai ai contatti"
+    },
+    "filters": {
+      "label": "Filtri della dashboard",
+      "period": "Periodo",
+      "range": {
+        "month": "Questo mese",
+        "7d": "7 giorni",
+        "30d": "30 giorni",
+        "90d": "90 giorni",
+        "custom": "Personalizzato"
+      },
+      "from": "Dal",
+      "to": "Al",
+      "pipeline": "Pipeline",
+      "allPipelines": "Tutte le pipeline",
+      "owner": "Responsabile",
+      "everyone": "Tutti",
+      "team": "Team",
+      "allTeams": "Tutti i team",
+      "reset": "Reimposta filtri"
+    },
+    "kpi": {
+      "title": "Cifre chiave",
+      "vsPrevious": "Rispetto al periodo precedente della stessa durata",
+      "open": "Pipeline aperta",
+      "openHint": "{count, plural, one {# trattativa} other {# trattative}} · previsione {forecast}",
+      "won": "Vinte",
+      "wonHint": "{count, plural, one {# trattativa chiusa} other {# trattative chiuse}}",
+      "collected": "Incassato",
+      "collectedHint": "Pagamenti ricevuti",
+      "outstanding": "Da incassare",
+      "outstandingHint": "{count, plural, one {# fattura aperta} other {# fatture aperte}}",
+      "winRate": "Tasso di successo",
+      "winRateHint": "{won} vinte, {lost} perse",
+      "avgSize": "Valore medio delle trattative",
+      "avgSizeHint": "Delle trattative vinte",
+      "avgCycle": "Ciclo di vendita medio",
+      "avgCycleHint": "Dalla creazione alla vittoria",
+      "days": "{count, plural, one {# giorno} other {# giorni}}",
+      "lost": "Trattative perse",
+      "lateClose": "Chiusura prevista superata",
+      "lateCloseHint": "Trattative aperte la cui data è passata",
+      "contacts": "Contatti",
+      "contactsHint": "Nella tua vista oggi",
+      "newContacts": "Nuovi contatti",
+      "newLeads": "Nuovi lead",
+      "newLeadsHint": "Contatti arrivati con una fonte",
+      "paid": "Fatture pagate",
+      "paidHint": "Pagate nel periodo",
+      "tasksOpen": "Attività aperte",
+      "tasksOpenHint": "{count} in scadenza più tardi oggi",
+      "tasksOverdue": "Attività in ritardo"
+    },
+    "funnel": {
+      "title": "Imbuto della pipeline",
+      "subtitle": "{pipeline} · {count, plural, one {# trattativa creata} other {# trattative create}} nel periodo",
+      "noPipeline": "Non c'è ancora nessuna pipeline.",
+      "empty": "Nessuna trattativa è stata creata in questo periodo.",
+      "conversion": "{percent}% è avanzato",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} hanno raggiunto questa fase, {open} aperte ora. Aprile.",
+      "openNow": "{count, plural, one {# aperta ora} other {# aperte ora}} · {value}"
+    },
+    "trend": {
+      "title": "Trattative vinte e perse",
+      "subtitle": {
+        "day": "Al giorno · {value} vinti",
+        "week": "A settimana · {value} vinti",
+        "month": "Al mese · {value} vinti"
+      },
+      "chartLabel": "Trattative vinte e perse nel periodo",
+      "won": "Vinte",
+      "lost": "Perse"
+    },
+    "leaderboard": {
+      "title": "Classifica dei responsabili",
+      "subtitle": "Per valore vinto nel periodo",
+      "empty": "Nessuna trattativa da classificare in questa vista.",
+      "owner": "Responsabile",
+      "won": "Vinte",
+      "value": "Valore",
+      "lost": "Perse",
+      "open": "Aperte",
+      "activities": "Attività",
+      "unowned": "Senza responsabile"
+    },
+    "sources": {
+      "title": "Fonti dei lead",
+      "subtitle": "Contatti arrivati nel periodo e fin dove sono arrivati",
+      "empty": "Nessun contatto con una fonte è arrivato in questo periodo.",
+      "source": "Fonte",
+      "leads": "Lead",
+      "toDeal": "A trattativa",
+      "toWon": "A vinta",
+      "wonValue": "Valore vinto",
+      "none": "Nessuna fonte"
+    },
+    "tasks": {
+      "title": "Attività",
+      "subtitle": "{open} aperte · {overdue} in ritardo · {today} in scadenza più tardi oggi",
+      "all": "Tutte le attività",
+      "empty": "Nessuna attività aperta.",
+      "byAssignee": "Attività aperte per assegnatario",
+      "assignee": "Assegnatario",
+      "open": "Aperte",
+      "overdue": "In ritardo",
+      "dueToday": "Più tardi oggi",
+      "unassigned": "Non assegnate",
+      "upcoming": "Prossime attività",
+      "overdueTag": "In ritardo"
+    },
+    "aging": {
+      "title": "Scadenzario dei crediti",
+      "open": "Pagamenti",
+      "empty": "Non è dovuto nulla.",
+      "bucket": {
+        "current": "Non ancora scaduto",
+        "d1_30": "Scaduto da 1–30 giorni",
+        "d31_60": "Scaduto da 31–60 giorni",
+        "d61_90": "Scaduto da 61–90 giorni",
+        "d90_plus": "Scaduto da oltre 90 giorni"
+      }
+    },
+    "payments": {
+      "title": "Pagamenti recenti",
+      "empty": "Ancora nessun pagamento."
+    },
+    "activity": {
+      "title": "Attività recente",
+      "empty": "Ancora nessuna attività.",
+      "stageMoved": "Spostata da {from} a {to}",
+      "stagePlaced": "Collocata in {to}",
+      "by": "da {name}",
+      "system": "dal sistema",
+      "type": {
+        "note": "Nota",
+        "stage_change": "Cambio di fase",
+        "call": "Chiamata",
+        "message": "Messaggio",
+        "email": "E-mail",
+        "meeting": "Riunione",
+        "task": "Attività"
+      }
+    }
+  }
+}

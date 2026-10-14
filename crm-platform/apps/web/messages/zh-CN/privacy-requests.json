@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "忽略",
+      "retry": "重试",
+      "loading": "加载中...",
+      "cancel": "取消",
+      "back": "返回",
+      "next": "下一步",
+      "close": "关闭",
+      "save": "保存"
+    },
+    "errors": {
+      "network": "无法连接到服务器。请检查网络连接后重试。",
+      "forbidden": "您没有执行此操作的权限。",
+      "notFound": "此请求已不存在。",
+      "subjectNotFound": "此人已不在该工作区中。",
+      "stateInvalid": "此请求当前状态下无法执行该操作。请刷新并检查其状态。",
+      "notVerified": "请先验证此人的身份。",
+      "legalHold": "此请求处于法律保留状态。请先解除保留再删除。",
+      "confirmationRequired": "请先运行预览，并准确输入确认短语。",
+      "exportInProgress": "此请求的导出正在准备中。",
+      "exportNotReady": "文件尚未就绪或已过期。请重新准备导出。",
+      "rateLimited": "请求过多。请稍候再试。",
+      "validation": "部分值无效。请检查表单后重试。",
+      "unexpected": "出了点问题。请重试。"
+    },
+    "type": {
+      "access": "访问",
+      "export": "导出",
+      "erasure": "删除",
+      "rectification": "更正",
+      "restriction": "限制处理",
+      "objection": "反对",
+      "withdrawal": "撤回同意",
+      "portability": "可携带性"
+    },
+    "typeHint": {
+      "access": "当事人询问我们持有其哪些数据。以文件结束。",
+      "export": "当事人数据的副本。以文件结束。",
+      "erasure": "删除当事人的数据。需先预览。",
+      "rectification": "更正错误的数据。由您手动修正并关闭请求。",
+      "restriction": "暂时停止使用这些数据。由您手动处理并关闭请求。",
+      "objection": "当事人反对对其数据的某项使用。由您手动处理并关闭请求。",
+      "withdrawal": "当事人撤回同意。由您手动处理并关闭请求。",
+      "portability": "可迁移到其他地方的机器可读副本。以文件结束。"
+    },
+    "status": {
+      "received": "已收到",
+      "verifying": "正在验证身份",
+      "in_progress": "处理中",
+      "completed": "已完成",
+      "rejected": "已拒绝",
+      "expired": "已过期"
+    },
+    "channel": {
+      "email": "电子邮件",
+      "whatsapp": "WhatsApp",
+      "phone": "电话",
+      "in_person": "当面",
+      "portal": "门户",
+      "staff": "由员工录入",
+      "other": "其他"
+    },
+    "method": {
+      "channel_code": "验证码已发送到当事人的渠道",
+      "email_link": "链接已通过电子邮件发送",
+      "known_contact": "通过我们已有的号码或邮箱联系",
+      "existing_session": "已登录其账户",
+      "id_document_checked": "已核对身份证件",
+      "other": "其他"
+    },
+    "disposition": {
+      "deleted": "已删除",
+      "anonymised": "已匿名化",
+      "cascaded": "已级联删除",
+      "retained": "已保留",
+      "unlinked": "已取消关联"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {剩余 # 天} other {剩余 # 天}}",
+      "dueToday": "今天到期",
+      "overdue": "{count, plural, one {已逾期 # 天} other {已逾期 # 天}}",
+      "closed": "已关闭",
+      "dueOn": "截止 {date}"
+    },
+    "list": {
+      "title": "数据请求",
+      "subtitle": "人们就您持有的其个人数据提出的请求：访问、导出、删除等。每项请求都有截止日期和处理记录。",
+      "newRequest": "新建请求",
+      "settings": "设置",
+      "empty": "暂无数据请求。",
+      "emptyFiltered": "没有符合这些筛选条件的请求。",
+      "loadMore": "加载更多",
+      "loadingMore": "加载中...",
+      "columns": {
+        "reference": "编号",
+        "type": "类型",
+        "subject": "当事人",
+        "status": "状态",
+        "due": "截止日期"
+      },
+      "filters": {
+        "label": "筛选",
+        "status": "状态",
+        "type": "类型",
+        "any": "全部",
+        "overdue": "仅显示已逾期"
+      },
+      "open": "打开请求 {reference}"
+    },
+    "settings": {
+      "title": "截止日期",
+      "slaDays": "答复请求的天数",
+      "slaHint": "请求到达后多少天内必须答复。默认为 30 天。",
+      "saved": "设置已保存。",
+      "invalid": "请输入 1 到 90 之间的整数天数。"
+    },
+    "wizard": {
+      "title": "新建数据请求",
+      "step": "第 {current} 步，共 {total} 步",
+      "person": {
+        "title": "查找当事人",
+        "search": "按姓名、电话或邮箱搜索",
+        "searchHint": "请至少输入 2 个字符。",
+        "searching": "搜索中...",
+        "none": "未找到任何人。您可以在下方使用电话号码或邮箱。",
+        "pick": "选择 {name}",
+        "unnamed": "未命名",
+        "kindContact": "联系人",
+        "kindLead": "线索",
+        "selected": "已选择：{name}",
+        "other": "不在您的联系人中",
+        "otherValue": "电话号码或邮箱",
+        "otherHint": "适用于未保存的人员。我们将通过此值查找其数据。",
+        "useOther": "使用此值",
+        "clear": "选择其他人"
+      },
+      "kind": {
+        "title": "当事人提出什么请求？"
+      },
+      "details": {
+        "title": "详情",
+        "channel": "请求是如何送达的？",
+        "note": "内部备注",
+        "noteHint": "选填。仅您的团队可见。请勿在此填写个人信息。",
+        "history": "会话记录",
+        "historyHint": "删除当事人数据时，其会话如何处理。",
+        "historyDelete": "删除会话、消息和文件",
+        "historyAnonymise": "保留会话，但去除当事人身份信息"
+      },
+      "create": "创建请求",
+      "creating": "创建中...",
+      "created": "请求 {reference} 已创建。"
+    },
+    "detail": {
+      "back": "数据请求",
+      "loading": "加载中...",
+      "received": "收到于 {date}",
+      "channel": "渠道：{channel}",
+      "history": {
+        "delete": "删除时：会话将被删除",
+        "anonymise": "删除时：保留会话，但去除当事人身份信息"
+      },
+      "note": "内部备注",
+      "legalHoldBadge": "法律保留",
+      "timeline": {
+        "title": "时间线",
+        "empty": "暂无记录。",
+        "by": "操作人：{actor}",
+        "system": "系统",
+        "event": {
+          "created": "请求已创建",
+          "verification_started": "身份核验已开始",
+          "verified": "身份已验证",
+          "verification_failed": "身份未通过验证",
+          "hold_set": "已设置法律保留",
+          "hold_released": "已解除法律保留",
+          "rejected": "请求已拒绝",
+          "export_requested": "已请求导出",
+          "export_downloaded": "导出已下载",
+          "erase_previewed": "已预览删除",
+          "erased": "数据已删除",
+          "completed": "请求已完成",
+          "other": "更新"
+        }
+      },
+      "verify": {
+        "title": "身份验证",
+        "intro": "在导出或删除任何内容之前，请确认提出请求的人确为本人。",
+        "state": {
+          "none": "尚未核验。",
+          "verified": "已于 {date} 验证（{method}）。",
+          "evidence": "证据编号：{ref}"
+        },
+        "method": "如何核验的？",
+        "evidence": "证据参考 ID",
+        "evidenceHint": "仅填写参考 ID，切勿上传文件。请使用工单编号或消息 ID。",
+        "note": "备注",
+        "outcome": "结果",
+        "pending": "核验已开始",
+        "verified": "已验证",
+        "notVerified": "未验证",
+        "submit": "记录结果",
+        "notVerifiedWarn": "未通过验证的人，其请求将被拒绝。",
+        "saved": "验证结果已记录。"
+      },
+      "hold": {
+        "title": "法律保留",
+        "intro": "保留生效期间，将拒绝删除。当法律或争议要求保留数据时使用。",
+        "toggle": "法律保留",
+        "reason": "原因",
+        "reasonHint": "至少 3 个字符。",
+        "apply": "设置保留",
+        "release": "解除保留",
+        "active": "保留中：{reason}",
+        "saved": "保留状态已更新。"
+      },
+      "export": {
+        "title": "导出",
+        "intro": "准备一个包含我们所持有的此人数据的 ZIP 文件。",
+        "expiry": "生成的文件可保留 {days} 天，之后将被删除。",
+        "noEmail": "不会向当事人发送任何内容。请下载文件，并通过安全渠道交给对方。",
+        "request": "准备导出",
+        "requesting": "准备中...",
+        "requested": "导出已开始。",
+        "none": "暂无导出。",
+        "download": "下载",
+        "size": "{size} KB",
+        "expires": "{date} 过期",
+        "status": {
+          "queued": "等待中",
+          "running": "生成中",
+          "ready": "已就绪",
+          "failed": "失败",
+          "expired": "已过期"
+        }
+      },
+      "erase": {
+        "title": "删除",
+        "intro": "从所有模块中删除此人的数据。请先预览：在您确认之前不会有任何更改。",
+        "preview": "预览",
+        "previewing": "统计中...",
+        "previewTitle": "将会发生什么",
+        "previewNote": "仅为预览。未做任何更改。",
+        "files": "{count, plural, one {# 个存储文件已排队等待删除} other {# 个存储文件已排队等待删除}}",
+        "totals": "已删除 {deleted} 条，已匿名化 {anonymised} 条，已保留 {retained} 条",
+        "colTable": "表",
+        "colWhat": "处理方式",
+        "colCount": "行数",
+        "colReason": "原因",
+        "confirmLabel": "输入 {phrase} 以确认",
+        "confirmHint": "此操作无法撤销。",
+        "execute": "立即删除",
+        "executing": "删除中...",
+        "done": "删除完成。",
+        "blocked": "身份验证通过且没有法律保留时，才可进行删除。"
+      },
+      "proof": {
+        "title": "删除证明",
+        "executedAt": "执行于 {date}",
+        "executedBy": "执行人：{actor}",
+        "totals": "已删除 {deleted} 条，已匿名化 {anonymised} 条，已保留 {retained} 条，{files} 个文件",
+        "registryDigest": "登记摘要",
+        "sha256": "SHA-256",
+        "notes": "此次删除的限制",
+        "download": "下载证明"
+      },
+      "close": {
+        "title": "关闭请求",
+        "complete": "标记为已完成",
+        "completeHint": "当已答复当事人或已手动完成工作时使用。",
+        "completed": "请求已完成。",
+        "rejectReason": "拒绝原因",
+        "reject": "拒绝请求",
+        "rejectConfirm": "拒绝",
+        "rejected": "请求已拒绝。",
+        "rejectedWith": "已拒绝：{reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "隐私",
+      "export": "导出此人的数据",
+      "erase": "删除此人",
+      "created": "请求 {reference} 已创建。",
+      "failed": "无法创建请求。"
+    }
+  }
+}

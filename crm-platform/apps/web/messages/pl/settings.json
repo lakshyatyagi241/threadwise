@@ -359,6 +359,11 @@
         "label": "Wydajność zespołu",
         "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
         "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
+      },
+      "privacy-requests": {
+        "label": "Wnioski o dane",
+        "description": "Odpowiadaj osobom pytającym, co o nich przechowujesz: sprawdzenie tożsamości, eksport, usunięcie z podglądem i dowód, który możesz zachować.",
+        "keywords": "prywatność, gdpr, wniosek o dane, dsar, dostęp do danych, eksport danych, usunięcie, prawo do bycia zapomnianym, usunięcie danych osobowych, blokada prawna"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

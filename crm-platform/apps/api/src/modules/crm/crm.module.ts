@@ -50,6 +50,9 @@ import { DealActivitiesRepository } from './deals/deal-activities.repository';
 import { DealActivitiesService } from './deals/deal-activities.service';
 import { DealBoardService } from './deals/deal-board.service';
 import { DealEngine } from './deals/deal-engine.service';
+import { CrmDashboardController } from './crm-dashboard/crm-dashboard.controller';
+import { CrmDashboardRepository } from './crm-dashboard/crm-dashboard.repository';
+import { CrmDashboardService } from './crm-dashboard/crm-dashboard.service';
 import { DealReportsRepository } from './deals/deal-reports.repository';
 import { DealReportsService } from './deals/deal-reports.service';
 import { DealsPlan, SalesPipelineGuard } from './deals/deals-plan';
@@ -102,6 +105,7 @@ import {
   ManualTransferGateway,
 } from '../../infra/providers/invoice-payments/invoice-payment-gateways';
 import { ContactConsentModule } from '../contact-consent';
+import { PrivacyModule } from '../privacy';
 import { CreditNotesController } from './invoicing/credit-notes.controller';
 import { CreditNotesRepository } from './invoicing/credit-notes.repository';
 import { CreditNotesService } from './invoicing/credit-notes.service';
@@ -173,6 +177,7 @@ import { TagsService } from './tags/tags.service';
     CheckoutOrdersMerchantPaymentsModule,
     PlatformSettingsModule,
     ContactConsentModule,
+    PrivacyModule,
   ],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
@@ -202,6 +207,7 @@ import { TagsService } from './tags/tags.service';
     // Deals: `deals/board`, `deals/reports` and `deals/tasks` are literal paths declared before `deals/:id` inside the controller.
     DealsController,
     ContactDealsController,
+    CrmDashboardController,
     PipelinesController,
     PipelineStagesController,
     LostReasonsController,
@@ -287,6 +293,8 @@ import { TagsService } from './tags/tags.service';
     DealActivitiesService,
     DealBoardService,
     DealReportsService,
+    CrmDashboardRepository,
+    CrmDashboardService,
     PipelinesRepository,
     PipelinesService,
     LostReasonsService,

@@ -25,6 +25,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { PersonalDataErasureService } from '../../privacy';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { assertOwnerWithinScope } from '../owner-scope';
 import { contactConditions, contactScopeCondition, whereOf } from '../contacts/contact-conditions';
@@ -78,6 +79,7 @@ export class ContactBulkService {
     private readonly tags: TagsService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly erasure: PersonalDataErasureService,
   ) {}
 
   private meta(): ActorMeta {
@@ -305,6 +307,9 @@ export class ContactBulkService {
    * Hard delete, 500 at a time inside one transaction. Unknown ids and ids outside the caller's
    * scope are reported in `failed`, not a reason to refuse the rest (Reference answered 422 and
    * deleted nothing if ANY id was stale, and echoed the requested ids as if all were deleted).
+   *
+   * Each batch first runs the shared erasure pipeline over its contacts (conversations, messages, media, files, call logs): with
+   * `eraseHistory` (default) they are removed, without it they are kept without the people's identity.
    */
   async delete(input: BulkDeleteContactsInput, scope: RecordScope): Promise<BulkSelectionResult> {
     const ctx = RequestContextStore.require();
@@ -312,7 +317,10 @@ export class ContactBulkService {
       const r = await this.resolve(tx, input, scope, { maxMatched: BULK_FILTER_MAX });
       let changed = 0;
       if (r.where) {
+        const mode = input.eraseHistory === false ? 'anonymise' : 'delete';
         for (;;) {
+          const ids = await this.repo.nextIds(tx, r.where, DELETE_BATCH);
+          if (ids.length) await this.erasure.eraseContactHistory(tx, ctx.orgId, ids, mode);
           const n = await this.repo.deleteBatch(tx, ctx.orgId, r.where, DELETE_BATCH, this.meta());
           changed += n;
           if (n < DELETE_BATCH) break;
