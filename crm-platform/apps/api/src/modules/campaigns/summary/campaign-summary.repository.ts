@@ -254,6 +254,22 @@ export class CampaignSummaryRepository {
     };
   }
 
+  /** The first and last send only: all a people page needs to bound its probes (the full roll-up is for the summary). */
+  async sendRange(
+    tx: Tx,
+    orgId: number,
+    source: SummarySource,
+    id: number,
+  ): Promise<{ firstSentAt: Date | null; lastSentAt: Date | null }> {
+    const res = await tx.execute(
+      source === 'campaign'
+        ? sql`SELECT min(sent_at) AS a, max(sent_at) AS b FROM wp_campaign_contacts WHERE org_id = ${orgId} AND campaign_id = ${id}`
+        : sql`SELECT min(sent_at) AS a, max(sent_at) AS b FROM broadcast_contacts WHERE org_id = ${orgId} AND broadcast_id = ${id}`,
+    );
+    const r = res.rows[0] as { a: unknown; b: unknown };
+    return { firstSentAt: date(r.a), lastSentAt: date(r.b) };
+  }
+
   // --------------------------------------------------------------------------------------------------------------- figures
 
   /** Every figure of the summary in a single statement. */
@@ -394,21 +410,26 @@ export class CampaignSummaryRepository {
     cursor: SummaryCursor | null,
     limit: number,
   ): Promise<{ rows: PersonRow[]; total: number }> {
+    // The list's size is counted on the first page and carried in the cursor, so paging through it does not count it again.
+    const knownTotal = cursor?.total === undefined ? null : { n: cursor.total };
     if (kind === 'not_reached') {
-      const after = cursor
-        ? sql`(${micros('r.updated_at')}, r.id) < (${cursor.at ?? '0'}::bigint, ${cursor.key}::bigint)`
-        : sql`true`;
+      // Newest row first by id: stable while rows are retried and touched (a time column would move a person between pages).
+      const after = cursor ? sql`r.id < ${cursor.key}::bigint` : sql`true`;
       const page = await tx.execute(sql`
         WITH rcp AS MATERIALIZED (${this.rcp(s.orgId, s.source, s.id)})
         SELECT r.id::text AS key, c.uuid AS contact_uuid, r.rname AS name, r.rphone AS phone, r.updated_at AS at,
                ${micros('r.updated_at')}::text AS at_micros
           FROM rcp r LEFT JOIN contacts c ON c.org_id = ${s.orgId} AND c.id = r.contact_id
          WHERE r.status = 'failed' AND ${after}
-         ORDER BY ${micros('r.updated_at')} DESC, r.id DESC LIMIT ${limit + 1}`);
-      const total = await tx.execute(sql`
+         ORDER BY r.id DESC LIMIT ${limit + 1}`);
+      const total =
+        knownTotal ??
+        (
+          await tx.execute(sql`
         WITH rcp AS MATERIALIZED (${this.rcp(s.orgId, s.source, s.id)})
-        SELECT count(*)::int AS n FROM rcp WHERE status = 'failed'`);
-      return this.toPage(page.rows as Array<Record<string, unknown>>, total.rows[0]);
+        SELECT count(*)::int AS n FROM rcp WHERE status = 'failed'`)
+        ).rows[0];
+      return this.toPage(page.rows as Array<Record<string, unknown>>, total);
     }
 
     const cond = this.cursorAfter(cursor, 'x.at', 'x.pkey');
@@ -431,8 +452,9 @@ export class CampaignSummaryRepository {
         FROM x LEFT JOIN contacts c ON c.org_id = ${s.orgId} AND c.id = x.contact_id
        WHERE ${cond}
        ORDER BY ${micros('x.at')} DESC, x.pkey DESC LIMIT ${limit + 1}`);
-    const total = await tx.execute(sql`${cte} SELECT count(*)::int AS n FROM x`);
-    return this.toPage(page.rows as Array<Record<string, unknown>>, total.rows[0]);
+    const total =
+      knownTotal ?? (await tx.execute(sql`${cte} SELECT count(*)::int AS n FROM x`)).rows[0];
+    return this.toPage(page.rows as Array<Record<string, unknown>>, total);
   }
 
   private toPage(

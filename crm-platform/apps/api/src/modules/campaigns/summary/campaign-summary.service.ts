@@ -238,7 +238,7 @@ export class CampaignSummaryService {
     if (q.kind === 'filled_form' && !this.canReadSubmissions()) {
       throw AppError.forbidden(PERM_SUBMISSIONS_READ);
     }
-    const cursor = decodeCursor(q.cursor);
+    const cursor = decodeCursor(q.cursor, q.kind);
     try {
       return await this.db.tx(async (tx) => {
         await tx.execute(
@@ -247,8 +247,8 @@ export class CampaignSummaryService {
         const head = await this.repo.header(tx, orgId, source, uuid);
         if (!head) throw AppError.notFound(source === 'campaign' ? 'Campaign' : 'Broadcast', uuid);
 
-        const roll = await this.repo.rollup(tx, orgId, source, head.id);
-        const bounds = windowBounds(roll.firstSentAt, roll.lastSentAt, q.cameBackDays);
+        const range = await this.repo.sendRange(tx, orgId, source, head.id);
+        const bounds = windowBounds(range.firstSentAt, range.lastSentAt, q.cameBackDays);
         if (!bounds && q.kind !== 'not_reached') return { data: [], nextCursor: null, total: 0 };
 
         let webForms: number[] | null = null;
@@ -287,7 +287,10 @@ export class CampaignSummaryService {
             at: r.at?.toISOString() ?? null,
             formName: r.formName,
           })),
-          nextCursor: more && last ? encodeCursor({ at: last.atMicros, key: last.key }) : null,
+          nextCursor:
+            more && last
+              ? encodeCursor({ at: last.atMicros, key: last.key, total: page.total })
+              : null,
           total: page.total,
         };
       });

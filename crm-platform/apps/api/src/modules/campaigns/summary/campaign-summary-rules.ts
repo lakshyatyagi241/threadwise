@@ -84,13 +84,25 @@ export interface SummaryCursor {
   /** Microseconds since the epoch; null sorts last. */
   at: string | null;
   key: string;
+  /** The size of the whole list, worked out on the first page and carried so the later pages do not count it again. */
+  total?: number;
 }
+
+/** The largest value a signed 64-bit integer column holds: the SQL compares the cursor's numbers as bigint. */
+const BIGINT_MAX = 9223372036854775807n;
 
 export function encodeCursor(c: SummaryCursor): string {
-  return Buffer.from(JSON.stringify([c.at, c.key]), 'utf8').toString('base64url');
+  return Buffer.from(JSON.stringify([c.at, c.key, c.total ?? null]), 'utf8').toString('base64url');
 }
 
-export function decodeCursor(raw: string | undefined): SummaryCursor | null {
+/**
+ * The page position of a request. `kind` says which list it is for: the not-reached list is keyed by a row id, so a key of any other
+ * shape (a cursor from another list, or a tampered one) is refused here instead of reaching a `::bigint` cast in the database.
+ */
+export function decodeCursor(
+  raw: string | undefined,
+  kind?: 'came_back' | 'filled_form' | 'not_reached',
+): SummaryCursor | null {
   if (raw === undefined || raw === '') return null;
   const bad = () =>
     AppError.validation('The cursor is not valid', [{ path: 'cursor', message: 'invalid' }]);
@@ -100,9 +112,15 @@ export function decodeCursor(raw: string | undefined): SummaryCursor | null {
   } catch {
     throw bad();
   }
-  if (!Array.isArray(parsed) || parsed.length !== 2) throw bad();
-  const [at, key] = parsed as [unknown, unknown];
-  if (at !== null && !(typeof at === 'string' && /^\d{1,19}$/.test(at))) throw bad();
+  if (!Array.isArray(parsed) || parsed.length < 2 || parsed.length > 3) throw bad();
+  const [at, key, total] = parsed as [unknown, unknown, unknown];
+  if (at !== null && !(typeof at === 'string' && /^\d{1,19}$/.test(at) && BigInt(at) <= BIGINT_MAX))
+    throw bad();
   if (typeof key !== 'string' || key.length === 0 || key.length > 80) throw bad();
-  return { at, key };
+  if (kind === 'not_reached' && !/^\d{1,18}$/.test(key)) throw bad();
+  if (total !== undefined && total !== null) {
+    if (typeof total !== 'number' || !Number.isInteger(total) || total < 0 || total > 1e9)
+      throw bad();
+  }
+  return { at, key, ...(typeof total === 'number' ? { total } : {}) };
 }

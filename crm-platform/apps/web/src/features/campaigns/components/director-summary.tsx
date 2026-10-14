@@ -51,6 +51,9 @@ export const PRINT_CSS = `
   .dsum-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }`;
 
+/** The most forms the picker lists (the API's cap): a list this long may be cut, so it cannot prove a remembered form was deleted. */
+const PICKER_LIST_LIMIT = 200;
+
 const CARD = 'dsum-card rounded-2xl border border-border bg-background p-5 shadow-sm';
 
 /* ------------------------------------------------------------------------------------------- pieces */
@@ -654,7 +657,8 @@ export function DirectorSummary({
 
   // A remembered form that was deleted since is dropped, so the choice never counts a form that is gone.
   useEffect(() => {
-    if (!forms.data) return;
+    // Only a full picker can say a form is gone: an empty list (the viewer may not list forms) or a list cut at its limit does not.
+    if (!forms.data || forms.data.length === 0 || forms.data.length >= PICKER_LIST_LIMIT) return;
     const known = new Set(forms.data.map((f) => f.id));
     if (formIds.some((f) => !known.has(f))) setFormIds(formIds.filter((f) => known.has(f)));
   }, [forms.data, formIds, setFormIds]);
@@ -699,7 +703,8 @@ export function DirectorSummary({
       a.href = url;
       a.download = csvFileName(s.name);
       a.click();
-      URL.revokeObjectURL(url);
+      // Revoked a moment later: some browsers read the blob only after the click handler has returned.
+      setTimeout(() => URL.revokeObjectURL(url), 10_000);
       const cut = lists.find((l) => l.truncated);
       toast(
         cut

@@ -121,6 +121,39 @@ describe('the people cursor', () => {
     });
   });
 
+  it('carries the size of the list so later pages do not count it again', () => {
+    const c = { at: '1790000000123456', key: '42', total: 7311 };
+    expect(decodeCursor(encodeCursor(c), 'not_reached')).toEqual(c);
+    const bad = (total: unknown) =>
+      expect(() =>
+        decodeCursor(Buffer.from(JSON.stringify(['1', '2', total])).toString('base64url')),
+      ).toThrowError(/cursor is not valid/);
+    bad(-1);
+    bad(1.5);
+    bad('7');
+    bad(2e9);
+  });
+
+  it('refuses what the database would choke on: an instant past bigint, a non-numeric not-reached key', () => {
+    const enc = (v: unknown[]) => Buffer.from(JSON.stringify(v)).toString('base64url');
+    expect(() => decodeCursor(enc(['9223372036854775808', '1']))).toThrowError(
+      /cursor is not valid/,
+    );
+    expect(decodeCursor(enc(['9223372036854775807', '1']))).toEqual({
+      at: '9223372036854775807',
+      key: '1',
+    });
+    // A cursor of the came-back list (a person key) is not a position in the not-reached list (a row id).
+    expect(() => decodeCursor(enc(['1', 'p:4915']), 'not_reached')).toThrowError(
+      /cursor is not valid/,
+    );
+    expect(() => decodeCursor(enc(['1', '12;DROP']), 'not_reached')).toThrowError(
+      /cursor is not valid/,
+    );
+    expect(decodeCursor(enc(['1', '12']), 'not_reached')).toEqual({ at: '1', key: '12' });
+    expect(decodeCursor(enc(['1', 'p:4915']), 'came_back')).toEqual({ at: '1', key: 'p:4915' });
+  });
+
   it('is no cursor when absent', () => {
     expect(decodeCursor(undefined)).toBeNull();
     expect(decodeCursor('')).toBeNull();
