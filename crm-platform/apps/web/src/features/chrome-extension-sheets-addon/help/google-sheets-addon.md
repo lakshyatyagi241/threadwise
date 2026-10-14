@@ -1,7 +1,7 @@
 ---
 id: google-sheets-addon
 title: Google Sheets add-on
-summary: Create your key and Webhook URL, add the add-on to a spreadsheet and send new and changed rows to your workspace as contacts, or pull contacts and sync products.
+summary: Create your key and Webhook URL, add the add-on to a spreadsheet, send new and changed rows to your workspace as contacts, or pull contacts and sync products.
 area: settings
 order: 110
 documents: [tile:google-sheets-addon]
