@@ -11,6 +11,7 @@ import { ApiError } from '@/lib/api/errors';
 import { KEYS, controlBroadcast, useBroadcast, type BroadcastAction } from '../api/wizard';
 import { controlsFor, runPath, statusTone } from '../lib/broadcast';
 import { scheduleZone } from '../lib/schedule';
+import { DirectorSummary } from '../../components/director-summary';
 import { Chip, ErrorBlock, Skeleton, WizardCard } from './parts';
 import { useScheduleWords } from './use-words';
 
@@ -115,6 +116,24 @@ function Runs({ b }: { b: WizardBroadcastDetail }) {
   );
 }
 
+/**
+ * The director summary of what this broadcast sent. A one-off campaign is its own campaign; a series shows its newest run (the list
+ * is newest first), and a series that has not run yet has nothing to summarise.
+ */
+function SummaryCard({ b }: { b: WizardBroadcastDetail }) {
+  const t = useTranslations('campaigns.detail.summary');
+  const latest = b.kind === 'campaign' ? null : (b.runList[0] ?? null);
+  const id = b.kind === 'campaign' ? b.id : (latest?.id ?? null);
+  if (!id) return null;
+  return (
+    <DirectorSummary
+      kind="campaign"
+      id={id}
+      note={latest ? t('latestRun', { occurrence: latest.occurrence }) : undefined}
+    />
+  );
+}
+
 /** `/campaigns/wizard/broadcasts/[id]`: what a launched broadcast (one-off or recurring) is doing, with Pause, Resume and Cancel. */
 export function BroadcastScreen({ id }: { id: string }) {
   const t = useTranslations('campaigns.wizard.status');
@@ -188,6 +207,8 @@ export function BroadcastScreen({ id }: { id: string }) {
               </div>
             )}
           </header>
+
+          <SummaryCard b={b} />
 
           <WizardCard title={t('scheduleTitle')} id="status-schedule">
             <dl className="grid gap-3 sm:grid-cols-3">

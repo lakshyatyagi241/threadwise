@@ -49,6 +49,9 @@ import { WizardReadService } from './wizard/wizard-read.service';
 import { WizardReviewService } from './wizard/wizard-review.service';
 import { WizardRunService } from './wizard/wizard-run.service';
 import { WizardTestSendService } from './wizard/wizard-test-send.service';
+import { BroadcastSummaryController } from './summary/broadcast-summary.controller';
+import { CampaignSummaryRepository } from './summary/campaign-summary.repository';
+import { CampaignSummaryService } from './summary/campaign-summary.service';
 import { WizardRepository } from './wizard/wizard.repository';
 
 /**
@@ -73,6 +76,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignAiController,
     CampaignsController,
     CampaignsReadController,
+    BroadcastSummaryController,
     CampaignsActionsController,
     CampaignCallbacksController,
   ],
@@ -82,6 +86,8 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignAudienceService,
     CampaignsService,
     CampaignsReadService,
+    CampaignSummaryRepository,
+    CampaignSummaryService,
     CampaignsActionsService,
     CampaignAiService,
     CampaignEvents,

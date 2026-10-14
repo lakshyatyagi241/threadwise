@@ -203,7 +203,13 @@
         "typeLabel": "类型",
         "ab": "A/B",
         "off": "关闭",
-        "step": "第 {n} 步，共 {total} 步"
+        "step": "第 {n} 步，共 {total} 步",
+        "broadcastTitle": "群发预览",
+        "templateMessage": "模板消息",
+        "customMessage": "自定义消息",
+        "flowTitle": "流程",
+        "variants": "显示的变体",
+        "variant": "变体 {v}"
       },
       "previewEmpty": "您的消息预览…",
       "previewTemplate": "模板",
@@ -258,7 +264,8 @@
         "abHint": "将收件人分配到两个消息版本中。",
         "split": "版本 A 占比 {a}%",
         "splitHint": "版本 B 接收其余受众。请在撰写步骤中设置版本 B 的内容。",
-        "pickSender": "— 选择发送方 —"
+        "pickSender": "— 选择发送方 —",
+        "notVerified": "尚未验证：号码验证后即可使用引导流程。"
       },
       "audience": {
         "title": "受众",
@@ -615,6 +622,35 @@
         "notesPlaceholder": "任何具体要求：必须包含的措辞、需避免的内容、品牌语气提示…",
         "failed": "无法生成营销活动，请重试。",
         "applied": "营销活动文案已填入。继续之前请先检查。"
+      },
+      "switch": {
+        "title": "使用引导流程？",
+        "body": "已验证的 WhatsApp Cloud API (Meta) 号码需通过引导式四步流程发送，该流程将从头开始。您在此处输入的内容不会保存，也不会带过去。如需保留，请先点击“保存草稿”。",
+        "confirm": "打开引导流程",
+        "cancel": "留在此处"
+      },
+      "guided": {
+        "template": "模板",
+        "pickTemplate": "— 选择模板 —",
+        "templateHint": "仅显示所选号码已通过审核的模板。其变量请在下方填写。",
+        "noTemplates": "此号码还没有已通过审核的模板。请创建一个并等待审核通过。",
+        "deliveryTitle": "发送",
+        "deliveryTag": "时间",
+        "typeBlocked": "在 WhatsApp Cloud API (Meta) 上，营销活动只能发送已通过审核的模板：自定义消息或流程只能触达最近 24 小时内给您发过消息的人，而 Cloud API 无法批量发送。请使用模板，或选择其他类型的号码。",
+        "templateA": "变体 A 模板",
+        "templateB": "变体 B 模板",
+        "variablesA": "变体 A 变量",
+        "variablesB": "变体 B 变量",
+        "splitNote": "变体 A 发送给 {a}% 的收件人，其余发送变体 B。",
+        "costTitle": "预估费用",
+        "costNoTemplate": "选择模板后可查看费用。",
+        "costNoAudience": "选择接收对象后可查看费用。",
+        "costLoading": "正在检查费用",
+        "costError": "无法检查余额。",
+        "balanceOk": "余额足以支付全部费用 {full}",
+        "balanceShort": "余额不足：还需 {shortfall}。",
+        "balanceLowFull": "余额低于全部费用 {full}：目前套餐可以覆盖，但套餐用完后将无法覆盖。",
+        "chargedNowLabel": "现从您的钱包扣款"
       }
     },
     "detail": {
@@ -670,7 +706,8 @@
         "engagement": "互动",
         "replies": "回复（{count}）",
         "failures": "失败（{count}）",
-        "optouts": "退订（{count}）"
+        "optouts": "退订（{count}）",
+        "summary": "摘要"
       },
       "cancel": "取消",
       "deleted": "营销活动已删除。",
@@ -781,6 +818,151 @@
         "replies": "回复",
         "optOuts": "退订",
         "readRate": "已读率"
+      },
+      "summary": {
+        "title": "摘要",
+        "intro": "用简单的话告诉您：谁收到了消息，谁回复了，谁填写了申请表。",
+        "loading": "正在加载摘要",
+        "headline": {
+          "none": "还没有发出任何消息。",
+          "messaged": "{count, plural, other {您向 # 人发送了消息。}}",
+          "notReceived": "{messaged}目前还没有人收到。",
+          "received": "{count, plural, =0 {还没有人收到} other {# 人已收到}}",
+          "opened": "{count, plural, =0 {还没有人打开} other {# 人已打开}}",
+          "wroteBack": "{count, plural, =0 {还没有人在{days, plural, other {# 天}}内回复} other {# 人在{days, plural, other {# 天}}内回复}}",
+          "filledForm": "{count, plural, =0 {还没有人填写申请表} other {# 人填写了申请表}}",
+          "rest": "{clauses}。",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "统计回复和表单的时间范围",
+          "hint": "从您发送消息的那一刻开始计算。",
+          "option": "{days, plural, other {# 天}}内"
+        },
+        "forms": {
+          "label": "哪些表单算作申请？",
+          "hint": "留空则统计所有网页表单和 WhatsApp 表单。",
+          "placeholder": "所有表单",
+          "empty": "没有找到表单",
+          "clear": "统计所有表单",
+          "remove": "移除 {name}",
+          "web": "{name}（网页表单）",
+          "whatsapp": "{name}（WhatsApp 表单）",
+          "loadError": "无法加载您的表单，目前统计所有表单。"
+        },
+        "tile": {
+          "listLabel": "数据一览",
+          "unit": "{count, plural, other {人}}",
+          "messaged": {
+            "label": "已发送",
+            "explain": "我们发送了消息的人。",
+            "pct": "您选择发送消息的人"
+          },
+          "received": {
+            "label": "已收到",
+            "explain": "手机收到消息的人。"
+          },
+          "opened": {
+            "label": "已打开",
+            "explain": "打开并阅读了消息的人。"
+          },
+          "wroteBack": {
+            "label": "已回复",
+            "explain": "发送后{days, plural, other {# 天}}内给您发来消息的人。"
+          },
+          "filledForm": {
+            "label": "已填表",
+            "explainAll": "填写了您任一申请表的人。",
+            "explainSome": "{count, plural, =1 {填写了您所选表单的人。} other {填写了您所选 # 个表单中任意一个的人。}}"
+          }
+        },
+        "pct": {
+          "of": "占已发送人数的 {pct}%",
+          "less": "不到已发送人数的 1%",
+          "zero": "已发送的人中没有人",
+          "everyone": "您发送的所有人"
+        },
+        "funnel": {
+          "title": "从消息到申请表",
+          "alt": "从发送消息到填写表单，每一步的人数",
+          "note": "有些人会跳过某一步。有人可能没打开消息就直接回复，所以某根柱子可能比上一根更长。"
+        },
+        "daily": {
+          "title": "每天回复的人数",
+          "series": "回复的人",
+          "empty": "还没有人回复。",
+          "alt": "{total, plural, other {共 # 人回复。}}回复最多的一天是 {day}，共 {count, plural, other {# 人}}。"
+        },
+        "people": {
+          "title": "查看名单",
+          "show": "{title}（{count}）",
+          "came_back": {
+            "title": "已回复",
+            "hint": "消息发出后给您发来消息的人。"
+          },
+          "filled_form": {
+            "title": "已填表",
+            "hint": "填写了申请表的人。"
+          },
+          "not_reached": {
+            "title": "未送达",
+            "hint": "消息没有送达的人。"
+          },
+          "table": "此名单中的人",
+          "name": "姓名",
+          "phone": "电话",
+          "when": "时间",
+          "form": "表单",
+          "unknown": "姓名未知",
+          "noContact": "未匹配到联系人",
+          "open": "打开 {name}",
+          "empty": "此名单中暂时没有人。",
+          "shown": "显示 {shown} / {total}",
+          "more": "显示更多",
+          "loading": "正在加载名单",
+          "error": "无法加载此名单。",
+          "retry": "重试",
+          "forbidden": "您无权查看这些姓名。"
+        },
+        "download": {
+          "button": "下载名单",
+          "busy": "正在准备文件",
+          "failed": "无法准备名单文件。",
+          "done": "名单文件已准备好。",
+          "truncated": "文件包含每个名单的前 {count} 人。",
+          "none": "暂时没有可下载的名单。",
+          "csv": {
+            "group": "名单",
+            "name": "姓名",
+            "phone": "电话",
+            "when": "时间",
+            "form": "表单"
+          }
+        },
+        "print": {
+          "button": "打印摘要",
+          "sent": "发送于 {date}",
+          "notSent": "尚未发送",
+          "window": "统计发送后{days, plural, other {# 天}}内的回复和表单",
+          "printed": "打印于 {date}"
+        },
+        "caveats": {
+          "title": "请注意",
+          "recipients_without_contact": "{count, plural, other {有 # 人无法匹配到联系人，所以我们无法判断他们是否回复。}}",
+          "contact_match_only": "我们通过电话号码把人和您的联系人匹配。用其他号码发来消息的人不会被统计。",
+          "opted_out_excluded": "要求不再接收消息的人不会被统计。",
+          "counted_in_other_campaigns": "在多个活动中都发送过消息的人，可能在每个活动中都被统计。"
+        },
+        "notSent": {
+          "title": "还没有发送任何内容",
+          "body": "消息发出后，您可以在这里看到谁收到了、谁回复了、谁填写了申请表。"
+        },
+        "sending": "仍在发送中，所以这些数字还会继续增加。",
+        "error": {
+          "title": "无法加载此摘要。",
+          "retry": "重试"
+        },
+        "latestRun": "当前显示第 {occurrence} 次发送，这是本系列中最新的一次。"
       }
     },
     "wizard": {
@@ -875,7 +1057,12 @@
         "insufficient_balance": "您的钱包余额不足以支付此群发。",
         "checking_balance": "正在检查您的钱包余额...",
         "sender_required": "请选择发送所用的 WhatsApp 号码。",
-        "balance_unavailable": "无法检查您的钱包余额。请在发送前重试。"
+        "balance_unavailable": "无法检查您的钱包余额。请在发送前重试。",
+        "template_b_required": "请选择 A/B 测试的变体 B 模板。",
+        "auto_end_in_past": "自动结束日期已过。",
+        "auto_end_before_send": "自动结束日期必须晚于发送时间。",
+        "auto_end_recurring": "重复营销活动按其自身规则结束：请清除自动结束日期。",
+        "pacing_range": "请检查 Smart Delivery：最长延迟短于最短延迟，或两个发送时间只设置了其中一个。"
       },
       "template": {
         "previewOnline": "在线",
@@ -908,7 +1095,8 @@
         "previewEmpty": "选择模板以查看消息效果。",
         "senderLabel": "发送自",
         "senderHint": "发送此群发所用的 WhatsApp 号码。",
-        "pickSender": "选择号码"
+        "pickSender": "选择号码",
+        "classicOption": "经典构建器"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",
@@ -1124,7 +1312,10 @@
         "sumContacts": "{count, plural, other {在表格中选择了 # 个联系人}}",
         "sumAllMatching": "所有匹配 {what} 的联系人",
         "sumAllContacts": "所有联系人",
-        "sumCsv": "CSV 文件 {name}：{count, plural, other {# 个有效号码}}"
+        "sumCsv": "CSV 文件 {name}：{count, plural, other {# 个有效号码}}",
+        "estimatedCostFull": "预估费用（全部）",
+        "chargedPlan": "现从您的钱包扣款：{amount}（您的套餐覆盖其中 {covered} 条消息）",
+        "chargedWallet": "从您的钱包扣款：{amount}"
       },
       "test": {
         "title": "发送 WhatsApp 测试消息",
@@ -1343,6 +1534,12 @@
         "pm": "下午",
         "hour": "时",
         "minute": "分"
+      },
+      "switch": {
+        "title": "使用经典构建器？",
+        "body": "{number}（{engine}）需通过经典构建器发送，该构建器将从头开始。此营销活动会保存为草稿并保留在您的营销活动列表中，您可以随时回来继续。",
+        "confirm": "打开经典构建器",
+        "cancel": "留在此处"
       }
     },
     "history": {
@@ -1420,7 +1617,8 @@
         "list": "列表",
         "blocks": "区块"
       },
-      "showing": "显示 {count} 个活动"
+      "showing": "显示 {count} 个活动",
+      "legacy": "旧版群发（{count}）"
     },
     "senderEmpty": {
       "loading": "正在加载您的号码…",
@@ -1456,6 +1654,11 @@
         "body": "此功能关闭期间，{count} 个个人（二维码）号码无法发送活动。平台管理员可为此工作区开启，或者您可以连接官方 WhatsApp Business 号码。",
         "action": "连接官方号码"
       }
+    },
+    "create": {
+      "loading": "正在加载您的号码",
+      "noAccessTitle": "您无法创建营销活动",
+      "noAccess": "请向工作区管理员申请创建营销活动的权限。"
     }
   }
 }

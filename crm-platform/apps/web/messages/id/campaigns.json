@@ -203,7 +203,13 @@
         "typeLabel": "Jenis",
         "ab": "A/B",
         "off": "Nonaktif",
-        "step": "Langkah {n} dari {total}"
+        "step": "Langkah {n} dari {total}",
+        "broadcastTitle": "Pratinjau siaran",
+        "templateMessage": "Pesan templat",
+        "customMessage": "Pesan kustom",
+        "flowTitle": "Alur",
+        "variants": "Varian yang ditampilkan",
+        "variant": "Varian {v}"
       },
       "previewEmpty": "Pratinjau pesan Anda…",
       "previewTemplate": "Template",
@@ -258,7 +264,8 @@
         "abHint": "Bagi penerima ke dalam dua varian pesan.",
         "split": "Varian A {a}%",
         "splitHint": "Varian B menerima sisa audiens. Atur konten Varian B pada langkah Susun.",
-        "pickSender": "— Pilih pengirim —"
+        "pickSender": "— Pilih pengirim —",
+        "notVerified": "Belum diverifikasi: alur terpandu tersedia setelah nomor diverifikasi."
       },
       "audience": {
         "title": "Audiens",
@@ -615,6 +622,35 @@
         "notesPlaceholder": "Hal khusus — frasa wajib, hal yang harus dihindari, ciri suara brand…",
         "failed": "Kampanye tidak dapat dibuat. Coba lagi.",
         "applied": "Teks kampanye sudah diisi. Tinjau sebelum melanjutkan."
+      },
+      "switch": {
+        "title": "Gunakan alur terpandu?",
+        "body": "Nomor WhatsApp Cloud API (Meta) yang terverifikasi dikirim dari alur terpandu empat langkah, yang dimulai dari awal. Apa yang Anda isi di sini tidak disimpan dan tidak akan dibawa. Gunakan Simpan draf terlebih dahulu jika ingin menyimpannya.",
+        "confirm": "Buka alur terpandu",
+        "cancel": "Tetap di sini"
+      },
+      "guided": {
+        "template": "Templat",
+        "pickTemplate": "— Pilih templat —",
+        "templateHint": "Hanya templat yang disetujui dari nomor yang dipilih. Variabelnya diisi di bawah.",
+        "noTemplates": "Nomor ini belum memiliki templat yang disetujui. Buat satu dan tunggu persetujuannya.",
+        "deliveryTitle": "Pengiriman",
+        "deliveryTag": "kapan",
+        "typeBlocked": "Di WhatsApp Cloud API (Meta), hanya templat yang disetujui yang dapat dikirim dari kampanye: pesan kustom atau alur hanya akan sampai ke orang yang menulis kepada Anda dalam 24 jam terakhir, dan Cloud API tidak dapat mengirimkannya secara massal. Gunakan templat, atau pilih jenis nomor lain.",
+        "templateA": "Templat varian A",
+        "templateB": "Templat varian B",
+        "variablesA": "Variabel varian A",
+        "variablesB": "Variabel varian B",
+        "splitNote": "Varian A dikirim ke {a}% penerima, varian B ke sisanya.",
+        "costTitle": "Perkiraan biaya",
+        "costNoTemplate": "Pilih templat untuk melihat biayanya.",
+        "costNoAudience": "Pilih penerima untuk melihat biayanya.",
+        "costLoading": "Memeriksa biaya",
+        "costError": "Tidak dapat memeriksa saldo.",
+        "balanceOk": "Saldo cukup untuk biaya penuh sebesar {full}",
+        "balanceShort": "Saldo tidak cukup: Anda membutuhkan {shortfall} lagi.",
+        "balanceLowFull": "Saldo lebih rendah dari biaya penuh sebesar {full}: paket Anda menanggungnya sekarang, tetapi tidak setelah paket habis.",
+        "chargedNowLabel": "Dibebankan ke dompet Anda sekarang"
       }
     },
     "detail": {
@@ -670,7 +706,8 @@
         "engagement": "Interaksi",
         "replies": "Balasan ({count})",
         "failures": "Kegagalan ({count})",
-        "optouts": "Berhenti berlangganan ({count})"
+        "optouts": "Berhenti berlangganan ({count})",
+        "summary": "Ringkasan"
       },
       "cancel": "Batal",
       "deleted": "Kampanye dihapus.",
@@ -781,6 +818,151 @@
         "replies": "Balasan",
         "optOuts": "Berhenti berlangganan",
         "readRate": "Tingkat baca"
+      },
+      "summary": {
+        "title": "Ringkasan",
+        "intro": "Dengan kata sederhana: siapa yang menerima pesan Anda, siapa yang membalas, dan siapa yang mengisi formulir pendaftaran.",
+        "loading": "Memuat ringkasan Anda",
+        "headline": {
+          "none": "Belum ada pesan yang terkirim.",
+          "messaged": "{count, plural, other {Anda mengirim pesan ke # kontak.}}",
+          "notReceived": "{messaged} Belum ada yang menerimanya.",
+          "received": "{count, plural, =0 {belum ada yang menerimanya} other {# menerimanya}}",
+          "opened": "{count, plural, =0 {belum ada yang membukanya} other {# membukanya}}",
+          "wroteBack": "{count, plural, =0 {belum ada yang membalas dalam {days, plural, other {# hari}}} other {# membalas dalam {days, plural, other {# hari}}}}",
+          "filledForm": "{count, plural, =0 {belum ada yang mengisi formulir pendaftaran} other {# mengisi formulir pendaftaran}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Hitung balasan dan formulir yang masuk",
+          "hint": "Dihitung sejak pesan dikirim.",
+          "option": "Dalam {days, plural, other {# hari}}"
+        },
+        "forms": {
+          "label": "Formulir mana yang dihitung sebagai pendaftaran?",
+          "hint": "Biarkan kosong untuk menghitung semua formulir web dan formulir WhatsApp.",
+          "placeholder": "Semua formulir",
+          "empty": "Formulir tidak ditemukan",
+          "clear": "Hitung semua formulir",
+          "remove": "Hapus {name}",
+          "web": "{name} (formulir web)",
+          "whatsapp": "{name} (formulir WhatsApp)",
+          "loadError": "Kami tidak dapat memuat formulir Anda. Untuk sementara semua formulir dihitung."
+        },
+        "tile": {
+          "listLabel": "Angka-angkanya",
+          "unit": "{count, plural, other {kontak}}",
+          "messaged": {
+            "label": "Dikirimi pesan",
+            "explain": "Kontak yang kami kirimi pesan Anda.",
+            "pct": "Kontak yang Anda pilih untuk dikirimi pesan"
+          },
+          "received": {
+            "label": "Menerima",
+            "explain": "Kontak yang ponselnya menerima pesan."
+          },
+          "opened": {
+            "label": "Membuka",
+            "explain": "Kontak yang membuka dan membaca pesan."
+          },
+          "wroteBack": {
+            "label": "Membalas",
+            "explain": "Kontak yang mengirim pesan kepada Anda dalam {days, plural, other {# hari}} setelah pengiriman."
+          },
+          "filledForm": {
+            "label": "Mengisi formulir",
+            "explainAll": "Kontak yang mengisi salah satu formulir pendaftaran Anda.",
+            "explainSome": "{count, plural, other {Kontak yang mengisi salah satu dari # formulir yang Anda pilih.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% dari kontak yang Anda kirimi pesan",
+          "less": "Kurang dari 1% dari kontak yang Anda kirimi pesan",
+          "zero": "Tidak ada dari kontak yang Anda kirimi pesan",
+          "everyone": "Semua kontak yang Anda kirimi pesan"
+        },
+        "funnel": {
+          "title": "Dari pesan sampai formulir pendaftaran",
+          "alt": "Jumlah kontak di setiap langkah, dari dikirimi pesan sampai mengisi formulir",
+          "note": "Kontak bisa melewati satu langkah. Seseorang bisa membalas tanpa membuka pesan lebih dulu, jadi sebuah batang bisa lebih panjang dari batang di atasnya."
+        },
+        "daily": {
+          "title": "Kontak yang membalas setiap hari",
+          "series": "Kontak yang membalas",
+          "empty": "Belum ada yang membalas.",
+          "alt": "{total, plural, other {# kontak membalas}}. Hari tersibuk adalah {day}, dengan {count, plural, other {# kontak}}."
+        },
+        "people": {
+          "title": "Lihat siapa saja",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Membalas",
+            "hint": "Kontak yang mengirim pesan kepada Anda setelah pesan Anda terkirim."
+          },
+          "filled_form": {
+            "title": "Mengisi formulir",
+            "hint": "Kontak yang mengisi formulir pendaftaran."
+          },
+          "not_reached": {
+            "title": "Tidak terjangkau",
+            "hint": "Kontak yang tidak menerima pesan Anda."
+          },
+          "table": "Kontak dalam daftar ini",
+          "name": "Nama",
+          "phone": "Telepon",
+          "when": "Kapan",
+          "form": "Formulir",
+          "unknown": "Nama tidak diketahui",
+          "noContact": "Tidak cocok dengan kontak mana pun",
+          "open": "Buka {name}",
+          "empty": "Belum ada siapa pun di daftar ini.",
+          "shown": "Menampilkan {shown} dari {total}",
+          "more": "Tampilkan lebih banyak",
+          "loading": "Memuat daftar",
+          "error": "Kami tidak dapat memuat daftar ini.",
+          "retry": "Coba lagi",
+          "forbidden": "Anda tidak memiliki akses untuk melihat nama-nama ini."
+        },
+        "download": {
+          "button": "Unduh daftar nama",
+          "busy": "Menyiapkan file",
+          "failed": "Kami tidak dapat menyiapkan file daftar nama.",
+          "done": "File daftar nama sudah siap.",
+          "truncated": "File ini berisi {count} kontak pertama dari setiap daftar.",
+          "none": "Belum ada nama untuk diunduh.",
+          "csv": {
+            "group": "Daftar",
+            "name": "Nama",
+            "phone": "Telepon",
+            "when": "Kapan",
+            "form": "Formulir"
+          }
+        },
+        "print": {
+          "button": "Cetak ringkasan",
+          "sent": "Dikirim {date}",
+          "notSent": "Belum dikirim",
+          "window": "Menghitung balasan dan formulir dalam {days, plural, other {# hari}} setelah pengiriman",
+          "printed": "Dicetak {date}"
+        },
+        "caveats": {
+          "title": "Perlu diketahui",
+          "recipients_without_contact": "{count, plural, other {# kontak tidak dapat dicocokkan dengan data kontak, jadi kami tidak tahu apakah mereka membalas.}}",
+          "contact_match_only": "Kami mencocokkan orang dengan kontak Anda lewat nomor telepon. Orang yang menulis dari nomor lain tidak dihitung.",
+          "opted_out_excluded": "Orang yang meminta untuk tidak dikirimi pesan tidak dihitung.",
+          "counted_in_other_campaigns": "Orang yang Anda kirimi pesan di lebih dari satu kampanye bisa dihitung di masing-masing kampanye."
+        },
+        "notSent": {
+          "title": "Belum ada yang terkirim",
+          "body": "Setelah pesan terkirim, di sini Anda akan melihat siapa yang menerimanya, siapa yang membalas, dan siapa yang mengisi formulir pendaftaran."
+        },
+        "sending": "Masih mengirim, jadi angka-angka ini akan terus bertambah.",
+        "error": {
+          "title": "Kami tidak dapat memuat ringkasan ini.",
+          "retry": "Coba lagi"
+        },
+        "latestRun": "Menampilkan pengiriman {occurrence}, yang terbaru dalam rangkaian ini."
       }
     },
     "wizard": {
@@ -875,7 +1057,12 @@
         "insufficient_balance": "Saldo dompet Anda terlalu rendah untuk broadcast ini.",
         "checking_balance": "Memeriksa saldo dompet Anda...",
         "sender_required": "Pilih nomor WhatsApp pengirim.",
-        "balance_unavailable": "Kami tidak dapat memeriksa saldo dompet Anda. Coba lagi sebelum mengirim."
+        "balance_unavailable": "Kami tidak dapat memeriksa saldo dompet Anda. Coba lagi sebelum mengirim.",
+        "template_b_required": "Pilih templat varian B untuk uji A/B.",
+        "auto_end_in_past": "Tanggal akhir otomatis sudah lewat.",
+        "auto_end_before_send": "Tanggal akhir otomatis harus setelah waktu kirim.",
+        "auto_end_recurring": "Kampanye berulang berakhir sesuai aturannya sendiri: hapus tanggal akhir otomatis.",
+        "pacing_range": "Periksa Smart Delivery: jeda terlama lebih pendek dari yang tersingkat, atau hanya satu dari dua jam pengiriman yang diatur."
       },
       "template": {
         "previewOnline": "online",
@@ -908,7 +1095,8 @@
         "previewEmpty": "Pilih template untuk melihat tampilan pesan.",
         "senderLabel": "Kirim dari",
         "senderHint": "Nomor WhatsApp pengirim broadcast ini.",
-        "pickSender": "Pilih nomor"
+        "pickSender": "Pilih nomor",
+        "classicOption": "pembuat klasik"
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",
@@ -1124,7 +1312,10 @@
         "sumContacts": "{count, plural, other {# kontak dipilih di tabel}}",
         "sumAllMatching": "Semua kontak yang cocok dengan {what}",
         "sumAllContacts": "Semua kontak",
-        "sumCsv": "File CSV {name}: {count, plural, other {# nomor valid}}"
+        "sumCsv": "File CSV {name}: {count, plural, other {# nomor valid}}",
+        "estimatedCostFull": "Perkiraan biaya (penuh)",
+        "chargedPlan": "Dibebankan ke dompet Anda sekarang: {amount} (paket Anda menanggung {covered} dari pesan ini)",
+        "chargedWallet": "Dibebankan ke dompet Anda: {amount}"
       },
       "test": {
         "title": "Kirim pesan WhatsApp uji coba",
@@ -1343,6 +1534,12 @@
         "pm": "PM",
         "hour": "Jam",
         "minute": "Menit"
+      },
+      "switch": {
+        "title": "Gunakan pembuat klasik?",
+        "body": "{number} ({engine}) dikirim dari pembuat klasik, yang dimulai dari awal. Kampanye ini disimpan sebagai draf dan tetap ada di daftar Kampanye Anda, sehingga Anda bisa kembali ke sana.",
+        "confirm": "Buka pembuat klasik",
+        "cancel": "Tetap di sini"
       }
     },
     "history": {
@@ -1420,7 +1617,8 @@
         "list": "Daftar",
         "blocks": "Blok"
       },
-      "showing": "Menampilkan {count} kampanye"
+      "showing": "Menampilkan {count} kampanye",
+      "legacy": "Siaran lama ({count})"
     },
     "senderEmpty": {
       "loading": "Memuat nomor Anda…",
@@ -1456,6 +1654,11 @@
         "body": "{count} nomor pribadi (QR) tidak dapat mengirim kampanye selama ini dinonaktifkan. Administrator platform dapat mengaktifkannya untuk workspace ini, atau Anda dapat menghubungkan nomor resmi WhatsApp Business.",
         "action": "Hubungkan nomor resmi"
       }
+    },
+    "create": {
+      "loading": "Memuat nomor Anda",
+      "noAccessTitle": "Anda tidak dapat membuat kampanye",
+      "noAccess": "Minta izin membuat kampanye kepada admin ruang kerja."
     }
   }
 }

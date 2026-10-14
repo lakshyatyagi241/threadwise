@@ -30,6 +30,7 @@ import {
   useCampaignDetail,
 } from '../api/campaigns';
 import { can } from '../lib/list-model';
+import { defaultTab } from '../lib/summary-model';
 import { AreaChart, Donut, HBars, HourHeatmap } from './charts';
 import {
   ChevronLeftIcon,
@@ -40,6 +41,7 @@ import {
   StopIcon,
   TrashIcon,
 } from './icons';
+import { DirectorSummary } from './director-summary';
 import { EngagementTab } from './engagement-tab';
 import { RecipientsTab } from './recipients-tab';
 
@@ -142,9 +144,17 @@ export function DetailScreen({ id }: { id: string }) {
       toast(message(e, t('exportFailed')), 'danger');
     }
   };
-  const tab = search.get('tab') ?? 'overview';
-  const setTab = (next: string) =>
-    router.replace(`${pathname}${next === 'overview' ? '' : `?tab=${next}`}`, { scroll: false });
+  // A finished campaign opens on the Summary; a live one on the Overview. The address can name any tab, and its other parameters
+  // (the summary's `window`) are kept when the tab changes.
+  const fallbackTab = defaultTab(c.status);
+  const tab = search.get('tab') ?? fallbackTab;
+  const setTab = (next: string) => {
+    const p = new URLSearchParams(search.toString());
+    if (next === fallbackTab) p.delete('tab');
+    else p.set('tab', next);
+    const q = p.toString();
+    router.replace(`${pathname}${q ? `?${q}` : ''}`, { scroll: false });
+  };
 
   const btn =
     'inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-xs font-medium hover:bg-muted disabled:opacity-50';
@@ -559,6 +569,11 @@ export function DetailScreen({ id }: { id: string }) {
         value={tab}
         onValueChange={setTab}
         items={[
+          {
+            id: 'summary',
+            label: t('tabs.summary'),
+            content: <DirectorSummary kind="campaign" id={id} />,
+          },
           { id: 'overview', label: t('tabs.overview'), content: overview },
           { id: 'messages', label: t('tabs.messages'), content: <RecipientsTab id={id} /> },
           { id: 'engagement', label: t('tabs.engagement'), content: <EngagementTab d={d} /> },

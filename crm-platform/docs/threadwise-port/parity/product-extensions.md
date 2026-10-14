@@ -443,6 +443,24 @@ Decisions for the owner: (1) whether a narrower inbox scope (`team`, `own`) shou
 Manager preset should read the cost (today only roles with `wallet.statement.read`); (3) whether the export should be limited to the caller's visible rows instead of requiring scope `all`; (4) whether campaign,
 broadcast and template screens should link to a filtered history; (5) whether `mask_customer_numbers` should become a real workspace setting (today the rule is by contact permission only).
 
+## Director summary of a campaign or broadcast: people messaged, wrote back, filled a form (owner walkthrough item 23): not in Reference
+
+Reference shows sent, delivered, read and failed for a campaign or broadcast, and replies from the bridge (`responded_at`, which only some
+workspaces fill). The owner asked for the figures an admission director reads, as distinct people: messaged, delivered, read, **wrote back**
+(a customer message in the inbox after the person's own send, inside a 3, 7 (default) or 14 day window) and **filled an application form**
+(an accepted web form or WhatsApp form submission by the same contact in the same window, any form or the picked ones), with the median hours
+to reply and a daily line. Endpoints: `GET /v2/campaigns/:id/summary`, `/summary/people`, `/summary/forms` and the same two per broadcast.
+Reference's own numbers and screens are untouched; the summary is a new card.
+
+Deviations the owner should know (all are honest floors, each carried as a `caveats` code the screen turns into a sentence):
+
+- A form submission is matched to the **contact messaged**; a different phone or email is a different person (`contact_match_only`).
+- A recipient with no contact is matched by phone; one that cannot be matched to a contact or a thread is `notTrackable` (`recipients_without_contact`).
+- An opted-out recipient who wrote back is not counted (`opted_out_excluded`).
+- Another campaign or broadcast messaging the same people in the window is flagged, not split (`counted_in_other_campaigns`).
+- Not verified against a live WhatsApp account (inbox rows are arranged directly in the tests); WhatsApp forms have no permission key of their own yet
+  (their domain is not ported), so they follow `record.forms.read` in the picker and `record.form-submissions.read` for the figures, both only at `all` scope: those permissions are record-scoped and the summary does not apply the scope, so an `own` or `team` reader gets the campaign figures without the form part.
+
 ## Data requests and the personal-data registry (BL-142, BL-143)
 
 Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 4.5; API: [privacy.md](../../api/privacy.md).

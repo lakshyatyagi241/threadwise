@@ -203,7 +203,13 @@
         "typeLabel": "Tipo",
         "ab": "A/B",
         "off": "Off",
-        "step": "Passo {n} di {total}"
+        "step": "Passo {n} di {total}",
+        "broadcastTitle": "Anteprima del broadcast",
+        "templateMessage": "Messaggio modello",
+        "customMessage": "Messaggio personalizzato",
+        "flowTitle": "Flow",
+        "variants": "Variante mostrata",
+        "variant": "Variante {v}"
       },
       "previewEmpty": "Anteprima del tuo messaggio…",
       "previewTemplate": "Template",
@@ -258,7 +264,8 @@
         "abHint": "Dividi i destinatari tra due varianti di messaggio.",
         "split": "Variante A {a}%",
         "splitHint": "La variante B riceve il resto del pubblico. Imposta il contenuto della variante B nel passaggio Componi.",
-        "pickSender": "— Seleziona un mittente —"
+        "pickSender": "— Seleziona un mittente —",
+        "notVerified": "Non ancora verificato: il percorso guidato è disponibile dopo la verifica del numero."
       },
       "audience": {
         "title": "Pubblico",
@@ -615,6 +622,35 @@
         "notesPlaceholder": "Qualsiasi dettaglio specifico: frasi obbligatorie, cosa evitare, indicazioni sul tono del brand…",
         "failed": "Impossibile generare la campagna. Riprova.",
         "applied": "Il testo della campagna è stato compilato. Verificalo prima di proseguire."
+      },
+      "switch": {
+        "title": "Usare il percorso guidato?",
+        "body": "Un numero WhatsApp Cloud API (Meta) verificato viene inviato dal percorso guidato in quattro passaggi, che riparte da zero. Quanto hai inserito qui non viene salvato e non sarà riportato. Usa prima Salva bozza se vuoi conservarlo.",
+        "confirm": "Apri il percorso guidato",
+        "cancel": "Resta qui"
+      },
+      "guided": {
+        "template": "Modello",
+        "pickTemplate": "— Seleziona un modello —",
+        "templateHint": "Solo i modelli approvati del numero scelto. Le sue variabili si compilano qui sotto.",
+        "noTemplates": "Questo numero non ha ancora modelli approvati. Creane uno e attendi l’approvazione.",
+        "deliveryTitle": "Invio",
+        "deliveryTag": "quando",
+        "typeBlocked": "Sulla WhatsApp Cloud API (Meta) da una campagna si può inviare solo un modello approvato: un messaggio personalizzato o un flow raggiungerebbe solo chi ti ha scritto nelle ultime 24 ore, e la Cloud API non può inviarli in massa. Usa un modello oppure scegli un altro tipo di numero.",
+        "templateA": "Modello della variante A",
+        "templateB": "Modello della variante B",
+        "variablesA": "Variabili della variante A",
+        "variablesB": "Variabili della variante B",
+        "splitNote": "La variante A va al {a}% dei destinatari, la variante B al resto.",
+        "costTitle": "Costo stimato",
+        "costNoTemplate": "Scegli un modello per vedere il costo.",
+        "costNoAudience": "Scegli i destinatari per vedere il costo.",
+        "costLoading": "Verifica del costo in corso",
+        "costError": "Impossibile verificare il saldo.",
+        "balanceOk": "Il saldo copre il costo totale di {full}",
+        "balanceShort": "Il saldo non è sufficiente: mancano {shortfall}.",
+        "balanceLowFull": "Il saldo è inferiore al costo totale di {full}: il tuo piano lo copre ora, ma non quando il piano si esaurirà.",
+        "chargedNowLabel": "Addebitato ora sul tuo wallet"
       }
     },
     "detail": {
@@ -670,7 +706,8 @@
         "engagement": "Coinvolgimento",
         "replies": "Risposte ({count})",
         "failures": "Errori ({count})",
-        "optouts": "Disiscrizioni ({count})"
+        "optouts": "Disiscrizioni ({count})",
+        "summary": "Riepilogo"
       },
       "cancel": "Annulla",
       "deleted": "Campagna eliminata.",
@@ -781,6 +818,151 @@
         "replies": "Risposte",
         "optOuts": "Disiscrizioni",
         "readRate": "Tasso di lettura"
+      },
+      "summary": {
+        "title": "Riepilogo",
+        "intro": "In parole semplici: chi ha ricevuto il messaggio, chi ha risposto e chi ha compilato un modulo di iscrizione.",
+        "loading": "Caricamento del riepilogo",
+        "headline": {
+          "none": "Nessun messaggio è stato ancora inviato.",
+          "messaged": "{count, plural, one {Hai inviato il messaggio a # persona.} other {Hai inviato il messaggio a # persone.}}",
+          "notReceived": "{messaged} Nessuno lo ha ancora ricevuto.",
+          "received": "{count, plural, =0 {nessuno lo ha ancora ricevuto} one {# lo ha ricevuto} other {# lo hanno ricevuto}}",
+          "opened": "{count, plural, =0 {nessuno lo ha ancora aperto} one {# lo ha aperto} other {# lo hanno aperto}}",
+          "wroteBack": "{count, plural, =0 {nessuno ha ancora risposto entro {days, plural, one {# giorno} other {# giorni}}} one {# ha risposto entro {days, plural, one {# giorno} other {# giorni}}} other {# hanno risposto entro {days, plural, one {# giorno} other {# giorni}}}}",
+          "filledForm": "{count, plural, =0 {nessuno ha ancora compilato un modulo di iscrizione} one {# ha compilato un modulo di iscrizione} other {# hanno compilato un modulo di iscrizione}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Conta le risposte e i moduli che arrivano",
+          "hint": "Il conteggio parte dal momento in cui hai inviato il messaggio.",
+          "option": "Entro {days, plural, one {# giorno} other {# giorni}}"
+        },
+        "forms": {
+          "label": "Quali moduli contano come iscrizione?",
+          "hint": "Lascia vuoto per contare tutti i moduli web e i moduli WhatsApp.",
+          "placeholder": "Tutti i moduli",
+          "empty": "Nessun modulo trovato",
+          "clear": "Conta tutti i moduli",
+          "remove": "Rimuovi {name}",
+          "web": "{name} (modulo web)",
+          "whatsapp": "{name} (modulo WhatsApp)",
+          "loadError": "Non siamo riusciti a caricare i moduli. Per ora vengono contati tutti."
+        },
+        "tile": {
+          "listLabel": "I numeri",
+          "unit": "{count, plural, one {persona} other {persone}}",
+          "messaged": {
+            "label": "Contattati",
+            "explain": "Persone a cui abbiamo inviato il messaggio.",
+            "pct": "Le persone che hai scelto di contattare"
+          },
+          "received": {
+            "label": "Ricevuto",
+            "explain": "Persone il cui telefono ha ricevuto il messaggio."
+          },
+          "opened": {
+            "label": "Aperto",
+            "explain": "Persone che hanno aperto e letto il messaggio."
+          },
+          "wroteBack": {
+            "label": "Hanno risposto",
+            "explain": "Persone che ti hanno scritto entro {days, plural, one {# giorno} other {# giorni}} dall'invio."
+          },
+          "filledForm": {
+            "label": "Hanno compilato un modulo",
+            "explainAll": "Persone che hanno compilato uno qualsiasi dei tuoi moduli di iscrizione.",
+            "explainSome": "{count, plural, one {Persone che hanno compilato il modulo che hai scelto.} other {Persone che hanno compilato uno dei # moduli che hai scelto.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% delle persone contattate",
+          "less": "Meno dell'1% delle persone contattate",
+          "zero": "Nessuna delle persone contattate",
+          "everyone": "Tutte le persone contattate"
+        },
+        "funnel": {
+          "title": "Dal messaggio al modulo di iscrizione",
+          "alt": "Numero di persone a ogni passaggio, da contattate a modulo compilato",
+          "note": "Le persone possono saltare un passaggio. Qualcuno può rispondere senza aver aperto prima il messaggio, quindi una barra può essere più lunga di quella sopra."
+        },
+        "daily": {
+          "title": "Persone che rispondono ogni giorno",
+          "series": "Persone che hanno risposto",
+          "empty": "Nessuno ha ancora risposto.",
+          "alt": "{total, plural, one {# persona ha risposto} other {# persone hanno risposto}}. Il giorno con più risposte è stato {day}, con {count, plural, one {# persona} other {# persone}}."
+        },
+        "people": {
+          "title": "Vedi chi",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Hanno risposto",
+            "hint": "Persone che ti hanno scritto dopo l'invio del messaggio."
+          },
+          "filled_form": {
+            "title": "Hanno compilato un modulo",
+            "hint": "Persone che hanno compilato un modulo di iscrizione."
+          },
+          "not_reached": {
+            "title": "Non raggiunti",
+            "hint": "Persone che il messaggio non ha raggiunto."
+          },
+          "table": "Persone in questo elenco",
+          "name": "Nome",
+          "phone": "Telefono",
+          "when": "Quando",
+          "form": "Modulo",
+          "unknown": "Nome non noto",
+          "noContact": "Non associato a un contatto",
+          "open": "Apri {name}",
+          "empty": "Per ora nessuno in questo elenco.",
+          "shown": "Mostrati {shown} su {total}",
+          "more": "Mostra altri",
+          "loading": "Caricamento dell'elenco",
+          "error": "Non siamo riusciti a caricare questo elenco.",
+          "retry": "Riprova",
+          "forbidden": "Non hai accesso per vedere questi nomi."
+        },
+        "download": {
+          "button": "Scarica i nomi",
+          "busy": "Preparazione del file",
+          "failed": "Non siamo riusciti a preparare il file dei nomi.",
+          "done": "Il file dei nomi è pronto.",
+          "truncated": "Il file contiene le prime {count} persone di ogni elenco.",
+          "none": "Non ci sono ancora nomi da scaricare.",
+          "csv": {
+            "group": "Elenco",
+            "name": "Nome",
+            "phone": "Telefono",
+            "when": "Quando",
+            "form": "Modulo"
+          }
+        },
+        "print": {
+          "button": "Stampa il riepilogo",
+          "sent": "Inviato il {date}",
+          "notSent": "Non ancora inviato",
+          "window": "Conteggio di risposte e moduli entro {days, plural, one {# giorno} other {# giorni}} dall'invio",
+          "printed": "Stampato il {date}"
+        },
+        "caveats": {
+          "title": "Da sapere",
+          "recipients_without_contact": "{count, plural, one {# persona non è stata associata a un contatto, quindi non possiamo sapere se ha risposto.} other {# persone non sono state associate a un contatto, quindi non possiamo sapere se hanno risposto.}}",
+          "contact_match_only": "Associamo le persone ai tuoi contatti tramite il numero di telefono. Chi scrive da un numero diverso non viene contato.",
+          "opted_out_excluded": "Le persone che hanno chiesto di non ricevere messaggi non vengono contate.",
+          "counted_in_other_campaigns": "Chi hai contattato in più di una campagna può essere contato in ciascuna."
+        },
+        "notSent": {
+          "title": "Non è stato ancora inviato nulla",
+          "body": "Appena i messaggi saranno partiti, qui vedrai chi li ha ricevuti, chi ha risposto e chi ha compilato un modulo di iscrizione."
+        },
+        "sending": "Invio ancora in corso, quindi questi numeri continueranno a crescere.",
+        "error": {
+          "title": "Non siamo riusciti a caricare questo riepilogo.",
+          "retry": "Riprova"
+        },
+        "latestRun": "Stai vedendo l'invio {occurrence}, il più recente di questa serie."
       }
     },
     "wizard": {
@@ -875,7 +1057,12 @@
         "insufficient_balance": "Il saldo del wallet è troppo basso per questo broadcast.",
         "checking_balance": "Controllo del saldo del wallet...",
         "sender_required": "Scegli il numero WhatsApp da cui inviare.",
-        "balance_unavailable": "Non è stato possibile controllare il saldo del wallet. Riprova prima di inviare."
+        "balance_unavailable": "Non è stato possibile controllare il saldo del wallet. Riprova prima di inviare.",
+        "template_b_required": "Scegli il modello della variante B del test A/B.",
+        "auto_end_in_past": "La data di fine automatica è già passata.",
+        "auto_end_before_send": "La data di fine automatica deve essere successiva all’orario di invio.",
+        "auto_end_recurring": "Una campagna ricorrente termina secondo la propria regola: cancella la data di fine automatica.",
+        "pacing_range": "Controlla Smart Delivery: il ritardo massimo è inferiore a quello minimo, oppure è impostato solo uno dei due orari di invio."
       },
       "template": {
         "previewOnline": "online",
@@ -908,7 +1095,8 @@
         "previewEmpty": "Scegli un template per vedere come appare il messaggio.",
         "senderLabel": "Invia da",
         "senderHint": "Il numero WhatsApp da cui viene inviato questo broadcast.",
-        "pickSender": "Scegli un numero"
+        "pickSender": "Scegli un numero",
+        "classicOption": "builder classico"
       },
       "audience": {
         "selectionTitle": "Scelti nel Contact Hub",
@@ -1124,7 +1312,10 @@
         "sumContacts": "{count, plural, one {# contatto scelto nella tabella} other {# contatti scelti nella tabella}}",
         "sumAllMatching": "Tutti i contatti corrispondenti a {what}",
         "sumAllContacts": "Tutti i contatti",
-        "sumCsv": "File CSV {name}: {count, plural, one {# numero valido} other {# numeri validi}}"
+        "sumCsv": "File CSV {name}: {count, plural, one {# numero valido} other {# numeri validi}}",
+        "estimatedCostFull": "Costo stimato (totale)",
+        "chargedPlan": "Addebitato ora sul tuo wallet: {amount} (il tuo piano copre {covered} di questi messaggi)",
+        "chargedWallet": "Addebitato sul tuo wallet: {amount}"
       },
       "test": {
         "title": "Invia un messaggio WhatsApp di prova",
@@ -1343,6 +1534,12 @@
         "pm": "PM",
         "hour": "Ora",
         "minute": "Minuto"
+      },
+      "switch": {
+        "title": "Usare il builder classico?",
+        "body": "{number} ({engine}) viene inviato dal builder classico, che riparte da zero. Questa campagna viene salvata come bozza e resta nell’elenco Campagne, così potrai riprenderla.",
+        "confirm": "Apri il builder classico",
+        "cancel": "Resta qui"
       }
     },
     "history": {
@@ -1420,7 +1617,8 @@
         "list": "Elenco",
         "blocks": "Blocchi"
       },
-      "showing": "{count, plural, one {# campagna mostrata} other {# campagne mostrate}}"
+      "showing": "{count, plural, one {# campagna mostrata} other {# campagne mostrate}}",
+      "legacy": "Broadcast precedenti ({count})"
     },
     "senderEmpty": {
       "loading": "Caricamento dei tuoi numeri…",
@@ -1456,6 +1654,11 @@
         "body": "{count, plural, one {Il tuo numero personale (QR) non può} other {I tuoi # numeri personali (QR) non possono}} inviare campagne finché questa opzione è disattivata. Un amministratore della piattaforma può attivarla per questo workspace, oppure puoi collegare un numero WhatsApp Business ufficiale.",
         "action": "Collega un numero ufficiale"
       }
+    },
+    "create": {
+      "loading": "Caricamento dei tuoi numeri",
+      "noAccessTitle": "Non puoi creare campagne",
+      "noAccess": "Chiedi a un amministratore del workspace l’autorizzazione a creare campagne."
     }
   }
 }

@@ -203,7 +203,13 @@
         "typeLabel": "種類",
         "ab": "A/B",
         "off": "オフ",
-        "step": "ステップ {n} / {total}"
+        "step": "ステップ {n} / {total}",
+        "broadcastTitle": "配信プレビュー",
+        "templateMessage": "テンプレートメッセージ",
+        "customMessage": "カスタムメッセージ",
+        "flowTitle": "フロー",
+        "variants": "表示中のバリアント",
+        "variant": "バリアント {v}"
       },
       "previewEmpty": "メッセージのプレビュー…",
       "previewTemplate": "テンプレート",
@@ -258,7 +264,8 @@
         "abHint": "宛先を2つのメッセージパターンに振り分けます。",
         "split": "パターンA 配分 {a}%",
         "splitHint": "パターンBには残りの宛先が割り当てられます。パターンBの内容は作成ステップで設定してください。",
-        "pickSender": "— 送信元を選択 —"
+        "pickSender": "— 送信元を選択 —",
+        "notVerified": "未認証です。番号が認証されるとガイド付きフローを利用できます。"
       },
       "audience": {
         "title": "対象",
@@ -615,6 +622,35 @@
         "notesPlaceholder": "具体的な要望（必ず入れたい表現、避けたい内容、ブランドの話し方など）…",
         "failed": "キャンペーンを生成できませんでした。もう一度お試しください。",
         "applied": "キャンペーンの文面が入力されました。次に進む前に内容を確認してください。"
+      },
+      "switch": {
+        "title": "ガイド付きフローを使用しますか?",
+        "body": "認証済みの WhatsApp Cloud API (Meta) の番号は、最初からやり直す4ステップのガイド付きフローから送信します。ここで入力した内容は保存されず、引き継がれません。残したい場合は先に「下書きを保存」を使用してください。",
+        "confirm": "ガイド付きフローを開く",
+        "cancel": "このままにする"
+      },
+      "guided": {
+        "template": "テンプレート",
+        "pickTemplate": "— テンプレートを選択 —",
+        "templateHint": "選択した番号の承認済みテンプレートのみ表示されます。変数は下で入力します。",
+        "noTemplates": "この番号には承認済みのテンプレートがまだありません。作成して承認されるまでお待ちください。",
+        "deliveryTitle": "配信",
+        "deliveryTag": "いつ",
+        "typeBlocked": "WhatsApp Cloud API (Meta) では、キャンペーンから送信できるのは承認済みテンプレートのみです。カスタムメッセージやフローは、過去24時間以内にメッセージをくれた相手にしか届かず、Cloud API では一括送信できません。テンプレートを使用するか、別の種類の番号を選択してください。",
+        "templateA": "バリアント A のテンプレート",
+        "templateB": "バリアント B のテンプレート",
+        "variablesA": "バリアント A の変数",
+        "variablesB": "バリアント B の変数",
+        "splitNote": "バリアント A は受信者の {a}% に、バリアント B は残りに送信されます。",
+        "costTitle": "概算費用",
+        "costNoTemplate": "テンプレートを選択すると費用が表示されます。",
+        "costNoAudience": "受信者を選択すると費用が表示されます。",
+        "costLoading": "費用を確認中",
+        "costError": "残高を確認できませんでした。",
+        "balanceOk": "残高は全額 {full} をまかなえます",
+        "balanceShort": "残高が不足しています。あと {shortfall} 必要です。",
+        "balanceLowFull": "残高が全額 {full} を下回っています。現在はプランで賄えますが、プランが終了すると賄えません。",
+        "chargedNowLabel": "今回ウォレットから請求される金額"
       }
     },
     "detail": {
@@ -670,7 +706,8 @@
         "engagement": "エンゲージメント",
         "replies": "返信({count})",
         "failures": "失敗({count})",
-        "optouts": "配信停止({count})"
+        "optouts": "配信停止({count})",
+        "summary": "サマリー"
       },
       "cancel": "キャンセル",
       "deleted": "キャンペーンを削除しました。",
@@ -781,6 +818,151 @@
         "replies": "返信",
         "optOuts": "配信停止",
         "readRate": "既読率"
+      },
+      "summary": {
+        "title": "サマリー",
+        "intro": "わかりやすくまとめました。メッセージを受け取った人、返信した人、願書フォームに記入した人がわかります。",
+        "loading": "サマリーを読み込んでいます",
+        "headline": {
+          "none": "まだメッセージは送信されていません。",
+          "messaged": "{count, plural, other {メッセージを送った相手は#人です。}}",
+          "notReceived": "{messaged}まだ誰も受信していません。",
+          "received": "{count, plural, =0 {受信した人はまだいません} other {受信した人は#人}}",
+          "opened": "{count, plural, =0 {開封した人はまだいません} other {開封した人は#人}}",
+          "wroteBack": "{count, plural, =0 {{days, plural, other {#日}}以内に返信した人はまだいません} other {{days, plural, other {#日}}以内に返信した人は#人}}",
+          "filledForm": "{count, plural, =0 {願書フォームに記入した人はまだいません} other {願書フォームに記入した人は#人}}",
+          "rest": "{clauses}です。",
+          "full": "{messaged}{rest}"
+        },
+        "window": {
+          "label": "返信とフォームを数える期間",
+          "hint": "メッセージを送った時点から数えます。",
+          "option": "{days, plural, other {#日}}以内"
+        },
+        "forms": {
+          "label": "願書として数えるフォームはどれですか?",
+          "hint": "空のままにすると、すべてのウェブフォームとWhatsAppフォームを数えます。",
+          "placeholder": "すべてのフォーム",
+          "empty": "フォームが見つかりません",
+          "clear": "すべてのフォームを数える",
+          "remove": "{name}を外す",
+          "web": "{name}(ウェブフォーム)",
+          "whatsapp": "{name}(WhatsAppフォーム)",
+          "loadError": "フォームを読み込めませんでした。当面はすべてのフォームを数えます。"
+        },
+        "tile": {
+          "listLabel": "数字で見る",
+          "unit": "{count, plural, other {人}}",
+          "messaged": {
+            "label": "送信",
+            "explain": "メッセージを送った相手の数です。",
+            "pct": "送信先として選んだ人"
+          },
+          "received": {
+            "label": "受信",
+            "explain": "メッセージが電話に届いた人の数です。"
+          },
+          "opened": {
+            "label": "開封",
+            "explain": "メッセージを開いて読んだ人の数です。"
+          },
+          "wroteBack": {
+            "label": "返信",
+            "explain": "送信から{days, plural, other {#日}}以内にメッセージを送ってきた人の数です。"
+          },
+          "filledForm": {
+            "label": "フォーム記入",
+            "explainAll": "願書フォームのいずれかに記入した人の数です。",
+            "explainSome": "{count, plural, other {選んだ#件のフォームのいずれかに記入した人の数です。}}"
+          }
+        },
+        "pct": {
+          "of": "送信した人の{pct}%",
+          "less": "送信した人の1%未満",
+          "zero": "送信した人のうち0人",
+          "everyone": "送信した人全員"
+        },
+        "funnel": {
+          "title": "メッセージから願書フォームまで",
+          "alt": "送信からフォーム記入までの各段階の人数",
+          "note": "段階を飛ばす人もいます。メッセージを開かずに返信する人もいるため、棒が上の段階より長くなることがあります。"
+        },
+        "daily": {
+          "title": "日ごとの返信数",
+          "series": "返信した人",
+          "empty": "まだ返信した人はいません。",
+          "alt": "返信は{total, plural, other {#人}}でした。最も多かった日は{day}で、{count, plural, other {#人}}でした。"
+        },
+        "people": {
+          "title": "該当する人を見る",
+          "show": "{title}({count})",
+          "came_back": {
+            "title": "返信",
+            "hint": "メッセージの送信後にあなたへメッセージを送ってきた人です。"
+          },
+          "filled_form": {
+            "title": "フォーム記入",
+            "hint": "願書フォームに記入した人です。"
+          },
+          "not_reached": {
+            "title": "未到達",
+            "hint": "メッセージが届かなかった人です。"
+          },
+          "table": "このリストの人",
+          "name": "名前",
+          "phone": "電話番号",
+          "when": "日時",
+          "form": "フォーム",
+          "unknown": "名前不明",
+          "noContact": "連絡先と一致しません",
+          "open": "{name}を開く",
+          "empty": "このリストにはまだ誰もいません。",
+          "shown": "{total}件中{shown}件を表示",
+          "more": "さらに表示",
+          "loading": "リストを読み込んでいます",
+          "error": "このリストを読み込めませんでした。",
+          "retry": "もう一度試す",
+          "forbidden": "これらの名前を見る権限がありません。"
+        },
+        "download": {
+          "button": "名前をダウンロード",
+          "busy": "ファイルを準備しています",
+          "failed": "名前のファイルを準備できませんでした。",
+          "done": "名前のファイルができました。",
+          "truncated": "ファイルには、各リストの先頭から最大{count}人分が含まれます。",
+          "none": "ダウンロードできる名前はまだありません。",
+          "csv": {
+            "group": "リスト",
+            "name": "名前",
+            "phone": "電話番号",
+            "when": "日時",
+            "form": "フォーム"
+          }
+        },
+        "print": {
+          "button": "サマリーを印刷",
+          "sent": "送信日:{date}",
+          "notSent": "未送信",
+          "window": "送信から{days, plural, other {#日}}以内の返信とフォームを集計",
+          "printed": "印刷日:{date}"
+        },
+        "caveats": {
+          "title": "ご注意",
+          "recipients_without_contact": "{count, plural, other {#人は連絡先と一致しなかったため、返信したかどうかがわかりません。}}",
+          "contact_match_only": "電話番号をもとに、相手をあなたの連絡先と照合しています。別の番号から送られたメッセージは数えられません。",
+          "opted_out_excluded": "メッセージの停止を希望した人は数えられません。",
+          "counted_in_other_campaigns": "複数のキャンペーンでメッセージを送った相手は、それぞれのキャンペーンで数えられることがあります。"
+        },
+        "notSent": {
+          "title": "まだ何も送信されていません",
+          "body": "メッセージが送信されると、受信した人、返信した人、願書フォームに記入した人がここに表示されます。"
+        },
+        "sending": "送信中のため、数字はこれから増えます。",
+        "error": {
+          "title": "サマリーを読み込めませんでした。",
+          "retry": "もう一度試す"
+        },
+        "latestRun": "このシリーズで最新の実行{occurrence}を表示しています。"
       }
     },
     "wizard": {
@@ -875,7 +1057,12 @@
         "insufficient_balance": "ウォレット残高がこの一斉配信には不足しています。",
         "checking_balance": "ウォレット残高を確認中...",
         "sender_required": "送信元のWhatsApp番号を選択してください。",
-        "balance_unavailable": "ウォレット残高を確認できませんでした。送信前にもう一度お試しください。"
+        "balance_unavailable": "ウォレット残高を確認できませんでした。送信前にもう一度お試しください。",
+        "template_b_required": "A/B テストのバリアント B のテンプレートを選択してください。",
+        "auto_end_in_past": "自動終了日はすでに過ぎています。",
+        "auto_end_before_send": "自動終了日は送信時刻より後にしてください。",
+        "auto_end_recurring": "定期キャンペーンは独自のルールで終了します。自動終了日をクリアしてください。",
+        "pacing_range": "Smart Delivery を確認してください。最長の遅延が最短より短いか、2つの送信時刻の片方しか設定されていません。"
       },
       "template": {
         "previewOnline": "オンライン",
@@ -908,7 +1095,8 @@
         "previewEmpty": "テンプレートを選択すると、メッセージの見た目を確認できます。",
         "senderLabel": "送信元",
         "senderHint": "この一斉配信の送信元となるWhatsApp番号です。",
-        "pickSender": "番号を選択"
+        "pickSender": "番号を選択",
+        "classicOption": "クラシックビルダー"
       },
       "audience": {
         "selectionTitle": "連絡先ハブで選択済み",
@@ -1124,7 +1312,10 @@
         "sumContacts": "{count, plural, other {表で#件の連絡先を選択}}",
         "sumAllMatching": "{what}に一致するすべての連絡先",
         "sumAllContacts": "すべての連絡先",
-        "sumCsv": "CSVファイル {name}: {count, plural, other {有効な番号#件}}"
+        "sumCsv": "CSVファイル {name}: {count, plural, other {有効な番号#件}}",
+        "estimatedCostFull": "概算費用(全額)",
+        "chargedPlan": "今回ウォレットから請求される金額: {amount}(これらのメッセージのうち {covered} 件はプランでまかなわれます)",
+        "chargedWallet": "ウォレットから請求される金額: {amount}"
       },
       "test": {
         "title": "WhatsAppテストメッセージを送信",
@@ -1343,6 +1534,12 @@
         "pm": "午後",
         "hour": "時",
         "minute": "分"
+      },
+      "switch": {
+        "title": "クラシックビルダーを使用しますか?",
+        "body": "{number} ({engine}) は、最初からやり直すクラシックビルダーから送信します。このキャンペーンは下書きとして保存され、キャンペーン一覧に残るので、あとで戻ってこられます。",
+        "confirm": "クラシックビルダーを開く",
+        "cancel": "このままにする"
       }
     },
     "history": {
@@ -1420,7 +1617,8 @@
         "list": "リスト",
         "blocks": "ブロック"
       },
-      "showing": "{count}件のキャンペーンを表示"
+      "showing": "{count}件のキャンペーンを表示",
+      "legacy": "旧配信 ({count})"
     },
     "senderEmpty": {
       "loading": "番号を読み込んでいます…",
@@ -1456,6 +1654,11 @@
         "body": "これが無効の間、{count}件の個人（QR）番号ではキャンペーンを送信できません。プラットフォーム管理者がこのワークスペースで有効にするか、公式のWhatsApp Business番号を接続してください。",
         "action": "公式番号を接続"
       }
+    },
+    "create": {
+      "loading": "番号を読み込み中",
+      "noAccessTitle": "キャンペーンを作成できません",
+      "noAccess": "キャンペーンを作成する権限をワークスペース管理者に依頼してください。"
     }
   }
 }

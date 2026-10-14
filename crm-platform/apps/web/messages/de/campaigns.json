@@ -203,7 +203,13 @@
         "typeLabel": "Typ",
         "ab": "A/B",
         "off": "Aus",
-        "step": "Schritt {n} von {total}"
+        "step": "Schritt {n} von {total}",
+        "broadcastTitle": "Broadcast-Vorschau",
+        "templateMessage": "Vorlagennachricht",
+        "customMessage": "Individuelle Nachricht",
+        "flowTitle": "Flow",
+        "variants": "Angezeigte Variante",
+        "variant": "Variante {v}"
       },
       "previewEmpty": "Ihre Nachrichtenvorschau…",
       "previewTemplate": "Vorlage",
@@ -258,7 +264,8 @@
         "abHint": "Empfänger auf zwei Nachrichtenvarianten aufteilen.",
         "split": "Anteil Variante A {a} %",
         "splitHint": "Variante B erhält den restlichen Empfängerkreis. Inhalt der Variante B im Schritt „Verfassen“ festlegen.",
-        "pickSender": "— Absender auswählen —"
+        "pickSender": "— Absender auswählen —",
+        "notVerified": "Noch nicht verifiziert: Der geführte Ablauf ist verfügbar, sobald die Nummer verifiziert ist."
       },
       "audience": {
         "title": "Zielgruppe",
@@ -615,6 +622,35 @@
         "notesPlaceholder": "Alles Spezifische — unverzichtbare Formulierungen, was vermieden werden soll, Markenstimme…",
         "failed": "Die Kampagne konnte nicht erstellt werden. Bitte erneut versuchen.",
         "applied": "Der Kampagnentext wurde ausgefüllt. Bitte prüfen Sie ihn, bevor Sie fortfahren."
+      },
+      "switch": {
+        "title": "Geführten Ablauf verwenden?",
+        "body": "Eine verifizierte WhatsApp Cloud API (Meta) Nummer wird über den geführten Vier-Schritte-Ablauf versendet, der neu beginnt. Ihre bisherigen Eingaben werden nicht gespeichert und nicht übernommen. Klicken Sie zuerst auf „Entwurf speichern“, wenn Sie sie behalten möchten.",
+        "confirm": "Geführten Ablauf öffnen",
+        "cancel": "Hier bleiben"
+      },
+      "guided": {
+        "template": "Vorlage",
+        "pickTemplate": "— Vorlage auswählen —",
+        "templateHint": "Nur genehmigte Vorlagen der gewählten Nummer. Die Variablen werden unten ausgefüllt.",
+        "noTemplates": "Diese Nummer hat noch keine genehmigten Vorlagen. Erstellen Sie eine und warten Sie auf die Genehmigung.",
+        "deliveryTitle": "Zustellung",
+        "deliveryTag": "wann",
+        "typeBlocked": "Über die WhatsApp Cloud API (Meta) kann aus einer Kampagne nur eine genehmigte Vorlage gesendet werden: Eine individuelle Nachricht oder ein Flow würde nur Personen erreichen, die Ihnen in den letzten 24 Stunden geschrieben haben, und die Cloud API kann sie nicht in großen Mengen versenden. Verwenden Sie eine Vorlage oder wählen Sie eine andere Nummernart.",
+        "templateA": "Vorlage für Variante A",
+        "templateB": "Vorlage für Variante B",
+        "variablesA": "Variablen für Variante A",
+        "variablesB": "Variablen für Variante B",
+        "splitNote": "Variante A geht an {a} % der Empfänger, Variante B an den Rest.",
+        "costTitle": "Geschätzte Kosten",
+        "costNoTemplate": "Wählen Sie eine Vorlage, um die Kosten zu sehen.",
+        "costNoAudience": "Wählen Sie die Empfänger, um die Kosten zu sehen.",
+        "costLoading": "Kosten werden geprüft",
+        "costError": "Das Guthaben konnte nicht geprüft werden.",
+        "balanceOk": "Das Guthaben reicht für die vollen Kosten von {full}",
+        "balanceShort": "Das Guthaben reicht nicht aus: Es fehlen {shortfall}.",
+        "balanceLowFull": "Das Guthaben liegt unter den vollen Kosten von {full}: Ihr Tarif deckt sie jetzt ab, aber nicht mehr, sobald der Tarif aufgebraucht ist.",
+        "chargedNowLabel": "Jetzt Ihrem Wallet belastet"
       }
     },
     "detail": {
@@ -670,7 +706,8 @@
         "engagement": "Interaktion",
         "replies": "Antworten ({count})",
         "failures": "Fehlschläge ({count})",
-        "optouts": "Abmeldungen ({count})"
+        "optouts": "Abmeldungen ({count})",
+        "summary": "Zusammenfassung"
       },
       "cancel": "Abbrechen",
       "deleted": "Kampagne gelöscht.",
@@ -781,6 +818,151 @@
         "replies": "Antworten",
         "optOuts": "Abmeldungen",
         "readRate": "Leserate"
+      },
+      "summary": {
+        "title": "Zusammenfassung",
+        "intro": "In einfachen Worten: wer Ihre Nachricht erhalten hat, wer geantwortet hat und wer ein Anmeldeformular ausgefüllt hat.",
+        "loading": "Zusammenfassung wird geladen",
+        "headline": {
+          "none": "Es wurden noch keine Nachrichten versendet.",
+          "messaged": "{count, plural, one {Sie haben # Kontakt angeschrieben.} other {Sie haben # Kontakte angeschrieben.}}",
+          "notReceived": "{messaged} Bisher hat sie noch niemand erhalten.",
+          "received": "{count, plural, =0 {bisher hat sie noch niemand erhalten} one {# hat sie erhalten} other {# haben sie erhalten}}",
+          "opened": "{count, plural, =0 {bisher hat sie noch niemand geöffnet} one {# hat sie geöffnet} other {# haben sie geöffnet}}",
+          "wroteBack": "{count, plural, =0 {bisher hat noch niemand innerhalb von {days, plural, one {# Tag} other {# Tagen}} geantwortet} one {# hat innerhalb von {days, plural, one {# Tag} other {# Tagen}} geantwortet} other {# haben innerhalb von {days, plural, one {# Tag} other {# Tagen}} geantwortet}}",
+          "filledForm": "{count, plural, =0 {bisher hat noch niemand ein Anmeldeformular ausgefüllt} one {# hat ein Anmeldeformular ausgefüllt} other {# haben ein Anmeldeformular ausgefüllt}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Antworten und Formulare zählen, die eingehen",
+          "hint": "Gezählt ab dem Moment, in dem Sie die Nachricht gesendet haben.",
+          "option": "Innerhalb von {days, plural, one {# Tag} other {# Tagen}}"
+        },
+        "forms": {
+          "label": "Welche Formulare gelten als Anmeldung?",
+          "hint": "Leer lassen, um alle Webformulare und WhatsApp-Formulare zu zählen.",
+          "placeholder": "Alle Formulare",
+          "empty": "Keine Formulare gefunden",
+          "clear": "Alle Formulare zählen",
+          "remove": "{name} entfernen",
+          "web": "{name} (Webformular)",
+          "whatsapp": "{name} (WhatsApp-Formular)",
+          "loadError": "Wir konnten Ihre Formulare nicht laden. Vorerst werden alle Formulare gezählt."
+        },
+        "tile": {
+          "listLabel": "Die Zahlen",
+          "unit": "{count, plural, one {Kontakt} other {Kontakte}}",
+          "messaged": {
+            "label": "Angeschrieben",
+            "explain": "Kontakte, an die wir Ihre Nachricht gesendet haben.",
+            "pct": "Die Kontakte, die Sie angeschrieben haben"
+          },
+          "received": {
+            "label": "Erhalten",
+            "explain": "Kontakte, auf deren Telefon die Nachricht angekommen ist."
+          },
+          "opened": {
+            "label": "Geöffnet",
+            "explain": "Kontakte, die die Nachricht geöffnet und gelesen haben."
+          },
+          "wroteBack": {
+            "label": "Geantwortet",
+            "explain": "Kontakte, die Ihnen innerhalb von {days, plural, one {# Tag} other {# Tagen}} nach dem Versand geschrieben haben."
+          },
+          "filledForm": {
+            "label": "Formular ausgefüllt",
+            "explainAll": "Kontakte, die eines Ihrer Anmeldeformulare ausgefüllt haben.",
+            "explainSome": "{count, plural, one {Kontakte, die das von Ihnen gewählte Formular ausgefüllt haben.} other {Kontakte, die eines der # von Ihnen gewählten Formulare ausgefüllt haben.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct} % der angeschriebenen Kontakte",
+          "less": "Weniger als 1 % der angeschriebenen Kontakte",
+          "zero": "Keiner der angeschriebenen Kontakte",
+          "everyone": "Alle angeschriebenen Kontakte"
+        },
+        "funnel": {
+          "title": "Von der Nachricht zum Anmeldeformular",
+          "alt": "Anzahl der Kontakte in jedem Schritt, von angeschrieben bis Formular ausgefüllt",
+          "note": "Kontakte können einen Schritt überspringen. Wer antwortet, ohne die Nachricht zu öffnen, wird trotzdem gezählt, daher kann ein Balken länger sein als der darüber."
+        },
+        "daily": {
+          "title": "Antworten pro Tag",
+          "series": "Kontakte, die geantwortet haben",
+          "empty": "Bisher hat noch niemand geantwortet.",
+          "alt": "Es haben {total, plural, one {# Kontakt} other {# Kontakte}} geantwortet. Der aktivste Tag war {day} mit {count, plural, one {# Kontakt} other {# Kontakten}}."
+        },
+        "people": {
+          "title": "Ansehen, wer",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Geantwortet",
+            "hint": "Kontakte, die Ihnen nach dem Versand Ihrer Nachricht geschrieben haben."
+          },
+          "filled_form": {
+            "title": "Formular ausgefüllt",
+            "hint": "Kontakte, die ein Anmeldeformular ausgefüllt haben."
+          },
+          "not_reached": {
+            "title": "Nicht erreicht",
+            "hint": "Kontakte, die Ihre Nachricht nicht erreicht hat."
+          },
+          "table": "Kontakte in dieser Liste",
+          "name": "Name",
+          "phone": "Telefon",
+          "when": "Wann",
+          "form": "Formular",
+          "unknown": "Name unbekannt",
+          "noContact": "Keinem Kontakt zugeordnet",
+          "open": "{name} öffnen",
+          "empty": "Diese Liste ist noch leer.",
+          "shown": "{shown} von {total} angezeigt",
+          "more": "Mehr anzeigen",
+          "loading": "Liste wird geladen",
+          "error": "Wir konnten diese Liste nicht laden.",
+          "retry": "Erneut versuchen",
+          "forbidden": "Sie haben keine Berechtigung, diese Namen zu sehen."
+        },
+        "download": {
+          "button": "Namen herunterladen",
+          "busy": "Datei wird vorbereitet",
+          "failed": "Wir konnten die Namensdatei nicht vorbereiten.",
+          "done": "Die Namensdatei ist fertig.",
+          "truncated": "Die Datei enthält die ersten {count} Kontakte jeder Liste.",
+          "none": "Es gibt noch keine Namen zum Herunterladen.",
+          "csv": {
+            "group": "Liste",
+            "name": "Name",
+            "phone": "Telefon",
+            "when": "Wann",
+            "form": "Formular"
+          }
+        },
+        "print": {
+          "button": "Zusammenfassung drucken",
+          "sent": "Gesendet am {date}",
+          "notSent": "Noch nicht gesendet",
+          "window": "Antworten und Formulare werden innerhalb von {days, plural, one {# Tag} other {# Tagen}} nach dem Versand gezählt",
+          "printed": "Gedruckt am {date}"
+        },
+        "caveats": {
+          "title": "Gut zu wissen",
+          "recipients_without_contact": "{count, plural, one {# Empfänger konnte keinem Kontakt zugeordnet werden, deshalb wissen wir nicht, ob er geantwortet hat.} other {# Empfänger konnten keinem Kontakt zugeordnet werden, deshalb wissen wir nicht, ob sie geantwortet haben.}}",
+          "contact_match_only": "Wir ordnen Personen Ihren Kontakten anhand der Telefonnummer zu. Wer von einer anderen Nummer schreibt, wird nicht gezählt.",
+          "opted_out_excluded": "Kontakte, die keine Nachrichten mehr erhalten möchten, werden nicht gezählt.",
+          "counted_in_other_campaigns": "Wenn Sie einen Kontakt in mehreren Kampagnen angeschrieben haben, kann er in jeder davon gezählt werden."
+        },
+        "notSent": {
+          "title": "Es wurde noch nichts gesendet",
+          "body": "Sobald die Nachrichten versendet sind, sehen Sie hier, wer sie erhalten hat, wer geantwortet hat und wer ein Anmeldeformular ausgefüllt hat."
+        },
+        "sending": "Der Versand läuft noch, die Zahlen werden also weiter steigen.",
+        "error": {
+          "title": "Wir konnten diese Zusammenfassung nicht laden.",
+          "retry": "Erneut versuchen"
+        },
+        "latestRun": "Angezeigt wird Durchlauf {occurrence}, der neueste dieser Serie."
       }
     },
     "wizard": {
@@ -875,7 +1057,12 @@
         "insufficient_balance": "Ihr Wallet-Guthaben ist für diesen Broadcast zu niedrig.",
         "checking_balance": "Wallet-Guthaben wird geprüft...",
         "sender_required": "Wählen Sie die WhatsApp-Nummer, von der gesendet wird.",
-        "balance_unavailable": "Wir konnten Ihr Wallet-Guthaben nicht prüfen. Versuchen Sie es vor dem Senden erneut."
+        "balance_unavailable": "Wir konnten Ihr Wallet-Guthaben nicht prüfen. Versuchen Sie es vor dem Senden erneut.",
+        "template_b_required": "Wählen Sie die Vorlage für Variante B des A/B-Tests.",
+        "auto_end_in_past": "Das automatische Enddatum liegt bereits in der Vergangenheit.",
+        "auto_end_before_send": "Das automatische Enddatum muss nach dem Sendezeitpunkt liegen.",
+        "auto_end_recurring": "Eine wiederkehrende Kampagne endet nach ihrer eigenen Regel: Entfernen Sie das automatische Enddatum.",
+        "pacing_range": "Prüfen Sie Smart Delivery: Die längste Verzögerung ist kürzer als die kürzeste, oder nur eine der beiden Sendezeiten ist festgelegt."
       },
       "template": {
         "previewOnline": "online",
@@ -908,7 +1095,8 @@
         "previewEmpty": "Wählen Sie eine Vorlage, um die Nachricht anzusehen.",
         "senderLabel": "Senden von",
         "senderHint": "Die WhatsApp-Nummer, von der dieser Broadcast gesendet wird.",
-        "pickSender": "Nummer auswählen"
+        "pickSender": "Nummer auswählen",
+        "classicOption": "klassischer Builder"
       },
       "audience": {
         "selectionTitle": "Im Contact Hub ausgewählt",
@@ -1124,7 +1312,10 @@
         "sumContacts": "{count, plural, one {# Kontakt in der Tabelle ausgewählt} other {# Kontakte in der Tabelle ausgewählt}}",
         "sumAllMatching": "Alle Kontakte, die {what} entsprechen",
         "sumAllContacts": "Alle Kontakte",
-        "sumCsv": "CSV-Datei {name}: {count, plural, one {# gültige Nummer} other {# gültige Nummern}}"
+        "sumCsv": "CSV-Datei {name}: {count, plural, one {# gültige Nummer} other {# gültige Nummern}}",
+        "estimatedCostFull": "Geschätzte Kosten (gesamt)",
+        "chargedPlan": "Jetzt Ihrem Wallet belastet: {amount} (Ihr Tarif deckt {covered} dieser Nachrichten ab)",
+        "chargedWallet": "Ihrem Wallet belastet: {amount}"
       },
       "test": {
         "title": "Eine WhatsApp-Testnachricht senden",
@@ -1343,6 +1534,12 @@
         "pm": "PM",
         "hour": "Stunde",
         "minute": "Minute"
+      },
+      "switch": {
+        "title": "Klassischen Builder verwenden?",
+        "body": "{number} ({engine}) wird über den klassischen Builder versendet, der neu beginnt. Diese Kampagne wird als Entwurf gespeichert und bleibt in Ihrer Kampagnenliste, sodass Sie sie später fortsetzen können.",
+        "confirm": "Klassischen Builder öffnen",
+        "cancel": "Hier bleiben"
       }
     },
     "history": {
@@ -1420,7 +1617,8 @@
         "list": "Liste",
         "blocks": "Kacheln"
       },
-      "showing": "{count, plural, one {# Kampagne} other {# Kampagnen}} angezeigt"
+      "showing": "{count, plural, one {# Kampagne} other {# Kampagnen}} angezeigt",
+      "legacy": "Ältere Broadcasts ({count})"
     },
     "senderEmpty": {
       "loading": "Ihre Nummern werden geladen…",
@@ -1456,6 +1654,11 @@
         "body": "{count, plural, one {Ihre persönliche (QR-)Nummer kann} other {Ihre # persönlichen (QR-)Nummern können}} keine Kampagnen senden, solange dies deaktiviert ist. Ein Plattform-Administrator kann es für diesen Arbeitsbereich aktivieren, oder Sie verbinden eine offizielle WhatsApp-Business-Nummer.",
         "action": "Offizielle Nummer verbinden"
       }
+    },
+    "create": {
+      "loading": "Ihre Nummern werden geladen",
+      "noAccessTitle": "Sie können keine Kampagnen erstellen",
+      "noAccess": "Bitten Sie einen Workspace-Admin um die Berechtigung, Kampagnen zu erstellen."
     }
   }
 }
