@@ -16,7 +16,8 @@ const ROUND =
 export function OnCallPanel() {
   const t = useTranslations('calling-voice.panel');
   const tc = useTranslations('calling-voice.recording.consent');
-  const { active, elapsed, hangup, toggleMute, record, recordingRules, answerConsent } = useCalling();
+  const { active, elapsed, hangup, toggleMute, record, recordingRules, answerConsent } =
+    useCalling();
   if (!active || (active.state !== 'ringing' && active.state !== 'active')) return null;
   const ringing = active.state === 'ringing';
 
@@ -105,7 +106,9 @@ export function OnCallPanel() {
         >
           <p className="font-medium">{tc('title')}</p>
           <p className="mt-1 text-muted-foreground">
-            {recordingRules.consentMode === 'confirmed' ? tc('askConfirmed') : tc('askAnnouncement')}
+            {recordingRules.consentMode === 'confirmed'
+              ? tc('askConfirmed')
+              : tc('askAnnouncement')}
           </p>
           <blockquote className="mt-2 border-s-2 border-primary ps-2 italic">
             {recordingRules.noticeText}
@@ -117,7 +120,9 @@ export function OnCallPanel() {
               disabled={active.consent === 'saving'}
               onClick={() => void answerConsent('granted')}
             >
-              {recordingRules.consentMode === 'confirmed' ? tc('grantConfirmed') : tc('grantAnnouncement')}
+              {recordingRules.consentMode === 'confirmed'
+                ? tc('grantConfirmed')
+                : tc('grantAnnouncement')}
             </Button>
             <Button
               size="sm"

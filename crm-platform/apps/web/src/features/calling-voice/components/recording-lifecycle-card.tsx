@@ -175,7 +175,12 @@ export function RecordingLifecycleCard({
             onChange={(e) => setReason(e.target.value)}
           />
           <div className="flex gap-2">
-            <Button size="sm" type="submit" variant="brand" disabled={!reason.trim() || hold.isPending}>
+            <Button
+              size="sm"
+              type="submit"
+              variant="brand"
+              disabled={!reason.trim() || hold.isPending}
+            >
               {t('placeHold')}
             </Button>
             <Button size="sm" type="button" variant="secondary" onClick={() => setAsking(false)}>
@@ -185,29 +190,31 @@ export function RecordingLifecycleCard({
         </form>
       )}
 
-      <ConfirmDialog
-        open={confirming}
-        title={t('deleteTitle')}
-        message={t('deleteMessage')}
-        confirmLabel={t('delete')}
-        cancelLabel={t('cancel')}
-        tone="danger"
-        busy={del.isPending}
-        onClose={() => setConfirming(false)}
-        onConfirm={() => {
-          setFailure(null);
-          del.mutate(undefined, {
-            onSuccess: () => {
-              setConfirming(false);
-              toast(t('deletedToast'), 'success');
-            },
-            onError: (e) => {
-              setConfirming(false);
-              setFailure(errorText(e));
-            },
-          });
-        }}
-      />
+      {canDelete && (
+        <ConfirmDialog
+          open={confirming}
+          title={t('deleteTitle')}
+          message={t('deleteMessage')}
+          confirmLabel={t('delete')}
+          cancelLabel={t('cancel')}
+          tone="danger"
+          busy={del.isPending}
+          onClose={() => setConfirming(false)}
+          onConfirm={() => {
+            setFailure(null);
+            del.mutate(undefined, {
+              onSuccess: () => {
+                setConfirming(false);
+                toast(t('deletedToast'), 'success');
+              },
+              onError: (e) => {
+                setConfirming(false);
+                setFailure(errorText(e));
+              },
+            });
+          }}
+        />
+      )}
     </section>
   );
 }

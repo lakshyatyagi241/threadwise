@@ -5,7 +5,18 @@ summary: See every WhatsApp call, open one to read its timeline and play its rec
 area: inbox
 order: 25
 documents: [nav:call-logs]
-keywords: [calls, call log, recording, play recording, missed calls, answered, analytics, handle time, busiest hours]
+keywords:
+  [
+    calls,
+    call log,
+    recording,
+    play recording,
+    missed calls,
+    answered,
+    analytics,
+    handle time,
+    busiest hours,
+  ]
 ---
 
 ## What it is for
