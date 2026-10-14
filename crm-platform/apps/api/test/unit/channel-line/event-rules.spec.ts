@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import {
   eventsOf,
   extractMessage,
-  isUserId,
   readEvent,
   sourceOf,
 } from '../../../src/modules/channel-line/event-rules';
@@ -41,14 +40,6 @@ describe('sourceOf', () => {
     expect(sourceOf({ source: { type: 'user', groupId: 'C1' } })).toBeNull();
     expect(sourceOf({ source: {} })).toBeNull();
     expect(sourceOf({})).toBeNull();
-  });
-});
-
-describe('isUserId', () => {
-  it('is true only for ids that start with U', () => {
-    expect(isUserId('Uabc')).toBe(true);
-    expect(isUserId('Cabc')).toBe(false);
-    expect(isUserId('Rabc')).toBe(false);
   });
 });
 

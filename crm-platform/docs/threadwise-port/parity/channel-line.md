@@ -18,7 +18,7 @@ running Reference (Playwright) was not done for this branch.
 - `line-broadcasts.e2e.spec.ts`: 13 scenarios (audience, frozen draft and forged ids, empty and no-recipient refusals, template and its buttons, a 45-person run in batches of 40
   with blocked and failed and the inbox mirror, media first, withdrawn consent blocked, paused channel, pause and a second start without double sends, retry, nothing to send, list totals
   and delete, isolation and permissions).
-- `apps/api/test/unit/channel-line/*.spec.ts`: 45 tests (signature, routing token, rotation JWT verified with the public key, message builders, event reading, broadcast rules).
+- `apps/api/test/unit/channel-line/*.spec.ts`: 43 tests (signature, routing token, rotation JWT verified with the public key, message builders, event reading, broadcast rules).
 - `apps/web/src/features/channel-line`: model tests (compose and channel) and `screens.render.test.tsx` (the hub, the channel card, the broadcast list and the compose screen rendered with the
   real messages in all 21 languages, failing on any missing key) and `channel-cards.test.ts` (the Campaigns chooser card).
 

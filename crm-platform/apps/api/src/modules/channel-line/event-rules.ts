@@ -37,9 +37,6 @@ export function sourceOf(event: LineEvent): Source | null {
   return id === null ? null : { type, id, userId };
 }
 
-/** LINE user ids start with `U`; group ids with `C` and room ids with `R`. Only a user can be sent a broadcast. */
-export const isUserId = (id: string): boolean => id.startsWith('U');
-
 export interface Extracted {
   text: string;
   mediaType: 'image' | 'video' | 'audio' | 'document' | null;
