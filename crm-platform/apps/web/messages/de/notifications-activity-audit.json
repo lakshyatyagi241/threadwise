@@ -358,6 +358,14 @@
         "sla_breached": {
           "label": "SLA verletzt",
           "hint": "Eine Ihrer Unterhaltungen hat das Ziel für die erste Antwort oder die Lösung verfehlt."
+        },
+        "member_leave_started": {
+          "label": "Mitglied ist im Urlaub",
+          "hint": "Ein Mitglied deines Teams ist in den Urlaub gegangen. Zeigt, was es betreut, mit Link zum Neuzuweisen."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Chat, den niemand übernehmen konnte",
+          "hint": "Das Routing hat für einen neuen Chat niemanden gefunden, weil die gewählten Personen im Urlaub sind. Weise ihn manuell zu."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",
