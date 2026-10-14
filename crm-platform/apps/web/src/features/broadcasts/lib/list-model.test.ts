@@ -65,10 +65,9 @@ describe('labels', () => {
     expect(providerTag(null, false, off)).toBe('—');
   });
 
-  it('only scheduled and failed broadcasts can be deleted', () => {
+  it('only scheduled broadcasts can be deleted', () => {
     expect(['scheduled', 'failed', 'processing', 'completed', 'paused'].filter(canDelete)).toEqual([
       'scheduled',
-      'failed',
     ]);
   });
 

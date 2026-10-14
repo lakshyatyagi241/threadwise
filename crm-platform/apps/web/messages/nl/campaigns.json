@@ -160,6 +160,17 @@
             "body": "Begin met een sjabloonupdate of een broadcast om contacten opnieuw te betrekken, en vergelijk daarna bezorgde, gelezen en mislukte aantallen voordat je opschaalt."
           }
         }
+      },
+      "view": {
+        "label": "Weergave",
+        "list": "Lijst",
+        "blocks": "Blokken"
+      },
+      "col": {
+        "name": "Campagne",
+        "status": "Status",
+        "schedule": "Planning",
+        "actions": "Acties"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Uitvoeringen",
         "noRuns": "Er is nog geen uitvoering gestart.",
         "cancel": "Reeks annuleren"
-      }
+      },
+      "view": {
+        "label": "Weergave",
+        "list": "Lijst",
+        "blocks": "Blokken"
+      },
+      "showing": "{count, plural, one {# campagne} other {# campagnes}} getoond"
     },
     "senderEmpty": {
       "loading": "Je nummers worden geladen…",

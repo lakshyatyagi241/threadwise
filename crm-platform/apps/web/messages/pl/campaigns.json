@@ -160,6 +160,17 @@
             "body": "Zacznij od aktualizacji szablonu lub wysyłki reaktywacyjnej, a następnie porównaj liczby dostarczonych, odczytanych i nieudanych, zanim zwiększysz skalę."
           }
         }
+      },
+      "view": {
+        "label": "Widok",
+        "list": "Lista",
+        "blocks": "Bloki"
+      },
+      "col": {
+        "name": "Kampania",
+        "status": "Status",
+        "schedule": "Harmonogram",
+        "actions": "Akcje"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Uruchomienia",
         "noRuns": "Żadne uruchomienie jeszcze się nie rozpoczęło.",
         "cancel": "Anuluj serię"
-      }
+      },
+      "view": {
+        "label": "Widok",
+        "list": "Lista",
+        "blocks": "Bloki"
+      },
+      "showing": "Wyświetlono: {count, plural, one {# kampanię} few {# kampanie} many {# kampanii} other {# kampanii}}"
     },
     "senderEmpty": {
       "loading": "Wczytywanie Twoich numerów…",

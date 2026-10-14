@@ -160,6 +160,17 @@
             "body": "Inizia con un aggiornamento di template o un broadcast di riattivazione, poi confronta i conteggi di consegnati, letti e falliti prima di scalare."
           }
         }
+      },
+      "view": {
+        "label": "Vista",
+        "list": "Elenco",
+        "blocks": "Blocchi"
+      },
+      "col": {
+        "name": "Campagna",
+        "status": "Stato",
+        "schedule": "Pianificazione",
+        "actions": "Azioni"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Esecuzioni",
         "noRuns": "Nessuna esecuzione è ancora iniziata.",
         "cancel": "Annulla serie"
-      }
+      },
+      "view": {
+        "label": "Vista",
+        "list": "Elenco",
+        "blocks": "Blocchi"
+      },
+      "showing": "{count, plural, one {# campagna mostrata} other {# campagne mostrate}}"
     },
     "senderEmpty": {
       "loading": "Caricamento dei tuoi numeri…",

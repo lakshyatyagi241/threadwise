@@ -160,6 +160,17 @@
             "body": "Comece com uma atualização de modelo ou um disparo de reengajamento e compare as contagens de entregues, lidas e com falha antes de escalar."
           }
         }
+      },
+      "view": {
+        "label": "Visualização",
+        "list": "Lista",
+        "blocks": "Blocos"
+      },
+      "col": {
+        "name": "Campanha",
+        "status": "Status",
+        "schedule": "Agendamento",
+        "actions": "Ações"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Execuções",
         "noRuns": "Nenhuma execução foi iniciada ainda.",
         "cancel": "Cancelar série"
-      }
+      },
+      "view": {
+        "label": "Visualização",
+        "list": "Lista",
+        "blocks": "Blocos"
+      },
+      "showing": "Mostrando {count, plural, one {# campanha} other {# campanhas}}"
     },
     "senderEmpty": {
       "loading": "Carregando seus números…",

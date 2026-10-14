@@ -160,6 +160,17 @@
             "body": "Mulailah dengan pembaruan templat atau siaran penarikan kembali, lalu bandingkan jumlah terkirim, terbaca, dan gagal sebelum memperbesar skala."
           }
         }
+      },
+      "view": {
+        "label": "Tampilan",
+        "list": "Daftar",
+        "blocks": "Blok"
+      },
+      "col": {
+        "name": "Kampanye",
+        "status": "Status",
+        "schedule": "Jadwal",
+        "actions": "Tindakan"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Putaran",
         "noRuns": "Belum ada putaran yang dimulai.",
         "cancel": "Batalkan seri"
-      }
+      },
+      "view": {
+        "label": "Tampilan",
+        "list": "Daftar",
+        "blocks": "Blok"
+      },
+      "showing": "Menampilkan {count} kampanye"
     },
     "senderEmpty": {
       "loading": "Memuat nomor Anda…",
