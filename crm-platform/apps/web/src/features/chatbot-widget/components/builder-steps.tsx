@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { WIDGET_LIMITS, type WidgetAssistantRef } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { ConsentNoticeEditor } from '@/features/contact-consent';
 import { snippetFor, type BuilderState } from '../lib/builder-model';
 import { CheckIcon, EngineGlyph, ExternalIcon } from './icons';
 import { ColorField } from './color-field';
@@ -22,6 +23,8 @@ export interface StepProps {
   flash: string | null;
   /** Drop the step number: the step sits on a page that is not the numbered wizard (a flow bot's Customize tab). */
   plain?: boolean;
+  /** The saved widget's id; null or absent while it is new (a consent line needs a widget to belong to). */
+  widgetId?: string | null;
 }
 
 const ring = (flash: string | null, field: string) =>
@@ -300,7 +303,7 @@ export function LookStep({ s, set, flash, plain }: StepProps) {
   );
 }
 
-export function VoiceStep({ s, set, flash, plain }: StepProps) {
+export function VoiceStep({ s, set, flash, plain, widgetId }: StepProps) {
   const t = useTranslations('chatbotWidget.builder.voice');
   return (
     <div data-step="3">
@@ -424,6 +427,11 @@ export function VoiceStep({ s, set, flash, plain }: StepProps) {
           ))}
         </div>
       </fieldset>
+      {(s.collectEmail || s.collectPhone) && (
+        <div className="mt-4">
+          <ConsentNoticeEditor scope="widget" refId={widgetId ?? ''} disabled={!widgetId} />
+        </div>
+      )}
     </div>
   );
 }

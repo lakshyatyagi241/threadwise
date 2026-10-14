@@ -16,7 +16,8 @@
       "validation": "일부 값이 올바르지 않습니다. 양식을 확인하고 다시 시도하세요.",
       "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
       "exportInProgress": "동의 증빙 파일을 이미 준비하는 중입니다. 완료될 때까지 기다린 후 다시 시도하세요.",
-      "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 파일을 준비하세요."
+      "exportNotReady": "파일이 준비되지 않았거나 만료되었습니다. 새 파일을 준비하세요.",
+      "noticeTargetMissing": "해당 위젯, 예약 페이지 또는 스토어가 더 이상 없습니다."
     },
     "settings": {
       "title": "수신 동의 및 STOP 답장",
@@ -130,7 +131,10 @@
         "flow": "플로우",
         "inbound_message": "메시지",
         "contact_request": "연락 요청",
-        "legacy": "수신 동의 기록 이전"
+        "legacy": "수신 동의 기록 이전",
+        "widget": "웹사이트 채팅",
+        "booking": "예약 페이지",
+        "commerce": "스토어 결제"
       },
       "by": "{name}님이 기록",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "파일",
         "apiKeyId": "API 키",
         "flowId": "플로우",
-        "reference": "참조"
+        "reference": "참조",
+        "noticeVersion": "고지 버전",
+        "noticeUrl": "고지 링크",
+        "widgetId": "채팅 위젯",
+        "bookingTypeId": "예약 페이지",
+        "integrationId": "스토어",
+        "storeFlag": "스토어 설정"
       },
       "dialog": {
         "titleGranted": "수신 중으로 표시",
@@ -272,6 +282,30 @@
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "채팅 양식의 동의 문구",
+        "booking": "예약 페이지의 동의 문구",
+        "commerce": "스토어 마케팅 체크박스의 의미"
+      },
+      "intro": {
+        "widget": "방문자 정보 아래에 체크박스로 표시됩니다. 체크한 방문자만 동의로 기록되며, 전화번호나 이메일을 입력한 경우에만 해당합니다.",
+        "booking": "예약 양식에 체크박스로 표시됩니다. 체크한 사람만 동의로 기록되며, 예약에는 필요하지 않습니다.",
+        "commerce": "스토어에서 마케팅을 수락한 고객은 동의로 기록됩니다. 그 체크박스가 고객에게 알려 주는 내용을 적어 증빙에 남기세요."
+      },
+      "enabled": "동의 문구 켜기",
+      "text": "사용자가 동의하는 문구",
+      "textHint": "최대 {max}자. 변경할 때마다 새 버전으로 저장됩니다.",
+      "textRequired": "문구를 쓴 다음에 켜세요.",
+      "url": "개인정보 처리방침 링크 (선택)",
+      "urlHint": "https://로 시작해야 합니다",
+      "save": "동의 문구 저장",
+      "saved": "동의 문구를 저장했습니다 (버전 {version}).",
+      "version": "현재 버전: {version}",
+      "noVersion": "아직 저장되지 않았습니다.",
+      "saveFirst": "먼저 저장한 뒤에 동의 문구를 설정할 수 있습니다.",
+      "whatsappToo": "WhatsApp 동의로도 간주 (문구에 그렇게 적힌 경우에만)"
     }
   }
 }

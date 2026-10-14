@@ -73,6 +73,7 @@ export function BuilderScreen({ widgetId }: { widgetId?: string }) {
     <Builder
       initial={fromWidget(widget.data)}
       editing
+      widgetId={widget.data.id}
       installed={{ embedUrl: widget.data.embedUrl, previewUrl: widget.data.previewUrl }}
     />
   );
@@ -82,9 +83,12 @@ function Builder({
   initial,
   editing,
   installed = null,
+  widgetId = null,
 }: {
   initial: BuilderState;
   editing: boolean;
+  /** The saved widget's id (editing only). */
+  widgetId?: string | null;
   /** The addresses of a widget that already exists, so its install snippet is on the page from the start. */
   installed?: { embedUrl: string; previewUrl: string } | null;
 }) {
@@ -225,7 +229,7 @@ function Builder({
     () => [t('steps.setup'), t('steps.look'), t('steps.voice'), t('steps.launch')],
     [t],
   );
-  const stepProps = { s, set, flash };
+  const stepProps = { s, set, flash, widgetId };
 
   if (s.mode === 'whatsapp') {
     return (

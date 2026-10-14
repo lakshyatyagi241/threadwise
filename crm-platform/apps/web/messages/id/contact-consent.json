@@ -16,7 +16,8 @@
       "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
       "unexpected": "Terjadi kesalahan. Coba lagi.",
       "exportInProgress": "Berkas bukti sedang disiapkan. Tunggu hingga selesai, lalu coba lagi.",
-      "exportNotReady": "Berkas itu belum siap atau sudah kedaluwarsa. Siapkan yang baru."
+      "exportNotReady": "Berkas itu belum siap atau sudah kedaluwarsa. Siapkan yang baru.",
+      "noticeTargetMissing": "Widget, halaman pemesanan, atau toko itu sudah tidak ada."
     },
     "settings": {
       "title": "Persetujuan dan balasan STOP",
@@ -130,7 +131,10 @@
         "flow": "Alur",
         "inbound_message": "Pesan",
         "contact_request": "Permintaan kontak",
-        "legacy": "Sebelum riwayat persetujuan"
+        "legacy": "Sebelum riwayat persetujuan",
+        "widget": "Obrolan situs web",
+        "booking": "Halaman pemesanan",
+        "commerce": "Checkout toko"
       },
       "by": "oleh {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "File",
         "apiKeyId": "Kunci API",
         "flowId": "Alur",
-        "reference": "Referensi"
+        "reference": "Referensi",
+        "noticeVersion": "Versi pemberitahuan",
+        "noticeUrl": "Tautan pemberitahuan",
+        "widgetId": "Widget obrolan",
+        "bookingTypeId": "Halaman pemesanan",
+        "integrationId": "Toko",
+        "storeFlag": "Pengaturan toko"
       },
       "dialog": {
         "titleGranted": "Tandai sebagai berlangganan",
@@ -272,6 +282,30 @@
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Baris persetujuan di formulir obrolan",
+        "booking": "Baris persetujuan di halaman pemesanan",
+        "commerce": "Arti kotak centang pemasaran toko"
+      },
+      "intro": {
+        "widget": "Ditampilkan sebagai kotak centang di bawah data pengunjung. Hanya pengunjung yang mencentangnya yang dicatat setuju, dan hanya bila ia memberi nomor telepon atau email.",
+        "booking": "Ditampilkan sebagai kotak centang di formulir pemesanan. Hanya orang yang mencentangnya yang dicatat setuju; pemesanan tidak pernah membutuhkannya.",
+        "commerce": "Pelanggan yang menerima pemasaran di toko Anda dicatat setuju. Tulis apa yang dikatakan kotak itu kepadanya agar bukti menyebutnya."
+      },
+      "enabled": "Baris persetujuan aktif",
+      "text": "Kata-kata yang disetujui orang tersebut",
+      "textHint": "Hingga {max} karakter. Setiap perubahan disimpan sebagai versi baru.",
+      "textRequired": "Tulis kata-katanya sebelum mengaktifkan baris.",
+      "url": "Tautan ke kebijakan privasi Anda (opsional)",
+      "urlHint": "Harus diawali https://",
+      "save": "Simpan baris persetujuan",
+      "saved": "Baris persetujuan disimpan (versi {version}).",
+      "version": "Versi saat ini: {version}",
+      "noVersion": "Belum disimpan.",
+      "saveFirst": "Simpan ini dulu, lalu Anda dapat mengatur baris persetujuannya.",
+      "whatsappToo": "Hitung juga sebagai persetujuan WhatsApp (hanya jika kata-katanya menyatakannya)"
     }
   }
 }

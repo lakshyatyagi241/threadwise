@@ -76,6 +76,15 @@ Every key is optional (a missing key takes its default; unknown keys are dropped
 
 Errors are 422 `VALIDATION_FAILED` with the field path (for example `launcher.desktop.sideSpacing`).
 
+## Consent line (BL-167)
+
+An optional tick box under the intake form, written by the workspace through `PUT /v2/contact-consent/notices/widget/:widgetId` (versioned,
+see [contact-consent.md](contact-consent.md)). `GET /widget/:token/api/config` carries `widget.consent { text, version, url }` only when the line
+is on and the widget asks for a phone or an email; `POST /widget/:token/api/message` takes `consent` and `consent_version`. A first message
+never grants consent. A tick writes a ledger grant (source `widget`) on whatsapp (phone given) and email (address given) against the version the
+page showed, best effort in a savepoint so it can never lose the message. The visitor's contact is made by `ContactsService.resolveOrCreateByIdentity`
+(audit, plan contact cap; over the cap the thread has no contact and nothing is granted).
+
 ## Public (no sign-in, not versioned, `{ ok, error }` JSON errors)
 
 The token (48 characters, `[A-Za-z0-9]{16,80}` accepted by the route) is the only credential. The organization is found through the

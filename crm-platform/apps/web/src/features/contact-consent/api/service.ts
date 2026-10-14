@@ -1,10 +1,13 @@
 import { z } from 'zod';
 import type {
+  ConsentNotice,
+  ConsentNoticeScope,
   ConsentExport,
   ConsentExportList,
   ConsentSettings,
   ContactConsent,
   RecordConsentInput,
+  SaveConsentNoticeInput,
   TestConsentMessageInput,
   TestConsentMessageResult,
   UpdateConsentSettingsInput,
@@ -32,6 +35,8 @@ export interface ComposerConsentConfig {
 }
 const composer = shape<ComposerConsentConfig>('footerText', 'footerDefaultOn');
 
+const noticeShape = shape<ConsentNotice>('scope', 'ref', 'enabled', 'text', 'version');
+
 const exportsList = shape<ConsentExportList>('data', 'needsAsync');
 const oneExport = shape<ConsentExport>('id', 'status');
 
@@ -50,6 +55,14 @@ export const consentApi = {
   requestExport: () => apiFetch(`${BASE}/exports`, { method: 'POST', body: {}, schema: oneExport }),
   forContact: (contactId: string, signal?: AbortSignal) =>
     apiFetch(`${BASE}/contacts/${enc(contactId)}`, { schema: contactConsent, signal }),
+  notice: (scope: ConsentNoticeScope, ref: string, signal?: AbortSignal) =>
+    apiFetch(`${BASE}/notices/${scope}/${enc(ref)}`, { schema: noticeShape, signal }),
+  saveNotice: (scope: ConsentNoticeScope, ref: string, input: SaveConsentNoticeInput) =>
+    apiFetch(`${BASE}/notices/${scope}/${enc(ref)}`, {
+      method: 'PUT',
+      body: input,
+      schema: noticeShape,
+    }),
   record: (
     contactId: string,
     input: Partial<RecordConsentInput> & { action: 'granted' | 'withdrawn' },

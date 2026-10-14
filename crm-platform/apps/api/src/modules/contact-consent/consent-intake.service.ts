@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
@@ -6,6 +7,7 @@ import {
   type ConsentSource,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { hasProof, intakeEvidence } from './consent-intake.rules';
 import { ContactConsentService } from './consent.service';
@@ -54,6 +56,23 @@ export class ConsentIntakeService {
 
   /** Appends one `granted` event per channel inside the caller's transaction. Returns the channels that really got a new event. */
   async grant(tx: Tx, orgId: number, input: IntakeGrantInput): Promise<ConsentChannel[]> {
+    // The ledger's audit row names the context's workspace and actor. A public page or a webhook has none of its own: it acts as the
+    // system of THIS workspace; a request of the same workspace keeps its own actor.
+    const current = RequestContextStore.peek();
+    if (current && current.orgId === orgId) return this.write(tx, orgId, input);
+    return RequestContextStore.run(
+      {
+        requestId: `intake-${randomUUID()}`,
+        orgId,
+        actorType: 'system',
+        actorId: null,
+        userId: null,
+      },
+      () => this.write(tx, orgId, input),
+    );
+  }
+
+  private async write(tx: Tx, orgId: number, input: IntakeGrantInput): Promise<ConsentChannel[]> {
     const now = new Date();
     // A date from the caller can be earlier than now, never later: a future grant would outrank a STOP that arrives before it.
     const at = input.proof?.at ? new Date(input.proof.at) : now;

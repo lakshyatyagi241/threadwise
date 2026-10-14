@@ -16,7 +16,8 @@
       "validation": "Algunos valores no son válidos. Revisa el formulario e inténtalo de nuevo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo.",
       "exportInProgress": "Ya se está preparando un archivo de prueba. Espera a que termine y vuelve a intentarlo.",
-      "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara uno nuevo."
+      "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara uno nuevo.",
+      "noticeTargetMissing": "Ese widget, página de reservas o tienda ya no existe."
     },
     "settings": {
       "title": "Consentimiento y respuestas STOP",
@@ -130,7 +131,10 @@
         "flow": "Flujo",
         "inbound_message": "Mensaje",
         "contact_request": "Solicitud del contacto",
-        "legacy": "Antes del historial de consentimiento"
+        "legacy": "Antes del historial de consentimiento",
+        "widget": "Chat del sitio web",
+        "booking": "Página de reservas",
+        "commerce": "Pago en la tienda"
       },
       "by": "por {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "Archivo",
         "apiKeyId": "Clave de API",
         "flowId": "Flujo",
-        "reference": "Referencia"
+        "reference": "Referencia",
+        "noticeVersion": "Versión del aviso",
+        "noticeUrl": "Enlace del aviso",
+        "widgetId": "Widget de chat",
+        "bookingTypeId": "Página de reservas",
+        "integrationId": "Tienda",
+        "storeFlag": "Ajuste de la tienda"
       },
       "dialog": {
         "titleGranted": "Marcar como suscrito",
@@ -272,6 +282,30 @@
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Línea de consentimiento en el formulario del chat",
+        "booking": "Línea de consentimiento en la página de reservas",
+        "commerce": "Qué significa la casilla de marketing de la tienda"
+      },
+      "intro": {
+        "widget": "Se muestra como una casilla bajo los datos del visitante. Solo se registra como que acepta quien la marca, y solo si dio un teléfono o un correo.",
+        "booking": "Se muestra como una casilla en el formulario de reserva. Solo se registra como que acepta quien la marca; reservar nunca la exige.",
+        "commerce": "Un cliente que acepta marketing en su tienda se registra como que acepta. Escriba lo que esa casilla le dice, para que la prueba lo nombre."
+      },
+      "enabled": "Línea de consentimiento activada",
+      "text": "Texto que la persona acepta",
+      "textHint": "Hasta {max} caracteres. Cada cambio se guarda como una versión nueva.",
+      "textRequired": "Escriba el texto antes de activar la línea.",
+      "url": "Enlace a su política de privacidad (opcional)",
+      "urlHint": "Debe empezar por https://",
+      "save": "Guardar la línea de consentimiento",
+      "saved": "Línea de consentimiento guardada (versión {version}).",
+      "version": "Versión actual: {version}",
+      "noVersion": "Aún no guardada.",
+      "saveFirst": "Guarde esto primero y luego podrá definir su línea de consentimiento.",
+      "whatsappToo": "Contar también como consentimiento de WhatsApp (solo si el texto lo dice)"
     }
   }
 }

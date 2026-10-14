@@ -217,6 +217,27 @@ export class SqlInboxGateway implements InboxGateway {
     return { id: conversationId, created: true };
   }
 
+  async contactOf(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    details: { email: string | null; phone: string | null },
+  ): Promise<number | null> {
+    const res = await tx.execute(
+      sql`SELECT contact_id FROM conversations WHERE org_id = ${orgId} AND id = ${conversationId}`,
+    );
+    const raw = (res.rows[0] as { contact_id: number | string | null } | undefined)?.contact_id;
+    if (raw === null || raw === undefined) return null;
+    const contactId = Number(raw);
+    const digits = phoneDigits(details.phone);
+    await tx.execute(sql`
+      UPDATE contacts SET email = COALESCE(email, ${details.email}),
+                          phone = COALESCE(phone, ${digits === '' ? null : `+${digits}`})
+      WHERE org_id = ${orgId} AND id = ${contactId}
+        AND ((email IS NULL AND ${details.email}::text IS NOT NULL) OR (phone IS NULL AND ${digits === '' ? null : digits}::text IS NOT NULL))`);
+    return contactId;
+  }
+
   /** The webchat channel of a widget, created on its first thread and renamed with the widget. */
   private async ensureChannel(tx: Tx, orgId: number, widget: WidgetForInbox): Promise<number> {
     const res = await tx.execute(sql`

@@ -40,6 +40,11 @@ export const CONSENT_SOURCES = [
   'inbound_message',
   'contact_request',
   'legacy',
+  // Intake sources (BL-167, migration 20261203090000): the agreement was given on the website chat widget, on a booking page, or at a
+  // store checkout (Shopify / WooCommerce marketing consent).
+  'widget',
+  'booking',
+  'commerce',
 ] as const;
 export const consentSourceSchema = z.enum(CONSENT_SOURCES);
 export type ConsentSource = z.infer<typeof consentSourceSchema>;
@@ -160,6 +165,13 @@ export const CONSENT_EVIDENCE_KEYS = [
   'apiKeyId',
   'flowId',
   'reference',
+  // Intake evidence (BL-167): the version and address of the notice the person saw, and where they agreed.
+  'noticeVersion',
+  'noticeUrl',
+  'widgetId',
+  'bookingTypeId',
+  'integrationId',
+  'storeFlag',
 ] as const;
 
 export const recordConsentSchema = z.object({

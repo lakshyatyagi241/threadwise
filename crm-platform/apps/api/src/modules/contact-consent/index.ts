@@ -23,6 +23,7 @@ export {
 } from './consent-gate.rules';
 export { CONSENT_GATE_ALLOWLIST, SEND_PRIMITIVES } from './consent-gate.allowlist';
 export { ConsentIntakeService, type IntakeGrantInput } from './consent-intake.service';
+export { ConsentNoticeService } from './consent-notice.service';
 export {
   hasProof,
   intakeEvidence,

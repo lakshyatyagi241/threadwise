@@ -16,7 +16,8 @@
       "validation": "Certaines valeurs ne sont pas valides. Vérifiez le formulaire et réessayez.",
       "unexpected": "Une erreur s'est produite. Réessayez.",
       "exportInProgress": "Un fichier de preuve est déjà en cours de préparation. Patientez jusqu'à la fin, puis réessayez.",
-      "exportNotReady": "Ce fichier n'est pas prêt ou a expiré. Préparez-en un nouveau."
+      "exportNotReady": "Ce fichier n'est pas prêt ou a expiré. Préparez-en un nouveau.",
+      "noticeTargetMissing": "Ce widget, cette page de réservation ou cette boutique n'existe plus."
     },
     "settings": {
       "title": "Consentement et réponses STOP",
@@ -130,7 +131,10 @@
         "flow": "Flux",
         "inbound_message": "Message",
         "contact_request": "Demande de contact",
-        "legacy": "Avant l'historique du consentement"
+        "legacy": "Avant l'historique du consentement",
+        "widget": "Chat du site web",
+        "booking": "Page de réservation",
+        "commerce": "Paiement en boutique"
       },
       "by": "par {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "Fichier",
         "apiKeyId": "Clé API",
         "flowId": "Flux",
-        "reference": "Référence"
+        "reference": "Référence",
+        "noticeVersion": "Version de l'avis",
+        "noticeUrl": "Lien de l'avis",
+        "widgetId": "Widget de chat",
+        "bookingTypeId": "Page de réservation",
+        "integrationId": "Boutique",
+        "storeFlag": "Réglage de la boutique"
       },
       "dialog": {
         "titleGranted": "Marquer comme inscrit",
@@ -272,6 +282,30 @@
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Ligne de consentement dans le formulaire du chat",
+        "booking": "Ligne de consentement sur la page de réservation",
+        "commerce": "Ce que signifie la case marketing de la boutique"
+      },
+      "intro": {
+        "widget": "Affichée sous forme de case à cocher sous les coordonnées du visiteur. Seul un visiteur qui la coche est enregistré comme consentant, et seulement s'il a donné un téléphone ou un e-mail.",
+        "booking": "Affichée sous forme de case à cocher dans le formulaire de réservation. Seule la personne qui la coche est enregistrée comme consentante ; réserver ne l'exige jamais.",
+        "commerce": "Un client qui accepte le marketing dans votre boutique est enregistré comme consentant. Écrivez ce que cette case lui dit, pour que la preuve le mentionne."
+      },
+      "enabled": "Ligne de consentement activée",
+      "text": "Texte auquel la personne consent",
+      "textHint": "Jusqu'à {max} caractères. Chaque modification est enregistrée comme une nouvelle version.",
+      "textRequired": "Écrivez le texte avant d'activer la ligne.",
+      "url": "Lien vers votre politique de confidentialité (facultatif)",
+      "urlHint": "Doit commencer par https://",
+      "save": "Enregistrer la ligne de consentement",
+      "saved": "Ligne de consentement enregistrée (version {version}).",
+      "version": "Version actuelle : {version}",
+      "noVersion": "Pas encore enregistrée.",
+      "saveFirst": "Enregistrez d'abord, vous pourrez ensuite définir sa ligne de consentement.",
+      "whatsappToo": "Compter aussi comme consentement WhatsApp (seulement si le texte le dit)"
     }
   }
 }

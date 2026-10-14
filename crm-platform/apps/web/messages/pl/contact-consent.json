@@ -16,7 +16,8 @@
       "validation": "Niektóre wartości są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
       "exportInProgress": "Plik dowodowy jest już przygotowywany. Poczekaj, aż zostanie gotowy, a następnie spróbuj ponownie.",
-      "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Przygotuj nowy."
+      "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Przygotuj nowy.",
+      "noticeTargetMissing": "Ten widżet, strona rezerwacji lub sklep już nie istnieje."
     },
     "settings": {
       "title": "Zgody i odpowiedzi STOP",
@@ -130,7 +131,10 @@
         "flow": "Przepływ",
         "inbound_message": "Wiadomość",
         "contact_request": "Prośba o kontakt",
-        "legacy": "Sprzed historii zgód"
+        "legacy": "Sprzed historii zgód",
+        "widget": "Czat na stronie",
+        "booking": "Strona rezerwacji",
+        "commerce": "Kasa sklepu"
       },
       "by": "przez {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "Plik",
         "apiKeyId": "Klucz API",
         "flowId": "Przepływ",
-        "reference": "Odniesienie"
+        "reference": "Odniesienie",
+        "noticeVersion": "Wersja informacji",
+        "noticeUrl": "Link do informacji",
+        "widgetId": "Widżet czatu",
+        "bookingTypeId": "Strona rezerwacji",
+        "integrationId": "Sklep",
+        "storeFlag": "Ustawienie sklepu"
       },
       "dialog": {
         "titleGranted": "Oznacz jako zapisanego",
@@ -272,6 +282,30 @@
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Wiersz zgody w formularzu czatu",
+        "booking": "Wiersz zgody na stronie rezerwacji",
+        "commerce": "Co oznacza pole marketingowe sklepu"
+      },
+      "intro": {
+        "widget": "Wyświetlany jako pole wyboru pod danymi odwiedzającego. Tylko odwiedzający, który je zaznaczy, jest zapisany jako zgadzający się, i tylko gdy podał telefon lub e-mail.",
+        "booking": "Wyświetlany jako pole wyboru w formularzu rezerwacji. Tylko osoba, która je zaznaczy, jest zapisana jako zgadzająca się; rezerwacja nigdy go nie wymaga.",
+        "commerce": "Klient, który w Twoim sklepie akceptuje marketing, jest zapisany jako zgadzający się. Napisz, co mówi mu to pole, aby dowód to wskazywał."
+      },
+      "enabled": "Wiersz zgody włączony",
+      "text": "Treść, na którą osoba wyraża zgodę",
+      "textHint": "Do {max} znaków. Każda zmiana jest zapisywana jako nowa wersja.",
+      "textRequired": "Wpisz treść przed włączeniem wiersza.",
+      "url": "Link do polityki prywatności (opcjonalnie)",
+      "urlHint": "Musi zaczynać się od https://",
+      "save": "Zapisz wiersz zgody",
+      "saved": "Wiersz zgody zapisany (wersja {version}).",
+      "version": "Bieżąca wersja: {version}",
+      "noVersion": "Jeszcze nie zapisano.",
+      "saveFirst": "Najpierw to zapisz, potem ustawisz jego wiersz zgody.",
+      "whatsappToo": "Licz także jako zgodę na WhatsApp (tylko jeśli treść tak mówi)"
     }
   }
 }

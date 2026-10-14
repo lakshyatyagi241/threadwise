@@ -187,6 +187,21 @@ describe('buildBookInput', () => {
     expect(built.input.phone).toBe('+34 600 111 222');
     expect(built.input.answers).toEqual([]);
   });
+
+  it('carries the consent line only when the visitor ticked it, with the version they saw', () => {
+    const base = {
+      startsAt: '2026-10-06T04:00:00.000Z',
+      zone: 'UTC',
+      details: { name: 'Ana', email: 'ana@acme.test', phone: '' },
+      questions: [],
+      values: {},
+    };
+    expect('consent' in buildBookInput(base).input).toBe(false);
+    expect(buildBookInput({ ...base, consentVersion: 3 }).input.consent).toEqual({
+      given: true,
+      version: 3,
+    });
+  });
 });
 
 describe('placeServerErrors', () => {

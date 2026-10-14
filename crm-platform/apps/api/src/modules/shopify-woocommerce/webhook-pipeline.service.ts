@@ -8,6 +8,7 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
 import { WOOCOMMERCE, type WooFactory } from '../../infra/providers/ecom/ecom.port';
 import { QUEUES } from '../../infra/queue/queues';
+import { ConsentNoticeService } from '../contact-consent';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import {
   PAID_ORDER_HOOK,
@@ -65,6 +66,7 @@ export class WebhookPipelineService {
   constructor(
     private readonly db: DatabaseService,
     private readonly stores: StoresRepository,
+    private readonly notices: ConsentNoticeService,
     private readonly mirrorRepo: MirrorRepository,
     private readonly events: EventsRepository,
     private readonly message: EventMessageService,
@@ -448,7 +450,21 @@ export class WebhookPipelineService {
           await this.stores.mergeMetadata(tx, orgId, kind, storeId, {
             [kind === 'shopify' ? 'shopify_group_id' : 'woo_group_id']: group,
           });
-        await this.mirror.upsertCustomer(tx, orgId, store.userId, kind, m, group);
+        const notice = await this.notices.publicCurrent(
+          tx,
+          orgId,
+          'commerce',
+          `${kind}:${store.uuid}`,
+        );
+        await this.mirror.upsertCustomer(
+          tx,
+          orgId,
+          store.userId,
+          kind,
+          m,
+          group,
+          notice ? { ref: `${kind}:${store.uuid}`, notice } : undefined,
+        );
       });
     }
   }

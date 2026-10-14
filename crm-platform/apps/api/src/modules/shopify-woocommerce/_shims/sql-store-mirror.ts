@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import type { ConsentChannel } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { CONTACT_RESOLVER, type ContactResolverPort } from '../../crm/contact-resolver.port';
+import { ConsentIntakeService } from '../../contact-consent';
 import { ContactsService } from '../../crm';
 import { recomputeProductAggregate } from '../../catalog-products';
 import {
@@ -11,7 +13,7 @@ import {
   type MirrorProduct,
   type StoreKind,
 } from '../mirror-rules';
-import type { StoreMirror } from './tokens';
+import type { StoreConsent, StoreMirror } from './tokens';
 
 /** The store's id column on `wa_products` and `wa_orders`. Constants, never user input. */
 const PRODUCT_ID = { shopify: 'shopify_product_id', woocommerce: 'woo_product_id' } as const;
@@ -31,6 +33,7 @@ export class SqlStoreMirror implements StoreMirror {
   constructor(
     @Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort,
     private readonly contactsService: ContactsService,
+    private readonly consentIntake: ConsentIntakeService,
   ) {}
 
   async upsertProduct(
@@ -236,6 +239,7 @@ export class SqlStoreMirror implements StoreMirror {
     kind: StoreKind,
     c: MirrorCustomer,
     groupId: number,
+    consent?: StoreConsent,
   ): Promise<boolean> {
     await lock(tx, `ecom-customer:${orgId}:${c.phone}`);
     // A contact is found by its number, as digits or with a leading `+`: the stored number may be either.
@@ -264,6 +268,34 @@ export class SqlStoreMirror implements StoreMirror {
             total_spent: c.totalSpent,
           })}::jsonb || coalesce(data, '{}'::jsonb)
       WHERE org_id = ${orgId} AND id = ${contactId}`);
+    // The store's own marketing choice, recorded only when the merchant switched the store's consent line on (it names the wording the
+    // checkbox stands for) and the customer really said yes there. Never over a withdrawal; once per customer and wording version.
+    if (consent && c.marketing) {
+      const channels: ConsentChannel[] = [];
+      if (c.marketing.email && c.email) channels.push('email');
+      if (c.marketing.sms) channels.push('sms');
+      if (consent.notice.channels.includes('whatsapp')) channels.push('whatsapp');
+      if (channels.length > 0) {
+        await this.consentIntake.grant(tx, orgId, {
+          contactId,
+          channels,
+          source: 'commerce',
+          proof: {
+            text: consent.notice.text,
+            version: String(consent.notice.version),
+            ...(c.marketing.at ? { at: c.marketing.at } : {}),
+          },
+          evidence: {
+            integrationId: consent.ref,
+            noticeVersion: String(consent.notice.version),
+            noticeUrl: consent.notice.url,
+            storeFlag: c.marketing.flag,
+          },
+          keyBase: `commerce:${consent.ref}:${c.storeId}:v${consent.notice.version}`,
+          fallbackNote: `Accepted marketing in the store (${c.marketing.flag})`,
+        });
+      }
+    }
     await tx.execute(sql`
       INSERT INTO contact_group_members (org_id, contact_id, group_id) VALUES (${orgId}, ${contactId}, ${groupId})
       ON CONFLICT (org_id, contact_id, group_id) DO NOTHING`);

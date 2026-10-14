@@ -122,6 +122,16 @@ export interface InboxGateway {
     assistantUuid: string | null,
     body: string,
   ): Promise<{ id: number; sentAt: Date }>;
+  /**
+   * The contact a thread belongs to, or null (none was made: the plan's contact cap, or a failure). Blank phone and email of that contact
+   * are filled from what the visitor gave, so a consent recorded for a channel is on a contact that can be reached there.
+   */
+  contactOf(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    details: { email: string | null; phone: string | null },
+  ): Promise<number | null>;
   /** The uuid of the `webchat` channel that carries a thread: the id the ingest queue names a channel by. */
   channelUuidOf(tx: Tx, orgId: number, conversationId: number): Promise<string>;
   /** Reference rule (TW-WGT-017): any outbound line after the opening line counts as a person having taken over; see the gateway. */

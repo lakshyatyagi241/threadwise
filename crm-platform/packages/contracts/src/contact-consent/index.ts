@@ -5,3 +5,4 @@ export * from './keywords';
 export * from './settings';
 export * from './exports';
 export * from './intake';
+export * from './notice';

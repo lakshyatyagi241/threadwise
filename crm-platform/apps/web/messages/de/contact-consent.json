@@ -16,7 +16,8 @@
       "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
       "exportInProgress": "Eine Nachweisdatei wird bereits erstellt. Warte, bis sie fertig ist, und versuche es dann erneut.",
-      "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Erstelle eine neue."
+      "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Erstelle eine neue.",
+      "noticeTargetMissing": "Dieses Widget, diese Buchungsseite oder dieser Shop existiert nicht mehr."
     },
     "settings": {
       "title": "Einwilligung und STOP-Antworten",
@@ -130,7 +131,10 @@
         "flow": "Flow",
         "inbound_message": "Nachricht",
         "contact_request": "Kontaktanfrage",
-        "legacy": "Vor dem Einwilligungsverlauf"
+        "legacy": "Vor dem Einwilligungsverlauf",
+        "widget": "Website-Chat",
+        "booking": "Buchungsseite",
+        "commerce": "Shop-Kasse"
       },
       "by": "von {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "Datei",
         "apiKeyId": "API-Schlüssel",
         "flowId": "Flow",
-        "reference": "Referenz"
+        "reference": "Referenz",
+        "noticeVersion": "Version des Hinweises",
+        "noticeUrl": "Link zum Hinweis",
+        "widgetId": "Chat-Widget",
+        "bookingTypeId": "Buchungsseite",
+        "integrationId": "Shop",
+        "storeFlag": "Shop-Einstellung"
       },
       "dialog": {
         "titleGranted": "Als angemeldet markieren",
@@ -272,6 +282,30 @@
         "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Einwilligungszeile im Chat-Formular",
+        "booking": "Einwilligungszeile auf der Buchungsseite",
+        "commerce": "Wofür das Marketing-Kästchen des Shops steht"
+      },
+      "intro": {
+        "widget": "Wird als Kästchen unter den Angaben des Besuchers angezeigt. Nur wer es ankreuzt, wird als zustimmend erfasst, und nur wenn eine Telefonnummer oder E-Mail angegeben wurde.",
+        "booking": "Wird als Kästchen im Buchungsformular angezeigt. Nur wer es ankreuzt, wird als zustimmend erfasst; für die Buchung ist es nie nötig.",
+        "commerce": "Ein Kunde, der in Ihrem Shop Marketing akzeptiert, wird als zustimmend erfasst. Schreiben Sie, was das Kästchen ihm sagt, damit der Nachweis es nennt."
+      },
+      "enabled": "Einwilligungszeile an",
+      "text": "Wortlaut, dem die Person zustimmt",
+      "textHint": "Bis zu {max} Zeichen. Jede Änderung wird als neue Version gespeichert.",
+      "textRequired": "Schreiben Sie den Wortlaut, bevor Sie die Zeile einschalten.",
+      "url": "Link zu Ihrer Datenschutzerklärung (optional)",
+      "urlHint": "Muss mit https:// beginnen",
+      "save": "Einwilligungszeile speichern",
+      "saved": "Einwilligungszeile gespeichert (Version {version}).",
+      "version": "Aktuelle Version: {version}",
+      "noVersion": "Noch nicht gespeichert.",
+      "saveFirst": "Speichern Sie dies zuerst, dann können Sie die Einwilligungszeile festlegen.",
+      "whatsappToo": "Auch als WhatsApp-Einwilligung zählen (nur wenn der Wortlaut das sagt)"
     }
   }
 }
