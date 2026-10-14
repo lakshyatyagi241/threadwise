@@ -602,8 +602,6 @@
       "eyebrow": "WhatsApp",
       "title": "Een sjabloon verzenden",
       "close": "Sluiten",
-      "cancel": "Annuleren",
-      "back": "Terug naar sjablonen",
       "search": "Zoeken op naam of tekst",
       "searchLabel": "Sjablonen zoeken",
       "loading": "Sjablonen laden",
@@ -612,9 +610,7 @@
       "empty": "Er zijn nog geen goedgekeurde sjablonen voor dit WhatsApp-nummer. Maak er een aan bij Sjablonen en wacht tot Meta het goedkeurt.",
       "noResults": "Geen sjabloon past bij je zoekopdracht.",
       "windowHint": "Een sjabloon werkt ook als het antwoordvenster van 24 uur is gesloten.",
-      "variables": "Vul de variabelen in",
       "preview": "Wat de klant zal lezen",
-      "send": "Sjabloon verzenden",
       "sending": "Verzenden",
       "sent": "Sjabloon verzonden",
       "problem": {
@@ -629,7 +625,31 @@
         "authentication": "Sjablonen met een eenmalige code worden door het systeem verzonden, niet vanuit de inbox.",
         "named_variables": "Gebruikt benoemde variabelen, die de inbox nog niet ondersteunt."
       },
-      "hasMore": "De eerste {count} sjablonen worden getoond. Zoek op naam of tekst om de andere te vinden."
+      "hasMore": "De eerste {count} sjablonen worden getoond. Zoek op naam of tekst om de andere te vinden.",
+      "previewEmpty": "Wijs een sjabloon aan om te zien hoe het eruitziet op de telefoon van de klant.",
+      "previewCustomer": "Klant",
+      "noVariables": "Deze sjabloon heeft niets om in te vullen. Controleer de telefoon en verstuur hem.",
+      "sendTo": "Verstuur naar {name}",
+      "refresh": "Lijst vernieuwen",
+      "device": "Telefoonvoorbeeld",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Body-variabelen configureren",
+      "or": "of",
+      "mapField": "Koppel een veld aan {key}",
+      "mapNone": "Dit contact heeft geen gegevens om te koppelen.",
+      "typeMessage": "Typ een bericht",
+      "fields": {
+        "name": "Naam",
+        "phone": "Telefoon",
+        "email": "E-mail"
+      },
+      "create": "Nieuwe sjabloon maken",
+      "actions": "Sjabloonacties",
+      "edit": "Sjabloon bewerken",
+      "duplicate": "Sjabloon dupliceren"
     },
     "log": {
       "title": "Bezorglogboek",

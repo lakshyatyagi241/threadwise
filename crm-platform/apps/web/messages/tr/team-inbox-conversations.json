@@ -602,8 +602,6 @@
       "eyebrow": "WhatsApp",
       "title": "Şablon gönder",
       "close": "Kapat",
-      "cancel": "İptal",
-      "back": "Şablonlara dön",
       "search": "Ad veya metne göre ara",
       "searchLabel": "Şablonlarda ara",
       "loading": "Şablonlar yükleniyor",
@@ -612,9 +610,7 @@
       "empty": "Bu WhatsApp numarası için henüz onaylı şablon yok. Şablonlar bölümünde bir şablon oluşturun ve Meta onayını bekleyin.",
       "noResults": "Aramanızla eşleşen şablon yok.",
       "windowHint": "Şablon, 24 saatlik yanıt penceresi kapansa bile çalışır.",
-      "variables": "Değişkenleri doldurun",
       "preview": "Müşterinin okuyacakları",
-      "send": "Şablonu gönder",
       "sending": "Gönderiliyor",
       "sent": "Şablon gönderildi",
       "problem": {
@@ -629,7 +625,31 @@
         "authentication": "Tek kullanımlık şifre şablonları gelen kutusundan değil, sistem tarafından gönderilir.",
         "named_variables": "Gelen kutusunun henüz desteklemediği adlandırılmış değişkenler kullanır."
       },
-      "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın."
+      "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın.",
+      "previewEmpty": "Müşterinin telefonunda nasıl görüneceğini görmek için bir şablonun üzerine gelin.",
+      "previewCustomer": "Müşteri",
+      "noVariables": "Bu şablonda doldurulacak bir şey yok. Telefonu kontrol edin, sonra gönderin.",
+      "sendTo": "{name} kişisine gönder",
+      "refresh": "Listeyi yenile",
+      "device": "Telefon önizlemesi",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Gövde değişkenlerini yapılandır",
+      "or": "veya",
+      "mapField": "{key} için alan eşle",
+      "mapNone": "Bu kişide eşlenecek bilgi yok.",
+      "typeMessage": "Bir mesaj yazın",
+      "fields": {
+        "name": "Ad",
+        "phone": "Telefon",
+        "email": "E-posta"
+      },
+      "create": "Yeni şablon oluştur",
+      "actions": "Şablon işlemleri",
+      "edit": "Şablonu düzenle",
+      "duplicate": "Şablonu çoğalt"
     },
     "log": {
       "title": "Teslimat günlüğü",
