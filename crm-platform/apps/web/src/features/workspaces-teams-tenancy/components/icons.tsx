@@ -60,3 +60,8 @@ export const InfoIcon = ({ className = 'size-3' }: { className?: string }) => (
     <path d="M8 5v3l2 2" />
   </Icon>
 );
+export const CalendarIcon = () => (
+  <Icon>
+    <path d="M3 4.5h10v8.5H3zM3 7.5h10M5.5 3v3M10.5 3v3" />
+  </Icon>
+);

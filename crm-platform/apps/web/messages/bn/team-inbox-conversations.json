@@ -448,7 +448,9 @@
         "unassign": "বরাদ্দ সরান",
         "open": "{count}টি খোলা",
         "pickTeam": "এই কথোপকথনের জন্য একটি টিম বেছে নিন",
-        "noTeam": "কোনো টিম নেই"
+        "noTeam": "কোনো টিম নেই",
+        "onLeave": "ছুটিতে আছেন",
+        "onLeaveUntil": "{date} পর্যন্ত ছুটিতে"
       },
       "presence": {
         "online": "অনলাইন",
@@ -933,7 +935,9 @@
       },
       "tag": "ট্যাগ",
       "tagAdd": "ট্যাগ যোগ করুন",
-      "tagRemove": "ট্যাগ সরান"
+      "tagRemove": "ট্যাগ সরান",
+      "onLeave": "ছুটিতে",
+      "onLeaveUntil": "{date} পর্যন্ত ছুটিতে"
     },
     "tags": {
       "tag": "ট্যাগ",

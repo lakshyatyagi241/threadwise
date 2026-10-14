@@ -448,7 +448,9 @@
         "unassign": "Batalkan penugasan",
         "open": "{count} terbuka",
         "pickTeam": "Pilih tim untuk percakapan ini",
-        "noTeam": "Tanpa tim"
+        "noTeam": "Tanpa tim",
+        "onLeave": "Sedang cuti",
+        "onLeaveUntil": "Cuti hingga {date}"
       },
       "presence": {
         "online": "Daring",
@@ -933,7 +935,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Tambah tag",
-      "tagRemove": "Hapus tag"
+      "tagRemove": "Hapus tag",
+      "onLeave": "sedang cuti",
+      "onLeaveUntil": "cuti hingga {date}"
     },
     "tags": {
       "tag": "Tag",

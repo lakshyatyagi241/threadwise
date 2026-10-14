@@ -11,7 +11,8 @@
       "copied": "복사됨",
       "retry": "다시 시도",
       "loadMore": "더 보기",
-      "loadingMore": "불러오는 중"
+      "loadingMore": "불러오는 중",
+      "loading": "불러오는 중"
     },
     "tiers": {
       "owner": "소유자",
@@ -95,7 +96,11 @@
       "linkReset": "이 서버에 이메일이 설정되어 있지 않으므로 이 링크를 직접 전달하세요. 한 번만 사용할 수 있습니다.",
       "linkInvite": "이 서버에 이메일이 설정되어 있지 않으므로 이 링크를 직접 전달하세요. 한 번만 사용할 수 있으며 {days, plural, other {#일}} 후에 만료됩니다.",
       "linkLabel": "일회용 링크",
-      "linkEmail": "이메일"
+      "linkEmail": "이메일",
+      "onLeaveUntil": "{date}까지 휴가 중",
+      "onLeaveOpen": "휴가 중",
+      "leaveFrom": "{date}부터 휴가",
+      "leaveAction": "휴가 및 대리인"
     },
     "invite": {
       "eyebrow": "워크스페이스",
@@ -214,7 +219,13 @@
       "teamNameTaken": "같은 이름의 팀이 이미 있습니다.",
       "teamMemberUnknown": "선택한 사용자 중 한 명이 이 워크스페이스에 없습니다.",
       "orgSuspended": "이 워크스페이스는 일시 중지되었습니다.",
-      "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도하세요."
+      "unexpected": "문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+      "leaveOverlap": "이 사람은 이 날짜와 하루 이상 겹치는 휴가가 이미 있습니다.",
+      "leaveInvalid": "사용할 수 없는 날짜입니다. 첫날은 과거일 수 없으며, 이미 시작된 휴가의 첫날은 바꿀 수 없습니다.",
+      "delegateInvalid": "대리인은 이 워크스페이스의 다른 활성 구성원이어야 합니다.",
+      "delegateCycle": "순환이 생기게 됩니다. 선택한 사람이 이미 이 사람을 대리인으로 지정했습니다.",
+      "reassignInvalid": "재배정된 항목이 없습니다. 이 사람이 연락처나 진행 중인 거래를 가지고 있는지, 대상이 인수할 수 있는지 확인하세요.",
+      "reassignNotRestorable": "이 재배정은 더 이상 되돌릴 수 없습니다."
     },
     "accept": {
       "title": "워크스페이스에 참여하기",
@@ -234,6 +245,81 @@
       "submit": "초대 수락",
       "submitting": "참여 중",
       "invalidHeading": "초대 링크"
+    },
+    "leave": {
+      "eyebrow": "휴가 및 대리인",
+      "calendarNote": "날짜는 워크스페이스 달력({timezone})의 날짜입니다.",
+      "nowTitle": "현재 휴가 중",
+      "upcomingTitle": "예정됨",
+      "notAway": "현재 휴가 중이 아닙니다.",
+      "range": "{from}부터 {to}까지",
+      "rangeOpen": "{from}부터, 종료일 없음",
+      "reasonShown": "사유(관리자에게만 표시): {reason}",
+      "endNow": "지금 휴가 종료",
+      "cancelLeave": "휴가 취소",
+      "endTitle": "이 휴가를 지금 종료할까요?",
+      "endMessage": "오늘 복귀합니다. 자동 배정에서 다시 이 사람을 선택하게 됩니다.",
+      "cancelTitle": "이 휴가를 취소할까요?",
+      "cancelMessage": "아직 시작되지 않았습니다. 삭제됩니다.",
+      "ended": "휴가를 종료했습니다.",
+      "added": "휴가를 저장했습니다.",
+      "readOnly": "본인과 관리자만 휴가를 변경할 수 있습니다.",
+      "addTitle": "휴가 추가",
+      "firstDay": "첫날",
+      "lastDay": "마지막 날",
+      "openEnded": "아직 종료일 없음(누군가 종료할 때까지)",
+      "reason": "사유(선택)",
+      "reasonHint": "본인과 관리자에게만 표시됩니다.",
+      "addSubmit": "휴가 저장",
+      "problems": {
+        "startRequired": "첫날을 선택하세요.",
+        "startPast": "첫날은 과거일 수 없습니다.",
+        "endRequired": "마지막 날을 선택하거나 '종료일 없음'을 선택하세요.",
+        "endBeforeStart": "마지막 날은 첫날보다 앞설 수 없습니다."
+      },
+      "delegateTitle": "대리인",
+      "delegateHelp": "이 사람이 휴가 중일 때는 새 채팅과 자동 배정이 대리인에게 가며, 대리인이 불가능하면 팀으로 갑니다.",
+      "noDelegate": "대리인 없음",
+      "delegateSaved": "대리인을 저장했습니다.",
+      "delegateRemoved": "대리인을 삭제했습니다.",
+      "delegateAway": "{name}님도 휴가 중이라 지금은 대리할 수 없습니다."
+    },
+    "reassign": {
+      "title": "연락처 및 거래 재배정",
+      "holds": "{name}님이 {contacts, plural, other {연락처 #개}}와 {chats, plural, other {진행 중인 채팅 #개}}를 담당하고 있습니다.",
+      "target": "배정 대상",
+      "kindUser": "한 사람",
+      "kindDelegate": "대리인",
+      "kindTeam": "팀(라운드 로빈)",
+      "person": "사람",
+      "team": "팀",
+      "teamHint": "자리에 있고 휴가 중이 아닌 구성원에게 돌아가며 배분됩니다.",
+      "choose": "선택",
+      "includeDeals": "진행 중인 거래 포함",
+      "returnOn": "본인이 복귀하는 {date}에 되돌리기",
+      "returnUnavailable": "본인이 복귀하면 되돌리기(마지막 날이 있는 휴가 필요)",
+      "returnHelp": "그 이후 아무도 변경하지 않은 연락처와 거래만 돌아옵니다. {days}일 동안은 직접 되돌릴 수도 있습니다.",
+      "reason": "메모(선택)",
+      "submit": "검토 후 재배정",
+      "confirmTitle": "지금 재배정할까요?",
+      "confirmMessage": "{name}님의 {contacts, plural, other {연락처 #개}}와 {deals, plural, other {진행 중인 거래 #개}}가 이동합니다.",
+      "confirm": "재배정",
+      "done": "{contacts, plural, other {연락처 #개}}와 {deals, plural, other {거래 #개}}를 이동했습니다.",
+      "history": "이전 재배정",
+      "historyEmpty": "아직 재배정한 항목이 없습니다.",
+      "status": {
+        "applied": "이동됨",
+        "restored": "되돌림",
+        "restore_blocked": "되돌리지 못함"
+      },
+      "summary": "연락처 {contacts}개와 거래 {deals}개를 {target}에게",
+      "returnsOn": "{date}에 복귀",
+      "restoredSummary": "{restored}개 되돌림, {skipped}개는 그대로 둠",
+      "remaining": "{count}개를 더 이동해야 합니다. 다시 실행하세요",
+      "undo": "되돌리기",
+      "undoTitle": "이 재배정을 되돌릴까요?",
+      "undoMessage": "그 이후 아무도 변경하지 않은 연락처와 거래는 이전 담당자에게 돌아갑니다. 나머지는 그대로 유지됩니다.",
+      "restored": "{count}개 되돌림, {skipped}개는 그대로 둠."
     }
   }
 }

@@ -359,6 +359,11 @@
         "label": "Wydajność zespołu",
         "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
         "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
+      },
+      "contact-assignment": {
+        "label": "Przypisywanie kontaktów",
+        "description": "Automatycznie przydzielaj nowe kontakty i transakcje właściwej osobie, pomijając osoby na urlopie.",
+        "keywords": "przypisanie, właściciel, round robin, nowy kontakt, nowa transakcja, urlop, routing leadów"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

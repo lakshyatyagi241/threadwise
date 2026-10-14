@@ -448,7 +448,9 @@
         "unassign": "Toewijzing ongedaan maken",
         "open": "{count} open",
         "pickTeam": "Kies een team voor dit gesprek",
-        "noTeam": "Geen team"
+        "noTeam": "Geen team",
+        "onLeave": "Met verlof",
+        "onLeaveUntil": "Met verlof tot {date}"
       },
       "presence": {
         "online": "Online",
@@ -933,7 +935,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Tag toevoegen",
-      "tagRemove": "Tag verwijderen"
+      "tagRemove": "Tag verwijderen",
+      "onLeave": "met verlof",
+      "onLeaveUntil": "met verlof tot {date}"
     },
     "tags": {
       "tag": "Tag",

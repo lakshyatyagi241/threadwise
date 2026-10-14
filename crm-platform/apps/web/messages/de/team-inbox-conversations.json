@@ -448,7 +448,9 @@
         "unassign": "Zuweisung aufheben",
         "open": "{count} offen",
         "pickTeam": "Wählen Sie ein Team für diese Unterhaltung",
-        "noTeam": "Kein Team"
+        "noTeam": "Kein Team",
+        "onLeave": "Abwesend",
+        "onLeaveUntil": "Abwesend bis {date}"
       },
       "presence": {
         "online": "Online",
@@ -933,7 +935,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Tag hinzufügen",
-      "tagRemove": "Tag entfernen"
+      "tagRemove": "Tag entfernen",
+      "onLeave": "abwesend",
+      "onLeaveUntil": "abwesend bis {date}"
     },
     "tags": {
       "tag": "Tag",

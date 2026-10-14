@@ -11,7 +11,8 @@
       "copied": "Copiado",
       "retry": "Reintentar",
       "loadMore": "Cargar más",
-      "loadingMore": "Cargando"
+      "loadingMore": "Cargando",
+      "loading": "Cargando"
     },
     "tiers": {
       "owner": "Propietario",
@@ -95,7 +96,11 @@
       "linkReset": "El correo no está configurado en este servidor, así que comparte este enlace directamente con la persona. Funciona una sola vez.",
       "linkInvite": "El correo no está configurado en este servidor, así que comparte este enlace directamente con la persona. Funciona una sola vez y caduca en {days, plural, one {# día} other {# días}}.",
       "linkLabel": "Enlace de un solo uso",
-      "linkEmail": "Correo"
+      "linkEmail": "Correo",
+      "onLeaveUntil": "De ausencia hasta el {date}",
+      "onLeaveOpen": "De ausencia",
+      "leaveFrom": "Ausencia desde el {date}",
+      "leaveAction": "Ausencia y suplente"
     },
     "invite": {
       "eyebrow": "Espacio de trabajo",
@@ -214,7 +219,13 @@
       "teamNameTaken": "Ya existe un equipo con ese nombre.",
       "teamMemberUnknown": "Una de las personas que elegiste no está en este espacio de trabajo.",
       "orgSuspended": "Este espacio de trabajo está suspendido.",
-      "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento."
+      "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
+      "leaveOverlap": "Esta persona ya tiene una ausencia que comparte algún día con estas fechas.",
+      "leaveInvalid": "No se pueden usar esas fechas. El primer día no puede estar en el pasado, y una ausencia que ya empezó conserva su primer día.",
+      "delegateInvalid": "El suplente debe ser otro miembro activo de este espacio de trabajo.",
+      "delegateCycle": "Eso crearía un círculo: la persona elegida ya tiene a esta persona como suplente.",
+      "reassignInvalid": "No se pudo reasignar nada. Comprueba que la persona tenga contactos o negocios abiertos y que el destino pueda recibirlos.",
+      "reassignNotRestorable": "Esta reasignación ya no se puede deshacer."
     },
     "accept": {
       "title": "Únete a tu espacio de trabajo",
@@ -234,6 +245,81 @@
       "submit": "Aceptar invitación",
       "submitting": "Uniéndote",
       "invalidHeading": "Enlace de invitación"
+    },
+    "leave": {
+      "eyebrow": "Ausencia y suplente",
+      "calendarNote": "Las fechas son días del calendario de tu espacio de trabajo ({timezone}).",
+      "nowTitle": "De ausencia ahora",
+      "upcomingTitle": "Próximamente",
+      "notAway": "Ahora no está de ausencia.",
+      "range": "Del {from} al {to}",
+      "rangeOpen": "Desde el {from}, sin fecha de fin",
+      "reasonShown": "Motivo (solo lo ven los responsables): {reason}",
+      "endNow": "Terminar la ausencia ahora",
+      "cancelLeave": "Cancelar la ausencia",
+      "endTitle": "¿Terminar esta ausencia ahora?",
+      "endMessage": "La persona vuelve hoy. La asignación automática volverá a elegirla.",
+      "cancelTitle": "¿Cancelar esta ausencia?",
+      "cancelMessage": "Todavía no ha empezado. Se eliminará.",
+      "ended": "Ausencia terminada.",
+      "added": "Ausencia guardada.",
+      "readOnly": "Solo la propia persona y los responsables pueden cambiar la ausencia.",
+      "addTitle": "Añadir ausencia",
+      "firstDay": "Primer día",
+      "lastDay": "Último día",
+      "openEnded": "Sin fecha de fin todavía (hasta que alguien la termine)",
+      "reason": "Motivo (opcional)",
+      "reasonHint": "Solo lo ven la persona y sus responsables.",
+      "addSubmit": "Guardar ausencia",
+      "problems": {
+        "startRequired": "Elige el primer día.",
+        "startPast": "El primer día no puede estar en el pasado.",
+        "endRequired": "Elige el último día o marca «Sin fecha de fin».",
+        "endBeforeStart": "El último día no puede ser anterior al primer día."
+      },
+      "delegateTitle": "Suplente",
+      "delegateHelp": "Mientras esta persona está de ausencia, los chats nuevos y la asignación automática van a su suplente si está disponible; si no, al equipo.",
+      "noDelegate": "Sin suplente",
+      "delegateSaved": "Suplente guardado.",
+      "delegateRemoved": "Suplente eliminado.",
+      "delegateAway": "{name} también está de ausencia, así que no puede cubrir ahora."
+    },
+    "reassign": {
+      "title": "Reasignar contactos y negocios",
+      "holds": "{name} es propietario de {contacts, plural, one {# contacto} other {# contactos}} y {chats, plural, one {# chat abierto} other {# chats abiertos}}.",
+      "target": "Asignárselos a",
+      "kindUser": "Una persona",
+      "kindDelegate": "Su suplente",
+      "kindTeam": "Un equipo, por turnos",
+      "person": "Persona",
+      "team": "Equipo",
+      "teamHint": "Se reparten por turnos entre los miembros que están presentes y no de ausencia.",
+      "choose": "Elegir",
+      "includeDeals": "Incluir los negocios abiertos",
+      "returnOn": "Devolverlos el {date}, cuando la persona vuelva",
+      "returnUnavailable": "Devolverlos cuando la persona vuelva (requiere una ausencia con último día)",
+      "returnHelp": "Solo vuelven los contactos y negocios que nadie ha modificado desde entonces. También puedes deshacerlo durante {days} días.",
+      "reason": "Nota (opcional)",
+      "submit": "Revisar y reasignar",
+      "confirmTitle": "¿Reasignar ahora?",
+      "confirmMessage": "{name} es propietario de {contacts, plural, one {# contacto} other {# contactos}} y {deals, plural, one {# negocio abierto} other {# negocios abiertos}} que se van a mover.",
+      "confirm": "Reasignar",
+      "done": "Se {contacts, plural, one {movió # contacto} other {movieron # contactos}} y {deals, plural, one {# negocio} other {# negocios}}.",
+      "history": "Reasignaciones anteriores",
+      "historyEmpty": "Todavía no se ha reasignado nada.",
+      "status": {
+        "applied": "Movido",
+        "restored": "Devuelto",
+        "restore_blocked": "No devuelto"
+      },
+      "summary": "{contacts} contactos y {deals} negocios a {target}",
+      "returnsOn": "vuelve el {date}",
+      "restoredSummary": "{restored} devueltos, {skipped} se quedan donde están",
+      "remaining": "Faltan {count} por mover: vuelve a ejecutarlo",
+      "undo": "Deshacer",
+      "undoTitle": "¿Deshacer esta reasignación?",
+      "undoMessage": "Los contactos y negocios que nadie ha modificado desde entonces vuelven al propietario anterior. Los demás se quedan donde están.",
+      "restored": "{count} devueltos, {skipped} se quedan donde están."
     }
   }
 }

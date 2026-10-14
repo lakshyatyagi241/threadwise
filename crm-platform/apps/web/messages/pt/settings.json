@@ -359,6 +359,11 @@
         "label": "Desempenho da equipe",
         "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
         "keywords": "relatórios, análises, agentes, tempo de resposta, primeira resposta, resolvidas, carga, desempenho"
+      },
+      "contact-assignment": {
+        "label": "Atribuição de contatos",
+        "description": "Atribui automaticamente novos contatos e negócios à pessoa certa, ignorando quem está de licença.",
+        "keywords": "atribuir, responsável, round robin, rodízio, novo contato, novo negócio, licença, férias, roteamento de leads"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

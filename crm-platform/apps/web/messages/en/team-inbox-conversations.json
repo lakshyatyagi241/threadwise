@@ -448,7 +448,9 @@
         "unassign": "Unassign",
         "open": "{count} open",
         "pickTeam": "Choose a team for this conversation",
-        "noTeam": "No team"
+        "noTeam": "No team",
+        "onLeave": "On leave",
+        "onLeaveUntil": "On leave until {date}"
       },
       "presence": {
         "online": "Online",
@@ -933,7 +935,9 @@
       },
       "tag": "Tag",
       "tagAdd": "Add tag",
-      "tagRemove": "Remove tag"
+      "tagRemove": "Remove tag",
+      "onLeave": "on leave",
+      "onLeaveUntil": "on leave until {date}"
     },
     "tags": {
       "tag": "Tag",

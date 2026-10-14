@@ -359,6 +359,11 @@
         "label": "Prestazioni del team",
         "description": "Scopri quanto è stato veloce ogni agente a rispondere e risolvere oggi, questa settimana o questo mese.",
         "keywords": "report, analisi, agenti, tempo di risposta, prima risposta, risolte, carico, prestazioni"
+      },
+      "contact-assignment": {
+        "label": "Assegnazione dei contatti",
+        "description": "Assegna automaticamente i nuovi contatti e le nuove trattative alla persona giusta, saltando chi è in ferie.",
+        "keywords": "assegnare, proprietario, round robin, nuovo contatto, nuova trattativa, ferie, assenza, routing dei lead"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

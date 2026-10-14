@@ -448,7 +448,9 @@
         "unassign": "Bỏ giao",
         "open": "{count} đang mở",
         "pickTeam": "Chọn nhóm cho cuộc trò chuyện này",
-        "noTeam": "Không có nhóm"
+        "noTeam": "Không có nhóm",
+        "onLeave": "Đang nghỉ phép",
+        "onLeaveUntil": "Nghỉ phép đến {date}"
       },
       "presence": {
         "online": "Trực tuyến",
@@ -933,7 +935,9 @@
       },
       "tag": "Gắn thẻ",
       "tagAdd": "Thêm thẻ",
-      "tagRemove": "Bỏ thẻ"
+      "tagRemove": "Bỏ thẻ",
+      "onLeave": "đang nghỉ phép",
+      "onLeaveUntil": "nghỉ phép đến {date}"
     },
     "tags": {
       "tag": "Thẻ",

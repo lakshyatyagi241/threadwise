@@ -448,7 +448,9 @@
         "unassign": "Снять назначение",
         "open": "Открыто: {count}",
         "pickTeam": "Выберите команду для этого диалога",
-        "noTeam": "Без команды"
+        "noTeam": "Без команды",
+        "onLeave": "В отпуске",
+        "onLeaveUntil": "В отпуске до {date}"
       },
       "presence": {
         "online": "В сети",
@@ -933,7 +935,9 @@
       },
       "tag": "Тег",
       "tagAdd": "Добавить тег",
-      "tagRemove": "Убрать тег"
+      "tagRemove": "Убрать тег",
+      "onLeave": "в отпуске",
+      "onLeaveUntil": "в отпуске до {date}"
     },
     "tags": {
       "tag": "Тег",

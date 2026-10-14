@@ -448,7 +448,9 @@
         "unassign": "ยกเลิกการมอบหมาย",
         "open": "เปิดอยู่ {count} รายการ",
         "pickTeam": "เลือกทีมสำหรับการสนทนานี้",
-        "noTeam": "ไม่มีทีม"
+        "noTeam": "ไม่มีทีม",
+        "onLeave": "ลาอยู่",
+        "onLeaveUntil": "ลาถึง {date}"
       },
       "presence": {
         "online": "ออนไลน์",
@@ -933,7 +935,9 @@
       },
       "tag": "แท็ก",
       "tagAdd": "เพิ่มแท็ก",
-      "tagRemove": "นำแท็กออก"
+      "tagRemove": "นำแท็กออก",
+      "onLeave": "ลาอยู่",
+      "onLeaveUntil": "ลาถึง {date}"
     },
     "tags": {
       "tag": "แท็ก",

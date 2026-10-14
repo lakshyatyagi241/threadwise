@@ -448,7 +448,9 @@
         "unassign": "تفویض ہٹائیں",
         "open": "{count} کھلی",
         "pickTeam": "اس گفتگو کے لیے ٹیم منتخب کریں",
-        "noTeam": "کوئی ٹیم نہیں"
+        "noTeam": "کوئی ٹیم نہیں",
+        "onLeave": "چھٹی پر",
+        "onLeaveUntil": "{date} تک چھٹی پر"
       },
       "presence": {
         "online": "آن لائن",
@@ -933,7 +935,9 @@
       },
       "tag": "ٹیگ",
       "tagAdd": "ٹیگ شامل کریں",
-      "tagRemove": "ٹیگ ہٹائیں"
+      "tagRemove": "ٹیگ ہٹائیں",
+      "onLeave": "چھٹی پر",
+      "onLeaveUntil": "{date} تک چھٹی پر"
     },
     "tags": {
       "tag": "ٹیگ",

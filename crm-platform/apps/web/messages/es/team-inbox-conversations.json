@@ -448,7 +448,9 @@
         "unassign": "Desasignar",
         "open": "{count} abiertas",
         "pickTeam": "Elige un equipo para esta conversación",
-        "noTeam": "Sin equipo"
+        "noTeam": "Sin equipo",
+        "onLeave": "De ausencia",
+        "onLeaveUntil": "De ausencia hasta el {date}"
       },
       "presence": {
         "online": "En línea",
@@ -933,7 +935,9 @@
       },
       "tag": "Etiqueta",
       "tagAdd": "Añadir etiqueta",
-      "tagRemove": "Quitar etiqueta"
+      "tagRemove": "Quitar etiqueta",
+      "onLeave": "de ausencia",
+      "onLeaveUntil": "de ausencia hasta el {date}"
     },
     "tags": {
       "tag": "Etiqueta",

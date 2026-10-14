@@ -448,7 +448,9 @@
         "unassign": "割り当てを解除",
         "open": "未対応 {count} 件",
         "pickTeam": "この会話のチームを選択",
-        "noTeam": "チームなし"
+        "noTeam": "チームなし",
+        "onLeave": "休暇中",
+        "onLeaveUntil": "{date}まで休暇中"
       },
       "presence": {
         "online": "オンライン",
@@ -933,7 +935,9 @@
       },
       "tag": "タグ",
       "tagAdd": "タグを追加",
-      "tagRemove": "タグを外す"
+      "tagRemove": "タグを外す",
+      "onLeave": "休暇中",
+      "onLeaveUntil": "{date}まで休暇中"
     },
     "tags": {
       "tag": "タグ",

@@ -11,7 +11,8 @@
       "copied": "Kopyalandı",
       "retry": "Yeniden dene",
       "loadMore": "Daha fazla yükle",
-      "loadingMore": "Yükleniyor"
+      "loadingMore": "Yükleniyor",
+      "loading": "Yükleniyor"
     },
     "tiers": {
       "owner": "Sahip",
@@ -95,7 +96,11 @@
       "linkReset": "Bu sunucuda e-posta yapılandırılmamış, bu yüzden bu bağlantıyı doğrudan paylaşın. Yalnızca bir kez çalışır.",
       "linkInvite": "Bu sunucuda e-posta yapılandırılmamış, bu yüzden bu bağlantıyı doğrudan paylaşın. Yalnızca bir kez çalışır ve {days, plural, other {# gün}} sonra sona erer.",
       "linkLabel": "Tek kullanımlık bağlantı",
-      "linkEmail": "E-posta"
+      "linkEmail": "E-posta",
+      "onLeaveUntil": "{date} tarihine kadar izinli",
+      "onLeaveOpen": "İzinli",
+      "leaveFrom": "{date} tarihinden itibaren izinli",
+      "leaveAction": "İzin ve vekil"
     },
     "invite": {
       "eyebrow": "Çalışma alanı",
@@ -214,7 +219,13 @@
       "teamNameTaken": "Bu ada sahip bir ekip zaten var.",
       "teamMemberUnknown": "Seçtiğiniz kişilerden biri bu çalışma alanında değil.",
       "orgSuspended": "Bu çalışma alanı askıya alındı.",
-      "unexpected": "Bir sorun oluştu. Birazdan yeniden deneyin."
+      "unexpected": "Bir sorun oluştu. Birazdan yeniden deneyin.",
+      "leaveOverlap": "Bu kişinin bu tarihlerle çakışan bir izni zaten var.",
+      "leaveInvalid": "Bu tarihler kullanılamaz. İlk gün geçmişte olamaz ve başlamış bir iznin ilk günü değiştirilemez.",
+      "delegateInvalid": "Vekil, bu çalışma alanının etkin başka bir üyesi olmalıdır.",
+      "delegateCycle": "Bu bir döngü oluşturur: seçilen kişinin vekili zaten bu kişi.",
+      "reassignInvalid": "Hiçbir şey yeniden atanamadı. Kişinin kişileri veya açık fırsatları olduğunu ve hedefin bunları alabildiğini kontrol edin.",
+      "reassignNotRestorable": "Bu yeniden atama artık geri alınamaz."
     },
     "accept": {
       "title": "Çalışma alanınıza katılın",
@@ -234,6 +245,81 @@
       "submit": "Daveti kabul et",
       "submitting": "Katılınıyor",
       "invalidHeading": "Davet bağlantısı"
+    },
+    "leave": {
+      "eyebrow": "İzin ve vekil",
+      "calendarNote": "Tarihler, çalışma alanı takviminizdeki günlerdir ({timezone}).",
+      "nowTitle": "Şu an izinli",
+      "upcomingTitle": "Yaklaşan",
+      "notAway": "Şu anda izinli değil.",
+      "range": "{from} - {to}",
+      "rangeOpen": "{from} tarihinden itibaren, bitiş tarihi yok",
+      "reasonShown": "Neden (yalnızca yöneticiler görür): {reason}",
+      "endNow": "İzni şimdi bitir",
+      "cancelLeave": "İzni iptal et",
+      "endTitle": "Bu izin şimdi bitirilsin mi?",
+      "endMessage": "Kişi bugün geri dönüyor. Otomatik atama onu yeniden seçmeye başlayacak.",
+      "cancelTitle": "Bu izin iptal edilsin mi?",
+      "cancelMessage": "Henüz başlamadı. Kaldırılacak.",
+      "ended": "İzin sona erdi.",
+      "added": "İzin kaydedildi.",
+      "readOnly": "İzni yalnızca kişinin kendisi ve yöneticiler değiştirebilir.",
+      "addTitle": "İzin ekle",
+      "firstDay": "İlk gün",
+      "lastDay": "Son gün",
+      "openEnded": "Henüz bitiş tarihi yok (biri bitirene kadar)",
+      "reason": "Neden (isteğe bağlı)",
+      "reasonHint": "Bunu yalnızca kişi ve yöneticileri görür.",
+      "addSubmit": "İzni kaydet",
+      "problems": {
+        "startRequired": "İlk günü seçin.",
+        "startPast": "İlk gün geçmişte olamaz.",
+        "endRequired": "Son günü seçin veya \"Bitiş tarihi yok\" seçeneğini işaretleyin.",
+        "endBeforeStart": "Son gün ilk günden önce olamaz."
+      },
+      "delegateTitle": "Vekil",
+      "delegateHelp": "Bu kişi izindeyken yeni sohbetler ve otomatik atamalar, vekil müsaitse ona, değilse ekibe gider.",
+      "noDelegate": "Vekil yok",
+      "delegateSaved": "Vekil kaydedildi.",
+      "delegateRemoved": "Vekil kaldırıldı.",
+      "delegateAway": "{name} da izinli, bu yüzden şu an yerine bakamaz."
+    },
+    "reassign": {
+      "title": "Kişileri ve fırsatları yeniden ata",
+      "holds": "{name} kişisinin {contacts, plural, one {# kişisi} other {# kişisi}} ve {chats, plural, one {# açık sohbeti} other {# açık sohbeti}} var.",
+      "target": "Şuna ver",
+      "kindUser": "Bir kişi",
+      "kindDelegate": "Vekili",
+      "kindTeam": "Bir ekip, sıralı dağıtım",
+      "person": "Kişi",
+      "team": "Ekip",
+      "teamHint": "Görevde olan ve izinli olmayan üyeler arasında sırayla paylaştırılır.",
+      "choose": "Seçin",
+      "includeDeals": "Açık fırsatları dahil et",
+      "returnOn": "Kişi döndüğünde, {date} tarihinde geri getir",
+      "returnUnavailable": "Kişi döndüğünde geri getir (son günü olan bir izin gerekir)",
+      "returnHelp": "Yalnızca o zamandan beri kimsenin değiştirmediği kişiler ve fırsatlar geri gelir. {days} gün boyunca geri de alabilirsiniz.",
+      "reason": "Not (isteğe bağlı)",
+      "submit": "İncele ve yeniden ata",
+      "confirmTitle": "Şimdi yeniden atansın mı?",
+      "confirmMessage": "{name} kişisinin taşınacak {contacts, plural, one {# kişisi} other {# kişisi}} ve {deals, plural, one {# açık fırsatı} other {# açık fırsatı}} var.",
+      "confirm": "Yeniden ata",
+      "done": "{contacts, plural, one {# kişi} other {# kişi}} ve {deals, plural, one {# fırsat} other {# fırsat}} taşındı.",
+      "history": "Önceki yeniden atamalar",
+      "historyEmpty": "Henüz hiçbir şey yeniden atanmadı.",
+      "status": {
+        "applied": "Taşındı",
+        "restored": "Geri döndü",
+        "restore_blocked": "Geri dönmedi"
+      },
+      "summary": "{contacts} kişi ve {deals} fırsat, {target} kişisine",
+      "returnsOn": "{date} tarihinde döner",
+      "restoredSummary": "{restored} geri döndü, {skipped} olduğu yerde kaldı",
+      "remaining": "{count} tane daha taşınacak: tekrar çalıştırın",
+      "undo": "Geri al",
+      "undoTitle": "Bu yeniden atama geri alınsın mı?",
+      "undoMessage": "O zamandan beri kimsenin değiştirmediği kişiler ve fırsatlar önceki sahibine döner. Diğerleri olduğu yerde kalır.",
+      "restored": "{count} geri döndü, {skipped} olduğu yerde kaldı."
     }
   }
 }

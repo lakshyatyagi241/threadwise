@@ -359,6 +359,11 @@
         "label": "Teamleistung",
         "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
         "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
+      },
+      "contact-assignment": {
+        "label": "Kontaktzuweisung",
+        "description": "Neue Kontakte und Deals automatisch der richtigen Person zuweisen, ohne Personen im Urlaub.",
+        "keywords": "zuweisen, Inhaber, Round Robin, neuer Kontakt, neuer Deal, Abwesenheit, Urlaub, Lead-Routing"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"
