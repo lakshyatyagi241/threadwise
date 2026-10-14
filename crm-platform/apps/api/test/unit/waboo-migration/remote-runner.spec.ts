@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+import type { ExecutionContext } from '@nestjs/common';
 import { describe, expect, it } from 'vitest';
 import {
   wabooMigrationRunnerClaimSchema,
@@ -26,6 +28,10 @@ import {
   executeRun,
   type ExecStore,
 } from '../../../src/modules/waboo-migration/waboo-migration.engine';
+import { AppError } from '../../../src/common/errors/app-error';
+import { WabooMigrationRunnerController } from '../../../src/modules/waboo-migration/runner-agent.controller';
+import { RunnerTokenGuard } from '../../../src/modules/waboo-migration/runner-token.guard';
+import { recover } from '../../../src/modules/waboo-migration/waboo-migration.engine';
 import type { PipelineEvent } from '../../../src/modules/waboo-migration/waboo-migration.rules';
 
 const RUN = '11111111-1111-4111-8111-111111111111';
@@ -55,7 +61,8 @@ const report = (green: boolean): PipelineEvent => ({
 });
 
 /** A job table that moves by a script, one entry per poll, with a fake clock the sleep advances. */
-function harness(script: Array<(now: number) => Partial<JobState>>) {
+type Scripted = Partial<JobState> & { lastSeenAt?: Date; claimedAt?: Date };
+function harness(script: Array<(now: number) => Scripted>) {
   let now = Date.parse('2026-10-14T10:00:00Z');
   const created = new Date(now);
   const enqueued: Array<{ uuid: string; args: RunnerJobArgs }> = [];
@@ -67,16 +74,23 @@ function harness(script: Array<(now: number) => Partial<JobState>>) {
     exitCode: null,
     timedOut: false,
     stderrTail: '',
-    claimedAt: null,
-    lastSeenAt: null,
-    createdAt: created,
+    queuedForMs: 0,
+    silentForMs: 0,
   };
   const store: RunnerJobStore = {
     enqueue: async (uuid, args) => void enqueued.push({ uuid, args }),
     read: async () => {
       const f = script[Math.min(poll, script.length - 1)]!;
       poll++;
-      return { ...base, ...f(now) };
+      // the ages come from the database's clock, which this fake shares with the worker's
+      const { lastSeenAt, claimedAt, ...rest } = f(now);
+      const seen = lastSeenAt ?? claimedAt ?? created;
+      return {
+        ...base,
+        ...rest,
+        queuedForMs: now - created.getTime(),
+        silentForMs: now - seen.getTime(),
+      };
     },
     abandon: async (uuid) => void abandoned.push(uuid),
   };
@@ -412,5 +426,92 @@ describe('what an agent can send', () => {
           ...bad,
         }).success,
       ).toBe(false);
+  });
+});
+
+describe('runner token guard', () => {
+  const TOKEN = 'g'.repeat(40);
+  const ctx = (authorization?: string): ExecutionContext =>
+    ({
+      getType: () => 'http',
+      switchToHttp: () => ({
+        getRequest: () => ({
+          header: (n: string) => (n === 'authorization' ? authorization : undefined),
+        }),
+      }),
+    }) as unknown as ExecutionContext;
+  const withToken = <T>(v: string | undefined, f: () => T): T => {
+    const prev = process.env.WABOO_RUNNER_TOKEN;
+    if (v === undefined) delete process.env.WABOO_RUNNER_TOKEN;
+    else process.env.WABOO_RUNNER_TOKEN = v;
+    try {
+      return f();
+    } finally {
+      if (prev === undefined) delete process.env.WABOO_RUNNER_TOKEN;
+      else process.env.WABOO_RUNNER_TOKEN = prev;
+    }
+  };
+  it('lets the configured token through', () => {
+    expect(withToken(TOKEN, () => new RunnerTokenGuard().canActivate(ctx(`Bearer ${TOKEN}`)))).toBe(
+      true,
+    );
+  });
+  it('answers every wrong, missing or unconfigured case with the same 401 (before any body or id is validated)', () => {
+    const errs = [
+      withToken(TOKEN, () => catchErr(() => new RunnerTokenGuard().canActivate(ctx()))),
+      withToken(TOKEN, () =>
+        catchErr(() => new RunnerTokenGuard().canActivate(ctx('Bearer nope'))),
+      ),
+      withToken(undefined, () =>
+        catchErr(() => new RunnerTokenGuard().canActivate(ctx(`Bearer ${TOKEN}`))),
+      ),
+      withToken('short', () =>
+        catchErr(() => new RunnerTokenGuard().canActivate(ctx('Bearer short'))),
+      ),
+    ];
+    for (const e of errs) {
+      expect(e).toBeInstanceOf(AppError);
+      expect((e as AppError).getStatus()).toBe(401);
+      expect((e as AppError).message).toBe((errs[0] as AppError).message);
+    }
+  });
+  it('is applied to the whole agent controller, so no handler can forget it', () => {
+    const guards = Reflect.getMetadata('__guards__', WabooMigrationRunnerController) as unknown[];
+    expect(guards).toContain(RunnerTokenGuard);
+  });
+});
+
+function catchErr(f: () => unknown): unknown {
+  try {
+    f();
+  } catch (e) {
+    return e;
+  }
+  return undefined;
+}
+
+describe('recovery after a worker restart (remote runner)', () => {
+  const store = (failed: { stale: number; orphan: number }, calls: string[]) => ({
+    failStale: async () => (calls.push('stale'), failed.stale),
+    failOrphanedRemote: async () => (calls.push('orphan'), failed.orphan),
+    pendingRuns: async () => [],
+    pendingBatches: async () => [],
+  });
+  const jobs = { ensure: async () => false };
+  it('fails the runs the dead worker was following and abandons their jobs, only when the runner is remote', async () => {
+    const remote: string[] = [];
+    const r = await recover(
+      { store: store({ stale: 1, orphan: 2 }, remote), jobs, timeoutMs: 1, remote: true },
+      () => 0,
+    );
+    expect(remote).toEqual(['stale', 'orphan']);
+    expect(r.failed).toBe(3);
+    const local: string[] = [];
+    const l = await recover(
+      { store: store({ stale: 1, orphan: 2 }, local), jobs, timeoutMs: 1 },
+      () => 0,
+    );
+    expect(local).toEqual(['stale']);
+    expect(l.failed).toBe(1);
   });
 });

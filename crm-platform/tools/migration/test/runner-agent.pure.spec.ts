@@ -13,6 +13,7 @@ const agent = require(AGENT) as {
     j: unknown,
   ) => { runId: string; sourceClient: string; sourceDb: string; mode: string } | null;
   pipelineArgs: (j: { sourceClient: string; sourceDb: string; mode: string }) => string[];
+  childEnv: (env: Record<string, string | undefined>) => Record<string, string | undefined>;
   runnerName: (env: Record<string, string | undefined>) => string;
   batches: (lines: string[]) => string[][];
   MAX_LINES: number;
@@ -62,6 +63,20 @@ describe('runner agent: what it will start a process for', () => {
   });
 });
 
+describe('runner agent: what the pipeline inherits', () => {
+  it("drops the runner's own token, address and name, whatever the case, and keeps everything else", () => {
+    const env = {
+      PATH: '/bin',
+      SERVER_HOST: 'h',
+      WABOO_RUNNER_TOKEN: 'x'.repeat(40),
+      Waboo_Runner_Url: 'https://desk.wabo.ai',
+      WABOO_RUNNER_NAME: 'n',
+      HOME: '/h',
+    };
+    expect(agent.childEnv(env)).toEqual({ PATH: '/bin', SERVER_HOST: 'h', HOME: '/h' });
+  });
+});
+
 describe('runner agent: naming and reporting', () => {
   it('names itself from WABOO_RUNNER_NAME or the machine, in the shape the API accepts', () => {
     expect(agent.runnerName({ WABOO_RUNNER_NAME: 'vedant-laptop' })).toBe('vedant-laptop');
@@ -92,8 +107,9 @@ describe('owner mailbox of a new client (pipeline.cjs)', () => {
   const src = readFileSync(join(STAGING, 'pipeline.cjs'), 'utf8');
   const guard = /[A-Za-z0-9+/_=-]{32,}/; // cycle.cjs LONGBLOB: what new-client refuses as a possible secret
   const ownerLocal = new Function(
-    `${/const ownerLocal = .*;/.exec(src)![0]}; return ownerLocal;`,
-  )() as (s: string) => string;
+    'require',
+    `${/const ownerLocal = [\s\S]*?;\n/.exec(src)![0]}; return ownerLocal;`,
+  )(require) as (s: string) => string;
   it('is used for the placeholder owner address', () => {
     expect(src).toContain('`owner-${ownerLocal(slug)}@desk.wabo.ai`');
   });
@@ -118,6 +134,11 @@ describe('owner mailbox of a new client (pipeline.cjs)', () => {
       seen.add(email);
     }
     expect(seen.size).toBe(keys.length);
+  });
+  it('gives two long keys that share their first and last characters different mailboxes', () => {
+    const a = 'www-same-prefix-x-one-middle-abcdef';
+    const b = 'www-same-prefix-x-two-middle-abcdef';
+    expect(ownerLocal(a)).not.toBe(ownerLocal(b));
   });
   it('leaves a short key whole', () => {
     expect(ownerLocal('iskm')).toBe('iskm');

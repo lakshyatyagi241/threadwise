@@ -270,6 +270,44 @@ export class WabooMigrationStores {
         return res.rows.length;
       }),
 
+    failOrphanedRemote: () =>
+      this.store.tx(async (tx) => {
+        const res = await tx.execute(sql`
+          UPDATE waboo_migration_runs SET status = 'failed', finished_at = now(),
+            error = 'The worker restarted while this run was in progress, so it was marked failed and the runner was told to stop. Check the last step shown, then run a catch-up.'
+          WHERE status = 'running'
+          RETURNING uuid, source_client, mode
+        `);
+        for (const r of res.rows as unknown as Array<{
+          uuid: string;
+          source_client: string;
+          mode: RunMode;
+        }>)
+          await this.audit.record(tx, {
+            event: 'platform.waboo_migration.finished',
+            status: 'failure',
+            actorType: 'system',
+            payload: {
+              runId: r.uuid,
+              sourceClient: r.source_client,
+              mode: r.mode,
+              outcome: 'failed',
+              swept: true,
+              orphaned: true,
+            },
+          });
+        // a job whose run is not running is nobody's: the agent sees `cancel` on its next report and stops the pipeline
+        await tx.execute(sql`
+          UPDATE waboo_migration_runner_jobs j
+          SET status = 'abandoned', cancel_requested = true, finished_at = now()
+          WHERE j.status IN ('queued', 'claimed')
+            AND NOT EXISTS (
+              SELECT 1 FROM waboo_migration_runs r WHERE r.uuid = j.run_uuid AND r.status = 'running'
+            )
+        `);
+        return res.rows.length;
+      }),
+
     pendingRuns: async () => {
       const res = await this.store.tx((tx) =>
         tx.execute(sql`

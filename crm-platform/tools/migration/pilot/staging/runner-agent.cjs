@@ -49,6 +49,22 @@ function validJob(j) {
   return { runId: j.runId, sourceClient: j.sourceClient, sourceDb: j.sourceDb, mode: j.mode };
 }
 
+/**
+ * The environment the pipeline gets: this process's, without the runner's own settings. The token only lets a caller claim jobs and write
+ * events; the pipeline and everything it starts (cycle.cjs, ssh, the exporter) have no use for it, so it must not be in their environment
+ * where a crash dump or a debug `env` would print it. Names are matched case-insensitively (Windows).
+ */
+function childEnv(env) {
+  const out = {};
+  for (const [k, v] of Object.entries(env)) {
+    const u = k.toUpperCase();
+    if (u === 'WABOO_RUNNER_TOKEN' || u === 'WABOO_RUNNER_URL' || u === 'WABOO_RUNNER_NAME')
+      continue;
+    out[k] = v;
+  }
+  return out;
+}
+
 /** `node pipeline.cjs --client c --db d --mode m`: an args array, never a shell string. */
 function pipelineArgs(job) {
   return [PIPELINE, '--client', job.sourceClient, '--db', job.sourceDb, '--mode', job.mode];
@@ -166,7 +182,7 @@ async function runJob(api, job, opts) {
 
   const child = spawn(process.execPath, pipelineArgs(job), {
     cwd: HERE,
-    env: process.env,
+    env: childEnv(process.env),
     shell: false,
     stdio: ['ignore', 'pipe', 'pipe'],
     windowsHide: true,
@@ -215,19 +231,22 @@ async function runJob(api, job, opts) {
 
   const flush = async (force) => {
     if (pending.length === 0 && !force && Date.now() - lastSent < heartbeatMs) return;
-    const lines = pending;
+    const parts = batches(pending);
     pending = [];
+    if (parts.length === 0) parts.push([]);
+    let sent = 0;
     try {
       let answer = { cancel: false };
-      const parts = batches(lines);
-      if (parts.length === 0) parts.push([]);
-      for (const part of parts) answer = await api.report(job.runId, part, stderr);
+      for (const part of parts) {
+        answer = await api.report(job.runId, part, stderr);
+        sent++; // an acknowledged report is never sent again
+      }
       lastOk = Date.now();
       lastSent = lastOk;
       if (answer.cancel) stop('the panel gave up on this run');
     } catch (e) {
       if (e.fatal) throw e;
-      pending = lines.concat(pending); // keep them for the next try
+      pending = parts.slice(sent).flat().concat(pending); // only what the API has not acknowledged goes again
       log(`could not report: ${e.message}`);
       if (Date.now() - lastOk > unreachableMs)
         stop(
@@ -242,7 +261,12 @@ async function runJob(api, job, opts) {
       await flush(false);
     }
     if (partial.trim()) pending.push(partial.trim());
-    await flush(true);
+    // the last lines carry the report: a transient failure here must not lose them, so retry before telling the API the job ended
+    for (let tries = 0; tries < 6; tries++) {
+      await flush(true);
+      if (pending.length === 0) break;
+      await sleep(5000);
+    }
   } catch (e) {
     stop('the API refused this agent');
     throw e;
@@ -314,6 +338,7 @@ async function main(argv, env) {
 }
 
 module.exports = {
+  childEnv,
   validJob,
   pipelineArgs,
   runnerName,

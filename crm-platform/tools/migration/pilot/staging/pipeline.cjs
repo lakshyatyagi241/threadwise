@@ -69,9 +69,13 @@ const warn = (m) => {
 
 /**
  * The mailbox name of the placeholder owner. `new-client` refuses any plain run of 32+ characters as a possible secret, and a client key (a
- * name plus Waboo's random suffix) is often longer, so a long key is cut to its first 14 and last 6 characters (the suffix keeps it unique).
+ * name plus Waboo's random suffix) is often longer, so a long key is cut to its first 14 characters plus 6 hex characters of a hash of the
+ * WHOLE key: two different keys never share a mailbox because they happen to share their first and last characters.
  */
-const ownerLocal = (slug) => (slug.length <= 20 ? slug : `${slug.slice(0, 14)}-${slug.slice(-6)}`);
+const ownerLocal = (slug) =>
+  slug.length <= 20
+    ? slug
+    : `${slug.slice(0, 14)}-${require('crypto').createHash('sha1').update(slug).digest('hex').slice(0, 6)}`;
 
 /** a new client: derive the config from geta_core (read-only) instead of asking a person for it */
 function ensureConfig() {

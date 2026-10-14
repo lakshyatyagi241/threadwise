@@ -20,9 +20,10 @@ export interface JobState {
   exitCode: number | null;
   timedOut: boolean;
   stderrTail: string;
-  claimedAt: Date | null;
-  lastSeenAt: Date | null;
-  createdAt: Date;
+  /** How long the job has existed, by the DATABASE's clock (the worker's clock is never compared with a stored timestamp). */
+  queuedForMs: number;
+  /** How long since the agent was last heard from (since it claimed the job, or since it was created when nobody has), by the database's clock. */
+  silentForMs: number;
 }
 
 /** What the worker's RemoteRunner needs from the hand-over table (a fake in the unit tests). Jobs are addressed by the run's uuid. */
@@ -61,7 +62,9 @@ export class RunnerJobs implements RunnerJobStore {
   async read(runUuid: string): Promise<JobState | null> {
     const res = await this.store.tx((tx) =>
       tx.execute(sql`
-        SELECT status, events, exit_code, timed_out, stderr_tail, claimed_at, last_seen_at, created_at
+        SELECT status, events, exit_code, timed_out, stderr_tail,
+               (extract(epoch FROM now() - created_at) * 1000)::float8 AS queued_for_ms,
+               (extract(epoch FROM now() - coalesce(last_seen_at, claimed_at, created_at)) * 1000)::float8 AS silent_for_ms
         FROM waboo_migration_runner_jobs WHERE run_uuid = ${runUuid}::uuid
       `),
     );
@@ -72,9 +75,8 @@ export class RunnerJobs implements RunnerJobStore {
           exit_code: number | null;
           timed_out: boolean;
           stderr_tail: string;
-          claimed_at: unknown;
-          last_seen_at: unknown;
-          created_at: unknown;
+          queued_for_ms: number | string;
+          silent_for_ms: number | string;
         }
       | undefined;
     if (!r) return null;
@@ -84,9 +86,8 @@ export class RunnerJobs implements RunnerJobStore {
       exitCode: r.exit_code,
       timedOut: r.timed_out,
       stderrTail: r.stderr_tail,
-      claimedAt: date(r.claimed_at),
-      lastSeenAt: date(r.last_seen_at),
-      createdAt: date(r.created_at) as Date,
+      queuedForMs: Number(r.queued_for_ms),
+      silentForMs: Number(r.silent_for_ms),
     };
   }
 

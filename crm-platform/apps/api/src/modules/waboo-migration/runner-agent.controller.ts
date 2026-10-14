@@ -1,4 +1,4 @@
-import { Body, Controller, Headers, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   uuidSchema,
@@ -10,11 +10,11 @@ import {
   type WabooMigrationRunnerReport,
 } from '@crm/contracts';
 import { Public } from '../../common/decorators';
-import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { Throttle } from '../platform-infrastructure';
 import { RunnerJobs } from './runner-jobs';
-import { eventsOf, runnerTokenMatches } from './runner-auth';
+import { eventsOf } from './runner-auth';
+import { RunnerTokenGuard } from './runner-token.guard';
 import { scrub, tail } from './waboo-migration.rules';
 
 /**
@@ -26,15 +26,11 @@ import { scrub, tail } from './waboo-migration.rules';
  */
 @ApiTags('platform')
 @Public()
+@UseGuards(RunnerTokenGuard)
 @Throttle({ limit: 240, windowSeconds: 60, by: 'ip' })
 @Controller({ path: 'platform/waboo-migration/runner', version: '2' })
 export class WabooMigrationRunnerController {
   constructor(private readonly jobs: RunnerJobs) {}
-
-  private auth(header: string | undefined): void {
-    if (!runnerTokenMatches(process.env.WABOO_RUNNER_TOKEN, header))
-      throw AppError.unauthenticated('Invalid or missing runner token');
-  }
 
   @Post('claim')
   @HttpCode(HttpStatus.OK)
@@ -42,11 +38,7 @@ export class WabooMigrationRunnerController {
     summary: 'Runner agent: ask for the job of a running migration',
     description: '200 with { job: null } when there is nothing to do. Also the agent heartbeat.',
   })
-  async claim(
-    @Headers('authorization') authorization: string | undefined,
-    @Body(zodPipe(wabooMigrationRunnerClaimSchema)) body: WabooMigrationRunnerClaim,
-  ) {
-    this.auth(authorization);
+  async claim(@Body(zodPipe(wabooMigrationRunnerClaimSchema)) body: WabooMigrationRunnerClaim) {
     return { job: await this.jobs.claim(body.runner) };
   }
 
@@ -57,11 +49,9 @@ export class WabooMigrationRunnerController {
     description: 'Answers { cancel: true } when the agent must stop the pipeline now.',
   })
   async report(
-    @Headers('authorization') authorization: string | undefined,
     @Param('id', zodPipe(uuidSchema)) id: string,
     @Body(zodPipe(wabooMigrationRunnerReportSchema)) body: WabooMigrationRunnerReport,
   ) {
-    this.auth(authorization);
     return this.jobs.push(
       id,
       body.runner,
@@ -74,11 +64,9 @@ export class WabooMigrationRunnerController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Runner agent: the pipeline ended (exit code, timed out, stderr tail)' })
   async finish(
-    @Headers('authorization') authorization: string | undefined,
     @Param('id', zodPipe(uuidSchema)) id: string,
     @Body(zodPipe(wabooMigrationRunnerFinishSchema)) body: WabooMigrationRunnerFinish,
   ) {
-    this.auth(authorization);
     const ok = await this.jobs.finish(id, body.runner, {
       exitCode: body.exitCode,
       timedOut: body.timedOut,

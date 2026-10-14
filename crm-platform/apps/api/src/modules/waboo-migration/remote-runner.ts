@@ -94,17 +94,14 @@ export class RemoteRunner implements Runner {
           report,
         };
       }
-      if (job.status === 'queued' && t - job.createdAt.getTime() > this.timing.pickupMs) {
+      if (job.status === 'queued' && job.queuedForMs > this.timing.pickupMs) {
         await this.jobs.abandon(runUuid);
         throw new RunnerUnavailableError(
           `No runner agent picked this run up within ${Math.round(this.timing.pickupMs / 60_000)} minutes. ` +
             'Start the runner agent on a machine that is on the Geta VPN, then run it again. Nothing was started.',
         );
       }
-      if (
-        job.status === 'claimed' &&
-        t - (job.lastSeenAt ?? job.claimedAt ?? job.createdAt).getTime() > this.timing.silenceMs
-      ) {
+      if (job.status === 'claimed' && job.silentForMs > this.timing.silenceMs) {
         await this.jobs.abandon(runUuid);
         throw new RunnerUnavailableError(
           'The runner agent stopped reporting while the migration was running, so this run was marked failed. ' +
