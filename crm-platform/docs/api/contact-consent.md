@@ -23,6 +23,29 @@ Product extension (spec [contact-consent-ledger.md](../specs/contact-consent-led
 `GET /api/v1/contacts/{id}/consent` (scope `contacts:read`) and `POST /api/v1/contacts/{id}/consent` (scope `contacts:write`, the
 source is stored as `api`). The existing `is_unsubscribed` field keeps working and now also writes the ledger.
 
+## Intake: how a grant is written when a person agrees (BL-165)
+
+POLICY: a first inbound message permits replying only and NEVER creates a marketing grant; a grant is written only when the person
+agreed, with source, wording, version and time as evidence ([spec 4.3.2](../specs/privacy-and-data-governance.md)). A subscription
+status (`whatsappSubscriptionStatus`, `smsSubscriptionStatus`, `emailSubscriptionStatus`) is a label, not proof.
+
+`consent` block (contracts `consentProofSchema`; accepted by `POST /v2/contacts`, `PATCH /v2/contacts/:id`, the REST v1 contact routes
+(snake_case keys, same fields), `POST /v2/partner/leads` and `POST /public/v1/leads`):
+
+| Field      | Meaning                                                                                                                                  |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `channels` | `whatsapp`, `sms`, `email`. Omitted: the channels whose status this write sets to `subscribed`; else the channels the contact can be reached on (phone: WhatsApp, address: email). SMS only when asked for. |
+| `note`     | How the person agreed (what they said or signed, and where). Up to 500 characters.                                                       |
+| `text`     | The wording they were shown (300 characters kept in the evidence, SHA-256 of the whole text beside it).                                  |
+| `version`  | The version of that wording.                                                                                                             |
+| `at`       | When they agreed; clamped to now if it is in the future.                                                                                 |
+
+Rules: a status set to `subscribed` (and not stored as subscribed already) or a `consent` block is a claim. It needs a `note` or `text`
+(else **422 `CONSENT_NOTE_REQUIRED`**, nothing written), it cannot sit beside `isUnsubscribed: true`, it appends one `granted` event per
+channel in the same transaction as the contact write, and it never overrides a withdrawal. A `create` that matches an existing contact
+records the grant on that contact. Source: `manual` for a staff session, `api` for a key, the partner portal and the Sheets add-on.
+Sheets rows use the cells `consent` (yes) and `consent_note`; a yes without a note fails that row; no or blank changes nothing.
+
 ## Events
 
 `contact.consent.granted`, `contact.consent.withdrawn` (payload: contactId, channel, purpose, source, eventId),

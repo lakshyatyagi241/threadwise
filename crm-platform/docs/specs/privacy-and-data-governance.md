@@ -262,6 +262,44 @@ Plug-in map (each is a backlog task):
   uses one without asking the gate and is not in `consent-gate.allowlist.ts` (each entry has a reason; stale entries also fail).
 - **Email unsubscribe:** signed no-PII link, `/u/<token>` page, RFC 8058 headers. See the API doc.
 
+### 4.3.2 Policy: how a grant comes to exist (intake) (BL-165 to BL-167)
+
+**Owner-approved policy (14 Oct 2026).**
+
+1. **A first inbound message permits replying only.** It opens the customer-service window (`inbound_reply_window`, service messaging)
+   and nothing else. It NEVER creates a marketing grant: the inbound pipeline writes no `granted` event, and a contact created from an
+   inbound message has the ledger state `unknown` ("No consent recorded"). The only inbound texts that write to the ledger are the
+   contact's own STOP and START keywords (`keyword` source), which are an explicit act, not a first message.
+2. **A grant is written only when the person actually agreed**, and the event carries the evidence: the **source** (form, manual, api,
+   widget, booking, commerce, import, keyword), the **notice wording and its version** (`consentText` cut to 300 characters, `consentHash`
+   of the whole text, `consentVersion`, and where relevant `noticeVersion` and `noticeUrl`), and the **time** (`occurred_at`; a date from a
+   caller can be earlier than now, never later, so a grant can never outrank a STOP that arrives first). Never an IP address or a user agent.
+3. **A subscription status is a label, not proof.** `whatsappSubscriptionStatus`, `smsSubscriptionStatus` and `emailSubscriptionStatus`
+   set to `subscribed` do not by themselves permit marketing. A write that sets one needs proof (a `consent` block with a note or the
+   wording) and writes the ledger grant, or it is refused with 422 `CONSENT_NOTE_REQUIRED`. A staff-set grant needs a note, as on the
+   Consent card. A grant from an automated source never overrides a withdrawal the person made (`respectWithdrawn`).
+4. **The ConsentGate stays the one enforcement point.** Nothing here lets a send path skip the gate; with the workspace switch on, a
+   contact with no grant is held back from marketing whatever its status says. The switch stays off by default (existing behaviour).
+5. **Contacts created by a channel are created by the contacts service** (`ContactsService.resolveOrCreateByIdentity`), so audit, the plan
+   quota and `contact.created` apply to every way a person enters the CRM, and none of them grants consent.
+
+Paths that write an intake grant (all through `ConsentIntakeService`, one idempotency key per source event):
+
+| Path                                                                          | Source           | Evidence (besides wording and version)       |
+| ----------------------------------------------------------------------------- | ---------------- | -------------------------------------------- |
+| CRM contact create and update (a status set to `subscribed`, or `consent`)    | `manual`         | actor, note                                  |
+| Customer REST API v1 contact create and update (`consent`)                    | `api`            | `apiKeyId`                                   |
+| Partner agent lead submit (`consent`)                                         | `api`            | `reference: partner_agent:<id>`              |
+| Public lead submit `/public/v1/leads` (`consent`)                             | `api`            | `apiKeyId`                                   |
+| Google Sheets add-on contact rows (`consent` yes + `consent_note`)            | `api`            | `reference: google_sheets`                   |
+| Website chat widget pre-chat consent line                                     | `widget`         | `widgetId`, `noticeVersion`                  |
+| Appointment booking page consent line                                         | `booking`        | `bookingPageId`, `noticeVersion`             |
+| Shopify and WooCommerce customers who accepted marketing in the store         | `commerce`       | `integrationId`, `noticeVersion`, `noticeUrl` |
+| Forms with a ticked marketing line (built before this policy)                 | `form`           | `formId`, `submissionId`                     |
+
+**Later round, not covered here:** lead capture (Meta lead ads, click-to-WhatsApp), the contact import's consent column redesign, and
+the consent line of non-marketing forms. They follow the same rules (source, wording, version, time) when built.
+
 ### 4.4 Voice bot and call recording
 
 See section 5 and [../privacy/voice-bot-consent-requirements.md](../privacy/voice-bot-consent-requirements.md).

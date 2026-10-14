@@ -38,6 +38,7 @@ Not a reference feature; spec [contact-consent-ledger.md](../../specs/contact-co
 | Consent card / `POST /contact-consent/contacts/:uuid/events`                         | `manual`          | chosen               |
 | Contact import engine (`consentConfirmed`, per-row with a mapped `consent` column)   | `import`          | whatsapp             |
 | Form submit with a ticked marketing consent box                                      | `form`            | whatsapp and email   |
+| `ContactsService.create/update` with a status set to `subscribed` or a `consent` block (CRM form, REST v1, partner and public lead submit, Sheets add-on rows) via `ConsentIntakeService` (BL-165) | `manual` or `api` | whatsapp, sms, email |
 
 ## Who reads it
 
