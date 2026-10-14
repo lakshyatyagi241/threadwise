@@ -159,6 +159,11 @@
         "title": "Votre numéro a été retiré de {name}",
         "titleNoName": "Votre numéro a été retiré d'un groupe WhatsApp",
         "body": "Quelqu'un a retiré votre numéro personnel de ce groupe. Le groupe est conservé ici, en lecture seule."
+      },
+      "test": {
+        "title": "Notification de test",
+        "titleNoName": "Notification de test",
+        "bodyNoActor": "Si vous pouvez lire ceci, les notifications en direct fonctionnent."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "Groupe WhatsApp suspendu",
         "waba_group_suspension_cleared": "Groupe WhatsApp de nouveau actif",
         "device_group_join_request": "Demande d'adhésion à un groupe",
-        "device_group_removed": "Retiré d'un groupe WhatsApp"
-      }
+        "device_group_removed": "Retiré d'un groupe WhatsApp",
+        "test": "Notification de test"
+      },
+      "generic": "Vous avez une nouvelle notification",
+      "paused": "Les mises à jour en direct sont en pause, les nouvelles alertes peuvent donc arriver avec jusqu’à une minute de retard. Rechargez la page pour vous reconnecter."
     },
     "prefs": {
       "title": "Préférences de notification",
@@ -212,7 +220,8 @@
         "broadcasts": "Diffusions et campagnes",
         "team_chat": "Team chat",
         "whatsapp_groups": "Groupes WhatsApp",
-        "billing": "Facturation et abonnements"
+        "billing": "Facturation et abonnements",
+        "system": "Système"
       },
       "types": {
         "new_chat": {
@@ -366,6 +375,10 @@
         "assignment_blocked_by_leave": {
           "label": "Discussion que personne n'a pu prendre",
           "hint": "Le routage n'a trouvé personne pour une nouvelle discussion car les personnes choisies sont en congé. Assignez-la à la main."
+        },
+        "test": {
+          "label": "Notification de test",
+          "hint": "Le test que vous envoyez depuis Notifications du navigateur, pour voir la cloche, le pop-up et le titre de l’onglet fonctionner."
         }
       },
       "loading": "Chargement de vos préférences",
@@ -445,6 +458,11 @@
           "neverUsed": "pas encore notifié",
           "remove": "Retirer",
           "removeFor": "Retirer {device}"
+        },
+        "testInApp": {
+          "watch": "Vous devriez voir un pop-up, et le nombre de la cloche ainsi que le titre de l’onglet changer.",
+          "notConnected": "Les mises à jour en direct ne sont pas connectées sur cette page, le pop-up ne peut donc pas s’y afficher. Rechargez la page et réessayez.",
+          "off": "Aucune notification n’a été créée dans la cloche : la cloche est désactivée pour « Notification de test » dans le tableau ci-dessous, ou par le propriétaire de votre espace de travail."
         }
       }
     },

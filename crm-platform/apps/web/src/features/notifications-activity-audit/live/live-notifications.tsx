@@ -118,8 +118,15 @@ export function LiveNotifications() {
       },
       toast: (toast) => {
         const tr = latest.current.t;
-        if (toast.kind === 'summary') {
-          push({ title: tr('live.summary', { count: toast.count }), body: null, href: null });
+        if (toast.kind !== 'alert') {
+          // The overflow summary and the generic fallback carry no row: words only. The toast region is silent on purpose, so the
+          // same words go to the screen-reader region.
+          const title =
+            toast.kind === 'generic' && toast.count === 1
+              ? tr('live.generic')
+              : tr('live.summary', { count: toast.count });
+          push({ title, body: null, href: null });
+          setAnnouncement((cur) => ({ n: cur.n + 1, text: title }));
           return;
         }
         const { title, body } = alertText(tr, toast.alert);
@@ -165,6 +172,13 @@ export function LiveNotifications() {
       claimer,
       env: {
         isVisible: () => document.visibilityState === 'visible',
+        onVisible: (listener) => {
+          const onChange = () => {
+            if (document.visibilityState === 'visible') listener();
+          };
+          document.addEventListener('visibilitychange', onChange);
+          return () => document.removeEventListener('visibilitychange', onChange);
+        },
         location: () => ({ pathname: window.location.pathname, search: window.location.search }),
         now: () => Date.now(),
       },

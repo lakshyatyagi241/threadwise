@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import type { PushDevice } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
+import { useRealtimeStatus } from '@/lib/realtime';
 import { NOTIFICATION_KEYS } from '../api/keys';
 import { notificationsApi } from '../api/service';
 import {
@@ -79,6 +80,10 @@ export interface BrowserPush {
   busy: 'enable' | 'disable' | 'remove' | 'test' | null;
   problem: PushProblem | null;
   testResult: TestOutcome | 'wait' | null;
+  /** Whether the last test also wrote a bell row (the in-app path: bell, toast, tab title). Null before a test, and after a refused one. */
+  testInApp: boolean | null;
+  /** The live socket is connected right now, so the in-app part of the test can show on this page. */
+  liveConnected: boolean;
   /** Asks the browser for permission and subscribes. Only ever call it from the person's click. */
   enable(): Promise<void>;
   disable(): Promise<void>;
@@ -105,6 +110,8 @@ export function useBrowserPush(): BrowserPush {
   const [busy, setBusy] = useState<BrowserPush['busy']>(null);
   const [problem, setProblem] = useState<PushProblem | null>(null);
   const [testResult, setTestResult] = useState<BrowserPush['testResult']>(null);
+  const [testInApp, setTestInApp] = useState<boolean | null>(null);
+  const liveConnected = useRealtimeStatus() === 'connected';
 
   // Whether the browser holds a push subscription is answered asynchronously; ask again whenever what the browser says changed.
   useEffect(() => {
@@ -152,6 +159,7 @@ export function useBrowserPush(): BrowserPush {
     setBusy('enable');
     setProblem(null);
     setTestResult(null);
+    setTestInApp(null);
     try {
       const subscription = await enableOnThisDevice(deployment.publicKey);
       const device = await notificationsApi.addPushDevice(subscription);
@@ -181,6 +189,7 @@ export function useBrowserPush(): BrowserPush {
     setBusy('disable');
     setProblem(null);
     setTestResult(null);
+    setTestInApp(null);
     try {
       const id = savedDeviceId();
       if (id) await removeOnServer(id);
@@ -220,8 +229,11 @@ export function useBrowserPush(): BrowserPush {
     setBusy('test');
     setProblem(null);
     setTestResult(null);
+    setTestInApp(null);
     try {
-      setTestResult(testOutcome(await notificationsApi.sendPushTest()));
+      const result = await notificationsApi.sendPushTest();
+      setTestResult(testOutcome(result));
+      setTestInApp(result.inApp);
       await invalidateDevices();
     } catch (err) {
       if (err instanceof ApiError && err.status === 429) setTestResult('wait');
@@ -240,6 +252,8 @@ export function useBrowserPush(): BrowserPush {
     busy,
     problem,
     testResult,
+    testInApp,
+    liveConnected,
     enable,
     disable,
     remove,

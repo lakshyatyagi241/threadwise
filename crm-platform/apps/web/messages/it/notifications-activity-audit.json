@@ -159,6 +159,11 @@
         "title": "Il tuo numero è stato rimosso da {name}",
         "titleNoName": "Il tuo numero è stato rimosso da un gruppo WhatsApp",
         "body": "Qualcuno ha rimosso il tuo numero personale da questo gruppo. Il gruppo resta qui, in sola lettura."
+      },
+      "test": {
+        "title": "Notifica di prova",
+        "titleNoName": "Notifica di prova",
+        "bodyNoActor": "Se riesci a leggere questo, le notifiche in tempo reale funzionano."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "Gruppo WhatsApp sospeso",
         "waba_group_suspension_cleared": "Gruppo WhatsApp di nuovo attivo",
         "device_group_join_request": "Richiesta di ingresso in un gruppo",
-        "device_group_removed": "Rimosso da un gruppo WhatsApp"
-      }
+        "device_group_removed": "Rimosso da un gruppo WhatsApp",
+        "test": "Notifica di prova"
+      },
+      "generic": "Hai una nuova notifica",
+      "paused": "Gli aggiornamenti in tempo reale sono in pausa, quindi i nuovi avvisi possono arrivare con un ritardo fino a un minuto. Ricarica la pagina per riconnetterti."
     },
     "prefs": {
       "title": "Preferenze di notifica",
@@ -212,7 +220,8 @@
         "broadcasts": "Broadcast e campagne",
         "team_chat": "Team chat",
         "whatsapp_groups": "Gruppi WhatsApp",
-        "billing": "Fatturazione e abbonamenti"
+        "billing": "Fatturazione e abbonamenti",
+        "system": "Sistema"
       },
       "types": {
         "new_chat": {
@@ -366,6 +375,10 @@
         "assignment_blocked_by_leave": {
           "label": "Chat che nessuno ha potuto prendere",
           "hint": "L'instradamento non ha trovato nessuno per una nuova chat perché le persone scelte sono in ferie. Assegnala a mano."
+        },
+        "test": {
+          "label": "Notifica di prova",
+          "hint": "La prova che invii da Notifiche del browser, per vedere funzionare la campanella, il popup e il titolo della scheda."
         }
       },
       "loading": "Caricamento delle tue preferenze",
@@ -445,6 +458,11 @@
           "neverUsed": "nessuna notifica ancora",
           "remove": "Rimuovi",
           "removeFor": "Rimuovi {device}"
+        },
+        "testInApp": {
+          "watch": "Dovresti vedere un popup, e il numero della campanella e il titolo della scheda dovrebbero cambiare.",
+          "notConnected": "Gli aggiornamenti in tempo reale non sono connessi in questa pagina, quindi il popup non può comparire qui. Ricarica la pagina e riprova.",
+          "off": "Nessuna notifica è stata creata nella campanella: la campanella è disattivata per «Notifica di prova» nella tabella sottostante, oppure dal proprietario del tuo spazio di lavoro."
         }
       }
     },

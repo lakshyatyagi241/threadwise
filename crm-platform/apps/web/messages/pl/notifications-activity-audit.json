@@ -159,6 +159,11 @@
         "title": "Twój numer został usunięty z grupy {name}",
         "titleNoName": "Twój numer został usunięty z grupy WhatsApp",
         "body": "Ktoś usunął Twój numer osobisty z tej grupy. Grupa jest tu zachowana tylko do odczytu."
+      },
+      "test": {
+        "title": "Powiadomienie testowe",
+        "titleNoName": "Powiadomienie testowe",
+        "bodyNoActor": "Jeśli możesz to przeczytać, powiadomienia na żywo działają."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "Grupa WhatsApp zawieszona",
         "waba_group_suspension_cleared": "Grupa WhatsApp znów aktywna",
         "device_group_join_request": "Prośba o dołączenie do grupy",
-        "device_group_removed": "Usunięto z grupy WhatsApp"
-      }
+        "device_group_removed": "Usunięto z grupy WhatsApp",
+        "test": "Powiadomienie testowe"
+      },
+      "generic": "Masz nowe powiadomienie",
+      "paused": "Aktualizacje na żywo są wstrzymane, więc nowe alerty mogą docierać z opóźnieniem do minuty. Odśwież stronę, aby połączyć się ponownie."
     },
     "prefs": {
       "title": "Preferencje powiadomień",
@@ -212,7 +220,8 @@
         "broadcasts": "Wiadomości masowe i kampanie",
         "team_chat": "Czat zespołu",
         "whatsapp_groups": "Grupy WhatsApp",
-        "billing": "Płatności i subskrypcje"
+        "billing": "Płatności i subskrypcje",
+        "system": "System"
       },
       "types": {
         "new_chat": {
@@ -366,6 +375,10 @@
         "assignment_blocked_by_leave": {
           "label": "Czat, którego nikt nie mógł przejąć",
           "hint": "Routing nie znalazł nikogo dla nowego czatu, bo wybrane osoby są na urlopie. Przypisz go ręcznie."
+        },
+        "test": {
+          "label": "Powiadomienie testowe",
+          "hint": "Test wysyłany z sekcji Powiadomienia przeglądarki, dzięki któremu zobaczysz, jak działają dzwonek, wyskakujące okno i tytuł karty."
         }
       },
       "loading": "Wczytywanie Twoich preferencji",
@@ -445,6 +458,11 @@
           "neverUsed": "jeszcze nie powiadomiono",
           "remove": "Usuń",
           "removeFor": "Usuń {device}"
+        },
+        "testInApp": {
+          "watch": "Powinno pojawić się wyskakujące okno, a liczba przy dzwonku i tytuł karty powinny się zmienić.",
+          "notConnected": "Aktualizacje na żywo nie są połączone na tej stronie, więc wyskakujące okno nie może się tu pojawić. Odśwież stronę i spróbuj ponownie.",
+          "off": "W dzwonku nie utworzono powiadomienia: dzwonek jest wyłączony dla „Powiadomienie testowe” w tabeli poniżej albo przez właściciela Twojego obszaru roboczego."
         }
       }
     },

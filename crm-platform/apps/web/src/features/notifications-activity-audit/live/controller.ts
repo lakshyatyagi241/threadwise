@@ -28,12 +28,18 @@ import {
 export const INBOX_COUNTS_KEY = ['inbox', 'counts'] as const;
 
 const FEED_SIZE = 8;
+/** A failed fetch of the newest rows is tried once more after this long before the toast falls back to the generic words. */
+export const FEED_RETRY_MS = 1_500;
+/** The most toasts a hidden tab keeps for when it comes back; past this only the count grows. */
+const PARKED_MAX = 50;
 /** The Inbox page marks a thread read itself; this guard waits a moment so a burst makes one call. */
 const READ_GUARD_MS = 1_000;
 
 /** What the controller needs from the outside world; each has a real implementation in the provider and a fake in tests. */
 export interface LiveEnv {
   isVisible(): boolean;
+  /** Calls `listener` whenever the tab comes to the front. Returns the way to stop. Absent: a hidden tab never shows its toast later. */
+  onVisible?(listener: () => void): () => void;
   location(): { pathname: string; search: string };
   now(): number;
 }
@@ -45,8 +51,16 @@ export interface LiveApi {
 
 /** How the person is told. The provider renders these in the viewer's language; tests record them. */
 export interface LivePresenter {
-  /** A toast in the page (tab visible). `summary` is the "N new notifications" overflow toast. */
-  toast(toast: { kind: 'alert'; alert: LiveAlert } | { kind: 'summary'; count: number }): void;
+  /**
+   * A toast in the page (tab visible). `summary` is the "N new notifications" overflow toast; `generic` is the fallback when the row
+   * itself could not be fetched ("You have a new notification" for one, the count for several): never nothing.
+   */
+  toast(
+    toast:
+      | { kind: 'alert'; alert: LiveAlert }
+      | { kind: 'summary'; count: number }
+      | { kind: 'generic'; count: number },
+  ): void;
   /** A screen-reader announcement (a polite live region), already spaced and batched. */
   announce(alerts: readonly LiveAlert[]): void;
   /** The desktop (OS) alert for a tab in the background: contact name only. */
@@ -79,6 +93,14 @@ export interface LiveOptions {
 
 type Timer = ReturnType<typeof setTimeout>;
 
+/** The planner key of the generic ("you have a new notification") toast: it is paced like one conversation. */
+const GENERIC_SUBJECT = 'generic';
+
+/** One toast waiting to be paced: a fetched row, or the generic words for events whose row could not be shown. */
+type ToastItem =
+  | { kind: 'alert'; subject: string; alert: LiveAlert }
+  | { kind: 'generic'; subject: string; count: number };
+
 /**
  * Turns the socket's hints into what the person sees, on every page. It reads events from the one shared socket, keeps the bell's
  * react-query caches in step at once (the unread total is the server's own number), and a few hundred milliseconds later (one pass
@@ -95,6 +117,11 @@ export class LiveNotificationsController {
   private readTimer: Timer | undefined;
   private readonly readSubjects = new Set<string>();
   private readonly deferred = new Map<string, Timer>();
+  private readonly deferredItems = new Map<string, ToastItem>();
+  /** What a hidden tab could not show: shown as one toast (or the one alert) when the tab is in front again and the rows are still unread. */
+  private parked = new Map<string, ToastItem>();
+  private parkedExtra = 0;
+  private retryTimer: Timer | undefined;
   private overflow = 0;
   private overflowTimer: Timer | undefined;
   private announceQueue: LiveAlert[] = [];
@@ -124,6 +151,8 @@ export class LiveNotificationsController {
         if (request.room === 'user') this.scheduleResync();
       }),
     );
+    const stopVisible = this.o.env.onVisible?.(() => this.showParked());
+    if (stopVisible) this.stops.push(stopVisible);
   }
 
   stop(): void {
@@ -137,11 +166,14 @@ export class LiveNotificationsController {
       this.readTimer,
       this.overflowTimer,
       this.announceTimer,
+      this.retryTimer,
       ...this.deferred.values(),
     ]) {
       clearTimeout(t);
     }
     this.deferred.clear();
+    this.deferredItems.clear();
+    this.parked.clear();
     this.pending = [];
     this.announceQueue = [];
   }
@@ -231,82 +263,186 @@ export class LiveNotificationsController {
     }
 
     // The words come from the fetched rows, never from the socket. The fetch also fills the bell's list.
-    let feed: NotificationListResponse;
-    try {
-      feed = await qc.fetchQuery({
-        queryKey: NOTIFICATION_KEYS.feed,
-        queryFn: ({ signal }) => this.o.api.list(FEED_SIZE, signal),
-        staleTime: 0,
-      });
-    } catch {
-      return;
-    }
+    const feed = await this.loadFeed();
     if (this.stopped) return;
 
     const alerts: LiveAlert[] = [];
+    // Events whose row could not be shown (the fetch failed twice, or the row is no longer among the newest): they still get a toast,
+    // in generic words, as long as the badge says something is unread and the person is not reading that conversation.
+    const generic: Array<{
+      notificationId: string;
+      sound: boolean;
+      type: string;
+      subject: string;
+    }> = [];
+    const unreadNow = qc.getQueryData<number>(NOTIFICATION_KEYS.unread);
     for (const c of candidates) {
-      const row =
-        feed.data.find((n) => n.id === c.notificationId) ??
-        // A later event collapsed this one into a newer row of the same conversation.
-        feed.data.find((n) => c.subjectId !== null && n.subject?.id === c.subjectId);
-      if (!row || row.readAt !== null) continue;
-      alerts.push({
-        notificationId: c.notificationId,
-        sound: this.wants(c, 'sound'),
-        subject: c.subjectId ?? `type:${c.type}`,
-        type: c.type,
-        row,
-        href: notificationHref(row),
-      });
+      const subject = c.subjectId ?? `type:${c.type}`;
+      const row = feed
+        ? (feed.data.find((n) => n.id === c.notificationId) ??
+          // A later event collapsed this one into a newer row of the same conversation.
+          feed.data.find((n) => c.subjectId !== null && n.subject?.id === c.subjectId))
+        : undefined;
+      if (row) {
+        // Read elsewhere in the meantime: nothing left to tell.
+        if (row.readAt !== null) continue;
+        alerts.push({
+          notificationId: c.notificationId,
+          sound: this.wants(c, 'sound'),
+          subject,
+          type: c.type,
+          row,
+          href: notificationHref(row),
+        });
+      } else if ((unreadNow === undefined || unreadNow > 0) && !this.isLookingAt(c)) {
+        generic.push({
+          notificationId: c.notificationId,
+          sound: this.wants(c, 'sound'),
+          type: c.type,
+          subject,
+        });
+      }
     }
-    if (alerts.length > 0) await this.alert(alerts);
+    if (alerts.length > 0 || generic.length > 0) await this.alert(alerts, generic);
   }
 
-  private async alert(alerts: LiveAlert[]): Promise<void> {
+  /** The newest rows, tried twice (a short pause between) so one dropped request does not cost the toast. Null when both failed. */
+  private async loadFeed(): Promise<NotificationListResponse | null> {
+    const { qc } = this.o;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        return await qc.fetchQuery({
+          queryKey: NOTIFICATION_KEYS.feed,
+          queryFn: ({ signal }) => this.o.api.list(FEED_SIZE, signal),
+          staleTime: 0,
+        });
+      } catch {
+        if (attempt === 1 || this.stopped) break;
+        await new Promise<void>((resolve) => {
+          this.retryTimer = setTimeout(resolve, FEED_RETRY_MS);
+        });
+        if (this.stopped) break;
+      }
+    }
+    return null;
+  }
+
+  private async alert(
+    alerts: LiveAlert[],
+    generic: Array<{ notificationId: string; sound: boolean; type: string; subject: string }>,
+  ): Promise<void> {
     const { env, presenter, settings, claimer } = this.o;
     const visible = env.isVisible();
+    const everyone = [
+      ...alerts.map((a) => ({ id: a.notificationId, sound: a.sound, type: a.type, alert: a })),
+      ...generic.map((g) => ({ id: g.notificationId, sound: g.sound, type: g.type, alert: null })),
+    ];
 
     // The sound and the desktop alert belong to one tab (the first to claim the event); the toast and the title belong to each.
-    const claimed = await Promise.all(
-      alerts.map((a) => claimer.claim(`alert:${a.notificationId}`, visible)),
-    );
+    const claimed = await Promise.all(everyone.map((a) => claimer.claim(`alert:${a.id}`, visible)));
     if (this.stopped) return;
     let pinged = false;
-    alerts.forEach((a, i) => {
+    everyone.forEach((a, i) => {
       if (!claimed[i]) return;
       if (a.sound && settings.soundOn() && !pinged) {
         pinged = true;
         presenter.ping();
       }
-      if (!visible && settings.desktopOn() && !settings.pushCovers?.(a.type)) presenter.desktop(a);
+      // The desktop alert names the contact from the row; with no row there is nothing safe to say, so the title badge stands in.
+      if (a.alert && !visible && settings.desktopOn() && !settings.pushCovers?.(a.type)) {
+        presenter.desktop(a.alert);
+      }
     });
 
-    // A hidden tab gets the title badge (always) and the desktop alert (if allowed), not a toast nobody can see.
-    if (!env.isVisible()) return;
-    this.queueAnnouncement(alerts);
-    for (const a of alerts) this.toast(a);
+    const items: ToastItem[] = [
+      ...alerts.map((alert): ToastItem => ({ kind: 'alert', subject: alert.subject, alert })),
+      ...(generic.length > 0
+        ? [{ kind: 'generic', subject: GENERIC_SUBJECT, count: generic.length } as ToastItem]
+        : []),
+    ];
+    // A hidden tab gets the title badge (always) and the desktop alert (if allowed), not a toast nobody can see. What it could not
+    // show is kept and shown once, when the tab comes back, if it is still unread.
+    if (!env.isVisible()) {
+      this.park(items);
+      return;
+    }
+    if (alerts.length > 0) this.queueAnnouncement(alerts);
+    for (const item of items) this.toast(item);
+  }
+
+  // --- a hidden tab, then the person comes back ------------------------------------------------------------------------------
+
+  private park(items: readonly ToastItem[]): void {
+    for (const item of items) {
+      const prior = this.parked.get(item.subject);
+      this.parked.delete(item.subject);
+      if (item.kind === 'generic' && prior?.kind === 'generic') {
+        this.parked.set(item.subject, { ...item, count: item.count + prior.count });
+      } else {
+        this.parked.set(item.subject, item);
+      }
+      if (this.parked.size > PARKED_MAX) {
+        this.parked.delete(this.parked.keys().next().value as string);
+        this.parkedExtra += 1;
+      }
+    }
+  }
+
+  /** The tab is in front again: show what it missed, as one alert or one "N new notifications", unless it was all read meanwhile. */
+  private showParked(): void {
+    if (this.stopped || this.parked.size === 0) return;
+    const items = [...this.parked.values()];
+    const extra = this.parkedExtra;
+    this.parked.clear();
+    this.parkedExtra = 0;
+    const { qc } = this.o;
+    if (qc.getQueryData<number>(NOTIFICATION_KEYS.unread) === 0) return;
+    const feed = qc.getQueryData<NotificationListResponse>(NOTIFICATION_KEYS.feed);
+    const stillUnread = items.filter((item) => {
+      if (item.kind !== 'alert') return true;
+      const now = feed?.data.find((n) => n.id === item.alert.row.id);
+      return !now || now.readAt === null;
+    });
+    if (stillUnread.length === 0) return;
+    const total =
+      stillUnread.reduce((n, item) => n + (item.kind === 'generic' ? item.count : 1), 0) + extra;
+    const only = stillUnread[0]!;
+    if (stillUnread.length === 1 && extra === 0) {
+      if (only.kind === 'alert') this.queueAnnouncement([only.alert]);
+      this.toast(only);
+    } else {
+      this.toast({ kind: 'generic', subject: GENERIC_SUBJECT, count: total });
+    }
   }
 
   // --- toasts, paced ---------------------------------------------------------------------------------------------------------
 
-  private toast(alert: LiveAlert): void {
+  private toast(item: ToastItem): void {
     const now = this.o.env.now();
-    const decision = this.planner.decide(alert.subject, now);
+    const decision = this.planner.decide(item.subject, now);
     if (decision.action === 'show') {
-      this.planner.record(alert.subject, now);
-      this.o.presenter.toast({ kind: 'alert', alert });
+      this.planner.record(item.subject, now);
+      this.show(item);
     } else if (decision.action === 'defer') {
       // The newest state of this conversation shows once its window has passed; a later event replaces the waiting one.
-      clearTimeout(this.deferred.get(alert.subject));
+      const waiting = this.deferredItems.get(item.subject);
+      clearTimeout(this.deferred.get(item.subject));
+      const next =
+        item.kind === 'generic' && waiting?.kind === 'generic'
+          ? { ...item, count: item.count + waiting.count }
+          : item;
+      this.deferredItems.set(item.subject, next);
       this.deferred.set(
-        alert.subject,
+        item.subject,
         setTimeout(() => {
-          this.deferred.delete(alert.subject);
-          if (!this.stopped && this.o.env.isVisible()) this.toast(alert);
+          this.deferred.delete(item.subject);
+          const due = this.deferredItems.get(item.subject);
+          this.deferredItems.delete(item.subject);
+          if (due && !this.stopped && this.o.env.isVisible()) this.toast(due);
         }, decision.waitMs),
       );
     } else {
-      this.overflow += 1;
+      this.overflow += item.kind === 'generic' ? item.count : 1;
       this.overflowTimer ??= setTimeout(() => {
         this.overflowTimer = undefined;
         const count = this.overflow;
@@ -316,6 +452,14 @@ export class LiveNotificationsController {
         }
       }, decision.waitMs);
     }
+  }
+
+  private show(item: ToastItem): void {
+    this.o.presenter.toast(
+      item.kind === 'alert'
+        ? { kind: 'alert', alert: item.alert }
+        : { kind: 'generic', count: item.count },
+    );
   }
 
   // --- announcements, spaced -------------------------------------------------------------------------------------------------
