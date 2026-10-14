@@ -288,8 +288,11 @@ the contacts, groups and tags endpoints.
 attachmentType, attachmentUrl, senderLabel, twilioReady`; `category` is `meta_category`, else the local category when it is a
   WhatsApp one, else `utility`.
 - `senders`: connected numbers (`key` is `<engine>:<uuid>`, what `senderKeys` takes), default engine first, with `label, phone,
-engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers are
-  left out.
+engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers and
+  mailboxes are left out.
+- `?channel=sms` and `?channel=email` scope the page to that channel. `email` lists the connected mailboxes the caller may send from
+  (`key` `email:<mailbox uuid>`, `phone` the address, `engine` `email`), no templates, and nothing without the Email plan add-on
+  (see [campaigns.md](campaigns.md#email-campaigns)). A template broadcast refuses an `email:` sender (422 on `senderKeys`).
 - `twilioEnabled`: a Twilio number is connected, so the picker marks each template "Twilio ready" or "plain text only".
 
 `templates[].engine` is `baileys`, `waba` or `twilio`: the stored channel, else Twilio when the template has a Content SID, WABA when
