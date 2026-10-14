@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Soumissions de formulaires par mois",
             "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois",
             "sms_monthly": "SMS par mois",
-            "email_mailboxes": "Boîtes e-mail"
+            "email_mailboxes": "Boîtes e-mail",
+            "email_monthly": "E-mails par mois"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Soumissions de formulaires acceptées dans le mois calendaire, spam exclu. Au-delà du plafond, une soumission est tout de même enregistrée pour examen, jamais perdue. 0 = illimité.",
             "ai_form_generations_monthly": "Générations du créateur de formulaires IA dans le mois calendaire, nouvelle tentative de réparation comprise. 0 = illimité.",
             "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
-            "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité."
+            "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
+            "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité."
           }
         }
       },

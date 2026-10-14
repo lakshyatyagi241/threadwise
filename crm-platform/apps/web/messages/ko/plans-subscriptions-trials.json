@@ -45,7 +45,8 @@
       "form_submissions_monthly": "월별 양식 제출",
       "ai_form_generations_monthly": "월별 AI 양식 빌더 생성",
       "sms_monthly": "월간 SMS",
-      "email_mailboxes": "이메일 메일함"
+      "email_mailboxes": "이메일 메일함",
+      "email_monthly": "월간 이메일"
     },
     "features": {
       "automation": "자동화",
@@ -132,7 +133,8 @@
       "form_submissions_monthly": "달력 월 기준으로 접수된 양식 제출입니다(스팸 제외). 한도를 넘으면 제출 내용은 검토를 위해 저장되며 버려지지 않습니다. 0 = 무제한",
       "ai_form_generations_monthly": "달력 월 기준 AI 양식 빌더 생성 횟수(복구 재시도 포함)입니다. 0 = 무제한",
       "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한.",
-      "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한."
+      "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
+      "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한."
     },
     "planAddons": {
       "title": "요금제에서 이용 가능한 추가 기능",

@@ -45,7 +45,8 @@
       "form_submissions_monthly": "Pengiriman formulir per bulan",
       "ai_form_generations_monthly": "Pembuatan formulir AI per bulan",
       "sms_monthly": "SMS per bulan",
-      "email_mailboxes": "Kotak surat email"
+      "email_mailboxes": "Kotak surat email",
+      "email_monthly": "Email per bulan"
     },
     "features": {
       "automation": "Otomatisasi",
@@ -132,7 +133,8 @@
       "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
       "ai_form_generations_monthly": "Pembuatan formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
       "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
-      "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas."
+      "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
+      "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas."
     },
     "planAddons": {
       "title": "Add-on yang tersedia di paket Anda",

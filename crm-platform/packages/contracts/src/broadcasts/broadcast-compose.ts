@@ -8,9 +8,13 @@ import { uuidSchema } from '../common/ids';
 
 /**
  * `channel=sms` scopes the composer to the SMS channel (TW-SMS-016): only SMS senders and SMS templates, and only while the platform
- * switch is on. Without it the composer is the WhatsApp one and never lists an SMS sender.
+ * switch is on. `channel=email` scopes it to the Email channel (TW-MAIL-036): the connected mailboxes as senders and no templates, and
+ * nothing at all when the plan has no Email add-on. Without it the composer is the WhatsApp one and never lists an SMS or email sender.
  */
-export const broadcastComposeQuerySchema = z.object({ channel: z.enum(['sms']).optional() });
+export const BROADCAST_COMPOSE_CHANNELS = ['sms', 'email'] as const;
+export const broadcastComposeQuerySchema = z.object({
+  channel: z.enum(BROADCAST_COMPOSE_CHANNELS).optional(),
+});
 export type BroadcastComposeQuery = z.infer<typeof broadcastComposeQuerySchema>;
 
 export const composeTemplateSchema = z.object({

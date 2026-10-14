@@ -45,7 +45,8 @@
       "form_submissions_monthly": "Aylık form gönderimi",
       "ai_form_generations_monthly": "Aylık AI form oluşturucu üretimi",
       "sms_monthly": "Aylık SMS",
-      "email_mailboxes": "E-posta kutuları"
+      "email_mailboxes": "E-posta kutuları",
+      "email_monthly": "Aylık e-posta"
     },
     "features": {
       "automation": "Otomasyon",
@@ -132,7 +133,8 @@
       "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınırın üzerindeki bir gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
       "ai_form_generations_monthly": "Takvim ayında AI form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
       "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
-      "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız."
+      "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
+      "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız."
     },
     "planAddons": {
       "title": "Planınızda kullanılabilir eklentiler",

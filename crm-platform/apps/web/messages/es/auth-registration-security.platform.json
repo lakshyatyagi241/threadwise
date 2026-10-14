@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Envíos de formulario al mes",
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes",
             "sms_monthly": "SMS al mes",
-            "email_mailboxes": "Buzones de correo"
+            "email_mailboxes": "Buzones de correo",
+            "email_monthly": "Correos al mes"
           },
           "featureGroups": {
             "messaging": "Mensajería",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Envíos de formulario aceptados en el mes natural, sin contar spam. Por encima del tope, un envío se guarda igualmente para revisión, nunca se descarta. 0 = ilimitado.",
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluido un reintento de reparación. 0 = ilimitado.",
             "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado.",
-            "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado."
+            "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
+            "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado."
           }
         }
       },

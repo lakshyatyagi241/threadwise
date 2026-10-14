@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Form submissions per month",
             "ai_form_generations_monthly": "AI form builder generations per month",
             "sms_monthly": "SMS per month",
-            "email_mailboxes": "Email mailboxes"
+            "email_mailboxes": "Email mailboxes",
+            "email_monthly": "Emails per month"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
             "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited.",
             "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
-            "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited."
+            "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
+            "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited."
           }
         }
       },
