@@ -48,6 +48,7 @@ import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
 import { ChannelLineModule } from './modules/channel-line';
 import { ChannelViberModule } from './modules/channel-viber';
+import { ChannelWechatModule } from './modules/channel-wechat';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule, NodeCatalogBridgeModule } from './modules/node-bridge-runtime';
@@ -223,6 +224,7 @@ import { HealthModule } from './health/health.module';
     ChannelTelegramModule,
     ChannelLineModule,
     ChannelViberModule,
+    ChannelWechatModule,
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,
