@@ -200,9 +200,12 @@ export class PrivacyRequestsRepository {
     const where: SQL[] = [sql`r.org_id = ${orgId}`];
     if (f.status) where.push(sql`r.status = ${f.status}`);
     if (f.requestType) where.push(sql`r.request_type = ${f.requestType}`);
-    if (f.overdue) where.push(sql`r.status IN ('received', 'verifying', 'in_progress') AND r.due_at < now()`);
+    if (f.overdue)
+      where.push(sql`r.status IN ('received', 'verifying', 'in_progress') AND r.due_at < now()`);
     if (f.after) {
-      where.push(sql`(r.received_at, r.id) < (${f.after.receivedAt.toISOString()}::timestamptz, ${f.after.id}::bigint)`);
+      where.push(
+        sql`(r.received_at, r.id) < (${f.after.receivedAt.toISOString()}::timestamptz, ${f.after.id}::bigint)`,
+      );
     }
     const res = await tx.execute(sql`
       SELECT ${REQUEST_COLS} FROM ${REQUEST_FROM} WHERE ${sql.join(where, sql` AND `)}
@@ -322,7 +325,12 @@ export class PrivacyRequestsRepository {
 
   // ---- exports ----------------------------------------------------------------------------------------------------------------
 
-  async createExport(tx: Tx, orgId: number, requestId: number, requestedBy: number | null): Promise<ExportRow> {
+  async createExport(
+    tx: Tx,
+    orgId: number,
+    requestId: number,
+    requestedBy: number | null,
+  ): Promise<ExportRow> {
     const res = await tx.execute(sql`
       INSERT INTO privacy_request_exports (org_id, request_id, requested_by) VALUES (${orgId}, ${requestId}, ${requestedBy})
       RETURNING ${EXPORT_COLS}`);
@@ -382,7 +390,9 @@ export class PrivacyRequestsRepository {
        WHERE org_id = ${orgId} AND id = ${id} AND status = 'ready' AND expires_at > now() AND file_zip IS NOT NULL`);
     const row = res.rows[0] as { file_zip: Buffer | string } | undefined;
     if (!row) return null;
-    return Buffer.isBuffer(row.file_zip) ? row.file_zip : Buffer.from(String(row.file_zip).replace(/^\\x/, ''), 'hex');
+    return Buffer.isBuffer(row.file_zip)
+      ? row.file_zip
+      : Buffer.from(String(row.file_zip).replace(/^\\x/, ''), 'hex');
   }
 
   /** Worker sweep (privileged): drops the file of an export past its week, fails one whose worker died. */
@@ -403,7 +413,9 @@ export class PrivacyRequestsRepository {
   // ---- settings ---------------------------------------------------------------------------------------------------------------
 
   async slaDays(tx: Tx, orgId: number): Promise<number | null> {
-    const res = await tx.execute(sql`SELECT sla_days FROM privacy_settings WHERE org_id = ${orgId}`);
+    const res = await tx.execute(
+      sql`SELECT sla_days FROM privacy_settings WHERE org_id = ${orgId}`,
+    );
     return res.rows[0] ? Number((res.rows[0] as { sla_days: number }).sla_days) : null;
   }
 
@@ -419,11 +431,18 @@ export class PrivacyRequestsRepository {
     tx: Tx,
     orgId: number,
     uuid: string,
-  ): Promise<{ id: number; name: string | null; phone: string | null; email: string | null } | null> {
+  ): Promise<{
+    id: number;
+    name: string | null;
+    phone: string | null;
+    email: string | null;
+  } | null> {
     const res = await tx.execute(
       sql`SELECT id, name, phone, email::text AS email FROM contacts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
     );
-    const r = res.rows[0] as { id: number | string; name: string | null; phone: string | null; email: string | null } | undefined;
+    const r = res.rows[0] as
+      | { id: number | string; name: string | null; phone: string | null; email: string | null }
+      | undefined;
     return r ? { id: Number(r.id), name: r.name, phone: r.phone, email: r.email } : null;
   }
 
@@ -431,11 +450,18 @@ export class PrivacyRequestsRepository {
     tx: Tx,
     orgId: number,
     uuid: string,
-  ): Promise<{ id: number; name: string | null; phone: string | null; email: string | null } | null> {
+  ): Promise<{
+    id: number;
+    name: string | null;
+    phone: string | null;
+    email: string | null;
+  } | null> {
     const res = await tx.execute(
       sql`SELECT id, name, coalesce(phone_e164, phone) AS phone, email FROM leads WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
     );
-    const r = res.rows[0] as { id: number | string; name: string | null; phone: string | null; email: string | null } | undefined;
+    const r = res.rows[0] as
+      | { id: number | string; name: string | null; phone: string | null; email: string | null }
+      | undefined;
     return r ? { id: Number(r.id), name: r.name, phone: r.phone, email: r.email } : null;
   }
 
@@ -443,15 +469,25 @@ export class PrivacyRequestsRepository {
     tx: Tx,
     orgId: number,
     q: string,
-  ): Promise<Array<{ kind: 'contact' | 'lead'; uuid: string; name: string | null; phone: string | null; email: string | null }>> {
+  ): Promise<
+    Array<{
+      kind: 'contact' | 'lead';
+      uuid: string;
+      name: string | null;
+      phone: string | null;
+      email: string | null;
+    }>
+  > {
     const like = `%${q.replace(/[%_\\]/g, (c) => `\\${c}`)}%`;
     const digits = q.replace(/\D/g, '');
-    const phoneCond = digits.length >= 4
-      ? sql` OR regexp_replace(coalesce(normalized_phone, phone, ''), '\\D', '', 'g') LIKE ${`%${digits}%`}`
-      : sql``;
-    const leadPhoneCond = digits.length >= 4
-      ? sql` OR regexp_replace(coalesce(phone_e164, phone, ''), '\\D', '', 'g') LIKE ${`%${digits}%`}`
-      : sql``;
+    const phoneCond =
+      digits.length >= 4
+        ? sql` OR regexp_replace(coalesce(normalized_phone, phone, ''), '\\D', '', 'g') LIKE ${`%${digits}%`}`
+        : sql``;
+    const leadPhoneCond =
+      digits.length >= 4
+        ? sql` OR regexp_replace(coalesce(phone_e164, phone, ''), '\\D', '', 'g') LIKE ${`%${digits}%`}`
+        : sql``;
     const res = await tx.execute(sql`
       (SELECT 'contact' AS kind, uuid, name, phone, email::text AS email FROM contacts
         WHERE org_id = ${orgId} AND (name ILIKE ${like} OR email::text ILIKE ${like}${phoneCond}) ORDER BY id LIMIT 10)
@@ -468,8 +504,10 @@ export class PrivacyRequestsRepository {
   }
 
   async userUuid(tx: Tx, orgId: number, userId: number): Promise<string | null> {
-    const res = await tx.execute(sql`SELECT uuid FROM users WHERE org_id = ${orgId} AND id = ${userId}`);
-    return res.rows[0] ? ((res.rows[0] as { uuid: string }).uuid) : null;
+    const res = await tx.execute(
+      sql`SELECT uuid FROM users WHERE org_id = ${orgId} AND id = ${userId}`,
+    );
+    return res.rows[0] ? (res.rows[0] as { uuid: string }).uuid : null;
   }
 
   // ---- storage bridge (worker) ------------------------------------------------------------------------------------------------

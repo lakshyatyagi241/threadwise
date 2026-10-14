@@ -255,7 +255,13 @@ export const privacyRequestEventSchema = z.object({
 });
 export type PrivacyRequestEvent = z.infer<typeof privacyRequestEventSchema>;
 
-export const privacyExportStatusSchema = z.enum(['queued', 'running', 'ready', 'failed', 'expired']);
+export const privacyExportStatusSchema = z.enum([
+  'queued',
+  'running',
+  'ready',
+  'failed',
+  'expired',
+]);
 export const privacyExportSchema = z.object({
   id: uuidSchema,
   status: privacyExportStatusSchema,
@@ -290,5 +296,7 @@ export const privacySubjectHitSchema = z.object({
   hint: z.string(),
 });
 export type PrivacySubjectHit = z.infer<typeof privacySubjectHitSchema>;
-export const privacySubjectSearchResultSchema = z.object({ data: z.array(privacySubjectHitSchema) });
+export const privacySubjectSearchResultSchema = z.object({
+  data: z.array(privacySubjectHitSchema),
+});
 export type PrivacySubjectSearchResult = z.infer<typeof privacySubjectSearchResultSchema>;

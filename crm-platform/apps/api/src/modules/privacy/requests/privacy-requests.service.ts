@@ -122,7 +122,11 @@ export class PrivacyRequestsService {
         type: 'created',
         to: 'received',
         actorUserId: ctx.userId,
-        detail: { requestType: input.requestType, subjectKind: s.kind, channel: input.requesterChannel },
+        detail: {
+          requestType: input.requestType,
+          subjectKind: s.kind,
+          channel: input.requesterChannel,
+        },
       });
       await this.audit.record(tx, { module: MODULE_KEY, recordId: row.id, action: 'insert' });
       await this.emit(tx, row, 'privacy_request.created');
@@ -194,7 +198,9 @@ export class PrivacyRequestsService {
     return this.db.tx(async (tx) => {
       const row = await this.mustFind(tx, ctx.orgId, uuid, true);
       if (row.status !== 'received' && row.status !== 'verifying') {
-        throw stateError('Identity can only be checked while the request is open and not yet verified.');
+        throw stateError(
+          'Identity can only be checked while the request is open and not yet verified.',
+        );
       }
       if (input.outcome === 'verified' && !input.method) {
         throw AppError.validation('Say how the identity was verified.', [
@@ -245,7 +251,9 @@ export class PrivacyRequestsService {
         delta: { status: { old: row.status, new: nextStatus(input.outcome) } },
       });
       const after = (await this.repo.byId(tx, ctx.orgId, row.id))!;
-      await this.emit(tx, after, 'privacy_request.verification_changed', { outcome: input.outcome });
+      await this.emit(tx, after, 'privacy_request.verification_changed', {
+        outcome: input.outcome,
+      });
       return toPrivacyRequest(after);
     });
   }
@@ -290,7 +298,9 @@ export class PrivacyRequestsService {
       if (!['received', 'verifying', 'in_progress'].includes(row.status)) {
         throw stateError('A closed request cannot be rejected.');
       }
-      await this.repo.setStatus(tx, ctx.orgId, row.id, 'rejected', { rejectionReason: input.reason });
+      await this.repo.setStatus(tx, ctx.orgId, row.id, 'rejected', {
+        rejectionReason: input.reason,
+      });
       await this.repo.dropIdentifier(tx, ctx.orgId, row.id);
       await this.repo.addEvent(tx, ctx.orgId, row.id, {
         type: 'rejected',
@@ -374,7 +384,12 @@ export class PrivacyRequestsService {
     } catch (err) {
       // Redis is down: the row must not sit `queued` forever, blocking every later request.
       await this.db.tx((tx) =>
-        this.repo.failExport(tx, ctx.orgId, created.id, 'The export could not be started. Try again.'),
+        this.repo.failExport(
+          tx,
+          ctx.orgId,
+          created.id,
+          'The export could not be started. Try again.',
+        ),
       );
       throw err;
     }
@@ -390,7 +405,11 @@ export class PrivacyRequestsService {
       const row = await this.mustFind(tx, ctx.orgId, uuid, true);
       const x = await this.repo.exportByUuid(tx, ctx.orgId, exportUuid);
       if (!x || x.requestId !== row.id) {
-        throw new AppError(ERROR_CODES.PRIVACY_EXPORT_NOT_FOUND, 'Export not found', HttpStatus.NOT_FOUND);
+        throw new AppError(
+          ERROR_CODES.PRIVACY_EXPORT_NOT_FOUND,
+          'Export not found',
+          HttpStatus.NOT_FOUND,
+        );
       }
       const file = await this.repo.exportFile(tx, ctx.orgId, x.id);
       if (!file) {
@@ -480,18 +499,23 @@ export class PrivacyRequestsService {
       // What the person confirmed is what runs: the counts are taken again inside this transaction and must equal the preview.
       const again = await this.eraser.run(tx, { ...base, dryRun: true });
       if (!sameCounts(again.report, row.dryRunSummary!)) {
-        throw stateError('The data changed since the preview. Preview the erasure again before executing it.');
+        throw stateError(
+          'The data changed since the preview. Preview the erasure again before executing it.',
+        );
       }
 
       const doomed = await this.contactsOf(tx, ctx.orgId, subject.contactIds);
       const run = await this.eraser.run(tx, { ...base, dryRun: false });
       if (!sameCounts(run.report, row.dryRunSummary!)) {
         // Cannot happen inside one transaction without a concurrent writer; if it does, nothing is kept.
-        throw stateError('The erasure did not match its preview and was rolled back. Preview it again.');
+        throw stateError(
+          'The erasure did not match its preview and was rolled back. Preview it again.',
+        );
       }
 
       const executedAt = new Date();
-      const userUuid = ctx.userId === null ? null : await this.repo.userUuid(tx, ctx.orgId, ctx.userId);
+      const userUuid =
+        ctx.userId === null ? null : await this.repo.userUuid(tx, ctx.orgId, ctx.userId);
       const body: Omit<PrivacyProof, 'sha256'> = {
         requestReference: referenceOf(row.uuid),
         requestType: row.requestType as PrivacyProof['requestType'],
@@ -542,7 +566,12 @@ export class PrivacyRequestsService {
         aggregateModule: MODULE_KEY,
         aggregateId: row.id,
         eventType: 'privacy_request.erased',
-        payload: { uuid: row.uuid, reference: referenceOf(row.uuid), ...run.report.totals, files: run.report.files },
+        payload: {
+          uuid: row.uuid,
+          reference: referenceOf(row.uuid),
+          ...run.report.totals,
+          files: run.report.files,
+        },
       });
       return run.report;
     });
@@ -655,7 +684,12 @@ export class PrivacyRequestsService {
       aggregateId: row.id,
       eventType,
       // Identifiers and the type only: the event never carries the person.
-      payload: { uuid: row.uuid, reference: referenceOf(row.uuid), requestType: row.requestType, ...extra },
+      payload: {
+        uuid: row.uuid,
+        reference: referenceOf(row.uuid),
+        requestType: row.requestType,
+        ...extra,
+      },
     });
   }
 
@@ -667,7 +701,9 @@ export class PrivacyRequestsService {
     if (!ids.length) return [];
     const res = await tx.execute(sql`
       SELECT id, uuid, display_id FROM contacts WHERE org_id = ${orgId} AND id = ANY(${`{${ids.join(',')}}`}::bigint[])`);
-    return (res.rows as Array<{ id: number | string; uuid: string; display_id: string | null }>).map((r) => ({
+    return (
+      res.rows as Array<{ id: number | string; uuid: string; display_id: string | null }>
+    ).map((r) => ({
       id: Number(r.id),
       uuid: r.uuid,
       displayId: r.display_id,

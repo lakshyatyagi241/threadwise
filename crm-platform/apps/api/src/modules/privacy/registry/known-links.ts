@@ -14,7 +14,11 @@ export interface KnownLink {
 }
 
 export const KNOWN_NO_FK_LINKS: readonly KnownLink[] = [
-  { table: 'messages', column: 'conversation_id', holds: 'conversations.id (a conversation belongs to a contact or a peer number)' },
+  {
+    table: 'messages',
+    column: 'conversation_id',
+    holds: 'conversations.id (a conversation belongs to a contact or a peer number)',
+  },
   { table: 'message_events', column: 'message_id', holds: 'messages.id' },
   { table: 'conversation_events', column: 'conversation_id', holds: 'conversations.id' },
   { table: 'faq_match_logs', column: 'conversation_id', holds: 'conversations.id' },
@@ -26,5 +30,9 @@ export const KNOWN_NO_FK_LINKS: readonly KnownLink[] = [
   { table: 'wa_call_permissions', column: 'contact_phone', holds: 'the contact number as text' },
   { table: 'keyword_reply_logs', column: 'contact_phone', holds: 'the sender number as text' },
   { table: 'auto_reply_lookups', column: 'contact_phone', holds: 'the sender number as text' },
-  { table: 'google_form_sessions', column: 'contact_phone', holds: 'the respondent number as text' },
+  {
+    table: 'google_form_sessions',
+    column: 'contact_phone',
+    holds: 'the respondent number as text',
+  },
 ];

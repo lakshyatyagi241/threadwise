@@ -13,7 +13,8 @@ import { defineHolder } from '../registry/define';
 export const privacyRequestsHolder = defineHolder({
   key: 'privacy.requests',
   module: 'privacy',
-  description: 'Data requests about a person, their proof of erasure, and the audit trail of the contact record.',
+  description:
+    'Data requests about a person, their proof of erasure, and the audit trail of the contact record.',
   subjects: ['contact', 'lead'],
   tables: [
     {
@@ -27,7 +28,8 @@ export const privacyRequestsHolder = defineHolder({
       categories: ['identifier'],
       pii: ['subject_label', 'internal_note'],
       exportOmit: ['subject_identifier_cipher'],
-      retention: 'Kept as the record of the request (accountability), without a link to the person.',
+      retention:
+        'Kept as the record of the request (accountability), without a link to the person.',
     },
     {
       table: 'audit_log',
@@ -44,7 +46,8 @@ export const privacyRequestsHolder = defineHolder({
       tier: 'core',
       categories: ['identifier', 'contact', 'behaviour'],
       pii: ['delta'],
-      retention: 'The audit row stays (actor, action, time, record id); the changed values are cleared.',
+      retention:
+        'The audit row stays (actor, action, time, record id); the changed values are cleared.',
     },
   ],
 });

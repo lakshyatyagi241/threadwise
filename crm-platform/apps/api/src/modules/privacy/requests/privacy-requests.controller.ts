@@ -72,7 +72,9 @@ export class PrivacyRequestsController {
     summary: 'Find the person a request is about, by name, phone or email (contacts and leads)',
     description: 'Phone and email come back masked.',
   })
-  searchSubjects(@Query(zodPipe(privacySubjectSearchQuerySchema)) query: PrivacySubjectSearchQuery) {
+  searchSubjects(
+    @Query(zodPipe(privacySubjectSearchQuerySchema)) query: PrivacySubjectSearchQuery,
+  ) {
     return this.requests.searchSubjects(query.q);
   }
 
@@ -89,7 +91,8 @@ export class PrivacyRequestsController {
   @RequirePermission('privacy.requests.manage')
   @Throttle({ limit: 30, windowSeconds: 60, by: 'actor' })
   @ApiOperation({
-    summary: 'Log a data request (access, export, erasure, rectification, restriction, objection, withdrawal, portability)',
+    summary:
+      'Log a data request (access, export, erasure, rectification, restriction, objection, withdrawal, portability)',
     description:
       'The subject is a contact, a lead, or a phone / email for a person who is not a contact. The clock starts now (workspace setting, default 30 days). Idempotency-Key supported.',
   })
@@ -149,7 +152,8 @@ export class PrivacyRequestsController {
   @RequirePermission('privacy.requests.manage')
   @Throttle({ limit: 30, windowSeconds: 60, by: 'actor' })
   @ApiOperation({
-    summary: 'Close a verified request that ends without an erasure (rectification, restriction, objection, withdrawal, or a delivered export)',
+    summary:
+      'Close a verified request that ends without an erasure (rectification, restriction, objection, withdrawal, or a delivered export)',
   })
   complete(@Param('id', ParseUUIDPipe) id: string) {
     return this.requests.complete(id);
@@ -172,7 +176,9 @@ export class PrivacyRequestsController {
   @Get('requests/:id/exports/:exportId/download')
   @RequirePermission('privacy.requests.manage')
   @Throttle({ limit: 20, windowSeconds: 60, by: 'actor' })
-  @ApiOperation({ summary: 'The finished ZIP (kept 7 days); audited, and it delivers an export request' })
+  @ApiOperation({
+    summary: 'The finished ZIP (kept 7 days); audited, and it delivers an export request',
+  })
   async download(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('exportId', ParseUUIDPipe) exportId: string,

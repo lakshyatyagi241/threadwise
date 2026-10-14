@@ -1,5 +1,9 @@
 export { PrivacyModule } from './privacy.module';
-export { PersonalDataErasureService, ALL_TIERS, CONTACT_DELETE_TIERS } from './engine/erasure.service';
+export {
+  PersonalDataErasureService,
+  ALL_TIERS,
+  CONTACT_DELETE_TIERS,
+} from './engine/erasure.service';
 export { SubjectResolver } from './engine/subject-resolver';
 export {
   PERSONAL_DATA_REGISTRY,

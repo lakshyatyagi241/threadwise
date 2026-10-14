@@ -11,7 +11,8 @@ const CONTACT: Link = { by: 'contact', column: 'contact_id' };
 export const broadcastsRecipients = defineHolder({
   key: 'broadcasts.recipients',
   module: 'broadcasts, scheduled-queue-warmer',
-  description: 'Rows saying which broadcasts and scheduled messages a person was sent, with the number used.',
+  description:
+    'Rows saying which broadcasts and scheduled messages a person was sent, with the number used.',
   subjects: ['contact'],
   tables: [
     {
@@ -57,7 +58,12 @@ export const campaignsRecipients = defineHolder({
       table: 'wp_campaign_contacts',
       link: [CONTACT, { by: 'phone', column: 'phone_number' }],
       disposition: 'anonymise',
-      set: { phone_number: 'null', recipient_name: 'null', response: 'null', error_message: 'null' },
+      set: {
+        phone_number: 'null',
+        recipient_name: 'null',
+        response: 'null',
+        error_message: 'null',
+      },
       tier: 'records',
       categories: ['identifier', 'communications', 'content'],
       pii: ['phone_number', 'recipient_name', 'response', 'error_message'],
@@ -73,7 +79,8 @@ export const campaignsRecipients = defineHolder({
         link: [CONTACT, { by: 'phone', column: 'phone_number' }],
       },
       disposition: 'retain',
-      reason: 'Retry timing of a recipient row; holds no personal value (the recipient row itself is anonymised).',
+      reason:
+        'Retry timing of a recipient row; holds no personal value (the recipient row itself is anonymised).',
       tier: 'records',
       categories: ['communications'],
       pii: [],
@@ -113,7 +120,11 @@ export const flowsRuntime = defineHolder({
         column: 'run_id',
         table: 'flow_runs',
         key: 'id',
-        link: [CONTACT, { by: 'phone', column: 'peer_key' }, { by: 'conversation', column: 'conversation_id' }],
+        link: [
+          CONTACT,
+          { by: 'phone', column: 'peer_key' },
+          { by: 'conversation', column: 'conversation_id' },
+        ],
       },
       disposition: 'delete',
       tier: 'history',
@@ -124,7 +135,11 @@ export const flowsRuntime = defineHolder({
     },
     {
       table: 'flow_runs',
-      link: [CONTACT, { by: 'phone', column: 'peer_key' }, { by: 'conversation', column: 'conversation_id' }],
+      link: [
+        CONTACT,
+        { by: 'phone', column: 'peer_key' },
+        { by: 'conversation', column: 'conversation_id' },
+      ],
       disposition: 'delete',
       tier: 'history',
       order: 40,

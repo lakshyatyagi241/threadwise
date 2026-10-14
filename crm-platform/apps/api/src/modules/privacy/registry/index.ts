@@ -6,12 +6,23 @@ import {
   growthEnrichment,
   leadsRecords,
 } from '../manifests/records';
-import { broadcastsRecipients, campaignsRecipients, commerceNudges, flowsRuntime } from '../manifests/engagement';
+import {
+  broadcastsRecipients,
+  campaignsRecipients,
+  commerceNudges,
+  flowsRuntime,
+} from '../manifests/engagement';
 import { callsLogs, callsPermissions } from '../manifests/calls';
-import { consentLedger, contactsCard, contactsGroupsTags, contactsNotesFiles } from '../manifests/contacts';
+import {
+  consentLedger,
+  contactsCard,
+  contactsGroupsTags,
+  contactsNotesFiles,
+} from '../manifests/contacts';
 import { inboxMessages } from '../manifests/inbox';
 import { salesInvoices } from '../manifests/sales';
 import { privacyRequestsHolder } from '../manifests/privacy';
+import { orderOf } from './define';
 import type { PersonalDataHolder, TableSpec } from './types';
 
 /**
@@ -45,11 +56,13 @@ export function registeredSpecs(
 ): { holder: PersonalDataHolder; spec: TableSpec }[] {
   const out: { holder: PersonalDataHolder; spec: TableSpec }[] = [];
   for (const holder of registry) for (const spec of holder.tables) out.push({ holder, spec });
-  return out.sort((a, b) => (a.spec.order ?? 50) - (b.spec.order ?? 50));
+  return out.sort((a, b) => orderOf(a.spec) - orderOf(b.spec));
 }
 
 /** The tables the registry names (a table may appear under two holders only by mistake; the test rejects that). */
-export function registeredTables(registry: readonly PersonalDataHolder[] = PERSONAL_DATA_REGISTRY): Set<string> {
+export function registeredTables(
+  registry: readonly PersonalDataHolder[] = PERSONAL_DATA_REGISTRY,
+): Set<string> {
   return new Set(registeredSpecs(registry).map((p) => p.spec.table));
 }
 
@@ -57,7 +70,9 @@ export function registeredTables(registry: readonly PersonalDataHolder[] = PERSO
  * A short digest of what the registry declares (keys, tables, dispositions). A proof of erasure carries it, so a later reader can tell
  * which version of the declarations an erasure ran with; it never includes a value.
  */
-export function registryDigest(registry: readonly PersonalDataHolder[] = PERSONAL_DATA_REGISTRY): string {
+export function registryDigest(
+  registry: readonly PersonalDataHolder[] = PERSONAL_DATA_REGISTRY,
+): string {
   const body = registeredSpecs(registry)
     .map((p) => `${p.holder.key}:${p.spec.table}:${p.spec.disposition}:${p.spec.tier}`)
     .sort()

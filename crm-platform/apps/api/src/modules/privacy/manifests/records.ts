@@ -11,7 +11,8 @@ const CONTACT: Link = { by: 'contact', column: 'contact_id' };
 export const leadsRecords = defineHolder({
   key: 'leads.records',
   module: 'leads, lead-scoring, marketplace (lead pipeline)',
-  description: 'Leads (found or submitted), their intake events and the webhook bodies that created them, lead scoring runs.',
+  description:
+    'Leads (found or submitted), their intake events and the webhook bodies that created them, lead scoring runs.',
   subjects: ['lead', 'contact'],
   tables: [
     {
@@ -66,7 +67,8 @@ export const leadsRecords = defineHolder({
       tier: 'records',
       categories: ['ai_inference', 'identifier'],
       pii: ['contact_name', 'reasons'],
-      retention: 'AI scoring log; no foreign key to the contact (the id is stored as a plain number).',
+      retention:
+        'AI scoring log; no foreign key to the contact (the id is stored as a plain number).',
     },
     {
       table: 'lead_chat_digests',
@@ -134,7 +136,8 @@ export const leadsRecords = defineHolder({
 export const crmRecords = defineHolder({
   key: 'crm.records',
   module: 'crm/deals, crm/tasks, crm/companies (projects)',
-  description: 'Deals, tasks and projects linked to a person. Titles and notes often carry the name, so a data request clears them.',
+  description:
+    'Deals, tasks and projects linked to a person. Titles and notes often carry the name, so a data request clears them.',
   subjects: ['contact'],
   tables: [
     {
@@ -185,7 +188,8 @@ export const crmRecords = defineHolder({
 export const formsSubmissions = defineHolder({
   key: 'forms.submissions',
   module: 'forms-builder, whatsapp flows forms',
-  description: 'Answers submitted through web forms and WhatsApp flow forms, and the consent line shown with them.',
+  description:
+    'Answers submitted through web forms and WhatsApp flow forms, and the consent line shown with them.',
   subjects: ['contact', 'lead'],
   tables: [
     {
@@ -206,7 +210,7 @@ export const formsSubmissions = defineHolder({
       categories: ['contact', 'content', 'attribution', 'special_risk'],
       pii: ['answers', 'ip_hash', 'user_agent', 'referrer', 'page_url', 'error'],
       retention:
-        'Answers are purged on the form\'s own schedule (answers_expires_at); the consent proof of the submission stays.',
+        "Answers are purged on the form's own schedule (answers_expires_at); the consent proof of the submission stays.",
     },
     {
       table: 'wa_form_submissions',

@@ -56,11 +56,13 @@ export class SubjectResolver {
             UNION
             SELECT i.contact_id FROM contact_identities i WHERE i.org_id = ${orgId} AND i.kind IN ('phone', 'whatsapp')
                AND regexp_replace(i.value, '\\D', '', 'g') = ${d}`);
-          for (const r of found.rows as Array<{ id: number | string }>) seed.contactIds.add(Number(r.id));
+          for (const r of found.rows as Array<{ id: number | string }>)
+            seed.contactIds.add(Number(r.id));
           const leads = await tx.execute(sql`
             SELECT id FROM leads WHERE org_id = ${orgId}
                AND (regexp_replace(coalesce(phone_e164, ''), '\\D', '', 'g') = ${d} OR regexp_replace(coalesce(phone, ''), '\\D', '', 'g') = ${d})`);
-          for (const r of leads.rows as Array<{ id: number | string }>) seed.leadIds.add(Number(r.id));
+          for (const r of leads.rows as Array<{ id: number | string }>)
+            seed.leadIds.add(Number(r.id));
         }
       } else {
         const e = subject.value.trim().toLowerCase();
@@ -69,11 +71,13 @@ export class SubjectResolver {
           SELECT c.id FROM contacts c WHERE c.org_id = ${orgId} AND lower(coalesce(c.normalized_email, c.email::text, '')) = ${e}
           UNION
           SELECT i.contact_id FROM contact_identities i WHERE i.org_id = ${orgId} AND i.kind = 'email' AND lower(i.value) = ${e}`);
-        for (const r of found.rows as Array<{ id: number | string }>) seed.contactIds.add(Number(r.id));
+        for (const r of found.rows as Array<{ id: number | string }>)
+          seed.contactIds.add(Number(r.id));
         const leads = await tx.execute(
           sql`SELECT id FROM leads WHERE org_id = ${orgId} AND lower(coalesce(email, '')) = ${e}`,
         );
-        for (const r of leads.rows as Array<{ id: number | string }>) seed.leadIds.add(Number(r.id));
+        for (const r of leads.rows as Array<{ id: number | string }>)
+          seed.leadIds.add(Number(r.id));
       }
     }
     return this.expand(tx, orgId, seed);

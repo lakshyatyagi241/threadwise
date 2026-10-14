@@ -43,7 +43,6 @@ export const salesInvoices = defineHolder({
         pdf_path: 'null',
         pdf_disk: 'null',
         pdf_sha256: 'null',
-        public_token_hash: 'null',
         public_token_cipher: 'null',
         token_revoked_at: 'now',
         send_error: 'null',
@@ -109,14 +108,14 @@ export const salesInvoices = defineHolder({
         buyer_phone: 'null',
         title: 'null',
         notes: 'null',
-        public_token_hash: 'null',
         public_token_cipher: 'null',
         token_revoked_at: 'now',
       },
       tier: 'financial',
       categories: ['identifier', 'contact', 'financial'],
       pii: ['buyer_name', 'buyer_email', 'buyer_phone', 'title', 'notes'],
-      retention: 'Statutory period for accepted quotes that became invoices; others as the workspace keeps them.',
+      retention:
+        'Statutory period for accepted quotes that became invoices; others as the workspace keeps them.',
     },
     {
       table: 'sales_doc_events',
@@ -160,7 +159,12 @@ export const salesInvoices = defineHolder({
       disposition: 'anonymise',
       legalHold: HOLD,
       // A recurring plan of an erased person must stop: `ended` requires no next run (check constraint).
-      set: { name: 'tombstone', template: 'empty_object', status: { text: 'ended' }, next_run_date: 'null' },
+      set: {
+        name: 'tombstone',
+        template: 'empty_object',
+        status: { text: 'ended' },
+        next_run_date: 'null',
+      },
       tier: 'financial',
       categories: ['contact', 'financial'],
       pii: ['name', 'template'],

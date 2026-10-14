@@ -99,7 +99,7 @@ export class ExportBuilder {
     }
 
     const csv = await this.messagesCsv(tx, params.orgId, params.subject);
-    entries.push({ name: 'messages.csv', data: Buffer.from(`﻿${csv.text}`, 'utf8') });
+    entries.push({ name: 'messages.csv', data: Buffer.from(`${String.fromCharCode(0xfeff)}${csv.text}`, 'utf8') });
     if (csv.truncated) truncated.push('messages.csv');
 
     const files = await this.files(tx, params, now);
@@ -124,7 +124,10 @@ export class ExportBuilder {
           'utf8',
         ),
       },
-      { name: 'README.txt', data: Buffer.from(readme(params.reference, now, files.length), 'utf8') },
+      {
+        name: 'README.txt',
+        data: Buffer.from(readme(params.reference, now, files.length), 'utf8'),
+      },
     );
 
     return { zip: buildZip(entries, now), sections, truncated };
@@ -201,7 +204,8 @@ export class ExportBuilder {
           for (const r of res.rows as Array<{ key: string }>) {
             if (seen.has(r.key)) continue;
             seen.add(r.key);
-            const linkable = params.linkUserId !== null && r.key.startsWith(`chat/${params.orgId}/`);
+            const linkable =
+              params.linkUserId !== null && r.key.startsWith(`chat/${params.orgId}/`);
             let link: string | null = null;
             if (linkable && this.tokens) {
               const token = this.tokens.sign(
@@ -224,7 +228,7 @@ export class ExportBuilder {
               linkExpiresAt: link ? expires.toISOString() : null,
               note: link
                 ? 'Open while signed in to the workspace as the person who requested this export.'
-                : 'Not served by a link: open it in the workspace (the contact\'s files, the call recording player, the invoice).',
+                : "Not served by a link: open it in the workspace (the contact's files, the call recording player, the invoice).",
             });
           }
         }

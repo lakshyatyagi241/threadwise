@@ -68,9 +68,17 @@ export class PrivacyExportRunner {
       );
       return 'done';
     } catch (err) {
-      this.logger.error({ orgId, exportUuid, err: (err as Error).message }, 'privacy export failed');
+      this.logger.error(
+        { orgId, exportUuid, err: (err as Error).message },
+        'privacy export failed',
+      );
       await this.db.txAs({ orgId }, (tx) =>
-        this.repo.failExport(tx, orgId, claimed.id, 'The export could not be built. Request it again.'),
+        this.repo.failExport(
+          tx,
+          orgId,
+          claimed.id,
+          'The export could not be built. Request it again.',
+        ),
       );
       return 'failed';
     }

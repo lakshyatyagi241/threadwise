@@ -45,7 +45,8 @@ const PII_COLUMN =
 /** Columns named like a link to a contact. */
 const CONTACT_COLUMN = /^(lead_|target_)?contact_(id|uuid)$/;
 /** Columns that hold an object-storage locator. */
-const STORAGE_COLUMN = /(^|_)(storage_key|media_key|object_key|recording_path|pdf_path|media_path|attachment_path|file_path)$/;
+const STORAGE_COLUMN =
+  /(^|_)(storage_key|media_key|object_key|recording_path|pdf_path|media_path|attachment_path|file_path)$/;
 
 const TEXT_TYPES = new Set(['text', 'character varying', 'citext', 'character']);
 
@@ -101,11 +102,13 @@ describe('personal-data registry against the migrated schema', () => {
     for (const k of fks) {
       if (!tables.includes(k.table)) continue;
       if (k.parent === 'contacts') why(k.table, `foreign key to contacts (${k.columns.join(',')})`);
-      if (k.parent === 'conversations') why(k.table, `foreign key to conversations (${k.columns.join(',')})`);
+      if (k.parent === 'conversations')
+        why(k.table, `foreign key to conversations (${k.columns.join(',')})`);
     }
     for (const c of cols) if (CONTACT_COLUMN.test(c.column)) why(c.table, `column ${c.column}`);
     for (const l of KNOWN_NO_FK_LINKS) why(l.table, `known link ${l.column}`);
-    for (const c of cols) if (PII_COLUMN.test(c.column)) why(c.table, `personal-value column ${c.column}`);
+    for (const c of cols)
+      if (PII_COLUMN.test(c.column)) why(c.table, `personal-value column ${c.column}`);
   }, 240_000);
 
   afterAll(async () => {
@@ -121,7 +124,10 @@ describe('personal-data registry against the migrated schema', () => {
       .filter((t) => !registered().has(t) && !(t in PRIVACY_ALLOWLIST))
       .sort()
       .map((t) => `${t}: ${[...new Set(reasons.get(t))].join('; ')}`);
-    expect(missing, `Register these in apps/api/src/modules/privacy/manifests or allow-list them with a reason:\n${missing.join('\n')}`).toEqual([]);
+    expect(
+      missing,
+      `Register these in apps/api/src/modules/privacy/manifests or allow-list them with a reason:\n${missing.join('\n')}`,
+    ).toEqual([]);
   });
 
   it('the detector is not vacuous: with nothing registered it flags the tables we know hold personal data', () => {
@@ -173,13 +179,15 @@ describe('personal-data registry against the migrated schema', () => {
       const need = (name: string, what: string) => {
         if (!col(spec.table, name)) problems.push(`${spec.table}.${name} (${what}) does not exist`);
       };
-      for (const l of ([] as Link[]).concat(spec.link as Link | Link[])) checkLink(l, spec.table, need, problems);
+      for (const l of ([] as Link[]).concat(spec.link as Link | Link[]))
+        checkLink(l, spec.table, need, problems);
       for (const c of spec.pii) need(c, 'pii');
       for (const s of spec.storage ?? []) need(s.column, 'storage');
       for (const c of spec.exportOmit ?? []) need(c, 'exportOmit');
       const set = anonymiseOf(spec);
       for (const c of Object.keys(set)) need(c, 'replacement');
-      if (!col(spec.table, 'org_id')) problems.push(`${spec.table} has no org_id: a registry table must be tenant data`);
+      if (!col(spec.table, 'org_id'))
+        problems.push(`${spec.table} has no org_id: a registry table must be tenant data`);
     }
     expect(problems).toEqual([]);
   });
@@ -202,7 +210,9 @@ describe('personal-data registry against the migrated schema', () => {
     for (const { spec } of specs()) {
       if (spec.disposition !== 'cascade' && spec.disposition !== 'fk_null') continue;
       const want = spec.disposition === 'cascade' ? 'c' : 'n';
-      const hit = fks.find((k) => k.table === spec.table && k.parent === spec.parent && k.del === want);
+      const hit = fks.find(
+        (k) => k.table === spec.table && k.parent === spec.parent && k.del === want,
+      );
       if (!hit) {
         problems.push(
           `${spec.table}: declared ${spec.disposition} from ${spec.parent}, but no foreign key ${spec.table} -> ${spec.parent} with ON DELETE ${want === 'c' ? 'CASCADE' : 'SET NULL'}`,
@@ -216,14 +226,20 @@ describe('personal-data registry against the migrated schema', () => {
     const toContacts = fks.filter((k) => k.parent === 'contacts' && tables.includes(k.table));
     const blocking = toContacts.filter((k) => k.del === 'a' || k.del === 'r').map((k) => k.table);
     expect(blocking, 'foreign keys that would block deleting a contact').toEqual([]);
-    const undeclared = toContacts.map((k) => k.table).filter((t) => !registered().has(t) && !(t in PRIVACY_ALLOWLIST));
+    const undeclared = toContacts
+      .map((k) => k.table)
+      .filter((t) => !registered().has(t) && !(t in PRIVACY_ALLOWLIST));
     expect(undeclared).toEqual([]);
   });
 
   it('the known links that have no foreign key still exist and are registered', () => {
-    const gone = KNOWN_NO_FK_LINKS.filter((l) => !col(l.table, l.column)).map((l) => `${l.table}.${l.column}`);
+    const gone = KNOWN_NO_FK_LINKS.filter((l) => !col(l.table, l.column)).map(
+      (l) => `${l.table}.${l.column}`,
+    );
     expect(gone, 'known links whose column disappeared').toEqual([]);
-    const unregistered = KNOWN_NO_FK_LINKS.filter((l) => !registered().has(l.table)).map((l) => l.table);
+    const unregistered = KNOWN_NO_FK_LINKS.filter((l) => !registered().has(l.table)).map(
+      (l) => l.table,
+    );
     expect(unregistered).toEqual([]);
   });
 
@@ -233,7 +249,9 @@ describe('personal-data registry against the migrated schema', () => {
       const declared = new Set((spec.storage ?? []).map((s) => s.column));
       for (const c of colsOf(spec.table)) {
         if (STORAGE_COLUMN.test(c.column) && TEXT_TYPES.has(c.type) && !declared.has(c.column)) {
-          problems.push(`${spec.table}.${c.column} looks like a stored file and is not declared in storage`);
+          problems.push(
+            `${spec.table}.${c.column} looks like a stored file and is not declared in storage`,
+          );
         }
       }
     }
@@ -243,7 +261,9 @@ describe('personal-data registry against the migrated schema', () => {
   it('financial records are only ever anonymised, under a declared legal hold', () => {
     const wrong = specs()
       .filter(({ spec }) => spec.tier === 'financial')
-      .filter(({ spec }) => spec.disposition === 'delete' || !('legalHold' in spec) || !spec.legalHold)
+      .filter(
+        ({ spec }) => spec.disposition === 'delete' || !('legalHold' in spec) || !spec.legalHold,
+      )
       .map(({ spec }) => spec.table);
     expect(wrong).toEqual([]);
   });
@@ -263,12 +283,16 @@ describe('personal-data registry against the migrated schema', () => {
 
   it('prints the coverage numbers', () => {
     const contactLinked = [...reasons.entries()].filter(([, r]) =>
-      r.some((x) => x.startsWith('foreign key to contacts') || x.startsWith('column ') || x.startsWith('known link')),
+      r.some(
+        (x) =>
+          x.startsWith('foreign key to contacts') ||
+          x.startsWith('column ') ||
+          x.startsWith('known link'),
+      ),
     );
     const flagged = reasons.size;
     const reg = [...reasons.keys()].filter((t) => registered().has(t)).length;
     const allowed = [...reasons.keys()].filter((t) => t in PRIVACY_ALLOWLIST).length;
-    // eslint-disable-next-line no-console
     console.info(
       `[privacy-registry] tables in schema: ${tables.length}; flagged as pointing at a person: ${flagged}; ` +
         `registered: ${reg}; allow-listed: ${allowed}; contact-linked (fk/column/known): ${contactLinked.length}; ` +
@@ -279,7 +303,12 @@ describe('personal-data registry against the migrated schema', () => {
   });
 });
 
-function checkLink(l: Link, table: string, need: (c: string, what: string) => void, problems: string[]): void {
+function checkLink(
+  l: Link,
+  table: string,
+  need: (c: string, what: string) => void,
+  problems: string[],
+): void {
   need(l.column, `link ${l.by}`);
   if (l.by === 'via') {
     for (const inner of ([] as Link[]).concat(l.link as Link | Link[])) {
@@ -292,7 +321,8 @@ function checkLink(l: Link, table: string, need: (c: string, what: string) => vo
 
 function anonymiseOf(spec: TableSpec): Readonly<Record<string, Replacement>> {
   if (spec.disposition === 'anonymise') return spec.set;
-  if (spec.disposition === 'delete' && spec.whenAnonymising && spec.whenAnonymising !== 'keep') return spec.whenAnonymising;
+  if (spec.disposition === 'delete' && spec.whenAnonymising && spec.whenAnonymising !== 'keep')
+    return spec.whenAnonymising;
   return {};
 }
 

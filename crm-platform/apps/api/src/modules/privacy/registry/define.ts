@@ -1,10 +1,6 @@
 import { sql } from 'drizzle-orm';
 import type { PrivacyDisposition, PrivacyErasureLine, PrivacyHistoryMode } from '@crm/contracts';
-import {
-  SECRET_COLUMN,
-  rowsOf,
-  setClause,
-} from './sql';
+import { SECRET_COLUMN, rowsOf, setClause } from './sql';
 import type {
   EraseOutcome,
   ExportSection,
@@ -18,13 +14,25 @@ import type {
 
 const DEFAULT_EXPORT_CAP = 50_000;
 const DEFAULT_ORDER = 50;
+/** Rows the database removes or unlinks, and rows kept as they are, are only counted: that must happen BEFORE anything is changed. */
+const COUNT_ONLY_ORDER = 5;
+
+/** Execution order of a table: counting-only tables first, then the declared order (default 50), the contact row (900) last. */
+export function orderOf(spec: TableSpec): number {
+  if (spec.order !== undefined) return spec.order;
+  return spec.disposition === 'cascade' ||
+    spec.disposition === 'fk_null' ||
+    spec.disposition === 'retain'
+    ? COUNT_ONLY_ORDER
+    : DEFAULT_ORDER;
+}
 
 /**
  * Turns a declaration into a holder with its two handlers. The handlers are generic on purpose: what a table holds and how it is
  * handled is data (reviewable in one place, checked against the schema by the registry test), not hand-written SQL per module.
  */
 export function defineHolder(manifest: HolderManifest): PersonalDataHolder {
-  const ordered = [...manifest.tables].sort((a, b) => (a.order ?? DEFAULT_ORDER) - (b.order ?? DEFAULT_ORDER));
+  const ordered = [...manifest.tables].sort((a, b) => orderOf(a) - orderOf(b));
   return {
     ...manifest,
     tables: ordered,
@@ -74,7 +82,11 @@ async function exportHolder(
 // ---------------------------------------------------------------------------------------------------------------------------------
 // erase
 
-const countOf = async (ctx: PrivacyCtx, spec: TableSpec, subject: ResolvedSubject): Promise<number> => {
+const countOf = async (
+  ctx: PrivacyCtx,
+  spec: TableSpec,
+  subject: ResolvedSubject,
+): Promise<number> => {
   const res = await ctx.tx.execute(
     sql`SELECT count(*)::int AS n FROM ${sql.identifier(spec.table)} WHERE ${rowsOf(spec, subject)}`,
   );
@@ -82,7 +94,11 @@ const countOf = async (ctx: PrivacyCtx, spec: TableSpec, subject: ResolvedSubjec
 };
 
 /** Queues the object-storage keys of the rows about to go. Returns how many distinct keys there are. */
-async function collectFiles(ctx: PrivacyCtx, spec: TableSpec, subject: ResolvedSubject): Promise<number> {
+async function collectFiles(
+  ctx: PrivacyCtx,
+  spec: TableSpec,
+  subject: ResolvedSubject,
+): Promise<number> {
   let found = 0;
   for (const s of spec.storage ?? []) {
     const col = sql.identifier(s.column);
@@ -105,7 +121,11 @@ async function collectFiles(ctx: PrivacyCtx, spec: TableSpec, subject: ResolvedS
   return found;
 }
 
-async function deleteRows(ctx: PrivacyCtx, spec: TableSpec, subject: ResolvedSubject): Promise<number> {
+async function deleteRows(
+  ctx: PrivacyCtx,
+  spec: TableSpec,
+  subject: ResolvedSubject,
+): Promise<number> {
   const res = await ctx.tx.execute(sql`
     WITH d AS (DELETE FROM ${sql.identifier(spec.table)} WHERE ${rowsOf(spec, subject)} RETURNING 1)
     SELECT count(*)::int AS n FROM d`);
@@ -173,20 +193,34 @@ export async function eraseSpec(
           ),
         };
       }
-      const n = ctx.dryRun ? await countOf(ctx, spec, subject) : await deleteRows(ctx, spec, subject);
+      const n = ctx.dryRun
+        ? await countOf(ctx, spec, subject)
+        : await deleteRows(ctx, spec, subject);
       return { files, line: line(key, spec.table, 'deleted', n, null) };
     }
     case 'anonymise': {
       const n = ctx.dryRun
         ? await countOf(ctx, spec, subject)
         : await updateRows(ctx, spec, subject, spec.set);
-      return { files, line: line(key, spec.table, 'anonymised', n, spec.legalHold?.reason ?? null) };
+      return {
+        files,
+        line: line(key, spec.table, 'anonymised', n, spec.legalHold?.reason ?? null),
+      };
     }
     case 'cascade': {
       // Removed by the database with its parent (the foreign key is checked by the registry test); counted now, while it is there.
       const n = await countOf(ctx, spec, subject);
       if (mode === 'anonymise' && spec.parentKeptWhenAnonymising) {
-        return { files, line: line(key, spec.table, 'retained', n, 'Link rows without personal values; they stay with the kept conversation.') };
+        return {
+          files,
+          line: line(
+            key,
+            spec.table,
+            'retained',
+            n,
+            'Link rows without personal values; they stay with the kept conversation.',
+          ),
+        };
       }
       return { files, line: line(key, spec.table, 'cascaded', n, null) };
     }

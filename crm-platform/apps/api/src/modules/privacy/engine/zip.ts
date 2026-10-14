@@ -49,7 +49,8 @@ export function buildZip(entries: readonly ZipEntry[], now: Date = new Date()): 
     const useDeflate = packed.length < raw.length;
     const body = useDeflate ? packed : raw;
     const crc = crc32(raw);
-    if (raw.length > 0xffffffff || body.length > 0xffffffff) throw new Error('file too large for a plain zip');
+    if (raw.length > 0xffffffff || body.length > 0xffffffff)
+      throw new Error('file too large for a plain zip');
 
     const local = Buffer.alloc(30);
     local.writeUInt32LE(0x04034b50, 0);

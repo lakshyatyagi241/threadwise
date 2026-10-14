@@ -30,11 +30,17 @@ function singleLink(link: Link, subject: ResolvedSubject): SQL {
       return sql`${col} IN (SELECT ${sql.identifier(link.key)} FROM ${sql.identifier(link.table)} WHERE org_id = ${subject.orgId} AND (${linkPredicate(link.link, subject)}))`;
     case 'self':
     case 'contact':
-      return subject.contactIds.length ? sql`${col} = ANY(${bigintArray(subject.contactIds)})` : sql`FALSE`;
+      return subject.contactIds.length
+        ? sql`${col} = ANY(${bigintArray(subject.contactIds)})`
+        : sql`FALSE`;
     case 'contact_uuid':
-      return subject.contactUuids.length ? sql`${col} = ANY(${uuidArray(subject.contactUuids)})` : sql`FALSE`;
+      return subject.contactUuids.length
+        ? sql`${col} = ANY(${uuidArray(subject.contactUuids)})`
+        : sql`FALSE`;
     case 'lead':
-      return subject.leadIds.length ? sql`${col} = ANY(${bigintArray(subject.leadIds)})` : sql`FALSE`;
+      return subject.leadIds.length
+        ? sql`${col} = ANY(${bigintArray(subject.leadIds)})`
+        : sql`FALSE`;
     case 'conversation':
       return subject.conversationIds.length
         ? sql`${col} = ANY(${bigintArray(subject.conversationIds)})`
@@ -52,7 +58,9 @@ function singleLink(link: Link, subject: ResolvedSubject): SQL {
         ? sql`regexp_replace(${col}::text, '\\D', '', 'g') = ANY(${textArray(subject.phoneDigits)})`
         : sql`FALSE`;
     case 'email':
-      return subject.emails.length ? sql`lower(${col}::text) = ANY(${textArray(subject.emails)})` : sql`FALSE`;
+      return subject.emails.length
+        ? sql`lower(${col}::text) = ANY(${textArray(subject.emails)})`
+        : sql`FALSE`;
   }
 }
 

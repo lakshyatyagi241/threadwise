@@ -32,7 +32,14 @@ export const callsLogs = defineHolder({
       },
       tier: 'history',
       categories: ['identifier', 'communications', 'voice'],
-      pii: ['from_phone', 'to_phone', 'recording_path', 'transcript', 'error_payload', 'meta_payload'],
+      pii: [
+        'from_phone',
+        'to_phone',
+        'recording_path',
+        'transcript',
+        'error_payload',
+        'meta_payload',
+      ],
       storage: [{ column: 'recording_path', note: 'the call recording (audio)' }],
       retention: 'Forever today (no recording retention rule yet, backlog BL-144 and BL-146).',
     },
@@ -87,7 +94,8 @@ export const callsPermissions = defineHolder({
       tier: 'history',
       categories: ['identifier', 'behaviour'],
       pii: ['contact_phone'],
-      retention: 'Until the permission expires or is withdrawn; no contact link, matched by number.',
+      retention:
+        'Until the permission expires or is withdrawn; no contact link, matched by number.',
     },
   ],
 });

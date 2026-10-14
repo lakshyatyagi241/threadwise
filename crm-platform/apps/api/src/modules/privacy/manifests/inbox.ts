@@ -41,7 +41,8 @@ export const inboxMessages = defineHolder({
       order: 10,
       categories: ['communications'],
       pii: ['detail'],
-      retention: 'Delivery events of a message; archived by the message log archive after the retention window.',
+      retention:
+        'Delivery events of a message; archived by the message log archive after the retention window.',
     },
     {
       table: 'messages',

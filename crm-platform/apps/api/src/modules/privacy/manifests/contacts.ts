@@ -10,7 +10,8 @@ const CONTACT: Link = { by: 'contact', column: 'contact_id' };
 export const contactsCard = defineHolder({
   key: 'contacts.card',
   module: 'crm/contacts',
-  description: 'The contact card: name, phone, email, address, custom properties, identities and campaign attribution.',
+  description:
+    'The contact card: name, phone, email, address, custom properties, identities and campaign attribution.',
   subjects: ['contact', 'lead'],
   tables: [
     {

@@ -14,7 +14,8 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 export const referenceOf = (uuid: string): string =>
   `DSR-${uuid.replace(/-/g, '').slice(0, 8).toUpperCase()}`;
 
-const isOpen = (status: string): boolean => (PRIVACY_OPEN_STATUSES as readonly string[]).includes(status);
+const isOpen = (status: string): boolean =>
+  (PRIVACY_OPEN_STATUSES as readonly string[]).includes(status);
 
 /**
  * A text safe to show and to store beside a request: initials and the last digits, never the person's name, number or address.
@@ -92,7 +93,8 @@ export function toPrivacyEvent(e: EventRow): PrivacyRequestEvent {
 }
 
 export function toPrivacyExport(x: ExportRow, now: Date = new Date()): PrivacyExport {
-  const expired = x.status === 'ready' && x.expiresAt !== null && x.expiresAt.getTime() <= now.getTime();
+  const expired =
+    x.status === 'ready' && x.expiresAt !== null && x.expiresAt.getTime() <= now.getTime();
   return {
     id: x.uuid,
     status: expired ? 'expired' : (x.status as PrivacyExport['status']),
