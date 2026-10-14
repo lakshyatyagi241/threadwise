@@ -76,7 +76,8 @@ export class WabaInboxSink implements WabaInboundSink {
 
   /**
    * The chat history Meta pushes after coexistence onboarding (TW-WABA-046): one ingest job per message, stored backdated and quiet
-   * (no unread, no contact, no alert). The ledger drops a message the inbox already has, so a repeated push adds nothing.
+   * (no unread, no alert, no flow). Each customer also gets a contact, made quietly (no `contact.created` event, no consent, counted against the plan's
+   * contact cap; at the cap the thread is kept without one). The ledger drops a message the inbox already has, so a repeated push adds nothing.
    */
   async onHistory(ctx: InboundContext, items: HistoryItem[]): Promise<void> {
     const channel = await this.links.ensure(ctx.orgId, ctx.configId, { create: true });
@@ -88,7 +89,7 @@ export class WabaInboxSink implements WabaInboundSink {
         kind: 'text',
         body: item.text,
         providerTimestamp: item.at,
-        history: { direction: item.outgoing ? 'out' : 'in' },
+        history: { direction: item.outgoing ? 'out' : 'in', contact: true },
       });
     }
   }

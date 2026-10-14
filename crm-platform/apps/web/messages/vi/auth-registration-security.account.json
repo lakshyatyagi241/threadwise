@@ -557,7 +557,8 @@
             "waba_groups": "Nhóm WhatsApp",
             "sms": "SMS",
             "help_agent": "Trợ lý trợ giúp",
-            "email_channel": "Kênh email (Gmail)"
+            "email_channel": "Kênh email (Gmail)",
+            "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)"
           },
           "cta": {
             "continueFree": "Tiếp tục miễn phí",

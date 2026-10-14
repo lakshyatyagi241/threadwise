@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "Niet inbegrepen in je abonnement. Upgrade om de volledige geschiedenis te importeren.",
+        "fullLockedLink": "Abonnementen bekijken"
+      }
+    }
+  }
+}

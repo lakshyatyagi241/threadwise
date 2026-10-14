@@ -320,6 +320,11 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/whatsapp-devices-baileys/history-import-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step only selects the ids of idle or never-answered history-import runs across tenants, and each run is ended by HistoryImportService.finishAs under that run's own org (txAs with a system context, filtered by org_id and id)",
+    "reviewedOn": "2026-10-14"
+  },
   "realtime/realtime.gateway.ts": {
     "status": "reviewed",
     "reason": "reads roles_version of the socket's own, server-derived org"

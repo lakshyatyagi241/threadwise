@@ -557,7 +557,8 @@
             "waba_groups": "مجموعات واتساب",
             "sms": "SMS",
             "help_agent": "المساعد الذكي",
-            "email_channel": "قناة البريد الإلكتروني (Gmail)"
+            "email_channel": "قناة البريد الإلكتروني (Gmail)",
+            "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

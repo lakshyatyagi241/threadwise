@@ -30,6 +30,8 @@ export const WADEV_ERROR_CODES = {
   WA_WORKER_UNAVAILABLE: 'WA_WORKER_UNAVAILABLE',
   /** WhatsApp did not produce the QR or the code in time (504). Counts toward the pairing limit. */
   DEVICE_PAIRING_TIMEOUT: 'DEVICE_PAIRING_TIMEOUT',
+  /** The history import has nothing to cancel in this state (409). */
+  HISTORY_IMPORT_NOT_ACTIVE: 'HISTORY_IMPORT_NOT_ACTIVE',
   // --- groups of a personal number (see groups.ts) ---
   ...WA_GROUP_ERROR_CODES,
 } as const;

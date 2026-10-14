@@ -1,0 +1,77 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "导入现有聊天记录？",
+        "intro": "WhatsApp 仅在号码首次关联后发送一次聊天记录。请在扫码之前做出选择。",
+        "label": "导入现有聊天",
+        "none": "否，从空白开始",
+        "noneHelp": "共享收件箱中只会显示新消息。这是默认选项。",
+        "recent": "是，导入最近的聊天和联系人",
+        "recentHelp": "号码首次关联时 WhatsApp 发送的最近聊天，以及其中的联系人。",
+        "full": "是，WhatsApp 发送多少就导入多少",
+        "fullHelp": "同时包含 WhatsApp 较早的历史记录。耗时更长，并会占用更多联系人额度。",
+        "pointsTitle": "须知",
+        "pointQuiet": "导入的聊天会标记为已读并保持静默：不会有提醒、自动化或自动回复。",
+        "pointNothingSent": "不会向任何人发送任何内容。",
+        "pointMedia": "照片、视频、语音消息和文件不会被导入，您会看到类似 [照片] 的占位符。",
+        "pointGroups": "群聊会保存为群组会话，不会创建联系人。",
+        "pointConsent": "导入的联系人不会被标记为已同意接收营销消息。",
+        "pointLimit": "导入的联系人会计入您套餐的联系人上限。达到上限时，导入会正常停止。",
+        "pointTime": "可能需要几分钟。您可以继续工作，也可以随时取消。",
+        "pointOnce": "再次关联该号码时，只有在扫码前再次选择导入才会导入。"
+      },
+      "result": {
+        "note": "正在导入您的聊天。请在该号码的页面查看进度。",
+        "link": "查看导入"
+      },
+      "card": {
+        "title": "已导入的聊天",
+        "state": {
+          "not_requested": "未请求",
+          "idle": "等待 WhatsApp",
+          "running": "正在导入",
+          "done": "已完成",
+          "failed": "未完成",
+          "cancelled": "已取消",
+          "limit_reached": "因联系人上限而停止"
+        },
+        "body": {
+          "not_requested": "该号码未导入聊天。WhatsApp 仅在号码首次关联时提供历史记录，请在下次关联此号码时选择导入。",
+          "idle": "正在等待号码完成关联以及 WhatsApp 发送聊天。这可能需要几分钟。",
+          "running": "正在导入聊天。您可以离开此页面，导入会继续进行。",
+          "done": "导入已完成。聊天已存入共享收件箱，并标记为已读。",
+          "failed": "导入未完成。已导入的内容会保留在收件箱中。",
+          "cancelled": "您已停止导入。已导入的内容会保留在收件箱中。",
+          "limit_reached": "由于已达到套餐的联系人上限，导入已停止。已导入的内容会保留在收件箱中。"
+        },
+        "chats": "{count, plural, other {# 个聊天}}",
+        "contacts": "{count, plural, other {# 位联系人}}",
+        "messages": "{count, plural, other {# 条消息}}",
+        "progress": "进度：{percent}%",
+        "window": "最近 {days, plural, other {# 天}}的消息。",
+        "mediaNote": "照片、视频、语音消息和文件不会被导入，其位置会显示占位符。",
+        "started": "开始时间",
+        "finished": "完成时间",
+        "openInbox": "打开收件箱",
+        "cancel": "停止导入",
+        "cancelling": "正在停止...",
+        "cancelTitle": "停止导入？",
+        "cancelMessage": "将不再获取更多聊天。已导入的内容会保留在收件箱中。",
+        "cancelConfirm": "停止导入",
+        "cancelKeep": "继续导入",
+        "cancelDone": "导入已停止。已导入的内容会保留在收件箱中。"
+      },
+      "error": {
+        "history_not_received": "WhatsApp 未发送任何聊天记录。它仅在号码首次关联时发送。请重新关联该号码并选择导入以重试。",
+        "message_cap_reached": "已达到单个号码的消息数量上限而停止。已导入的内容会保留。",
+        "chat_cap_reached": "已达到单个号码的聊天数量上限而停止。已导入的内容会保留。",
+        "contact_limit_reached": "由于已达到套餐的联系人上限而停止。请释放部分联系人或升级套餐，然后重新关联号码并导入。",
+        "worker_error": "导入因错误而停止。已导入的内容会保留。请重新关联该号码以重试。"
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "该号码当前没有正在进行的导入。"
+    }
+  }
+}

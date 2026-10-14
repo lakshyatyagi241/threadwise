@@ -1,0 +1,77 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "¿Traer tus chats existentes?",
+        "intro": "WhatsApp envía el historial de chats de un número una sola vez, justo después de vincularlo por primera vez. Elige ahora, antes de escanear.",
+        "label": "Importar chats existentes",
+        "none": "No, empezar vacío",
+        "noneHelp": "Solo los mensajes nuevos aparecen en la bandeja compartida. Es la opción predeterminada.",
+        "recent": "Sí, chats y contactos recientes",
+        "recentHelp": "Los chats recientes que WhatsApp envía al vincular un número por primera vez, con las personas que participan en ellos.",
+        "full": "Sí, todo lo que WhatsApp envíe",
+        "fullHelp": "Incluye también el historial más antiguo de WhatsApp. Tarda más y consume más de tu límite de contactos.",
+        "pointsTitle": "Qué esperar",
+        "pointQuiet": "Los chats importados se marcan como leídos y permanecen en silencio: sin alertas, sin automatizaciones y sin respuestas automáticas.",
+        "pointNothingSent": "No se envía nada a nadie.",
+        "pointMedia": "Las fotos, los vídeos, las notas de voz y los archivos no se importan. Verás un marcador como [Foto].",
+        "pointGroups": "Los chats de grupo se guardan como conversaciones de grupo y no crean contactos.",
+        "pointConsent": "Las personas importadas no se marcan como que han aceptado recibir mensajes de marketing.",
+        "pointLimit": "Las personas importadas cuentan para el límite de contactos de tu plan. La importación se detiene limpiamente si se alcanza.",
+        "pointTime": "Puede tardar unos minutos. Puedes seguir trabajando y cancelar en cualquier momento.",
+        "pointOnce": "Al vincular el número de nuevo solo se importa si eliges importar otra vez antes de escanear."
+      },
+      "result": {
+        "note": "Se están importando tus chats. Sigue el progreso en la página del número.",
+        "link": "Ver la importación"
+      },
+      "card": {
+        "title": "Chats importados",
+        "state": {
+          "not_requested": "No solicitada",
+          "idle": "Esperando a WhatsApp",
+          "running": "Importando",
+          "done": "Finalizada",
+          "failed": "No finalizó",
+          "cancelled": "Cancelada",
+          "limit_reached": "Detenida en tu límite de contactos"
+        },
+        "body": {
+          "not_requested": "Este número no importó sus chats. WhatsApp ofrece el historial solo cuando se vincula un número por primera vez, así que elígelo la próxima vez que vincules este número.",
+          "idle": "Esperando a que se vincule el número y a que WhatsApp envíe sus chats. Esto puede tardar unos minutos.",
+          "running": "Importando chats. Puedes salir de esta página, la importación continúa.",
+          "done": "La importación ha terminado. Los chats están en la bandeja compartida, marcados como leídos.",
+          "failed": "La importación no finalizó. Lo que se importó permanece en la bandeja.",
+          "cancelled": "Detuviste la importación. Lo que se importó permanece en la bandeja.",
+          "limit_reached": "La importación se detuvo porque se alcanzó el límite de contactos de tu plan. Lo que se importó permanece en la bandeja."
+        },
+        "chats": "{count, plural, one {# chat} other {# chats}}",
+        "contacts": "{count, plural, one {# contacto} other {# contactos}}",
+        "messages": "{count, plural, one {# mensaje} other {# mensajes}}",
+        "progress": "Progreso: {percent}%",
+        "window": "Mensajes de {days, plural, one {el último # día} other {los últimos # días}}.",
+        "mediaNote": "Las fotos, los vídeos, las notas de voz y los archivos no se importan. En su lugar se muestra un marcador.",
+        "started": "Iniciada",
+        "finished": "Finalizada",
+        "openInbox": "Abrir la bandeja",
+        "cancel": "Detener la importación",
+        "cancelling": "Deteniendo...",
+        "cancelTitle": "¿Detener la importación?",
+        "cancelMessage": "No se tomarán más chats. Lo que ya se importó permanece en la bandeja.",
+        "cancelConfirm": "Detener la importación",
+        "cancelKeep": "Seguir importando",
+        "cancelDone": "Importación detenida. Lo que se importó permanece en la bandeja."
+      },
+      "error": {
+        "history_not_received": "WhatsApp no envió ningún historial de chats. Solo lo hace cuando se vincula un número por primera vez. Vincula el número de nuevo y elige importar para intentarlo otra vez.",
+        "message_cap_reached": "Detenida en el límite de mensajes para un número. Lo que se importó permanece.",
+        "chat_cap_reached": "Detenida en el límite de chats para un número. Lo que se importó permanece.",
+        "contact_limit_reached": "Detenida porque se alcanzó el límite de contactos de tu plan. Libera algunos contactos o mejora tu plan, luego vincula el número de nuevo e importa.",
+        "worker_error": "La importación se detuvo por un error. Lo que se importó permanece. Vincula el número de nuevo para intentarlo otra vez."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "No hay ninguna importación en curso para este número."
+    }
+  }
+}

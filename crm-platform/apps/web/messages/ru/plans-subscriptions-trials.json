@@ -79,7 +79,8 @@
       "waba_groups": "Группы WhatsApp",
       "sms": "Канал SMS",
       "help_agent": "Помощник",
-      "email_channel": "Канал электронной почты (Gmail)"
+      "email_channel": "Канал электронной почты (Gmail)",
+      "personal_history_full": "Импорт полной истории (личный WhatsApp)"
     },
     "limitGroups": {
       "messaging": "Переписка",

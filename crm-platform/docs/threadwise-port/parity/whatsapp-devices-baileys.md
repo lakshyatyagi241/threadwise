@@ -64,3 +64,12 @@ guide and Arabic copy (web), the real-phone run, and counsel's review of the not
 7. **No "delete a group"**: WhatsApp has none; leaving keeps the row read-only (D5). Removing every member and leaving is not offered.
 8. **The group picture is not stored here**: it goes to WhatsApp, which re-encodes it; the list shows no picture until a profile-picture read exists (`picture_url` is empty).
 9. **Notifications**: a join request and a removal reach people holding `wa.groups.manage` (in-app only by default); Reference's FCM push `is_group` flag is not a notification of this kind.
+
+## Import of existing chats of a personal number: intended differences (TW-WAHIST)
+
+1. **Reference has no history import** (`reference/app/node/classes/BaileysClientManager.js`: `syncFullHistory: false`, `shouldSyncHistoryMessage: () => false`; a `.backup.js` copy once set `true`). This is a port addition,
+   opt-in and off by default; a number that does not opt in is built with exactly Reference's settings. `intended`, owner request (walkthrough item 26).
+2. **Quiet, read, silent, no media, no consent**: the same rules as the Cloud API coexistence import (TW-WABA-046) and the mail backfill; see spec section 23.4.
+3. **Imported people become contacts** (coexistence history creates none). Created quietly (no `contact.created`), counted against the plan's contact cap, never with consent. A group never makes one. `intended`.
+4. **Plan gate and marker (2026-10-14):** `full` needs the plan feature `personal_history_full`; imported threads and messages are marked in the inbox; one realtime hint per run; coexistence history now also makes contacts quietly (TW-WAHIST-006 to 008). `intended`, owner decisions.
+5. **Not verified:** a live WhatsApp account. The adapter is tested against a mocked library and the importer against a fake socket; see spec section 23.8. Open decisions are in the build plan.

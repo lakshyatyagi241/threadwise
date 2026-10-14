@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "Niedostępne w Twoim planie. Przejdź na wyższy plan, aby zaimportować pełną historię.",
+        "fullLockedLink": "Zobacz plany"
+      }
+    }
+  }
+}

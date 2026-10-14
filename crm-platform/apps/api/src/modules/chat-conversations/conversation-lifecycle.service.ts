@@ -31,6 +31,7 @@ export class ConversationLifecycleService {
     conv: ConversationRow,
     actor: 'customer' | 'system' | 'user',
     actorUserId?: number | null,
+    opts: { quiet?: boolean } = {},
   ): Promise<void> {
     await this.conversations.insertEvent(tx, orgId, conv.id, {
       type: 'created',
@@ -43,6 +44,8 @@ export class ConversationLifecycleService {
       recordId: conv.id,
       action: 'insert',
     });
+    // Imported history is quiet: a thread recreated from the past is not "a new conversation" to any automation or webhook.
+    if (opts.quiet) return;
     await this.outbox.emit(tx, {
       aggregateModule: CONVERSATIONS_MODULE,
       aggregateId: conv.id,

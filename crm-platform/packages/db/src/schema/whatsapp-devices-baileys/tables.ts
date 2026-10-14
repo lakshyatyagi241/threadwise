@@ -60,6 +60,8 @@ export const devices = pgTable(
     stateChangedAt: timestamp('state_changed_at', { withTimezone: true }),
     /** Country code + local number as digits, kept by the API; unique per workspace where set. */
     phoneDigits: text('phone_digits'),
+    /** The history import chosen for the pairing in progress (20261202090000): `none`, `recent` or `full`. Reset when the run ends. */
+    historyImportMode: text('history_import_mode').notNull().default('none'),
     /** The risk acknowledgement that led to this device. */
     consentId: idColumn('consent_id'),
     createdAt: createdAt(),
@@ -272,3 +274,71 @@ export const waDeviceGroups = pgTable(
 
 export type WaDeviceGroupsRow = typeof waDeviceGroups.$inferSelect;
 export type NewWaDeviceGroupsRow = typeof waDeviceGroups.$inferInsert;
+
+/** One run of the opt-in history import of a personal number. Mirrors 20261202090000_wa_device_history_import.sql. Counts only: no text, no phone. */
+export const waDeviceHistoryImports = pgTable(
+  'wa_device_history_imports',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    deviceId: idColumn('device_id').notNull(),
+    mode: text('mode').notNull(),
+    state: text('state').notNull().default('idle'),
+    requestedByUserId: idColumn('requested_by_user_id'),
+    windowDays: integer('window_days').notNull(),
+    maxMessages: integer('max_messages').notNull(),
+    maxMessagesPerChat: integer('max_messages_per_chat').notNull(),
+    maxChats: integer('max_chats').notNull(),
+    chatsCount: integer('chats_count').notNull().default(0),
+    contactsCount: integer('contacts_count').notNull().default(0),
+    messagesCount: integer('messages_count').notNull().default(0),
+    batchesCount: integer('batches_count').notNull().default(0),
+    progress: smallint('progress').notNull().default(0),
+    errorCode: text('error_code'),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    lastBatchAt: timestamp('last_batch_at', { withTimezone: true }),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_wa_device_history_imports_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'wa_device_history_imports_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_wa_device_history_imports_device',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_wa_device_history_imports_user',
+      columns: [t.orgId, t.requestedByUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    check('ck_wa_device_history_imports_mode', sql`${t.mode} in ('recent', 'full')`),
+    check(
+      'ck_wa_device_history_imports_state',
+      sql`${t.state} in ('idle', 'running', 'done', 'failed', 'cancelled', 'limit_reached')`,
+    ),
+    check('ck_wa_device_history_imports_progress', sql`${t.progress} between 0 and 100`),
+    check(
+      'ck_wa_device_history_imports_counts',
+      sql`${t.chatsCount} >= 0 and ${t.contactsCount} >= 0 and ${t.messagesCount} >= 0 and ${t.batchesCount} >= 0`,
+    ),
+    uniqueIndex('uq_wa_device_history_imports_active')
+      .on(t.orgId, t.deviceId)
+      .where(sql`${t.state} in ('idle', 'running')`),
+    index('idx_wa_device_history_imports_device').on(t.orgId, t.deviceId, t.id.desc()),
+    index('idx_wa_device_history_imports_sweep')
+      .on(t.state, t.lastBatchAt)
+      .where(sql`${t.state} in ('idle', 'running')`),
+  ],
+);
+
+export type WaDeviceHistoryImportsRow = typeof waDeviceHistoryImports.$inferSelect;

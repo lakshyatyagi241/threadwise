@@ -392,8 +392,12 @@ export interface NormalisedInbound {
   /**
    * Imported history (WhatsApp Business app coexistence): stored quietly and backdated to when it was really sent, with no unread,
    * no reopening, no contact creation and no realtime alert. `direction` is who wrote it.
+   *
+   * `contact: true` (the personal-number import, TW-WAHIST, where the person chose to bring their chats in): the thread is linked to the
+   * contact of its number, created quietly when there is none (no `contact.created` event, so no flow and no notification), counted
+   * against the plan's contact cap. It never grants consent: a contact made this way has no consent event. Never set for a group.
    */
-  history?: { direction: 'in' | 'out' };
+  history?: { direction: 'in' | 'out'; contact?: boolean };
 }
 
 export interface NormalisedReceipt {

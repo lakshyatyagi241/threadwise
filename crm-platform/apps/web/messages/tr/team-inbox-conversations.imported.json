@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "İçe aktarıldı",
+      "importedHint": "Bu sohbet telefonun geçmişinden içe aktarıldı"
+    },
+    "bubble": {
+      "imported": "İçe aktarıldı",
+      "importedHint": "Telefonun sohbet geçmişinden içe aktarıldı"
+    }
+  }
+}

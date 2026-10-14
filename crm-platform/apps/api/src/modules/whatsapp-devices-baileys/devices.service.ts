@@ -35,6 +35,7 @@ import {
 } from './device-rules';
 import { toDevice, toDeviceDetail } from './devices.mapper';
 import { DevicesRepository, type DeviceRow } from './devices.repository';
+import { HistoryImportService } from './history-import.service';
 import { RiskNoticeService } from './risk-notice.service';
 
 const MODULE = 'devices';
@@ -81,15 +82,17 @@ export class DevicesService {
     private readonly channels: ChannelRegistryService,
     private readonly planUsage: PlanUsageService,
     private readonly entitlements: PlanEntitlementService,
+    private readonly history: HistoryImportService,
   ) {}
 
   // --- reading ---------------------------------------------------------------------------------------------------------------
 
   async list(query: ListDevicesQuery): Promise<ListDevicesResponse> {
     const ctx = RequestContextStore.require();
-    const [planLimit, workers] = await Promise.all([
+    const [planLimit, workers, historyFullAllowed] = await Promise.all([
       this.entitlements.limit(ctx.orgId, 'devices'),
       this.workers.read().catch(() => ({ workers: 0, devices: 0 })),
+      this.entitlements.featureEnabled(ctx.orgId, 'personal_history_full'),
     ]);
     return this.db.tx(async (tx) => {
       const [page, used, notice] = await Promise.all([
@@ -108,6 +111,7 @@ export class DevicesService {
           noticeVersion: notice.version,
           noticeAccepted: notice.accepted,
           workerRunning: workers.workers > 0,
+          historyFullAllowed,
         },
       };
     });
@@ -365,6 +369,8 @@ export class DevicesService {
 
     const device = await this.db.tx(async (tx) => {
       const current = await this.must(tx, ctx.orgId, uuid, true);
+      // An unlinked number receives no more history: an import still waiting or running is ended.
+      await this.history.cancelActiveIn(tx, ctx.orgId, current.id, 'disconnect');
       // Nobody answered, or the device was not live but kept a saved session: the saved session goes either way.
       if (fallback || !live) await this.repo.deleteSession(tx, ctx.orgId, current.id);
       if (fallback) {

@@ -25,6 +25,13 @@ import {
 } from './message-rules';
 import { MessagesRepository, type MessageRow } from './messages.repository';
 
+/** `contacts.source` of a contact made by the personal-number history import. */
+export const IMPORT_CONTACT_SOURCE = 'whatsapp_personal_import';
+/** And of one made by the Cloud API coexistence history (the business app's chats), so the two origins stay tellable apart. */
+export const COEXISTENCE_CONTACT_SOURCE = 'whatsapp_coexistence_import';
+const importSourceOf = (channelKind: string): string =>
+  channelKind === 'whatsapp_qr' ? IMPORT_CONTACT_SOURCE : COEXISTENCE_CONTACT_SOURCE;
+
 export type IngestOutcome =
   | {
       outcome: 'stored';
@@ -33,6 +40,12 @@ export type IngestOutcome =
       seq: number;
       createdConversation: boolean;
       reopenedFrom: string | null;
+      /** The thread has a contact now (false for a group, or when the plan's contact cap stopped the link). */
+      contactLinked?: boolean;
+      /** A contact was created by this message (the quiet history import only). */
+      contactCreated?: boolean;
+      /** The plan's contact cap stopped the contact link of an imported thread. */
+      quotaReached?: boolean;
     }
   /** The provider message id was already in the ledger: nothing was stored (a redelivery, or a concurrent copy). */
   | { outcome: 'duplicate' }
@@ -178,6 +191,9 @@ export class InboundIngestService {
         seq: result.message.seq,
         createdConversation: result.createdConversation,
         reopenedFrom: result.reopenedFrom,
+        contactLinked: result.conv.contactId !== null,
+        contactCreated: result.contactCreated,
+        quotaReached: result.quotaReached,
       };
     }
     if (result.outcome === 'reaction') {
@@ -203,14 +219,27 @@ export class InboundIngestService {
     await this.conversations.lockPeer(tx, orgId, channel.id, peerKey);
     let conv = await this.conversations.findForUpdate(tx, orgId, channel.id, peerKey);
     let createdConversation = false;
+    let contactCreated = false;
+    let quotaReached = false;
     const peerName = m.peerName?.trim() || null;
 
     // A group has no contact, and imported history creates none (it must not trigger the flows or alerts a new contact does).
-    const noContact = Boolean(m.group || m.history);
+    const noContact = Boolean(m.group || (m.history && !m.history.contact));
+    const quiet = Boolean(m.history);
     if (!conv) {
       const link = noContact
-        ? { contactId: null, needsContact: false }
-        : await this.linkContact(tx, orgId, channel.kind, peerKey, peerName, m.contactIdentity);
+        ? { contactId: null, needsContact: false, created: false, quota: false }
+        : await this.linkContact(
+            tx,
+            orgId,
+            channel.kind,
+            peerKey,
+            peerName,
+            m.contactIdentity,
+            quiet,
+          );
+      contactCreated = link.created;
+      quotaReached = Boolean(m.history?.contact) && link.quota;
       conv = await this.conversations.insert(tx, orgId, {
         channelId: channel.id,
         peerKey,
@@ -222,6 +251,7 @@ export class InboundIngestService {
             : defaultTitle(channel.kind, peerKey, peerName),
         contactId: link.contactId,
         needsContact: link.needsContact,
+        imported: Boolean(m.history),
       });
       createdConversation = true;
     } else {
@@ -236,7 +266,10 @@ export class InboundIngestService {
           peerKey,
           peerName,
           m.contactIdentity,
+          quiet,
         );
+        contactCreated = link.created;
+        quotaReached = Boolean(m.history?.contact) && link.quota;
         if (link.contactId !== null || link.needsContact !== conv.needsContact) {
           patch.contactId = link.contactId;
           patch.needsContact = link.needsContact;
@@ -358,7 +391,11 @@ export class InboundIngestService {
       providerTs: customerAt,
     });
 
-    if (createdConversation) await this.lifecycle.created(tx, orgId, channel, after, 'customer');
+    if (createdConversation) {
+      await this.lifecycle.created(tx, orgId, channel, after, 'customer', undefined, {
+        quiet: Boolean(m.history),
+      });
+    }
     if (reopenedFrom) await this.lifecycle.reopened(tx, orgId, channel, after, reopenedFrom);
     await this.conversations.touchChannel(tx, orgId, channel.id);
 
@@ -381,7 +418,16 @@ export class InboundIngestService {
     const changed = ['lastMessage', 'unread'];
     if (createdConversation) changed.push('created');
     if (reopenedFrom) changed.push('status');
-    return { outcome: 'stored', conv: after, message, createdConversation, reopenedFrom, changed };
+    return {
+      outcome: 'stored',
+      conv: after,
+      message,
+      createdConversation,
+      reopenedFrom,
+      changed,
+      contactCreated,
+      quotaReached,
+    };
   }
 
   // --- pieces --------------------------------------------------------------------------------------------------------------------
@@ -397,12 +443,20 @@ export class InboundIngestService {
     peerKey: string,
     peerName: string | null,
     given?: NormalisedInbound['contactIdentity'],
-  ): Promise<{ contactId: number | null; needsContact: boolean }> {
+    quiet = false,
+  ): Promise<{
+    contactId: number | null;
+    needsContact: boolean;
+    created: boolean;
+    quota: boolean;
+  }> {
     // An email thread is keyed by the provider's thread id, so the adapter says whose mail it is; a phone channel's key is the number.
     const identity = given
       ? { kind: given.kind, value: given.value.trim() }
       : identityOfPeer(channelKind, peerKey);
-    if (!identity || identity.value === '') return { contactId: null, needsContact: false };
+    if (!identity || identity.value === '') {
+      return { contactId: null, needsContact: false, created: false, quota: false };
+    }
     const name = given?.name?.trim() || peerName;
     try {
       return await tx.transaction(async (sp) => {
@@ -410,19 +464,31 @@ export class InboundIngestService {
           kind: identity.kind,
           value: identity.value,
           name,
-          source: 'inbox',
+          // An imported chat is a bulk import, not live engagement: quiet means no `contact.created` event (no flow, no alert).
+          source: quiet ? importSourceOf(channelKind) : 'inbox',
+          ...(quiet ? { quiet: true } : {}),
         });
         if (r.outcome === 'found' || r.outcome === 'created') {
-          return { contactId: r.contactId, needsContact: false };
+          return {
+            contactId: r.contactId,
+            needsContact: false,
+            created: r.outcome === 'created',
+            quota: false,
+          };
         }
-        return { contactId: null, needsContact: r.outcome === 'quota_reached' };
+        return {
+          contactId: null,
+          needsContact: r.outcome === 'quota_reached',
+          created: false,
+          quota: r.outcome === 'quota_reached',
+        };
       });
     } catch (err) {
       this.logger.warn(
         { orgId, err: (err as Error).message },
         'contact resolution failed; the message is kept on a thread without a contact',
       );
-      return { contactId: null, needsContact: true };
+      return { contactId: null, needsContact: true, created: false, quota: false };
     }
   }
 
@@ -563,6 +629,8 @@ type TxResult =
       createdConversation: boolean;
       reopenedFrom: string | null;
       changed: string[];
+      contactCreated: boolean;
+      quotaReached: boolean;
     }
   | { outcome: 'duplicate' }
   | { outcome: 'reaction'; applied: boolean; conversationUuid: string | null };

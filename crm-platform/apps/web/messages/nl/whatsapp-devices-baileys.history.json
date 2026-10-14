@@ -1,0 +1,77 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Je bestaande chats overnemen?",
+        "intro": "WhatsApp stuurt de chatgeschiedenis van een nummer maar één keer, direct nadat het nummer voor het eerst is gekoppeld. Kies nu, voordat je scant.",
+        "label": "Bestaande chats importeren",
+        "none": "Nee, begin leeg",
+        "noneHelp": "Alleen nieuwe berichten verschijnen in de gedeelde inbox. Dit is de standaardinstelling.",
+        "recent": "Ja, recente chats en contacten",
+        "recentHelp": "De recente chats die WhatsApp stuurt wanneer een nummer voor het eerst wordt gekoppeld, samen met de mensen daarin.",
+        "full": "Ja, zoveel als WhatsApp verstuurt",
+        "fullHelp": "Ook de oudere geschiedenis van WhatsApp. Dit duurt langer en gebruikt meer van je contactlimiet.",
+        "pointsTitle": "Wat kun je verwachten",
+        "pointQuiet": "Geïmporteerde chats worden als gelezen gemarkeerd en blijven stil: geen meldingen, geen automatiseringen en geen automatische antwoorden.",
+        "pointNothingSent": "Er wordt niets naar iemand verstuurd.",
+        "pointMedia": "Foto's, video's, spraakberichten en bestanden worden niet geïmporteerd. Je ziet een plaatshouder zoals [Foto].",
+        "pointGroups": "Groepschats worden opgeslagen als groepsgesprekken en maken geen contacten aan.",
+        "pointConsent": "Geïmporteerde personen worden niet gemarkeerd als akkoord met marketingberichten.",
+        "pointLimit": "Geïmporteerde personen tellen mee voor de contactlimiet van je abonnement. De import stopt netjes als de limiet wordt bereikt.",
+        "pointTime": "Dit kan een paar minuten duren. Je kunt gewoon doorwerken en op elk moment annuleren.",
+        "pointOnce": "Als je het nummer opnieuw koppelt, wordt er alleen geïmporteerd als je vóór het scannen opnieuw kiest om te importeren."
+      },
+      "result": {
+        "note": "Je chats worden geïmporteerd. Volg de voortgang op de pagina van het nummer.",
+        "link": "Bekijk de import"
+      },
+      "card": {
+        "title": "Geïmporteerde chats",
+        "state": {
+          "not_requested": "Niet aangevraagd",
+          "idle": "Wachten op WhatsApp",
+          "running": "Bezig met importeren",
+          "done": "Voltooid",
+          "failed": "Niet voltooid",
+          "cancelled": "Geannuleerd",
+          "limit_reached": "Gestopt bij je contactlimiet"
+        },
+        "body": {
+          "not_requested": "Dit nummer heeft zijn chats niet geïmporteerd. WhatsApp biedt de geschiedenis alleen aan wanneer een nummer voor het eerst wordt gekoppeld, dus kies dit de volgende keer dat je dit nummer koppelt.",
+          "idle": "Wachten tot het nummer is gekoppeld en WhatsApp de chats verstuurt. Dit kan een paar minuten duren.",
+          "running": "Chats worden geïmporteerd. Je kunt deze pagina verlaten, de import gaat door.",
+          "done": "De import is voltooid. De chats staan in de gedeelde inbox, gemarkeerd als gelezen.",
+          "failed": "De import is niet voltooid. Wat is geïmporteerd, blijft in de inbox.",
+          "cancelled": "Je hebt de import gestopt. Wat is geïmporteerd, blijft in de inbox.",
+          "limit_reached": "De import is gestopt omdat de contactlimiet van je abonnement is bereikt. Wat is geïmporteerd, blijft in de inbox."
+        },
+        "chats": "{count, plural, one {# chat} other {# chats}}",
+        "contacts": "{count, plural, one {# contact} other {# contacten}}",
+        "messages": "{count, plural, one {# bericht} other {# berichten}}",
+        "progress": "Voortgang: {percent}%",
+        "window": "Berichten van de afgelopen {days, plural, one {# dag} other {# dagen}}.",
+        "mediaNote": "Foto's, video's, spraakberichten en bestanden worden niet geïmporteerd. Op hun plaats staat een plaatshouder.",
+        "started": "Gestart",
+        "finished": "Voltooid",
+        "openInbox": "Inbox openen",
+        "cancel": "Import stoppen",
+        "cancelling": "Bezig met stoppen...",
+        "cancelTitle": "De import stoppen?",
+        "cancelMessage": "Er worden geen chats meer opgehaald. Wat al is geïmporteerd, blijft in de inbox.",
+        "cancelConfirm": "Import stoppen",
+        "cancelKeep": "Doorgaan met importeren",
+        "cancelDone": "Import gestopt. Wat is geïmporteerd, blijft in de inbox."
+      },
+      "error": {
+        "history_not_received": "WhatsApp heeft geen chatgeschiedenis gestuurd. Dat gebeurt alleen wanneer een nummer voor het eerst wordt gekoppeld. Koppel het nummer opnieuw en kies importeren om het nog eens te proberen.",
+        "message_cap_reached": "Gestopt bij de limiet aan berichten voor één nummer. Wat is geïmporteerd, blijft behouden.",
+        "chat_cap_reached": "Gestopt bij de limiet aan chats voor één nummer. Wat is geïmporteerd, blijft behouden.",
+        "contact_limit_reached": "Gestopt omdat de contactlimiet van je abonnement is bereikt. Maak contacten vrij of upgrade, koppel het nummer daarna opnieuw en importeer.",
+        "worker_error": "De import is gestopt vanwege een fout. Wat is geïmporteerd, blijft behouden. Koppel het nummer opnieuw om het nog eens te proberen."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Er loopt geen import voor dit nummer."
+    }
+  }
+}

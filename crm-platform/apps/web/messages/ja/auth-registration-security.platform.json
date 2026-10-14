@@ -1438,7 +1438,8 @@
             "waba_groups": "Cloud API番号からWhatsAppグループを作成・管理します：招待リンク、参加リクエスト、メンバー。番号は公式ビジネスアカウントである必要があります。",
             "sms": "TwilioまたはMSG91経由の送信専用SMS：送信元を接続し、SMS一斉配信とキャンペーンを送信します。",
             "help_agent": "アプリ内のヘルプアシスタント。やりたいことを普通の言葉で伝えると、本人のセッションで案内または代行し、リスクのある操作の前には必ず確認します。AIトークンを消費します。",
-            "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。"
+            "email_channel": "GmailとGoogle Workspaceのメールボックスをチームの受信箱に接続します。このスイッチは有料のメールアプリが管理します。",
+            "personal_history_full": "個人用WhatsApp番号を初めて連携する際に、チャット履歴をすべてインポートできます。最近のチャットのインポートは、個人用番号を含むすべてのプランで利用できます。"
           },
           "units": {
             "days": "日",
@@ -1621,7 +1622,8 @@
             "waba_groups": "WhatsAppグループ（Cloud API）",
             "sms": "SMSチャネル",
             "help_agent": "ヘルプアシスタント（AI、トークンを消費）",
-            "email_channel": "メール(Gmail)チャネル"
+            "email_channel": "メール(Gmail)チャネル",
+            "personal_history_full": "チャット全履歴のインポート(個人用WhatsApp)"
           },
           "problems": {
             "required": "この項目は必須です。",

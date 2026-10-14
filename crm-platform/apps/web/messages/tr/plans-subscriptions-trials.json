@@ -79,7 +79,8 @@
       "waba_groups": "WhatsApp grupları",
       "sms": "SMS kanalı",
       "help_agent": "Yardım asistanı",
-      "email_channel": "E-posta (Gmail) kanalı"
+      "email_channel": "E-posta (Gmail) kanalı",
+      "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",

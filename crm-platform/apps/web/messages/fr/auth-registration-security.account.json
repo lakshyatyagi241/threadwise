@@ -557,7 +557,8 @@
             "waba_groups": "Groupes WhatsApp",
             "sms": "SMS",
             "help_agent": "Assistant d’aide",
-            "email_channel": "Canal e-mail (Gmail)"
+            "email_channel": "Canal e-mail (Gmail)",
+            "personal_history_full": "Import complet de l'historique (WhatsApp personnel)"
           },
           "cta": {
             "continueFree": "Continuer gratuitement",

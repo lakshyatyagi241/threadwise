@@ -1,0 +1,77 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Trazer suas conversas existentes?",
+        "intro": "O WhatsApp envia o histórico de conversas de um número apenas uma vez, logo após a primeira vinculação. Escolha agora, antes de escanear.",
+        "label": "Importar conversas existentes",
+        "none": "Não, começar vazio",
+        "noneHelp": "Somente as mensagens novas aparecem na caixa de entrada compartilhada. Esta é a opção padrão.",
+        "recent": "Sim, conversas e contatos recentes",
+        "recentHelp": "As conversas recentes que o WhatsApp envia quando um número é vinculado pela primeira vez, com as pessoas que participam delas.",
+        "full": "Sim, tudo o que o WhatsApp enviar",
+        "fullHelp": "Inclui também o histórico mais antigo do WhatsApp. Demora mais e usa mais do seu limite de contatos.",
+        "pointsTitle": "O que esperar",
+        "pointQuiet": "As conversas importadas são marcadas como lidas e ficam em silêncio: sem alertas, sem automações e sem respostas automáticas.",
+        "pointNothingSent": "Nada é enviado a ninguém.",
+        "pointMedia": "Fotos, vídeos, mensagens de voz e arquivos não são importados. Você verá um marcador como [Foto].",
+        "pointGroups": "As conversas de grupo são salvas como conversas de grupo e não criam contatos.",
+        "pointConsent": "As pessoas importadas não são marcadas como tendo aceitado receber mensagens de marketing.",
+        "pointLimit": "As pessoas importadas contam para o limite de contatos do seu plano. A importação para de forma limpa se o limite for atingido.",
+        "pointTime": "Pode levar alguns minutos. Você pode continuar trabalhando e cancelar a qualquer momento.",
+        "pointOnce": "Vincular o número novamente só importa se você escolher importar de novo antes de escanear."
+      },
+      "result": {
+        "note": "Suas conversas estão sendo importadas. Acompanhe o progresso na página do número.",
+        "link": "Ver a importação"
+      },
+      "card": {
+        "title": "Conversas importadas",
+        "state": {
+          "not_requested": "Não solicitada",
+          "idle": "Aguardando o WhatsApp",
+          "running": "Importando",
+          "done": "Concluída",
+          "failed": "Não concluída",
+          "cancelled": "Cancelada",
+          "limit_reached": "Interrompida no seu limite de contatos"
+        },
+        "body": {
+          "not_requested": "Este número não importou suas conversas. O WhatsApp oferece o histórico apenas quando um número é vinculado pela primeira vez, então escolha essa opção na próxima vez que vincular este número.",
+          "idle": "Aguardando a vinculação do número e o envio das conversas pelo WhatsApp. Isso pode levar alguns minutos.",
+          "running": "Importando conversas. Você pode sair desta página, a importação continua.",
+          "done": "A importação foi concluída. As conversas estão na caixa de entrada compartilhada, marcadas como lidas.",
+          "failed": "A importação não foi concluída. O que foi importado permanece na caixa de entrada.",
+          "cancelled": "Você interrompeu a importação. O que foi importado permanece na caixa de entrada.",
+          "limit_reached": "A importação foi interrompida porque o limite de contatos do seu plano foi atingido. O que foi importado permanece na caixa de entrada."
+        },
+        "chats": "{count, plural, one {# conversa} other {# conversas}}",
+        "contacts": "{count, plural, one {# contato} other {# contatos}}",
+        "messages": "{count, plural, one {# mensagem} other {# mensagens}}",
+        "progress": "Progresso: {percent}%",
+        "window": "Mensagens {days, plural, one {do último # dia} other {dos últimos # dias}}.",
+        "mediaNote": "Fotos, vídeos, mensagens de voz e arquivos não são importados. No lugar deles aparece um marcador.",
+        "started": "Iniciada",
+        "finished": "Concluída",
+        "openInbox": "Abrir a caixa de entrada",
+        "cancel": "Interromper a importação",
+        "cancelling": "Interrompendo...",
+        "cancelTitle": "Interromper a importação?",
+        "cancelMessage": "Nenhuma outra conversa será importada. O que já foi importado permanece na caixa de entrada.",
+        "cancelConfirm": "Interromper a importação",
+        "cancelKeep": "Continuar importando",
+        "cancelDone": "Importação interrompida. O que foi importado permanece na caixa de entrada."
+      },
+      "error": {
+        "history_not_received": "O WhatsApp não enviou nenhum histórico de conversas. Ele só faz isso quando um número é vinculado pela primeira vez. Vincule o número novamente e escolha importar para tentar de novo.",
+        "message_cap_reached": "Interrompida no limite de mensagens para um número. O que foi importado permanece.",
+        "chat_cap_reached": "Interrompida no limite de conversas para um número. O que foi importado permanece.",
+        "contact_limit_reached": "Interrompida porque o limite de contatos do seu plano foi atingido. Libere alguns contatos ou faça upgrade, depois vincule o número novamente e importe.",
+        "worker_error": "A importação foi interrompida por um erro. O que foi importado permanece. Vincule o número novamente para tentar de novo."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Não há nenhuma importação em andamento para este número."
+    }
+  }
+}

@@ -79,7 +79,8 @@
       "waba_groups": "Grup WhatsApp",
       "sms": "Kanal SMS",
       "help_agent": "Asisten Bantuan",
-      "email_channel": "Kanal email (Gmail)"
+      "email_channel": "Kanal email (Gmail)",
+      "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)"
     },
     "limitGroups": {
       "messaging": "Pesan",

@@ -1438,7 +1438,8 @@
             "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。",
             "sms": "通过 Twilio 或 MSG91 发送的仅发送短信：连接发送方，发送短信群发和营销活动。",
             "help_agent": "应用内帮助助手：用户用平常的话说出要做的事，助手在其自己的会话中指引或代为操作，执行有风险的操作前会先询问。会消耗 AI 额度。",
-            "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。"
+            "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。",
+            "personal_history_full": "个人 WhatsApp 号码首次关联时，可导入完整的聊天记录。所有支持个人号码的套餐均可导入近期聊天。"
           },
           "units": {
             "days": "天",
@@ -1621,7 +1622,8 @@
             "waba_groups": "WhatsApp 群组（Cloud API）",
             "sms": "SMS 渠道",
             "help_agent": "帮助助手（AI，消耗额度）",
-            "email_channel": "电子邮件(Gmail)渠道"
+            "email_channel": "电子邮件(Gmail)渠道",
+            "personal_history_full": "完整聊天记录导入（个人 WhatsApp）"
           },
           "problems": {
             "required": "此字段为必填项。",

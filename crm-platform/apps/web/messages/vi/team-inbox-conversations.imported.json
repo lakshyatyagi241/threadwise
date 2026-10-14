@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "Đã nhập",
+      "importedHint": "Cuộc trò chuyện này được nhập từ lịch sử điện thoại"
+    },
+    "bubble": {
+      "imported": "Đã nhập",
+      "importedHint": "Được nhập từ lịch sử trò chuyện trên điện thoại"
+    }
+  }
+}

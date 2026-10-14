@@ -1,0 +1,77 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Importer vos discussions existantes ?",
+        "intro": "WhatsApp n'envoie l'historique des discussions d'un numéro qu'une seule fois, juste après la première association du numéro. Choisissez maintenant, avant de scanner.",
+        "label": "Importer les discussions existantes",
+        "none": "Non, commencer à vide",
+        "noneHelp": "Seuls les nouveaux messages apparaissent dans la boîte de réception partagée. C'est le choix par défaut.",
+        "recent": "Oui, discussions récentes et contacts",
+        "recentHelp": "Les discussions récentes que WhatsApp envoie lors de la première association d'un numéro, avec les personnes concernées.",
+        "full": "Oui, autant que WhatsApp en envoie",
+        "fullHelp": "Aussi l'historique plus ancien de WhatsApp. Cela prend plus de temps et utilise davantage de votre limite de contacts.",
+        "pointsTitle": "À savoir",
+        "pointQuiet": "Les discussions importées sont marquées comme lues et restent silencieuses : ni alertes, ni automatisations, ni réponses automatiques.",
+        "pointNothingSent": "Rien n'est envoyé à personne.",
+        "pointMedia": "Les photos, vidéos, messages vocaux et fichiers ne sont pas importés. Vous verrez un espace réservé tel que [Photo].",
+        "pointGroups": "Les discussions de groupe sont enregistrées comme conversations de groupe et ne créent pas de contacts.",
+        "pointConsent": "Les personnes importées ne sont pas marquées comme ayant accepté de recevoir des messages marketing.",
+        "pointLimit": "Les personnes importées comptent dans la limite de contacts de votre forfait. L'import s'arrête proprement si elle est atteinte.",
+        "pointTime": "Cela peut prendre quelques minutes. Vous pouvez continuer à travailler et annuler à tout moment.",
+        "pointOnce": "Si vous associez de nouveau le numéro, l'import n'a lieu que si vous choisissez de nouveau d'importer avant de scanner."
+      },
+      "result": {
+        "note": "Vos discussions sont en cours d'import. Suivez la progression sur la page du numéro.",
+        "link": "Voir l'import"
+      },
+      "card": {
+        "title": "Discussions importées",
+        "state": {
+          "not_requested": "Non demandé",
+          "idle": "En attente de WhatsApp",
+          "running": "Import en cours",
+          "done": "Terminé",
+          "failed": "Non terminé",
+          "cancelled": "Annulé",
+          "limit_reached": "Arrêté à la limite de contacts"
+        },
+        "body": {
+          "not_requested": "Ce numéro n'a pas importé ses discussions. WhatsApp ne propose l'historique que lors de la première association d'un numéro ; choisissez-le donc la prochaine fois que vous associerez ce numéro.",
+          "idle": "En attente de l'association du numéro et de l'envoi des discussions par WhatsApp. Cela peut prendre quelques minutes.",
+          "running": "Import des discussions en cours. Vous pouvez quitter cette page, l'import continue.",
+          "done": "L'import est terminé. Les discussions sont dans la boîte de réception partagée, marquées comme lues.",
+          "failed": "L'import n'est pas allé à son terme. Ce qui a été importé reste dans la boîte de réception.",
+          "cancelled": "Vous avez arrêté l'import. Ce qui a été importé reste dans la boîte de réception.",
+          "limit_reached": "L'import s'est arrêté car la limite de contacts de votre forfait a été atteinte. Ce qui a été importé reste dans la boîte de réception."
+        },
+        "chats": "{count, plural, one {# discussion} other {# discussions}}",
+        "contacts": "{count, plural, one {# contact} other {# contacts}}",
+        "messages": "{count, plural, one {# message} other {# messages}}",
+        "progress": "Progression : {percent} %",
+        "window": "Messages des {days, plural, one {# dernier jour} other {# derniers jours}}.",
+        "mediaNote": "Les photos, vidéos, messages vocaux et fichiers ne sont pas importés. Un espace réservé apparaît à leur place.",
+        "started": "Démarré",
+        "finished": "Terminé",
+        "openInbox": "Ouvrir la boîte de réception",
+        "cancel": "Arrêter l'import",
+        "cancelling": "Arrêt en cours...",
+        "cancelTitle": "Arrêter l'import ?",
+        "cancelMessage": "Plus aucune discussion ne sera récupérée. Ce qui a déjà été importé reste dans la boîte de réception.",
+        "cancelConfirm": "Arrêter l'import",
+        "cancelKeep": "Continuer l'import",
+        "cancelDone": "Import arrêté. Ce qui a été importé reste dans la boîte de réception."
+      },
+      "error": {
+        "history_not_received": "WhatsApp n'a envoyé aucun historique de discussions. Il ne le fait que lors de la première association d'un numéro. Associez de nouveau le numéro et choisissez d'importer pour réessayer.",
+        "message_cap_reached": "Arrêté à la limite de messages par numéro. Ce qui a été importé est conservé.",
+        "chat_cap_reached": "Arrêté à la limite de discussions par numéro. Ce qui a été importé est conservé.",
+        "contact_limit_reached": "Arrêté car la limite de contacts de votre forfait a été atteinte. Libérez des contacts ou passez à un forfait supérieur, puis associez de nouveau le numéro et importez.",
+        "worker_error": "L'import s'est arrêté à cause d'une erreur. Ce qui a été importé est conservé. Associez de nouveau le numéro pour réessayer."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Aucun import n'est en cours pour ce numéro."
+    }
+  }
+}

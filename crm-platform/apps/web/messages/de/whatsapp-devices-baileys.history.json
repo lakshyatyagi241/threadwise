@@ -1,0 +1,77 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Bestehende Chats übernehmen?",
+        "intro": "WhatsApp sendet den Chatverlauf einer Nummer nur einmal, direkt nachdem die Nummer zum ersten Mal verknüpft wurde. Entscheiden Sie jetzt, bevor Sie scannen.",
+        "label": "Bestehende Chats importieren",
+        "none": "Nein, leer beginnen",
+        "noneHelp": "Nur neue Nachrichten erscheinen im gemeinsamen Posteingang. Das ist die Standardeinstellung.",
+        "recent": "Ja, letzte Chats und Kontakte",
+        "recentHelp": "Die letzten Chats, die WhatsApp bei der ersten Verknüpfung einer Nummer sendet, samt den beteiligten Personen.",
+        "full": "Ja, so viel wie WhatsApp sendet",
+        "fullHelp": "Auch den älteren Verlauf von WhatsApp. Das dauert länger und verbraucht mehr von Ihrem Kontaktlimit.",
+        "pointsTitle": "Was Sie erwartet",
+        "pointQuiet": "Importierte Chats werden als gelesen markiert und bleiben still: keine Benachrichtigungen, keine Automatisierungen und keine automatischen Antworten.",
+        "pointNothingSent": "Es wird nichts an andere gesendet.",
+        "pointMedia": "Fotos, Videos, Sprachnachrichten und Dateien werden nicht importiert. Sie sehen stattdessen einen Platzhalter wie [Foto].",
+        "pointGroups": "Gruppenchats werden als Gruppenunterhaltungen gespeichert und erzeugen keine Kontakte.",
+        "pointConsent": "Importierte Personen gelten nicht als einverstanden mit Marketingnachrichten.",
+        "pointLimit": "Importierte Personen zählen zum Kontaktlimit Ihres Tarifs. Der Import stoppt sauber, wenn es erreicht wird.",
+        "pointTime": "Das kann einige Minuten dauern. Sie können weiterarbeiten und jederzeit abbrechen.",
+        "pointOnce": "Bei erneuter Verknüpfung der Nummer wird nur importiert, wenn Sie vor dem Scannen erneut den Import wählen."
+      },
+      "result": {
+        "note": "Ihre Chats werden importiert. Den Fortschritt sehen Sie auf der Seite der Nummer.",
+        "link": "Import ansehen"
+      },
+      "card": {
+        "title": "Importierte Chats",
+        "state": {
+          "not_requested": "Nicht angefordert",
+          "idle": "Warten auf WhatsApp",
+          "running": "Import läuft",
+          "done": "Abgeschlossen",
+          "failed": "Nicht abgeschlossen",
+          "cancelled": "Abgebrochen",
+          "limit_reached": "Am Kontaktlimit gestoppt"
+        },
+        "body": {
+          "not_requested": "Diese Nummer hat ihre Chats nicht importiert. WhatsApp bietet den Verlauf nur bei der ersten Verknüpfung einer Nummer an. Wählen Sie ihn daher beim nächsten Verknüpfen dieser Nummer.",
+          "idle": "Warten darauf, dass die Nummer verknüpft wird und WhatsApp ihre Chats sendet. Das kann einige Minuten dauern.",
+          "running": "Chats werden importiert. Sie können diese Seite verlassen, der Import läuft weiter.",
+          "done": "Der Import ist abgeschlossen. Die Chats befinden sich als gelesen markiert im gemeinsamen Posteingang.",
+          "failed": "Der Import wurde nicht abgeschlossen. Bereits Importiertes bleibt im Posteingang.",
+          "cancelled": "Sie haben den Import gestoppt. Bereits Importiertes bleibt im Posteingang.",
+          "limit_reached": "Der Import wurde gestoppt, weil das Kontaktlimit Ihres Tarifs erreicht wurde. Bereits Importiertes bleibt im Posteingang."
+        },
+        "chats": "{count, plural, one {# Chat} other {# Chats}}",
+        "contacts": "{count, plural, one {# Kontakt} other {# Kontakte}}",
+        "messages": "{count, plural, one {# Nachricht} other {# Nachrichten}}",
+        "progress": "Fortschritt: {percent} %",
+        "window": "Nachrichten der letzten {days, plural, one {# Tag} other {# Tage}}.",
+        "mediaNote": "Fotos, Videos, Sprachnachrichten und Dateien werden nicht importiert. An ihrer Stelle steht ein Platzhalter.",
+        "started": "Gestartet",
+        "finished": "Abgeschlossen",
+        "openInbox": "Posteingang öffnen",
+        "cancel": "Import stoppen",
+        "cancelling": "Wird gestoppt...",
+        "cancelTitle": "Import stoppen?",
+        "cancelMessage": "Es werden keine weiteren Chats übernommen. Bereits Importiertes bleibt im Posteingang.",
+        "cancelConfirm": "Import stoppen",
+        "cancelKeep": "Weiter importieren",
+        "cancelDone": "Import gestoppt. Bereits Importiertes bleibt im Posteingang."
+      },
+      "error": {
+        "history_not_received": "WhatsApp hat keinen Chatverlauf gesendet. Das geschieht nur bei der ersten Verknüpfung einer Nummer. Verknüpfen Sie die Nummer erneut und wählen Sie den Import, um es noch einmal zu versuchen.",
+        "message_cap_reached": "Am Limit für Nachrichten pro Nummer gestoppt. Bereits Importiertes bleibt erhalten.",
+        "chat_cap_reached": "Am Limit für Chats pro Nummer gestoppt. Bereits Importiertes bleibt erhalten.",
+        "contact_limit_reached": "Gestoppt, weil das Kontaktlimit Ihres Tarifs erreicht wurde. Geben Sie Kontakte frei oder wechseln Sie den Tarif, verknüpfen Sie die Nummer dann erneut und importieren Sie.",
+        "worker_error": "Der Import wurde wegen eines Fehlers gestoppt. Bereits Importiertes bleibt erhalten. Verknüpfen Sie die Nummer erneut, um es noch einmal zu versuchen."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Für diese Nummer läuft kein Import."
+    }
+  }
+}

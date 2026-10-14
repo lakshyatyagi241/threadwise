@@ -362,6 +362,8 @@ describe('the whole journey: create, acknowledge, QR, poll, connected, rename, d
       noticeVersion: PERSONAL_WA_NOTICE_VERSION,
       noticeAccepted: true,
       workerRunning: true,
+      // the signed-up workspace's plan has the full-history feature
+      historyFullAllowed: true,
     });
 
     // 10. disconnect: the worker unlinks, the session is gone, the state says why

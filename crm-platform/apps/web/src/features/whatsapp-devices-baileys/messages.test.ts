@@ -43,6 +43,7 @@ const placeholders = (m: string) =>
 const readAll = (locale: string) => ({
   ...flatten(read(locale, 'whatsapp-devices-baileys')),
   ...flatten(read(locale, 'whatsapp-devices-baileys.groups')),
+  ...flatten(read(locale, 'whatsapp-devices-baileys.history')),
 });
 const en = readAll('en');
 const ar = readAll('ar');

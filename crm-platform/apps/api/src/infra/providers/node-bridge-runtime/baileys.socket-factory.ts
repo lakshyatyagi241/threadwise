@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import makeWASocket, {
   BufferJSON,
   downloadMediaMessage,
@@ -15,7 +15,9 @@ import makeWASocket, {
   type WAVersion,
 } from 'baileys';
 import pino from 'pino';
+import { historySocketConfig, readHistoryEvent, type RawHistoryEvent } from './history-sync';
 import { normalizeMessage, type Normalized, type RawMessage } from './inbound-normalizer';
+import type { HistoryBatch } from './history.port';
 import type { GroupSnapshot } from './inbound.port';
 import {
   bareDevice,
@@ -121,6 +123,13 @@ function debounce(ms: number, fn: () => void): () => void {
   };
 }
 
+/** Where the limits of the history import come from: read when a history event arrives, so an operator's change applies without a restart. */
+export interface HistoryImportLimits {
+  windowDays(choice: 'recent' | 'full'): number;
+  batchSize(): number;
+}
+export const HISTORY_IMPORT_LIMITS = Symbol('HISTORY_IMPORT_LIMITS');
+
 /** What the runtime learns about a device's proxy each time it connects (TW-NODE-013 rule 2). */
 export interface ProxyResultSink {
   report(
@@ -134,7 +143,7 @@ export const PROXY_RESULT_SINK = Symbol('PROXY_RESULT_SINK');
 /**
  * The unofficial WhatsApp engine (TW-NODE-011): Baileys behind the runtime's socket port. This file is the only place that
  * knows the library. Settings are Reference's, value for value: the long query timeout (120 s, so a slow send is not reported
- * failed and retried into a duplicate), the 15 s keep-alive, no history sync, no "online" on connect, and a `getMessage` that
+ * failed and retried into a duplicate), the 15 s keep-alive, no history sync unless the person opted in (TW-WAHIST), no "online" on connect, and a `getMessage` that
  * answers nothing (a placeholder text made WhatsApp loop on decryption).
  *
  * Not verified against a live WhatsApp session in this repository: everything around it (the state machine, the persistence,
@@ -150,6 +159,7 @@ export class BaileysSocketFactory implements WaSocketFactory {
   constructor(
     private readonly store: DeviceAuthStore,
     private readonly fetcher: SafeFetch,
+    @Optional() @Inject(HISTORY_IMPORT_LIMITS) private readonly limits?: HistoryImportLimits,
   ) {}
 
   async create(target: SocketTarget): Promise<WaSocket> {
@@ -164,6 +174,7 @@ export class BaileysSocketFactory implements WaSocketFactory {
     const { creds, keys, saveCreds } = await this.loadState(target.orgId, target.deviceId);
     const logger = pino({ level: process.env.BAILEYS_LOG_LEVEL || 'warn' });
     const version = await this.waVersion();
+    const history = historySocketConfig(target.historyImport ?? 'none');
     const sock = makeWASocket({
       ...(version ? { version } : {}),
       auth: { creds, keys: makeCacheableSignalKeyStore(keys, logger) },
@@ -177,9 +188,11 @@ export class BaileysSocketFactory implements WaSocketFactory {
       qrTimeout: 60_000,
       emitOwnEvents: false,
       fireInitQueries: false,
-      syncFullHistory: false,
+      // History is asked for only by a person's opt-in, chosen before the scan (docs/specs/personal-whatsapp-connect.md section 14); a
+      // number that did not opt in keeps `false` and `() => false`, as before. The browser identity is the same desktop one either way.
+      syncFullHistory: history.syncFullHistory,
       markOnlineOnConnect: false,
-      shouldSyncHistoryMessage: () => false,
+      shouldSyncHistoryMessage: history.shouldSyncHistoryMessage,
       transactionOpts: { maxCommitRetries: 10, delayBetweenTriesMs: 3_000 },
       getMessage: async () => undefined,
       generateHighQualityLinkPreview: false,
@@ -232,6 +245,32 @@ export class BaileysSocketFactory implements WaSocketFactory {
           }
         }
       })();
+    });
+    // The one-time history of a first link: read into bounded batches and handed over one at a time (the next is not read before the
+    // handler returns). Without an opt-in WhatsApp is never asked, so this never fires; a stray event is dropped.
+    let historyHandler: ((b: HistoryBatch) => Promise<void>) | null = null;
+    let historyChain: Promise<void> = Promise.resolve();
+    const choice = target.historyImport ?? 'none';
+    sock.ev.on('messaging-history.set', (ev) => {
+      if (choice === 'none') return;
+      historyChain = historyChain.then(async () => {
+        const handler = historyHandler;
+        if (!handler || ended) return;
+        try {
+          const batches = readHistoryEvent(ev as unknown as RawHistoryEvent, {
+            now: new Date(),
+            windowDays: this.limits?.windowDays(choice) ?? 90,
+            batchSize: this.limits?.batchSize() ?? 200,
+            selfDigits: target.phoneDigits,
+          });
+          for (const b of batches) {
+            if (ended) return;
+            await handler(b);
+          }
+        } catch (err) {
+          this.logger.warn({ err: String(err) }, '[NODE] a history batch could not be handled');
+        }
+      });
     });
     sock.ev.on('messages.update', (updates) => {
       for (const u of updates) {
@@ -527,6 +566,9 @@ export class BaileysSocketFactory implements WaSocketFactory {
       send,
       act,
       groups,
+      subscribeHistory: (h) => {
+        historyHandler = h;
+      },
       subscribe: (l) => {
         listener = l;
         for (const e of backlog.splice(0)) l(e);
@@ -544,6 +586,7 @@ export class BaileysSocketFactory implements WaSocketFactory {
       logout: () => sock.logout(),
       end: () => {
         ended = true;
+        historyHandler = null;
         sock.ev.removeAllListeners('connection.update');
         sock.ev.removeAllListeners('creds.update');
         sock.end(undefined);

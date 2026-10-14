@@ -28,6 +28,7 @@ export interface InboxConversationRow {
   mutedAt: string | null;
   unreadCount: number;
   needsContact: boolean;
+  imported: boolean;
   contactId: number | null;
   contactUuid: string | null;
   contactName: string | null;
@@ -126,7 +127,7 @@ const ts = (column: string) =>
 
 const SELECT_COLUMNS = sql.raw(`
   c.id, c.uuid, c.channel_id, ch.uuid AS channel_uuid, ch.kind AS channel_kind, ch.name AS channel_name, c.peer_key, c.peer_name, c.title, c.preview, c.status, c.priority, c.archived,
-  ${ts('c.pinned_at')} AS pinned_at, ${ts('c.muted_at')} AS muted_at, c.unread_count, c.needs_contact,
+  ${ts('c.pinned_at')} AS pinned_at, ${ts('c.muted_at')} AS muted_at, c.unread_count, c.needs_contact, c.imported_at IS NOT NULL AS imported,
   c.contact_id, ct.uuid AS contact_uuid, ct.name AS contact_name,
   c.assignee_user_id, au.uuid AS assignee_user_uuid, au.full_name AS assignee_user_name,
   c.assignee_team_id, tm.uuid AS assignee_team_uuid, tm.name AS assignee_team_name, tm.color AS assignee_team_color,
@@ -174,6 +175,7 @@ function toRow(r: Raw): InboxConversationRow {
     mutedAt: str(r.muted_at),
     unreadCount: Number(r.unread_count),
     needsContact: r.needs_contact === true,
+    imported: r.imported === true,
     contactId: int(r.contact_id),
     contactUuid: str(r.contact_uuid),
     contactName: str(r.contact_name),
