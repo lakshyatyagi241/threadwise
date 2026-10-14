@@ -91,3 +91,25 @@ With **Require recorded consent for marketing sends** on, a MARKETING template a
 ## The unsubscribe link in marketing emails
 
 A marketing email carries a personal unsubscribe link and the standard one-click unsubscribe header, so the mail app can show its own Unsubscribe button. The link opens a short page (no login) with one button. Pressing it records that the contact opted out of marketing emails, and every marketing path then skips them, including WhatsApp and SMS. A marketing email can only go to someone who is a contact, so there is always a link that works.
+
+## How a contact becomes "agreed"
+
+A first message from a person lets you **reply** to them. It never records marketing consent. Consent is recorded only when the person actually agreed, and the history shows where, with the wording they saw, its version and the time.
+
+These are the places that record it:
+
+- **A person on your team** sets a contact's WhatsApp, SMS or email status to **subscribed**, or uses **Mark as subscribed**. You are asked how they agreed (what they said or signed, and where). A status set to subscribed with no explanation is refused: a status on its own is a label, not proof.
+- **A form** with the marketing box ticked, **the website chat form** and **the booking page** when the person ticks the consent line you wrote for them (see below), and **your Shopify or WooCommerce store** when the customer accepted marketing there.
+- **The customer API, partner and public lead submissions and the Google Sheets add-on**, when the request says the person agreed and explains how. In a sheet, put yes in a `consent` column and say how in a `consent_note` column; a yes without a note is refused for that row, and a no or a blank changes nothing.
+
+A grant never overrides a STOP the contact sent: to bring an opted-out contact back, use **Mark as subscribed** on their Consent card and say why.
+
+## The consent line of the chat widget, a booking page or a store
+
+On the chat widget's settings, on a booking type and on your Shopify or WooCommerce connection you can write the wording a person agrees to, add a link to your privacy policy, and switch the line on. Every change to the wording, the link or the switch is saved as a numbered **version**, and a person who ticks the box is recorded against the version they saw. Switching the line on grants nothing by itself.
+
+- **Chat widget**: shown under the details form, only when the widget asks for a phone number or an email. A visitor who ticks it is recorded as agreeing on the channels they gave (WhatsApp for a phone, email for an address).
+- **Booking page**: an optional tick box on the booking form. Booking never needs it.
+- **Store**: the store's own marketing choice (Shopify's email and SMS consent) is recorded when a customer is synced or orders. Write what that checkbox tells your customers; tick "also count it as WhatsApp consent" only if the wording says so.
+
+You need the permission to manage consent settings to edit these lines.

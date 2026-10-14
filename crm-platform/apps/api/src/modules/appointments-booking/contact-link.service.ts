@@ -1,10 +1,16 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { canonicalizePhone, ERROR_CODES } from '@crm/contracts';
+import { canonicalizePhone, ERROR_CODES, type ConsentProof } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ContactsService } from '../crm';
 import { AppointmentsRepository } from './appointments.repository';
+
+/** The invitee ticked the booking page's consent line (BL-167): the wording they saw and where, written as a grant on the contact. */
+export interface BookingConsent {
+  proof: ConsentProof;
+  evidence: Record<string, string | undefined>;
+}
 
 export interface InviteeFacts {
   name: string | null;
@@ -50,18 +56,27 @@ export class ContactLinkService {
   ) {}
 
   /** The internal id of the contact for this invitee, creating it when needed; null when none can be made. */
-  async resolve(invitee: InviteeFacts, hostUuid: string | null): Promise<number | null> {
+  async resolve(
+    invitee: InviteeFacts,
+    hostUuid: string | null,
+    consent?: BookingConsent,
+  ): Promise<number | null> {
     if (!invitee.email && !invitee.phone) return null;
     try {
       const make = (ownerId: string | undefined) =>
-        this.contacts.create({
-          name: invitee.name ?? undefined,
-          email: invitee.email ?? undefined,
-          phone: invitee.phone ?? undefined,
-          ownerId,
-          source: 'appointment',
-          customFields: {},
-        });
+        this.contacts.create(
+          {
+            name: invitee.name ?? undefined,
+            email: invitee.email ?? undefined,
+            phone: invitee.phone ?? undefined,
+            ownerId,
+            source: 'appointment',
+            // A booking alone grants nothing; only a ticked consent line does (whatsapp for a phone, email for an address).
+            ...(consent ? { consent: consent.proof } : {}),
+            customFields: {},
+          },
+          consent ? { source: 'booking', evidence: consent.evidence } : undefined,
+        );
       let created;
       try {
         created = await make(hostUuid ?? undefined);

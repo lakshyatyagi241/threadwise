@@ -16,7 +16,8 @@
       "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
       "unexpected": "Qualcosa è andato storto. Riprova.",
       "exportInProgress": "È già in preparazione un file di prova. Attendi che termini, poi riprova.",
-      "exportNotReady": "Il file non è pronto oppure è scaduto. Prepara un nuovo file."
+      "exportNotReady": "Il file non è pronto oppure è scaduto. Prepara un nuovo file.",
+      "noticeTargetMissing": "Quel widget, quella pagina di prenotazione o quel negozio non esiste più."
     },
     "settings": {
       "title": "Consenso e risposte STOP",
@@ -130,7 +131,10 @@
         "flow": "Flusso",
         "inbound_message": "Messaggio",
         "contact_request": "Richiesta di contatto",
-        "legacy": "Prima della cronologia del consenso"
+        "legacy": "Prima della cronologia del consenso",
+        "widget": "Chat del sito web",
+        "booking": "Pagina di prenotazione",
+        "commerce": "Checkout del negozio"
       },
       "by": "da {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "File",
         "apiKeyId": "Chiave API",
         "flowId": "Flusso",
-        "reference": "Riferimento"
+        "reference": "Riferimento",
+        "noticeVersion": "Versione dell'informativa",
+        "noticeUrl": "Link all'informativa",
+        "widgetId": "Widget chat",
+        "bookingTypeId": "Pagina di prenotazione",
+        "integrationId": "Negozio",
+        "storeFlag": "Impostazione del negozio"
       },
       "dialog": {
         "titleGranted": "Segna come iscritto",
@@ -276,6 +286,30 @@
         "consent_declined": "Non consentito: la persona ha rifiutato.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Riga di consenso nel modulo della chat",
+        "booking": "Riga di consenso nella pagina di prenotazione",
+        "commerce": "Cosa significa la casella marketing del negozio"
+      },
+      "intro": {
+        "widget": "Mostrata come casella sotto i dati del visitatore. Solo chi la spunta viene registrato come consenziente, e solo se ha dato un telefono o un'email.",
+        "booking": "Mostrata come casella nel modulo di prenotazione. Solo chi la spunta viene registrato come consenziente; prenotare non la richiede mai.",
+        "commerce": "Un cliente che accetta il marketing nel tuo negozio viene registrato come consenziente. Scrivi cosa gli dice quella casella, così la prova lo riporta."
+      },
+      "enabled": "Riga di consenso attiva",
+      "text": "Testo a cui la persona acconsente",
+      "textHint": "Fino a {max} caratteri. Ogni modifica viene salvata come nuova versione.",
+      "textRequired": "Scrivi il testo prima di attivare la riga.",
+      "url": "Link alla tua informativa sulla privacy (facoltativo)",
+      "urlHint": "Deve iniziare con https://",
+      "save": "Salva la riga di consenso",
+      "saved": "Riga di consenso salvata (versione {version}).",
+      "version": "Versione attuale: {version}",
+      "noVersion": "Non ancora salvata.",
+      "saveFirst": "Salva prima questo, poi potrai impostarne la riga di consenso.",
+      "whatsappToo": "Conta anche come consenso WhatsApp (solo se il testo lo dice)"
     }
   }
 }

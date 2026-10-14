@@ -496,3 +496,11 @@ per workspace today, per language and per region later (requirement 1 and 3); (3
 when the migration runs, not at their original date; (4) whether a legal hold on a recording should block a rights erasure of the same person (today the
 erasure wins and removes the file, as the rights service has no per-call hold); (5) whether consent should also be written to the contact consent
 ledger once BL-140b adds purposes other than marketing and service.
+
+## Consent at intake (BL-165 to BL-167)
+
+Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 4.3.2; API: [contact-consent.md](../../api/contact-consent.md).
+
+- **Policy (owner-approved):** a first inbound message permits replying only and never creates a marketing grant; a grant is written only when the person agreed, with source, wording, version and time as evidence; the ConsentGate stays the enforcement point.
+- **New:** a `consent` block (note or wording, channels, version, time) on contact create/update, the REST v1 contact routes, partner and public lead submit, and `consent` / `consent_note` cells for the Google Sheets add-on; a subscription status set to `subscribed` without proof is refused (422 `CONSENT_NOTE_REQUIRED`). A versioned consent line for the chat widget, booking types and stores (`consent_notices`), and the store's own marketing flag from Shopify (and a Woo checkout plugin's meta) recorded when the store's line is on.
+- **Intended difference from the reference (contact creation):** contacts made by Telegram, Facebook, Instagram, the website widget, the campaign wizard's typed or uploaded numbers and the Shopify/WooCommerce customer sync now go through `ContactsService.resolveOrCreateByIdentity` (audit row, plan contact cap, default stage and status) instead of raw inserts. Over the cap such a person is not made a contact (the message is kept without one; a wizard number is left out of the audience).

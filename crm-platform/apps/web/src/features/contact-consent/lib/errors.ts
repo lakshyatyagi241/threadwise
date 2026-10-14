@@ -8,6 +8,7 @@ export type ErrorKey =
   | 'notFound'
   | 'conflict'
   | 'noteRequired'
+  | 'noticeTargetMissing'
   | 'settingsInvalid'
   | 'exportInProgress'
   | 'exportNotReady'
@@ -21,6 +22,7 @@ export const ERROR_KEYS: readonly ErrorKey[] = [
   'notFound',
   'conflict',
   'noteRequired',
+  'noticeTargetMissing',
   'settingsInvalid',
   'exportInProgress',
   'exportNotReady',
@@ -37,6 +39,10 @@ export function errorKey(error: unknown): ErrorKey {
       return 'notFound';
     case ERROR_CODES.CONSENT_NOTE_REQUIRED:
       return 'noteRequired';
+    case ERROR_CODES.CONSENT_NOTICE_TARGET_NOT_FOUND:
+      return 'noticeTargetMissing';
+    case ERROR_CODES.CONSENT_NOTICE_INVALID:
+      return 'validation';
     case ERROR_CODES.CONSENT_SETTINGS_INVALID:
       return 'settingsInvalid';
     case ERROR_CODES.CONSENT_EXPORT_IN_PROGRESS:

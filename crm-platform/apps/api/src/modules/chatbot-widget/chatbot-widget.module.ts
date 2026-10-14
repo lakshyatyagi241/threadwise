@@ -6,6 +6,8 @@ import {
   LocalizationTranslationModule,
 } from '../localization-translation';
 import { ChatConversationsModule } from '../chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { SqlAssistantDirectory } from './_shims/sql-assistant-directory';
 import { SqlInboxGateway } from './_shims/sql-inbox-gateway';
@@ -32,7 +34,13 @@ import { WidgetsService } from './widgets.service';
  * binding the real service to the same token (see _shims/README.md).
  */
 @Module({
-  imports: [PlansCoreModule, LocalizationTranslationModule, ChatConversationsModule],
+  imports: [
+    PlansCoreModule,
+    LocalizationTranslationModule,
+    ChatConversationsModule,
+    ContactConsentModule,
+    CrmModule,
+  ],
   controllers: [
     WidgetsController,
     FlowWidgetController,

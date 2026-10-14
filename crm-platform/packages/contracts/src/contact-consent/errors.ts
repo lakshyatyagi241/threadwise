@@ -18,4 +18,8 @@ export const CONSENT_ERROR_CODES = {
   CONSENT_EXPORT_NOT_FOUND: 'CONSENT_EXPORT_NOT_FOUND',
   /** The export is not ready (still building, failed) or its file has expired. 409. */
   CONSENT_EXPORT_NOT_READY: 'CONSENT_EXPORT_NOT_READY',
+  /** The consent notice could not be saved: its wording is missing or the link is not https. 422. */
+  CONSENT_NOTICE_INVALID: 'CONSENT_NOTICE_INVALID',
+  /** The intake point the notice belongs to (widget, booking type, store) does not exist in this workspace. 404. */
+  CONSENT_NOTICE_TARGET_NOT_FOUND: 'CONSENT_NOTICE_TARGET_NOT_FOUND',
 } as const;

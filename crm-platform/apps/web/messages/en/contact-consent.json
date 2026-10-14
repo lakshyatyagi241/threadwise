@@ -16,7 +16,8 @@
       "validation": "Some of the values are not valid. Check the form and try again.",
       "unexpected": "Something went wrong. Try again.",
       "exportInProgress": "A proof file is already being prepared. Wait for it to finish, then try again.",
-      "exportNotReady": "That file is not ready or has expired. Prepare a new one."
+      "exportNotReady": "That file is not ready or has expired. Prepare a new one.",
+      "noticeTargetMissing": "That widget, booking page or store no longer exists."
     },
     "settings": {
       "title": "Consent and STOP replies",
@@ -130,7 +131,10 @@
         "flow": "Flow",
         "inbound_message": "Message",
         "contact_request": "Contact request",
-        "legacy": "Before the consent history"
+        "legacy": "Before the consent history",
+        "widget": "Website chat",
+        "booking": "Booking page",
+        "commerce": "Store checkout"
       },
       "by": "by {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "File",
         "apiKeyId": "API key",
         "flowId": "Flow",
-        "reference": "Reference"
+        "reference": "Reference",
+        "noticeVersion": "Notice version",
+        "noticeUrl": "Notice link",
+        "widgetId": "Chat widget",
+        "bookingTypeId": "Booking page",
+        "integrationId": "Store",
+        "storeFlag": "Store setting"
       },
       "dialog": {
         "titleGranted": "Mark as subscribed",
@@ -276,6 +286,30 @@
         "consent_declined": "Not allowed: the person declined.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Consent line on the chat form",
+        "booking": "Consent line on the booking page",
+        "commerce": "What the store's marketing checkbox stands for"
+      },
+      "intro": {
+        "widget": "Shown as a tick box under the visitor's details. Only a visitor who ticks it is recorded as agreeing, and only when they gave a phone number or an email.",
+        "booking": "Shown as a tick box on the booking form. Only a person who ticks it is recorded as agreeing; booking never needs it.",
+        "commerce": "A customer who accepts marketing in your store is recorded as agreeing. Write what that checkbox tells them, so the proof names it."
+      },
+      "enabled": "Consent line on",
+      "text": "Wording the person agrees to",
+      "textHint": "Up to {max} characters. Every change is saved as a new version.",
+      "textRequired": "Write the wording before switching the line on.",
+      "url": "Link to your privacy policy (optional)",
+      "urlHint": "Must start with https://",
+      "save": "Save consent line",
+      "saved": "Consent line saved (version {version}).",
+      "version": "Current version: {version}",
+      "noVersion": "Not saved yet.",
+      "saveFirst": "Save this first, then you can set its consent line.",
+      "whatsappToo": "Also count it as WhatsApp consent (only if the wording says so)"
     }
   }
 }

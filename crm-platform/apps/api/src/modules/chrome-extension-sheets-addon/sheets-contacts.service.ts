@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
@@ -14,7 +15,12 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
-import { ContactsRepository, ContactsService, toContactResponse } from '../crm';
+import {
+  ContactsRepository,
+  ContactsService,
+  toContactResponse,
+  type ContactConsentContext,
+} from '../crm';
 import { toSheetsContact } from './sheets-addon.mapper';
 import type { SheetsCallerState } from './sheets-access';
 import { SheetsRunLog } from './sheets-run-log.service';
@@ -25,6 +31,24 @@ import {
   summarize,
   type PlannedContact,
 } from './sheets-row.rules';
+
+const hash16 = (text: string): string =>
+  createHash('sha256').update(text).digest('hex').slice(0, 16);
+
+/**
+ * The ledger context of a sheet row that says the person agreed. The grant's key is stable for the same person and the same note, so the
+ * add-on re-sending a changed row (it does, on edit and on the hourly sweep) records the agreement once, not once per sync. Hashed: no
+ * email or phone in the key.
+ */
+function sheetsConsentVia(c: PlannedContact): ContactConsentContext | undefined {
+  if (!c.consent) return undefined;
+  const who = (c.email ?? c.phone ?? '').toLowerCase();
+  return {
+    source: 'api',
+    evidence: { reference: 'google_sheets' },
+    dedupeKey: `sheets:${hash16(who)}:${hash16(c.consent.note ?? '')}`,
+  };
+}
 
 /** One lost optimistic-lock race is retried once: a sheet has no `rowVersion` to send. */
 const UPDATE_ATTEMPTS = 2;
@@ -128,16 +152,20 @@ export class SheetsContactsService {
         if (!caller.holds('record.contacts.create')) {
           return failedRow(index, ref, ERROR_CODES.FORBIDDEN, 'Your role cannot create contacts.');
         }
-        const made = await this.contacts.create({
-          email: c.email,
-          phone: c.phone,
-          name: c.name,
-          firstName: c.firstName,
-          lastName: c.lastName,
-          source: c.source,
-          isUnsubscribed: c.isUnsubscribed,
-          customFields: c.customFields,
-        });
+        const made = await this.contacts.create(
+          {
+            email: c.email,
+            phone: c.phone,
+            name: c.name,
+            firstName: c.firstName,
+            lastName: c.lastName,
+            source: c.source,
+            isUnsubscribed: c.isUnsubscribed,
+            consent: c.consent,
+            customFields: c.customFields,
+          },
+          sheetsConsentVia(c),
+        );
         return { index, ...(ref !== undefined ? { ref } : {}), status: 'created', id: made.id };
       }
 
@@ -155,7 +183,11 @@ export class SheetsContactsService {
         };
       }
       try {
-        await this.contacts.update(current.id, { ...patch, rowVersion: found.rowVersion });
+        await this.contacts.update(
+          current.id,
+          { ...patch, rowVersion: found.rowVersion },
+          sheetsConsentVia(c),
+        );
         return { index, ...(ref !== undefined ? { ref } : {}), status: 'updated', id: current.id };
       } catch (err) {
         if (
@@ -188,6 +220,8 @@ export class SheetsContactsService {
     if (c.isUnsubscribed !== undefined && c.isUnsubscribed !== cur.isUnsubscribed) {
       patch.isUnsubscribed = c.isUnsubscribed;
     }
+    // The same yes sent again (the add-on re-sends changed rows) records once: `sheetsConsentVia` gives the grant a stable key.
+    if (c.consent) patch.consent = c.consent;
     const attrs = Object.fromEntries(
       Object.entries(c.customFields).filter(
         ([k, v]) => JSON.stringify(cur.customFields[k]) !== JSON.stringify(v),

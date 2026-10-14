@@ -11,6 +11,7 @@ import {
   type WooFactory,
 } from '../../infra/providers/ecom/ecom.port';
 import { QUEUES } from '../../infra/queue/queues';
+import { ConsentNoticeService } from '../contact-consent';
 import { STORE_MIRROR, type StoreMirror } from './_shims/tokens';
 import {
   shopifyCustomer,
@@ -38,6 +39,8 @@ export interface ImportJob {
 export type ImportStats = Record<'products' | 'orders' | 'customers' | 'incomplete', number>;
 
 interface Source {
+  /** The integration's uuid (the consent line is keyed by it). */
+  uuid: string;
   storeUrl: string;
   currency: string | null;
   userId: number | null;
@@ -68,6 +71,7 @@ export class ImportService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: StoresRepository,
+    private readonly notices: ConsentNoticeService,
     private readonly crypto: CryptoService,
     @Inject(SHOPIFY) private readonly shopify: ShopifyFactory,
     @Inject(WOOCOMMERCE) private readonly woo: WooFactory,
@@ -93,6 +97,7 @@ export class ImportService {
       const meta = row.metadata as { shopify_group_id?: unknown } | null;
       const ctx = { storeUrl: row.storeUrl, currency: row.shopCurrency };
       return {
+        uuid: row.uuid,
         storeUrl: row.storeUrl,
         currency: row.shopCurrency,
         userId: row.userId,
@@ -118,6 +123,7 @@ export class ImportService {
     const meta = row.metadata as { woo_group_id?: unknown } | null;
     const ctx = { storeUrl: row.storeUrl, currency: row.storeCurrency };
     return {
+      uuid: row.uuid,
       storeUrl: row.storeUrl,
       currency: row.storeCurrency,
       userId: row.userId,
@@ -168,6 +174,11 @@ export class ImportService {
     }
 
     const customers = await src.read.customers();
+    // The store's consent line, read once: its marketing checkbox is recorded as consent only when the merchant switched the line on.
+    const notice = await this.db.txAs({ orgId }, (tx) =>
+      this.notices.publicCurrent(tx, orgId, 'commerce', `${kind}:${src.uuid}`),
+    );
+    const consent = notice ? { ref: `${kind}:${src.uuid}`, notice } : undefined;
     // The group is found or made once, and its id kept on the store so a renamed group is still the one used.
     const groupId = await this.db.txAs({ orgId }, async (tx) => {
       const g = await this.mirror.ensureGroup(tx, orgId, src.userId, kind, src.cachedGroup);
@@ -180,7 +191,7 @@ export class ImportService {
         const m = src.customer(raw);
         if (!m || m.storeId === '') continue;
         await this.db.txAs({ orgId }, (tx) =>
-          this.mirror.upsertCustomer(tx, orgId, src.userId, kind, m, groupId),
+          this.mirror.upsertCustomer(tx, orgId, src.userId, kind, m, groupId, consent),
         );
         stats.customers += 1;
       } catch (err) {

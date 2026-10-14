@@ -516,6 +516,7 @@ function publicTypeOf(t: BookingType): PublicType {
           ? Math.min(total, t.price.depositValueMinor)
           : 0,
     questions: t.questions,
+    consent: null,
   };
 }
 

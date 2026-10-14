@@ -12,7 +12,10 @@ import {
   type WidgetPublicConfig,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
+import type { ConsentChannel } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { ChannelIngestPublisher } from '../chat-conversations';
+import { ConsentIntakeService, ConsentNoticeService } from '../contact-consent';
 import {
   ASSISTANT_DIRECTORY,
   INBOX_GATEWAY,
@@ -32,6 +35,7 @@ import {
   historyFrom,
   isTokenShape,
   originAllowed,
+  phoneDigits,
   toTranscriptEntry,
   usesAi,
   whatsappUrl,
@@ -101,6 +105,8 @@ export class WidgetPublicService {
     @Inject(INBOX_GATEWAY) private readonly inbox: InboxGateway,
     @Inject(ASSISTANT_DIRECTORY) private readonly assistants: AssistantDirectory,
     private readonly ingest: ChannelIngestPublisher,
+    private readonly notices: ConsentNoticeService,
+    private readonly consentIntake: ConsentIntakeService,
   ) {}
 
   /** The widget behind a token, whatever its status; undefined for a malformed, unknown or rotated token. */
@@ -236,6 +242,14 @@ export class WidgetPublicService {
                 sql`SELECT uuid FROM flows WHERE org_id = ${orgId} AND id = ${widget.flowId}`,
               )) as unknown as { rows: Array<{ uuid: string }> }
             ).rows[0]?.uuid ?? null);
+      // The consent line is offered only where there is something to be reached on: a phone or an email asked for on the form.
+      const notice =
+        widget.collectEmail || widget.collectPhone
+          ? await this.notices.publicCurrent(tx, orgId, 'widget', widget.uuid)
+          : null;
+      const consent = notice
+        ? { text: notice.text, version: notice.version, url: notice.url }
+        : null;
       const lines: InboxLine[] =
         visitor.conversationId === null
           ? []
@@ -266,6 +280,7 @@ export class WidgetPublicService {
             whatsapp_url: whatsappUrl(widget),
             launcher: toPublicLauncher(widget.launcher),
             ...(flowUuid ? { flow_uuid: flowUuid } : {}),
+            ...(consent ? { consent } : {}),
           },
           visitor: {
             uuid: visitor.visitorUuid,
@@ -327,6 +342,7 @@ export class WidgetPublicService {
         conversationId: visitor.conversationId,
       };
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
+      await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
       const inbound = await this.inbox.insertInbound(
         tx,
         orgId,
@@ -385,13 +401,66 @@ export class WidgetPublicService {
     return { ok: true, inbound: { id: stored.inbound.id }, reply };
   }
 
+  /**
+   * The visitor ticked the consent line of the intake form: a grant on the channels they gave (WhatsApp for a phone, email for an
+   * address), against the version of the wording their page showed. Written only when the box was ticked, the version is a real,
+   * enabled version of THIS widget's notice, and the thread has a contact; never an IP or a user agent. Best effort by design: a
+   * failure here (in a savepoint) never loses the visitor's message.
+   */
+  private async recordConsent(
+    tx: Tx,
+    orgId: number,
+    widgetUuid: string,
+    conversationId: number,
+    visitor: VisitorForInbox,
+    data: { consent?: boolean | null; consent_version?: number | null },
+  ): Promise<void> {
+    if (data.consent !== true || !data.consent_version) return;
+    try {
+      await tx.transaction(async (sp) => {
+        const notice = await this.notices.seen(
+          sp as Tx,
+          orgId,
+          'widget',
+          widgetUuid,
+          data.consent_version!,
+        );
+        if (!notice) return;
+        const contactId = await this.inbox.contactOf(sp as Tx, orgId, conversationId, {
+          email: visitor.email,
+          phone: visitor.phone,
+        });
+        if (contactId === null) return;
+        const channels: ConsentChannel[] = [];
+        if (phoneDigits(visitor.phone) !== '') channels.push('whatsapp');
+        if (visitor.email) channels.push('email');
+        if (channels.length === 0) return;
+        await this.consentIntake.grant(sp as Tx, orgId, {
+          contactId,
+          channels,
+          source: 'widget',
+          proof: { text: notice.text, version: String(notice.version) },
+          evidence: {
+            widgetId: widgetUuid,
+            noticeVersion: String(notice.version),
+            noticeUrl: notice.url,
+          },
+          keyBase: `widget:${widgetUuid}:${visitor.visitorUuid}:v${notice.version}`,
+          fallbackNote: 'Ticked the consent line on the website chat form',
+        });
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err) }, '[WGT] consent could not be recorded');
+    }
+  }
+
   /** The visitor, their thread and its channel for a flow bot's widget, as the inbox's ingest names them. */
   private async flowPeer(
     orgId: number,
     widget: WidgetRow,
     req: PublicRequest,
     forInbox: WidgetForInbox,
-    data: { name?: string | null; email?: string | null; phone?: string | null },
+    data: Pick<WidgetMessageRequest, 'name' | 'email' | 'phone' | 'consent' | 'consent_version'>,
   ): Promise<{ peerKey: string; peerName: string | null; channelUuid: string }> {
     return this.db.txAs({ orgId }, async (tx) => {
       const { visitor } = (await this.resolveVisitor(tx, orgId, widget, req, true))!;
@@ -406,6 +475,7 @@ export class WidgetPublicService {
         conversationId: visitor.conversationId,
       };
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
+      await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
       return {
         peerKey: visitor.visitorUuid,
         peerName: fresh.name,

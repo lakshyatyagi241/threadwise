@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { CHAT_AUTO_OPEN_MAX, WIDGET_LIMITS } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { ConsentNoticeEditor } from '@/features/contact-consent';
 import type { BuilderState } from '../lib/builder-model';
 import { ToggleRow } from './toggle-row';
 
@@ -21,6 +22,7 @@ export function WebBehaviourCard({
   flash,
   domains,
   onDomains,
+  widgetId = null,
 }: {
   s: BuilderState;
   set: (patch: Partial<BuilderState>) => void;
@@ -28,6 +30,8 @@ export function WebBehaviourCard({
   /** The websites the chat may show on; empty means any. */
   domains: string[];
   onDomains: (next: string[]) => void;
+  /** The bot's saved widget id; null until the look has been saved once. */
+  widgetId?: string | null;
 }) {
   const t = useTranslations('chatbotWidget.flowBot.customize.brand');
   const tv = useTranslations('chatbotWidget.builder.voice');
@@ -73,6 +77,11 @@ export function WebBehaviourCard({
           ))}
         </div>
         <p className="mt-1 text-[11.5px] text-muted-foreground">{tv('intakeHint')}</p>
+        {(s.collectEmail || s.collectPhone) && (
+          <div className="mt-3">
+            <ConsentNoticeEditor scope="widget" refId={widgetId ?? ''} disabled={!widgetId} />
+          </div>
+        )}
       </div>
 
       <div>

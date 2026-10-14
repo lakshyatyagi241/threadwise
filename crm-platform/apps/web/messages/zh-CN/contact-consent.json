@@ -16,7 +16,8 @@
       "validation": "部分内容无效。请检查表单后重试。",
       "unexpected": "出了点问题。请重试。",
       "exportInProgress": "已有证明文件正在准备中。请等待完成后再试。",
-      "exportNotReady": "该文件尚未就绪或已过期。请重新准备。"
+      "exportNotReady": "该文件尚未就绪或已过期。请重新准备。",
+      "noticeTargetMissing": "该小组件、预约页面或店铺已不存在。"
     },
     "settings": {
       "title": "同意与 STOP 回复",
@@ -130,7 +131,10 @@
         "flow": "流程",
         "inbound_message": "消息",
         "contact_request": "联系请求",
-        "legacy": "同意历史之前"
+        "legacy": "同意历史之前",
+        "widget": "网站聊天",
+        "booking": "预约页面",
+        "commerce": "店铺结账"
       },
       "by": "由 {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "文件",
         "apiKeyId": "API 密钥",
         "flowId": "流程",
-        "reference": "参考"
+        "reference": "参考",
+        "noticeVersion": "声明版本",
+        "noticeUrl": "声明链接",
+        "widgetId": "聊天小组件",
+        "bookingTypeId": "预约页面",
+        "integrationId": "店铺",
+        "storeFlag": "店铺设置"
       },
       "dialog": {
         "titleGranted": "标记为已订阅",
@@ -276,6 +286,30 @@
         "consent_declined": "不允许：对方拒绝。",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "聊天表单中的同意行",
+        "booking": "预约页面中的同意行",
+        "commerce": "店铺营销复选框的含义"
+      },
+      "intro": {
+        "widget": "显示为访客信息下方的复选框。只有勾选的访客才会被记录为同意，且仅限其提供了电话号码或电子邮件时。",
+        "booking": "显示为预约表单上的复选框。只有勾选的人才会被记录为同意；预约从不需要它。",
+        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。"
+      },
+      "enabled": "开启同意行",
+      "text": "此人同意的措辞",
+      "textHint": "最多 {max} 个字符。每次更改都会保存为新版本。",
+      "textRequired": "开启该行之前请先写好措辞。",
+      "url": "隐私政策链接（可选）",
+      "urlHint": "必须以 https:// 开头",
+      "save": "保存同意行",
+      "saved": "同意行已保存（版本 {version}）。",
+      "version": "当前版本：{version}",
+      "noVersion": "尚未保存。",
+      "saveFirst": "请先保存此项，然后即可设置其同意行。",
+      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）"
     }
   }
 }

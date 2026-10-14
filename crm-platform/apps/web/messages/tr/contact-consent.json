@@ -16,7 +16,8 @@
       "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
       "exportInProgress": "Bir kanıt dosyası zaten hazırlanıyor. Bitmesini bekleyin ve tekrar deneyin.",
-      "exportNotReady": "Bu dosya hazır değil veya süresi doldu. Yeni bir dosya hazırlayın."
+      "exportNotReady": "Bu dosya hazır değil veya süresi doldu. Yeni bir dosya hazırlayın.",
+      "noticeTargetMissing": "Bu widget, rezervasyon sayfası veya mağaza artık yok."
     },
     "settings": {
       "title": "Onay ve STOP yanıtları",
@@ -130,7 +131,10 @@
         "flow": "Akış",
         "inbound_message": "Mesaj",
         "contact_request": "İletişim isteği",
-        "legacy": "Onay geçmişinden önce"
+        "legacy": "Onay geçmişinden önce",
+        "widget": "Web sitesi sohbeti",
+        "booking": "Rezervasyon sayfası",
+        "commerce": "Mağaza ödeme sayfası"
       },
       "by": "{name} tarafından",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "Dosya",
         "apiKeyId": "API anahtarı",
         "flowId": "Akış",
-        "reference": "Referans"
+        "reference": "Referans",
+        "noticeVersion": "Bildirim sürümü",
+        "noticeUrl": "Bildirim bağlantısı",
+        "widgetId": "Sohbet widget'ı",
+        "bookingTypeId": "Rezervasyon sayfası",
+        "integrationId": "Mağaza",
+        "storeFlag": "Mağaza ayarı"
       },
       "dialog": {
         "titleGranted": "Abone olarak işaretle",
@@ -276,6 +286,30 @@
         "consent_declined": "İzin verilmedi: kişi reddetti.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Sohbet formundaki onay satırı",
+        "booking": "Rezervasyon sayfasındaki onay satırı",
+        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir"
+      },
+      "intro": {
+        "widget": "Ziyaretçinin bilgilerinin altında bir onay kutusu olarak gösterilir. Yalnızca işaretleyen ziyaretçi kabul etmiş olarak kaydedilir, o da telefon veya e-posta verdiyse.",
+        "booking": "Rezervasyon formunda bir onay kutusu olarak gösterilir. Yalnızca işaretleyen kişi kabul etmiş olarak kaydedilir; rezervasyon bunu hiçbir zaman gerektirmez.",
+        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin."
+      },
+      "enabled": "Onay satırı açık",
+      "text": "Kişinin kabul ettiği metin",
+      "textHint": "En fazla {max} karakter. Her değişiklik yeni bir sürüm olarak kaydedilir.",
+      "textRequired": "Satırı açmadan önce metni yazın.",
+      "url": "Gizlilik politikanızın bağlantısı (isteğe bağlı)",
+      "urlHint": "https:// ile başlamalıdır",
+      "save": "Onay satırını kaydet",
+      "saved": "Onay satırı kaydedildi (sürüm {version}).",
+      "version": "Geçerli sürüm: {version}",
+      "noVersion": "Henüz kaydedilmedi.",
+      "saveFirst": "Önce bunu kaydedin, sonra onay satırını ayarlayabilirsiniz.",
+      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)"
     }
   }
 }

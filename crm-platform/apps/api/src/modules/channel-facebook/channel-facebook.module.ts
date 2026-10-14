@@ -12,6 +12,7 @@ import {
   INBOX_INGEST,
 } from './_shims/tokens';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
+import { CrmModule } from '../crm';
 import { BackfillService } from './backfill.service';
 import { FacebookChannelAdapter } from './facebook-channel.adapter';
 import { FbBroadcastSenderService } from './fb-broadcast-sender.service';
@@ -38,7 +39,7 @@ import { FacebookPublicController } from './webhook.controller';
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [ChatConversationsModule],
+  imports: [ChatConversationsModule, CrmModule],
   controllers: [
     PagesController,
     FbBroadcastsController,

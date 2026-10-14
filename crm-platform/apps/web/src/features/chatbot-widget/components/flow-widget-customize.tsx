@@ -86,6 +86,7 @@ export function FlowWidgetCustomize({
       flowId={flowId}
       initial={widget ? fromWidget(widget) : startingState(flowName)}
       initialDomains={widget?.allowedDomains ?? []}
+      widgetId={widget?.id ?? null}
       untouched={widget === null}
       canEdit={canEdit}
       onSaved={onSaved}
@@ -97,6 +98,7 @@ function Panel({
   flowId,
   initial,
   initialDomains,
+  widgetId,
   untouched,
   canEdit,
   onSaved,
@@ -104,6 +106,7 @@ function Panel({
   flowId: string;
   initial: BuilderState;
   initialDomains: string[];
+  widgetId: string | null;
   untouched: boolean;
   canEdit: boolean;
   onSaved?: (widget: Widget) => void;
@@ -286,6 +289,7 @@ function Panel({
               flash={flash}
               domains={domains}
               onDomains={setDomains}
+              widgetId={widgetId}
             />
           </Section>
           <Section id="launch" title={t('groups.launch')} lead={t('leads.launch')}>

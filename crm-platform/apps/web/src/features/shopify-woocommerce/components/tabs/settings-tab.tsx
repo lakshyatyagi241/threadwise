@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useToast } from '@crm/ui';
 import type { ShopifyStore, WoocommerceStore } from '@crm/contracts';
+import { ConsentNoticeEditor } from '@/features/contact-consent';
 import { formatRelative } from '@/features/auth-registration-security/shared/relative-time';
 import type { Kind } from '../../lib/model';
 import { PluginCard } from '../plugin-card';
@@ -86,6 +87,8 @@ export function SettingsTab({
           </div>
         </dl>
       </Panel>
+      {/* What the store's marketing checkbox stands for: the store's own marketing choice is recorded as consent only when this is on. */}
+      <ConsentNoticeEditor scope="commerce" refId={`${kind}:${store.id}`} />
       {kind === 'woocommerce' && <PluginCard storeId={store.id} />}
     </>
   );

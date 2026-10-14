@@ -91,6 +91,19 @@ export interface MirrorOrder {
   meta: Record<string, unknown>;
 }
 
+/**
+ * What the STORE says the customer agreed to (BL-167): its own marketing consent, read from the payload, never inferred. Present only when
+ * the customer said yes to at least one channel; absent for a customer who did not, whose consent is then simply unknown.
+ */
+export interface MirrorMarketing {
+  /** Which store setting said so (`email_marketing_consent`, `sms_marketing_consent`, `accepts_marketing`, `meta:<key>`). */
+  flag: string;
+  email: boolean;
+  sms: boolean;
+  /** When the customer agreed, if the store says (ISO). */
+  at: string | null;
+}
+
 export interface MirrorCustomer {
   storeId: string;
   /** Digits only: a customer with no number is not mirrored, WhatsApp needs one. */
@@ -101,6 +114,7 @@ export interface MirrorCustomer {
   lastName: string | null;
   ordersCount: number;
   totalSpent: string;
+  marketing?: MirrorMarketing;
 }
 
 const fullName = (first: unknown, last: unknown): string =>
@@ -282,9 +296,61 @@ export function shopifyOrder(o: Json, ctx: { currency: string | null }): MirrorO
   };
 }
 
+/** An ISO time from a store field, or null when it is missing or not a date. */
+const isoOf = (x: unknown): string | null => {
+  const s = str(x);
+  if (!s) return null;
+  const t = Date.parse(s);
+  return Number.isNaN(t) ? null : new Date(t).toISOString();
+};
+
+/**
+ * Shopify's own marketing consent: `email_marketing_consent` and `sms_marketing_consent` (state `subscribed`, with the time of the
+ * choice), or the older boolean `accepts_marketing` (email) when the object is absent. `pending` (double opt-in not yet confirmed),
+ * `unsubscribed`, `not_subscribed` and `invalid` are NOT consent.
+ */
+export function shopifyMarketing(c: Json): MirrorMarketing | undefined {
+  const em = obj(c.email_marketing_consent);
+  const sm = obj(c.sms_marketing_consent);
+  const email =
+    str(em.state) === 'subscribed' ||
+    (Object.keys(em).length === 0 && c.accepts_marketing === true);
+  const sms = str(sm.state) === 'subscribed';
+  if (!email && !sms) return undefined;
+  const flag = email
+    ? Object.keys(em).length === 0
+      ? 'accepts_marketing'
+      : 'email_marketing_consent'
+    : 'sms_marketing_consent';
+  return {
+    flag,
+    email,
+    sms,
+    at: isoOf(email ? em.consent_updated_at : sm.consent_updated_at),
+  };
+}
+
+/** The meta keys a WooCommerce checkout plugin writes a marketing choice under; core WooCommerce has none. A truthy value is consent. */
+const WOO_MARKETING_KEYS = ['accepts_marketing', 'marketing_consent'] as const;
+const TRUTHY = new Set(['1', 'true', 'yes', 'on', 'subscribed']);
+
+/** WooCommerce has no marketing flag of its own: only a plugin's `meta_data` entry named in WOO_MARKETING_KEYS is read (email). */
+export function wooMarketing(c: Json): MirrorMarketing | undefined {
+  const meta = Array.isArray(c.meta_data) ? c.meta_data : [];
+  for (const item of meta) {
+    const m = obj(item);
+    const key = str(m.key);
+    if (!key || !(WOO_MARKETING_KEYS as readonly string[]).includes(key)) continue;
+    const v = typeof m.value === 'boolean' ? String(m.value) : (str(m.value) ?? '').toLowerCase();
+    if (TRUTHY.has(v)) return { flag: `meta:${key}`, email: true, sms: false, at: null };
+  }
+  return undefined;
+}
+
 export function shopifyCustomer(c: Json): MirrorCustomer | null {
   const phone = digits(c.phone);
   if (phone === '') return null;
+  const marketing = shopifyMarketing(c);
   return {
     storeId: str(c.id) ?? '',
     phone,
@@ -294,6 +360,7 @@ export function shopifyCustomer(c: Json): MirrorCustomer | null {
     lastName: str(c.last_name),
     ordersCount: Number(c.orders_count) || 0,
     totalSpent: str(c.total_spent) ?? '0',
+    ...(marketing ? { marketing } : {}),
   };
 }
 
@@ -502,6 +569,7 @@ export function wooOrder(o: Json, ctx: { currency: string | null }): MirrorOrder
 export function wooCustomer(c: Json): MirrorCustomer | null {
   const phone = wooPhoneOf(c)?.replace(/\D+/g, '') ?? '';
   if (phone === '') return null;
+  const marketing = wooMarketing(c);
   return {
     storeId: str(c.id) ?? '',
     phone,
@@ -511,6 +579,7 @@ export function wooCustomer(c: Json): MirrorCustomer | null {
     lastName: str(c.last_name),
     ordersCount: Number(c.orders_count) || 0,
     totalSpent: str(c.total_spent) ?? '0',
+    ...(marketing ? { marketing } : {}),
   };
 }
 

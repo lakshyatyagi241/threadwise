@@ -166,6 +166,9 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .intake label { display: block; font-size: 11.5px; color: #6b7280; margin-bottom: 4px; }
 .intake input { width: 100%; padding: 9px 11px; border: 1px solid #d9dce8; border-radius: 10px; font: inherit; font-size: 13.5px; margin-bottom: 8px; outline: none; }
 .intake input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.intake label.consent { display: flex; gap: 8px; align-items: flex-start; font-size: 11.5px; color: #374151; margin: 2px 0 10px; line-height: 1.4; }
+.intake label.consent input { width: auto; margin: 2px 0 0; padding: 0; flex: none; }
+.intake label.consent a { color: var(--accent); }
 .intake button { width: 100%; padding: 10px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px; font: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer; }
 .footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; }
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
@@ -959,6 +962,29 @@ const SCRIPT = `
     if (cfg.collect_name) field(box, tx('name', 'Name'), 'i-name', 'text');
     if (cfg.collect_email) field(box, tx('email', 'Email'), 'i-email', 'email');
     if (cfg.collect_phone) field(box, tx('phone', 'Phone'), 'i-phone', 'tel');
+    // The optional consent line: unticked by default. Only the wording the workspace wrote is shown, as plain text.
+    if (cfg.consent && cfg.consent.text && (cfg.collect_email || cfg.collect_phone)) {
+      var crow = document.createElement('label');
+      crow.className = 'consent';
+      var cbox = document.createElement('input');
+      cbox.type = 'checkbox';
+      cbox.id = 'i-consent';
+      crow.appendChild(cbox);
+      var ctext = document.createElement('span');
+      ctext.textContent = cfg.consent.text;
+      ctext.setAttribute('dir', 'auto');
+      crow.appendChild(ctext);
+      if (cfg.consent.url) {
+        var clink = document.createElement('a');
+        clink.href = cfg.consent.url;
+        clink.target = '_blank';
+        clink.rel = 'noopener noreferrer';
+        clink.textContent = cfg.consent.url.replace(/^https:[/][/]/, '').split('/')[0];
+        ctext.appendChild(document.createTextNode(' '));
+        ctext.appendChild(clink);
+      }
+      box.appendChild(crow);
+    }
     var go = document.createElement('button');
     go.id = 'i-go';
     go.type = 'button';
@@ -1026,6 +1052,8 @@ const SCRIPT = `
       var n = $('i-name'); if (n && n.value) payload.name = n.value;
       var e = $('i-email'); if (e && e.value) payload.email = e.value;
       var p = $('i-phone'); if (p && p.value) payload.phone = p.value;
+      var c = $('i-consent');
+      if (c && c.checked && cfg.consent) { payload.consent = true; payload.consent_version = cfg.consent.version; }
     }
     showTyping();
     fetch(API_MSG, {
