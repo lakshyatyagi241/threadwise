@@ -508,7 +508,7 @@ export function DetailScreen({ id }: { id: string }) {
               {t('actions.export')}
             </button>
           )}
-          {canDelete && (
+          {canDelete && can.delete(c.status) && (
             <button
               type="button"
               className={`${btn} text-danger hover:bg-danger/10`}

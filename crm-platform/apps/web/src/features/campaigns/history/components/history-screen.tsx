@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { CAMPAIGN_STATUSES, WIZARD_SCHEDULE_MODES } from '@crm/contracts';
-import { Input, Select } from '@crm/ui';
+import { Input, Select, cn } from '@crm/ui';
 import { useBroadcastHistory, type HistoryQuery } from '../api';
 import { rowHref } from '../lib';
 import { useDebounced, usePaging } from '../use-paging';
@@ -25,6 +25,64 @@ import {
   rowClass,
 } from './parts';
 
+type View = 'list' | 'blocks';
+const VIEW_KEY = 'campaigns.history.view';
+
+const ICON = 'size-4';
+const ListViewIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className={ICON}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+);
+const BlockViewIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className={ICON}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="4" y="4" width="7" height="7" rx="1.5" />
+    <rect x="13" y="4" width="7" height="7" rx="1.5" />
+    <rect x="4" y="13" width="7" height="7" rx="1.5" />
+    <rect x="13" y="13" width="7" height="7" rx="1.5" />
+  </svg>
+);
+
+/** The list or block choice, kept in this browser. */
+function useView(): [View, (v: View) => void] {
+  const [view, setView] = useState<View>('list');
+  useEffect(() => {
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- read after mount so the server and first paint agree
+      if (localStorage.getItem(VIEW_KEY) === 'blocks') setView('blocks');
+    } catch {
+      /* storage can be blocked */
+    }
+  }, []);
+  return [
+    view,
+    (v) => {
+      setView(v);
+      try {
+        localStorage.setItem(VIEW_KEY, v);
+      } catch {
+        /* storage can be blocked */
+      }
+    },
+  ];
+}
+
 type Filters = Pick<HistoryQuery, 'type' | 'status' | 'from' | 'to' | 'q'>;
 const NO_FILTERS: Filters = { type: '', status: '', from: '', to: '', q: '' };
 
@@ -36,6 +94,7 @@ export function BroadcastHistoryScreen({ highlight }: { highlight: string | null
   const time = useWorkspaceTime();
   const scrollTo = useScrollTo();
   const [f, setF] = useState<Filters>({ ...NO_FILTERS });
+  const [view, setView] = useView();
   const q = useDebounced(f.q.trim());
   const key = JSON.stringify([f.type, f.status, f.from, f.to, q]);
   const paging = usePaging(key);
@@ -110,6 +169,29 @@ export function BroadcastHistoryScreen({ highlight }: { highlight: string | null
           className="mt-1"
         />
       </label>
+      <div
+        role="group"
+        aria-label={t('view.label')}
+        className="ms-auto flex overflow-hidden rounded-md border border-border"
+      >
+        {(['list', 'blocks'] as const).map((v) => (
+          <button
+            key={v}
+            type="button"
+            data-testid={`history-view-${v}`}
+            aria-pressed={view === v}
+            title={t(`view.${v}`)}
+            aria-label={t(`view.${v}`)}
+            onClick={() => setView(v)}
+            className={cn(
+              'grid size-10 place-items-center outline-none focus-visible:ring-2 focus-visible:ring-primary',
+              view === v ? 'bg-brand text-brand-foreground' : 'bg-background hover:bg-muted',
+            )}
+          >
+            {v === 'list' ? <ListViewIcon /> : <BlockViewIcon />}
+          </button>
+        ))}
+      </div>
     </div>
   );
 
@@ -135,91 +217,161 @@ export function BroadcastHistoryScreen({ highlight }: { highlight: string | null
           ) : null
         }
       >
-        <TableBox label={t('history.title')}>
-          <thead>
-            <tr>
-              <th scope="col" className={TH}>
-                {t('col.name')}
-              </th>
-              <th scope="col" className={TH}>
-                {t('col.type')}
-              </th>
-              <th scope="col" className={TH}>
-                {t('col.template')}
-              </th>
-              <th scope="col" className={`${TH} text-end`}>
-                {t('col.audience')}
-              </th>
-              <th scope="col" className={`${TH} text-end`}>
-                {t('col.sent')}
-              </th>
-              <th scope="col" className={`${TH} text-end`}>
-                {t('col.delivered')}
-              </th>
-              <th scope="col" className={`${TH} text-end`}>
-                {t('col.failed')}
-              </th>
-              <th scope="col" className={TH}>
-                {t('col.status')}
-              </th>
-              <th scope="col" className={TH}>
-                {t('col.started')}
-              </th>
-              <th scope="col" className={TH}>
-                {t('col.finished')}
-              </th>
-              <th scope="col" className={TH}>
-                {t('col.sender')}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        {view === 'blocks' ? (
+          <ul
+            data-testid="history-blocks"
+            className="grid min-h-0 flex-1 grid-cols-1 content-start gap-3 overflow-auto p-3 sm:grid-cols-2 xl:grid-cols-3"
+          >
             {rows.map((r) => {
               const href = rowHref(r);
               const mark = highlight !== null && (r.id === highlight || r.seriesId === highlight);
               return (
-                <tr
+                <li
                   key={r.id}
                   ref={mark ? scrollTo : undefined}
                   aria-current={mark ? 'true' : undefined}
-                  className={`${rowClass(mark)} cursor-pointer`}
-                  onClick={(e) => {
-                    if (!(e.target as HTMLElement).closest('a,button')) router.push(href);
-                  }}
+                  className={cn(
+                    'flex flex-col gap-3 rounded-xl border border-border bg-background p-4 shadow-sm transition hover:shadow',
+                    mark && 'ring-2 ring-brand/50',
+                  )}
                 >
-                  <td className={`${TD} max-w-[16rem]`}>
-                    <div className="flex items-center gap-2">
-                      <Link href={href} className="truncate font-medium text-brand hover:underline">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <Link
+                        href={href}
+                        className="block truncate font-semibold text-brand hover:underline"
+                      >
                         {r.name}
                       </Link>
-                      {mark && <NewChip />}
-                    </div>
-                    {r.occurrence !== null && (
-                      <div className="text-xs text-muted-foreground">
-                        {t('runNumber', { n: r.occurrence })}
+                      <div className="truncate text-xs text-muted-foreground">
+                        {[
+                          r.templateName,
+                          r.occurrence !== null ? t('runNumber', { n: r.occurrence }) : null,
+                        ]
+                          .filter(Boolean)
+                          .join(' · ') || '-'}
                       </div>
-                    )}
-                  </td>
-                  <td className={TD}>
-                    <TypeBadge type={r.type} />
-                  </td>
-                  <td className={`${TD} max-w-[12rem] truncate`}>{r.templateName ?? '-'}</td>
-                  <td className={`${TD} ${NUM}`}>{r.counts.recipients.toLocaleString()}</td>
-                  <td className={`${TD} ${NUM}`}>{r.counts.sent.toLocaleString()}</td>
-                  <td className={`${TD} ${NUM}`}>{r.counts.delivered.toLocaleString()}</td>
-                  <td className={`${TD} ${NUM}`}>{r.counts.failed.toLocaleString()}</td>
-                  <td className={TD}>
+                    </div>
                     <StatusChip status={r.status} />
-                  </td>
-                  <td className={`${TD} whitespace-nowrap`}>{time.when(r.startedAt)}</td>
-                  <td className={`${TD} whitespace-nowrap`}>{time.when(r.finishedAt)}</td>
-                  <td className={`${TD} whitespace-nowrap`}>{r.senderLabel ?? '-'}</td>
-                </tr>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <TypeBadge type={r.type} />
+                    {mark && <NewChip />}
+                    <span className="text-xs text-muted-foreground">{r.senderLabel ?? '-'}</span>
+                  </div>
+                  <dl className="grid grid-cols-4 gap-2 text-center">
+                    {(
+                      [
+                        ['audience', r.counts.recipients],
+                        ['sent', r.counts.sent],
+                        ['delivered', r.counts.delivered],
+                        ['failed', r.counts.failed],
+                      ] as const
+                    ).map(([k, v]) => (
+                      <div key={k} className="rounded-lg bg-muted/60 px-1 py-2">
+                        <dd className="text-sm font-semibold tabular-nums">{v.toLocaleString()}</dd>
+                        <dt className="text-[11px] text-muted-foreground">{t(`col.${k}`)}</dt>
+                      </div>
+                    ))}
+                  </dl>
+                  <div className="text-xs text-muted-foreground">
+                    {t('col.started')}: {time.when(r.startedAt)}
+                  </div>
+                </li>
               );
             })}
-          </tbody>
-        </TableBox>
+          </ul>
+        ) : (
+          <TableBox label={t('history.title')}>
+            <thead>
+              <tr>
+                <th scope="col" className={TH}>
+                  {t('col.name')}
+                </th>
+                <th scope="col" className={TH}>
+                  {t('col.type')}
+                </th>
+                <th scope="col" className={TH}>
+                  {t('col.template')}
+                </th>
+                <th scope="col" className={`${TH} text-end`}>
+                  {t('col.audience')}
+                </th>
+                <th scope="col" className={`${TH} text-end`}>
+                  {t('col.sent')}
+                </th>
+                <th scope="col" className={`${TH} text-end`}>
+                  {t('col.delivered')}
+                </th>
+                <th scope="col" className={`${TH} text-end`}>
+                  {t('col.failed')}
+                </th>
+                <th scope="col" className={TH}>
+                  {t('col.status')}
+                </th>
+                <th scope="col" className={TH}>
+                  {t('col.started')}
+                </th>
+                <th scope="col" className={TH}>
+                  {t('col.finished')}
+                </th>
+                <th scope="col" className={TH}>
+                  {t('col.sender')}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => {
+                const href = rowHref(r);
+                const mark = highlight !== null && (r.id === highlight || r.seriesId === highlight);
+                return (
+                  <tr
+                    key={r.id}
+                    ref={mark ? scrollTo : undefined}
+                    aria-current={mark ? 'true' : undefined}
+                    className={`${rowClass(mark)} cursor-pointer`}
+                    onClick={(e) => {
+                      if (!(e.target as HTMLElement).closest('a,button')) router.push(href);
+                    }}
+                  >
+                    <td className={`${TD} max-w-[16rem]`}>
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={href}
+                          className="truncate font-medium text-brand hover:underline"
+                        >
+                          {r.name}
+                        </Link>
+                        {mark && <NewChip />}
+                      </div>
+                      {r.occurrence !== null && (
+                        <div className="text-xs text-muted-foreground">
+                          {t('runNumber', { n: r.occurrence })}
+                        </div>
+                      )}
+                    </td>
+                    <td className={TD}>
+                      <TypeBadge type={r.type} />
+                    </td>
+                    <td className={`${TD} max-w-[12rem] truncate`}>{r.templateName ?? '-'}</td>
+                    <td className={`${TD} ${NUM}`}>{r.counts.recipients.toLocaleString()}</td>
+                    <td className={`${TD} ${NUM}`}>{r.counts.sent.toLocaleString()}</td>
+                    <td className={`${TD} ${NUM}`}>{r.counts.delivered.toLocaleString()}</td>
+                    <td className={`${TD} ${NUM}`}>{r.counts.failed.toLocaleString()}</td>
+                    <td className={TD}>
+                      <StatusChip status={r.status} />
+                    </td>
+                    <td className={`${TD} whitespace-nowrap`}>{time.when(r.startedAt)}</td>
+                    <td className={`${TD} whitespace-nowrap`}>{time.when(r.finishedAt)}</td>
+                    <td className={`${TD} whitespace-nowrap`}>{r.senderLabel ?? '-'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </TableBox>
+        )}
         <Pager
+          shown={rows.length}
           page={paging.page}
           hasPrev={paging.hasPrev}
           hasNext={Boolean(res.data?.page.nextCursor)}

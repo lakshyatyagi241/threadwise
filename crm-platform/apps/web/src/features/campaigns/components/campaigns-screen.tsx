@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Button, ConfirmDialog, EmptyState, Input, Spinner, StatTile, useToast } from '@crm/ui';
+import { Button, ConfirmDialog, EmptyState, Input, Spinner, StatTile, cn, useToast } from '@crm/ui';
 import type { Campaign } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
@@ -20,8 +20,9 @@ import {
   resumeCampaign,
   useCampaignList,
 } from '../api/campaigns';
-import { pageCount, parseState, stateToSearch, type ListState } from '../lib/list-model';
+import { can, pageCount, parseState, stateToSearch, type ListState } from '../lib/list-model';
 import { CampaignCard } from './campaign-card';
+import { CampaignTable } from './campaign-table';
 import { CampaignsRail } from './campaigns-rail';
 import {
   ChevronLeftIcon,
@@ -31,6 +32,39 @@ import {
   SearchIcon,
   TrashIcon,
 } from './icons';
+
+type View = 'list' | 'blocks';
+const VIEW_KEY = 'campaigns.list.view';
+
+const ListViewIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="size-4"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+);
+const BlockViewIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="size-4"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="4" y="4" width="7" height="7" rx="1.5" />
+    <rect x="13" y="4" width="7" height="7" rx="1.5" />
+    <rect x="4" y="13" width="7" height="7" rx="1.5" />
+    <rect x="13" y="13" width="7" height="7" rx="1.5" />
+  </svg>
+);
 
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
 const RANGES = ['all', '7d', '30d', '90d'] as const;
@@ -89,6 +123,24 @@ export function CampaignsScreen() {
   const [picked, setPicked] = useState<string[]>([]);
   const [pending, setPending] = useState<Pending>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  // The list or block choice is kept in this browser; it is read after mount so the server and first paint agree.
+  const [view, setViewState] = useState<View>('list');
+  useEffect(() => {
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- read after mount so the server and first paint agree
+      if (localStorage.getItem(VIEW_KEY) === 'blocks') setViewState('blocks');
+    } catch {
+      /* storage can be blocked */
+    }
+  }, []);
+  const setView = (v: View) => {
+    setViewState(v);
+    try {
+      localStorage.setItem(VIEW_KEY, v);
+    } catch {
+      /* storage can be blocked */
+    }
+  };
 
   const refresh = () => void qc.invalidateQueries({ queryKey: KEYS.all });
   const run = async (id: string, action: () => Promise<unknown>, ok: string | (() => string)) => {
@@ -148,7 +200,8 @@ export function CampaignsScreen() {
   const items = data?.data ?? [];
   const total = data?.page.total ?? 0;
   const pages = pageCount(total, data?.page.perPage ?? 12);
-  const allShown = items.length > 0 && items.every((c) => picked.includes(c.id));
+  const deletable = items.filter((c) => can.delete(c.status));
+  const allShown = deletable.length > 0 && deletable.every((c) => picked.includes(c.id));
   const pill = (active: boolean) =>
     `rounded-full border px-3 py-1 text-[11.5px] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${active ? 'border-brand bg-brand text-brand-foreground' : 'border-border bg-background hover:bg-muted'}`;
 
@@ -244,19 +297,46 @@ export function CampaignsScreen() {
                 </button>
               ))}
             </div>
-            <div className="relative">
-              <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder={t('search')}
-                aria-label={t('search')}
-                className="h-9 w-64 ps-9 text-xs"
-              />
+            <div className="flex items-center gap-2">
+              <div
+                role="group"
+                aria-label={t('view.label')}
+                className="flex overflow-hidden rounded-md border border-border"
+              >
+                {(['list', 'blocks'] as const).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    data-testid={`campaigns-view-${v}`}
+                    aria-pressed={view === v}
+                    title={t(`view.${v}`)}
+                    aria-label={t(`view.${v}`)}
+                    onClick={() => setView(v)}
+                    className={cn(
+                      'grid size-9 place-items-center outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                      view === v
+                        ? 'bg-brand text-brand-foreground'
+                        : 'bg-background hover:bg-muted',
+                    )}
+                  >
+                    {v === 'list' ? <ListViewIcon /> : <BlockViewIcon />}
+                  </button>
+                ))}
+              </div>
+              <div className="relative">
+                <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder={t('search')}
+                  aria-label={t('search')}
+                  className="h-9 w-64 ps-9 text-xs"
+                />
+              </div>
             </div>
           </div>
 
-          {canDelete && items.length > 0 && (
+          {canDelete && (deletable.length > 0 || picked.length > 0) && (
             <div className="mb-3 flex items-center justify-between gap-3 text-xs">
               <label className="flex cursor-pointer items-center gap-2">
                 <input
@@ -266,8 +346,8 @@ export function CampaignsScreen() {
                   onChange={(e) =>
                     setPicked(
                       e.target.checked
-                        ? [...new Set([...picked, ...items.map((c) => c.id)])]
-                        : picked.filter((id) => !items.some((c) => c.id === id)),
+                        ? [...new Set([...picked, ...deletable.map((c) => c.id)])]
+                        : picked.filter((id) => !deletable.some((c) => c.id === id)),
                     )
                   }
                 />
@@ -317,6 +397,31 @@ export function CampaignsScreen() {
                 )}
               </div>
             </div>
+          ) : view === 'list' ? (
+            <CampaignTable
+              items={items}
+              picked={picked}
+              busy={busy}
+              canControl={canControl}
+              canUpdate={canUpdate}
+              canDelete={canDelete}
+              canExport={canExport}
+              onSelect={(c, on) =>
+                setPicked(on ? [...picked, c.id] : picked.filter((id) => id !== c.id))
+              }
+              onSelectAll={(on) =>
+                setPicked(
+                  on
+                    ? [...new Set([...picked, ...deletable.map((c) => c.id)])]
+                    : picked.filter((id) => !deletable.some((c) => c.id === id)),
+                )
+              }
+              onCancel={(c) => void run(c.id, () => cancelCampaign(c.id), t('cancelled'))}
+              onResume={(c) => void run(c.id, () => resumeCampaign(c.id), t('resumed'))}
+              onResend={(c) => setPending({ kind: 'resend', c })}
+              onDelete={(c) => setPending({ kind: 'delete', c })}
+              onExport={(c) => void exportRows(c)}
+            />
           ) : (
             <div className="space-y-3">
               {items.map((c) => (
@@ -345,7 +450,7 @@ export function CampaignsScreen() {
           {total > 0 && (
             <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
               <span>{t('showing', { shown: items.length, total })}</span>
-              {pages > 1 && (
+              {total > 0 && (
                 <nav className="flex items-center gap-1" aria-label={t('pages')}>
                   <button
                     type="button"

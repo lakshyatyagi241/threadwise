@@ -160,6 +160,17 @@
             "body": "Commencez par une mise à jour de modèle ou une diffusion de réengagement, puis comparez les envois livrés, lus et en échec avant d'augmenter le volume."
           }
         }
+      },
+      "view": {
+        "label": "Affichage",
+        "list": "Liste",
+        "blocks": "Blocs"
+      },
+      "col": {
+        "name": "Campagne",
+        "status": "Statut",
+        "schedule": "Planification",
+        "actions": "Actions"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Exécutions",
         "noRuns": "Aucune exécution n’a encore démarré.",
         "cancel": "Annuler la série"
-      }
+      },
+      "view": {
+        "label": "Affichage",
+        "list": "Liste",
+        "blocks": "Blocs"
+      },
+      "showing": "{count, plural, one {# campagne affichée} other {# campagnes affichées}}"
     },
     "senderEmpty": {
       "loading": "Chargement de vos numéros…",

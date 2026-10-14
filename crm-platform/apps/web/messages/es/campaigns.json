@@ -160,6 +160,17 @@
             "body": "Empieza con una actualización de plantilla o una difusión de reactivación, y compara los entregados, leídos y fallidos antes de escalar."
           }
         }
+      },
+      "view": {
+        "label": "Vista",
+        "list": "Lista",
+        "blocks": "Bloques"
+      },
+      "col": {
+        "name": "Campaña",
+        "status": "Estado",
+        "schedule": "Programación",
+        "actions": "Acciones"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Ejecuciones",
         "noRuns": "Aún no ha empezado ninguna ejecución.",
         "cancel": "Cancelar serie"
-      }
+      },
+      "view": {
+        "label": "Vista",
+        "list": "Lista",
+        "blocks": "Bloques"
+      },
+      "showing": "Mostrando {count, plural, one {# campaña} other {# campañas}}"
     },
     "senderEmpty": {
       "loading": "Cargando tus números…",

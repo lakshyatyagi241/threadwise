@@ -86,8 +86,8 @@ export const providerTag = (
 /** Reference showed `BR-0042` from the numeric id; ids are uuids here, so the reference is the start of the uuid. */
 export const reference = (uuid: string) => `BR-${uuid.slice(0, 8).toUpperCase()}`;
 
-/** Only a broadcast that has not started, or that failed, can be deleted. */
-export const canDelete = (status: string) => status === 'scheduled' || status === 'failed';
+/** Only a broadcast that is still scheduled (not started) can be deleted. */
+export const canDelete = (status: string) => status === 'scheduled';
 
 /** The calendar day and the clock of an instant in `timeZone` (left out: the browser's zone). */
 function zoned(d: Date, timeZone?: string) {

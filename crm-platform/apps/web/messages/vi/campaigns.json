@@ -160,6 +160,17 @@
             "body": "Bắt đầu bằng cập nhật mẫu hoặc đợt gửi tái tương tác, rồi so sánh số tin đã giao, đã đọc và thất bại trước khi mở rộng."
           }
         }
+      },
+      "view": {
+        "label": "Kiểu xem",
+        "list": "Danh sách",
+        "blocks": "Khối"
+      },
+      "col": {
+        "name": "Chiến dịch",
+        "status": "Trạng thái",
+        "schedule": "Lịch gửi",
+        "actions": "Thao tác"
       }
     },
     "builder": {
@@ -1403,7 +1414,13 @@
         "runs": "Lần chạy",
         "noRuns": "Chưa có lần chạy nào bắt đầu.",
         "cancel": "Hủy chuỗi"
-      }
+      },
+      "view": {
+        "label": "Kiểu xem",
+        "list": "Danh sách",
+        "blocks": "Khối"
+      },
+      "showing": "Đang hiển thị {count} chiến dịch"
     },
     "senderEmpty": {
       "loading": "Đang tải các số của bạn…",
