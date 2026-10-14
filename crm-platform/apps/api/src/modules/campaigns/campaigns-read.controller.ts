@@ -113,9 +113,25 @@ export class CampaignsReadController {
 
   @Get(':id/live')
   @RequirePermission('camp.campaigns.read')
-  @ApiOperation({ summary: 'The numbers the detail page repaints every 15 seconds' })
+  @ApiOperation({
+    summary: 'Live stats: the counts, rates, queued and processing numbers the detail page polls',
+    description:
+      'Recounted from the recipient rows on every call. `inFlight` is true while the campaign is scheduled or running; the page stops asking when it is false.',
+  })
   live(@Param('id', ParseUUIDPipe) id: string) {
     return this.read.live(id);
+  }
+
+  @Get(':id/statistics')
+  @RequirePermission('camp.campaigns.read')
+  @ApiOperation({
+    summary:
+      'Statistics: where every recipient is now, the funnel figures and the campaign timeline',
+    description:
+      '`breakdown` counts each recipient once at its status, so it adds up to `total`; `counts` and `rates` are the cumulative funnel (a read message is also delivered and sent).',
+  })
+  statistics(@Param('id', ParseUUIDPipe) id: string) {
+    return this.read.statistics(id);
   }
 
   @Get(':id/recipients')

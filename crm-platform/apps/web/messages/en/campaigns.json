@@ -700,7 +700,8 @@
         "engagement": "Engagement",
         "replies": "Replies ({count})",
         "failures": "Failures ({count})",
-        "optouts": "Opt-outs ({count})"
+        "optouts": "Opt-outs ({count})",
+        "statistics": "Statistics"
       },
       "cancel": "Cancel",
       "deleted": "Campaign deleted.",
@@ -956,6 +957,41 @@
           "retry": "Try again"
         },
         "latestRun": "Showing run {occurrence}, the newest one of this series."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "updated {time}",
+        "queued": "{count} waiting to send",
+        "processing": "{count} sending now"
+      },
+      "statistics": {
+        "loadFailed": "The statistics could not be loaded.",
+        "rates": {
+          "delivered": "Delivery rate",
+          "deliveredHint": "of the audience",
+          "read": "Read rate",
+          "readHint": "of delivered",
+          "replies": "Reply rate",
+          "clicks": "Click rate",
+          "failed": "Failure rate"
+        },
+        "breakdown": {
+          "title": "Where everyone is now",
+          "hint": "Each of the {total} recipients is counted once, at the status it holds.",
+          "empty": "This campaign has no recipients yet."
+        },
+        "timeline": {
+          "title": "Timeline",
+          "created": "Created",
+          "scheduled": "Set to start",
+          "firstSent": "First message sent",
+          "lastRun": "Last run",
+          "finished": "Finished",
+          "notYet": "Not yet"
+        },
+        "live": "Following live",
+        "atRest": "Final numbers",
+        "updated": "Updated {time}"
       }
     },
     "wizard": {

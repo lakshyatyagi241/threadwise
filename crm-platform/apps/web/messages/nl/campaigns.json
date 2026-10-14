@@ -709,7 +709,8 @@
         "replies": "Antwoorden ({count})",
         "failures": "Fouten ({count})",
         "optouts": "Afmeldingen ({count})",
-        "summary": "Samenvatting"
+        "summary": "Samenvatting",
+        "statistics": "Statistieken"
       },
       "cancel": "Annuleren",
       "deleted": "Campagne verwijderd.",
@@ -965,6 +966,41 @@
           "retry": "Opnieuw proberen"
         },
         "latestRun": "Verzending {occurrence} wordt getoond, de nieuwste van deze reeks."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "bijgewerkt {time}",
+        "queued": "{count} wachten op verzending",
+        "processing": "{count} worden nu verstuurd"
+      },
+      "statistics": {
+        "loadFailed": "De statistieken konden niet worden geladen.",
+        "rates": {
+          "delivered": "Afleverpercentage",
+          "deliveredHint": "van het publiek",
+          "read": "Leespercentage",
+          "readHint": "van de afgeleverde",
+          "replies": "Antwoordpercentage",
+          "clicks": "Klikpercentage",
+          "failed": "Foutpercentage"
+        },
+        "breakdown": {
+          "title": "Waar iedereen nu is",
+          "hint": "Elk van de {total} ontvangers wordt één keer geteld, in de status waarin hij zit.",
+          "empty": "Deze campagne heeft nog geen ontvangers."
+        },
+        "timeline": {
+          "title": "Tijdlijn",
+          "created": "Aangemaakt",
+          "scheduled": "Gepland om te starten",
+          "firstSent": "Eerste bericht verstuurd",
+          "lastRun": "Laatste run",
+          "finished": "Afgerond",
+          "notYet": "Nog niet"
+        },
+        "live": "Live gevolgd",
+        "atRest": "Eindcijfers",
+        "updated": "Bijgewerkt {time}"
       }
     },
     "wizard": {

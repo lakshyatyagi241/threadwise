@@ -709,7 +709,8 @@
         "replies": "回复（{count}）",
         "failures": "失败（{count}）",
         "optouts": "退订（{count}）",
-        "summary": "摘要"
+        "summary": "摘要",
+        "statistics": "统计"
       },
       "cancel": "取消",
       "deleted": "营销活动已删除。",
@@ -965,6 +966,41 @@
           "retry": "重试"
         },
         "latestRun": "当前显示第 {occurrence} 次发送，这是本系列中最新的一次。"
+      },
+      "live": {
+        "badge": "实时",
+        "updated": "更新于 {time}",
+        "queued": "{count} 条等待发送",
+        "processing": "{count} 条正在发送"
+      },
+      "statistics": {
+        "loadFailed": "无法加载统计数据。",
+        "rates": {
+          "delivered": "送达率",
+          "deliveredHint": "占目标受众",
+          "read": "阅读率",
+          "readHint": "占已送达",
+          "replies": "回复率",
+          "clicks": "点击率",
+          "failed": "失败率"
+        },
+        "breakdown": {
+          "title": "每位收件人当前所处状态",
+          "hint": "{total} 位收件人各按其当前状态统计一次。",
+          "empty": "此营销活动还没有收件人。"
+        },
+        "timeline": {
+          "title": "时间线",
+          "created": "创建时间",
+          "scheduled": "计划开始",
+          "firstSent": "首条消息发送",
+          "lastRun": "上次运行",
+          "finished": "完成",
+          "notYet": "尚未"
+        },
+        "live": "正在实时跟踪",
+        "atRest": "最终数据",
+        "updated": "更新于 {time}"
       }
     },
     "wizard": {

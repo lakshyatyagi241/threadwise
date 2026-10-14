@@ -24,6 +24,8 @@ export const CAMPAIGN_STATUSES = [
 export type CampaignStatus = (typeof CAMPAIGN_STATUSES)[number];
 /** Only these can be edited (Reference: draft, scheduled or paused). */
 export const EDITABLE_STATUSES = ['draft', 'paused', 'scheduled'] as const;
+/** A campaign in these statuses is still moving, so its numbers are polled; every other status is at rest. */
+export const CAMPAIGN_IN_FLIGHT_STATUSES = ['scheduled', 'running'] as const;
 /** Only these can be resent. */
 export const RESENDABLE_STATUSES = ['completed', 'failed', 'cancelled'] as const;
 
