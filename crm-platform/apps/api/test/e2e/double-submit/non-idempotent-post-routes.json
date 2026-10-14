@@ -342,6 +342,7 @@
   "POST /v2/public/booking-manage/:token/reschedule",
   "POST /v2/public/booking/:orgSlug/:typeSlug/book",
   "POST /v2/public/cms/contact",
+  "POST /v2/public/consent/unsubscribe/:token",
   "POST /v2/public/email/google/push",
   "POST /v2/public/forms/:publicKey/events",
   "POST /v2/public/forms/:publicKey/submit",
