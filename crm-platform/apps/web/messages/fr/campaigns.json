@@ -1256,6 +1256,7 @@
         "messages": "Messages",
         "modePlan": "{count, plural, one {Votre forfait couvre les premiers messages ; le portefeuille paie # message au-delà.} other {Votre forfait couvre les premiers messages ; le portefeuille paie # messages au-delà.}}",
         "modeWallet": "{count, plural, one {Chaque message distribué est débité de votre portefeuille : # message.} other {Chaque message distribué est débité de votre portefeuille : # messages.}}",
+        "platformOwned": "Cet espace de travail n'est pas facturé pour les envois, rien n'est donc débité de votre portefeuille.",
         "breakdown": "Coût par pays",
         "country": "Pays",
         "unitPrice": "Par message",

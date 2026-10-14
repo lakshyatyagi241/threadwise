@@ -59,6 +59,13 @@ describe('credit check', () => {
     );
   });
 
+  it('says the workspace is not billed instead of what the plan covers', () => {
+    const out = card(ready(credit({ platformOwned: true, billingMode: 'plan' })));
+    expect(out).toContain('This workspace is not billed for sends');
+    expect(out).not.toContain('Your plan covers');
+    expect(out).not.toContain('Charged to your wallet');
+  });
+
   it('shows the danger state with the shortfall and a Top up link to the response url', () => {
     const out = card(
       ready(

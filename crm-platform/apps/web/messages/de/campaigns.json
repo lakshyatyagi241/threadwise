@@ -1256,6 +1256,7 @@
         "messages": "Nachrichten",
         "modePlan": "{count, plural, one {Ihr Tarif deckt die ersten Nachrichten ab; das Wallet bezahlt # Nachricht darüber hinaus.} other {Ihr Tarif deckt die ersten Nachrichten ab; das Wallet bezahlt # Nachrichten darüber hinaus.}}",
         "modeWallet": "{count, plural, one {Jede zugestellte Nachricht wird Ihrem Wallet belastet: # Nachricht.} other {Jede zugestellte Nachricht wird Ihrem Wallet belastet: # Nachrichten.}}",
+        "platformOwned": "Für Sendungen in diesem Arbeitsbereich fallen keine Kosten an, daher wird nichts von Ihrem Guthaben abgebucht.",
         "breakdown": "Kosten nach Land",
         "country": "Land",
         "unitPrice": "Pro Nachricht",
