@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { assemblePhone } from '../../broadcasts';
+import { ConsentGate } from '../../contact-consent';
 
 export interface AudienceInput {
   recipientType: 'group' | 'tag' | 'queue' | 'number';
@@ -52,10 +53,13 @@ export function cleanNumber(raw: string): string | null {
  *
  * Deliberately not Reference's behavior: a contact who opted out (replied STOP) or was archived is never messaged, whichever audience
  * type named them (Reference filtered them only on the multi-sender path), and a contact is counted once however many of the chosen
- * groups, tags or broadcasts contain them.
+ * groups, tags or broadcasts contain them. "Opted out" is the ConsentGate's answer for marketing (BL-141), so the workspace switch
+ * "require recorded consent" is honoured here too; the run asks the gate again at send time.
  */
 @Injectable()
 export class ScheduleAudienceService {
+  constructor(private readonly consentGate: ConsentGate) {}
+
   async resolve(tx: Tx, orgId: number, input: AudienceInput): Promise<ResolvedAudience> {
     if (input.recipientType === 'number') return this.numbers(tx, orgId, input.numbers ?? []);
     const contactIds = await this.contactIds(tx, orgId, input);
@@ -100,15 +104,24 @@ export class ScheduleAudienceService {
       const res = await tx.execute(sql`
         SELECT id, phone, country_code, is_unsubscribed, is_archived FROM contacts
          WHERE org_id = ${orgId} AND id IN (${ids(part)}) ORDER BY id`);
-      for (const r of res.rows as Array<{
+      const rows = res.rows as Array<{
         id: number | string;
         phone: string | null;
         country_code: string | null;
         is_unsubscribed: boolean;
         is_archived: boolean;
-      }>) {
+      }>;
+      const verdict = await this.consentGate.checkMany(
+        orgId,
+        rows.map((r) => Number(r.id)),
+        'whatsapp',
+        'marketing_messaging',
+        undefined,
+        { tx },
+      );
+      for (const r of rows) {
         const phone = assemblePhone(r.phone, r.country_code);
-        if (!phone || r.is_unsubscribed || r.is_archived) {
+        if (!phone || !verdict.allowed.has(Number(r.id)) || r.is_archived) {
           skipped++;
           continue;
         }
@@ -149,11 +162,20 @@ export class ScheduleAudienceService {
         whole: string;
         local: string;
       }>) {
-        const entry = { id: Number(r.id), out: r.is_unsubscribed || r.is_archived };
+        const entry = { id: Number(r.id), out: r.is_archived };
         known.set(r.local, entry);
         known.set(r.whole, entry);
       }
     }
+    const verdict = await this.consentGate.checkMany(
+      orgId,
+      [...new Set([...known.values()].map((k) => k.id))],
+      'whatsapp',
+      'marketing_messaging',
+      undefined,
+      { tx },
+    );
+    for (const k of known.values()) if (!verdict.allowed.has(k.id)) k.out = true;
     const recipients: Recipient[] = [];
     let skipped = 0;
     for (const phone of clean) {

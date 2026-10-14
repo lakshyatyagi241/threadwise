@@ -32,6 +32,8 @@ import { DeliveryBillingConsumer } from '../../../src/modules/wallet-message-bil
 import { WalletLogService } from '../../../src/modules/wallet-message-billing/wallet-log.service';
 import type { WalletRealtimePublisher } from '../../../src/modules/wallet-message-billing/wallet-realtime.publisher';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import { ConsentGate } from '../../../src/modules/contact-consent';
+import { WALLET_GATE } from '../../../src/modules/broadcasts';
 
 /**
  * Does a scheduled send settle the wallet the way a broadcast does (TW-SCHED-024, TW-WALLET-009 to 013)? The whole chain on a real
@@ -95,6 +97,8 @@ beforeAll(async () => {
     h.app.get(WarmerService),
     h.app.get(UNOFFICIAL_WHATSAPP_GATE),
     h.app.get(OutboxService),
+    h.app.get(WALLET_GATE),
+    h.app.get(ConsentGate),
   );
   receipts = new ScheduledReceiptsService(db, h.app.get(OutboxService));
   consumer = new DeliveryBillingConsumer(

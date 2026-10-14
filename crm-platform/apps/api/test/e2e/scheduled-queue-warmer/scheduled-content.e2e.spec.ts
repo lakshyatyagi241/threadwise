@@ -26,6 +26,8 @@ import { WarmerService } from '../../../src/modules/scheduled-queue-warmer';
 import { ScheduleMessageBuilder } from '../../../src/modules/scheduled-queue-warmer/schedule-message-builder.service';
 import { ScheduledRunService } from '../../../src/modules/scheduled-queue-warmer/scheduled-run.service';
 import { Api, startHarness, type Harness, type Tenant } from '../contacts-attributes-tags/support';
+import { ConsentGate } from '../../../src/modules/contact-consent';
+import { WALLET_GATE } from '../../../src/modules/broadcasts';
 
 /**
  * Template and file schedules, the edit screen's API and the detail page's funnel (TW-SCHED-006, 012, 016) through the real API on a
@@ -83,6 +85,8 @@ beforeAll(async () => {
     h.app.get(WarmerService),
     h.app.get(UNOFFICIAL_WHATSAPP_GATE),
     h.app.get(OutboxService),
+    h.app.get(WALLET_GATE),
+    h.app.get(ConsentGate),
   );
   // An object store in memory behind the real storage service. Until a test turns it on, media is local disk, as on a fresh install.
   const storage = h.app.get(MediaStorageService, { strict: false }) as unknown as Record<
