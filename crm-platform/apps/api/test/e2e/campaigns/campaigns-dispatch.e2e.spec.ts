@@ -455,6 +455,57 @@ describe('TW-CAMP-012: retries', () => {
   });
 });
 
+describe('"Retry failed messages" switched off', () => {
+  it('is stored with the campaign, on by default, and read back', async () => {
+    const t = await api.signup('cr3');
+    const on = await campaign(t, { count: 1 });
+    const off = await campaign(t, { count: 1, extra: { retryFailed: false } });
+    const flag = async (id: number) =>
+      (await h.owner.query(`SELECT retry_failed FROM wpcampaigns WHERE id = $1`, [id])).rows[0]
+        .retry_failed as boolean;
+    expect(await flag(on.id)).toBe(true);
+    expect(await flag(off.id)).toBe(false);
+    const cfg = await api.http().get(`/v2/campaigns/${off.uuid}/config`).set(bearer(t.admin));
+    expect(cfg.status).toBe(200);
+    expect(JSON.stringify(cfg.body)).toContain('"retryFailed":false');
+  });
+
+  it('a refused send is final at once: no backoff, the campaign completes and is not scheduled again', async () => {
+    const t = await api.signup('cr4');
+    const c = await campaign(t, { count: 2, extra: { retryFailed: false } });
+    let first = true;
+    beforeSend = () => {
+      if (first) {
+        first = false;
+        throw new Error('network down');
+      }
+    };
+    expect(await run(c)).toBe('finished');
+    const r = await rows(c.id);
+    expect(r.map((x) => x.status)).toEqual(['failed', 'sent']);
+    expect(r[0]).toMatchObject({ send_attempts: 3, next_attempt_at: null });
+    expect(await camp(c.id)).toMatchObject({ status: 'completed', failed_count: 1, sent_count: 1 });
+  });
+
+  it('a failure reported later (even Meta’s throttle) is never sent again by the sweeper, and the reconcile pass drops it', async () => {
+    const t = await api.signup('cr5');
+    const c = await campaign(t, { count: 1, extra: { retryFailed: false } });
+    expect(await run(c)).toBe('finished');
+    await h.owner.query(
+      `UPDATE wp_campaign_contacts SET status = 'failed', send_attempts = 1, next_attempt_at = NULL,
+              error_message = '(#131049) This message was not delivered to maintain a healthy ecosystem engagement'
+       WHERE campaign_id = $1`,
+      [c.id],
+    );
+    (sweeper as unknown as { lastMetaBlocks: number }).lastMetaBlocks = 0;
+    queued = [];
+    await sweep();
+    expect(queued.filter((q) => q.campaignId === c.id)).toEqual([]);
+    expect((await camp(c.id)).status).toBe('completed');
+    expect((await rows(c.id))[0]!.send_attempts).toBe(3);
+  });
+});
+
 describe('TW-CAMP-009: daily limit and window', () => {
   it('stops at the daily limit, leaves the rest queued and schedules the next day', async () => {
     const t = await api.signup('cl1');

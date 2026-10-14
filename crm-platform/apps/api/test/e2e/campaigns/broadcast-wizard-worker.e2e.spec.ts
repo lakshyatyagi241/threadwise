@@ -2,6 +2,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
   MESSAGE_DELIVERY_EVENT,
   walletDeliveryReportedSchema,
+  wizardRetryFailedResponseSchema,
   wizardTestSendResponseSchema,
   wizardTestLogSchema,
 } from '@crm/contracts';
@@ -672,6 +673,190 @@ describe('retries for Meta frequency capping (131049)', () => {
 });
 
 // ------------------------------------------------------------------------------------------------ the test send
+
+describe('retry failed (by hand) on a launched broadcast', () => {
+  async function finished(label: string) {
+    const w = await world(lab, label);
+    await payPerMessage(lab, w.t, 5_000_000);
+    const who = {
+      once: number('1049'),
+      never: number('9049'),
+      dead: number('0000'),
+      fine: number('1234'),
+    };
+    const ids = await people(
+      lab,
+      w.t,
+      Object.entries(who).map(([name, phone]) => ({ name, phone })),
+    );
+    const g = await group(owner(), w.t, 'G', ids);
+    const d = await makeDraft(
+      lab,
+      w,
+      readyDraft(w, g, {
+        retries: {
+          enabled: true,
+          endDate: new Date(Date.now() + 2 * 86_400_000).toISOString().slice(0, 10),
+          timezone: 'UTC',
+        },
+      }),
+    );
+    const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    const { id, orgId } = await idOfCampaign(owner(), d.id);
+    lab.clock.now = new Date();
+    expect(await lab.run(orgId, id)).toBe('finished');
+    await lab.flush();
+    return { w, id, orgId, uuid: d.id };
+  }
+  const rows = async (campaignId: number) =>
+    Object.fromEntries(
+      (
+        await owner().query(
+          `SELECT c.name, r.status, r.error_code, r.retry_state, r.retry_count FROM wp_campaign_contacts r
+           JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id WHERE r.campaign_id = $1`,
+          [campaignId],
+        )
+      ).rows.map((x) => [x.name as string, x]),
+    );
+  const attemptCount = async (campaignId: number) =>
+    Number(
+      (
+        await owner().query(
+          `SELECT count(*) AS n FROM camp_retry_attempts WHERE campaign_id = $1`,
+          [campaignId],
+        )
+      ).rows[0].n,
+    );
+
+  it('puts only the failed recipients back in the queue, clears their retry state and attempt log, and they can be armed again after the next failure', async () => {
+    const c = await finished('bwf1');
+    await lab.retries.tick(); // arms the three frequency-cap failures
+    expect((await rows(c.id)).once.retry_state).toBe('scheduled');
+
+    const res = await wiz(lab, c.w.t.admin).post(`/broadcasts/${c.uuid}/retry-failed`);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(wizardRetryFailedResponseSchema.parse(res.body)).toMatchObject({
+      id: c.uuid,
+      kind: 'campaign',
+      status: 'running',
+      recipients: 3,
+      runs: 1,
+    });
+
+    const r = await rows(c.id);
+    for (const n of ['once', 'never', 'dead']) {
+      expect(r[n]).toMatchObject({
+        status: 'queued',
+        error_code: null,
+        retry_state: null,
+        retry_count: 0,
+      });
+    }
+    expect(r.fine.status).toBe('delivered');
+    expect(await attemptCount(c.id)).toBe(0);
+
+    // A broadcast that is running again cannot be retried a second time on top of itself.
+    const twice = await wiz(lab, c.w.t.admin).post(`/broadcasts/${c.uuid}/retry-failed`);
+    expect(twice.status).toBe(422);
+    expect(problem(twice).code).toBe('CAMP_NOT_RESENDABLE');
+
+    // Run it again: the frequency-cap failures are armed from a clean slate, not skipped as a duplicate attempt.
+    lab.sent.length = 0;
+    expect(await lab.run(c.orgId, c.id)).toBe('finished');
+    await lab.flush();
+    expect(lab.sent.map((m) => `+${m.to}`).sort()).toEqual(
+      [number('0000'), number('1049'), number('9049')].sort(),
+    );
+    expect((await lab.retries.tick()).armed).toBe(2);
+    expect((await rows(c.id)).never.retry_state).toBe('scheduled');
+  });
+
+  it('nothing to retry is a 422 with its own code; another workspace gets a 404', async () => {
+    const c = await finished('bwf2');
+    // A delivered-only campaign: reset the failures by hand so nobody is left failed.
+    await owner().query(
+      `UPDATE wp_campaign_contacts SET status = 'delivered' WHERE campaign_id = $1 AND status = 'failed'`,
+      [c.id],
+    );
+    const none = await wiz(lab, c.w.t.admin).post(`/broadcasts/${c.uuid}/retry-failed`);
+    expect(none.status).toBe(422);
+    expect(problem(none).code).toBe('CAMP_NOTHING_TO_RESEND');
+
+    const other = await world(lab, 'bwf2b');
+    expect((await wiz(lab, other.t.admin).post(`/broadcasts/${c.uuid}/retry-failed`)).status).toBe(
+      404,
+    );
+    expect((await rows(c.id)).fine.status).toBe('delivered');
+  });
+
+  it('a recurring series retries the failed recipients of every finished run, and leaves a run still in progress alone', async () => {
+    const w = await world(lab, 'bwf3');
+    await payPerMessage(lab, w.t, 5_000_000);
+    const ids = await people(lab, w.t, [{}, {}]);
+    const g = await group(owner(), w.t, 'G', ids);
+    const d = await makeDraft(
+      lab,
+      w,
+      readyDraft(w, g, {
+        schedule: {
+          mode: 'recurring',
+          rule: {
+            frequency: 'daily',
+            interval: 1,
+            startDate: '2028-02-01',
+            timeOfDay: '09:00',
+            timezone: 'UTC',
+            weekdays: [],
+            ends: { kind: 'never' },
+          },
+        },
+      }),
+    );
+    lab.clock.now = new Date();
+    const launch = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
+      rowVersion: d.rowVersion,
+    });
+    expect(launch.status, JSON.stringify(launch.body)).toBe(200);
+    const series = (
+      await owner().query(`SELECT id FROM camp_series WHERE uuid = $1`, [launch.body.id])
+    ).rows[0];
+    at('2028-02-01T09:00:00Z');
+    await lab.series.tick();
+    at('2028-02-02T09:00:00Z');
+    await lab.series.tick();
+    const children = (
+      await owner().query(
+        `SELECT id FROM wpcampaigns WHERE series_id = $1 ORDER BY occurrence_no`,
+        [series.id],
+      )
+    ).rows.map((x) => Number(x.id));
+    expect(children).toHaveLength(2);
+    // Run 1 finished with a failure; run 2 is still running with one too.
+    await owner().query(`UPDATE wpcampaigns SET status = 'completed' WHERE id = $1`, [children[0]]);
+    await owner().query(`UPDATE wpcampaigns SET status = 'running' WHERE id = $1`, [children[1]]);
+    for (const id of children) {
+      await owner().query(
+        `UPDATE wp_campaign_contacts SET status = 'failed', error_message = 'boom' WHERE id = (SELECT min(id) FROM wp_campaign_contacts WHERE campaign_id = $1)`,
+        [id],
+      );
+    }
+    // A cancelled run is never restarted by the series' retry.
+    await owner().query(`UPDATE wpcampaigns SET status = 'cancelled' WHERE id = $1`, [children[1]]);
+    const res = await wiz(lab, w.t.admin).post(`/broadcasts/${launch.body.id}/retry-failed`);
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body).toMatchObject({ kind: 'series', recipients: 1, runs: 1 });
+    const left = (
+      await owner().query(
+        `SELECT campaign_id, count(*) FILTER (WHERE status = 'failed') AS failed FROM wp_campaign_contacts WHERE campaign_id = ANY($1) GROUP BY campaign_id ORDER BY campaign_id`,
+        [children],
+      )
+    ).rows.map((x) => Number(x.failed));
+    expect(left).toEqual([0, 1]);
+  });
+});
 
 describe('the test send', () => {
   async function ready(label: string, fundMinor = 5_000_000) {

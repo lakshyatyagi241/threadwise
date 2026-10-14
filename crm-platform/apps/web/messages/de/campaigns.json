@@ -403,7 +403,9 @@
         "smartIntro": "Leer lassen, um die Workspace-Standardtaktung zu verwenden. Diese Regeln verteilen den Versand, damit eine große Liste menschlich wirkt und unter WhatsApps Sperrschwelle bleibt.",
         "smartZone": "Zeiten in {zone}.",
         "throttleMaxHint": "Die längste Wartezeit vor einer Nachricht.",
-        "batchPauseHint": "Minuten Pause nach jeder Charge."
+        "batchPauseHint": "Minuten Pause nach jeder Charge.",
+        "retryFailed": "Fehlgeschlagene Nachrichten automatisch wiederholen",
+        "retryFailedHint": "Eine Nachricht, die aus einem vorübergehenden Grund fehlschlägt, wird mehrmals mit Pause dazwischen erneut versucht. Ausschalten, um jede Nachricht nur einmal zu senden."
       },
       "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer.",
       "draftChip": "Entwurf / nicht gespeichert",
@@ -1486,12 +1488,14 @@
         "action": {
           "pause": "Pausieren",
           "resume": "Fortsetzen",
-          "cancel": "Broadcast abbrechen"
+          "cancel": "Broadcast abbrechen",
+          "retryFailed": "Fehlgeschlagene wiederholen ({count})"
         },
         "done": {
           "pause": "Broadcast pausiert.",
           "resume": "Broadcast fortgesetzt.",
-          "cancel": "Broadcast abgebrochen."
+          "cancel": "Broadcast abgebrochen.",
+          "retryFailed": "{count, plural, one {# fehlgeschlagener Empfänger wird} other {# fehlgeschlagene Empfänger werden}} erneut versucht."
         },
         "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
         "noControl": "Sie haben keine Berechtigung, Broadcasts zu pausieren, fortzusetzen oder abzubrechen.",
@@ -1510,7 +1514,9 @@
           "cancelled": "Abgebrochen",
           "active": "Aktiv",
           "ended": "Beendet"
-        }
+        },
+        "retryTitle": "Fehlgeschlagene Nachrichten wiederholen?",
+        "retryMessage": "Sendet erneut an {count, plural, one {# Empfänger} other {# Empfänger}}, bei denen die Nachricht fehlgeschlagen ist. Wer sie schon erhalten hat, bleibt unberührt, und eine Nachricht wird nur bei Zustellung berechnet."
       },
       "panel": {
         "title": "Erstellt mit Broadcast erstellen",

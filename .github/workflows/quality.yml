@@ -47,12 +47,17 @@ jobs:
           node tools/quality/check-acceptance-coverage.mjs --report docs/quality/acceptance/REPORT.md
       - name: Journey catalogue
         run: node tools/quality/journeys.mjs
+      - name: QA suite self-tests (parsers, and the live checks against a mock API)
+        run: node --test tools/qa-suite/qa-suite.test.mjs
+      - name: QA suite, static checks (the report lists every finding; add --fail to make findings block)
+        run: node tools/qa-suite/run.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: quality-reports
           path: |
             crm-platform/docs/quality/edge-cases/REPORT.md
             crm-platform/docs/quality/acceptance/REPORT.md
+            crm-platform/reports/qa-suite/latest/
 
   unit:
     name: Unit tests with coverage (API, web)

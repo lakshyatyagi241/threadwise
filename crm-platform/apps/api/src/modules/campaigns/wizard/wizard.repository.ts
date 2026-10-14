@@ -427,7 +427,7 @@ export class WizardRepository {
     await tx.execute(sql`
       UPDATE wpcampaigns SET wizard = ${json(v.wizard)}::jsonb, provider = ${v.provider}, device_id = ${v.deviceId},
         ab_testing = ${o.abTesting}, ab_split = ${o.abSplit}, template_id_b = ${o.templateIdB},
-        tracking_enabled = ${o.trackingEnabled}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
+        tracking_enabled = ${o.trackingEnabled}, retry_failed = ${o.retryFailed}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
         throttle_min_sec = ${o.throttleMinSec}, throttle_max_sec = ${o.throttleMaxSec}, batch_size = ${o.batchSize},
         batch_pause_min = ${o.batchPauseMin}, daily_limit = ${o.dailyLimit}, window_start = ${o.windowStart},
         window_end = ${o.windowEnd},

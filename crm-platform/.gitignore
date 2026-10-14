@@ -67,3 +67,4 @@ deploy/hostinger/backups/
 reports/auth-audit/
 reports/tenancy-audit/
 reports/sast/
+reports/qa-suite/

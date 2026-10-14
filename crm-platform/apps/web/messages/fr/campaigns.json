@@ -403,7 +403,9 @@
         "smartIntro": "Laissez vide pour utiliser le rythme par défaut de l'espace de travail. Ces règles espacent les envois pour qu'une grande liste paraisse humaine et reste sous le radar de blocage de WhatsApp.",
         "smartZone": "Heures en {zone}.",
         "throttleMaxHint": "Le délai d'attente le plus long avant un message.",
-        "batchPauseHint": "Minutes de pause après chaque lot."
+        "batchPauseHint": "Minutes de pause après chaque lot.",
+        "retryFailed": "Réessayer automatiquement les messages en échec",
+        "retryFailedHint": "Un message qui échoue pour une raison temporaire est renvoyé plusieurs fois, avec une pause entre les essais. Désactivez pour envoyer chaque message une seule fois."
       },
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
       "draftChip": "Brouillon / non enregistré",
@@ -1486,12 +1488,14 @@
         "action": {
           "pause": "Mettre en pause",
           "resume": "Reprendre",
-          "cancel": "Annuler la diffusion"
+          "cancel": "Annuler la diffusion",
+          "retryFailed": "Réessayer les échecs ({count})"
         },
         "done": {
           "pause": "Diffusion mise en pause.",
           "resume": "Diffusion reprise.",
-          "cancel": "Diffusion annulée."
+          "cancel": "Diffusion annulée.",
+          "retryFailed": "Nouvel essai pour {count, plural, one {# destinataire en échec} other {# destinataires en échec}}."
         },
         "failed": "Cela n’a pas fonctionné. Réessayez.",
         "noControl": "Vous n’avez pas l’autorisation de mettre en pause, reprendre ou annuler des diffusions.",
@@ -1510,7 +1514,9 @@
           "cancelled": "Annulée",
           "active": "Active",
           "ended": "Terminée"
-        }
+        },
+        "retryTitle": "Réessayer les messages en échec ?",
+        "retryMessage": "Renvoie à {count, plural, one {# destinataire} other {# destinataires}} dont le message a échoué. Ceux qui l’ont déjà reçu ne sont pas concernés, et un message n’est facturé que lorsqu’il est distribué."
       },
       "panel": {
         "title": "Créées avec Créer une diffusion",

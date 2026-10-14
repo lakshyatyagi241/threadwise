@@ -5,7 +5,23 @@ summary: Message a chosen audience with a text, a rich message, a template or a 
 area: campaigns
 order: 10
 documents: [nav:campaigns]
-keywords: [campaign, bulk, send, schedule, recurring, a/b test, csv, audience, delivery, replies, clicks, ai, wizard, broadcast]
+keywords:
+  [
+    campaign,
+    bulk,
+    send,
+    schedule,
+    recurring,
+    a/b test,
+    csv,
+    audience,
+    delivery,
+    replies,
+    clicks,
+    ai,
+    wizard,
+    broadcast,
+  ]
 ---
 
 ## What it is for
@@ -31,7 +47,7 @@ The panel on the right shows a live preview of the message and the recipients, s
 
 - **Enable A/B test** sends a second version to part of the audience. You set the split in Setup and write the second message, template or flow in Compose; the results appear per version on the campaign page.
 - **Smart Delivery** paces sending: gaps between messages, batches, a daily limit and sending hours. Blank fields use the platform default.
-- **Auto-end date** stops the campaign at that moment. **Track link clicks** records clicks on links.
+- **Auto-end date** stops the campaign at that moment. **Track link clicks** records clicks on links. **Retry failed messages automatically** (on by default) tries a message again a few times when it fails for a temporary reason; switch it off to send each message once, and use **Resend** later if you need to.
 - The list filters by status and message type. Each card offers the actions its status allows, and you can tick several cards to delete them together.
 - A campaign page has the tabs **Overview**, **Messages**, **Engagement**, **Replies**, **Failures** and **Opt-outs**.
 
@@ -43,5 +59,5 @@ You need the right to view campaigns to open the screen. Creating, editing, cont
 
 - **Next does not move on.** A list under the buttons names what is missing, such as a name, a message, an audience or a send date.
 - **Build with AI says no provider is enabled.** An admin has to switch on an AI provider for the platform, or your workspace has to add its own key.
-- **Messages failed.** Open the **Failures** tab for the most common reasons, then use the button there to resend to the recipients that failed.
+- **Messages failed.** Open the **Failures** tab for the most common reasons, then use the button there to resend to the recipients that failed. A campaign made with the guided flow has the same **Retry failed** button on its status page.
 - **A template is not listed.** Some sending engines accept only templates that WhatsApp has approved. See [Message templates](help:message-templates-overview).

@@ -403,7 +403,9 @@
         "smartIntro": "Deixe em branco para usar o ritmo padrão do workspace. Estas regras espaçam os envios para que uma lista grande pareça humana e fique abaixo do radar de bloqueio do WhatsApp.",
         "smartZone": "Horários em {zone}.",
         "throttleMaxHint": "A maior espera antes de uma mensagem.",
-        "batchPauseHint": "Minutos de pausa após cada lote."
+        "batchPauseHint": "Minutos de pausa após cada lote.",
+        "retryFailed": "Tentar novamente automaticamente as mensagens com falha",
+        "retryFailedHint": "Uma mensagem que falha por um motivo temporário é reenviada algumas vezes, com uma pausa entre as tentativas. Desative para enviar cada mensagem uma única vez."
       },
       "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business.",
       "draftChip": "Rascunho / não salvo",
@@ -1486,12 +1488,14 @@
         "action": {
           "pause": "Pausar",
           "resume": "Retomar",
-          "cancel": "Cancelar transmissão"
+          "cancel": "Cancelar transmissão",
+          "retryFailed": "Tentar novamente as falhas ({count})"
         },
         "done": {
           "pause": "Transmissão pausada.",
           "resume": "Transmissão retomada.",
-          "cancel": "Transmissão cancelada."
+          "cancel": "Transmissão cancelada.",
+          "retryFailed": "Tentando novamente {count, plural, one {# destinatário com falha} other {# destinatários com falha}}."
         },
         "failed": "Não funcionou. Tente novamente.",
         "noControl": "Você não tem permissão para pausar, retomar ou cancelar transmissões.",
@@ -1510,7 +1514,9 @@
           "cancelled": "Cancelada",
           "active": "Ativa",
           "ended": "Encerrada"
-        }
+        },
+        "retryTitle": "Tentar novamente as mensagens com falha?",
+        "retryMessage": "Envia de novo para {count, plural, one {# destinatário} other {# destinatários}} cuja mensagem falhou. Quem já recebeu não é afetado, e a mensagem só é cobrada quando é entregue."
       },
       "panel": {
         "title": "Criadas com Criar transmissão",
