@@ -10,10 +10,26 @@ export default defineConfig({
     // Integration tests each own a Postgres container; running suites in
     // parallel would multiply containers and starve a laptop.
     fileParallelism: false,
+    // Coverage of the business logic that unit tests can reach without a database: the *-rules, mappers, parsers and the
+    // shared helpers. Services and repositories need Postgres and are measured by the e2e and integration suites, so they are
+    // listed in the report (`tools/quality/coverage-metrics.mjs`) but not gated here. `pnpm --filter @crm/api test:coverage`.
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
-      exclude: ['**/*.module.ts', '**/main.ts', '**/worker.ts', 'test/**'],
+      // A failing test must not hide the coverage report: without this vitest writes none, and the baseline is lost.
+      reportOnFailure: true,
+      reporter: ['text-summary', 'json-summary', 'json', 'lcov'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        '**/*.module.ts',
+        '**/main.ts',
+        '**/worker.ts',
+        '**/*.controller.ts',
+        '**/*.dto.ts',
+        '**/index.ts',
+        '**/*.d.ts',
+        'src/tools/**',
+        'test/**',
+      ],
     },
   },
   resolve: {

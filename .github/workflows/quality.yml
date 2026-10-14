@@ -1,0 +1,113 @@
+name: Quality
+
+# Test suites and quality gates (QA tasks 4 to 9): the quality tools' own tests, the catalogue and acceptance checks, unit tests with
+# coverage, and, when asked for, the database-backed suites (integration, end to end, contract, journeys).
+#
+# Manual on purpose, for the same reason as the Security workflow: the automatic check workflows were removed in #328 because GitHub
+# Actions jobs do not start on this account. Run the same things on your own machine with the commands in
+# crm-platform/docs/quality/README.md. Nothing here has run on GitHub yet; every command in it was run locally.
+on:
+  workflow_dispatch:
+    inputs:
+      database_suites:
+        description: "Also run the suites that start Postgres and Redis (slow: one container per file)"
+        type: boolean
+        default: false
+      e2e_folder:
+        description: "With database_suites: the e2e folder to run (for example contacts-attributes-tags, contract, journeys, negative)"
+        type: string
+        default: contract
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  tools:
+    name: Quality tools, catalogue and acceptance checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: The tools' own tests
+        run: node --test tools/quality/*.test.mjs
+      - name: Edge-case catalogue (strict, no untested P0 case in a P0 module)
+        run: node tools/quality/check-edge-cases.mjs --strict --report docs/quality/edge-cases/REPORT.md
+      - name: Acceptance criteria are up to date, and their coverage
+        run: |
+          node tools/quality/extract-acceptance.mjs --check
+          node tools/quality/check-acceptance-coverage.mjs --report docs/quality/acceptance/REPORT.md
+      - name: Journey catalogue
+        run: node tools/quality/journeys.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports
+          path: |
+            crm-platform/docs/quality/edge-cases/REPORT.md
+            crm-platform/docs/quality/acceptance/REPORT.md
+
+  unit:
+    name: Unit tests with coverage (API, web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - name: Build the shared packages
+        run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+      - name: API unit tests with coverage
+        run: pnpm --filter @crm/api exec vitest run --dir test/unit --coverage --coverage.reporter=json-summary --coverage.reporter=text-summary --reporter=json --outputFile=api-unit.json
+      - name: Web unit tests
+        run: pnpm --filter @crm/web exec vitest run --reporter=json --outputFile=web-unit.json
+        env:
+          CI: "true"
+      - name: Metrics
+        run: |
+          node tools/quality/collect-metrics.mjs --suite api-unit=apps/api/api-unit.json --suite web-unit=apps/web/web-unit.json \
+            --coverage apps/api/coverage/coverage-summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unit-metrics
+          path: |
+            crm-platform/docs/quality/metrics/metrics.json
+            crm-platform/apps/api/coverage/coverage-summary.json
+
+  database-suites:
+    name: Database-backed suites (integration and one e2e folder)
+    if: ${{ inputs.database_suites }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+      - name: Integration tests
+        run: pnpm --filter @crm/api test:integration
+      - name: One e2e folder, with the contract assertions counted
+        env:
+          QA_CONTRACT_OUT: ${{ runner.temp }}/contract.jsonl
+        run: |
+          pnpm --filter @crm/api exec vitest run test/e2e/${{ inputs.e2e_folder }} --testTimeout=120000
+          if [ -f "$QA_CONTRACT_OUT" ]; then node tools/quality/sum-contract-assertions.mjs "$QA_CONTRACT_OUT"; fi
