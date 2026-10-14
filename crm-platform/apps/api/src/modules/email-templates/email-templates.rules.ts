@@ -60,6 +60,10 @@ export function buildLookup(f: RenderFacts): VariableLookup {
         return firstWord(f.agentName);
       case 'workspace_name':
         return f.base.system.businessName;
+      // A device (the number a chat is pinned to) is not part of an email: flagged as unknown, never filled.
+      case 'device_name':
+      case 'device_phone':
+        return undefined;
       default:
         break;
     }
