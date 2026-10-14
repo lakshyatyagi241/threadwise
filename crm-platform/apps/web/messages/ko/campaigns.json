@@ -1258,6 +1258,7 @@
         "messages": "메시지",
         "modePlan": "{count, plural, other {플랜에 처음 메시지가 포함되어 있으며, 초과분 #건은 지갑에서 결제됩니다.}}",
         "modeWallet": "{count, plural, other {전달된 모든 메시지는 지갑에서 차감됩니다: #건.}}",
+        "platformOwned": "이 워크스페이스는 발송에 요금이 청구되지 않으므로 지갑에서 아무것도 차감되지 않습니다.",
         "breakdown": "국가별 비용",
         "country": "국가",
         "unitPrice": "메시지당",

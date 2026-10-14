@@ -8,7 +8,8 @@ import type { CreditQuery } from '../../wizard/components/credit-card';
 /**
  * The cost of the selected audience with the draft's template, and whether the wallet covers it: the same check (and numbers) as
  * the Review step's credit card, in the preview column so it is in view from the first contact picked. Inside the plan's monthly
- * allowance the cost is the wallet's $0 and the note says so, as Review does.
+ * allowance the cost is the wallet's $0 and the note says so, as Review does. A platform-owned workspace is never billed: the note
+ * says that, and the balance warnings (which do not apply to it) are left out.
  */
 export function CostPanel({
   credit,
@@ -64,7 +65,7 @@ export function CostPanel({
                 <dd className="font-medium tabular-nums">{money(c.balanceMinor)}</dd>
               </div>
             </dl>
-            {c.sufficient ? (
+            {c.platformOwned ? null : c.sufficient ? (
               c.balanceMinor >= c.fullCostMinor ? (
                 <Alert tone="success">{t('balanceOk', { full: money(c.fullCostMinor) })}</Alert>
               ) : (
@@ -81,12 +82,14 @@ export function CostPanel({
               </Alert>
             )}
             <p className="text-xs text-muted-foreground">
-              {c.billingMode === 'plan'
-                ? tr('chargedPlan', {
-                    amount: money(c.estimatedCostMinor),
-                    covered: c.recipients - c.chargeableMessages,
-                  })
-                : tr('chargedWallet', { amount: money(c.estimatedCostMinor) })}
+              {c.platformOwned
+                ? tr('platformOwned')
+                : c.billingMode === 'plan'
+                  ? tr('chargedPlan', {
+                      amount: money(c.estimatedCostMinor),
+                      covered: c.recipients - c.chargeableMessages,
+                    })
+                  : tr('chargedWallet', { amount: money(c.estimatedCostMinor) })}
             </p>
           </div>
         )}

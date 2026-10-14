@@ -1258,6 +1258,7 @@
         "messages": "Tin nhắn",
         "modePlan": "{count, plural, other {Gói của bạn bao gồm các tin nhắn đầu tiên; ví thanh toán cho # tin nhắn vượt mức.}}",
         "modeWallet": "{count, plural, other {Mỗi tin nhắn đã nhận đều bị tính vào ví của bạn: # tin nhắn.}}",
+        "platformOwned": "Không gian làm việc này không bị tính phí khi gửi, nên sẽ không trừ gì từ ví của bạn.",
         "breakdown": "Chi phí theo quốc gia",
         "country": "Quốc gia",
         "unitPrice": "Mỗi tin nhắn",

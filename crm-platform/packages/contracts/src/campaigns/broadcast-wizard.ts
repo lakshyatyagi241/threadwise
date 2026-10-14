@@ -493,6 +493,8 @@ export const wizardCreditCheckSchema = z.object({
   estimatedCostMinor: z.number().int(),
   /** Every message at its price, independent of the plan (shown beside what is charged now). */
   fullCostMinor: z.number().int(),
+  /** The workspace is owned by the platform: its sends are never billed, so the wallet and the plan's allowance play no part. */
+  platformOwned: z.boolean(),
   lines: z.array(wizardCreditLineSchema),
   /** The wallet's own launch rule says this send may start. Sending is blocked when false. */
   sufficient: z.boolean(),

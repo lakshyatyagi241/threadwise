@@ -1258,6 +1258,7 @@
         "messages": "Wiadomości",
         "modePlan": "{count, plural, one {Twój plan pokrywa pierwsze wiadomości; portfel płaci za # wiadomość ponad ten limit.} few {Twój plan pokrywa pierwsze wiadomości; portfel płaci za # wiadomości ponad ten limit.} many {Twój plan pokrywa pierwsze wiadomości; portfel płaci za # wiadomości ponad ten limit.} other {Twój plan pokrywa pierwsze wiadomości; portfel płaci za # wiadomości ponad ten limit.}}",
         "modeWallet": "{count, plural, one {Każda dostarczona wiadomość jest obciążana z portfela: # wiadomość.} few {Każda dostarczona wiadomość jest obciążana z portfela: # wiadomości.} many {Każda dostarczona wiadomość jest obciążana z portfela: # wiadomości.} other {Każda dostarczona wiadomość jest obciążana z portfela: # wiadomości.}}",
+        "platformOwned": "Ta przestrzeń robocza nie jest rozliczana za wysyłki, więc z Twojego portfela nic nie zostanie pobrane.",
         "breakdown": "Koszt według kraju",
         "country": "Kraj",
         "unitPrice": "Za wiadomość",

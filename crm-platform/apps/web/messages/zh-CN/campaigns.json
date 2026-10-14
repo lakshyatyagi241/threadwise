@@ -1258,6 +1258,7 @@
         "messages": "消息",
         "modePlan": "{count, plural, other {您的套餐涵盖前面的消息；超出部分的 # 条消息由钱包支付。}}",
         "modeWallet": "{count, plural, other {每条已送达的消息都会从您的钱包扣费：# 条消息。}}",
+        "platformOwned": "此工作区的发送不计费，因此不会从您的钱包中扣款。",
         "breakdown": "按国家/地区的费用",
         "country": "国家/地区",
         "unitPrice": "每条消息",
