@@ -11,6 +11,8 @@ import { useFeed, useMarkRead, useUnreadCount } from '../api/hooks';
 import { notificationHref, typeMeta } from '../lib/catalogue';
 import { badgeText, notificationText, type Translator } from '../lib/copy';
 import { useAlertSettings, type AlertSettings } from '../live/use-alert-settings';
+import { useLiveUpdatesPaused } from '../live/use-live-paused';
+import { LivePausedNote } from './live-paused-note';
 import { TypeIcon } from './type-icon';
 
 /** Where a person tunes which events reach them (a pane of the account hub). */
@@ -30,6 +32,7 @@ export function NotificationBell() {
   const feed = useFeed(open);
   const { markRead, markAllRead, markingAll } = useMarkRead();
   const settings = useAlertSettings();
+  const livePaused = useLiveUpdatesPaused();
   const close = useCallback(() => setOpen(false), []);
 
   // While the panel is open its own total is the freshest; otherwise the polled count.
@@ -76,6 +79,7 @@ export function NotificationBell() {
             close();
           }}
           settings={settings}
+          livePaused={livePaused}
           onNavigate={close}
         />
         <div className="flex items-center justify-between border-t border-border bg-muted/40 px-4 py-2.5">
@@ -111,6 +115,7 @@ export function BellPanel({
   onRetry,
   onOpen,
   settings,
+  livePaused = false,
   onNavigate,
 }: {
   count: number;
@@ -122,6 +127,8 @@ export function BellPanel({
   onRetry: () => void;
   onOpen: (n: NotificationResponse) => void;
   settings: AlertSettings;
+  /** The live connection has been down for a few seconds: say why alerts are late. */
+  livePaused?: boolean;
   /** Called when the footer link is followed, so the panel can close. */
   onNavigate?: () => void;
 }) {
@@ -140,6 +147,11 @@ export function BellPanel({
         </button>
       </div>
       <FeedBody loading={loading} failed={failed} items={items} onRetry={onRetry} onOpen={onOpen} />
+      {livePaused && (
+        <div className="border-t border-border px-4 py-2.5">
+          <LivePausedNote paused />
+        </div>
+      )}
       <AlertSwitches settings={settings} />
       <div className="border-t border-border px-4 py-2.5">
         <Link

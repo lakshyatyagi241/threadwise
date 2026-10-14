@@ -5,7 +5,7 @@ summary: The bell in the header, the pop-up that appears wherever you are, the s
 area: getting-started
 order: 90
 documents: []
-keywords: [notifications, bell, alerts, toast, sound, ping, desktop, browser notifications, push, closed tab, tab title, unread, mention, assigned, new chat, new message]
+keywords: [notifications, bell, alerts, toast, sound, ping, desktop, browser notifications, push, closed tab, tab title, unread, mention, assigned, new chat, new message, live updates paused, test notification]
 ---
 
 ## What it is for
@@ -30,6 +30,8 @@ When a chat has no owner, everyone who can answer it hears about it once when it
 When something arrives and this tab is in front, a small pop-up appears in the top corner with the contact name or the event, the first words of the message and an **Open** link. A problem, such as a number that disconnected or a send that failed, is drawn in red and stays a little longer. It disappears by itself after a few seconds, or when you press Escape while it is focused or choose the close button.
 
 - A busy chat shows at most one pop-up every few seconds, and a flood of different chats becomes a single "new notifications" pop-up.
+- If the CRM cannot load the details of a new notification right away, it tries once more and otherwise shows "You have a new notification" instead of nothing.
+- While this tab is in the background you get the tab title (and a desktop alert if you allowed them), not a pop-up. When you come back to the tab, a notification that is still unread shows as a pop-up, or as one "new notifications" pop-up if several came in.
 - You get no pop-up for the conversation you are reading, or for your own actions.
 - Screen readers are told about each new notification once, in a polite announcement that does not move your focus.
 
@@ -61,6 +63,6 @@ The tab title shows the number of unread notifications in front of the page name
 
 ## If something looks wrong
 
-- No pop-ups or sound but the number changes after a minute: the live connection is not working, so the bell checks once a minute instead. Reload the page; if it persists, tell your administrator.
+- No pop-ups or sound but the number in the tab title changes after a minute: the live connection is not working, so the bell checks once a minute instead. The bell panel and Notification settings then show **Live updates are paused**. Reload the page; if it persists, tell your administrator.
 - No sound: click once anywhere on the page, then check that the sound is on in the bell footer and that the browser is not muting the tab.
 - Notifications for new chats, waiting chats and assignments can be switched off for the whole workspace by an administrator in the notification settings.

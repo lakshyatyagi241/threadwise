@@ -29,6 +29,7 @@ export const NOTIFICATION_GROUPS = [
   'broadcasts',
   'team_chat',
   'whatsapp_groups',
+  'system',
 ] as const;
 export type NotificationGroup = (typeof NOTIFICATION_GROUPS)[number];
 
@@ -99,6 +100,8 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   // Groups of a personal number: quiet defaults like the official ones. A removal is news to read, not an emergency; push stays off.
   device_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   device_group_removed: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
+  // The test button writes one so a person can see the in-app path work: pop-up and ping on by default (they can turn either off), no push of its own (the button sends the Web Push test separately).
+  test: { group: 'system', toast: true, sound: true, push: false },
 };
 
 export const notificationPrefTypeSchema = z.enum(NOTIFICATION_PREF_TYPES);

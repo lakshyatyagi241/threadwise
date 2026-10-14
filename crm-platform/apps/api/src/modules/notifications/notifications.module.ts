@@ -3,6 +3,7 @@ import { WEB_PUSH_PROVIDER } from '../../infra/providers/web-push/web-push.port'
 import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.provider';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationReadState } from './conversation-read-state';
+import { NotificationFanout } from './notification-fanout';
 import { NotificationPreferencesService } from './notification-preferences.service';
 import { NotificationPrefsResolver } from './notification-prefs.resolver';
 import { NotificationPublisher } from './notification.publisher';
@@ -22,6 +23,7 @@ import { NotificationsService } from './notifications.service';
     NotificationsService,
     NotificationsRepository,
     NotificationPublisher,
+    NotificationFanout,
     NotificationPrefsResolver,
     NotificationPreferencesService,
     ConversationReadState,

@@ -119,6 +119,7 @@ const LOOK: Record<NotificationPrefType, Look> = {
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),
   device_group_join_request: look('group', 'info', 'device_group'),
   device_group_removed: look('group', 'danger', 'device_group'),
+  test: look('generic', 'info'),
 };
 
 export const TYPE_CATALOGUE: Readonly<Record<string, TypeMeta>> = Object.fromEntries(

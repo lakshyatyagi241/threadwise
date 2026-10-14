@@ -159,6 +159,11 @@
         "title": "회원님의 번호가 {name}에서 제거되었습니다",
         "titleNoName": "회원님의 번호가 WhatsApp 그룹에서 제거되었습니다",
         "body": "누군가 이 그룹에서 회원님의 개인 번호를 내보냈습니다. 그룹은 읽기 전용으로 이곳에 보관됩니다."
+      },
+      "test": {
+        "title": "테스트 알림",
+        "titleNoName": "테스트 알림",
+        "bodyNoActor": "이 글이 보인다면 실시간 알림이 작동하는 것입니다."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "WhatsApp 그룹 정지",
         "waba_group_suspension_cleared": "WhatsApp 그룹 재활성화",
         "device_group_join_request": "그룹 참여 요청",
-        "device_group_removed": "WhatsApp 그룹에서 제거됨"
-      }
+        "device_group_removed": "WhatsApp 그룹에서 제거됨",
+        "test": "테스트 알림"
+      },
+      "generic": "새 알림이 있습니다",
+      "paused": "실시간 업데이트가 일시 중지되어 새 알림이 최대 1분 늦게 도착할 수 있습니다. 페이지를 새로고침하여 다시 연결하세요."
     },
     "prefs": {
       "title": "알림 환경설정",
@@ -212,7 +220,8 @@
         "broadcasts": "브로드캐스트 및 캠페인",
         "team_chat": "팀 채팅",
         "whatsapp_groups": "WhatsApp 그룹",
-        "billing": "결제 및 구독"
+        "billing": "결제 및 구독",
+        "system": "시스템"
       },
       "types": {
         "new_chat": {
@@ -366,6 +375,10 @@
         "assignment_blocked_by_leave": {
           "label": "아무도 맡을 수 없던 채팅",
           "hint": "선택된 담당자가 휴가 중이라 새 채팅을 맡을 사람을 찾지 못했습니다. 직접 배정하세요."
+        },
+        "test": {
+          "label": "테스트 알림",
+          "hint": "브라우저 알림에서 보내는 테스트로, 벨, 팝업, 탭 제목이 작동하는지 확인할 수 있습니다."
         }
       },
       "loading": "환경설정을 불러오는 중",
@@ -445,6 +458,11 @@
           "neverUsed": "아직 알림 없음",
           "remove": "제거",
           "removeFor": "{device} 제거"
+        },
+        "testInApp": {
+          "watch": "팝업이 나타나고 벨의 숫자와 탭 제목이 바뀌어야 합니다.",
+          "notConnected": "이 페이지에는 실시간 업데이트가 연결되어 있지 않아 팝업이 표시될 수 없습니다. 페이지를 새로고침한 뒤 다시 시도하세요.",
+          "off": "벨에 알림이 만들어지지 않았습니다. 아래 표에서 \"테스트 알림\"의 벨이 꺼져 있거나 워크스페이스 소유자가 꺼 두었습니다."
         }
       }
     },

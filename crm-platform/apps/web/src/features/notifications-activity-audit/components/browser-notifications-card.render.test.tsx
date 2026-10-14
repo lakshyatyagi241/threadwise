@@ -34,6 +34,8 @@ const push = (state: PushUiState, over: Partial<BrowserPush> = {}): BrowserPush 
   busy: null,
   problem: null,
   testResult: null,
+  testInApp: null,
+  liveConnected: true,
   enable: noop,
   disable: noop,
   remove: noop,
@@ -112,6 +114,40 @@ describe('the Browser notifications card (en)', () => {
     expect(out).toContain('Send a test notification');
     expect(out).toContain('Turn off on this device');
     expect(out).toContain('never the message text');
+  });
+
+  it('after a test, tells the person what to look for when the live connection works', () => {
+    const out = view('on', { testResult: 'sent', testInApp: true, liveConnected: true });
+    expect(out).toContain('data-state="watch"');
+    expect(out).toContain('You should see a pop-up, the bell number and the tab title change.');
+    expect(out).not.toContain('not connected');
+  });
+
+  it('after a test with no live connection, says to reload instead of promising a pop-up', () => {
+    const out = view('on', { testResult: 'sent', testInApp: true, liveConnected: false });
+    expect(out).toContain('data-state="notConnected"');
+    expect(out).toContain('Live updates are not connected on this page');
+    expect(out).toContain('Reload the page');
+    expect(out).not.toContain('You should see a pop-up');
+  });
+
+  it('says so when no bell row was written (the bell is off for the test type)', () => {
+    const out = view('on', { testResult: 'sent', testInApp: false });
+    expect(out).toContain('data-state="off"');
+    expect(out).toContain('No bell notification was created');
+  });
+
+  it('shows no in-app line before a test, or after a refused one', () => {
+    expect(view('on')).not.toContain('data-testid="test-in-app"');
+    expect(view('on', { testResult: 'wait', testInApp: null })).not.toContain(
+      'data-testid="test-in-app"',
+    );
+  });
+
+  it('words the in-app feedback in Arabic too', () => {
+    const out = view('on', { testResult: 'sent', testInApp: true, liveConnected: true }, 'ar');
+    expect(out).toContain('data-state="watch"');
+    expect(out).not.toContain('You should see');
   });
 
   it('lists the devices without any secret, marks this one, and can remove each', () => {

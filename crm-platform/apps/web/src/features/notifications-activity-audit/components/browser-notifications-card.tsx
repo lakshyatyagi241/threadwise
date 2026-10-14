@@ -100,6 +100,9 @@ export function BrowserNotificationsView({ push }: { push: BrowserPush }) {
             </Button>
           </div>
           {push.testResult && <TestResult outcome={push.testResult} />}
+          {push.testInApp !== null && (
+            <InAppTestResult inApp={push.testInApp} connected={push.liveConnected} />
+          )}
           <p className="text-xs text-muted-foreground">{t('howItWorks')}</p>
         </div>
       )}
@@ -149,6 +152,20 @@ function TestResult({ outcome }: { outcome: TestOutcome | 'wait' }) {
   return (
     <Alert tone={outcome === 'sent' ? 'success' : outcome === 'wait' ? 'info' : 'warning'}>
       {t(`testResult.${outcome}`)}
+    </Alert>
+  );
+}
+
+/**
+ * What to look for after a test: the bell row it wrote is announced live, so on a connected page a toast, the bell number and the tab title
+ * change; on a page with no live connection only a reload shows it (the number then moves on its own within a minute).
+ */
+function InAppTestResult({ inApp, connected }: { inApp: boolean; connected: boolean }) {
+  const t = useTranslations('notifications.prefs.push.testInApp');
+  const key = !inApp ? 'off' : connected ? 'watch' : 'notConnected';
+  return (
+    <Alert tone={key === 'watch' ? 'info' : 'warning'} data-testid="test-in-app" data-state={key}>
+      {t(key)}
     </Alert>
   );
 }

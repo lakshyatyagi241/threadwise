@@ -343,3 +343,34 @@ describe('the preferences screen (ar)', () => {
     expect(out).not.toMatch(/class="[^"]*\b(?:ml|mr|pl|pr|left|right|text-left|text-right)-/);
   });
 });
+
+describe('the System group and the paused note', () => {
+  const testRow = () => [
+    item('test', 'system', {
+      sound: true,
+      defaults: { bell: true, toast: true, sound: true, push: false },
+    }),
+  ];
+
+  it('lists the test notification under System, with its default', () => {
+    const out = html(view({ state: state(...testRow()) }));
+    expect(out).toContain('System');
+    expect(out).toContain('Test notification');
+    expect(out).toContain('aria-label="Test notification: bell"');
+    expect(out).not.toContain('notifications.prefs');
+  });
+
+  it('words the System group in Arabic', () => {
+    const out = html(view({ state: state(...testRow()) }), 'ar');
+    expect(out).toContain('النظام');
+    expect(out).toContain('إشعار تجريبي');
+  });
+
+  it('explains a title-only state with a small note when live updates are paused, and shows nothing otherwise', () => {
+    const paused = html(view({ livePaused: true }));
+    expect(paused).toContain('data-testid="live-paused"');
+    expect(paused).toContain('Live updates are paused');
+    expect(html(view())).not.toContain('data-testid="live-paused"');
+    expect(html(view({ livePaused: true }), 'ar')).toContain('data-testid="live-paused"');
+  });
+});

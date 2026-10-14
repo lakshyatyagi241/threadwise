@@ -6,6 +6,8 @@ import { Alert, Badge, Button, Card, Spinner, Switch, cn } from '@crm/ui';
 import { usePreferenceActions, usePreferences } from '../api/prefs-hooks';
 import { typeMeta } from '../lib/catalogue';
 import { useAlertSettings, type AlertSettings } from '../live/use-alert-settings';
+import { useLiveUpdatesPaused } from '../live/use-live-paused';
+import { LivePausedNote } from './live-paused-note';
 import { usePushDeployment } from '../push/use-browser-push';
 import {
   PREF_CHANNELS,
@@ -30,6 +32,7 @@ export function PreferencesScreen() {
   const query = usePreferences();
   const actions = usePreferenceActions();
   const alerts = useAlertSettings();
+  const livePaused = useLiveUpdatesPaused();
   // The Push column exists only where the deployment has browser notifications (the card is the same: invisible without keys).
   const push = usePushDeployment();
   return (
@@ -46,6 +49,7 @@ export function PreferencesScreen() {
       onReset={actions.reset}
       onResetAll={actions.resetEverything}
       alerts={alerts}
+      livePaused={livePaused}
     />
   );
 }
@@ -64,8 +68,11 @@ export function PreferencesView({
   alerts,
   pushEnabled = false,
   browserCard = null,
+  livePaused = false,
 }: {
   pushEnabled?: boolean;
+  /** The live connection has been down for a few seconds: a quiet note says alerts are late, so a title that moves with no toast is explained. */
+  livePaused?: boolean;
   /** The "Browser notifications" card, a slot so this view stays free of data hooks and can be rendered in a test. */
   browserCard?: ReactNode;
   state: PrefsState | undefined;
@@ -88,6 +95,8 @@ export function PreferencesView({
         </h1>
         <p className="text-sm text-muted-foreground">{t('description')}</p>
       </header>
+
+      <LivePausedNote paused={livePaused} />
 
       {browserCard}
 

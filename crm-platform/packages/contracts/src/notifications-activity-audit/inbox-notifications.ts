@@ -61,6 +61,9 @@ export const NOTIFICATION_TYPES = [
   'device_group_join_request',
   /** The personal number was removed from a group by someone else (a useful abuse or ban signal). */
   'device_group_removed',
+  // --- The test button (Account, Notifications, Browser notifications) -------------------------------------------------------------
+  /** "Send a test notification": a harmless row written for the person who pressed the button, so the bell, the toast, the ping and the tab title can be seen working. */
+  'test',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
