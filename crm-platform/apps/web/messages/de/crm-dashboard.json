@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "CRM-Dashboard"
+    },
+    "title": "Ihr CRM",
+    "subtitle": "Deals, Rechnungen, Zahlungen und Aufgaben — das ganze Geschäft in einer Ansicht.",
+    "period": "{from} bis {to} · Zeitzone {zone}",
+    "openBoard": "Deal-Board öffnen",
+    "loading": "Dashboard wird geladen",
+    "retry": "Erneut versuchen",
+    "stale": "Die Aktualisierung ist fehlgeschlagen. Das sind die zuletzt bekannten Zahlen.",
+    "empty": {
+      "title": "Noch nichts zu berichten",
+      "message": "Fügen Sie Kontakte und Deals hinzu, dann füllt sich diese Seite: der Pipeline-Trichter, wer gewinnt, woher Leads kommen, Aufgaben und was Ihnen noch zusteht.",
+      "deals": "Zu den Deals",
+      "contacts": "Zu den Kontakten"
+    },
+    "filters": {
+      "label": "Dashboard-Filter",
+      "period": "Zeitraum",
+      "range": {
+        "month": "Dieser Monat",
+        "7d": "7 Tage",
+        "30d": "30 Tage",
+        "90d": "90 Tage",
+        "custom": "Benutzerdefiniert"
+      },
+      "from": "Von",
+      "to": "Bis",
+      "pipeline": "Pipeline",
+      "allPipelines": "Alle Pipelines",
+      "owner": "Verantwortlicher",
+      "everyone": "Alle",
+      "team": "Team",
+      "allTeams": "Alle Teams",
+      "reset": "Filter zurücksetzen"
+    },
+    "kpi": {
+      "title": "Kennzahlen",
+      "vsPrevious": "Im Vergleich zum vorherigen Zeitraum gleicher Länge",
+      "open": "Offene Pipeline",
+      "openHint": "{count, plural, one {# Deal} other {# Deals}} · Prognose {forecast}",
+      "won": "Gewonnen",
+      "wonHint": "{count, plural, one {# Deal abgeschlossen} other {# Deals abgeschlossen}}",
+      "collected": "Eingenommen",
+      "collectedHint": "Eingegangene Zahlungen",
+      "outstanding": "Offen",
+      "outstandingHint": "{count, plural, one {# offene Rechnung} other {# offene Rechnungen}}",
+      "winRate": "Gewinnquote",
+      "winRateHint": "{won} gewonnen, {lost} verloren",
+      "avgSize": "Durchschnittliche Dealgröße",
+      "avgSizeHint": "Der gewonnenen Deals",
+      "avgCycle": "Durchschnittlicher Verkaufszyklus",
+      "avgCycleHint": "Von der Erstellung bis zum Gewinn",
+      "days": "{count, plural, one {# Tag} other {# Tage}}",
+      "lost": "Verlorene Deals",
+      "lateClose": "Erwarteter Abschluss überschritten",
+      "lateCloseHint": "Offene Deals mit abgelaufenem Datum",
+      "contacts": "Kontakte",
+      "contactsHint": "Heute in Ihrer Ansicht",
+      "newContacts": "Neue Kontakte",
+      "newLeads": "Neue Leads",
+      "newLeadsHint": "Kontakte, die mit einer Quelle kamen",
+      "paid": "Bezahlte Rechnungen",
+      "paidHint": "Im Zeitraum bezahlt worden",
+      "tasksOpen": "Offene Aufgaben",
+      "tasksOpenHint": "{count} heute später fällig",
+      "tasksOverdue": "Überfällige Aufgaben"
+    },
+    "funnel": {
+      "title": "Pipeline-Trichter",
+      "subtitle": "{pipeline} · {count, plural, one {# Deal erstellt} other {# Deals erstellt}} im Zeitraum",
+      "noPipeline": "Es gibt noch keine Pipeline.",
+      "empty": "In diesem Zeitraum wurden keine Deals erstellt.",
+      "conversion": "{percent} % weitergekommen",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} haben diese Phase erreicht, {open} sind jetzt offen. Öffnen.",
+      "openNow": "{count, plural, one {# jetzt offen} other {# jetzt offen}} · {value}"
+    },
+    "trend": {
+      "title": "Gewonnene und verlorene Deals",
+      "subtitle": {
+        "day": "Pro Tag · {value} gewonnen",
+        "week": "Pro Woche · {value} gewonnen",
+        "month": "Pro Monat · {value} gewonnen"
+      },
+      "chartLabel": "Gewonnene und verlorene Deals im Zeitraum",
+      "won": "Gewonnen",
+      "lost": "Verloren"
+    },
+    "leaderboard": {
+      "title": "Rangliste der Verantwortlichen",
+      "subtitle": "Nach gewonnenem Wert im Zeitraum",
+      "empty": "Keine Deals zum Einordnen in dieser Ansicht.",
+      "owner": "Verantwortlicher",
+      "won": "Gewonnen",
+      "value": "Wert",
+      "lost": "Verloren",
+      "open": "Offen",
+      "activities": "Aktivitäten",
+      "unowned": "Ohne Verantwortlichen"
+    },
+    "sources": {
+      "title": "Lead-Quellen",
+      "subtitle": "Kontakte, die im Zeitraum eingegangen sind, und wie weit sie kamen",
+      "empty": "In diesem Zeitraum ist kein Kontakt mit Quelle eingegangen.",
+      "source": "Quelle",
+      "leads": "Leads",
+      "toDeal": "Zum Deal",
+      "toWon": "Zum Gewinn",
+      "wonValue": "Gewonnener Wert",
+      "none": "Keine Quelle"
+    },
+    "tasks": {
+      "title": "Aufgaben",
+      "subtitle": "{open} offen · {overdue} überfällig · {today} heute später fällig",
+      "all": "Alle Aufgaben",
+      "empty": "Keine offenen Aufgaben.",
+      "byAssignee": "Offene Aufgaben nach Bearbeiter",
+      "assignee": "Bearbeiter",
+      "open": "Offen",
+      "overdue": "Überfällig",
+      "dueToday": "Heute später",
+      "unassigned": "Nicht zugewiesen",
+      "upcoming": "Anstehende Aufgaben",
+      "overdueTag": "Überfällig"
+    },
+    "aging": {
+      "title": "Fälligkeitsstruktur der Forderungen",
+      "open": "Zahlungen",
+      "empty": "Es ist nichts offen.",
+      "bucket": {
+        "current": "Noch nicht fällig",
+        "d1_30": "1–30 Tage überfällig",
+        "d31_60": "31–60 Tage überfällig",
+        "d61_90": "61–90 Tage überfällig",
+        "d90_plus": "Über 90 Tage überfällig"
+      }
+    },
+    "payments": {
+      "title": "Letzte Zahlungen",
+      "empty": "Noch keine Zahlungen."
+    },
+    "activity": {
+      "title": "Letzte Aktivität",
+      "empty": "Noch keine Aktivität.",
+      "stageMoved": "Von {from} nach {to} verschoben",
+      "stagePlaced": "In {to} eingeordnet",
+      "by": "von {name}",
+      "system": "vom System",
+      "type": {
+        "note": "Notiz",
+        "stage_change": "Phasenwechsel",
+        "call": "Anruf",
+        "message": "Nachricht",
+        "email": "E-Mail",
+        "meeting": "Meeting",
+        "task": "Aufgabe"
+      }
+    }
+  }
+}

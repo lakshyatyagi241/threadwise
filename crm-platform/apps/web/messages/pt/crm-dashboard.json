@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "Painel do CRM"
+    },
+    "title": "Seu CRM",
+    "subtitle": "Negócios, faturas, pagamentos e tarefas — toda a empresa em uma só visão.",
+    "period": "{from} a {to} · fuso horário {zone}",
+    "openBoard": "Abrir o quadro de negócios",
+    "loading": "Carregando o painel",
+    "retry": "Tentar novamente",
+    "stale": "A atualização falhou. Estes são os últimos números que tínhamos.",
+    "empty": {
+      "title": "Nada para mostrar ainda",
+      "message": "Adicione contatos e negócios e esta página se preenche: o funil do pipeline, quem está ganhando, de onde vêm os leads, as tarefas e o que você tem a receber.",
+      "deals": "Ir para negócios",
+      "contacts": "Ir para contatos"
+    },
+    "filters": {
+      "label": "Filtros do painel",
+      "period": "Período",
+      "range": {
+        "month": "Este mês",
+        "7d": "7 dias",
+        "30d": "30 dias",
+        "90d": "90 dias",
+        "custom": "Personalizado"
+      },
+      "from": "De",
+      "to": "Até",
+      "pipeline": "Pipeline",
+      "allPipelines": "Todos os pipelines",
+      "owner": "Responsável",
+      "everyone": "Todos",
+      "team": "Equipe",
+      "allTeams": "Todas as equipes",
+      "reset": "Redefinir filtros"
+    },
+    "kpi": {
+      "title": "Números principais",
+      "vsPrevious": "Comparado com o período anterior de mesma duração",
+      "open": "Pipeline aberto",
+      "openHint": "{count, plural, one {# negócio} other {# negócios}} · previsão {forecast}",
+      "won": "Ganhos",
+      "wonHint": "{count, plural, one {# negócio fechado} other {# negócios fechados}}",
+      "collected": "Recebido",
+      "collectedHint": "Pagamentos recebidos",
+      "outstanding": "Em aberto",
+      "outstandingHint": "{count, plural, one {# fatura aberta} other {# faturas abertas}}",
+      "winRate": "Taxa de ganho",
+      "winRateHint": "{won} ganhos, {lost} perdidos",
+      "avgSize": "Tamanho médio do negócio",
+      "avgSizeHint": "Dos negócios ganhos",
+      "avgCycle": "Ciclo de vendas médio",
+      "avgCycleHint": "Da criação ao ganho",
+      "days": "{count, plural, one {# dia} other {# dias}}",
+      "lost": "Negócios perdidos",
+      "lateClose": "Fechamento previsto vencido",
+      "lateCloseHint": "Negócios abertos cuja data já passou",
+      "contacts": "Contatos",
+      "contactsHint": "Na sua visão hoje",
+      "newContacts": "Novos contatos",
+      "newLeads": "Novos leads",
+      "newLeadsHint": "Contatos que chegaram com uma origem",
+      "paid": "Faturas pagas",
+      "paidHint": "Passaram a pagas no período",
+      "tasksOpen": "Tarefas abertas",
+      "tasksOpenHint": "{count} vencem mais tarde hoje",
+      "tasksOverdue": "Tarefas atrasadas"
+    },
+    "funnel": {
+      "title": "Funil do pipeline",
+      "subtitle": "{pipeline} · {count, plural, one {# negócio criado} other {# negócios criados}} no período",
+      "noPipeline": "Ainda não há nenhum pipeline.",
+      "empty": "Nenhum negócio foi criado neste período.",
+      "conversion": "{percent}% avançaram",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} chegaram a esta etapa, {open} abertos agora. Abra-os.",
+      "openNow": "{count, plural, one {# aberto agora} other {# abertos agora}} · {value}"
+    },
+    "trend": {
+      "title": "Negócios ganhos e perdidos",
+      "subtitle": {
+        "day": "Por dia · {value} ganho",
+        "week": "Por semana · {value} ganho",
+        "month": "Por mês · {value} ganho"
+      },
+      "chartLabel": "Negócios ganhos e perdidos ao longo do período",
+      "won": "Ganhos",
+      "lost": "Perdidos"
+    },
+    "leaderboard": {
+      "title": "Ranking de responsáveis",
+      "subtitle": "Por valor ganho no período",
+      "empty": "Nenhum negócio para classificar nesta visão.",
+      "owner": "Responsável",
+      "won": "Ganhos",
+      "value": "Valor",
+      "lost": "Perdidos",
+      "open": "Abertos",
+      "activities": "Atividades",
+      "unowned": "Sem responsável"
+    },
+    "sources": {
+      "title": "Origens de leads",
+      "subtitle": "Contatos que chegaram no período e até onde avançaram",
+      "empty": "Nenhum contato com origem chegou neste período.",
+      "source": "Origem",
+      "leads": "Leads",
+      "toDeal": "Para negócio",
+      "toWon": "Para ganho",
+      "wonValue": "Valor ganho",
+      "none": "Sem origem"
+    },
+    "tasks": {
+      "title": "Tarefas",
+      "subtitle": "{open} abertas · {overdue} atrasadas · {today} vencem mais tarde hoje",
+      "all": "Todas as tarefas",
+      "empty": "Nenhuma tarefa aberta.",
+      "byAssignee": "Tarefas abertas por responsável",
+      "assignee": "Responsável",
+      "open": "Abertas",
+      "overdue": "Atrasadas",
+      "dueToday": "Mais tarde hoje",
+      "unassigned": "Não atribuídas",
+      "upcoming": "Próximas tarefas",
+      "overdueTag": "Atrasada"
+    },
+    "aging": {
+      "title": "Aging de recebíveis",
+      "open": "Pagamentos",
+      "empty": "Nada a receber.",
+      "bucket": {
+        "current": "Ainda não vencido",
+        "d1_30": "Vencido há 1–30 dias",
+        "d31_60": "Vencido há 31–60 dias",
+        "d61_90": "Vencido há 61–90 dias",
+        "d90_plus": "Vencido há mais de 90 dias"
+      }
+    },
+    "payments": {
+      "title": "Pagamentos recentes",
+      "empty": "Ainda não há pagamentos."
+    },
+    "activity": {
+      "title": "Atividade recente",
+      "empty": "Ainda não há atividade.",
+      "stageMoved": "Movido de {from} para {to}",
+      "stagePlaced": "Colocado em {to}",
+      "by": "por {name}",
+      "system": "pelo sistema",
+      "type": {
+        "note": "Nota",
+        "stage_change": "Mudança de etapa",
+        "call": "Ligação",
+        "message": "Mensagem",
+        "email": "E-mail",
+        "meeting": "Reunião",
+        "task": "Tarefa"
+      }
+    }
+  }
+}

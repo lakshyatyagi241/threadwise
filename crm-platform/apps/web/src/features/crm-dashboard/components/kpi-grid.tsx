@@ -78,7 +78,6 @@ export function KpiGrid({
   const cards: Kpi[] = [];
 
   if (deals) {
-    const closedPrev = deals.won.previousCount + deals.lost.previousCount;
     const wonDelta = changePercent(magnitude(deals.won.value), magnitude(deals.won.previousValue));
     cards.push({
       id: 'open',
@@ -119,6 +118,7 @@ export function KpiGrid({
     });
   }
   if (deals) {
+    const closedPrev = deals.won.previousCount + deals.lost.previousCount;
     cards.push({
       id: 'winRate',
       label: t('winRate'),

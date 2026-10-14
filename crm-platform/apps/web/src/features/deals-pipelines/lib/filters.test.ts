@@ -20,6 +20,7 @@ describe('deal filters', () => {
       q: 'acme',
       owner: 'u1',
       source: 'api',
+      stage: '',
       status: 'won',
       view: 'list',
       deal: 'd9',
