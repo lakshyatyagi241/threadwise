@@ -18,6 +18,7 @@ import { recipientsOf, replyMessageId } from './email-send-rules';
 import { MailboxUnavailableError } from './mail-errors';
 import { MailOutboundPreparer } from './mail-outbound.preparer';
 import { MailPlan } from './mail-plan';
+import { ConsentUnsubscribeService } from '../contact-consent';
 import { MailSendGuard } from './mail-send.guard';
 import { MailTokens } from './mail-tokens.service';
 
@@ -59,6 +60,7 @@ export class EmailChannelAdapter implements ChannelAdapter {
     private readonly plan: MailPlan,
     private readonly preparer: MailOutboundPreparer,
     private readonly guard: MailSendGuard,
+    private readonly unsubscribe: ConsentUnsubscribeService,
   ) {}
 
   externalIdOf(): string | null {
@@ -128,6 +130,24 @@ export class EmailChannelAdapter implements ChannelAdapter {
         }
         const everyone = [...to, ...cc, ...bcc];
         await this.guard.assertAllowed(channel.orgId, mailbox, everyone);
+        // Marketing mail carries the signed unsubscribe link in the text and the one-click headers (RFC 8058). A recipient who is
+        // not a contact has nobody to unsubscribe, so the mail is refused rather than sent without a way out.
+        let unsubHeaders: Record<string, string> = {};
+        let body = envelope.body;
+        if (email.marketing) {
+          const link = await this.unsubscribe.linkForAddress(channel.orgId, to[0]!);
+          if (!link) {
+            throw new ChannelError(
+              'MAIL_SEND_REFUSED',
+              'A marketing email can only go to a contact, so it can carry an unsubscribe link.',
+              false,
+            );
+          }
+          unsubHeaders = link.headers;
+          body = `${envelope.body}
+
+Unsubscribe: ${link.pageUrl}`;
+        }
         const draft: OutgoingMail = {
           messageId: replyMessageId(envelope.clientReference, mailbox.address),
           from: { name: mailbox.displayName, address: mailbox.address },
@@ -135,14 +155,17 @@ export class EmailChannelAdapter implements ChannelAdapter {
           cc,
           bcc,
           subject: email.subject,
-          text: envelope.body,
+          text: body,
           html: null, // the preparer fills it (rich body, signature)
           inReplyTo: email.inReplyTo,
           references: email.references,
           threadKey: email.threadId,
           attachments: [],
           // Mail an automation wrote (a bot, a flow: no sending person) says so, so the other side never auto-answers it (loop protection).
-          headers: email.sentBy ? {} : { 'Auto-Submitted': 'auto-generated' },
+          headers: {
+            ...(email.sentBy ? {} : { 'Auto-Submitted': 'auto-generated' }),
+            ...unsubHeaders,
+          },
           attempt: envelope.attempt,
         };
         const mail = await this.preparer.prepare({ orgId: channel.orgId, mailbox, email }, draft);

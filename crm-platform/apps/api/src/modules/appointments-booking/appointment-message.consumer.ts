@@ -12,6 +12,7 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
+import { ConsentGate } from '../contact-consent';
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsSupport } from './appointments.support';
 import { BookingTypesRepository, type TemplateRow } from './booking-types.repository';
@@ -77,6 +78,7 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
     private readonly support: AppointmentsSupport,
     private readonly registry: OutboxSubscriberRegistry,
     @Inject(APPOINTMENT_MESSENGER) private readonly messenger: AppointmentMessenger,
+    private readonly consentGate: ConsentGate,
   ) {}
 
   onModuleInit(): void {
@@ -130,6 +132,23 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
     });
 
     for (const message of messages) {
+      // Booking notices are service messages (BL-141): a contact who sent STOP still gets them, a contact who withdrew the service
+      // purpose on that channel does not.
+      const verdict = await this.consentGate.check(
+        event.orgId,
+        message.channel === 'email'
+          ? { type: 'email', email: message.to.email ?? '' }
+          : { type: 'phone', phone: message.to.phone ?? '' },
+        message.channel,
+        'service_messaging',
+      );
+      if (verdict.decision === 'deny') {
+        this.logger.debug(
+          { event: event.eventType, channel: message.channel, reason: verdict.reason },
+          'booking message not sent: consent gate',
+        );
+        continue;
+      }
       const res = await this.messenger.send(message);
       if (res.status === 'failed') {
         // Throwing makes the drain retry the event with backoff; the adapter's dedupe makes the retry safe.

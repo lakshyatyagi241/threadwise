@@ -21,12 +21,14 @@ import type { Owner } from '../api/owners';
 import type { ContactGroup, ContactStats } from '../api/schemas';
 import type { ColumnDef, ColumnId } from '../lib/columns';
 import type { Choice } from '../lib/option-sets';
-import { AdvancedFilter } from '@/features/segments';
+import { appliedConditionCount } from '@/features/segments';
 import { ColumnsModal } from './columns-modal';
+import { FilterPanel } from './filter-panel';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import {
   ChevronDownIcon,
   DownloadIcon,
+  SortIcon,
   FilterIcon,
   KanbanIcon,
   ListIcon,
@@ -34,6 +36,7 @@ import {
   RefreshIcon,
   SearchIcon,
   SendIcon,
+  SparkIcon,
   UploadIcon,
   UsersPlusIcon,
 } from './icons';
@@ -169,7 +172,11 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
   const hasMoreActions = Object.values(p.can).some(Boolean);
 
   const tagLabel = p.tags.find((x) => x.id === p.tag)?.name ?? t('selectTag');
-  const filtersOn = Number(p.stage !== '') + Number(p.consent !== '');
+  // What the AI understood, kept only while the rules it produced are still the ones applied.
+  const [ai, setAi] = useState<{ rules: string; summary: string } | null>(null);
+  const aiChip =
+    ai && ai.rules === p.rules && p.rules !== '' && ai.summary !== '' ? ai.summary : null;
+  const conditions = appliedConditionCount(p.rules);
   const pickedOwners = ownerTokens(p.owner);
   const ownerLabel =
     pickedOwners.length === 0
@@ -318,52 +325,15 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
         </Menu>
 
         <Menu
-          label={t('moreFilters')}
+          label={t('sort')}
           trigger={
             <>
-              <FilterIcon className="size-4 text-muted-foreground" />
-              {t('filters')}
-              {filtersOn > 0 && (
-                <span className="rounded-full bg-brand px-1.5 text-[11px] leading-5 text-brand-foreground">
-                  {filtersOn}
-                </span>
-              )}
+              <SortIcon className="size-4 text-muted-foreground" />
+              {t('sortButton')}
             </>
           }
           triggerClassName={trigger}
         >
-          <MenuLabel>{t('stageFilter')}</MenuLabel>
-          <MenuRadioItem checked={p.stage === ''} onSelect={() => p.onStage('')}>
-            {t('allStages')}
-          </MenuRadioItem>
-          {p.stages.map((x) => (
-            <MenuRadioItem
-              key={x.value}
-              checked={p.stage === x.value}
-              onSelect={() => p.onStage(x.value)}
-            >
-              {x.label}
-            </MenuRadioItem>
-          ))}
-          <MenuSeparator />
-          <MenuLabel>{t('consentFilter')}</MenuLabel>
-          {(
-            [
-              ['', t('allConsent')],
-              ['subscribed', t('subscribedOnly')],
-              ['unsubscribed', t('unsubscribedOnly')],
-            ] as const
-          ).map(([v, label]) => (
-            <MenuRadioItem
-              key={v || 'all'}
-              checked={p.consent === v}
-              onSelect={() => p.onConsent(v)}
-            >
-              {label}
-            </MenuRadioItem>
-          ))}
-          <MenuSeparator />
-          <MenuLabel>{t('sort')}</MenuLabel>
           <MenuRadioItem checked={p.order === 'desc'} onSelect={() => p.onOrder('desc')}>
             {t('newestFirst')}
           </MenuRadioItem>
@@ -372,7 +342,18 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           </MenuRadioItem>
         </Menu>
 
-        <AdvancedFilter value={p.rules} onApply={p.onRules} />
+        <FilterPanel
+          stage={p.stage}
+          stages={p.stages}
+          tags={p.tags}
+          onStage={p.onStage}
+          consent={p.consent}
+          onConsent={p.onConsent}
+          rules={p.rules}
+          onRules={p.onRules}
+          onAiSummary={(rules, summary) => setAi({ rules, summary })}
+          conditionCount={appliedConditionCount(p.rules)}
+        />
 
         {p.onSaveAsSegment && (
           <Button
@@ -530,6 +511,24 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           </div>
         </div>
       </div>
+
+      {p.rules !== '' && (
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 py-1 ps-2.5 pe-1 text-brand">
+            {aiChip && <SparkIcon />}
+            <span className="truncate">{aiChip ?? t('conditionsChip', { count: conditions })}</span>
+            <button
+              type="button"
+              onClick={() => p.onRules('')}
+              aria-label={t('clearFilter')}
+              title={t('clearFilter')}
+              className="inline-flex size-5 items-center justify-center rounded-full outline-none hover:bg-brand/20 focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              ×
+            </button>
+          </span>
+        </div>
+      )}
 
       {p.anySelected && (
         <div className="flex flex-wrap items-center gap-2 text-sm" role="status">

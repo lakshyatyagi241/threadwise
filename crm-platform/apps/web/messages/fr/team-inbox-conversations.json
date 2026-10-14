@@ -152,7 +152,9 @@
       "savedReplyGone": "Cette réponse enregistrée n'existe plus.",
       "savedReplyChannel": "Cette réponse enregistrée n'est pas prévue pour ce type de canal.",
       "shortcutTaken": "Une autre réponse enregistrée utilise déjà ce raccourci.",
-      "importInvalid": "Ce fichier ne peut pas être lu comme réponses enregistrées. Il doit comporter une première ligne avec les colonnes title, shortcut et body, et au maximum 1 000 lignes."
+      "importInvalid": "Ce fichier ne peut pas être lu comme réponses enregistrées. Il doit comporter une première ligne avec les colonnes title, shortcut et body, et au maximum 1 000 lignes.",
+      "contactOptedOut": "Ce contact s'est désabonné des messages marketing ; le message n'a donc pas été envoyé.",
+      "consentRequired": "Cet espace de travail exige un consentement enregistré pour les messages marketing et ce contact n'en a pas ; le message n'a donc pas été envoyé."
     },
     "bubble": {
       "kind": {

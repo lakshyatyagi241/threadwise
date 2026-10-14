@@ -691,7 +691,7 @@ describe('the button options: bot name, sub-header, button text, popup and anima
     [{ popup: { position: 'bottom' } }, 'unknown popup position'],
     [{ popup: { image: 'javascript:alert(1)' } }, 'script address as the popup image'],
     [{ animation: 'spin' }, 'unknown animation'],
-  ])('refuses %j (%s)', (input) => {
+  ])('refuses %j (%s)', (input, _why) => {
     expect(widgetLauncherSchema.safeParse(input).success).toBe(false);
   });
 

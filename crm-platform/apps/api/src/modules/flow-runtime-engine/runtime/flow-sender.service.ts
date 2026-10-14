@@ -14,6 +14,8 @@ import {
 } from '../../chat-conversations';
 import { WalletGateService } from '../../wallet-message-billing';
 import { CapTally, DEFAULT_PACING } from '../caps';
+import { ConsentGate } from '../../contact-consent';
+import { flowMessagePurpose } from './flow-consent';
 import { profileOf, renderForChannel, threadTextOf, type Rendered } from './channel-render';
 import type { OutboundMessage, RunState, SendOutcome } from './types';
 
@@ -55,6 +57,7 @@ export class FlowSender {
     private readonly wallet: WalletGateService,
     private readonly fetcher: SafeFetch,
     private readonly media: ChatMediaStore,
+    private readonly consentGate: ConsentGate,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -111,11 +114,24 @@ export class FlowSender {
         textForWebchat(run.channelKind, rendered),
         clientReference,
       );
+      // A template takes its category; a plain message is marketing in a run the business started and a reply otherwise.
+      const templatePurpose =
+        rendered.kind === 'template'
+          ? await this.consentGate.purposeOfTemplate(
+              run.orgId,
+              rendered.template.name,
+              rendered.template.language,
+            )
+          : null;
       const sent = await this.dispatcher.send({
         channel: runtime,
         envelope,
         lastInboundAt,
         source: 'flow',
+        consent: {
+          purpose: flowMessagePurpose(run.source, templatePurpose),
+          contactId: run.contactId,
+        },
       });
       await this.conversations.recordOutbound({
         channelId: run.channelUuid,

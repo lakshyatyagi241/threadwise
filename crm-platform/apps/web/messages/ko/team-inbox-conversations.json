@@ -152,7 +152,9 @@
       "savedReplyGone": "이 저장된 답변은 더 이상 존재하지 않습니다.",
       "savedReplyChannel": "이 저장된 답변은 이 유형의 채널용이 아닙니다.",
       "shortcutTaken": "다른 저장된 답변이 이미 해당 단축키를 사용하고 있습니다.",
-      "importInvalid": "이 파일은 저장된 답장으로 읽을 수 없습니다. 첫 행에 title, shortcut, body 열이 있어야 하며, 최대 1,000행까지 가능합니다."
+      "importInvalid": "이 파일은 저장된 답장으로 읽을 수 없습니다. 첫 행에 title, shortcut, body 열이 있어야 하며, 최대 1,000행까지 가능합니다.",
+      "contactOptedOut": "이 연락처는 마케팅 메시지를 수신 거부했으므로 메시지가 전송되지 않았습니다.",
+      "consentRequired": "이 워크스페이스는 마케팅 메시지에 기록된 동의를 요구하며 이 연락처에는 동의가 없어 메시지가 전송되지 않았습니다."
     },
     "bubble": {
       "kind": {

@@ -76,6 +76,7 @@ const widgetsService = (repo: object, assertCanAdd: ReturnType<typeof vi.fn>) =>
     as({ isEnabled: vi.fn().mockResolvedValue(true) }),
     as({ assertCanAdd }),
     as({ assertFeature: vi.fn() }),
+    none,
   );
 
 describe('plan limits, group B: guard before insert', () => {

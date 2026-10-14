@@ -84,8 +84,11 @@ export class ScheduleMessageBuilder {
     let mediaName: string | null = null;
 
     if (kind === 'location') {
-      const latitude = Number(row.latitude);
-      const longitude = Number(row.longitude);
+      // A missing coordinate is not 0: `Number(null)` and `Number('')` are both 0, a valid point in the Atlantic.
+      const coord = (v: string | number | null): number =>
+        v === null || (typeof v === 'string' && v.trim() === '') ? Number.NaN : Number(v);
+      const latitude = coord(row.latitude);
+      const longitude = coord(row.longitude);
       if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
         throw new UnsupportedSendError('This location schedule has no coordinates.');
       }

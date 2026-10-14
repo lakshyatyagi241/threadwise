@@ -13,6 +13,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CALLING_GRAPH, type CallingGraph } from '../../infra/providers/calling-voice';
 import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
+import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { WabaConnectService } from '../whatsapp-cloud-api-waba';
 import { digitsOf, isPermissionRefusal, usableAnswer } from './calling.rules';
@@ -45,6 +46,7 @@ export class CallActionsService {
     private readonly permissions: CallPermissionService,
     private readonly plans: PlanEntitlementService,
     @Inject(CALLING_GRAPH) private readonly graph: CallingGraph,
+    private readonly consentGate: ConsentGate,
   ) {}
 
   // --- dial ------------------------------------------------------------------------------------------------------------------
@@ -72,6 +74,20 @@ export class CallActionsService {
       return { ...u, contactId, conversationId };
     });
 
+    // An operator's call (and its permission request) is a service action, voice modality (BL-141): it is refused only for a contact
+    // who withdrew the service purpose by voice. A campaign call would be `marketing_messaging` and honour STOP; none exists yet.
+    if (ctx.contactId !== null) {
+      const verdict = await this.consentGate.check(
+        orgId,
+        { type: 'contact', id: ctx.contactId },
+        'voice',
+        'service_messaging',
+        'voice',
+      );
+      if (verdict.decision === 'deny') {
+        throw unprocessable('CONSENT_OPTED_OUT', 'This contact has asked not to be called.');
+      }
+    }
     if (!(await this.permissions.mayCall(orgId, ctx.number.id, to))) {
       const alreadyPermitted = await this.permissions.send(orgId, ctx.number, ctx.conn, to);
       if (!alreadyPermitted) throw this.permissionRequested();

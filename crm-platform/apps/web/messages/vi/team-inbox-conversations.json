@@ -152,7 +152,9 @@
       "savedReplyGone": "Trả lời nhanh này không còn tồn tại.",
       "savedReplyChannel": "Trả lời nhanh này không dành cho loại kênh này.",
       "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó.",
-      "importInvalid": "Không thể đọc tệp này dưới dạng câu trả lời đã lưu. Tệp cần có hàng đầu tiên với các cột title, shortcut và body, và tối đa 1.000 hàng."
+      "importInvalid": "Không thể đọc tệp này dưới dạng câu trả lời đã lưu. Tệp cần có hàng đầu tiên với các cột title, shortcut và body, và tối đa 1.000 hàng.",
+      "contactOptedOut": "Liên hệ này đã hủy đăng ký tin nhắn tiếp thị nên tin nhắn không được gửi.",
+      "consentRequired": "Không gian làm việc này yêu cầu sự đồng ý được ghi lại cho tin nhắn tiếp thị và liên hệ này chưa có, nên tin nhắn không được gửi."
     },
     "bubble": {
       "kind": {

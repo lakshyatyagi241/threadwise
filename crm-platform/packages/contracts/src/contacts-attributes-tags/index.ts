@@ -11,3 +11,5 @@ export * from './contact-bulk';
 export * from './contact-import';
 export * from './attribute';
 export * from './status-stage';
+export * from './contact-pql';
+export * from './pql-errors';
