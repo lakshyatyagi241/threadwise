@@ -1,0 +1,26 @@
+{
+  "module": "channel-facebook",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-channel-facebook-001",
+      "feature": "fb",
+      "category": "input",
+      "scenario": "a value of 11 (one past FB_MAX_PHOTOS = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-facebook/post.ts"
+    },
+    {
+      "id": "EC-channel-facebook-002",
+      "feature": "fb message",
+      "category": "input",
+      "scenario": "a value of 60001 (one past FB_MESSAGE_MAX = 60000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-facebook/post.ts"
+    }
+  ]
+}

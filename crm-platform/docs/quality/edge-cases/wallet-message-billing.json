@@ -1,0 +1,250 @@
+{
+  "module": "wallet-message-billing",
+  "tier": "P0",
+  "owner": "Lakshya",
+  "cases": [
+    {
+      "id": "EC-wallet-message-billing-001",
+      "feature": "statement",
+      "category": "data",
+      "scenario": "a message charge and a top-up appear on the statement",
+      "expected": "charge is money out, top-up is money in",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "classifies the statement by direction"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-002",
+      "feature": "statement",
+      "category": "input",
+      "scenario": "a malformed filter is sent",
+      "expected": "validation problem",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "rejects a malformed filter with a validation problem"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-003",
+      "feature": "statement",
+      "category": "data",
+      "scenario": "CSV export of a description that starts with = + - or @",
+      "expected": "formula cells are neutralised",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "formula cells neutralised"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-004",
+      "feature": "statement",
+      "category": "permission",
+      "scenario": "another workspace reads this workspace wallet",
+      "expected": "sees nothing",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "shows another workspace nothing of this one"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-005",
+      "feature": "statement",
+      "category": "permission",
+      "scenario": "balance, statement and export each without their permission; anonymous caller; platform operator token",
+      "expected": "refused",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "requires the permission for each screen"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-006",
+      "feature": "pricing",
+      "category": "input",
+      "scenario": "a flat price of 0 is saved",
+      "expected": "rejected",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "rejects a flat price of 0"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-007",
+      "feature": "pricing",
+      "category": "permission",
+      "scenario": "someone other than a super admin saves the economics",
+      "expected": "refused; the old and new values are logged for the super admin",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "saves the economics for a super admin only"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-008",
+      "feature": "pricing",
+      "category": "input",
+      "scenario": "a rate grid with a repeated key and a row that cannot be saved",
+      "expected": "first kept, the failing row reported",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "keeps the first of a repeated key"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-009",
+      "feature": "pricing",
+      "category": "state",
+      "scenario": "a price is edited and the next message settles",
+      "expected": "the new price applies, no stale cache",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "makes a price edit apply to the very next settlement"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-010",
+      "feature": "pricing",
+      "category": "input",
+      "scenario": "a rate import with an unknown country",
+      "expected": "previewed without writing, the country counted and explained",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "previews an import without writing, then writes it"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-011",
+      "feature": "rate card",
+      "category": "input",
+      "scenario": "a file that is not the Meta rate card",
+      "expected": "refused with the stable code",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "refuses a file that is not Meta"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-012",
+      "feature": "rate card",
+      "category": "state",
+      "scenario": "no card stored for a currency a workspace uses",
+      "expected": "asks for one",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "asks for a card for a currency"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-013",
+      "feature": "credit",
+      "category": "input",
+      "scenario": "an operator adds balance with a missing, blank or too short note",
+      "expected": "refused and nothing written",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "refuses a missing, blank or too short note"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-014",
+      "feature": "credit",
+      "category": "data",
+      "scenario": "an operator adds balance with a note",
+      "expected": "wallet, ledger, wallet log and audit trail all record who and why",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/console.e2e.spec.ts",
+          "match": "adds balance with a note"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-015",
+      "feature": "wallet",
+      "category": "concurrency",
+      "scenario": "20 messages settle at once against 100.00",
+      "expected": "every id is charged once and the wallet never goes negative",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/wallet-message-billing/engine.e2e.spec.ts",
+          "match": "settles 20 different messages racing on 100.00"
+        }
+      ]
+    },
+    {
+      "id": "EC-wallet-message-billing-016",
+      "feature": "wallet",
+      "category": "concurrency",
+      "scenario": "the same top-up webhook is delivered twice",
+      "expected": "credited once",
+      "priority": "P0",
+      "status": "gap"
+    },
+    {
+      "id": "EC-wallet-message-billing-017",
+      "feature": "wallet",
+      "category": "time",
+      "scenario": "the 30-day summary across a time-zone boundary",
+      "expected": "a charge lands on the day the workspace sees",
+      "priority": "P1",
+      "status": "gap"
+    }
+  ]
+}

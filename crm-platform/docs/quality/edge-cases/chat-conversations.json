@@ -1,0 +1,86 @@
+{
+  "module": "chat-conversations",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-chat-conversations-001",
+      "feature": "simulator latency",
+      "category": "input",
+      "scenario": "a value of 60001 (one past SIMULATOR_LATENCY_MAX_MS = 60000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/channels.ts"
+    },
+    {
+      "id": "EC-chat-conversations-002",
+      "feature": "simulator inbound text",
+      "category": "input",
+      "scenario": "a value of 4097 (one past SIMULATOR_INBOUND_TEXT_MAX = 4096) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/channels.ts"
+    },
+    {
+      "id": "EC-chat-conversations-003",
+      "feature": "message history",
+      "category": "input",
+      "scenario": "a value of 366 (one past MESSAGE_HISTORY_MAX_DAYS = 365) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/message-history.ts"
+    },
+    {
+      "id": "EC-chat-conversations-004",
+      "feature": "message log export",
+      "category": "input",
+      "scenario": "a value of 2000001 (one past MESSAGE_LOG_EXPORT_MAX_ROWS = 2000000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/message-log.ts"
+    },
+    {
+      "id": "EC-chat-conversations-005",
+      "feature": "message body",
+      "category": "input",
+      "scenario": "a value of 4097 (one past MESSAGE_BODY_MAX = 4096) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/message.ts"
+    },
+    {
+      "id": "EC-chat-conversations-006",
+      "feature": "message body",
+      "category": "input",
+      "scenario": "a value of 100001 (one past MESSAGE_BODY_MAX_EMAIL = 100000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/message.ts"
+    },
+    {
+      "id": "EC-chat-conversations-007",
+      "feature": "message caption",
+      "category": "input",
+      "scenario": "a value of 1025 (one past MESSAGE_CAPTION_MAX = 1024) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/message.ts"
+    },
+    {
+      "id": "EC-chat-conversations-008",
+      "feature": "interactive body",
+      "category": "input",
+      "scenario": "a value of 1025 (one past INTERACTIVE_BODY_MAX = 1024) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/chat-conversations/message.ts"
+    }
+  ]
+}

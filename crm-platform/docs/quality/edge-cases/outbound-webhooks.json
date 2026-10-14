@@ -1,0 +1,36 @@
+{
+  "module": "outbound-webhooks",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-outbound-webhooks-001",
+      "feature": "webhook name",
+      "category": "input",
+      "scenario": "a value of 192 (one past WEBHOOK_NAME_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/outbound-webhooks/index.ts"
+    },
+    {
+      "id": "EC-outbound-webhooks-002",
+      "feature": "webhook url",
+      "category": "input",
+      "scenario": "a value of 2049 (one past WEBHOOK_URL_MAX = 2048) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/outbound-webhooks/index.ts"
+    },
+    {
+      "id": "EC-outbound-webhooks-003",
+      "feature": "webhook secret",
+      "category": "input",
+      "scenario": "a value of 192 (one past WEBHOOK_SECRET_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/outbound-webhooks/index.ts"
+    }
+  ]
+}

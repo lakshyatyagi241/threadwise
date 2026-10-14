@@ -1,0 +1,86 @@
+{
+  "module": "catalog-products",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-catalog-products-001",
+      "feature": "catalog send",
+      "category": "input",
+      "scenario": "a value of 501 (one past CATALOG_SEND_MAX_RECIPIENTS = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/catalog.ts"
+    },
+    {
+      "id": "EC-catalog-products-002",
+      "feature": "catalog send",
+      "category": "input",
+      "scenario": "a value of 31 (one past CATALOG_SEND_MAX_PRODUCTS = 30) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/catalog.ts"
+    },
+    {
+      "id": "EC-catalog-products-003",
+      "feature": "collection name",
+      "category": "input",
+      "scenario": "a value of 121 (one past COLLECTION_NAME_MAX = 120) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/collection.ts"
+    },
+    {
+      "id": "EC-catalog-products-004",
+      "feature": "collection description",
+      "category": "input",
+      "scenario": "a value of 501 (one past COLLECTION_DESCRIPTION_MAX = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/collection.ts"
+    },
+    {
+      "id": "EC-catalog-products-005",
+      "feature": "product name",
+      "category": "input",
+      "scenario": "a value of 192 (one past PRODUCT_NAME_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/product.ts"
+    },
+    {
+      "id": "EC-catalog-products-006",
+      "feature": "product sku",
+      "category": "input",
+      "scenario": "a value of 97 (one past PRODUCT_SKU_MAX = 96) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/product.ts"
+    },
+    {
+      "id": "EC-catalog-products-007",
+      "feature": "product tags",
+      "category": "input",
+      "scenario": "a value of 1025 (one past PRODUCT_TAGS_MAX = 1024) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/product.ts"
+    },
+    {
+      "id": "EC-catalog-products-008",
+      "feature": "product description",
+      "category": "input",
+      "scenario": "a value of 2001 (one past PRODUCT_DESCRIPTION_MAX = 2000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/catalog-products/product.ts"
+    }
+  ]
+}

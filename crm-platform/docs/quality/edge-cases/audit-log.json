@@ -1,0 +1,16 @@
+{
+  "module": "audit-log",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-audit-log-001",
+      "feature": "audit log export",
+      "category": "input",
+      "scenario": "a value of 1000001 (one past AUDIT_LOG_EXPORT_MAX_ROWS = 1000000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/notifications-activity-audit/audit-log.ts"
+    }
+  ]
+}

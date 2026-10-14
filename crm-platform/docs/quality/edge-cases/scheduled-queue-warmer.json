@@ -1,0 +1,5 @@
+{
+  "module": "scheduled-queue-warmer",
+  "tier": "P2",
+  "cases": []
+}

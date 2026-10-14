@@ -1,0 +1,76 @@
+{
+  "module": "team-inbox-routing-sla",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-team-inbox-routing-sla-001",
+      "feature": "routing name",
+      "category": "input",
+      "scenario": "a value of 129 (one past ROUTING_NAME_MAX = 128) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-routing-sla/routing-rules.ts"
+    },
+    {
+      "id": "EC-team-inbox-routing-sla-002",
+      "feature": "routing description",
+      "category": "input",
+      "scenario": "a value of 501 (one past ROUTING_DESCRIPTION_MAX = 500) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-routing-sla/routing-rules.ts"
+    },
+    {
+      "id": "EC-team-inbox-routing-sla-003",
+      "feature": "routing keywords",
+      "category": "input",
+      "scenario": "a value of 21 (one past ROUTING_KEYWORDS_MAX = 20) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-routing-sla/routing-rules.ts"
+    },
+    {
+      "id": "EC-team-inbox-routing-sla-004",
+      "feature": "routing targets",
+      "category": "input",
+      "scenario": "a value of 51 (one past ROUTING_TARGETS_MAX = 50) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-routing-sla/routing-rules.ts"
+    },
+    {
+      "id": "EC-team-inbox-routing-sla-005",
+      "feature": "routing list",
+      "category": "input",
+      "scenario": "a value of 101 (one past ROUTING_LIST_MAX = 100) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-routing-sla/routing-rules.ts"
+    },
+    {
+      "id": "EC-team-inbox-routing-sla-006",
+      "feature": "sla first response",
+      "category": "input",
+      "scenario": "a value of 100001 (one past SLA_FIRST_RESPONSE_MAX_MINUTES = 100000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-routing-sla/sla.ts"
+    },
+    {
+      "id": "EC-team-inbox-routing-sla-007",
+      "feature": "sla resolution",
+      "category": "input",
+      "scenario": "a value of 1000001 (one past SLA_RESOLUTION_MAX_MINUTES = 1000000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-inbox-routing-sla/sla.ts"
+    }
+  ]
+}

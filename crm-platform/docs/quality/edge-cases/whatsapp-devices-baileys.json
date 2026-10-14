@@ -1,0 +1,86 @@
+{
+  "module": "whatsapp-devices-baileys",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-whatsapp-devices-baileys-001",
+      "feature": "device name",
+      "category": "input",
+      "scenario": "a value of 1 (one under DEVICE_NAME_MIN = 2) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/devices.ts"
+    },
+    {
+      "id": "EC-whatsapp-devices-baileys-002",
+      "feature": "device name",
+      "category": "input",
+      "scenario": "a value of 192 (one past DEVICE_NAME_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/devices.ts"
+    },
+    {
+      "id": "EC-whatsapp-devices-baileys-003",
+      "feature": "device country code",
+      "category": "input",
+      "scenario": "a value of 9 (one past DEVICE_COUNTRY_CODE_MAX = 8) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/devices.ts"
+    },
+    {
+      "id": "EC-whatsapp-devices-baileys-004",
+      "feature": "device phone",
+      "category": "input",
+      "scenario": "a value of 4 (one under DEVICE_PHONE_MIN = 5) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/devices.ts"
+    },
+    {
+      "id": "EC-whatsapp-devices-baileys-005",
+      "feature": "device phone",
+      "category": "input",
+      "scenario": "a value of 33 (one past DEVICE_PHONE_MAX = 32) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/devices.ts"
+    },
+    {
+      "id": "EC-whatsapp-devices-baileys-006",
+      "feature": "device region",
+      "category": "input",
+      "scenario": "a value of 17 (one past DEVICE_REGION_MAX = 16) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/devices.ts"
+    },
+    {
+      "id": "EC-whatsapp-devices-baileys-007",
+      "feature": "device pairing",
+      "category": "input",
+      "scenario": "a value of 7 (one under DEVICE_PAIRING_MIN_DIGITS = 8) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/devices.ts"
+    },
+    {
+      "id": "EC-whatsapp-devices-baileys-008",
+      "feature": "wa device group subject",
+      "category": "input",
+      "scenario": "a value of 61 (one past WA_DEVICE_GROUP_SUBJECT_MAX = 60) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/whatsapp-devices-baileys/groups.ts"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "module": "contact-consent",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-contact-consent-001",
+      "feature": "consent export sync",
+      "category": "input",
+      "scenario": "a value of 50001 (one past CONSENT_EXPORT_SYNC_MAX = 50000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/contact-consent/exports.ts"
+    },
+    {
+      "id": "EC-contact-consent-002",
+      "feature": "consent export",
+      "category": "input",
+      "scenario": "a value of 5000001 (one past CONSENT_EXPORT_MAX_ROWS = 5000000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/contact-consent/exports.ts"
+    },
+    {
+      "id": "EC-contact-consent-003",
+      "feature": "consent keyword",
+      "category": "input",
+      "scenario": "a value of 65 (one past CONSENT_KEYWORD_MAX_TEXT = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/contact-consent/keywords.ts"
+    }
+  ]
+}

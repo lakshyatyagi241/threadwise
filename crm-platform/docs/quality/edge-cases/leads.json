@@ -1,0 +1,16 @@
+{
+  "module": "leads",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-leads-001",
+      "feature": "lead raw retention",
+      "category": "input",
+      "scenario": "a value of 366 (one past LEAD_RAW_RETENTION_MAX_DAYS = 365) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/leads/lead-source.ts"
+    }
+  ]
+}
