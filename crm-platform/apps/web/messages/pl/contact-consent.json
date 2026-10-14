@@ -134,7 +134,8 @@
         "legacy": "Sprzed historii zgód",
         "widget": "Czat na stronie",
         "booking": "Strona rezerwacji",
-        "commerce": "Kasa sklepu"
+        "commerce": "Kasa sklepu",
+        "lead": "Pozyskanie leada"
       },
       "by": "przez {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Widżet czatu",
         "bookingTypeId": "Strona rezerwacji",
         "integrationId": "Sklep",
-        "storeFlag": "Ustawienie sklepu"
+        "storeFlag": "Ustawienie sklepu",
+        "leadSourceId": "Źródło leada",
+        "leadFormId": "Formularz leada",
+        "adId": "Reklama"
       },
       "dialog": {
         "titleGranted": "Oznacz jako zapisanego",

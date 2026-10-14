@@ -134,7 +134,8 @@
         "legacy": "Sebelum riwayat persetujuan",
         "widget": "Obrolan situs web",
         "booking": "Halaman pemesanan",
-        "commerce": "Checkout toko"
+        "commerce": "Checkout toko",
+        "lead": "Penangkapan lead"
       },
       "by": "oleh {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Widget obrolan",
         "bookingTypeId": "Halaman pemesanan",
         "integrationId": "Toko",
-        "storeFlag": "Pengaturan toko"
+        "storeFlag": "Pengaturan toko",
+        "leadSourceId": "Sumber lead",
+        "leadFormId": "Formulir lead",
+        "adId": "Iklan"
       },
       "dialog": {
         "titleGranted": "Tandai sebagai berlangganan",

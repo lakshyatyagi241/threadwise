@@ -134,7 +134,8 @@
         "legacy": "رضامندی کی تاریخ سے پہلے",
         "widget": "ویب سائٹ چیٹ",
         "booking": "بکنگ صفحہ",
-        "commerce": "اسٹور چیک آؤٹ"
+        "commerce": "اسٹور چیک آؤٹ",
+        "lead": "لیڈ کیپچر"
       },
       "by": "بذریعہ {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "چیٹ وجیٹ",
         "bookingTypeId": "بکنگ صفحہ",
         "integrationId": "اسٹور",
-        "storeFlag": "اسٹور کی ترتیب"
+        "storeFlag": "اسٹور کی ترتیب",
+        "leadSourceId": "لیڈ ذریعہ",
+        "leadFormId": "لیڈ فارم",
+        "adId": "اشتہار"
       },
       "dialog": {
         "titleGranted": "سبسکرائب شدہ کے طور پر نشان زد کریں",

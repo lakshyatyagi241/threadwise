@@ -134,7 +134,8 @@
         "legacy": "לפני היסטוריית ההסכמה",
         "widget": "צ'אט באתר",
         "booking": "דף הזמנות",
-        "commerce": "קופה בחנות"
+        "commerce": "קופה בחנות",
+        "lead": "קליטת לידים"
       },
       "by": "על ידי {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "ווידג'ט צ'אט",
         "bookingTypeId": "דף הזמנות",
         "integrationId": "חנות",
-        "storeFlag": "הגדרת חנות"
+        "storeFlag": "הגדרת חנות",
+        "leadSourceId": "מקור הליד",
+        "leadFormId": "טופס ליד",
+        "adId": "מודעה"
       },
       "dialog": {
         "titleGranted": "סימון כרשום",

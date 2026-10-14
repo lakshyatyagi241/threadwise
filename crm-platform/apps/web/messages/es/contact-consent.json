@@ -134,7 +134,8 @@
         "legacy": "Antes del historial de consentimiento",
         "widget": "Chat del sitio web",
         "booking": "Página de reservas",
-        "commerce": "Pago en la tienda"
+        "commerce": "Pago en la tienda",
+        "lead": "Captación de leads"
       },
       "by": "por {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Widget de chat",
         "bookingTypeId": "Página de reservas",
         "integrationId": "Tienda",
-        "storeFlag": "Ajuste de la tienda"
+        "storeFlag": "Ajuste de la tienda",
+        "leadSourceId": "Origen del lead",
+        "leadFormId": "Formulario de lead",
+        "adId": "Anuncio"
       },
       "dialog": {
         "titleGranted": "Marcar como suscrito",

@@ -134,7 +134,8 @@
         "legacy": "수신 동의 기록 이전",
         "widget": "웹사이트 채팅",
         "booking": "예약 페이지",
-        "commerce": "스토어 결제"
+        "commerce": "스토어 결제",
+        "lead": "리드 수집"
       },
       "by": "{name}님이 기록",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "채팅 위젯",
         "bookingTypeId": "예약 페이지",
         "integrationId": "스토어",
-        "storeFlag": "스토어 설정"
+        "storeFlag": "스토어 설정",
+        "leadSourceId": "리드 소스",
+        "leadFormId": "리드 양식",
+        "adId": "광고"
       },
       "dialog": {
         "titleGranted": "수신 중으로 표시",

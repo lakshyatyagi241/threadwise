@@ -134,7 +134,8 @@
         "legacy": "قبل سجل الموافقة",
         "widget": "دردشة الموقع",
         "booking": "صفحة الحجز",
-        "commerce": "الدفع في المتجر"
+        "commerce": "الدفع في المتجر",
+        "lead": "التقاط العملاء المحتملين"
       },
       "by": "بواسطة {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "أداة الدردشة",
         "bookingTypeId": "صفحة الحجز",
         "integrationId": "المتجر",
-        "storeFlag": "إعداد المتجر"
+        "storeFlag": "إعداد المتجر",
+        "leadSourceId": "مصدر العميل المحتمل",
+        "leadFormId": "نموذج العميل المحتمل",
+        "adId": "الإعلان"
       },
       "dialog": {
         "titleGranted": "وضع علامة مشترك",

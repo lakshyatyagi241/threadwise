@@ -134,7 +134,8 @@
         "legacy": "ก่อนประวัติความยินยอม",
         "widget": "แชตบนเว็บไซต์",
         "booking": "หน้าจอง",
-        "commerce": "การชำระเงินของร้านค้า"
+        "commerce": "การชำระเงินของร้านค้า",
+        "lead": "การรับลีด"
       },
       "by": "โดย {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "วิดเจ็ตแชต",
         "bookingTypeId": "หน้าจอง",
         "integrationId": "ร้านค้า",
-        "storeFlag": "การตั้งค่าร้านค้า"
+        "storeFlag": "การตั้งค่าร้านค้า",
+        "leadSourceId": "แหล่งลีด",
+        "leadFormId": "ฟอร์มลีด",
+        "adId": "โฆษณา"
       },
       "dialog": {
         "titleGranted": "ทำเครื่องหมายว่าสมัครรับ",

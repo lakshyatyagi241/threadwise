@@ -134,7 +134,8 @@
         "legacy": "Onay geçmişinden önce",
         "widget": "Web sitesi sohbeti",
         "booking": "Rezervasyon sayfası",
-        "commerce": "Mağaza ödeme sayfası"
+        "commerce": "Mağaza ödeme sayfası",
+        "lead": "Potansiyel müşteri toplama"
       },
       "by": "{name} tarafından",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Sohbet widget'ı",
         "bookingTypeId": "Rezervasyon sayfası",
         "integrationId": "Mağaza",
-        "storeFlag": "Mağaza ayarı"
+        "storeFlag": "Mağaza ayarı",
+        "leadSourceId": "Müşteri adayı kaynağı",
+        "leadFormId": "Müşteri adayı formu",
+        "adId": "Reklam"
       },
       "dialog": {
         "titleGranted": "Abone olarak işaretle",

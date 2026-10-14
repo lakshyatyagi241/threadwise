@@ -134,7 +134,8 @@
         "legacy": "Prima della cronologia del consenso",
         "widget": "Chat del sito web",
         "booking": "Pagina di prenotazione",
-        "commerce": "Checkout del negozio"
+        "commerce": "Checkout del negozio",
+        "lead": "Acquisizione lead"
       },
       "by": "da {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Widget chat",
         "bookingTypeId": "Pagina di prenotazione",
         "integrationId": "Negozio",
-        "storeFlag": "Impostazione del negozio"
+        "storeFlag": "Impostazione del negozio",
+        "leadSourceId": "Fonte del lead",
+        "leadFormId": "Modulo lead",
+        "adId": "Annuncio"
       },
       "dialog": {
         "titleGranted": "Segna come iscritto",

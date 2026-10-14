@@ -134,7 +134,8 @@
         "legacy": "সম্মতির ইতিহাসের আগে",
         "widget": "ওয়েবসাইট চ্যাট",
         "booking": "বুকিং পেজ",
-        "commerce": "স্টোর চেকআউট"
+        "commerce": "স্টোর চেকআউট",
+        "lead": "লিড সংগ্রহ"
       },
       "by": "{name} দ্বারা",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "চ্যাট উইজেট",
         "bookingTypeId": "বুকিং পেজ",
         "integrationId": "স্টোর",
-        "storeFlag": "স্টোরের সেটিং"
+        "storeFlag": "স্টোরের সেটিং",
+        "leadSourceId": "লিড সোর্স",
+        "leadFormId": "লিড ফর্ম",
+        "adId": "বিজ্ঞাপন"
       },
       "dialog": {
         "titleGranted": "সাবস্ক্রাইবড হিসেবে চিহ্নিত করুন",

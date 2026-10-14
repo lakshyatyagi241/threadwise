@@ -134,7 +134,8 @@
         "legacy": "Avant l'historique du consentement",
         "widget": "Chat du site web",
         "booking": "Page de réservation",
-        "commerce": "Paiement en boutique"
+        "commerce": "Paiement en boutique",
+        "lead": "Capture de leads"
       },
       "by": "par {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Widget de chat",
         "bookingTypeId": "Page de réservation",
         "integrationId": "Boutique",
-        "storeFlag": "Réglage de la boutique"
+        "storeFlag": "Réglage de la boutique",
+        "leadSourceId": "Source du lead",
+        "leadFormId": "Formulaire de lead",
+        "adId": "Annonce"
       },
       "dialog": {
         "titleGranted": "Marquer comme inscrit",

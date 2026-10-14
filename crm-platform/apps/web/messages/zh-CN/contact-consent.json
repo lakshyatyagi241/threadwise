@@ -134,7 +134,8 @@
         "legacy": "同意历史之前",
         "widget": "网站聊天",
         "booking": "预约页面",
-        "commerce": "店铺结账"
+        "commerce": "店铺结账",
+        "lead": "线索收集"
       },
       "by": "由 {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "聊天小组件",
         "bookingTypeId": "预约页面",
         "integrationId": "店铺",
-        "storeFlag": "店铺设置"
+        "storeFlag": "店铺设置",
+        "leadSourceId": "线索来源",
+        "leadFormId": "线索表单",
+        "adId": "广告"
       },
       "dialog": {
         "titleGranted": "标记为已订阅",

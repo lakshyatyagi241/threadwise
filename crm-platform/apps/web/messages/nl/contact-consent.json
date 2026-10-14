@@ -134,7 +134,8 @@
         "legacy": "Vóór de toestemmingsgeschiedenis",
         "widget": "Websitechat",
         "booking": "Boekingspagina",
-        "commerce": "Winkelkassa"
+        "commerce": "Winkelkassa",
+        "lead": "Leadregistratie"
       },
       "by": "door {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Chatwidget",
         "bookingTypeId": "Boekingspagina",
         "integrationId": "Winkel",
-        "storeFlag": "Winkelinstelling"
+        "storeFlag": "Winkelinstelling",
+        "leadSourceId": "Leadbron",
+        "leadFormId": "Leadformulier",
+        "adId": "Advertentie"
       },
       "dialog": {
         "titleGranted": "Markeren als aangemeld",

@@ -134,7 +134,8 @@
         "legacy": "Vor dem Einwilligungsverlauf",
         "widget": "Website-Chat",
         "booking": "Buchungsseite",
-        "commerce": "Shop-Kasse"
+        "commerce": "Shop-Kasse",
+        "lead": "Lead-Erfassung"
       },
       "by": "von {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Chat-Widget",
         "bookingTypeId": "Buchungsseite",
         "integrationId": "Shop",
-        "storeFlag": "Shop-Einstellung"
+        "storeFlag": "Shop-Einstellung",
+        "leadSourceId": "Lead-Quelle",
+        "leadFormId": "Lead-Formular",
+        "adId": "Anzeige"
       },
       "dialog": {
         "titleGranted": "Als angemeldet markieren",

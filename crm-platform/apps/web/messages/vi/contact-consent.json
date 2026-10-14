@@ -134,7 +134,8 @@
         "legacy": "Trước lịch sử đồng ý",
         "widget": "Trò chuyện trên website",
         "booking": "Trang đặt lịch",
-        "commerce": "Thanh toán của cửa hàng"
+        "commerce": "Thanh toán của cửa hàng",
+        "lead": "Thu thập lead"
       },
       "by": "bởi {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Tiện ích trò chuyện",
         "bookingTypeId": "Trang đặt lịch",
         "integrationId": "Cửa hàng",
-        "storeFlag": "Cài đặt cửa hàng"
+        "storeFlag": "Cài đặt cửa hàng",
+        "leadSourceId": "Nguồn lead",
+        "leadFormId": "Biểu mẫu lead",
+        "adId": "Quảng cáo"
       },
       "dialog": {
         "titleGranted": "Đánh dấu đã đăng ký",

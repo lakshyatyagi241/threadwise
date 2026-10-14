@@ -134,7 +134,8 @@
         "legacy": "Before the consent history",
         "widget": "Website chat",
         "booking": "Booking page",
-        "commerce": "Store checkout"
+        "commerce": "Store checkout",
+        "lead": "Lead capture"
       },
       "by": "by {name}",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "Chat widget",
         "bookingTypeId": "Booking page",
         "integrationId": "Store",
-        "storeFlag": "Store setting"
+        "storeFlag": "Store setting",
+        "leadSourceId": "Lead source",
+        "leadFormId": "Lead form",
+        "adId": "Ad"
       },
       "dialog": {
         "titleGranted": "Mark as subscribed",

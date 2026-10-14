@@ -134,7 +134,8 @@
         "legacy": "同意履歴の記録開始前",
         "widget": "ウェブサイトのチャット",
         "booking": "予約ページ",
-        "commerce": "ストアのチェックアウト"
+        "commerce": "ストアのチェックアウト",
+        "lead": "リード獲得"
       },
       "by": "{name} による",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "チャットウィジェット",
         "bookingTypeId": "予約ページ",
         "integrationId": "ストア",
-        "storeFlag": "ストアの設定"
+        "storeFlag": "ストアの設定",
+        "leadSourceId": "リードソース",
+        "leadFormId": "リードフォーム",
+        "adId": "広告"
       },
       "dialog": {
         "titleGranted": "購読中にする",

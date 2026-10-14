@@ -134,7 +134,8 @@
         "legacy": "सहमति इतिहास से पहले",
         "widget": "वेबसाइट चैट",
         "booking": "बुकिंग पेज",
-        "commerce": "स्टोर चेकआउट"
+        "commerce": "स्टोर चेकआउट",
+        "lead": "लीड कैप्चर"
       },
       "by": "{name} द्वारा",
       "evidence": {
@@ -154,7 +155,10 @@
         "widgetId": "चैट विजेट",
         "bookingTypeId": "बुकिंग पेज",
         "integrationId": "स्टोर",
-        "storeFlag": "स्टोर की सेटिंग"
+        "storeFlag": "स्टोर की सेटिंग",
+        "leadSourceId": "लीड स्रोत",
+        "leadFormId": "लीड फ़ॉर्म",
+        "adId": "विज्ञापन"
       },
       "dialog": {
         "titleGranted": "सब्सक्राइब किया हुआ चिह्नित करें",
