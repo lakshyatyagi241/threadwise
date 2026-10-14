@@ -375,6 +375,11 @@
         "name": "Viber",
         "hint": "向已经在与您的 Viber 账号聊天的用户发送消息。",
         "cta": "创建 Viber 群发"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "向你的公众号的所有粉丝、某个标签或选定的用户群发消息。",
+        "cta": "创建 WeChat 群发"
       }
     }
   }

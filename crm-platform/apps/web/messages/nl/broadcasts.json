@@ -375,6 +375,11 @@
         "name": "Viber",
         "hint": "Stuur een bericht naar de mensen die al met je Viber-account chatten.",
         "cta": "Viber-broadcast maken"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Verstuur een bericht in bulk naar alle volgers, een tag of geselecteerde gebruikers van je Official Account.",
+        "cta": "WeChat-broadcast aanmaken"
       }
     }
   }

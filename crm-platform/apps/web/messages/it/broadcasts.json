@@ -375,6 +375,11 @@
         "name": "Viber",
         "hint": "Invia un messaggio alle persone che già chattano con il tuo account Viber.",
         "cta": "Crea broadcast Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Invia un messaggio di massa a tutti i follower, a un tag o a utenti selezionati del tuo Account ufficiale.",
+        "cta": "Crea broadcast WeChat"
       }
     }
   }
