@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-14",
+  "suites": {
+    "api-unit": {
+      "files": 579,
+      "failedFiles": 2,
+      "tests": 8849,
+      "passed": 8845,
+      "failed": 2,
+      "skipped": 2
+    },
+    "web-unit": {
+      "files": 779,
+      "failedFiles": 0,
+      "tests": 9481,
+      "passed": 9480,
+      "failed": 0,
+      "skipped": 1
+    }
+  },
+  "runTotal": 18330,
+  "coverageByGroup": {
+    "common": {
+      "files": 20,
+      "linePct": 81.4,
+      "branchPct": 85.9,
+      "lines": 1026,
+      "branches": 368
+    },
+    "other": {
+      "files": 816,
+      "linePct": 66.7,
+      "branchPct": 83.5,
+      "lines": 69665,
+      "branches": 17058
+    },
+    "services": {
+      "files": 640,
+      "linePct": 10.4,
+      "branchPct": 75,
+      "lines": 120848,
+      "branches": 3596
+    },
+    "rules": {
+      "files": 123,
+      "linePct": 97.8,
+      "branchPct": 91.9,
+      "lines": 13462,
+      "branches": 6768
+    },
+    "workers": {
+      "files": 99,
+      "linePct": 18.9,
+      "branchPct": 75.2,
+      "lines": 6058,
+      "branches": 343
+    },
+    "mappers": {
+      "files": 68,
+      "linePct": 34.4,
+      "branchPct": 77,
+      "lines": 4210,
+      "branches": 573
+    },
+    "repositories": {
+      "files": 154,
+      "linePct": 12.8,
+      "branchPct": 48.9,
+      "lines": 30969,
+      "branches": 90
+    }
+  },
+  "staticBlocks": {
+    "api-e2e": 6129,
+    "api-integration": 977,
+    "api-unit-blocks": 6922,
+    "web-unit-blocks": 8398,
+    "web-playwright": 414,
+    "contracts-blocks": 0,
+    "tools-node-tests": 504
+  },
+  "targets": {
+    "unitTests": 30000,
+    "integrationTests": 4500,
+    "e2eJourneys": 1200,
+    "functionalScenarios": 10000,
+    "contractAssertions": 5000
+  }
+}

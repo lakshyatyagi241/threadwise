@@ -21,7 +21,11 @@ import { concretePath, negativeRoutes, type NegRoute } from './routes';
  *   NEGATIVE_REPORT=file    write the failures as JSON, to fill known-gaps.json from
  */
 const GAPS_FILE = resolve(__dirname, 'known-gaps.json');
-const gaps = (JSON.parse(readFileSync(GAPS_FILE, 'utf8')) as { gaps: Record<string, { owner: string; reason: string }> }).gaps;
+const gaps = (
+  JSON.parse(readFileSync(GAPS_FILE, 'utf8')) as {
+    gaps: Record<string, { owner: string; reason: string }>;
+  }
+).gaps;
 const filter = process.env.NEGATIVE_FILTER ? new RegExp(process.env.NEGATIVE_FILTER) : null;
 const maxCases = Number(process.env.NEGATIVE_MAX_CASES ?? 12);
 /** Routes the sweep must not call with a valid token: they end the session the sweep is using. */
@@ -40,7 +44,8 @@ beforeAll(async () => {
   routes = (await negativeRoutes(h.app)).filter((r) => !filter || filter.test(r.route));
 }, 240_000);
 afterAll(async () => {
-  if (process.env.NEGATIVE_REPORT) writeFileSync(process.env.NEGATIVE_REPORT, JSON.stringify(failures, null, 2));
+  if (process.env.NEGATIVE_REPORT)
+    writeFileSync(process.env.NEGATIVE_REPORT, JSON.stringify(failures, null, 2));
   await h?.stop();
 });
 
@@ -56,7 +61,8 @@ function badReply(res: { status: number; body: unknown; text: string }): string 
   if (res.status >= 200 && res.status < 300) return `accepted (${res.status})`;
   if (/\bat\s+\S+\s+\(.*:\d+:\d+\)/.test(res.text)) return 'stack trace in the reply';
   const code = (res.body as { code?: unknown } | null)?.code;
-  if (res.status !== 404 && res.status !== 401 && typeof code !== 'string') return 'no error code in the reply';
+  if (res.status !== 404 && res.status !== 401 && typeof code !== 'string')
+    return 'no error code in the reply';
   return null;
 }
 
@@ -88,7 +94,9 @@ describe('body sweep: a bad body is refused cleanly', () => {
     console.log(`NEGATIVE sent=${sent} failingRoutes=${Object.keys(bad).length}`);
     const unexpected = Object.entries(bad).filter(([route]) => !(route in gaps));
     expect(unexpected, JSON.stringify(unexpected.slice(0, 20), null, 1)).toEqual([]);
-    const stale = Object.keys(gaps).filter((k) => routes.some((r) => r.route === k) && !(k in bad) && !filter);
+    const stale = Object.keys(gaps).filter(
+      (k) => routes.some((r) => r.route === k) && !(k in bad) && !filter,
+    );
     expect(stale, 'these routes now pass: take them off known-gaps.json').toEqual([]);
   }, 1_800_000);
 });
@@ -100,8 +108,16 @@ describe('auth sweep: no token, a garbage token, a tampered token', () => {
     const bad: string[] = [];
     for (const r of routes) {
       if (r.isPublic) continue;
-      for (const [label, token] of [['no token', null], ['garbage token', 'not.a.token'], ['tampered token', tampered]] as const) {
-        const res = await send(r, token, r.method === 'GET' || r.method === 'DELETE' ? undefined : {});
+      for (const [label, token] of [
+        ['no token', null],
+        ['garbage token', 'not.a.token'],
+        ['tampered token', tampered],
+      ] as const) {
+        const res = await send(
+          r,
+          token,
+          r.method === 'GET' || r.method === 'DELETE' ? undefined : {},
+        );
         if (res.status !== 401) bad.push(`${r.route} (${label}): ${res.status}`);
       }
     }

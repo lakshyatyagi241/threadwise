@@ -107,13 +107,17 @@ describe('IdempotencyInterceptor', () => {
     const never: CallHandler = { handle: () => new Observable<never>(() => undefined) };
     void call('POST', '/v2/tags', { name: 'a' }, 'k4', 1, () => never);
     await new Promise((r) => setImmediate(r));
-    await expect(call('POST', '/v2/tags', { name: 'a' }, 'k4')).rejects.toMatchObject({ status: 409 });
+    await expect(call('POST', '/v2/tags', { name: 'a' }, 'k4')).rejects.toMatchObject({
+      status: 409,
+    });
   });
 
   it('frees the key when the first request fails, so the retry runs', async () => {
     const { call, calls } = setup();
     await expect(
-      call('POST', '/v2/tags', { name: 'a' }, 'k5', 1, () => ({ handle: () => throwError(() => new Error('boom')) })),
+      call('POST', '/v2/tags', { name: 'a' }, 'k5', 1, () => ({
+        handle: () => throwError(() => new Error('boom')),
+      })),
     ).rejects.toThrow('boom');
     await new Promise((r) => setImmediate(r));
     await call('POST', '/v2/tags', { name: 'a' }, 'k5');

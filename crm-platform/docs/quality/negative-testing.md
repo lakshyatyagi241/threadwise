@@ -4,13 +4,13 @@ Sends every route the wrong thing and proves it refuses cleanly: a 4xx with the 
 
 ## Pieces
 
-| File | What it is | Runs without Docker |
-| --- | --- | --- |
-| `apps/api/test/support/negative.ts` | `mutations(schema)` makes bad bodies from a zod schema (missing field, wrong type, one past each min and max, outside an enum, empty string, null, wrong container, unknown field); `validSample(schema)` builds a good body to mutate. Every case is checked against the schema, so a body the schema would accept is never reported. | yes |
-| `apps/api/test/unit/common/negative.spec.ts` | unit tests of the generator | yes |
-| `apps/api/test/e2e/negative/routes.ts` | reads every route, its public flag and its body schema from the controllers' own metadata | needs the app |
-| `apps/api/test/e2e/negative/negative.e2e.spec.ts` | body sweep, auth sweep (no, garbage and tampered token), protocol checks (malformed JSON, 413, wrong content type, long query, wrong method) | needs Postgres and Redis (Docker) |
-| `apps/api/test/e2e/negative/known-gaps.json` | routes allowed to fail today, each with an owner and a reason. Only shrinks. | n/a |
+| File                                              | What it is                                                                                                                                                                                                                                                                                                                             | Runs without Docker               |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `apps/api/test/support/negative.ts`               | `mutations(schema)` makes bad bodies from a zod schema (missing field, wrong type, one past each min and max, outside an enum, empty string, null, wrong container, unknown field); `validSample(schema)` builds a good body to mutate. Every case is checked against the schema, so a body the schema would accept is never reported. | yes                               |
+| `apps/api/test/unit/common/negative.spec.ts`      | unit tests of the generator                                                                                                                                                                                                                                                                                                            | yes                               |
+| `apps/api/test/e2e/negative/routes.ts`            | reads every route, its public flag and its body schema from the controllers' own metadata                                                                                                                                                                                                                                              | needs the app                     |
+| `apps/api/test/e2e/negative/negative.e2e.spec.ts` | body sweep, auth sweep (no, garbage and tampered token), protocol checks (malformed JSON, 413, wrong content type, long query, wrong method)                                                                                                                                                                                           | needs Postgres and Redis (Docker) |
+| `apps/api/test/e2e/negative/known-gaps.json`      | routes allowed to fail today, each with an owner and a reason. Only shrinks.                                                                                                                                                                                                                                                           | n/a                               |
 
 ## Run it
 

@@ -20,7 +20,12 @@ type Shape = Record<string, ZodTypeAny>;
 export function unwrap(s: ZodTypeAny): ZodTypeAny {
   let cur = s;
   for (let i = 0; i < 12; i++) {
-    const def = cur._def as { typeName?: string; innerType?: ZodTypeAny; schema?: ZodTypeAny; type?: ZodTypeAny };
+    const def = cur._def as {
+      typeName?: string;
+      innerType?: ZodTypeAny;
+      schema?: ZodTypeAny;
+      type?: ZodTypeAny;
+    };
     switch (def.typeName) {
       case 'ZodOptional':
       case 'ZodNullable':
@@ -67,8 +72,10 @@ export function badValues(field: ZodTypeAny): Array<{ label: string; value: unkn
   const wrong = WRONG[typeName];
   if (wrong !== undefined) out.push({ label: 'wrong type', value: wrong });
   if (u instanceof z.ZodString) {
-    if (u.minLength !== null && u.minLength > 0) out.push({ label: `shorter than min ${u.minLength}`, value: 'x'.repeat(u.minLength - 1) });
-    if (u.maxLength !== null && u.maxLength < 100_000) out.push({ label: `longer than max ${u.maxLength}`, value: 'x'.repeat(u.maxLength + 1) });
+    if (u.minLength !== null && u.minLength > 0)
+      out.push({ label: `shorter than min ${u.minLength}`, value: 'x'.repeat(u.minLength - 1) });
+    if (u.maxLength !== null && u.maxLength < 100_000)
+      out.push({ label: `longer than max ${u.maxLength}`, value: 'x'.repeat(u.maxLength + 1) });
     out.push({ label: 'array instead of string', value: ['a'] });
   }
   if (u instanceof z.ZodNumber) {
@@ -77,15 +84,25 @@ export function badValues(field: ZodTypeAny): Array<{ label: string; value: unkn
     out.push({ label: 'string instead of number', value: 'abc' });
   }
   if (u instanceof z.ZodArray) {
-    const d = u._def as { minLength: { value: number } | null; maxLength: { value: number } | null };
-    if (d.maxLength && d.maxLength.value < 10_000) out.push({ label: `more than max ${d.maxLength.value} items`, value: Array.from({ length: d.maxLength.value + 1 }, () => 'x') });
+    const d = u._def as {
+      minLength: { value: number } | null;
+      maxLength: { value: number } | null;
+    };
+    if (d.maxLength && d.maxLength.value < 10_000)
+      out.push({
+        label: `more than max ${d.maxLength.value} items`,
+        value: Array.from({ length: d.maxLength.value + 1 }, () => 'x'),
+      });
   }
   out.push({ label: 'object instead of scalar', value: { a: 1 } });
   return out;
 }
 
 /** A body the schema accepts, to mutate. Built from the schema's own defaults where it can; null when it cannot be built. */
-export function validBase(schema: ZodTypeAny, sample: Record<string, unknown>): Record<string, unknown> | null {
+export function validBase(
+  schema: ZodTypeAny,
+  sample: Record<string, unknown>,
+): Record<string, unknown> | null {
   const r = schema.safeParse(sample);
   return r.success ? sample : null;
 }
@@ -93,7 +110,10 @@ export function validBase(schema: ZodTypeAny, sample: Record<string, unknown>): 
 /**
  * @param sample a body the schema accepts (the sweep supplies a minimal one per route, or `{}` when every field is optional).
  */
-export function mutations(schema: ZodTypeAny, sample: Record<string, unknown> = {}): NegativeCase[] {
+export function mutations(
+  schema: ZodTypeAny,
+  sample: Record<string, unknown> = {},
+): NegativeCase[] {
   const shape = shapeOf(schema);
   const out: NegativeCase[] = [];
   const keep = (label: string, body: unknown) => {
@@ -109,7 +129,8 @@ export function mutations(schema: ZodTypeAny, sample: Record<string, unknown> = 
     keep(`missing "${name}"`, without);
     keep(`"${name}" is null`, { ...base, [name]: null });
     keep(`"${name}" is an empty string`, { ...base, [name]: '' });
-    for (const bad of badValues(field)) keep(`"${name}" ${bad.label}`, { ...base, [name]: bad.value });
+    for (const bad of badValues(field))
+      keep(`"${name}" ${bad.label}`, { ...base, [name]: bad.value });
   }
   keep('unknown field', { ...base, __unknown_field__: 1 });
   return out;
@@ -128,7 +149,13 @@ export function schemaOfPipe(pipe: unknown): ZodTypeAny | null {
 export function sampleOf(schema: ZodTypeAny, depth = 0): unknown {
   if (depth > 6) return undefined;
   const s = unwrap(schema);
-  const def = s._def as { typeName: string; values?: unknown; value?: unknown; options?: ZodTypeAny[]; type?: ZodTypeAny };
+  const def = s._def as {
+    typeName: string;
+    values?: unknown;
+    value?: unknown;
+    options?: ZodTypeAny[];
+    type?: ZodTypeAny;
+  };
   if (s instanceof z.ZodString) {
     const kinds = new Set(s._def.checks.map((c) => c.kind));
     if (kinds.has('uuid')) return '11111111-1111-4111-8111-111111111111';
@@ -137,7 +164,12 @@ export function sampleOf(schema: ZodTypeAny, depth = 0): unknown {
     if (kinds.has('datetime')) return '2026-01-01T00:00:00.000Z';
     return 'x'.repeat(Math.max(s.minLength ?? 1, 1));
   }
-  if (s instanceof z.ZodNumber) return s.minValue !== null ? Math.ceil(s.minValue) : s.maxValue !== null ? Math.min(1, Math.floor(s.maxValue)) : 1;
+  if (s instanceof z.ZodNumber)
+    return s.minValue !== null
+      ? Math.ceil(s.minValue)
+      : s.maxValue !== null
+        ? Math.min(1, Math.floor(s.maxValue))
+        : 1;
   if (s instanceof z.ZodBoolean) return true;
   if (s instanceof z.ZodEnum) return (def.values as string[])[0];
   if (s instanceof z.ZodNativeEnum) return Object.values(def.values as object)[0];
@@ -149,7 +181,9 @@ export function sampleOf(schema: ZodTypeAny, depth = 0): unknown {
   }
   if (s instanceof z.ZodUnion || s instanceof z.ZodDiscriminatedUnion) {
     const options = (def.options as unknown as ZodTypeAny[] | Map<string, ZodTypeAny>) ?? [];
-    const first = Array.isArray(options) ? options[0] : [...(options as Map<string, ZodTypeAny>).values()][0];
+    const first = Array.isArray(options)
+      ? options[0]
+      : [...(options as Map<string, ZodTypeAny>).values()][0];
     return first ? sampleOf(first, depth + 1) : undefined;
   }
   if (s instanceof z.ZodRecord) return {};
@@ -169,5 +203,7 @@ export function sampleOf(schema: ZodTypeAny, depth = 0): unknown {
 /** A body the schema accepts, or null if `sampleOf` could not build one. */
 export function validSample(schema: ZodTypeAny): Record<string, unknown> | null {
   const v = sampleOf(schema);
-  return v !== null && typeof v === 'object' && !Array.isArray(v) && schema.safeParse(v).success ? (v as Record<string, unknown>) : null;
+  return v !== null && typeof v === 'object' && !Array.isArray(v) && schema.safeParse(v).success
+    ? (v as Record<string, unknown>)
+    : null;
 }

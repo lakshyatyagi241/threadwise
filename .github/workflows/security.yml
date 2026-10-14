@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 env:
-  NODE_VERSION: '22'
+  NODE_VERSION: "22"
   GITLEAKS_IMAGE: zricethezav/gitleaks:v8.30.1
   TRIVY_IMAGE: aquasec/trivy:0.75.0
 

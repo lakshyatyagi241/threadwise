@@ -27,13 +27,54 @@ const CONTRACTS = {
 };
 
 /** Modules where a mistake loses money, messages or data. They must end with no untested P0 case. */
-const P0 = new Set(['auth', 'identity', 'roles-permissions', 'workspaces-teams-tenancy', 'wallet-message-billing', 'plans-subscriptions-trials',
-  'chat-conversations', 'inbox', 'team-inbox-conversations', 'crm', 'contact-consent', 'broadcasts', 'broadcast', 'campaigns',
-  'flow-builder-editor', 'flow-runtime-engine', 'whatsapp-cloud-api-waba']);
-const P1 = new Set(['billing', 'bsp-billing-engine', 'coupons-credits-referral-currency', 'message-templates', 'outbound-webhooks', 'webhook-fanout',
-  'developer-rest-api-v1', 'public-api', 'privacy', 'audit-log', 'notifications', 'forms-builder', 'leads', 'lead-scoring', 'checkout-orders-merchant-payments',
-  'platform-payment-gateways', 'channel-email', 'channel-sms', 'channel-telegram', 'channel-facebook', 'channel-instagram', 'whatsapp-devices-baileys',
-  'team-inbox-routing-sla', 'contacts-pql', 'appointments-booking', 'catalog-products', 'node-bridge-runtime']);
+const P0 = new Set([
+  'auth',
+  'identity',
+  'roles-permissions',
+  'workspaces-teams-tenancy',
+  'wallet-message-billing',
+  'plans-subscriptions-trials',
+  'chat-conversations',
+  'inbox',
+  'team-inbox-conversations',
+  'crm',
+  'contact-consent',
+  'broadcasts',
+  'broadcast',
+  'campaigns',
+  'flow-builder-editor',
+  'flow-runtime-engine',
+  'whatsapp-cloud-api-waba',
+]);
+const P1 = new Set([
+  'billing',
+  'bsp-billing-engine',
+  'coupons-credits-referral-currency',
+  'message-templates',
+  'outbound-webhooks',
+  'webhook-fanout',
+  'developer-rest-api-v1',
+  'public-api',
+  'privacy',
+  'audit-log',
+  'notifications',
+  'forms-builder',
+  'leads',
+  'lead-scoring',
+  'checkout-orders-merchant-payments',
+  'platform-payment-gateways',
+  'channel-email',
+  'channel-sms',
+  'channel-telegram',
+  'channel-facebook',
+  'channel-instagram',
+  'whatsapp-devices-baileys',
+  'team-inbox-routing-sla',
+  'contacts-pql',
+  'appointments-booking',
+  'catalog-products',
+  'node-bridge-runtime',
+]);
 
 const words = (s) => s.replace(/_/g, ' ').toLowerCase();
 function limitsOf(dirs) {
@@ -41,10 +82,19 @@ function limitsOf(dirs) {
   for (const d of dirs) {
     const p = join(contractsDir, d);
     if (!existsSync(p) || !statSync(p).isDirectory()) continue;
-    for (const f of readdirSync(p).filter((n) => n.endsWith('.ts') && !n.endsWith('.test.ts')).sort()) {
+    for (const f of readdirSync(p)
+      .filter((n) => n.endsWith('.ts') && !n.endsWith('.test.ts'))
+      .sort()) {
       const text = readFileSync(join(p, f), 'utf8');
-      for (const m of text.matchAll(/^export const ([A-Z][A-Z0-9_]*_(MAX|MIN)(?:_[A-Z]+)?)\s*=\s*([0-9_]+)\s*;/gm)) {
-        out.push({ name: m[1], kind: m[2], value: m[3].replace(/_/g, ''), file: `packages/contracts/src/${d}/${f}` });
+      for (const m of text.matchAll(
+        /^export const ([A-Z][A-Z0-9_]*_(MAX|MIN)(?:_[A-Z]+)?)\s*=\s*([0-9_]+)\s*;/gm,
+      )) {
+        out.push({
+          name: m[1],
+          kind: m[2],
+          value: m[3].replace(/_/g, ''),
+          file: `packages/contracts/src/${d}/${f}`,
+        });
       }
     }
   }
@@ -52,7 +102,9 @@ function limitsOf(dirs) {
 }
 
 let made = 0;
-for (const mod of readdirSync(modulesDir).filter((n) => statSync(join(modulesDir, n)).isDirectory()).sort()) {
+for (const mod of readdirSync(modulesDir)
+  .filter((n) => statSync(join(modulesDir, n)).isDirectory())
+  .sort()) {
   const file = join(outDir, `${mod}.json`);
   if (existsSync(file)) continue;
   const tier = P0.has(mod) ? 'P0' : P1.has(mod) ? 'P1' : 'P2';
@@ -67,7 +119,9 @@ for (const mod of readdirSync(modulesDir).filter((n) => statSync(join(modulesDir
       id: `EC-${mod}-${n}`,
       feature: words(l.name.replace(/_(MAX|MIN)(_.*)?$/, '')),
       category: 'input',
-      scenario: over ? `a value of ${Number(l.value) + 1} (one past ${l.name} = ${l.value}) is sent` : `a value of ${Math.max(Number(l.value) - 1, 0)} (one under ${l.name} = ${l.value}) is sent`,
+      scenario: over
+        ? `a value of ${Number(l.value) + 1} (one past ${l.name} = ${l.value}) is sent`
+        : `a value of ${Math.max(Number(l.value) - 1, 0)} (one under ${l.name} = ${l.value}) is sent`,
       expected: 'refused with a 422 validation error, nothing is stored',
       priority: tier === 'P0' ? 'P1' : 'P2',
       status: 'gap',
