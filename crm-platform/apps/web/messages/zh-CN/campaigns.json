@@ -689,7 +689,8 @@
         "edit": "编辑",
         "resendAll": "重新发送给全部",
         "export": "导出行",
-        "delete": "删除"
+        "delete": "删除",
+        "broadcastStatus": "群发状态"
       },
       "kpi": {
         "recipients": "收件人",
@@ -1525,13 +1526,16 @@
           "pause": "暂停",
           "resume": "继续",
           "cancel": "取消群发",
-          "retryFailed": "重试失败项 ({count})"
+          "retryFailed": "重试失败项 ({count})",
+          "export": "导出行",
+          "delete": "删除"
         },
         "done": {
           "pause": "群发已暂停。",
           "resume": "群发已继续。",
           "cancel": "群发已取消。",
-          "retryFailed": "正在重试 {count, plural, other {# 个失败的收件人}}。"
+          "retryFailed": "正在重试 {count, plural, other {# 个失败的收件人}}。",
+          "delete": "群发已删除。"
         },
         "failed": "操作未成功，请重试。",
         "noControl": "您没有暂停、继续或取消群发的权限。",
@@ -1552,7 +1556,11 @@
           "ended": "已结束"
         },
         "retryTitle": "重试失败的消息？",
-        "retryMessage": "将再次发送给消息失败的 {count, plural, other {# 个收件人}}。已收到的人不受影响，消息仅在送达时计费。"
+        "retryMessage": "将再次发送给消息失败的 {count, plural, other {# 个收件人}}。已收到的人不受影响，消息仅在送达时计费。",
+        "exportFailed": "无法下载导出文件。",
+        "deleteTitle": "删除此群发？",
+        "deleteOne": "将删除此群发及其收件人，且无法撤销。",
+        "deleteSeries": "将删除此循环群发及其已计划的运行。尚未发送任何消息，因此不会丢失历史记录。此操作无法撤销。"
       },
       "panel": {
         "title": "通过“创建群发”创建",

@@ -1,4 +1,9 @@
-import { RESENDABLE_STATUSES, type WizardBroadcastDetail } from '@crm/contracts';
+import {
+  RESENDABLE_STATUSES,
+  type CampaignStatus,
+  type WizardBroadcastDetail,
+} from '@crm/contracts';
+import { can } from '../../lib/list-model';
 
 export type ControlAction = 'pause' | 'resume' | 'cancel';
 
@@ -30,6 +35,16 @@ export function controlsFor(b: Pick<WizardBroadcastDetail, 'kind' | 'status'>): 
 export function retryableFailed(b: Pick<WizardBroadcastDetail, 'kind' | 'runList'>): number {
   const ok: readonly string[] = b.kind === 'series' ? ['completed', 'failed'] : RESENDABLE_STATUSES;
   return b.runList.filter((r) => ok.includes(r.status)).reduce((n, r) => n + r.counts.failed, 0);
+}
+
+/**
+ * Whether Delete is offered. A one-off broadcast follows the campaign rule (still waiting for its time, or failed outright). A recurring
+ * series can go while none of its runs has sent a message or is going right now, whatever its own status: once a run has sent, its
+ * history is kept and the series is only cancelled. The API makes the same decision; this just hides a button that would be refused.
+ */
+export function deletable(b: Pick<WizardBroadcastDetail, 'kind' | 'status' | 'runList'>): boolean {
+  if (b.kind === 'campaign') return can.delete(b.status as CampaignStatus);
+  return b.runList.every((r) => r.status !== 'running' && r.counts.sent === 0);
 }
 
 export type StatusTone = 'success' | 'warning' | 'danger' | 'neutral' | 'brand';

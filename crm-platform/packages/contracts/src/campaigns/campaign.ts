@@ -231,6 +231,8 @@ export const campaignSchema = z.object({
   abTesting: z.boolean(),
   /** Made by the "Create broadcast" wizard (a draft of it resumes there, not in the classic builder). */
   wizard: z.boolean().default(false),
+  /** The recurring broadcast this run belongs to (its status page, export and delete live there); null for any other campaign. */
+  seriesId: uuidSchema.nullable().default(null),
   scheduleType: z.enum(CAMPAIGN_SCHEDULE_TYPES),
   sendDate: z.string().nullable(),
   sendTime: z.string().nullable(),

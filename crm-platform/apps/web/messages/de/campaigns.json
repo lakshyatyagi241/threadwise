@@ -689,7 +689,8 @@
         "edit": "Bearbeiten",
         "resendAll": "An alle erneut senden",
         "export": "Zeilen exportieren",
-        "delete": "Löschen"
+        "delete": "Löschen",
+        "broadcastStatus": "Status des Versands"
       },
       "kpi": {
         "recipients": "Empfänger",
@@ -1525,13 +1526,16 @@
           "pause": "Pausieren",
           "resume": "Fortsetzen",
           "cancel": "Broadcast abbrechen",
-          "retryFailed": "Fehlgeschlagene wiederholen ({count})"
+          "retryFailed": "Fehlgeschlagene wiederholen ({count})",
+          "export": "Zeilen exportieren",
+          "delete": "Löschen"
         },
         "done": {
           "pause": "Broadcast pausiert.",
           "resume": "Broadcast fortgesetzt.",
           "cancel": "Broadcast abgebrochen.",
-          "retryFailed": "{count, plural, one {# fehlgeschlagener Empfänger wird} other {# fehlgeschlagene Empfänger werden}} erneut versucht."
+          "retryFailed": "{count, plural, one {# fehlgeschlagener Empfänger wird} other {# fehlgeschlagene Empfänger werden}} erneut versucht.",
+          "delete": "Versand gelöscht."
         },
         "failed": "Das hat nicht funktioniert. Versuchen Sie es erneut.",
         "noControl": "Sie haben keine Berechtigung, Broadcasts zu pausieren, fortzusetzen oder abzubrechen.",
@@ -1552,7 +1556,11 @@
           "ended": "Beendet"
         },
         "retryTitle": "Fehlgeschlagene Nachrichten wiederholen?",
-        "retryMessage": "Sendet erneut an {count, plural, one {# Empfänger} other {# Empfänger}}, bei denen die Nachricht fehlgeschlagen ist. Wer sie schon erhalten hat, bleibt unberührt, und eine Nachricht wird nur bei Zustellung berechnet."
+        "retryMessage": "Sendet erneut an {count, plural, one {# Empfänger} other {# Empfänger}}, bei denen die Nachricht fehlgeschlagen ist. Wer sie schon erhalten hat, bleibt unberührt, und eine Nachricht wird nur bei Zustellung berechnet.",
+        "exportFailed": "Der Export konnte nicht heruntergeladen werden.",
+        "deleteTitle": "Diesen Versand löschen?",
+        "deleteOne": "Löscht diesen Versand und seine Empfänger. Das lässt sich nicht rückgängig machen.",
+        "deleteSeries": "Löscht diesen wiederkehrenden Versand und die geplanten Durchläufe. Es wurde nichts gesendet, daher geht kein Verlauf verloren. Das lässt sich nicht rückgängig machen."
       },
       "panel": {
         "title": "Erstellt mit Broadcast erstellen",

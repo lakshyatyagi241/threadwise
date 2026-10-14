@@ -689,7 +689,8 @@
         "edit": "編集",
         "resendAll": "全員に再送信",
         "export": "行をエクスポート",
-        "delete": "削除"
+        "delete": "削除",
+        "broadcastStatus": "配信の状況"
       },
       "kpi": {
         "recipients": "受信者",
@@ -1525,13 +1526,16 @@
           "pause": "一時停止",
           "resume": "再開",
           "cancel": "一斉配信をキャンセル",
-          "retryFailed": "失敗分を再試行 ({count})"
+          "retryFailed": "失敗分を再試行 ({count})",
+          "export": "行をエクスポート",
+          "delete": "削除"
         },
         "done": {
           "pause": "一斉配信を一時停止しました。",
           "resume": "一斉配信を再開しました。",
           "cancel": "一斉配信をキャンセルしました。",
-          "retryFailed": "失敗した{count, plural, other {#件の宛先}}に再送信しています。"
+          "retryFailed": "失敗した{count, plural, other {#件の宛先}}に再送信しています。",
+          "delete": "配信を削除しました。"
         },
         "failed": "うまくいきませんでした。もう一度お試しください。",
         "noControl": "一斉配信を一時停止、再開、キャンセルする権限がありません。",
@@ -1552,7 +1556,11 @@
           "ended": "終了"
         },
         "retryTitle": "失敗したメッセージを再試行しますか？",
-        "retryMessage": "メッセージが失敗した{count, plural, other {#件の宛先}}にもう一度送信します。すでに受け取った人には送られず、料金は配信された時点でのみ発生します。"
+        "retryMessage": "メッセージが失敗した{count, plural, other {#件の宛先}}にもう一度送信します。すでに受け取った人には送られず、料金は配信された時点でのみ発生します。",
+        "exportFailed": "エクスポートをダウンロードできませんでした。",
+        "deleteTitle": "この配信を削除しますか？",
+        "deleteOne": "この配信と宛先を削除します。元に戻せません。",
+        "deleteSeries": "この定期配信と、予定されていた実行を削除します。まだ何も送信されていないため、履歴は失われません。元に戻せません。"
       },
       "panel": {
         "title": "一斉配信の作成で作成",

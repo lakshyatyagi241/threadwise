@@ -680,7 +680,8 @@
         "edit": "Edit",
         "resendAll": "Resend to all",
         "export": "Export rows",
-        "delete": "Delete"
+        "delete": "Delete",
+        "broadcastStatus": "Broadcast status"
       },
       "kpi": {
         "recipients": "Recipients",
@@ -1515,13 +1516,16 @@
           "pause": "Pause",
           "resume": "Resume",
           "cancel": "Cancel campaign",
-          "retryFailed": "Retry failed ({count})"
+          "retryFailed": "Retry failed ({count})",
+          "export": "Export rows",
+          "delete": "Delete"
         },
         "done": {
           "pause": "Campaign paused.",
           "resume": "Campaign resumed.",
           "cancel": "Campaign cancelled.",
-          "retryFailed": "Retrying {count, plural, one {# failed recipient} other {# failed recipients}}."
+          "retryFailed": "Retrying {count, plural, one {# failed recipient} other {# failed recipients}}.",
+          "delete": "Broadcast deleted."
         },
         "failed": "That did not work. Try again.",
         "noControl": "You do not have permission to pause, resume or cancel campaigns.",
@@ -1542,7 +1546,11 @@
           "ended": "Ended"
         },
         "retryTitle": "Retry the failed messages?",
-        "retryMessage": "Sends again to the {count, plural, one {# recipient} other {# recipients}} whose message failed. Everyone who already got it is left alone, and a message is charged only when it is delivered."
+        "retryMessage": "Sends again to the {count, plural, one {# recipient} other {# recipients}} whose message failed. Everyone who already got it is left alone, and a message is charged only when it is delivered.",
+        "exportFailed": "The export could not be downloaded.",
+        "deleteTitle": "Delete this broadcast?",
+        "deleteOne": "Deletes this broadcast and its recipients. This cannot be undone.",
+        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone."
       },
       "panel": {
         "title": "Created with the guided flow",
