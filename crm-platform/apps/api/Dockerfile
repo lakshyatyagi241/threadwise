@@ -51,6 +51,10 @@ ARG GIT_SHA=
 ENV GIT_SHA=$GIT_SHA
 WORKDIR /app
 
+# Alpine ships security fixes (OpenSSL, musl, zlib) before the node image is rebuilt on top of them; take the fixed packages now, so a
+# freshly published OS flaw does not wait for a new base image. The image scan (QA task 39) fails on a fixable high finding.
+RUN apk upgrade --no-cache
+
 # npm and corepack ship inside the node base image and carry their own dependencies (the image scan flags brace-expansion, pacote,
 # picomatch and others there). The API only ever runs `node`, so they are removed rather than patched.
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \

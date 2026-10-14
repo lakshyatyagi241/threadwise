@@ -2,16 +2,18 @@
 
 ## What runs, and when
 
-`Security` (`.github/workflows/security.yml`) runs on every pull request, **every day at 02:17 UTC**, and on demand. It:
+Nothing runs automatically: the check workflows were removed in #328 because GitHub Actions jobs do not start on this account. Run the
+scans yourself with `bash tools/quality/security-scan.sh` (add `--images` to build and scan both Docker images), or start the
+**Security** workflow (`.github/workflows/security.yml`) from the Actions tab once the account is paid up. The release workflow
+(`deploy.yml`) still scans both images before they ship. The scans:
 
-1. runs `pnpm audit` twice (production dependencies, and everything) and hands both reports to `tools/quality/audit-gate.mjs`;
-2. scans `pnpm-lock.yaml` again with Trivy, a second vulnerability database, for fixable high and critical findings in production;
-3. keeps both reports as an artifact, and on a failed **daily** run opens or updates one GitHub issue labelled `security-scan`.
+1. `pnpm audit` twice (production dependencies, and everything), judged by `tools/quality/audit-gate.mjs`;
+2. Trivy over `pnpm-lock.yaml`, a second vulnerability database, for fixable high and critical findings in production;
+3. Gitleaks over the whole git history, and Trivy over the two Docker images.
 
 The gate's rules: a **high or critical advisory in a production dependency fails**; a **critical advisory in a development
 dependency fails** (development high is listed, not blocking); a reviewed decision **past its end date fails**. Moderate and low are
-reported by `pnpm audit` and not blocking; look at them when you are in the area. `CI` still runs `pnpm audit --prod --audit-level=high`
-on pull requests as before. Dependabot (`.github/dependabot.yml`) opens a PR every Monday: minor and patch bumps grouped into one,
+reported by `pnpm audit` and not blocking; look at them when you are in the area. Dependabot (`.github/dependabot.yml`) opens a PR every Monday: minor and patch bumps grouped into one,
 each major on its own.
 
 Run it yourself:

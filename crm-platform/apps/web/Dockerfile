@@ -46,6 +46,8 @@ ENV NODE_ENV=production
 # which lets pnpm, its cache, npm and corepack be removed. CI=true lets pnpm replace the modules directory without asking (there is no
 # terminal to answer); --ignore-scripts skips the repository's husky `prepare` hook, which is not installed any more; --filter keeps only
 # the web app and what it depends on (the API's git-hosted packages are not in this stage's store, and the web app does not use them).
+# Take the fixed Alpine packages (OpenSSL etc.) that are newer than the node base image; see the API Dockerfile.
+RUN apk upgrade --no-cache
 RUN CI=true pnpm install --prod --frozen-lockfile --offline --ignore-scripts --filter "@crm/web..." \
  && rm -rf /root/.cache /root/.local/share/pnpm/store \
       /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \

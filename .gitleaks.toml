@@ -14,11 +14,14 @@ paths = [
   '''^crm-platform/apps/web/src/.*\.test\.tsx?$''',
   '''^crm-platform/apps/web/src/.*test-fixtures\.ts$''',
   '''^crm-platform/apps/web/e2e/''',
+  # The migration tool's tests feed made-up keys (sk-live-0123456789abcdef...) to its scrubber to prove they are removed.
+  '''^crm-platform/tools/migration/test/''',
   # Examples in documentation: truncated tokens and sample curl commands.
   '''^docs/api-testing\.md$''',
   '''^crm-platform/docs/api/''',
   # The licensed WaDesk reference copy: third-party code and docs with example keys, not our credentials.
   '''^wadesk-reference/''',
+  '''^reference/''',
 ]
 regexes = [
   # The development placeholder for CREDENTIALS_ENCRYPTION_KEY (base64 of "dev-only-32-byte-key-do-not-use!"). The API refuses to

@@ -1,31 +1,49 @@
 name: Security
 
-# Dependency scans (QA task 27) and image scans (QA task 39), on every pull request and once a day. A vulnerability published on a quiet
-# week would otherwise be seen only when the next PR is opened. The rules are in crm-platform/tools/quality/audit-gate.mjs; a reviewed
-# finding is accepted in crm-platform/.audit-accepted.json with a reason and an end date, and an expired entry fails the run.
+# Security scans (QA tasks 28, 27, 39): secrets in the whole git history, known vulnerabilities in dependencies, and the two Docker images.
+#
+# Manual on purpose. The automatic check workflows were removed in #328 because GitHub Actions jobs do not start on this account, so
+# nothing here runs on a pull request, a push or a schedule. Start it from the Actions tab when the account is paid up, or run the same
+# three scans on your own machine with `bash crm-platform/tools/quality/security-scan.sh`. The release workflow (deploy.yml) still scans
+# the images before they ship.
+#
+# The dependency rules are in crm-platform/tools/quality/audit-gate.mjs; a reviewed finding is accepted in
+# crm-platform/.audit-accepted.json with a reason and an end date, and an expired entry fails the run.
 on:
-  pull_request:
-    branches: [main]
-    paths: ['crm-platform/**', '.github/workflows/security.yml']
-  schedule:
-    - cron: '17 2 * * *'
   workflow_dispatch:
-
-concurrency:
-  group: security-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: read
-  issues: write
 
 env:
   NODE_VERSION: '22'
+  GITLEAKS_IMAGE: zricethezav/gitleaks:v8.30.1
   TRIVY_IMAGE: aquasec/trivy:0.75.0
 
 jobs:
+  secrets:
+    name: Secrets in the git history
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # the whole history is scanned: a key that was committed and then deleted is still in it
+      # Rules and the list of fake values are in .gitleaks.toml; a reviewed finding is fingerprinted in .gitleaksignore.
+      # A real secret is rotated before anything else (crm-platform/docs/runbooks/key-rotation.md).
+      - name: Scan the repository history
+        run: |
+          docker run --rm -v "$PWD:/repo" "$GITLEAKS_IMAGE" detect --source /repo --log-opts="--all" \
+            --config /repo/.gitleaks.toml --redact --no-banner --report-format json --report-path /repo/gitleaks-report.json
+      - name: Keep the report when it fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
+
   dependencies:
-    name: Dependencies (audit, second database)
+    name: Dependencies (audit and a second database)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
@@ -37,16 +55,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
-      - uses: actions/cache@v6
-        with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-${{ hashFiles('crm-platform/pnpm-lock.yaml') }}
-          restore-keys: pnpm-
       - run: pnpm install --frozen-lockfile
-
       - name: The gate's own tests
         run: node --test tools/quality/audit-gate.test.mjs
-
       # Two reports: what ships (production) and everything. `pnpm audit` exits 1 when it finds anything, so the exit code is
       # ignored here and the gate decides.
       - name: Audit reports
@@ -56,14 +67,11 @@ jobs:
           pnpm audit --json > ../security-reports/audit-all.json || true
       - name: Gate (production high and critical, development critical, expired decisions)
         run: node tools/quality/audit-gate.mjs ../security-reports/audit-prod.json ../security-reports/audit-all.json
-
-      # A second vulnerability database over the same lockfile (Trivy reads production dependencies by default). The two lists
-      # do not always agree; either one failing is worth a look.
+      # A second vulnerability database over the same lockfile (Trivy reads production dependencies by default).
       - name: Lockfile scan with Trivy (production, high and critical, fixes only)
         run: |
           docker run --rm -v "$PWD:/src" -v "$PWD/../security-reports:/out" "$TRIVY_IMAGE" fs --scanners vuln \
             --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --format json --output /out/trivy-lockfile.json /src/pnpm-lock.yaml
-
       - name: Keep the reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -71,23 +79,8 @@ jobs:
           name: dependency-reports
           path: security-reports/
 
-      - name: Open or update an issue when the daily scan fails
-        if: failure() && github.event_name == 'schedule'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const title = 'Daily security scan failed';
-            const body = `The scheduled dependency scan failed: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\nOpen the run, read the "Gate" step, then fix the dependency or add a reviewed entry to crm-platform/.audit-accepted.json with a reason and an end date.`;
-            const open = await github.rest.issues.listForRepo({ ...context.repo, state: 'open', labels: 'security-scan' });
-            const existing = open.data.find((i) => i.title === title);
-            if (existing) await github.rest.issues.createComment({ ...context.repo, issue_number: existing.number, body });
-            else await github.rest.issues.create({ ...context.repo, title, body, labels: ['security-scan'] });
-
   images:
-    name: Images (daily scan of main)
-    # The images are not published to a registry (they are shipped over SSH), so the daily scan builds them from main, with the same
-    # layer cache the PR check uses, and scans what was built. Pull requests are covered by pr-checks.yml, so this runs on the clock only.
-    if: github.event_name != 'pull_request'
+    name: Docker images
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -98,7 +91,7 @@ jobs:
         with:
           context: crm-platform
           file: crm-platform/apps/api/Dockerfile
-          tags: desk-api:daily
+          tags: desk-api:scan
           load: true
           cache-from: type=gha,scope=api
       - name: Build web image
@@ -106,13 +99,13 @@ jobs:
         with:
           context: crm-platform
           file: crm-platform/apps/web/Dockerfile
-          tags: desk-web:daily
+          tags: desk-web:scan
           load: true
           cache-from: type=gha,scope=web
       - name: Scan the images (high and critical, fixes only)
         run: |
           mkdir -p security-reports
-          for image in desk-api:daily desk-web:daily; do
+          for image in desk-api:scan desk-web:scan; do
             docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD/.trivyignore:/.trivyignore:ro" -v "$PWD/security-reports:/out" \
               "$TRIVY_IMAGE" image --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --ignorefile /.trivyignore \
               --format json --output "/out/${image%%:*}.json" "$image"
@@ -123,14 +116,3 @@ jobs:
         with:
           name: image-reports
           path: security-reports/
-      - name: Open or update an issue when the daily scan fails
-        if: failure() && github.event_name == 'schedule'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const title = 'Daily security scan failed';
-            const body = `The scheduled image scan failed: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const open = await github.rest.issues.listForRepo({ ...context.repo, state: 'open', labels: 'security-scan' });
-            const existing = open.data.find((i) => i.title === title);
-            if (existing) await github.rest.issues.createComment({ ...context.repo, issue_number: existing.number, body });
-            else await github.rest.issues.create({ ...context.repo, title, body, labels: ['security-scan'] });
