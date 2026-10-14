@@ -29,3 +29,8 @@ docs/threadwise-port/schema/source/*.json
 # In-app help articles: read by apps/web/scripts/gen-registry.mjs, whose frontmatter parser takes one `key: value` per line.
 # Prettier wraps a long keyword list over several lines, which the parser cannot read.
 apps/web/src/features/*/help/*.md
+
+# Written by tools/quality/*.mjs; regenerate instead of formatting by hand.
+docs/quality/acceptance/acceptance.json
+docs/quality/acceptance/REPORT.md
+docs/quality/edge-cases/REPORT.md
