@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "نماذج واتساب",
+      "links": "روابط واتساب"
+    },
+    "errors": {
+      "generic": "حدث خطأ ما. حاول مرة أخرى.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "قم بربط رقم واجهة WhatsApp Cloud API لاستخدام النماذج.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "لا يوجد رقم Cloud API متصل ببيانات اعتماد صالحة.",
+      "WFL_FORM_META_VALIDATION_FAILED": "رفضت Meta تعريف النموذج.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "يجب أن يمر حساب واتساب للأعمال بعملية التحقق من Meta قبل نشر النماذج.",
+      "WFL_FORM_PUBLISH_FAILED": "تعذّر على Meta نشر هذا النموذج.",
+      "WFL_LINK_NOT_LIVE": "هذا الرابط متوقف أو منتهي الصلاحية.",
+      "ROW_VERSION_CONFLICT": "تم تغيير هذا العنصر في مكان آخر. أعد التحميل وحاول مرة أخرى.",
+      "VALIDATION_FAILED": "تحقق من الحقول المظللة وحاول مرة أخرى.",
+      "PLAN_FEATURE_LOCKED": "قم بترقية باقتك لاستخدام هذه الميزة."
+    },
+    "forms": {
+      "heading": "نماذج واتساب",
+      "intro": "أنشئ نماذج يعبئها العملاء داخل واتساب مباشرة، ثم أرسلها من تدفق تلقائي وراجع الإجابات هنا.",
+      "loading": "جارٍ تحميل النماذج…",
+      "retry": "حاول مرة أخرى",
+      "create": {
+        "cta": "نموذج جديد",
+        "creating": "جارٍ الإنشاء…",
+        "defaultTitle": "نموذج بدون عنوان",
+        "defaultField": "الاسم الكامل"
+      },
+      "stats": {
+        "all": "كل النماذج",
+        "published": "منشورة",
+        "draft": "مسودات",
+        "submissions": "الإجابات"
+      },
+      "empty": {
+        "title": "لا توجد نماذج بعد",
+        "description": "أنشئ نموذجًا، ثم أرسله من خطوة نموذج واتساب داخل تدفق."
+      },
+      "table": {
+        "form": "النموذج",
+        "type": "النوع",
+        "fields": "الحقول",
+        "submissions": "الإجابات"
+      },
+      "status": {
+        "draft": "مسودة",
+        "published": "منشور",
+        "paused": "متوقف"
+      },
+      "audience": {
+        "lead_capture": "جمع العملاء المحتملين",
+        "survey": "استبيان",
+        "appointment_booking": "حجز موعد",
+        "customer_support": "دعم العملاء",
+        "sign_up": "تسجيل",
+        "other": "أخرى"
+      },
+      "row": {
+        "edit": "تعديل",
+        "duplicate": "تكرار",
+        "delete": "حذف"
+      },
+      "confirm": {
+        "deleteTitle": "حذف هذا النموذج؟",
+        "deleteMessage": "عُقد التدفق النشطة التي تشير إليه ستتعطل.",
+        "deleteConfirm": "حذف",
+        "cancel": "إلغاء"
+      },
+      "notice": {
+        "saved": "تم الحفظ.",
+        "published": "تم النشر على واتساب."
+      },
+      "builder": {
+        "back": "العودة إلى النماذج",
+        "untitled": "نموذج بدون عنوان",
+        "saving": "جارٍ الحفظ…",
+        "saveDraft": "حفظ كمسودة",
+        "savePublish": "حفظ ونشر",
+        "publishing": "جارٍ النشر…",
+        "basics": "أساسيات النموذج",
+        "title": "العنوان",
+        "audienceType": "النوع",
+        "purpose": "الغرض",
+        "sendButtonLabel": "نص زر الإرسال",
+        "thankYouNote": "رسالة الشكر",
+        "screens": "الشاشات",
+        "addScreen": "إضافة شاشة",
+        "removeScreen": "إزالة الشاشة",
+        "screenN": "الشاشة {n}",
+        "defaultField": "الاسم الكامل",
+        "newFieldLabel": "حقل جديد",
+        "fieldKind": "نوع الحقل",
+        "fieldLabel": "التسمية",
+        "required": "مطلوب",
+        "removeField": "إزالة",
+        "options": "الخيارات (مفصولة بفواصل)",
+        "optionsPlaceholder": "خيار 1، خيار 2، خيار 3"
+      },
+      "fieldKind": {
+        "heading": "عنوان",
+        "short_text": "نص قصير",
+        "paragraph": "فقرة",
+        "email": "بريد إلكتروني",
+        "phone_number": "رقم الهاتف",
+        "number": "رقم",
+        "date": "تاريخ",
+        "dropdown": "قائمة منسدلة",
+        "radio_buttons": "اختيار واحد",
+        "checkbox": "خانات اختيار"
+      },
+      "submissions": {
+        "heading": "الإجابات",
+        "metaFlowId": "معرّف تدفق Meta: {id}",
+        "export": "تصدير CSV",
+        "empty": {
+          "title": "لا توجد إجابات بعد",
+          "description": "تظهر الإجابات هنا بعد إرسال هذا النموذج من تدفق وتعبئته من أحد العملاء."
+        },
+        "table": {
+          "submitted": "تاريخ الإرسال",
+          "contact": "جهة الاتصال",
+          "phone": "الهاتف"
+        }
+      }
+    },
+    "links": {
+      "heading": "روابط واتساب",
+      "intro": "أنشئ رابطًا قابلًا للتتبع يفتح واتساب برسالة معبأة مسبقًا — للإعلانات والسير الذاتية ورموز QR.",
+      "loading": "جارٍ تحميل الروابط…",
+      "retry": "حاول مرة أخرى",
+      "searchPlaceholder": "ابحث بالاسم أو الرابط",
+      "create": { "cta": "رابط جديد" },
+      "stats": {
+        "all": "كل الروابط",
+        "live": "نشطة",
+        "totalClicks": "إجمالي النقرات",
+        "avgClicks": "متوسط النقرات / رابط"
+      },
+      "tabs": { "all": "الكل", "live": "نشطة", "paused": "متوقفة" },
+      "status": { "live": "نشط", "paused": "متوقف" },
+      "empty": {
+        "title": "لا توجد روابط بعد",
+        "description": "أنشئ رابطًا لمشاركته في الإعلانات أو السيرة الذاتية أو رمز QR."
+      },
+      "table": {
+        "link": "الرابط",
+        "destination": "الوجهة",
+        "clicks": "النقرات",
+        "lastClicked": "آخر نقرة"
+      },
+      "row": {
+        "open": "فتح",
+        "copy": "نسخ",
+        "copied": "تم النسخ!",
+        "edit": "تعديل",
+        "duplicate": "تكرار",
+        "delete": "حذف"
+      },
+      "confirm": {
+        "deleteTitle": "حذف هذا الرابط؟",
+        "deleteMessage": "يتوقف الرابط المختصر عن العمل فورًا.",
+        "deleteConfirm": "حذف",
+        "cancel": "إلغاء"
+      },
+      "notice": {
+        "saved": "تم الحفظ.",
+        "copyFailed": "تعذّر نسخ الرابط."
+      },
+      "builder": {
+        "back": "العودة إلى الروابط",
+        "newHeading": "رابط جديد",
+        "step": { "destination": "الوجهة", "message": "رسالة البداية", "tracking": "التتبع" },
+        "name": "الاسم",
+        "status": "الحالة",
+        "countryCode": "رمز الدولة",
+        "phoneNumber": "رقم الهاتف",
+        "welcomeMessage": "رسالة البداية",
+        "welcomeMessageHint": "تُعبأ مسبقًا في المحادثة عند نقر الرابط.",
+        "slug": "الرابط المختصر",
+        "slugHint": "أحرف وأرقام وشرطات فقط. اتركه فارغًا لإنشاء رابط تلقائيًا.",
+        "slugPlaceholder": "عرض-الصيف",
+        "expiresAt": "تاريخ الانتهاء",
+        "utmSource": "مصدر UTM",
+        "utmMedium": "وسيط UTM",
+        "utmCampaign": "حملة UTM",
+        "previous": "السابق",
+        "next": "التالي",
+        "mint": "إنشاء الرابط",
+        "save": "حفظ",
+        "saving": "جارٍ الحفظ…",
+        "fixErrors": "تحقق من حقول الوجهة والرابط المختصر.",
+        "mintedHeading": "رابطك",
+        "shortUrl": "الرابط المختصر",
+        "waUrl": "رابط واتساب",
+        "qrAlt": "رمز QR لهذا الرابط"
+      }
+    }
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp 양식",
+      "links": "WhatsApp 링크"
+    },
+    "errors": {
+      "generic": "문제가 발생했습니다. 다시 시도해 주세요.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "양식을 사용하려면 WhatsApp Cloud API 번호를 연결하세요.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "연결된 WhatsApp Cloud API 번호 중 유효한 자격 증명이 있는 번호가 없습니다.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta가 이 양식 정의를 거부했습니다.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "양식을 게시하려면 WhatsApp Business 계정이 Meta의 인증을 통과해야 합니다.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta가 이 양식을 게시할 수 없었습니다.",
+      "WFL_LINK_NOT_LIVE": "이 링크는 일시 중지되었거나 만료되었습니다.",
+      "ROW_VERSION_CONFLICT": "다른 곳에서 변경되었습니다. 새로고침 후 다시 시도하세요.",
+      "VALIDATION_FAILED": "강조 표시된 필드를 확인하고 다시 시도하세요.",
+      "PLAN_FEATURE_LOCKED": "이 기능을 사용하려면 플랜을 업그레이드하세요."
+    },
+    "forms": {
+      "heading": "WhatsApp 양식",
+      "intro": "고객이 WhatsApp에서 바로 작성하는 양식을 만들고, 플로우에서 전송한 후 응답을 이곳에서 확인하세요.",
+      "loading": "양식을 불러오는 중…",
+      "retry": "다시 시도",
+      "create": {
+        "cta": "새 양식",
+        "creating": "생성 중…",
+        "defaultTitle": "제목 없는 양식",
+        "defaultField": "이름"
+      },
+      "stats": {
+        "all": "전체 양식",
+        "published": "게시됨",
+        "draft": "임시 저장",
+        "submissions": "응답 수"
+      },
+      "empty": {
+        "title": "아직 양식이 없습니다",
+        "description": "양식을 만든 후 플로우의 WhatsApp 양식 단계에서 전송하세요."
+      },
+      "table": {
+        "form": "양식",
+        "type": "유형",
+        "fields": "필드",
+        "submissions": "응답 수"
+      },
+      "status": {
+        "draft": "임시 저장",
+        "published": "게시됨",
+        "paused": "일시 중지됨"
+      },
+      "audience": {
+        "lead_capture": "리드 수집",
+        "survey": "설문조사",
+        "appointment_booking": "예약",
+        "customer_support": "고객 지원",
+        "sign_up": "가입",
+        "other": "기타"
+      },
+      "row": {
+        "edit": "수정",
+        "duplicate": "복제",
+        "delete": "삭제"
+      },
+      "confirm": {
+        "deleteTitle": "이 양식을 삭제하시겠습니까?",
+        "deleteMessage": "이 양식을 참조하는 활성 플로우 노드가 작동하지 않게 됩니다.",
+        "deleteConfirm": "삭제",
+        "cancel": "취소"
+      },
+      "notice": {
+        "saved": "저장되었습니다.",
+        "published": "WhatsApp에 게시되었습니다."
+      },
+      "builder": {
+        "back": "양식 목록으로",
+        "untitled": "제목 없는 양식",
+        "saving": "저장 중…",
+        "saveDraft": "임시 저장",
+        "savePublish": "저장 후 게시",
+        "publishing": "게시 중…",
+        "basics": "양식 기본 정보",
+        "title": "제목",
+        "audienceType": "유형",
+        "purpose": "용도",
+        "sendButtonLabel": "전송 버튼 텍스트",
+        "thankYouNote": "감사 메시지",
+        "screens": "화면",
+        "addScreen": "화면 추가",
+        "removeScreen": "화면 삭제",
+        "screenN": "화면 {n}",
+        "defaultField": "이름",
+        "newFieldLabel": "새 필드",
+        "fieldKind": "필드 유형",
+        "fieldLabel": "라벨",
+        "required": "필수",
+        "removeField": "삭제",
+        "options": "옵션(쉼표로 구분)",
+        "optionsPlaceholder": "옵션 1, 옵션 2, 옵션 3"
+      },
+      "fieldKind": {
+        "heading": "제목",
+        "short_text": "단답형 텍스트",
+        "paragraph": "장문형 텍스트",
+        "email": "이메일",
+        "phone_number": "전화번호",
+        "number": "숫자",
+        "date": "날짜",
+        "dropdown": "드롭다운",
+        "radio_buttons": "라디오 버튼",
+        "checkbox": "체크박스"
+      },
+      "submissions": {
+        "heading": "응답",
+        "metaFlowId": "Meta Flow ID: {id}",
+        "export": "CSV로 내보내기",
+        "empty": {
+          "title": "아직 응답이 없습니다",
+          "description": "이 양식이 플로우에서 전송되어 누군가 작성하면 응답이 여기에 표시됩니다."
+        },
+        "table": {
+          "submitted": "제출일",
+          "contact": "연락처",
+          "phone": "전화번호"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp 링크",
+      "intro": "미리 입력된 메시지로 WhatsApp을 여는 추적 가능한 링크를 생성하세요. 광고, 프로필, QR 코드에 활용할 수 있습니다.",
+      "loading": "링크를 불러오는 중…",
+      "retry": "다시 시도",
+      "searchPlaceholder": "이름 또는 링크로 검색",
+      "create": { "cta": "새 링크" },
+      "stats": {
+        "all": "전체 링크",
+        "live": "활성",
+        "totalClicks": "총 클릭 수",
+        "avgClicks": "링크당 평균 클릭 수"
+      },
+      "tabs": { "all": "전체", "live": "활성", "paused": "일시 중지됨" },
+      "status": { "live": "활성", "paused": "일시 중지됨" },
+      "empty": {
+        "title": "아직 링크가 없습니다",
+        "description": "광고, 프로필 또는 QR 코드에 공유할 링크를 생성하세요."
+      },
+      "table": {
+        "link": "링크",
+        "destination": "대상 번호",
+        "clicks": "클릭 수",
+        "lastClicked": "마지막 클릭"
+      },
+      "row": {
+        "open": "열기",
+        "copy": "복사",
+        "copied": "복사되었습니다!",
+        "edit": "수정",
+        "duplicate": "복제",
+        "delete": "삭제"
+      },
+      "confirm": {
+        "deleteTitle": "이 링크를 삭제하시겠습니까?",
+        "deleteMessage": "단축 링크가 즉시 작동을 멈춥니다.",
+        "deleteConfirm": "삭제",
+        "cancel": "취소"
+      },
+      "notice": {
+        "saved": "저장되었습니다.",
+        "copyFailed": "링크를 복사할 수 없습니다."
+      },
+      "builder": {
+        "back": "링크 목록으로",
+        "newHeading": "새 링크",
+        "step": { "destination": "대상 번호", "message": "시작 메시지", "tracking": "추적" },
+        "name": "이름",
+        "status": "상태",
+        "countryCode": "국가 코드",
+        "phoneNumber": "전화번호",
+        "welcomeMessage": "시작 메시지",
+        "welcomeMessageHint": "누군가 링크를 탭하면 채팅창에 미리 입력됩니다.",
+        "slug": "단축 링크",
+        "slugHint": "문자, 숫자, 하이픈만 사용할 수 있습니다. 비워두면 자동으로 생성됩니다.",
+        "slugPlaceholder": "summer-sale",
+        "expiresAt": "만료일",
+        "utmSource": "UTM 소스",
+        "utmMedium": "UTM 매체",
+        "utmCampaign": "UTM 캠페인",
+        "previous": "이전",
+        "next": "다음",
+        "mint": "링크 생성",
+        "save": "저장",
+        "saving": "저장 중…",
+        "fixErrors": "대상 번호와 단축 링크 필드를 확인하세요.",
+        "mintedHeading": "생성된 링크",
+        "shortUrl": "단축 링크",
+        "waUrl": "WhatsApp 링크",
+        "qrAlt": "이 링크의 QR 코드"
+      }
+    }
+  }
+}

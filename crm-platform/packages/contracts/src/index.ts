@@ -91,6 +91,7 @@ export * from './leads';
 export * from './developer-rest-api-v1';
 export * from './outbound-webhooks';
 export * from './forms-builder';
+export * from './forms-links-groups';
 export * from './chrome-extension-sheets-addon';
 export * from './api-library';
 export * from './faq-knowledge';

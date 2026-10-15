@@ -35,6 +35,7 @@ import { PRIVACY_ERROR_CODES } from '../privacy/errors';
 import { GROWTH_ERROR_CODES } from '../growth';
 import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log';
 import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
+import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
 
 export const ERROR_CODES = {
   ...FAQ_ERROR_CODES,
@@ -44,6 +45,7 @@ export const ERROR_CODES = {
   ...PRIVACY_ERROR_CODES,
   ...AUDIT_LOG_ERROR_CODES,
   ...PQL_ERROR_CODES,
+  ...WFL_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
   ...CPN_ERROR_CODES,
