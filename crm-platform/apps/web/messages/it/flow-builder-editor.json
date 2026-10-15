@@ -1096,7 +1096,8 @@
             "ask": "Chiedi al cliente",
             "handoff": "Passa a un operatore",
             "logic": "Decidi",
-            "answer": "Risposta"
+            "answer": "Risposta",
+            "action": "Azioni"
           },
           "blockedTitle": "Pulsanti ed elenchi concludono un flow, quindi possono stare solo per ultimi.",
           "blockedTitleFaq": "Rispondi da FAQ ha due uscite, quindi può stare solo alla fine."
@@ -1112,7 +1113,21 @@
           "faqExits": {
             "matched": "Risposta data",
             "no_match": "Nessuna corrispondenza"
-          }
+          },
+          "close": "Chiudi",
+          "clickToEdit": "Clicca per modificare",
+          "outsideToSave": "Clicca ovunque all'esterno per salvare le modifiche",
+          "addCondition": "Aggiungi una condizione dopo questo passo",
+          "conditionLast": "Una condizione chiude questa parte, quindi può stare solo in fondo.",
+          "duplicateTitle": "Duplicare questo passo?",
+          "duplicateBody": "Una copia viene aggiunta subito dopo.",
+          "deleteTitle": "Eliminare questo passo?",
+          "deleteBody": "Il passo viene rimosso dal flusso.",
+          "stage": "Fase {stage}",
+          "storedIn": "I valori saranno salvati nella proprietà <b>{property}</b> del contatto",
+          "actions": "Azioni",
+          "actionsHint": "Aggiungi un passo che parte subito dopo questo.",
+          "actionsBlocked": "Un passo che chiude la sua parte non può avere altri passi dopo."
         },
         "editors": {
           "linkLabel": "Dove porta",
@@ -1810,6 +1825,42 @@
         "label": "Icona (facoltativo)",
         "add": "Aggiungi icona",
         "saveFirst": "Salva il bot una volta per aggiungere un'icona."
+      },
+      "buttonAction": {
+        "label": "Azione alla pressione del pulsante",
+        "kind": {
+          "none": "Vai al passo successivo",
+          "flow": "Collega flusso",
+          "live_agent": "Agente dal vivo",
+          "opt_in": "Iscrizione",
+          "opt_out": "Disiscrizione"
+        },
+        "pickFlow": "Scegli un flusso",
+        "loadingFlows": "Caricamento dei flussi…",
+        "flowMissing": "Flusso {id} (non trovato)",
+        "hint": {
+          "flow": "Avvia il flusso scelto per questo contatto e la conversazione prosegue lì. Dopo questo pulsante non si collega nulla.",
+          "live_agent": "Passa la conversazione al team che scegli. Dopo questo pulsante non si collega nulla.",
+          "opt_in": "Segna il contatto come iscritto ai messaggi di marketing, poi prosegue con il passo collegato dopo questo pulsante.",
+          "opt_out": "Segna il contatto come disiscritto dai messaggi di marketing, poi prosegue con il passo collegato dopo questo pulsante."
+        }
+      },
+      "messageTools": {
+        "format": "Formattazione del testo",
+        "bold": "Grassetto",
+        "italic": "Corsivo",
+        "strike": "Barrato",
+        "mono": "Monospazio",
+        "bullet": "Elenco puntato",
+        "numbered": "Elenco numerato",
+        "emoji": "Emoji",
+        "emojiSearch": "Cerca emoji",
+        "emojiNone": "Nessuna emoji trovata",
+        "variable": "Inserisci una variabile",
+        "variableSearch": "Cerca variabili",
+        "groupContact": "Proprietà del contatto",
+        "groupFlow": "Salvate in questo flusso",
+        "variableNone": "Nessuna variabile trovata"
       }
     },
     "contracts": {
@@ -2328,6 +2379,14 @@
         "faq": {
           "label": "Rispondi da FAQ",
           "help": "Confronta il messaggio del cliente con le tue FAQ. Termina questo flusso: un'uscita se una FAQ ha risposto, un'altra in caso contrario"
+        },
+        "apiLibrary": {
+          "label": "Chiamata API",
+          "help": "Chiama un'API dalla tua libreria di API"
+        },
+        "code": {
+          "label": "Funzione JS",
+          "help": "Esegui un piccolo pezzo di JavaScript"
         }
       },
       "typeLabel": {
@@ -2345,7 +2404,9 @@
         "assign": "Assegna a un operatore",
         "carousel": "Carosello",
         "condition": "Condizione",
-        "faq": "Rispondi da FAQ"
+        "faq": "Rispondi da FAQ",
+        "api_library": "Chiamata API",
+        "code": "Funzione JS"
       },
       "stepLabel": {
         "questionOf": "Domanda · {kind}"
@@ -2386,7 +2447,10 @@
         "carouselCards": "Passaggio {stage}: aggiungi almeno una scheda e dai un titolo a ogni scheda.",
         "carouselButtons": "Passaggio {stage}: dai un nome a ogni pulsante, e un link, un numero o un indirizzo dove apre qualcosa.",
         "conditionIncomplete": "Passaggio {stage}: completa le regole della condizione (una variabile e un valore in ciascuna).",
-        "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione del flusso."
+        "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione del flusso.",
+        "chooseFlow": "Passo {stage}: scegli il flusso che il pulsante avvia.",
+        "chooseApi": "Passo {stage}: scegli l'API da chiamare.",
+        "writeCode": "Passo {stage}: scrivi il codice da eseguire."
       },
       "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
     },
