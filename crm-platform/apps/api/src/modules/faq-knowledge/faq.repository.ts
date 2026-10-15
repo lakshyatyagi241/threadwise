@@ -189,6 +189,24 @@ export class FaqRepository {
     return r ? this.toEntry(r) : null;
   }
 
+  /** The same rows as `findById`, for many ids in one query (bulk actions), ordered by id. */
+  async findByIds(
+    tx: Tx,
+    orgId: number,
+    ids: readonly number[],
+    model: string,
+  ): Promise<EntryRow[]> {
+    if (ids.length === 0) return [];
+    const res = await tx.execute(sql`
+      SELECT ${this.cols()} FROM faqs f ${this.joins(model)}
+      WHERE f.org_id = ${orgId} AND f.id IN (${sql.join(
+        ids.map((id) => sql`${id}`),
+        sql`, `,
+      )})
+      ORDER BY f.id`);
+    return (res.rows as Raw[]).map((r) => this.toEntry(r));
+  }
+
   async stats(tx: Tx, orgId: number, flowId: number, model: string): Promise<FaqStatsRow> {
     const res = await tx.execute(sql`
       SELECT
