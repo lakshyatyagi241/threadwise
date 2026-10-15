@@ -36,7 +36,7 @@ pipeline {
     stage('Install & unit test') {
       steps {
         dir(env.CRM_DIR) {
-          sh '''
+          sh '''#!/usr/bin/env bash
             set -euo pipefail
             corepack enable
             corepack prepare pnpm@9.15.4 --activate
@@ -57,7 +57,7 @@ pipeline {
             env.IMAGE_TAG = sh(script: 'git rev-parse --short=8 HEAD', returnStdout: true).trim()
           }
           withCredentials([string(credentialsId: 'sentry-auth-token', variable: 'SENTRY_AUTH_TOKEN')]) {
-            sh '''
+            sh '''#!/usr/bin/env bash
               set -euo pipefail
               docker build -f apps/api/Dockerfile -t "desk-api:${IMAGE_TAG}" --build-arg GIT_SHA="${IMAGE_TAG}" .
               docker build -f apps/web/Dockerfile -t "desk-web:${IMAGE_TAG}" \
@@ -77,7 +77,7 @@ pipeline {
       // QA task 39 equivalent: a fixable HIGH/CRITICAL finding stops the release.
       // .trivyignore lives at the outer repo root, not under crm-platform/.
       steps {
-        sh '''
+        sh '''#!/usr/bin/env bash
           set -euo pipefail
           for image in "desk-api:${IMAGE_TAG}" "desk-web:${IMAGE_TAG}"; do
             docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD/.trivyignore:/.trivyignore:ro" \
@@ -95,7 +95,7 @@ pipeline {
             string(credentialsId: 'desk-deploy-host', variable: 'DEPLOY_HOST'),
             string(credentialsId: 'desk-deploy-known-hosts', variable: 'DEPLOY_KNOWN_HOSTS')
           ]) {
-            sh '''
+            sh '''#!/usr/bin/env bash
               set -euo pipefail
               install -m 700 -d "$HOME/.ssh"
               printf '%s\\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts_desk"
@@ -117,7 +117,7 @@ pipeline {
 
     stage('Smoke test') {
       steps {
-        sh '''
+        sh '''#!/usr/bin/env bash
           set -euo pipefail
           for i in $(seq 1 12); do
             code=$(curl -s -o /dev/null -w '%{http_code}' https://desk.wabo.ai/ready || true)
