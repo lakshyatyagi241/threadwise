@@ -1,7 +1,8 @@
 # Privacy and data governance: platform-wide design and audit
 
-Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); **BL-165 to BL-167 (consent at intake: policy, grants on contact writes, channel contacts through the contacts service, consent lines for the chat widget, booking page and stores) are built** (section 4.3.2); the rest is still design. Backlog: BL-140 to BL-153
-([backlog.md](../backlog.md) section O). Not legal advice: see section 10.
+Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); **BL-165 to BL-167 (consent at intake: policy, grants on contact writes, channel contacts through the contacts service, consent lines for the chat widget, booking page and stores) are built** (section 4.3.2); the rest is still design. **BL-172 to BL-181 (Compliance center v1: regime profiles, officer contacts, sub-processor list, terms and privacy
+links, quiet hours and calling windows stored, checklist) are section 11.** Backlog: BL-140 to BL-153
+([backlog.md](../backlog.md) section O), BL-172 to BL-181 (section Q). Not legal advice: see section 10.
 
 ## How to read the evidence
 
@@ -523,3 +524,117 @@ Needs a lawyer before relying on it:
 10. Cookie law (which categories need prior consent) and the proof standard for cookie and terms acceptance.
 11. Backup retention disclosure wording and whether "put beyond use" is accepted for the 12-month off-site copies.
 12. Enforceability of the end-customer DSAR verification method.
+
+## 11. Compliance center and regime profiles (BL-172 to BL-181)
+
+Status: **design (this section) and first build (Compliance center v1)**. What is built and what is open is in 11.6, kept in step with the
+code. The words in the product are always "tools to help you comply": nothing here is, or says, that a workspace is compliant.
+
+### 11.1 Decision (owner, 15 Oct 2026)
+
+The product is **global with no signup restriction**: anyone, anywhere, can open a workspace. So we do not build per-country versions.
+We build one **strict superset baseline** that every workspace gets, and **regime profiles** that switch on the extras a particular law asks
+for.
+
+1. **Baseline for every workspace** (11.2): lawful basis and purpose recorded, real consent with easy withdrawal, versioned notices,
+   data-subject rights, retention and deletion with legal holds, security and a breach runbook, a sub-processor list and a DPA template,
+   a children flag. A workspace in a country with no privacy law still gets all of it.
+2. **Regime profiles are workspace settings** (11.3), not code forks. A profile switches on extras (an officer contact, a bilingual notice,
+   an opt-out notice, quiet hours, a DND hook) and raises the bar of the checklist. **Several profiles can be on at once, and the strictest
+   rule wins** (11.4).
+3. **The regime is suggested, never imposed.** The workspace's billing country (the latest paid order) or, when there is none, the country
+   given at onboarding suggests profiles; a person with `settings.compliance.manage` accepts, changes or ignores the suggestion. A
+   workspace that sells into other countries turns on more profiles by hand.
+4. **HIPAA is not claimed and not supported.** We say so in onboarding and in the terms text ("do not store protected health information"),
+   and 11.7 lists what would be needed. **SOC 2 and ISO 27001 are out of scope** (section 8.3 stands).
+5. The roles of section 8.1 stand: the workspace is the controller (DPDP: data fiduciary) for its contacts, we are the processor. The
+   Compliance center helps the workspace carry its duties; it does not carry them for it.
+
+### 11.2 The baseline (every workspace)
+
+| #   | Baseline point                          | What carries it                                                                                                                                                                                     |
+| --- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| B1  | Lawful basis and purpose recorded       | the purpose registry (4.3.1) and the ledger, which keeps source, wording, version and time of every grant (4.3.2)                                                                                   |
+| B2  | Real consent, easy withdrawal           | STOP / START keywords, the email unsubscribe link, the switch "require recorded consent" (Settings, Consent); a first inbound message never creates a grant                                         |
+| B3  | Versioned notices                       | `consent_notices` (append-only versions) for the widget, booking pages, stores and the workspace default notice; the form builder's consent line keeps its version                                  |
+| B4  | Data-subject rights                     | `privacy_requests` (access, export, erasure, rectification, restriction, objection, portability, withdrawal) with identity check, deadline and proof                                                |
+| B5  | Retention and deletion with legal holds | recording retention and hold (BL-144), legal hold on a request; the general retention engine is open (BL-146)                                                                                       |
+| B6  | Security and a breach runbook           | forced RLS, AES-GCM secrets, audit log; [breach-response-runbook.md](../privacy/breach-response-runbook.md) (skeleton, owner and counsel complete it)                                               |
+| B7  | Sub-processor list and DPA template     | the workspace's editable list (Compliance center), the platform register ([subprocessor-register.md](../privacy/subprocessor-register.md)), [dpa-template.md](../privacy/dpa-template.md)           |
+| B8  | Children flag                           | `children_policy` on the workspace: not answered, "we do not knowingly process minors", or "minors may be included" (which asks for the strictest rules)                                           |
+| B9  | A privacy contact and published links   | the DPO / privacy contact block, and the workspace privacy and terms links offered to every consent line                                                                                            |
+
+### 11.3 Regime profiles: what each one switches on
+
+`generic` is the baseline alone. A profile never lowers the baseline. "Needs counsel" applies to every number and obligation in this table:
+it states design intent, not legal advice (section 10).
+
+| Profile   | Suggested for        | Extras it switches on in the Compliance center                                                                                                                                              | Answer time for a person's request | Marketing consent                  | Quiet hours / calling window (defaults offered) | Breach clock (documented, not automated)  |
+| --------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ---------------------------------- | ----------------------------------------------- | ----------------------------------------- |
+| `gdpr_eu` | EU and EEA countries | a DPO or privacy contact is required on the checklist; sub-processor list with locations; cookies before consent noted; minors under 16 (member states 13 to 16) flag                      | 30 days                            | opt-in                             | none statutory                                  | 72 hours to the authority                 |
+| `uk_gdpr` | United Kingdom       | as `gdpr_eu`, plus PECR (opt-in for electronic marketing); minors under 13                                                                                                                  | 30 days                            | opt-in                             | none statutory                                  | 72 hours to the ICO                       |
+| `dpdp_in` | India                | **grievance officer** (name and contact) required; **notice in English and one Indian language**; **parental consent flag** for minors under 18; **consent manager placeholder** (name, link; no integration) | 30 days (inferred, not fixed)      | opt-in, withdrawable               | none beyond `trai_in`                           | Board and affected persons (CERT-In 6 h) |
+| `ccpa_us` | United States        | **Do Not Sell or Share** switch and **opt-out notice** link; notice at collection; right to limit sensitive data noted                                                                      | 45 days                            | opt-out (opt-in under 16 for sale) | none                                            | per state law                             |
+| `tcpa_us` | United States        | **quiet hours** 21:00 to 08:00 and **calling window** 08:00 to 21:00 (the contact's local time; see 11.5); **DNC list hook**; prior express written consent for marketing calls and texts   | n/a                                | opt-in (written)                   | quiet 21:00 to 08:00, calling 08:00 to 21:00    | n/a                                       |
+| `trai_in` | India                | **quiet hours** 21:00 to 09:00 and **calling window** 09:00 to 21:00; **DND (NDNC) hook**; DLT registration for SMS noted                                                                   | n/a                                | opt-in                             | quiet 21:00 to 09:00, calling 09:00 to 21:00    | CERT-In 6 hours                           |
+| `lgpd_br` | Brazil               | a DPO (encarregado) contact on the checklist; legal basis named per purpose; minors' best interest flag                                                                                    | 15 days                            | opt-in                             | none statutory                                  | "reasonable time" to the ANPD             |
+| `pdpa_sg` | Singapore            | a DPO contact required; Do Not Call registry hook for calls and texts                                                                                                                       | 30 days                            | opt-in                             | none statutory                                  | 3 days to the PDPC when notifiable        |
+| `generic` | every other country  | nothing extra                                                                                                                                                                               | 30 days                            | opt-in recommended                 | none                                            | n/a                                       |
+
+Country to suggestion (`suggestRegimes`, pure code in `@crm/contracts`): the 27 EU states and Iceland, Liechtenstein, Norway: `gdpr_eu`;
+GB: `uk_gdpr`; IN: `dpdp_in` and `trai_in`; US: `ccpa_us` and `tcpa_us`; BR: `lgpd_br`; SG: `pdpa_sg`; anything else: `generic`.
+
+### 11.4 "The strictest wins": how profiles combine
+
+`effectivePolicy(profiles)` (pure, tested) merges the switched-on profiles:
+
+- **Marketing consent**: opt-in as soon as any profile asks for it (every profile above except `ccpa_us` alone). The Compliance center shows
+  a hint and a link to the Consent settings; it does **not** flip the workspace switch for you (that would change sending without asking).
+- **Answer time for requests**: the smallest number of days. The checklist compares it with the days set in Data requests.
+- **Quiet hours and calling window**: the narrowest allowed window (latest start, earliest end) over the profiles that have one.
+- **Minimum age** treated as a minor: the highest of the profiles' ages (18 when `dpdp_in` is on).
+- **Extras**: the union. A requirement of any profile that is on appears on the checklist.
+
+A profile that is switched off adds nothing, and nothing is switched on without a person confirming the choice (`regimes_confirmed_at`).
+
+### 11.5 Quiet hours, calling windows, DND hooks
+
+Stored per workspace: quiet hours for messages, a calling window and days for calls, the time zone they are read in (default: the
+workspace's), and a DND registry choice (`none`, `trai_ndnc`, `us_dnc`, `sg_dnc`, `custom`). **Enforcement is a follow-up (BL-177), on
+purpose.** The ConsentGate answers allow or deny for one send; a quiet hour needs a third answer, **defer until the window opens**, and a
+dispatcher that holds the message and sends it later. A deny would silently drop a broadcast scheduled for 22:00. Until that exists the
+pure helper `isInsideWindow` is tested and the checklist shows "stored, not enforced". Two further limits: the window should be read in
+the **contact's** time zone (the ledger has no contact time zone yet), and a DND check needs a registry feed we do not have (the hook is a
+setting and a design, no integration).
+
+### 11.6 Built and open
+
+| Id     | Item                                                                                                                                                                                              | State                                              |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| BL-172 | Regime profiles and the country suggestion; DPO and grievance officer contacts; children flag; DPDP, CCPA and DND settings (`compliance_settings`)                                                | built (v1)                                         |
+| BL-173 | Sub-processor list (admin-editable) with an optional public page `/trust/<workspace>`, and the DPA template download                                                                             | built (v1)                                         |
+| BL-174 | Compliance checklist: each baseline point and each switched-on profile requirement as built, partial or open, from real workspace data                                                            | built (v1)                                         |
+| BL-175 | Privacy and terms links per workspace, offered to the form builder consent block and the consent-notice editor; optional `termsUrl` beside `privacyUrl`                                           | built (v1)                                         |
+| BL-176 | Quiet hours and calling windows stored, with the pure window helper                                                                                                                               | built (v1); enforcement is BL-177                  |
+| BL-177 | Enforce quiet hours and calling windows (defer, not deny) in the dispatcher, per contact time zone; DND registry check                                                                            | open                                               |
+| BL-178 | HIPAA: the "do not store protected health information" notice in onboarding and the Compliance center; [hipaa-not-supported.md](../privacy/hipaa-not-supported.md)                                | built (notice, doc); the terms text is the owner's |
+| BL-179 | Workspace default notice in English and one more language (`consent_notices`, scope `workspace`), offered to forms and the notice editor                                                          | built (v1)                                         |
+| BL-180 | Contact-level extras: a minor tag per contact (the gate's `subject_minor`), parental-consent evidence, a per-contact "do not sell or share" opt-out, honouring the Global Privacy Control signal | open                                               |
+| BL-181 | The integrations the placeholders stand for: a DPDP consent manager, a DNC / NDNC registry feed, a breach-notification workflow, the platform sub-processor register inside the app             | open (needs owner decisions and counsel)           |
+
+### 11.7 HIPAA: not supported
+
+We do not sign a Business Associate Agreement, we do not claim HIPAA, and workspaces must not store protected health information (PHI) in
+the product. The notice is shown in onboarding and in the Compliance center, and the owner adds the clause to the terms (suggested wording
+in [hipaa-not-supported.md](../privacy/hipaa-not-supported.md), together with what would be needed: a BAA, access controls and minimum
+necessary, audit trails, encryption in transit and at rest, breach notification, vendor BAAs).
+
+### 11.8 Decisions for the owner (from this section)
+
+| #   | Decision                                                                                                              | Recommendation                                                  |
+| --- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| D13 | Should accepting a regime profile change the Consent switch ("require recorded consent") by itself?                    | No (today a hint and a link); a silent change would stop sends  |
+| D14 | Enforce quiet hours by deferring, which needs a "held until" state in the dispatcher and a contact time zone (BL-177)  | Yes, after the contact time zone exists; never as a deny        |
+| D15 | A public `/trust/<workspace>` page for the sub-processor list                                                          | Off by default, a switch per workspace (built so)               |
+| D16 | The platform's own sub-processor register in the app (read-only) next to the workspace list                            | Yes once the owner fills the TODO columns of the register       |
+| D17 | Add the "no PHI" clause to the platform terms and the signup checkbox text                                             | Yes; the wording in the HIPAA note is a draft for counsel       |
