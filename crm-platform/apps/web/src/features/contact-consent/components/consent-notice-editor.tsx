@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   CONSENT_NOTICE_TEXT_MAX,
   INTAKE_CHANNELS,
@@ -71,15 +71,18 @@ export function ConsentNoticeEditor({
   const locale = useLocale();
   const [error, setError] = useState<unknown>(null);
 
-  useEffect(() => {
-    if (!q.data) return;
+  // The form fields restart from the saved notice whenever it loads or changes (a save, a refetch): adjusted while rendering, keyed on
+  // the notice object, instead of in an effect that would paint one frame of stale fields first.
+  const [syncedFrom, setSyncedFrom] = useState<typeof q.data>(undefined);
+  if (q.data && q.data !== syncedFrom) {
+    setSyncedFrom(q.data);
     setEnabled(q.data.enabled);
     setText(q.data.text);
     setUrl(q.data.url ?? '');
     setTermsUrl(q.data.termsUrl ?? '');
     setWhatsapp(q.data.channels.includes('whatsapp'));
     setChannels(effectiveChannels(q.data.channels));
-  }, [q.data]);
+  }
 
   const save = useMutation({
     mutationFn: () =>

@@ -17,7 +17,8 @@ import { ApiError } from '@/lib/api/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { flowsApi } from '../api/flows';
-import { useMsg, type Msg } from '../lib/msg';
+import { useFlb, useMsg, type Msg } from '../lib/msg';
+import { nodeLabel } from '../lib/contract-text';
 import { validateGraph } from '../lib/validation-text';
 import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
@@ -168,6 +169,7 @@ function BuilderInner({
 }: InnerProps) {
   const tb = useTranslations('flb.builder.shell.screen');
   const tw = useTranslations('flb.builder.webBot');
+  const tf = useFlb();
   const seed = useMemo<CanvasState>(
     () => ({
       nodes: initial?.graph.flowNodes ?? [],
@@ -397,6 +399,16 @@ function BuilderInner({
     return ctx.senders.chat.length > 0;
   }, [mode, ctx.senders]);
 
+  /** Select a node and bring it to the middle of the canvas. */
+  const focusNode = (id: string) => {
+    const n = state.nodes.find((x) => x.id === id);
+    const el = wrapperRef.current;
+    setSelectedId(id);
+    if (!n || !el) return;
+    const r = el.getBoundingClientRect();
+    setPan({ x: r.width / 2 - (n.x + NODE_W / 2) * zoom, y: r.height / 2 - (n.y + 60) * zoom });
+  };
+
   const runValidation = (): boolean => {
     const r = validateGraph(state.nodes, state.edges, { mode, senderAvailable });
     if (r.ok) {
@@ -404,7 +416,7 @@ function BuilderInner({
       return true;
     }
     setVres({ edges: state.edges, ids: new Set(r.badNodeIds), items: r.items.map(m), popup: true });
-    if (r.badNodeIds[0]) setSelectedId(r.badNodeIds[0]);
+    if (r.badNodeIds[0]) focusNode(r.badNodeIds[0]);
     return false;
   };
 
@@ -815,6 +827,11 @@ function BuilderInner({
         {validationItems ? (
           <ValidationPopup
             items={validationItems}
+            nodes={[...invalid].flatMap((id) => {
+              const n = state.nodes.find((x) => x.id === id);
+              return n ? [{ id, label: nodeLabel(tf, n.type) }] : [];
+            })}
+            onGoTo={focusNode}
             onClose={() => setVres((v) => (v ? { ...v, popup: false } : v))}
           />
         ) : null}
