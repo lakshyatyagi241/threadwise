@@ -106,7 +106,7 @@ export const registrationConfigResponseSchema = z.object({
   social: z.object({ google: z.boolean(), facebook: z.boolean() }),
   defaultCountryIso: z.string().length(2).nullable(),
   authPages: z.object({
-    variant: z.number().int().min(1).max(5),
+    variant: z.number().int().min(1).max(6),
     login: authPageContentSchema,
     register: authPageContentSchema,
     forgot: authPageContentSchema,

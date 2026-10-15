@@ -100,9 +100,14 @@
   color-scheme: dark;
 }
 
-/* The page behind the scope (overscroll, short pages) takes the paper colour too. */
+/*
+ * The page behind the scope (overscroll, short pages) takes the paper colour too, and never scrolls
+ * sideways: design 6's blurred corner blobs sit outside their own box on purpose (the glow bleeds past
+ * the card) and must not widen the document.
+ */
 html:has(.auth-scope) {
   background: #f7f6ff;
+  overflow-x: hidden;
 }
 html[data-theme='dark']:has(.auth-scope) {
   background: #0d0b2e;
@@ -181,6 +186,156 @@ html[data-theme='dark']:has(.auth-scope) {
   .auth-scope .auth-aurora {
     animation: none;
   }
+}
+
+/*
+ * Design 6 ("Geta split"): Geta's own brand, not the shared WhatsApp-green palette the other five
+ * designs use. Colours and the dot-grid/orb/shape measurements are taken from Geta's own production
+ * login and sign-up pages, reproduced here in our own markup and CSS (no asset or code copied).
+ */
+.auth-scope .auth-geta-page {
+  --auth-geta-primary: #3214db;
+  --auth-geta-violet: #7c3aed;
+  --auth-geta-ink: #0d0b2e;
+  background: #f0efff;
+}
+
+.auth-scope .auth-geta-blob {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: auth-geta-blob-drift 11s ease-in-out infinite;
+}
+.auth-scope .auth-geta-blob--slow {
+  animation-duration: 15s;
+  animation-delay: -5s;
+}
+.auth-scope .auth-geta-blob--rev {
+  animation-direction: reverse;
+}
+@keyframes auth-geta-blob-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(16px, -12px) scale(1.06);
+  }
+}
+
+/* The dotted texture over the dark panel. */
+.auth-scope .auth-geta-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.35) 1px, transparent 1px);
+  background-size: 35px 35px;
+  pointer-events: none;
+}
+
+/* The soft gradient circle anchored to the panel's bottom-right corner. */
+.auth-scope .auth-geta-orb {
+  position: absolute;
+  border-radius: 9999px;
+  background: linear-gradient(to top left, #4539a0, #6d28d9, #7c3aed);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.auth-scope .auth-geta-shape {
+  animation: auth-geta-shape-drift 9s ease-in-out infinite;
+}
+.auth-scope .auth-geta-shape--slow {
+  animation-duration: 13s;
+  animation-delay: -3s;
+}
+.auth-scope .auth-geta-shape--fast {
+  animation-duration: 7s;
+  animation-delay: -1.5s;
+}
+@keyframes auth-geta-shape-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(var(--geta-rot, 45deg));
+  }
+  50% {
+    transform: translate(-6px, 8px) rotate(calc(var(--geta-rot, 45deg) + 10deg));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth-scope .auth-geta-blob,
+  .auth-scope .auth-geta-shape {
+    animation: none;
+  }
+}
+
+/* The primary call-to-action inside design 6 uses Geta's own indigo-to-violet gradient. */
+.auth-scope .auth-geta-card button[type='submit'] {
+  background-image: linear-gradient(to right, var(--auth-geta-primary), var(--auth-geta-violet));
+  background-color: transparent;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px -8px rgb(50 20 219 / 0.35);
+}
+.auth-scope .auth-geta-card button[type='submit']:hover {
+  filter: brightness(1.05);
+}
+.auth-scope .auth-geta-card h2 {
+  font-family: var(--font-sans);
+}
+.auth-scope .auth-geta-card h2 span {
+  font-style: normal !important;
+  color: inherit !important;
+}
+
+/*
+ * Geta's brand has no dark variant: the card keeps its own light palette regardless of the viewer's
+ * light/dark toggle, so text and field borders never flip to the (invisible-on-white) dark-mode ink
+ * scale. Same specificity as `[data-theme='dark'] .auth-scope`; declared after it, so this wins.
+ */
+.auth-scope .auth-geta-card {
+  --background: #ffffff;
+  --foreground: #0d0b2e;
+  --muted: #f5f3ec;
+  --muted-foreground: #6b807c;
+  --border: #e5dfd0;
+  --primary: var(--auth-geta-primary);
+  --primary-foreground: #ffffff;
+  --danger: #a1431f;
+  --danger-foreground: #ffffff;
+  --auth-ink-300: #c3ccc9;
+  --auth-ink-400: #9aa8a4;
+  --auth-ink-500: #6b807c;
+  --auth-ink-600: #3a5a55;
+  --auth-ink-700: #1f4540;
+  --auth-ink-800: #13312d;
+  --auth-ink-900: #0d0b2e;
+  --auth-paper-0: #ffffff;
+  --auth-paper-50: #f5f3ec;
+  --auth-paper-100: #efebe0;
+  --auth-paper-200: #e5dfd0;
+  --auth-link: var(--auth-geta-primary);
+  color: var(--foreground);
+  color-scheme: light;
+}
+
+/* Tighter vertical rhythm: the sign-up step has more fields than the other designs budget room for. */
+.auth-scope .auth-geta-card header {
+  margin-bottom: 0.625rem;
+}
+.auth-scope .auth-geta-card .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.5rem;
+}
+.auth-scope .auth-geta-card .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.4rem;
+}
+.auth-scope .auth-geta-card .space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.3rem;
+}
+.auth-scope .auth-geta-card [class*='mb-3'] {
+  margin-bottom: 0.5rem;
+}
+.auth-scope .auth-geta-card input {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 /* Country flags in the phone picker (flag-icons ships the SVG files). */

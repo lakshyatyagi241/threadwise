@@ -35,8 +35,8 @@ function shell(variant: number, over: Record<string, unknown> = {}, locale: 'en'
 
 const at = (html: string, needle: string) => html.indexOf(needle);
 
-describe('the five guest designs', () => {
-  it.each([1, 2, 3, 4, 5])(
+describe('the six guest designs', () => {
+  it.each([1, 2, 3, 4, 5, 6])(
     'design %i carries the form title inside the form column or card',
     (v) => {
       const html = shell(v);
@@ -127,6 +127,36 @@ describe('the five guest designs', () => {
     expect(html).toContain('backdrop-blur-xl');
   });
 
+  it('design 6 is the Geta split: a 540 px form column on the left, the pitch and stats on an indigo panel on the right', () => {
+    const html = shell(6);
+    expect(html).toContain('lg:grid-cols-[540px_1fr]');
+    expect(html).toContain('auth-geta');
+    expect(html).toContain('MARKETING EYEBROW');
+    expect(html).toContain('Marketing heading');
+    expect(html).toContain('Marketing sub copy');
+    // The brand mark sits in the form column, not gated to small screens only.
+    expect(at(html, 'Acme')).toBeLessThan(at(html, 'FORM BODY'));
+    expect(html).not.toContain('lg:hidden');
+  });
+
+  it('design 6 shows the three stat rows on sign-in but not on forgot password', () => {
+    const login = shell(6);
+    expect(login).toContain('auth-geta-shape');
+    expect(login).toContain('10K+');
+
+    const forgot = renderGuest(
+      createElement(AuthShell, {
+        variant: 6,
+        page: 'forgot',
+        content,
+        appName: 'Acme',
+        header,
+        children: createElement('form'),
+      }),
+    );
+    expect(forgot).not.toContain('10K+');
+  });
+
   it('an unknown design number renders the split showcase', () => {
     expect(shell(0)).toContain('lg:grid-cols-[1fr_540px]');
     expect(shell(9)).toContain('lg:grid-cols-[1fr_540px]');
@@ -141,7 +171,7 @@ describe('the five guest designs', () => {
       accent: 'accent',
       subheading: 'Panel sub',
     };
-    for (const v of [1, 2, 3, 4, 5]) {
+    for (const v of [1, 2, 3, 4, 5, 6]) {
       const html = shell(v, { fixedPanel: panel });
       expect(html, `design ${v}`).toContain('lg:grid-cols-[1fr_540px]');
       expect(html).toContain('Panel heading');
