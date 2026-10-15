@@ -145,8 +145,6 @@ export class WabooMigrationService {
         sourceClient: client,
         organizationId: input.organizationId,
         confirmClient: input.confirm,
-        latestDry: await latestDryOf(tx, client),
-        now,
       });
       if (blocked === 'confirm')
         throw new AppError(
@@ -154,12 +152,6 @@ export class WabooMigrationService {
           'Type the organization id to confirm a load.',
           HttpStatus.UNPROCESSABLE_ENTITY,
           [{ path: 'confirm', message: 'Must equal the organization id' }],
-        );
-      if (blocked === 'dry')
-        throw new AppError(
-          ERROR_CODES.WMIG_DRY_RUN_REQUIRED,
-          'A load needs a green dry run for this organization from the last 24 hours.',
-          HttpStatus.UNPROCESSABLE_ENTITY,
         );
 
       let row: RunRow | undefined;
@@ -269,23 +261,9 @@ export class WabooMigrationService {
       );
 
     const batchUuid = await this.store.tx(async (tx) => {
-      const missing: string[] = [];
-      for (const it of plan.items) {
+      // No dry-run gate: every load starts with its own rehearsal and stops before writing when it is not clean.
+      for (const it of plan.items)
         await this.assertNoCollision(tx, it.sourceClient, it.organizationId);
-        // Enqueue-time gate: every organization needs a green dry run from the last 24 hours. The worker checks again at start.
-        if (
-          input.mode === 'load' &&
-          dryReadiness(await latestDryOf(tx, it.sourceClient), now) !== 'ok'
-        )
-          missing.push(it.organizationId);
-      }
-      if (missing.length > 0)
-        throw new AppError(
-          ERROR_CODES.WMIG_DRY_RUN_REQUIRED,
-          'A load needs a green dry run from the last 24 hours for every organization.',
-          HttpStatus.UNPROCESSABLE_ENTITY,
-          missing.map((m) => ({ path: 'organizationIds', message: m })),
-        );
       const b = await tx.execute(sql`
         INSERT INTO waboo_migration_batches (mode, run_at, stop_on_failure, total_count, created_by)
         VALUES (${input.mode}, ${input.runAt ?? null}::timestamptz, ${input.stopOnFailure}, ${plan.items.length}, ${operatorId})

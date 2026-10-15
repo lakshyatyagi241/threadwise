@@ -8,13 +8,13 @@ import {
   wabooMigrationBatchDetailSchema,
   type WabooMigrationBatchDetail,
 } from '@crm/contracts';
-import { Alert, Badge, Button, Checkbox, Field, Input, Modal, Textarea } from '@crm/ui';
+import { Alert, Button, Checkbox, Field, Input, Modal, Textarea } from '@crm/ui';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { errorKind } from './lib/errors';
 import { parseOrgIds } from './lib/org-ids';
 import { localToIso, runAtProblem } from './lib/run-at';
-import { BATCHES_QUERY_KEY, READINESS_KEY, useReadiness } from './queries';
+import { BATCHES_QUERY_KEY } from './queries';
 import { RunAtField } from './run-at-field';
 
 const NS = 'waboo-migration.bulk';
@@ -28,7 +28,6 @@ export function BulkForm({ onStarted }: { onStarted: (batch: WabooMigrationBatch
   const t = useTranslations(NS);
   const tc = useTranslations('waboo-migration.bulkConfirm');
   const te = useTranslations('waboo-migration.common.errors');
-  const tr = useTranslations('waboo-migration.readiness');
   const toast = useToast();
   const qc = useQueryClient();
   const id = useId();
@@ -42,10 +41,8 @@ export function BulkForm({ onStarted }: { onStarted: (batch: WabooMigrationBatch
   const parsed = useMemo(() => parseOrgIds(text), [text]);
   const scheduleBad = runAtProblem(runAt, new Date()) !== null;
   const valid = parsed.ok && !scheduleBad;
-  const readiness = useReadiness(parsed.ok ? parsed.ids : []);
-  const rows = readiness.data?.data ?? [];
-  const notReady = rows.filter((r) => !r.canLoad);
-  const canLoad = valid && rows.length === parsed.ids.length && notReady.length === 0;
+  // no earlier dry run is needed: every organization starts with its own full rehearsal and loads nothing when that is not clean
+  const canLoad = valid;
 
   const start = useMutation({
     mutationFn: (mode: 'dry' | 'load') =>
@@ -65,10 +62,7 @@ export function BulkForm({ onStarted }: { onStarted: (batch: WabooMigrationBatch
       setConfirming(false);
       setTyped('');
       toast.success(runAt ? t('scheduled') : t('queued'));
-      await Promise.all([
-        qc.invalidateQueries({ queryKey: BATCHES_QUERY_KEY }),
-        qc.invalidateQueries({ queryKey: READINESS_KEY }),
-      ]);
+      await Promise.all([qc.invalidateQueries({ queryKey: BATCHES_QUERY_KEY })]);
       onStarted(batch);
     },
     onError: (err) => setProblem(te(errorKind(err))),
@@ -121,19 +115,6 @@ export function BulkForm({ onStarted }: { onStarted: (batch: WabooMigrationBatch
         </div>
       </div>
       <p className="text-xs text-muted-foreground">{t('sequential')}</p>
-      {parsed.ok && rows.length > 0 && notReady.length > 0 && (
-        <Alert tone="info" className="space-y-1">
-          <p>{t('notReady', { count: notReady.length })}</p>
-          <ul className="space-y-1 text-xs">
-            {notReady.slice(0, 10).map((r) => (
-              <li key={r.organizationId} className="flex flex-wrap items-center gap-2">
-                <span className="font-mono">{r.organizationId}</span>
-                <Badge>{tr(r.reason as 'no_dry' | 'not_green' | 'stale')}</Badge>
-              </li>
-            ))}
-          </ul>
-        </Alert>
-      )}
       {problem && !confirming && <Alert tone="danger">{problem}</Alert>}
       <div className="flex flex-wrap items-center gap-3">
         <Button onClick={() => start.mutate('dry')} disabled={!valid || busy}>
