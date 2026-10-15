@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import { cookieNames, setSessionCookies, REMEMBER_COOKIE, type SessionKind } from './cookies';
 import { clientIpFrom } from './client-ip';
 import { apiBase, refreshTokens } from './server';
+import { isUpstreamTimeout, upstreamFetch } from './upstream';
 
 const FORWARD_REQUEST = [
   'content-type',
@@ -122,10 +123,21 @@ export async function proxyRequest(req: Request, path: string[], kind: SessionKi
     const ip = clientIpFrom(req.headers);
     if (ip) headers.set('x-forwarded-for', ip);
     if (token) headers.set('authorization', `Bearer ${token}`);
-    return fetch(target, { method: req.method, headers, body, cache: 'no-store' });
+    return upstreamFetch(target, { method: req.method, headers, body, cache: 'no-store' });
   };
 
-  let upstream = await call(store.get(names.access)?.value);
+  // The API being down or silent is an answer the browser can act on (retry, show a banner), not an unhandled 500 or a hang.
+  const unavailable = (e: unknown) =>
+    isUpstreamTimeout(e)
+      ? problem(504, 'UPSTREAM_TIMEOUT', 'The service took too long to answer')
+      : problem(502, 'UPSTREAM_UNAVAILABLE', 'The service is unavailable');
+
+  let upstream: Response;
+  try {
+    upstream = await call(store.get(names.access)?.value);
+  } catch (e) {
+    return unavailable(e);
+  }
   if (upstream.status === 401) {
     const rt = store.get(names.refresh)?.value;
     const tokens = rt ? await refreshTokens(rt, kind) : null;
@@ -134,7 +146,11 @@ export async function proxyRequest(req: Request, path: string[], kind: SessionKi
         kind,
         remember: store.get(REMEMBER_COOKIE)?.value === '1',
       });
-      upstream = await call(tokens.accessToken);
+      try {
+        upstream = await call(tokens.accessToken);
+      } catch (e) {
+        return unavailable(e);
+      }
     }
   }
   const headers = new Headers();
