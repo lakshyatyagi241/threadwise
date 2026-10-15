@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { ContactPrivacy } from './privacy';
 
 /** Channels a consent is recorded for. WhatsApp Cloud and the QR number are one phone, so one consent: `whatsapp`. */
 export const CONSENT_CHANNELS = [
@@ -159,6 +160,8 @@ export interface ContactConsent {
   optedOut: boolean;
   states: ConsentStateRow[];
   events: ConsentEvent[];
+  /** The minor and Do Not Sell or Share flags of the contact (BL-180). */
+  privacy: ContactPrivacy;
 }
 
 /** Evidence keys a caller may supply, per source. Anything else is dropped; the values are short strings. */
@@ -185,6 +188,9 @@ export const CONSENT_EVIDENCE_KEYS = [
   'leadSourceId',
   'leadFormId',
   'adId',
+  // Minors (BL-180): a REFERENCE to how a parent or guardian agreed (a signed form number, a document id). Evidence of the agreement
+  // only: it never makes a marketing grant by itself and is never a name or free text about the guardian.
+  'guardianConsentRef',
 ] as const;
 
 export const recordConsentSchema = z.object({
