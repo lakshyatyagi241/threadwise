@@ -1394,6 +1394,19 @@
         "selectAll": "Select All",
         "reorder": "Drag to re-order columns",
         "remove": "Remove {name}"
+      },
+      "presets": {
+        "myContacts": "My contacts",
+        "newThisWeek": "New this week",
+        "newLastWeek": "New last week",
+        "recentlyCreated": "Recently created",
+        "recentlyModified": "Recently modified",
+        "recentlyImported": "Recently imported",
+        "neverContacted": "Never contacted",
+        "needsFollowUp": "Needs follow-up",
+        "active": "Active",
+        "inactive": "Inactive",
+        "unsubscribed": "Unsubscribed"
       }
     },
     "erase": {

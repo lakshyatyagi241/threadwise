@@ -1394,6 +1394,19 @@
         "selectAll": "すべて選択",
         "reorder": "ドラッグして列の順序を変更",
         "remove": "{name} を削除"
+      },
+      "presets": {
+        "myContacts": "自分の連絡先",
+        "newThisWeek": "今週の新規",
+        "newLastWeek": "先週の新規",
+        "recentlyCreated": "最近作成",
+        "recentlyModified": "最近更新",
+        "recentlyImported": "最近インポート",
+        "neverContacted": "未連絡",
+        "needsFollowUp": "要フォローアップ",
+        "active": "アクティブ",
+        "inactive": "非アクティブ",
+        "unsubscribed": "配信停止"
       }
     },
     "erase": {

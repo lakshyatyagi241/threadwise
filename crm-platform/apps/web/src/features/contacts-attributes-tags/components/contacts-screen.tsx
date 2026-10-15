@@ -53,6 +53,7 @@ import { displayName } from '../lib/contact-model';
 import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
+import { presetFilters, type PresetView } from '../lib/preset-views';
 import { filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
 import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
@@ -153,6 +154,17 @@ export function ContactsScreen() {
     router.replace(`${pathname}${withView(filtersToSearch(next, sizeDefault), view?.id ?? '')}`, {
       scroll: false,
     });
+  };
+
+  /** A built-in view: the filters it stands for, on top of the defaults, with no saved view open. */
+  const selectPreset = (preset: PresetView) => {
+    appliedView.current = '';
+    const next = {
+      ...DEFAULT_FILTERS,
+      limit: sizeDefault,
+      ...presetFilters(preset, session.user.id),
+    };
+    router.replace(`${pathname}${filtersToSearch(next, sizeDefault)}`, { scroll: false });
   };
 
   /**
@@ -698,6 +710,8 @@ export function ContactsScreen() {
               columnIds={columns.map((c) => c.id)}
               keepsColumns={savedViewCols !== null}
               onSelect={selectView}
+              onPreset={selectPreset}
+              meId={session.user.id}
               can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
             />
           )}

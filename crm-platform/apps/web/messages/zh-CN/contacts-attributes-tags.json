@@ -1394,6 +1394,19 @@
         "selectAll": "全选",
         "reorder": "拖动以重新排序列",
         "remove": "移除 {name}"
+      },
+      "presets": {
+        "myContacts": "我的联系人",
+        "newThisWeek": "本周新增",
+        "newLastWeek": "上周新增",
+        "recentlyCreated": "最近创建",
+        "recentlyModified": "最近修改",
+        "recentlyImported": "最近导入",
+        "neverContacted": "从未联系",
+        "needsFollowUp": "需要跟进",
+        "active": "活跃",
+        "inactive": "不活跃",
+        "unsubscribed": "已退订"
       }
     },
     "erase": {

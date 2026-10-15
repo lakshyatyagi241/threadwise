@@ -1394,6 +1394,19 @@
         "selectAll": "Выбрать все",
         "reorder": "Перетащите, чтобы изменить порядок столбцов",
         "remove": "Удалить {name}"
+      },
+      "presets": {
+        "myContacts": "Мои контакты",
+        "newThisWeek": "Новые на этой неделе",
+        "newLastWeek": "Новые на прошлой неделе",
+        "recentlyCreated": "Недавно созданные",
+        "recentlyModified": "Недавно изменённые",
+        "recentlyImported": "Недавно импортированные",
+        "neverContacted": "Без контакта",
+        "needsFollowUp": "Нужен повторный контакт",
+        "active": "Активные",
+        "inactive": "Неактивные",
+        "unsubscribed": "Отписавшиеся"
       }
     },
     "erase": {

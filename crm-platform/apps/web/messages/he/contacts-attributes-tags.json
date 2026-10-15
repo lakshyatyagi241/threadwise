@@ -1394,6 +1394,19 @@
         "selectAll": "בחירת הכול",
         "reorder": "גררו כדי לשנות את סדר העמודות",
         "remove": "הסרת {name}"
+      },
+      "presets": {
+        "myContacts": "אנשי הקשר שלי",
+        "newThisWeek": "חדשים השבוע",
+        "newLastWeek": "חדשים בשבוע שעבר",
+        "recentlyCreated": "נוצרו לאחרונה",
+        "recentlyModified": "עודכנו לאחרונה",
+        "recentlyImported": "יובאו לאחרונה",
+        "neverContacted": "לא נוצר קשר מעולם",
+        "needsFollowUp": "דורשים מעקב",
+        "active": "פעילים",
+        "inactive": "לא פעילים",
+        "unsubscribed": "בוטלה הרשמתם"
       }
     },
     "erase": {

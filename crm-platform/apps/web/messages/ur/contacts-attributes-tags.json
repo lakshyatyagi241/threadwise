@@ -1394,6 +1394,19 @@
         "selectAll": "سب منتخب کریں",
         "reorder": "کالمز کی ترتیب بدلنے کے لیے گھسیٹیں",
         "remove": "{name} کو ہٹائیں"
+      },
+      "presets": {
+        "myContacts": "میرے رابطے",
+        "newThisWeek": "اس ہفتے نئے",
+        "newLastWeek": "پچھلے ہفتے نئے",
+        "recentlyCreated": "حال ہی میں بنائے گئے",
+        "recentlyModified": "حال ہی میں تبدیل کیے گئے",
+        "recentlyImported": "حال ہی میں درآمد کیے گئے",
+        "neverContacted": "کبھی رابطہ نہیں ہوا",
+        "needsFollowUp": "فالو اپ درکار",
+        "active": "فعال",
+        "inactive": "غیر فعال",
+        "unsubscribed": "سبسکرپشن ختم کرنے والے"
       }
     },
     "erase": {

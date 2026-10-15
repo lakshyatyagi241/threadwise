@@ -1394,6 +1394,19 @@
         "selectAll": "เลือกทั้งหมด",
         "reorder": "ลากเพื่อจัดลำดับคอลัมน์ใหม่",
         "remove": "นำ {name} ออก"
+      },
+      "presets": {
+        "myContacts": "รายชื่อของฉัน",
+        "newThisWeek": "ใหม่สัปดาห์นี้",
+        "newLastWeek": "ใหม่สัปดาห์ที่แล้ว",
+        "recentlyCreated": "สร้างล่าสุด",
+        "recentlyModified": "แก้ไขล่าสุด",
+        "recentlyImported": "นำเข้าล่าสุด",
+        "neverContacted": "ไม่เคยติดต่อ",
+        "needsFollowUp": "ต้องติดตามผล",
+        "active": "ใช้งานอยู่",
+        "inactive": "ไม่ใช้งาน",
+        "unsubscribed": "ยกเลิกการรับข้อความ"
       }
     },
     "erase": {
