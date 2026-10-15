@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SSRF Test Report</title>
+<style>
+  :root { --bg:#fff; --fg:#1b1f24; --muted:#5b6570; --line:#d8dee4; --card:#f6f8fa; --ok:#1a7f37; --warn:#9a6700; --bad:#cf222e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0d1117; --fg:#e6edf3; --muted:#8b949e; --line:#30363d; --card:#161b22; --ok:#3fb950; --warn:#d29922; --bad:#f85149; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:26px; margin:0 0 4px; } h2 { font-size:19px; margin:32px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  p, li { max-width:75ch; } .muted { color:var(--muted); }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin:8px 0; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; } th { background:var(--card); }
+  code { background:var(--card); padding:1px 5px; border-radius:4px; font-size:13px; }
+  .pill { display:inline-block; padding:1px 9px; border-radius:99px; font-size:12px; font-weight:600; border:1px solid currentColor; }
+  .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:12px 0; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 12px; } .stat b { font-size:24px; display:block; }
+</style>
+</head>
+<body>
+<main>
+<h1>SSRF test report</h1>
+<p class="muted">QA sheet 3, item 29 &middot; P1 &middot; owner Vedant &middot; run 2026-10-15 &middot; branch <code>vedant/security/ssrf-suite</code> from main e86934b79</p>
+
+<p><b>Target:</b> automated on PR, daily and pre-release; zero Critical/High release blockers.
+<b>Result:</b> <span class="pill ok">No Critical or High found</span> &nbsp;<span class="pill warn">2 follow-ups need a decision</span></p>
+
+<div class="grid">
+  <div class="stat"><b>721</b>tests pass in the SSRF run (9 files)</div>
+  <div class="stat"><b>280</b>address cases (40 &times; 7 guards)</div>
+  <div class="stat"><b>204</b>URL-spelling cases</div>
+  <div class="stat"><b>0 / 0</b>Critical / High</div>
+  <div class="stat"><b>7</b>findings (Medium and Low), all 7 fixed; 2 follow-ups open</div>
+</div>
+
+<h2>1. What was tested and how</h2>
+<ol>
+  <li><b>Inventory.</b> Every file under <code>apps/api/src</code> that makes an outbound HTTP call was read and classified: fixed vendor host, guarded, operator-set, or reachable by a tenant.</li>
+  <li><b>Address matrix</b> (<code>address-matrix.spec.ts</code>). One list of 35 must-block and 5 must-allow addresses run against the address rule of all 7 guards: loopback, RFC1918, CGNAT, link-local and cloud metadata, documentation and benchmark ranges, IPv6 loopback, IPv4-mapped (dotted and hex), NAT64, 6to4, Teredo, <code>::127.0.0.1</code>, and text that is not an address.</li>
+  <li><b>URL matrix</b> (<code>url-matrix.spec.ts</code>). 41 hostile URL spellings run against 5 entry points (flow-builder guard, webhook guard, <code>SafeFetch</code>, <code>guardedRequest</code>, WABA provider guard): decimal, hex and octal IPs, <code>127.1</code>, trailing dot, <code>localhost</code> variants, userinfo tricks (<code>good@127.0.0.1</code>, <code>127.0.0.1#@good</code>), unicode digits, IPv6 forms, and the schemes <code>file</code>, <code>gopher</code>, <code>ftp</code>, <code>dict</code>, <code>javascript</code>. Names resolve through a fake resolver; no real internal address or production host is contacted.</li>
+  <li><b>Redirects.</b> A local server answers 302 to a second local listener standing in for an internal service. <code>SafeFetch</code> and <code>guardedRequest</code> must return the 3xx and the internal listener must receive 0 hits.</li>
+  <li><b>Ratchet</b> (<code>outbound-ratchet.spec.ts</code>). Scans every source file; a bare <code>fetch()</code> (which follows redirects) fails unless the file is on a reviewed list with a stated reason. This stops the problem from coming back and forces review of new outbound code.</li>
+</ol>
+
+<h2>2. Findings</h2>
+<table>
+<tr><th>#</th><th>Where</th><th>Issue</th><th>Severity</th><th>Status</th></tr>
+<tr><td>1</td><td><code>SafeFetch</code> (API Library, flow Webhook node &mdash; tenant-typed URLs)</td><td>Own address list missed NAT64, 6to4, <code>::127.0.0.1</code>, Teredo and the TEST-NET / benchmark ranges. 12 cases failed.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed</td></tr>
+<tr><td>2</td><td>WABA provider URL guard</td><td>Missed 6to4, <code>::127.0.0.1</code>, Teredo. 4 cases failed. Operator-set, https-only.</td><td><span class="pill warn">Low</span></td><td class="ok">Fixed</td></tr>
+<tr><td>3</td><td>AI-training <code>blocked-address</code></td><td>A second copy of the shared rule; passes today but can drift.</td><td><span class="pill warn">Low</span></td><td class="ok">Now re-exports the shared rule</td></tr>
+<tr><td>4</td><td>Outbound webhooks <code>send.ts</code>, webhook fan-out <code>deliver.ts</code></td><td>Checked the address, then called <code>fetch</code>, which looks the name up again (DNS rebinding window). <code>send.ts</code> also stores a 1 KB response snippet.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed &mdash; now <code>guardedRequest</code> (check inside the socket lookup)</td></tr>
+<tr><td>5</td><td>Storage endpoint (upload, delete, probe, presigned read), node bridge health check, reseller rates, Facebook client</td><td>Operator-set or remote-data URLs fetched with redirects followed; a redirect could carry <code>Authorization</code>, a bridge token or a signed request to another host.</td><td><span class="pill warn">Medium</span> (storage, bridge) / Low</td><td class="ok">Fixed &mdash; <code>redirect: 'manual'</code> on 10 calls</td></tr>
+<tr><td>6</td><td>Facebook <code>paging.next</code> and reel <code>upload_url</code></td><td>Followed any host named in Meta's response, with the page token.</td><td><span class="pill warn">Low</span></td><td class="ok">Fixed &mdash; must be https on <code>*.facebook.com</code></td></tr>
+<tr><td>7</td><td>Node bridge address (contract)</td><td>Test endpoint accepted any string; save accepted link-local and metadata hosts.</td><td><span class="pill warn">Low</span></td><td class="ok">Fixed &mdash; http(s) only, link-local and metadata refused (private ranges stay allowed: a local bridge is normal)</td></tr>
+</table>
+
+<h2>3. Evidence</h2>
+<table>
+<tr><th>Check</th><th>Before</th><th>After</th></tr>
+<tr><td>Address matrix (280)</td><td>16 failed</td><td class="ok">280 pass</td></tr>
+<tr><td>URL matrix (204)</td><td>not run</td><td class="ok">204 pass</td></tr>
+<tr><td>Ratchet and hardening cases (23)</td><td>n/a</td><td class="ok">23 pass</td></tr>
+<tr><td>Existing guard suites touched (net 56, safe-fetch 49, url-fetcher 58, fan-out 48, send 3)</td><td>pass</td><td class="ok">pass</td></tr>
+<tr><td>Whole SSRF run</td><td>&mdash;</td><td class="ok">721 / 721 in 9 files</td></tr>
+</table>
+<p>One existing test changed meaning: <code>SafeFetch</code>'s "a name is not an address" used to expect <i>allowed</i>; it now expects <i>refused</i> (fail closed). Callers only pass resolved IPs, so no behaviour changes for real traffic.</p>
+
+<h2>4. Automation</h2>
+<p>Workflow <code>.github/workflows/ssrf-audit.yml</code> runs the suite on pull requests that touch guards or outbound callers, nightly, on release, and manually, and keeps the JUnit report for 90 days. Any failing case fails the job.</p>
+
+<h2>5. Not fixed, and why (needs a decision)</h2>
+<ul>
+  <li><b>LibreTranslate endpoint</b> (<code>localization-translation</code>): operator-set; private ranges are allowed on purpose and the guard is a string check. Moving it to <code>guardedRequest</code> with an allow-private flag would be correct but could break self-hosted set-ups. <span class="pill warn">Medium, operator only</span></li>
+  <li><b>Payment gateway drivers</b> (<code>payment-driver.ts</code>): bare <code>fetch</code>; not yet confirmed whether any driver takes a tenant base URL. Listed in the ratchet with that note. <span class="pill warn">Low, unconfirmed</span></li>
+  <li><b>Fixed-host vendor calls</b> (Google, Meta, Telegram, Twilio, AI vendors, FX rates): hosts are constants; env overrides are deploy-time only. They still follow redirects; left as they are and recorded in the ratchet list.</li>
+  <li><b>Not reviewed in depth:</b> <code>node-bridge-runtime/proxy.ts</code> (operator proxy test), SMTP host, setup-wizard database host.</li>
+</ul>
+
+<h2>6. Limits of this test</h2>
+<ul>
+  <li>Unit-level with fake resolvers and local listeners. It does not prove how NAT64/6to4 routes behave on a particular host network.</li>
+  <li>No live DNS-rebinding server was used; rebinding is closed by design (check inside the socket lookup), not shown by a timing test.</li>
+  <li>In the checkout used for this run, 18 other unit test files cannot load because <code>@nestjs/swagger</code> cannot resolve <code>@nestjs/common/interfaces</code> with the locked versions. The lockfile is untouched by this change, but those suites were not exercised here and should be checked in CI.</li>
+  <li>The code survey was a read, not an exploit attempt. Operator-only findings assume the operator is trusted.</li>
+</ul>
+
+<h2>7. Files</h2>
+<p>New: <code>test/unit/ssrf/{address-matrix,url-matrix,outbound-ratchet}.spec.ts</code>, <code>test/unit/outbound-webhooks/send.spec.ts</code>, <code>.github/workflows/ssrf-audit.yml</code>. Changed: <code>infra/net/guarded-http.ts</code>, <code>safe-fetch.ts</code>, <code>provider-url-guard.ts</code>, <code>ai-agents-training/blocked-address.ts</code>, <code>webhook-fanout/deliver.ts</code>, <code>outbound-webhooks/send.ts</code>, <code>facebook-graph.client.ts</code>, <code>health.service.ts</code>, <code>platform-rates.service.ts</code>, <code>media-storage.service.ts</code>, <code>object-storage.probe.ts</code>, <code>chat-media.store.ts</code>, <code>contracts/node-bridge-runtime</code>, and the matching tests.</p>
+</main>
+</body>
+</html>

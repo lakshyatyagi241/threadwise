@@ -37,6 +37,10 @@ const MAX_PAGES = 10;
 
 type Json = Record<string, unknown>;
 
+/** A full address Meta's own answer names (`paging.next`, a reel's `upload_url`) is only followed when it stays on Meta over https. */
+export const isMetaUrl = (u: URL): boolean =>
+  u.protocol === 'https:' && !u.username && !u.password && /(^|\.)facebook\.com$/i.test(u.hostname);
+
 const obj = (x: unknown): Json => (typeof x === 'object' && x !== null ? (x as Json) : {});
 const str = (x: unknown): string | undefined =>
   typeof x === 'string' || typeof x === 'number' ? String(x) : undefined;
@@ -54,6 +58,7 @@ async function call(
   } = {},
 ): Promise<GraphResult<Json>> {
   const url = new URL(path.startsWith('http') ? path : `${HOST}/${version}/${path}`);
+  if (!isMetaUrl(url)) return { ok: false, error: 'Refused: the address is not a Facebook address.' };
   for (const [k, v] of Object.entries(o.query ?? {})) url.searchParams.set(k, v);
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (o.token) headers.Authorization = `Bearer ${o.token}`;
@@ -70,6 +75,7 @@ async function call(
       method,
       headers,
       body,
+      redirect: 'manual',
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     const parsed = obj(await res.json().catch(() => ({})));
@@ -361,10 +367,20 @@ class PageApi implements FacebookPageApi {
     if (!uploadUrl) return { ok: false, error: 'reel start returned no upload_url' };
 
     // 2. Upload: a hosted transfer, so Meta is told where to pull the file from.
+    let uploadTarget: URL;
     try {
-      const up = await fetch(uploadUrl, {
+      uploadTarget = new URL(uploadUrl);
+    } catch {
+      return { ok: false, error: 'reel start returned an invalid upload_url' };
+    }
+    if (!isMetaUrl(uploadTarget)) {
+      return { ok: false, error: 'Refused: the upload address is not a Facebook address.' };
+    }
+    try {
+      const up = await fetch(uploadTarget, {
         method: 'POST',
         headers: { Authorization: `OAuth ${this.token}`, file_url: fileUrl },
+        redirect: 'manual',
         signal: AbortSignal.timeout(180_000),
       });
       if (!up.ok) {
