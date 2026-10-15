@@ -296,7 +296,9 @@
       "media": "{kind} önizlemesi",
       "contactsDenied": "Kişi listesine erişiminiz yok. Kişileri gruplar veya etiketler üzerinden seçin.",
       "unofficialDisabled": "Kişisel WhatsApp numaraları (resmî olmayan API) üzerinden gönderim çalışma alanınız için etkin değil. Resmî bir WhatsApp Business API numarası seçin.",
-      "previewLabel": "Şablon önizleme"
+      "previewLabel": "Şablon önizleme",
+      "colEmail": "E-posta",
+      "noEmail": "E-posta adresi yok"
     },
     "overrides": {
       "title": "Bu gönderimi doldurun",
@@ -358,6 +360,11 @@
         "name": "Facebook",
         "hint": "Son 24 saat içinde Sayfanıza mesaj atan kişilere Messenger mesajı gönderin.",
         "cta": "Facebook yayını oluştur"
+      },
+      "email": {
+        "name": "E-posta",
+        "hint": "Bağlı bir posta kutusundan mesajı e-posta olarak gönderin, abonelikten çıkma bağlantısıyla.",
+        "cta": "E-posta kampanyası oluştur"
       }
     }
   }

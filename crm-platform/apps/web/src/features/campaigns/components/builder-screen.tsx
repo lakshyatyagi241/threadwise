@@ -45,13 +45,20 @@ import {
   WIZARD_STEPS,
   applyAiCopy,
   initialRecipientMode,
+  emailSkipped,
   recipientTotals,
   stepProblems,
   withRecipientMode,
   type RecipientMode,
   type WizardStep,
 } from '../lib/wizard-model';
-import { coerceForEngine, engineOf, senderOf, templatesFor } from '../lib/engine-gate';
+import {
+  coerceForEngine,
+  engineOf,
+  isEmailEngine,
+  senderOf,
+  templatesFor,
+} from '../lib/engine-gate';
 import { AiModal } from './builder/ai-modal';
 import { BuilderHeader } from './builder/header';
 import { LivePreview } from './builder/live-preview';
@@ -84,8 +91,11 @@ export function BuilderScreen({
 }) {
   const t = useTranslations('campaigns.builder');
   const config = useCampaignConfig(id);
-  const smsChannel = engineOf(initialSenderKey ?? config.data?.senderKey ?? '') === 'sms';
-  const builder = useBuilder(smsChannel ? 'sms' : undefined);
+  // The channel is the picked sender's: an SMS or a mailbox sender is not in the WhatsApp list, so the builder asks for its own list.
+  const channelEngine = engineOf(initialSenderKey ?? config.data?.senderKey ?? '');
+  const builder = useBuilder(
+    channelEngine === 'sms' ? 'sms' : channelEngine === 'email' ? 'email' : undefined,
+  );
   const session = useSession();
   const zone = session.effectiveTimezone;
 
@@ -274,6 +284,12 @@ function Builder({
     [data?.groups, data?.tags],
   );
   const totals = recipientTotals(form, sizes);
+  // An email campaign only reaches contacts with an address: what the screen can already tell is counted as skipped.
+  const emailChannel = isEmailEngine(engine);
+  const skipped = useMemo(
+    () => (emailChannel ? emailSkipped(form, contacts.data?.data ?? []) : null),
+    [emailChannel, form, contacts.data?.data],
+  );
   const scheduleLabel =
     form.scheduleType === 'now'
       ? t('review.now')
@@ -369,17 +385,23 @@ function Builder({
                     filter: audienceFilter,
                     onFilter: setAudienceFilter,
                   }}
+                  engine={engine}
+                  skipped={skipped}
                   onSample={() => void sampleCsv()}
                   onCsvTooBig={() => toast(t('audience.csvTooBig'), 'danger')}
                 />
               )}
-              {step === 'schedule' && <StepSchedule form={form} patch={patch} minDate={minDate} />}
+              {step === 'schedule' && (
+                <StepSchedule form={form} patch={patch} minDate={minDate} engine={engine} />
+              )}
               {step === 'review' && (
                 <StepReview
                   form={form}
                   senderLabel={senderLabel}
                   scheduleLabel={scheduleLabel}
                   totals={totals}
+                  skipped={skipped}
+                  engine={engine}
                   onGo={go}
                 />
               )}

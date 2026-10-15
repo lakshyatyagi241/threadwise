@@ -10,6 +10,21 @@ describe('the empty "Send from" notice', () => {
     expect(out).not.toContain('WhatsApp');
   });
 
+  it('the Email card sends the person to the Email page, and says a mailbox is disconnected or needs reconnecting', () => {
+    const none = html(<SenderEmptyNotice hidden={[]} email />);
+    expect(none).toContain('No mailbox is connected');
+    expect(none).toContain('href="/email"');
+    expect(none).not.toContain('WhatsApp');
+    const gone = html(
+      <SenderEmptyNotice hidden={[{ engine: 'email', reason: 'not_connected', count: 2 }]} email />,
+    );
+    expect(gone).toContain('2 mailboxes are disconnected');
+    const err = html(
+      <SenderEmptyNotice hidden={[{ engine: 'email', reason: 'error', count: 1 }]} email />,
+    );
+    expect(err).toContain('1 mailbox needs reconnecting');
+  });
+
   it('the SMS card still explains a pending number', () => {
     const out = html(
       <SenderEmptyNotice hidden={[{ engine: 'sms', reason: 'pending', count: 1 }]} sms />,

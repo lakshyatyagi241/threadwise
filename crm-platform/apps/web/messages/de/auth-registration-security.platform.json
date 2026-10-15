@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Formulareinsendungen pro Monat",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen pro Monat",
             "sms_monthly": "SMS pro Monat",
-            "email_mailboxes": "E-Mail-Postfächer"
+            "email_mailboxes": "E-Mail-Postfächer",
+            "email_monthly": "E-Mails pro Monat"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Im Kalendermonat angenommene Formulareinsendungen, ohne Spam. Über dem Limit wird eine Einsendung weiterhin zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen im Kalendermonat, einschließlich eines Reparaturversuchs. 0 = unbegrenzt.",
             "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
-            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt."
+            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
+            "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt."
           }
         }
       },

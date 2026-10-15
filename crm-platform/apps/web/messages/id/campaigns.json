@@ -209,7 +209,16 @@
         "customMessage": "Pesan kustom",
         "flowTitle": "Alur",
         "variants": "Varian yang ditampilkan",
-        "variant": "Varian {v}"
+        "variant": "Varian {v}",
+        "typeEmail": "Email",
+        "emailTitle": "Pratinjau email",
+        "emailFrom": "Dari",
+        "emailSubject": "Subjek",
+        "emailNoSender": "Pilih pengirim",
+        "emailNoSubject": "(tanpa subjek)",
+        "emailEmpty": "Tulis isi pesan dan akan muncul di sini.",
+        "emailUnsubscribe": "Tautan berhenti berlangganan ditambahkan di bagian bawah setiap email.",
+        "emailNote": "Begini tampilan kampanye Anda di kotak masuk setiap penerima."
       },
       "previewEmpty": "Pratinjau pesan Anda…",
       "previewTemplate": "Template",
@@ -228,7 +237,8 @@
         "throttle": "Jeda terpanjang harus setidaknya sama dengan jeda terpendek.",
         "expiry": "Tanggal akhir harus setelah tanggal kirim, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
         "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
-        "sender": "Pilih pengirim."
+        "sender": "Pilih pengirim.",
+        "subject": "Persingkat subjek hingga maksimal 150 karakter."
       },
       "submit": {
         "save": "Simpan perubahan",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} nomor dalam berkas",
         "numbersPlaceholder": "Satu nomor per baris — sertakan kode negara, tanpa tanda plus",
-        "numbersCount": "{count} nomor"
+        "numbersCount": "{count} nomor",
+        "emailNote": "Email dikirim ke alamat setiap kontak. Kontak tanpa alamat email, alamat ganda, dan kontak yang berhenti berlangganan dilewati.",
+        "emailSkipped": "Penerima terpilih tanpa alamat email (akan dilewati): {count}",
+        "emailNoAddress": "Nomor yang diketik dan baris CSV tidak memiliki alamat email, sehingga dilewati. Pilih kontak, grup, tag, atau segmen."
       },
       "message": {
         "title": "Pesan",
@@ -526,7 +539,13 @@
           "baileys": "Belum ada templat API Tidak Resmi. Buat di halaman Templat."
         },
         "templateIntroApproved": "Pilih templat Meta yang disetujui. Nilai variabel per kontak diisi saat pengiriman dari atribut kontak.",
-        "templateApproved": "Templat yang disetujui"
+        "templateApproved": "Templat yang disetujui",
+        "subject": "Subjek",
+        "subjectNote": "Subjek, maks. 150",
+        "subjectPlaceholder": "mis. Penawaran Mei Anda sudah tayang",
+        "subjectHint": "Digunakan sebagai subjek email. Kosongkan untuk memakai nama kampanye.",
+        "emailNote": "Kampanye ini dikirim sebagai email dari kotak surat yang Anda pilih. Tautan berhenti berlangganan ditambahkan di bagian bawah setiap email.",
+        "emailBodyHint": "Teks biasa. Gunakan '{{name}}' atau '{{first_name}}' untuk personalisasi. Kontak tanpa alamat email dilewati."
       },
       "review": {
         "title": "Tinjau",
@@ -568,8 +587,14 @@
           "throttle": "Jeda terpanjang harus sama dengan atau lebih dari jeda terpendek.",
           "expiry": "Tanggal akhir harus setelah tanggal pengiriman, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
           "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
-          "sender": "Pilih pengirim."
-        }
+          "sender": "Pilih pengirim.",
+          "subject": "Persingkat subjek hingga maksimal 150 karakter."
+        },
+        "from": "Dari",
+        "subject": "Subjek",
+        "subjectFallback": "Nama kampanye",
+        "skippedNoEmail": "Dilewati (tanpa alamat email)",
+        "estimateEmail": "Ini perkiraan: kontak yang ada di dua grup dihitung dua kali. Kontak tanpa alamat email di grup, tag, dan segmen dilewati saat kampanye berjalan."
       },
       "ai": {
         "open": "Buat dengan AI",
@@ -1706,6 +1731,23 @@
         "title": "Nomor pribadi dinonaktifkan untuk workspace ini",
         "body": "{count} nomor pribadi (QR) tidak dapat mengirim kampanye selama ini dinonaktifkan. Administrator platform dapat mengaktifkannya untuk workspace ini, atau Anda dapat menghubungkan nomor resmi WhatsApp Business.",
         "action": "Hubungkan nomor resmi"
+      },
+      "email": {
+        "none": {
+          "title": "Tidak ada kotak surat yang terhubung",
+          "body": "Hubungkan kotak surat di halaman Email untuk memilih pengirim kampanye ini.",
+          "action": "Hubungkan kotak surat"
+        },
+        "disconnected": {
+          "title": "Kotak surat yang terputus: {count}",
+          "body": "Hubungkan kembali di halaman Email untuk mengirim kampanye darinya.",
+          "action": "Buka halaman Email"
+        },
+        "error": {
+          "title": "Kotak surat yang perlu dihubungkan kembali: {count}",
+          "body": "Login terakhirnya gagal. Hubungkan kembali di halaman Email dan kotak surat akan muncul di sini.",
+          "action": "Buka halaman Email"
+        }
       }
     },
     "create": {

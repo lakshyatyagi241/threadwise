@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Formulierinzendingen per maand",
             "ai_form_generations_monthly": "AI-formulierbuilder-generaties per maand",
             "sms_monthly": "SMS per maand",
-            "email_mailboxes": "E-mailpostvakken"
+            "email_mailboxes": "E-mailpostvakken",
+            "email_monthly": "E-mails per maand"
           },
           "featureGroups": {
             "messaging": "Berichten",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Formulierinzendingen die in de kalendermaand zijn geaccepteerd, spam uitgezonderd. Boven de limiet wordt een inzending nog steeds bewaard ter beoordeling en nooit weggegooid. 0 = onbeperkt.",
             "ai_form_generations_monthly": "AI-formulierbuilder-generaties in de kalendermaand, inclusief een herstelpoging. 0 = onbeperkt.",
             "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
-            "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt."
+            "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
+            "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt."
           }
         }
       },

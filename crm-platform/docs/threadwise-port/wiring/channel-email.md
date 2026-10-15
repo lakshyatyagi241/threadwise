@@ -115,3 +115,7 @@ Files `apps/api/src/modules/channel-email/{mail-settings.{controller,service,rep
 `developer-rest-api-v1/resources/messaging/messaging.repository.ts`; `admin-console-shell/workspace-export.service.ts`. Tables `mail_workspace_settings`, `mail_mailboxes.scope/owner_user_id` (Phase A, no new migration). Permissions
 `mail.mailboxes.manage_personal`, `mail.settings.manage`. Contract addition: optional `MailboxResponse.contentHidden`. Every consumer of "who may see a conversation" now takes the channel owner (required field).
 Deviation from Reference: Reference has no personal mailboxes. Runbook: if a workspace asks "why can't I see my teammate's email", it is by design; an admin only reads personal mail when the Email sharing policy says so.
+
+## Campaign engine (TW-CAMP-028, email half)
+
+`EmailEngineSender` (`channel-email/email-engine.sender.ts`, pure rules `email-engine.rules.ts`) is the `email` engine of `EngineSenderRegistry`: campaigns send through a mailbox (`email:<uuid>`) with the mailbox's own `MailTokens.withAccess`, `MailDriverRegistry`, `MailSendGuard` (bounce list, hourly cap and burst) and the consent gate / unsubscribe link. New seams: `ChannelEmailModule` imports `BroadcastsModule` (the registry); `MailPlan.monthlyLimit` (plan limit `email_monthly`); `MailboxesRepository.byId`, `sentSince`, `contactUuid`. No new table or permission. See wiring/campaigns.md (Email campaigns).

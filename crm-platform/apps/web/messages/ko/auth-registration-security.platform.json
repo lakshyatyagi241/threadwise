@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "월별 양식 제출",
             "ai_form_generations_monthly": "월별 AI 양식 빌더 생성",
             "sms_monthly": "월간 SMS",
-            "email_mailboxes": "이메일 메일함"
+            "email_mailboxes": "이메일 메일함",
+            "email_monthly": "월간 이메일"
           },
           "featureGroups": {
             "messaging": "메시징",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "해당 월에 접수된 양식 제출이며 스팸은 제외됩니다. 한도를 초과해도 제출은 검토용으로 저장되며 삭제되지 않습니다. 0 = 무제한.",
             "ai_form_generations_monthly": "해당 월의 AI 양식 빌더 생성 횟수이며 복구 재시도를 포함합니다. 0 = 무제한.",
             "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한.",
-            "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한."
+            "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
+            "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한."
           }
         }
       },

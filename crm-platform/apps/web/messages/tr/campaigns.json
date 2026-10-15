@@ -209,7 +209,16 @@
         "customMessage": "Özel mesaj",
         "flowTitle": "Akış",
         "variants": "Gösterilen varyant",
-        "variant": "Varyant {v}"
+        "variant": "Varyant {v}",
+        "typeEmail": "E-posta",
+        "emailTitle": "E-posta önizlemesi",
+        "emailFrom": "Gönderen",
+        "emailSubject": "Konu",
+        "emailNoSender": "Bir gönderen seçin",
+        "emailNoSubject": "(konu yok)",
+        "emailEmpty": "Mesaj gövdesini yazın, burada görünür.",
+        "emailUnsubscribe": "Her e-postanın en altına abonelikten çıkma bağlantısı eklenir.",
+        "emailNote": "Kampanyanız her alıcının gelen kutusunda böyle görünecek."
       },
       "previewEmpty": "Mesaj önizlemeniz…",
       "previewTemplate": "Şablon",
@@ -228,7 +237,8 @@
         "throttle": "En uzun aralık en az en kısa aralık kadar olmalıdır.",
         "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi hâlde kampanya hiç gönderilmeden süresi dolar.",
         "media": "http:// veya https:// ile başlayan tam bir adres girin.",
-        "sender": "Bir gönderici seçin."
+        "sender": "Bir gönderici seçin.",
+        "subject": "Konuyu 150 karakter veya daha kısa tutun."
       },
       "submit": {
         "save": "Değişiklikleri kaydet",
@@ -293,7 +303,10 @@
         },
         "csvRows": "Dosyada {count} numara",
         "numbersPlaceholder": "Her satırda bir numara — ülke kodunu ekleyin, artı işareti olmadan",
-        "numbersCount": "{count} numara"
+        "numbersCount": "{count} numara",
+        "emailNote": "E-postalar her kişinin adresine gider. E-posta adresi olmayan kişiler, yinelenen adresler ve abonelikten çıkmış kişiler atlanır.",
+        "emailSkipped": "E-posta adresi olmadığı için atlanacak seçili alıcılar: {count}",
+        "emailNoAddress": "Elle yazılan numaraların ve CSV satırlarının e-posta adresi yoktur, bu yüzden atlanırlar. Bunun yerine kişileri, grupları, etiketleri veya segmentleri seçin."
       },
       "message": {
         "title": "Mesaj",
@@ -526,7 +539,13 @@
           "baileys": "Henüz Unofficial API şablonu yok. Şablonlar sayfasında bir tane oluşturun."
         },
         "templateIntroApproved": "Onaylı bir Meta şablonu seçin. Kişiye özgü değişken değerleri gönderim anında kişi özniteliklerinden doldurulur.",
-        "templateApproved": "Onaylı şablon"
+        "templateApproved": "Onaylı şablon",
+        "subject": "Konu",
+        "subjectNote": "Konu, en fazla 150",
+        "subjectPlaceholder": "örn. Mayıs fırsatınız başladı",
+        "subjectHint": "E-posta konusu olarak kullanılır. Boş bırakırsanız kampanya adı kullanılır.",
+        "emailNote": "Bu kampanya, seçtiğiniz posta kutusundan e-posta olarak gönderilir. Her e-postanın en altına abonelikten çıkma bağlantısı eklenir.",
+        "emailBodyHint": "Düz metin. Kişiselleştirmek için '{{name}}' veya '{{first_name}}' kullanın. E-posta adresi olmayan kişiler atlanır."
       },
       "review": {
         "title": "Gözden geçir",
@@ -568,8 +587,14 @@
           "throttle": "En uzun aralık en kısa aralıktan az olamaz.",
           "expiry": "Bitiş tarihi gönderim tarihinden sonra olmalıdır; aksi halde kampanya hiç gönderilmeden sona erer.",
           "media": "http:// veya https:// ile başlayan tam bir adres girin.",
-          "sender": "Bir gönderici seçin."
-        }
+          "sender": "Bir gönderici seçin.",
+          "subject": "Konuyu 150 karakter veya daha kısa tutun."
+        },
+        "from": "Gönderen",
+        "subject": "Konu",
+        "subjectFallback": "Kampanya adı",
+        "skippedNoEmail": "Atlananlar (e-posta adresi yok)",
+        "estimateEmail": "Bu bir tahmindir: iki grupta olan kişi iki kez sayılır. Gruplardaki, etiketlerdeki ve segmentlerdeki e-posta adresi olmayan kişiler kampanya çalışırken atlanır."
       },
       "ai": {
         "open": "Yapay zeka ile oluştur",
@@ -1706,6 +1731,23 @@
         "title": "Kişisel numaralar bu çalışma alanı için kapalı",
         "body": "Bu seçenek kapalıyken {count} kişisel (QR) numara kampanya gönderemez. Bir platform yöneticisi bunu bu çalışma alanı için açabilir veya resmi bir WhatsApp Business numarası bağlayabilirsiniz.",
         "action": "Resmi numara bağla"
+      },
+      "email": {
+        "none": {
+          "title": "Bağlı posta kutusu yok",
+          "body": "Bu kampanyanın hangi adresten gönderileceğini seçmek için E-posta sayfasından bir posta kutusu bağlayın.",
+          "action": "Posta kutusu bağla"
+        },
+        "disconnected": {
+          "title": "Bağlantısı kesilen posta kutuları: {count}",
+          "body": "Bu posta kutusundan kampanya göndermek için E-posta sayfasında yeniden bağlayın.",
+          "action": "E-posta sayfasını aç"
+        },
+        "error": {
+          "title": "Yeniden bağlanması gereken posta kutuları: {count}",
+          "body": "Son oturum açma başarısız oldu. E-posta sayfasından yeniden bağlayın, burada görünecektir.",
+          "action": "E-posta sayfasını aç"
+        }
       }
     },
     "create": {

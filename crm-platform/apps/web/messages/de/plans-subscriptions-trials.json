@@ -45,7 +45,8 @@
       "form_submissions_monthly": "Formular-Einreichungen pro Monat",
       "ai_form_generations_monthly": "KI-Formulareditor-Generierungen pro Monat",
       "sms_monthly": "SMS pro Monat",
-      "email_mailboxes": "E-Mail-Postfächer"
+      "email_mailboxes": "E-Mail-Postfächer",
+      "email_monthly": "E-Mails pro Monat"
     },
     "features": {
       "automation": "Automatisierung",
@@ -132,7 +133,8 @@
       "form_submissions_monthly": "Im Kalendermonat angenommene Formular-Einreichungen, Spam ausgenommen. Über dem Limit wird eine Einreichung trotzdem zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
       "ai_form_generations_monthly": "KI-Formulareditor-Generierungen im Kalendermonat, einschließlich Reparaturwiederholungen. 0 = unbegrenzt.",
       "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
-      "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt."
+      "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
+      "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt."
     },
     "planAddons": {
       "title": "Add-ons in Ihrem Tarif verfügbar",

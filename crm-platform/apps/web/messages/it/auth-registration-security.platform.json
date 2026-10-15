@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Invii di moduli al mese",
             "ai_form_generations_monthly": "Generazioni del creatore di moduli AI al mese",
             "sms_monthly": "SMS al mese",
-            "email_mailboxes": "Caselle e-mail"
+            "email_mailboxes": "Caselle e-mail",
+            "email_monthly": "E-mail al mese"
           },
           "featureGroups": {
             "messaging": "Messaggistica",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Invii di moduli accettati nel mese di calendario, spam escluso. Oltre il limite un invio viene comunque salvato per la revisione, mai scartato. 0 = illimitato.",
             "ai_form_generations_monthly": "Generazioni del creatore di moduli AI nel mese di calendario, inclusi i nuovi tentativi di correzione. 0 = illimitato.",
             "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
-            "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato."
+            "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
+            "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato."
           }
         }
       },

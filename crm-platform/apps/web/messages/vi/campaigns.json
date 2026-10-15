@@ -209,7 +209,16 @@
         "customMessage": "Tin nhắn tùy chỉnh",
         "flowTitle": "Luồng",
         "variants": "Biến thể đang hiển thị",
-        "variant": "Biến thể {v}"
+        "variant": "Biến thể {v}",
+        "typeEmail": "Email",
+        "emailTitle": "Xem trước email",
+        "emailFrom": "Từ",
+        "emailSubject": "Tiêu đề",
+        "emailNoSender": "Chọn người gửi",
+        "emailNoSubject": "(không có tiêu đề)",
+        "emailEmpty": "Hãy viết nội dung tin nhắn, nội dung sẽ hiện ở đây.",
+        "emailUnsubscribe": "Liên kết hủy đăng ký được thêm vào cuối mỗi email.",
+        "emailNote": "Đây là cách chiến dịch của bạn hiển thị trong hộp thư đến của từng người nhận."
       },
       "previewEmpty": "Xem trước tin nhắn của bạn…",
       "previewTemplate": "Mẫu",
@@ -228,7 +237,8 @@
         "throttle": "Khoảng cách dài nhất phải bằng hoặc lớn hơn khoảng cách ngắn nhất.",
         "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi được gửi.",
         "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
-        "sender": "Chọn người gửi."
+        "sender": "Chọn người gửi.",
+        "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự."
       },
       "submit": {
         "save": "Lưu thay đổi",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} số trong tệp",
         "numbersPlaceholder": "Mỗi số một dòng — gồm mã quốc gia, không có dấu cộng",
-        "numbersCount": "{count} số"
+        "numbersCount": "{count} số",
+        "emailNote": "Email được gửi đến địa chỉ của từng liên hệ. Liên hệ không có địa chỉ email, địa chỉ trùng lặp và liên hệ đã hủy đăng ký sẽ bị bỏ qua.",
+        "emailSkipped": "Người nhận đã chọn không có địa chỉ email (sẽ bị bỏ qua): {count}",
+        "emailNoAddress": "Số điện thoại nhập tay và các dòng CSV không có địa chỉ email nên sẽ bị bỏ qua. Hãy chọn liên hệ, nhóm, thẻ hoặc phân khúc."
       },
       "message": {
         "title": "Tin nhắn",
@@ -526,7 +539,13 @@
           "baileys": "Chưa có mẫu API không chính thức nào. Tạo một mẫu tại trang Mẫu."
         },
         "templateIntroApproved": "Chọn một mẫu Meta đã duyệt. Giá trị biến theo từng liên hệ được điền khi gửi từ thuộc tính liên hệ.",
-        "templateApproved": "Mẫu đã duyệt"
+        "templateApproved": "Mẫu đã duyệt",
+        "subject": "Tiêu đề",
+        "subjectNote": "Tiêu đề, tối đa 150",
+        "subjectPlaceholder": "vd: Ưu đãi tháng Năm của bạn đã có",
+        "subjectHint": "Dùng làm tiêu đề email. Để trống để dùng tên chiến dịch.",
+        "emailNote": "Chiến dịch này được gửi dưới dạng email từ hộp thư bạn đã chọn. Liên kết hủy đăng ký được thêm vào cuối mỗi email.",
+        "emailBodyHint": "Văn bản thuần. Dùng '{{name}}' hoặc '{{first_name}}' để cá nhân hóa. Liên hệ không có địa chỉ email sẽ bị bỏ qua."
       },
       "review": {
         "title": "Xem lại",
@@ -568,8 +587,14 @@
           "throttle": "Khoảng nghỉ dài nhất phải lớn hơn hoặc bằng khoảng nghỉ ngắn nhất.",
           "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi gửi.",
           "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
-          "sender": "Chọn người gửi."
-        }
+          "sender": "Chọn người gửi.",
+          "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự."
+        },
+        "from": "Từ",
+        "subject": "Tiêu đề",
+        "subjectFallback": "Tên chiến dịch",
+        "skippedNoEmail": "Bỏ qua (không có địa chỉ email)",
+        "estimateEmail": "Đây là số ước tính: liên hệ thuộc hai nhóm được tính hai lần. Liên hệ không có địa chỉ email trong nhóm, thẻ và phân khúc sẽ bị bỏ qua khi chiến dịch chạy."
       },
       "ai": {
         "open": "Tạo bằng AI",
@@ -1706,6 +1731,23 @@
         "title": "Số cá nhân đang tắt cho không gian làm việc này",
         "body": "Khi tính năng này tắt, {count} số cá nhân (QR) không thể gửi chiến dịch. Quản trị viên nền tảng có thể bật cho không gian làm việc này, hoặc bạn có thể kết nối số WhatsApp Business chính thức.",
         "action": "Kết nối số chính thức"
+      },
+      "email": {
+        "none": {
+          "title": "Chưa kết nối hộp thư nào",
+          "body": "Hãy kết nối hộp thư ở trang Email để chọn nơi gửi chiến dịch này.",
+          "action": "Kết nối hộp thư"
+        },
+        "disconnected": {
+          "title": "Hộp thư bị ngắt kết nối: {count}",
+          "body": "Hãy kết nối lại ở trang Email để gửi chiến dịch từ hộp thư này.",
+          "action": "Mở trang Email"
+        },
+        "error": {
+          "title": "Hộp thư cần kết nối lại: {count}",
+          "body": "Lần đăng nhập gần nhất không thành công. Hãy kết nối lại ở trang Email, hộp thư sẽ hiện ở đây.",
+          "action": "Mở trang Email"
+        }
       }
     },
     "create": {

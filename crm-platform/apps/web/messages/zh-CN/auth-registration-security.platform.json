@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "每月表单提交数",
             "ai_form_generations_monthly": "每月 AI 表单构建器生成次数",
             "sms_monthly": "每月短信数",
-            "email_mailboxes": "邮箱数量"
+            "email_mailboxes": "邮箱数量",
+            "email_monthly": "每月邮件数"
           },
           "featureGroups": {
             "messaging": "消息",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "日历月内接受的表单提交数，不含垃圾信息。超出上限后，提交仍会保存以供审核，不会被丢弃。0 = 不限。",
             "ai_form_generations_monthly": "日历月内 AI 表单构建器的生成次数，包括修复重试。0 = 不限。",
             "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
-            "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。"
+            "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
+            "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。"
           }
         }
       },

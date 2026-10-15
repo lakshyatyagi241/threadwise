@@ -14,6 +14,7 @@ import {
   campaignRecipientsResponseSchema,
   campaignStatisticsSchema,
   resendCampaignResponseSchema,
+  type BroadcastComposeQuery,
   type CampaignAiGenerateInput,
   type CreateCampaignInput,
   type ResendCampaignInput,
@@ -54,8 +55,11 @@ export function useCampaignList(state: ListState) {
   });
 }
 
-/** `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018). */
-export function useBuilder(channel?: 'sms') {
+/**
+ * `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018); `'email'` lists the connected mailboxes
+ * as senders and no templates (TW-MAIL-036).
+ */
+export function useBuilder(channel?: BroadcastComposeQuery['channel']) {
   return useQuery({
     queryKey: channel ? ([...KEYS.builder, channel] as const) : KEYS.builder,
     queryFn: ({ signal }) =>

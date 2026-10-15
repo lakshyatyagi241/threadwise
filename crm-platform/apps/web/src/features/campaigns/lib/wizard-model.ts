@@ -13,6 +13,7 @@ const STEP_OF: Record<Problem, WizardStep> = {
   template: 'compose',
   flow: 'compose',
   media: 'compose',
+  subject: 'compose',
   audience: 'recipients',
   date: 'schedule',
   time: 'schedule',
@@ -124,4 +125,19 @@ export function applyAiCopy(
     customFooter: copy.footer,
     buttons,
   };
+}
+
+/**
+ * An email campaign sends only to contacts with an address; the others are stamped skipped when it runs. What the screen can tell:
+ * the individually picked contacts whose address is empty (the list it loaded carries the address), and every typed or uploaded
+ * number (no address). Groups, tags and segments are counted by the server when the queue is built, so they are not in `known`.
+ */
+export function emailSkipped(
+  f: BuilderForm,
+  contacts: readonly { id: string; email: string | null }[],
+): { contacts: number; numbers: number; total: number } {
+  const noAddress = new Set(contacts.filter((c) => (c.email ?? '').trim() === '').map((c) => c.id));
+  const picked = f.contactIds.filter((id) => noAddress.has(id)).length;
+  const numbers = countNumbers(f.manualNumbers) + countCsvRows(f.csvText);
+  return { contacts: picked, numbers, total: picked + numbers };
 }

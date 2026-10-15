@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Aylık form gönderimleri",
             "ai_form_generations_monthly": "Aylık yapay zeka form oluşturucu üretimleri",
             "sms_monthly": "Aylık SMS",
-            "email_mailboxes": "E-posta kutuları"
+            "email_mailboxes": "E-posta kutuları",
+            "email_monthly": "Aylık e-posta"
           },
           "featureGroups": {
             "messaging": "Mesajlaşma",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınır aşıldığında gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
             "ai_form_generations_monthly": "Takvim ayındaki yapay zeka form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
             "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
-            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız."
+            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
+            "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız."
           }
         }
       },

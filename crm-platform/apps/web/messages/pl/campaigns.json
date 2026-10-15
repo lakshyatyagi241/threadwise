@@ -209,7 +209,16 @@
         "customMessage": "Wiadomość własna",
         "flowTitle": "Przepływ",
         "variants": "Wyświetlany wariant",
-        "variant": "Wariant {v}"
+        "variant": "Wariant {v}",
+        "typeEmail": "E-mail",
+        "emailTitle": "Podgląd e-maila",
+        "emailFrom": "Od",
+        "emailSubject": "Temat",
+        "emailNoSender": "Wybierz nadawcę",
+        "emailNoSubject": "(bez tematu)",
+        "emailEmpty": "Napisz treść wiadomości, a pojawi się tutaj.",
+        "emailUnsubscribe": "Na końcu każdego e-maila dodawany jest link do rezygnacji z subskrypcji.",
+        "emailNote": "Tak kampania będzie wyglądać w skrzynce odbiorczej każdego odbiorcy."
       },
       "previewEmpty": "Podgląd Twojej wiadomości…",
       "previewTemplate": "Szablon",
@@ -228,7 +237,8 @@
         "throttle": "Najdłuższy odstęp musi być co najmniej równy najkrótszemu.",
         "expiry": "Data zakończenia musi być późniejsza niż data wysyłki, w przeciwnym razie kampania wygasłaby, zanim cokolwiek wyśle.",
         "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
-        "sender": "Wybierz nadawcę."
+        "sender": "Wybierz nadawcę.",
+        "subject": "Skróć temat do 150 znaków lub mniej."
       },
       "submit": {
         "save": "Zapisz zmiany",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} numerów w pliku",
         "numbersPlaceholder": "Jeden numer w wierszu — z kodem kraju, bez znaku plus",
-        "numbersCount": "{count} numerów"
+        "numbersCount": "{count} numerów",
+        "emailNote": "E-maile trafiają na adres każdego kontaktu. Kontakty bez adresu e-mail, powtórzone adresy i kontakty, które zrezygnowały z subskrypcji, są pomijane.",
+        "emailSkipped": "Wybrani odbiorcy bez adresu e-mail (zostaną pominięci): {count}",
+        "emailNoAddress": "Wpisane numery i wiersze CSV nie mają adresu e-mail, więc są pomijane. Wybierz zamiast tego kontakty, grupy, tagi lub segmenty."
       },
       "message": {
         "title": "Wiadomość",
@@ -526,7 +539,13 @@
           "baileys": "Brak szablonów Unofficial API. Utwórz jeden na stronie Szablony."
         },
         "templateIntroApproved": "Wybierz zatwierdzony szablon Meta. Wartości zmiennych dla kontaktu są uzupełniane w chwili wysyłki z atrybutów kontaktu.",
-        "templateApproved": "Zatwierdzony szablon"
+        "templateApproved": "Zatwierdzony szablon",
+        "subject": "Temat",
+        "subjectNote": "Temat, maks. 150",
+        "subjectPlaceholder": "np. Twoja majowa oferta już jest",
+        "subjectHint": "Używany jako temat e-maila. Zostaw puste, aby użyć nazwy kampanii.",
+        "emailNote": "Ta kampania jest wysyłana jako e-mail z wybranej skrzynki. Na końcu każdego e-maila dodawany jest link do rezygnacji z subskrypcji.",
+        "emailBodyHint": "Zwykły tekst. Użyj '{{name}}' lub '{{first_name}}', aby spersonalizować. Kontakty bez adresu e-mail są pomijane."
       },
       "review": {
         "title": "Przegląd",
@@ -568,8 +587,14 @@
           "throttle": "Najdłuższa przerwa musi być nie krótsza niż najkrótsza.",
           "expiry": "Data końcowa musi być późniejsza niż data wysyłki, inaczej kampania wygaśnie, zanim cokolwiek wyśle.",
           "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
-          "sender": "Wybierz nadawcę."
-        }
+          "sender": "Wybierz nadawcę.",
+          "subject": "Skróć temat do 150 znaków lub mniej."
+        },
+        "from": "Od",
+        "subject": "Temat",
+        "subjectFallback": "Nazwa kampanii",
+        "skippedNoEmail": "Pominięci (brak adresu e-mail)",
+        "estimateEmail": "To szacunek: kontakt w dwóch grupach jest liczony dwa razy. Kontakty bez adresu e-mail w grupach, tagach i segmentach są pomijane po uruchomieniu kampanii."
       },
       "ai": {
         "open": "Twórz z AI",
@@ -1706,6 +1731,23 @@
         "title": "Numery osobiste są wyłączone w tym obszarze roboczym",
         "body": "Dopóki ta opcja jest wyłączona, numery osobiste (QR) w liczbie {count} nie mogą wysyłać kampanii. Administrator platformy może ją włączyć dla tego obszaru roboczego albo możesz połączyć oficjalny numer WhatsApp Business.",
         "action": "Połącz oficjalny numer"
+      },
+      "email": {
+        "none": {
+          "title": "Brak połączonej skrzynki",
+          "body": "Połącz skrzynkę na stronie E-mail, aby wybrać, skąd wysyłana jest ta kampania.",
+          "action": "Połącz skrzynkę"
+        },
+        "disconnected": {
+          "title": "Skrzynki, które są rozłączone: {count}",
+          "body": "Połącz ją ponownie na stronie E-mail, aby wysyłać z niej kampanie.",
+          "action": "Otwórz stronę E-mail"
+        },
+        "error": {
+          "title": "Skrzynki wymagające ponownego połączenia: {count}",
+          "body": "Jej ostatnie logowanie się nie powiodło. Połącz ją ponownie na stronie E-mail, a pojawi się tutaj.",
+          "action": "Otwórz stronę E-mail"
+        }
       }
     },
     "create": {
