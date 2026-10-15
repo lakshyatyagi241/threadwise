@@ -36,8 +36,8 @@
     {
       "id": 6,
       "criterion": "Actionable warning and critical alert rules active",
-      "status": "NOT VERIFIED",
-      "evidence": "deploy/observability/event-loop.rules.yml parses as YAML. Not validated with promtool, not loaded anywhere, never fired. The worker queue-impact alert now has data to evaluate (job metrics hook, verified on a real BullMQ worker) but has never fired."
+      "status": "PARTIAL",
+      "evidence": "deploy/observability/event-loop.rules.yml passes promtool check (11 rules) and promtool test (9 case groups on synthetic series, mutation-checked, including the near-misses that must not page). Not loaded in any Prometheus, never fired from a real process, no receiver configured, so not 'active'. The worker queue-impact alert has data to evaluate (job metrics hook, verified on a real BullMQ worker) but has never fired."
     },
     {
       "id": 7,
