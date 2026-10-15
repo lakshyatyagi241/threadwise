@@ -276,6 +276,13 @@ send custom text, media, flows and A/B tests; the wizard is a second front end o
 - **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-follow-ups.e2e.spec.ts`, `apps/api/test/unit/campaigns/wizard-follow-up-rules.spec.ts`, and the web `follow-ups*` tests.
 - **Not verified:** nothing was run against the real WhatsApp Cloud API; read reports come from Meta's webhook and are reported as the sandbox does not make them by itself.
 
+### TW-CAMP-037: A/B auto-winner (ADDITION, pending)
+
+- **Source:** the meeting's "ship A/B now, rebuild the auto-winner later". Reference has the A/B split (TW-CAMP-007) and per-variant results but no auto-winner either, so this is new behaviour, not built yet.
+- **State today:** the split slider (`abSplit`, default 50) and per-variant results exist on the guided campaign and the classic builder. The campaign never picks a winner: both variants keep their fixed share for the whole send.
+- **To decide before building:** the winning measure (read rate, reply rate, click rate), the test share and how long it runs before the rest is sent, what a tie does, whether the person confirms the winner, and whether it applies to a recurring series' every run.
+- **Status:** pending (tracker `todo`).
+
 ### Reference comparison (live Reference, read-only)
 
 See [parity/campaigns.md](../parity/campaigns.md#broadcast-wizard-addition): Reference's create flow, and what the wizard does the same or differently.
