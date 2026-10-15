@@ -186,7 +186,7 @@ export function FormHeader({ header, page }: { header: ShellHeader | null; page:
       <h2
         className={cn(
           'font-serif tracking-[-0.01em]',
-          page === 'register' ? 'text-[32px]' : 'text-[38px]',
+          page === 'register' ? 'text-[30px]' : 'text-[34px]',
           // After the size: merging a font size drops an earlier line-height class.
           'leading-tight',
         )}
@@ -480,7 +480,7 @@ function FitHeight({ children, className }: { children: ReactNode; className?: s
       const natural = content.offsetHeight;
       if (natural <= 0 || room <= 0) return;
       const wide = column.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-      const growth = Math.min(1.25, wide / Math.max(box.offsetWidth, 1));
+      const growth = Math.min(1.08, wide / Math.max(box.offsetWidth, 1));
       const scale = Math.max(0.4, Math.min(growth, room / natural));
       setFit((f) =>
         Math.abs(f.scale - scale) < 0.005
