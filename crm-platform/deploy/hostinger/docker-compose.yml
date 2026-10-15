@@ -73,6 +73,7 @@ x-api-env: &api-env
   META_BUSINESS_ID: ${META_BUSINESS_ID:-}
   # Offer "connect my existing Business App number" (coexistence) in Embedded Signup.
   WABA_COEXISTENCE: ${WABA_COEXISTENCE:-false}
+  WABA_TRUSTED_FORWARDER_IPS: ${WABA_TRUSTED_FORWARDER_IPS:-}
   # Google Calendar for workspaces (blank = set the client on the console's Google Calendar page instead).
   GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
   GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
