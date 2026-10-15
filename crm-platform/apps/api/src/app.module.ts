@@ -103,6 +103,7 @@ import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy
 import { LeadsModule } from './modules/leads';
 import { FormsBuilderModule } from './modules/forms-builder';
 import { FormsLinksGroupsModule } from './modules/forms-links-groups';
+import { AiCopilotLeadFinderModule } from './modules/ai-copilot-lead-finder';
 import { MarketplaceModule } from './modules/marketplace';
 import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
@@ -266,6 +267,7 @@ import { HealthModule } from './health/health.module';
     LeadsModule,
     FormsBuilderModule,
     FormsLinksGroupsModule,
+    AiCopilotLeadFinderModule,
     MarketplaceModule,
     ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each

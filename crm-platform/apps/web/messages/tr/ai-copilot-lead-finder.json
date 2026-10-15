@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "AI CRM Kopilotu"
+    },
+    "errors": {
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+      "AICRM_NO_AI_PROVIDER": "Yapılandırılmış bir AI sağlayıcısı yok. Yöneticinizden bir AI anahtarı eklemesini isteyin.",
+      "AICRM_PROVIDER_FAILED": "AI servisi bir hata döndürdü. Lütfen tekrar deneyin.",
+      "VALIDATION_FAILED": "Vurgulanan alanları kontrol edip tekrar deneyin.",
+      "PLAN_FEATURE_LOCKED": "Bu özelliği kullanmak için planınızı yükseltin."
+    },
+    "chat": {
+      "title": "AI CRM Kopilotu",
+      "subtitle": "Kişi ve anlaşma bulmasını veya oluşturmasını, satış hattı aşamalarını taşımasını veya bir rapor çalıştırmasını isteyin.",
+      "loading": "Yükleniyor…",
+      "thinking": "Düşünüyor…",
+      "emptyState": "Merhaba deyin veya \"hangi anlaşmalar açık?\" gibi bir şey sorun",
+      "inputPlaceholder": "Kopilota sorun…",
+      "send": "Gönder",
+      "resetConversation": "Konuşmayı sıfırla",
+      "recentActions": "Son işlemler",
+      "noRecentActions": "Henüz işlem yok.",
+      "notice": {
+        "settingsSaved": "Ayar kaydedildi."
+      },
+      "settings": {
+        "title": "WhatsApp personel kanalı",
+        "waCopilotToggle": "Personelin WhatsApp üzerinden Kopilot ile sohbet etmesine izin ver (henüz kullanılamıyor)"
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "AI CRM 助手"
+    },
+    "errors": {
+      "generic": "出了点问题,请重试。",
+      "AICRM_NO_AI_PROVIDER": "未配置AI提供方,请联系管理员添加AI密钥。",
+      "AICRM_PROVIDER_FAILED": "AI服务返回了错误,请重试。",
+      "VALIDATION_FAILED": "请检查高亮显示的字段后重试。",
+      "PLAN_FEATURE_LOCKED": "请升级您的套餐以使用此功能。"
+    },
+    "chat": {
+      "title": "AI CRM 助手",
+      "subtitle": "让它帮你查找或创建联系人与交易、移动销售流程阶段,或运行报表。",
+      "loading": "加载中…",
+      "thinking": "思考中…",
+      "emptyState": "打个招呼,或者问问\"有哪些未结交易?\"",
+      "inputPlaceholder": "问问助手…",
+      "send": "发送",
+      "resetConversation": "重置对话",
+      "recentActions": "最近操作",
+      "noRecentActions": "暂无操作。",
+      "notice": {
+        "settingsSaved": "设置已保存。"
+      },
+      "settings": {
+        "title": "WhatsApp 员工频道",
+        "waCopilotToggle": "允许员工通过WhatsApp与助手聊天(暂未开放)"
+      }
+    }
+  }
+}

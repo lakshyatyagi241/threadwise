@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "AI CRM コパイロット"
+    },
+    "errors": {
+      "generic": "問題が発生しました。もう一度お試しください。",
+      "AICRM_NO_AI_PROVIDER": "AIプロバイダーが設定されていません。管理者にAIキーの追加を依頼してください。",
+      "AICRM_PROVIDER_FAILED": "AIサービスがエラーを返しました。もう一度お試しください。",
+      "VALIDATION_FAILED": "ハイライトされた項目を確認して、もう一度お試しください。",
+      "PLAN_FEATURE_LOCKED": "この機能を使用するにはプランをアップグレードしてください。"
+    },
+    "chat": {
+      "title": "AI CRM コパイロット",
+      "subtitle": "連絡先や商談の検索・作成、パイプラインステージの変更、レポートの実行などを依頼できます。",
+      "loading": "読み込み中…",
+      "thinking": "考え中…",
+      "emptyState": "「こんにちは」と言ってみるか、「どの商談が進行中ですか?」のように質問してください",
+      "inputPlaceholder": "コパイロットに質問する…",
+      "send": "送信",
+      "resetConversation": "会話をリセット",
+      "recentActions": "最近の操作",
+      "noRecentActions": "まだ操作はありません。",
+      "notice": {
+        "settingsSaved": "設定を保存しました。"
+      },
+      "settings": {
+        "title": "WhatsApp スタッフチャンネル",
+        "waCopilotToggle": "スタッフがWhatsApp経由でコパイロットとチャットできるようにする(まだ利用できません)"
+      }
+    }
+  }
+}

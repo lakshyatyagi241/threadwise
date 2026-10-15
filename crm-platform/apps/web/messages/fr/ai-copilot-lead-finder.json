@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "Copilote IA CRM"
+    },
+    "errors": {
+      "generic": "Une erreur s'est produite. Veuillez réessayer.",
+      "AICRM_NO_AI_PROVIDER": "Aucun fournisseur d'IA n'est configuré. Demandez à votre administrateur d'ajouter une clé IA.",
+      "AICRM_PROVIDER_FAILED": "Le service d'IA a renvoyé une erreur. Veuillez réessayer.",
+      "VALIDATION_FAILED": "Vérifiez les champs surlignés et réessayez.",
+      "PLAN_FEATURE_LOCKED": "Passez à un forfait supérieur pour utiliser cette fonctionnalité."
+    },
+    "chat": {
+      "title": "Copilote IA CRM",
+      "subtitle": "Demandez-lui de trouver ou créer des contacts et des affaires, de déplacer des étapes du pipeline, ou de générer un rapport.",
+      "loading": "Chargement…",
+      "thinking": "Réflexion en cours…",
+      "emptyState": "Dites bonjour, ou demandez par exemple \"quelles affaires sont ouvertes ?\"",
+      "inputPlaceholder": "Demandez au Copilote…",
+      "send": "Envoyer",
+      "resetConversation": "Réinitialiser la conversation",
+      "recentActions": "Actions récentes",
+      "noRecentActions": "Aucune action pour l'instant.",
+      "notice": {
+        "settingsSaved": "Paramètre enregistré."
+      },
+      "settings": {
+        "title": "Canal WhatsApp du personnel",
+        "waCopilotToggle": "Autoriser le personnel à discuter avec le Copilote via WhatsApp (pas encore disponible)"
+      }
+    }
+  }
+}
