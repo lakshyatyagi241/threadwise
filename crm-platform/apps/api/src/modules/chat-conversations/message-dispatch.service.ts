@@ -5,6 +5,7 @@ import { AppError } from '../../common/errors/app-error';
 import { ConversationTranslationService } from '../localization-translation';
 import { ChannelError, type ChannelRuntime } from '../../infra/providers/chat-conversations';
 import { ChannelDispatcher, type DispatchResult } from './channel-dispatcher.service';
+import { SendHeldError } from './send-held.error';
 import { ChannelRegistryService } from './channel-registry.service';
 import { ChannelsRepository } from './channels.repository';
 import { DeliveryReporter } from './delivery-reporter';
@@ -100,6 +101,11 @@ export class MessageDispatchService {
         },
       });
     } catch (err) {
+      // Quiet hours (BL-177): not a failure. The hold is recorded and thrown on; the processor delays the job to the opening.
+      if (err instanceof SendHeldError) {
+        await this.held(orgId, row, ref, err);
+        throw err;
+      }
       return this.failed(orgId, row, ref, err, options, runtime.uuid);
     }
 
@@ -247,6 +253,31 @@ export class MessageDispatchService {
     const changed = ['lastOutbound', 'waiting'];
     if (done.firstResponse) changed.push('firstResponse');
     await this.realtime.conversationChanged(orgId, done.after, changed);
+  }
+
+  /**
+   * A marketing message met the workspace's quiet hours (BL-177). It stays `queued`; the reason and the instant it may go are written
+   * on the message and in its event log, and the open thread is asked to refresh so the agent sees "held until". Nothing is lost: the
+   * job comes back at `hold.until`, the ConsentGate and the hours are asked again, and then it goes.
+   */
+  private async held(
+    orgId: number,
+    row: MessageRow,
+    ref: { id: number; createdAt: string },
+    err: SendHeldError,
+  ): Promise<void> {
+    const conversationUuid = await this.db.txAs({ orgId }, async (tx) => {
+      const moved = await this.messages.setHold(tx, orgId, ref, err.hold);
+      if (!moved) return null;
+      await this.messages.insertEvent(tx, orgId, ref, 'held', { ...err.hold });
+      return (await this.messages.byId(tx, orgId, ref.id, ref.createdAt))?.conversationUuid ?? null;
+    });
+    this.logger.log(
+      { orgId, message: row.uuid, until: err.hold.until, reason: err.hold.reason },
+      'outbound message held',
+    );
+    if (conversationUuid)
+      await this.realtime.threadChanged(orgId, conversationUuid, 'message_held');
   }
 
   /**

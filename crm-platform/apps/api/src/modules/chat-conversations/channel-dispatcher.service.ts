@@ -1,7 +1,13 @@
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
-import { ERROR_CODES, purposeOf, type ConsentSubject, type PurposeInput } from '@crm/contracts';
+import {
+  ERROR_CODES,
+  holdOf,
+  purposeOf,
+  type ConsentSubject,
+  type PurposeInput,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import {
@@ -25,11 +31,13 @@ import {
   OUTBOUND_SEND_GUARD,
   type OutboundSendGuard,
 } from '../../infra/providers/whatsapp/send-guard.port';
+import { SendWindowService, holdsPurpose } from '../compliance-center';
 import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { effectiveCapabilitiesOf } from './channel-capabilities';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
+import { SendHeldError } from './send-held.error';
 
 /**
  * What the send IS, for the ConsentGate (BL-141). Required on every request, so a new caller cannot forget it: free-form replies and
@@ -111,6 +119,8 @@ export class ChannelDispatcher {
     @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly consentGate: ConsentGate,
+    // Quiet hours (BL-177). Optional so a caller that builds the dispatcher without it keeps the old behaviour: nothing is held.
+    @Optional() private readonly sendWindow?: SendWindowService,
   ) {}
 
   /**
@@ -177,6 +187,9 @@ export class ChannelDispatcher {
     if (stored) return { ...stored, replayed: true };
     // At send time, not only at queue time: a STOP that arrived while the message waited in the queue still stops it.
     await this.assertConsent(req, envelope, window);
+    // After the consent answer (a denied contact is never merely held) and at send time too: a message released from a hold passes
+    // through here again, so the hours are checked once more on the clock of the moment it actually goes.
+    await this.assertSendWindow(req, envelope, now);
 
     const owner = randomUUID();
     const locked = await this.redisCall(() =>
@@ -279,6 +292,33 @@ export class ChannelDispatcher {
       'The message was not sent: this workspace requires a recorded consent for marketing messages and this contact has none.',
       HttpStatus.UNPROCESSABLE_ENTITY,
     );
+  }
+
+  /**
+   * Quiet hours (BL-177): a MARKETING send inside them is HELD, never denied. Service replies and utility notices are never asked about.
+   * Throws `SendHeldError`; the caller keeps the message and tries again at `hold.until`.
+   */
+  private async assertSendWindow(
+    req: DispatchRequest,
+    envelope: OutboundEnvelope,
+    now: Date,
+  ): Promise<void> {
+    if (!this.sendWindow) return;
+    const { purpose, contactId } = req.consent;
+    if (!holdsPurpose(purposeOf(purpose).ledgerPurpose)) return;
+    const mail = req.channel.kind === 'email';
+    const decision = await this.sendWindow.check(
+      req.channel.orgId,
+      'message',
+      {
+        contactId: contactId ?? null,
+        phone: mail ? null : envelope.to,
+        email: mail ? envelope.to : null,
+      },
+      { now },
+    );
+    const hold = holdOf(decision);
+    if (hold) throw new SendHeldError(hold);
   }
 
   // --- internals ---------------------------------------------------------------------------------------------------------------
