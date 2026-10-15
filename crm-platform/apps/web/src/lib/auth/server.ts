@@ -10,6 +10,7 @@ import { cookies, headers } from 'next/headers';
 import { clientIpFrom } from './client-ip';
 import { cookieNames, type SessionKind, type TokenPair } from './cookies';
 import { REQUEST_PATH_HEADER, loginPath, refreshPath } from './next-path';
+import { upstreamFetch } from './upstream';
 
 export const apiBase = () => process.env.API_URL ?? 'http://localhost:3000';
 
@@ -46,7 +47,7 @@ async function probe<T>(
   const at = store.get(names.access)?.value;
   const hasRefresh = Boolean(store.get(names.refresh)?.value);
   if (!at) return { session: null, expired: hasRefresh };
-  const res = await fetch(`${apiBase()}${path}`, {
+  const res = await upstreamFetch(`${apiBase()}${path}`, {
     headers: { Authorization: `Bearer ${at}`, ...(await clientAddressHeaders()) },
     cache: 'no-store',
   });
@@ -117,7 +118,7 @@ export async function refreshTokens(
   kind: SessionKind = 'user',
 ): Promise<TokenPair | null> {
   const path = kind === 'operator' ? '/v2/platform/auth/refresh' : '/v2/auth/refresh';
-  const res = await fetch(`${apiBase()}${path}`, {
+  const res = await upstreamFetch(`${apiBase()}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...(await clientAddressHeaders()) },
     body: JSON.stringify({ refreshToken }),

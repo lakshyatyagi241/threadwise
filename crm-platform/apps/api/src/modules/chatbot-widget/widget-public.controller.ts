@@ -218,6 +218,26 @@ export class WidgetPublicController {
       .json(await this.widgets.feedback(token, this.publicRequest(req, inputUuid), body));
   }
 
+  /** The visitor chose "Restart this chat" or "Close this chat": a fresh visitor, so the next load is a new conversation. */
+  @Post('api/restart')
+  async restart(
+    @Param('token') token: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const out = await this.widgets.restart(token, this.publicRequest(req, undefined));
+    res.cookie(`wgt_vid_${out.widgetUuid}`, out.visitorUuid, {
+      maxAge: YEAR_MS,
+      httpOnly: true,
+      path: '/',
+      secure: req.secure,
+      sameSite: req.secure ? 'none' : 'lax',
+    });
+    res.status(200).json({ ok: true, visitor_uuid: out.visitorUuid });
+  }
+
   @Get('api/history')
   async history(
     @Param('token') token: string,

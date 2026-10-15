@@ -56,6 +56,7 @@ run "format check (changed files)" format_files
 run "lint"          pnpm lint
 run "typecheck"     pnpm typecheck
 run "architecture boundaries" pnpm arch:check
+run "event-loop static gate" node tools/event-loop-audit/scan.mjs --check
 run "unit tests"    pnpm test
 run "translations (21 locales)" bash .claude/skills/i18n-translate-sync/scripts/check.sh
 

@@ -1,0 +1,86 @@
+{
+  "planningTarget": 280,
+  "implemented": {
+    "unitIntegration": 27,
+    "staticGate": 1,
+    "benchmarks": 2,
+    "total": 30
+  },
+  "coverageAgainstTarget": "30 of 280 (about 11%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
+  "categories": [
+    {
+      "name": "Instrumentation unit/integration",
+      "target": 40,
+      "implemented": 27,
+      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
+      "covers": [
+        "histogram ns to ms conversion",
+        "empty/NaN histogram is a missing measurement, not zeros",
+        "interval ELU delta, baseline moves per window",
+        "real synchronous block detected, then recovery",
+        "threshold classification (ok / warn / critical), high ELU alone is not blocking",
+        "Prometheus text: identity labels, escaping, NaN dropped, histogram cumulative, cardinality cap with overflow",
+        "RuntimeMonitor: series present, blocked-window log carries route templates only, HTTP and job series, unmeasurable window, start/stop idempotent, cgroup throttling read",
+        "HTTP middleware: route template and 'unmatched', raw URL never a label, abandoned request recorded once as 499",
+        "metrics server: GET /metrics only, bearer token required when set, other paths and methods 404/401",
+        "environment: defaults, master switch, single monitor per process, malformed values stop boot"
+      ],
+      "missing": [
+        "stale-metric detection end to end",
+        "restart continuity",
+        "sampling accuracy vs an independent timer across resolutions",
+        "metrics server under concurrent scrape"
+      ]
+    },
+    {
+      "name": "Blocking-operation and input-boundary",
+      "target": 50,
+      "implemented": 1,
+      "kind": "static gate",
+      "file": "tools/event-loop-audit/scan.mjs --check",
+      "covers": [
+        "new sync fs / child process / crypto / zlib / JSON deep clone / Atomics.wait / unbounded loop / ReDoS-shaped regex on a runtime path fails the gate; verified to fail on an injected probe file"
+      ],
+      "missing": ["scanner unit tests per rule", "oversized-payload boundary tests per endpoint"]
+    },
+    {
+      "name": "API/module performance scenarios",
+      "target": 70,
+      "implemented": 0,
+      "blockedBy": "No load tool in the repo and no isolated API+Postgres+Redis performance environment"
+    },
+    {
+      "name": "Worker/concurrency scenarios",
+      "target": 40,
+      "implemented": 0,
+      "blockedBy": "Queue processors do not report job metrics yet; no worker saturation harness"
+    },
+    {
+      "name": "CPU/GC/memory correlation",
+      "target": 30,
+      "implemented": 2,
+      "kind": "benchmark",
+      "files": [
+        "tools/event-loop-audit/bench.mjs (monitor overhead, fault detection, recovery)",
+        "tools/event-loop-audit/measure-zlib.mjs (sync vs async zlib loop hold)"
+      ],
+      "missing": [
+        "heap growth under sustained load",
+        "GC pause vs loop spike correlation",
+        "container throttling effect"
+      ]
+    },
+    {
+      "name": "Load/spike/soak profiles",
+      "target": 20,
+      "implemented": 0,
+      "blockedBy": "Same as API scenarios; soak needs 12 h and 24 h runs"
+    },
+    {
+      "name": "Alerting, telemetry and operational",
+      "target": 30,
+      "implemented": 0,
+      "note": "deploy/observability/event-loop.rules.yml exists and parses as YAML; PromQL was NOT validated with promtool and no alert has been fired against a real Prometheus."
+    }
+  ]
+}
