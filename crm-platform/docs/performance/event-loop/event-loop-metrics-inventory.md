@@ -32,7 +32,11 @@ Units are seconds and bytes (Prometheus convention); the engineering targets in 
 
 - **Webhook acknowledgement latency (#17)**: derived from `crm_http_request_duration_seconds` for the webhook route templates; no separate series.
 - **Per-process OOM count (#20)**: an orchestrator signal (container restarts, exit code 137), not something a dying process can report. Use `crm_process_start_time_seconds` changes plus the orchestrator.
-- **Queue job metrics are not fed yet.** `RuntimeMonitor.observeJob(queue, waitMs, durationMs, outcome)` exists and is tested, but none of the BullMQ processors calls it. Until they do, the two queue histograms are empty and the worker alert `WorkerEventLoopBlockingWithQueueImpact` cannot fire. Tracked in the optimization backlog.
+- **Queue job metrics come from one hook, with these limits** (`job-metrics.ts`, `JobMetricsModule` in the worker process; checked against a real BullMQ worker with `tools/event-loop-audit/verify-job-metrics.ts`):
+  - One observation per job that reaches a **final** state. BullMQ's `completed`/`failed` events do not fire for an attempt that will be retried, so failed attempts that are retried are invisible and `outcome="failed"` understates the real attempt failure rate.
+  - Wait excludes the delay the producer asked for (a promoted delayed job reports `job.delay = 0`, so the original `opts.delay` is used), and is **not recorded for a job that needed a retry** (its enqueue time says nothing about queue pressure).
+  - Duration is that of the final attempt.
+  - Labels are the queue name and outcome only. Not measured yet: the effect on real processors in a running worker, and the `WorkerEventLoopBlockingWithQueueImpact` alert, which has never fired.
 - **`apps/web` (Next.js server) is not instrumented.**
 
 ## Behaviour on bad data

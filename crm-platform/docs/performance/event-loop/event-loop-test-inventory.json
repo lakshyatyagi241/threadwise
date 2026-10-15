@@ -1,18 +1,18 @@
 {
   "planningTarget": 280,
   "implemented": {
-    "unitIntegration": 27,
+    "unitIntegration": 41,
     "staticGate": 1,
-    "benchmarks": 2,
-    "total": 30
+    "benchmarks": 3,
+    "total": 45
   },
-  "coverageAgainstTarget": "30 of 280 (about 11%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
+  "coverageAgainstTarget": "45 of 280 (about 16%). The 280-check target is NOT MET. The categories below show what exists and what is missing.",
   "categories": [
     {
       "name": "Instrumentation unit/integration",
       "target": 40,
-      "implemented": 27,
-      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts",
+      "implemented": 41,
+      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts (27) and job-metrics.spec.ts (14: wait/duration math, delay handling, retry handling, labels, discovery of WorkerHost processors)",
       "covers": [
         "histogram ns to ms conversion",
         "empty/NaN histogram is a missing measurement, not zeros",
@@ -58,11 +58,12 @@
     {
       "name": "CPU/GC/memory correlation",
       "target": 30,
-      "implemented": 2,
+      "implemented": 3,
       "kind": "benchmark",
       "files": [
         "tools/event-loop-audit/bench.mjs (monitor overhead, fault detection, recovery)",
-        "tools/event-loop-audit/measure-zlib.mjs (sync vs async zlib loop hold)"
+        "tools/event-loop-audit/measure-zlib.mjs (sync vs async zlib loop hold)",
+        "tools/event-loop-audit/verify-job-metrics.ts (real BullMQ worker against throwaway Redis, 7 checks, needs Docker)"
       ],
       "missing": [
         "heap growth under sustained load",

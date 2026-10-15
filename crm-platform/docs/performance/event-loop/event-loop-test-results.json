@@ -11,6 +11,20 @@
       "note": "Run after the code-review fixes. Includes two tests that block the real loop for 300 ms."
     },
     {
+      "suite": "apps/api/test/unit/platform-infrastructure/job-metrics.spec.ts",
+      "status": "PASSED",
+      "tests": 15,
+      "passed": 15,
+      "ranOn": "2026-10-15, branch claude/event-loop-job-metrics",
+      "note": "Run together with event-loop-monitor.spec.ts: 42/42. Includes one test that boots a real Nest application context to check the module wiring. Typecheck of the app config and ESLint of the changed API files are clean."
+    },
+    {
+      "suite": "tools/event-loop-audit/verify-job-metrics.ts (real BullMQ worker, throwaway redis:7-alpine in Docker)",
+      "status": "PASSED",
+      "checks": 7,
+      "note": "The first run FAILED 4 of 7 and found a bug (a promoted delayed job's delay was counted as queue wait, because BullMQ resets job.delay to 0) and a wrong assumption (BullMQ emits failed/completed only at a job's final state). Both fixed, rerun 7/7. Uses the library's own worker, not the app's processors: the booted app worker has NOT been run."
+    },
+    {
       "suite": "apps/api/test/unit/platform-infrastructure (all 7 files)",
       "status": "PASSED",
       "tests": 162,
@@ -39,8 +53,16 @@
       "skipped": 2,
       "files": { "passed": 598, "failed": 2 },
       "failures": [
-        { "file": "test/unit/infra/boundaries.matrix.spec.ts", "tests": 4, "reason": "outbox consumer files (calling-voice, flow-runtime-engine) are reported as neither explained nor listed in the idempotency audit; paths print with backslashes" },
-        { "file": "test/unit/security/encryption-audit.spec.ts", "tests": 4, "reason": "offenders are crypto.service.ts, india.drivers.ts and seal.ts, printed as common\\\\crypto\\\\crypto.service.ts against forward-slash allow-lists (Windows path separator)" }
+        {
+          "file": "test/unit/infra/boundaries.matrix.spec.ts",
+          "tests": 4,
+          "reason": "outbox consumer files (calling-voice, flow-runtime-engine) are reported as neither explained nor listed in the idempotency audit; paths print with backslashes"
+        },
+        {
+          "file": "test/unit/security/encryption-audit.spec.ts",
+          "tests": 4,
+          "reason": "offenders are crypto.service.ts, india.drivers.ts and seal.ts, printed as common\\\\crypto\\\\crypto.service.ts against forward-slash allow-lists (Windows path separator)"
+        }
       ],
       "attribution": "The offending files are not ones this change touches, and the path form matches the known Windows separator problems in this repo. Not re-run on main to prove it; treat as environment/other-work failures, not as passed.",
       "note": "Run before the code-review fixes."
@@ -56,15 +78,45 @@
       "note": "Two errors in test/integration/catalog-products/variant-channels.spec.ts and test/unit/chrome-extension-sheets-addon/addon-source.spec.ts, neither touched here. No error in the files of this change."
     },
     { "suite": "eslint on changed API files", "status": "PASSED" },
-    { "suite": "dependency-cruiser (pnpm --filter @crm/api arch)", "status": "PASSED", "note": "0 errors, 3 existing no-orphans warnings" },
-    { "suite": "event-loop static gate (scan.mjs --check)", "status": "PASSED", "detail": "31 baselined runtime suspects; fails (exit 1) on an injected new fs call, on a same-count swap, and on a while(true) whose only return is inside a callback" },
-    { "suite": "audit:tenancy --static / audit:authz / audit:auth", "status": "NOT A PASS FOR THIS CHANGE", "note": "Existing findings only: TI-xxx backlog, and public-route-drift for 3 consent/forms routes already on main. No new finding from this change." },
-    { "suite": "pnpm audit --prod --audit-level high", "status": "2 existing high advisories", "note": "No dependency or lockfile change in this work." },
-    { "suite": "pre-pr gate (gate.sh)", "status": "NOT RUN as a whole", "note": "Its parts were run individually as listed. The web typecheck, i18n and web-lint steps were not run." }
+    {
+      "suite": "dependency-cruiser (pnpm --filter @crm/api arch)",
+      "status": "PASSED",
+      "note": "0 errors, 3 existing no-orphans warnings"
+    },
+    {
+      "suite": "event-loop static gate (scan.mjs --check)",
+      "status": "PASSED",
+      "detail": "31 baselined runtime suspects; fails (exit 1) on an injected new fs call, on a same-count swap, and on a while(true) whose only return is inside a callback"
+    },
+    {
+      "suite": "audit:tenancy --static / audit:authz / audit:auth",
+      "status": "NOT A PASS FOR THIS CHANGE",
+      "note": "Existing findings only: TI-xxx backlog, and public-route-drift for 3 consent/forms routes already on main. No new finding from this change."
+    },
+    {
+      "suite": "pnpm audit --prod --audit-level high",
+      "status": "2 existing high advisories",
+      "note": "No dependency or lockfile change in this work."
+    },
+    {
+      "suite": "pre-pr gate (gate.sh)",
+      "status": "NOT RUN as a whole",
+      "note": "Its parts were run individually as listed. The web typecheck, i18n and web-lint steps were not run."
+    }
   ],
   "benchmarks": [
-    { "name": "monitor overhead and detection", "file": "evidence/bench-monitor.json", "status": "RAN", "caveat": "bare http server, same machine as the load generator" },
-    { "name": "sync vs async zlib loop hold", "file": "evidence/zlib-hold.json", "status": "RAN", "caveat": "synthetic NDJSON, one machine" }
+    {
+      "name": "monitor overhead and detection",
+      "file": "evidence/bench-monitor.json",
+      "status": "RAN",
+      "caveat": "bare http server, same machine as the load generator"
+    },
+    {
+      "name": "sync vs async zlib loop hold",
+      "file": "evidence/zlib-hold.json",
+      "status": "RAN",
+      "caveat": "synthetic NDJSON, one machine"
+    }
   ],
   "notVerified": [
     "Prometheus rules (promtool)",

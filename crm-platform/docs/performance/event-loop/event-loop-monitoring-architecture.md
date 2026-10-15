@@ -55,10 +55,10 @@ measured too. The API also installs `httpMetricsMiddleware` before the routes.
 
 ## Process inventory (summary; machine-readable in `event-loop-runtime-inventory.json`)
 
-| Process                                                            | Instrumented                                                                                      | How                                            |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| `apps/api` HTTP + WebSocket (`dist/src/main.js`)                   | yes                                                                                               | `startRuntimeMonitor('api')` + HTTP middleware |
-| `apps/api` worker (`dist/src/worker.js`, BullMQ + outbox)          | yes for loop, CPU, memory, GC; **job duration/wait series exist but no processor feeds them yet** | `startRuntimeMonitor('worker')`                |
-| `apps/web` Next.js server                                          | **no**                                                                                            | needs `instrumentation.ts`; see backlog        |
-| CLIs (`seed:*`, `secrets:reencrypt`, offsite backup, key rotation) | no, by design                                                                                     | short-lived                                    |
-| Worker threads                                                     | none exist in the repo                                                                            | n/a                                            |
+| Process                                                            | Instrumented                                                                                                               | How                                            |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `apps/api` HTTP + WebSocket (`dist/src/main.js`)                   | yes                                                                                                                        | `startRuntimeMonitor('api')` + HTTP middleware |
+| `apps/api` worker (`dist/src/worker.js`, BullMQ + outbox)          | yes for loop, CPU, memory, GC, and job wait/duration/outcome per queue (one `JobMetricsModule` hook on every `WorkerHost`) | `startRuntimeMonitor('worker')`                |
+| `apps/web` Next.js server                                          | **no**                                                                                                                     | needs `instrumentation.ts`; see backlog        |
+| CLIs (`seed:*`, `secrets:reencrypt`, offsite backup, key rotation) | no, by design                                                                                                              | short-lived                                    |
+| Worker threads                                                     | no, by design: one short-lived thread per flow Code-node run (`infra/sandbox/code-sandbox.ts`), hard-killed on timeout     | its cost appears in the caller's job duration  |
