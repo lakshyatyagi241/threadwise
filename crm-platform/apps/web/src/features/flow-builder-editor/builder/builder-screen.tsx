@@ -17,7 +17,8 @@ import { ApiError } from '@/lib/api/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { flowsApi } from '../api/flows';
-import { useMsg, type Msg } from '../lib/msg';
+import { useFlb, useMsg, type Msg } from '../lib/msg';
+import { nodeLabel } from '../lib/contract-text';
 import { validateGraph } from '../lib/validation-text';
 import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
@@ -61,6 +62,8 @@ import type { FormEnv } from './inspector/types';
 import { AIGenModal, SaveConfirmModal } from './modals';
 import { Icon } from './node-card';
 import { Palette } from './palette';
+import { QuickAddMenu } from './quick-add';
+import { uploadFlowMedia } from '../lib/upload-media';
 import { TestPanel } from './simulator/test-panel';
 import { Toolbar } from './toolbar';
 
@@ -166,6 +169,7 @@ function BuilderInner({
 }: InnerProps) {
   const tb = useTranslations('flb.builder.shell.screen');
   const tw = useTranslations('flb.builder.webBot');
+  const tf = useFlb();
   const seed = useMemo<CanvasState>(
     () => ({
       nodes: initial?.graph.flowNodes ?? [],
@@ -298,6 +302,12 @@ function BuilderInner({
     setState(r.state);
   }, [hist]);
 
+  const [quickAdd, setQuickAdd] = useState<{
+    from: { nodeId: string; handleId: string };
+    world: { x: number; y: number };
+    screen: { x: number; y: number };
+  } | null>(null);
+
   const doAdd = useCallback(
     (type: string, x: number, y: number) => {
       const r = addNode(state, type, x, y);
@@ -306,6 +316,20 @@ function BuilderInner({
       setSelectedId(r.id ?? null);
     },
     [state, commit, toast],
+  );
+  const quickAddPick = useCallback(
+    (type: string) => {
+      if (!quickAdd) return;
+      const r = addNode(state, type, quickAdd.world.x, quickAdd.world.y - 30);
+      if (!r.ok) {
+        toast(r.message);
+        return;
+      }
+      commit(r.id ? connect(r.state, quickAdd.from, r.id) : r.state);
+      setSelectedId(r.id ?? null);
+      setQuickAdd(null);
+    },
+    [quickAdd, state, commit, toast],
   );
   const addAtCenter = useCallback(
     (type: string) => {
@@ -375,6 +399,16 @@ function BuilderInner({
     return ctx.senders.chat.length > 0;
   }, [mode, ctx.senders]);
 
+  /** Select a node and bring it to the middle of the canvas. */
+  const focusNode = (id: string) => {
+    const n = state.nodes.find((x) => x.id === id);
+    const el = wrapperRef.current;
+    setSelectedId(id);
+    if (!n || !el) return;
+    const r = el.getBoundingClientRect();
+    setPan({ x: r.width / 2 - (n.x + NODE_W / 2) * zoom, y: r.height / 2 - (n.y + 60) * zoom });
+  };
+
   const runValidation = (): boolean => {
     const r = validateGraph(state.nodes, state.edges, { mode, senderAvailable });
     if (r.ok) {
@@ -382,7 +416,7 @@ function BuilderInner({
       return true;
     }
     setVres({ edges: state.edges, ids: new Set(r.badNodeIds), items: r.items.map(m), popup: true });
-    if (r.badNodeIds[0]) setSelectedId(r.badNodeIds[0]);
+    if (r.badNodeIds[0]) focusNode(r.badNodeIds[0]);
     return false;
   };
 
@@ -541,25 +575,7 @@ function BuilderInner({
       toast,
       nodes: state.nodes,
       flowId,
-      uploadMedia: async (file, kind) => {
-        const fd = new FormData();
-        fd.append('file', file);
-        fd.append('type', kind);
-        const res = await fetch('/api/v2/flows/upload-media', {
-          method: 'POST',
-          body: fd,
-          credentials: 'same-origin',
-          headers: { Accept: 'application/json' },
-        });
-        const json = (await res.json().catch(() => ({}))) as {
-          data?: { url: string; filename: string };
-          detail?: string;
-          title?: string;
-        };
-        if (!res.ok || !json.data)
-          throw new Error(json.detail ?? json.title ?? `HTTP ${res.status}`);
-        return { url: json.data.url, filename: json.data.filename };
-      },
+      uploadMedia: uploadFlowMedia,
     }),
     [ctx, mode, openedAs, refreshContext, toast, state.nodes, flowId],
   );
@@ -643,10 +659,21 @@ function BuilderInner({
               if (next !== state) commit(next);
             }}
             onDropNode={doAdd}
+            onDropEmpty={(from, world, screen) => setQuickAdd({ from, world, screen })}
             onDeleteEdge={(id) => commit(deleteEdge(state, id))}
             onPatchNode={(id, patch) => commit(updateData(state, id, patch))}
             wrapperRef={wrapperRef}
           >
+            {quickAdd ? (
+              <QuickAddMenu
+                mode={mode}
+                x={quickAdd.screen.x}
+                y={quickAdd.screen.y}
+                onPick={quickAddPick}
+                onClose={() => setQuickAdd(null)}
+              />
+            ) : null}
+
             {selectedNode ? (
               <NodeActionBar
                 node={selectedNode}
@@ -800,6 +827,11 @@ function BuilderInner({
         {validationItems ? (
           <ValidationPopup
             items={validationItems}
+            nodes={[...invalid].flatMap((id) => {
+              const n = state.nodes.find((x) => x.id === id);
+              return n ? [{ id, label: nodeLabel(tf, n.type) }] : [];
+            })}
+            onGoTo={focusNode}
             onClose={() => setVres((v) => (v ? { ...v, popup: false } : v))}
           />
         ) : null}

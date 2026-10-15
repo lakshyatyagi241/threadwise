@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -100,7 +101,11 @@ export function CallingProvider({
   const served = useIceServers(canCall && iceServers === undefined);
   const rules = useRecordingSettings(canCall);
   const rulesRef = useRef<CallRecordingSettings | null>(null);
-  rulesRef.current = rules.data ?? null;
+  // Mirrors the latest rules for the call callbacks. A layout effect keeps it current before any click or poll handler can run.
+  const rulesData = rules.data ?? null;
+  useLayoutEffect(() => {
+    rulesRef.current = rulesData;
+  }, [rulesData]);
   const source = iceServers ?? served.data?.servers;
   const ice = useMemo(() => parseIceServers(source), [source]);
 

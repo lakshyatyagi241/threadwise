@@ -24,6 +24,8 @@ export interface MediaDestination {
   target: StorageTarget | null;
   visibility: 'public' | 'private';
   cdnUrl: string;
+  /** Public address of the bucket for links handed to outsiders, when the endpoint the server uses is private (`S3_PUBLIC_ENDPOINT`). */
+  publicEndpoint?: string;
 }
 
 const LOCAL_URL_ROOT = '/storage';
@@ -82,7 +84,18 @@ export class MediaStorageService {
       : null;
     if (!target) {
       const fallback = this.envTarget();
-      if (fallback) return { disk: 'cloud', target: fallback, visibility: 'private', cdnUrl: '' };
+      if (fallback) {
+        const publicEndpoint = this.config
+          ?.get('S3_PUBLIC_ENDPOINT', { infer: true })
+          ?.replace(/\/+$/, '');
+        return {
+          disk: 'cloud',
+          target: fallback,
+          visibility: 'private',
+          cdnUrl: '',
+          ...(publicEndpoint ? { publicEndpoint } : {}),
+        };
+      }
     }
     return {
       disk: target ? 'cloud' : 'local',
@@ -168,8 +181,8 @@ export class MediaStorageService {
     if (d.disk !== 'cloud' || !d.target) return `${LOCAL_URL_ROOT}/${k}`;
     const objectKey = this.fullKey(d, k);
     if (d.cdnUrl) return `${d.cdnUrl.replace(/\/+$/, '')}/${objectKey}`;
-    if (d.visibility === 'private') return presignS3Get(d.target, objectKey, ttlSeconds);
-    const t = d.target;
+    const t = d.publicEndpoint ? { ...d.target, endpoint: d.publicEndpoint } : d.target;
+    if (d.visibility === 'private') return presignS3Get(t, objectKey, ttlSeconds);
     const base = new URL(t.endpoint);
     return t.pathStyle
       ? `${t.endpoint}/${t.bucket}/${objectKey}`
