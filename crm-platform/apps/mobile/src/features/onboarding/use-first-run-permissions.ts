@@ -6,7 +6,7 @@ import { log } from '@/lib/observability/logger';
 
 /**
  * The first time the app opens on a phone, shows the phone's own permission prompts (notifications, calls, camera), one after the
- * other, over the app; a permission the phone will not ask about again opens the app's settings page instead. Nothing is asked
+ * other, over the app; a permission left off opens the app's settings page afterwards. Nothing is asked
  * until `enabled` (the app is on screen) and never twice: the flag is written before the first prompt, so closing the app in the
  * middle of the prompts does not bring them back on the next start.
  */

@@ -69,9 +69,9 @@ export async function requestPermission(
 
 /**
  * The first-open flow: the phone's own "Allow" prompt for each permission, one after the other, with no screen of the app in
- * between. A permission the phone will not ask about again (refused for good, here or in an earlier install) cannot be turned on
- * by a prompt, so the app's page in the phone's settings is opened once, at the end, for the person to switch it on there (the notification page itself when that is the only one). A
- * single "Don't allow" is respected: the phone would still ask next time, so nothing more happens.
+ * between. Any permission still off after its prompt (refused, or refused for good here or in an earlier install, when the phone
+ * would not even show the prompt) is left for the phone's settings: the app's page there is opened once, at the end, for the person
+ * to switch it on (the notification page itself when that is the only one).
  */
 export async function askForPermissions(labels: Labels): Promise<void> {
   const blocked: DevicePermission[] = [];
@@ -79,13 +79,13 @@ export async function askForPermissions(labels: Labels): Promise<void> {
     try {
       // A permission that is already on is answered at once, without a prompt.
       const answer = await requestPermission(kind, labels);
-      if (answer.state !== 'granted' && !answer.canAskAgain) blocked.push(kind);
+      if (answer.state !== 'granted') blocked.push(kind);
     } catch (error) {
       log.exception(error, 'device.permission_request_failed');
     }
   }
   if (blocked.length === 0) return;
-  // Notifications have a settings page of their own, with the switch on it; the rest are found under "Permissions" in the app's page.
+  // Notifications have a settings page of their own, with the switch on it; the rest are in the phone's list of the app's permissions.
   if (blocked.every((kind) => kind === 'notifications')) await openNotificationSettings();
   else await openPermissionSettings();
 }

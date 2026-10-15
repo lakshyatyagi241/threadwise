@@ -133,12 +133,13 @@ describe('askForPermissions', () => {
     expect(openSettings).not.toHaveBeenCalled();
   });
 
-  it('respects a single "Don\'t allow": the phone would ask again, so settings stay closed', async () => {
+  it('opens the app\'s settings page, once, after a single "Don\'t allow" too', async () => {
     notifyAsk.mockResolvedValue(answer('denied', true));
     cameraAsk.mockResolvedValue(answer('denied', true));
     callAnswer('denied');
     await askForPermissions(labels);
-    expect(openSettings).not.toHaveBeenCalled();
+    expect(openSettings).toHaveBeenCalledTimes(1);
+    expect(openNotifications).not.toHaveBeenCalled();
   });
 
   it("goes straight to the app's settings page, once, when the phone will not ask again", async () => {
@@ -150,8 +151,8 @@ describe('askForPermissions', () => {
     expect(openNotifications).not.toHaveBeenCalled();
   });
 
-  it('opens the notification page itself when notifications are the only ones refused for good', async () => {
-    notifyAsk.mockResolvedValue(answer('denied', false));
+  it('opens the notification page itself when notifications are the only ones left off', async () => {
+    notifyAsk.mockResolvedValue(answer('denied', true));
     cameraAsk.mockResolvedValue(answer('granted', true));
     callAnswer('granted');
     await askForPermissions(labels);
