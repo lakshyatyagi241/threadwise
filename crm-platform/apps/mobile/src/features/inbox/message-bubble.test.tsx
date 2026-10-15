@@ -63,6 +63,23 @@ describe('MessageBubble: pictures and files', () => {
     expect(await heightOf()).toBe(120);
   });
 
+  it('opens the picture full screen with the same token, and closes it again', async () => {
+    await renderApp(
+      <MessageBubble message={message(1, { kind: 'image', body: 'Look', media: media() })} />,
+    );
+    expect(screen.queryByTestId('picture-viewer-image')).toBeNull();
+    await fireEvent.press(
+      await screen.findByRole('imagebutton', { name: 'Open photo full screen' }),
+    );
+    const full = await screen.findByTestId('picture-viewer-image');
+    expect(full.props.source).toEqual([
+      { uri: 'http://api.test/v2/media/abc', headers: { Authorization: 'Bearer tok' } },
+    ]);
+    expect(full.props.resizeMode).toBe('contain');
+    await fireEvent.press(screen.getByRole('button', { name: 'Close photo' }));
+    expect(screen.queryByTestId('picture-viewer-image')).toBeNull();
+  });
+
   it('puts a tile with the word for it in place of a picture that cannot be loaded', async () => {
     await renderApp(
       <MessageBubble message={message(1, { kind: 'image', body: null, media: media() })} />,

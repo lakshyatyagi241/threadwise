@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Banner } from '@/components/ui/banner';
-import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { TextField } from '@/components/ui/text-field';
@@ -26,14 +25,18 @@ import {
 import { contactKey, useUpdateContact } from './use-contacts';
 import { describeEditFailure, useStatusOptions } from './use-properties';
 
+/** Which of the two dropdowns opened the sheet: each one lists only its own choices. */
+type Focus = 'stage' | 'status';
+
 interface SheetProps {
   contact: ContactResponse;
   options: readonly StatusOptionResponse[];
+  focus: Focus;
   onClose: () => void;
 }
 
-/** The sheet that changes the stage and status. It is mounted fresh each time it opens, so it starts from the contact. */
-function LifecycleSheet({ contact, options, onClose }: SheetProps) {
+/** The sheet behind a dropdown: the stage (and, for a move into a lost stage, why) or the status. It is mounted fresh each time it opens, so it starts from the contact. */
+function LifecycleSheet({ contact, options, focus, onClose }: SheetProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const update = useUpdateContact(contact.id);
@@ -110,7 +113,11 @@ function LifecycleSheet({ contact, options, onClose }: SheetProps) {
 
   return (
     <EditSheet
-      title={t('contactProps.lifecycle.change')}
+      title={
+        focus === 'stage'
+          ? t('contactProps.lifecycle.change')
+          : t('contactProps.lifecycle.changeStatus')
+      }
       onClose={onClose}
       onSave={save}
       saving={update.isPending}
@@ -118,7 +125,7 @@ function LifecycleSheet({ contact, options, onClose }: SheetProps) {
       {notice ? <Banner tone="warning" message={notice} /> : null}
       {banner ? <Banner tone="danger" message={banner} /> : null}
 
-      {stages.length > 0 ? (
+      {focus === 'stage' && stages.length > 0 ? (
         <View accessibilityRole="radiogroup">
           <Text variant="label" muted>
             {t('contactProps.lifecycle.stage')}
@@ -135,7 +142,7 @@ function LifecycleSheet({ contact, options, onClose }: SheetProps) {
         </View>
       ) : null}
 
-      {statuses.length > 0 ? (
+      {focus === 'status' && statuses.length > 0 ? (
         <View accessibilityRole="radiogroup">
           <Text variant="label" muted>
             {t('contactProps.lifecycle.status')}
@@ -152,7 +159,7 @@ function LifecycleSheet({ contact, options, onClose }: SheetProps) {
         </View>
       ) : null}
 
-      {askReason ? (
+      {focus === 'stage' && askReason ? (
         <View accessibilityRole="radiogroup">
           <Text variant="label" muted>
             {t('contactProps.lifecycle.lostReason')}
@@ -203,25 +210,62 @@ function LifecycleSheet({ contact, options, onClose }: SheetProps) {
   );
 }
 
+/** One of the two dropdowns: the label above, the current value with a caret under it. Opens the sheet of its own list. */
+function Dropdown({
+  label,
+  value,
+  onPress,
+}: {
+  label: string;
+  value: string;
+  onPress: (() => void) | null;
+}) {
+  const { t } = useTranslation();
+  const body = (
+    <>
+      <Text variant="caption" color="onBrandMuted">
+        {label}
+      </Text>
+      <View style={styles.value}>
+        <Text variant="label" color="onBrand" numberOfLines={1} style={styles.valueText}>
+          {value}
+        </Text>
+        {onPress ? <Icon name="caret-down" size={16} color="onBrand" /> : null}
+      </View>
+    </>
+  );
+  if (!onPress) return <View style={styles.cell}>{body}</View>;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${label}: ${value}`}
+      accessibilityHint={t('contactProps.lifecycle.dropdownHint')}
+      onPress={onPress}
+      style={[styles.cell, styles.touch]}
+    >
+      {body}
+    </Pressable>
+  );
+}
+
 /**
- * Where the contact stands: its lifecycle stage and status, with a pencil for people who may update contacts, plus its lead
- * score (read-only here; scoring itself is a separate concern). The stage and status lists are the workspace's own (the
- * property-read permission); when the person may not read them, or the workspace has none, the card only shows the current
- * values and offers no pencil.
+ * Where the contact stands, in the strip under the name on the header band: the lifecycle stage and the status as dropdowns
+ * (each opens a sheet with its own list; only for people who may update contacts), and the lead score (read-only here; scoring
+ * itself is a separate concern). The stage and status lists are the workspace's own (the property-read permission); when the
+ * person may not read them, or the workspace has none, the strip only shows the current values, with no caret.
  */
 export function LifecycleCard({ contact }: { contact: ContactResponse }) {
   const { t } = useTranslation();
   const session = useSession();
   const canUpdate = can(session.data, 'record.contacts.update');
   const canReadOptions = can(session.data, 'record.contact-properties.read');
-  // A refused or failed read leaves `data` empty, which is the read-only card.
+  // A refused or failed read leaves `data` empty, which is the read-only strip.
   const query = useStatusOptions(canReadOptions);
   const options = query.data ?? [];
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<Focus | null>(null);
 
   const stages = optionsOfGroup(options, [STAGE_GROUP]);
   const statuses = optionsOfGroup(options, STATUS_GROUPS);
-  const editable = canUpdate && (stages.length > 0 || statuses.length > 0);
 
   const stageText = contact.lifecycleStage
     ? (stages.find((o) => o.value === contact.lifecycleStage)?.label ??
@@ -236,52 +280,42 @@ export function LifecycleCard({ contact }: { contact: ContactResponse }) {
 
   return (
     <>
-      <Card>
-        <View style={styles.row} testID="lifecycle-card">
-          <View style={styles.cell}>
-            <Text variant="caption" muted>
-              {t('contactProps.lifecycle.stage')}
-            </Text>
-            <Text>{stageText}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text variant="caption" muted>
-              {t('contactProps.lifecycle.status')}
-            </Text>
-            <Text>{statusText}</Text>
-          </View>
-          <View style={styles.cell}>
-            <Text variant="caption" muted>
-              {t('contacts.detail.score')}
-            </Text>
-            <Text>{scoreText}</Text>
-          </View>
-          {editable ? (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={t('contactProps.lifecycle.change')}
-              onPress={() => setOpen(true)}
-              style={styles.pencil}
-            >
-              <Icon name="create-outline" size={22} color="primary" />
-            </Pressable>
-          ) : null}
+      <View style={styles.row} testID="lifecycle-card">
+        <Dropdown
+          label={t('contactProps.lifecycle.stage')}
+          value={stageText}
+          onPress={canUpdate && stages.length > 0 ? () => setOpen('stage') : null}
+        />
+        <Dropdown
+          label={t('contactProps.lifecycle.status')}
+          value={statusText}
+          onPress={canUpdate && statuses.length > 0 ? () => setOpen('status') : null}
+        />
+        <View style={[styles.cell, styles.touch]}>
+          <Text variant="caption" color="onBrandMuted">
+            {t('contacts.detail.score')}
+          </Text>
+          <Text variant="label" color="onBrand" style={styles.valueText}>
+            {scoreText}
+          </Text>
         </View>
-      </Card>
+      </View>
       {open ? (
-        <LifecycleSheet contact={contact} options={options} onClose={() => setOpen(false)} />
+        <LifecycleSheet
+          contact={contact}
+          options={options}
+          focus={open}
+          onClose={() => setOpen(null)}
+        />
       ) : null}
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.lg },
+  row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.lg, alignSelf: 'stretch' },
   cell: { flex: 1, gap: spacing.xs },
-  pencil: {
-    width: MIN_TOUCH_TARGET,
-    height: MIN_TOUCH_TARGET,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  touch: { minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' },
+  value: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  valueText: { flexShrink: 1 },
 });

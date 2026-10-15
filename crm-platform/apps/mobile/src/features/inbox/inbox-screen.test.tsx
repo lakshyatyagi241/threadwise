@@ -184,7 +184,7 @@ describe('InboxScreen', () => {
     await screen.findByText('Rohan Mehta');
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
     await fireEvent.press(await screen.findByRole('radio', { name: 'Pending' }));
-    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'pending' }));
     const chip = await screen.findByRole('button', { name: 'Remove filter: Status: Pending' });
     await fireEvent.press(chip);
@@ -200,7 +200,7 @@ describe('InboxScreen', () => {
     await screen.findByText('Rohan Mehta');
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
     await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
-    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Search conversations' }));
     await fireEvent.changeText(screen.getByLabelText('Search'), 'meera');
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'resolved', q: 'meera' }));
@@ -216,7 +216,7 @@ describe('InboxScreen', () => {
     expect(screen.getByText('Messages from your customers will show up here.')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
     await fireEvent.press(await screen.findByRole('radio', { name: 'Closed' }));
-    await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
     expect(
       await screen.findByText('Nothing matches these filters. Try clearing them.'),
     ).toBeTruthy();
@@ -292,17 +292,19 @@ describe('InboxScreen', () => {
     });
   });
 
-  describe('the filter sheet', () => {
+  describe('the filter screen', () => {
     const open = async () => {
       await show();
       await screen.findByText('Rohan Mehta');
       await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
     };
-    const save = async () =>
-      await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+    const save = async () => await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
+    const category = async (name: string) =>
+      await fireEvent.press(await screen.findByRole('tab', { name }));
 
     it('narrows the list to one channel, and names it in the chip', async () => {
       await open();
+      await category('Channel');
       await fireEvent.press(
         await screen.findByRole('radio', { name: 'Support line, +91 98000 00001' }),
       );
@@ -335,6 +337,7 @@ describe('InboxScreen', () => {
         },
       ]);
       await open();
+      await category('Labels');
       await fireEvent.press(await screen.findByRole('checkbox', { name: 'VIP' }));
       await fireEvent.press(screen.getByRole('checkbox', { name: 'Cold' }));
       await save();
@@ -351,6 +354,7 @@ describe('InboxScreen', () => {
 
     it('switches to the archive and back with Clear all', async () => {
       await open();
+      await category('View');
       await fireEvent.press(await screen.findByRole('radio', { name: 'Archived' }));
       await save();
       await waitFor(() => expect(lastFilters()).toMatchObject({ archived: true }));
@@ -359,14 +363,28 @@ describe('InboxScreen', () => {
       await waitFor(() => expect(lastFilters()).toMatchObject({ archived: false }));
     });
 
-    it('has no channel or label group when the workspace has neither, and cannot save without a change', async () => {
+    it('has no channel or label category when the workspace has neither', async () => {
       channelsCall.mockResolvedValue({ data: [] });
       await open();
       await screen.findByRole('radio', { name: 'Pending' });
-      expect(screen.queryByText('All channels')).toBeNull();
+      expect(screen.getByRole('tab', { name: 'Conversation status' })).toBeTruthy();
+      expect(screen.getByRole('tab', { name: 'View' })).toBeTruthy();
+      expect(screen.queryByRole('tab', { name: 'Channel' })).toBeNull();
+      expect(screen.queryByRole('tab', { name: 'Labels' })).toBeNull();
+    });
+
+    it('empties the choices with Clear all and applies them only on Apply', async () => {
+      await open();
+      await fireEvent.press(await screen.findByRole('radio', { name: 'Resolved' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
+      expect(screen.getByRole('radio', { name: 'Resolved' }).props.accessibilityState.checked).toBe(
+        false,
+      );
       expect(
-        screen.getByRole('button', { name: 'Save changes' }).props.accessibilityState.disabled,
+        screen.getByRole('radio', { name: 'Open & pending' }).props.accessibilityState.checked,
       ).toBe(true);
+      await fireEvent.press(screen.getByRole('button', { name: 'Back' }));
+      expect(lastFilters()).toMatchObject({ status: 'default' });
     });
 
     it('says when the channels could not be loaded, and still lets the rest be chosen', async () => {
@@ -512,6 +530,7 @@ describe('InboxScreen', () => {
             availability: 'online',
             openConversations: 1,
             isMe: false,
+            onLeave: null,
           },
         ],
         teams: [],

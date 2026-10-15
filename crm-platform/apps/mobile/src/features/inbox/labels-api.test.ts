@@ -20,7 +20,7 @@ describe('inbox labels api', () => {
     await expect(fetchLabelLibrary()).resolves.toMatchObject([
       { name: 'VIP', conversationCount: 3 },
     ]);
-    expect(http.calls[0]?.url).toContain('/v2/inbox/labels');
+    expect(http.calls[0]?.url).toContain('/v2/inbox/tags');
     expect(http.calls[0]?.url).not.toContain('/v2/tags');
   });
 
@@ -35,8 +35,8 @@ describe('inbox labels api', () => {
     });
     await applyLabel(CONVERSATION_ID, { name: 'Hot' });
     expect(http.calls.map((c) => [c.init.method, c.url.split('/v2')[1], c.body])).toEqual([
-      ['POST', `/inbox/conversations/${CONVERSATION_ID}/labels`, { tagId: VIP.id }],
-      ['POST', `/inbox/conversations/${CONVERSATION_ID}/labels`, { name: 'Hot' }],
+      ['POST', `/inbox/conversations/${CONVERSATION_ID}/tags`, { tagId: VIP.id }],
+      ['POST', `/inbox/conversations/${CONVERSATION_ID}/tags`, { name: 'Hot' }],
     ]);
   });
 
@@ -45,7 +45,7 @@ describe('inbox labels api', () => {
     await expect(withdrawLabel(CONVERSATION_ID, VIP.id)).resolves.toMatchObject({ labels: [] });
     expect(http.calls[0]?.init.method).toBe('DELETE');
     expect(http.calls[0]?.url).toContain(
-      `/v2/inbox/conversations/${CONVERSATION_ID}/labels/${VIP.id}`,
+      `/v2/inbox/conversations/${CONVERSATION_ID}/tags/${VIP.id}`,
     );
   });
 });

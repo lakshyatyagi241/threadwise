@@ -12,6 +12,7 @@ import { Icon, type IconName } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
+import { PictureViewer } from './picture-viewer';
 import { useMediaSource } from './use-media-source';
 
 const PICTURE_WIDTH = 240;
@@ -62,8 +63,10 @@ export function formatBytes(bytes: number): string {
  */
 export function Picture({ media, fallback }: { media: MessageMedia; fallback: string }) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const source = useMediaSource(media.url);
   const [failed, setFailed] = useState(false);
+  const [open, setOpen] = useState(false);
   // Drawn at its own proportions: the width is fixed, and the height follows once the picture has said how big it is.
   const [ratio, setRatio] = useState(PICTURE_RATIO);
   const height = Math.round(
@@ -71,20 +74,29 @@ export function Picture({ media, fallback }: { media: MessageMedia; fallback: st
   );
   if (!source || failed) return <FileTile icon="image-outline" label={fallback} />;
   return (
-    <Image
-      testID="message-picture"
-      // A list of one: React Native 0.86 on Android sends the headers of a source only when it is given as a list, and silently
-      // drops them for a single object (the picture would be refused with 401 and never show).
-      source={[source]}
-      accessible={false}
-      resizeMode="cover"
-      onLoad={(event) => {
-        const { width, height: tall } = event.nativeEvent.source;
-        if (width > 0 && tall > 0) setRatio(width / tall);
-      }}
-      onError={() => setFailed(true)}
-      style={[styles.picture, { height, backgroundColor: colors.surfaceMuted }]}
-    />
+    <>
+      <Pressable
+        accessibilityRole="imagebutton"
+        accessibilityLabel={t('inbox.thread.pictureOpen')}
+        onPress={() => setOpen(true)}
+      >
+        <Image
+          testID="message-picture"
+          // A list of one: React Native 0.86 on Android sends the headers of a source only when it is given as a list, and silently
+          // drops them for a single object (the picture would be refused with 401 and never show).
+          source={[source]}
+          accessible={false}
+          resizeMode="cover"
+          onLoad={(event) => {
+            const { width, height: tall } = event.nativeEvent.source;
+            if (width > 0 && tall > 0) setRatio(width / tall);
+          }}
+          onError={() => setFailed(true)}
+          style={[styles.picture, { height, backgroundColor: colors.surfaceMuted }]}
+        />
+      </Pressable>
+      <PictureViewer source={source} visible={open} onClose={() => setOpen(false)} />
+    </>
   );
 }
 

@@ -145,6 +145,7 @@ describe('ThreadScreen', () => {
           source: null,
           isUnsubscribed: false,
           whatsappSubscriptionStatus: null,
+          contactTags: [],
           leadScore: null,
           leadScoreSource: null,
           leadScoreReasons: null,
@@ -946,6 +947,7 @@ describe('ThreadScreen: who has the conversation', () => {
           availability: 'away',
           openConversations: 1,
           isMe: false,
+          onLeave: null,
         },
         {
           id: ME,
@@ -954,6 +956,7 @@ describe('ThreadScreen: who has the conversation', () => {
           availability: 'online',
           openConversations: 3,
           isMe: true,
+          onLeave: null,
         },
       ],
       teams: [

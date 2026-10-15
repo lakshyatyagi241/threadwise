@@ -40,10 +40,14 @@ async function show() {
 const settled = (queryClient: QueryClient) =>
   waitFor(() => expect(queryClient.isFetching()).toBe(0));
 
-/** The pencil appears once the session and the options have been read. */
+/** The dropdowns appear once the session and the options have been read. */
 const openSheet = async () => {
-  await fireEvent.press(await screen.findByRole('button', { name: 'Change lifecycle stage' }));
+  await fireEvent.press(await screen.findByRole('button', { name: /^Lifecycle stage: / }));
   return screen.findByRole('header', { name: 'Change lifecycle stage' });
+};
+const openStatusSheet = async () => {
+  await fireEvent.press(await screen.findByRole('button', { name: /^Status: / }));
+  return screen.findByRole('header', { name: 'Change status' });
 };
 const save = () => fireEvent.press(screen.getByRole('button', { name: 'Save' }));
 const radio = (name: string) => screen.getByRole('radio', { name });
@@ -88,7 +92,7 @@ describe('LifecycleCard', () => {
     await show();
     expect(await screen.findByText('Qualified')).toBeTruthy();
     await settled(client!);
-    expect(screen.queryByRole('button', { name: 'Change lifecycle stage' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^(Lifecycle stage|Status): / })).toBeNull();
   });
 
   it('shows the current values and asks for nothing when the person may not read the options', async () => {
@@ -98,7 +102,7 @@ describe('LifecycleCard', () => {
     expect(screen.getByText('Open')).toBeTruthy();
     await settled(client!);
     expect(statusCall).not.toHaveBeenCalled();
-    expect(screen.queryByRole('button', { name: 'Change lifecycle stage' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^(Lifecycle stage|Status): / })).toBeNull();
   });
 
   it('falls back to the current values, without a pencil, when the API refuses the options', async () => {
@@ -106,7 +110,7 @@ describe('LifecycleCard', () => {
     await show();
     expect(await screen.findByText('Qualified')).toBeTruthy();
     await settled(client!);
-    expect(screen.queryByRole('button', { name: 'Change lifecycle stage' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^(Lifecycle stage|Status): / })).toBeNull();
     expect(screen.getByText('Open')).toBeTruthy();
   });
 
@@ -115,7 +119,7 @@ describe('LifecycleCard', () => {
     await show();
     expect(await screen.findByText('Qualified')).toBeTruthy();
     await settled(client!);
-    expect(screen.queryByRole('button', { name: 'Change lifecycle stage' })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^(Lifecycle stage|Status): / })).toBeNull();
   });
 
   it('names an unknown stage in words', async () => {
@@ -128,17 +132,24 @@ describe('LifecycleCard', () => {
 });
 
 describe('LifecycleCard sheet', () => {
-  it('opens with the current stage and status ticked, and only the statuses of that stage', async () => {
+  it('opens the stage dropdown with the current stage ticked and none of the statuses', async () => {
     await show();
     await openSheet();
     expect(checked('Qualified')).toBe(true);
     expect(checked('New lead')).toBe(false);
+    expect(screen.queryByRole('radio', { name: 'Open' })).toBeNull();
+    // A stage change asks for no reason unless the stage is a lost one.
+    expect(screen.queryByText('Lost reason')).toBeNull();
+  });
+
+  it('opens the status dropdown with the current status ticked and only the statuses of the stage', async () => {
+    await show();
+    await openStatusSheet();
     expect(checked('Open')).toBe(true);
     expect(checked('Hot lead')).toBe(false);
     expect(screen.queryByRole('radio', { name: 'Closed' })).toBeNull();
     expect(screen.queryByRole('radio', { name: 'Retired' })).toBeNull();
-    // A stage change asks for no reason unless the stage is a lost one.
-    expect(screen.queryByText('Lost reason')).toBeNull();
+    expect(screen.queryByRole('radio', { name: 'Qualified' })).toBeNull();
   });
 
   it('changes the stage and sends only that, with the row version that was read', async () => {
@@ -163,7 +174,7 @@ describe('LifecycleCard sheet', () => {
   it('changes the status on its own', async () => {
     updateCall.mockResolvedValue({ ...profile, status: 'Hot', rowVersion: 4 });
     await show();
-    await openSheet();
+    await openStatusSheet();
     await fireEvent.press(radio('Hot lead'));
     await save();
     await waitFor(() =>
@@ -176,7 +187,7 @@ describe('LifecycleCard sheet', () => {
     expect(await screen.findByText('Hot lead')).toBeTruthy();
   });
 
-  it('drops a status that does not belong to the stage it moves to', async () => {
+  it('leaves a status that does not belong to the new stage to the API', async () => {
     getCall.mockResolvedValue({ ...profile, status: 'Hot' });
     updateCall.mockResolvedValue({
       ...profile,
@@ -186,10 +197,7 @@ describe('LifecycleCard sheet', () => {
     });
     await show();
     await openSheet();
-    expect(checked('Hot lead')).toBe(true);
     await fireEvent.press(radio('New lead'));
-    expect(screen.queryByRole('radio', { name: 'Hot lead' })).toBeNull();
-    expect(checked('Open')).toBe(false);
     await save();
     // The status is left to the API, which gives the new stage's own.
     await waitFor(() =>
@@ -229,8 +237,6 @@ describe('LifecycleCard lost stage', () => {
     await openSheet();
     await fireEvent.press(radio('Lost'));
     expect(screen.getByText('Lost reason')).toBeTruthy();
-    // The statuses follow the stage.
-    expect(screen.getByRole('radio', { name: 'Closed' })).toBeTruthy();
     await save();
     expect(await screen.findByText('Say why this contact was lost.')).toBeTruthy();
     expect(updateCall).not.toHaveBeenCalled();
@@ -303,7 +309,7 @@ describe('LifecycleCard lost stage', () => {
       rowVersion: 4,
     });
     await show();
-    await openSheet();
+    await openStatusSheet();
     expect(screen.queryByText('Lost reason')).toBeNull();
     await fireEvent.press(radio('Open'));
     await save();

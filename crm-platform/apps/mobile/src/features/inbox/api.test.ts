@@ -118,6 +118,7 @@ describe('inbox api', () => {
             availability: 'online',
             openConversations: 2,
             isMe: false,
+            onLeave: null,
           },
         ],
         teams: [

@@ -188,12 +188,12 @@ export function ContactDetailScreen() {
     const line = contactLine(data);
     body = (
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <ContactHero name={name} line={line && line !== name ? line : null} style={styles.hero} />
+        <ContactHero name={name} line={line && line !== name ? line : null} style={styles.hero}>
+          <LifecycleCard contact={data} />
+        </ContactHero>
 
         {notice ? <Banner tone="warning" message={notice} /> : null}
         {removeError ? <Banner tone="danger" message={removeError} /> : null}
-
-        <LifecycleCard contact={data} />
 
         <SegmentedControl
           label={t('contacts.detail.tabsLabel')}

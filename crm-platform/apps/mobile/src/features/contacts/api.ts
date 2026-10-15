@@ -21,8 +21,19 @@ export type ContactList = z.infer<typeof contactListSchema>;
 /** The filters the app offers. Names and meanings are the API's (`listContactsQuerySchema`). */
 export type ContactFilters = Pick<
   ListContactsQuery,
-  'q' | 'lifecycleStage' | 'source' | 'unsubscribed' | 'ownerId' | 'createdFrom' | 'rules'
->;
+  | 'q'
+  | 'lifecycleStage'
+  | 'source'
+  | 'unsubscribed'
+  | 'ownerId'
+  | 'unassigned'
+  | 'createdFrom'
+  | 'createdTo'
+  | 'rules'
+> & {
+  /** Contacts owned by any of these people: their ids, comma-joined as the query string takes them. */
+  ownerIds?: string;
+};
 
 export type ContactListParams = ContactFilters & { limit: number; cursor?: string };
 

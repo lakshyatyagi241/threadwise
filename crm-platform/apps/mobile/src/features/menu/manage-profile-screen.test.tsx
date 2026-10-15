@@ -27,8 +27,10 @@ const profile: ProfileResponse = {
   pendingEmail: null,
   phone: '+919812345678',
   locale: 'en',
+  timezone: null,
   theme: 'paper',
   avatarUrl: null,
+  effectiveTimezone: 'Asia/Kolkata',
   workspaceTimezone: 'Asia/Kolkata',
   canEditWorkspaceTimezone: false,
 };

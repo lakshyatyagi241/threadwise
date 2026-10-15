@@ -36,6 +36,8 @@ const config: RegistrationConfigResponse = {
   emailVerification: 'off',
   trialDays: 14,
   rememberMeEnabled: true,
+  businessEmailOnly: true,
+  phoneRequired: true,
   otp: { enabled: false },
   captcha: null,
   social: { google: false, facebook: false },

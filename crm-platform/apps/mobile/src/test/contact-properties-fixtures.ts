@@ -184,11 +184,13 @@ export const priya: AssigneeResponse = {
   id: '77777777-7777-4777-8777-777777777771',
   fullName: 'Priya Nair',
   email: 'priya@example.test',
+  canAssign: true,
 };
 export const rohan: AssigneeResponse = {
   id: '77777777-7777-4777-8777-777777777772',
   fullName: 'Rohan Das',
   email: 'rohan@example.test',
+  canAssign: true,
 };
 export const assignees: AssigneeResponse[] = [priya, rohan];
 

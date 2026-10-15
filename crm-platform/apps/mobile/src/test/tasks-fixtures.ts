@@ -78,8 +78,13 @@ export const taskPage = (data: TaskResponse[], next: string | null = null): Task
 });
 
 export const team: AssigneeResponse[] = [
-  { id: baseSession.user.id, fullName: 'Asha Verma', email: 'asha@example.test' },
-  { id: '66666666-6666-4666-8666-666666666666', fullName: 'Dev Patel', email: 'dev@example.test' },
+  { id: baseSession.user.id, fullName: 'Asha Verma', email: 'asha@example.test', canAssign: true },
+  {
+    id: '66666666-6666-4666-8666-666666666666',
+    fullName: 'Dev Patel',
+    email: 'dev@example.test',
+    canAssign: true,
+  },
 ];
 
 export const contactChoices: ContactSelectItem[] = [

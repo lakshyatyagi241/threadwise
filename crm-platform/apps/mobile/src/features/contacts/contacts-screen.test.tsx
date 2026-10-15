@@ -177,13 +177,19 @@ describe('ContactsScreen', () => {
   });
 
   describe('filters', () => {
-    it('applies the chosen filters, remembers them in the sheet, and clears them all', async () => {
+    const category = (name: string) => fireEvent.press(screen.getByRole('tab', { name }));
+
+    it('applies the chosen filters, remembers them in the screen, and clears them all', async () => {
       await show();
       await screen.findByRole('button', { name: 'Aarav Sharma' });
       await fireEvent.press(screen.getByRole('button', { name: 'Filter contacts' }));
+      await category('Lifecycle stage');
       await fireEvent.press(screen.getByRole('radio', { name: 'Qualified' }));
+      await category('Marketing messages');
       await fireEvent.press(screen.getByRole('radio', { name: 'Opted out' }));
-      await fireEvent.changeText(screen.getByLabelText('Source'), 'import');
+      await category('Source');
+      // The category on the left and the field on the right share the word: the field is the later one.
+      await fireEvent.changeText(screen.getAllByLabelText('Source').at(-1)!, 'import');
       await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       await waitFor(() =>
         expect(listCall).toHaveBeenLastCalledWith(
@@ -197,14 +203,19 @@ describe('ContactsScreen', () => {
           expect.anything(),
         ),
       );
-      expect(screen.queryByRole('radio', { name: 'Qualified' })).toBeNull();
+      expect(screen.queryByRole('tab', { name: 'Lifecycle stage' })).toBeNull();
 
-      // The sheet opens on what is applied, and "Clear all" removes every filter at once.
+      // The screen opens on what is applied; "Clear all" empties the draft and "Apply" sends it.
       await fireEvent.press(screen.getByRole('button', { name: 'Filter contacts' }));
+      await category('Lifecycle stage');
       expect(
         screen.getByRole('radio', { name: 'Qualified' }).props.accessibilityState.checked,
       ).toBe(true);
       await fireEvent.press(screen.getByRole('button', { name: 'Clear all' }));
+      expect(
+        screen.getByRole('radio', { name: 'Qualified' }).props.accessibilityState.checked,
+      ).toBe(false);
+      await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
       await waitFor(() =>
         expect(listCall).toHaveBeenLastCalledWith(
           { limit: 50, cursor: undefined },
@@ -214,12 +225,13 @@ describe('ContactsScreen', () => {
       expect(screen.queryByRole('button', { name: 'Apply' })).toBeNull();
     });
 
-    it('leaves the list alone when the sheet is cancelled', async () => {
+    it('leaves the list alone when the screen is closed with Back', async () => {
       await show();
       await screen.findByRole('button', { name: 'Aarav Sharma' });
       await fireEvent.press(screen.getByRole('button', { name: 'Filter contacts' }));
+      await category('Lifecycle stage');
       await fireEvent.press(screen.getByRole('radio', { name: 'Lost' }));
-      await fireEvent.press(screen.getByRole('button', { name: 'Cancel' }));
+      await fireEvent.press(screen.getByRole('button', { name: 'Back' }));
       expect(screen.queryByRole('button', { name: 'Apply' })).toBeNull();
       expect(listCall).toHaveBeenCalledTimes(1);
     });
@@ -230,6 +242,7 @@ describe('ContactsScreen', () => {
     await show();
     expect(await screen.findByText('No contacts')).toBeTruthy();
     await fireEvent.press(screen.getByRole('button', { name: 'Filter contacts' }));
+    await fireEvent.press(screen.getByRole('tab', { name: 'Lifecycle stage' }));
     await fireEvent.press(screen.getByRole('radio', { name: 'Lost' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
     expect(await screen.findByText('No matching contacts')).toBeTruthy();

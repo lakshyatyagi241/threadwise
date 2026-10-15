@@ -43,6 +43,7 @@ export const summary = (over: Partial<ConversationSummary> = {}): ConversationSu
   pinned: false,
   muted: false,
   unreadCount: 0,
+  slaStatus: null,
   needsContact: false,
   contact: null,
   assignment: { user: null, team: null, aiAgent: null },

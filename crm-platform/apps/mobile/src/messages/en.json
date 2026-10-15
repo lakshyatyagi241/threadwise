@@ -4,7 +4,12 @@
     "retry": "Try again",
     "signOut": "Sign out",
     "clear": "Clear",
-    "back": "Back"
+    "back": "Back",
+    "filters": {
+      "clearAll": "Clear all",
+      "apply": "Apply",
+      "noMatch": "Nothing matches your search."
+    }
   },
   "errors": {
     "generic": "Something went wrong. Please try again.",
@@ -462,6 +467,7 @@
       "channel": "Channel",
       "allChannels": "All channels",
       "labels": "Labels",
+      "searchLabels": "Search labels",
       "channelChip": "Channel: {{name}}",
       "labelsChip": "Labels: {{names}}",
       "archivedChip": "Archived"
@@ -517,6 +523,9 @@
       "resolve": "Resolve",
       "reopen": "Reopen",
       "call": "Call {{phone}}",
+      "pictureOpen": "Open photo full screen",
+      "pictureFull": "Photo",
+      "pictureClose": "Close photo",
       "windowClosed": "The 24-hour reply window is closed. Send a template instead.",
       "conflict": "Someone else changed this conversation. The latest version is loaded, please try again.",
       "statusInvalid": "This conversation can't be moved to that status.",
@@ -815,8 +824,12 @@
     },
     "filter": {
       "open": "Filter contacts",
-      "title": "Filter",
+      "title": "Filters",
       "stage": "Lifecycle stage",
+      "owner": "Contact owner",
+      "ownerSearch": "Search contact owner",
+      "unassigned": "No owner",
+      "created": "Created date",
       "any": "Any",
       "marketing": "Marketing messages",
       "marketingOptions": {
@@ -1292,6 +1305,8 @@
       "stage": "Lifecycle stage",
       "status": "Status",
       "change": "Change lifecycle stage",
+      "changeStatus": "Change status",
+      "dropdownHint": "Opens the list to choose from",
       "lostReason": "Lost reason",
       "otherReason": "Other",
       "otherLabel": "Describe the reason"

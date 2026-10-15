@@ -1,13 +1,10 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { TextField } from '@/components/ui/text-field';
-import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
-import { useTheme } from '@/lib/theme/use-theme';
+import { FilterPanes, type FilterCategory } from '@/components/ui/filter-panes';
+import { can, useSession } from '@/lib/session/use-session';
 import type { ContactFilters } from './api';
-import { LIFECYCLE_STAGES, NO_FILTERS, cleanFilters } from './filters';
+import { LIFECYCLE_STAGES, cleanFilters } from './filters';
+import { STAGE_GROUP, optionsOfGroup } from './property-values';
+import { useAssignees, useStatusOptions } from './use-properties';
 
 interface Props {
   filters: ContactFilters;
@@ -15,148 +12,108 @@ interface Props {
   onClose: () => void;
 }
 
+/** The owner list's own value for "contacts with no owner" (a person's id is a uuid, so it cannot clash). */
+const NO_OWNER = 'none';
+
 /** The marketing choice as a word, since the API takes a yes/no/unset flag. */
 type Marketing = 'all' | 'subscribed' | 'unsubscribed';
 const toMarketing = (v: boolean | undefined): Marketing =>
   v === undefined ? 'all' : v ? 'unsubscribed' : 'subscribed';
-const fromMarketing = (m: Marketing): boolean | undefined =>
-  m === 'all' ? undefined : m === 'unsubscribed';
+const fromMarketing = (m: string): boolean | undefined =>
+  m === 'unsubscribed' ? true : m === 'subscribed' ? false : undefined;
 
-function Chip({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string;
-  selected: boolean;
-  onPress: () => void;
-}) {
-  const { colors } = useTheme();
-  return (
-    <Pressable
-      accessibilityRole="radio"
-      accessibilityLabel={label}
-      accessibilityState={{ checked: selected }}
-      onPress={onPress}
-      style={[
-        styles.chip,
-        {
-          backgroundColor: selected ? colors.primarySoft : colors.surface,
-          borderColor: selected ? colors.primary : colors.borderStrong,
-        },
-      ]}
-    >
-      <Text variant="label" color={selected ? 'primary' : 'text'}>
-        {label}
-      </Text>
-    </Pressable>
-  );
-}
+/** Today as YYYY-MM-DD in UTC, the last day the created-date calendar offers. */
+const today = (): string => new Date().toISOString().slice(0, 10);
 
-/** The filters the list offers, in a sheet. The screen mounts it fresh each time it opens, so it starts from what is applied.
- * Nothing changes on the list until "Apply"; "Clear all" empties the sheet and applies. */
+/**
+ * The filters the contact list offers, laid out like the Geta app: the categories (owner, lifecycle stage, created date, source,
+ * marketing) down the left, the choices of the open one on the right, "Clear all" and "Apply" along the bottom. The screen mounts
+ * it only while open, so it starts from what is applied; nothing changes on the list until "Apply".
+ */
 export function FilterModal({ filters, onApply, onClose }: Props) {
   const { t } = useTranslation();
-  const { colors } = useTheme();
-  const [draft, setDraft] = useState<ContactFilters>(filters);
+  const session = useSession();
+  const people = useAssignees(can(session.data, 'record.contacts.read'));
+  const workspaceStages = optionsOfGroup(
+    useStatusOptions(can(session.data, 'record.contact-properties.read')).data ?? [],
+    [STAGE_GROUP],
+  );
 
-  const marketing = toMarketing(draft.unsubscribed);
+  const stages =
+    workspaceStages.length > 0
+      ? workspaceStages.map((o) => ({ value: o.value, label: o.label }))
+      : LIFECYCLE_STAGES.map((stage) => ({ value: stage, label: t(`contacts.stage.${stage}`) }));
+
+  const categories: FilterCategory[] = [
+    {
+      key: 'owner',
+      title: t('contacts.filter.owner'),
+      kind: 'multi',
+      searchLabel: t('contacts.filter.ownerSearch'),
+      options: [
+        { value: NO_OWNER, label: t('contacts.filter.unassigned') },
+        ...(people.data ?? []).map((p) => ({ value: p.id, label: p.fullName, hint: p.email })),
+      ],
+    },
+    {
+      key: 'stage',
+      title: t('contacts.filter.stage'),
+      kind: 'single',
+      options: [{ value: '', label: t('contacts.filter.any') }, ...stages],
+    },
+    { key: 'created', title: t('contacts.filter.created'), kind: 'dates', maxDate: today() },
+    {
+      key: 'source',
+      title: t('contacts.filter.source'),
+      kind: 'text',
+      label: t('contacts.filter.source'),
+      hint: t('contacts.filter.sourceHint'),
+    },
+    {
+      key: 'marketing',
+      title: t('contacts.filter.marketing'),
+      kind: 'single',
+      empty: 'all',
+      options: (['all', 'subscribed', 'unsubscribed'] as const).map((value) => ({
+        value,
+        label: t(`contacts.filter.marketingOptions.${value}`),
+      })),
+    },
+  ];
+
+  const owners = [
+    ...(filters.unassigned ? [NO_OWNER] : []),
+    ...(filters.ownerIds ? filters.ownerIds.split(',') : []),
+  ];
   return (
-    <Modal transparent visible animationType="slide" onRequestClose={onClose}>
-      <View style={[styles.scrim, { backgroundColor: colors.scrim }]}>
-        <View
-          accessibilityViewIsModal
-          style={[styles.sheet, { backgroundColor: colors.surface, borderColor: colors.border }]}
-        >
-          <Text variant="heading" accessibilityRole="header">
-            {t('contacts.filter.title')}
-          </Text>
-          <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
-            <View style={styles.group} accessibilityRole="radiogroup">
-              <Text variant="label" muted>
-                {t('contacts.filter.stage')}
-              </Text>
-              <View style={styles.chips}>
-                <Chip
-                  label={t('contacts.filter.any')}
-                  selected={draft.lifecycleStage === undefined}
-                  onPress={() => setDraft({ ...draft, lifecycleStage: undefined })}
-                />
-                {LIFECYCLE_STAGES.map((stage) => (
-                  <Chip
-                    key={stage}
-                    label={t(`contacts.stage.${stage}`)}
-                    selected={draft.lifecycleStage === stage}
-                    onPress={() => setDraft({ ...draft, lifecycleStage: stage })}
-                  />
-                ))}
-              </View>
-            </View>
-            <View style={styles.group} accessibilityRole="radiogroup">
-              <Text variant="label" muted>
-                {t('contacts.filter.marketing')}
-              </Text>
-              <View style={styles.chips}>
-                {(['all', 'subscribed', 'unsubscribed'] as const).map((value) => (
-                  <Chip
-                    key={value}
-                    label={t(`contacts.filter.marketingOptions.${value}`)}
-                    selected={marketing === value}
-                    onPress={() => setDraft({ ...draft, unsubscribed: fromMarketing(value) })}
-                  />
-                ))}
-              </View>
-            </View>
-            <TextField
-              label={t('contacts.filter.source')}
-              hint={t('contacts.filter.sourceHint')}
-              value={draft.source ?? ''}
-              onChangeText={(source) => setDraft({ ...draft, source })}
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType="done"
-            />
-          </ScrollView>
-          <View style={styles.actions}>
-            <Button
-              variant="secondary"
-              label={t('contacts.filter.clear')}
-              onPress={() => {
-                setDraft(NO_FILTERS);
-                onApply(NO_FILTERS);
-              }}
-            />
-            <Button
-              label={t('contacts.filter.apply')}
-              onPress={() => onApply(cleanFilters({ ...draft, q: filters.q }))}
-            />
-            <Button variant="link" label={t('contacts.cancel')} onPress={onClose} />
-          </View>
-        </View>
-      </View>
-    </Modal>
+    <FilterPanes
+      visible
+      title={t('contacts.filter.title')}
+      categories={categories}
+      value={{
+        owner: owners.join(','),
+        stage: filters.lifecycleStage ?? '',
+        created: `${filters.createdFrom ?? ''},${filters.createdTo ?? ''}`,
+        source: filters.source ?? '',
+        marketing: toMarketing(filters.unsubscribed),
+      }}
+      onApply={(picked) => {
+        const chosen = picked.owner ? picked.owner.split(',') : [];
+        const [createdFrom, createdTo] = (picked.created ?? '').split(',');
+        onApply(
+          cleanFilters({
+            q: filters.q,
+            ownerIds: chosen.filter((id) => id !== NO_OWNER).join(','),
+            unassigned: chosen.includes(NO_OWNER) ? true : undefined,
+            lifecycleStage: picked.stage || undefined,
+            createdFrom: createdFrom || undefined,
+            createdTo: createdTo || undefined,
+            source: picked.source,
+            unsubscribed: fromMarketing(picked.marketing ?? 'all'),
+          }),
+        );
+      }}
+      onClose={onClose}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  scrim: { flex: 1, justifyContent: 'flex-end' },
-  sheet: {
-    maxHeight: '85%',
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: spacing.lg,
-    gap: spacing.lg,
-  },
-  body: { gap: spacing.xl },
-  group: { gap: spacing.sm },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  chip: {
-    minHeight: MIN_TOUCH_TARGET,
-    justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
-    borderRadius: radius.pill,
-    borderWidth: 1.5,
-  },
-  actions: { gap: spacing.sm },
-});

@@ -1,4 +1,4 @@
-import type { ConversationLabel } from '@crm/contracts';
+import type { ConversationTag } from '@crm/contracts';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -26,7 +26,7 @@ interface Props {
   visible: boolean;
   conversationId: string;
   /** The labels the conversation has now. */
-  applied: readonly ConversationLabel[];
+  applied: readonly ConversationTag[];
   /** The person may also make a new label by typing its name (`inbox.tag.manage`). */
   canCreate: boolean;
   onClose: () => void;
