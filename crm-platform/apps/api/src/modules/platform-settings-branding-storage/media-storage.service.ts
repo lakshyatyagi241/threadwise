@@ -121,6 +121,7 @@ export class MediaStorageService {
         method: 'PUT',
         headers: { ...req.headers, 'content-type': contentType },
         body,
+        redirect: 'manual',
         signal: AbortSignal.timeout(30_000),
       });
     };
@@ -137,6 +138,7 @@ export class MediaStorageService {
     const res = await fetch(req.url, {
       method: 'PUT',
       headers: req.headers,
+      redirect: 'manual',
       signal: AbortSignal.timeout(15_000),
     });
     if (!res.ok && res.status !== 409) return false;
@@ -151,6 +153,7 @@ export class MediaStorageService {
     const res = await fetch(req.url, {
       method: 'DELETE',
       headers: req.headers,
+      redirect: 'manual',
       signal: AbortSignal.timeout(15_000),
     });
     if (!res.ok && res.status !== 404) {

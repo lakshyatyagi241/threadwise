@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { lookup as dnsLookup } from 'node:dns/promises';
 import { request as httpRequest, type IncomingMessage } from 'node:http';
 import { request as httpsRequest } from 'node:https';
-import { BlockList, isIP } from 'node:net';
+import { isIP } from 'node:net';
 import { extname } from 'node:path';
+import { isBlockedAddress } from '../../net/blocked-address';
 
 /** What Reference allowed to follow (TW-NODE-028). */
 export const MAX_REDIRECTS = 3;
@@ -14,35 +15,7 @@ const DEFAULT_MAX_BYTES = 100 * 1024 * 1024;
 /** Thrown for a target we refuse to fetch. The message is the one Reference's bridge reported. */
 export class UnsafeMediaUrlError extends Error {}
 
-const blocked = new BlockList();
-for (const [net, prefix] of [
-  ['0.0.0.0', 8],
-  ['10.0.0.0', 8],
-  ['100.64.0.0', 10],
-  ['127.0.0.0', 8],
-  ['169.254.0.0', 16], // link-local, includes the cloud metadata address
-  ['172.16.0.0', 12],
-  ['192.168.0.0', 16],
-  ['224.0.0.0', 3], // multicast and reserved: 224.0.0.0 and up
-] as const)
-  blocked.addSubnet(net, prefix, 'ipv4');
-for (const [net, prefix] of [
-  ['::', 128],
-  ['::1', 128],
-  ['fe80::', 10],
-  ['fc00::', 7],
-  ['ff00::', 8],
-] as const)
-  blocked.addSubnet(net, prefix, 'ipv6');
-
-/** Loopback, private, link-local, CGNAT, multicast and reserved addresses, and their IPv4-mapped IPv6 forms. */
-export function isBlockedAddress(address: string): boolean {
-  const v = address.toLowerCase().replace(/^\[|\]$/g, '');
-  const mapped = /^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/.exec(v);
-  if (mapped) return isBlockedAddress(mapped[1]!);
-  const family = isIP(v);
-  return family !== 0 && blocked.check(v, family === 4 ? 'ipv4' : 'ipv6');
-}
+export { isBlockedAddress };
 
 const MIME_BY_EXT: Record<string, string> = {
   '.jpg': 'image/jpeg',

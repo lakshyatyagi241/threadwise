@@ -303,6 +303,7 @@ export class HealthService {
       const token = saved?.token ?? this.config.get<string>('NODE_BRIDGE_TOKEN');
       const res = await fetch(url, {
         headers: token ? { 'X-Node-Token': token } : {},
+        redirect: 'manual',
         signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
       });
       const ms = Date.now() - t0;
@@ -342,7 +343,11 @@ export class HealthService {
     const value = `S3 · ${this.config.get<string>('S3_BUCKET_MEDIA') ?? 'media'}`;
     const t0 = Date.now();
     try {
-      await fetch(endpoint, { method: 'HEAD', signal: AbortSignal.timeout(PROBE_TIMEOUT_MS) });
+      await fetch(endpoint, {
+        method: 'HEAD',
+        redirect: 'manual',
+        signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
+      });
       const ms = Date.now() - t0;
       return { key: 'storage', state: 'up', value, detail: `reachable · ${ms} ms`, ping: ms };
     } catch (err) {

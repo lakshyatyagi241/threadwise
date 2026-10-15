@@ -1,4 +1,5 @@
 import { WEBHOOK_HEADERS, type WebhookEnvelope } from '@crm/contracts';
+import { guardedRequest } from '../../infra/net/guarded-http';
 import { assertPublicTarget } from '../webhook-fanout';
 import { sign } from './signing';
 
@@ -18,8 +19,9 @@ const SNIPPET_BYTES = 1024;
 
 /**
  * One signed POST of an envelope to a customer's endpoint. The address is checked again here (a name can be repointed at an internal
- * host after it was saved), redirects are not followed (a redirect is a way around that check), and only the first kilobyte of the
- * answer is read.
+ * host after it was saved), the address is checked again inside the socket's own DNS lookup (`guardedRequest`, so a name repointed
+ * between the check and the connect is still refused), redirects are not followed (a redirect is a way around that check), and only
+ * the first kilobyte of the answer is kept.
  */
 export async function send(
   url: string,
@@ -56,14 +58,16 @@ export async function send(
   if (secret) headers[WEBHOOK_HEADERS.signature] = sign(secret, timestamp, body);
 
   try {
-    const res = await fetch(url, {
+    const res = await guardedRequest({
       method: 'POST',
+      url: new URL(url),
       headers,
       body,
-      redirect: 'manual',
-      signal: AbortSignal.timeout(TIMEOUT_MS),
+      timeoutMs: TIMEOUT_MS,
+      allowPrivate: false,
+      maxBytes: SNIPPET_BYTES * 64,
     });
-    const snippet = await readSnippet(res);
+    const snippet = Buffer.from(res.body, 'utf8').subarray(0, SNIPPET_BYTES).toString('utf8') || null;
     const ok = res.status >= 200 && res.status < 300;
     return {
       ok,
@@ -79,27 +83,7 @@ export async function send(
     };
   } catch (err) {
     const e = err as Error;
-    const timedOut = e.name === 'TimeoutError' || e.name === 'AbortError';
+    const timedOut = /timed out/i.test(e.message);
     return fail(timedOut ? `Timed out after ${TIMEOUT_MS / 1000} s` : 'Could not connect');
-  }
-}
-
-async function readSnippet(res: Response): Promise<string | null> {
-  try {
-    const reader = res.body?.getReader();
-    if (!reader) return null;
-    const chunks: Uint8Array[] = [];
-    let size = 0;
-    while (size < SNIPPET_BYTES) {
-      const { done, value } = await reader.read();
-      if (done || !value) break;
-      chunks.push(value);
-      size += value.byteLength;
-    }
-    void reader.cancel().catch(() => undefined);
-    const text = Buffer.concat(chunks).subarray(0, SNIPPET_BYTES).toString('utf8');
-    return text === '' ? null : text;
-  } catch {
-    return null;
   }
 }

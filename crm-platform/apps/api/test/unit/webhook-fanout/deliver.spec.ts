@@ -1,5 +1,8 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { guardedRequest } from '../../../src/infra/net/guarded-http';
 import { deliver } from '../../../src/modules/webhook-fanout/deliver';
+
+vi.mock('../../../src/infra/net/guarded-http', () => ({ guardedRequest: vi.fn() }));
 
 const target = {
   url: 'https://8.8.8.8/hook',
@@ -9,11 +12,10 @@ const target = {
 };
 const body = Buffer.from('{"object":"whatsapp_business_account",  "spacing":"kept"}');
 
-afterEach(() => vi.unstubAllGlobals());
-
 function stubFetch(status: number) {
-  const fn = vi.fn(async () => new Response(null, { status }));
-  vi.stubGlobal('fetch', fn);
+  const fn = vi.mocked(guardedRequest);
+  fn.mockReset();
+  fn.mockResolvedValue({ status, body: '', headers: {} });
   return fn;
 }
 
@@ -26,11 +28,11 @@ describe('deliver', () => {
       contentType: 'application/json',
     });
     expect(out).toMatchObject({ ok: true, statusCode: 200, permanent: false });
-    const [url, init] = fetchFn.mock.calls[0] as unknown as [string, RequestInit];
-    expect(url).toBe(target.url);
-    expect(Buffer.from(init.body as Uint8Array).equals(body)).toBe(true);
-    expect(init.redirect).toBe('manual');
-    const h = init.headers as Record<string, string>;
+    const req = fetchFn.mock.calls[0]![0];
+    expect(req.url.href).toBe(target.url);
+    expect(Buffer.isBuffer(req.body) && req.body.equals(body)).toBe(true);
+    expect(req.allowPrivate).toBe(false); // the address is checked inside the socket lookup
+    const h = req.headers;
     expect(h['x-hub-signature-256']).toBe('sha256=abc');
     expect(h['x-secret']).toBe('s3cret');
     expect(h['content-type']).toBe('application/json');
@@ -52,9 +54,8 @@ describe('deliver', () => {
   });
 
   it('reports a timeout as retryable', async () => {
-    vi.stubGlobal('fetch', async () => {
-      throw Object.assign(new Error('The operation was aborted'), { name: 'TimeoutError' });
-    });
+    vi.mocked(guardedRequest).mockReset();
+    vi.mocked(guardedRequest).mockRejectedValue(new Error('timed out'));
     const out = await deliver(target, { body });
     expect(out).toMatchObject({ ok: false, statusCode: null, permanent: false });
     expect(out.error).toMatch(/Timed out/);
