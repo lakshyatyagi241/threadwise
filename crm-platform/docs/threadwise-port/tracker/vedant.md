@@ -439,6 +439,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CAMP-033 | done |  | ADDITION: now / scheduled / recurring series with child runs |
 | TW-CAMP-034 | done |  | ADDITION: 131049 retries every 24h to an end date; real Meta behaviour unverified (sandbox only) |
 | TW-CAMP-035 | done |  | ADDITION: wizard broadcasts list, status, pause, resume, cancel |
+| TW-CAMP-036 | done |  | ADDITION: follow-up steps after a campaign message (replied, read, not replied, not read; template or flow; up to 3); not in Reference, built from the meeting; sandbox only, real Meta read reports unverified |
 
 ## scheduled-queue-warmer (sched)
 

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { WizardFollowUp } from '@crm/contracts';
 import { audience, draft, NOW, uuid } from '../testing';
 import { issueFor, stepIssues, stepOfPath, unmappedSlots } from './issues';
 
@@ -106,5 +107,48 @@ describe('step 3 when the balance cannot be checked', () => {
   it('stops the broadcast: an unknown balance is not a sufficient one', () => {
     const out = stepIssues(3, draft(), { slots: [], now: NOW, credit: null, creditFailed: true });
     expect(out.map((i) => i.code)).toContain('balance_unavailable');
+  });
+});
+
+describe('follow-up issues (step 4)', () => {
+  const step = (action: WizardFollowUp['action']): WizardFollowUp => ({
+    trigger: 'not_read',
+    waitMinutes: 60,
+    action,
+  });
+  const cloud = `waba:${uuid(31)}`;
+
+  it('a step without its template or flow is reported on its own action path', () => {
+    const d = draft({
+      senderKey: cloud,
+      followUps: [
+        step({ kind: 'template', templateId: uuid(1) }),
+        step({ kind: 'template', templateId: null }),
+        step({ kind: 'flow', flowId: null }),
+      ],
+    });
+    expect(stepIssues(4, d, ctx)).toEqual([
+      { path: 'followUps.1.action', code: 'follow_up_template_required' },
+      { path: 'followUps.2.action', code: 'follow_up_flow_required' },
+    ]);
+    expect(issueFor(stepIssues(4, d, ctx), 'followUps.2.action')?.code).toBe(
+      'follow_up_flow_required',
+    );
+  });
+
+  it('a complete step passes, and follow-ups on a non Cloud API number are refused', () => {
+    const done = [step({ kind: 'flow', flowId: uuid(81) })];
+    expect(stepIssues(4, draft({ senderKey: cloud, followUps: done }), ctx)).toEqual([]);
+    expect(
+      stepIssues(4, draft({ senderKey: `baileys:${uuid(40)}`, followUps: done }), ctx).map(
+        (i) => i.code,
+      ),
+    ).toEqual(['follow_up_cloud_api_only']);
+    expect(stepIssues(4, draft({ senderKey: `baileys:${uuid(40)}` }), ctx)).toEqual([]);
+  });
+
+  it('every follow-up path belongs to step 4', () => {
+    expect(stepOfPath('followUps')).toBe(4);
+    expect(stepOfPath('followUps.1.action')).toBe(4);
   });
 });
