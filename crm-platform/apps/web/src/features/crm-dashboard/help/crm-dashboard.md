@@ -26,6 +26,7 @@ The CRM dashboard is the home of your sales. It answers "how are we doing" for a
 - **Owner leaderboard**: owners ranked by value won, with their lost and open deals and logged activities.
 - **Lead sources**: leads per source, and the share that became a deal and a won deal.
 - **Tasks, receivables aging, recent payments and recent activity.**
+- **Revenue report**: the button at the top opens the [revenue report](help:revenue-report), which splits what you invoiced and collected by source, product, owner or team and can be downloaded. It shows when you can read payments and your plan has invoicing.
 
 > You only see numbers from records your role lets you see. A member whose scope is "own" sees only their own deals, contacts, tasks and invoices. A section you have no access to is left out.
 

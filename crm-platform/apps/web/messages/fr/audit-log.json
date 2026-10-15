@@ -92,7 +92,8 @@
       "api_keys": "Clés API",
       "audit-log": "Journal d'audit",
       "audit-log-exports": "Exports du journal d'audit",
-      "contact_consent_exports": "Exports de preuves de consentement"
+      "contact_consent_exports": "Exports de preuves de consentement",
+      "revenue-report-exports": "Fichiers du rapport de revenus"
     },
     "table": {
       "caption": "Entrées d'audit, les plus récentes en premier. Les heures sont affichées dans votre fuseau horaire ({zone}).",

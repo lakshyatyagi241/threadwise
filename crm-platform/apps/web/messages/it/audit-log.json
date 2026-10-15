@@ -92,7 +92,8 @@
       "api_keys": "Chiavi API",
       "audit-log": "Registro di controllo",
       "audit-log-exports": "Esportazioni del registro di controllo",
-      "contact_consent_exports": "Esportazioni delle prove di consenso"
+      "contact_consent_exports": "Esportazioni delle prove di consenso",
+      "revenue-report-exports": "File del report ricavi"
     },
     "table": {
       "caption": "Voci del registro, dalla più recente. Gli orari sono nel tuo fuso orario ({zone}).",

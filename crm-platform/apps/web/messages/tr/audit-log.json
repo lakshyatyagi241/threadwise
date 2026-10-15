@@ -92,7 +92,8 @@
       "api_keys": "API anahtarları",
       "audit-log": "Denetim günlüğü",
       "audit-log-exports": "Denetim günlüğü dışa aktarımları",
-      "contact_consent_exports": "Onay kanıtı dışa aktarımları"
+      "contact_consent_exports": "Onay kanıtı dışa aktarımları",
+      "revenue-report-exports": "Gelir raporu dosyaları"
     },
     "table": {
       "caption": "Denetim kayıtları, en yeniden eskiye. Saatler saat diliminizde gösterilir ({zone}).",

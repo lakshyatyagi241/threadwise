@@ -92,7 +92,8 @@
       "api_keys": "Kunci API",
       "audit-log": "Log audit",
       "audit-log-exports": "Ekspor log audit",
-      "contact_consent_exports": "Ekspor bukti persetujuan"
+      "contact_consent_exports": "Ekspor bukti persetujuan",
+      "revenue-report-exports": "File laporan pendapatan"
     },
     "table": {
       "caption": "Entri audit, terbaru lebih dulu. Waktu ditampilkan dalam zona waktu Anda ({zone}).",

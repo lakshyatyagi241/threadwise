@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Informes",
+    "title": "Informe de ingresos",
+    "subtitle": "Lo que facturaste, cuánto está pagado y cuánto se debe todavía, y el dinero que entró, en el período que elijas.",
+    "back": "Panel del CRM",
+    "period": "{from} a {to} ({zone})",
+    "comparedWith": "Comparado con {mode}: {from} a {to}",
+    "loading": "Cargando el informe de ingresos",
+    "retry": "Reintentar",
+    "stale": "No se pudieron actualizar las cifras. Estas son las últimas cargadas.",
+    "empty": {
+      "title": "Nada en este período",
+      "message": "No se emitió ninguna factura ni entró ningún pago entre estas fechas. Elige otro período o abre las facturas.",
+      "invoices": "Abrir facturas"
+    },
+    "mode": {
+      "previous": "el período anterior",
+      "lastYear": "el mismo período del año pasado"
+    },
+    "filters": {
+      "label": "Filtros del informe",
+      "period": "Período",
+      "range": {
+        "month": "Este mes",
+        "lastMonth": "Mes pasado",
+        "quarter": "Este trimestre",
+        "year": "Este año",
+        "30d": "30 días",
+        "90d": "90 días",
+        "custom": "Personalizado"
+      },
+      "from": "Desde",
+      "to": "Hasta",
+      "compare": "Comparar con",
+      "compareOption": {
+        "previous": "Período anterior",
+        "lastYear": "Mismo período del año pasado",
+        "none": "Sin comparación"
+      },
+      "groupBy": "Dividir por",
+      "groupOption": {
+        "source": "Origen del lead",
+        "origin": "Origen de la factura",
+        "product": "Producto",
+        "owner": "Responsable",
+        "team": "Equipo"
+      },
+      "owner": "Responsable",
+      "everyone": "Todos",
+      "team": "Equipo",
+      "allTeams": "Todos los equipos",
+      "currency": "Moneda",
+      "allCurrencies": "Todas, mostradas en {currency}",
+      "reset": "Restablecer filtros"
+    },
+    "note": {
+      "converted": "Hay varias monedas en uso. Las cifras se convierten a {currency}; elige una moneda para ver sus importes exactos.",
+      "missingRate": "No hay tipo de cambio para {currencies}: esos importes quedan fuera de las cifras convertidas.",
+      "invoiced": "Facturado, pagado y adeudado cuentan las facturas emitidas en el período (se excluyen borradores, facturas anuladas y proformas). Cobrado y reembolsado cuentan el dinero que entró durante el período, sea cual sea la factura que saldó."
+    },
+    "kpi": {
+      "title": "Cifras clave",
+      "vsPrevious": "Frente al período de comparación",
+      "collected": "Cobrado",
+      "collectedHint": "Pagos recibidos en el período",
+      "collectedAll": "Cobrado, total histórico",
+      "collectedAllHint": "Todos los pagos que puedes ver",
+      "outstanding": "Pendiente de cobro",
+      "outstandingHint": "{count, plural, one {# factura abierta} other {# facturas abiertas}} a día de hoy",
+      "tax": "Impuestos cobrados",
+      "taxHint": "En facturas pagadas por completo en el período",
+      "invoiced": "Facturado",
+      "invoicedHint": "{count, plural, one {# factura emitida} other {# facturas emitidas}}",
+      "paid": "Pagado hasta ahora",
+      "paidHint": "De las facturas emitidas en el período",
+      "overdue": "Vencido",
+      "overdueHint": "Pasada la fecha de vencimiento",
+      "refunded": "Reembolsado",
+      "refundedHint": "Devuelto en el período",
+      "paidInFull": "Pagadas por completo",
+      "paidInFullHint": "Facturas que pasaron a estar pagadas por completo",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Facturado, pagado y adeudado",
+      "subtitle": "Las facturas emitidas en el período y su situación actual",
+      "paid": "Pagado",
+      "owed": "Adeudado, aún no vencido",
+      "overdue": "Vencido",
+      "credited": "Notas de crédito",
+      "invoiced": "facturado",
+      "empty": "No se facturó nada en este período.",
+      "several": "Estas facturas están en varias monedas. Elige una moneda arriba para verlas en una sola barra."
+    },
+    "trend": {
+      "title": "Facturado y cobrado",
+      "subtitle": {
+        "day": "Por día",
+        "week": "Por semana",
+        "month": "Por mes"
+      },
+      "chartLabel": "Facturado y cobrado durante el período",
+      "invoiced": "Facturado",
+      "collected": "Cobrado"
+    },
+    "split": {
+      "title": "Por {group}",
+      "subtitle": "Los mayores primero. El dinero se muestra en {currency}.",
+      "subtitlePerCurrency": "Los mayores primero. El dinero se lista por moneda.",
+      "group": {
+        "source": "origen del lead",
+        "origin": "origen de la factura",
+        "product": "producto",
+        "owner": "responsable",
+        "team": "equipo"
+      },
+      "empty": {
+        "source": "Sin origen del lead",
+        "origin": "Origen desconocido",
+        "product": "Sin líneas",
+        "owner": "Sin asignar",
+        "team": "Sin equipo"
+      },
+      "origin": {
+        "manual": "Creada a mano",
+        "quote": "Desde un presupuesto",
+        "order": "Desde un pedido",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Tienda propia",
+        "api": "API",
+        "ai": "Asistente de IA"
+      },
+      "col": {
+        "invoices": "Facturas",
+        "invoiced": "Facturado",
+        "paid": "Pagado",
+        "outstanding": "Adeudado",
+        "overdue": "Vencido",
+        "collected": "Cobrado",
+        "refunded": "Reembolsado"
+      },
+      "total": "Total",
+      "truncated": "Solo se listan las {count} filas más grandes. El resumen en CSV tiene las mismas filas.",
+      "teamNote": "Una persona en dos equipos cuenta en ambos, así que las filas de equipo pueden sumar más que el total.",
+      "productNote": "Los descuentos sobre toda la factura, el envío y el redondeo se reparten entre las líneas en proporción a su valor."
+    },
+    "aging": {
+      "title": "Antigüedad de cuentas por cobrar",
+      "open": "Pagos",
+      "empty": "No se debe nada.",
+      "bucket": {
+        "current": "Aún no vencido",
+        "d1_30": "1-30 días de retraso",
+        "d31_60": "31-60 días de retraso",
+        "d61_90": "61-90 días de retraso",
+        "d90_plus": "Más de 90 días de retraso"
+      }
+    },
+    "export": {
+      "title": "Descargar este informe",
+      "note": "Se prepara en segundo plano con los filtros de arriba, se conserva {days} días y se avisa por correo. Recibes solo lo que el informe te muestra.",
+      "csvPayments": "CSV: pagos",
+      "csvPaymentsHint": "Una línea por pago y reembolso del período",
+      "csvSummary": "CSV: esta tabla",
+      "csvSummaryHint": "La división de arriba, con los totales",
+      "pdf": "PDF",
+      "pdfHint": "El informe como documento",
+      "preparing": "Preparando...",
+      "requested": "Tu archivo se está preparando. Recibirás un correo cuando esté listo y aparecerá en la lista de abajo.",
+      "recent": "Tus archivos recientes",
+      "none": "Todavía no has preparado ningún archivo.",
+      "kind": {
+        "pdf": "Informe en PDF",
+        "csv-payments": "CSV de pagos",
+        "csv-summary": "Resumen en CSV"
+      },
+      "status": {
+        "queued": "En espera",
+        "running": "Preparando",
+        "ready": "Listo",
+        "failed": "Fallido",
+        "expired": "Caducado"
+      },
+      "range": "{from} a {to}",
+      "rows": "{count, plural, one {# fila} other {# filas}}",
+      "expires": "Se conserva hasta el {date}",
+      "failed": "No se pudo preparar este archivo. Vuelve a solicitarlo.",
+      "download": "Descargar"
+    },
+    "errors": {
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "No tienes acceso a esto.",
+      "notFound": "Ese archivo no existe.",
+      "exportInProgress": "Ya se está preparando un archivo para ti. Espera su correo y luego solicita otro.",
+      "exportNotReady": "Este archivo no está listo o ha caducado. Vuelve a solicitarlo.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "validation": "Esos filtros no son válidos.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo."
+    }
+  }
+}

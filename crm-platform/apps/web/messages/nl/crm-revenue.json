@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Rapporten",
+    "title": "Omzetrapport",
+    "subtitle": "Wat u hebt gefactureerd, hoeveel daarvan is betaald en wat nog openstaat, plus het geld dat binnenkwam, voor de periode die u kiest.",
+    "back": "CRM-dashboard",
+    "period": "{from} tot {to} ({zone})",
+    "comparedWith": "Vergeleken met {mode}: {from} tot {to}",
+    "loading": "Omzetrapport wordt geladen",
+    "retry": "Opnieuw proberen",
+    "stale": "De cijfers konden niet worden vernieuwd. Dit zijn de laatst geladen cijfers.",
+    "empty": {
+      "title": "Niets in deze periode",
+      "message": "Tussen deze data is geen factuur uitgegeven en kwam er geen betaling binnen. Kies een andere periode of open de facturen.",
+      "invoices": "Facturen openen"
+    },
+    "mode": {
+      "previous": "de vorige periode",
+      "lastYear": "dezelfde periode vorig jaar"
+    },
+    "filters": {
+      "label": "Rapportfilters",
+      "period": "Periode",
+      "range": {
+        "month": "Deze maand",
+        "lastMonth": "Vorige maand",
+        "quarter": "Dit kwartaal",
+        "year": "Dit jaar",
+        "30d": "30 dagen",
+        "90d": "90 dagen",
+        "custom": "Aangepast"
+      },
+      "from": "Van",
+      "to": "Tot",
+      "compare": "Vergelijken met",
+      "compareOption": {
+        "previous": "Vorige periode",
+        "lastYear": "Dezelfde periode vorig jaar",
+        "none": "Geen vergelijking"
+      },
+      "groupBy": "Splitsen per",
+      "groupOption": {
+        "source": "Leadbron",
+        "origin": "Factuurherkomst",
+        "product": "Product",
+        "owner": "Eigenaar",
+        "team": "Team"
+      },
+      "owner": "Eigenaar",
+      "everyone": "Iedereen",
+      "team": "Team",
+      "allTeams": "Alle teams",
+      "currency": "Valuta",
+      "allCurrencies": "Alle, getoond in {currency}",
+      "reset": "Filters resetten"
+    },
+    "note": {
+      "converted": "Er worden meerdere valuta gebruikt. De cijfers zijn omgerekend naar {currency}; kies één valuta om de exacte bedragen te zien.",
+      "missingRate": "Geen wisselkoers voor {currencies}: die bedragen zijn weggelaten uit de omgerekende cijfers.",
+      "invoiced": "Gefactureerd, betaald en openstaand tellen de facturen die in de periode zijn uitgegeven (concepten, vervallen facturen en proforma's zijn uitgesloten). Ontvangen en terugbetaald tellen het geld dat in de periode binnenkwam, ongeacht welke factuur het heeft voldaan."
+    },
+    "kpi": {
+      "title": "Kerncijfers",
+      "vsPrevious": "Ten opzichte van de vergelijkingsperiode",
+      "collected": "Ontvangen",
+      "collectedHint": "In de periode ontvangen betalingen",
+      "collectedAll": "Ontvangen, totaal",
+      "collectedAllHint": "Elke betaling die u kunt zien",
+      "outstanding": "Openstaand",
+      "outstandingHint": "{count, plural, one {# openstaande factuur} other {# openstaande facturen}} per vandaag",
+      "tax": "Ontvangen belasting",
+      "taxHint": "Op facturen die in de periode volledig zijn betaald",
+      "invoiced": "Gefactureerd",
+      "invoicedHint": "{count, plural, one {# factuur uitgegeven} other {# facturen uitgegeven}}",
+      "paid": "Tot nu toe betaald",
+      "paidHint": "Van de in de periode uitgegeven facturen",
+      "overdue": "Achterstallig",
+      "overdueHint": "Vervaldatum verstreken",
+      "refunded": "Terugbetaald",
+      "refundedHint": "In de periode terugbetaald",
+      "paidInFull": "Volledig betaald",
+      "paidInFullHint": "Facturen die volledig betaald zijn",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Gefactureerd, betaald en openstaand",
+      "subtitle": "De in de periode uitgegeven facturen en hun stand van vandaag",
+      "paid": "Betaald",
+      "owed": "Openstaand, nog niet vervallen",
+      "overdue": "Achterstallig",
+      "credited": "Creditnota's",
+      "invoiced": "gefactureerd",
+      "empty": "In deze periode is niets gefactureerd.",
+      "several": "Deze facturen staan in meerdere valuta. Kies hierboven een valuta om ze als één balk te zien."
+    },
+    "trend": {
+      "title": "Gefactureerd en ontvangen",
+      "subtitle": {
+        "day": "Per dag",
+        "week": "Per week",
+        "month": "Per maand"
+      },
+      "chartLabel": "Gefactureerd en ontvangen over de periode",
+      "invoiced": "Gefactureerd",
+      "collected": "Ontvangen"
+    },
+    "split": {
+      "title": "Per {group}",
+      "subtitle": "De grootste eerst. Bedragen worden getoond in {currency}.",
+      "subtitlePerCurrency": "De grootste eerst. Bedragen worden per valuta weergegeven.",
+      "group": {
+        "source": "leadbron",
+        "origin": "factuurherkomst",
+        "product": "product",
+        "owner": "eigenaar",
+        "team": "team"
+      },
+      "empty": {
+        "source": "Geen leadbron",
+        "origin": "Onbekende herkomst",
+        "product": "Geen factuurregels",
+        "owner": "Niet toegewezen",
+        "team": "Geen team"
+      },
+      "origin": {
+        "manual": "Handmatig aangemaakt",
+        "quote": "Uit een offerte",
+        "order": "Uit een bestelling",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Eigen winkel",
+        "api": "API",
+        "ai": "AI-assistent"
+      },
+      "col": {
+        "invoices": "Facturen",
+        "invoiced": "Gefactureerd",
+        "paid": "Betaald",
+        "outstanding": "Openstaand",
+        "overdue": "Achterstallig",
+        "collected": "Ontvangen",
+        "refunded": "Terugbetaald"
+      },
+      "total": "Totaal",
+      "truncated": "Alleen de {count} grootste rijen worden getoond. De CSV-samenvatting bevat dezelfde rijen.",
+      "teamNote": "Een persoon in twee teams telt in beide mee, dus de teamrijen kunnen samen meer dan het totaal opleveren.",
+      "productNote": "Kortingen op de hele factuur, verzendkosten en afrondingen worden naar verhouding van hun waarde over de regels verdeeld."
+    },
+    "aging": {
+      "title": "Ouderdomsanalyse debiteuren",
+      "open": "Betalingen",
+      "empty": "Er staat niets open.",
+      "bucket": {
+        "current": "Nog niet vervallen",
+        "d1_30": "1-30 dagen achterstallig",
+        "d31_60": "31-60 dagen achterstallig",
+        "d61_90": "61-90 dagen achterstallig",
+        "d90_plus": "Meer dan 90 dagen achterstallig"
+      }
+    },
+    "export": {
+      "title": "Dit rapport downloaden",
+      "note": "Wordt op de achtergrond opgesteld met de filters hierboven, {days} dagen bewaard en per e-mail aangekondigd. U krijgt niet meer dan het rapport u laat zien.",
+      "csvPayments": "CSV: betalingen",
+      "csvPaymentsHint": "Eén regel per betaling en terugbetaling van de periode",
+      "csvSummary": "CSV: deze tabel",
+      "csvSummaryHint": "De indeling hierboven, met de totalen",
+      "pdf": "PDF",
+      "pdfHint": "Het rapport als document",
+      "preparing": "Bezig met voorbereiden...",
+      "requested": "Uw bestand wordt voorbereid. U krijgt een e-mail zodra het klaar is en het verschijnt in de lijst hieronder.",
+      "recent": "Uw recente bestanden",
+      "none": "U hebt nog geen bestand voorbereid.",
+      "kind": {
+        "pdf": "PDF-rapport",
+        "csv-payments": "CSV van betalingen",
+        "csv-summary": "CSV-samenvatting"
+      },
+      "status": {
+        "queued": "Wachtend",
+        "running": "Wordt voorbereid",
+        "ready": "Klaar",
+        "failed": "Mislukt",
+        "expired": "Verlopen"
+      },
+      "range": "{from} tot {to}",
+      "rows": "{count, plural, one {# rij} other {# rijen}}",
+      "expires": "Bewaard tot {date}",
+      "failed": "Dit bestand kon niet worden voorbereid. Vraag het opnieuw aan.",
+      "download": "Downloaden"
+    },
+    "errors": {
+      "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
+      "forbidden": "U hebt hiervoor geen toegang.",
+      "notFound": "Dat bestand bestaat niet.",
+      "exportInProgress": "Er wordt al een bestand voor u voorbereid. Wacht op de e-mail en vraag dan een nieuw bestand aan.",
+      "exportNotReady": "Dit bestand is niet klaar of verlopen. Vraag het opnieuw aan.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "validation": "Deze filters zijn ongeldig.",
+      "unexpected": "Er is iets misgegaan. Probeer het opnieuw."
+    }
+  }
+}

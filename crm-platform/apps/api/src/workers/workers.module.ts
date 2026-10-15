@@ -51,6 +51,7 @@ import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-wo
 import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
 import { PrivacyWorkerModule } from '../modules/privacy/privacy-worker.module';
 import { AuditLogWorkerModule } from '../modules/audit-log/audit-log-worker.module';
+import { RevenueReportWorkerModule } from '../modules/crm/revenue-report/revenue-report-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysWorkerModule } from '../modules/whatsapp-devices-baileys';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
@@ -106,6 +107,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ContactConsentWorkerModule,
     PrivacyWorkerModule,
     AuditLogWorkerModule,
+    RevenueReportWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,

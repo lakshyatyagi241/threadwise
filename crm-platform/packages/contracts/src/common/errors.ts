@@ -36,6 +36,7 @@ import { PRIVACY_ERROR_CODES } from '../privacy/errors';
 import { COMPLIANCE_ERROR_CODES } from '../compliance/errors';
 import { GROWTH_ERROR_CODES } from '../growth';
 import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log';
+import { REVENUE_ERROR_CODES } from '../crm/revenue-report';
 import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
 import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
 
@@ -47,6 +48,7 @@ export const ERROR_CODES = {
   ...PRIVACY_ERROR_CODES,
   ...COMPLIANCE_ERROR_CODES,
   ...AUDIT_LOG_ERROR_CODES,
+  ...REVENUE_ERROR_CODES,
   ...PQL_ERROR_CODES,
   ...WFL_ERROR_CODES,
   ...ALIB_ERROR_CODES,

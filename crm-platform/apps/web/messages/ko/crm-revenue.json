@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / 보고서",
+    "title": "매출 보고서",
+    "subtitle": "선택한 기간 동안 청구한 금액, 그중 결제된 금액과 아직 받지 못한 금액, 그리고 들어온 돈을 확인하세요.",
+    "back": "CRM 대시보드",
+    "period": "{from} ~ {to} ({zone})",
+    "comparedWith": "{mode}와(과) 비교: {from} ~ {to}",
+    "loading": "매출 보고서 불러오는 중",
+    "retry": "다시 시도",
+    "stale": "수치를 새로 고치지 못했습니다. 마지막으로 불러온 수치를 표시합니다.",
+    "empty": {
+      "title": "이 기간에는 내역이 없습니다",
+      "message": "이 기간에 발행된 청구서도, 들어온 결제도 없습니다. 다른 기간을 선택하거나 청구서를 열어 보세요.",
+      "invoices": "청구서 열기"
+    },
+    "mode": {
+      "previous": "이전 기간",
+      "lastYear": "작년 같은 기간"
+    },
+    "filters": {
+      "label": "보고서 필터",
+      "period": "기간",
+      "range": {
+        "month": "이번 달",
+        "lastMonth": "지난달",
+        "quarter": "이번 분기",
+        "year": "올해",
+        "30d": "30일",
+        "90d": "90일",
+        "custom": "직접 지정"
+      },
+      "from": "시작일",
+      "to": "종료일",
+      "compare": "비교 대상",
+      "compareOption": {
+        "previous": "이전 기간",
+        "lastYear": "작년 같은 기간",
+        "none": "비교 안 함"
+      },
+      "groupBy": "분류 기준",
+      "groupOption": {
+        "source": "리드 소스",
+        "origin": "청구서 출처",
+        "product": "제품",
+        "owner": "담당자",
+        "team": "팀"
+      },
+      "owner": "담당자",
+      "everyone": "전체",
+      "team": "팀",
+      "allTeams": "모든 팀",
+      "currency": "통화",
+      "allCurrencies": "전체, {currency}(으)로 표시",
+      "reset": "필터 초기화"
+    },
+    "note": {
+      "converted": "여러 통화가 사용되고 있습니다. 수치는 {currency}(으)로 환산되었습니다. 정확한 금액을 보려면 통화를 하나 선택하세요.",
+      "missingRate": "{currencies}의 환율이 없어 해당 금액은 환산된 수치에서 제외되었습니다.",
+      "invoiced": "청구액, 결제액, 미수금은 해당 기간에 발행된 청구서를 기준으로 집계합니다(임시 저장, 무효 처리된 청구서와 견적 청구서는 제외). 수금액과 환불액은 어떤 청구서에 대한 것이든 해당 기간에 들어온 돈을 기준으로 집계합니다."
+    },
+    "kpi": {
+      "title": "주요 수치",
+      "vsPrevious": "비교 기간 대비",
+      "collected": "수금액",
+      "collectedHint": "해당 기간에 받은 결제",
+      "collectedAll": "수금액(전체 기간)",
+      "collectedAllHint": "볼 수 있는 모든 결제",
+      "outstanding": "미수금",
+      "outstandingHint": "오늘 기준 미결 청구서 {count, plural, other {#건}}",
+      "tax": "수금된 세금",
+      "taxHint": "해당 기간에 전액 결제된 청구서 기준",
+      "invoiced": "청구액",
+      "invoicedHint": "발행된 청구서 {count, plural, other {#건}}",
+      "paid": "현재까지 결제액",
+      "paidHint": "해당 기간에 발행된 청구서 기준",
+      "overdue": "연체",
+      "overdueHint": "만기일 경과",
+      "refunded": "환불액",
+      "refundedHint": "해당 기간에 환불된 금액",
+      "paidInFull": "전액 결제",
+      "paidInFullHint": "전액 결제 상태가 된 청구서",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "청구액, 결제액, 미수금",
+      "subtitle": "해당 기간에 발행된 청구서와 현재 상태",
+      "paid": "결제됨",
+      "owed": "미수금(만기 전)",
+      "overdue": "연체",
+      "credited": "크레딧 노트",
+      "invoiced": "청구액",
+      "empty": "이 기간에 청구된 내역이 없습니다.",
+      "several": "이 청구서들은 여러 통화로 되어 있습니다. 위에서 통화를 선택하면 하나의 막대로 볼 수 있습니다."
+    },
+    "trend": {
+      "title": "청구액 및 수금액",
+      "subtitle": {
+        "day": "일별",
+        "week": "주별",
+        "month": "월별"
+      },
+      "chartLabel": "기간 중 청구액 및 수금액",
+      "invoiced": "청구액",
+      "collected": "수금액"
+    },
+    "split": {
+      "title": "{group}별",
+      "subtitle": "금액이 큰 순서대로 표시합니다. 금액은 {currency}(으)로 표시됩니다.",
+      "subtitlePerCurrency": "금액이 큰 순서대로 표시합니다. 금액은 통화별로 나열됩니다.",
+      "group": {
+        "source": "리드 소스",
+        "origin": "청구서 출처",
+        "product": "제품",
+        "owner": "담당자",
+        "team": "팀"
+      },
+      "empty": {
+        "source": "리드 소스 없음",
+        "origin": "출처 알 수 없음",
+        "product": "품목 없음",
+        "owner": "담당자 미지정",
+        "team": "팀 없음"
+      },
+      "origin": {
+        "manual": "직접 생성",
+        "quote": "견적에서 생성",
+        "order": "주문에서 생성",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "자체 스토어",
+        "api": "API",
+        "ai": "AI 어시스턴트"
+      },
+      "col": {
+        "invoices": "청구서",
+        "invoiced": "청구액",
+        "paid": "결제액",
+        "outstanding": "미수금",
+        "overdue": "연체",
+        "collected": "수금액",
+        "refunded": "환불액"
+      },
+      "total": "합계",
+      "truncated": "상위 {count, plural, other {#개}} 행만 표시됩니다. CSV 요약에도 같은 행이 포함됩니다.",
+      "teamNote": "두 팀에 속한 사람은 양쪽에 모두 집계되므로 팀별 행의 합이 전체 합계보다 클 수 있습니다.",
+      "productNote": "청구서 전체에 대한 할인, 배송비, 반올림은 각 품목의 금액 비율에 따라 나누어 반영됩니다."
+    },
+    "aging": {
+      "title": "미수금 연령 분석",
+      "open": "결제",
+      "empty": "받을 금액이 없습니다.",
+      "bucket": {
+        "current": "만기 전",
+        "d1_30": "만기 경과 1~30일",
+        "d31_60": "만기 경과 31~60일",
+        "d61_90": "만기 경과 61~90일",
+        "d90_plus": "만기 경과 90일 이상"
+      }
+    },
+    "export": {
+      "title": "이 보고서 다운로드",
+      "note": "위의 필터를 적용해 백그라운드에서 준비하며, {days}일간 보관되고 이메일로 알려 드립니다. 보고서에 표시되는 범위를 넘는 내용은 받을 수 없습니다.",
+      "csvPayments": "CSV: 결제",
+      "csvPaymentsHint": "해당 기간의 결제 및 환불 건당 한 줄",
+      "csvSummary": "CSV: 이 표",
+      "csvSummaryHint": "위의 분류 결과와 합계",
+      "pdf": "PDF",
+      "pdfHint": "문서 형태의 보고서",
+      "preparing": "준비 중...",
+      "requested": "파일을 준비하고 있습니다. 준비되면 이메일로 알려 드리며 아래 목록에도 표시됩니다.",
+      "recent": "최근 파일",
+      "none": "아직 준비한 파일이 없습니다.",
+      "kind": {
+        "pdf": "PDF 보고서",
+        "csv-payments": "결제 CSV",
+        "csv-summary": "CSV 요약"
+      },
+      "status": {
+        "queued": "대기 중",
+        "running": "준비 중",
+        "ready": "준비 완료",
+        "failed": "실패",
+        "expired": "만료됨"
+      },
+      "range": "{from} ~ {to}",
+      "rows": "{count, plural, other {#개 행}}",
+      "expires": "{date}까지 보관",
+      "failed": "이 파일을 준비하지 못했습니다. 다시 요청해 주세요.",
+      "download": "다운로드"
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도해 주세요.",
+      "forbidden": "이 항목에 대한 접근 권한이 없습니다.",
+      "notFound": "해당 파일이 없습니다.",
+      "exportInProgress": "이미 파일을 준비하고 있습니다. 이메일이 도착한 후에 다시 요청해 주세요.",
+      "exportNotReady": "이 파일은 아직 준비되지 않았거나 만료되었습니다. 다시 요청해 주세요.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도해 주세요.",
+      "validation": "필터 값이 올바르지 않습니다.",
+      "unexpected": "문제가 발생했습니다. 다시 시도해 주세요."
+    }
+  }
+}

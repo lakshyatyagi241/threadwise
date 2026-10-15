@@ -78,6 +78,8 @@ export const QUEUES = {
   CONSENT_EXPORT: 'consent-export',
   /** One job per requested export of the tenant audit log: reads the filtered window into a masked CSV and mails the requester. Own queue: a year of audit rows must not hold a send or a receipt. */
   AUDIT_LOG_EXPORT: 'audit-log-export',
+  /** One job per requested file of the revenue report (CSV or PDF): reads the payments of the window or renders the report and mails the requester. Own queue: a year of payments must not hold a send or a receipt. */
+  REVENUE_EXPORT: 'revenue-report-export',
   /** One job per Waboo -> WaDesk migration run started from the operator panel. Own queue: a run lasts up to an hour and must hold nothing else. */
   /** One job per requested export of a data-subject request: reads everything the workspace holds about one person into a ZIP kept 7 days. Own queue: a heavy subject must not hold a send or a receipt. */
   PRIVACY_EXPORT: 'privacy-export',
