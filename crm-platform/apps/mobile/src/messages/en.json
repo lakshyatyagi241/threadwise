@@ -1394,6 +1394,19 @@
   },
   "permissions": {
     "channelName": "Messages and updates",
-    "settingsHint": "Tap Permissions, then switch on what you need."
+    "settingsHint": "Tap Permissions, then switch on what you need.",
+    "names": {
+      "notifications": "Notifications",
+      "calls": "Phone calls",
+      "camera": "Camera"
+    },
+    "guide": {
+      "title": "Turn on permissions",
+      "open": "Open settings",
+      "later": "Not now",
+      "notifications": "Notifications are off. Next, switch them on.",
+      "android": "Switched off: {{list}}. Next, tap Permissions, pick each one and choose Allow.",
+      "ios": "Switched off: {{list}}. Next, switch each one on."
+    }
   }
 }

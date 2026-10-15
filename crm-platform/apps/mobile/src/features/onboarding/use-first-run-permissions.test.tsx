@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react-native';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 import * as SecureStore from 'expo-secure-store';
 import { askForPermissions } from '@/lib/device/permissions';
 import { useFirstRunPermissions } from './use-first-run-permissions';
@@ -12,7 +12,7 @@ const KEY = 'crm.permissions-asked.v1';
 beforeEach(() => {
   jest.clearAllMocks();
   store.clear();
-  ask.mockResolvedValue();
+  ask.mockResolvedValue([]);
 });
 
 describe('useFirstRunPermissions', () => {
@@ -21,6 +21,14 @@ describe('useFirstRunPermissions', () => {
     await waitFor(() => expect(ask).toHaveBeenCalledTimes(1));
     expect(ask).toHaveBeenCalledWith({ channelName: expect.any(String) });
     expect(store.get(KEY)).toBe('1');
+  });
+
+  it('hands back the permissions left off, until they are cleared', async () => {
+    ask.mockResolvedValue(['camera']);
+    const view = await renderHook(() => useFirstRunPermissions(true));
+    await waitFor(() => expect(view.result.current.off).toEqual(['camera']));
+    await act(async () => view.result.current.clear());
+    expect(view.result.current.off).toEqual([]);
   });
 
   it('asks nothing until the app is on screen', async () => {
@@ -43,6 +51,7 @@ describe('useFirstRunPermissions', () => {
   it('marks it before asking, so a close in the middle of the prompts does not bring them back', async () => {
     ask.mockImplementation(async () => {
       expect(store.get(KEY)).toBe('1');
+      return [];
     });
     await renderHook(() => useFirstRunPermissions(true));
     await waitFor(() => expect(ask).toHaveBeenCalledTimes(1));

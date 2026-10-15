@@ -69,23 +69,29 @@ export async function requestPermission(
 
 /**
  * The first-open flow: the phone's own "Allow" prompt for each permission, one after the other, with no screen of the app in
- * between. Any permission still off after its prompt (refused, or refused for good here or in an earlier install, when the phone
- * would not even show the prompt) is left for the phone's settings: the app's page there is opened once, at the end, for the person
- * to switch it on (the notification page itself when that is the only one).
+ * between. Answers with the permissions still off afterwards (refused, or refused for good here or in an earlier install, when the
+ * phone would not even show the prompt): only the phone's settings can switch those on, and the app tells the person where first
+ * (see `PermissionGuide`) before `openSettingsFor` takes them there.
  */
-export async function askForPermissions(labels: Labels): Promise<void> {
-  const blocked: DevicePermission[] = [];
+export async function askForPermissions(labels: Labels): Promise<DevicePermission[]> {
+  const off: DevicePermission[] = [];
   for (const kind of offeredPermissions()) {
     try {
       // A permission that is already on is answered at once, without a prompt.
       const answer = await requestPermission(kind, labels);
-      if (answer.state !== 'granted') blocked.push(kind);
+      if (answer.state !== 'granted') off.push(kind);
     } catch (error) {
       log.exception(error, 'device.permission_request_failed');
     }
   }
-  if (blocked.length === 0) return;
-  // Notifications have a settings page of their own, with the switch on it; the rest are in the phone's list of the app's permissions.
-  if (blocked.every((kind) => kind === 'notifications')) await openNotificationSettings();
+  return off;
+}
+
+/**
+ * Takes the person to where the given permissions are switched on. Notifications have a settings page of their own, with the
+ * switch on it; the rest are found under "Permissions" in the app's page.
+ */
+export async function openSettingsFor(kinds: DevicePermission[]): Promise<void> {
+  if (kinds.every((kind) => kind === 'notifications')) await openNotificationSettings();
   else await openPermissionSettings();
 }
