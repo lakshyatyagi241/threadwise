@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type {
   CalendarBusyInterval,
   CalendarEventRequest,
+  CalendarEventState,
   CalendarEventResult,
   CalendarStatus,
   CalendarSyncPort,
@@ -30,5 +31,13 @@ export class NoCalendarSync implements CalendarSyncPort {
 
   async deleteEvent(): Promise<void> {
     /* nothing was ever written */
+  }
+
+  async readEvent(): Promise<CalendarEventState> {
+    return { kind: 'missing' };
+  }
+
+  async calendarExists(): Promise<boolean> {
+    return false;
   }
 }

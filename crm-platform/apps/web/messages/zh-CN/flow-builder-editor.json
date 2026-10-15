@@ -1317,7 +1317,8 @@
             "date_field_match": "定时：相对于联系人的某个日期（如生日…）",
             "schedule": "定时：在指定日期和时间",
             "shopify_event": "电商：Shopify 店铺事件",
-            "woocommerce_event": "电商：WooCommerce 店铺事件"
+            "woocommerce_event": "电商：WooCommerce 店铺事件",
+            "segment_leave": "受众：联系人离开细分时"
           },
           "tagsLoading": "正在加载标签…",
           "tagPick": "— 选择标签 —",
@@ -1411,7 +1412,8 @@
             "productId": "商品 ID（可选）",
             "productIdHint": "留空 = 订单中的任意商品。",
             "storeNote": "客户按电话号码匹配已保存的联系人；订单不会创建新联系人。“加入购物车”和“查看商品”不提供：店铺不会上报这些事件。",
-            "updatedNote": "每次由人工或导入操作更改联系人时都会触发。其他流程所做的更改不会触发此流程。"
+            "updatedNote": "每次由人工或导入操作更改联系人时都会触发。其他流程所做的更改不会触发此流程。",
+            "segmentLeaveHint": "每当原本在此细分内的联系人在更新、打标签或列出后被发现已不在其中时，运行一次。只有流程之前见到该联系人在细分内，才会发现其离开。"
           }
         }
       },
@@ -1701,7 +1703,21 @@
           "setupOpen": "打开您的表单 → <mono>⋮ 菜单</mono> → <mono>脚本编辑器</mono>",
           "setupDownload": "<link>下载脚本 (.gs)</link> 并粘贴",
           "setupTrigger": "添加触发器：<mono>onFormSubmit</mono> · 来自表单 · 提交表单时",
-          "setupWarning": "若没有此脚本，表单仍会在 Google 表单中记录回答，但流程不会恢复执行。"
+          "setupWarning": "若没有此脚本，表单仍会在 Google 表单中记录回答，但流程不会恢复执行。",
+          "noListing": "由于未在 Google 账户页面授予 Drive 文件列表权限，无法列出你的文件。请改为粘贴链接或 ID。",
+          "connection": {
+            "open": "打开 Google 账户",
+            "permission": {
+              "calendar": "日历",
+              "sheets": "Sheets",
+              "docs": "Docs 和 Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "此平台尚未设置 Google，因此流程运行时此步骤会失败。",
+            "disconnected": "尚未连接 Google 账号，因此流程运行时此步骤会失败。请先连接 Google。",
+            "needsReconnect": "Google 不再接受已连接的账号，因此流程运行时此步骤会失败。请先重新连接 Google。",
+            "missing": "已连接的 Google 账号未获得 {permission} 权限，因此流程运行时此步骤会失败。"
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2316,7 +2332,8 @@
         "date_field_match": "日期匹配时",
         "schedule": "按计划",
         "shopify_event": "Shopify 事件触发时",
-        "woocommerce_event": "WooCommerce 事件触发时"
+        "woocommerce_event": "WooCommerce 事件触发时",
+        "segment_leave": "离开细分时"
       },
       "ports": {
         "manual": "手动",

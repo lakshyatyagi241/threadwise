@@ -191,6 +191,16 @@
       "routeBase": "extension"
     },
     {
+      "id": "google-account",
+      "code": "gacc",
+      "cluster": "platform",
+      "owner": "lakshya",
+      "days": 5,
+      "wave": 3,
+      "inventory": "pending",
+      "routeBase": "google-account"
+    },
+    {
       "id": "addons-extension-registry",
       "code": "add",
       "cluster": "platform",

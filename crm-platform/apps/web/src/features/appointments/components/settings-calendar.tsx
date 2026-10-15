@@ -127,7 +127,9 @@ export function CalendarCard() {
   return (
     <SettingsCard id="calendar" title={t('title')} description={t('description')}>
       {outcome && (
-        <Alert tone={outcome === 'connected' ? 'success' : 'danger'}>
+        <Alert
+          tone={outcome === 'connected' ? 'success' : outcome === 'cancelled' ? 'info' : 'danger'}
+        >
           <p>{t(`outcome.${outcome}`)}</p>
         </Alert>
       )}

@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { Injectable, Logger } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   listContactsQuerySchema,
@@ -152,7 +153,7 @@ export class SheetsContactsService {
         if (!caller.holds('record.contacts.create')) {
           return failedRow(index, ref, ERROR_CODES.FORBIDDEN, 'Your role cannot create contacts.');
         }
-        const made = await this.contacts.create(
+        const made = await this.contacts.createOrMatch(
           {
             email: c.email,
             phone: c.phone,
@@ -166,14 +167,37 @@ export class SheetsContactsService {
           },
           sheetsConsentVia(c),
         );
-        return { index, ...(ref !== undefined ? { ref } : {}), status: 'created', id: made.id };
+        // Another request for the same person got there first (the same row sent twice at once): this one found them, nothing was made.
+        if (!made.created) {
+          return {
+            index,
+            ...(ref !== undefined ? { ref } : {}),
+            status: 'unchanged',
+            id: made.contact.id,
+          };
+        }
+        return {
+          index,
+          ...(ref !== undefined ? { ref } : {}),
+          status: 'created',
+          id: made.contact.id,
+        };
       }
 
       if (!caller.holds('record.contacts.update')) {
         return failedRow(index, ref, ERROR_CODES.FORBIDDEN, 'Your role cannot edit contacts.');
       }
       const current = toContactResponse(found);
-      const patch = this.patchOf(current, c);
+      let patch = this.patchOf(current, c);
+      // A row that only repeats a consent the ledger already holds changes nothing: it is "unchanged", not another update.
+      if (
+        patch !== null &&
+        Object.keys(patch).length === 1 &&
+        patch.consent &&
+        (await this.consentAlreadyRecorded(ctx.orgId, current.id, c))
+      ) {
+        patch = null;
+      }
       if (patch === null) {
         return {
           index,
@@ -201,6 +225,33 @@ export class SheetsContactsService {
         throw err;
       }
     }
+  }
+
+  /** Whether this exact agreement (this person, this note) is already in the consent ledger for the contact. */
+  private async consentAlreadyRecorded(
+    orgId: number,
+    contactUuid: string,
+    c: PlannedContact,
+  ): Promise<boolean> {
+    const via = sheetsConsentVia(c);
+    if (!via?.dedupeKey) return false;
+    return this.ledgerHasKeyPrefix(orgId, contactUuid, `${via.dedupeKey}:`);
+  }
+
+  /**
+   * Whether a granted consent of the contact has an idempotency key starting with `prefix`. An exact prefix comparison (`left()`), not
+   * `LIKE`: a key holding `%`, `_` or `\\` must match only itself.
+   */
+  async ledgerHasKeyPrefix(orgId: number, contactUuid: string, prefix: string): Promise<boolean> {
+    return this.db.txAs({ orgId, userId: null }, async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT 1 FROM contact_consent_events e
+        JOIN contacts k ON k.org_id = e.org_id AND k.id = e.contact_id
+        WHERE e.org_id = ${orgId} AND k.uuid = ${contactUuid} AND e.action = 'granted'
+          AND left(e.idempotency_key, char_length(${prefix}::text)) = ${prefix}::text
+        LIMIT 1`);
+      return res.rows.length > 0;
+    });
   }
 
   /**

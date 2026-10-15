@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "The Google OAuth client every workspace connects its calendar through.",
+        "description": "The Google OAuth client every workspace connects its Google account through, for the calendar, Sheets, Docs and Forms.",
         "sections": {
           "oauth": {
             "title": "Google OAuth client"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Allow workspaces to connect Google Calendar",
-            "hint": "Off: no workspace can connect, and nothing is written to or read from a calendar."
+            "label": "Allow workspaces to connect Google",
+            "hint": "Off: no workspace can connect, and nothing is read from or written to Google (calendar, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "Client ID",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "The Google OAuth client workspaces use to connect their calendar for bookings and busy times.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "The Google OAuth client workspaces use to connect their Google account for bookings, Sheets, Docs and Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmail email",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "Admin - Appointments",
-        "description": "One Google Cloud OAuth client for the whole platform. Each workspace then connects its own Google account from Appointments, Settings; a workspace never sees the client id or secret.",
+        "description": "One Google Cloud OAuth client for the whole platform. Each workspace then connects its own Google account from Google account in Settings, and chooses which permissions to give; a workspace never sees the client id or secret.",
         "sections": {
           "oauth": {
             "title": "Google OAuth client",
-            "description": "Without a client id and secret, workspaces see Google Calendar as not available and bookings carry on without a calendar."
+            "description": "Without a client id and secret, workspaces see Google as not available, bookings carry on without a calendar and the Google steps in flows are skipped."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Project and API",
-              "body": "In Google Cloud Console create a project and enable the Google Calendar API."
+              "body": "In Google Cloud Console create a project and enable the Google Calendar, Google Sheets, Google Docs, Google Drive and Google Forms APIs. A permission only works when its API is enabled."
             },
             "redirect": {
               "title": "2. OAuth client",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Consent screen",
-              "body": "Add the calendar.events, calendar.freebusy and calendar.calendarlist.readonly scopes, then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect."
+              "body": "Add the scopes the product asks for (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect. The drive scopes are restricted and need Google's review."
             },
             "workspaces": {
               "title": "4. Workspaces connect",
-              "body": "Paste the client id and secret here and save. Admins then connect from Appointments, Settings, Google Calendar."
+              "body": "Paste the client id and secret here and save. Admins then connect from Settings, Integrations, Google account, or from Appointments, Settings, Google Calendar."
             }
           }
         }

@@ -433,7 +433,21 @@
           "setupDownload": "<link>Scarica lo script (.gs)</link> e incollalo",
           "setupTrigger": "Aggiungi un trigger: <mono>onFormSubmit</mono> · Dal modulo · All’invio del modulo",
           "setupWarning": "Senza questo script il modulo registrerà comunque le risposte in Moduli Google, ma il Flow non riprenderà.",
-          "docsIntro": "Copia un documento Template, compila i <mono>{placeholders}</mono>, condividilo con chiunque abbia il link e invia l’URL al cliente. Inserisci <mono>{key}</mono> nel modello dove deve andare il valore."
+          "docsIntro": "Copia un documento Template, compila i <mono>{placeholders}</mono>, condividilo con chiunque abbia il link e invia l’URL al cliente. Inserisci <mono>{key}</mono> nel modello dove deve andare il valore.",
+          "noListing": "Non è possibile elencare i tuoi file perché il permesso Elenco file di Drive non è stato concesso nella pagina Account Google. Incolla invece il link o l’ID.",
+          "connection": {
+            "open": "Apri Account Google",
+            "permission": {
+              "calendar": "Calendar",
+              "sheets": "Sheets",
+              "docs": "Docs e Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google non è configurato per questa piattaforma, quindi questo passaggio non riuscirà quando il flusso verrà eseguito.",
+            "disconnected": "Nessun account Google è collegato, quindi questo passaggio non riuscirà quando il flusso verrà eseguito. Collega prima Google.",
+            "needsReconnect": "Google non accetta più l'account collegato, quindi questo passaggio non riuscirà quando il flusso verrà eseguito. Ricollega prima Google.",
+            "missing": "All'account Google collegato non è stata concessa l'autorizzazione {permission}, quindi questo passaggio non riuscirà quando il flusso verrà eseguito."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1696,7 +1710,8 @@
             "date_field_match": "Programmazione: relativa a una data del contatto (compleanno…)",
             "schedule": "Programmazione: a una data e ora",
             "shopify_event": "Commercio: un evento dello store Shopify",
-            "woocommerce_event": "Commercio: un evento dello store WooCommerce"
+            "woocommerce_event": "Commercio: un evento dello store WooCommerce",
+            "segment_leave": "Pubblico: quando un contatto esce da un segmento"
           },
           "tagsLoading": "Caricamento tag…",
           "tagPick": "— scegli tag —",
@@ -1790,7 +1805,8 @@
             "productId": "ID prodotto (facoltativo)",
             "productIdHint": "Vuoto = qualsiasi prodotto dell'ordine.",
             "storeNote": "Il cliente viene associato a un contatto salvato tramite numero di telefono; per un ordine non viene creato nessuno. \"Aggiunto al carrello\" e \"prodotto visualizzato\" non sono disponibili: lo store non li segnala.",
-            "updatedNote": "Si attiva ogni volta che una persona o un'importazione modifica un contatto. Una modifica fatta da un altro flusso non lo avvia."
+            "updatedNote": "Si attiva ogni volta che una persona o un'importazione modifica un contatto. Una modifica fatta da un altro flusso non lo avvia.",
+            "segmentLeaveHint": "Viene eseguito una volta ogni volta che un contatto che era dentro questo segmento risulta fuori dopo essere stato aggiornato, taggato o inserito in un elenco. L'uscita di un contatto viene rilevata solo se il flusso lo aveva visto prima all'interno."
           }
         }
       },
@@ -2174,7 +2190,8 @@
         "date_field_match": "alla corrispondenza di una data",
         "schedule": "su pianificazione",
         "shopify_event": "all'evento Shopify",
-        "woocommerce_event": "all'evento WooCommerce"
+        "woocommerce_event": "all'evento WooCommerce",
+        "segment_leave": "all'uscita dal segmento"
       },
       "ports": {
         "manual": "manuale",

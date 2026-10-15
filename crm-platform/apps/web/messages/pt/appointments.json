@@ -41,7 +41,10 @@
       "notStarted": "Isso só pode ser feito depois que a reserva tiver começado.",
       "alreadyStarted": "Esta reserva já começou, então não pode mais ser alterada.",
       "bookingOff": "A reserva não está disponível para este serviço no momento.",
-      "notDeletable": "Isto não pode ser excluído enquanto houver reservas futuras."
+      "notDeletable": "Isto não pode ser excluído enquanto houver reservas futuras.",
+      "notDrifted": "Este agendamento já corresponde ao evento no Google. Ele foi recarregado.",
+      "calendarNotConnected": "O Google Calendar não está conectado. Reconecte-o na página da conta Google e tente novamente.",
+      "calendarFailed": "O Google não respondeu ou recusou a alteração. Tente novamente em instantes."
     },
     "picker": {
       "timeZone": "Fuso horário",
@@ -156,7 +159,8 @@
       "yesterday": "Ontem",
       "rowLabel": "Abrir reserva: {title}",
       "noName": "Sem nome",
-      "needsReview": "Requer revisão"
+      "needsReview": "Requer revisão",
+      "outOfSync": "Agenda fora de sincronia"
     },
     "row": {
       "moreFor": "Mais ações para {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Reserva movida para o novo horário.",
       "linkCopied": "Link de gerenciamento copiado.",
       "copyFailed": "Não foi possível copiar o link.",
-      "declined": "Solicitação recusada."
+      "declined": "Solicitação recusada.",
+      "calendarPushed": "Enviado ao Google: o evento agora corresponde a este agendamento.",
+      "calendarAccepted": {
+        "cancelled": "Alteração do Google aceita: o agendamento foi cancelado.",
+        "rescheduled": "Alteração do Google aceita: o agendamento foi movido para o novo horário.",
+        "acknowledged": "Alteração do Google aceita. O agendamento permanece como está."
+      }
     },
     "typesList": {
       "breadcrumb": "Trilha de navegação",
@@ -962,7 +972,7 @@
         "calendarSaved": "Agenda salva.",
         "confirmOff": {
           "title": "Desconectar o Google Agenda?",
-          "message": "As novas reservas deixam de ir para a sua agenda e os horários ocupados dela deixam de ser lidos. Os eventos que já estão na sua agenda permanecem lá, e o Google é avisado para retirar este acesso.",
+          "message": "As novas reservas deixam de ir para a sua agenda e os horários ocupados dela deixam de ser lidos. As etapas do Google nos seus fluxos também param, porque compartilham esta conexão. Os eventos que já estão na sua agenda permanecem lá, e o Google é avisado para retirar este acesso.",
           "confirm": "Desconectar",
           "cancel": "Manter"
         },
@@ -972,7 +982,8 @@
           "failed": "A conexão não foi concluída. Tente novamente; se continuar falhando, peça ao administrador da plataforma para verificar a configuração do Google.",
           "expired": "Essa tentativa demorou demais. Pressione Conectar para recomeçar.",
           "not_configured": "O Google Agenda não está configurado nesta plataforma. Peça ao administrador da plataforma para adicionar o cliente OAuth do Google.",
-          "missing_scope": "O Google não concedeu todas as permissões de agenda necessárias. Conecte novamente e mantenha todas as caixas marcadas."
+          "missing_scope": "O Google não concedeu todas as permissões de agenda necessárias. Conecte novamente e mantenha todas as caixas marcadas.",
+          "cancelled": "Você cancelou. Nada foi conectado."
         },
         "whatTitle": "O que isto faz",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Carregar mais",
       "loadMorePast": "Carregar mais anteriores",
       "noType": "Agendamento"
+    },
+    "sync": {
+      "title": "Agenda fora de sincronia",
+      "reason": {
+        "event_deleted": "O evento foi excluído ou cancelado no Google Calendar.",
+        "event_missing": "Não foi mais possível encontrar o evento no Google Calendar.",
+        "time_changed": "O evento foi movido para outro horário no Google Calendar.",
+        "attendees_changed": "Os convidados do evento foram alterados no Google Calendar."
+      },
+      "googleShows": "O Google mostra: {time}",
+      "notChanged": "Este agendamento não foi alterado. Escolha qual está correto.",
+      "found": "Encontrado {when}",
+      "push": "Enviar nosso horário ao Google",
+      "accept": "Aceitar a alteração do Google",
+      "keep": "Agora não",
+      "acceptTitle": {
+        "cancel": "Cancelar este agendamento?",
+        "reschedule": "Mover este agendamento para o horário do Google?",
+        "acknowledge": "Aceitar os convidados exibidos pelo Google?"
+      },
+      "acceptMessage": {
+        "cancel": "O evento não existe mais no Google, então este agendamento será cancelado e o horário ficará livre novamente. O cliente é avisado, como em qualquer cancelamento.",
+        "reschedule": "Este agendamento será movido para {time}. O cliente é avisado do novo horário, como em qualquer reagendamento.",
+        "acknowledge": "O agendamento em si não muda. A lista de convidados do Google é guardada e este aviso desaparece."
+      },
+      "acceptConfirm": {
+        "cancel": "Cancelar agendamento",
+        "reschedule": "Mover agendamento",
+        "acknowledge": "Aceitar"
+      }
     }
   }
 }

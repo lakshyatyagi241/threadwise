@@ -379,6 +379,10 @@
         "test": {
           "label": "Notificação de teste",
           "hint": "O teste que você envia em Notificações do navegador, para ver o sino, o pop-up e o título da aba funcionando."
+        },
+        "appointment_calendar_drift": {
+          "label": "Agendamento fora de sincronia com o Google Calendar",
+          "hint": "O evento do Google Calendar de um agendamento futuro foi excluído, movido ou teve os convidados alterados. O agendamento não é alterado; você escolhe o que fazer."
         }
       },
       "loading": "Carregando suas preferências",

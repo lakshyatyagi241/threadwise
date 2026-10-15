@@ -1317,7 +1317,8 @@
             "date_field_match": "Zamanlama: kişideki bir tarihe göre (doğum günü…)",
             "schedule": "Zamanlama: belirli bir tarih ve saatte",
             "shopify_event": "Ticaret: bir Shopify mağaza olayı",
-            "woocommerce_event": "Ticaret: bir WooCommerce mağaza olayı"
+            "woocommerce_event": "Ticaret: bir WooCommerce mağaza olayı",
+            "segment_leave": "Kitle: kişi bir segmentten ayrıldığında"
           },
           "tagsLoading": "Etiketler yükleniyor…",
           "tagPick": "— etiket seçin —",
@@ -1411,7 +1412,8 @@
             "productId": "Ürün kimliği (isteğe bağlı)",
             "productIdHint": "Boş = siparişteki herhangi bir ürün.",
             "storeNote": "Müşteri, telefon numarasına göre kayıtlı bir kişiyle eşleştirilir; sipariş için kimse oluşturulmaz. “Sepete eklendi” ve “ürün görüntülendi” sunulmaz: mağaza bunları bildirmez.",
-            "updatedNote": "Bir kişi ya da içe aktarma bir kişiyi her değiştirdiğinde tetiklenir. Başka bir akışın yaptığı değişiklik onu başlatmaz."
+            "updatedNote": "Bir kişi ya da içe aktarma bir kişiyi her değiştirdiğinde tetiklenir. Başka bir akışın yaptığı değişiklik onu başlatmaz.",
+            "segmentLeaveHint": "Bu segmentin içinde olan bir kişi güncellendikten, etiketlendikten veya listelendikten sonra segmentin dışında bulunduğunda her seferinde bir kez çalışır. Bir kişinin ayrıldığı yalnızca akış onu önceden segmentin içinde gördüyse fark edilir."
           }
         }
       },
@@ -1701,7 +1703,21 @@
           "setupOpen": "Formunuzu açın → <mono>⋮ menü</mono> → <mono>Komut dosyası düzenleyicisi</mono>",
           "setupDownload": "<link>Komut dosyasını (.gs) indirin</link> ve yapıştırın",
           "setupTrigger": "Bir tetikleyici ekleyin: <mono>onFormSubmit</mono> · Formdan · Form gönderildiğinde",
-          "setupWarning": "Bu komut dosyası olmadan form yanıtları yine Google Forms'ta kaydedilir, ancak akış devam etmez."
+          "setupWarning": "Bu komut dosyası olmadan form yanıtları yine Google Forms'ta kaydedilir, ancak akış devam etmez.",
+          "noListing": "Google hesabı sayfasında Drive dosya listesi izni verilmediği için dosyalarınız listelenemiyor. Bunun yerine bağlantıyı veya kimliği yapıştırın.",
+          "connection": {
+            "open": "Google hesabını aç",
+            "permission": {
+              "calendar": "Takvim",
+              "sheets": "Sheets",
+              "docs": "Docs ve Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google bu platform için kurulu değil, bu yüzden akış çalıştığında bu adım başarısız olur.",
+            "disconnected": "Bağlı bir Google hesabı yok, bu yüzden akış çalıştığında bu adım başarısız olur. Önce Google'ı bağlayın.",
+            "needsReconnect": "Google artık bağlı hesabı kabul etmiyor, bu yüzden akış çalıştığında bu adım başarısız olur. Önce Google'ı yeniden bağlayın.",
+            "missing": "Bağlı Google hesabına {permission} izni verilmedi, bu yüzden akış çalıştığında bu adım başarısız olur."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2316,7 +2332,8 @@
         "date_field_match": "tarih eşleşince",
         "schedule": "zamanlamaya göre",
         "shopify_event": "Shopify etkinliğinde",
-        "woocommerce_event": "WooCommerce etkinliğinde"
+        "woocommerce_event": "WooCommerce etkinliğinde",
+        "segment_leave": "segmentten ayrılınca"
       },
       "ports": {
         "manual": "manuel",

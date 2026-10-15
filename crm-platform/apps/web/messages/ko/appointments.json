@@ -41,7 +41,10 @@
       "notStarted": "예약이 시작된 후에만 수행할 수 있습니다.",
       "alreadyStarted": "이 예약은 이미 시작되어 더 이상 변경할 수 없습니다.",
       "bookingOff": "지금은 이 서비스를 예약할 수 없습니다.",
-      "notDeletable": "예정된 예약이 있는 동안에는 삭제할 수 없습니다."
+      "notDeletable": "예정된 예약이 있는 동안에는 삭제할 수 없습니다.",
+      "notDrifted": "이 예약은 이미 Google 일정과 일치합니다. 새로 불러왔습니다.",
+      "calendarNotConnected": "Google Calendar가 연결되어 있지 않습니다. Google 계정 페이지에서 다시 연결한 후 다시 시도해 주세요.",
+      "calendarFailed": "Google이 응답하지 않았거나 변경을 거부했습니다. 잠시 후 다시 시도해 주세요."
     },
     "picker": {
       "timeZone": "시간대",
@@ -156,7 +159,8 @@
       "yesterday": "어제",
       "rowLabel": "예약 열기: {title}",
       "noName": "이름 없음",
-      "needsReview": "검토 필요"
+      "needsReview": "검토 필요",
+      "outOfSync": "캘린더 동기화 안 됨"
     },
     "row": {
       "moreFor": "{title}에 대한 추가 작업",
@@ -269,7 +273,13 @@
       "rescheduled": "예약을 새 시간으로 옮겼습니다.",
       "linkCopied": "관리 링크를 복사했습니다.",
       "copyFailed": "링크를 복사할 수 없습니다.",
-      "declined": "요청을 거절했습니다."
+      "declined": "요청을 거절했습니다.",
+      "calendarPushed": "Google에 반영했습니다. 이제 일정이 이 예약과 일치합니다.",
+      "calendarAccepted": {
+        "cancelled": "Google의 변경을 수락했습니다. 예약이 취소되었습니다.",
+        "rescheduled": "Google의 변경을 수락했습니다. 예약이 새 시간으로 변경되었습니다.",
+        "acknowledged": "Google의 변경을 수락했습니다. 예약은 그대로 유지됩니다."
+      }
     },
     "typesList": {
       "breadcrumb": "이동 경로",
@@ -962,7 +972,7 @@
         "calendarSaved": "캘린더를 저장했습니다.",
         "confirmOff": {
           "title": "Google 캘린더 연결을 해제할까요?",
-          "message": "새 예약이 캘린더에 기록되지 않으며 바쁜 시간도 더 이상 읽지 않습니다. 이미 캘린더에 있는 이벤트는 그대로 유지되며 Google에 이 접근 권한을 철회하도록 요청합니다.",
+          "message": "새 예약이 캘린더에 기록되지 않으며 바쁜 시간도 더 이상 읽지 않습니다. 플로우의 Google 단계도 이 연결을 함께 사용하므로 중지됩니다. 이미 캘린더에 있는 이벤트는 그대로 유지되며 Google에 이 접근 권한을 철회하도록 요청합니다.",
           "confirm": "연결 해제",
           "cancel": "유지"
         },
@@ -972,7 +982,8 @@
           "failed": "연결이 완료되지 않았습니다. 다시 시도하고, 계속 실패하면 플랫폼 관리자에게 Google 설정 확인을 요청하세요.",
           "expired": "시도 시간이 너무 오래 걸렸습니다. 연결을 눌러 다시 시작하세요.",
           "not_configured": "이 플랫폼에는 Google 캘린더가 설정되지 않았습니다. 플랫폼 관리자에게 Google OAuth 클라이언트 추가를 요청하세요.",
-          "missing_scope": "Google이 필요한 모든 캘린더 권한을 부여하지 않았습니다. 다시 연결하고 모든 체크박스를 선택한 상태로 유지하세요."
+          "missing_scope": "Google이 필요한 모든 캘린더 권한을 부여하지 않았습니다. 다시 연결하고 모든 체크박스를 선택한 상태로 유지하세요.",
+          "cancelled": "취소하셨습니다. 연결된 항목이 없습니다."
         },
         "whatTitle": "이 기능이 하는 일",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "더 보기",
       "loadMorePast": "지난 예약 더 보기",
       "noType": "예약"
+    },
+    "sync": {
+      "title": "캘린더 동기화 안 됨",
+      "reason": {
+        "event_deleted": "Google Calendar에서 일정이 삭제되었거나 취소되었습니다.",
+        "event_missing": "Google Calendar에서 일정을 더 이상 찾을 수 없습니다.",
+        "time_changed": "Google Calendar에서 일정이 다른 시간으로 이동되었습니다.",
+        "attendees_changed": "Google Calendar에서 일정의 참석자가 변경되었습니다."
+      },
+      "googleShows": "Google 표시: {time}",
+      "notChanged": "이 예약은 변경되지 않았습니다. 어느 쪽이 맞는지 선택해 주세요.",
+      "found": "{when} 확인됨",
+      "push": "우리 시간으로 Google 덮어쓰기",
+      "accept": "Google의 변경 수락",
+      "keep": "나중에",
+      "acceptTitle": {
+        "cancel": "이 예약을 취소하시겠습니까?",
+        "reschedule": "이 예약을 Google의 시간으로 변경하시겠습니까?",
+        "acknowledge": "Google에 표시된 참석자를 수락하시겠습니까?"
+      },
+      "acceptMessage": {
+        "cancel": "Google에서 일정이 사라졌으므로 이 예약이 취소되며 해당 시간은 다시 비워집니다. 일반적인 취소와 마찬가지로 고객에게 안내됩니다.",
+        "reschedule": "이 예약이 {time}(으)로 변경됩니다. 일반적인 일정 변경과 마찬가지로 고객에게 새 시간이 안내됩니다.",
+        "acknowledge": "예약 자체는 변경되지 않습니다. Google의 참석자 목록이 저장되고 이 알림은 사라집니다."
+      },
+      "acceptConfirm": {
+        "cancel": "예약 취소",
+        "reschedule": "예약 변경",
+        "acknowledge": "수락"
+      }
     }
   }
 }

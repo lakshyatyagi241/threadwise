@@ -55,7 +55,26 @@ export interface CalendarEventResult {
   eventId: string;
   calendarId: string | null;
   meetUrl: string | null;
+  /** The provider's version tag of the event as we left it (Google's `etag`): the echo guard of the reconcile. */
+  etag?: string | null;
 }
+
+/**
+ * An event as the provider shows it now, for the reconcile (TW-GACC-011): `deleted` (410, or status cancelled), `missing` (404), or what
+ * it holds. Times are instants; an all-day event has none (`allDay`), which can never equal a booking.
+ */
+export type CalendarEventState =
+  | { kind: 'deleted' }
+  | { kind: 'missing' }
+  | {
+      kind: 'found';
+      startsAt: Date | null;
+      endsAt: Date | null;
+      allDay: boolean;
+      /** Guest emails, lower-cased, without the organizer, the calendar's own entry and resource rooms. */
+      attendees: string[];
+      etag: string | null;
+    };
 
 export interface CalendarSyncPort {
   /** The provider key ("google", "none"). */
@@ -72,4 +91,14 @@ export interface CalendarSyncPort {
   /** Creates the event, or updates `existingEventId`. Null = nothing was written (not connected). */
   upsertEvent(request: CalendarEventRequest): Promise<CalendarEventResult | null>;
   deleteEvent(orgId: number, calendarId: string | null, eventId: string): Promise<void>;
+  /**
+   * Reads one event by id and reports what it holds (never throws for "gone": that is an answer). Throws for a failure to ask (provider
+   * down, rate limit, grant refused) so the caller can stop and back off instead of reading "could not look" as "drifted".
+   */
+  readEvent(orgId: number, calendarId: string | null, eventId: string): Promise<CalendarEventState>;
+  /**
+   * Whether the calendar itself still exists and is visible to the connected account. A 404 on an EVENT of a calendar that is gone is not
+   * the event's drift, so the reconcile asks this before it reads "missing" as an answer about one appointment. Throws like `readEvent`.
+   */
+  calendarExists(orgId: number, calendarId: string | null): Promise<boolean>;
 }

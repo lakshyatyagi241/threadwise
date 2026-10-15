@@ -153,6 +153,19 @@ export const appointments = pgTable(
     orderId: idColumn('order_id'),
     calendarEventId: text('calendar_event_id'),
     calendarId: text('calendar_id'),
+    /** The bounded reconcile against the Google event (null until the first look): `in_sync` or `drifted`, and why. */
+    googleSyncState: text('google_sync_state'),
+    googleSyncReason: text('google_sync_reason'),
+    googleDriftDetectedAt: timestamp('google_drift_detected_at', { withTimezone: true }),
+    googleDriftStartsAt: timestamp('google_drift_starts_at', { withTimezone: true }),
+    googleDriftEndsAt: timestamp('google_drift_ends_at', { withTimezone: true }),
+    /** What we last wrote to the event (the echo guard): Google's etag, the time and the guest. */
+    googleEventEtag: text('google_event_etag'),
+    googlePushedAt: timestamp('google_pushed_at', { withTimezone: true }),
+    googlePushedStartsAt: timestamp('google_pushed_starts_at', { withTimezone: true }),
+    googlePushedEndsAt: timestamp('google_pushed_ends_at', { withTimezone: true }),
+    googlePushedAttendee: text('google_pushed_attendee'),
+    googleCheckedAt: timestamp('google_checked_at', { withTimezone: true }),
     meetUrl: text('meet_url'),
     inviteeName: text('invitee_name'),
     inviteeEmail: text('invitee_email'),
@@ -233,6 +246,17 @@ export const appointments = pgTable(
     index('idx_appointments_contact_id').on(t.orgId, t.contactId),
     index('idx_appointments_conversation_id').on(t.orgId, t.conversationId),
     index('idx_appointments_calendar_event_id').on(t.orgId, t.calendarEventId),
+    check(
+      'chk_appointments_google_sync_state',
+      sql`${t.googleSyncState} is null or ${t.googleSyncState} in ('in_sync', 'drifted', 'unreadable')`,
+    ),
+    check(
+      'chk_appointments_google_sync_reason',
+      sql`(${t.googleSyncState} in ('drifted', 'unreadable')) = (${t.googleSyncReason} is not null) and (${t.googleSyncReason} is null or ${t.googleSyncReason} in ('event_deleted', 'event_missing', 'time_changed', 'attendees_changed', 'event_forbidden', 'event_unreadable'))`,
+    ),
+    index('idx_appointments_google_reconcile')
+      .on(t.orgId, t.startsAt)
+      .where(sql`${t.calendarEventId} is not null and ${t.status} in ('pending', 'confirmed')`),
     index('idx_appointments_order_id').on(t.orgId, t.orderId),
     index('idx_appointments_user_id').on(t.orgId, t.userId),
     index('idx_appointments_created_by').on(t.orgId, t.createdBy),
@@ -625,12 +649,30 @@ export const appointmentCalendarConnections = pgTable(
     statusReason: text('status_reason'),
     statusAt: timestamp('status_at', { withTimezone: true }).notNull().defaultNow(),
     connectedAt: timestamp('connected_at', { withTimezone: true }).notNull().defaultNow(),
+    /** The last failure a feature met using the account (a GOOGLE_* code), cleared by the next success. */
+    lastErrorCode: text('last_error_code'),
+    lastErrorAt: timestamp('last_error_at', { withTimezone: true }),
+    /** The capability whose call failed: only a success of the same capability clears the error. */
+    lastErrorCapability: text('last_error_capability'),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    /** The reconcile job's schedule: when it is next due, when it last ran, and consecutive failures (the back-off). */
+    nextReconcileAt: timestamp('next_reconcile_at', { withTimezone: true }),
+    lastReconcileAt: timestamp('last_reconcile_at', { withTimezone: true }),
+    reconcileFailures: integer('reconcile_failures').notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
+    check(
+      'chk_appointment_calendar_connections_last_error',
+      sql`(${t.lastErrorCode} is null) = (${t.lastErrorAt} is null)`,
+    ),
+    check(
+      'chk_appointment_calendar_connections_last_error_capability',
+      sql`${t.lastErrorCapability} is null or ${t.lastErrorCapability} in ('calendar', 'sheets', 'docs', 'forms', 'drive_listing')`,
+    ),
     unique('uq_appointment_calendar_connections_org_id_uuid').on(t.orgId, t.uuid),
     foreignKey({
       name: 'fk_appointment_calendar_connections_org',
@@ -655,3 +697,48 @@ export const appointmentCalendarConnections = pgTable(
 export type AppointmentCalendarConnectionsRow = typeof appointmentCalendarConnections.$inferSelect;
 export type NewAppointmentCalendarConnectionsRow =
   typeof appointmentCalendarConnections.$inferInsert;
+
+/**
+ * One Google consent in flight (TW-GACC-010): created when an admin presses Connect, filled by the public callback with what Google returned
+ * (sealed), consumed once by the same admin's confirmation. See migration 20261208090000_gacc_drift_and_consent.sql.
+ */
+export const googleConsentRequests = pgTable(
+  'google_consent_requests',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    nonceHash: text('nonce_hash').notNull(),
+    userId: idColumn('user_id').notNull(),
+    capabilities: text('capabilities').array().notNull(),
+    returnTo: text('return_to').notNull(),
+    status: text('status').notNull().default('pending'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    accountEmail: text('account_email'),
+    accountSub: text('account_sub'),
+    scopes: text('scopes'),
+    missingScopes: text('missing_scopes').array(),
+    refreshTokenEnc: text('refresh_token_enc'),
+    accessTokenEnc: text('access_token_enc'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
+    decidedAt: timestamp('decided_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('google_consent_requests_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_google_consent_requests_nonce').on(t.nonceHash),
+    foreignKey({
+      name: 'fk_google_consent_requests_user',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    check(
+      'chk_google_consent_requests_status',
+      sql`${t.status} in ('pending', 'awaiting_confirm', 'confirmed', 'cancelled', 'rejected', 'expired')`,
+    ),
+    index('idx_google_consent_requests_user').on(t.orgId, t.userId),
+  ],
+);

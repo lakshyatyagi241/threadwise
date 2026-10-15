@@ -61,3 +61,31 @@ Why one listing can serve every installation: the add-on takes the server addres
 ## While you wait
 
 Nothing blocks members: the setup page offers the six files for download, with `CRM_BASE` already set to this installation.
+
+## Verifying without Google, and installing in a real Sheet
+
+Nobody on the team has run this add-on in a real Google Sheet yet, and CI has no Google account. So there are two kinds of evidence, and the listing application above should wait for the
+second one.
+
+**1. What the automated suites prove (no Google, runs in CI and on a laptop).** `apps/api/test/support/apps-script-harness.ts` is an emulator of the Apps Script runtime: it loads
+the unchanged `Code.gs` in a sandbox that has only the globals Apps Script has, and mocks `SpreadsheetApp` (a real in-memory grid with Google's range rules and limits), `HtmlService`
+(it renders the real dialogs and fails for a file name that does not exist), `PropertiesService`, `CacheService`, `LockService`, `ScriptApp` (installable triggers, 20 per user),
+`UrlFetchApp`, `Utilities` and `Session`, with the 6-minute execution limit, the scopes in `appsscript.json`, and the simple-trigger 30 second limit. Run them from `crm-platform/apps/api`:
+
+```bash
+pnpm exec vitest run --dir test/unit test/unit/chrome-extension-sheets-addon
+pnpm exec vitest run --dir test/e2e --testTimeout=120000 test/e2e/chrome-extension-sheets-addon
+```
+
+- `addon-runtime.spec.ts`, `addon-sweep.spec.ts`: the menu, Initial Setup, Send Test, Submit, both triggers, the hourly sweep, chunking, failures (401, 403, 413, 429, network, quota), the key never leaving the member's own properties.
+- `addon-static.spec.ts`: the manifest (V8, time zone, exactly four scopes and the Google API in `Code.gs` that needs each), and every dialog against `Code.gs` (each `google.script.run` function exists and is public, each `<?= ?>` variable is supplied, no `innerHTML`/`eval`/modal dialogs).
+- `apps-script-harness.spec.ts`: the emulator tested against what Google documents.
+- `addon-real-api.e2e.spec.ts`: the same unchanged `Code.gs` posting over real HTTP to the real Nest app (Postgres and Redis in containers): Initial Setup with a real Webhook URL, Send Test, Submit, an edit becoming a contact, the same row being `unchanged`, a changed row updating it, 600 rows as two chunks, a revoked key, the per-key 429, Pull and Sync products.
+- `sheets-webhook-hardening.e2e.spec.ts`: the receiving endpoint: idempotency, two requests at once, size and row limits, the key stored only as a hash.
+
+**2. What only a real Google account can prove.** Google's real runtime, the authorization flow and the consent screen, how long a trigger takes to fire, real quotas, the real execution limit, and
+how the dialogs look and behave in Google's sandboxed iframe are not exercised by any automated test. Follow
+[google-sheets-addon-real-sheet-test.md](google-sheets-addon-real-sheet-test.md): a click-by-click procedure (create a test Sheet, paste the five project files, authorize past the
+"Google hasn't verified this app" screen, run every menu item and trigger) with a checklist of every menu item and every failure message, and how to read the Executions and Triggers pages.
+Attach the filled checklist to the listing application. Run it twice: once as a copy bound to a spreadsheet (what members do today) and once as a test deployment of an Editor Add-on
+(step 3 above), because an add-on's hourly trigger has no open spreadsheet and may behave differently (see the "Add-on test deployment" part of that page).

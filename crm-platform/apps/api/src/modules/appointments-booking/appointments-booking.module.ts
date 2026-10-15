@@ -13,6 +13,8 @@ import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AppointmentsController, ContactAppointmentsController } from './appointments.controller';
 import { AppointmentsRepository } from './appointments.repository';
 import { AppointmentsService } from './appointments.service';
+import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
+import { AppointmentCalendarWriter } from './appointment-calendar-writer.service';
 import { AppointmentsSupport } from './appointments.support';
 import { AppointmentBookingGuard, AppointmentPlan } from './booking-plan';
 import { BookingOffersService } from './booking-offers.service';
@@ -21,6 +23,8 @@ import { BookingTypesController } from './booking-types.controller';
 import { BookingTypesRepository } from './booking-types.repository';
 import { BookingTypesService } from './booking-types.service';
 import { ContactLinkService } from './contact-link.service';
+import { GoogleConsentRepository } from './google-consent.repository';
+import { GoogleConsentService } from './google-consent.service';
 import { GoogleCalendarAdapter } from './google-calendar.adapter';
 import { GoogleCalendarCallbackController } from './google-calendar-callback.controller';
 import { GoogleCalendarConfig } from './google-calendar-config.service';
@@ -69,6 +73,8 @@ import { SlotsService } from './slots.service';
     BookingTypesRepository,
     AppointmentsRepository,
     AppointmentsSupport,
+    AppointmentCalendarWriter,
+    AppointmentCalendarSyncService,
     SlotsService,
     BookingService,
     BookingTypesService,
@@ -82,6 +88,8 @@ import { SlotsService } from './slots.service';
     GoogleCalendarConnectionRepository,
     GoogleCalendarTokens,
     GoogleCalendarAdapter,
+    GoogleConsentRepository,
+    GoogleConsentService,
     GoogleCalendarConnectService,
     { provide: APPOINTMENT_CALENDAR, useExisting: GoogleCalendarAdapter },
     { provide: APPOINTMENT_MESSENGER, useClass: NoAppointmentMessenger },
@@ -93,9 +101,15 @@ import { SlotsService } from './slots.service';
     BookingTypesRepository,
     AppointmentsRepository,
     AppointmentsSupport,
+    AppointmentCalendarWriter,
     SlotsService,
     APPOINTMENT_CALENDAR,
     APPOINTMENT_MESSENGER,
+    // The Google account domain (`/google-account`) shares this module's grant, its token refresh and its consent flow.
+    GoogleCalendarConnectService,
+    GoogleConsentService,
+    GoogleCalendarTokens,
+    GoogleCalendarConnectionRepository,
   ],
 })
 export class AppointmentsBookingModule {}

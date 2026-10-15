@@ -75,6 +75,8 @@ export interface MoveParams {
   nowMs: number;
   busy: EngineBusy[];
   rowVersion?: number;
+  /** Only when a move must keep a length other than the booking type's (accepting a time Google shows): the new end. */
+  endsAt?: Date;
 }
 
 export interface TransitionParams {
@@ -299,13 +301,14 @@ export class BookingService {
     if (row.startsAt.getTime() <= p.nowMs) throw alreadyStarted();
     if (row.bookingTypeId === null) throw typeGone();
     const startMs = p.startsAt.getTime();
-    if (startMs === row.startsAt.getTime()) return row;
+    const sameEnd = p.endsAt === undefined || p.endsAt.getTime() === row.endsAt.getTime();
+    if (startMs === row.startsAt.getTime() && sameEnd) return row;
 
     await this.appts.lockType(tx, orgId, row.bookingTypeId);
     const type = await this.types.findById(tx, orgId, row.bookingTypeId);
     if (!type) throw typeGone();
     const lt = await this.slots.load(tx, orgId, type);
-    const endMs = startMs + type.durationMinutes * MINUTE;
+    const endMs = p.endsAt ? p.endsAt.getTime() : startMs + type.durationMinutes * MINUTE;
     // The booking being moved does not block its own new slot.
     const facts = await this.slots.facts(
       tx,
@@ -351,7 +354,12 @@ export class BookingService {
       orgId,
       audit: {
         action: 'update',
-        delta: { startsAt: { old: row.startsAt.toISOString(), new: after.startsAt.toISOString() } },
+        delta: {
+          startsAt: { old: row.startsAt.toISOString(), new: after.startsAt.toISOString() },
+          ...(row.endsAt.getTime() !== after.endsAt.getTime()
+            ? { endsAt: { old: row.endsAt.toISOString(), new: after.endsAt.toISOString() } }
+            : {}),
+        },
       },
       event: {
         type: 'appointment.rescheduled',

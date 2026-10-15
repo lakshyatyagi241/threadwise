@@ -88,7 +88,18 @@ export interface Appointment {
   cancelledBy: string | null;
   cancelReason: string | null;
   manageUrl: string | null;
-  calendar: { eventId: string | null; calendarId: string | null };
+  calendar: {
+    eventId: string | null;
+    calendarId: string | null;
+    sync?: {
+      state: 'in_sync' | 'drifted';
+      reason: string | null;
+      detectedAt: string | null;
+      googleStartsAt: string | null;
+      googleEndsAt: string | null;
+      checkedAt: string | null;
+    } | null;
+  };
   answers: Array<{ questionId: string | null; label: string; value: string }>;
   rowVersion: number;
 }

@@ -1317,7 +1317,8 @@
             "date_field_match": "Harmonogram: względem daty na kontakcie (urodziny…)",
             "schedule": "Harmonogram: o określonej dacie i godzinie",
             "shopify_event": "Handel: zdarzenie sklepu Shopify",
-            "woocommerce_event": "Handel: zdarzenie sklepu WooCommerce"
+            "woocommerce_event": "Handel: zdarzenie sklepu WooCommerce",
+            "segment_leave": "Odbiorcy: gdy kontakt opuści segment"
           },
           "tagsLoading": "Wczytywanie tagów…",
           "tagPick": "— wybierz tag —",
@@ -1411,7 +1412,8 @@
             "productId": "ID produktu (opcjonalnie)",
             "productIdHint": "Puste = dowolny produkt w zamówieniu.",
             "storeNote": "Klient jest dopasowywany do zapisanego kontaktu po numerze telefonu; dla zamówienia nikt nie jest tworzony. Zdarzeń „Dodano do koszyka” i „produkt obejrzany” nie ma, ponieważ sklep ich nie raportuje.",
-            "updatedNote": "Uruchamia się za każdym razem, gdy osoba lub import zmienia kontakt. Zmiana wykonana przez inny przepływ go nie uruchamia."
+            "updatedNote": "Uruchamia się za każdym razem, gdy osoba lub import zmienia kontakt. Zmiana wykonana przez inny przepływ go nie uruchamia.",
+            "segmentLeaveHint": "Uruchamia się raz za każdym razem, gdy kontakt, który był w tym segmencie, zostanie znaleziony poza nim po aktualizacji, otagowaniu lub wyświetleniu na liście. Odejście kontaktu jest wykrywane tylko wtedy, gdy przepływ wcześniej widział go w segmencie."
           }
         }
       },
@@ -1701,7 +1703,21 @@
           "setupOpen": "Otwórz formularz → <mono>menu ⋮</mono> → <mono>Edytor skryptów</mono>",
           "setupDownload": "<link>Pobierz skrypt (.gs)</link> i wklej go",
           "setupTrigger": "Dodaj wyzwalacz: <mono>onFormSubmit</mono> · Z formularza · Przy wysłaniu formularza",
-          "setupWarning": "Bez tego skryptu formularz nadal zapisze odpowiedzi w Formularzach Google, ale przepływ nie zostanie wznowiony."
+          "setupWarning": "Bez tego skryptu formularz nadal zapisze odpowiedzi w Formularzach Google, ale przepływ nie zostanie wznowiony.",
+          "noListing": "Nie można wyświetlić listy Twoich plików, ponieważ na stronie konta Google nie przyznano uprawnienia do listy plików Drive. Wklej zamiast tego link lub identyfikator.",
+          "connection": {
+            "open": "Otwórz konto Google",
+            "permission": {
+              "calendar": "Kalendarz",
+              "sheets": "Sheets",
+              "docs": "Docs i Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google nie jest skonfigurowany dla tej platformy, więc ten krok zakończy się błędem podczas działania przepływu.",
+            "disconnected": "Nie połączono żadnego konta Google, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google.",
+            "needsReconnect": "Google nie akceptuje już połączonego konta, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google ponownie.",
+            "missing": "Połączone konto Google nie otrzymało uprawnienia {permission}, więc ten krok zakończy się błędem podczas działania przepływu."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2316,7 +2332,8 @@
         "date_field_match": "po dopasowaniu daty",
         "schedule": "według harmonogramu",
         "shopify_event": "po zdarzeniu Shopify",
-        "woocommerce_event": "po zdarzeniu WooCommerce"
+        "woocommerce_event": "po zdarzeniu WooCommerce",
+        "segment_leave": "po opuszczeniu segmentu"
       },
       "ports": {
         "manual": "ręcznie",

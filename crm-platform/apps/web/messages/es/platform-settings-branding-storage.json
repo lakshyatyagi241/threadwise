@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "El cliente OAuth de Google que usa cada espacio de trabajo para conectar su calendario.",
+        "description": "El cliente OAuth de Google mediante el cual cada espacio de trabajo conecta su cuenta de Google, para el calendario, Sheets, Docs y Forms.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth de Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Permitir a los espacios de trabajo conectar Google Calendar",
-            "hint": "Desactivado: ningún espacio de trabajo puede conectarse y no se escribe ni se lee nada en un calendario."
+            "label": "Permitir a los espacios de trabajo conectar Google",
+            "hint": "Desactivado: ningún espacio de trabajo puede conectarse y no se lee ni se escribe nada en Google (calendario, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "ID de cliente",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar su calendario y gestionar citas y horas ocupadas.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar su cuenta de Google para reservas, Sheets, Docs y Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Correo Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "Admin - Citas",
-        "description": "Un único cliente OAuth de Google Cloud para toda la plataforma. Después, cada espacio de trabajo conecta su propia cuenta de Google desde Citas, Ajustes; un espacio de trabajo nunca ve el ID ni el secreto del cliente.",
+        "description": "Un único cliente OAuth de Google Cloud para toda la plataforma. Después, cada espacio de trabajo conecta su propia cuenta de Google desde Cuenta de Google en Ajustes y elige qué permisos conceder; un espacio de trabajo nunca ve el ID ni el secreto del cliente.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth de Google",
-            "description": "Sin ID ni secreto de cliente, los espacios de trabajo ven Google Calendar como no disponible y las citas siguen sin calendario."
+            "description": "Sin ID ni secreto de cliente, los espacios de trabajo ven Google como no disponible, las reservas siguen sin calendario y los pasos de Google de los flujos se omiten."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Proyecto y API",
-              "body": "En Google Cloud Console crea un proyecto y activa la API de Google Calendar."
+              "body": "En Google Cloud Console crea un proyecto y activa las API de Google Calendar, Google Sheets, Google Docs, Google Drive y Google Forms. Un permiso solo funciona si su API está activada."
             },
             "redirect": {
               "title": "2. Cliente OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Pantalla de consentimiento",
-              "body": "Añade los ámbitos calendar.events, calendar.freebusy y calendar.calendarlist.readonly, y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse."
+              "body": "Añade los ámbitos que pide el producto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse. Los ámbitos de drive son restringidos y requieren la revisión de Google."
             },
             "workspaces": {
               "title": "4. Los espacios de trabajo se conectan",
-              "body": "Pega aquí el ID y el secreto del cliente y guarda. Después, los administradores se conectan desde Citas, Ajustes, Google Calendar."
+              "body": "Pega aquí el ID y el secreto del cliente y guarda. Después, los administradores se conectan desde Ajustes, Integraciones, Cuenta de Google, o desde Citas, Ajustes, Google Calendar."
             }
           }
         }

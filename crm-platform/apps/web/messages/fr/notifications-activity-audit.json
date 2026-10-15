@@ -379,6 +379,10 @@
         "test": {
           "label": "Notification de test",
           "hint": "Le test que vous envoyez depuis Notifications du navigateur, pour voir la cloche, le pop-up et le titre de l’onglet fonctionner."
+        },
+        "appointment_calendar_drift": {
+          "label": "Rendez-vous désynchronisé de Google Calendar",
+          "hint": "L'événement Google Calendar d'un rendez-vous à venir a été supprimé, déplacé ou ses invités ont été modifiés. Le rendez-vous n'est pas modifié ; vous choisissez la suite à donner."
         }
       },
       "loading": "Chargement de vos préférences",

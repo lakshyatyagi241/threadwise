@@ -1317,7 +1317,8 @@
             "date_field_match": "Programación: en relación con una fecha del contacto (cumpleaños…)",
             "schedule": "Programación: en una fecha y hora",
             "shopify_event": "Comercio: un evento de la tienda Shopify",
-            "woocommerce_event": "Comercio: un evento de la tienda WooCommerce"
+            "woocommerce_event": "Comercio: un evento de la tienda WooCommerce",
+            "segment_leave": "Audiencia: cuando un contacto sale de un segmento"
           },
           "tagsLoading": "Cargando etiquetas…",
           "tagPick": "— elige una etiqueta —",
@@ -1411,7 +1412,8 @@
             "productId": "ID del producto (opcional)",
             "productIdHint": "Vacío = cualquier producto del pedido.",
             "storeNote": "El cliente se asocia a un contacto guardado por su número de teléfono; no se crea nadie por un pedido. “Añadido al carrito” y “producto visto” no se ofrecen porque la tienda no los informa.",
-            "updatedNote": "Se activa cada vez que una persona o una importación cambia un contacto. Un cambio hecho por otro flujo no lo inicia."
+            "updatedNote": "Se activa cada vez que una persona o una importación cambia un contacto. Un cambio hecho por otro flujo no lo inicia.",
+            "segmentLeaveHint": "Se ejecuta una vez cada vez que un contacto que estaba dentro de este segmento se encuentra fuera de él tras ser actualizado, etiquetado o incluido en una lista. Solo se detecta que un contacto sale si el flujo lo vio dentro primero."
           }
         }
       },
@@ -1701,7 +1703,21 @@
           "setupOpen": "Abre tu formulario → <mono>menú ⋮</mono> → <mono>Editor de secuencias de comandos</mono>",
           "setupDownload": "<link>Descarga el script (.gs)</link> y pégalo",
           "setupTrigger": "Añade un activador: <mono>onFormSubmit</mono> · Desde el formulario · Al enviar el formulario",
-          "setupWarning": "Sin este script, el formulario seguirá registrando las respuestas en Formularios de Google, pero el flujo no se reanudará."
+          "setupWarning": "Sin este script, el formulario seguirá registrando las respuestas en Formularios de Google, pero el flujo no se reanudará.",
+          "noListing": "No se pueden listar tus archivos porque no se concedió el permiso de lista de archivos de Drive en la página de la cuenta de Google. Pega el enlace o el ID en su lugar.",
+          "connection": {
+            "open": "Abrir cuenta de Google",
+            "permission": {
+              "calendar": "Calendar",
+              "sheets": "Sheets",
+              "docs": "Docs y Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google no está configurado para esta plataforma, por lo que este paso falla al ejecutarse el flujo.",
+            "disconnected": "No hay ninguna cuenta de Google conectada, por lo que este paso falla al ejecutarse el flujo. Conecte Google primero.",
+            "needsReconnect": "Google ya no acepta la cuenta conectada, por lo que este paso falla al ejecutarse el flujo. Vuelva a conectar Google primero.",
+            "missing": "La cuenta de Google conectada no concedió el permiso {permission}, por lo que este paso falla al ejecutarse el flujo."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2316,7 +2332,8 @@
         "date_field_match": "al coincidir una fecha",
         "schedule": "según programación",
         "shopify_event": "al ocurrir un evento de Shopify",
-        "woocommerce_event": "al ocurrir un evento de WooCommerce"
+        "woocommerce_event": "al ocurrir un evento de WooCommerce",
+        "segment_leave": "al salir del segmento"
       },
       "ports": {
         "manual": "manual",

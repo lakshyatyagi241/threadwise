@@ -80,6 +80,8 @@ export const QUEUES = {
   WAB_MIGRATE: 'wab-migrate',
   /** One job per WhatsApp number to check for calling readiness (EXT-CALL-007): after a connect and on a schedule. Own queue: a slow Meta must not hold WhatsApp ingest. */
   CALLING_READINESS: 'calling-readiness',
+  /** One job per workspace whose upcoming appointments are compared with their Google events (TW-GACC-011). Own queue: a slow Google must not hold a booking message. */
+  CALENDAR_RECONCILE: 'calendar-reconcile',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

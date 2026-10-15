@@ -1317,7 +1317,8 @@
             "date_field_match": "Lịch: tương đối so với một ngày trên liên hệ (sinh nhật…)",
             "schedule": "Lịch: vào một ngày và giờ",
             "shopify_event": "Thương mại: một sự kiện cửa hàng Shopify",
-            "woocommerce_event": "Thương mại: một sự kiện cửa hàng WooCommerce"
+            "woocommerce_event": "Thương mại: một sự kiện cửa hàng WooCommerce",
+            "segment_leave": "Đối tượng: khi liên hệ rời khỏi phân khúc"
           },
           "tagsLoading": "Đang tải thẻ…",
           "tagPick": "— chọn thẻ —",
@@ -1411,7 +1412,8 @@
             "productId": "ID sản phẩm (không bắt buộc)",
             "productIdHint": "Để trống = bất kỳ sản phẩm nào trong đơn hàng.",
             "storeNote": "Khách hàng được khớp với liên hệ đã lưu theo số điện thoại; không tạo liên hệ mới cho đơn hàng. Không có các mục “Đã thêm vào giỏ” và “Đã xem sản phẩm”: cửa hàng không báo các sự kiện này.",
-            "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt."
+            "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt.",
+            "segmentLeaveHint": "Chạy một lần mỗi khi một liên hệ từng nằm trong phân khúc này được phát hiện đã ở ngoài sau khi được cập nhật, gắn thẻ hoặc liệt kê. Liên hệ chỉ được ghi nhận là đã rời đi nếu luồng đã thấy họ ở trong phân khúc trước đó."
           }
         }
       },
@@ -1701,7 +1703,21 @@
           "setupOpen": "Mở biểu mẫu → <mono>menu ⋮</mono> → <mono>Trình chỉnh sửa Script</mono>",
           "setupDownload": "<link>Tải script (.gs)</link> và dán vào",
           "setupTrigger": "Thêm trình kích hoạt: <mono>onFormSubmit</mono> · Từ biểu mẫu · Khi gửi biểu mẫu",
-          "setupWarning": "Nếu không có script này, biểu mẫu vẫn ghi nhận câu trả lời trong Google Forms, nhưng luồng sẽ không tiếp tục."
+          "setupWarning": "Nếu không có script này, biểu mẫu vẫn ghi nhận câu trả lời trong Google Forms, nhưng luồng sẽ không tiếp tục.",
+          "noListing": "Không thể liệt kê tệp của bạn vì quyền danh sách tệp Drive chưa được cấp ở trang tài khoản Google. Hãy dán liên kết hoặc id.",
+          "connection": {
+            "open": "Mở tài khoản Google",
+            "permission": {
+              "calendar": "Lịch",
+              "sheets": "Sheets",
+              "docs": "Docs và Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google chưa được thiết lập cho nền tảng này nên bước này sẽ thất bại khi luồng chạy.",
+            "disconnected": "Chưa có tài khoản Google nào được kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối Google trước.",
+            "needsReconnect": "Google không còn chấp nhận tài khoản đã kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối lại Google trước.",
+            "missing": "Tài khoản Google đã kết nối chưa được cấp quyền {permission} nên bước này sẽ thất bại khi luồng chạy."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2316,7 +2332,8 @@
         "date_field_match": "khi ngày khớp",
         "schedule": "theo lịch",
         "shopify_event": "khi có sự kiện Shopify",
-        "woocommerce_event": "khi có sự kiện WooCommerce"
+        "woocommerce_event": "khi có sự kiện WooCommerce",
+        "segment_leave": "khi rời phân khúc"
       },
       "ports": {
         "manual": "thủ công",

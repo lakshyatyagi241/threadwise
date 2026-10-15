@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { calendarSyncSchema } from '../google-account/drift';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
 import { dealValueSchema } from '../deals-pipelines/money';
@@ -135,6 +136,8 @@ export const appointmentResponseSchema = z.object({
   calendar: z.object({
     eventId: z.string().nullable(),
     calendarId: z.string().nullable(),
+    /** Whether the Google event still matches (TW-GACC-011). Null on a row from a server that predates it. */
+    sync: calendarSyncSchema.nullable().optional(),
   }),
   /** The customer's manage link (reschedule or cancel); staff can copy it. */
   manageUrl: z.string().nullable(),

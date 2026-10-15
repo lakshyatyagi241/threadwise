@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "לקוח OAuth של Google שדרכו כל סביבת עבודה מחברת את היומן שלה.",
+        "description": "לקוח OAuth של Google שדרכו כל סביבת עבודה מחברת את חשבון Google שלה, עבור לוח השנה, Sheets, Docs ו-Forms.",
         "sections": {
           "oauth": {
             "title": "לקוח OAuth של Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "אפשרו לסביבות עבודה לחבר את Google Calendar",
-            "hint": "כבוי: אף סביבת עבודה לא יכולה לחבר, ואין כתיבה או קריאה מיומן."
+            "label": "אפשרו לסביבות עבודה לחבר את Google",
+            "hint": "כבוי: אף סביבת עבודה לא יכולה לחבר, ואין קריאה או כתיבה מ-Google או אליו (לוח שנה, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "Client ID",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "לקוח OAuth של Google שסביבות העבודה משתמשות בו לחיבור היומן לצורך הזמנות ושעות תפוסות.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "לקוח OAuth של Google שסביבות העבודה משתמשות בו לחיבור חשבון Google שלהן להזמנות, Sheets, Docs ו-Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "דוא\"ל Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "מנהל - פגישות",
-        "description": "לקוח OAuth אחד של Google Cloud לכל הפלטפורמה. כל סביבת עבודה מחברת אחר כך את חשבון Google שלה מ-Appointments, Settings; סביבת עבודה לעולם לא רואה את מזהה הלקוח או את הסוד.",
+        "description": "לקוח OAuth אחד של Google Cloud לכל הפלטפורמה. כל סביבת עבודה מחברת אחר כך את חשבון Google שלה מהעמוד חשבון Google בהגדרות, ובוחרת אילו הרשאות לתת; סביבת עבודה לעולם לא רואה את מזהה הלקוח או את הסוד.",
         "sections": {
           "oauth": {
             "title": "לקוח OAuth של Google",
-            "description": "בלי מזהה לקוח וסוד, סביבות העבודה רואות את Google Calendar כלא זמין, וההזמנות ממשיכות בלי יומן."
+            "description": "בלי מזהה לקוח וסוד, סביבות העבודה רואות את Google כלא זמין, ההזמנות ממשיכות בלי לוח שנה ושלבי Google בתהליכים מדולגים."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. פרויקט ו-API",
-              "body": "ב-Google Cloud Console צרו פרויקט והפעילו את Google Calendar API."
+              "body": "ב-Google Cloud Console צרו פרויקט והפעילו את ה-API של Google Calendar, Google Sheets, Google Docs, Google Drive ו-Google Forms. הרשאה פועלת רק כשה-API שלה מופעל."
             },
             "redirect": {
               "title": "2. לקוח OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. מסך הסכמה",
-              "body": "הוסיפו את ההרשאות calendar.events, calendar.freebusy ו-calendar.calendarlist.readonly, ואז פרסמו את האפליקציה: במצב Testing, Google מבטלת כל הרשאה לאחר 7 ימים וסביבות העבודה יצטרכו להתחבר מחדש."
+              "body": "הוסיפו את ההרשאות (scopes) שהמוצר מבקש (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), ואז פרסמו את האפליקציה: במצב Testing, Google מבטלת כל הרשאה לאחר 7 ימים וסביבות העבודה יצטרכו להתחבר מחדש. ההרשאות של drive מוגבלות ודורשות בדיקה של Google."
             },
             "workspaces": {
               "title": "4. סביבות העבודה מתחברות",
-              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. מנהלים מתחברים לאחר מכן מ-Appointments, Settings, Google Calendar."
+              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. מנהלים מתחברים לאחר מכן מהגדרות, אינטגרציות, חשבון Google, או מ-Appointments, Settings, Google Calendar."
             }
           }
         }

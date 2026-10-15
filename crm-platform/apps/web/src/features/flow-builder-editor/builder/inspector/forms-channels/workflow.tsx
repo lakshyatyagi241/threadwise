@@ -1,5 +1,6 @@
 'use client';
 
+import { GoogleConnectionNotice } from './google-connection';
 import { FLB_FIELD_MATCH_OPERATORS } from '@crm/contracts';
 import { Field, TextInput, type Opt } from '../kit';
 import type { FormComponent } from '../types';
@@ -147,6 +148,7 @@ export const WaSessionForm: FormComponent = (p) => (
 function SheetLookup({ p }: { p: Parameters<FormComponent>[0] }) {
   return (
     <>
+      <GoogleConnectionNotice need="sheets" />
       <Field label="Spreadsheet" hint="The sheet's link or id. Needs a connected Google account.">
         <TextInput
           value={p.data.sheetId}

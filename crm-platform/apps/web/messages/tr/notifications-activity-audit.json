@@ -379,6 +379,10 @@
         "test": {
           "label": "Test bildirimi",
           "hint": "Tarayıcı bildirimleri bölümünden gönderdiğiniz test; zilin, açılır pencerenin ve sekme başlığının çalıştığını görmenizi sağlar."
+        },
+        "appointment_calendar_drift": {
+          "label": "Randevu, Google Calendar ile senkronize değil",
+          "hint": "Yaklaşan bir randevunun Google Calendar etkinliği silindi, taşındı veya konukları değiştirildi. Randevu değiştirilmez; ne yapacağınıza siz karar verirsiniz."
         }
       },
       "loading": "Tercihleriniz yükleniyor",

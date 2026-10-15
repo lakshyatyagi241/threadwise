@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Takvim",
-        "description": "Her çalışma alanının takvimini bağladığı Google OAuth istemcisi.",
+        "description": "Her çalışma alanının takvim, Sheets, Docs ve Forms için Google hesabını bağladığı Google OAuth istemcisi.",
         "sections": {
           "oauth": {
             "title": "Google OAuth istemcisi"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Çalışma alanlarının Google Takvim'i bağlamasına izin ver",
-            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve bir takvime hiçbir şey yazılmaz veya okunmaz."
+            "label": "Çalışma alanlarının Google'ı bağlamasına izin ver",
+            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve Google'dan (takvim, Sheets, Docs, Forms) hiçbir şey okunmaz veya Google'a yazılmaz."
           },
           "clientId": {
             "label": "İstemci kimliği",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Takvim",
-        "description": "Çalışma alanlarının randevu ve meşgul saatler için takvimlerini bağlamak amacıyla kullandığı Google OAuth istemcisi.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "Çalışma alanlarının rezervasyonlar, Sheets, Docs ve Forms için Google hesaplarını bağlamak amacıyla kullandığı Google OAuth istemcisi.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmail e-posta",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Takvim",
         "eyebrow": "Yönetici - Randevular",
-        "description": "Tüm platform için tek bir Google Cloud OAuth istemcisi. Her çalışma alanı daha sonra Randevular, Ayarlar bölümünden kendi Google hesabını bağlar; bir çalışma alanı istemci kimliğini veya gizli anahtarı asla görmez.",
+        "description": "Tüm platform için tek bir Google Cloud OAuth istemcisi. Her çalışma alanı daha sonra kendi Google hesabını Ayarlar'daki Google hesabı bölümünden bağlar ve hangi izinleri vereceğini seçer; bir çalışma alanı istemci kimliğini veya gizli anahtarı asla görmez.",
         "sections": {
           "oauth": {
             "title": "Google OAuth istemcisi",
-            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları Google Takvim'i kullanılamaz olarak görür ve randevular takvim olmadan devam eder."
+            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları Google'ı kullanılamaz olarak görür, rezervasyonlar takvim olmadan devam eder ve akışlardaki Google adımları atlanır."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Proje ve API",
-              "body": "Google Cloud Console'da bir proje oluşturun ve Google Takvim API'sini etkinleştirin."
+              "body": "Google Cloud Console'da bir proje oluşturun ve Google Calendar, Google Sheets, Google Docs, Google Drive ve Google Forms API'lerini etkinleştirin. Bir izin yalnızca API'si etkinse çalışır."
             },
             "redirect": {
               "title": "2. OAuth istemcisi",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Onay ekranı",
-              "body": "calendar.events, calendar.freebusy ve calendar.calendarlist.readonly kapsamlarını ekleyin, ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir."
+              "body": "Ürünün istediği kapsamları ekleyin (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir. Drive kapsamları kısıtlıdır ve Google incelemesi gerektirir."
             },
             "workspaces": {
               "title": "4. Çalışma alanları bağlanır",
-              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Yöneticiler daha sonra Randevular, Ayarlar, Google Takvim bölümünden bağlanır."
+              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Yöneticiler daha sonra Ayarlar, Entegrasyonlar, Google hesabı bölümünden veya Randevular, Ayarlar, Google Takvim bölümünden bağlanır."
             }
           }
         }

@@ -1,3 +1,4 @@
+import { GoogleAccountModule } from '../google-account';
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { FLOW_AI_PORT } from '../../infra/providers/flow-builder-editor/flow-ai.port';
@@ -34,7 +35,7 @@ import { TestWebhookService } from './test-webhook.service';
  * through BOT_PUBLISH_PORT.
  */
 @Module({
-  imports: [PlansCoreModule, PlatformSettingsModule, FlowRuntimeEngineModule],
+  imports: [PlansCoreModule, PlatformSettingsModule, FlowRuntimeEngineModule, GoogleAccountModule],
   controllers: [
     FlowsController,
     GetaPublishController,

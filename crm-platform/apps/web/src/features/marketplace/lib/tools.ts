@@ -15,6 +15,7 @@ export type ToolTab = 'addons' | 'integrations';
 export const INTEGRATION_TOOL_IDS: readonly string[] = [
   'shopify',
   'woocommerce',
+  'google-account',
   'google-sheets-addon',
   'email',
 ];

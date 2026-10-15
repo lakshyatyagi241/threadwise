@@ -42,6 +42,7 @@
 | [migrations.md](runbooks/migrations.md)                                   | writing and applying schema changes safely                      |
 | [outbox-backlog.md](runbooks/outbox-backlog.md)                           | when events stop being processed                                |
 | [google-calendar-setup.md](runbooks/google-calendar-setup.md)             | creating the Google OAuth client for workspace calendars        |
+| [google-workspace-setup.md](runbooks/google-workspace-setup.md)           | Google Cloud setup for Calendar, Sheets, Docs, Forms and Drive  |
 | [marketplace-publish-listing.md](runbooks/marketplace-publish-listing.md) | publishing a Marketplace listing and writing a connector recipe |
 | [mobile-local-development.md](runbooks/mobile-local-development.md)       | running the mobile app on an emulator or phone                  |
 | [mobile-store-setup.md](runbooks/mobile-store-setup.md)                   | Apple, Google and Expo accounts, bundle id, first store listing |

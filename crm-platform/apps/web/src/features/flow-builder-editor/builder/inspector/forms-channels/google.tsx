@@ -1,7 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { ERROR_CODES } from '@crm/contracts';
+import { ApiError } from '@/lib/api/errors';
 import { useGoogleFiles } from '../../../api/hooks';
+import { GoogleConnectionNotice } from './google-connection';
 import { Check, Field, Notice, SelectInput, TextInput } from '../kit';
 import type { FormComponent, FormProps } from '../types';
 import { appsScriptHref, extractGoogleId, withSavedOption } from './helpers';
@@ -32,10 +35,13 @@ function GoogleFilePicker({ p, kind, dataKey }: { p: FormProps; kind: Kind; data
   const files = useGoogleFiles(kind);
   const value = p.data[dataKey];
   if (files.isError) {
+    // Connected, but without the Drive file list permission: say that, not "not connected".
+    const noListing =
+      files.error instanceof ApiError && files.error.code === ERROR_CODES.GOOGLE_SCOPE_MISSING;
     return (
       <>
         <Notice tone="warn" className="mb-2">
-          {t(`kinds.${kind}.notConnected`)}
+          {noListing ? t('noListing') : t(`kinds.${kind}.notConnected`)}
         </Notice>
         <TextInput
           value={value}
@@ -79,6 +85,7 @@ export const GoogleSheetsForm: FormComponent = (p) => {
       <Intro>
         {t.rich('sheetsIntro', { link: (c) => <ExtLink href="/google-account">{c}</ExtLink> })}
       </Intro>
+      <GoogleConnectionNotice need="sheets" />
       <Field label={t('mode')}>
         {Sel(p, 'mode', [
           { v: 'write', l: t('modeWrite') },
@@ -193,6 +200,7 @@ export const GoogleDocsForm: FormComponent = (p) => {
           mono: (c) => <Mono>{c}</Mono>,
         })}
       </Intro>
+      <GoogleConnectionNotice need="docs" />
       <Field label={t('templateDocument')}>
         <GoogleFilePicker p={p} kind="docs" dataKey="templateId" />
       </Field>
@@ -259,6 +267,7 @@ export const GoogleFormForm: FormComponent = (p) => {
   return (
     <>
       <Intro>{t.rich('formIntro', { b: (c) => <b>{c}</b> })}</Intro>
+      <GoogleConnectionNotice need="forms" />
       <Field label={t('googleForm')}>
         <GoogleFilePicker p={p} kind="forms" dataKey="formId" />
       </Field>

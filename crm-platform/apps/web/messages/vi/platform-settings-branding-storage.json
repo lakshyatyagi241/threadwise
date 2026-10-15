@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "Client OAuth của Google mà mọi không gian làm việc dùng để kết nối lịch.",
+        "description": "Client OAuth của Google mà mọi không gian làm việc dùng để kết nối tài khoản Google của mình, cho lịch, Sheets, Docs và Forms.",
         "sections": {
           "oauth": {
             "title": "Client OAuth của Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Cho phép không gian làm việc kết nối Google Calendar",
-            "hint": "Tắt: không không gian làm việc nào có thể kết nối, và không có dữ liệu nào được ghi hoặc đọc từ lịch."
+            "label": "Cho phép không gian làm việc kết nối Google",
+            "hint": "Tắt: không không gian làm việc nào có thể kết nối, và không có dữ liệu nào được đọc từ hoặc ghi vào Google (lịch, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "ID client",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "Client OAuth của Google mà không gian làm việc dùng để kết nối lịch cho việc đặt lịch và thời gian bận.",
-        "tags": "Google / OAuth / Lịch"
+        "description": "Client OAuth của Google mà không gian làm việc dùng để kết nối tài khoản Google cho việc đặt lịch, Sheets, Docs và Forms.",
+        "tags": "Google / OAuth / Lịch / Sheets"
       },
       "googleMail": {
         "title": "Email Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "Quản trị - Lịch hẹn",
-        "description": "Một client OAuth Google Cloud cho toàn nền tảng. Sau đó mỗi không gian làm việc kết nối tài khoản Google của mình từ Lịch hẹn, Cài đặt; không gian làm việc không bao giờ thấy client id hoặc secret.",
+        "description": "Một client OAuth Google Cloud cho toàn nền tảng. Sau đó mỗi không gian làm việc kết nối tài khoản Google của mình từ Tài khoản Google trong Cài đặt và chọn quyền cấp; không gian làm việc không bao giờ thấy client id hoặc secret.",
         "sections": {
           "oauth": {
             "title": "Client OAuth của Google",
-            "description": "Nếu không có client id và secret, không gian làm việc sẽ thấy Google Calendar là không khả dụng và việc đặt lịch vẫn tiếp tục mà không có lịch."
+            "description": "Nếu không có client id và secret, không gian làm việc sẽ thấy Google là không khả dụng, việc đặt lịch vẫn tiếp tục mà không có lịch và các bước Google trong luồng bị bỏ qua."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Dự án và API",
-              "body": "Trong Google Cloud Console, tạo một dự án và bật Google Calendar API."
+              "body": "Trong Google Cloud Console, tạo một dự án và bật các API Google Calendar, Google Sheets, Google Docs, Google Drive và Google Forms. Một quyền chỉ hoạt động khi API của nó được bật."
             },
             "redirect": {
               "title": "2. Client OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Màn hình đồng ý",
-              "body": "Thêm các phạm vi calendar.events, calendar.freebusy và calendar.calendarlist.readonly, sau đó xuất bản ứng dụng: ở chế độ Testing, Google sẽ hủy mọi cấp quyền sau 7 ngày và không gian làm việc sẽ phải kết nối lại."
+              "body": "Thêm các phạm vi mà sản phẩm yêu cầu (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), sau đó xuất bản ứng dụng: ở chế độ Testing, Google sẽ hủy mọi cấp quyền sau 7 ngày và không gian làm việc sẽ phải kết nối lại. Các phạm vi drive bị hạn chế và cần Google xét duyệt."
             },
             "workspaces": {
               "title": "4. Không gian làm việc kết nối",
-              "body": "Dán client id và secret tại đây rồi lưu. Sau đó quản trị viên kết nối từ Lịch hẹn, Cài đặt, Google Calendar."
+              "body": "Dán client id và secret tại đây rồi lưu. Sau đó quản trị viên kết nối từ Cài đặt, Tích hợp, Tài khoản Google, hoặc từ Lịch hẹn, Cài đặt, Google Calendar."
             }
           }
         }

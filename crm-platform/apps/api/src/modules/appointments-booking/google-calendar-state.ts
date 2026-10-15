@@ -1,4 +1,5 @@
 import { createHmac, hkdfSync, randomBytes, timingSafeEqual } from 'node:crypto';
+import { GOOGLE_CAPABILITIES, type GoogleCapability } from '@crm/contracts';
 
 /**
  * The OAuth `state` of the Google consent round trip (TW-APPT-028). Reference held a random string in the browser session and compared it on
@@ -18,6 +19,8 @@ export interface CalendarState {
   userId: number | null;
   /** A path inside this app to return to (validated before it is signed). */
   returnTo: string;
+  /** What this consent asked Google for: the callback insists the grant covers all of it. A state signed before capabilities existed is a calendar consent. */
+  capabilities: GoogleCapability[];
   nonce: string;
   /** Epoch milliseconds. */
   expiresAt: number;
@@ -37,11 +40,17 @@ const b64 = (b: Buffer | string) => Buffer.from(b).toString('base64url');
 const mac = (payload: string, key: Buffer) => createHmac('sha256', key).update(payload).digest();
 
 export function newState(
-  input: { orgId: number; userId: number | null; returnTo: string },
+  input: {
+    orgId: number;
+    userId: number | null;
+    returnTo: string;
+    capabilities?: GoogleCapability[];
+  },
   nowMs: number,
 ): CalendarState {
   return {
     ...input,
+    capabilities: input.capabilities ?? ['calendar'],
     nonce: randomBytes(12).toString('base64url'),
     expiresAt: nowMs + STATE_TTL_SECONDS * 1000,
   };
@@ -54,6 +63,7 @@ export function signState(state: CalendarState, key: Buffer): string {
       o: state.orgId,
       u: state.userId,
       r: state.returnTo,
+      c: state.capabilities,
       n: state.nonce,
       e: state.expiresAt,
     }),
@@ -92,9 +102,24 @@ export function verifyState(token: string, key: Buffer, nowMs: number): StateChe
     return { ok: false, reason: 'malformed' };
   }
   if (body.e <= nowMs) return { ok: false, reason: 'expired' };
+  const known = new Set<string>(GOOGLE_CAPABILITIES);
+  const capabilities =
+    body.c === undefined
+      ? (['calendar'] as GoogleCapability[])
+      : Array.isArray(body.c) && body.c.length > 0 && body.c.every((c) => known.has(String(c)))
+        ? (body.c as GoogleCapability[])
+        : null;
+  if (!capabilities) return { ok: false, reason: 'malformed' };
   return {
     ok: true,
-    state: { orgId: body.o, userId: body.u, returnTo: body.r, nonce: body.n, expiresAt: body.e },
+    state: {
+      orgId: body.o,
+      userId: body.u,
+      returnTo: body.r,
+      capabilities,
+      nonce: body.n,
+      expiresAt: body.e,
+    },
   };
 }
 

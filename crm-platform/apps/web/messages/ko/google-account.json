@@ -1,0 +1,172 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Google 계정",
+        "description": "플로우에서 Google 캘린더, Sheets, Docs, Forms, Meet를 쓰도록 Google 계정 하나를 연결하세요.",
+        "keywords": "google, 구글, google 계정, 구글 계정, 캘린더, calendar, 스프레드시트, sheets, 문서, docs, 폼, forms, meet, 미트, drive, 드라이브, oauth, google 연결"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "닫기"
+    },
+    "page": {
+      "eyebrow": "워크스페이스",
+      "title": "Google 계정",
+      "subtitle": "한 번만 연결하세요. 같은 Google 계정이 예약 캘린더, Meet 링크, 그리고 플로우의 Sheets, Docs, Forms 단계를 모두 처리합니다.",
+      "loading": "Google 계정을 불러오는 중...",
+      "forbidden": {
+        "title": "이 페이지를 열 수 없습니다",
+        "body": "현재 역할에는 Google 계정을 볼 권한이 없습니다. 워크스페이스 관리자에게 문의하세요."
+      },
+      "status": {
+        "unavailable": "설정되지 않음",
+        "disconnected": "연결되지 않음",
+        "connected": "연결됨",
+        "needs_reconnect": "다시 연결 필요"
+      },
+      "outcome": {
+        "connected": "Google 계정이 연결되었습니다.",
+        "denied": "Google이 연결되지 않았습니다. 권한 화면이 취소되었습니다.",
+        "failed": "Google 연결이 완료되지 않았습니다. 다시 시도하세요.",
+        "expired": "연결 시도가 만료되었습니다. 버튼을 눌러 다시 시작하세요.",
+        "not_configured": "이 플랫폼에는 아직 Google이 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
+        "missing_scope": "Google이 요청한 모든 권한을 부여하지 않았습니다. 이미 허용된 권한은 계속 작동합니다. 누락된 권한을 다시 추가하고 모든 체크박스를 선택한 상태로 두세요.",
+        "cancelled": "취소하셨습니다. 연결된 항목이 없습니다."
+      },
+      "actions": {
+        "connect": "Google 계정 연결",
+        "reconnect": "Google 다시 연결",
+        "addPermissions": "권한 추가",
+        "disconnect": "연결 해제",
+        "working": "Google을 여는 중...",
+        "retry": "다시 시도"
+      },
+      "unavailable": {
+        "title": "이 플랫폼에는 Google이 설정되지 않았습니다",
+        "body": "누군가 연결하려면 먼저 플랫폼 관리자가 Google OAuth 클라이언트를 추가해야 합니다. 그때까지 플로우의 Google 단계는 이를 알리는 메시지와 함께 실패하며, 예약은 캘린더 없이 진행됩니다."
+      },
+      "reconnect": {
+        "title": "Google이 이 연결을 더 이상 수락하지 않습니다",
+        "body": "권한이 철회되었거나 비밀번호가 변경되었거나 권한 부여가 만료되었습니다. 다시 연결하면 복원되며 선택한 항목은 유지됩니다.",
+        "bodyAccount": "Google이 {account} 계정을 더 이상 수락하지 않습니다. 다시 연결하면 복원되며 선택한 항목은 유지됩니다."
+      },
+      "stats": {
+        "status": "상태",
+        "calendars": "캘린더",
+        "calendarsValue": "{count}개 사용 가능",
+        "calendarsNone": "없음",
+        "permissions": "권한",
+        "permissionsValue": "{total}개 중 {granted}개",
+        "lastUsed": "마지막 사용",
+        "never": "사용 안 함",
+        "live": "사용 중",
+        "idle": "유휴"
+      },
+      "account": {
+        "title": "연결된 계정",
+        "email": "계정",
+        "calendar": "예약 및 Meet용 캘린더",
+        "primaryCalendar": "기본 캘린더",
+        "changeCalendar": "캘린더 변경",
+        "connectedAgo": "{when} 연결됨",
+        "none": "연결된 Google 계정이 없습니다.",
+        "noneBody": "연결하기 전까지 플로우의 Google 단계는 Google을 연결하라는 메시지와 함께 실패하며, 예약은 캘린더에 추가되지 않습니다."
+      },
+      "permissions": {
+        "title": "Google을 사용할 수 있는 용도",
+        "intro": "허용할 항목을 선택하세요. Google은 이 화면에서 선택한 권한만 그대로 표시하며, 나중에 이미 허용된 권한을 잃지 않고 더 추가할 수 있습니다.",
+        "allowed": "허용됨",
+        "notAllowed": "허용 안 됨",
+        "allow": "허용",
+        "restricted": "Google에서 제한됨",
+        "restrictedNote": "Google은 이 권한을 제한 권한으로 취급합니다. 많은 워크스페이스에서 작동하려면 플랫폼이 Google의 검토를 받아야 합니다. 꼭 필요하지 않다면 꺼 두세요.",
+        "nothingTicked": "권한을 하나 이상 선택하세요.",
+        "calendar": {
+          "name": "캘린더",
+          "body": "예약과 Meet 링크를 캘린더에 추가하고 예약 페이지에서 바쁜 시간을 숨깁니다.",
+          "usedBy": "예약 캘린더, 약속 예약 및 Google Meet 단계"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "body": "시트에 행을 추가하고, 행을 조회하고, 셀을 확인하거나 행을 연락처로 복사합니다.",
+          "usedBy": "Google Sheets, Google Sheet 필드 확인, Google Sheet에서 연락처 저장"
+        },
+        "docs": {
+          "name": "Docs 및 Drive",
+          "body": "템플릿 문서를 복사해 내용을 채우고 사본을 링크로 공유합니다.",
+          "usedBy": "Google Docs 단계"
+        },
+        "forms": {
+          "name": "Forms",
+          "body": "폼의 공개 링크를 읽어 플로우가 고객에게 보낼 수 있게 합니다.",
+          "usedBy": "Google Form 단계"
+        },
+        "drive_listing": {
+          "name": "Drive 파일 목록",
+          "body": "플로우 빌더에서 시트, 문서, 폼을 이름으로 나열하여 링크를 붙여 넣는 대신 선택할 수 있게 합니다.",
+          "usedBy": "플로우 빌더의 파일 선택기"
+        }
+      },
+      "lastError": {
+        "title": "Google이 보고한 마지막 문제",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google이 연결된 계정을 더 이상 수락하지 않습니다. 다시 연결하세요.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "플랫폼의 Google 클라이언트가 없거나 꺼져 있습니다.",
+        "GOOGLE_API_NOT_ENABLED": "플랫폼의 Google Cloud 프로젝트에서 이 기능에 필요한 API를 사용 설정하지 않았습니다. 플랫폼 관리자가 사용 설정해야 합니다.",
+        "GOOGLE_SCOPE_MISSING": "한 단계에 필요한 권한이 이 계정에 부여되지 않았습니다. 위에서 추가하세요.",
+        "GOOGLE_RATE_LIMITED": "Google이 현재 요청을 제한하고 있습니다. 단계는 잠시 후 다시 시도됩니다.",
+        "GOOGLE_UNAVAILABLE": "Google이 응답하지 않았습니다. 다음 사용 시 다시 시도됩니다.",
+        "other": "Google에서 문제가 보고되었습니다."
+      },
+      "usedBy": {
+        "title": "사용처",
+        "book": "약속 예약 단계",
+        "meet": "Google Meet 단계",
+        "sheets": "Google Sheets 단계",
+        "docs": "Google Docs 단계",
+        "forms": "Google Form 단계",
+        "flow": "플로우"
+      },
+      "disconnectConfirm": {
+        "title": "Google 연결을 해제할까요?",
+        "body": "다시 연결하기 전까지 예약의 캘린더 동기화와 플로우의 모든 Google 단계가 중지됩니다. 이미 만든 이벤트와 파일은 Google에 남습니다.",
+        "confirm": "연결 해제",
+        "cancel": "연결 유지"
+      },
+      "disconnected": "Google 계정 연결이 해제되었습니다.",
+      "failure": {
+        "notConfigured": "이 플랫폼에는 Google이 설정되지 않았습니다. 플랫폼 관리자에게 문의하세요.",
+        "generic": "문제가 발생했습니다. 다시 시도하세요."
+      },
+      "privacy": {
+        "title": "개인정보",
+        "body": "선택한 권한만 요청됩니다. 연결 정보는 암호화되어 저장되고 워크스페이스에 속하며 여기에 나열된 기능에서만 사용됩니다. 연결을 해제하면 Google에서 권한이 철회됩니다."
+      }
+    },
+    "consent": {
+      "title": "Google 연결 확인",
+      "loading": "Google 연결 정보를 불러오는 중...",
+      "question": "{permissions} 권한으로 {email}을(를) {workspace}에 연결하시겠습니까?",
+      "permissions": "권한",
+      "notGiven": "부여되지 않음",
+      "missing": "Google이 다음 권한을 부여하지 않았습니다: {permissions}. 확인하면 부여된 권한만 연결됩니다.",
+      "replaces": "현재 연결된 Google 계정 {email}이(가) 이 계정으로 교체됩니다. 이전 계정의 액세스 권한은 해제됩니다.",
+      "onlyYou": "연결 버튼을 누른 본인만 이 워크스페이스에서 이 작업을 완료할 수 있습니다. 다른 사람이 이 링크를 보냈다면 확인하지 말고 페이지를 닫아 주세요.",
+      "unknownAccount": "이 Google 계정",
+      "confirm": "확인",
+      "cancel": "취소",
+      "working": "처리 중...",
+      "failure": {
+        "notYours": "이 Google 연결은 다른 사람이 시작했기 때문에 연결되지 않았습니다. 해당 사용자가 직접 연결하도록 요청해 주세요.",
+        "expired": "이 Google 연결의 확인 시간이 너무 오래 걸렸습니다. 돌아가서 연결 버튼을 다시 눌러 주세요.",
+        "used": "이 Google 연결은 이미 확인, 취소 또는 거부되었습니다. 아직 필요하면 돌아가서 연결 버튼을 다시 눌러 주세요.",
+        "notFound": "이 Google 연결은 확인 대기 중이 아니거나 다른 워크스페이스에 속해 있습니다.",
+        "generic": "문제가 발생했으며 변경된 내용은 없습니다. 다시 시도해 주세요.",
+        "nothingConnected": "연결된 항목이 없습니다."
+      }
+    }
+  }
+}

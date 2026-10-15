@@ -1,0 +1,172 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Google 账户",
+        "description": "为你的流程连接一个 Google 账户，用于 Google 日历、Sheets、Docs、Forms 和 Meet。",
+        "keywords": "google, 谷歌, google 账户, 日历, calendar, 表格, sheets, 文档, docs, 表单, forms, meet, drive, 云端硬盘, oauth, 连接 google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "关闭"
+    },
+    "page": {
+      "eyebrow": "工作区",
+      "title": "Google 账户",
+      "subtitle": "只需连接一次。同一个 Google 账户即可支持预订日历、Meet 链接，以及流程中的 Sheets、Docs 和 Forms 步骤。",
+      "loading": "正在加载你的 Google 账户...",
+      "forbidden": {
+        "title": "你无法打开此页面",
+        "body": "你的角色没有查看 Google 账户的权限。请联系工作区管理员。"
+      },
+      "status": {
+        "unavailable": "未设置",
+        "disconnected": "未连接",
+        "connected": "已连接",
+        "needs_reconnect": "需要重新连接"
+      },
+      "outcome": {
+        "connected": "Google 账户已连接。",
+        "denied": "Google 未连接：权限页面已被取消。",
+        "failed": "连接 Google 未完成。请重试。",
+        "expired": "该连接尝试已过期。请点击按钮重新开始。",
+        "not_configured": "此平台尚未设置 Google。请联系平台管理员。",
+        "missing_scope": "Google 没有授予你请求的全部权限。已允许的权限仍然有效；请重新添加缺少的权限，并保持所有复选框处于勾选状态。",
+        "cancelled": "您已取消，未连接任何账号。"
+      },
+      "actions": {
+        "connect": "连接 Google 账户",
+        "reconnect": "重新连接 Google",
+        "addPermissions": "添加权限",
+        "disconnect": "断开连接",
+        "working": "正在打开 Google...",
+        "retry": "重试"
+      },
+      "unavailable": {
+        "title": "此平台尚未设置 Google",
+        "body": "需要平台管理员先添加 Google OAuth 客户端，任何人才能进行连接。在此之前，流程中的 Google 步骤会失败并给出相应提示，预约则会继续进行，只是不会写入日历。"
+      },
+      "reconnect": {
+        "title": "Google 已不再接受此连接",
+        "body": "权限已被撤回、密码已更改，或授权已过期。重新连接即可恢复；你的选择会被保留。",
+        "bodyAccount": "Google 已不再接受 {account}。重新连接即可恢复；你的选择会被保留。"
+      },
+      "stats": {
+        "status": "状态",
+        "calendars": "日历",
+        "calendarsValue": "{count} 个可用",
+        "calendarsNone": "无",
+        "permissions": "权限",
+        "permissionsValue": "{granted} / {total}",
+        "lastUsed": "上次使用",
+        "never": "从未",
+        "live": "运行中",
+        "idle": "空闲"
+      },
+      "account": {
+        "title": "已连接的账户",
+        "email": "账户",
+        "calendar": "用于预订和 Meet 的日历",
+        "primaryCalendar": "你的主日历",
+        "changeCalendar": "更改日历",
+        "connectedAgo": "{when}连接",
+        "none": "尚未关联 Google 账户。",
+        "noneBody": "在您连接之前，流程中的 Google 步骤会失败并提示先连接 Google，预约也不会添加到日历中。"
+      },
+      "permissions": {
+        "title": "Google 可用于哪些用途",
+        "intro": "勾选你想允许的内容。Google 会在其页面上准确显示这些权限，你之后可以添加更多权限，而不会丢失已允许的权限。",
+        "allowed": "已允许",
+        "notAllowed": "未允许",
+        "allow": "允许",
+        "restricted": "Google 限制权限",
+        "restrictedNote": "Google 将此权限视为受限权限：平台需要通过 Google 的审核，才能在许多工作区中使用。除非需要，否则请保持关闭。",
+        "nothingTicked": "请至少勾选一项权限。",
+        "calendar": {
+          "name": "日历",
+          "body": "将预订和 Meet 链接添加到你的日历，并在预订页面隐藏忙碌时段。",
+          "usedBy": "预订日历、预约和 Google Meet 步骤"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "body": "向表格添加一行、查找一行、检查某个单元格，或将一行复制到联系人。",
+          "usedBy": "Google Sheets、检查 Google Sheet 字段、从 Google Sheet 保存联系人"
+        },
+        "docs": {
+          "name": "Docs 和 Drive",
+          "body": "复制模板文档、填写内容，并通过链接共享副本。",
+          "usedBy": "Google Docs 步骤"
+        },
+        "forms": {
+          "name": "Forms",
+          "body": "读取表单的公开链接，以便流程将其发送给客户。",
+          "usedBy": "Google Form 步骤"
+        },
+        "drive_listing": {
+          "name": "Drive 文件列表",
+          "body": "在流程构建器中按名称列出你的表格、文档和表单，这样你可以直接选择，而无需粘贴链接。",
+          "usedBy": "流程构建器中的文件选择器"
+        }
+      },
+      "lastError": {
+        "title": "Google 报告的最近一次问题",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google 已不再接受已连接的账户。请重新连接。",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "平台的 Google 客户端缺失或已关闭。",
+        "GOOGLE_API_NOT_ENABLED": "平台的 Google Cloud 项目尚未启用此功能所需的 API。平台管理员必须启用它。",
+        "GOOGLE_SCOPE_MISSING": "某个步骤需要此账户未被授予的权限。请在上方添加。",
+        "GOOGLE_RATE_LIMITED": "Google 当前正在限制请求。步骤会稍后重试。",
+        "GOOGLE_UNAVAILABLE": "Google 没有响应。下次使用时会再次尝试。",
+        "other": "Google 报告了一个问题。"
+      },
+      "usedBy": {
+        "title": "使用方",
+        "book": "预约步骤",
+        "meet": "Google Meet 步骤",
+        "sheets": "Google Sheets 步骤",
+        "docs": "Google Docs 步骤",
+        "forms": "Google Form 步骤",
+        "flow": "流程"
+      },
+      "disconnectConfirm": {
+        "title": "断开 Google？",
+        "body": "在重新连接之前，预订的日历同步和流程中的所有 Google 步骤都会停止。已创建的事件和文件会保留在 Google 中。",
+        "confirm": "断开连接",
+        "cancel": "保持连接"
+      },
+      "disconnected": "Google 账户已断开连接。",
+      "failure": {
+        "notConfigured": "此平台尚未设置 Google。请联系平台管理员。",
+        "generic": "出了点问题。请重试。"
+      },
+      "privacy": {
+        "title": "隐私",
+        "body": "仅请求你勾选的权限。连接信息经加密存储，归工作区所有，仅供此处列出的功能使用。断开连接会在 Google 端撤回授权。"
+      }
+    },
+    "consent": {
+      "title": "确认 Google 连接",
+      "loading": "正在加载您的 Google 连接...",
+      "question": "要将 {email} 连接到 {workspace}，并授予以下权限吗：{permissions}？",
+      "permissions": "权限",
+      "notGiven": "未授予",
+      "missing": "Google 未授予：{permissions}。如果您确认，只会连接已授予的部分。",
+      "replaces": "这将替换当前已连接的 Google 账号 {email}，旧账号的访问权限将被撤销。",
+      "onlyYou": "只有点击“连接”的本人才能在此工作区完成此操作。如果是别人把此链接发给您，请不要确认，直接关闭页面。",
+      "unknownAccount": "此 Google 账号",
+      "confirm": "确认",
+      "cancel": "取消",
+      "working": "处理中...",
+      "failure": {
+        "notYours": "此 Google 连接由其他人发起，因此未连接。请让对方自行连接。",
+        "expired": "此 Google 连接确认超时。请返回并重新点击“连接”。",
+        "used": "此 Google 连接已被确认、取消或拒绝。如仍需要，请返回并重新点击“连接”。",
+        "notFound": "此 Google 连接没有等待确认，或者它属于其他工作区。",
+        "generic": "出了点问题，未做任何更改。请重试。",
+        "nothingConnected": "未连接任何账号。"
+      }
+    }
+  }
+}

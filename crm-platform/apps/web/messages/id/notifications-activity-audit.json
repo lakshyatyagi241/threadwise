@@ -379,6 +379,10 @@
         "test": {
           "label": "Notifikasi uji",
           "hint": "Uji yang Anda kirim dari Notifikasi browser, agar Anda bisa melihat lonceng, pop-up, dan judul tab berfungsi."
+        },
+        "appointment_calendar_drift": {
+          "label": "Janji temu tidak sinkron dengan Google Calendar",
+          "hint": "Acara Google Calendar dari janji temu mendatang dihapus, dipindahkan, atau tamunya diubah. Janji temu tidak diubah; Anda yang memilih tindakan selanjutnya."
         }
       },
       "loading": "Memuat preferensi Anda",

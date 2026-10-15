@@ -1317,7 +1317,8 @@
             "date_field_match": "Zeitplan: relativ zu einem Datum am Kontakt (Geburtstag…)",
             "schedule": "Zeitplan: zu einem Datum und einer Uhrzeit",
             "shopify_event": "Handel: ein Ereignis im Shopify-Shop",
-            "woocommerce_event": "Handel: ein Ereignis im WooCommerce-Shop"
+            "woocommerce_event": "Handel: ein Ereignis im WooCommerce-Shop",
+            "segment_leave": "Zielgruppe: wenn ein Kontakt ein Segment verlässt"
           },
           "tagsLoading": "Tags werden geladen ...",
           "tagPick": "— Tag auswählen —",
@@ -1411,7 +1412,8 @@
             "productId": "Produkt-ID (optional)",
             "productIdHint": "Leer = jedes Produkt in der Bestellung.",
             "storeNote": "Der Kunde wird anhand der Telefonnummer einem gespeicherten Kontakt zugeordnet; für eine Bestellung wird niemand angelegt. „In den Warenkorb gelegt“ und „Produkt angesehen“ werden nicht angeboten, da der Shop diese nicht meldet.",
-            "updatedNote": "Wird bei jeder Änderung eines Kontakts durch eine Person oder einen Import ausgelöst. Eine Änderung durch einen anderen Flow startet ihn nicht."
+            "updatedNote": "Wird bei jeder Änderung eines Kontakts durch eine Person oder einen Import ausgelöst. Eine Änderung durch einen anderen Flow startet ihn nicht.",
+            "segmentLeaveHint": "Wird jedes Mal einmal ausgeführt, wenn ein Kontakt, der in diesem Segment war, nach einer Aktualisierung, Verschlagwortung oder Listung außerhalb davon gefunden wird. Das Verlassen wird nur erkannt, wenn der Flow den Kontakt zuvor im Segment gesehen hat."
           }
         }
       },
@@ -1701,7 +1703,21 @@
           "setupOpen": "Öffnen Sie Ihr Formular → <mono>⋮-Menü</mono> → <mono>Skript-Editor</mono>",
           "setupDownload": "<link>Skript herunterladen (.gs)</link> und einfügen",
           "setupTrigger": "Fügen Sie einen Trigger hinzu: <mono>onFormSubmit</mono> · Aus Formular · Bei Formularübermittlung",
-          "setupWarning": "Ohne dieses Skript speichert das Formular die Antworten zwar in Google Forms, der Flow wird jedoch nicht fortgesetzt."
+          "setupWarning": "Ohne dieses Skript speichert das Formular die Antworten zwar in Google Forms, der Flow wird jedoch nicht fortgesetzt.",
+          "noListing": "Ihre Dateien können nicht aufgelistet werden, weil auf der Seite des Google-Kontos die Berechtigung für die Drive-Dateiliste nicht erteilt wurde. Fügen Sie stattdessen den Link oder die ID ein.",
+          "connection": {
+            "open": "Google-Konto öffnen",
+            "permission": {
+              "calendar": "Kalender",
+              "sheets": "Sheets",
+              "docs": "Docs und Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google ist für diese Plattform nicht eingerichtet. Dieser Schritt schlägt daher fehl, wenn der Flow ausgeführt wird.",
+            "disconnected": "Es ist kein Google-Konto verbunden. Dieser Schritt schlägt daher fehl, wenn der Flow ausgeführt wird. Verbinden Sie zuerst Google.",
+            "needsReconnect": "Google akzeptiert das verbundene Konto nicht mehr. Dieser Schritt schlägt daher fehl, wenn der Flow ausgeführt wird. Verbinden Sie Google zuerst erneut.",
+            "missing": "Dem verbundenen Google-Konto wurde die Berechtigung {permission} nicht erteilt. Dieser Schritt schlägt daher fehl, wenn der Flow ausgeführt wird."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2316,7 +2332,8 @@
         "date_field_match": "bei Datumsübereinstimmung",
         "schedule": "nach Zeitplan",
         "shopify_event": "bei Shopify-Ereignis",
-        "woocommerce_event": "bei WooCommerce-Ereignis"
+        "woocommerce_event": "bei WooCommerce-Ereignis",
+        "segment_leave": "beim Verlassen des Segments"
       },
       "ports": {
         "manual": "manuell",
