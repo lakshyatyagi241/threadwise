@@ -8,7 +8,11 @@ import { intakeChannelSchema } from './intake';
  * to (`noticeVersion`) and the wording can be reconstructed. A grant is written only when the person ticked the box
  * (docs/specs/privacy-and-data-governance.md section 4.3.2).
  */
-export const CONSENT_NOTICE_SCOPES = ['widget', 'booking', 'commerce'] as const;
+/**
+ * `workspace` is the workspace's default wording (BL-179): one notice per language, `ref` is the language code (`en`, `hi`...). Forms and
+ * the other editors are offered it; the DPDP profile asks for English plus an Indian language.
+ */
+export const CONSENT_NOTICE_SCOPES = ['widget', 'booking', 'commerce', 'workspace'] as const;
 export const consentNoticeScopeSchema = z.enum(CONSENT_NOTICE_SCOPES);
 export type ConsentNoticeScope = z.infer<typeof consentNoticeScopeSchema>;
 
@@ -21,6 +25,14 @@ export const saveConsentNoticeSchema = z
     text: z.string().trim().max(CONSENT_NOTICE_TEXT_MAX),
     /** The privacy policy or terms the wording points to. https only. */
     url: z
+      .string()
+      .trim()
+      .max(500)
+      .regex(/^https:\/\/\S+$/i, 'The link must start with https://')
+      .nullish()
+      .transform((v) => (v ? v : null)),
+    /** The terms the wording points to, next to the privacy link above (BL-175). Optional; https only. */
+    termsUrl: z
       .string()
       .trim()
       .max(500)
@@ -47,6 +59,7 @@ export const consentNoticeSchema = z.object({
   enabled: z.boolean(),
   text: z.string(),
   url: z.string().nullable(),
+  termsUrl: z.string().nullable(),
   channels: z.array(intakeChannelSchema),
   version: z.number().int().min(0),
   updatedAt: z.string().nullable(),
@@ -58,6 +71,8 @@ export const publicConsentNoticeSchema = z.object({
   text: z.string(),
   version: z.number().int().min(1),
   url: z.string().nullable(),
+  /** Optional so an older client that does not know it keeps parsing. */
+  termsUrl: z.string().nullable().optional(),
   channels: z.array(intakeChannelSchema),
 });
 export type PublicConsentNotice = z.infer<typeof publicConsentNoticeSchema>;
