@@ -609,6 +609,16 @@ async function cmdChatRelink(srv, cfg, flags = {}) {
   return r.code === 0 ? 0 : 1;
 }
 
+/** Close the conversations an earlier load wrote open that Waboo has closed (the status of the newest visitor_logs session; never reopens, never touches a conversation a person resolved). Reads the dump and the database. Dry run unless --apply. */
+async function cmdChatStatus(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const a = ['chat-status', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (cfg.channelMap) a.push('--channel-map', inMig(cfg, cfg.channelMap));
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-status (APPLY)' : 'chat-status (dry run)', `chat-status-${cfg.client}.txt`);
+  return r.code === 0 ? 0 : 1;
+}
+
 /** Give the campaigns an earlier load wrote with template_id NULL their wa_templates row (exact matches only: template id + name + Meta id, see broadcast/template-link.ts). Reads the dump and the database. Dry run unless --apply. */
 async function cmdCampaignLink(srv, cfg, flags = {}) {
   await assertStaging(srv);
@@ -835,9 +845,9 @@ function printStepStats(steps) {
 
 // ---------- orchestration: migrate / batch / new-client -------------------------------------------------------------------------------
 // core-load (plan, subscription, role grants from geta_core) and flow-state (publish what is live in Waboo) run after the load and before the verifier
-const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'files', 'core-load', 'wallet-sync', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
+const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'files', 'core-load', 'wallet-sync', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
 /** steps that only make sense for a client that is ALREADY loaded: --catch-up adds them; a fresh load never runs them (a fresh load reads everything once) */
-const CATCHUP_ONLY = new Set(['update', 'usage-append']);
+const CATCHUP_ONLY = new Set(['update', 'chat-status', 'usage-append']);
 /** steps a catch-up refuses: flow-state would publish flows again (the flows are already live) */
 const CATCHUP_SKIPPED = new Set(['flow-state']);
 /** free memory (MB, MemAvailable) the server must have: one migrate container uses up to ~400 MB next to the live stack and the 1 GB Postgres */
@@ -1045,7 +1055,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       // the credits group holds the wallet OPENING (a second opening would be a second balance); wallet-sync brings the balance up to date instead
       const skip = [...new Set(['credits', ...String(flags['skip-steps'] || '').split(',').filter(Boolean)])].join(',');
       flags = { ...flags, 'force-export': true, 'with-dry-run': true, 'skip-steps': skip };
-      console.log('migrate: CATCH-UP of an already-loaded client: forced export, load (new rows; credits skipped), update, files, core-load, wallet-sync, usage-append');
+      console.log('migrate: CATCH-UP of an already-loaded client: forced export, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, usage-append');
     }
     if (!shared.memChecked) {
       await assertStaging(srv);
@@ -1099,6 +1109,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     'core-load': () => cmdCoreLoad(srv, cfg, { ...flags, apply: true }),
     files: async () => (await cmdFiles(srv, cfg, 'copy', { apply: true })) || cmdFiles(srv, cfg, 'verify'),
     'wallet-sync': () => cmdWalletSync(srv, cfg, { ...flags, apply: true }),
+    'chat-status': () => cmdChatStatus(srv, cfg, { ...flags, apply: true }),
     'usage-append': () => cmdUsageAppend(srv, cfg, { ...flags, apply: true }),
     'flow-state': () => cmdFlowState(srv, cfg, { ...flags, apply: true }),
     load: () => cmdLoad(srv, cfg, flags, ctxL),
@@ -1392,6 +1403,7 @@ const COMMANDS = [
   'cutover',
   'chat-reparse',
   'chat-relink',
+  'chat-status',
   'campaign-link',
   'pricing-seed',
   'load',
@@ -1442,6 +1454,7 @@ async function main(argv) {
     cutover: () => cmdCutover(srv, cfg, flags),
     'chat-reparse': () => cmdChatReparse(srv, cfg, flags),
     'chat-relink': () => cmdChatRelink(srv, cfg, flags),
+    'chat-status': () => cmdChatStatus(srv, cfg, flags),
     'campaign-link': () => cmdCampaignLink(srv, cfg, flags),
   };
   if (cmd !== 'all-dry') return timed(cmd, one[cmd]);

@@ -151,6 +151,9 @@ export const WEB_ANALYTICS_KEYS: ReadonlySet<string> = new Set([
   'channel', 'bot_name', 'module_type', 'module_name', 'platform',
 ]);
 
+/** Created Time / Modified Time: system in Waboo, but shown on the contact page as read-only fields (their value is also kept in contacts.data). */
+export const VISIBLE_TIME_KEYS: ReadonlySet<string> = new Set(['created_time', 'modified_time']);
+
 export const fieldDefs: HandlerSpec = {
   handler: 'field_defs',
   collection: 'contact_properties_fields',
@@ -224,12 +227,12 @@ export const fieldDefs: HandlerSpec = {
             is_hidden: !bool(doc.visible, true) || bool(doc.hidden_from_ui),
             // the web-analytics fields are editable in WaDesk: the contact Edit panel lists only editable fields, so a read-only flag would keep
             // the UTM / referrer / device fields out of it (Waboo shows all of them on the contact)
-            is_read_only: bool(doc.read_only) && !WEB_ANALYTICS_KEYS.has(key),
+            is_read_only: VISIBLE_TIME_KEYS.has(key) ? true : bool(doc.read_only) && !WEB_ANALYTICS_KEYS.has(key),
             is_masked: bool(doc.masked),
             is_unique: bool(doc.unique),
             // Waboo's own web-analytics properties are "system" there but have no built-in place in WaDesk: a system field is hidden on the
             // contact page, so these stay ordinary (read-only) fields. `source` stays system: it is the native contacts.source column.
-            is_system: bool(doc.system_default) && !WEB_ANALYTICS_KEYS.has(key),
+            is_system: bool(doc.system_default) && !WEB_ANALYTICS_KEYS.has(key) && !VISIBLE_TIME_KEYS.has(key),
             is_active: true,
             position: Number(doc.position) || 0,
             config: { legacy: { type: legacyType, ...rest(doc, DEF_COLUMN_KEYS) } },

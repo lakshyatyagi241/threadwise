@@ -20,6 +20,8 @@ export interface OracleOptions {
   botToExt: Map<string, string>;
   keepDeletedContactChats: boolean;
   threadStatus: 'waboo' | 'closed';
+  /** visitor_logs: session_id -> its current conversation_status and recency (written from the README, "Chat") */
+  sessionStatus: Map<string, { status: string; ms: number }>;
   assignAgents: boolean;
   windowHours: number;
   /** the dump time: the partition window is measured from it */
@@ -275,6 +277,7 @@ interface Rec {
   provider: string | null;
   name: string | null;
   statusRaw: string | null;
+  session: string | null;
   agentId: string | null;
   contactCands: string[];
 }
@@ -362,6 +365,7 @@ export async function oracleChat(
       provider: provider !== '' && provider.length <= 512 ? provider : null,
       name: text(context.visitor_name) || null,
       statusRaw: text(user.conversation_status).toLowerCase() || null,
+      session: text(doc.session_id) || null,
       agentId: agent ? text(agent.id) || null : null,
       contactCands: [text(user.contact_id), text(context.contact_id)].filter((x) => x !== ''),
     };
@@ -476,7 +480,13 @@ export async function oracleChat(
     const last = kept[kept.length - 1]!;
     const newestWith = (f: (r: Rec) => boolean): Rec | undefined => [...kept].reverse().find(f);
     const nm = newestWith((r) => r.name !== null);
-    const st = newestWith((r) => r.statusRaw !== null)?.statusRaw ?? null;
+    // README "Chat": the status of the thread's newest visitor_logs session wins; the newest turn that names one is the fallback
+    let live: { status: string; ms: number } | null = null;
+    for (const r of kept) {
+      const v = r.session !== null ? o.sessionStatus.get(r.session) : undefined;
+      if (v && (live === null || v.ms > live.ms)) live = v;
+    }
+    const st = live?.status ?? newestWith((r) => r.statusRaw !== null)?.statusRaw ?? null;
     const status: 'open' | 'closed' =
       o.threadStatus === 'closed' || st === 'closed' ? 'closed' : 'open';
     const ag = newestWith((r) => r.agentId !== null);

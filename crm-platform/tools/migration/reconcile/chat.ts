@@ -4,6 +4,7 @@ import type { ChatPlan } from '../inbox/plan';
 import { reparsedConversations } from '../load/chatreparse';
 import { appendedConversations } from '../load/inbox';
 import { relinkedConversations } from '../load/chatrelink';
+import { statusChangedConversations } from '../load/chatstatus';
 import { sql, withTenant, type Database, type TenantTx } from '../load/db';
 import { isSecretName, uuidv5 } from '../util';
 import { hexKey, oracleDeleted, text } from './oracle';
@@ -177,8 +178,22 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       yield d;
     }
   }
+  // visitor_logs: the current status of each chat session (README "Chat"), read here independently of the planner
+  const sessionStatus = new Map<string, { status: string; ms: number }>();
+  if (a.source.collections(client).includes('visitor_logs'))
+    for await (const d of a.source.read(client, 'visitor_logs')) {
+      const sid = String(d.session_id ?? '').trim();
+      const st = String(d.conversation_status ?? '').trim().toLowerCase();
+      if (sid === '' || (st !== 'open' && st !== 'closed')) continue;
+      const raw = d.last_message_time ?? d.updatedAt;
+      const t = raw instanceof Date ? raw.getTime() : Date.parse(String(raw ?? ''));
+      const ms = Number.isNaN(t) ? 0 : t;
+      const prev = sessionStatus.get(sid);
+      if (!prev || ms >= prev.ms) sessionStatus.set(sid, { status: st, ms });
+    }
   const oracle: OracleResult = await oracleChat(observed(), {
     client,
+    sessionStatus,
     botToExt,
     keepDeletedContactChats: s.keepDeletedContactChats,
     threadStatus: s.threadStatus,
@@ -450,8 +465,13 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   const appended = await appendedConversations(db, client);
   // chat-relink set contact_id on conversations that had none (same trigger; run_log _chat/chat_relink)
   const relinked = await relinkedConversations(db, client);
+  // chat-status closed conversations Waboo has closed (same trigger; run_log _chat/chat_status)
+  const statusChanged = await statusChangedConversations(db, client);
   const touched = (uuid: unknown): boolean =>
-    reparsed.has(String(uuid)) || appended.has(String(uuid)) || relinked.has(String(uuid));
+    reparsed.has(String(uuid)) ||
+    appended.has(String(uuid)) ||
+    relinked.has(String(uuid)) ||
+    statusChanged.has(String(uuid));
   for (const th of threads) {
     const set = convOfThread.get(th.key);
     if (!set || set.size !== 1) continue;

@@ -6,6 +6,9 @@
  */
 type Doc = Record<string, unknown>;
 
+/** Written from the README ("Contact properties"), not imported from the transform: the two timestamp properties shown as read-only fields. */
+const TIME_NAMES = ['created_time', 'modified_time'];
+
 /** Written from the README ("Contact properties"), not imported from the transform: the Waboo web-analytics property names that become ordinary fields. */
 const WEB_ANALYTICS_NAMES = [
   'referrer', 'referrer_name', 'referrer_keyword', 'referrer_url', 'utm_medium', 'utm_campaign', 'utm_source',
@@ -347,11 +350,11 @@ export class TableOracle {
           field_type: FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text',
           is_required: truthy(doc.required),
           is_hidden: !visible(doc.visible) || truthy(doc.hidden_from_ui),
-          is_read_only: truthy(doc.read_only) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
+          is_read_only: TIME_NAMES.includes(String(doc.name)) ? true : truthy(doc.read_only) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
           is_masked: truthy(doc.masked),
           is_unique: truthy(doc.unique),
           // the verifier's own copy of the rule (README, "Contact properties"): the 22 web-analytics names are never system fields
-          is_system: truthy(doc.system_default) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
+          is_system: truthy(doc.system_default) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)) && !TIME_NAMES.includes(String(doc.name)),
           is_active: true,
           position: Number(doc.position) || 0,
           ...this.dates(doc),

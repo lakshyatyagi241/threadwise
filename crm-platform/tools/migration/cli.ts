@@ -25,6 +25,7 @@
  *                                  OPERATOR step, NEVER part of run/migrate, DRY RUN by default: connects the migrated WhatsApp number (see README "WhatsApp cutover")
  *   chat-reparse --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (re-read the saved bot payloads of messages loaded with an empty body)
  *   chat-relink  --client <c> --org-slug <s> [--channel-map FILE] [--apply --confirm-org-slug <s>]   (contact_id of loaded conversations that have none, by the planner's rule)
+ *   chat-status  --client <c> --org-slug <s> [--channel-map FILE] [--apply --confirm-org-slug <s>]   (closes loaded conversations that Waboo has closed: the status of the newest visitor_logs session)
  *   usage-charges-append --client <c> --org-slug <s> [--skip-hash] [--apply --confirm-org-slug <s>]  (credits catch-up: ONLY the billing-log charges and token rows not yet in id_map; never the ledger or the wallet; DRY RUN by default)
  *   campaign-link --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]  (set wpcampaigns.template_id on campaigns loaded before the templates; exact matches only, DRY RUN by default)
  *                                  OPERATOR step, DRY RUN by default: migrated knowledge-base url entries -> processing + ai_training_source.requested (the app worker then makes outbound requests)
@@ -67,6 +68,7 @@ import { cutover } from './load/cutover';
 import { updateRows } from './load/update';
 import { chatReparse } from './load/chatreparse';
 import { chatRelink } from './load/chatrelink';
+import { chatStatus } from './load/chatstatus';
 import { campaignLink } from './load/campaignlink';
 import { runClient, RunLockedError } from './load/run';
 import { formatSteps, StepsError } from './load/steps';
@@ -534,6 +536,35 @@ async function main(): Promise<number> {
         assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
       );
       await chatRelink({
+        client: clients[0]!,
+        orgSlug: slug,
+        targetUrl: need('TARGET_DATABASE_URL'),
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
+        source,
+        dumpsDir,
+        inbox: inboxOf(flags),
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'chat-status': {
+      // status of the conversations an earlier load wrote open that Waboo has closed (see load/chatstatus.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('chat-status --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('TARGET_DATABASE_URL'), 'target', { ...guard, dryRun: !apply }),
+      );
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await chatStatus({
         client: clients[0]!,
         orgSlug: slug,
         targetUrl: need('TARGET_DATABASE_URL'),
