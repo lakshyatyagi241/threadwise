@@ -253,42 +253,43 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
   let extraFirst = '';
   // a client with a wallet history has the full statement: judged by verifyHistory below, not by the one-opening-balance model
   if (!a.history)
-  for await (const rows of pages(
-    db,
-    orgId,
-    'wallet_transactions',
-    `id, uuid::text AS uuid, idempotency_key, user_id, kind, type, amount::text AS amount, balance_after::text AS balance_after, source, description, meta, direction, note, actor_type, actor_label, unit, ${tsSql('created_at')}, ${tsSql('updated_at')}, subject_type, subject_id, operator_id, request_id, row_version`,
-  )) {
-    for (const r of rows) {
-      const key = String(r.idempotency_key);
-      const want = expected.get(key);
-      if (!want) {
-        extra++;
-        extraFirst ||= key;
-        continue;
+    for await (const rows of pages(
+      db,
+      orgId,
+      'wallet_transactions',
+      `id, uuid::text AS uuid, idempotency_key, user_id, kind, type, amount::text AS amount, balance_after::text AS balance_after, source, description, meta, direction, note, actor_type, actor_label, unit, ${tsSql('created_at')}, ${tsSql('updated_at')}, subject_type, subject_id, operator_id, request_id, row_version`,
+    )) {
+      for (const r of rows) {
+        const key = String(r.idempotency_key);
+        const want = expected.get(key);
+        if (!want) {
+          extra++;
+          extraFirst ||= key;
+          continue;
+        }
+        found.add(key);
+        const bad: string[] = [];
+        for (const [c, w] of Object.entries(want)) {
+          const got = r[c];
+          const same =
+            typeof w === 'number'
+              ? got !== null && got !== undefined && Number(got) === w
+              : (got ?? null) === (w ?? null);
+          if (!same) bad.push(`${c} expected=${lim(String(w))} target=${lim(String(got))}`);
+        }
+        // the preserved source detail
+        const meta = r.meta as { legacy?: { waboo?: Row } } | null;
+        if (key.includes(':credit_log:')) {
+          const id = key.split(':credit_log:')[1]!;
+          const w = oracle.wallet.get(id)!;
+          const wb = meta?.legacy?.waboo ?? {};
+          if (wb.id !== id || wb.credits_deducted !== w.exact)
+            bad.push('meta.legacy.waboo (id / credits_deducted text)');
+        }
+        if (bad.length > 0)
+          alarm(`CREDITS_MISMATCH: wallet_transactions ${key}: ${bad.join('; ')}`);
       }
-      found.add(key);
-      const bad: string[] = [];
-      for (const [c, w] of Object.entries(want)) {
-        const got = r[c];
-        const same =
-          typeof w === 'number'
-            ? got !== null && got !== undefined && Number(got) === w
-            : (got ?? null) === (w ?? null);
-        if (!same) bad.push(`${c} expected=${lim(String(w))} target=${lim(String(got))}`);
-      }
-      // the preserved source detail
-      const meta = r.meta as { legacy?: { waboo?: Row } } | null;
-      if (key.includes(':credit_log:')) {
-        const id = key.split(':credit_log:')[1]!;
-        const w = oracle.wallet.get(id)!;
-        const wb = meta?.legacy?.waboo ?? {};
-        if (wb.id !== id || wb.credits_deducted !== w.exact)
-          bad.push('meta.legacy.waboo (id / credits_deducted text)');
-      }
-      if (bad.length > 0) alarm(`CREDITS_MISMATCH: wallet_transactions ${key}: ${bad.join('; ')}`);
     }
-  }
   if (!a.history)
     for (const k of expected.keys())
       if (!found.has(k)) alarm(`TARGET_MISSING: wallet_transactions row ${k} is gone`);
@@ -475,7 +476,14 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
       months.set(m, (months.get(m) ?? 0) + 1);
     }
     alarm(
-      `IDMAP_MISSING: ${pendingUse.length} whatsapp_broadcasting_data_usage document(s) load per the dump but are in no id_map (first keys ${pendingUse.slice(0, 3).join(', ')}; per month ${[...months].sort().map(([m, n]) => `${m}=${n}`).join(' ')}): not loaded yet; \`usage-charges-append\` loads them (it never touches the ledger or the wallet)`,
+      `IDMAP_MISSING: ${pendingUse.length} whatsapp_broadcasting_data_usage document(s) load per the dump but are in no id_map (first keys ${pendingUse.slice(0, 3).join(', ')}; per month ${[
+        ...months,
+      ]
+        .sort()
+        .map(([m, n]) => `${m}=${n}`)
+        .join(
+          ' ',
+        )}): not loaded yet; \`usage-charges-append\` loads them (it never touches the ledger or the wallet)`,
     );
   }
   const seenUse = new Set<number>();
@@ -602,7 +610,8 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
     )
   ).rows[0] as { counts?: Record<string, { migrated?: number } | string>; at: string } | undefined;
   if (ap?.counts) {
-    const n = (k: string): number => Number((ap.counts![k] as { migrated?: number } | undefined)?.migrated ?? 0);
+    const n = (k: string): number =>
+      Number((ap.counts![k] as { migrated?: number } | undefined)?.migrated ?? 0);
     warnings.push(
       `CREDITS APPEND: usage-charges-append last ran ${ap.at.slice(0, 19)} UTC: ${n('usage_charges')} usage charge(s) and ${n('credit_tokens')} token row(s) were added after the first load (the ledger and the wallet are not part of it; the wallet follows wallet-sync)`,
     );
@@ -676,18 +685,32 @@ async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Prom
   let core: {
     readAt?: string;
     readOn?: string;
-    workspace?: { timezone?: { utc?: unknown[] } | string; credits?: { remaining_amounts?: unknown } };
+    workspace?: {
+      timezone?: { utc?: unknown[] } | string;
+      credits?: { remaining_amounts?: unknown };
+    };
     walletEvents?: Array<Record<string, unknown>>;
   };
   try {
     core = JSON.parse(readFileSync(join(dirname(anyFile), 'core.json'), 'utf8'));
   } catch {
-    alarm('HISTORY_NO_CORE: the wallet was rebuilt from core.json but the file is not readable now');
+    alarm(
+      'HISTORY_NO_CORE: the wallet was rebuilt from core.json but the file is not readable now',
+    );
     return;
   }
-  const readAll = async (c: string): Promise<Array<Record<string, unknown>>> => {
+  // reduced to the fields the oracle reads while the documents stream by: the charge log of a big client is hundreds of thousands of
+  // documents with contact data, and keeping them whole ran the verifier out of memory
+  const readAll = async (c: string, keep: string[]): Promise<Array<Record<string, unknown>>> => {
     const out: Array<Record<string, unknown>> = [];
-    if (has(c)) for await (const d of source.read(client, c)) out.push(d as Record<string, unknown>);
+    if (has(c))
+      for await (const d of source.read(client, c)) {
+        const slim: Record<string, unknown> = {};
+        for (const k of keep)
+          if ((d as Record<string, unknown>)[k] !== undefined)
+            slim[k] = (d as Record<string, unknown>)[k];
+        out.push(slim);
+      }
     return out;
   };
   const tzRaw = core.workspace?.timezone;
@@ -707,8 +730,23 @@ async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Prom
     balanceText,
     asOf,
     timezone,
-    creditLogs: await readAll('credit_logs'),
-    charges: await readAll('whatsapp_broadcasting_data'),
+    creditLogs: await readAll('credit_logs', [
+      '_id',
+      'id',
+      'workspace_id',
+      'credits_deducted',
+      'created_time',
+    ]),
+    charges: await readAll('whatsapp_broadcasting_data', [
+      '_id',
+      'id',
+      'amount',
+      'created_time',
+      'revert',
+      'reverted_at',
+      'template_category',
+      'origin',
+    ]),
     events: core.walletEvents ?? [],
     workspaceId: a.settings.workspaceId,
   });
@@ -734,7 +772,8 @@ async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Prom
     }
     const diff: string[] = [];
     if (fourDigits(r.amount) !== w.amount) diff.push(`amount ${r.amount}`);
-    if (fourDigits(r.balance_after) !== w.balanceAfter) diff.push(`balance_after ${r.balance_after}`);
+    if (fourDigits(r.balance_after) !== w.balanceAfter)
+      diff.push(`balance_after ${r.balance_after}`);
     if (r.type !== w.type) diff.push(`type ${r.type}`);
     if (BigInt(r.ms) !== BigInt(w.atMs)) diff.push(`time ${r.ms}`);
     if (diff.length > 0) {
@@ -758,7 +797,9 @@ async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Prom
     );
   const w = (
     await withTenant(db, { orgId }, (tx) =>
-      tx.execute(sql`SELECT balance::text AS balance FROM wallets WHERE org_id = ${orgId} AND unit = ${unit}`),
+      tx.execute(
+        sql`SELECT balance::text AS balance FROM wallets WHERE org_id = ${orgId} AND unit = ${unit}`,
+      ),
     )
   ).rows[0] as { balance: string } | undefined;
   if ((!w || fourDigits(w.balance) !== fourDigits(h.target)) && !a.allowExtraRows)

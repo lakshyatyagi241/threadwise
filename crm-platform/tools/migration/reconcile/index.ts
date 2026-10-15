@@ -206,6 +206,12 @@ export function norm(v: unknown, pg: string): string {
 const rowHash = (cols: string[], types: Map<string, string>, row: Row): string =>
   sha256(cols.map((c) => norm(row[c], types.get(c) ?? '')).join('␟'));
 
+/** One line of the verifier's heap use per phase: a big client (Karma: 190,000 charge documents, 74,000 chat documents) can exhaust the worker's 768 MB, and this says where. */
+const memLog = (where: string): void =>
+  console.log(
+    `  reconcile heap ${Math.round(process.memoryUsage().heapUsed / 1048576)} MB at ${where}`,
+  );
+
 export async function reconcile(opts: ReconcileOptions): Promise<Report> {
   const { source, client, dumpsDir } = opts;
   const alarms: string[] = [];
@@ -585,6 +591,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
     const uniqueSeen = new Map<string, string>(); // `${table}\0${unique key}` of every loaded document
     const tableOracle = new TableOracle(await read('contact_lifecycle_stages'), fallbackAt);
     for (const spec of STEPS) {
+      memLog(`step ${spec.handler}`);
       if (!stepRan(spec.handler)) {
         if (source.collections(client).includes(spec.collection)) notRunList.push(spec.handler);
         continue;
@@ -711,7 +718,8 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             row.unaccounted++;
           } else {
             chunk.push({ base, outcome, doc });
-            if (spec.handler === 'faq_knowledge' && outcome.kind === 'rows') faqItems.push({ base, outcome });
+            if (spec.handler === 'faq_knowledge' && outcome.kind === 'rows')
+              faqItems.push({ base, outcome });
             row.migrated++;
             // an adopting document points at a row that already exists (the owner, a preset role)
             const first =
@@ -1042,6 +1050,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
 
     // 3d2. roles, grants, users and their per-user rows against the independent oracle; NO-ADMIN over the whole organization
     if (ctx.chat || inboxProblem) {
+      memLog('chat verifier');
       await verifyChat({
         db,
         orgId,
@@ -1075,6 +1084,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       });
     }
     if (creditSettings && anyRan('credit_wallet', 'credit_tokens', 'usage_charges')) {
+      memLog('credits verifier');
       await verifyCredits({
         db,
         orgId,
@@ -1093,6 +1103,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       });
     }
     if (ctx.flows && flowSettings) {
+      memLog('flows verifier');
       await verifyFlows({
         db,
         orgId,

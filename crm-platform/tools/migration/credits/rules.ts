@@ -1,5 +1,5 @@
 import type { Soft } from '../transform/types';
-import { str, toDate, type Doc } from '../util';
+import { cutText, str, toDate, type Doc } from '../util';
 import type { CreditSettings } from './config';
 import { counter, plainDecimal, scaled, toMinor } from './decimal';
 
@@ -211,7 +211,7 @@ export function providerOf(type: unknown, model: unknown): { provider: string; s
 
 export const clip = (v: unknown, n: number): string | null => {
   const s = str(v);
-  return s === null ? null : s.slice(0, n);
+  return s === null ? null : cutText(s, n);
 };
 
 // -------------------------------------------------------------------------------------------- whatsapp_broadcasting_data (billing)

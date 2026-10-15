@@ -168,15 +168,21 @@ function reconcileArgs(cfg, { steps, skipSteps } = {}) {
 
 // ---------- remote command construction (exported for the tests) -----------------------------------------------------------------------
 /** docker compose run of one shell line inside the worker container (desk-api image). stdin is /dev/null: compose swallows here-docs. */
-function containerRun(srv, inner, { mounts = [], env = [] } = {}) {
+function containerRun(srv, inner, { mounts = [], env = [], memMb = 0 } = {}) {
   const m = [
     `${srv.mig}/bundle:/mig/bundle:ro`,
     `${srv.mig}/dumps:/mig/dumps:ro`,
     `${srv.mig}/out:/mig/out`,
     ...mounts,
   ];
+  // The worker service is capped at 1 GB in docker-compose.yml. A big client's verifier (Karma: 190,000 charge and 74,000 chat documents)
+  // needs more than 768 MB of heap, so memMb gives THIS container a larger cap through an override file written next to the dumps (the
+  // deployed stack is not touched), with the heap at 82% of it.
+  const heap = memMb > 0 ? Math.floor(memMb * 0.82) : /^\d{3,4}$/.test(process.env.CYCLE_NODE_HEAP_MB || '') ? process.env.CYCLE_NODE_HEAP_MB : 384;
+  const over = memMb > 0 ? `printf 'services:\\n  worker:\\n    mem_limit: ${memMb}m\\n' > ${shq(`${srv.mig}/mem-override.yml`)} && ` : '';
+  const files = memMb > 0 ? ` -f docker-compose.yml -f ${shq(`${srv.mig}/mem-override.yml`)}` : '';
   return (
-    `cd ${shq(srv.app)} && docker compose --env-file .env run --rm --no-deps -T --user 10001:10001 -e NODE_OPTIONS=--max-old-space-size=${/^\d{3,4}$/.test(process.env.CYCLE_NODE_HEAP_MB || '') ? process.env.CYCLE_NODE_HEAP_MB : 384}` +
+    `${over}cd ${shq(srv.app)} && docker compose${files} --env-file .env run --rm --no-deps -T --user 10001:10001 -e NODE_OPTIONS=--max-old-space-size=${heap}` +
     ['', ...env.map((e) => `-e ${e}`), ...m.map((v) => `-v ${shq(v)}`)].join(' ') +
     ` worker sh -c ${shq(inner)} </dev/null`
   );
@@ -511,7 +517,9 @@ async function cmdReconcile(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const r = await runShown(
     srv,
-    containerRun(srv, migrateInner(reconcileArgs(cfg, { steps: flags.steps, skipSteps: flags['skip-steps'] }))),
+    containerRun(srv, migrateInner(reconcileArgs(cfg, { steps: flags.steps, skipSteps: flags['skip-steps'] })), {
+      memMb: Number(process.env.CYCLE_VERIFY_MEM_MB) > 0 ? Number(process.env.CYCLE_VERIFY_MEM_MB) : 1500,
+    }),
     'reconcile',
     `reconcile-${cfg.client}.txt`,
   );
@@ -938,26 +946,56 @@ const exportArgs = (client, db, force = false) => [
 function runExport(client, db, force = false) {
   const bin = process.env.MONGO_EXPORT_BIN || KIT_EXPORT;
   if (!fs.existsSync(bin)) refuse(`the exporter ${bin} does not exist (set MONGO_EXPORT_BIN)`);
-  return new Promise((res) => {
-    const c = spawn(process.execPath, [bin, ...exportArgs(client, db, force)], {
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
-    for (const s of [c.stdout, c.stderr]) {
-      let tail = '';
-      s.on('data', (d) => {
-        tail += d.toString('utf8');
-        const p = tail.split('\n');
-        tail = p.pop();
-        for (const l of p) console.log('  export: ' + maskPII(l));
+  // A network or VPN drop can freeze the stream of a big collection for good (Karma: the upload of a 163 MB collection stopped 1.4 MB
+  // short and nothing noticed for over two hours). So an attempt that prints nothing for IDLE minutes is stopped and the export is
+  // resumed: a collection whose server file and record already match is skipped, the unfinished one starts again.
+  const idleMs = (Number(process.env.CYCLE_EXPORT_IDLE_MIN) > 0 ? Number(process.env.CYCLE_EXPORT_IDLE_MIN) : 10) * 60_000;
+  const attempt = () =>
+    new Promise((res) => {
+      const c = spawn(process.execPath, [bin, ...exportArgs(client, db, force)], {
+        stdio: ['ignore', 'pipe', 'pipe'],
       });
-      s.on('close', () => tail && console.log('  export: ' + maskPII(tail)));
-    }
-    c.on('error', () => res(1));
-    c.on('close', (code) => {
-      summary('export', code);
-      res(code === 0 ? 0 : 1);
+      let last = Date.now();
+      let stalled = false;
+      const dog = setInterval(() => {
+        if (Date.now() - last > idleMs) {
+          stalled = true;
+          console.log(`  export: no progress for ${Math.round(idleMs / 60000)} minutes, stopping this attempt`);
+          c.kill();
+        }
+      }, 15_000);
+      for (const s of [c.stdout, c.stderr]) {
+        let tail = '';
+        s.on('data', (d) => {
+          last = Date.now();
+          tail += d.toString('utf8');
+          const p = tail.split('\n');
+          tail = p.pop();
+          for (const l of p) console.log('  export: ' + maskPII(l));
+        });
+        s.on('close', () => tail && console.log('  export: ' + maskPII(tail)));
+      }
+      c.on('error', () => {
+        clearInterval(dog);
+        res(1);
+      });
+      c.on('close', (code) => {
+        clearInterval(dog);
+        res(stalled ? 'stalled' : code === 0 ? 0 : 1);
+      });
     });
-  });
+  return (async () => {
+    for (let n = 1; n <= 3; n++) {
+      const r = await attempt();
+      if (r === 0 || r === 1) {
+        summary('export', r);
+        return r;
+      }
+      console.log(`  export: attempt ${n} of 3 stalled${n < 3 ? '; resuming' : ''}`);
+    }
+    summary('export', 1);
+    return 1;
+  })();
 }
 
 function runComplete(client) {

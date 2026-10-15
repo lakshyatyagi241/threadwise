@@ -15,6 +15,7 @@ import {
   str,
   toDate,
   type Doc,
+  cutText,
 } from '../util';
 import { c, times, TS_COLS } from './common';
 import type { SourceIndex } from './source-index';
@@ -323,7 +324,7 @@ export const contacts: HandlerSpec = {
         reason: 'source longer than the 128-character column limit',
         detail: source,
       });
-      source = source.slice(0, 128);
+      source = cutText(source, 128);
     }
 
     const wa = subscriptionStatus(doc.whatsapp_subscription_status, ctx.idx);
