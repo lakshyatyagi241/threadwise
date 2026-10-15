@@ -74,7 +74,10 @@ export type CampaignOptionColumns = Pick<
   | 'dailyLimit'
   | 'windowStart'
   | 'windowEnd'
->;
+> & {
+  /** How many follow-up steps the draft has (0 to 3); the worker only looks at campaigns that have some. */
+  followUpCount: number;
+};
 
 /**
  * The same columns the classic create endpoint writes for these options (so the dispatcher, the pacing and the end-date sweep
@@ -100,5 +103,6 @@ export function campaignColumnsOf(
     dailyLimit: p.dailyLimit ?? null,
     windowStart: p.windowStart ?? null,
     windowEnd: p.windowEnd ?? null,
+    followUpCount: draft.followUps.length,
   };
 }

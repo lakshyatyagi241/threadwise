@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "De automatische einddatum is al verstreken.",
         "auto_end_before_send": "De automatische einddatum moet na het verzendmoment liggen.",
         "auto_end_recurring": "Een terugkerende campagne eindigt volgens haar eigen regel: wis de automatische einddatum.",
-        "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld."
+        "pacing_range": "Controleer Smart Delivery: de langste vertraging is korter dan de kortste, of slechts een van de twee verzenduren is ingesteld.",
+        "follow_up_template_required": "Kies de sjabloon die elke follow-up verstuurt.",
+        "follow_up_flow_required": "Kies de flow die elke follow-up start.",
+        "follow_up_cloud_api_only": "Follow-ups werken alleen met een WhatsApp Cloud API-nummer. Kies er een in stap 1 of verwijder de follow-ups."
       },
       "template": {
         "previewOnline": "online",
@@ -1382,7 +1385,8 @@
         "sumCsv": "CSV-bestand {name}: {count, plural, one {# geldig nummer} other {# geldige nummers}}",
         "estimatedCostFull": "Geschatte kosten (volledig)",
         "chargedPlan": "Nu van je portemonnee afgeschreven: {amount} (je abonnement dekt {covered} van deze berichten)",
-        "chargedWallet": "Van je portemonnee afgeschreven: {amount}"
+        "chargedWallet": "Van je portemonnee afgeschreven: {amount}",
+        "sumFollowUps": "Follow-ups"
       },
       "test": {
         "title": "Een WhatsApp-testbericht sturen",
@@ -1587,7 +1591,25 @@
         "exportFailed": "De export kon niet worden gedownload.",
         "deleteTitle": "Deze verzending verwijderen?",
         "deleteOne": "Verwijdert deze verzending en de ontvangers. Dit kan niet ongedaan worden gemaakt.",
-        "deleteSeries": "Verwijdert deze terugkerende verzending en de geplande runs. Er is niets verstuurd, dus er gaat geen geschiedenis verloren. Dit kan niet ongedaan worden gemaakt."
+        "deleteSeries": "Verwijdert deze terugkerende verzending en de geplande runs. Er is niets verstuurd, dus er gaat geen geschiedenis verloren. Dit kan niet ongedaan worden gemaakt.",
+        "followUps": {
+          "title": "Follow-ups",
+          "step": "Follow-up {step}",
+          "count": {
+            "waiting": "{count} in afwachting",
+            "sent": "{count} verzonden",
+            "delivered": "{count} afgeleverd",
+            "read": "{count} gelezen",
+            "flowsStarted": "{count} flows gestart",
+            "skipped": "{count} overgeslagen",
+            "lapsed": "{count} verlopen",
+            "failed": "{count} mislukt"
+          },
+          "hint": {
+            "skipped": "Er werd niet aan de voorwaarde voldaan toen deze werd gecontroleerd, dus de reeks eindigde daar.",
+            "lapsed": "De bewakingstijd was verstreken voordat het contact reageerde of las, dus de reeks eindigde daar."
+          }
+        }
       },
       "panel": {
         "title": "Gemaakt met Broadcast maken",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) verstuurt via de klassieke builder, die opnieuw begint. Deze campagne wordt als concept opgeslagen en blijft in je campagnelijst staan, zodat je er later op terug kunt komen.",
         "confirm": "Klassieke builder openen",
         "cancel": "Hier blijven"
+      },
+      "followUps": {
+        "title": "Follow-ups",
+        "intro": "Verstuur nog een bericht of start een flow, afhankelijk van wat het contact doet na het campagnebericht. Maximaal 3 stappen achter elkaar.",
+        "cloudOnly": "Follow-ups vereisen een WhatsApp Cloud API-nummer, omdat ze gebruikmaken van de lees- en antwoordrapporten van Meta. Kies er een in stap 1.",
+        "add": "Follow-up toevoegen",
+        "count": "{used} van {max} follow-ups",
+        "limitReached": "Limiet bereikt: {max} follow-ups.",
+        "stepTitle": "Follow-up {step}",
+        "measuredFromCampaign": "Geteld vanaf het campagnebericht.",
+        "measuredFromStep": "Geteld vanaf het bericht van follow-up {step}.",
+        "remove": "Follow-up {step} verwijderen",
+        "removeShort": "Verwijderen",
+        "triggerLabel": "Wanneer het contact",
+        "trigger": {
+          "replied": "Antwoordt",
+          "read": "Het bericht leest",
+          "not_replied": "Niet heeft geantwoord",
+          "not_read": "Het bericht niet heeft gelezen"
+        },
+        "triggerHelp": {
+          "replied": "Wordt direct uitgevoerd zodra het contact antwoordt, als dat binnen de ingestelde tijd gebeurt. Anders eindigt de reeks.",
+          "read": "Wordt direct uitgevoerd zodra het contact het bericht leest, als dat binnen de ingestelde tijd gebeurt. Anders eindigt de reeks.",
+          "not_replied": "Wacht de ingestelde tijd en wordt dan uitgevoerd als het contact niet heeft geantwoord. Als het wel heeft geantwoord, eindigt de reeks.",
+          "not_read": "Wacht de ingestelde tijd en wordt dan uitgevoerd als het contact het bericht niet heeft gelezen. Als het dat wel heeft gedaan, eindigt de reeks."
+        },
+        "watchLabel": "Bewaken tot maximaal",
+        "waitLabel": "Wachten",
+        "unitLabel": "Tijdseenheid",
+        "duration": {
+          "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+          "hours": "{count, plural, one {# uur} other {# uur}}",
+          "days": "{count, plural, one {# dag} other {# dagen}}"
+        },
+        "actionLabel": "Dan",
+        "action": {
+          "template": "Een sjabloon versturen",
+          "flow": "Een flow starten"
+        },
+        "templateLabel": "Te versturen sjabloon",
+        "flowLabel": "Te starten flow",
+        "pickTemplate": "Kies een sjabloon",
+        "pickFlow": "Kies een flow",
+        "loading": "Laden...",
+        "unavailable": "Niet meer beschikbaar",
+        "noTemplates": "Nog geen goedgekeurde sjablonen.",
+        "createTemplate": "Een sjabloon maken",
+        "noFlows": "Nog geen flows.",
+        "createFlow": "Een flow maken",
+        "flowsError": "De flows konden niet worden geladen. Probeer het later opnieuw.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Als het contact binnen {wait} antwoordt",
+          "read": "Als het contact het binnen {wait} leest",
+          "not_replied": "Als er na {wait} niet is geantwoord",
+          "not_read": "Als het na {wait} niet is gelezen"
+        },
+        "does": {
+          "template": "{name} versturen",
+          "flow": "flow {name} starten"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuut} other {minuten}}",
+          "hours": "{count, plural, one {uur} other {uur}}",
+          "days": "{count, plural, one {dag} other {dagen}}"
+        }
       }
     },
     "history": {

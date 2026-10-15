@@ -1117,7 +1117,10 @@
         "auto_end_in_past": "The auto-end date has already passed.",
         "auto_end_before_send": "The auto-end date must be after the send time.",
         "auto_end_recurring": "A recurring campaign ends by its own rule: clear the auto-end date.",
-        "pacing_range": "Check Smart Delivery: the longest delay is shorter than the shortest, or only one of the two sending hours is set."
+        "pacing_range": "Check Smart Delivery: the longest delay is shorter than the shortest, or only one of the two sending hours is set.",
+        "follow_up_template_required": "Choose the template each follow-up sends.",
+        "follow_up_flow_required": "Choose the flow each follow-up starts.",
+        "follow_up_cloud_api_only": "Follow-ups work only with a WhatsApp Cloud API number. Pick one in step 1 or remove the follow-ups."
       },
       "template": {
         "previewOnline": "online",
@@ -1372,7 +1375,8 @@
         "sumCsv": "CSV file {name}: {count, plural, one {# valid number} other {# valid numbers}}",
         "estimatedCostFull": "Estimated cost (full)",
         "chargedPlan": "Charged to your wallet now: {amount} (your plan covers {covered} of these messages)",
-        "chargedWallet": "Charged to your wallet: {amount}"
+        "chargedWallet": "Charged to your wallet: {amount}",
+        "sumFollowUps": "Follow-ups"
       },
       "test": {
         "title": "Send a test WhatsApp message",
@@ -1577,7 +1581,25 @@
         "exportFailed": "The export could not be downloaded.",
         "deleteTitle": "Delete this broadcast?",
         "deleteOne": "Deletes this broadcast and its recipients. This cannot be undone.",
-        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone."
+        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone.",
+        "followUps": {
+          "title": "Follow-ups",
+          "step": "Follow-up {step}",
+          "count": {
+            "waiting": "{count} waiting",
+            "sent": "{count} sent",
+            "delivered": "{count} delivered",
+            "read": "{count} read",
+            "flowsStarted": "{count} flows started",
+            "skipped": "{count} skipped",
+            "lapsed": "{count} lapsed",
+            "failed": "{count} failed"
+          },
+          "hint": {
+            "skipped": "The condition was not met when it was checked, so the sequence ended there.",
+            "lapsed": "The watch time ran out before the contact replied or read, so the sequence ended there."
+          }
+        }
       },
       "panel": {
         "title": "Created with the guided flow",
@@ -1608,6 +1630,72 @@
         "body": "{number} ({engine}) is sent from the classic builder, which starts fresh. This campaign is saved as a draft and stays in your Campaigns list, so you can come back to it.",
         "confirm": "Open the classic builder",
         "cancel": "Stay here"
+      },
+      "followUps": {
+        "title": "Follow-ups",
+        "intro": "Send another message, or start a flow, depending on what the contact does after the campaign message. Up to 3 steps in a row.",
+        "cloudOnly": "Follow-ups need a WhatsApp Cloud API number, because they rely on Meta's read and reply reports. Pick one in step 1.",
+        "add": "Add a follow-up",
+        "count": "{used} of {max} follow-ups",
+        "limitReached": "Limit reached: {max} follow-ups.",
+        "stepTitle": "Follow-up {step}",
+        "measuredFromCampaign": "Counted from the campaign message.",
+        "measuredFromStep": "Counted from the message of follow-up {step}.",
+        "remove": "Remove follow-up {step}",
+        "removeShort": "Remove",
+        "triggerLabel": "When the contact",
+        "trigger": {
+          "replied": "Replies",
+          "read": "Reads the message",
+          "not_replied": "Has not replied",
+          "not_read": "Has not read the message"
+        },
+        "triggerHelp": {
+          "replied": "Fires the moment they reply, if that happens within the time you set. Otherwise the sequence ends.",
+          "read": "Fires the moment they read it, if that happens within the time you set. Otherwise the sequence ends.",
+          "not_replied": "Waits the time you set, then fires if they have not replied. If they did, the sequence ends.",
+          "not_read": "Waits the time you set, then fires if they have not read it. If they did, the sequence ends."
+        },
+        "watchLabel": "Watch for up to",
+        "waitLabel": "Wait",
+        "unitLabel": "Time unit",
+        "duration": {
+          "minutes": "{count, plural, one {# minute} other {# minutes}}",
+          "hours": "{count, plural, one {# hour} other {# hours}}",
+          "days": "{count, plural, one {# day} other {# days}}"
+        },
+        "actionLabel": "Then",
+        "action": {
+          "template": "Send a template",
+          "flow": "Start a flow"
+        },
+        "templateLabel": "Template to send",
+        "flowLabel": "Flow to start",
+        "pickTemplate": "Choose a template",
+        "pickFlow": "Choose a flow",
+        "loading": "Loading...",
+        "unavailable": "No longer available",
+        "noTemplates": "No approved templates yet.",
+        "createTemplate": "Create a template",
+        "noFlows": "No flows yet.",
+        "createFlow": "Create a flow",
+        "flowsError": "The flows could not be loaded. Try again later.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "If they reply within {wait}",
+          "read": "If they read it within {wait}",
+          "not_replied": "If not replied after {wait}",
+          "not_read": "If not read after {wait}"
+        },
+        "does": {
+          "template": "send {name}",
+          "flow": "start flow {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minute} other {minutes}}",
+          "hours": "{count, plural, one {hour} other {hours}}",
+          "days": "{count, plural, one {day} other {days}}"
+        }
       }
     },
     "history": {

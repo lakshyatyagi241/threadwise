@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "Ngày tự động kết thúc đã qua.",
         "auto_end_before_send": "Ngày tự động kết thúc phải sau thời điểm gửi.",
         "auto_end_recurring": "Chiến dịch lặp lại kết thúc theo quy tắc riêng: hãy xóa ngày tự động kết thúc.",
-        "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi."
+        "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi.",
+        "follow_up_template_required": "Chọn mẫu mà mỗi tin theo dõi sẽ gửi.",
+        "follow_up_flow_required": "Chọn luồng mà mỗi tin theo dõi sẽ bắt đầu.",
+        "follow_up_cloud_api_only": "Tin theo dõi chỉ hoạt động với số WhatsApp Cloud API. Hãy chọn một số ở bước 1 hoặc xóa các tin theo dõi."
       },
       "template": {
         "previewOnline": "trực tuyến",
@@ -1382,7 +1385,8 @@
         "sumCsv": "Tệp CSV {name}: {count, plural, other {# số hợp lệ}}",
         "estimatedCostFull": "Chi phí ước tính (đầy đủ)",
         "chargedPlan": "Trừ vào ví của bạn ngay bây giờ: {amount} (gói của bạn chi trả {covered} trong số các tin nhắn này)",
-        "chargedWallet": "Trừ vào ví của bạn: {amount}"
+        "chargedWallet": "Trừ vào ví của bạn: {amount}",
+        "sumFollowUps": "Tin theo dõi"
       },
       "test": {
         "title": "Gửi thử tin nhắn WhatsApp",
@@ -1587,7 +1591,25 @@
         "exportFailed": "Không tải được tệp xuất.",
         "deleteTitle": "Xóa chiến dịch gửi này?",
         "deleteOne": "Xóa chiến dịch gửi này và người nhận của nó. Không thể hoàn tác.",
-        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác."
+        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác.",
+        "followUps": {
+          "title": "Tin theo dõi",
+          "step": "Theo dõi {step}",
+          "count": {
+            "waiting": "{count} đang chờ",
+            "sent": "{count} đã gửi",
+            "delivered": "{count} đã nhận",
+            "read": "{count} đã đọc",
+            "flowsStarted": "{count} luồng đã bắt đầu",
+            "skipped": "{count} đã bỏ qua",
+            "lapsed": "{count} đã hết hạn",
+            "failed": "{count} thất bại"
+          },
+          "hint": {
+            "skipped": "Điều kiện không được đáp ứng khi kiểm tra nên chuỗi kết thúc tại đó.",
+            "lapsed": "Thời gian theo dõi đã hết trước khi liên hệ trả lời hoặc đọc nên chuỗi kết thúc tại đó."
+          }
+        }
       },
       "panel": {
         "title": "Được tạo bằng Tạo gửi hàng loạt",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) được gửi từ trình tạo cổ điển, bắt đầu lại từ đầu. Chiến dịch này được lưu thành bản nháp và vẫn nằm trong danh sách Chiến dịch của bạn, nên bạn có thể quay lại sau.",
         "confirm": "Mở trình tạo cổ điển",
         "cancel": "Ở lại đây"
+      },
+      "followUps": {
+        "title": "Tin theo dõi",
+        "intro": "Gửi thêm một tin nhắn hoặc bắt đầu một luồng, tùy theo hành động của liên hệ sau tin nhắn chiến dịch. Tối đa 3 bước liên tiếp.",
+        "cloudOnly": "Tin theo dõi cần số WhatsApp Cloud API vì dựa trên báo cáo đã đọc và trả lời của Meta. Hãy chọn một số ở bước 1.",
+        "add": "Thêm tin theo dõi",
+        "count": "{used}/{max} tin theo dõi",
+        "limitReached": "Đã đạt giới hạn: {max} tin theo dõi.",
+        "stepTitle": "Theo dõi {step}",
+        "measuredFromCampaign": "Tính từ tin nhắn chiến dịch.",
+        "measuredFromStep": "Tính từ tin nhắn của tin theo dõi {step}.",
+        "remove": "Xóa tin theo dõi {step}",
+        "removeShort": "Xóa",
+        "triggerLabel": "Khi liên hệ",
+        "trigger": {
+          "replied": "Trả lời",
+          "read": "Đọc tin nhắn",
+          "not_replied": "Chưa trả lời",
+          "not_read": "Chưa đọc tin nhắn"
+        },
+        "triggerHelp": {
+          "replied": "Kích hoạt ngay khi họ trả lời, nếu việc đó xảy ra trong thời gian bạn đặt. Nếu không, chuỗi kết thúc.",
+          "read": "Kích hoạt ngay khi họ đọc, nếu việc đó xảy ra trong thời gian bạn đặt. Nếu không, chuỗi kết thúc.",
+          "not_replied": "Chờ trong thời gian bạn đặt, rồi kích hoạt nếu họ chưa trả lời. Nếu họ đã trả lời, chuỗi kết thúc.",
+          "not_read": "Chờ trong thời gian bạn đặt, rồi kích hoạt nếu họ chưa đọc. Nếu họ đã đọc, chuỗi kết thúc."
+        },
+        "watchLabel": "Theo dõi tối đa",
+        "waitLabel": "Chờ",
+        "unitLabel": "Đơn vị thời gian",
+        "duration": {
+          "minutes": "{count, plural, other {# phút}}",
+          "hours": "{count, plural, other {# giờ}}",
+          "days": "{count, plural, other {# ngày}}"
+        },
+        "actionLabel": "Sau đó",
+        "action": {
+          "template": "Gửi một mẫu",
+          "flow": "Bắt đầu một luồng"
+        },
+        "templateLabel": "Mẫu cần gửi",
+        "flowLabel": "Luồng cần bắt đầu",
+        "pickTemplate": "Chọn một mẫu",
+        "pickFlow": "Chọn một luồng",
+        "loading": "Đang tải...",
+        "unavailable": "Không còn khả dụng",
+        "noTemplates": "Chưa có mẫu nào được duyệt.",
+        "createTemplate": "Tạo mẫu",
+        "noFlows": "Chưa có luồng nào.",
+        "createFlow": "Tạo luồng",
+        "flowsError": "Không thể tải các luồng. Vui lòng thử lại sau.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Nếu họ trả lời trong {wait}",
+          "read": "Nếu họ đọc trong {wait}",
+          "not_replied": "Nếu chưa trả lời sau {wait}",
+          "not_read": "Nếu chưa đọc sau {wait}"
+        },
+        "does": {
+          "template": "gửi {name}",
+          "flow": "bắt đầu luồng {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, other {phút}}",
+          "hours": "{count, plural, other {giờ}}",
+          "days": "{count, plural, other {ngày}}"
+        }
       }
     },
     "history": {

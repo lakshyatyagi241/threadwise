@@ -212,6 +212,7 @@ describe('status page', () => {
           clicks: 3,
         } as never,
         retries,
+        followUps: [],
       },
     ],
     ...over,
@@ -246,6 +247,60 @@ describe('status page', () => {
     expect(out).toContain('Gave up');
     expect(out).toContain('Retrying until Oct 20, 2026.');
     expect(out).toContain('4 waiting, 7 recovered, 1 gave up');
+  });
+
+  describe('follow-ups of a run', () => {
+    const steps = [
+      {
+        step: 1,
+        waiting: 12,
+        sent: 300,
+        delivered: 280,
+        read: 90,
+        flowsStarted: 0,
+        skipped: 40,
+        lapsed: 0,
+        failed: 3,
+      },
+      {
+        step: 2,
+        waiting: 0,
+        sent: 0,
+        delivered: 0,
+        read: 0,
+        flowsStarted: 55,
+        skipped: 0,
+        lapsed: 21,
+        failed: 0,
+      },
+    ];
+    const withFollowUps = () =>
+      detail({ runList: [{ ...detail().runList[0]!, followUps: steps }] });
+
+    it('lists what each step did under the run', () => {
+      const out = page(withFollowUps());
+      expect(out).toContain('data-testid="run-follow-ups"');
+      expect(out).toContain('Follow-up 1');
+      expect(out).toContain('Follow-up 2');
+      for (const text of [
+        '12 waiting',
+        '300 sent',
+        '280 delivered',
+        '90 read',
+        '40 skipped',
+        '3 failed',
+        '55 flows started',
+        '21 lapsed',
+      ]) {
+        expect(out).toContain(text);
+      }
+    });
+
+    it('shows nothing for a run without follow-ups', () => {
+      const out = page(detail());
+      expect(out).not.toContain('run-follow-ups');
+      expect(out).not.toContain('Follow-up 1');
+    });
   });
 
   it('shows Pause and Cancel for an active series, Resume and Cancel for a paused one', () => {
