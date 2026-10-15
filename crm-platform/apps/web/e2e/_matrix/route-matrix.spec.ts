@@ -9,6 +9,8 @@ import { join } from 'node:path';
  *   HEADLESS=1 pnpm --filter @crm/web exec playwright test e2e/_matrix
  *   QA_MATRIX_LIMIT=20 ...                  only the first 20 routes (smoke)
  *   QA_MATRIX_FILTER=contacts ...           only routes containing that text
+ *   QA_MATRIX_SCOPE=public ...              only the pages that need no sign-in (they need the web app only, not the API or a seeded
+ *                                           workspace); `authed` for the rest; default `all`
  *
  * Needs the running stack (API :3000, web :3001) and the seeded workspace the other specs use (E2E_ORG / E2E_ADMIN_EMAIL / E2E_PASSWORD).
  * Dynamic pages (`[token]`, `[id]`) need real data and are not generated here; the QA report lists how many are left out.
@@ -45,10 +47,12 @@ function discover(): Route[] {
   };
   walk(root, []);
   const filter = process.env.QA_MATRIX_FILTER;
+  const scope = process.env.QA_MATRIX_SCOPE ?? 'all';
   const limit = Number(process.env.QA_MATRIX_LIMIT ?? 0);
   const all = out
     .sort((a, b) => a.url.localeCompare(b.url))
-    .filter((r) => !filter || r.url.includes(filter));
+    .filter((r) => !filter || r.url.includes(filter))
+    .filter((r) => scope === 'all' || (scope === 'public') === !r.authed);
   return limit ? all.slice(0, limit) : all;
 }
 
