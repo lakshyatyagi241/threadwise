@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "ویب چیٹ",
         "voice": "وائس کال",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "سبسکرائب شدہ",

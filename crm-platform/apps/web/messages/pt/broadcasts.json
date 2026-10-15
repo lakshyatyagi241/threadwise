@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Envie mensagens para pessoas que já estão nas suas DMs do Instagram — sem aprovação de modelo.",
         "cta": "Criar transmissão do Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envie uma mensagem do Messenger para quem escreveu para a sua Página nas últimas 24 horas.",
+        "cta": "Criar transmissão no Facebook"
       }
     }
   }

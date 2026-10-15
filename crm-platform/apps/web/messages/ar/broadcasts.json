@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "راسل الأشخاص الموجودين أصلًا في رسائل Instagram المباشرة — دون اعتماد قالب.",
         "cta": "إنشاء بث Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "أرسل رسالة Messenger إلى من راسلوا صفحتك خلال آخر 24 ساعة.",
+        "cta": "إنشاء بث على Facebook"
       }
     }
   }

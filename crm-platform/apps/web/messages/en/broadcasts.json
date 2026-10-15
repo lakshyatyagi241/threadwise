@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Message people already in your Instagram DMs — no template approval.",
         "cta": "Create Instagram broadcast"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Send a Messenger message to people who messaged your Page in the last 24 hours.",
+        "cta": "Create Facebook broadcast"
       }
     }
   }

@@ -6,6 +6,29 @@ import {
   normalizePeerKey,
 } from '../../../src/modules/chat-conversations/peer-key';
 
+describe('normalizePeerKey: LINE, Viber and WeChat ids are case-sensitive tokens', () => {
+  it.each([
+    ['line', 'U4af4980629AbCdEf0123456789abcdef'],
+    ['viber', 'Gv9mNAbCdEf+/w=='],
+    ['wechat', 'oABCdEfGhIjKlMnOpQrStUvWxYz_12'],
+  ])('%s keeps the id exactly as the platform wrote it (only trimmed)', (kind, id) => {
+    expect(normalizePeerKey(kind, id)).toBe(id);
+    expect(normalizePeerKey(kind, `  ${id}  `)).toBe(id);
+  });
+
+  it('is not a phone channel, so nothing is stripped to digits and no contact is linked by phone', () => {
+    for (const kind of ['line', 'viber', 'wechat']) {
+      expect(isPhoneChannel(kind)).toBe(false);
+      expect(identityOfPeer(kind, 'U123')).toBeNull();
+    }
+  });
+
+  it('refuses an id longer than the key allows, and an empty one', () => {
+    expect(normalizePeerKey('line', 'U'.repeat(129))).toBeNull();
+    expect(normalizePeerKey('wechat', '   ')).toBeNull();
+  });
+});
+
 describe('normalizePeerKey: one thread per sender however the provider writes the number', () => {
   it.each([
     ['919876543210'],

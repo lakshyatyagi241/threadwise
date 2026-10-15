@@ -26,6 +26,8 @@ export const SECRET_HEADERS = [
   'x-invoice-signature',
   'x-twilio-signature',
   'x-signature',
+  'x-line-signature',
+  'x-viber-content-signature',
   'stripe-signature',
 ] as const;
 

@@ -9,6 +9,9 @@ export const CONSENT_CHANNELS = [
   'facebook',
   'instagram',
   'webchat',
+  'line',
+  'viber',
+  'wechat',
   // Added with the purpose registry (BL-140): a voice call and RCS are consent channels too. The ledger column is free text with a
   // pattern check, so older rows and the older API calls are unaffected.
   'voice',
@@ -113,6 +116,9 @@ export function consentChannelOfKind(kind: string): ConsentChannel | null {
     case 'facebook':
     case 'instagram':
     case 'webchat':
+    case 'line':
+    case 'viber':
+    case 'wechat':
     case 'sms':
     case 'rcs':
     case 'voice':

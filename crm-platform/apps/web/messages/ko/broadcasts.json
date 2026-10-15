@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "이미 Instagram DM에 있는 사람에게 메시지를 보냅니다. 템플릿 승인이 필요 없습니다.",
         "cta": "Instagram 브로드캐스트 만들기"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "지난 24시간 안에 페이지에 메시지를 보낸 사람들에게 Messenger 메시지를 보냅니다.",
+        "cta": "Facebook 브로드캐스트 만들기"
       }
     }
   }

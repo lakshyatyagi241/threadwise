@@ -191,7 +191,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   storefront_builder: 'Storefront builder',
   invoicing: 'Invoicing',
   forms_and_links: 'Forms and links',
-  extra_channels: 'Telegram, Facebook and Instagram channels',
+  extra_channels: 'Telegram, Facebook, Instagram, LINE, Viber and WeChat channels',
   form_builder: 'Forms',
   waba_groups: 'WhatsApp groups',
   sms: 'SMS channel',

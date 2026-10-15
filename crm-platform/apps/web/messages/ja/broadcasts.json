@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "InstagramのDMにすでにいるユーザーにメッセージを送ります。テンプレートの承認は不要です。",
         "cta": "Instagram一斉配信を作成"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "過去24時間にページへメッセージを送ってくれた人に Messenger でメッセージを送ります。",
+        "cta": "Facebook 配信を作成"
       }
     }
   }

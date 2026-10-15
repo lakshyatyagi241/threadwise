@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Personen anschreiben, die bereits in Ihren Instagram-DMs sind – ohne Vorlagengenehmigung.",
         "cta": "Instagram-Broadcast erstellen"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Sende eine Messenger-Nachricht an Personen, die deiner Seite in den letzten 24 Stunden geschrieben haben.",
+        "cta": "Facebook-Versand erstellen"
       }
     }
   }

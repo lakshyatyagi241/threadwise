@@ -353,6 +353,11 @@
         "name": "Instagram",
         "hint": "Écrivez aux personnes déjà présentes dans vos messages privés Instagram : aucune approbation de modèle.",
         "cta": "Créer une diffusion Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envoyez un message Messenger aux personnes qui ont écrit à votre Page ces dernières 24 heures.",
+        "cta": "Créer une diffusion Facebook"
       }
     }
   }

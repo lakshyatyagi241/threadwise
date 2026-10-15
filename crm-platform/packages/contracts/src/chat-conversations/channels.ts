@@ -20,6 +20,9 @@ export const CHANNEL_KINDS = [
   'facebook',
   'instagram',
   'email',
+  'line',
+  'viber',
+  'wechat',
 ] as const;
 export const channelKindSchema = z.enum(CHANNEL_KINDS);
 export type ChannelKind = z.infer<typeof channelKindSchema>;

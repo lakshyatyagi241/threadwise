@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "צ'אט באתר",
         "voice": "שיחת קול",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "רשום",

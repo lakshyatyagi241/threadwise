@@ -11,7 +11,10 @@
       "telegram": "تيليجرام",
       "facebook": "ماسنجر فيسبوك",
       "instagram": "إنستجرام",
-      "email": "البريد الإلكتروني (Gmail)"
+      "email": "البريد الإلكتروني (Gmail)",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
     },
     "page": {
       "back": "الأتمتة والذكاء الاصطناعي",
