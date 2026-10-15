@@ -41,16 +41,25 @@ describe('Check Google Sheet cell', () => {
     });
   });
 
-  it('no when there is no row, no sheet, no column, or Google fails', async () => {
+  it('no when there is no row, no sheet chosen or no column to check (as in Reference), noting why', async () => {
     for (const [d, rows] of [
       [{ ...base, checkColumn: 'Status', operator: 'equals', value: 'x' }, []],
       [{ matchColumn: 'Phone', checkColumn: 'Status' }, [{ Status: 'x' }]],
       [{ ...base, operator: 'equals' }, [{ Status: 'x' }]],
-      [{ ...base, checkColumn: 'Status' }, new Error('No Google account connected')],
     ] as const) {
       const x = ctx({ ...d });
       expect(await runSheetCheck(x.c, google(rows as never) as never)).toMatchObject({ port: 2 });
     }
+    const x = ctx({ matchColumn: 'Phone', checkColumn: 'Status' });
+    await runSheetCheck(x.c, google([]) as never);
+    expect(x.notes.join()).toContain('has no sheet: skipped');
+  });
+
+  it('FAILS the step when Google cannot be used (never a quiet "no" for a problem)', async () => {
+    const x = ctx({ ...base, checkColumn: 'Status' });
+    expect(
+      await runSheetCheck(x.c, google(new Error('No Google account connected')) as never),
+    ).toMatchObject({ kind: 'fail', code: expect.stringMatching(/^GOOGLE_/) });
   });
 });
 

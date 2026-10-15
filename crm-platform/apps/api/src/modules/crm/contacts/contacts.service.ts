@@ -289,7 +289,38 @@ export class ContactsService {
     });
   }
 
+  private async lockIdentities(
+    tx: Tx,
+    orgId: number,
+    email: string | undefined,
+    phone: string | undefined,
+  ): Promise<void> {
+    const keys = [
+      email ? `email:${email.trim().toLowerCase()}` : null,
+      phone ? `phone:${phone}` : null,
+    ]
+      .filter((k): k is string => k !== null)
+      .sort();
+    for (const k of keys) {
+      await tx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`contact-identity:${orgId}:${k}`}, 0))`,
+      );
+    }
+  }
+
   async create(input: CreateContactInput, via?: ContactConsentContext): Promise<ContactResponse> {
+    return (await this.createOrMatch(input, via)).contact;
+  }
+
+  /**
+   * `create`, saying whether a contact was made or an existing one (same email or phone) was returned. A caller that reports "created"
+   * (an import, the Sheets add-on) needs the difference; two requests for one new person at once make one contact, and only one of them
+   * created it.
+   */
+  async createOrMatch(
+    input: CreateContactInput,
+    via?: ContactConsentContext,
+  ): Promise<{ contact: ContactResponse; created: boolean }> {
     const ctx = RequestContextStore.require();
 
     // One canonicaliser for create, import and dedupe (TW-CON-013). The contract already insists
@@ -309,6 +340,11 @@ export class ContactsService {
     this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
 
     return this.db.tx(async (tx) => {
+      // Serialise creates of the same person: the identity lookup below and the insert are separate statements, so two requests for one
+      // new email or phone (a sheet row sent twice, a form and a flow at once) would both find nobody and both insert. A transaction-scoped
+      // advisory lock keyed on org and normalised identity makes the second wait for the first to commit, then find it. Locks are taken in
+      // sorted order so two creates sharing one identity cannot deadlock; they are released at commit or rollback.
+      await this.lockIdentities(tx, ctx.orgId, input.email, phone);
       // Omitted: the creator (Reference stamped `user_id` with the caller). `null`: nobody, which a caller whose
       // record scope is own/team is refused below (the contact would vanish from their own list).
       const ownerId =
@@ -341,11 +377,14 @@ export class ContactsService {
           );
           // The same person agreeing again is still an agreement: the grant lands on the contact they already are.
           const regranted = await this.grantOnMatch(tx, ctx, existing, input, via);
-          return toContactResponse(
-            regranted
-              ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
-              : existing,
-          );
+          return {
+            contact: toContactResponse(
+              regranted
+                ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
+                : existing,
+            ),
+            created: false,
+          };
         }
       }
 
@@ -471,7 +510,7 @@ export class ContactsService {
       });
 
       const row = await this.repo.findById(tx, ctx.orgId, created.id);
-      return toContactResponse(row!);
+      return { contact: toContactResponse(row!), created: true };
     });
   }
 

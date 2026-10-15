@@ -16,6 +16,7 @@ import {
 import { formatMoney } from '../lib/money';
 import { deriveReminders } from '../lib/reminders';
 import { REMINDER_TONE, actionsFor } from '../lib/status';
+import { CalendarSyncPanel } from './calendar-sync-panel';
 import { Drawer } from './drawer';
 import {
   CalendarIcon,
@@ -184,6 +185,7 @@ function Body({
             {t('needsReviewHint')}
           </p>
         )}
+        <CalendarSyncPanel appointment={a} zone={zone} canUpdate={canUpdate} />
         {(a.status === 'cancelled' || a.status === 'declined') &&
           (a.cancelledBy || a.cancelReason) && (
             <p className="rounded-md border border-border bg-muted/40 px-3 py-2 text-sm">

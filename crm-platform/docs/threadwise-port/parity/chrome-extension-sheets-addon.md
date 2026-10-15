@@ -82,3 +82,12 @@ Quirks kept on purpose: a sync with no `shop_id` makes a new shop each time; an 
 - The page and add-on are English only; the Arabic file holds just the Settings tile text, and the other languages come through the localization domain.
 - Publish the `google-sheets` Marketplace listing (it is a seeded draft) and run a real install through the Marketplace API.
 - Owner decisions: keys after an uninstall (dormant vs cleared), an optional key expiry, and whether TW-EXT-016 is wanted.
+
+## Apps Script emulator, 14 fixes in `Code.gs`, and a real-API run (walkthrough item 30)
+
+The add-on was still never run in a real Google Sheet. It now runs, unchanged, under an emulator of Apps Script's globals (`apps/api/test/support/apps-script-*.ts`) in unit tests, and against the real
+Nest app and Postgres in `addon-real-api.e2e.spec.ts`. That found and fixed 14 defects in `Code.gs` (an hourly resend of every row, writes past the default grid, row hashes read as numbers, a
+row-by-row sweep, no time guard, a 413 that retrying could not fix, formulas and lost `+` on pull, edit triggers not scoped per spreadsheet, no lock around concurrent sends, and more) and one
+duplicate-contact race on the webhook path. Details, what the emulator cannot prove, and the open questions about the Marketplace version's hourly trigger:
+[plan/google-workspace-build.md, section 5](../plan/google-workspace-build.md). The human procedure and checklist:
+[runbooks/google-sheets-addon-real-sheet-test.md](../../runbooks/google-sheets-addon-real-sheet-test.md).

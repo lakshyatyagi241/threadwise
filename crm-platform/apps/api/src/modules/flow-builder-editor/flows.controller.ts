@@ -19,7 +19,6 @@ import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { z } from 'zod';
 import {
   FLB_AI_PROVIDERS,
-  ERROR_CODES,
   FLB_GOOGLE_PICKER_KINDS,
   flbAiGenerateRequestSchema,
   flbCommerceProductsQuerySchema,
@@ -45,6 +44,7 @@ import {
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { GoogleFilesService } from '../google-account';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { BuilderContextService } from './builder-context.service';
 import { FlowAiService } from './flow-ai.service';
@@ -85,6 +85,7 @@ export class FlowsController {
     private readonly ai: FlowAiService,
     private readonly webhook: TestWebhookService,
     private readonly media: FlowMediaService,
+    private readonly googleFiles: GoogleFilesService,
   ) {}
 
   @Get()
@@ -160,19 +161,26 @@ export class FlowsController {
     return this.context.commerceProducts(query);
   }
 
+  @Get('builder-context/google/status')
+  @RequirePermission('flb.flows.read')
+  @ApiOperation({
+    summary: "Whether the workspace's Google account is usable, and for which nodes",
+    description:
+      'State and the capabilities the grant covers (no account email), so a Sheets, Docs, Forms or Meet node can warn before the flow runs.',
+  })
+  async googleStatus() {
+    return this.googleFiles.summary();
+  }
+
   @Get('builder-context/google/:kind')
   @RequirePermission('flb.flows.read')
   @ApiOperation({
     summary: 'Google Sheets / Docs / Forms files for the node pickers',
     description:
-      '503 FLB_INTEGRATION_DISABLED while the Google integration is not connected on this deployment.',
+      "The connected account's files of that kind, newest first. Needs the Drive file list permission on the Google account page. 409 GOOGLE_ACCOUNT_NOT_CONNECTED, GOOGLE_ACCOUNT_NEEDS_RECONNECT or GOOGLE_SCOPE_MISSING when the account cannot list; 503 GOOGLE_ACCOUNT_NOT_CONFIGURED or GOOGLE_API_NOT_ENABLED when the platform's Google setup is incomplete; the builder falls back to a text field for the id on any of them.",
   })
-  async google(@Param('kind', zodPipe(googleKindSchema)) _kind: z.infer<typeof googleKindSchema>) {
-    throw new AppError(
-      ERROR_CODES.FLB_INTEGRATION_DISABLED,
-      'Google integration is not connected.',
-      HttpStatus.SERVICE_UNAVAILABLE,
-    );
+  async google(@Param('kind', zodPipe(googleKindSchema)) kind: z.infer<typeof googleKindSchema>) {
+    return this.googleFiles.list(kind);
   }
 
   @Get('builder-context/google/forms/:formId/apps-script')

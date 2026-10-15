@@ -379,6 +379,10 @@
         "test": {
           "label": "Testbenachrichtigung",
           "hint": "Der Test, den du unter Browser-Benachrichtigungen sendest, damit du siehst, dass Glocke, Pop-up und Tab-Titel funktionieren."
+        },
+        "appointment_calendar_drift": {
+          "label": "Termin nicht synchron mit Google Calendar",
+          "hint": "Der Google-Calendar-Eintrag eines bevorstehenden Termins wurde gelöscht, verschoben oder seine Gäste wurden geändert. Der Termin selbst bleibt unverändert; Sie entscheiden, was geschehen soll."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",

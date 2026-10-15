@@ -1332,7 +1332,8 @@
             "date_field_match": "תזמון: יחסי לתאריך אצל איש הקשר (יום הולדת…)",
             "schedule": "תזמון: בתאריך ושעה",
             "shopify_event": "מסחר: אירוע בחנות Shopify",
-            "woocommerce_event": "מסחר: אירוע בחנות WooCommerce"
+            "woocommerce_event": "מסחר: אירוע בחנות WooCommerce",
+            "segment_leave": "קהל: כשאיש קשר עוזב סגמנט"
           },
           "tagsLoading": "טוען תגים…",
           "tagPick": "— בחר תג —",
@@ -1426,7 +1427,8 @@
             "productId": "מזהה מוצר (אופציונלי)",
             "productIdHint": "ריק = כל מוצר בהזמנה.",
             "storeNote": "הלקוח מותאם לאיש קשר שמור לפי מספר טלפון; לא נוצר איש קשר עבור הזמנה. “נוסף לעגלה” ו“מוצר נצפה” אינם מוצעים: החנות אינה מדווחת עליהם.",
-            "updatedNote": "פועל בכל פעם שאדם או ייבוא משנים איש קשר. שינוי שנעשה על ידי זרימה אחרת לא מפעיל אותה."
+            "updatedNote": "פועל בכל פעם שאדם או ייבוא משנים איש קשר. שינוי שנעשה על ידי זרימה אחרת לא מפעיל אותה.",
+            "segmentLeaveHint": "רץ פעם אחת בכל פעם שאיש קשר שהיה בסגמנט הזה נמצא מחוצה לו לאחר עדכון, תיוג או הצגה ברשימה. עזיבה של איש קשר מזוהה רק אם הזרימה ראתה אותו קודם בתוך הסגמנט."
           }
         }
       },
@@ -1716,7 +1718,21 @@
           "setupOpen": "פתחו את הטופס → <mono>תפריט ⋮</mono> → <mono>עורך סקריפטים</mono>",
           "setupDownload": "<link>הורידו את הסקריפט (.gs)</link> והדביקו אותו",
           "setupTrigger": "הוסיפו טריגר: <mono>onFormSubmit</mono> · מהטופס · בעת הגשת הטופס",
-          "setupWarning": "בלי הסקריפט הטופס ימשיך לתעד תשובות ב-Google Forms, אך התהליך לא ימשיך."
+          "setupWarning": "בלי הסקריפט הטופס ימשיך לתעד תשובות ב-Google Forms, אך התהליך לא ימשיך.",
+          "noListing": "לא ניתן להציג את רשימת הקבצים שלכם כי הרשאת רשימת הקבצים של Drive לא ניתנה בעמוד חשבון Google. הדביקו במקום זאת את הקישור או המזהה.",
+          "connection": {
+            "open": "פתיחת חשבון Google",
+            "permission": {
+              "calendar": "לוח שנה",
+              "sheets": "Sheets",
+              "docs": "Docs ו-Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google לא הוגדר בפלטפורמה הזו, ולכן השלב הזה ייכשל בהרצת התהליך.",
+            "disconnected": "לא מחובר חשבון Google, ולכן השלב הזה ייכשל בהרצת התהליך. חברו קודם את Google.",
+            "needsReconnect": "Google כבר לא מקבל את החשבון המחובר, ולכן השלב הזה ייכשל בהרצת התהליך. חברו מחדש את Google קודם.",
+            "missing": "חשבון Google המחובר לא קיבל את ההרשאה {permission}, ולכן השלב הזה ייכשל בהרצת התהליך."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2367,7 +2383,8 @@
         "date_field_match": "בהתאמת תאריך",
         "schedule": "לפי תזמון",
         "shopify_event": "באירוע Shopify",
-        "woocommerce_event": "באירוע WooCommerce"
+        "woocommerce_event": "באירוע WooCommerce",
+        "segment_leave": "בעזיבת סגמנט"
       },
       "ports": {
         "manual": "ידני",

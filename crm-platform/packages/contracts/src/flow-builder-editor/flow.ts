@@ -366,6 +366,7 @@ export const FLB_GOOGLE_PICKER_KINDS = ['sheets', 'docs', 'forms'] as const;
 export const flbGoogleFilesResponseSchema = z.object({
   data: z.array(z.object({ id: z.string(), name: z.string() })),
 });
+export type FlbGoogleFilesResponse = z.infer<typeof flbGoogleFilesResponseSchema>;
 
 export const FLOW_ENGINE_LABELS: Record<string, string> = {
   baileys: 'Unofficial API',

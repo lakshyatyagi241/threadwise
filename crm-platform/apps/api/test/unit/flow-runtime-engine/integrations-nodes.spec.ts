@@ -5,7 +5,9 @@ import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import type { AiCallPort } from '../../../src/infra/providers/flow-runtime-engine/ai-call.port';
 import {
+  GoogleAccountError,
   GoogleNotConnectedError,
+  type GoogleAccessTokens,
   type GoogleWorkspacePort,
 } from '../../../src/infra/providers/flow-runtime-engine/google-workspace.port';
 import { placeUnderHeaders } from '../../../src/infra/providers/flow-runtime-engine/google-workspace.http.adapter';
@@ -127,10 +129,12 @@ const failingGoogle = (): GoogleWorkspacePort => {
   };
   return {
     appendSheetRow: no,
+    appendSheetRows: no,
     readSheetRows: no,
     generateDoc: no,
     formResponderUrl: no,
     createMeet: no,
+    listFiles: no,
   };
 };
 
@@ -516,14 +520,15 @@ function fakeGoogle() {
     meets: [] as unknown[],
   };
   const g: GoogleWorkspacePort = {
-    appendSheetRow: async (_o, r) => void log.appends.push(r),
+    appendSheetRow: async (_o, r) => void log.appends.push({ ...r, rows: [r.values] }),
+    appendSheetRows: async (_o, r) => void log.appends.push(r),
     readSheetRows: async (_o, r) => {
       log.reads.push(r);
       return r.matchValue === 'CUST-1' ? [{ Name: 'Ana', Phone: '555' }] : [];
     },
     generateDoc: async (_o, r) => {
       log.docs.push(r);
-      return { url: 'https://docs.google.com/document/d/abc/edit' };
+      return { url: 'https://docs.google.com/document/d/abc/edit', warnings: [] };
     },
     formResponderUrl: async (_o, id) => ({
       url: `https://docs.google.com/forms/d/e/${id}/viewform`,
@@ -532,6 +537,7 @@ function fakeGoogle() {
       log.meets.push(r);
       return { meetUrl: 'https://meet.google.com/abc-defg-hij', eventId: 'ev1' };
     },
+    listFiles: async () => [],
   };
   return { g, log };
 }
@@ -558,7 +564,7 @@ describe('Google Sheets node', () => {
     expect(log.appends[0]).toMatchObject({
       sheetId: 'S1',
       tabName: 'Leads',
-      values: ['Ana', 'mine', 'Pizza', '', 'a, b'],
+      rows: [['Ana', 'mine', 'Pizza', '', 'a, b']],
       matchByHeader: false,
     });
     expect(run.vars).not.toHaveProperty('sheet_row');
@@ -572,10 +578,8 @@ describe('Google Sheets node', () => {
       { sheetId: 'S', columns: ['{{timestamp}}', '{{date}}', '{{iso_timestamp}}'] },
       { google: g },
     );
-    expect((log.appends[0] as { values: string[] }).values).toEqual([
-      '2026-10-03 10:00:00',
-      '2026-10-03',
-      '2026-10-03T10:00:00.000Z',
+    expect((log.appends[0] as { rows: string[][] }).rows).toEqual([
+      ['2026-10-03 10:00:00', '2026-10-03', '2026-10-03T10:00:00.000Z'],
     ]);
   });
 
@@ -592,7 +596,9 @@ describe('Google Sheets node', () => {
         ],
       },
     );
-    expect(log.appends.map((a) => (a as { values: string[] }).values)).toEqual([
+    // ONE append call carries every row of the step: it is all-or-nothing, so a retried step cannot duplicate rows.
+    expect(log.appends).toHaveLength(1);
+    expect((log.appends[0] as { rows: string[][] }).rows).toEqual([
       ['wings', '5'],
       ['fries', '2'],
     ]);
@@ -609,7 +615,7 @@ describe('Google Sheets node', () => {
     expect(log.appends[0]).toMatchObject({
       matchByHeader: true,
       columnHeaders: ['Email'],
-      values: ['a@b.c'],
+      rows: [['a@b.c']],
     });
   });
 
@@ -632,18 +638,65 @@ describe('Google Sheets node', () => {
     goes(miss.out.transition, 'n2');
   });
 
-  it('moves on with a note when no Google account is connected, or the sheet or columns are missing', async () => {
+  it('fails the step, naming Connect Google, when no Google account is connected', async () => {
     const a = await runNode('google_sheets', { sheetId: 'S', columns: ['x'] });
-    expect(a.out.notes.join()).toContain('No Google account connected');
-    goes(a.out.transition, 'n2');
-    expect((await runNode('google_sheets', { columns: ['x'] })).out.notes.join()).toContain(
-      'no sheet',
-    );
-    expect((await runNode('google_sheets', { sheetId: 'S' })).out.notes.join()).toContain(
-      'no columns',
+    expect(a.out.transition).toMatchObject({
+      t: 'end',
+      status: 'failed',
+      failureCode: 'GOOGLE_ACCOUNT_NOT_CONNECTED',
+    });
+    expect(String((a.out.transition as { failureReason?: string }).failureReason)).toContain(
+      'Connect Google',
     );
     const r = await runNode('google_sheets', { sheetId: 'S', mode: 'read', matchValue: 'a' });
-    expect(r.out.notes.join()).toContain('No Google account connected');
+    expect(r.out.transition).toMatchObject({
+      t: 'end',
+      failureCode: 'GOOGLE_ACCOUNT_NOT_CONNECTED',
+    });
+  });
+
+  it('fails the step, with the code and the fix, for every reason the account cannot be used', async () => {
+    for (const code of [
+      'GOOGLE_ACCOUNT_NOT_CONFIGURED',
+      'GOOGLE_ACCOUNT_NEEDS_RECONNECT',
+      'GOOGLE_SCOPE_MISSING',
+      'GOOGLE_API_NOT_ENABLED',
+      'GOOGLE_RATE_LIMITED',
+      'GOOGLE_NOT_FOUND',
+    ] as const) {
+      const g = fakeGoogle().g;
+      g.appendSheetRows = async () => {
+        throw new GoogleAccountError(code, 'x', 'sheets');
+      };
+      const r = await runNode('google_sheets', { sheetId: 'S', columns: ['x'] }, { google: g });
+      expect(r.out.transition, code).toMatchObject({
+        t: 'end',
+        status: 'failed',
+        failureCode: code,
+      });
+      expect(String((r.out.transition as { failureReason?: string }).failureReason)).toContain(
+        `[${code}]`,
+      );
+    }
+  });
+
+  it('a step whose sheet or columns were never chosen is noted and skipped, as in Reference (no Google call, no failure)', async () => {
+    const noSheet = await runNode('google_sheets', { columns: ['x'] });
+    goes(noSheet.out.transition, 'n2');
+    expect(noSheet.out.notes.join()).toContain('has no sheet: skipped');
+    const noCols = await runNode('google_sheets', { sheetId: 'S' });
+    goes(noCols.out.transition, 'n2');
+    expect(noCols.out.notes.join()).toContain('has no columns: skipped');
+  });
+
+  it('does not fail when the lookup simply finds no row', async () => {
+    const { g } = fakeGoogle();
+    const r = await runNode(
+      'google_sheets',
+      { sheetId: 'S', mode: 'read', matchColumn: 'Id', matchValue: 'nobody' },
+      { google: g },
+    );
+    goes(r.out.transition, 'n2');
   });
 });
 
@@ -676,7 +729,7 @@ describe('Google Docs node', () => {
     goes(out.transition, 'n2');
   });
 
-  it("sends Reference's apology when Google fails, and moves on", async () => {
+  it("sends Reference's apology when Google fails, then fails the step", async () => {
     const { sent, out } = await runNode('google_docs', { templateId: 'T' });
     expect(sent).toEqual([
       {
@@ -684,11 +737,14 @@ describe('Google Docs node', () => {
         body: "Sorry, couldn't generate your document right now. Please try again later.",
       },
     ]);
-    goes(out.transition, 'n2');
+    expect(out.transition).toMatchObject({ t: 'end', failureCode: 'GOOGLE_ACCOUNT_NOT_CONNECTED' });
   });
 
-  it('skips without a template, and survives a refused send', async () => {
-    expect((await runNode('google_docs', {})).sent).toEqual([]);
+  it('skips (noted) without a template, and survives a refused send', async () => {
+    const none = await runNode('google_docs', {});
+    expect(none.sent).toEqual([]);
+    goes(none.out.transition, 'n2');
+    expect(none.out.notes.join()).toContain('has no template: skipped');
     const { g } = fakeGoogle();
     const r = await runNode(
       'google_docs',
@@ -740,7 +796,7 @@ describe('Google Meet node', () => {
       body: "Sorry, couldn't generate a meeting link right now. Please try again later.",
     });
     expect(run.vars).not.toHaveProperty('meet_link');
-    goes(out.transition, 'n2');
+    expect(out.transition).toMatchObject({ t: 'end', failureCode: 'GOOGLE_ACCOUNT_NOT_CONNECTED' });
   });
 });
 
@@ -771,7 +827,7 @@ describe('Google Form node', () => {
     });
   });
 
-  it('defaults to a day, apologises when the form is unreachable, skips without a form id', async () => {
+  it('defaults to a day, apologises and fails when the form is unreachable, skips without a form id', async () => {
     const { g } = fakeGoogle();
     const day = await runNode('google_form', { formId: 'F' }, { google: g });
     expect(day.out.transition).toMatchObject({
@@ -782,8 +838,13 @@ describe('Google Form node', () => {
       kind: 'text',
       body: 'Sorry, the form is unavailable right now. Please try again later.',
     });
-    goes(down.out.transition, 'n2');
-    expect((await runNode('google_form', {})).out.notes.join()).toContain('no form');
+    expect(down.out.transition).toMatchObject({
+      t: 'end',
+      failureCode: 'GOOGLE_ACCOUNT_NOT_CONNECTED',
+    });
+    const noForm = await runNode('google_form', {});
+    goes(noForm.out.transition, 'n2');
+    expect(noForm.out.notes.join()).toContain('has no form: skipped');
   });
 
   it('a submission saves the answers and routes by submitted; a typed message is ignored', async () => {
@@ -821,6 +882,14 @@ describe('Google Form node', () => {
   });
 });
 
+const tokensOf = (token: string | null): GoogleAccessTokens => ({
+  withToken: async (_org, _capability, fn) => {
+    if (!token) throw new GoogleNotConnectedError();
+    return fn(token);
+  },
+  calendarId: async () => 'primary',
+});
+
 describe('placeUnderHeaders and the Google HTTP adapter', () => {
   it('places values under matching headers and keeps unknown labels after the last column', () => {
     expect(
@@ -833,7 +902,7 @@ describe('placeUnderHeaders and the Google HTTP adapter', () => {
   });
 
   it('fails with the not-connected error when there is no token', async () => {
-    const g = new HttpGoogleWorkspace({ accessToken: async () => null });
+    const g = new HttpGoogleWorkspace(tokensOf(null));
     await expect(
       g.appendSheetRow(1, {
         sheetId: 's',
@@ -851,15 +920,15 @@ describe('placeUnderHeaders and the Google HTTP adapter', () => {
       calls.push({ url, init });
       return new Response('{}', { status: 200 });
     }) as unknown as typeof fetch;
-    const g = new HttpGoogleWorkspace({ accessToken: async () => 'tok' }, http);
+    const g = new HttpGoogleWorkspace(tokensOf('tok'), http);
     await g.appendSheetRow(1, {
-      sheetId: 'a b',
+      sheetId: 'ab-1_c',
       tabName: "Ana's",
       values: ['1', '2'],
       columnHeaders: [],
       matchByHeader: false,
     });
-    expect(calls[0]!.url).toContain('https://sheets.googleapis.com/v4/spreadsheets/a%20b/values/');
+    expect(calls[0]!.url).toContain('https://sheets.googleapis.com/v4/spreadsheets/ab-1_c/values/');
     expect(calls[0]!.url).toContain(encodeURIComponent("'Ana''s'"));
     expect((calls[0]!.init.headers as Record<string, string>).authorization).toBe('Bearer tok');
     expect(JSON.parse(String(calls[0]!.init.body))).toEqual({ values: [['1', '2']] });
@@ -877,7 +946,7 @@ describe('placeUnderHeaders and the Google HTTP adapter', () => {
         }),
         { status: 200 },
       )) as unknown as typeof fetch;
-    const g = new HttpGoogleWorkspace({ accessToken: async () => 't' }, http);
+    const g = new HttpGoogleWorkspace(tokensOf('t'), http);
     expect(
       await g.readSheetRows(1, {
         sheetId: 's',

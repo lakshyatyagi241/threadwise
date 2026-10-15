@@ -210,7 +210,7 @@ elapsed minutes, so a 23-hour day offers 23 hours and a 25-hour day 25.
   "cancelledAt": null,
   "cancelledBy": null,
   "cancelReason": null,
-  "calendar": { "eventId": null, "calendarId": null },
+  "calendar": { "eventId": null, "calendarId": null, "sync": null },
   "manageUrl": "https://app.example/b/manage/<token>",
   "rowVersion": 2,
   "createdAt": "…",
@@ -247,6 +247,8 @@ Any other move is `409 APPT_INVALID_TRANSITION` with `from` and `to`. The four f
 | `GET /appointments/calendar`                                                       | `record.appointments.read`   | `{ provider, connected, account, status, calendarId, calendarName, connectedAt }`: `status` is `unavailable` (the platform has no Google client), `disconnected`, `connected` or `needs_reconnect`. See Google Calendar                                                                        |
 | `POST /appointments`                                                               | `record.appointments.create` | _idempotent_; 201. `bookingTypeId`, `startsAt`, `contactId` or `invitee`, `notes`, `answers`, `hostId`, `ignoreAvailability`, `notify`                                                                                                                                                         |
 | `GET /appointments/:id`                                                            | `record.appointments.read`   | includes `manageUrl`                                                                                                                                                                                                                                                                           |
+| `POST /appointments/:id/calendar/push`                                             | `record.appointments.update` | "Push our time back to Google": rewrites the Google event from the appointment (a deleted event returns under its id); `{ appointment, result: { done: 'pushed', applied: null } }`. `409 GOOGLE_SYNC_NOT_DRIFTED`, `409 APPT_CALENDAR_NOT_CONNECTED`, `502 APPT_CALENDAR_PROVIDER_FAILED`     |
+| `POST /appointments/:id/calendar/accept`                                           | `record.appointments.update` | "Accept Google's change" `{ notify? }`: re-reads the event and applies it through the usual rules (deleted or missing cancels, moved reschedules, guests acknowledged): `result.applied` is `cancelled`, `rescheduled` or `acknowledged`. `409 GOOGLE_SYNC_NOT_DRIFTED`                        |
 | `GET /appointments/:id/ics`                                                        | `record.appointments.read`   | `text/calendar` attachment                                                                                                                                                                                                                                                                     |
 | `PATCH /appointments/:id`                                                          | `record.appointments.update` | needs `rowVersion`; `title`, `description`, `location`, `notes`, `hostId`, `contactId`, `invitee`; `null` clears                                                                                                                                                                               |
 | `POST /appointments/:id/reschedule`                                                | `record.appointments.update` | `{ startsAt, ignoreAvailability?, notify?, rowVersion? }`; pending or confirmed, not started; keeps the status                                                                                                                                                                                 |
@@ -358,9 +360,12 @@ One Google account per workspace, connected by an admin through Google's consent
 OAuth client once for everyone (console, _Admin, Settings, Google Calendar_: client id, client secret, optional redirect URI override,
 and a switch); a workspace never sees them. Setting that client up in Google Cloud: `docs/runbooks/google-calendar-setup.md`.
 
+This is the same connection as the workspace's Google account (`docs/api/google-account.md`): the flow builder's Sheets, Docs, Forms and Meet steps use it too, each with its own
+permission. An account connected for Sheets only reads as `disconnected` here until the calendar permission is added (the Connect button then asks for the calendar and keeps the rest).
+
 **What is asked of Google:** `openid`, `email`, `calendar.events` (write events, Meet), `calendar.freebusy` and
-`calendar.calendarlist.readonly`. Reference asked for Calendar, Sheets, Docs, Drive and Forms in one consent; only calendar access is asked
-here. The consent URL carries `access_type=offline` and `prompt=consent`, so Google issues a refresh token on every consent. A consent with
+`calendar.calendarlist.readonly` for the calendar capability; the other capabilities are asked only when an admin ticks them on the Google account page. Reference asked for
+Calendar, Sheets, Docs, Drive and Forms in one consent. The consent URL carries `access_type=offline` and `prompt=consent`, so Google issues a refresh token on every consent. A consent with
 a calendar scope unticked is withdrawn again and stores nothing (`?calendar=missing_scope`).
 
 ### Where the client comes from
@@ -374,7 +379,7 @@ redirect URI is `<APP_URL>/v2/public/appointments/calendar/google/callback`. Wit
 
 Environment for the adapter (all optional, defaults are Google's own addresses; they exist so tests can aim at a local stand-in):
 `GOOGLE_OAUTH_AUTH_URL`, `GOOGLE_OAUTH_TOKEN_URL`, `GOOGLE_OAUTH_REVOKE_URL`, `GOOGLE_USERINFO_URL`, `GOOGLE_CALENDAR_API_URL`,
-`GOOGLE_HTTP_TIMEOUT_MS` (8000), `GOOGLE_BUSY_CACHE_SECONDS` (30), `GOOGLE_BUSY_BACKOFF_SECONDS` (20).
+`GOOGLE_HTTP_TIMEOUT_MS` (8000), `GOOGLE_BUSY_CACHE_SECONDS` (30), `GOOGLE_BUSY_BACKOFF_SECONDS` (20), and the retry policy `GOOGLE_RETRIES` (2), `GOOGLE_RETRY_BASE_MS` (300), `GOOGLE_RETRY_AFTER_CAP_SECONDS` (5): a 429, 5xx, timeout or network error is repeated with random jitter (never the busy-time lookup a visitor waits on, never the one-time code exchange); a `Retry-After` beyond the cap is not slept on, it is handed to the outbox.
 
 ### Routes
 
@@ -464,3 +469,10 @@ append is not built (`blocked`: it is the Sheets half of TW-APPT-012 and 029, an
 (nine to a page), `reserve(orgId, typeId, startsAt, sessionRef)` (a ten-minute soft lock), `book(orgId, input)` (the same engine and guard,
 as actor `bot`, source `chat`). Subscribe to `appointment.booked` for the `appointment_booked` trigger and the notification toggle.
 **For the payments domain**: consume `appointment.payment_due`, call `AppointmentsService.recordPayment` when settled.
+
+## Calendar drift (TW-GACC-011)
+
+`calendar.sync` on an appointment is `{ state: in_sync | drifted | null, reason, detectedAt, googleStartsAt, googleEndsAt, checkedAt }`. A worker reconcile (queue `calendar-reconcile`, one workspace per job, Redis lock, about hourly, only confirmed
+appointments with an event in the next 60 days, each read about once an hour) compares the Google event with what we last wrote and records `drifted` with one of `event_deleted`, `event_missing`, `time_changed`, `attendees_changed`. It never
+changes the appointment; the first detection writes an audit row and the outbox event `appointment.calendar_drifted` (one in-app notification, type `appointment_calendar_drift`, to the host or the person who booked). Our own writes and a guest
+answering are not drift. Plan section 8: [google-workspace-build.md](../threadwise-port/plan/google-workspace-build.md).

@@ -84,6 +84,8 @@ export const QUEUES = {
   WAB_MIGRATE: 'wab-migrate',
   /** One job per WhatsApp number to check for calling readiness (EXT-CALL-007): after a connect and on a schedule. Own queue: a slow Meta must not hold WhatsApp ingest. */
   CALLING_READINESS: 'calling-readiness',
+  /** One job per workspace whose upcoming appointments are compared with their Google events (TW-GACC-011). Own queue: a slow Google must not hold a booking message. */
+  CALENDAR_RECONCILE: 'calendar-reconcile',
   /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
   WECHAT_BROADCAST: 'wechat-broadcast',
 } as const;

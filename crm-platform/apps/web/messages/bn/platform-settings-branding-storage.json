@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "যে Google OAuth ক্লায়েন্টের মাধ্যমে প্রতিটি ওয়ার্কস্পেস তার ক্যালেন্ডার সংযুক্ত করে।",
+        "description": "যে Google OAuth ক্লায়েন্টের মাধ্যমে প্রতিটি ওয়ার্কস্পেস তার Google অ্যাকাউন্ট সংযুক্ত করে, ক্যালেন্ডার, Sheets, Docs ও Forms-এর জন্য।",
         "sections": {
           "oauth": {
             "title": "Google OAuth client"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "ওয়ার্কস্পেসকে Google Calendar সংযুক্ত করার অনুমতি দিন",
-            "hint": "বন্ধ: কোনো ওয়ার্কস্পেস সংযুক্ত করতে পারবে না, এবং কোনো ক্যালেন্ডারে লেখা বা পড়া হবে না।"
+            "label": "ওয়ার্কস্পেসকে Google সংযুক্ত করার অনুমতি দিন",
+            "hint": "বন্ধ: কোনো ওয়ার্কস্পেস সংযুক্ত করতে পারবে না, এবং Google থেকে কিছু পড়া বা Google-এ কিছু লেখা হবে না (ক্যালেন্ডার, Sheets, Docs, Forms)।"
           },
           "clientId": {
             "label": "Client ID",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "বুকিং ও ব্যস্ত সময়ের জন্য ওয়ার্কস্পেস যে Google OAuth ক্লায়েন্ট দিয়ে ক্যালেন্ডার সংযুক্ত করে।",
-        "tags": "Google / OAuth / Calendar"
+        "description": "বুকিং, Sheets, Docs ও Forms-এর জন্য ওয়ার্কস্পেস যে Google OAuth ক্লায়েন্ট দিয়ে নিজের Google অ্যাকাউন্ট সংযুক্ত করে।",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmail ইমেল",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "অ্যাডমিন - অ্যাপয়েন্টমেন্ট",
-        "description": "পুরো প্ল্যাটফর্মের জন্য একটিমাত্র Google Cloud OAuth ক্লায়েন্ট। এরপর প্রতিটি ওয়ার্কস্পেস অ্যাপয়েন্টমেন্ট, সেটিংস থেকে নিজের Google অ্যাকাউন্ট সংযুক্ত করে; ওয়ার্কস্পেস কখনও ক্লায়েন্ট ID বা সিক্রেট দেখে না।",
+        "description": "পুরো প্ল্যাটফর্মের জন্য একটিমাত্র Google Cloud OAuth ক্লায়েন্ট। এরপর প্রতিটি ওয়ার্কস্পেস সেটিংসের Google অ্যাকাউন্ট থেকে নিজের Google অ্যাকাউন্ট সংযুক্ত করে এবং কোন অনুমতি দেবে তা বেছে নেয়; ওয়ার্কস্পেস কখনও ক্লায়েন্ট ID বা সিক্রেট দেখে না।",
         "sections": {
           "oauth": {
             "title": "Google OAuth client",
-            "description": "ক্লায়েন্ট ID ও সিক্রেট ছাড়া ওয়ার্কস্পেসে Google Calendar অনুপলব্ধ দেখায় এবং বুকিং ক্যালেন্ডার ছাড়াই চলতে থাকে।"
+            "description": "ক্লায়েন্ট ID ও সিক্রেট ছাড়া ওয়ার্কস্পেসে Google অনুপলব্ধ দেখায়, বুকিং ক্যালেন্ডার ছাড়াই চলতে থাকে এবং ফ্লোর Google ধাপগুলো বাদ যায়।"
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "১. প্রজেক্ট ও API",
-              "body": "Google Cloud Console-এ একটি প্রজেক্ট তৈরি করুন এবং Google Calendar API চালু করুন।"
+              "body": "Google Cloud Console-এ একটি প্রজেক্ট তৈরি করুন এবং Google Calendar, Google Sheets, Google Docs, Google Drive ও Google Forms API চালু করুন। কোনো অনুমতি তখনই কাজ করে যখন তার API চালু থাকে।"
             },
             "redirect": {
               "title": "২. OAuth ক্লায়েন্ট",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "৩. সম্মতি স্ক্রিন",
-              "body": "calendar.events, calendar.freebusy ও calendar.calendarlist.readonly স্কোপ যোগ করুন, তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়।"
+              "body": "পণ্যটি যে স্কোপ চায় সেগুলো যোগ করুন (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়। drive স্কোপগুলো সীমাবদ্ধ এবং Google-এর পর্যালোচনা লাগে।"
             },
             "workspaces": {
               "title": "৪. ওয়ার্কস্পেস সংযুক্ত করে",
-              "body": "ক্লায়েন্ট ID ও সিক্রেট এখানে পেস্ট করে সংরক্ষণ করুন। এরপর অ্যাডমিনরা অ্যাপয়েন্টমেন্ট, সেটিংস, Google Calendar থেকে সংযুক্ত করেন।"
+              "body": "ক্লায়েন্ট ID ও সিক্রেট এখানে পেস্ট করে সংরক্ষণ করুন। এরপর অ্যাডমিনরা সেটিংস, ইন্টিগ্রেশন, Google অ্যাকাউন্ট থেকে, অথবা অ্যাপয়েন্টমেন্ট, সেটিংস, Google Calendar থেকে সংযুক্ত করেন।"
             }
           }
         }

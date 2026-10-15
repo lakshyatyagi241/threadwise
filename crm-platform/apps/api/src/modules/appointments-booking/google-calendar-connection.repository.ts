@@ -25,6 +25,13 @@ export interface CalendarConnectionRow {
   status: ConnectionStatus;
   statusReason: string | null;
   connectedAt: Date;
+  lastErrorCode: string | null;
+  lastErrorAt: Date | null;
+  lastErrorCapability: string | null;
+  lastUsedAt: Date | null;
+  nextReconcileAt: Date | null;
+  lastReconcileAt: Date | null;
+  reconcileFailures: number;
   rowVersion: number;
 }
 
@@ -44,6 +51,13 @@ function toRow(r: Raw): CalendarConnectionRow {
     status: r.status as ConnectionStatus,
     statusReason: s(r.status_reason),
     connectedAt: d(r.connected_at)!,
+    lastErrorCode: s(r.last_error_code),
+    lastErrorAt: d(r.last_error_at),
+    lastErrorCapability: s(r.last_error_capability),
+    lastUsedAt: d(r.last_used_at),
+    nextReconcileAt: d(r.next_reconcile_at),
+    lastReconcileAt: d(r.last_reconcile_at),
+    reconcileFailures: Number(r.reconcile_failures ?? 0),
     rowVersion: Number(r.row_version),
   };
 }
@@ -86,22 +100,28 @@ export class GoogleCalendarConnectionRepository {
         connected_by = EXCLUDED.connected_by, account_email = EXCLUDED.account_email, account_sub = EXCLUDED.account_sub,
         refresh_token_enc = EXCLUDED.refresh_token_enc, access_token_enc = EXCLUDED.access_token_enc,
         access_token_expires_at = EXCLUDED.access_token_expires_at, scopes = EXCLUDED.scopes,
-        status = 'active', status_reason = NULL, status_at = now(), connected_at = now()
+        status = 'active', status_reason = NULL, status_at = now(), connected_at = now(),
+        last_error_code = NULL, last_error_at = NULL, last_error_capability = NULL
       RETURNING *`);
     return toRow((res.rows as Raw[])[0]!);
   }
 
+  /**
+   * Stores a refreshed access token, but only onto the grant it was minted for: a refresh in flight while an admin connected another
+   * account must not put the old account's token on the new account's row.
+   */
   async saveAccessToken(
     tx: Tx,
     orgId: number,
     id: number,
     accessTokenEnc: string,
     expiresAt: Date,
+    forRefreshTokenEnc: string,
   ): Promise<void> {
     await tx.execute(sql`
       UPDATE appointment_calendar_connections
          SET access_token_enc = ${accessTokenEnc}, access_token_expires_at = ${expiresAt.toISOString()}::timestamptz
-       WHERE org_id = ${orgId} AND id = ${id}`);
+       WHERE org_id = ${orgId} AND id = ${id} AND refresh_token_enc = ${forRefreshTokenEnc}`);
   }
 
   /** Drops the cached access token (Google refused it): the next call refreshes. */
@@ -120,6 +140,73 @@ export class GoogleCalendarConnectionRepository {
        WHERE org_id = ${orgId} AND id = ${id} AND status = 'active'
        RETURNING id`);
     return (res.rows as Raw[]).length > 0;
+  }
+
+  /** Stamps "used just now", at most once a minute per workspace however many calls there are. */
+  async touchUsed(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE appointment_calendar_connections SET last_used_at = now()
+       WHERE org_id = ${orgId} AND id = ${id}
+         AND (last_used_at IS NULL OR last_used_at < now() - interval '1 minute')`);
+  }
+
+  /**
+   * Records an account-level failure (`code` and the capability that met it), or clears it (`code` null) after a success OF THAT CAPABILITY:
+   * a success of another one says nothing about it. Returns whether the row changed.
+   */
+  async setLastError(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    code: string | null,
+    capability: string | null,
+  ): Promise<boolean> {
+    if (code === null) {
+      const res = await tx.execute(sql`
+        UPDATE appointment_calendar_connections
+           SET last_error_code = NULL, last_error_at = NULL, last_error_capability = NULL
+         WHERE org_id = ${orgId} AND id = ${id} AND last_error_code IS NOT NULL
+           AND (last_error_capability IS NULL OR last_error_capability = ${capability}::text)
+         RETURNING id`);
+      return (res.rows as Raw[]).length > 0;
+    }
+    const res = await tx.execute(sql`
+      UPDATE appointment_calendar_connections
+         SET last_error_code = ${code}::text, last_error_at = now(), last_error_capability = ${capability}::text
+       WHERE org_id = ${orgId} AND id = ${id}
+         AND (last_error_code IS DISTINCT FROM ${code}::text OR last_error_capability IS DISTINCT FROM ${capability}::text)
+       RETURNING id`);
+    return (res.rows as Raw[]).length > 0;
+  }
+
+  /** The reconcile job's schedule: when it is next due, how many passes in a row failed, and (when a pass ran) when. */
+  async setReconcileSchedule(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    s: { nextAt: Date; failures: number; ran: boolean },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE appointment_calendar_connections
+         SET next_reconcile_at = ${s.nextAt.toISOString()}::timestamptz, reconcile_failures = ${s.failures},
+             last_reconcile_at = CASE WHEN ${s.ran} THEN now() ELSE last_reconcile_at END
+       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * Workspaces whose reconcile is due (across all of them: the caller is the scheduler, privileged), oldest first. Claims them by pushing
+   * `next_reconcile_at` a little way ahead in the same statement, so several workers asking at once get different workspaces.
+   */
+  async claimDueReconciles(tx: Tx, limit: number, claimMs: number): Promise<number[]> {
+    const res = await tx.execute(sql`
+      UPDATE appointment_calendar_connections c SET next_reconcile_at = now() + (${claimMs} || ' milliseconds')::interval
+       WHERE (c.org_id, c.id) IN (
+         SELECT org_id, id FROM appointment_calendar_connections
+          WHERE status = 'active' AND (next_reconcile_at IS NULL OR next_reconcile_at <= now())
+            AND scopes LIKE '%calendar.events%'
+          ORDER BY next_reconcile_at ASC NULLS FIRST LIMIT ${limit} FOR UPDATE SKIP LOCKED)
+       RETURNING c.org_id`);
+    return (res.rows as Raw[]).map((r) => Number(r.org_id));
   }
 
   async setCalendar(

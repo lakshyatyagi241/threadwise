@@ -1,5 +1,6 @@
 'use client';
 
+import { GoogleConnectionNotice } from './google-connection';
 import { useTranslations } from 'next-intl';
 import { Check, Field } from '../kit';
 import type { FormComponent } from '../types';
@@ -90,6 +91,7 @@ export const GoogleMeetForm: FormComponent = (p) => {
       >
         {t('meetIntro')}
       </Intro>
+      <GoogleConnectionNotice need="calendar" />
       <Field label={t('meetingTitle')} hint={t('meetingTitleHint')}>
         {Txt(p, 'title', t('meetingTitlePlaceholder'))}
       </Field>

@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Kalender",
-        "description": "Der Google-OAuth-Client, über den jeder Workspace seinen Kalender verbindet.",
+        "description": "Der Google-OAuth-Client, über den jeder Workspace sein Google-Konto für Kalender, Sheets, Docs und Forms verbindet.",
         "sections": {
           "oauth": {
             "title": "Google-OAuth-Client"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Workspaces erlauben, Google Kalender zu verbinden",
-            "hint": "Aus: Kein Workspace kann sich verbinden, und es wird weder in einen Kalender geschrieben noch daraus gelesen."
+            "label": "Workspaces erlauben, Google zu verbinden",
+            "hint": "Aus: Kein Workspace kann sich verbinden, und es wird nichts aus Google (Kalender, Sheets, Docs, Forms) gelesen oder dorthin geschrieben."
           },
           "clientId": {
             "label": "Client-ID",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Kalender",
-        "description": "Der Google-OAuth-Client, den Workspaces zum Verbinden ihres Kalenders für Buchungen und belegte Zeiten verwenden.",
-        "tags": "Google / OAuth / Kalender"
+        "description": "Der Google-OAuth-Client, den Workspaces zum Verbinden ihres Google-Kontos für Buchungen, Sheets, Docs und Forms verwenden.",
+        "tags": "Google / OAuth / Kalender / Sheets"
       },
       "googleMail": {
         "title": "Gmail-E-Mail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Kalender",
         "eyebrow": "Admin – Termine",
-        "description": "Ein Google-Cloud-OAuth-Client für die gesamte Plattform. Jeder Workspace verbindet danach sein eigenes Google-Konto unter Termine, Einstellungen; ein Workspace sieht die Client-ID oder das Geheimnis nie.",
+        "description": "Ein Google-Cloud-OAuth-Client für die gesamte Plattform. Jeder Workspace verbindet danach sein eigenes Google-Konto unter Einstellungen, Google-Konto und wählt, welche Berechtigungen er erteilt; ein Workspace sieht die Client-ID oder das Geheimnis nie.",
         "sections": {
           "oauth": {
             "title": "Google-OAuth-Client",
-            "description": "Ohne Client-ID und Geheimnis gilt Google Kalender für Workspaces als nicht verfügbar, und Buchungen laufen ohne Kalender weiter."
+            "description": "Ohne Client-ID und Geheimnis gilt Google für Workspaces als nicht verfügbar, Buchungen laufen ohne Kalender weiter, und die Google-Schritte in Flows werden übersprungen."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Projekt und API",
-              "body": "Erstellen Sie in der Google Cloud Console ein Projekt und aktivieren Sie die Google Calendar API."
+              "body": "Erstellen Sie in der Google Cloud Console ein Projekt und aktivieren Sie die APIs Google Calendar, Google Sheets, Google Docs, Google Drive und Google Forms. Eine Berechtigung funktioniert nur, wenn ihre API aktiviert ist."
             },
             "redirect": {
               "title": "2. OAuth-Client",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Zustimmungsbildschirm",
-              "body": "Fügen Sie die Bereiche calendar.events, calendar.freebusy und calendar.calendarlist.readonly hinzu und veröffentlichen Sie dann die App: Im Testmodus beendet Google jede Freigabe nach 7 Tagen, und Workspaces müssen sich neu verbinden."
+              "body": "Fügen Sie die Bereiche hinzu, die das Produkt anfordert (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), und veröffentlichen Sie dann die App: Im Testmodus beendet Google jede Freigabe nach 7 Tagen, und Workspaces müssen sich neu verbinden. Die Drive-Bereiche sind eingeschränkt und erfordern die Prüfung durch Google."
             },
             "workspaces": {
               "title": "4. Workspaces verbinden sich",
-              "body": "Fügen Sie Client-ID und Geheimnis hier ein und speichern Sie. Admins verbinden sich danach unter Termine, Einstellungen, Google Kalender."
+              "body": "Fügen Sie Client-ID und Geheimnis hier ein und speichern Sie. Admins verbinden sich danach unter Einstellungen, Integrationen, Google-Konto oder unter Termine, Einstellungen, Google Kalender."
             }
           }
         }

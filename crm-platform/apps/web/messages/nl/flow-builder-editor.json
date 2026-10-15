@@ -433,7 +433,21 @@
           "setupOpen": "Open je formulier → <mono>⋮-menu</mono> → <mono>Scripteditor</mono>",
           "setupDownload": "<link>Download het script (.gs)</link> en plak het",
           "setupTrigger": "Voeg een trigger toe: <mono>onFormSubmit</mono> · Vanuit formulier · Bij verzenden van formulier",
-          "setupWarning": "Zonder dit script slaat het formulier de antwoorden wel op in Google Formulieren, maar gaat de flow niet verder."
+          "setupWarning": "Zonder dit script slaat het formulier de antwoorden wel op in Google Formulieren, maar gaat de flow niet verder.",
+          "noListing": "Je bestanden kunnen niet worden getoond omdat de toestemming voor de Drive-bestandslijst niet is gegeven op de Google-accountpagina. Plak in plaats daarvan de link of het id.",
+          "connection": {
+            "open": "Google-account openen",
+            "permission": {
+              "calendar": "Agenda",
+              "sheets": "Sheets",
+              "docs": "Docs en Drive",
+              "forms": "Formulieren"
+            },
+            "unavailable": "Google is niet ingesteld voor dit platform, dus deze stap mislukt wanneer de flow draait.",
+            "disconnected": "Er is geen Google-account gekoppeld, dus deze stap mislukt wanneer de flow draait. Koppel eerst Google.",
+            "needsReconnect": "Google accepteert het gekoppelde account niet meer, dus deze stap mislukt wanneer de flow draait. Koppel Google eerst opnieuw.",
+            "missing": "Het gekoppelde Google-account heeft de toestemming {permission} niet gegeven, dus deze stap mislukt wanneer de flow draait."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1711,7 +1725,8 @@
             "date_field_match": "Planning: ten opzichte van een datum bij het contact (verjaardag…)",
             "schedule": "Planning: op een datum en tijd",
             "shopify_event": "Commerce: een Shopify-winkelevent",
-            "woocommerce_event": "Commerce: een WooCommerce-winkelevent"
+            "woocommerce_event": "Commerce: een WooCommerce-winkelevent",
+            "segment_leave": "Doelgroep: wanneer een contact een segment verlaat"
           },
           "tagsLoading": "Tags laden…",
           "tagPick": "— kies tag —",
@@ -1805,7 +1820,8 @@
             "productId": "Product-ID (optioneel)",
             "productIdHint": "Leeg = elk product in de bestelling.",
             "storeNote": "De klant wordt via het telefoonnummer gekoppeld aan een opgeslagen contact; voor een bestelling wordt niemand aangemaakt. „Toegevoegd aan winkelwagen” en „product bekeken” worden niet aangeboden: de winkel meldt deze niet.",
-            "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet."
+            "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet.",
+            "segmentLeaveHint": "Wordt één keer uitgevoerd telkens wanneer een contact dat in dit segment zat buiten het segment wordt aangetroffen na een update, een tag of een lijstweergave. Een vertrekkend contact wordt alleen opgemerkt als de flow het eerder in het segment heeft gezien."
           }
         }
       },
@@ -2225,7 +2241,8 @@
         "date_field_match": "bij datumovereenkomst",
         "schedule": "op schema",
         "shopify_event": "bij Shopify-gebeurtenis",
-        "woocommerce_event": "bij WooCommerce-gebeurtenis"
+        "woocommerce_event": "bij WooCommerce-gebeurtenis",
+        "segment_leave": "bij verlaten segment"
       },
       "ports": {
         "manual": "handmatig",

@@ -1,0 +1,172 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Google account",
+        "description": "Connect one Google account for Calendar, Sheets, Docs, Forms and Meet in your flows.",
+        "keywords": "google, google account, calendar, sheets, docs, forms, meet, drive, oauth, connect google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "page": {
+      "eyebrow": "Workspace",
+      "title": "Google account",
+      "subtitle": "Connect once. The same Google account powers your booking calendar, Meet links and the Sheets, Docs and Forms steps in your flows.",
+      "loading": "Loading your Google account...",
+      "forbidden": {
+        "title": "You cannot open this page",
+        "body": "Your role does not include viewing the Google account. Ask a workspace admin."
+      },
+      "status": {
+        "unavailable": "Not set up",
+        "disconnected": "Not connected",
+        "connected": "Connected",
+        "needs_reconnect": "Needs reconnecting"
+      },
+      "outcome": {
+        "connected": "Google account connected.",
+        "denied": "Google was not connected: the permission screen was cancelled.",
+        "failed": "Connecting Google did not finish. Try again.",
+        "expired": "That connection attempt expired. Press the button to start again.",
+        "not_configured": "Google is not set up for this platform yet. Ask your platform administrator.",
+        "missing_scope": "Google did not give every permission you asked for. What was already allowed still works; add the missing ones again and keep every box ticked.",
+        "cancelled": "You cancelled. Nothing was connected."
+      },
+      "actions": {
+        "connect": "Connect Google account",
+        "reconnect": "Reconnect Google",
+        "addPermissions": "Add permissions",
+        "disconnect": "Disconnect",
+        "working": "Opening Google...",
+        "retry": "Try again"
+      },
+      "unavailable": {
+        "title": "Google is not set up for this platform",
+        "body": "The platform administrator has to add the Google OAuth client before anyone can connect. Until then Google steps in your flows fail with a message that says so, and bookings carry on without a calendar."
+      },
+      "reconnect": {
+        "title": "Google stopped accepting this connection",
+        "body": "The permission was withdrawn, the password changed, or the grant expired. Connect again to restore it; your choices are kept.",
+        "bodyAccount": "Google stopped accepting {account}. Connect it again to restore it; your choices are kept."
+      },
+      "stats": {
+        "status": "Status",
+        "calendars": "Calendars",
+        "calendarsValue": "{count} available",
+        "calendarsNone": "none",
+        "permissions": "Permissions",
+        "permissionsValue": "{granted} of {total}",
+        "lastUsed": "Last used",
+        "never": "never",
+        "live": "live",
+        "idle": "idle"
+      },
+      "account": {
+        "title": "Connected account",
+        "email": "Account",
+        "calendar": "Calendar for bookings and Meet",
+        "primaryCalendar": "Your main calendar",
+        "changeCalendar": "Change calendar",
+        "connectedAgo": "Connected {when}",
+        "none": "No Google account is linked.",
+        "noneBody": "Until you connect, Google steps in your flows fail with a message that says to connect Google, and bookings are not added to a calendar."
+      },
+      "permissions": {
+        "title": "What Google may be used for",
+        "intro": "Tick what you want to allow. Google shows exactly these permissions on its screen, and you can add more later without losing what is already allowed.",
+        "allowed": "Allowed",
+        "notAllowed": "Not allowed",
+        "allow": "Allow",
+        "restricted": "Restricted by Google",
+        "restrictedNote": "Google treats this permission as restricted: the platform needs Google's review before it works for many workspaces. Leave it off unless you need it.",
+        "nothingTicked": "Tick at least one permission.",
+        "calendar": {
+          "name": "Calendar",
+          "body": "Add bookings and Meet links to your calendar and hide busy times from the booking page.",
+          "usedBy": "Booking calendar, Book appointment and Google Meet steps"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "body": "Add a row to a sheet, look a row up, check a cell or copy a row into a contact.",
+          "usedBy": "Google Sheets, Check Google Sheet field, Save contact from Google Sheet"
+        },
+        "docs": {
+          "name": "Docs and Drive",
+          "body": "Copy a template document, fill it in and share the copy by link.",
+          "usedBy": "Google Docs step"
+        },
+        "forms": {
+          "name": "Forms",
+          "body": "Read a form's public link so the flow can send it to the customer.",
+          "usedBy": "Google Form step"
+        },
+        "drive_listing": {
+          "name": "Drive file list",
+          "body": "List your sheets, documents and forms by name in the flow builder, so you can pick instead of pasting a link.",
+          "usedBy": "File pickers in the flow builder"
+        }
+      },
+      "lastError": {
+        "title": "The last problem Google reported",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google no longer accepts the connected account. Connect again.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "The platform's Google client is missing or switched off.",
+        "GOOGLE_API_NOT_ENABLED": "The platform's Google Cloud project has not enabled an API this feature needs. The platform administrator has to enable it.",
+        "GOOGLE_SCOPE_MISSING": "A step needed a permission this account was not given. Add it above.",
+        "GOOGLE_RATE_LIMITED": "Google is limiting requests right now. Steps are retried a moment later.",
+        "GOOGLE_UNAVAILABLE": "Google did not answer. It is tried again on the next use.",
+        "other": "Google reported a problem."
+      },
+      "usedBy": {
+        "title": "Used by",
+        "book": "Book appointment step",
+        "meet": "Google Meet step",
+        "sheets": "Google Sheets steps",
+        "docs": "Google Docs step",
+        "forms": "Google Form step",
+        "flow": "flow"
+      },
+      "disconnectConfirm": {
+        "title": "Disconnect Google?",
+        "body": "Calendar sync for bookings and every Google step in your flows stop until you connect again. Events and files already created stay in Google.",
+        "confirm": "Disconnect",
+        "cancel": "Keep connected"
+      },
+      "disconnected": "Google account disconnected.",
+      "failure": {
+        "notConfigured": "Google is not set up for this platform. Ask your platform administrator.",
+        "generic": "Something went wrong. Try again."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "body": "Only the permissions you tick are requested. The connection is stored encrypted, belongs to the workspace and is used only by the features listed here. Disconnecting withdraws it at Google."
+      }
+    },
+    "consent": {
+      "title": "Confirm Google connection",
+      "loading": "Loading your Google connection...",
+      "question": "Connect {email} to {workspace} for {permissions}?",
+      "permissions": "Permissions",
+      "notGiven": "not given",
+      "missing": "Google did not give: {permissions}. If you confirm, only what was given is connected.",
+      "replaces": "This replaces the Google account {email} that is connected now. The access of the old account is withdrawn.",
+      "onlyYou": "Only the person who pressed Connect can finish this, from this workspace. If somebody sent you this link, do not confirm it: close the page.",
+      "unknownAccount": "this Google account",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "working": "Working...",
+      "failure": {
+        "notYours": "This Google connection was started by someone else, so it was not connected. Ask them to connect it themselves.",
+        "expired": "This Google connection took too long to confirm. Go back and press Connect again.",
+        "used": "This Google connection was already confirmed, cancelled or refused. Go back and press Connect again if you still need it.",
+        "notFound": "This Google connection is not waiting for confirmation, or it belongs to another workspace.",
+        "generic": "Something went wrong and nothing was changed. Try again.",
+        "nothingConnected": "Nothing was connected."
+      }
+    }
+  }
+}

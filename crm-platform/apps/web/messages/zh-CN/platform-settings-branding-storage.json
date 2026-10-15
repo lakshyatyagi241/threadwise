@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google 日历",
-        "description": "每个工作区连接日历时使用的 Google OAuth 客户端。",
+        "description": "每个工作区用于连接其 Google 账户（用于日历、Sheets、Docs 和 Forms）的 Google OAuth 客户端。",
         "sections": {
           "oauth": {
             "title": "Google OAuth 客户端"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "允许工作区连接 Google 日历",
-            "hint": "关闭时：任何工作区都无法连接，也不会写入或读取日历。"
+            "label": "允许工作区连接 Google",
+            "hint": "关闭时：任何工作区都无法连接，也不会从 Google（日历、Sheets、Docs、Forms）读取或写入任何内容。"
           },
           "clientId": {
             "label": "客户端 ID",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google 日历",
-        "description": "工作区用于连接日历以进行预约和忙碌时段查询的 Google OAuth 客户端。",
-        "tags": "Google / OAuth / 日历"
+        "description": "工作区用于连接其 Google 账户以进行预订、Sheets、Docs 和 Forms 的 Google OAuth 客户端。",
+        "tags": "Google / OAuth / 日历 / Sheets"
       },
       "googleMail": {
         "title": "Gmail 邮件",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google 日历",
         "eyebrow": "管理员 - 预约",
-        "description": "整个平台使用一个 Google Cloud OAuth 客户端。每个工作区随后可在“预约 > 设置”中连接自己的 Google 账户；工作区永远看不到客户端 ID 或密钥。",
+        "description": "整个平台使用一个 Google Cloud OAuth 客户端。每个工作区随后可在“设置”中的“Google 账户”里连接自己的 Google 账户，并选择授予哪些权限；工作区永远看不到客户端 ID 或密钥。",
         "sections": {
           "oauth": {
             "title": "Google OAuth 客户端",
-            "description": "没有客户端 ID 和密钥时，工作区会看到 Google 日历不可用，预约仍可继续，只是没有日历。"
+            "description": "没有客户端 ID 和密钥时，工作区会看到 Google 不可用，预订仍可继续（只是没有日历），流程中的 Google 步骤会被跳过。"
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. 项目与 API",
-              "body": "在 Google Cloud Console 中创建项目并启用 Google Calendar API。"
+              "body": "在 Google Cloud Console 中创建项目，并启用 Google Calendar、Google Sheets、Google Docs、Google Drive 和 Google Forms API。只有启用了相应的 API，权限才能生效。"
             },
             "redirect": {
               "title": "2. OAuth 客户端",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. 同意屏幕",
-              "body": "添加 calendar.events、calendar.freebusy 和 calendar.calendarlist.readonly 权限范围，然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。"
+              "body": "添加产品所请求的权限范围（calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、drive.metadata.readonly），然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。Drive 权限范围属于受限范围，需要通过 Google 的审核。"
             },
             "workspaces": {
               "title": "4. 工作区连接",
-              "body": "在此粘贴客户端 ID 和密钥并保存。管理员随后可在“预约 > 设置 > Google 日历”中连接。"
+              "body": "在此粘贴客户端 ID 和密钥并保存。管理员随后可在“设置 > 集成 > Google 账户”或“预约 > 设置 > Google 日历”中连接。"
             }
           }
         }

@@ -1332,7 +1332,8 @@
             "date_field_match": "スケジュール: 連絡先の日付を基準（誕生日など）",
             "schedule": "スケジュール: 指定の日時",
             "shopify_event": "コマース: Shopifyストアのイベント",
-            "woocommerce_event": "コマース: WooCommerceストアのイベント"
+            "woocommerce_event": "コマース: WooCommerceストアのイベント",
+            "segment_leave": "オーディエンス: コンタクトがセグメントから外れたとき"
           },
           "tagsLoading": "タグを読み込み中…",
           "tagPick": "— タグを選択 —",
@@ -1426,7 +1427,8 @@
             "productId": "商品ID（任意）",
             "productIdHint": "空欄の場合は注文内の任意の商品。",
             "storeNote": "お客様は電話番号で保存済みの連絡先と照合されます。注文によって新しい連絡先が作成されることはありません。「カートに追加」と「商品閲覧」は提供していません。ストア側からこれらの情報が送られないためです。",
-            "updatedNote": "担当者またはインポートによって連絡先が変更されるたびに実行されます。別のフローによる変更では開始されません。"
+            "updatedNote": "担当者またはインポートによって連絡先が変更されるたびに実行されます。別のフローによる変更では開始されません。",
+            "segmentLeaveHint": "このセグメント内にいたコンタクトが、更新、タグ付け、またはリスト化の後にセグメント外にいると判明するたびに、1回実行されます。コンタクトの離脱は、フローが先にセグメント内にいるのを確認していた場合にのみ検出されます。"
           }
         }
       },
@@ -1716,7 +1718,21 @@
           "setupOpen": "フォームを開く → <mono>⋮ メニュー</mono> → <mono>スクリプトエディタ</mono>",
           "setupDownload": "<link>スクリプト（.gs）をダウンロード</link>して貼り付けてください",
           "setupTrigger": "トリガーを追加: <mono>onFormSubmit</mono> · フォームから · フォーム送信時",
-          "setupWarning": "このスクリプトがない場合、フォームへの回答はGoogleフォームに記録されますが、フローは再開しません。"
+          "setupWarning": "このスクリプトがない場合、フォームへの回答はGoogleフォームに記録されますが、フローは再開しません。",
+          "noListing": "Google アカウントのページで Drive のファイル一覧の権限が付与されていないため、ファイルを一覧表示できません。リンクまたは ID を貼り付けてください。",
+          "connection": {
+            "open": "Google アカウントを開く",
+            "permission": {
+              "calendar": "カレンダー",
+              "sheets": "Sheets",
+              "docs": "Docs と Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "このプラットフォームではGoogleが設定されていないため、フローの実行時にこのステップは失敗します。",
+            "disconnected": "Googleアカウントが接続されていないため、フローの実行時にこのステップは失敗します。先にGoogleを接続してください。",
+            "needsReconnect": "接続中のアカウントがGoogleに受け付けられなくなったため、フローの実行時にこのステップは失敗します。先にGoogleを再接続してください。",
+            "missing": "接続されたGoogleアカウントに{permission}の権限が付与されていないため、フローの実行時にこのステップは失敗します。"
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2367,7 +2383,8 @@
         "date_field_match": "日付一致時",
         "schedule": "スケジュール時",
         "shopify_event": "Shopifyイベント発生時",
-        "woocommerce_event": "WooCommerceイベント発生時"
+        "woocommerce_event": "WooCommerceイベント発生時",
+        "segment_leave": "セグメント離脱時"
       },
       "ports": {
         "manual": "手動",

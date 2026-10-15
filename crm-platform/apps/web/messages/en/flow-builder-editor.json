@@ -1729,7 +1729,21 @@
           "setupOpen": "Open your form → <mono>⋮ menu</mono> → <mono>Script editor</mono>",
           "setupDownload": "<link>Download the script (.gs)</link> and paste it",
           "setupTrigger": "Add a trigger: <mono>onFormSubmit</mono> · From form · On form submit",
-          "setupWarning": "Without this script the form will still record answers in Google Forms, but the flow won't resume."
+          "setupWarning": "Without this script the form will still record answers in Google Forms, but the flow won't resume.",
+          "noListing": "Your files cannot be listed because the Drive file list permission was not given on the Google account page. Paste the link or id instead.",
+          "connection": {
+            "unavailable": "Google is not set up for this platform, so this step fails when the flow runs.",
+            "disconnected": "No Google account is connected, so this step fails when the flow runs. Connect Google first.",
+            "needsReconnect": "Google no longer accepts the connected account, so this step fails when the flow runs. Reconnect Google first.",
+            "missing": "The connected Google account was not given the {permission} permission, so this step fails when the flow runs.",
+            "open": "Open Google account",
+            "permission": {
+              "calendar": "Calendar",
+              "sheets": "Sheets",
+              "docs": "Docs and Drive",
+              "forms": "Forms"
+            }
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",

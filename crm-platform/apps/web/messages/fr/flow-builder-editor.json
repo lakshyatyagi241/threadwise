@@ -1332,7 +1332,8 @@
             "date_field_match": "Programmation : par rapport à une date du contact (anniversaire…)",
             "schedule": "Programmation : à une date et une heure",
             "shopify_event": "Commerce : un événement de boutique Shopify",
-            "woocommerce_event": "Commerce : un événement de boutique WooCommerce"
+            "woocommerce_event": "Commerce : un événement de boutique WooCommerce",
+            "segment_leave": "Audience : quand un contact quitte un segment"
           },
           "tagsLoading": "Chargement des étiquettes…",
           "tagPick": "— choisir une étiquette —",
@@ -1426,7 +1427,8 @@
             "productId": "ID du produit (facultatif)",
             "productIdHint": "Vide = n'importe quel produit de la commande.",
             "storeNote": "Le client est associé à un contact enregistré par son numéro de téléphone ; aucun contact n'est créé pour une commande. « Ajouté au panier » et « produit consulté » ne sont pas proposés : la boutique ne les transmet pas.",
-            "updatedNote": "Se déclenche à chaque modification d'un contact par une personne ou un import. Une modification faite par un autre flux ne le démarre pas."
+            "updatedNote": "Se déclenche à chaque modification d'un contact par une personne ou un import. Une modification faite par un autre flux ne le démarre pas.",
+            "segmentLeaveHint": "S'exécute une fois chaque fois qu'un contact qui se trouvait dans ce segment est constaté en dehors après avoir été mis à jour, étiqueté ou listé. Le départ d'un contact n'est détecté que si le flux l'a d'abord vu dans le segment."
           }
         }
       },
@@ -1716,7 +1718,21 @@
           "setupOpen": "Ouvrez votre formulaire → <mono>menu ⋮</mono> → <mono>Éditeur de script</mono>",
           "setupDownload": "<link>Téléchargez le script (.gs)</link> et collez-le",
           "setupTrigger": "Ajoutez un déclencheur : <mono>onFormSubmit</mono> · Depuis le formulaire · À l’envoi du formulaire",
-          "setupWarning": "Sans ce script, le formulaire enregistrera toujours les réponses dans Google Forms, mais le flux ne reprendra pas."
+          "setupWarning": "Sans ce script, le formulaire enregistrera toujours les réponses dans Google Forms, mais le flux ne reprendra pas.",
+          "noListing": "Vos fichiers ne peuvent pas être listés, car l’autorisation de liste des fichiers Drive n’a pas été accordée sur la page du compte Google. Collez plutôt le lien ou l’identifiant.",
+          "connection": {
+            "open": "Ouvrir le compte Google",
+            "permission": {
+              "calendar": "Agenda",
+              "sheets": "Sheets",
+              "docs": "Docs et Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google n'est pas configuré pour cette plateforme : cette étape échouera à l'exécution du flux.",
+            "disconnected": "Aucun compte Google n'est connecté : cette étape échouera à l'exécution du flux. Connectez d'abord Google.",
+            "needsReconnect": "Google n'accepte plus le compte connecté : cette étape échouera à l'exécution du flux. Reconnectez d'abord Google.",
+            "missing": "Le compte Google connecté n'a pas reçu l'autorisation {permission} : cette étape échouera à l'exécution du flux."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2367,7 +2383,8 @@
         "date_field_match": "à la correspondance d'une date",
         "schedule": "selon le planning",
         "shopify_event": "à un événement Shopify",
-        "woocommerce_event": "à un événement WooCommerce"
+        "woocommerce_event": "à un événement WooCommerce",
+        "segment_leave": "à la sortie du segment"
       },
       "ports": {
         "manual": "manuel",

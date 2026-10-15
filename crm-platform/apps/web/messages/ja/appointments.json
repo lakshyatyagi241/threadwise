@@ -41,7 +41,10 @@
       "notStarted": "この操作は予約が開始した後にのみ行えます。",
       "alreadyStarted": "この予約はすでに開始しているため、変更できません。",
       "bookingOff": "現在、このサービスは予約を受け付けていません。",
-      "notDeletable": "今後の予約が残っている間は削除できません。"
+      "notDeletable": "今後の予約が残っている間は削除できません。",
+      "notDrifted": "この予約はすでにGoogleのイベントと一致しています。最新の状態に更新しました。",
+      "calendarNotConnected": "Google Calendarが接続されていません。Googleアカウントのページで再接続してから、もう一度お試しください。",
+      "calendarFailed": "Googleから応答がないか、変更が拒否されました。しばらくしてからもう一度お試しください。"
     },
     "picker": {
       "timeZone": "タイムゾーン",
@@ -156,7 +159,8 @@
       "yesterday": "昨日",
       "rowLabel": "予約を開く: {title}",
       "noName": "名前なし",
-      "needsReview": "要確認"
+      "needsReview": "要確認",
+      "outOfSync": "カレンダーが同期されていません"
     },
     "row": {
       "moreFor": "{title}のその他の操作",
@@ -269,7 +273,13 @@
       "rescheduled": "予約を新しい日時に移動しました。",
       "linkCopied": "管理リンクをコピーしました。",
       "copyFailed": "リンクをコピーできませんでした。",
-      "declined": "リクエストを辞退しました。"
+      "declined": "リクエストを辞退しました。",
+      "calendarPushed": "Googleに反映しました。イベントはこの予約と一致しています。",
+      "calendarAccepted": {
+        "cancelled": "Googleの変更を受け入れました。予約をキャンセルしました。",
+        "rescheduled": "Googleの変更を受け入れました。予約を新しい時間に変更しました。",
+        "acknowledged": "Googleの変更を受け入れました。予約はそのままです。"
+      }
     },
     "typesList": {
       "breadcrumb": "パンくずリスト",
@@ -962,7 +972,7 @@
         "calendarSaved": "カレンダーを保存しました。",
         "confirmOff": {
           "title": "Googleカレンダーを切断しますか?",
-          "message": "新しい予約はカレンダーに書き込まれなくなり、予定も読み取られなくなります。カレンダーにすでにある予定は残り、このアクセスの取り消しがGoogleに通知されます。",
+          "message": "新しい予約はカレンダーに書き込まれなくなり、予定も読み取られなくなります。この接続を共有しているため、フローの Google ステップも停止します。カレンダーにすでにある予定は残り、このアクセスの取り消しが Google に通知されます。",
           "confirm": "切断",
           "cancel": "そのままにする"
         },
@@ -972,7 +982,8 @@
           "failed": "接続が完了しませんでした。もう一度お試しください。繰り返し失敗する場合は、プラットフォーム管理者にGoogleの設定確認を依頼してください。",
           "expired": "試行に時間がかかりすぎました。「接続」を押してやり直してください。",
           "not_configured": "このプラットフォームではGoogleカレンダーが設定されていません。プラットフォーム管理者にGoogle OAuthクライアントの追加を依頼してください。",
-          "missing_scope": "必要なカレンダー権限がすべては付与されませんでした。もう一度接続し、すべてのチェックボックスをオンのままにしてください。"
+          "missing_scope": "必要なカレンダー権限がすべては付与されませんでした。もう一度接続し、すべてのチェックボックスをオンのままにしてください。",
+          "cancelled": "接続をキャンセルしました。何も接続されていません。"
         },
         "whatTitle": "この機能でできること",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "さらに読み込む",
       "loadMorePast": "過去をさらに読み込む",
       "noType": "予約"
+    },
+    "sync": {
+      "title": "カレンダーが同期されていません",
+      "reason": {
+        "event_deleted": "イベントがGoogle Calendarで削除またはキャンセルされました。",
+        "event_missing": "イベントがGoogle Calendarに見つかりません。",
+        "time_changed": "イベントがGoogle Calendarで別の時間に移動されました。",
+        "attendees_changed": "イベントのゲストがGoogle Calendarで変更されました。"
+      },
+      "googleShows": "Googleの表示: {time}",
+      "notChanged": "この予約は変更されていません。どちらが正しいか選択してください。",
+      "found": "検出: {when}",
+      "push": "こちらの時間をGoogleに反映",
+      "accept": "Googleの変更を受け入れる",
+      "keep": "後で",
+      "acceptTitle": {
+        "cancel": "この予約をキャンセルしますか？",
+        "reschedule": "この予約をGoogleの時間に変更しますか？",
+        "acknowledge": "Googleに表示されているゲストを受け入れますか？"
+      },
+      "acceptMessage": {
+        "cancel": "イベントがGoogleから削除されたため、この予約はキャンセルされ、その時間枠は再び空きになります。通常のキャンセルと同様に、お客様に通知されます。",
+        "reschedule": "この予約は{time}に変更されます。通常の日時変更と同様に、お客様に新しい時間が通知されます。",
+        "acknowledge": "予約自体は変更されません。Googleのゲスト一覧が記憶され、この通知は消えます。"
+      },
+      "acceptConfirm": {
+        "cancel": "予約をキャンセル",
+        "reschedule": "予約を変更",
+        "acknowledge": "受け入れる"
+      }
     }
   }
 }

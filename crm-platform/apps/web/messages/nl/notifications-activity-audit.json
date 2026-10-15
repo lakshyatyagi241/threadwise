@@ -379,6 +379,10 @@
         "test": {
           "label": "Testmelding",
           "hint": "De test die je verstuurt vanuit Browsermeldingen, zodat je ziet dat het belletje, de pop-up en de tabtitel werken."
+        },
+        "appointment_calendar_drift": {
+          "label": "Afspraak niet gesynchroniseerd met Google Calendar",
+          "hint": "Het Google Calendar-event van een aankomende afspraak is verwijderd, verplaatst of de gasten zijn gewijzigd. De afspraak zelf is niet gewijzigd; u kiest wat er gebeurt."
         }
       },
       "loading": "Je voorkeuren laden",

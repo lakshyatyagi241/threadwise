@@ -16,6 +16,7 @@ const tile = (id: string, over: Partial<ResolvedSettingsTile> = {}): ResolvedSet
 const ALL = [
   'email',
   'google-sheets-addon',
+  'google-account',
   'woocommerce',
   'shopify',
   'addons',
@@ -27,10 +28,11 @@ const ALL = [
 ].map((id) => tile(id));
 
 describe('toolTilesFor', () => {
-  it('puts Shopify, WooCommerce, Google Sheets and Email on the Integrations tab, in that order', () => {
+  it('puts Shopify, WooCommerce, the Google account, Google Sheets and Email on the Integrations tab, in that order', () => {
     expect(toolTilesFor('integrations', ALL).map((t) => t.id)).toEqual([
       'shopify',
       'woocommerce',
+      'google-account',
       'google-sheets-addon',
       'email',
     ]);

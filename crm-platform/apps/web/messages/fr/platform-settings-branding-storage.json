@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "Le client OAuth Google par lequel chaque espace de travail connecte son agenda.",
+        "description": "Le client OAuth Google par lequel chaque espace de travail connecte son compte Google, pour l’agenda, Sheets, Docs et Forms.",
         "sections": {
           "oauth": {
             "title": "Client OAuth Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Autoriser les espaces de travail à connecter Google Agenda",
-            "hint": "Désactivé : aucun espace de travail ne peut se connecter, et rien n’est écrit ni lu dans un agenda."
+            "label": "Autoriser les espaces de travail à connecter Google",
+            "hint": "Désactivé : aucun espace de travail ne peut se connecter, et rien n’est lu ni écrit dans Google (agenda, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "ID client",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "Le client OAuth Google qu’utilisent les espaces de travail pour connecter leur agenda aux réservations et aux créneaux occupés.",
-        "tags": "Google / OAuth / Agenda"
+        "description": "Le client OAuth Google qu’utilisent les espaces de travail pour connecter leur compte Google aux réservations, à Sheets, Docs et Forms.",
+        "tags": "Google / OAuth / Agenda / Sheets"
       },
       "googleMail": {
         "title": "E-mail Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Agenda",
         "eyebrow": "Admin - Rendez-vous",
-        "description": "Un seul client OAuth Google Cloud pour toute la plateforme. Chaque espace de travail connecte ensuite son propre compte Google depuis Rendez-vous, Paramètres ; un espace de travail ne voit jamais l’ID ni le secret du client.",
+        "description": "Un seul client OAuth Google Cloud pour toute la plateforme. Chaque espace de travail connecte ensuite son propre compte Google depuis Compte Google dans Paramètres, et choisit les autorisations à accorder ; un espace de travail ne voit jamais l’ID ni le secret du client.",
         "sections": {
           "oauth": {
             "title": "Client OAuth Google",
-            "description": "Sans ID et secret de client, les espaces de travail voient Google Agenda comme indisponible, et les réservations continuent sans agenda."
+            "description": "Sans ID et secret de client, les espaces de travail voient Google comme indisponible, les réservations continuent sans agenda et les étapes Google des flux sont ignorées."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Projet et API",
-              "body": "Dans Google Cloud Console, créez un projet et activez l’API Google Agenda."
+              "body": "Dans Google Cloud Console, créez un projet et activez les API Google Calendar, Google Sheets, Google Docs, Google Drive et Google Forms. Une autorisation ne fonctionne que si son API est activée."
             },
             "redirect": {
               "title": "2. Client OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Écran de consentement",
-              "body": "Ajoutez les portées calendar.events, calendar.freebusy et calendar.calendarlist.readonly, puis publiez l’application : en mode test, Google met fin à chaque autorisation au bout de 7 jours et les espaces de travail devront se reconnecter."
+              "body": "Ajoutez les portées demandées par le produit (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), puis publiez l’application : en mode test, Google met fin à chaque autorisation au bout de 7 jours et les espaces de travail devront se reconnecter. Les portées drive sont restreintes et nécessitent la validation de Google."
             },
             "workspaces": {
               "title": "4. Connexion des espaces de travail",
-              "body": "Collez l’ID et le secret du client ici, puis enregistrez. Les administrateurs se connectent ensuite depuis Rendez-vous, Paramètres, Google Agenda."
+              "body": "Collez l’ID et le secret du client ici, puis enregistrez. Les administrateurs se connectent ensuite depuis Paramètres, Intégrations, Compte Google, ou depuis Rendez-vous, Paramètres, Google Agenda."
             }
           }
         }

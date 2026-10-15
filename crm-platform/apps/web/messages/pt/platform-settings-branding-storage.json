@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "O cliente OAuth do Google pelo qual cada espaço de trabalho conecta sua agenda.",
+        "description": "O cliente OAuth do Google pelo qual cada espaço de trabalho conecta sua conta do Google, para a agenda, Sheets, Docs e Forms.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth do Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Permitir que os espaços de trabalho conectem o Google Agenda",
-            "hint": "Desativado: nenhum espaço de trabalho pode conectar, e nada é gravado nem lido de uma agenda."
+            "label": "Permitir que os espaços de trabalho conectem o Google",
+            "hint": "Desativado: nenhum espaço de trabalho pode conectar, e nada é lido nem gravado no Google (agenda, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "ID do cliente",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "O cliente OAuth do Google que os espaços de trabalho usam para conectar sua agenda para reservas e horários ocupados.",
-        "tags": "Google / OAuth / Agenda"
+        "description": "O cliente OAuth do Google que os espaços de trabalho usam para conectar sua conta do Google para reservas, Sheets, Docs e Forms.",
+        "tags": "Google / OAuth / Agenda / Sheets"
       },
       "googleMail": {
         "title": "E-mail Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Agenda",
         "eyebrow": "Admin - Agendamentos",
-        "description": "Um único cliente OAuth do Google Cloud para toda a plataforma. Cada espaço de trabalho então conecta a própria conta do Google em Agendamentos, Configurações; um espaço de trabalho nunca vê o ID ou o segredo do cliente.",
+        "description": "Um único cliente OAuth do Google Cloud para toda a plataforma. Cada espaço de trabalho então conecta a própria conta do Google em Conta do Google, nas Configurações, e escolhe quais permissões conceder; um espaço de trabalho nunca vê o ID ou o segredo do cliente.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth do Google",
-            "description": "Sem ID e segredo do cliente, os espaços de trabalho veem o Google Agenda como indisponível e os agendamentos continuam sem agenda."
+            "description": "Sem ID e segredo do cliente, os espaços de trabalho veem o Google como indisponível, as reservas continuam sem agenda e as etapas do Google nos fluxos são ignoradas."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Projeto e API",
-              "body": "No Console do Google Cloud, crie um projeto e ative a API do Google Agenda."
+              "body": "No Console do Google Cloud, crie um projeto e ative as APIs Google Agenda, Google Sheets, Google Docs, Google Drive e Google Forms. Uma permissão só funciona quando a API dela está ativada."
             },
             "redirect": {
               "title": "2. Cliente OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Tela de consentimento",
-              "body": "Adicione os escopos calendar.events, calendar.freebusy e calendar.calendarlist.readonly e depois publique o app: em modo de teste, o Google encerra cada autorização após 7 dias e os espaços de trabalho precisarão reconectar."
+              "body": "Adicione os escopos que o produto pede (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) e depois publique o app: em modo de teste, o Google encerra cada autorização após 7 dias e os espaços de trabalho precisarão reconectar. Os escopos do drive são restritos e precisam da análise do Google."
             },
             "workspaces": {
               "title": "4. Espaços de trabalho conectam",
-              "body": "Cole o ID e o segredo do cliente aqui e salve. Os admins então conectam em Agendamentos, Configurações, Google Agenda."
+              "body": "Cole o ID e o segredo do cliente aqui e salve. Os admins então conectam em Configurações, Integrações, Conta do Google, ou em Agendamentos, Configurações, Google Agenda."
             }
           }
         }

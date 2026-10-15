@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ApiError } from '@/lib/api/errors';
 import type { ApiRequest } from './http';
 import {
   appointmentCountsSchema,
@@ -40,6 +41,9 @@ async function call<T = void>(path: string, req: ApiRequest<T> = {}): Promise<T>
 }
 const callPublic = <T>(path: string, req: ApiRequest<T> = {}): Promise<T> =>
   call(`/public${path}`, req);
+
+const notDrifted = () =>
+  new ApiError(409, 'GOOGLE_SYNC_NOT_DRIFTED', 'This appointment is not out of sync with Google');
 
 export interface AppointmentPageResult {
   appointments: Appointment[];
@@ -85,6 +89,9 @@ export const mockAppointmentsApi = {
     call(`/appointments/${id}/decline`, { method: 'POST', body: {}, schema: appointmentSchema }),
   cancel: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/cancel`, { method: 'POST', body: {}, schema: appointmentSchema }),
+  /** The stand-in has no Google: nothing is ever out of sync, which is what the real API answers for an event that matches. */
+  pushCalendar: (_id: string): Promise<never> => Promise.reject(notDrifted()),
+  acceptCalendar: (_id: string, _notify: boolean): Promise<never> => Promise.reject(notDrifted()),
   complete: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/complete`, { method: 'POST', body: {}, schema: appointmentSchema }),
   noShow: (id: string): Promise<Appointment> =>

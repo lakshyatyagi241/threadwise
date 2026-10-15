@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Kalendarz Google",
-        "description": "Klient OAuth Google, przez który każda przestrzeń robocza łączy swój kalendarz.",
+        "description": "Klient OAuth Google, przez który każda przestrzeń robocza łączy swoje konto Google, dla kalendarza, Sheets, Docs i Forms.",
         "sections": {
           "oauth": {
             "title": "Klient OAuth Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Zezwalaj przestrzeniom roboczym na łączenie z Kalendarzem Google",
-            "hint": "Wyłączone: żadna przestrzeń robocza nie może się połączyć i nic nie jest zapisywane do kalendarza ani z niego odczytywane."
+            "label": "Zezwalaj przestrzeniom roboczym na łączenie z Google",
+            "hint": "Wyłączone: żadna przestrzeń robocza nie może się połączyć i nic nie jest odczytywane z Google ani do niego zapisywane (kalendarz, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "Identyfikator klienta",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Kalendarz Google",
-        "description": "Klient OAuth Google, którego przestrzenie robocze używają do łączenia kalendarza na potrzeby rezerwacji i terminów zajętości.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "Klient OAuth Google, którego przestrzenie robocze używają do łączenia konta Google na potrzeby rezerwacji, Sheets, Docs i Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "E-mail Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Kalendarz Google",
         "eyebrow": "Admin - Terminy",
-        "description": "Jeden klient OAuth Google Cloud dla całej platformy. Każda przestrzeń robocza łączy następnie własne konto Google w Terminach, w Ustawieniach; przestrzeń robocza nigdy nie widzi identyfikatora ani sekretu klienta.",
+        "description": "Jeden klient OAuth Google Cloud dla całej platformy. Każda przestrzeń robocza łączy następnie własne konto Google ze strony Konto Google w Ustawieniach i wybiera, jakich uprawnień udzielić; przestrzeń robocza nigdy nie widzi identyfikatora ani sekretu klienta.",
         "sections": {
           "oauth": {
             "title": "Klient OAuth Google",
-            "description": "Bez identyfikatora i sekretu klienta przestrzenie robocze widzą Kalendarz Google jako niedostępny, a rezerwacje działają dalej bez kalendarza."
+            "description": "Bez identyfikatora i sekretu klienta przestrzenie robocze widzą Google jako niedostępne, rezerwacje działają dalej bez kalendarza, a kroki Google w przepływach są pomijane."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Projekt i API",
-              "body": "W konsoli Google Cloud utwórz projekt i włącz Google Calendar API."
+              "body": "W konsoli Google Cloud utwórz projekt i włącz interfejsy API Google Calendar, Google Sheets, Google Docs, Google Drive i Google Forms. Uprawnienie działa tylko wtedy, gdy jego API jest włączone."
             },
             "redirect": {
               "title": "2. Klient OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Ekran zgody",
-              "body": "Dodaj zakresy calendar.events, calendar.freebusy i calendar.calendarlist.readonly, a następnie opublikuj aplikację: w trybie Testing Google kończy każdą zgodę po 7 dniach i przestrzenie robocze będą musiały połączyć się ponownie."
+              "body": "Dodaj zakresy, o które prosi produkt (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), a następnie opublikuj aplikację: w trybie Testing Google kończy każdą zgodę po 7 dniach i przestrzenie robocze będą musiały połączyć się ponownie. Zakresy drive są ograniczone i wymagają przeglądu Google."
             },
             "workspaces": {
               "title": "4. Połączenie przestrzeni roboczych",
-              "body": "Wklej tutaj identyfikator i sekret klienta i zapisz. Administratorzy połączą się następnie z poziomu Terminy, Ustawienia, Kalendarz Google."
+              "body": "Wklej tutaj identyfikator i sekret klienta i zapisz. Administratorzy połączą się następnie z poziomu Ustawienia, Integracje, Konto Google lub z Terminy, Ustawienia, Kalendarz Google."
             }
           }
         }

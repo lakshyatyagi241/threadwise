@@ -379,6 +379,10 @@
         "test": {
           "label": "Notificación de prueba",
           "hint": "La prueba que envías desde Notificaciones del navegador, para comprobar que funcionan la campana, la ventana emergente y el título de la pestaña."
+        },
+        "appointment_calendar_drift": {
+          "label": "Cita desincronizada con Google Calendar",
+          "hint": "El evento de Google Calendar de una próxima cita se eliminó, se movió o se modificaron sus invitados. La cita no se modifica; usted decide qué hacer."
         }
       },
       "loading": "Cargando tus preferencias",

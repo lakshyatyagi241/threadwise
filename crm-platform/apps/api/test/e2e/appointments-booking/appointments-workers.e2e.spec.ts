@@ -1,3 +1,4 @@
+import { AppointmentCalendarWriter } from '../../../src/modules/appointments-booking/appointment-calendar-writer.service';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import type {
@@ -686,6 +687,12 @@ class FakeCalendar implements CalendarSyncPort {
   async deleteEvent(_o: number, calendarId: string | null, eventId: string) {
     this.deletes.push({ calendarId, eventId });
   }
+  async readEvent() {
+    return { kind: 'missing' as const };
+  }
+  async calendarExists() {
+    return true;
+  }
 }
 
 describe('the calendar hook (TW-APPT-012, 029, D-08, EXT-APPT-08)', () => {
@@ -696,9 +703,7 @@ describe('the calendar hook (TW-APPT-012, 029, D-08, EXT-APPT-08)', () => {
     t = await api.signup('wcc');
     cal = new FakeCalendar();
     consumer = new AppointmentCalendarConsumer(
-      db,
-      apptsRepo,
-      typesRepo,
+      new AppointmentCalendarWriter(db, apptsRepo, typesRepo, cal),
       new OutboxSubscriberRegistry(),
       cal,
     );
@@ -737,9 +742,10 @@ describe('the calendar hook (TW-APPT-012, 029, D-08, EXT-APPT-08)', () => {
       calendar_id: 'team@example.com',
       meet_url: 'https://meet.example/abc',
     });
-    expect((await api.appt(t.admin, a.id)).calendar).toEqual({
+    expect((await api.appt(t.admin, a.id)).calendar).toMatchObject({
       eventId: 'evt-1',
       calendarId: 'team@example.com',
+      sync: { state: 'in_sync', reason: null },
     });
     // Redelivery and a move both update the same event.
     await consumer.handle(await first('appointment.booked', a.id));

@@ -41,7 +41,10 @@
       "notStarted": "Można to zrobić dopiero po rozpoczęciu rezerwacji.",
       "alreadyStarted": "Ta rezerwacja już się rozpoczęła, więc nie można jej już zmienić.",
       "bookingOff": "Rezerwacja tej usługi jest teraz niedostępna.",
-      "notDeletable": "Nie można tego usunąć, gdy ma nadchodzące rezerwacje."
+      "notDeletable": "Nie można tego usunąć, gdy ma nadchodzące rezerwacje.",
+      "notDrifted": "Ta rezerwacja jest już zgodna z wydarzeniem w Google. Dane zostały odświeżone.",
+      "calendarNotConnected": "Google Calendar nie jest połączony. Połącz go ponownie na stronie konta Google i spróbuj jeszcze raz.",
+      "calendarFailed": "Google nie odpowiedział lub odrzucił zmianę. Spróbuj ponownie za chwilę."
     },
     "picker": {
       "timeZone": "Strefa czasowa",
@@ -156,7 +159,8 @@
       "yesterday": "Wczoraj",
       "rowLabel": "Otwórz rezerwację: {title}",
       "noName": "Brak nazwy",
-      "needsReview": "Wymaga przeglądu"
+      "needsReview": "Wymaga przeglądu",
+      "outOfSync": "Kalendarz niezsynchronizowany"
     },
     "row": {
       "moreFor": "Więcej akcji dla: {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Rezerwacja przeniesiona na nowy termin.",
       "linkCopied": "Link zarządzania skopiowany.",
       "copyFailed": "Nie udało się skopiować linku.",
-      "declined": "Prośba odrzucona."
+      "declined": "Prośba odrzucona.",
+      "calendarPushed": "Wysłano do Google: wydarzenie jest teraz zgodne z tą rezerwacją.",
+      "calendarAccepted": {
+        "cancelled": "Zmiana z Google zaakceptowana: rezerwacja została anulowana.",
+        "rescheduled": "Zmiana z Google zaakceptowana: rezerwacja została przeniesiona na nowy termin.",
+        "acknowledged": "Zmiana z Google zaakceptowana. Rezerwacja pozostaje bez zmian."
+      }
     },
     "typesList": {
       "breadcrumb": "Ścieżka nawigacji",
@@ -962,7 +972,7 @@
         "calendarSaved": "Kalendarz zapisany.",
         "confirmOff": {
           "title": "Rozłączyć Kalendarz Google?",
-          "message": "Nowe rezerwacje przestaną trafiać do Twojego kalendarza, a jego zajęte terminy nie będą już odczytywane. Wydarzenia już w kalendarzu pozostaną, a Google zostanie poproszone o wycofanie tego dostępu.",
+          "message": "Nowe rezerwacje przestaną trafiać do Twojego kalendarza, a jego zajęte terminy nie będą już odczytywane. Kroki Google w Twoich przepływach też przestaną działać, ponieważ korzystają z tego samego połączenia. Wydarzenia już w kalendarzu pozostaną, a Google zostanie poproszone o wycofanie tego dostępu.",
           "confirm": "Rozłącz",
           "cancel": "Zachowaj"
         },
@@ -972,7 +982,8 @@
           "failed": "Łączenie nie zostało ukończone. Spróbuj ponownie; jeśli nadal się nie udaje, poproś administratora platformy o sprawdzenie konfiguracji Google.",
           "expired": "Ta próba trwała zbyt długo. Naciśnij Połącz, aby zacząć od nowa.",
           "not_configured": "Kalendarz Google nie jest skonfigurowany dla tej platformy. Poproś administratora platformy o dodanie klienta Google OAuth.",
-          "missing_scope": "Google nie przyznało wszystkich wymaganych uprawnień do kalendarza. Połącz ponownie i pozostaw zaznaczone wszystkie pola."
+          "missing_scope": "Google nie przyznało wszystkich wymaganych uprawnień do kalendarza. Połącz ponownie i pozostaw zaznaczone wszystkie pola.",
+          "cancelled": "Anulowano. Nic nie zostało połączone."
         },
         "whatTitle": "Co to robi",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Załaduj więcej",
       "loadMorePast": "Załaduj więcej minionych",
       "noType": "Spotkanie"
+    },
+    "sync": {
+      "title": "Kalendarz niezsynchronizowany",
+      "reason": {
+        "event_deleted": "Wydarzenie zostało usunięte lub anulowane w Google Calendar.",
+        "event_missing": "Nie można już znaleźć tego wydarzenia w Google Calendar.",
+        "time_changed": "Wydarzenie zostało przeniesione na inny termin w Google Calendar.",
+        "attendees_changed": "Goście wydarzenia zostali zmienieni w Google Calendar."
+      },
+      "googleShows": "Google pokazuje: {time}",
+      "notChanged": "Ta rezerwacja nie została zmieniona. Wybierz, która wersja jest prawidłowa.",
+      "found": "Znaleziono: {when}",
+      "push": "Wyślij nasz termin do Google",
+      "accept": "Zaakceptuj zmianę z Google",
+      "keep": "Nie teraz",
+      "acceptTitle": {
+        "cancel": "Anulować tę rezerwację?",
+        "reschedule": "Przenieść tę rezerwację na termin z Google?",
+        "acknowledge": "Zaakceptować gości widocznych w Google?"
+      },
+      "acceptMessage": {
+        "cancel": "Wydarzenie zostało usunięte z Google, więc ta rezerwacja zostanie anulowana, a jej termin znów będzie wolny. Klient zostanie powiadomiony, tak jak przy każdym anulowaniu.",
+        "reschedule": "Ta rezerwacja zostanie przeniesiona na {time}. Klient zostanie poinformowany o nowym terminie, tak jak przy każdej zmianie terminu.",
+        "acknowledge": "Sama rezerwacja się nie zmienia. Lista gości z Google zostanie zapamiętana, a to powiadomienie zniknie."
+      },
+      "acceptConfirm": {
+        "cancel": "Anuluj rezerwację",
+        "reschedule": "Przenieś rezerwację",
+        "acknowledge": "Zaakceptuj"
+      }
     }
   }
 }

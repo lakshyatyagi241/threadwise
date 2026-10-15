@@ -27,6 +27,7 @@ import { FORMS_ERROR_CODES } from '../forms-builder/errors';
 import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { EXT_ERROR_CODES } from '../chrome-extension-sheets-addon/errors';
+import { GOOGLE_ERROR_CODES } from '../google-account/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
 import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 import { LSC_ERROR_CODES } from '../lead-scoring/errors';
@@ -50,6 +51,7 @@ export const ERROR_CODES = {
   ...WFL_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
+  ...GOOGLE_ERROR_CODES,
   ...CPN_ERROR_CODES,
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,

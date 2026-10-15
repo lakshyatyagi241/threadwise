@@ -364,6 +364,35 @@ export class AppointmentsService {
     });
   }
 
+  /**
+   * "Accept Google's change": moves the booking to the start AND end its Google event shows, through the same rules as a staff move (the
+   * reminders are armed again, the customer is told when `notify`, `appointment.rescheduled` is emitted). Availability is not re-checked: a
+   * person is accepting a time somebody chose on purpose. Only the end differing is a move too.
+   */
+  async rescheduleToGoogle(
+    uuid: string,
+    input: { startsAt: Date; endsAt: Date; notify: boolean; rowVersion?: number },
+    scope: RecordScope,
+  ): Promise<AppointmentResponse> {
+    const ctx = RequestContextStore.require();
+    const nowMs = Date.now();
+    const busy = await this.busyAround(uuid, scope, input.startsAt.getTime());
+    return this.db.tx(async (tx) => {
+      const row = await this.lock(tx, uuid, scope);
+      const after = await this.booking.reschedule(tx, ctx.orgId, row, {
+        startsAt: input.startsAt,
+        endsAt: input.endsAt,
+        ignoreAvailability: true,
+        notify: input.notify,
+        by: 'staff',
+        nowMs,
+        busy,
+        rowVersion: input.rowVersion,
+      });
+      return this.support.toResponse(after);
+    });
+  }
+
   cancel(
     uuid: string,
     input: CancelAppointmentInput,

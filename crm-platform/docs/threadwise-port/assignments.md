@@ -13,9 +13,9 @@ and each domain has exclusive directories in every layer, so the three of you do
 
 | Person | Cluster | Domains | Features written | Domain est. days | Foundation days | Total |
 |---|---|---|---|---|---|---|
-| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 25 | 705 | 2805 | 48 | 2853 |
-| Vedant (`vedant`) | WhatsApp core, inbox and automation | 17 | 591 | 2802 | 55 | 2858 |
-| Punya (`punya`) | CRM, commerce, AI and the other channels | 22 | 319 | 2740 | 22 | 2762 |
+| Lakshya Tyagi (`lakshya`) | Platform, identity, billing, admin and developer surface | 26 | 0 | 2810 | 48 | 2858 |
+| Vedant (`vedant`) | WhatsApp core, inbox and automation | 17 | 0 | 2802 | 55 | 2858 |
+| Punya (`punya`) | CRM, commerce, AI and the other channels | 22 | 0 | 2740 | 22 | 2762 |
 | Shubham (`shubham`) | - | 0 | 0 | 0 | 0 | 0 |
 
 The people are interchangeable: to swap two clusters, change `owner` in `assignment-input.json` `clusters` and regenerate.
@@ -49,85 +49,86 @@ A domain in wave N can start earlier against stubs, but it cannot be marked `don
 
 | Domain | Code | Route | Wave | Est. days | Inventory | Features |
 |---|---|---|---|---|---|---|
-| admin-console-shell | ashell | /shell | 1 | 160 | written | 47 |
-| auth-registration-security | auth | /auth | 1 | 128 | written | 49 |
-| install-update-licensing | inst | /install | 1 | 84 | written | 29 |
-| localization-translation | i18n | /i18n | 1 | 105 | written | 39 |
-| platform-infrastructure | infra | /infra | 1 | 130 | written | 62 |
-| platform-settings-branding-storage | set | /settings | 1 | 137 | written | 46 |
-| roles-permissions | rbac | /roles | 1 | 96 | written | 37 |
-| workspaces-teams-tenancy | wsp | /workspaces | 1 | 145 | written | 47 |
-| coupons-credits-referral-currency | cpn | /coupons | 2 | 88 | written | 38 |
-| notifications-activity-audit | notif | /notifications | 2 | 114 | written | 45 |
-| plans-subscriptions-trials | plan | /plans | 2 | 106 | written | 28 |
-| platform-payment-gateways | paygw | /payment-gateways | 2 | 216 | written | 48 |
-| wallet-message-billing | wallet | /wallet | 2 | 105 | written | 33 |
-| addons-extension-registry | add | /addons | 3 | 100 | written | 35 |
-| ai-keys-usage-admin | aiadm | /ai-admin | 3 | 90 | partial | 10 |
-| bsp-billing-engine | bsp | /bsp | 3 | 64 | written | 21 |
-| dashboards-analytics-charts | dash | /dashboard | 3 | 132 | written | 54 |
+| admin-console-shell | ashell | /shell | 1 | 160 | written |  |
+| auth-registration-security | auth | /auth | 1 | 128 | written |  |
+| install-update-licensing | inst | /install | 1 | 84 | written |  |
+| localization-translation | i18n | /i18n | 1 | 105 | written |  |
+| platform-infrastructure | infra | /infra | 1 | 130 | written |  |
+| platform-settings-branding-storage | set | /settings | 1 | 137 | written |  |
+| roles-permissions | rbac | /roles | 1 | 96 | written |  |
+| workspaces-teams-tenancy | wsp | /workspaces | 1 | 145 | written |  |
+| coupons-credits-referral-currency | cpn | /coupons | 2 | 88 | written |  |
+| notifications-activity-audit | notif | /notifications | 2 | 114 | written |  |
+| plans-subscriptions-trials | plan | /plans | 2 | 106 | written |  |
+| platform-payment-gateways | paygw | /payment-gateways | 2 | 216 | written |  |
+| wallet-message-billing | wallet | /wallet | 2 | 105 | written |  |
+| addons-extension-registry | add | /addons | 3 | 100 | written |  |
+| ai-keys-usage-admin | aiadm | /ai-admin | 3 | 90 | partial |  |
+| bsp-billing-engine | bsp | /bsp | 3 | 64 | written |  |
+| chrome-extension-sheets-addon | ext | /extension | 3 | 70 | pending |  |
+| dashboards-analytics-charts | dash | /dashboard | 3 | 132 | written |  |
 | developer-rest-api-v1 | api | /developer | 3 | 130 | pending |  |
+| google-account | gacc | /google-account | 3 | 5 | pending |  |
 | integrations-hubspot-slack-trello-google-webhooks | intg | /integrations | 3 | 150 | pending |  |
 | leads | lead | /lead-sources | 3 | 15 | pending |  |
-| marketing-site-cms | cms | /cms | 3 | 152 | written | 53 |
+| marketing-site-cms | cms | /cms | 3 | 152 | written |  |
 | marketplace | mkt | /marketplace | 3 | 25 | pending |  |
 | mobile-app-api | mob | /mobile | 3 | 140 | pending |  |
-| platform-support-desk | supp | /support | 3 | 122 | written | 46 |
-| chrome-extension-sheets-addon | ext | /extension | 3 | 70 | pending |  |
+| platform-support-desk | supp | /support | 3 | 122 | written |  |
 
 ## Vedant (`vedant`)
 
 | Domain | Code | Route | Wave | Est. days | Inventory | Features |
 |---|---|---|---|---|---|---|
-| chat-conversations | chat | /chat | 1 | 134 | written | 44 |
-| node-bridge-runtime | node | /bridge | 1 | 250 | partial | 54 |
-| whatsapp-cloud-api-waba | waba | /waba | 1 | 216 | written | 57 |
-| whatsapp-devices-baileys | wadev | /devices | 1 | 161 | written | 46 |
-| broadcasts | bcast | /broadcasts | 2 | 168 | written | 43 |
+| chat-conversations | chat | /chat | 1 | 134 | written |  |
+| node-bridge-runtime | node | /bridge | 1 | 250 | partial |  |
+| whatsapp-cloud-api-waba | waba | /waba | 1 | 216 | written |  |
+| whatsapp-devices-baileys | wadev | /devices | 1 | 161 | written |  |
+| broadcasts | bcast | /broadcasts | 2 | 168 | written |  |
 | campaigns | camp | /campaigns | 2 | 150 | pending |  |
-| message-templates | tpl | /templates | 2 | 130 | partial | 50 |
-| scheduled-queue-warmer | sched | /scheduled | 2 | 120 | partial | 30 |
-| team-inbox-conversations | tib1 | /inbox | 2 | 222 | written | 55 |
-| team-inbox-routing-sla | tib2 | /inbox-routing | 2 | 128 | written | 36 |
-| auto-reply-keywords | ar | /auto-reply | 3 | 151 | written | 44 |
-| chatbot-widget | wgt | /widgets | 3 | 101 | written | 30 |
-| flow-builder-editor | flb | /flows | 3 | 260 | partial | 29 |
-| flow-runtime-engine | flr | /flow-runtime | 3 | 220 | partial | 20 |
+| message-templates | tpl | /templates | 2 | 130 | partial |  |
+| scheduled-queue-warmer | sched | /scheduled | 2 | 120 | partial |  |
+| team-inbox-conversations | tib1 | /inbox | 2 | 222 | written |  |
+| team-inbox-routing-sla | tib2 | /inbox-routing | 2 | 128 | written |  |
+| auto-reply-keywords | ar | /auto-reply | 3 | 151 | written |  |
+| chatbot-widget | wgt | /widgets | 3 | 101 | written |  |
+| flow-builder-editor | flb | /flows | 3 | 260 | partial |  |
+| flow-runtime-engine | flr | /flow-runtime | 3 | 220 | partial |  |
 | forms-links-groups | wfl | /forms | 3 | 110 | pending |  |
-| team-chat | tchat | /team-chat | 3 | 82 | written | 32 |
-| calling-voice | call | /calling | 4 | 200 | partial | 21 |
+| team-chat | tchat | /team-chat | 3 | 82 | written |  |
+| calling-voice | call | /calling | 4 | 200 | partial |  |
 
 ## Punya (`punya`)
 
 | Domain | Code | Route | Wave | Est. days | Inventory | Features |
 |---|---|---|---|---|---|---|
-| contacts-attributes-tags | con | /contacts | 1 | 200 | pending | 65 |
-| appointments-booking | appt | /appointments | 2 | 130 | pending | 40 |
+| contacts-attributes-tags | con | /contacts | 1 | 200 | pending |  |
+| appointments-booking | appt | /appointments | 2 | 130 | pending |  |
 | companies-projects-tasks | ctp | /companies | 2 | 140 | pending |  |
-| deals-pipelines | deal | /deals | 2 | 120 | pending | 47 |
+| deals-pipelines | deal | /deals | 2 | 120 | pending |  |
 | invoicing | inv | /invoices | 2 | 120 | pending |  |
 | sales-docs-proposals | sales | /proposals | 2 | 110 | pending |  |
-| catalog-products | cat | /catalog | 3 | 110 | pending | 36 |
+| catalog-products | cat | /catalog | 3 | 110 | pending |  |
 | channel-email | mail | /email | 3 | 110 | pending |  |
-| channel-facebook | fb | /facebook | 3 | 130 | pending | 23 |
-| channel-instagram | ig | /instagram | 3 | 90 | pending | 20 |
+| channel-facebook | fb | /facebook | 3 | 130 | pending |  |
+| channel-instagram | ig | /instagram | 3 | 90 | pending |  |
 | channel-line | line | /line | 3 | 100 | pending |  |
 | channel-sms | sms | /sms | 3 | 90 | pending |  |
-| channel-telegram | tg | /telegram | 3 | 100 | pending | 19 |
+| channel-telegram | tg | /telegram | 3 | 100 | pending |  |
 | channel-tiktok | tt | /tiktok | 3 | 110 | pending |  |
 | channel-viber | vib | /viber | 3 | 80 | pending |  |
 | channel-wechat | wech | /wechat | 3 | 100 | pending | 20 |
 | checkout-orders-merchant-payments | chk | /checkout | 3 | 190 | pending |  |
 | meta-ads | mads | /meta-ads | 3 | 120 | pending |  |
-| shopify-woocommerce | ecom | /ecommerce | 3 | 130 | pending | 38 |
-| storefront-builder | store | /store | 3 | 150 | pending | 31 |
+| shopify-woocommerce | ecom | /ecommerce | 3 | 130 | pending |  |
+| storefront-builder | store | /store | 3 | 150 | pending |  |
 | ai-agents-training | aiag | /ai-agents | 4 | 180 | pending |  |
 | ai-copilot-lead-finder | aicrm | /ai-copilot | 4 | 130 | pending |  |
 
 ## Shubham (`shubham`)
 
-No domains: chrome-extension-sheets-addon moved to Lakshya.
-
+| Domain | Code | Route | Wave | Est. days | Inventory | Features |
+|---|---|---|---|---|---|---|
 
 ## Handoffs between people
 

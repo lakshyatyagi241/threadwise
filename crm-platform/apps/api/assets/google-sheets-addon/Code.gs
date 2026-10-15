@@ -43,6 +43,12 @@ const PULL_SHEET = 'CRM contacts';
 const STATUS_HEADER = 'CRM status';
 const MAX_AUTO_WAIT_SECONDS = 20;
 const MAX_RETRIES = 2;
+// The CRM refuses a request over 2 MiB; stay clear of it. Google allows one run 6 minutes; the sweep stops sending after 4.5 and the
+// next hourly run carries on, because every row it sent is already recorded.
+const MAX_BODY_BYTES = 1536 * 1024;
+const SWEEP_BUDGET_MS = 270000;
+const LOCK_WAIT_MS = 30000;
+const VALUE_SAMPLE_CHARS = 500;
 
 const CONTACT_FIELDS = {
   name: ['name', 'fullname', 'contactname'],
@@ -190,15 +196,16 @@ function parseConnection_(text) {
 function columnIndex_(spec, headers) {
   const text = typeof spec === 'string' ? spec.trim() : '';
   if (text === '') return -1;
+  // A heading wins over a column letter: a column headed "Age" or "ID" is that column, not the columns AGE and ID.
+  const wanted = normalizeHeader_(text);
+  for (let i = 0; i < headers.length; i++) {
+    if (normalizeHeader_(headers[i]) === wanted) return i;
+  }
   if (/^[A-Za-z]{1,3}$/.test(text)) {
     let n = 0;
     const upper = text.toUpperCase();
     for (let i = 0; i < upper.length; i++) n = n * 26 + (upper.charCodeAt(i) - 64);
     return n - 1;
-  }
-  const wanted = normalizeHeader_(text);
-  for (let i = 0; i < headers.length; i++) {
-    if (normalizeHeader_(headers[i]) === wanted) return i;
   }
   return -1;
 }
@@ -406,6 +413,14 @@ function callApi_(method, path, query, body, creds) {
         response.getHeaders(),
       );
     } catch (e) {
+      // Google ends a day's worth of web requests with its own exception; that is not a connection problem.
+      if (/too many times|quota|bandwidth/i.test(e && e.message ? String(e.message) : '')) {
+        return failure_(
+          'QUOTA',
+          0,
+          "Google's daily limit for web requests from this account is used up. Try again tomorrow.",
+        );
+      }
       return failure_(
         'NETWORK',
         0,
@@ -505,6 +520,10 @@ function mapHeaders_(headers, fields, allowAttributes) {
   return { columns: columns, attributes: attributes, status: status };
 }
 
+function isBlankText_(value) {
+  return typeof value !== 'string' || value.trim() === '';
+}
+
 function isBlank_(value) {
   return (
     value === undefined || value === null || (typeof value === 'string' && value.trim() === '')
@@ -588,6 +607,40 @@ function chunk_(list, size) {
   return out;
 }
 
+/** Bytes of a text as UTF-8 (the CRM's limit is in bytes; a cell of 50,000 characters is up to 150,000 of them). */
+function byteLength_(text) {
+  let n = 0;
+  for (let i = 0; i < text.length; i++) {
+    const code = text.charCodeAt(i);
+    if (code < 0x80) n += 1;
+    else if (code < 0x800) n += 2;
+    else if (code >= 0xd800 && code <= 0xdbff) {
+      n += 4;
+      i++;
+    } else n += 3;
+  }
+  return n;
+}
+
+/** Like chunk_, and also closes a chunk before it would pass `maxBytes`: a request the CRM refuses as too large cannot be fixed by retrying it. */
+function chunkBySize_(rows, maxRows, maxBytes) {
+  const out = [];
+  let current = [];
+  let bytes = 0;
+  for (let i = 0; i < rows.length; i++) {
+    const size = byteLength_(JSON.stringify(rows[i])) + 1;
+    if (current.length > 0 && (current.length >= maxRows || bytes + size > maxBytes)) {
+      out.push(current);
+      current = [];
+      bytes = 0;
+    }
+    current.push(rows[i]);
+    bytes += size;
+  }
+  if (current.length > 0) out.push(current);
+  return out;
+}
+
 /** The text written in the status column for one row result. */
 function statusText_(result) {
   if (!result) return 'no result returned';
@@ -631,9 +684,24 @@ function applyResults_(totals, sentRows, results) {
 /** Finds the CRM status column, or adds one after the last used column. Returns the 0-based index. */
 function ensureStatusColumn_(sheet, mapping) {
   if (mapping.status >= 0) return mapping.status;
-  const index = Math.max(sheet.getLastColumn(), 1);
+  const lastColumn = sheet.getLastColumn();
+  if (lastColumn >= 1) {
+    // Another run may have added the column since `mapping` was read; a second one would split the statuses over two columns.
+    const fresh = mapHeaders_(sheet.getRange(1, 1, 1, lastColumn).getValues()[0], {}, false);
+    if (fresh.status >= 0) return fresh.status;
+  }
+  const index = Math.max(lastColumn, 1);
+  ensureSize_(sheet, 1, index + 1);
   sheet.getRange(1, index + 1).setValue(STATUS_HEADER);
   return index;
+}
+
+/** A sheet has the rows and columns it was made with (1000 by 26 for a new one) and Google does not grow it for a write that reaches past them. */
+function ensureSize_(sheet, rows, columns) {
+  const maxRows = sheet.getMaxRows();
+  if (maxRows < rows) sheet.insertRowsAfter(maxRows, rows - maxRows);
+  const maxColumns = sheet.getMaxColumns();
+  if (maxColumns < columns) sheet.insertColumnsAfter(maxColumns, columns - maxColumns);
 }
 
 /** Writes a status text for each given sheet row number into the status column (0-based `statusIndex`), in one read and one write. */
@@ -775,7 +843,11 @@ function runPull(options) {
       return contactLine_(c, attributeKeys);
     }),
   );
-  sheet.getRange(1, 1, lines.length, headers.length).setValues(lines);
+  ensureSize_(sheet, lines.length, headers.length);
+  const target = sheet.getRange(1, 1, lines.length, headers.length);
+  // Plain text, so Sheets keeps "+91..." and "0012" as written and never runs a contact's name that starts with "=" as a formula.
+  target.setNumberFormat('@');
+  target.setValues(lines);
   sheet.setFrozenRows(1);
   spreadsheet.setActiveSheet(sheet);
   return {
@@ -813,7 +885,7 @@ function runPush(options) {
   const totals = emptyTotals_();
   const problems = [];
   let stopped = null;
-  const chunks = chunk_(read.rows, MAX_ROWS);
+  const chunks = chunkBySize_(read.rows, MAX_ROWS, MAX_BODY_BYTES);
   for (let c = 0; c < chunks.length; c++) {
     const sent = chunks[c];
     const body = { rows: sent };
@@ -933,7 +1005,7 @@ function runProductSync(options) {
   const problems = [];
   let stopped = null;
   let shop = null;
-  const chunks = chunk_(read.rows, MAX_ROWS);
+  const chunks = chunkBySize_(read.rows, MAX_ROWS, MAX_BODY_BYTES);
   for (let c = 0; c < chunks.length; c++) {
     const sent = chunks[c];
     const body = { shop_name: valid.name, products: sent };
@@ -993,12 +1065,14 @@ function forgetShop() {
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 /** Small stable text hash (FNV-1a) of a row, used to tell a changed row from one that was already sent. */
-function rowHash_(line) {
-  const text = JSON.stringify(
-    (line || []).map(function (c) {
-      return cellValue_(c);
-    }),
-  );
+function rowHash_(line, skipIndex) {
+  // The CRM status column (`skipIndex`) is written by this add-on after a send; it is not part of what the member changed.
+  const cells = [];
+  const source = line || [];
+  for (let i = 0; i < source.length; i++) {
+    if (i !== skipIndex) cells.push(cellValue_(source[i]));
+  }
+  const text = JSON.stringify(cells);
   let h = 0x811c9dc5;
   for (let i = 0; i < text.length; i++) {
     h ^= text.charCodeAt(i);
@@ -1010,15 +1084,16 @@ function rowHash_(line) {
 /**
  * Which data rows the hourly sweep must send. `lines` are the sheet's rows from row 2 down, `state` maps "sheet!row" to the hash last sent.
  * A row counts when it is not blank, its trigger cell (if a trigger column is set) is filled, and it is new or its hash changed.
- * Returns [{ row, hash }].
+ * `statusIndex` is the CRM status column, left out of the blank check and the hash. Returns [{ row, hash }].
  */
-function changedRows_(lines, sheetName, triggerIndex, state) {
+function changedRows_(lines, sheetName, triggerIndex, state, statusIndex) {
   const out = [];
+  const skip = typeof statusIndex === 'number' ? statusIndex : -1;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     let empty = true;
     for (let c = 0; c < line.length; c++) {
-      if (!isBlank_(line[c])) {
+      if (c !== skip && !isBlank_(line[c])) {
         empty = false;
         break;
       }
@@ -1026,10 +1101,17 @@ function changedRows_(lines, sheetName, triggerIndex, state) {
     if (empty) continue;
     if (triggerIndex >= 0 && isBlank_(line[triggerIndex])) continue;
     const row = i + 2;
-    const hash = rowHash_(line);
+    const hash = rowHash_(line, skip);
     if (state[sheetName + '!' + row] !== hash) out.push({ row: row, hash: hash });
   }
   return out;
+}
+
+/** The CRM keeps only a short sample of each raw cell, so a huge cell is cut here instead of travelling whole. */
+function sampleValue_(value) {
+  return typeof value === 'string' && value.length > VALUE_SAMPLE_CHARS
+    ? value.slice(0, VALUE_SAMPLE_CHARS)
+    : value;
 }
 
 /** The body of one webhook call. A test carries the raw cells by heading only; a data call also carries each row as a contact. */
@@ -1046,7 +1128,7 @@ function buildWebhookBody_(event, sheetName, headers, lines, rowNumbers, country
         headers[c] === undefined || headers[c] === null ? '' : headers[c],
       ).trim();
       if (heading === '' || normalizeHeader_(heading) === 'crmstatus') continue;
-      values[heading] = cellValue_(lines[i][c]);
+      values[heading] = sampleValue_(cellValue_(lines[i][c]));
     }
     const row = event === 'test' ? {} : byRef[i + 2] || null;
     if (row === null) continue;
@@ -1059,10 +1141,13 @@ function buildWebhookBody_(event, sheetName, headers, lines, rowNumbers, country
   return { body: body, problem: event === 'test' ? '' : contacts.problem };
 }
 
-function hookSheet_() {
+/** The sheet chosen in Initial Setup, else the active one. `strict`: nothing when the chosen sheet is gone (the hourly run must never read another sheet). */
+function hookSheet_(strict) {
   const name = docProps_().getProperty(PROP_HOOK_SHEET) || '';
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  return (name && spreadsheet.getSheetByName(name)) || spreadsheet.getActiveSheet();
+  const named = name ? spreadsheet.getSheetByName(name) : null;
+  if (named) return named;
+  return strict && name ? null : spreadsheet.getActiveSheet();
 }
 
 function readState_() {
@@ -1078,48 +1163,193 @@ function writeState_(state) {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = spreadsheet.getSheetByName(STATE_SHEET);
   if (!sheet) {
+    // Google makes a new sheet the active one; the member stays where they were.
+    const previous = spreadsheet.getActiveSheet();
     sheet = spreadsheet.insertSheet(STATE_SHEET);
     sheet.hideSheet();
+    spreadsheet.setActiveSheet(previous);
   }
   const lines = [];
   for (const key in state) lines.push([key, state[key]]);
   sheet.clear();
-  if (lines.length) sheet.getRange(1, 1, lines.length, 2).setValues(lines);
+  if (lines.length) {
+    ensureSize_(sheet, lines.length, 2);
+    const target = sheet.getRange(1, 1, lines.length, 2);
+    // Text, not input: a hash such as 12e4 would otherwise become the number 120000 and look like a changed row every hour.
+    target.setNumberFormat('@');
+    target.setValues(lines);
+  }
+}
+
+/** Runs `work` while holding the document lock, so two overlapping triggers do not overwrite each other's status and state. If the lock is not free in time the work still runs: a lost edit is worse, and the CRM treats a repeat as "unchanged". */
+function withLock_(work) {
+  let lock = null;
+  let held = false;
+  try {
+    lock = LockService.getDocumentLock() || LockService.getUserLock();
+    if (lock) {
+      lock.waitLock(LOCK_WAIT_MS);
+      held = true;
+    }
+  } catch (e) {
+    held = false;
+  }
+  try {
+    return work();
+  } finally {
+    if (held) {
+      try {
+        lock.releaseLock();
+      } catch (e) {
+        // the lock is released when the run ends anyway
+      }
+    }
+  }
+}
+
+/** The lines of the given sheet rows: from `snapshot` when the caller already read them, else in one read of the span they cover. */
+function readLines_(sheet, rowNumbers, lastColumn, snapshot) {
+  const found = {};
+  const missing = [];
+  for (let i = 0; i < rowNumbers.length; i++) {
+    const known = snapshot && snapshot.lines[rowNumbers[i]];
+    if (known) found[rowNumbers[i]] = known;
+    else missing.push(rowNumbers[i]);
+  }
+  if (missing.length > 0) {
+    const first = Math.min.apply(null, missing);
+    const last = Math.max.apply(null, missing);
+    const block = sheet.getRange(first, 1, last - first + 1, lastColumn).getValues();
+    for (let i = 0; i < missing.length; i++) found[missing[i]] = block[missing[i] - first];
+  }
+  return rowNumbers.map(function (r) {
+    return found[r];
+  });
+}
+
+function withRows_(body, rows) {
+  const copy = {};
+  for (const name in body) copy[name] = body[name];
+  copy.rows = rows;
+  return copy;
+}
+
+function tooLargeResult_(row) {
+  return {
+    index: 0,
+    ref: row.ref,
+    status: 'failed',
+    error: {
+      code: 'PAYLOAD_TOO_LARGE',
+      message: 'This row is too large to send. Shorten its longest cells.',
+    },
+  };
 }
 
 /**
- * Sends the given rows of the configured sheet to the CRM. `event` is 'edit', 'schedule' or 'test'. Writes each row's result to the
- * CRM status column and remembers what was sent, so the hourly sweep does not send it again.
+ * Posts one webhook body. A body too big for one request (by our count, or because the CRM answered 413) is cut in half and the halves
+ * are posted one after the other. Returns { accepted, results, failure }: how many leading rows the CRM took, their per-row results
+ * (indexed from 0), and the failure that stopped it, if any.
  */
-function sendRows_(event, sheet, rowNumbers) {
-  const lastColumn = sheet.getLastColumn();
-  if (rowNumbers.length === 0 || lastColumn < 1) return { ok: true, sent: 0 };
-  const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
-  const lines = rowNumbers.map(function (r) {
-    return sheet.getRange(r, 1, 1, lastColumn).getValues()[0];
+function postRows_(body) {
+  const oversize = byteLength_(JSON.stringify(body)) > MAX_BODY_BYTES;
+  if (oversize) {
+    if (body.rows.length === 1)
+      return { accepted: 1, results: [tooLargeResult_(body.rows[0])], failure: null };
+    return postHalves_(body);
+  }
+  const result = callApi_('post', '/webhook', undefined, body);
+  if (result.ok) {
+    return { accepted: body.rows.length, results: result.data.results || [], failure: null };
+  }
+  if (result.status === 413 || result.code === 'PAYLOAD_TOO_LARGE') {
+    if (body.rows.length === 1)
+      return { accepted: 1, results: [tooLargeResult_(body.rows[0])], failure: null };
+    return postHalves_(body);
+  }
+  return { accepted: 0, results: [], failure: result };
+}
+
+function postHalves_(body) {
+  const half = Math.ceil(body.rows.length / 2);
+  const first = postRows_(withRows_(body, body.rows.slice(0, half)));
+  if (first.failure || first.accepted < half) return first;
+  const second = postRows_(withRows_(body, body.rows.slice(half)));
+  const results = first.results.slice();
+  for (let i = 0; i < second.results.length; i++) {
+    const shifted = {};
+    for (const name in second.results[i]) shifted[name] = second.results[i][name];
+    shifted.index = second.results[i].index + half;
+    results.push(shifted);
+  }
+  return {
+    accepted: first.accepted + second.accepted,
+    results: results,
+    failure: second.failure,
+  };
+}
+
+/** A row the CRM could not save for a reason of its own is tried again at the next sweep; every other answer settles the row until it changes. */
+function isRetryable_(result) {
+  return (
+    !!result && result.status === 'failed' && !!result.error && result.error.code === 'INTERNAL'
+  );
+}
+
+/**
+ * Sends the given rows of the configured sheet to the CRM. `event` is 'edit' or 'schedule'. Writes each row's result to the CRM status
+ * column and remembers what was sent, so the hourly sweep does not send it again. `snapshot` ({ headers, lines: { row: line } }) lets the
+ * sweep hand over rows it has already read.
+ */
+function sendRows_(event, sheet, rowNumbers, snapshot) {
+  if (rowNumbers.length === 0 || sheet.getLastColumn() < 1) return { ok: true, sent: 0 };
+  return withLock_(function () {
+    return sendRowsNow_(event, sheet, rowNumbers, snapshot);
   });
+}
+
+function sendRowsNow_(event, sheet, rowNumbers, snapshot) {
+  const lastColumn = sheet.getLastColumn();
+  // The headings are read every time: the CRM status column may have been added since the snapshot was taken.
+  const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+  const lines = readLines_(sheet, rowNumbers, lastColumn, snapshot);
   const built = buildWebhookBody_(event, sheet.getName(), headers, lines, rowNumbers, '');
   if (built.problem) return failure_('BAD_HEADERS', 0, built.problem);
   if (built.body.rows.length === 0) return { ok: true, sent: 0 };
-  const result = callApi_('post', '/webhook', undefined, built.body);
-  if (!result.ok || event === 'test') return result;
-  const mapping = mapHeaders_(headers, CONTACT_FIELDS, true);
+  const posted = postRows_(built.body);
+  const accepted = built.body.rows.slice(0, posted.accepted);
   const totals = emptyTotals_();
-  const applied = applyResults_(totals, built.body.rows, result.data.results);
-  const statusIndex = ensureStatusColumn_(sheet, mapping);
-  writeStatuses_(sheet, statusIndex, applied.texts);
-  const state = readState_();
-  for (let i = 0; i < built.body.rows.length; i++) {
-    const line = lines[rowNumbers.indexOf(built.body.rows[i].ref)];
-    state[sheet.getName() + '!' + built.body.rows[i].ref] = rowHash_(line);
+  let problems = [];
+  if (accepted.length > 0) {
+    const mapping = mapHeaders_(headers, CONTACT_FIELDS, true);
+    const applied = applyResults_(totals, accepted, posted.results);
+    problems = applied.problems;
+    const statusIndex = ensureStatusColumn_(sheet, mapping);
+    writeStatuses_(sheet, statusIndex, applied.texts);
+    const lineByRow = {};
+    for (let i = 0; i < rowNumbers.length; i++) lineByRow[rowNumbers[i]] = lines[i];
+    const byIndex = {};
+    for (let i = 0; i < posted.results.length; i++)
+      byIndex[posted.results[i].index] = posted.results[i];
+    const state = readState_();
+    for (let i = 0; i < accepted.length; i++) {
+      if (isRetryable_(byIndex[i])) continue;
+      state[sheet.getName() + '!' + accepted[i].ref] = rowHash_(
+        lineByRow[accepted[i].ref],
+        mapping.status,
+      );
+    }
+    writeState_(state);
   }
-  writeState_(state);
-  return { ok: true, sent: built.body.rows.length, totals: totals, problems: applied.problems };
+  if (posted.failure) return posted.failure;
+  return { ok: true, sent: accepted.length, totals: totals, problems: problems };
 }
 
 /** Initial Setup: Send Test. Checks the pasted URL without saving it, then sends the first data row (or the headers alone). */
 function testWebhook(url, column, sheetName) {
-  const connection = parseConnection_(url);
+  // An empty box means "the saved connection", as the page says.
+  const connection =
+    isBlankText_(url) && readKey_() !== '' ? { base: '', key: readKey_() } : parseConnection_(url);
   if (!connection) return saveKey(url);
   const creds = {
     base: connection.base || readBase_(),
@@ -1154,7 +1384,9 @@ function testWebhook(url, column, sheetName) {
 /** Initial Setup: Submit. Saves the connection and the trigger settings and turns the event and schedule senders on or off. */
 function submitSetup(settings) {
   const input = settings || {};
-  const saved = saveKey(input.url);
+  // An empty Webhook URL box keeps the saved connection (the page says so); it is checked again so a revoked key is noticed now.
+  const saved =
+    isBlankText_(input.url) && readKey_() !== '' ? checkConnection() : saveKey(input.url);
   if (!saved.ok) return saved;
   const column = typeof input.column === 'string' ? input.column.trim() : '';
   const sheetName = typeof input.sheet === 'string' ? input.sheet : '';
@@ -1180,11 +1412,15 @@ function submitSetup(settings) {
 
 function syncTriggers_(wantEvent, wantSchedule) {
   const existing = ScriptApp.getProjectTriggers();
+  // A member's triggers for this add-on span every spreadsheet they use it in; the edit trigger of another spreadsheet is not ours to
+  // keep, count or delete.
+  const bookId = SpreadsheetApp.getActiveSpreadsheet().getId();
   let hasEvent = false;
   let hasSchedule = false;
   for (let i = 0; i < existing.length; i++) {
     const handler = existing[i].getHandlerFunction();
     if (handler === EVENT_HANDLER) {
+      if (existing[i].getTriggerSourceId() !== bookId) continue;
       if (wantEvent && !hasEvent) hasEvent = true;
       else ScriptApp.deleteTrigger(existing[i]);
     } else if (handler === SCHEDULE_HANDLER) {
@@ -1222,8 +1458,8 @@ function sendTestMenu() {
     ui.alert('Send a test row', describeFailure_(0, 'EXT_KEY_MISSING', '', 0), ui.ButtonSet.OK);
     return;
   }
-  const url = readBase_() + API_PATH + '/webhook/' + key;
-  const result = testWebhook(url, state.column, state.sheet);
+  // The saved connection (server and key) is used as it is; rebuilding a URL from it would refuse a server that is not https.
+  const result = testWebhook('', state.column, state.sheet);
   ui.alert(
     'Send a test row',
     result.ok
@@ -1264,25 +1500,34 @@ function crmOnEditSend(e) {
   }
 }
 
-/** Installable hourly trigger ("Send on schedule"): sends rows that are new or changed since they were last sent, wherever the change came from. */
+/**
+ * Installable hourly trigger ("Send on schedule"): sends rows that are new or changed since they were last sent, wherever the change came
+ * from. It stops sending after SWEEP_BUDGET_MS so Google does not end it in the middle of a call; what is left goes in the next run.
+ */
 function crmScheduledSend() {
+  const started = Date.now();
   try {
     const props = docProps_();
     if (props.getProperty(PROP_HOOK_SCHEDULE) !== 'on') return;
-    const sheet = hookSheet_();
+    const sheet = hookSheet_(true);
+    if (!sheet) return;
     const lastRow = sheet.getLastRow();
     const lastColumn = sheet.getLastColumn();
     if (lastRow < 2 || lastColumn < 1) return;
     const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
     const trigger = columnIndex_(props.getProperty(PROP_HOOK_COLUMN) || '', headers);
+    const statusIndex = mapHeaders_(headers, CONTACT_FIELDS, true).status;
     const lines = sheet.getRange(2, 1, lastRow - 1, lastColumn).getValues();
-    const changed = changedRows_(lines, sheet.getName(), trigger, readState_());
+    const changed = changedRows_(lines, sheet.getName(), trigger, readState_(), statusIndex);
+    const snapshot = { headers: headers, lines: {} };
     const rows = changed.map(function (c) {
+      snapshot.lines[c.row] = lines[c.row - 2];
       return c.row;
     });
     const chunks = chunk_(rows, MAX_ROWS);
     for (let i = 0; i < chunks.length; i++) {
-      const result = sendRows_('schedule', sheet, chunks[i]);
+      if (Date.now() - started > SWEEP_BUDGET_MS) break;
+      const result = sendRows_('schedule', sheet, chunks[i], snapshot);
       if (!result.ok) break;
     }
   } catch (err) {

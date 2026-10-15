@@ -95,6 +95,7 @@ export * from './outbound-webhooks';
 export * from './forms-builder';
 export * from './forms-links-groups';
 export * from './chrome-extension-sheets-addon';
+export * from './google-account';
 export * from './api-library';
 export * from './faq-knowledge';
 export * from './lead-scoring';

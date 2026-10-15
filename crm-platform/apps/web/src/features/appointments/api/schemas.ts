@@ -60,6 +60,33 @@ export const answerSchema = z.object({
 });
 export type Answer = z.infer<typeof answerSchema>;
 
+/** Whether the appointment's Google Calendar event still matches it (TW-GACC-011). `drifted` shows the "Calendar out of sync" badge. */
+export const CALENDAR_DRIFT_REASONS = [
+  'event_deleted',
+  'event_missing',
+  'time_changed',
+  'attendees_changed',
+] as const;
+export type CalendarDriftReason = (typeof CALENDAR_DRIFT_REASONS)[number];
+
+export const calendarSyncSchema = z.object({
+  state: z.enum(['in_sync', 'drifted', 'unreadable']).nullable(),
+  reason: z.enum([...CALENDAR_DRIFT_REASONS, 'event_forbidden', 'event_unreadable']).nullable(),
+  detectedAt: instant.nullable(),
+  /** What Google shows when the time was moved. */
+  googleStartsAt: instant.nullable(),
+  googleEndsAt: instant.nullable(),
+  checkedAt: instant.nullable(),
+});
+export type CalendarSync = z.infer<typeof calendarSyncSchema>;
+
+/** What the two drift actions answer, besides the appointment as it is now. */
+export const calendarDriftResultSchema = z.object({
+  done: z.enum(['pushed', 'accepted']),
+  applied: z.enum(['cancelled', 'rescheduled', 'acknowledged']).nullable(),
+});
+export type CalendarDriftResult = z.infer<typeof calendarDriftResultSchema>;
+
 export const appointmentSchema = z.object({
   id: z.string(),
   rowVersion: z.number().int().optional(),
@@ -85,6 +112,8 @@ export const appointmentSchema = z.object({
   customer: z.object({ name: nullableText, phone: nullableText, email: nullableText }),
   location: nullableText,
   meetUrl: nullableText,
+  /** The state of its Google Calendar event, when the appointment has one. */
+  calendarSync: calendarSyncSchema.nullable().optional(),
   answers: z.array(answerSchema),
   notes: nullableText,
   source: z.string(),

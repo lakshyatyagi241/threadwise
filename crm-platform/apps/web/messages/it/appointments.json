@@ -41,7 +41,10 @@
       "notStarted": "Si può fare solo dopo l'inizio della prenotazione.",
       "alreadyStarted": "Questa prenotazione è già iniziata, quindi non può più essere modificata.",
       "bookingOff": "La prenotazione non è disponibile per questo servizio al momento.",
-      "notDeletable": "Non può essere eliminato finché ha prenotazioni future."
+      "notDeletable": "Non può essere eliminato finché ha prenotazioni future.",
+      "notDrifted": "Questa prenotazione corrisponde già all'evento su Google. È stata ricaricata.",
+      "calendarNotConnected": "Google Calendar non è collegato. Ricollegalo dalla pagina dell'account Google e riprova.",
+      "calendarFailed": "Google non ha risposto o ha rifiutato la modifica. Riprova tra qualche istante."
     },
     "picker": {
       "timeZone": "Fuso orario",
@@ -156,7 +159,8 @@
       "yesterday": "Ieri",
       "rowLabel": "Apri prenotazione: {title}",
       "noName": "Senza nome",
-      "needsReview": "Da rivedere"
+      "needsReview": "Da rivedere",
+      "outOfSync": "Calendario non sincronizzato"
     },
     "row": {
       "moreFor": "Altre azioni per {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Prenotazione spostata al nuovo orario.",
       "linkCopied": "Link di gestione copiato.",
       "copyFailed": "Impossibile copiare il link.",
-      "declined": "Richiesta rifiutata."
+      "declined": "Richiesta rifiutata.",
+      "calendarPushed": "Inviato a Google: l'evento ora corrisponde a questa prenotazione.",
+      "calendarAccepted": {
+        "cancelled": "Modifica di Google accettata: la prenotazione è stata annullata.",
+        "rescheduled": "Modifica di Google accettata: la prenotazione è stata spostata al nuovo orario.",
+        "acknowledged": "Modifica di Google accettata. La prenotazione resta invariata."
+      }
     },
     "typesList": {
       "breadcrumb": "Percorso di navigazione",
@@ -962,7 +972,7 @@
         "calendarSaved": "Calendario salvato.",
         "confirmOff": {
           "title": "Disconnettere Google Calendar?",
-          "message": "Le nuove prenotazioni non vengono più inviate al tuo calendario e i suoi orari occupati non vengono più letti. Gli eventi già presenti nel calendario restano, e Google viene avvisato di revocare questo accesso.",
+          "message": "Le nuove prenotazioni non vengono più inviate al tuo calendario e i suoi orari occupati non vengono più letti. Anche i passaggi Google nei tuoi flow si fermano, perché condividono questo collegamento. Gli eventi già presenti nel calendario restano, e Google viene avvisato di revocare questo accesso.",
           "confirm": "Disconnetti",
           "cancel": "Mantieni"
         },
@@ -972,7 +982,8 @@
           "failed": "La connessione non è stata completata. Riprova; se continua a fallire, chiedi all'amministratore della piattaforma di controllare la configurazione di Google.",
           "expired": "Il tentativo ha richiesto troppo tempo. Premi Connetti per ricominciare.",
           "not_configured": "Google Calendar non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di aggiungere il client OAuth di Google.",
-          "missing_scope": "Google non ha concesso tutte le autorizzazioni del calendario necessarie. Connetti di nuovo e lascia selezionate tutte le caselle."
+          "missing_scope": "Google non ha concesso tutte le autorizzazioni del calendario necessarie. Connetti di nuovo e lascia selezionate tutte le caselle.",
+          "cancelled": "Hai annullato l'operazione. Non è stato collegato nulla."
         },
         "whatTitle": "Cosa fa",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Carica altro",
       "loadMorePast": "Carica altri passati",
       "noType": "Appuntamento"
+    },
+    "sync": {
+      "title": "Calendario non sincronizzato",
+      "reason": {
+        "event_deleted": "L'evento è stato eliminato o annullato in Google Calendar.",
+        "event_missing": "L'evento non è più presente in Google Calendar.",
+        "time_changed": "L'evento è stato spostato a un altro orario in Google Calendar.",
+        "attendees_changed": "Gli invitati all'evento sono stati modificati in Google Calendar."
+      },
+      "googleShows": "Google mostra: {time}",
+      "notChanged": "Questa prenotazione non è stata modificata. Scegli quale versione è corretta.",
+      "found": "Trovato {when}",
+      "push": "Reimposta su Google il nostro orario",
+      "accept": "Accetta la modifica di Google",
+      "keep": "Non ora",
+      "acceptTitle": {
+        "cancel": "Annullare questa prenotazione?",
+        "reschedule": "Spostare questa prenotazione all'orario di Google?",
+        "acknowledge": "Accettare gli invitati mostrati da Google?"
+      },
+      "acceptMessage": {
+        "cancel": "L'evento non esiste più su Google, quindi questa prenotazione viene annullata e il suo orario torna disponibile. Il cliente viene avvisato, come per qualsiasi annullamento.",
+        "reschedule": "Questa prenotazione viene spostata a {time}. Il cliente viene avvisato del nuovo orario, come per qualsiasi spostamento.",
+        "acknowledge": "La prenotazione in sé non cambia. L'elenco degli invitati di Google viene memorizzato e questo avviso scompare."
+      },
+      "acceptConfirm": {
+        "cancel": "Annulla prenotazione",
+        "reschedule": "Sposta prenotazione",
+        "acknowledge": "Accetta"
+      }
     }
   }
 }

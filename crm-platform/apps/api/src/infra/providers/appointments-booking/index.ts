@@ -5,3 +5,4 @@ export * from './appointment-messenger.stub';
 export * from './google-calendar.client';
 export * from './google-calendar.errors';
 export * from './google-calendar.mapping';
+export * from './google-transport';

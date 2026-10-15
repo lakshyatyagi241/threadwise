@@ -1332,7 +1332,8 @@
             "date_field_match": "Jadwal: relatif terhadap tanggal pada kontak (ulang tahun…)",
             "schedule": "Jadwal: pada tanggal dan waktu tertentu",
             "shopify_event": "Komersial: event toko Shopify",
-            "woocommerce_event": "Komersial: event toko WooCommerce"
+            "woocommerce_event": "Komersial: event toko WooCommerce",
+            "segment_leave": "Audiens: saat kontak keluar dari segmen"
           },
           "tagsLoading": "Memuat tag…",
           "tagPick": "— pilih tag —",
@@ -1426,7 +1427,8 @@
             "productId": "ID produk (opsional)",
             "productIdHint": "Kosong = produk apa pun dalam pesanan.",
             "storeNote": "Pelanggan dicocokkan dengan kontak tersimpan berdasarkan nomor telepon; tidak ada kontak baru yang dibuat untuk pesanan. \"Ditambahkan ke keranjang\" dan \"produk dilihat\" tidak tersedia: toko tidak melaporkannya.",
-            "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya."
+            "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya.",
+            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen."
           }
         }
       },
@@ -1716,7 +1718,21 @@
           "setupOpen": "Buka formulir Anda → <mono>menu ⋮</mono> → <mono>Editor skrip</mono>",
           "setupDownload": "<link>Unduh skrip (.gs)</link> lalu tempel",
           "setupTrigger": "Tambahkan pemicu: <mono>onFormSubmit</mono> · Dari formulir · Saat formulir dikirim",
-          "setupWarning": "Tanpa skrip ini, formulir tetap mencatat jawaban di Google Forms, tetapi alur tidak akan dilanjutkan."
+          "setupWarning": "Tanpa skrip ini, formulir tetap mencatat jawaban di Google Forms, tetapi alur tidak akan dilanjutkan.",
+          "noListing": "File Anda tidak dapat ditampilkan karena izin daftar file Drive belum diberikan di halaman akun Google. Tempel tautan atau ID sebagai gantinya.",
+          "connection": {
+            "open": "Buka akun Google",
+            "permission": {
+              "calendar": "Kalender",
+              "sheets": "Sheets",
+              "docs": "Docs dan Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google belum disiapkan untuk platform ini, sehingga langkah ini gagal saat alur dijalankan.",
+            "disconnected": "Belum ada akun Google yang terhubung, sehingga langkah ini gagal saat alur dijalankan. Hubungkan Google terlebih dahulu.",
+            "needsReconnect": "Google tidak lagi menerima akun yang terhubung, sehingga langkah ini gagal saat alur dijalankan. Hubungkan kembali Google terlebih dahulu.",
+            "missing": "Akun Google yang terhubung tidak diberi izin {permission}, sehingga langkah ini gagal saat alur dijalankan."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2367,7 +2383,8 @@
         "date_field_match": "saat tanggal cocok",
         "schedule": "sesuai jadwal",
         "shopify_event": "saat event Shopify",
-        "woocommerce_event": "saat event WooCommerce"
+        "woocommerce_event": "saat event WooCommerce",
+        "segment_leave": "saat keluar segmen"
       },
       "ports": {
         "manual": "manual",

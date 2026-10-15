@@ -41,7 +41,10 @@
       "notStarted": "Dit kan pas nadat de boeking is begonnen.",
       "alreadyStarted": "Deze boeking is al begonnen en kan dus niet meer worden gewijzigd.",
       "bookingOff": "Boeken is voor deze dienst momenteel niet beschikbaar.",
-      "notDeletable": "Dit kan niet worden verwijderd zolang er nog komende boekingen zijn."
+      "notDeletable": "Dit kan niet worden verwijderd zolang er nog komende boekingen zijn.",
+      "notDrifted": "Deze boeking komt al overeen met het Google-event. De gegevens zijn opnieuw geladen.",
+      "calendarNotConnected": "Google Calendar is niet gekoppeld. Koppel het opnieuw op de pagina Google-account en probeer het nog eens.",
+      "calendarFailed": "Google reageerde niet of heeft de wijziging geweigerd. Probeer het zo meteen opnieuw."
     },
     "picker": {
       "timeZone": "Tijdzone",
@@ -156,7 +159,8 @@
       "yesterday": "Gisteren",
       "rowLabel": "Boeking openen: {title}",
       "noName": "Geen naam",
-      "needsReview": "Beoordeling nodig"
+      "needsReview": "Beoordeling nodig",
+      "outOfSync": "Agenda niet gesynchroniseerd"
     },
     "row": {
       "moreFor": "Meer acties voor {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Boeking verplaatst naar het nieuwe tijdstip.",
       "linkCopied": "Beheerlink gekopieerd.",
       "copyFailed": "De link kon niet worden gekopieerd.",
-      "declined": "Verzoek afgewezen."
+      "declined": "Verzoek afgewezen.",
+      "calendarPushed": "Naar Google gestuurd: het event komt nu overeen met deze boeking.",
+      "calendarAccepted": {
+        "cancelled": "Wijziging van Google geaccepteerd: de boeking is geannuleerd.",
+        "rescheduled": "Wijziging van Google geaccepteerd: de boeking is verplaatst naar de nieuwe tijd.",
+        "acknowledged": "Wijziging van Google geaccepteerd. De boeking blijft zoals ze is."
+      }
     },
     "typesList": {
       "breadcrumb": "Kruimelpad",
@@ -962,7 +972,7 @@
         "calendarSaved": "Agenda opgeslagen.",
         "confirmOff": {
           "title": "Google Agenda loskoppelen?",
-          "message": "Nieuwe boekingen gaan niet meer naar je agenda en de bezette tijden ervan worden niet meer gelezen. Afspraken die al in je agenda staan, blijven daar en Google krijgt de melding om deze toegang in te trekken.",
+          "message": "Nieuwe boekingen gaan niet meer naar je agenda en de bezette tijden ervan worden niet meer gelezen. De Google-stappen in je flows stoppen ook, omdat ze deze verbinding delen. Afspraken die al in je agenda staan, blijven daar en Google krijgt de melding om deze toegang in te trekken.",
           "confirm": "Loskoppelen",
           "cancel": "Behouden"
         },
@@ -972,7 +982,8 @@
           "failed": "Het verbinden is niet voltooid. Probeer het opnieuw; als het blijft mislukken, vraag je platformbeheerder om de Google-configuratie te controleren.",
           "expired": "Die poging duurde te lang. Druk op Verbinden om opnieuw te beginnen.",
           "not_configured": "Google Agenda is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Google OAuth-client toe te voegen.",
-          "missing_scope": "Google heeft niet alle benodigde agendarechten verleend. Verbind opnieuw en laat alle vakjes aangevinkt."
+          "missing_scope": "Google heeft niet alle benodigde agendarechten verleend. Verbind opnieuw en laat alle vakjes aangevinkt.",
+          "cancelled": "U hebt geannuleerd. Er is niets gekoppeld."
         },
         "whatTitle": "Wat dit doet",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Meer laden",
       "loadMorePast": "Meer eerdere laden",
       "noType": "Afspraak"
+    },
+    "sync": {
+      "title": "Agenda niet gesynchroniseerd",
+      "reason": {
+        "event_deleted": "Het event is verwijderd of geannuleerd in Google Calendar.",
+        "event_missing": "Het event is niet meer te vinden in Google Calendar.",
+        "time_changed": "Het event is in Google Calendar naar een andere tijd verplaatst.",
+        "attendees_changed": "De gasten van het event zijn gewijzigd in Google Calendar."
+      },
+      "googleShows": "Google toont: {time}",
+      "notChanged": "Deze boeking is niet gewijzigd. Kies welke versie juist is.",
+      "found": "Gevonden: {when}",
+      "push": "Onze tijd terugzetten naar Google",
+      "accept": "Wijziging van Google accepteren",
+      "keep": "Niet nu",
+      "acceptTitle": {
+        "cancel": "Deze boeking annuleren?",
+        "reschedule": "Deze boeking naar de tijd van Google verplaatsen?",
+        "acknowledge": "De gasten die Google toont accepteren?"
+      },
+      "acceptMessage": {
+        "cancel": "Het event is verdwenen uit Google, dus deze boeking wordt geannuleerd en de tijd komt weer vrij. De klant wordt hiervan op de hoogte gebracht, zoals bij elke annulering.",
+        "reschedule": "Deze boeking wordt verplaatst naar {time}. De klant krijgt de nieuwe tijd te horen, zoals bij elke verplaatsing.",
+        "acknowledge": "De boeking zelf verandert niet. De gastenlijst van Google wordt onthouden en deze melding verdwijnt."
+      },
+      "acceptConfirm": {
+        "cancel": "Boeking annuleren",
+        "reschedule": "Boeking verplaatsen",
+        "acknowledge": "Accepteren"
+      }
     }
   }
 }

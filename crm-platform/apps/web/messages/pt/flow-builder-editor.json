@@ -1332,7 +1332,8 @@
             "date_field_match": "Agendamento: em relação a uma data do contato (aniversário…)",
             "schedule": "Agendamento: em uma data e hora",
             "shopify_event": "Comércio: um evento da loja Shopify",
-            "woocommerce_event": "Comércio: um evento da loja WooCommerce"
+            "woocommerce_event": "Comércio: um evento da loja WooCommerce",
+            "segment_leave": "Público: quando um contato sai de um segmento"
           },
           "tagsLoading": "Carregando tags…",
           "tagPick": "— escolha a tag —",
@@ -1426,7 +1427,8 @@
             "productId": "ID do produto (opcional)",
             "productIdHint": "Em branco = qualquer produto do pedido.",
             "storeNote": "O cliente é associado a um contato salvo pelo número de telefone; ninguém é criado por causa de um pedido. “Adicionado ao carrinho” e “produto visualizado” não são oferecidos: a loja não informa esses eventos.",
-            "updatedNote": "Dispara sempre que uma pessoa ou importação altera um contato. Uma alteração feita por outro fluxo não o inicia."
+            "updatedNote": "Dispara sempre que uma pessoa ou importação altera um contato. Uma alteração feita por outro fluxo não o inicia.",
+            "segmentLeaveHint": "Executa uma vez cada vez que um contato que estava dentro deste segmento é encontrado fora dele após ser atualizado, marcado ou listado. Só se percebe que um contato saiu se o fluxo o tiver visto dentro antes."
           }
         }
       },
@@ -1716,7 +1718,21 @@
           "setupOpen": "Abra seu formulário → <mono>menu ⋮</mono> → <mono>Editor de script</mono>",
           "setupDownload": "<link>Baixe o script (.gs)</link> e cole-o",
           "setupTrigger": "Adicione um gatilho: <mono>onFormSubmit</mono> · A partir do formulário · Ao enviar o formulário",
-          "setupWarning": "Sem este script, o formulário continuará registrando as respostas no Formulários Google, mas o fluxo não será retomado."
+          "setupWarning": "Sem este script, o formulário continuará registrando as respostas no Formulários Google, mas o fluxo não será retomado.",
+          "noListing": "Não é possível listar seus arquivos porque a permissão de lista de arquivos do Drive não foi concedida na página da conta do Google. Cole o link ou o ID.",
+          "connection": {
+            "open": "Abrir conta do Google",
+            "permission": {
+              "calendar": "Agenda",
+              "sheets": "Sheets",
+              "docs": "Docs e Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "O Google não está configurado para esta plataforma, então esta etapa falha quando o fluxo é executado.",
+            "disconnected": "Nenhuma conta Google está conectada, então esta etapa falha quando o fluxo é executado. Conecte o Google primeiro.",
+            "needsReconnect": "O Google não aceita mais a conta conectada, então esta etapa falha quando o fluxo é executado. Reconecte o Google primeiro.",
+            "missing": "A conta Google conectada não recebeu a permissão {permission}, então esta etapa falha quando o fluxo é executado."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -2367,7 +2383,8 @@
         "date_field_match": "ao coincidir a data",
         "schedule": "no agendamento",
         "shopify_event": "no evento do Shopify",
-        "woocommerce_event": "no evento do WooCommerce"
+        "woocommerce_event": "no evento do WooCommerce",
+        "segment_leave": "ao sair do segmento"
       },
       "ports": {
         "manual": "manual",

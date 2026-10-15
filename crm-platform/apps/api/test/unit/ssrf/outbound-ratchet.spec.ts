@@ -20,8 +20,6 @@ const REVIEWED_BARE_FETCH: Record<string, string> = {
   'infra/providers/ai-agents-training/http-training-url-fetcher.adapter.ts':
     'wraps safeGet, which re-checks every hop',
   'infra/providers/ai-agents-training/training-url-fetcher.port.ts': 'port type only',
-  'infra/providers/appointments-booking/google-calendar.client.ts':
-    'fixed Google host (env override is deploy-time)',
   'infra/providers/auth-registration-security/recaptcha.adapter.ts': 'fixed Google host',
   'infra/providers/auth-registration-security/social-oauth.adapters.ts':
     'fixed Google / Facebook hosts',

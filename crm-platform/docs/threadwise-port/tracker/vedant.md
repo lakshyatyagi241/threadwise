@@ -165,7 +165,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-043 | backend-done |  | flow definition, attributes, template data and media store are module-internal calls of the flow runtime (compile-graph, TemplateService, ChatMediaStore); vishal/FLR |
 | TW-NODE-044 | in-progress |  | tag, assign, deal, AI, Meet and WhatsApp form are node executors (TW-FLR-030, 035 to 037, 043, 047); the MySQL node waits for a driver (TW-FLR-034); web search is not built |
 | TW-NODE-045 | backend-done |  | the ordering endpoints are TW-FLR-042 (parse, shipping, confirm, cancel, reply under /public/v1/flows/ordering); vishal/FLR |
-| TW-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes are built against GoogleWorkspacePort (TW-FLR-044 to 047); no Google account store exists yet, so they report no account |
+| TW-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes run against the workspace's Google account (TW-GACC); not tried against a live Google account |
 | TW-NODE-047 | in-progress |  | the Commerce shop node's WhatsApp Shop stock and native list are served by the catalog (CatalogShopAdapter, TW-FLR-041); the checkout link for WooCommerce and Shopify waits for the store domains |
 | TW-NODE-048 | backend-done |  | booking for flows is the Book appointment node over the appointments domain (TW-FLR-040); vishal/FLR |
 | TW-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
@@ -585,11 +585,11 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLB-052 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-053 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-054 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
-| TW-FLB-055 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| TW-FLB-055 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
 | TW-FLB-056 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
-| TW-FLB-057 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
-| TW-FLB-058 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
-| TW-FLB-059 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| TW-FLB-057 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
+| TW-FLB-058 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
+| TW-FLB-059 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
 | TW-FLB-060 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-061 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-062 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
@@ -662,7 +662,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-041 | backend-done |  | Commerce shop node over FlowShopPort; CatalogShopAdapter binds the catalog behind it: WhatsApp Shop stock by retailer id and the native product list through CatalogSendService (card for one product, multi-product list for more); the single-use checkout link and WooCommerce and Shopify stock still answer cannot, because the store domains expose neither; commerce-shop-form spec, catalog-shop-adapter spec |
 | TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e; a saved customer profile (written by the store at checkout, no company) no longer hides the company the flow's last order kept |
 | TW-FLR-043 | backend-done |  | WhatsApp Form node and the form-submission resume; commerce-shop-form spec |
-| TW-FLR-044 | backend-done |  | Google Sheets node against a workspace port; no Google account store exists yet, so the nodes report no account and move on; integrations-nodes e2e |
+| TW-FLR-044 | backend-done |  | Google Sheets node over the workspace's Google account (TW-GACC-004); a node that cannot use Google FAILS the step with `[GOOGLE_*]` and what to do (run log, run view); google-account e2e against a stand-in |
 | TW-FLR-045 | backend-done |  | Google Docs node against the same port; integrations-nodes spec |
 | TW-FLR-046 | backend-done |  | Google Form node: sends the link, parks the run on a custom wait, the response webhook (per-org token) resumes it or the timeout port leaves; integrations-nodes e2e |
 | TW-FLR-047 | backend-done |  | Google Meet node against the Google port; integrations-nodes spec |
@@ -698,7 +698,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-077 | backend-done |  | Contact-change triggers: group_leave (contact.group_removed), segment_join, contact_updated, field_match (each value once per contact). A list or field change made by a flow does not start list or update flows (loop guard). Needs migration 20261111100000 (trigger_config, the new kinds). Beyond Reference; flow-workflow-gaps e2e. Trigger form built |
 | TW-FLR-078 | backend-done |  | Clock triggers: schedule (once, daily, weekly, monthly, for everyone, a list or a segment, at most 5,000 people per run) and date_field_match (days before, on or after a date field, yearly or full date), swept each minute with a compare-and-set on flows.trigger_last_occurrence so two workers fire once. Date fields are custom contact fields only. Beyond Reference; schedule-rules unit spec and e2e. Trigger form built |
 | TW-FLR-079 | backend-done |  | Store event triggers shopify_event and woocommerce_event: checkout started, ordered product, fulfilled, cancelled, refunded (from the webhook pipeline, store.flow_event through the outbox) and abandoned cart (announced when a recovery's first follow-up comes due, so a store with no cart follow-ups configured never reports abandonment). Added to cart and product viewed are not offered: the stores send no such events. Beyond Reference; unit and e2e. Trigger form built |
-| TW-FLR-080 | backend-done |  | Check Google Sheet cell condition (sheet_check) and Save contact from Sheet (sheet_contact: copies the matching row's cells into the run's contact), over GoogleWorkspacePort. No Google account store exists, so both report no account until one is bound (the check answers no). Beyond Reference; unit spec. Web forms built |
+| TW-FLR-080 | backend-done |  | Check Google Sheet cell condition (sheet_check) and Save contact from Sheet (sheet_contact: copies the matching row's cells into the run's contact), over the workspace's Google account (TW-GACC-004); without one the step fails with GOOGLE_ACCOUNT_NOT_CONNECTED. Beyond Reference; unit spec, google-account e2e. Web forms built |
 | TW-FLR-081 | blocked |  | Google Sheet events trigger (a row added or changed): needs a Google account store and a polling or push feed; not built |
 | TW-FLR-082 | done |  | Inbound webhook as a trigger, verified: an external system starts a flow with POST /public/v1/flows/:id/enroll (contact by id or phone), and a lead webhook that creates or updates a contact emits contact.created or contact.updated, which start contact_created and contact_updated flows. A webhook that creates the contact AND picks a flow in one call is not built (Reference's lead_config.flow_id) |
 

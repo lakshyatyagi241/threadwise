@@ -41,7 +41,10 @@
       "notStarted": "只有预订开始后才能执行此操作。",
       "alreadyStarted": "此预订已经开始，无法再更改。",
       "bookingOff": "此服务目前无法预订。",
-      "notDeletable": "仍有未来的预订，无法删除。"
+      "notDeletable": "仍有未来的预订，无法删除。",
+      "notDrifted": "此预约已与其 Google 日程一致，已为您重新加载。",
+      "calendarNotConnected": "Google Calendar 未连接。请在 Google 账号页面重新连接后再试。",
+      "calendarFailed": "Google 没有响应或拒绝了此更改。请稍后再试。"
     },
     "picker": {
       "timeZone": "时区",
@@ -156,7 +159,8 @@
       "yesterday": "昨天",
       "rowLabel": "打开预订：{title}",
       "noName": "无姓名",
-      "needsReview": "需审核"
+      "needsReview": "需审核",
+      "outOfSync": "日历不同步"
     },
     "row": {
       "moreFor": "{title} 的更多操作",
@@ -269,7 +273,13 @@
       "rescheduled": "预订已改到新时间。",
       "linkCopied": "管理链接已复制。",
       "copyFailed": "无法复制链接。",
-      "declined": "请求已拒绝。"
+      "declined": "请求已拒绝。",
+      "calendarPushed": "已推送到 Google：日程现已与此预约一致。",
+      "calendarAccepted": {
+        "cancelled": "已接受 Google 的更改：预约已取消。",
+        "rescheduled": "已接受 Google 的更改：预约已改到新的时间。",
+        "acknowledged": "已接受 Google 的更改，预约保持不变。"
+      }
     },
     "typesList": {
       "breadcrumb": "面包屑导航",
@@ -962,7 +972,7 @@
         "calendarSaved": "日历已保存。",
         "confirmOff": {
           "title": "断开 Google 日历？",
-          "message": "新预订将不再写入你的日历，也不再读取其忙碌时间。已在日历中的事件会保留，并会通知 Google 撤回此访问权限。",
+          "message": "新预订将不再写入你的日历，也不再读取其忙碌时间。流程中的 Google 步骤也会停止，因为它们共用此连接。已在日历中的事件会保留，并会通知 Google 撤回此访问权限。",
           "confirm": "断开连接",
           "cancel": "保留"
         },
@@ -972,7 +982,8 @@
           "failed": "连接未完成。请重试；如果持续失败，请让平台管理员检查 Google 设置。",
           "expired": "该次尝试耗时过长。请点击连接重新开始。",
           "not_configured": "此平台尚未设置 Google 日历。请让平台管理员添加 Google OAuth 客户端。",
-          "missing_scope": "Google 未授予所需的全部日历权限。请重新连接并保持所有复选框勾选。"
+          "missing_scope": "Google 未授予所需的全部日历权限。请重新连接并保持所有复选框勾选。",
+          "cancelled": "您已取消，未连接任何账号。"
         },
         "whatTitle": "功能说明",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "加载更多",
       "loadMorePast": "加载更多过往",
       "noType": "预约"
+    },
+    "sync": {
+      "title": "日历不同步",
+      "reason": {
+        "event_deleted": "该日程已在 Google Calendar 中被删除或取消。",
+        "event_missing": "在 Google Calendar 中已找不到该日程。",
+        "time_changed": "该日程在 Google Calendar 中被改到了其他时间。",
+        "attendees_changed": "该日程的参与者在 Google Calendar 中已被更改。"
+      },
+      "googleShows": "Google 显示：{time}",
+      "notChanged": "此预约尚未更改。请选择以哪一方为准。",
+      "found": "发现 {when}",
+      "push": "将我们的时间同步回 Google",
+      "accept": "接受 Google 的更改",
+      "keep": "暂不处理",
+      "acceptTitle": {
+        "cancel": "取消此预约？",
+        "reschedule": "将此预约改到 Google 显示的时间？",
+        "acknowledge": "接受 Google 显示的参与者？"
+      },
+      "acceptMessage": {
+        "cancel": "该日程已从 Google 中移除，因此此预约将被取消，其时间段会重新开放。与其他取消操作一样，客户会收到通知。",
+        "reschedule": "此预约将改到 {time}。与其他改期操作一样，客户会收到新时间的通知。",
+        "acknowledge": "预约本身不会改变。系统会记住 Google 的参与者名单，此提示也将消失。"
+      },
+      "acceptConfirm": {
+        "cancel": "取消预约",
+        "reschedule": "改期预约",
+        "acknowledge": "接受"
+      }
     }
   }
 }
