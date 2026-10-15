@@ -60,7 +60,10 @@
       "rejected": "Rifiutato: {reason}",
       "view": "Visualizza",
       "edit": "Modifica",
-      "delete": "Elimina"
+      "delete": "Elimina",
+      "copyCurl": "Copia cURL",
+      "copyCurlNamed": "Copia cURL per inviare {name}",
+      "curlUnavailable": "L'API può inviare solo modelli approvati con variabili numerate nel corpo, senza intestazione multimediale e senza variabili nell'intestazione o nei link"
     },
     "library": {
       "title": "Libreria dei template",
@@ -355,6 +358,14 @@
         "hint": "Ciò che viene inviato a Meta per la revisione, esattamente come è costruito.",
         "empty": "Nulla ancora costruito."
       }
+    },
+    "curl": {
+      "title": "Invia con l'API",
+      "hint": "Sostituisci la chiave, il numero e i valori tra parentesi angolari, poi eseguilo in un terminale o incollalo nella tua app.",
+      "copy": "Copia",
+      "copied": "Copiato",
+      "close": "Chiudi",
+      "keyHint": "La tua chiave API viene mostrata una sola volta, alla creazione, in <link>Sviluppatori</link>. Richiede il permesso templates:write."
     }
   }
 }

@@ -60,7 +60,10 @@
       "rejected": "Rejeté : {reason}",
       "view": "Afficher",
       "edit": "Modifier",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "copyCurl": "Copier le cURL",
+      "copyCurlNamed": "Copier le cURL pour envoyer {name}",
+      "curlUnavailable": "L'API ne peut envoyer que des modèles approuvés avec des variables numérotées dans le corps, sans en-tête média ni variables dans l'en-tête ou les liens"
     },
     "library": {
       "title": "Bibliothèque de modèles",
@@ -355,6 +358,14 @@
         "hint": "Ce qui est envoyé à Meta pour examen, exactement tel que construit.",
         "empty": "Rien n’a encore été construit."
       }
+    },
+    "curl": {
+      "title": "Envoyer avec l'API",
+      "hint": "Remplacez la clé, le numéro et les valeurs entre chevrons, puis exécutez-le dans un terminal ou collez-le dans votre appli.",
+      "copy": "Copier",
+      "copied": "Copié",
+      "close": "Fermer",
+      "keyHint": "Votre clé d'API s'affiche une seule fois, à sa création, sous <link>Développeurs</link>. Elle exige l'autorisation templates:write."
     }
   }
 }

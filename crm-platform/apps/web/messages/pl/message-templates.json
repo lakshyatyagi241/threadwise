@@ -60,7 +60,10 @@
       "rejected": "Odrzucone: {reason}",
       "view": "Wyświetl",
       "edit": "Edytuj",
-      "delete": "Usuń"
+      "delete": "Usuń",
+      "copyCurl": "Kopiuj cURL",
+      "copyCurlNamed": "Kopiuj cURL do wysłania {name}",
+      "curlUnavailable": "API może wysyłać tylko zatwierdzone szablony z numerowanymi zmiennymi w treści, bez nagłówka multimedialnego i bez zmiennych w nagłówku lub linkach"
     },
     "library": {
       "title": "Biblioteka szablonów",
@@ -355,6 +358,14 @@
         "hint": "Co dokładnie jest wysyłane do Meta do weryfikacji, w postaci zbudowanej.",
         "empty": "Nic jeszcze nie zbudowano."
       }
+    },
+    "curl": {
+      "title": "Wyślij przez API",
+      "hint": "Zastąp klucz, numer i wartości w nawiasach ostrych, a potem uruchom w terminalu lub wklej do aplikacji.",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "close": "Zamknij",
+      "keyHint": "Klucz API jest pokazywany raz, przy tworzeniu, w sekcji <link>Programiści</link>. Wymaga uprawnienia templates:write."
     }
   }
 }

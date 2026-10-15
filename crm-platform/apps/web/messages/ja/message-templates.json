@@ -60,7 +60,10 @@
       "rejected": "却下：{reason}",
       "view": "表示",
       "edit": "編集",
-      "delete": "削除"
+      "delete": "削除",
+      "copyCurl": "cURL をコピー",
+      "copyCurlNamed": "{name} を送信する cURL をコピー",
+      "curlUnavailable": "API で送れるのは、本文に番号付き変数があり、メディアヘッダーがなく、ヘッダーやリンクに変数がない承認済みテンプレートだけです"
     },
     "library": {
       "title": "テンプレートライブラリ",
@@ -355,6 +358,14 @@
         "hint": "Metaの審査に送信される内容です（作成された通りに表示）。",
         "empty": "まだ作成されていません。"
       }
+    },
+    "curl": {
+      "title": "API で送信",
+      "hint": "山かっこ内のキー、番号、値を置き換えて、ターミナルで実行するかアプリに貼り付けてください。",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "close": "閉じる",
+      "keyHint": "API キーは作成時に一度だけ <link>開発者</link> に表示されます。templates:write 権限が必要です。"
     }
   }
 }

@@ -163,3 +163,9 @@ export const DotIcon = (p: IconProps) => (
     <circle cx="8" cy="8" r="5.5" />
   </Svg>
 );
+
+export const CodeIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="m5.5 4.5-3.5 3.5 3.5 3.5M10.5 4.5 14 8l-3.5 3.5" />
+  </Svg>
+);

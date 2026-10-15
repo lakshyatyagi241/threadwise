@@ -60,7 +60,10 @@
       "rejected": "Ditolak: {reason}",
       "view": "Lihat",
       "edit": "Edit",
-      "delete": "Hapus"
+      "delete": "Hapus",
+      "copyCurl": "Salin cURL",
+      "copyCurlNamed": "Salin cURL untuk mengirim {name}",
+      "curlUnavailable": "API hanya bisa mengirim templat yang disetujui dengan variabel bernomor di isi pesan, tanpa header media, dan tanpa variabel di header atau tautan"
     },
     "library": {
       "title": "Pustaka templat",
@@ -355,6 +358,14 @@
         "hint": "Yang dikirim ke Meta untuk peninjauan, persis seperti yang dibuat.",
         "empty": "Belum ada yang dibuat."
       }
+    },
+    "curl": {
+      "title": "Kirim dengan API",
+      "hint": "Ganti kunci, nomor, dan nilai di dalam tanda kurung siku, lalu jalankan di terminal atau tempel di aplikasi Anda.",
+      "copy": "Salin",
+      "copied": "Tersalin",
+      "close": "Tutup",
+      "keyHint": "Kunci API Anda hanya ditampilkan sekali, saat dibuat, di <link>Pengembang</link>. Kunci ini butuh izin templates:write."
     }
   }
 }

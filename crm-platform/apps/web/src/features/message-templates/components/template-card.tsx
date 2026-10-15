@@ -7,7 +7,8 @@ import { cn } from '@crm/ui';
 import { canEdit, statusGroupOf } from '../lib/status-model';
 import { previewOfSummary } from '../lib/preview';
 import { CategoryPill } from './badges';
-import { ChatIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
+import { ChatIcon, CodeIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
+import { curlAvailable } from '../lib/template-curl';
 import { MessageBubble } from './wa-bubble';
 
 const DOT = {
@@ -26,6 +27,7 @@ export function TemplateCard({
   mayEdit,
   mayDelete,
   onDelete,
+  onCopyCurl,
 }: {
   template: TemplateSummary;
   /** The number it is submitted through, resolved by the screen; null when it is not known. */
@@ -35,6 +37,8 @@ export function TemplateCard({
   /** `tpl.templates.delete`. */
   mayDelete: boolean;
   onDelete: (t: TemplateSummary) => void;
+  /** Opens the "Copy cURL" dialog for this template. */
+  onCopyCurl: (t: TemplateSummary) => void;
 }) {
   const t = useTranslations('message-templates.card');
   const ts = useTranslations('message-templates.status');
@@ -120,6 +124,18 @@ export function TemplateCard({
         >
           <EyeIcon className="size-3.5" />
         </Link>
+        <button
+          type="button"
+          title={curlAvailable(tpl) ? t('copyCurl') : t('curlUnavailable')}
+          aria-label={
+            curlAvailable(tpl) ? t('copyCurlNamed', { name: tpl.name }) : t('curlUnavailable')
+          }
+          disabled={!curlAvailable(tpl)}
+          onClick={() => onCopyCurl(tpl)}
+          className="grid size-8 place-items-center rounded-full border border-border bg-background transition enabled:hover:border-brand enabled:hover:bg-brand/10 enabled:hover:text-brand disabled:opacity-40"
+        >
+          <CodeIcon className="size-3.5" />
+        </button>
         {mayDelete && (
           <button
             type="button"

@@ -60,7 +60,10 @@
       "rejected": "Rejeitado: {reason}",
       "view": "Ver",
       "edit": "Editar",
-      "delete": "Excluir"
+      "delete": "Excluir",
+      "copyCurl": "Copiar cURL",
+      "copyCurlNamed": "Copiar cURL para enviar {name}",
+      "curlUnavailable": "A API só envia modelos aprovados com variáveis numeradas no corpo, sem cabeçalho de mídia e sem variáveis no cabeçalho ou nos links"
     },
     "library": {
       "title": "Biblioteca de modelos",
@@ -355,6 +358,14 @@
         "hint": "O que é enviado à Meta para análise, exatamente como foi montado.",
         "empty": "Nada montado ainda."
       }
+    },
+    "curl": {
+      "title": "Enviar com a API",
+      "hint": "Substitua a chave, o número e os valores entre colchetes angulares e execute no terminal ou cole no seu app.",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "close": "Fechar",
+      "keyHint": "Sua chave de API aparece uma única vez, ao ser criada, em <link>Desenvolvedores</link>. Ela precisa da permissão templates:write."
     }
   }
 }

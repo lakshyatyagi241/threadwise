@@ -19,6 +19,7 @@ import { connectionLabel, summarizeSync, syncTargets } from '../lib/sync';
 import { DeleteTemplateDialog } from './delete-dialog';
 import { ErrorAlert } from './error-line';
 import { PlusIcon, RefreshIcon, SearchIcon } from './icons';
+import { CurlDialog } from './curl-dialog';
 import { TemplateCard } from './template-card';
 import { useErrorText } from './use-error-text';
 
@@ -42,7 +43,7 @@ const isSort = (v: string | null): v is (typeof SORTS)[number] => SORTS.includes
  * row, a grid of cards, and three help cards. The filters live in the URL so a reload or a shared link keeps them.
  * Pages are "Load more" over the API's cursor (no page numbers), eight at a time like Reference's page.
  */
-export function TemplatesScreen() {
+export function TemplatesScreen({ apiBaseUrl }: { apiBaseUrl: string }) {
   const t = useTranslations('message-templates.library');
   const tc = useTranslations('message-templates.category');
   const errorText = useErrorText();
@@ -92,6 +93,7 @@ export function TemplatesScreen() {
   const [syncing, setSyncing] = useState(false);
   const [banner, setBanner] = useState<{ tone: 'ok' | 'error'; text: string } | null>(null);
   const [toDelete, setToDelete] = useState<TemplateSummary | null>(null);
+  const [curlOf, setCurlOf] = useState<TemplateSummary | null>(null);
 
   const labels = useMemo(() => {
     const m = new Map<string, string>();
@@ -448,6 +450,7 @@ export function TemplatesScreen() {
                         mayEdit={mayCreate}
                         mayDelete={mayDelete}
                         onDelete={setToDelete}
+                        onCopyCurl={setCurlOf}
                       />
                     </li>
                   ))}
@@ -496,6 +499,7 @@ export function TemplatesScreen() {
       </div>
 
       <DeleteTemplateDialog template={toDelete} onClose={() => setToDelete(null)} />
+      <CurlDialog template={curlOf} baseUrl={apiBaseUrl} onClose={() => setCurlOf(null)} />
     </div>
   );
 }

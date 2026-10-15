@@ -60,7 +60,10 @@
       "rejected": "Bị từ chối: {reason}",
       "view": "Xem",
       "edit": "Chỉnh sửa",
-      "delete": "Xóa"
+      "delete": "Xóa",
+      "copyCurl": "Sao chép cURL",
+      "copyCurlNamed": "Sao chép cURL để gửi {name}",
+      "curlUnavailable": "API chỉ gửi được mẫu đã duyệt có biến đánh số trong nội dung, không có tiêu đề phương tiện và không có biến trong tiêu đề hoặc liên kết"
     },
     "library": {
       "title": "Thư viện mẫu",
@@ -355,6 +358,14 @@
         "hint": "Nội dung gửi Meta để xét duyệt, đúng như đã tạo.",
         "empty": "Chưa tạo gì."
       }
+    },
+    "curl": {
+      "title": "Gửi bằng API",
+      "hint": "Thay khóa, số và các giá trị trong dấu ngoặc nhọn rồi chạy trong terminal hoặc dán vào ứng dụng của bạn.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép",
+      "close": "Đóng",
+      "keyHint": "Khóa API chỉ hiện một lần, khi bạn tạo, trong <link>Nhà phát triển</link>. Khóa cần quyền templates:write."
     }
   }
 }

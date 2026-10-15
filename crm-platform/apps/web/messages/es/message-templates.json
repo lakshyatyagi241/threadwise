@@ -60,7 +60,10 @@
       "rejected": "Rechazada: {reason}",
       "view": "Ver",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "copyCurl": "Copiar cURL",
+      "copyCurlNamed": "Copiar cURL para enviar {name}",
+      "curlUnavailable": "La API solo puede enviar plantillas aprobadas con variables numeradas en el cuerpo, sin encabezado multimedia ni variables en el encabezado o los enlaces"
     },
     "library": {
       "title": "Biblioteca de plantillas",
@@ -355,6 +358,14 @@
         "hint": "Lo que se envía a Meta para revisión, exactamente como se construye.",
         "empty": "Todavía no hay nada construido."
       }
+    },
+    "curl": {
+      "title": "Enviar con la API",
+      "hint": "Sustituye la clave, el número y los valores entre corchetes angulares, y ejecútalo en una terminal o pégalo en tu app.",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "close": "Cerrar",
+      "keyHint": "Tu clave de API se muestra una sola vez, al crearla, en <link>Desarrolladores</link>. Necesita el permiso templates:write."
     }
   }
 }

@@ -73,7 +73,10 @@
       "edit": "Edit template",
       "viewTitle": "View details & Meta review status",
       "delete": "Delete",
-      "deleteNamed": "Delete {name}"
+      "deleteNamed": "Delete {name}",
+      "copyCurl": "Copy cURL",
+      "copyCurlNamed": "Copy cURL to send {name}",
+      "curlUnavailable": "The API can send only approved templates with numbered body variables, no media header and no header or link variables"
     },
     "library": {
       "title": "Template library",
@@ -427,6 +430,14 @@
         "TAG_CONTENT_MISMATCH": "Category does not match the content (e.g. promotional copy in a UTILITY template).",
         "SCAM": "Meta flagged the template as a potential scam. Review claims and language."
       }
+    },
+    "curl": {
+      "title": "Send with the API",
+      "hint": "Replace the key, the number and the values in angle brackets, then run it in a terminal or paste it into your app.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "close": "Close",
+      "keyHint": "Your API key is shown once, when you create it, under <link>Developers</link>. It needs the templates:write permission."
     }
   }
 }
