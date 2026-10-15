@@ -436,7 +436,11 @@
         "copied": "Copied",
         "copyFailed": "Could not copy. Select the text and copy it by hand.",
         "keyHint": "Replace YOUR_API_KEY with your API key.",
-        "keyLink": "Get an API key"
+        "keyLink": "Get an API key",
+        "loading": "Checking your API keys…",
+        "noKey": "This workspace has no API key yet. Create an API key first, then use this cURL.",
+        "keysUnknown": "Could not check your API keys. Open the Developers page to create or review a key, then use this cURL.",
+        "createKey": "Create an API key"
       }
     }
   }

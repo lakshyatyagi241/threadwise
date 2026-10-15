@@ -54,7 +54,10 @@
       "time": "10:30",
       "copyCode": "コードをコピー",
       "buttonUnnamed": "ボタン",
-      "moreButtons": "{count, plural, other {+#個のボタン}}"
+      "moreButtons": "{count, plural, other {+#個のボタン}}",
+      "live": "ライブプレビュー",
+      "business": "Bloomly",
+      "online": "オンライン"
     },
     "card": {
       "rejected": "却下：{reason}",
@@ -62,7 +65,19 @@
       "edit": "編集",
       "delete": "削除",
       "curl": "cURL: APIでこのテンプレートを送信",
-      "curlNamed": "{name} を送信する cURL"
+      "curlNamed": "{name} を送信する cURL",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "標準",
+        "media": "メディア",
+        "auth": "認証",
+        "carousel": "カルーセル",
+        "catalog": "カタログ",
+        "limited_time_offer": "期間限定オファー"
+      },
+      "rejectedLabel": "却下:",
+      "viewTitle": "詳細とMetaの審査状況を表示",
+      "deleteNamed": "{name}を削除"
     },
     "library": {
       "title": "テンプレートライブラリ",
@@ -91,7 +106,56 @@
       "emptyFilteredTitle": "一致するテンプレートはありません",
       "emptyFilteredBody": "フィルターを変更またはクリアすると、より多くのテンプレートが表示されます。",
       "clearFilters": "フィルターをクリア",
-      "loadMore": "もっと読み込む"
+      "loadMore": "もっと読み込む",
+      "crumb": "キャンペーン / テンプレート",
+      "titleA": "テンプレート",
+      "titleB": "ライブラリ",
+      "tipTitle": "ヒント",
+      "tip": "変数を使いやすい明確な文面でテンプレートを送信してください('{{name}}'、'{{order_id}}')。本文が販促的な表現を避け、選択したMetaカテゴリに合っていれば、承認は24時間以内に完了します。",
+      "statusTitle": "ステータス",
+      "statusTab": {
+        "all": "すべて",
+        "approved": "承認済み",
+        "pending": "審査中",
+        "rejected": "却下"
+      },
+      "quickStartTitle": "クイックスタート",
+      "quickStart": "承認までの時間を24時間以内に保つため、Metaに送信する前に<link>テンプレートガイドライン</link>をお読みください。",
+      "createTemplate": "テンプレートを作成",
+      "syncFailedLabel": "Metaからの同期に失敗しました:",
+      "categories": "カテゴリ",
+      "tabAll": "すべて",
+      "sortLabel": "テンプレートを並べ替え",
+      "sort": {
+        "newest": "新しい順",
+        "oldest": "古い順",
+        "name-asc": "名前 A→Z",
+        "name-desc": "名前 Z→A"
+      },
+      "showing": "表示中",
+      "of": "/",
+      "filteredTemplates": "件の絞り込み済みテンプレート",
+      "showingRange": "{total}件中1〜{shown}件のテンプレートを表示",
+      "legend": {
+        "approved": "承認済み",
+        "pending": "審査中",
+        "rejected": "却下"
+      },
+      "helpLabel": "ヘルプ - 0{n}",
+      "help": {
+        "one": {
+          "title": "テンプレートメッセージとは?",
+          "body": "24時間のサービスウィンドウ外で顧客との新しい会話を始めるためにMetaが必要とする、事前承認済みのメッセージ形式です。"
+        },
+        "two": {
+          "title": "承認時間を短縮するには?",
+          "body": "メッセージ本文は明確にし、ユーティリティカテゴリでは過度な販促表現を避け、変数には必ずサンプル値を指定してください。"
+        },
+        "three": {
+          "title": "テンプレートが却下されたのはなぜですか?",
+          "body": "主な理由は、書式の誤り、カテゴリの不一致、不適切な内容です。却下理由を確認し、編集して再送信してください。"
+        }
+      }
     },
     "delete": {
       "title": "テンプレートを削除",
@@ -317,7 +381,15 @@
         "paused": "Metaにより一時停止されています。Metaが停止を解除するまで送信できません。",
         "pausedUntil": "Metaにより {when} まで一時停止されています。",
         "disabled": "Metaにより無効化されています。送信できません。",
-        "deleted": "Metaにこのテンプレートが表示されなくなりました。ここには残っています。再度同期するか、削除してください。"
+        "deleted": "Metaにこのテンプレートが表示されなくなりました。ここには残っています。再度同期するか、削除してください。",
+        "notSubmitted": "まだMetaに送信されていません",
+        "notSubmittedBody": "このテンプレートはここに保存されていますが、MetaテンプレートIDがありません。Metaに受理されていないため、審査も送信もできません。送信して審査を開始してください。",
+        "notSubmittedNoWaba": "このテンプレートにはMetaテンプレートIDがありません。WhatsApp Business(WABA)アカウントを接続してから、審査用に送信してください。",
+        "pendingBody": "ほとんどのテンプレートは数分で承認されますが、Metaでは最大48時間かかる場合があります。ステータスが保留中の間、このページは30秒ごとに自動更新されます。",
+        "submittedAgo": "送信日時 {when}",
+        "checkedAgo": "最終確認 {when}",
+        "code": "コード:",
+        "pausedBody": "ブロックやスパム報告などの否定的なフィードバックが繰り返されたため、このテンプレートは一時停止されました。再び送信するには品質スコアの回復が必要です。"
       },
       "facts": {
         "title": "Meta同期",
@@ -364,7 +436,36 @@
         "copied": "コピーしました",
         "copyFailed": "コピーできませんでした。テキストを選択して手動でコピーしてください。",
         "keyHint": "YOUR_API_KEY をご自身のAPIキーに置き換えてください。",
-        "keyLink": "APIキーを取得"
+        "keyLink": "APIキーを取得",
+        "loading": "APIキーを確認しています…",
+        "noKey": "このワークスペースにはまだAPIキーがありません。先にAPIキーを作成してから、このcURLを使用してください。",
+        "keysUnknown": "APIキーを確認できませんでした。開発者ページでキーを作成または確認してから、このcURLを使用してください。",
+        "createKey": "APIキーを作成"
+      },
+      "refreshNow": "今すぐ更新",
+      "editTemplate": "テンプレートを編集",
+      "editResubmit": "編集して再送信",
+      "submitToMeta": "Metaに送信",
+      "wabaAccount": "WhatsApp Businessアカウント",
+      "noWaba": "WABAアカウントが接続されていません。",
+      "connectOne": "接続する",
+      "noWabaTail": "とテンプレートをMetaに送信できます。",
+      "related": "関連",
+      "useInBroadcast": "ブロードキャストで使用",
+      "crumbTemplates": "テンプレート",
+      "crumbDetail": "詳細",
+      "notSubmittedPill": "未送信",
+      "qualityPill": "品質 · {quality}",
+      "preview": {
+        "title": "プレビュー",
+        "hint": "WhatsAppでの表示イメージ"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "コンテンツが不適切または脅迫的と判断されました。",
+        "INVALID_FORMAT": "Metaのテンプレートルール(プレースホルダー、改行、長さ)に違反しています。",
+        "PROMOTIONAL": "このカテゴリでは販促的な表現は使用できません。",
+        "TAG_CONTENT_MISMATCH": "カテゴリが内容と一致しません(例:UTILITYテンプレートでの販促文)。",
+        "SCAM": "Metaがこのテンプレートを詐欺の可能性があると判断しました。主張と表現を見直してください。"
       }
     }
   }

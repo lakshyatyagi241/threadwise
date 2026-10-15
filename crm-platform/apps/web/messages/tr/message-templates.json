@@ -54,7 +54,10 @@
       "time": "10:30",
       "copyCode": "Kodu kopyala",
       "buttonUnnamed": "Düğme",
-      "moreButtons": "{count, plural, other {+# düğme daha}}"
+      "moreButtons": "{count, plural, other {+# düğme daha}}",
+      "live": "Canlı önizleme",
+      "business": "Bloomly",
+      "online": "çevrimiçi"
     },
     "card": {
       "rejected": "Reddedildi: {reason}",
@@ -62,7 +65,19 @@
       "edit": "Düzenle",
       "delete": "Sil",
       "curl": "cURL: bu şablonu API ile gönder",
-      "curlNamed": "{name} göndermek için cURL"
+      "curlNamed": "{name} göndermek için cURL",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standart",
+        "media": "Medya",
+        "auth": "Doğrulama",
+        "carousel": "Karusel",
+        "catalog": "Katalog",
+        "limited_time_offer": "Sınırlı süreli teklif"
+      },
+      "rejectedLabel": "Reddedildi:",
+      "viewTitle": "Ayrıntıları ve Meta inceleme durumunu görüntüle",
+      "deleteNamed": "{name} öğesini sil"
     },
     "library": {
       "title": "Şablon kütüphanesi",
@@ -91,7 +106,56 @@
       "emptyFilteredTitle": "Eşleşen şablon yok",
       "emptyFilteredBody": "Daha fazla şablon görmek için filtreleri değiştirin veya temizleyin.",
       "clearFilters": "Filtreleri temizle",
-      "loadMore": "Daha fazla yükle"
+      "loadMore": "Daha fazla yükle",
+      "crumb": "Kampanyalar / Şablonlar",
+      "titleA": "Şablon",
+      "titleB": "kitaplığı",
+      "tipTitle": "İpucu",
+      "tip": "Şablonlarınızı net ve değişkenlere uygun metinlerle gönderin ('{{name}}', '{{order_id}}'). Gövde metni promosyon tetikleyicilerinden kaçındığında ve seçilen Meta kategorisine uyduğunda onay süresi 24 saatin altında kalır.",
+      "statusTitle": "Durum",
+      "statusTab": {
+        "all": "Tümü",
+        "approved": "Onaylandı",
+        "pending": "İncelemede",
+        "rejected": "Reddedildi"
+      },
+      "quickStartTitle": "Hızlı başlangıç",
+      "quickStart": "Onay sürelerini 24 saatin altında tutmak için Meta'ya göndermeden önce <link>Şablon Yönergeleri</link>'ni okuyun.",
+      "createTemplate": "Şablon oluştur",
+      "syncFailedLabel": "Meta'dan eşitleme başarısız oldu:",
+      "categories": "Kategoriler",
+      "tabAll": "Tümü",
+      "sortLabel": "Şablonları sırala",
+      "sort": {
+        "newest": "En yeni",
+        "oldest": "En eski",
+        "name-asc": "Ad A→Z",
+        "name-desc": "Ad Z→A"
+      },
+      "showing": "Gösterilen",
+      "of": "/",
+      "filteredTemplates": "filtrelenmiş şablon",
+      "showingRange": "{total} şablondan 1-{shown} arası gösteriliyor",
+      "legend": {
+        "approved": "Onaylandı",
+        "pending": "İncelemede",
+        "rejected": "Reddedildi"
+      },
+      "helpLabel": "Yardım - 0{n}",
+      "help": {
+        "one": {
+          "title": "Şablon mesajı nedir?",
+          "body": "Meta'nın, 24 saatlik hizmet penceresi dışında müşterilerle yeni görüşmeler başlatmak için zorunlu kıldığı, önceden onaylanmış mesaj biçimidir."
+        },
+        "two": {
+          "title": "Onay süreleri nasıl kısaltılır?",
+          "body": "Mesaj gövdesini net tutun, Yardımcı kategorisinde aşırı promosyon dilinden kaçının ve değişkenler için her zaman örnek değerler girin."
+        },
+        "three": {
+          "title": "Şablonum neden reddedildi?",
+          "body": "Yaygın nedenler arasında hatalı biçimlendirme, uyumsuz kategori veya taciz içerikli metin bulunur. Ret nedenini kontrol edin ve yeniden göndermek için düzenleyin."
+        }
+      }
     },
     "delete": {
       "title": "Şablonu sil",
@@ -317,7 +381,15 @@
         "paused": "Meta tarafından duraklatıldı. Meta duraklatmayı kaldırana kadar gönderilemez.",
         "pausedUntil": "Meta tarafından {when} tarihine kadar duraklatıldı.",
         "disabled": "Meta tarafından devre dışı bırakıldı. Gönderilemez.",
-        "deleted": "Meta bu şablonu artık listelemiyor. Burada saklanıyor; yeniden eşitleyin veya silin."
+        "deleted": "Meta bu şablonu artık listelemiyor. Burada saklanıyor; yeniden eşitleyin veya silin.",
+        "notSubmitted": "Henüz Meta'ya gönderilmedi",
+        "notSubmittedBody": "Bu şablon burada kayıtlı ancak Meta Şablon Kimliği yok: Meta onu hiç kabul etmedi, bu yüzden incelenemiyor veya gönderilemiyor. İncelemeyi başlatmak için gönderin.",
+        "notSubmittedNoWaba": "Bu şablonun Meta Şablon Kimliği yok. Bir WhatsApp Business (WABA) hesabı bağlayın, ardından incelemeye gönderin.",
+        "pendingBody": "Çoğu şablon dakikalar içinde onaylanır; Meta en fazla 48 saat sürebilir. Durum beklemedeyken bu sayfa her 30 saniyede bir otomatik yenilenir.",
+        "submittedAgo": "Gönderildi: {when}",
+        "checkedAgo": "son kontrol: {when}",
+        "code": "Kod:",
+        "pausedBody": "Tekrarlanan olumsuz geri bildirimler (engellemeler veya spam bildirimleri) bu şablonu duraklattı. Yeniden gönderilebilmesi için kalite puanının düzelmesi gerekir."
       },
       "facts": {
         "title": "Meta eşitlemesi",
@@ -364,7 +436,36 @@
         "copied": "Kopyalandı",
         "copyFailed": "Kopyalanamadı. Metni seçip elle kopyalayın.",
         "keyHint": "YOUR_API_KEY yerine API anahtarınızı yazın.",
-        "keyLink": "API anahtarı al"
+        "keyLink": "API anahtarı al",
+        "loading": "API anahtarlarınız kontrol ediliyor…",
+        "noKey": "Bu çalışma alanında henüz API anahtarı yok. Önce bir API anahtarı oluşturun, sonra bu cURL'ü kullanın.",
+        "keysUnknown": "API anahtarlarınız kontrol edilemedi. Anahtar oluşturmak veya incelemek için Geliştiriciler sayfasını açın, sonra bu cURL'ü kullanın.",
+        "createKey": "API anahtarı oluştur"
+      },
+      "refreshNow": "Şimdi yenile",
+      "editTemplate": "Şablonu düzenle",
+      "editResubmit": "Düzenle ve yeniden gönder",
+      "submitToMeta": "Meta'ya gönder",
+      "wabaAccount": "WhatsApp Business hesabı",
+      "noWaba": "Bağlı WABA hesabı yok.",
+      "connectOne": "Bir tane bağlayın",
+      "noWabaTail": "ve şablonları Meta'ya gönderin.",
+      "related": "İlgili",
+      "useInBroadcast": "Toplu gönderimde kullan",
+      "crumbTemplates": "Şablonlar",
+      "crumbDetail": "Ayrıntı",
+      "notSubmittedPill": "Gönderilmedi",
+      "qualityPill": "Kalite · {quality}",
+      "preview": {
+        "title": "Önizleme",
+        "hint": "WhatsApp'ta nasıl görünür"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "İçerik taciz edici veya tehdit edici olarak işaretlendi.",
+        "INVALID_FORMAT": "Biçim, Meta'nın şablon kurallarını ihlal ediyor (yer tutucular, satır sonları, uzunluk).",
+        "PROMOTIONAL": "Bu kategoride pazarlama dili kullanılamaz.",
+        "TAG_CONTENT_MISMATCH": "Kategori içerikle uyuşmuyor (ör. UTILITY şablonunda promosyon metni).",
+        "SCAM": "Meta şablonu olası dolandırıcılık olarak işaretledi. İddiaları ve dili gözden geçirin."
       }
     }
   }

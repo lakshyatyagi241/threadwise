@@ -26,6 +26,7 @@ export function TemplateCard({
   connectionLabel,
   mayEdit,
   mayDelete,
+  mayCurl = false,
   onDelete,
 }: {
   template: TemplateSummary;
@@ -35,6 +36,8 @@ export function TemplateCard({
   mayEdit: boolean;
   /** `tpl.templates.delete`. */
   mayDelete: boolean;
+  /** `tpl.templates.api_curl` and `api.keys.read`: the cURL shortcut to the send example. */
+  mayCurl?: boolean;
   onDelete: (t: TemplateSummary) => void;
 }) {
   const t = useTranslations('message-templates.card');
@@ -121,7 +124,7 @@ export function TemplateCard({
         >
           <EyeIcon className="size-3.5" />
         </Link>
-        {canSendViaApi(tpl) && (
+        {mayCurl && canSendViaApi(tpl) && (
           <Link
             href={`/templates/${tpl.id}#curl`}
             title={t('curl')}

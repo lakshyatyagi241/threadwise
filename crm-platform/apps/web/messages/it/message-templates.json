@@ -54,7 +54,10 @@
       "time": "10:30",
       "copyCode": "Copia codice",
       "buttonUnnamed": "Pulsante",
-      "moreButtons": "{count, plural, one {+# altro pulsante} other {+# altri pulsanti}}"
+      "moreButtons": "{count, plural, one {+# altro pulsante} other {+# altri pulsanti}}",
+      "live": "Anteprima live",
+      "business": "Bloomly",
+      "online": "online"
     },
     "card": {
       "rejected": "Rifiutato: {reason}",
@@ -62,7 +65,19 @@
       "edit": "Modifica",
       "delete": "Elimina",
       "curl": "cURL: invia questo modello con l'API",
-      "curlNamed": "cURL per inviare {name}"
+      "curlNamed": "cURL per inviare {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standard",
+        "media": "Multimediale",
+        "auth": "Autenticazione",
+        "carousel": "Carosello",
+        "catalog": "Catalogo",
+        "limited_time_offer": "Offerta a tempo limitato"
+      },
+      "rejectedLabel": "Rifiutato:",
+      "viewTitle": "Vedi dettagli e stato della revisione Meta",
+      "deleteNamed": "Elimina {name}"
     },
     "library": {
       "title": "Libreria dei template",
@@ -91,7 +106,56 @@
       "emptyFilteredTitle": "Nessun template corrisponde",
       "emptyFilteredBody": "Modifica o cancella i filtri per vedere altri template.",
       "clearFilters": "Cancella filtri",
-      "loadMore": "Carica altri"
+      "loadMore": "Carica altri",
+      "crumb": "Campagne / Template",
+      "titleA": "Template",
+      "titleB": "libreria",
+      "tipTitle": "Suggerimento",
+      "tip": "Invia template con testi chiari e adatti alle variabili ('{{name}}', '{{order_id}}'). I tempi di approvazione restano sotto le 24 ore quando il corpo evita formule promozionali e corrisponde alla categoria Meta scelta.",
+      "statusTitle": "Stato",
+      "statusTab": {
+        "all": "Tutti",
+        "approved": "Approvato",
+        "pending": "In revisione",
+        "rejected": "Rifiutato"
+      },
+      "quickStartTitle": "Guida rapida",
+      "quickStart": "Leggi le <link>Linee guida dei template</link> prima di inviare a Meta per mantenere i tempi di approvazione sotto le 24 ore.",
+      "createTemplate": "Crea template",
+      "syncFailedLabel": "Sincronizzazione da Meta non riuscita:",
+      "categories": "Categorie",
+      "tabAll": "Tutte",
+      "sortLabel": "Ordina template",
+      "sort": {
+        "newest": "Più recenti",
+        "oldest": "Meno recenti",
+        "name-asc": "Nome A→Z",
+        "name-desc": "Nome Z→A"
+      },
+      "showing": "Visualizzati",
+      "of": "di",
+      "filteredTemplates": "template filtrati",
+      "showingRange": "Visualizzati 1-{shown} di {total} template",
+      "legend": {
+        "approved": "Approvati",
+        "pending": "In revisione",
+        "rejected": "Rifiutati"
+      },
+      "helpLabel": "Aiuto - 0{n}",
+      "help": {
+        "one": {
+          "title": "Che cos'è un messaggio template?",
+          "body": "Un formato di messaggio pre-approvato richiesto da Meta per avviare nuove conversazioni con i clienti al di fuori della finestra di assistenza di 24 ore."
+        },
+        "two": {
+          "title": "Come velocizzare l'approvazione?",
+          "body": "Mantieni il corpo del messaggio chiaro, evita un linguaggio troppo promozionale nelle categorie Utility e fornisci sempre valori di esempio per le variabili."
+        },
+        "three": {
+          "title": "Perché il mio template è stato rifiutato?",
+          "body": "I motivi più comuni sono formattazione errata, categoria non corrispondente o contenuto offensivo. Controlla il motivo del rifiuto e modifica per inviare di nuovo."
+        }
+      }
     },
     "delete": {
       "title": "Elimina template",
@@ -317,7 +381,15 @@
         "paused": "Messo in pausa da Meta. Non può essere inviato finché Meta non revoca la pausa.",
         "pausedUntil": "Messo in pausa da Meta fino al {when}.",
         "disabled": "Disattivato da Meta. Non può essere inviato.",
-        "deleted": "Meta non elenca più questo template. Resta qui; sincronizza di nuovo o eliminalo."
+        "deleted": "Meta non elenca più questo template. Resta qui; sincronizza di nuovo o eliminalo.",
+        "notSubmitted": "Non ancora inviato a Meta",
+        "notSubmittedBody": "Questo template è salvato qui ma non ha un ID template Meta: Meta non lo ha mai accettato, per questo non può essere revisionato né inviato. Invialo per avviare la revisione.",
+        "notSubmittedNoWaba": "Questo template non ha un ID template Meta. Collega un account WhatsApp Business (WABA), poi invialo in revisione.",
+        "pendingBody": "La maggior parte dei template viene approvata in pochi minuti; Meta impiega fino a 48 ore. Questa pagina si aggiorna automaticamente ogni 30 secondi finché lo stato è in attesa.",
+        "submittedAgo": "Inviato {when}",
+        "checkedAgo": "ultimo controllo {when}",
+        "code": "Codice:",
+        "pausedBody": "Feedback negativi ripetuti (blocchi o segnalazioni di spam) hanno messo in pausa questo template. Il suo punteggio di qualità deve risalire prima di poterlo inviare di nuovo."
       },
       "facts": {
         "title": "Sincronizzazione con Meta",
@@ -364,7 +436,36 @@
         "copied": "Copiato",
         "copyFailed": "Impossibile copiare. Seleziona il testo e copialo a mano.",
         "keyHint": "Sostituisci YOUR_API_KEY con la tua chiave API.",
-        "keyLink": "Ottieni una chiave API"
+        "keyLink": "Ottieni una chiave API",
+        "loading": "Controllo delle chiavi API…",
+        "noKey": "Questo spazio di lavoro non ha ancora una chiave API. Crea prima una chiave API, poi usa questo cURL.",
+        "keysUnknown": "Impossibile controllare le chiavi API. Apri la pagina Sviluppatori per creare o rivedere una chiave, poi usa questo cURL.",
+        "createKey": "Crea una chiave API"
+      },
+      "refreshNow": "Aggiorna ora",
+      "editTemplate": "Modifica template",
+      "editResubmit": "Modifica e reinvia",
+      "submitToMeta": "Invia a Meta",
+      "wabaAccount": "Account WhatsApp Business",
+      "noWaba": "Nessun account WABA collegato.",
+      "connectOne": "Collegane uno",
+      "noWabaTail": "per inviare template a Meta.",
+      "related": "Correlati",
+      "useInBroadcast": "Usa in una trasmissione",
+      "crumbTemplates": "Template",
+      "crumbDetail": "Dettaglio",
+      "notSubmittedPill": "Non inviato",
+      "qualityPill": "Qualità · {quality}",
+      "preview": {
+        "title": "Anteprima",
+        "hint": "Come appare su WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Il contenuto è stato segnalato come offensivo o minaccioso.",
+        "INVALID_FORMAT": "Il formato viola le regole dei template di Meta (segnaposto, interruzioni di riga, lunghezza).",
+        "PROMOTIONAL": "Linguaggio di marketing non consentito in questa categoria.",
+        "TAG_CONTENT_MISMATCH": "La categoria non corrisponde al contenuto (es. testo promozionale in un template UTILITY).",
+        "SCAM": "Meta ha segnalato il template come potenziale truffa. Controlla affermazioni e linguaggio."
       }
     }
   }

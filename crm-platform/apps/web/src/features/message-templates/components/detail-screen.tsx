@@ -6,7 +6,13 @@ import { useEffect, useState, type ReactNode } from 'react';
 import type { TemplateDetail, TemplateSubmitResult } from '@crm/contracts';
 import { Button, Spinner, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useConnections, useRefreshTemplate, useSubmitTemplate, useTemplate } from '../api/hooks';
+import {
+  useConnections,
+  useHasApiKey,
+  useRefreshTemplate,
+  useSubmitTemplate,
+  useTemplate,
+} from '../api/hooks';
 import { canSendViaApi, templateSendCurl } from '../lib/curl';
 import { clearFlash, peekFlash } from '../lib/flash';
 import { previewOfSummary } from '../lib/preview';
@@ -128,6 +134,9 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
   const errorText = useErrorText();
   const mayEdit = useCan('tpl.templates.create');
   const maySync = useCan('tpl.templates.sync');
+  const mayCurlPerm = useCan('tpl.templates.api_curl');
+  const mayKeys = useCan('api.keys.read');
+  const mayCurl = mayCurlPerm && mayKeys;
   const connections = useConnections();
   const refresh = useRefreshTemplate();
   const submit = useSubmitTemplate();
@@ -572,7 +581,7 @@ function Detail({ tpl, apiBaseUrl }: { tpl: TemplateDetail; apiBaseUrl: string }
             </dl>
           </div>
 
-          {canSendViaApi(tpl) && <CurlCard tpl={tpl} baseUrl={apiBaseUrl} />}
+          {mayCurl && canSendViaApi(tpl) && <CurlCard tpl={tpl} baseUrl={apiBaseUrl} />}
         </section>
       </div>
     </main>
@@ -584,6 +593,7 @@ function CurlCard({ tpl, baseUrl }: { tpl: TemplateDetail; baseUrl: string }) {
   const t = useTranslations('message-templates.detail.curl');
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
+  const hasKey = useHasApiKey(true);
   const curl = templateSendCurl(baseUrl, tpl);
   const copy = async () => {
     try {
@@ -598,31 +608,50 @@ function CurlCard({ tpl, baseUrl }: { tpl: TemplateDetail; baseUrl: string }) {
     <div id="curl" className={cn(CARD, 'mt-4 scroll-mt-20 overflow-hidden')}>
       <div className="flex items-baseline justify-between gap-3 border-b border-border px-5 py-3">
         <h2 className="text-[13px] font-semibold">{t('title')}</h2>
-        <button
-          type="button"
-          onClick={() => void copy()}
-          className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-[11px] font-medium hover:bg-muted"
-        >
-          {copied ? <TickIcon className="size-3" /> : <CopyIcon className="size-3" />}
-          {copied ? t('copied') : t('copy')}
-        </button>
+        {hasKey.data === true && (
+          <button
+            type="button"
+            onClick={() => void copy()}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-[11px] font-medium hover:bg-muted"
+          >
+            {copied ? <TickIcon className="size-3" /> : <CopyIcon className="size-3" />}
+            {copied ? t('copied') : t('copy')}
+          </button>
+        )}
       </div>
-      <p className="px-5 pt-3 text-xs text-muted-foreground">{t('intro')}</p>
-      <pre
-        dir="ltr"
-        tabIndex={0}
-        aria-label={t('title')}
-        data-testid="template-curl"
-        className="m-5 overflow-x-auto rounded-xl bg-foreground px-4 py-3 font-mono text-xs leading-relaxed text-background"
-      >
-        {curl}
-      </pre>
-      <p className="px-5 pb-4 text-xs text-muted-foreground">
-        {t('keyHint')}{' '}
-        <Link href="/developers" className="font-medium text-brand underline">
-          {t('keyLink')}
-        </Link>
-      </p>
+      {hasKey.isPending ? (
+        <p className="px-5 py-4 text-xs text-muted-foreground">{t('loading')}</p>
+      ) : hasKey.data !== true ? (
+        <p
+          role="status"
+          data-testid="template-curl-nokey"
+          className="px-5 py-4 text-xs text-muted-foreground"
+        >
+          {hasKey.isError ? t('keysUnknown') : t('noKey')}{' '}
+          <Link href="/developers" className="font-medium text-brand underline">
+            {t('createKey')}
+          </Link>
+        </p>
+      ) : (
+        <>
+          <p className="px-5 pt-3 text-xs text-muted-foreground">{t('intro')}</p>
+          <pre
+            dir="ltr"
+            tabIndex={0}
+            aria-label={t('title')}
+            data-testid="template-curl"
+            className="m-5 overflow-x-auto rounded-xl bg-foreground px-4 py-3 font-mono text-xs leading-relaxed text-background"
+          >
+            {curl}
+          </pre>
+          <p className="px-5 pb-4 text-xs text-muted-foreground">
+            {t('keyHint')}{' '}
+            <Link href="/developers" className="font-medium text-brand underline">
+              {t('keyLink')}
+            </Link>
+          </p>
+        </>
+      )}
     </div>
   );
 }
