@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "自動終了日はすでに過ぎています。",
         "auto_end_before_send": "自動終了日は送信時刻より後にしてください。",
         "auto_end_recurring": "定期キャンペーンは独自のルールで終了します。自動終了日をクリアしてください。",
-        "pacing_range": "Smart Delivery を確認してください。最長の遅延が最短より短いか、2つの送信時刻の片方しか設定されていません。"
+        "pacing_range": "Smart Delivery を確認してください。最長の遅延が最短より短いか、2つの送信時刻の片方しか設定されていません。",
+        "follow_up_template_required": "各フォローアップで送信するテンプレートを選択してください。",
+        "follow_up_flow_required": "各フォローアップで開始するフローを選択してください。",
+        "follow_up_cloud_api_only": "フォローアップは WhatsApp Cloud API の番号でのみ使用できます。ステップ1で番号を選択するか、フォローアップを削除してください。"
       },
       "template": {
         "previewOnline": "オンライン",
@@ -1382,7 +1385,8 @@
         "sumCsv": "CSVファイル {name}: {count, plural, other {有効な番号#件}}",
         "estimatedCostFull": "概算費用(全額)",
         "chargedPlan": "今回ウォレットから請求される金額: {amount}(これらのメッセージのうち {covered} 件はプランでまかなわれます)",
-        "chargedWallet": "ウォレットから請求される金額: {amount}"
+        "chargedWallet": "ウォレットから請求される金額: {amount}",
+        "sumFollowUps": "フォローアップ"
       },
       "test": {
         "title": "WhatsAppテストメッセージを送信",
@@ -1587,7 +1591,25 @@
         "exportFailed": "エクスポートをダウンロードできませんでした。",
         "deleteTitle": "この配信を削除しますか？",
         "deleteOne": "この配信と宛先を削除します。元に戻せません。",
-        "deleteSeries": "この定期配信と、予定されていた実行を削除します。まだ何も送信されていないため、履歴は失われません。元に戻せません。"
+        "deleteSeries": "この定期配信と、予定されていた実行を削除します。まだ何も送信されていないため、履歴は失われません。元に戻せません。",
+        "followUps": {
+          "title": "フォローアップ",
+          "step": "フォローアップ {step}",
+          "count": {
+            "waiting": "待機中 {count}",
+            "sent": "送信済み {count}",
+            "delivered": "配信済み {count}",
+            "read": "既読 {count}",
+            "flowsStarted": "開始されたフロー {count}",
+            "skipped": "スキップ {count}",
+            "lapsed": "期限切れ {count}",
+            "failed": "失敗 {count}"
+          },
+          "hint": {
+            "skipped": "確認時に条件を満たしていなかったため、シーケンスはそこで終了しました。",
+            "lapsed": "コンタクトが返信または既読にする前に監視時間が終了したため、シーケンスはそこで終了しました。"
+          }
+        }
       },
       "panel": {
         "title": "一斉配信の作成で作成",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) は、最初からやり直すクラシックビルダーから送信します。このキャンペーンは下書きとして保存され、キャンペーン一覧に残るので、あとで戻ってこられます。",
         "confirm": "クラシックビルダーを開く",
         "cancel": "このままにする"
+      },
+      "followUps": {
+        "title": "フォローアップ",
+        "intro": "キャンペーンメッセージ後のコンタクトの行動に応じて、別のメッセージを送信したりフローを開始したりします。最大3ステップまで連続して設定できます。",
+        "cloudOnly": "フォローアップは Meta の既読・返信レポートを利用するため、WhatsApp Cloud API の番号が必要です。ステップ1で番号を選択してください。",
+        "add": "フォローアップを追加",
+        "count": "フォローアップ {used} / {max}",
+        "limitReached": "上限に達しました: フォローアップは {max} 件までです。",
+        "stepTitle": "フォローアップ {step}",
+        "measuredFromCampaign": "キャンペーンメッセージから計測します。",
+        "measuredFromStep": "フォローアップ {step} のメッセージから計測します。",
+        "remove": "フォローアップ {step} を削除",
+        "removeShort": "削除",
+        "triggerLabel": "コンタクトが",
+        "trigger": {
+          "replied": "返信した",
+          "read": "メッセージを読んだ",
+          "not_replied": "返信していない",
+          "not_read": "メッセージを読んでいない"
+        },
+        "triggerHelp": {
+          "replied": "設定した時間内に返信があった時点で実行されます。それ以外の場合、シーケンスは終了します。",
+          "read": "設定した時間内に既読になった時点で実行されます。それ以外の場合、シーケンスは終了します。",
+          "not_replied": "設定した時間だけ待機し、返信がなければ実行されます。返信があった場合、シーケンスは終了します。",
+          "not_read": "設定した時間だけ待機し、既読になっていなければ実行されます。既読になった場合、シーケンスは終了します。"
+        },
+        "watchLabel": "監視する最大時間",
+        "waitLabel": "待機時間",
+        "unitLabel": "時間の単位",
+        "duration": {
+          "minutes": "{count, plural, other {#分}}",
+          "hours": "{count, plural, other {#時間}}",
+          "days": "{count, plural, other {#日}}"
+        },
+        "actionLabel": "その後",
+        "action": {
+          "template": "テンプレートを送信",
+          "flow": "フローを開始"
+        },
+        "templateLabel": "送信するテンプレート",
+        "flowLabel": "開始するフロー",
+        "pickTemplate": "テンプレートを選択",
+        "pickFlow": "フローを選択",
+        "loading": "読み込み中...",
+        "unavailable": "利用できなくなりました",
+        "noTemplates": "承認済みのテンプレートはまだありません。",
+        "createTemplate": "テンプレートを作成",
+        "noFlows": "フローはまだありません。",
+        "createFlow": "フローを作成",
+        "flowsError": "フローを読み込めませんでした。しばらくしてからもう一度お試しください。",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "{wait}以内に返信した場合",
+          "read": "{wait}以内に読んだ場合",
+          "not_replied": "{wait}後も返信がない場合",
+          "not_read": "{wait}後も読んでいない場合"
+        },
+        "does": {
+          "template": "{name} を送信",
+          "flow": "フロー {name} を開始"
+        },
+        "unit": {
+          "minutes": "{count, plural, other {分}}",
+          "hours": "{count, plural, other {時間}}",
+          "days": "{count, plural, other {日}}"
+        }
       }
     },
     "history": {

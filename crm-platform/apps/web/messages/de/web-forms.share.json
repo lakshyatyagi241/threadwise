@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Kanäle dieser Einwilligung",
         "channelsHint": "Besucher werden nur auf den hier angehakten Kanälen angemeldet, und der Einwilligungstext nennt sie. Ein Kanal wird nur genutzt, wenn das Formular die passende Telefonnummer oder E-Mail erfasst.",
-        "channelsUse": "Text mit diesen Kanälen aktualisieren"
+        "channelsUse": "Text mit diesen Kanälen aktualisieren",
+        "channelNeedsPhone": "Dieses Formular hat kein Telefonfeld, daher wird darüber niemand auf diesem Kanal angemeldet.",
+        "channelNeedsEmail": "Dieses Formular hat kein E-Mail-Feld, daher wird darüber niemand auf diesem Kanal angemeldet."
       },
       "crm": {
         "title": "Im CRM",

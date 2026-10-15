@@ -5,7 +5,20 @@ summary: See who changed what in your workspace, when, and from what to what, in
 area: settings
 order: 30
 documents: [tile:activity-log]
-keywords: [audit, audit log, activity log, history, who changed, changes, security, compliance, export, support access, csv]
+keywords:
+  [
+    audit,
+    audit log,
+    activity log,
+    history,
+    who changed,
+    changes,
+    security,
+    compliance,
+    export,
+    support access,
+    csv,
+  ]
 ---
 
 ## What it is for

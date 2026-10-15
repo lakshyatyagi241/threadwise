@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Kanały objęte tą zgodą",
         "channelsHint": "Odwiedzający jest zapisywany tylko na zaznaczone tutaj kanały, a tekst zgody je wymienia. Kanał jest używany tylko wtedy, gdy formularz zbiera pasujący numer telefonu lub e-mail.",
-        "channelsUse": "Zaktualizuj treść o te kanały"
+        "channelsUse": "Zaktualizuj treść o te kanały",
+        "channelNeedsPhone": "Ten formularz nie ma pola telefonu, więc nikt nie zostanie przez niego zapisany na ten kanał.",
+        "channelNeedsEmail": "Ten formularz nie ma pola e-mail, więc nikt nie zostanie przez niego zapisany na ten kanał."
       },
       "crm": {
         "title": "W CRM",

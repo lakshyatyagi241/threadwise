@@ -5,7 +5,18 @@ summary: Set the Get Started button, greeting, persistent menu and ice-breaker q
 area: automation
 order: 45
 documents: [nav:facebook-setup]
-keywords: [messenger, get started, greeting, persistent menu, ice breakers, FAQ, welcome, profile, facebook page]
+keywords:
+  [
+    messenger,
+    get started,
+    greeting,
+    persistent menu,
+    ice breakers,
+    FAQ,
+    welcome,
+    profile,
+    facebook page,
+  ]
 ---
 
 ## What it is for

@@ -6,7 +6,8 @@
 export { SlashTextarea } from './components/slash-picker';
 export { ContactsReadonlyTable } from './components/contacts-readonly-table';
 export { RowMenu, RowMenuItem, RowMenuSeparator } from './components/row-menu';
-export { usePickerFeed, useStatusOptions } from './api/attributes';
+export { createAttribute, usePickerFeed, useStatusOptions } from './api/attributes';
+export { suggestKey as suggestAttributeKey } from './lib/attribute-model';
 export { useGroups } from './api/groups';
 export { useTags } from './api/tags';
 export { useContactFields } from './api/properties';

@@ -344,6 +344,12 @@ export class FormSubmitService {
     const version = await this.forms.findVersionById(tx, orgId, versionId);
     if (!version) throw notFound();
     const def = readDefinition(version.definition);
+    // The channels are the ones of the wording the visitor saw (the submission's own version), not of a later republish.
+    const seen =
+      sub.versionId === versionId
+        ? version
+        : ((await this.forms.findVersionById(tx, orgId, sub.versionId)) ?? version);
+    const seenChannels = consentChannels(readDefinition(seen.definition).consent);
     await this.subs.markRetry(tx, orgId, sub.id);
     const consent: ConsentOutcome = sub.consent
       ? {
@@ -351,7 +357,7 @@ export class FormSubmitService {
           missing: false,
           marketingOptIn: sub.consent.given && def.consent.marketing,
           serviceAgreed: sub.consent.given && !def.consent.marketing,
-          channels: consentChannels(def.consent),
+          channels: seenChannels,
         }
       : {
           stored: null,

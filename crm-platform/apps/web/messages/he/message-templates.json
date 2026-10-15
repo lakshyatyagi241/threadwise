@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "העתק קוד",
       "buttonUnnamed": "כפתור",
-      "moreButtons": "{count, plural, one {+# כפתור נוסף} two {+# כפתורים נוספים} other {+# כפתורים נוספים}}"
+      "moreButtons": "{count, plural, one {+# כפתור נוסף} two {+# כפתורים נוספים} other {+# כפתורים נוספים}}",
+      "live": "תצוגה מקדימה חיה",
+      "business": "Bloomly",
+      "online": "מחובר"
     },
     "card": {
       "rejected": "נדחה: {reason}",
       "view": "הצגה",
       "edit": "עריכה",
-      "delete": "מחיקה"
+      "delete": "מחיקה",
+      "curl": "cURL: שליחת התבנית הזו דרך ה-API",
+      "curlNamed": "cURL לשליחת {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "רגיל",
+        "media": "מדיה",
+        "auth": "אימות",
+        "carousel": "קרוסלה",
+        "catalog": "קטלוג",
+        "limited_time_offer": "הצעה לזמן מוגבל"
+      },
+      "rejectedLabel": "נדחה:",
+      "viewTitle": "הצג פרטים וסטטוס בדיקה ב-Meta",
+      "deleteNamed": "מחק את {name}"
     },
     "library": {
       "title": "ספריית התבניות",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "אין תבניות תואמות",
       "emptyFilteredBody": "שנה או נקה את המסננים כדי לראות יותר תבניות.",
       "clearFilters": "ניקוי מסננים",
-      "loadMore": "טען עוד"
+      "loadMore": "טען עוד",
+      "crumb": "קמפיינים / תבניות",
+      "titleA": "תבנית",
+      "titleB": "ספרייה",
+      "tipTitle": "טיפ",
+      "tip": "שלחו תבניות עם טקסט ברור שמתאים למשתנים ('{{name}}', '{{order_id}}'). זמני האישור נשארים מתחת ל-24 שעות כאשר הגוף נמנע מניסוחים שיווקיים ותואם לקטגוריית Meta שנבחרה.",
+      "statusTitle": "סטטוס",
+      "statusTab": {
+        "all": "הכל",
+        "approved": "אושר",
+        "pending": "בבדיקה",
+        "rejected": "נדחה"
+      },
+      "quickStartTitle": "התחלה מהירה",
+      "quickStart": "קראו את <link>הנחיות התבניות</link> לפני השליחה ל-Meta כדי לשמור על זמני אישור מתחת ל-24 שעות.",
+      "createTemplate": "צור תבנית",
+      "syncFailedLabel": "הסנכרון מ-Meta נכשל:",
+      "categories": "קטגוריות",
+      "tabAll": "הכל",
+      "sortLabel": "מיון תבניות",
+      "sort": {
+        "newest": "החדשות ביותר",
+        "oldest": "הישנות ביותר",
+        "name-asc": "שם א←ת",
+        "name-desc": "שם ת←א"
+      },
+      "showing": "מוצגות",
+      "of": "מתוך",
+      "filteredTemplates": "תבניות מסוננות",
+      "showingRange": "מוצגות 1-{shown} מתוך {total} תבניות",
+      "legend": {
+        "approved": "אושר",
+        "pending": "בבדיקה",
+        "rejected": "נדחה"
+      },
+      "helpLabel": "עזרה - 0{n}",
+      "help": {
+        "one": {
+          "title": "מהי הודעת תבנית?",
+          "body": "פורמט הודעה מאושר מראש ש-Meta דורשת כדי להתחיל שיחות חדשות עם לקוחות מחוץ לחלון השירות של 24 השעות."
+        },
+        "two": {
+          "title": "איך לקצר את זמני האישור?",
+          "body": "שמרו על גוף הודעה ברור, הימנעו מניסוח שיווקי יתר בקטגוריית Utility, וספקו תמיד ערכים לדוגמה למשתנים."
+        },
+        "three": {
+          "title": "למה התבנית שלי נדחתה?",
+          "body": "סיבות נפוצות כוללות עיצוב שגוי, קטגוריה שאינה תואמת או תוכן פוגעני. בדקו את סיבת הדחייה וערכו כדי לשלוח שוב."
+        }
+      }
     },
     "delete": {
       "title": "מחיקת תבנית",
@@ -315,7 +381,15 @@
         "paused": "מושהה על ידי Meta. לא ניתן לשלוח אותה עד ש־Meta תסיר את ההשהיה.",
         "pausedUntil": "מושהה על ידי Meta עד {when}.",
         "disabled": "מושבתת על ידי Meta. לא ניתן לשלוח אותה.",
-        "deleted": "Meta כבר לא מציגה את התבנית הזו. היא נשמרת כאן; סנכרן שוב או מחק אותה."
+        "deleted": "Meta כבר לא מציגה את התבנית הזו. היא נשמרת כאן; סנכרן שוב או מחק אותה.",
+        "notSubmitted": "טרם נשלחה ל-Meta",
+        "notSubmittedBody": "התבנית שמורה כאן אך אין לה מזהה תבנית של Meta: Meta לא קיבלה אותה, ולכן אי אפשר לבדוק או לשלוח אותה. שלחו אותה כדי להתחיל את הבדיקה.",
+        "notSubmittedNoWaba": "לתבנית זו אין מזהה תבנית של Meta. חברו חשבון WhatsApp Business (WABA) ולאחר מכן שלחו אותה לבדיקה.",
+        "pendingBody": "רוב התבניות מאושרות תוך דקות; Meta מאפשרת עד 48 שעות. הדף מתרענן אוטומטית כל 30 שניות כל עוד הסטטוס ממתין.",
+        "submittedAgo": "נשלחה {when}",
+        "checkedAgo": "נבדקה לאחרונה {when}",
+        "code": "קוד:",
+        "pausedBody": "משוב שלילי חוזר (חסימות או דיווחי ספאם) השהה תבנית זו. ציון האיכות שלה חייב להשתפר לפני שניתן יהיה לשלוח אותה שוב."
       },
       "facts": {
         "title": "סנכרון Meta",
@@ -354,6 +428,44 @@
         "title": "מטען Meta",
         "hint": "מה נשלח ל־Meta לבדיקה, בדיוק כפי שנבנה.",
         "empty": "עדיין לא נבנה דבר."
+      },
+      "curl": {
+        "title": "שליחה דרך ה-API (cURL)",
+        "intro": "שלחו את התבנית המאושרת הזו למספר אחד. החליפו את ערכי הדוגמה בערכים שלכם.",
+        "copy": "העתקה",
+        "copied": "הועתק",
+        "copyFailed": "ההעתקה נכשלה. סמנו את הטקסט והעתיקו ידנית.",
+        "keyHint": "החליפו את YOUR_API_KEY במפתח ה-API שלכם.",
+        "keyLink": "קבלת מפתח API",
+        "loading": "בודקים את מפתחות ה-API שלכם…",
+        "noKey": "בסביבת העבודה הזו עדיין אין מפתח API. צרו קודם מפתח API ואז השתמשו ב-cURL הזה.",
+        "keysUnknown": "לא ניתן לבדוק את מפתחות ה-API שלכם. פתחו את דף המפתחים כדי ליצור או לבדוק מפתח ואז השתמשו ב-cURL הזה.",
+        "createKey": "יצירת מפתח API"
+      },
+      "refreshNow": "רענן עכשיו",
+      "editTemplate": "ערוך תבנית",
+      "editResubmit": "ערוך ושלח מחדש",
+      "submitToMeta": "שלח ל-Meta",
+      "wabaAccount": "חשבון WhatsApp Business",
+      "noWaba": "לא מחובר חשבון WABA.",
+      "connectOne": "חברו אחד",
+      "noWabaTail": "כדי לשלוח תבניות ל-Meta.",
+      "related": "קשורים",
+      "useInBroadcast": "שימוש בשידור",
+      "crumbTemplates": "תבניות",
+      "crumbDetail": "פרטים",
+      "notSubmittedPill": "לא נשלחה",
+      "qualityPill": "איכות · {quality}",
+      "preview": {
+        "title": "תצוגה מקדימה",
+        "hint": "כך זה נראה ב-WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "התוכן סומן כפוגעני או מאיים.",
+        "INVALID_FORMAT": "הפורמט מפר את כללי התבניות של Meta (משתנים, ירידות שורה, אורך).",
+        "PROMOTIONAL": "ניסוח שיווקי אינו מותר בקטגוריה זו.",
+        "TAG_CONTENT_MISMATCH": "הקטגוריה אינה תואמת לתוכן (למשל טקסט שיווקי בתבנית UTILITY).",
+        "SCAM": "Meta סימנה את התבנית כהונאה אפשרית. בדקו את הטענות והניסוח."
       }
     },
     "gallery": {

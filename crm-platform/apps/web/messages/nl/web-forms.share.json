@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Kanalen die deze toestemming dekt",
         "channelsHint": "De bezoeker wordt alleen aangemeld op de hier aangevinkte kanalen, en de toestemmingstekst noemt ze. Een kanaal wordt alleen gebruikt als het formulier het bijbehorende telefoonnummer of e-mailadres verzamelt.",
-        "channelsUse": "Tekst bijwerken met deze kanalen"
+        "channelsUse": "Tekst bijwerken met deze kanalen",
+        "channelNeedsPhone": "Dit formulier heeft geen telefoonveld, dus niemand wordt hiermee op dit kanaal aangemeld.",
+        "channelNeedsEmail": "Dit formulier heeft geen e-mailveld, dus niemand wordt hiermee op dit kanaal aangemeld."
       },
       "crm": {
         "title": "In het CRM",

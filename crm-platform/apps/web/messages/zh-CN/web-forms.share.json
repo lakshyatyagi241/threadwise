@@ -162,7 +162,9 @@
         },
         "channelsLabel": "此同意涵盖的渠道",
         "channelsHint": "访客仅会订阅此处勾选的渠道,下方的同意文案也会列出这些渠道。仅当表单收集了对应的手机号码或邮箱时才会使用该渠道。",
-        "channelsUse": "用这些渠道更新文案"
+        "channelsUse": "用这些渠道更新文案",
+        "channelNeedsPhone": "此表单没有手机号码字段,因此不会通过它订阅该渠道。",
+        "channelNeedsEmail": "此表单没有邮箱字段,因此不会通过它订阅该渠道。"
       },
       "crm": {
         "title": "在 CRM 中",

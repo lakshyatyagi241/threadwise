@@ -28,6 +28,7 @@ WhatsApp only lets a business start a conversation with an approved template. Th
 - An **Authentication** template is a one-time passcode: Meta writes the message and the Copy code button, and you can set how long the code stays valid.
 - Each template shows a status: Draft, In review, Approved, Rejected, Paused, Disabled or Missing on Meta. Approved templates also show a quality rating.
 - Open a template to see its Meta details. While it is in review the page checks every 30 seconds, and **Refresh** asks Meta now. A draft, in-review, rejected, approved or paused template can be edited; **Save changes** on a live template sends the edit to Meta and it goes back into review, and its name and language cannot change. A template you have not submitted shows **Submit to Meta** on its page.
+- An approved template shows a **cURL** button on its card and a **Send with the API (cURL)** card on its page. **Copy** gives a ready request for `POST /templates/{id}/send` with a slot for each variable, header and dynamic button; swap in your values and your API key. You see it only with the **View the API cURL example** right and the right to view API keys. If the workspace has no API key yet, the card says to create one first (under [Developers](help:rest-api-keys)).
 
 ## Plan and access
 

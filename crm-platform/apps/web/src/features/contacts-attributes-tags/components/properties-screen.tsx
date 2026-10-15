@@ -74,6 +74,8 @@ export function PropertiesScreen() {
   const [sectionEditing, setSectionEditing] = useState<FieldSectionResponse | 'new' | null>(null);
   const [deactivating, setDeactivating] = useState<FieldResponse | null>(null);
   const [deletingSection, setDeletingSection] = useState<SectionGroup | null>(null);
+  /** Sections the owner folded away (by id); a section is open until they do. */
+  const [folded, setFolded] = useState<ReadonlySet<string>>(new Set());
   /** The order just chosen for one section's properties, until the server's list catches up. */
   const [pending, setPending] = useState<{ sectionId: string; ids: string[] } | null>(null);
 
@@ -307,21 +309,45 @@ export function PropertiesScreen() {
                       .filter((f): f is FieldResponse => Boolean(f)),
                   ]
                 : g.fields;
+            const key = section?.id ?? 'loose';
+            const open = !folded.has(key);
             return (
               <section
                 key={section?.id ?? 'loose'}
                 aria-label={section?.name ?? t('noSection')}
                 className="rounded-md border border-border bg-background"
               >
-                <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
-                  <div className="min-w-0">
-                    <h2 className="truncate text-base font-semibold" dir="auto">
-                      {section?.name ?? t('noSection')}
-                    </h2>
-                    <p className="text-xs text-muted-foreground">
-                      {section ? t('sectionCount', { count: g.fields.length }) : t('noSectionHint')}
-                    </p>
-                  </div>
+                <header
+                  className={`flex flex-wrap items-center justify-between gap-2 px-4 py-3 ${open ? 'border-b border-border' : ''}`}
+                >
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-label={section?.name ?? t('noSection')}
+                    onClick={() =>
+                      setFolded((cur) => {
+                        const next = new Set(cur);
+                        if (next.has(key)) next.delete(key);
+                        else next.add(key);
+                        return next;
+                      })
+                    }
+                    className="flex min-w-0 items-center gap-2 rounded-md text-start outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <ChevronRightIcon
+                      className={`size-4 shrink-0 text-muted-foreground transition-transform rtl:-scale-x-100 ${open ? 'rotate-90 rtl:-rotate-90' : ''}`}
+                    />
+                    <span className="min-w-0">
+                      <span className="block truncate text-base font-semibold" dir="auto">
+                        {section?.name ?? t('noSection')}
+                      </span>
+                      <span className="block text-xs text-muted-foreground">
+                        {section
+                          ? t('sectionCount', { count: g.fields.length })
+                          : t('noSectionHint')}
+                      </span>
+                    </span>
+                  </button>
                   <div className="flex items-center gap-1">
                     {canCreate && section && (
                       <Button variant="secondary" size="sm" onClick={() => newProperty(section.id)}>
@@ -366,7 +392,7 @@ export function PropertiesScreen() {
                   </div>
                 </header>
 
-                {ordered.length === 0 ? (
+                {!open ? null : ordered.length === 0 ? (
                   <p className="px-4 py-5 text-sm text-muted-foreground">{t('sectionEmpty')}</p>
                 ) : (
                   <div className="overflow-x-auto">

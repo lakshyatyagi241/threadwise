@@ -102,6 +102,23 @@ export const wabaEnvSchema = z.object({
       .default(false),
   ),
   /**
+   * Comma-separated source addresses whose unsigned, key-less POSTs to the WhatsApp callback are accepted: a relay (Geta's
+   * callback forwarder) that re-posts the raw body and drops Meta's signature header. Matched against the client IP that
+   * `TRUST_PROXY` resolves, so keep that setting exact. Empty (default) trusts nobody; `WABA_REQUIRE_INTERAKT_SIGNATURE` still wins.
+   */
+  WABA_TRUSTED_FORWARDER_IPS: z.preprocess(
+    blankToUndefined,
+    z
+      .string()
+      .transform((v) =>
+        v
+          .split(',')
+          .map((x) => x.trim())
+          .filter(Boolean),
+      )
+      .default(''),
+  ),
+  /**
    * Development only: let a provider of the WhatsApp provider registry live on a loopback or private address over plain http (a stand-in
    * server on the developer's machine). Ignored when NODE_ENV is `production`: the registry's addresses are typed by an operator and
    * every call to them carries a credential, so production only ever reaches public https hosts.

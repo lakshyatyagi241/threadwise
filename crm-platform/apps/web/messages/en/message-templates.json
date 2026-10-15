@@ -73,7 +73,9 @@
       "edit": "Edit template",
       "viewTitle": "View details & Meta review status",
       "delete": "Delete",
-      "deleteNamed": "Delete {name}"
+      "deleteNamed": "Delete {name}",
+      "curl": "cURL: send this template with the API",
+      "curlNamed": "cURL to send {name}"
     },
     "library": {
       "title": "Template library",
@@ -426,6 +428,19 @@
         "PROMOTIONAL": "Marketing language not allowed in this category.",
         "TAG_CONTENT_MISMATCH": "Category does not match the content (e.g. promotional copy in a UTILITY template).",
         "SCAM": "Meta flagged the template as a potential scam. Review claims and language."
+      },
+      "curl": {
+        "title": "Send with the API (cURL)",
+        "intro": "Send this approved template to one number. Replace the sample values with your own.",
+        "copy": "Copy",
+        "copied": "Copied",
+        "copyFailed": "Could not copy. Select the text and copy it by hand.",
+        "keyHint": "Replace YOUR_API_KEY with your API key.",
+        "keyLink": "Get an API key",
+        "loading": "Checking your API keys…",
+        "noKey": "This workspace has no API key yet. Create an API key first, then use this cURL.",
+        "keysUnknown": "Could not check your API keys. Open the Developers page to create or review a key, then use this cURL.",
+        "createKey": "Create an API key"
       }
     },
     "gallery": {

@@ -78,6 +78,24 @@ describe('the consent line editor', () => {
     expect(m.host.textContent).toContain(text('notice.saveFirst'));
   });
 
+  it('writes the ticked channels into the sentence and saves them', async () => {
+    m = await mount(<ConsentNoticeEditor scope="widget" refId="w1" />, { client: client() });
+    await flush();
+    await flush();
+    await click(m.host.querySelector('[role="switch"]')!);
+    const area = m.host.querySelector('textarea')!;
+    // An empty wording is filled in from the channels as they are ticked.
+    await click(m.host.querySelector('#notice-widget-ch-sms')!);
+    expect(area.value).toContain('WhatsApp');
+    expect(area.value).toContain('SMS');
+    await click(button(m.host, text('notice.save')));
+    await flush();
+    expect(state.saved).toHaveLength(1);
+    const saved = state.saved[0] as { channels: string[]; text: string };
+    expect(saved.channels).toEqual(['whatsapp', 'sms', 'email']);
+    expect(saved.text).toContain('SMS');
+  });
+
   it('saves the wording and the link as a new version and says which', async () => {
     m = await mount(<ConsentNoticeEditor scope="widget" refId="w1" />, { client: client() });
     await flush();
@@ -98,7 +116,7 @@ describe('the consent line editor', () => {
         text: 'Send me offers.',
         url: 'https://example.com/privacy',
         termsUrl: null,
-        channels: [],
+        channels: ['whatsapp', 'email'],
       },
     ]);
   });
@@ -131,7 +149,7 @@ describe('the consent line editor', () => {
         text: 'We use your details to answer you.',
         url: 'https://acme.test/privacy',
         termsUrl: 'https://acme.test/terms',
-        channels: [],
+        channels: ['whatsapp', 'email'],
       },
     ]);
   });

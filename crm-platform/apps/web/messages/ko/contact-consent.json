@@ -334,7 +334,16 @@
       "termsUrlHint": "https://로 시작해야 합니다",
       "useWorkspacePrivacy": "워크스페이스 개인정보 링크 사용",
       "useWorkspaceTerms": "워크스페이스 이용약관 링크 사용",
-      "useWorkspaceText": "워크스페이스 기본 문구 사용"
+      "useWorkspaceText": "워크스페이스 기본 문구 사용",
+      "statement": "{channels}으로 업데이트와 혜택 안내를 받는 데 동의합니다. 언제든지 STOP이라고 답장하면 수신을 거부할 수 있습니다.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "이메일"
+      },
+      "channelsLabel": "이 동의가 적용되는 채널",
+      "channelsHint": "본인은 여기서 선택한 채널에만 구독되며, 동의 문구에 해당 채널이 표시됩니다. 해당 전화번호나 이메일을 입력한 경우에만 채널이 사용됩니다.",
+      "channelsUse": "이 채널로 문구 업데이트"
     }
   }
 }

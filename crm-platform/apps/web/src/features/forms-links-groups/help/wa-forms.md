@@ -8,7 +8,8 @@ documents: [nav:wa-forms]
 gates:
   planFeature: forms_and_links
   permission: wfl.forms.read
-keywords: [forms, whatsapp form, whatsapp flow, flow builder, lead capture, survey, submissions, publish]
+keywords:
+  [forms, whatsapp form, whatsapp flow, flow builder, lead capture, survey, submissions, publish]
 ---
 
 ## What it is for

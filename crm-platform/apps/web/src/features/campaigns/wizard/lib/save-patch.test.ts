@@ -49,3 +49,22 @@ describe('sanitizePatch', () => {
     expect(sanitizePatch({ name: 'x'.repeat(300) }).name).toHaveLength(191);
   });
 });
+
+describe('sanitizePatch: follow-ups', () => {
+  const ok = {
+    trigger: 'read' as const,
+    waitMinutes: 60,
+    action: { kind: 'flow' as const, flowId: null },
+  };
+
+  it('keeps a step that still has no template or flow chosen', () => {
+    expect(sanitizePatch({ followUps: [ok] }).followUps).toEqual([ok]);
+    expect(sanitizePatch({ followUps: [] }).followUps).toEqual([]);
+  });
+
+  it('leaves out a step the server would refuse and cuts the list to the limit', () => {
+    const bad = { ...ok, waitMinutes: 20_000 };
+    expect(sanitizePatch({ followUps: [ok, bad] }).followUps).toEqual([ok]);
+    expect(sanitizePatch({ followUps: [ok, ok, ok, ok, ok] }).followUps).toHaveLength(3);
+  });
+});

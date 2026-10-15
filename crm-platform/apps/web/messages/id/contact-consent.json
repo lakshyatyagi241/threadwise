@@ -334,7 +334,16 @@
       "termsUrlHint": "Harus diawali dengan https://",
       "useWorkspacePrivacy": "Gunakan tautan privasi ruang kerja saya",
       "useWorkspaceTerms": "Gunakan tautan ketentuan ruang kerja saya",
-      "useWorkspaceText": "Gunakan kata-kata default ruang kerja saya"
+      "useWorkspaceText": "Gunakan kata-kata default ruang kerja saya",
+      "statement": "Saya setuju menerima pembaruan dan penawaran di {channels}. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "email"
+      },
+      "channelsLabel": "Saluran yang dicakup persetujuan ini",
+      "channelsHint": "Orang tersebut hanya berlangganan pada saluran yang dicentang di sini, dan teks persetujuan menyebutkannya. Saluran dipakai hanya jika orang itu memberikan nomor telepon atau email yang sesuai.",
+      "channelsUse": "Perbarui teks dengan saluran ini"
     }
   }
 }

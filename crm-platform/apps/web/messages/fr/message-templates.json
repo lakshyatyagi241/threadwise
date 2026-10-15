@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Copier le code",
       "buttonUnnamed": "Bouton",
-      "moreButtons": "{count, plural, one {+# bouton de plus} other {+# boutons de plus}}"
+      "moreButtons": "{count, plural, one {+# bouton de plus} other {+# boutons de plus}}",
+      "live": "Aperçu en direct",
+      "business": "Bloomly",
+      "online": "en ligne"
     },
     "card": {
       "rejected": "Rejeté : {reason}",
       "view": "Afficher",
       "edit": "Modifier",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "curl": "cURL : envoyer ce modèle avec l'API",
+      "curlNamed": "cURL pour envoyer {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standard",
+        "media": "Média",
+        "auth": "Authentification",
+        "carousel": "Carrousel",
+        "catalog": "Catalogue",
+        "limited_time_offer": "Offre à durée limitée"
+      },
+      "rejectedLabel": "Refusé :",
+      "viewTitle": "Voir les détails et le statut de révision Meta",
+      "deleteNamed": "Supprimer {name}"
     },
     "library": {
       "title": "Bibliothèque de modèles",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Aucun modèle ne correspond",
       "emptyFilteredBody": "Modifiez ou effacez les filtres pour voir plus de modèles.",
       "clearFilters": "Effacer les filtres",
-      "loadMore": "Charger plus"
+      "loadMore": "Charger plus",
+      "crumb": "Campagnes / Modèles",
+      "titleA": "Modèle",
+      "titleB": "bibliothèque",
+      "tipTitle": "Astuce",
+      "tip": "Soumettez des modèles au texte clair et adapté aux variables ('{{name}}', '{{order_id}}'). Les délais d'approbation restent sous 24 h lorsque le corps évite les termes promotionnels et correspond à la catégorie Meta choisie.",
+      "statusTitle": "Statut",
+      "statusTab": {
+        "all": "Tous",
+        "approved": "Approuvé",
+        "pending": "En cours d'examen",
+        "rejected": "Refusé"
+      },
+      "quickStartTitle": "Démarrage rapide",
+      "quickStart": "Lisez les <link>consignes relatives aux modèles</link> avant de soumettre à Meta pour garder des délais d'approbation sous 24 h.",
+      "createTemplate": "Créer un modèle",
+      "syncFailedLabel": "Échec de la synchronisation depuis Meta :",
+      "categories": "Catégories",
+      "tabAll": "Toutes",
+      "sortLabel": "Trier les modèles",
+      "sort": {
+        "newest": "Plus récents",
+        "oldest": "Plus anciens",
+        "name-asc": "Nom A→Z",
+        "name-desc": "Nom Z→A"
+      },
+      "showing": "Affichage de",
+      "of": "sur",
+      "filteredTemplates": "modèles filtrés",
+      "showingRange": "Affichage de 1 à {shown} sur {total} modèles",
+      "legend": {
+        "approved": "Approuvés",
+        "pending": "En cours d'examen",
+        "rejected": "Refusés"
+      },
+      "helpLabel": "Aide - 0{n}",
+      "help": {
+        "one": {
+          "title": "Qu'est-ce qu'un modèle de message ?",
+          "body": "Un format de message pré-approuvé exigé par Meta pour démarrer de nouvelles conversations avec des clients en dehors de la fenêtre de service de 24 heures."
+        },
+        "two": {
+          "title": "Comment réduire les délais d'approbation ?",
+          "body": "Gardez le corps du message clair, évitez un langage trop promotionnel dans les catégories Utilitaire et fournissez toujours des valeurs d'exemple pour les variables."
+        },
+        "three": {
+          "title": "Pourquoi mon modèle a-t-il été refusé ?",
+          "body": "Les causes courantes sont un format incorrect, une catégorie inadaptée ou un contenu abusif. Consultez le motif du refus et modifiez le modèle pour le soumettre à nouveau."
+        }
+      }
     },
     "delete": {
       "title": "Supprimer le modèle",
@@ -315,7 +381,15 @@
         "paused": "Suspendu par Meta. Il ne peut pas être envoyé tant que Meta n’a pas levé la suspension.",
         "pausedUntil": "Suspendu par Meta jusqu’au {when}.",
         "disabled": "Désactivé par Meta. Il ne peut pas être envoyé.",
-        "deleted": "Meta ne liste plus ce modèle. Il est conservé ici ; synchronisez à nouveau ou supprimez-le."
+        "deleted": "Meta ne liste plus ce modèle. Il est conservé ici ; synchronisez à nouveau ou supprimez-le.",
+        "notSubmitted": "Pas encore soumis à Meta",
+        "notSubmittedBody": "Ce modèle est enregistré ici mais n'a pas d'ID de modèle Meta : Meta ne l'a jamais accepté, c'est pourquoi il ne peut être ni examiné ni envoyé. Soumettez-le pour lancer la révision.",
+        "notSubmittedNoWaba": "Ce modèle n'a pas d'ID de modèle Meta. Connectez un compte WhatsApp Business (WABA), puis soumettez-le pour révision.",
+        "pendingBody": "La plupart des modèles sont approuvés en quelques minutes ; Meta peut prendre jusqu'à 48 heures. Cette page s'actualise automatiquement toutes les 30 secondes tant que le statut est en attente.",
+        "submittedAgo": "Soumis {when}",
+        "checkedAgo": "dernière vérification {when}",
+        "code": "Code :",
+        "pausedBody": "Des retours négatifs répétés (blocages ou signalements de spam) ont mis ce modèle en pause. Son score de qualité doit remonter avant qu'il puisse être réenvoyé."
       },
       "facts": {
         "title": "Synchronisation Meta",
@@ -354,6 +428,44 @@
         "title": "Données envoyées à Meta",
         "hint": "Ce qui est envoyé à Meta pour examen, exactement tel que construit.",
         "empty": "Rien n’a encore été construit."
+      },
+      "curl": {
+        "title": "Envoyer avec l'API (cURL)",
+        "intro": "Envoyez ce modèle approuvé à un numéro. Remplacez les valeurs d'exemple par les vôtres.",
+        "copy": "Copier",
+        "copied": "Copié",
+        "copyFailed": "Copie impossible. Sélectionnez le texte et copiez-le à la main.",
+        "keyHint": "Remplacez YOUR_API_KEY par votre clé d'API.",
+        "keyLink": "Obtenir une clé d'API",
+        "loading": "Vérification de vos clés d'API…",
+        "noKey": "Cet espace de travail n'a pas encore de clé d'API. Créez d'abord une clé d'API, puis utilisez ce cURL.",
+        "keysUnknown": "Impossible de vérifier vos clés d'API. Ouvrez la page Développeurs pour créer ou consulter une clé, puis utilisez ce cURL.",
+        "createKey": "Créer une clé d'API"
+      },
+      "refreshNow": "Actualiser maintenant",
+      "editTemplate": "Modifier le modèle",
+      "editResubmit": "Modifier et soumettre à nouveau",
+      "submitToMeta": "Soumettre à Meta",
+      "wabaAccount": "Compte WhatsApp Business",
+      "noWaba": "Aucun compte WABA connecté.",
+      "connectOne": "En connecter un",
+      "noWabaTail": "pour soumettre des modèles à Meta.",
+      "related": "Associés",
+      "useInBroadcast": "Utiliser dans une diffusion",
+      "crumbTemplates": "Modèles",
+      "crumbDetail": "Détail",
+      "notSubmittedPill": "Non soumis",
+      "qualityPill": "Qualité · {quality}",
+      "preview": {
+        "title": "Aperçu",
+        "hint": "Aspect dans WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Le contenu a été signalé comme abusif ou menaçant.",
+        "INVALID_FORMAT": "Le format enfreint les règles de modèles de Meta (variables, sauts de ligne, longueur).",
+        "PROMOTIONAL": "Langage marketing non autorisé dans cette catégorie.",
+        "TAG_CONTENT_MISMATCH": "La catégorie ne correspond pas au contenu (p. ex. texte promotionnel dans un modèle UTILITY).",
+        "SCAM": "Meta a signalé le modèle comme une arnaque potentielle. Vérifiez les affirmations et le langage."
       }
     },
     "gallery": {

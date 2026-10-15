@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Code kopiëren",
       "buttonUnnamed": "Knop",
-      "moreButtons": "{count, plural, one {+# knop meer} other {+# knoppen meer}}"
+      "moreButtons": "{count, plural, one {+# knop meer} other {+# knoppen meer}}",
+      "live": "Live voorbeeld",
+      "business": "Bloomly",
+      "online": "online"
     },
     "card": {
       "rejected": "Afgewezen: {reason}",
       "view": "Bekijken",
       "edit": "Bewerken",
-      "delete": "Verwijderen"
+      "delete": "Verwijderen",
+      "curl": "cURL: dit sjabloon via de API versturen",
+      "curlNamed": "cURL om {name} te versturen",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standaard",
+        "media": "Media",
+        "auth": "Verificatie",
+        "carousel": "Carrousel",
+        "catalog": "Catalogus",
+        "limited_time_offer": "Tijdelijke aanbieding"
+      },
+      "rejectedLabel": "Afgewezen:",
+      "viewTitle": "Details en Meta-beoordelingsstatus bekijken",
+      "deleteNamed": "{name} verwijderen"
     },
     "library": {
       "title": "Sjabloonbibliotheek",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Geen sjablonen gevonden",
       "emptyFilteredBody": "Wijzig of wis de filters om meer sjablonen te zien.",
       "clearFilters": "Filters wissen",
-      "loadMore": "Meer laden"
+      "loadMore": "Meer laden",
+      "crumb": "Campagnes / Sjablonen",
+      "titleA": "Sjabloon",
+      "titleB": "bibliotheek",
+      "tipTitle": "Tip",
+      "tip": "Dien sjablonen in met duidelijke, variabelevriendelijke tekst ('{{name}}', '{{order_id}}'). Goedkeuring duurt minder dan 24 uur als de tekst geen promotionele triggers bevat en past bij de gekozen Meta-categorie.",
+      "statusTitle": "Status",
+      "statusTab": {
+        "all": "Alle",
+        "approved": "Goedgekeurd",
+        "pending": "In beoordeling",
+        "rejected": "Afgewezen"
+      },
+      "quickStartTitle": "Snel starten",
+      "quickStart": "Lees de <link>sjabloonrichtlijnen</link> voordat je indient bij Meta, zodat de goedkeuring binnen 24 uur klaar is.",
+      "createTemplate": "Sjabloon maken",
+      "syncFailedLabel": "Synchroniseren vanuit Meta mislukt:",
+      "categories": "Categorieën",
+      "tabAll": "Alle",
+      "sortLabel": "Sjablonen sorteren",
+      "sort": {
+        "newest": "Nieuwste",
+        "oldest": "Oudste",
+        "name-asc": "Naam A→Z",
+        "name-desc": "Naam Z→A"
+      },
+      "showing": "Weergave van",
+      "of": "van",
+      "filteredTemplates": "gefilterde sjablonen",
+      "showingRange": "1-{shown} van {total} sjablonen weergegeven",
+      "legend": {
+        "approved": "Goedgekeurd",
+        "pending": "In beoordeling",
+        "rejected": "Afgewezen"
+      },
+      "helpLabel": "Hulp - 0{n}",
+      "help": {
+        "one": {
+          "title": "Wat is een sjabloonbericht?",
+          "body": "Een vooraf goedgekeurd berichtformaat dat Meta vereist om nieuwe gesprekken met klanten te starten buiten het servicevenster van 24 uur."
+        },
+        "two": {
+          "title": "Hoe verkort ik de goedkeuringstijd?",
+          "body": "Houd je bericht duidelijk, vermijd te promotionele taal in Utility-categorieën en geef altijd voorbeeldwaarden voor variabelen op."
+        },
+        "three": {
+          "title": "Waarom is mijn sjabloon afgewezen?",
+          "body": "Veelvoorkomende redenen zijn onjuiste opmaak, een niet-passende categorie of beledigende inhoud. Bekijk de afwijzingsreden en bewerk het sjabloon om opnieuw in te dienen."
+        }
+      }
     },
     "delete": {
       "title": "Sjabloon verwijderen",
@@ -315,7 +381,15 @@
         "paused": "Gepauzeerd door Meta. Het kan niet worden verzonden totdat Meta de pauze opheft.",
         "pausedUntil": "Gepauzeerd door Meta tot {when}.",
         "disabled": "Uitgeschakeld door Meta. Het kan niet worden verzonden.",
-        "deleted": "Meta vermeldt dit sjabloon niet meer. Het blijft hier bewaard; synchroniseer opnieuw of verwijder het."
+        "deleted": "Meta vermeldt dit sjabloon niet meer. Het blijft hier bewaard; synchroniseer opnieuw of verwijder het.",
+        "notSubmitted": "Nog niet bij Meta ingediend",
+        "notSubmittedBody": "Dit sjabloon is hier opgeslagen maar heeft geen Meta-sjabloon-ID: Meta heeft het nooit geaccepteerd, daarom kan het niet worden beoordeeld of verzonden. Dien het in om de beoordeling te starten.",
+        "notSubmittedNoWaba": "Dit sjabloon heeft geen Meta-sjabloon-ID. Koppel een WhatsApp Business-account (WABA) en dien het daarna in ter beoordeling.",
+        "pendingBody": "De meeste sjablonen worden binnen enkele minuten goedgekeurd; Meta neemt maximaal 48 uur. Deze pagina wordt elke 30 seconden automatisch vernieuwd zolang de status in behandeling is.",
+        "submittedAgo": "Ingediend {when}",
+        "checkedAgo": "laatst gecontroleerd {when}",
+        "code": "Code:",
+        "pausedBody": "Herhaalde negatieve feedback (blokkeringen of spammeldingen) heeft dit sjabloon gepauzeerd. De kwaliteitsscore moet herstellen voordat het weer verzonden kan worden."
       },
       "facts": {
         "title": "Synchronisatie met Meta",
@@ -354,6 +428,44 @@
         "title": "Meta-payload",
         "hint": "Wat er voor de beoordeling naar Meta wordt gestuurd, precies zoals het is opgebouwd.",
         "empty": "Nog niets opgebouwd."
+      },
+      "curl": {
+        "title": "Versturen met de API (cURL)",
+        "intro": "Verstuur dit goedgekeurde sjabloon naar één nummer. Vervang de voorbeeldwaarden door je eigen waarden.",
+        "copy": "Kopiëren",
+        "copied": "Gekopieerd",
+        "copyFailed": "Kopiëren mislukt. Selecteer de tekst en kopieer hem handmatig.",
+        "keyHint": "Vervang YOUR_API_KEY door je API-sleutel.",
+        "keyLink": "API-sleutel ophalen",
+        "loading": "Je API-sleutels worden gecontroleerd…",
+        "noKey": "Deze werkruimte heeft nog geen API-sleutel. Maak eerst een API-sleutel aan en gebruik daarna deze cURL.",
+        "keysUnknown": "Je API-sleutels konden niet worden gecontroleerd. Open de pagina Ontwikkelaars om een sleutel aan te maken of te bekijken en gebruik daarna deze cURL.",
+        "createKey": "API-sleutel aanmaken"
+      },
+      "refreshNow": "Nu vernieuwen",
+      "editTemplate": "Sjabloon bewerken",
+      "editResubmit": "Bewerken en opnieuw indienen",
+      "submitToMeta": "Indienen bij Meta",
+      "wabaAccount": "WhatsApp Business-account",
+      "noWaba": "Geen WABA-account gekoppeld.",
+      "connectOne": "Koppel er een",
+      "noWabaTail": "om sjablonen bij Meta in te dienen.",
+      "related": "Gerelateerd",
+      "useInBroadcast": "Gebruiken in een broadcast",
+      "crumbTemplates": "Sjablonen",
+      "crumbDetail": "Details",
+      "notSubmittedPill": "Niet ingediend",
+      "qualityPill": "Kwaliteit · {quality}",
+      "preview": {
+        "title": "Voorbeeld",
+        "hint": "Zo verschijnt het op WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Inhoud is gemarkeerd als beledigend of bedreigend.",
+        "INVALID_FORMAT": "Opmaak schendt de sjabloonregels van Meta (plaatsaanduidingen, regeleinden, lengte).",
+        "PROMOTIONAL": "Marketingtaal is niet toegestaan in deze categorie.",
+        "TAG_CONTENT_MISMATCH": "Categorie komt niet overeen met de inhoud (bijv. promotionele tekst in een UTILITY-sjabloon).",
+        "SCAM": "Meta heeft het sjabloon gemarkeerd als mogelijke oplichting. Controleer beweringen en taalgebruik."
       }
     },
     "gallery": {

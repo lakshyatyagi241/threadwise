@@ -25,3 +25,8 @@ Contracts: `@crm/contracts` (`message-templates`). Every route is tenant-scoped:
 - **Failures from Meta** on refresh, sync and media are 422 `TPL_META_REJECTED` (Meta's reason in `detail`) or, for a throttle or outage, 503 `WABA_PROVIDER_UNAVAILABLE`.
 - **Stale sweep:** a worker job every ten minutes re-reads templates PENDING on Meta for more than an hour and unchecked for 30 minutes (queue `tpl-sweep`, 50 per pass).
 - **Events** (outbox): `template.created`, `template.updated`, `template.submitted`, `template.submit_failed`, `template.status_changed`, `template.synced`, `template.deleted`.
+
+
+## API cURL example (web only)
+
+`tpl.templates.api_curl` lets a person see the "Send with the API (cURL)" card on an approved template and the cURL shortcut on its library card. It is shown only together with `api.keys.read`, and it tells the person to create an API key first when the workspace has no live key. It grants no API access by itself: the example calls `POST /api/v1/templates/{id}/send`, which an API key still authorises.

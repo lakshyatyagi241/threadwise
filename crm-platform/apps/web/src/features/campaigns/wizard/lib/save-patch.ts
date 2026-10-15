@@ -1,5 +1,7 @@
 import {
+  WIZARD_FOLLOW_UP_MAX,
   WIZARD_NAME_MAX,
+  wizardFollowUpSchema,
   wizardRetriesSchema,
   wizardScheduleSchema,
   wizardVariableSourceSchema,
@@ -31,6 +33,12 @@ export function sanitizePatch(patch: DraftPatch): DraftPatch {
     };
     if (wizardRetriesSchema.safeParse(r).success) out.retries = r;
     else delete out.retries;
+  }
+  if (out.followUps) {
+    // A step the server would refuse is left out of the save; the rest still saves, and the step's own check blocks Next.
+    out.followUps = out.followUps
+      .filter((f) => wizardFollowUpSchema.safeParse(f).success)
+      .slice(0, WIZARD_FOLLOW_UP_MAX);
   }
   return out;
 }

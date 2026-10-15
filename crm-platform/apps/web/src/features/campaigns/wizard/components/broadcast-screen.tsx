@@ -2,10 +2,14 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
-import type { WizardBroadcastDetail, WizardRetrySummary } from '@crm/contracts';
+import type {
+  WizardBroadcastDetail,
+  WizardFollowUpStepSummary,
+  WizardRetrySummary,
+} from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, EmptyState, Spinner, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
@@ -58,6 +62,43 @@ function RetryBlock({ retries, zone }: { retries: WizardRetrySummary; zone: stri
   );
 }
 
+const FOLLOW_UP_COUNTS = [
+  'waiting',
+  'sent',
+  'delivered',
+  'read',
+  'flowsStarted',
+  'skipped',
+  'lapsed',
+  'failed',
+] as const;
+
+/** What each follow-up step of a run did, one compact line per step. */
+function FollowUpOutcome({ steps }: { steps: readonly WizardFollowUpStepSummary[] }) {
+  const t = useTranslations('campaigns.wizard.status.followUps');
+  return (
+    <div data-testid="run-follow-ups">
+      <p className="text-xs font-medium text-muted-foreground">{t('title')}</p>
+      <ul className="mt-1 space-y-1">
+        {steps.map((s) => (
+          <li key={s.step} className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 text-xs">
+            <span className="font-medium">{t('step', { step: s.step })}</span>
+            {FOLLOW_UP_COUNTS.map((k) => (
+              <span
+                key={k}
+                title={k === 'skipped' || k === 'lapsed' ? t(`hint.${k}`) : undefined}
+                className={s[k] === 0 ? 'text-muted-foreground' : undefined}
+              >
+                {t(`count.${k}`, { count: s[k] })}
+              </span>
+            ))}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function Runs({ b }: { b: WizardBroadcastDetail }) {
   const words = useScheduleWords();
   const t = useTranslations('campaigns.wizard.status');
@@ -92,33 +133,42 @@ function Runs({ b }: { b: WizardBroadcastDetail }) {
         </thead>
         <tbody>
           {b.runList.map((r) => (
-            <tr key={r.id} className="border-b border-border/60">
-              <td className="px-2 py-1.5 tabular-nums">#{r.occurrence}</td>
-              <td className="px-2 py-1.5">{when(r.runAt)}</td>
-              <td className="px-2 py-1.5">
-                <Chip tone={statusTone(r.status)}>{stateLabel(t, r.status)}</Chip>
-              </td>
-              <td className="px-2 py-1.5 tabular-nums">{r.counts.sent.toLocaleString()}</td>
-              <td className="px-2 py-1.5 tabular-nums">{r.counts.delivered.toLocaleString()}</td>
-              <td className="px-2 py-1.5 tabular-nums">{r.counts.failed.toLocaleString()}</td>
-              <td className="px-2 py-1.5 text-xs text-muted-foreground">
-                {r.retries.enabled
-                  ? t('retrySummary', {
-                      pending: r.retries.pending,
-                      recovered: r.retries.recovered,
-                      exhausted: r.retries.exhausted,
-                    })
-                  : '-'}
-              </td>
-              <td className="px-2 py-1.5 text-end">
-                <Link
-                  href={runPath(r.id)}
-                  className="font-medium text-brand underline underline-offset-2"
-                >
-                  {t('openRun')}
-                </Link>
-              </td>
-            </tr>
+            <Fragment key={r.id}>
+              <tr className="border-b border-border/60">
+                <td className="px-2 py-1.5 tabular-nums">#{r.occurrence}</td>
+                <td className="px-2 py-1.5">{when(r.runAt)}</td>
+                <td className="px-2 py-1.5">
+                  <Chip tone={statusTone(r.status)}>{stateLabel(t, r.status)}</Chip>
+                </td>
+                <td className="px-2 py-1.5 tabular-nums">{r.counts.sent.toLocaleString()}</td>
+                <td className="px-2 py-1.5 tabular-nums">{r.counts.delivered.toLocaleString()}</td>
+                <td className="px-2 py-1.5 tabular-nums">{r.counts.failed.toLocaleString()}</td>
+                <td className="px-2 py-1.5 text-xs text-muted-foreground">
+                  {r.retries.enabled
+                    ? t('retrySummary', {
+                        pending: r.retries.pending,
+                        recovered: r.retries.recovered,
+                        exhausted: r.retries.exhausted,
+                      })
+                    : '-'}
+                </td>
+                <td className="px-2 py-1.5 text-end">
+                  <Link
+                    href={runPath(r.id)}
+                    className="font-medium text-brand underline underline-offset-2"
+                  >
+                    {t('openRun')}
+                  </Link>
+                </td>
+              </tr>
+              {r.followUps.length > 0 && (
+                <tr className="border-b border-border/60">
+                  <td colSpan={8} className="px-2 pb-2.5 pt-0">
+                    <FollowUpOutcome steps={r.followUps} />
+                  </td>
+                </tr>
+              )}
+            </Fragment>
           ))}
         </tbody>
       </table>
