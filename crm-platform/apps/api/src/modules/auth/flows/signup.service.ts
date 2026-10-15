@@ -435,6 +435,11 @@ export class SignupService {
       );
     }
 
+    // One identity, one account: the same refusal `start()` gives, at the same point, so this
+    // older one-step route cannot be used to open a second account for a taken email or number.
+    if (await this.tenants.identityExists(req.email, req.phone ?? null)) {
+      throw this.identityExistsError();
+    }
     await this.passwords.assertAcceptable(req.password, {
       email: req.email,
       fullName: req.fullName,
@@ -658,6 +663,14 @@ export class SignupService {
         'That code is not correct.',
         HttpStatus.BAD_REQUEST,
       );
+    }
+
+    // Up to STAGE_TTL can pass since the identity was first checked, and another sign-up for the same
+    // email or number may have finished meanwhile. Checked only once the code is proven (so it tells
+    // nobody without the code whether an account exists) and before the stage is consumed, so the
+    // refusal does not burn a stage for a reason other than the stage itself. Still check-then-act.
+    if (await this.tenants.identityExists(staged.data.email, staged.data.phoneE164)) {
+      throw this.identityExistsError();
     }
 
     // Single use: only one of any number of parallel correct posts gets the staged data.

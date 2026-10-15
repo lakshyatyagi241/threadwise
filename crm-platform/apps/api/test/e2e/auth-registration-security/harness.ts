@@ -68,6 +68,43 @@ export interface HarnessOptions {
 }
 
 /**
+ * Opens one more workspace for an email that already has an account, for the multi-workspace
+ * scenarios (workspace picker, switch). Every public sign-up route now refuses that with
+ * AUTH_IDENTITY_EXISTS, so this skips those routes' checks and runs the same provisioning step a
+ * sign-up runs once its checks pass, giving a real organization, owner, session and mails.
+ */
+export async function seedAnotherWorkspace(
+  h: Harness,
+  input: {
+    email: string;
+    orgName: string;
+    password: string;
+    fullName?: string;
+    referralCode?: string;
+  },
+  meta: { ip?: string; userAgent?: string } = {},
+): Promise<{ orgSlug: string; tokens: { accessToken: string; refreshToken: string } }> {
+  const { SignupService } = await import('../../../src/modules/auth/flows/signup.service');
+  const { PasswordService } = await import('../../../src/modules/auth/security/password.service');
+  const { slugify } = await import('../../../src/modules/auth/support/text');
+  const result = await h.app.get(SignupService).create(
+    {
+      orgName: input.orgName,
+      slug: slugify(input.orgName),
+      slugExplicit: false,
+      fullName: input.fullName ?? 'Test Person',
+      email: input.email,
+      phoneE164: null,
+      passwordHash: await h.app.get(PasswordService).hash(input.password),
+      referralCode: input.referralCode ?? null,
+    },
+    { phoneVerified: false },
+    meta,
+  );
+  return { orgSlug: result.orgSlug, tokens: result.tokens };
+}
+
+/**
  * A hermetic copy of the API: real Postgres (restricted role, real migrations),
  * real Redis, the real AppModule. Only the outbound edges are faked: mail,
  * captcha and the OAuth providers capture what they were asked to do, and the

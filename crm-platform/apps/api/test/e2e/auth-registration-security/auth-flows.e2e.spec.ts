@@ -1,7 +1,14 @@
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { AuthKeys } from '../../../src/modules/auth/support/redis-keys';
 import { base32Decode, hotp, totpStep } from '../../../src/modules/auth/support/totp';
-import { OPERATOR_EMAIL, OPERATOR_PASSWORD, startHarness, type Harness } from './harness';
+import {
+  OPERATOR_EMAIL,
+  OPERATOR_PASSWORD,
+  seedAnotherWorkspace,
+  startHarness,
+  type Harness,
+} from './harness';
 import { BRIDGE_SENDER, BRIDGE_TOKEN } from './stubs';
 
 /**
@@ -52,6 +59,18 @@ async function signup(over: Record<string, unknown> = {}): Promise<Account> {
     access: res.body.tokens.accessToken,
     refresh: res.body.tokens.refreshToken,
     ip,
+  };
+}
+
+/** A second workspace for an email that already has one; public sign-up refuses that (one identity, one account). */
+async function anotherWorkspace(email: string, orgName: string): Promise<Account> {
+  const r = await seedAnotherWorkspace(h, { email, orgName, password: PASSWORD });
+  return {
+    email,
+    slug: r.orgSlug,
+    access: r.tokens.accessToken,
+    refresh: r.tokens.refreshToken,
+    ip: nextIp(),
   };
 }
 
@@ -366,6 +385,141 @@ describe('registration', () => {
         [email],
       );
       expect(created.rows[0].phone_verified_at).not.toBeNull();
+    } finally {
+      await op('patch', '/settings/registration').send({ otp: { enabled: false } });
+      await api().delete(`/v2/platform/settings/senders/${bridge.body.id}`).set(bearer(opAccess));
+    }
+  });
+});
+
+describe('one identity, one account on the one-step and phone-code paths', () => {
+  const countUsers = async (email: string) =>
+    (await h.owner.query(`SELECT count(*)::int AS c FROM users WHERE email = $1`, [email])).rows[0]
+      .c as number;
+  const countOrgs = async () =>
+    (await h.owner.query(`SELECT count(*)::int AS c FROM organizations`)).rows[0].c as number;
+
+  it('the one-step sign-up refuses an email that already has an account, creating nothing', async () => {
+    const existing = await signup();
+    const orgsBefore = await countOrgs();
+    const res = await api().post('/v2/auth/signup').set('x-forwarded-for', nextIp()).send({
+      orgName: 'Second Try Co',
+      fullName: 'Second Try',
+      email: existing.email,
+      password: PASSWORD,
+      acceptTerms: true,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(409);
+    expect(res.body.code).toBe('AUTH_IDENTITY_EXISTS');
+    expect(res.body.errors).toEqual([
+      {
+        path: 'email',
+        message:
+          'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
+      },
+    ]);
+    expect(await countUsers(existing.email)).toBe(1);
+    expect(await countOrgs()).toBe(orgsBefore);
+  });
+
+  it('the one-step sign-up refuses a mobile number that already has an account', async () => {
+    const phone = '+919876500201';
+    await signup({ phone });
+    const orgsBefore = await countOrgs();
+    const res = await api()
+      .post('/v2/auth/signup')
+      .set('x-forwarded-for', nextIp())
+      .send({
+        orgName: 'Same Phone Co',
+        fullName: 'Same Phone',
+        email: uniqueEmail('samephone'),
+        password: PASSWORD,
+        acceptTerms: true,
+        phone,
+      });
+    expect(res.status, JSON.stringify(res.body)).toBe(409);
+    expect(res.body.code).toBe('AUTH_IDENTITY_EXISTS');
+    expect(await countOrgs()).toBe(orgsBefore);
+  });
+
+  it('a sign-up staged behind the phone code is refused when the same email finished first', async () => {
+    // Two sign-ups for one email both pass the first identity check (nothing exists yet) and both
+    // wait behind the phone code, for up to 7 days. Whichever confirms second must not get an account.
+    const bridge = await op('post', '/settings/senders').send({
+      kind: 'device',
+      label: 'Identity race bridge',
+      bridgeUrl: h.stubs.bridge.url,
+      senderNumber: BRIDGE_SENDER,
+      secret: BRIDGE_TOKEN,
+    });
+    expect(bridge.status, JSON.stringify(bridge.body)).toBe(201);
+    await op('patch', '/settings/registration').send({
+      otp: {
+        enabled: true,
+        sender: `device:${bridge.body.id}`,
+        ttlMinutes: 5,
+        length: 6,
+        resendCooldownSec: 15,
+        maxAttempts: 3,
+      },
+    });
+    try {
+      const email = uniqueEmail('otp-race');
+
+      // A: the three-step flow (start -> email code -> password), staged behind the phone code.
+      const ipA = nextIp();
+      const started = await api()
+        .post('/v2/auth/signup/start')
+        .set('x-forwarded-for', ipA)
+        .send({ fullName: 'Race A', email, phone: '+919876500301' });
+      expect(started.status, JSON.stringify(started.body)).toBe(201);
+      const emailCode = h.mail
+        .filter((m) => m.to === email)
+        .at(-1)!
+        .text.match(/\b(\d{6})\b/)![1]!;
+      const verified = await api()
+        .post('/v2/auth/signup/verify-email-code')
+        .set('x-forwarded-for', ipA)
+        .send({ token: started.body.token, code: emailCode });
+      expect(verified.status, JSON.stringify(verified.body)).toBe(200);
+      const stagedA = await api()
+        .post('/v2/auth/signup/set-password')
+        .set('x-forwarded-for', ipA)
+        .send({ token: started.body.token, password: PASSWORD, acceptTerms: true });
+      expect(stagedA.status, JSON.stringify(stagedA.body)).toBe(201);
+      expect(stagedA.body.status).toBe('otp_required');
+      const codeA = h.otps.at(-1)!.code;
+
+      // B: the one-step sign-up for the same email, also staged (A has no account yet).
+      const stagedB = await api().post('/v2/auth/signup').set('x-forwarded-for', nextIp()).send({
+        orgName: 'Race B Co',
+        fullName: 'Race B',
+        email,
+        password: PASSWORD,
+        acceptTerms: true,
+        phone: '+919876500302',
+      });
+      expect(stagedB.status, JSON.stringify(stagedB.body)).toBe(201);
+      expect(stagedB.body.status).toBe('otp_required');
+      const codeB = h.otps.at(-1)!.code;
+      expect(await countUsers(email)).toBe(0);
+
+      const doneA = await api()
+        .post('/v2/auth/signup/verify-otp')
+        .send({ challengeId: stagedA.body.challengeId, code: codeA });
+      expect(doneA.status, JSON.stringify(doneA.body)).toBe(201);
+      expect(doneA.body.status).toBe('authenticated');
+
+      const orgsBefore = await countOrgs();
+      const doneB = await api()
+        .post('/v2/auth/signup/verify-otp')
+        .send({ challengeId: stagedB.body.challengeId, code: codeB });
+      expect(doneB.status, JSON.stringify(doneB.body)).toBe(409);
+      expect(doneB.body.code).toBe('AUTH_IDENTITY_EXISTS');
+      expect(await countUsers(email)).toBe(1);
+      expect(await countOrgs()).toBe(orgsBefore);
+      // Refused for the identity, not for the stage itself: B's stage is not consumed.
+      expect(await h.redis.exists(AuthKeys.signup(stagedB.body.challengeId))).toBe(1);
     } finally {
       await op('patch', '/settings/registration').send({ otp: { enabled: false } });
       await api().delete(`/v2/platform/settings/senders/${bridge.body.id}`).set(bearer(opAccess));
@@ -1000,7 +1154,7 @@ describe('workspaces', () => {
   it('lists and switches between organizations that share a verified email, and refuses unverified ones', async () => {
     const email = uniqueEmail('multi');
     const one = await signup({ email, orgName: 'First Workspace' });
-    const two = await signup({ email, orgName: 'Second Workspace' });
+    const two = await anotherWorkspace(email, 'Second Workspace');
     expect(one.slug).not.toBe(two.slug);
 
     const alone = await api().get('/v2/auth/workspaces').set(bearer(one.access));
