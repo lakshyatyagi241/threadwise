@@ -1401,6 +1401,19 @@
         "selectAll": "सभी चुनें",
         "reorder": "कॉलम का क्रम बदलने के लिए खींचें",
         "remove": "{name} को हटाएँ"
+      },
+      "presets": {
+        "myContacts": "मेरे संपर्क",
+        "newThisWeek": "इस सप्ताह नए",
+        "newLastWeek": "पिछले सप्ताह नए",
+        "recentlyCreated": "हाल में बनाए गए",
+        "recentlyModified": "हाल में बदले गए",
+        "recentlyImported": "हाल में इंपोर्ट किए गए",
+        "neverContacted": "कभी संपर्क नहीं किया",
+        "needsFollowUp": "फ़ॉलो-अप ज़रूरी",
+        "active": "सक्रिय",
+        "inactive": "निष्क्रिय",
+        "unsubscribed": "सदस्यता छोड़ चुके"
       }
     },
     "erase": {

@@ -1401,6 +1401,19 @@
         "selectAll": "Alles selecteren",
         "reorder": "Sleep om kolommen te herschikken",
         "remove": "{name} verwijderen"
+      },
+      "presets": {
+        "myContacts": "Mijn contacten",
+        "newThisWeek": "Nieuw deze week",
+        "newLastWeek": "Nieuw vorige week",
+        "recentlyCreated": "Onlangs aangemaakt",
+        "recentlyModified": "Onlangs gewijzigd",
+        "recentlyImported": "Onlangs geïmporteerd",
+        "neverContacted": "Nooit gecontacteerd",
+        "needsFollowUp": "Opvolging nodig",
+        "active": "Actief",
+        "inactive": "Inactief",
+        "unsubscribed": "Uitgeschreven"
       }
     },
     "erase": {

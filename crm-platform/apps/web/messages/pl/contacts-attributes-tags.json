@@ -1401,6 +1401,19 @@
         "selectAll": "Zaznacz wszystko",
         "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
         "remove": "Usuń: {name}"
+      },
+      "presets": {
+        "myContacts": "Moje kontakty",
+        "newThisWeek": "Nowe w tym tygodniu",
+        "newLastWeek": "Nowe w zeszłym tygodniu",
+        "recentlyCreated": "Ostatnio utworzone",
+        "recentlyModified": "Ostatnio zmienione",
+        "recentlyImported": "Ostatnio zaimportowane",
+        "neverContacted": "Nigdy nie kontaktowano",
+        "needsFollowUp": "Wymagają kontaktu",
+        "active": "Aktywne",
+        "inactive": "Nieaktywne",
+        "unsubscribed": "Wypisane"
       }
     },
     "erase": {

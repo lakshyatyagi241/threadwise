@@ -1401,6 +1401,19 @@
         "selectAll": "تحديد الكل",
         "reorder": "اسحب لإعادة ترتيب الأعمدة",
         "remove": "إزالة {name}"
+      },
+      "presets": {
+        "myContacts": "جهات اتصالي",
+        "newThisWeek": "جديدة هذا الأسبوع",
+        "newLastWeek": "جديدة الأسبوع الماضي",
+        "recentlyCreated": "أُنشئت مؤخرًا",
+        "recentlyModified": "عُدّلت مؤخرًا",
+        "recentlyImported": "استُوردت مؤخرًا",
+        "neverContacted": "لم يُتواصل معها",
+        "needsFollowUp": "تحتاج متابعة",
+        "active": "نشطة",
+        "inactive": "غير نشطة",
+        "unsubscribed": "ألغت الاشتراك"
       }
     },
     "erase": {

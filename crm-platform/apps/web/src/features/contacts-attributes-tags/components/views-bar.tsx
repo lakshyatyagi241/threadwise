@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
+import { useStoredValue } from '@/lib/use-stored-value';
 import type { ContactViewResponse } from '@crm/contracts';
 import { Button, ConfirmDialog, Drawer, Input, Popover, cn, useToast } from '@crm/ui';
 import type { ContactFilters } from '../api/contacts';
@@ -10,6 +11,15 @@ import { useContactViews, useViewMutations } from '../api/views';
 import { pickerViews, tabViews, viewChanged, viewFilterOf } from '../lib/views';
 import { ChevronDownIcon, PlusIcon } from './icons';
 import { RowMenu, RowMenuItem, RowMenuSeparator } from './row-menu';
+
+import {
+  activePreset,
+  parsePresetFavorites,
+  PRESET_FAVORITES_KEY,
+  PRESET_VIEWS,
+  togglePresetFavorite,
+  type PresetView,
+} from '../lib/preset-views';
 
 const NS = 'contacts-attributes-tags.views';
 
@@ -27,6 +37,8 @@ export function ViewsBar({
   columnIds,
   keepsColumns,
   onSelect,
+  onPreset,
+  meId,
   can,
 }: {
   /** The filters on screen now (what "Create view" and "Save current filters" keep). */
@@ -40,6 +52,10 @@ export function ViewsBar({
   keepsColumns: boolean;
   /** A tab (or a picked / created view) was chosen; null is "All contacts". */
   onSelect: (view: ContactViewResponse | null) => void;
+  /** A built-in view was chosen from "Default filters". */
+  onPreset: (preset: PresetView) => void;
+  /** The signed-in person (what "My contacts" means). */
+  meId: string;
   can: { create: boolean; update: boolean; delete: boolean };
 }) {
   const t = useTranslations(NS);
@@ -52,6 +68,12 @@ export function ViewsBar({
   const [deleting, setDeleting] = useState<ContactViewResponse | null>(null);
 
   const all = useMemo(() => views.data ?? [], [views.data]);
+  const preset = useMemo(
+    () => (activeId === '' ? activePreset(filters, meId) : null),
+    [activeId, filters, meId],
+  );
+  const [favRaw, setFavRaw] = useStoredValue(PRESET_FAVORITES_KEY);
+  const favPresets = useMemo(() => parsePresetFavorites(favRaw), [favRaw]);
   const tabs = useMemo(() => tabViews(all, activeId), [all, activeId]);
   const failed = (e: unknown) =>
     toast(t('toast.failed', { message: e instanceof Error ? e.message : String(e) }), 'danger');
@@ -68,7 +90,11 @@ export function ViewsBar({
           className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-primary bg-background px-4 text-sm font-medium text-primary outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           <span className="truncate">
-            {activeId === '' ? t('all') : (all.find((v) => v.id === activeId)?.name ?? t('all'))}
+            {activeId === ''
+              ? preset
+                ? t(`presets.${preset}`)
+                : t('all')
+              : (all.find((v) => v.id === activeId)?.name ?? t('all'))}
           </span>
           <ChevronDownIcon className="size-3.5" />
         </button>
@@ -76,12 +102,19 @@ export function ViewsBar({
           open={pickerOpen}
           onClose={() => setPickerOpen(false)}
           label={t('picker.title')}
-          className="start-0 end-auto w-80"
+          className="start-0 end-auto w-80 space-y-0 overflow-hidden p-0"
         >
           <Picker
             views={all}
             activeId={activeId}
+            preset={preset}
+            favPresets={favPresets}
+            onToggleFavPreset={(p) => setFavRaw(togglePresetFavorite(favRaw, p))}
             canCreate={can.create}
+            onPreset={(p) => {
+              setPickerOpen(false);
+              onPreset(p);
+            }}
             onAll={() => {
               setPickerOpen(false);
               onSelect(null);
@@ -240,7 +273,11 @@ export function ViewsBar({
 function Picker({
   views,
   activeId,
+  preset,
+  favPresets,
+  onToggleFavPreset,
   canCreate,
+  onPreset,
   onAll,
   onCreate,
   onPick,
@@ -248,7 +285,11 @@ function Picker({
 }: {
   views: readonly ContactViewResponse[];
   activeId: string;
+  preset: PresetView | null;
+  favPresets: readonly PresetView[];
+  onToggleFavPreset: (p: PresetView) => void;
   canCreate: boolean;
+  onPreset: (p: PresetView) => void;
   onAll: () => void;
   onCreate: () => void;
   onPick: (v: ContactViewResponse) => void;
@@ -258,20 +299,70 @@ function Picker({
   const [q, setQ] = useState('');
   const shown = pickerViews(views, q, 'all');
   const favorites = shown.filter((v) => v.isFavorite);
-  const showAll = q.trim() === '' || t('all').toLowerCase().includes(q.trim().toLowerCase());
+  const presets = PRESET_VIEWS.filter(
+    (p) => q.trim() === '' || t(`presets.${p}`).toLowerCase().includes(q.trim().toLowerCase()),
+  );
+  const favPresetsShown = presets.filter((p) => favPresets.includes(p));
+  const allMatches = q.trim() === '' || t('all').toLowerCase().includes(q.trim().toLowerCase());
+  const showAll = allMatches || presets.length > 0;
+  const searching = q.trim() !== '';
+  const [closed, setClosed] = useState<Record<string, boolean>>({});
+  const isOpen = (key: string) => searching || !closed[key];
   const row = (active: boolean) =>
     cn(
-      'flex min-w-0 flex-1 items-center rounded-md px-2 py-1.5 text-start text-sm outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
-      active && 'bg-muted font-medium',
+      'flex min-w-0 flex-1 items-center px-4 py-2.5 text-start text-[13px] outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+      active && 'bg-primary/10 font-semibold',
     );
-  const group = (title: string, count: number) => (
-    <li className="flex items-center justify-between px-2 pt-2 text-xs font-semibold uppercase text-muted-foreground">
-      {title}
-      <span className="rounded bg-muted px-1.5 py-0.5 text-[11px]">{count}</span>
+  /** A group header: a chevron, the title in capitals and how many rows it holds; a click folds the group. */
+  const group = (key: string, title: string, count: number) => (
+    <li key={`g-${key}`}>
+      <button
+        type="button"
+        aria-expanded={isOpen(key)}
+        onClick={() => !searching && setClosed((c) => ({ ...c, [key]: isOpen(key) }))}
+        className="flex w-full items-center gap-2 px-4 py-2.5 text-start text-[12px] font-bold uppercase tracking-wide text-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+      >
+        <ChevronDownIcon
+          className={cn('size-3 shrink-0 transition', !isOpen(key) && '-rotate-90 rtl:rotate-90')}
+        />
+        <span className="min-w-0 flex-1 truncate">{title}</span>
+        <span className="rounded bg-muted px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-muted-foreground">
+          {count}
+        </span>
+      </button>
+    </li>
+  );
+  const star = (on: boolean, toggle: () => void, name: string) => (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-pressed={on}
+      aria-label={`${t(on ? 'picker.unmarkFavorite' : 'picker.markFavorite')}: ${name}`}
+      title={t(on ? 'picker.unmarkFavorite' : 'picker.markFavorite')}
+      className={cn(
+        'me-3 shrink-0 rounded px-1 text-lg leading-none outline-none focus-visible:ring-2 focus-visible:ring-primary',
+        on ? 'text-amber-400' : 'text-muted-foreground/50 hover:text-amber-400',
+      )}
+    >
+      {on ? '★' : '☆'}
+    </button>
+  );
+  const item = 'flex items-center border-t border-border';
+  const presetRow = (p: PresetView, scope: string) => (
+    <li key={`${scope}-${p}`} className={item}>
+      <button
+        type="button"
+        onClick={() => onPreset(p)}
+        aria-current={activeId === '' && preset === p ? 'true' : undefined}
+        className={row(activeId === '' && preset === p)}
+      >
+        <span className="min-w-0 truncate">{t(`presets.${p}`)}</span>
+      </button>
+      {star(favPresets.includes(p), () => onToggleFavPreset(p), t(`presets.${p}`))}
     </li>
   );
   const viewRow = (v: ContactViewResponse, scope: string) => (
-    <li key={`${scope}-${v.id}`} className="flex items-center gap-1">
+    <li key={`${scope}-${v.id}`} className={item}>
       <button
         type="button"
         onClick={() => onPick(v)}
@@ -280,66 +371,73 @@ function Picker({
       >
         <span className="min-w-0 truncate">{v.name}</span>
       </button>
-      <button
-        type="button"
-        onClick={() => onToggleFav(v)}
-        aria-pressed={v.isFavorite}
-        aria-label={t(v.isFavorite ? 'picker.unmarkFavorite' : 'picker.markFavorite')}
-        title={t(v.isFavorite ? 'picker.unmarkFavorite' : 'picker.markFavorite')}
-        className={cn(
-          'shrink-0 rounded px-1.5 text-base leading-none outline-none focus-visible:ring-2 focus-visible:ring-primary',
-          v.isFavorite ? 'text-amber-500' : 'text-muted-foreground hover:text-amber-500',
-        )}
-      >
-        {v.isFavorite ? '★' : '☆'}
-      </button>
+      {star(v.isFavorite, () => onToggleFav(v), v.name)}
     </li>
   );
+  const favCount = favorites.length + favPresetsShown.length;
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-semibold">{t('picker.title')}</p>
+    <div>
+      <h2 className="sr-only">{t('picker.title')}</h2>
+      <div className="p-3">
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder={t('picker.search')}
+          aria-label={t('picker.search')}
+          autoFocus
+        />
       </div>
-      <Input
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder={t('picker.search')}
-        aria-label={t('picker.search')}
-        autoFocus
-      />
-      <ul className="max-h-72 space-y-0.5 overflow-y-auto">
-        {favorites.length > 0 && (
+      <ul className="max-h-80 overflow-y-auto border-b border-border">
+        {favCount > 0 && (
           <>
-            {group(t('picker.favorites'), favorites.length)}
-            {favorites.map((v) => viewRow(v, 'fav'))}
+            {group('fav', t('picker.favorites'), favCount)}
+            {isOpen('fav') && (
+              <>
+                {favPresetsShown.map((p) => presetRow(p, 'fav'))}
+                {favorites.map((v) => viewRow(v, 'fav'))}
+              </>
+            )}
           </>
         )}
         {showAll && (
           <>
-            {group(t('picker.defaultFilters'), 1)}
-            <li>
-              <button
-                type="button"
-                onClick={onAll}
-                aria-current={activeId === '' ? 'true' : undefined}
-                className={cn(row(activeId === ''), 'w-full')}
-              >
-                {t('all')}
-              </button>
-            </li>
+            {group('def', t('picker.defaultFilters'), (allMatches ? 1 : 0) + presets.length)}
+            {isOpen('def') && (
+              <>
+                {allMatches && (
+                  <li className={item}>
+                    <button
+                      type="button"
+                      onClick={onAll}
+                      aria-current={activeId === '' && preset === null ? 'true' : undefined}
+                      className={row(activeId === '' && preset === null)}
+                    >
+                      {t('all')}
+                    </button>
+                  </li>
+                )}
+                {presets.map((p) => presetRow(p, 'def'))}
+              </>
+            )}
           </>
         )}
-        {group(t('picker.createdViews'), shown.length)}
-        {shown.length === 0 && (
-          <li className="py-4 text-center text-sm text-muted-foreground">{t('picker.empty')}</li>
+        {group('made', t('picker.createdViews'), shown.length)}
+        {isOpen('made') && (
+          <>
+            {shown.length === 0 && (
+              <li className="border-t border-border py-4 text-center text-sm text-muted-foreground">
+                {t('picker.empty')}
+              </li>
+            )}
+            {shown.map((v) => viewRow(v, 'all'))}
+          </>
         )}
-        {shown.map((v) => viewRow(v, 'all'))}
       </ul>
       {canCreate && (
         <button
           type="button"
           onClick={onCreate}
-          className="inline-flex w-full items-center gap-1 border-t border-border pt-2 text-sm font-medium text-primary outline-none hover:underline focus-visible:ring-2 focus-visible:ring-primary"
+          className="flex w-full items-center gap-2 px-4 py-3 text-[13px] font-medium text-primary outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
         >
           <PlusIcon className="size-3.5" />
           {t('picker.addView')}

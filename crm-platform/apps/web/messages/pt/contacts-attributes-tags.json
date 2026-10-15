@@ -1401,6 +1401,19 @@
         "selectAll": "Selecionar tudo",
         "reorder": "Arraste para reordenar as colunas",
         "remove": "Remover {name}"
+      },
+      "presets": {
+        "myContacts": "Meus contatos",
+        "newThisWeek": "Novos esta semana",
+        "newLastWeek": "Novos na semana passada",
+        "recentlyCreated": "Criados recentemente",
+        "recentlyModified": "Modificados recentemente",
+        "recentlyImported": "Importados recentemente",
+        "neverContacted": "Nunca contatados",
+        "needsFollowUp": "Precisam de acompanhamento",
+        "active": "Ativos",
+        "inactive": "Inativos",
+        "unsubscribed": "Cancelaram a inscrição"
       }
     },
     "erase": {
