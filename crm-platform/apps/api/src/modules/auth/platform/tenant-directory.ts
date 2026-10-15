@@ -160,6 +160,28 @@ export class TenantDirectory {
   }
 
   /**
+   * True when a `users` row already exists anywhere (any org, any status) for this email OR this
+   * phone (the phone lives on `user_profiles`, not `users`). Used only at signup time to block
+   * creating a second account for an identity that already has one — never used for login, which
+   * goes through `activeOrgsForEmail` instead.
+   */
+  async identityExists(email: string, phoneE164: string | null): Promise<boolean> {
+    return this.db.privileged(async (tx) => {
+      const res = await tx.execute(
+        phoneE164
+          ? sql`
+              SELECT 1 FROM users u
+              LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
+              WHERE u.email = ${email} OR p.phone_e164 = ${phoneE164}
+              LIMIT 1
+            `
+          : sql`SELECT 1 FROM users WHERE email = ${email} LIMIT 1`,
+      );
+      return res.rows.length > 0;
+    });
+  }
+
+  /**
    * Creates the organization, its five workspace preset roles (the locked Owner
    * holds every capability key), the first user, that user's security/profile
    * rows and the organization's plan (the registration default, plus a free
