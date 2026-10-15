@@ -43,6 +43,7 @@ import {
   useNewContacts,
   useSummary,
   useTaskCounts,
+  useConversationStats,
   useTeamPanel,
   useThroughput,
   useUnofficialWhatsapp,
@@ -93,6 +94,8 @@ export function DashboardScreen() {
   const canAnalytics = can(session.data, 'dash.analytics.read');
   // The people panel is only asked for while the Agent view is open.
   const team = useTeamPanel(win, canAnalytics && view === 'agent');
+  const [agent, setAgent] = useState<string | undefined>(undefined);
+  const conversationStats = useConversationStats(win, agent, canAnalytics && view === 'agent');
   const taskCounts = useTaskCounts(canTasks);
   const inboxCounts = useInboxCounts(canInbox);
   const wallet = useWalletSummary(can(session.data, 'wallet.balance.read'));
@@ -112,7 +115,7 @@ export function DashboardScreen() {
       widgets.refetch(),
       wallet.refetch(),
       session.refetch(),
-      ...(canAnalytics && view === 'agent' ? [team.refetch()] : []),
+      ...(canAnalytics && view === 'agent' ? [team.refetch(), conversationStats.refetch()] : []),
       ...(canContacts ? [newContacts.refetch()] : []),
       ...(canTasks ? [taskCounts.refetch()] : []),
       ...(canInbox ? [inboxCounts.refetch()] : []),
@@ -235,6 +238,9 @@ export function DashboardScreen() {
         {view === 'agent' ? (
           <AgentView
             query={team}
+            stats={conversationStats}
+            agent={agent}
+            onAgent={setAgent}
             allowed={canAnalytics}
             role={role}
             rangeName={rangeName}

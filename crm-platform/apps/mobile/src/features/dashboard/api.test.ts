@@ -1,7 +1,8 @@
 import { resetSessionForTests, startSession } from '@/lib/auth/session-manager';
-import { summary, throughput, wallet, widgets } from '@/test/dashboard-fixtures';
+import { conversationStats, summary, throughput, wallet, widgets } from '@/test/dashboard-fixtures';
 import { jsonResponse, mockFetch, TOKEN_PAIR } from '@/test/fetch-mock';
 import {
+  fetchConversationStats,
   fetchEntitlements,
   fetchInboxCounts,
   fetchNewContacts,
@@ -35,6 +36,21 @@ describe('dashboard api', () => {
       expect.stringContaining(`/v2/dashboard/widgets?${query}`),
     ]);
     expect(http.calls[0]?.headers.Authorization).toBe('Bearer access-1');
+  });
+
+  it('asks for the conversation numbers of the window, narrowed to one person when asked', async () => {
+    const http = mockFetch(
+      jsonResponse(200, conversationStats),
+      jsonResponse(200, conversationStats),
+    );
+    const win = { from: '2026-09-13', to: '2026-10-12' };
+    await expect(fetchConversationStats(win)).resolves.toMatchObject({ counts: { total: 17 } });
+    await fetchConversationStats(win, 'b1111111-1111-4111-8111-111111111111');
+    expect(http.calls[0]?.url).toContain(
+      '/v2/analytics/conversations?range=custom&from=2026-09-13&to=2026-10-12',
+    );
+    expect(http.calls[0]?.url).not.toContain('agent=');
+    expect(http.calls[1]?.url).toContain('&agent=b1111111-1111-4111-8111-111111111111');
   });
 
   it('reads the wallet and the plan features', async () => {

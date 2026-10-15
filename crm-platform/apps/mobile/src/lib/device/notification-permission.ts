@@ -28,18 +28,24 @@ export const getNotificationPermission = async (): Promise<NotificationPermissio
   readPermission(await Notifications.getPermissionsAsync());
 
 /**
- * Asks the phone to show its notification prompt. Android 13 and newer show no prompt until the app has at least one notification
- * channel, so the app's default channel is made first (`channelName` is what the phone's settings list it as). The answer is the
+ * Makes the app's default notification channel (`channelName` is what the phone's settings list it as). Android 13 and newer show
+ * no notification permission, in a prompt or in the settings, until the app has at least one channel. Safe to repeat.
+ */
+export async function ensureNotificationChannel(channelName: string): Promise<void> {
+  if (Platform.OS !== 'android') return;
+  await Notifications.setNotificationChannelAsync('default', {
+    name: channelName,
+    importance: Notifications.AndroidImportance.DEFAULT,
+  });
+}
+
+/**
+ * Asks the phone to show its notification prompt, after the channel exists (see `ensureNotificationChannel`). The answer is the
  * permission after the person has chosen; a prompt that was already answered is not shown again and the answer is the same.
  */
 export async function requestNotificationPermission(
   channelName: string,
 ): Promise<NotificationPermission> {
-  if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('default', {
-      name: channelName,
-      importance: Notifications.AndroidImportance.DEFAULT,
-    });
-  }
+  await ensureNotificationChannel(channelName);
   return readPermission(await Notifications.requestPermissionsAsync());
 }

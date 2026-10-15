@@ -1,3 +1,4 @@
+import type { TFunction } from 'i18next';
 import { ApiError } from '@/lib/api';
 import { latinDigits } from '@/lib/format/numbers';
 
@@ -93,3 +94,15 @@ export const isForbidden = (error: unknown): boolean =>
 /** The plan does not include the feature. */
 export const isPlanLocked = (error: unknown): boolean =>
   error instanceof ApiError && error.code === 'PLAN_FEATURE_LOCKED';
+
+/** What a figure that does not exist (nobody answered, nobody rated) shows. */
+const DASH = '—';
+
+/** A wait in minutes as people say it: "12 min", "3.5 h", "2 d". Null when there is nothing to average. */
+export function formatWait(minutes: number | null, t: TFunction): string {
+  if (minutes === null) return DASH;
+  const one = (n: number) => String(Math.round(n * 10) / 10);
+  if (minutes < 60) return t('dashboard.agents.minutes', { value: one(minutes) });
+  if (minutes < 1440) return t('dashboard.agents.hours', { value: one(minutes / 60) });
+  return t('dashboard.agents.days', { value: one(minutes / 1440) });
+}

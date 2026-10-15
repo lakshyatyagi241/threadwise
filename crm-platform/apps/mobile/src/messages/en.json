@@ -367,7 +367,23 @@
       "hours": "{{value}} h",
       "days": "{{value}} d",
       "empty": "No conversation was given to anyone in this period.",
-      "noAccess": "Your role ({{role}}) does not have access to agent analytics."
+      "noAccess": "Your role ({{role}}) does not have access to agent analytics.",
+      "everyone": "All agents",
+      "pickerLabel": "Agent",
+      "pickerPlaceholder": "Select an agent",
+      "statusTitle": "Conversation status",
+      "avgResolution": "Average resolution time",
+      "avgDuration": "Average conversation duration",
+      "byAgentTitle": "Conversations by agent",
+      "byAgentPicker": "Agent for the status list",
+      "status": {
+        "open": "Open",
+        "pending": "Pending",
+        "closed": "Closed",
+        "assigned": "Assigned",
+        "unassigned": "Unassigned",
+        "unattended": "Unattended"
+      }
     },
     "bots": {
       "activeFlows": "Active flows",
@@ -1387,12 +1403,10 @@
         "title": "Camera",
         "body": "Take photos to share in conversations and attach to contacts."
       },
-      "allow": "Allow",
-      "allowFor": "Allow {{name}}",
       "allowedFor": "{{name}} allowed",
       "openSettingsFor": "Open settings to allow {{name}}",
       "settings": "Settings",
-      "allowAll": "Allow all",
+      "openSettings": "Open settings",
       "continue": "Continue",
       "notNow": "Not now",
       "footnote": "You can change these any time in your phone's settings.",

@@ -6,6 +6,7 @@ import { initI18n } from '@/lib/i18n';
 import { identifyUser } from '@/lib/observability/sentry';
 import { fetchSession } from '@/lib/session/api';
 import {
+  conversationStats,
   emptyWidgets,
   session,
   summary,
@@ -34,6 +35,7 @@ const summaryCall = jest.mocked(api.fetchSummary);
 const throughputCall = jest.mocked(api.fetchThroughput);
 const widgetsCall = jest.mocked(api.fetchWidgets);
 const teamCall = jest.mocked(api.fetchTeamPanel);
+const statsCall = jest.mocked(api.fetchConversationStats);
 const walletCall = jest.mocked(api.fetchWalletSummary);
 const entitlementsCall = jest.mocked(api.fetchEntitlements);
 const newContactsCall = jest.mocked(api.fetchNewContacts);
@@ -431,6 +433,56 @@ describe('DashboardScreen', () => {
       expect(screen.queryByTestId('card-sent')).toBeNull();
     });
 
+    it('shows the conversation status, the average times and each person in the Agent view', async () => {
+      arrange({ session: sessionAnalytics });
+      teamCall.mockResolvedValue(teamPanel);
+      statsCall.mockResolvedValue(conversationStats);
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Agent');
+      expect(await screen.findByLabelText('Open: 3')).toBeTruthy();
+      for (const [label, value] of [
+        ['Pending', '1'],
+        ['Closed', '13'],
+        ['Assigned', '12'],
+        ['Unassigned', '5'],
+        ['Unattended', '2'],
+      ]) {
+        expect(screen.getAllByLabelText(`${label}: ${value}`).length).toBeGreaterThan(0);
+      }
+      expect(screen.getByText('Conversation status')).toBeTruthy();
+      expect(screen.getByText('14 h')).toBeTruthy();
+      expect(screen.getByText('1.5 h')).toBeTruthy();
+      // The first person is chosen in the by-agent card; switching shows the other one's counts.
+      expect(
+        screen.getByRole('button', { name: 'Agent for the status list' }).props.accessibilityValue,
+      ).toEqual({
+        text: 'Asha Verma',
+      });
+      await fireEvent.press(screen.getByRole('button', { name: 'Agent for the status list' }));
+      await fireEvent.press(screen.getByRole('radio', { name: 'Rohan Mehta' }));
+      expect(await screen.findByLabelText('Closed: 6')).toBeTruthy();
+    });
+
+    it('narrows the headline numbers to the person picked at the top', async () => {
+      arrange({ session: sessionAnalytics });
+      teamCall.mockResolvedValue(teamPanel);
+      statsCall.mockResolvedValue(conversationStats);
+      const { queryClient } = await show();
+      await loaded(queryClient);
+      await pick('Agent');
+      await screen.findByLabelText('Open: 3');
+      await fireEvent.press(screen.getByRole('button', { name: 'Agent' }));
+      await fireEvent.press(screen.getByRole('radio', { name: 'Rohan Mehta' }));
+      await waitFor(() =>
+        expect(statsCall).toHaveBeenLastCalledWith(
+          expect.objectContaining({ from: expect.any(String) }),
+          'b2222222-2222-4222-8222-222222222222',
+          expect.anything(),
+        ),
+      );
+    });
+
     it('says so when nobody was given a conversation in the period', async () => {
       arrange({ session: sessionAnalytics });
       teamCall.mockResolvedValue({ ...teamPanel, team: [] });
@@ -447,6 +499,7 @@ describe('DashboardScreen', () => {
       const { queryClient } = await show();
       await loaded(queryClient);
       await pick('Agent');
+      expect(statsCall).not.toHaveBeenCalled();
       expect(
         await screen.findByText('Your role (Owner) does not have access to agent analytics.'),
       ).toBeTruthy();

@@ -1,4 +1,5 @@
 import {
+  analyticsConversationsSchema,
   analyticsPanelsSchema,
   dashSummaryResponseSchema,
   inboxCountsSchema,
@@ -43,6 +44,17 @@ export const fetchTeamPanel = (win: DashWindow, signal?: AbortSignal) =>
   apiFetch('/v2/analytics/panels', {
     query: windowQuery(win),
     schema: analyticsPanelsSchema,
+    signal,
+  });
+
+/**
+ * Conversation counts by status and assignment, average resolution and duration, and one row per person, for a window; `agent` (a
+ * user uuid) narrows the headline to one person. Same permission and plan as the team panel.
+ */
+export const fetchConversationStats = (win: DashWindow, agent?: string, signal?: AbortSignal) =>
+  apiFetch('/v2/analytics/conversations', {
+    query: { ...windowQuery(win), agent },
+    schema: analyticsConversationsSchema,
     signal,
   });
 

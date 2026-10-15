@@ -87,6 +87,15 @@ function Stat({ title, subtitle, value, icon, tone, onPress, label }: StatProps)
   );
 }
 
+/** One figure in a card of its own: the title (and subtitle) on the left, the figure and its icon tile under it. */
+export function StatCard(props: StatProps) {
+  return (
+    <FlatCard>
+      <Stat {...props} />
+    </FlatCard>
+  );
+}
+
 /** Two figures side by side in one card, with a dotted line between them. */
 export function PairCard({ left, right }: { left: StatProps; right: StatProps }) {
   const { colors } = useTheme();

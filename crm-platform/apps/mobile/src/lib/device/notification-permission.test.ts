@@ -2,6 +2,7 @@ import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import {
   getNotificationPermission,
+  ensureNotificationChannel,
   requestNotificationPermission,
 } from './notification-permission';
 
@@ -49,6 +50,21 @@ describe('getNotificationPermission', () => {
     getCall.mockResolvedValueOnce(answer('undetermined', true));
     await getNotificationPermission();
     expect(requestCall).not.toHaveBeenCalled();
+  });
+});
+
+describe('ensureNotificationChannel', () => {
+  it('makes the default channel on Android and asks nothing', async () => {
+    onPlatform('android');
+    await ensureNotificationChannel('Messages');
+    expect(channelCall).toHaveBeenCalledWith('default', { name: 'Messages', importance: 3 });
+    expect(requestCall).not.toHaveBeenCalled();
+  });
+
+  it('does nothing on iOS, which has no channels', async () => {
+    onPlatform('ios');
+    await ensureNotificationChannel('Messages');
+    expect(channelCall).not.toHaveBeenCalled();
   });
 });
 

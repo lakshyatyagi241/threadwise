@@ -2,7 +2,9 @@ import { Body, Controller, Get, Header, Put, Query, Res, StreamableFile } from '
 import type { Response } from 'express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  analyticsConversationsQuerySchema,
   analyticsQuerySchema,
+  type AnalyticsConversationsQuery,
   quickAccessUpdateSchema,
   type QuickAccessUpdate,
   dashSummaryQuerySchema,
@@ -75,6 +77,16 @@ export class AnalyticsController {
   })
   panels(@Query(zodPipe(analyticsQuerySchema)) q: AnalyticsQuery) {
     return this.dash.panels(q);
+  }
+
+  @Get('conversations')
+  @RequirePermission('dash.analytics.read')
+  @ApiOperation({
+    summary:
+      'Conversation status counts (open, pending, closed, assigned, unassigned, unattended), average resolution and duration, per person; ?agent= narrows to one person',
+  })
+  conversations(@Query(zodPipe(analyticsConversationsQuerySchema)) q: AnalyticsConversationsQuery) {
+    return this.dash.conversations(q);
   }
 
   @Get('export')

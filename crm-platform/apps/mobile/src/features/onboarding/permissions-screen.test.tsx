@@ -1,8 +1,9 @@
-import { fireEvent, screen } from '@testing-library/react-native';
-import { Linking } from 'react-native';
+import { act, fireEvent, screen } from '@testing-library/react-native';
+import { AppState, Linking, type AppStateStatus } from 'react-native';
 import {
   getPermission,
   offeredPermissions,
+  preparePermissions,
   requestPermission,
   type DevicePermission,
   type PermissionInfo,
@@ -15,6 +16,7 @@ jest.mock('@/lib/device/permissions');
 const offered = jest.mocked(offeredPermissions);
 const readCall = jest.mocked(getPermission);
 const askCall = jest.mocked(requestPermission);
+const prepareCall = jest.mocked(preparePermissions);
 const onDone = jest.fn();
 
 const ASK: PermissionInfo = { state: 'denied', canAskAgain: true };
@@ -30,6 +32,7 @@ beforeEach(() => {
   offered.mockReturnValue(['notifications', 'calls', 'camera']);
   standing({});
   askCall.mockImplementation(async () => GRANTED);
+  prepareCall.mockResolvedValue();
 });
 
 describe('PermissionsScreen', () => {
@@ -52,52 +55,7 @@ describe('PermissionsScreen', () => {
     expect(screen.queryByText('Calls')).toBeNull();
   });
 
-  it('asks for one permission from its own Allow, and shows it as allowed', async () => {
-    await renderApp(<PermissionsScreen onDone={onDone} />);
-    await fireEvent.press(await screen.findByRole('button', { name: 'Allow Camera' }));
-    expect(askCall).toHaveBeenCalledTimes(1);
-    expect(askCall).toHaveBeenCalledWith('camera', { channelName: 'Messages and updates' });
-    expect(await screen.findByLabelText('Camera allowed')).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'Allow Camera' })).toBeNull();
-    expect(onDone).not.toHaveBeenCalled();
-  });
-
-  it('asks for the rest, one after another, on Allow all, and then goes on', async () => {
-    standing({ notifications: GRANTED });
-    await renderApp(<PermissionsScreen onDone={onDone} />);
-    await screen.findByLabelText('Notifications allowed');
-    await fireEvent.press(screen.getByRole('button', { name: 'Allow all' }));
-    await screen.findByLabelText('Camera allowed');
-    expect(askCall.mock.calls.map(([kind]) => kind)).toEqual(['calls', 'camera']);
-    expect(onDone).toHaveBeenCalledTimes(1);
-  });
-
-  it('goes on after the person refuses in the phone prompt', async () => {
-    askCall.mockResolvedValue(BLOCKED);
-    await renderApp(<PermissionsScreen onDone={onDone} />);
-    await screen.findByText('Camera');
-    await fireEvent.press(await screen.findByRole('button', { name: 'Allow all' }));
-    await screen.findByRole('button', { name: 'Open settings to allow Camera' });
-    expect(askCall).toHaveBeenCalledTimes(3);
-    expect(onDone).toHaveBeenCalledTimes(1);
-  });
-
-  it('goes on even when the phone fails to answer', async () => {
-    askCall.mockRejectedValue(new Error('no channel'));
-    await renderApp(<PermissionsScreen onDone={onDone} />);
-    await fireEvent.press(await screen.findByRole('button', { name: 'Allow all' }));
-    await screen.findByRole('button', { name: 'Not now' });
-    expect(onDone).toHaveBeenCalledTimes(1);
-  });
-
-  it('asks the phone nothing on Not now', async () => {
-    await renderApp(<PermissionsScreen onDone={onDone} />);
-    await fireEvent.press(await screen.findByRole('button', { name: 'Not now' }));
-    expect(onDone).toHaveBeenCalledTimes(1);
-    expect(askCall).not.toHaveBeenCalled();
-  });
-
-  it('offers the phone settings for a permission that was refused for good', async () => {
+  it('opens the phone settings from a permission that is off, and asks the phone nothing', async () => {
     standing({ camera: BLOCKED });
     const openSettings = jest.spyOn(Linking, 'openSettings').mockResolvedValue();
     await renderApp(<PermissionsScreen onDone={onDone} />);
@@ -105,6 +63,55 @@ describe('PermissionsScreen', () => {
       await screen.findByRole('button', { name: 'Open settings to allow Camera' }),
     );
     expect(openSettings).toHaveBeenCalledTimes(1);
+    expect(askCall).not.toHaveBeenCalled();
+    expect(onDone).not.toHaveBeenCalled();
+  });
+
+  it('opens the phone settings from the main button while something is off', async () => {
+    standing({ notifications: GRANTED });
+    const openSettings = jest.spyOn(Linking, 'openSettings').mockResolvedValue();
+    await renderApp(<PermissionsScreen onDone={onDone} />);
+    await screen.findByLabelText('Notifications allowed');
+    await fireEvent.press(screen.getByRole('button', { name: 'Open settings' }));
+    expect(openSettings).toHaveBeenCalledTimes(1);
+    expect(askCall).not.toHaveBeenCalled();
+    expect(onDone).not.toHaveBeenCalled();
+  });
+
+  it('gets the notification channel ready before reading, without asking', async () => {
+    await renderApp(<PermissionsScreen onDone={onDone} />);
+    await screen.findByText('Camera');
+    expect(prepareCall).toHaveBeenCalledWith({ channelName: 'Messages and updates' });
+  });
+
+  it('shows a permission as allowed when the person comes back from the settings', async () => {
+    let listener: (state: AppStateStatus) => void = () => undefined;
+    jest.spyOn(AppState, 'addEventListener').mockImplementation((_type, handler) => {
+      listener = handler;
+      return { remove: jest.fn() };
+    });
+    await renderApp(<PermissionsScreen onDone={onDone} />);
+    await screen.findByRole('button', { name: 'Open settings to allow Camera' });
+    standing({ camera: GRANTED });
+    await act(async () => listener('active'));
+    expect(await screen.findByLabelText('Camera allowed')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Open settings to allow Camera' })).toBeNull();
+  });
+
+  it('still reads the permissions when the phone fails to get ready', async () => {
+    prepareCall.mockRejectedValue(new Error('no channel'));
+    await renderApp(<PermissionsScreen onDone={onDone} />);
+    expect(
+      await screen.findByRole('button', { name: 'Open settings to allow Camera' }),
+    ).toBeTruthy();
+  });
+
+  it('goes on without opening anything on Not now', async () => {
+    const openSettings = jest.spyOn(Linking, 'openSettings').mockResolvedValue();
+    await renderApp(<PermissionsScreen onDone={onDone} />);
+    await fireEvent.press(await screen.findByRole('button', { name: 'Not now' }));
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(openSettings).not.toHaveBeenCalled();
     expect(askCall).not.toHaveBeenCalled();
   });
 

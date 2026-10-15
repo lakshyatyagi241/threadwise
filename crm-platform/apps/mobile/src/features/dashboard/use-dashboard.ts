@@ -1,6 +1,7 @@
 import { UNOFFICIAL_WHATSAPP_FEATURE_KEY } from '@crm/contracts';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import {
+  fetchConversationStats,
   fetchEntitlements,
   fetchInboxCounts,
   fetchNewContacts,
@@ -43,6 +44,20 @@ export const useTeamPanel = (win: DashWindow, enabled: boolean) =>
     enabled,
     placeholderData: keepPreviousData,
     // A plan without analytics answers 403 every time: say so at once instead of trying again.
+    retry: false,
+  });
+
+/** The Agent view's status counts and times, for the whole workspace or one person (`agent` is a user uuid). */
+export const useConversationStats = (
+  win: DashWindow,
+  agent: string | undefined,
+  enabled: boolean,
+) =>
+  useQuery({
+    queryKey: ['dash', 'conversations', win.from, win.to, agent ?? 'all'],
+    queryFn: ({ signal }) => fetchConversationStats(win, agent, signal),
+    enabled,
+    placeholderData: keepPreviousData,
     retry: false,
   });
 

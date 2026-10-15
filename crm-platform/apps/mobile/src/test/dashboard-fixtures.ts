@@ -1,4 +1,5 @@
 import type {
+  AnalyticsConversations,
   AnalyticsPanels,
   DashSummaryResponse,
   DashThroughputResponse,
@@ -265,6 +266,49 @@ export const emptyWidgets: DashWidgets = {
   flows: { total: 0, active: 0, subscribers: 0, recent: [] },
   integrations: { connected: 0, total: 4, rows: [] },
   activity: [],
+};
+
+/** The Agent view's conversation numbers: 17 conversations, two people, one of whom has an unanswered open one. */
+export const conversationStats: AnalyticsConversations = {
+  counts: {
+    open: 3,
+    pending: 1,
+    closed: 13,
+    total: 17,
+    assigned: 12,
+    unassigned: 5,
+    unattended: 2,
+  },
+  avgResolutionMin: 840,
+  avgDurationMin: 90,
+  agents: [
+    {
+      userUuid: 'b1111111-1111-4111-8111-111111111111',
+      name: 'Asha Verma',
+      counts: {
+        open: 2,
+        pending: 1,
+        closed: 7,
+        total: 10,
+        assigned: 10,
+        unassigned: 0,
+        unattended: 2,
+      },
+    },
+    {
+      userUuid: 'b2222222-2222-4222-8222-222222222222',
+      name: 'Rohan Mehta',
+      counts: {
+        open: 1,
+        pending: 0,
+        closed: 6,
+        total: 7,
+        assigned: 7,
+        unassigned: 0,
+        unattended: 0,
+      },
+    },
+  ],
 };
 
 /** The analytics team panel: two people with answers and ratings, one who has had no conversation answered or rated yet. */

@@ -1,6 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { PermissionsAndroid, Platform } from 'react-native';
 import {
+  ensureNotificationChannel,
   getNotificationPermission,
   readPermission,
   requestNotificationPermission,
@@ -45,6 +46,13 @@ interface Labels {
   /** What the phone's settings list the notification channel as (Android). */
   channelName: string;
 }
+
+/**
+ * Gets the phone ready for the person to switch permissions on in its settings, without asking anything: Android lists an app's
+ * notification permission there only once the app has a notification channel.
+ */
+export const preparePermissions = (labels: Labels): Promise<void> =>
+  ensureNotificationChannel(labels.channelName);
 
 /** Shows the phone's own prompt for one permission, and answers with where it stands after the person has chosen. */
 export async function requestPermission(

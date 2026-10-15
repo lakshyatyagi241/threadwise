@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   type DashWidgets,
+  type AnalyticsConversations,
+  type AnalyticsConversationsQuery,
   type AnalyticsPanels,
   type AnalyticsQuery,
   type AnalyticsResponse,
@@ -205,6 +207,20 @@ export class DashService {
         geo: await this.panelsRepo.geo(tx, orgId, w.from, w.to),
         events: await this.panelsRepo.events(tx, orgId, w.from, w.to),
       };
+    });
+  }
+
+  /** The Agent view: conversation status counts, resolution and duration times, optionally for one person. */
+  async conversations(
+    q: AnalyticsConversationsQuery,
+    now: Date = new Date(),
+  ): Promise<AnalyticsConversations> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const tz = resolveTimezone(await this.repo.orgTimezone(tx, orgId));
+      const w = resolveAnalyticsWindow(q, tz, now);
+      if (!w) throw tooLong();
+      return this.panelsRepo.conversationStatus(tx, orgId, w.from, w.to, q.agent);
     });
   }
 

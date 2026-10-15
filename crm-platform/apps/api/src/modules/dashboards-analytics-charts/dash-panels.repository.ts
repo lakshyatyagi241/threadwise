@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { AnalyticsPanels } from '@crm/contracts';
+import type {
+  AnalyticsConversations,
+  AnalyticsPanels,
+  ConversationStatusCounts,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { channelOwnerSql } from '../../realtime';
 import { countryOfPhone } from './platform-rules';
@@ -113,6 +117,64 @@ export class DashPanelsRepository {
       csatAvg: num(r.csat_avg) === null ? null : Math.round(Number(r.csat_avg) * 100) / 100,
       csatCount: n(r.csat_count),
     }));
+  }
+
+  /**
+   * The Agent view's conversation numbers: conversations created in the window, spam left out. Open includes snoozed, closed includes
+   * resolved; unattended is open, held by a person and not answered yet. `agent` narrows the headline counts and times to one person;
+   * the per-person list always covers the whole team so the picker can switch without another request.
+   */
+  async conversationStatus(
+    tx: Tx,
+    orgId: number,
+    from: Date,
+    to: Date,
+    agentUuid: string | undefined,
+  ): Promise<AnalyticsConversations> {
+    const counts = (r: Raw): ConversationStatusCounts => ({
+      open: n(r.open),
+      pending: n(r.pending),
+      closed: n(r.closed),
+      total: n(r.open) + n(r.pending) + n(r.closed),
+      assigned: n(r.assigned),
+      unassigned: n(r.unassigned),
+      unattended: n(r.unattended),
+    });
+    const figures = sql`
+      count(*) FILTER (WHERE c.status IN ('open', 'snoozed'))::int AS open,
+      count(*) FILTER (WHERE c.status = 'pending')::int AS pending,
+      count(*) FILTER (WHERE c.status IN ('resolved', 'closed'))::int AS closed,
+      count(*) FILTER (WHERE c.assignee_user_id IS NOT NULL)::int AS assigned,
+      count(*) FILTER (WHERE c.assignee_user_id IS NULL)::int AS unassigned,
+      count(*) FILTER (WHERE c.status IN ('open', 'snoozed') AND c.assignee_user_id IS NOT NULL AND c.first_response_at IS NULL)::int AS unattended`;
+    const inWindow = sql`
+      c.org_id = ${orgId} AND c.status <> 'spam'
+        AND c.created_at >= ${from.toISOString()}::timestamptz AND c.created_at < ${to.toISOString()}::timestamptz`;
+    const only = agentUuid
+      ? sql` AND c.assignee_user_id = (SELECT id FROM users WHERE org_id = ${orgId} AND uuid = ${agentUuid}::uuid)`
+      : sql``;
+    const head = (
+      await tx.execute(sql`
+        SELECT ${figures},
+               avg(extract(epoch FROM (c.resolved_at - c.created_at)) / 60) FILTER (WHERE c.resolved_at >= c.created_at) AS resolution_min,
+               avg(extract(epoch FROM (c.last_message_at - c.created_at)) / 60) FILTER (WHERE c.last_message_at >= c.created_at) AS duration_min
+        FROM conversations c WHERE ${inWindow}${only}`)
+    ).rows[0] as Raw;
+    const team = await tx.execute(sql`
+      SELECT u.uuid, u.full_name, ${figures}
+      FROM conversations c JOIN users u ON u.org_id = c.org_id AND u.id = c.assignee_user_id
+      WHERE ${inWindow}
+      GROUP BY u.uuid, u.full_name ORDER BY count(*) DESC, u.full_name`);
+    return {
+      counts: counts(head),
+      avgResolutionMin: round1(num(head.resolution_min)),
+      avgDurationMin: round1(num(head.duration_min)),
+      agents: (team.rows as Raw[]).map((r) => ({
+        userUuid: String(r.uuid),
+        name: String(r.full_name),
+        counts: counts(r),
+      })),
+    };
   }
 
   /**

@@ -141,6 +141,13 @@ export const analyticsQuerySchema = z.object({
 });
 export type AnalyticsQuery = z.infer<typeof analyticsQuerySchema>;
 
+/** The Agent view of the dashboard: `analyticsQuerySchema` plus an optional person to look at on their own. */
+export const analyticsConversationsQuerySchema = analyticsQuerySchema.extend({
+  /** The uuid of one member of the team; absent means the whole workspace. A uuid that is not in the workspace gives zeros. */
+  agent: z.string().uuid().optional().catch(undefined),
+});
+export type AnalyticsConversationsQuery = z.infer<typeof analyticsConversationsQuerySchema>;
+
 export const ANALYTICS_MAX_DAYS = 366;
 
 export const analyticsResponseSchema = z.object({
@@ -190,3 +197,4 @@ export * from './admin';
 export * from './widgets';
 export * from './panels';
 export * from './quick-access';
+export * from './conversations';

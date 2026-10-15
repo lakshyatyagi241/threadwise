@@ -1,6 +1,5 @@
-import type { AnalyticsPanels } from '@crm/contracts';
+import type { AnalyticsConversations, AnalyticsPanels } from '@crm/contracts';
 import type { UseQueryResult } from '@tanstack/react-query';
-import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Avatar } from '@/components/ui/avatar';
@@ -11,7 +10,8 @@ import { messageForError } from '@/lib/api/error-message';
 import { formatCount } from '@/lib/format/numbers';
 import { radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { isForbidden, isPlanLocked } from './format';
+import { formatWait, isForbidden, isPlanLocked } from './format';
+import { ConversationStats } from './conversation-stats';
 import { PairCard, TitledCard } from './summary-cards';
 
 /** What a figure that does not exist (nobody answered, nobody rated) shows. */
@@ -19,17 +19,12 @@ const DASH = '—';
 
 type Team = AnalyticsPanels['team'][number];
 
-/** A wait in minutes as people say it: "12 min", "3.5 h", "2 d". Null when there is nothing to average. */
-export function formatWait(minutes: number | null, t: TFunction): string {
-  if (minutes === null) return DASH;
-  const one = (n: number) => String(Math.round(n * 10) / 10);
-  if (minutes < 60) return t('dashboard.agents.minutes', { value: one(minutes) });
-  if (minutes < 1440) return t('dashboard.agents.hours', { value: one(minutes / 60) });
-  return t('dashboard.agents.days', { value: one(minutes / 1440) });
-}
-
 interface Props {
   query: UseQueryResult<AnalyticsPanels>;
+  /** Status counts and times of the window; `agent` (a user uuid, absent for everyone) is the person they are narrowed to. */
+  stats: UseQueryResult<AnalyticsConversations>;
+  agent: string | undefined;
+  onAgent: (agent: string | undefined) => void;
   /** The person may read analytics (`dash.analytics.read`); without it nothing was asked of the API. */
   allowed: boolean;
   role: string;
@@ -43,10 +38,17 @@ interface Props {
  * person with their resolved count, first-reply and resolution times and the customers' rating. These are the numbers of the web
  * analytics page's team panel; an empty team (nobody was given a conversation in the window) says so.
  */
-export function AgentView({ query, allowed, role, rangeName, onRetry }: Props) {
-  const { t, i18n } = useTranslation();
-  const n = (value: number) => formatCount(value, i18n.language);
-
+export function AgentView({
+  query,
+  stats,
+  agent,
+  onAgent,
+  allowed,
+  role,
+  rangeName,
+  onRetry,
+}: Props) {
+  const { t } = useTranslation();
   if (!allowed) {
     return (
       <Card>
@@ -54,6 +56,30 @@ export function AgentView({ query, allowed, role, rangeName, onRetry }: Props) {
       </Card>
     );
   }
+  return (
+    <>
+      <ConversationStats
+        query={stats}
+        agent={agent}
+        onAgent={onAgent}
+        role={role}
+        rangeName={rangeName}
+        onRetry={() => void stats.refetch()}
+      />
+      <TeamPanel query={query} role={role} rangeName={rangeName} onRetry={onRetry} />
+    </>
+  );
+}
+
+/** The per-person performance cards (conversations given, resolved, times, rating). */
+function TeamPanel({
+  query,
+  role,
+  rangeName,
+  onRetry,
+}: Pick<Props, 'query' | 'role' | 'rangeName' | 'onRetry'>) {
+  const { t, i18n } = useTranslation();
+  const n = (value: number) => formatCount(value, i18n.language);
   if (query.error && !query.data) {
     return (
       <Card>

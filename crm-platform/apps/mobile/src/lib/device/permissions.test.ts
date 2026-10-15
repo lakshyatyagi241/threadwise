@@ -1,7 +1,13 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as Notifications from 'expo-notifications';
 import { PermissionsAndroid, Platform } from 'react-native';
-import { canPlaceCalls, getPermission, offeredPermissions, requestPermission } from './permissions';
+import {
+  canPlaceCalls,
+  getPermission,
+  offeredPermissions,
+  preparePermissions,
+  requestPermission,
+} from './permissions';
 
 const cameraGet = jest.mocked(ImagePicker.getCameraPermissionsAsync);
 const cameraAsk = jest.mocked(ImagePicker.requestCameraPermissionsAsync);
@@ -96,5 +102,15 @@ describe('requestPermission', () => {
       canAskAgain: false,
     });
     expect(ask).toHaveBeenCalledWith('android.permission.CALL_PHONE');
+  });
+});
+
+describe('preparePermissions', () => {
+  it('makes the notification channel on Android without asking the person anything', async () => {
+    onPlatform('android');
+    const channel = jest.mocked(Notifications.setNotificationChannelAsync);
+    await preparePermissions({ channelName: 'Messages' });
+    expect(channel).toHaveBeenCalledWith('default', { name: 'Messages', importance: 3 });
+    expect(jest.mocked(Notifications.requestPermissionsAsync)).not.toHaveBeenCalled();
   });
 });
