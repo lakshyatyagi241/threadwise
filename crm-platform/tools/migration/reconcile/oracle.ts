@@ -347,7 +347,7 @@ export class TableOracle {
           field_type: FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text',
           is_required: truthy(doc.required),
           is_hidden: !visible(doc.visible) || truthy(doc.hidden_from_ui),
-          is_read_only: truthy(doc.read_only),
+          is_read_only: truthy(doc.read_only) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
           is_masked: truthy(doc.masked),
           is_unique: truthy(doc.unique),
           // the verifier's own copy of the rule (README, "Contact properties"): the 22 web-analytics names are never system fields
