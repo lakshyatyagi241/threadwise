@@ -61,3 +61,17 @@ export {
 } from './observability/sentry';
 export { createFatalHandler, installProcessHandlers } from './observability/process-handlers';
 export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability/log-redaction';
+export {
+  EventLoopSampler,
+  RuntimeMonitor,
+  classifySnapshot,
+  getRuntimeMonitor,
+  httpMetricsMiddleware,
+  startMetricsServer,
+  startRuntimeMonitor,
+  stopRuntimeMonitor,
+  type EventLoopSnapshot,
+  type LoopLevel,
+  type RuntimeMonitorOptions,
+  type RuntimeService,
+} from './observability/event-loop';

@@ -1,12 +1,18 @@
 import 'reflect-metadata';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { initSentry, installProcessHandlers } from './modules/platform-infrastructure';
+import {
+  initSentry,
+  installProcessHandlers,
+  startRuntimeMonitor,
+} from './modules/platform-infrastructure';
 import { WorkerModule } from './worker.module';
 
 async function bootstrap(): Promise<void> {
   installProcessHandlers('worker');
   initSentry('worker');
+  // Same loop, CPU, memory and GC metrics as the API; job duration and wait are fed by observeJob.
+  startRuntimeMonitor('worker');
 
   // No HTTP listener at all — createApplicationContext, not create().
   const app = await NestFactory.createApplicationContext(WorkerModule, { bufferLogs: true });

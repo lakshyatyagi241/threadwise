@@ -1,0 +1,51 @@
+{
+  "status": "PARTIAL: monitor micro-benchmark only. Idle, normal, peak, spike and soak baselines of the real application are NOT VERIFIED.",
+  "why": "The application baselines need the API plus Postgres and Redis under a load generator in an isolated environment, and no load tool exists in the repo. None was run.",
+  "environment": {
+    "commit": "604c1db95bac5efb2245506552f95f4801b63461 (base; the working tree already contained this change when measured)",
+    "node": "v22.17.0",
+    "os": "win32 10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 7 155H, 22 logical cores, 31.4 GB",
+    "infrastructureProfile": "developer laptop, load generator and server on the same machine",
+    "dataset": "none (bare http server, no database)",
+    "loadGenerator": "tools/event-loop-audit/bench.mjs, in-process node:http keep-alive, closed loop, 32 concurrent",
+    "service": "bench server with the real RuntimeMonitor (1 s window to speed the run)",
+    "duration": "3 rounds x 10 s per condition, plus 10 s fault run and 4 s recovery run",
+    "rawData": "evidence/bench-monitor.json"
+  },
+  "comparabilityWarning": "Valid only against runs from this same machine and Node version. Do not compare with CI or production numbers.",
+  "results": {
+    "monitorOverhead": {
+      "medianRps": { "monitorOff": 2474.8, "monitorOn": 2432.3 },
+      "rpsDeltaPercent": -1.72,
+      "medianP99Ms": { "monitorOff": 21.52, "monitorOn": 21.25 },
+      "roundRpsOff": [2307.4, 2474.8, 2969.8],
+      "roundRpsOn": [2310.6, 2432.3, 2561.4],
+      "reading": "The -1.7% is inside the round-to-round spread of the monitor-off runs themselves (2307 to 2970 rps). Overhead is not distinguishable from noise at this sample size. This is NOT proof that overhead is zero."
+    },
+    "detectionUnderFault": {
+      "injected": "4 synchronous 300 ms blocks, 2 s apart, under 32-way load",
+      "requestLatencyMs": {
+        "healthyMax": 25.1,
+        "duringBlocksP99": 52.11,
+        "duringBlocksMax": 328.74
+      },
+      "blockedWindowsReported": { "critical": 4, "warn": 2 },
+      "reading": "Each block was visible as a critical window and as request max near the block length."
+    },
+    "recovery": {
+      "afterBlocksStop": { "requestP99Ms": 20.75, "requestMaxMs": 25.1, "loopDelayMaxMs": 16.8 },
+      "reading": "Latency and loop delay returned to the pre-fault level within the next window."
+    }
+  },
+  "notVerified": [
+    "idle baseline of the API",
+    "normal load",
+    "expected peak",
+    "3x spike",
+    "12 h soak",
+    "24 h pre-release soak",
+    "per-module (contacts, inbox, webhook, broadcast, automation) baselines",
+    "worker saturation baseline"
+  ]
+}

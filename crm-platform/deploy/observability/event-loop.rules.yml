@@ -1,0 +1,108 @@
+# Prometheus alert rules for the event-loop metrics exposed by every API and worker process (apps/api, OBS_METRICS_PORT).
+# Metric reference: docs/performance/event-loop/event-loop-metrics-inventory.md. Runbook: event-loop-observability-runbook.md.
+#
+# Paging rule: a critical alert needs SUSTAINED loop degradation AND user impact (slow API, slow webhook ack, or a queue wait
+# climbing). A lone spike is recorded in the metrics and the "event loop blocked" log line, and does not page.
+# Thresholds are the initial engineering targets, not measured limits: tune them from the baselines before making them gates.
+groups:
+  - name: event-loop
+    rules:
+      # ---- warnings: sustained 5 minutes, no impact condition ------------------------------------------------------------
+      - alert: EventLoopDelayP95Warning
+        expr: avg_over_time(crm_event_loop_delay_p95_seconds[5m]) > 0.020
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Event-loop p95 above 20 ms for 5 min on {{ $labels.service }} {{ $labels.instance }}'
+          description: 'Scheduling delay p95 {{ $value | humanizeDuration }}. Check the blocked-loop log lines for the slowest routes of the window.'
+
+      - alert: EventLoopDelayP99Warning
+        expr: avg_over_time(crm_event_loop_delay_p99_seconds[5m]) > 0.050
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Event-loop p99 above 50 ms for 5 min on {{ $labels.service }} {{ $labels.instance }}'
+
+      - alert: EventLoopUtilizationHigh
+        expr: avg_over_time(crm_event_loop_utilization_ratio[5m]) > 0.85
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Event-loop utilization above 85% for 5 min on {{ $labels.service }} {{ $labels.instance }}'
+          description: 'High utilization with low delay is a busy but responsive loop: capacity headroom, not a defect. It pages only together with delay (EventLoopBlockingWithImpact).'
+
+      - alert: ProcessHeapNearLimit
+        expr: crm_process_heap_used_bytes / crm_process_heap_limit_bytes > 0.75
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: 'Heap above 75% of the limit on {{ $labels.service }} {{ $labels.instance }}'
+
+      - alert: GcPauseHigh
+        expr: max_over_time(crm_gc_pause_max_seconds[5m]) > 0.100
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'GC pauses above 100 ms in the last 5 min on {{ $labels.service }} {{ $labels.instance }}'
+
+      - alert: ContainerCpuThrottled
+        expr: rate(crm_container_cpu_throttled_seconds_total[5m]) > 0.1
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: 'cgroup is throttling {{ $labels.service }} {{ $labels.instance }} (over 100 ms of throttle per second)'
+
+      # ---- critical: sustained loop degradation AND user impact ----------------------------------------------------------
+      - alert: EventLoopBlockingWithImpact
+        expr: |
+          (
+            avg_over_time(crm_event_loop_delay_p95_seconds{service="api"}[5m]) > 0.050
+            or avg_over_time(crm_event_loop_delay_p99_seconds{service="api"}[5m]) > 0.100
+          )
+          and on (service, instance)
+          (
+            histogram_quantile(0.95, sum by (le, service, instance) (rate(crm_http_request_duration_seconds_bucket[5m]))) > 0.5
+          )
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'API event loop blocked and request p95 over 500 ms on {{ $labels.instance }}'
+          description: 'Sustained loop delay with slow requests. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+
+      - alert: WorkerEventLoopBlockingWithQueueImpact
+        expr: |
+          (
+            avg_over_time(crm_event_loop_delay_p95_seconds{service="worker"}[5m]) > 0.050
+            or avg_over_time(crm_event_loop_delay_p99_seconds{service="worker"}[5m]) > 0.100
+          )
+          and on (service)
+          (
+            histogram_quantile(0.95, sum by (le, service) (rate(crm_queue_job_wait_seconds_bucket[5m]))) > 30
+          )
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Worker event loop blocked and job wait p95 over 30 s'
+
+      - alert: HeapNearOom
+        expr: crm_process_heap_used_bytes / crm_process_heap_limit_bytes > 0.90
+        for: 5m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Heap above 90% of the limit on {{ $labels.service }} {{ $labels.instance }}: OOM risk'
+
+      # ---- the monitor itself --------------------------------------------------------------------------------------------
+      - alert: RuntimeMetricsStale
+        expr: time() - crm_runtime_last_report_timestamp_seconds > 60
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: '{{ $labels.service }} {{ $labels.instance }} stopped reporting runtime metrics'
+          description: 'The monitor window stopped completing. A loop blocked for over a minute looks exactly like this; check the process before the scrape.'
+
+      - alert: RuntimeMetricsTargetDown
+        expr: up{job=~"crm-(api|worker)"} == 0
+        for: 2m
+        labels: { severity: critical }
+        annotations:
+          summary: 'Metrics scrape of {{ $labels.job }} {{ $labels.instance }} failing'
