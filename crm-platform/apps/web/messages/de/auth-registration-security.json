@@ -364,7 +364,9 @@
         "resendIn": "Code erneut senden in {time}",
         "resending": "Wird gesendet",
         "resent": "Ein neuer Code ist auf dem Weg zu Ihrem WhatsApp.",
+        "resentEmail": "Ein neuer Code ist auf dem Weg zu deiner E-Mail-Adresse.",
         "wrongNumber": "Falsche Nummer?",
+        "wrongEmail": "Falsche E-Mail-Adresse?",
         "goBack": "Zurück",
         "addressTakenHint": "Diese Workspace-Adresse wurde vergeben, während Sie die Bestätigung durchgeführt haben. Wählen Sie eine andere, und wir senden Ihnen einen neuen Code.",
         "chooseAnotherAddress": "Andere Adresse wählen"

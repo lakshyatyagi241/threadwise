@@ -364,7 +364,9 @@
         "resendIn": "{time} 后可重新发送验证码",
         "resending": "正在发送",
         "resent": "新的验证码已发送至你的 WhatsApp。",
+        "resentEmail": "新验证码正在发送到您的邮箱。",
         "wrongNumber": "号码填错了？",
+        "wrongEmail": "邮箱错了？",
         "goBack": "返回",
         "addressTakenHint": "你在验证期间，该工作区地址已被他人占用。请选择其他地址，我们会向你发送新的验证码。",
         "chooseAnotherAddress": "选择其他地址"

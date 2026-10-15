@@ -364,7 +364,9 @@
         "resendIn": "Kirim ulang kode dalam {time}",
         "resending": "Mengirim",
         "resent": "Kode baru sedang dikirim ke WhatsApp Anda.",
+        "resentEmail": "Kode baru sedang dikirim ke email Anda.",
         "wrongNumber": "Nomor salah?",
+        "wrongEmail": "Email salah?",
         "goBack": "Kembali",
         "addressTakenHint": "Alamat ruang kerja itu dipakai orang lain saat Anda memverifikasi. Pilih alamat lain dan kami akan mengirim kode baru.",
         "chooseAnotherAddress": "Pilih alamat lain"

@@ -364,7 +364,9 @@
         "resendIn": "שליחת קוד מחדש בעוד {time}",
         "resending": "שולח",
         "resent": "קוד חדש בדרך אל ה-WhatsApp שלכם.",
+        "resentEmail": "קוד חדש בדרך לאימייל שלך.",
         "wrongNumber": "מספר שגוי?",
+        "wrongEmail": "אימייל שגוי?",
         "goBack": "חזרה",
         "addressTakenHint": "כתובת סביבת העבודה נתפסה בזמן שאימתתם. בחרו כתובת אחרת ונשלח לכם קוד חדש.",
         "chooseAnotherAddress": "בחירת כתובת אחרת"

@@ -364,7 +364,9 @@
         "resendIn": "Gửi lại mã sau {time}",
         "resending": "Đang gửi",
         "resent": "Mã mới đang được gửi tới WhatsApp của bạn.",
+        "resentEmail": "Mã mới đang được gửi đến email của bạn.",
         "wrongNumber": "Sai số?",
+        "wrongEmail": "Sai email?",
         "goBack": "Quay lại",
         "addressTakenHint": "Địa chỉ không gian làm việc này đã bị dùng trong lúc bạn xác minh. Hãy chọn địa chỉ khác và chúng tôi sẽ gửi mã mới.",
         "chooseAnotherAddress": "Chọn địa chỉ khác"

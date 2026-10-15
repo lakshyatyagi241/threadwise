@@ -361,7 +361,9 @@
         "resendIn": "Invia di nuovo il codice tra {time}",
         "resending": "Invio in corso",
         "resent": "Un nuovo codice è in arrivo sul tuo WhatsApp.",
+        "resentEmail": "Un nuovo codice è in arrivo alla tua email.",
         "wrongNumber": "Numero sbagliato?",
+        "wrongEmail": "Email sbagliata?",
         "goBack": "Torna indietro",
         "addressTakenHint": "L'indirizzo del workspace è stato preso mentre eseguivi la verifica. Scegline un altro e ti invieremo un nuovo codice.",
         "chooseAnotherAddress": "Scegli un altro indirizzo"

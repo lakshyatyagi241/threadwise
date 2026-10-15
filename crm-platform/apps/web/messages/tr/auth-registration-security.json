@@ -364,7 +364,9 @@
         "resendIn": "Kodu {time} içinde yeniden gönder",
         "resending": "Gönderiliyor",
         "resent": "WhatsApp numaranıza yeni bir kod geliyor.",
+        "resentEmail": "Yeni bir kod e-postana gönderiliyor.",
         "wrongNumber": "Yanlış numara mı?",
+        "wrongEmail": "Yanlış e-posta mı?",
         "goBack": "Geri dön",
         "addressTakenHint": "Siz doğrularken bu çalışma alanı adresi alındı. Başka bir adres seçin, size yeni bir kod gönderelim.",
         "chooseAnotherAddress": "Başka bir adres seç"

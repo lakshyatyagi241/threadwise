@@ -364,7 +364,9 @@
         "resendIn": "{time} 후 코드 다시 보내기",
         "resending": "보내는 중",
         "resent": "새 코드가 WhatsApp으로 전송되고 있습니다.",
+        "resentEmail": "새 코드가 이메일로 전송 중입니다.",
         "wrongNumber": "번호가 잘못되었나요?",
+        "wrongEmail": "이메일이 잘못되었나요?",
         "goBack": "뒤로 가기",
         "addressTakenHint": "인증하는 동안 해당 워크스페이스 주소가 다른 사람에게 사용되었습니다. 다른 주소를 선택하면 새 코드를 보내 드립니다.",
         "chooseAnotherAddress": "다른 주소 선택"

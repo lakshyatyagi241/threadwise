@@ -364,7 +364,9 @@
         "resendIn": "Wyślij kod ponownie za {time}",
         "resending": "Wysyłanie",
         "resent": "Nowy kod jest w drodze na Twój WhatsApp.",
+        "resentEmail": "Nowy kod jest w drodze na Twój e-mail.",
         "wrongNumber": "Zły numer?",
+        "wrongEmail": "Zły e-mail?",
         "goBack": "Wróć",
         "addressTakenHint": "Ten adres przestrzeni roboczej został zajęty podczas weryfikacji. Wybierz inny, a wyślemy nowy kod.",
         "chooseAnotherAddress": "Wybierz inny adres"

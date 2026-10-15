@@ -364,7 +364,9 @@
         "resendIn": "Code opnieuw versturen over {time}",
         "resending": "Versturen",
         "resent": "Er is een nieuwe code onderweg naar je WhatsApp.",
+        "resentEmail": "Een nieuwe code is onderweg naar je e-mail.",
         "wrongNumber": "Verkeerd nummer?",
+        "wrongEmail": "Verkeerd e-mailadres?",
         "goBack": "Terug",
         "addressTakenHint": "Dat workspaceadres is bezet geraakt terwijl je verifieerde. Kies een ander adres, dan sturen we je een nieuwe code.",
         "chooseAnotherAddress": "Kies een ander adres"
