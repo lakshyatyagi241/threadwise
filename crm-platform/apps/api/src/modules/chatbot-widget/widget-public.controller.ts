@@ -26,6 +26,7 @@ import {
 import { ApiExcludeController } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { Public } from '../../common/decorators';
+import { isGpcSignal } from '../contact-consent';
 import { pickChatLocale } from './chat-page-text';
 import {
   NOT_FOUND_SCRIPT,
@@ -78,6 +79,7 @@ export class WidgetPublicController {
       inputUuid: typeof inputUuid === 'string' ? inputUuid.trim() : '',
       headerUuid: (Array.isArray(header) ? header[0] : header)?.trim() ?? '',
       secure: req.secure,
+      gpc: isGpcSignal(req.headers['sec-gpc']),
     };
   }
 

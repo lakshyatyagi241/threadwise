@@ -4,6 +4,12 @@ export {
   type RecordEventInput,
   type RecordOutcome,
 } from './consent.service';
+export {
+  ContactPrivacyService,
+  type PrivacyChangeInput,
+  type PrivacyChangeOutcome,
+} from './contact-privacy.service';
+export { isGpcSignal } from './contact-privacy.rules';
 export { ConsentUnsubscribeService, type UnsubscribeLink } from './consent-unsubscribe.service';
 export { ConsentSettingsService } from './consent-settings.service';
 export { ConsentPolicyService, hasGrantedConsentSql } from './consent-policy.service';
@@ -19,6 +25,7 @@ export {
   failureResult,
   messagePurpose,
   isAllowed,
+  isHeldAsMinor,
   type ConsentFacts,
 } from './consent-gate.rules';
 export { CONSENT_GATE_ALLOWLIST, SEND_PRIMITIVES } from './consent-gate.allowlist';

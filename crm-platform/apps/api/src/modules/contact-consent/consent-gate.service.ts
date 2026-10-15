@@ -8,6 +8,7 @@ import {
   type ConsentModality,
   type ConsentNoticeEvidence,
   type ConsentSubject,
+  type PurposeDefinition,
   type PurposeInput,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -92,9 +93,11 @@ export class ConsentGate {
           facts: NO_FACTS,
         });
       }
-      const [requireConsent, facts] = await Promise.all([
-        def.ledgerPurpose === 'marketing' ? this.policy.requiresConsent(orgId) : false,
-        def.ledgerPurpose
+      const marketing = def.ledgerPurpose === 'marketing';
+      const [requireConsent, minorRule, facts] = await Promise.all([
+        marketing ? this.policy.requiresConsent(orgId) : false,
+        marketing ? this.policy.minorRule(orgId) : undefined,
+        readsFacts(def)
           ? this.factsOf(orgId, subject, channel, def.ledgerPurpose, options.tx)
           : NO_FACTS,
       ]);
@@ -103,6 +106,7 @@ export class ConsentGate {
         channel,
         ...(modality ? { modality } : {}),
         requireConsent,
+        ...(minorRule ? { minorRule } : {}),
         ...(options.replyWindowOpen ? { replyWindowOpen: true } : {}),
         ...(options.purposeEnabled === undefined ? {} : { purposeEnabled: options.purposeEnabled }),
         ...(options.noticeEvidence ? { noticeEvidence: options.noticeEvidence } : {}),
@@ -130,12 +134,13 @@ export class ConsentGate {
     const decisions = new Map<number, ConsentGateResult>();
     const unique = [...new Set(contactIds)];
     try {
-      const ledger = options.replyWindowOpen ? null : def.ledgerPurpose;
-      const requireConsent =
-        def.ledgerPurpose === 'marketing' ? await this.policy.requiresConsent(orgId) : false;
-      const facts = ledger
-        ? await this.factsMany(orgId, unique, channel, ledger, options.tx)
-        : new Map<number, ConsentFacts>();
+      const marketing = def.ledgerPurpose === 'marketing';
+      const requireConsent = marketing ? await this.policy.requiresConsent(orgId) : false;
+      const minorRule = marketing ? await this.policy.minorRule(orgId) : undefined;
+      const facts =
+        !options.replyWindowOpen && readsFacts(def)
+          ? await this.factsMany(orgId, unique, channel, def.ledgerPurpose, options.tx)
+          : new Map<number, ConsentFacts>();
       for (const id of unique) {
         decisions.set(
           id,
@@ -144,6 +149,7 @@ export class ConsentGate {
             channel,
             ...(modality ? { modality } : {}),
             requireConsent,
+            ...(minorRule ? { minorRule } : {}),
             ...(options.replyWindowOpen ? { replyWindowOpen: true } : {}),
             facts: facts.get(id) ?? NO_FACTS,
           }),
@@ -187,7 +193,7 @@ export class ConsentGate {
     orgId: number,
     subject: ConsentSubject,
     channel: string,
-    ledgerPurpose: 'marketing' | 'utility',
+    ledgerPurpose: 'marketing' | 'utility' | null,
     tx?: Tx,
   ): Promise<ConsentFacts> {
     const where = subjectMatch(subject);
@@ -196,14 +202,30 @@ export class ConsentGate {
       this.factRows(t, orgId, where, channel, ledgerPurpose),
     );
     // A phone can belong to more than one contact: any withdrawal wins, then any grant.
-    const merged: ConsentFacts = { unsubscribedFlag: false, ledgerState: 'unknown' };
+    const merged: ConsentFacts = {
+      unsubscribedFlag: false,
+      ledgerState: 'unknown',
+      minor: false,
+      guardianConsent: false,
+      saleShareOptOut: false,
+    };
+    // Any matched contact that is a minor or opted out counts (the stricter reading); guardian consent must cover EVERY flagged minor.
+    let minors = 0;
+    let guarded = 0;
     for (const r of rows) {
       if (r.flag) merged.unsubscribedFlag = true;
+      if (r.minor) {
+        minors += 1;
+        if (r.guardian) guarded += 1;
+      }
+      if (r.saleShare) merged.saleShareOptOut = true;
       if (r.state === 'withdrawn') merged.ledgerState = 'withdrawn';
       else if (r.state === 'granted' && merged.ledgerState !== 'withdrawn') {
         merged.ledgerState = 'granted';
       }
     }
+    merged.minor = minors > 0;
+    merged.guardianConsent = minors > 0 && guarded === minors;
     return merged;
   }
 
@@ -211,7 +233,7 @@ export class ConsentGate {
     orgId: number,
     ids: readonly number[],
     channel: string,
-    ledgerPurpose: 'marketing' | 'utility',
+    ledgerPurpose: 'marketing' | 'utility' | null,
     tx?: Tx,
   ): Promise<Map<number, ConsentFacts>> {
     const out = new Map<number, ConsentFacts>();
@@ -228,32 +250,54 @@ export class ConsentGate {
         out.set(r.id, {
           unsubscribedFlag: r.flag,
           ledgerState: r.state === 'granted' || r.state === 'withdrawn' ? r.state : 'unknown',
+          minor: r.minor,
+          guardianConsent: r.guardian,
+          saleShareOptOut: r.saleShare,
         });
       }
     }
     return out;
   }
 
-  /** One statement: the flag and the ledger state of every matched contact. */
+  /**
+   * One statement: the flag, the ledger state and the privacy flags (minor, guardian consent, sale / share opt-out) of every matched
+   * contact. The privacy flags are one primary-key lookup per contact. A purpose with no ledger purpose (third-party sharing) matches
+   * no ledger row, so only the flags come back.
+   */
   private async factRows(
     tx: Tx,
     orgId: number,
     where: SQL,
     channel: string,
-    ledgerPurpose: 'marketing' | 'utility',
-  ): Promise<Array<{ id: number; flag: boolean; state: string | null }>> {
+    ledgerPurpose: 'marketing' | 'utility' | null,
+  ): Promise<
+    Array<{
+      id: number;
+      flag: boolean;
+      state: string | null;
+      minor: boolean;
+      guardian: boolean;
+      saleShare: boolean;
+    }>
+  > {
     const consentChannel = consentChannelOfKind(channel);
     const res = await tx.execute(sql`
-      SELECT c.id, c.is_unsubscribed AS flag, cs.state
+      SELECT c.id, c.is_unsubscribed AS flag, cs.state,
+             coalesce(pf.is_minor, false) AS minor, coalesce(pf.guardian_consent, false) AS guardian,
+             coalesce(pf.do_not_sell_share, false) AS sale_share
       FROM contacts c
       LEFT JOIN contact_consent_state cs
         ON cs.org_id = c.org_id AND cs.contact_id = c.id
-       AND cs.channel = ${consentChannel ?? ''} AND cs.purpose = ${ledgerPurpose}
+       AND cs.channel = ${consentChannel ?? ''} AND cs.purpose = ${ledgerPurpose ?? ''}
+      LEFT JOIN contact_privacy_flags pf ON pf.org_id = c.org_id AND pf.contact_id = c.id
       WHERE c.org_id = ${orgId} AND ${where}`);
     return (res.rows as Raw[]).map((r) => ({
       id: Number(r.id),
       flag: r.flag === true,
       state: (r.state as string | null) ?? null,
+      minor: r.minor === true,
+      guardian: r.guardian === true,
+      saleShare: r.sale_share === true,
     }));
   }
 
@@ -270,6 +314,11 @@ export class ConsentGate {
       '[CONSENT] the consent gate could not decide; marketing is refused, service replies go through',
     );
   }
+}
+
+/** Whether the decision for this purpose reads anything about the contact: the ledger, or the privacy flags (third-party sharing). */
+function readsFacts(def: PurposeDefinition): boolean {
+  return def.ledgerPurpose !== null || def.id === 'third_party_sharing';
 }
 
 function summarise(decisions: Map<number, ConsentGateResult>): GateManyResult {

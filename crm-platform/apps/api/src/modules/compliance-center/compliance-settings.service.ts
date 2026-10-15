@@ -14,6 +14,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { ConsentPolicyService } from '../contact-consent';
 import { ComplianceRepository, type SettingsRow } from './compliance.repository';
 
 const MODULE_KEY = 'compliance_settings';
@@ -107,6 +108,7 @@ export class ComplianceSettingsService {
     private readonly repo: ComplianceRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consentPolicy: ConsentPolicyService,
   ) {}
 
   /** The saved values, or the defaults for a workspace that never saved. */
@@ -172,6 +174,8 @@ export class ComplianceSettingsService {
         payload: { regimes: values.regimes },
       });
     });
+    // The ConsentGate caches the children setting (minor rule) for a minute; this process sees the new one at once (BL-180).
+    this.consentPolicy.invalidateMinorRule(orgId);
     return this.get();
   }
 

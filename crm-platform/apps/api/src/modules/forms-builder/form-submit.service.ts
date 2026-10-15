@@ -31,7 +31,7 @@ import {
 import { coerceCustomValue, normaliseLeadEmail, pickOwner } from '../leads';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { createHash } from 'node:crypto';
-import { ContactConsentService } from '../contact-consent';
+import { ContactConsentService, ContactPrivacyService } from '../contact-consent';
 import { resolveConsent, type ConsentOutcome } from './form-consent';
 import { computeAmount } from './form-payment-rules';
 import { FormPaymentsService, type Payer } from './form-payments.service';
@@ -71,7 +71,15 @@ export interface PublicRequestMeta {
   userAgent?: string;
   /** The `Origin` header, when a browser sent one. */
   origin?: string;
+  /** The browser sent the Global Privacy Control signal (`Sec-GPC: 1`). Recorded as a Do Not Sell or Share opt-out when the workspace has `ccpa_us` on. */
+  gpc?: boolean;
 }
+
+/** What the sender's browser signalled beyond the answers. Today only the Global Privacy Control. */
+interface Signals {
+  gpc: boolean;
+}
+const NO_SIGNALS: Signals = { gpc: false };
 
 type Outcome =
   | {
@@ -144,6 +152,7 @@ export class FormSubmitService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly consentLedger: ContactConsentService,
+    private readonly privacy: ContactPrivacyService,
     config: ConfigService<Env, true>,
   ) {
     this.ipSecret = `forms-ip:${config.get('JWT_ACCESS_SECRET', { infer: true })}`;
@@ -294,6 +303,7 @@ export class FormSubmitService {
             validated.values,
             consent,
             gatewaySlug,
+            { gpc: meta.gpc === true },
           );
           return { ...plain, pay: opened };
         }),
@@ -392,9 +402,10 @@ export class FormSubmitService {
     values: Record<string, StoredAnswer>,
     consent: ConsentOutcome,
     gatewaySlug: string,
+    signals: Signals = NO_SIGNALS,
   ): Promise<{ payment: PaymentRow; payer: Payer } | null> {
     const mapped = mapAnswers(def, values);
-    const outcome = await this.writeCrm(tx, orgId, form, def, sub, mapped, consent);
+    const outcome = await this.writeCrm(tx, orgId, form, def, sub, mapped, consent, signals);
     if (outcome.kind === 'review') {
       await this.review(tx, orgId, form, sub, outcome.reason);
       return null;
@@ -532,6 +543,7 @@ export class FormSubmitService {
     sub: SubmissionRow,
     mapped: MappedSubmission,
     consent: ConsentOutcome,
+    signals: Signals,
   ): Promise<Outcome> {
     const name = contactDisplayName(mapped.contact);
     const email = normaliseLeadEmail(mapped.contact.builtin.email ?? null);
@@ -616,6 +628,8 @@ export class FormSubmitService {
       );
     }
 
+    if (signals.gpc) await this.recordGpc(tx, orgId, form, sub, found.contactId);
+
     await this.activities.insert(tx, orgId, {
       contactId: found.contactId,
       activityType: 'form_submission',
@@ -646,6 +660,30 @@ export class FormSubmitService {
             )
           : undefined,
     };
+  }
+
+  /**
+   * The browser sent the Global Privacy Control signal with this submission: record the contact's Do Not Sell or Share opt-out, but
+   * only when the workspace has the `ccpa_us` profile on (the service checks). Best effort in a savepoint: a failure here never loses
+   * the visitor's submission. It writes no marketing grant and changes nothing about the consent line.
+   */
+  private async recordGpc(
+    tx: Tx,
+    orgId: number,
+    form: FormRow,
+    sub: SubmissionRow,
+    contactId: number,
+  ): Promise<void> {
+    try {
+      await tx.transaction(async (sp) => {
+        await this.privacy.recordGpc(sp as Tx, orgId, contactId, {
+          keyBase: `form:${sub.uuid}`,
+          evidence: { formId: form.uuid, submissionId: sub.uuid },
+        });
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err), form: form.uuid }, 'could not record the GPC opt-out');
+    }
   }
 
   /**

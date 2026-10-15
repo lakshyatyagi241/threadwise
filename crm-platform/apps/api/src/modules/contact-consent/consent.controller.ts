@@ -18,10 +18,12 @@ import type { Response } from 'express';
 import {
   consentEventsQuerySchema,
   recordConsentSchema,
+  recordPrivacyFlagSchema,
   testConsentMessageSchema,
   updateConsentSettingsSchema,
   type ConsentEventsQuery,
   type RecordConsentInput,
+  type RecordPrivacyFlagInput,
   type TestConsentMessageInput,
   type UpdateConsentSettingsInput,
 } from '@crm/contracts';
@@ -31,6 +33,7 @@ import { Throttle } from '../platform-infrastructure';
 import { ConsentExportService } from './consent-export.service';
 import { ConsentSettingsService } from './consent-settings.service';
 import { ContactConsentService } from './consent.service';
+import { ContactPrivacyService } from './contact-privacy.service';
 
 /** The consent ledger, the STOP / START settings and the proof exports (spec docs/specs/contact-consent-ledger.md). */
 @ApiTags('contact-consent')
@@ -41,6 +44,7 @@ export class ContactConsentController {
     private readonly ledger: ContactConsentService,
     private readonly settings: ConsentSettingsService,
     private readonly exports: ConsentExportService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   @Get('settings')
@@ -168,6 +172,29 @@ export class ContactConsentController {
     @Headers('idempotency-key') key?: string,
   ) {
     return this.ledger.record(uuid, body, key);
+  }
+
+  @Post('contacts/:uuid/privacy-events')
+  @Idempotent()
+  @HttpCode(HttpStatus.CREATED)
+  @RequirePermission('contacts.consent.manage')
+  @Throttle({ limit: 60, windowSeconds: 60, by: 'actor' })
+  @ApiOperation({
+    summary:
+      'Turn a privacy flag of a contact on or off: minor, guardian consent, Do Not Sell or Share',
+    description:
+      'Appends one event (who, when, source, evidence) and updates the flag in the same transaction. Guardian consent needs a note ' +
+      '(422 CONSENT_NOTE_REQUIRED) and a contact flagged as a minor (422 CONSENT_PRIVACY_NOT_MINOR); it is evidence only and never ' +
+      'creates a marketing grant. Clearing the minor flag also clears guardian consent. Idempotency-Key: a repeat records nothing. ' +
+      'Answers the contact consent view, including the flags.',
+  })
+  async recordPrivacy(
+    @Param('uuid', ParseUUIDPipe) uuid: string,
+    @Body(zodPipe(recordPrivacyFlagSchema)) body: RecordPrivacyFlagInput,
+    @Headers('idempotency-key') key?: string,
+  ) {
+    await this.privacy.record(uuid, body, key);
+    return this.ledger.forContact(uuid, { limit: 50 });
   }
 
   @Get('contacts/:uuid/export')
