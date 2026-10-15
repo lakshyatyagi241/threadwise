@@ -994,35 +994,17 @@ export class CampaignsRepository {
     return ok;
   }
 
-  /** The contact with this phone (digits compared), else a new one; CSV attributes are merged into its data. */
-  async rememberPhone(
+  /** CSV attributes of a recipient row, merged into the contact's data. The contact itself is made by the contacts service. */
+  async mergeAttributes(
     tx: Tx,
     orgId: number,
-    userId: number | null,
-    digits: string,
-    name: string,
+    contactId: number,
     attrs: Record<string, string>,
-  ): Promise<number> {
-    const found = await tx.execute(sql`
-      SELECT id FROM contacts
-      WHERE org_id = ${orgId} AND regexp_replace(coalesce(phone, ''), '[^0-9]', '', 'g') = ${digits}
-      ORDER BY id LIMIT 1`);
-    let id: number;
-    const hit = found.rows[0] as { id: number | string } | undefined;
-    if (hit) id = Number(hit.id);
-    else {
-      const ins = await tx.execute(sql`
-        INSERT INTO contacts (org_id, name, phone, created_by)
-        VALUES (${orgId}, ${name}, ${`+${digits}`}, ${userId})
-        RETURNING id`);
-      id = Number((ins.rows[0] as { id: number | string }).id);
-    }
-    if (Object.keys(attrs).length > 0) {
-      await tx.execute(sql`
-        UPDATE contacts SET data = coalesce(data, '{}'::jsonb) || ${JSON.stringify(attrs)}::jsonb
-        WHERE org_id = ${orgId} AND id = ${id}`);
-    }
-    return id;
+  ): Promise<void> {
+    if (Object.keys(attrs).length === 0) return;
+    await tx.execute(sql`
+      UPDATE contacts SET data = coalesce(data, '{}'::jsonb) || ${JSON.stringify(attrs)}::jsonb
+      WHERE org_id = ${orgId} AND id = ${contactId}`);
   }
 
   /** Of these contact ids, the ones that exist here and are not archived (opted-out ones stay: the run stamps them). */

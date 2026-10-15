@@ -331,6 +331,11 @@ export const publicTypeSchema = z.object({
   taxPct: z.number(),
   dueNowMinor: z.number().int(),
   questions: z.array(bookingQuestionSchema),
+  /** The optional consent line under the form (BL-167); null when the workspace wrote none. */
+  consent: z
+    .object({ text: z.string(), version: z.number().int(), url: nullableText })
+    .nullable()
+    .default(null),
 });
 export type PublicType = z.infer<typeof publicTypeSchema>;
 
@@ -375,4 +380,6 @@ export interface PublicBookInput {
   phone?: string;
   inviteeTimezone: string;
   answers: Answer[];
+  /** The visitor ticked the consent line shown at this version. Left out when the box was not ticked. */
+  consent?: { given: true; version: number };
 }

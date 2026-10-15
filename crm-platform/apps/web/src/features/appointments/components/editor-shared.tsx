@@ -16,6 +16,8 @@ export interface EditorContextValue {
   fid: (key: string) => string;
   /** True while the form is saving, or read-only. */
   disabled: boolean;
+  /** The saved booking type's id; null while it is new (nothing to attach a consent line to yet). */
+  typeId: string | null;
 }
 
 const EditorContext = createContext<EditorContextValue | null>(null);

@@ -47,6 +47,10 @@ const SPECS = {
   'web-proxy': ['src/lib/auth/proxy.tenancy.test.ts', null, 'apps/web'],
   'catalog-bridge': ['test/unit/node-bridge-runtime/catalog-bridge.spec.ts', null],
   'api-key-throttle': ['test/unit/public-api/api-key-auth-throttle.spec.ts', null],
+  'lock-scoping': ['test/unit/tenancy/lock-scoping.spec.ts', null],
+  'typeahead-scoping': ['test/unit/tenancy/typeahead-scoping.spec.ts', null],
+  'media-purge-isolation': ['test/unit/tenancy/media-and-purge-isolation.spec.ts', null],
+  'storage-key-owner': ['test/unit/tenancy/storage-key-owner.spec.ts', null],
   'scheduled-receipts': [
     'test/unit/scheduled-queue-warmer/scheduled-receipts-tenant.spec.ts',
     null,

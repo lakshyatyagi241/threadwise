@@ -16,7 +16,8 @@
       "validation": "無効な値があります。フォームを確認してもう一度お試しください。",
       "unexpected": "問題が発生しました。もう一度お試しください。",
       "exportInProgress": "同意証明ファイルを準備中です。完了するまでお待ちいただき、もう一度お試しください。",
-      "exportNotReady": "そのファイルは準備できていないか、有効期限が切れています。新しいファイルを準備してください。"
+      "exportNotReady": "そのファイルは準備できていないか、有効期限が切れています。新しいファイルを準備してください。",
+      "noticeTargetMissing": "そのウィジェット、予約ページ、またはストアはもう存在しません。"
     },
     "settings": {
       "title": "同意と STOP 返信",
@@ -130,7 +131,10 @@
         "flow": "フロー",
         "inbound_message": "メッセージ",
         "contact_request": "コンタクトからのリクエスト",
-        "legacy": "同意履歴の記録開始前"
+        "legacy": "同意履歴の記録開始前",
+        "widget": "ウェブサイトのチャット",
+        "booking": "予約ページ",
+        "commerce": "ストアのチェックアウト"
       },
       "by": "{name} による",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "ファイル",
         "apiKeyId": "APIキー",
         "flowId": "フロー",
-        "reference": "参照"
+        "reference": "参照",
+        "noticeVersion": "通知のバージョン",
+        "noticeUrl": "通知のリンク",
+        "widgetId": "チャットウィジェット",
+        "bookingTypeId": "予約ページ",
+        "integrationId": "ストア",
+        "storeFlag": "ストアの設定"
       },
       "dialog": {
         "titleGranted": "購読中にする",
@@ -276,6 +286,30 @@
         "consent_declined": "不許可: 相手が拒否しました。",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "チャットフォームの同意文",
+        "booking": "予約ページの同意文",
+        "commerce": "ストアのマーケティング用チェックボックスの意味"
+      },
+      "intro": {
+        "widget": "訪問者の情報の下にチェックボックスとして表示されます。チェックした訪問者だけが同意として記録され、電話番号またはメールを入力した場合に限ります。",
+        "booking": "予約フォームにチェックボックスとして表示されます。チェックした人だけが同意として記録されます。予約にこれが必要になることはありません。",
+        "commerce": "ストアでマーケティングを承諾した顧客は同意として記録されます。そのチェックボックスが伝える内容を書いて、証拠に記載されるようにしてください。"
+      },
+      "enabled": "同意文をオンにする",
+      "text": "本人が同意する文言",
+      "textHint": "最大{max}文字。変更するたびに新しいバージョンとして保存されます。",
+      "textRequired": "オンにする前に文言を書いてください。",
+      "url": "プライバシーポリシーへのリンク（任意）",
+      "urlHint": "https:// で始まる必要があります",
+      "save": "同意文を保存",
+      "saved": "同意文を保存しました（バージョン{version}）。",
+      "version": "現在のバージョン：{version}",
+      "noVersion": "まだ保存されていません。",
+      "saveFirst": "先にこれを保存すると、同意文を設定できます。",
+      "whatsappToo": "WhatsAppの同意としても扱う（文言にそう書かれている場合のみ）"
     }
   }
 }

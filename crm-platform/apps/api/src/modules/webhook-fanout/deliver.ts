@@ -1,3 +1,4 @@
+import { guardedRequest } from '../../infra/net/guarded-http';
 import { assertPublicTarget } from './url-guard';
 
 export interface DeliveryTarget {
@@ -26,7 +27,7 @@ export interface DeliveryOutcome {
 /**
  * One POST of the raw bytes, nothing re-serialised. The original `X-Hub-Signature-256` rides along so the target can
  * verify it with the Meta app secret exactly as if Meta had called it. Redirects are not followed (a redirect is a way
- * around the address check) and the response body is never read.
+ * around the address check) and the response body is never kept.
  */
 export async function deliver(
   target: DeliveryTarget,
@@ -48,14 +49,17 @@ export async function deliver(
     headers[target.authHeaderName.toLowerCase()] = target.authHeaderValue;
 
   try {
-    const res = await fetch(target.url, {
+    // The address is checked inside the socket's own DNS lookup, so the address that was checked is the address that is connected to
+    // (no resolve-then-connect gap for DNS rebinding), and redirects are never followed.
+    const res = await guardedRequest({
       method: 'POST',
+      url: new URL(target.url),
       headers,
       body: new Uint8Array(input.body),
-      redirect: 'manual',
-      signal: AbortSignal.timeout(target.timeoutMs),
+      timeoutMs: target.timeoutMs,
+      allowPrivate: false,
+      maxBytes: 1024,
     });
-    void res.body?.cancel().catch(() => undefined);
     const ok = res.status >= 200 && res.status < 300;
     return {
       ok,
@@ -66,7 +70,8 @@ export async function deliver(
     };
   } catch (err) {
     const e = err as Error;
-    const timedOut = e.name === 'TimeoutError' || e.name === 'AbortError';
+    const timedOut =
+      e.name === 'TimeoutError' || e.name === 'AbortError' || e.message === 'timed out';
     return {
       ok: false,
       statusCode: null,

@@ -13,8 +13,8 @@ export interface GuardedRequest {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   url: URL;
   headers: Record<string, string>;
-  /** A JSON body for a POST or PUT. */
-  body?: string;
+  /** A body for a POST or PUT: a JSON string, or raw bytes sent exactly as given (a signed payload must not be re-serialised). */
+  body?: string | Uint8Array;
   timeoutMs: number;
   /** Private, loopback and link-local destinations are refused unless this is on. */
   allowPrivate: boolean;

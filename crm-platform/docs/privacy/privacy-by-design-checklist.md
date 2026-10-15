@@ -21,6 +21,7 @@ list into the pull request and answer each line (yes, no, not applicable with a 
 - [ ] Does STOP / opt-out apply? It must. Does the feature need a footer or unsubscribe link? Email always does.
 - [ ] Voice or recording involved? Read [voice-bot-consent-requirements.md](voice-bot-consent-requirements.md) first.
 - [ ] Is any consent proof stored without IP address, user agent or message text (as the ledger does)?
+- [ ] Does the feature collect a person's contact details from a page, an API or a store? A first message or a sign-up never grants marketing consent by itself ([spec 4.3.2](../specs/privacy-and-data-governance.md)): write a grant only when the person ticked a box or said yes, through `ConsentIntakeService`, with the wording, its version and the source as evidence, and create the contact through `ContactsService` (never a raw insert).
 
 ## 3. Where it lives
 

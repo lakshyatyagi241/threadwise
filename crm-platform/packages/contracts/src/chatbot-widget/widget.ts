@@ -387,6 +387,12 @@ export const widgetMessageRequestSchema = z.object({
   visitor_uuid: z.preprocess(blankToNull, z.string().max(64).nullish()),
   /** A flow bot's reply button the visitor tapped: `body` is its title, this is its id. Ignored by a widget with no flow. */
   tap_id: z.preprocess(blankToNull, z.string().max(128).nullish()),
+  /**
+   * The visitor ticked the consent line of the intake form, which was at `consent_version` (BL-167). Sent only by a page that showed the
+   * line; ignored when the widget has none, when the version is not a real version of it, or when no phone or email was given.
+   */
+  consent: z.boolean().nullish(),
+  consent_version: z.number().int().min(1).nullish(),
 });
 export type WidgetMessageRequest = z.infer<typeof widgetMessageRequestSchema>;
 
@@ -415,6 +421,11 @@ export const widgetPublicConfigSchema = z.object({
     launcher: widgetPublicLauncherSchema,
     /** The flow that answers this widget; a tap that jumps to one of its steps names it. Null for an AI widget. */
     flow_uuid: z.string().nullable().optional(),
+    /** The consent line under the intake form: only when the widget has one switched on and asks for a phone or an email. */
+    consent: z
+      .object({ text: z.string(), version: z.number().int().min(1), url: z.string().nullable() })
+      .nullable()
+      .optional(),
   }),
   visitor: z.object({
     uuid: z.string(),

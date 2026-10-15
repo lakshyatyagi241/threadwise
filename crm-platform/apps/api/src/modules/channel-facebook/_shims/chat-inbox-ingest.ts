@@ -10,6 +10,7 @@ import {
   ExternalChannelIngest,
   type ConversationsFacade,
 } from '../../chat-conversations';
+import { ContactsService } from '../../crm';
 import type { InboundInput, InboundRecorded, InboxIngest } from './tokens';
 
 /** The placeholder a thread carries until Meta tells us a real name. */
@@ -53,6 +54,7 @@ export class ChatInboxIngest implements InboxIngest {
     private readonly db: DatabaseService,
     private readonly external: ExternalChannelIngest,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly contacts: ContactsService,
   ) {}
 
   /** Keeps the Page's inbox channel in step with the Page (connected or not). */
@@ -107,17 +109,20 @@ export class ChatInboxIngest implements InboxIngest {
       const conversationId = Number(conv.id);
       let contactId = conv.contact_id === null ? null : Number(conv.contact_id);
       if (m.kind === 'dm' && m.senderId !== '') {
-        const c = await tx.execute(sql`
-          INSERT INTO contacts (org_id, name, channel, channel_uid, message)
-          VALUES (${orgId}, ${m.title}, ${FACEBOOK_KIND}, ${m.senderId}, 'Source: Facebook DM')
-          ON CONFLICT (org_id, channel, channel_uid) WHERE channel IS NOT NULL AND channel_uid IS NOT NULL
-          DO UPDATE SET name = coalesce(nullif(contacts.name, ''), EXCLUDED.name)
-          RETURNING id`);
-        const id = Number((c.rows[0] as { id: number | string }).id);
-        if (contactId === null) {
-          contactId = id;
+        // Through the contacts service: audit and the plan's contact cap apply, and no consent is granted by a first message. Over the
+        // cap the thread simply has no contact (the message is kept).
+        const r = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
+          kind: 'channel_uid',
+          channel: FACEBOOK_KIND,
+          value: m.senderId,
+          name: m.title,
+          message: 'Source: Facebook DM',
+          quiet: true,
+        });
+        if ((r.outcome === 'found' || r.outcome === 'created') && contactId === null) {
+          contactId = r.contactId;
           await tx.execute(
-            sql`UPDATE conversations SET contact_id = ${id} WHERE org_id = ${orgId} AND id = ${conversationId}`,
+            sql`UPDATE conversations SET contact_id = ${r.contactId} WHERE org_id = ${orgId} AND id = ${conversationId}`,
           );
         }
       }

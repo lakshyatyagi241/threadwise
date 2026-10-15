@@ -6,7 +6,11 @@
  * .dependency-cruiser.cjs.
  */
 export { ContactsService } from './contacts.service';
-export type { ResolveContactInput, ResolvedContact } from './contacts.service';
+export type {
+  ContactConsentContext,
+  ResolveContactInput,
+  ResolvedContact,
+} from './contacts.service';
 export { ContactsRepository } from './contacts.repository';
 export { toContactResponse } from './contacts.mapper';
 export { assertContactScope } from './contact-scope';

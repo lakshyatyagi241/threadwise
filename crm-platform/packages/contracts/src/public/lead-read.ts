@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { consentProofSchema } from '../contact-consent/intake';
 
 /**
  * `/public/v1` — the external contract.
@@ -35,6 +36,12 @@ export const publicLeadSubmitSchema = z.object({
    * echoes these but never branches on them.
    */
   custom: z.record(z.string()).optional(),
+  /**
+   * Only when the person agreed to marketing messages on the caller's side: the wording they were shown (`text`, with its `version`)
+   * or how they agreed (`note`), and optionally when (`at`). Without it the lead is stored with NO marketing consent. With it the
+   * ledger gets a grant with source `api` and the API key as evidence.
+   */
+  consent: consentProofSchema.optional(),
 });
 export type PublicLeadSubmitInput = z.infer<typeof publicLeadSubmitSchema>;
 

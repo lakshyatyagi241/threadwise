@@ -16,7 +16,8 @@
       "validation": "Alguns valores não são válidos. Verifique o formulário e tente novamente.",
       "unexpected": "Algo deu errado. Tente novamente.",
       "exportInProgress": "Um arquivo de comprovação já está sendo preparado. Aguarde a conclusão e tente novamente.",
-      "exportNotReady": "Esse arquivo não está pronto ou expirou. Prepare um novo."
+      "exportNotReady": "Esse arquivo não está pronto ou expirou. Prepare um novo.",
+      "noticeTargetMissing": "Esse widget, página de reservas ou loja já não existe."
     },
     "settings": {
       "title": "Consentimento e respostas STOP",
@@ -130,7 +131,10 @@
         "flow": "Fluxo",
         "inbound_message": "Mensagem",
         "contact_request": "Solicitação do contato",
-        "legacy": "Antes do histórico de consentimento"
+        "legacy": "Antes do histórico de consentimento",
+        "widget": "Chat do site",
+        "booking": "Página de reservas",
+        "commerce": "Checkout da loja"
       },
       "by": "por {name}",
       "evidence": {
@@ -144,7 +148,13 @@
         "fileName": "Arquivo",
         "apiKeyId": "Chave de API",
         "flowId": "Fluxo",
-        "reference": "Referência"
+        "reference": "Referência",
+        "noticeVersion": "Versão do aviso",
+        "noticeUrl": "Link do aviso",
+        "widgetId": "Widget de chat",
+        "bookingTypeId": "Página de reservas",
+        "integrationId": "Loja",
+        "storeFlag": "Configuração da loja"
       },
       "dialog": {
         "titleGranted": "Marcar como inscrito",
@@ -276,6 +286,30 @@
         "consent_declined": "Não permitido: a pessoa recusou.",
         "notice_required": "A notice must be delivered first."
       }
+    },
+    "notice": {
+      "title": {
+        "widget": "Linha de consentimento no formulário do chat",
+        "booking": "Linha de consentimento na página de reservas",
+        "commerce": "O que significa a caixa de marketing da loja"
+      },
+      "intro": {
+        "widget": "Mostrada como uma caixa sob os dados do visitante. Só quem a marca é registado como concordante, e só se indicou um telefone ou e-mail.",
+        "booking": "Mostrada como uma caixa no formulário de reserva. Só quem a marca é registado como concordante; reservar nunca a exige.",
+        "commerce": "Um cliente que aceita marketing na sua loja é registado como concordante. Escreva o que essa caixa lhe diz, para que a prova a mencione."
+      },
+      "enabled": "Linha de consentimento ativada",
+      "text": "Texto com que a pessoa concorda",
+      "textHint": "Até {max} caracteres. Cada alteração é guardada como nova versão.",
+      "textRequired": "Escreva o texto antes de ativar a linha.",
+      "url": "Link da sua política de privacidade (opcional)",
+      "urlHint": "Tem de começar por https://",
+      "save": "Guardar a linha de consentimento",
+      "saved": "Linha de consentimento guardada (versão {version}).",
+      "version": "Versão atual: {version}",
+      "noVersion": "Ainda não guardada.",
+      "saveFirst": "Guarde isto primeiro e depois poderá definir a sua linha de consentimento.",
+      "whatsappToo": "Contar também como consentimento do WhatsApp (só se o texto o disser)"
     }
   }
 }

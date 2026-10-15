@@ -8,6 +8,7 @@ import type {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
+import { storageKeyOrg } from '../../../common/storage-key-owner';
 import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
@@ -71,8 +72,9 @@ export class ContactFilesService {
       const contactId = contact.id;
 
       // AZ-009: a key minted per workspace looks like `<area>/<orgId>/...`; it may only name the caller's own workspace.
-      const keyOrg = /^[^/]+\/(\d+)\//.exec(input.storageKey)?.[1];
-      if (keyOrg !== undefined && Number(keyOrg) !== ctx.orgId) {
+      // TI-022: compared in the form the storage layer acts on (`storage/chat/7/x` is `chat/7/x`).
+      const keyOrg = storageKeyOrg(input.storageKey);
+      if (keyOrg !== null && keyOrg !== ctx.orgId) {
         throw new AppError(
           ERROR_CODES.VALIDATION_FAILED,
           'The storage key belongs to another workspace.',
