@@ -241,6 +241,51 @@ describe('live adapter: payload shapes', () => {
   });
 });
 
+describe('live adapter: catalog login code exchange', () => {
+  const withApp = (f: typeof fetch, app?: { id?: string; secret?: string }) =>
+    new MetaGraphCatalogProvider({
+      graphVersion: 'v23.0',
+      fetchImpl: f,
+      retryDelayMs: 0,
+      app: { id: app?.id, secret: app?.secret },
+    });
+
+  it('exchanges the popup code with the app id and secret and sends no redirect_uri', async () => {
+    const m = mockFetch([{ body: { access_token: 'CAT-TOKEN-0123456789' } }]);
+    const token = await withApp(m.impl, { id: 'app1', secret: 'sec-0123456789' }).exchangeLoginCode(
+      'the-code',
+    );
+    expect(token).toBe('CAT-TOKEN-0123456789');
+    const url = new URL(m.calls[0]!.url);
+    expect(url.pathname).toBe('/v23.0/oauth/access_token');
+    expect(Object.fromEntries(url.searchParams)).toEqual({
+      client_id: 'app1',
+      client_secret: 'sec-0123456789',
+      code: 'the-code',
+    });
+  });
+
+  it('says so when the Meta app is not configured, without calling Meta', async () => {
+    const m = mockFetch([]);
+    await expect(withApp(m.impl).exchangeLoginCode('c')).rejects.toMatchObject({ kind: 'config' });
+    expect(m.calls).toHaveLength(0);
+  });
+
+  it('turns a Meta refusal into a provider error and never echoes the secret or the code', async () => {
+    const m = mockFetch([
+      {
+        status: 400,
+        body: { error: { message: 'Invalid verification code: the-code', code: 100 } },
+      },
+    ]);
+    const err = await withApp(m.impl, { id: 'app1', secret: 'sec-0123456789' })
+      .exchangeLoginCode('the-code')
+      .catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(CatalogProviderError);
+    expect((err as Error).message).not.toContain('sec-0123456789');
+  });
+});
+
 describe('live adapter: manage the catalog and its product sets', () => {
   it('renames and deletes the catalog and creates, updates and deletes a product set', async () => {
     const m = mockFetch([

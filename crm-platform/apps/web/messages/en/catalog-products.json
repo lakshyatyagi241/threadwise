@@ -832,7 +832,10 @@
         "placeholder": "e.g. My shop",
         "button": "Create catalog",
         "needName": "Enter a catalog name.",
-        "done": "Catalog created and connected."
+        "done": "Catalog created and connected.",
+        "loginCancelled": "The Meta login was closed before it finished. Try again and approve catalog access.",
+        "sdkFailed": "Meta's login could not be loaded. Check your connection or ad blocker, then reload the page.",
+        "sdkLoading": "Meta's login is still loading. Try again in a moment."
       },
       "rename": {
         "label": "Catalog name",

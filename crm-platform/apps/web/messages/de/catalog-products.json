@@ -832,7 +832,10 @@
         "placeholder": "z. B. Mein Shop",
         "button": "Katalog erstellen",
         "needName": "Geben Sie einen Katalognamen ein.",
-        "done": "Katalog erstellt und verbunden."
+        "done": "Katalog erstellt und verbunden.",
+        "loginCancelled": "Die Meta-Anmeldung wurde vor dem Abschluss geschlossen. Versuche es erneut und erlaube den Zugriff auf den Katalog.",
+        "sdkFailed": "Die Meta-Anmeldung konnte nicht geladen werden. Prüfe deine Verbindung oder deinen Werbeblocker und lade die Seite neu.",
+        "sdkLoading": "Die Meta-Anmeldung wird noch geladen. Versuche es gleich noch einmal."
       },
       "rename": {
         "label": "Katalogname",

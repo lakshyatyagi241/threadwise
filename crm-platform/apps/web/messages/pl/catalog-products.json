@@ -832,7 +832,10 @@
         "placeholder": "np. Mój sklep",
         "button": "Utwórz katalog",
         "needName": "Wpisz nazwę katalogu.",
-        "done": "Katalog utworzony i połączony."
+        "done": "Katalog utworzony i połączony.",
+        "loginCancelled": "Logowanie Meta zostało zamknięte przed zakończeniem. Spróbuj ponownie i zatwierdź dostęp do katalogu.",
+        "sdkFailed": "Nie udało się załadować logowania Meta. Sprawdź połączenie lub blokadę reklam i odśwież stronę.",
+        "sdkLoading": "Logowanie Meta nadal się ładuje. Spróbuj ponownie za chwilę."
       },
       "rename": {
         "label": "Nazwa katalogu",

@@ -832,7 +832,10 @@
         "placeholder": "ví dụ: Cửa hàng của tôi",
         "button": "Tạo danh mục",
         "needName": "Nhập tên danh mục.",
-        "done": "Đã tạo và kết nối danh mục."
+        "done": "Đã tạo và kết nối danh mục.",
+        "loginCancelled": "Cửa sổ đăng nhập Meta đã đóng trước khi hoàn tất. Hãy thử lại và chấp thuận quyền truy cập danh mục.",
+        "sdkFailed": "Không thể tải đăng nhập Meta. Hãy kiểm tra kết nối hoặc trình chặn quảng cáo rồi tải lại trang.",
+        "sdkLoading": "Đăng nhập Meta vẫn đang tải. Hãy thử lại sau giây lát."
       },
       "rename": {
         "label": "Tên danh mục",
