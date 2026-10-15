@@ -73,3 +73,21 @@ export function sendTemplate(
     idempotencyKey: input.clientMessageId,
   });
 }
+
+/** Sends one free-form email (subject + body) through a connected mailbox. Same idempotency guarantee as `sendTemplate`. */
+export function sendEmail(
+  conversationId: string,
+  input: { subject: string; body: string; clientMessageId: string },
+) {
+  return apiFetch(`/inbox/conversations/${conversationId}/messages`, {
+    method: 'POST',
+    body: {
+      kind: 'text',
+      body: input.body,
+      clientMessageId: input.clientMessageId,
+      email: { subject: input.subject },
+    },
+    schema: messageResponseSchema,
+    idempotencyKey: input.clientMessageId,
+  });
+}

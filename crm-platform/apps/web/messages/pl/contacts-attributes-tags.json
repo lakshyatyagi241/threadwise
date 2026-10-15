@@ -1279,6 +1279,14 @@
       "number": "Wyślij z",
       "numberHint": "Numer WhatsApp, z którego zostanie wysłana wiadomość.",
       "noChannel": "Nie podłączono żadnego numeru WhatsApp. Najpierw podłącz go w Kanałach.",
+      "mailbox": "Wyślij z",
+      "mailboxPlaceholder": "Wybierz skrzynkę pocztową",
+      "mailboxHint": "Połączona skrzynka pocztowa, z której wysyłana jest wiadomość e-mail.",
+      "noMailbox": "Żaden skrzynka pocztowa nie jest połączona. Połącz najpierw jedną w sekcji Kanały.",
+      "subject": "Temat",
+      "subjectPlaceholder": "Czego dotyczy ta wiadomość?",
+      "body": "Wiadomość",
+      "bodyPlaceholder": "Napisz swój e-mail…",
       "template": "Szablon WhatsApp",
       "templatePlaceholder": "Wybierz szablon",
       "noTemplates": "Brak zatwierdzonych szablonów dla tego numeru.",
@@ -1295,12 +1303,10 @@
       "callPermission": "Kontakt nie zezwolił jeszcze na połączenia. Przed połączeniem zostanie poproszony o zgodę.",
       "callReady": "Gotowe do połączenia z {phone}.",
       "later": {
-        "sms": "Wysyłanie SMS z CRM nie jest jeszcze dostępne.",
-        "email": "Wysyłanie e-maili z CRM nie jest jeszcze dostępne."
+        "sms": "Wysyłanie SMS z CRM nie jest jeszcze dostępne."
       },
       "openApp": {
-        "sms": "Otwórz w aplikacji do wiadomości",
-        "email": "Otwórz w aplikacji pocztowej"
+        "sms": "Otwórz w aplikacji do wiadomości"
       }
     },
     "views": {

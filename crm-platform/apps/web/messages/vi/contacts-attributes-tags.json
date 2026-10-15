@@ -1279,6 +1279,14 @@
       "number": "Gửi từ",
       "numberHint": "Số WhatsApp dùng để gửi tin nhắn.",
       "noChannel": "Chưa kết nối số WhatsApp nào. Hãy kết nối một số trong Kênh trước.",
+      "mailbox": "Gửi từ",
+      "mailboxPlaceholder": "Chọn một hộp thư",
+      "mailboxHint": "Hộp thư đã kết nối mà email được gửi đi từ đó.",
+      "noMailbox": "Chưa có hộp thư nào được kết nối. Hãy kết nối một hộp thư trong mục Kênh trước.",
+      "subject": "Chủ đề",
+      "subjectPlaceholder": "Nội dung này về điều gì?",
+      "body": "Nội dung",
+      "bodyPlaceholder": "Soạn email của bạn…",
       "template": "Mẫu WhatsApp",
       "templatePlaceholder": "Chọn mẫu",
       "noTemplates": "Không có mẫu nào được duyệt cho số này.",
@@ -1295,12 +1303,10 @@
       "callPermission": "Liên hệ chưa cho phép cuộc gọi. Hệ thống sẽ xin phép họ trước khi gọi.",
       "callReady": "Sẵn sàng gọi {phone}.",
       "later": {
-        "sms": "Chưa hỗ trợ gửi SMS từ CRM.",
-        "email": "Chưa hỗ trợ gửi email từ CRM."
+        "sms": "Chưa hỗ trợ gửi SMS từ CRM."
       },
       "openApp": {
-        "sms": "Mở trong ứng dụng tin nhắn",
-        "email": "Mở trong ứng dụng email"
+        "sms": "Mở trong ứng dụng tin nhắn"
       }
     },
     "views": {
