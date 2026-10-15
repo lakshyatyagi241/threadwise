@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import { hash, verify } from '@node-rs/argon2';
 import type { ConfigService } from '@nestjs/config';
 import { describe, expect, it } from 'vitest';
@@ -146,7 +146,7 @@ function files(dir: string, out: string[] = []): string[] {
   }
   return out;
 }
-const ALL = files(SRC).map((p) => ({ p: relative(SRC, p), s: readFileSync(p, 'utf8') }));
+const ALL = files(SRC).map((p) => ({ p: relative(SRC, p).split(sep).join('/'), s: readFileSync(p, 'utf8') }));
 
 describe('source guards', () => {
   it('no secret, token, key or code is made with Math.random', () => {
