@@ -4,11 +4,13 @@ import {
   FREQUENCY_CAP_ERROR_CODE,
   WIZARD_FOLLOW_UP_WAIT_MAX,
   WIZARD_RETRY_INTERVAL_HOURS,
+  holdOf,
   type WizardFollowUp,
 } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { WabaApiError } from '../../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
-import { ConsentGate } from '../../contact-consent';
+import { SendWindowService } from '../../compliance-center';
+import { ConsentGate, purposeOfCategory } from '../../contact-consent';
 import { MergeTagService } from '../../crm';
 import {
   EngineSenderRegistry,
@@ -106,6 +108,8 @@ export class WizardFollowUpService {
     @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
     @Optional() private readonly consentGate?: ConsentGate,
+    // Quiet hours (BL-177). Optional so a caller that builds the service without it keeps the old behaviour: nothing is held.
+    @Optional() private readonly sendWindow?: SendWindowService,
   ) {}
 
   /** One full pass. Returns what it did, for the log and the tests. */
@@ -312,6 +316,14 @@ export class WizardFollowUpService {
       return ok;
     }
 
+    // Quiet hours (BL-177): a marketing follow-up inside them is DEFERRED, not skipped. The claim goes back and the step is looked at again
+    // when the hours open (the consent is asked again then, with everything else, by the same pass).
+    const hold = await this.quietHold(c, prep.tpl.id);
+    if (hold) {
+      await this.deferTo(c, new Date(hold.until));
+      return false;
+    }
+
     // The wallet must cover this message, as it must for any campaign message; if not, the chain ends here.
     const allowed = await this.billing.consume({ orgId, to: prep.to, usedThisMonth: 0 });
     if (!allowed) {
@@ -374,6 +386,39 @@ export class WizardFollowUpService {
       });
       return false;
     }
+  }
+
+  /**
+   * Does the quiet hours hold this follow-up? Only a MARKETING template is asked about: a utility one is a notice the person needs.
+   * Null when it may go now.
+   */
+  private async quietHold(
+    c: Claimed,
+    templateId: number,
+  ): Promise<{ until: string; reason: string } | null> {
+    if (!this.sendWindow || c.contactId === null) return null;
+    const { orgId } = c;
+    const category = await this.db.txAs({ orgId }, async (tx) => {
+      const res = await tx.execute(sql`
+        SELECT lower(coalesce(meta_category, category)) AS category FROM wa_templates
+        WHERE org_id = ${orgId} AND id = ${templateId}`);
+      return (res.rows[0] as { category?: string } | undefined)?.category;
+    });
+    if (purposeOfCategory(category) !== 'marketing_messaging') return null;
+    return holdOf(await this.sendWindow.check(orgId, 'message', { contactId: c.contactId }));
+  }
+
+  /** The step waits for the quiet hours to end: the claim in the log is released and the recipient is looked at again at `until`. */
+  private async deferTo(c: Claimed, until: Date): Promise<void> {
+    const { orgId } = c;
+    await this.db.txAs({ orgId }, async (tx) => {
+      await tx.execute(sql`
+        DELETE FROM camp_follow_up_attempts
+        WHERE org_id = ${orgId} AND recipient_id = ${c.id} AND step_no = ${c.stepNo} AND outcome = 'claimed'`);
+      await tx.execute(sql`
+        UPDATE wp_campaign_contacts SET follow_up_check_at = ${iso(until)}::timestamptz
+        WHERE org_id = ${orgId} AND id = ${c.id} AND follow_up_state = 'active' AND follow_up_next = ${c.stepNo}`);
+    });
   }
 
   /** The provider refused for now: the claim in the log is released and the recipient is looked at again after a retry interval. */
