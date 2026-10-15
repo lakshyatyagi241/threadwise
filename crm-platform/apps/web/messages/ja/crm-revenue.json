@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / レポート",
+    "title": "売上レポート",
+    "subtitle": "選択した期間について、請求した金額、そのうち入金済みの金額と未払いの金額、そして入金されたお金を確認できます。",
+    "back": "CRMダッシュボード",
+    "period": "{from}〜{to}（{zone}）",
+    "comparedWith": "{mode}との比較: {from}〜{to}",
+    "loading": "売上レポートを読み込み中",
+    "retry": "再試行",
+    "stale": "数値を更新できませんでした。最後に読み込んだ数値を表示しています。",
+    "empty": {
+      "title": "この期間にデータはありません",
+      "message": "この期間に発行された請求書も入金もありません。別の期間を選択するか、請求書を開いてください。",
+      "invoices": "請求書を開く"
+    },
+    "mode": {
+      "previous": "前の期間",
+      "lastYear": "前年の同じ期間"
+    },
+    "filters": {
+      "label": "レポートのフィルター",
+      "period": "期間",
+      "range": {
+        "month": "今月",
+        "lastMonth": "先月",
+        "quarter": "今四半期",
+        "year": "今年",
+        "30d": "30日間",
+        "90d": "90日間",
+        "custom": "カスタム"
+      },
+      "from": "開始日",
+      "to": "終了日",
+      "compare": "比較対象",
+      "compareOption": {
+        "previous": "前の期間",
+        "lastYear": "前年の同じ期間",
+        "none": "比較しない"
+      },
+      "groupBy": "分類",
+      "groupOption": {
+        "source": "リードソース",
+        "origin": "請求書の作成元",
+        "product": "商品",
+        "owner": "担当者",
+        "team": "チーム"
+      },
+      "owner": "担当者",
+      "everyone": "全員",
+      "team": "チーム",
+      "allTeams": "すべてのチーム",
+      "currency": "通貨",
+      "allCurrencies": "すべて（{currency}で表示）",
+      "reset": "フィルターをリセット"
+    },
+    "note": {
+      "converted": "複数の通貨が使われています。数値は{currency}に換算されています。正確な金額を見るには通貨を1つ選択してください。",
+      "missingRate": "{currencies}の為替レートがないため、これらの金額は換算後の数値に含まれていません。",
+      "invoiced": "請求額・入金済み・未払いは、その期間に発行された請求書を集計します（下書き、無効化された請求書、見積請求書は除く）。回収額と返金額は、どの請求書に対するものかに関係なく、その期間に入金されたお金を集計します。"
+    },
+    "kpi": {
+      "title": "主要な数値",
+      "vsPrevious": "比較期間との差",
+      "collected": "回収額",
+      "collectedHint": "この期間に受け取った入金",
+      "collectedAll": "回収額（全期間）",
+      "collectedAllHint": "表示できるすべての入金",
+      "outstanding": "未回収額",
+      "outstandingHint": "本日時点で未完了の請求書 {count, plural, other {#件}}",
+      "tax": "回収した税額",
+      "taxHint": "この期間に全額入金された請求書の税額",
+      "invoiced": "請求額",
+      "invoicedHint": "発行した請求書 {count, plural, other {#件}}",
+      "paid": "入金済み",
+      "paidHint": "この期間に発行された請求書の入金分",
+      "overdue": "期限超過",
+      "overdueHint": "支払期限を過ぎたもの",
+      "refunded": "返金額",
+      "refundedHint": "この期間に返金した金額",
+      "paidInFull": "全額入金済み",
+      "paidInFullHint": "全額入金となった請求書",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "請求額・入金済み・未払い",
+      "subtitle": "この期間に発行された請求書と現在の状況",
+      "paid": "入金済み",
+      "owed": "未払い（期限前）",
+      "overdue": "期限超過",
+      "credited": "クレジットノート",
+      "invoiced": "請求額",
+      "empty": "この期間に請求はありません。",
+      "several": "これらの請求書は複数の通貨で発行されています。上で通貨を選択すると、1本のバーで表示されます。"
+    },
+    "trend": {
+      "title": "請求額と回収額",
+      "subtitle": {
+        "day": "日別",
+        "week": "週別",
+        "month": "月別"
+      },
+      "chartLabel": "期間中の請求額と回収額",
+      "invoiced": "請求額",
+      "collected": "回収額"
+    },
+    "split": {
+      "title": "{group}別",
+      "subtitle": "金額の大きい順。金額は{currency}で表示しています。",
+      "subtitlePerCurrency": "金額の大きい順。金額は通貨ごとに表示しています。",
+      "group": {
+        "source": "リードソース",
+        "origin": "請求書の作成元",
+        "product": "商品",
+        "owner": "担当者",
+        "team": "チーム"
+      },
+      "empty": {
+        "source": "リードソースなし",
+        "origin": "作成元不明",
+        "product": "明細なし",
+        "owner": "未割り当て",
+        "team": "チームなし"
+      },
+      "origin": {
+        "manual": "手動で作成",
+        "quote": "見積から作成",
+        "order": "注文から作成",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "自社ストア",
+        "api": "API",
+        "ai": "AIアシスタント"
+      },
+      "col": {
+        "invoices": "請求書",
+        "invoiced": "請求額",
+        "paid": "入金済み",
+        "outstanding": "未払い",
+        "overdue": "期限超過",
+        "collected": "回収額",
+        "refunded": "返金額"
+      },
+      "total": "合計",
+      "truncated": "上位{count, plural, other {#件}}の行のみ表示しています。CSVサマリーにも同じ行が含まれます。",
+      "teamNote": "2つのチームに所属する担当者は両方で集計されるため、チームごとの行の合計が全体の合計を上回ることがあります。",
+      "productNote": "請求書全体の割引、送料、端数処理は、各明細の金額に応じて按分されます。"
+    },
+    "aging": {
+      "title": "売掛金の滞留状況",
+      "open": "入金",
+      "empty": "未払いはありません。",
+      "bucket": {
+        "current": "期限前",
+        "d1_30": "期限超過 1〜30日",
+        "d31_60": "期限超過 31〜60日",
+        "d61_90": "期限超過 61〜90日",
+        "d90_plus": "期限超過 90日以上"
+      }
+    },
+    "export": {
+      "title": "このレポートをダウンロード",
+      "note": "上記のフィルターを適用してバックグラウンドで作成され、{days}日間保管され、メールでお知らせします。レポートに表示される範囲を超える内容は取得できません。",
+      "csvPayments": "CSV: 入金",
+      "csvPaymentsHint": "この期間の入金と返金を1件ずつ1行で出力",
+      "csvSummary": "CSV: この表",
+      "csvSummaryHint": "上の分類結果と合計",
+      "pdf": "PDF",
+      "pdfHint": "ドキュメント形式のレポート",
+      "preparing": "準備中...",
+      "requested": "ファイルを準備しています。完了するとメールでお知らせします。下のリストにも表示されます。",
+      "recent": "最近のファイル",
+      "none": "まだファイルを作成していません。",
+      "kind": {
+        "pdf": "PDFレポート",
+        "csv-payments": "入金のCSV",
+        "csv-summary": "CSVサマリー"
+      },
+      "status": {
+        "queued": "待機中",
+        "running": "準備中",
+        "ready": "準備完了",
+        "failed": "失敗",
+        "expired": "期限切れ"
+      },
+      "range": "{from}〜{to}",
+      "rows": "{count, plural, other {#行}}",
+      "expires": "{date}まで保管",
+      "failed": "このファイルを準備できませんでした。もう一度リクエストしてください。",
+      "download": "ダウンロード"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "この操作を行う権限がありません。",
+      "notFound": "そのファイルは存在しません。",
+      "exportInProgress": "すでにファイルを準備中です。届くメールをお待ちいただいてから、次のファイルをリクエストしてください。",
+      "exportNotReady": "このファイルは準備できていないか、有効期限が切れています。もう一度リクエストしてください。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "validation": "フィルターの内容が正しくありません。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    }
+  }
+}

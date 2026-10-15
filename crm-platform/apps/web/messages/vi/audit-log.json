@@ -92,7 +92,8 @@
       "api_keys": "Khóa API",
       "audit-log": "Nhật ký kiểm tra",
       "audit-log-exports": "Bản xuất nhật ký kiểm tra",
-      "contact_consent_exports": "Bản xuất bằng chứng đồng ý"
+      "contact_consent_exports": "Bản xuất bằng chứng đồng ý",
+      "revenue-report-exports": "Tệp báo cáo doanh thu"
     },
     "table": {
       "caption": "Các mục nhật ký kiểm tra, mới nhất trước. Thời gian hiển thị theo múi giờ của bạn ({zone}).",

@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Raporlar",
+    "title": "Gelir raporu",
+    "subtitle": "Seçtiğiniz dönem için kestiğiniz faturalar, bunun ne kadarının ödendiği, ne kadarının hâlâ borç olduğu ve giren para.",
+    "back": "CRM panosu",
+    "period": "{from} – {to} ({zone})",
+    "comparedWith": "{mode} ile karşılaştırma: {from} – {to}",
+    "loading": "Gelir raporu yükleniyor",
+    "retry": "Tekrar dene",
+    "stale": "Rakamlar yenilenemedi. Bunlar en son yüklenenler.",
+    "empty": {
+      "title": "Bu dönemde veri yok",
+      "message": "Bu tarihler arasında fatura kesilmedi ve ödeme gelmedi. Başka bir dönem seçin veya faturaları açın.",
+      "invoices": "Faturaları aç"
+    },
+    "mode": {
+      "previous": "önceki dönem",
+      "lastYear": "geçen yılın aynı dönemi"
+    },
+    "filters": {
+      "label": "Rapor filtreleri",
+      "period": "Dönem",
+      "range": {
+        "month": "Bu ay",
+        "lastMonth": "Geçen ay",
+        "quarter": "Bu çeyrek",
+        "year": "Bu yıl",
+        "30d": "30 gün",
+        "90d": "90 gün",
+        "custom": "Özel"
+      },
+      "from": "Başlangıç",
+      "to": "Bitiş",
+      "compare": "Karşılaştır",
+      "compareOption": {
+        "previous": "Önceki dönem",
+        "lastYear": "Geçen yılın aynı dönemi",
+        "none": "Karşılaştırma yok"
+      },
+      "groupBy": "Dağılım ölçütü",
+      "groupOption": {
+        "source": "Lead kaynağı",
+        "origin": "Fatura kaynağı",
+        "product": "Ürün",
+        "owner": "Sahip",
+        "team": "Ekip"
+      },
+      "owner": "Sahip",
+      "everyone": "Herkes",
+      "team": "Ekip",
+      "allTeams": "Tüm ekipler",
+      "currency": "Para birimi",
+      "allCurrencies": "Tümü, {currency} olarak gösterilir",
+      "reset": "Filtreleri sıfırla"
+    },
+    "note": {
+      "converted": "Birden fazla para birimi kullanılıyor. Rakamlar {currency} cinsine çevrildi; tam tutarları görmek için tek bir para birimi seçin.",
+      "missingRate": "{currencies} için döviz kuru yok: bu tutarlar çevrilen rakamlara dahil edilmedi.",
+      "invoiced": "Faturalanan, ödenen ve borç, dönemde kesilen faturaları sayar (taslaklar, iptal edilen faturalar ve proformalar hariç). Tahsil edilen ve iade edilen, hangi faturayı kapattığına bakılmaksızın dönemde giren parayı sayar."
+    },
+    "kpi": {
+      "title": "Temel rakamlar",
+      "vsPrevious": "Karşılaştırma dönemine göre",
+      "collected": "Tahsil edilen",
+      "collectedHint": "Dönemde alınan ödemeler",
+      "collectedAll": "Tahsil edilen, tüm zamanlar",
+      "collectedAllHint": "Görebildiğiniz tüm ödemeler",
+      "outstanding": "Açık bakiye",
+      "outstandingHint": "Bugün itibarıyla {count, plural, one {# açık fatura} other {# açık fatura}}",
+      "tax": "Tahsil edilen vergi",
+      "taxHint": "Dönemde tamamen ödenen faturalarda",
+      "invoiced": "Faturalanan",
+      "invoicedHint": "{count, plural, one {# fatura kesildi} other {# fatura kesildi}}",
+      "paid": "Şimdiye kadar ödenen",
+      "paidHint": "Dönemde kesilen faturalardan",
+      "overdue": "Vadesi geçen",
+      "overdueHint": "Vade tarihini aşan",
+      "refunded": "İade edilen",
+      "refundedHint": "Dönemde geri ödenen",
+      "paidInFull": "Tamamen ödenen",
+      "paidInFullHint": "Tamamen ödenmiş hale gelen faturalar",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Faturalanan, ödenen ve borç",
+      "subtitle": "Dönemde kesilen faturalar ve bugünkü durumları",
+      "paid": "Ödenen",
+      "owed": "Borç, vadesi gelmemiş",
+      "overdue": "Vadesi geçen",
+      "credited": "Alacak dekontları",
+      "invoiced": "faturalanan",
+      "empty": "Bu dönemde fatura kesilmedi.",
+      "several": "Bu faturalar birden fazla para biriminde. Tek çubuk olarak görmek için yukarıdan bir para birimi seçin."
+    },
+    "trend": {
+      "title": "Faturalanan ve tahsil edilen",
+      "subtitle": {
+        "day": "Günlük",
+        "week": "Haftalık",
+        "month": "Aylık"
+      },
+      "chartLabel": "Dönem boyunca faturalanan ve tahsil edilen",
+      "invoiced": "Faturalanan",
+      "collected": "Tahsil edilen"
+    },
+    "split": {
+      "title": "{group} bazında",
+      "subtitle": "En büyükler önce. Para {currency} cinsinden gösterilir.",
+      "subtitlePerCurrency": "En büyükler önce. Para, para birimine göre listelenir.",
+      "group": {
+        "source": "lead kaynağı",
+        "origin": "fatura kaynağı",
+        "product": "ürün",
+        "owner": "sahip",
+        "team": "ekip"
+      },
+      "empty": {
+        "source": "Lead kaynağı yok",
+        "origin": "Bilinmeyen kaynak",
+        "product": "Kalem yok",
+        "owner": "Atanmamış",
+        "team": "Ekip yok"
+      },
+      "origin": {
+        "manual": "Elle oluşturuldu",
+        "quote": "Tekliften",
+        "order": "Siparişten",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Kendi mağaza",
+        "api": "API",
+        "ai": "Yapay zeka asistanı"
+      },
+      "col": {
+        "invoices": "Faturalar",
+        "invoiced": "Faturalanan",
+        "paid": "Ödenen",
+        "outstanding": "Borç",
+        "overdue": "Vadesi geçen",
+        "collected": "Tahsil edilen",
+        "refunded": "İade edilen"
+      },
+      "total": "Toplam",
+      "truncated": "Yalnızca en büyük {count} satır listelenir. CSV özeti aynı satırları içerir.",
+      "teamNote": "İki ekipte olan kişi her ikisinde de sayılır, bu yüzden ekip satırlarının toplamı genel toplamı aşabilir.",
+      "productNote": "Faturanın tamamına uygulanan indirimler, kargo ve yuvarlama, satırlara değerleriyle orantılı olarak dağıtılır."
+    },
+    "aging": {
+      "title": "Alacak yaşlandırması",
+      "open": "Ödemeler",
+      "empty": "Borç yok.",
+      "bucket": {
+        "current": "Vadesi gelmemiş",
+        "d1_30": "1-30 gün gecikmiş",
+        "d31_60": "31-60 gün gecikmiş",
+        "d61_90": "61-90 gün gecikmiş",
+        "d90_plus": "90+ gün gecikmiş"
+      }
+    },
+    "export": {
+      "title": "Bu raporu indir",
+      "note": "Yukarıdaki filtrelerle arka planda hazırlanır, {days} gün saklanır ve e-postayla duyurulur. Raporun size gösterdiğinden fazlasını almazsınız.",
+      "csvPayments": "CSV: ödemeler",
+      "csvPaymentsHint": "Dönemdeki her ödeme ve iade için bir satır",
+      "csvSummary": "CSV: bu tablo",
+      "csvSummaryHint": "Yukarıdaki dağılım, toplamlarla birlikte",
+      "pdf": "PDF",
+      "pdfHint": "Rapor belge olarak",
+      "preparing": "Hazırlanıyor...",
+      "requested": "Dosyanız hazırlanıyor. Hazır olduğunda e-posta alacaksınız ve aşağıdaki listede görünecek.",
+      "recent": "Son dosyalarınız",
+      "none": "Henüz bir dosya hazırlamadınız.",
+      "kind": {
+        "pdf": "PDF raporu",
+        "csv-payments": "Ödemelerin CSV'si",
+        "csv-summary": "CSV özeti"
+      },
+      "status": {
+        "queued": "Bekliyor",
+        "running": "Hazırlanıyor",
+        "ready": "Hazır",
+        "failed": "Başarısız",
+        "expired": "Süresi doldu"
+      },
+      "range": "{from} – {to}",
+      "rows": "{count, plural, one {# satır} other {# satır}}",
+      "expires": "{date} tarihine kadar saklanır",
+      "failed": "Bu dosya hazırlanamadı. Yeniden isteyin.",
+      "download": "İndir"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Buna erişiminiz yok.",
+      "notFound": "Böyle bir dosya yok.",
+      "exportInProgress": "Sizin için zaten bir dosya hazırlanıyor. E-postasını bekleyin, sonra yenisini isteyin.",
+      "exportNotReady": "Bu dosya hazır değil veya süresi doldu. Yeniden isteyin.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "Bu filtreler geçerli değil.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    }
+  }
+}

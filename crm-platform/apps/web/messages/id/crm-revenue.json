@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Laporan",
+    "title": "Laporan pendapatan",
+    "subtitle": "Total yang Anda tagihkan, berapa yang sudah dibayar dan berapa yang masih terutang, serta uang yang masuk, untuk periode yang Anda pilih.",
+    "back": "Dasbor CRM",
+    "period": "{from} sampai {to} ({zone})",
+    "comparedWith": "Dibandingkan dengan {mode}: {from} sampai {to}",
+    "loading": "Memuat laporan pendapatan",
+    "retry": "Coba lagi",
+    "stale": "Angka tidak dapat diperbarui. Ini adalah data terakhir yang dimuat.",
+    "empty": {
+      "title": "Tidak ada data pada periode ini",
+      "message": "Tidak ada faktur yang diterbitkan dan tidak ada pembayaran yang masuk pada rentang tanggal ini. Pilih periode lain, atau buka daftar faktur.",
+      "invoices": "Buka faktur"
+    },
+    "mode": {
+      "previous": "periode sebelumnya",
+      "lastYear": "periode yang sama tahun lalu"
+    },
+    "filters": {
+      "label": "Filter laporan",
+      "period": "Periode",
+      "range": {
+        "month": "Bulan ini",
+        "lastMonth": "Bulan lalu",
+        "quarter": "Kuartal ini",
+        "year": "Tahun ini",
+        "30d": "30 hari",
+        "90d": "90 hari",
+        "custom": "Kustom"
+      },
+      "from": "Dari",
+      "to": "Sampai",
+      "compare": "Bandingkan dengan",
+      "compareOption": {
+        "previous": "Periode sebelumnya",
+        "lastYear": "Periode yang sama tahun lalu",
+        "none": "Tanpa perbandingan"
+      },
+      "groupBy": "Pisahkan menurut",
+      "groupOption": {
+        "source": "Sumber prospek",
+        "origin": "Asal faktur",
+        "product": "Produk",
+        "owner": "Pemilik",
+        "team": "Tim"
+      },
+      "owner": "Pemilik",
+      "everyone": "Semua orang",
+      "team": "Tim",
+      "allTeams": "Semua tim",
+      "currency": "Mata uang",
+      "allCurrencies": "Semua, ditampilkan dalam {currency}",
+      "reset": "Atur ulang filter"
+    },
+    "note": {
+      "converted": "Beberapa mata uang digunakan. Angka dikonversi ke {currency}; pilih satu mata uang untuk melihat jumlah pastinya.",
+      "missingRate": "Tidak ada kurs untuk {currencies}: jumlah tersebut tidak disertakan dalam angka yang dikonversi.",
+      "invoiced": "Ditagihkan, dibayar, dan terutang menghitung faktur yang diterbitkan pada periode ini (draf, faktur yang dibatalkan, dan proforma tidak disertakan). Terkumpul dan dikembalikan menghitung uang yang masuk selama periode ini, faktur mana pun yang dilunasinya."
+    },
+    "kpi": {
+      "title": "Angka utama",
+      "vsPrevious": "Dibandingkan dengan periode pembanding",
+      "collected": "Terkumpul",
+      "collectedHint": "Pembayaran yang diterima pada periode ini",
+      "collectedAll": "Terkumpul, sepanjang waktu",
+      "collectedAllHint": "Semua pembayaran yang dapat Anda lihat",
+      "outstanding": "Belum dibayar",
+      "outstandingHint": "{count, plural, one {# faktur terbuka} other {# faktur terbuka}} per hari ini",
+      "tax": "Pajak terkumpul",
+      "taxHint": "Dari faktur yang lunas pada periode ini",
+      "invoiced": "Ditagihkan",
+      "invoicedHint": "{count, plural, one {# faktur diterbitkan} other {# faktur diterbitkan}}",
+      "paid": "Dibayar sejauh ini",
+      "paidHint": "Dari faktur yang diterbitkan pada periode ini",
+      "overdue": "Jatuh tempo",
+      "overdueHint": "Melewati tanggal jatuh tempo",
+      "refunded": "Dikembalikan",
+      "refundedHint": "Dana dikembalikan pada periode ini",
+      "paidInFull": "Lunas",
+      "paidInFullHint": "Faktur yang menjadi lunas",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Ditagihkan, dibayar, dan terutang",
+      "subtitle": "Faktur yang diterbitkan pada periode ini dan statusnya saat ini",
+      "paid": "Dibayar",
+      "owed": "Terutang, belum jatuh tempo",
+      "overdue": "Jatuh tempo",
+      "credited": "Nota kredit",
+      "invoiced": "ditagihkan",
+      "empty": "Tidak ada yang ditagihkan pada periode ini.",
+      "several": "Faktur ini menggunakan beberapa mata uang. Pilih mata uang di atas untuk melihatnya sebagai satu bilah."
+    },
+    "trend": {
+      "title": "Ditagihkan dan terkumpul",
+      "subtitle": {
+        "day": "Per hari",
+        "week": "Per minggu",
+        "month": "Per bulan"
+      },
+      "chartLabel": "Ditagihkan dan terkumpul selama periode",
+      "invoiced": "Ditagihkan",
+      "collected": "Terkumpul"
+    },
+    "split": {
+      "title": "Menurut {group}",
+      "subtitle": "Yang terbesar di atas. Uang ditampilkan dalam {currency}.",
+      "subtitlePerCurrency": "Yang terbesar di atas. Uang dicantumkan per mata uang.",
+      "group": {
+        "source": "sumber prospek",
+        "origin": "asal faktur",
+        "product": "produk",
+        "owner": "pemilik",
+        "team": "tim"
+      },
+      "empty": {
+        "source": "Tanpa sumber prospek",
+        "origin": "Asal tidak diketahui",
+        "product": "Tanpa item baris",
+        "owner": "Belum ditugaskan",
+        "team": "Tanpa tim"
+      },
+      "origin": {
+        "manual": "Dibuat manual",
+        "quote": "Dari penawaran",
+        "order": "Dari pesanan",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Toko sendiri",
+        "api": "API",
+        "ai": "Asisten AI"
+      },
+      "col": {
+        "invoices": "Faktur",
+        "invoiced": "Ditagihkan",
+        "paid": "Dibayar",
+        "outstanding": "Terutang",
+        "overdue": "Jatuh tempo",
+        "collected": "Terkumpul",
+        "refunded": "Dikembalikan"
+      },
+      "total": "Total",
+      "truncated": "Hanya {count} baris terbesar yang ditampilkan. Ringkasan CSV memuat baris yang sama.",
+      "teamNote": "Orang yang berada di dua tim dihitung di keduanya, sehingga jumlah baris tim bisa melebihi total.",
+      "productNote": "Diskon pada seluruh faktur, ongkos kirim, dan pembulatan dibagi ke setiap baris sebanding dengan nilainya."
+    },
+    "aging": {
+      "title": "Umur piutang",
+      "open": "Pembayaran",
+      "empty": "Tidak ada yang terutang.",
+      "bucket": {
+        "current": "Belum jatuh tempo",
+        "d1_30": "Lewat jatuh tempo 1-30 hari",
+        "d31_60": "Lewat jatuh tempo 31-60 hari",
+        "d61_90": "Lewat jatuh tempo 61-90 hari",
+        "d90_plus": "Lewat jatuh tempo 90+ hari"
+      }
+    },
+    "export": {
+      "title": "Unduh laporan ini",
+      "note": "Disiapkan di latar belakang dengan filter di atas, disimpan selama {days} hari, dan diberitahukan lewat email. Anda hanya mendapatkan data yang ditampilkan laporan.",
+      "csvPayments": "CSV: pembayaran",
+      "csvPaymentsHint": "Satu baris per pembayaran dan pengembalian dana pada periode ini",
+      "csvSummary": "CSV: tabel ini",
+      "csvSummaryHint": "Pemisahan di atas, beserta totalnya",
+      "pdf": "PDF",
+      "pdfHint": "Laporan sebagai dokumen",
+      "preparing": "Menyiapkan...",
+      "requested": "File Anda sedang disiapkan. Anda akan menerima email saat file siap, dan file akan muncul di daftar di bawah.",
+      "recent": "File terbaru Anda",
+      "none": "Anda belum menyiapkan file apa pun.",
+      "kind": {
+        "pdf": "Laporan PDF",
+        "csv-payments": "CSV pembayaran",
+        "csv-summary": "Ringkasan CSV"
+      },
+      "status": {
+        "queued": "Menunggu",
+        "running": "Menyiapkan",
+        "ready": "Siap",
+        "failed": "Gagal",
+        "expired": "Kedaluwarsa"
+      },
+      "range": "{from} sampai {to}",
+      "rows": "{count, plural, one {# baris} other {# baris}}",
+      "expires": "Disimpan hingga {date}",
+      "failed": "File ini tidak dapat disiapkan. Minta lagi.",
+      "download": "Unduh"
+    },
+    "errors": {
+      "network": "Server tidak dapat dijangkau. Periksa koneksi Anda dan coba lagi.",
+      "forbidden": "Anda tidak memiliki akses ke ini.",
+      "notFound": "File tersebut tidak ada.",
+      "exportInProgress": "Sebuah file sedang disiapkan untuk Anda. Tunggu emailnya, lalu minta file lain.",
+      "exportNotReady": "File ini belum siap atau sudah kedaluwarsa. Minta lagi.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "validation": "Filter tersebut tidak valid.",
+      "unexpected": "Terjadi kesalahan. Coba lagi."
+    }
+  }
+}

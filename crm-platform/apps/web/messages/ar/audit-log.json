@@ -92,7 +92,8 @@
       "api_keys": "مفاتيح API",
       "audit-log": "سجل التدقيق",
       "audit-log-exports": "تصديرات سجل التدقيق",
-      "contact_consent_exports": "تصديرات إثبات الموافقة"
+      "contact_consent_exports": "تصديرات إثبات الموافقة",
+      "revenue-report-exports": "ملفات تقرير الإيرادات"
     },
     "table": {
       "caption": "سجلات التدقيق، الأحدث أولًا. تُعرض الأوقات بحسب منطقتك الزمنية ({zone}).",

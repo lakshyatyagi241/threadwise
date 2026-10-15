@@ -92,7 +92,8 @@
       "api_keys": "מפתחות API",
       "audit-log": "יומן ביקורת",
       "audit-log-exports": "ייצואי יומן ביקורת",
-      "contact_consent_exports": "ייצואי הוכחת הסכמה"
+      "contact_consent_exports": "ייצואי הוכחת הסכמה",
+      "revenue-report-exports": "קובצי דוח הכנסות"
     },
     "table": {
       "caption": "רשומות ביקורת, מהחדשה לישנה. הזמנים מוצגים באזור הזמן שלך ({zone}).",

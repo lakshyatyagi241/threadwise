@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Báo cáo",
+    "title": "Báo cáo doanh thu",
+    "subtitle": "Xem số tiền đã xuất hóa đơn, phần đã thanh toán, phần còn nợ và số tiền thực thu trong khoảng thời gian bạn chọn.",
+    "back": "Bảng điều khiển CRM",
+    "period": "{from} đến {to} ({zone})",
+    "comparedWith": "So với {mode}: {from} đến {to}",
+    "loading": "Đang tải báo cáo doanh thu",
+    "retry": "Thử lại",
+    "stale": "Không thể làm mới số liệu. Đây là số liệu đã tải lần gần nhất.",
+    "empty": {
+      "title": "Không có dữ liệu trong kỳ này",
+      "message": "Không có hóa đơn nào được phát hành và không có khoản thanh toán nào trong khoảng ngày này. Hãy chọn kỳ khác hoặc mở danh sách hóa đơn.",
+      "invoices": "Mở hóa đơn"
+    },
+    "mode": {
+      "previous": "kỳ trước",
+      "lastYear": "cùng kỳ năm trước"
+    },
+    "filters": {
+      "label": "Bộ lọc báo cáo",
+      "period": "Kỳ báo cáo",
+      "range": {
+        "month": "Tháng này",
+        "lastMonth": "Tháng trước",
+        "quarter": "Quý này",
+        "year": "Năm nay",
+        "30d": "30 ngày",
+        "90d": "90 ngày",
+        "custom": "Tùy chọn"
+      },
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "compare": "So sánh với",
+      "compareOption": {
+        "previous": "Kỳ trước",
+        "lastYear": "Cùng kỳ năm trước",
+        "none": "Không so sánh"
+      },
+      "groupBy": "Phân tách theo",
+      "groupOption": {
+        "source": "Nguồn khách hàng tiềm năng",
+        "origin": "Nguồn hóa đơn",
+        "product": "Sản phẩm",
+        "owner": "Người phụ trách",
+        "team": "Nhóm"
+      },
+      "owner": "Người phụ trách",
+      "everyone": "Tất cả mọi người",
+      "team": "Nhóm",
+      "allTeams": "Tất cả nhóm",
+      "currency": "Tiền tệ",
+      "allCurrencies": "Tất cả, hiển thị bằng {currency}",
+      "reset": "Đặt lại bộ lọc"
+    },
+    "note": {
+      "converted": "Đang sử dụng nhiều loại tiền tệ. Số liệu được quy đổi sang {currency}; hãy chọn một loại tiền tệ để xem số tiền chính xác.",
+      "missingRate": "Chưa có tỷ giá cho {currencies}: các khoản này không được tính vào số liệu quy đổi.",
+      "invoiced": "Đã xuất hóa đơn, đã thanh toán và còn nợ tính trên các hóa đơn phát hành trong kỳ (không gồm hóa đơn nháp, hóa đơn đã hủy và hóa đơn chiếu lệ). Đã thu và đã hoàn tiền tính trên số tiền thực nhận trong kỳ, bất kể khoản đó tất toán hóa đơn nào."
+    },
+    "kpi": {
+      "title": "Chỉ số chính",
+      "vsPrevious": "So với kỳ đối chiếu",
+      "collected": "Đã thu",
+      "collectedHint": "Các khoản thanh toán nhận được trong kỳ",
+      "collectedAll": "Đã thu, toàn thời gian",
+      "collectedAllHint": "Mọi khoản thanh toán bạn có thể xem",
+      "outstanding": "Còn phải thu",
+      "outstandingHint": "{count, plural, other {# hóa đơn chưa thanh toán}} tính đến hôm nay",
+      "tax": "Thuế đã thu",
+      "taxHint": "Trên các hóa đơn được thanh toán đủ trong kỳ",
+      "invoiced": "Đã xuất hóa đơn",
+      "invoicedHint": "{count, plural, other {# hóa đơn đã phát hành}}",
+      "paid": "Đã thanh toán",
+      "paidHint": "Trên các hóa đơn phát hành trong kỳ",
+      "overdue": "Quá hạn",
+      "overdueHint": "Đã qua hạn thanh toán",
+      "refunded": "Đã hoàn tiền",
+      "refundedHint": "Số tiền đã hoàn trả trong kỳ",
+      "paidInFull": "Đã thanh toán đủ",
+      "paidInFullHint": "Các hóa đơn đã được thanh toán đủ",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Đã xuất hóa đơn, đã thanh toán và còn nợ",
+      "subtitle": "Các hóa đơn phát hành trong kỳ và tình trạng hiện tại",
+      "paid": "Đã thanh toán",
+      "owed": "Còn nợ, chưa đến hạn",
+      "overdue": "Quá hạn",
+      "credited": "Giấy báo có",
+      "invoiced": "đã xuất hóa đơn",
+      "empty": "Không có hóa đơn nào được xuất trong kỳ này.",
+      "several": "Các hóa đơn này dùng nhiều loại tiền tệ. Hãy chọn một loại tiền tệ ở trên để xem dưới dạng một thanh."
+    },
+    "trend": {
+      "title": "Đã xuất hóa đơn và đã thu",
+      "subtitle": {
+        "day": "Theo ngày",
+        "week": "Theo tuần",
+        "month": "Theo tháng"
+      },
+      "chartLabel": "Đã xuất hóa đơn và đã thu trong kỳ",
+      "invoiced": "Đã xuất hóa đơn",
+      "collected": "Đã thu"
+    },
+    "split": {
+      "title": "Theo {group}",
+      "subtitle": "Sắp xếp từ lớn nhất. Số tiền hiển thị bằng {currency}.",
+      "subtitlePerCurrency": "Sắp xếp từ lớn nhất. Số tiền được liệt kê theo từng loại tiền tệ.",
+      "group": {
+        "source": "nguồn khách hàng tiềm năng",
+        "origin": "nguồn hóa đơn",
+        "product": "sản phẩm",
+        "owner": "người phụ trách",
+        "team": "nhóm"
+      },
+      "empty": {
+        "source": "Không có nguồn khách hàng tiềm năng",
+        "origin": "Nguồn không xác định",
+        "product": "Không có dòng hàng",
+        "owner": "Chưa phân công",
+        "team": "Không có nhóm"
+      },
+      "origin": {
+        "manual": "Tạo thủ công",
+        "quote": "Từ báo giá",
+        "order": "Từ đơn hàng",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Cửa hàng riêng",
+        "api": "API",
+        "ai": "Trợ lý AI"
+      },
+      "col": {
+        "invoices": "Hóa đơn",
+        "invoiced": "Đã xuất hóa đơn",
+        "paid": "Đã thanh toán",
+        "outstanding": "Còn nợ",
+        "overdue": "Quá hạn",
+        "collected": "Đã thu",
+        "refunded": "Đã hoàn tiền"
+      },
+      "total": "Tổng cộng",
+      "truncated": "Chỉ liệt kê {count} dòng lớn nhất. Bản tóm tắt CSV có cùng các dòng này.",
+      "teamNote": "Một người thuộc hai nhóm sẽ được tính ở cả hai nhóm, nên tổng các dòng nhóm có thể lớn hơn tổng chung.",
+      "productNote": "Chiết khấu trên toàn hóa đơn, phí vận chuyển và chênh lệch làm tròn được phân bổ cho các dòng hàng theo tỷ lệ giá trị."
+    },
+    "aging": {
+      "title": "Phân tích tuổi nợ phải thu",
+      "open": "Thanh toán",
+      "empty": "Không có khoản nào còn nợ.",
+      "bucket": {
+        "current": "Chưa đến hạn",
+        "d1_30": "Quá hạn 1-30 ngày",
+        "d31_60": "Quá hạn 31-60 ngày",
+        "d61_90": "Quá hạn 61-90 ngày",
+        "d90_plus": "Quá hạn trên 90 ngày"
+      }
+    },
+    "export": {
+      "title": "Tải báo cáo này",
+      "note": "Được chuẩn bị ở chế độ nền theo các bộ lọc ở trên, lưu giữ trong {days} ngày và thông báo qua email. Bạn chỉ nhận được những gì báo cáo hiển thị cho bạn.",
+      "csvPayments": "CSV: thanh toán",
+      "csvPaymentsHint": "Mỗi dòng là một khoản thanh toán hoặc hoàn tiền trong kỳ",
+      "csvSummary": "CSV: bảng này",
+      "csvSummaryHint": "Phần phân tách ở trên, kèm tổng cộng",
+      "pdf": "PDF",
+      "pdfHint": "Báo cáo dưới dạng tài liệu",
+      "preparing": "Đang chuẩn bị...",
+      "requested": "Tệp của bạn đang được chuẩn bị. Bạn sẽ nhận được email khi tệp sẵn sàng và tệp sẽ xuất hiện trong danh sách bên dưới.",
+      "recent": "Các tệp gần đây của bạn",
+      "none": "Bạn chưa chuẩn bị tệp nào.",
+      "kind": {
+        "pdf": "Báo cáo PDF",
+        "csv-payments": "CSV thanh toán",
+        "csv-summary": "CSV tóm tắt"
+      },
+      "status": {
+        "queued": "Đang chờ",
+        "running": "Đang chuẩn bị",
+        "ready": "Sẵn sàng",
+        "failed": "Thất bại",
+        "expired": "Đã hết hạn"
+      },
+      "range": "{from} đến {to}",
+      "rows": "{count, plural, other {# dòng}}",
+      "expires": "Lưu giữ đến {date}",
+      "failed": "Không thể chuẩn bị tệp này. Hãy yêu cầu lại.",
+      "download": "Tải xuống"
+    },
+    "errors": {
+      "network": "Không thể kết nối đến máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền truy cập nội dung này.",
+      "notFound": "Tệp đó không tồn tại.",
+      "exportInProgress": "Một tệp đang được chuẩn bị cho bạn. Hãy chờ email của tệp đó rồi mới yêu cầu tệp khác.",
+      "exportNotReady": "Tệp này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy chờ một lát rồi thử lại.",
+      "validation": "Các bộ lọc này không hợp lệ.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+    }
+  }
+}
