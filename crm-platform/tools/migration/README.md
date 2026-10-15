@@ -314,7 +314,7 @@ falls back to `normalized_phone`), and any secret or credential value.
 - Subscription statuses become the words the app uses (`subscribed` / `unsubscribed`; Yes/No and opt-in/out map to them); any other label
   becomes its slug. **Unverified.**
 - A contact whose lifecycle stage cannot be resolved gets the workspace default stage and the raw value is quarantined.
-- Waboo property definitions for built-in properties (`first_name` ...) also become `fields` rows, marked `is_system` when Waboo says so.
+- Waboo property definitions for built-in properties (`first_name` ...) also become `fields` rows, marked `is_system` when Waboo says so. Exception: Waboo's own web-analytics properties (`referrer`, `referrer_name`, `referrer_keyword`, `referrer_url`, `utm_medium`, `utm_campaign`, `utm_source`, `device_type`, `device_model`, `operating_system`, `operating_system_name`, `browser_version`, `browser_name`, `ip_continent`, `ip_country_region`, `ip_state_region`, `ip_city`, `channel`, `bot_name`, `module_type`, `module_name`, `platform`) are NOT `is_system`: WaDesk has no built-in place for them and a system field is hidden on the contact page, so they stay ordinary read-only fields (`source` stays system: it is the native `contacts.source` column). Their values stay in `contacts.data`.
   Check in the UI that built-in properties are not shown twice. **Unverified.**
 - `contacts.channel` is left empty: Waboo `channel` ("WhatsApp", "API") is the capture channel, not the app's `channel` + `channel_uid`
   identity pair. It stays in `contacts.data.channel`.
