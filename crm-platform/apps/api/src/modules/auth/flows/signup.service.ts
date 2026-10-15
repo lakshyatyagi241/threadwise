@@ -10,6 +10,10 @@ import {
   type SignupVerifyOtpRequest,
   type SignupStartRequest,
   type SignupStartResponse,
+  type SignupVerifyEmailCodeRequest,
+  type SignupVerifyEmailCodeResponse,
+  type SignupResendEmailCodeRequest,
+  type SignupResendEmailCodeResponse,
   type Authenticated,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -108,8 +112,7 @@ const STAGE_TTL_SECONDS = 7 * 24 * 60 * 60;
 const EMAIL_STAGE_TTL_SECONDS = 30 * 60;
 const EMAIL_CODE_TTL_SECONDS = 5 * 60;
 const EMAIL_CODE_LENGTH = 6;
-/** Consumed by the verify-code method (Task 6), not by `start()`; prefixed until then. */
-const _EMAIL_CODE_MAX_ATTEMPTS = 5;
+const EMAIL_CODE_MAX_ATTEMPTS = 5;
 const EMAIL_CODE_RESEND_COOLDOWN_SECONDS = 60;
 const SIGNUPS_PER_IP_PER_HOUR = 10;
 const OTP_SENDS_PER_NUMBER_PER_HOUR = 5;
@@ -253,6 +256,78 @@ export class SignupService {
       expiresInSeconds: EMAIL_CODE_TTL_SECONDS,
       resendCooldownSeconds: EMAIL_CODE_RESEND_COOLDOWN_SECONDS,
       codeLength: EMAIL_CODE_LENGTH,
+    };
+  }
+
+  /**
+   * Step 2 of the three-step sign-up: check the emailed code against the staged `EmailStage`.
+   * A wrong guess is counted and persisted back with `KEEPTTL` so the stage's own remaining TTL
+   * (set once by `start()`/`resendEmailCode()`) is never reset by a failed attempt.
+   */
+  async verifyEmailCode(req: SignupVerifyEmailCodeRequest): Promise<SignupVerifyEmailCodeResponse> {
+    const key = AuthKeys.signupEmailStage(req.token);
+    const raw = await this.redis.get(key);
+    if (!raw) throw this.signupExpired();
+    const stage = JSON.parse(raw) as EmailStage;
+
+    if (stage.attempts >= EMAIL_CODE_MAX_ATTEMPTS) {
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_TOO_MANY_ATTEMPTS,
+        'Too many attempts. Please request a new code.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+    if (Date.now() > stage.codeExpiresAt) {
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_EXPIRED,
+        'That code has expired. Please request a new one.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const ok = await verify(stage.codeHash, req.code).catch(() => false);
+    if (!ok) {
+      stage.attempts += 1;
+      await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_INVALID,
+        'Incorrect code. Please try again.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    stage.verified = true;
+    await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+    return { token: req.token };
+  }
+
+  /**
+   * Issues a fresh code for the same staged sign-up: a genuinely new hash and expiry, a reset
+   * attempt budget, and a new mail sent (the old code's mail is useless once this runs).
+   */
+  async resendEmailCode(req: SignupResendEmailCodeRequest): Promise<SignupResendEmailCodeResponse> {
+    const key = AuthKeys.signupEmailStage(req.token);
+    const raw = await this.redis.get(key);
+    if (!raw) throw this.signupExpired();
+    const stage = JSON.parse(raw) as EmailStage;
+
+    const sinceLast = (Date.now() - stage.lastSentAt) / 1000;
+    if (sinceLast < EMAIL_CODE_RESEND_COOLDOWN_SECONDS) {
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_RESEND_COOLDOWN,
+        'Please wait a moment before requesting another code.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+    const code = randomNumericCode(EMAIL_CODE_LENGTH);
+    stage.codeHash = await hash(code);
+    stage.codeExpiresAt = Date.now() + EMAIL_CODE_TTL_SECONDS * 1000;
+    stage.attempts = 0;
+    stage.lastSentAt = Date.now();
+    await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+    await this.mail.sendSignupCode(stage.email, stage.fullName, code, EMAIL_CODE_TTL_SECONDS / 60);
+
+    return {
+      expiresInSeconds: EMAIL_CODE_TTL_SECONDS,
+      resendCooldownSeconds: EMAIL_CODE_RESEND_COOLDOWN_SECONDS,
     };
   }
 

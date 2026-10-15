@@ -13,6 +13,16 @@ const api = () => request(h.app.getHttpServer());
 let n = 0;
 const uniqueEmail = (tag = 'u') => `${tag}${Date.now()}${n++}@example.test`;
 
+async function startAndReadCode(fullName: string, email: string) {
+  const res = await api().post('/v2/auth/signup/start').send({ fullName, email });
+  expect(res.status, JSON.stringify(res.body)).toBe(201);
+  const msg = h.mail.find((m) => m.to === email);
+  if (!msg) throw new Error(`no mail sent to ${email}`);
+  const match = msg.text.match(/\b(\d{6})\b/);
+  if (!match) throw new Error(`no 6-digit code found in mail to ${email}: ${msg.text}`);
+  return { token: res.body.token as string, code: match[1]! };
+}
+
 beforeAll(async () => {
   h = await startHarness();
 }, 240_000);
@@ -70,5 +80,32 @@ describe('POST /v2/auth/signup/start', () => {
         acceptTerms: true,
       });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
+  });
+});
+
+describe('POST /v2/auth/signup/verify-email-code', () => {
+  it('marks the stage verified on a correct code', async () => {
+    const { token, code } = await startAndReadCode('Ada', uniqueEmail('v'));
+    const res = await api().post('/v2/auth/signup/verify-email-code').send({ token, code });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.token).toBe(token);
+  });
+
+  it('rejects a wrong code', async () => {
+    const { token } = await startAndReadCode('Ada', uniqueEmail('w'));
+    const res = await api().post('/v2/auth/signup/verify-email-code').send({ token, code: '000000' });
+    expect(res.status, JSON.stringify(res.body)).toBe(400);
+    expect(res.body.code).toBe('AUTH_OTP_INVALID');
+  });
+});
+
+describe('POST /v2/auth/signup/resend-email-code', () => {
+  it('rejects a second resend inside the cooldown', async () => {
+    const { token } = await startAndReadCode('Ada', uniqueEmail('r'));
+    const first = await api().post('/v2/auth/signup/resend-email-code').send({ token });
+    expect(first.status, JSON.stringify(first.body)).toBe(201);
+    const second = await api().post('/v2/auth/signup/resend-email-code').send({ token });
+    expect(second.status, JSON.stringify(second.body)).toBe(429);
+    expect(second.body.code).toBe('AUTH_OTP_RESEND_COOLDOWN');
   });
 });
