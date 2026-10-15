@@ -5,7 +5,20 @@ summary: Bring a personal number's recent chats and contacts into the shared inb
 area: inbox
 order: 42
 documents: [nav:devices]
-keywords: [import chats, history, existing chats, contacts, first link, personal number, unofficial, imported, read, media, cancel]
+keywords:
+  [
+    import chats,
+    history,
+    existing chats,
+    contacts,
+    first link,
+    personal number,
+    unofficial,
+    imported,
+    read,
+    media,
+    cancel,
+  ]
 ---
 
 ## What it is for

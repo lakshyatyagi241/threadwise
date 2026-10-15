@@ -386,6 +386,7 @@ function WizardBody({
             sources={sources.data}
             count={count.data}
             credit={credit}
+            templates={templates.data?.data}
             properties={properties}
             issues={issues}
             showIssues={Boolean(attempted[3])}
@@ -400,6 +401,7 @@ function WizardBody({
             draftId={w.id}
             zone={zone}
             canTest={canTest}
+            templates={templates}
             issues={visible}
             currency={credit.data?.currency ?? null}
             ensureSaved={w.flush}

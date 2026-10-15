@@ -344,6 +344,33 @@ day. A claim whose worker died with no attempt logged goes back; one with an att
 never resent). No extra cost: the wallet charges a message when its delivery is reported, once per provider message id, and a failed message is not
 charged, so a retry is charged only if it is delivered. The 6 h / 12 h backoff of TW-CAMP-012 is not applied to a wizard campaign.
 
+### Follow-up steps (an addition beyond Reference)
+
+`followUps` on the draft, 0 to 3 steps in order, for Cloud API numbers (`waba:` sender) only. Reference's campaign screens have no such step; it is
+built from the meeting's "Add a follow-up": after the campaign message goes out, a recipient's reaction (or silence) triggers another message or starts a flow.
+
+```json
+{ "trigger": "not_read", "waitMinutes": 120, "action": { "kind": "template", "templateId": "<uuid>" } }
+{ "trigger": "replied",  "waitMinutes": 1440, "action": { "kind": "flow", "flowId": "<uuid>" } }
+```
+
+- `trigger`: `replied`, `read` (watch for `waitMinutes`: the step fires the moment the event happens and lapses, ending the chain, when the time runs out first)
+  or `not_replied`, `not_read` (wait `waitMinutes`, then fire if the event did not happen; an event before then ends the chain at once).
+  `waitMinutes` is 1 to 10080 (seven days). Step 1 is measured from the campaign message, step 2 from step 1's message, and so on.
+- `action`: an approved template sent from the campaign's number (the template's own variable defaults fill it), or a published flow started for the recipient.
+- Launch: 422 `CAMP_WIZARD_INCOMPLETE` with `follow_up_template_required`, `follow_up_flow_required` (path `followUps.<i>.action`) or `follow_up_cloud_api_only` (path `followUps`).
+  A template must be usable from the number (same check as the campaign's template), a flow must exist in the workspace. A recurring series carries the steps to every run.
+- `reply` is a message from the contact in the inbox after the base time; the first one since the campaign went out also becomes the recipient's `response` (its statistics
+  and the `campaign.contact_replied` event). `read` is the provider's read report of the message before the step.
+- Worker (`WizardFollowUpService`, every 10 seconds): `arm` puts a recipient whose message went out into its chain (`wp_campaign_contacts.follow_up_state`, `follow_up_next`,
+  `follow_up_base_at`, `follow_up_check_at`); `run` claims the recipients due to be looked at (one worker takes each; a crashed one only delays it) and decides: wait, fire, skip or lapse.
+  A step is logged in `camp_follow_up_attempts` with a unique `(recipient, step)` row BEFORE the provider is called, so it happens at most once. A recipient who opted out, whose
+  consent is gone, whose message failed, or whose wallet cannot pay never gets a later step; the log row says why. The campaign's Smart Delivery gap spaces the sends.
+- Cost: a template follow-up is charged like any campaign message, by the wallet once its delivery is reported (`camp_follow_up_receipt_lookup` names the attempt of the message id,
+  `CampaignReceiptsService` records the step's own delivery and read, and emits `message.delivery_reported`). A resend of a recipient restarts its chain.
+- Limits: a follow-up template is a second marketing message to someone who has not engaged, and Meta may refuse it with its frequency cap (`131049`). The step is given its claim back and tried again every 24 hours, for up to seven days after its base time, then logged `failed` with the provider's text and the chain ends. A step whose worker died after claiming it is logged `failed` (`interrupted before the provider answered`), never sent again. A paused campaign's recipients are not looked at until it resumes (a watching step may then have lapsed).
+- `GET /broadcast-wizard/broadcasts/:id`: `runList[].followUps` has, per step, `waiting`, `sent`, `delivered`, `read`, `flowsStarted`, `skipped`, `lapsed`, `failed`.
+
 ### Test send
 
 `{ "draftId": "...", "recipients": "+919876543210,+14155550123" }`: the draft's template and variables resolved for the first messageable contact of

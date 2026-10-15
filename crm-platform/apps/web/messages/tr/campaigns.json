@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "Otomatik bitiş tarihi geçti.",
         "auto_end_before_send": "Otomatik bitiş tarihi gönderim zamanından sonra olmalıdır.",
         "auto_end_recurring": "Yinelenen bir kampanya kendi kuralıyla sona erer: otomatik bitiş tarihini temizleyin.",
-        "pacing_range": "Smart Delivery'yi kontrol edin: en uzun gecikme en kısadan kısa ya da iki gönderim saatinden yalnızca biri ayarlı."
+        "pacing_range": "Smart Delivery'yi kontrol edin: en uzun gecikme en kısadan kısa ya da iki gönderim saatinden yalnızca biri ayarlı.",
+        "follow_up_template_required": "Her takip mesajının göndereceği şablonu seçin.",
+        "follow_up_flow_required": "Her takip mesajının başlatacağı akışı seçin.",
+        "follow_up_cloud_api_only": "Takip mesajları yalnızca WhatsApp Cloud API numarasıyla çalışır. 1. adımda bir numara seçin veya takip mesajlarını kaldırın."
       },
       "template": {
         "previewOnline": "çevrimiçi",
@@ -1382,7 +1385,8 @@
         "sumCsv": "CSV dosyası {name}: {count, plural, one {# geçerli numara} other {# geçerli numara}}",
         "estimatedCostFull": "Tahmini maliyet (tam)",
         "chargedPlan": "Şimdi cüzdanınızdan tahsil edilen: {amount} (planınız bu mesajların {covered} tanesini karşılıyor)",
-        "chargedWallet": "Cüzdanınızdan tahsil edilen: {amount}"
+        "chargedWallet": "Cüzdanınızdan tahsil edilen: {amount}",
+        "sumFollowUps": "Takip mesajları"
       },
       "test": {
         "title": "Test WhatsApp mesajı gönder",
@@ -1587,7 +1591,25 @@
         "exportFailed": "Dışa aktarma indirilemedi.",
         "deleteTitle": "Bu yayın silinsin mi?",
         "deleteOne": "Bu yayını ve alıcılarını siler. Geri alınamaz.",
-        "deleteSeries": "Bu yinelenen yayını ve planlanan çalıştırmalarını siler. Hiçbir şey gönderilmediği için geçmiş kaybolmaz. Geri alınamaz."
+        "deleteSeries": "Bu yinelenen yayını ve planlanan çalıştırmalarını siler. Hiçbir şey gönderilmediği için geçmiş kaybolmaz. Geri alınamaz.",
+        "followUps": {
+          "title": "Takip mesajları",
+          "step": "Takip {step}",
+          "count": {
+            "waiting": "{count} bekliyor",
+            "sent": "{count} gönderildi",
+            "delivered": "{count} iletildi",
+            "read": "{count} okundu",
+            "flowsStarted": "{count} akış başlatıldı",
+            "skipped": "{count} atlandı",
+            "lapsed": "{count} süresi doldu",
+            "failed": "{count} başarısız"
+          },
+          "hint": {
+            "skipped": "Koşul kontrol edildiğinde sağlanmamıştı, bu yüzden dizi orada sona erdi.",
+            "lapsed": "Kişi yanıtlamadan veya okumadan izleme süresi doldu, bu yüzden dizi orada sona erdi."
+          }
+        }
       },
       "panel": {
         "title": "Toplu gönderim oluştur ile oluşturuldu",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) sıfırdan başlayan klasik oluşturucudan gönderilir. Bu kampanya taslak olarak kaydedilir ve Kampanyalar listenizde kalır, böylece sonra geri dönebilirsiniz.",
         "confirm": "Klasik oluşturucuyu aç",
         "cancel": "Burada kal"
+      },
+      "followUps": {
+        "title": "Takip mesajları",
+        "intro": "Kişinin kampanya mesajından sonra ne yaptığına göre başka bir mesaj gönderin veya bir akış başlatın. Arka arkaya en fazla 3 adım.",
+        "cloudOnly": "Takip mesajları, Meta'nın okundu ve yanıt raporlarına dayandığı için WhatsApp Cloud API numarası gerektirir. 1. adımda bir numara seçin.",
+        "add": "Takip ekle",
+        "count": "{used} / {max} takip",
+        "limitReached": "Sınıra ulaşıldı: {max} takip.",
+        "stepTitle": "Takip {step}",
+        "measuredFromCampaign": "Kampanya mesajından itibaren sayılır.",
+        "measuredFromStep": "Takip {step} mesajından itibaren sayılır.",
+        "remove": "Takip {step} öğesini kaldır",
+        "removeShort": "Kaldır",
+        "triggerLabel": "Kişi şunu yaptığında",
+        "trigger": {
+          "replied": "Yanıtlar",
+          "read": "Mesajı okur",
+          "not_replied": "Yanıtlamamıştır",
+          "not_read": "Mesajı okumamıştır"
+        },
+        "triggerHelp": {
+          "replied": "Belirlediğiniz süre içinde yanıt verirse yanıtladığı anda tetiklenir. Aksi halde dizi sona erer.",
+          "read": "Belirlediğiniz süre içinde okursa okuduğu anda tetiklenir. Aksi halde dizi sona erer.",
+          "not_replied": "Belirlediğiniz süre kadar bekler, ardından yanıt vermemişse tetiklenir. Yanıt verdiyse dizi sona erer.",
+          "not_read": "Belirlediğiniz süre kadar bekler, ardından okumamışsa tetiklenir. Okuduysa dizi sona erer."
+        },
+        "watchLabel": "En fazla şu süre izle",
+        "waitLabel": "Bekle",
+        "unitLabel": "Zaman birimi",
+        "duration": {
+          "minutes": "{count, plural, one {# dakika} other {# dakika}}",
+          "hours": "{count, plural, one {# saat} other {# saat}}",
+          "days": "{count, plural, one {# gün} other {# gün}}"
+        },
+        "actionLabel": "Ardından",
+        "action": {
+          "template": "Şablon gönder",
+          "flow": "Akış başlat"
+        },
+        "templateLabel": "Gönderilecek şablon",
+        "flowLabel": "Başlatılacak akış",
+        "pickTemplate": "Şablon seçin",
+        "pickFlow": "Akış seçin",
+        "loading": "Yükleniyor...",
+        "unavailable": "Artık kullanılamıyor",
+        "noTemplates": "Henüz onaylı şablon yok.",
+        "createTemplate": "Şablon oluştur",
+        "noFlows": "Henüz akış yok.",
+        "createFlow": "Akış oluştur",
+        "flowsError": "Akışlar yüklenemedi. Daha sonra tekrar deneyin.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "{wait} içinde yanıtlarsa",
+          "read": "{wait} içinde okursa",
+          "not_replied": "{wait} sonra yanıtlamamışsa",
+          "not_read": "{wait} sonra okumamışsa"
+        },
+        "does": {
+          "template": "{name} gönder",
+          "flow": "{name} akışını başlat"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {dakika} other {dakika}}",
+          "hours": "{count, plural, one {saat} other {saat}}",
+          "days": "{count, plural, one {gün} other {gün}}"
+        }
       }
     },
     "history": {

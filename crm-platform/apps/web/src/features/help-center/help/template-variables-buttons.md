@@ -5,7 +5,18 @@ summary: How the header, body, footer, variables and buttons of a template work,
 area: campaigns
 order: 54
 documents: [nav:templates]
-keywords: [variables, placeholders, header, footer, buttons, quick reply, call to action, sample value, components]
+keywords:
+  [
+    variables,
+    placeholders,
+    header,
+    footer,
+    buttons,
+    quick reply,
+    call to action,
+    sample value,
+    components,
+  ]
 ---
 
 ## What it is for

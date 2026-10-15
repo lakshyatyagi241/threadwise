@@ -8,7 +8,18 @@ documents: [nav:waba-groups]
 gates:
   planFeature: waba_groups
   permission: waba.groups.read
-keywords: [groups, whatsapp group, meta groups, invite link, join request, approve, members, official business account, group chat]
+keywords:
+  [
+    groups,
+    whatsapp group,
+    meta groups,
+    invite link,
+    join request,
+    approve,
+    members,
+    official business account,
+    group chat,
+  ]
 ---
 
 ## What it is for

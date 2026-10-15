@@ -153,12 +153,18 @@
         "requiredHint": "Nonaktifkan jika persetujuan bersifat opsional.",
         "marketing": "Persetujuan pemasaran",
         "marketingHint": "Mencentang kotak ini mencatat persetujuan pemasaran pada kontak. Kotak yang tidak dicentang tidak pernah berlangganan siapa pun.",
-        "whatsappHint": "Apakah Anda akan mengirim pesan ke kontak ini lewat WhatsApp? Gunakan kalimat yang menyatakannya dan cara berhenti. Kotak yang dicentang disimpan sebagai bukti, dengan teks persis ini dan versinya.",
-        "whatsappInsert": "Gunakan kalimat persetujuan WhatsApp",
-        "whatsappWording": "Saya setuju menerima pembaruan dan penawaran di WhatsApp. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan.",
-        "coversSms": "Teks mencakup SMS",
-        "coversSmsHint": "Aktifkan hanya jika teks di atas menyatakan orang dapat dihubungi lewat SMS. Saat nomor telepon dikumpulkan, SMS dicatat bersama WhatsApp dan email.",
-        "serviceHint": "Baris ini bukan pemasaran. Kotak yang dicentang disimpan sebagai bukti bahwa orang tersebut setuju dihubungi terkait permintaannya (hanya pesan layanan), dengan teks persis ini dan versinya. Tidak pernah membuat siapa pun berlangganan pemasaran."
+        "serviceHint": "Baris ini bukan pemasaran. Kotak yang dicentang disimpan sebagai bukti bahwa orang tersebut setuju dihubungi terkait permintaannya (hanya pesan layanan), dengan teks persis ini dan versinya. Tidak pernah membuat siapa pun berlangganan pemasaran.",
+        "statement": "Saya setuju menerima pembaruan dan penawaran di {channels}. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "email"
+        },
+        "channelsLabel": "Saluran yang dicakup persetujuan ini",
+        "channelsHint": "Pengunjung hanya berlangganan pada saluran yang dicentang di sini, dan teks persetujuan menyebutkannya. Saluran dipakai hanya jika formulir mengumpulkan nomor telepon atau email yang sesuai.",
+        "channelsUse": "Perbarui teks dengan saluran ini",
+        "channelNeedsPhone": "Formulir ini tidak punya kolom telepon, jadi tidak ada yang berlangganan di saluran ini lewat formulir ini.",
+        "channelNeedsEmail": "Formulir ini tidak punya kolom email, jadi tidak ada yang berlangganan di saluran ini lewat formulir ini."
       },
       "crm": {
         "title": "Di CRM",

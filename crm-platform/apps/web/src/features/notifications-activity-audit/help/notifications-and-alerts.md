@@ -5,7 +5,27 @@ summary: The bell in the header, the pop-up that appears wherever you are, the s
 area: getting-started
 order: 90
 documents: []
-keywords: [notifications, bell, alerts, toast, sound, ping, desktop, browser notifications, push, closed tab, tab title, unread, mention, assigned, new chat, new message, live updates paused, test notification]
+keywords:
+  [
+    notifications,
+    bell,
+    alerts,
+    toast,
+    sound,
+    ping,
+    desktop,
+    browser notifications,
+    push,
+    closed tab,
+    tab title,
+    unread,
+    mention,
+    assigned,
+    new chat,
+    new message,
+    live updates paused,
+    test notification,
+  ]
 ---
 
 ## What it is for

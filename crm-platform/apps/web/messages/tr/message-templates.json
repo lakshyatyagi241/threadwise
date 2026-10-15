@@ -60,7 +60,9 @@
       "rejected": "Reddedildi: {reason}",
       "view": "Görüntüle",
       "edit": "Düzenle",
-      "delete": "Sil"
+      "delete": "Sil",
+      "curl": "cURL: bu şablonu API ile gönder",
+      "curlNamed": "{name} göndermek için cURL"
     },
     "library": {
       "title": "Şablon kütüphanesi",
@@ -354,6 +356,15 @@
         "title": "Meta yükü",
         "hint": "İnceleme için Meta'ya gönderilen, oluşturulduğu haliyle tam içerik.",
         "empty": "Henüz bir şey oluşturulmadı."
+      },
+      "curl": {
+        "title": "API ile gönder (cURL)",
+        "intro": "Onaylı bu şablonu tek bir numaraya gönderin. Örnek değerleri kendi değerlerinizle değiştirin.",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "copyFailed": "Kopyalanamadı. Metni seçip elle kopyalayın.",
+        "keyHint": "YOUR_API_KEY yerine API anahtarınızı yazın.",
+        "keyLink": "API anahtarı al"
       }
     }
   }

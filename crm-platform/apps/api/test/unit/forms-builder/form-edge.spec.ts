@@ -4,6 +4,7 @@ import {
   formDefinitionSchema,
   formRateLimitsSchema,
   type FormDefinitionInput,
+  formCollects,
 } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
 import { buildCsv, csvCell } from '../../../src/common/csv';
@@ -173,12 +174,17 @@ describe('consent (spec 9.5, D10)', () => {
       missing: false,
       marketingOptIn: false,
       serviceAgreed: false,
-      coversSms: false,
+      channels: [],
     });
   });
 
   it('BL-171: a ticked line that is not marketing is a service agreement, never a marketing opt-in', () => {
-    const d = def({ enabled: true, required: false, marketing: false, text: 'Contact me about my request' });
+    const d = def({
+      enabled: true,
+      required: false,
+      marketing: false,
+      text: 'Contact me about my request',
+    });
     expect(resolveConsent(d, { given: true, textVersion: 1 }, now)).toMatchObject({
       marketingOptIn: false,
       serviceAgreed: true,
@@ -197,11 +203,33 @@ describe('consent (spec 9.5, D10)', () => {
     });
   });
 
-  it('BL-171: the form declares whether its wording covers SMS (never guessed from the text)', () => {
-    const covers = def({ enabled: true, marketing: true, coversSms: true, text: 'WhatsApp, email or SMS' });
-    expect(resolveConsent(covers, { given: true, textVersion: 1 }, now).coversSms).toBe(true);
-    const plain = def({ enabled: true, marketing: true, text: 'Send me an SMS' });
-    expect(resolveConsent(plain, { given: true, textVersion: 1 }, now).coversSms).toBe(false);
+  it('the form picks the channels its wording covers; a form saved before the choice keeps WhatsApp and email (SMS when declared)', () => {
+    const only = def({
+      enabled: true,
+      marketing: true,
+      channels: ['whatsapp'],
+      text: 'On WhatsApp',
+    });
+    expect(resolveConsent(only, { given: true, textVersion: 1 }, now).channels).toEqual([
+      'whatsapp',
+    ]);
+    const all = def({ enabled: true, marketing: true, channels: ['email', 'sms', 'whatsapp'] });
+    expect(resolveConsent(all, { given: true, textVersion: 1 }, now).channels).toEqual([
+      'whatsapp',
+      'sms',
+      'email',
+    ]);
+    const legacy = def({ enabled: true, marketing: true, text: 'Send me an SMS' });
+    expect(resolveConsent(legacy, { given: true, textVersion: 1 }, now).channels).toEqual([
+      'whatsapp',
+      'email',
+    ]);
+    const legacySms = def({ enabled: true, marketing: true, coversSms: true });
+    expect(resolveConsent(legacySms, { given: true, textVersion: 1 }, now).channels).toEqual([
+      'whatsapp',
+      'sms',
+      'email',
+    ]);
   });
 
   it('a required box that is not ticked is missing; a ticked marketing box subscribes; an unticked one never does', () => {
@@ -650,5 +678,30 @@ describe('company website match (spec 9.3)', () => {
       ]),
     );
     expect(s.every((x) => x === x.toLowerCase())).toBe(true);
+  });
+});
+
+describe('formCollects', () => {
+  const field = (property: string) => ({
+    id: `f_${property}`,
+    type: 'field' as const,
+    kind: 'short_text' as const,
+    label: property,
+    bind: { object: 'contact' as const, property },
+  });
+  it('says which contact details the form asks for', () => {
+    const steps = (props: string[]) => [{ id: 's1', blocks: props.map(field) }];
+    expect(formCollects({ steps: steps(['email']) } as never)).toEqual({
+      phone: false,
+      email: true,
+    });
+    expect(formCollects({ steps: steps(['phone', 'email']) } as never)).toEqual({
+      phone: true,
+      email: true,
+    });
+    expect(formCollects({ steps: steps(['name']) } as never)).toEqual({
+      phone: false,
+      email: false,
+    });
   });
 });

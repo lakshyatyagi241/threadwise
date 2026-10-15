@@ -334,7 +334,16 @@
       "termsUrlHint": "https:// ile başlamalıdır",
       "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
       "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan",
-      "useWorkspaceText": "Çalışma alanı varsayılan metnini kullan"
+      "useWorkspaceText": "Çalışma alanı varsayılan metnini kullan",
+      "statement": "{channels} üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-posta"
+      },
+      "channelsLabel": "Bu onayın kapsadığı kanallar",
+      "channelsHint": "Kişi yalnızca burada işaretlenen kanallara abone edilir ve onay metni bunları belirtir. Bir kanal, yalnızca kişi ilgili telefon numarasını veya e-postayı verirse kullanılır.",
+      "channelsUse": "Metni bu kanallarla güncelle"
     }
   }
 }

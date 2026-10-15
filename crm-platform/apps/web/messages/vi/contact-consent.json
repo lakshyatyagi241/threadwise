@@ -334,7 +334,16 @@
       "termsUrlHint": "Phải bắt đầu bằng https://",
       "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
       "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc",
-      "useWorkspaceText": "Dùng nội dung mặc định của không gian làm việc"
+      "useWorkspaceText": "Dùng nội dung mặc định của không gian làm việc",
+      "statement": "Tôi đồng ý nhận cập nhật và ưu đãi qua {channels}. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "email"
+      },
+      "channelsLabel": "Kênh mà sự đồng ý này bao gồm",
+      "channelsHint": "Người đó chỉ được đăng ký trên các kênh được chọn tại đây và nội dung đồng ý sẽ nêu tên các kênh đó. Một kênh chỉ được dùng khi người đó cung cấp số điện thoại hoặc email tương ứng.",
+      "channelsUse": "Cập nhật nội dung theo các kênh này"
     }
   }
 }

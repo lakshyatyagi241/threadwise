@@ -62,9 +62,12 @@ function render(links: WaChatLink[], opts: { locale?: 'en' | 'ar' } = {}) {
 describe('the WhatsApp Links list screen', () => {
   for (const locale of ['en', 'ar'] as const) {
     it(`draws the KPI tiles and the links table in ${locale}`, () => {
-      const html = render([link(), link({ id: '4444', name: 'Winter promo', status: 'paused', isLive: false })], {
-        locale,
-      });
+      const html = render(
+        [link(), link({ id: '4444', name: 'Winter promo', status: 'paused', isLive: false })],
+        {
+          locale,
+        },
+      );
       expect(html).toContain('Summer sale');
       expect(html).toContain('Winter promo');
       expect(html).toContain('/l/summer-sale');

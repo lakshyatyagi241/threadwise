@@ -334,7 +334,16 @@
       "termsUrlHint": "Moet beginnen met https://",
       "useWorkspacePrivacy": "Privacylink van mijn werkruimte gebruiken",
       "useWorkspaceTerms": "Voorwaardenlink van mijn werkruimte gebruiken",
-      "useWorkspaceText": "Standaardtekst van mijn werkruimte gebruiken"
+      "useWorkspaceText": "Standaardtekst van mijn werkruimte gebruiken",
+      "statement": "Ik ga akkoord met het ontvangen van updates en aanbiedingen via {channels}. Ik kan me altijd afmelden door STOP te antwoorden.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Kanalen die deze toestemming dekt",
+      "channelsHint": "De persoon wordt alleen aangemeld op de hier aangevinkte kanalen, en de toestemmingstekst noemt ze. Een kanaal wordt alleen gebruikt als de persoon het bijbehorende telefoonnummer of e-mailadres opgeeft.",
+      "channelsUse": "Tekst bijwerken met deze kanalen"
     }
   }
 }

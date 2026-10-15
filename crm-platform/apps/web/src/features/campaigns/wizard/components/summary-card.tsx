@@ -17,6 +17,7 @@ import { useSummaryContext } from '@/features/segments/components/use-summary';
 import { audienceNames, editorFromRules, selectionKind } from '../lib/audience';
 import { formatMinor } from '../lib/money';
 import type { WizardView } from '../lib/state';
+import { useWaitText } from './follow-ups-card';
 import { Chip, WizardCard } from './parts';
 
 function Row({
@@ -61,6 +62,8 @@ export function SummaryCard({
   sources,
   count,
   credit,
+  templates,
+  flows,
   onEdit,
 }: {
   draft: WizardDraft;
@@ -69,6 +72,9 @@ export function SummaryCard({
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: WizardCreditCheck | undefined;
+  /** The approved templates and flows by id, to name what each follow-up sends or starts. */
+  templates?: readonly Pick<WizardTemplate, 'id' | 'name'>[] | undefined;
+  flows?: readonly { id: string; name: string }[] | undefined;
   onEdit: (step: WizardView) => void;
 }) {
   const t = useTranslations('campaigns.wizard.review');
@@ -76,6 +82,8 @@ export function SummaryCard({
   const tc = useTranslations('campaigns.wizard.categories');
   const tf = useTranslations('campaigns.wizard.fields');
   const locale = useLocale();
+  const tf2 = useTranslations('campaigns.wizard.followUps');
+  const waitText = useWaitText();
   const { catalog } = useSegmentCatalog();
   const ctx = useSummaryContext(catalog);
   const names = audienceNames(draft.audience, sources);
@@ -191,6 +199,27 @@ export function SummaryCard({
             </ul>
           )}
         </Row>
+        {draft.followUps.length > 0 && (
+          <Row label={t('sumFollowUps')} step={4} onEdit={onEdit}>
+            <ol className="space-y-0.5">
+              {draft.followUps.map((f, i) => {
+                const id = f.action.kind === 'template' ? f.action.templateId : f.action.flowId;
+                const known = f.action.kind === 'template' ? templates : flows;
+                // The list is still loading: a dash, not "(deleted)".
+                const what =
+                  known?.find((x) => x.id === id)?.name ?? (known ? t('missingSource') : '-');
+                return (
+                  <li key={i}>
+                    {tf2('line', {
+                      when: tf2(`when.${f.trigger}`, { wait: waitText(f.waitMinutes) }),
+                      what: tf2(`does.${f.action.kind}`, { name: what }),
+                    })}
+                  </li>
+                );
+              })}
+            </ol>
+          </Row>
+        )}
       </dl>
     </WizardCard>
   );

@@ -60,7 +60,9 @@
       "rejected": "Abgelehnt: {reason}",
       "view": "Ansehen",
       "edit": "Bearbeiten",
-      "delete": "Löschen"
+      "delete": "Löschen",
+      "curl": "cURL: diese Vorlage per API senden",
+      "curlNamed": "cURL zum Senden von {name}"
     },
     "library": {
       "title": "Vorlagenbibliothek",
@@ -354,6 +356,15 @@
         "title": "Meta-Daten",
         "hint": "Was zur Prüfung an Meta gesendet wird, genau so wie es aufgebaut ist.",
         "empty": "Noch nichts erstellt."
+      },
+      "curl": {
+        "title": "Mit der API senden (cURL)",
+        "intro": "Sende diese genehmigte Vorlage an eine Nummer. Ersetze die Beispielwerte durch deine eigenen.",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "copyFailed": "Kopieren nicht möglich. Markiere den Text und kopiere ihn von Hand.",
+        "keyHint": "Ersetze YOUR_API_KEY durch deinen API-Schlüssel.",
+        "keyLink": "API-Schlüssel erhalten"
       }
     }
   }

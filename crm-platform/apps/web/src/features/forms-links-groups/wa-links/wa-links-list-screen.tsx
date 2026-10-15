@@ -41,7 +41,9 @@ export function WaLinksListScreen() {
     const items = links.data?.items ?? [];
     const q = search.trim().toLowerCase();
     if (!q) return items;
-    return items.filter((l) => l.name.toLowerCase().includes(q) || l.slug.toLowerCase().includes(q));
+    return items.filter(
+      (l) => l.name.toLowerCase().includes(q) || l.slug.toLowerCase().includes(q),
+    );
   }, [links.data, search]);
 
   const copy = async (link: WaChatLink) => {
@@ -82,7 +84,10 @@ export function WaLinksListScreen() {
           <StatTile label={t('stats.all')} value={stats.all} />
           <StatTile label={t('stats.live')} value={stats.live} />
           <StatTile label={t('stats.totalClicks')} value={stats.totalClicks} />
-          <StatTile label={t('stats.avgClicks')} value={Math.round(stats.avgClicksPerLink * 10) / 10} />
+          <StatTile
+            label={t('stats.avgClicks')}
+            value={Math.round(stats.avgClicksPerLink * 10) / 10}
+          />
         </div>
       )}
 
@@ -94,7 +99,9 @@ export function WaLinksListScreen() {
               type="button"
               onClick={() => setStatus(tab.value)}
               className={`rounded px-3 py-1.5 text-sm font-medium ${
-                status === tab.value ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted'
+                status === tab.value
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-muted'
               }`}
             >
               {t(tab.labelKey)}
@@ -143,7 +150,9 @@ export function WaLinksListScreen() {
                       <div className="mt-0.5 text-xs text-muted-foreground">{link.shortPath}</div>
                       <span
                         className={`mt-1 inline-block rounded px-1.5 py-0.5 text-xs ${
-                          link.isLive ? 'bg-success/10 text-success' : 'bg-muted text-muted-foreground'
+                          link.isLive
+                            ? 'bg-success/10 text-success'
+                            : 'bg-muted text-muted-foreground'
                         }`}
                       >
                         {link.isLive ? t('status.live') : t('status.paused')}
@@ -188,7 +197,8 @@ export function WaLinksListScreen() {
                             disabled={duplicate.isPending}
                             onClick={() =>
                               duplicate.mutate(link.id, {
-                                onError: (err) => setNotice({ tone: 'danger', text: errorText(err).text }),
+                                onError: (err) =>
+                                  setNotice({ tone: 'danger', text: errorText(err).text }),
                               })
                             }
                           >

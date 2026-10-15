@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "La data di fine automatica è già passata.",
         "auto_end_before_send": "La data di fine automatica deve essere successiva all’orario di invio.",
         "auto_end_recurring": "Una campagna ricorrente termina secondo la propria regola: cancella la data di fine automatica.",
-        "pacing_range": "Controlla Smart Delivery: il ritardo massimo è inferiore a quello minimo, oppure è impostato solo uno dei due orari di invio."
+        "pacing_range": "Controlla Smart Delivery: il ritardo massimo è inferiore a quello minimo, oppure è impostato solo uno dei due orari di invio.",
+        "follow_up_template_required": "Scegli il modello inviato da ogni follow-up.",
+        "follow_up_flow_required": "Scegli il flusso avviato da ogni follow-up.",
+        "follow_up_cloud_api_only": "I follow-up funzionano solo con un numero WhatsApp Cloud API. Scegline uno nel passaggio 1 o rimuovi i follow-up."
       },
       "template": {
         "previewOnline": "online",
@@ -1382,7 +1385,8 @@
         "sumCsv": "File CSV {name}: {count, plural, one {# numero valido} other {# numeri validi}}",
         "estimatedCostFull": "Costo stimato (totale)",
         "chargedPlan": "Addebitato ora sul tuo wallet: {amount} (il tuo piano copre {covered} di questi messaggi)",
-        "chargedWallet": "Addebitato sul tuo wallet: {amount}"
+        "chargedWallet": "Addebitato sul tuo wallet: {amount}",
+        "sumFollowUps": "Follow-up"
       },
       "test": {
         "title": "Invia un messaggio WhatsApp di prova",
@@ -1587,7 +1591,25 @@
         "exportFailed": "Non è stato possibile scaricare l’esportazione.",
         "deleteTitle": "Eliminare questa trasmissione?",
         "deleteOne": "Elimina questa trasmissione e i suoi destinatari. L’operazione non è reversibile.",
-        "deleteSeries": "Elimina questa trasmissione ricorrente e le esecuzioni pianificate. Non è stato inviato nulla, quindi nessuna cronologia va persa. L’operazione non è reversibile."
+        "deleteSeries": "Elimina questa trasmissione ricorrente e le esecuzioni pianificate. Non è stato inviato nulla, quindi nessuna cronologia va persa. L’operazione non è reversibile.",
+        "followUps": {
+          "title": "Follow-up",
+          "step": "Follow-up {step}",
+          "count": {
+            "waiting": "{count} in attesa",
+            "sent": "{count} inviati",
+            "delivered": "{count} consegnati",
+            "read": "{count} letti",
+            "flowsStarted": "{count} flussi avviati",
+            "skipped": "{count} saltati",
+            "lapsed": "{count} scaduti",
+            "failed": "{count} falliti"
+          },
+          "hint": {
+            "skipped": "La condizione non era soddisfatta al momento del controllo, quindi la sequenza si è conclusa lì.",
+            "lapsed": "Il tempo di monitoraggio è scaduto prima che il contatto rispondesse o leggesse, quindi la sequenza si è conclusa lì."
+          }
+        }
       },
       "panel": {
         "title": "Creato con Crea broadcast",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) viene inviato dal builder classico, che riparte da zero. Questa campagna viene salvata come bozza e resta nell’elenco Campagne, così potrai riprenderla.",
         "confirm": "Apri il builder classico",
         "cancel": "Resta qui"
+      },
+      "followUps": {
+        "title": "Follow-up",
+        "intro": "Invia un altro messaggio, o avvia un flusso, in base a ciò che fa il contatto dopo il messaggio della campagna. Fino a 3 passaggi consecutivi.",
+        "cloudOnly": "I follow-up richiedono un numero WhatsApp Cloud API, perché si basano sui report di lettura e risposta di Meta. Scegline uno nel passaggio 1.",
+        "add": "Aggiungi un follow-up",
+        "count": "{used} di {max} follow-up",
+        "limitReached": "Limite raggiunto: {max} follow-up.",
+        "stepTitle": "Follow-up {step}",
+        "measuredFromCampaign": "Conteggio dal messaggio della campagna.",
+        "measuredFromStep": "Conteggio dal messaggio del follow-up {step}.",
+        "remove": "Rimuovi il follow-up {step}",
+        "removeShort": "Rimuovi",
+        "triggerLabel": "Quando il contatto",
+        "trigger": {
+          "replied": "Risponde",
+          "read": "Legge il messaggio",
+          "not_replied": "Non ha risposto",
+          "not_read": "Non ha letto il messaggio"
+        },
+        "triggerHelp": {
+          "replied": "Scatta nel momento in cui risponde, se ciò avviene entro il tempo impostato. In caso contrario la sequenza termina.",
+          "read": "Scatta nel momento in cui legge il messaggio, se ciò avviene entro il tempo impostato. In caso contrario la sequenza termina.",
+          "not_replied": "Attende il tempo impostato, poi scatta se il contatto non ha risposto. Se ha risposto, la sequenza termina.",
+          "not_read": "Attende il tempo impostato, poi scatta se il contatto non ha letto il messaggio. Se lo ha letto, la sequenza termina."
+        },
+        "watchLabel": "Monitora per un massimo di",
+        "waitLabel": "Attendi",
+        "unitLabel": "Unità di tempo",
+        "duration": {
+          "minutes": "{count, plural, one {# minuto} many {# di minuti} other {# minuti}}",
+          "hours": "{count, plural, one {# ora} many {# di ore} other {# ore}}",
+          "days": "{count, plural, one {# giorno} many {# di giorni} other {# giorni}}"
+        },
+        "actionLabel": "Poi",
+        "action": {
+          "template": "Invia un modello",
+          "flow": "Avvia un flusso"
+        },
+        "templateLabel": "Modello da inviare",
+        "flowLabel": "Flusso da avviare",
+        "pickTemplate": "Scegli un modello",
+        "pickFlow": "Scegli un flusso",
+        "loading": "Caricamento...",
+        "unavailable": "Non più disponibile",
+        "noTemplates": "Nessun modello approvato per ora.",
+        "createTemplate": "Crea un modello",
+        "noFlows": "Nessun flusso per ora.",
+        "createFlow": "Crea un flusso",
+        "flowsError": "Impossibile caricare i flussi. Riprova più tardi.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Se risponde entro {wait}",
+          "read": "Se legge il messaggio entro {wait}",
+          "not_replied": "Se non ha risposto dopo {wait}",
+          "not_read": "Se non ha letto dopo {wait}"
+        },
+        "does": {
+          "template": "invia {name}",
+          "flow": "avvia il flusso {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuto} many {di minuti} other {minuti}}",
+          "hours": "{count, plural, one {ora} many {di ore} other {ore}}",
+          "days": "{count, plural, one {giorno} many {di giorni} other {giorni}}"
+        }
       }
     },
     "history": {

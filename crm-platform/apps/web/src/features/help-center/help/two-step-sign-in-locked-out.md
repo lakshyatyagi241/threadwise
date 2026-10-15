@@ -5,7 +5,17 @@ summary: What to do when a code is refused, your phone or recovery codes are los
 area: troubleshooting
 order: 50
 documents: [tile:account-security]
-keywords: [two-factor, 2fa, mfa, authenticator, recovery codes, locked out, lost phone, too many incorrect codes]
+keywords:
+  [
+    two-factor,
+    2fa,
+    mfa,
+    authenticator,
+    recovery codes,
+    locked out,
+    lost phone,
+    too many incorrect codes,
+  ]
 ---
 
 ## What it is for

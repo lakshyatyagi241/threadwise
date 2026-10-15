@@ -156,6 +156,7 @@ export function envelopeOf(
         templateName?: string;
         templateLanguage?: string;
         templateVariables?: Record<string, string>;
+        templateComponents?: Record<string, unknown>[];
       };
       return {
         ...common,
@@ -164,6 +165,7 @@ export function envelopeOf(
           name: meta.templateName ?? '',
           language: meta.templateLanguage ?? 'en',
           variables: meta.templateVariables ?? {},
+          ...(meta.templateComponents?.length ? { components: meta.templateComponents } : {}),
         },
       };
     }
@@ -320,6 +322,7 @@ export function messageFieldsOf(content: OutboundContent): {
           templateName: content.name,
           templateLanguage: content.language,
           templateVariables: content.variables,
+          ...(content.components?.length ? { templateComponents: content.components } : {}),
         },
         templateId: content.templateId ?? null,
       };

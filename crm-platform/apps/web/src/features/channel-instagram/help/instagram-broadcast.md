@@ -5,7 +5,8 @@ summary: Send one reply-only message to existing Instagram conversations, with e
 area: campaigns
 order: 42
 documents: [nav:instagram-broadcast]
-keywords: [instagram, broadcast, reply only, 24 hour window, conversations, template, bulk message, dm]
+keywords:
+  [instagram, broadcast, reply only, 24 hour window, conversations, template, bulk message, dm]
 ---
 
 ## What it is for
