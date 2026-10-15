@@ -70,6 +70,32 @@ export function commandForText(m: OutgoingText): SendCommand {
   return { type: 'text', to: m.to, body: text };
 }
 
+/**
+ * A send an engine refused for a reason that will not change on a retry (an opted-out contact, an address that bounced, a recipient the
+ * channel cannot reach). The campaign dispatcher records the recipient as failed at once instead of spending its retry attempts.
+ */
+export class SenderRefused extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SenderRefused';
+  }
+}
+
+/**
+ * The sender is out of room for now (a mailbox's hourly cap) and says when a slot frees. The campaign dispatcher puts the recipient back,
+ * stops the run and schedules the campaign again after `retryAfterMs`, so a long campaign spreads over the hours the mailbox allows
+ * instead of failing most of its recipients.
+ */
+export class SenderThrottled extends Error {
+  constructor(
+    message: string,
+    readonly retryAfterMs: number,
+  ) {
+    super(message);
+    this.name = 'SenderThrottled';
+  }
+}
+
 /** A sender with its credentials loaded once for the whole run. */
 export interface OpenedSender {
   send(message: OutgoingMessage): Promise<{ providerMessageId: string | null }>;

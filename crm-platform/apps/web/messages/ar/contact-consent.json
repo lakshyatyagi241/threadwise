@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "دردشة الويب",
         "voice": "مكالمة صوتية",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "مشترك",

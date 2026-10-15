@@ -296,7 +296,9 @@
       "media": "{kind} preview",
       "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags.",
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
-      "previewLabel": "Template preview"
+      "previewLabel": "Template preview",
+      "colEmail": "Email",
+      "noEmail": "No email address"
     },
     "overrides": {
       "title": "Fill in this send",
@@ -353,6 +355,16 @@
         "name": "Instagram",
         "hint": "Message people already in your Instagram DMs — no template approval.",
         "cta": "Create Instagram broadcast"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Send a Messenger message to people who messaged your Page in the last 24 hours.",
+        "cta": "Create Facebook broadcast"
+      },
+      "email": {
+        "name": "Email",
+        "hint": "Send a message as an email from a connected mailbox, with an unsubscribe link.",
+        "cta": "Create email campaign"
       }
     }
   }

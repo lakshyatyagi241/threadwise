@@ -6,7 +6,7 @@ import {
   type FormDefinitionInput,
 } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
-import { buildCsv, csvCell } from '../../../src/modules/forms-builder/form-csv';
+import { buildCsv, csvCell } from '../../../src/common/csv';
 import { resolveConsent } from '../../../src/modules/forms-builder/form-consent';
 import { buildEmbedScript, jsString } from '../../../src/modules/forms-builder/embed-script';
 import { hashIp, newPublicKey, randomToken } from '../../../src/modules/forms-builder/form-key';

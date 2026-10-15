@@ -200,7 +200,16 @@
         "customMessage": "Custom message",
         "flowTitle": "Flow",
         "variants": "Variant shown",
-        "variant": "Variant {v}"
+        "variant": "Variant {v}",
+        "typeEmail": "Email",
+        "emailTitle": "Email preview",
+        "emailFrom": "From",
+        "emailSubject": "Subject",
+        "emailNoSender": "Pick a sender",
+        "emailNoSubject": "(no subject)",
+        "emailEmpty": "Write your message body and it appears here.",
+        "emailUnsubscribe": "An unsubscribe link is added at the bottom of every email.",
+        "emailNote": "This is how your campaign will look in each recipient's inbox."
       },
       "previewEmpty": "Your message preview…",
       "previewTemplate": "Template",
@@ -219,7 +228,8 @@
         "throttle": "The longest gap must be at least the shortest.",
         "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
         "media": "Enter a full address starting with http:// or https://.",
-        "sender": "Pick a sender."
+        "sender": "Pick a sender.",
+        "subject": "Shorten the subject to 150 characters or fewer."
       },
       "submit": {
         "save": "Save changes",
@@ -284,7 +294,10 @@
         },
         "csvRows": "{count} numbers in the file",
         "numbersPlaceholder": "One number per line — include the country code, no plus sign",
-        "numbersCount": "{count} numbers"
+        "numbersCount": "{count} numbers",
+        "emailNote": "Emails go to the address on each contact. Contacts without an email address, duplicate addresses and opted-out contacts are skipped.",
+        "emailSkipped": "{count, plural, one {# chosen recipient has no email address and will be skipped.} other {# chosen recipients have no email address and will be skipped.}}",
+        "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead."
       },
       "message": {
         "title": "Message",
@@ -517,7 +530,13 @@
           "baileys": "No Unofficial API templates yet. Create one on the Templates page."
         },
         "templateIntroApproved": "Pick an approved Meta template. Per-contact variable values are filled at send time from contact attributes.",
-        "templateApproved": "Approved template"
+        "templateApproved": "Approved template",
+        "subject": "Subject",
+        "subjectNote": "Subject line max 150",
+        "subjectPlaceholder": "e.g. Your May offer is live",
+        "subjectHint": "Used as the email subject. Leave it blank to fall back to the campaign name.",
+        "emailNote": "This campaign is sent as an email from the mailbox you picked. An unsubscribe link is added at the bottom of every email.",
+        "emailBodyHint": "Plain text. Use '{{name}}' or '{{first_name}}' to personalise. Contacts without an email address are skipped."
       },
       "review": {
         "title": "Review",
@@ -559,8 +578,14 @@
           "throttle": "The longest gap must be at least the shortest.",
           "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
           "media": "Enter a full address starting with http:// or https://.",
-          "sender": "Pick a sender."
-        }
+          "sender": "Pick a sender.",
+          "subject": "Shorten the subject to 150 characters or fewer."
+        },
+        "from": "From",
+        "subject": "Subject",
+        "subjectFallback": "The campaign name",
+        "skippedNoEmail": "Skipped (no email address)",
+        "estimateEmail": "An estimate: a contact in two groups is counted twice. Contacts without an email address in groups, tags and segments are skipped when the campaign runs."
       },
       "ai": {
         "open": "Build with AI",
@@ -1701,6 +1726,23 @@
         "title": "Personal numbers are turned off for this workspace",
         "body": "{count, plural, one {Your personal (QR) number can't} other {Your # personal (QR) numbers can't}} send campaigns while this is off. A platform administrator can turn it on for this workspace, or you can connect an official WhatsApp Business number.",
         "action": "Connect an official number"
+      },
+      "email": {
+        "none": {
+          "title": "No mailbox is connected",
+          "body": "Connect a mailbox on the Email page to choose who this campaign is sent from.",
+          "action": "Connect a mailbox"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# mailbox is disconnected} other {# mailboxes are disconnected}}",
+          "body": "Reconnect it on the Email page to send campaigns from it.",
+          "action": "Open the Email page"
+        },
+        "error": {
+          "title": "{count, plural, one {# mailbox needs reconnecting} other {# mailboxes need reconnecting}}",
+          "body": "Its last sign-in failed. Reconnect it on the Email page and it will appear here.",
+          "action": "Open the Email page"
+        }
       }
     }
   }

@@ -1433,7 +1433,7 @@
             "storefront_builder": "Trình tạo cửa hàng trực tuyến.",
             "invoicing": "Hóa đơn, phiếu ghi có, thanh toán, đơn bán hàng và thuế suất.",
             "forms_and_links": "Biểu mẫu thu thập khách hàng tiềm năng và liên kết chia sẻ.",
-            "extra_channels": "Các kênh Telegram, Facebook và Instagram.",
+            "extra_channels": "Các kênh Telegram, Facebook, Instagram, LINE, Viber và WeChat.",
             "form_builder": "Biểu mẫu web được lưu trữ và nhúng tạo liên hệ trong CRM. Ứng dụng Biểu mẫu trả phí nắm công tắc này.",
             "waba_groups": "Tạo và quản lý nhóm WhatsApp từ số Cloud API: liên kết mời, yêu cầu tham gia, thành viên. Số phải là Official Business Account.",
             "sms": "SMS chỉ gửi qua Twilio hoặc MSG91: kết nối người gửi, gửi chiến dịch và tin nhắn hàng loạt qua SMS.",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Lượt gửi biểu mẫu mỗi tháng",
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI mỗi tháng",
             "sms_monthly": "SMS mỗi tháng",
-            "email_mailboxes": "Hộp thư email"
+            "email_mailboxes": "Hộp thư email",
+            "email_monthly": "Email mỗi tháng"
           },
           "featureGroups": {
             "messaging": "Nhắn tin",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "Trình tạo cửa hàng và website",
             "invoicing": "Lập hóa đơn (hóa đơn, phiếu ghi có, hóa đơn định kỳ)",
             "forms_and_links": "Biểu mẫu, liên kết nhấp để trò chuyện và nhóm",
-            "extra_channels": "Kênh Telegram, Facebook và Instagram",
+            "extra_channels": "Kênh Telegram, Facebook, Instagram, LINE, Viber và WeChat",
             "form_builder": "Biểu mẫu (trình tạo biểu mẫu web)",
             "waba_groups": "Nhóm WhatsApp (Cloud API)",
             "sms": "Kênh SMS",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Lượt gửi biểu mẫu được chấp nhận trong tháng dương lịch, không tính spam. Vượt giới hạn, lượt gửi vẫn được lưu để xem xét, không bị bỏ. 0 = không giới hạn.",
             "ai_form_generations_monthly": "Lượt tạo bằng trình tạo biểu mẫu AI trong tháng dương lịch, gồm cả lần thử sửa lại. 0 = không giới hạn.",
             "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
-            "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn."
+            "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
+            "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn."
           }
         }
       },

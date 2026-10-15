@@ -1401,6 +1401,19 @@
         "selectAll": "Tümünü seç",
         "reorder": "Sütunları yeniden sıralamak için sürükleyin",
         "remove": "{name} öğesini kaldır"
+      },
+      "presets": {
+        "myContacts": "Kişilerim",
+        "newThisWeek": "Bu hafta yeni",
+        "newLastWeek": "Geçen hafta yeni",
+        "recentlyCreated": "Son oluşturulan",
+        "recentlyModified": "Son değiştirilen",
+        "recentlyImported": "Son içe aktarılan",
+        "neverContacted": "Hiç iletişim kurulmayan",
+        "needsFollowUp": "Takip gerekenler",
+        "active": "Aktif",
+        "inactive": "Pasif",
+        "unsubscribed": "Abonelikten çıkanlar"
       }
     },
     "erase": {

@@ -40,6 +40,9 @@ export const KINDS_OF_PROVIDER: Readonly<Record<string, readonly string[]>> = {
   baileys: ['whatsapp_qr'],
   waba: ['whatsapp_cloud'],
   telegram: ['telegram'],
+  line: ['line'],
+  viber: ['viber'],
+  wechat: ['wechat'],
   webchat: ['webchat'],
   simulator: ['simulator'],
 };

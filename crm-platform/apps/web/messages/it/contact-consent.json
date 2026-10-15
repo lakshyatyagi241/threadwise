@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "Chat web",
         "voice": "Chiamata vocale",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "iscritto",

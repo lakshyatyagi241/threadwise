@@ -209,7 +209,16 @@
         "customMessage": "Eigen bericht",
         "flowTitle": "Flow",
         "variants": "Getoonde variant",
-        "variant": "Variant {v}"
+        "variant": "Variant {v}",
+        "typeEmail": "E-mail",
+        "emailTitle": "E-mailvoorbeeld",
+        "emailFrom": "Van",
+        "emailSubject": "Onderwerp",
+        "emailNoSender": "Kies een afzender",
+        "emailNoSubject": "(geen onderwerp)",
+        "emailEmpty": "Schrijf de berichttekst en die verschijnt hier.",
+        "emailUnsubscribe": "Onderaan elke e-mail wordt een afmeldlink toegevoegd.",
+        "emailNote": "Zo ziet je campagne eruit in de inbox van elke ontvanger."
       },
       "previewEmpty": "Voorbeeld van je bericht…",
       "previewTemplate": "Sjabloon",
@@ -228,7 +237,8 @@
         "throttle": "De langste pauze moet minstens zo lang zijn als de kortste.",
         "expiry": "De einddatum moet na de verzenddatum liggen, anders zou de campagne verlopen voordat hij ooit wordt verzonden.",
         "media": "Voer een volledig adres in dat begint met http:// of https://.",
-        "sender": "Kies een afzender."
+        "sender": "Kies een afzender.",
+        "subject": "Kort het onderwerp in tot maximaal 150 tekens."
       },
       "submit": {
         "save": "Wijzigingen opslaan",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} nummers in het bestand",
         "numbersPlaceholder": "Eén nummer per regel — met landcode, zonder plusteken",
-        "numbersCount": "{count} nummers"
+        "numbersCount": "{count} nummers",
+        "emailNote": "E-mails gaan naar het adres van elk contact. Contacten zonder e-mailadres, dubbele adressen en afgemelde contacten worden overgeslagen.",
+        "emailSkipped": "{count, plural, one {# gekozen ontvanger heeft geen e-mailadres en wordt overgeslagen.} other {# gekozen ontvangers hebben geen e-mailadres en worden overgeslagen.}}",
+        "emailNoAddress": "Getypte nummers en CSV-rijen hebben geen e-mailadres en worden daarom overgeslagen. Kies in plaats daarvan contacten, groepen, tags of segmenten."
       },
       "message": {
         "title": "Bericht",
@@ -526,7 +539,13 @@
           "baileys": "Nog geen Unofficial API-sjablonen. Maak er een op de pagina Sjablonen."
         },
         "templateIntroApproved": "Kies een goedgekeurd Meta-sjabloon. Variabelewaarden per contact worden bij het verzenden ingevuld vanuit contactattributen.",
-        "templateApproved": "Goedgekeurd sjabloon"
+        "templateApproved": "Goedgekeurd sjabloon",
+        "subject": "Onderwerp",
+        "subjectNote": "Onderwerp, max. 150",
+        "subjectPlaceholder": "bijv. Je meiaanbieding is live",
+        "subjectHint": "Wordt gebruikt als onderwerp van de e-mail. Laat leeg om de campagnenaam te gebruiken.",
+        "emailNote": "Deze campagne wordt als e-mail verstuurd vanuit de gekozen mailbox. Onderaan elke e-mail wordt een afmeldlink toegevoegd.",
+        "emailBodyHint": "Platte tekst. Gebruik '{{name}}' of '{{first_name}}' om te personaliseren. Contacten zonder e-mailadres worden overgeslagen."
       },
       "review": {
         "title": "Controleren",
@@ -568,8 +587,14 @@
           "throttle": "De langste pauze moet minstens zo lang zijn als de kortste.",
           "expiry": "De einddatum moet na de verzenddatum liggen, anders verloopt de campagne voordat er iets wordt verzonden.",
           "media": "Voer een volledig adres in dat begint met http:// of https://.",
-          "sender": "Kies een afzender."
-        }
+          "sender": "Kies een afzender.",
+          "subject": "Kort het onderwerp in tot maximaal 150 tekens."
+        },
+        "from": "Van",
+        "subject": "Onderwerp",
+        "subjectFallback": "De campagnenaam",
+        "skippedNoEmail": "Overgeslagen (geen e-mailadres)",
+        "estimateEmail": "Dit is een schatting: een contact in twee groepen wordt dubbel geteld. Contacten zonder e-mailadres in groepen, tags en segmenten worden overgeslagen wanneer de campagne draait."
       },
       "ai": {
         "open": "Bouwen met AI",
@@ -1706,6 +1731,23 @@
         "title": "Persoonlijke nummers staan uit voor deze werkruimte",
         "body": "{count, plural, one {Je persoonlijke (QR-)nummer kan} other {Je # persoonlijke (QR-)nummers kunnen}} geen campagnes verzenden zolang dit uitstaat. Een platformbeheerder kan dit voor deze werkruimte inschakelen, of je koppelt een officieel WhatsApp Business-nummer.",
         "action": "Officieel nummer koppelen"
+      },
+      "email": {
+        "none": {
+          "title": "Geen mailbox gekoppeld",
+          "body": "Koppel een mailbox op de pagina E-mail om te kiezen waarvandaan deze campagne wordt verstuurd.",
+          "action": "Mailbox koppelen"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# mailbox is losgekoppeld} other {# mailboxen zijn losgekoppeld}}",
+          "body": "Koppel hem opnieuw op de pagina E-mail om er campagnes mee te versturen.",
+          "action": "Pagina E-mail openen"
+        },
+        "error": {
+          "title": "{count, plural, one {# mailbox moet opnieuw worden gekoppeld} other {# mailboxen moeten opnieuw worden gekoppeld}}",
+          "body": "De laatste aanmelding is mislukt. Koppel hem opnieuw op de pagina E-mail en hij verschijnt hier.",
+          "action": "Pagina E-mail openen"
+        }
       }
     },
     "create": {

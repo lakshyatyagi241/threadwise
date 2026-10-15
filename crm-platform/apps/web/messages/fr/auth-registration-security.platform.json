@@ -1433,7 +1433,7 @@
             "storefront_builder": "Le créateur de boutique en ligne.",
             "invoicing": "Factures, avoirs, paiements, commandes de vente et taux de taxe.",
             "forms_and_links": "Formulaires de capture de leads et liens partageables.",
-            "extra_channels": "Les canaux Telegram, Facebook et Instagram.",
+            "extra_channels": "Les canaux Telegram, Facebook, Instagram, LINE, Viber et WeChat.",
             "form_builder": "Formulaires web hébergés et intégrés qui créent des contacts dans le CRM. L’application payante Formulaires gère cet interrupteur.",
             "waba_groups": "Créer et gérer des groupes WhatsApp depuis un numéro de l’API Cloud : lien d’invitation, demandes d’adhésion, membres. Le numéro doit être un compte d’entreprise officiel.",
             "sms": "SMS en envoi uniquement via Twilio ou MSG91 : connectez des expéditeurs, envoyez des diffusions et campagnes SMS.",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Soumissions de formulaires par mois",
             "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois",
             "sms_monthly": "SMS par mois",
-            "email_mailboxes": "Boîtes e-mail"
+            "email_mailboxes": "Boîtes e-mail",
+            "email_monthly": "E-mails par mois"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "Créateur de boutique et de site web",
             "invoicing": "Facturation (factures, avoirs, factures récurrentes)",
             "forms_and_links": "Formulaires, liens click-to-chat et groupes",
-            "extra_channels": "Canaux Telegram, Facebook et Instagram",
+            "extra_channels": "Canaux Telegram, Facebook, Instagram, LINE, Viber et WeChat",
             "form_builder": "Formulaires (créateur de formulaires web)",
             "waba_groups": "Groupes WhatsApp (API Cloud)",
             "sms": "Canal SMS",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Soumissions de formulaires acceptées dans le mois calendaire, spam exclu. Au-delà du plafond, une soumission est tout de même enregistrée pour examen, jamais perdue. 0 = illimité.",
             "ai_form_generations_monthly": "Générations du créateur de formulaires IA dans le mois calendaire, nouvelle tentative de réparation comprise. 0 = illimité.",
             "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
-            "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité."
+            "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
+            "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité."
           }
         }
       },

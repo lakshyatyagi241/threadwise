@@ -1401,6 +1401,19 @@
         "selectAll": "Pilih Semua",
         "reorder": "Seret untuk mengurutkan ulang kolom",
         "remove": "Hapus {name}"
+      },
+      "presets": {
+        "myContacts": "Kontak saya",
+        "newThisWeek": "Baru minggu ini",
+        "newLastWeek": "Baru minggu lalu",
+        "recentlyCreated": "Baru dibuat",
+        "recentlyModified": "Baru diubah",
+        "recentlyImported": "Baru diimpor",
+        "neverContacted": "Belum pernah dihubungi",
+        "needsFollowUp": "Perlu tindak lanjut",
+        "active": "Aktif",
+        "inactive": "Tidak aktif",
+        "unsubscribed": "Berhenti berlangganan"
       }
     },
     "erase": {

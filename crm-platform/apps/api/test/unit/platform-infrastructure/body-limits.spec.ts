@@ -22,6 +22,11 @@ describe('body limit defaults', () => {
   it('give the WhatsApp callback 4 MiB and other callbacks 1 MiB', () => {
     expect(bodyLimitFor('/v2/public/webhooks/whatsapp', env)?.bytes).toBe(4096 * KIB);
     expect(bodyLimitFor('/v2/shopify/webhook/abc', env)?.bytes).toBe(1024 * KIB);
+    for (const channel of ['line', 'viber', 'wechat']) {
+      expect(bodyLimitFor(`/v2/${channel}/inbound/tok`, env)?.bytes).toBe(
+        bodyLimitFor('/v2/telegram/inbound/tok', env)?.bytes,
+      );
+    }
   });
 
   it("take the lead hook and marketplace caps from the domains' own contracts", () => {

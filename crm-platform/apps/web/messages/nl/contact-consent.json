@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "Webchat",
         "voice": "Spraakoproep",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "aangemeld",

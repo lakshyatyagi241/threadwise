@@ -19,6 +19,7 @@ import { WALLET_GATE, type WalletGate } from '../broadcasts';
 import { CampaignEvents } from './campaign-events';
 import { CampaignJobs } from './campaign-jobs';
 import { csvSafe } from './campaign-rules';
+import { isWalletFree } from './email-campaign-rules';
 import { CampaignsRepository } from './campaigns.repository';
 import { MODULE_KEY } from './campaigns.service';
 
@@ -66,8 +67,8 @@ export class CampaignsActionsService {
     orgId: number,
     c: { provider: string | null; totalRecipients: number; counts: { sent: number } },
   ) {
-    // SMS is never charged to the wallet (TW-SMS-027).
-    if (c.provider === 'sms') return Promise.resolve();
+    // SMS and email are never charged to the wallet (TW-SMS-027).
+    if (isWalletFree(c.provider)) return Promise.resolve();
     return this.wallet.precheck(orgId, Math.max(0, c.totalRecipients - c.counts.sent), {
       source: 'campaign',
     });
@@ -186,7 +187,7 @@ export class CampaignsActionsService {
             : 'Nothing to resend — no matching recipients.',
         );
       }
-      if (c.provider !== 'sms') await this.wallet.precheck(orgId, n, { source: 'campaign' });
+      if (!isWalletFree(c.provider)) await this.wallet.precheck(orgId, n, { source: 'campaign' });
       await this.repo.recount(tx, orgId, c.id);
       // `now` campaigns run at once for the reset rows; the others go back to the schedule.
       const next: CampaignStatus = c.scheduleType === 'now' ? 'running' : 'scheduled';

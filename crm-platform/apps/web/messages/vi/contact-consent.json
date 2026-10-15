@@ -112,7 +112,10 @@
         "instagram": "Instagram",
         "webchat": "Chat web",
         "voice": "Cuộc gọi thoại",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "đã đăng ký",

@@ -209,7 +209,16 @@
         "customMessage": "Message personnalisé",
         "flowTitle": "Flow",
         "variants": "Variante affichée",
-        "variant": "Variante {v}"
+        "variant": "Variante {v}",
+        "typeEmail": "E-mail",
+        "emailTitle": "Aperçu de l'e-mail",
+        "emailFrom": "De",
+        "emailSubject": "Objet",
+        "emailNoSender": "Choisissez un expéditeur",
+        "emailNoSubject": "(sans objet)",
+        "emailEmpty": "Rédigez le corps du message, il apparaîtra ici.",
+        "emailUnsubscribe": "Un lien de désabonnement est ajouté à la fin de chaque e-mail.",
+        "emailNote": "Voici comment votre campagne apparaîtra dans la boîte de réception de chaque destinataire."
       },
       "previewEmpty": "Aperçu de votre message…",
       "previewTemplate": "Modèle",
@@ -228,7 +237,8 @@
         "throttle": "L’écart le plus long doit être au moins égal au plus court.",
         "expiry": "La date de fin doit être postérieure à la date d’envoi, sinon la campagne expirerait avant même d’être envoyée.",
         "media": "Saisissez une adresse complète commençant par http:// ou https://.",
-        "sender": "Choisissez un expéditeur."
+        "sender": "Choisissez un expéditeur.",
+        "subject": "Raccourcissez l'objet à 150 caractères ou moins."
       },
       "submit": {
         "save": "Enregistrer les modifications",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} numéros dans le fichier",
         "numbersPlaceholder": "Un numéro par ligne, avec l'indicatif pays, sans signe plus",
-        "numbersCount": "{count} numéros"
+        "numbersCount": "{count} numéros",
+        "emailNote": "Les e-mails sont envoyés à l'adresse de chaque contact. Les contacts sans adresse e-mail, les adresses en double et les contacts désabonnés sont ignorés.",
+        "emailSkipped": "{count, plural, one {# destinataire choisi n'a pas d'adresse e-mail et sera ignoré.} other {# destinataires choisis n'ont pas d'adresse e-mail et seront ignorés.}}",
+        "emailNoAddress": "Les numéros saisis et les lignes du CSV n'ont pas d'adresse e-mail, ils sont donc ignorés. Choisissez plutôt des contacts, des groupes, des étiquettes ou des segments."
       },
       "message": {
         "title": "Message",
@@ -526,7 +539,13 @@
           "baileys": "Aucun modèle API non officielle pour le moment. Créez-en un sur la page Modèles."
         },
         "templateIntroApproved": "Choisissez un modèle Meta approuvé. Les valeurs des variables par contact sont renseignées au moment de l'envoi à partir des attributs du contact.",
-        "templateApproved": "Modèle approuvé"
+        "templateApproved": "Modèle approuvé",
+        "subject": "Objet",
+        "subjectNote": "Objet, 150 max.",
+        "subjectPlaceholder": "p. ex. Votre offre de mai est en ligne",
+        "subjectHint": "Utilisé comme objet de l'e-mail. Laissez vide pour utiliser le nom de la campagne.",
+        "emailNote": "Cette campagne est envoyée sous forme d'e-mail depuis la boîte mail choisie. Un lien de désabonnement est ajouté à la fin de chaque e-mail.",
+        "emailBodyHint": "Texte brut. Utilisez '{{name}}' ou '{{first_name}}' pour personnaliser. Les contacts sans adresse e-mail sont ignorés."
       },
       "review": {
         "title": "Vérification",
@@ -568,8 +587,14 @@
           "throttle": "L'intervalle maximal doit être au moins égal à l'intervalle minimal.",
           "expiry": "La date de fin doit être postérieure à la date d'envoi, sinon la campagne expirerait avant tout envoi.",
           "media": "Saisissez une adresse complète commençant par http:// ou https://.",
-          "sender": "Choisissez un expéditeur."
-        }
+          "sender": "Choisissez un expéditeur.",
+          "subject": "Raccourcissez l'objet à 150 caractères ou moins."
+        },
+        "from": "De",
+        "subject": "Objet",
+        "subjectFallback": "Le nom de la campagne",
+        "skippedNoEmail": "Ignorés (sans adresse e-mail)",
+        "estimateEmail": "Il s'agit d'une estimation : un contact présent dans deux groupes est compté deux fois. Les contacts sans adresse e-mail dans les groupes, étiquettes et segments sont ignorés au lancement de la campagne."
       },
       "ai": {
         "open": "Créer avec l'IA",
@@ -1706,6 +1731,23 @@
         "title": "Les numéros personnels sont désactivés pour cet espace de travail",
         "body": "{count, plural, one {Votre numéro personnel (QR) ne peut pas} other {Vos # numéros personnels (QR) ne peuvent pas}} envoyer de campagnes tant que cette option est désactivée. Un administrateur de la plateforme peut l'activer pour cet espace de travail, ou vous pouvez connecter un numéro WhatsApp Business officiel.",
         "action": "Connecter un numéro officiel"
+      },
+      "email": {
+        "none": {
+          "title": "Aucune boîte mail connectée",
+          "body": "Connectez une boîte mail depuis la page E-mail pour choisir l'expéditeur de cette campagne.",
+          "action": "Connecter une boîte mail"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# boîte mail est déconnectée} other {# boîtes mail sont déconnectées}}",
+          "body": "Reconnectez-la depuis la page E-mail pour envoyer des campagnes avec elle.",
+          "action": "Ouvrir la page E-mail"
+        },
+        "error": {
+          "title": "{count, plural, one {# boîte mail doit être reconnectée} other {# boîtes mail doivent être reconnectées}}",
+          "body": "Sa dernière connexion a échoué. Reconnectez-la depuis la page E-mail et elle apparaîtra ici.",
+          "action": "Ouvrir la page E-mail"
+        }
       }
     },
     "create": {

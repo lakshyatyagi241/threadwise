@@ -209,7 +209,16 @@
         "customMessage": "Mensaje personalizado",
         "flowTitle": "Flujo",
         "variants": "Variante mostrada",
-        "variant": "Variante {v}"
+        "variant": "Variante {v}",
+        "typeEmail": "Correo electrónico",
+        "emailTitle": "Vista previa del correo",
+        "emailFrom": "De",
+        "emailSubject": "Asunto",
+        "emailNoSender": "Elige un remitente",
+        "emailNoSubject": "(sin asunto)",
+        "emailEmpty": "Escribe el cuerpo del mensaje y aparecerá aquí.",
+        "emailUnsubscribe": "Se añade un enlace para darse de baja al final de cada correo.",
+        "emailNote": "Así verá cada destinatario tu campaña en su bandeja de entrada."
       },
       "previewEmpty": "Vista previa de tu mensaje…",
       "previewTemplate": "Plantilla",
@@ -228,7 +237,8 @@
         "throttle": "El intervalo más largo debe ser al menos igual al más corto.",
         "expiry": "La fecha de fin debe ser posterior a la de envío; de lo contrario, la campaña caducaría antes de enviarse.",
         "media": "Introduce una dirección completa que empiece por http:// o https://.",
-        "sender": "Elige un remitente."
+        "sender": "Elige un remitente.",
+        "subject": "Acorta el asunto a 150 caracteres o menos."
       },
       "submit": {
         "save": "Guardar cambios",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} números en el archivo",
         "numbersPlaceholder": "Un número por línea: incluye el código de país, sin el signo +",
-        "numbersCount": "{count} números"
+        "numbersCount": "{count} números",
+        "emailNote": "Los correos van a la dirección de cada contacto. Se omiten los contactos sin dirección de correo, las direcciones duplicadas y los contactos que se dieron de baja.",
+        "emailSkipped": "{count, plural, one {# destinatario elegido no tiene dirección de correo y se omitirá.} other {# destinatarios elegidos no tienen dirección de correo y se omitirán.}}",
+        "emailNoAddress": "Los números escritos y las filas del CSV no tienen dirección de correo, así que se omiten. Elige contactos, grupos, etiquetas o segmentos."
       },
       "message": {
         "title": "Mensaje",
@@ -526,7 +539,13 @@
           "baileys": "Aún no hay plantillas de la API no oficial. Crea una en la página de plantillas."
         },
         "templateIntroApproved": "Elige una plantilla de Meta aprobada. Los valores de las variables de cada contacto se completan al enviar con sus atributos.",
-        "templateApproved": "Plantilla aprobada"
+        "templateApproved": "Plantilla aprobada",
+        "subject": "Asunto",
+        "subjectNote": "Asunto, máximo 150",
+        "subjectPlaceholder": "p. ej. Tu oferta de mayo ya está aquí",
+        "subjectHint": "Se usa como asunto del correo. Déjalo en blanco para usar el nombre de la campaña.",
+        "emailNote": "Esta campaña se envía como correo electrónico desde el buzón que elegiste. Se añade un enlace para darse de baja al final de cada correo.",
+        "emailBodyHint": "Texto sin formato. Usa '{{name}}' o '{{first_name}}' para personalizar. Se omiten los contactos sin dirección de correo."
       },
       "review": {
         "title": "Revisar",
@@ -568,8 +587,14 @@
           "throttle": "La pausa más larga debe ser igual o mayor que la más corta.",
           "expiry": "La fecha de fin debe ser posterior a la de envío; de lo contrario, la campaña caducaría antes de enviarse.",
           "media": "Introduce una dirección completa que empiece por http:// o https://.",
-          "sender": "Elige un remitente."
-        }
+          "sender": "Elige un remitente.",
+          "subject": "Acorta el asunto a 150 caracteres o menos."
+        },
+        "from": "De",
+        "subject": "Asunto",
+        "subjectFallback": "El nombre de la campaña",
+        "skippedNoEmail": "Omitidos (sin dirección de correo)",
+        "estimateEmail": "Es una estimación: un contacto en dos grupos se cuenta dos veces. Los contactos sin dirección de correo que estén en grupos, etiquetas y segmentos se omiten al ejecutar la campaña."
       },
       "ai": {
         "open": "Crear con IA",
@@ -1706,6 +1731,23 @@
         "title": "Los números personales están desactivados en este espacio de trabajo",
         "body": "{count, plural, one {Tu número personal (QR) no puede} other {Tus # números personales (QR) no pueden}} enviar campañas mientras esto esté desactivado. Un administrador de la plataforma puede activarlo para este espacio de trabajo, o puedes conectar un número oficial de WhatsApp Business.",
         "action": "Conectar un número oficial"
+      },
+      "email": {
+        "none": {
+          "title": "No hay ningún buzón conectado",
+          "body": "Conecta un buzón en la página de Correo para elegir desde dónde se envía esta campaña.",
+          "action": "Conectar un buzón"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# buzón está desconectado} other {# buzones están desconectados}}",
+          "body": "Vuelve a conectarlo en la página de Correo para enviar campañas desde él.",
+          "action": "Abrir la página de Correo"
+        },
+        "error": {
+          "title": "{count, plural, one {# buzón necesita reconectarse} other {# buzones necesitan reconectarse}}",
+          "body": "Falló su último inicio de sesión. Vuelve a conectarlo en la página de Correo y aparecerá aquí.",
+          "action": "Abrir la página de Correo"
+        }
       }
     },
     "create": {

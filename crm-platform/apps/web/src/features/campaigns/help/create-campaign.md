@@ -33,6 +33,9 @@ keywords:
     test,
     variables,
     credit,
+    email,
+    subject,
+    mailbox,
   ]
 ---
 
@@ -46,6 +49,7 @@ Campaigns have one place to start: **Create campaign** on the Campaigns screen (
 
 - **A verified WhatsApp Cloud API (Meta) number** keeps everything the classic builder has and adds the broadcast logic, described below. **Setup** has the **Campaign type** cards and **Enable A/B test**. **Compose** is a **Template** dropdown (name and language, only the approved templates of that number) with the variable mapping right under it, and a second dropdown and mapping for variant B when A/B is on. **Recipients** offers contacts, groups, segments and a CSV, with the filter panel and the live count. **Schedule** sends now, later or on a rule, with retries, the **Auto-end date**, **Smart Delivery** and **Track link clicks**. **Review** shows the cost, the summary and a test send, and the last button sends. The live preview shows your template as WhatsApp will. A number counts as verified when it is connected to Meta and Meta has not blocked it (banned, restricted, deleted, migrated or still pending), its code is verified and its display name was not declined.
 - **Any other number** (Twilio, SMS, or a personal number when your platform allows them) keeps the classic steps: custom message, template or flow, A/B test, groups, tags, a CSV or typed numbers, and the classic live preview. See [Campaigns](help:campaigns-overview).
+- **A mailbox** (an email campaign, opened from the **Email** card in **New campaign**) keeps the classic steps with only what an email can carry; see **Email campaigns** below.
 - **A Meta number that is not verified yet** also keeps the classic steps, and a line next to the select says the guided steps are available once the number is verified.
 
 If your default number is a verified Meta number, the builder opens with the guided steps already in place.
@@ -62,6 +66,16 @@ The list only holds numbers that can send right now, and an empty list says why 
 - **Personal numbers are turned off for this workspace.** Personal (QR) numbers only send while the platform has them on and your workspace is allowed to use them. A platform administrator turns that on for the workspace; until then, connect an official WhatsApp Business number.
 
 The list loads while the page opens, and it refreshes when you come back to the page or the window regains focus, so a number you just connected shows up without reloading. You need the permission to create campaigns to see the list at all.
+
+## Email campaigns
+
+Choose the **Email** card in **New campaign**. The card shows when your plan includes Email and a mailbox is connected and you may send from it (a shared mailbox, or your own personal one). The builder then lists your mailboxes in **Send from**, shown with their address. If there is none, the box says whether no mailbox is connected, one is disconnected or one needs reconnecting, and links to the **Email** page.
+
+- **Setup:** a name and the mailbox. There are no campaign type cards (an email is always a typed message, not a template or a flow) and no A/B test.
+- **Compose:** the **Subject** (up to 150 characters; blank uses the campaign name) and the **Body**. There is no attachment, footer or buttons. An unsubscribe link is added at the bottom of every email, so you do not need to write an opt-out line. The preview on the right is an email card with the sender, subject and body.
+- **Recipients:** the same ways to pick an audience, with the contact table showing each email address. Contacts with no address are skipped when the campaign runs, so are repeated addresses and opted-out contacts. Typed numbers and CSV rows have no address, so they are skipped: the step warns you, and Review shows **Skipped (no email address)** for the contacts it can see (contacts inside groups, tags and segments are checked when the campaign runs).
+- **Schedule:** send now, later or recurring, and the **Auto-end date**. **Smart Delivery** (gaps, batches, daily limit, sending hours) and **Track link clicks** are not offered for email. **Retry failed messages automatically** stays.
+- **Review:** shows the mailbox, the subject, the recipients and the schedule. Emails are not charged to your WhatsApp wallet. Your plan sets a monthly email limit (replies and campaign emails together): a campaign that starts when the month is used up does not send, and the mailbox's own hourly sending limit spreads a long campaign over several hours, so the rest of the recipients stay waiting and go out when it frees up.
 
 ## The guided steps
 

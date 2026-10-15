@@ -209,7 +209,16 @@
         "customMessage": "自定义消息",
         "flowTitle": "流程",
         "variants": "显示的变体",
-        "variant": "变体 {v}"
+        "variant": "变体 {v}",
+        "typeEmail": "电子邮件",
+        "emailTitle": "邮件预览",
+        "emailFrom": "发件人",
+        "emailSubject": "主题",
+        "emailNoSender": "请选择发件人",
+        "emailNoSubject": "（无主题）",
+        "emailEmpty": "写下消息正文，它会显示在这里。",
+        "emailUnsubscribe": "每封邮件末尾都会添加退订链接。",
+        "emailNote": "每位收件人的收件箱中，您的活动将这样显示。"
       },
       "previewEmpty": "您的消息预览…",
       "previewTemplate": "模板",
@@ -228,7 +237,8 @@
         "throttle": "最长间隔必须不小于最短间隔。",
         "expiry": "结束日期必须晚于发送日期，否则营销活动会在发送前过期。",
         "media": "请输入以 http:// 或 https:// 开头的完整地址。",
-        "sender": "请选择发送方。"
+        "sender": "请选择发送方。",
+        "subject": "请将主题缩短到 150 个字符以内。"
       },
       "submit": {
         "save": "保存更改",
@@ -293,7 +303,10 @@
         },
         "csvRows": "文件中有 {count} 个号码",
         "numbersPlaceholder": "每行一个号码，包含国家代码，不加加号",
-        "numbersCount": "{count} 个号码"
+        "numbersCount": "{count} 个号码",
+        "emailNote": "邮件会发送到每位联系人的邮箱地址。没有邮箱地址的联系人、重复的地址和已退订的联系人会被跳过。",
+        "emailSkipped": "所选收件人中没有邮箱地址、将被跳过的人数：{count}",
+        "emailNoAddress": "手动输入的号码和 CSV 行没有邮箱地址，因此会被跳过。请改为选择联系人、群组、标签或细分。"
       },
       "message": {
         "title": "消息",
@@ -526,7 +539,13 @@
           "baileys": "暂无非官方 API 模板。请在模板页面创建一个。"
         },
         "templateIntroApproved": "选择已审核的 Meta 模板。每位联系人的变量值会在发送时从联系人属性中自动填入。",
-        "templateApproved": "已审核模板"
+        "templateApproved": "已审核模板",
+        "subject": "主题",
+        "subjectNote": "主题，最多 150 个字符",
+        "subjectPlaceholder": "例如：您的五月优惠现已上线",
+        "subjectHint": "用作邮件主题。留空则使用活动名称。",
+        "emailNote": "此活动将通过您选择的邮箱以电子邮件发送。每封邮件末尾都会添加退订链接。",
+        "emailBodyHint": "纯文本。使用 '{{name}}' 或 '{{first_name}}' 进行个性化。没有邮箱地址的联系人会被跳过。"
       },
       "review": {
         "title": "检查",
@@ -568,8 +587,14 @@
           "throttle": "最长间隔不得小于最短间隔。",
           "expiry": "结束日期必须晚于发送日期，否则营销活动会在发送前就已过期。",
           "media": "请输入以 http:// 或 https:// 开头的完整地址。",
-          "sender": "请选择发送方。"
-        }
+          "sender": "请选择发送方。",
+          "subject": "请将主题缩短到 150 个字符以内。"
+        },
+        "from": "发件人",
+        "subject": "主题",
+        "subjectFallback": "活动名称",
+        "skippedNoEmail": "已跳过（没有邮箱地址）",
+        "estimateEmail": "这是估算值：同时在两个群组中的联系人会被计算两次。群组、标签和细分中没有邮箱地址的联系人会在活动运行时被跳过。"
       },
       "ai": {
         "open": "使用 AI 创建",
@@ -1706,6 +1731,23 @@
         "title": "此工作区已关闭个人号码",
         "body": "此功能关闭期间，{count} 个个人（二维码）号码无法发送活动。平台管理员可为此工作区开启，或者您可以连接官方 WhatsApp Business 号码。",
         "action": "连接官方号码"
+      },
+      "email": {
+        "none": {
+          "title": "没有已连接的邮箱",
+          "body": "在“电子邮件”页面连接邮箱，以选择此活动的发件邮箱。",
+          "action": "连接邮箱"
+        },
+        "disconnected": {
+          "title": "已断开连接的邮箱数：{count}",
+          "body": "在“电子邮件”页面重新连接后，即可用它发送活动。",
+          "action": "打开电子邮件页面"
+        },
+        "error": {
+          "title": "需要重新连接的邮箱数：{count}",
+          "body": "它上次登录失败。在“电子邮件”页面重新连接后，它会出现在这里。",
+          "action": "打开电子邮件页面"
+        }
       }
     },
     "create": {

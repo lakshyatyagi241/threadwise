@@ -221,7 +221,7 @@ whatsapp-devices-baileys and whatsapp-cloud-api-waba (senders), wallet-message-b
 - **025 Flow campaigns:** each recipient gets a new flow session started by the Node bridge (`flow_id`, `flow_id_b` for B). Blocked on flow-runtime-engine.
 - **026 Build with AI:** `GET wa-campaigns/api/ai-models` lists the active admin text models (not ElevenLabs), `POST wa-campaigns/api/ai-generate` writes a message. Depends on ai-keys-usage-admin.
 - **027 Meta click sync:** at most every 15 minutes per campaign on the detail refresh, the template's button clicks from Meta template analytics fill `meta_clicked_count`. Depends on whatsapp-cloud-api-waba.
-- **028 SMS and email runners:** campaigns with provider `sms` or `email` run through their own transports. Skipped on the owner's word (SMS and email are not ported).
+- **028 SMS and email runners:** campaigns with provider `sms` or `email` run through their own transports. SMS: ported with the SMS channel (TW-SMS). Email: ported (`?channel=email`, `EmailCampaignRunner`; API in [docs/api/campaigns.md](../../api/campaigns.md#email-campaigns)). The sender is a connected mailbox (`email:<uuid>`); the builder hides the template picker, flow, A/B, attachment and pacing, and the Header becomes the Subject (max 150, falls back to the campaign name); recipients are contacts with an address (opted-out dropped, a repeated address mailed once, subject CR/LF stripped); the body is HTML-escaped plain text with a text part; plan flag `email_channel` (Reference `access_email`) and the monthly cap `email_monthly` (Reference `email_monthly_limit`); each send is mirrored into an email inbox thread; one lock per campaign; auto-end date, Pause and Cancel respected.
 
 ## Additions beyond Reference: the Create broadcast wizard
 

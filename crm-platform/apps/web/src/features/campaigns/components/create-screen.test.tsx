@@ -5,6 +5,12 @@ import { KEYS } from '../wizard/api/wizard';
 import type { SenderHidden } from '@crm/contracts';
 import { ENTITLEMENTS_KEY } from '@/lib/use-unofficial-whatsapp';
 import { html, sender, templates, uuid } from '../wizard/testing';
+import { EMPTY_FORM, type BuilderForm } from '../lib/builder-model';
+import { StepCompose } from './builder/step-compose';
+import { StepRecipients } from './builder/step-recipients';
+import { StepReview } from './builder/step-review';
+import { StepSchedule } from './builder/step-schedule';
+import { LivePreview } from './builder/live-preview';
 import { CreateScreen } from './create-screen';
 
 vi.mock('next/navigation', () => ({
@@ -199,5 +205,211 @@ describe('an empty or still-loading sender list', () => {
     expect(out).not.toContain('Step 1 of 4');
     expect(out).toMatch(new RegExp(`<option value="${restricted.key}" selected`));
     expect(out).not.toContain('data-cause');
+  });
+});
+
+describe('an email campaign (a connected mailbox as the sender)', () => {
+  const mailKey = `email:${uuid(50)}`;
+  const mailbox = {
+    key: mailKey,
+    label: 'Support inbox',
+    phone: 'support@acme.test',
+    engine: 'email',
+    engineLabel: 'Email',
+    isDefault: true,
+  };
+  const withMailbox = (senders: unknown[] = [mailbox], hidden: SenderHidden[] = []) => {
+    const qc = seeded([meta]);
+    qc.setQueryData([...CAMP_KEYS.builder, 'email'], {
+      templates: [],
+      senders,
+      hidden,
+      groups: [],
+      tags: [],
+      segments: [],
+      flows: [],
+      requiresApprovedTemplates: false,
+    });
+    return qc;
+  };
+  const mail: BuilderForm = {
+    ...EMPTY_FORM,
+    type: 'custom',
+    name: 'May offer',
+    senderKey: mailKey,
+    customHeader: 'Your May offer is live',
+    customMessage: 'Hi there',
+  };
+  const noop = () => undefined;
+
+  it('opens the classic builder on the mailbox, never the guided flow, with no type tiles and no A/B test', () => {
+    const out = html(<CreateScreen sender={mailKey} draft="" />, { qc: withMailbox() });
+    expect(out).toContain('id="camp-sender"');
+    expect(out).toContain('Support inbox');
+    expect(out).toContain('support@acme.test');
+    expect(out).not.toContain('Campaign type');
+    expect(out).not.toContain('Use template');
+    expect(out).not.toContain('Flow builder');
+    expect(out).not.toContain('Enable A/B test');
+    expect(out).not.toContain('Step 1 of 4');
+    expect(out).toContain('Campaign steps');
+  });
+
+  it('without a mailbox the sender box says why and points at the Email page', () => {
+    const out = html(<CreateScreen sender={mailKey} draft="" />, {
+      qc: withMailbox([], [{ engine: 'email', reason: 'not_connected', count: 1 }]),
+    });
+    expect(out).toContain('data-cause="disconnected"');
+    expect(out).toContain('1 mailbox is disconnected');
+    expect(out).toContain('href="/email"');
+  });
+
+  it('Compose shows a Subject (150), the body and the unsubscribe note, and no attachment, footer, buttons or opt-out line', () => {
+    const out = html(
+      <StepCompose
+        form={mail}
+        patch={noop}
+        builder={undefined}
+        catalog={undefined}
+        engine="email"
+        templates={[]}
+      />,
+    );
+    expect(out).toContain('>Subject<');
+    expect(out).toContain('Subject line max 150');
+    expect(out).toContain('maxLength="150"');
+    expect(out).toContain('e.g. Your May offer is live');
+    expect(out).toContain('fall back to the campaign name');
+    expect(out).toContain('An unsubscribe link is added');
+    expect(out).toContain('Your May offer is live');
+    expect(out).not.toContain('>Header<');
+    expect(out).not.toContain('Attachment');
+    expect(out).not.toContain('>Footer<');
+    expect(out).not.toContain('>Buttons<');
+    expect(out).not.toContain('Variant B');
+  });
+
+  it('a WhatsApp custom message keeps its Header, attachment, footer and buttons', () => {
+    const out = html(
+      <StepCompose
+        form={{ ...mail, senderKey: 'baileys:1' }}
+        patch={noop}
+        builder={undefined}
+        catalog={undefined}
+        engine="baileys"
+        templates={[]}
+      />,
+    );
+    expect(out).toContain('>Header<');
+    expect(out).toContain('Attachment');
+    expect(out).toContain('>Footer<');
+    expect(out).toContain('>Buttons<');
+    expect(out).not.toContain('>Subject<');
+  });
+
+  it('Schedule keeps send now, scheduled, recurring and the auto-end date, and drops pacing and click tracking', () => {
+    const out = html(<StepSchedule form={mail} patch={noop} minDate="2026-10-14" engine="email" />);
+    expect(out).toContain('Send now');
+    expect(out).toContain('Schedule later');
+    expect(out).toContain('Recurring');
+    expect(out).toContain('Auto-end date');
+    expect(out).not.toContain('Smart Delivery');
+    expect(out).not.toContain('camp-batchSize');
+    expect(out).not.toContain('camp-dailyLimit');
+    expect(out).not.toContain('camp-wstart');
+    expect(out).not.toContain('Track link clicks');
+    const wa = html(
+      <StepSchedule form={mail} patch={noop} minDate="2026-10-14" engine="baileys" />,
+    );
+    expect(wa).toContain('Smart Delivery');
+    expect(wa).toContain('Track link clicks');
+  });
+
+  it('Recipients says contacts without an address are skipped, and typed numbers and CSV rows too', () => {
+    const lists = {
+      tags: [],
+      groups: [],
+      segments: [],
+      contacts: [],
+      contactsDenied: false,
+      filter: {},
+      onFilter: noop,
+    };
+    const base = {
+      form: mail,
+      patch: noop,
+      lists,
+      onSample: noop,
+      onCsvTooBig: noop,
+      engine: 'email',
+    };
+    const picked = html(
+      <StepRecipients
+        {...base}
+        mode="audience"
+        onMode={noop}
+        skipped={{ contacts: 2, numbers: 0, total: 2 }}
+      />,
+    );
+    expect(picked).toContain('Emails go to the address on each contact');
+    expect(picked).toContain('2 chosen recipients have no email address and will be skipped.');
+    expect(picked).toContain('>Email<');
+    const typed = html(<StepRecipients {...base} mode="manual" onMode={noop} />);
+    expect(typed).toContain('have no email address, so they are skipped');
+    const wa = html(<StepRecipients {...base} engine="baileys" mode="audience" onMode={noop} />);
+    expect(wa).not.toContain('Emails go to the address');
+    expect(wa).toContain('>Phone<');
+  });
+
+  it('the preview is an email card with the sender, the subject and the body', () => {
+    const out = html(
+      <LivePreview
+        form={mail}
+        builder={undefined}
+        engine="email"
+        senderLabel="Support inbox · support@acme.test"
+        recipients={3}
+        step={2}
+        stepCount={5}
+      />,
+    );
+    expect(out).toContain('data-testid="email-preview"');
+    expect(out).toContain('Support inbox · support@acme.test');
+    expect(out).toContain('Your May offer is live');
+    expect(out).toContain('Hi there');
+    expect(out).not.toContain('broadcast-preview');
+    expect(out).not.toContain('>A/B<');
+    // With no subject the campaign name is shown, as the server sends it.
+    const named = html(
+      <LivePreview
+        form={{ ...mail, customHeader: '' }}
+        builder={undefined}
+        engine="email"
+        senderLabel={null}
+        recipients={0}
+        step={2}
+        stepCount={5}
+      />,
+    );
+    expect(named).toContain('May offer');
+  });
+
+  it('Review shows the sender address, the subject and the skipped count', () => {
+    const out = html(
+      <StepReview
+        form={mail}
+        senderLabel="Support inbox · support@acme.test"
+        scheduleLabel="Sending immediately"
+        totals={{ groups: 0, contacts: 2, numbers: 1, total: 3 }}
+        skipped={{ contacts: 1, numbers: 1, total: 2 }}
+        engine="email"
+        onGo={noop}
+      />,
+    );
+    expect(out).toContain('>From<');
+    expect(out).toContain('support@acme.test');
+    expect(out).toContain('Your May offer is live');
+    expect(out).toContain('Skipped (no email address)');
+    expect(out).not.toContain('>Device<');
   });
 });

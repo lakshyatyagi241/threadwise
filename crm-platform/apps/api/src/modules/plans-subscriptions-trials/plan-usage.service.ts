@@ -314,6 +314,21 @@ const METERS: ReadonlyArray<{
       ),
   },
   {
+    // Mails sent this calendar month, replies and campaign mail together (the Email add-on). Enforced by the email campaign sender
+    // from the same count. Plain SQL on the tables: they belong to the conversations domain and are not imported here.
+    key: 'email_monthly',
+    window: 'month',
+    count: (tx, orgId, from, to) =>
+      n(
+        tx,
+        sql`SELECT count(*)::int AS n FROM messages m
+        JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+        JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+        WHERE m.org_id = ${orgId} AND ch.kind = 'email' AND m.direction = 'out' AND m.kind <> 'system'
+          AND m.created_at >= ${from.toISOString()}::timestamptz AND m.created_at < ${to.toISOString()}::timestamptz`,
+      ),
+  },
+  {
     // Tokens billed to the platform's keys this calendar month: the same sum AiTokenMeter.guard compares with the cap (it enforces; this row is the panel's number).
     key: 'ai_token_limit_monthly',
     window: 'month',
@@ -331,6 +346,7 @@ const METERS: ReadonlyArray<{
 const NOT_A_ROW_COUNT: ReadonlySet<PlanLimitKey> = new Set<PlanLimitKey>([
   'monthly_messages',
   'sms_monthly',
+  'email_monthly',
   'total_campaigns',
   'broadcast_recipients',
   'ai_token_limit_monthly',
