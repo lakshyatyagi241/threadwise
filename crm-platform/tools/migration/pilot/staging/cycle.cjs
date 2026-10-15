@@ -619,6 +619,15 @@ async function cmdChatStatus(srv, cfg, flags = {}) {
   return r.code === 0 ? 0 : 1;
 }
 
+/** Give the bot messages an earlier load wrote without their buttons (Visit our website, Call now ...) the meta.sentInteractive the inbox draws them from. Reads only the database. Dry run unless --apply. */
+async function cmdChatButtons(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const a = ['chat-buttons', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-buttons (APPLY)' : 'chat-buttons (dry run)', `chat-buttons-${cfg.client}.txt`);
+  return r.code === 0 ? 0 : 1;
+}
+
 /** Give the campaigns an earlier load wrote with template_id NULL their wa_templates row (exact matches only: template id + name + Meta id, see broadcast/template-link.ts). Reads the dump and the database. Dry run unless --apply. */
 async function cmdCampaignLink(srv, cfg, flags = {}) {
   await assertStaging(srv);
@@ -845,9 +854,9 @@ function printStepStats(steps) {
 
 // ---------- orchestration: migrate / batch / new-client -------------------------------------------------------------------------------
 // core-load (plan, subscription, role grants from geta_core) and flow-state (publish what is live in Waboo) run after the load and before the verifier
-const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'files', 'core-load', 'wallet-sync', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
+const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'chat-buttons', 'files', 'core-load', 'wallet-sync', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
 /** steps that only make sense for a client that is ALREADY loaded: --catch-up adds them; a fresh load never runs them (a fresh load reads everything once) */
-const CATCHUP_ONLY = new Set(['update', 'chat-status', 'usage-append']);
+const CATCHUP_ONLY = new Set(['update', 'chat-status', 'chat-buttons', 'usage-append']);
 /** steps a catch-up refuses: flow-state would publish flows again (the flows are already live) */
 const CATCHUP_SKIPPED = new Set(['flow-state']);
 /** free memory (MB, MemAvailable) the server must have: one migrate container uses up to ~400 MB next to the live stack and the 1 GB Postgres */
@@ -1110,6 +1119,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     files: async () => (await cmdFiles(srv, cfg, 'copy', { apply: true })) || cmdFiles(srv, cfg, 'verify'),
     'wallet-sync': () => cmdWalletSync(srv, cfg, { ...flags, apply: true }),
     'chat-status': () => cmdChatStatus(srv, cfg, { ...flags, apply: true }),
+    'chat-buttons': () => cmdChatButtons(srv, cfg, { ...flags, apply: true }),
     'usage-append': () => cmdUsageAppend(srv, cfg, { ...flags, apply: true }),
     'flow-state': () => cmdFlowState(srv, cfg, { ...flags, apply: true }),
     load: () => cmdLoad(srv, cfg, flags, ctxL),
@@ -1404,6 +1414,7 @@ const COMMANDS = [
   'chat-reparse',
   'chat-relink',
   'chat-status',
+  'chat-buttons',
   'campaign-link',
   'pricing-seed',
   'load',
@@ -1455,6 +1466,7 @@ async function main(argv) {
     'chat-reparse': () => cmdChatReparse(srv, cfg, flags),
     'chat-relink': () => cmdChatRelink(srv, cfg, flags),
     'chat-status': () => cmdChatStatus(srv, cfg, flags),
+    'chat-buttons': () => cmdChatButtons(srv, cfg, flags),
     'campaign-link': () => cmdCampaignLink(srv, cfg, flags),
   };
   if (cmd !== 'all-dry') return timed(cmd, one[cmd]);
