@@ -117,6 +117,8 @@ const EMAIL_CODE_TTL_SECONDS = 5 * 60;
 const EMAIL_CODE_LENGTH = 6;
 const EMAIL_CODE_MAX_ATTEMPTS = 5;
 const EMAIL_CODE_RESEND_COOLDOWN_SECONDS = 60;
+/** Code mails per address per hour, start and resends together; the email twin of `OTP_SENDS_PER_NUMBER_PER_HOUR`. */
+const EMAIL_CODE_SENDS_PER_ADDRESS_PER_HOUR = 5;
 const SIGNUPS_PER_IP_PER_HOUR = 10;
 const OTP_SENDS_PER_NUMBER_PER_HOUR = 5;
 const OTP_SENDS_PER_IP_PER_HOUR = 15;
@@ -142,6 +144,25 @@ return raw
 `;
 
 const triesKey = (stagedKey: string) => `${stagedKey}:tries`;
+
+/**
+ * The email-stage twin of `CONSUME_STAGED`'s compare-at-write-time check: writes the verified
+ * `EmailStage` (ARGV[2]) only if the stored stage still carries the code hash the caller just
+ * compared against (ARGV[1]), keeping the stage's TTL. A resend in between replaces the hash, and
+ * then the old code must not win. Returns 1 when written, 0 when the hash changed, nil when the
+ * stage is gone.
+ */
+const MARK_EMAIL_STAGE_VERIFIED = `
+local raw = redis.call('GET', KEYS[1])
+if not raw then return false end
+local stage = cjson.decode(raw)
+if stage.codeHash ~= ARGV[1] then return 0 end
+redis.call('SET', KEYS[1], ARGV[2], 'KEEPTTL')
+return 1
+`;
+
+/** Held by the one resend that won the cooldown; parallel resends that lose it are refused. */
+const resendClaimKey = (stageKey: string) => `${stageKey}:resend`;
 
 /**
  * Account creation (TW-AUTH-005/006/008-prep). Creates the organization and its
@@ -207,6 +228,8 @@ export class SignupService {
     if (await this.tenants.identityExists(req.email, req.phone ?? null)) {
       throw this.identityExistsError();
     }
+    // Every /start opens a fresh code with a fresh guess budget, so it counts against the address.
+    await this.assertEmailSendAllowed(req.email);
 
     const token = randomToken();
     const code = randomNumericCode(EMAIL_CODE_LENGTH);
@@ -288,9 +311,25 @@ export class SignupService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    // Compare-and-set against the hash this guess was actually checked with: a resend that replaced
+    // the code mid-check makes this (old) code dead, and a consumed stage stays consumed.
+    const comparedHash = stage.codeHash;
     stage.verified = true;
-    // XX: a stage consumed between our GET and this SET stays consumed (see `stageWriteBack`).
-    if (!(await this.stageWriteBack(key, stage))) throw this.signupExpired();
+    const marked = await this.redis.eval(
+      MARK_EMAIL_STAGE_VERIFIED,
+      1,
+      key,
+      comparedHash,
+      JSON.stringify(stage),
+    );
+    if (marked === 0) {
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_INVALID,
+        'Incorrect code. Please try again.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (marked !== 1) throw this.signupExpired();
     await this.redis.del(triesKey(key));
     return { token: req.token };
   }
@@ -310,14 +349,33 @@ export class SignupService {
     if (!raw) throw this.signupExpired();
     const stage = JSON.parse(raw) as EmailStage;
 
-    const sinceLast = (Date.now() - stage.lastSentAt) / 1000;
-    if (sinceLast < EMAIL_CODE_RESEND_COOLDOWN_SECONDS) {
-      throw new AppError(
+    const cooldown = () =>
+      new AppError(
         ERROR_CODES.AUTH_OTP_RESEND_COOLDOWN,
         'Please wait a moment before requesting another code.',
         HttpStatus.TOO_MANY_REQUESTS,
       );
+    const sinceLast = (Date.now() - stage.lastSentAt) / 1000;
+    if (sinceLast < EMAIL_CODE_RESEND_COOLDOWN_SECONDS) throw cooldown();
+    // `lastSentAt` was read above, so parallel resends all pass that check together. Claim the
+    // cooldown in one atomic step: only the winner goes on to mail a code and reset the guess
+    // budget; the rest are refused before anything else happens.
+    const claimKey = resendClaimKey(key);
+    const claimed = await this.redis.set(
+      claimKey,
+      '1',
+      'EX',
+      EMAIL_CODE_RESEND_COOLDOWN_SECONDS,
+      'NX',
+    );
+    if (claimed !== 'OK') throw cooldown();
+    try {
+      await this.assertEmailSendAllowed(stage.email);
+    } catch (err) {
+      await this.redis.del(claimKey);
+      throw err;
     }
+
     // Generate the new code/hash and attempt delivery BEFORE touching the stage in Redis: if the
     // send fails, the old code, old guess count and old cooldown timer must stay exactly as they were
     // (mirroring `start()`'s own rollback-on-failed-send behavior), otherwise the client gets a 201
@@ -331,6 +389,8 @@ export class SignupService {
       EMAIL_CODE_TTL_SECONDS / 60,
     );
     if (!sent) {
+      // Nothing changed, so the cooldown claim is released too: an immediate retry may go through.
+      await this.redis.del(claimKey);
       this.logger.error('sign-up code resend mail could not be sent');
       throw new AppError(
         ERROR_CODES.AUTH_OTP_SEND_FAILED,
@@ -981,6 +1041,28 @@ export class SignupService {
     const k = triesKey(stagedKey);
     const results = await this.redis.multi().incr(k).expire(k, STAGE_TTL_SECONDS, 'NX').exec();
     return Number(results?.[0]?.[1] ?? 1);
+  }
+
+  /**
+   * Per-address cap on sign-up code mails (start + resends), from any client: the email twin of the
+   * phone path's `otpPhone` counter. Stops a spread-out attacker from re-opening fresh guess budgets
+   * (or mail-bombing the address) by rotating IPs.
+   */
+  private async assertEmailSendAllowed(email: string): Promise<void> {
+    if (
+      await this.rate.allow(
+        AuthKeys.signupEmailSends(email),
+        EMAIL_CODE_SENDS_PER_ADDRESS_PER_HOUR,
+        3600,
+      )
+    ) {
+      return;
+    }
+    throw new AppError(
+      ERROR_CODES.RATE_LIMITED,
+      'Too many codes requested. Try again later.',
+      HttpStatus.TOO_MANY_REQUESTS,
+    );
   }
 
   /** Reference throttles the code pages per client: more than `max` a minute is refused. */

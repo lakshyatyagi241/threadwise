@@ -1,9 +1,11 @@
+import type { Redis } from 'ioredis';
 import request from 'supertest';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
   MAIL_PORT,
   type MailPort,
 } from '../../../src/infra/providers/auth-registration-security/mail.port';
+import { REDIS_CLIENT } from '../../../src/infra/redis/redis.module';
 import { PlatformSettingsService } from '../../../src/modules/auth/platform/platform-settings.service';
 import { AuthKeys } from '../../../src/modules/auth/support/redis-keys';
 import { startHarness, type Harness } from './harness';
@@ -33,12 +35,24 @@ async function startAndReadCode(fullName: string, email: string) {
   return { token: res.body.token as string, code: match[1]! };
 }
 
-/** `start()` stamps `lastSentAt`, so a resend straight after it hits the 60s cooldown; backdate it. */
+/**
+ * `start()` stamps `lastSentAt`, so a resend straight after it hits the 60s cooldown; backdate it.
+ * A successful resend also holds the atomic cooldown claim (`<stageKey>:resend`); drop that too.
+ */
 async function skipResendCooldown(token: string) {
   const key = AuthKeys.signupEmailStage(token);
   const stage = JSON.parse((await h.redis.get(key))!);
   stage.lastSentAt = 0;
   await h.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+  await h.redis.del(`${key}:resend`);
+}
+
+/** The newest 6-digit code mailed to `email`. */
+function latestCode(email: string): string {
+  const msg = h.mail.filter((m) => m.to === email).at(-1);
+  const match = msg?.text.match(/\b(\d{6})\b/);
+  if (!match) throw new Error(`no 6-digit code found in mail to ${email}`);
+  return match[1]!;
 }
 
 beforeAll(async () => {
@@ -253,6 +267,116 @@ describe('POST /v2/auth/signup/resend-email-code', () => {
     // overwritten the stage's hash, attempts or cooldown timer.
     const verify = await api().post('/v2/auth/signup/verify-email-code').send({ token, code });
     expect(verify.status, JSON.stringify(verify.body)).toBe(200);
+    // ...and the failed attempt did not keep the cooldown claim: retrying straight away works.
+    const retry = await api().post('/v2/auth/signup/resend-email-code').send({ token });
+    expect(retry.status, JSON.stringify(retry.body)).toBe(201);
+  });
+
+  it('claims the cooldown atomically: of 5 parallel resends exactly one goes through', async () => {
+    const email = uniqueEmail('par-resend');
+    const { token } = await startAndReadCode('Ada', email);
+    await skipResendCooldown(token);
+    const sentBefore = h.mail.filter((m) => m.to === email).length;
+    // Each from its own address, so the per-IP throttle is not what stops them: only the cooldown.
+    const answers = await Promise.all(
+      Array.from({ length: 5 }, () =>
+        api()
+          .post('/v2/auth/signup/resend-email-code')
+          .set('x-forwarded-for', nextIp())
+          .send({ token }),
+      ),
+    );
+    const statuses = answers.map((r) => `${r.status}:${r.body.code ?? ''}`);
+    expect(
+      statuses.filter((s) => s === '201:'),
+      JSON.stringify(statuses),
+    ).toHaveLength(1);
+    expect(
+      statuses.filter((s) => s === '429:AUTH_OTP_RESEND_COOLDOWN'),
+      JSON.stringify(statuses),
+    ).toHaveLength(4);
+    // Exactly one new code was mailed, and it is the one that works.
+    expect(h.mail.filter((m) => m.to === email).length).toBe(sentBefore + 1);
+    const ok = await api()
+      .post('/v2/auth/signup/verify-email-code')
+      .send({ token, code: latestCode(email) });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+  });
+
+  it('caps code mails per address: 5 an hour across start and resends, from any client', async () => {
+    const email = uniqueEmail('cap');
+    const { token } = await startAndReadCode('Ada', email); // send 1
+    for (let i = 0; i < 4; i++) {
+      await skipResendCooldown(token);
+      const r = await api()
+        .post('/v2/auth/signup/resend-email-code')
+        .set('x-forwarded-for', nextIp())
+        .send({ token }); // sends 2..5
+      expect(r.status, `resend ${i + 1}: ${JSON.stringify(r.body)}`).toBe(201);
+    }
+    await skipResendCooldown(token);
+    const over = await api()
+      .post('/v2/auth/signup/resend-email-code')
+      .set('x-forwarded-for', nextIp())
+      .send({ token });
+    expect(over.status, JSON.stringify(over.body)).toBe(429);
+    expect(over.body.code).toBe('RATE_LIMITED');
+    // A fresh /start for the same address cannot open a new budget either.
+    const restart = await api()
+      .post('/v2/auth/signup/start')
+      .set('x-forwarded-for', nextIp())
+      .send({ fullName: 'Ada', email });
+    expect(restart.status, JSON.stringify(restart.body)).toBe(429);
+    expect(restart.body.code).toBe('RATE_LIMITED');
+  });
+});
+
+describe('email-code stale-hash race', () => {
+  it('a correct guess of a code that a resend replaced mid-check never marks the stage verified', async () => {
+    const email = uniqueEmail('stale');
+    const { token, code: oldCode } = await startAndReadCode('Ada', email);
+    await skipResendCooldown(token);
+    const key = AuthKeys.signupEmailStage(token);
+
+    // verifyEmailCode does GET -> count -> compare -> write. Run a real resend right after its GET,
+    // so it compares the (correct) old code against the hash it read, which is stale by the write.
+    const appRedis = h.app.get<Redis>(REDIS_CLIENT);
+    const patchable = appRedis as unknown as { get: (k: string) => Promise<string | null> };
+    const originalGet = patchable.get;
+    const realGet = appRedis.get.bind(appRedis);
+    let fired = false;
+    let resendStatus = 0;
+    patchable.get = async (k: string) => {
+      const value = await realGet(k);
+      if (k === key && !fired) {
+        fired = true;
+        const r = await api().post('/v2/auth/signup/resend-email-code').send({ token });
+        resendStatus = r.status;
+      }
+      return value;
+    };
+    let verify: request.Response;
+    try {
+      verify = await api().post('/v2/auth/signup/verify-email-code').send({ token, code: oldCode });
+    } finally {
+      patchable.get = originalGet;
+    }
+    expect(resendStatus).toBe(201);
+    expect(verify.status, JSON.stringify(verify.body)).toBe(400);
+    expect(verify.body.code).toBe('AUTH_OTP_INVALID');
+    // The stage keeps the resend's new code and is still unverified.
+    const stage = JSON.parse((await h.redis.get(key))!);
+    expect(stage.verified).toBe(false);
+    const setPw = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(setPw.status, JSON.stringify(setPw.body)).toBe(403);
+    expect(setPw.body.code).toBe('AUTH_EMAIL_NOT_VERIFIED');
+    // The new code still works.
+    const fresh = await api()
+      .post('/v2/auth/signup/verify-email-code')
+      .send({ token, code: latestCode(email) });
+    expect(fresh.status, JSON.stringify(fresh.body)).toBe(200);
   });
 });
 
