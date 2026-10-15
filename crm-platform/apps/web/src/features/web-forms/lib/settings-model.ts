@@ -157,7 +157,7 @@ export function redirectIssue(
   return safeRedirect(v) ? null : 'https';
 }
 
-/** The optional privacy page: empty is fine, anything else must be https. */
+/** The optional privacy or terms page: empty is fine, anything else must be https. */
 export function privacyUrlIssue(url: string | undefined): 'https' | null {
   const v = (url ?? '').trim();
   if (!v) return null;

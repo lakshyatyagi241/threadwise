@@ -26,7 +26,14 @@ import {
   type OrderGroupNotifyPort,
   type OrderMediaPort,
 } from '../../../../../infra/providers/flow-runtime-engine/ordering.port';
-import { InventoryService, matchProduct, retailerIdOf } from '../../../../catalog-products';
+import {
+  InventoryService,
+  matchProduct,
+  matchVariant,
+  retailerIdOf,
+  retailerIdOfVariant,
+  variantPriceOf,
+} from '../../../../catalog-products';
 import { TranslationService } from '../../../../localization-translation';
 import { AiCallService } from './ai-call.service';
 import { tryParseJson } from './ai-rules';
@@ -63,6 +70,25 @@ interface ProductRow {
   reservedQty: number;
   imageUrl: string | null;
   metaRetailerId: string | null;
+  /** The product's option names, in order (empty without variants). */
+  options: Array<{ name: string; values: string[] }>;
+  variants: VariantInfo[];
+}
+
+/** A variant as ordering reads it. A product with variants is only ever sold through one of these. */
+interface VariantInfo {
+  id: number;
+  uuid: string;
+  title: string;
+  sku: string | null;
+  optionValues: string[];
+  priceMinor: number | null;
+  imageUrl: string | null;
+  stockQty: number | null;
+  reservedQty: number;
+  active: boolean;
+  position: number;
+  metaRetailerId: string | null;
 }
 
 interface ShipParts {
@@ -71,6 +97,16 @@ interface ShipParts {
   company: string;
   address: string;
 }
+
+const optionsOf = (raw: unknown): Array<{ name: string; values: string[] }> =>
+  Array.isArray(raw)
+    ? raw
+        .filter((o): o is Record<string, unknown> => !!o && typeof o === 'object')
+        .map((o) => ({
+          name: String(o.name ?? ''),
+          values: Array.isArray(o.values) ? o.values.map(String) : [],
+        }))
+    : [];
 
 const NO_SHIP: ShipParts = { useSaved: false, name: '', company: '', address: '' };
 
@@ -151,22 +187,62 @@ export class OrderingFlowService {
           unavailable.push({ name: it.name, qty: it.qty, reason: 'not_found' });
           continue;
         }
-        const held = await this.inventory.hold(tx, orgId, p.id, it.qty, ref);
+        // A product with variants is sold by variant: the customer's words pick one, or the cart asks for the missing option.
+        let variant: VariantInfo | null = null;
+        if (p.variants.length > 0) {
+          const vm = matchVariant(
+            p.variants,
+            p.options.map((o) => o.name),
+            `${it.name} ${it.variant}`,
+          );
+          if (vm.status !== 'matched' || !vm.variant) {
+            unavailable.push({
+              name: p.name,
+              qty: it.qty,
+              reason: 'option_required',
+              options: this.optionsToAsk(p, vm.missing, vm.candidates),
+            });
+            continue;
+          }
+          variant = vm.variant;
+        }
+        const held = await this.inventory.hold(
+          tx,
+          orgId,
+          p.id,
+          it.qty,
+          ref,
+          variant ? { variantId: variant.id } : {},
+        );
         if (!held) {
-          const left = p.stockQty === null ? null : Math.max(0, p.stockQty - p.reservedQty);
-          unavailable.push({ name: p.name, qty: it.qty, reason: 'out_of_stock', available: left });
+          const stock = variant ?? p;
+          const left =
+            stock.stockQty === null ? null : Math.max(0, stock.stockQty - stock.reservedQty);
+          unavailable.push({
+            name: variant ? `${p.name} (${variant.title})` : p.name,
+            qty: it.qty,
+            reason: 'out_of_stock',
+            available: left,
+          });
           continue;
         }
+        const unit = variant ? variantPriceOf(variant, p.priceMinor) : p.priceMinor;
         currency = currency || p.currency;
-        totalMinor += p.priceMinor * it.qty;
+        totalMinor += unit * it.qty;
         lines.push({
           product_id: p.id,
-          retailer_id: retailerIdOf({ id: p.id, sku: p.sku, metaRetailerId: p.metaRetailerId }),
+          retailer_id: variant
+            ? retailerIdOfVariant(
+                { id: p.id, sku: p.sku, metaRetailerId: p.metaRetailerId },
+                variant,
+              )
+            : retailerIdOf({ id: p.id, sku: p.sku, metaRetailerId: p.metaRetailerId }),
           name: p.name,
-          image_url: p.imageUrl,
+          image_url: variant?.imageUrl ?? p.imageUrl,
           qty: it.qty,
-          price_minor: p.priceMinor,
+          price_minor: unit,
           currency: p.currency,
+          ...(variant ? { variant_id: variant.uuid, variant_title: variant.title } : {}),
         });
       }
     });
@@ -610,8 +686,35 @@ export class OrderingFlowService {
     orgId: number,
   ): Promise<ProductRow[]> {
     const res = await tx.execute(sql`
-      SELECT id, sku, name, aliases_json, price_minor, currency_code, stock_qty, reserved_qty, image_url, meta_retailer_id
+      SELECT id, sku, name, aliases_json, price_minor, currency_code, stock_qty, reserved_qty, image_url, meta_retailer_id,
+             options_json
       FROM wa_products WHERE org_id = ${orgId} AND status = 'active' ORDER BY id`);
+    const vres = await tx.execute(sql`
+      SELECT v.id, v.uuid, v.product_id, v.title, v.sku, v.option_values_json, v.price_minor, v.image_url, v.stock_qty,
+             v.reserved_qty, v.active, v.position, v.meta_retailer_id
+      FROM wa_product_variants v JOIN wa_products p ON p.org_id = v.org_id AND p.id = v.product_id
+      WHERE v.org_id = ${orgId} AND p.status = 'active' ORDER BY v.product_id, v.position, v.id`);
+    const byProduct = new Map<number, VariantInfo[]>();
+    for (const v of vres.rows as Row[]) {
+      const list = byProduct.get(Number(v.product_id)) ?? [];
+      list.push({
+        id: Number(v.id),
+        uuid: String(v.uuid),
+        title: String(v.title),
+        sku: (v.sku as string | null) ?? null,
+        optionValues: Array.isArray(v.option_values_json)
+          ? (v.option_values_json as unknown[]).map(String)
+          : [],
+        priceMinor: v.price_minor === null ? null : Number(v.price_minor),
+        imageUrl: (v.image_url as string | null) ?? null,
+        stockQty: v.stock_qty === null ? null : Number(v.stock_qty),
+        reservedQty: Number(v.reserved_qty ?? 0),
+        active: v.active !== false,
+        position: Number(v.position ?? 0),
+        metaRetailerId: (v.meta_retailer_id as string | null) ?? null,
+      });
+      byProduct.set(Number(v.product_id), list);
+    }
     return (res.rows as Row[]).map((r) => ({
       id: Number(r.id),
       sku: (r.sku as string | null) ?? null,
@@ -623,14 +726,33 @@ export class OrderingFlowService {
       reservedQty: Number(r.reserved_qty ?? 0),
       imageUrl: (r.image_url as string | null) ?? null,
       metaRetailerId: (r.meta_retailer_id as string | null) ?? null,
+      options: optionsOf(r.options_json),
+      variants: byProduct.get(Number(r.id)) ?? [],
     }));
+  }
+
+  /** What to ask for: each missing option with the values the still-possible variants have for it. */
+  private optionsToAsk(
+    p: ProductRow,
+    missing: readonly string[],
+    candidates: readonly VariantInfo[],
+  ): Array<{ name: string; values: string[] }> {
+    const names = missing.length > 0 ? missing : p.options.map((o) => o.name);
+    return names.map((name) => {
+      const i = p.options.findIndex((o) => o.name === name);
+      const pool = candidates.length > 0 ? candidates : p.variants.filter((v) => v.active);
+      const values = [
+        ...new Set(pool.map((v) => v.optionValues[i]).filter((x): x is string => !!x)),
+      ];
+      return { name, values: values.length > 0 ? values : (p.options[i]?.values ?? []) };
+    });
   }
 
   /** A short "what is in stock" list for a customer whose items matched nothing: name, price and what is left. */
   async availableProducts(orgId: number, limit = 15): Promise<string> {
     const rows = await this.db.txAs({ orgId, userId: null }, async (tx) => {
       const res = await tx.execute(sql`
-        SELECT name, price_minor, currency_code, stock_qty FROM wa_products
+        SELECT name, price_minor, currency_code, stock_qty, options_json FROM wa_products
         WHERE org_id = ${orgId} AND status = 'active' AND (stock_qty IS NULL OR stock_qty > 0)
         ORDER BY sort_order, name LIMIT ${limit}`);
       return res.rows as Row[];
@@ -638,7 +760,11 @@ export class OrderingFlowService {
     return rows
       .map((r) => {
         const left = r.stock_qty === null ? '' : ` (${Number(r.stock_qty)} left)`;
-        return `• ${String(r.name)} — ${formatProductMoney(Number(r.price_minor), r.currency_code as string | null)}${left}`;
+        const opts = optionsOf(r.options_json)
+          .map((o) => `${o.name}: ${o.values.join(', ')}`)
+          .join('; ');
+        const from = opts === '' ? '' : ' from';
+        return `• ${String(r.name)}${opts === '' ? '' : ` (${opts})`} —${from} ${formatProductMoney(Number(r.price_minor), r.currency_code as string | null)}${left}`;
       })
       .join('\n');
   }
@@ -671,7 +797,7 @@ export class OrderingFlowService {
     orgId: number,
     text: string,
     model: string,
-  ): Promise<Array<{ name: string; qty: number }>> {
+  ): Promise<Array<{ name: string; qty: number; variant: string }>> {
     if (text.trim() === '') return [];
     return normalizeItems(await this.callJson(orgId, model, ORDER_PARSE_SYSTEM, text, 600, 0.1));
   }

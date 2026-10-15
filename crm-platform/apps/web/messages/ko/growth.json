@@ -1,0 +1,433 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "닫기",
+      "retry": "다시 시도",
+      "noAccessTitle": "이 화면을 열 수 없습니다",
+      "noAccess": "관리자에게 “{permission}” 권한을 요청하세요."
+    },
+    "errors": {
+      "network": "서버에 연결할 수 없습니다. 연결 상태를 확인하고 다시 시도하세요.",
+      "forbidden": "현재 역할로는 이 작업을 할 수 없습니다.",
+      "notAvailable": "이 워크스페이스에서는 그로스 파일럿을 사용할 수 없습니다.",
+      "featureOff": "그로스 파일럿의 이 기능이 꺼져 있습니다. 컨트롤에서 켜세요.",
+      "actionGone": "다른 사용자가 이미 처리했습니다.",
+      "assistantFailed": "어시스턴트가 제안을 만들지 못했습니다. 오디언스와 승인된 템플릿이 있는지 확인한 후 다시 시도하세요.",
+      "undoRefused": "이 변경은 더 이상 되돌릴 수 없습니다. 연락처가 이미 다음 단계로 이동했거나 이미 되돌려졌습니다.",
+      "conflict": "다른 사용자가 먼저 이 설정을 저장했습니다. 최신 버전을 불러왔습니다.",
+      "notFound": "더 이상 존재하지 않습니다.",
+      "validation": "올바르지 않은 값이 있습니다. 확인한 후 다시 시도하세요.",
+      "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
+      "unexpected": "문제가 발생했습니다. 다시 시도하고, 계속되면 지원팀에 문의하세요."
+    },
+    "page": {
+      "title": "그로스",
+      "subtitle": "캠페인과 대화에서 파악한 내용을 팀이 바로 실행할 수 있는 항목으로 정리합니다. 여기서 연락처에 자동으로 메시지가 전송되지는 않습니다.",
+      "notAvailableTitle": "파일럿 대상이 아닙니다",
+      "notAvailable": "그로스 파일럿은 선택된 워크스페이스에서만 켜져 있습니다. 아직 이 워크스페이스는 해당되지 않습니다.",
+      "tabs": {
+        "inbox": "받은 편지함",
+        "audiences": "오디언스",
+        "campaigns": "캠페인",
+        "insights": "인사이트",
+        "autoStage": "자동 단계 변경",
+        "assistant": "발송 어시스턴트",
+        "controls": "컨트롤"
+      }
+    },
+    "digest": {
+      "title": "오늘",
+      "quiet": "지금 확인할 항목이 없습니다.",
+      "highlights": {
+        "hotLeads": "{count, plural, other {핫 리드 #명이 구매할 준비가 되었습니다}}",
+        "unanswered": "{count, plural, other {구매 관련 질문 #건에 답변하지 않았습니다}}",
+        "optOuts": "{count, plural, other {연락처 #명이 수신 중단을 요청했습니다}}",
+        "suggestionsPending": "{count, plural, other {단계 변경 #건이 결정을 기다리고 있습니다}}",
+        "campaignReplies": "{count, plural, other {연락처 #명이 캠페인 발송 후 하루 안에 답장했습니다}}",
+        "lapsed": "{count, plural, other {고객 #명이 반응이 없어졌습니다}}"
+      }
+    },
+    "inbox": {
+      "title": "그로스 받은 편지함",
+      "hint": "살펴볼 만한 항목입니다. 수락하면 해당 유형의 작업이 실행되고, 무시하면 항목만 닫힙니다.",
+      "filter": "보기",
+      "all": "전체 ({count})",
+      "empty": "대기 중인 항목이 없습니다. 채팅을 분석하고 매일 점검을 실행하면 새 항목이 여기에 표시됩니다.",
+      "more": "더 보기",
+      "doneAccept": "{count, plural, other {#개 항목을 처리했습니다}}",
+      "doneDismiss": "{count, plural, other {#개 항목을 무시했습니다}}",
+      "someFailed": "{count, plural, other {#개 항목을 처리하지 못했습니다}}",
+      "openContact": "연락처 열기",
+      "someone": "연락처",
+      "dismiss": "무시",
+      "types": {
+        "hot_lead": "핫 리드",
+        "unanswered_intent": "미답변",
+        "registration_issue": "등록 문제",
+        "purchase_route": "담당자 배정",
+        "opt_out": "수신 중단 요청",
+        "lapsed": "반응 없음",
+        "service_due": "서비스 시기 도래",
+        "status_reply": "주문 상태"
+      },
+      "titles": {
+        "hot_lead": "{name} 님이 구매할 준비가 되었습니다",
+        "unanswered_intent": "{name} 님이 구매에 대해 문의했지만 아무도 답변하지 않았습니다",
+        "registration_issue": "{name} 님이 등록에 문제가 있다고 알려왔습니다",
+        "purchase_route": "{name} 님을 {user} 님에게 배정",
+        "opt_out": "{name} 님이 수신 중단을 요청했습니다",
+        "lapsed": "{name} 님의 반응이 없어졌습니다",
+        "service_due": "{name} 님: {rule} 시기가 되었습니다",
+        "status_reply": "{name} 님이 주문에 대해 문의했습니다"
+      },
+      "accept": {
+        "hot_lead": "처리 완료로 표시",
+        "unanswered_intent": "처리 완료로 표시",
+        "registration_issue": "처리 완료로 표시",
+        "purchase_route": "채팅 배정",
+        "opt_out": "수신 중단 기록",
+        "lapsed": "완료",
+        "service_due": "완료",
+        "status_reply": "완료"
+      },
+      "facts": {
+        "routeOwner": "{name} 님이 이 연락처의 담당자입니다.",
+        "routeLeastBusy": "{name} 님의 진행 중인 채팅이 가장 적습니다.",
+        "lapsedDays": "{count, plural, other {#일}} 동안 열람이나 메시지가 없습니다.",
+        "issue": {
+          "missing_confirmation": "확인 메시지를 받지 못했습니다.",
+          "payment_problem": "결제 문제를 알려왔습니다.",
+          "wrong_info": "일부 정보가 잘못되었다고 합니다."
+        }
+      }
+    },
+    "audiences": {
+      "title": "오디언스",
+      "hint": "연락처가 실제로 한 행동을 바탕으로 만든 그룹입니다. 동기화하면 캠페인을 보낼 수 있는 연락처 그룹이 채워집니다.",
+      "empty": "아직 오디언스가 없습니다. 컨트롤에서 기능을 켜세요.",
+      "synced": "“{name}”에 이제 {count, plural, other {연락처 #명}}이 있습니다.",
+      "lastSync": "그룹 “{name}”, 마지막 동기화: {when}.",
+      "notSynced": "그룹 “{name}”은(는) 첫 동기화 때 만들어집니다.",
+      "sync": "그룹으로 동기화",
+      "resync": "다시 동기화",
+      "errors": {
+        "forbidden": "현재 역할로는 오디언스를 동기화할 수 없습니다.",
+        "failed": "오디언스를 동기화하지 못했습니다. 다시 시도하세요."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "참여 중",
+          "description": "최근 여러 캠페인을 열어 본 연락처입니다."
+        },
+        "silent": {
+          "label": "무반응",
+          "description": "캠페인을 받았지만 하나도 열어 보지 않은 연락처입니다."
+        },
+        "lapsed": {
+          "label": "휴면",
+          "description": "오랫동안 열람이나 메시지가 없는 고객입니다."
+        },
+        "hot_chat": {
+          "label": "채팅에서 뜨거운 연락처",
+          "description": "최근 채팅 분석에서 구매할 준비가 되었다고 나온 연락처입니다."
+        },
+        "high_propensity": {
+          "label": "전환 가능성 높음",
+          "description": "전환 모델 기준 상위 10%입니다."
+        },
+        "service_due": {
+          "label": "서비스 시기 도래",
+          "description": "서비스 날짜가 된 연락처입니다."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "캠페인 답장",
+      "hint": "발송 후 24시간 및 72시간 이내에 답장한 연락처를 받은 편지함 기준으로 집계했습니다.",
+      "stamp": "지금 답장 기록",
+      "stamped": "{count, plural, other {답장 #건을 기록했습니다}}.",
+      "stampFailed": "답장을 기록하지 못했습니다. 다시 시도하세요.",
+      "empty": "아직 발송된 캠페인이 없습니다.",
+      "totals": {
+        "sent": "발송",
+        "read": "읽음",
+        "replied24h": "24시간 내 답장",
+        "replied72h": "72시간 내 답장"
+      },
+      "cols": {
+        "campaign": "캠페인",
+        "sent": "발송",
+        "read": "읽음",
+        "replied24h": "24시간",
+        "replied72h": "72시간",
+        "replyRate": "답장률"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "최적 발송 시간",
+        "hint": "연락처가 캠페인을 읽고 메시지를 보내는 시간대입니다(내 시간대 기준).",
+        "empty": "판단할 만한 활동이 아직 충분하지 않습니다.",
+        "best": "가장 좋은 시간대: {hours} ({zone}).",
+        "quiet": "가장 조용한 시간대: {hours}.",
+        "chart": "시간대별 활동",
+        "sample": "{count, plural, other {이벤트 #건}}을 기준으로 합니다."
+      },
+      "propensity": {
+        "title": "전환 모델",
+        "hint": "고객이 된 연락처에서 어떤 행동이 전환과 이어지는지 학습하여 모든 연락처에 점수를 매깁니다.",
+        "recompute": "지금 다시 학습",
+        "done": "모델을 업데이트했습니다.",
+        "failed": "모델을 업데이트하지 못했습니다. 다시 시도하세요.",
+        "contacts": "점수가 매겨진 연락처",
+        "converted": "전환됨",
+        "auc": "순위 정확도",
+        "capture": "상위 10% 내 전환",
+        "captureHint": "무작위 순위라면 10%입니다",
+        "none": "측정 안 됨",
+        "trained": "모델이 전환된 연락처에서 학습했습니다.",
+        "notTrained": "학습할 전환 연락처가 아직 너무 적어 고정 가중치를 사용합니다.",
+        "computedAt": "{when}에 업데이트됨.",
+        "drivers": "점수에 영향을 주는 요인",
+        "features": {
+          "campaigns_opened_30d": "열어 본 캠페인 (30일)",
+          "campaigns_received_30d": "받은 캠페인 (30일)",
+          "messages_from_contact_30d": "직접 보낸 메시지 (30일)",
+          "links_clicked_30d": "클릭한 링크 (30일)",
+          "groups": "속한 그룹",
+          "has_email": "이메일 주소 있음",
+          "chat_messages_total": "채팅 메시지 수",
+          "age_days": "추가 후 경과 일수"
+        }
+      },
+      "quality": {
+        "title": "성과 확인",
+        "hint": "최근 30일 동안 제안이 활용되는지, 리드 점수가 전환된 연락처를 얼마나 잘 구분하는지, AI 비용이 얼마인지 보여 줍니다.",
+        "none": "측정 안 됨",
+        "scoreAuc": "리드 점수 품질",
+        "scoreAucHint": "점수 산정 {scored}건, 전환 {converted}건",
+        "calls": "AI 호출",
+        "cost": "AI 비용",
+        "autoApplied": "자동 변경",
+        "undone": "{count}건 되돌림",
+        "suggestions": {
+          "chat": "채팅 기반 단계 제안",
+          "engagement": "캠페인 기반 단계 제안"
+        },
+        "suggestionLine": "수락 {accepted}건, 무시 {dismissed}건, 대기 {pending}건.",
+        "cols": {
+          "type": "받은 편지함 항목",
+          "done": "완료",
+          "dismissed": "무시됨",
+          "open": "미처리"
+        },
+        "actionTypes": {
+          "hot_lead": "핫 리드",
+          "unanswered_intent": "미답변",
+          "registration_issue": "등록 문제",
+          "purchase_route": "담당자 배정",
+          "opt_out": "수신 중단 요청",
+          "lapsed": "반응 없음",
+          "service_due": "서비스 시기 도래",
+          "status_reply": "주문 상태"
+        }
+      },
+      "enrichment": {
+        "title": "회사 정보",
+        "hint": "업무용 이메일 주소가 있는 연락처의 회사 정보를 조회하여 연락처에 표시합니다.",
+        "run": "다음 묶음 조회",
+        "asked": "{count, plural, other {연락처 #명을 조회했습니다}}.",
+        "failed": "조회에 실패했습니다. 다시 시도하세요.",
+        "status": "{provider}: {found}건 찾음, {notFound}건 못 찾음, {failed}건 실패.",
+        "notConfigured": "서버에 연결된 조회 서비스가 없어 이 스위치는 아직 효과가 없습니다."
+      }
+    },
+    "autoStage": {
+      "title": "자동 단계 변경",
+      "hint": "AI가 매우 확신하는 판독만, 하루 한도 내에서 적용합니다. 그 이후 연락처가 이동되지 않았다면 각각 되돌릴 수 있습니다.",
+      "today": "오늘 {cap}건 중 {done}건 사용.",
+      "empty": "자동으로 변경된 항목이 아직 없습니다.",
+      "contact": "연락처",
+      "moved": "{from}에서 {to}(으)로 이동했습니다.",
+      "confidence": "확신도 {percent}%",
+      "undone": "되돌림",
+      "undo": "되돌리기",
+      "undoDone": "연락처를 원래 단계로 되돌렸습니다.",
+      "undoRefused": "이 변경은 더 이상 되돌릴 수 없습니다. 연락처가 이미 다음 단계로 이동했습니다.",
+      "undoFailed": "변경을 되돌리지 못했습니다. 다시 시도하세요."
+    },
+    "assistant": {
+      "title": "발송 어시스턴트",
+      "hint": "달성하려는 목표를 입력하면 오디언스 하나와 승인된 템플릿 하나를 제안합니다. 각 템플릿이 실제로 받은 답장도 고려합니다. 발송이나 생성은 하지 않습니다.",
+      "goal": "무엇을 달성하고 싶으신가요?",
+      "goalHint": "예: 등록한 모든 연락처에게 토요일 행사를 알려 주세요.",
+      "placeholder": "등록한 연락처에게 토요일 행사를 알려 주세요",
+      "ask": "캠페인 제안받기",
+      "audience": "오디언스",
+      "audienceValue": "{name} (연락처 {count}명)",
+      "template": "템플릿",
+      "replyRate": "하루 안에 {percent} 답장",
+      "sendAt": "발송 시각",
+      "considered": "{audiences, plural, other {오디언스 #개}}와 {templates, plural, other {템플릿 #개}} 중에서 선택했습니다."
+    },
+    "controls": {
+      "readOnly": "이 설정은 볼 수만 있고 변경할 수 없습니다.",
+      "saved": "설정을 저장했습니다.",
+      "discard": "변경 취소",
+      "save": "저장",
+      "problem": {
+        "numbers": "범위를 벗어난 숫자가 있습니다. 임계값을 확인하세요.",
+        "serviceRules": "{line}번째 줄의 서비스 규칙이 “이름 | 날짜 속성 | 경과 일수 | 남은 일수” 형식이 아닙니다.",
+        "customPhrases": "{line}번째 줄의 문구가 “문구 = 인텐트” 형식이 아닙니다."
+      },
+      "groups": {
+        "measure": {
+          "title": "측정",
+          "hint": "읽기 전용 측정입니다. 아무것도 변경하지 않습니다."
+        },
+        "audiences": {
+          "title": "오디언스와 단계",
+          "hint": "누구에게 연락할지 파악하고, 연락처가 캠페인에서 보이는 행동을 바탕으로 단계 변경을 제안합니다."
+        },
+        "chats": {
+          "title": "채팅 분석",
+          "hint": "AI 리드 점수의 채팅 분석을 사용하므로 해당 기능이 켜져 있어야 합니다. 채팅을 분석하기 전에 개인 정보 일부를 가립니다."
+        },
+        "assist": {
+          "title": "어시스턴트",
+          "hint": "의사 결정을 돕습니다. 연락처에게는 아무것도 전송되지 않습니다."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "실제 캠페인 답장",
+          "hint": "캠페인 후 답장한 연락처를 집계하고 응답 수치를 보정합니다."
+        },
+        "send_times": {
+          "label": "최적 발송 시간",
+          "hint": "연락처가 읽고 메시지를 보내는 시간대를 보여 줍니다."
+        },
+        "propensity": {
+          "label": "전환 모델",
+          "hint": "모든 연락처에 전환 가능성 점수를 매깁니다."
+        },
+        "quality": {
+          "label": "품질 대시보드",
+          "hint": "제안이 얼마나 활용되는지와 AI 비용을 보여 줍니다."
+        },
+        "daily_digest": {
+          "label": "일일 요약",
+          "hint": "이 화면 상단에 워크스페이스의 짧은 요약을 표시합니다."
+        },
+        "engagement_audiences": {
+          "label": "참여도 오디언스",
+          "hint": "참여 중, 무반응, 휴면 연락처를 캠페인을 보낼 수 있게 준비합니다."
+        },
+        "engagement_stage_rules": {
+          "label": "캠페인 기반 단계 제안",
+          "hint": "캠페인을 계속 열어 보는 연락처를 다음 단계로 옮기도록 제안합니다."
+        },
+        "service_rules": {
+          "label": "서비스 알림 및 후속 조치",
+          "hint": "직접 정한 규칙에 따라 서비스 날짜나 구매 날짜가 되어 대응이 필요한 연락처를 찾습니다."
+        },
+        "enrichment": {
+          "label": "회사 정보",
+          "hint": "업무용 이메일 주소가 있는 연락처의 회사 정보를 조회합니다."
+        },
+        "intent_fields": {
+          "label": "연락처의 채팅 인텐트",
+          "hint": "채팅 내용을 “AI 인텐트” 속성에 기록하여 플로우가 반응할 수 있게 합니다."
+        },
+        "language_detect": {
+          "label": "채팅 언어",
+          "hint": "각 채팅이 어떤 언어인지 기록합니다."
+        },
+        "auto_notes": {
+          "label": "채팅 요약 메모",
+          "hint": "채팅의 짧은 요약을 연락처에 메모로 추가합니다."
+        },
+        "hot_lead_alerts": {
+          "label": "핫 리드 알림",
+          "hint": "연락처가 분명히 구매할 준비가 되었을 때 알림을 띄우고 담당자에게 알립니다."
+        },
+        "unanswered_watch": {
+          "label": "답변 없는 구매 문의",
+          "hint": "아무도 답변하지 않은 구매 또는 가격 문의를 표시합니다."
+        },
+        "handover_summary": {
+          "label": "인계 시 요약",
+          "hint": "채팅을 담당자에게 넘길 때 채팅 요약을 맨 위에 표시합니다."
+        },
+        "purchase_routing": {
+          "label": "구매 희망자를 담당자에게 배정",
+          "hint": "연락처가 구매를 원할 때 누가 채팅을 맡아야 할지 제안합니다."
+        },
+        "registration_check": {
+          "label": "등록 문제",
+          "hint": "결제 또는 등록을 했다고 하지만 확인 메시지를 받지 못한 연락처를 표시합니다."
+        },
+        "status_reply": {
+          "label": "주문 및 수리 상태",
+          "hint": "고객이 문의하면 주문 또는 수리 상태를 준비합니다."
+        },
+        "optout_detection": {
+          "label": "수신 중단 요청",
+          "hint": "수신 중단을 요청한 연락처를 표시합니다. 수락하면 동의 기록부에 남습니다."
+        },
+        "broadcast_assistant": {
+          "label": "발송 어시스턴트",
+          "hint": "목표에 맞는 오디언스와 템플릿을 제안합니다."
+        },
+        "auto_stage": {
+          "label": "자동 단계 변경",
+          "hint": "AI가 매우 확신할 때 하루 한도 내에서 연락처를 다음 단계로 옮깁니다. 되돌리기가 가능합니다."
+        }
+      },
+      "thresholds": {
+        "title": "임계값",
+        "hint": "위 기능들이 사용하는 수치입니다.",
+        "hotLeadConfidence": "핫 리드 확신도",
+        "hotLeadConfidenceHint": "판독에 필요한 확신도이며 0.5에서 1 사이입니다.",
+        "unansweredHours": "질문을 미답변으로 보는 기준 시간",
+        "unansweredHoursHint": "1에서 168 사이.",
+        "lapsedDays": "고객을 휴면으로 보는 기준 일수",
+        "lapsedDaysHint": "7에서 730 사이.",
+        "engagedOpens": "참여 중으로 보는 캠페인 열람 수",
+        "engagedOpensHint": "30일 이내.",
+        "stageMinOpens": "단계 변경을 제안하는 캠페인 열람 수",
+        "stageWindowDays": "이를 집계할 과거 일수",
+        "autoMinConfidence": "자동 변경에 필요한 확신도",
+        "autoMinConfidenceHint": "0.8에서 1 사이.",
+        "autoDailyCap": "하루 자동 변경 수",
+        "autoDailyCapHint": "워크스페이스 전체 한도입니다.",
+        "requireGroup": "그룹에 속한 연락처에게만 단계 변경 제안"
+      },
+      "rules": {
+        "title": "직접 정한 규칙과 단어",
+        "hint": "한 줄에 항목 하나씩 입력하세요.",
+        "statusFields": "상태 속성",
+        "statusFieldsHint": "주문 또는 수리 상태를 담는 연락처 속성입니다(예: repair_status).",
+        "serviceRules": "서비스 규칙",
+        "serviceRulesHint": "이름 | 날짜 속성 | 경과 일수 | 남은 일수(선택).",
+        "serviceRulesExample": "배터리 교체 | purchase_date | 700 | 760",
+        "customPhrases": "버튼 및 키워드 탭",
+        "customPhrasesHint": "문구 = 인텐트. 인텐트: {intents}.",
+        "customPhrasesExample": "보증서 보기 = post_purchase",
+        "extraMaskTerms": "항상 가릴 단어",
+        "extraMaskTermsHint": "AI에 절대 보내면 안 되는 브랜드, 주소 또는 이름입니다."
+      },
+      "confirmEnrich": {
+        "title": "회사 정보를 조회할까요?",
+        "body": "회사 정보를 찾기 위해 연락처의 업무용 이메일 주소가 조회 서비스로 전송됩니다. 개인 이메일 주소는 전송되지 않습니다.",
+        "yes": "켜기",
+        "no": "나중에"
+      }
+    },
+    "contactCard": {
+      "title": "그로스",
+      "propensity": "전환 가능성: 100점 만점에 {score}점.",
+      "computedAt": "{when}에 업데이트됨."
+    }
+  }
+}

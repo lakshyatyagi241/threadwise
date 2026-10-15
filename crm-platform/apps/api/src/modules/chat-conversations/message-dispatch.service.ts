@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import type { EmailMeta } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AppError } from '../../common/errors/app-error';
 import { ConversationTranslationService } from '../localization-translation';
@@ -12,7 +13,12 @@ import { ConversationLifecycleService } from './conversation-lifecycle.service';
 import { ConversationsRepository, type ConversationRow } from './conversations.repository';
 import { failureReason } from './message-rules';
 import { MessagesRepository, type MessageRow } from './messages.repository';
-import { envelopeOf } from './outbound-envelope';
+import {
+  emailEnvelopeOf,
+  envelopeOf,
+  threadIdOfPeerKey,
+  type StoredEmailReply,
+} from './outbound-envelope';
 
 export type DispatchOutcome =
   | 'sent'
@@ -87,6 +93,11 @@ export class MessageDispatchService {
         envelope,
         lastInboundAt: conv.lastInboundAt,
         source: 'inbox',
+        // The gate runs at send time too: a STOP that arrived while a marketing template waited in the queue still stops it.
+        consent: {
+          purpose: await this.dispatcher.purposeFor(orgId, envelope),
+          contactId: conv.contactId,
+        },
       });
     } catch (err) {
       return this.failed(orgId, row, ref, err, options, runtime.uuid);
@@ -131,7 +142,24 @@ export class MessageDispatchService {
       const replyTo = row.replyToMessageUuid
         ? await this.messages.byUuid(tx, orgId, row.replyToMessageUuid)
         : null;
-      const envelope = envelopeOf(row, conv.peerKey, replyTo?.providerMessageId ?? null, attempt);
+      // An email reply carries its thread: recipients, subject and the headers that keep it inside the customer's thread. Rebuilt from
+      // the stored reply extras on every attempt (a retry sends the same cc, bcc and subject), and from the thread's newest mail.
+      const email =
+        channel.kind === 'email' && row.kind === 'text'
+          ? emailEnvelopeOf(
+              (await this.messages.latestInboundEmailMeta(tx, orgId, conv.id)) as EmailMeta | null,
+              row.meta.emailReply as Partial<StoredEmailReply> | undefined,
+              threadIdOfPeerKey(conv.peerKey),
+              row.senderKind === 'agent' ? row.senderUserId : null,
+            )
+          : null;
+      const envelope = envelopeOf(
+        row,
+        conv.peerKey,
+        replyTo?.providerMessageId ?? null,
+        attempt,
+        email,
+      );
       // Before the provider is called: the log must show an attempt even if the process dies inside the call.
       await this.messages.insertEvent(
         tx,
@@ -160,6 +188,7 @@ export class MessageDispatchService {
       const moved = await this.messages.markSent(tx, orgId, ref, {
         providerMessageId: sent.providerMessageId,
         acceptedAt: sent.acceptedAt,
+        ...(sent.meta ? { meta: sent.meta } : {}),
       });
       // Idempotent: a retried attempt that finds the message already sent changes nothing.
       if (!moved) return null;

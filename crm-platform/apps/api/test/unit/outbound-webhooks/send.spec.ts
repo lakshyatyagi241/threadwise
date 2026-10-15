@@ -1,35 +1,64 @@
-import { describe, expect, it, vi } from 'vitest';
-import { guardedRequest } from '../../../src/infra/net/guarded-http';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { WebhookEnvelope } from '@crm/contracts';
+
+const guarded = vi.hoisted(() => ({ guardedRequest: vi.fn() }));
+vi.mock('../../../src/infra/net/guarded-http', () => guarded);
+
 import { send } from '../../../src/modules/outbound-webhooks/send';
 
-// The real contracts barrel pulls in Nest decorators; only the header names are needed here.
-vi.mock('@crm/contracts', () => ({
-  WEBHOOK_HEADERS: { event: 'x-event', id: 'x-id', timestamp: 'x-ts', signature: 'x-sig' },
-}));
-// The barrel also exports Nest services; the real guard lives in url-guard.
-vi.mock('../../../src/modules/webhook-fanout', () => import('../../../src/modules/webhook-fanout/url-guard'));
-vi.mock('../../../src/infra/net/guarded-http', () => ({ guardedRequest: vi.fn() }));
+const envelope = { id: 'evt_1', event: 'contact.created', data: {} } as unknown as WebhookEnvelope;
 
-const envelope = { id: 'evt_1', event: 'contact.created' } as never;
-
-describe('outbound webhook send', () => {
-  it('connects through the socket-level guard (no resolve-then-fetch gap) and keeps 1 KB of the answer', async () => {
-    vi.mocked(guardedRequest).mockResolvedValue({ status: 200, body: 'x'.repeat(5000), headers: {} });
-    const out = await send('https://8.8.8.8/hook', 'secret', envelope);
-    expect(out.ok).toBe(true);
-    expect(out.responseSnippet).toHaveLength(1024);
-    expect(vi.mocked(guardedRequest).mock.calls[0]![0].allowPrivate).toBe(false);
+describe('customer webhook send: the connection is made to the address that was checked', () => {
+  beforeEach(() => {
+    guarded.guardedRequest.mockReset();
   });
-  it('never calls out to a private address', async () => {
-    vi.mocked(guardedRequest).mockClear();
-    const out = await send('https://10.0.0.5/hook', null, envelope);
+
+  it('goes through the connect-time guard with private addresses off and no redirect following', async () => {
+    guarded.guardedRequest.mockResolvedValue({ status: 200, body: 'ok', headers: {} });
+    const out = await send('https://93.184.216.34/hook', 'secret', envelope);
+    expect(out).toMatchObject({ ok: true, statusCode: 200, responseSnippet: 'ok' });
+    const req = guarded.guardedRequest.mock.calls[0]![0];
+    expect(req.allowPrivate).toBe(false);
+    expect(req.method).toBe('POST');
+    expect(String(req.url)).toBe('https://93.184.216.34/hook');
+    expect(req.maxBytes).toBe(1024);
+  });
+
+  it('never makes a request for an internal address', async () => {
+    const out = await send('https://169.254.169.254/latest', null, envelope);
     expect(out.ok).toBe(false);
-    expect(guardedRequest).not.toHaveBeenCalled();
+    expect(out.permanent).toBe(true);
+    expect(guarded.guardedRequest).not.toHaveBeenCalled();
   });
-  it('does not follow a redirect and says so', async () => {
-    vi.mocked(guardedRequest).mockResolvedValue({ status: 302, body: '', headers: {} });
-    const out = await send('https://8.8.8.8/hook', null, envelope);
-    expect(out).toMatchObject({ ok: false, statusCode: 302, permanent: true });
-    expect(out.error).toMatch(/redirects are not followed/);
+
+  it('reports a name that is repointed at an internal address after the check as a failed delivery, with no body leaked', async () => {
+    guarded.guardedRequest.mockImplementation(async () => {
+      throw new Error('addresses on private networks are not allowed');
+    });
+    const out = await send('https://93.184.216.34/hook', null, envelope);
+    expect(out).toMatchObject({ ok: false, error: 'Could not connect', responseSnippet: null });
+  });
+
+  it('words a redirect as not followed, and treats it as permanent', async () => {
+    guarded.guardedRequest.mockResolvedValue({
+      status: 302,
+      body: '',
+      headers: { location: 'http://10.0.0.1/' },
+    });
+    const out = await send('https://93.184.216.34/hook', null, envelope);
+    expect(out).toMatchObject({
+      ok: false,
+      statusCode: 302,
+      permanent: true,
+      responseSnippet: null,
+    });
+    expect(out.error).toContain('redirects are not followed');
+  });
+
+  it('words a timeout as a timeout', async () => {
+    guarded.guardedRequest.mockImplementation(async () => {
+      throw new Error('timed out');
+    });
+    expect((await send('https://93.184.216.34/hook', null, envelope)).error).toMatch(/Timed out/);
   });
 });

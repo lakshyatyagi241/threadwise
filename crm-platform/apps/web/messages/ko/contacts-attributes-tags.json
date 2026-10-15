@@ -21,7 +21,6 @@
       "unavailable": "API의 이 부분은 아직 사용할 수 없습니다.",
       "rateLimited": "요청이 너무 많습니다. 잠시 기다린 후 다시 시도하세요.",
       "unexpected": "문제가 발생했습니다. 다시 시도하세요.",
-      "requestId": "요청 ID",
       "retry": "다시 시도",
       "reservedKey": "해당 키는 기본 제공 토큰용으로 예약되어 있습니다. 다른 키를 선택하세요.",
       "attributeInUse": "일부 연락처에 이 속성의 값이 있습니다.",
@@ -121,6 +120,11 @@
       "selectedActionsNone": "선택한 연락처(먼저 행을 선택하세요)",
       "modifyColumns": "열 수정",
       "resetColumns": "기본값으로 초기화",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsSave": "Save",
       "colContactName": "연락처 이름",
       "colPhone": "전화번호",
       "colEmailId": "이메일 ID",
@@ -170,7 +174,42 @@
       "import": "가져오기",
       "columns": "열",
       "addColumnField": "사용자 지정 필드를 열로 추가",
-      "kanbanView": "보드 보기(단계별)"
+      "kanbanView": "보드 보기(단계별)",
+      "colLeadScore": "리드 점수",
+      "colOwner": "담당자",
+      "unassigned": "미배정",
+      "ownerFilter": "담당자로 필터",
+      "selectOwner": "담당자",
+      "allOwners": "모든 담당자",
+      "myContacts": "내 연락처",
+      "ownersCount": "담당자 {count}명",
+      "ownerMe": "{name}(나)",
+      "ownerFormer": "이전 멤버",
+      "reassignView": "{name}의 연락처 재배정...",
+      "smsNamed": "{name}에게 SMS 보내기",
+      "noSms": "SMS를 보낼 전화번호가 없습니다",
+      "pqlLabel": "일상 언어로 연락처 검색",
+      "pqlAsk": "검색",
+      "pqlAsking": "검색 중...",
+      "pqlIgnored": "이해하지 못한 부분: {parts}",
+      "pqlNothing": "이 검색으로 필터를 만들 수 없었습니다.",
+      "pqlFailed": "자연어 검색을 지금 사용할 수 없습니다. 다시 시도하세요.",
+      "filter": "필터",
+      "filterAi": "AI로 필터링",
+      "filterAiHint": "찾는 사람을 설명하세요",
+      "filterAdvanced": "고급 필터 추가",
+      "quickFilters": "빠른 필터",
+      "sortButton": "정렬",
+      "back": "뒤로",
+      "pqlPromptPlaceholder": "원하는 연락처를 설명하세요...",
+      "pqlTry": "예시 사용해 보기",
+      "pqlExample2": "30일간 활동 없음",
+      "pqlExample3": "최근 7일 내 생성",
+      "clearFilter": "필터 지우기",
+      "conditionsChip": "조건: {count}",
+      "pqlExampleTag": "태그 {tag}가 붙은 30일간 활동 없는 연락처",
+      "pqlExampleStage": "최근 7일 내 생성된 {stage} 연락처",
+      "pqlExampleNoOwner": "담당자가 없는 연락처"
     },
     "bulk": {
       "label": "선택한 연락처에 대한 작업",
@@ -215,7 +254,6 @@
       "exportStarted": "내보내기 파일을 다운로드했습니다.",
       "exportTooLarge": "한 번에 내보내기에는 연락처가 너무 많습니다. 필터를 좁혀 다시 시도하세요.",
       "update": "업데이트",
-      "updateNeedsRows": "행 선택",
       "updated": "{count, plural, other {연락처 #개를 업데이트했습니다.}}"
     },
     "form": {
@@ -304,7 +342,13 @@
       "statusNoticeReset": "상태가 {status}(으)로 초기화되었습니다.",
       "statusNoticeSet": "상태가 이 단계의 기본값인 {status}(으)로 설정되었습니다.",
       "statusNoticeCleared": "이 단계에는 해당되지 않아 상태가 지워졌습니다.",
-      "statusNoneForStage": "이 단계에 설정된 상태가 없습니다."
+      "statusNoneForStage": "이 단계에 설정된 상태가 없습니다.",
+      "owner": "담당자",
+      "ownerNone": "미배정",
+      "ownerMe": "{name}(나)",
+      "ownerFormer": "이전 멤버",
+      "ownerHelp": "이 연락처를 관리하는 사람입니다. 내 접근 권한으로 허용된 사람만 선택할 수 있습니다.",
+      "ownerOutOfScope": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다."
     },
     "tags": {
       "title": "태그",
@@ -320,7 +364,12 @@
       "addPlaceholder": "태그 추가 또는 선택...",
       "addLabel": "태그 이름",
       "add": "태그 추가",
-      "failed": "태그를 변경할 수 없습니다. 다시 시도하세요."
+      "failed": "태그를 변경할 수 없습니다. 다시 시도하세요.",
+      "quickPlaceholder": "태그 검색 또는 만들기",
+      "create": "태그 “{name}” 만들기",
+      "noMatch": "일치하는 태그가 없습니다",
+      "quickHint": "태그를 여러 개 선택하거나, 이름을 입력하고 Enter를 눌러 새 태그를 만드세요.",
+      "quickHintPick": "목록에서 태그를 여러 개 선택하세요."
     },
     "groups": {
       "eyebrow": "워크스페이스 · {workspace}",
@@ -406,7 +455,10 @@
         "address": "주소",
         "memo": "메모",
         "status": "상태",
-        "source": "출처"
+        "source": "출처",
+        "consent": "마케팅 동의(예 / 아니요)",
+        "consentSms": "SMS 마케팅 동의(예 / 아니요)",
+        "consentEmail": "이메일 마케팅 동의(예 / 아니요)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",
@@ -431,7 +483,7 @@
       "imported": "{count, plural, other {연락처 #개를 가져왔습니다.}}",
       "importedUpdated": "{count, plural, other {기존 연락처 #개를 업데이트했습니다.}}",
       "importedInvalid": "{count, plural, other {유효하지 않은 행 #개를 건너뛰었습니다.}}",
-      "downloadRejects": "거부된 행 다운로드",
+      "downloadRejects": "오류 및 건너뛴 행 다운로드",
       "fileTooLarge": "파일이 {mb}MB보다 큽니다.",
       "checking": "파일 확인 중...",
       "errorFile": "파일을 연락처 CSV로 읽을 수 없습니다. 머리글 행과 연락처가 하나 이상 있는지 확인하세요.",
@@ -462,7 +514,8 @@
         "group_name_too_long": "그룹 이름이 너무 김",
         "tag_name_too_long": "태그 이름이 너무 김",
         "plan_limit_reached": "요금제 연락처 한도 도달",
-        "tag_limit_reached": "요금제 태그 한도 도달"
+        "tag_limit_reached": "요금제 태그 한도 도달",
+        "duplicate_in_file": "중복된 번호, 앞선 행에 병합됨"
       },
       "statusHint": "이 파일이 생성하는 연락처에 적용됩니다.",
       "queued": "시작 대기 중...",
@@ -512,7 +565,17 @@
       "noActivity": "이 연락처의 활동이 아직 없습니다.",
       "loadMore": "더 보기",
       "yes": "예",
-      "no": "아니요"
+      "no": "아니요",
+      "owner": "담당자",
+      "ownerNone": "미배정",
+      "ownerChange": "담당자 변경",
+      "ownerChanged": "담당자를 {name}(으)로 설정했습니다.",
+      "ownerCleared": "담당자를 제거했습니다.",
+      "ownerConflict": "다른 사용자가 먼저 이 연락처를 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
+      "ownerForbidden": "내 접근 권한으로는 이 연락처를 해당 사람에게 배정할 수 없습니다.",
+      "ownerFailed": "담당자를 변경하지 못했습니다. 다시 시도하세요.",
+      "ownerMe": "{name}(나)",
+      "ownerFormer": "이전 멤버"
     },
     "attributes": {
       "eyebrow": "더보기 / 속성",
@@ -1137,7 +1200,11 @@
         "willClear": "{count, plural, one {선택한 연락처} other {선택한 연락처 #명 모두}}에서 비워집니다.",
         "requiredNoClear": "필수 속성은 지울 수 없습니다.",
         "problemEmpty": "값을 입력하거나 지우기를 선택하세요."
-      }
+      },
+      "titleAll": "일치하는 모든 연락처 업데이트",
+      "hintAll": "현재 필터와 일치하는 모든 연락처에 같은 값을 설정합니다. 유지로 둔 필드는 변경되지 않습니다.",
+      "applyAll": "일치하는 모든 연락처 업데이트",
+      "ownerOnlyNote": "일치하는 모든 연락처에 대해서는 여기서 담당자만 변경할 수 있습니다. 단계, 상태 또는 속성을 변경하려면 행을 선택하세요."
     },
     "kanban": {
       "board": "단계별 연락처",
@@ -1164,17 +1231,18 @@
         "updated": "업데이트됨",
         "rejected": "거부됨",
         "actions": "작업",
-        "downloadRejects": "거부된 행 다운로드",
+        "downloadRejects": "오류 및 건너뛴 행 다운로드",
         "statuses": {
           "queued": "대기 중",
           "running": "실행 중",
           "completed": "완료됨",
           "failed": "실패"
-        }
+        },
+        "by": "가져온 사람"
       },
       "exports": {
         "title": "내보내기",
-        "hint": "허브에서 내보낸 연락처가 최신순으로 표시됩니다. 다운로드한 파일은 보관되지 않습니다.",
+        "hint": "허브의 연락처 내보내기 기록(최신순). 각 파일은 30일간 보관되어 본인과 내보내기 권한이 있는 팀원이 다시 내려받을 수 있습니다.",
         "empty": "내보내기 기록이 없습니다.",
         "by": "실행자",
         "rows": "연락처",
@@ -1183,8 +1251,176 @@
         "selections": {
           "ids": "선택한 연락처",
           "filter": "조건에 맞는 모든 연락처"
-        }
+        },
+        "download": "다운로드",
+        "noFile": "저장 안 됨",
+        "keptUntil": "{date}까지 보관",
+        "downloadFailed": "파일을 다운로드할 수 없습니다. 만료되었을 수 있습니다."
       }
+    },
+    "singleSend": {
+      "close": "닫기",
+      "cancel": "취소",
+      "send": "보내기",
+      "sending": "보내는 중",
+      "contact": "연락처",
+      "name": "이름",
+      "phone": "휴대전화",
+      "email": "이메일",
+      "title": {
+        "whatsapp": "WhatsApp 메시지 보내기",
+        "sms": "SMS 보내기",
+        "email": "이메일 보내기",
+        "call": "전화"
+      },
+      "optedOut": "이 연락처는 수신을 거부했습니다. 메시지를 보낼 수 없습니다.",
+      "noPhone": "이 연락처에는 전화번호가 없습니다.",
+      "noEmail": "이 연락처에는 이메일 주소가 없습니다.",
+      "number": "보내는 번호",
+      "numberHint": "메시지를 발송할 WhatsApp 번호입니다.",
+      "noChannel": "연결된 WhatsApp 번호가 없습니다. 먼저 채널에서 번호를 연결하세요.",
+      "template": "WhatsApp 템플릿",
+      "templatePlaceholder": "템플릿 선택",
+      "noTemplates": "이 번호에 승인된 템플릿이 없습니다.",
+      "notSendable": "이 템플릿은 여기에서 채울 수 없습니다 ({reason}).",
+      "variables": "템플릿 변수",
+      "preview": "미리보기",
+      "slot": "변수 {key}",
+      "loading": "로딩 중",
+      "openFailed": "대화를 열 수 없습니다: {message}",
+      "sent": "{name}님에게 보낼 메시지가 대기열에 추가되었습니다.",
+      "failed": "보낼 수 없습니다: {message}",
+      "callIntro": "브라우저에서 이 연락처에게 WhatsApp 전화를 겁니다.",
+      "callOff": "이 WhatsApp 번호는 전화 기능이 꺼져 있습니다. 번호 설정에서 켜세요.",
+      "callPermission": "연락처가 아직 전화를 허용하지 않았습니다. 전화를 걸면 먼저 상대방에게 허락을 요청합니다.",
+      "callReady": "{phone}에 전화할 준비가 되었습니다.",
+      "later": {
+        "sms": "CRM에서 SMS 보내기는 아직 사용할 수 없습니다.",
+        "email": "CRM에서 이메일 보내기는 아직 사용할 수 없습니다."
+      },
+      "openApp": {
+        "sms": "메시지 앱에서 열기",
+        "email": "메일 앱에서 열기"
+      }
+    },
+    "views": {
+      "label": "보기",
+      "all": "모든 연락처",
+      "add": "보기 추가",
+      "changed": "이 보기를 저장한 후 필터가 변경되었습니다",
+      "more": "{name} 더보기",
+      "picker": {
+        "title": "보기 선택",
+        "create": "새 보기 만들기",
+        "search": "보기 검색...",
+        "empty": "보기를 찾을 수 없습니다",
+        "pinned": "탭에 표시",
+        "favorites": "즐겨찾기",
+        "defaultFilters": "기본 필터",
+        "createdViews": "만든 보기",
+        "addView": "보기 추가",
+        "markFavorite": "즐겨찾기로 표시",
+        "unmarkFavorite": "즐겨찾기에서 제거"
+      },
+      "menu": {
+        "rename": "보기 이름 바꾸기",
+        "update": "현재 필터 저장",
+        "unpin": "탭에서 제거",
+        "pin": "탭으로 표시",
+        "delete": "보기 삭제",
+        "edit": "보기 편집"
+      },
+      "drawer": {
+        "editTitle": "보기 이름 바꾸기",
+        "name": "보기 이름",
+        "namePlaceholder": "제목 없는 보기",
+        "shareWith": "공유 대상",
+        "justMe": "나만",
+        "everyone": "모든 사람",
+        "save": "업데이트",
+        "cancel": "취소",
+        "close": "닫기"
+      },
+      "toast": {
+        "created": "\"{name}\" 보기를 만들었습니다.",
+        "updated": "보기를 업데이트했습니다.",
+        "filtersSaved": "필터를 \"{name}\"에 저장했습니다.",
+        "deleted": "\"{name}\" 보기를 삭제했습니다.",
+        "failed": "보기를 저장할 수 없습니다: {message}",
+        "conflict": "다른 사용자가 이 보기를 변경했습니다. 새로고침한 후 다시 시도하세요."
+      },
+      "delete": {
+        "title": "이 보기를 삭제하시겠습니까?",
+        "message": "\"{name}\" 보기는 공유된 모든 사용자에게서 삭제됩니다. 연락처는 변경되지 않습니다.",
+        "confirm": "보기 삭제",
+        "cancel": "보기 유지"
+      },
+      "editor": {
+        "title": {
+          "create": "새 보기 만들기",
+          "edit": "보기 편집"
+        },
+        "close": "닫기",
+        "back": "연락처로 돌아가기",
+        "name": "보기 이름",
+        "namePlaceholder": "보기 이름 입력",
+        "favorite": "즐겨찾기로 표시",
+        "favoriteHint": "즐겨찾기 보기는 별도의 탭으로 표시됩니다.",
+        "shareWith": "공유 대상",
+        "justMe": "나만",
+        "everyone": "모든 사람",
+        "filterTitle": "연락처 필터",
+        "filterHint": "모든 조건 또는 일부 조건과 일치시키고, 그룹을 추가해 더 복잡한 필터를 만들 수 있습니다.",
+        "columnsTitle": "열 환경설정",
+        "locked": "항상 표시",
+        "cancel": "취소",
+        "create": "보기 만들기",
+        "save": "보기 저장",
+        "saving": "저장 중",
+        "needName": "보기 이름을 입력하세요.",
+        "needFilter": "완전한 조건을 하나 이상 추가하세요.",
+        "notFound": "이 보기를 찾을 수 없거나 삭제되었습니다.",
+        "noPermission": "이 작업을 수행할 권한이 없습니다.",
+        "loading": "로딩 중",
+        "columnsHint": "이 보기에 표시할 열을 검색해 선택한 다음, 선택한 열을 끌어 순서를 정하세요.",
+        "drag": "끌어서 {name} 순서 변경",
+        "selectedUsers": "선택한 사용자",
+        "accessLevel": "접근 수준",
+        "canView": "볼 수 있음",
+        "canEdit": "보고 편집할 수 있음",
+        "peoplePlaceholder": "사용자 검색",
+        "noPeople": "사용자를 찾을 수 없습니다",
+        "removePerson": "{name} 제거",
+        "clearPeople": "모든 사용자 지우기",
+        "needPeople": "한 명 이상을 선택하세요.",
+        "onlyCreator": "이 보기를 만든 사람만 공유 대상을 변경할 수 있습니다.",
+        "searchColumns": "열 검색",
+        "noColumnMatch": "일치하는 열이 없습니다.",
+        "available": "사용 가능한 열",
+        "selected": "선택한 열",
+        "selectAll": "모두 선택",
+        "reorder": "끌어서 열 순서 변경",
+        "remove": "{name} 제거"
+      },
+      "presets": {
+        "myContacts": "내 연락처",
+        "newThisWeek": "이번 주 신규",
+        "newLastWeek": "지난주 신규",
+        "recentlyCreated": "최근 생성",
+        "recentlyModified": "최근 수정",
+        "recentlyImported": "최근 가져옴",
+        "neverContacted": "연락한 적 없음",
+        "needsFollowUp": "후속 조치 필요",
+        "active": "활성",
+        "inactive": "비활성",
+        "unsubscribed": "수신 거부"
+      }
+    },
+    "erase": {
+      "scope": "연락처를 삭제하면 해당 연락처의 대화, 메시지, 미디어, 파일, 통화 녹음 및 통화 기록도 함께 삭제됩니다. 리드, 거래, 작업, 청구서는 유지됩니다.",
+      "scopeMany": "연락처를 삭제하면 해당 연락처들의 대화, 메시지, 미디어, 파일, 통화 녹음 및 통화 기록도 함께 삭제됩니다. 리드, 거래, 작업, 청구서는 유지됩니다.",
+      "keepHistory": "본인 식별 정보 없이 대화 기록 유지",
+      "keepHistoryHint": "대화는 기록용으로 남지만 더 이상 해당 사람을 가리키지 않습니다."
     }
   }
 }

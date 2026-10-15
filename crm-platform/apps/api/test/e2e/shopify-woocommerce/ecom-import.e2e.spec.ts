@@ -73,6 +73,7 @@ beforeAll(async () => {
     updateOrder: () => Promise.resolve(true),
     recent: () => Promise.resolve([]),
     salesReport: () => Promise.resolve({}),
+    variations: () => Promise.resolve({ items: [], complete: true }),
     createPendingOrder: () => Promise.resolve(null),
   });
 }, 240_000);
@@ -283,10 +284,10 @@ describe('a Shopify import (TW-ECOM-011)', () => {
   it('keeps using the customer group it made, even renamed, and makes a new one when it is gone', async () => {
     const t = await api.signup('eiv');
     const id = await shopifyStore(t);
-    shopifyData.customers = read([{ id: 1, first_name: 'A', phone: '111111' }]);
+    shopifyData.customers = read([{ id: 1, first_name: 'A', phone: '919811100111' }]);
     await imports.run(t.orgId, 'shopify', id);
     await h.owner.query(`UPDATE contact_groups SET name = 'VIPs' WHERE org_id = $1`, [t.orgId]);
-    shopifyData.customers = read([{ id: 2, first_name: 'B', phone: '222222' }]);
+    shopifyData.customers = read([{ id: 2, first_name: 'B', phone: '919811100222' }]);
     await imports.run(t.orgId, 'shopify', id);
     expect(await q(`SELECT name FROM contact_groups WHERE org_id = $1`, t)).toEqual([
       { name: 'VIPs' },
@@ -294,7 +295,7 @@ describe('a Shopify import (TW-ECOM-011)', () => {
     expect(await q(`SELECT 1 FROM contact_group_members WHERE org_id = $1`, t)).toHaveLength(2);
 
     await h.owner.query(`DELETE FROM contact_groups WHERE org_id = $1`, [t.orgId]);
-    shopifyData.customers = read([{ id: 3, first_name: 'C', phone: '333333' }]);
+    shopifyData.customers = read([{ id: 3, first_name: 'C', phone: '919811100333' }]);
     await imports.run(t.orgId, 'shopify', id);
     expect(await q(`SELECT name FROM contact_groups WHERE org_id = $1`, t)).toEqual([
       { name: 'Shopify Customers' },

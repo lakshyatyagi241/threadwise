@@ -1,0 +1,355 @@
+{
+  "lead-scoring": {
+    "common": {
+      "dismiss": "Descartar",
+      "retry": "Reintentar",
+      "noAccessTitle": "No tienes acceso a esta pantalla",
+      "noAccess": "Pide a un administrador del espacio de trabajo que dé a tu rol el permiso {permission}."
+    },
+    "badge": {
+      "none": "Sin puntuación de lead",
+      "aria": "Puntuación de lead {score} de 100, {band}, {source}",
+      "titleAi": "Puntuado por IA",
+      "titleAiOn": "Puntuado por IA el {date}",
+      "titleManual": "Introducido por una persona",
+      "band": {
+        "cold": "Frío",
+        "warm": "Templado",
+        "hot": "Caliente"
+      },
+      "source": {
+        "ai": "puntuado por IA",
+        "manual": "introducido por una persona"
+      }
+    },
+    "card": {
+      "title": "Puntuación del lead",
+      "band": {
+        "cold": "Lead frío",
+        "warm": "Lead templado",
+        "hot": "Lead caliente"
+      },
+      "sourceAi": "IA",
+      "sourceManual": "Manual",
+      "score": "Puntuar con IA",
+      "rescore": "Volver a puntuar",
+      "scoring": "Puntuando...",
+      "scoringSlow": "Consultando a la IA. Puede tardar unos segundos.",
+      "neverScored": "Este contacto aún no se ha puntuado.",
+      "scoredBy": "Puntuado por IA el {date} con {model}.",
+      "scoredOn": "Puntuado por IA el {date}.",
+      "scoredByAi": "Puntuado por IA.",
+      "reasons": "Por qué esta puntuación",
+      "manualWhy": "Una persona escribió esta puntuación, así que la IA no la cambiará. Para que la IA puntúe este contacto, edítalo y borra la puntuación del lead.",
+      "manualNote": "Una persona escribió esta puntuación, así que la IA no la cambia.",
+      "lastRun": "Puntuación {score}. Coste {cost}, {tokens} tokens.",
+      "showHistory": "Mostrar historial de puntuación",
+      "hideHistory": "Ocultar historial de puntuación",
+      "historyLoading": "Cargando el historial...",
+      "historyFailed": "No se pudo cargar el historial.",
+      "historyEmpty": "Aún no hay intentos de puntuación para este contacto.",
+      "historyCaption": "Intentos de puntuación de este contacto, del más reciente al más antiguo",
+      "historyMore": "Cargar más"
+    },
+    "errors": {
+      "network": "No se pudo contactar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "Tu rol no permite esto.",
+      "notFound": "Ese contacto o registro ya no existe.",
+      "conflict": "Alguien cambió esto al mismo tiempo. Se ha recargado.",
+      "platformDisabled": "La puntuación de leads con IA está desactivada para toda la plataforma ahora mismo.",
+      "notEnabled": "La puntuación de leads con IA no está activada en este espacio de trabajo.",
+      "noKey": "No hay ninguna clave de IA disponible para este espacio de trabajo.",
+      "providerFailed": "El proveedor de IA no dio una respuesta utilizable. Inténtalo de nuevo en un momento.",
+      "manualScore": "Este contacto tiene una puntuación escrita por una persona.",
+      "planLimit": "Se ha agotado la cuota de IA de tu plan.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "validation": "Algunos valores no son válidos.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo.",
+      "chatUnavailable": "La lectura de conversaciones no está disponible para este espacio de trabajo.",
+      "notEnoughChat": "Este contacto aún no ha escrito lo suficiente para poder leerlo.",
+      "suggestionGone": "Esa sugerencia ya fue resuelta o reemplazada."
+    },
+    "scoreErrors": {
+      "network": "No se pudo contactar con el servidor, así que el contacto no se puntuó. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "Tu rol no tiene permiso para puntuar contactos.",
+      "notFound": "Este contacto ya no existe.",
+      "conflict": "Alguien cambió este contacto al mismo tiempo. Se ha recargado; inténtalo de nuevo.",
+      "platformDisabled": "La puntuación de leads con IA está desactivada para toda la plataforma ahora mismo. No se puede puntuar nada hasta que el operador de la plataforma la vuelva a activar.",
+      "notEnabled": "La puntuación de leads con IA no está activada en este espacio de trabajo. Está desactivada hasta que tú decidas, porque los datos de los contactos se envían a un proveedor de IA.",
+      "noKey": "No hay ninguna clave de OpenRouter configurada para este espacio de trabajo. Añade una en Claves de IA o pide a tu administrador de plataforma que active la clave compartida.",
+      "providerFailed": "El proveedor de IA no dio una respuesta utilizable, así que no se guardó ninguna puntuación. Inténtalo de nuevo en un momento.",
+      "manualScore": "Este contacto tiene una puntuación escrita por una persona, y la IA nunca la sobrescribe. Edita el contacto y borra antes la puntuación del lead si quieres que la IA lo puntúe.",
+      "planLimit": "Se ha agotado la cuota de IA de tu plan, así que el contacto no se puntuó. Inténtalo más tarde o añade tu propia clave de OpenRouter.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "validation": "La solicitud no era válida.",
+      "unexpected": "Algo salió mal y el contacto no se puntuó. Inténtalo de nuevo.",
+      "openSettings": "Abrir ajustes de puntuación de leads con IA",
+      "openKeys": "Abrir claves de IA",
+      "chatUnavailable": "La lectura de conversaciones no está activada para este espacio de trabajo. Es una función piloto que debe activarse en los ajustes de puntuación de leads con IA.",
+      "notEnoughChat": "Este contacto aún no ha escrito lo suficiente: solo saludos, emojis o respuestas automáticas. Inténtalo de nuevo cuando escriba más.",
+      "suggestionGone": "Esa sugerencia ya fue resuelta o reemplazada por una más reciente, así que no se cambió nada."
+    },
+    "field": {
+      "label": "Puntuación del lead",
+      "placeholder": "De 0 a 100",
+      "hint": "Si escribes una puntuación, pasa a ser tuya: la IA deja de cambiarla. Bórrala para devolver el contacto a la IA.",
+      "invalid": "Introduce un número entero del 0 al 100, o déjalo vacío."
+    },
+    "runs": {
+      "col": {
+        "when": "Cuándo",
+        "contact": "Contacto",
+        "result": "Resultado",
+        "score": "Puntuación",
+        "trigger": "Origen",
+        "tokens": "Tokens",
+        "cost": "Coste",
+        "key": "Clave"
+      },
+      "unnamed": "Contacto sin nombre",
+      "deletedContact": "Contacto eliminado",
+      "status": {
+        "ok": "Puntuado",
+        "kept": "No guardado",
+        "failed": "Fallido",
+        "skipped": "Omitido"
+      },
+      "keptNote": "La IA respondió, pero mientras tanto una persona escribió una puntuación, así que no se guardó.",
+      "reason": {
+        "no_key": "No había ninguna clave de IA disponible.",
+        "token_allowance": "Se agotó la cuota de IA del plan.",
+        "hourly_limit": "Se alcanzó el límite por hora de la clave compartida.",
+        "manual_score": "El contacto tiene una puntuación escrita por una persona.",
+        "platform_off": "La puntuación de leads con IA estaba desactivada para la plataforma.",
+        "not_enabled": "La puntuación de leads con IA estaba desactivada en este espacio de trabajo.",
+        "auth": "El proveedor de IA rechazó la clave.",
+        "rate_limited": "El proveedor de IA estaba ocupado.",
+        "provider": "El proveedor de IA devolvió un error.",
+        "timeout": "El proveedor de IA tardó demasiado.",
+        "bad_response": "La IA respondió con algo que no era una puntuación.",
+        "other": "El intento no terminó."
+      },
+      "trigger": {
+        "created": "Contacto creado",
+        "updated": "Contacto modificado",
+        "manual": "Botón de puntuar",
+        "backfill": "Puntuar contactos sin puntuación",
+        "chat": "El chat quedó en silencio"
+      },
+      "tokensDetail": "{prompt} de entrada, {completion} de salida",
+      "costSource": {
+        "vendor": "El coste informado por OpenRouter",
+        "estimate": "Estimado a partir de los tokens y el precio de lista"
+      },
+      "billed": {
+        "admin": "Clave de la plataforma",
+        "workspace": "Tu clave"
+      }
+    },
+    "log": {
+      "title": "Registro de puntuación",
+      "hint": "Todos los intentos de puntuación, del más reciente al más antiguo, con tokens y coste.",
+      "filter": "Mostrar intentos con este resultado",
+      "all": "Todos los resultados",
+      "status": {
+        "ok": "Puntuado",
+        "kept": "No guardado",
+        "failed": "Fallido",
+        "skipped": "Omitido"
+      },
+      "refresh": "Actualizar",
+      "emptyTitle": "Aún no hay intentos de puntuación",
+      "emptyBody": "Los intentos aparecerán aquí cuando la puntuación de leads con IA esté activada y se puntúe un contacto.",
+      "emptyFilteredTitle": "No hay intentos con este resultado",
+      "emptyFilteredBody": "Elige otro resultado o muestra todos.",
+      "caption": "Intentos de puntuación, del más reciente al más antiguo",
+      "loadMore": "Cargar más"
+    },
+    "settings": {
+      "title": "Puntuación de leads con IA",
+      "subtitle": "Da a cada contacto una puntuación de 0 a 100 que indique su probabilidad de compra, y consulta cuánto cuesta.",
+      "discard": "Descartar",
+      "save": "Guardar",
+      "saved": "Ajustes guardados.",
+      "readOnly": "Puedes ver estos ajustes pero no cambiarlos. Pide a un administrador del espacio de trabajo el permiso lsc.settings.manage.",
+      "conflict": "Otra persona cambió estos ajustes antes. Se han recargado, así que ves la versión guardada. Haz tu cambio de nuevo.",
+      "conflictOk": "Entendido",
+      "enable": {
+        "title": "Activar la puntuación de leads con IA",
+        "hint": "Desactivada hasta que tú decidas, porque los datos de tus contactos se envían a un proveedor de IA.",
+        "label": "Puntuación de leads con IA",
+        "on": "Activada",
+        "off": "Desactivada",
+        "what": "Cuando está activada, un modelo de IA lee una descripción breve y anónima de un contacto y responde con una puntuación y sus motivos. La puntuación se guarda en la puntuación del lead del contacto."
+      },
+      "sent": {
+        "title": "Qué se envía a la IA",
+        "stage": "La etapa y el estado del contacto",
+        "source": "De dónde viene el contacto",
+        "tags": "Los nombres de las etiquetas",
+        "deals": "Cuántos negocios hay abiertos, ganados y perdidos",
+        "activity": "Qué tan reciente fue la actividad del contacto",
+        "company": "El nombre de la empresa",
+        "engagement": "Cómo ha interactuado el contacto últimamente: número de sus mensajes, difusiones abiertas y enlaces pulsados, y lo rápido que responde (solo números)"
+      },
+      "notSent": {
+        "title": "Qué no se envía nunca",
+        "name": "El nombre del contacto",
+        "email": "La dirección de correo electrónico",
+        "phone": "El número de teléfono",
+        "messages": "El texto de cualquier mensaje",
+        "messagesChat": "El texto de cualquier mensaje, a menos que actives la lectura de conversaciones (abajo)"
+      },
+      "manualRule": "Una puntuación escrita por una persona nunca se sobrescribe. La IA solo rellena las puntuaciones vacías y actualiza las que ella misma escribió.",
+      "auto": {
+        "label": "Puntuar automáticamente cuando cambian los contactos",
+        "onBody": "Un contacto se puntúa al crearse y de nuevo cuando cambian sus datos.",
+        "offBody": "Los contactos solo se puntúan cuando usas el botón Puntuar con IA o puntúas los contactos sin puntuación más abajo."
+      },
+      "confirm": {
+        "title": "¿Enviar datos anonimizados de contactos a un proveedor de IA?",
+        "body": "Una vez activado, se envían a un proveedor de IA a través de OpenRouter descripciones breves de tus contactos (etapa, origen, etiquetas, número de negocios, actividad, datos de interacción como mensajes, difusiones abiertas y enlaces pulsados, y nombre de la empresa). Nunca se envían nombres, correos electrónicos, números de teléfono ni el texto de los mensajes. Puedes desactivarlo en cualquier momento.",
+        "yes": "Activar",
+        "no": "Cancelar"
+      },
+      "banner": {
+        "platformOff": "La puntuación de leads con IA está desactivada para toda la plataforma. No se puntúa nada, sea cual sea la configuración, hasta que el operador de la plataforma la vuelva a activar.",
+        "noKey": "No hay ninguna clave de OpenRouter disponible, así que no se puede puntuar nada. Añade tu propia clave en Claves de IA o pide a tu administrador de plataforma que active la clave compartida.",
+        "openKeys": "Abrir claves de IA",
+        "off": "La puntuación de leads con IA está desactivada en este espacio de trabajo. No se envía nada a un proveedor de IA.",
+        "ready": "Listo. Los contactos se puntúan con {model} usando {key}.",
+        "keyWorkspace": "la clave de OpenRouter propia de tu espacio de trabajo",
+        "keyAdmin": "la clave de OpenRouter compartida de la plataforma"
+      },
+      "backfill": {
+        "title": "Puntuar los contactos que ya tienes",
+        "hint": "Pone en cola los contactos que aún no tienen puntuación, hasta {limit} a la vez. Se puntúan en segundo plano.",
+        "eligible": "Contactos que la IA puede puntuar",
+        "scored": "Puntuados por la IA",
+        "waiting": "Esperando una puntuación",
+        "eligibleNote": "Los contactos con una puntuación escrita por una persona quedan fuera: la IA nunca los cambia.",
+        "button": "Puntuar ahora los contactos sin puntuación",
+        "noRight": "Tu rol no permite puntuar contactos. Necesita el permiso lsc.contacts.score.",
+        "notReady": "Activa la puntuación de leads con IA y asegúrate de que haya una clave disponible para puntuar contactos.",
+        "queued": "{count, plural, one {# contacto está en cola y se puntuará} many {# de contactos están en cola y se puntuarán} other {# contactos están en cola y se puntuarán}} en segundo plano. Recarga el registro en un minuto para ver los resultados.",
+        "nothingToScore": "No hay contactos sin puntuación que poner en cola."
+      },
+      "cost": {
+        "title": "Últimos 30 días",
+        "hint": "Qué hizo la puntuación y cuánto costó en los últimos 30 días.",
+        "scores": "Contactos puntuados",
+        "tokens": "Tokens usados",
+        "total": "Coste total",
+        "average": "Promedio por puntuación",
+        "averageHint": "Coste total dividido entre los contactos puntuados",
+        "model": "Modelo",
+        "payer": "Quién paga",
+        "payerBy": {
+          "workspace": "Tu propia clave de OpenRouter, que OpenRouter te factura a ti",
+          "admin": "La clave compartida de OpenRouter de la plataforma",
+          "none": "Aún no hay ninguna clave disponible"
+        },
+        "failed": "Intentos fallidos",
+        "platformPart": "Del total, con la clave de la plataforma"
+      },
+      "chat": {
+        "title": "Leer conversaciones (piloto)",
+        "hint": "Desactivado hasta que lo elijas, porque los mensajes recientes de un contacto se envían a un proveedor de IA, con los datos personales parcialmente enmascarados.",
+        "label": "Leer la conversación de un contacto cuando queda en silencio",
+        "onBody": "Unos 12 minutos después de que un contacto deja de escribir, la IA lee los mensajes recientes y anota lo que busca el contacto. También calcula la puntuación.",
+        "offBody": "Las conversaciones no se leen. Las puntuaciones usan solo datos del contacto y cifras de interacción.",
+        "needsScoring": "Activa primero la puntuación de leads con IA.",
+        "stageLabel": "Sugerir etapas del ciclo de vida",
+        "stageBody": "Cuando la conversación muestra claramente que un contacto ha avanzado, la IA elige la siguiente etapa. La IA nunca asigna las etapas Ganado y Perdido. Elige abajo si el cambio se aplica solo o espera a una persona.",
+        "masked": {
+          "title": "Cómo se enmascaran los datos personales",
+          "phone": "Los números de teléfono conservan solo el primer dígito y los dos últimos (+91 ***** ***10)",
+          "email": "Los correos electrónicos conservan la primera letra y el dominio (p***@acme.io)",
+          "card": "Los números de tarjeta, Aadhaar y PAN conservan solo su primer y último carácter",
+          "name": "El nombre del contacto, y un nombre que alguien da sobre sí mismo, conservan solo la primera y la última letra"
+        },
+        "rules": {
+          "title": "Qué se lee y qué no",
+          "quiet": "Solo los chats que han quedado en silencio, y solo las dos últimas semanas",
+          "enough": "Los contactos que solo tocaron botones se clasifican con una tabla de frases, sin llamada a la IA",
+          "person": "Una puntuación o etapa definida por una persona nunca se sobrescribe",
+          "closing": "Se excluyen bots, mensajes eliminados, chats de grupo y respuestas automáticas"
+        },
+        "confirm": {
+          "title": "¿Enviar conversaciones enmascaradas a un proveedor de IA?",
+          "body": "Una vez activado, los mensajes recientes de un contacto se envían a un proveedor de IA a través de OpenRouter cuando el chat queda en silencio. Antes se enmascaran parcialmente los teléfonos, correos, números de tarjeta y nombres, de modo que lo enviado no sirve para contactar a la persona. Puedes desactivarlo en cualquier momento.",
+          "yes": "Activar",
+          "no": "Cancelar"
+        },
+        "stageMode": {
+          "title": "Cómo se cambia la etapa",
+          "auto": {
+            "label": "Automático",
+            "body": "El contacto se mueve de inmediato y el chat muestra una línea con Deshacer."
+          },
+          "manual": {
+            "label": "Manual",
+            "body": "La sugerencia espera en Sugerencias de etapa hasta que una persona la acepte o la descarte."
+          }
+        }
+      }
+    },
+    "insight": {
+      "title": "Lectura de la conversación",
+      "empty": "Aún no se ha leído. Un chat se lee unos 12 minutos después de que el contacto deja de escribir, o puedes leerlo ahora.",
+      "analyze": "Leer chat",
+      "analyzing": "Leyendo...",
+      "analyzingSlow": "Consultando a la IA. Esto puede tardar unos segundos.",
+      "sourceAi": "Leído por IA",
+      "sourceRules": "Clasificado por toques de botón",
+      "signals": "Lo que el contacto señaló",
+      "signal": {
+        "askedPrice": "Preguntó por el precio",
+        "readyToBuy": "Listo para comprar",
+        "objection": "Duda u objeción",
+        "urgent": "Urgente"
+      },
+      "readOn": "Leído el {date} a partir de {count, plural, one {# mensaje} other {# mensajes}}.",
+      "privacy": "Los nombres, teléfonos y correos del chat se enmascaran parcialmente antes de enviar nada a la IA.",
+      "intent": {
+        "ready_to_buy": "Listo para comprar",
+        "asking_price": "Pregunta por el precio",
+        "comparing": "Comparando opciones",
+        "registering": "Registrándose",
+        "needs_support": "Necesita soporte",
+        "post_purchase": "Posventa o servicio",
+        "browsing": "Solo mirando",
+        "not_interested": "No interesado",
+        "other": "Sin intención clara"
+      },
+      "suggestion": {
+        "title": "Etapa sugerida",
+        "move": "Mover de {from} a {to}",
+        "confidence": "{percent}% de certeza",
+        "accept": "Aceptar",
+        "dismiss": "Descartar",
+        "accepted": "Etapa cambiada a {stage}.",
+        "dismissed": "Sugerencia descartada.",
+        "noRight": "No tienes permiso para aceptar o descartar sugerencias.",
+        "couldNot": "No se pudo aplicar la sugerencia. Puede que ya se haya resuelto."
+      }
+    },
+    "suggestions": {
+      "title": "Sugerencias de etapa",
+      "hint": "Cambios que sugiere la IA tras leer las conversaciones. No cambia nada hasta que aceptes.",
+      "empty": "No hay sugerencias pendientes.",
+      "unnamed": "Contacto sin nombre",
+      "move": "Mover de {from} a {to}",
+      "confidence": "{percent}% de certeza",
+      "accept": "Aceptar",
+      "dismiss": "Descartar",
+      "acceptConfident": "Aceptar las {count} por encima del {percent}%",
+      "dismissAll": "Descartar todas",
+      "more": "Cargar más",
+      "doneAccept": "{count, plural, one {# etapa cambiada.} other {# etapas cambiadas.}}",
+      "doneDismiss": "{count, plural, one {# sugerencia descartada.} other {# sugerencias descartadas.}}",
+      "noRight": "Puedes ver las sugerencias pero no resolverlas: eso requiere el permiso lsc.stage.review.",
+      "couldNot": "{count, plural, one {# sugerencia no se pudo aplicar.} other {# sugerencias no se pudieron aplicar.}}"
+    }
+  }
+}

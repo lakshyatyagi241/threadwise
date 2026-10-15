@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import { cn } from '@crm/ui';
+import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { parseMarkup, type Segment } from '../lib/format';
 import type { PreviewModel } from '../lib/form-model';
 import {
@@ -145,7 +146,7 @@ export function MessageBubble({
             </p>
           )}
           {model.body ? (
-            <p className="break-words" data-testid="bubble-body">
+            <p {...AGENT_IGNORE} className="break-words" data-testid="bubble-body">
               <FormattedText text={model.body} />
             </p>
           ) : (

@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Laden...",
-      "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-id"
+      "retry": "Opnieuw proberen"
     },
     "errors": {
       "conflict": "Iemand anders heeft deze provider gewijzigd terwijl jij hem bewerkte. De laatste versie is geladen; controleer hem en pas je wijziging opnieuw toe.",

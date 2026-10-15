@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "Importata",
+      "importedHint": "Questa chat è stata importata dalla cronologia del telefono"
+    },
+    "bubble": {
+      "imported": "Importato",
+      "importedHint": "Importato dalla cronologia chat del telefono"
+    }
+  }
+}

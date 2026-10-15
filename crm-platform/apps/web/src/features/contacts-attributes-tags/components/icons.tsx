@@ -262,3 +262,22 @@ export const ArrowRightIcon = (p: IconProps) => (
     <path d="M5 12h14M13 6l6 6-6 6" />
   </Svg>
 );
+/** Material Design "Sms" (the glyph of `@mui/icons-material/Sms`), inlined: it is a filled shape, so no stroke. */
+export const SmsIcon = (p: IconProps) => (
+  <Svg fill="currentColor" stroke="none" {...p}>
+    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z" />
+  </Svg>
+);
+
+export const SortIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4" />
+  </Svg>
+);
+
+export const SparkIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z" />
+    <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z" />
+  </Svg>
+);

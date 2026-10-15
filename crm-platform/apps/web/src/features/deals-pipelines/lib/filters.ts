@@ -13,6 +13,8 @@ export interface DealFilters {
   view: DealsView;
   /** The deal whose drawer is open (`?deal=`). */
   deal: string;
+  /** A stage id: the table lists only the deals in that stage (the CRM dashboard's funnel links here). Table view only. */
+  stage: string;
 }
 
 export const DEFAULT_FILTERS: DealFilters = {
@@ -23,6 +25,7 @@ export const DEFAULT_FILTERS: DealFilters = {
   status: '',
   view: 'board',
   deal: '',
+  stage: '',
 };
 
 interface SearchLike {
@@ -44,6 +47,7 @@ export function parseFilters(search: SearchLike): DealFilters {
     status: status === 'open' || status === 'won' || status === 'lost' ? status : '',
     view: view === 'list' ? 'list' : 'board',
     deal: search.get('deal') ?? '',
+    stage: search.get('stage') ?? '',
   };
 }
 
@@ -55,6 +59,7 @@ export function filtersToSearch(f: DealFilters): string {
   if (f.owner) p.set('owner', f.owner);
   if (f.source) p.set('source', f.source);
   if (f.status && f.view === 'list') p.set('status', f.status);
+  if (f.stage && f.view === 'list') p.set('stage', f.stage);
   if (f.view === 'list') p.set('view', 'list');
   if (f.deal) p.set('deal', f.deal);
   const s = p.toString();

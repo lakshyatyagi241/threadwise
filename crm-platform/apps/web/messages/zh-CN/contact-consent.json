@@ -1,0 +1,340 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "关闭",
+      "retry": "重试",
+      "loading": "加载中..."
+    },
+    "errors": {
+      "network": "无法连接到服务器。请检查网络后重试。",
+      "forbidden": "你没有执行此操作的权限。",
+      "notFound": "该联系人已不存在。",
+      "conflict": "你编辑期间其他人已修改此内容。请刷新后重试。",
+      "noteRequired": "记录同意前，请说明联系人同意的原因（对方说了或签署了什么，以及在哪里）。",
+      "settingsInvalid": "关键词至少需要包含一个字母或数字；开启检测时，至少要保留一个 STOP 关键词。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "validation": "部分内容无效。请检查表单后重试。",
+      "unexpected": "出了点问题。请重试。",
+      "exportInProgress": "已有证明文件正在准备中。请等待完成后再试。",
+      "exportNotReady": "该文件尚未就绪或已过期。请重新准备。",
+      "noticeTargetMissing": "该小组件、预约页面或店铺已不存在。"
+    },
+    "settings": {
+      "title": "同意与 STOP 回复",
+      "subtitle": "设置让联系人退订或重新订阅的词语、我们的回复、营销消息的退订提示行，以及营销是否需要已记录的同意。",
+      "exportProof": "导出同意凭证 (CSV)",
+      "discard": "放弃更改",
+      "save": "保存更改",
+      "saved": "同意设置已保存。",
+      "conflict": "其他人已先保存了这些设置。表单现在显示的是已存储的内容。",
+      "conflictOk": "确定",
+      "problems": {
+        "noOptOutWord": "请至少添加一个 STOP 关键词，或关闭检测。",
+        "badLang": "语言代码形如 en、ar 或 pt-BR。"
+      }
+    },
+    "policy": {
+      "title": "营销策略",
+      "requireConsent": "发送营销消息需要已记录的同意",
+      "requireConsentHint": "关闭：营销消息发送给所有未退订的联系人。开启：仅发送给有已记录同意的联系人。活动和群发受众会显示被跳过的人数。",
+      "withdrawnAlways": "无论此开关如何设置，已退订的联系人始终会被跳过。"
+    },
+    "detect": {
+      "title": "STOP 和 START 回复",
+      "enabled": "检测 STOP 和 START 回复",
+      "enabledHint": "当联系人只发送下列某个词时，将在该渠道退订或重新订阅。",
+      "autoReply": "发送确认回复",
+      "autoReplyHint": "在 24 小时窗口内发送的简短自由文本回复，每次变更只发送一次。它不是营销活动，也不计入营销。",
+      "rule": "整条消息必须恰好是关键词：大写字母、空格、标点、表情符号和阿拉伯语变音符号会被忽略。“Please stop sending me invoices”或“don't stop”不会匹配，因此不会误退订任何人。"
+    },
+    "lang": {
+      "groupLabel": "{lang} 的词语和回复",
+      "title": "语言",
+      "remove": "移除语言",
+      "optOutWords": "STOP 关键词（退订）",
+      "optInWords": "START 关键词（重新订阅）",
+      "wordsHint": "每行一个。",
+      "optOutReply": "STOP 后的回复",
+      "optInReply": "START 后的回复",
+      "replyHint": "可以用 '{{name}}' 代表联系人的名字。说明如何重新订阅。",
+      "footer": "营销消息的退订提示行",
+      "footerHint": "添加在营销文本下方。告诉对方应发送哪个词。",
+      "add": "添加语言",
+      "addHint": "语言代码，如 fr 或 pt-BR。",
+      "invalid": "请使用 fr 或 pt-BR 这样的代码。",
+      "addButton": "添加"
+    },
+    "footer": {
+      "title": "退订提示行",
+      "intro": "群发和活动编辑器可在营销文本下方添加这一行，让收件人知道可以回复 STOP。已审核的模板不会被修改：请把这一行写进模板本身。",
+      "defaultOn": "营销文本没有退订提示行时提醒",
+      "defaultOnHint": "编辑器会显示警告和一键添加按钮。",
+      "noneSet": "所有语言都未设置退订提示行。",
+      "previewLabel": "收件人看到的内容",
+      "sample": "春季特卖今天开始。本周欢迎光临。"
+    },
+    "test": {
+      "title": "测试消息",
+      "intro": "输入联系人可能发送的内容，查看会发生什么。不会更改或发送任何内容。即使尚未保存，也会使用上面的词语。",
+      "label": "联系人发来的消息",
+      "run": "测试",
+      "failed": "测试无法运行。请重试。",
+      "outcome": {
+        "opts_out": "这会让该联系人退订营销消息。",
+        "opts_in": "这会让该联系人重新订阅。",
+        "no_match": "不会发生任何事：该消息不是关键词。",
+        "detection_off": "不会发生任何事：检测已关闭。"
+      },
+      "matched": "匹配到关键词“{keyword}”（{lang}）。",
+      "replyLabel": "联系人将收到",
+      "noReply": "不会发送回复。"
+    },
+    "card": {
+      "title": "同意",
+      "status": {
+        "optedOut": "已退订",
+        "subscribed": "已订阅",
+        "none": "无同意记录"
+      },
+      "export": "导出凭证 (CSV)",
+      "markSubscribed": "标记为已订阅",
+      "markUnsubscribed": "标记为已退订",
+      "loading": "正在加载同意信息...",
+      "noneRecorded": "该联系人没有同意记录。营销发送遵循工作区策略。",
+      "perChannel": "按渠道的同意情况",
+      "timeline": "同意历史",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "邮件",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "网页聊天",
+        "voice": "语音通话",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "state": {
+        "granted": "已订阅",
+        "withdrawn": "已退订",
+        "utilityGranted": "已同意服务消息",
+        "utilityWithdrawn": "已停止服务消息"
+      },
+      "action": {
+        "granted": "已订阅",
+        "withdrawn": "已退订",
+        "utilityGranted": "同意就其请求被联系",
+        "utilityWithdrawn": "已停止服务消息"
+      },
+      "source": {
+        "form": "表单",
+        "keyword": "关键词回复",
+        "manual": "人工记录",
+        "import": "导入",
+        "api": "API",
+        "flow": "流程",
+        "inbound_message": "消息",
+        "contact_request": "联系请求",
+        "legacy": "同意历史之前",
+        "widget": "网站聊天",
+        "booking": "预约页面",
+        "commerce": "店铺结账",
+        "lead": "线索收集"
+      },
+      "by": "由 {name}",
+      "evidence": {
+        "consentText": "显示的文本",
+        "consentVersion": "版本",
+        "consentHash": "哈希",
+        "formId": "表单",
+        "submissionId": "提交",
+        "messageId": "消息",
+        "keyword": "关键词",
+        "fileName": "文件",
+        "apiKeyId": "API 密钥",
+        "flowId": "流程",
+        "reference": "参考",
+        "noticeVersion": "声明版本",
+        "noticeUrl": "声明链接",
+        "widgetId": "聊天小组件",
+        "bookingTypeId": "预约页面",
+        "integrationId": "店铺",
+        "storeFlag": "店铺设置",
+        "leadSourceId": "线索来源",
+        "leadFormId": "线索表单",
+        "adId": "广告"
+      },
+      "dialog": {
+        "titleGranted": "标记为已订阅",
+        "titleWithdrawn": "标记为已退订",
+        "introGranted": "记录该联系人同意接收营销消息。原因将作为凭证保存。",
+        "introWithdrawn": "记录该联系人不再希望接收营销消息。所有活动和群发都会跳过此联系人。",
+        "channel": "渠道",
+        "noteRequired": "原因？（必填）",
+        "noteOptional": "备注（可选）",
+        "noteHint": "例如：在柜台签署了纸质表单，或在 3 月 3 日通过邮件同意。",
+        "confirm": "保存",
+        "cancel": "取消",
+        "close": "关闭",
+        "savedGranted": "已标记为已订阅。",
+        "savedWithdrawn": "已标记为已退订。"
+      }
+    },
+    "composer": {
+      "add": "添加退订提示行",
+      "missing": "这条营销消息没有告诉对方如何退订。请添加类似“回复 STOP 退订”的一行。",
+      "addButton": "添加该行",
+      "templateHint": "模板在审核后即固定。若要告知对方可以退订，请在模板本身中加入类似“{line}”的一行。",
+      "footerSuggestion": "营销模板推荐文案:“{line}”",
+      "footerUse": "用作页脚"
+    },
+    "import": {
+      "legend": "同意",
+      "label": "我已获得向这些联系人发送消息的同意",
+      "hint": "勾选后，文件中的所有联系人都会被记录为已同意接收营销信息，并以文件名作为凭证。未勾选时，导入不会记录任何同意。已退订的联系人将保持退订状态。",
+      "hintColumn": "映射为营销同意的列决定记录对象：只有标注为“是”的行会记录同意，并以文件名作为证明。“否”、空白单元格或无法识别的词不会记录任何内容。已退订的联系人将保持退订状态。",
+      "columnSummary": "{granted} 行标注为“是”，将被记录。{notGranted} 行为“否”或空白，不会生成同意记录。",
+      "unrecognised": "{count, plural, one {# 行} other {# 行}}的同意值既不是“是”也不是“否”（{values}），将被视为未同意。请使用 yes / no、true / false 或 1 / 0。",
+      "columnIgnored": "在你勾选上方的复选框之前，同意列不会生效。",
+      "noticeText": "告知或法律依据(可选)",
+      "noticeTextHint": "这些联系人同意了什么、在哪里同意,例如:结账时按隐私声明 v3 订阅。它会作为证据与每条已记录的同意一起保存。",
+      "noticeVersion": "告知版本(可选)",
+      "smsSummary": "短信同意列:{granted} 行为“是”,将记录为短信同意。{notGranted} 行为“否”或为空。",
+      "emailSummary": "邮件同意列:{granted} 行为“是”,将记录为邮件同意(该行还需有邮箱地址)。{notGranted} 行为“否”或为空。",
+      "labelNumbers": "我已获得向这些号码发送消息的同意",
+      "hintNumbers": "勾选后,发起群发时文件中的每个号码都会被记录为已同意营销,并以文件名作为证据。不勾选则不记录同意。已退订的人保持退订。"
+    },
+    "systemLine": {
+      "withdrawn": "联系人回复 {keyword}：已取消营销订阅",
+      "granted": "联系人回复 {keyword}：已重新订阅营销"
+    },
+    "proof": {
+      "title": "已准备的证明文件",
+      "prepare": "准备完整证明文件",
+      "preparing": "正在准备证明文件",
+      "largeHint": "记录超过 {max} 个事件，因此将在后台准备文件",
+      "large": "记录超过 {max} 个事件，超出直接下载的范围。请准备完整文件：它会在后台生成，准备好后会通过邮件通知你。",
+      "none": "暂无已准备的文件。",
+      "keptFor": "已准备的文件可下载 {days} 天，之后将被删除。同一时间只会准备一个文件。",
+      "rows": "{count, plural, one {# 个事件} other {# 个事件}}",
+      "expires": "有效期至 {date}",
+      "download": "下载 CSV",
+      "failed": "文件生成失败。请重新准备。",
+      "status": {
+        "queued": "等待中",
+        "running": "生成中",
+        "ready": "就绪",
+        "failed": "失败",
+        "expired": "已过期"
+      }
+    },
+    "unsubscribe": {
+      "title": "退订营销邮件",
+      "intro": "请确认您不再希望收到该商家的营销邮件。您仍会收到与订单和预约相关的消息。",
+      "confirm": "退订",
+      "working": "正在退订...",
+      "doneTitle": "您已退订",
+      "doneBody": "您将不再收到该商家的营销消息。",
+      "already": "您之前已经退订。",
+      "invalidTitle": "此链接无效",
+      "invalidBody": "退订链接不完整或已被更改。请使用您最近收到的邮件中的链接。",
+      "error": "出现问题，请重试。"
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "允许：提示已先送达。",
+        "consent_evidence_recorded": "允许：提示已送达且对方同意。",
+        "purpose_not_enabled": "不允许：工作区未开启此功能。",
+        "consent_declined": "不允许：对方拒绝。",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "聊天表单中的同意行",
+        "booking": "预约页面中的同意行",
+        "commerce": "店铺营销复选框的含义",
+        "workspace": "默认同意告知声明"
+      },
+      "intro": {
+        "widget": "显示为访客信息下方的复选框。只有勾选的访客才会被记录为同意，且仅限其提供了电话号码或电子邮件时。",
+        "booking": "显示为预约表单上的复选框。只有勾选的人才会被记录为同意；预约从不需要它。",
+        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。",
+        "workspace": "当表单、小组件或预约页面没有自己的文字时,您的工作区在同意框旁显示的文字。每次修改都会生成新的编号版本。"
+      },
+      "enabled": "开启同意行",
+      "text": "此人同意的措辞",
+      "textHint": "最多 {max} 个字符。每次更改都会保存为新版本。",
+      "textRequired": "开启该行之前请先写好措辞。",
+      "url": "隐私政策链接（可选）",
+      "urlHint": "必须以 https:// 开头",
+      "save": "保存同意行",
+      "saved": "同意行已保存（版本 {version}）。",
+      "version": "当前版本：{version}",
+      "noVersion": "尚未保存。",
+      "saveFirst": "请先保存此项，然后即可设置其同意行。",
+      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）",
+      "termsUrl": "条款链接(可选)",
+      "termsUrlHint": "必须以 https:// 开头",
+      "useWorkspacePrivacy": "使用我的工作区隐私链接",
+      "useWorkspaceTerms": "使用我的工作区条款链接",
+      "useWorkspaceText": "使用我的工作区默认文字"
+    }
+  }
+}

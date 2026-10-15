@@ -7,7 +7,6 @@
       "dismiss": "ปิด",
       "cancel": "ยกเลิก",
       "close": "ปิด",
-      "requestId": "คำขอ {id}",
       "unknown": "—"
     },
     "numbers": {
@@ -34,7 +33,8 @@
         "registered": "ลงทะเบียน \"{name}\" บน Cloud API แล้ว",
         "disconnected": "ยกเลิกการเชื่อมต่อ \"{name}\" แล้ว",
         "removed": "นำ \"{name}\" ออกแล้ว",
-        "warningsTitle": "เชื่อมต่อแล้ว แต่โปรดตรวจสอบสิ่งนี้:"
+        "warningsTitle": "เชื่อมต่อแล้ว แต่โปรดตรวจสอบสิ่งนี้:",
+        "verified": "ยืนยัน \"{name}\" แล้ว"
       },
       "notReady": {
         "title": "ยังไม่ได้ตั้งค่า Embedded Signup",
@@ -81,7 +81,8 @@
         "register": "ลงทะเบียน",
         "meta": "Meta",
         "disconnect": "ยกเลิกการเชื่อมต่อ",
-        "remove": "นำออก"
+        "remove": "นำออก",
+        "verify": "ยืนยันหมายเลข"
       },
       "confirm": {
         "fixInboundTitle": "แก้ไขข้อความขาเข้าใช่หรือไม่",
@@ -100,6 +101,17 @@
         "pin": "PIN ยืนยันสองขั้นตอน (ไม่บังคับ)",
         "pinError": "PIN ต้องมี 6 หลัก",
         "submit": "ลงทะเบียน"
+      },
+      "verifyDialog": {
+        "title": "ยืนยันหมายเลขนี้",
+        "message": "Meta จะส่งรหัส 6 หลักไปยัง {phone} เลือกวิธีรับรหัส",
+        "enterCode": "กรอกรหัส 6 หลักที่ Meta ส่งไปยัง {phone}",
+        "sendSms": "ส่งรหัสทาง SMS",
+        "sendVoice": "ส่งรหัสทางโทรศัพท์",
+        "code": "รหัสยืนยัน",
+        "codeError": "รหัสต้องมี 6 หลัก",
+        "submit": "ยืนยัน",
+        "resend": "ส่งรหัสใหม่"
       }
     },
     "connect": {

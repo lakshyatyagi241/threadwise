@@ -1,3 +1,4 @@
+import type { ProductOption } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 /**
@@ -8,11 +9,28 @@ import type { Tx } from '@crm/db';
  * Every method takes the caller's transaction (already scoped to the shop's organization by `DatabaseService.txAs`) and the
  * organization id. Internal ids (`id`) are returned for the order-writing code; they never go on the wire, `uuid` does.
  *
- * "Available" (decision D-03 of the STORE inventory, a deliberate fix of a Reference leak): the product is `in_stock`, its status
+ * "Available" (decision D-03 of the STORE inventory, a deliberate fix of a Reference leak): the product is `in_stock` (for a product with variants: at least one active variant is sellable), its status
  * is `active` (Reference checked only `in_stock`, so drafts and archived products showed on the public shop), and it belongs to
  * this shop: `storefront_id IS NULL` (every shop of the workspace) or equal to the shop. Everything is ordered by
  * `sort_order` then newest first, as Reference did.
  */
+export interface StorefrontVariant {
+  id: number;
+  uuid: string;
+  /** "M / Red". */
+  title: string;
+  optionValues: string[];
+  sku: string | null;
+  /** Effective price: the variant's own, else the product's. */
+  priceMinor: number;
+  comparePriceMinor: number | null;
+  imageUrl: string | null;
+  /** Null means unlimited. */
+  stockQty: number | null;
+  /** The id the variant has on Meta and in an order line (invariant 5). */
+  retailerId: string;
+}
+
 export interface StorefrontProduct {
   id: number;
   uuid: string;
@@ -35,6 +53,10 @@ export interface StorefrontProduct {
   createdAt?: Date;
   weightGrams?: number | null;
   tags?: string[];
+  /** Only for a product with variants. Then `priceMinor` is the lowest active variant price and `stockQty` the aggregate. */
+  options?: ProductOption[];
+  /** The ACTIVE variants in display order (sold-out ones included, with `stockQty` 0). Absent or empty for a product without. */
+  variants?: StorefrontVariant[];
 }
 
 export interface StorefrontReview {
@@ -81,6 +103,13 @@ export abstract class StorefrontProductsReader {
     limit: number,
   ): Promise<StorefrontProduct[]>;
 
+  /** The active variants named by these (product uuid, variant uuid) pairs; a pair that is unknown, inactive or of another organization is absent. */
+  abstract findVariants(
+    tx: Tx,
+    orgId: number,
+    pairs: ReadonlyArray<{ productUuid: string; variantUuid: string }>,
+  ): Promise<Array<{ productUuid: string; variant: StorefrontVariant }>>;
+
   /** Approved reviews of a product, newest first. */
   abstract approvedReviews(
     tx: Tx,
@@ -109,8 +138,16 @@ export abstract class StorefrontProductsReader {
    * Checkout stock decrement (TW-STORE-013): lowers `stock_qty` by `qty` (never below 0) for a product that tracks stock, and
    * does nothing for an unlimited one. Row-locks the product (`FOR UPDATE`) and returns the quantity really taken, so two
    * buyers cannot both take the last unit (decision D-08). It does NOT push to Meta: the resync sweep settles Meta stock.
+   * With `variantId` the stock of that active variant moves instead (the variant row is locked `FOR UPDATE`), and the product
+   * aggregate is recomputed in the same transaction.
    */
-  abstract takeStock(tx: Tx, orgId: number, productId: number, qty: number): Promise<number>;
+  abstract takeStock(
+    tx: Tx,
+    orgId: number,
+    productId: number,
+    qty: number,
+    variantId?: number,
+  ): Promise<number>;
 
   /** Number of products of the organization (the dashboard tile counts every one, whatever its status). */
   abstract countProducts(tx: Tx, orgId: number): Promise<number>;

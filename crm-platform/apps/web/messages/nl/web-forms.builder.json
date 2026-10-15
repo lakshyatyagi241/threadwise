@@ -51,7 +51,9 @@
         "generic": "Probleem: {reason}",
         "reason": {
           "crm_required_unbound": "Een eigenschap die je workspace verplicht stelt, staat niet in het formulier.",
-          "no_contact_point": "Voeg een e-mail- of telefoonveld toe dat aan het contact is gekoppeld, zodat elke inzending aan een persoon kan worden gekoppeld."
+          "no_contact_point": "Voeg een e-mail- of telefoonveld toe dat aan het contact is gekoppeld, zodat elke inzending aan een persoon kan worden gekoppeld.",
+          "payment_no_gateway": "Koppel een betaalgateway die betaallinks kan maken, of schakel betalen uit.",
+          "captcha_not_configured": "CAPTCHA staat op altijd aan, maar het platform heeft geen CAPTCHA. Kies een andere instelling of vraag je platformbeheerder er een toe te voegen."
         },
         "code": {
           "no_fields": "Voeg minstens één veld toe.",
@@ -129,7 +131,14 @@
         "custom": "Aangepast",
         "requiredByCrm": "Verplicht",
         "inForm": "In formulier",
-        "full": "Het formulier heeft zijn limiet aan blokken bereikt."
+        "full": "Het formulier heeft zijn limiet aan blokken bereikt.",
+        "section": {
+          "contact": "Contact",
+          "contactAddress": "Adres van contact",
+          "company": "Bedrijf",
+          "companyAddress": "Adres van bedrijf"
+        },
+        "addAddress": "Alle adresvelden toevoegen"
       },
       "list": {
         "title": "Velden",

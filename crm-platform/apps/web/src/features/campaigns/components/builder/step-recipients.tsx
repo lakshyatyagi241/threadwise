@@ -17,6 +17,7 @@ import {
   countNumbers,
   type RecipientMode,
 } from '../../lib/wizard-model';
+import { isEmailEngine } from '../../lib/engine-gate';
 import { DownloadIcon } from '../icons';
 import { ChoiceCard, StepCard } from './parts';
 
@@ -32,6 +33,8 @@ export function StepRecipients({
   lists,
   onSample,
   onCsvTooBig,
+  engine = '',
+  skipped = null,
 }: {
   form: BuilderForm;
   patch: (p: Partial<BuilderForm>) => void;
@@ -48,8 +51,13 @@ export function StepRecipients({
   };
   onSample: () => void;
   onCsvTooBig: () => void;
+  /** The picked sender's engine: for a mailbox the audience is read by email address. */
+  engine?: string;
+  /** Email only: what is already known to be skipped (picked contacts with no address, typed or uploaded numbers). */
+  skipped?: { contacts: number; numbers: number; total: number } | null;
 }) {
   const t = useTranslations('campaigns.builder');
+  const email = isEmailEngine(engine);
   return (
     <StepCard index="03" title={t('audience.title')} tag={t('audience.tag')}>
       <div
@@ -69,8 +77,25 @@ export function StepRecipients({
         ))}
       </div>
 
+      {email && (
+        <p
+          role="note"
+          data-testid="email-audience-note"
+          className="rounded-xl border border-border bg-muted/40 px-3 py-2 text-[12px]"
+        >
+          {t('audience.emailNote')}
+          {skipped && skipped.total > 0 && (
+            <>
+              {' '}
+              <strong>{t('audience.emailSkipped', { count: skipped.total })}</strong>
+            </>
+          )}
+        </p>
+      )}
+
       {mode === 'audience' && (
         <AudiencePicker
+          email={email}
           tags={lists.tags}
           groups={lists.groups}
           segments={lists.segments}
@@ -124,6 +149,11 @@ export function StepRecipients({
           <p className="mt-1 text-xs text-muted-foreground">
             {t('audience.csvRows', { count: countCsvRows(form.csvText) })}
           </p>
+          {email && (
+            <p role="alert" className="mt-1 text-xs text-warning">
+              {t('audience.emailNoAddress')}
+            </p>
+          )}
         </div>
       )}
 
@@ -144,6 +174,11 @@ export function StepRecipients({
           <p className="mt-1 text-xs text-muted-foreground">
             {t('audience.numbersCount', { count: countNumbers(form.manualNumbers) })}
           </p>
+          {email && (
+            <p role="alert" className="mt-1 text-xs text-warning">
+              {t('audience.emailNoAddress')}
+            </p>
+          )}
         </Field>
       )}
     </StepCard>

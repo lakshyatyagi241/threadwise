@@ -2,7 +2,7 @@
   "auth-registration-security": {
     "guest": {
       "shell": {
-        "appNameFallback": "CRM",
+        "appNameFallback": "Geta",
         "header": {
           "login": {
             "eyebrow": "Sign in",
@@ -27,12 +27,12 @@
           "login": {
             "hero_title": "Everything in one place",
             "hero_desc": "Chats, campaigns and contacts stay together, so nobody hunts for context.",
-            "stat1_num": "24/7",
-            "stat1_label": "shared team inbox",
-            "stat2_num": "5 min",
-            "stat2_label": "typical setup",
-            "stat3_num": "1 place",
-            "stat3_label": "for chats and contacts",
+            "stat1_num": "10K+",
+            "stat1_label": "Businesses on Geta",
+            "stat2_num": "50M+",
+            "stat2_label": "Messages automated",
+            "stat3_num": "99.9%",
+            "stat3_label": "Platform uptime",
             "feat1_title": "Shared inbox",
             "feat1_desc": "Assign, reply and hand over chats without losing the thread.",
             "feat2_title": "Broadcasts",
@@ -52,12 +52,12 @@
           "register": {
             "hero_title": "Start free",
             "hero_desc": "Set up your workspace first and choose a plan when you are ready.",
-            "stat1_num": "3 steps",
-            "stat1_label": "to a working workspace",
-            "stat2_num": "5 min",
-            "stat2_label": "typical setup",
-            "stat3_num": "Day 1",
-            "stat3_label": "invite your team",
+            "stat1_num": "10K+",
+            "stat1_label": "Active businesses",
+            "stat2_num": "50M+",
+            "stat2_label": "Messages delivered",
+            "stat3_num": "14 days",
+            "stat3_label": "Free trial, no card",
             "feat1_title": "Quick setup",
             "feat1_desc": "Name your workspace, set your time zone and you are in.",
             "feat2_title": "Bring your team",
@@ -81,16 +81,16 @@
         },
         "contentDefaults": {
           "login": {
-            "eyebrow": "Team inbox for WhatsApp",
-            "heading": "Every customer chat,",
-            "headingAccent": "one calm workspace",
-            "subheading": "Broadcasts, automations and a shared inbox for teams that answer fast."
+            "eyebrow": "Sign in to your account",
+            "heading": "Welcome back to",
+            "headingAccent": "Geta",
+            "subheading": "Build, deploy, and manage intelligent chatbots across all messaging channels. Automate customer conversations and scale your support effortlessly."
           },
           "register": {
-            "eyebrow": "Start in minutes",
-            "heading": "Set up your",
-            "headingAccent": "workspace",
-            "subheading": "Create your workspace, then bring your team and your first channel in."
+            "eyebrow": "Start for free",
+            "heading": "Create",
+            "headingAccent": "an account",
+            "subheading": "Build, deploy and manage intelligent chatbots across all messaging channels."
           },
           "forgot": {
             "eyebrow": "Account recovery",
@@ -215,7 +215,6 @@
         "sessionExpired": "Your session expired for security. Please try again.",
         "network": "We could not reach the server. Check your connection and try again.",
         "unexpected": "Something went wrong on our side. Please try again.",
-        "requestId": "Request id",
         "signupExpired": "Please start registration again.",
         "policyRules": {
           "min_length": "Use at least {min, plural, one {# character} other {# characters}}.",

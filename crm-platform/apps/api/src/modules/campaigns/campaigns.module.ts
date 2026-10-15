@@ -8,6 +8,7 @@ import { PlanCampaignGate } from './_shims/plan-gate';
 import { PlatformCampaignSettings } from './_shims/platform-campaign-settings';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { BroadcastsModule } from '../broadcasts';
+import { ContactConsentModule } from '../contact-consent';
 import { ChatConversationsModule } from '../chat-conversations';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { CrmModule } from '../crm';
@@ -48,6 +49,9 @@ import { WizardReadService } from './wizard/wizard-read.service';
 import { WizardReviewService } from './wizard/wizard-review.service';
 import { WizardRunService } from './wizard/wizard-run.service';
 import { WizardTestSendService } from './wizard/wizard-test-send.service';
+import { BroadcastSummaryController } from './summary/broadcast-summary.controller';
+import { CampaignSummaryRepository } from './summary/campaign-summary.repository';
+import { CampaignSummaryService } from './summary/campaign-summary.service';
 import { WizardRepository } from './wizard/wizard.repository';
 
 /**
@@ -59,6 +63,7 @@ import { WizardRepository } from './wizard/wizard.repository';
   imports: [
     AiKeysUsageAdminModule,
     BroadcastsModule,
+    ContactConsentModule,
     ChatConversationsModule,
     CrmModule,
     PlansCoreModule,
@@ -71,6 +76,7 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignAiController,
     CampaignsController,
     CampaignsReadController,
+    BroadcastSummaryController,
     CampaignsActionsController,
     CampaignCallbacksController,
   ],
@@ -80,6 +86,8 @@ import { WizardRepository } from './wizard/wizard.repository';
     CampaignAudienceService,
     CampaignsService,
     CampaignsReadService,
+    CampaignSummaryRepository,
+    CampaignSummaryService,
     CampaignsActionsService,
     CampaignAiService,
     CampaignEvents,

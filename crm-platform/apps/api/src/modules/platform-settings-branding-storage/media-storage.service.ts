@@ -1,5 +1,6 @@
 import { Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { canonicalStorageKey } from '../../common/storage-key-owner';
 import type { Env } from '../../config/env.schema';
 import {
   presignS3Get,
@@ -28,12 +29,7 @@ export interface MediaDestination {
 const LOCAL_URL_ROOT = '/storage';
 
 /** `storage/foo` and `/foo` both mean the object key `foo` (Reference's media_url strips a stray `storage/`). */
-export function normaliseKey(path: string): string {
-  return path
-    .trim()
-    .replace(/^\/+/, '')
-    .replace(/^storage\//, '');
-}
+export const normaliseKey = canonicalStorageKey;
 
 @Injectable()
 export class MediaStorageService {

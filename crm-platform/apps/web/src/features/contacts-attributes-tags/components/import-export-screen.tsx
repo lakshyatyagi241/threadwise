@@ -5,7 +5,7 @@ import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Button, Spinner, cn, useToast } from '@crm/ui';
 import type { ContactImportJob } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { downloadRejects } from '../api/import-export';
+import { downloadRejects, downloadSavedExport } from '../api/import-export';
 import { useExportHistory, useImportJobs } from '../api/history';
 import { downloadBlob } from '../lib/download';
 import { formatDateTime } from '../lib/format';
@@ -100,6 +100,7 @@ function Imports() {
             <tr>
               <th className={TH}>{t('imports.file')}</th>
               <th className={TH}>{t('when')}</th>
+              <th className={TH}>{t('imports.by')}</th>
               <th className={TH}>{t('imports.status')}</th>
               <th className={cn(TH, 'text-end')}>{t('imports.created')}</th>
               <th className={cn(TH, 'text-end')}>{t('imports.updated')}</th>
@@ -120,6 +121,7 @@ function Imports() {
                   <td className={cn(TD, 'whitespace-nowrap tabular-nums')}>
                     {formatDateTime(j.createdAt, locale, timeZone)}
                   </td>
+                  <td className={TD}>{j.createdBy ?? t('exports.unknown')}</td>
                   <td className={TD}>
                     <span
                       className={cn(
@@ -138,7 +140,7 @@ function Imports() {
                   <td className={cn(TD, 'text-end tabular-nums')}>{j.updated}</td>
                   <td className={cn(TD, 'text-end tabular-nums')}>{rejected}</td>
                   <td className={cn(TD, 'text-end')}>
-                    {j.invalid > 0 && (
+                    {rejected > 0 && (
                       <Button
                         variant="secondary"
                         size="sm"
@@ -165,7 +167,22 @@ function Exports() {
   const locale = useLocale();
   const timeZone = useTimeZone();
   const q = useExportHistory(true);
+  const { toast } = useToast();
+  const [busy, setBusy] = useState<string | null>(null);
   const rows = q.data?.data ?? [];
+
+  async function download(fileId: string) {
+    setBusy(fileId);
+    try {
+      downloadBlob('contacts-export.csv', await downloadSavedExport(fileId));
+    } catch {
+      toast(t('exports.downloadFailed'), 'danger');
+      void q.refetch();
+    } finally {
+      setBusy(null);
+    }
+  }
+
   return (
     <Panel title={t('exports.title')} hint={t('exports.hint')}>
       {q.isPending ? (
@@ -186,17 +203,40 @@ function Exports() {
               <th className={TH}>{t('exports.by')}</th>
               <th className={cn(TH, 'text-end')}>{t('exports.rows')}</th>
               <th className={TH}>{t('exports.selection')}</th>
+              <th className={cn(TH, 'text-end')}>{t('imports.actions')}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
             {rows.map((e) => (
-              <tr key={`${e.at}:${e.by ?? ''}:${e.rows}:${e.selection}`}>
+              <tr key={e.fileId ?? `${e.at}:${e.by ?? ''}:${e.rows}:${e.selection}`}>
                 <td className={cn(TD, 'whitespace-nowrap tabular-nums')}>
                   {formatDateTime(e.at, locale, timeZone)}
                 </td>
                 <td className={TD}>{e.by ?? t('exports.unknown')}</td>
                 <td className={cn(TD, 'text-end tabular-nums')}>{e.rows}</td>
                 <td className={TD}>{t(`exports.selections.${e.selection}`)}</td>
+                <td className={cn(TD, 'text-end')}>
+                  {e.fileId ? (
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      disabled={busy === e.fileId}
+                      onClick={() => void download(e.fileId!)}
+                      title={
+                        e.expiresAt
+                          ? t('exports.keptUntil', {
+                              date: formatDateTime(e.expiresAt, locale, timeZone),
+                            })
+                          : undefined
+                      }
+                    >
+                      {busy === e.fileId && <Spinner />}
+                      {t('exports.download')}
+                    </Button>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">{t('exports.noFile')}</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

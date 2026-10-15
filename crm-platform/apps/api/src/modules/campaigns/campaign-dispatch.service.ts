@@ -1,10 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import {
   UNOFFICIAL_ENGINE,
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { ConsentGate, ConsentPolicyService } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
@@ -14,6 +15,8 @@ import {
   PacingRuntime,
   SENDER_DIRECTORY,
   SenderLease,
+  SenderRefused,
+  SenderThrottled,
   TEMPLATE_DIRECTORY,
   WARMER_GATE,
   assemblePhone,
@@ -62,6 +65,16 @@ import {
   type CampaignRow,
   type ClaimedRecipient,
 } from './campaigns.repository';
+import {
+  INVALID_EMAIL,
+  NO_EMAIL_ADDRESS,
+  cleanSubject,
+  isEmailProvider,
+  isMailableAddress,
+  isWalletFree,
+  normalizeAddress,
+  subjectSource,
+} from './email-campaign-rules';
 
 /** Recipients are claimed and sent in small slices so a long campaign never holds a transaction or a big array. */
 const BATCH = 200;
@@ -77,7 +90,8 @@ const HEARTBEAT_MS = 20_000;
 export type CampaignRunResult =
   'skipped' | 'busy' | 'finished' | 'rearmed' | 'halted' | 'expired' | 'failed';
 
-type Stop = 'cap' | 'window' | null;
+/** `rate`: the sender's own cap (a mailbox's sends per hour) is spent for now; the campaign is scheduled again when a slot frees. */
+type Stop = 'cap' | 'window' | 'wallet' | 'rate' | null;
 
 const PERMANENT_SENDER_MESSAGES = {
   waba: 'WhatsApp Cloud (Official API) campaigns must use an approved template. This campaign sends a custom message, which Meta only permits inside an open 24-hour customer session.',
@@ -119,6 +133,8 @@ export class CampaignDispatchService {
     @Inject(CAMPAIGN_BILLING) private readonly billing: CampaignBilling,
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
     @Inject(CAMPAIGN_SETTINGS) private readonly settingsSource: CampaignSettingsSource,
+    @Optional() private readonly consentPolicy?: ConsentPolicyService,
+    @Optional() private readonly consentGate?: ConsentGate,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -147,7 +163,46 @@ export class CampaignDispatchService {
         return null;
       await this.repo.touch(t, orgId, campaignId);
       const settings = await this.settingsSource.get(t, orgId);
-      await this.repo.screenRecipients(t, orgId, campaignId);
+      const email = isEmailProvider(c.provider);
+      await this.repo.screenRecipients(
+        t,
+        orgId,
+        campaignId,
+        // With the gate present it decides the grant requirement below; the repository keeps the flag, duplicates and counts.
+        this.consentGate ? false : ((await this.consentPolicy?.requiresConsent(orgId)) ?? false),
+        // An email campaign's duplicates are the same address, and a contact with none cannot be reached.
+        email ? 'email' : 'phone',
+      );
+      if (this.consentGate) {
+        const ids = await this.repo.screenCandidates(t, orgId, campaignId);
+        const verdict = await this.consentGate.checkMany(
+          orgId,
+          ids.map((r) => r.contactId),
+          // The consent that counts is the one given on the channel the message goes out on.
+          email ? 'email' : 'whatsapp',
+          'marketing_messaging',
+          undefined,
+          { tx: t },
+        );
+        const withdrawn = ids.filter(
+          (r) => verdict.decisions.get(r.contactId)?.reason === 'withdrawn',
+        );
+        const missing = ids.filter(
+          (r) => verdict.decisions.get(r.contactId)?.decision === 'deny' && !withdrawn.includes(r),
+        );
+        await this.repo.markScreened(
+          t,
+          orgId,
+          withdrawn.map((r) => r.id),
+          'unsubscribed',
+        );
+        await this.repo.markScreened(
+          t,
+          orgId,
+          missing.map((r) => r.id),
+          'skipped',
+        );
+      }
       return { c, settings };
     });
     if (!prep) return 'skipped';
@@ -205,6 +260,8 @@ export class CampaignDispatchService {
     settings: CampaignSettings,
   ): Promise<Date | null> {
     if (c.expiresAt) return c.expiresAt;
+    // The platform's default end date is the WhatsApp 24-hour window; a mail has none, so only the operator's own date ends it.
+    if (isEmailProvider(c.provider)) return null;
     if (!settings.autoExpiryEnabled || c.provider === 'baileys') return null;
     const intentionallyPaced =
       c.scheduleType === 'recurring' ||
@@ -222,7 +279,10 @@ export class CampaignDispatchService {
         deviceId: c.deviceId,
       });
       if (!sender) return { failed: 'no sender' };
-      if (!sender.phoneDigits) return { failed: 'sender has no number' };
+      if (!sender.phoneDigits)
+        return {
+          failed: sender.engine === 'email' ? 'sender has no address' : 'sender has no number',
+        };
       const adapter = this.engines.get(sender.engine);
       if (!adapter) return { failed: `no sender adapter for engine ${sender.engine}` };
 
@@ -237,7 +297,8 @@ export class CampaignDispatchService {
         return { failed: `sender could not be opened: ${String(err)}` };
       }
       const pacing = await this.pacingSettings.get(t, orgId);
-      const warm = await this.warmer.gap(t, sender);
+      // The warm-up profile belongs to a WhatsApp number; a mailbox's id would read another table's row.
+      const warm = sender.engine === 'email' ? null : await this.warmer.gap(t, sender);
       const base = await this.merge.baseContext(t, orgId);
       return { sender, opened, bundles: { a, b } as Bundles, pacing, warm, base };
     });
@@ -319,7 +380,10 @@ export class CampaignDispatchService {
     const { orgId, c, maxAttempts } = o;
     // Providers that take the rate themselves and need no human-like gap: SMS is sent one message at a time with no pacing.
     const official =
-      o.sender.engine === 'waba' || o.sender.engine === 'twilio' || o.sender.engine === 'sms';
+      o.sender.engine === 'waba' ||
+      o.sender.engine === 'twilio' ||
+      o.sender.engine === 'sms' ||
+      o.sender.engine === 'email';
     const tMin = c.throttleMinSec ?? 0;
     const tMax = c.throttleMaxSec ?? 0;
     const randomDelay = tMin > 0 && tMax >= tMin;
@@ -335,10 +399,11 @@ export class CampaignDispatchService {
     let stop: Stop = null;
     let halted = false;
     let expired = false;
+    let rateWaitMs = 0;
 
     batches: for (;;) {
       const batch = await this.db.txAs({ orgId }, (t) =>
-        this.repo.claim(t, orgId, c.id, maxAttempts, BATCH),
+        this.repo.claim(t, orgId, c.id, c.retryFailed ? maxAttempts : 0, BATCH),
       );
       if (batch.length === 0) break;
 
@@ -395,6 +460,19 @@ export class CampaignDispatchService {
         paceIdx++;
 
         const sent = await this.sendOne(o, r, sentThisRun);
+        if (typeof sent === 'object') {
+          // The sender's own cap is spent: this recipient and the rest go back, and the campaign continues when a slot frees.
+          stop = 'rate';
+          rateWaitMs = sent.throttledMs;
+          await putBack(batch.slice(i));
+          break batches;
+        }
+        if (sent === 'wallet') {
+          // The wallet cannot pay for the next message: this recipient and the rest go back, the campaign pauses (a top-up and Resume continue it).
+          stop = 'wallet';
+          await putBack(batch.slice(i));
+          break batches;
+        }
         if (sent) sentThisRun++;
         if (++sinceCounters >= COUNTER_EVERY) {
           sinceCounters = 0;
@@ -403,7 +481,7 @@ export class CampaignDispatchService {
       }
     }
 
-    return this.finish({ ...o, stop, halted, expired });
+    return this.finish({ ...o, stop, halted, expired, rateWaitMs });
   }
 
   /** One recipient. Returns true when it counted toward the daily limit (a real attempt, not bad data). */
@@ -411,10 +489,12 @@ export class CampaignDispatchService {
     o: Parameters<CampaignDispatchService['loop']>[0],
     r: ClaimedRecipient,
     sentThisRun: number,
-  ): Promise<boolean> {
+  ): Promise<boolean | 'wallet' | { throttledMs: number }> {
     const { orgId, c, maxAttempts, settings } = o;
     const content = pickVariant(o.bundles, c.abTesting, r.variant);
-    const to = assemblePhone(r.phone, r.countryCode);
+    const mail = o.sender.engine === 'email';
+    // A mail goes to the contact's address, anything else to their number.
+    const to = mail ? normalizeAddress(r.email) : assemblePhone(r.phone, r.countryCode);
 
     const permanent = async (error: string) =>
       this.db.txAs({ orgId }, async (t) => {
@@ -429,8 +509,9 @@ export class CampaignDispatchService {
       this.db.txAs({ orgId }, async (t) => {
         // A broadcast made by the wizard leaves Meta's frequency cap (131049) to its own retry job: 24 hours apart until the end date
         // the person chose, or not at all when they did not switch retries on. Retrying it here at 6 and 12 hours would defeat that.
+        // A campaign made without "Retry failed messages" treats its first failure as final too.
         const out =
-          c.wizard !== null && isEcosystemThrottle(error)
+          !c.retryFailed || (c.wizard !== null && isEcosystemThrottle(error))
             ? { attempts: maxAttempts, nextAttemptAt: null, final: true }
             : retryOutcome({
                 attemptsBefore: r.attempts,
@@ -452,7 +533,11 @@ export class CampaignDispatchService {
       });
 
     if (!to) {
-      await permanent('No mobile number on contact');
+      await permanent(mail ? NO_EMAIL_ADDRESS : 'No mobile number on contact');
+      return false;
+    }
+    if (mail && !isMailableAddress(to)) {
+      await permanent(INVALID_EMAIL);
       return false;
     }
 
@@ -477,8 +562,8 @@ export class CampaignDispatchService {
       return false;
     }
 
-    // Click tracking in the text of a custom message: every link becomes this recipient's own short link.
-    if (!isTemplate && c.trackingEnabled) {
+    // Click tracking in the text of a custom message: every link becomes this recipient's own short link. A mail has none (Reference).
+    if (!isTemplate && c.trackingEnabled && !mail) {
       try {
         text = await this.db.txAs({ orgId }, (t) =>
           this.tracker.wrapText(t, orgId, text, {
@@ -496,11 +581,11 @@ export class CampaignDispatchService {
       }
     }
 
-    // Plan first: free under the plan's monthly messages, one wallet credit after.
-    const allowed = await this.billing.consume({ orgId, to, usedThisMonth: sentThisRun });
-    if (!allowed) {
-      await permanent('Plan cap reached — top up wallet to keep sending');
-      return false;
+    // Free under the plan's monthly messages, else the wallet must cover this message: if not, the run stops (nothing is failed).
+    // SMS and email are never charged to the wallet, so an empty wallet does not stop them.
+    if (!isWalletFree(o.sender.engine)) {
+      const allowed = await this.billing.consume({ orgId, to, usedThisMonth: sentThisRun });
+      if (!allowed) return 'wallet';
     }
 
     try {
@@ -528,16 +613,27 @@ export class CampaignDispatchService {
           );
           return true;
         }
-        const res = await o.opened.sendText({
-          to,
-          text,
-          clientReference: `camp-${c.id}-${r.contactId}`,
-          header: fill(content.header),
-          footer: fill(content.footer),
-          buttons: this.resolveButtons(content.buttons, content.variableMap, pull),
-          quickReplies: this.resolveButtons(content.quickReplies, content.variableMap, pull),
-          media: content.media,
-        });
+        const res = await o.opened.sendText(
+          mail
+            ? {
+                to,
+                text,
+                clientReference: `camp-${c.id}-${r.contactId}`,
+                // The Header field is the subject of a mail, and the campaign's name when it is blank.
+                header: cleanSubject(fill(subjectSource(content.header, c.name))),
+                footer: null,
+              }
+            : {
+                to,
+                text,
+                clientReference: `camp-${c.id}-${r.contactId}`,
+                header: fill(content.header),
+                footer: fill(content.footer),
+                buttons: this.resolveButtons(content.buttons, content.variableMap, pull),
+                quickReplies: this.resolveButtons(content.quickReplies, content.variableMap, pull),
+                media: content.media,
+              },
+        );
         providerMessageId = res.providerMessageId;
       }
       await this.db.txAs({ orgId }, async (t) => {
@@ -557,9 +653,14 @@ export class CampaignDispatchService {
           o.sender.engine,
         );
       });
-      // After the send is recorded, and never failing it: the inbox bubble is best effort.
-      await this.mirror.mirror(orgId, c.id, r.contactId, 'sent', providerMessageId);
+      // After the send is recorded, and never failing it: the inbox bubble is best effort. A mail writes its own thread (the mailbox's).
+      if (!mail) await this.mirror.mirror(orgId, c.id, r.contactId, 'sent', providerMessageId);
     } catch (err) {
+      if (err instanceof SenderThrottled) return { throttledMs: err.retryAfterMs };
+      if (err instanceof SenderRefused) {
+        await permanent(err.message);
+        return false;
+      }
       await transient(err instanceof Error ? err.message : String(err));
     }
     return true;
@@ -612,7 +713,7 @@ export class CampaignDispatchService {
   ): Promise<CampaignRunResult> {
     for (;;) {
       const batch = await this.db.txAs({ orgId }, (t) =>
-        this.repo.claim(t, orgId, c.id, maxAttempts, BATCH),
+        this.repo.claim(t, orgId, c.id, c.retryFailed ? maxAttempts : 0, BATCH),
       );
       if (batch.length === 0) break;
       for (const r of batch) {
@@ -667,12 +768,25 @@ export class CampaignDispatchService {
       stop: Stop;
       halted: boolean;
       expired: boolean;
+      rateWaitMs: number;
     },
   ): Promise<CampaignRunResult> {
     const { orgId, c, maxAttempts, settings } = o;
     const left = await this.db.txAs({ orgId }, (t) =>
-      this.repo.remaining(t, orgId, c.id, maxAttempts),
+      this.repo.remaining(t, orgId, c.id, c.retryFailed ? maxAttempts : 0),
     );
+    if (o.stop === 'wallet') {
+      await this.db.txAs({ orgId }, async (t) => {
+        await this.repo.recount(t, orgId, c.id);
+        await this.repo.setStatus(t, orgId, c.id, 'paused');
+        await this.events.statusChanged(t, orgId, c.id, 'running');
+      });
+      this.logger.warn(
+        { orgId, campaign: c.uuid },
+        '[CAMP] paused: wallet cannot cover the next message',
+      );
+      return 'halted';
+    }
     const live = await this.db.txAs({ orgId }, (t) => this.repo.liveStatus(t, orgId, c.id));
     if (o.halted || live === 'cancelled' || live === 'paused') {
       await this.db.txAs({ orgId }, (t) => this.repo.recount(t, orgId, c.id));
@@ -686,16 +800,22 @@ export class CampaignDispatchService {
     const now = this.runtime.now();
     const recurring = c.scheduleType === 'recurring';
     let result: CampaignRunResult = 'finished';
+    // The wallet stop returned above, so what is left is a daily cap or a send window.
+    const stop = o.stop;
 
     await this.db.txAs({ orgId }, async (t) => {
       await this.repo.recount(t, orgId, c.id);
       const previous = 'running';
-      if (o.stop && left.remaining > 0 && !recurring) {
-        const slot = nextRunSlot(c, o.stop, now);
+      if (stop && left.remaining > 0 && !recurring) {
+        // The sender's own cap frees a slot at a known time (a minute of margin, since the schedule is kept to the minute).
+        const slot =
+          stop === 'rate'
+            ? this.slotAt(new Date(now.getTime() + o.rateWaitMs + 60_000), c.timezone ?? 'UTC')
+            : nextRunSlot(c, stop, now);
         await this.repo.setSchedule(t, orgId, c.id, { scheduleType: 'scheduled', ...slot });
         await this.repo.setStatus(t, orgId, c.id, 'scheduled');
         result = 'rearmed';
-      } else if (!o.stop && left.retryable > 0 && !recurring) {
+      } else if (!stop && left.retryable > 0 && !recurring) {
         // Retries are waiting: scheduled again at the earliest due time, else after one backoff.
         const at = left.nextRetryAt ?? new Date(now.getTime() + settings.retryBackoffSec * 1000);
         const slot = this.slotAt(at, c.timezone ?? 'UTC');

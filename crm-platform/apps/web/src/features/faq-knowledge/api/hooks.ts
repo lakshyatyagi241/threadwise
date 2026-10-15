@@ -10,33 +10,37 @@ import type { FaqEntry, FaqEntryListResponse } from '@crm/contracts';
 import { flowsApi } from '@/features/flow-builder-editor/api/flows';
 import { toListQuery, type ListFilters } from '../lib/list-model';
 import type { LogView } from '../lib/log-model';
+import { useFaqFlow } from '../components/faq-flow';
 import { faqApi } from './service';
 
+/** Everything an FAQ screen reads is one flow's: the flow id is in each key, so two flows never share a cache entry. */
 export const KEYS = {
   all: ['faq'] as const,
-  list: ['faq', 'list'] as const,
+  list: (flowId: string) => ['faq', 'list', flowId] as const,
   entry: (id: string) => ['faq', 'entry', id] as const,
-  settings: ['faq', 'settings'] as const,
-  summary: (days: number) => ['faq', 'summary', days] as const,
+  settings: (flowId: string) => ['faq', 'settings', flowId] as const,
+  summary: (flowId: string, days: number) => ['faq', 'summary', flowId, days] as const,
   summaries: ['faq', 'summary'] as const,
-  log: ['faq', 'log'] as const,
+  log: (flowId: string) => ['faq', 'log', flowId] as const,
   flows: (q: string) => ['faq', 'flows', q] as const,
+  flowNodes: (flowId: string) => ['faq', 'flow-nodes', flowId] as const,
 };
 
 /** After any change to FAQs or their variations: lists, counts, the open entry and the unanswered badge are stale. */
 export const refreshFaqs = (qc: QueryClient) => qc.invalidateQueries({ queryKey: KEYS.all });
 
-/** The list screen: cursor pages with "Load more"; the stats of the newest loaded page describe the whole workspace. */
+/** The list screen: cursor pages with "Load more"; the stats of the newest loaded page describe the whole flow. */
 export function useFaqList(filters: ListFilters, debouncedSearch: string, enabled: boolean) {
+  const { flowId } = useFaqFlow();
   const query = toListQuery(filters, debouncedSearch);
   const q = useInfiniteQuery({
-    queryKey: [...KEYS.list, query],
+    queryKey: [...KEYS.list(flowId), query],
     enabled,
     retry: false,
     placeholderData: keepPreviousData,
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) =>
-      faqApi.list({ ...query, limit: 20, cursor: pageParam }, signal),
+      faqApi.list(flowId, { ...query, limit: 20, cursor: pageParam }, signal),
     getNextPageParam: (last: FaqEntryListResponse) =>
       last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
   });
@@ -49,6 +53,7 @@ export function useFaqList(filters: ListFilters, debouncedSearch: string, enable
 }
 
 export function useFaqEntry(id: string | null) {
+  const { flowId } = useFaqFlow();
   return useQuery<FaqEntry>({
     queryKey: KEYS.entry(id ?? ''),
     enabled: id !== null,
@@ -58,39 +63,46 @@ export function useFaqEntry(id: string | null) {
       const e = query.state.data;
       return e && e.variations.some((v) => v.embedState === 'pending') ? 4000 : false;
     },
-    queryFn: ({ signal }) => faqApi.get(id!, signal),
+    queryFn: ({ signal }) => faqApi.get(flowId, id!, signal),
   });
 }
 
 /** Settings are readable with `faq.entries.read`; the banner and the editor counters use them on every screen. */
 export function useFaqSettings(enabled: boolean) {
+  const { flowId } = useFaqFlow();
   return useQuery({
-    queryKey: KEYS.settings,
+    queryKey: KEYS.settings(flowId),
     enabled,
     retry: false,
     staleTime: 30_000,
-    queryFn: ({ signal }) => faqApi.settings(signal),
+    queryFn: ({ signal }) => faqApi.settings(flowId, signal),
   });
 }
 
 export function useFaqSummary(days: number, enabled: boolean) {
+  const { flowId } = useFaqFlow();
   return useQuery({
-    queryKey: KEYS.summary(days),
+    queryKey: KEYS.summary(flowId, days),
     enabled,
     retry: false,
     staleTime: 30_000,
-    queryFn: ({ signal }) => faqApi.summary(days, signal),
+    queryFn: ({ signal }) => faqApi.summary(flowId, days, signal),
   });
 }
 
 export function useFaqLog(view: LogView, search: string, enabled: boolean) {
+  const { flowId } = useFaqFlow();
   const q = useInfiniteQuery({
-    queryKey: [...KEYS.log, view, search],
+    queryKey: [...KEYS.log(flowId), view, search],
     enabled,
     retry: false,
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) =>
-      faqApi.log({ view, search: search || undefined, limit: 30, cursor: pageParam }, signal),
+      faqApi.log(
+        flowId,
+        { view, search: search || undefined, limit: 30, cursor: pageParam },
+        signal,
+      ),
     getNextPageParam: (last) =>
       last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
   });
@@ -110,13 +122,26 @@ export function useFlowOptions(search: string, enabled: boolean) {
   });
 }
 
-/** Categories already in use, for the editor's suggestions (the list response carries them in its stats). */
-export function useFaqCategories(enabled: boolean) {
+/** The steps of the answer's target flow (this one or another), for the "Go to" select. Re-read when the screen regains focus: the flow may have been edited meanwhile. */
+export function useFlowNodes(flowId: string | null, enabled: boolean) {
   return useQuery({
-    queryKey: [...KEYS.list, 'categories'],
+    queryKey: KEYS.flowNodes(flowId ?? ''),
+    enabled: enabled && flowId !== null,
+    retry: false,
+    staleTime: 15_000,
+    queryFn: ({ signal }) => faqApi.flowNodes(flowId!, signal),
+  });
+}
+
+/** Categories already in use in this flow, for the editor's suggestions (the list response carries them in its stats). */
+export function useFaqCategories(enabled: boolean) {
+  const { flowId } = useFaqFlow();
+  return useQuery({
+    queryKey: [...KEYS.list(flowId), 'categories'],
     enabled,
     retry: false,
     staleTime: 60_000,
-    queryFn: ({ signal }) => faqApi.list({ limit: 1 }, signal).then((r) => r.stats.categories),
+    queryFn: ({ signal }) =>
+      faqApi.list(flowId, { limit: 1 }, signal).then((r) => r.stats.categories),
   });
 }

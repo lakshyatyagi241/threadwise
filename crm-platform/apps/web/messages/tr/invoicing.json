@@ -40,7 +40,6 @@
       "planDisabled": "Planınız faturalamayı içermiyor.",
       "invalidState": "Faturanın mevcut durumunda bu mümkün değil. Yenileyip durumunu kontrol edin.",
       "unexpected": "Tarafımızda bir sorun oluştu. Yeniden deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Yeniden dene"
     },
     "picker": {

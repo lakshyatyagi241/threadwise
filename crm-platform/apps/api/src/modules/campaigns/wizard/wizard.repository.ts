@@ -427,7 +427,7 @@ export class WizardRepository {
     await tx.execute(sql`
       UPDATE wpcampaigns SET wizard = ${json(v.wizard)}::jsonb, provider = ${v.provider}, device_id = ${v.deviceId},
         ab_testing = ${o.abTesting}, ab_split = ${o.abSplit}, template_id_b = ${o.templateIdB},
-        tracking_enabled = ${o.trackingEnabled}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
+        tracking_enabled = ${o.trackingEnabled}, retry_failed = ${o.retryFailed}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
         throttle_min_sec = ${o.throttleMinSec}, throttle_max_sec = ${o.throttleMaxSec}, batch_size = ${o.batchSize},
         batch_pause_min = ${o.batchPauseMin}, daily_limit = ${o.dailyLimit}, window_start = ${o.windowStart},
         window_end = ${o.windowEnd},
@@ -529,6 +529,32 @@ export class WizardRepository {
       UPDATE camp_series SET status = ${status},
         ended_at = CASE WHEN ${status === 'cancelled' || status === 'ended'} THEN coalesce(ended_at, now()) ELSE ended_at END
       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * Takes the row locks of every run of the series. A worker moving a run from scheduled to running waits for the transaction that
+   * holds them, and then finds the run gone, so a delete never removes a run a worker has just claimed.
+   */
+  async lockSeriesRuns(tx: Tx, orgId: number, seriesId: number): Promise<void> {
+    await tx.execute(
+      sql`SELECT id FROM wpcampaigns WHERE org_id = ${orgId} AND series_id = ${seriesId} ORDER BY id FOR UPDATE`,
+    );
+  }
+
+  /** True once any run of the series has sent a message: its history is then kept. */
+  async seriesHasSent(tx: Tx, orgId: number, seriesId: number): Promise<boolean> {
+    const res = await tx.execute(sql`
+      SELECT 1 FROM wp_campaign_contacts r
+      JOIN wpcampaigns c ON c.org_id = r.org_id AND c.id = r.campaign_id
+      WHERE c.org_id = ${orgId} AND c.series_id = ${seriesId}
+        AND (r.status IN ('sent', 'delivered', 'read', 'responded') OR r.sent_at IS NOT NULL
+             OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)
+      LIMIT 1`);
+    return res.rows.length > 0;
+  }
+
+  async deleteSeries(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`DELETE FROM camp_series WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
   async seriesChildren(tx: Tx, orgId: number, seriesId: number): Promise<WizardCampaignRow[]> {

@@ -21,6 +21,7 @@ const session = {
     displayName: null,
     phone: null,
     locale: null,
+    timezone: null,
     theme: 'paper' as const,
     avatarUrl: null,
     emailVerified: true,
@@ -47,11 +48,12 @@ const session = {
     passwordChangeRequired: false,
   },
   sessionId: '3a7d1c9e-2b4f-4c6d-8e0a-5f1b2c3d4e5f',
+  effectiveTimezone: 'UTC',
 };
 
-const renderScreen = () => {
+const renderScreen = async () => {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  render(
+  await render(
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>
         <HomeScreen />
@@ -73,7 +75,7 @@ beforeEach(async () => {
 describe('HomeScreen', () => {
   it('greets the person and names the workspace, and tags error reports with the opaque user id only', async () => {
     fetchSession.mockResolvedValue(session);
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText('Hello, Pat Person')).toBeTruthy();
     expect(screen.getByText('Workspace: Acme Ltd')).toBeTruthy();
     expect(identifyUser).toHaveBeenCalledWith(session.user.id);
@@ -81,7 +83,7 @@ describe('HomeScreen', () => {
 
   it('prefers the display name', async () => {
     fetchSession.mockResolvedValue({ ...session, user: { ...session.user, displayName: 'Pat' } });
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText('Hello, Pat')).toBeTruthy();
   });
 
@@ -89,18 +91,18 @@ describe('HomeScreen', () => {
     fetchSession
       .mockRejectedValueOnce(new ApiError(0, 'CLIENT_NETWORK', 'x'))
       .mockResolvedValueOnce(session);
-    renderScreen();
+    await renderScreen();
     expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
-    fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     expect(await screen.findByText('Hello, Pat Person')).toBeTruthy();
   });
 
   it('signs out and empties the cache', async () => {
     fetchSession.mockResolvedValue(session);
     mockFetch(jsonResponse(200, { ok: true }));
-    const queryClient = renderScreen();
+    const queryClient = await renderScreen();
     await screen.findByText('Hello, Pat Person');
-    fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Sign out' }));
     await waitFor(() => expect(getSnapshot().status).toBe('signedOut'));
     expect(queryClient.getQueryData(['session'])).toBeUndefined();
   });

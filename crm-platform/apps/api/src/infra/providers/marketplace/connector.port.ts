@@ -23,6 +23,16 @@ export interface ConnectorLead {
     ad?: string;
     form?: string;
   };
+  /** Proof the person agreed to be contacted, when the portal sends it (the recipe's `consent` mapping). Same shape as `LeadConsent`. */
+  consent?: {
+    given: boolean;
+    text?: string;
+    version?: string;
+    at?: string;
+    formId?: string;
+    adId?: string;
+    channels?: Array<'whatsapp' | 'sms' | 'email'>;
+  };
   raw?: unknown;
 }
 

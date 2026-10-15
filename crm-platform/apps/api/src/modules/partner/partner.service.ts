@@ -58,19 +58,24 @@ export class PartnerService {
     }
     const agentId = ctx.actorId;
 
-    const contact = await this.contacts.create({
-      name: input.name,
-      email: input.email,
-      phone: input.phone,
-      lifecycleStage: 'new',
-      customFields: {
-        college_tag: input.collegeTag ?? null,
-        program_of_interest: input.programOfInterest ?? null,
-        city: input.city ?? null,
-        country: input.country ?? null,
-        agent_notes: input.notes ?? null,
+    const contact = await this.contacts.create(
+      {
+        name: input.name,
+        email: input.email,
+        phone: input.phone,
+        lifecycleStage: 'new',
+        consent: input.consent,
+        customFields: {
+          college_tag: input.collegeTag ?? null,
+          program_of_interest: input.programOfInterest ?? null,
+          city: input.city ?? null,
+          country: input.country ?? null,
+          agent_notes: input.notes ?? null,
+        },
       },
-    });
+      // The agent speaks for the person: the grant is theirs to assert, the ledger names the agent as the reference.
+      { source: 'api', evidence: { reference: `partner_agent:${agentId}` } },
+    );
 
     await this.db.tx(async (tx) => {
       const idRow = await tx.execute(

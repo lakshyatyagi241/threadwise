@@ -145,10 +145,20 @@
         "privacyUrl": "Link naar privacybeleid",
         "privacyUrlHint": "Optioneel. Wordt naast de toestemmingstekst getoond. Moet beginnen met https://.",
         "privacyUrlHttps": "Gebruik een adres dat begint met https://.",
+        "termsUrl": "Link naar voorwaarden",
+        "termsUrlHint": "Optioneel. Wordt getoond naast de toestemmingstekst en de privacylink. Moet beginnen met https://.",
+        "useWorkspacePrivacy": "Privacylink van mijn werkruimte gebruiken",
+        "useWorkspaceTerms": "Voorwaardenlink van mijn werkruimte gebruiken",
         "required": "Moet worden aangevinkt om te verzenden",
         "requiredHint": "Zet dit uit als toestemming optioneel is.",
         "marketing": "Opt-in voor marketing",
-        "marketingHint": "Het aanvinken registreert marketingtoestemming bij het contact. Een niet-aangevinkt vakje schrijft nooit iemand in."
+        "marketingHint": "Het aanvinken registreert marketingtoestemming bij het contact. Een niet-aangevinkt vakje schrijft nooit iemand in.",
+        "whatsappHint": "Ga je deze contacten via WhatsApp berichten sturen? Gebruik tekst die dat zegt en uitlegt hoe je je kunt afmelden. Het aangevinkte vakje wordt als bewijs bewaard, met precies deze tekst en de versie ervan.",
+        "whatsappInsert": "Gebruik de WhatsApp-opt-in-tekst",
+        "whatsappWording": "Ik ga akkoord met het ontvangen van updates en aanbiedingen via WhatsApp. Ik kan me altijd afmelden door STOP te antwoorden.",
+        "coversSms": "De tekst dekt sms",
+        "coversSmsHint": "Zet dit alleen aan als de tekst hierboven zegt dat mensen via sms benaderd kunnen worden. Als een telefoonnummer wordt verzameld, wordt sms samen met WhatsApp en e-mail vastgelegd.",
+        "serviceHint": "Deze regel is geen marketing. Een aangevinkt vakje wordt bewaard als bewijs dat de persoon akkoord ging met contact over zijn of haar verzoek (alleen serviceberichten), met precies deze tekst en de versie. Het meldt nooit iemand aan voor marketing."
       },
       "crm": {
         "title": "In het CRM",
@@ -253,8 +263,8 @@
           "off": "Uit"
         },
         "captchaHints": {
-          "inherit": "Gebruikt wat je workspace voor publieke formulieren heeft ingesteld.",
-          "on": "Bezoekers moeten de controle doorstaan voordat ze kunnen verzenden.",
+          "inherit": "Gebruikt de CAPTCHA die je platformbeheerder voor openbare formulieren heeft ingesteld, als die er is.",
+          "on": "Bezoekers moeten de controle doorstaan voordat ze kunnen verzenden. Vereist een CAPTCHA op het platform; zonder CAPTCHA wordt publiceren geweigerd.",
           "off": "Geen controle. Vertrouw op het verborgen valvelde en de snelheidslimieten."
         },
         "retention": "Antwoorden bewaren (dagen)",
@@ -271,6 +281,17 @@
           "perFormPerMinuteHint": "Inzendingen naar dit formulier, van overal.",
           "perContactPerHour": "Per contact, per uur",
           "perContactPerHourHint": "Inzendingen met hetzelfde e-mailadres of telefoonnummer."
+        },
+        "captchaStatus": {
+          "available": "Er is een CAPTCHA ingesteld op dit platform (reCAPTCHA {version}).",
+          "none": "Er is geen CAPTCHA ingesteld op dit platform, dus hier wordt niets gecontroleerd. Vraag je platformbeheerder er een toe te voegen, of vertrouw op het verborgen valstrikveld en de limieten.",
+          "noneOn": "Dit formulier staat op altijd controleren, maar het platform heeft geen CAPTCHA, dus er wordt niets gecontroleerd en het kan niet worden gepubliceerd. Vraag je platformbeheerder er een toe te voegen, of kies een andere instelling.",
+          "failed": "Kon niet controleren of er een CAPTCHA is ingesteld."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Het verborgen valstrikveld heeft deze maand geen bots tegengehouden.} one {Het verborgen valstrikveld heeft deze maand 1 bot tegengehouden.} other {Het verborgen valstrikveld heeft deze maand # bots tegengehouden.}}",
+          "held": "{count, plural, one {1 inzending is vastgehouden als spam.} other {# inzendingen zijn vastgehouden als spam.}}",
+          "review": "Bekijken"
         }
       }
     }

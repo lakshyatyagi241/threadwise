@@ -4,6 +4,7 @@ import {
   type FaqAiPort,
   type FaqEmbedRequest,
   type FaqEmbedResult,
+  type FaqJudgeRequest,
   type FaqSuggestRequest,
   type FaqSuggestResult,
 } from './faq-ai.port';
@@ -71,6 +72,27 @@ export class OpenRouterFaqAiAdapter implements FaqAiPort {
       model: req.model,
       max_tokens: 700,
       temperature: 0.8,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: req.system },
+        { role: 'user', content: req.user },
+      ],
+    })) as {
+      choices?: Array<{ message?: { content?: string } }>;
+      usage?: { prompt_tokens?: number; completion_tokens?: number };
+    };
+    return {
+      text: json.choices?.[0]?.message?.content ?? '',
+      promptTokens: num(json.usage?.prompt_tokens),
+      completionTokens: num(json.usage?.completion_tokens),
+    };
+  }
+
+  async judge(req: FaqJudgeRequest): Promise<FaqSuggestResult> {
+    const json = (await this.post('/chat/completions', req.apiKey, {
+      model: req.model,
+      max_tokens: 150,
+      temperature: 0,
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: req.system },

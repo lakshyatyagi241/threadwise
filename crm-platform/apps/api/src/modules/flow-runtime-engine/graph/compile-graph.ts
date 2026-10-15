@@ -3,6 +3,7 @@ import {
   flbCleanAskInputType,
   flbSanitizeConditionGroup,
   flbToRuntimeData,
+  flbCleanCarouselCards,
 } from '@crm/contracts';
 import { shapeCommerceNode } from './commerce-shapes';
 import type { RuntimeEdge, RuntimeGraph, RuntimeNode } from './runtime-graph';
@@ -38,6 +39,7 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   wa_form: 'WaForm',
   template: 'Template',
   buttons: 'InteractiveButtons',
+  carousel: 'Carousel',
   list: 'List',
   ask: 'Question',
   ask_file: 'AskFile',
@@ -65,6 +67,7 @@ export const TYPE_MAP: Readonly<Record<string, string>> = {
   google_form: 'GoogleForm',
   deal: 'Deal',
   api_library: 'ApiLibrary',
+  faq: 'Faq',
   trigger: 'Trigger',
   end: 'End',
   // Instagram and Messenger nodes that are the shared nodes under another name (TW-FLR-061, 062): same executor, the editor's own fields.
@@ -95,6 +98,7 @@ const PORT_MAP: Readonly<Record<string, Readonly<Record<string, number>>>> = {
   google_form: { submitted: 1, timeout: 2 },
   deal: { created: 1, error: 2 },
   api_library: { success: 1, error: 2 },
+  faq: { matched: 1, no_match: 2 },
   in_list: { yes: 1, no: 2 },
   in_segment: { yes: 1, no: 2 },
   wa_session: { yes: 1, no: 2 },
@@ -206,18 +210,51 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         savePropertyKey: str(data.savePropertyKey),
       };
     }
+    case 'carousel': {
+      // The reply buttons become the node's exits in card order (`p0`, `p1`, ...); a card's link buttons keep their kind and value.
+      const cards = flbCleanCarouselCards(data.cards);
+      let reply = 0;
+      const buttons: Array<{ id: string; title: string }> = [];
+      const handoffs: Record<string, { team: string; message: string }> = {};
+      return {
+        bodyText: str(data.text),
+        cards: cards.map((c) => ({
+          image: c.image,
+          title: c.title,
+          text: c.text,
+          buttons: c.buttons.map((b) => {
+            if (b.type !== 'reply' && b.type !== 'agent')
+              return { kind: 'link', type: b.type, label: b.label, value: b.value };
+            const i = reply++;
+            if (b.type === 'agent')
+              handoffs[String(i)] = { team: b.team ?? '', message: b.note ?? '' };
+            const title = b.label || `Option ${i + 1}`;
+            buttons.push({ id: `p${i}`, title });
+            return { kind: 'reply', index: i, label: title };
+          }),
+        })),
+        buttons,
+        handoffs,
+        variable: cleanVar(data.var, 'choice'),
+      };
+    }
     case 'buttons': {
       const opts = arr(data.options);
       return {
         bodyText: str(data.prompt, 'Please choose:'),
-        buttons: opts.map((o, i) => ({
-          id: `p${i}`,
-          title: typeof o === 'string' ? o : str(obj(o).title, `Option ${i + 1}`),
-        })),
+        buttons: opts.map((o, i) => {
+          const icon = str(arr(data.optionIcons)[i]).trim();
+          return {
+            id: `p${i}`,
+            title: typeof o === 'string' ? o : str(obj(o).title, `Option ${i + 1}`),
+            ...(/^https?:\/\/\S+$/i.test(icon) ? { icon } : {}),
+          };
+        }),
         variable: cleanVar(data.var, 'choice'),
         footerText: str(data.footerText),
         savePropertyKey: str(data.savePropertyKey),
         keepMenuOpen: data.keepMenuOpen !== false,
+        handoffs: cleanHandoffs(data.handoffs, opts.length),
       };
     }
     case 'ask':
@@ -236,6 +273,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
         maxRetries: int(data.maxRetries, 0),
         onGiveUp: str(data.onGiveUp, 'continue'),
         savePropertyKey: str(data.savePropertyKey),
+        verifyOtp: data.verifyOtp === true,
       };
     // Not Reference nodes (TW-FLB-081, 082). `flbToRuntimeData` has already normalised the wait settings.
     case 'ask_file':
@@ -301,6 +339,7 @@ function shapeNode(type: string, data: Record<string, unknown>): Record<string, 
             type: str(obj(a).type, 'url').toLowerCase(),
             label: str(obj(a).label),
             value: str(obj(a).value),
+            ...(str(obj(a).icon).trim() ? { icon: str(obj(a).icon).trim() } : {}),
           })),
       };
     case 'location':
@@ -331,6 +370,24 @@ function portOf(type: string, handle: unknown): number {
  * Builder graph to runtime graph (TW-FLR-013). Pure: no database, no clock. The pinned start node (`isStart`) moves to the front,
  * else the first `trigger` node, else the order is kept; the runtime always begins at the first node.
  */
+/**
+ * "Hand over to a person" on a button: `{ "<exit index>": { team, message } }`, only for exits that exist. The compiler gives such an
+ * exit its own Assign agent step when the author wired nothing to it.
+ */
+function cleanHandoffs(
+  raw: unknown,
+  exits: number,
+): Record<string, { team: string; message: string }> {
+  const out: Record<string, { team: string; message: string }> = {};
+  for (const [k, v] of Object.entries(obj(raw))) {
+    const i = Number(k);
+    if (!Number.isInteger(i) || i < 0 || i >= exits) continue;
+    const h = obj(v);
+    out[String(i)] = { team: str(h.team).trim(), message: str(h.message).slice(0, 500) };
+  }
+  return out;
+}
+
 export function compileGraph(input: unknown): RuntimeGraph {
   const g = obj(input) as BuilderGraph;
   const raw = [...arr(g.flowNodes)].map(obj) as BuilderNode[];
@@ -375,6 +432,28 @@ export function compileGraph(input: unknown): RuntimeGraph {
       .map((e) => str(e.source)),
   );
   for (const n of nodes) if (n.type === 'Template') n.props.buttonsWired = tapWired.has(n.id);
+  // A button that hands the visitor to a person and has nothing wired after it gets its own Assign agent step.
+  const wired = new Set(edges.map((e) => e.from));
+  for (const n of [...nodes]) {
+    for (const [idx, h] of Object.entries(obj(n.props.handoffs))) {
+      const from = `${n.id}_${portOf(typeById.get(n.id) ?? '', `p${idx}`)}`;
+      if (wired.has(from)) continue;
+      const id = `${n.id}__agent_${idx}`;
+      const give = obj(h);
+      nodes.push({
+        id,
+        type: 'AssignAgent',
+        props: shapeNode(
+          'assign',
+          flbToRuntimeData({
+            type: 'assign',
+            data: { team: str(give.team), message: str(give.message) },
+          }),
+        ),
+      });
+      edges.push({ from, to: id });
+    }
+  }
   return { nodes, edges, vars: obj(g.vars) };
 }
 

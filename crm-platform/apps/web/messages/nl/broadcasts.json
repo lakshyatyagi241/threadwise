@@ -296,7 +296,9 @@
       "media": "Voorbeeld van {kind}",
       "contactsDenied": "Je hebt geen toegang tot de contactenlijst. Kies contacten via groepen of tags.",
       "unofficialDisabled": "Verzenden via persoonlijke WhatsApp-nummers (de onofficiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
-      "previewLabel": "Sjabloonvoorbeeld"
+      "previewLabel": "Sjabloonvoorbeeld",
+      "colEmail": "E-mail",
+      "noEmail": "Geen e-mailadres"
     },
     "overrides": {
       "title": "Deze verzending invullen",
@@ -353,6 +355,21 @@
         "name": "Instagram",
         "hint": "Stuur berichten naar mensen die al in je Instagram-DM's staan, zonder sjabloongoedkeuring.",
         "cta": "Instagram-broadcast maken"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Stuur een Messenger-bericht naar mensen die je Pagina de afgelopen 24 uur een bericht stuurden.",
+        "cta": "Facebook-verzending maken"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Verstuur een bericht als e-mail vanuit een gekoppelde mailbox, met een afmeldlink.",
+        "cta": "E-mailcampagne maken"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Stuur een bericht naar mensen die al met je LINE-account chatten.",
+        "cta": "LINE-broadcast aanmaken"
       }
     }
   }

@@ -1,0 +1,433 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "忽略",
+      "retry": "重试",
+      "noAccessTitle": "您无法打开此页面",
+      "noAccess": "请向管理员申请“{permission}”权限。"
+    },
+    "errors": {
+      "network": "无法连接到服务器。请检查网络连接后重试。",
+      "forbidden": "您的角色无权执行此操作。",
+      "notAvailable": "此工作区暂不支持增长试点。",
+      "featureOff": "增长试点的这一部分已关闭。请在“控制”中开启。",
+      "actionGone": "此项已被其他人处理。",
+      "assistantFailed": "助手未能给出建议。请确认已有受众和已通过审核的模板，然后重试。",
+      "undoRefused": "此更改已无法撤销：该联系人已有后续变化，或此更改已被撤销。",
+      "conflict": "其他人已先保存了这些设置，已为您加载最新版本。",
+      "notFound": "该内容已不存在。",
+      "validation": "部分值无效。请检查后重试。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "unexpected": "出现问题。请重试；如果问题持续，请联系支持团队。"
+    },
+    "page": {
+      "title": "增长",
+      "subtitle": "将您的营销活动和对话转化为团队可以采取行动的事项。此处的任何内容都不会自动向联系人发送消息。",
+      "notAvailableTitle": "不在试点范围内",
+      "notAvailable": "增长试点仅对部分工作区开放，您的工作区暂未开通。",
+      "tabs": {
+        "inbox": "收件箱",
+        "audiences": "受众",
+        "campaigns": "营销活动",
+        "insights": "洞察",
+        "autoStage": "自动阶段变更",
+        "assistant": "群发助手",
+        "controls": "控制"
+      }
+    },
+    "digest": {
+      "title": "今天",
+      "quiet": "目前没有需要您关注的事项。",
+      "highlights": {
+        "hotLeads": "{count, plural, other {# 个高意向线索已准备好购买}}",
+        "unanswered": "{count, plural, other {# 个购买咨询尚未得到回复}}",
+        "optOuts": "{count, plural, other {# 位联系人要求停止接收}}",
+        "suggestionsPending": "{count, plural, other {# 项阶段变更等待决定}}",
+        "campaignReplies": "{count, plural, other {# 位联系人在营销活动发送后一天内回复}}",
+        "lapsed": "{count, plural, other {# 位客户已沉寂}}"
+      }
+    },
+    "inbox": {
+      "title": "增长收件箱",
+      "hint": "值得关注的事项。接受会执行对应类型的操作；忽略只会关闭该项。",
+      "filter": "显示",
+      "all": "全部（{count}）",
+      "empty": "暂无待处理事项。随着对话被读取和每日检查运行，新事项会显示在这里。",
+      "more": "显示更多",
+      "doneAccept": "{count, plural, other {# 项已完成}}",
+      "doneDismiss": "{count, plural, other {# 项已忽略}}",
+      "someFailed": "{count, plural, other {# 项未能完成}}",
+      "openContact": "打开联系人",
+      "someone": "一位联系人",
+      "dismiss": "忽略",
+      "types": {
+        "hot_lead": "高意向线索",
+        "unanswered_intent": "未回复",
+        "registration_issue": "注册问题",
+        "purchase_route": "转交人工",
+        "opt_out": "要求停止接收",
+        "lapsed": "已沉寂",
+        "service_due": "服务到期",
+        "status_reply": "订单状态"
+      },
+      "titles": {
+        "hot_lead": "{name} 已准备好购买",
+        "unanswered_intent": "{name} 咨询了购买事宜，但无人回复",
+        "registration_issue": "{name} 反馈注册出现问题",
+        "purchase_route": "将 {name} 交给 {user}",
+        "opt_out": "{name} 要求停止接收",
+        "lapsed": "{name} 已沉寂",
+        "service_due": "{name}：{rule}已到期",
+        "status_reply": "{name} 咨询了订单情况"
+      },
+      "accept": {
+        "hot_lead": "标记为已处理",
+        "unanswered_intent": "标记为已处理",
+        "registration_issue": "标记为已处理",
+        "purchase_route": "分配对话",
+        "opt_out": "记录退订",
+        "lapsed": "完成",
+        "service_due": "完成",
+        "status_reply": "完成"
+      },
+      "facts": {
+        "routeOwner": "{name} 负责此联系人。",
+        "routeLeastBusy": "{name} 的未结对话最少。",
+        "lapsedDays": "已有 {count, plural, other {# 天}}没有打开或发送消息。",
+        "issue": {
+          "missing_confirmation": "未收到确认。",
+          "payment_problem": "反馈付款有问题。",
+          "wrong_info": "称部分信息有误。"
+        }
+      }
+    },
+    "audiences": {
+      "title": "受众",
+      "hint": "根据联系人的实际行为得出的联系人分组。同步后可填充一个联系人组，用于发送营销活动。",
+      "empty": "暂无受众。请在“控制”中开启相关部分。",
+      "synced": "“{name}”现有 {count, plural, other {# 位联系人}}。",
+      "lastSync": "分组“{name}”，上次同步于 {when}。",
+      "notSynced": "分组“{name}”将在首次同步时创建。",
+      "sync": "同步到分组",
+      "resync": "再次同步",
+      "errors": {
+        "forbidden": "您的角色无权同步受众。",
+        "failed": "无法同步该受众。请重试。"
+      },
+      "kinds": {
+        "engaged": {
+          "label": "活跃",
+          "description": "最近打开过多个营销活动。"
+        },
+        "silent": {
+          "label": "无响应",
+          "description": "收到过营销活动但一个都没有打开。"
+        },
+        "lapsed": {
+          "label": "已流失",
+          "description": "长时间没有打开或发送消息的客户。"
+        },
+        "hot_chat": {
+          "label": "对话高意向",
+          "description": "最新对话分析显示已准备好购买的联系人。"
+        },
+        "high_propensity": {
+          "label": "高转化可能",
+          "description": "转化模型评分前 10% 的联系人。"
+        },
+        "service_due": {
+          "label": "服务到期",
+          "description": "服务日期已到的联系人。"
+        }
+      }
+    },
+    "campaigns": {
+      "title": "营销活动回复",
+      "hint": "在发送后 24 小时和 72 小时内回复的联系人，根据收件箱统计。",
+      "stamp": "立即记录回复",
+      "stamped": "{count, plural, other {已记录 # 条回复}}。",
+      "stampFailed": "无法记录回复。请重试。",
+      "empty": "尚未发送任何营销活动。",
+      "totals": {
+        "sent": "已发送",
+        "read": "已读",
+        "replied24h": "24 小时内回复",
+        "replied72h": "72 小时内回复"
+      },
+      "cols": {
+        "campaign": "营销活动",
+        "sent": "已发送",
+        "read": "已读",
+        "replied24h": "24 小时",
+        "replied72h": "72 小时",
+        "replyRate": "回复率"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "最佳发送时间",
+        "hint": "联系人阅读营销活动并给你发消息的时间,按你的时区显示。",
+        "empty": "活动数据不足，暂时无法判断。",
+        "best": "最佳时段：{hours}（{zone}）。",
+        "quiet": "最冷清的时段：{hours}。",
+        "chart": "按一天中各小时划分的活动",
+        "sample": "基于 {count, plural, other {# 个事件}}。"
+      },
+      "propensity": {
+        "title": "转化模型",
+        "hint": "从已成为客户的联系人中学习哪些行为与转化相关，并为所有人评分。",
+        "recompute": "立即重新学习",
+        "done": "模型已更新。",
+        "failed": "无法更新模型。请重试。",
+        "contacts": "已评分联系人",
+        "converted": "已转化",
+        "auc": "排序准确度",
+        "capture": "前 10% 中的转化数",
+        "captureHint": "随机排序的结果为 10%",
+        "none": "未测量",
+        "trained": "模型已从您已转化的联系人中学习。",
+        "notTrained": "已转化的联系人太少，暂无法学习，因此使用固定权重。",
+        "computedAt": "更新于 {when}。",
+        "drivers": "影响评分的因素",
+        "features": {
+          "campaigns_opened_30d": "打开的营销活动（30 天）",
+          "campaigns_received_30d": "收到的营销活动（30 天）",
+          "messages_from_contact_30d": "他们发送的消息（30 天）",
+          "links_clicked_30d": "点击的链接（30 天）",
+          "groups": "所在的分组",
+          "has_email": "有电子邮箱地址",
+          "chat_messages_total": "对话中的消息数",
+          "age_days": "添加至今的天数"
+        }
+      },
+      "quality": {
+        "title": "运行效果",
+        "hint": "过去 30 天内建议的采纳情况、线索评分区分已转化联系人的能力，以及 AI 的费用。",
+        "none": "未测量",
+        "scoreAuc": "线索评分质量",
+        "scoreAucHint": "已评分 {scored}，已转化 {converted}",
+        "calls": "AI 调用次数",
+        "cost": "AI 费用",
+        "autoApplied": "自动变更",
+        "undone": "已撤销 {count}",
+        "suggestions": {
+          "chat": "来自对话的阶段建议",
+          "engagement": "来自营销活动的阶段建议"
+        },
+        "suggestionLine": "已接受 {accepted}，已忽略 {dismissed}，待处理 {pending}。",
+        "cols": {
+          "type": "收件箱事项",
+          "done": "已完成",
+          "dismissed": "已忽略",
+          "open": "待处理"
+        },
+        "actionTypes": {
+          "hot_lead": "高意向线索",
+          "unanswered_intent": "未回复",
+          "registration_issue": "注册问题",
+          "purchase_route": "转交人工",
+          "opt_out": "要求停止接收",
+          "lapsed": "已沉寂",
+          "service_due": "服务到期",
+          "status_reply": "订单状态"
+        }
+      },
+      "enrichment": {
+        "title": "公司信息",
+        "hint": "为拥有企业邮箱地址的联系人查询公司信息，并显示在联系人资料中。",
+        "run": "查询下一批",
+        "asked": "{count, plural, other {已查询 # 位联系人}}。",
+        "failed": "查询失败。请重试。",
+        "status": "{provider}：找到 {found}，未找到 {notFound}，失败 {failed}。",
+        "notConfigured": "服务器上未连接任何查询服务，因此此开关暂时无效。"
+      }
+    },
+    "autoStage": {
+      "title": "自动阶段变更",
+      "hint": "仅限 AI 非常确定的判断，并受每日上限限制。只要此后无人移动该联系人，每项变更都可以恢复。",
+      "today": "今日已使用 {done}/{cap}。",
+      "empty": "尚未自动更改任何内容。",
+      "contact": "一位联系人",
+      "moved": "已从 {from} 移至 {to}。",
+      "confidence": "确定度 {percent}%",
+      "undone": "已恢复",
+      "undo": "恢复",
+      "undoDone": "该联系人已恢复到原来的阶段。",
+      "undoRefused": "此更改已无法撤销：该联系人已有后续变化。",
+      "undoFailed": "无法撤销此更改。请重试。"
+    },
+    "assistant": {
+      "title": "群发助手",
+      "hint": "说明您想达成的目标。它会综合每个模板的实际回复情况，从您的受众和已通过审核的模板中各建议一个。它不会发送或创建任何内容。",
+      "goal": "您想达成什么目标？",
+      "goalHint": "例如：提醒所有已报名的人参加周六的活动。",
+      "placeholder": "提醒已报名的联系人参加周六的活动",
+      "ask": "建议营销活动",
+      "audience": "受众",
+      "audienceValue": "{name}（{count} 位联系人）",
+      "template": "模板",
+      "replyRate": "一天内回复率 {percent}",
+      "sendAt": "发送时间约为",
+      "considered": "从 {audiences, plural, other {# 个受众}}和 {templates, plural, other {# 个模板}}中选出。"
+    },
+    "controls": {
+      "readOnly": "您可以查看这些设置，但无法更改。",
+      "saved": "设置已保存。",
+      "discard": "放弃更改",
+      "save": "保存",
+      "problem": {
+        "numbers": "有数值超出范围。请检查阈值。",
+        "serviceRules": "第 {line} 行的服务规则格式不正确，应为：标签 | 日期属性 | 之后天数 | 之前天数。",
+        "customPhrases": "第 {line} 行的短语格式不正确，应为：短语 = 意图。"
+      },
+      "groups": {
+        "measure": {
+          "title": "测量",
+          "hint": "只读测量，不会更改任何内容。"
+        },
+        "audiences": {
+          "title": "受众和阶段",
+          "hint": "找出应该联系的对象，并根据联系人对营销活动的反应建议阶段变更。"
+        },
+        "chats": {
+          "title": "读取对话",
+          "hint": "使用 AI 线索评分的对话分析，因此需要先开启该功能。读取对话前会对部分个人数据进行遮盖。"
+        },
+        "assist": {
+          "title": "助手",
+          "hint": "辅助决策。不会向联系人发送任何内容。"
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "真实营销活动回复",
+          "hint": "统计营销活动后回复的联系人，并修正回复数据。"
+        },
+        "send_times": {
+          "label": "最佳发送时间",
+          "hint": "显示联系人阅读和发消息的时段。"
+        },
+        "propensity": {
+          "label": "转化模型",
+          "hint": "为每位联系人的转化可能性评分。"
+        },
+        "quality": {
+          "label": "质量仪表板",
+          "hint": "显示建议的使用频率和 AI 的费用。"
+        },
+        "daily_digest": {
+          "label": "每日摘要",
+          "hint": "在此页面顶部显示工作区的简短摘要。"
+        },
+        "engagement_audiences": {
+          "label": "互动受众",
+          "hint": "活跃、无响应和已流失的联系人，可直接用于发送营销活动。"
+        },
+        "engagement_stage_rules": {
+          "label": "来自营销活动的阶段建议",
+          "hint": "当联系人持续打开营销活动时，建议将其推进到下一阶段。"
+        },
+        "service_rules": {
+          "label": "服务提醒和跟进",
+          "hint": "根据您自己的规则，找出服务或购买日期已到期的联系人。"
+        },
+        "enrichment": {
+          "label": "公司信息",
+          "hint": "为拥有企业邮箱地址的联系人查询公司信息。"
+        },
+        "intent_fields": {
+          "label": "联系人上的对话意图",
+          "hint": "将对话的主题写入“AI 意图”属性，以便流程据此作出响应。"
+        },
+        "language_detect": {
+          "label": "对话语言",
+          "hint": "记录每个对话所使用的语言。"
+        },
+        "auto_notes": {
+          "label": "对话摘要备注",
+          "hint": "将对话的简短摘要作为备注添加到联系人。"
+        },
+        "hot_lead_alerts": {
+          "label": "高意向线索提醒",
+          "hint": "当联系人明确准备购买时，发出提醒并通知负责人。"
+        },
+        "unanswered_watch": {
+          "label": "未回复的购买咨询",
+          "hint": "标记无人回复的购买或价格咨询。"
+        },
+        "handover_summary": {
+          "label": "转接时的摘要",
+          "hint": "当对话转交给人工时，在顶部放置对话摘要。"
+        },
+        "purchase_routing": {
+          "label": "将买家转交人工",
+          "hint": "当联系人想要购买时，建议由谁来接手对话。"
+        },
+        "registration_check": {
+          "label": "注册问题",
+          "hint": "标记称已付款或已注册但未收到确认的联系人。"
+        },
+        "status_reply": {
+          "label": "订单和维修状态",
+          "hint": "当客户询问订单或维修情况时，准备相应的状态信息。"
+        },
+        "optout_detection": {
+          "label": "退订请求",
+          "hint": "标记要求停止接收的联系人；接受后会记录到同意记录中。"
+        },
+        "broadcast_assistant": {
+          "label": "群发助手",
+          "hint": "根据目标建议受众和模板。"
+        },
+        "auto_stage": {
+          "label": "自动阶段变更",
+          "hint": "当 AI 非常确定时推进联系人阶段，受每日上限限制，并支持撤销。"
+        }
+      },
+      "thresholds": {
+        "title": "阈值",
+        "hint": "上述各部分使用的数值。",
+        "hotLeadConfidence": "高意向线索置信度",
+        "hotLeadConfidenceHint": "分析结果所需的确定程度，范围 0.5 到 1。",
+        "unansweredHours": "多少小时后视为未回复",
+        "unansweredHoursHint": "范围 1 到 168。",
+        "lapsedDays": "多少天后视为客户已流失",
+        "lapsedDaysHint": "范围 7 到 730。",
+        "engagedOpens": "视为活跃所需的营销活动打开次数",
+        "engagedOpensHint": "30 天内。",
+        "stageMinOpens": "建议阶段变更所需的营销活动打开次数",
+        "stageWindowDays": "为此回溯的天数",
+        "autoMinConfidence": "自动变更所需的置信度",
+        "autoMinConfidenceHint": "范围 0.8 到 1。",
+        "autoDailyCap": "每日自动变更次数",
+        "autoDailyCapHint": "整个工作区的上限。",
+        "requireGroup": "仅对已加入分组的联系人建议阶段变更"
+      },
+      "rules": {
+        "title": "您自己的规则和词语",
+        "hint": "每行一条。",
+        "statusFields": "状态属性",
+        "statusFieldsHint": "保存订单或维修状态的联系人属性，例如 repair_status。",
+        "serviceRules": "服务规则",
+        "serviceRulesHint": "标签 | 日期属性 | 之后天数 | 之前天数（可选）。",
+        "serviceRulesExample": "更换电池 | purchase_date | 700 | 760",
+        "customPhrases": "按钮和关键词点击",
+        "customPhrasesHint": "短语 = 意图。意图：{intents}。",
+        "customPhrasesExample": "查看保修单 = post_purchase",
+        "extraMaskTerms": "需始终隐藏的词语",
+        "extraMaskTermsHint": "绝不能发送给 AI 的品牌、地址或名称。"
+      },
+      "confirmEnrich": {
+        "title": "查询公司信息？",
+        "body": "为了查找公司信息，联系人的企业邮箱地址会被发送到查询服务。个人邮箱地址不会被发送。",
+        "yes": "开启",
+        "no": "暂不"
+      }
+    },
+    "contactCard": {
+      "title": "增长",
+      "propensity": "转化可能性：{score}/100。",
+      "computedAt": "更新于 {when}。"
+    }
+  }
+}

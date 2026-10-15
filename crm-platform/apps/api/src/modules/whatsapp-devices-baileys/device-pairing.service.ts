@@ -8,6 +8,7 @@ import {
   type DevicePairing,
   type DeviceStateReason,
   type PairingMethod,
+  type PlanFeatureKey,
   type StartPairingInput,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
@@ -32,9 +33,13 @@ import {
 } from './device-rules';
 import { workerUnreachable } from './devices.service';
 import { DevicesRepository } from './devices.repository';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { HistoryImportService } from './history-import.service';
 import { RiskNoticeService } from './risk-notice.service';
 
 const MODULE = 'devices';
+/** The plan feature the `full` history choice needs. */
+export const HISTORY_FULL_FEATURE = 'personal_history_full' satisfies PlanFeatureKey;
 const CODE_VALID_S = 180;
 /** The attempt record outlives its deadline a little, so the last poll still finds the final state. */
 const ATTEMPT_GRACE_S = 15;
@@ -66,6 +71,8 @@ export class DevicePairingService {
     private readonly control: DeviceControlService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly history: HistoryImportService,
+    private readonly entitlements: PlanEntitlementService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly gate: UnofficialWhatsappGate,
   ) {}
@@ -96,6 +103,16 @@ export class DevicePairingService {
       return { row, sessionRows, state: row.connection_state as DeviceConnectionState };
     });
     const row = pre.row;
+
+    // The FULL import is a plan feature (owner decision 2026-10-14); `recent` is open to every workspace that may use personal numbers.
+    // Refused before anything is counted or recorded, with the standard 422 PLAN_FEATURE_LOCKED (`errors[]` names the feature).
+    if (input.importHistory === 'full') {
+      await this.entitlements.assertFeature(
+        ctx.orgId,
+        HISTORY_FULL_FEATURE,
+        'The full history import is not part of your plan. Choose the recent chats, or upgrade your plan.',
+      );
+    }
 
     const refusal = pairingRefusal({
       state: pre.state,
@@ -167,8 +184,16 @@ export class DevicePairingService {
         aggregateModule: MODULE,
         aggregateId: row.id,
         eventType: 'device.pairing_started',
-        payload: { deviceId: row.uuid, method, relink: input.relink },
+        payload: {
+          deviceId: row.uuid,
+          method,
+          relink: input.relink,
+          importHistory: input.importHistory,
+        },
       });
+      // The choice is on the device row BEFORE the worker is asked for a QR: the socket reads it when it is built (WhatsApp sends
+      // history only to a companion that asked for it while registering). A re-link that does not choose again imports nothing.
+      await this.history.request(tx, ctx.orgId, row.id, input.importHistory, userId);
     });
 
     const res =
@@ -177,6 +202,10 @@ export class DevicePairingService {
         : await this.control.requestPairingCode(ctx.orgId, row.id, { relink: input.relink });
     if (!res.ok || res.status === 'connected') {
       await this.redis.del(attemptKey(ctx.orgId, row.id));
+      // No QR was produced: nothing will be scanned, so the import that was asked for is over.
+      await this.db.tx((tx) =>
+        this.history.cancelActiveIn(tx, ctx.orgId, row.id, 'pairing_failed'),
+      );
       await this.fail(res, uuid, ctx.orgId);
     }
     return this.view(uuid, attempt, userId);
@@ -213,6 +242,10 @@ export class DevicePairingService {
     if (!attempt) return { cancelled: false };
     await this.redis.del(attemptKey(ctx.orgId, row.id));
     if (['awaiting_qr', 'awaiting_pairing_code'].includes(row.connection_state)) {
+      // An attempt ended before the scan wants no history; a link that already happened keeps its import running (cancel it on its own).
+      await this.db.tx((tx) =>
+        this.history.cancelActiveIn(tx, ctx.orgId, row.id, 'pairing_cancelled'),
+      );
       // An unfinished pairing holds fewer than 3 session rows: the worker's terminate stops the socket and forgets them.
       await this.control.terminate(ctx.orgId, row.id).catch(() => undefined);
     }

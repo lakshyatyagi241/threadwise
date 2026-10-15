@@ -133,6 +133,20 @@ export const MARKET_SCOPES = [
     permissions: ['record.forms.create', 'record.forms.update', 'record.form-submissions.update'],
   },
   {
+    id: 'email.read',
+    label: 'Read email mailboxes',
+    description: 'See the Gmail mailboxes connected to your workspace and their status.',
+    risk: 'medium',
+    permissions: ['mail.mailboxes.read'],
+  },
+  {
+    id: 'email.write',
+    label: 'Connect and manage email mailboxes',
+    description: 'Connect, rename, sync and disconnect Gmail mailboxes.',
+    risk: 'high',
+    permissions: ['mail.mailboxes.manage'],
+  },
+  {
     id: 'templates.read',
     label: 'Read message templates',
     description: 'See your WhatsApp message templates.',

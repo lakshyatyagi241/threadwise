@@ -59,6 +59,14 @@ export const registrationSettingsSchema = z.object({
   emailVerification: z.enum(['off', 'banner', 'block']).default('off'),
   /** Plan slug from the PLAN domain; null = the domain's own default. */
   defaultPlanId: z.string().max(64).nullable().default(null),
+  /** Refuse free mailbox providers (gmail.com, outlook.com, ...): sign-up needs a work address. */
+  businessEmailOnly: z.boolean().default(true),
+  /** Refuse throwaway / temporary mail domains and domains with no mail server. */
+  blockDisposableEmail: z.boolean().default(true),
+  /** Extra domains an operator refuses, lower-case, without the `@`. */
+  blockedEmailDomains: z.array(z.string().max(253)).max(500).default([]),
+  /** A verified mobile number is mandatory: sign-up fails closed when the code step cannot run. */
+  requirePhoneVerification: z.boolean().default(true),
   trialDays: z.number().int().min(0).max(365).default(14),
   defaultTimezone: z.string().max(64).default('UTC'),
   defaultCountryIso: z.string().length(2).nullable().default(null),
@@ -99,6 +107,13 @@ export const registrationSettingsPatchSchema = z.object({
   publicRegistration: z.boolean().optional(),
   emailVerification: z.enum(['off', 'banner', 'block']).optional(),
   defaultPlanId: z.string().max(64).nullable().optional(),
+  businessEmailOnly: z.boolean().optional(),
+  blockDisposableEmail: z.boolean().optional(),
+  blockedEmailDomains: z
+    .array(z.string().trim().toLowerCase().max(253))
+    .max(500)
+    .optional(),
+  requirePhoneVerification: z.boolean().optional(),
   trialDays: z.number().int().min(0).max(365).optional(),
   defaultTimezone: z.string().max(64).optional(),
   defaultCountryIso: z.string().length(2).nullable().optional(),
@@ -228,7 +243,7 @@ export const authPagesResponseSchema = z.object({
     register: authPageContentSchema,
     forgot: authPageContentSchema,
   }),
-  variant: z.number().int().min(1).max(5),
+  variant: z.number().int().min(1).max(6),
   login: authPageContentSchema,
   register: authPageContentSchema,
   forgot: authPageContentSchema,
@@ -262,7 +277,7 @@ export const authPageContentPatchSchema = z.object({
 });
 
 export const authPagesPatchSchema = z.object({
-  variant: z.number().int().min(1).max(5).optional(),
+  variant: z.number().int().min(1).max(6).optional(),
   login: authPageContentPatchSchema.optional(),
   register: authPageContentPatchSchema.optional(),
   forgot: authPageContentPatchSchema.optional(),

@@ -1,10 +1,13 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import {
+  CHANNEL_KINDS,
   CONVERSATION_EVENT_TYPES,
   CONVERSATION_STATUSES,
   INBOX_TABS,
   INBOX_TEMPLATE_BLOCK_REASONS,
+  SAVED_REPLY_VARIABLES,
+  SAVED_REPLY_VARIABLE_GROUPS,
 } from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { ERROR_KINDS } from './lib/errors';
@@ -36,8 +39,13 @@ function flatten(tree: Tree, prefix = ''): Record<string, string> {
 const placeholders = (message: string) =>
   [...new Set([...message.matchAll(/\{\s*([A-Za-z_]\w*)\s*[,}]/g)].map((m) => m[1]!))].sort();
 
-const en = flatten(load('en'));
-const ar = flatten(load('ar'));
+/** The "Imported" marker strings are a slice of their own (messages/<locale>/team-inbox-conversations.imported.json), merged at runtime. */
+const loadSlice = (locale: string): Tree =>
+  JSON.parse(
+    readFileSync(join(WEB, 'messages', locale, 'team-inbox-conversations.imported.json'), 'utf8'),
+  ) as Tree;
+const en = { ...flatten(load('en')), ...flatten(loadSlice('en')) };
+const ar = { ...flatten(load('ar')), ...flatten(loadSlice('ar')) };
 
 describe('team-inbox-conversations messages', () => {
   it('Arabic has exactly the keys English has', () => {
@@ -102,6 +110,7 @@ const DYNAMIC = [
   ]),
   ...CONVERSATION_STATUSES.flatMap((s) => [`list.status.${s}`, `panel.past.status.${s}`]),
   ...(['low', 'normal', 'high', 'urgent'] as const).map((s) => `list.priority.${s}`),
+  ...(['first_response', 'resolution'] as const).map((s) => `sla.kind.${s}`),
   ...(['received', 'queued', 'sent', 'delivered', 'read', 'failed'] as const).map(
     (s) => `status.${s}`,
   ),
@@ -121,6 +130,14 @@ const DYNAMIC = [
   ...INBOX_TEMPLATE_BLOCK_REASONS.map((r) => `templates.reason.${r}`),
   ...(['required', 'format'] as const).map((p) => `templates.problem.${p}`),
   'panel.timeline.events.unknown',
+  ...CHANNEL_KINDS.map((k) => `savedReplies.channelKind.${k}`),
+  ...SAVED_REPLY_VARIABLES.map((v) => `savedReplies.variable.${v.key}`),
+  ...SAVED_REPLY_VARIABLE_GROUPS.map((g) => `savedReplies.variableGroup.${g}`),
+  ...(['all', 'shared', 'mine'] as const).map((k) => `savedReplies.screen.tab.${k}`),
+  ...(['shared', 'mine'] as const).flatMap((k) => [
+    `savedReplies.screen.scope.${k}`,
+    `savedReplies.form.scopeOption.${k}`,
+  ]),
 ];
 
 describe('message keys used in code', () => {

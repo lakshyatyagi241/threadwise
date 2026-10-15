@@ -40,7 +40,6 @@
       "planDisabled": "Twój plan nie obejmuje fakturowania.",
       "invalidState": "Nie jest to możliwe w bieżącym stanie faktury. Przeładuj i sprawdź jej status.",
       "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie.",
-      "requestId": "ID żądania",
       "retry": "Spróbuj ponownie"
     },
     "picker": {

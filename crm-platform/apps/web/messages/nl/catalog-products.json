@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Sluiten",
-      "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-id"
+      "retry": "Opnieuw proberen"
     },
     "errors": {
       "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
@@ -35,7 +34,10 @@
       "sendFailed": "Het bericht kon niet worden verzonden: {detail}",
       "collectionProducts": "Geen van de geselecteerde producten hoort bij deze workspace.",
       "providerFailed": "WhatsApp of Meta kon het verzoek niet voltooien: {detail}",
-      "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw."
+      "unexpected": "Er is iets misgegaan. Probeer het zo meteen opnieuw.",
+      "alreadyConnected": "Er is al een catalogus verbonden. Verbreek die eerst om een nieuwe te maken.",
+      "confirmMismatch": "De ingevoerde catalogus-ID komt niet overeen met de verbonden catalogus.",
+      "setNotSyncable": "Deze collectie heeft geen actieve producten voor een Meta-productset."
     },
     "paywall": {
       "kicker": "Premiumfunctie",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "De beschrijving is te lang.",
           "noProducts": "Kies minstens één product."
         }
+      },
+      "meta": {
+        "onMeta": "Bij Meta",
+        "notOnMeta": "Niet bij Meta",
+        "push": "Naar Meta sturen",
+        "update": "Bijwerken bij Meta",
+        "remove": "Verwijderen van Meta",
+        "pushed": "Collectie naar Meta gestuurd.",
+        "removed": "Collectie van Meta verwijderd."
       }
     },
     "activity": {
@@ -447,7 +458,8 @@
       "cancel": "Annuleren",
       "deleted": "Product verwijderd.",
       "deleteTitle": "Dit product verwijderen?",
-      "deleteBody": "\"{name}\" wordt verwijderd. Het blijft op Meta staan tot je het daar verwijdert."
+      "deleteBody": "\"{name}\" wordt verwijderd. Het blijft op Meta staan tot je het daar verwijdert.",
+      "variantsBadge": "{count, plural, one {# variant} other {# varianten}}"
     },
     "share": {
       "eyebrow": "Product delen",
@@ -552,6 +564,91 @@
         "badUrl": "Voer een volledige link in die begint met https://",
         "outOfRange": "Dit getal valt buiten het bereik.",
         "tooMany": "Te veel afbeeldingen."
+      },
+      "variants": {
+        "title": "Varianten",
+        "hint": "Verkoop dit product in meer dan één vorm, zoals maat of kleur. Elke combinatie krijgt een eigen SKU, prijs en voorraad.",
+        "toggle": "Dit product heeft varianten",
+        "removeOnSave": "De varianten van dit product worden verwijderd wanneer je opslaat.",
+        "optionName": "Naam van optie {n}",
+        "optionNamePlaceholder": "Maat, Kleur...",
+        "suggest": {
+          "size": "Maat",
+          "colour": "Kleur",
+          "material": "Materiaal",
+          "style": "Stijl"
+        },
+        "values": "Waarden",
+        "valuesHint": "Druk op Enter of typ een komma na elke waarde. Maximaal {max} tekens per waarde.",
+        "valuesPlaceholder": "Typ een waarde, bijvoorbeeld M",
+        "valuesMore": "Nog een waarde toevoegen",
+        "quickAdd": "Snel toevoegen:",
+        "preset": {
+          "clothing": "Kledingmaten ({values})",
+          "shoes": "Schoenmaten ({values})"
+        },
+        "addOption": "Optie toevoegen",
+        "maxOptions": "Maximaal {max} opties.",
+        "removeOption": "Optie {n} verwijderen",
+        "moveOptionUp": "Optie {n} omhoog verplaatsen",
+        "moveOptionDown": "Optie {n} omlaag verplaatsen",
+        "removeValue": "Waarde {value} verwijderen",
+        "moveValueEarlier": "{value} eerder zetten",
+        "moveValueLater": "{value} later zetten",
+        "refused": {
+          "tooLong": "Deze waarde is te lang.",
+          "dup": "Deze waarde staat al in de lijst.",
+          "tooMany": "Je hebt de limiet aan waarden voor deze optie bereikt."
+        },
+        "tableTitle": "Varianten",
+        "count": "{count, plural, one {# variant} other {# varianten}}",
+        "tableEmpty": "Geef elke optie een naam en minstens één waarde om de varianten te genereren.",
+        "totalStock": "Totale voorraad",
+        "fromPrice": "Vanaf-prijs",
+        "fromPreview": "Vanaf {price}",
+        "unlimited": "Onbeperkt",
+        "priceHint": "De laagste prijs van de actieve varianten. Varianten zonder eigen prijs gebruiken deze prijs.",
+        "stockHint": "Het totaal van de actieve varianten, bepaald door de tabel hierboven.",
+        "bulkPrice": "Prijs voor alle varianten",
+        "bulkStock": "Voorraad voor alle varianten",
+        "bulkApplyPrice": "Prijs toepassen",
+        "bulkApplyStock": "Voorraad toepassen",
+        "pricePlaceholder": "Productprijs",
+        "stockPlaceholder": "Onbeperkt",
+        "col": {
+          "variant": "Variant",
+          "sku": "SKU",
+          "price": "Prijs",
+          "stock": "Voorraad",
+          "image": "Afbeeldingslink",
+          "active": "Actief"
+        },
+        "rowSku": "SKU voor {title}",
+        "rowPrice": "Prijs voor {title}",
+        "rowStock": "Voorraad voor {title}",
+        "rowImage": "Afbeeldingslink voor {title}",
+        "rowActive": "{title} is actief",
+        "confirm": {
+          "title": "Varianten verwijderen?",
+          "body": "{count, plural, one {# variant met gegevens wordt} other {# varianten met gegevens worden}} verwijderd omdat die combinatie niet meer bestaat.",
+          "remove": "Verwijderen",
+          "keep": "Behouden"
+        },
+        "problem": {
+          "required": "Dit veld is verplicht.",
+          "tooLong": "Deze tekst is te lang.",
+          "dupName": "Twee opties hebben dezelfde naam.",
+          "dupValue": "Deze waarde komt twee keer voor.",
+          "needOption": "Voeg minstens één optie toe.",
+          "needValue": "Voeg minstens één waarde toe.",
+          "tooManyValues": "Te veel waarden voor deze optie.",
+          "tooManyVariants": "Deze opties leveren te veel varianten op. De limiet is 100.",
+          "notNumber": "Voer een getal in, zoals 499 of 499.50.",
+          "tooBig": "Het bedrag is te groot.",
+          "notWhole": "Voer een geheel getal in.",
+          "outOfRange": "Dit getal valt buiten het bereik.",
+          "badUrl": "Voer een volledige link in die begint met https://"
+        }
       }
     },
     "reviews": {
@@ -724,6 +821,33 @@
           "goods": "Geen alcohol / volwassenen- / gereguleerde goederen",
           "verification": "Bedrijfsverificatie vereist voor productie"
         }
+      }
+    },
+    "manage": {
+      "title": "Catalogus beheren bij Meta",
+      "create": {
+        "title": "Nieuwe catalogus maken bij Meta",
+        "intro": "Maakt een lege catalogus in je WhatsApp Business-account, koppelt die en verbindt hem hier.",
+        "name": "Catalogusnaam",
+        "placeholder": "bijv. Mijn winkel",
+        "button": "Catalogus maken",
+        "needName": "Voer een catalogusnaam in.",
+        "done": "Catalogus gemaakt en verbonden."
+      },
+      "rename": {
+        "label": "Catalogusnaam",
+        "button": "Hernoemen bij Meta",
+        "done": "Catalogus hernoemd bij Meta."
+      },
+      "delete": {
+        "title": "Catalogus verwijderen bij Meta",
+        "warning": "Verwijdert de catalogus en de producten definitief bij Meta. Dit kan niet ongedaan worden gemaakt.",
+        "confirmLabel": "Typ catalogus-ID {id} ter bevestiging",
+        "button": "Verwijderen bij Meta",
+        "dialogTitle": "Catalogus verwijderen bij Meta?",
+        "dialogMessage": "De catalogus wordt bij Meta verwijderd en hier losgekoppeld. Dit kan niet ongedaan worden gemaakt.",
+        "cancel": "Annuleren",
+        "done": "Catalogus verwijderd bij Meta."
       }
     }
   }

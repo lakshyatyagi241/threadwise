@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { PersonalDeviceDetail } from '@crm/contracts';
 import { Alert, Badge, Button, Field, Input, Spinner, Switch, useToast } from '@crm/ui';
@@ -18,6 +18,7 @@ import { canDisconnect, canEditNumber, primaryAction } from '../lib/state-model'
 import { nameProblem } from '../lib/wizard-model';
 import { ConnectWizard } from './connect-wizard';
 import { DeleteDialog, DisconnectDialog } from './device-dialogs';
+import { HistoryImportCard } from './history-import-card';
 import { ErrorNotice } from './error-notice';
 import { ReasonText, StateBadge } from './state-badge';
 import { useErrorText, type ErrorText } from './use-error-text';
@@ -32,6 +33,7 @@ export function DeviceDetailScreen({ id }: { id: string }) {
   const tl = useTranslations(`${NS}.list`);
   const tc = useTranslations(`${NS}.common`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const router = useRouter();
   const { toast } = useToast();
   const errorText = useErrorText();
@@ -70,7 +72,7 @@ export function DeviceDetailScreen({ id }: { id: string }) {
 
   const d = detail.data;
   const action = primaryAction(d.connectionState);
-  const when = (iso: string | null) => formatWhen(iso, locale);
+  const when = (iso: string | null) => formatWhen(iso, locale, timeZone);
   const close = () => setDialog(null);
 
   return (
@@ -129,6 +131,8 @@ export function DeviceDetailScreen({ id }: { id: string }) {
         </div>
       </section>
 
+      <HistoryImportCard deviceId={d.id} canCancel={perms.pair} />
+
       <EditCard device={d} canEdit={perms.create} />
 
       {(perms.disconnect || perms.delete) && (
@@ -161,6 +165,7 @@ export function DeviceDetailScreen({ id }: { id: string }) {
           existing={d}
           noticeVersion={list.data?.meta.noticeVersion ?? null}
           noticeAccepted={list.data?.meta.noticeAccepted ?? false}
+          historyFullAllowed={list.data?.meta.historyFullAllowed ?? false}
           onClose={close}
         />
       )}

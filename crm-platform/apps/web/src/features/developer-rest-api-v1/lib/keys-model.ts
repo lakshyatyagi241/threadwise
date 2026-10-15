@@ -157,10 +157,11 @@ export function relativeTime(iso: string | null, locale: string, now = Date.now(
 }
 
 /** "Created Oct 6, 2026". */
-export function dateLabel(iso: string, locale: string): string {
+export function dateLabel(iso: string, locale: string, timeZone?: string): string {
   return new Date(iso).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone,
   });
 }

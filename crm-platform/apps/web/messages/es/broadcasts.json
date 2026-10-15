@@ -296,7 +296,9 @@
       "media": "Vista previa de {kind}",
       "contactsDenied": "No tienes acceso a la lista de contactos. Elige contactos mediante grupos o etiquetas.",
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
-      "previewLabel": "Vista previa de la plantilla"
+      "previewLabel": "Vista previa de la plantilla",
+      "colEmail": "Correo electrónico",
+      "noEmail": "Sin dirección de correo"
     },
     "overrides": {
       "title": "Completa este envío",
@@ -353,6 +355,21 @@
         "name": "Instagram",
         "hint": "Escribe a personas que ya están en tus mensajes directos de Instagram, sin aprobación de plantilla.",
         "cta": "Crear difusión de Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envía un mensaje de Messenger a quienes escribieron a tu Página en las últimas 24 horas.",
+        "cta": "Crear difusión de Facebook"
+      },
+      "email": {
+        "name": "Correo electrónico",
+        "hint": "Envía un mensaje como correo electrónico desde un buzón conectado, con un enlace para darse de baja.",
+        "cta": "Crear campaña de correo"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de LINE.",
+        "cta": "Crear difusión de LINE"
       }
     }
   }

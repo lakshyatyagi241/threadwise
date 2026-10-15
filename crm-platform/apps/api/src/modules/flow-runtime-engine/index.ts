@@ -5,7 +5,12 @@
  */
 export { FlowRuntimeEngineModule } from './flow-runtime-engine.module';
 export { FlowRuntimeEngineWorkerModule } from './flow-runtime-engine-worker.module';
-export { FlowLaunchService, type LaunchInput, type LaunchOutcome } from './runtime/launch.service';
+export {
+  FlowLaunchService,
+  KINDS_OF_PROVIDER,
+  type LaunchInput,
+  type LaunchOutcome,
+} from './runtime/launch.service';
 export { FlowTriggerService, type OrderPlaced } from './triggers/trigger.service';
 export { FlowEngine } from './runtime/engine.service';
 // The operator-facing reads and enrolment (flows, subscribers, enrol one contact), for the customer REST API's `/api/v1/flows`.

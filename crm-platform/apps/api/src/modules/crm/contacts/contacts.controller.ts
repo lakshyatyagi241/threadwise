@@ -17,6 +17,7 @@ import {
   bulkUpdateContactsSchema,
   contactSelectQuerySchema,
   createContactSchema,
+  deleteContactQuerySchema,
   listContactsQuerySchema,
   listFieldHistoryQuerySchema,
   setContactAssigneeSchema,
@@ -25,6 +26,7 @@ import {
   type BulkUpdateContactsInput,
   type ContactSelectQuery,
   type CreateContactInput,
+  type DeleteContactQuery,
   type ListContactsQuery,
   type ListFieldHistoryQuery,
   type RecordScope,
@@ -142,9 +144,16 @@ export class ContactsController {
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   @RequirePermission('record.contacts.delete')
-  @ApiOperation({ summary: 'Delete a contact (hard delete)' })
-  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
-    await this.contacts.remove(id);
+  @ApiOperation({
+    summary: 'Delete a contact (hard delete) together with its conversation history',
+    description:
+      'By default the conversations, messages, media, files, call logs and recordings of the contact are erased with it. `eraseHistory=false` keeps the conversations and call logs without the identity of the person. Leads, deals, tasks and invoices stay as business records.',
+  })
+  async remove(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(deleteContactQuerySchema)) query: DeleteContactQuery,
+  ): Promise<void> {
+    await this.contacts.remove(id, { eraseHistory: query.eraseHistory });
   }
 
   @Get(':id/tags')

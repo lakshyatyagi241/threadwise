@@ -16,4 +16,17 @@ export class BillingWalletGate implements WalletGate {
       ...(opts.category !== undefined ? { category: opts.category } : {}),
     });
   }
+
+  precheckSend(
+    orgId: number,
+    to: string,
+    opts: Omit<WalletGateOptions, 'phones'> = {},
+  ): Promise<void> {
+    return this.gate.assertCanSend({
+      orgId,
+      source: opts.source ?? 'broadcast',
+      to,
+      category: opts.category ?? 'marketing',
+    });
+  }
 }

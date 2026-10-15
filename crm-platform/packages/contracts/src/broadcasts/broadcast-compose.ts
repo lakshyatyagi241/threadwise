@@ -8,9 +8,13 @@ import { uuidSchema } from '../common/ids';
 
 /**
  * `channel=sms` scopes the composer to the SMS channel (TW-SMS-016): only SMS senders and SMS templates, and only while the platform
- * switch is on. Without it the composer is the WhatsApp one and never lists an SMS sender.
+ * switch is on. `channel=email` scopes it to the Email channel (TW-MAIL-036): the connected mailboxes as senders and no templates, and
+ * nothing at all when the plan has no Email add-on. Without it the composer is the WhatsApp one and never lists an SMS or email sender.
  */
-export const broadcastComposeQuerySchema = z.object({ channel: z.enum(['sms']).optional() });
+export const BROADCAST_COMPOSE_CHANNELS = ['sms', 'email'] as const;
+export const broadcastComposeQuerySchema = z.object({
+  channel: z.enum(BROADCAST_COMPOSE_CHANNELS).optional(),
+});
 export type BroadcastComposeQuery = z.infer<typeof broadcastComposeQuerySchema>;
 
 export const composeTemplateSchema = z.object({
@@ -49,9 +53,33 @@ export const composeSenderSchema = z.object({
 });
 export type ComposeSender = z.infer<typeof composeSenderSchema>;
 
+/**
+ * Why a number the workspace has is not in the sender list. `unofficial_disabled`: a personal (QR) number while the platform switch or
+ * the workspace's allow-list keeps that engine off. `not_connected`: a number that is disconnected or inactive. `pending`: a Meta or
+ * Twilio number whose connection is not finished. `error`: a number whose connection failed.
+ */
+export const SENDER_HIDDEN_REASONS = [
+  'unofficial_disabled',
+  'not_connected',
+  'pending',
+  'error',
+] as const;
+export const senderHiddenReasonSchema = z.enum(SENDER_HIDDEN_REASONS);
+export type SenderHiddenReason = z.infer<typeof senderHiddenReasonSchema>;
+
+/** A count of numbers left out of the list for one reason on one engine. Never a number, label or secret. */
+export const senderHiddenSchema = z.object({
+  engine: z.string(),
+  reason: senderHiddenReasonSchema,
+  count: z.number().int().positive(),
+});
+export type SenderHidden = z.infer<typeof senderHiddenSchema>;
+
 export const broadcastComposeSchema = z.object({
   templates: z.array(composeTemplateSchema),
   senders: z.array(composeSenderSchema),
+  /** The numbers the workspace has that are not in `senders`, by engine and reason, so an empty list can say why. */
+  hidden: z.array(senderHiddenSchema),
   /** A Twilio number is connected: the picker then marks each template "Twilio ready" or "plain text only". */
   twilioEnabled: z.boolean(),
 });

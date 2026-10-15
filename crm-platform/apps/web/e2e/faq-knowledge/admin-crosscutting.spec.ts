@@ -9,6 +9,7 @@ import {
   signInOperator,
   sw,
   watch,
+  arabic,
 } from './admin-support';
 
 test.use({ launchOptions: LAUNCH });
@@ -164,7 +165,7 @@ test.describe('cross-cutting: console and network', () => {
     await field.follow(page).uncheck();
     await sw(page).focus();
     const seen: string[] = [];
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 12; i++) {
       seen.push(
         await page.evaluate(() => {
           const e = document.activeElement as HTMLElement;
@@ -184,7 +185,11 @@ test.describe('cross-cutting: console and network', () => {
       'Generation model',
       'Default match threshold',
       'Follow the model',
-      'Maximum FAQs per workspace',
+      // The second-check block sits between the model settings and the limits.
+      'Allow the second check',
+      'Check model',
+      'Second checks per workspace per hour',
+      'Maximum FAQs per flow',
       'Maximum variations per FAQ',
       'Semantic matches per workspace per hour',
       'Save changes',
@@ -351,7 +356,8 @@ test.describe('cross-cutting: responsive, theme, RTL', () => {
   }) => {
     await context.addCookies([{ name: 'NEXT_LOCALE', value: 'ar', url: WEB }]);
     const w = watch(page);
-    await openFaq(page);
+    const ar = arabic();
+    await openFaq(page, ar);
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
     await expect(page.locator('html')).toHaveAttribute('lang', 'ar');
     await expect(page.getByRole('row').nth(1)).toBeVisible();
@@ -359,12 +365,15 @@ test.describe('cross-cutting: responsive, theme, RTL', () => {
     expect(await spills(page)).toEqual([]);
     expect((await noHorizontalScroll(page)).doc).toBeLessThanOrEqual(0);
     // The settings form mirrors: the switch sits at the start (right) edge area, the labels are right-aligned.
-    const labelBox = (await page
-      .getByText('Maximum FAQs per workspace', { exact: true })
-      .boundingBox())!;
-    const inputBox = (await field.maxFaqs(page).boundingBox())!;
+    const labelBox = (await page.getByText(ar.maxFaqs, { exact: true }).boundingBox())!;
+    const maxFaqs = page.getByRole('textbox', { name: ar.maxFaqs });
+    const inputBox = (await maxFaqs.boundingBox())!;
     expect(labelBox.x + labelBox.width).toBeGreaterThanOrEqual(inputBox.x + inputBox.width - 2);
-    for (const input of [field.maxFaqs(page), field.generation(page), field.slider(page)]) {
+    for (const input of [
+      maxFaqs,
+      page.getByRole('textbox', { name: ar.generation }),
+      page.getByRole('slider', { name: ar.threshold }),
+    ]) {
       await expect(input).toHaveAttribute('dir', 'ltr');
     }
     await page.setViewportSize({ width: 375, height: 812 });
@@ -378,12 +387,14 @@ test.describe('cross-cutting: responsive, theme, RTL', () => {
     context,
   }) => {
     await context.addCookies([{ name: 'NEXT_LOCALE', value: 'ar', url: WEB }]);
-    await openFaq(page);
-    await sw(page).click();
-    await save(page).click();
+    const ar = arabic();
+    await openFaq(page, ar);
+    const arSave = page.getByRole('button', { name: ar.save, exact: true });
+    await page.getByRole('switch', { name: ar.engineSwitch }).click();
+    await arSave.click();
     await expect(page.getByRole('dialog')).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(page.getByRole('dialog')).toBeHidden();
-    await expect(save(page)).toBeFocused();
+    await expect(arSave).toBeFocused();
   });
 });

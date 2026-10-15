@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { WIDGET_LIMITS, type WidgetAssistantRef } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { ConsentNoticeEditor } from '@/features/contact-consent';
 import { snippetFor, type BuilderState } from '../lib/builder-model';
 import { CheckIcon, EngineGlyph, ExternalIcon } from './icons';
 import { ColorField } from './color-field';
 import { PhoneField } from './phone-field';
+import { ToggleRow } from './toggle-row';
 
 const INPUT =
   'w-full rounded-lg border bg-background px-3 py-2 text-[12.5px] outline-none focus-visible:border-brand focus-visible:ring-4 focus-visible:ring-brand/10';
@@ -21,6 +23,8 @@ export interface StepProps {
   flash: string | null;
   /** Drop the step number: the step sits on a page that is not the numbered wizard (a flow bot's Customize tab). */
   plain?: boolean;
+  /** The saved widget's id; null or absent while it is new (a consent line needs a widget to belong to). */
+  widgetId?: string | null;
 }
 
 const ring = (flash: string | null, field: string) =>
@@ -299,7 +303,7 @@ export function LookStep({ s, set, flash, plain }: StepProps) {
   );
 }
 
-export function VoiceStep({ s, set, flash, plain }: StepProps) {
+export function VoiceStep({ s, set, flash, plain, widgetId }: StepProps) {
   const t = useTranslations('chatbotWidget.builder.voice');
   return (
     <div data-step="3">
@@ -392,28 +396,20 @@ export function VoiceStep({ s, set, flash, plain }: StepProps) {
         )}
       </fieldset>
 
-      <label className="mb-4 flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-border px-3 py-2.5 hover:bg-muted">
-        <span>
-          <span className="block text-[12.5px] font-semibold">{t('autoOpen')}</span>
-          <span className="block text-[10.5px] text-muted-foreground">{t('autoOpenHint')}</span>
-        </span>
-        <span className="relative inline-block h-5 w-[34px] shrink-0">
-          <input
-            type="checkbox"
-            role="switch"
-            aria-label={t('autoOpen')}
-            checked={s.autoOpen}
-            onChange={(e) => set({ autoOpen: e.target.checked })}
-            className="peer h-0 w-0 opacity-0"
-          />
-          <span className="absolute inset-0 cursor-pointer rounded-full bg-border transition before:absolute before:bottom-0.5 before:left-0.5 before:size-4 before:rounded-full before:bg-background before:transition before:content-[''] peer-checked:bg-brand peer-checked:before:translate-x-[14px] peer-focus-visible:ring-2 peer-focus-visible:ring-primary" />
-        </span>
-      </label>
+      <div className="mb-4">
+        <ToggleRow
+          id="wgt-f-autoOpen"
+          checked={s.autoOpen}
+          label={t('autoOpen')}
+          hint={t('autoOpenHint')}
+          onChange={(autoOpen) => set({ autoOpen })}
+        />
+      </div>
 
       <fieldset>
         <legend className={cn(LABEL, 'mb-2')}>{t('intake')}</legend>
         <p className="mb-2 text-[10.5px] text-muted-foreground">{t('intakeHint')}</p>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+        <div className="space-y-2">
           {(
             [
               ['collectName', 'name'],
@@ -421,21 +417,21 @@ export function VoiceStep({ s, set, flash, plain }: StepProps) {
               ['collectPhone', 'phone'],
             ] as const
           ).map(([field, key]) => (
-            <label
+            <ToggleRow
               key={field}
-              className="flex cursor-pointer items-center gap-2 rounded-lg border border-border p-2 transition hover:border-brand"
-            >
-              <input
-                type="checkbox"
-                checked={s[field]}
-                onChange={(e) => set({ [field]: e.target.checked })}
-                className="size-4 accent-[var(--brand)]"
-              />
-              <span className="text-[12.5px]">{t(`intakeField.${key}`)}</span>
-            </label>
+              id={`wgt-f-${field}`}
+              checked={s[field]}
+              label={t(`intakeField.${key}`)}
+              onChange={(on) => set({ [field]: on })}
+            />
           ))}
         </div>
       </fieldset>
+      {(s.collectEmail || s.collectPhone) && (
+        <div className="mt-4">
+          <ConsentNoticeEditor scope="widget" refId={widgetId ?? ''} disabled={!widgetId} />
+        </div>
+      )}
     </div>
   );
 }

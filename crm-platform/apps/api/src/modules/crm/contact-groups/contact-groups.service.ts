@@ -339,6 +339,67 @@ export class ContactGroupsService {
     });
   }
 
+  /**
+   * Makes a group hold exactly these contacts, creating it when it does not exist: for an audience a system keeps up to date (the
+   * growth pilot's "engaged", "lapsed"...). Set-based, so thousands of members are two statements; one audit entry for the group and no
+   * per-contact events (a list that rebuilds itself must not start flows of its own).
+   */
+  async syncSystemGroup(
+    orgId: number,
+    name: string,
+    contactIds: readonly number[],
+    note?: string,
+  ): Promise<{
+    groupUuid: string;
+    groupName: string;
+    members: number;
+    added: number;
+    removed: number;
+  }> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      let group = await this.repo.findByName(tx, orgId, name);
+      if (!group) {
+        await this.repo.insertIfAbsent(tx, orgId, {
+          name,
+          note: note ?? null,
+          color: null,
+          createdBy: null,
+        });
+        group = await this.repo.findByName(tx, orgId, name);
+      }
+      if (!group) throw AppError.notFound('Contact group', name);
+      const wanted = JSON.stringify([...new Set(contactIds)]);
+      const removed = await tx.execute(sql`
+        DELETE FROM contact_group_members m
+         WHERE m.org_id = ${orgId} AND m.group_id = ${group.id}
+           AND NOT EXISTS (SELECT 1 FROM jsonb_array_elements_text(${wanted}::jsonb) w(v) WHERE w.v::bigint = m.contact_id)
+        RETURNING m.contact_id`);
+      const added = await tx.execute(sql`
+        INSERT INTO contact_group_members (org_id, contact_id, group_id)
+        SELECT ${orgId}, w.v::bigint, ${group.id} FROM jsonb_array_elements_text(${wanted}::jsonb) w(v)
+        ON CONFLICT DO NOTHING RETURNING contact_id`);
+      // Touched on every sync, so "last synced" is the group's own update time.
+      await tx.execute(
+        sql`UPDATE contact_groups SET note = note WHERE org_id = ${orgId} AND id = ${group.id}`,
+      );
+      if (removed.rows.length > 0 || added.rows.length > 0) {
+        await this.audit.record(tx, {
+          module: 'contact_groups',
+          recordId: group.id,
+          action: 'update',
+          delta: { members: { old: `-${removed.rows.length}`, new: `+${added.rows.length}` } },
+        });
+      }
+      return {
+        groupUuid: group.uuid,
+        groupName: group.name,
+        members: new Set(contactIds).size,
+        added: added.rows.length,
+        removed: removed.rows.length,
+      };
+    });
+  }
+
   private async groupOfFlow(
     tx: Parameters<ContactGroupsRepository['findByUuid']>[0],
     orgId: number,

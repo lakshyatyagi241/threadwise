@@ -11,7 +11,7 @@ import {
   toLocalInput,
 } from './coupon-draft';
 import { buildCurrencyRequest, currencyToDraft, newCurrencyDraft } from './currency-draft';
-import { pageWindow, relativeTime, validityParts } from './format';
+import { pageWindow, relativeTime, shortDate, validityParts } from './format';
 
 const coupon: CouponItem = {
   id: '11111111-1111-4111-8111-111111111111',
@@ -192,5 +192,12 @@ describe('coupon form focus and double submit helpers', () => {
     expect(f.tryStart()).toBe(false);
     f.done();
     expect(f.tryStart()).toBe(true);
+  });
+});
+
+describe('shortDate time zone', () => {
+  it('gives a different day for two zones', () => {
+    expect(shortDate('2026-10-02T20:30:00Z', 'en', 'Asia/Kolkata')).toBe('Oct 3, 2026');
+    expect(shortDate('2026-10-02T20:30:00Z', 'en', 'America/New_York')).toBe('Oct 2, 2026');
   });
 });

@@ -4,6 +4,12 @@ import type { FormDefinition } from '@crm/contracts';
  * The consent line of a submission (docs/specs/forms-builder-app.md 9.5, decision D10). There is no consent table in the product, so the
  * evidence lives on the submission: the exact text the visitor saw, its version and the time. A ticked box that is marked `marketing`
  * subscribes the contact; an unticked box NEVER changes a subscription (it does not unsubscribe either).
+ *
+ * BL-171 (privacy spec 4.3.2): the line is also evidence in the consent ledger, and what it records depends on what the person agreed to.
+ * A ticked MARKETING line is a marketing grant (WhatsApp, email, and SMS when the wording covers it). A ticked line that is NOT marketing
+ * ("I agree to be contacted about my request") is a record of agreement to service messages only: purpose `utility`, never a marketing
+ * grant. An unticked line is not an agreement, so it records nothing in the ledger (the submission keeps what was shown and that it was
+ * left unticked).
  */
 
 export interface StoredConsent {
@@ -24,6 +30,10 @@ export interface ConsentOutcome {
   missing: boolean;
   /** Subscribe the contact (a ticked marketing box). */
   marketingOptIn: boolean;
+  /** A ticked box that is not marketing: the person agreed to be contacted about their request (service messages only). */
+  serviceAgreed: boolean;
+  /** The wording also covers SMS (declared on the form). */
+  coversSms: boolean;
 }
 
 export function resolveConsent(
@@ -32,7 +42,15 @@ export function resolveConsent(
   now: Date,
 ): ConsentOutcome {
   const c = def.consent;
-  if (!c.enabled) return { stored: null, missing: false, marketingOptIn: false };
+  if (!c.enabled) {
+    return {
+      stored: null,
+      missing: false,
+      marketingOptIn: false,
+      serviceAgreed: false,
+      coversSms: false,
+    };
+  }
   const given = input?.given === true;
   return {
     stored: {
@@ -44,5 +62,7 @@ export function resolveConsent(
     },
     missing: c.required && !given,
     marketingOptIn: given && c.marketing,
+    serviceAgreed: given && !c.marketing,
+    coversSms: c.coversSms,
   };
 }

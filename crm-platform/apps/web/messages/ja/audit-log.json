@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "監査ログ",
+    "description": "このワークスペースで、誰が、いつ、何をどのように変更したかを確認できます。「誰がこれを行ったか」の確認、チームによる変更のレビュー、サポート依頼時にプラットフォームサポートが行った操作の確認にご利用ください。",
+    "tile": {
+      "label": "監査ログ",
+      "description": "ワークスペースで誰が、いつ、何をどのように変更したかを確認できます。絞り込みとエクスポートに対応しています。",
+      "keywords": "アクティビティログ, 監査, 履歴, 変更, 誰が変更, セキュリティ, コンプライアンス, エクスポート, サポートアクセス"
+    },
+    "retention": {
+      "days": "エントリは{days, plural, other {#日間}}保持され、その後削除されます。この期間はプラットフォームが設定します。",
+      "forever": "エントリは期限なしで保持されます。このポリシーはプラットフォームが設定します。",
+      "unknown": "エントリはプラットフォームが設定した期間保持され、その後削除されます。"
+    },
+    "forbidden": {
+      "title": "監査ログへのアクセス権がありません",
+      "body": "ワークスペースのOwnerまたはAdminに、お使いのロールへ監査ログの閲覧権限を付与するよう依頼してください。"
+    },
+    "filters": {
+      "label": "監査ログのフィルター",
+      "range": "期間",
+      "from": "開始日",
+      "to": "終了日",
+      "actor": "担当者",
+      "allActors": "全員",
+      "actorType": "実行者の種類",
+      "allActorTypes": "すべて",
+      "module": "領域",
+      "allModules": "すべての領域",
+      "action": "操作",
+      "allActions": "すべての操作",
+      "search": "領域と操作を検索",
+      "searchHint": "領域と操作のみが対象で、変更された値は検索されません。",
+      "recordId": "レコード番号",
+      "requestId": "リクエストID",
+      "supportOnly": "プラットフォームサポートのセッションのみ",
+      "apply": "フィルターを適用",
+      "refresh": "更新",
+      "reset": "フィルターをリセット"
+    },
+    "ranges": {
+      "24h": "過去24時間",
+      "7d": "過去7日間",
+      "30d": "過去30日間",
+      "90d": "過去90日間",
+      "custom": "日付を指定"
+    },
+    "actorTypes": {
+      "user": "ユーザー",
+      "system": "システム",
+      "api_key": "APIキー",
+      "bot": "ボット",
+      "partner_agent": "パートナーエージェント",
+      "candidate": "候補者",
+      "other": "その他"
+    },
+    "actors": {
+      "system": "システム",
+      "api_key": "APIキー",
+      "apiKeyNamed": "APIキー: {name}",
+      "bot": "ボット",
+      "partner_agent": "パートナーエージェント",
+      "candidate": "候補者",
+      "other": "その他",
+      "removedUser": "削除されたユーザー",
+      "support": "プラットフォームサポート",
+      "actingAs": "{name}として操作",
+      "supportBadge": "プラットフォームサポート"
+    },
+    "actions": {
+      "insert": "作成",
+      "update": "更新",
+      "delete": "削除",
+      "merge": "統合",
+      "login": "サインイン",
+      "export": "エクスポート",
+      "read": "閲覧"
+    },
+    "modules": {
+      "contacts": "連絡先",
+      "contact_groups": "連絡先グループ",
+      "contact_notes": "連絡先メモ",
+      "companies": "会社",
+      "deals": "商談",
+      "tags": "タグ",
+      "members": "チームメンバー",
+      "teams": "チーム",
+      "conversation_notes": "会話メモ",
+      "broadcasts": "一斉配信",
+      "campaigns": "キャンペーン",
+      "faqs": "FAQ",
+      "api_keys": "APIキー",
+      "audit-log": "監査ログ",
+      "audit-log-exports": "監査ログのエクスポート",
+      "contact_consent_exports": "同意証跡のエクスポート"
+    },
+    "table": {
+      "caption": "監査エントリ(新しい順)。時刻はお使いのタイムゾーン({zone})で表示されます。",
+      "zone": "時刻はお使いのタイムゾーン({zone})で表示されます。",
+      "time": "日時",
+      "actor": "実行者",
+      "action": "操作",
+      "record": "レコード",
+      "changed": "変更された項目",
+      "request": "リクエスト",
+      "details": "詳細",
+      "openDetails": "この変更の詳細: {what}"
+    },
+    "states": {
+      "loading": "監査ログを読み込み中",
+      "empty": "この期間の記録はありません",
+      "emptyHint": "チームが行った変更がここに表示されます。",
+      "emptyFiltered": "条件に一致するエントリはありません",
+      "emptyFilteredHint": "期間を長くするか、フィルターを外してください。",
+      "retry": "再試行",
+      "showing": "{count, plural, other {#件のエントリを読み込みました}}",
+      "loadMore": "さらに読み込む",
+      "end": "リストの最後です"
+    },
+    "detail": {
+      "title": "監査エントリ",
+      "when": "日時",
+      "who": "実行者",
+      "what": "操作",
+      "record": "レコード",
+      "openRecord": "レコードを開く",
+      "request": "リクエストID",
+      "changes": "変更内容",
+      "field": "項目",
+      "before": "変更前",
+      "after": "変更後",
+      "noChanges": "このエントリには項目の変更内容が記載されていません。",
+      "supportTitle": "プラットフォームサポートがワークスペースで操作しました",
+      "supportBody": "プラットフォームサポートの担当者が、{name}としてサポートセッションを使用しました。そのユーザーと同じ操作が可能でした。",
+      "supportReason": "理由: {reason}",
+      "supportNoReason": "このセッションの理由は確認できなくなりました。",
+      "supportReadOnly": "このセッションは読み取り専用でした。",
+      "secret": "非表示のシークレット",
+      "secretHint": "パスワード、キー、トークンは表示されません。",
+      "maskedHint": "個人データは一部非表示です。",
+      "maskedNote": "電話番号、メールアドレス、氏名、メモなどの個人データは一部非表示です。シークレットは表示されません。",
+      "maskedNoteOwner": "パスワード、キー、トークンなどのシークレットは、全員に対して非表示です。",
+      "audited": "このエントリを開くと、監査ログに記録されます。"
+    },
+    "export": {
+      "title": "エクスポート",
+      "note": "上のフィルターに一致するエントリのCSVを作成します。ファイルは{days}日間保持され、個人データは常に非表示になります。",
+      "button": "CSVをエクスポート",
+      "preparing": "ファイルを準備中",
+      "requested": "エクスポートを準備しています。完了したらメールでお知らせします。",
+      "none": "エクスポートはまだありません。",
+      "status": {
+        "queued": "待機中",
+        "running": "準備中",
+        "ready": "準備完了",
+        "failed": "失敗",
+        "expired": "期限切れ"
+      },
+      "rows": "{count, plural, other {#件のエントリ}}",
+      "expires": "{date}まで保持",
+      "download": "ダウンロード",
+      "failed": "このエクスポートを作成できませんでした。もう一度リクエストしてください。"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "この操作を行う権限がありません。",
+      "notFound": "該当するエントリまたはエクスポートが見つかりませんでした。",
+      "rangeInvalid": "終了日が開始日より後になるよう、400日以内の期間を選択してください。",
+      "exportInProgress": "すでにエクスポートを準備中です。メールが届いてから、新たにリクエストしてください。",
+      "exportNotReady": "このエクスポートは準備中か、期限切れです。",
+      "rateLimited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
+      "validation": "無効なフィルターがあります。",
+      "unexpected": "問題が発生しました。もう一度お試しください。"
+    },
+    "common": {
+      "close": "閉じる",
+      "dismiss": "閉じる"
+    }
+  }
+}

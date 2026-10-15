@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CAMPAIGN_PAGE_SIZE,
+  CAMPAIGN_RECIPIENT_STATUSES,
+  CAMPAIGN_IN_FLIGHT_STATUSES,
   RECIPIENT_PAGE_SIZE,
   TEXT_FILTER_TYPES,
   type CampaignBuilder,
@@ -9,6 +11,7 @@ import {
   type CampaignDetail,
   type CampaignListResponse,
   type CampaignLive,
+  type CampaignStatistics,
   type CampaignRecipientsResponse,
   type CampaignStatus,
   type ListCampaignsQuery,
@@ -93,8 +96,13 @@ export class CampaignsReadService {
 
       const start = (q.page - 1) * CAMPAIGN_PAGE_SIZE;
       const count = (status: string) => all.filter((c) => c.status === status).length;
-      const sentTotal = all.reduce((n, c) => n + c.counts.sent, 0);
-      const deliveredTotal = all.reduce((n, c) => n + c.counts.delivered, 0);
+      // The tiles above the list follow the date filter (campaigns created in the window), not the status, type or search: they
+      // describe the period, while the list below narrows it further. Reference left them on all time whatever the period.
+      const cutoff = q.range === 'all' ? null : now - RANGE_DAYS[q.range] * DAY;
+      const period = cutoff === null ? all : all.filter((c) => c.createdAt.getTime() >= cutoff);
+      const inPeriod = (status: string) => period.filter((c) => c.status === status).length;
+      const sentTotal = period.reduce((n, c) => n + c.counts.sent, 0);
+      const deliveredTotal = period.reduce((n, c) => n + c.counts.delivered, 0);
       const failingCampaigns = all.filter((c) => c.counts.failed > 5).length;
       const tpl = await this.repo.templateHealth(tx, orgId);
       const dev = await this.repo.deviceHealth(tx, orgId);
@@ -103,16 +111,16 @@ export class CampaignsReadService {
         data: rows.slice(start, start + CAMPAIGN_PAGE_SIZE).map(toCampaign),
         page: { page: q.page, perPage: CAMPAIGN_PAGE_SIZE, total: rows.length },
         stats: {
-          total: all.length,
-          queued: count('scheduled'),
-          running: count('running'),
-          completed: count('completed'),
-          failed: count('failed'),
+          total: period.length,
+          queued: inPeriod('scheduled'),
+          running: inPeriod('running'),
+          completed: inPeriod('completed'),
+          failed: inPeriod('failed'),
           sentTotal,
           deliveredTotal,
-          readTotal: all.reduce((n, c) => n + c.counts.read, 0),
-          failedTotal: all.reduce((n, c) => n + c.counts.failed, 0),
-          processing: count('running'),
+          readTotal: period.reduce((n, c) => n + c.counts.read, 0),
+          failedTotal: period.reduce((n, c) => n + c.counts.failed, 0),
+          processing: inPeriod('running'),
         },
         statusCounts: {
           all: all.length,
@@ -129,7 +137,10 @@ export class CampaignsReadService {
           flow: all.filter((c) => c.type === 'flow').length,
         },
         deliveryHealth: {
-          avgDeliveryRate: pct(deliveredTotal, sentTotal),
+          avgDeliveryRate: pct(
+            all.reduce((n, c) => n + c.counts.delivered, 0),
+            all.reduce((n, c) => n + c.counts.sent, 0),
+          ),
           failingCampaigns,
           status: failingCampaigns > 0 ? 'warning' : 'healthy',
         },
@@ -163,6 +174,7 @@ export class CampaignsReadService {
     const base = await this.compose.compose(query);
     return this.db.tx(async (tx) => ({
       senders: base.senders,
+      hidden: base.hidden,
       templates: base.templates,
       groups: await this.repo.groupsWithCounts(tx, orgId),
       tags: await this.repo.tagsWithCounts(tx, orgId),
@@ -284,7 +296,10 @@ export class CampaignsReadService {
     });
   }
 
-  /** The 15-second refresh of the detail page. */
+  /**
+   * Live stats: the light read the detail page polls while the campaign is in flight. Recounts from the recipient rows (so the numbers
+   * never lag the delivery reports), settles a finished campaign's status, and adds what is still waiting and what a run holds now.
+   */
   async live(uuid: string): Promise<CampaignLive> {
     const { orgId } = RequestContextStore.require();
     return this.db.tx(async (tx) => {
@@ -294,10 +309,16 @@ export class CampaignsReadService {
       await this.reconcile(tx, orgId, found);
       const c = (await this.repo.findById(tx, orgId, found.id)) ?? found;
       const n = toCampaign(c).counts;
+      const held = Object.fromEntries(
+        (await this.repo.statusBreakdown(tx, orgId, c.id)).map((x) => [x.status, x.count]),
+      ) as Record<string, number>;
       const failures = await this.repo.failures(tx, orgId, c.id, 10);
       return {
         status: c.status as CampaignStatus,
+        inFlight: (CAMPAIGN_IN_FLIGHT_STATUSES as readonly string[]).includes(c.status),
         counts: n,
+        queued: held.queued ?? 0,
+        processing: held.pending ?? 0,
         rates: {
           delivered: pct(n.delivered, n.recipients),
           read: pct(n.read, n.delivered),
@@ -307,6 +328,57 @@ export class CampaignsReadService {
         },
         failures: failures.map((f) => ({ ...f, at: f.at.toISOString() })),
         failureSummary: await this.repo.failureSummary(tx, orgId, c.id, 5),
+        fetchedAt: new Date().toISOString(),
+      };
+    });
+  }
+
+  /**
+   * Statistics: every recipient once, at the status it holds (it adds up to the audience), the funnel's cumulative figures, and the
+   * campaign's own timeline. Read from the recipient rows like the live stats.
+   */
+  async statistics(uuid: string): Promise<CampaignStatistics> {
+    const { orgId } = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const found = await this.repo.findByUuid(tx, orgId, uuid);
+      if (!found) throw AppError.notFound('Campaign', uuid);
+      await this.repo.recount(tx, orgId, found.id);
+      await this.reconcile(tx, orgId, found);
+      const c = (await this.repo.findById(tx, orgId, found.id)) ?? found;
+      const n = toCampaign(c).counts;
+      const held = Object.fromEntries(
+        (await this.repo.statusBreakdown(tx, orgId, c.id)).map((x) => [x.status, x.count]),
+      ) as Record<string, number>;
+      const total = Object.values(held).reduce((a, b) => a + b, 0);
+      const firstSentAt = await this.repo.firstSentAt(tx, orgId, c.id);
+      return {
+        status: c.status,
+        inFlight: (CAMPAIGN_IN_FLIGHT_STATUSES as readonly string[]).includes(c.status),
+        total,
+        breakdown: CAMPAIGN_RECIPIENT_STATUSES.map((key) => ({
+          key,
+          count: held[key] ?? 0,
+          pct: pct(held[key] ?? 0, total),
+        })),
+        counts: n,
+        rates: {
+          delivered: pct(n.delivered, n.recipients),
+          read: pct(n.read, n.delivered),
+          replies: pct(n.replies, n.recipients),
+          clicks: pct(n.clicks, n.recipients),
+          failed: pct(n.failed, n.recipients),
+        },
+        lifecycle: {
+          createdAt: c.createdAt.toISOString(),
+          scheduledFor:
+            c.scheduleType !== 'now' && c.sendDate
+              ? { date: c.sendDate, time: c.sendTime, timezone: c.timezone }
+              : null,
+          firstSentAt: firstSentAt ? firstSentAt.toISOString() : null,
+          lastRunAt: c.lastRunAt ? c.lastRunAt.toISOString() : null,
+          completedAt: c.completedAt ? c.completedAt.toISOString() : null,
+        },
+        fetchedAt: new Date().toISOString(),
       };
     });
   }

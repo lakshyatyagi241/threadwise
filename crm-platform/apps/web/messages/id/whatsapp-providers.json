@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Memuat...",
-      "retry": "Coba lagi",
-      "requestId": "ID permintaan"
+      "retry": "Coba lagi"
     },
     "errors": {
       "conflict": "Orang lain mengubah provider ini saat Anda sedang mengeditnya. Versi terbaru sudah dimuat; tinjau lalu terapkan perubahan Anda lagi.",

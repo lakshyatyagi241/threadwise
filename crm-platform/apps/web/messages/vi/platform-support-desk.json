@@ -63,8 +63,7 @@
       "closed": "Phiếu này đã đóng. Mở phiếu mới để tiếp tục.",
       "notFound": "Không tìm thấy phiếu này.",
       "unexpected": "Đã xảy ra lỗi. Thử lại.",
-      "retry": "Thử lại",
-      "requestId": "Mã yêu cầu"
+      "retry": "Thử lại"
     },
     "customer": {
       "title": "Chúng tôi có thể giúp gì?",

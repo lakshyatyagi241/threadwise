@@ -4,6 +4,7 @@ import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
+  NOT_REQUESTED_STATUS,
   PERSONAL_WA_NOTICE_ITEMS,
   PERSONAL_WA_NOTICE_VERSION,
   type DevicePairing,
@@ -103,6 +104,7 @@ const device = (over: Partial<PersonalDevice> = {}): PersonalDevice => ({
   assignee: { id: U1, name: 'Anna' },
   createdBy: { id: U1, name: 'Anna' },
   proxy: { enabled: false, status: null, egressIp: null },
+  historyImport: NOT_REQUESTED_STATUS,
   sent24h: 0,
   failed24h: 0,
   createdAt: '2026-10-06T09:00:00.000Z',
@@ -124,6 +126,7 @@ const list = (
     noticeVersion: PERSONAL_WA_NOTICE_VERSION,
     noticeAccepted: true,
     workerRunning: true,
+    historyFullAllowed: true,
     ...meta,
   },
 });
@@ -312,6 +315,9 @@ for (const locale of ['en', 'ar'] as const) {
       );
       expect(html).toContain('data-step="link"');
       expect(html).toContain('role="radiogroup"');
+      // the import of existing chats is chosen here, before the QR, and nothing else is pre-selected
+      expect(html).toContain('data-testid="history-choice"');
+      expect(html).not.toContain('data-testid="history-points"');
     });
 
     it('step 2 shows field messages only after the first Continue', () => {

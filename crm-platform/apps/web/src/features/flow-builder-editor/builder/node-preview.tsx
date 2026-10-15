@@ -9,6 +9,7 @@ import {
   type FlbNodeData,
 } from '@crm/contracts';
 import { condSummary } from '../lib/contract-text';
+import { FAQ_DEFAULT_QUERY, faqSaveName, hasOwnMinScore } from '../lib/faq-node';
 import { useFlb } from '../lib/msg';
 import { findTemplate } from '../lib/templates';
 import { FlowImage } from './flow-image';
@@ -575,6 +576,26 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           <Count>{form ? form.title : tp('formNumber', { id: str(d.formId) || '?' })}</Count>
           <div className="truncate text-[12px] text-foreground">
             {str(d.bodyText) || tp('tapToOpenForm')}
+          </div>
+        </div>
+      );
+    }
+    case 'faq': {
+      const query = str(d.query) || FAQ_DEFAULT_QUERY;
+      const category = str(d.category).trim();
+      const own = hasOwnMinScore(d.minScore);
+      return (
+        <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
+          <div className="truncate font-mono text-[11px] text-foreground">{query}</div>
+          <Count>
+            {category ? tp('faqCategory', { name: category }) : tp('faqAllFaqs')}
+            {' · '}
+            {own ? tp('faqScore', { score: str(d.minScore) }) : tp('faqWorkspaceScore')}
+            {d.sendAnswer === false ? ` · ${tp('faqNotSent')}` : ''}
+          </Count>
+          <div className="truncate text-[12px] text-foreground">
+            <Muted>{tp('saveTo')}</Muted>{' '}
+            <Mono cls="text-[11px]">{`{{${faqSaveName(d.save)}}}`}</Mono>
           </div>
         </div>
       );

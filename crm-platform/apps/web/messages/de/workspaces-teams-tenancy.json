@@ -12,7 +12,7 @@
       "retry": "Erneut versuchen",
       "loadMore": "Mehr laden",
       "loadingMore": "Wird geladen",
-      "requestId": "Anfrage-ID"
+      "loading": "Wird geladen"
     },
     "tiers": {
       "owner": "Inhaber",
@@ -96,7 +96,11 @@
       "linkReset": "E-Mail ist auf diesem Server nicht konfiguriert. Teilen Sie diesen Link deshalb direkt mit der Person. Er funktioniert einmal.",
       "linkInvite": "E-Mail ist auf diesem Server nicht konfiguriert. Teilen Sie diesen Link deshalb direkt mit der Person. Er funktioniert einmal und läuft nach {days, plural, one {# Tag} other {# Tagen}} ab.",
       "linkLabel": "Einmaliger Link",
-      "linkEmail": "E-Mail"
+      "linkEmail": "E-Mail",
+      "onLeaveUntil": "Abwesend bis {date}",
+      "onLeaveOpen": "Abwesend",
+      "leaveFrom": "Abwesend ab {date}",
+      "leaveAction": "Abwesenheit und Vertretung"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -215,7 +219,13 @@
       "teamNameTaken": "Ein Team mit diesem Namen existiert bereits.",
       "teamMemberUnknown": "Eine der ausgewählten Personen ist nicht in diesem Workspace.",
       "orgSuspended": "Dieser Workspace ist gesperrt.",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es in einem Moment erneut."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es in einem Moment erneut.",
+      "leaveOverlap": "Diese Person hat bereits eine Abwesenheit, die sich mit diesen Tagen überschneidet.",
+      "leaveInvalid": "Diese Daten sind nicht möglich. Der erste Tag darf nicht in der Vergangenheit liegen, und bei einer bereits begonnenen Abwesenheit bleibt der erste Tag unverändert.",
+      "delegateInvalid": "Die Vertretung muss ein anderes aktives Mitglied dieses Workspace sein.",
+      "delegateCycle": "Das würde einen Kreis ergeben: Die gewählte Person hat diese Person bereits als Vertretung.",
+      "reassignInvalid": "Es konnte nichts neu zugewiesen werden. Prüfen Sie, ob die Person Kontakte oder offene Deals hat und ob das Ziel sie übernehmen kann.",
+      "reassignNotRestorable": "Diese Neuzuweisung kann nicht mehr rückgängig gemacht werden."
     },
     "accept": {
       "title": "Treten Sie Ihrem Workspace bei",
@@ -235,6 +245,81 @@
       "submit": "Einladung annehmen",
       "submitting": "Beitreten",
       "invalidHeading": "Einladungslink"
+    },
+    "leave": {
+      "eyebrow": "Abwesenheit und Vertretung",
+      "calendarNote": "Die Daten sind Tage im Kalender Ihres Workspace ({timezone}).",
+      "nowTitle": "Jetzt abwesend",
+      "upcomingTitle": "Demnächst",
+      "notAway": "Derzeit nicht abwesend.",
+      "range": "{from} bis {to}",
+      "rangeOpen": "Ab {from}, ohne Enddatum",
+      "reasonShown": "Grund (nur für Manager sichtbar): {reason}",
+      "endNow": "Abwesenheit jetzt beenden",
+      "cancelLeave": "Abwesenheit stornieren",
+      "endTitle": "Diese Abwesenheit jetzt beenden?",
+      "endMessage": "Die Person ist heute zurück. Die automatische Zuweisung wählt sie wieder aus.",
+      "cancelTitle": "Diese Abwesenheit stornieren?",
+      "cancelMessage": "Sie hat noch nicht begonnen und wird entfernt.",
+      "ended": "Abwesenheit beendet.",
+      "added": "Abwesenheit gespeichert.",
+      "readOnly": "Nur die Person selbst und Manager können die Abwesenheit ändern.",
+      "addTitle": "Abwesenheit hinzufügen",
+      "firstDay": "Erster Tag",
+      "lastDay": "Letzter Tag",
+      "openEnded": "Noch kein Enddatum (bis es jemand beendet)",
+      "reason": "Grund (optional)",
+      "reasonHint": "Nur die Person und ihre Manager sehen dies.",
+      "addSubmit": "Abwesenheit speichern",
+      "problems": {
+        "startRequired": "Wählen Sie den ersten Tag.",
+        "startPast": "Der erste Tag darf nicht in der Vergangenheit liegen.",
+        "endRequired": "Wählen Sie den letzten Tag oder haken Sie „Kein Enddatum“ an.",
+        "endBeforeStart": "Der letzte Tag darf nicht vor dem ersten Tag liegen."
+      },
+      "delegateTitle": "Vertretung",
+      "delegateHelp": "Während diese Person abwesend ist, gehen neue Chats und die automatische Zuweisung an ihre Vertretung, wenn diese verfügbar ist, sonst an das Team.",
+      "noDelegate": "Keine Vertretung",
+      "delegateSaved": "Vertretung gespeichert.",
+      "delegateRemoved": "Vertretung entfernt.",
+      "delegateAway": "{name} ist ebenfalls abwesend und kann daher derzeit nicht vertreten."
+    },
+    "reassign": {
+      "title": "Kontakte und Deals neu zuweisen",
+      "holds": "{name} besitzt {contacts, plural, one {# Kontakt} other {# Kontakte}} und {chats, plural, one {# offenen Chat} other {# offene Chats}}.",
+      "target": "Zuweisen an",
+      "kindUser": "Eine Person",
+      "kindDelegate": "Die Vertretung",
+      "kindTeam": "Ein Team, Round Robin",
+      "person": "Person",
+      "team": "Team",
+      "teamHint": "Wird reihum auf die Mitglieder verteilt, die anwesend und nicht abwesend sind.",
+      "choose": "Auswählen",
+      "includeDeals": "Offene Deals einbeziehen",
+      "returnOn": "Am {date} zurückgeben, wenn die Person zurückkehrt",
+      "returnUnavailable": "Bei Rückkehr der Person zurückgeben (erfordert eine Abwesenheit mit letztem Tag)",
+      "returnHelp": "Es kommen nur Kontakte und Deals zurück, die seitdem niemand geändert hat. Sie können auch {days} Tage lang rückgängig machen.",
+      "reason": "Notiz (optional)",
+      "submit": "Prüfen und neu zuweisen",
+      "confirmTitle": "Jetzt neu zuweisen?",
+      "confirmMessage": "{name} besitzt {contacts, plural, one {# Kontakt} other {# Kontakte}} und {deals, plural, one {# offenen Deal} other {# offene Deals}}, die verschoben werden.",
+      "confirm": "Neu zuweisen",
+      "done": "{contacts, plural, one {# Kontakt} other {# Kontakte}} und {deals, plural, one {# Deal} other {# Deals}} verschoben.",
+      "history": "Frühere Neuzuweisungen",
+      "historyEmpty": "Es wurde noch nichts neu zugewiesen.",
+      "status": {
+        "applied": "Verschoben",
+        "restored": "Zurückgegeben",
+        "restore_blocked": "Nicht zurückgegeben"
+      },
+      "summary": "{contacts} Kontakte und {deals} Deals an {target}",
+      "returnsOn": "kehrt am {date} zurück",
+      "restoredSummary": "{restored} zurückgegeben, {skipped} bleiben, wo sie sind",
+      "remaining": "Noch {count} zu verschieben: Führen Sie es erneut aus",
+      "undo": "Rückgängig",
+      "undoTitle": "Diese Neuzuweisung rückgängig machen?",
+      "undoMessage": "Kontakte und Deals, die seitdem niemand geändert hat, gehen an den früheren Inhaber zurück. Die übrigen bleiben, wo sie sind.",
+      "restored": "{count} zurückgegeben, {skipped} bleiben, wo sie sind."
     }
   }
 }

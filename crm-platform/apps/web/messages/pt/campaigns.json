@@ -137,7 +137,8 @@
         "recipients": "{count} destinatários",
         "scheduled": "Agendada: {date}",
         "instant": "Envio: imediato",
-        "template": "Modelo {name}"
+        "template": "Modelo {name}",
+        "cost": "Custo"
       },
       "createBroadcast": "Criar transmissão",
       "noData": "Nenhum dado encontrado",
@@ -159,6 +160,17 @@
             "body": "Comece com uma atualização de modelo ou um disparo de reengajamento e compare as contagens de entregues, lidas e com falha antes de escalar."
           }
         }
+      },
+      "view": {
+        "label": "Visualização",
+        "list": "Lista",
+        "blocks": "Blocos"
+      },
+      "col": {
+        "name": "Campanha",
+        "status": "Status",
+        "schedule": "Agendamento",
+        "actions": "Ações"
       }
     },
     "builder": {
@@ -191,7 +203,22 @@
         "typeLabel": "Tipo",
         "ab": "A/B",
         "off": "Desligado",
-        "step": "Etapa {n} de {total}"
+        "step": "Etapa {n} de {total}",
+        "broadcastTitle": "Pré-visualização do envio",
+        "templateMessage": "Mensagem de modelo",
+        "customMessage": "Mensagem personalizada",
+        "flowTitle": "Fluxo",
+        "variants": "Variante exibida",
+        "variant": "Variante {v}",
+        "typeEmail": "E-mail",
+        "emailTitle": "Pré-visualização do e-mail",
+        "emailFrom": "De",
+        "emailSubject": "Assunto",
+        "emailNoSender": "Escolha um remetente",
+        "emailNoSubject": "(sem assunto)",
+        "emailEmpty": "Escreva o corpo da mensagem e ele aparecerá aqui.",
+        "emailUnsubscribe": "Um link para cancelar a inscrição é adicionado ao final de cada e-mail.",
+        "emailNote": "É assim que sua campanha aparecerá na caixa de entrada de cada destinatário."
       },
       "previewEmpty": "Pré-visualização da sua mensagem…",
       "previewTemplate": "Modelo",
@@ -210,7 +237,8 @@
         "throttle": "O intervalo máximo deve ser pelo menos igual ao mínimo.",
         "expiry": "A data de término deve ser posterior à data de envio, caso contrário a campanha expiraria antes de ser enviada.",
         "media": "Informe um endereço completo começando com http:// ou https://.",
-        "sender": "Escolha um remetente."
+        "sender": "Escolha um remetente.",
+        "subject": "Reduza o assunto para 150 caracteres ou menos."
       },
       "submit": {
         "save": "Salvar alterações",
@@ -227,8 +255,6 @@
         "senderHint": "Se ficar no padrão, a campanha sai pelo mecanismo principal do seu espaço de trabalho.",
         "defaultSender": "Remetente padrão",
         "nameHint": "Rótulo interno para relatórios e histórico da fila.",
-        "noSenders": "Nenhum remetente conectado.",
-        "connectOne": "Conectar um →",
         "type": "Tipo de campanha",
         "types": {
           "custom": {
@@ -248,7 +274,8 @@
         "abHint": "Divida os destinatários entre duas variantes de mensagem.",
         "split": "Variante A: {a}%",
         "splitHint": "A variante B recebe o restante do público. Defina o conteúdo da variante B na etapa Compor.",
-        "pickSender": "— Selecione um remetente —"
+        "pickSender": "— Selecione um remetente —",
+        "notVerified": "Ainda não verificado: o fluxo guiado fica disponível quando o número for verificado."
       },
       "audience": {
         "title": "Público",
@@ -276,7 +303,10 @@
         },
         "csvRows": "{count} números no arquivo",
         "numbersPlaceholder": "Um número por linha — inclua o código do país, sem o sinal de mais",
-        "numbersCount": "{count} números"
+        "numbersCount": "{count} números",
+        "emailNote": "Os e-mails vão para o endereço de cada contato. Contatos sem endereço de e-mail, endereços duplicados e contatos que cancelaram a inscrição são ignorados.",
+        "emailSkipped": "{count, plural, one {# destinatário escolhido não tem endereço de e-mail e será ignorado.} other {# destinatários escolhidos não têm endereço de e-mail e serão ignorados.}}",
+        "emailNoAddress": "Números digitados e linhas do CSV não têm endereço de e-mail, por isso são ignorados. Escolha contatos, grupos, tags ou segmentos."
       },
       "message": {
         "title": "Mensagem",
@@ -386,7 +416,9 @@
         "smartIntro": "Deixe em branco para usar o ritmo padrão do workspace. Estas regras espaçam os envios para que uma lista grande pareça humana e fique abaixo do radar de bloqueio do WhatsApp.",
         "smartZone": "Horários em {zone}.",
         "throttleMaxHint": "A maior espera antes de uma mensagem.",
-        "batchPauseHint": "Minutos de pausa após cada lote."
+        "batchPauseHint": "Minutos de pausa após cada lote.",
+        "retryFailed": "Tentar novamente automaticamente as mensagens com falha",
+        "retryFailedHint": "Uma mensagem que falha por um motivo temporário é reenviada algumas vezes, com uma pausa entre as tentativas. Desative para enviar cada mensagem uma única vez."
       },
       "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business.",
       "draftChip": "Rascunho / não salvo",
@@ -507,7 +539,13 @@
           "baileys": "Ainda não há modelos da API não oficial. Crie um na página de Modelos."
         },
         "templateIntroApproved": "Escolha um modelo aprovado pela Meta. Os valores das variáveis de cada contato são preenchidos no envio com os atributos do contato.",
-        "templateApproved": "Modelo aprovado"
+        "templateApproved": "Modelo aprovado",
+        "subject": "Assunto",
+        "subjectNote": "Assunto, máximo 150",
+        "subjectPlaceholder": "ex.: Sua oferta de maio já começou",
+        "subjectHint": "Usado como assunto do e-mail. Deixe em branco para usar o nome da campanha.",
+        "emailNote": "Esta campanha é enviada como e-mail a partir da caixa de correio escolhida. Um link para cancelar a inscrição é adicionado ao final de cada e-mail.",
+        "emailBodyHint": "Texto simples. Use '{{name}}' ou '{{first_name}}' para personalizar. Contatos sem endereço de e-mail são ignorados."
       },
       "review": {
         "title": "Revisar",
@@ -549,8 +587,14 @@
           "throttle": "A maior pausa deve ser maior ou igual à menor.",
           "expiry": "A data final deve ser posterior à data de envio; caso contrário, a campanha expiraria antes de ser enviada.",
           "media": "Digite um endereço completo começando com http:// ou https://.",
-          "sender": "Escolha um remetente."
-        }
+          "sender": "Escolha um remetente.",
+          "subject": "Reduza o assunto para 150 caracteres ou menos."
+        },
+        "from": "De",
+        "subject": "Assunto",
+        "subjectFallback": "O nome da campanha",
+        "skippedNoEmail": "Ignorados (sem endereço de e-mail)",
+        "estimateEmail": "É uma estimativa: um contato em dois grupos é contado duas vezes. Contatos sem endereço de e-mail em grupos, tags e segmentos são ignorados quando a campanha é executada."
       },
       "ai": {
         "open": "Criar com IA",
@@ -605,6 +649,35 @@
         "notesPlaceholder": "Qualquer detalhe — frases obrigatórias, o que evitar, tom da marca…",
         "failed": "Não foi possível gerar a campanha. Tente novamente.",
         "applied": "O texto da campanha foi preenchido. Revise antes de continuar."
+      },
+      "switch": {
+        "title": "Usar o fluxo guiado?",
+        "body": "Um número verificado da WhatsApp Cloud API (Meta) é enviado pelo fluxo guiado de quatro etapas, que começa do zero. O que você preencheu aqui não é salvo e não será levado para lá. Use Salvar rascunho antes se quiser mantê-lo.",
+        "confirm": "Abrir o fluxo guiado",
+        "cancel": "Ficar aqui"
+      },
+      "guided": {
+        "template": "Modelo",
+        "pickTemplate": "— Selecione um modelo —",
+        "templateHint": "Apenas modelos aprovados do número escolhido. As variáveis dele são preenchidas abaixo.",
+        "noTemplates": "Este número ainda não tem modelos aprovados. Crie um e aguarde a aprovação.",
+        "deliveryTitle": "Entrega",
+        "deliveryTag": "quando",
+        "typeBlocked": "Na WhatsApp Cloud API (Meta), uma campanha só pode enviar um modelo aprovado: uma mensagem personalizada ou um fluxo chegaria apenas a quem falou com você nas últimas 24 horas, e a Cloud API não consegue enviá-los em massa. Use um modelo ou escolha outro tipo de número.",
+        "templateA": "Modelo da variante A",
+        "templateB": "Modelo da variante B",
+        "variablesA": "Variáveis da variante A",
+        "variablesB": "Variáveis da variante B",
+        "splitNote": "A variante A vai para {a}% dos destinatários e a variante B para o restante.",
+        "costTitle": "Custo estimado",
+        "costNoTemplate": "Escolha um modelo para ver o custo.",
+        "costNoAudience": "Escolha quem recebe para ver o custo.",
+        "costLoading": "Verificando o custo",
+        "costError": "Não foi possível verificar o saldo.",
+        "balanceOk": "O saldo é suficiente para o custo total de {full}",
+        "balanceShort": "O saldo não é suficiente: faltam {shortfall}.",
+        "balanceLowFull": "O saldo é menor que o custo total de {full}: seu plano cobre agora, mas não depois que o plano acabar.",
+        "chargedNowLabel": "Cobrado agora da sua carteira"
       }
     },
     "detail": {
@@ -641,7 +714,8 @@
         "edit": "Editar",
         "resendAll": "Reenviar para todos",
         "export": "Exportar linhas",
-        "delete": "Excluir"
+        "delete": "Excluir",
+        "broadcastStatus": "Status da transmissão"
       },
       "kpi": {
         "recipients": "Destinatários",
@@ -650,7 +724,9 @@
         "read": "Lidas",
         "replies": "Respostas",
         "clicks": "Cliques",
-        "failed": "Com falha"
+        "failed": "Com falha",
+        "cost": "Custo",
+        "costHint": "Cobrado da carteira até agora"
       },
       "tabs": {
         "overview": "Visão geral",
@@ -658,7 +734,9 @@
         "engagement": "Engajamento",
         "replies": "Respostas ({count})",
         "failures": "Falhas ({count})",
-        "optouts": "Cancelamentos de inscrição ({count})"
+        "optouts": "Cancelamentos de inscrição ({count})",
+        "summary": "Resumo",
+        "statistics": "Estatísticas"
       },
       "cancel": "Cancelar",
       "deleted": "Campanha excluída.",
@@ -769,6 +847,186 @@
         "replies": "Respostas",
         "optOuts": "Cancelamentos de inscrição",
         "readRate": "Taxa de leitura"
+      },
+      "summary": {
+        "title": "Resumo",
+        "intro": "Em palavras simples: quem recebeu sua mensagem, quem respondeu e quem preencheu um formulário de inscrição.",
+        "loading": "Carregando seu resumo",
+        "headline": {
+          "none": "Nenhuma mensagem foi enviada ainda.",
+          "messaged": "{count, plural, one {Você enviou a mensagem para # contato.} other {Você enviou a mensagem para # contatos.}}",
+          "notReceived": "{messaged} Ninguém a recebeu ainda.",
+          "received": "{count, plural, =0 {ninguém recebeu ainda} one {# recebeu} other {# receberam}}",
+          "opened": "{count, plural, =0 {ninguém abriu ainda} one {# abriu} other {# abriram}}",
+          "wroteBack": "{count, plural, =0 {ninguém respondeu ainda em até {days, plural, one {# dia} other {# dias}}} one {# respondeu em até {days, plural, one {# dia} other {# dias}}} other {# responderam em até {days, plural, one {# dia} other {# dias}}}}",
+          "filledForm": "{count, plural, =0 {ninguém preencheu ainda um formulário de inscrição} one {# preencheu um formulário de inscrição} other {# preencheram um formulário de inscrição}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Contar as respostas e os formulários recebidos",
+          "hint": "A contagem começa no momento em que você enviou a mensagem.",
+          "option": "Em até {days, plural, one {# dia} other {# dias}}"
+        },
+        "forms": {
+          "label": "Quais formulários contam como inscrição?",
+          "hint": "Deixe vazio para contar todos os formulários web e do WhatsApp.",
+          "placeholder": "Todos os formulários",
+          "empty": "Nenhum formulário encontrado",
+          "clear": "Contar todos os formulários",
+          "remove": "Remover {name}",
+          "web": "{name} (formulário web)",
+          "whatsapp": "{name} (formulário do WhatsApp)",
+          "loadError": "Não conseguimos carregar seus formulários. Por enquanto, todos são contados."
+        },
+        "tile": {
+          "listLabel": "Os números",
+          "unit": "{count, plural, one {contato} other {contatos}}",
+          "messaged": {
+            "label": "Contatados",
+            "explain": "Contatos para quem enviamos sua mensagem.",
+            "pct": "Os contatos que você escolheu para receber a mensagem"
+          },
+          "received": {
+            "label": "Receberam",
+            "explain": "Contatos cujo celular recebeu a mensagem."
+          },
+          "opened": {
+            "label": "Abriram",
+            "explain": "Contatos que abriram e leram a mensagem."
+          },
+          "wroteBack": {
+            "label": "Responderam",
+            "explain": "Contatos que enviaram uma mensagem para você em até {days, plural, one {# dia} other {# dias}} após o envio."
+          },
+          "filledForm": {
+            "label": "Preencheram um formulário",
+            "explainAll": "Contatos que preencheram qualquer um dos seus formulários de inscrição.",
+            "explainSome": "{count, plural, one {Contatos que preencheram o formulário que você escolheu.} other {Contatos que preencheram um dos # formulários que você escolheu.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% dos contatos para quem você enviou a mensagem",
+          "less": "Menos de 1% dos contatos para quem você enviou a mensagem",
+          "zero": "Nenhum dos contatos para quem você enviou a mensagem",
+          "everyone": "Todos os contatos para quem você enviou a mensagem"
+        },
+        "funnel": {
+          "title": "Da mensagem ao formulário de inscrição",
+          "alt": "Número de contatos em cada etapa, do envio da mensagem até o preenchimento de um formulário",
+          "note": "Os contatos podem pular uma etapa. Alguém pode responder sem ter aberto a mensagem antes, então uma barra pode ser maior que a de cima."
+        },
+        "daily": {
+          "title": "Contatos que responderam a cada dia",
+          "series": "Contatos que responderam",
+          "empty": "Ninguém respondeu ainda.",
+          "alt": "{total, plural, one {# contato respondeu} other {# contatos responderam}}. O dia mais movimentado foi {day}, com {count, plural, one {# contato} other {# contatos}}."
+        },
+        "people": {
+          "title": "Ver quem",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Responderam",
+            "hint": "Contatos que enviaram uma mensagem depois que a sua foi enviada."
+          },
+          "filled_form": {
+            "title": "Preencheram um formulário",
+            "hint": "Contatos que preencheram um formulário de inscrição."
+          },
+          "not_reached": {
+            "title": "Não alcançados",
+            "hint": "Contatos que a sua mensagem não alcançou."
+          },
+          "table": "Contatos desta lista",
+          "name": "Nome",
+          "phone": "Telefone",
+          "when": "Quando",
+          "form": "Formulário",
+          "unknown": "Nome desconhecido",
+          "noContact": "Não associado a um contato",
+          "open": "Abrir {name}",
+          "empty": "Ninguém nesta lista ainda.",
+          "shown": "Mostrando {shown} de {total}",
+          "more": "Mostrar mais",
+          "loading": "Carregando a lista",
+          "error": "Não conseguimos carregar esta lista.",
+          "retry": "Tentar novamente",
+          "forbidden": "Você não tem acesso para ver estes nomes."
+        },
+        "download": {
+          "button": "Baixar nomes",
+          "busy": "Preparando o arquivo",
+          "failed": "Não conseguimos preparar o arquivo de nomes.",
+          "done": "O arquivo de nomes está pronto.",
+          "truncated": "O arquivo traz os primeiros {count} contatos de cada lista.",
+          "none": "Ainda não há nomes para baixar.",
+          "csv": {
+            "group": "Lista",
+            "name": "Nome",
+            "phone": "Telefone",
+            "when": "Quando",
+            "form": "Formulário"
+          }
+        },
+        "print": {
+          "button": "Imprimir resumo",
+          "sent": "Enviado em {date}",
+          "notSent": "Ainda não enviado",
+          "window": "Contando respostas e formulários em até {days, plural, one {# dia} other {# dias}} após o envio",
+          "printed": "Impresso em {date}"
+        },
+        "caveats": {
+          "title": "Bom saber",
+          "recipients_without_contact": "{count, plural, one {# pessoa não pôde ser associada a um contato, então não sabemos se ela respondeu.} other {# pessoas não puderam ser associadas a um contato, então não sabemos se elas responderam.}}",
+          "contact_match_only": "Associamos as pessoas aos seus contatos pelo número de telefone. Quem escreve de outro número não é contado.",
+          "opted_out_excluded": "Pessoas que pediram para não receber mensagens não são contadas.",
+          "counted_in_other_campaigns": "Quem recebeu mensagens de mais de uma campanha pode ser contado em cada uma delas."
+        },
+        "notSent": {
+          "title": "Nada foi enviado ainda",
+          "body": "Quando as mensagens forem enviadas, você verá aqui quem as recebeu, quem respondeu e quem preencheu um formulário de inscrição."
+        },
+        "sending": "Ainda enviando, então estes números vão continuar crescendo.",
+        "error": {
+          "title": "Não conseguimos carregar este resumo.",
+          "retry": "Tentar novamente"
+        },
+        "latestRun": "Mostrando a execução {occurrence}, a mais recente desta série."
+      },
+      "live": {
+        "badge": "Ao vivo",
+        "updated": "atualizado {time}",
+        "queued": "{count} aguardando envio",
+        "processing": "{count} sendo enviados agora"
+      },
+      "statistics": {
+        "loadFailed": "Não foi possível carregar as estatísticas.",
+        "rates": {
+          "delivered": "Taxa de entrega",
+          "deliveredHint": "do público",
+          "read": "Taxa de leitura",
+          "readHint": "das entregues",
+          "replies": "Taxa de resposta",
+          "clicks": "Taxa de cliques",
+          "failed": "Taxa de falhas"
+        },
+        "breakdown": {
+          "title": "Onde cada pessoa está agora",
+          "hint": "Cada um dos {total} destinatários é contado uma vez, no status em que está.",
+          "empty": "Esta campanha ainda não tem destinatários."
+        },
+        "timeline": {
+          "title": "Linha do tempo",
+          "created": "Criada",
+          "scheduled": "Programada para",
+          "firstSent": "Primeira mensagem enviada",
+          "lastRun": "Última execução",
+          "finished": "Concluída",
+          "notYet": "Ainda não"
+        },
+        "live": "Acompanhando ao vivo",
+        "atRest": "Números finais",
+        "updated": "Atualizado {time}"
       }
     },
     "wizard": {
@@ -827,7 +1085,6 @@
         "notFound": "Não foi encontrado. Pode ter sido excluído.",
         "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
         "unexpected": "Algo deu errado do nosso lado. Tente novamente.",
-        "requestId": "ID da solicitação",
         "retry": "Tentar novamente"
       },
       "categories": {
@@ -864,7 +1121,12 @@
         "insufficient_balance": "O saldo da sua carteira é muito baixo para esta transmissão.",
         "checking_balance": "Verificando o saldo da sua carteira...",
         "sender_required": "Escolha o número do WhatsApp de onde enviar.",
-        "balance_unavailable": "Não foi possível verificar o saldo da sua carteira. Tente novamente antes de enviar."
+        "balance_unavailable": "Não foi possível verificar o saldo da sua carteira. Tente novamente antes de enviar.",
+        "template_b_required": "Escolha o modelo da variante B do teste A/B.",
+        "auto_end_in_past": "A data de encerramento automático já passou.",
+        "auto_end_before_send": "A data de encerramento automático deve ser posterior ao horário de envio.",
+        "auto_end_recurring": "Uma campanha recorrente termina pela própria regra: limpe a data de encerramento automático.",
+        "pacing_range": "Verifique o Smart Delivery: o maior atraso é menor que o menor, ou apenas um dos dois horários de envio foi definido."
       },
       "template": {
         "previewOnline": "online",
@@ -898,7 +1160,7 @@
         "senderLabel": "Enviar de",
         "senderHint": "O número do WhatsApp de onde esta transmissão é enviada.",
         "pickSender": "Escolha um número",
-        "noSenders": "Nenhum número do WhatsApp está conectado. Conecte um primeiro."
+        "classicOption": "editor clássico"
       },
       "audience": {
         "selectionTitle": "Escolhidos no Hub de Contatos",
@@ -932,6 +1194,7 @@
         "optedOut": "Cancelaram a inscrição",
         "invalidNumbers": "Números inválidos",
         "alwaysSkipped": "Contatos que cancelaram a inscrição e números inválidos são sempre ignorados.",
+        "noConsent": "Sem consentimento registrado (ignorado)",
         "willBeMessaged": "Receberão mensagem",
         "about": "cerca de {count}",
         "approximate": "Esta é uma estimativa: o público é grande demais para ser contado com exatidão a tempo.",
@@ -1040,7 +1303,9 @@
           "invalid_phone": "Número inválido",
           "duplicate": "Duplicado"
         },
-        "csvIssuesMore": "Mais {count} estão no download."
+        "csvIssuesMore": "Mais {count} estão no download.",
+        "csvConsentOn": "Confirmou o consentimento destes números. Ficam registados como aceites quando a difusão for lançada.",
+        "csvConsentVersion": "Versão do aviso: {version}."
       },
       "review": {
         "intro": "Confira o custo, diga com o que cada variável do modelo é preenchida e revise a transmissão.",
@@ -1057,6 +1322,7 @@
         "messages": "Mensagens",
         "modePlan": "{count, plural, one {Seu plano cobre as primeiras mensagens; a carteira paga # mensagem além delas.} other {Seu plano cobre as primeiras mensagens; a carteira paga # mensagens além delas.}}",
         "modeWallet": "{count, plural, one {Toda mensagem entregue é cobrada da sua carteira: # mensagem.} other {Toda mensagem entregue é cobrada da sua carteira: # mensagens.}}",
+        "platformOwned": "Este espaço de trabalho não é cobrado pelos envios, então nada é cobrado da sua carteira.",
         "breakdown": "Custo por país",
         "country": "País",
         "unitPrice": "Por mensagem",
@@ -1113,7 +1379,10 @@
         "sumContacts": "{count, plural, one {# contato escolhido na tabela} other {# contatos escolhidos na tabela}}",
         "sumAllMatching": "Todos os contatos que correspondem a {what}",
         "sumAllContacts": "Todos os contatos",
-        "sumCsv": "Arquivo CSV {name}: {count, plural, one {# número válido} other {# números válidos}}"
+        "sumCsv": "Arquivo CSV {name}: {count, plural, one {# número válido} other {# números válidos}}",
+        "estimatedCostFull": "Custo estimado (total)",
+        "chargedPlan": "Cobrado agora da sua carteira: {amount} (seu plano cobre {covered} destas mensagens)",
+        "chargedWallet": "Cobrado da sua carteira: {amount}"
       },
       "test": {
         "title": "Enviar uma mensagem de teste do WhatsApp",
@@ -1283,12 +1552,17 @@
         "action": {
           "pause": "Pausar",
           "resume": "Retomar",
-          "cancel": "Cancelar transmissão"
+          "cancel": "Cancelar transmissão",
+          "retryFailed": "Tentar novamente as falhas ({count})",
+          "export": "Exportar linhas",
+          "delete": "Excluir"
         },
         "done": {
           "pause": "Transmissão pausada.",
           "resume": "Transmissão retomada.",
-          "cancel": "Transmissão cancelada."
+          "cancel": "Transmissão cancelada.",
+          "retryFailed": "Tentando novamente {count, plural, one {# destinatário com falha} other {# destinatários com falha}}.",
+          "delete": "Transmissão excluída."
         },
         "failed": "Não funcionou. Tente novamente.",
         "noControl": "Você não tem permissão para pausar, retomar ou cancelar transmissões.",
@@ -1307,7 +1581,13 @@
           "cancelled": "Cancelada",
           "active": "Ativa",
           "ended": "Encerrada"
-        }
+        },
+        "retryTitle": "Tentar novamente as mensagens com falha?",
+        "retryMessage": "Envia de novo para {count, plural, one {# destinatário} other {# destinatários}} cuja mensagem falhou. Quem já recebeu não é afetado, e a mensagem só é cobrada quando é entregue.",
+        "exportFailed": "Não foi possível baixar a exportação.",
+        "deleteTitle": "Excluir esta transmissão?",
+        "deleteOne": "Exclui esta transmissão e seus destinatários. Não é possível desfazer.",
+        "deleteSeries": "Exclui esta transmissão recorrente e as execuções que ela tinha planejadas. Nada foi enviado, então nenhum histórico é perdido. Não é possível desfazer."
       },
       "panel": {
         "title": "Criadas com Criar transmissão",
@@ -1332,6 +1612,12 @@
         "pm": "PM",
         "hour": "Hora",
         "minute": "Minuto"
+      },
+      "switch": {
+        "title": "Usar o editor clássico?",
+        "body": "{number} ({engine}) é enviado pelo editor clássico, que começa do zero. Esta campanha é salva como rascunho e continua na sua lista de Campanhas, para você voltar a ela.",
+        "confirm": "Abrir o editor clássico",
+        "cancel": "Ficar aqui"
       }
     },
     "history": {
@@ -1403,7 +1689,71 @@
         "runs": "Execuções",
         "noRuns": "Nenhuma execução foi iniciada ainda.",
         "cancel": "Cancelar série"
+      },
+      "view": {
+        "label": "Visualização",
+        "list": "Lista",
+        "blocks": "Blocos"
+      },
+      "showing": "Mostrando {count, plural, one {# campanha} other {# campanhas}}",
+      "legacy": "Envios antigos ({count})"
+    },
+    "senderEmpty": {
+      "loading": "Carregando seus números…",
+      "none": {
+        "title": "Nenhum número de WhatsApp conectado",
+        "body": "Conecte um número do WhatsApp Business para escolher de qual número esta campanha é enviada.",
+        "action": "Conectar um número de WhatsApp"
+      },
+      "sms": {
+        "none": {
+          "title": "Nenhum remetente de SMS conectado",
+          "body": "Conecte um remetente de SMS para escolher de qual remetente esta campanha é enviada.",
+          "action": "Conectar um remetente de SMS"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# número ainda está sendo conectado} other {# números ainda estão sendo conectados}}",
+        "body": "Um número pode enviar campanhas quando a conexão for concluída. Abra o status dele para terminar a configuração.",
+        "action": "Ver o status do número"
+      },
+      "error": {
+        "title": "{count, plural, one {A conexão de # número falhou} other {A conexão de # números falhou}}",
+        "body": "Reconecte o número pela página de status e ele aparecerá aqui.",
+        "action": "Corrigir a conexão"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# número está desconectado} other {# números estão desconectados}}",
+        "body": "Reconecte-o para enviar campanhas por ele. Os números conectados aparecem aqui.",
+        "action": "Reconectar um número"
+      },
+      "personal_off": {
+        "title": "Os números pessoais estão desativados neste workspace",
+        "body": "{count, plural, one {Seu número pessoal (QR) não pode} other {Seus # números pessoais (QR) não podem}} enviar campanhas enquanto isso estiver desativado. Um administrador da plataforma pode ativá-lo neste workspace, ou você pode conectar um número oficial do WhatsApp Business.",
+        "action": "Conectar um número oficial"
+      },
+      "email": {
+        "none": {
+          "title": "Nenhuma caixa de correio conectada",
+          "body": "Conecte uma caixa de correio na página de E-mail para escolher de onde esta campanha é enviada.",
+          "action": "Conectar uma caixa de correio"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# caixa de correio está desconectada} other {# caixas de correio estão desconectadas}}",
+          "body": "Reconecte-a na página de E-mail para enviar campanhas a partir dela.",
+          "action": "Abrir a página de E-mail"
+        },
+        "error": {
+          "title": "{count, plural, one {# caixa de correio precisa ser reconectada} other {# caixas de correio precisam ser reconectadas}}",
+          "body": "O último login falhou. Reconecte-a na página de E-mail e ela aparecerá aqui.",
+          "action": "Abrir a página de E-mail"
+        }
       }
+    },
+    "create": {
+      "loading": "Carregando seus números",
+      "noAccessTitle": "Você não pode criar campanhas",
+      "noAccess": "Peça a um administrador do workspace permissão para criar campanhas."
     }
   }
 }

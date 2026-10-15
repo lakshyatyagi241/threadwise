@@ -1,0 +1,492 @@
+{
+  "compliance-center": {
+    "title": "Compliance-Center",
+    "subtitle": "Werkzeuge, die Sie bei Ihren Datenschutzpflichten unterstützen: die Gesetze, denen Sie unterliegen, wer erreichbar ist, Ihre Hinweise und Unterauftragsverarbeiter sowie eine Checkliste dessen, was vorhanden ist. Sie machen einen Arbeitsbereich nicht von selbst konform, und dies ist keine Rechtsberatung.",
+    "readOnly": "Sie können diese Seite lesen, aber nicht ändern.",
+    "saved": "Compliance-Einstellungen gespeichert.",
+    "conflict": "Jemand anderes hat diese Einstellungen gespeichert, während Sie sie bearbeitet haben. Die neueste Version wurde geladen; prüfen Sie sie und nehmen Sie Ihre Änderung erneut vor.",
+    "conflictOk": "Verstanden",
+    "common": {
+      "dismiss": "Ausblenden",
+      "retry": "Erneut versuchen",
+      "loading": "Wird geladen ..."
+    },
+    "tabs": {
+      "checklist": "Checkliste",
+      "profiles": "Gesetze und Regionen",
+      "contacts": "Kontakte und Kinder",
+      "notices": "Hinweise",
+      "links": "Links zu Datenschutz und Nutzungsbedingungen",
+      "subprocessors": "Unterauftragsverarbeiter",
+      "windows": "Ruhezeiten und Anrufe"
+    },
+    "saveBar": {
+      "unsaved": "Sie haben ungespeicherte Änderungen.",
+      "problems": "Korrigieren Sie die markierten Felder, bevor Sie speichern.",
+      "discard": "Änderungen verwerfen",
+      "save": "Änderungen speichern"
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Dafür fehlt Ihnen die Berechtigung.",
+      "notFound": "Das gibt es nicht mehr.",
+      "conflict": "Jemand anderes hat dies geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "settingsInvalid": "Einige Einstellungen sind ungültig. Prüfen Sie die Ruhezeiten, das Anruffenster, die Zeitzone und die Sprache.",
+      "duplicate": "Sie haben bereits einen Unterauftragsverarbeiter mit diesem Namen aufgeführt.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "problems": {
+      "httpsOnly": "Verwenden Sie eine Adresse, die mit https:// beginnt.",
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "quietEmpty": "Das Ende der Ruhezeit muss sich vom Beginn unterscheiden.",
+      "windowOrder": "Das Anruffenster muss am selben Tag nach seinem Beginn enden.",
+      "daysEmpty": "Wählen Sie mindestens einen Tag.",
+      "englishFirst": "Englisch ist immer der erste Hinweis. Wählen Sie eine andere Sprache."
+    },
+    "phi": {
+      "title": "Keine geschützten Gesundheitsdaten speichern.",
+      "body": "Dieses Produkt ist nicht für Gesundheitsakten ausgelegt. Wir behaupten keine HIPAA-Konformität und schließen keine Business-Associate-Vereinbarungen ab. Tragen Sie daher keine Diagnosen, Behandlungsdetails, Versicherungsnummern oder ähnliche Gesundheitsdaten in Kontakte, Notizen, Nachrichten, Dateien, Formulare oder Aufzeichnungen ein."
+    },
+    "checklist": {
+      "intro": "Was in Ihrem Arbeitsbereich derzeit vorhanden ist, ermittelt aus Ihren eigenen Einstellungen und Daten. „Eingerichtet“ bedeutet, dass das Werkzeug konfiguriert ist. Es bedeutet nicht, dass ein Gesetz erfüllt ist.",
+      "summaryLabel": "Gesamt",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Eingerichtet",
+        "partial": "Teilweise",
+        "open": "Offen"
+      },
+      "baselineTitle": "Für jeden Arbeitsbereich",
+      "baselineHint": "Ein strenger Satz von Punkten, den wir allen Arbeitsbereichen in jedem Land anbieten.",
+      "profileTitle": "Von den aktivierten Gesetzen verlangt",
+      "profileHint": "Jede Zeile nennt die Profile, die sie verlangen. Gelten mehrere, wird die strengste Regel angewendet.",
+      "noProfiles": "Es ist noch kein Gesetz und keine Region aktiviert, daher werden nur die Punkte für jeden Arbeitsbereich angezeigt. Wählen Sie sie unter Gesetze und Regionen.",
+      "disclaimer": "Diese Liste hilft Ihnen, Ihre eigene Einrichtung im Blick zu behalten. Sie ist keine Rechtsberatung und sagt nicht, dass Ihr Arbeitsbereich ein bestimmtes Gesetz einhält. Fragen Sie Ihre Rechtsberatung, was für Sie gilt.",
+      "open": "Offen",
+      "items": {
+        "lawful_basis": {
+          "title": "Zweck und Grundlage erfasst",
+          "detail": {
+            "built": "Jede Einwilligung wird zu einem Zweck erfasst, mit Angabe, wer oder was sie erfasst hat, dem angezeigten Wortlaut, der Version und dem Zeitpunkt. Sie müssen nichts einrichten."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Einwilligung und einfacher Widerruf",
+          "detail": {
+            "detectionOff": "Die STOP-Erkennung ist aus, daher wird ein Kontakt, der mit STOP antwortet, nicht abgemeldet. Aktivieren Sie sie in den Einwilligungseinstellungen.",
+            "optInOff": "STOP funktioniert, aber Marketing erfordert noch keine erfasste Einwilligung. Aktivieren Sie „Erfasste Einwilligung verlangen“ in den Einwilligungseinstellungen.",
+            "built": "STOP wird erkannt, und Marketing erfordert eine erfasste Einwilligung."
+          }
+        },
+        "notices": {
+          "title": "Versionierte Hinweise",
+          "detail": {
+            "built": "{lines, plural, one {# Einwilligungshinweis ist} other {# Einwilligungshinweise sind}} aktiviert, einschließlich Ihres Standardhinweises in {languages, plural, one {# Sprache} other {# Sprachen}}.",
+            "noDefault": "{lines, plural, one {# Einwilligungshinweis ist} other {# Einwilligungshinweise sind}} aktiviert, aber der Arbeitsbereich hat noch keinen Standardhinweis.",
+            "none": "Es ist kein Einwilligungshinweis aktiviert. Verfassen Sie einen Standardhinweis, damit ein Eintrag den Wortlaut nennen kann, den eine Person gesehen hat."
+          }
+        },
+        "rights": {
+          "title": "Anfragen von Personen (Auskunft, Export, Löschung)",
+          "detail": {
+            "overdue": "{overdue, plural, one {# Anfrage ist} other {# Anfragen sind}} überfällig, von {open} offenen. Beantworten Sie sie unter Datenanfragen.",
+            "noContact": "Anfragen haben eine Frist von {days} Tagen, aber es ist noch keine Datenschutz-Kontaktperson benannt. Fügen Sie eine hinzu.",
+            "built": "Anfragen haben eine Frist von {days} Tagen, und {open} sind offen. Eine Datenschutz-Kontaktperson ist benannt."
+          }
+        },
+        "retention": {
+          "title": "Aufbewahrung und Löschung",
+          "detail": {
+            "recordingsOn": "Anrufaufzeichnungen werden {days} Tage aufbewahrt und können angehalten (Legal Hold) werden. Die Aufbewahrung für andere Daten ist noch nicht umgesetzt.",
+            "recordingsOff": "Die Anrufaufzeichnung ist aus. Eine Aufbewahrungseinstellung für Ihre übrigen Daten ist noch nicht umgesetzt."
+          }
+        },
+        "security": {
+          "title": "Sicherheit und Plan für Datenpannen",
+          "detail": {
+            "runbook": "Trennung der Arbeitsbereiche, verschlüsselte Zugangsdaten und ein Audit-Protokoll sind vorhanden. Der Plan zur Reaktion auf Datenpannen ist ein Entwurf, den der Plattformbetreiber fertigstellt. Sie können dies hier nicht aktivieren."
+          }
+        },
+        "subprocessors": {
+          "title": "Liste der Unterauftragsverarbeiter",
+          "detail": {
+            "built": "{count, plural, one {# Unterauftragsverarbeiter ist} other {# Unterauftragsverarbeiter sind}} aufgeführt. Die DPA-Vorlage steht zum Download bereit.",
+            "none": "Es ist noch kein Unterauftragsverarbeiter aufgeführt. Führen Sie die Dienstleister auf, die für Sie personenbezogene Daten verarbeiten."
+          }
+        },
+        "children": {
+          "title": "Daten von Kindern",
+          "detail": {
+            "unset": "Noch nicht beantwortet. Geben Sie an, ob unter Ihren Kontakten Minderjährige sein können.",
+            "minorsNoParental": "Minderjährige können enthalten sein, aber die Einwilligung der Eltern ist nicht aktiviert.",
+            "no_minors": "Sie verarbeiten nicht wissentlich Daten von Minderjährigen.",
+            "may_include_minors": "Minderjährige können enthalten sein, und die Einwilligung der Eltern ist aktiviert."
+          }
+        },
+        "contact_links": {
+          "title": "Datenschutzkontakt und Links",
+          "detail": {
+            "built": "Die Links zu Datenschutz und Nutzungsbedingungen sowie ein erreichbarer Kontakt sind hinterlegt.",
+            "none": "Noch kein Datenschutzlink, kein Link zu den Nutzungsbedingungen und kein Kontakt.",
+            "some": "Ein Teil der Links und Kontaktdaten ist hinterlegt. Ergänzen Sie den Rest."
+          }
+        },
+        "dpo_contact": {
+          "title": "Datenschutzbeauftragter oder Datenschutzkontakt",
+          "detail": {
+            "built": "Ein Name und eine E-Mail-Adresse sind hinterlegt.",
+            "one": "Ergänzen Sie sowohl einen Namen als auch eine E-Mail-Adresse.",
+            "none": "Es ist noch kein Beauftragter oder Datenschutzkontakt benannt."
+          }
+        },
+        "grievance_officer": {
+          "title": "Beschwerdebeauftragter",
+          "detail": {
+            "built": "Ein Name und eine E-Mail-Adresse sind hinterlegt.",
+            "one": "Ergänzen Sie sowohl einen Namen als auch eine E-Mail-Adresse.",
+            "none": "Es ist noch kein Beschwerdebeauftragter benannt."
+          }
+        },
+        "notice_languages": {
+          "title": "Hinweis auf Englisch und in einer zweiten Sprache",
+          "detail": {
+            "built": "Ihr Standardhinweis ist auf Englisch und in {locale} aktiv.",
+            "noSecond": "Wählen Sie die zweite Sprache und verfassen Sie dann den Hinweis in dieser Sprache.",
+            "secondMissing": "Englisch ist aktiv. Verfassen Sie den Hinweis in der zweiten Sprache.",
+            "englishMissing": "Die zweite Sprache ist aktiv. Verfassen Sie den englischen Hinweis.",
+            "none": "Noch ist keiner der beiden Hinweise aktiv."
+          }
+        },
+        "parental_flag": {
+          "title": "Minderjährige und Einwilligung der Eltern",
+          "detail": {
+            "unset": "Beantworten Sie die Frage zu Kindern unter Kontakte und Kinder.",
+            "minorsNoParental": "Minderjährige können enthalten sein, aber die Einwilligung der Eltern ist aus. Dieses Profil behandelt alle unter {age} als minderjährig.",
+            "no_minors": "Sie verarbeiten nicht wissentlich Daten von Minderjährigen. Dieses Profil behandelt alle unter {age} als minderjährig.",
+            "may_include_minors": "Die Einwilligung der Eltern ist für Personen unter {age} aktiviert. Die Nachweisführung pro Kontakt ist noch nicht umgesetzt."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Option „Nicht verkaufen oder weitergeben“",
+          "detail": {
+            "built": "Die Opt-out-Option und der Link zu ihrem Hinweis sind hinterlegt.",
+            "noUrl": "Die Option ist aktiv, aber es ist kein Link zum Opt-out-Hinweis hinterlegt.",
+            "off": "Aktivieren Sie die Option, wenn Sie personenbezogene Daten verkaufen oder weitergeben, und fügen Sie den Link zu Ihrem Opt-out-Hinweis hinzu."
+          }
+        },
+        "quiet_hours": {
+          "title": "Ruhezeiten",
+          "detail": {
+            "built": "Ruhezeiten von {start} bis {end} sind gespeichert.",
+            "off": "Es sind keine Ruhezeiten festgelegt."
+          }
+        },
+        "calling_window": {
+          "title": "Anruffenster",
+          "detail": {
+            "built": "Ein Anruffenster von {start} bis {end} ist gespeichert.",
+            "off": "Es ist kein Anruffenster festgelegt."
+          }
+        },
+        "dnd_registry": {
+          "title": "Do-Not-Call-/DND-Register",
+          "detail": {
+            "off": "Es ist kein Register ausgewählt.",
+            "hookOnly": "Register vermerkt ({registry}). Bisher wird nichts dagegen geprüft."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Standorte Ihrer Unterauftragsverarbeiter",
+          "detail": {
+            "built": "Alle {count, plural, one {# Unterauftragsverarbeiter hat} other {# Unterauftragsverarbeiter haben}} einen Standort.",
+            "some": "{missing, plural, one {# Unterauftragsverarbeiter hat} other {# Unterauftragsverarbeiter haben}} noch keinen Standort.",
+            "none": "Es ist kein Unterauftragsverarbeiter aufgeführt, oder keiner hat einen Standort."
+          }
+        },
+        "request_days": {
+          "title": "Frist zur Beantwortung von Anfragen",
+          "detail": {
+            "built": "Ihre Frist für Anfragen beträgt {sla} Tage, innerhalb der {days} Tage, die das strengste Profil verlangt.",
+            "tooLong": "Ihre Frist beträgt {sla} Tage. Das strengste von Ihnen aktivierte Profil verlangt {days}. Ändern Sie sie unter Datenanfragen."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Erfasstes Opt-in vor Marketing",
+          "detail": {
+            "built": "Marketing erfordert eine erfasste Einwilligung.",
+            "off": "Marketing erfordert noch keine erfasste Einwilligung. Aktivieren Sie dies in den Einwilligungseinstellungen."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Ruhezeiten und Anruffenster werden noch nicht durchgesetzt",
+          "detail": {
+            "notEnforced": "Ihre Ruhezeiten und Ihr Anruffenster sind gespeichert, aber noch hält nichts eine Nachricht außerhalb davon zurück oder blockiert einen Anruf. Planen Sie selbst entsprechend."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "Aktivieren Sie die Gesetze und Regionen, die für die Personen gelten, die Sie kontaktieren. Sie können mehrere aktivieren; wo sie sich unterscheiden, gilt die strengste Regel. Ein Land schlägt nur etwas vor; Sie entscheiden.",
+      "suggested": "Ihr Land ({source}) ist {country}, was Folgendes nahelegt:",
+      "source": {
+        "billing": "Rechnungsadresse",
+        "onboarding": "Arbeitsbereich"
+      },
+      "useSuggestion": "Diesen Vorschlag verwenden",
+      "suggestedNote": "Ein Arbeitsbereich, der Personen in anderen Ländern kontaktiert, sollte auch diese Gesetze aktivieren.",
+      "notConfirmed": "Noch ist nichts aktiviert. Es gilt die Grundausstattung für jeden Arbeitsbereich, bis Sie eine Auswahl speichern.",
+      "listTitle": "Gesetze und Regionen",
+      "switchesOn": "Aktiviert:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (EU und EEA)",
+          "summary": "Für Personen in der Europäischen Union, Island, Liechtenstein und Norwegen.",
+          "extras": "Ein Datenschutzbeauftragter oder Datenschutzkontakt, Standorte der Unterauftragsverarbeiter, Antworten auf Anfragen innerhalb von 30 Tagen, erfasstes Opt-in für Marketing."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR und PECR (Vereinigtes Königreich)",
+          "summary": "Für Personen im Vereinigten Königreich.",
+          "extras": "Ein Datenschutzbeauftragter oder Datenschutzkontakt, Standorte der Unterauftragsverarbeiter, Antworten innerhalb von 30 Tagen, erfasstes Opt-in für elektronisches Marketing."
+        },
+        "dpdp_in": {
+          "name": "DPDP Act (Indien)",
+          "summary": "Für Personen in Indien.",
+          "extras": "Ein Beschwerdebeauftragter, Hinweise auf Englisch und in einer indischen Sprache, ein Kennzeichen für die Einwilligung der Eltern bei Minderjährigen unter 18, ein Platzhalter für den Consent Manager, erfasstes Opt-in."
+        },
+        "ccpa_us": {
+          "name": "CCPA und CPRA (Vereinigte Staaten)",
+          "summary": "Für Einwohner Kaliforniens und ein sinnvoller Einstieg für die Vereinigten Staaten.",
+          "extras": "Eine Option „Meine personenbezogenen Daten nicht verkaufen oder weitergeben“ mit Link zum Opt-out-Hinweis, Antworten innerhalb von 45 Tagen."
+        },
+        "tcpa_us": {
+          "name": "TCPA (Anrufe und Textnachrichten in die Vereinigten Staaten)",
+          "summary": "Für Marketinganrufe und -textnachrichten an Personen in den Vereinigten Staaten.",
+          "extras": "Ruhezeiten 21:00 bis 08:00, ein Anruffenster von 08:00 bis 21:00, ein Hinweis auf das Do-Not-Call-Register, erfasstes Opt-in."
+        },
+        "trai_in": {
+          "name": "TRAI-Regeln (Anrufe und Textnachrichten nach Indien)",
+          "summary": "Für Werbeanrufe und -textnachrichten an Personen in Indien.",
+          "extras": "Ruhezeiten 21:00 bis 09:00, ein Anruffenster von 09:00 bis 21:00, ein Hinweis auf das DND-Register, erfasstes Opt-in."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brasilien)",
+          "summary": "Für Personen in Brasilien.",
+          "extras": "Ein Kontakt für den Datenschutzbeauftragten (encarregado), Standorte der Unterauftragsverarbeiter, Antworten innerhalb von 15 Tagen, erfasstes Opt-in."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapur)",
+          "summary": "Für Personen in Singapur.",
+          "extras": "Ein Kontakt für den Datenschutzbeauftragten, ein Hinweis auf das Do-Not-Call-Register, Antworten innerhalb von 30 Tagen, erfasstes Opt-in."
+        },
+        "generic": {
+          "name": "Andere Länder (nur Grundausstattung)",
+          "summary": "Für alle anderen Orte oder wenn Sie sich noch nicht entschieden haben.",
+          "extras": "Nichts über die Grundausstattung hinaus, die jeder Arbeitsbereich ohnehin erhält."
+        }
+      },
+      "effective": {
+        "title": "Was die strengste Regel verlangt",
+        "hint": "Ermittelt aus den von Ihnen aktivierten Gesetzen. Dies sind Ausgangspunkte, die Sie mit Ihrer Rechtsberatung prüfen sollten.",
+        "baselineOnly": "Es ist kein Gesetz aktiviert. Es gilt nur die Grundausstattung für jeden Arbeitsbereich.",
+        "optIn": "Erfasstes Opt-in vor Marketing",
+        "optInYes": "Empfohlen.",
+        "optInNo": "Von diesen Profilen nicht verlangt.",
+        "consentLink": "Einwilligungseinstellungen öffnen",
+        "requestDays": "Frist zur Beantwortung einer Anfrage",
+        "days": "{count, plural, one {# Tag} other {# Tage}}",
+        "minorAge": "Person als minderjährig behandeln, wenn jünger als",
+        "years": "{count, plural, one {# Jahr} other {# Jahre}}",
+        "callingWindow": "Anruffenster",
+        "dnd": "Do-Not-Call-/DND-Register",
+        "none": "Keines",
+        "registry": {
+          "none": "Keines",
+          "trai_ndnc": "Indien NDNC (TRAI)",
+          "us_dnc": "Do-Not-Call-Register der Vereinigten Staaten",
+          "sg_dnc": "Do-Not-Call-Register von Singapur",
+          "custom": "Ihre eigene Liste"
+        },
+        "strictest": "Wenn mehrere Profile aktiv sind, gilt die strengste Regel: die kürzeste Antwortfrist, das höchste Alter, das engste Anruffenster."
+      },
+      "ccpa": {
+        "title": "Nicht verkaufen oder weitergeben",
+        "hint": "Wenn Sie personenbezogene Daten verkaufen oder weitergeben (auch für Werbung auf anderen Websites), können Personen verlangen, dass Sie damit aufhören.",
+        "offer": "Option „Meine personenbezogenen Daten nicht verkaufen oder weitergeben“ anbieten",
+        "url": "Link zu Ihrem Opt-out-Hinweis",
+        "urlHint": "Die Seite, auf der Personen widersprechen können. Muss mit https:// beginnen."
+      },
+      "dpdp": {
+        "title": "Consent Manager",
+        "hint": "Der DPDP Act erlaubt es Personen, ihre Einwilligung über einen registrierten Consent Manager zu verwalten. Nennen Sie hier Ihren, falls Sie einen nutzen.",
+        "managerName": "Consent Manager",
+        "managerUrl": "Link zum Consent Manager",
+        "placeholderNote": "Dies ist nur ein Hinweis. Es ist noch kein Consent Manager angebunden."
+      }
+    },
+    "contacts": {
+      "intro": "Wer für eine Person oder eine Behörde zu ihren Daten erreichbar ist und ob Kinder unter Ihren Kontakten sein können.",
+      "requiredByProfile": "Von einem aktivierten Profil verlangt",
+      "officer": {
+        "name": "Name",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "address": "Postanschrift"
+      },
+      "dpo": {
+        "title": "Datenschutzbeauftragter oder Datenschutzkontakt",
+        "hint": "Die Person oder das Team, die Datenschutzfragen beantwortet. Wird auf Ihrer öffentlichen Seite angezeigt, wenn Sie dies aktivieren."
+      },
+      "grievance": {
+        "title": "Beschwerdebeauftragter",
+        "hint": "Der DPDP Act verlangt einen benannten Beauftragten, der Beschwerden über die Verarbeitung personenbezogener Daten bearbeitet."
+      },
+      "children": {
+        "title": "Daten von Kindern",
+        "hint": "Dieses Produkt ist für Unternehmen gedacht. Geben Sie an, ob Sie Daten von Minderjährigen halten könnten, damit die passenden Regeln angezeigt werden.",
+        "policy": "Minderjährige unter Ihren Kontakten",
+        "policies": {
+          "unset": "Noch nicht beantwortet",
+          "no_minors": "Wir verarbeiten nicht wissentlich Daten von Minderjährigen",
+          "may_include_minors": "Minderjährige können unter unseren Kontakten sein"
+        },
+        "parental": "Für Minderjährige ist die Einwilligung der Eltern erforderlich",
+        "parentalHint": "Ein Kennzeichen, das Ihre Richtlinie festhält. Das Erheben und Aufbewahren von Nachweisen der elterlichen Einwilligung pro Kontakt ist noch nicht umgesetzt.",
+        "age": "Die von Ihnen aktivierten Profile behandeln alle unter {age} als minderjährig.",
+        "dpdpNeedsAnswer": "Das DPDP-Profil verlangt, dass Sie diese Frage beantworten."
+      }
+    },
+    "links": {
+      "intro": "Hinterlegen Sie Ihre Links zu Datenschutz und Nutzungsbedingungen einmal. Sie werden per Klick in der Einwilligungszeile des Formularerstellers und in jedem Editor für Einwilligungshinweise angeboten.",
+      "privacy": "Link zur Datenschutzerklärung",
+      "privacyHint": "Muss mit https:// beginnen",
+      "terms": "Link zu den Nutzungsbedingungen",
+      "termsHint": "Muss mit https:// beginnen",
+      "offered": "Nichts wird automatisch ausgefüllt: Jedes Formular und jeder Hinweis zeigt eine Schaltfläche, um diese Links zu verwenden."
+    },
+    "notices": {
+      "intro": "Der Standardwortlaut, den Ihr Arbeitsbereich neben einem Einwilligungsfeld anzeigt. Jede Änderung wird als neue nummerierte Version gespeichert, sodass ein Eintrag den genauen Text nennen kann, dem eine Person zugestimmt hat.",
+      "english": "Standard-Einwilligungshinweis ({language})",
+      "secondEditor": "Standard-Einwilligungshinweis ({language})",
+      "second": {
+        "title": "Zweite Sprache",
+        "requiredByProfile": "Vom DPDP-Profil verlangt",
+        "hint": "Der DPDP Act verlangt den Hinweis auf Englisch und in einer der Sprachen Indiens. Wählen Sie die zweite Sprache, speichern Sie und verfassen Sie dann den Hinweis in dieser Sprache.",
+        "language": "Sprache des zweiten Hinweises",
+        "none": "Keine zweite Sprache",
+        "saveFirst": "Speichern Sie zuerst Ihre Änderungen, dann erscheint der Hinweis-Editor für diese Sprache."
+      }
+    },
+    "windows": {
+      "notEnforced": "Diese Einstellungen sind gespeichert, aber noch nicht durchgesetzt. Eine Nachricht wird nicht zurückgehalten und ein Anruf nicht blockiert, wenn er außerhalb der festgelegten Zeiten liegt. Planen Sie Ihren Versand und Ihre Anrufe entsprechend.",
+      "intro": "Manche Regeln beschränken, wann Marketingnachrichten und -anrufe Personen erreichen dürfen. Halten Sie hier die Zeiten fest, zu denen Sie arbeiten.",
+      "quiet": {
+        "title": "Ruhezeiten für Nachrichten",
+        "hint": "Zeiten, in denen Marketingnachrichten Personen nicht erreichen sollen. Der Zeitraum kann über Mitternacht gehen.",
+        "enabled": "Ruhezeiten aktiv",
+        "start": "Ruhe ab",
+        "end": "Ruhe bis"
+      },
+      "calling": {
+        "title": "Anruffenster",
+        "hint": "Die einzigen Zeiten, zu denen Marketinganrufe erfolgen sollen, an den von Ihnen gewählten Tagen.",
+        "enabled": "Anruffenster aktiv",
+        "start": "Anrufe ab",
+        "end": "Anrufe bis",
+        "days": "Tage"
+      },
+      "day": {
+        "1": "Montag",
+        "2": "Dienstag",
+        "3": "Mittwoch",
+        "4": "Donnerstag",
+        "5": "Freitag",
+        "6": "Samstag",
+        "7": "Sonntag"
+      },
+      "suggested": "Die von Ihnen aktivierten Gesetze legen {start} bis {end} nahe.",
+      "zone": {
+        "label": "Zeitzone",
+        "hint": "Die Zeiten werden in dieser Zone gelesen. Die Zone Ihres Arbeitsbereichs ist {zone}.",
+        "workspace": "Zeitzone des Arbeitsbereichs ({zone})"
+      },
+      "dnd": {
+        "label": "Do-Not-Call-/DND-Register",
+        "hint": "Das Register, mit dem Sie Ihre Listen abgleichen.",
+        "registry": {
+          "none": "Keines",
+          "trai_ndnc": "Indien NDNC (TRAI)",
+          "us_dnc": "Do-Not-Call-Register der Vereinigten Staaten",
+          "sg_dnc": "Do-Not-Call-Register von Singapur",
+          "custom": "Ihre eigene Liste"
+        },
+        "note": "Dies ist nur ein Hinweis. Es wird noch nichts gegen ein Register geprüft."
+      }
+    },
+    "subprocessors": {
+      "intro": "Die Dienstleister, die für Ihren Arbeitsbereich personenbezogene Daten verarbeiten: was sie tun, welche Daten sie erhalten und wo. Sie können die Liste auf einer öffentlichen Seite veröffentlichen.",
+      "listTitle": "Ihre Unterauftragsverarbeiter",
+      "add": "Unterauftragsverarbeiter hinzufügen",
+      "saved": "Unterauftragsverarbeiter gespeichert.",
+      "removed": "Unterauftragsverarbeiter entfernt.",
+      "empty": {
+        "title": "Noch keine Unterauftragsverarbeiter",
+        "body": "Fügen Sie jeden Dienstleister hinzu, der für Sie personenbezogene Daten verarbeitet, zum Beispiel Ihren E-Mail- oder SMS-Anbieter."
+      },
+      "status": {
+        "active": "In Nutzung",
+        "planned": "Geplant",
+        "removed": "Nicht mehr genutzt"
+      },
+      "edit": "Bearbeiten",
+      "remove": "Entfernen",
+      "public": {
+        "title": "Öffentliche Seite",
+        "hint": "Veröffentlichen Sie die genutzten Dienstleister, Ihre Links zu Datenschutz und Nutzungsbedingungen und Ihren Datenschutzkontakt auf einer Seite, die jeder öffnen kann. Standardmäßig aus.",
+        "switch": "Öffentliche Seite aktiv",
+        "saveToApply": "Speichern Sie Ihre Änderungen, um dies anzuwenden."
+      },
+      "dpa": {
+        "title": "Vorlage für einen Auftragsverarbeitungsvertrag",
+        "hint": "Eine Vorlage, die mit Ihren Angaben und Ihrer Liste ausgefüllt ist. Sie ist keine Rechtsberatung und keine Vereinbarung: Lassen Sie sie vor der Verwendung von Ihrer Rechtsberatung prüfen.",
+        "download": "Vorlage herunterladen"
+      },
+      "form": {
+        "addTitle": "Unterauftragsverarbeiter hinzufügen",
+        "editTitle": "Unterauftragsverarbeiter bearbeiten",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "name": "Name",
+        "required": "Ein Name ist erforderlich.",
+        "purpose": "Was sie für Sie tun",
+        "data": "Daten, die sie erhalten",
+        "location": "Standort",
+        "locationHint": "Land oder Region, in dem sie die Daten verarbeiten.",
+        "status": "Status",
+        "website": "Website",
+        "dpa": "Link zur Vereinbarung",
+        "httpsOnly": "Verwenden Sie eine Adresse, die mit https:// beginnt.",
+        "addedOn": "Hinzugefügt am",
+        "noticeSentOn": "Kunden informiert am",
+        "noticeHint": "Der Tag, an dem Sie Ihre Kunden über diesen Dienstleister informiert haben."
+      },
+      "confirmRemove": {
+        "title": "Diesen Unterauftragsverarbeiter entfernen?",
+        "body": "{name} wird von Ihrer Liste entfernt. Markieren Sie ihn stattdessen als nicht mehr genutzt, wenn Sie den Verlauf behalten möchten.",
+        "confirm": "Entfernen"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: Unterauftragsverarbeiter und Datenschutz",
+      "intro": "Die Dienstleister, die dieses Unternehmen zur Verarbeitung personenbezogener Daten einsetzt, und wie sich sein Datenschutzkontakt erreichen lässt.",
+      "subprocessors": "Unterauftragsverarbeiter",
+      "none": "Es sind keine Unterauftragsverarbeiter aufgeführt.",
+      "contact": "Datenschutzkontakt und Richtlinien",
+      "privacy": "Datenschutzerklärung",
+      "terms": "Nutzungsbedingungen",
+      "notFound": "Seite nicht gefunden"
+    }
+  }
+}

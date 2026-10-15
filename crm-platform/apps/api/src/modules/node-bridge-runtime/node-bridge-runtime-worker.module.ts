@@ -1,6 +1,14 @@
 import { Module, type OnModuleInit } from '@nestjs/common';
-import { BaileysSocketFactory } from '../../infra/providers/node-bridge-runtime/baileys.socket-factory';
+import {
+  BaileysSocketFactory,
+  HISTORY_IMPORT_LIMITS,
+  type HistoryImportLimits,
+} from '../../infra/providers/node-bridge-runtime/baileys.socket-factory';
 import { DeviceAuthStore } from '../../infra/providers/node-bridge-runtime/device-auth-store';
+import {
+  historyImportConfig,
+  windowDaysOf,
+} from '../../config/domains/whatsapp-history-import.env';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DeviceRuntimeService } from './runtime/device-runtime.service';
 import { WA_SOCKET_FACTORY } from '../../infra/providers/node-bridge-runtime/socket.port';
@@ -20,6 +28,13 @@ import { InboxBridge } from './inbox/inbox-bridge.service';
     CryptoService,
     DeviceAuthStore,
     DeviceLease,
+    {
+      provide: HISTORY_IMPORT_LIMITS,
+      useValue: {
+        windowDays: (choice) => windowDaysOf(choice),
+        batchSize: () => historyImportConfig().batchSize,
+      } satisfies HistoryImportLimits,
+    },
     BaileysSocketFactory,
     { provide: WA_SOCKET_FACTORY, useExisting: BaileysSocketFactory },
     DeviceRuntimeService,

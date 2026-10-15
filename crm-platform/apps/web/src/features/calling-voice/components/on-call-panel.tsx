@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { cn } from '@crm/ui';
+import { Button, cn } from '@crm/ui';
 import { useCalling } from './calling-provider';
 import { EndCallIcon, MicIcon, MicOffIcon, RecordIcon } from './icons';
 
@@ -15,7 +15,9 @@ const ROUND =
  */
 export function OnCallPanel() {
   const t = useTranslations('calling-voice.panel');
-  const { active, elapsed, hangup, toggleMute, record } = useCalling();
+  const tc = useTranslations('calling-voice.recording.consent');
+  const { active, elapsed, hangup, toggleMute, record, recordingRules, answerConsent } =
+    useCalling();
   if (!active || (active.state !== 'ringing' && active.state !== 'active')) return null;
   const ringing = active.state === 'ringing';
 
@@ -74,7 +76,7 @@ export function OnCallPanel() {
           <button
             type="button"
             onClick={record}
-            disabled={ringing || active.recording}
+            disabled={ringing || active.recording || active.consent === 'saving'}
             title={active.recording ? t('recordingTooltip') : t('recordTooltip')}
             className={cn(
               ROUND,
@@ -95,6 +97,50 @@ export function OnCallPanel() {
           </span>
         </div>
       </div>
+
+      {(active.consent === 'asking' || active.consent === 'saving') && recordingRules && (
+        <div
+          role="group"
+          aria-label={tc('title')}
+          className="mt-3 rounded-lg border border-border bg-muted/40 p-3 text-xs"
+        >
+          <p className="font-medium">{tc('title')}</p>
+          <p className="mt-1 text-muted-foreground">
+            {recordingRules.consentMode === 'confirmed'
+              ? tc('askConfirmed')
+              : tc('askAnnouncement')}
+          </p>
+          <blockquote className="mt-2 border-s-2 border-primary ps-2 italic">
+            {recordingRules.noticeText}
+          </blockquote>
+          <div className="mt-3 flex flex-col gap-2">
+            <Button
+              size="sm"
+              variant="brand"
+              disabled={active.consent === 'saving'}
+              onClick={() => void answerConsent('granted')}
+            >
+              {recordingRules.consentMode === 'confirmed'
+                ? tc('grantConfirmed')
+                : tc('grantAnnouncement')}
+            </Button>
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={active.consent === 'saving'}
+              onClick={() => void answerConsent('declined')}
+            >
+              {tc('decline')}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {active.consent === 'declined' && (
+        <p role="status" className="mt-3 text-xs text-muted-foreground">
+          {tc('declinedNote')}
+        </p>
+      )}
 
       {active.recording && (
         <p role="status" className="mt-3 flex items-center gap-1.5 text-xs font-medium text-danger">

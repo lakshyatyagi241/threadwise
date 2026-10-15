@@ -1,0 +1,133 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "提问",
+      "shortcut": "询问助手（Ctrl 或 Cmd + Shift + L）"
+    },
+    "panel": {
+      "title": "询问助手",
+      "subtitle": "说出你想做什么。我会阅读此页面并替你点击，保存、发送、删除或付款前我都会先询问你。",
+      "close": "关闭",
+      "taskLabel": "你想做什么？",
+      "taskPlaceholder": "例如：给联系人添加 VIP 标签",
+      "tooLong": "请不要超过 {max} 个字符。",
+      "doItForMe": "帮我完成",
+      "showMe": "演示给我看",
+      "stop": "停止",
+      "stopping": "正在停止...",
+      "newTask": "新任务",
+      "tryAgain": "重试",
+      "openGuide": "打开指南",
+      "showSteps": "显示步骤",
+      "guidesTitle": "来自帮助指南",
+      "examplesTitle": "试着问问",
+      "disabledHere": "此页面会显示客户写的消息和详情，因此助手在此处已关闭。请打开其他页面使用。"
+    },
+    "notice": {
+      "title": "开始之前",
+      "sent": "为完成任务，助手会把你的请求和当前页面的文字发送给 AI 服务商。",
+      "masked": "电话号码、电子邮箱地址和机密信息会先被隐藏。页面上的姓名和其他文字不会被隐藏。",
+      "asks": "助手使用你自己的账号，因此只能做你能做的事。保存、发送、删除、付款、邀请他人或更改设置前，它会先询问你。",
+      "limits": "它不会输入密码或银行卡信息，不会打开其他网站，你也可以随时停止它。",
+      "accept": "我明白了"
+    },
+    "status": {
+      "progress": "第 {n} 步，共 {max} 步",
+      "thinking": "思考中...",
+      "starting": "正在开始..."
+    },
+    "activity": {
+      "click": "正在点击：{label}",
+      "type": "正在输入：{label}",
+      "select": "正在选择：{label}",
+      "blocked": "已跳过：{label}",
+      "declined": "你已拒绝：{label}",
+      "shown": "正在显示：{label}"
+    },
+    "confirm": {
+      "title": "允许这样做吗？",
+      "clickBody": "助手将要点击 \"{label}\"。",
+      "selectBody": "助手将要在 \"{label}\" 中选择 \"{detail}\"。",
+      "allow": "允许一次",
+      "deny": "拒绝",
+      "reasons": {
+        "marked": "这是应用中最敏感的按钮之一。",
+        "submit": "这会保存或提交页面上的内容。",
+        "delete": "这会删除、移除或断开某项内容。",
+        "send": "这会发送、发布或启动其他人会看到的内容。",
+        "pay": "这可能会花钱或改变你的付费金额。",
+        "invite": "这会邀请某人加入你的工作区。",
+        "connect": "这会连接或断开某个渠道或应用。",
+        "access": "这会更改谁可以做什么，或更改机密信息或账单信息。",
+        "settings": "这会开启或关闭某项功能。",
+        "toggle": "此开关会立即生效。",
+        "dialog": "这会确认窗口所询问的内容。",
+        "signout": "这会让你退出登录。"
+      }
+    },
+    "question": {
+      "title": "助手提问",
+      "answerLabel": "你的回答",
+      "send": "发送"
+    },
+    "result": {
+      "completedTitle": "完成",
+      "failedTitle": "我无法完成此任务",
+      "stoppedTitle": "已停止",
+      "summary": "{steps, plural, other {# 步}}，已允许 {confirmed} 次，已拒绝 {denied} 次。"
+    },
+    "stopped": {
+      "person": "你已停止任务。",
+      "budget": "任务已达到步数上限并停止。请尝试更小的请求。",
+      "location": "任务已停止，因为到达了助手不允许使用的页面。"
+    },
+    "errors": {
+      "disabled": "助手已在此工作区或此页面关闭。",
+      "planLocked": "你的套餐不包含助手。",
+      "forbidden": "你没有使用助手的权限。",
+      "rateLimited": "请求过多。请稍等片刻后重试。",
+      "taskLimit": "你已启动了目前允许的全部任务数。请稍后再试。",
+      "stepLimit": "此任务已用完步数。请用更小的请求开始新任务。",
+      "closed": "此任务已结束。请开始新任务。",
+      "providerDown": "AI 服务没有响应。请稍后重试，如果持续出现，请联系平台所有者。",
+      "monthlyLimit": "你的工作区已用完本月的 AI 额度。",
+      "signedOut": "你的会话已结束。请重新登录。",
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "generic": "出错了。请重试。",
+      "retryIn": "请在 {seconds} 秒后重试。"
+    },
+    "examples": {
+      "howDo": "如何使用 {title}？",
+      "showMe": "告诉我在 {title} 中从哪里开始",
+      "whereIs": "在哪里可以找到 {title}？",
+      "generic1": "如何连接我的 WhatsApp 号码？",
+      "generic2": "在哪里修改我的企业资料？",
+      "generic3": "如何邀请团队成员？"
+    },
+    "helpCard": {
+      "title": "询问助手",
+      "body": "告诉它你想做什么。它会找到合适的指南，告诉你点哪里，或代你完成步骤，重要操作前会先询问。",
+      "button": "打开助手"
+    },
+    "settingsPage": {
+      "title": "帮助助手",
+      "description": "让团队说出想做的事，由应用指引他们，或在他们自己的账号上完成步骤。",
+      "loading": "加载中",
+      "loadFailed": "无法加载该设置。",
+      "shareTitle": "有人使用时会共享什么",
+      "share1": "用户输入的请求以及其所在页面的可见文字，会发送给平台使用的 AI 服务商。",
+      "share2": "电话号码、电子邮箱地址、机密信息和表单中的个人字段会先被隐藏。页面上的姓名和其他自由文本不会被隐藏。",
+      "share3": "绝不会读取客户消息和团队聊天：助手在这些页面上是关闭的。",
+      "share4": "助手以已登录用户自己的权限操作，保存、发送、删除、付款或更改设置前会先询问。只记录次数和每个任务的结果，绝不保存请求文本。",
+      "optIn": "开启即表示你确认你的工作区同意与 AI 服务商共享这些内容。",
+      "switchLabel": "为此工作区开启帮助助手",
+      "stateOn": "已开启。有权限的人会看到“提问”按钮。",
+      "stateOff": "已关闭。没有人会看到助手。",
+      "saveFailed": "无法保存该设置。",
+      "savedOn": "助手已开启。",
+      "savedOff": "助手已关闭。",
+      "whoCanUse": "只有拥有“使用帮助助手”权限的角色才能看到。所有者和管理员拥有该权限。",
+      "rolesLink": "打开角色"
+    }
+  }
+}

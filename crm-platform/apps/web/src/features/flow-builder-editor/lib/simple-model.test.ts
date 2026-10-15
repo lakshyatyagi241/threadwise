@@ -11,6 +11,7 @@ import {
   insertStep,
   moveStep,
   newStep,
+  optionCount,
   problems,
   removeGroup,
   removeJourney,
@@ -501,13 +502,333 @@ describe('the list of flows (groups)', () => {
   });
 });
 
+describe('the Answer from FAQ step in the Simple builder', () => {
+  const faqGraph = () =>
+    graph(
+      [
+        node('t', 'trigger'),
+        node('f', 'faq', {
+          query: '{{user_message}}',
+          category: 'Billing',
+          minScore: 0.6,
+          sendAnswer: true,
+          save: 'faq',
+        }),
+        node('yes', 'message', { text: 'Glad that helped', journeyName: 'Answered' }, 400, 0),
+        node(
+          'no',
+          'assign',
+          { team: 'support', userId: '', message: '', journeyName: 'Handoff' },
+          800,
+          0,
+        ),
+      ],
+      [edge('t', 'out', 'f'), edge('f', 'matched', 'yes'), edge('f', 'no_match', 'no')],
+    );
+
+  it('is a step of the menu, in its own Answer group', () => {
+    const kind = STEP_KINDS.find((k) => k.type === 'faq')!;
+    expect(kind.group).toBe('answer');
+    expect(en(kind.label)).toBe('Answer from FAQ');
+    expect(en(stepLabel({ type: 'faq', data: {} }))).toBe('Answer from FAQ');
+  });
+
+  it('reads the two exits as two links and writes them back on the same ports', () => {
+    const r = toSimple(faqGraph());
+    if (!r.ok) throw new Error(r.reasons.map(en).join('; '));
+    const step = allSteps(r.doc).find((s) => s.id === 'f')!;
+    expect(step.type).toBe('faq');
+    expect(step.links).toEqual(['yes', 'no']);
+    expect(step.data).toMatchObject({ category: 'Billing', minScore: 0.6, save: 'faq' });
+    const back = toGraph(r.doc);
+    expect(back.flowEdges.map((e) => `${e.source}.${e.sourceHandle}>${e.target}`).sort()).toEqual(
+      ['f.matched>yes', 'f.no_match>no', 't.out>f'].sort(),
+    );
+    expect(toSimple(back).ok).toBe(true);
+    expect(back.flowNodes.find((n) => n.id === 'f')!.data).toMatchObject({ minScore: 0.6 });
+  });
+
+  it('an exit that is not wired ends the conversation, and only that one', () => {
+    const g = faqGraph();
+    g.flowEdges = g.flowEdges.filter((e) => e.sourceHandle !== 'no_match');
+    const r = toSimple(g);
+    expect(r.ok && allSteps(r.doc).find((s) => s.id === 'f')!.links).toEqual(['yes', null]);
+  });
+
+  it('refuses a faq node wired from a port Simple has no place for, or from "out"', () => {
+    const g = faqGraph();
+    g.flowEdges.push(edge('f', 'out', 'yes'));
+    const r = toSimple(g);
+    expect(r).toMatchObject({ ok: false });
+    expect(r.ok === false && r.reasons.map(en)).toEqual([
+      expect.stringContaining('Answer from FAQ'),
+    ]);
+  });
+
+  it('a new step has the catalogue defaults and one empty link per exit', () => {
+    const s = newStep('faq', []);
+    expect(s.data).toEqual({
+      query: '{{user_message}}',
+      category: '',
+      minScore: null,
+      sendAnswer: true,
+      save: 'faq',
+    });
+    expect(s.links).toEqual([null, null]);
+  });
+
+  it('ends its part like buttons do: nothing can follow it, it can only be added and moved last, and it is not duplicated', () => {
+    let d = emptyDoc();
+    const m = newStep('message', []);
+    d = insertStep(d, 0, 0, m);
+    const f = newStep('faq', [m]);
+    expect(insertStep(d, 0, 0, f)).toBe(d); // before another step: refused
+    d = insertStep(d, 0, 1, f);
+    expect(allSteps(d).map((s) => s.type)).toEqual(['message', 'faq']);
+    const after = newStep('message', allSteps(d));
+    expect(insertStep(d, 0, 2, after)).toBe(d); // after it: refused
+    expect(moveStep(d, f.id, -1)).toBe(d); // moving it up would cut the message off
+    expect(duplicateStep(d, f.id)).toBe(d);
+  });
+
+  it('keeps one link per exit when the step is edited, and drops a link whose target is removed', () => {
+    let d = emptyDoc();
+    const target = newStep('message', []);
+    d = addJourney(d, target);
+    const f = newStep('faq', []);
+    d = insertStep(d, 0, 0, f);
+    d = updateStep(d, f.id, { links: [target.id, null] });
+    d = updateStep(d, f.id, { data: { category: 'Billing' } });
+    expect(allSteps(d).find((s) => s.id === f.id)!.links).toEqual([target.id, null]);
+    expect(allSteps(removeStep(d, target.id)).find((s) => s.id === f.id)!.links).toEqual([
+      null,
+      null,
+    ]);
+    // both exits leading into the other part count as reaching it
+    d = updateStep(d, f.id, { links: [null, target.id] });
+    expect(unreachable(d)).toEqual([]);
+  });
+
+  it('blocks publishing a minimum score outside 0.05 to 0.99, and nothing else about it', () => {
+    const make = (data: Record<string, unknown>) => {
+      const d = emptyDoc();
+      const f = { ...newStep('faq', []), data: { ...newStep('faq', []).data, ...data } };
+      d.journeys[0]!.steps = [f];
+      // The trigger's own problems (no keyword yet) are not what is under test.
+      return problems(d, { senderRequired: false })
+        .filter((p) => p.stepId !== null)
+        .map((p) => en(p.message));
+    };
+    expect(make({ minScore: 1.4 })).toEqual([
+      "Step 1.1: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
+    ]);
+    expect(make({ minScore: 0.01 })).toHaveLength(1);
+    expect(make({ minScore: 0.5 })).toEqual([]);
+    expect(make({ minScore: null })).toEqual([]);
+    expect(make({ query: '', category: 'x' })).toEqual([]);
+  });
+});
+
 describe('steps per channel', () => {
   it('a website chat bot offers only what the widget can show', () => {
     const keys = stepKindsFor('web').map((k) => k.type);
-    expect(new Set(keys)).toEqual(new Set(['message', 'buttons', 'ask', 'delay']));
+    expect(new Set(keys)).toEqual(
+      new Set([
+        'message',
+        'media',
+        'buttons',
+        'carousel',
+        'condition',
+        'ask',
+        'ask_file',
+        'delay',
+        'cta',
+      ]),
+    );
   });
 
-  it('a WhatsApp bot keeps every step', () => {
-    expect(stepKindsFor('chat')).toEqual(STEP_KINDS);
+  it('a WhatsApp bot keeps every step except the website-only carousel', () => {
+    expect(stepKindsFor('chat')).toEqual(STEP_KINDS.filter((k) => k.type !== 'carousel'));
+  });
+});
+
+describe('the carousel step', () => {
+  const two = (extra: Record<string, unknown> = {}) => ({
+    text: 'Pick one',
+    cards: [
+      {
+        image: '',
+        title: 'Pune',
+        text: 'Open',
+        buttons: [
+          { type: 'reply', label: 'Book Pune', value: '' },
+          { type: 'url', label: 'Details', value: 'https://x.test' },
+        ],
+      },
+      {
+        image: '',
+        title: 'Mumbai',
+        text: '',
+        buttons: [{ type: 'reply', label: 'Book Mumbai', value: '' }],
+      },
+    ],
+    ...extra,
+  });
+
+  it('starts with one card and one reply, so one exit', () => {
+    const s = newStep('carousel', []);
+    expect(s.links).toEqual([null]);
+    expect(optionCount(s)).toBe(1);
+  });
+
+  it('has one exit per reply button, in card order, not per card or per link button', () => {
+    expect(optionCount({ type: 'carousel', data: two() })).toBe(2);
+  });
+
+  it('keeps its exits in step with the replies when buttons change', () => {
+    let d = emptyDoc();
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, { data: two() });
+    expect(allSteps(d).find((x) => x.id === c.id)!.links).toHaveLength(2);
+  });
+
+  it('round-trips through the graph: each reply exit is wired to its own step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, { data: two() });
+    const a = newStep('message', allSteps(d));
+    d = addJourney(d, a);
+    const b = newStep('message', allSteps(d));
+    d = addJourney(d, b);
+    d = updateStep(d, c.id, { links: [a.id, b.id] });
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['p0', a.id],
+      ['p1', b.id],
+    ]);
+  });
+
+  it('asks for a card with a title, and for a name and an address on every button', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: add at least one card and give every card a title.',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [{ title: 'A', buttons: [{ type: 'url', label: 'Open', value: '' }] }],
+      },
+    });
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: give every button a name, and a link, number or address where it opens one.',
+    ]);
+  });
+});
+
+describe('the condition step', () => {
+  it('has two exits, Yes then No, wired to the handles the runtime reads', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('condition', []);
+    expect(c.links).toEqual([null, null]);
+    expect(optionCount(c)).toBe(2);
+    d = insertStep(d, 0, 0, c);
+    const a = newStep('message', allSteps(d));
+    d = addJourney(d, a);
+    const b = newStep('message', allSteps(d));
+    d = addJourney(d, b);
+    d = updateStep(d, c.id, { links: [a.id, b.id] });
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['yes', a.id],
+      ['no', b.id],
+    ]);
+    // and back: a saved Yes/No condition opens with both exits wired
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) expect(allSteps(back.doc).find((x) => x.id === c.id)!.links).toEqual([a.id, b.id]);
+  });
+
+  it('asks for complete rules, and takes nested AND / OR groups', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('condition', []);
+    d = insertStep(d, 0, 0, c);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: finish the rules of the condition (a variable and a value in each).',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        conditionGroup: {
+          op: 'or',
+          items: [
+            { variable: 'plan', operator: 'equals', value: 'pro' },
+            { op: 'and', items: [{ variable: 'age', operator: 'greater_than', value: '30' }] },
+          ],
+        },
+      },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+});
+
+describe('a button that hands the visitor to a person', () => {
+  it('counts as an exit of a carousel, and needs a team, but no step after it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          { title: 'Billing', buttons: [{ type: 'agent', label: 'Talk to billing', team: '' }] },
+        ],
+      },
+    });
+    expect(optionCount(allSteps(d)[0]!)).toBe(1);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: choose the team the conversation goes to.',
+    ]);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          {
+            title: 'Billing',
+            buttons: [{ type: 'agent', label: 'Talk to billing', team: 'team-1' }],
+          },
+        ],
+      },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+
+  it('on a quick reply, is kept per button and needs a team', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const b = newStep('buttons', []);
+    d = insertStep(d, 0, 0, b);
+    d = updateStep(d, b.id, {
+      data: {
+        prompt: 'p',
+        options: ['Pricing', 'Talk to a person'],
+        handoffs: { '1': { team: '', message: '' } },
+      },
+    });
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
+      'Step 1.1: choose the team the conversation goes to.',
+    ]);
+    d = updateStep(d, b.id, {
+      data: { handoffs: { '1': { team: 'team-1', message: 'Asked for a person' } } },
+    });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
   });
 });

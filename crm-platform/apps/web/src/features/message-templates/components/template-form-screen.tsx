@@ -24,6 +24,7 @@ import {
   useToast,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { OptOutFooterSuggestion } from '@/features/contact-consent';
 import {
   useConnections,
   useCreateTemplate,
@@ -91,10 +92,11 @@ function Section({ title, hint, children }: { title: string; hint?: string; chil
 }
 
 /** TW-TPL-005/006: `/templates/new` and `/templates/[id]/edit`. Edit loads the saved template first. */
-export function TemplateFormScreen({ id }: { id?: string }) {
+export function TemplateFormScreen({ id, copyFrom }: { id?: string; copyFrom?: string }) {
   const t = useTranslations('message-templates.form');
   const errorText = useErrorText();
-  const detail = useTemplate(id ?? '', { poll: false });
+  // A copy opens the form of a new template filled in from this one ("Duplicate template" in the inbox's template list).
+  const detail = useTemplate(id ?? copyFrom ?? '', { poll: false });
   const mayCreate = useCan('tpl.templates.create');
 
   if (!mayCreate) {
@@ -104,7 +106,8 @@ export function TemplateFormScreen({ id }: { id?: string }) {
       </main>
     );
   }
-  if (id === undefined) return <TemplateForm key="new" initial={initialState()} />;
+  if (id === undefined && copyFrom === undefined)
+    return <TemplateForm key="new" initial={initialState()} />;
   if (detail.isPending)
     return (
       <div className="flex justify-center p-12">
@@ -128,6 +131,8 @@ export function TemplateFormScreen({ id }: { id?: string }) {
         </div>
       </main>
     );
+  if (id === undefined)
+    return <TemplateForm key={`copy:${copyFrom}`} initial={copyState(detail.data)} />;
   if (!canEdit(detail.data.status)) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-7">
@@ -153,6 +158,11 @@ export function TemplateFormScreen({ id }: { id?: string }) {
       initial={stateFromDetail(detail.data)}
     />
   );
+}
+
+/** A new template that starts as a copy of `d`: its own name, and no media sample (a new file is chosen for the copy). */
+function copyState(d: TemplateDetail): FormState {
+  return { ...stateFromDetail(d), name: `${d.name}_copy`.slice(0, 512), headerSampleUrl: '' };
 }
 
 interface Saved {
@@ -182,7 +192,15 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
   const usable = useMemo(() => usableConnections(connections.data ?? []), [connections.data]);
   const fallbackConnection = (usable.find((c) => c.isPrimary) ?? usable[0])?.id ?? '';
   // The picker defaults to the primary number until the operator chooses one.
-  const current: FormState = { ...state, connectionId: state.connectionId || fallbackConnection };
+  const stale =
+    !detail &&
+    usable.length > 0 &&
+    state.connectionId !== '' &&
+    !usable.some((c) => c.id === state.connectionId);
+  const current: FormState = {
+    ...state,
+    connectionId: (stale ? '' : state.connectionId) || fallbackConnection,
+  };
   const set = (p: Partial<FormState>) => setState((s) => ({ ...s, ...p }));
 
   const create = useCreateTemplate();
@@ -530,6 +548,11 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
                     maxLength={FOOTER_MAX + 20}
                     invalid={Boolean(contract.footer)}
                     onChange={(e) => set({ footer: e.target.value })}
+                  />
+                  <OptOutFooterSuggestion
+                    footer={current.footer}
+                    max={FOOTER_MAX}
+                    onUse={(line) => set({ footer: line })}
                   />
                   <IssueList issues={issues} field="footer" />
                 </Field>

@@ -411,7 +411,9 @@ export function ConsoleShell({
                   onChange={(e) =>
                     start(async () => {
                       await setLocale(e.target.value);
-                      router.refresh();
+                      // A full reload, not router.refresh(): the language decides the messages, number formats and text
+                      // direction of every layout above this page, and a soft refresh left the old texts on screen.
+                      window.location.reload();
                     })
                   }
                   className="h-8 w-20 rounded-md border border-border bg-background px-1.5 text-sm focus-visible:ring-2 focus-visible:ring-primary sm:w-auto sm:max-w-32 sm:px-2"

@@ -39,6 +39,10 @@ import {
   type SendOutcome,
 } from '../../../infra/providers/node-bridge-runtime/outbound.port';
 import type { GroupAction } from '../../../infra/providers/node-bridge-runtime/socket.port';
+import {
+  classifyGroupError,
+  COOLDOWN_REASONS,
+} from '../../../infra/providers/node-bridge-runtime/group-mapping';
 import { DeviceNotReadyError } from './device-session';
 import { senderDigits } from '../outbound/sender-resolver.service';
 
@@ -69,6 +73,7 @@ interface DeviceRow {
   proxy_port: number | null;
   proxy_username: string | null;
   proxy_password: string | null;
+  history_import_mode: string | null;
 }
 
 /** The domain event a state change into one of these states also raises (consumers are phase 2: notifications, webhook, audit). */
@@ -249,7 +254,13 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       ended: () => void this.drop(orgId, deviceId),
       inbound: async (n, media) => void (await this.inbound.message(orgId, deviceId, n, media)),
       receipt: async (r) => void (await this.receipts.route({ orgId, deviceId }, r)),
-      groups: (g) => this.inbound.groups(orgId, deviceId, g),
+      groups: (g, o) => this.inbound.groups(orgId, deviceId, g, o),
+      groupEvent: (e) => this.inbound.groupEvent(orgId, deviceId, e),
+      historyImportFor: async () => {
+        const mode = (await this.loadDevice(orgId, deviceId))?.history_import_mode;
+        return mode === 'recent' || mode === 'full' ? mode : 'none';
+      },
+      history: (b) => this.inbound.history(orgId, deviceId, b),
     };
     const session = new DeviceSession(
       { orgId, deviceId, phoneDigits: senderDigits(dev.country_code, dev.phone_number) },
@@ -538,7 +549,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   private async loadDevice(orgId: number, deviceId: number): Promise<DeviceRow | null> {
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
       const res = await tx.execute(sql`
-        SELECT id, country_code, phone_number, proxy_enabled, proxy_type, proxy_host, proxy_port, proxy_username, proxy_password
+        SELECT id, country_code, phone_number, proxy_enabled, proxy_type, proxy_host, proxy_port, proxy_username, proxy_password, history_import_mode
           FROM devices WHERE org_id = ${orgId} AND id = ${deviceId}`);
       return (res.rows[0] as unknown as DeviceRow | undefined) ?? null;
     });
@@ -569,11 +580,41 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       return {
         ok: true,
         status: 'group',
-        result: await this.session(orgId, deviceId).groups(action),
+        result: await this.session(orgId, deviceId).groups(await this.withGroupBytes(action)),
       };
     } catch (err) {
-      return failureOf(err);
+      if (
+        err instanceof DeviceNotReadyError ||
+        err instanceof UnsupportedSendError ||
+        !isWhatsappRefusal(err)
+      ) {
+        return failureOf(err);
+      }
+      // WhatsApp said no: classify it, and let a refusal that looks like a limit or a ban signal pause the device's group operations.
+      const reason = classifyGroupError(
+        err,
+        action.type === 'accept_invite' || action.type === 'get_invite_info',
+      );
+      if (COOLDOWN_REASONS.has(reason)) {
+        this.logger.warn({ orgId, deviceId, action: action.type, reason }, '[NODE] group cooldown');
+        await this.control.groupLimiter.startCooldown(orgId, deviceId);
+      }
+      return {
+        ok: false,
+        status: 'group_failed',
+        reason,
+        message: err instanceof Error ? err.message : 'WhatsApp refused the group request.',
+      };
     }
+  }
+
+  /** A picture that left its file in Redis (`bufferKey`) gets the bytes back before the socket uses it. */
+  private async withGroupBytes(action: GroupAction): Promise<GroupAction> {
+    if (action.type !== 'picture' || !action.bufferKey) return action;
+    const data = await this.redis.getdelBuffer(action.bufferKey);
+    if (!data) throw new UnsupportedSendError('The picture expired before the device took it.');
+    const { bufferKey: _gone, ...rest } = action;
+    return { ...rest, data };
   }
 
   private session(orgId: number, deviceId: number): DeviceSession {
@@ -782,6 +823,12 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
 }
 
 /** What a failed send or action becomes for the caller: the reason, in words the user can act on. */
+/** A refusal from WhatsApp (an IQ error, carrying its code) or from the group call's own checks, as opposed to a crash in our code. */
+function isWhatsappRefusal(err: unknown): boolean {
+  const e = err as { data?: unknown; isBoom?: boolean } | null;
+  return e?.isBoom === true || typeof e?.data === 'number' || typeof e?.data === 'string';
+}
+
 function failureOf(err: unknown): DeviceCommandResult {
   if (err instanceof DeviceNotReadyError)
     return { ok: false, status: 'not_ready', message: err.message };

@@ -40,7 +40,6 @@
       "planDisabled": "Gói của bạn không bao gồm chức năng hóa đơn.",
       "invalidState": "Không thể thực hiện thao tác này ở trạng thái hiện tại của hóa đơn. Hãy tải lại và kiểm tra trạng thái.",
       "unexpected": "Đã xảy ra lỗi phía chúng tôi. Hãy thử lại.",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại"
     },
     "picker": {

@@ -10,7 +10,9 @@ import { errorKey } from '../lib/errors';
 import { LOG_VIEWS, type LogView } from '../lib/log-model';
 import { DailyChart, ScoreHistogram } from './charts';
 import { ChevronIcon, FaqIcon, SearchIcon } from './icons';
-import { CandidateList, OutcomeBadge, WhyText } from './log-parts';
+import { useFaqFlow } from './faq-flow';
+import { CandidateList, OriginTag, OutcomeBadge, WhyText } from './log-parts';
+import { VerifyChip, VerifyDetail } from './verify-parts';
 import {
   CARD,
   LoadError,
@@ -25,9 +27,10 @@ import { pct } from '../lib/decision';
 
 const RANGES = [7, 30, 90] as const;
 
-/** `/faq/insights`: how well the FAQs answer, the score spread against the threshold, what is never used, and the full match log. */
+/** The flow's insights: how well the FAQs answer, the score spread against the threshold, what is never used, and the full match log. */
 export function InsightsScreen() {
   const t = useTranslations('faq.insights');
+  const { href } = useFaqFlow();
   const canInsights = useCan('faq.insights.read');
   const [days, setDays] = useState<(typeof RANGES)[number]>(30);
   const summary = useFaqSummary(days, canInsights);
@@ -130,7 +133,7 @@ export function InsightsScreen() {
               </div>
               <p className="rounded-md bg-muted/60 p-3 text-sm">{t('hist.advice')}</p>
               <Link
-                href="/faq/settings"
+                href={href('settings')}
                 className="text-sm font-medium underline underline-offset-2"
               >
                 {t('hist.tune')}
@@ -146,7 +149,7 @@ export function InsightsScreen() {
                 <ol className="space-y-2">
                   {s.topFaqs.map((f, i) => (
                     <li key={f.faqId} className="flex items-baseline justify-between gap-3 text-sm">
-                      <Link href={`/faq/${f.faqId}`} className="min-w-0 hover:underline">
+                      <Link href={href({ faqId: f.faqId })} className="min-w-0 hover:underline">
                         <span className="me-1.5 text-muted-foreground tabular-nums">{i + 1}.</span>
                         {f.question}
                       </Link>
@@ -161,7 +164,10 @@ export function InsightsScreen() {
             <SectionCard id="faq-ins-never" title={t('never.title')}>
               <p className="text-3xl font-semibold tabular-nums">{s.neverMatched}</p>
               <p className="text-sm text-muted-foreground">{t('never.body', { days })}</p>
-              <Link href="/faq" className="text-sm font-medium underline underline-offset-2">
+              <Link
+                href={href('list')}
+                className="text-sm font-medium underline underline-offset-2"
+              >
                 {t('never.link')}
               </Link>
             </SectionCard>
@@ -285,12 +291,13 @@ function MatchLog() {
                             {t('notKept', { length: row.queryLength })}
                           </span>
                         )}
-                        {row.origin === 'test' && (
-                          <span className="ms-2 text-xs text-muted-foreground">{t('testRun')}</span>
-                        )}
+                        <OriginTag origin={row.origin} />
                       </td>
                       <td className="py-2 pe-3">
-                        <OutcomeBadge outcome={row.outcome} />
+                        <div className="flex flex-wrap items-center gap-1">
+                          <OutcomeBadge outcome={row.outcome} verify={row.verify} />
+                          {row.verify && <VerifyChip verify={row.verify} />}
+                        </div>
                       </td>
                       <td className="max-w-xs py-2 pe-3">
                         {row.faqQuestion ?? <span className="text-muted-foreground">-</span>}
@@ -304,6 +311,7 @@ function MatchLog() {
                         <td />
                         <td colSpan={5} className="space-y-3 pb-4">
                           <WhyText row={row} threshold={settings.data?.threshold} />
+                          {row.verify && <VerifyDetail verify={row.verify} />}
                           <CandidateList row={row} />
                           <dl className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-foreground">
                             {row.tier && (

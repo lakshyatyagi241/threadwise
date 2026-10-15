@@ -164,7 +164,12 @@
       "messaging": "Przepływ wiadomości",
       "messagingNote": "WhatsApp, Instagram lub Facebook — zmień kanał w węźle Wyzwalacz",
       "call": "Połączenie",
-      "callNote": "Głosowe IVR z AI — mów, słuchaj, przekieruj"
+      "callNote": "Głosowe IVR z AI — mów, słuchaj, przekieruj",
+      "subtitleSimple": "Każdy bot jest tworzony dla jednego kanału, ponieważ nie wszystkie komponenty działają w każdym kanale.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Odpowiada klientom na podłączonym numerze WhatsApp",
+      "web": "Czat na stronie",
+      "webNote": "Widżet czatu, który dodajesz do swojej strony"
     },
     "rename": {
       "title": "Zmień nazwę przepływu",
@@ -549,7 +554,12 @@
           "cardGallery": "Galeria kart",
           "cardCount": "{count, plural, one {# karta} few {# karty} many {# kart} other {# karty}}",
           "payLink": "Link do płatności",
-          "invoice": "Faktura"
+          "invoice": "Faktura",
+          "faqAllFaqs": "Wszystkie FAQ",
+          "faqCategory": "FAQ: {name}",
+          "faqScore": "min. wynik {score}",
+          "faqNotSent": "nie wysłano",
+          "faqWorkspaceScore": "wynik przepływu"
         },
         "overlays": {
           "startPinned": "To jest punkt startowy (kliknij, aby odpiąć)",
@@ -697,16 +707,20 @@
           "wordsPlaceholder": "hej, cześć, menu",
           "whatsappNumber": "Numer WhatsApp",
           "noNumberHint": "Nie połączono jeszcze żadnego numeru WhatsApp: połącz go w Ustawieniach, a następnie wybierz tutaj.",
-          "chooseNumber": "Wybierz numer…"
+          "chooseNumber": "Wybierz numer…",
+          "connectedNumber": "Odpowiada z Twojego połączonego numeru WhatsApp: {number}"
         },
         "add": {
           "addStep": "Dodaj krok",
           "groups": {
             "send": "Wyślij",
             "ask": "Zapytaj klienta",
-            "handoff": "Przekaż dalej"
+            "handoff": "Przekaż dalej",
+            "logic": "Decyzja",
+            "answer": "Odpowiedź"
           },
-          "blockedTitle": "Przyciski i listy kończą przepływ, więc mogą być tylko na końcu."
+          "blockedTitle": "Przyciski i listy kończą przepływ, więc mogą być tylko na końcu.",
+          "blockedTitleFaq": "Odpowiedz z FAQ ma dwa wyjścia, więc może być tylko ostatnim krokiem."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -715,7 +729,11 @@
           "moveUp": "Przenieś wyżej",
           "moveDown": "Przenieś niżej",
           "duplicate": "Duplikuj",
-          "deleteStep": "Usuń krok"
+          "deleteStep": "Usuń krok",
+          "faqExits": {
+            "matched": "Odpowiedziano",
+            "no_match": "Brak dopasowania"
+          }
         },
         "editors": {
           "linkLabel": "Dokąd to prowadzi",
@@ -747,7 +765,8 @@
             "placeholder": "Przycisk {n}",
             "remove": "Usuń przycisk",
             "add": "Dodaj przycisk",
-            "saveIn": "Zapisz naciśnięty przycisk w"
+            "saveIn": "Zapisz naciśnięty przycisk w",
+            "handoff": "Przekaż osobie (konsultant na żywo)"
           },
           "list": {
             "above": "Wiadomość nad listą",
@@ -779,7 +798,9 @@
             "dateFormat": "Format daty",
             "dateFormatHint": "Jak klient zapisuje datę. Jest zapisywana tak, jak wpisano, a kopia w formacie rok-miesiąc-dzień w zmiennej _iso.",
             "saveIn": "Zapisz odpowiedź w",
-            "retriesHint": "0 pyta, dopóki odpowiedź nie będzie poprawna."
+            "retriesHint": "0 pyta, dopóki odpowiedź nie będzie poprawna.",
+            "verifyOtp": "Zweryfikuj numer jednorazowym kodem",
+            "verifyOtpHint": "Kod jest wysyłany na numer (potrzebny numer kierunkowy kraju), a odwiedzający wpisuje go na czacie. Numer jest zapisywany tylko, gdy kod jest poprawny; zmienna kończąca się na _verified mówi tak lub nie."
           },
           "askFile": {
             "accepted": "Akceptowane pliki",
@@ -830,9 +851,59 @@
           },
           "cta": {
             "buttonText": "Tekst przycisku",
-            "opens": "Otwiera (link)"
+            "opens": "Otwiera (link)",
+            "type": "Otwiera",
+            "kinds": {
+              "url": "Stronę internetową",
+              "phone": "Połączenie telefoniczne",
+              "email": "E-mail"
+            },
+            "add": "Dodaj kolejny przycisk",
+            "remove": "Usuń przycisk",
+            "opensPhone": "Numer telefonu",
+            "opensEmail": "Adres e-mail"
+          },
+          "carousel": {
+            "intro": "Wiadomość nad kartami",
+            "card": "Karta {n}",
+            "image": "Link do obrazu (opcjonalnie)",
+            "title": "Tytuł",
+            "text": "Tekst",
+            "buttons": "Przyciski (do 2)",
+            "label": "Tekst przycisku",
+            "addCard": "Dodaj kartę",
+            "removeCard": "Usuń kartę",
+            "addButton": "Dodaj przycisk",
+            "removeButton": "Usuń przycisk",
+            "btnKinds": {
+              "reply": "Odpowiedz w czacie",
+              "url": "Otwórz stronę internetową",
+              "phone": "Zadzwoń pod numer",
+              "email": "Wyślij e-mail",
+              "agent": "Porozmawiaj z człowiekiem"
+            }
+          },
+          "condition": {
+            "info": "Dodaj reguły (zmienną, porównanie i wartość). Połącz je przez AND lub OR i zagnieżdżaj grupy, gdy trzeba.",
+            "yes": "Gdy reguły są spełnione, przejdź do",
+            "no": "Gdy nie są spełnione, przejdź do"
+          },
+          "handoff": {
+            "hint": "Odwiedzający trafia do tego zespołu z Twoją notatką. Po tym przycisku nie trzeba niczego łączyć."
+          },
+          "faq": {
+            "exits": {
+              "matched": "Jeśli FAQ odpowiedziało, przejdź do",
+              "no_match": "Jeśli żadne FAQ nie odpowiedziało, przejdź do"
+            },
+            "exitsHint": {
+              "matched": "Do tego czasu odpowiedź tekstowa została już wysłana. FAQ uruchamiające przepływ kontynuuje w tym przepływie.",
+              "no_match": "Nic nie było wystarczająco zbliżone albo automatyczne odpowiadanie z FAQ jest wyłączone."
+            }
           }
-        }
+        },
+        "branchAdd": "Dodaj krok dla „{title}”",
+        "faqEnds": "Ten krok kończy tę część: to, co zostanie wysłane dalej, zależy od tego, czy FAQ odpowiedziało."
       },
       "formsCore": {
         "helpers": {
@@ -1765,6 +1836,45 @@
           "afterSending": "Po wysłaniu",
           "afterSendingHint": "Włączone: przepływ wstrzymuje się tutaj i kontynuuje dalej dopiero po zapłacie klienta (kwota trafia jako {paidAmount} {paidCurrency}). Wyłączone: faktura zostaje wysłana, a przepływ przechodzi dalej od razu.",
           "waitUntilPaid": "Czekaj na płatność, a następnie kontynuuj"
+        },
+        "faq": {
+          "intro": {
+            "body": "Dopasowuje wiadomość do FAQ tego przepływu według znaczenia i odpowiada. Wychodzi przez <mono>answered</mono>, gdy FAQ odpowiedziało, a w przeciwnym razie przez <mono>no match</mono>.",
+            "sub": "Działa bez włączania automatycznego odpowiadania na FAQ w tym przepływie. <link>Zarządzaj FAQ tego przepływu</link>"
+          },
+          "exitsLabel": "Wyjścia",
+          "exitMatchedName": "Odpowiedziano",
+          "exitMatched": "FAQ odpowiedziało: jego tekst został wysłany (chyba że wysyłanie jest wyłączone) albo jego przepływ przejął obsługę i nie wraca.",
+          "exitNoMatchName": "Brak dopasowania",
+          "exitNoMatch": "nic nie było wystarczająco zbliżone, automatyczne odpowiadanie z FAQ jest wyłączone dla platformy, powiązany przepływ lub krok nie istnieje albo wiadomość była pusta.",
+          "query": "Wiadomość do dopasowania",
+          "queryHint": "Domyślnie ostatnia wiadomość klienta. Działa też zmienna zapisana przez krok Pytanie, na przykład <mono>{variable}</mono>. Wpisz /, aby ją wstawić.",
+          "category": "Tylko te FAQ",
+          "allFaqs": "Wszystkie FAQ",
+          "loadingCategories": "Ładowanie kategorii…",
+          "categoryGone": "{name} (żadne FAQ jej nie używa)",
+          "retry": "Spróbuj ponownie",
+          "minScore": "Minimalny wynik",
+          "sendAnswer": "Wyślij odpowiedź klientowi",
+          "sendAnswerToggle": "Wyślij pasującą odpowiedź tekstową jako wiadomość",
+          "sendAnswerOnHint": "Pasujące FAQ z tekstem jest wysyłane klientowi. FAQ uruchamiające przepływ kontynuuje w tym przepływie.",
+          "sendAnswerOffHint": "Nic nie jest wysyłane: odpowiedź jest tylko zapisywana w zmiennych poniżej, aby późniejszy krok mógł sam sformułować odpowiedź. FAQ uruchamiające przepływ nadal kontynuuje w tym przepływie.",
+          "save": "Zapisz wynik jako",
+          "saveHint": "Nazwa, pod którą zapisywany jest wynik. Kolejne kroki odczytują go tak, jak pokazano poniżej.",
+          "variables": {
+            "answer": "tekst odpowiedzi",
+            "matched": "tak lub nie",
+            "question": "pytanie dopasowanego FAQ",
+            "score": "jak bliskie było dopasowanie",
+            "id": "id dopasowanego FAQ"
+          },
+          "noFaqs": "Ten przepływ nie ma jeszcze FAQ, więc ten krok zawsze kończy się wyjściem no match. <link>Dodaj pierwsze FAQ tego przepływu</link>",
+          "useWorkspaceScore": "Użyj ustawienia tego przepływu",
+          "minScoreInvalid": "Wpisz liczbę od {min} do {max} lub użyj ustawienia tego przepływu.",
+          "saveFlowFirst": "Najpierw zapisz przepływ. Jego FAQ edytuje się na karcie FAQ w prostym kreatorze, a ten krok odpowiada na ich podstawie.",
+          "categoryHint": "Odpowiadać mogą tylko FAQ z tej kategorii. Kategorie pochodzą z FAQ tego przepływu.",
+          "categoriesFailed": "Nie udało się wczytać kategorii FAQ tego przepływu.",
+          "minScoreHint": "Zastępuje wynik tego przepływu tylko dla tego kroku, od {min} do {max}. Wyniki zależą od modelu embeddingów platformy, więc przed wybraniem liczby wypróbuj wiadomość w <link>teście FAQ</link> tego przepływu."
         }
       },
       "attrPicker": {
@@ -1825,6 +1935,23 @@
           "sampleName": "Miejsce testowe",
           "sampleAddress": "1 MG Road, Bengaluru"
         }
+      },
+      "webBot": {
+        "aria": "Sekcje przepływu",
+        "build": "Twórz",
+        "customize": "Dostosuj",
+        "saveFirst": "Najpierw zapisz przepływ.",
+        "needsCustomizing": "Widżet nadal używa domyślnego wyglądu. Otwórz Dostosuj.",
+        "customizeFirst": "Dostosuj widżet czatu i zapisz go raz przed publikacją.",
+        "deploy": "Wdróż",
+        "customizeFirstWhatsapp": "Spersonalizuj przycisk WhatsApp i zapisz go raz przed publikacją.",
+        "faqs": "FAQ",
+        "install": "Zainstaluj"
+      },
+      "buttonIcon": {
+        "label": "Ikona (opcjonalnie)",
+        "add": "Dodaj ikonę",
+        "saveFirst": "Zapisz bota raz, aby dodać ikonę."
       }
     },
     "contracts": {
@@ -2100,6 +2227,14 @@
         "api_library": {
           "label": "API (z biblioteki)",
           "description": "Wywołaj zapisane API z Biblioteki API"
+        },
+        "carousel": {
+          "label": "Karuzela",
+          "description": "Przewijane karty z obrazami i przyciskami"
+        },
+        "faq": {
+          "label": "Odpowiedz z FAQ",
+          "description": "Dopasuj wiadomość do Twoich FAQ"
         }
       },
       "groups": {
@@ -2148,7 +2283,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "E-mail"
+        "email": "E-mail",
+        "web": "Czat na stronie"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2242,7 +2378,8 @@
         "wrongChannel": "„{node}” nie działa na {channel} — usuń go lub ponownie włącz kanał we węźle Wyzwalacz.",
         "noSenderInstagram": "Węzeł Wyzwalacz nie ma wybranego konta Instagram — wybierz je w kroku Wyzwalacz.",
         "noSenderFacebook": "Węzeł Wyzwalacz nie ma wybranej strony Facebook — wybierz ją w kroku Wyzwalacz.",
-        "noSenderNumber": "Węzeł Wyzwalacz nie ma wybranego numeru — wybierz go w kroku Wyzwalacz."
+        "noSenderNumber": "Węzeł Wyzwalacz nie ma wybranego numeru — wybierz go w kroku Wyzwalacz.",
+        "faqMinScore": "\"{node}\" ma minimalny wynik spoza zakresu od 0.05 do 0.99 — popraw go lub zostaw puste, aby użyć ustawienia przepływu."
       }
     },
     "simpleModel": {
@@ -2321,6 +2458,18 @@
         "askLocation": {
           "label": "Lokalizacja klienta",
           "help": "Czekaj, aż klient udostępni lokalizację"
+        },
+        "carousel": {
+          "label": "Karuzela",
+          "help": "Przewijane karty z obrazami i przyciskami"
+        },
+        "condition": {
+          "label": "Warunek",
+          "help": "Rozgałęzienie według tego, co klient powiedział lub zapisał, z regułami AND / OR"
+        },
+        "faq": {
+          "label": "Odpowiedz z FAQ",
+          "help": "Dopasuj wiadomość klienta do Twoich FAQ. Kończy ten przepływ: jedno wyjście, gdy FAQ odpowiedziało, drugie, gdy nie"
         }
       },
       "typeLabel": {
@@ -2335,7 +2484,10 @@
         "location": "Lokalizacja",
         "template": "Szablon",
         "cta": "Przycisk z linkiem",
-        "assign": "Przypisz do konsultanta"
+        "assign": "Przypisz do konsultanta",
+        "carousel": "Karuzela",
+        "condition": "Warunek",
+        "faq": "Odpowiedz z FAQ"
       },
       "stepLabel": {
         "questionOf": "Pytanie · {kind}"
@@ -2372,8 +2524,13 @@
         "addRow": "Krok {stage}: dodaj co najmniej jeden wiersz.",
         "rowTitle": "Krok {stage}: każdy wiersz wymaga tytułu do {max} znaków.",
         "rowDescriptionTooLong": "Krok {stage}: opis wiersza jest dłuższy niż {max} znaków.",
-        "variableUsed": "Krok {stage}: „{name}” jest już używane przez krok {other}; nadaj każdej odpowiedzi osobną nazwę."
-      }
+        "variableUsed": "Krok {stage}: „{name}” jest już używane przez krok {other}; nadaj każdej odpowiedzi osobną nazwę.",
+        "carouselCards": "Krok {stage}: dodaj co najmniej jedną kartę i nadaj każdej karcie tytuł.",
+        "carouselButtons": "Krok {stage}: nadaj każdemu przyciskowi nazwę oraz link, numer lub adres tam, gdzie coś otwiera.",
+        "conditionIncomplete": "Krok {stage}: dokończ reguły warunku (w każdej zmienna i wartość).",
+        "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu."
+      },
+      "faqSummary": "{hasCategory, select, true {Z Twoich FAQ · {category}} other {Z Twoich FAQ}}"
     },
     "waboImport": {
       "notes": {
@@ -2381,7 +2538,11 @@
         "buttonNoTarget": "Przycisk „{type}” („{text}”) nie ma celu w uproszczonym kreatorze.",
         "skippedStep": "Pominięto krok „{sub}”: uproszczony kreator nie ma takiego odpowiednika.",
         "leadsOutside": "„{text}” prowadzi do przepływu, którego nie ma w tym pliku; kończy się tam, dopóki go nie połączysz.",
-        "connectsOutside": "Krok łączy się z węzłem, którego nie ma w tym pliku ({id}); pozostaje niepołączony."
+        "connectsOutside": "Krok łączy się z węzłem, którego nie ma w tym pliku ({id}); pozostaje niepołączony.",
+        "dateLimits": "Pytanie o datę zachowuje format, ale nie ograniczenia (najwcześniej, najpóźniej, wykluczone dni).",
+        "tooManyButtons": "Wiadomość z przyciskami miała więcej wyborów, niż się mieści; nadmiarowe przyciski pominięto.",
+        "agentTeam": "Zachowano przycisk konsultanta na żywo: wybierz zespół, który przejmie rozmowę.",
+        "tooManySlides": "Karuzela miała ponad 10 kart; nadmiarowe karty pominięto."
       },
       "reasons": {
         "notExport": "Ten plik nie jest eksportem przepływu. Użyj pliku .json wyeksportowanego z Flows lub przepływu wyeksportowanego z konsoli wabo.",
@@ -2480,7 +2641,9 @@
       "optionNotConnected": "Wyjście „{port}” (opcja {n}) nie jest połączone — zatrzymano.",
       "buttonNotConnected": "Przycisk „{label}” nie jest połączony — zatrzymano.",
       "simPurchase": "Symulowany zakup: {name} → wyjście „kupiono”",
-      "simAbandon": "Symulowane porzucenie → wyjście „porzucono”"
+      "simAbandon": "Symulowane porzucenie → wyjście „porzucono”",
+      "faqAnswered": "(symulacja) Odpowiedz z FAQ dla \"{query}\": czat testowy nie przeszukuje Twoich FAQ, więc nic nie jest wysyłane, a {ref} pozostaje puste. Wybieram wyjście \"odpowiedziano\".",
+      "faqNoMatch": "(symulacja) Odpowiedz z FAQ dla \"{query}\": czat testowy nie przeszukuje Twoich FAQ, a wyjście \"odpowiedziano\" nie jest połączone, więc wybieram \"brak dopasowania\". {ref} pozostaje puste."
     }
   }
 }

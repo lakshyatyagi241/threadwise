@@ -14,6 +14,7 @@ import {
   TELEGRAM_TEMPLATES,
 } from './_shims/tokens';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
+import { CrmModule } from '../crm';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { BotsController } from './bots.controller';
 import { BotsRepository } from './bots.repository';
@@ -32,7 +33,7 @@ import { WebhookController } from './webhook.controller';
  * one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [ChatConversationsModule, PlatformSettingsModule],
+  imports: [ChatConversationsModule, CrmModule, PlatformSettingsModule],
   controllers: [BotsController, TgBroadcastsController, WebhookController],
   providers: [
     CryptoService,

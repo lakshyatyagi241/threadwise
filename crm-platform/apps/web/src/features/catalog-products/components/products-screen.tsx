@@ -51,6 +51,9 @@ export function ProductsScreen() {
   }
 
   const list = useProductsPage(state);
+  // The contract's option schema trims its text with z.preprocess, whose output type is lost inside the generic page wrapper,
+  // so the rows are read back as the product shape they are.
+  const rows = list.items as ProductResponse[];
   const [sharing, setSharing] = useState<ProductResponse | null>(null);
   const [pendingDelete, setPendingDelete] = useState<ProductResponse | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -165,13 +168,24 @@ export function ProductsScreen() {
                         </td>
                       </tr>
                     ) : (
-                      list.items.map((p) => (
+                      rows.map((p) => (
                         <tr key={p.id} className="hover:bg-muted/50">
                           <td className="px-4 py-2.5">
                             <ProductThumb url={p.imageUrl} size="size-12" glyph="image" />
                           </td>
                           <td className="px-2 py-2.5">
-                            <div className="font-medium">{p.name}</div>
+                            <div className="flex flex-wrap items-center gap-2 font-medium">
+                              {p.name}
+                              {p.hasVariants && (
+                                <Badge
+                                  tone="neutral"
+                                  className="font-mono text-[10.5px]"
+                                  data-testid="variants-badge"
+                                >
+                                  {t('variantsBadge', { count: p.variants.length })}
+                                </Badge>
+                              )}
+                            </div>
                             {p.description ? (
                               <div className="max-w-md truncate text-[10.5px] text-muted-foreground">
                                 {truncate(p.description, 80)}

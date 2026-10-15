@@ -1,0 +1,340 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "סגירה",
+      "retry": "נסו שוב",
+      "loading": "טוען..."
+    },
+    "errors": {
+      "network": "לא הצלחנו להתחבר לשרת. בדקו את החיבור ונסו שוב.",
+      "forbidden": "אין לכם הרשאה לבצע פעולה זו.",
+      "notFound": "איש הקשר הזה כבר לא קיים.",
+      "conflict": "מישהו אחר שינה זאת בזמן שערכתם. טענו מחדש ונסו שוב.",
+      "noteRequired": "ציינו מדוע איש הקשר הסכים (מה אמר או חתם, ואיפה) לפני רישום ההסכמה.",
+      "settingsInvalid": "מילת מפתח חייבת לכלול לפחות אות או ספרה אחת, ולפחות מילת STOP אחת חייבת להישאר כל עוד הזיהוי פעיל.",
+      "rateLimited": "יותר מדי בקשות. המתינו רגע ונסו שוב.",
+      "validation": "חלק מהערכים אינם תקינים. בדקו את הטופס ונסו שוב.",
+      "unexpected": "משהו השתבש. נסו שוב.",
+      "exportInProgress": "קובץ הוכחה כבר בהכנה. המתינו לסיום ונסו שוב.",
+      "exportNotReady": "הקובץ אינו מוכן או שפג תוקפו. הכינו קובץ חדש.",
+      "noticeTargetMissing": "הווידג'ט, דף ההזמנות או החנות כבר אינם קיימים."
+    },
+    "settings": {
+      "title": "הסכמה ותשובות STOP",
+      "subtitle": "בחרו את המילים שמסירות איש קשר מהדיוור או מחזירות אותו, את התשובה שלנו, את שורת ההסרה להודעות שיווק, והאם שיווק דורש הסכמה רשומה.",
+      "exportProof": "ייצוא הוכחת הסכמה (CSV)",
+      "discard": "ביטול שינויים",
+      "save": "שמירת שינויים",
+      "saved": "הגדרות ההסכמה נשמרו.",
+      "conflict": "מישהו אחר שמר את ההגדרות קודם. הטופס מציג כעת את מה שנשמר.",
+      "conflictOk": "אישור",
+      "problems": {
+        "noOptOutWord": "הוסיפו לפחות מילת STOP אחת, או כבו את הזיהוי.",
+        "badLang": "קוד שפה נראה כך: en, ar או pt-BR."
+      }
+    },
+    "policy": {
+      "title": "מדיניות שיווק",
+      "requireConsent": "דרישת הסכמה רשומה לשליחות שיווק",
+      "requireConsentHint": "כבוי: השיווק נשלח לכל איש קשר שלא ביטל הסכמה. פעיל: רק לאנשי קשר עם הסכמה רשומה. בקהלי קמפיינים ושידורים מוצג כמה דולגו.",
+      "withdrawnAlways": "אנשי קשר שביטלו הסכמה מדולגים תמיד, בלי קשר למתג הזה."
+    },
+    "detect": {
+      "title": "תשובות STOP ו-START",
+      "enabled": "זיהוי תשובות STOP ו-START",
+      "enabledHint": "כשאיש קשר שולח רק אחת מהמילים שלהלן, הוא מוסר מהדיוור או חוזר אליו בערוץ הזה.",
+      "autoReply": "שליחת תשובת אישור",
+      "autoReplyHint": "תשובת טקסט חופשי קצרה בתוך חלון 24 השעות, נשלחת פעם אחת לכל שינוי. היא אינה קמפיין ואינה נספרת כשיווק.",
+      "rule": "ההודעה כולה חייבת להיות מילת המפתח: אותיות גדולות, רווחים, סימני פיסוק, אמוג'י וניקוד ערבי מתעלמים. “תפסיקו לשלוח לי חשבוניות” או “אל תפסיקו” אינם תואמים, כך שאף אחד לא מוסר מהדיוור בטעות."
+    },
+    "lang": {
+      "groupLabel": "מילים ותשובות עבור {lang}",
+      "title": "שפה",
+      "remove": "הסרת שפה",
+      "optOutWords": "מילות STOP (הסרה)",
+      "optInWords": "מילות START (חזרה)",
+      "wordsHint": "אחת בכל שורה.",
+      "optOutReply": "תשובה אחרי STOP",
+      "optInReply": "תשובה אחרי START",
+      "replyHint": "אפשר להשתמש ב-'{{name}}' לשם הפרטי של איש הקשר. הסבירו איך לחזור.",
+      "footer": "שורת הסרה להודעות שיווק",
+      "footerHint": "מתווספת מתחת לטקסטים שיווקיים. אמרו לאנשים איזו מילה לשלוח.",
+      "add": "הוספת שפה",
+      "addHint": "קוד שפה כמו fr או pt-BR.",
+      "invalid": "השתמשו בקוד כמו fr או pt-BR.",
+      "addButton": "הוספה"
+    },
+    "footer": {
+      "title": "שורת ההסרה",
+      "intro": "בעורכי השידורים והקמפיינים אפשר להוסיף שורה זו מתחת לטקסטים שיווקיים כדי שהנמענים ידעו שהם יכולים להשיב STOP. תבניות מאושרות לעולם לא משתנות: שימו את השורה בתבנית עצמה.",
+      "defaultOn": "אזהרה כשבטקסט שיווקי אין שורת הסרה",
+      "defaultOnHint": "העורך מציג אזהרה וכפתור להוספת השורה בלחיצה אחת.",
+      "noneSet": "לא הוגדרה שורת הסרה באף שפה.",
+      "previewLabel": "מה שהנמען רואה",
+      "sample": "מבצע האביב שלנו מתחיל היום. בקרו אותנו השבוע."
+    },
+    "test": {
+      "title": "בדיקת הודעה",
+      "intro": "הקלידו מה איש קשר עשוי לשלוח וראו מה יקרה. שום דבר לא משתנה ולא נשלח. הבדיקה משתמשת במילים שלמעלה, גם לפני השמירה.",
+      "label": "הודעה מאיש קשר",
+      "run": "בדיקה",
+      "failed": "הבדיקה לא הצליחה לרוץ. נסו שוב.",
+      "outcome": {
+        "opts_out": "פעולה זו מסירה את איש הקשר משיווק.",
+        "opts_in": "פעולה זו מחזירה את איש הקשר.",
+        "no_match": "לא קורה כלום: ההודעה אינה מילת מפתח.",
+        "detection_off": "לא קורה כלום: הזיהוי כבוי."
+      },
+      "matched": "תואם למילת המפתח “{keyword}” ({lang}).",
+      "replyLabel": "איש הקשר מקבל",
+      "noReply": "לא נשלחת תשובה."
+    },
+    "card": {
+      "title": "הסכמה",
+      "status": {
+        "optedOut": "הוסר מהדיוור",
+        "subscribed": "רשום",
+        "none": "לא נרשמה הסכמה"
+      },
+      "export": "ייצוא הוכחה (CSV)",
+      "markSubscribed": "סימון כרשום",
+      "markUnsubscribed": "סימון כמוסר מהדיוור",
+      "loading": "טוען הסכמה...",
+      "noneRecorded": "לא נרשמה הסכמה לאיש קשר זה. שליחות שיווק פועלות לפי מדיניות סביבת העבודה שלכם.",
+      "perChannel": "הסכמה לפי ערוץ",
+      "timeline": "היסטוריית הסכמה",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "אימייל",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "צ'אט באתר",
+        "voice": "שיחת קול",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "state": {
+        "granted": "רשום",
+        "withdrawn": "הוסר מהדיוור",
+        "utilityGranted": "הסכים להודעות שירות",
+        "utilityWithdrawn": "הודעות שירות הופסקו"
+      },
+      "action": {
+        "granted": "רשום",
+        "withdrawn": "הוסר מהדיוור",
+        "utilityGranted": "הסכים שייצרו איתו קשר בנוגע לפנייתו",
+        "utilityWithdrawn": "הפסיק הודעות שירות"
+      },
+      "source": {
+        "form": "טופס",
+        "keyword": "תשובת מילת מפתח",
+        "manual": "נרשם על ידי אדם",
+        "import": "ייבוא",
+        "api": "API",
+        "flow": "תהליך",
+        "inbound_message": "הודעה",
+        "contact_request": "בקשת איש קשר",
+        "legacy": "לפני היסטוריית ההסכמה",
+        "widget": "צ'אט באתר",
+        "booking": "דף הזמנות",
+        "commerce": "קופה בחנות",
+        "lead": "קליטת לידים"
+      },
+      "by": "על ידי {name}",
+      "evidence": {
+        "consentText": "הטקסט שהוצג",
+        "consentVersion": "גרסה",
+        "consentHash": "גיבוב",
+        "formId": "טופס",
+        "submissionId": "הגשה",
+        "messageId": "הודעה",
+        "keyword": "מילת מפתח",
+        "fileName": "קובץ",
+        "apiKeyId": "מפתח API",
+        "flowId": "תהליך",
+        "reference": "הפניה",
+        "noticeVersion": "גרסת ההודעה",
+        "noticeUrl": "קישור להודעה",
+        "widgetId": "ווידג'ט צ'אט",
+        "bookingTypeId": "דף הזמנות",
+        "integrationId": "חנות",
+        "storeFlag": "הגדרת חנות",
+        "leadSourceId": "מקור הליד",
+        "leadFormId": "טופס ליד",
+        "adId": "מודעה"
+      },
+      "dialog": {
+        "titleGranted": "סימון כרשום",
+        "titleWithdrawn": "סימון כמוסר מהדיוור",
+        "introGranted": "רישום שאיש הקשר הזה הסכים לקבל הודעות שיווק. הסיבה נשמרת כהוכחה.",
+        "introWithdrawn": "רישום שאיש הקשר הזה כבר לא רוצה הודעות שיווק. כל קמפיין ושידור ידלגו עליו.",
+        "channel": "ערוץ",
+        "noteRequired": "מדוע? (חובה)",
+        "noteOptional": "הערה (אופציונלי)",
+        "noteHint": "לדוגמה: חתם על הטופס המודפס בדלפק, או הסכים באימייל ב-3 במרץ.",
+        "confirm": "שמירה",
+        "cancel": "ביטול",
+        "close": "סגירה",
+        "savedGranted": "סומן כרשום.",
+        "savedWithdrawn": "סומן כמוסר מהדיוור."
+      }
+    },
+    "composer": {
+      "add": "הוספת שורת הסרה",
+      "missing": "הודעת השיווק הזו לא מסבירה לאנשים איך להסיר את עצמם. הוסיפו שורה כמו “השיבו STOP להסרה מהרשימה”.",
+      "addButton": "הוספת השורה",
+      "templateHint": "תבניות קבועות לפי האישור שלהן. כדי ליידע אנשים שהם יכולים להסיר את עצמם, כללו בתבנית עצמה שורה כמו “{line}”.",
+      "footerSuggestion": "מוצע לתבנית שיווקית: \"{line}\"",
+      "footerUse": "השתמש בזה ככותרת תחתונה"
+    },
+    "import": {
+      "legend": "הסכמה",
+      "label": "יש לי הסכמה לשלוח הודעות לאנשי הקשר האלה",
+      "hint": "כשהתיבה מסומנת, כל אנשי הקשר בקובץ נרשמים כמי שהסכימו לשיווק, ושם הקובץ נשמר כהוכחה. כשהיא לא מסומנת, הייבוא לא רושם הסכמה כלשהי. אנשי קשר שביטלו את הרישום נשארים מוסרים.",
+      "hintColumn": "העמודה שממופה להסכמה לשיווק קובעת מי נרשם: רק שורות שמציינות כן מקבלות הסכמה, עם שם הקובץ כהוכחה. לא, תא ריק או מילה לא מוכרת לא רושמים דבר. אנשי קשר שביטלו הרשמה נשארים מבוטלים.",
+      "columnSummary": "{granted} שורות מציינות כן ויירשמו. {notGranted} מציינות לא או ריקות ולא יקבלו רשומת הסכמה.",
+      "unrecognised": "ל-{count, plural, one {שורה #} other {# שורות}} יש ערך הסכמה שאינו כן או לא ({values}). הערך נחשב כלא ניתן להסכמה. השתמשו ב-yes / no, true / false או 1 / 0.",
+      "columnIgnored": "עמודת ההסכמה לא פועלת עד שתסמנו את התיבה למעלה.",
+      "noticeText": "הודעה או בסיס משפטי (לא חובה)",
+      "noticeTextHint": "למה אנשי הקשר האלה הסכימו ואיפה, לדוגמה: נרשמו בקופה לפי הודעת הפרטיות v3. נשמר כראיה עם כל הסכמה שנרשמה.",
+      "noticeVersion": "גרסת ההודעה (לא חובה)",
+      "smsSummary": "עמודת הסכמה ל-SMS: {granted} שורות אומרות כן ויירשמו כהסכמה ל-SMS. {notGranted} אומרות לא או ריקות.",
+      "emailSummary": "עמודת הסכמה לאימייל: {granted} שורות אומרות כן ויירשמו כהסכמה לאימייל (השורה צריכה גם כתובת אימייל). {notGranted} אומרות לא או ריקות.",
+      "labelNumbers": "יש לי הסכמה לשלוח הודעות למספרים האלה",
+      "hintNumbers": "כשמסומן, בעת שיגור התפוצה כל מספר בקובץ נרשם כמי שהסכים לשיווק, כשם הקובץ משמש ראיה. כשלא מסומן לא נרשמת הסכמה. מי שהסיר את עצמו נשאר מוסר."
+    },
+    "systemLine": {
+      "withdrawn": "איש הקשר ענה {keyword}: בוטלה הרשמה לשיווק",
+      "granted": "איש הקשר ענה {keyword}: נרשם מחדש לשיווק"
+    },
+    "proof": {
+      "title": "קבצי הוכחה שהוכנו",
+      "prepare": "הכנת קובץ ההוכחה המלא",
+      "preparing": "מכין את קובץ ההוכחה",
+      "largeHint": "היומן גדול מ-{max} אירועים, ולכן הקובץ מוכן ברקע",
+      "large": "היומן מכיל יותר מ-{max} אירועים, יותר ממה שהורדה ישירה יכולה להכיל. הכינו את הקובץ המלא: הוא נבנה ברקע ותקבלו הודעת דוא\"ל כשהוא מוכן.",
+      "none": "אין עדיין קבצים מוכנים.",
+      "keptFor": "אפשר להוריד קובץ מוכן במשך {days} ימים, ואז הוא נמחק. ניתן להכין קובץ אחד בלבד בכל פעם.",
+      "rows": "{count, plural, one {# אירוע} other {# אירועים}}",
+      "expires": "זמין עד {date}",
+      "download": "הורדת CSV",
+      "failed": "לא ניתן היה לבנות את הקובץ. הכינו אותו שוב.",
+      "status": {
+        "queued": "ממתין",
+        "running": "נבנה",
+        "ready": "מוכן",
+        "failed": "נכשל",
+        "expired": "פג תוקף"
+      }
+    },
+    "unsubscribe": {
+      "title": "ביטול הרשמה לדוא\"ל שיווקי",
+      "intro": "אשרו שאינכם רוצים עוד לקבל דוא\"ל שיווקי מהעסק הזה. תמשיכו לקבל הודעות על ההזמנות והפגישות שלכם.",
+      "confirm": "ביטול הרשמה",
+      "working": "מבטל הרשמה...",
+      "doneTitle": "ההרשמה בוטלה",
+      "doneBody": "לא תקבלו עוד הודעות שיווקיות מהעסק הזה.",
+      "already": "כבר ביטלתם את ההרשמה.",
+      "invalidTitle": "הקישור אינו תקין",
+      "invalidBody": "קישור ביטול ההרשמה חלקי או שונה. השתמשו בקישור בדוא\"ל האחרון שקיבלתם.",
+      "error": "משהו השתבש. נסו שוב."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "מותר: ההודעה נמסרה קודם.",
+        "consent_evidence_recorded": "מותר: ההודעה נמסרה והאדם הסכים.",
+        "purpose_not_enabled": "אסור: סביבת העבודה לא הפעילה זאת.",
+        "consent_declined": "אסור: האדם סירב.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "שורת הסכמה בטופס הצ'אט",
+        "booking": "שורת הסכמה בדף ההזמנות",
+        "commerce": "מה משמעות תיבת השיווק של החנות",
+        "workspace": "הודעת הסכמה ברירת מחדל"
+      },
+      "intro": {
+        "widget": "מוצגת תיבת סימון מתחת לפרטי המבקר. רק מבקר שמסמן אותה נרשם כמסכים, ורק אם מסר מספר טלפון או אימייל.",
+        "booking": "מוצגת תיבת סימון בטופס ההזמנה. רק מי שמסמן אותה נרשם כמסכים; ההזמנה אינה דורשת אותה לעולם.",
+        "commerce": "לקוח שמאשר שיווק בחנות שלך נרשם כמסכים. כתבו מה התיבה אומרת לו, כדי שההוכחה תציין זאת.",
+        "workspace": "הנוסח שסביבת העבודה שלך מציגה ליד תיבת הסכמה כשלטופס, לווידג'ט או לדף הזמנה אין נוסח משלהם. כל שינוי הוא גרסה ממוספרת חדשה."
+      },
+      "enabled": "שורת הסכמה פעילה",
+      "text": "הנוסח שהאדם מסכים לו",
+      "textHint": "עד {max} תווים. כל שינוי נשמר כגרסה חדשה.",
+      "textRequired": "כתבו את הנוסח לפני הפעלת השורה.",
+      "url": "קישור למדיניות הפרטיות שלכם (אופציונלי)",
+      "urlHint": "חייב להתחיל ב-https://",
+      "save": "שמירת שורת ההסכמה",
+      "saved": "שורת ההסכמה נשמרה (גרסה {version}).",
+      "version": "הגרסה הנוכחית: {version}",
+      "noVersion": "עדיין לא נשמר.",
+      "saveFirst": "שמרו קודם את זה, ואז תוכלו להגדיר את שורת ההסכמה שלו.",
+      "whatsappToo": "ספור גם כהסכמה בוואטסאפ (רק אם הנוסח אומר זאת)",
+      "termsUrl": "קישור לתנאים שלך (אופציונלי)",
+      "termsUrlHint": "חייב להתחיל ב-https://",
+      "useWorkspacePrivacy": "השתמש בקישור הפרטיות של סביבת העבודה שלי",
+      "useWorkspaceTerms": "השתמש בקישור התנאים של סביבת העבודה שלי",
+      "useWorkspaceText": "השתמש בנוסח ברירת המחדל של סביבת העבודה שלי"
+    }
+  }
+}

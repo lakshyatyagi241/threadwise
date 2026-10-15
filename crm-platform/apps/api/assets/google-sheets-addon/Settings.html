@@ -4,7 +4,7 @@
     <base target="_top" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CRM settings</title>
+    <title>Initial Setup</title>
     <style>
       body {
         font:
@@ -30,7 +30,8 @@
         margin: 14px 0 4px;
       }
       input[type='password'],
-      input[type='text'] {
+      input[type='text'],
+      select {
         width: 100%;
         box-sizing: border-box;
         padding: 8px;
@@ -94,6 +95,27 @@
         margin: 6px 0 0 18px;
         padding: 0;
       }
+      .check {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin: 10px 0 0;
+        font-weight: normal;
+      }
+      .check input {
+        margin-top: 3px;
+      }
+      table {
+        border-collapse: collapse;
+        margin-top: 6px;
+        width: 100%;
+      }
+      td {
+        border: 1px solid #d3d9e0;
+        padding: 3px 6px;
+        font-size: 12px;
+        word-break: break-all;
+      }
       .sr-only {
         position: absolute;
         width: 1px;
@@ -104,32 +126,63 @@
     </style>
   </head>
   <body>
-    <h1>CRM settings</h1>
+    <h1>Initial Setup</h1>
     <p class="muted">
-      Your personal key connects this sheet to your CRM workspace. It stays in your own Google
-      account.
+      Connect this sheet to your CRM. New or changed rows are sent to the CRM as contacts. The
+      Webhook URL stays in your own Google account.
     </p>
 
     <div id="current" class="box" hidden>
-      <p><strong>Saved key</strong></p>
+      <p><strong>Connected</strong></p>
       <p id="masked" class="masked"></p>
     </div>
 
     <form id="form" novalidate>
-      <label for="key">Paste your key</label>
+      <label for="url">Webhook URL</label>
       <input
-        id="key"
+        id="url"
         type="password"
         autocomplete="off"
         spellcheck="false"
-        aria-describedby="hint"
+        aria-describedby="urlhint"
       />
-      <p id="hint" class="muted">
-        Create it in the CRM under Settings, Google Sheets add-on. It starts with wsn_live_.
+      <p id="urlhint" class="muted">
+        Copy it from the CRM under Settings, Google Sheets add-on. Leave it empty to keep the saved
+        one.
       </p>
+
+      <label for="sheet">Sheet to watch</label>
+      <select id="sheet"></select>
+
+      <label for="column">Trigger column</label>
+      <input
+        id="column"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        aria-describedby="colhint"
+      />
+      <p id="colhint" class="muted">
+        A column letter such as F, or its heading in row 1. A row is sent when this cell is filled
+        or changed. Leave empty to send on any change.
+      </p>
+
+      <label class="check" for="onEvent">
+        <input id="onEvent" type="checkbox" />
+        <span>Send on event: send a row right away when you edit it in this sheet.</span>
+      </label>
+      <label class="check" for="onSchedule">
+        <input id="onSchedule" type="checkbox" />
+        <span>
+          Send on schedule: every hour, send rows that were added or changed from somewhere else (a
+          form, an import, another app).
+        </span>
+      </label>
+
       <div class="row">
-        <button id="save" type="submit">Save and check</button>
-        <button id="remove" type="button" class="danger" hidden>Remove key</button>
+        <button id="test" type="button" class="secondary">Send Test</button>
+        <button id="save" type="submit">Submit</button>
+        <button id="remove" type="button" class="danger" hidden>Remove connection</button>
         <button id="close" type="button" class="secondary">Close</button>
       </div>
     </form>
@@ -141,20 +194,35 @@
         return document.getElementById(id);
       };
       var busy = false;
+      var hasKey = false;
 
       function setBusy(value) {
         busy = value;
         el('save').disabled = value;
+        el('test').disabled = value;
         el('remove').disabled = value;
       }
 
       function showState(state) {
+        hasKey = state.hasKey;
         el('current').hidden = !state.hasKey;
         el('remove').hidden = !state.hasKey;
-        el('masked').textContent = state.masked || '';
+        el('masked').textContent = state.hasKey ? state.base + ' ' + state.masked : '';
+        var select = el('sheet');
+        select.textContent = '';
+        (state.sheets || []).forEach(function (name) {
+          var option = document.createElement('option');
+          option.value = name;
+          option.textContent = name;
+          if (name === state.sheet) option.selected = true;
+          select.appendChild(option);
+        });
+        el('column').value = state.column || '';
+        el('onEvent').checked = state.onEvent === true;
+        el('onSchedule').checked = state.onSchedule === true;
       }
 
-      function show(kind, lines) {
+      function show(kind, lines, fields) {
         var box = el('result');
         box.textContent = '';
         var wrap = document.createElement('div');
@@ -164,25 +232,25 @@
           p.textContent = lines[i];
           wrap.appendChild(p);
         }
+        if (fields && fields.length) {
+          var table = document.createElement('table');
+          var tr = document.createElement('tr');
+          fields.forEach(function (name) {
+            var td = document.createElement('td');
+            td.textContent = name;
+            tr.appendChild(td);
+          });
+          table.appendChild(tr);
+          wrap.appendChild(table);
+        }
         box.appendChild(wrap);
       }
 
       function connectedLines(info) {
-        var can = info.can || {};
         var lines = [
           'Connected as ' + (info.user.name || 'a member') + ' (' + (info.user.email || '') + ').',
           'Workspace: ' + (info.workspace.name || ''),
         ];
-        var allowed = [];
-        if (can.read_contacts) allowed.push('pull contacts');
-        if (can.write_contacts) allowed.push('push contacts');
-        if (can.read_catalog) allowed.push('see shops');
-        if (can.write_catalog) allowed.push('sync products');
-        lines.push(
-          allowed.length
-            ? 'Your role can: ' + allowed.join(', ') + '.'
-            : 'Your role cannot use any action of this add-on yet. Ask an admin.',
-        );
         return lines;
       }
 
@@ -192,17 +260,31 @@
         show('error', lines);
       }
 
-      el('form').addEventListener('submit', function (event) {
-        event.preventDefault();
-        if (busy) return;
-        var value = el('key').value;
-        if (value.trim() === '') {
-          show('error', ['Paste your key first.']);
-          el('key').focus();
-          return;
+      function values() {
+        return {
+          url: el('url').value,
+          sheet: el('sheet').value,
+          column: el('column').value,
+          onEvent: el('onEvent').checked,
+          onSchedule: el('onSchedule').checked,
+        };
+      }
+
+      function needUrl(v) {
+        if (v.url.trim() === '' && !hasKey) {
+          show('error', ['Paste the Webhook URL from the CRM first.']);
+          el('url').focus();
+          return true;
         }
+        return false;
+      }
+
+      el('test').addEventListener('click', function () {
+        if (busy) return;
+        var v = values();
+        if (needUrl(v)) return;
         setBusy(true);
-        show('', ['Checking the key...']);
+        show('', ['Sending a test row...']);
         google.script.run
           .withSuccessHandler(function (result) {
             setBusy(false);
@@ -210,22 +292,58 @@
               fail(result);
               return;
             }
-            el('key').value = '';
-            google.script.run.withSuccessHandler(showState).getSettingsState();
-            show('ok', connectedLines(result));
+            var lines = connectedLines(result);
+            lines.push(
+              result.sampleRow
+                ? 'The CRM received row 2 as a test (nothing was saved). It saw these columns:'
+                : 'The CRM received the column headings (the sheet has no data row yet). It saw:',
+            );
+            if (!result.triggerFound) lines.push('The trigger column was not found in row 1.');
+            show('ok', lines, result.fields);
           })
           .withFailureHandler(function () {
             setBusy(false);
             show('error', ['The add-on could not run. Close this window and try again.']);
           })
-          .saveKey(value);
+          .testWebhook(v.url.trim() === '' ? '' : v.url, v.column, v.sheet);
+      });
+
+      el('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (busy) return;
+        var v = values();
+        if (needUrl(v)) return;
+        setBusy(true);
+        show('', ['Saving...']);
+        google.script.run
+          .withSuccessHandler(function (result) {
+            setBusy(false);
+            if (!result.ok) {
+              fail(result);
+              return;
+            }
+            el('url').value = '';
+            google.script.run.withSuccessHandler(showState).getSettingsState();
+            var lines = connectedLines(result);
+            lines.push(
+              'Saved. ' +
+                (result.triggers.onEvent ? 'Sending on every edit. ' : '') +
+                (result.triggers.onSchedule ? 'Sweeping every hour.' : ''),
+            );
+            show('ok', lines);
+          })
+          .withFailureHandler(function () {
+            setBusy(false);
+            show('error', ['The add-on could not run. Close this window and try again.']);
+          })
+          .submitSetup(v);
       });
 
       el('remove').addEventListener('click', function () {
         if (
           busy ||
           !window.confirm(
-            'Remove the saved key from this Google account? The add-on stops working until you paste a key again.',
+            'Remove the connection from this Google account? Rows stop being sent until you set it up again.',
           )
         )
           return;
@@ -233,12 +351,12 @@
         google.script.run
           .withSuccessHandler(function () {
             setBusy(false);
-            showState({ hasKey: false, masked: '' });
-            show('ok', ['The key was removed from this Google account.']);
+            google.script.run.withSuccessHandler(showState).getSettingsState();
+            show('ok', ['The connection was removed and sending was stopped.']);
           })
           .withFailureHandler(function () {
             setBusy(false);
-            show('error', ['The key could not be removed. Try again.']);
+            show('error', ['The connection could not be removed. Try again.']);
           })
           .clearKey();
       });

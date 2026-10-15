@@ -7,7 +7,7 @@ import type { MessageStatus } from '@crm/contracts';
 import { WhatsappGlyph } from '@/features/channel-whatsapp-cloud';
 import { isUnofficialChannelKind } from '@/lib/unofficial-whatsapp';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
-import { errorCode, errorKind, requestIdOf } from '../lib/errors';
+import { errorCode, errorKind } from '../lib/errors';
 import { avatarColor, initials } from '../lib/time';
 import { AlertIcon, CloseIcon, ClockIcon } from './icons';
 
@@ -63,7 +63,13 @@ export function ChannelTag({
   if (isUnofficialChannelKind(kind) && !unofficial) return null;
   const whatsapp = kind === 'whatsapp_cloud';
   const label =
-    kind === 'whatsapp_qr' ? 'QR' : kind === 'simulator' ? 'SIM' : kind.slice(0, 3).toUpperCase();
+    kind === 'whatsapp_qr'
+      ? 'QR'
+      : kind === 'simulator'
+        ? 'SIM'
+        : kind === 'email'
+          ? 'EML'
+          : kind.slice(0, 3).toUpperCase();
   return (
     <span
       title={name}
@@ -234,7 +240,6 @@ export function useErrorText() {
     const code = typeof error === 'string' ? error : errorCode(error);
     const kind = errorKind(code);
     if (kind !== 'generic') return t(kind);
-    const id = typeof error === 'string' ? undefined : requestIdOf(error);
-    return id ? t('genericWithId', { id }) : t('generic');
+    return t('generic');
   };
 }

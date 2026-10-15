@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import { Field, Input, Select } from '@crm/ui';
 import { timezoneList } from '@/lib/timezones';
 import type { BuilderForm } from '../../lib/builder-model';
-import { AutoEndField, SmartDelivery, TrackClicks } from './delivery-extras';
+import { isEmailEngine } from '../../lib/engine-gate';
+import { AutoEndField, RetryFailed, SmartDelivery, TrackClicks } from './delivery-extras';
 import { ChoiceCard, StepCard } from './parts';
 
 const SCHEDULES = ['now', 'scheduled', 'recurring'] as const;
@@ -19,12 +20,16 @@ export function StepSchedule({
   form,
   patch,
   minDate,
+  engine = '',
 }: {
   form: BuilderForm;
   patch: (p: Partial<BuilderForm>) => void;
   minDate: string;
+  /** The picked sender's engine: an email campaign has no Smart Delivery and no click tracking (its runner honours the auto-end date alone). */
+  engine?: string;
 }) {
   const t = useTranslations('campaigns.builder.delivery');
+  const email = isEmailEngine(engine);
   const later = form.scheduleType !== 'now';
   const zones = useMemo(() => timezoneList(form.timezone), [form.timezone]);
   return (
@@ -112,16 +117,22 @@ export function StepSchedule({
         </div>
       )}
 
-      <SmartDelivery
-        zone={form.timezone}
-        values={form}
-        onChange={(key, value) => patch({ [key]: value } as Partial<BuilderForm>)}
-      />
+      {!email && (
+        <SmartDelivery
+          zone={form.timezone}
+          values={form}
+          onChange={(key, value) => patch({ [key]: value } as Partial<BuilderForm>)}
+        />
+      )}
 
-      <TrackClicks
-        checked={form.trackingEnabled}
-        onChange={(trackingEnabled) => patch({ trackingEnabled })}
-      />
+      <RetryFailed checked={form.retryFailed} onChange={(retryFailed) => patch({ retryFailed })} />
+
+      {!email && (
+        <TrackClicks
+          checked={form.trackingEnabled}
+          onChange={(trackingEnabled) => patch({ trackingEnabled })}
+        />
+      )}
     </StepCard>
   );
 }

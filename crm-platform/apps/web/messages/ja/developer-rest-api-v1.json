@@ -96,8 +96,7 @@
       "unexpected": "当社側で問題が発生しました。しばらくしてからもう一度お試しください。",
       "loadFailed": "APIキーを読み込めませんでした。",
       "retry": "再試行",
-      "upgrade": "プランを見る",
-      "requestId": "リクエストID：{id}"
+      "upgrade": "プランを見る"
     }
   }
 }

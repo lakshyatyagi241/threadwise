@@ -9,6 +9,8 @@ import {
   wizardBroadcastListSchema,
   wizardContactsPageSchema,
   wizardControlResponseSchema,
+  wizardDeleteResponseSchema,
+  wizardRetryFailedResponseSchema,
   wizardCsvReportSchema,
   wizardCreditCheckSchema,
   wizardDraftResponseSchema,
@@ -67,7 +69,11 @@ export function useWizardSenders() {
     queryKey: KEYS.senders,
     queryFn: ({ signal }) =>
       apiFetch(`${BASE}/senders`, { schema: wizardSendersResponseSchema, signal }),
-    staleTime: 60_000,
+    // The numbers come and go (one connected a moment ago, one that just disconnected): read them again on every visit and when the
+    // window regains focus, so the "Send from" list is never a minute behind.
+    staleTime: 0,
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: true,
   });
 }
 
@@ -221,6 +227,21 @@ export const controlBroadcast = (id: string, action: BroadcastAction) =>
     schema: wizardControlResponseSchema,
   });
 
+/** Delete a launched broadcast: a one-off with its recipients, or a recurring series that has not sent anything yet. */
+export const deleteBroadcast = (id: string) =>
+  apiFetch(`${BASE}/broadcasts/${id}`, { method: 'DELETE', schema: wizardDeleteResponseSchema });
+
+/** The recipients of a launched broadcast as a CSV download (a series: every run, with a Run column). */
+export const exportBroadcastPath = (id: string) => `/broadcast-wizard/broadcasts/${id}/export`;
+
+/** Retry failed: the recipients whose message failed go back in the queue (a series: in every finished run). */
+export const retryFailedBroadcast = (id: string) =>
+  apiFetch(`${BASE}/broadcasts/${id}/retry-failed`, {
+    method: 'POST',
+    body: {},
+    schema: wizardRetryFailedResponseSchema,
+  });
+
 // ---------------------------------------------------------------------------------------- the audience modes
 
 export const PER_PAGE_CHOICES = WIZARD_CONTACT_PAGE_SIZES;
@@ -264,10 +285,22 @@ export function useCsvReport(id: string | null) {
   });
 }
 
-/** Uploads the CSV as multipart; the server parses and validates it and answers with the report. */
-export async function uploadCsv(file: File, signal?: AbortSignal): Promise<WizardCsvReport> {
+/**
+ * Uploads the CSV as multipart; the server parses and validates it and answers with the report. `options` carries the uploader's
+ * confirmation that they hold consent for the numbers (BL-170) and the notice they stated; without it the upload records no consent.
+ */
+export async function uploadCsv(
+  file: File,
+  options: {
+    consentConfirmed?: boolean;
+    consentNoticeText?: string;
+    consentNoticeVersion?: string;
+  } = {},
+  signal?: AbortSignal,
+): Promise<WizardCsvReport> {
   const form = new FormData();
   form.set('file', file);
+  if (options.consentConfirmed) form.set('options', JSON.stringify(options));
   const res = await fetch(`/api/v2${BASE}/csv`, {
     method: 'POST',
     body: form,

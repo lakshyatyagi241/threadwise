@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "यह आपके प्लान में शामिल नहीं है। पूरी हिस्ट्री इंपोर्ट करने के लिए अपग्रेड करें।",
+        "fullLockedLink": "प्लान देखें"
+      }
+    }
+  }
+}

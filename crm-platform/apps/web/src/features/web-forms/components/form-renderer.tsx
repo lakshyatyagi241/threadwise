@@ -426,6 +426,7 @@ export function FormRenderer(props: FormRendererProps) {
               uid={uid}
               text={form.consent.text}
               privacyUrl={form.consent.privacyUrl}
+              termsUrl={form.consent.termsUrl}
               required={form.consent.required}
               checked={answers[CONSENT_KEY] === true}
               issue={issueFor(CONSENT_KEY)}
@@ -500,6 +501,7 @@ function ConsentView({
   uid,
   text,
   privacyUrl,
+  termsUrl,
   required,
   checked,
   issue,
@@ -509,6 +511,7 @@ function ConsentView({
   uid: string;
   text: string;
   privacyUrl?: string;
+  termsUrl?: string;
   required: boolean;
   checked: boolean;
   issue: FieldIssue | undefined;
@@ -546,6 +549,14 @@ function ConsentView({
               {' '}
               <a href={privacyUrl} target="_blank" rel="noopener noreferrer">
                 {t('privacyPolicy')}
+              </a>
+            </>
+          ) : null}
+          {termsUrl && /^https:\/\//i.test(termsUrl) ? (
+            <>
+              {' '}
+              <a href={termsUrl} target="_blank" rel="noopener noreferrer">
+                {t('termsOfService')}
               </a>
             </>
           ) : null}

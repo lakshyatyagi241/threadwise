@@ -56,6 +56,9 @@ x-api-env: &api-env
   SMTP_FROM: ${SMTP_FROM}
   WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN}
   WHATSAPP_APP_SECRET: ${WHATSAPP_APP_SECRET}
+  # The Help assistant's model vendor; the model is that vendor's default model in the platform AI keys (HELP_AGENT_MODEL overrides it).
+  HELP_AGENT_PROVIDER: ${HELP_AGENT_PROVIDER:-openrouter}
+  HELP_AGENT_MODEL: ${HELP_AGENT_MODEL:-}
   # WhatsApp Cloud API / Interakt embedded signup (blank = "not configured" on the Channels screen).
   WABA_DEFAULT_PROVIDER: ${WABA_DEFAULT_PROVIDER:-interakt}
   WABA_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN}
@@ -73,6 +76,13 @@ x-api-env: &api-env
   # Google Calendar for workspaces (blank = set the client on the console's Google Calendar page instead).
   GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
   GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+  # Waboo migration panel: "remote" = the pipeline runs on a runner agent on a machine on the Geta VPN (tools/migration/pilot/staging/runner-agent.cjs).
+  # The token (32+ characters) is shared with the agent; empty = the agent endpoints refuse everyone. Runbook: tools/migration/pilot/staging/STAGING-RUNBOOK.md.
+  WABOO_MIGRATE_RUNNER: ${WABOO_MIGRATE_RUNNER:-}
+  WABOO_RUNNER_TOKEN: ${WABOO_RUNNER_TOKEN:-}
+  WABOO_RUNNER_PICKUP_MIN: ${WABOO_RUNNER_PICKUP_MIN:-}
+  WABOO_RUNNER_SILENCE_MIN: ${WABOO_RUNNER_SILENCE_MIN:-}
+  WABOO_MIGRATE_TIMEOUT_MIN: ${WABOO_MIGRATE_TIMEOUT_MIN:-}
 
 services:
   postgres:

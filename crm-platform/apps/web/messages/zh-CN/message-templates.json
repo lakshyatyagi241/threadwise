@@ -4,8 +4,7 @@
       "title": "模板"
     },
     "common": {
-      "dismiss": "关闭",
-      "requestId": "请求 ID"
+      "dismiss": "关闭"
     },
     "status": {
       "draft": "草稿",

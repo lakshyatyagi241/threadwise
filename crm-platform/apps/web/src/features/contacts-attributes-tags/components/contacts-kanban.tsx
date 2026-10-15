@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Select, Spinner, cn } from '@crm/ui';
+import { ScoreBadge } from '@/features/lead-scoring';
 import type { ContactRow } from '../api/schemas';
 import { useStageColumn, type ContactFilters } from '../api/contacts';
 import type { Choice } from '../lib/option-sets';
@@ -202,6 +203,13 @@ function Card({
           <span className="rounded bg-danger/10 px-1.5 py-0.5 text-[10px] text-danger">
             {t('optedOut')}
           </span>
+        )}
+        {view.leadScore !== null && (
+          <ScoreBadge
+            score={view.leadScore}
+            source={view.leadScoreSource}
+            scoredAt={view.leadScoredAt}
+          />
         )}
       </div>
       {view.tags.length > 0 && (

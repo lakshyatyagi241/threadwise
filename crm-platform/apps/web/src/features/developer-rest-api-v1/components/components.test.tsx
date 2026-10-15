@@ -132,7 +132,7 @@ describe('DeveloperScreen', () => {
     const out = html(<DeveloperScreen baseUrl={BASE} />);
     expect(out).toContain('Could not load your API key.');
     expect(out).toContain('Retry');
-    expect(out).toContain('req-9');
+    expect(out).not.toContain('req-9');
   });
 
   it('says so when the member may not read keys, and does not call the list', () => {
@@ -336,7 +336,7 @@ describe('error mapping', () => {
     const out = html(<NoticeBox notice={notice(422, ERROR_CODES.PLAN_LIMIT_REACHED, sentence)} />);
     expect(out).toContain(sentence);
     expect(out).toContain('role="alert"');
-    expect(out).toContain('req-3');
+    expect(out).not.toContain('req-3');
   });
   it('a plan-locked refusal points at the plans', () => {
     const out = html(<NoticeBox notice={notice(402, ERROR_CODES.PLAN_FEATURE_LOCKED)} />);

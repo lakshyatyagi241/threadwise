@@ -22,7 +22,6 @@
         "signedOut": "انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.",
         "rateLimited": "محاولات كثيرة جدًا. انتظر قليلًا ثم حاول مرة أخرى.",
         "rateLimitedWait": "محاولات كثيرة جدًا. حاول مرة أخرى بعد {seconds, plural, one {ثانية} two {ثانيتين} few {# ثوانٍ} many {# ثانية} other {# ثانية}}.",
-        "requestId": "معرّف الطلب",
         "locked": "محاولات فاشلة كثيرة. انتظر قليلًا قبل أن تحاول مرة أخرى.",
         "lockedWait": "محاولات فاشلة كثيرة. أعد المحاولة بعد {minutes, plural, one {دقيقة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "المنطقة الزمنية",
         "workspaceTimezoneHint": "تُطبَّق على {workspace}. يستطيع المالكون والمسؤولون فقط تغييرها.",
+        "myTimezone": "منطقتي الزمنية",
+        "myTimezoneHint": "تُعرض لك التواريخ والأوقات بتوقيت {zone}. اتركها فارغة لاتباع المنطقة الزمنية لمساحة العمل (أو UTC إذا لم تكن لديها منطقة).",
+        "myTimezoneUseWorkspace": "استخدام الإعداد الافتراضي لمساحة العمل",
         "saved": "تم حفظ الملف الشخصي.",
         "errors": {
           "fullNameRequired": "أدخل اسمك الكامل.",
@@ -367,7 +369,8 @@
         "failed": "تعذّر تبديل مساحة العمل. يرجى المحاولة مرة أخرى.",
         "notAvailable": "لا يمكنك التبديل إلى مساحة العمل هذه.",
         "rateLimited": "محاولات كثيرة جدًا. انتظر قليلًا ثم حاول مرة أخرى.",
-        "rateLimitedWait": "محاولات كثيرة جدًا. حاول مرة أخرى بعد {seconds, plural, one {ثانية} two {ثانيتين} few {# ثوانٍ} many {# ثانية} other {# ثانية}}."
+        "rateLimitedWait": "محاولات كثيرة جدًا. حاول مرة أخرى بعد {seconds, plural, one {ثانية} two {ثانيتين} few {# ثوانٍ} many {# ثانية} other {# ثانية}}.",
+        "unverified": "تحقق من بريدك الإلكتروني في مساحة العمل هذه للتبديل إليها."
       },
       "mfaChallenge": {
         "title": "أكّد هويتك",
@@ -549,10 +552,13 @@
             "storefront_builder": "منشئ المتجر",
             "invoicing": "الفوترة",
             "forms_and_links": "النماذج والروابط",
-            "extra_channels": "تيليجرام وفيسبوك وإنستغرام",
+            "extra_channels": "تيليجرام وفيسبوك وإنستغرام وLINE وViber وWeChat",
             "form_builder": "النماذج",
             "waba_groups": "مجموعات واتساب",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "المساعد الذكي",
+            "email_channel": "قناة البريد الإلكتروني (Gmail)",
+            "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

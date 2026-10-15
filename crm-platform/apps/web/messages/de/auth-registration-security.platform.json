@@ -46,7 +46,6 @@
         "copyFailed": "Kopieren nicht möglich",
         "loading": "Wird geladen",
         "retry": "Erneut versuchen",
-        "requestId": "Anfrage-ID",
         "errors": {
           "forbidden": "Ihre Rolle erlaubt dies nicht.",
           "request": "Die Anfrage wurde abgelehnt. Laden Sie die Seite neu und versuchen Sie es erneut.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Betreiber-Anmeldung",
         "intro": "Diese Konsole ist für die Personen gedacht, die die Plattform betreiben. Workspace-Nutzer melden sich auf der Hauptanmeldeseite an.",
-        "requestId": "Anfrage-ID",
         "submit": "Anmelden",
         "submitting": "Anmeldung läuft",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Ihr Konto",
         "title": "Zwei-Faktor-Authentifizierung",
         "description": "Schützen Sie {email} mit einer Authenticator-App. Betreiberkonten sind die Konten mit dem höchsten Vertrauensniveau auf der Plattform.",
-        "requestId": "Anfrage-ID",
         "status": {
           "title": "Authenticator-App",
           "on": "Ein",
@@ -181,7 +178,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Wird verarbeitet",
             "close": "Schließen",
             "signInAgain": "Erneut anmelden",
-            "requestId": "Anfrage-ID",
             "errors": {
               "forbidden": "Nur ein Super-Admin kann diese Aktion ausführen.",
               "unexpected": "Die Aktion wurde nicht abgeschlossen. Prüfen Sie das Ereignisprotokoll, bevor Sie es erneut versuchen."
@@ -731,7 +726,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "Verwenden Sie einen Website-Pfad wie /legal/terms oder eine vollständige http- oder https-Adresse.",
           "senderFormat": "Wählen Sie einen der Absender aus der Liste.",
           "countryFormat": "Verwenden Sie einen zweistelligen Ländercode.",
-          "senderRequired": "Wählen Sie einen Absenderkanal, bevor Sie die Vorlage erstellen."
+          "senderRequired": "Wählen Sie einen Absenderkanal, bevor Sie die Vorlage erstellen.",
+          "domainFormat": "{entry} ist keine gültige Domain. Verwenden Sie einen Namen wie beispiel.de.",
+          "tooMany": "Höchstens {max} Domains."
         },
         "policy": {
           "kicker": "Registrierung",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Max. Versuche"
+          },
+          "businessEmailOnly": {
+            "label": "Nur geschäftliche E-Mail-Adressen",
+            "hintOn": "Kostenlose Anbieter wie Gmail, Outlook und Yahoo werden bei der Registrierung abgelehnt.",
+            "hintOff": "Jeder kann sich mit einer kostenlosen privaten Adresse registrieren."
+          },
+          "blockDisposableEmail": {
+            "label": "Temporäre E-Mail blockieren",
+            "hintOn": "Wegwerf- und temporäre Domains sowie Domains ohne Mailserver werden abgelehnt.",
+            "hintOff": "Temporäre Adressen werden akzeptiert."
+          },
+          "requirePhoneVerification": {
+            "label": "Bestätigte Mobilnummer verlangen",
+            "hintOn": "Jede Registrierung muss einen Einmalcode bestätigen. Kann der Code nicht gesendet werden, stoppt die Registrierung, statt die Prüfung zu überspringen.",
+            "hintOff": "Der Code-Schritt läuft nur, wenn der Registrierungscode unten aktiviert ist."
+          },
+          "blockedEmailDomains": {
+            "label": "Immer blockierte Domains",
+            "hint": "Eine Domain pro Zeile. Subdomains werden ebenfalls blockiert. Sie werden auch abgelehnt, wenn „Nur geschäftliche E-Mail-Adressen“ aus ist.",
+            "placeholder": "beispiel.de"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "Ein Testcode wurde an {to} gesendet.",
             "remaining": "{count, plural, one {# Test in dieser Stunde übrig.} other {# Tests in dieser Stunde übrig.}}",
             "notShown": "Der Code wird hier nicht angezeigt; lesen Sie ihn auf dem Telefon ab.",
-            "requestId": "Anfrage-ID",
             "errors": {
               "invalidNumber": "Geben Sie die Nummer mit Landesvorwahl ein, zum Beispiel +49 151 23456789.",
               "rateLimited": "Zu viele Testcodes in dieser Stunde. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut.",
@@ -1045,7 +1060,6 @@
           "saved": "Absender gespeichert",
           "removed": "Absender entfernt",
           "secretRemoved": "Gespeichertes Geheimnis entfernt",
-          "requestId": "Anfrage-ID",
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
             "tooLong": "Höchstens {max} Zeichen.",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "Diese Fußzeile wurde nicht akzeptiert.",
             "unexpected": "Die Fußzeile konnte nicht gespeichert werden. Versuchen Sie es gleich noch einmal."
-          },
-          "requestId": "Anfrage-ID"
+          }
+        },
+        "guard": {
+          "kicker": "Registrierungsschutz",
+          "title": "Prüfung von Geschäfts-E-Mail und Mobilnummer",
+          "description": "Hält Wegwerf- und private Adressen fern und stellt sicher, dass jedes neue Konto eine bestätigte Mobilnummer hat. Gilt für die Registrierung per E-Mail und über soziale Netzwerke.",
+          "phoneOffWarning": "Bei ausgeschalteter Mobilprüfung können Konten ohne bestätigte Nummer angelegt werden, was massenhafte Fake-Registrierungen erleichtert."
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "Abbrechen",
           "working": "Wird entfernt",
           "error": "Das Geheimnis konnte nicht entfernt werden. Versuchen Sie es gleich noch einmal.",
-          "requestId": "Anfrage-ID",
           "done": "Das gespeicherte Geheimnis für {name} wurde entfernt.",
           "names": {
             "google": "Google",
@@ -1416,10 +1433,13 @@
             "storefront_builder": "Der Builder für den Online-Shop.",
             "invoicing": "Rechnungen, Gutschriften, Zahlungen, Verkaufsaufträge und Steuersätze.",
             "forms_and_links": "Formulare zur Lead-Erfassung und teilbare Links.",
-            "extra_channels": "Die Kanäle Telegram, Facebook und Instagram.",
+            "extra_channels": "Die Kanäle Telegram, Facebook, Instagram, LINE, Viber und WeChat.",
             "form_builder": "Gehostete und eingebettete Webformulare, die Kontakte im CRM erstellen. Die kostenpflichtige App Formulare steuert diesen Schalter.",
             "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein.",
-            "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden."
+            "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden.",
+            "help_agent": "Der Hilfe-Assistent in der App: Nutzer beschreiben eine Aufgabe in einfachen Worten, und er führt sie an oder erledigt sie in der eigenen Sitzung – bei Risiken fragt er vorher nach. Verbraucht KI-Tokens.",
+            "email_channel": "Gmail- und Google-Workspace-Postfächer mit dem Team-Posteingang verbinden. Die kostenpflichtige E-Mail-App steuert diesen Schalter.",
+            "personal_history_full": "Ermöglicht es einer privaten WhatsApp-Nummer, beim ersten Verknüpfen den gesamten Chatverlauf zu importieren. Der Import der letzten Chats ist in allen Tarifen mit privaten Nummern enthalten."
           },
           "units": {
             "days": "Tage",
@@ -1561,7 +1581,9 @@
             "forms": "Webformulare",
             "form_submissions_monthly": "Formulareinsendungen pro Monat",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen pro Monat",
-            "sms_monthly": "SMS pro Monat"
+            "sms_monthly": "SMS pro Monat",
+            "email_mailboxes": "E-Mail-Postfächer",
+            "email_monthly": "E-Mails pro Monat"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1596,10 +1618,13 @@
             "storefront_builder": "Storefront- und Website-Builder",
             "invoicing": "Rechnungsstellung (Rechnungen, Gutschriften, wiederkehrende Rechnungen)",
             "forms_and_links": "Formulare, Click-to-Chat-Links und Gruppen",
-            "extra_channels": "Telegram-, Facebook- und Instagram-Kanäle",
+            "extra_channels": "Telegram-, Facebook-, Instagram-, LINE-, Viber- und WeChat-Kanäle",
             "form_builder": "Formulare (Webformular-Builder)",
             "waba_groups": "WhatsApp-Gruppen (Cloud API)",
-            "sms": "SMS-Kanal"
+            "sms": "SMS-Kanal",
+            "help_agent": "Hilfe-Assistent (KI, verbraucht Tokens)",
+            "email_channel": "E-Mail-Kanal (Gmail)",
+            "personal_history_full": "Vollständiger Chatverlauf-Import (privates WhatsApp)"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
@@ -1652,7 +1677,9 @@
             "forms": "Aktive Webformulare (App Formulare). Beim Archivieren eines Formulars wird der Platz frei. 0 = unbegrenzt.",
             "form_submissions_monthly": "Im Kalendermonat angenommene Formulareinsendungen, ohne Spam. Über dem Limit wird eine Einsendung weiterhin zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen im Kalendermonat, einschließlich eines Reparaturversuchs. 0 = unbegrenzt.",
-            "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt."
+            "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
+            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
+            "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt."
           }
         }
       },
@@ -1664,7 +1691,6 @@
         "saving": "Wird gespeichert",
         "saved": "{count, plural, one {# Einstellung gespeichert} other {# Einstellungen gespeichert}}",
         "rejected": "Es wurde nichts gespeichert. {count, plural, one {# Feld wurde} other {# Felder wurden}} abgelehnt.",
-        "requestId": "Anfrage-ID",
         "unsaved": "{count, plural, one {# nicht gespeicherte Änderung} other {# nicht gespeicherte Änderungen}}",
         "discard": "Änderungen verwerfen",
         "errors": {

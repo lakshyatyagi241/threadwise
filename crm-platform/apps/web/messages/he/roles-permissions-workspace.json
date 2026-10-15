@@ -9,7 +9,6 @@
       "breadcrumb": "נתיב ניווט",
       "loading": "טוען…",
       "retry": "נסה שוב",
-      "requestId": "מזהה בקשה",
       "cancel": "ביטול",
       "close": "סגור",
       "dismiss": "סגור",
@@ -102,7 +101,8 @@
         "added": "{name} נוסף לסביבת העבודה.",
         "rolesUpdated": "התפקידים של {name} עודכנו.",
         "deactivated": "{name} הושבת.",
-        "reactivated": "{name} הופעל מחדש."
+        "reactivated": "{name} הופעל מחדש.",
+        "invited": "ההזמנה נשלחה אל {name}."
       },
       "deactivate": {
         "action": "השבת",
@@ -123,7 +123,13 @@
         "passwordShort": "הסיסמה חייבת להכיל לפחות 8 תווים.",
         "generate": "צור",
         "role": "תפקיד",
-        "submit": "הוסף חבר"
+        "submit": "הוסף חבר",
+        "inviteHint": "נשלח להם בדוא\"ל קישור להגדרת סיסמה בעצמם. הקישור פועל פעם אחת ופג תוקף לאחר מספר ימים.",
+        "submitInvite": "שלח הזמנה",
+        "linkNotSent": "לא ניתן היה לשלוח את הדוא\"ל אל {email}. העתיקו את הקישור והעבירו אותו; הוא לא יוצג שוב.",
+        "copyLink": "העתק קישור",
+        "copied": "הועתק",
+        "done": "סיום"
       },
       "changeRole": {
         "title": "שנה תפקידים של {name}",

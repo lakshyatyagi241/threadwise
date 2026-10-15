@@ -22,7 +22,6 @@
         "signedOut": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
         "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
         "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut.",
-        "requestId": "Anfrage-ID",
         "locked": "Zu viele fehlgeschlagene Versuche. Warten Sie eine Weile, bevor Sie es erneut versuchen.",
         "lockedWait": "Zu viele fehlgeschlagene Versuche. Versuchen Sie es in {minutes, plural, one {# Minute} other {# Minuten}} erneut."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Zeitzone",
         "workspaceTimezoneHint": "Gilt für {workspace}. Nur Inhaber und Administratoren können sie ändern.",
+        "myTimezone": "Meine Zeitzone",
+        "myTimezoneHint": "Datum und Uhrzeit werden dir in {zone} angezeigt. Lass das Feld leer, um der Zeitzone des Arbeitsbereichs zu folgen (UTC, falls er keine hat).",
+        "myTimezoneUseWorkspace": "Standard des Arbeitsbereichs verwenden",
         "saved": "Profil gespeichert.",
         "errors": {
           "fullNameRequired": "Geben Sie Ihren vollständigen Namen ein.",
@@ -367,7 +369,8 @@
         "failed": "Der Workspace konnte nicht gewechselt werden. Bitte versuchen Sie es erneut.",
         "notAvailable": "Sie können nicht zu diesem Workspace wechseln.",
         "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
-        "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut."
+        "rateLimitedWait": "Zu viele Versuche. Versuchen Sie es in {seconds, plural, one {# Sekunde} other {# Sekunden}} erneut.",
+        "unverified": "Bestätigen Sie Ihre E-Mail-Adresse in diesem Arbeitsbereich, um dorthin zu wechseln."
       },
       "mfaChallenge": {
         "title": "Bestätigen Sie, dass Sie es sind",
@@ -549,10 +552,13 @@
             "storefront_builder": "Storefront-Builder",
             "invoicing": "Rechnungsstellung",
             "forms_and_links": "Formulare und Links",
-            "extra_channels": "Telegram, Facebook und Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber und WeChat",
             "form_builder": "Formulare",
             "waba_groups": "WhatsApp-Gruppen",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Hilfe-Assistent",
+            "email_channel": "E-Mail-Kanal (Gmail)",
+            "personal_history_full": "Vollständiger Verlaufsimport (privates WhatsApp)"
           },
           "cta": {
             "continueFree": "Kostenlos fortfahren",

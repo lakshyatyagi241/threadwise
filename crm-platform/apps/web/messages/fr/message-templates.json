@@ -4,8 +4,7 @@
       "title": "Modèles"
     },
     "common": {
-      "dismiss": "Ignorer",
-      "requestId": "ID de la demande"
+      "dismiss": "Ignorer"
     },
     "status": {
       "draft": "Brouillon",

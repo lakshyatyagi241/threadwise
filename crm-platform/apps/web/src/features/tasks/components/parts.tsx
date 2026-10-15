@@ -7,7 +7,7 @@ import { Alert, Button, cn } from '@crm/ui';
 import type { TaskPriority, TaskResponse } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { isOverdue, relativeDay } from '../lib/dates';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 import { avatarColor, formatShortDate, formatTime, initials } from '../lib/format';
 import { CalendarIcon, CheckIcon, ContactIcon, DealIcon } from './icons';
 
@@ -225,15 +225,9 @@ export function ErrorLine({
 }) {
   const t = useTranslations('tasks.errors');
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone={kind === 'unavailable' ? 'warning' : 'danger'} className={className}>
       <span>{t(kind)}</span>
-      {requestId && (
-        <span className="mt-1 block text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </span>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}

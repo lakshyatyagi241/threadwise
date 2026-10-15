@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { WizardDraftResponse, WizardSender } from '@crm/contracts';
+import type { SenderHidden, WizardDraftResponse, WizardSender } from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, Field, Select, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { isUsableProperty, useContactFields } from '@/features/contacts-attributes-tags';
 import { useUnsavedGuard } from '@/features/segments/components/use-unsaved-guard';
 import { EMPTY_FORM } from '../lib/builder-model';
+import { classicFallback } from '../lib/sender-empty';
 import { WIZARD_STEPS, type WizardStep } from '../lib/wizard-model';
 import {
   useAudienceCount,
@@ -44,6 +45,7 @@ import {
   AutoEndField,
   PACING_KEYS,
   SmartDelivery,
+  RetryFailed,
   TrackClicks,
   type PacingKey,
 } from './builder/delivery-extras';
@@ -102,6 +104,7 @@ function stepOfIssue(path: string): WizardStep {
 export function GuidedCampaign({
   initial,
   senders,
+  hidden,
   preferredSenderKey,
   initialName,
   onClassic,
@@ -109,6 +112,8 @@ export function GuidedCampaign({
   initial: WizardDraftResponse | null;
   /** The numbers on offer (all engines): picking one that is not a verified Meta number hands the screen to the classic builder. */
   senders: readonly WizardSender[];
+  /** The numbers the server left out, so an empty list can say why. */
+  hidden?: readonly SenderHidden[] | undefined;
   preferredSenderKey?: string | undefined;
   initialName?: string | undefined;
   onClassic: (senderKey: string, name: string) => void;
@@ -121,7 +126,7 @@ export function GuidedCampaign({
   const w = useWizard(initial);
   const session = useSession();
   const canTest = useCan('camp.campaigns.test');
-  const zone = defaultTimeZone(session.org.timezone);
+  const zone = defaultTimeZone(session.effectiveTimezone);
   const { draft } = w.state;
 
   const [step, setStep] = useState<WizardStep>('setup');
@@ -300,6 +305,17 @@ export function GuidedCampaign({
     onClassic(switchTo.key, draft.name);
   };
 
+  // A draft resumed when none of the workspace's numbers is a verified Meta number any more: the guided flow cannot send from any of
+  // them, so the switch to the classic builder is offered at once (on the default number, else the first) instead of leaving the picker
+  // on a number this flow cannot use.
+  const classic = classicFallback(senders);
+  const offeredSwitch = useRef(false);
+  useEffect(() => {
+    if (offeredSwitch.current || !classic || sender?.guided) return;
+    offeredSwitch.current = true;
+    setSwitchTo(classic);
+  }, [classic, sender?.guided]);
+
   // Smart Delivery and the auto-end are read in the send's zone: the schedule's own, else the workspace's.
   const sendZone = draft.schedule.mode === 'scheduled' ? draft.schedule.timezone : zone;
   const pacingValues = Object.fromEntries(
@@ -408,6 +424,7 @@ export function GuidedCampaign({
                         onSender={pickSender}
                         senders={senders}
                         notVerified={false}
+                        hidden={hidden}
                       />
                       <TypeCards
                         value="template"
@@ -598,6 +615,10 @@ export function GuidedCampaign({
                             ? ti('pacing_range')
                             : undefined
                         }
+                      />
+                      <RetryFailed
+                        checked={draft.retryFailed}
+                        onChange={(retryFailed) => act({ type: 'options', patch: { retryFailed } })}
                       />
                       <TrackClicks
                         checked={draft.trackLinks}

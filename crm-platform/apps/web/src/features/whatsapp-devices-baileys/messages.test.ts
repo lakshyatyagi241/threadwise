@@ -8,6 +8,9 @@ import {
   PERSONAL_WA_NOTICE_VERSION,
   DEVICE_STATE_REASONS,
   WADEV_ERROR_CODES,
+  WA_GROUP_ERROR_CODES,
+  WA_GROUP_PARTICIPANT_OUTCOMES,
+  WA_GROUP_RATE_SCOPES,
 } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { describeError } from './lib/error-model';
@@ -36,8 +39,14 @@ const flatten = (tree: Tree, prefix = ''): Record<string, string> => {
 const placeholders = (m: string) =>
   [...new Set([...m.matchAll(/\{\s*([A-Za-z_]\w*)\s*[,}]/g)].map((x) => x[1]!))].sort();
 
-const en = flatten(read('en', 'whatsapp-devices-baileys'));
-const ar = flatten(read('ar', 'whatsapp-devices-baileys'));
+/** The feature's text is in two files: the numbers and the pairing, and the groups of personal numbers (both under one root). */
+const readAll = (locale: string) => ({
+  ...flatten(read(locale, 'whatsapp-devices-baileys')),
+  ...flatten(read(locale, 'whatsapp-devices-baileys.groups')),
+  ...flatten(read(locale, 'whatsapp-devices-baileys.history')),
+});
+const en = readAll('en');
+const ar = readAll('ar');
 const ROOT = 'whatsapp-devices-baileys';
 
 describe('whatsapp-devices-baileys messages', () => {
@@ -54,8 +63,13 @@ describe('whatsapp-devices-baileys messages', () => {
   });
 
   it('Arabic is Arabic: no message is left in English by mistake', () => {
-    const latin = (s: string) => s.replace(/\{[^}]*\}/g, '').match(/[A-Za-z]{4,}/g) ?? [];
-    const allowed = new Set(['QR', 'WhatsApp']);
+    // A web address (the invite link host) and the picture formats stay in Latin letters in every language.
+    const latin = (s: string) =>
+      s
+        .replace(/\{[^}]*\}/g, '')
+        .replace(/(https?:\/\/)?chat\.whatsapp\.com\S*/gi, '')
+        .match(/[A-Za-z]{4,}/g) ?? [];
+    const allowed = new Set(['QR', 'WhatsApp', 'JPEG', 'PNG']);
     for (const [key, text] of Object.entries(ar)) {
       const words = latin(text).filter((w) => !allowed.has(w));
       // ICU plural keywords are not prose
@@ -120,7 +134,9 @@ describe('whatsapp-devices-baileys messages', () => {
     ]);
     for (const key of Object.keys(en).filter((k) => k.startsWith(`${ROOT}.errors.`))) {
       const name = key.slice(`${ROOT}.errors.`.length);
-      expect(variants.has(name) || name in ERROR_CODES, name).toBe(true);
+      // WA_GROUP_RATE_LIMITED_<scope>: one sentence per throttle that can refuse (the screen's own wording, by `errors[].scope`).
+      const isRateScope = name.startsWith('WA_GROUP_RATE_LIMITED_');
+      expect(variants.has(name) || isRateScope || name in ERROR_CODES, name).toBe(true);
     }
   });
 
@@ -229,5 +245,59 @@ describe('describeError (by code only)', () => {
       key: 'DEVICE_NOT_PAIRABLE',
       relinkable: false,
     });
+  });
+
+  it('words each group refusal, and reads the throttle scope and wait of WA_GROUP_RATE_LIMITED', () => {
+    for (const scope of WA_GROUP_RATE_SCOPES) {
+      const d = describeError(
+        err('WA_GROUP_RATE_LIMITED', [
+          { path: 'scope', message: scope },
+          { path: 'retryAfterS', message: '65' },
+        ]),
+        known,
+      );
+      expect(d.key).toBe(`WA_GROUP_RATE_LIMITED_${scope}`);
+      expect(d.scope).toBe(scope);
+      expect(d.retryAfterS).toBe(65);
+      expect(known(d.key), d.key).toBe(true);
+      expect(ar[`${ROOT}.errors.${d.key}`], `ar ${d.key}`).toBeTruthy();
+    }
+    // A scope this build does not know, or none, reads as the general sentence.
+    const odd = describeError(
+      err('WA_GROUP_RATE_LIMITED', [{ path: 'scope', message: 'something_new' }]),
+      known,
+    );
+    expect(odd.key).toBe('WA_GROUP_RATE_LIMITED');
+    expect(odd.scope).toBeUndefined();
+    expect(describeError(err('WA_GROUP_RATE_LIMITED'), known).key).toBe('WA_GROUP_RATE_LIMITED');
+    // The wait the proxy took from the Retry-After header is read too.
+    expect(
+      describeError(
+        err('WA_GROUP_RATE_LIMITED', [{ path: 'retryAfterSeconds', message: '30' }]),
+        known,
+      ).retryAfterS,
+    ).toBe(30);
+    for (const code of Object.keys(WA_GROUP_ERROR_CODES)) {
+      if (code === 'WA_GROUP_RATE_LIMITED') continue;
+      expect(describeError(err(code), known).key, code).toBe(code);
+    }
+  });
+
+  it('has the Groups tab and menu labels in English and Arabic', () => {
+    expect(en[`${ROOT}.area.groups`]).toBeTruthy();
+    expect(ar[`${ROOT}.area.groups`]).toBeTruthy();
+    expect(en[`${ROOT}.nav.groups`]).toBeTruthy();
+    expect(ar[`${ROOT}.nav.groups`]).toBeTruthy();
+  });
+
+  it('words every outcome a participants call can answer, and every badge a row can wear', () => {
+    for (const o of WA_GROUP_PARTICIPANT_OUTCOMES) {
+      const key = `${ROOT}.groups.outcome.${o === 'ok' ? 'done' : o}`;
+      expect(en[key], key).toBeTruthy();
+      expect(ar[key], `ar ${key}`).toBeTruthy();
+    }
+    for (const b of ['admin', 'notAdmin', 'left', 'announce', 'restrict', 'approval', 'requests']) {
+      expect(en[`${ROOT}.groups.badge.${b}`], b).toBeTruthy();
+    }
   });
 });

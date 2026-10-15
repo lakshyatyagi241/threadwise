@@ -252,6 +252,17 @@ const conditionRich = {
  * flat chain is shown as the equal tree and saved as `conditionGroup` on its first edit (the flat arrays are left as they were and
  * ignored by the runtime). A flat chain too long or too alternating for the tree limits keeps the flat editor.
  */
+/** The nested AND / OR rules of a Condition, as one editor (the Simple builder's Condition step shows the same one). */
+export function ConditionGroupEditor({
+  tree,
+  onChange,
+}: {
+  tree: FlbCondGroup;
+  onChange: (next: FlbCondGroup) => void;
+}) {
+  return <GroupEditor root={tree} group={tree} path={[]} onChange={onChange} />;
+}
+
 export function ConditionForm(props: FormProps) {
   const t = useTranslations('flb.builder.formsCore.logic');
   const model = conditionTreeOf(props.data);

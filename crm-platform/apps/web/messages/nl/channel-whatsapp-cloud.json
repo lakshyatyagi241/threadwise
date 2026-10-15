@@ -156,7 +156,6 @@
       "notFound": "Dit nummer bestaat niet meer. De lijst is vernieuwd.",
       "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
       "generic": "Er is iets misgegaan. Probeer het opnieuw.",
-      "genericWithId": "Er is iets misgegaan. Probeer het opnieuw. Referentie: {id}",
       "detail": "Details: {detail}",
       "fix": {
         "tokenInvalid": "Maak in je Meta-bedrijfsinstellingen een permanent systeemgebruikerstoken en plak het onder Inloggegevens bewerken.",

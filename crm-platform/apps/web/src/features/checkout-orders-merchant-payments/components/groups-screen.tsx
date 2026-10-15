@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { StoreGroup } from '@crm/contracts';
 import { Input } from '@crm/ui';
@@ -124,7 +124,7 @@ function SummaryStrip({ summary }: { summary: ReturnType<typeof useGroupSummary>
           <div className="space-y-1 text-sm font-normal">
             <p className="text-muted-foreground">{t('summary.noBot')}</p>
             <Link
-              href={'/channels'}
+              href="/channels/whatsapp"
               className="font-medium text-primary underline-offset-2 hover:underline"
             >
               {t('summary.connect')}
@@ -164,7 +164,7 @@ function EmptyGroups({ searching }: { searching: boolean }) {
       <div className="text-lg font-semibold">{t('empty.title')}</div>
       <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">{t('empty.message')}</p>
       <div className="mt-5 flex justify-center">
-        <LinkButton href={'/channels'} variant="secondary">
+        <LinkButton href="/channels/whatsapp" variant="secondary">
           {t('empty.action')}
         </LinkButton>
       </div>
@@ -185,6 +185,7 @@ function GroupsTable({
 }) {
   const t = useTranslations('checkout-orders-merchant-payments.groups');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[44rem] text-sm">
@@ -215,7 +216,7 @@ function GroupsTable({
                 {displayPhone(g.devicePhone) || '—'}
               </td>
               <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                {formatWhen(g.syncedAt, locale) || '—'}
+                {formatWhen(g.syncedAt, locale, timeZone) || '—'}
               </td>
               <td className="px-4 py-3">
                 <GroupCodeEditor

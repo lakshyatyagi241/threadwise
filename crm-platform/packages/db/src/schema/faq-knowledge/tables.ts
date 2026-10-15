@@ -1,5 +1,5 @@
 /**
- * faq-knowledge: the FAQ knowledge base with semantic matching (ADR-0021). Mirrors migrations/20261114090000_faq_core.sql.
+ * faq-knowledge: the FAQ knowledge base with semantic matching (ADR-0021). Mirrors migrations/20261114090000_faq_core.sql and, for the flow ownership, 20261118090000_faq_per_flow.sql.
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {
@@ -39,17 +39,25 @@ export const faqSettings = pgTable(
   'faq_settings',
   {
     orgId: orgIdColumn(),
+    flowId: idColumn('flow_id').notNull(),
     enabled: boolean('enabled').notNull().default(false),
     threshold: numeric('threshold', { precision: 4, scale: 3 }).notNull().default('0.450'),
     minMargin: numeric('min_margin', { precision: 4, scale: 3 }).notNull().default('0.000'),
     logQueries: boolean('log_queries').notNull().default(true),
     tunedModel: text('tuned_model'),
+    verifyMode: text('verify_mode').notNull().default('off'),
+    verifyBand: numeric('verify_band', { precision: 4, scale: 3 }).notNull().default('0.100'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
   (t) => [
-    primaryKey({ columns: [t.orgId] }),
+    primaryKey({ columns: [t.orgId, t.flowId] }),
+    foreignKey({
+      name: 'fk_faq_settings_flow',
+      columns: [t.orgId, t.flowId],
+      foreignColumns: [flows.orgId, flows.id],
+    }).onDelete('cascade'),
     foreignKey({
       name: 'faq_settings_org_id_fkey',
       columns: [t.orgId],
@@ -57,6 +65,8 @@ export const faqSettings = pgTable(
     }).onDelete('cascade'),
     check('ck_faq_settings_threshold', sql`${t.threshold} between 0.050 and 0.990`),
     check('ck_faq_settings_margin', sql`${t.minMargin} between 0.000 and 0.500`),
+    check('ck_faq_settings_verify_mode', sql`${t.verifyMode} in ('off', 'borderline')`),
+    check('ck_faq_settings_verify_band', sql`${t.verifyBand} between 0.010 and 0.300`),
   ],
 );
 
@@ -69,7 +79,11 @@ export const faqs = pgTable(
     question: text('question').notNull(),
     answerType: text('answer_type').notNull().default('text'),
     answerText: text('answer_text'),
+    /** The flow this FAQ belongs to; it answers only inside it. */
+    ownerFlowId: idColumn('owner_flow_id').notNull(),
+    /** The flow the answer starts (the editor defaults it to the owner). */
     flowId: idColumn('flow_id'),
+    flowNodeId: text('flow_node_id'),
     category: text('category'),
     status: text('status').notNull().default('active'),
     thresholdOverride: numeric('threshold_override', { precision: 4, scale: 3 }),
@@ -87,6 +101,11 @@ export const faqs = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     foreignKey({
+      name: 'fk_faqs_owner_flow',
+      columns: [t.orgId, t.ownerFlowId],
+      foreignColumns: [flows.orgId, flows.id],
+    }).onDelete('cascade'),
+    foreignKey({
       name: 'fk_faqs_flow',
       columns: [t.orgId, t.flowId],
       foreignColumns: [flows.orgId, flows.id],
@@ -99,6 +118,10 @@ export const faqs = pgTable(
     check('ck_faqs_answer_type', sql`${t.answerType} in ('text', 'flow')`),
     check('ck_faqs_status', sql`${t.status} in ('active', 'paused')`),
     check(
+      'ck_faqs_flow_node',
+      sql`${t.flowNodeId} is null or (${t.answerType} = 'flow' and btrim(${t.flowNodeId}) <> '' and length(${t.flowNodeId}) <= 120)`,
+    ),
+    check(
       'ck_faqs_answer_shape',
       sql`(${t.answerType} = 'text' and ${t.answerText} is not null and btrim(${t.answerText}) <> '') or (${t.answerType} = 'flow')`,
     ),
@@ -107,6 +130,7 @@ export const faqs = pgTable(
       sql`${t.thresholdOverride} is null or ${t.thresholdOverride} between 0.050 and 0.990`,
     ),
     // `uq_faqs_question` (unique on lower(btrim(question))) is an expression index: the SQL migration is its only declaration.
+    index('idx_faqs_owner').on(t.orgId, t.ownerFlowId, t.status),
     index('idx_faqs_status').on(t.orgId, t.status),
     index('idx_faqs_flow')
       .on(t.orgId, t.flowId)
@@ -178,6 +202,7 @@ export const faqMatchLogs = pgTable(
     id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
     uuid: uuid('uuid').notNull().defaultRandom(),
     createdAt: createdAt(),
+    flowId: idColumn('flow_id').notNull(),
     origin: text('origin').notNull().default('inbound'),
     conversationId: idColumn('conversation_id'),
     channelId: idColumn('channel_id'),
@@ -196,6 +221,9 @@ export const faqMatchLogs = pgTable(
     embeddingModel: text('embedding_model'),
     latencyMs: integer('latency_ms'),
     error: text('error'),
+    verifyVerdict: text('verify_verdict'),
+    verifyModel: text('verify_model'),
+    verifyReason: text('verify_reason'),
     resolvedAt: timestamp('resolved_at', { withTimezone: true }),
   },
   (t) => [
@@ -207,21 +235,30 @@ export const faqMatchLogs = pgTable(
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
     foreignKey({
+      name: 'fk_faq_match_logs_flow',
+      columns: [t.orgId, t.flowId],
+      foreignColumns: [flows.orgId, flows.id],
+    }).onDelete('cascade'),
+    foreignKey({
       name: 'fk_faq_match_logs_faq',
       columns: [t.orgId, t.matchedFaqId],
       foreignColumns: [faqs.orgId, faqs.id],
     }).onDelete('set null'),
-    check('ck_faq_match_logs_origin', sql`${t.origin} in ('inbound', 'test')`),
+    check('ck_faq_match_logs_origin', sql`${t.origin} in ('inbound', 'test', 'flow')`),
+    check(
+      'ck_faq_match_logs_verify',
+      sql`${t.verifyVerdict} is null or ${t.verifyVerdict} in ('confirmed', 'rejected', 'error', 'skipped')`,
+    ),
     check(
       'ck_faq_match_logs_outcome',
       sql`${t.outcome} in ('answered', 'flow_started', 'below_threshold', 'low_margin', 'no_faqs', 'provider_error', 'not_sent')`,
     ),
-    index('idx_faq_match_logs_created').on(t.orgId, t.createdAt.desc()),
+    index('idx_faq_match_logs_created').on(t.orgId, t.flowId, t.createdAt.desc()),
     index('idx_faq_match_logs_faq')
       .on(t.orgId, t.matchedFaqId, t.createdAt.desc())
       .where(sql`${t.matchedFaqId} is not null`),
     index('idx_faq_match_logs_unanswered')
-      .on(t.orgId, t.createdAt.desc())
+      .on(t.orgId, t.flowId, t.createdAt.desc())
       .where(
         sql`${t.origin} = 'inbound' and ${t.outcome} in ('below_threshold', 'low_margin', 'no_faqs') and ${t.resolvedAt} is null`,
       ),

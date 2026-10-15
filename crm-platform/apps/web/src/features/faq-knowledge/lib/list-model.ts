@@ -38,6 +38,12 @@ export function indexingShares(
 export const flowMissing = (e: Pick<FaqEntrySummary, 'answerType' | 'flowName'>): boolean =>
   e.answerType === 'flow' && e.flowName === null;
 
+/** A flow FAQ that starts at a step the flow no longer has: the flow is there, but customers get no answer. */
+export const stepMissing = (
+  e: Pick<FaqEntrySummary, 'answerType' | 'flowName' | 'flowNodeId' | 'flowNodeLabel'>,
+): boolean =>
+  e.answerType === 'flow' && e.flowName !== null && !!e.flowNodeId && e.flowNodeLabel === null;
+
 export type BulkAction = 'pause' | 'activate' | 'delete';
 
 /** Bulk update needs `faq.entries.update`; delete needs `faq.entries.delete` as well (the controller checks both). */

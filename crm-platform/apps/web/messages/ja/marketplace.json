@@ -10,13 +10,13 @@
       "install": "インストール · マーケットプレイス",
       "installed": "インストール済み · マーケットプレイス",
       "manage": "アプリを管理 · マーケットプレイス",
-      "requests": "リクエスト · マーケットプレイス"
+      "requests": "リクエスト · マーケットプレイス",
+      "addons": "アドオン · マーケットプレイス"
     },
     "common": {
       "dismiss": "閉じる",
       "loading": "読み込み中",
       "errorTitle": "この内容を読み込めませんでした",
-      "requestId": "リクエストID",
       "retry": "再試行",
       "upgrade": "プランを確認してアップグレード",
       "opensNewTab": "（新しいタブで開きます）",
@@ -124,7 +124,8 @@
       "moreLabel": "インストール済みとリクエスト",
       "tabs": {
         "mini_app": "ミニアプリ",
-        "integration": "連携"
+        "integration": "連携",
+        "addon": "アドオン"
       },
       "installed": "インストール済み",
       "installedLimit": "インストール済み（{installed} / {limit}）",
@@ -865,6 +866,15 @@
       },
       "working": "処理中",
       "noCheckout": "現在、このアプリの決済画面は利用できません。しばらくしてから再度お試しください。"
+    },
+    "tools": {
+      "open": "開く",
+      "empty": {
+        "title": "利用できるアドオンはありません",
+        "message": "ロールとプランに含まれるアドオンがここに表示されます。"
+      },
+      "soon": "近日公開",
+      "upgrade": "アップグレード"
     }
   }
 }

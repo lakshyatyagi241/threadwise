@@ -72,7 +72,9 @@ async function run(path: string, target: BulkTarget, extra: object = {}): Promis
   return total;
 }
 
-export const bulkDelete = (target: BulkTarget) => run('/contacts/bulk/delete', target);
+/** `eraseHistory: false` keeps the conversations without the contacts' identity; absent means they are erased with the contact. */
+export const bulkDelete = (target: BulkTarget, opts: { eraseHistory?: boolean } = {}) =>
+  run('/contacts/bulk/delete', target, opts.eraseHistory === false ? { eraseHistory: false } : {});
 
 export const bulkGroupMembership = (
   target: BulkTarget,
@@ -86,6 +88,13 @@ export const bulkTag = (
   action: 'add' | 'remove',
   tag: { tagId?: string; name?: string },
 ) => run('/contacts/bulk/tag', target, { action, ...tag });
+
+/**
+ * Hands the target to one person, or to nobody (`null`). Unlike `bulkUpdate` this takes "all N matching" too, so a whole
+ * person's book moves in one request (`POST /contacts/bulk/owner`); the API holds the target to the caller's record scope.
+ */
+export const bulkOwner = (target: BulkTarget, ownerId: string | null) =>
+  run('/contacts/bulk/owner', target, { ownerId });
 
 /**
  * Exports as CSV. The API streams the file (at most 200,000 rows), so this reads the response as a blob rather than

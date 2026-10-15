@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Ghi âm cuộc gọi",
+        "intro": "Ghi âm tắt cho đến khi bạn bật. Khi bật, đồng nghiệp đọc thông báo, người gọi trả lời, và chỉ sau đó mới bắt đầu ghi âm. Bản ghi bị xóa khi hết thời gian lưu giữ.",
+        "loading": "Đang tải quy tắc ghi âm",
+        "loadFailed": "Không thể tải quy tắc ghi âm.",
+        "retry": "Thử lại",
+        "viewOnly": "Bạn xem được các quy tắc này nhưng chỉ chủ sở hữu hoặc quản trị viên mới thay đổi được.",
+        "enabled": "Ghi âm cuộc gọi",
+        "enabledOn": "Bật: đồng nghiệp có thể ghi âm cuộc gọi sau khi người đó đồng ý.",
+        "enabledOff": "Tắt: không cuộc gọi nào được ghi âm.",
+        "mode": "Người đó đồng ý bằng cách nào",
+        "modeHint": {
+          "confirmed": "Người đó nói đồng ý được ghi âm và đồng nghiệp lưu câu trả lời. Lựa chọn an toàn nhất.",
+          "announcement": "Đồng nghiệp đọc thông báo và cuộc gọi tiếp tục. Chỉ dùng khi cố vấn pháp lý xác nhận thông báo là đủ."
+        },
+        "modeOption": {
+          "confirmed": "Người đó nói đồng ý",
+          "announcement": "Thông báo, rồi tiếp tục"
+        },
+        "retention": "Giữ bản ghi trong (ngày)",
+        "retentionHint": "Từ {min} đến {max} ngày. Bản ghi cũ hơn bị xóa mỗi đêm; cuộc gọi vẫn còn trong nhật ký.",
+        "retentionInvalid": "Nhập số ngày nguyên trong phạm vi cho phép.",
+        "notice": "Thông báo ghi âm",
+        "noticeHint": "Đồng nghiệp đọc nội dung này trước khi ghi âm. Tối đa {max} ký tự. Mỗi thay đổi được lưu thành một phiên bản mới.",
+        "noticeRequired": "Hãy viết thông báo (ít nhất {min} ký tự) để bật ghi âm.",
+        "noticeVersion": "Phiên bản thông báo {version}",
+        "noticeNone": "Chưa lưu thông báo nào",
+        "updatedAt": "đã lưu {date}",
+        "noticeSuggestion": "Cuộc gọi này có thể được ghi âm để kiểm tra chất lượng và đào tạo. Bạn có đồng ý được ghi âm không?",
+        "useSuggestion": "Dùng văn bản gợi ý",
+        "saved": "Đã lưu quy tắc ghi âm.",
+        "saving": "Đang lưu",
+        "save": "Lưu quy tắc"
+      },
+      "consent": {
+        "title": "Hỏi trước khi ghi âm",
+        "askConfirmed": "Hãy đọc thông báo. Chỉ nhấn nút đầu tiên nếu người đó nói đồng ý.",
+        "askAnnouncement": "Hãy đọc thông báo rồi bắt đầu ghi âm.",
+        "grantConfirmed": "Đã đồng ý: bắt đầu ghi âm",
+        "grantAnnouncement": "Đã đọc thông báo: bắt đầu ghi âm",
+        "decline": "Không: tiếp tục mà không ghi âm",
+        "declinedNote": "Không ghi âm: người đó không đồng ý.",
+        "off": "Ghi âm cuộc gọi đang tắt cho không gian làm việc này.",
+        "failed": "Không thể lưu câu trả lời nên không có gì được ghi âm: {message}"
+      },
+      "lifecycle": {
+        "title": "Ghi âm và sự đồng ý",
+        "consent": "Sự đồng ý ghi âm",
+        "consentGranted": "Đã đồng ý ghi âm",
+        "consentDeclined": "Đã từ chối ghi âm",
+        "consentNone": "Chưa ghi nhận câu trả lời",
+        "method": {
+          "announcement_continue": "Đã đọc thông báo, cuộc gọi tiếp tục",
+          "spoken_yes": "Đã nói đồng ý"
+        },
+        "noticeVersion": "Phiên bản thông báo {version}",
+        "storedAt": "Đã lưu",
+        "expiresAt": "Tự động xóa vào",
+        "heldNoExpiry": "Không xóa: tạm giữ pháp lý",
+        "none": "Chưa đặt",
+        "deleted": "Đã xóa bản ghi",
+        "deletedReason": {
+          "retention": "hết thời gian lưu giữ",
+          "manual": "đồng nghiệp đã xóa",
+          "consent_withdrawn": "đã rút lại sự đồng ý"
+        },
+        "holdOn": "Tạm giữ pháp lý",
+        "placeHold": "Đặt tạm giữ pháp lý",
+        "liftHold": "Gỡ tạm giữ pháp lý",
+        "holdLifted": "Đã gỡ tạm giữ pháp lý.",
+        "holdPlaced": "Đã đặt tạm giữ pháp lý.",
+        "holdReasonLabel": "Vì sao được giữ lại?",
+        "cancel": "Hủy",
+        "delete": "Xóa bản ghi",
+        "deleteBlockedByHold": "Hãy gỡ tạm giữ pháp lý trước.",
+        "deleteTitle": "Xóa bản ghi này?",
+        "deleteMessage": "Tệp âm thanh bị xóa vĩnh viễn. Cuộc gọi vẫn còn trong nhật ký.",
+        "deletedToast": "Đã xóa bản ghi."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "Ghi âm cuộc gọi đang tắt cho không gian làm việc này.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Không thể ghi âm cuộc gọi này: người đó chưa đồng ý.",
+      "CALL_RECORDING_CONSENT_INVALID": "Không thể lưu câu trả lời đó cho cuộc gọi này.",
+      "CALL_RECORDING_ON_HOLD": "Bản ghi này đang bị tạm giữ pháp lý. Hãy gỡ tạm giữ trước.",
+      "CALL_RECORDING_SETTINGS_INVALID": "Quy tắc ghi âm không hợp lệ: hãy viết thông báo trước."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "Người đó đã đồng ý ghi âm",
+          "recording_consent_declined": "Người đó đã từ chối ghi âm",
+          "recording_deleted": "Đã xóa bản ghi",
+          "recording_hold_set": "Đã đặt tạm giữ pháp lý",
+          "recording_hold_lifted": "Đã gỡ tạm giữ pháp lý"
+        }
+      }
+    }
+  }
+}

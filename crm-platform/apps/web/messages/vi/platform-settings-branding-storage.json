@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "Chiến dịch",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "Trình tạo luồng"
     },
     "hub": {
@@ -62,7 +64,6 @@
       "conflict": "Người khác đã lưu các cài đặt này sau khi bạn mở chúng. Tải lại trang để xem thay đổi của họ, rồi áp dụng lại thay đổi của bạn.",
       "reload": "Tải lại cài đặt",
       "unexpected": "Đã xảy ra lỗi và chưa có gì được lưu.",
-      "requestId": "Mã yêu cầu",
       "readOnly": "Bạn có thể xem các cài đặt này, nhưng chỉ quản trị viên cấp cao mới có thể thay đổi.",
       "secretSet": "Đã lưu. Để trống để giữ nguyên.",
       "secretUnset": "Chưa đặt.",
@@ -930,6 +931,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Ứng dụng khách OAuth của Google mà mỗi không gian làm việc dùng để kết nối hộp thư.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth của Google"
+          },
+          "push": {
+            "title": "Gmail push (tùy chọn)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Cho phép không gian làm việc kết nối Gmail",
+            "hint": "Tắt: không không gian làm việc nào kết nối được và không có email nào được đọc hay gửi. Các hộp thư đã kết nối vẫn được giữ."
+          },
+          "clientId": {
+            "label": "ID client",
+            "hint": "Lấy từ Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). Để trống sẽ dùng GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Khóa bí mật client",
+            "hint": "Được lưu dưới dạng mã hóa và sẽ không hiển thị lại. Để trống sẽ giữ khóa đã lưu; GOOGLE_MAIL_CLIENT_SECRET là phương án dự phòng."
+          },
+          "redirectUri": {
+            "label": "Ghi đè URI chuyển hướng",
+            "hint": "Để trống để dùng địa chỉ ở trên. Địa chỉ này phải khớp chính xác với một Authorised redirect URI của client."
+          },
+          "pubsubTopic": {
+            "label": "Chủ đề Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. Cấp vai trò Publisher trên chủ đề này cho gmail-api-push@system.gserviceaccount.com. Để trống sẽ dùng GOOGLE_MAIL_PUBSUB_TOPIC; không có chủ đề thì hộp thư chỉ được kiểm tra định kỳ."
+          },
+          "pushAudience": {
+            "label": "Đối tượng (audience) của push",
+            "hint": "Đối tượng đặt trên gói đăng ký push. Để trống sẽ dùng GOOGLE_MAIL_PUSH_AUDIENCE, nếu không thì dùng địa chỉ endpoint push của nền tảng này."
+          },
+          "pushServiceAccount": {
+            "label": "Tài khoản dịch vụ của push",
+            "hint": "Tài khoản dịch vụ mà gói đăng ký push dùng để ký. Push từ tài khoản khác bị từ chối. Để trống sẽ dùng GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Email Microsoft 365",
+        "description": "Ứng dụng Microsoft mà mỗi không gian làm việc dùng để kết nối hộp thư Outlook và Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Ứng dụng Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Cho phép không gian làm việc kết nối Microsoft 365",
+            "hint": "Tắt: không không gian làm việc nào kết nối được và không có email nào được đọc hay gửi. Các hộp thư đã kết nối vẫn được giữ."
+          },
+          "clientId": {
+            "label": "ID ứng dụng (ứng dụng khách)",
+            "hint": "Từ trung tâm quản trị Microsoft Entra, Đăng ký ứng dụng, Tổng quan. Để trống sẽ dùng MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Khóa bí mật client",
+            "hint": "Được lưu dưới dạng mã hóa và sẽ không hiển thị lại. Để trống sẽ giữ khóa đã lưu; MICROSOFT_MAIL_CLIENT_SECRET là phương án dự phòng."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common cho phép tài khoản cơ quan, trường học và cá nhân; dùng ID thư mục (tenant) cho ứng dụng một tenant. Để trống sẽ dùng MICROSOFT_MAIL_TENANT, nếu không thì common."
+          },
+          "redirectUri": {
+            "label": "Ghi đè URI chuyển hướng",
+            "hint": "Để trống để dùng địa chỉ ở trên. Địa chỉ này phải khớp chính xác với một Authorised redirect URI của client."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Trình tạo luồng",
         "description": "Các trình tạo luồng nào được cung cấp cho không gian làm việc.",
@@ -1062,6 +1136,16 @@
         "title": "Google Calendar",
         "description": "Client OAuth của Google mà không gian làm việc dùng để kết nối lịch cho việc đặt lịch và thời gian bận.",
         "tags": "Google / OAuth / Lịch"
+      },
+      "googleMail": {
+        "title": "Email Gmail",
+        "description": "Ứng dụng khách OAuth của Google mà các không gian làm việc dùng để kết nối hộp thư Gmail.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "Email Microsoft 365",
+        "description": "Ứng dụng Microsoft mà các không gian làm việc dùng để kết nối hộp thư Outlook và Microsoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "Trình tạo luồng",
@@ -1648,6 +1732,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "Email Gmail",
+        "eyebrow": "Quản trị - Email",
+        "description": "Một ứng dụng khách OAuth của Google Cloud cho cả nền tảng, tách biệt với Google Calendar. Mỗi không gian làm việc tự kết nối hộp thư của mình từ Email và không bao giờ thấy ID ứng dụng khách hay khóa bí mật.",
+        "sections": {
+          "oauth": {
+            "title": "Client OAuth của Google",
+            "description": "Không có ID ứng dụng khách và khóa bí mật, các không gian làm việc không thể kết nối hộp thư."
+          },
+          "push": {
+            "title": "Gmail push (tùy chọn)",
+            "description": "Thư mới đến hộp thư nhóm trong vài giây thay vì chờ lần kiểm tra tiếp theo. Việc kiểm tra định kỳ vẫn bật để dự phòng."
+          }
+        },
+        "guide": {
+          "title": "Thiết lập trong Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. Dự án và API",
+              "body": "Trong Google Cloud Console, tạo một dự án và bật Gmail API."
+            },
+            "redirect": {
+              "title": "2. Client OAuth",
+              "body": "Tạo OAuth 2.0 Client ID loại Web application và thêm URI chuyển hướng hiển thị trên trang này vào mục Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. Màn hình đồng ý",
+              "body": "Thêm các phạm vi openid, email, gmail.readonly và gmail.send. Phạm vi Gmail bị hạn chế: Google phải xác minh ứng dụng để dùng rộng rãi, và ở chế độ Thử nghiệm, quyền cấp hết hạn sau 7 ngày."
+            },
+            "workspaces": {
+              "title": "4. Không gian làm việc kết nối",
+              "body": "Dán ID ứng dụng khách và khóa bí mật vào đây rồi lưu. Sau đó quản trị viên kết nối từ Email."
+            },
+            "push": {
+              "title": "5. Thư tức thì (tùy chọn)",
+              "body": "Tạo một chủ đề Pub/Sub, cấp vai trò Publisher cho gmail-api-push@system.gserviceaccount.com, thêm gói đăng ký push tới APP_URL/v2/public/email/google/push với xác thực OIDC, rồi nhập chủ đề, đối tượng và tài khoản dịch vụ tại đây."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "Email Microsoft 365",
+        "eyebrow": "Quản trị - Email",
+        "description": "Một ứng dụng Microsoft Entra cho toàn nền tảng. Mỗi không gian làm việc tự kết nối hộp thư của mình từ Email và không bao giờ thấy ID hay bí mật ứng dụng khách.",
+        "sections": {
+          "oauth": {
+            "title": "Ứng dụng Microsoft Entra",
+            "description": "Không có ID ứng dụng khách và khóa bí mật, các không gian làm việc không thể kết nối hộp thư."
+          }
+        },
+        "guide": {
+          "title": "Thiết lập trong Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Đăng ký ứng dụng",
+              "body": "Trong trung tâm quản trị Microsoft Entra, tạo một bản đăng ký ứng dụng. Chọn loại tài khoản khách hàng của bạn (cơ quan hoặc trường học, và tài khoản cá nhân cho Outlook.com) rồi sao chép ID ứng dụng (ứng dụng khách) và tenant vào đây."
+            },
+            "redirect": {
+              "title": "2. URI chuyển hướng và bí mật",
+              "body": "Thêm URI chuyển hướng hiển thị trên trang này làm chuyển hướng nền tảng Web, sau đó tạo bí mật ứng dụng khách trong Chứng chỉ & bí mật và dán giá trị vào đây."
+            },
+            "permissions": {
+              "title": "3. Quyền API",
+              "body": "Thêm các quyền được ủy quyền của Microsoft Graph: Mail.Read, Mail.Send, User.Read và offline_access. Để dùng rộng rãi, hãy hoàn tất xác minh nhà xuất bản; một số tổ chức còn yêu cầu quản trị viên đồng ý."
+            },
+            "workspaces": {
+              "title": "4. Không gian làm việc kết nối",
+              "body": "Dán ID ứng dụng khách và khóa bí mật vào đây rồi lưu. Sau đó quản trị viên kết nối từ Email."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "Trình tạo luồng",
         "eyebrow": "Quản trị - Tự động hóa",
@@ -1735,6 +1891,12 @@
     "googleCallback": {
       "redirectTitle": "URI chuyển hướng",
       "redirectHint": "Đăng ký đúng địa chỉ này làm Authorised redirect URI trên client OAuth. Đây là nơi Google chuyển trình duyệt đến sau khi quản trị viên không gian làm việc đồng ý.",
+      "copy": "Sao chép",
+      "copied": "Đã sao chép"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "URI chuyển hướng",
+      "redirectHint": "Đăng ký chính xác địa chỉ này làm URI chuyển hướng Web trong bản đăng ký ứng dụng. Đây là nơi Microsoft đưa trình duyệt về sau khi quản trị viên không gian làm việc đồng ý.",
       "copy": "Sao chép",
       "copied": "Đã sao chép"
     }

@@ -14,12 +14,11 @@
       "copy": "Salin",
       "copied": "Tersalin",
       "copyFailed": "Tidak dapat menyalin. Pilih kunci lalu salin secara manual.",
-      "reference": "Referensi untuk dukungan: {id}",
       "back": "Kembali ke integrasi"
     },
     "page": {
       "title": "Add-on Google Sheets",
-      "subtitle": "Tarik dan dorong kontak serta sinkronkan produk antara spreadsheet dan workspace Anda.",
+      "subtitle": "Kirim baris sheet yang baru dan berubah ke ruang kerja Anda sebagai kontak, tarik kontak ke sheet, dan sinkronkan produk.",
       "loading": "Memuat penyiapan add-on",
       "retry": "Coba lagi",
       "status": {
@@ -51,7 +50,7 @@
     },
     "key": {
       "title": "Kunci Anda",
-      "intro": "Add-on menggunakan kunci pribadi Anda untuk bertindak sebagai Anda. Add-on hanya melihat apa yang diizinkan peran Anda.",
+      "intro": "Add-on menggunakan kunci pribadi Anda untuk bertindak sebagai Anda. Add-on hanya melihat apa yang diizinkan peran Anda. Kunci adalah bagian terakhir dari Webhook URL Anda.",
       "none": "Anda belum memiliki kunci.",
       "generate": "Buat kunci",
       "rotate": "Buat kunci baru",
@@ -61,8 +60,8 @@
       "created": "Dibuat {when}",
       "lastUsed": "Terakhir dipakai {when}",
       "neverUsed": "Belum pernah dipakai",
-      "newTitle": "Kunci baru Anda",
-      "newWarning": "Salin sekarang. Kunci hanya ditampilkan sekali dan tidak dapat ditampilkan lagi. Siapa pun yang memiliki kunci ini dapat bertindak sebagai Anda di add-on.",
+      "newTitle": "Kunci baru dan Webhook URL Anda",
+      "newWarning": "Salin sekarang. Kunci dan Webhook URL hanya ditampilkan sekali dan tidak dapat ditampilkan lagi. Siapa pun yang memilikinya dapat bertindak sebagai Anda di add-on.",
       "rotatedNote": "Kunci Anda sebelumnya berhenti berfungsi.",
       "keyLabel": "Kunci baru",
       "confirmRotate": {
@@ -86,7 +85,8 @@
         "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
         "network": "Kami tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
         "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Yang dapat dilakukan kunci Anda",
@@ -109,12 +109,12 @@
     },
     "steps": {
       "title": "Siapkan di spreadsheet",
-      "one": "Buka spreadsheet, lalu Extensions, lalu Apps Script.",
-      "two": "Unduh enam file di atas. Di Project Settings tampilkan file appsscript.json, lalu tempel appsscript.json dan Code.gs menimpa yang ada di editor.",
-      "three": "Tambahkan tiga file HTML bernama Dialog, Settings, dan Help lalu tempel file yang diunduh ke dalamnya.",
-      "four": "Simpan dan muat ulang spreadsheet. Menu CRM akan muncul. Izinkan tiga izin yang diminta Google.",
-      "five": "Pilih CRM, lalu Settings, tempel kunci Anda, dan pilih Save and check.",
-      "six": "Baris 1 sheet Anda berisi nama kolom. Lalu gunakan Pull contacts, Push contacts, atau Sync products dari menu CRM."
+      "one": "Salin Webhook URL Anda saat membuat kunci. URL ini hanya ditampilkan sekali.",
+      "two": "Di spreadsheet, pilih Extensions, lalu Add-ons, lalu Get add-ons, dan pasang add-on dari Google Workspace Marketplace. Selama belum terdaftar di sana, tempelkan keenam file di bawah ke Extensions, Apps Script.",
+      "three": "Muat ulang spreadsheet. Pilih Extensions, lalu add-on, lalu Initial Setup, dan tempelkan Webhook URL.",
+      "four": "Pilih sheet dan kolom pemicu. Sebuah baris dikirim saat sel itu diisi atau diubah.",
+      "five": "Pilih Send Test untuk memeriksa koneksi. Tidak ada yang disimpan; Anda melihat kolom yang diterima CRM. Lalu pilih Submit.",
+      "six": "Aktifkan Send on event (baris dikirim begitu Anda mengeditnya) dan/atau Send on schedule (setiap jam, baris yang diubah oleh formulir atau aplikasi lain). Setiap baris tiba sebagai kontak dan hasilnya ditulis ke kolom CRM status."
     },
     "columns": {
       "title": "Kolom yang dibaca add-on",
@@ -134,6 +134,22 @@
       "title": "Produk terbaru",
       "empty": "Belum ada produk. Sinkronkan sheet untuk menambahkan.",
       "count": "{count, plural, other {# produk di workspace Anda}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Tempelkan ini di Initial Setup pada add-on. URL ini memuat kunci Anda, jadi jaga kerahasiaannya.",
+      "none": "Buat kunci untuk mendapatkan Webhook URL Anda.",
+      "capture": {
+        "title": "Data terakhir diterima",
+        "none": "Belum ada yang diterima. Di add-on, pilih Initial Setup, lalu Send Test.",
+        "when": "{event} dari {sheet}, {when}. {rows, plural, other {# baris}}.",
+        "noSheet": "sheet tanpa nama",
+        "events": {
+          "test": "Tes",
+          "edit": "Edit",
+          "schedule": "Pemindaian per jam"
+        }
+      }
     }
   }
 }

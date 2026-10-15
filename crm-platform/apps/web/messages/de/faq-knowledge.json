@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQs",
       "label": "FAQ-Bereiche",
       "tab": {
         "faqs": "FAQs",
@@ -13,9 +12,7 @@
       "unansweredCount": "{count, plural, one {# unbeantwortete Nachricht} other {# unbeantwortete Nachrichten}}"
     },
     "common": {
-      "dismiss": "Schließen",
       "retry": "Erneut versuchen",
-      "requestId": "Anfrage {id}",
       "noAccessTitle": "Sie haben keinen Zugriff auf diese Seite",
       "noAccess": "Bitten Sie einen Workspace-Admin, Ihrer Rolle die Berechtigung {permission} zu erteilen."
     },
@@ -26,28 +23,28 @@
       "conflict": "Jemand anderes hat dies geändert, während Sie es bearbeitet haben.",
       "duplicateQuestion": "Eine andere FAQ enthält bereits diese Frage.",
       "duplicateVariation": "Diese FAQ enthält diese Formulierung bereits.",
-      "limitReached": "Ihr Workspace hat das FAQ-Limit erreicht. Löschen Sie nicht benötigte FAQs oder Varianten oder bitten Sie Ihren Plattform-Admin, das Limit zu erhöhen.",
       "flowNotFound": "Der gewählte Flow existiert in diesem Workspace nicht mehr. Wählen Sie einen anderen.",
       "embeddingUnavailable": "Der KI-Anbieter ist nicht verfügbar. Hinterlegen Sie einen OpenRouter-Schlüssel in Ihrem Workspace oder bitten Sie Ihren Plattform-Admin, den gemeinsamen Schlüssel zu aktivieren, und versuchen Sie es dann erneut.",
       "engineDisabled": "Die FAQ-Beantwortung ist für die gesamte Plattform derzeit ausgeschaltet.",
       "modelNotAllowed": "Das KI-Modell der Plattform ist nicht zulässig. Wenden Sie sich an Ihren Plattform-Admin.",
       "validation": "Einige Felder müssen geprüft werden.",
       "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut und nennen Sie dem Support die Anfrage-ID, falls es weiterhin auftritt."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut und nennen Sie dem Support die Anfrage-ID, falls es weiterhin auftritt.",
+      "flowNodeNotFound": "Der gewählte Schritt ist in diesem Flow nicht mehr vorhanden. Wählen Sie einen anderen Schritt oder den Start des Flows.",
+      "limitReached": "Dieser Flow hat sein FAQ-Limit erreicht. Löschen Sie ungenutzte FAQs oder Varianten oder bitten Sie Ihren Plattform-Admin, das Limit zu erhöhen."
     },
     "banner": {
       "enabledToast": "Die FAQ-Beantwortung ist eingeschaltet.",
       "engineOff": "Die FAQ-Beantwortung wurde von der Plattform ausgeschaltet. Kunden erhalten keine FAQ-Antworten, bis sie wieder eingeschaltet wird.",
       "modelChanged": "Die Plattform hat das KI-Modell geändert, nachdem Sie diesen Schwellenwert eingestellt haben. Die Werte haben sich verschoben, prüfen Sie daher Ihre Empfindlichkeit.",
       "reviewSensitivity": "Empfindlichkeit prüfen",
-      "offTitle": "Die FAQ-Beantwortung ist für Kunden AUSGESCHALTET",
-      "offBody": "Sie können FAQs schreiben und testen, doch Kunden erhalten erst Antworten, wenn Sie die Funktion einschalten.",
       "offNoRight": "Bitten Sie jemanden mit der Berechtigung faq.settings.manage (meist ein Workspace-Admin), sie einzuschalten.",
-      "enable": "FAQ-Beantwortung einschalten"
+      "enable": "FAQ-Beantwortung einschalten",
+      "offTitle": "FAQ-Antworten sind für diesen Flow AUS",
+      "offBody": "Sie können die FAQs dieses Flows schreiben und testen, aber Kunden erhalten erst Antworten, wenn Sie die Funktion einschalten."
     },
     "list": {
       "title": "FAQs",
-      "subtitle": "Fragen Ihrer Kunden und die Antworten Ihres Bots. Kunden müssen nicht Ihre genauen Worte verwenden.",
       "add": "FAQ hinzufügen",
       "stats": {
         "label": "FAQ-Übersicht",
@@ -97,10 +94,10 @@
       "deleted": "FAQ gelöscht.",
       "empty": {
         "title": "Bringen Sie Ihrem Bot die Antworten auf häufige Fragen bei",
-        "body": "Schreiben Sie eine Frage und ihre Antwort nur einmal. Ihr Bot erkennt, was Kunden in eigenen Worten schreiben, und antwortet oder startet einen Flow.",
         "how": "Fügen Sie ein paar weitere Formulierungen derselben Frage hinzu und testen Sie sie, bevor Kunden sie sehen.",
         "cta": "Erste FAQ hinzufügen",
-        "noRight": "Bitten Sie einen Workspace-Admin um die Berechtigung, FAQs hinzuzufügen."
+        "noRight": "Bitten Sie einen Workspace-Admin um die Berechtigung, FAQs hinzuzufügen.",
+        "body": "Schreiben Sie eine Frage und ihre Antwort nur einmal. Ihr Bot erkennt, was Kunden in eigenen Worten schreiben, und antwortet mit der Antwort oder leitet zu einem Schritt eines Flows weiter."
       },
       "noMatch": {
         "title": "Keine FAQ passt zu diesen Filtern",
@@ -139,7 +136,11 @@
         "ready": "{count} aktiv",
         "pending": "{count} in Indexierung",
         "failed": "{count} fehlgeschlagen"
-      }
+      },
+      "stepMissing": "Schritt fehlt",
+      "subtitle": "Fragen, die Kunden in {flow} stellen, und was der Bot antwortet. Diese FAQs antworten nur innerhalb dieses Flows.",
+      "thisFlow": "Dieser Flow",
+      "startsAt": "Weiter zu: {step}"
     },
     "editor": {
       "back": "Zurück zu den FAQs",
@@ -156,7 +157,6 @@
       "saved": "FAQ gespeichert.",
       "deleted": "FAQ gelöscht.",
       "readOnly": "Sie können diese FAQ ansehen, Ihre Rolle darf sie aber nicht ändern.",
-      "faqLimit": "Ihr Workspace hat sein Limit von {max} FAQs erreicht. Löschen Sie eine, um eine weitere hinzuzufügen.",
       "prefilled": "Die Frage wurde aus einer unbeantworteten Kundennachricht übernommen. Mit dem Speichern dieser FAQ wird die Nachricht auch als erledigt markiert.",
       "tryItSaveFirst": "Speichern Sie zuerst die FAQ, dann können Sie testen, wie Kundennachrichten dazu passen.",
       "conflict": {
@@ -186,21 +186,30 @@
         "title": "Antwort",
         "hint": "Das erhält der Kunde, wenn diese FAQ passt.",
         "text": "Textantwort",
-        "flow": "Flow starten",
         "textLabel": "Antworttext",
         "count": "{count} / {max} Zeichen",
         "preview": "So sieht es in WhatsApp aus",
         "previewEmpty": "Ihre Antwort erscheint hier",
-        "flowLabel": "Zu startender Flow",
-        "noFlow": "Kein Flow ausgewählt"
+        "noFlow": "Kein Flow ausgewählt",
+        "flow": "Zu einem Schritt springen",
+        "flowLabel": "Ziel",
+        "startsAt": "Springt zu Schritt: {step}",
+        "stepGone": "Der Schritt, zu dem diese FAQ führt, existiert nicht mehr, daher erhalten Kunden keine Antwort.",
+        "thisFlowNamed": "Ein Schritt dieses Flows ({name})",
+        "target": {
+          "here": "Ein Schritt dieses Flows",
+          "hereHint": "Der Kunde setzt in {name} fort. Das ist die übliche Wahl.",
+          "other": "Ein Schritt eines anderen Flows",
+          "otherHint": "Die Unterhaltung an einen anderen Flow übergeben."
+        }
       },
       "advanced": {
         "title": "Erweitert: Empfindlichkeit nur für diese FAQ",
-        "body": "Standardmäßig verwendet jede FAQ die Empfindlichkeit des Workspace. Nutzen Sie einen eigenen Wert, wenn diese FAQ zu schnell (Wert erhöhen) oder zu selten (Wert senken) zutrifft.",
         "custom": "Eigene Empfindlichkeit für diese FAQ verwenden",
         "sliderLabel": "Zutreffend ab",
-        "workspace": "Die Empfindlichkeit des Workspace beträgt {value} %.",
-        "following": "Folgt der Empfindlichkeit des Workspace ({value} %)."
+        "body": "Standardmäßig verwendet jede FAQ die Empfindlichkeit dieses Flows. Nutzen Sie einen eigenen Wert, wenn diese FAQ zu schnell (erhöhen) oder zu selten (senken) passt.",
+        "workspace": "Die Empfindlichkeit dieses Flows beträgt {value}%.",
+        "following": "Folgt der Empfindlichkeit dieses Flows ({value}%)."
       },
       "problem": {
         "question": {
@@ -214,9 +223,9 @@
           "invalid": "Diese Antwort ist ungültig."
         },
         "flowId": {
-          "required": "Wählen Sie den Flow, der gestartet werden soll.",
-          "tooLong": "Wählen Sie den Flow, der gestartet werden soll.",
-          "invalid": "Wählen Sie den Flow, der gestartet werden soll."
+          "required": "Wählen Sie den Ziel-Flow.",
+          "tooLong": "Wählen Sie den Ziel-Flow.",
+          "invalid": "Wählen Sie den Ziel-Flow."
         },
         "category": {
           "required": "Geben Sie eine Kategorie ein oder lassen Sie das Feld leer.",
@@ -227,6 +236,11 @@
           "required": "Wählen Sie einen Wert zwischen 5 % und 99 %.",
           "tooLong": "Wählen Sie einen Wert zwischen 5 % und 99 %.",
           "invalid": "Wählen Sie einen Wert zwischen 5 % und 99 %."
+        },
+        "flowNodeId": {
+          "required": "Wählen Sie einen Schritt dieses Flows oder den Start des Flows.",
+          "tooLong": "Wählen Sie einen Schritt dieses Flows oder den Start des Flows.",
+          "invalid": "Wählen Sie einen Schritt dieses Flows oder den Start des Flows."
         }
       },
       "deleteConfirm": {
@@ -239,11 +253,11 @@
         "body": "Ihre Änderungen an dieser FAQ sind nicht gespeichert.",
         "leave": "Verlassen",
         "stay": "Weiter bearbeiten"
-      }
+      },
+      "faqLimit": "Dieser Flow hat sein Limit von {max} FAQs erreicht. Löschen Sie eine, um eine weitere hinzuzufügen."
     },
     "flowPicker": {
       "noAccess": "Sie benötigen die Berechtigung zum Ansehen von Flows (flb.flows.read), um hier einen auszuwählen.",
-      "missing": "Der Flow, den diese FAQ gestartet hat, existiert nicht mehr. Wählen Sie einen anderen Flow, sonst kann diese FAQ nicht antworten.",
       "selected": "Ausgewählt",
       "search": "Flows durchsuchen",
       "searchPlaceholder": "Flows nach Namen suchen",
@@ -257,7 +271,9 @@
         "off": "Inaktiv",
         "draft": "Entwurf"
       },
-      "note": "Der Flow startet mit seinem Auslöser. Nur veröffentlichte, aktive Flows können laufen."
+      "missing": "Der Flow, zu dem diese FAQ führt, existiert nicht mehr. Wählen Sie einen anderen Flow, sonst kann diese FAQ nicht antworten.",
+      "noOthers": "In diesem Workspace gibt es keinen weiteren Flow.",
+      "note": "Der Kunde setzt beim unten gewählten Schritt oder am Anfang des Flows fort. Nur veröffentlichte, aktive Flows können laufen."
     },
     "variations": {
       "title": "Fragevarianten",
@@ -333,7 +349,7 @@
       "verdict": {
         "answer": {
           "title": "Würde antworten",
-          "body": "Eine FAQ passte gut genug. Der Kunde erhält ihre Antwort (oder ihr Flow startet)."
+          "body": "Eine FAQ passte gut genug. Der Kunde erhält ihre Antwort oder wird zu dem Schritt geleitet, auf den sie verweist."
         },
         "below": {
           "title": "Unter dem Schwellenwert",
@@ -354,6 +370,10 @@
         "notSent": {
           "title": "Passend, nicht gesendet",
           "body": "Eine FAQ passte, aber die Antwort wurde nicht gesendet, z. B. weil die FAQ-Beantwortung ausgeschaltet war."
+        },
+        "vetoed": {
+          "title": "Antwort zurückgehalten",
+          "body": "Der Treffer hatte genug Punkte, doch die Zweitprüfung hat widersprochen, daher würde nichts gesendet."
         }
       },
       "tier": {
@@ -383,8 +403,8 @@
       "winner": {
         "title": "Das würde der Kunde erhalten",
         "unavailable": "Diese FAQ konnte nicht geladen werden.",
-        "flow": "Startet den Flow {name}",
-        "flowMissing": "Startet einen Flow, der nicht mehr existiert"
+        "flow": "Führt zu einem Schritt von {name}",
+        "flowMissing": "Führt zu einem Flow, der nicht mehr existiert"
       },
       "candidates": {
         "title": "Beste Treffer",
@@ -401,16 +421,16 @@
     },
     "playground": {
       "title": "Wie würde mein Bot das beantworten?",
-      "subtitle": "Lassen Sie eine Kundennachricht durch denselben Abgleich laufen, den Ihr Bot verwendet. Es wird nichts gesendet und nichts in der Auswertung gezählt.",
       "label": "Kundennachricht",
       "placeholder": "Wo ist mein Paket?",
       "run": "Ausführen",
-      "hint": "Nur gespeicherte FAQs werden abgeglichen. Aktive FAQs mit aktiven Formulierungen werden berücksichtigt.",
       "empty": "Geben Sie oben eine Nachricht ein und führen Sie sie aus, um die Entscheidung zu sehen.",
       "history": {
         "title": "Diese Sitzung",
         "empty": "Ihre letzten 10 Tests erscheinen hier."
-      }
+      },
+      "subtitle": "Eine Kundennachricht durch den Abgleich von {flow} laufen lassen. Es wird nichts gesendet und nichts in den Insights gezählt.",
+      "hint": "Es werden nur die gespeicherten FAQs dieses Flows abgeglichen. Aktive FAQs mit gültigen Formulierungen werden berücksichtigt."
     },
     "unanswered": {
       "title": "Unbeantwortete Nachrichten",
@@ -478,7 +498,6 @@
       "loadingMore": "Wird geladen",
       "why": {
         "answered": "Mit „{faq}“ beantwortet bei {score} %.",
-        "flowStarted": "Flow von „{faq}“ gestartet bei {score} %.",
         "belowThreshold": "Der beste Treffer erreichte {score} % und lag unter der Schwelle von {threshold} %, daher wurde nichts gesendet.",
         "belowThresholdNoBar": "Der beste Treffer erreichte {score} %, das reichte nicht aus, daher wurde nichts gesendet.",
         "lowMargin": "Zwei FAQs lagen zu dicht beieinander ({score} % und {second} %), daher hat der Bot nicht geraten.",
@@ -486,8 +505,12 @@
         "providerError": "Der KI-Anbieter ist ausgefallen, daher konnte der Bot nur nach Schreibweise abgleichen.",
         "notSent": "Eine FAQ passte, aber die Antwort wurde nicht gesendet.",
         "tier": "Entschieden von der Stufe {tier}.",
-        "error": "Fehler: {error}"
-      }
+        "error": "Fehler: {error}",
+        "vetoed": "Der beste Treffer erreichte {score} % und lag über der Schwelle von {threshold} %, doch die Zweitprüfung kam zu dem Ergebnis, dass er die Nachricht nicht beantwortet, daher wurde nichts gesendet.",
+        "vetoedNoBar": "Der beste Treffer erreichte {score} %, doch die Zweitprüfung kam zu dem Ergebnis, dass er die Nachricht nicht beantwortet, daher wurde nichts gesendet.",
+        "flowStarted": "Kunde mit {score}% zum Schritt von \"{faq}\" geleitet."
+      },
+      "flowRun": "(aus einem Flow)"
     },
     "insights": {
       "title": "FAQ-Auswertung",
@@ -548,7 +571,6 @@
     },
     "settings": {
       "title": "FAQ-Einstellungen",
-      "subtitle": "Schalten Sie die FAQ-Beantwortung ein und legen Sie fest, wie genau eine Nachricht passen muss.",
       "unsaved": "Nicht gespeicherte Änderungen",
       "discard": "Verwerfen",
       "save": "Einstellungen speichern",
@@ -563,11 +585,11 @@
       },
       "enable": {
         "title": "FAQ-Beantwortung",
-        "label": "Kunden mit FAQs antworten",
         "on": "Ein",
         "off": "Aus",
-        "onBody": "Wenn ein Kunde schreibt, vergleicht der Bot die Nachricht mit Ihren FAQs und antwortet mit der besten Antwort oder startet ihren Flow. Ein Flow oder Stichwort-Auslöser, der die Nachricht bereits übernommen hat, hat Vorrang.",
-        "offBody": "Kunden erhalten keine FAQ-Antworten. Sie können FAQs weiterhin schreiben und testen."
+        "label": "Kunden mit den FAQs dieses Flows antworten",
+        "onBody": "Solange dieser Flow aktiv ist, wird eine Kundennachricht, die kein Stichwort-Trigger und kein laufender Flow aufgegriffen hat, mit den FAQs dieses Flows verglichen. Der Bot antwortet mit der besten Antwort oder leitet den Kunden zu dem Schritt, auf den die FAQ verweist.",
+        "offBody": "Die FAQs dieses Flows antworten Kunden nicht. Sie können sie weiterhin schreiben und testen."
       },
       "sens": {
         "title": "Empfindlichkeit",
@@ -612,7 +634,8 @@
         "exact": "Exakt: Die Nachricht entspricht einer gespeicherten Formulierung, unabhängig von Groß-/Kleinschreibung und Leerzeichen.",
         "semantic": "Bedeutung: Die Nachricht wird inhaltlich mit jeder aktiven Formulierung verglichen, sodass auch andere Wörter passen können.",
         "trigram": "Schreibweise als Ersatz: Ist der KI-Anbieter nicht verfügbar, werden Buchstaben verglichen. Das erkennt nur Tippfehler.",
-        "threshold": "Die beste Punktzahl wird mit der Empfindlichkeit verglichen. Darüber antwortet die FAQ; darunter erscheint die Nachricht unter Unbeantwortet."
+        "threshold": "Die beste Punktzahl wird mit der Empfindlichkeit verglichen. Darüber antwortet die FAQ; darunter erscheint die Nachricht unter Unbeantwortet.",
+        "verify": "Zweitprüfung (optional): Ein Treffer, der die Empfindlichkeit nur knapp erreicht hat, kann von einem kleinen Chat-Modell gegengeprüft werden. Dieses kann eine Antwort nur zurückhalten."
       },
       "who": "Zum Ändern dieser Einstellungen ist die Berechtigung faq.settings.manage nötig.",
       "leave": {
@@ -620,6 +643,62 @@
         "body": "Ihre Änderungen an diesen Einstellungen sind nicht gespeichert.",
         "leave": "Verlassen",
         "stay": "Bleiben"
+      },
+      "verify": {
+        "title": "Zweitprüfung bei knappen Treffern",
+        "hint": "Ein kleines Chat-Modell prüft Treffer gegen, die die Schwelle nur knapp erreicht haben.",
+        "unavailable": "Die Plattform hat die Zweitprüfung ausgeschaltet, daher läuft sie auch dann nicht, wenn Sie sie hier einschalten. Wenden Sie sich an Ihren Plattform-Admin.",
+        "label": "Knappe Treffer per Zweitprüfung kontrollieren",
+        "on": "Ein",
+        "off": "Aus",
+        "onBody": "Erreicht ein Treffer die Schwelle nur knapp, liest ein kleines Chat-Modell die Nachricht des Kunden und die FAQ und beurteilt, ob die Antwort passt. Es kann nur Nein sagen: Es löst nie eine Antwort aus.",
+        "offBody": "Jeder Treffer, der die Schwelle erreicht, wird ohne zweite Prüfung beantwortet.",
+        "bandLabel": "Ab wann ein Treffer als knapp gilt",
+        "bandValue": "+{value}%",
+        "explainOn": "Treffer mit {from} % bis {to} % werden von {model} geprüft. Ein \"Nein\" bedeutet: Es wird keine Antwort gesendet und die Nachricht erscheint unter Unbeantwortet.",
+        "explainOff": "Jeder Treffer mit {threshold} % oder mehr wird beantwortet. Schalten Sie die Zweitprüfung ein, um die knappsten Treffer gegenprüfen zu lassen.",
+        "cost": "Jede Prüfung sendet die Nachricht des Kunden und die Frage der FAQ an das Modell: einige hundert Tokens, und bei einer knappen Antwort dauert es etwa eine Sekunde länger. Treffer außerhalb des Bereichs werden nie geprüft. Schlägt die Prüfung fehl, ist sie nicht verfügbar oder ist das Stundenlimit erreicht, gilt der Treffer, als gäbe es keine Prüfung."
+      },
+      "subtitle": "Schalten Sie FAQ-Antworten für {flow} ein und legen Sie fest, wie genau eine Nachricht passen muss."
+    },
+    "flowNode": {
+      "start": "Start des Flows",
+      "loading": "Schritte dieses Flows werden geladen",
+      "empty": "Dieser Flow hat keine weiteren Schritte und beginnt daher an seinem Anfang.",
+      "retry": "Erneut versuchen",
+      "deletedOption": "Gelöschter Schritt (anderen wählen)",
+      "missing": {
+        "body": "Dieser Schritt wurde aus dem Flow gelöscht. Solange Sie keinen anderen Schritt wählen, erhalten Kunden, die zu dieser FAQ passen, keine Antwort. Wählen Sie unten einen Schritt oder den Start des Flows.",
+        "fix": "Beim Start des Flows beginnen",
+        "title": "Der Schritt, zu dem diese FAQ führt, ist nicht mehr vorhanden"
+      },
+      "label": "Weiter zu",
+      "hint": "Wählen Sie einen Schritt, um den Anfang des Flows zu überspringen. Kunden setzen beim gewählten Schritt fort.",
+      "hintOwn": "Wählen Sie einen Schritt dieses Flows. Schritte, die Sie seit dem letzten Speichern hinzugefügt haben, erscheinen nach dem Speichern."
+    },
+    "verify": {
+      "title": "Zweitprüfung",
+      "chip": {
+        "confirmed": "Zweitprüfung: Ja",
+        "vetoed": "Zweitprüfung: Nein",
+        "failed": "Zweitprüfung fehlgeschlagen",
+        "skipped": "Zweitprüfung übersprungen"
+      },
+      "model": "Geprüft von",
+      "reason": "Grund",
+      "body": {
+        "confirmed": "Der Treffer war knapp, daher hat ein kleines Chat-Modell die Nachricht und die FAQ gelesen und bestätigt, dass die Antwort passt.",
+        "vetoed": "Der Treffer war knapp und die Zweitprüfung kam zu dem Ergebnis, dass diese FAQ die Nachricht nicht beantwortet. Die Antwort wurde zurückgehalten, nichts wurde gesendet, und die Nachricht erscheint unter Unbeantwortet.",
+        "failed": "Der Treffer war knapp, doch die Prüfung konnte nicht abgeschlossen werden. Der Treffer blieb bestehen und die Antwort wurde gesendet, als gäbe es keine Zweitprüfung.",
+        "skipped": "Die Zweitprüfung wurde für diesen Treffer nicht ausgeführt, daher blieb der Treffer unverändert."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "FAQs verlassen, ohne zu speichern?",
+        "body": "Sie haben ungespeicherte Änderungen in den FAQs. Wenn Sie diesen Tab verlassen, gehen sie verloren.",
+        "leave": "Verlassen",
+        "stay": "Weiter bearbeiten"
       }
     }
   }

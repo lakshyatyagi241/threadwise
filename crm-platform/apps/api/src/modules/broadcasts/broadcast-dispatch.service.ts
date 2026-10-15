@@ -38,10 +38,12 @@ import { assemblePhone } from './recipient-phone';
 import {
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
+  WALLET_GATE,
   WARMER_GATE,
   type SenderDirectory,
   type TemplateDirectory,
   type TemplateRecord,
+  type WalletGate,
   type WarmerGate,
 } from './_shims/tokens';
 
@@ -101,6 +103,7 @@ export class BroadcastDispatchService {
     private readonly runtime: PacingRuntime,
     private readonly cap: CapTally,
     private readonly lease: SenderLease,
+    @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -254,6 +257,30 @@ export class BroadcastDispatchService {
                 });
               });
               this.logger.warn({ orgId, broadcastId, used }, '[BCAST] paused: daily cap reached');
+              return 'paused';
+            }
+          }
+
+          // The wallet must pay for this message: when it cannot, the run stops here (nobody is failed) until a top-up and Resume.
+          if (to) {
+            try {
+              await this.wallet.precheckSend(orgId, to, {
+                source: 'broadcast',
+                category: 'marketing',
+              });
+            } catch (err) {
+              if (!(err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY)) throw err;
+              await this.db.tx(async (tx) => {
+                await this.progress.recompute(tx, orgId, broadcastId);
+                await this.progress.pause(tx, orgId, broadcastId, {
+                  reason: 'manual',
+                  at: this.runtime.now().toISOString(),
+                });
+              });
+              this.logger.warn(
+                { orgId, broadcastId },
+                '[BCAST] paused: wallet cannot cover the next message',
+              );
               return 'paused';
             }
           }

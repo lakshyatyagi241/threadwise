@@ -110,16 +110,18 @@ export function useToggleCalling() {
 }
 
 /** Whether the Call button shows for a conversation. A refusal (no permission, plan without calling) just hides the button. */
+export const fetchEligibility = (conversationId: string, signal?: AbortSignal) =>
+  apiFetch(`${BASE}/eligibility`, {
+    query: { conversationId },
+    schema: callEligibilitySchema,
+    signal,
+  });
+
 export function useCallEligibility(conversationId: string, enabled = true) {
   return useQuery({
     queryKey: KEYS.eligibility(conversationId),
     enabled,
-    queryFn: ({ signal }) =>
-      apiFetch(`${BASE}/eligibility`, {
-        query: { conversationId },
-        schema: callEligibilitySchema,
-        signal,
-      }),
+    queryFn: ({ signal }) => fetchEligibility(conversationId, signal),
     retry: false,
   });
 }

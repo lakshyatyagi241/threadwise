@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ContactConsentModule } from '../contact-consent';
 import { AppointmentsBookingModule } from './appointments-booking.module';
 import { AppointmentCalendarConsumer } from './appointment-calendar.consumer';
 import { AppointmentLifecycleSweepService } from './appointment-lifecycle-sweep.service';
@@ -11,7 +12,7 @@ import { AppointmentReminderSweepService } from './appointment-reminder-sweep.se
  * registers itself with the kernel's OutboxSubscriberRegistry, which the drain loop in that process fans events out to.
  */
 @Module({
-  imports: [AppointmentsBookingModule],
+  imports: [AppointmentsBookingModule, ContactConsentModule],
   providers: [
     AppointmentReminderSweepService,
     AppointmentLifecycleSweepService,

@@ -9,6 +9,7 @@ import {
 import { senderDigits } from '../node-bridge-runtime';
 import type { DeviceRow } from './devices.repository';
 import { toE164 } from './device-rules';
+import { toHistoryStatus } from './history-import.mapper';
 
 const iso = (d: Date | null): string | null => (d ? d.toISOString() : null);
 
@@ -41,6 +42,22 @@ export function toDevice(r: DeviceRow): PersonalDevice {
     proxy: { enabled: r.proxy_enabled, status: r.proxy_status, egressIp: r.proxy_egress_ip },
     sent24h: r.sent_24h,
     failed24h: r.failed_24h,
+    historyImport: toHistoryStatus(
+      r.hi_state === null
+        ? null
+        : {
+            state: r.hi_state,
+            mode: r.hi_mode,
+            chats_count: r.hi_chats,
+            contacts_count: r.hi_contacts,
+            messages_count: r.hi_messages,
+            progress: r.hi_progress,
+            window_days: r.hi_window_days,
+            started_at: r.hi_started_at,
+            finished_at: r.hi_finished_at,
+            error_code: r.hi_error,
+          },
+    ),
     createdAt: r.created_at.toISOString(),
     rowVersion: r.row_version,
   };

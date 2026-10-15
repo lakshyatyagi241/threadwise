@@ -8,7 +8,7 @@ import { PublicForm } from '../public/public-form';
 import { UnavailableForm } from '../public/unavailable';
 import { definition, field, loose, PROPERTIES, publicForm } from '../test-fixtures';
 import { boundKeys } from '../lib/builder-model';
-import type { FieldBlock } from '../lib/types';
+import type { CrmProperty, FieldBlock } from '../lib/types';
 import { BlockInspector } from './build-inspector';
 import { BuildPalette } from './build-palette';
 import { BuildTab } from './build-tab';
@@ -73,6 +73,84 @@ describe('Build tab', () => {
   });
 });
 
+describe('Build tab layout', () => {
+  it('uses the three columns only from 1280px, so a field card is never squeezed to a letter', () => {
+    const html = renderAccount(<BuildTab {...props()} />);
+    expect(html).toContain('xl:grid-cols-[260px_minmax(0,1fr)_320px]');
+    expect(html).not.toContain('lg:grid-cols-[260px');
+    // below that width the palette is the "Add a field" dialog and the settings open under the field
+    expect(html).toContain('xl:hidden');
+  });
+});
+
+describe('Palette: CRM properties come first, with the address as its own group', () => {
+  const props = (over: Record<string, unknown> = {}) => ({
+    properties: [
+      ...PROPERTIES,
+      {
+        object: 'contact',
+        property: 'address_city',
+        label: 'City',
+        source: 'builtin',
+        type: 'text',
+        suggestedKind: 'short_text',
+        requiredByWorkspace: false,
+      },
+      {
+        object: 'contact',
+        property: 'address_line',
+        label: 'Street',
+        source: 'builtin',
+        type: 'text',
+        suggestedKind: 'short_text',
+        requiredByWorkspace: false,
+      },
+    ] as CrmProperty[],
+    propertiesState: 'ready' as const,
+    bound: boundKeys(definition()),
+    disabled: false,
+    full: false,
+    onField: noop,
+    onHidden: noop,
+    onBlock: noop,
+    onProperty: noop,
+    onProperties: noop,
+    ...over,
+  });
+  const html = (over: Record<string, unknown> = {}, locale: 'en' | 'ar' = 'en') =>
+    renderAccount(<BuildPalette {...props(over)} />, { locale });
+
+  it('lists the CRM properties above the plain field types', () => {
+    const out = html();
+    expect(out.indexOf('CRM properties')).toBeGreaterThan(-1);
+    expect(out.indexOf('CRM properties')).toBeLessThan(out.indexOf('New fields'));
+  });
+
+  it('shows Contact and Contact address as separate groups with an add-all button for the address', () => {
+    const out = html();
+    expect(out).toContain('data-testid="crm-section-contact"');
+    expect(out).toContain('data-testid="crm-section-contactAddress"');
+    expect(out).toContain('Contact address');
+    expect(out).toContain('Add all address fields');
+    // the plain group has no such button: exactly one in this list (company has no address here)
+    expect(out.split('Add all address fields').length - 1).toBe(1);
+  });
+
+  it('the add-all button is off when every part is already on the form, or the form cannot take more', () => {
+    const allBound = new Set(['contact:address_city', 'contact:address_line']);
+    expect(html({ bound: allBound })).toMatch(
+      /<button[^>]*disabled=""[^>]*>[^<]*Add all address fields/,
+    );
+    expect(html({ full: true })).toMatch(
+      /<button[^>]*disabled=""[^>]*>[^<]*Add all address fields/,
+    );
+  });
+
+  it('renders in Arabic with real messages', () => {
+    expect(() => html({}, 'ar')).not.toThrow();
+  });
+});
+
 describe('Palette', () => {
   const palette = (over: Record<string, unknown> = {}) =>
     renderAccount(
@@ -86,6 +164,7 @@ describe('Palette', () => {
         onHidden={noop}
         onBlock={noop}
         onProperty={noop}
+        onProperties={noop}
         {...over}
       />,
     );
@@ -297,6 +376,7 @@ describe('Form renderer', () => {
         required: true,
         privacyUrl: 'https://example.com/privacy',
         marketing: false,
+        coversSms: false,
         version: 2,
       },
     });

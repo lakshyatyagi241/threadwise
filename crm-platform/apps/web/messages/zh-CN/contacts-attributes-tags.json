@@ -21,7 +21,6 @@
       "unavailable": "API 的这一部分暂不可用。",
       "rateLimited": "请求过多。请稍候再试。",
       "unexpected": "出了点问题。请重试。",
-      "requestId": "请求 ID",
       "retry": "重试",
       "reservedKey": "该键已被内置令牌保留。请选择其他键。",
       "attributeInUse": "部分联系人在此属性上有值。",
@@ -121,6 +120,11 @@
       "selectedActionsNone": "已选联系人（请先选择行）",
       "modifyColumns": "调整列",
       "resetColumns": "恢复默认",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsSave": "Save",
       "colContactName": "联系人姓名",
       "colPhone": "电话号码",
       "colEmailId": "电子邮箱",
@@ -170,7 +174,42 @@
       "import": "导入",
       "columns": "列",
       "addColumnField": "将自定义字段添加为列",
-      "kanbanView": "看板视图（按阶段）"
+      "kanbanView": "看板视图（按阶段）",
+      "colLeadScore": "线索评分",
+      "colOwner": "负责人",
+      "unassigned": "未分配",
+      "ownerFilter": "按负责人筛选",
+      "selectOwner": "负责人",
+      "allOwners": "所有负责人",
+      "myContacts": "我的联系人",
+      "ownersCount": "{count} 位负责人",
+      "ownerMe": "{name}(我)",
+      "ownerFormer": "已离开的成员",
+      "reassignView": "重新分配 {name} 的联系人...",
+      "smsNamed": "短信 {name}",
+      "noSms": "没有可用于发送短信的电话号码",
+      "pqlLabel": "用日常语言搜索联系人",
+      "pqlAsk": "提问",
+      "pqlAsking": "正在提问...",
+      "pqlIgnored": "未理解：{parts}",
+      "pqlNothing": "该搜索无法转换为筛选条件。",
+      "pqlFailed": "自然语言搜索暂不可用，请重试。",
+      "filter": "筛选",
+      "filterAi": "用 AI 筛选",
+      "filterAiHint": "描述你要找的人",
+      "filterAdvanced": "添加高级筛选",
+      "quickFilters": "快速筛选",
+      "sortButton": "排序",
+      "back": "返回",
+      "pqlPromptPlaceholder": "描述你想要的联系人...",
+      "pqlTry": "试试这些",
+      "pqlExample2": "30天未活跃",
+      "pqlExample3": "最近7天创建",
+      "clearFilter": "清除筛选",
+      "conditionsChip": "条件：{count}",
+      "pqlExampleTag": "带有标签 {tag} 且30天未活跃的联系人",
+      "pqlExampleStage": "最近7天创建的 {stage} 联系人",
+      "pqlExampleNoOwner": "没有负责人的联系人"
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -215,7 +254,6 @@
       "exportStarted": "您的导出文件已下载。",
       "exportTooLarge": "一次导出的联系人太多。请缩小筛选范围后重试。",
       "update": "更新",
-      "updateNeedsRows": "选择行",
       "updated": "{count, plural, other {已更新 # 位联系人。}}"
     },
     "form": {
@@ -304,7 +342,13 @@
       "statusNoticeReset": "状态已重置为{status}。",
       "statusNoticeSet": "状态已设为{status}，这是该阶段的默认状态。",
       "statusNoticeCleared": "状态已清除：它不适用于该阶段。",
-      "statusNoneForStage": "此阶段未设置状态。"
+      "statusNoneForStage": "此阶段未设置状态。",
+      "owner": "负责人",
+      "ownerNone": "未分配",
+      "ownerMe": "{name}(我)",
+      "ownerFormer": "已离开的成员",
+      "ownerHelp": "负责这个联系人的人。只能选择您的权限允许的人员。",
+      "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。"
     },
     "tags": {
       "title": "标签",
@@ -320,7 +364,12 @@
       "addPlaceholder": "添加或选择标签...",
       "addLabel": "标签名称",
       "add": "添加标签",
-      "failed": "无法更改标签。请重试。"
+      "failed": "无法更改标签。请重试。",
+      "quickPlaceholder": "搜索或创建标签",
+      "create": "创建标签“{name}”",
+      "noMatch": "没有匹配的标签",
+      "quickHint": "可选择多个标签，或输入名称后按 Enter 创建新标签。",
+      "quickHintPick": "可从列表中选择多个标签。"
     },
     "groups": {
       "eyebrow": "工作区 · {workspace}",
@@ -406,7 +455,10 @@
         "address": "地址",
         "memo": "备忘",
         "status": "状态",
-        "source": "来源"
+        "source": "来源",
+        "consent": "营销同意（是 / 否）",
+        "consentSms": "短信营销同意(是 / 否)",
+        "consentEmail": "邮件营销同意(是 / 否)"
       },
       "notInFile": "文件中没有",
       "columnN": "第 {n} 列",
@@ -431,7 +483,7 @@
       "imported": "{count, plural, other {已导入 # 位联系人。}}",
       "importedUpdated": "{count, plural, other {已更新 # 位现有联系人。}}",
       "importedInvalid": "{count, plural, other {已跳过 # 行无效数据。}}",
-      "downloadRejects": "下载被拒绝的行",
+      "downloadRejects": "下载错误和跳过的行",
       "fileTooLarge": "该文件超过 {mb} MB。",
       "checking": "正在检查文件...",
       "errorFile": "无法将该文件读取为联系人 CSV。请确认其包含表头行和至少一位联系人。",
@@ -462,7 +514,8 @@
         "group_name_too_long": "群组名称过长",
         "tag_name_too_long": "标签名称过长",
         "plan_limit_reached": "已达套餐联系人上限",
-        "tag_limit_reached": "已达套餐标签上限"
+        "tag_limit_reached": "已达套餐标签上限",
+        "duplicate_in_file": "号码重复，已合并到前面的行"
       },
       "statusHint": "应用于此文件创建的联系人。",
       "queued": "等待开始...",
@@ -512,7 +565,17 @@
       "noActivity": "该联系人暂无活动。",
       "loadMore": "加载更多",
       "yes": "是",
-      "no": "否"
+      "no": "否",
+      "owner": "负责人",
+      "ownerNone": "未分配",
+      "ownerChange": "更改负责人",
+      "ownerChanged": "负责人已设置为 {name}。",
+      "ownerCleared": "已移除负责人。",
+      "ownerConflict": "其他人已先更改了此联系人。已重新加载,请重试。",
+      "ownerForbidden": "您的权限不允许将此联系人分配给该人员。",
+      "ownerFailed": "无法更改负责人。请重试。",
+      "ownerMe": "{name}(我)",
+      "ownerFormer": "已离开的成员"
     },
     "attributes": {
       "eyebrow": "更多 / 属性",
@@ -1137,7 +1200,11 @@
         "willClear": "将清空{count, plural, other {所选的全部 # 个联系人}}的该值。",
         "requiredNoClear": "必填属性无法清空。",
         "problemEmpty": "请输入值，或选择“清空”。"
-      }
+      },
+      "titleAll": "更新所有匹配的联系人",
+      "hintAll": "将相同的值设置到符合当前筛选条件的每个联系人。保持不变的字段不会被更改。",
+      "applyAll": "更新所有匹配的联系人",
+      "ownerOnlyNote": "对于每个匹配的联系人,这里只能更改负责人。如需更改阶段、状态或属性,请改为勾选行。"
     },
     "kanban": {
       "board": "按阶段查看联系人",
@@ -1164,17 +1231,18 @@
         "updated": "已更新",
         "rejected": "已拒绝",
         "actions": "操作",
-        "downloadRejects": "下载被拒绝项",
+        "downloadRejects": "下载错误和跳过的行",
         "statuses": {
           "queued": "排队中",
           "running": "运行中",
           "completed": "已完成",
           "failed": "失败"
-        }
+        },
+        "by": "导入人"
       },
       "exports": {
         "title": "导出",
-        "hint": "来自联系人中心的联系人导出，最新的在前。下载的文件不会保留。",
+        "hint": "来自 Hub 的联系人导出记录，最新的在前。每个文件保留 30 天，您和有导出权限的同事可再次下载。",
         "empty": "暂无导出记录。",
         "by": "操作人",
         "rows": "联系人",
@@ -1183,8 +1251,176 @@
         "selections": {
           "ids": "已勾选的联系人",
           "filter": "所有符合条件的"
-        }
+        },
+        "download": "下载",
+        "noFile": "未保存",
+        "keptUntil": "保留至 {date}",
+        "downloadFailed": "无法下载该文件，可能已过期。"
       }
+    },
+    "singleSend": {
+      "close": "关闭",
+      "cancel": "取消",
+      "send": "发送",
+      "sending": "发送中",
+      "contact": "联系人",
+      "name": "姓名",
+      "phone": "手机",
+      "email": "邮箱",
+      "title": {
+        "whatsapp": "发送 WhatsApp 消息",
+        "sms": "发送短信",
+        "email": "发送邮件",
+        "call": "拨打电话"
+      },
+      "optedOut": "该联系人已退订通信，无法发送消息。",
+      "noPhone": "该联系人没有电话号码。",
+      "noEmail": "该联系人没有邮箱地址。",
+      "number": "发送自",
+      "numberHint": "发送消息所使用的 WhatsApp 号码。",
+      "noChannel": "尚未连接 WhatsApp 号码，请先在“渠道”中连接。",
+      "template": "WhatsApp 模板",
+      "templatePlaceholder": "选择模板",
+      "noTemplates": "此号码没有已审核通过的模板。",
+      "notSendable": "此模板无法在此处填写（{reason}）。",
+      "variables": "模板变量",
+      "preview": "预览",
+      "slot": "变量 {key}",
+      "loading": "加载中",
+      "openFailed": "无法打开对话：{message}",
+      "sent": "已将发给 {name} 的消息加入队列。",
+      "failed": "无法发送：{message}",
+      "callIntro": "通过浏览器向该联系人发起 WhatsApp 通话。",
+      "callOff": "此 WhatsApp 号码未开启通话功能，请在号码设置中开启。",
+      "callPermission": "该联系人尚未允许通话，通话前需先征得其同意。",
+      "callReady": "准备拨打 {phone}。",
+      "later": {
+        "sms": "暂不支持从 CRM 发送短信。",
+        "email": "暂不支持从 CRM 发送邮件。"
+      },
+      "openApp": {
+        "sms": "在短信应用中打开",
+        "email": "在邮件应用中打开"
+      }
+    },
+    "views": {
+      "label": "视图",
+      "all": "所有联系人",
+      "add": "添加视图",
+      "changed": "自保存此视图后，筛选条件已更改",
+      "more": "{name} 的更多操作",
+      "picker": {
+        "title": "选择视图",
+        "create": "新建视图",
+        "search": "搜索视图...",
+        "empty": "未找到视图",
+        "pinned": "已置于标签页",
+        "favorites": "收藏",
+        "defaultFilters": "默认筛选",
+        "createdViews": "已创建的视图",
+        "addView": "添加视图",
+        "markFavorite": "标记为收藏",
+        "unmarkFavorite": "取消收藏"
+      },
+      "menu": {
+        "rename": "重命名视图",
+        "update": "保存当前筛选条件",
+        "unpin": "从标签页移除",
+        "pin": "显示为标签页",
+        "delete": "删除视图",
+        "edit": "编辑视图"
+      },
+      "drawer": {
+        "editTitle": "重命名视图",
+        "name": "视图名称",
+        "namePlaceholder": "未命名视图",
+        "shareWith": "共享给",
+        "justMe": "仅自己",
+        "everyone": "所有人",
+        "save": "更新",
+        "cancel": "取消",
+        "close": "关闭"
+      },
+      "toast": {
+        "created": "视图“{name}”已创建。",
+        "updated": "视图已更新。",
+        "filtersSaved": "筛选条件已保存到“{name}”。",
+        "deleted": "视图“{name}”已删除。",
+        "failed": "无法保存视图：{message}",
+        "conflict": "其他人已修改此视图，请刷新后重试。"
+      },
+      "delete": {
+        "title": "删除此视图？",
+        "message": "“{name}”将对所有共享对象删除，联系人不会受到影响。",
+        "confirm": "删除视图",
+        "cancel": "保留视图"
+      },
+      "editor": {
+        "title": {
+          "create": "新建视图",
+          "edit": "编辑视图"
+        },
+        "close": "关闭",
+        "back": "返回联系人",
+        "name": "视图名称",
+        "namePlaceholder": "输入视图名称",
+        "favorite": "设为收藏",
+        "favoriteHint": "收藏的视图会拥有独立的标签页。",
+        "shareWith": "共享给",
+        "justMe": "仅自己",
+        "everyone": "所有人",
+        "filterTitle": "筛选联系人",
+        "filterHint": "可匹配全部或任一条件，并可添加分组以设置更复杂的筛选。",
+        "columnsTitle": "列偏好设置",
+        "locked": "始终显示",
+        "cancel": "取消",
+        "create": "创建视图",
+        "save": "保存视图",
+        "saving": "保存中",
+        "needName": "请输入视图名称。",
+        "needFilter": "请至少添加一个完整的条件。",
+        "notFound": "未找到此视图，或它已被删除。",
+        "noPermission": "您没有执行此操作的权限。",
+        "loading": "加载中",
+        "columnsHint": "搜索并勾选此视图要显示的列，然后拖动已选列调整顺序。",
+        "drag": "拖动以重新排序 {name}",
+        "selectedUsers": "已选用户",
+        "accessLevel": "访问级别",
+        "canView": "可查看",
+        "canEdit": "可查看和编辑",
+        "peoplePlaceholder": "搜索人员",
+        "noPeople": "未找到人员",
+        "removePerson": "移除 {name}",
+        "clearPeople": "清除所有人员",
+        "needPeople": "请至少选择一人。",
+        "onlyCreator": "只有创建此视图的人才能更改其共享对象。",
+        "searchColumns": "搜索列",
+        "noColumnMatch": "没有匹配的列。",
+        "available": "可用列",
+        "selected": "已选列",
+        "selectAll": "全选",
+        "reorder": "拖动以重新排序列",
+        "remove": "移除 {name}"
+      },
+      "presets": {
+        "myContacts": "我的联系人",
+        "newThisWeek": "本周新增",
+        "newLastWeek": "上周新增",
+        "recentlyCreated": "最近创建",
+        "recentlyModified": "最近修改",
+        "recentlyImported": "最近导入",
+        "neverContacted": "从未联系",
+        "needsFollowUp": "需要跟进",
+        "active": "活跃",
+        "inactive": "不活跃",
+        "unsubscribed": "已退订"
+      }
+    },
+    "erase": {
+      "scope": "删除联系人时，也会删除其会话、消息、媒体、文件、通话录音和通话记录。线索、交易、任务和发票将保留。",
+      "scopeMany": "删除联系人时，也会删除他们的会话、消息、媒体、文件、通话录音和通话记录。线索、交易、任务和发票将保留。",
+      "keepHistory": "保留会话记录，但去除当事人身份信息",
+      "keepHistoryHint": "这些会话会留作记录，但不再指向当事人。"
     }
   }
 }

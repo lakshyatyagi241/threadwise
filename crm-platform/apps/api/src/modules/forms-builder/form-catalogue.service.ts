@@ -4,6 +4,7 @@ import type {
   FormBindObject,
   FormFieldKind,
   FormPaymentGateway,
+  FormProtection,
   FormProperty,
   FormPropertyList,
   FormTemplateList,
@@ -14,6 +15,7 @@ import {
   WorkspaceGatewayResolver,
   supportsPaymentLinks,
 } from '../checkout-orders-merchant-payments';
+import { CaptchaService } from '../auth';
 import { ContactsRepository } from '../crm';
 import { FORM_TEMPLATES } from './form-templates';
 import { FormsRepository } from './forms.repository';
@@ -25,15 +27,54 @@ interface Builtin {
   kind: FormFieldKind;
 }
 
+/** The address typed as separate fields; the pipeline joins them into the one address line the CRM keeps (`composeAddress`). */
+function addressParts(company: boolean): Builtin[] {
+  const label = (contact: string, owned: string): string => (company ? owned : contact);
+  return [
+    {
+      property: 'address_line',
+      label: label('Street', 'Company street'),
+      type: 'text',
+      kind: 'short_text',
+    },
+    {
+      property: 'address_city',
+      label: label('City', 'Company city'),
+      type: 'text',
+      kind: 'short_text',
+    },
+    {
+      property: 'address_state',
+      label: label('State or region', 'Company state or region'),
+      type: 'text',
+      kind: 'short_text',
+    },
+    {
+      property: 'address_postal_code',
+      label: label('Postal code', 'Company postal code'),
+      type: 'text',
+      kind: 'short_text',
+    },
+    {
+      property: 'address_country',
+      label: label('Country', 'Company country'),
+      type: 'text',
+      kind: 'short_text',
+    },
+  ];
+}
+
 /** The columns a form can write without a registry entry. Names match `CONTACT_BUILTIN_PROPERTIES` / `COMPANY_BUILTIN_PROPERTIES`. */
 const CONTACT_BUILTINS: readonly Builtin[] = [
   { property: 'name', label: 'Full name', type: 'text', kind: 'short_text' },
   { property: 'first_name', label: 'First name', type: 'text', kind: 'short_text' },
+  { property: 'middle_name', label: 'Middle name', type: 'text', kind: 'short_text' },
   { property: 'last_name', label: 'Last name', type: 'text', kind: 'short_text' },
   { property: 'email', label: 'Email', type: 'email', kind: 'email' },
   { property: 'phone', label: 'Phone', type: 'phone', kind: 'phone' },
   { property: 'title', label: 'Job title', type: 'text', kind: 'short_text' },
-  { property: 'address', label: 'Address', type: 'long_text', kind: 'long_text' },
+  { property: 'address', label: 'Full address', type: 'long_text', kind: 'long_text' },
+  ...addressParts(false),
   { property: 'message', label: 'Message', type: 'long_text', kind: 'long_text' },
 ];
 const COMPANY_BUILTINS: readonly Builtin[] = [
@@ -43,7 +84,8 @@ const COMPANY_BUILTINS: readonly Builtin[] = [
   { property: 'phone', label: 'Company phone', type: 'phone', kind: 'phone' },
   { property: 'industry', label: 'Industry', type: 'text', kind: 'short_text' },
   { property: 'size_range', label: 'Company size', type: 'text', kind: 'short_text' },
-  { property: 'address', label: 'Company address', type: 'long_text', kind: 'long_text' },
+  { property: 'address', label: 'Company full address', type: 'long_text', kind: 'long_text' },
+  ...addressParts(true),
   { property: 'notes', label: 'Notes', type: 'long_text', kind: 'long_text' },
 ];
 
@@ -82,6 +124,7 @@ export class FormCatalogueService {
     private readonly repo: FormsRepository,
     private readonly contacts: ContactsRepository,
     private readonly gateways: WorkspaceGatewayResolver,
+    private readonly captcha: CaptchaService,
   ) {}
 
   async properties(object: FormBindObject): Promise<FormPropertyList> {
@@ -136,6 +179,17 @@ export class FormCatalogueService {
       name: gw.name,
       mode: gw.mode,
       reason: ready ? null : 'no_link_support',
+    };
+  }
+
+  /** What protects the workspace's forms right now: whether the platform has a CAPTCHA provider, and what the silent protections caught. */
+  async protection(): Promise<FormProtection> {
+    const ctx = RequestContextStore.require();
+    const config = await this.captcha.publicConfig();
+    const counts = await this.db.tx((tx) => this.repo.protectionCounts(tx, ctx.orgId, new Date()));
+    return {
+      captcha: { available: config !== null, version: config?.version ?? null },
+      ...counts,
     };
   }
 

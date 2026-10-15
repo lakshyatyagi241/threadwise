@@ -1,0 +1,216 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "AIリードスコアリング"
+    },
+    "common": {
+      "loading": "読み込み中",
+      "retry": "再試行",
+      "dash": "-",
+      "cancel": "キャンセル",
+      "errors": {
+        "forbidden": "この操作を行う権限がありません。",
+        "request": "リクエストを完了できませんでした。",
+        "unexpected": "サーバー側で問題が発生しました。しばらくしてからもう一度お試しください。",
+        "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
+        "validation": "無効な値があります。ハイライトされた項目を確認してください。",
+        "notFound": "この項目はすでに存在しません。"
+      }
+    },
+    "page": {
+      "eyebrow": "管理 · AI · リードスコアリング",
+      "title": "AIリードスコアリング",
+      "description": "ワークスペースがAIモデルでコンタクトをスコアリングできるかどうか、使用するモデル、上限、そしてコストを管理します。",
+      "superOnly": "AIリードスコアリングの表示と変更ができるのはスーパー管理者のみです。"
+    },
+    "status": {
+      "label": "リードスコアリングの状態",
+      "switch": {
+        "title": "プラットフォームスイッチ",
+        "on": "オン",
+        "off": "オフ",
+        "hintOn": "オプトインしたワークスペースはコンタクトをスコアリングできます。",
+        "hintOff": "各ワークスペースの設定に関係なく、どのワークスペースもコンタクトをスコアリングできません。"
+      },
+      "model": {
+        "title": "モデル",
+        "custom": "一覧にない、手入力されたモデルです。"
+      },
+      "key": {
+        "title": "プラットフォームのOpenRouterキー",
+        "ready": "使用可能",
+        "missing": "未設定",
+        "explainReady": "独自のOpenRouterキーを持たないワークスペースはこのキーでスコアリングされ、その費用はお客様の負担となります。",
+        "explainMissing": "プラットフォームキーがない場合、独自のOpenRouterキーを保存したワークスペースのみがコンタクトをスコアリングできます。",
+        "link": "AIキーを開く"
+      },
+      "reach": {
+        "title": "対象範囲",
+        "workspaces": "オプトイン済みワークスペース",
+        "contacts": "スコアリング済みコンタクト"
+      }
+    },
+    "settings": {
+      "title": "設定",
+      "description": "変更はすべてのワークスペースに一括で適用されます。変更した項目のみが保存されます。",
+      "enabled": {
+        "label": "AIリードスコアリング",
+        "hint": "初期状態ではオフです。オンにすると、オプトインしたワークスペースが匿名化したコンタクト情報をOpenRouterに送信し、0〜100のスコアを取得します。オフにするとすべてのスコアリングが停止します。"
+      },
+      "model": {
+        "label": "モデル",
+        "hint": "価格は100万トークンあたりの米ドルで、OpenRouterの一覧に基づきます。",
+        "option": "{label} · 入力 {input} / 出力 {output}",
+        "other": "その他のOpenRouterモデルID",
+        "details": "100万入力トークンあたり {input}、100万出力トークンあたり {output}。",
+        "customLabel": "OpenRouterモデルID",
+        "customHint": "構造化出力に対応したOpenRouterの任意のモデルID。",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "上限",
+        "scoresPerHour": "ワークスペースごとの1時間あたりのスコア数",
+        "scoresPerHourHint": "プラットフォームキーを使用するワークスペース向けのコスト制限です。0は無制限を意味します。",
+        "retentionDays": "ログの保持期間(日数)",
+        "retentionDaysHint": "それより古い実行とそのコスト履歴は削除されます。7〜730日。"
+      },
+      "saving": "保存中",
+      "save": "変更を保存",
+      "reset": "変更を破棄",
+      "changed": "{count, plural, other {#件の変更を保存できます}}",
+      "unchanged": "保存する変更はありません。",
+      "saved": "リードスコアリングの設定を保存しました。",
+      "errors": {
+        "range": "{min}から{max}の間の値を入力してください。",
+        "integer": "整数を入力してください。",
+        "modelId": "openai/gpt-6-lunaのようなOpenRouterモデルIDを使用してください。",
+        "invalid": "この値は無効です。"
+      },
+      "confirm": {
+        "title": "変更の確認",
+        "turnOn": "オプトインしたワークスペースが匿名化したコンタクト情報をOpenRouterに送信し、プラットフォームキーのクレジットを消費できるようになります。",
+        "turnOff": "すべてのワークスペースでAIリードスコアリングが停止します。保存済みのスコアは残ります。",
+        "confirm": "変更を保存"
+      }
+    },
+    "cost": {
+      "title": "スコアリングのコスト",
+      "description": "スコアリングログの合計(米ドル)。",
+      "last24h": "過去24時間",
+      "last30d": "過去30日間",
+      "scores": "書き込まれたスコア",
+      "failed": "失敗した実行",
+      "tokens": "トークン",
+      "tokensSplit": "入力 / 出力トークン",
+      "total": "合計コスト",
+      "average": "スコア1件あたりの平均",
+      "platform": "プラットフォームキーで支払い済み",
+      "footnote": "コストはOpenRouterが報告した金額です。報告がない場合はトークン数からの推定値です。ワークスペース自身のキーで請求された実行は合計に含まれますが、プラットフォーム負担分には含まれません。"
+    },
+    "workspaces": {
+      "title": "ワークスペース",
+      "description": "AIリードスコアリングを利用しているワークスペースと、過去30日間のコストを高い順に表示します。",
+      "search": "ワークスペースを検索",
+      "searchPlaceholder": "ワークスペース名",
+      "limit": "行数",
+      "limitOption": "{count}行",
+      "noMatchTitle": "一致するワークスペースがありません",
+      "noMatchMessage": "別の名前をお試しください。",
+      "clearSearch": "検索をクリア",
+      "emptyTitle": "ワークスペースがまだありません",
+      "emptyMessage": "ワークスペースが作成されると、ここに表示されます。",
+      "tableLabel": "スコアリングコスト別のワークスペース",
+      "columns": {
+        "name": "ワークスペース",
+        "enabled": "スコアリング",
+        "contacts": "スコアリング済みコンタクト",
+        "scores": "スコア数(30日間)",
+        "cost": "コスト(30日間)"
+      },
+      "enabled": "オン",
+      "disabled": "オフ"
+    },
+    "runs": {
+      "title": "スコアリングログ",
+      "description": "全ワークスペースのスコアリング試行を新しい順に表示し、トークン、コスト、支払者を確認できます。",
+      "refresh": "更新",
+      "filters": {
+        "status": "ステータス",
+        "anyStatus": "すべてのステータス",
+        "workspace": "ワークスペース",
+        "anyWorkspace": "すべてのワークスペース",
+        "clear": "フィルターをクリア"
+      },
+      "status": {
+        "ok": "スコアリング済み",
+        "kept": "維持",
+        "failed": "失敗",
+        "skipped": "スキップ"
+      },
+      "trigger": {
+        "created": "コンタクト作成",
+        "updated": "コンタクト更新",
+        "manual": "スコアボタン",
+        "backfill": "バックフィル"
+      },
+      "scoreWas": "{score}(以前は{previous})",
+      "tokensTitle": "入力 {input}、出力 {output}",
+      "costSource": {
+        "vendor": "報告値",
+        "estimate": "推定値",
+        "none": "呼び出しなし"
+      },
+      "costSourceHelp": {
+        "vendor": "この呼び出しについてOpenRouterが報告したコストです。",
+        "estimate": "コストが報告されなかったため、トークン数にモデルの定価を掛けた値です。",
+        "none": "呼び出しが行われなかったため、課金はありません。"
+      },
+      "paidBy": {
+        "admin": "プラットフォーム",
+        "workspace": "ワークスペース",
+        "none": "なし"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "プラットフォームスイッチがオフです",
+        "not_enabled": "ワークスペースがオプトインしていません",
+        "contact_gone": "コンタクトが削除されました",
+        "manual_score": "コンタクトに手入力のスコアがあります",
+        "no_key": "OpenRouterキーがありません",
+        "token_allowance": "トークン上限に達しました",
+        "hourly_limit": "1時間あたりの上限に達しました",
+        "auth": "OpenRouterがキーを拒否しました",
+        "rate_limited": "OpenRouterのレート制限",
+        "provider": "OpenRouterエラー",
+        "timeout": "OpenRouterがタイムアウトしました",
+        "bad_response": "応答が有効なスコアではありませんでした"
+      },
+      "noMatchTitle": "一致する実行がありません",
+      "noMatchMessage": "これらのフィルターに一致するスコアリング実行はありません。",
+      "emptyTitle": "実行はまだありません",
+      "emptyMessage": "ワークスペースがコンタクトをスコアリングすると、ここに実行が表示されます。",
+      "tableLabel": "スコアリング実行",
+      "columns": {
+        "time": "時刻",
+        "workspace": "ワークスペース",
+        "contact": "コンタクト",
+        "trigger": "トリガー",
+        "status": "ステータス",
+        "score": "スコア",
+        "model": "モデル",
+        "tokens": "トークン",
+        "cost": "コスト",
+        "paidBy": "支払者",
+        "duration": "所要時間",
+        "error": "理由"
+      },
+      "costLegend": "コストの前の~は、OpenRouterが報告した金額ではなく、トークン数からの推定値であることを示します。",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中"
+    }
+  }
+}

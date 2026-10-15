@@ -14,7 +14,6 @@
     "common": {
       "loading": "Загрузка",
       "retry": "Повторить",
-      "requestId": "ID запроса",
       "dismiss": "Скрыть",
       "tokens": "{count, number} токенов",
       "dash": "-",

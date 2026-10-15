@@ -7,7 +7,7 @@ Design: [realtime-notifications.md](../specs/realtime-notifications.md) section 
 
 1. Generate a key pair once per deployment, on your own terminal: `npx web-push generate-vapid-keys`. Do not paste it into chat, tickets or any tracked file.
 2. Set `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `VAPID_SUBJECT` (`mailto:ops@your-domain.com`) in the environment of **both** the API and the worker, then restart them.
-3. Open Account, Notifications as a signed-in person: the **Browser notifications** card and the **Push** column appear. Press **Enable on this device**, allow the browser's prompt, then **Send a test notification**.
+3. Open Account, Notifications as a signed-in person: the **Browser notifications** card and the **Push** column appear. Press **Enable on this device**, allow the browser's prompt, then **Send a test notification**. The test also writes a bell row of the `test` type for you, so you should see a pop-up, the bell number and the tab title change as well as the browser notification (on a page whose live connection is down the card says so and asks you to reload).
 
 Leave the three values empty to keep the feature off: the card and column do not exist, `GET /v2/notifications/push/public-key` answers `enabled: false`, nothing is queued.
 The browser needs a secure page (https, or `localhost` in development) to register the service worker (`/sw.js`).

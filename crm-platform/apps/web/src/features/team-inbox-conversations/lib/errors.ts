@@ -4,6 +4,8 @@ import { ApiError } from '@/lib/api/errors';
 export const ERROR_KINDS = [
   'conflict',
   'windowClosed',
+  'contactOptedOut',
+  'consentRequired',
   'planLimit',
   'channelDisconnected',
   'sendHalted',
@@ -21,6 +23,20 @@ export const ERROR_KINDS = [
   'unsupported',
   'templateNotSendable',
   'groupSendUnavailable',
+  'groupSuspended',
+  'groupLeft',
+  'groupAnnounceOnly',
+  'groupRateLimited',
+  'groupUnavailable',
+  'walletEmpty',
+  'groupPlanLocked',
+  'logRange',
+  'logBusy',
+  'logNotReady',
+  'savedReplyGone',
+  'savedReplyChannel',
+  'shortcutTaken',
+  'importInvalid',
   'network',
   'generic',
 ] as const;
@@ -29,6 +45,8 @@ export type ErrorKind = (typeof ERROR_KINDS)[number];
 const BY_CODE: Record<string, ErrorKind> = {
   ROW_VERSION_CONFLICT: 'conflict',
   SERVICE_WINDOW_CLOSED: 'windowClosed',
+  CONSENT_OPTED_OUT: 'contactOptedOut',
+  CONSENT_SEND_DENIED: 'consentRequired',
   PLAN_LIMIT_REACHED: 'planLimit',
   CHANNEL_DISCONNECTED: 'channelDisconnected',
   AUTH_SEND_HALTED: 'sendHalted',
@@ -50,7 +68,27 @@ const BY_CODE: Record<string, ErrorKind> = {
   PAYLOAD_TOO_LARGE: 'tooLarge',
   CHANNEL_CAPABILITY_UNSUPPORTED: 'unsupported',
   WABA_GROUP_SEND_UNAVAILABLE: 'groupSendUnavailable',
+  WABA_GROUP_SUSPENDED: 'groupSuspended',
+  // Groups of a personal (linked) number.
+  WA_GROUP_LEFT: 'groupLeft',
+  WA_GROUP_ANNOUNCE_ONLY: 'groupAnnounceOnly',
+  WA_GROUP_RATE_LIMITED: 'groupRateLimited',
+  WA_GROUP_DEVICE_NOT_READY: 'channelDisconnected',
+  WA_GROUP_NOT_FOUND: 'groupUnavailable',
+  WA_GROUP_UNAVAILABLE: 'groupUnavailable',
+  WA_GROUP_NOT_ADMIN: 'groupAnnounceOnly',
+  WALLET_EMPTY: 'walletEmpty',
+  PLAN_FEATURE_LOCKED: 'groupPlanLocked',
+  MESSAGE_LOG_EXPORT_RANGE_INVALID: 'logRange',
+  MESSAGE_LOG_EXPORT_IN_PROGRESS: 'logBusy',
+  MESSAGE_LOG_EXPORT_NOT_FOUND: 'notFound',
+  MESSAGE_LOG_EXPORT_NOT_READY: 'logNotReady',
   UNSUPPORTED_MEDIA_TYPE: 'unsupported',
+  SAVED_REPLY_NOT_FOUND: 'savedReplyGone',
+  SAVED_REPLY_NOT_EDITABLE: 'forbidden',
+  SAVED_REPLY_CHANNEL_MISMATCH: 'savedReplyChannel',
+  SAVED_REPLY_SHORTCUT_TAKEN: 'shortcutTaken',
+  SAVED_REPLY_IMPORT_INVALID: 'importInvalid',
   NETWORK: 'network',
 };
 
@@ -68,6 +106,15 @@ export function errorKind(code: string): ErrorKind {
   return BY_CODE[code] ?? 'generic';
 }
 
+/** Seconds the server asked to wait before trying again (`Retry-After`, or the problem's `retryAfterSeconds`), when it said. */
+export function retryAfterOf(e: unknown): number | undefined {
+  if (!(e instanceof ApiError)) return undefined;
+  const n = Number(
+    e.fieldErrors.find((f) => f.path === 'retryAfterSeconds' || f.path === 'retryAfterS')?.message,
+  );
+  return Number.isFinite(n) && n > 0 ? Math.ceil(n) : undefined;
+}
+
 /** The request id of an API error, shown beside a generic failure so support can find it in the logs. */
 export function requestIdOf(e: unknown): string | undefined {
   return e instanceof ApiError ? e.requestId : undefined;
@@ -78,5 +125,11 @@ export function requestIdOf(e: unknown): string | undefined {
  * refused for a reason that will not change by itself (window closed, plan cap, disconnected channel) is not.
  */
 export function isRetryableSend(code: string): boolean {
-  return errorKind(code) === 'network' || errorKind(code) === 'generic' || code === 'RATE_LIMITED';
+  return (
+    errorKind(code) === 'network' ||
+    errorKind(code) === 'generic' ||
+    code === 'RATE_LIMITED' ||
+    // Our own throttle on a group send lifts by itself: trying again later is the right move.
+    code === 'WA_GROUP_RATE_LIMITED'
+  );
 }

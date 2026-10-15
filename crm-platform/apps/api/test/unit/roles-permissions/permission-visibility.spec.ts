@@ -28,7 +28,11 @@ const rows = [
   },
 ];
 
-function controller(featureOn: boolean, installed: string[] = []) {
+function controller(
+  featureOn: boolean,
+  installed: string[] = [],
+  withheld: Record<string, { slug: string; installed: boolean }> = {},
+) {
   const db = {
     txAs: undefined as unknown,
     tx: vi.fn(async (fn: (tx: unknown) => unknown) =>
@@ -44,7 +48,10 @@ function controller(featureOn: boolean, installed: string[] = []) {
       }),
     }),
   );
-  const entitlements = { featureEnabled: vi.fn(async () => featureOn) };
+  const entitlements = {
+    featureEnabled: vi.fn(async () => featureOn),
+    withheldByApps: vi.fn(async () => withheld),
+  };
   return {
     entitlements,
     controller: new PermissionsController({ ...db, txAs } as never, entitlements as never),
@@ -89,5 +96,24 @@ describe('Roles editor permission list', () => {
     const { controller: c } = controller(true, ['google-sheets']);
     const { data } = await c.list({ orgId: 7 } as never, 'true');
     expect(data.every((d) => d.lock === undefined)).toBe(true);
+  });
+
+  it('a subscribed app that is not installed locks its keys with the app badge, not the plan badge', async () => {
+    const { controller: c } = controller(false, [], {
+      appointment_booking: { slug: 'appointments', installed: false },
+    });
+    const { data } = await c.list({ orgId: 7 } as never, '1');
+    expect(data.find((d) => d.key === 'record.appointments.read')?.lock).toEqual({
+      kind: 'app',
+      slug: 'appointments',
+    });
+  });
+
+  it('a paused app (installed, switched off) keeps its keys open so the admin can manage who may use it', async () => {
+    const { controller: c } = controller(false, ['appointments'], {
+      appointment_booking: { slug: 'appointments', installed: true },
+    });
+    const { data } = await c.list({ orgId: 7 } as never, '1');
+    expect(data.find((d) => d.key === 'record.appointments.read')?.lock).toBeUndefined();
   });
 });

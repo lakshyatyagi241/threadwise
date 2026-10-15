@@ -257,7 +257,6 @@
       "ownerInvalid": "Sahip, çalışma alanının etkin bir üyesi olmalıdır.",
       "invoicingUnavailable": "Faturalandırma henüz kullanılamıyor, bu nedenle bu belge dönüştürülemez.",
       "unexpected": "Bir sorun oluştu. Tekrar deneyin.",
-      "requestId": "İstek kimliği",
       "retry": "Tekrar dene"
     },
     "link": {

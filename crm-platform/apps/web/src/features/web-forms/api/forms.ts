@@ -4,6 +4,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   formDetailSchema,
   formPaymentGatewaySchema,
+  formProtectionSchema,
   formPaymentLinkResultSchema,
   formPropertyListSchema,
   formSubmissionDetailSchema,
@@ -18,6 +19,7 @@ import {
   type FormBindObject,
   type FormDetail,
   type FormPaymentGateway,
+  type FormProtection,
   type FormPaymentLinkResult,
   type FormProperty,
   type FormSubmissionDetail,
@@ -46,6 +48,7 @@ export const KEYS = {
   versions: (id: string) => ['web-forms', 'versions', id] as const,
   templates: ['web-forms', 'templates'] as const,
   paymentGateway: ['web-forms', 'payment-gateway'] as const,
+  protection: ['web-forms', 'protection'] as const,
   properties: (object: FormBindObject) => ['web-forms', 'properties', object] as const,
   submissions: (id: string, f: object) => ['web-forms', 'submissions', id, f] as const,
   submission: (id: string, sid: string) => ['web-forms', 'submission', id, sid] as const,
@@ -117,6 +120,15 @@ export function useFormPaymentGateway() {
   return useQuery<FormPaymentGateway>({
     queryKey: KEYS.paymentGateway,
     queryFn: () => apiFetch('/forms/meta/payment-gateway', { schema: formPaymentGatewaySchema }),
+    staleTime: 30_000,
+  });
+}
+
+/** What keeps spam out right now: is the platform's CAPTCHA set up, what the hidden trap caught, how many submissions are held as spam. */
+export function useFormProtection() {
+  return useQuery<FormProtection>({
+    queryKey: KEYS.protection,
+    queryFn: () => apiFetch('/forms/meta/protection', { schema: formProtectionSchema }),
     staleTime: 30_000,
   });
 }

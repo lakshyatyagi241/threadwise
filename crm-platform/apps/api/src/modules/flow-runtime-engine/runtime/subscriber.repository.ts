@@ -97,6 +97,16 @@ export class SubscriberRepository {
       WHERE org_id = ${orgId} AND id = ${id} AND status IN ('active', 'failed')`);
   }
 
+  /**
+   * A start that was refused (a trigger loop): the subscriber shows `failed` with the reason whatever it was before, except a paused
+   * one (an operator's hold stays). A failed row may launch again on the next, unrelated, event.
+   */
+  async markRefused(tx: Tx, orgId: number, id: number, reason: string): Promise<void> {
+    await tx.execute(sql`
+      UPDATE flow_subscribers SET status = 'failed', failed_at = now(), failure_reason = ${reason.slice(0, 191)}
+      WHERE org_id = ${orgId} AND id = ${id} AND status <> 'paused'`);
+  }
+
   async setStatus(tx: Tx, orgId: number, id: number, status: FlowSubscriberStatus): Promise<void> {
     await tx.execute(
       sql`UPDATE flow_subscribers SET status = ${status} WHERE org_id = ${orgId} AND id = ${id}`,

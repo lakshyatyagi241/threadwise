@@ -57,6 +57,7 @@ every action), `auth-registration-security` (the key lives in `user_settings`, t
 | TW-EXT-013 | Install per workspace, consented scopes and the member's role gate every action | docs-only   | P0       | M      | marketplace              |
 | TW-EXT-014 | Audit trail and event for every add-on write                                    | docs-only   | P1       | S      | TW-EXT-010, 012          |
 | TW-EXT-015 | Health check: is the key good, who am I, what may I do                          | implemented | P0       | S      | TW-EXT-004               |
+| TW-EXT-017 | Webhook trigger: send new or changed rows as contacts, Initial Setup, Send Test | docs-only   | P1       | M      | TW-EXT-004, 012          |
 | TW-EXT-016 | Send a WhatsApp message or template from a sheet                                | docs-only   | P2       | L      | message-templates, inbox |
 
 Status here is what Reference 1.7.0 does. `docs-only` marks what the port adds (or hardens) beyond Reference, or what is blocked (016); the row says "new in this port" in the entry.
@@ -478,6 +479,30 @@ Status here is what Reference 1.7.0 does. `docs-only` marks what the port adds (
   - Given no or a wrong key, then 401 as TW-EXT-004.
 - **Source refs:** `SheetsAddonController.php` (`health`).
 - **Port notes:** `SheetsAddonService.health`.
+
+### TW-EXT-017 — Webhook trigger: send new or changed rows as contacts, Initial Setup, Send Test
+
+- **Status:** docs-only
+- **Priority:** P1
+- **Effort:** M
+- **Depends on:** TW-EXT-004, TW-EXT-012
+- **Summary:** New in this port (owner request, modelled on Pabbly's Google Sheets webhook add-on). Instead of pressing Push, the member pastes a **Webhook URL** into the add-on's Initial Setup, chooses a sheet and a trigger column, sends a test, and submits. From then on rows are sent when edited ("Send on event") and/or in an hourly sweep ("Send on schedule"), and arrive as contacts.
+- **Actors & access:** as TW-EXT-012 (consented scope `contacts.write`, role `record.contacts.create` or `update`, per row).
+- **UX & screens:** setup page: the Webhook URL (full once, with the key; masked after), the steps, and "Last data received" (the columns and first row of the last test or send). In the add-on: Initial Setup dialog (Webhook URL, sheet, trigger column, Send on event, Send on schedule, Send Test, Submit, Remove connection) and a "Send a test row" menu item.
+- **Endpoints:** `POST api/v1/sheets-addon/webhook` (bearer) and `POST api/v1/sheets-addon/webhook/:key` (the pasted URL). Setup data: `webhookUrl` on `POST /v2/extension/sheets/key` and the overview.
+- **Data:** no table. The last capture is a Redis value per member for 24 hours. The add-on keeps what it sent in a hidden `CRM sync state` sheet of the member's spreadsheet and its settings in Google user and document properties.
+- **Rules & edge cases:** 1. A `test` event writes nothing and records the columns. 2. `edit` and `schedule` run the `contacts/sync` path unchanged. 3. The key is the last path segment of the URL and is masked in logs and Sentry; a header-borne key is read first. 4. One published add-on serves every installation because the server address comes from the pasted URL. 5. The trigger column is a letter or a row-1 heading; blank means any change. 6. The hourly sweep sends only rows new or changed since last sent. 7. Products are not sent by the trigger.
+- **Async & events:** the contact events and summary audit of TW-EXT-012/014 (`ext.sheets.synced`).
+- **External systems:** Google Apps Script triggers (edit, hourly) in the member's own account; Google Workspace Marketplace for distribution.
+- **Settings:** none.
+- **Acceptance criteria:**
+  - Given a key, when the add-on posts a `test`, then no contact is written and the setup page lists the columns sent.
+  - Given an `edit` call with a valid and an identity-less row, then one contact is created and the other is reported failed.
+  - Given the key as the last path segment or as a bearer header, then both work; a wrong key is the same 401 either way.
+  - Given 0 or 501 rows or an unknown event, then 422.
+  - Given the setup page after a key was created, then only the masked URL is in the answer.
+- **Source refs:** none in Reference (Reference's add-on has no trigger mode); behaviour follows the Pabbly Connect Google Sheets add-on the owner named.
+- **Port notes:** `SheetsWebhookService`; guard reads `params.key` when no bearer header; `maskSecretUrl` extended. The Apps Script side is `Code.gs` (`submitSetup`, `testWebhook`, `crmOnEditSend`, `crmScheduledSend`) and `Settings.html`; not run in a real sheet yet.
 
 ### TW-EXT-016 — Send a WhatsApp message or template from a sheet
 

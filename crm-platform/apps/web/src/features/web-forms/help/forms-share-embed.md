@@ -7,8 +7,7 @@ order: 17
 documents: []
 gates:
   planFeature: form_builder
-keywords:
-  [share, embed, iframe, script, qr code, allowed websites, domains, rotate key, public link]
+keywords: [share, embed, iframe, qr code, allowed websites, popup, modal, delay, scroll, trigger]
 ---
 
 ## What it is for

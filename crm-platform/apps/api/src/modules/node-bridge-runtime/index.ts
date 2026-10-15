@@ -39,6 +39,46 @@ export {
   type ReceiptSink,
 } from './runtime/routers';
 export type { Normalized } from '../../infra/providers/node-bridge-runtime/inbound-normalizer';
-export type { GroupSnapshot } from '../../infra/providers/node-bridge-runtime/inbound.port';
-export type { GroupAction } from '../../infra/providers/node-bridge-runtime/socket.port';
+export type {
+  GroupEvent,
+  GroupParticipantSnapshot,
+  GroupPatch,
+  GroupSnapshot,
+  InboundMessage,
+} from '../../infra/providers/node-bridge-runtime/inbound.port';
+export type {
+  HistoryBatch,
+  HistoryChat,
+  HistoryContact,
+} from '../../infra/providers/node-bridge-runtime/history.port';
+export type { HistoryImportLimits } from '../../infra/providers/node-bridge-runtime/baileys.socket-factory';
+export { HISTORY_IMPORT_LIMITS } from '../../infra/providers/node-bridge-runtime/baileys.socket-factory';
+export {
+  bareGroupId,
+  classifyGroupError,
+  COOLDOWN_REASONS,
+  inviteCodeOf,
+  jidUser,
+  mentionToken,
+  participantOutcome,
+  toGroupJid,
+  type GroupFailureReason,
+  type ParticipantChange,
+  type ParticipantOutcome,
+} from '../../infra/providers/node-bridge-runtime/group-mapping';
+export {
+  GroupOpLimiter,
+  loadGroupLimits,
+  opKindOf,
+  type GroupLimits,
+  type GroupLimitsView,
+  type GroupRefusal,
+} from './runtime/group-limiter';
+export type {
+  GroupAction,
+  GroupInviteInfo,
+  GroupJoinRequestSnapshot,
+  GroupParticipantStatus,
+  GroupResult,
+} from '../../infra/providers/node-bridge-runtime/socket.port';
 export type { MessageAction } from '../../infra/providers/node-bridge-runtime/outbound.port';

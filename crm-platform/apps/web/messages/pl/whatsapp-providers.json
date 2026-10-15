@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Wczytywanie...",
-      "retry": "Spróbuj ponownie",
-      "requestId": "Identyfikator żądania"
+      "retry": "Spróbuj ponownie"
     },
     "errors": {
       "conflict": "Ktoś inny zmienił tego dostawcę, gdy go edytowałeś. Załadowano najnowszą wersję; sprawdź ją i zastosuj zmianę ponownie.",

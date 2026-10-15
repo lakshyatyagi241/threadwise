@@ -12,7 +12,10 @@ import {
   ChannelRegistryService,
   type ConversationsFacade,
 } from '../../chat-conversations';
+import { WalletGateService } from '../../wallet-message-billing';
 import { CapTally, DEFAULT_PACING } from '../caps';
+import { ConsentGate } from '../../contact-consent';
+import { flowMessagePurpose } from './flow-consent';
 import { profileOf, renderForChannel, threadTextOf, type Rendered } from './channel-render';
 import type { OutboundMessage, RunState, SendOutcome } from './types';
 
@@ -25,6 +28,8 @@ export const HALT_RETRY_MS = 5 * 60_000;
 const HALT_CODES: ReadonlySet<string> = new Set([
   ERROR_CODES.CHANNEL_DISCONNECTED,
   ERROR_CODES.AUTH_SEND_HALTED,
+  // An empty wallet halts the run too: it tries again by itself and carries on once the wallet is topped up.
+  ERROR_CODES.WALLET_EMPTY,
 ]);
 
 /**
@@ -49,8 +54,10 @@ export class FlowSender {
     private readonly channels: ChannelRegistryService,
     private readonly dispatcher: ChannelDispatcher,
     private readonly tally: CapTally,
+    private readonly wallet: WalletGateService,
     private readonly fetcher: SafeFetch,
     private readonly media: ChatMediaStore,
+    private readonly consentGate: ConsentGate,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -66,6 +73,16 @@ export class FlowSender {
     try {
       const profile = profileOf(run.channelKind);
       const rendered = renderForChannel(message, profile);
+
+      // A template is the paid message of a flow (a plain reply inside the customer's window is free): the wallet must cover it.
+      if (rendered.kind === 'template') {
+        await this.wallet.assertCanSend({
+          orgId: run.orgId,
+          source: 'flow',
+          to: run.peerKey,
+          category: 'utility',
+        });
+      }
 
       const deviceId = run.channelKind === 'whatsapp_qr' ? await this.deviceOf(run) : null;
       if (deviceId !== null) {
@@ -97,11 +114,24 @@ export class FlowSender {
         textForWebchat(run.channelKind, rendered),
         clientReference,
       );
+      // A template takes its category; a plain message is marketing in a run the business started and a reply otherwise.
+      const templatePurpose =
+        rendered.kind === 'template'
+          ? await this.consentGate.purposeOfTemplate(
+              run.orgId,
+              rendered.template.name,
+              rendered.template.language,
+            )
+          : null;
       const sent = await this.dispatcher.send({
         channel: runtime,
         envelope,
         lastInboundAt,
         source: 'flow',
+        consent: {
+          purpose: flowMessagePurpose(run.source, templatePurpose),
+          contactId: run.contactId,
+        },
       });
       await this.conversations.recordOutbound({
         channelId: run.channelUuid,
@@ -109,7 +139,13 @@ export class FlowSender {
         ...(run.contactUuid ? { contactId: run.contactUuid } : {}),
         source: 'flow',
         // The widget draws reply buttons itself, so its thread keeps the question and the buttons apart.
-        ...webButtons(run.channelKind, rendered),
+        ...withWebInput(
+          run.channelKind,
+          message,
+          webCarousel(run.channelKind, message) ??
+            webMedia(run.channelKind, rendered, envelope) ??
+            webButtons(run.channelKind, rendered),
+        ),
         providerMessageId: sent.providerMessageId,
         // A template node knows the name, language and values it sent (not the template's uuid, so the bubble has no header, footer or
         // buttons to draw: it shows the name and the text).
@@ -227,6 +263,68 @@ export async function envelopeFor(
 }
 
 /**
+ * A carousel on a website chat thread is stored as its intro line with the cards in the meta the window reads (`widget_cards`); the
+ * channel itself was sent the cards as text.
+ */
+function webCarousel(
+  channelKind: string | null,
+  message: OutboundMessage,
+): { body: string; meta: Record<string, unknown> } | null {
+  if (channelKind !== 'webchat' || message.kind !== 'carousel') return null;
+  return {
+    body: message.body,
+    meta: { widget_cards: message.cards },
+  };
+}
+
+/**
+ * A question that says what it waits for (an Ask node's type, a file) keeps that on the website chat line, in the meta the window
+ * reads (`widget_input`): the window then shows the right keyboard, date picker or attach button for it.
+ */
+function withWebInput(
+  channelKind: string | null,
+  message: OutboundMessage,
+  stored: { body: string; meta?: Record<string, unknown> },
+): { body: string; meta?: Record<string, unknown> } {
+  if (channelKind !== 'webchat' || message.kind !== 'text') return stored;
+  if (!message.input && !message.links?.length) return stored;
+  return {
+    ...stored,
+    meta: {
+      ...stored.meta,
+      ...(message.input ? { widget_input: message.input } : {}),
+      ...(message.links?.length ? { widget_links: message.links } : {}),
+    },
+  };
+}
+
+/**
+ * A file the bot sent on a website chat thread is stored as a line with the file's object key, type and name in the meta the widget
+ * reads (`widget_media`): the visitor's window draws it from there and reads the bytes through its own thread.
+ */
+function webMedia(
+  channelKind: string | null,
+  r: Rendered,
+  envelope: unknown,
+): { body: string; meta: Record<string, unknown> } | null {
+  if (channelKind !== 'webchat' || r.kind !== 'media') return null;
+  const m = (
+    envelope as {
+      media?: { key?: string; mediaKind?: string; mime?: string; name?: string; caption?: string };
+    }
+  ).media;
+  if (!m?.key) return null;
+  const kind = ['image', 'video', 'audio'].includes(String(m.mediaKind))
+    ? String(m.mediaKind)
+    : 'document';
+  const name = m.name || r.filename || 'file';
+  return {
+    body: m.caption || '',
+    meta: { widget_media: { key: m.key, kind, mime: m.mime ?? '', name } },
+  };
+}
+
+/**
  * On a website chat thread a reply-button message is stored as the question alone, with the buttons in the meta the widget reads.
  * Every other channel (and every other kind of message) keeps the thread text with the options after it.
  */
@@ -237,7 +335,13 @@ function webButtons(
   if (channelKind === 'webchat' && r.kind === 'interactive' && r.interactive.type === 'buttons') {
     return {
       body: r.interactive.body,
-      meta: { widget_buttons: r.interactive.buttons.map((b) => ({ id: b.id, title: b.title })) },
+      meta: {
+        widget_buttons: r.interactive.buttons.map((b) => ({
+          id: b.id,
+          title: b.title,
+          ...(b.icon ? { icon: b.icon } : {}),
+        })),
+      },
     };
   }
   return { body: threadTextOf(r) };

@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { CONTACT_RESOLVER, type ContactResolverPort } from '../crm/contact-resolver.port';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { resolveVariantRetailerIds, type ResolvedVariantRef } from '../catalog-products';
 import { cartOf, type CartOrder } from './waba-order-rules';
 
 interface ProductRow {
@@ -47,7 +48,12 @@ export class WabaOrdersService {
       );
       if (seen.rows.length > 0) return null;
     }
-    const products = await this.products(tx, orgId, cart);
+    const variants = await resolveVariantRetailerIds(
+      tx,
+      orgId,
+      cart.lines.map((l) => l.retailerId),
+    );
+    const products = await this.products(tx, orgId, cart, variants);
     const phone = from.replace(/\D+/g, '');
     // The sender is a contact of the workspace (the inbox made one already when the message arrived: this finds it); a plan that is out
     // of contacts leaves the link empty and the order is still captured.
@@ -59,8 +65,39 @@ export class WabaOrdersService {
       saveProfile: true,
     });
     const contactId = link.outcome === 'skipped' ? null : link.contactId;
+    const stockWarnings: Array<{
+      retailer_id: string;
+      requested: number;
+      available: number | null;
+      active: boolean;
+    }> = [];
     const items = cart.lines.map((l, i) => {
-      const p = products.get(l.retailerId);
+      // A cart line naming a variant's retailer id is that variant of its product: the product's name, the variant's own image,
+      // price when Meta sent none, and the variant's title and id on the line (invariant 3).
+      const v = variants.get(l.retailerId);
+      if (v) {
+        const p = products.byId.get(v.productId);
+        const left = v.stockQty === null ? null : Math.max(0, v.stockQty - v.reservedQty);
+        if (!v.active || (left !== null && l.quantity > left))
+          stockWarnings.push({
+            retailer_id: l.retailerId,
+            requested: l.quantity,
+            available: left,
+            active: v.active,
+          });
+        return {
+          retailer_id: l.retailerId,
+          product_id: v.productId,
+          variant_id: v.variantUuid,
+          variant_title: v.title,
+          name: p?.name ?? l.retailerId,
+          image_url: v.imageUrl ?? p?.image_url ?? null,
+          quantity: l.quantity,
+          price_minor: l.priceMinor > 0 ? l.priceMinor : (v.priceMinor ?? v.productPriceMinor),
+          currency: l.currency ?? cart.currency,
+        };
+      }
+      const p = products.byRetailer.get(l.retailerId);
       return {
         retailer_id: p ? l.retailerId : `wsn-unknown-${i + 1}`,
         product_id: p ? Number(p.id) : null,
@@ -76,7 +113,11 @@ export class WabaOrdersService {
                                  status, wa_message_id, notes, meta_json, contact_id)
           VALUES (${orgId}, 'waba', ${phone}, ${customerName}, ${JSON.stringify(items)}::jsonb, ${cart.totalMinor},
                   ${cart.currency}, 'new', ${wamid || null}, ${cart.note},
-                  ${JSON.stringify({ catalog_id: cart.catalogId, product_text: cart.note })}::jsonb, ${contactId})
+                  ${JSON.stringify({
+                    catalog_id: cart.catalogId,
+                    product_text: cart.note,
+                    ...(stockWarnings.length > 0 ? { stock_warnings: stockWarnings } : {}),
+                  })}::jsonb, ${contactId})
           RETURNING id, uuid`,
     );
     const { id, uuid } = order.rows[0] as { id: number | string; uuid: string };
@@ -104,26 +145,43 @@ export class WabaOrdersService {
     return Number(id);
   }
 
-  /** Products by Meta retailer id or SKU, in one query. */
-  private async products(tx: Tx, orgId: number, cart: CartOrder): Promise<Map<string, ProductRow>> {
-    const ids = [...new Set(cart.lines.map((l) => l.retailerId))];
+  /** Products by Meta retailer id or SKU (and the products that own the variants the cart named), in one query. */
+  private async products(
+    tx: Tx,
+    orgId: number,
+    cart: CartOrder,
+    variants: ReadonlyMap<string, ResolvedVariantRef>,
+  ): Promise<{ byRetailer: Map<string, ProductRow>; byId: Map<number, ProductRow> }> {
+    const ids = [...new Set(cart.lines.map((l) => l.retailerId))].filter((i) => !variants.has(i));
+    const productIds = [...new Set([...variants.values()].map((v) => v.productId))];
+    const byRetailer = new Map<string, ProductRow>();
+    const byId = new Map<number, ProductRow>();
+    if (ids.length === 0 && productIds.length === 0) return { byRetailer, byId };
+    const idList =
+      ids.length > 0
+        ? sql.join(
+            ids.map((i) => sql`${i}`),
+            sql`, `,
+          )
+        : sql`NULL`;
+    const pidList =
+      productIds.length > 0
+        ? sql.join(
+            productIds.map((i) => sql`${i}`),
+            sql`, `,
+          )
+        : sql`NULL`;
     const res = await tx.execute(
       sql`SELECT id, name, image_url, meta_retailer_id, sku FROM wa_products
            WHERE org_id = ${orgId}
-             AND (meta_retailer_id IN (${sql.join(
-               ids.map((i) => sql`${i}`),
-               sql`, `,
-             )})
-               OR sku IN (${sql.join(
-                 ids.map((i) => sql`${i}`),
-                 sql`, `,
-               )}))`,
+             AND (meta_retailer_id IN (${idList}) OR sku IN (${idList}) OR id IN (${pidList}))`,
     );
-    const map = new Map<string, ProductRow>();
     for (const r of res.rows as unknown as ProductRow[]) {
-      if (r.meta_retailer_id && ids.includes(r.meta_retailer_id)) map.set(r.meta_retailer_id, r);
-      else if (r.sku && ids.includes(r.sku) && !map.has(r.sku)) map.set(r.sku, r);
+      byId.set(Number(r.id), r);
+      if (r.meta_retailer_id && ids.includes(r.meta_retailer_id))
+        byRetailer.set(r.meta_retailer_id, r);
+      else if (r.sku && ids.includes(r.sku) && !byRetailer.has(r.sku)) byRetailer.set(r.sku, r);
     }
-    return map;
+    return { byRetailer, byId };
   }
 }

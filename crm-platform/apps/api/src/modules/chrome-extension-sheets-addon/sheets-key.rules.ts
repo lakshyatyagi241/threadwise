@@ -52,3 +52,15 @@ export const SHEETS_CAPABILITIES = {
   },
 } as const;
 export type SheetsCapability = keyof typeof SHEETS_CAPABILITIES;
+
+/** Where the add-on posts rows. The key is the last segment, so one pasted URL carries both the server and the credential (as Pabbly's does). */
+export const SHEETS_WEBHOOK_PATH = '/api/v1/sheets-addon/webhook';
+
+export function sheetsWebhookUrl(apiBase: string, key: string): string {
+  return `${apiBase.replace(/\/+$/, '')}${SHEETS_WEBHOOK_PATH}/${key}`;
+}
+
+/** The same URL with the key masked to its last 8 characters, safe to show after the one-time display. */
+export function maskedSheetsWebhookUrl(apiBase: string, suffix: string): string {
+  return sheetsWebhookUrl(apiBase, maskedSheetsKey(suffix));
+}

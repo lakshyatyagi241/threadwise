@@ -51,15 +51,66 @@ const common = {
 };
 
 export const OUTBOUND_TEXT_MAX = 4096;
+/** The text limit of an email reply (the schema carries this one; `outboundTextMaxFor` is the per-kind rule the dispatcher applies). */
+export const OUTBOUND_TEXT_MAX_EMAIL = 100_000;
+/** The longest text an outbound message may carry on a channel of this kind. */
+export const outboundTextMaxFor = (channelKind: string): number =>
+  channelKind === 'email' ? OUTBOUND_TEXT_MAX_EMAIL : OUTBOUND_TEXT_MAX;
+
+/**
+ * What an email adapter needs to send a reply on its thread, beyond the body. Built by the conversation core (message dispatch) from the
+ * conversation, the newest inbound message's `meta.email` and the reply extras; only ever set for a channel of kind `email`.
+ */
+export const outboundEmailSchema = z.object({
+  /** Recipients: the sender of the newest inbound mail. */
+  to: z.array(z.string().trim().email().max(320)).min(1).max(20),
+  cc: z.array(z.string().trim().email().max(320)).max(20).default([]),
+  bcc: z.array(z.string().trim().email().max(320)).max(20).default([]),
+  /** The reply's subject (`Re: <original>` unless the agent overrode it). */
+  subject: z.string().trim().min(1).max(998),
+  /** RFC 5322 Message-ID (no angle brackets) of the mail this answers; null when unknown. */
+  inReplyTo: z.string().max(998).nullable(),
+  /** The References chain, oldest first, ending with `inReplyTo`. */
+  references: z.array(z.string().max(998)).max(100).default([]),
+  /** The provider's thread key (Gmail threadId, a header-derived key): the reply is sent inside it. */
+  threadId: z.string().max(128),
+  /** Staged composer uploads (`mail_outbound_attachments.uuid`) sent with this reply (TW-MAIL-027). */
+  attachmentIds: z.array(z.string().uuid()).max(10).optional(),
+  /** A specific signature to append (`mail_signatures.uuid`); absent = the default for the sender and mailbox. */
+  signatureId: z.string().uuid().optional(),
+  /** `false`: no signature at all. */
+  signature: z.boolean().optional(),
+  /** The user who wrote the reply (internal id), for their default signature; null for a bot or flow. */
+  sentBy: z.number().int().nullable().optional(),
+  /**
+   * A marketing email (BL-141): the ConsentGate treats it as `marketing_messaging`, and the adapter adds the signed unsubscribe link
+   * and the RFC 8058 `List-Unsubscribe` headers. Replies and transactional mail leave it unset.
+   */
+  marketing: z.boolean().optional(),
+  /** The composer's rich-text body (raw: the email adapter sanitises it before it goes out); the envelope `body` is its plain text. */
+  bodyHtml: z.string().max(200_000).optional(),
+  /** The email template (`email_templates.uuid`) the reply was filled from: a sent reply counts one use of it. */
+  templateId: z.string().uuid().optional(),
+});
+export type OutboundEmail = z.infer<typeof outboundEmailSchema>;
 export const OUTBOUND_CAPTION_MAX = 1024;
 
 export const outboundEnvelopeSchema = z.discriminatedUnion('kind', [
   z.object({
     ...common,
     kind: z.literal('text'),
-    body: z.string().min(1).max(OUTBOUND_TEXT_MAX),
+    body: z.string().min(1).max(OUTBOUND_TEXT_MAX_EMAIL),
     /** Ask the provider to render a link preview (WhatsApp `preview_url`). */
     previewUrl: z.boolean().optional(),
+    /** Personal-number group threads only: the members @mentioned in the body (`jid` as in the group's roster). Ignored elsewhere. */
+    mentions: z
+      .array(
+        z.object({ jid: z.string().trim().min(1).max(128), name: z.string().max(200).optional() }),
+      )
+      .max(50)
+      .optional(),
+    /** Email channels only (refused for any other kind by the dispatcher). */
+    email: outboundEmailSchema.optional(),
   }),
   z.object({
     ...common,
@@ -234,6 +285,7 @@ export interface PlannedReceipt {
   status: ReceiptStatus;
   delayMs: number;
   errorCode?: string;
+  errorMessage?: string;
 }
 
 export interface SendResult {
@@ -242,6 +294,11 @@ export interface SendResult {
   acceptedAt: Date;
   /** Only the simulator fills this; the dispatcher turns it into delayed receipt jobs. */
   plannedReceipts?: PlannedReceipt[];
+  /**
+   * Keys to merge into the stored message's `meta` when it is marked sent (an email reply records what really went out: its HTML,
+   * its attachments, the recipients). Plain JSON; kept with the idempotent result so a replay records the same.
+   */
+  meta?: Record<string, unknown>;
 }
 
 /**
@@ -307,6 +364,16 @@ export interface NormalisedInbound {
   replyToProviderMessageId?: string;
   reactionEmoji?: string;
   /**
+   * The conversation's title when this message creates it (an email's subject); never overwritten by a later message. Without it the
+   * title is the sender's name.
+   */
+  title?: string;
+  /**
+   * Who to link or create as the contact, when the thread key is not itself the sender's identity (an email thread is keyed by the
+   * provider's thread id, the contact is the sender's address). Without it the contact comes from `peerKey` (phone channels only).
+   */
+  contactIdentity?: { kind: 'email'; value: string; name?: string };
+  /**
    * What the channel knows beyond the common fields, stored on the message and read by the screens that render it: `contacts` (cards),
    * `interactive` (what the customer picked), `referral` (the ad or link that opened the chat), `rawType` (an unsupported kind),
    * `forwarded`. Plain JSON; the adapter keeps it small.
@@ -318,12 +385,21 @@ export interface NormalisedInbound {
    * The message came from a group, not from one person: `peerKey` is the group's id, the thread is the group and has no contact,
    * and `participant` says who wrote it. Storage only: nothing may auto-reply to a group (a big group would bill per member).
    */
-  group?: { title?: string; participant: string; participantName?: string };
+  group?: {
+    title?: string;
+    participant: string;
+    participantName?: string;
+    participantLid?: string;
+  };
   /**
    * Imported history (WhatsApp Business app coexistence): stored quietly and backdated to when it was really sent, with no unread,
    * no reopening, no contact creation and no realtime alert. `direction` is who wrote it.
+   *
+   * `contact: true` (the personal-number import, TW-WAHIST, where the person chose to bring their chats in): the thread is linked to the
+   * contact of its number, created quietly when there is none (no `contact.created` event, so no flow and no notification), counted
+   * against the plan's contact cap. It never grants consent: a contact made this way has no consent event. Never set for a group.
    */
-  history?: { direction: 'in' | 'out' };
+  history?: { direction: 'in' | 'out'; contact?: boolean };
 }
 
 export interface NormalisedReceipt {

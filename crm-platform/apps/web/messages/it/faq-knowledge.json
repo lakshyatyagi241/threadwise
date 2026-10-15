@@ -1,7 +1,6 @@
 {
   "faq": {
     "nav": {
-      "faq": "FAQ",
       "label": "Sezioni FAQ",
       "tab": {
         "faqs": "FAQ",
@@ -13,9 +12,7 @@
       "unansweredCount": "{count, plural, one {# messaggio senza risposta} other {# messaggi senza risposta}}"
     },
     "common": {
-      "dismiss": "Chiudi",
       "retry": "Riprova",
-      "requestId": "Richiesta {id}",
       "noAccessTitle": "Non hai accesso a questa schermata",
       "noAccess": "Chiedi a un amministratore dello spazio di lavoro di assegnare al tuo ruolo il permesso {permission}."
     },
@@ -26,28 +23,28 @@
       "conflict": "Qualcun altro ha modificato questo elemento mentre lo stavi modificando.",
       "duplicateQuestion": "Un'altra FAQ ha già questa domanda.",
       "duplicateVariation": "Questa FAQ ha già questa formulazione.",
-      "limitReached": "Il tuo spazio di lavoro ha raggiunto il limite di FAQ. Elimina le FAQ o le varianti inutilizzate, oppure chiedi all'amministratore della piattaforma di aumentarlo.",
       "flowNotFound": "Il flow scelto non esiste più in questo spazio di lavoro. Scegline un altro.",
       "embeddingUnavailable": "Il provider AI non è disponibile. Aggiungi una chiave OpenRouter al tuo spazio di lavoro, oppure chiedi all'amministratore della piattaforma di attivare la chiave condivisa, poi riprova.",
       "engineDisabled": "Le risposte FAQ sono al momento disattivate per l'intera piattaforma.",
       "modelNotAllowed": "Il modello di embedding della piattaforma non è consentito. Rivolgiti all'amministratore della piattaforma.",
       "validation": "Alcuni campi richiedono attenzione.",
       "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
-      "unexpected": "Qualcosa è andato storto. Riprova e, se il problema persiste, comunica l'ID richiesta all'assistenza."
+      "unexpected": "Qualcosa è andato storto. Riprova e, se il problema persiste, comunica l'ID richiesta all'assistenza.",
+      "flowNodeNotFound": "Il passaggio scelto non è più presente in questo flow. Scegli un altro passaggio oppure parti dall'inizio del flow.",
+      "limitReached": "Questo flusso ha raggiunto il limite di FAQ. Elimina le FAQ o le varianti inutilizzate, oppure chiedi all’amministratore della piattaforma di aumentarlo."
     },
     "banner": {
       "enabledToast": "Le risposte FAQ sono attive.",
       "engineOff": "Le risposte FAQ sono state disattivate dalla piattaforma. I clienti non ricevono risposte FAQ finché non vengono riattivate.",
       "modelChanged": "La piattaforma ha cambiato il modello AI dopo che hai regolato questa soglia. I punteggi sono cambiati, quindi rivedi la sensibilità.",
       "reviewSensitivity": "Rivedi la sensibilità",
-      "offTitle": "Le risposte FAQ sono DISATTIVATE per i clienti",
-      "offBody": "Puoi scrivere e provare le FAQ, ma i clienti non ricevono risposte finché non le attivi.",
       "offNoRight": "Chiedi a chi ha il permesso faq.settings.manage (di solito un amministratore dello spazio di lavoro) di attivarle.",
-      "enable": "Attiva le risposte FAQ"
+      "enable": "Attiva le risposte FAQ",
+      "offTitle": "Le risposte FAQ sono DISATTIVATE per questo flusso",
+      "offBody": "Puoi scrivere e testare le FAQ di questo flusso, ma i clienti non ricevono risposte finché non lo attivi."
     },
     "list": {
       "title": "FAQ",
-      "subtitle": "Le domande dei tuoi clienti e le risposte del tuo bot. I clienti non devono usare le tue parole esatte.",
       "add": "Aggiungi FAQ",
       "stats": {
         "label": "Totali FAQ",
@@ -97,10 +94,10 @@
       "deleted": "FAQ eliminata.",
       "empty": {
         "title": "Insegna al tuo bot le risposte alle domande più comuni",
-        "body": "Scrivi una domanda e la sua risposta una sola volta. Il tuo bot riconosce ciò che scrivono i clienti, con le loro parole, e risponde oppure avvia un flow.",
         "how": "Aggiungi qualche altro modo di fare la stessa domanda (formulazioni) e provala prima che la vedano i clienti.",
         "cta": "Aggiungi la tua prima FAQ",
-        "noRight": "Chiedi a un amministratore dello spazio di lavoro il permesso di aggiungere FAQ."
+        "noRight": "Chiedi a un amministratore dello spazio di lavoro il permesso di aggiungere FAQ.",
+        "body": "Scrivi una domanda e la sua risposta una sola volta. Il bot riconosce ciò che i clienti scrivono con parole loro e risponde con la risposta oppure li manda a un passaggio di un flusso."
       },
       "noMatch": {
         "title": "Nessuna FAQ corrisponde ai filtri",
@@ -139,7 +136,11 @@
         "ready": "{count} attive",
         "pending": "{count} in indicizzazione",
         "failed": "{count} non riuscite"
-      }
+      },
+      "stepMissing": "Passaggio mancante",
+      "subtitle": "Le domande che i clienti fanno in {flow} e ciò che risponde il bot. Queste FAQ rispondono solo all’interno di questo flusso.",
+      "thisFlow": "Questo flusso",
+      "startsAt": "Porta a: {step}"
     },
     "editor": {
       "back": "Torna alle FAQ",
@@ -156,7 +157,6 @@
       "saved": "FAQ salvata.",
       "deleted": "FAQ eliminata.",
       "readOnly": "Puoi vedere questa FAQ, ma il tuo ruolo non può modificarla.",
-      "faqLimit": "Il tuo spazio di lavoro ha raggiunto il limite di {max} FAQ. Eliminane una per aggiungerne un'altra.",
       "prefilled": "La domanda è stata compilata a partire da un messaggio cliente senza risposta. Salvando questa FAQ, quel messaggio viene segnato come gestito.",
       "tryItSaveFirst": "Salva prima la FAQ, poi potrai provare come vi corrispondono i messaggi dei clienti.",
       "conflict": {
@@ -186,21 +186,30 @@
         "title": "Risposta",
         "hint": "Ciò che riceve il cliente quando questa FAQ corrisponde.",
         "text": "Risposta testuale",
-        "flow": "Avvia un flow",
         "textLabel": "Testo della risposta",
         "count": "{count} / {max} caratteri",
         "preview": "Anteprima in WhatsApp",
         "previewEmpty": "Qui compare la tua risposta",
-        "flowLabel": "Flow da avviare",
-        "noFlow": "Nessun flow scelto"
+        "noFlow": "Nessun flow scelto",
+        "flow": "Vai a un passaggio",
+        "flowLabel": "Destinazione",
+        "startsAt": "Porta al passaggio: {step}",
+        "stepGone": "Il passaggio a cui porta questa FAQ non esiste più, quindi i clienti non ricevono risposta.",
+        "thisFlowNamed": "Un passaggio di questo flusso ({name})",
+        "target": {
+          "here": "Un passaggio di questo flusso",
+          "hereHint": "Il cliente prosegue all’interno di {name}. È la scelta abituale.",
+          "other": "Un passaggio di un altro flusso",
+          "otherHint": "Passa la conversazione a un flusso diverso."
+        }
       },
       "advanced": {
         "title": "Avanzate: sensibilità solo per questa FAQ",
-        "body": "Per impostazione predefinita ogni FAQ usa la sensibilità dello spazio di lavoro. Usa un valore personalizzato se questa corrisponde troppo facilmente (aumentalo) o troppo raramente (diminuiscilo).",
         "custom": "Usa una sensibilità personalizzata per questa FAQ",
         "sliderLabel": "Corrispondenza pari o superiore a",
-        "workspace": "La sensibilità dello spazio di lavoro è {value}%.",
-        "following": "Segue la sensibilità dello spazio di lavoro ({value}%)."
+        "body": "Per impostazione predefinita ogni FAQ usa la sensibilità di questo flusso. Usa un valore personalizzato quando questa corrisponde troppo facilmente (aumentalo) o troppo raramente (diminuiscilo).",
+        "workspace": "La sensibilità di questo flusso è {value}%.",
+        "following": "Segue la sensibilità di questo flusso ({value}%)."
       },
       "problem": {
         "question": {
@@ -214,9 +223,9 @@
           "invalid": "Questa risposta non è valida."
         },
         "flowId": {
-          "required": "Scegli il flow da avviare.",
-          "tooLong": "Scegli il flow da avviare.",
-          "invalid": "Scegli il flow da avviare."
+          "required": "Scegli il flusso di destinazione.",
+          "tooLong": "Scegli il flusso di destinazione.",
+          "invalid": "Scegli il flusso di destinazione."
         },
         "category": {
           "required": "Scrivi una categoria o lascia vuoto.",
@@ -227,6 +236,11 @@
           "required": "Scegli un valore tra 5% e 99%.",
           "tooLong": "Scegli un valore tra 5% e 99%.",
           "invalid": "Scegli un valore tra 5% e 99%."
+        },
+        "flowNodeId": {
+          "required": "Scegli un passaggio di questo flow oppure l'inizio del flow.",
+          "tooLong": "Scegli un passaggio di questo flow oppure l'inizio del flow.",
+          "invalid": "Scegli un passaggio di questo flow oppure l'inizio del flow."
         }
       },
       "deleteConfirm": {
@@ -239,11 +253,11 @@
         "body": "Le modifiche a questa FAQ non sono state salvate.",
         "leave": "Esci",
         "stay": "Continua a modificare"
-      }
+      },
+      "faqLimit": "Questo flusso ha raggiunto il limite di {max} FAQ. Eliminane una per aggiungerne un’altra."
     },
     "flowPicker": {
       "noAccess": "Per scegliere un flow qui serve il permesso di visualizzare i flow (flb.flows.read).",
-      "missing": "Il flow avviato da questa FAQ non esiste più. Scegli un altro flow, altrimenti questa FAQ non potrà rispondere.",
       "selected": "Scelto",
       "search": "Cerca flow",
       "searchPlaceholder": "Cerca flow per nome",
@@ -257,7 +271,9 @@
         "off": "Inattivo",
         "draft": "Bozza"
       },
-      "note": "Il flow parte dal suo trigger. Possono essere eseguiti solo i flow pubblicati e attivi."
+      "missing": "Il flusso a cui porta questa FAQ non esiste più. Scegli un altro flusso, altrimenti questa FAQ non può rispondere.",
+      "noOthers": "Non ci sono altri flussi in questo spazio di lavoro.",
+      "note": "Il cliente prosegue dal passaggio che scegli qui sotto, oppure dall’inizio del flusso. Possono essere eseguiti solo flussi pubblicati e attivi."
     },
     "variations": {
       "title": "Varianti della domanda",
@@ -333,7 +349,7 @@
       "verdict": {
         "answer": {
           "title": "Risponderebbe",
-          "body": "Una FAQ corrisponde abbastanza bene. Il cliente riceve la sua risposta (o parte il suo flow)."
+          "body": "Una FAQ corrispondeva abbastanza bene. Il cliente riceve la sua risposta oppure viene mandato al passaggio indicato."
         },
         "below": {
           "title": "Sotto la soglia",
@@ -354,6 +370,10 @@
         "notSent": {
           "title": "Corrispondenza trovata, non inviata",
           "body": "Una FAQ corrisponde ma la risposta non è stata inviata, ad esempio perché le risposte FAQ erano disattivate."
+        },
+        "vetoed": {
+          "title": "Risposta trattenuta",
+          "body": "La corrispondenza ha ottenuto un punteggio sufficiente, ma il secondo controllo ha risposto no, quindi non verrebbe inviato nulla."
         }
       },
       "tier": {
@@ -383,8 +403,8 @@
       "winner": {
         "title": "Cosa riceverebbe il cliente",
         "unavailable": "Impossibile caricare questa FAQ.",
-        "flow": "Avvia il flow {name}",
-        "flowMissing": "Avvia un flow che non esiste più"
+        "flow": "Porta a un passaggio di {name}",
+        "flowMissing": "Porta a un flusso che non esiste più"
       },
       "candidates": {
         "title": "Migliori corrispondenze",
@@ -401,16 +421,16 @@
     },
     "playground": {
       "title": "Come risponderebbe il mio bot?",
-      "subtitle": "Fai passare un messaggio cliente nello stesso confronto usato dal tuo bot. Non viene inviato nulla e nulla viene conteggiato nelle statistiche.",
       "label": "Messaggio del cliente",
       "placeholder": "Dov'è il mio pacco?",
       "run": "Esegui",
-      "hint": "Vengono confrontate solo le FAQ salvate. Partecipano le FAQ attive con formulazioni attive.",
       "empty": "Scrivi un messaggio qui sopra ed eseguilo per vedere la decisione.",
       "history": {
         "title": "Questa sessione",
         "empty": "Qui compaiono le tue ultime 10 prove."
-      }
+      },
+      "subtitle": "Fai passare un messaggio cliente nel confronto usato da {flow}. Non viene inviato nulla e nulla viene conteggiato nelle statistiche.",
+      "hint": "Vengono confrontate solo le FAQ salvate di questo flusso. Partecipano le FAQ attive con formulazioni in uso."
     },
     "unanswered": {
       "title": "Messaggi senza risposta",
@@ -478,7 +498,6 @@
       "loadingMore": "Caricamento",
       "why": {
         "answered": "Risposto con \"{faq}\" al {score}%.",
-        "flowStarted": "Avviato il flow di \"{faq}\" al {score}%.",
         "belowThreshold": "La migliore corrispondenza ha ottenuto {score}%, sotto la soglia del {threshold}%, quindi non è stato inviato nulla.",
         "belowThresholdNoBar": "La migliore corrispondenza ha ottenuto {score}%, non abbastanza, quindi non è stato inviato nulla.",
         "lowMargin": "Due FAQ erano troppo vicine ({score}% e {second}%), quindi il bot non ha tirato a indovinare.",
@@ -486,8 +505,12 @@
         "providerError": "Il provider AI ha avuto un errore, quindi il bot ha potuto confrontare solo l'ortografia.",
         "notSent": "Una FAQ corrispondeva ma la risposta non è stata inviata.",
         "tier": "Deciso dal livello {tier}.",
-        "error": "Errore: {error}"
-      }
+        "error": "Errore: {error}",
+        "vetoed": "La migliore corrispondenza ha ottenuto {score}%, sopra la soglia del {threshold}%, ma il secondo controllo ha stabilito che non risponde al messaggio, quindi non è stato inviato nulla.",
+        "vetoedNoBar": "La migliore corrispondenza ha ottenuto {score}%, ma il secondo controllo ha stabilito che non risponde al messaggio, quindi non è stato inviato nulla.",
+        "flowStarted": "Cliente mandato al passaggio di \"{faq}\" al {score}%."
+      },
+      "flowRun": "(da un flow)"
     },
     "insights": {
       "title": "Statistiche FAQ",
@@ -548,7 +571,6 @@
     },
     "settings": {
       "title": "Impostazioni FAQ",
-      "subtitle": "Attiva le risposte FAQ e regola quanto un messaggio deve corrispondere.",
       "unsaved": "Modifiche non salvate",
       "discard": "Scarta",
       "save": "Salva impostazioni",
@@ -563,11 +585,11 @@
       },
       "enable": {
         "title": "Risposte FAQ",
-        "label": "Rispondi ai clienti con le FAQ",
         "on": "Attivo",
         "off": "Disattivo",
-        "onBody": "Quando un cliente scrive, il bot confronta il messaggio con le tue FAQ e risponde con la risposta migliore oppure avvia il suo flow. Se un flow o un trigger a parola chiave ha già preso in carico il messaggio, ha la precedenza.",
-        "offBody": "I clienti non ricevono risposte FAQ. Puoi comunque scrivere e provare le FAQ."
+        "label": "Rispondi ai clienti con le FAQ di questo flusso",
+        "onBody": "Finché questo flusso è attivo, un messaggio del cliente che nessun trigger a parola chiave né flusso in esecuzione ha gestito viene confrontato con le FAQ di questo flusso. Il bot risponde con la risposta migliore oppure manda il cliente al passaggio indicato dalla FAQ.",
+        "offBody": "Le FAQ di questo flusso non rispondono ai clienti. Puoi comunque scriverle e testarle."
       },
       "sens": {
         "title": "Sensibilità",
@@ -612,7 +634,8 @@
         "exact": "Esatto: il messaggio coincide con una formulazione salvata, senza considerare maiuscole e spaziatura.",
         "semantic": "Significato: il messaggio viene confrontato per significato con ogni formulazione attiva, quindi anche parole diverse possono corrispondere.",
         "trigram": "Confronto ortografico: se il provider AI non è disponibile, vengono confrontate le lettere, il che individua solo gli errori di battitura.",
-        "threshold": "Il punteggio migliore viene confrontato con la sensibilità. Sopra, la FAQ risponde; sotto, il messaggio finisce tra quelli Senza risposta."
+        "threshold": "Il punteggio migliore viene confrontato con la sensibilità. Sopra, la FAQ risponde; sotto, il messaggio finisce tra quelli Senza risposta.",
+        "verify": "Secondo controllo (facoltativo): una corrispondenza che ha appena raggiunto la sensibilità può essere ricontrollata da un piccolo modello di chat, che può soltanto trattenere una risposta."
       },
       "who": "Per modificare queste impostazioni serve il permesso faq.settings.manage.",
       "leave": {
@@ -620,6 +643,62 @@
         "body": "Le modifiche a queste impostazioni non sono state salvate.",
         "leave": "Esci",
         "stay": "Resta"
+      },
+      "verify": {
+        "title": "Secondo controllo per i casi al limite",
+        "hint": "Un piccolo modello di chat ricontrolla le corrispondenze che hanno appena raggiunto la soglia.",
+        "unavailable": "La piattaforma ha disattivato il secondo controllo, quindi non viene eseguito anche se lo attivi qui. Rivolgiti all'amministratore della piattaforma.",
+        "label": "Ricontrolla i casi al limite con un secondo parere",
+        "on": "Attivo",
+        "off": "Disattivato",
+        "onBody": "Quando una corrispondenza supera la soglia di poco, un piccolo modello di chat legge il messaggio del cliente e la FAQ e dice se la risposta è adatta. Può solo dire no: non fa mai partire una risposta.",
+        "offBody": "Ogni corrispondenza che raggiunge la soglia riceve risposta senza un secondo controllo.",
+        "bandLabel": "Quanto vicino alla soglia è un caso al limite",
+        "bandValue": "+{value}%",
+        "explainOn": "Le corrispondenze con un punteggio da {from}% fino a {to}% vengono controllate da {model}. Un \"no\" significa che non viene inviata alcuna risposta e il messaggio compare in Senza risposta.",
+        "explainOff": "Ogni corrispondenza con un punteggio di {threshold}% o più riceve risposta. Attiva il secondo controllo per far ricontrollare i casi più al limite.",
+        "cost": "Ogni controllo invia al modello il messaggio del cliente e la domanda della FAQ: poche centinaia di token, e aggiunge circa un secondo a una risposta al limite. Le corrispondenze fuori dall'intervallo non vengono mai controllate. Se il controllo fallisce, non è disponibile o si raggiunge il limite orario, la corrispondenza resta valida come se non ci fosse alcun controllo."
+      },
+      "subtitle": "Attiva le risposte FAQ per {flow} e regola quanto un messaggio deve corrispondere."
+    },
+    "flowNode": {
+      "start": "L'inizio del flow",
+      "loading": "Caricamento dei passaggi di questo flow",
+      "empty": "Questo flow non ha altri passaggi, quindi parte dall'inizio.",
+      "retry": "Riprova",
+      "deletedOption": "Passaggio eliminato (scegline un altro)",
+      "missing": {
+        "body": "Quel passaggio è stato eliminato dal flow. Finché non scegli un altro passaggio, i clienti che corrispondono a questa FAQ non ricevono risposta. Scegli un passaggio qui sotto oppure parti dall'inizio del flow.",
+        "fix": "Parti dall'inizio del flow",
+        "title": "Il passaggio a cui porta questa FAQ non esiste più"
+      },
+      "label": "Vai a",
+      "hint": "Scegli un passaggio per saltare l’inizio del flusso. I clienti proseguono dal passaggio selezionato.",
+      "hintOwn": "Scegli un passaggio di questo flusso. I passaggi aggiunti dopo l’ultimo salvataggio del flusso compaiono dopo il salvataggio."
+    },
+    "verify": {
+      "title": "Secondo controllo",
+      "chip": {
+        "confirmed": "Secondo controllo: sì",
+        "vetoed": "Secondo controllo: no",
+        "failed": "Secondo controllo non riuscito",
+        "skipped": "Secondo controllo saltato"
+      },
+      "model": "Controllato da",
+      "reason": "Motivo",
+      "body": {
+        "confirmed": "La corrispondenza era al limite, quindi un piccolo modello di chat ha letto il messaggio e la FAQ e ha confermato che la risposta è adatta.",
+        "vetoed": "La corrispondenza era al limite e il secondo controllo ha stabilito che questa FAQ non risponde al messaggio. La risposta è stata trattenuta, non è stato inviato nulla e il messaggio compare in Senza risposta.",
+        "failed": "La corrispondenza era al limite, ma il controllo non si è concluso, quindi la corrispondenza è rimasta valida e la risposta è stata inviata come se non ci fosse un secondo controllo.",
+        "skipped": "Il secondo controllo non è stato eseguito per questa corrispondenza, che è rimasta invariata."
+      }
+    },
+    "panel": {
+      "leave": {
+        "title": "Uscire dalle FAQ senza salvare?",
+        "body": "Hai modifiche non salvate nelle FAQ. Se lasci questa scheda andranno perse.",
+        "leave": "Esci",
+        "stay": "Continua a modificare"
       }
     }
   }

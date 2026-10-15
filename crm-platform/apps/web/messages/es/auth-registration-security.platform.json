@@ -46,7 +46,6 @@
         "copyFailed": "No se pudo copiar",
         "loading": "Cargando",
         "retry": "Reintentar",
-        "requestId": "ID de solicitud",
         "errors": {
           "forbidden": "Tu rol no permite esta acción.",
           "request": "Se rechazó la solicitud. Recarga la página e inténtalo de nuevo.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Inicio de sesión de operador",
         "intro": "Esta consola es para quienes operan la plataforma. Los usuarios de los espacios de trabajo inician sesión en la página principal de inicio de sesión.",
-        "requestId": "ID de solicitud",
         "submit": "Iniciar sesión",
         "submitting": "Iniciando sesión",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Tu cuenta",
         "title": "Autenticación de dos factores",
         "description": "Protege {email} con una aplicación de autenticación. Las cuentas de operador son las de mayor confianza de la plataforma.",
-        "requestId": "ID de solicitud",
         "status": {
           "title": "Aplicación de autenticación",
           "on": "Activada",
@@ -181,7 +178,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Procesando",
             "close": "Cerrar",
             "signInAgain": "Iniciar sesión de nuevo",
-            "requestId": "ID de solicitud",
             "errors": {
               "forbidden": "Solo un superadministrador puede ejecutar esta acción.",
               "unexpected": "La acción no se completó. Revisa el registro de eventos antes de volver a intentarlo."
@@ -731,7 +726,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "Usa una ruta del sitio como /legal/terms, o una dirección completa http o https.",
           "senderFormat": "Elige uno de los remitentes de la lista.",
           "countryFormat": "Usa un código de país de dos letras.",
-          "senderRequired": "Elige un canal remitente antes de crear la plantilla."
+          "senderRequired": "Elige un canal remitente antes de crear la plantilla.",
+          "domainFormat": "{entry} no es un dominio válido. Usa un nombre como ejemplo.com.",
+          "tooMany": "No más de {max} dominios."
         },
         "policy": {
           "kicker": "Registro",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Máximo de intentos"
+          },
+          "businessEmailOnly": {
+            "label": "Solo correos de trabajo",
+            "hintOn": "Los proveedores gratuitos como Gmail, Outlook y Yahoo se rechazan al registrarse.",
+            "hintOff": "Cualquiera puede registrarse con una dirección personal gratuita."
+          },
+          "blockDisposableEmail": {
+            "label": "Bloquear correos temporales",
+            "hintOn": "Se rechazan los dominios desechables y temporales, y los dominios sin servidor de correo.",
+            "hintOff": "Se aceptan direcciones temporales."
+          },
+          "requirePhoneVerification": {
+            "label": "Exigir un número móvil verificado",
+            "hintOn": "Todo registro debe confirmar un código de un solo uso. Si no se puede enviar el código, el registro se detiene en lugar de omitir la comprobación.",
+            "hintOff": "El paso del código solo se ejecuta cuando el código de registro de abajo está activado."
+          },
+          "blockedEmailDomains": {
+            "label": "Dominios siempre bloqueados",
+            "hint": "Un dominio por línea. Los subdominios también se bloquean. Se rechazan aunque «solo correos de trabajo» esté desactivado.",
+            "placeholder": "ejemplo.com"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "Se envió un código de prueba a {to}.",
             "remaining": "{count, plural, one {Queda # prueba esta hora.} many {Quedan # de pruebas esta hora.} other {Quedan # pruebas esta hora.}}",
             "notShown": "El código no se muestra aquí; léelo en el teléfono.",
-            "requestId": "ID de solicitud",
             "errors": {
               "invalidNumber": "Introduce el número con su prefijo de país, por ejemplo +91 98765 43221.",
               "rateLimited": "Demasiados códigos de prueba esta hora. Inténtalo de nuevo en {minutes, plural, one {# minuto} many {# de minutos} other {# minutos}}.",
@@ -1045,7 +1060,6 @@
           "saved": "Remitente guardado",
           "removed": "Remitente quitado",
           "secretRemoved": "Secreto guardado eliminado",
-          "requestId": "ID de solicitud",
           "problems": {
             "required": "Este campo es obligatorio.",
             "tooLong": "Como máximo {max} caracteres.",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "No se aceptó ese pie.",
             "unexpected": "No se pudo guardar el pie. Inténtalo de nuevo en un momento."
-          },
-          "requestId": "ID de solicitud"
+          }
+        },
+        "guard": {
+          "kicker": "Protección del registro",
+          "title": "Comprobación de correo de trabajo y móvil",
+          "description": "Evita las direcciones desechables y personales y garantiza que cada cuenta nueva tenga un número móvil verificado. Se aplica al registro con correo y al social.",
+          "phoneOffWarning": "Con la comprobación del móvil desactivada, se pueden crear cuentas sin un número verificado, lo que facilita los registros falsos en masa."
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "Cancelar",
           "working": "Quitando",
           "error": "No se pudo quitar el secreto. Inténtalo de nuevo en un momento.",
-          "requestId": "ID de solicitud",
           "done": "Se quitó el secreto guardado de {name}.",
           "names": {
             "google": "Google",
@@ -1416,10 +1433,13 @@
             "storefront_builder": "El creador de tiendas en línea.",
             "invoicing": "Facturas, notas de crédito, pagos, pedidos de venta y tipos de impuesto.",
             "forms_and_links": "Formularios de captación de leads y enlaces compartibles.",
-            "extra_channels": "Los canales de Telegram, Facebook e Instagram.",
+            "extra_channels": "Los canales de Telegram, Facebook, Instagram, LINE, Viber e WeChat.",
             "form_builder": "Formularios web alojados e incrustados que crean contactos en el CRM. La aplicación de pago Formularios controla este interruptor.",
             "waba_groups": "Crea y gestiona grupos de WhatsApp desde un número de la API en la nube: enlace de invitación, solicitudes de unión, miembros. El número debe ser una Cuenta de Empresa Oficial.",
-            "sms": "SMS solo de envío mediante Twilio o MSG91: conecta remitentes y envía difusiones y campañas por SMS."
+            "sms": "SMS solo de envío mediante Twilio o MSG91: conecta remitentes y envía difusiones y campañas por SMS.",
+            "help_agent": "El asistente de ayuda dentro de la app: la gente pide una tarea con sus palabras y él la guía o la hace en su propia sesión, preguntando antes de cualquier acción de riesgo. Consume tokens de IA.",
+            "email_channel": "Conecta buzones de Gmail y Google Workspace a la bandeja de equipo. La aplicación de pago Correo controla este interruptor.",
+            "personal_history_full": "Permite que un número personal de WhatsApp importe todo su historial de chats al vincularse por primera vez. La importación de chats recientes está disponible en todos los planes que incluyen números personales."
           },
           "units": {
             "days": "Días",
@@ -1561,7 +1581,9 @@
             "forms": "Formularios web",
             "form_submissions_monthly": "Envíos de formulario al mes",
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes",
-            "sms_monthly": "SMS al mes"
+            "sms_monthly": "SMS al mes",
+            "email_mailboxes": "Buzones de correo",
+            "email_monthly": "Correos al mes"
           },
           "featureGroups": {
             "messaging": "Mensajería",
@@ -1596,10 +1618,13 @@
             "storefront_builder": "Creador de tienda y sitio web",
             "invoicing": "Facturación (facturas, notas de crédito, facturas recurrentes)",
             "forms_and_links": "Formularios, enlaces de clic para chatear y grupos",
-            "extra_channels": "Canales de Telegram, Facebook e Instagram",
+            "extra_channels": "Canales de Telegram, Facebook, Instagram, LINE, Viber e WeChat",
             "form_builder": "Formularios (creador de formularios web)",
             "waba_groups": "Grupos de WhatsApp (API en la nube)",
-            "sms": "Canal SMS"
+            "sms": "Canal SMS",
+            "help_agent": "Asistente de ayuda (IA, consume tokens)",
+            "email_channel": "Canal de correo (Gmail)",
+            "personal_history_full": "Importación del historial completo de chats (WhatsApp personal)"
           },
           "problems": {
             "required": "Este campo es obligatorio.",
@@ -1652,7 +1677,9 @@
             "forms": "Formularios web activos (aplicación Formularios). Archivar un formulario libera su plaza. 0 = ilimitado.",
             "form_submissions_monthly": "Envíos de formulario aceptados en el mes natural, sin contar spam. Por encima del tope, un envío se guarda igualmente para revisión, nunca se descarta. 0 = ilimitado.",
             "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluido un reintento de reparación. 0 = ilimitado.",
-            "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado."
+            "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado.",
+            "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
+            "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado."
           }
         }
       },
@@ -1664,7 +1691,6 @@
         "saving": "Guardando",
         "saved": "{count, plural, one {# ajuste guardado} many {# de ajustes guardados} other {# ajustes guardados}}",
         "rejected": "No se guardó nada. {count, plural, one {Se rechazó # campo.} many {Se rechazaron # de campos.} other {Se rechazaron # campos.}}",
-        "requestId": "ID de solicitud",
         "unsaved": "{count, plural, one {# cambio sin guardar} many {# de cambios sin guardar} other {# cambios sin guardar}}",
         "discard": "Descartar cambios",
         "errors": {

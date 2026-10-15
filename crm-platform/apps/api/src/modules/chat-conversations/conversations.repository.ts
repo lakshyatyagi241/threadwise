@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { channelOwnerSql } from '../../realtime';
 
 /**
  * Every SQL statement the conversation side of the message pipelines runs on `conversations` and `conversation_events`. Each method
@@ -37,12 +38,14 @@ export interface ConversationRow {
   firstResponseAt: Date | null;
   assigneeUserId: number | null;
   assigneeTeamId: number | null;
+  /** The owner of the personal mailbox the thread is on, null for a shared channel: the visibility rule needs it (`ConversationRecord`). */
+  channelOwnerUserId: number | null;
   rowVersion: number;
 }
 
 const COLUMNS = sql`id, uuid, channel_id, peer_key, peer_name, title, contact_id, needs_contact, status, unread_count, msg_seq,
   last_message_at, last_inbound_at, last_outbound_at, window_expires_at, waiting_since, first_response_at,
-  assignee_user_id, assignee_team_id, row_version`;
+  assignee_user_id, assignee_team_id, row_version, ${channelOwnerSql('conversations')} AS channel_owner_user_id`;
 
 export const toConversationRow = (r: Raw): ConversationRow => ({
   id: Number(r.id),
@@ -64,6 +67,7 @@ export const toConversationRow = (r: Raw): ConversationRow => ({
   firstResponseAt: date(r.first_response_at),
   assigneeUserId: num(r.assignee_user_id),
   assigneeTeamId: num(r.assignee_team_id),
+  channelOwnerUserId: num(r.channel_owner_user_id),
   rowVersion: Number(r.row_version),
 });
 
@@ -171,11 +175,14 @@ export class ConversationsRepository {
       title: string;
       contactId: number | null;
       needsContact: boolean;
+      /** The thread starts from an imported history: it is marked once (`imported_at`). */
+      imported?: boolean;
     },
   ): Promise<ConversationRow> {
     const res = await tx.execute(sql`
-      INSERT INTO conversations (org_id, channel_id, peer_key, peer_name, title, contact_id, needs_contact, status)
-      VALUES (${orgId}, ${c.channelId}, ${c.peerKey}, ${c.peerName}, ${c.title}, ${c.contactId}, ${c.needsContact}, 'open')
+      INSERT INTO conversations (org_id, channel_id, peer_key, peer_name, title, contact_id, needs_contact, status, imported_at)
+      VALUES (${orgId}, ${c.channelId}, ${c.peerKey}, ${c.peerName}, ${c.title}, ${c.contactId}, ${c.needsContact}, 'open',
+              ${c.imported ? sql`now()` : sql`NULL`})
       RETURNING ${COLUMNS}`);
     return toConversationRow(rowsOf(res)[0]!);
   }
@@ -195,6 +202,25 @@ export class ConversationsRepository {
     await tx.execute(
       sql`UPDATE conversations SET ${sql.join(sets, sql`, `)} WHERE org_id = ${orgId} AND id = ${id}`,
     );
+  }
+
+  /**
+   * The contact on a thread was just heard from, or answered by a person: stamps `contacts.last_activity_at` (the list's "Last Activity"
+   * column, the segment filter and the lead scorer's recency fact). Raw SQL on purpose: it is a stamp, not an edit, so it emits no
+   * `contact.updated` (which would queue a score per message) and the contacts touch trigger leaves `row_version` alone for it. Moves
+   * forward only, and at most once a minute per contact, so a burst of messages is one write on the contact row.
+   */
+  async touchContactActivity(
+    tx: Tx,
+    orgId: number,
+    contactId: number | null,
+    at: Date | string,
+  ): Promise<void> {
+    if (contactId === null) return;
+    await tx.execute(sql`
+      UPDATE contacts SET last_activity_at = ${at}::timestamptz
+      WHERE org_id = ${orgId} AND id = ${contactId}
+        AND (last_activity_at IS NULL OR last_activity_at < ${at}::timestamptz - interval '1 minute')`);
   }
 
   /**
@@ -247,6 +273,7 @@ export class ConversationsRepository {
           WHERE org_id = ${orgId} AND id = ${id}
           RETURNING ${COLUMNS}`);
     const row = toConversationRow(rowsOf(res)[0]!);
+    if (t.active) await this.touchContactActivity(tx, orgId, row.contactId, t.arrivedAt);
     const reopened = t.active && ['resolved', 'closed', 'snoozed'].includes(previous);
     return { row, reopenedFrom: reopened ? previous : null };
   }
@@ -337,7 +364,9 @@ export class ConversationsRepository {
         }
       WHERE org_id = ${orgId} AND id = ${id}
       RETURNING ${COLUMNS}`);
-    return { row: toConversationRow(rowsOf(res)[0]!), firstResponse };
+    const row = toConversationRow(rowsOf(res)[0]!);
+    if (t.humanReply) await this.touchContactActivity(tx, orgId, row.contactId, t.at);
+    return { row, firstResponse };
   }
 
   /** Unread becomes the number of customer messages after `seq` (so a message that arrived while the agent read stays unread). */

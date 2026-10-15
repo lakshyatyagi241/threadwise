@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useState, type DragEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ImportConsent } from '@/features/contact-consent';
 import { useTranslations } from 'next-intl';
 import {
   IMPORT_FIELDS,
@@ -52,6 +53,7 @@ const MAIN_FIELDS: readonly ImportField[] = [
   'countryCode',
   'group',
   'language',
+  'consent',
 ];
 
 type Mapping = Partial<Record<ImportField, number | null>>;
@@ -128,6 +130,8 @@ function ImportBody({
   const groupMode: 'existing' | 'new' =
     groups.isSuccess && groups.data.length === 0 ? 'new' : groupModeChoice;
   const [tagIds, setTagIds] = useState<string[]>([]);
+  const [consent, setConsent] = useState(false);
+  const [notice, setNotice] = useState({ text: '', version: '' });
   const [jobId, setJobId] = useState<string | null>(null);
 
   const statuses = useMemo(
@@ -142,6 +146,9 @@ function ImportBody({
     ...(source.trim() ? { source: source.trim() } : {}),
     ...(groupId ? { groupId } : {}),
     ...(tagIds.length > 0 ? { tagIds } : {}),
+    ...(consent ? { consentConfirmed: true } : {}),
+    ...(consent && notice.text.trim() ? { consentNoticeText: notice.text.trim() } : {}),
+    ...(consent && notice.version.trim() ? { consentNoticeVersion: notice.version.trim() } : {}),
   };
 
   // What the file would do. Only the column mapping changes the answer, so the knobs below do not re-upload it.
@@ -457,6 +464,16 @@ function ImportBody({
         </div>
       </div>
 
+      <ImportConsent
+        checked={consent}
+        onChange={setConsent}
+        summary={preview.data?.consent ?? null}
+        smsSummary={preview.data?.consentSms ?? null}
+        emailSummary={preview.data?.consentEmail ?? null}
+        notice={notice}
+        onNotice={setNotice}
+      />
+
       {start.isError && <PreviewError error={start.error} />}
 
       <div className="flex justify-end gap-2 border-t border-border pt-4">
@@ -714,7 +731,7 @@ function JobView({
         )}
       </div>
       {job.limitExceeded > 0 && <Alert tone="warning">{t('limitExceededNote')}</Alert>}
-      {job.invalid > 0 && (
+      {job.invalid + job.limitExceeded + job.duplicatesInFile > 0 && (
         <Button variant="secondary" size="sm" onClick={() => void rejects()} disabled={busy}>
           {busy ? <Spinner /> : <DownloadIcon />} {t('downloadRejects')}
         </Button>

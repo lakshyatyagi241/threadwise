@@ -72,6 +72,7 @@ export class ReceiptsService {
         at,
         errorCode: receipt.errorCode,
         errorMessage: receipt.errorMessage,
+        providerMessageId: receipt.providerMessageId,
       });
       if (outcome === 'missing') return 'unknown' as const;
 

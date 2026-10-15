@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Alert, Button, ConfirmDialog, useToast } from '@crm/ui';
-import { KEYS, useAppointmentsSetup, useBookingSettings } from '../api/hooks';
+import { KEYS, useAppointmentsSetup, useBookingSettings, useDisplayZone } from '../api/hooks';
 import type { BookingSettings } from '../api/schemas';
 import { appointmentsApi } from '../api/service';
 import { errorKind, fieldErrors } from '../lib/errors';
@@ -18,7 +18,6 @@ import {
   type FieldKey,
   type SettingsDraft,
 } from '../lib/settings-form';
-import { browserZone } from '../lib/zone';
 import { isUnavailable } from '../lib/errors';
 import { ErrorLine, LinkButton, useAppointmentsCan } from './parts';
 import { CalendarCard } from './settings-calendar';
@@ -109,7 +108,8 @@ function SettingsEditor({
   const savingRef = useRef(false);
 
   const [base, setBase] = useState(settings);
-  const initial = useMemo(() => draftFromSettings(base, browserZone()), [base]);
+  const displayZone = useDisplayZone();
+  const initial = useMemo(() => draftFromSettings(base, displayZone), [base, displayZone]);
   const [draft, setDraft] = useState<SettingsDraft>(initial);
   const [serverErrors, setServerErrors] = useState<ServerErrors>({});
   const [error, setError] = useState<unknown>(null);
@@ -124,7 +124,7 @@ function SettingsEditor({
   // A newer record arrives (another tab saved, a refetch): take it when nothing here is being edited.
   if (!dirty && settings.rowVersion !== base.rowVersion) {
     setBase(settings);
-    setDraft(draftFromSettings(settings, browserZone()));
+    setDraft(draftFromSettings(settings, displayZone));
   }
 
   const problems = useMemo(() => validateDraft(draft), [draft]);
@@ -163,7 +163,7 @@ function SettingsEditor({
 
   function adopt(next: BookingSettings) {
     setBase(next);
-    setDraft(draftFromSettings(next, browserZone()));
+    setDraft(draftFromSettings(next, displayZone));
     setServerErrors({});
     setError(null);
     setTried(false);

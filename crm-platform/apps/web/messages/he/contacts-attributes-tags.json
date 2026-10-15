@@ -21,7 +21,6 @@
       "unavailable": "חלק זה של ה-API עדיין אינו זמין.",
       "rateLimited": "יותר מדי בקשות. המתן רגע ונסה שוב.",
       "unexpected": "משהו השתבש. נסה שוב.",
-      "requestId": "מזהה בקשה",
       "retry": "נסה שוב",
       "reservedKey": "המפתח הזה שמור לאסימון מובנה. בחר אחר.",
       "attributeInUse": "לחלק מאנשי הקשר יש ערך עבור מאפיין זה.",
@@ -121,6 +120,11 @@
       "selectedActionsNone": "אנשי קשר שנבחרו (בחר שורות תחילה)",
       "modifyColumns": "שנה עמודות",
       "resetColumns": "אפס לברירת מחדל",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsSave": "Save",
       "colContactName": "שם איש קשר",
       "colPhone": "מספר טלפון",
       "colEmailId": "כתובת אימייל",
@@ -170,7 +174,42 @@
       "import": "ייבוא",
       "columns": "עמודות",
       "addColumnField": "הוסף שדה מותאם כעמודה",
-      "kanbanView": "תצוגת לוח (לפי שלב)"
+      "kanbanView": "תצוגת לוח (לפי שלב)",
+      "colLeadScore": "דירוג ליד",
+      "colOwner": "בעלים",
+      "unassigned": "לא מוקצה",
+      "ownerFilter": "סינון לפי בעלים",
+      "selectOwner": "בעלים",
+      "allOwners": "כל הבעלים",
+      "myContacts": "אנשי הקשר שלי",
+      "ownersCount": "{count} בעלים",
+      "ownerMe": "{name} (אני)",
+      "ownerFormer": "חבר לשעבר",
+      "reassignView": "הקצה מחדש את אנשי הקשר של {name}...",
+      "smsNamed": "SMS ל-{name}",
+      "noSms": "אין מספר טלפון ל-SMS",
+      "pqlLabel": "חיפוש אנשי קשר בשפה רגילה",
+      "pqlAsk": "שאל",
+      "pqlAsking": "שואל...",
+      "pqlIgnored": "לא הובן: {parts}",
+      "pqlNothing": "לא ניתן היה להפוך חלק מהחיפוש הזה למסנן.",
+      "pqlFailed": "חיפוש בשפה רגילה אינו זמין כעת. נסו שוב.",
+      "filter": "סינון",
+      "filterAi": "סינון עם AI",
+      "filterAiHint": "תארו את מי שאתם מחפשים",
+      "filterAdvanced": "הוספת מסנן מתקדם",
+      "quickFilters": "מסננים מהירים",
+      "sortButton": "מיון",
+      "back": "חזרה",
+      "pqlPromptPlaceholder": "תארו את אנשי הקשר שאתם רוצים...",
+      "pqlTry": "נסו אחד מאלה",
+      "pqlExample2": "לא פעילים 30 יום",
+      "pqlExample3": "נוצרו ב-7 הימים האחרונים",
+      "clearFilter": "ניקוי מסנן",
+      "conditionsChip": "תנאים: {count}",
+      "pqlExampleTag": "אנשי קשר עם התגית {tag} שלא פעילים 30 יום",
+      "pqlExampleStage": "אנשי קשר בשלב {stage} שנוצרו ב-7 הימים האחרונים",
+      "pqlExampleNoOwner": "אנשי קשר ללא בעלים"
     },
     "bulk": {
       "label": "פעולות עבור אנשי הקשר שנבחרו",
@@ -215,7 +254,6 @@
       "exportStarted": "הייצוא שלך הורד.",
       "exportTooLarge": "זה יותר מדי אנשי קשר לייצוא בבת אחת. צמצם את המסנן ונסה שוב.",
       "update": "עדכן",
-      "updateNeedsRows": "בחר שורות",
       "updated": "{count, plural, one {עודכן איש קשר #.} two {עודכנו # אנשי קשר.} other {עודכנו # אנשי קשר.}}"
     },
     "form": {
@@ -304,7 +342,13 @@
       "statusNoticeReset": "הסטטוס אופס ל-{status}.",
       "statusNoticeSet": "הסטטוס הוגדר ל-{status}, ברירת המחדל של שלב זה.",
       "statusNoticeCleared": "הסטטוס נוקה: הוא אינו חל על שלב זה.",
-      "statusNoneForStage": "לא הוגדר סטטוס לשלב זה."
+      "statusNoneForStage": "לא הוגדר סטטוס לשלב זה.",
+      "owner": "בעלים",
+      "ownerNone": "לא מוקצה",
+      "ownerMe": "{name} (אני)",
+      "ownerFormer": "חבר לשעבר",
+      "ownerHelp": "מי אחראי על איש קשר זה. אפשר לבחור רק אנשים שההרשאות שלך מאפשרות.",
+      "ownerOutOfScope": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה."
     },
     "tags": {
       "title": "תגיות",
@@ -320,7 +364,12 @@
       "addPlaceholder": "הוסף או בחר תגית...",
       "addLabel": "שם תגית",
       "add": "הוסף תגית",
-      "failed": "לא ניתן היה לשנות את התגית. נסה שוב."
+      "failed": "לא ניתן היה לשנות את התגית. נסה שוב.",
+      "quickPlaceholder": "חפשו או צרו תגית",
+      "create": "יצירת התגית ”{name}“",
+      "noMatch": "אין תגיות תואמות",
+      "quickHint": "בחרו כמה תגיות, או הקלידו שם ולחצו Enter כדי ליצור תגית חדשה.",
+      "quickHintPick": "בחרו כמה תגיות מהרשימה."
     },
     "groups": {
       "eyebrow": "סביבת עבודה · {workspace}",
@@ -406,7 +455,10 @@
         "address": "כתובת",
         "memo": "תזכיר",
         "status": "סטטוס",
-        "source": "מקור"
+        "source": "מקור",
+        "consent": "הסכמה לשיווק (כן / לא)",
+        "consentSms": "הסכמה לשיווק ב-SMS (כן / לא)",
+        "consentEmail": "הסכמה לשיווק באימייל (כן / לא)"
       },
       "notInFile": "לא בקובץ",
       "columnN": "עמודה {n}",
@@ -431,7 +483,7 @@
       "imported": "{count, plural, one {יובא איש קשר #.} two {יובאו # אנשי קשר.} other {יובאו # אנשי קשר.}}",
       "importedUpdated": "{count, plural, one {איש קשר קיים # עודכן.} two {# אנשי קשר קיימים עודכנו.} other {# אנשי קשר קיימים עודכנו.}}",
       "importedInvalid": "{count, plural, one {שורה לא תקינה # דולגה.} two {# שורות לא תקינות דולגו.} other {# שורות לא תקינות דולגו.}}",
-      "downloadRejects": "הורד שורות שנדחו",
+      "downloadRejects": "הורדת שגיאות ושורות שדולגו",
       "fileTooLarge": "הקובץ גדול מ-{mb} MB.",
       "checking": "בודק את הקובץ...",
       "errorFile": "לא ניתן היה לקרוא את הקובץ כקובץ CSV של אנשי קשר. בדוק שיש בו שורת כותרת ואיש קשר אחד לפחות.",
@@ -462,7 +514,8 @@
         "group_name_too_long": "שם הקבוצה ארוך מדי",
         "tag_name_too_long": "שם התגית ארוך מדי",
         "plan_limit_reached": "הגעת למגבלת אנשי הקשר של התוכנית",
-        "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית"
+        "tag_limit_reached": "הגעת למגבלת התגיות של התוכנית",
+        "duplicate_in_file": "מספר חוזר, מוזג לשורה קודמת"
       },
       "statusHint": "חל על אנשי הקשר שהקובץ יוצר.",
       "queued": "ממתין להתחלה...",
@@ -512,7 +565,17 @@
       "noActivity": "אין עדיין פעילות לאיש קשר זה.",
       "loadMore": "טען עוד",
       "yes": "כן",
-      "no": "לא"
+      "no": "לא",
+      "owner": "בעלים",
+      "ownerNone": "לא מוקצה",
+      "ownerChange": "שנה בעלים",
+      "ownerChanged": "הבעלים הוגדר ל-{name}.",
+      "ownerCleared": "הבעלים הוסר.",
+      "ownerConflict": "מישהו אחר שינה את איש הקשר הזה קודם. הוא נטען מחדש, נסה שוב.",
+      "ownerForbidden": "ההרשאות שלך אינן מאפשרות להקצות איש קשר זה לאדם הזה.",
+      "ownerFailed": "לא ניתן היה לשנות את הבעלים. נסה שוב.",
+      "ownerMe": "{name} (אני)",
+      "ownerFormer": "חבר לשעבר"
     },
     "attributes": {
       "eyebrow": "עוד / מאפיינים",
@@ -1137,7 +1200,11 @@
         "willClear": "ירוקן עבור {count, plural, one {איש הקשר שנבחר} two {כל # אנשי הקשר שנבחרו} other {כל # אנשי הקשר שנבחרו}}.",
         "requiredNoClear": "לא ניתן לנקות שדה חובה.",
         "problemEmpty": "הזן ערך, או בחר נקה."
-      }
+      },
+      "titleAll": "עדכן את כל אנשי הקשר התואמים",
+      "hintAll": "הגדר את אותם ערכים לכל איש קשר התואם למסננים הנוכחיים. שדות שנשארו על שמור לא ישתנו.",
+      "applyAll": "עדכן את כל אנשי הקשר התואמים",
+      "ownerOnlyNote": "לכל אנשי הקשר התואמים ניתן לשנות כאן רק את הבעלים. כדי לשנות שלב, סטטוס או מאפיינים, סמן את השורות."
     },
     "kanban": {
       "board": "אנשי קשר לפי שלב",
@@ -1164,17 +1231,18 @@
         "updated": "עודכן",
         "rejected": "נדחו",
         "actions": "פעולות",
-        "downloadRejects": "הורד שורות שנדחו",
+        "downloadRejects": "הורדת שגיאות ושורות שדולגו",
         "statuses": {
           "queued": "בתור",
           "running": "פועל",
           "completed": "הושלם",
           "failed": "נכשל"
-        }
+        },
+        "by": "יובא על ידי"
       },
       "exports": {
         "title": "ייצואים",
-        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ביותר ראשונים. הקובץ שהורד אינו נשמר.",
+        "hint": "ייצואי אנשי קשר מה-Hub, החדשים ראשונים. כל קובץ נשמר 30 יום כדי שאתם ועמיתים עם הרשאת ייצוא תוכלו להוריד אותו שוב.",
         "empty": "אין עדיין ייצואים.",
         "by": "על ידי",
         "rows": "אנשי קשר",
@@ -1183,8 +1251,176 @@
         "selections": {
           "ids": "אנשי קשר שסומנו",
           "filter": "כל ההתאמות"
-        }
+        },
+        "download": "הורדה",
+        "noFile": "לא נשמר",
+        "keptUntil": "נשמר עד {date}",
+        "downloadFailed": "לא ניתן היה להוריד את הקובץ. ייתכן שפג תוקפו."
       }
+    },
+    "singleSend": {
+      "close": "סגירה",
+      "cancel": "ביטול",
+      "send": "שליחה",
+      "sending": "שולח",
+      "contact": "איש קשר",
+      "name": "שם",
+      "phone": "נייד",
+      "email": "אימייל",
+      "title": {
+        "whatsapp": "שליחת הודעת WhatsApp",
+        "sms": "שליחת SMS",
+        "email": "שליחת אימייל",
+        "call": "התקשרות"
+      },
+      "optedOut": "איש הקשר הזה ביטל את הסכמתו לקבלת הודעות. לא ניתן לשלוח הודעות.",
+      "noPhone": "לאיש הקשר הזה אין מספר טלפון.",
+      "noEmail": "לאיש הקשר הזה אין כתובת אימייל.",
+      "number": "שליחה מתוך",
+      "numberHint": "מספר ה-WhatsApp שממנו תישלח ההודעה.",
+      "noChannel": "לא מחובר מספר WhatsApp. חברו מספר תחילה בערוצים.",
+      "template": "תבנית WhatsApp",
+      "templatePlaceholder": "בחירת תבנית",
+      "noTemplates": "אין תבניות מאושרות למספר הזה.",
+      "notSendable": "לא ניתן למלא כאן את התבנית הזו ({reason}).",
+      "variables": "משתני תבנית",
+      "preview": "תצוגה מקדימה",
+      "slot": "משתנה {key}",
+      "loading": "טוען",
+      "openFailed": "לא ניתן לפתוח את השיחה: {message}",
+      "sent": "ההודעה ל-{name} נוספה לתור.",
+      "failed": "לא ניתן לשלוח: {message}",
+      "callIntro": "בצעו שיחת WhatsApp לאיש הקשר הזה מהדפדפן.",
+      "callOff": "השיחות לא מופעלות במספר ה-WhatsApp הזה. הפעילו אותן בהגדרות המספר.",
+      "callPermission": "איש הקשר עדיין לא אישר שיחות. לפני השיחה תישלח בקשה לאישורו.",
+      "callReady": "מוכן להתקשר אל {phone}.",
+      "later": {
+        "sms": "שליחת SMS מתוך ה-CRM עדיין לא זמינה.",
+        "email": "שליחת אימייל מתוך ה-CRM עדיין לא זמינה."
+      },
+      "openApp": {
+        "sms": "פתיחה באפליקציית ההודעות",
+        "email": "פתיחה באפליקציית הדואר"
+      }
+    },
+    "views": {
+      "label": "תצוגות",
+      "all": "כל אנשי הקשר",
+      "add": "הוספת תצוגה",
+      "changed": "המסננים השתנו מאז שמירת התצוגה",
+      "more": "עוד עבור {name}",
+      "picker": {
+        "title": "בחירת תצוגה",
+        "create": "יצירת תצוגה חדשה",
+        "search": "חיפוש תצוגות...",
+        "empty": "לא נמצאו תצוגות",
+        "pinned": "בלשוניות",
+        "favorites": "מועדפים",
+        "defaultFilters": "מסננים ברירת מחדל",
+        "createdViews": "תצוגות שנוצרו",
+        "addView": "הוספת תצוגה",
+        "markFavorite": "סימון כמועדף",
+        "unmarkFavorite": "הסרה מהמועדפים"
+      },
+      "menu": {
+        "rename": "שינוי שם התצוגה",
+        "update": "שמירת המסננים הנוכחיים",
+        "unpin": "הסרה מהלשוניות",
+        "pin": "הצגה כלשונית",
+        "delete": "מחיקת תצוגה",
+        "edit": "עריכת תצוגה"
+      },
+      "drawer": {
+        "editTitle": "שינוי שם התצוגה",
+        "name": "שם התצוגה",
+        "namePlaceholder": "תצוגה ללא שם",
+        "shareWith": "שיתוף עם",
+        "justMe": "רק אני",
+        "everyone": "כולם",
+        "save": "עדכון",
+        "cancel": "ביטול",
+        "close": "סגירה"
+      },
+      "toast": {
+        "created": "התצוגה \"{name}\" נוצרה.",
+        "updated": "התצוגה עודכנה.",
+        "filtersSaved": "המסננים נשמרו ב-\"{name}\".",
+        "deleted": "התצוגה \"{name}\" נמחקה.",
+        "failed": "לא ניתן לשמור את התצוגה: {message}",
+        "conflict": "מישהו אחר שינה את התצוגה הזו. רעננו ונסו שוב."
+      },
+      "delete": {
+        "title": "למחוק את התצוגה?",
+        "message": "\"{name}\" תימחק עבור כל מי ששותפה איתו. אנשי הקשר לא ישתנו.",
+        "confirm": "מחיקת תצוגה",
+        "cancel": "שמירת התצוגה"
+      },
+      "editor": {
+        "title": {
+          "create": "יצירת תצוגה חדשה",
+          "edit": "עריכת תצוגה"
+        },
+        "close": "סגירה",
+        "back": "חזרה לאנשי הקשר",
+        "name": "שם התצוגה",
+        "namePlaceholder": "הזינו שם לתצוגה",
+        "favorite": "סימון כמועדף",
+        "favoriteHint": "תצוגה מועדפת מקבלת לשונית משלה.",
+        "shareWith": "שיתוף עם",
+        "justMe": "רק אני",
+        "everyone": "כולם",
+        "filterTitle": "סינון אנשי קשר",
+        "filterHint": "התאימו את כל התנאים או אחד מהם, והוסיפו קבוצות למסננים מורכבים יותר.",
+        "columnsTitle": "העדפות עמודות",
+        "locked": "מוצגת תמיד",
+        "cancel": "ביטול",
+        "create": "יצירת תצוגה",
+        "save": "שמירת תצוגה",
+        "saving": "שומר",
+        "needName": "הזינו שם לתצוגה.",
+        "needFilter": "הוסיפו לפחות תנאי מלא אחד.",
+        "notFound": "התצוגה לא נמצאה או שנמחקה.",
+        "noPermission": "אין לכם הרשאה לבצע פעולה זו.",
+        "loading": "טוען",
+        "columnsHint": "חפשו וסמנו את העמודות שהתצוגה מציגה, ואז גררו את העמודות שנבחרו כדי לקבוע את סדרן.",
+        "drag": "גררו כדי לשנות את הסדר של {name}",
+        "selectedUsers": "משתמשים שנבחרו",
+        "accessLevel": "רמת גישה",
+        "canView": "יכול לצפות",
+        "canEdit": "יכול לצפות ולערוך",
+        "peoplePlaceholder": "חיפוש אנשים",
+        "noPeople": "לא נמצאו אנשים",
+        "removePerson": "הסרת {name}",
+        "clearPeople": "ניקוי כל האנשים",
+        "needPeople": "בחרו לפחות אדם אחד.",
+        "onlyCreator": "רק מי שיצר את התצוגה יכול לשנות עם מי היא משותפת.",
+        "searchColumns": "חיפוש עמודות",
+        "noColumnMatch": "אין עמודה תואמת.",
+        "available": "עמודות זמינות",
+        "selected": "עמודות שנבחרו",
+        "selectAll": "בחירת הכול",
+        "reorder": "גררו כדי לשנות את סדר העמודות",
+        "remove": "הסרת {name}"
+      },
+      "presets": {
+        "myContacts": "אנשי הקשר שלי",
+        "newThisWeek": "חדשים השבוע",
+        "newLastWeek": "חדשים בשבוע שעבר",
+        "recentlyCreated": "נוצרו לאחרונה",
+        "recentlyModified": "עודכנו לאחרונה",
+        "recentlyImported": "יובאו לאחרונה",
+        "neverContacted": "לא נוצר קשר מעולם",
+        "needsFollowUp": "דורשים מעקב",
+        "active": "פעילים",
+        "inactive": "לא פעילים",
+        "unsubscribed": "בוטלה הרשמתם"
+      }
+    },
+    "erase": {
+      "scope": "מחיקת איש קשר מוחקת גם את השיחות, ההודעות, המדיה, הקבצים, הקלטות השיחות ויומני השיחות שלו. לידים, עסקאות, משימות וחשבוניות נשארים.",
+      "scopeMany": "מחיקת אנשי קשר מוחקת גם את השיחות, ההודעות, המדיה, הקבצים, הקלטות השיחות ויומני השיחות שלהם. לידים, עסקאות, משימות וחשבוניות נשארים.",
+      "keepHistory": "שמירת היסטוריית השיחות ללא זהות האדם",
+      "keepHistoryHint": "השיחות נשארות לצורכי התיעוד שלכם אך כבר לא מצביעות על האדם."
     }
   }
 }

@@ -5,7 +5,7 @@ summary: Link a WhatsApp number by QR code or pairing code, see its status, and 
 area: inbox
 order: 40
 documents: [nav:devices, tile:unofficial-whatsapp]
-keywords: [personal number, qr code, pairing code, linked devices, unofficial, ban risk, disconnect, whatsapp web]
+keywords: [personal number, qr code, pairing code, linked devices, unofficial, ban risk, disconnect, whatsapp web, import chats, history]
 ---
 
 ## What it is for
@@ -14,16 +14,16 @@ Personal WhatsApp links a number you already use to this workspace the way Whats
 
 > This is not an approved way to automate WhatsApp. WhatsApp can restrict or permanently ban the number at any time, including for normal use, and we cannot prevent it or get a banned number back. For serious or long-term use, the official WhatsApp Business route is the lower-risk one: see [Connect WhatsApp Business](help:whatsapp-numbers-overview).
 
-Every private chat on a linked number, not only business chats, appears in this workspace's shared inbox for members who can read the inbox. Messages you type on the phone are copied there too.
+Every private chat on a linked number, not only business chats, appears in this workspace's shared inbox for members who can read the inbox. Messages you type on the phone are copied there too. The groups the number is in appear there as well, and the **Groups** tab manages them: see [Groups of a personal WhatsApp number](help:personal-whatsapp-groups).
 
 ## How to connect a number
 
-1. Open **Settings**, then **Channels**, and select **Unofficial WhatsApp API**. The **Numbers** tab lists your linked numbers.
+1. Open **Settings**, then **Channels**, and select **Unofficial WhatsApp API**. The **Numbers** tab lists your linked numbers. The **Groups** and **Warmer** tabs sit next to it.
 2. Select **Connect a number**.
 3. Read **Before you connect** and tick all three boxes. Each person who connects a number accepts the notice for themselves. If the notice changes, you are asked again.
 4. Select **I accept and continue**.
 5. Enter a **Name** for your team and the **WhatsApp number** with its country. It must be the number of the phone you will link. Leave **Use for sending after linking** ticked if campaigns, scheduled messages and flows may use it.
-6. Choose how to link it.
+6. Choose how to link it, and whether to bring in your existing chats (see [Import your existing chats](help:personal-whatsapp-import-history)). The choice must be made now, before you scan.
    - **Scan a QR code**: open WhatsApp on that phone, go to Linked devices, then Link a device, and point the camera at the code. The code refreshes by itself, and the page shows how long is left.
    - **Use a pairing code**: open WhatsApp on that phone, go to Linked devices, then Link a device, then Link with phone number instead, and type the 8-character code. The number needs its country code. The code is valid for about 3 minutes, and you can copy it.
 7. Wait for **Connected**. The page shows the steps Code shown, Scanned and Ready.

@@ -33,6 +33,7 @@ const collection = (products = [member(1), member(2, false)]): CollectionRespons
   description: null,
   isActive: true,
   productCount: products.length,
+  metaSetId: null,
   products,
   rowVersion: 3,
   createdAt: '2026-10-01T00:00:00.000Z',

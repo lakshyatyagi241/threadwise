@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { ComponentProps, ReactNode } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 
 /** A link that looks like a `@crm/ui` button. */
 export function LinkButton({
@@ -52,16 +52,10 @@ export function Skeleton({ className }: { className?: string }) {
 export function ErrorPanel({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const t = useTranslations('storefront-builder.admin.errors');
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <div className="font-medium">{t(`${kind}.title`)}</div>
       <p className="text-sm">{t(`${kind}.message`)}</p>
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')} <span className="font-mono">{requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}

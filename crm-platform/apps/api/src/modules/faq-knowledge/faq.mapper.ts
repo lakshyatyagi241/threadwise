@@ -21,6 +21,8 @@ export const toSummary = (r: EntryRow): FaqEntrySummary => ({
   answerPreview: r.answerText === null ? null : Array.from(r.answerText).slice(0, PREVIEW).join(''),
   flowId: r.flowUuid,
   flowName: r.flowName,
+  flowNodeId: r.flowNodeId,
+  flowNodeLabel: r.flowNodeLabel,
   category: r.category,
   status: r.status as FaqStatus,
   thresholdOverride: r.thresholdOverride,
@@ -68,5 +70,6 @@ export const toLogItem = (r: LogRow): FaqLogItem => ({
   embeddingModel: r.embeddingModel,
   latencyMs: r.latencyMs,
   error: r.error,
+  verify: r.verify,
   resolved: r.resolved,
 });

@@ -11,7 +11,7 @@ export const signupRequestSchema = z.object({
   orgSlug: orgSlugSchema.optional(),
   fullName: z.string().trim().min(1).max(120),
   email: emailSchema,
-  /** E.164. Required only when registration OTP is active. */
+  /** E.164. Required: a mobile number verified by a one-time code (unless an operator turned that off). */
   phone: phoneSchema.optional(),
   password: passwordSchema,
   acceptTerms: z.literal(true, { errorMap: () => ({ message: 'You must accept the terms.' }) }),
@@ -96,6 +96,9 @@ export const registrationConfigResponseSchema = z.object({
   /** False when an administrator turned "keep me signed in" off; the checkbox is then hidden. */
   rememberMeEnabled: z.boolean(),
   otp: z.object({ enabled: z.boolean() }),
+  /** Tells the form to ask for a work address and a mobile number up front. */
+  businessEmailOnly: z.boolean().default(true),
+  phoneRequired: z.boolean().default(true),
   captcha: z
     .object({ version: z.enum(['v2', 'v3']), siteKey: z.string() })
     .nullable()
@@ -103,7 +106,7 @@ export const registrationConfigResponseSchema = z.object({
   social: z.object({ google: z.boolean(), facebook: z.boolean() }),
   defaultCountryIso: z.string().length(2).nullable(),
   authPages: z.object({
-    variant: z.number().int().min(1).max(5),
+    variant: z.number().int().min(1).max(6),
     login: authPageContentSchema,
     register: authPageContentSchema,
     forgot: authPageContentSchema,

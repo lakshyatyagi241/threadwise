@@ -1,3 +1,4 @@
+import { WA_GROUP_RATE_SCOPES } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 
 export interface DescribedError {
@@ -14,7 +15,11 @@ export interface DescribedError {
   /** A pairing refused only because a saved session or an attempt exists: starting with `relink: true` is allowed. */
   relinkable?: boolean;
   fieldErrors: Array<{ path: string; message: string }>;
+  /** `WA_GROUP_RATE_LIMITED` only: what the throttle refused on (`ops_minute`, `ops_day`, `creates_day`, `join_link_day`, `cooldown`). */
+  scope?: string;
 }
+
+const GROUP_RATE_SCOPES: readonly string[] = WA_GROUP_RATE_SCOPES;
 
 const detail = (e: ApiError, ...paths: string[]): string | undefined =>
   e.fieldErrors.find((f) => paths.includes(f.path))?.message;
@@ -76,6 +81,19 @@ export function describeError(e: unknown, known: (code: string) => boolean): Des
             retryAfterS,
           }
         : { ...base, key: e.code, values: {}, plan: false };
+    case 'WA_GROUP_RATE_LIMITED': {
+      // Our per-number throttle (ban safety). The scope says which limit was hit; the wait itself is counted down by the screen.
+      const scope = detail(e, 'scope');
+      const known = scope !== undefined && GROUP_RATE_SCOPES.includes(scope);
+      return {
+        ...base,
+        key: known ? `${e.code}_${scope}` : e.code,
+        values: {},
+        plan: false,
+        retryAfterS,
+        scope: known ? scope : undefined,
+      };
+    }
     case 'DEVICE_PAIRING_IN_PROGRESS': {
       const name = detail(e, 'startedBy');
       return name

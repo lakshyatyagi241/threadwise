@@ -1,5 +1,5 @@
 import { canonicalizePhone, ERROR_CODES, extSheetsContactRowSchema } from '@crm/contracts';
-import type { ExtSheetsContactRow, ExtSheetsRowResult } from '@crm/contracts';
+import type { ConsentProof, ExtSheetsContactRow, ExtSheetsRowResult } from '@crm/contracts';
 import { z } from 'zod';
 
 const emailOk = z.string().email();
@@ -44,6 +44,8 @@ export interface PlannedContact {
   lastName?: string;
   source: string;
   isUnsubscribed?: boolean;
+  /** The sheet says the person agreed to marketing: the proof is the row's `consent_note`. Absent unless the row says yes. */
+  consent?: ConsentProof;
   customFields: Record<string, unknown>;
 }
 
@@ -90,6 +92,21 @@ export function planContactRow(
   if (!email && !phone) {
     return { ok: false, message: 'Give an email or a phone number.', field: 'email' };
   }
+  // A yes in the consent column is a claim that the person agreed; the note says how. No note, no grant: the row is refused whole.
+  if (row.consent === true && !row.consent_note) {
+    return {
+      ok: false,
+      message: 'Say how the person agreed (what they said or signed, and where) in consent_note.',
+      field: 'consent_note',
+    };
+  }
+  if (row.consent === true && row.is_unsubscribed === true) {
+    return {
+      ok: false,
+      message: 'A row cannot say both that the person agreed and that they unsubscribed.',
+      field: 'consent',
+    };
+  }
   return {
     ok: true,
     contact: {
@@ -100,6 +117,7 @@ export function planContactRow(
       lastName: row.last_name,
       source: row.source ?? 'google_sheets',
       isUnsubscribed: row.is_unsubscribed,
+      ...(row.consent === true ? { consent: { note: row.consent_note ?? '' } } : {}),
       customFields: cleanAttributes(row.attributes),
     },
   };

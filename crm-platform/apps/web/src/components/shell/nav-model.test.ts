@@ -106,9 +106,30 @@ describe('the real menu', () => {
     ]);
   });
 
+  it('does not draw the message logs screen: the Inbox entry and its Settings tile already reach it', () => {
+    const drawn = menuItems(resolveNav(NAV, CAPABILITIES_UNKNOWN, { planned: PLANNED_NAV })).map(
+      (i) => i.id,
+    );
+    expect(drawn).toContain('inbox');
+    expect(drawn).not.toContain('inbox-message-logs');
+  });
+
   it('orders Platform, Inbox & Chat and CRM as specified', () => {
     expect(ids('overview')).toEqual(['dashboard', 'analytics', 'notifications']);
-    expect(ids('inbox')).toEqual(['inbox', 'quick-chat', 'call-logs', 'team-chat', 'devices']);
+    // `inbox-message-logs` is registered (its gate closes the route) but `menuItems` hides it: the Inbox entry and a Settings tile reach it.
+    // `email` is registered with `inMenu: false` (its tile is in Settings > Channels), so `menuItems` does not draw it; it stays
+    // registered for the plan paywall on /email. `devices-groups` is a route entry of the personal-number Groups tab (also not drawn).
+    expect(ids('inbox')).toEqual([
+      'inbox',
+      'inbox-message-logs',
+      'inbox-saved-replies',
+      'quick-chat',
+      'call-logs',
+      'team-chat',
+      'devices',
+      'devices-groups',
+      'email',
+    ]);
     expect(ids('audience')).toEqual([
       'contacts',
       'contact-groups',

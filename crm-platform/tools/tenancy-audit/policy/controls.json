@@ -295,7 +295,9 @@
     "title": "Scope distributed locks",
     "priority": "P0",
     "status": "NOT_RUN",
-    "basis": "manual read only, no executed test: every lock call site carries the org (SenderLease.key(orgId, ...), camp:run:<orgId>:<id>, the device lease takes (orgId, deviceId)); Postgres advisory locks are per org. Read, not executed."
+    "basis": "executed e2e suites: lock-scoping Scope: Redis leases (SenderLease) and every Postgres advisory-lock call site by static scan; not the BullMQ job locks.",
+    "evidence": "e2e",
+    "e2e": ["lock-scoping"]
   },
   "MT-040": {
     "title": "Scope dedup and idempotency keys",
@@ -488,7 +490,9 @@
     "title": "Scope temp files and report jobs",
     "priority": "P0",
     "status": "NOT_RUN",
-    "basis": "no executed evidence in this tool yet"
+    "basis": "executed e2e suites: media-purge-isolation, storage-key-owner Scope: chat-media keys, temporary links and the erase purge; the audit-log / consent export files and report jobs are NOT exercised here.",
+    "evidence": "e2e",
+    "e2e": ["media-purge-isolation", "storage-key-owner"]
   },
   "MT-065": {
     "title": "Scope full-text search",
@@ -502,7 +506,9 @@
     "title": "Scope autocomplete/suggestions",
     "priority": "P0",
     "status": "NOT_RUN",
-    "basis": "no executed evidence in this tool yet"
+    "basis": "executed e2e suites: typeahead-scoping Scope: the contacts and companies pickers only; other pickers (deals, users, tags, templates) are NOT exercised.",
+    "evidence": "e2e",
+    "e2e": ["typeahead-scoping"]
   },
   "MT-067": {
     "title": "Prevent facet/count leaks",
@@ -540,7 +546,9 @@
     "title": "Tenant-aware deletion and file retention",
     "priority": "P1",
     "status": "NOT_RUN",
-    "basis": "no executed evidence in this tool yet"
+    "basis": "executed e2e suites: media-purge-isolation, storage-key-owner Scope: the erase purge and chat-media removal only; per-module retention sweeps are reviewed by the privileged() allowlist, not run.",
+    "evidence": "e2e",
+    "e2e": ["media-purge-isolation", "storage-key-owner"]
   },
   "MT-072": {
     "title": "Contacts isolation",

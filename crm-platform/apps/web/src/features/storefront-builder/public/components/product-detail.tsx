@@ -4,6 +4,17 @@ import type { PublicProductPage } from '@crm/contracts';
 import { useTranslations } from 'next-intl';
 import { useId, useMemo, useState } from 'react';
 import { discountPercent, isOnSale, isSoldOut } from '../lib/catalog';
+import {
+  allVariantsSoldOut,
+  emptySelection,
+  findVariant,
+  firstMissingOption,
+  fromPrice,
+  hasVariants,
+  selectionComplete,
+  variantSoldOut,
+  type Selection,
+} from '../lib/variants';
 import { productPath, productQuestionUrl, shopPath } from '../lib/links';
 import { LEGACY_FREE_THRESHOLD_MINOR, formatIn } from '../lib/money';
 import { sanitizeHtml } from '../lib/sanitize';
@@ -11,6 +22,7 @@ import { CheckIcon, CompareIcon, HeartIcon, ShareIcon } from './icons';
 import { ProductCard } from './product-card';
 import { ProductImage } from './product-image';
 import { ReviewForm } from './review-form';
+import { VariantPicker } from './variant-picker';
 import { useStore } from './store-provider';
 import { useOrigin } from './use-origin';
 
@@ -73,29 +85,56 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
   const uid = useId();
   const origin = useOrigin();
 
+  const variantProduct = hasVariants(product);
   const images = useMemo(
     () => [
-      ...new Set([product.imageUrl, ...product.galleryUrls].filter((u): u is string => Boolean(u))),
+      ...new Set(
+        [
+          product.imageUrl,
+          ...product.galleryUrls,
+          ...(product.variants ?? []).map((v) => v.imageUrl),
+        ].filter((u): u is string => Boolean(u)),
+      ),
     ],
-    [product.imageUrl, product.galleryUrls],
+    [product.imageUrl, product.galleryUrls, product.variants],
   );
   const [active, setActive] = useState(0);
+  const [selection, setSelection] = useState<Selection>(() => emptySelection(product));
+  const variant = findVariant(product, selection);
+  const complete = selectionComplete(selection);
+  const missing = firstMissingOption(selection);
+  const choose = (next: Selection) => {
+    setSelection(next);
+    // A variant with its own picture takes the main image.
+    const img = findVariant(product, next)?.imageUrl;
+    const at = img ? images.indexOf(img) : -1;
+    if (at >= 0) setActive(at);
+  };
   const [qty, setQty] = useState('1');
   const [tab, setTab] = useState<Tab>('desc');
 
-  const soldOut = isSoldOut(product);
-  const onSale = isOnSale(product);
+  // What the price, compare price and stock lines show: the chosen variant, else (variants, nothing chosen yet) "From <lowest>".
+  const from = fromPrice(product);
+  const shown = variant ?? product;
+  const soldOut = variantProduct
+    ? allVariantsSoldOut(product) || (variant ? variantSoldOut(variant) : false)
+    : isSoldOut(product);
+  const onSale = isOnSale(shown);
   const wished = wish.includes(product.id);
   const compared = compare.includes(product.id);
   const home = shopPath(shop.slug);
   const url = `${origin}${productPath(shop.slug, product.slug)}`;
   const body = sanitizeHtml(product.bodyHtml, 'rich');
-  const lowStock = product.stockQty !== null && product.stockQty <= 10;
+  const stockQty = variantProduct ? (variant ? variant.stockQty : null) : product.stockQty;
+  const lowStock = stockQty !== null && stockQty <= 10;
+  const needsChoice = variantProduct && !variant;
+  const noCombination = variantProduct && complete && !variant;
 
   const parsedQty = () => Math.max(1, Number.parseInt(qty || '1', 10) || 1);
   const add = () => {
     // QUIRK (Reference): no stock cap here, the page's own product is in the browser catalog without a stock quantity.
-    addQuantity({ ...product, stockQty: null }, parsedQty());
+    if (variantProduct && !variant) return;
+    addQuantity({ ...product, stockQty: null }, parsedQty(), variant);
     if (drawer !== 'cart') toggleDrawer('cart');
   };
 
@@ -147,29 +186,47 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
           <h1>{product.name}</h1>
 
           <div className="sf-pd-price">
-            <span className="sf-pd-now">{product.priceDisplay}</span>
-            {onSale && product.comparePriceDisplay ? (
+            <span className="sf-pd-now">
+              {variant
+                ? variant.priceDisplay
+                : variantProduct && from.varies
+                  ? t('variant.from', { price: from.display })
+                  : variantProduct
+                    ? from.display
+                    : product.priceDisplay}
+            </span>
+            {onSale && shown.comparePriceDisplay ? (
               <>
-                <s className="sf-pd-was">{product.comparePriceDisplay}</s>
+                <s className="sf-pd-was">{shown.comparePriceDisplay}</s>
                 <span className="sf-pd-save">
-                  {t('product.save', { percent: discountPercent(product) })}
+                  {t('product.save', { percent: discountPercent(shown) })}
                 </span>
               </>
             ) : null}
           </div>
 
-          <div>
-            {soldOut ? (
+          {variantProduct ? (
+            <VariantPicker product={product} selection={selection} onChange={choose} />
+          ) : null}
+
+          <div aria-live="polite">
+            {needsChoice && !soldOut ? null : soldOut ? (
               <span className="sf-pd-stock is-out">{t('card.soldOut')}</span>
             ) : (
               <span className="sf-pd-stock">
                 <CheckIcon size={11} />
-                {lowStock
-                  ? t('product.onlyLeft', { count: product.stockQty ?? 0 })
-                  : t('product.inStock')}
+                {lowStock ? t('product.onlyLeft', { count: stockQty ?? 0 }) : t('product.inStock')}
               </span>
             )}
           </div>
+
+          {needsChoice && !soldOut ? (
+            <p className="sf-variant-prompt" id={`${uid}-choose`} role="status">
+              {noCombination
+                ? t('variant.unavailable')
+                : t('variant.select', { option: product.options?.[missing]?.name ?? '' })}
+            </p>
+          ) : null}
 
           {product.description ? <p className="sf-pd-desc">{product.description}</p> : null}
 
@@ -198,7 +255,13 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
                 +
               </button>
             </div>
-            <button type="button" className="sf-cta sf-pd-add" disabled={soldOut} onClick={add}>
+            <button
+              type="button"
+              className="sf-cta sf-pd-add"
+              disabled={soldOut || needsChoice}
+              aria-describedby={needsChoice ? `${uid}-choose` : undefined}
+              onClick={add}
+            >
               {soldOut ? t('card.soldOut') : t('card.addToCart')}
             </button>
             <div className="sf-pd-icons">
@@ -243,10 +306,10 @@ export function ProductDetail({ page }: { page: PublicProductPage }) {
           ) : null}
 
           <dl className="sf-pd-meta">
-            {product.sku ? (
+            {(variant?.sku ?? product.sku) ? (
               <>
                 <dt>{t('product.sku')}</dt>
-                <dd>{product.sku}</dd>
+                <dd>{variant?.sku ?? product.sku}</dd>
               </>
             ) : null}
             {product.category ? (

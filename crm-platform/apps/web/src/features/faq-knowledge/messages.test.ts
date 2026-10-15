@@ -54,13 +54,16 @@ function usedKeys(source: string): string[] {
 
 /** Keys the code builds from a value (a template string), so the literal scan cannot see them. */
 const DYNAMIC = [
-  `${ROOT}.nav.faq`,
   `${ROOT}.list.paused`,
   `${ROOT}.list.activated`,
   `${ROOT}.editor.created`,
   `${ROOT}.editor.saved`,
   `${ROOT}.log.expand`,
   `${ROOT}.log.collapse`,
+  `${ROOT}.log.testRun`,
+  `${ROOT}.log.flowRun`,
+  `${ROOT}.verify.chip.`,
+  `${ROOT}.verify.body.`,
   `${ROOT}.errors.`,
   `${ROOT}.nav.tab.`,
   `${ROOT}.list.bulk.done.`,
@@ -111,6 +114,7 @@ describe('faq-knowledge messages', () => {
       'duplicateVariation',
       'limitReached',
       'flowNotFound',
+      'flowNodeNotFound',
       'embeddingUnavailable',
       'engineDisabled',
       'modelNotAllowed',
@@ -122,11 +126,20 @@ describe('faq-knowledge messages', () => {
       'question',
       'answerText',
       'flowId',
+      'flowNodeId',
       'category',
       'thresholdOverride',
     ];
     const problems: FieldProblem[] = ['required', 'tooLong', 'invalid'];
-    const verdicts = ['answer', 'below', 'ambiguous', 'noFaqs', 'providerError', 'notSent'];
+    const verdicts = [
+      'answer',
+      'below',
+      'ambiguous',
+      'noFaqs',
+      'providerError',
+      'notSent',
+      'vetoed',
+    ];
     const dynamic = [
       ...errorKeys.map((k) => `errors.${k}`),
       ...['faqs', 'test', 'unanswered', 'insights', 'settings'].map((k) => `nav.tab.${k}`),
@@ -148,7 +161,15 @@ describe('faq-knowledge messages', () => {
         'noFaqs',
         'providerError',
         'notSent',
+        'vetoed',
+        'vetoedNoBar',
+        'belowThresholdNoBar',
       ].map((k) => `log.why.${k}`),
+      ...['testRun', 'flowRun'].map((k) => `log.${k}`),
+      ...['confirmed', 'vetoed', 'failed', 'skipped'].flatMap((k) => [
+        `verify.chip.${k}`,
+        `verify.body.${k}`,
+      ]),
       ...['live', 'off', 'draft'].map((s) => `flowPicker.state.${s}`),
       ...['strict', 'balanced', 'forgiving'].map((p) => `settings.sens.preset.${p}`),
       ...['faqs', 'variations'].map((k) => `settings.facts.${k}`),

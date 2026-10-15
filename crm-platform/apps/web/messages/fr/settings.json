@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Connectez une boîte e-mail pour envoyer et recevoir des e-mails dans la boîte de réception.",
-        "keywords": "boîte e-mail, smtp, imap, gmail, outlook, expéditeur"
+        "description": "Connectez des boîtes Gmail ou Google Workspace pour que votre équipe lise et réponde aux e-mails des clients dans la boîte de réception partagée.",
+        "keywords": "boîte e-mail, gmail, google workspace, boîte de réception partagée, e-mail de support, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -309,7 +309,73 @@
         "label": "Attribution automatique",
         "description": "Attribuez automatiquement les nouvelles conversations au bon agent, à tour de rôle ou selon des règles.",
         "keywords": "routage, tourniquet, attribuer, agents, règles de boîte, répartir, propriétaire"
+      },
+      "web": {
+        "label": "Chat du site web",
+        "description": "Les bots conçus pour le chat de votre site web et le widget dans lequel chacun s’exécute.",
+        "keywords": "web, site web, widget, chatbot, intégrer, chat en direct"
+      },
+      "message-logs": {
+        "label": "Journaux des messages",
+        "description": "Exportez le journal de livraison de vos messages, jusqu'à un an en arrière, sous forme de fichier envoyé à votre e-mail.",
+        "keywords": "exporter, journal de livraison, historique, archive, csv, messages"
+      },
+      "billing-subscriptions": {
+        "label": "Abonnements",
+        "description": "Ce qui se renouvelle, jusqu'à quand c'est payé, et résiliation.",
+        "keywords": "abonnement, renouvellement, renouvellement automatique, résilier, prélèvement automatique, paiement échoué, paiements"
+      },
+      "lead-scoring": {
+        "label": "Scoring des leads par IA",
+        "description": "Évaluez chaque contact avec l'IA, choisissez ce qui est envoyé et consultez le coût.",
+        "keywords": "score de lead, scoring, notation, ia, chaud, tiède, froid, openrouter, coût, qualifier"
+      },
+      "help-assistant": {
+        "label": "Assistant d’aide",
+        "description": "Activez l’assistant qui guide votre équipe ou réalise les étapes à sa place.",
+        "keywords": "ia, assistant, agent, guide, aide, automatisation"
+      },
+      "consent": {
+        "label": "Consentement et réponses STOP",
+        "description": "Choisissez les mots STOP et START, les réponses de confirmation, la ligne de désinscription et si le marketing exige un consentement enregistré.",
+        "keywords": "consentement, désinscription, réinscription, se désabonner, stop, start, rgpd, conformité, confidentialité, marketing"
+      },
+      "inbox-tags": {
+        "label": "Étiquettes de conversation",
+        "description": "Créez les étiquettes que votre équipe applique aux conversations et qui servent à filtrer la boîte de réception. Ce sont les mêmes étiquettes que celles des contacts.",
+        "keywords": "tags, étiquettes, catégories, organiser, filtrer, étiquettes de conversation"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Leads chauds, audiences, réponses aux campagnes et autres éléments exploitables par votre équipe, déduits des discussions et des campagnes.",
+        "keywords": "growth, lead chaud, audience, engagement, inactif, réponses aux campagnes, probabilité de conversion, désabonnement, pilote"
+      },
+      "sla-policies": {
+        "label": "Objectifs de réponse (SLA)",
+        "description": "Définissez la rapidité de réponse et de résolution de votre équipe, et soyez alerté lorsqu'une conversation manque son objectif.",
+        "keywords": "sla, temps de réponse, première réponse, résolution, non-respect, objectifs, heures ouvrables"
+      },
+      "team-performance": {
+        "label": "Performance de l'équipe",
+        "description": "Voyez la rapidité de chaque agent à répondre et résoudre aujourd'hui, cette semaine ou ce mois-ci.",
+        "keywords": "rapports, analyses, agents, temps de réponse, première réponse, résolues, charge, performance"
+      },
+      "contact-assignment": {
+        "label": "Attribution des contacts",
+        "description": "Attribuez automatiquement les nouveaux contacts et affaires à la bonne personne, en ignorant les personnes en congé.",
+        "keywords": "attribuer, propriétaire, round robin, tourniquet, nouveau contact, nouvelle affaire, congé, absence, routage des leads"
+      },
+      "privacy-requests": {
+        "label": "Demandes de données",
+        "description": "Répondez aux personnes qui demandent ce que vous détenez sur elles : vérification d'identité, export, effacement avec aperçu et une preuve à conserver.",
+        "keywords": "confidentialité, RGPD, GDPR, demande de données, DSR, droit d'accès, exporter les données, effacer, droit à l'oubli, supprimer des données personnelles, blocage légal"
+      },
+      "compliance-center": {
+        "label": "Centre de conformité",
+        "description": "Des outils pour vous aider à respecter vos obligations en matière de vie privée : les lois auxquelles vous êtes soumis, les contacts vie privée, les avis et liens, les sous-traitants ultérieurs, les heures de silence et une liste de contrôle de ce qui est en place.",
+        "keywords": "conformité, vie privée, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, délégué à la protection des données, responsable des réclamations, sous-traitant ultérieur, dpa, conditions, politique de confidentialité, heures de silence, do not call, liste de contrôle, enfants"
       }
-    }
+    },
+    "backToMarketplace": "Retour au Marketplace"
   }
 }

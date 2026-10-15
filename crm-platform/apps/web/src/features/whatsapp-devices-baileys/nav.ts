@@ -19,4 +19,16 @@ export const nav: NavItem[] = [
     inMenu: false,
     gates: { permission: 'wa.devices.read', app: 'unofficial_whatsapp' },
   },
+  // The Groups tab next to Numbers and Warmer: the groups of a personal number (docs/threadwise-port/plan/whatsapp-personal-groups-build.md).
+  // Same engine gate as the numbers, and its own read key (`wa.groups.read`, no plan feature). It is a tab, not a menu entry or a tile.
+  {
+    id: 'devices-groups',
+    group: 'inbox',
+    labelKey: 'whatsapp-devices-baileys.nav.groups',
+    href: '/devices/groups',
+    order: 41,
+    icon: 'groups',
+    inMenu: false,
+    gates: { permission: 'wa.groups.read', app: 'unofficial_whatsapp' },
+  },
 ];

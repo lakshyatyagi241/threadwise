@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Perekaman panggilan",
+        "intro": "Perekaman nonaktif sampai Anda mengaktifkannya. Jika aktif, rekan tim membacakan pemberitahuan, orang tersebut menjawab, dan baru setelah itu perekaman dimulai. Rekaman dihapus setelah masa penyimpanan berakhir.",
+        "loading": "Memuat aturan perekaman",
+        "loadFailed": "Aturan perekaman tidak dapat dimuat.",
+        "retry": "Coba lagi",
+        "viewOnly": "Anda dapat melihat aturan ini, tetapi hanya pemilik atau admin yang dapat mengubahnya.",
+        "enabled": "Rekam panggilan",
+        "enabledOn": "Aktif: rekan tim dapat merekam panggilan setelah orang tersebut setuju.",
+        "enabledOff": "Nonaktif: tidak ada panggilan yang direkam.",
+        "mode": "Cara orang tersebut setuju",
+        "modeHint": {
+          "confirmed": "Orang tersebut menjawab ya untuk direkam dan rekan tim menyimpan jawabannya. Pilihan paling aman.",
+          "announcement": "Rekan tim membacakan pemberitahuan dan panggilan berlanjut. Gunakan hanya jika penasihat hukum Anda memastikan pengumuman sudah cukup."
+        },
+        "modeOption": {
+          "confirmed": "Orang tersebut menjawab ya",
+          "announcement": "Pengumuman, lalu lanjut"
+        },
+        "retention": "Simpan rekaman selama (hari)",
+        "retentionHint": "Antara {min} dan {max} hari. Rekaman lama dihapus setiap malam; panggilannya tetap ada di log.",
+        "retentionInvalid": "Masukkan jumlah hari berupa bilangan bulat dalam rentang yang diizinkan.",
+        "notice": "Pemberitahuan perekaman",
+        "noticeHint": "Rekan tim membacakan ini sebelum merekam. Maksimal {max} karakter. Setiap perubahan disimpan sebagai versi baru.",
+        "noticeRequired": "Tulis pemberitahuan (minimal {min} karakter) untuk mengaktifkan perekaman.",
+        "noticeVersion": "Versi pemberitahuan {version}",
+        "noticeNone": "Belum ada pemberitahuan tersimpan",
+        "updatedAt": "disimpan {date}",
+        "noticeSuggestion": "Panggilan ini dapat direkam untuk kualitas dan pelatihan. Apakah Anda setuju direkam?",
+        "useSuggestion": "Gunakan teks yang disarankan",
+        "saved": "Aturan perekaman disimpan.",
+        "saving": "Menyimpan",
+        "save": "Simpan aturan"
+      },
+      "consent": {
+        "title": "Tanya sebelum merekam",
+        "askConfirmed": "Bacakan pemberitahuan. Tekan tombol pertama hanya jika orang tersebut menjawab ya.",
+        "askAnnouncement": "Bacakan pemberitahuan, lalu mulai merekam.",
+        "grantConfirmed": "Mereka menjawab ya: mulai merekam",
+        "grantAnnouncement": "Pemberitahuan dibacakan: mulai merekam",
+        "decline": "Tidak: lanjutkan tanpa merekam",
+        "declinedNote": "Tidak merekam: orang tersebut tidak setuju.",
+        "off": "Perekaman panggilan dinonaktifkan untuk ruang kerja ini.",
+        "failed": "Jawaban tidak dapat disimpan, jadi tidak ada yang direkam: {message}"
+      },
+      "lifecycle": {
+        "title": "Rekaman dan persetujuan",
+        "consent": "Persetujuan untuk merekam",
+        "consentGranted": "Setuju untuk direkam",
+        "consentDeclined": "Menolak direkam",
+        "consentNone": "Belum ada jawaban tercatat",
+        "method": {
+          "announcement_continue": "Pemberitahuan dibacakan, panggilan berlanjut",
+          "spoken_yes": "Menjawab ya"
+        },
+        "noticeVersion": "Versi pemberitahuan {version}",
+        "storedAt": "Disimpan",
+        "expiresAt": "Dihapus otomatis pada",
+        "heldNoExpiry": "Tidak dihapus: penahanan hukum",
+        "none": "Belum diatur",
+        "deleted": "Rekaman dihapus",
+        "deletedReason": {
+          "retention": "masa penyimpanan berakhir",
+          "manual": "dihapus oleh rekan tim",
+          "consent_withdrawn": "persetujuan dicabut"
+        },
+        "holdOn": "Penahanan hukum",
+        "placeHold": "Pasang penahanan hukum",
+        "liftHold": "Lepas penahanan hukum",
+        "holdLifted": "Penahanan hukum dilepas.",
+        "holdPlaced": "Penahanan hukum dipasang.",
+        "holdReasonLabel": "Mengapa disimpan?",
+        "cancel": "Batal",
+        "delete": "Hapus rekaman",
+        "deleteBlockedByHold": "Lepas penahanan hukum terlebih dahulu.",
+        "deleteTitle": "Hapus rekaman ini?",
+        "deleteMessage": "File audio dihapus permanen. Panggilan tetap ada di log.",
+        "deletedToast": "Rekaman dihapus."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "Perekaman panggilan dinonaktifkan untuk ruang kerja ini.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Panggilan ini tidak dapat direkam: orang tersebut belum setuju.",
+      "CALL_RECORDING_CONSENT_INVALID": "Jawaban itu tidak dapat disimpan untuk panggilan ini.",
+      "CALL_RECORDING_ON_HOLD": "Rekaman ini berada dalam penahanan hukum. Lepas penahanan terlebih dahulu.",
+      "CALL_RECORDING_SETTINGS_INVALID": "Aturan perekaman tidak valid: tulis pemberitahuan terlebih dahulu."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "Orang tersebut setuju untuk direkam",
+          "recording_consent_declined": "Orang tersebut menolak perekaman",
+          "recording_deleted": "Rekaman dihapus",
+          "recording_hold_set": "Penahanan hukum dipasang",
+          "recording_hold_lifted": "Penahanan hukum dilepas"
+        }
+      }
+    }
+  }
+}

@@ -7,7 +7,6 @@
     "common": {
       "loading": "Cargando",
       "retry": "Reintentar",
-      "requestId": "ID de la solicitud",
       "dash": "-",
       "errors": {
         "forbidden": "No tienes permiso para hacer esto.",

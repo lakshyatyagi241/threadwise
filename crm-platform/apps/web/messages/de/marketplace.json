@@ -10,13 +10,13 @@
       "install": "Installieren · Marketplace",
       "installed": "Installiert · Marketplace",
       "manage": "App verwalten · Marketplace",
-      "requests": "Anfragen · Marketplace"
+      "requests": "Anfragen · Marketplace",
+      "addons": "Add-ons · Marketplace"
     },
     "common": {
       "dismiss": "Schließen",
       "loading": "Wird geladen",
       "errorTitle": "Dies konnte nicht geladen werden",
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen",
       "upgrade": "Tarife ansehen und upgraden",
       "opensNewTab": "(öffnet in einem neuen Tab)",
@@ -124,7 +124,8 @@
       "moreLabel": "Installiert und Anfragen",
       "tabs": {
         "mini_app": "Mini-Apps",
-        "integration": "Integrationen"
+        "integration": "Integrationen",
+        "addon": "Add-ons"
       },
       "installed": "Installiert",
       "installedLimit": "Installiert ({installed} von {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "Wird verarbeitet",
       "noCheckout": "Der Checkout ist für diese App derzeit nicht verfügbar. Versuchen Sie es in einem Moment erneut."
+    },
+    "tools": {
+      "open": "Öffnen",
+      "empty": {
+        "title": "Keine Add-ons verfügbar",
+        "message": "Die Add-ons, die Ihre Rolle und Ihr Tarif enthalten, erscheinen hier."
+      },
+      "soon": "Demnächst",
+      "upgrade": "Upgrade"
     }
   }
 }

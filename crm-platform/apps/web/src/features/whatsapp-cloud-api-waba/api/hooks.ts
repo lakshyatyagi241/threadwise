@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { invalidateSenderLists } from '@/lib/sender-lists';
 import { wabaApi } from './service';
 
 export const KEYS = {
@@ -46,7 +47,11 @@ function useAction<TVars, TOut>(fn: (vars: TVars) => Promise<TOut>) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: fn,
-    onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.all }),
+    onSuccess: () => {
+      // The campaign screens' "Send from" lists follow the numbers.
+      void invalidateSenderLists(qc);
+      return qc.invalidateQueries({ queryKey: KEYS.all });
+    },
   });
 }
 
@@ -58,6 +63,10 @@ export const useSetPrimary = () => useAction((id: string) => wabaApi.setPrimary(
 export const useResubscribe = () => useAction((id: string) => wabaApi.resubscribe(id));
 export const useRegister = () =>
   useAction((v: { id: string; pin?: string }) => wabaApi.register(v.id, v.pin));
+export const useRequestCode = () =>
+  useAction((v: { id: string; method: 'SMS' | 'VOICE' }) => wabaApi.requestCode(v.id, v.method));
+export const useVerifyCode = () =>
+  useAction((v: { id: string; code: string }) => wabaApi.verifyCode(v.id, v.code));
 export const useDisconnect = () => useAction((id: string) => wabaApi.disconnect(id));
 export const useRemove = () => useAction((id: string) => wabaApi.remove(id));
 export const useSetToken = () =>

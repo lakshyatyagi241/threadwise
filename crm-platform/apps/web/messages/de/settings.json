@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-Mail",
-        "description": "Verbinden Sie ein Postfach, um E-Mails im Posteingang zu senden und zu empfangen.",
-        "keywords": "postfach, smtp, imap, gmail, outlook, absender"
+        "description": "Verbinden Sie Gmail- oder Google-Workspace-Postfächer, damit Ihr Team Kunden-E-Mails im gemeinsamen Posteingang lesen und beantworten kann.",
+        "keywords": "postfach, gmail, google workspace, gemeinsamer posteingang, support-e-mail, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -309,7 +309,73 @@
         "label": "Automatische Zuweisung",
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
+      },
+      "web": {
+        "label": "Website-Chat",
+        "description": "Bots für den Chat Ihrer Website und das Widget, in dem jeder davon läuft.",
+        "keywords": "Web, Website, Widget, Chatbot, Einbetten, Live-Chat"
+      },
+      "message-logs": {
+        "label": "Nachrichtenprotokolle",
+        "description": "Exportieren Sie das Zustellprotokoll Ihrer Nachrichten bis zu einem Jahr rückwirkend als Datei, die an Ihre E-Mail-Adresse gesendet wird.",
+        "keywords": "Export, Zustellprotokoll, Verlauf, Archiv, CSV, Nachrichten"
+      },
+      "billing-subscriptions": {
+        "label": "Abonnements",
+        "description": "Was sich verlängert, bis wann bezahlt ist, und Kündigung.",
+        "keywords": "Abonnement, Verlängerung, automatische Verlängerung, kündigen, Lastschrift, fehlgeschlagene Zahlung, Zahlungen"
+      },
+      "lead-scoring": {
+        "label": "KI-Lead-Scoring",
+        "description": "Bewerten Sie jeden Kontakt mit KI, legen Sie fest, was gesendet wird, und sehen Sie die Kosten.",
+        "keywords": "lead-score, scoring, bewertung, ki, heiß, warm, kalt, openrouter, kosten, qualifizieren"
+      },
+      "help-assistant": {
+        "label": "Hilfe-Assistent",
+        "description": "Schalten Sie den Assistenten ein, der Ihr Team anleitet oder die Schritte für es erledigt.",
+        "keywords": "ki, assistent, agent, anleitung, hilfe, automatisierung"
+      },
+      "consent": {
+        "label": "Einwilligung und STOP-Antworten",
+        "description": "Legen Sie die STOP- und START-Wörter, die Bestätigungsantworten, die Abmeldezeile und die Einwilligungspflicht für Marketing fest.",
+        "keywords": "einwilligung, abmeldung, anmeldung, abmelden, stop, start, dsgvo, compliance, datenschutz, marketing"
+      },
+      "inbox-tags": {
+        "label": "Unterhaltungs-Tags",
+        "description": "Erstellen Sie die Tags, die Ihr Team Unterhaltungen zuweist und nach denen es den Posteingang filtert. Es sind dieselben Tags wie bei den Kontakten.",
+        "keywords": "Tags, Unterhaltungs-Tags, Kategorien, organisieren, filtern"
+      },
+      "growth": {
+        "label": "Growth",
+        "description": "Hot Leads, Zielgruppen, Kampagnenantworten und weitere Dinge, die Ihr Team aus Chats und Kampagnen ableiten und angehen kann.",
+        "keywords": "growth, hot lead, zielgruppe, engagement, inaktiv, kampagnenantworten, conversion-wahrscheinlichkeit, opt-out, pilot"
+      },
+      "sla-policies": {
+        "label": "Antwortziele (SLA)",
+        "description": "Legen Sie fest, wie schnell Ihr Team antworten und lösen soll, und werden Sie benachrichtigt, wenn eine Unterhaltung ihr Ziel verfehlt.",
+        "keywords": "sla, Antwortzeit, erste Antwort, Lösung, Verletzung, Ziele, Geschäftszeiten"
+      },
+      "team-performance": {
+        "label": "Teamleistung",
+        "description": "Sehen Sie, wie schnell jeder Agent heute, diese Woche oder diesen Monat geantwortet und gelöst hat.",
+        "keywords": "Berichte, Analysen, Agenten, Antwortzeit, erste Antwort, gelöst, Auslastung, Leistung"
+      },
+      "contact-assignment": {
+        "label": "Kontaktzuweisung",
+        "description": "Neue Kontakte und Deals automatisch der richtigen Person zuweisen, ohne Personen im Urlaub.",
+        "keywords": "zuweisen, Inhaber, Round Robin, neuer Kontakt, neuer Deal, Abwesenheit, Urlaub, Lead-Routing"
+      },
+      "privacy-requests": {
+        "label": "Datenanfragen",
+        "description": "Beantworten Sie Personen, die wissen wollen, was Sie über sie speichern: Identitätsprüfung, Export, Löschung mit Vorschau und ein Nachweis zum Aufbewahren.",
+        "keywords": "Datenschutz, DSGVO, GDPR, Datenanfrage, DSR, Auskunftsersuchen, Daten exportieren, löschen, Recht auf Vergessenwerden, personenbezogene Daten löschen, Rechtssperre"
+      },
+      "compliance-center": {
+        "label": "Compliance-Center",
+        "description": "Werkzeuge, die Sie bei Ihren Datenschutzpflichten unterstützen: die Gesetze, denen Sie unterliegen, Datenschutzkontakte, Hinweise und Links, Unterauftragsverarbeiter, Ruhezeiten und eine Checkliste dessen, was vorhanden ist.",
+        "keywords": "compliance, datenschutz, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, datenschutzbeauftragter, beschwerdebeauftragter, unterauftragsverarbeiter, dpa, auftragsverarbeitungsvertrag, nutzungsbedingungen, datenschutzerklärung, ruhezeiten, do not call, checkliste, kinder"
       }
-    }
+    },
+    "backToMarketplace": "Zurück zum Marketplace"
   }
 }

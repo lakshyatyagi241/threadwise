@@ -1,0 +1,340 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "বন্ধ করুন",
+      "retry": "আবার চেষ্টা করুন",
+      "loading": "লোড হচ্ছে..."
+    },
+    "errors": {
+      "network": "সার্ভারে পৌঁছানো যায়নি। আপনার সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।",
+      "forbidden": "এটি করার অনুমতি আপনার নেই।",
+      "notFound": "এই কন্টাক্টটি আর নেই।",
+      "conflict": "আপনি সম্পাদনা করার সময় অন্য কেউ এটি বদলে দিয়েছে। রিলোড করে আবার চেষ্টা করুন।",
+      "noteRequired": "সম্মতি রেকর্ড করার আগে লিখুন কন্টাক্ট কেন সম্মতি দিয়েছে (কী বলেছে বা সই করেছে, এবং কোথায়)।",
+      "settingsInvalid": "কীওয়ার্ডে অন্তত একটি অক্ষর বা অঙ্ক থাকতে হবে, এবং শনাক্তকরণ চালু থাকলে অন্তত একটি STOP কীওয়ার্ড থাকতে হবে।",
+      "rateLimited": "অনেক বেশি অনুরোধ। একটু অপেক্ষা করে আবার চেষ্টা করুন।",
+      "validation": "কিছু মান সঠিক নয়। ফর্মটি পরীক্ষা করে আবার চেষ্টা করুন।",
+      "unexpected": "কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।",
+      "exportInProgress": "একটি প্রমাণ ফাইল ইতিমধ্যে প্রস্তুত হচ্ছে। শেষ হওয়া পর্যন্ত অপেক্ষা করে আবার চেষ্টা করুন।",
+      "exportNotReady": "ফাইলটি প্রস্তুত নয় বা মেয়াদ শেষ হয়ে গেছে। নতুন ফাইল প্রস্তুত করুন।",
+      "noticeTargetMissing": "সেই উইজেট, বুকিং পেজ বা স্টোর আর নেই।"
+    },
+    "settings": {
+      "title": "সম্মতি ও STOP উত্তর",
+      "subtitle": "বেছে নিন কোন শব্দে কন্টাক্ট অপ্ট-আউট বা আবার অপ্ট-ইন হবে, আমাদের উত্তর, মার্কেটিং বার্তার অপ্ট-আউট লাইন, এবং মার্কেটিংয়ের জন্য রেকর্ড করা সম্মতি লাগবে কি না।",
+      "exportProof": "সম্মতির প্রমাণ এক্সপোর্ট করুন (CSV)",
+      "discard": "পরিবর্তন বাতিল করুন",
+      "save": "পরিবর্তন সংরক্ষণ করুন",
+      "saved": "সম্মতির সেটিংস সংরক্ষিত হয়েছে।",
+      "conflict": "অন্য কেউ আগে এই সেটিংস সংরক্ষণ করেছে। ফর্মে এখন সংরক্ষিত তথ্য দেখাচ্ছে।",
+      "conflictOk": "ঠিক আছে",
+      "problems": {
+        "noOptOutWord": "অন্তত একটি STOP কীওয়ার্ড যোগ করুন, অথবা শনাক্তকরণ বন্ধ করুন।",
+        "badLang": "ভাষার কোড দেখতে এমন: en, ar বা pt-BR।"
+      }
+    },
+    "policy": {
+      "title": "মার্কেটিং নীতি",
+      "requireConsent": "মার্কেটিং পাঠাতে রেকর্ড করা সম্মতি আবশ্যক করুন",
+      "requireConsentHint": "বন্ধ: যে কন্টাক্ট অপ্ট-আউট করেনি মার্কেটিং তার সবার কাছে যায়। চালু: শুধু রেকর্ড করা সম্মতি আছে এমন কন্টাক্টের কাছে। ক্যাম্পেইন ও ব্রডকাস্টের দর্শকসংখ্যায় কতজন বাদ পড়েছে তা দেখানো হয়।",
+      "withdrawnAlways": "এই সুইচ যাই হোক, অপ্ট-আউট করা কন্টাক্ট সবসময় বাদ পড়ে।"
+    },
+    "detect": {
+      "title": "STOP ও START উত্তর",
+      "enabled": "STOP ও START উত্তর শনাক্ত করুন",
+      "enabledHint": "কন্টাক্ট নিচের শব্দগুলোর শুধু একটি পাঠালে সে ওই চ্যানেলে অপ্ট-আউট বা আবার অপ্ট-ইন হয়।",
+      "autoReply": "নিশ্চিতকরণ উত্তর পাঠান",
+      "autoReplyHint": "২৪ ঘণ্টার উইন্ডোর মধ্যে একটি ছোট ফ্রি-টেক্সট উত্তর, প্রতি পরিবর্তনে একবার পাঠানো হয়। এটি ক্যাম্পেইন নয় এবং মার্কেটিং হিসেবে গণ্য হয় না।",
+      "rule": "পুরো বার্তাটিই কীওয়ার্ড হতে হবে: বড় হাতের অক্ষর, স্পেস, বিরামচিহ্ন, ইমোজি ও আরবি হরকত উপেক্ষা করা হয়। “আমাকে ইনভয়েস পাঠানো বন্ধ করুন” বা “থামবেন না” মেলে না, তাই কেউ ভুলে অপ্ট-আউট হয় না।"
+    },
+    "lang": {
+      "groupLabel": "{lang}-এর শব্দ ও উত্তর",
+      "title": "ভাষা",
+      "remove": "ভাষা সরান",
+      "optOutWords": "STOP কীওয়ার্ড (অপ্ট-আউট)",
+      "optInWords": "START কীওয়ার্ড (আবার অপ্ট-ইন)",
+      "wordsHint": "প্রতি লাইনে একটি।",
+      "optOutReply": "STOP-এর পর উত্তর",
+      "optInReply": "START-এর পর উত্তর",
+      "replyHint": "কন্টাক্টের প্রথম নামের জন্য '{{name}}' ব্যবহার করতে পারেন। ফিরে আসার উপায়ও লিখুন।",
+      "footer": "মার্কেটিং বার্তার অপ্ট-আউট লাইন",
+      "footerHint": "মার্কেটিং টেক্সটের নিচে যোগ হয়। কোন শব্দ পাঠাতে হবে তা মানুষকে জানান।",
+      "add": "ভাষা যোগ করুন",
+      "addHint": "ভাষার কোড, যেমন fr বা pt-BR।",
+      "invalid": "fr বা pt-BR-এর মতো কোড ব্যবহার করুন।",
+      "addButton": "যোগ করুন"
+    },
+    "footer": {
+      "title": "অপ্ট-আউট লাইন",
+      "intro": "ব্রডকাস্ট ও ক্যাম্পেইন কম্পোজার মার্কেটিং টেক্সটের নিচে এই লাইন যোগ করতে পারে, যাতে প্রাপকরা জানে তারা STOP লিখে উত্তর দিতে পারে। অনুমোদিত টেমপ্লেট কখনো বদলায় না: লাইনটি টেমপ্লেটের ভেতরেই রাখুন।",
+      "defaultOn": "মার্কেটিং টেক্সটে অপ্ট-আউট লাইন না থাকলে সতর্ক করুন",
+      "defaultOnHint": "কম্পোজার একটি সতর্কতা এবং এক ক্লিকে লাইনটি যোগ করার বোতাম দেখায়।",
+      "noneSet": "কোনো ভাষার জন্য অপ্ট-আউট লাইন সেট করা নেই।",
+      "previewLabel": "প্রাপক যা দেখেন",
+      "sample": "আমাদের বসন্তের সেল আজ শুরু। এই সপ্তাহে আসুন।"
+    },
+    "test": {
+      "title": "একটি বার্তা পরীক্ষা করুন",
+      "intro": "কন্টাক্ট কী পাঠাতে পারে তা লিখুন এবং দেখুন কী হবে। কিছু বদলায় না বা পাঠানো হয় না। সংরক্ষণের আগেও এটি উপরের শব্দগুলো ব্যবহার করে।",
+      "label": "কন্টাক্টের বার্তা",
+      "run": "পরীক্ষা",
+      "failed": "পরীক্ষা চালানো যায়নি। আবার চেষ্টা করুন।",
+      "outcome": {
+        "opts_out": "এতে কন্টাক্ট মার্কেটিং থেকে অপ্ট-আউট হয়।",
+        "opts_in": "এতে কন্টাক্ট আবার অপ্ট-ইন হয়।",
+        "no_match": "কিছু হয় না: বার্তাটি কীওয়ার্ড নয়।",
+        "detection_off": "কিছু হয় না: শনাক্তকরণ বন্ধ আছে।"
+      },
+      "matched": "কীওয়ার্ড “{keyword}” ({lang}) মিলেছে।",
+      "replyLabel": "কন্টাক্ট পায়",
+      "noReply": "কোনো উত্তর পাঠানো হয় না।"
+    },
+    "card": {
+      "title": "সম্মতি",
+      "status": {
+        "optedOut": "অপ্ট-আউট",
+        "subscribed": "সাবস্ক্রাইবড",
+        "none": "কোনো সম্মতি রেকর্ড নেই"
+      },
+      "export": "প্রমাণ এক্সপোর্ট করুন (CSV)",
+      "markSubscribed": "সাবস্ক্রাইবড হিসেবে চিহ্নিত করুন",
+      "markUnsubscribed": "আনসাবস্ক্রাইবড হিসেবে চিহ্নিত করুন",
+      "loading": "সম্মতি লোড হচ্ছে...",
+      "noneRecorded": "এই কন্টাক্টের কোনো সম্মতি রেকর্ড নেই। মার্কেটিং বার্তা আপনার ওয়ার্কস্পেসের নীতি অনুসরণ করে।",
+      "perChannel": "চ্যানেল অনুযায়ী সম্মতি",
+      "timeline": "সম্মতির ইতিহাস",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "ইমেইল",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "ওয়েব চ্যাট",
+        "voice": "ভয়েস কল",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "state": {
+        "granted": "সাবস্ক্রাইবড",
+        "withdrawn": "অপ্ট-আউট",
+        "utilityGranted": "সেবা বার্তায় সম্মত",
+        "utilityWithdrawn": "সেবা বার্তা বন্ধ"
+      },
+      "action": {
+        "granted": "সাবস্ক্রাইবড",
+        "withdrawn": "অপ্ট-আউট",
+        "utilityGranted": "নিজের অনুরোধ সম্পর্কে যোগাযোগে সম্মত",
+        "utilityWithdrawn": "সেবা বার্তা বন্ধ করেছে"
+      },
+      "source": {
+        "form": "ফর্ম",
+        "keyword": "কীওয়ার্ড উত্তর",
+        "manual": "একজন ব্যক্তি রেকর্ড করেছেন",
+        "import": "ইমপোর্ট",
+        "api": "API",
+        "flow": "ফ্লো",
+        "inbound_message": "বার্তা",
+        "contact_request": "কন্টাক্ট অনুরোধ",
+        "legacy": "সম্মতির ইতিহাসের আগে",
+        "widget": "ওয়েবসাইট চ্যাট",
+        "booking": "বুকিং পেজ",
+        "commerce": "স্টোর চেকআউট",
+        "lead": "লিড সংগ্রহ"
+      },
+      "by": "{name} দ্বারা",
+      "evidence": {
+        "consentText": "দেখানো টেক্সট",
+        "consentVersion": "সংস্করণ",
+        "consentHash": "হ্যাশ",
+        "formId": "ফর্ম",
+        "submissionId": "জমা",
+        "messageId": "বার্তা",
+        "keyword": "কীওয়ার্ড",
+        "fileName": "ফাইল",
+        "apiKeyId": "API কী",
+        "flowId": "ফ্লো",
+        "reference": "রেফারেন্স",
+        "noticeVersion": "নোটিশের সংস্করণ",
+        "noticeUrl": "নোটিশের লিংক",
+        "widgetId": "চ্যাট উইজেট",
+        "bookingTypeId": "বুকিং পেজ",
+        "integrationId": "স্টোর",
+        "storeFlag": "স্টোরের সেটিং",
+        "leadSourceId": "লিড সোর্স",
+        "leadFormId": "লিড ফর্ম",
+        "adId": "বিজ্ঞাপন"
+      },
+      "dialog": {
+        "titleGranted": "সাবস্ক্রাইবড হিসেবে চিহ্নিত করুন",
+        "titleWithdrawn": "আনসাবস্ক্রাইবড হিসেবে চিহ্নিত করুন",
+        "introGranted": "রেকর্ড করুন যে এই কন্টাক্ট মার্কেটিং বার্তা পেতে রাজি হয়েছে। কারণটি প্রমাণ হিসেবে রাখা হয়।",
+        "introWithdrawn": "রেকর্ড করুন যে এই কন্টাক্ট আর মার্কেটিং বার্তা চায় না। প্রতিটি ক্যাম্পেইন ও ব্রডকাস্টে তাকে বাদ দেওয়া হবে।",
+        "channel": "চ্যানেল",
+        "noteRequired": "কেন? (আবশ্যক)",
+        "noteOptional": "নোট (ঐচ্ছিক)",
+        "noteHint": "যেমন: কাউন্টারে কাগজের ফর্মে সই করেছেন, বা ৩ মার্চ ইমেইলে সম্মতি দিয়েছেন।",
+        "confirm": "সংরক্ষণ",
+        "cancel": "বাতিল",
+        "close": "বন্ধ করুন",
+        "savedGranted": "সাবস্ক্রাইবড হিসেবে চিহ্নিত হয়েছে।",
+        "savedWithdrawn": "আনসাবস্ক্রাইবড হিসেবে চিহ্নিত হয়েছে।"
+      }
+    },
+    "composer": {
+      "add": "অপ্ট-আউট লাইন যোগ করুন",
+      "missing": "এই মার্কেটিং বার্তা মানুষকে অপ্ট-আউটের উপায় জানায় না। “আনসাবস্ক্রাইব করতে STOP লিখে উত্তর দিন” ধরনের একটি লাইন যোগ করুন।",
+      "addButton": "লাইন যোগ করুন",
+      "templateHint": "অনুমোদনের কারণে টেমপ্লেট স্থির থাকে। মানুষকে অপ্ট-আউটের কথা জানাতে টেমপ্লেটের ভেতরেই “{line}” ধরনের একটি লাইন রাখুন।",
+      "footerSuggestion": "মার্কেটিং টেমপ্লেটের জন্য প্রস্তাবিত: \"{line}\"",
+      "footerUse": "ফুটার হিসেবে ব্যবহার করুন"
+    },
+    "import": {
+      "legend": "সম্মতি",
+      "label": "এই কন্টাক্টদের বার্তা পাঠানোর জন্য আমার সম্মতি আছে",
+      "hint": "টিক দিলে, ফাইলের সব কন্টাক্ট মার্কেটিংয়ে সম্মত হিসেবে রেকর্ড হবে এবং প্রমাণ হিসেবে ফাইলের নাম থাকবে। টিক না দিলে, ইমপোর্ট কোনো সম্মতি রেকর্ড করে না। যারা অপ্ট-আউট করেছেন তারা অপ্ট-আউটই থাকবেন।",
+      "hintColumn": "মার্কেটিং সম্মতির সঙ্গে যুক্ত কলামটি ঠিক করে কাদের রেকর্ড করা হবে: যে সারিতে হ্যাঁ লেখা আছে শুধু সেগুলোর সম্মতি রেকর্ড হবে, প্রমাণ হিসেবে ফাইলের নাম থাকবে। না, ফাঁকা ঘর বা অজানা শব্দ কিছুই রেকর্ড করে না। যারা আগেই অপ্ট-আউট করেছেন তারা অপ্ট-আউটই থাকবেন।",
+      "columnSummary": "{granted}টি সারিতে হ্যাঁ আছে এবং সেগুলো রেকর্ড হবে। {notGranted}টিতে না আছে বা ফাঁকা, তাই সেগুলোর কোনো সম্মতির রেকর্ড তৈরি হবে না।",
+      "unrecognised": "{count, plural, one {#টি সারিতে} other {#টি সারিতে}} হ্যাঁ বা না নয় এমন সম্মতির মান আছে ({values})। এগুলোকে অনুমোদিত ধরা হয়নি। yes / no, true / false বা 1 / 0 ব্যবহার করুন।",
+      "columnIgnored": "উপরের বাক্সটি টিক না দেওয়া পর্যন্ত সম্মতির কলামটির কোনো কাজ নেই।",
+      "noticeText": "বিজ্ঞপ্তি বা আইনি ভিত্তি (ঐচ্ছিক)",
+      "noticeTextHint": "এই যোগাযোগগুলো কীসে এবং কোথায় সম্মত হয়েছে, যেমন: চেকআউটে গোপনীয়তা বিজ্ঞপ্তি v3 অনুযায়ী সাবস্ক্রাইব করেছে। প্রতিটি নথিভুক্ত সম্মতির প্রমাণ হিসেবে এটি রাখা হয়।",
+      "noticeVersion": "বিজ্ঞপ্তির সংস্করণ (ঐচ্ছিক)",
+      "smsSummary": "SMS সম্মতি কলাম: {granted} সারিতে হ্যাঁ আছে এবং সেগুলো SMS সম্মতি হিসেবে নথিভুক্ত হবে। {notGranted} সারিতে না আছে বা ফাঁকা।",
+      "emailSummary": "ইমেইল সম্মতি কলাম: {granted} সারিতে হ্যাঁ আছে এবং সেগুলো ইমেইল সম্মতি হিসেবে নথিভুক্ত হবে (সারিতে ইমেইল ঠিকানাও থাকতে হবে)। {notGranted} সারিতে না আছে বা ফাঁকা।",
+      "labelNumbers": "এই নম্বরগুলোতে বার্তা পাঠানোর সম্মতি আমার আছে",
+      "hintNumbers": "টিক দিলে ব্রডকাস্ট চালু করার সময় ফাইলের প্রতিটি নম্বর মার্কেটিংয়ে সম্মত হিসেবে নথিভুক্ত হয়, প্রমাণ হিসেবে ফাইলের নাম থাকে। টিক না দিলে কোনো সম্মতি নথিভুক্ত হয় না। যারা সাবস্ক্রিপশন ছেড়েছে তারা ছাড়াই থাকে।"
+    },
+    "systemLine": {
+      "withdrawn": "যোগাযোগকারী {keyword} লিখেছেন: মার্কেটিং থেকে সদস্যতা বাতিল",
+      "granted": "যোগাযোগকারী {keyword} লিখেছেন: মার্কেটিংয়ে আবার সদস্যতা নিয়েছেন"
+    },
+    "proof": {
+      "title": "প্রস্তুত প্রমাণ ফাইল",
+      "prepare": "সম্পূর্ণ প্রমাণ ফাইল প্রস্তুত করুন",
+      "preparing": "প্রমাণ ফাইল প্রস্তুত হচ্ছে",
+      "largeHint": "লেজারে {max}টির বেশি ইভেন্ট থাকায় ফাইলটি পটভূমিতে প্রস্তুত হবে",
+      "large": "লেজারে {max}টির বেশি ইভেন্ট আছে, যা সরাসরি ডাউনলোডে আসে না। সম্পূর্ণ ফাইল প্রস্তুত করুন: এটি পটভূমিতে তৈরি হবে এবং প্রস্তুত হলে আপনি একটি ইমেল পাবেন।",
+      "none": "এখনও কোনো প্রমাণ ফাইল প্রস্তুত হয়নি।",
+      "keptFor": "প্রস্তুত ফাইলটি {days} দিন পর্যন্ত ডাউনলোড করা যাবে, তারপর মুছে যাবে। একবারে শুধু একটি ফাইল প্রস্তুত হয়।",
+      "rows": "{count, plural, one {#টি ইভেন্ট} other {#টি ইভেন্ট}}",
+      "expires": "{date} পর্যন্ত উপলব্ধ",
+      "download": "CSV ডাউনলোড করুন",
+      "failed": "ফাইলটি তৈরি করা যায়নি। আবার প্রস্তুত করুন।",
+      "status": {
+        "queued": "অপেক্ষমাণ",
+        "running": "তৈরি হচ্ছে",
+        "ready": "প্রস্তুত",
+        "failed": "ব্যর্থ",
+        "expired": "মেয়াদ শেষ"
+      }
+    },
+    "unsubscribe": {
+      "title": "বিপণন ইমেল থেকে আনসাবস্ক্রাইব করুন",
+      "intro": "নিশ্চিত করুন যে আপনি এই প্রতিষ্ঠান থেকে আর বিপণন ইমেল পেতে চান না। আপনার অর্ডার ও অ্যাপয়েন্টমেন্ট সংক্রান্ত বার্তা আপনি পেতেই থাকবেন।",
+      "confirm": "আনসাবস্ক্রাইব",
+      "working": "আনসাবস্ক্রাইব হচ্ছে...",
+      "doneTitle": "আপনি আনসাবস্ক্রাইব করেছেন",
+      "doneBody": "এই প্রতিষ্ঠান থেকে আপনি আর বিপণন বার্তা পাবেন না।",
+      "already": "আপনি আগেই আনসাবস্ক্রাইব করেছেন।",
+      "invalidTitle": "এই লিঙ্কটি বৈধ নয়",
+      "invalidBody": "আনসাবস্ক্রাইব লিঙ্কটি অসম্পূর্ণ বা পরিবর্তিত। সর্বশেষ ইমেলের লিঙ্কটি ব্যবহার করুন।",
+      "error": "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।"
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "অনুমোদিত: বিজ্ঞপ্তি আগে দেওয়া হয়েছে।",
+        "consent_evidence_recorded": "অনুমোদিত: বিজ্ঞপ্তি দেওয়া হয়েছে এবং ব্যক্তি রাজি হয়েছেন।",
+        "purpose_not_enabled": "অনুমোদিত নয়: ওয়ার্কস্পেস এটি চালু করেনি।",
+        "consent_declined": "অনুমোদিত নয়: ব্যক্তি প্রত্যাখ্যান করেছেন।",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "চ্যাট ফর্মে সম্মতির লাইন",
+        "booking": "বুকিং পেজে সম্মতির লাইন",
+        "commerce": "স্টোরের মার্কেটিং চেকবক্স কী বোঝায়",
+        "workspace": "ডিফল্ট সম্মতি নোটিস"
+      },
+      "intro": {
+        "widget": "দর্শকের তথ্যের নিচে একটি টিক বক্স হিসেবে দেখানো হয়। শুধু যে দর্শক টিক দেন এবং ফোন নম্বর বা ইমেইল দেন, তাঁকেই সম্মত হিসেবে রেকর্ড করা হয়।",
+        "booking": "বুকিং ফর্মে একটি টিক বক্স হিসেবে দেখানো হয়। শুধু যিনি টিক দেন তাঁকেই সম্মত হিসেবে রেকর্ড করা হয়; বুকিংয়ে এটি কখনও লাগে না।",
+        "commerce": "আপনার স্টোরে যে গ্রাহক মার্কেটিং গ্রহণ করেন তাঁকে সম্মত হিসেবে রেকর্ড করা হয়। ওই চেকবক্স তাঁকে কী বলে তা লিখুন, যাতে প্রমাণে তা থাকে।",
+        "workspace": "কোনো ফর্ম, উইজেট বা বুকিং পেজের নিজস্ব শব্দবিন্যাস না থাকলে আপনার ওয়ার্কস্পেস সম্মতি বক্সের পাশে যে শব্দবিন্যাস দেখায়। প্রতিটি পরিবর্তন একটি নতুন ক্রমিক সংস্করণ।"
+      },
+      "enabled": "সম্মতির লাইন চালু",
+      "text": "যে বাক্যে ব্যক্তি সম্মত হন",
+      "textHint": "সর্বোচ্চ {max} অক্ষর। প্রতিটি পরিবর্তন নতুন সংস্করণ হিসেবে সংরক্ষিত হয়।",
+      "textRequired": "লাইন চালু করার আগে বাক্যটি লিখুন।",
+      "url": "আপনার গোপনীয়তা নীতির লিংক (ঐচ্ছিক)",
+      "urlHint": "https:// দিয়ে শুরু হতে হবে",
+      "save": "সম্মতির লাইন সংরক্ষণ করুন",
+      "saved": "সম্মতির লাইন সংরক্ষিত (সংস্করণ {version})।",
+      "version": "বর্তমান সংস্করণ: {version}",
+      "noVersion": "এখনও সংরক্ষিত হয়নি।",
+      "saveFirst": "আগে এটি সংরক্ষণ করুন, তারপর এর সম্মতির লাইন ঠিক করতে পারবেন।",
+      "whatsappToo": "এটিকে হোয়াটসঅ্যাপ সম্মতি হিসেবেও গণ্য করুন (শুধু যদি বাক্যে তা বলা থাকে)",
+      "termsUrl": "আপনার শর্তাবলির লিঙ্ক (ঐচ্ছিক)",
+      "termsUrlHint": "https:// দিয়ে শুরু হতে হবে",
+      "useWorkspacePrivacy": "আমার ওয়ার্কস্পেসের গোপনীয়তা লিঙ্ক ব্যবহার করুন",
+      "useWorkspaceTerms": "আমার ওয়ার্কস্পেসের শর্তাবলির লিঙ্ক ব্যবহার করুন",
+      "useWorkspaceText": "আমার ওয়ার্কস্পেসের ডিফল্ট শব্দবিন্যাস ব্যবহার করুন"
+    }
+  }
+}

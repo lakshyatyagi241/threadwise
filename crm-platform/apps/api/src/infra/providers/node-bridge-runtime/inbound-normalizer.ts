@@ -22,7 +22,7 @@ export interface RawMessage {
 /** A message older than this is a replay after a reconnect, never a live event (TW-NODE-016 rule 2). */
 export const STALE_AFTER_MS = 600_000;
 
-export type Upsert = 'notify' | 'append' | string;
+export type Upsert = 'notify' | 'append' | 'history' | string;
 
 export type Normalized =
   /** A customer message: goes on to the inbox. */
@@ -139,7 +139,8 @@ const MEDIA_KEYS = [
  * Reads one `messages.upsert` entry (TW-NODE-016, 018). Returns null for everything that must be dropped: the wrong upsert
  * type, a replay older than 10 minutes, a status or newsletter or broadcast chat, an event with nothing to show.
  *
- * `notify` is a live message; `append` is history and is kept only for the business's own messages (the echo sync).
+ * `notify` is a live message; `append` is history and is kept only for the business's own messages (the echo sync). `history` is the
+ * one-time import of a first link (history-sync.ts): both directions are kept, and `opts.maxAgeMs` is the import window.
  */
 export function normalizeMessage(
   msg: RawMessage,
@@ -147,7 +148,7 @@ export function normalizeMessage(
   now: Date,
   opts: { maxAgeMs?: number } = {},
 ): Normalized | null {
-  if (upsert !== 'notify' && upsert !== 'append') return null;
+  if (upsert !== 'notify' && upsert !== 'append' && upsert !== 'history') return null;
   const fromMe = msg.key.fromMe === true;
   if (upsert === 'append' && !fromMe) return null;
 
@@ -242,9 +243,14 @@ export function normalizeMessage(
   const replyTo = Object.values(content)
     .map((v) => (v as { contextInfo?: Record<string, any> } | null)?.contextInfo?.stanzaId)
     .find((v) => typeof v === 'string' && v !== '');
+  const mentioned = Object.values(content)
+    .map((v) => (v as { contextInfo?: Record<string, any> } | null)?.contextInfo?.mentionedJid)
+    .find((v) => Array.isArray(v) && v.length > 0) as unknown[] | undefined;
+  const mentionedJids = (mentioned ?? []).filter((j): j is string => typeof j === 'string');
   return wrap(
     {
       ...base(msg, id, chat, fromMe, participant, timestamp),
+      ...(mentionedJids.length ? { mentionedJids } : {}),
       text: shown,
       media,
       location,

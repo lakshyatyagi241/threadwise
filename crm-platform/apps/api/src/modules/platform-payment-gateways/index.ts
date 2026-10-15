@@ -8,3 +8,4 @@ export { PaymentConfirmationService } from './payment-confirmation.service';
 export { SubscriptionLifecycleService } from './subscription-lifecycle.service';
 export { PaygwWorkerModule } from './paygw-worker.module';
 export { SubscriptionReconcilerService } from './subscription-reconciler.service';
+export { SubscriptionCancelService, type EndReason } from './subscription-cancel.service';

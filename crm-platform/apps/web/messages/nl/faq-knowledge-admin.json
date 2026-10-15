@@ -7,7 +7,6 @@
     "common": {
       "loading": "Laden",
       "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-id",
       "dash": "-",
       "cancel": "Annuleren",
       "errors": {
@@ -61,7 +60,9 @@
         "matches": "Gecontroleerde klantberichten",
         "answered": "Beantwoord",
         "rate": "Antwoordpercentage",
-        "tokens": "Embedding-tokens"
+        "tokens": "Embedding-tokens",
+        "verified": "Tweede controles",
+        "vetoed": "Achtergehouden antwoorden"
       }
     },
     "settings": {
@@ -86,17 +87,18 @@
       },
       "threshold": {
         "label": "Standaarddrempel voor overeenkomst",
-        "hint": "Een bericht komt overeen als de score minstens zo hoog is. Wordt alleen gebruikt door workspaces die nooit een eigen drempel hebben opgeslagen. Scores hangen af van het AI-model.",
         "value": "{value}",
         "follow": "Het model volgen",
-        "followHint": "De standaardgevoeligheid is de aanbevolen waarde van het model ({value}) en verandert mee als het model wijzigt. Zet uit om een vast getal in te stellen."
+        "followHint": "De standaardgevoeligheid is de aanbevolen waarde van het model ({value}) en verandert mee als het model wijzigt. Zet uit om een vast getal in te stellen.",
+        "hint": "Een bericht komt overeen als de score minstens zo hoog is. Wordt alleen gebruikt door flows die nooit een eigen drempel hebben opgeslagen. Scores hangen af van het embeddingmodel."
       },
       "limits": {
         "title": "Limieten",
-        "maxFaqs": "Maximum aantal FAQ's per workspace",
         "maxVariationsPerFaq": "Maximum aantal varianten per FAQ",
         "semanticPerHour": "Semantische matches per workspace per uur",
-        "semanticPerHourHint": "Daarna valt een workspace de rest van het uur terug op spellingsgelijkenis. 0 betekent altijd spellingsgelijkenis."
+        "semanticPerHourHint": "Daarna valt een workspace de rest van het uur terug op spellingsgelijkenis. 0 betekent altijd spellingsgelijkenis.",
+        "verifyPerHour": "Tweede controles per workspace per uur",
+        "maxFaqs": "Maximum aantal FAQs per flow"
       },
       "errors": {
         "integer": "Voer een geheel getal in.",
@@ -114,7 +116,20 @@
         "title": "Controleren voor het opslaan",
         "confirm": "Wijzigingen opslaan",
         "engineOff": "Als je de engine uitzet, antwoordt geen enkele workspace meer vanuit FAQ's en zijn FAQ-bewerkingen geblokkeerd totdat je hem weer aanzet.",
-        "modelChange": "Het AI-model wijzigen van {from} naar {to} zorgt dat elke opgeslagen vector opnieuw wordt gemaakt. Tot dat klaar is, gebruikt matching alleen spellingsgelijkenis. De standaardgevoeligheid volgt het nieuwe model (aanbevolen {threshold}), tenzij je een vaste waarde instelt. Drempels die een workspace zelf heeft opgeslagen, moeten mogelijk opnieuw worden afgesteld, omdat scores met het model veranderen."
+        "modelChange": "Als je het embeddingmodel van {from} naar {to} wijzigt, wordt elke opgeslagen vector opnieuw berekend. Tot dat klaar is, gebruikt de matching alleen spellingsgelijkenis. De standaardgevoeligheid volgt het nieuwe model (aanbevolen {threshold}), tenzij je een vaste waarde instelt. Drempels die flows zelf hebben opgeslagen moeten mogelijk opnieuw worden afgesteld, omdat scores met het model veranderen."
+      },
+      "verify": {
+        "title": "Tweede controle bij twijfelgevallen",
+        "enabled": {
+          "label": "Tweede controle toestaan",
+          "hint": "Zet dit uit om de controle voor alle workspaces te stoppen, wat ze zelf ook instellen."
+        },
+        "model": {
+          "label": "Controlemodel",
+          "hint": "De OpenRouter-model-id die twijfelgevallen beoordeelt, bijvoorbeeld openai/gpt-4o-mini. Een klein, snel model is genoeg."
+        },
+        "perHourHint": "Daarboven blijft een twijfelgeval de rest van het uur ongecontroleerd staan. 0 betekent nooit controleren.",
+        "description": "Een klein chatmodel controleert matches die de drempel van een flow nipt haalden. Het kan alleen een antwoord tegenhouden. Flows schakelen het in via hun eigen FAQ-instellingen."
       }
     },
     "maintenance": {

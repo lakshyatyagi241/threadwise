@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { AddonGrants } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
-import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import {
+  PlanEntitlementService,
+  grantedByPack,
+  type WithheldAppFeature,
+} from '../plans-subscriptions-trials';
 import { addonLiveSql, readGrants } from './addon-grants';
 import { mergeFeature, mergeLimit, type PlanFacts } from './entitlement-merge';
 import { ModuleRegistryService } from './module-registry.service';
@@ -30,14 +34,39 @@ export class AddonEntitlementService {
     const live = sql.raw(addonLiveSql(await this.plans.graceDays()));
     const res = await this.db.txAs({ orgId, userId: null }, (tx) =>
       tx.execute(sql`
-        SELECT p.features, p.limits
+        SELECT p.features, p.limits, ma.slug AS app_slug,
+               (SELECT wi.status FROM workspace_app_installations wi
+                 WHERE wi.org_id = a.org_id AND wi.app_id = p.marketplace_app_id) AS install
         FROM workspace_addons a JOIN plans p ON p.id = a.package_id
+        LEFT JOIN marketplace_apps ma ON ma.id = p.marketplace_app_id
         WHERE a.org_id = ${orgId} AND ${live}
       `),
     );
-    return (res.rows as unknown as Array<{ features: unknown; limits: unknown }>).map((r) =>
-      readGrants(r.features, r.limits),
-    );
+    return (
+      res.rows as unknown as Array<{
+        features: unknown;
+        limits: unknown;
+        app_slug: string | null;
+        install: 'active' | 'disabled' | 'killed' | null;
+      }>
+    ).map((r) => {
+      // The add-on that sells a Marketplace app grants the app's plan features only while the app is installed and running in the
+      // workspace (the same rule the plan domain applies to the entitlements the web reads); any other add-on grants as stored.
+      const features =
+        r.app_slug === null
+          ? r.features
+          : Object.fromEntries(
+              grantedByPack({ slug: r.app_slug, features: r.features, install: r.install }).map(
+                (k) => [k, true],
+              ),
+            );
+      return readGrants(features, r.limits);
+    });
+  }
+
+  /** Plan features a subscribed app would grant but does not (not installed, or paused): why a gate is closed, for the Roles editor. */
+  async withheldByApps(orgId: number): Promise<Record<string, WithheldAppFeature>> {
+    return (await this.plans.forOrg(orgId))?.appWithheld ?? {};
   }
 
   private async facts(orgId: number): Promise<PlanFacts | null> {

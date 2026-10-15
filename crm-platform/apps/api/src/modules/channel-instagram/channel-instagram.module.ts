@@ -3,6 +3,7 @@ import { HttpInstagramBridgeFactory } from '../../infra/providers/channel-instag
 import { INSTAGRAM_BRIDGE } from '../../infra/providers/channel-instagram/instagram-bridge.port';
 import { AddonsExtensionRegistryModule } from '../addons-extension-registry';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
+import { CrmModule } from '../crm';
 import { NoInstagramAutomation, OpenInstagramPlanGate } from './_shims/open-gates';
 import { ChatInstagramIngest } from './_shims/chat-instagram-ingest';
 import { SqlInstagramTemplates } from './_shims/sql-instagram-templates';
@@ -31,7 +32,7 @@ import { SenderService } from './sender.service';
  * by binding the real one to the same token (see `_shims/tokens.ts`).
  */
 @Module({
-  imports: [AddonsExtensionRegistryModule, ChatConversationsModule],
+  imports: [AddonsExtensionRegistryModule, ChatConversationsModule, CrmModule],
   controllers: [
     AccountsController,
     BroadcastsController,

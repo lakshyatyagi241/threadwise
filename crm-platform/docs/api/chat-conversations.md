@@ -256,10 +256,11 @@ after commit: realtime (conv room, user rooms)                      after commit
 
 ## Queues and jobs
 
-| Queue              | Job              | Payload                                                               | Producer                                                       | Consumer                                   | Retry                                                                                                                                                                                     |
-| ------------------ | ---------------- | --------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `webhook-ingest`   | `channel.ingest` | `channelIngestJobSchema`: one inbound message or receipt (normalised) | `ChannelIngestPublisher` (webhook door, simulator, dispatcher) | `ChannelIngestProcessor` (concurrency 8)   | Queue default (5 attempts, exponential 2 s). A receipt that finds no message is retried through that backoff (it may have beaten the send's commit), then dropped.                        |
-| `message-dispatch` | `message.send`   | `{ orgId, messageUuid, generation }` (ids only)                       | `OutboundService` after the commit; the recovery sweep         | `MessageDispatchProcessor` (concurrency 8) | 8 attempts, exponential 2 s (`MESSAGE_SEND_JOB_OPTIONS`): the wait before the last attempt (about 4 minutes) outlasts a killed worker's 60 s send lock. Job id `msg-<uuid>-<generation>`. |
+| Queue              | Job                  | Payload                                                               | Producer                                                       | Consumer                                    | Retry                                                                                                                                                                                     |
+| ------------------ | -------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `webhook-ingest`   | `channel.ingest`     | `channelIngestJobSchema`: one inbound message or receipt (normalised) | `ChannelIngestPublisher` (webhook door, simulator, dispatcher) | `ChannelIngestProcessor` (concurrency 8)    | Queue default (5 attempts, exponential 2 s). A receipt that finds no message is retried through that backoff (it may have beaten the send's commit), then dropped.                        |
+| `message-dispatch` | `message.send`       | `{ orgId, messageUuid, generation }` (ids only)                       | `OutboundService` after the commit; the recovery sweep         | `MessageDispatchProcessor` (concurrency 8)  | 8 attempts, exponential 2 s (`MESSAGE_SEND_JOB_OPTIONS`): the wait before the last attempt (about 4 minutes) outlasts a killed worker's 60 s send lock. Job id `msg-<uuid>-<generation>`. |
+| `msg-log-export`   | `message-log.export` | `{ orgId, exportUuid }` (ids only)                                    | `MessageLogService.requestExport` after the commit             | `MessageLogExportProcessor` (concurrency 1) | One attempt (`MESSAGE_LOG_EXPORT_JOB_OPTIONS`): the runner records its own failure on the export row. Job id `msglog-export-<uuid>`.                                                      |
 
 No queue was added: the health probe and the dashboards queue list are unchanged. One interval job in the worker: `QueuedMessageRecoveryService` (below).
 
@@ -302,6 +303,9 @@ delivery, nothing leaves `failed`. A receipt the rule refuses still fills its ti
 `message_events` (`detail.applied` says which), so the log is complete when the arrival order was not. An id nobody has is `unknown` and changes nothing. After
 the commit: `inbox.message.status` to the thread's room.
 
+A receipt names the provider id it is about, and a message whose Retry produced a new send has a new one: a late receipt of an EARLIER send of the same message
+is `ignored` (its event is still logged, `applied: false`) and cannot fail or deliver the message that now belongs to the later send.
+
 ## Outbound (`OutboundService`, `MessageDispatchService`)
 
 `enqueueOutbound` (the agent's send): one transaction holds the thread's row lock, the client-id ledger row (a repeated `clientMessageId` returns the first
@@ -324,7 +328,10 @@ stamped it when the agent pressed send, even if the send then failed). Then the 
 Failures: a retryable `ChannelError` goes back to the queue (backoff; a message another worker is sending is delayed without using an attempt); on the last
 attempt, or for a permanent refusal (`ChannelError` not retryable) or a guard (`AppError`: `AUTH_SEND_HALTED`, `AUTH_SEND_BLOCKED`, window, channel off), the
 message ends `failed` with `failure_code` / `failure_reason`, no first response, the customer still waiting. `retryOutbound` puts the same message back to
-`queued` (new dispatch generation, same `seq`, same row) after the same guards; only a failed outbound message qualifies.
+`queued` (new dispatch generation, same `seq`, same row) after the same guards; only a failed outbound message qualifies. **A Retry of a message the provider
+had already accepted** (it then reported a failure in a receipt, e.g. Meta 131049) first forgets the dispatcher's stored answer for that client reference
+(`ChannelDispatcher.forget`) and writes `previousProviderMessageId` on the `retry` event: otherwise the worker would replay the first answer, never call the
+provider, and put the message back to `sent` with its failure wiped. A message that never reached the provider has no stored answer, so nothing changes for it.
 
 Kill-safety: the message row exists before the job, and the worker never creates one, so a worker killed anywhere cannot duplicate a message. The retry finds
 it `queued` and asks the dispatcher again, which answers from the stored result if the provider had already accepted. **Residual risk, as in the plan (3.4):**
@@ -369,16 +376,88 @@ the file belongs to (`conversationVisible`, current grants), looked up through `
 key on no message yet (an upload waiting in the composer) passes: the link was minted by code that had authorised the person. The worker registers the same
 `ChatMediaModule` as the HTTP app, because inbound files are stored by the ingest job.
 
+## The message log (delivery log, archive, export)
+
+`message_events` is the exact log of every message: `queued`, each `attempt`, `sent` (the pipeline: the provider accepted it), the provider's own `sent` /
+`delivered` / `read` / `failed` receipts (`detail.providerAt` marks these), `retry` (the queue's own, or an agent's: `manual`, `by`). Nothing is dropped, including a
+receipt that did not move the status (`applied: false`).
+
+- **Read one message's log**: `GET /v1/inbox/messages/:id/log` (`inbox.conversation.read`, same visibility as the thread) returns the status now, the failure, and every event
+  oldest first (`messageLogResponseSchema`): `source` (`system` or `provider`), provider id, `errorCode` / `errorMessage` (the two writers' keys read the same), attempt,
+  who retried, `applied`, `replayed`. Events older than 90 days come from the archive (`fromArchive`); a message past the retention has `expired: true`.
+- **Archive** (`MessageLogArchiveService`, worker, daily 02:17): every workspace's events of a UTC day older than `MESSAGE_LOG_HOT_DAYS` (90) are written as one gzip NDJSON object
+  into `message_event_archives` (`bytea`, one row per workspace and day) and deleted from `message_events` in the SAME transaction, so an event is always in exactly one place; a
+  count mismatch rolls the day back. Resumable (at most 45 days a run, oldest first), idempotent (a second run finds nothing; a stray late event is appended as another gzip member).
+  The same run deletes archive days older than `MESSAGE_LOG_RETENTION_DAYS` (365), deletes the file of an export past its 7 days (status `expired`), and fails an export that has been
+  `running` for an hour (its worker died). Why Postgres and not a bucket: the bucket is optional in this stack and a local disk is not shared by the API and the worker.
+- **Export** (`inbox.logs.export`, the locked Admin preset has it): `POST /v1/inbox/message-logs/exports` `{ from, to, messageStatus? }` (UTC days, `to` not in the future, `from` not older than
+  365 days; `422 MESSAGE_LOG_EXPORT_RANGE_INVALID`) records the request and enqueues `msg-log-export` (`202`); one active export per workspace (`409 MESSAGE_LOG_EXPORT_IN_PROGRESS`).
+  The worker (`MessageLogExportRunner`) claims the row, reads each day's archive object and live rows oldest first, puts the recipient, channel, template and status now next to each event
+  (a message that no longer exists leaves them blank), writes a formula-safe CSV (stops at 2,000,000 lines: `failed` with the reason), stores it gzipped on the row for 7 days and
+  emails the requester a link to `/inbox/message-logs?export=<id>` (the file itself is never attached or linked without a session). `GET .../exports` lists, `GET .../exports/:id/download`
+  streams the CSV (`409 MESSAGE_LOG_EXPORT_NOT_READY` when queued, failed or expired). A mail that cannot be sent never fails the export.
+- Dev simulator: a message starting `/bounce` is accepted and then reported failed by a receipt (`ECOSYSTEM_ENGAGEMENT_BLOCKED`, as Meta 131049), and every Retry of it is a new send.
+
+## Message History (`/message-history`, TW-CHAT-039 to -042)
+
+One feed over every message the workspace sent or received, built in `team-inbox-conversations` (`MessageHistoryController`, `MessageHistoryService`: who may see what) on top of the SQL in
+`chat-conversations` (`message-history.query.ts`, `message-history.repository.ts`, `message-history-rules.ts`: pure rules; `message-history-export.ts`: the file). Reference merged six tables in PHP and
+took the newest 200 rows of each, so its numbers were wrong past 100 rows (TW-CHAT-040 quirk); here every number is a count and every page is a cursor.
+
+**What is in the feed.** The message stream (`messages`: inbox, flows, auto-replies, AI, API, and every inbound message) plus one row per recipient of a broadcast (`broadcast_contacts`), a campaign
+(`wp_campaign_contacts`) and a scheduled message (`scheduled_message_contacts`), because a recipient with no thread, or whose send failed, has no message row. Left out: system lines (a call bubble), reactions,
+deleted messages, and the bubble a broadcast or campaign mirrored into a thread (`meta.source` `broadcast` with `meta.broadcast_id`, or `campaign` with `meta.campaign_id` / a `campaign:` provider id): the recipient
+row is that send. Ids: `m:<uuid>`, `b:<uuid>`, `c:<uuid>`, `s:<uuid>` (the table and the row's uuid). Order: the moment (`created_at`; for a recipient row `COALESCE(sent_at, created_at)`, indexed in
+`20261126090000_message_history`), then the branch, then the id, newest first. The cursor carries the moment as Postgres printed it (microseconds), the branch rank and the id, so rows that share a moment are never
+skipped or repeated. Each branch is cut at `limit + 1` rows before the merge, so a page never reads the window.
+
+| Route                                                                     | Permission          |                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /v2/message-history`                                                 | `msg.history.read`  | the page: `range` (24h, 7d, 30d, 90d; default 30d) or `from`/`to` (UTC days, at most 365 back), `dir` (all, out, in, fail), `type` (Reference's type filter), `source` (comma list: inbox, flow, auto_reply, ai, api, broadcast, campaign, scheduled, other), `status` (queued, sent, delivered, read, failed), `channelId`, `templateId`, `campaignId`, `broadcastId`, `scheduledId`, `q`, `cursor`, `limit` (25, max 100) |
+| `GET /v2/message-history/summary`                                         | `msg.history.read`  | the cards and the tab counts of the window; `dir`, `type`, `source`, `status` and `q` do not change them (Reference's rule: the headline numbers do not jiggle)                                                                                                                                                                                                                                                             |
+| `GET /v2/message-history/insights`                                        | `msg.history.read`  | volume per bucket (`bucket` daily, hourly (last 24 h), weekly; `tz` an IANA zone, empty buckets included), the type mix, the 4 most active conversations; follows every filter                                                                                                                                                                                                                                              |
+| `GET /v2/message-history/:id`                                             | `msg.history.read`  | one row for the drawer: whole text, sender, failure, cost, and the timeline                                                                                                                                                                                                                                                                                                                                                 |
+| `POST /v2/message-history/exports`                                        | `inbox.logs.export` | the screen's filters as a CSV through the delivery log's export queue (`msg-log-export`); `202`                                                                                                                                                                                                                                                                                                                             |
+| `GET /v2/inbox/message-logs/exports?kind=messages` and `.../:id/download` | `inbox.logs.export` | the history exports (the delivery log exports are the default `kind=events`)                                                                                                                                                                                                                                                                                                                                                |
+
+**Who sees what** (`MessageHistoryService.context`, once; the SQL only receives the answer).
+
+- `msg.history.read` opens the screen. Reference gated it with `workspace.role:manager`; the key is held by the Manager preset and above (migration `20261126090000_message_history`).
+- A row that belongs to a conversation is visible exactly when the conversation is: the caller's scope for `inbox.conversation.read`, through `visibleToSql`, the rule the inbox list and the socket use. A member who reads only
+  their own conversations sees only those messages, in the table, the cards, the charts, the search and the drawer (a message they cannot see is a `404`, like one that does not exist). No read scope: `403`.
+- Recipient rows of broadcasts, campaigns and scheduled messages belong to no conversation, so they are visible only to a caller whose scope is `all`. (Decision for the owner: whether a narrower scope should see the
+  recipients of the campaigns it can open.)
+- A recipient's number: whole only for a contact the caller may read (`record.contacts.read` and its scope: `all`, `own` = contacts they own, `team` = owned by them or a teammate); otherwise the last 4 digits
+  (`maskRecipient`: `•••••••8988`). The contact's name is shown either way (Reference's rule for `mask_customer_numbers`, which it stored and never enforced). A hidden number is not searchable either: digits typed into
+  the search match only numbers the caller may see. A key that is not a phone number (a Telegram id) is not masked.
+- Text: the table shows the first 40 characters; the drawer shows the whole text, because the caller can open that conversation. Customer-written text carries `data-agent-ignore` in the web (help assistant spec).
+- Cost: joined from `usage_charges` by the provider message id, and only for a caller with `wallet.statement.read`; the cards add it up per currency. Everyone else gets `cost: null`.
+
+**The drawer's timeline.** A message: `MessageLogFacade.messageLog` (live events, and the archive for events older than 90 days, one day-object at a time; `fromArchive`, `expired`). A recipient row keeps no event log, so its
+timeline is the moments the row recorded (queued, sent, delivered, read, failed with the reason). The failure is plain language in the web through the WhatsApp failure map (`describeFailure`), the same one the thread uses.
+
+**The export.** `POST /v2/message-history/exports` takes the same filters as the list. It needs `inbox.logs.export` and `msg.history.read` and a read scope of `all` (the file has every row and full numbers, so a caller
+who sees less cannot ask for it: `403`). The window is resolved to two instants on the day of the request and stored with the filters in `message_log_exports.filters` (`kind = 'messages'`), so the worker builds what was meant.
+Same queue, same one-at-a-time rule (`409 MESSAGE_LOG_EXPORT_IN_PROGRESS`), same 7 days, same 2,000,000 line stop. Columns: ID, Source, When (UTC), Direction, Phone, Contact, Status, Type, Body, Channel, Template,
+Campaign / broadcast / schedule, Error code, Error message; a cell a spreadsheet would run as a formula is prefixed with a quote (Reference did the same). The email links to `/message-history?export=<id>`.
+
+**Retention.** The feed reads `messages` and the recipient tables, which are not archived; what ages out is the delivery log (`MESSAGE_LOG_HOT_DAYS` 90 live, `MESSAGE_LOG_RETENTION_DAYS` 365 archived). The window of the feed
+is at most `MESSAGE_HISTORY_MAX_DAYS` (365). The screen says so, read from the contracts.
+
+Tests: `test/unit/chat-conversations/message-history-rules.spec.ts` (window, masking, preview, KPI maths, cursor, timeline, file) and `test/e2e/team-inbox-conversations/message-history.e2e.spec.ts` (real Postgres: the feed
+across hot and archived days and its cursor, every filter, the cards and charts, the drawer including an archived day, own versus all visibility, masking and search, cost, tenant isolation, the export with filters and its
+refusals, and the query plan on 5,500 rows).
+
 ## Errors
 
 `SERVICE_WINDOW_CLOSED`, `CHANNEL_DISCONNECTED`, `CHANNEL_CAPABILITY_UNSUPPORTED`, `PLAN_LIMIT_REACHED` (all `422`, at enqueue); `CONVERSATION_NOT_FOUND`,
-`MESSAGE_NOT_FOUND` (`404`, also for another workspace's ids); `MESSAGE_NOT_RETRYABLE`, `IDEMPOTENCY_KEY_REUSED` (`409`). At send time the message ends `failed` with
+`MESSAGE_NOT_FOUND` (`404`, also for another workspace's ids); `MESSAGE_NOT_RETRYABLE`, `IDEMPOTENCY_KEY_REUSED`, `MESSAGE_LOG_EXPORT_IN_PROGRESS`, `MESSAGE_LOG_EXPORT_NOT_READY` (`409`); `MESSAGE_LOG_EXPORT_RANGE_INVALID` (`422`); `MESSAGE_LOG_EXPORT_NOT_FOUND` (`404`). At send time the message ends `failed` with
 `AUTH_SEND_HALTED` / `AUTH_SEND_BLOCKED` (the guard), `SIM_REJECTED` (the simulator), `CHANNEL_NOT_LIVE` (an adapter that cannot send yet), a provider's own code, or
 `DISPATCH_ERROR` (retries exhausted on an unclassified error).
 
 ## Not built here
 
-Message-event retention (180 days) and the ledger sweep (60 days) are not scheduled yet; routing, auto-reply and opt-out stages of the ingest (plan 3.4 step 6, Phase 2+);
+The ledger sweep (60 days) is not scheduled yet; the message-event log is kept and archived by the message log (below); routing, auto-reply and opt-out stages of the ingest (plan 3.4 step 6, Phase 2+);
 inbound reactions are stored on the target message only (no reaction send); an inbound `contact` card carries no card; the web chat widget's own inbound still goes
 through its shim.
 
@@ -391,5 +470,5 @@ message to the microsecond, every receipt order ends at `read`, `failed` rules, 
 (`apps/api/test/e2e/chat-conversations/`; `pipeline-support.ts` runs the worker processors inside the test app): `message-ingest.e2e.spec.ts` (inbound, contact, reopen,
 duplicates 20x and 3x, 50 in parallel through the queue, the contact cap, realtime audience, the signed webhook, unknown receipts), `message-send.e2e.spec.ts` (send to
 `read`, idempotency, `/fail` and Retry, `/flaky`, `/ooo`, forced receipts, window, channel, monthly cap, emergency halt, a crash before the commit, a worker really killed
-mid-call and finished by another, the recovery sweep, cross-tenant) and `conversations-facade.e2e.spec.ts` (thread paging, mark read, thread lookups, `recordOutbound`, the media
+mid-call and finished by another, the recovery sweep, cross-tenant) and `message-log.e2e.spec.ts` (Retry after an accepted-then-failed send really resends and a late receipt of the first send is ignored, the log of a message, the archive sweep moves events once and the log still reads them, an export of live plus archived events, range refusals) and `conversations-facade.e2e.spec.ts` (thread paging, mark read, thread lookups, `recordOutbound`, the media
 access rule, joining a room).

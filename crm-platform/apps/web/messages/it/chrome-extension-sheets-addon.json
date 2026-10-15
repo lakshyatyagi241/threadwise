@@ -14,12 +14,11 @@
       "copy": "Copia",
       "copied": "Copiato",
       "copyFailed": "Impossibile copiare. Seleziona la chiave e copiala manualmente.",
-      "reference": "Riferimento per l'assistenza: {id}",
       "back": "Torna alle integrazioni"
     },
     "page": {
       "title": "Componente aggiuntivo Google Sheets",
-      "subtitle": "Importa ed esporta contatti e sincronizza i prodotti tra un foglio di calcolo e il tuo Workspace.",
+      "subtitle": "Invia le righe nuove e modificate del foglio al tuo spazio di lavoro come contatti, porta i contatti in un foglio e sincronizza i prodotti.",
       "loading": "Caricamento della configurazione del componente aggiuntivo",
       "retry": "Riprova",
       "status": {
@@ -51,7 +50,7 @@
     },
     "key": {
       "title": "La tua chiave",
-      "intro": "Il componente aggiuntivo usa la tua chiave personale per agire a tuo nome. Vede solo ciò che il tuo ruolo consente.",
+      "intro": "Il componente aggiuntivo usa la tua chiave personale per agire come te. Vede solo ciò che il tuo ruolo consente. La chiave è l’ultima parte del tuo Webhook URL.",
       "none": "Non hai ancora una chiave.",
       "generate": "Genera chiave",
       "rotate": "Genera una nuova chiave",
@@ -61,8 +60,8 @@
       "created": "Creata {when}",
       "lastUsed": "Ultimo utilizzo {when}",
       "neverUsed": "Mai usata",
-      "newTitle": "La tua nuova chiave",
-      "newWarning": "Copiala adesso. Viene mostrata una sola volta e non potrà essere mostrata di nuovo. Chiunque abbia questa chiave può agire a tuo nome nel componente aggiuntivo.",
+      "newTitle": "La tua nuova chiave e il tuo Webhook URL",
+      "newWarning": "Copiali adesso. La chiave e il Webhook URL vengono mostrati una sola volta e non potranno essere mostrati di nuovo. Chiunque li abbia può agire a tuo nome nel componente aggiuntivo.",
       "rotatedNote": "La tua chiave precedente ha smesso di funzionare.",
       "keyLabel": "Nuova chiave",
       "confirmRotate": {
@@ -86,7 +85,8 @@
         "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
         "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
         "unexpected": "Qualcosa è andato storto da parte nostra. Riprova."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Cosa può fare la tua chiave",
@@ -109,12 +109,12 @@
     },
     "steps": {
       "title": "Configuralo in un foglio di calcolo",
-      "one": "Apri un foglio di calcolo, poi Estensioni, poi Apps Script.",
-      "two": "Scarica i sei file qui sopra. In Impostazioni progetto mostra il file appsscript.json, e incolla appsscript.json e Code.gs al posto di quelli presenti nell'editor.",
-      "three": "Aggiungi tre file HTML chiamati Dialog, Settings e Help e incolla in essi i file scaricati.",
-      "four": "Salva e ricarica il foglio di calcolo. Compare un menu CRM. Consenti i tre permessi richiesti da Google.",
-      "five": "Scegli CRM, poi Impostazioni, incolla la tua chiave e seleziona Salva e controlla.",
-      "six": "La riga 1 del foglio contiene i nomi delle colonne. Poi usa Importa contatti, Esporta contatti o Sincronizza prodotti dal menu CRM."
+      "one": "Copia il tuo Webhook URL quando crei la chiave. Viene mostrato una sola volta.",
+      "two": "In un foglio di calcolo scegli Extensions, poi Add-ons, poi Get add-ons, e installa il componente aggiuntivo da Google Workspace Marketplace. Finché non è presente lì, incolla i sei file qui sotto in Extensions, Apps Script.",
+      "three": "Ricarica il foglio di calcolo. Scegli Extensions, poi il componente aggiuntivo, poi Initial Setup, e incolla il Webhook URL.",
+      "four": "Scegli il foglio e la colonna di attivazione. Una riga viene inviata quando quella cella viene compilata o modificata.",
+      "five": "Seleziona Send Test per verificare la connessione. Non viene salvato nulla; vedi le colonne ricevute dal CRM. Poi seleziona Submit.",
+      "six": "Attiva Send on event (una riga viene inviata appena la modifichi) e/o Send on schedule (ogni ora, righe modificate da un modulo o da un’altra app). Ogni riga arriva come contatto e il suo risultato viene scritto in una colonna CRM status."
     },
     "columns": {
       "title": "Colonne lette dal componente aggiuntivo",
@@ -134,6 +134,22 @@
       "title": "Prodotti recenti",
       "empty": "Ancora nessun prodotto. Sincronizza un foglio per aggiungerne.",
       "count": "{count, plural, one {# prodotto nel tuo Workspace} other {# prodotti nel tuo Workspace}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Incollalo in Initial Setup nel componente aggiuntivo. Contiene la tua chiave, quindi tienilo privato.",
+      "none": "Crea una chiave per ottenere il tuo Webhook URL.",
+      "capture": {
+        "title": "Ultimi dati ricevuti",
+        "none": "Ancora nulla ricevuto. Nel componente aggiuntivo scegli Initial Setup, poi Send Test.",
+        "when": "{event} da {sheet}, {when}. {rows, plural, one {# riga} other {# righe}}.",
+        "noSheet": "un foglio senza nome",
+        "events": {
+          "test": "Test",
+          "edit": "Modifica",
+          "schedule": "Scansione oraria"
+        }
+      }
     }
   }
 }

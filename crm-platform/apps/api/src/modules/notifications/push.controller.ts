@@ -72,9 +72,9 @@ export class PushController {
   @Post('test')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Send a test notification to all my devices',
+    summary: 'Send a test notification: a bell row for me and a browser push to all my devices',
     description:
-      'Ignores preferences and whether a tab is open. Returns how many devices accepted it. One test per person every 10 seconds (429 otherwise).',
+      'Writes one `test` bell row for the caller only and announces it live (`notification.created` to their user room: the bell number, the toast and the tab title follow, as their preferences allow), and sends a Web Push to all their devices, ignoring whether a tab is open. Returns `inApp` (a row was written; false when the bell is turned off for the test type) and how many devices accepted the push. One test per person every 10 seconds (429 otherwise).',
   })
   async test() {
     return this.push.test();

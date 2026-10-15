@@ -24,10 +24,12 @@ export const NOTIFICATION_GROUPS = [
   'leads',
   'documents',
   'wallet',
+  'billing',
   'devices',
   'broadcasts',
   'team_chat',
   'whatsapp_groups',
+  'system',
 ] as const;
 export type NotificationGroup = (typeof NOTIFICATION_GROUPS)[number];
 
@@ -63,6 +65,9 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   sales_doc_decided: { group: 'documents', toast: true, sound: false, push: false },
   wallet_low_balance: { group: 'wallet', toast: true, sound: false, push: false },
   wallet_credited: { group: 'wallet', toast: true, sound: false, push: false },
+  // A failed subscription payment is something a person must act on, so it also reaches their devices.
+  billing_payment_failed: { group: 'billing', toast: true, sound: false, push: true },
+  billing_subscription_canceled: { group: 'billing', toast: true, sound: false, push: false },
   device_connected: { group: 'devices', toast: true, sound: false, push: false },
   device_disconnected: { group: 'devices', toast: true, sound: false, push: false },
   device_logged_out: { group: 'devices', toast: true, sound: false, push: false },
@@ -76,6 +81,14 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   teamchat_message: { group: 'team_chat', toast: true, sound: true, push: true },
   // BL-099: quiet defaults, like the devices and the sends. Someone waiting to join is a task for the admins, not an emergency, and a
   // suspension is news to read; a person who wants the OS notification turns the push on.
+  // TW-MAIL-032: a reply that did not reach someone. Quiet like the send outcomes; the push stays on (the sender wants to fix the address).
+  email_bounced: { group: 'conversations', toast: true, sound: false, push: false },
+  // BL-036: a breach is news for the person who owns the conversation; quiet by default (no sound, no push) like the other alerts of the group.
+  sla_breached: { group: 'conversations', toast: true, sound: false, push: false },
+  // BL-112: news for the people who run the team; quiet like the SLA alert.
+  member_leave_started: { group: 'conversations', toast: true, sound: false, push: false },
+  // BL-112: a chat nobody could take is news for the leads; the push stays on because a customer is waiting.
+  assignment_blocked_by_leave: { group: 'conversations', toast: true, sound: false, push: true },
   waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspended: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspension_cleared: {
@@ -84,6 +97,11 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
     sound: false,
     push: false,
   },
+  // Groups of a personal number: quiet defaults like the official ones. A removal is news to read, not an emergency; push stays off.
+  device_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
+  device_group_removed: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
+  // The test button writes one so a person can see the in-app path work: pop-up and ping on by default (they can turn either off), no push of its own (the button sends the Web Push test separately).
+  test: { group: 'system', toast: true, sound: true, push: false },
 };
 
 export const notificationPrefTypeSchema = z.enum(NOTIFICATION_PREF_TYPES);
@@ -236,3 +254,18 @@ export const wabaGroupNotificationDataSchema = z.object({
   count: z.number().int().min(1).optional(),
 });
 export type WabaGroupNotificationData = z.infer<typeof wabaGroupNotificationDataSchema>;
+
+/**
+ * `device_group_join_request`, `device_group_removed`. Never a member's number, never the invite code: a join request is a count, a group is
+ * named by its subject. `deviceId` is the number the group belongs to (the Groups tab's `?device=`).
+ */
+export const deviceGroupNotificationDataSchema = z.object({
+  /** `wa_device_groups.uuid`. */
+  groupId: uuidSchema,
+  /** `devices.uuid`. */
+  deviceId: uuidSchema.optional(),
+  groupName: z.string().nullable().optional(),
+  /** Join requests only: how many people the row stands for. */
+  count: z.number().int().min(1).optional(),
+});
+export type DeviceGroupNotificationData = z.infer<typeof deviceGroupNotificationDataSchema>;

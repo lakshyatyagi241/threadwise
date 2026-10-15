@@ -4,12 +4,18 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Field, Input, Select, Textarea, cn } from '@crm/ui';
-import type { AttributeCatalog, CampaignBuilder, ComposeTemplate } from '@crm/contracts';
+import { OptOutLine, OptOutTemplateHint } from '@/features/contact-consent';
 import { OverridesPanel } from '@/features/broadcasts/components/overrides-panel';
 import { UploadMediaButton } from '@/features/broadcasts/components/upload-media-button';
+import {
+  CAMPAIGN_EMAIL_SUBJECT_MAX,
+  type AttributeCatalog,
+  type CampaignBuilder,
+  type ComposeTemplate,
+} from '@crm/contracts';
 import { editorType, type BuilderForm, type ButtonRow } from '../../lib/builder-model';
 import { SegmentCounter } from '@/features/channel-sms/components/segment-counter';
-import { isLimitedEngine, isSmsEngine } from '../../lib/engine-gate';
+import { isEmailEngine, isLimitedEngine, isSmsEngine } from '../../lib/engine-gate';
 import { PlusIcon, TrashIcon } from '../icons';
 import { LabelRow, StepCard } from './parts';
 
@@ -65,6 +71,8 @@ export function StepCompose({
   const kind = editorType(form.type);
   const limited = isLimitedEngine(engine);
   const text = isSmsEngine(engine);
+  // A mailbox: the Header field is the subject; no attachment, footer, buttons or opt-out line (the unsubscribe link is added on send).
+  const email = isEmailEngine(engine);
   const approvedOnly =
     engine === 'waba' || (engine === '' && builder?.requiresApprovedTemplates === true);
   const flows = builder?.flows ?? [];
@@ -126,7 +134,29 @@ export function StepCompose({
               {text ? sms('note') : t(`engineNotes.${engine}`)}
             </p>
           )}
-          {!text && (
+          {email && (
+            <p
+              role="note"
+              className="rounded-xl border border-border bg-muted/40 px-3 py-2 text-[12px]"
+            >
+              {t('emailNote')}
+            </p>
+          )}
+          {email && (
+            <div>
+              <LabelRow note={t('subjectNote')}>{t('subject')}</LabelRow>
+              <Input
+                id="camp-header"
+                aria-label={t('subject')}
+                maxLength={CAMPAIGN_EMAIL_SUBJECT_MAX}
+                value={form.customHeader}
+                onChange={(e) => patch({ customHeader: e.target.value })}
+                placeholder={t('subjectPlaceholder')}
+              />
+              <p className="mt-1 text-[11px] text-muted-foreground">{t('subjectHint')}</p>
+            </div>
+          )}
+          {!text && !email && (
             <div>
               <LabelRow note={t('headerNote')}>{t('header')}</LabelRow>
               <Input
@@ -157,7 +187,16 @@ export function StepCompose({
                 <p className="mt-1 text-[11px] text-muted-foreground">{sms('bodyHint')}</p>
               </>
             ) : (
-              <p className="mt-1 text-[11px] text-muted-foreground">{t('bodyHint')}</p>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                {email ? t('emailBodyHint') : t('bodyHint')}
+              </p>
+            )}
+            {!email && (
+              <OptOutLine
+                body={form.customMessage}
+                onChange={(v) => patch({ customMessage: v })}
+                idPrefix="camp-a"
+              />
             )}
           </div>
 
@@ -173,10 +212,15 @@ export function StepCompose({
                 placeholder={t('variantBPlaceholder')}
               />
               <p className="mt-1 text-[11px] text-muted-foreground">{t('variantBHint')}</p>
+              <OptOutLine
+                body={form.customMessageB}
+                onChange={(v) => patch({ customMessageB: v })}
+                idPrefix="camp-b"
+              />
             </div>
           )}
 
-          {!text && (
+          {!text && !email && (
             <div className="rounded-xl border border-border p-3">
               <LabelRow note={t('attachmentNote')}>{t('attachment')}</LabelRow>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-[180px_1fr]">
@@ -226,7 +270,7 @@ export function StepCompose({
             </div>
           )}
 
-          {!text && (
+          {!text && !email && (
             <div>
               <LabelRow note={t('footerNote')}>{t('footer')}</LabelRow>
               <Input
@@ -241,7 +285,7 @@ export function StepCompose({
             </div>
           )}
 
-          {limited ? null : (
+          {limited || email ? null : (
             <div>
               <LabelRow note={t('buttonsNote')}>{t('buttons')}</LabelRow>
               <div
@@ -348,6 +392,7 @@ export function StepCompose({
           <p className="text-[12px] text-muted-foreground">
             {approvedOnly ? t('templateIntroApproved') : t('templateIntro')}
           </p>
+          <OptOutTemplateHint />
           <Field
             label={`${approvedOnly ? t('templateApproved') : t('template')} *`}
             htmlFor="camp-template"

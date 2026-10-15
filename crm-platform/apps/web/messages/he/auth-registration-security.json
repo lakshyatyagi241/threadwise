@@ -214,7 +214,6 @@
         "sessionExpired": "ההפעלה שלכם פגה מטעמי אבטחה. נסו שוב.",
         "network": "לא הצלחנו להגיע לשרת. בדקו את החיבור ונסו שוב.",
         "unexpected": "משהו השתבש מצידנו. נסו שוב.",
-        "requestId": "מזהה בקשה",
         "signupExpired": "התחילו את ההרשמה מחדש.",
         "policyRules": {
           "min_length": "השתמשו בלפחות {min, plural, one {תו #} other {# תווים}}.",

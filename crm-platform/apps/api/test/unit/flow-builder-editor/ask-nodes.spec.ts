@@ -25,10 +25,11 @@ import { parseImportPayload } from '../../../src/modules/flow-builder-editor/flo
 const TYPES = ['ask_file', 'ask_location'] as const;
 
 describe('the two nodes in the catalogue', () => {
-  it.each(TYPES)('%s: chat only, group Listen, not terminal, not hidden', (id) => {
+  it.each(TYPES)('%s: group Listen, not terminal, not hidden', (id) => {
     const d = FLB_NODE_TYPES[id]!;
     expect(d.group).toBe('Listen');
-    expect(d.modes).toEqual(['chat']);
+    // A file question also runs on the website chat (its window has an attach button); a location question is WhatsApp only.
+    expect(d.modes).toEqual(id === 'ask_file' ? ['chat', 'web'] : ['chat']);
     expect(d.terminal).toBeFalsy();
     expect(d.hidden).toBeFalsy();
   });
@@ -38,13 +39,14 @@ describe('the two nodes in the catalogue', () => {
     expect(FLB_NODE_TYPES.ask_location!.label).toBe('Ask for location');
   });
 
-  it('the WhatsApp palette lists them right after Ask question, and no other channel does', () => {
+  it('the WhatsApp palette lists them right after Ask question; only the file question is also on website chat', () => {
     const chat = flbPaletteFor('chat').map((d) => d.id);
     const i = chat.indexOf('ask');
     expect(chat.slice(i, i + 3)).toEqual(['ask', 'ask_file', 'ask_location']);
     for (const mode of FLOW_TYPES.filter((m) => m !== 'chat')) {
       const ids = flbPaletteFor(mode).map((d) => d.id);
-      expect(ids).not.toContain('ask_file');
+      if (mode === 'web') expect(ids).toContain('ask_file');
+      else expect(ids).not.toContain('ask_file');
       expect(ids).not.toContain('ask_location');
     }
   });

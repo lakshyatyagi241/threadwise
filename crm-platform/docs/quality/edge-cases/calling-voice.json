@@ -1,0 +1,16 @@
+{
+  "module": "calling-voice",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-calling-voice-001",
+      "feature": "call sdp",
+      "category": "input",
+      "scenario": "a value of 49 (one under CALL_SDP_MIN_LENGTH = 50) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/calling-voice/index.ts"
+    }
+  ]
+}

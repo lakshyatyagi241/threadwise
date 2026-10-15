@@ -1,12 +1,14 @@
 import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, purposeOf, type ConsentSubject, type PurposeInput } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import {
   ChannelError,
   envelopeText,
   outboundEnvelopeSchema,
+  outboundTextMaxFor,
   type ChannelAdapter,
   type ChannelRuntime,
   type OutboundEnvelope,
@@ -14,18 +16,30 @@ import {
   type WindowInfo,
 } from '../../infra/providers/chat-conversations';
 import {
-  GROUP_SEND_UNAVAILABLE_MESSAGE,
   isGroupPeer,
+  isGroupSendKind,
+  isPersonalGroupSendKind,
 } from '../../infra/providers/whatsapp/group-peer';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import {
   OUTBOUND_SEND_GUARD,
   type OutboundSendGuard,
 } from '../../infra/providers/whatsapp/send-guard.port';
+import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { effectiveCapabilitiesOf } from './channel-capabilities';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
+
+/**
+ * What the send IS, for the ConsentGate (BL-141). Required on every request, so a new caller cannot forget it: free-form replies and
+ * utility templates are `service_messaging`, a MARKETING template or a promotional flow message is `marketing_messaging`.
+ */
+export interface DispatchConsent {
+  purpose: PurposeInput;
+  /** The contact (internal id) when the caller knows it. Without it the recipient key (a phone or an email) finds the contact. */
+  contactId?: number | null;
+}
 
 /** What the caller knows about the send. */
 export interface DispatchRequest {
@@ -36,6 +50,7 @@ export interface DispatchRequest {
   lastInboundAt: Date | null;
   /** Recorded with a flagged or blocked send: `inbox`, `broadcast`, ... */
   source?: string;
+  consent: DispatchConsent;
 }
 
 export interface QueueCheckOptions {
@@ -52,12 +67,11 @@ export interface DispatchResult {
   acceptedAt: Date;
   /** What a simulated provider will report later (empty for a real one, which uses its webhook). See `scheduleReceipts`. */
   plannedReceipts: PlannedReceipt[];
+  /** What the adapter asked to record on the message's `meta` (see `SendResult.meta`). */
+  meta?: Record<string, unknown>;
   /** True when this key had already been sent: the stored answer is returned and the provider is not called again. */
   replayed: boolean;
 }
-
-/** Channels that send to a phone number built from the thread key: a group key must never reach them. */
-const GROUP_SEND_CHANNEL_KINDS: ReadonlySet<string> = new Set(['whatsapp_cloud', 'whatsapp_qr']);
 
 const RESULT_TTL_SECONDS = 24 * 3600;
 /**
@@ -82,7 +96,7 @@ const RELEASE_IF_OWNER =
  *    once per `clientReference`. The halt is checked at send time, not only at enqueue time, so a halt stops what is already queued.
  *
  * Idempotency: a send that succeeded is remembered for 24 hours under its client reference; a retry (a redelivered job, a double
- * click) gets the stored answer and the provider is not called again. A failed send stores nothing, so a retry really retries. The
+ * click) gets the stored answer and the provider is not called again. A failed send stores nothing, so a retry really retries; a send the provider accepted and then failed in a receipt is forgotten by `forget` when the agent presses Retry. The
  * residual window (the process dies after the provider accepted and before the answer is stored) is documented in
  * plan-inbox-chat.md section 3.4: the Cloud API has no idempotency key of its own.
  */
@@ -96,7 +110,24 @@ export class ChannelDispatcher {
     private readonly plans: PlanEntitlementService,
     @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    private readonly consentGate: ConsentGate,
   ) {}
+
+  /**
+   * The purpose of an envelope: a template takes its category (a MARKETING template is marketing), everything else a person writes or a
+   * bot answers is a service message. `tx` is the caller's transaction when it has one.
+   */
+  async purposeFor(orgId: number, envelope: unknown, tx?: Tx): Promise<PurposeInput> {
+    const parsed = outboundEnvelopeSchema.safeParse(envelope);
+    if (parsed.success && parsed.data.kind === 'text' && parsed.data.email?.marketing) {
+      return 'marketing_messaging';
+    }
+    if (parsed.success && parsed.data.kind === 'template') {
+      const t = parsed.data.template;
+      return this.consentGate.purposeOfTemplate(orgId, t.name, t.language, tx);
+    }
+    return 'service_messaging';
+  }
 
   /** Checks that can be made before anything is stored. Throws an AppError with a stable code. */
   async assertCanQueue(
@@ -113,6 +144,8 @@ export class ChannelDispatcher {
       opts.now,
     );
 
+    // Before the plan cap and before any row exists: a refused marketing message costs nothing and tells the agent why.
+    await this.assertConsent(req, envelope, window);
     if (opts.monthlyUsed !== undefined && req.channel.settings.metered) {
       await this.plans.assertWithinLimit(req.channel.orgId, 'monthly_messages', opts.monthlyUsed);
     }
@@ -123,7 +156,15 @@ export class ChannelDispatcher {
   async send(req: DispatchRequest, now: Date = new Date()): Promise<DispatchResult> {
     const envelope = this.parse(req.envelope);
     const adapter = this.adapters.for(req.channel.kind);
-    this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
+    const window = this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
+    // An email reply is sent inside a customer's thread: with no mail to answer there is nobody to send to.
+    if (req.channel.kind === 'email' && envelope.kind === 'text' && !envelope.email) {
+      throw new AppError(
+        ERROR_CODES.VALIDATION_FAILED,
+        'There is no email in this conversation to reply to',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
 
     await this.guard.beforeSend({
       orgId: req.channel.orgId,
@@ -134,6 +175,8 @@ export class ChannelDispatcher {
     const key = `chat:dispatch:${req.channel.orgId}:${req.channel.uuid}:${envelope.clientReference}`;
     const stored = await this.readStored(key);
     if (stored) return { ...stored, replayed: true };
+    // At send time, not only at queue time: a STOP that arrived while the message waited in the queue still stops it.
+    await this.assertConsent(req, envelope, window);
 
     const owner = randomUUID();
     const locked = await this.redisCall(() =>
@@ -154,6 +197,7 @@ export class ChannelDispatcher {
         providerMessageId: sent.providerMessageId,
         acceptedAt: sent.acceptedAt,
         plannedReceipts: sent.plannedReceipts ?? [],
+        ...(sent.meta ? { meta: sent.meta } : {}),
       };
       await this.redisCall(() =>
         this.redis.set(
@@ -183,6 +227,60 @@ export class ChannelDispatcher {
     );
   }
 
+  /**
+   * Forgets the stored answer of a send. A provider can accept a message (the answer is stored) and then report, in a receipt, that it
+   * could not deliver it; the agent's Retry of that message must really send again, not be handed the first answer. Only called for a
+   * message the provider had already accepted, so it cannot double-send one that is still in flight.
+   */
+  async forget(channel: ChannelRuntime, clientReference: string): Promise<void> {
+    const key = `chat:dispatch:${channel.orgId}:${channel.uuid}:${clientReference}`;
+    await this.redisCall(() => this.redis.del(key));
+  }
+
+  /**
+   * The ConsentGate for this send (BL-141). A deny ends the send with a stable code and a plain message; there is no override. A gate
+   * failure is decided inside the gate (marketing fails closed, service replies fail open), so this never throws for a database error.
+   */
+  private async assertConsent(
+    req: DispatchRequest,
+    envelope: OutboundEnvelope,
+    window: WindowInfo,
+  ): Promise<void> {
+    const { purpose, contactId } = req.consent;
+    const subject: ConsentSubject =
+      contactId != null
+        ? { type: 'contact', id: contactId }
+        : req.channel.kind === 'email'
+          ? { type: 'email', email: envelope.to }
+          : { type: 'phone', phone: envelope.to };
+    const replyWindowOpen =
+      purposeOf(purpose).ledgerPurpose === 'utility' &&
+      envelope.kind !== 'template' &&
+      req.lastInboundAt !== null &&
+      window.open;
+    const verdict = await this.consentGate.check(
+      req.channel.orgId,
+      subject,
+      req.channel.kind,
+      purpose,
+      undefined,
+      { replyWindowOpen },
+    );
+    if (verdict.decision !== 'deny') return;
+    if (verdict.reason === 'withdrawn') {
+      throw new AppError(
+        ERROR_CODES.CONSENT_OPTED_OUT,
+        'This contact has unsubscribed from messages of this kind, so the message was not sent.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    throw new AppError(
+      ERROR_CODES.CONSENT_SEND_DENIED,
+      'The message was not sent: this workspace requires a recorded consent for marketing messages and this contact has none.',
+      HttpStatus.UNPROCESSABLE_ENTITY,
+    );
+  }
+
   // --- internals ---------------------------------------------------------------------------------------------------------------
 
   private parse(raw: unknown): OutboundEnvelope {
@@ -204,12 +302,27 @@ export class ChannelDispatcher {
     lastInboundAt: Date | null,
     now: Date = new Date(),
   ): WindowInfo {
-    // A WhatsApp group thread (`g:<group id>`) has no phone number to send to: refuse before anything is stored or queued, and again in
-    // the worker, so no path (an old queued message, a flow, a retry) can reach the individual-send code (WABA_GROUP_SEND_UNAVAILABLE).
-    if (GROUP_SEND_CHANNEL_KINDS.has(channel.kind) && isGroupPeer(envelope.to)) {
+    // A WhatsApp group thread (`g:<group id>`) is addressed by its id, never by a phone number. The Cloud API channel and a personal
+    // number (`whatsapp_qr`, over the linked device) each carry only the kinds WhatsApp accepts in a group.
+    if (
+      channel.kind === 'whatsapp_qr' &&
+      isGroupPeer(envelope.to) &&
+      !isPersonalGroupSendKind(envelope.kind)
+    ) {
       throw new AppError(
-        ERROR_CODES.WABA_GROUP_SEND_UNAVAILABLE,
-        GROUP_SEND_UNAVAILABLE_MESSAGE,
+        ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
+        `A WhatsApp group cannot receive a ${envelope.kind} message`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    if (
+      channel.kind === 'whatsapp_cloud' &&
+      isGroupPeer(envelope.to) &&
+      !isGroupSendKind(envelope.kind)
+    ) {
+      throw new AppError(
+        ERROR_CODES.CHANNEL_CAPABILITY_UNSUPPORTED,
+        `A WhatsApp group cannot receive a ${envelope.kind} message`,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
@@ -228,6 +341,16 @@ export class ChannelDispatcher {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     };
+    if (envelope.kind === 'text') {
+      // The envelope schema carries the largest limit (email's); every other kind keeps WhatsApp's.
+      const max = outboundTextMaxFor(channel.kind);
+      if (envelope.body.length > max) {
+        throw AppError.validation('Outbound message failed validation', [
+          { path: 'body', message: `at most ${max} characters on this channel` },
+        ]);
+      }
+      if (envelope.email && channel.kind !== 'email') unsupported('cc, bcc or a subject');
+    }
     if (envelope.kind === 'template' && !caps.templates) unsupported('templates');
     if (envelope.kind === 'reaction' && !caps.reactions) unsupported('reactions');
     if (envelope.kind === 'media' && !caps.media.includes(envelope.media.mediaKind)) {
@@ -284,6 +407,7 @@ export class ChannelDispatcher {
             status: step.status,
             at: new Date(acceptedAt.getTime() + step.delayMs),
             errorCode: step.errorCode,
+            errorMessage: step.errorMessage,
           },
           { delayMs: step.delayMs },
         );
@@ -305,11 +429,13 @@ export class ChannelDispatcher {
         providerMessageId: string;
         acceptedAt: string;
         plannedReceipts?: PlannedReceipt[];
+        meta?: Record<string, unknown>;
       };
       return {
         providerMessageId: v.providerMessageId,
         acceptedAt: new Date(v.acceptedAt),
         plannedReceipts: v.plannedReceipts ?? [],
+        ...(v.meta ? { meta: v.meta } : {}),
       };
     } catch {
       return null;

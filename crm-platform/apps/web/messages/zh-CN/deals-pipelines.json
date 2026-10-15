@@ -35,7 +35,6 @@
       "notFound": "找不到该交易。它可能已被删除。",
       "planDisabled": "您的套餐不包含销售管道。升级后即可使用。",
       "unexpected": "出了点问题。请稍后重试。",
-      "requestId": "请求 ID",
       "retry": "重试",
       "planLimit": "您已达到套餐上限。",
       "lostReasonRequired": "请选择原因，将交易标记为丢失。",

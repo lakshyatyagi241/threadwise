@@ -19,6 +19,7 @@ import { RoutingEngine } from './routing-engine.service';
 @Injectable()
 export class RoutingInboundListener implements InboundMessageListener, OnModuleInit {
   readonly name = 'team-inbox-routing';
+  readonly runsOnEmail = true as const;
   private readonly logger = new Logger(RoutingInboundListener.name);
 
   constructor(

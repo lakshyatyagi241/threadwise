@@ -8,7 +8,6 @@
         "dismiss": "Tutup"
       },
       "errors": {
-        "requestId": "ID permintaan",
         "retry": "Coba lagi",
         "network": {
           "title": "Tidak dapat terhubung ke server",

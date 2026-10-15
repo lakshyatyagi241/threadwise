@@ -3,8 +3,9 @@
 import { Badge, Button, EmptyState, Select, Spinner, cn } from '@crm/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
-import type { WspMember, WspMembersSummary } from '@crm/contracts';
+import type { MemberLeave, WspMember, WspMembersSummary } from '@crm/contracts';
 import { joinedDate } from '../lib/format';
+import { formatDay, leaveBadge } from '../lib/leave';
 import {
   PRESENCE_DOT,
   canChangeRole,
@@ -15,13 +16,17 @@ import {
   roleOptions,
 } from '../lib/roles';
 import { Avatar } from './parts';
-import { LockIcon, MailIcon, TrashIcon } from './icons';
+import { CalendarIcon, LockIcon, MailIcon, TrashIcon } from './icons';
 
 export interface RowActions {
   onRole: (member: WspMember, roleId: string) => void;
   onReset: (member: WspMember) => void;
   onResend: (member: WspMember) => void;
   onRemove: (member: WspMember) => void;
+  /** Opens the leave and delegate dialog of this member (BL-112). */
+  onLeave: (member: WspMember) => void;
+  /** Open leaves of the workspace and its calendar day, for the badge beside a name. */
+  leaves: { items: readonly MemberLeave[]; today: string };
   /** The member a call is in flight for: its controls are disabled. */
   busyId: string | null;
 }
@@ -77,6 +82,7 @@ function MemberRow({
   const joined = joinedDate(member.joinedAt, locale);
   const busy = actions.busyId === member.id;
   const isMe = member.id === me.id;
+  const badge = leaveBadge(actions.leaves.items, member.id, actions.leaves.today);
   const roleLabel = (tier: WspMember['tier'], name: string) =>
     tier === 'custom' ? name : tt(tier);
 
@@ -97,6 +103,19 @@ function MemberRow({
             <div className="truncate font-mono text-[10.5px] text-muted-foreground">
               {member.email}
             </div>
+            {badge && (
+              <Badge
+                tone="warning"
+                className="mt-0.5 text-[10.5px]"
+                data-testid={`leave-badge-${member.email}`}
+              >
+                {badge.kind === 'now'
+                  ? badge.until
+                    ? t('onLeaveUntil', { date: formatDay(badge.until, locale) })
+                    : t('onLeaveOpen')
+                  : t('leaveFrom', { date: formatDay(badge.from, locale) })}
+              </Badge>
+            )}
           </div>
         </div>
       </td>
@@ -146,6 +165,17 @@ function MemberRow({
       </td>
       <td className="py-3 pe-2 ps-1 text-end sm:pe-5 sm:ps-3">
         <div className="inline-flex items-center gap-1">
+          {member.status === 'active' && (
+            <IconAction
+              label={t('leaveAction')}
+              tone="primary"
+              disabled={busy}
+              testId={`leave-${member.email}`}
+              onClick={() => actions.onLeave(member)}
+            >
+              <CalendarIcon />
+            </IconAction>
+          )}
           {canResend(member, me) && (
             <IconAction
               label={t('resendAction')}

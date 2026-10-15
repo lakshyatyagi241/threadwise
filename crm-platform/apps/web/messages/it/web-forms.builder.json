@@ -51,7 +51,9 @@
         "generic": "Problema: {reason}",
         "reason": {
           "crm_required_unbound": "Una proprietà richiesta dal tuo workspace non è nel modulo.",
-          "no_contact_point": "Aggiungi un campo email o telefono collegato al contatto, così ogni invio può essere associato a una persona."
+          "no_contact_point": "Aggiungi un campo email o telefono collegato al contatto, così ogni invio può essere associato a una persona.",
+          "payment_no_gateway": "Collega un gateway di pagamento in grado di creare link di pagamento, oppure disattiva il pagamento.",
+          "captcha_not_configured": "Il CAPTCHA è impostato su sempre attivo, ma la piattaforma non ha un CAPTCHA. Scegli un'altra impostazione oppure chiedi all'amministratore della piattaforma di aggiungerne uno."
         },
         "code": {
           "no_fields": "Aggiungi almeno un campo.",
@@ -129,7 +131,14 @@
         "custom": "Personalizzata",
         "requiredByCrm": "Obbligatorio",
         "inForm": "Nel modulo",
-        "full": "Il modulo ha raggiunto il limite di blocchi."
+        "full": "Il modulo ha raggiunto il limite di blocchi.",
+        "section": {
+          "contact": "Contatto",
+          "contactAddress": "Indirizzo del contatto",
+          "company": "Azienda",
+          "companyAddress": "Indirizzo dell'azienda"
+        },
+        "addAddress": "Aggiungi tutti i campi indirizzo"
       },
       "list": {
         "title": "Campi",

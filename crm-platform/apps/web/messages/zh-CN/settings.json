@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "电子邮件",
-        "description": "连接邮箱，在收件箱中收发邮件。",
-        "keywords": "邮箱, smtp, imap, gmail, outlook, 发件人"
+        "description": "连接 Gmail 或 Google Workspace 邮箱，让团队在共享收件箱中阅读和回复客户邮件。",
+        "keywords": "邮箱, gmail, google workspace, 共享收件箱, 客服邮件, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -309,7 +309,73 @@
         "label": "自动分配",
         "description": "按轮询或规则，自动将新对话分配给合适的坐席。",
         "keywords": "路由, 轮询, 分配, 坐席, 收件箱规则, 分发, 负责人"
+      },
+      "web": {
+        "label": "网站聊天",
+        "description": "为您的网站聊天创建的机器人，以及每个机器人所运行的小组件。",
+        "keywords": "网页, 网站, 小组件, 聊天机器人, 嵌入, 在线聊天"
+      },
+      "message-logs": {
+        "label": "消息日志",
+        "description": "导出您的消息投递日志，最多可回溯一年，文件将发送到您的邮箱。",
+        "keywords": "导出, 投递日志, 历史记录, 归档, csv, 消息"
+      },
+      "billing-subscriptions": {
+        "label": "订阅",
+        "description": "查看续订内容、已付至何时，并可取消。",
+        "keywords": "订阅, 续订, 自动续订, 取消, 自动扣款, 付款失败, 扣款"
+      },
+      "lead-scoring": {
+        "label": "AI 线索评分",
+        "description": "用 AI 为每位联系人评分，自主选择发送的内容，并查看费用。",
+        "keywords": "线索评分, 评分, ai, 热, 温, 冷, openrouter, 费用, 资格审核"
+      },
+      "help-assistant": {
+        "label": "帮助助手",
+        "description": "开启助手，为团队提供指引或代为完成步骤。",
+        "keywords": "ai, 助手, 智能体, 指南, 帮助, 自动化"
+      },
+      "consent": {
+        "label": "同意与 STOP 回复",
+        "description": "设置 STOP 和 START 词语、确认回复、退订提示行，以及营销是否需要已记录的同意。",
+        "keywords": "同意, 退订, 重新订阅, 取消订阅, stop, start, gdpr, 合规, 隐私, 营销"
+      },
+      "inbox-tags": {
+        "label": "会话标签",
+        "description": "创建团队用于会话并据以筛选收件箱的标签。它们与联系人使用的标签相同。",
+        "keywords": "标签, 标记, 会话标签, 分类, 整理, 筛选"
+      },
+      "growth": {
+        "label": "增长",
+        "description": "高意向线索、受众、营销活动回复，以及其他团队可据以行动的事项，均由对话和营销活动分析得出。",
+        "keywords": "增长, 高意向线索, 受众, 互动, 已流失, 营销活动回复, 转化倾向, 退订, 试点"
+      },
+      "sla-policies": {
+        "label": "响应目标",
+        "description": "设置团队回复和解决的时限（SLA），会话错过目标时收到提醒。",
+        "keywords": "sla, 响应时间, 首次回复, 解决, 超时, 目标, 营业时间"
+      },
+      "team-performance": {
+        "label": "团队绩效",
+        "description": "查看每位客服今天、本周或本月回复和解决的速度。",
+        "keywords": "报表, 分析, 客服, 响应时间, 首次回复, 已解决, 工作量, 绩效"
+      },
+      "contact-assignment": {
+        "label": "联系人分配",
+        "description": "自动把新联系人和商机分配给合适的人，并跳过休假的人。",
+        "keywords": "分配, 负责人, 轮流分配, 新联系人, 新商机, 休假, 线索路由"
+      },
+      "privacy-requests": {
+        "label": "数据请求",
+        "description": "答复询问您持有其哪些数据的人：身份核验、导出、带预览的删除，以及可留存的证明。",
+        "keywords": "隐私, gdpr, 数据请求, dsar, 数据主体访问, 导出数据, 删除, 被遗忘权, 删除个人数据, 法律保留"
+      },
+      "compliance-center": {
+        "label": "合规中心",
+        "description": "帮助您履行隐私保护义务的工具:您适用的法律、隐私联系人、告知声明和链接、子处理者、免打扰时段,以及已落实事项的清单。",
+        "keywords": "合规, 隐私, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, 投诉处理官, 子处理者, dpa, 条款, 隐私政策, 免打扰时段, 禁止来电, 清单, 儿童"
       }
-    }
+    },
+    "backToMarketplace": "返回应用市场"
   }
 }

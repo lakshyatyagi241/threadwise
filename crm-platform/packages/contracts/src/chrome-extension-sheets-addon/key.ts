@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { extSheetsCaptureSchema } from './addon';
 
 /**
  * The member's personal Sheets key and the add-on setup page (TW-EXT-001 to 006). The key is what the add-on sends as a bearer token; the
@@ -30,6 +31,8 @@ export type ExtSheetsKeyStatus = z.infer<typeof extSheetsKeyStatusSchema>;
 /** Answer to generate: the new status plus the secret, which is never returned again. A previous key stops working at once. */
 export const extSheetsKeyIssuedSchema = extSheetsKeyStatusSchema.extend({
   key: z.string().regex(EXT_SHEETS_KEY_PATTERN),
+  /** `<api>/api/v1/sheets-addon/webhook/<key>`: the one value the add-on's Initial Setup needs. Shown once, like the key. */
+  webhookUrl: z.string().url(),
   /** True when this replaced a key that was active. */
   rotated: z.boolean(),
 });
@@ -90,6 +93,10 @@ export const extSheetsOverviewSchema = z.object({
     writeCatalog: z.boolean(),
   }),
   files: z.array(extSheetsFileSchema),
+  /** The URL the add-on's Initial Setup asks for: the API origin and path with the key last. Masked here; the whole URL is shown once, with a new key. */
+  webhookUrl: z.string().nullable(),
+  /** The last call the add-on made to the webhook (test or data); null until one arrived or after a day. */
+  lastCapture: extSheetsCaptureSchema.nullable(),
   /** Shops and recent products of the workspace; empty when the member's role cannot read the catalog. */
   shops: z.array(extSheetsShopSchema),
   productCount: z.number().int(),

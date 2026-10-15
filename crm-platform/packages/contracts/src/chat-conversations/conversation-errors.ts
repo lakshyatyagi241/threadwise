@@ -15,4 +15,11 @@ export const CONVERSATION_ERROR_CODES = {
   MESSAGE_NOT_RETRYABLE: 'MESSAGE_NOT_RETRYABLE',
   /** The send names a media upload that does not exist, belongs to another workspace, or already expired. */
   MESSAGE_MEDIA_NOT_FOUND: 'MESSAGE_MEDIA_NOT_FOUND',
+  /** The export's dates are not a range inside the log's retention (from after to, in the future, or older than a year). */
+  MESSAGE_LOG_EXPORT_RANGE_INVALID: 'MESSAGE_LOG_EXPORT_RANGE_INVALID',
+  /** One export per workspace at a time: the last one is still queued or running. */
+  MESSAGE_LOG_EXPORT_IN_PROGRESS: 'MESSAGE_LOG_EXPORT_IN_PROGRESS',
+  MESSAGE_LOG_EXPORT_NOT_FOUND: 'MESSAGE_LOG_EXPORT_NOT_FOUND',
+  /** The file is not ready yet, or it has expired. */
+  MESSAGE_LOG_EXPORT_NOT_READY: 'MESSAGE_LOG_EXPORT_NOT_READY',
 } as const;

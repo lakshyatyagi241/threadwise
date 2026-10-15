@@ -8,7 +8,6 @@
     "common": {
       "loading": "Caricamento",
       "retry": "Riprova",
-      "requestId": "ID richiesta",
       "cancel": "Annulla",
       "back": "Indietro",
       "close": "Chiudi",

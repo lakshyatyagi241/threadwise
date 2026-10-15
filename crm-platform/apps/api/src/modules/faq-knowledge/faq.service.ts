@@ -6,6 +6,7 @@ import {
   type CreateFaqEntryInput,
   type FaqBulkResult,
   type FaqEntry,
+  type FaqFlowNodesResponse,
   type FaqEntryListResponse,
   type FaqVariation,
   type ListFaqEntriesQuery,
@@ -43,7 +44,7 @@ const duplicateQuestion = (): AppError =>
 const limitReached = (what: string, max: number): AppError =>
   new AppError(
     ERROR_CODES.FAQ_LIMIT_REACHED,
-    `This workspace is at its limit of ${max} ${what}.`,
+    `This flow is at its limit of ${max} ${what}.`,
     HttpStatus.UNPROCESSABLE_ENTITY,
   );
 
@@ -65,31 +66,49 @@ export class FaqService {
 
   // --- reads --------------------------------------------------------------------------------------------------------
 
-  async list(query: ListFaqEntriesQuery): Promise<FaqEntryListResponse> {
+  async list(flowUuid: string, query: ListFaqEntriesQuery): Promise<FaqEntryListResponse> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     const afterId = query.cursor ? decodeCursor(query.cursor).id : null;
-    const { rows, stats } = await this.db.tx(async (tx) => ({
-      rows: await this.repo.list(tx, orgId, {
-        limit: query.limit,
-        afterId,
-        search: query.search,
-        status: query.status,
-        category: query.category,
-        indexing: query.indexing,
-        model: cfg.embeddingModel,
-      }),
-      stats: await this.repo.stats(tx, orgId, cfg.embeddingModel),
-    }));
+    const { rows, stats } = await this.db.tx(async (tx) => {
+      const flow = await this.repo.requireFlow(tx, orgId, flowUuid);
+      return {
+        rows: await this.repo.list(tx, orgId, flow.id, {
+          limit: query.limit,
+          afterId,
+          search: query.search,
+          status: query.status,
+          category: query.category,
+          indexing: query.indexing,
+          model: cfg.embeddingModel,
+        }),
+        stats: await this.repo.stats(tx, orgId, flow.id, cfg.embeddingModel),
+      };
+    });
     const { items, page } = buildPage(rows, query.limit);
     return { data: items.map(toSummary), page, stats };
   }
 
-  async get(uuid: string): Promise<FaqEntry> {
+  /** The steps of a flow of this workspace; 422 when the flow is not one of its flows. */
+  async flowNodes(flowUuid: string): Promise<FaqFlowNodesResponse> {
+    const orgId = RequestContextStore.orgId();
+    const nodes = await this.db.tx((tx) => this.repo.flowNodes(tx, orgId, flowUuid));
+    if (nodes === null) {
+      throw new AppError(
+        ERROR_CODES.FAQ_FLOW_NOT_FOUND,
+        'That flow is not in this workspace.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return { data: nodes };
+  }
+
+  async get(flowUuid: string, uuid: string): Promise<FaqEntry> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     return this.db.tx(async (tx) => {
-      const row = await this.repo.findByUuid(tx, orgId, uuid, cfg.embeddingModel);
+      const flow = await this.repo.requireFlow(tx, orgId, flowUuid);
+      const row = await this.repo.findByUuid(tx, orgId, flow.id, uuid, cfg.embeddingModel);
       if (!row) throw AppError.notFound('FAQ', uuid);
       return toEntry(row, await this.repo.listVariations(tx, orgId, row.id, cfg.embeddingModel));
     });
@@ -97,15 +116,16 @@ export class FaqService {
 
   // --- entries ------------------------------------------------------------------------------------------------------
 
-  async create(input: CreateFaqEntryInput): Promise<FaqEntry> {
+  async create(flowUuid: string, input: CreateFaqEntryInput): Promise<FaqEntry> {
     const ctx = RequestContextStore.require();
     const cfg = await this.engineOn();
     try {
       return await this.db.tx(async (tx) => {
-        if ((await this.repo.countFaqs(tx, ctx.orgId)) >= cfg.maxFaqs)
+        const owner = await this.repo.requireFlow(tx, ctx.orgId, flowUuid);
+        if ((await this.repo.countFaqs(tx, ctx.orgId, owner.id)) >= cfg.maxFaqs)
           throw limitReached('FAQs', cfg.maxFaqs);
-        const write = await this.writeOf(tx, ctx.orgId, input);
-        if (await this.repo.questionTaken(tx, ctx.orgId, write.question, null))
+        const write = await this.writeOf(tx, ctx.orgId, owner.id, input);
+        if (await this.repo.questionTaken(tx, ctx.orgId, owner.id, write.question, null))
           throw duplicateQuestion();
         const extra = this.freshTexts(write.question, input.variations);
         if (1 + extra.length > cfg.maxVariationsPerFaq)
@@ -114,10 +134,10 @@ export class FaqService {
         await this.repo.syncQuestionVariation(tx, ctx.orgId, id, write.question);
         await this.repo.insertVariations(tx, ctx.orgId, id, extra, 'manual');
         if (input.resolveLogId) {
-          const log = await this.logs.findByUuid(tx, ctx.orgId, input.resolveLogId);
+          const log = await this.logs.findByUuid(tx, ctx.orgId, owner.id, input.resolveLogId);
           if (log) {
             await this.logs.resolve(tx, ctx.orgId, log.internalId);
-            if (log.query) await this.logs.resolveSameQuery(tx, ctx.orgId, log.query);
+            if (log.query) await this.logs.resolveSameQuery(tx, ctx.orgId, owner.id, log.query);
           }
         }
         const created = (await this.repo.findById(tx, ctx.orgId, id, cfg.embeddingModel))!;
@@ -133,17 +153,18 @@ export class FaqService {
     }
   }
 
-  async update(uuid: string, input: UpdateFaqEntryInput): Promise<FaqEntry> {
+  async update(flowUuid: string, uuid: string, input: UpdateFaqEntryInput): Promise<FaqEntry> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.engineOn();
     try {
       return await this.db.tx(async (tx) => {
-        const current = await this.repo.findByUuid(tx, orgId, uuid, cfg.embeddingModel);
+        const owner = await this.repo.requireFlow(tx, orgId, flowUuid);
+        const current = await this.repo.findByUuid(tx, orgId, owner.id, uuid, cfg.embeddingModel);
         if (!current) throw AppError.notFound('FAQ', uuid);
-        const write = await this.writeOf(tx, orgId, input);
+        const write = await this.writeOf(tx, orgId, owner.id, input);
         if (
           sameKey(write.question) !== sameKey(current.question) &&
-          (await this.repo.questionTaken(tx, orgId, write.question, current.id))
+          (await this.repo.questionTaken(tx, orgId, owner.id, write.question, current.id))
         ) {
           throw duplicateQuestion();
         }
@@ -165,22 +186,24 @@ export class FaqService {
     }
   }
 
-  async remove(uuid: string): Promise<void> {
+  async remove(flowUuid: string, uuid: string): Promise<void> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     await this.db.tx(async (tx) => {
-      const row = await this.repo.findByUuid(tx, orgId, uuid, cfg.embeddingModel);
+      const owner = await this.repo.requireFlow(tx, orgId, flowUuid);
+      const row = await this.repo.findByUuid(tx, orgId, owner.id, uuid, cfg.embeddingModel);
       if (!row) throw AppError.notFound('FAQ', uuid);
       await this.repo.deleteMany(tx, orgId, [row.id]);
       await this.record(tx, row, 'delete', 'faq.deleted');
     });
   }
 
-  async bulk(input: BulkFaqEntriesInput): Promise<FaqBulkResult> {
+  async bulk(flowUuid: string, input: BulkFaqEntriesInput): Promise<FaqBulkResult> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     return this.db.tx(async (tx) => {
-      const found = await this.repo.idsByUuids(tx, orgId, input.ids);
+      const owner = await this.repo.requireFlow(tx, orgId, flowUuid);
+      const found = await this.repo.idsByUuids(tx, orgId, owner.id, input.ids);
       const ids = found.map((f) => f.id);
       let affected = 0;
       if (input.action === 'delete') {
@@ -209,11 +232,16 @@ export class FaqService {
   // --- variations ---------------------------------------------------------------------------------------------------
 
   /** Adds phrasings; one the FAQ already has (ignoring case and spacing) is skipped. Returns the ones that were new. */
-  async addVariations(uuid: string, input: AddFaqVariationsInput): Promise<FaqVariation[]> {
+  async addVariations(
+    flowUuid: string,
+    uuid: string,
+    input: AddFaqVariationsInput,
+  ): Promise<FaqVariation[]> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.engineOn();
     return this.db.tx(async (tx) => {
-      const faq = await this.repo.findByUuid(tx, orgId, uuid, cfg.embeddingModel);
+      const owner = await this.repo.requireFlow(tx, orgId, flowUuid);
+      const faq = await this.repo.findByUuid(tx, orgId, owner.id, uuid, cfg.embeddingModel);
       if (!faq) throw AppError.notFound('FAQ', uuid);
       const texts = this.freshTexts(faq.question, input.texts);
       const have = await this.repo.variationCount(tx, orgId, faq.id);
@@ -243,6 +271,7 @@ export class FaqService {
   }
 
   async updateVariation(
+    flowUuid: string,
     faqUuid: string,
     variationUuid: string,
     input: UpdateFaqVariationInput,
@@ -251,7 +280,8 @@ export class FaqService {
     const cfg = await this.engineOn();
     try {
       return await this.db.tx(async (tx) => {
-        const faq = await this.repo.findByUuid(tx, orgId, faqUuid, cfg.embeddingModel);
+        const owner = await this.repo.requireFlow(tx, orgId, flowUuid);
+        const faq = await this.repo.findByUuid(tx, orgId, owner.id, faqUuid, cfg.embeddingModel);
         if (!faq) throw AppError.notFound('FAQ', faqUuid);
         const v = await this.repo.findVariation(tx, orgId, faq.id, variationUuid);
         if (!v) throw AppError.notFound('Variation', variationUuid);
@@ -286,11 +316,12 @@ export class FaqService {
     }
   }
 
-  async removeVariation(faqUuid: string, variationUuid: string): Promise<void> {
+  async removeVariation(flowUuid: string, faqUuid: string, variationUuid: string): Promise<void> {
     const orgId = RequestContextStore.orgId();
     const cfg = await this.config.get();
     await this.db.tx(async (tx) => {
-      const faq = await this.repo.findByUuid(tx, orgId, faqUuid, cfg.embeddingModel);
+      const owner = await this.repo.requireFlow(tx, orgId, flowUuid);
+      const faq = await this.repo.findByUuid(tx, orgId, owner.id, faqUuid, cfg.embeddingModel);
       if (!faq) throw AppError.notFound('FAQ', faqUuid);
       const v = await this.repo.findVariation(tx, orgId, faq.id, variationUuid);
       if (!v) throw AppError.notFound('Variation', variationUuid);
@@ -339,11 +370,13 @@ export class FaqService {
   private async writeOf(
     tx: Tx,
     orgId: number,
+    ownerFlowId: number,
     i: {
       question: string;
       answerType: 'text' | 'flow';
       answerText?: string | null;
       flowId?: string | null;
+      flowNodeId?: string | null;
       category?: string | null;
       status?: 'active' | 'paused';
       thresholdOverride?: number | null;
@@ -361,12 +394,25 @@ export class FaqService {
         );
       }
       flowId = flow.id;
+      if (i.flowNodeId) {
+        const nodes = await this.repo.flowNodes(tx, orgId, i.flowId!);
+        if (!nodes?.some((n) => n.id === i.flowNodeId)) {
+          throw new AppError(
+            ERROR_CODES.FAQ_FLOW_NODE_NOT_FOUND,
+            'That step is not in the flow.',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path: 'flowNodeId', message: 'Pick a step that is in this flow.' }],
+          );
+        }
+      }
     }
     return {
+      ownerFlowId,
       question: tidy(i.question),
       answerType: i.answerType,
       answerText: i.answerType === 'text' ? (i.answerText ?? '').trim() : null,
       flowId,
+      flowNodeId: i.answerType === 'flow' && i.flowNodeId ? i.flowNodeId : null,
       category: i.category ? tidy(i.category) : null,
       status: i.status ?? 'active',
       thresholdOverride: i.thresholdOverride ?? null,
@@ -408,6 +454,7 @@ function diff(
     'status',
     'thresholdOverride',
     'flowId',
+    'flowNodeId',
   ] as const) {
     if (a[k] !== b[k]) out[k] = { old: a[k], new: b[k] };
   }

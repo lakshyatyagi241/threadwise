@@ -1,0 +1,216 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "AI lead scoring"
+    },
+    "common": {
+      "loading": "Loading",
+      "retry": "Try again",
+      "dash": "-",
+      "cancel": "Cancel",
+      "errors": {
+        "forbidden": "You do not have permission to do this.",
+        "request": "That request could not be completed.",
+        "unexpected": "Something went wrong on our side. Try again in a moment.",
+        "network": "Could not reach the server. Check your connection and try again.",
+        "validation": "Some values are not valid. Check the highlighted fields.",
+        "notFound": "That item no longer exists."
+      }
+    },
+    "page": {
+      "eyebrow": "Admin · AI · Lead scoring",
+      "title": "AI lead scoring",
+      "description": "Controls whether workspaces can score their contacts with an AI model, which model does it, the limits, and what it costs.",
+      "superOnly": "Only a super admin can see or change AI lead scoring."
+    },
+    "status": {
+      "label": "Lead scoring status",
+      "switch": {
+        "title": "Platform switch",
+        "on": "On",
+        "off": "Off",
+        "hintOn": "Workspaces that opted in can score their contacts.",
+        "hintOff": "No workspace can score contacts, whatever its own setting says."
+      },
+      "model": {
+        "title": "Model",
+        "custom": "A model typed in by hand, not on the list."
+      },
+      "key": {
+        "title": "Platform OpenRouter key",
+        "ready": "Ready",
+        "missing": "Missing",
+        "explainReady": "Workspaces without their own OpenRouter key are scored with this one, and you pay for those scores.",
+        "explainMissing": "Without a platform key, only workspaces that saved their own OpenRouter key can score contacts.",
+        "link": "Open AI keys"
+      },
+      "reach": {
+        "title": "Reach",
+        "workspaces": "Workspaces opted in",
+        "contacts": "Contacts scored"
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Changes apply to every workspace at once. Only the fields you change are saved.",
+      "enabled": {
+        "label": "AI lead scoring",
+        "hint": "Off by default. When on, workspaces that opted in send anonymised contact facts to OpenRouter to get a score from 0 to 100. Turn it off to stop all scoring."
+      },
+      "model": {
+        "label": "Model",
+        "hint": "Prices are US dollars per million tokens, from OpenRouter's list.",
+        "option": "{label} · {input} in / {output} out",
+        "other": "Other OpenRouter model id",
+        "details": "{input} per million input tokens, {output} per million output tokens.",
+        "customLabel": "OpenRouter model id",
+        "customHint": "Any model id from OpenRouter that supports structured output.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limits",
+        "scoresPerHour": "Scores per workspace per hour",
+        "scoresPerHourHint": "A cost guard for workspaces that use the platform key. 0 means no limit.",
+        "retentionDays": "Keep the log for (days)",
+        "retentionDaysHint": "Older runs, and their cost history, are deleted. 7 to 730 days."
+      },
+      "saving": "Saving",
+      "save": "Save changes",
+      "reset": "Discard changes",
+      "changed": "{count, plural, one {# change ready to save} other {# changes ready to save}}",
+      "unchanged": "No changes to save.",
+      "saved": "Lead scoring settings saved.",
+      "errors": {
+        "range": "Enter a value between {min} and {max}.",
+        "integer": "Enter a whole number.",
+        "modelId": "Use an OpenRouter model id such as openai/gpt-6-luna.",
+        "invalid": "This value is not valid."
+      },
+      "confirm": {
+        "title": "Confirm the change",
+        "turnOn": "This lets workspaces that opted in send anonymised contact facts to OpenRouter and spend your platform key's credit.",
+        "turnOff": "This stops all AI lead scoring for every workspace. Scores already saved stay.",
+        "confirm": "Save changes"
+      }
+    },
+    "cost": {
+      "title": "What scoring costs",
+      "description": "Totals from the scoring log, in US dollars.",
+      "last24h": "Last 24 hours",
+      "last30d": "Last 30 days",
+      "scores": "Scores written",
+      "failed": "Failed runs",
+      "tokens": "Tokens",
+      "tokensSplit": "Input / output tokens",
+      "total": "Total cost",
+      "average": "Average per score",
+      "platform": "Paid by the platform key",
+      "footnote": "Costs are the amount OpenRouter reported, or an estimate from token counts when it reported none. Runs billed to a workspace's own key are part of the total but not of the platform's share."
+    },
+    "workspaces": {
+      "title": "Workspaces",
+      "description": "Who uses AI lead scoring and what it cost them over the last 30 days, highest first.",
+      "search": "Search workspaces",
+      "searchPlaceholder": "Workspace name",
+      "limit": "Rows",
+      "limitOption": "{count} rows",
+      "noMatchTitle": "No workspace matches",
+      "noMatchMessage": "Try a different name.",
+      "clearSearch": "Clear search",
+      "emptyTitle": "No workspaces yet",
+      "emptyMessage": "Workspaces appear here once they exist.",
+      "tableLabel": "Workspaces by scoring cost",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "Scoring",
+        "contacts": "Contacts scored",
+        "scores": "Scores, 30 days",
+        "cost": "Cost, 30 days"
+      },
+      "enabled": "On",
+      "disabled": "Off"
+    },
+    "runs": {
+      "title": "Scoring log",
+      "description": "Every scoring attempt across workspaces, newest first, with tokens, cost and who paid.",
+      "refresh": "Refresh",
+      "filters": {
+        "status": "Status",
+        "anyStatus": "Any status",
+        "workspace": "Workspace",
+        "anyWorkspace": "All workspaces",
+        "clear": "Clear filters"
+      },
+      "status": {
+        "ok": "Scored",
+        "kept": "Kept",
+        "failed": "Failed",
+        "skipped": "Skipped"
+      },
+      "trigger": {
+        "created": "Contact created",
+        "updated": "Contact updated",
+        "manual": "Score button",
+        "backfill": "Backfill"
+      },
+      "scoreWas": "{score} (was {previous})",
+      "tokensTitle": "{input} input, {output} output",
+      "costSource": {
+        "vendor": "Reported",
+        "estimate": "Estimate",
+        "none": "No call"
+      },
+      "costSourceHelp": {
+        "vendor": "The cost OpenRouter reported for this call.",
+        "estimate": "No cost was reported, so this is the token count times the model's list price.",
+        "none": "No call was made, so nothing was charged."
+      },
+      "paidBy": {
+        "admin": "Platform",
+        "workspace": "Workspace",
+        "none": "Nobody"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "Platform switch is off",
+        "not_enabled": "Workspace has not opted in",
+        "contact_gone": "Contact was deleted",
+        "manual_score": "Contact has a typed score",
+        "no_key": "No OpenRouter key",
+        "token_allowance": "Token allowance used up",
+        "hourly_limit": "Hourly limit reached",
+        "auth": "OpenRouter refused the key",
+        "rate_limited": "OpenRouter rate limit",
+        "provider": "OpenRouter error",
+        "timeout": "OpenRouter timed out",
+        "bad_response": "Answer was not a valid score"
+      },
+      "noMatchTitle": "No runs match",
+      "noMatchMessage": "No scoring run matches these filters.",
+      "emptyTitle": "No runs yet",
+      "emptyMessage": "Runs appear here once a workspace scores a contact.",
+      "tableLabel": "Scoring runs",
+      "columns": {
+        "time": "Time",
+        "workspace": "Workspace",
+        "contact": "Contact",
+        "trigger": "Trigger",
+        "status": "Status",
+        "score": "Score",
+        "model": "Model",
+        "tokens": "Tokens",
+        "cost": "Cost",
+        "paidBy": "Paid by",
+        "duration": "Duration",
+        "error": "Reason"
+      },
+      "costLegend": "A ~ before a cost marks an estimate from token counts instead of the amount OpenRouter reported.",
+      "loadMore": "Load more",
+      "loadingMore": "Loading"
+    }
+  }
+}

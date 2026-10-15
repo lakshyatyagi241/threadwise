@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "현재 요금제에 포함되어 있지 않습니다. 요금제를 업그레이드하여 전체 기록을 가져오세요.",
+        "fullLockedLink": "요금제 보기"
+      }
+    }
+  }
+}

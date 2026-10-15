@@ -46,7 +46,6 @@
         "copyFailed": "Kopiëren mislukt",
         "loading": "Laden",
         "retry": "Opnieuw proberen",
-        "requestId": "Aanvraag-id",
         "errors": {
           "forbidden": "Je rol staat dit niet toe.",
           "request": "De aanvraag is geweigerd. Laad de pagina opnieuw en probeer het nog eens.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Operator-login",
         "intro": "Deze console is voor de mensen die het platform beheren. Workspacegebruikers loggen in op de hoofdloginpagina.",
-        "requestId": "Aanvraag-id",
         "submit": "Inloggen",
         "submitting": "Inloggen",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Jouw account",
         "title": "Tweestapsverificatie",
         "description": "Bescherm {email} met een authenticator-app. Operatoraccounts zijn de accounts met het hoogste vertrouwen op het platform.",
-        "requestId": "Aanvraag-id",
         "status": {
           "title": "Authenticator-app",
           "on": "Aan",
@@ -181,7 +178,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Bezig",
             "close": "Sluiten",
             "signInAgain": "Opnieuw inloggen",
-            "requestId": "Aanvraag-id",
             "errors": {
               "forbidden": "Alleen een superbeheerder kan deze actie uitvoeren.",
               "unexpected": "De actie is niet voltooid. Controleer het gebeurtenissenlogboek voordat je het opnieuw probeert."
@@ -731,7 +726,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "Gebruik een sitepad zoals /legal/terms, of een volledig http- of https-adres.",
           "senderFormat": "Kies een van de afzenders uit de lijst.",
           "countryFormat": "Gebruik een landcode van twee letters.",
-          "senderRequired": "Kies een afzenderkanaal voordat je het sjabloon aanmaakt."
+          "senderRequired": "Kies een afzenderkanaal voordat je het sjabloon aanmaakt.",
+          "domainFormat": "{entry} is geen geldig domein. Gebruik een naam zoals voorbeeld.nl.",
+          "tooMany": "Maximaal {max} domeinen."
         },
         "policy": {
           "kicker": "Aanmelden",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Max. pogingen"
+          },
+          "businessEmailOnly": {
+            "label": "Alleen zakelijke e-mailadressen",
+            "hintOn": "Gratis aanbieders zoals Gmail, Outlook en Yahoo worden bij het aanmelden geweigerd.",
+            "hintOff": "Iedereen kan zich aanmelden met een gratis privéadres."
+          },
+          "blockDisposableEmail": {
+            "label": "Tijdelijke e-mail blokkeren",
+            "hintOn": "Wegwerp- en tijdelijke domeinen, en domeinen zonder mailserver, worden geweigerd.",
+            "hintOff": "Tijdelijke adressen worden geaccepteerd."
+          },
+          "requirePhoneVerification": {
+            "label": "Geverifieerd mobiel nummer verplicht stellen",
+            "hintOn": "Elke aanmelding moet een eenmalige code bevestigen. Als de code niet kan worden verstuurd, stopt de aanmelding in plaats van de controle over te slaan.",
+            "hintOff": "De codestap wordt alleen uitgevoerd als de aanmeldcode hieronder aan staat."
+          },
+          "blockedEmailDomains": {
+            "label": "Altijd geblokkeerde domeinen",
+            "hint": "Eén domein per regel. Subdomeinen worden ook geblokkeerd. Ze worden geweigerd, ook als «Alleen zakelijke e-mailadressen» uit staat.",
+            "placeholder": "voorbeeld.nl"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "Er is een testcode verstuurd naar {to}.",
             "remaining": "{count, plural, one {# test over dit uur.} other {# tests over dit uur.}}",
             "notShown": "De code wordt hier niet getoond; lees hem af op de telefoon.",
-            "requestId": "Aanvraag-id",
             "errors": {
               "invalidNumber": "Voer het nummer in met landcode, bijvoorbeeld +91 98765 43221.",
               "rateLimited": "Te veel testcodes dit uur. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw.",
@@ -1045,7 +1060,6 @@
           "saved": "Afzender opgeslagen",
           "removed": "Afzender verwijderd",
           "secretRemoved": "Opgeslagen geheim verwijderd",
-          "requestId": "Aanvraag-id",
           "problems": {
             "required": "Dit veld is verplicht.",
             "tooLong": "Maximaal {max} tekens.",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "Die voettekst is niet geaccepteerd.",
             "unexpected": "De voettekst kon niet worden opgeslagen. Probeer het zo meteen opnieuw."
-          },
-          "requestId": "Aanvraag-id"
+          }
+        },
+        "guard": {
+          "kicker": "Aanmeldbeveiliging",
+          "title": "Controle op zakelijke e-mail en mobiel nummer",
+          "description": "Houdt wegwerp- en privéadressen buiten en zorgt dat elk nieuw account een geverifieerd mobiel nummer heeft. Geldt voor aanmelden met e-mail en via social.",
+          "phoneOffWarning": "Met de mobiele controle uit kunnen accounts zonder geverifieerd nummer worden gemaakt, wat massale nepaanmeldingen makkelijker maakt."
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "Annuleren",
           "working": "Verwijderen",
           "error": "Het geheim kon niet worden verwijderd. Probeer het zo meteen opnieuw.",
-          "requestId": "Aanvraag-id",
           "done": "Het opgeslagen {name}-geheim is verwijderd.",
           "names": {
             "google": "Google",
@@ -1416,10 +1433,13 @@
             "storefront_builder": "De builder voor de online winkel.",
             "invoicing": "Facturen, creditnota's, betalingen, verkooporders en belastingtarieven.",
             "forms_and_links": "Formulieren voor leadcaptatie en deelbare links.",
-            "extra_channels": "De kanalen Telegram, Facebook en Instagram.",
+            "extra_channels": "De kanalen Telegram, Facebook, Instagram, LINE, Viber en WeChat.",
             "form_builder": "Gehoste en ingebedde webformulieren die contacten in het CRM aanmaken. De betaalde Formulieren-app beheert deze schakelaar.",
             "waba_groups": "Maak en beheer WhatsApp-groepen vanaf een Cloud API-nummer: uitnodigingslink, deelnameverzoeken, leden. Het nummer moet een Official Business Account zijn.",
-            "sms": "Alleen-verzenden-SMS via Twilio of MSG91: koppel afzenders, verstuur SMS-broadcasts en -campagnes."
+            "sms": "Alleen-verzenden-SMS via Twilio of MSG91: koppel afzenders, verstuur SMS-broadcasts en -campagnes.",
+            "help_agent": "De Hulpassistent in de app: mensen vragen in gewone woorden om een taak en de assistent begeleidt of voert die uit op hun eigen sessie, en vraagt eerst toestemming bij alles wat risicovol is. Verbruikt AI-tokens.",
+            "email_channel": "Koppel Gmail- en Google Workspace-postvakken aan de teaminbox. De betaalde E-mail-app beheert deze schakelaar.",
+            "personal_history_full": "Laat een persoonlijk WhatsApp-nummer de volledige chatgeschiedenis importeren bij de eerste koppeling. Het importeren van recente chats is beschikbaar voor elk abonnement met persoonlijke nummers."
           },
           "units": {
             "days": "Dagen",
@@ -1561,7 +1581,9 @@
             "forms": "Webformulieren",
             "form_submissions_monthly": "Formulierinzendingen per maand",
             "ai_form_generations_monthly": "AI-formulierbuilder-generaties per maand",
-            "sms_monthly": "SMS per maand"
+            "sms_monthly": "SMS per maand",
+            "email_mailboxes": "E-mailpostvakken",
+            "email_monthly": "E-mails per maand"
           },
           "featureGroups": {
             "messaging": "Berichten",
@@ -1596,10 +1618,13 @@
             "storefront_builder": "Winkel- en websitebuilder",
             "invoicing": "Facturatie (facturen, creditnota's, terugkerende facturen)",
             "forms_and_links": "Formulieren, klik-om-te-chatten-links en groepen",
-            "extra_channels": "Telegram-, Facebook- en Instagram-kanalen",
+            "extra_channels": "Telegram-, Facebook-, Instagram-, LINE-, Viber- en WeChat-kanalen",
             "form_builder": "Formulieren (webformulierbuilder)",
             "waba_groups": "WhatsApp-groepen (Cloud API)",
-            "sms": "SMS-kanaal"
+            "sms": "SMS-kanaal",
+            "help_agent": "Hulpassistent (AI, verbruikt tokens)",
+            "email_channel": "E-mailkanaal (Gmail)",
+            "personal_history_full": "Volledige chatgeschiedenis importeren (persoonlijke WhatsApp)"
           },
           "problems": {
             "required": "Dit veld is verplicht.",
@@ -1652,7 +1677,9 @@
             "forms": "Actieve webformulieren (Formulieren-app). Een formulier archiveren maakt zijn plek vrij. 0 = onbeperkt.",
             "form_submissions_monthly": "Formulierinzendingen die in de kalendermaand zijn geaccepteerd, spam uitgezonderd. Boven de limiet wordt een inzending nog steeds bewaard ter beoordeling en nooit weggegooid. 0 = onbeperkt.",
             "ai_form_generations_monthly": "AI-formulierbuilder-generaties in de kalendermaand, inclusief een herstelpoging. 0 = onbeperkt.",
-            "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt."
+            "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
+            "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
+            "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt."
           }
         }
       },
@@ -1664,7 +1691,6 @@
         "saving": "Opslaan",
         "saved": "{count, plural, one {# instelling opgeslagen} other {# instellingen opgeslagen}}",
         "rejected": "Er is niets opgeslagen. {count, plural, one {# veld is} other {# velden zijn}} geweigerd.",
-        "requestId": "Aanvraag-id",
         "unsaved": "{count, plural, one {# niet-opgeslagen wijziging} other {# niet-opgeslagen wijzigingen}}",
         "discard": "Wijzigingen negeren",
         "errors": {

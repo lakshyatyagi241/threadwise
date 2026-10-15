@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { EmptyState } from '@crm/ui';
 import type { SettingsSection } from '@/features/_registry/settings-types';
 import { defaultSection, toSettingsSections } from '@/features/_registry/settings-resolve';
-import { useSettingsTiles } from './settings-context';
+import { useSettingsPageTiles } from './settings-context';
 import { TileCard } from './tile-card';
 
 /**
@@ -13,7 +13,7 @@ import { TileCard } from './tile-card';
  */
 export function SectionPanel({ section }: { section?: SettingsSection }) {
   const t = useTranslations();
-  const tiles = useSettingsTiles();
+  const tiles = useSettingsPageTiles();
   const sections = toSettingsSections(tiles);
   const current = section ?? defaultSection(sections);
   const entry = sections.find((s) => s.section === current);

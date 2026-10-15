@@ -1204,6 +1204,7 @@ describe("the customer's booking page (EXT-APPT-01, TW-APPT-024..026)", () => {
     expect(Object.keys(svc).sort()).toEqual([
       'approvalRequired',
       'color',
+      'consent',
       'description',
       'durationMinutes',
       'introMessage',

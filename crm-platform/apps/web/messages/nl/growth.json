@@ -1,0 +1,433 @@
+{
+  "growth": {
+    "common": {
+      "dismiss": "Negeren",
+      "retry": "Probeer opnieuw",
+      "noAccessTitle": "Je kunt dit scherm niet openen",
+      "noAccess": "Vraag een beheerder om de machtiging “{permission}”."
+    },
+    "errors": {
+      "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je rol mag dit niet doen.",
+      "notAvailable": "De groeipilot is niet beschikbaar voor deze werkruimte.",
+      "featureOff": "Dit onderdeel van de groeipilot staat uit. Zet het aan onder Instellingen.",
+      "actionGone": "Iemand heeft hier al over beslist.",
+      "assistantFailed": "De assistent kon niets voorstellen. Zorg dat je een doelgroep en een goedgekeurde template hebt en probeer het opnieuw.",
+      "undoRefused": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is verder gegaan, of de wijziging is al ongedaan gemaakt.",
+      "conflict": "Iemand heeft deze instellingen eerder opgeslagen. De nieuwste versie is geladen.",
+      "notFound": "Dat bestaat niet meer.",
+      "validation": "Sommige waarden zijn ongeldig. Controleer ze en probeer het opnieuw.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "unexpected": "Er is iets misgegaan. Probeer het opnieuw en neem contact op met support als het blijft gebeuren."
+    },
+    "page": {
+      "title": "Groei",
+      "subtitle": "Wat je campagnes en gesprekken je vertellen, omgezet in acties voor je team. Niets hier stuurt zelf een bericht naar een contact.",
+      "notAvailableTitle": "Geen onderdeel van de pilot",
+      "notAvailable": "De groeipilot staat alleen aan voor geselecteerde werkruimtes. De jouwe hoort daar nog niet bij.",
+      "tabs": {
+        "inbox": "Inbox",
+        "audiences": "Doelgroepen",
+        "campaigns": "Campagnes",
+        "insights": "Inzichten",
+        "autoStage": "Automatische fasewijzigingen",
+        "assistant": "Broadcastassistent",
+        "controls": "Instellingen"
+      }
+    },
+    "digest": {
+      "title": "Vandaag",
+      "quiet": "Er heeft nu niets je aandacht nodig.",
+      "highlights": {
+        "hotLeads": "{count, plural, one {# hete lead is klaar om te kopen} other {# hete leads zijn klaar om te kopen}}",
+        "unanswered": "{count, plural, one {# koopvraag is niet beantwoord} other {# koopvragen zijn niet beantwoord}}",
+        "optOuts": "{count, plural, one {# contact vroeg om te stoppen} other {# contacten vroegen om te stoppen}}",
+        "suggestionsPending": "{count, plural, one {# fasewijziging wacht op een beslissing} other {# fasewijzigingen wachten op een beslissing}}",
+        "campaignReplies": "{count, plural, one {# contact reageerde binnen een dag na een campagne} other {# contacten reageerden binnen een dag na een campagne}}",
+        "lapsed": "{count, plural, one {# klant is stil geworden} other {# klanten zijn stil geworden}}"
+      }
+    },
+    "inbox": {
+      "title": "Groei-inbox",
+      "hint": "Dingen die het bekijken waard zijn. Accepteren voert het werk van dat type uit; negeren sluit het alleen af.",
+      "filter": "Toon",
+      "all": "Alle ({count})",
+      "empty": "Niets in de wacht. Nieuwe items verschijnen hier zodra gesprekken worden gelezen en de dagelijkse controles draaien.",
+      "more": "Toon meer",
+      "doneAccept": "{count, plural, one {# item afgehandeld} other {# items afgehandeld}}",
+      "doneDismiss": "{count, plural, one {# item genegeerd} other {# items genegeerd}}",
+      "someFailed": "{count, plural, one {# item kon niet worden afgehandeld} other {# items konden niet worden afgehandeld}}",
+      "openContact": "Contact openen",
+      "someone": "Een contact",
+      "dismiss": "Negeren",
+      "types": {
+        "hot_lead": "Hete lead",
+        "unanswered_intent": "Onbeantwoord",
+        "registration_issue": "Registratieprobleem",
+        "purchase_route": "Doorsturen naar een persoon",
+        "opt_out": "Vroeg om te stoppen",
+        "lapsed": "Stil geworden",
+        "service_due": "Onderhoud gepland",
+        "status_reply": "Bestelstatus"
+      },
+      "titles": {
+        "hot_lead": "{name} is klaar om te kopen",
+        "unanswered_intent": "{name} vroeg naar kopen en niemand antwoordde",
+        "registration_issue": "{name} meldt een probleem met de registratie",
+        "purchase_route": "Geef {name} aan {user}",
+        "opt_out": "{name} vroeg om te stoppen",
+        "lapsed": "{name} is stil geworden",
+        "service_due": "{name}: {rule} is aan de beurt",
+        "status_reply": "{name} vroeg naar de bestelling"
+      },
+      "accept": {
+        "hot_lead": "Markeren als afgehandeld",
+        "unanswered_intent": "Markeren als afgehandeld",
+        "registration_issue": "Markeren als afgehandeld",
+        "purchase_route": "Gesprek toewijzen",
+        "opt_out": "Opt-out vastleggen",
+        "lapsed": "Klaar",
+        "service_due": "Klaar",
+        "status_reply": "Klaar"
+      },
+      "facts": {
+        "routeOwner": "{name} is eigenaar van dit contact.",
+        "routeLeastBusy": "{name} heeft de minste openstaande gesprekken.",
+        "lapsedDays": "Geen opens of berichten gedurende {count, plural, one {# dag} other {# dagen}}.",
+        "issue": {
+          "missing_confirmation": "Heeft geen bevestiging ontvangen.",
+          "payment_problem": "Meldt een betalingsprobleem.",
+          "wrong_info": "Zegt dat sommige gegevens niet kloppen."
+        }
+      }
+    },
+    "audiences": {
+      "title": "Doelgroepen",
+      "hint": "Groepen contacten, bepaald op basis van wat ze echt hebben gedaan. Synchroniseer een doelgroep om een contactgroep te vullen waarnaar je een campagne kunt sturen.",
+      "empty": "Nog geen doelgroepen. Zet een onderdeel aan onder Instellingen.",
+      "synced": "“{name}” heeft nu {count, plural, one {# contact} other {# contacten}}.",
+      "lastSync": "Groep “{name}”, laatst gesynchroniseerd {when}.",
+      "notSynced": "Groep “{name}” wordt bij de eerste synchronisatie aangemaakt.",
+      "sync": "Synchroniseren met een groep",
+      "resync": "Opnieuw synchroniseren",
+      "errors": {
+        "forbidden": "Je rol mag geen doelgroepen synchroniseren.",
+        "failed": "De doelgroep kon niet worden gesynchroniseerd. Probeer het opnieuw."
+      },
+      "kinds": {
+        "engaged": {
+          "label": "Betrokken",
+          "description": "Heeft onlangs meerdere campagnes geopend."
+        },
+        "silent": {
+          "label": "Stil",
+          "description": "Heeft campagnes ontvangen maar er geen geopend."
+        },
+        "lapsed": {
+          "label": "Afgehaakt",
+          "description": "Klanten zonder opens of berichten gedurende lange tijd."
+        },
+        "hot_chat": {
+          "label": "Heet in chat",
+          "description": "Contacten van wie de laatste chatanalyse zegt dat ze klaar zijn om te kopen."
+        },
+        "high_propensity": {
+          "label": "Waarschijnlijk te converteren",
+          "description": "De top tien procent volgens het conversiemodel."
+        },
+        "service_due": {
+          "label": "Onderhoud gepland",
+          "description": "Contacten van wie de onderhoudsdatum is aangebroken."
+        }
+      }
+    },
+    "campaigns": {
+      "title": "Reacties op campagnes",
+      "hint": "Contacten die binnen 24 en 72 uur na verzending reageerden, geteld vanuit de inbox.",
+      "stamp": "Reacties nu vastleggen",
+      "stamped": "{count, plural, one {# reactie vastgelegd} other {# reacties vastgelegd}}.",
+      "stampFailed": "De reacties konden niet worden vastgelegd. Probeer het opnieuw.",
+      "empty": "Er zijn nog geen campagnes verzonden.",
+      "totals": {
+        "sent": "Verzonden",
+        "read": "Gelezen",
+        "replied24h": "Reactie binnen 24 uur",
+        "replied72h": "Reactie binnen 72 uur"
+      },
+      "cols": {
+        "campaign": "Campagne",
+        "sent": "Verzonden",
+        "read": "Gelezen",
+        "replied24h": "24 u",
+        "replied72h": "72 u",
+        "replyRate": "Reactiepercentage"
+      }
+    },
+    "insights": {
+      "sendTimes": {
+        "title": "Beste verzendmoment",
+        "hint": "Wanneer je contacten campagnes lezen en je schrijven, in jouw tijdzone.",
+        "empty": "Nog niet genoeg activiteit om dat te zeggen.",
+        "best": "Beste uren: {hours} ({zone}).",
+        "quiet": "Rustigste uren: {hours}.",
+        "chart": "Activiteit per uur van de dag",
+        "sample": "Gebaseerd op {count, plural, one {# gebeurtenis} other {# gebeurtenissen}}."
+      },
+      "propensity": {
+        "title": "Conversiemodel",
+        "hint": "Leert van de contacten die klant werden welk gedrag bij conversie hoort en scoort iedereen.",
+        "recompute": "Nu opnieuw leren",
+        "done": "Het model is bijgewerkt.",
+        "failed": "Het model kon niet worden bijgewerkt. Probeer het opnieuw.",
+        "contacts": "Gescoorde contacten",
+        "converted": "Geconverteerd",
+        "auc": "Hoe goed het rangschikt",
+        "capture": "Geconverteerd in de top tien procent",
+        "captureHint": "Een willekeurige rangschikking zou 10% zijn",
+        "none": "Niet gemeten",
+        "trained": "Het model heeft geleerd van je geconverteerde contacten.",
+        "notTrained": "Nog te weinig geconverteerde contacten om van te leren, dus er worden vaste gewichten gebruikt.",
+        "computedAt": "Bijgewerkt {when}.",
+        "drivers": "Wat de score bepaalt",
+        "features": {
+          "campaigns_opened_30d": "Geopende campagnes (30 dagen)",
+          "campaigns_received_30d": "Ontvangen campagnes (30 dagen)",
+          "messages_from_contact_30d": "Berichten die ze schreven (30 dagen)",
+          "links_clicked_30d": "Aangeklikte links (30 dagen)",
+          "groups": "Groepen waarin ze zitten",
+          "has_email": "Heeft een e-mailadres",
+          "chat_messages_total": "Berichten in de chat",
+          "age_days": "Dagen sinds toevoeging"
+        }
+      },
+      "quality": {
+        "title": "Hoe goed het werkt",
+        "hint": "Of de suggesties worden gebruikt, hoe goed de leadscore de geconverteerde contacten onderscheidt en wat de AI kostte, over de afgelopen 30 dagen.",
+        "none": "Niet gemeten",
+        "scoreAuc": "Kwaliteit van de leadscore",
+        "scoreAucHint": "{scored} gescoord, {converted} geconverteerd",
+        "calls": "AI-aanroepen",
+        "cost": "AI-kosten",
+        "autoApplied": "Automatisch gewijzigd",
+        "undone": "{count} ongedaan gemaakt",
+        "suggestions": {
+          "chat": "Fasesuggesties uit chats",
+          "engagement": "Fasesuggesties uit campagnes"
+        },
+        "suggestionLine": "{accepted} geaccepteerd, {dismissed} genegeerd, {pending} wachtend.",
+        "cols": {
+          "type": "Inbox-item",
+          "done": "Afgehandeld",
+          "dismissed": "Genegeerd",
+          "open": "Open"
+        },
+        "actionTypes": {
+          "hot_lead": "Hete lead",
+          "unanswered_intent": "Onbeantwoord",
+          "registration_issue": "Registratieprobleem",
+          "purchase_route": "Doorsturen naar een persoon",
+          "opt_out": "Vroeg om te stoppen",
+          "lapsed": "Stil geworden",
+          "service_due": "Onderhoud gepland",
+          "status_reply": "Bestelstatus"
+        }
+      },
+      "enrichment": {
+        "title": "Bedrijfsgegevens",
+        "hint": "Zoekt bedrijfsgegevens op voor contacten met een zakelijk e-mailadres en toont ze bij het contact.",
+        "run": "Volgende batch opzoeken",
+        "asked": "{count, plural, one {# contact opgezocht} other {# contacten opgezocht}}.",
+        "failed": "Het opzoeken is mislukt. Probeer het opnieuw.",
+        "status": "{provider}: {found} gevonden, {notFound} niet gevonden, {failed} mislukt.",
+        "notConfigured": "Er is geen opzoekservice gekoppeld op de server, dus deze schakelaar heeft nog geen effect."
+      }
+    },
+    "autoStage": {
+      "title": "Automatische fasewijzigingen",
+      "hint": "Alleen analyses waar de AI heel zeker van is, tot een dagelijkse limiet. Elke wijziging kan worden teruggezet zolang niemand het contact sindsdien heeft verplaatst.",
+      "today": "{done} van {cap} vandaag gebruikt.",
+      "empty": "Er is nog niets automatisch gewijzigd.",
+      "contact": "Een contact",
+      "moved": "Verplaatst van {from} naar {to}.",
+      "confidence": "{percent}% zeker",
+      "undone": "Teruggezet",
+      "undo": "Terugzetten",
+      "undoDone": "Het contact staat weer waar het stond.",
+      "undoRefused": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is verder gegaan.",
+      "undoFailed": "De wijziging kon niet ongedaan worden gemaakt. Probeer het opnieuw."
+    },
+    "assistant": {
+      "title": "Broadcastassistent",
+      "hint": "Zeg wat je wilt bereiken. De assistent stelt een van je doelgroepen en een van je goedgekeurde templates voor, en weegt daarbij de reacties die elke template echt kreeg. Er wordt niets verzonden of aangemaakt.",
+      "goal": "Wat wil je bereiken?",
+      "goalHint": "Bijvoorbeeld: herinner iedereen die zich heeft geregistreerd aan het evenement van zaterdag.",
+      "placeholder": "Herinner geregistreerde contacten aan het evenement van zaterdag",
+      "ask": "Campagne voorstellen",
+      "audience": "Doelgroep",
+      "audienceValue": "{name} ({count} contacten)",
+      "template": "Template",
+      "replyRate": "{percent} reageert binnen een dag",
+      "sendAt": "Verzenden rond",
+      "considered": "Gekozen uit {audiences, plural, one {# doelgroep} other {# doelgroepen}} en {templates, plural, one {# template} other {# templates}}."
+    },
+    "controls": {
+      "readOnly": "Je kunt deze instellingen zien maar niet wijzigen.",
+      "saved": "Instellingen opgeslagen.",
+      "discard": "Wijzigingen negeren",
+      "save": "Opslaan",
+      "problem": {
+        "numbers": "Een van de getallen valt buiten het bereik. Controleer de drempels.",
+        "serviceRules": "Onderhoudsregel op regel {line} heeft niet de vorm: label | datumeigenschap | dagen na | dagen tot.",
+        "customPhrases": "Zin op regel {line} heeft niet de vorm: zin = intentie."
+      },
+      "groups": {
+        "measure": {
+          "title": "Meten",
+          "hint": "Metingen die alleen worden gelezen. Ze wijzigen niets."
+        },
+        "audiences": {
+          "title": "Doelgroepen en fasen",
+          "hint": "Bepaal met wie je praat en stel fasewijzigingen voor op basis van wat contacten met campagnes doen."
+        },
+        "chats": {
+          "title": "Chats lezen",
+          "hint": "Gebruikt de chatanalyse van AI-leadscoring, dus die moet aanstaan. Persoonsgegevens worden deels afgeschermd voordat een chat wordt gelezen."
+        },
+        "assist": {
+          "title": "Assistenten",
+          "hint": "Hulp bij beslissingen. Er wordt niets naar een contact gestuurd."
+        }
+      },
+      "features": {
+        "campaign_response": {
+          "label": "Echte campagnereacties",
+          "hint": "Tel de contacten die na een campagne reageerden en corrigeer de reactiecijfers."
+        },
+        "send_times": {
+          "label": "Beste verzendmoment",
+          "hint": "Toon de uren waarop je contacten lezen en schrijven."
+        },
+        "propensity": {
+          "label": "Conversiemodel",
+          "hint": "Geef elk contact een score voor hoe waarschijnlijk het is dat het converteert."
+        },
+        "quality": {
+          "label": "Kwaliteitsdashboard",
+          "hint": "Toon hoe vaak suggesties worden gebruikt en wat de AI kost."
+        },
+        "daily_digest": {
+          "label": "Dagoverzicht",
+          "hint": "Een kort overzicht van de werkruimte boven aan dit scherm."
+        },
+        "engagement_audiences": {
+          "label": "Betrokkenheidsdoelgroepen",
+          "hint": "Betrokken, stille en afgehaakte contacten, klaar om campagnes naar te sturen."
+        },
+        "engagement_stage_rules": {
+          "label": "Fasesuggesties uit campagnes",
+          "hint": "Stel voor een contact verder te verplaatsen als het campagnes blijft openen."
+        },
+        "service_rules": {
+          "label": "Onderhoudsherinneringen en opvolging",
+          "hint": "Vind contacten van wie de onderhouds- of aankoopdatum aan de beurt is, met je eigen regels."
+        },
+        "enrichment": {
+          "label": "Bedrijfsgegevens",
+          "hint": "Zoek bedrijfsgegevens op voor contacten met een zakelijk e-mailadres."
+        },
+        "intent_fields": {
+          "label": "Chatintentie bij het contact",
+          "hint": "Schrijf het onderwerp van de chat naar de eigenschap “AI-intentie”, zodat een flow erop kan reageren."
+        },
+        "language_detect": {
+          "label": "Chattaal",
+          "hint": "Noteer in welke taal elke chat is."
+        },
+        "auto_notes": {
+          "label": "Samenvattingsnotities van chats",
+          "hint": "Voeg een korte samenvatting van de chat als notitie toe aan het contact."
+        },
+        "hot_lead_alerts": {
+          "label": "Meldingen voor hete leads",
+          "hint": "Maak een melding en breng de eigenaar op de hoogte als een contact duidelijk klaar is om te kopen."
+        },
+        "unanswered_watch": {
+          "label": "Onbeantwoorde koopvragen",
+          "hint": "Markeer koop- of prijsvragen die niemand heeft beantwoord."
+        },
+        "handover_summary": {
+          "label": "Samenvatting bij overdracht",
+          "hint": "Zet bovenaan een samenvatting van de chat zodra die aan een persoon wordt overgedragen."
+        },
+        "purchase_routing": {
+          "label": "Kopers doorsturen naar een persoon",
+          "hint": "Stel voor wie een chat moet overnemen als het contact wil kopen."
+        },
+        "registration_check": {
+          "label": "Registratieproblemen",
+          "hint": "Markeer contacten die zeggen te hebben betaald of zich te hebben geregistreerd maar geen bevestiging kregen."
+        },
+        "status_reply": {
+          "label": "Order- en reparatiestatus",
+          "hint": "Bereid de status van een bestelling of reparatie voor als een klant ernaar vraagt."
+        },
+        "optout_detection": {
+          "label": "Opt-outverzoeken",
+          "hint": "Markeer contacten die vragen om te stoppen; accepteren legt het vast in het toestemmingsregister."
+        },
+        "broadcast_assistant": {
+          "label": "Broadcastassistent",
+          "hint": "Stel een doelgroep en een template voor bij een doel."
+        },
+        "auto_stage": {
+          "label": "Automatische fasewijzigingen",
+          "hint": "Verplaats een contact als de AI heel zeker is, tot een dagelijkse limiet, met ongedaan maken."
+        }
+      },
+      "thresholds": {
+        "title": "Drempels",
+        "hint": "De getallen die de onderdelen hierboven gebruiken.",
+        "hotLeadConfidence": "Zekerheid voor een hete lead",
+        "hotLeadConfidenceHint": "Hoe zeker de analyse moet zijn, van 0,5 tot 1.",
+        "unansweredHours": "Uren voordat een vraag als onbeantwoord telt",
+        "unansweredHoursHint": "Van 1 tot 168.",
+        "lapsedDays": "Dagen voordat een klant als afgehaakt telt",
+        "lapsedDaysHint": "Van 7 tot 730.",
+        "engagedOpens": "Geopende campagnes om als betrokken te tellen",
+        "engagedOpensHint": "Binnen 30 dagen.",
+        "stageMinOpens": "Geopende campagnes om een fasewijziging voor te stellen",
+        "stageWindowDays": "Dagen terugkijken hiervoor",
+        "autoMinConfidence": "Zekerheid voor een automatische wijziging",
+        "autoMinConfidenceHint": "Van 0,8 tot 1.",
+        "autoDailyCap": "Automatische wijzigingen per dag",
+        "autoDailyCapHint": "De limiet voor de hele werkruimte.",
+        "requireGroup": "Stel alleen een fasewijziging voor bij contacten die in een groep zitten"
+      },
+      "rules": {
+        "title": "Je eigen regels en woorden",
+        "hint": "Eén item per regel.",
+        "statusFields": "Statuseigenschappen",
+        "statusFieldsHint": "Contacteigenschappen met een order- of reparatiestatus, zoals repair_status.",
+        "serviceRules": "Onderhoudsregels",
+        "serviceRulesHint": "Label | datumeigenschap | dagen na | dagen tot (optioneel).",
+        "serviceRulesExample": "Batterij vervangen | purchase_date | 700 | 760",
+        "customPhrases": "Knop- en trefwoordtaps",
+        "customPhrasesHint": "Zin = intentie. Intenties: {intents}.",
+        "customPhrasesExample": "Garantiebewijs bekijken = post_purchase",
+        "extraMaskTerms": "Woorden die altijd verborgen moeten worden",
+        "extraMaskTermsHint": "Een merk, een adres of een naam die nooit naar de AI mag worden gestuurd."
+      },
+      "confirmEnrich": {
+        "title": "Bedrijfsgegevens opzoeken?",
+        "body": "Om bedrijfsgegevens te vinden, wordt het zakelijke e-mailadres van een contact naar de opzoekservice gestuurd. Persoonlijke e-mailadressen worden niet verzonden.",
+        "yes": "Aanzetten",
+        "no": "Nu niet"
+      }
+    },
+    "contactCard": {
+      "title": "Groei",
+      "propensity": "Kans op conversie: {score} van de 100.",
+      "computedAt": "Bijgewerkt {when}."
+    }
+  }
+}

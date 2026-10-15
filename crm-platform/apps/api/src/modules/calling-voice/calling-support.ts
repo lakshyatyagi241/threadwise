@@ -6,25 +6,50 @@ import { AppError } from '../../common/errors/app-error';
 import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
 import type { WabaConnection } from '../../infra/providers/whatsapp-cloud-api-waba/waba-admin.port';
 import { WabaConnectService } from '../whatsapp-cloud-api-waba';
+import { metaReason, reasonDetail } from './calling-meta-errors';
 import type { CallsRepository, NumberRow } from './calls.repository';
 
-export const unprocessable = (code: keyof typeof ERROR_CODES, message: string) =>
-  new AppError(ERROR_CODES[code], message, HttpStatus.UNPROCESSABLE_ENTITY);
+export const unprocessable = (
+  code: keyof typeof ERROR_CODES,
+  message: string,
+  details?: Array<{ path: string; message: string }>,
+) => new AppError(ERROR_CODES[code], message, HttpStatus.UNPROCESSABLE_ENTITY, details);
 
 export const notFound = (code: keyof typeof ERROR_CODES, what: string) =>
   new AppError(ERROR_CODES[code], `${what} not found`, HttpStatus.NOT_FOUND);
 
-/** Meta's reason, as a refusal the caller can show. `prefix` says what was being asked ("Meta refused permission_request"). */
+/** Meta appends "(code N[/sub], trace X)" to its sentence; the trace id is for logs, never for the person reading the toast. */
+const stripMetaSuffix = (text: string): string =>
+  text.replace(/\s*\(code \d+(?:\/\d+)?(?:, trace [\w-]+)?\)\s*$/, '').trim();
+
+/** Meta code 138009: too many call-permission requests to the same customer in the window. */
+const PERMISSION_REQUEST_LIMIT = 138009;
+
+/**
+ * Meta's reason, as a refusal the caller can show. `prefix` says what was being asked ("Meta refused permission_request"). The problem
+ * carries a stable `reason` (EXT-CALL-009) that the web turns into words; `message` stays Meta's own sentence for logs and for a reason
+ * that is `unknown`.
+ */
 export function refused(err: unknown, prefix: string): AppError {
   if (err instanceof WabaApiError) {
+    const reason = metaReason(err);
+    if (err.code === PERMISSION_REQUEST_LIMIT) {
+      return unprocessable(
+        'CALL_META_REFUSED',
+        'WhatsApp limits how often you can ask this customer for call permission. Try again later.',
+        reasonDetail(reason),
+      );
+    }
     return unprocessable(
       'CALL_META_REFUSED',
-      `${prefix} (${err.status}): ${err.userMessage ?? err.message}`,
+      `${prefix} (${err.status}): ${stripMetaSuffix(err.userMessage ?? err.message)}`,
+      reasonDetail(reason),
     );
   }
   return unprocessable(
     'CALL_META_REFUSED',
     `${prefix}: ${err instanceof Error ? err.message : 'unknown error'}`,
+    reasonDetail('unknown'),
   );
 }
 

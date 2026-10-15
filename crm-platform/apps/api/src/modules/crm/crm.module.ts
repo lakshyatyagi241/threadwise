@@ -11,6 +11,13 @@ import { CompaniesController } from './companies/companies.controller';
 import { CompaniesRepository } from './companies/companies.repository';
 import { CompaniesService } from './companies/companies.service';
 import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
+import { ContactAssignmentController } from './contact-assignment/contact-assignment.controller';
+import { ContactAssignmentEngine } from './contact-assignment/contact-assignment.engine';
+import { ContactAssignmentRepository } from './contact-assignment/contact-assignment.repository';
+import { ContactAssignmentService } from './contact-assignment/contact-assignment.service';
+import { OwnerReassignController } from './owner-reassign/owner-reassign.controller';
+import { OwnerReassignRepository } from './owner-reassign/owner-reassign.repository';
+import { OwnerReassignService } from './owner-reassign/owner-reassign.service';
 import { ContactBulkRepository } from './contact-bulk/contact-bulk.repository';
 import { ContactBulkService } from './contact-bulk/contact-bulk.service';
 import { ContactDedupeController } from './contact-dedupe/contact-dedupe.controller';
@@ -50,6 +57,9 @@ import { DealActivitiesRepository } from './deals/deal-activities.repository';
 import { DealActivitiesService } from './deals/deal-activities.service';
 import { DealBoardService } from './deals/deal-board.service';
 import { DealEngine } from './deals/deal-engine.service';
+import { CrmDashboardController } from './crm-dashboard/crm-dashboard.controller';
+import { CrmDashboardRepository } from './crm-dashboard/crm-dashboard.repository';
+import { CrmDashboardService } from './crm-dashboard/crm-dashboard.service';
 import { DealReportsRepository } from './deals/deal-reports.repository';
 import { DealReportsService } from './deals/deal-reports.service';
 import { DealsPlan, SalesPipelineGuard } from './deals/deals-plan';
@@ -101,6 +111,8 @@ import {
   HmacGenericGateway,
   ManualTransferGateway,
 } from '../../infra/providers/invoice-payments/invoice-payment-gateways';
+import { ContactConsentModule } from '../contact-consent';
+import { PrivacyModule } from '../privacy';
 import { CreditNotesController } from './invoicing/credit-notes.controller';
 import { CreditNotesRepository } from './invoicing/credit-notes.repository';
 import { CreditNotesService } from './invoicing/credit-notes.service';
@@ -167,12 +179,20 @@ import { TagsService } from './tags/tags.service';
  */
 @Module({
   // PlansCoreModule: the contact and tag caps (TW-CON-026) are plan entitlements.
-  imports: [PlansCoreModule, CheckoutOrdersMerchantPaymentsModule, PlatformSettingsModule],
+  imports: [
+    PlansCoreModule,
+    CheckoutOrdersMerchantPaymentsModule,
+    PlatformSettingsModule,
+    ContactConsentModule,
+    PrivacyModule,
+  ],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
     // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`
     // or Express reads "stats" as an id.
     ContactBulkController,
+    OwnerReassignController,
+    ContactAssignmentController,
     ContactDedupeController,
     ContactImportController,
     ContactsController,
@@ -196,6 +216,7 @@ import { TagsService } from './tags/tags.service';
     // Deals: `deals/board`, `deals/reports` and `deals/tasks` are literal paths declared before `deals/:id` inside the controller.
     DealsController,
     ContactDealsController,
+    CrmDashboardController,
     PipelinesController,
     PipelineStagesController,
     LostReasonsController,
@@ -237,6 +258,11 @@ import { TagsService } from './tags/tags.service';
     ContactGroupsService,
     ContactGroupsRepository,
     ContactBulkService,
+    OwnerReassignRepository,
+    OwnerReassignService,
+    ContactAssignmentRepository,
+    ContactAssignmentEngine,
+    ContactAssignmentService,
     ContactBulkRepository,
     ContactDedupeService,
     ContactImportService,
@@ -281,6 +307,8 @@ import { TagsService } from './tags/tags.service';
     DealActivitiesService,
     DealBoardService,
     DealReportsService,
+    CrmDashboardRepository,
+    CrmDashboardService,
     PipelinesRepository,
     PipelinesService,
     LostReasonsService,
@@ -328,11 +356,16 @@ import { TagsService } from './tags/tags.service';
   exports: [
     ContactsService,
     ContactsRepository,
+    // The growth pilot writes its chat summary as a note (modules/growth-pilot).
+    ContactNotesRepository,
     ContactQuotaService,
     ContactResolverService,
     CONTACT_RESOLVER,
     ContactGroupsService,
     ContactBulkService,
+    OwnerReassignRepository,
+    OwnerReassignService,
+    ContactAssignmentEngine,
     ContactImportEngine,
     MergeTagService,
     // The API Library lists the contact properties a response can be saved into (modules/api-library).

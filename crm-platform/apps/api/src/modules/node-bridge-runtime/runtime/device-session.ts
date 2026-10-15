@@ -2,10 +2,13 @@ import { decideClose, isMismatch, QR_MIN_GAP_MS, QR_STALL_MS, shortStatus } from
 import type { DeviceStateReason } from '@crm/contracts';
 import type { RuntimeStatus } from './device-status';
 import type {
+  GroupEvent,
   GroupSnapshot,
   ReceiptUpdate,
 } from '../../../infra/providers/node-bridge-runtime/inbound.port';
+import type { HistoryImportChoice } from '../../../infra/providers/node-bridge-runtime/history-sync';
 import type { Normalized } from '../../../infra/providers/node-bridge-runtime/inbound-normalizer';
+import type { HistoryBatch } from '../../../infra/providers/node-bridge-runtime/history.port';
 import type {
   MessageAction,
   SendCommand,
@@ -59,7 +62,17 @@ export interface SessionHost {
   /** What the socket delivered (TW-NODE-016, 018, 020, 021). The runtime hands each to whoever consumes it. */
   inbound?(message: Normalized, media?: Buffer): Promise<void>;
   receipt?(receipt: ReceiptUpdate): Promise<void>;
-  groups?(groups: GroupSnapshot[]): Promise<void>;
+  /** `complete` false: only these groups were re-read after a change; true (the default): the full list the account is in. */
+  groups?(groups: GroupSnapshot[], opts?: { complete: boolean }): Promise<void>;
+  /** One change in one group, as it happened. */
+  groupEvent?(event: GroupEvent): Promise<void>;
+  /** The history import chosen for this link, read from the device row at every start; absent or `none` builds the socket as before. */
+  historyImportFor?(): Promise<HistoryImportChoice>;
+  /**
+   * One bounded batch of the first link's history (TW-WAHIST). Not part of the serialized event chain: a long import must never hold
+   * back a status or a close. The socket does not read the next slice until this resolves.
+   */
+  history?(batch: HistoryBatch): Promise<void>;
 }
 
 /** A send was asked of a device that is not connected (Reference: HTTP 503 `Sender device is not connected.`). */
@@ -131,12 +144,17 @@ export class DeviceSession {
     const generation = ++this.generation;
     try {
       const proxy = await this.host.proxyFor();
-      const sock = await this.factory.create({ ...this.ids, proxy });
+      const historyImport = (await this.host.historyImportFor?.()) ?? 'none';
+      const sock = await this.factory.create({ ...this.ids, proxy, historyImport });
       if (generation !== this.generation) {
         sock.end();
         return;
       }
       this.sock = sock;
+      sock.subscribeHistory?.(async (b) => {
+        if (generation !== this.generation) return;
+        await this.host.history?.(b);
+      });
       sock.subscribe((e) => {
         this.events = this.events.then(() => this.handle(generation, e)).catch(() => undefined);
       });
@@ -266,7 +284,9 @@ export class DeviceSession {
       case 'receipt':
         return this.host.receipt?.(e.receipt);
       case 'groups':
-        return this.host.groups?.(e.groups);
+        return this.host.groups?.(e.groups, { complete: e.complete !== false });
+      case 'group_event':
+        return this.host.groupEvent?.(e.event);
     }
   }
 

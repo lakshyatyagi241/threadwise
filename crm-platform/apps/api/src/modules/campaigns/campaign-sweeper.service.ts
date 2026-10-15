@@ -30,6 +30,7 @@ interface Row {
   schedule_type: string;
   send_date: string | Date | null;
   send_time: string | null;
+  retry_failed?: boolean;
 }
 
 /**
@@ -119,7 +120,7 @@ export class CampaignSweeper {
   /** Back to `scheduled`, due now in the campaign's own zone, so the same pass fires it. */
   private async resumeStalled(tx: Parameters<CampaignsRepository['count']>[0]): Promise<void> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, org_id, timezone, schedule_type FROM wpcampaigns
+      SELECT id, uuid, org_id, timezone, schedule_type, retry_failed FROM wpcampaigns
       WHERE status = 'running' AND coalesce(last_run_at, created_at) < now() - ${`${STALLED_SECONDS} seconds`}::interval
       ORDER BY coalesce(last_run_at, created_at) LIMIT 100`);
     for (const r of res.rows as unknown as Row[]) {
@@ -129,7 +130,7 @@ export class CampaignSweeper {
       const pending = await tx.execute(sql`
         SELECT 1 FROM wp_campaign_contacts
         WHERE org_id = ${orgId} AND campaign_id = ${id}
-          AND (status IN ('queued', 'pending') OR (status = 'failed' AND send_attempts < ${Math.max(1, retryAttempts)}))
+          AND (status IN ('queued', 'pending') OR (status = 'failed' AND send_attempts < ${r.retry_failed === false ? 0 : Math.max(1, retryAttempts)}))
         LIMIT 1`);
       if (pending.rows.length === 0) continue;
       const now = this.runtime.now();
@@ -160,6 +161,13 @@ export class CampaignSweeper {
       const orgId = Number(r.org_id);
       const id = Number(r.campaign_id);
       const c = await this.repo.findById(tx, orgId, id);
+      // A campaign made without "Retry failed messages" leaves its failures final: stamp them so this scan never picks them up again.
+      if (c && !c.retryFailed) {
+        await tx.execute(
+          sql`UPDATE wp_campaign_contacts SET send_attempts = 3 WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'failed' AND send_attempts < 3 AND next_attempt_at IS NULL`,
+        );
+        continue;
+      }
       if (!c || ['cancelled', 'paused', 'draft', 'scheduled', 'running'].includes(c.status))
         continue;
       // A wizard broadcast's frequency-cap failures belong to the wizard's own retry job (24 hours apart, or none): never re-run here.
@@ -169,15 +177,20 @@ export class CampaignSweeper {
       const rows = await tx.execute(sql`
         SELECT id, error_message FROM wp_campaign_contacts
         WHERE org_id = ${orgId} AND campaign_id = ${id} AND status = 'failed' AND send_attempts < ${max} AND next_attempt_at IS NULL`);
-      let retryable = false;
+      const throttled: number[] = [];
       for (const x of rows.rows as Array<{ id: number | string; error_message: string | null }>) {
-        if (isEcosystemThrottle(x.error_message ?? '')) retryable = true;
+        if (isEcosystemThrottle(x.error_message ?? '')) throttled.push(Number(x.id));
         else
           await tx.execute(
             sql`UPDATE wp_campaign_contacts SET send_attempts = ${max} WHERE org_id = ${orgId} AND id = ${Number(x.id)}`,
           );
       }
-      if (!retryable) continue;
+      if (throttled.length === 0) continue;
+      // Each row is picked up once per pass: with a next attempt set it no longer matches this scan, so a run that leaves it
+      // untouched (a closed window, a halt) cannot start the campaign again every ten minutes. The run's own result then rewrites it.
+      await tx.execute(
+        sql`UPDATE wp_campaign_contacts SET next_attempt_at = now() WHERE org_id = ${orgId} AND id = ANY(${orgIdList(throttled)})`,
+      );
       const now = this.runtime.now();
       const zone = c.timezone ?? 'UTC';
       await this.repo.setSchedule(tx, orgId, id, {

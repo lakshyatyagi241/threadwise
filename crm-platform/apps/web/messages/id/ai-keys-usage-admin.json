@@ -14,7 +14,6 @@
     "common": {
       "loading": "Memuat",
       "retry": "Coba lagi",
-      "requestId": "ID permintaan",
       "dismiss": "Tutup",
       "tokens": "{count, number} token",
       "dash": "-",

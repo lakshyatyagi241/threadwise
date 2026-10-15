@@ -568,6 +568,45 @@
           "afterSending": "Dopo l’invio",
           "afterSendingHint": "Attivo: il Flow si ferma qui e prosegue dall’uscita «out» solo quando il cliente paga (l’importo arriva come {paidAmount} {paidCurrency}). Disattivo: la fattura viene inviata e il Flow prosegue subito.",
           "waitUntilPaid": "Attendi il pagamento, poi continua"
+        },
+        "faq": {
+          "intro": {
+            "body": "Confronta un messaggio con le FAQ di questo flusso in base al significato e gli risponde. Esce da <mono>risposto</mono> quando una FAQ ha risposto, e da <mono>nessuna corrispondenza</mono> altrimenti.",
+            "sub": "Funziona anche senza attivare la risposta FAQ automatica di questo flusso. <link>Gestisci le FAQ di questo flusso</link>"
+          },
+          "exitsLabel": "Uscite",
+          "exitMatchedName": "Risposta data",
+          "exitMatched": "una FAQ ha risposto: il suo testo è stato inviato (a meno che l'invio sia disattivato), oppure il suo flusso ha preso il controllo e non torna indietro.",
+          "exitNoMatchName": "Nessuna corrispondenza",
+          "exitNoMatch": "nessuna FAQ era abbastanza vicina, la risposta con FAQ è disattivata per la piattaforma, il flusso o il passaggio collegato non esiste più, oppure il messaggio era vuoto.",
+          "query": "Messaggio da confrontare",
+          "queryHint": "Per impostazione predefinita è l'ultimo messaggio del cliente. Funziona anche una variabile salvata da un passaggio Domanda, ad esempio <mono>{variable}</mono>. Digita / per inserirne una.",
+          "category": "Solo queste FAQ",
+          "allFaqs": "Tutte le FAQ",
+          "loadingCategories": "Caricamento categorie…",
+          "categoryGone": "{name} (nessuna FAQ la usa)",
+          "retry": "Riprova",
+          "minScore": "Punteggio minimo",
+          "sendAnswer": "Invia la risposta al cliente",
+          "sendAnswerToggle": "Invia come messaggio una risposta testuale corrispondente",
+          "sendAnswerOnHint": "Una FAQ testuale corrispondente viene inviata al cliente. Una FAQ che avvia un flusso continua in quel flusso.",
+          "sendAnswerOffHint": "Non viene inviato nulla: la risposta è salvata solo nelle variabili qui sotto, così un passaggio successivo può formulare la risposta da sé. Una FAQ che avvia un flusso continua comunque in quel flusso.",
+          "save": "Salva il risultato come",
+          "saveHint": "Il nome con cui viene salvato il risultato. I passaggi successivi lo leggono come mostrato qui sotto.",
+          "variables": {
+            "answer": "il testo della risposta",
+            "matched": "sì o no",
+            "question": "la domanda della FAQ corrispondente",
+            "score": "quanto era vicina la corrispondenza",
+            "id": "l'ID della FAQ corrispondente"
+          },
+          "noFaqs": "Questo flusso non ha ancora FAQ, quindi questo passaggio esce sempre da nessuna corrispondenza. <link>Aggiungi la prima FAQ di questo flusso</link>",
+          "useWorkspaceScore": "Usa l’impostazione di questo flusso",
+          "minScoreInvalid": "Inserisci un numero da {min} a {max}, oppure usa l’impostazione di questo flusso.",
+          "saveFlowFirst": "Salva prima il flusso. Le sue FAQ si modificano nella scheda FAQ del builder semplice, e questo passaggio risponde da esse.",
+          "categoryHint": "Possono rispondere solo le FAQ di questa categoria. Le categorie provengono dalle FAQ di questo flusso.",
+          "categoriesFailed": "Impossibile caricare le categorie FAQ di questo flusso.",
+          "minScoreHint": "Sostituisce il punteggio di questo flusso solo per questo passaggio, da {min} a {max}. I punteggi dipendono dal modello di embedding della piattaforma, quindi prova un messaggio nel <link>test FAQ</link> di questo flusso prima di scegliere un numero."
         }
       },
       "attrPicker": {
@@ -894,7 +933,12 @@
           "cardGallery": "Galleria di card",
           "cardCount": "{count} card",
           "payLink": "Link di pagamento",
-          "invoice": "Fattura"
+          "invoice": "Fattura",
+          "faqAllFaqs": "Tutte le FAQ",
+          "faqCategory": "FAQ: {name}",
+          "faqScore": "punteggio min. {score}",
+          "faqNotSent": "non inviata",
+          "faqWorkspaceScore": "punteggio del flusso"
         },
         "overlays": {
           "startPinned": "Questo è il punto di partenza (clicca per rimuoverlo)",
@@ -1042,16 +1086,20 @@
           "wordsPlaceholder": "ciao, salve, menu",
           "whatsappNumber": "Numero WhatsApp",
           "noNumberHint": "Nessun numero WhatsApp collegato: collegane uno in Impostazioni, poi scegli qui.",
-          "chooseNumber": "Scegli un numero…"
+          "chooseNumber": "Scegli un numero…",
+          "connectedNumber": "Risponde dal tuo numero WhatsApp collegato: {number}"
         },
         "add": {
           "addStep": "Aggiungi un passaggio",
           "groups": {
             "send": "Invia",
             "ask": "Chiedi al cliente",
-            "handoff": "Passa a un operatore"
+            "handoff": "Passa a un operatore",
+            "logic": "Decidi",
+            "answer": "Risposta"
           },
-          "blockedTitle": "Pulsanti ed elenchi concludono un flow, quindi possono stare solo per ultimi."
+          "blockedTitle": "Pulsanti ed elenchi concludono un flow, quindi possono stare solo per ultimi.",
+          "blockedTitleFaq": "Rispondi da FAQ ha due uscite, quindi può stare solo alla fine."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -1060,7 +1108,11 @@
           "moveUp": "Sposta su",
           "moveDown": "Sposta giù",
           "duplicate": "Duplica",
-          "deleteStep": "Elimina passaggio"
+          "deleteStep": "Elimina passaggio",
+          "faqExits": {
+            "matched": "Risposta data",
+            "no_match": "Nessuna corrispondenza"
+          }
         },
         "editors": {
           "linkLabel": "Dove porta",
@@ -1092,7 +1144,8 @@
             "placeholder": "Pulsante {n}",
             "remove": "Rimuovi pulsante",
             "add": "Aggiungi un pulsante",
-            "saveIn": "Salva il pulsante toccato in"
+            "saveIn": "Salva il pulsante toccato in",
+            "handoff": "Passa a una persona (agente dal vivo)"
           },
           "list": {
             "above": "Messaggio sopra l’elenco",
@@ -1124,7 +1177,9 @@
             "dateFormat": "Formato data",
             "dateFormatHint": "Come il cliente scrive la data. Viene salvata come digitata, con una copia in formato anno-mese-giorno nella variabile _iso.",
             "saveIn": "Salva la risposta in",
-            "retriesHint": "0 continua a chiedere finché la risposta non è corretta."
+            "retriesHint": "0 continua a chiedere finché la risposta non è corretta.",
+            "verifyOtp": "Verifica il numero con un codice monouso",
+            "verifyOtpHint": "Un codice viene inviato al numero (serve il prefisso del paese) e il visitatore lo scrive nella chat. Il numero viene tenuto solo se il codice è giusto; la variabile che termina con _verified dice sì o no."
           },
           "askFile": {
             "accepted": "File accettati",
@@ -1175,9 +1230,59 @@
           },
           "cta": {
             "buttonText": "Testo del pulsante",
-            "opens": "Apre (link)"
+            "opens": "Apre (link)",
+            "type": "Apre",
+            "kinds": {
+              "url": "Una pagina web",
+              "phone": "Una chiamata",
+              "email": "Un'e-mail"
+            },
+            "add": "Aggiungi un altro pulsante",
+            "remove": "Rimuovi pulsante",
+            "opensPhone": "Numero di telefono",
+            "opensEmail": "Indirizzo e-mail"
+          },
+          "carousel": {
+            "intro": "Messaggio sopra le schede",
+            "card": "Scheda {n}",
+            "image": "Link dell'immagine (facoltativo)",
+            "title": "Titolo",
+            "text": "Testo",
+            "buttons": "Pulsanti (fino a 2)",
+            "label": "Testo del pulsante",
+            "addCard": "Aggiungi una scheda",
+            "removeCard": "Rimuovi scheda",
+            "addButton": "Aggiungi un pulsante",
+            "removeButton": "Rimuovi pulsante",
+            "btnKinds": {
+              "reply": "Rispondi in chat",
+              "url": "Apri una pagina web",
+              "phone": "Chiama un numero",
+              "email": "Invia un'e-mail",
+              "agent": "Parla con una persona"
+            }
+          },
+          "condition": {
+            "info": "Aggiungi regole (una variabile, un confronto e un valore). Uniscile con AND o OR e annida gruppi quando serve.",
+            "yes": "Quando le regole sono vere, vai a",
+            "no": "Quando non lo sono, vai a"
+          },
+          "handoff": {
+            "hint": "Il visitatore passa a questo team con la tua nota. Dopo questo pulsante non serve collegare nulla."
+          },
+          "faq": {
+            "exits": {
+              "matched": "Se una FAQ ha risposto, vai a",
+              "no_match": "Se nessuna FAQ ha risposto, vai a"
+            },
+            "exitsHint": {
+              "matched": "A quel punto è stata inviata una risposta testuale. Una FAQ che avvia un flusso continua invece in quel flusso.",
+              "no_match": "Nessuna FAQ era abbastanza vicina, oppure la risposta automatica con FAQ è disattivata."
+            }
           }
-        }
+        },
+        "branchAdd": "Aggiungi un passaggio per «{title}»",
+        "faqEnds": "Questo passaggio chiude questa parte: ciò che viene inviato dopo dipende dal fatto che una FAQ abbia risposto."
       },
       "formsCore": {
         "helpers": {
@@ -1688,6 +1793,23 @@
             "updatedNote": "Si attiva ogni volta che una persona o un'importazione modifica un contatto. Una modifica fatta da un altro flusso non lo avvia."
           }
         }
+      },
+      "webBot": {
+        "aria": "Sezioni del flusso",
+        "build": "Crea",
+        "customize": "Personalizza",
+        "saveFirst": "Salva prima il flusso.",
+        "needsCustomizing": "Il widget usa ancora l’aspetto predefinito. Apri Personalizza.",
+        "customizeFirst": "Personalizza il widget di chat e salvalo una volta prima di pubblicare.",
+        "deploy": "Deploy",
+        "customizeFirstWhatsapp": "Personalizza il pulsante WhatsApp e salvalo una volta prima di pubblicare.",
+        "faqs": "FAQ",
+        "install": "Installa"
+      },
+      "buttonIcon": {
+        "label": "Icona (facoltativo)",
+        "add": "Aggiungi icona",
+        "saveFirst": "Salva il bot una volta per aggiungere un'icona."
       }
     },
     "contracts": {
@@ -1963,6 +2085,14 @@
         "api_library": {
           "label": "API (dalla libreria)",
           "description": "Richiama un'API salvata dalla Libreria API"
+        },
+        "carousel": {
+          "label": "Carosello",
+          "description": "Schede scorrevoli con immagini e pulsanti"
+        },
+        "faq": {
+          "label": "Rispondi da FAQ",
+          "description": "Confronta un messaggio con le tue FAQ"
         }
       },
       "groups": {
@@ -2011,7 +2141,8 @@
         "line": "LINE",
         "wechat": "WeChat",
         "viber": "Viber",
-        "email": "Email"
+        "email": "Email",
+        "web": "Chat del sito web"
       },
       "dateFormats": {
         "ddDmmDyyyy": "DD-MM-YYYY",
@@ -2105,7 +2236,8 @@
         "wrongChannel": "«{node}» non funziona su {channel} — eliminalo oppure riattiva il canale nel nodo Trigger.",
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",
         "noSenderFacebook": "Il nodo Trigger non ha una Pagina Facebook selezionata — scegline una nel passo Trigger.",
-        "noSenderNumber": "Il nodo Trigger non ha un numero selezionato — scegline uno nel passo Trigger."
+        "noSenderNumber": "Il nodo Trigger non ha un numero selezionato — scegline uno nel passo Trigger.",
+        "faqMinScore": "\"{node}\" ha un punteggio minimo fuori dall'intervallo da 0.05 a 0.99 — correggilo o lascialo vuoto per usare l'impostazione del flusso."
       }
     },
     "simpleModel": {
@@ -2184,6 +2316,18 @@
         "askLocation": {
           "label": "La loro posizione",
           "help": "Attendi che il cliente condivida una posizione"
+        },
+        "carousel": {
+          "label": "Carosello",
+          "help": "Schede scorrevoli con immagini e pulsanti"
+        },
+        "condition": {
+          "label": "Condizione",
+          "help": "Ramifica in base a ciò che il cliente ha detto o salvato, con regole AND / OR"
+        },
+        "faq": {
+          "label": "Rispondi da FAQ",
+          "help": "Confronta il messaggio del cliente con le tue FAQ. Termina questo flusso: un'uscita se una FAQ ha risposto, un'altra in caso contrario"
         }
       },
       "typeLabel": {
@@ -2198,7 +2342,10 @@
         "location": "Posizione",
         "template": "Template",
         "cta": "Pulsante link",
-        "assign": "Assegna a un operatore"
+        "assign": "Assegna a un operatore",
+        "carousel": "Carosello",
+        "condition": "Condizione",
+        "faq": "Rispondi da FAQ"
       },
       "stepLabel": {
         "questionOf": "Domanda · {kind}"
@@ -2235,8 +2382,13 @@
         "addRow": "Passo {stage}: aggiungi almeno una riga.",
         "rowTitle": "Passo {stage}: ogni riga deve avere un titolo di fino a {max} caratteri.",
         "rowDescriptionTooLong": "Passo {stage}: una descrizione di riga supera {max} caratteri.",
-        "variableUsed": "Passo {stage}: «{name}» è già usato dal passo {other}; dai a ogni risposta un nome proprio."
-      }
+        "variableUsed": "Passo {stage}: «{name}» è già usato dal passo {other}; dai a ogni risposta un nome proprio.",
+        "carouselCards": "Passaggio {stage}: aggiungi almeno una scheda e dai un titolo a ogni scheda.",
+        "carouselButtons": "Passaggio {stage}: dai un nome a ogni pulsante, e un link, un numero o un indirizzo dove apre qualcosa.",
+        "conditionIncomplete": "Passaggio {stage}: completa le regole della condizione (una variabile e un valore in ciascuna).",
+        "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione del flusso."
+      },
+      "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
     },
     "waboImport": {
       "notes": {
@@ -2244,7 +2396,11 @@
         "buttonNoTarget": "Un pulsante «{type}» («{text}») non ha destinazione in Semplice.",
         "skippedStep": "Passo «{sub}» saltato: Semplice non ha nulla di simile.",
         "leadsOutside": "«{text}» porta a un Flow che non è in questo file; termina qui finché non lo colleghi.",
-        "connectsOutside": "Un passo si collega a un nodo che non è in questo file ({id}); resta non collegato."
+        "connectsOutside": "Un passo si collega a un nodo che non è in questo file ({id}); resta non collegato.",
+        "dateLimits": "Una domanda di data mantiene il formato ma non i limiti (più presto, più tardi, giorni esclusi).",
+        "tooManyButtons": "Un messaggio con pulsanti aveva più scelte di quante ne entrino; i pulsanti in più sono stati omessi.",
+        "agentTeam": "Un pulsante di agente dal vivo è stato mantenuto: scegli il team che riceve la conversazione.",
+        "tooManySlides": "Un carosello aveva più di 10 schede; le schede in più sono state omesse."
       },
       "reasons": {
         "notExport": "Questo file non è un export di Flow. Usa un file .json esportato da Flows, oppure un Flow esportato dalla console wabo.",
@@ -2343,7 +2499,9 @@
       "optionNotConnected": "Porta «{port}» (opzione {n}) non collegata — stop.",
       "buttonNotConnected": "Pulsante «{label}» non collegato — stop.",
       "simPurchase": "Acquisto simulato: {name} → porta «acquistato»",
-      "simAbandon": "Abbandono simulato → porta «abbandonato»"
+      "simAbandon": "Abbandono simulato → porta «abbandonato»",
+      "faqAnswered": "(simulato) Rispondi da FAQ per \"{query}\": la chat di prova non cerca nelle tue FAQ, quindi non viene inviato nulla e {ref} resta vuoto. Si segue l'uscita \"risposta data\".",
+      "faqNoMatch": "(simulato) Rispondi da FAQ per \"{query}\": la chat di prova non cerca nelle tue FAQ e l'uscita \"risposta data\" non è collegata, quindi si segue \"nessuna corrispondenza\". {ref} resta vuoto."
     },
     "templates": {
       "eyebrow": "Modelli di partenza",
@@ -2363,7 +2521,12 @@
       "messaging": "Flow di messaggistica",
       "messagingNote": "WhatsApp, Instagram o Facebook — cambia canale nel nodo Trigger",
       "call": "Chiamata",
-      "callNote": "IVR vocale con AI — ascolta, parla, trasferisci"
+      "callNote": "IVR vocale con AI — ascolta, parla, trasferisci",
+      "subtitleSimple": "Ogni bot è creato per un solo canale, perché non tutti i componenti funzionano su tutti i canali.",
+      "whatsapp": "WhatsApp",
+      "whatsappNote": "Risponde ai clienti su un numero WhatsApp collegato",
+      "web": "Chat del sito web",
+      "webNote": "Un widget di chat da aggiungere al tuo sito web"
     },
     "rename": {
       "title": "Rinomina flow",

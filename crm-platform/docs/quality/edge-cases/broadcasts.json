@@ -1,0 +1,26 @@
+{
+  "module": "broadcasts",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-broadcasts-001",
+      "feature": "broadcast name",
+      "category": "input",
+      "scenario": "a value of 256 (one past BROADCAST_NAME_MAX = 255) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/broadcasts/broadcast.ts"
+    },
+    {
+      "id": "EC-broadcasts-002",
+      "feature": "broadcast share",
+      "category": "input",
+      "scenario": "a value of 1001 (one past BROADCAST_SHARE_MAX = 1000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/broadcasts/broadcast.ts"
+    }
+  ]
+}

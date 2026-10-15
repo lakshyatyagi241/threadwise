@@ -10,13 +10,13 @@
       "install": "Instalar · Marketplace",
       "installed": "Instalado · Marketplace",
       "manage": "Gerenciar app · Marketplace",
-      "requests": "Solicitações · Marketplace"
+      "requests": "Solicitações · Marketplace",
+      "addons": "Complementos · Marketplace"
     },
     "common": {
       "dismiss": "Dispensar",
       "loading": "Carregando",
       "errorTitle": "Não foi possível carregar isto",
-      "requestId": "ID da solicitação",
       "retry": "Tentar novamente",
       "upgrade": "Ver planos e fazer upgrade",
       "opensNewTab": "(abre em uma nova aba)",
@@ -124,7 +124,8 @@
       "moreLabel": "Instalados e solicitações",
       "tabs": {
         "mini_app": "Mini apps",
-        "integration": "Integrações"
+        "integration": "Integrações",
+        "addon": "Complementos"
       },
       "installed": "Instalado",
       "installedLimit": "Instalados ({installed} de {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "Processando",
       "noCheckout": "O checkout não está disponível para este app no momento. Tente novamente em instantes."
+    },
+    "tools": {
+      "open": "Abrir",
+      "empty": {
+        "title": "Nenhum complemento disponível",
+        "message": "Os complementos incluídos no seu perfil e plano aparecerão aqui."
+      },
+      "soon": "Em breve",
+      "upgrade": "Fazer upgrade"
     }
   }
 }

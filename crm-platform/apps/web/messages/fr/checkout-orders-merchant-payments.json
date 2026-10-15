@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp IA"
     },
     "errors": {
-      "requestId": "ID de requête",
       "retry": "Réessayer",
       "network": {
         "title": "Impossible de joindre le serveur",

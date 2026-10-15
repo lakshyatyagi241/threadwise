@@ -4,6 +4,7 @@ import { ToastProvider } from '@crm/ui';
 import { renderAccount } from '@/features/auth-registration-security/account/render-test-utils';
 import type { Definition, FormDetail, FormLiveSettings } from '../lib/types';
 import type { BuilderTabProps } from './builder-types';
+import { KEYS } from '../api/forms';
 import { formUserKeys } from './forms-users';
 import { SettingsTab } from './settings-tab';
 
@@ -42,6 +43,7 @@ function detail(published: boolean): FormDetail {
 }
 
 interface Over {
+  protection?: { available: boolean; version: 'v2' | 'v3' | null; blocked?: number; held?: number };
   draft?: (d: Definition) => Definition;
   live?: Partial<FormLiveSettings>;
   published?: boolean;
@@ -68,7 +70,27 @@ function render(over: Over = {}, locale: 'en' | 'ar' = 'en'): string {
     <ToastProvider>
       <SettingsTab {...props} />
     </ToastProvider>,
-    { locale, seed: [[formUserKeys.members, USERS]] },
+    {
+      locale,
+      seed: [
+        [formUserKeys.members, USERS],
+        ...(over.protection
+          ? ([
+              [
+                KEYS.protection,
+                {
+                  captcha: {
+                    available: over.protection.available,
+                    version: over.protection.version,
+                  },
+                  blockedThisMonth: over.protection.blocked ?? 0,
+                  heldAsSpam: over.protection.held ?? 0,
+                },
+              ],
+            ] as const)
+          : []),
+      ],
+    },
   );
 }
 
@@ -228,7 +250,10 @@ describe('Settings tab: notifications and protection', () => {
   });
 
   it('explains the CAPTCHA modes and keeps the rate limits in a collapsed disclosure', () => {
-    expect(render()).toContain('Uses whatever your workspace has set for public forms.');
+    expect(render()).toContain(
+      'Uses the CAPTCHA your platform administrator has set up for public forms, if there is one.',
+    );
+    expect(render({ live: { captchaMode: 'on' } })).toContain('publishing is refused without one');
     expect(render({ live: { captchaMode: 'off' } })).toContain(
       'No check. Rely on the hidden trap field',
     );
@@ -237,5 +262,42 @@ describe('Settings tab: notifications and protection', () => {
     expect(html).toContain('value="20"');
     expect(html).toContain('value="120"');
     expect(html).toContain('value="5"');
+  });
+});
+
+describe('Settings tab: what protects the form is told truthfully', () => {
+  it('says a platform CAPTCHA exists, with its version', () => {
+    const html = render({ protection: { available: true, version: 'v3' } });
+    expect(html).toContain('A CAPTCHA is set up on this platform (reCAPTCHA v3).');
+  });
+
+  it('says plainly that nothing is checked when the platform has none', () => {
+    const html = render({ protection: { available: false, version: null } });
+    expect(html).toContain('No CAPTCHA is set up on this platform, so nothing is checked here.');
+  });
+
+  it('warns that an always-on form cannot be published without a platform CAPTCHA', () => {
+    const html = render({
+      protection: { available: false, version: null },
+      live: { captchaMode: 'on' },
+    });
+    expect(html).toContain('cannot be published');
+    expect(html).toContain('data-testid="captcha-status"');
+  });
+
+  it('shows what the hidden trap caught, and links to the spam bin only when something is held', () => {
+    const none = render({ protection: { available: true, version: 'v2', blocked: 0, held: 0 } });
+    expect(none).toContain('has not stopped any bots this month');
+    expect(none).not.toContain('tab=spam');
+    const some = render({ protection: { available: true, version: 'v2', blocked: 7, held: 3 } });
+    expect(some).toContain('stopped 7 bots this month');
+    expect(some).toContain('3 submissions are held as spam');
+    expect(some).toContain(`/forms/${A}/submissions?tab=spam`);
+  });
+
+  it('the same in Arabic: real messages, no missing keys', () => {
+    expect(() =>
+      render({ protection: { available: false, version: null, blocked: 2, held: 1 } }, 'ar'),
+    ).not.toThrow();
   });
 });

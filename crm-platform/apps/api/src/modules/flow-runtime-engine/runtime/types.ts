@@ -1,4 +1,9 @@
-import type { FlowRunEndReason, FlowRunSource, FlowRunStatus } from '@crm/contracts';
+import type {
+  FlowRunEndReason,
+  FlowRunSource,
+  FlowRunStatus,
+  FlowStepIoItem,
+} from '@crm/contracts';
 import type { RuntimeGraph } from '../graph/runtime-graph';
 import type { VariableBag } from './variables';
 
@@ -6,6 +11,8 @@ import type { VariableBag } from './variables';
 export interface MenuItem {
   id: string;
   text: string;
+  /** A small picture in front of the button, drawn by the website chat window only (an https address). */
+  icon?: string;
 }
 
 /**
@@ -99,8 +106,38 @@ export interface RunState {
 }
 
 /** A message in the flow's own vocabulary; the sender renders it for the channel or degrades it (TW-FLR-019). */
+/**
+ * What kind of answer a question waits for, for a channel that draws its own input (the website chat window picks the keyboard, a date
+ * picker or an attach button from it). `type` is an Ask node's "validate as" (`text`, `name`, `email`, `phone`, `number`,
+ * `alphanumeric`, `date`) or `file`; `format` is the date shape; `accept` the file extensions a file question allows.
+ */
+export interface InputHint {
+  type: string;
+  format?: string;
+  accept?: string[];
+}
+
+/** A button that opens something outside the chat (a page, a call, an email); only the website chat window draws these. */
+export interface WebLink {
+  label: string;
+  url: string;
+  /** A small picture in front of the button (an https address). */
+  icon?: string;
+}
+
+/** One card of a carousel as the website chat window draws it. */
+export interface CarouselCard {
+  title: string;
+  text: string;
+  image?: string;
+  buttons: Array<
+    { kind: 'reply'; id: string; title: string } | { kind: 'link'; label: string; url: string }
+  >;
+}
+
 export type OutboundMessage =
-  | { kind: 'text'; body: string }
+  | { kind: 'text'; body: string; input?: InputHint; links?: WebLink[] }
+  | { kind: 'carousel'; body: string; cards: CarouselCard[] }
   | {
       kind: 'media';
       mediaKind: 'image' | 'video' | 'audio' | 'document';
@@ -158,7 +195,14 @@ export type NodeResult =
   | { kind: 'park' }
   | { kind: 'end'; reason: FlowRunEndReason }
   /** Sub-flow (TW-FLR-031): replace the running graph with another flow's, keep the variables, start at its first node. */
-  | { kind: 'subflow'; flowId: number | string }
+  /** `startNodeId`: enter the flow at that node instead of its first one (the FAQ's "link to node"). `missPort`: the exit taken when the flow or node cannot be entered (default 1); `missVars`: variables set only in that case. */
+  | {
+      kind: 'subflow';
+      flowId: number | string;
+      startNodeId?: string;
+      missPort?: number;
+      missVars?: Record<string, unknown>;
+    }
   | { kind: 'halt'; reason: string }
   | { kind: 'fail'; code: string; reason: string };
 
@@ -173,6 +217,8 @@ export interface NodeContext {
   render(template: unknown): string;
   /** Adds a line to this step's entry in the run log (a skipped send, a warning). */
   note(text: string): void;
+  /** Records something the node took in (`in`) or produced (`out`) for the run log: a request, a response, a result. Optional: tests build contexts without it. */
+  io?(side: 'in' | 'out', item: FlowStepIoItem): void;
   now(): Date;
 }
 
@@ -204,4 +250,53 @@ export interface InboundReply {
   text: string;
   /** A stored link to the customer's file, set when the wait accepts media. */
   mediaUrl?: string;
+}
+
+/** Where a run goes after one step. The engine persists it; nothing here touches the database, the clock (but `now`) or a queue. */
+export type Transition =
+  /** Run `nodeId` next, after `delayMs` (the humanising pause on a plain move; 0 on a routed choice). */
+  | {
+      t: 'goto';
+      nodeId: string;
+      delayMs: number;
+      /** The exit it left by: the run log shows the branch a Condition took. */
+      port?: number;
+      /** A sub-flow swapped `run.graph` for this flow's: the engine persists the new graph and logs the flow id. */
+      subflowId?: number;
+    }
+  /** The node asked to run another flow in this run: the engine resolves it (it needs the database) and turns this into a `goto`. */
+  | {
+      t: 'subflow';
+      flowId: number | string;
+      startNodeId?: string;
+      missPort?: number;
+      missVars?: Record<string, unknown>;
+    }
+  | { t: 'wait'; wait: NonNullable<RunState['wait']> }
+  | { t: 'sleep'; seconds: number }
+  | {
+      t: 'end';
+      status: Extract<FlowRunStatus, 'completed' | 'failed'>;
+      reason: FlowRunEndReason;
+      failureCode?: string;
+      failureReason?: string;
+    }
+  | { t: 'halt'; reason: string }
+  /** The reply was not an answer: nothing changes. */
+  | { t: 'none' };
+
+export interface StepOutcome {
+  transition: Transition;
+  /** The node that ran, for the run log. */
+  nodeId: string | null;
+  nodeType: string | null;
+  notes: string[];
+  /** One line per message this step sent to the customer, for the run log. */
+  sent?: string[];
+  /** A message of this step did not go out, though the run went on (a media link the provider refused). */
+  sendFailed?: boolean;
+  /** What the node took in and produced, for the run log. */
+  io?: { in: FlowStepIoItem[]; out: FlowStepIoItem[] };
+  /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */
+  saveProperty?: { key: string; value: string };
 }

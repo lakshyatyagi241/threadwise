@@ -4,6 +4,7 @@
  */
 import {
   boolean,
+  check,
   date,
   foreignKey,
   index,
@@ -59,6 +60,8 @@ export const devices = pgTable(
     stateChangedAt: timestamp('state_changed_at', { withTimezone: true }),
     /** Country code + local number as digits, kept by the API; unique per workspace where set. */
     phoneDigits: text('phone_digits'),
+    /** The history import chosen for the pairing in progress (20261204090000): `none`, `recent` or `full`. Reset when the run ends. */
+    historyImportMode: text('history_import_mode').notNull().default('none'),
     /** The risk acknowledgement that led to this device. */
     consentId: idColumn('consent_id'),
     createdAt: createdAt(),
@@ -183,3 +186,159 @@ export const waProviderConfigs = pgTable(
 
 export type WaProviderConfigsRow = typeof waProviderConfigs.$inferSelect;
 export type NewWaProviderConfigsRow = typeof waProviderConfigs.$inferInsert;
+
+/** One member in the cached roster of a personal-number group (`wa_device_groups.participants`). */
+export interface WaDeviceGroupParticipant {
+  jid: string;
+  phone: string | null;
+  lid: string | null;
+  name: string | null;
+  admin: 'superadmin' | 'admin' | null;
+}
+/** One person waiting to be let in (`wa_device_groups.join_requests`). */
+export interface WaDeviceGroupJoinRequest {
+  jid: string;
+  phone: string | null;
+  lid: string | null;
+  name: string | null;
+  requestedAt: string | null;
+}
+
+/**
+ * The groups of a personal (unofficial) number. Mirrors migration 20261120090000_wa_device_groups.sql. `groupJid` is the BARE id (no
+ * `@g.us`), the same as the inbox thread key `g:<id>`. A group the number left is kept with `leftAt` set. `inviteCode` is a bearer secret.
+ */
+export const waDeviceGroups = pgTable(
+  'wa_device_groups',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    deviceId: idColumn('device_id').notNull(),
+    groupJid: text('group_jid').notNull(),
+    subject: text('subject'),
+    description: text('description'),
+    size: integer('size').notNull().default(0),
+    isAdmin: boolean('is_admin').notNull().default(false),
+    announce: boolean('announce').notNull().default(false),
+    restrictInfo: boolean('restrict_info').notNull().default(false),
+    joinApproval: boolean('join_approval').notNull().default(false),
+    memberAddMode: text('member_add_mode').notNull().default('all_member_add'),
+    ownerJid: text('owner_jid'),
+    addressingMode: text('addressing_mode'),
+    inviteCode: text('invite_code'),
+    pictureUrl: text('picture_url'),
+    creationAt: timestamp('creation_at', { withTimezone: true }),
+    syncedAt: timestamp('synced_at', { withTimezone: true }),
+    leftAt: timestamp('left_at', { withTimezone: true }),
+    participants: jsonb('participants')
+      .$type<WaDeviceGroupParticipant[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    joinRequests: jsonb('join_requests')
+      .$type<WaDeviceGroupJoinRequest[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    createdByUserId: idColumn('created_by_user_id'),
+    metaJson: jsonb('meta_json'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_wa_device_groups_org_id_uuid').on(t.orgId, t.uuid),
+    unique('uq_wa_device_groups_device_jid').on(t.orgId, t.deviceId, t.groupJid),
+    foreignKey({
+      name: 'wa_device_groups_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_wa_device_groups_device_id',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_wa_device_groups_created_by_user_id',
+      columns: [t.orgId, t.createdByUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    check(
+      'ck_wa_device_groups_member_add_mode',
+      sql`${t.memberAddMode} in ('all_member_add', 'admin_add')`,
+    ),
+    index('idx_wa_device_groups_list').on(t.orgId, t.deviceId, t.createdAt.desc(), t.id.desc()),
+  ],
+);
+
+export type WaDeviceGroupsRow = typeof waDeviceGroups.$inferSelect;
+export type NewWaDeviceGroupsRow = typeof waDeviceGroups.$inferInsert;
+
+/** One run of the opt-in history import of a personal number. Mirrors 20261204090000_wa_device_history_import.sql. Counts only: no text, no phone. */
+export const waDeviceHistoryImports = pgTable(
+  'wa_device_history_imports',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    deviceId: idColumn('device_id').notNull(),
+    mode: text('mode').notNull(),
+    state: text('state').notNull().default('idle'),
+    requestedByUserId: idColumn('requested_by_user_id'),
+    windowDays: integer('window_days').notNull(),
+    maxMessages: integer('max_messages').notNull(),
+    maxMessagesPerChat: integer('max_messages_per_chat').notNull(),
+    maxChats: integer('max_chats').notNull(),
+    chatsCount: integer('chats_count').notNull().default(0),
+    contactsCount: integer('contacts_count').notNull().default(0),
+    messagesCount: integer('messages_count').notNull().default(0),
+    batchesCount: integer('batches_count').notNull().default(0),
+    progress: smallint('progress').notNull().default(0),
+    errorCode: text('error_code'),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    lastBatchAt: timestamp('last_batch_at', { withTimezone: true }),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_wa_device_history_imports_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'wa_device_history_imports_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_wa_device_history_imports_device',
+      columns: [t.orgId, t.deviceId],
+      foreignColumns: [devices.orgId, devices.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_wa_device_history_imports_user',
+      columns: [t.orgId, t.requestedByUserId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    check('ck_wa_device_history_imports_mode', sql`${t.mode} in ('recent', 'full')`),
+    check(
+      'ck_wa_device_history_imports_state',
+      sql`${t.state} in ('idle', 'running', 'done', 'failed', 'cancelled', 'limit_reached')`,
+    ),
+    check('ck_wa_device_history_imports_progress', sql`${t.progress} between 0 and 100`),
+    check(
+      'ck_wa_device_history_imports_counts',
+      sql`${t.chatsCount} >= 0 and ${t.contactsCount} >= 0 and ${t.messagesCount} >= 0 and ${t.batchesCount} >= 0`,
+    ),
+    uniqueIndex('uq_wa_device_history_imports_active')
+      .on(t.orgId, t.deviceId)
+      .where(sql`${t.state} in ('idle', 'running')`),
+    index('idx_wa_device_history_imports_device').on(t.orgId, t.deviceId, t.id.desc()),
+    index('idx_wa_device_history_imports_sweep')
+      .on(t.state, t.lastBatchAt)
+      .where(sql`${t.state} in ('idle', 'running')`),
+  ],
+);
+
+export type WaDeviceHistoryImportsRow = typeof waDeviceHistoryImports.$inferSelect;

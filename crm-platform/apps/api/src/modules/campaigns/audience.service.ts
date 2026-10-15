@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { Tx } from '@crm/db';
 import { cleanNumbers, parseCsv, parseManualNumbers } from './campaign-rules';
-import { SegmentsService } from '../crm';
+import { ContactsService, SegmentsService } from '../crm';
 import { CampaignsRepository } from './campaigns.repository';
 
 export interface AudienceInput {
@@ -34,12 +34,13 @@ export class CampaignAudienceService {
   constructor(
     private readonly repo: CampaignsRepository,
     private readonly segments: SegmentsService,
+    private readonly contacts: ContactsService,
   ) {}
 
   async resolve(
     tx: Tx,
     orgId: number,
-    userId: number | null,
+    _userId: number | null,
     input: AudienceInput,
   ): Promise<number[]> {
     const merged: number[] = [
@@ -58,16 +59,20 @@ export class CampaignAudienceService {
       const attrs = { ...(csv.attrsByPhone.get(digits) ?? {}) };
       const csvName = attrs.name ?? '';
       delete attrs.name;
-      merged.push(
-        await this.repo.rememberPhone(
-          tx,
-          orgId,
-          userId,
-          digits,
-          csvName !== '' ? csvName : `Recipient · ${digits.slice(-4)}`,
-          attrs,
-        ),
-      );
+      // A typed or uploaded number becomes a contact through the contacts service (identity lookup, the plan's contact cap, default stage
+      // and status, audit). Quiet: a recipient list is not live engagement, so no `contact.created` flows start. It grants NO consent: the
+      // person has not agreed to anything by being on a list.
+      const resolved = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
+        kind: 'phone',
+        value: `+${digits}`,
+        name: csvName !== '' ? csvName : null,
+        createdName: `Recipient · ${digits.slice(-4)}`,
+        quiet: true,
+      });
+      // Over the contact cap (or not a usable number) the number is left out; the audience step cannot send to a non-contact anyway.
+      if (resolved.outcome !== 'found' && resolved.outcome !== 'created') continue;
+      await this.repo.mergeAttributes(tx, orgId, resolved.contactId, attrs);
+      merged.push(resolved.contactId);
     }
 
     const unique = [...new Set(merged)];

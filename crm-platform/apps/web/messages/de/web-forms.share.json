@@ -145,10 +145,20 @@
         "privacyUrl": "Link zur Datenschutzerklärung",
         "privacyUrlHint": "Optional. Wird neben dem Einwilligungstext angezeigt. Muss mit https:// beginnen.",
         "privacyUrlHttps": "Verwenden Sie eine Adresse, die mit https:// beginnt.",
+        "termsUrl": "Link zu den Nutzungsbedingungen",
+        "termsUrlHint": "Optional. Wird neben dem Einwilligungstext und dem Datenschutzlink angezeigt. Muss mit https:// beginnen.",
+        "useWorkspacePrivacy": "Link zur Datenschutzerklärung meines Arbeitsbereichs verwenden",
+        "useWorkspaceTerms": "Link zu den Nutzungsbedingungen meines Arbeitsbereichs verwenden",
         "required": "Zum Absenden muss das Kästchen angehakt sein",
         "requiredHint": "Deaktivieren Sie dies, wenn die Einwilligung optional ist.",
         "marketing": "Marketing-Opt-in",
-        "marketingHint": "Wenn das Kästchen angehakt wird, wird die Marketing-Einwilligung im Kontakt gespeichert. Ein nicht angehaktes Kästchen meldet niemanden an."
+        "marketingHint": "Wenn das Kästchen angehakt wird, wird die Marketing-Einwilligung im Kontakt gespeichert. Ein nicht angehaktes Kästchen meldet niemanden an.",
+        "whatsappHint": "Wirst du diese Kontakte per WhatsApp anschreiben? Verwende einen Hinweis, der das sagt, und erkläre, wie man sich abmeldet. Das angekreuzte Kästchen wird mit genau diesem Text und seiner Version als Nachweis gespeichert.",
+        "whatsappInsert": "WhatsApp-Einwilligungstext verwenden",
+        "whatsappWording": "Ich stimme zu, Updates und Angebote über WhatsApp zu erhalten. Ich kann jederzeit mit STOP antworten, um mich abzumelden.",
+        "coversSms": "Der Wortlaut umfasst SMS",
+        "coversSmsHint": "Nur aktivieren, wenn der Text oben mitteilt, dass per SMS Kontakt aufgenommen werden darf. Wird eine Telefonnummer erfasst, wird SMS zusammen mit WhatsApp und E-Mail erfasst.",
+        "serviceHint": "Diese Zeile ist kein Marketing. Ein angehaktes Kästchen wird als Nachweis gespeichert, dass die Person der Kontaktaufnahme zu ihrer Anfrage zugestimmt hat (nur Servicenachrichten), mit genau diesem Wortlaut und seiner Version. Es meldet niemanden für Marketing an."
       },
       "crm": {
         "title": "Im CRM",
@@ -253,8 +263,8 @@
           "off": "Aus"
         },
         "captchaHints": {
-          "inherit": "Verwendet die Einstellung Ihres Arbeitsbereichs für öffentliche Formulare.",
-          "on": "Besucher müssen die Prüfung bestehen, bevor sie absenden können.",
+          "inherit": "Verwendet das CAPTCHA, das Ihr Plattformadministrator für öffentliche Formulare eingerichtet hat, falls vorhanden.",
+          "on": "Besucher müssen die Prüfung bestehen, bevor sie absenden können. Erfordert ein auf der Plattform eingerichtetes CAPTCHA; ohne eines wird die Veröffentlichung abgelehnt.",
           "off": "Keine Prüfung. Verlassen Sie sich auf das versteckte Fallen-Feld und die Ratenbegrenzungen."
         },
         "retention": "Antworten aufbewahren für (Tage)",
@@ -271,6 +281,17 @@
           "perFormPerMinuteHint": "Übermittlungen an dieses Formular von überall.",
           "perContactPerHour": "Pro Kontakt, pro Stunde",
           "perContactPerHourHint": "Übermittlungen mit derselben E-Mail-Adresse oder Telefonnummer."
+        },
+        "captchaStatus": {
+          "available": "Auf dieser Plattform ist ein CAPTCHA eingerichtet (reCAPTCHA {version}).",
+          "none": "Auf dieser Plattform ist kein CAPTCHA eingerichtet, daher wird hier nichts geprüft. Bitten Sie Ihren Plattformadministrator, eines hinzuzufügen, oder verlassen Sie sich auf das versteckte Fallenfeld und die Ratenbegrenzungen.",
+          "noneOn": "Dieses Formular ist auf „immer prüfen“ gesetzt, aber die Plattform hat kein CAPTCHA, daher prüft es nichts und kann nicht veröffentlicht werden. Bitten Sie Ihren Plattformadministrator, eines hinzuzufügen, oder wählen Sie eine andere Einstellung.",
+          "failed": "Es konnte nicht geprüft werden, ob ein CAPTCHA eingerichtet ist."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Das versteckte Fallenfeld hat diesen Monat keine Bots gestoppt.} one {Das versteckte Fallenfeld hat diesen Monat 1 Bot gestoppt.} other {Das versteckte Fallenfeld hat diesen Monat # Bots gestoppt.}}",
+          "held": "{count, plural, one {1 Einsendung wird als Spam zurückgehalten.} other {# Einsendungen werden als Spam zurückgehalten.}}",
+          "review": "Prüfen"
         }
       }
     }

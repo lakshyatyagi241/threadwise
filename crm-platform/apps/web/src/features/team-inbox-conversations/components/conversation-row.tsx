@@ -1,12 +1,14 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { memo } from 'react';
 import { cn } from '@crm/ui';
 import type { ConversationSummary } from '@crm/contracts';
 import { badgeText } from '../lib/list';
 import { fullStamp, listTime } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
+import { TagChip } from './tag-chip';
+import { SlaBadge } from './sla-badge';
 import { Avatar, ChannelTag } from './parts';
 import { PinIcon } from './icons';
 
@@ -16,6 +18,10 @@ export interface ConversationRowProps {
   nowMs: number;
   showChannel: boolean;
   onOpen: (id: string) => void;
+  /** Selection mode: a click picks the row (shift picks the run up to it) instead of opening it. */
+  selecting?: boolean;
+  selected?: boolean;
+  onSelect?: (id: string, shift: boolean) => void;
 }
 
 /** True when the last message in the thread went out (so the preview starts with "You:"). */
@@ -37,9 +43,13 @@ export const ConversationRow = memo(function ConversationRow({
   nowMs,
   showChannel,
   onOpen,
+  selecting = false,
+  selected = false,
+  onSelect,
 }: ConversationRowProps) {
   const t = useTranslations('team-inbox-conversations.list');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const unread = row.unreadCount > 0;
   const outbound = lastWasOutbound(row);
   const chip = rowWindowChip(row.windowExpiresAt, nowMs);
@@ -49,6 +59,7 @@ export const ConversationRow = memo(function ConversationRow({
   const label = [
     row.title,
     unread ? t('unreadCount', { count: row.unreadCount }) : null,
+    row.imported ? t('imported') : null,
     row.preview,
   ]
     .filter(Boolean)
@@ -60,14 +71,30 @@ export const ConversationRow = memo(function ConversationRow({
         type="button"
         data-testid="inbox-row"
         data-conversation-id={row.id}
-        aria-current={active ? 'true' : undefined}
+        {...(selecting
+          ? { role: 'checkbox' as const, 'aria-checked': selected }
+          : { 'aria-current': active ? ('true' as const) : undefined })}
         aria-label={label}
-        onClick={() => onOpen(row.id)}
+        onClick={(e) => (selecting ? onSelect?.(row.id, e.shiftKey) : onOpen(row.id))}
         className={cn(
           'flex w-full items-start gap-3 border-b border-border px-3 py-2.5 text-start transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-          active ? 'bg-muted' : 'hover:bg-muted/60',
+          selected ? 'bg-primary/10' : active && !selecting ? 'bg-muted' : 'hover:bg-muted/60',
         )}
       >
+        {selecting && (
+          <span
+            aria-hidden="true"
+            data-testid="inbox-row-check"
+            className={cn(
+              'mt-2.5 flex size-4 shrink-0 items-center justify-center rounded border text-[10px] leading-none',
+              selected
+                ? 'border-primary bg-primary text-primary-foreground'
+                : 'border-border bg-background',
+            )}
+          >
+            {selected ? '✓' : ''}
+          </span>
+        )}
         <Avatar id={row.id} name={row.title} />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">
@@ -93,13 +120,13 @@ export const ConversationRow = memo(function ConversationRow({
               )}
               <time
                 dateTime={row.lastMessageAt ?? undefined}
-                title={fullStamp(row.lastMessageAt, locale)}
+                title={fullStamp(row.lastMessageAt, locale, timeZone)}
                 className={cn(
                   'whitespace-nowrap text-[11px]',
                   unread ? 'font-medium text-primary' : 'text-muted-foreground',
                 )}
               >
-                {listTime(row.lastMessageAt, nowMs, locale)}
+                {listTime(row.lastMessageAt, nowMs, locale, timeZone)}
               </time>
             </span>
           </span>
@@ -122,6 +149,22 @@ export const ConversationRow = memo(function ConversationRow({
               >
                 {row.channel.name}
               </span>
+            )}
+            {row.imported && (
+              <span
+                data-testid="inbox-row-imported"
+                title={t('importedHint')}
+                className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground"
+              >
+                {t('imported')}
+              </span>
+            )}
+            <SlaBadge status={row.slaStatus} nowMs={nowMs} compact />
+            {row.labels.slice(0, 2).map((l) => (
+              <TagChip key={l.id} tag={l} />
+            ))}
+            {row.labels.length > 2 && (
+              <span className="text-[10px] text-muted-foreground">+{row.labels.length - 2}</span>
             )}
             {chip && (
               <span

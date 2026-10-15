@@ -10,10 +10,11 @@ import { useCan, useSession } from '@/features/auth-registration-security/shared
 import { ApiError } from '@/lib/api/errors';
 import {
   isUnofficialDisabledError,
-  offerSenders,
+  offerSendersFor,
   submittableSenderKey,
 } from '@/lib/unofficial-whatsapp';
-import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
+import { useUnofficialWhatsappState } from '@/lib/use-unofficial-whatsapp';
+import { withClientHidden } from '../lib/sender-empty';
 import {
   useAttributeCatalog,
   useAudienceContacts,
@@ -44,13 +45,20 @@ import {
   WIZARD_STEPS,
   applyAiCopy,
   initialRecipientMode,
+  emailSkipped,
   recipientTotals,
   stepProblems,
   withRecipientMode,
   type RecipientMode,
   type WizardStep,
 } from '../lib/wizard-model';
-import { coerceForEngine, engineOf, senderOf, templatesFor } from '../lib/engine-gate';
+import {
+  coerceForEngine,
+  engineOf,
+  isEmailEngine,
+  senderOf,
+  templatesFor,
+} from '../lib/engine-gate';
 import { AiModal } from './builder/ai-modal';
 import { BuilderHeader } from './builder/header';
 import { LivePreview } from './builder/live-preview';
@@ -83,10 +91,13 @@ export function BuilderScreen({
 }) {
   const t = useTranslations('campaigns.builder');
   const config = useCampaignConfig(id);
-  const smsChannel = engineOf(initialSenderKey ?? config.data?.senderKey ?? '') === 'sms';
-  const builder = useBuilder(smsChannel ? 'sms' : undefined);
+  // The channel is the picked sender's: an SMS or a mailbox sender is not in the WhatsApp list, so the builder asks for its own list.
+  const channelEngine = engineOf(initialSenderKey ?? config.data?.senderKey ?? '');
+  const builder = useBuilder(
+    channelEngine === 'sms' ? 'sms' : channelEngine === 'email' ? 'email' : undefined,
+  );
   const session = useSession();
-  const zone = session.org.timezone ?? 'UTC';
+  const zone = session.effectiveTimezone;
 
   if (id && config.isLoading) {
     return (
@@ -138,7 +149,8 @@ function Builder({
 }) {
   const t = useTranslations('campaigns.builder');
   // Personal numbers (the unofficial engine) are offered only while the platform has switched it on.
-  const unofficial = useUnofficialWhatsapp();
+  const unofficialState = useUnofficialWhatsappState();
+  const unofficial = unofficialState !== 'off';
   const router = useRouter();
   const qc = useQueryClient();
   const { toast } = useToast();
@@ -193,9 +205,16 @@ function Builder({
   );
   const data = builder.data;
   // What the picked number allows (see lib/engine-gate): its engine, its templates, and the form as that number can send it.
-  const senders = useMemo(
-    () => offerSenders(data?.senders ?? [], unofficial),
-    [data?.senders, unofficial],
+  const offered = useMemo(
+    () => offerSendersFor(data?.senders, unofficialState),
+    [data?.senders, unofficialState],
+  );
+  const senders = useMemo(() => offered ?? [], [offered]);
+  // The list is still on its way (the numbers, or the answer on the platform switch): a skeleton, not an empty select.
+  const sendersLoading = builder.isPending || unofficialState === 'pending';
+  const hidden = useMemo(
+    () => withClientHidden(data?.senders, offered, data?.hidden),
+    [data?.senders, offered, data?.hidden],
   );
   const sender = senderOf(stored.senderKey, senders);
   const engine = engineOf(stored.senderKey);
@@ -265,6 +284,12 @@ function Builder({
     [data?.groups, data?.tags],
   );
   const totals = recipientTotals(form, sizes);
+  // An email campaign only reaches contacts with an address: what the screen can already tell is counted as skipped.
+  const emailChannel = isEmailEngine(engine);
+  const skipped = useMemo(
+    () => (emailChannel ? emailSkipped(form, contacts.data?.data ?? []) : null),
+    [emailChannel, form, contacts.data?.data],
+  );
   const scheduleLabel =
     form.scheduleType === 'now'
       ? t('review.now')
@@ -328,6 +353,8 @@ function Builder({
                   engine={engine}
                   onSender={pickSender}
                   notVerified={notVerified}
+                  hidden={hidden}
+                  loading={sendersLoading}
                 />
               )}
               {step === 'compose' && (
@@ -358,17 +385,23 @@ function Builder({
                     filter: audienceFilter,
                     onFilter: setAudienceFilter,
                   }}
+                  engine={engine}
+                  skipped={skipped}
                   onSample={() => void sampleCsv()}
                   onCsvTooBig={() => toast(t('audience.csvTooBig'), 'danger')}
                 />
               )}
-              {step === 'schedule' && <StepSchedule form={form} patch={patch} minDate={minDate} />}
+              {step === 'schedule' && (
+                <StepSchedule form={form} patch={patch} minDate={minDate} engine={engine} />
+              )}
               {step === 'review' && (
                 <StepReview
                   form={form}
                   senderLabel={senderLabel}
                   scheduleLabel={scheduleLabel}
                   totals={totals}
+                  skipped={skipped}
+                  engine={engine}
                   onGo={go}
                 />
               )}

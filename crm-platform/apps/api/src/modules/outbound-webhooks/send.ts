@@ -58,6 +58,9 @@ export async function send(
   if (secret) headers[WEBHOOK_HEADERS.signature] = sign(secret, timestamp, body);
 
   try {
+    // The address is checked inside the socket's own DNS lookup, so the address that was checked is the address that is connected to:
+    // a name repointed at an internal host between the check above and this call cannot be reached (DNS rebinding), and redirects are
+    // never followed.
     const res = await guardedRequest({
       method: 'POST',
       url: new URL(url),
@@ -65,9 +68,9 @@ export async function send(
       body,
       timeoutMs: TIMEOUT_MS,
       allowPrivate: false,
-      maxBytes: SNIPPET_BYTES * 64,
+      maxBytes: SNIPPET_BYTES,
     });
-    const snippet = Buffer.from(res.body, 'utf8').subarray(0, SNIPPET_BYTES).toString('utf8') || null;
+    const snippet = res.body.slice(0, SNIPPET_BYTES) || null;
     const ok = res.status >= 200 && res.status < 300;
     return {
       ok,
@@ -83,7 +86,8 @@ export async function send(
     };
   } catch (err) {
     const e = err as Error;
-    const timedOut = /timed out/i.test(e.message);
+    const timedOut =
+      e.name === 'TimeoutError' || e.name === 'AbortError' || e.message === 'timed out';
     return fail(timedOut ? `Timed out after ${TIMEOUT_MS / 1000} s` : 'Could not connect');
   }
 }

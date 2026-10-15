@@ -50,6 +50,15 @@ cases, reports every difference, spawns fix sub-agents for the defects and recor
 `.claude/settings.json` blocks the end of the turn until a stamp covers the current state of the feature files, so
 do not wait for it. Skip only on the user's explicit word (`stamp.py write --status skipped --user-approved "..."`).
 
+## Every change gets a security review (mandatory)
+
+Before you say any change is done, ready or opened as a PR, invoke the `security-review-gate` skill. It runs the repo's
+`audit:tenancy`, `audit:authz`, `audit:auth` and dependency audit, a secret scan of the diff, then the built-in
+`security-review` and `code-review` skills, and you triage and fix every confirmed finding. Model reports are unreviewed,
+so read the cited code before acting. It runs before `pre-pr`. A Stop hook in `.claude/settings.json` blocks the end of the turn until a stamp
+covers the current state of the code, so do not wait for it. Skip only on the user's explicit word
+(`security-review-gate/scripts/stamp.py write --status skipped --user-approved "..."`).
+
 ## Every feature gets a help guide (automatic)
 
 The Help center (`/help`, the question mark above Settings, the "?" tips on pages) has one guide per feature, written as markdown in

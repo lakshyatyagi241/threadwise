@@ -1,0 +1,207 @@
+{
+  "calling-voice": {
+    "logs": {
+      "eyebrow": "Werkruimte",
+      "title": "Gespreksoverzicht",
+      "subtitle": "Elk WhatsApp-gesprek dat je team heeft gevoerd of beantwoord, met de duur, wie het afhandelde en de opname.",
+      "sideTip": "Elk WhatsApp-gesprek van en naar je nummers. Filter op datum, status, nummer of teamgenoot om een specifiek gesprek te vinden.",
+      "loading": "Gesprekken laden",
+      "loadFailed": "Het gespreksoverzicht kon niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "emptyTitle": "Nog geen gesprekken",
+      "emptyMessage": "Zodra een klant een van je WhatsApp-nummers belt, of je team een gesprek start vanuit de inbox, verschijnt het hier met de duur, wie het afhandelde en de opname.",
+      "emptyFilteredTitle": "Geen gesprekken voldoen aan deze filters",
+      "emptyFilteredMessage": "Probeer een ruimer tijdsbereik of wis de filters.",
+      "clearFilters": "Filters wissen",
+      "tabs": {
+        "label": "Gespreksweergaven",
+        "log": "Gespreksoverzicht",
+        "analytics": "Analyse"
+      },
+      "range": {
+        "title": "Tijdsbereik",
+        "last24h": "Laatste 24 u",
+        "last7d": "Laatste 7 dagen",
+        "last30d": "Laatste 30 dagen",
+        "custom": "Aangepast bereik",
+        "from": "Van",
+        "to": "Tot",
+        "apply": "Toepassen"
+      },
+      "status": {
+        "title": "Status",
+        "all": "Alle",
+        "completed": "Voltooid",
+        "in-progress": "Nu bezig",
+        "no-answer": "Geen antwoord",
+        "declined": "Geweigerd",
+        "failed": "Mislukt"
+      },
+      "kpi": {
+        "total": "Totaal",
+        "last24h": "Laatste 24 u",
+        "minutes": "{count} min",
+        "completed": "Voltooid",
+        "failed": "Mislukt",
+        "selection": "In deze selectie",
+        "calls": "Gesprekken",
+        "answered": "Beantwoord",
+        "missed": "Gemist",
+        "avgDuration": "Gemiddelde duur",
+        "totalMinutes": "Totaal aantal minuten"
+      },
+      "filters": {
+        "label": "Gesprekken filteren",
+        "searchLabel": "Gesprekken zoeken",
+        "searchPlaceholder": "Telefoonnummer of contactnaam...",
+        "direction": "Richting",
+        "allDirections": "Alle gesprekken",
+        "inbound": "Inkomend",
+        "outbound": "Uitgaand",
+        "number": "Nummer",
+        "allNumbers": "Alle nummers",
+        "agent": "Afgehandeld door",
+        "allAgents": "Iedereen",
+        "apply": "Filteren",
+        "clear": "Wissen"
+      },
+      "table": {
+        "caption": "Gesprekken, nieuwste eerst",
+        "customer": "Klant",
+        "number": "Nummer",
+        "handledBy": "Afgehandeld door",
+        "started": "Gestart",
+        "duration": "Duur",
+        "status": "Status",
+        "actions": "Acties",
+        "open": "Openen",
+        "inbound": "Inkomend",
+        "outbound": "Uitgaand",
+        "none": "-"
+      },
+      "paging": {
+        "label": "Pagina's",
+        "showing": "{from}-{to} van {total} gesprekken weergegeven",
+        "beyond": "Deze pagina ligt voorbij de laatste ({pages} pagina's).",
+        "previous": "Vorige",
+        "next": "Volgende",
+        "page": "Pagina {page} van {pages}"
+      },
+      "detail": {
+        "breadcrumb": "Kruimelpad",
+        "back": "Gespreksoverzicht",
+        "loading": "Gesprek laden",
+        "loadFailed": "Dit gesprek kon niet worden geladen.",
+        "notFound": "Dit gesprek is niet gevonden. Het hoort mogelijk bij een andere werkruimte of valt buiten de gesprekken die je kunt zien.",
+        "retry": "Opnieuw proberen",
+        "handledBy": "Afgehandeld door {name}",
+        "handler": {
+          "none": "Door niemand afgehandeld",
+          "ai": "AI-assistent",
+          "voicemail": "Voicemail"
+        },
+        "openContact": "Contact openen",
+        "openInbox": "Openen in inbox",
+        "tiles": {
+          "duration": "Duur",
+          "number": "Nummer",
+          "answered": "Beantwoord",
+          "ended": "Beëindigd"
+        },
+        "reasons": {
+          "unknown": "Het gesprek is mislukt.",
+          "COMPLETED": "Voltooid",
+          "REJECTED": "Het gesprek is geweigerd.",
+          "DECLINED": "Het gesprek is geweigerd.",
+          "BUSY": "De klant was in een ander gesprek.",
+          "NO_ANSWER": "Niemand nam op.",
+          "MISSED": "De klant heeft het gesprek gemist.",
+          "CANCELLED": "Het gesprek is geannuleerd.",
+          "FAILED": "WhatsApp meldde dat het gesprek is mislukt.",
+          "NO_PERMISSION": "De klant had nog geen gesprekken toegestaan, dus er is geen gesprek gestart.",
+          "META_REFUSED": "WhatsApp weigerde het gesprek te starten."
+        },
+        "timeline": {
+          "title": "Tijdlijn",
+          "count": "{count, plural, one {# stap} other {# stappen}}",
+          "empty": "Voor dit gesprek zijn geen stappen vastgelegd."
+        },
+        "steps": {
+          "dial_sent": "Gesprek gestart",
+          "dial_failed": "Gesprek kon niet worden gestart",
+          "connect": "Gesprek verbonden met WhatsApp",
+          "pre_accept_sent": "Voorbereiden om op te nemen",
+          "accept_sent": "Gesprek beantwoord",
+          "accept_failed": "Opnemen mislukt",
+          "reject_sent": "Gesprek geweigerd",
+          "terminate_sent": "Ophangverzoek verzonden",
+          "terminate": "Gesprek beëindigd",
+          "recording_stored": "Opname opgeslagen"
+        },
+        "noRecording": {
+          "title": "Opname",
+          "message": "Dit gesprek heeft geen opname."
+        }
+      },
+      "recording": {
+        "title": "Opname",
+        "notice": "Dit gesprek is opgenomen.",
+        "privacy": "Alleen mensen met toegang tot opnames kunnen het afspelen en elke keer afspelen wordt vastgelegd.",
+        "noAccess": "Je kunt zien dat dit gesprek is opgenomen, maar je hebt geen toestemming om opnames af te spelen.",
+        "play": "Opname afspelen",
+        "loading": "Opname ophalen",
+        "playerLabel": "Gespreksopname",
+        "linkUntil": "Deze link werkt tot {time}. Druk daarna opnieuw op afspelen.",
+        "playFailed": "De opname kon niet worden afgespeeld.",
+        "retry": "Opnieuw proberen"
+      }
+    },
+    "analytics": {
+      "eyebrow": "Werkruimte",
+      "title": "Gespreksanalyse",
+      "subtitle": "Gesprekken in de tijd, hoeveel er zijn beantwoord, wie ze aannam en wanneer je lijnen het drukst zijn.",
+      "loading": "Gespreksanalyse laden",
+      "loadFailed": "De gespreksanalyse kon niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "emptyTitle": "Geen gesprekken in deze periode",
+      "emptyMessage": "Kies een ruimer tijdsbereik, of kom terug na je eerste gesprekken.",
+      "number": "Nummer",
+      "allNumbers": "Alle nummers",
+      "period": "{from} tot {to}, in tijdzone {tz}",
+      "kpi": {
+        "total": "Gesprekken",
+        "answeredRate": "Beantwoord",
+        "answeredOf": "{answered} beantwoord",
+        "missed": "Gemist",
+        "avgHandle": "Gemiddelde afhandeltijd",
+        "avgHandleHint": "Spreektijd van beantwoorde gesprekken",
+        "totalMinutes": "Totaal aantal minuten"
+      },
+      "overTime": {
+        "title": "Gesprekken in de tijd",
+        "hint": "Eén balk per dag. Het groene deel zijn de gesprekken die zijn beantwoord.",
+        "summary": "{total} gesprekken in {days} dagen",
+        "answered": "Beantwoord",
+        "other": "Niet beantwoord",
+        "missed": "Gemist",
+        "day": "Dag",
+        "calls": "Gesprekken"
+      },
+      "byAgent": {
+        "title": "Per teamgenoot",
+        "agent": "Teamgenoot",
+        "calls": "Gesprekken",
+        "answered": "Beantwoord",
+        "avgHandle": "Gemiddelde afhandeltijd",
+        "minutes": "Minuten",
+        "unassigned": "Door niemand afgehandeld"
+      },
+      "heatmap": {
+        "title": "Gesprekken per uur van de week",
+        "hint": "Donkerder betekent meer gesprekken die in dat uur begonnen. Uren staan in tijdzone {tz}.",
+        "weekday": "Dag van de week",
+        "cell": "{day}, {hour}:00: {calls, plural, =0 {geen gesprekken} one {# gesprek} other {# gesprekken}}"
+      }
+    }
+  }
+}

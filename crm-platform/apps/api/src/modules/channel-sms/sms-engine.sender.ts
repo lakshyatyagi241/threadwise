@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Env } from '../../config/env.schema';
+import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   SMS_GATEWAY,
@@ -11,6 +12,7 @@ import { TWILIO_STOP_CODE, credentialsProblem } from '../../infra/providers/chan
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import type { EngineSender, OpenedSender, OutgoingText } from '../broadcasts';
+import { ConsentGate, ContactConsentService } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   SMS_USAGE_METRIC,
@@ -25,6 +27,7 @@ import { SmsSendersService } from './sms-senders.service';
 /** Reference's words for a sender that cannot send (TW-SMS-017 rule 1); the same for a switched-off sender. */
 export const NO_SENDABLE_SENDER = 'No sendable SMS number connected';
 export const OPTED_OUT = 'This contact has opted out of messages.';
+export const NO_RECORDED_CONSENT = 'This contact has no recorded consent for marketing messages.';
 
 /**
  * The SMS engine for broadcasts and campaigns (TW-SMS-010, 011, 012, 017, 019, 026). Registered in the shared `EngineSenderRegistry`
@@ -47,6 +50,8 @@ export class SmsEngineSender implements EngineSender {
     private readonly entitlements: PlanEntitlementService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consent: ContactConsentService,
+    private readonly consentGate: ConsentGate,
     private readonly config: ConfigService<Env, true>,
     @Inject(SMS_GATEWAY) private readonly gateway: SmsGateway,
   ) {}
@@ -89,11 +94,20 @@ export class SmsEngineSender implements EngineSender {
     callback: string,
     m: OutgoingText,
   ): Promise<{ providerMessageId: string | null }> {
-    // The dispatchers name the contact in the client reference; a reference of any other shape skips only this extra check.
+    // The dispatchers name the contact in the client reference; a reference of any other shape skips only this extra check. The
+    // ConsentGate decides (BL-141): a withdrawn contact (the roll-up flag or the sms ledger) is refused as before, and with the
+    // workspace switch on a contact with no recorded sms grant is too. A broadcast or campaign text is marketing.
     const contactId = contactOfReference(m.clientReference);
     if (contactId !== null) {
-      const out = await this.db.txAs({ orgId }, (tx) => this.repo.isOptedOut(tx, orgId, contactId));
-      if (out) throw new Error(OPTED_OUT);
+      const verdict = await this.consentGate.check(
+        orgId,
+        { type: 'contact', id: contactId },
+        'sms',
+        'marketing_messaging',
+      );
+      if (verdict.decision === 'deny') {
+        throw new Error(verdict.reason === 'withdrawn' ? OPTED_OUT : NO_RECORDED_CONSENT);
+      }
     }
 
     const reserved = await this.db.txAs({ orgId }, (tx) =>
@@ -120,7 +134,27 @@ export class SmsEngineSender implements EngineSender {
   private async flagOptedOut(orgId: number, contactId: number): Promise<void> {
     try {
       await this.db.txAs({ orgId }, async (tx) => {
-        if (!(await this.repo.markOptedOut(tx, orgId, contactId))) return;
+        const changed = await this.repo.markOptedOut(tx, orgId, contactId);
+        // The ledger keeps the proof (provider-reported STOP); one event per contact and day however often sends are retried.
+        await RequestContextStore.run(
+          {
+            requestId: `sms-stop-${orgId}-${contactId}`,
+            orgId,
+            actorType: 'system',
+            actorId: null,
+            userId: null,
+          },
+          () =>
+            this.consent.recordInTx(tx, orgId, {
+              contactId,
+              channel: 'sms',
+              action: 'withdrawn',
+              source: 'keyword',
+              evidence: { reference: 'sms-provider-21610' },
+              idempotencyKey: `keyword:sms-provider:${contactId}:${new Date().toISOString().slice(0, 10)}`,
+            }),
+        );
+        if (!changed) return;
         await this.audit.record(tx, {
           module: 'contacts',
           recordId: contactId,

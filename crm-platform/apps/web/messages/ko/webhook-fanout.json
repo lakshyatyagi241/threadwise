@@ -7,7 +7,6 @@
     "common": {
       "loading": "불러오는 중",
       "retry": "다시 시도",
-      "requestId": "요청 ID",
       "dash": "-",
       "errors": {
         "forbidden": "이 작업을 수행할 권한이 없습니다.",

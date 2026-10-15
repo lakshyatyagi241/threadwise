@@ -1,7 +1,9 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Inbox"
+      "inbox": "Inbox",
+      "messageLogs": "Message logs",
+      "savedReplies": "Saved replies"
     },
     "common": {
       "dismiss": "Dismiss"
@@ -23,7 +25,11 @@
       "pickTitle": "Pick a conversation",
       "pickMessage": "Choose a conversation from the list to read it and reply. New messages appear here by themselves.",
       "shortcuts": "Shortcuts: j and k move through the list, e resolves, / searches.",
-      "teamChanged": "Team updated."
+      "teamChanged": "Team updated.",
+      "priorityChanged": "Priority updated",
+      "snoozed": "Conversation snoozed",
+      "tagAdded": "Tag added",
+      "tagRemoved": "Tag removed"
     },
     "list": {
       "title": "Inbox",
@@ -99,7 +105,9 @@
           "title": "You are all caught up",
           "message": "Conversations with new messages from customers are listed here."
         }
-      }
+      },
+      "select": "Select",
+      "selectDone": "Done"
     },
     "status": {
       "received": "Received",
@@ -129,9 +137,24 @@
       "unsupported": "This channel cannot send that kind of message or file.",
       "network": "The server could not be reached. Check your connection and try again.",
       "generic": "Something went wrong. Try again.",
-      "genericWithId": "Something went wrong. Try again. Reference: {id}",
       "templateNotSendable": "That template cannot be sent into this conversation. Pick another one.",
-      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app."
+      "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.",
+      "logRange": "Choose dates inside the last year, with the start before the end and not in the future.",
+      "logBusy": "An export is already being prepared. Wait for its email, then request another.",
+      "logNotReady": "This export is not ready, or it has expired. Request it again.",
+      "groupSuspended": "Meta suspended this group, so it cannot be messaged until Meta clears it.",
+      "groupLeft": "This number left the group, so it can no longer send messages there.",
+      "groupAnnounceOnly": "Only admins can send messages in this group, and this number is not an admin.",
+      "groupRateLimited": "Too many group messages from this number in a short time. Wait a minute, then try again.",
+      "groupUnavailable": "WhatsApp did not accept this group message. Try again in a few minutes.",
+      "walletEmpty": "Your message wallet cannot cover this group message (one charge per member). Top up and try again.",
+      "groupPlanLocked": "Your plan does not include WhatsApp Groups, so this group cannot be messaged. Ask an admin to upgrade the plan.",
+      "savedReplyGone": "This saved reply no longer exists.",
+      "savedReplyChannel": "This saved reply is not meant for this kind of channel.",
+      "shortcutTaken": "Another saved reply already uses that shortcut.",
+      "importInvalid": "That file cannot be read as saved replies. It needs a first row with the columns title, shortcut and body, and at most 1,000 rows.",
+      "contactOptedOut": "This contact has unsubscribed from marketing messages, so the message was not sent.",
+      "consentRequired": "This workspace requires a recorded consent for marketing messages and this contact has none, so the message was not sent."
     },
     "bubble": {
       "kind": {
@@ -196,6 +219,19 @@
         "takeBack": "Tap to take your reaction back",
         "takeBackLabel": "Your reaction {emoji}. Take it back",
         "failed": "This reaction was not sent"
+      },
+      "deliveryLog": "Delivery log",
+      "groupMember": "Group member",
+      "groupTally": "Delivered to {delivered} of {members}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyNoTotal": "Delivered to {delivered, plural, one {# member} other {# members}}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
+      "groupTallyBilled": "{billable} billed, {free} free",
+      "stageLine": {
+        "auto": "AI read the chat and moved this contact from {from} to {to}.",
+        "undo": "Undo",
+        "wasUndone": "Undone",
+        "undone": "Stage change undone: back to {stage}.",
+        "undoneToast": "Stage put back to {stage}.",
+        "couldNotUndo": "This change cannot be undone any more: the contact moved on, or it was already undone."
       }
     },
     "media": {
@@ -248,6 +284,44 @@
       "attachment": "an attachment",
       "jumpLatest": "Jump to latest",
       "jumpLatestNew": "{count, plural, one {# new message} other {# new messages}}"
+    },
+    "groupThread": {
+      "openGroup": "Open group",
+      "readOnly": {
+        "left": {
+          "title": "This number left the group",
+          "message": "The conversation is kept as it was. You can read it and add internal notes, but you cannot send messages."
+        },
+        "announceOnly": {
+          "title": "Only admins can send in this group",
+          "message": "This number is not an admin of the group, so WhatsApp would not deliver a message. You can still add internal notes."
+        }
+      },
+      "mention": {
+        "label": "Group members",
+        "loading": "Looking for members",
+        "none": "No member matches"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta suspended this group",
+          "message": "WhatsApp does not deliver messages to a suspended group. You can read the thread and add internal notes until Meta clears it."
+        },
+        "plan": {
+          "title": "Your plan does not include WhatsApp Groups",
+          "message": "You can read this thread and add internal notes, but sending to the group needs a plan with Groups. Ask an admin to upgrade."
+        },
+        "ineligible": {
+          "title": "This number cannot use WhatsApp Groups",
+          "message": "Meta did not allow Groups on this number when it was last checked (it needs an Official Business Account). You can read the thread and add internal notes. Open Meta Groups to check again."
+        }
+      },
+      "cost": {
+        "members": "This message goes to {count, plural, one {# member} other {# members}}. Estimated cost {cost}: WhatsApp bills each member who receives it.",
+        "membersNoEstimate": "This message goes to {count, plural, one {# member} other {# members}}. WhatsApp bills each member who receives it.",
+        "sizeUnknown": "The member count is not known yet. WhatsApp bills each member who receives this message.",
+        "walletShort": "Your wallet may not cover this message. Top up before sending."
+      }
     },
     "composer": {
       "modeLabel": "Message type",
@@ -345,7 +419,9 @@
           "url": "Enter a link starting with http:// or https://",
           "tooManyRows": "A list holds at most 10 rows in total"
         }
-      }
+      },
+      "savedReplies": "Saved replies",
+      "savedReplyIssues": "Not filled in and left as written ({count}): {list}. Fix before you send."
     },
     "panel": {
       "tabsLabel": "Notes and timeline",
@@ -374,7 +450,9 @@
         "unassign": "Unassign",
         "open": "{count} open",
         "pickTeam": "Choose a team for this conversation",
-        "noTeam": "No team"
+        "noTeam": "No team",
+        "onLeave": "On leave",
+        "onLeaveUntil": "On leave until {date}"
       },
       "presence": {
         "online": "Online",
@@ -414,8 +492,8 @@
           "snoozed": "Snoozed by {actor}",
           "auto_unsnoozed": "Snooze ended",
           "priority_changed": "Priority changed by {actor}",
-          "tag_added": "Label added by {actor}",
-          "tag_removed": "Label removed by {actor}",
+          "tag_added": "Tag added by {actor}",
+          "tag_removed": "Tag removed by {actor}",
           "first_response": "First reply sent",
           "sla_breach": "Response deadline missed",
           "unknown": "{what} by {actor}"
@@ -526,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Send a template",
       "close": "Close",
-      "cancel": "Cancel",
-      "back": "Back to templates",
       "search": "Search by name or text",
       "searchLabel": "Search templates",
       "loading": "Loading templates",
@@ -536,9 +612,7 @@
       "empty": "There are no approved templates for this WhatsApp number yet. Create one in Templates and wait for Meta to approve it.",
       "noResults": "No template matches your search.",
       "windowHint": "A template works even when the 24-hour reply window has closed.",
-      "variables": "Fill in the variables",
       "preview": "What the customer will read",
-      "send": "Send template",
       "sending": "Sending",
       "sent": "Template sent",
       "problem": {
@@ -553,7 +627,408 @@
         "authentication": "One-time-password templates are sent by the system, not from the inbox.",
         "named_variables": "Uses named variables, which the inbox does not support yet."
       },
-      "hasMore": "Showing the first {count} templates. Search by name or text to find the others."
+      "hasMore": "Showing the first {count} templates. Search by name or text to find the others.",
+      "previewEmpty": "Point at a template to see how it will look on the customer’s phone.",
+      "previewCustomer": "Customer",
+      "noVariables": "This template has nothing to fill in. Check the phone, then send it.",
+      "sendTo": "Send to {name}",
+      "refresh": "Refresh list",
+      "device": "Phone preview",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Configure body variables",
+      "or": "or",
+      "mapField": "Map a field to {key}",
+      "mapNone": "This contact has no details to map.",
+      "typeMessage": "Type a message",
+      "fields": {
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "create": "Create new template",
+      "actions": "Template actions",
+      "edit": "Edit template",
+      "duplicate": "Duplicate template"
+    },
+    "log": {
+      "title": "Delivery log",
+      "close": "Close",
+      "loading": "Loading the log",
+      "tryAgain": "Try again",
+      "statusNow": "Status now",
+      "createdAt": "Created",
+      "providerId": "Provider message ID",
+      "failedNoReason": "This message was not delivered.",
+      "expired": "This message is older than {days} days. Its log is no longer kept.",
+      "empty": "No log was recorded for this message. Messages sent before logs were kept have none.",
+      "archived": "Entries older than {days} days are read from the archive.",
+      "exportLink": "Export message logs",
+      "source": {
+        "system": "Our system",
+        "provider": "Provider receipt"
+      },
+      "event": {
+        "queued": "Queued to send",
+        "attempt": "Send attempt {attempt}",
+        "accepted": "Accepted by the provider",
+        "sentReceipt": "Provider confirmed it was sent",
+        "delivered": "Delivered to the customer's phone",
+        "read": "Read by the customer",
+        "failedReceipt": "Provider reported it as not delivered",
+        "failedSend": "Could not be sent",
+        "retryAuto": "Will try again automatically",
+        "retryManual": "A teammate pressed Retry"
+      },
+      "notApplied": "This report arrived late or for an earlier send. It did not change the message.",
+      "replayed": "No new request was made: the provider's earlier answer was reused.",
+      "resent": "Sent again to the provider as a new message."
+    },
+    "logs": {
+      "back": "Back to the inbox",
+      "title": "Message logs",
+      "intro": "Every message keeps its delivery log: {hot} days in the inbox, then in the archive until {days} days after it happened. Request an export of a date range; it is prepared in the background and emailed to you when it is ready.",
+      "requested": "Export requested. We will email you when it is ready.",
+      "requestedTo": "Export requested. We will email {email} when it is ready.",
+      "form": {
+        "title": "Request an export",
+        "from": "From",
+        "to": "To",
+        "status": "Only messages that are now",
+        "anyStatus": "Any status",
+        "hint": "Dates are in UTC. You can go back up to {days} days. One export is prepared at a time.",
+        "submit": "Request export",
+        "sending": "Requesting"
+      },
+      "problem": {
+        "order": "The start date must not be after the end date.",
+        "future": "The end date cannot be in the future.",
+        "tooOld": "Logs are kept for {days} days. Choose a later start date.",
+        "invalid": "Enter both dates."
+      },
+      "history": {
+        "title": "Your exports",
+        "loading": "Loading exports",
+        "tryAgain": "Try again",
+        "empty": "No exports yet.",
+        "onlyStatus": "Only {status} messages",
+        "requestedAt": "Requested {date}",
+        "lines": "{count, plural, one {# line} other {# lines}}",
+        "until": "Available until {date}",
+        "download": "Download",
+        "status": {
+          "queued": "Waiting",
+          "running": "Preparing",
+          "ready": "Ready",
+          "failed": "Failed",
+          "expired": "Expired"
+        }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Simulator (testing)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Website chat",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "Email",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "variableGroup": {
+        "contact": "Contact",
+        "agent": "You",
+        "workspace": "Workspace",
+        "conversation": "Conversation"
+      },
+      "variable": {
+        "first_name": "Contact's first name",
+        "last_name": "Contact's last name",
+        "name": "Contact's full name",
+        "email": "Contact's email",
+        "phone": "Contact's phone number",
+        "agent_name": "Your full name",
+        "agent_first_name": "Your first name",
+        "workspace_name": "Workspace name",
+        "company_name": "Company name",
+        "today": "Today's date",
+        "device_name": "Name of the channel",
+        "device_phone": "Phone number of the channel"
+      },
+      "picker": {
+        "title": "Saved replies",
+        "close": "Close saved replies",
+        "searchLabel": "Search saved replies",
+        "searchPlaceholder": "Search by shortcut, title or text",
+        "listLabel": "Saved replies",
+        "loading": "Loading saved replies",
+        "loadFailed": "Saved replies could not be loaded.",
+        "retry": "Try again",
+        "empty": "There are no saved replies yet.",
+        "emptyForChannel": "No saved reply is meant for this channel.",
+        "createFirst": "Create the first one",
+        "noMatch": "No saved reply matches \"{q}\".",
+        "mine": "Mine",
+        "hint": "Arrow keys move, Enter inserts, Esc closes.",
+        "manage": "Manage saved replies",
+        "tooLong": "That reply is too long for this channel's message limit, so it was not inserted."
+      },
+      "screen": {
+        "back": "Settings",
+        "title": "Saved replies",
+        "subtitle": "Reusable answers your team inserts into a reply. Type / in a conversation to find one.",
+        "create": "New saved reply",
+        "noAccess": "You do not have permission to manage saved replies.",
+        "meter": "{used} of {limit} saved replies used",
+        "meterLabel": "Saved replies used on your plan",
+        "meterNote": "Shared and personal replies both count toward the limit.",
+        "atLimit": "You have reached your plan's limit of {limit} saved replies. Delete one or upgrade to add more.",
+        "nearLimit": "You are close to your plan's limit of {limit} saved replies.",
+        "upgrade": "See plans",
+        "tabsLabel": "Show",
+        "tab": {
+          "all": "All ({count})",
+          "shared": "Shared ({count})",
+          "mine": "Mine ({count})"
+        },
+        "categoryFilter": "Filter by category",
+        "allCategories": "All categories",
+        "searchLabel": "Search saved replies",
+        "searchPlaceholder": "Search by shortcut, title or text",
+        "howItWorks": "In the inbox, type / in the message box or use the Saved replies button. Variables such as '{{first_name}}' are filled in from the conversation before the text reaches the box. Nothing is sent until the agent presses Send.",
+        "loading": "Loading saved replies",
+        "loadFailed": "Saved replies could not be loaded.",
+        "retry": "Try again",
+        "loadMore": "Load more",
+        "list": "Saved replies",
+        "emptyTitle": "No saved replies yet",
+        "empty": "Write the answers your team gives again and again, then insert them in one keystroke.",
+        "noMatchTitle": "Nothing found",
+        "noMatch": "No saved reply matches \"{q}\".",
+        "noMatchCategory": "No saved reply in this category.",
+        "scope": {
+          "shared": "Shared",
+          "mine": "Mine"
+        },
+        "allChannels": "All channels",
+        "neverUsed": "Not used yet",
+        "used": "Used {count, plural, one {# time} other {# times}}",
+        "lastUsed": "Last used {when}",
+        "createdBy": "Created by {name}",
+        "readOnly": "Only people who manage saved replies can change a shared reply.",
+        "edit": "Edit",
+        "duplicate": "Duplicate",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "deleteTitle": "Delete this saved reply?",
+        "deleteShared": "/{shortcut} will be removed for everyone in the workspace.",
+        "deleteMine": "/{shortcut} will be removed from your replies.",
+        "deleted": "Saved reply deleted.",
+        "duplicated": "Saved reply duplicated.",
+        "created": "Saved reply /{shortcut} created.",
+        "saved": "Saved reply updated."
+      },
+      "form": {
+        "eyebrow": "Saved reply",
+        "titleNew": "New saved reply",
+        "titleEdit": "Edit saved reply",
+        "close": "Close",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saving": "Saving…",
+        "shortcut": "Shortcut",
+        "shortcutPlaceholder": "thanks",
+        "shortcutHint": "Letters, numbers and underscores, up to {max} characters.",
+        "shortcutStored": "Agents type /{shortcut}",
+        "shortcutEmpty": "Enter a shortcut made of letters, numbers or underscores.",
+        "shortcutTaken": "/{shortcut} is already used by another reply. Choose a different shortcut.",
+        "title": "Title",
+        "titlePlaceholder": "Thanks for getting in touch",
+        "titleEmpty": "Enter a title.",
+        "titleLong": "The title can have at most {max} characters.",
+        "body": "Text",
+        "bodyHint": "Plain text. Use *bold* and _italic_ as in WhatsApp.",
+        "bodyPlaceholder": "Hi '{{first_name}}', thanks for reaching out. How can we help?",
+        "bodyEmpty": "Enter the text of the reply.",
+        "bodyLong": "The text can have at most {max} characters.",
+        "count": "{n} of {max}",
+        "variables": "Insert a variable",
+        "variablesHint": "Click one to add it at the cursor. A variable that cannot be filled in stays as written, so the agent sees it.",
+        "preview": "Preview",
+        "previewHint": "With sample customer data.",
+        "previewEmpty": "Type the text to see how it will look.",
+        "previewIssues": "Not filled in the preview: {list}. When a reply is used, your contact attributes are filled in when the contact has them; anything else stays as written.",
+        "category": "Category (optional)",
+        "categoryPlaceholder": "Greetings, billing, support",
+        "language": "Language (optional)",
+        "languageHint": "A code such as en or pt-BR, for your own reference.",
+        "languageFormat": "Use a language code such as en or pt-BR.",
+        "channels": "Only on these channels",
+        "channelsHint": "Leave all unticked to offer it on every channel.",
+        "scope": "Who can use it",
+        "scopeOption": {
+          "shared": "Everyone in the workspace",
+          "mine": "Only me"
+        },
+        "scopeLocked": "A reply cannot change between shared and personal after it is saved.",
+        "planLimit": "You have reached your plan's limit of saved replies.",
+        "upgrade": "See plans",
+        "conflict": "Someone else changed this reply first. Close this window and open it again.",
+        "invalid": "Some of what you entered is not valid."
+      },
+      "transfer": {
+        "export": "Export CSV",
+        "import": "Import CSV",
+        "title": "Import saved replies",
+        "intro": "Upload a CSV with the columns title, shortcut, body and, if you like, category, language and channel (channel kinds separated by |, empty for every channel). Up to 1,000 rows and {maxKb} KB. Imported replies are shared with the whole team. The export has the same columns.",
+        "file": "CSV file",
+        "tooBig": "This file is too large.",
+        "duplicates": "When a shared reply already uses the shortcut",
+        "policy": {
+          "skip": "Keep the existing reply",
+          "overwrite": "Replace its text"
+        },
+        "policyHint": {
+          "skip": "The row is skipped and the reply stays as it is.",
+          "overwrite": "Title, text, category, language and channels are replaced. Its use count is kept."
+        },
+        "check": "Check the file",
+        "go": "Import ({count})",
+        "cancel": "Cancel",
+        "summary": "{create} to create, {update} to replace, {skip} skipped, {invalid} with a problem. Nothing is saved yet.",
+        "plan": "Your plan: {used} of {limit} replies.",
+        "row": "Line {line}: /{shortcut}",
+        "truncated": "Only the first rows with a problem or a change are listed.",
+        "done": "Imported: {created} created, {updated} replaced.",
+        "issue": {
+          "update": "will be replaced",
+          "skip": "skipped",
+          "invalid": "has a problem",
+          "duplicate": "shortcut already in use, skipped",
+          "missing_shortcut": "no shortcut",
+          "shortcut_invalid": "the shortcut has no usable letters or numbers",
+          "missing_title": "no title",
+          "title_too_long": "the title is too long",
+          "missing_body": "no text",
+          "body_too_long": "the text is too long",
+          "control_characters": "contains control characters",
+          "category_too_long": "the category is too long",
+          "language_invalid": "the language is not a code such as en or pt-BR",
+          "channel_unknown": "an unknown channel",
+          "duplicate_in_file": "the shortcut appears earlier in the file",
+          "plan_limit_reached": "over your plan's limit"
+        }
+      }
+    },
+    "triage": {
+      "priority": "Priority",
+      "snooze": "Snooze",
+      "wake": "Wake now"
+    },
+    "bulk": {
+      "barLabel": "Bulk actions",
+      "selected": "{count, plural, one {# conversation selected} other {# conversations selected}}",
+      "selectAllInView": "Select all {count} in view",
+      "done": "Done",
+      "markRead": "Mark as read",
+      "resolve": "Resolve",
+      "close": "Close",
+      "reopen": "Reopen",
+      "assign": "Assign",
+      "assignToMe": "Assign to me",
+      "unassign": "Unassign",
+      "removeTeam": "Remove team",
+      "priority": "Priority",
+      "snooze": "Snooze",
+      "snoozePreset": {
+        "oneHour": "1 hour",
+        "threeHours": "3 hours",
+        "tomorrow": "Tomorrow, 9:00",
+        "nextWeek": "Next Monday, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {# conversation updated} other {# conversations updated}}.",
+        "nothingChanged": "Nothing to change: the selected conversations are already up to date.",
+        "partial": "{done} updated, {unchanged} already up to date, {failed} could not be changed. The ones that failed stay selected.",
+        "allFailed": "None of the {count, plural, one {# conversation} other {# conversations}} could be changed."
+      },
+      "tag": "Tag",
+      "tagAdd": "Add tag",
+      "tagRemove": "Remove tag",
+      "onLeave": "on leave",
+      "onLeaveUntil": "on leave until {date}"
+    },
+    "tags": {
+      "tag": "Tag",
+      "loading": "Loading tags…",
+      "loadFailed": "Could not load the tags.",
+      "none": "No tags yet.",
+      "newTag": "New tag",
+      "add": "Add",
+      "filter": "Tags",
+      "filterActive": "{count, plural, one {# tag} other {# tags}}",
+      "clearFilter": "Clear tag filter",
+      "scope": {
+        "label": "Match tags on",
+        "conversation": "Conversation tags",
+        "contact": "Contact tags"
+      },
+      "groups": {
+        "title": "Tags",
+        "helpFor": "About {title}",
+        "rule": "Both kinds come from the same workspace tag library.",
+        "contactTitle": "Contact tags",
+        "contactHelp": "A contact tag describes the person (VIP, lead, region). It follows them into every conversation.",
+        "contactNone": "This contact has no tags.",
+        "contactEdit": "Edit on contact",
+        "conversationTitle": "Conversation tags",
+        "conversationHelp": "A conversation tag describes this thread (billing, refund, urgent).",
+        "conversationNone": "No tags on this conversation yet.",
+        "remove": "Remove tag {name}"
+      },
+      "screen": {
+        "back": "Back to the inbox",
+        "title": "Conversation tags",
+        "intro": "Conversation tags mark a thread (billing, refund, urgent) so your team can sort and filter the inbox. They come from the same tag library as contact tags, which describe the person.",
+        "newTitle": "New tag",
+        "editTitle": "Edit tag",
+        "name": "Name",
+        "color": "Color",
+        "colorInvalid": "Use a hex color such as #075E54 or a color name.",
+        "description": "Description (optional)",
+        "create": "Create tag",
+        "save": "Save changes",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "inUse": "{count, plural, one {# conversation} other {# conversations}}",
+        "emptyTitle": "No tags yet",
+        "emptyMessage": "Create your first tag above, then put it on conversations from the inbox.",
+        "deleteTitle": "Delete this tag?",
+        "deleteMessage": "\"{name}\" is on {count, plural, one {# conversation} other {# conversations}}. Deleting it removes it from them and from any contacts that carry it. This cannot be undone.",
+        "nameTaken": "A tag with that name already exists.",
+        "conflict": "Someone else changed this tag first. The list was reloaded.",
+        "saved": "Tag saved",
+        "created": "Tag created",
+        "deleted": "Tag deleted"
+      }
+    },
+    "sla": {
+      "breached": "SLA breached",
+      "atRisk": "SLA due in {minutes} min",
+      "ok": "SLA due {time}",
+      "kind": {
+        "first_response": "First reply target",
+        "resolution": "Resolution target"
+      },
+      "titleBreached": "{kind}: missed (was due {time})",
+      "titleOpen": "{kind}: due {time}"
     }
   }
 }

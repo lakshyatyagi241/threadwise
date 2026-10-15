@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "ご利用のプランの上限に達しました。",
       "WA_UNOFFICIAL_DISABLED": "個人のWhatsApp番号による送信（非公式API）は、このワークスペースでは有効になっていません。公式のWhatsApp Business APIの番号を選択してください。",
       "AUTH_SEND_HALTED": "このワークスペースでは送信が停止されています。",
-      "upgrade": "プランを確認してアップグレード",
-      "requestId": "リクエスト {id}"
+      "upgrade": "プランを確認してアップグレード"
     },
     "actions": {
       "done": {

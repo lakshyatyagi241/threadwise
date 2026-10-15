@@ -282,7 +282,6 @@
       "planDisabled": "Tu plan no incluye tareas. Mejora el plan para desbloquearlas.",
       "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
-      "requestId": "ID de la solicitud",
       "retry": "Reintentar"
     },
     "toast": {

@@ -4,7 +4,7 @@ import { request as httpRequest, type IncomingMessage } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { isIP } from 'node:net';
 import { extname } from 'node:path';
-import { isBlockedAddress } from '../../net/blocked-address';
+import { isBlockedAddress as isSharedBlockedAddress } from '../../net/blocked-address';
 
 /** What Reference allowed to follow (TW-NODE-028). */
 export const MAX_REDIRECTS = 3;
@@ -15,7 +15,15 @@ const DEFAULT_MAX_BYTES = 100 * 1024 * 1024;
 /** Thrown for a target we refuse to fetch. The message is the one Reference's bridge reported. */
 export class UnsafeMediaUrlError extends Error {}
 
-export { isBlockedAddress };
+/**
+ * Loopback, private, link-local, CGNAT, multicast and reserved addresses, and every IPv6 spelling of one (mapped, NAT64, 6to4). The
+ * rule itself is the shared one (`infra/net/blocked-address.ts`), so this guard cannot drift from the others. A host NAME is not an
+ * address and is answered `false` here: callers resolve a name first and judge each address it resolves to.
+ */
+export function isBlockedAddress(address: string): boolean {
+  const v = address.toLowerCase().replace(/^\[|\]$/g, '');
+  return isIP(v) !== 0 && isSharedBlockedAddress(v);
+}
 
 const MIME_BY_EXT: Record<string, string> = {
   '.jpg': 'image/jpeg',

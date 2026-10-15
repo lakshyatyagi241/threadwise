@@ -26,14 +26,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     order: 10,
     icon: 'analytics',
   },
-  {
-    id: 'notifications',
-    group: 'overview',
-    labelKey: L('notifications'),
-    href: '/notifications',
-    order: 20,
-    icon: 'bell',
-  },
 
   // Inbox & Chat
   {
@@ -45,14 +37,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     icon: 'chat',
   },
   {
-    id: 'call-logs',
-    group: 'inbox',
-    labelKey: L('callLogs'),
-    href: '/call-logs',
-    order: 20,
-    icon: 'phone',
-  },
-  {
     id: 'team-chat',
     group: 'inbox',
     labelKey: L('teamChat'),
@@ -61,7 +45,7 @@ export const PLANNED_NAV: readonly NavItem[] = [
     icon: 'team-chat',
   },
 
-  // CRM (Contacts, Contact groups, Segments, Deals, Tasks and Companies are real screens; Attributes and Pipelines moved to Settings). Orders keep the menu sequence:
+  // CRM (Contacts, Contact groups, Segments, Deals, Tasks, Companies and Email templates are real screens; Attributes and Pipelines moved to Settings). Orders keep the menu sequence:
   // Contacts 0, Contact groups 2, Segments 3, Lead finder 30, Deals 40, Tasks 60, Companies 70, Email templates 80.
   {
     id: 'lead-finder',
@@ -72,24 +56,8 @@ export const PLANNED_NAV: readonly NavItem[] = [
     icon: 'pin',
     badge: 'new',
   },
-  {
-    id: 'email-templates',
-    group: 'audience',
-    labelKey: L('emailTemplates'),
-    href: '/email-templates',
-    order: 80,
-    icon: 'mail',
-  },
 
   // Sales (Reference's SalesDocs engine: proposals and estimates are real screens in features/sales-docs; invoices, payments and tax rates are real screens in features/invoicing)
-  {
-    id: 'crm-dashboard',
-    group: 'sales',
-    labelKey: L('crmDashboard'),
-    href: '/crm',
-    order: 0,
-    icon: 'crm',
-  },
 
   // Campaigns
   {
@@ -99,14 +67,6 @@ export const PLANNED_NAV: readonly NavItem[] = [
     href: '/scheduled',
     order: 20,
     icon: 'clock',
-  },
-  {
-    id: 'history',
-    group: 'campaigns',
-    labelKey: L('history'),
-    href: '/message-history',
-    order: 40,
-    icon: 'history',
   },
 
   // Automation (Appointments is a real screen in features/appointments)

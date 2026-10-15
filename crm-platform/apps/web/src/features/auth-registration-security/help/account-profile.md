@@ -1,7 +1,7 @@
 ---
 id: account-profile
 title: Your account and profile
-summary: Update your photo, name, email, phone, language and theme, and find the other account pages from one place.
+summary: Update your photo, name, email, phone, language, timezone and theme, and find the other account pages from one place.
 area: account
 order: 10
 documents: [tile:account]
@@ -28,6 +28,10 @@ Your email is shown read-only, with a badge that says **Verified** or **Not veri
 ## The workspace timezone
 
 The **Timezone** box belongs to the workspace, not to you, and says so with a **(workspace)** tag. Everyone can see it, but only some roles can change it. If you cannot, the box is greyed out.
+
+## Your own timezone
+
+**My timezone** is yours alone. Dates and times across the app are shown in it. Pick a zone from the list and save. The hint under the box says which zone is in use right now. Select **Use workspace default** (and save) to go back to following the workspace timezone. If the workspace has none either, times are shown in UTC.
 
 ## Other account pages
 

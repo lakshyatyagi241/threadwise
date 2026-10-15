@@ -22,7 +22,6 @@
         "signedOut": "Je sessie is beëindigd. Meld je opnieuw aan.",
         "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
         "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
-        "requestId": "Verzoek-ID",
         "locked": "Te veel mislukte pogingen. Wacht een tijdje voordat je het opnieuw probeert.",
         "lockedWait": "Te veel mislukte pogingen. Probeer het over {minutes, plural, one {# minuut} other {# minuten}} opnieuw."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Tijdzone",
         "workspaceTimezoneHint": "Geldt voor {workspace}. Alleen eigenaren en beheerders kunnen dit wijzigen.",
+        "myTimezone": "Mijn tijdzone",
+        "myTimezoneHint": "Datums en tijden worden aan jou getoond in {zone}. Laat leeg om de tijdzone van de werkruimte te volgen (UTC als de werkruimte er geen heeft).",
+        "myTimezoneUseWorkspace": "Standaard van de werkruimte gebruiken",
         "saved": "Profiel opgeslagen.",
         "errors": {
           "fullNameRequired": "Voer je volledige naam in.",
@@ -367,7 +369,8 @@
         "failed": "We kunnen niet van workspace wisselen. Probeer het opnieuw.",
         "notAvailable": "Je kunt niet naar die workspace wisselen.",
         "rateLimited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
-        "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw."
+        "rateLimitedWait": "Te veel pogingen. Probeer het over {seconds, plural, one {# seconde} other {# seconden}} opnieuw.",
+        "unverified": "Verifieer je e-mailadres in deze werkruimte om ernaartoe te wisselen."
       },
       "mfaChallenge": {
         "title": "Bevestig dat jij het bent",
@@ -549,10 +552,13 @@
             "storefront_builder": "Winkelbouwer",
             "invoicing": "Facturatie",
             "forms_and_links": "Formulieren en links",
-            "extra_channels": "Telegram, Facebook en Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber en WeChat",
             "form_builder": "Formulieren",
             "waba_groups": "WhatsApp-groepen",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Hulpassistent",
+            "email_channel": "E-mailkanaal (Gmail)",
+            "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

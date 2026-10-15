@@ -250,7 +250,6 @@
       "planDisabled": "您的套餐不包含发票功能。",
       "invalidState": "当前发票状态下无法执行此操作。请重新加载并检查其状态。",
       "unexpected": "系统出现问题，请重试。",
-      "requestId": "请求 ID",
       "retry": "重试"
     },
     "picker": {

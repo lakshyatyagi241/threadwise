@@ -27,6 +27,7 @@ const REENTRY_BY_REF: ReadonlySet<FlowRunSource> = new Set([
   'order_placed',
   'deal_stage_changed',
   'contact_updated',
+  'segment_leave',
   'field_match',
   'date_field_match',
   'schedule',
@@ -39,6 +40,9 @@ export const KINDS_OF_PROVIDER: Readonly<Record<string, readonly string[]>> = {
   baileys: ['whatsapp_qr'],
   waba: ['whatsapp_cloud'],
   telegram: ['telegram'],
+  line: ['line'],
+  viber: ['viber'],
+  wechat: ['wechat'],
   webchat: ['webchat'],
   simulator: ['simulator'],
 };
@@ -77,6 +81,8 @@ export interface LaunchInput {
   /** A retry of a failed run: the same subscriber row, a new run. */
   retry?: boolean;
   conversationId?: number | null;
+  /** Enter the flow at this node instead of its first (the FAQ's "link to node"). A node the flow no longer has fails the launch. */
+  startNodeId?: string | null;
 }
 
 export type LaunchOutcome =
@@ -125,6 +131,36 @@ export class FlowLaunchService {
     return result;
   }
 
+  /**
+   * Refuses a start that must not happen (a trigger loop, TW-FLR-010): no run is written, and the contact's subscriber row for the flow
+   * shows `failed` with the reason where an operator reads it (a start with no contact is only logged). Never silent.
+   */
+  async refuse(
+    orgId: number,
+    input: LaunchInput,
+    code: string,
+    reason: string,
+  ): Promise<LaunchOutcome> {
+    this.logger.warn(
+      { orgId, flowId: input.flowId, source: input.source, code },
+      `[FLR] start refused: ${reason}`,
+    );
+    const subscriberId = await this.db.txAs({ orgId }, async (tx) => {
+      const flow = await this.loadFlow(tx, orgId, input.flowId);
+      if (!flow || !input.withSubscriber || !input.contactId) return null;
+      const got = await this.subscribers.firstOrCreate(
+        tx,
+        orgId,
+        flow.id,
+        input.contactId,
+        input.source,
+      );
+      await this.subscribers.markRefused(tx, orgId, got.row.id, reason);
+      return got.row.id;
+    });
+    return { outcome: 'failed', reason, code, subscriberId };
+  }
+
   /** Starts inside the caller's transaction. The caller must queue step 0 of a `started` run after it commits (`publisher.schedule`). */
   async startIn(tx: Tx, orgId: number, input: LaunchInput): Promise<LaunchOutcome> {
     const flow = await this.loadFlow(tx, orgId, input.flowId);
@@ -145,6 +181,15 @@ export class FlowLaunchService {
         'This flow has no steps',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
+    }
+
+    if (input.startNodeId && !graph.nodes.some((n) => n.id === input.startNodeId)) {
+      return {
+        outcome: 'failed',
+        reason: 'The step this should start at is no longer in the flow',
+        code: 'FLR_NODE_NOT_FOUND',
+        subscriberId: null,
+      };
     }
 
     // The subscriber row decides whether anything launches.
@@ -209,7 +254,7 @@ export class FlowLaunchService {
       triggerRef: input.triggerRef ?? null,
       triggerText: input.triggerText ? input.triggerText.trim().toLowerCase() : null,
       graph: graph as RuntimeGraph,
-      currentNodeId: graph.nodes[0]!.id,
+      currentNodeId: input.startNodeId ?? graph.nodes[0]!.id,
       vars,
       timeoutSeconds:
         input.timeoutSeconds ??

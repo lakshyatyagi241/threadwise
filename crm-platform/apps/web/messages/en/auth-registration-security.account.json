@@ -22,7 +22,6 @@
         "signedOut": "Your session has ended. Please sign in again.",
         "rateLimited": "Too many attempts. Please wait a moment and try again.",
         "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
-        "requestId": "Request id",
         "locked": "Too many failed attempts. Wait a while before trying again.",
         "lockedWait": "Too many failed attempts. Try again in {minutes, plural, one {# minute} other {# minutes}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Timezone",
         "workspaceTimezoneHint": "Applies to {workspace}. Only owners and administrators can change it.",
+        "myTimezone": "My timezone",
+        "myTimezoneHint": "Dates and times are shown to you in {zone}. Leave it empty to follow the workspace timezone (UTC if the workspace has none).",
+        "myTimezoneUseWorkspace": "Use workspace default",
         "saved": "Profile saved.",
         "errors": {
           "fullNameRequired": "Enter your full name.",
@@ -406,7 +408,8 @@
         "failed": "We could not switch workspaces. Please try again.",
         "notAvailable": "You cannot switch to that workspace.",
         "rateLimited": "Too many attempts. Please wait a moment and try again.",
-        "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}."
+        "rateLimitedWait": "Too many attempts. Try again in {seconds, plural, one {# second} other {# seconds}}.",
+        "unverified": "Verify your email in this workspace to switch to it."
       },
       "mfaChallenge": {
         "title": "Confirm it is you",
@@ -588,10 +591,13 @@
             "storefront_builder": "Storefront builder",
             "invoicing": "Invoicing",
             "forms_and_links": "Forms and links",
-            "extra_channels": "Telegram, Facebook and Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber and WeChat",
             "form_builder": "Forms",
             "waba_groups": "WhatsApp groups",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Help assistant",
+            "email_channel": "Email (Gmail) channel",
+            "personal_history_full": "Full history import (personal WhatsApp)"
           },
           "cta": {
             "continueFree": "Continue free",

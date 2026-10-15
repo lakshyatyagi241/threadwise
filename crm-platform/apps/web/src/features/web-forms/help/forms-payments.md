@@ -7,21 +7,7 @@ order: 18
 documents: []
 gates:
   planFeature: form_builder
-keywords:
-  [
-    payment,
-    pay,
-    gateway,
-    razorpay,
-    stripe,
-    price,
-    amount,
-    donation,
-    awaiting payment,
-    paid,
-    mark as paid,
-    payment link,
-  ]
+keywords: [payment, gateway, razorpay, stripe, price, amount, donation, awaiting payment, paid]
 ---
 
 ## What it is for

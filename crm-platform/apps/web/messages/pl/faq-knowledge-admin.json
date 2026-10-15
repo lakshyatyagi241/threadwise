@@ -7,7 +7,6 @@
     "common": {
       "loading": "Wczytywanie",
       "retry": "Spróbuj ponownie",
-      "requestId": "Identyfikator żądania",
       "dash": "-",
       "cancel": "Anuluj",
       "errors": {
@@ -61,7 +60,9 @@
         "matches": "Sprawdzone wiadomości klientów",
         "answered": "Z odpowiedzią",
         "rate": "Odsetek odpowiedzi",
-        "tokens": "Tokeny do dopasowywania"
+        "tokens": "Tokeny do dopasowywania",
+        "verified": "Drugie sprawdzenia",
+        "vetoed": "Wstrzymane odpowiedzi"
       }
     },
     "settings": {
@@ -86,17 +87,18 @@
       },
       "threshold": {
         "label": "Domyślny próg dopasowania",
-        "hint": "Wiadomość pasuje, gdy jej wynik wynosi co najmniej tyle. Używane tylko przez przestrzenie robocze, które nigdy nie zapisały własnego progu. Wyniki zależą od modelu AI do dopasowywania.",
         "value": "{value}",
         "follow": "Podążaj za modelem",
-        "followHint": "Domyślna czułość to zalecana wartość modelu ({value}) i zmienia się razem z modelem. Wyłącz, aby ustawić stałą wartość."
+        "followHint": "Domyślna czułość to zalecana wartość modelu ({value}) i zmienia się razem z modelem. Wyłącz, aby ustawić stałą wartość.",
+        "hint": "Wiadomość pasuje, gdy jej wynik jest co najmniej tak wysoki. Używane tylko przez przepływy, które nigdy nie zapisały własnego progu. Wyniki zależą od modelu embeddingów."
       },
       "limits": {
         "title": "Limity",
-        "maxFaqs": "Maksymalna liczba FAQ na przestrzeń roboczą",
         "maxVariationsPerFaq": "Maksymalna liczba wariantów na FAQ",
         "semanticPerHour": "Dopasowania semantyczne na przestrzeń roboczą na godzinę",
-        "semanticPerHourHint": "Po przekroczeniu przestrzeń robocza wraca do podobieństwa pisowni do końca godziny. 0 oznacza zawsze podobieństwo pisowni."
+        "semanticPerHourHint": "Po przekroczeniu przestrzeń robocza wraca do podobieństwa pisowni do końca godziny. 0 oznacza zawsze podobieństwo pisowni.",
+        "verifyPerHour": "Drugie sprawdzenia na przestrzeń roboczą na godzinę",
+        "maxFaqs": "Maksymalna liczba FAQ na przepływ"
       },
       "errors": {
         "integer": "Wpisz liczbę całkowitą.",
@@ -114,7 +116,20 @@
         "title": "Sprawdź przed zapisem",
         "confirm": "Zapisz zmiany",
         "engineOff": "Wyłączenie silnika sprawia, że żadna przestrzeń robocza nie odpowiada klientom z FAQ, a edycje FAQ są blokowane, dopóki go nie włączysz.",
-        "modelChange": "Zmiana modelu AI do dopasowywania z {from} na {to} powoduje ponowne utworzenie wszystkich zapisanych wektorów. Do czasu zakończenia dopasowywanie korzysta tylko z podobieństwa pisowni. Domyślna czułość będzie podążać za nowym modelem (zalecane {threshold}), chyba że ustawisz stałą wartość. Progi przestrzeni roboczych zapisane osobno mogą wymagać ponownego dostrojenia, bo wyniki zależą od modelu."
+        "modelChange": "Zmiana modelu embeddingów z {from} na {to} sprawi, że wszystkie zapisane wektory zostaną obliczone ponownie. Do czasu zakończenia dopasowywanie opiera się tylko na podobieństwie pisowni. Domyślna czułość będzie zgodna z nowym modelem (zalecane {threshold}), chyba że ustawisz stałą wartość. Progi zapisane przez same przepływy mogą wymagać ponownego dostrojenia, bo wyniki zmieniają się wraz z modelem."
+      },
+      "verify": {
+        "title": "Drugie sprawdzenie niepewnych dopasowań",
+        "enabled": {
+          "label": "Zezwalaj na drugie sprawdzenie",
+          "hint": "Wyłącz, aby zatrzymać sprawdzanie we wszystkich przestrzeniach roboczych, niezależnie od ich ustawień."
+        },
+        "model": {
+          "label": "Model sprawdzający",
+          "hint": "Identyfikator modelu OpenRouter, który ocenia niepewne dopasowania, na przykład openai/gpt-4o-mini. Wystarczy mały, szybki model."
+        },
+        "perHourHint": "Po przekroczeniu tego limitu niepewne dopasowanie obowiązuje bez sprawdzenia do końca godziny. 0 oznacza, że nigdy nie sprawdzaj.",
+        "description": "Mały model czatu dwukrotnie sprawdza dopasowania, które ledwo osiągnęły próg przepływu. Może tylko wstrzymać odpowiedź. Przepływy włączają go we własnych ustawieniach FAQ."
       }
     },
     "maintenance": {

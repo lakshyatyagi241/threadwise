@@ -67,6 +67,12 @@ describe('the run log', () => {
     );
     const greeting = res.body.log.find((s: { nodeId: string }) => s.nodeId === 'a');
     expect(greeting).toMatchObject({ outcome: 'ok', port: 1, attempt: 1 });
+    // What the node actually sent shows in its row.
+    expect(greeting.summary).toContain('Hello there');
+    // Input and output: the message as the customer read it.
+    expect(greeting.output).toEqual(
+      expect.arrayContaining([expect.objectContaining({ kind: 'message', value: 'Hello there' })]),
+    );
     // The first row says why the run started.
     expect(res.body.log[0]).toMatchObject({ event: 'start', nodeId: null, outcome: 'ok' });
     expect(res.body.log[0].summary).toContain('keyword');

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Input, Spinner } from '@crm/ui';
@@ -26,6 +26,7 @@ export function SidePanel({
 }) {
   const t = useTranslations('team-chat.panel');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const now = useNow();
   const [q, setQ] = useState('');
   const [applied, setApplied] = useState('');
@@ -102,7 +103,9 @@ export function SidePanel({
               className="w-full rounded-md bg-background px-2 py-1.5 text-start text-xs hover:bg-border/60"
             >
               <span className="font-medium">{m.authorName}</span>{' '}
-              <span className="text-muted-foreground">{formatStamp(m.createdAt, now, locale)}</span>
+              <span className="text-muted-foreground">
+                {formatStamp(m.createdAt, now, locale, timeZone)}
+              </span>
               <span className="block truncate">
                 {plainBody(m.body ?? m.attachment?.name ?? '')}
               </span>

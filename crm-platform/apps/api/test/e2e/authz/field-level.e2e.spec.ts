@@ -63,10 +63,10 @@ let api: Api;
 let A: Tenant;
 let B: Tenant;
 let bAdminUuid = '';
-let aAdminUuid = '';
+let _aAdminUuid = '';
 let adminRoleUuid = '';
 let viewerRoleUuid = '';
-let agentRoleUuid = '';
+let _agentRoleUuid = '';
 let colleague: { token: string; userId: number; uuid: string };
 const T0 = Date.now() - 5 * 60_000;
 const OLD = '2001-01-01T00:00:00.000Z';
@@ -747,7 +747,7 @@ beforeAll(async () => {
     ]);
   }
   bAdminUuid = await uuidOfUser(B.adminUserId);
-  aAdminUuid = await uuidOfUser(A.adminUserId);
+  _aAdminUuid = await uuidOfUser(A.adminUserId);
   adminRoleUuid = (
     await h.owner.query(
       `SELECT r.uuid FROM user_roles ur JOIN roles r ON r.id = ur.role_id WHERE ur.user_id = $1 AND ur.org_id = $2 LIMIT 1`,
@@ -755,7 +755,7 @@ beforeAll(async () => {
     )
   ).rows[0].uuid as string;
   viewerRoleUuid = await roleUuid(A.orgId, 'Viewer');
-  agentRoleUuid = await roleUuid(A.orgId, 'Agent');
+  _agentRoleUuid = await roleUuid(A.orgId, 'Agent');
   const c = await api.member(A, 'colleague', []);
   colleague = { ...c, uuid: await uuidOfUser(c.userId) };
 }, 600_000);
@@ -1713,7 +1713,7 @@ describe('response exposure', () => {
 
 describe('custom fields and the field-metadata permissions', () => {
   let contactId = '';
-  let contactRv = 1;
+  let _contactRv = 1;
   const f: Record<string, { id: string; rowVersion: number }> = {};
 
   beforeAll(async () => {
@@ -1757,7 +1757,7 @@ describe('custom fields and the field-metadata permissions', () => {
       },
     ]);
     contactId = id!;
-    contactRv = Number(((await rowOf(contactId))!.row.row_version as number) ?? 1);
+    _contactRv = Number(((await rowOf(contactId))!.row.row_version as number) ?? 1);
   }, 120_000);
 
   const dataOf = async () => (await rowOf(contactId))!.row.data as Row;
@@ -2098,7 +2098,7 @@ describe('input ambiguity', () => {
       `{"name":"x","rowVersion":1e400}`,
       `{"name":"x","rowVersion":${a.rv},"ownerId":{"$ne":null}}`,
       `{"name":"\\u0000","rowVersion":${a.rv}}`,
-      `﻿{"name":"bom","rowVersion":${a.rv}}`,
+      `\uFEFF{"name":"bom","rowVersion":${a.rv}}`,
     ];
     for (const raw of bodies) {
       const r = await send('patch', `/v2/contacts/${a.id}`, writer.token, undefined, { raw });

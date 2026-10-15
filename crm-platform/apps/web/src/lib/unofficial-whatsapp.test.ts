@@ -10,6 +10,7 @@ import {
   offerChannels,
   offerEngines,
   offerSenders,
+  offerSendersFor,
   submittableSenderKey,
   submittableSenderKeys,
   unofficialEnabledIn,
@@ -107,5 +108,28 @@ describe('unofficial WhatsApp switch (pure rules)', () => {
     );
     expect(isUnofficialDisabledError(new Error('WA_UNOFFICIAL_DISABLED'))).toBe(false);
     expect(isUnofficialDisabledError(null)).toBe(false);
+  });
+});
+
+describe('offerSendersFor: the campaign screens wait for the switch instead of reading "loading" as "off"', () => {
+  const all = [waba, twilio, phone];
+
+  it('is undefined while the answer is pending or there is no list yet: show a skeleton, not an empty list', () => {
+    expect(offerSendersFor(all, 'pending')).toBeUndefined();
+    expect(offerSendersFor(undefined, 'on')).toBeUndefined();
+  });
+
+  it('hides the personal numbers only when the switch is known to be off', () => {
+    expect(offerSendersFor(all, 'off')).toEqual([waba, twilio]);
+    expect(offerSendersFor(all, 'on')).toEqual(all);
+  });
+
+  it('trusts the server list when the answer could not be read (the server never lists a personal number while the engine is off)', () => {
+    expect(offerSendersFor(all, 'unknown')).toEqual(all);
+  });
+
+  it('reads the engine from the key when a sender has none', () => {
+    const bare = [{ key: 'baileys:9' }, { key: 'waba:8' }];
+    expect(offerSendersFor(bare, 'off')).toEqual([{ key: 'waba:8' }]);
   });
 });

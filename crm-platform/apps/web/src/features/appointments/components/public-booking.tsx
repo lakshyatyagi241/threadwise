@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { Button, Field, Input, Select, Spinner, Textarea, cn } from '@crm/ui';
+import { Button, Checkbox, Field, Input, Select, Spinner, Textarea, cn } from '@crm/ui';
 import { publicApi } from '../api/service';
 import type { PublicBooking as PublicBookingData, PublicType } from '../api/schemas';
 import { errorKind, fieldErrors } from '../lib/errors';
@@ -57,6 +57,15 @@ import { SlotPicker } from './slot-picker';
  * confirm, and land on the page that holds your calendar entry and manage link. The server decides whether the time is still
  * free; a lost race sends the visitor back to the times with the form still filled in.
  */
+/** The address of the privacy link, as the visitor reads it; the link itself was checked to be https when the line was saved. */
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return url;
+  }
+}
+
 export function PublicBooking({ org, slug }: { org: string; slug: string }) {
   const q = useQuery({
     queryKey: ['appointments', 'public', 'type', org, slug],
@@ -116,6 +125,7 @@ function Service({
   const [submitted, setSubmitted] = useState(false);
   const [server, setServer] = useState<ServerProblems | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
+  const [consentTicked, setConsentTicked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [booked, setBooked] = useState<PublicBookingData | null>(null);
   const busyRef = useRef(false);
@@ -176,6 +186,7 @@ function Service({
       details,
       questions: type.questions,
       values,
+      ...(type.consent && consentTicked ? { consentVersion: type.consent.version } : {}),
     });
     const body = JSON.stringify(built.input);
     if (attempt.current?.body !== body) attempt.current = { body, key: crypto.randomUUID() };
@@ -350,6 +361,32 @@ function Service({
                     onChange={(v) => changeAnswer(a.index, v)}
                   />
                 ))}
+                {type.consent && (
+                  <Checkbox
+                    id={`${base}-consent`}
+                    checked={consentTicked}
+                    onChange={(e) => setConsentTicked(e.target.checked)}
+                    disabled={busy}
+                    label={
+                      <span dir="auto" className="text-sm">
+                        {type.consent.text}
+                        {type.consent.url && (
+                          <>
+                            {' '}
+                            <a
+                              href={type.consent.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline"
+                            >
+                              {hostOf(type.consent.url)}
+                            </a>
+                          </>
+                        )}
+                      </span>
+                    }
+                  />
+                )}
               </div>
 
               {price && <PriceSummary lines={price} />}

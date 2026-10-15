@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { memo, useState } from 'react';
 import { cn } from '@crm/ui';
 import type { ConversationNote, MessageResponse } from '@crm/contracts';
@@ -11,13 +11,18 @@ import {
   MediaStateNote,
   mediaView,
 } from '@/features/channel-whatsapp-cloud';
+import { EmailMessageBody } from '@/features/channel-email/components/email-message';
+import { composerErrorKey } from '@/features/channel-email/lib/composer-errors';
 import { isRetryableSend } from '../lib/errors';
+import { groupTallyOf } from '../lib/group-thread';
+import { displayMentions } from '../lib/mentions';
 import type { AgentReaction, PendingSend } from '../lib/thread';
 import { clockTime, fullStamp, humanSize } from '../lib/time';
 import {
   AlertIcon,
   FileIcon,
   LinkIcon,
+  ListIcon,
   MenuIcon,
   NoteIcon,
   ReplyIcon,
@@ -35,6 +40,7 @@ import {
 import { Ticks, useErrorText } from './parts';
 import { QuotePreview } from './quote-preview';
 import { ReactionBar } from './reaction-bar';
+import { StageChangeLine } from './stage-change-line';
 import { TemplateMessage } from './template-message';
 
 const BUBBLE = 'relative max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm sm:max-w-[70%]';
@@ -49,10 +55,12 @@ function MessageBody({
 }) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [showOriginal, setShowOriginal] = useState(false);
 
   const translated = m.isTranslated && m.translatedBody;
-  const text = translated ? m.translatedBody : m.body;
+  // A personal-number group message names the members it @mentions by their number in the body: show their names.
+  const text = translated ? m.translatedBody : displayMentions(m.body, m.mentions);
   const caption = text?.trim() ? text : null;
   const alt = m.media?.name ?? caption ?? t('kind.image');
 
@@ -88,6 +96,19 @@ function MessageBody({
       default:
         visual = <DocumentMedia media={media} />;
     }
+  }
+
+  // An email carries its own header, HTML body and files (TW-MAIL-026); the frame and the lists are the email feature's.
+  if (m.email) {
+    return (
+      <EmailMessageBody
+        email={m.email}
+        conversationId={m.conversationId}
+        messageId={m.id}
+        body={m.body}
+        date={m.providerAt ?? m.createdAt}
+      />
+    );
   }
 
   const referral =
@@ -256,7 +277,7 @@ function MessageBody({
       {m.kind === 'document' && media?.sizeBytes != null && !visual && (
         <p className="text-xs text-muted-foreground">{humanSize(media.sizeBytes)}</p>
       )}
-      <span className="sr-only">{fullStamp(m.createdAt, locale)}</span>
+      <span className="sr-only">{fullStamp(m.createdAt, locale, timeZone)}</span>
     </div>
   );
 }
@@ -273,6 +294,10 @@ export interface MessageBubbleProps {
   onRetry: (messageId: string) => Promise<void>;
   /** The person may open the channel settings, so a failure that the channel causes links there. */
   canManageChannel?: boolean;
+  /** Opens the message's delivery log (every step it went through). Offered on a message we sent. */
+  onOpenLog?: (messageId: string) => void;
+  /** On a stage change line: a later "undone" line of the same change is in the thread, so the Undo is gone. */
+  stageUndone?: boolean;
 }
 
 /**
@@ -287,23 +312,46 @@ export const MessageBubble = memo(function MessageBubble({
   agentReaction = null,
   onRetry,
   canManageChannel = false,
+  onOpenLog,
+  stageUndone = false,
 }: MessageBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
+  const tConsent = useTranslations('contact-consent.systemLine');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [retrying, setRetrying] = useState(false);
   const [reactOpen, setReactOpen] = useState(false);
 
   if (m.kind === 'system') {
+    // The stage change line is the AI's move, with an Undo; the consent line is worded in the reader's language; every other system
+    // line is the server's text.
+    if (m.systemEvent?.event === 'stage_change') {
+      return (
+        <li data-testid="inbox-message" className="flex justify-center">
+          <StageChangeLine event={m.systemEvent} undone={stageUndone} />
+        </li>
+      );
+    }
+    const consent = m.systemEvent?.event === 'consent' ? m.systemEvent : null;
     return (
       <li data-testid="inbox-message" className="flex justify-center">
-        <p className="max-w-[80%] rounded-md bg-muted px-3 py-1 text-center text-xs text-muted-foreground">
-          {m.body}
+        <p
+          data-testid={consent ? 'inbox-consent-line' : undefined}
+          className="max-w-[80%] rounded-md bg-muted px-3 py-1 text-center text-xs text-muted-foreground"
+        >
+          {consent
+            ? tConsent(consent.action === 'withdrawn' ? 'withdrawn' : 'granted', {
+                keyword: (consent.keyword ?? '').toUpperCase(),
+              })
+            : m.body}
         </p>
       </li>
     );
   }
 
   const out = m.direction === 'out';
+  // "Delivered to 5 of 8, read by 2": what Meta reported per member of a group, rolled up (null for anything else).
+  const tally = out ? groupTallyOf(m.groupDelivery) : null;
   const failed = m.status === 'failed';
   // The customer's app only has a message that reached the provider: ours must have been accepted first.
   const canReact =
@@ -343,6 +391,7 @@ export const MessageBubble = memo(function MessageBubble({
           <div
             className={cn(
               BUBBLE,
+              m.email && 'w-full sm:max-w-[90%]',
               out
                 ? 'rounded-ee-md border border-primary/25 bg-primary/15 text-foreground'
                 : 'rounded-es-md border border-border bg-background',
@@ -351,6 +400,31 @@ export const MessageBubble = memo(function MessageBubble({
           >
             {out && sender && (
               <p className="mb-0.5 text-[11px] font-medium text-muted-foreground">{sender}</p>
+            )}
+            {!out && m.group && (
+              <p
+                dir="auto"
+                data-testid="inbox-group-author"
+                className="mb-0.5 text-[11px] font-medium text-primary"
+              >
+                {m.group.senderName ?? m.group.participant ?? t('groupMember')}
+                {m.group.senderName && m.group.participant && (
+                  <span className="ms-1 font-normal text-muted-foreground" dir="ltr">
+                    {m.group.participant}
+                  </span>
+                )}
+              </p>
+            )}
+            {m.imported && (
+              <p
+                data-testid="inbox-imported"
+                title={t('importedHint')}
+                className="mb-0.5 text-[11px] text-muted-foreground"
+              >
+                <span className="rounded-full bg-muted px-1.5 py-0.5 font-medium">
+                  {t('imported')}
+                </span>
+              </p>
             )}
             {m.forwarded && (
               <p
@@ -423,6 +497,18 @@ export const MessageBubble = memo(function MessageBubble({
               className={cn('-top-10', out ? 'end-0' : 'start-0')}
             />
           )}
+          {out && onOpenLog && (
+            <button
+              type="button"
+              data-testid="inbox-message-log"
+              aria-label={t('deliveryLog')}
+              title={t('deliveryLog')}
+              onClick={() => onOpenLog(m.id)}
+              className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 hover:bg-muted hover:text-foreground focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-primary group-hover/row:opacity-100"
+            >
+              <ListIcon width={14} height={14} />
+            </button>
+          )}
           {onReply && (
             <button
               type="button"
@@ -438,10 +524,31 @@ export const MessageBubble = memo(function MessageBubble({
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
           {m.editedAt && <span className="italic">{t('edited')}</span>}
-          <time dateTime={m.createdAt} title={fullStamp(m.createdAt, locale)}>
-            {clockTime(m.createdAt, locale)}
+          <time dateTime={m.createdAt} title={fullStamp(m.createdAt, locale, timeZone)}>
+            {clockTime(m.createdAt, locale, timeZone)}
           </time>
           {out && <Ticks status={m.status} />}
+          {tally && (
+            <span data-testid="inbox-group-tally" className="flex items-center gap-1">
+              <span>
+                {t(tally.withTotal ? 'groupTally' : 'groupTallyNoTotal', {
+                  delivered: tally.delivered,
+                  members: tally.members,
+                  read: tally.read,
+                  failed: tally.failed,
+                })}
+              </span>
+              {tally.billable + tally.free > 0 && (
+                <span data-testid="inbox-group-billing" className="opacity-80">
+                  {'· '}
+                  {t('groupTallyBilled', {
+                    billable: tally.billable,
+                    free: tally.free,
+                  })}
+                </span>
+              )}
+            </span>
+          )}
         </div>
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
@@ -459,6 +566,16 @@ export const MessageBubble = memo(function MessageBubble({
             >
               {t('retry')}
             </button>
+            {onOpenLog && (
+              <button
+                type="button"
+                data-testid="inbox-failure-log"
+                onClick={() => onOpenLog(m.id)}
+                className="rounded font-medium underline underline-offset-2 hover:no-underline focus-visible:ring-2 focus-visible:ring-danger"
+              >
+                {t('deliveryLog')}
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -477,8 +594,11 @@ export interface PendingBubbleProps {
 export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: PendingBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const errorText = useErrorText();
+  const mailError = useTranslations('email.composer.error');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const failed = p.status === 'failed';
+  const mailKey = p.error ? composerErrorKey(p.error) : null;
   return (
     <li
       data-testid="inbox-pending"
@@ -504,12 +624,12 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
           )}
           {p.body && (
             <p dir="auto" className="whitespace-pre-wrap break-words">
-              {p.body}
+              {displayMentions(p.body, p.mentions)}
             </p>
           )}
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
-          <time dateTime={p.createdAt}>{clockTime(p.createdAt, locale)}</time>
+          <time dateTime={p.createdAt}>{clockTime(p.createdAt, locale, timeZone)}</time>
           {failed ? (
             <AlertIcon width={12} height={12} className="text-danger" />
           ) : (
@@ -519,7 +639,11 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
         </div>
         {failed && (
           <div className="mt-0.5 flex flex-wrap items-center justify-end gap-2 px-1 text-xs text-danger">
-            <span role="alert">{errorText(p.error ?? 'NETWORK')}</span>
+            <span role="alert">
+              {mailKey
+                ? mailError(mailKey, { seconds: p.retryAfterS ?? 0 })
+                : errorText(p.error ?? 'NETWORK')}
+            </span>
             {isRetryableSend(p.error ?? 'NETWORK') && (
               <button
                 type="button"
@@ -556,6 +680,7 @@ export function NoteBubble({
 }) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   return (
     <li data-testid="inbox-note" className="flex justify-center">
       <div className="w-full max-w-[85%] rounded-md border border-warning/30 bg-warning/10 px-3 py-2 text-sm text-foreground">
@@ -563,7 +688,8 @@ export function NoteBubble({
           <NoteIcon width={12} height={12} />
           <span>{t('noteLabel')}</span>
           <span className="font-normal normal-case text-muted-foreground">
-            · {note.author.name ?? t('unknownAuthor')} · {clockTime(note.createdAt, locale)}
+            · {note.author.name ?? t('unknownAuthor')} ·{' '}
+            {clockTime(note.createdAt, locale, timeZone)}
           </span>
           {canDelete && (
             <button

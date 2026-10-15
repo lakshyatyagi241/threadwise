@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Modelli email"
+    },
+    "common": {
+      "dismiss": "Chiudi"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Modelli email",
+      "subtitle": "Email riutilizzabili con oggetto, testo formattato e variabili. Inseriscine una in una risposta dal composer email.",
+      "newTemplate": "Nuovo modello",
+      "loading": "Caricamento dei modelli…",
+      "emptyTitle": "Nessun modello email per ora",
+      "empty": "Scrivi un'email una volta sola, con variabili come il nome del contatto, e riutilizzala in qualsiasi conversazione email.",
+      "emptyFilteredTitle": "Nessun modello corrisponde",
+      "emptyFiltered": "Prova con un'altra ricerca o rimuovi i filtri.",
+      "clearFilters": "Rimuovi filtri",
+      "unavailableTitle": "I modelli email non sono disponibili",
+      "unavailable": "Questo workspace non riesce a raggiungere il servizio dei modelli email in questo momento.",
+      "showing": "{count, plural, one {# modello visualizzato} other {# modelli visualizzati}}",
+      "loadMore": "Carica altri",
+      "loadingMore": "Caricamento…",
+      "noPermission": "Puoi usare i modelli condivisi dal tuo workspace e gestire i tuoi. Chiedi a un amministratore se devi modificare quelli condivisi."
+    },
+    "toolbar": {
+      "search": "Cerca modelli",
+      "searchPlaceholder": "Cerca per nome, oggetto o categoria",
+      "scope": "Di chi",
+      "scopes": {
+        "all": "Tutti",
+        "shared": "Condivisi",
+        "mine": "Miei"
+      },
+      "purpose": "Tipo",
+      "anyPurpose": "Qualsiasi tipo",
+      "purposes": {
+        "general": "Generale",
+        "marketing": "Marketing"
+      },
+      "status": "Stato",
+      "statuses": {
+        "active": "Attivi",
+        "archived": "Archiviati",
+        "all": "Tutti"
+      },
+      "category": "Categoria",
+      "anyCategory": "Qualsiasi categoria",
+      "refresh": "Aggiorna"
+    },
+    "card": {
+      "subject": "Oggetto",
+      "noSubject": "Nessun oggetto: la risposta mantiene il proprio",
+      "badges": {
+        "shared": "Condiviso",
+        "mine": "Mio",
+        "marketing": "Marketing",
+        "archived": "Archiviato"
+      },
+      "used": "{count, plural, =0 {Mai usato} one {Usato una volta} other {Usato # volte}}",
+      "lastUsed": "Ultimo utilizzo {date}",
+      "by": "Di {name}",
+      "variables": "Variabili: {list}",
+      "edit": "Modifica",
+      "archive": "Archivia",
+      "restore": "Ripristina",
+      "delete": "Elimina",
+      "preview": "Mostra anteprima",
+      "hidePreview": "Nascondi anteprima"
+    },
+    "delete": {
+      "title": "Eliminare questo modello?",
+      "message": "\"{name}\" verrà rimosso per tutti coloro che possono usarlo. Le email già inviate con questo modello non vengono modificate.",
+      "confirm": "Elimina",
+      "cancel": "Annulla"
+    },
+    "editor": {
+      "eyebrow": "Modello email",
+      "newTitle": "Nuovo modello email",
+      "editTitle": "Modifica modello email",
+      "close": "Chiudi",
+      "name": "Nome",
+      "namePlaceholder": "Benvenuto dopo la registrazione",
+      "subject": "Oggetto",
+      "subjectPlaceholder": "Benvenuto in {workspace}, {name}",
+      "subjectHint": "Facoltativo. Se lasci vuoto, la risposta mantiene il proprio oggetto.",
+      "body": "Messaggio",
+      "bodyPlaceholder": "Scrivi l'email. Usa le variabili qui sotto per personalizzarla.",
+      "category": "Categoria",
+      "categoryPlaceholder": "Onboarding",
+      "categoryList": "Categorie in uso",
+      "purpose": "Tipo",
+      "purposes": {
+        "general": {
+          "label": "Generale",
+          "hint": "Risposte e posta one-to-one. Inviato come qualsiasi risposta."
+        },
+        "marketing": {
+          "label": "Marketing",
+          "hint": "Email promozionali. Richiedono il consenso marketing del contatto dove il tuo workspace lo prevede e includono sempre un link per annullare l'iscrizione."
+        }
+      },
+      "scope": "Chi può usarlo",
+      "scopes": {
+        "shared": {
+          "label": "Tutti nel workspace",
+          "hint": "Un modello condiviso. Solo chi gestisce i modelli può modificarlo."
+        },
+        "mine": {
+          "label": "Solo io",
+          "hint": "Un modello personale. Nessun altro lo vede."
+        }
+      },
+      "variables": "Inserisci una variabile",
+      "variablesHint": "Le variabili vengono compilate con i dati del contatto, i tuoi e quelli del workspace quando il modello viene usato. Una variabile senza valore resta come scritta, così puoi correggerla.",
+      "variableGroups": {
+        "contact": "Contatto",
+        "agent": "Tu",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Inserisce nel campo {field}",
+      "fields": {
+        "subject": "oggetto",
+        "body": "messaggio"
+      },
+      "save": "Salva modifiche",
+      "create": "Crea modello",
+      "cancel": "Annulla",
+      "problems": {
+        "required": "Campo obbligatorio.",
+        "tooLong": "Troppo lungo (massimo {limit} caratteri).",
+        "subjectLines": "L'oggetto deve essere su una sola riga."
+      }
+    },
+    "preview": {
+      "title": "Anteprima con dati di esempio",
+      "subjectLabel": "Oggetto",
+      "noSubject": "(senza oggetto)",
+      "empty": "Scrivi il messaggio per vedere un'anteprima.",
+      "loading": "Aggiornamento dell'anteprima…",
+      "failed": "Impossibile aggiornare l'anteprima.",
+      "issues": "{count, plural, one {Questa variabile non ha un valore di esempio e resta come scritta: {list}} other {Queste variabili non hanno un valore di esempio e restano come scritte: {list}}}",
+      "sampleNote": "Solo valori di esempio. I valori reali provengono dal contatto quando usi il modello."
+    },
+    "picker": {
+      "button": "Modelli",
+      "title": "Modelli email",
+      "search": "Cerca modelli",
+      "searchPlaceholder": "Cerca modelli",
+      "loading": "Caricamento dei modelli…",
+      "empty": "Ancora nessun modello. Creali in Modelli email nel menu CRM.",
+      "emptyFiltered": "Nessun modello corrisponde alla ricerca.",
+      "loadError": "Impossibile caricare i modelli.",
+      "marketing": "Marketing",
+      "mine": "Miei",
+      "replaceTitle": "Sostituire ciò che hai scritto?",
+      "replaceMessage": "Usando \"{name}\" il messaggio nella casella viene sostituito, così come l'oggetto se il modello ne ha uno.",
+      "replaceConfirm": "Sostituisci",
+      "replaceCancel": "Annulla",
+      "used": "Modello in uso: \"{name}\"",
+      "marketingNote": "Questa è un'email di marketing: segue le tue regole sul consenso e include un link per annullare l'iscrizione.",
+      "forget": "Non usare più questo modello",
+      "more": "Carica altri"
+    },
+    "toast": {
+      "created": "Modello creato",
+      "updated": "Modello salvato",
+      "archived": "Modello archiviato",
+      "restored": "Modello ripristinato",
+      "deleted": "Modello eliminato"
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai l'autorizzazione per farlo.",
+      "signedOut": "La sessione è terminata. Accedi di nuovo per continuare.",
+      "conflict": "Qualcun altro ha modificato questo modello. È stata caricata la sua versione: controllala e riprova.",
+      "validation": "Alcuni dati inseriti non sono validi. Controlla i campi e riprova.",
+      "unavailable": "I modelli email non sono disponibili al momento.",
+      "rateLimited": "Troppe richieste. Attendi un attimo e riprova.",
+      "notFound": "Questo modello non esiste più.",
+      "planDisabled": "Il tuo piano non include l'email. Passa a un piano superiore per usare i modelli email.",
+      "nameTaken": "Hai già un modello con questo nome. Scegli un nome diverso.",
+      "notEditable": "Solo chi gestisce i modelli email può modificare un modello condiviso.",
+      "archived": "Questo modello è archiviato. Ripristinalo per usarlo.",
+      "unexpected": "Qualcosa è andato storto. Riprova.",
+      "retry": "Riprova"
+    }
+  }
+}

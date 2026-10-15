@@ -296,7 +296,9 @@
       "media": "Pratinjau {kind}",
       "contactsDenied": "Anda tidak memiliki akses ke daftar kontak. Pilih kontak melalui grup atau tag.",
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
-      "previewLabel": "Pratinjau templat"
+      "previewLabel": "Pratinjau templat",
+      "colEmail": "Email",
+      "noEmail": "Tidak ada alamat email"
     },
     "overrides": {
       "title": "Isi pengiriman ini",
@@ -353,6 +355,21 @@
         "name": "Instagram",
         "hint": "Kirim pesan ke orang yang sudah ada di DM Instagram Anda — tanpa persetujuan template.",
         "cta": "Buat broadcast Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Kirim pesan Messenger ke orang yang mengirim pesan ke Halaman Anda dalam 24 jam terakhir.",
+        "cta": "Buat siaran Facebook"
+      },
+      "email": {
+        "name": "Email",
+        "hint": "Kirim pesan sebagai email dari kotak surat yang terhubung, lengkap dengan tautan berhenti berlangganan.",
+        "cta": "Buat kampanye email"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Kirim pesan ke orang-orang yang sudah mengobrol dengan akun LINE Anda.",
+        "cta": "Buat siaran LINE"
       }
     }
   }

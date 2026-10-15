@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Log de auditoria",
+    "description": "Quem alterou o quê neste workspace, quando e de quê para quê. Use para responder \"quem fez isso?\", revisar as alterações da sua equipe e conferir o que o suporte da plataforma fez quando você pediu ajuda.",
+    "tile": {
+      "label": "Log de auditoria",
+      "description": "Veja quem alterou o quê no seu workspace, quando e de quê para quê. Filtre e exporte.",
+      "keywords": "log de atividades, auditoria, histórico, alterações, quem alterou, segurança, conformidade, exportar, acesso do suporte"
+    },
+    "retention": {
+      "days": "As entradas são mantidas por {days, plural, one {# dia} many {# de dias} other {# dias}} e depois excluídas. A plataforma define esse prazo.",
+      "forever": "As entradas são mantidas sem data de término. A plataforma define essa política.",
+      "unknown": "As entradas são mantidas pelo prazo definido pela plataforma e depois excluídas."
+    },
+    "forbidden": {
+      "title": "Você não tem acesso ao log de auditoria",
+      "body": "Peça a um Owner ou Admin do workspace para dar ao seu perfil a permissão de ver o log de auditoria."
+    },
+    "filters": {
+      "label": "Filtros do log de auditoria",
+      "range": "Período",
+      "from": "De",
+      "to": "Até",
+      "actor": "Pessoa",
+      "allActors": "Todos",
+      "actorType": "Quem agiu",
+      "allActorTypes": "Qualquer um",
+      "module": "Área",
+      "allModules": "Todas as áreas",
+      "action": "Ação",
+      "allActions": "Todas as ações",
+      "search": "Buscar áreas e ações",
+      "searchHint": "Busca apenas na área e na ação, nunca nos valores alterados.",
+      "recordId": "Número do registro",
+      "requestId": "ID da requisição",
+      "supportOnly": "Somente sessões do suporte da plataforma",
+      "apply": "Aplicar filtros",
+      "refresh": "Atualizar",
+      "reset": "Limpar filtros"
+    },
+    "ranges": {
+      "24h": "Últimas 24 horas",
+      "7d": "Últimos 7 dias",
+      "30d": "Últimos 30 dias",
+      "90d": "Últimos 90 dias",
+      "custom": "Escolher datas"
+    },
+    "actorTypes": {
+      "user": "Uma pessoa",
+      "system": "O sistema",
+      "api_key": "Uma chave de API",
+      "bot": "Um bot",
+      "partner_agent": "Um agente parceiro",
+      "candidate": "Um candidato",
+      "other": "Outro"
+    },
+    "actors": {
+      "system": "Sistema",
+      "api_key": "Chave de API",
+      "apiKeyNamed": "Chave de API: {name}",
+      "bot": "Bot",
+      "partner_agent": "Agente parceiro",
+      "candidate": "Candidato",
+      "other": "Outro",
+      "removedUser": "Um usuário removido",
+      "support": "Suporte da plataforma",
+      "actingAs": "agindo como {name}",
+      "supportBadge": "Suporte da plataforma"
+    },
+    "actions": {
+      "insert": "Criado",
+      "update": "Atualizado",
+      "delete": "Excluído",
+      "merge": "Mesclado",
+      "login": "Login realizado",
+      "export": "Exportado",
+      "read": "Visualizado"
+    },
+    "modules": {
+      "contacts": "Contatos",
+      "contact_groups": "Grupos de contatos",
+      "contact_notes": "Notas de contatos",
+      "companies": "Empresas",
+      "deals": "Negócios",
+      "tags": "Etiquetas",
+      "members": "Membros da equipe",
+      "teams": "Equipes",
+      "conversation_notes": "Notas de conversas",
+      "broadcasts": "Transmissões",
+      "campaigns": "Campanhas",
+      "faqs": "FAQs",
+      "api_keys": "Chaves de API",
+      "audit-log": "Log de auditoria",
+      "audit-log-exports": "Exportações do log de auditoria",
+      "contact_consent_exports": "Exportações de comprovante de consentimento"
+    },
+    "table": {
+      "caption": "Entradas de auditoria, da mais recente para a mais antiga. Os horários são exibidos no seu fuso horário ({zone}).",
+      "zone": "Os horários são exibidos no seu fuso horário: {zone}.",
+      "time": "Quando",
+      "actor": "Quem",
+      "action": "O quê",
+      "record": "Registro",
+      "changed": "Campos alterados",
+      "request": "Requisição",
+      "details": "Detalhes",
+      "openDetails": "Detalhes desta alteração: {what}"
+    },
+    "states": {
+      "loading": "Carregando o log de auditoria",
+      "empty": "Nada registrado neste período",
+      "emptyHint": "As alterações feitas pela sua equipe aparecerão aqui.",
+      "emptyFiltered": "Nenhuma entrada corresponde a estes filtros",
+      "emptyFilteredHint": "Tente um período maior ou remova um filtro.",
+      "retry": "Tentar novamente",
+      "showing": "{count, plural, one {# entrada carregada} many {# de entradas carregadas} other {# entradas carregadas}}",
+      "loadMore": "Carregar mais",
+      "end": "Fim da lista"
+    },
+    "detail": {
+      "title": "Entrada de auditoria",
+      "when": "Quando",
+      "who": "Quem",
+      "what": "O quê",
+      "record": "Registro",
+      "openRecord": "Abrir o registro",
+      "request": "ID da requisição",
+      "changes": "O que mudou",
+      "field": "Campo",
+      "before": "Antes",
+      "after": "Depois",
+      "noChanges": "Esta entrada não lista alterações de campos.",
+      "supportTitle": "O suporte da plataforma atuou no seu workspace",
+      "supportBody": "Um membro do suporte da plataforma usou uma sessão de suporte como {name}. Ele podia fazer o que essa pessoa pode fazer.",
+      "supportReason": "Motivo informado: {reason}",
+      "supportNoReason": "O motivo desta sessão não está mais disponível.",
+      "supportReadOnly": "A sessão era somente leitura.",
+      "secret": "Segredo oculto",
+      "secretHint": "Senhas, chaves e tokens nunca são exibidos.",
+      "maskedHint": "Os dados pessoais estão parcialmente ocultos.",
+      "maskedNote": "Dados pessoais, como telefones, e-mails, nomes e notas, ficam parcialmente ocultos. Segredos nunca são exibidos.",
+      "maskedNoteOwner": "Segredos, como senhas, chaves e tokens, ficam ocultos para todos.",
+      "audited": "A abertura desta entrada é registrada no log de auditoria."
+    },
+    "export": {
+      "title": "Exportar",
+      "note": "Prepara um CSV com as entradas que correspondem aos filtros acima. Ele é mantido por {days} dias e sempre oculta dados pessoais.",
+      "button": "Exportar CSV",
+      "preparing": "Preparando o arquivo",
+      "requested": "A exportação está sendo preparada. Avisaremos por e-mail quando estiver pronta.",
+      "none": "Nenhuma exportação ainda.",
+      "status": {
+        "queued": "Aguardando",
+        "running": "Preparando",
+        "ready": "Pronta",
+        "failed": "Falhou",
+        "expired": "Expirada"
+      },
+      "rows": "{count, plural, one {# entrada} many {# de entradas} other {# entradas}}",
+      "expires": "mantida até {date}",
+      "download": "Baixar",
+      "failed": "Não foi possível gerar esta exportação. Solicite novamente."
+    },
+    "errors": {
+      "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "notFound": "Essa entrada ou exportação não foi encontrada.",
+      "rangeInvalid": "Escolha um período de no máximo 400 dias, com o fim depois do início.",
+      "exportInProgress": "Já há uma exportação sendo preparada. Aguarde o e-mail dela e solicite outra.",
+      "exportNotReady": "Esta exportação não está pronta ou já expirou.",
+      "rateLimited": "Muitas requisições. Aguarde um momento e tente novamente.",
+      "validation": "Um dos filtros não é válido.",
+      "unexpected": "Algo deu errado. Tente novamente."
+    },
+    "common": {
+      "close": "Fechar",
+      "dismiss": "Dispensar"
+    }
+  }
+}

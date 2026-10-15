@@ -17,6 +17,9 @@ import { PaymentWebhookController } from '../../../src/modules/storefront-builde
 import { BotsController } from '../../../src/modules/channel-telegram/bots.controller';
 import { TgBroadcastsController } from '../../../src/modules/channel-telegram/tg-broadcasts.controller';
 import { WebhookController as TelegramWebhookController } from '../../../src/modules/channel-telegram/webhook.controller';
+import { ChannelsController as LineChannelsController } from '../../../src/modules/channel-line/channels.controller';
+import { LineBroadcastsController } from '../../../src/modules/channel-line/line-broadcasts.controller';
+import { WebhookController as LineWebhookController } from '../../../src/modules/channel-line/webhook.controller';
 import { SmsSendersController } from '../../../src/modules/channel-sms/sms-senders.controller';
 import { SmsPlatformController } from '../../../src/modules/channel-sms/sms-platform.controller';
 import { SmsStatusController } from '../../../src/modules/channel-sms/sms-status.controller';
@@ -74,6 +77,8 @@ describe('whole-controller plan features', () => {
     ['public api', PublicApiController, 'public_api'],
     ['telegram bots', BotsController, 'extra_channels'],
     ['telegram broadcasts', TgBroadcastsController, 'extra_channels'],
+    ['line channels', LineChannelsController, 'extra_channels'],
+    ['line broadcasts', LineBroadcastsController, 'extra_channels'],
     ['sms senders', SmsSendersController, 'sms'],
     ['facebook broadcasts', FbBroadcastsController, 'extra_channels'],
     ['facebook insights', InsightsController, 'extra_channels'],
@@ -114,6 +119,7 @@ describe('write-route plan features', () => {
 describe('routes that must stay open (third parties, visitors, paywall rendering)', () => {
   const open: Array<[string, Ctor]> = [
     ['telegram inbound webhook', TelegramWebhookController],
+    ['line inbound webhook', LineWebhookController],
     ['sms delivery reports', SmsStatusController],
     ['sms platform switch (operator console)', SmsPlatformController],
     ['facebook webhook', FacebookPublicController],
@@ -132,7 +138,10 @@ describe('routes that must stay open (third parties, visitors, paywall rendering
 });
 
 function stubEntitlements(enabled: boolean): PlanEntitlementService {
-  const stub = { featureEnabled: async () => enabled } as unknown as PlanEntitlementService;
+  const stub = {
+    featureEnabled: async () => enabled,
+    forOrg: async () => null,
+  } as unknown as PlanEntitlementService;
   (stub as { assertFeature: unknown }).assertFeature =
     PlanEntitlementService.prototype.assertFeature.bind(stub);
   return stub;

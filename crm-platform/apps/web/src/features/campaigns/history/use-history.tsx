@@ -13,7 +13,7 @@ import { defaultTimeZone } from '../wizard/lib/schedule';
 export function useWorkspaceTime() {
   const session = useSession();
   const format = useFormatter();
-  const zone = defaultTimeZone(session.org.timezone);
+  const zone = defaultTimeZone(session.effectiveTimezone);
   return {
     zone,
     when: (iso: string | null | undefined): string =>

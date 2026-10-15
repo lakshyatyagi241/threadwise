@@ -28,6 +28,7 @@ export const KEYS = {
   statusOptions: ['cat', 'status-options'] as const,
   groups: ['cat', 'groups'] as const,
   stats: ['cat', 'stats'] as const,
+  owners: ['cat', 'owners'] as const,
 };
 
 /** Rows per screen (the API accepts up to 1000; the footer offers these); ten is the default until one is remembered. */
@@ -48,6 +49,11 @@ export interface ContactFilters {
   imported: boolean;
   /** Members of one segment (a saved rule that fills itself), by id; empty for none. Combines with every other filter. */
   segment: string;
+  /**
+   * Owners to show: person ids and/or `none` (contacts nobody owns), comma-separated, in the order picked; empty for everyone.
+   * Several mean "any of them".
+   */
+  owner: string;
   /** Ad-hoc conditions (a segment's rule tree as JSON text) from the Hub's "Add condition"; empty for none. */
   rules: string;
   order: 'asc' | 'desc';
@@ -66,6 +72,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   consent: '',
   imported: false,
   segment: '',
+  owner: '',
   rules: '',
   order: 'desc',
   sort: 'createdAt',
@@ -78,8 +85,10 @@ export function contactFilterBody(
   f: Pick<
     ContactFilters,
     'q' | 'lifecycleStage' | 'group' | 'tag' | 'consent' | 'imported' | 'segment'
-  > & { rules?: string },
+  > & { rules?: string; owner?: string },
 ) {
+  const owners = ownerTokens(f.owner ?? '');
+  const ownerIds = owners.filter((o) => o !== UNASSIGNED_OWNER);
   return {
     q: f.q.trim() || undefined,
     lifecycleStage: f.lifecycleStage || undefined,
@@ -90,7 +99,24 @@ export function contactFilterBody(
     imported: f.imported ? true : undefined,
     segmentId: f.segment || undefined,
     rules: f.rules || undefined,
+    ownerIds: ownerIds.length > 0 ? ownerIds : undefined,
+    unassigned: owners.includes(UNASSIGNED_OWNER) ? true : undefined,
   };
+}
+
+/** The `none` token of the owner filter: contacts with no owner. */
+export const UNASSIGNED_OWNER = 'none';
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** The distinct, valid tokens of an owner filter value (a person's uuid or `none`), in order; anything else is dropped. */
+export function ownerTokens(value: string): string[] {
+  const out: string[] = [];
+  for (const raw of value.split(',')) {
+    const t = raw.trim().toLowerCase();
+    if ((t === UNASSIGNED_OWNER || UUID_RE.test(t)) && !out.includes(t)) out.push(t);
+  }
+  return out.slice(0, 50);
 }
 
 /** The query string of `GET /contacts`. Rows come with their group and tag chips; the total feeds the tiles. */
@@ -106,6 +132,8 @@ export function listQuery(f: ContactFilters) {
     imported: b.imported,
     segmentId: b.segmentId,
     rules: b.rules,
+    ownerIds: b.ownerIds?.join(','),
+    unassigned: b.unassigned,
     order: f.order,
     sort: f.sort === 'createdAt' ? undefined : f.sort,
     limit: f.limit,
@@ -235,8 +263,15 @@ export const createContact = (body: unknown): Promise<ContactRow> =>
 export const updateContact = (id: string, body: unknown): Promise<ContactRow> =>
   apiFetch(`/contacts/${id}`, { method: 'PATCH', body, schema: contactResponseSchema });
 
-export const deleteContact = (id: string): Promise<void> =>
-  apiFetch(`/contacts/${id}`, { method: 'DELETE' });
+/**
+ * Deleting a contact erases their conversations, messages, media, files, call recordings and call logs (leads, deals, tasks and
+ * invoices stay). `eraseHistory: false` keeps the conversations without the person's identity; absent means erase.
+ */
+export const deleteContact = (id: string, opts: { eraseHistory?: boolean } = {}): Promise<void> =>
+  apiFetch(`/contacts/${id}`, {
+    method: 'DELETE',
+    query: opts.eraseHistory === false ? { eraseHistory: false } : undefined,
+  });
 
 export function invalidateContacts(qc: QueryClient) {
   return Promise.all([

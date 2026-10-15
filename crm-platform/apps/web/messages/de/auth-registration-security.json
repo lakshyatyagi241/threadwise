@@ -214,7 +214,6 @@
         "sessionExpired": "Ihre Sitzung ist aus Sicherheitsgründen abgelaufen. Bitte versuchen Sie es erneut.",
         "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
         "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Bitte versuchen Sie es erneut.",
-        "requestId": "Anfrage-ID",
         "signupExpired": "Bitte beginnen Sie die Registrierung erneut.",
         "policyRules": {
           "min_length": "Verwenden Sie mindestens {min, plural, one {# Zeichen} other {# Zeichen}}.",

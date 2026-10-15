@@ -406,6 +406,8 @@
       "colStarted": "شروع ہوا",
       "colActivity": "آخری سرگرمی",
       "colSteps": "مراحل",
+      "colReplies": "جوابات",
+      "repliesHint": "اس رن کے انتظار نوڈ تک پہنچنے والے صارف کے پیغامات",
       "colActions": "عمل",
       "open": "رن کھولیں",
       "cancel": "منسوخ کریں",
@@ -479,7 +481,24 @@
       "retention": "رن ختم ہونے کے {days} دن بعد لاگز حذف ہو جاتے ہیں۔",
       "pathTitle": "اختیار کیا گیا راستہ",
       "notReached": "نہیں پہنچے",
-      "noErrors": "اس رن میں کوئی خرابی نہیں۔"
+      "noErrors": "اس رن میں کوئی خرابی نہیں۔",
+      "factNext": "اگلا: {node}",
+      "factWaiting": "یہاں انتظار: {node}",
+      "factDelay": "{time} انتظار",
+      "factReplied": "کسٹمر نے جواب دیا: {text}",
+      "factEnded": "ختم: {reason}",
+      "ioInput": "ان پٹ",
+      "ioOutput": "آؤٹ پٹ",
+      "ioKind": {
+        "message": "بھیجا گیا پیغام",
+        "reply": "کسٹمر کا جواب",
+        "variable": "متغیر",
+        "request": "درخواست",
+        "response": "جواب",
+        "result": "نتیجہ"
+      },
+      "factMenuKept": "یہاں اگلا مرحلہ نہیں۔ {node} کے اختیارات فعال رہتے ہیں۔",
+      "factAnswered": "{time} بعد جواب ملا"
     },
     "event": {
       "step": "مرحلہ",
@@ -498,7 +517,9 @@
       "error": "خرابی",
       "skipped": "چھوڑا گیا",
       "waiting": "انتظار میں",
-      "timeout": "وقت ختم"
+      "timeout": "وقت ختم",
+      "answered": "جواب مل گیا",
+      "gaveUp": "کوئی جواب نہیں"
     }
   }
 }

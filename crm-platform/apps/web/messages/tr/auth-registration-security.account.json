@@ -22,7 +22,6 @@
         "signedOut": "Oturumunuz sona erdi. Lütfen tekrar oturum açın.",
         "rateLimited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
         "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
-        "requestId": "İstek kimliği",
         "locked": "Çok fazla başarısız deneme. Tekrar denemeden önce bir süre bekleyin.",
         "lockedWait": "Çok fazla başarısız deneme. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Saat dilimi",
         "workspaceTimezoneHint": "{workspace} için geçerlidir. Yalnızca sahipler ve yöneticiler değiştirebilir.",
+        "myTimezone": "Saat dilimim",
+        "myTimezoneHint": "Tarih ve saatler size {zone} diliminde gösterilir. Çalışma alanının saat dilimini izlemek için boş bırakın (çalışma alanında yoksa UTC).",
+        "myTimezoneUseWorkspace": "Çalışma alanı varsayılanını kullan",
         "saved": "Profil kaydedildi.",
         "errors": {
           "fullNameRequired": "Ad soyadınızı girin.",
@@ -367,7 +369,8 @@
         "failed": "Çalışma alanı değiştirilemedi. Lütfen tekrar deneyin.",
         "notAvailable": "Bu çalışma alanına geçemezsiniz.",
         "rateLimited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar deneyin.",
-        "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin."
+        "rateLimitedWait": "Çok fazla deneme. {seconds, plural, one {# saniye} other {# saniye}} sonra tekrar deneyin.",
+        "unverified": "Bu çalışma alanına geçmek için önce bu çalışma alanında e-postanızı doğrulayın."
       },
       "mfaChallenge": {
         "title": "Siz olduğunuzu doğrulayın",
@@ -549,10 +552,13 @@
             "storefront_builder": "Mağaza vitrini oluşturucu",
             "invoicing": "Faturalama",
             "forms_and_links": "Formlar ve bağlantılar",
-            "extra_channels": "Telegram, Facebook ve Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ve WeChat",
             "form_builder": "Formlar",
             "waba_groups": "WhatsApp grupları",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Yardım asistanı",
+            "email_channel": "E-posta (Gmail) kanalı",
+            "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

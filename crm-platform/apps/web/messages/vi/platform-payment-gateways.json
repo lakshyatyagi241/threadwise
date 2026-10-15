@@ -6,7 +6,8 @@
       "orders": "Lịch sử đơn hàng",
       "billingHistory": "Lịch sử thanh toán",
       "invoices": "Hóa đơn",
-      "billingSettings": "Cài đặt thanh toán"
+      "billingSettings": "Cài đặt thanh toán",
+      "subscriptions": "Gói đăng ký"
     },
     "admin": {
       "title": "Cổng thanh toán",
@@ -236,8 +237,12 @@
           "30d": "30 ngày gần đây",
           "90d": "90 ngày gần đây",
           "1y": "Năm trước",
-          "all": "Toàn thời gian"
-        }
+          "all": "Toàn thời gian",
+          "custom": "Khoảng tùy chọn"
+        },
+        "customFrom": "Từ ngày",
+        "customTo": "Đến ngày",
+        "customInvalid": "Chọn hai ngày hợp lệ: ngày bắt đầu không được sau ngày kết thúc, cách nhau tối đa 5 năm."
       },
       "orders": {
         "title": "Lịch sử đơn hàng",
@@ -249,7 +254,8 @@
         "windows": {
           "90d": "90 ngày gần đây",
           "this_year": "Năm nay",
-          "all": "Toàn thời gian"
+          "all": "Toàn thời gian",
+          "custom": "Khoảng tùy chọn"
         },
         "kpi": {
           "total": "Tổng đơn hàng",
@@ -299,7 +305,8 @@
           "markPaid": "Đánh dấu đã thanh toán",
           "cancelOrder": "Hủy",
           "approve": "Phê duyệt",
-          "reject": "Từ chối"
+          "reject": "Từ chối",
+          "refund": "Hoàn tiền"
         },
         "confirm": {
           "approveTitle": "Đánh dấu đơn hàng này là đã thanh toán?",
@@ -432,7 +439,7 @@
           "gross": "Doanh thu gộp",
           "net": "Doanh thu ròng",
           "netPct": "{pct}% ròng",
-          "success": "Ủy quyền thành công",
+          "success": "Tỷ lệ thanh toán thành công",
           "failed": "Thất bại",
           "events": "{count, plural, other {# sự kiện}}",
           "refunds": "Hoàn tiền",
@@ -673,6 +680,79 @@
           "faqsHint": "Các mục thu gọn hiển thị bên dưới các gói.",
           "configured": "Đã cấu hình {count}."
         }
+      },
+      "subscriptions": {
+        "title": "Gói đăng ký",
+        "eyebrow": "Thanh toán",
+        "titleFirst": "Nền tảng",
+        "titleSecond": "gói đăng ký",
+        "description": "Các gói đăng ký gói cước và tiện ích bổ sung được quản lý qua nhà cung cấp thanh toán, trên tất cả không gian làm việc. Chấm dứt một gói, làm mới từ nhà cung cấp hoặc hoàn tiền một khoản thu.",
+        "kpi": {
+          "active": "Đang hoạt động",
+          "pastDue": "Thanh toán thất bại",
+          "canceled": "Đã hủy"
+        },
+        "statusFilter": "Trạng thái gói đăng ký",
+        "statuses": {
+          "all": "Tất cả",
+          "active": "Đang hoạt động",
+          "past_due": "Thanh toán thất bại",
+          "pending": "Đang chờ",
+          "canceled": "Đã hủy",
+          "expired": "Đã hết hạn"
+        },
+        "kind": {
+          "plan": "Gói cước",
+          "addon": "Tiện ích bổ sung"
+        },
+        "search": "Tìm không gian làm việc hoặc ID nhà cung cấp",
+        "noun": "gói đăng ký",
+        "empty": "Không có gói đăng ký nào phù hợp.",
+        "col": {
+          "workspace": "Không gian làm việc",
+          "item": "Mục",
+          "price": "Giá",
+          "paidUntil": "Đã trả đến",
+          "status": "Trạng thái",
+          "provider": "Nhà cung cấp",
+          "actions": "Thao tác"
+        },
+        "cancelFailed": "Hủy tại nhà cung cấp thất bại",
+        "cancelFailedHint": "Bản ghi cục bộ đã được chấm dứt, nhưng nhà cung cấp chưa xác nhận việc hủy. Hãy hoàn tất trong trang quản trị của nhà cung cấp để ngừng thu tiền.",
+        "actions": {
+          "sync": "Làm mới",
+          "refund": "Hoàn tiền",
+          "endAtCycle": "Chấm dứt khi hết chu kỳ",
+          "endNow": "Chấm dứt ngay"
+        },
+        "confirm": {
+          "title": "Chấm dứt gói đăng ký này?",
+          "atCycle": "{name} vẫn được truy cập đến hết chu kỳ đã thanh toán và sẽ không bị thu tiền thêm.",
+          "now": "Chấm dứt ngay gói đăng ký của {name} tại nhà cung cấp. Sẽ không có khoản thu nào nữa."
+        },
+        "ended": "Gói đăng ký đã được chấm dứt tại nhà cung cấp.",
+        "endedLocalOnly": "Đã chấm dứt tại đây, nhưng nhà cung cấp chưa xác nhận việc hủy. Hãy hoàn tất trong trang quản trị của nhà cung cấp.",
+        "endedUnsupported": "Đã chấm dứt tại đây. Không thể hủy nhà cung cấp này từ đây.",
+        "alreadyEnded": "Gói này đã được chấm dứt trước đó.",
+        "synced": "Đã kiểm tra với nhà cung cấp: {outcome}."
+      },
+      "refund": {
+        "title": "Hoàn tiền {label}",
+        "intro": "Khoản hoàn tiền được gửi đến nhà cung cấp thanh toán và quay về phương thức thanh toán ban đầu của người mua.",
+        "charge": "Khoản thu cần hoàn tiền",
+        "pickCharge": "Chọn một khoản thu đã thanh toán",
+        "loadingCharges": "Đang tải các khoản thu",
+        "chargesFailed": "Không thể hỏi nhà cung cấp thanh toán về các khoản thu của gói đăng ký này.",
+        "noPaidCharges": "Nhà cung cấp không liệt kê khoản thu đã thanh toán nào cho gói đăng ký này.",
+        "amount": "Số tiền ({currency})",
+        "amountHint": "Để trống để hoàn lại toàn bộ phần chưa được hoàn.",
+        "reason": "Lý do",
+        "endSubscription": "Đồng thời chấm dứt gói đăng ký ngay để không bị thu tiền nữa",
+        "submit": "Hoàn tiền",
+        "processed": "Đã hoàn {amount}.",
+        "pending": "Đã gửi yêu cầu hoàn tiền. Nhà cung cấp đang xử lý.",
+        "failed": "Nhà cung cấp đã từ chối hoàn tiền.",
+        "badAmount": "Nhập số tiền dưới dạng số, ví dụ 12.50."
       }
     },
     "offline": {
@@ -711,6 +791,74 @@
       "rejected": "Loại tệp này không được phép. Hãy dùng JPG, PNG, WEBP hoặc PDF.",
       "closed": "Không thể gửi bằng chứng thanh toán cho đơn hàng này nữa.",
       "failed": "Không thể tải tệp lên. Vui lòng thử lại."
+    },
+    "subscriptions": {
+      "title": "Gói đăng ký",
+      "subtitle": "Các gói đăng ký gói cước và tiện ích bổ sung của bạn với nhà cung cấp thanh toán: gói nào sẽ gia hạn, đã trả đến khi nào và đã bị thu những gì.",
+      "loading": "Đang tải gói đăng ký",
+      "loadFailed": "Không thể tải các gói đăng ký của bạn. Hãy thử lại sau giây lát.",
+      "emptyTitle": "Chưa có gói đăng ký",
+      "emptyMessage": "Khi bạn thanh toán gói cước hoặc tiện ích bổ sung với tự động gia hạn, chúng sẽ hiển thị ở đây.",
+      "browsePlans": "Xem các gói cước",
+      "failedBanner": "Lần thanh toán gần nhất cho {names} đã thất bại. Quyền truy cập của bạn vẫn tiếp tục trong lúc nhà cung cấp thử lại; hãy cập nhật phương thức thanh toán với ngân hàng hoặc nhà cung cấp để không bị mất quyền truy cập.",
+      "paymentFailed": "Lần thanh toán gần nhất thất bại. Nhà cung cấp đang thử lại.",
+      "kind": {
+        "plan": "Gói cước",
+        "addon": "Tiện ích bổ sung"
+      },
+      "status": {
+        "active": "Đang hoạt động",
+        "past_due": "Thanh toán thất bại",
+        "pending": "Đang chờ thanh toán",
+        "canceled": "Đã hủy",
+        "expired": "Đã hết hạn"
+      },
+      "cycle": {
+        "monthly": "tháng",
+        "yearly": "năm"
+      },
+      "price": "{amount} mỗi {cycle}",
+      "renewsOn": "Gia hạn vào {date}",
+      "endsOn": "Đã trả đến {date}. Sẽ không gia hạn.",
+      "endedOn": "Kết thúc vào {date}",
+      "refreshFromProvider": "Làm mới từ nhà cung cấp",
+      "showCharges": "Hiện các khoản thu",
+      "hideCharges": "Ẩn các khoản thu",
+      "cancel": "Hủy gói đăng ký",
+      "confirmTitle": "Hủy {name}?",
+      "confirmBody": "Bạn vẫn được truy cập đến {date}. Sau đó gói sẽ không gia hạn và bạn sẽ không bị thu tiền thêm.",
+      "confirmBodyNoDate": "Gói sẽ không gia hạn và bạn sẽ không bị thu tiền thêm.",
+      "confirm": "Hủy gói đăng ký",
+      "keep": "Giữ lại",
+      "cancelDone": "Đã hủy. Thời hạn đã thanh toán vẫn tiếp tục và sẽ không có khoản thu nào nữa.",
+      "cancelFailed": "Không thể hủy gói đăng ký này. Hãy thử lại hoặc liên hệ bộ phận hỗ trợ.",
+      "forbidden": "Bạn không có quyền quản lý gói đăng ký.",
+      "sync": {
+        "up_to_date": "Đã đồng bộ với nhà cung cấp thanh toán.",
+        "renewed": "Đã cập nhật: nhà cung cấp có lần gia hạn mới hơn.",
+        "gateway_canceled": "Nhà cung cấp hiển thị gói đăng ký này đã bị hủy.",
+        "gateway_expired": "Nhà cung cấp hiển thị gói đăng ký này đã kết thúc.",
+        "unknown": "Đã kiểm tra với nhà cung cấp thanh toán.",
+        "failed": "Không thể kết nối với nhà cung cấp thanh toán. Hãy thử lại sau giây lát."
+      },
+      "chargesFailed": "Không thể tải các khoản thu.",
+      "chargesFromOrders": "Không thể kết nối với nhà cung cấp thanh toán, nên đây là các đơn hàng đã thanh toán của bạn.",
+      "noCharges": "Chưa có khoản thu nào.",
+      "col": {
+        "date": "Ngày",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "receipt": "Biên lai"
+      },
+      "chargeStatus": {
+        "paid": "Đã thanh toán",
+        "issued": "Chờ thanh toán",
+        "failed": "Thất bại",
+        "cancelled": "Đã hủy",
+        "expired": "Đã hết hạn",
+        "other": "Khác"
+      },
+      "openReceipt": "Mở biên lai"
     }
   }
 }

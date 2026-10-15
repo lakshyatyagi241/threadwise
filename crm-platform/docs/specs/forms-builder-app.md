@@ -384,7 +384,7 @@ Add to `PLAN_LIMIT_DEFS`: `forms` (max active forms, 0 = unlimited), `form_submi
 
 ### 12.6 Entitlement lifecycle
 
-Subscribing makes the entitlement resolver (`PlanEntitlementService.forOrg`) include `form_builder`: the menu appears, the routes open. **When the subscription lapses** the admin routes lock at once (`PLAN_FEATURE_LOCKED`) and the **public forms stop** (404 / "closed"), but **data is kept** (forms, submissions) so a renewal restores everything; a banner on the app page says so. No data is deleted on lapse. Uninstall with "delete data" is the Marketplace's BL-066 consumer: Forms registers a deleter that removes forms, versions, submissions and files, and the UI states plainly what is lost.
+Subscribing AND installing the app make the entitlement resolver (`PlanEntitlementService.forOrg`) include `form_builder` (owner decision 2026-10-08: a subscription alone only lets the workspace install; not installed, paused or uninstalled means menu entry gone, `/forms` closed, routes `422 PLAN_FEATURE_LOCKED` with `reason: app_not_installed`, Roles editor keys locked with the `app` badge): the menu appears, the routes open. **When the subscription lapses** the admin routes lock at once (`PLAN_FEATURE_LOCKED`) and the **public forms stop** (404 / "closed"), but **data is kept** (forms, submissions) so a renewal restores everything; a banner on the app page says so. No data is deleted on lapse. Uninstall with "delete data" is the Marketplace's BL-066 consumer: Forms registers a deleter that removes forms, versions, submissions and files, and the UI states plainly what is lost.
 
 ### 12.7 Dev setup and help
 

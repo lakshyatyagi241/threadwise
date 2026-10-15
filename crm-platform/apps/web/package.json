@@ -10,17 +10,24 @@
     "typecheck": "node scripts/gen-registry.mjs && next typegen && tsc --noEmit",
     "lint": "node scripts/gen-registry.mjs && eslint src",
     "test": "node scripts/gen-registry.mjs && vitest run",
+    "test:coverage": "node scripts/gen-registry.mjs && vitest run --coverage",
     "test:e2e": "playwright test"
   },
   "dependencies": {
     "@crm/contracts": "workspace:*",
     "@crm/tax": "workspace:*",
     "@crm/ui": "workspace:*",
-    "@sentry/nextjs": "^11.5.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^9.5.0",
+    "@mui/material": "^9.5.0",
+    "@page-agent/core": "1.12.4",
+    "@page-agent/page-controller": "1.12.4",
+    "@sentry/nextjs": "^11.6.0",
     "@simplewebauthn/browser": "14.0.0",
     "@tanstack/react-query": "^5.104.1",
     "flag-icons": "^7.5.0",
-    "intl-tel-input": "^28.1.0",
+    "intl-tel-input": "^29.5.3",
     "libphonenumber-js": "^1.13.15",
     "next": "^16.4.0",
     "next-intl": "^4.14.9",
@@ -39,6 +46,7 @@
     "@types/react-dom": "^19.3.0",
     "jsdom": "^30.1.2",
     "tailwindcss": "^4.3.3",
+    "@vitest/coverage-v8": "^2.1.9",
     "vitest": "^2.1.9"
   }
 }

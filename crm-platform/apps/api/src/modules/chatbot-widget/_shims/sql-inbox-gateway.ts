@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { ContactsService } from '../../crm';
 import {
   AI_SOURCE,
   phoneDigits,
@@ -29,15 +30,112 @@ interface LineRow {
   agent_id: number | string | null;
   sent_at: Date | string | null;
   buttons: unknown;
+  media: unknown;
+  input: unknown;
+  links: unknown;
+  cards: unknown;
 }
 
 /** The reply buttons a flow bot stored in a line's meta (`widget_buttons`), or null. */
 const buttonsOf = (raw: unknown): NonNullable<InboxLine['buttons']> | null => {
   if (!Array.isArray(raw)) return null;
   const out = raw
-    .filter((b): b is { id: unknown; title: unknown } => typeof b === 'object' && b !== null)
-    .map((b) => ({ id: String(b.id ?? ''), title: String(b.title ?? '') }))
+    .filter(
+      (b): b is { id: unknown; title: unknown; icon?: unknown } =>
+        typeof b === 'object' && b !== null,
+    )
+    .map((b) => ({
+      id: String(b.id ?? ''),
+      title: String(b.title ?? ''),
+      ...(/^https?:\/\/\S+$/i.test(String(b.icon ?? '')) ? { icon: String(b.icon) } : {}),
+    }))
     .filter((b) => b.id !== '' && b.title !== '');
+  return out.length ? out : null;
+};
+
+/** The file a flow bot stored in a line's meta (`widget_media`), or null. */
+const mediaOf = (raw: unknown): NonNullable<InboxLine['media']> | null => {
+  if (typeof raw !== 'object' || raw === null) return null;
+  const m = raw as Record<string, unknown>;
+  const key = typeof m.key === 'string' ? m.key : '';
+  const kind = typeof m.kind === 'string' ? m.kind : '';
+  if (key === '' || !['image', 'video', 'audio', 'document'].includes(kind)) return null;
+  return {
+    key,
+    kind,
+    mime: typeof m.mime === 'string' ? m.mime : '',
+    name: typeof m.name === 'string' && m.name !== '' ? m.name : 'file',
+  };
+};
+
+/** What a question stored in its meta (`widget_input`), or null. */
+const inputOf = (raw: unknown): NonNullable<InboxLine['input']> | null => {
+  if (typeof raw !== 'object' || raw === null) return null;
+  const i = raw as Record<string, unknown>;
+  if (typeof i.type !== 'string' || i.type === '') return null;
+  return {
+    type: i.type,
+    ...(typeof i.format === 'string' ? { format: i.format } : {}),
+    ...(Array.isArray(i.accept)
+      ? { accept: i.accept.filter((e): e is string => typeof e === 'string') }
+      : {}),
+  };
+};
+
+/** The link, call and email buttons stored in a line's meta (`widget_links`): only the schemes a visitor's browser may open. */
+const linksOf = (raw: unknown): NonNullable<InboxLine['links']> | null => {
+  if (!Array.isArray(raw)) return null;
+  const out = raw
+    .filter(
+      (l): l is { label: unknown; url: unknown; icon?: unknown } =>
+        typeof l === 'object' && l !== null,
+    )
+    .map((l) => ({
+      label: String(l.label ?? '').slice(0, 40),
+      url: String(l.url ?? ''),
+      ...(/^https?:\/\/\S+$/i.test(String(l.icon ?? '')) ? { icon: String(l.icon) } : {}),
+    }))
+    .filter(
+      (l) => l.label !== '' && /^(https?:\/\/|tel:\+?[0-9]+$|mailto:[^\s@]+@[^\s@]+$)/i.test(l.url),
+    );
+  return out.length ? out : null;
+};
+
+const SAFE_LINK = /^(https?:\/\/|tel:\+?[0-9]+$|mailto:[^\s@]+@[^\s@]+$)/i;
+
+/** The carousel cards stored in a line's meta (`widget_cards`), limited to what the window may draw: at most ten cards of two buttons. */
+const cardsOf = (raw: unknown): NonNullable<InboxLine['cards']> | null => {
+  if (!Array.isArray(raw)) return null;
+  const out = raw
+    .filter((c): c is Record<string, unknown> => typeof c === 'object' && c !== null)
+    .slice(0, 10)
+    .map((c) => {
+      const image = String(c.image ?? '');
+      const buttons: NonNullable<InboxLine['cards']>[number]['buttons'] = [];
+      for (const b of (Array.isArray(c.buttons) ? c.buttons : []).slice(0, 2)) {
+        if (typeof b !== 'object' || b === null) continue;
+        const bb = b as Record<string, unknown>;
+        if (bb.kind === 'reply' && typeof bb.id === 'string' && bb.id !== '')
+          buttons.push({
+            kind: 'reply',
+            id: bb.id.slice(0, 120),
+            title: String(bb.title ?? '').slice(0, 40),
+          });
+        else if (bb.kind === 'link' && SAFE_LINK.test(String(bb.url ?? '')))
+          buttons.push({
+            kind: 'link',
+            label: String(bb.label ?? '').slice(0, 40),
+            url: String(bb.url),
+          });
+      }
+      return {
+        title: String(c.title ?? '').slice(0, 80),
+        text: String(c.text ?? '').slice(0, 300),
+        ...(/^https?:\/\/\S+$/i.test(image) ? { image } : {}),
+        buttons,
+      };
+    })
+    .filter((c) => c.title !== '' || c.text !== '' || c.image !== undefined);
   return out.length ? out : null;
 };
 
@@ -48,6 +146,10 @@ const toLine = (r: LineRow): InboxLine => ({
   agentId: r.agent_id === null ? null : Number(r.agent_id),
   sentAt: r.sent_at ? new Date(r.sent_at) : null,
   buttons: buttonsOf(r.buttons),
+  media: mediaOf(r.media),
+  input: inputOf(r.input),
+  links: linksOf(r.links),
+  cards: cardsOf(r.cards),
 });
 
 /**
@@ -58,6 +160,8 @@ const toLine = (r: LineRow): InboxLine => ({
 @Injectable()
 export class SqlInboxGateway implements InboxGateway {
   private readonly logger = new Logger(SqlInboxGateway.name);
+
+  constructor(private readonly contacts: ContactsService) {}
 
   async ensureConversation(
     tx: Tx,
@@ -111,6 +215,27 @@ export class SqlInboxGateway implements InboxGateway {
       });
     }
     return { id: conversationId, created: true };
+  }
+
+  async contactOf(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    details: { email: string | null; phone: string | null },
+  ): Promise<number | null> {
+    const res = await tx.execute(
+      sql`SELECT contact_id FROM conversations WHERE org_id = ${orgId} AND id = ${conversationId}`,
+    );
+    const raw = (res.rows[0] as { contact_id: number | string | null } | undefined)?.contact_id;
+    if (raw === null || raw === undefined) return null;
+    const contactId = Number(raw);
+    const digits = phoneDigits(details.phone);
+    await tx.execute(sql`
+      UPDATE contacts SET email = COALESCE(email, ${details.email}),
+                          phone = COALESCE(phone, ${digits === '' ? null : `+${digits}`})
+      WHERE org_id = ${orgId} AND id = ${contactId}
+        AND ((email IS NULL AND ${details.email}::text IS NOT NULL) OR (phone IS NULL AND ${digits === '' ? null : digits}::text IS NOT NULL))`);
+    return contactId;
   }
 
   /** The webchat channel of a widget, created on its first thread and renamed with the widget. */
@@ -167,29 +292,25 @@ export class SqlInboxGateway implements InboxGateway {
     try {
       await tx.transaction(async (sp) => {
         const digits = phoneDigits(visitor.phone);
-        let contactId: number | null = null;
-        if (digits !== '') {
-          const hit = await sp.execute(sql`
-            SELECT id FROM contacts
-            WHERE org_id = ${orgId} AND regexp_replace(coalesce(normalized_phone, ''), '[^0-9]', '', 'g') = ${digits}
-            ORDER BY id LIMIT 1`);
-          if (hit.rows[0]) contactId = Number((hit.rows[0] as { id: number | string }).id);
-        }
-        if (contactId === null) {
-          const keyed = await sp.execute(sql`
-            SELECT id FROM contacts
-            WHERE org_id = ${orgId} AND channel = 'chatbot_widget' AND channel_uid = ${visitor.visitorUuid}`);
-          if (keyed.rows[0]) contactId = Number((keyed.rows[0] as { id: number | string }).id);
-        }
         const phone = digits === '' ? null : `+${digits}`;
-        if (contactId === null) {
-          const inserted = await sp.execute(sql`
-            INSERT INTO contacts (org_id, name, first_name, email, phone, owner_id, channel, channel_uid, source)
-            VALUES (${orgId}, ${visitor.name}, ${visitor.name}, ${visitor.email}, ${phone}, ${widget.userId},
-                    'chatbot_widget', ${visitor.visitorUuid}, 'chatbot_widget')
-            RETURNING id`);
-          contactId = Number((inserted.rows[0] as { id: number | string }).id);
-        } else {
+        // Through the contacts service: audit and the plan's contact cap apply. A contact that already holds the typed phone IS the
+        // visitor; else the visitor is keyed by the widget channel. Nothing here grants consent: a chat message is not agreement.
+        const r = await this.contacts.resolveOrCreateByIdentity(sp as Tx, orgId, {
+          kind: 'channel_uid',
+          channel: 'chatbot_widget',
+          value: visitor.visitorUuid,
+          name: visitor.name,
+          firstName: visitor.name,
+          email: visitor.email,
+          phone,
+          matchPhoneFirst: true,
+          ownerId: widget.userId,
+          source: 'chatbot_widget',
+          quiet: true,
+        });
+        if (r.outcome !== 'found' && r.outcome !== 'created') return;
+        const contactId = r.contactId;
+        if (r.outcome === 'found') {
           await sp.execute(sql`
             UPDATE contacts SET
               name = COALESCE(name, ${visitor.name}),
@@ -229,6 +350,12 @@ export class SqlInboxGateway implements InboxGateway {
                                last_inbound_at = now(), unread_count = unread_count + 1,
                                waiting_since = COALESCE(waiting_since, now())
       WHERE org_id = ${orgId} AND id = ${conversation.id}`);
+    // The visitor is heard from: the contact's "Last Activity" (and the lead scorer's recency) moves, at most once a minute.
+    await tx.execute(sql`
+      UPDATE contacts SET last_activity_at = now()
+      WHERE org_id = ${orgId}
+        AND id = (SELECT contact_id FROM conversations WHERE org_id = ${orgId} AND id = ${conversation.id})
+        AND (last_activity_at IS NULL OR last_activity_at < now() - interval '1 minute')`);
     return msg;
   }
 
@@ -287,9 +414,9 @@ export class SqlInboxGateway implements InboxGateway {
 
   async recent(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
-      SELECT id, direction, body, agent_id, sent_at, buttons FROM (
+      SELECT id, direction, body, agent_id, sent_at, buttons, media, input, links, cards FROM (
         SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
-               meta->'widget_buttons' AS buttons
+               meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
         FROM messages
         WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
         ORDER BY id DESC LIMIT ${limit}
@@ -301,11 +428,41 @@ export class SqlInboxGateway implements InboxGateway {
   async oldest(tx: Tx, orgId: number, conversationId: number, limit: number): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
       SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
-             meta->'widget_buttons' AS buttons
+             meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND COALESCE(meta->>'source', '') <> 'welcome'
       ORDER BY id LIMIT ${limit}`);
     return (res.rows as unknown as LineRow[]).map(toLine);
+  }
+
+  async setFeedback(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    id: number,
+    value: 'up' | 'down' | null,
+  ): Promise<boolean> {
+    const res = await tx.execute(sql`
+      UPDATE messages
+         SET meta = CASE WHEN ${value}::text IS NULL THEN meta - 'feedback'
+                         ELSE jsonb_set(meta, '{feedback}', to_jsonb(${value}::text)) END
+       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND id = ${id} AND direction = 'out'
+       RETURNING id`);
+    return (res.rows as unknown[]).length > 0;
+  }
+
+  async mediaOf(
+    tx: Tx,
+    orgId: number,
+    conversationId: number,
+    id: number,
+  ): Promise<NonNullable<InboxLine['media']> | null> {
+    const res = await tx.execute(sql`
+      SELECT meta->'widget_media' AS media FROM messages
+      WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND id = ${id} AND direction = 'out'
+      LIMIT 1`);
+    const row = (res.rows as unknown as Array<{ media: unknown }>)[0];
+    return row ? mediaOf(row.media) : null;
   }
 
   async outboundSince(
@@ -316,7 +473,7 @@ export class SqlInboxGateway implements InboxGateway {
   ): Promise<InboxLine[]> {
     const res = await tx.execute(sql`
       SELECT id, direction, body, sender_agent_id AS agent_id, COALESCE(sent_at, provider_ts, created_at) AS sent_at,
-             meta->'widget_buttons' AS buttons
+             meta->'widget_buttons' AS buttons, meta->'widget_media' AS media, meta->'widget_input' AS input, meta->'widget_links' AS links, meta->'widget_cards' AS cards
       FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out' AND id > ${since}
         AND COALESCE(meta->>'source', '') <> 'welcome'

@@ -4,6 +4,7 @@ import { WebPushLibProvider } from '../../infra/providers/web-push/web-push-lib.
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { ConversationNotificationConsumer } from './conversation-notification.consumer';
 import { ConversationReadState } from './conversation-read-state';
+import { DeviceGroupNotificationConsumer } from './device-group-notification.consumer';
 import { DeviceNotificationConsumer } from './device-notification.consumer';
 import { NotificationFanout } from './notification-fanout';
 import { NotificationPrefsResolver } from './notification-prefs.resolver';
@@ -17,6 +18,9 @@ import { WebPushDeliveryService } from './web-push-delivery.service';
 import { WebPushProcessor } from './web-push.processor';
 import { WebPushSender } from './web-push.sender';
 import { SalesDocNotificationConsumer } from './salesdoc-notification.consumer';
+import { EmailBounceNotificationConsumer } from './email-bounce-notification.consumer';
+import { MemberLeaveNotificationConsumer } from './member-leave-notification.consumer';
+import { SlaNotificationConsumer } from './sla-notification.consumer';
 import { SendOutcomeNotificationConsumer } from './send-outcome-notification.consumer';
 import { TaskNotificationConsumer } from './task-notification.consumer';
 import { TeamChatNotificationConsumer } from './team-chat-notification.consumer';
@@ -39,8 +43,12 @@ import { WabaGroupNotificationConsumer } from './waba-group-notification.consume
     NotificationFanout,
     DeviceNotificationConsumer,
     SendOutcomeNotificationConsumer,
+    EmailBounceNotificationConsumer,
+    SlaNotificationConsumer,
+    MemberLeaveNotificationConsumer,
     TeamChatNotificationConsumer,
     WabaGroupNotificationConsumer,
+    DeviceGroupNotificationConsumer,
     NotificationRetentionService,
     WaitingNudgeService,
     PushSubscriptionsRepository,

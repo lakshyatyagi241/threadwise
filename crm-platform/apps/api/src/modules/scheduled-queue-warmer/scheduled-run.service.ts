@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, type ConsentGateResult, type PurposeInput } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import {
   UNOFFICIAL_ENGINE,
@@ -14,6 +14,9 @@ import {
   PacingRuntime,
   CapTally,
   SenderLease,
+  WALLET_GATE,
+  type WalletGate,
+  assemblePhone,
   batchCooldownMs,
   batchingApplies,
   capRemaining,
@@ -21,21 +24,17 @@ import {
   nextUtcMidnight,
   type PacingSettingsSource,
 } from '../broadcasts';
-import { MergeTagService, renderMergeTags, type MergeContext } from '../crm';
+import { ConsentGate, purposeOfCategory } from '../contact-consent';
+import { MergeTagService } from '../crm';
 import {
   OutboundRegistry,
   SenderResolver,
   UnsupportedSendError,
   type OpenTransport,
 } from '../node-bridge-runtime';
-import {
-  commandFor,
-  dateOnly,
-  isRecurring,
-  runAt,
-  weekdays,
-  type ScheduledRow,
-} from './scheduled-message';
+import { dateOnly, isRecurring, runAt, weekdays, type ScheduledRow } from './scheduled-message';
+import { deliveryProviderOf, emitDeliveryReported } from '../../kernel/outbox/delivery-report';
+import { ScheduleMessageBuilder, type PreparedMessage } from './schedule-message-builder.service';
 import { nextRun } from './schedule-time';
 import { emitScheduledStatus } from './scheduled-events';
 import { spin } from './warmer/warmer-rules';
@@ -74,6 +73,7 @@ export class ScheduledRunService {
     private readonly resolver: SenderResolver,
     private readonly outbound: OutboundRegistry,
     private readonly merge: MergeTagService,
+    private readonly builder: ScheduleMessageBuilder,
     @Inject(PACING_SETTINGS) private readonly pacingSettings: PacingSettingsSource,
     private readonly runtime: PacingRuntime,
     private readonly cap: CapTally,
@@ -81,6 +81,8 @@ export class ScheduledRunService {
     private readonly warmer: WarmerService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     private readonly outbox: OutboxService,
+    @Inject(WALLET_GATE) private readonly wallet: WalletGate,
+    private readonly consentGate: ConsentGate,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -88,8 +90,8 @@ export class ScheduledRunService {
     const prep = await this.db.tx(async (tx) => {
       const res = await tx.execute(sql`
         SELECT id, uuid, status, schedule_type, scheduled_time, next_run_at, timezone, repeat_interval, repeat_every,
-               days_of_week, end_date, template_type, message_content, media_file, latitude, longitude, provider,
-               device_id, send_attempts
+               days_of_week, end_date, template_type, template_id, template_overrides, message_content, media_file, latitude, longitude, provider,
+               device_id, send_attempts, recipients_spent
         FROM scheduled_messages WHERE org_id = ${orgId} AND id = ${scheduledId} FOR UPDATE`);
       const row = res.rows[0] as unknown as ScheduledRow | undefined;
       if (!row || !['scheduled', 'running'].includes(row.status)) return { skip: true as const };
@@ -112,11 +114,6 @@ export class ScheduledRunService {
         return { skip: false as const, failed: true as const };
       };
 
-      try {
-        commandFor(row, '0', ''); // an unsupported kind fails the schedule once, not every recipient
-      } catch (err) {
-        return fail(err instanceof Error ? err.message : String(err));
-      }
       const sender = await this.resolver.resolve(tx, orgId, {
         provider: row.provider,
         deviceId: row.device_id === null ? null : Number(row.device_id),
@@ -133,6 +130,19 @@ export class ScheduledRunService {
         return { skip: true as const };
       }
 
+      // The recipients of the last occurrence were kept until now so the provider's late reports still found them; this occurrence starts
+      // from the whole audience again.
+      if (row.recipients_spent) {
+        await tx.execute(sql`
+          UPDATE scheduled_message_contacts
+             SET status = 'pending', error_message = NULL, wa_message_id = NULL, sent_at = NULL,
+                 delivered_at = NULL, read_at = NULL, failed_at = NULL
+           WHERE org_id = ${orgId} AND scheduled_message_id = ${scheduledId}`);
+        await tx.execute(
+          sql`UPDATE scheduled_messages SET recipients_spent = false WHERE org_id = ${orgId} AND id = ${scheduledId}`,
+        );
+      }
+
       await tx.execute(sql`
         UPDATE scheduled_message_contacts SET status = 'failed', error_message = 'Send was interrupted before it finished', failed_at = now()
         WHERE org_id = ${orgId} AND scheduled_message_id = ${scheduledId} AND status = 'processing'
@@ -143,7 +153,14 @@ export class ScheduledRunService {
       const pendingTotal = Number((pending.rows[0] as { n: number }).n);
       if (pendingTotal === 0) return fail('No recipients');
 
-      const wantsMerge = (row.message_content ?? '').includes('{{');
+      // What the message needs that is the same for everyone: the template and its approval, the file's link, the merge context. A message
+      // that cannot be sent (a template Meta no longer approves, a file that is gone) fails the schedule once, here, with the reason.
+      let prepared: PreparedMessage;
+      try {
+        prepared = await this.builder.prepare(tx, orgId, row, sender.engine);
+      } catch (err) {
+        return fail(err instanceof Error ? err.message : String(err));
+      }
       return {
         skip: false as const,
         failed: false as const,
@@ -153,13 +170,13 @@ export class ScheduledRunService {
         pacing: await this.pacingSettings.get(tx, orgId),
         warm: await this.warmer.gap(tx, sender),
         spinOn: await this.warmer.spintaxOn(tx, sender),
-        mergeBase: wantsMerge ? await this.merge.baseContext(tx, orgId) : null,
+        prepared,
         pendingTotal,
       };
     });
     if (prep.skip) return 'skipped';
     if (prep.failed) return 'failed';
-    const { row, sender, transport, pacing, warm, spinOn, mergeBase, pendingTotal } = prep;
+    const { row, sender, transport, pacing, warm, spinOn, prepared, pendingTotal } = prep;
 
     let opened: OpenTransport;
     try {
@@ -192,9 +209,22 @@ export class ScheduledRunService {
         });
         if (batch.length === 0) break;
 
+        // The consent gate runs NOW, at send time, not when the schedule was saved: a STOP since then, or a workspace that has since
+        // switched on "require recorded consent", is honoured. One statement for the whole batch.
+        const refused = await this.refusedByGate(orgId, batch, prepared);
+
         for (const r of batch) {
           lastId = Number(r.id);
           const to = digits(r.phone);
+
+          const why = refused.get(Number(r.id));
+          if (why) {
+            await this.db.tx((tx) =>
+              this.setRecipient(tx, orgId, Number(r.id), 'failed', { error: why }),
+            );
+            processed++;
+            continue;
+          }
 
           if (to && sender.engine === 'baileys') {
             const used = await this.cap.sentToday(orgId, sender.engine, sender.id);
@@ -202,6 +232,29 @@ export class ScheduledRunService {
               const now = this.runtime.now();
               await this.pause(orgId, scheduledId, counts, nextUtcMidnight(now));
               this.logger.warn({ orgId, scheduledId, used }, '[SCHED] paused: daily cap reached');
+              return 'paused';
+            }
+          }
+
+          // The wallet must pay for this message: when it cannot, the run pauses (nobody is failed) and retries later.
+          if (to) {
+            try {
+              await this.wallet.precheckSend(orgId, to, {
+                source: 'scheduled',
+                category: 'marketing',
+              });
+            } catch (err) {
+              if (!(err instanceof AppError && err.code === ERROR_CODES.WALLET_EMPTY)) throw err;
+              await this.pause(
+                orgId,
+                scheduledId,
+                counts,
+                new Date(this.runtime.now().getTime() + HALT_RETRY_MS),
+              );
+              this.logger.warn(
+                { orgId, scheduledId },
+                '[SCHED] paused: wallet cannot cover the next message',
+              );
               return 'paused';
             }
           }
@@ -225,16 +278,31 @@ export class ScheduledRunService {
           }
 
           try {
-            const rendered = await this.render(orgId, row, r, mergeBase);
+            const contact =
+              r.contact_id === null || !prepared.mergeBase
+                ? undefined
+                : await this.db.tx((tx) => this.merge.contactFor(tx, orgId, Number(r.contact_id)));
             // A warming number may vary the wording ({a|b}); spun after the merge tags, so a name is never touched.
-            const body = spinOn ? spin(rendered, this.runtime.random) : rendered;
-            const sent = await opened.send(commandFor(row, to, body), {
+            const command = this.builder.command(
+              prepared,
+              to,
+              contact,
+              spinOn ? (t) => spin(t, this.runtime.random) : undefined,
+              `sched-${scheduledId}-${r.id}`,
+            );
+            const sent = await opened.send(command, {
               clientReference: `sched-${scheduledId}-${r.id}`,
               screen: { bulk: true, source: 'scheduled' },
             });
             await this.db.tx((tx) =>
               this.setRecipient(tx, orgId, Number(r.id), 'sent', {
                 providerMessageId: sent.providerMessageId,
+                report: {
+                  scheduledId,
+                  provider: row.provider,
+                  category: prepared.template?.category ?? null,
+                  phone: r.phone,
+                },
               }),
             );
             counts.sent++;
@@ -281,6 +349,40 @@ export class ScheduledRunService {
     }
   }
 
+  /**
+   * The recipients the ConsentGate refuses for this occurrence, with the plain reason kept on the recipient row. A schedule is
+   * marketing unless its template is a utility or authentication one. Typed numbers that belong to no contact are decided on the
+   * workspace policy alone (a withdrawn contact cannot be named, a missing grant is "no consent recorded").
+   */
+  private async refusedByGate(
+    orgId: number,
+    batch: readonly Recipient[],
+    prepared: PreparedMessage,
+  ): Promise<Map<number, string>> {
+    const purpose: PurposeInput = prepared.template
+      ? purposeOfCategory(prepared.template.category)
+      : 'marketing_messaging';
+    // Scheduled messages are WhatsApp (Cloud, Twilio or the linked number): one consent channel.
+    const channel = 'whatsapp';
+    const refused = new Map<number, string>();
+    const reasonText = (d: ConsentGateResult): string =>
+      d.reason === 'withdrawn'
+        ? 'Not sent: the contact unsubscribed'
+        : 'Not sent: no recorded consent';
+
+    const ids = batch.filter((r) => r.contact_id !== null).map((r) => Number(r.contact_id));
+    const many =
+      ids.length > 0 ? await this.consentGate.checkMany(orgId, ids, channel, purpose) : null;
+    const anyone = batch.some((r) => r.contact_id === null)
+      ? await this.consentGate.check(orgId, { type: 'anonymous' }, channel, purpose)
+      : null;
+    for (const r of batch) {
+      const d = r.contact_id === null ? anyone : many?.decisions.get(Number(r.contact_id));
+      if (d && d.decision === 'deny') refused.set(Number(r.id), reasonText(d));
+    }
+    return refused;
+  }
+
   private async stillRunning(orgId: number, scheduledId: number): Promise<boolean> {
     return this.db.tx(async (tx) => {
       const res = await tx.execute(
@@ -290,28 +392,23 @@ export class ScheduledRunService {
     });
   }
 
-  /** The message text for one recipient: `{{name}}` and the other tags filled from the contact; unresolved ones stay as typed. */
-  private async render(
-    orgId: number,
-    row: ScheduledRow,
-    r: Recipient,
-    base: Omit<MergeContext, 'contact'> | null,
-  ): Promise<string> {
-    const text = row.message_content ?? '';
-    if (!base || r.contact_id === null) return text;
-    const contact = await this.db.tx((tx) =>
-      this.merge.contactFor(tx, orgId, Number(r.contact_id)),
-    );
-    return renderMergeTags(text, { ...base, contact }).rendered;
-  }
-
   /** Recipient states only move up (pending, failed, sent), so a late write can never undo a later one (TW-NODE-035 rule 7). */
   private async setRecipient(
     tx: Parameters<Parameters<DatabaseService['tx']>[0]>[0],
     orgId: number,
     id: number,
     status: 'pending' | 'failed' | 'sent',
-    extra: { error?: string; providerMessageId?: string | null },
+    extra: {
+      error?: string;
+      providerMessageId?: string | null;
+      /** What the wallet needs to know about a send that went out. */
+      report?: {
+        scheduledId: number;
+        provider: string | null;
+        category: string | null;
+        phone: string;
+      };
+    },
   ): Promise<void> {
     await tx.execute(sql`
       UPDATE scheduled_message_contacts
@@ -321,6 +418,25 @@ export class ScheduledRunService {
              sent_at = ${status === 'sent' ? sql`now()` : null},
              failed_at = ${status === 'failed' ? sql`now()` : null}
        WHERE org_id = ${orgId} AND id = ${id}`);
+    // The wallet hears of the send in the same transaction. Only the unofficial engine bills on `sent`; the Cloud API and Twilio bill
+    // when the provider reports delivery (the receipt below), so for them this writes nothing.
+    const wamid = extra.providerMessageId;
+    const provider = deliveryProviderOf(extra.report?.provider ?? 'baileys');
+    if (status === 'sent' && wamid && extra.report && provider) {
+      await emitDeliveryReported(this.outbox, tx, {
+        orgId,
+        aggregateModule: 'scheduled_messages',
+        aggregateId: extra.report.scheduledId,
+        report: {
+          provider,
+          providerMessageId: wamid,
+          status: 'sent',
+          recipient: assemblePhone(extra.report.phone, null) || null,
+          category: extra.report.category,
+          source: 'scheduled',
+        },
+      });
+    }
   }
 
   private async markFailed(
@@ -370,15 +486,11 @@ export class ScheduledRunService {
           timezone: row.timezone || 'UTC',
         });
         if (next) {
-          // Every run reaches the whole audience again, so each occurrence starts from "pending" (Reference ignored later runs).
-          await tx.execute(sql`
-            UPDATE scheduled_message_contacts
-               SET status = 'pending', error_message = NULL, wa_message_id = NULL, sent_at = NULL,
-                   delivered_at = NULL, read_at = NULL, failed_at = NULL
-             WHERE org_id = ${orgId} AND scheduled_message_id = ${id}`);
+          // Every run reaches the whole audience again (Reference ignored later runs), but the recipients are only put back to "pending"
+          // when that run starts (`recipients_spent`): until then each keeps the message id its late delivered/read/failed report is matched by.
           await tx.execute(sql`
             UPDATE scheduled_messages
-               SET status = 'scheduled', next_run_at = ${next.toISOString()}::timestamptz, last_run_at = ${now.toISOString()}::timestamptz,
+               SET recipients_spent = true, status = 'scheduled', next_run_at = ${next.toISOString()}::timestamptz, last_run_at = ${now.toISOString()}::timestamptz,
                    next_attempt_at = NULL, node_schedule_id = NULL,
                    total_sent = total_sent + ${counts.sent}, total_failed = total_failed + ${counts.failed}
              WHERE org_id = ${orgId} AND id = ${id}`);

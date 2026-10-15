@@ -56,7 +56,7 @@ The first real-Meta run is `pnpm waba:smoke` (see `docs/threadwise-port/waba-int
 ## Groups, hand-offs, coexistence imports, orders, click sync, saved customers (TW-WABA-039, 040, 042, 043, 045, 046, 053, 055, 056)
 
 - Built: Groups webhooks mirrored into `waba_groups` (040); group messages on their own thread and per-participant delivery folded into one bubble (039); catalog carts as
-  orders (042); form submissions and payment statuses handed to the outbox (043); the Business app's contacts synced quietly (045); chat history imported quietly (046);
+  orders (042); form submissions and payment statuses handed to the outbox (043); the Business app's contacts synced quietly (045); chat history imported quietly (046; since 2026-10-14 it also makes contacts quietly, TW-WAHIST-008: no event, no consent, counted against the plan cap);
   Meta template button clicks pulled daily onto campaigns (053); saved customers with the Customers screen (055, 056).
 - Evidence: unit `waba-groups-handoff.spec.ts` (14); e2e `waba-coexistence.e2e.spec.ts` (8: echoes, groups, hand-offs, orders, history, contacts), `waba-click-sync.e2e.spec.ts` (2) and `waba-customers.e2e.spec.ts` (5), a real Postgres and Redis with Meta faked at the HTTP edge. Nothing ran against real Meta; no Playwright twin run.
 - Deviations: a group thread is keyed `g:<group id>` and never gets a contact (Reference used `raw_jid` and no contact too, but kept the group id as a phone-like key);

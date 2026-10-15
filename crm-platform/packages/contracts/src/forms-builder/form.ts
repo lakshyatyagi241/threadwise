@@ -293,3 +293,19 @@ export const formPaymentGatewaySchema = z.object({
   reason: z.enum(['none_connected', 'no_link_support']).nullable(),
 });
 export type FormPaymentGateway = z.infer<typeof formPaymentGatewaySchema>;
+
+/**
+ * `GET /v2/forms/meta/protection`: what keeps spam out of THIS workspace's forms right now. The CAPTCHA provider belongs to the platform
+ * operator, not the workspace, so a form set to "always on" does nothing when `captcha.available` is false (the owner is told, and publish
+ * refuses). The two counters make the silent protections visible: bots the hidden trap field dropped this month (nothing is stored for
+ * them) and the submissions held as spam that a person may still release.
+ */
+export const formProtectionSchema = z.object({
+  captcha: z.object({
+    available: z.boolean(),
+    version: z.enum(['v2', 'v3']).nullable(),
+  }),
+  blockedThisMonth: z.number().int().min(0),
+  heldAsSpam: z.number().int().min(0),
+});
+export type FormProtection = z.infer<typeof formProtectionSchema>;

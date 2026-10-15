@@ -276,7 +276,14 @@
           "iconOnly": "Chỉ biểu tượng",
           "buttonColor": "Màu nút",
           "pickCustom": "Chọn màu tùy chỉnh",
-          "custom": "Tùy chỉnh {hex}"
+          "custom": "Tùy chỉnh {hex}",
+          "animation": "Hiệu ứng nút",
+          "animationHint": "Thu hút sự chú ý vào nút khi khung chat đang đóng.",
+          "animations": {
+            "none": "Tắt",
+            "bounce": "Nảy",
+            "ripple": "Gợn sóng"
+          }
         },
         "2": {
           "title": "Thiết kế messenger của bạn",
@@ -289,7 +296,9 @@
             "person": "Người"
           },
           "url": "Hoặc dùng địa chỉ ảnh của riêng bạn",
-          "urlHint": "Dán địa chỉ của ảnh vuông (https://...). Chưa hỗ trợ tải tệp lên."
+          "urlHint": "Dán địa chỉ của ảnh vuông (https://...). Chưa hỗ trợ tải tệp lên.",
+          "botName": "Tên bot",
+          "botNameHint": "Hiển thị ở phần đầu của cửa sổ chat. Để trống để dùng tên bot của bạn."
         },
         "3": {
           "title": "Đặt lời chào mừng",
@@ -297,7 +306,13 @@
           "greeting": "Lời chào",
           "greetingHint": "Chào khách hàng khi họ mở messenger",
           "intro": "Tin nhắn giới thiệu",
-          "introHint": "Giới thiệu doanh nghiệp của bạn và cho khách hàng biết bạn có thể giúp gì"
+          "introHint": "Giới thiệu doanh nghiệp của bạn và cho khách hàng biết bạn có thể giúp gì",
+          "subHeader": "Dòng phụ đề",
+          "subHeaderHint": "Dòng nằm dưới tên, ví dụ thời gian bạn thường phản hồi.",
+          "cta": "Chữ trên nút",
+          "ctaHint": "Chữ hiển thị trên nút mở WhatsApp.",
+          "prefilled": "Tin nhắn điền sẵn",
+          "prefilledHint": "Nội dung được gửi khi nhấn nút. Mặc định là từ khóa của bot, nên bot sẽ bắt đầu chạy."
         },
         "4": {
           "title": "Đặt vị trí nút trò chuyện",
@@ -322,6 +337,19 @@
           "numberHint": "Messenger sẽ đưa khách hàng của bạn đến số WhatsApp này",
           "prefilled": "Tin nhắn điền sẵn",
           "prefilledHint": "Đây sẽ là nội dung tin nhắn mặc định đầu tiên"
+        },
+        "6": {
+          "title": "Hiện tin nhắn bật lên",
+          "subtitle": "Một bong bóng nhỏ mời khách truy cập trò chuyện",
+          "visibility": "Hiển thị tin nhắn bật lên",
+          "visibilityHint": "Hiện tin nhắn bên cạnh nút cho đến khi khách truy cập đóng nó.",
+          "position": "Vị trí tin nhắn bật lên",
+          "side": "Bên cạnh",
+          "top": "Phía trên",
+          "text": "Nội dung tin nhắn bật lên",
+          "textHint": "Một lời mời ngắn gọn, ví dụ: Xin chào! Tôi có thể giúp gì cho bạn?",
+          "image": "Hình ảnh tin nhắn bật lên (không bắt buộc)",
+          "imageHint": "Nhập địa chỉ hình ảnh hoặc tải ảnh lên bên dưới."
         }
       },
       "install": {
@@ -335,7 +363,11 @@
         "greeting": "Hãy thêm lời chào.",
         "intro": "Hãy thêm tin nhắn giới thiệu.",
         "spacing": "Khoảng cách phải là số nguyên pixel từ 0 đến 500.",
-        "whatsapp": "Hãy thêm số WhatsApp đầy đủ: mã quốc gia và các chữ số."
+        "whatsapp": "Hãy thêm số WhatsApp đầy đủ: mã quốc gia và các chữ số.",
+        "cta": "Hãy nhập chữ trên nút.",
+        "prefilled": "Hãy nhập nội dung sẽ được gửi khi nhấn nút.",
+        "popupText": "Hãy nhập nội dung tin nhắn bật lên hoặc tắt tin nhắn này.",
+        "popupImage": "Dùng hình ảnh có sẵn hoặc địa chỉ hình ảnh http(s)."
       },
       "preview": {
         "title": "Xem trước trực tiếp",
@@ -344,7 +376,333 @@
         "frameTitle": "Xem trước trực tiếp widget WhatsApp của bạn",
         "hint": "Thu gọn bảng bằng nút tròn, mở lại từ nút trò chuyện và thử Bắt đầu cuộc trò chuyện.",
         "businessName": "Doanh nghiệp của bạn"
+      },
+      "upload": {
+        "choose": "Tải ảnh lên",
+        "replace": "Thay ảnh",
+        "remove": "Xóa",
+        "uploading": "Đang tải lên…",
+        "hint": "SVG, PNG, JPG, WebP hoặc GIF, tối đa 1 MB.",
+        "failed": "Không thể tải ảnh lên. Vui lòng thử lại.",
+        "tooLarge": "Ảnh lớn hơn 1 MB."
       }
+    },
+    "flowBot": {
+      "customize": {
+        "loading": "Đang tải widget…",
+        "loadError": "Không thể tải widget. Hãy làm mới trang để thử lại.",
+        "untouched": "Bạn vẫn đang dùng giao diện mặc định. Hãy xem lại, sau đó lưu để mở khóa Triển khai và Xuất bản.",
+        "position": "Vị trí của nút chat",
+        "right": "Dưới cùng bên phải",
+        "left": "Dưới cùng bên trái",
+        "save": "Lưu tùy chỉnh",
+        "saved": "Đã lưu tùy chỉnh",
+        "saveFailed": "Không thể lưu widget. Hãy thử lại.",
+        "launcher": {
+          "title": "Nút mở chat đóng",
+          "hint": "Điều khách thấy trước khi mở chat: lời nhắn, hiệu ứng và chấm chưa đọc.",
+          "calloutOn": "Hiện lời nhắn cạnh nút mở chat",
+          "style": "Kiểu lời nhắn",
+          "styles": {
+            "bubble": "Bong bóng phía trên",
+            "pill": "Viên thuốc bên cạnh",
+            "avatar": "Viên thuốc có ảnh đại diện",
+            "media": "Thẻ có hình ảnh",
+            "bar": "Thanh nhập"
+          },
+          "text": "Nội dung lời nhắn",
+          "image": "Hình ảnh",
+          "animation": "Hiệu ứng nút mở chat",
+          "animations": {
+            "none": "Không",
+            "bounce": "Nảy",
+            "ripple": "Gợn sóng"
+          },
+          "badge": "Hiện chấm chưa đọc",
+          "popupTextRequired": "Thêm nội dung lời nhắn, hoặc tắt lời nhắn.",
+          "gaps": {
+            "title": "Khoảng cách từ cạnh màn hình (px)",
+            "desktop": {
+              "side": "Máy tính: từ phía bên",
+              "bottom": "Máy tính: từ phía dưới"
+            },
+            "mobile": {
+              "side": "Điện thoại: từ phía bên",
+              "bottom": "Điện thoại: từ phía dưới"
+            }
+          }
+        },
+        "chat": {
+          "title": "Cửa sổ chat",
+          "hint": "Giao diện và cách hoạt động của cửa sổ. Màu sắc được đặt ở trên.",
+          "fill": "Kiểu tô nút trả lời",
+          "fills": {
+            "outline": "Viền",
+            "tinted": "Nhạt",
+            "solid": "Đặc"
+          },
+          "shape": "Hình dạng nút trả lời",
+          "shapes": {
+            "pill": "Viên thuốc",
+            "rounded": "Bo tròn",
+            "soft": "Bo nhẹ",
+            "square": "Vuông"
+          },
+          "font": "Phông chữ",
+          "fonts": {
+            "system": "Hệ thống",
+            "serif": "Serif",
+            "rounded": "Tròn",
+            "humanist": "Nhân văn",
+            "mono": "Cách đều"
+          },
+          "size": "Kích thước cửa sổ",
+          "sizes": {
+            "compact": "Gọn",
+            "standard": "Chuẩn",
+            "tall": "Cao",
+            "wide": "Rộng"
+          },
+          "suggestions": "Gợi ý dưới cuộc trò chuyện",
+          "suggestionsHint": "Tối đa 4 dòng ngắn. Chúng biến mất khi khách bắt đầu gõ.",
+          "suggestionPlaceholder": "Một câu hỏi khách thường hỏi",
+          "addSuggestion": "Thêm gợi ý",
+          "removeSuggestion": "Xóa gợi ý",
+          "actions": "Biểu tượng sao chép và ngón tay dưới mỗi dòng của bot",
+          "expand": "Nút mở rộng",
+          "voice": "Trò chuyện bằng giọng nói (dùng công cụ giọng nói của trình duyệt)",
+          "header": "Nền tiêu đề",
+          "headers": {
+            "solid": "Đặc",
+            "diagonal": "Đường chéo",
+            "vivid": "Sống động",
+            "dusk": "Hoàng hôn",
+            "soft": "Quét mềm"
+          },
+          "direction": "Hướng văn bản",
+          "directions": {
+            "auto": "Theo dõi ngôn ngữ của khách",
+            "ltr": "Trái sang phải",
+            "rtl": "Phải sang trái"
+          },
+          "icons": "Biểu tượng tròn phía trước mỗi nút trả lời",
+          "fontSize": "Cỡ chữ: {value}px",
+          "hoverBg": "Màu khi rê chuột vào nút trả lời",
+          "hoverBgReset": "Dùng màu nhạt"
+        },
+        "preview": {
+          "title": "Xem trước trực tiếp",
+          "loading": "Đang tải bản xem trước…",
+          "error": "Không tải được bản xem trước. Hãy làm mới để thử lại.",
+          "frame": "Xem trước cửa sổ chat",
+          "hint": "Đây là cửa sổ chat thật với các cài đặt chưa lưu của bạn. Cuộc trò chuyện và nút chỉ là ví dụ.",
+          "launcherFrame": "Xem trước trình khởi động đóng"
+        },
+        "groups": {
+          "look": "Giao diện và thương hiệu",
+          "voice": "Giọng nói và lời chào",
+          "window": "Cửa sổ trò chuyện",
+          "launcher": "Trình khởi động và lời gọi",
+          "launch": "Khởi động",
+          "chat": "Công cụ hội thoại",
+          "behave": "Hành vi"
+        },
+        "surfaces": {
+          "chat": "Cửa sổ trò chuyện",
+          "expanded": "Mở rộng",
+          "mobile": "Điện thoại",
+          "closed": "Trình khởi động đóng"
+        },
+        "brand": {
+          "title": "Hình ảnh thương hiệu và phụ kiện",
+          "logo": {
+            "label": "Logo công ty",
+            "hint": "Hiển thị trên tiêu đề cuộc trò chuyện."
+          },
+          "avatar": {
+            "label": "Ảnh đại diện chatbot",
+            "hint": "Hiển thị bên cạnh mỗi tin nhắn do bot gửi."
+          },
+          "background": {
+            "label": "Nền trò chuyện",
+            "hint": "Hình ảnh phía sau cuộc trò chuyện. Tùy chọn."
+          },
+          "corner": "Góc phần thân",
+          "corners": {
+            "rounded": "Tròn",
+            "soft": "Mềm mại",
+            "square": "Vuông"
+          },
+          "autoOpen": "Mở tự động sau (giây)",
+          "autoOpenHint": "0 giữ trò chuyện đóng cho đến khi khách truy cập mở nó. Mở một lần trên mỗi lần truy cập.",
+          "sound": "Phát âm thanh mềm mại cho các dòng bot mới",
+          "soundVolume": "Âm lượng: {value}%",
+          "speak": "Đọc to lời của bot (giọng đọc trình duyệt)",
+          "devices": {
+            "title": "Hiển thị widget trên",
+            "desktop": "Máy tính",
+            "tablet": "Máy tính bảng",
+            "mobile": "Điện thoại",
+            "hint": "Điện thoại rộng tối đa 768 px, máy tính bảng tối đa 1024 px."
+          },
+          "pictures": "Hình ảnh · SVG, PNG, GIF",
+          "botName": "Tên bot",
+          "primary": "Màu chính",
+          "primaryCustom": "Màu tùy chỉnh",
+          "fineTune": "Tinh chỉnh từng màu",
+          "pip": "Đề xuất cửa sổ trò chuyện nổi khi khách truy cập chuyển tab",
+          "pipHint": "Giống như cuộc gọi video, cuộc trò chuyện có thể nổi trên các tab và ứng dụng khác (Chrome và Edge). Khách truy cập chỉ được yêu cầu cho phép thông báo một lần, và trình duyệt quyết định khi nào có thể mở cửa sổ.",
+          "domains": {
+            "label": "Chỉ hiển thị chat trên các trang web này",
+            "hint": "Khách truy cập trang web khác sẽ không thấy chat. Nhập địa chỉ trang web, ví dụ example.com. Tên miền phụ của trang web sẽ không được tính trừ khi bạn thêm vào.",
+            "placeholder": "example.com",
+            "add": "Thêm trang web",
+            "remove": "Xóa trang web"
+          }
+        },
+        "rail": {
+          "label": "Tùy chỉnh các phần",
+          "look": "Thương hiệu",
+          "voice": "Chào mừng",
+          "window": "Cửa sổ",
+          "launcher": "Trình khởi chạy",
+          "launch": "Khởi chạy",
+          "chat": "Mở rộng",
+          "behave": "Hành vi"
+        },
+        "leads": {
+          "look": "Logo, hình ảnh, màu sắc và giao diện tiêu đề.",
+          "voice": "Tên, dòng chào mừng và nút gửi.",
+          "window": "Kích thước, kiểu chữ, nút trả lời và công cụ hỗ trợ.",
+          "launcher": "Những gì khách truy cập thấy trước khi mở cuộc trò chuyện.",
+          "launch": "Nơi widget mở ra và cách đặt nó trên trang web của bạn.",
+          "chat": "Thẻ thông báo, menu nhanh, banner và trả lời nhanh.",
+          "behave": "Khi nào cuộc trò chuyện mở ra, giọng điệu ra sao và ai nhìn thấy."
+        },
+        "footer": "Các thay đổi xuất hiện trong bản xem trước khi bạn thực hiện chúng.",
+        "conversation": {
+          "title": "Công cụ hội thoại",
+          "tabs": {
+            "notice": "Khối thông báo",
+            "menu": "Menu nhanh",
+            "banner": "Banner",
+            "replies": "Trả lời nhanh"
+          },
+          "enable": {
+            "notice": "Hiện chuông thông báo",
+            "menu": "Hiện menu nhanh",
+            "banner": "Hiện banner",
+            "replies": "Hiện trả lời nhanh"
+          },
+          "icon": "Kiểu chuông",
+          "icons": {
+            "1": "Chuông",
+            "2": "Vé",
+            "3": "Hộp",
+            "4": "Tin nhắn"
+          },
+          "view": "Kiểu hiển thị",
+          "views": {
+            "list": "Danh sách",
+            "blocks": "Khối"
+          },
+          "card": "Thẻ {n}",
+          "entry": "Mục menu {n}",
+          "slide": "Slide {n}",
+          "remove": "Xóa",
+          "max": "Tối đa {count}.",
+          "addCard": "Thêm thẻ",
+          "addEntry": "Thêm mục menu",
+          "addSlide": "Thêm slide",
+          "kinds": {
+            "image": "Ảnh",
+            "video": "Video"
+          },
+          "fields": {
+            "title": "Tiêu đề",
+            "description": "Mô tả",
+            "buttonTitle": "Tiêu đề nút",
+            "buttonUrl": "Địa chỉ nút",
+            "urlHint": "Một trang web, địa chỉ tel: hoặc mailto:. Để trống nếu không cần nút.",
+            "footer": "Văn bản chân trang",
+            "menuTitle": "Tiêu đề menu",
+            "menuUrl": "Mở ra (tùy chọn)",
+            "menuUrlHint": "Để trống để gửi tiêu đề như một tin nhắn mà bot sẽ trả lời.",
+            "video": "Liên kết video",
+            "videoHint": "Dán liên kết YouTube hoặc Vimeo, hoặc mã nhúng của video.",
+            "videoOk": "Đã tìm thấy video.",
+            "bannerUrl": "Liên kết khi chạm vào (tùy chọn)"
+          },
+          "action": "Hành động của nút",
+          "step": "Bước của bot",
+          "stepPlaceholder": "Chọn một bước",
+          "noSteps": "Bot này chưa có bước nào. Hãy thêm trong tab Xây dựng rồi lưu.",
+          "replyStep": "Khi chạm",
+          "replyAsMessage": "Gửi dòng này dưới dạng tin nhắn",
+          "actions": {
+            "link": "Thêm liên kết",
+            "flow": "Liên kết tới luồng"
+          }
+        },
+        "launchNote": "Mã nhúng để dán vào trang web của bạn nằm ở tab Triển khai."
+      },
+      "deploy": {
+        "loading": "Đang tải các tùy chọn triển khai…",
+        "locked": "Hãy lưu tab Tùy chỉnh trước. Mã nhúng của bạn sẽ hiển thị ở đây khi widget được tạo.",
+        "lockedWhatsapp": "Hãy lưu tab Tùy chỉnh trước. Nút trên website và liên kết WhatsApp của bạn sẽ hiển thị ở đây khi chúng được tạo.",
+        "title": "Triển khai",
+        "lead": "Đưa cửa sổ chat lên website của bạn. Bot sẽ hoạt động khi bạn xuất bản.",
+        "leadWhatsapp": "Đưa nút WhatsApp lên website của bạn, hoặc chia sẻ liên kết trực tiếp ở bất cứ đâu. Bot sẽ trả lời trên số WhatsApp của nó sau khi được xuất bản.",
+        "notPublished": "Bot này chưa được xuất bản nên khách truy cập sẽ không nhận được câu trả lời. Hãy xuất bản bot từ tab Xây dựng.",
+        "notPublishedWhatsapp": "Bot này chưa được xuất bản nên sẽ không trả lời trên WhatsApp. Hãy xuất bản bot từ tab Xây dựng.",
+        "embedTitle": "Thêm vào website của bạn",
+        "embedBody": "Dán đoạn mã này ngay trước thẻ đóng body trên mọi trang bạn muốn hiển thị.",
+        "copy": "Sao chép mã",
+        "copied": "Đã sao chép mã nhúng",
+        "clipboardBlocked": "Trình duyệt đã chặn việc sao chép. Hãy chọn văn bản và sao chép thủ công.",
+        "preview": "Xem trước",
+        "linkTitle": "Liên kết WhatsApp trực tiếp",
+        "linkBody": "Mở cuộc trò chuyện WhatsApp với số của bot và tin nhắn bạn đã đặt. Dùng trong email, tiểu sử mạng xã hội, mã QR và quảng cáo.",
+        "copyLink": "Sao chép liên kết",
+        "linkCopied": "Đã sao chép liên kết WhatsApp",
+        "openLink": "Mở liên kết",
+        "qrTitle": "Mã QR",
+        "qrBody": "In ra hoặc hiển thị trên màn hình. Quét mã sẽ mở cuộc trò chuyện WhatsApp với bot của bạn.",
+        "downloadQr": "Tải mã QR xuống",
+        "statusLive": "Đang hoạt động",
+        "statusDraft": "Chưa xuất bản",
+        "codeLabel": "HTML",
+        "localNote": "Mã này trỏ đến một địa chỉ trên máy tính này (localhost), nên chỉ chạy trên các trang mở tại đây. Trên website thật, hãy dùng địa chỉ đã triển khai của bạn."
+      },
+      "whatsapp": {
+        "loading": "Đang tải nút…",
+        "loadError": "Không thể tải nút. Hãy làm mới trang để thử lại.",
+        "untouched": "Nút WhatsApp của bạn chưa được thiết lập. Nút bắt đầu từ số và từ khóa của bot. Hãy xem lại, sau đó lưu để mở khóa Triển khai và Xuất bản.",
+        "saved": "Đã lưu nút WhatsApp",
+        "saveFailed": "Không thể lưu nút. Hãy thử lại.",
+        "fromBot": "Nút này mở WhatsApp tại số {number}, là số mà bot này đang chạy. Để đổi số, hãy sửa Trình kích hoạt trong tab Build.",
+        "noNumber": "Bot này chưa có số WhatsApp. Hãy chọn một số ở trình kích hoạt trong tab Xây dựng, rồi quay lại để lưu nút."
+      }
+    },
+    "webBots": {
+      "title": "Bot chat trên website",
+      "intro": "Tất cả bot bạn đã tạo cho chat trên website và widget mà chúng chạy trong đó. Mở một hàng để thay đổi giao diện widget hoặc sao chép mã nhúng.",
+      "create": "Bot website mới",
+      "loading": "Đang tải các bot website của bạn…",
+      "loadError": "Không thể tải các bot website. Hãy làm mới trang để thử lại.",
+      "emptyTitle": "Chưa có bot chat trên website",
+      "emptyBody": "Hãy tạo một bot cho chat trên website và widget của nó sẽ hiển thị ở đây.",
+      "widgetLine": "Widget: {title}",
+      "noWidget": "Chưa có widget. Hãy tùy chỉnh để tạo một widget.",
+      "customize": "Tùy chỉnh",
+      "more": "Hiển thị {shown} trong tổng số {total} bot. Mở các bot còn lại từ Luồng.",
+      "state": {
+        "needs_customizing": "Cần tùy chỉnh",
+        "draft": "Bản nháp",
+        "live": "Đang hoạt động",
+        "paused": "Tạm dừng"
+      },
+      "deploy": "Triển khai"
     }
   }
 }

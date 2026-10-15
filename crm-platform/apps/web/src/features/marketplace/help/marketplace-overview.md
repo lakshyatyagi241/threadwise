@@ -10,18 +10,19 @@ keywords: [marketplace, apps, mini apps, integrations, install, uninstall, permi
 
 ## What it is for
 
-The Marketplace is where you add mini apps and connect outside services to your workspace. It has two tabs, **Mini apps** and **Integrations**, a list of what you have **Installed**, and a way to ask for something missing.
+The Marketplace is where you add mini apps and connect outside services to your workspace. It has three tabs, **Mini apps**, **Integrations** and **Add-ons**, a list of what you have **Installed**, and a way to ask for something missing.
 
 ## How to use it
 
 1. Open **Marketplace** from the menu. It opens on the **Integrations** tab.
-2. Find an app with the search box, the categories on the left, the **All**, **Available add-ons** and **Installed** buttons, and **Sort by** (**Featured**, **Most installed**, **Newest** or **Name**). With no filter set, shelves show **Featured**, **Popular** and **New** apps.
-3. Select a card to read the app page, including **What it can access** (each permission has a risk level), **What you will need to set up** and **Your data**.
-4. Select **Install**. Step one is **Permissions**: read the list and tick the box that allows them. Step two is **Set up**, where you fill in the fields the app needs. Keys are stored sealed and cannot be read back. Step three confirms the install.
-5. Some connections show a secret or a private address once. Copy it, tick the box that says you saved it, and then continue.
-6. Select **Installed** at the top to see your apps. Filter by **Type** or **Status**, and select **Manage** on an app.
-7. On the manage page you can **Pause** or **Resume** the app, review the permissions it holds, change **Credentials and settings**, use **Test connection**, **Send sample lead** or **Rotate secret** where they apply, read **Recent deliveries**, and **Uninstall**. Uninstalling asks whether to keep or delete the data the app created, though today its contacts stay either way.
-8. Missing something? Select **Request an integration**, describe it, and vote on what others asked for.
+2. Besides apps, the **Integrations** tab starts with cards for the services you can connect to your workspace: **Shopify**, **WooCommerce**, **Google Sheets add-on** and **Email**. The **Add-ons** tab has cards for **Google Calendar**, **REST API**, **Webhooks**, **Geta publishing**, **Translation** and **Add-ons**. Select **Open** on a card to go to that screen. Your role and plan decide which cards you see, and the cards on the Integrations tab hide while you search or filter.
+3. Find an app with the search box, the categories on the left, the **All**, **Available add-ons** and **Installed** buttons, and **Sort by** (**Featured**, **Most installed**, **Newest** or **Name**). With no filter set, shelves show **Featured**, **Popular** and **New** apps.
+4. Select a card to read the app page, including **What it can access** (each permission has a risk level), **What you will need to set up** and **Your data**.
+5. Select **Install**. Step one is **Permissions**: read the list and tick the box that allows them. Step two is **Set up**, where you fill in the fields the app needs. Keys are stored sealed and cannot be read back. Step three confirms the install.
+6. Some connections show a secret or a private address once. Copy it, tick the box that says you saved it, and then continue.
+7. Select **Installed** at the top to see your apps. Filter by **Type** or **Status**, and select **Manage** on an app.
+8. On the manage page you can **Pause** or **Resume** the app, review the permissions it holds, change **Credentials and settings**, use **Test connection**, **Send sample lead** or **Rotate secret** where they apply, read **Recent deliveries**, and **Uninstall**. Uninstalling asks whether to keep or delete the data the app created, though today its contacts stay either way.
+9. Missing something? Select **Request an integration**, describe it, and vote on what others asked for.
 
 ## Available add-ons
 

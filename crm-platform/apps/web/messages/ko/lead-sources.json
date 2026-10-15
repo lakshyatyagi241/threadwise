@@ -5,8 +5,7 @@
       "loading": "불러오는 중",
       "retry": "다시 시도",
       "copied": "복사됨",
-      "copyFailed": "복사할 수 없습니다. 텍스트를 선택해 직접 복사하세요.",
-      "requestId": "참조: {id}"
+      "copyFailed": "복사할 수 없습니다. 텍스트를 선택해 직접 복사하세요."
     },
     "states": {
       "noAccessTitle": "소셜 리드에 접근할 권한이 없습니다",

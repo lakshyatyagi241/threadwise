@@ -1,0 +1,16 @@
+{
+  "module": "channel-instagram",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-channel-instagram-001",
+      "feature": "ig send",
+      "category": "input",
+      "scenario": "a value of 201 (one past IG_SEND_MAX = 200) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/channel-instagram/broadcast.ts"
+    }
+  ]
+}

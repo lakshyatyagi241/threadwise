@@ -389,7 +389,7 @@ describe('the event drawer', () => {
       },
     );
     expect(html).toContain('deleted after its retention period');
-    expect(html).toContain('Reference: req-7');
+    expect(html).not.toContain('Reference: req-7');
     expect(html).not.toContain('raw server text');
   });
 

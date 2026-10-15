@@ -1,0 +1,302 @@
+{
+  "whatsapp-devices-baileys": {
+    "nav": {
+      "groups": "個人番号のグループ"
+    },
+    "area": {
+      "groups": "グループ"
+    },
+    "errors": {
+      "WA_GROUP_NOT_ADMIN": "この番号はグループの管理者ではないため、WhatsAppが変更を拒否しました。",
+      "WA_GROUP_NOT_FOUND": "この番号ではこのグループが見つかりませんでした。削除された可能性があります。",
+      "WA_GROUP_DEVICE_NOT_READY": "この番号は現在接続されていません。接続するか、しばらく待ってからもう一度お試しください。",
+      "WA_GROUP_RATE_LIMITED": "この番号でのグループ操作が多すぎます。しばらく待ってからもう一度お試しください。",
+      "WA_GROUP_RATE_LIMITED_ops_minute": "この番号で直近1分間のグループ操作が多すぎます。しばらく待ってからもう一度お試しください。",
+      "WA_GROUP_RATE_LIMITED_ops_day": "この番号は本日のグループ操作の上限に達しました。明日もう一度お試しください。",
+      "WA_GROUP_RATE_LIMITED_creates_day": "この番号は本日の新規グループ作成の上限に達しました。明日もう一度お試しください。",
+      "WA_GROUP_RATE_LIMITED_join_link_day": "この番号は本日の招待リンクでの参加の上限に達しました。明日もう一度お試しください。",
+      "WA_GROUP_RATE_LIMITED_cooldown": "WhatsAppがこの番号を制限したため、保護のためにグループ操作を一時停止しています。",
+      "WA_GROUP_LIMIT_REACHED": "WhatsAppによると、グループが満員か、この番号はこれ以上グループに参加できません。",
+      "WA_GROUP_LEFT": "この番号はグループから退出したため、グループは読み取り専用です。",
+      "WA_GROUP_INVALID_NUMBER": "電話番号のいずれかが無効か、この番号自身です。",
+      "WA_GROUP_JOIN_LINK_INVALID": "この招待リンクは無効か、取り消されたか、グループが存在しません。",
+      "WA_GROUP_JOIN_BY_LINK_DISABLED": "このプラットフォームでは、招待リンクによるグループ参加はオフになっています。",
+      "WA_GROUP_ANNOUNCE_ONLY": "このグループでは管理者のみメッセージを送信でき、この番号は管理者ではありません。",
+      "WA_GROUP_UNAVAILABLE": "WhatsAppがリクエストを受け付けませんでした。数分後にもう一度お試しください。"
+    },
+    "groups": {
+      "eyebrow": "非公式WhatsApp API / グループ",
+      "headingA": "あなたの",
+      "headingB": "個人番号のグループ",
+      "intro": "連携した各番号が参加しているグループです。グループの作成、メンバーの追加・削除、参加リクエストの承認、招待リンクの共有、退出ができます。グループのメッセージは共有インボックスにも表示されます。",
+      "loading": "読み込み中",
+      "loadFailed": "番号を読み込めませんでした。",
+      "retry": "再試行",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中",
+      "untitled": "名称未設定のグループ",
+      "memberCount": "{count, plural, =0 {メンバーなし} other {#人のメンバー}}",
+      "membersButton": "メンバー",
+      "editButton": "編集",
+      "leave": "退出",
+      "openChat": "チャットを開く",
+      "leftOn": "この番号は{date}にグループから退出しました。ここには読み取り専用で保存されています。",
+      "leftNote": "この番号はグループから退出しました。ここには読み取り専用で保存されています。",
+      "badge": {
+        "admin": "あなたは管理者です",
+        "notAdmin": "管理者ではありません",
+        "left": "退出済み",
+        "announce": "管理者のみ送信可",
+        "restrict": "管理者のみ情報編集可",
+        "approval": "参加には承認が必要",
+        "requests": "{count, plural, other {#件のリクエスト}}"
+      },
+      "blocked": {
+        "left": "この番号はグループから退出しました。",
+        "offline": "この番号はオフラインです。グループを変更するには接続してください。",
+        "notAdmin": "この番号はここでは管理者ではありません。グループは閲覧できますが、変更はできません。"
+      },
+      "kpi": {
+        "groups": "グループ",
+        "groupsSub": "この番号の参加先",
+        "members": "メンバー",
+        "membersSub": "全グループ合計",
+        "admin": "管理者として",
+        "adminSub": "管理できるグループ",
+        "joinRequests": "参加待ち",
+        "joinRequestsSub": "対応が必要なリクエスト",
+        "left": "退出済み",
+        "leftSub": "読み取り専用で保存"
+      },
+      "list": {
+        "title": "グループ",
+        "search": "名前で検索",
+        "statusLabel": "表示",
+        "statusAll": "すべてのグループ",
+        "statusActive": "参加中",
+        "statusLeft": "退出済み",
+        "empty": "まだグループがありません。グループを作成するか、スマートフォンでこの番号をグループに追加すると、ここに表示されます。",
+        "noMatch": "該当するグループがありません。",
+        "sync": "WhatsAppから更新",
+        "syncing": "更新中",
+        "synced": "{count, plural, other {WhatsAppから#件のグループを読み取りました。}}",
+        "syncThrottled": "リストは更新されたばかりです。もう一度更新するには1分ほどお待ちください。"
+      },
+      "rail": {
+        "title": "番号",
+        "noNumber": "個人番号がまだありません。",
+        "online": "オンライン",
+        "offline": "オフライン",
+        "notAdminHint": "{count, plural, other {この番号は#件のグループで管理者ではありません。閲覧はできますが、変更はできません。}}",
+        "limitsTitle": "残りのグループ操作回数",
+        "limitMinute": "この1分間",
+        "limitDay": "今日",
+        "limitCreates": "今日の新規グループ",
+        "limitJoins": "今日のリンクでの参加",
+        "perCall": "追加または削除は1回につき最大{count, plural, other {#人}}までです。",
+        "howTitle": "ここでのグループの仕組み",
+        "howRisk": "グループは非公式の接続で管理されます。WhatsAppはグループ操作を厳しく監視しているため、各番号には保護のための上限があり、あなたの操作にも適用されます。",
+        "howAdmin": "グループを変更できるのはグループの管理者だけです。この番号が管理者でない場合は、グループの閲覧とチャットのみ可能です。",
+        "howInbox": "メンバーが書き込んだ内容は共有インボックスに表示されます。返信はこの番号から送信され、1通のメッセージとして数えられます。"
+      },
+      "state": {
+        "noDevice": {
+          "title": "接続済みの個人番号がありません",
+          "message": "グループは個人のWhatsApp番号に紐づいています。まず番号を接続してください。",
+          "connect": "番号を接続"
+        },
+        "gateOff": {
+          "title": "このワークスペースでは利用できません",
+          "message": "このワークスペースでは非公式のWhatsApp接続が無効になっているため、グループは利用できません。"
+        },
+        "denied": {
+          "title": "グループを表示できません",
+          "message": "あなたのロールには、個人番号のグループを閲覧する権限がありません。ワークスペースの管理者にお問い合わせください。"
+        },
+        "offline": {
+          "not_connected": {
+            "title": "この番号はオフラインです",
+            "message": "以下のグループは最後に保存された状態です。変更するには番号を接続してください。"
+          },
+          "worker_unavailable": {
+            "title": "接続サービスが混み合っています",
+            "message": "番号はリンクされていますが、現在セッションを保持しているものがありません。以下のグループは最後に保存された状態です。数分後にもう一度お試しください。"
+          },
+          "open": "この番号を開く"
+        },
+        "rateLimited": {
+          "title": "グループ操作を一時停止中",
+          "message": "WhatsAppの制限からこの番号を保護するため、新しいグループ操作は待機中です。",
+          "countdown": "{time}後にもう一度お試しください"
+        }
+      },
+      "create": {
+        "open": "グループを作成",
+        "title": "グループを作成",
+        "risk": "グループの作成とメンバーの追加は、WhatsAppが最も厳しく監視している操作です。あなたを知っていて追加されることを期待している人だけを追加し、1日に作成するグループは少なくしてください。この番号がWhatsAppに制限される可能性があります。",
+        "subject": "グループ名",
+        "subjectHint": "60文字まで。",
+        "numbers": "追加するメンバー",
+        "numbersHint": "国番号付きの電話番号を、1行に1件、またはカンマ区切りで入力してください。現在は最大{max}件まで。後から追加できます。",
+        "numbersPlaceholder": "+919876543210\n+14155550123",
+        "description": "説明（任意）",
+        "descriptionHint": "{max}文字まで。",
+        "counted": "{count}/{max}件の番号",
+        "duplicates": "{count, plural, other {重複#件を無視しました}}",
+        "invalid": "電話番号ではありません: {numbers}",
+        "selfIgnored": "この番号はWhatsApp自身が追加するため、リストから除外されました。",
+        "overCap": "一度に追加できる番号は最大{max}件です。",
+        "readNotice": "リスクに関する注意事項を全文読む",
+        "acknowledge": "グループの作成とメンバーの追加により、この番号がWhatsAppに制限される可能性があることを理解しました。",
+        "offlineHint": "グループを作成するには、この番号を接続してください。",
+        "submit": "グループを作成",
+        "submitting": "作成中",
+        "created": "グループを作成しました: {name}",
+        "resultSummary": "{ok, plural, =0 {誰も追加されませんでした。} other {#人を追加しました。}} {failed, plural, =0 {} other {#人は追加できませんでした。}}",
+        "descriptionNotSet": "グループは作成されましたが、WhatsAppが説明を受け付けませんでした。グループを編集してもう一度お試しください。"
+      },
+      "outcome": {
+        "someone": "メンバー",
+        "done": "完了",
+        "already_member": "すでにグループに参加しています。",
+        "not_member": "グループに参加していません。",
+        "not_on_whatsapp": "この番号はWhatsAppを利用していません。",
+        "privacy_blocked": "相手のプライバシー設定により、この番号では追加できません。代わりに招待リンクを送ってください。",
+        "not_allowed": "WhatsAppでは、この相手に対してこの操作はできません。",
+        "group_full": "グループが満員です。",
+        "failed": "WhatsAppがこのメンバーを受け付けませんでした。"
+      },
+      "edit": {
+        "title": "グループを編集",
+        "saved": "グループを更新しました。",
+        "saving": "保存中",
+        "save": "保存",
+        "choosePicture": "画像を選択",
+        "pictureHint": "JPEGまたはPNG、{mb} MBまで。",
+        "pictureType": "JPEGまたはPNGの画像を使用してください。",
+        "pictureSize": "画像が{mb} MBを超えています。",
+        "subject": "グループ名",
+        "description": "説明",
+        "settings": "設定",
+        "announce": "管理者のみメッセージを送信可能",
+        "announceHint": "メンバーは閲覧のみで、書き込みはできません。",
+        "restrict": "管理者のみグループ情報を編集可能",
+        "restrictHint": "名前、説明、画像。",
+        "approval": "管理者が新しいメンバーを承認",
+        "approvalHint": "招待リンクから参加する人は承認を待ちます。",
+        "addMode": "管理者のみメンバーを追加可能",
+        "addModeHint": "他のメンバーは人を追加できません。",
+        "offline": "この番号はオフラインのため、保存できません。",
+        "removePicture": "画像を削除",
+        "keepPicture": "画像を残す"
+      },
+      "members": {
+        "title": "{name}のメンバー",
+        "readOnly": {
+          "left": "この番号はグループから退出しました。リストは最後に保存された状態で、変更できません。",
+          "offline": "この番号はオフラインです。リストは最後に保存された状態です。",
+          "notAdmin": "この番号は管理者ではありません。リストは閲覧できますが、変更はできません。"
+        },
+        "held": "グループ操作を少しの間一時停止しています。カウントダウンが終わったらもう一度お試しください。",
+        "add": {
+          "label": "メンバーを追加",
+          "hint": "国番号付きの電話番号を、1行に1件、またはカンマ区切りで入力してください。一度に最大{max}件まで。",
+          "placeholder": "+919876543210",
+          "counted": "{count}/{max}件の番号",
+          "invalid": "電話番号ではありません: {numbers}",
+          "overCap": "一度に追加できるのは最大{max}件です。",
+          "risk": "あなたを知らない人を追加することは、WhatsAppが番号を制限する一般的な原因です。",
+          "adding": "追加中",
+          "submit": "追加"
+        },
+        "done": {
+          "add": "{count, plural, other {#人を追加しました。}}",
+          "remove": "{count, plural, other {#人を削除しました。}}",
+          "promote": "{count, plural, other {#人が管理者になりました。}}",
+          "demote": "{count, plural, other {#人が管理者ではなくなりました。}}"
+        },
+        "result": "{ok, plural, =0 {誰も変更されませんでした。} other {#人を変更しました。}} {failed, plural, =0 {} other {#人は変更されませんでした。}}",
+        "search": "メンバーを検索",
+        "searchPlaceholder": "名前または番号",
+        "total": "{count, plural, other {#人のメンバー}}",
+        "noAccess": "メンバーを表示する権限がありません。",
+        "loading": "メンバーを読み込み中",
+        "noMatch": "該当するメンバーがいません。",
+        "empty": "保存されたメンバーはまだいません。",
+        "member": "メンバー",
+        "noNumber": "WhatsAppはこのメンバーの番号を表示しません。",
+        "you": "この番号",
+        "owner": "オーナー",
+        "admin": "管理者",
+        "promote": "管理者にする",
+        "demote": "管理者を外す",
+        "remove": "削除",
+        "selected": "{count, plural, =0 {選択なし} other {#人を選択中}}",
+        "limit": "一度に最大{max}人まで",
+        "removeConfirm": "{count, plural, other {#人をこのグループから削除しますか？}}"
+      },
+      "requests": {
+        "readOnly": {
+          "left": "この番号はグループから退出しました。",
+          "offline": "この番号はオフラインです。応答するには接続してください。",
+          "notAdmin": "この番号は管理者ではないため、これらのリクエストに応答できません。"
+        },
+        "hidden": "{count, plural, other {#人が参加を待っています。}}",
+        "title": "{count, plural, other {参加待ち#人}}",
+        "working": "…",
+        "approveAll": "すべて承認",
+        "rejectAll": "すべて拒否",
+        "loading": "リクエストを読み込み中",
+        "none": "表示するリクエストはありません。",
+        "someone": "誰か",
+        "approve": "承認",
+        "reject": "拒否",
+        "approved": "{count, plural, other {#人を承認しました。}}",
+        "rejected": "{count, plural, other {#件のリクエストを拒否しました。}}",
+        "someFailed": "{ok}件完了、{failed}件未完了:"
+      },
+      "link": {
+        "show": "招待リンク",
+        "hide": "招待リンクを非表示",
+        "loading": "リンクを読み込み中",
+        "label": "招待リンク",
+        "copy": "コピー",
+        "copied": "コピーしました",
+        "copyFailed": "リンクをコピーできませんでした。選択して手動でコピーしてください。",
+        "newLink": "新しいリンク",
+        "reset": "新しい招待リンクを作成しました。古いリンクは使えなくなりました。",
+        "confirmTitle": "新しい招待リンクを作成しますか？",
+        "confirmMessage": "古いリンクはすぐに使えなくなります。リンクを持っている人は、それでは参加できなくなります。",
+        "confirmButton": "新しいリンクを作成"
+      },
+      "join": {
+        "open": "招待リンクで参加",
+        "title": "招待リンクでグループに参加",
+        "risk": "リンクからのグループ参加は、WhatsAppが番号を制限する最も多い操作です。この番号では1日に数回しかできません。知っているグループにだけ参加してください。",
+        "invite": "招待リンク",
+        "inviteHint": "chat.whatsapp.comのリンク、またはそのコードのみ。",
+        "invalid": "WhatsAppの招待リンクまたはコードではありません。",
+        "lookUp": "確認",
+        "lookingUp": "確認中",
+        "submit": "参加",
+        "joining": "参加中",
+        "joined": "グループに参加しました。数秒後にリストに表示されます。",
+        "requested": "リクエストを送信しました。グループの管理者の承認が必要です。",
+        "alreadyMember": "この番号はすでにこのグループに参加しています。",
+        "approvalRequired": "参加には管理者の承認が必要です。",
+        "acknowledge": "リンクからグループに参加すると、この番号がWhatsAppに制限される可能性があることを理解しました。",
+        "offline": "グループに参加するには、この番号を接続してください。"
+      },
+      "confirm": {
+        "leaveTitle": "このグループから退出しますか？",
+        "leaveMessage": "この番号は{name}から退出します。招待がない限り、ここから再参加することはできません。グループとそのメッセージは、読み取り専用でインボックスに残ります。",
+        "leaveConfirm": "グループから退出"
+      },
+      "notice": {
+        "left": "この番号はグループから退出しました。"
+      }
+    }
+  }
+}

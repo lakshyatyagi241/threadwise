@@ -1,6 +1,6 @@
 import { lookup } from 'node:dns/promises';
-import { isBlockedAddress } from '../../net/blocked-address';
 import { checkProviderBaseUrl } from '@crm/contracts';
+import { isBlockedAddress } from '../../net/blocked-address';
 
 /**
  * The half of the provider base-URL rule that a URL cannot show: where the name POINTS. A registry provider's address is typed by a
@@ -31,9 +31,14 @@ export interface PublicUrlOptions {
 const defaultResolve = async (host: string): Promise<string[]> =>
   (await lookup(host, { all: true, verbatim: true })).map((a) => a.address);
 
-/** True for an address a provider must not live on (the shared rule, `infra/net/blocked-address.ts`). */
+/** True for an address a provider must not live on. The rule is the shared one (`infra/net/blocked-address.ts`); text that is not an address is refused. */
 export function isNonPublicAddress(address: string): boolean {
-  return isBlockedAddress(address.trim().replace(/^\[|\]$/g, ''));
+  return isBlockedAddress(
+    address
+      .trim()
+      .toLowerCase()
+      .replace(/^\[|\]$/g, ''),
+  );
 }
 
 /** Throws UnsafeProviderUrlError unless `raw` is an https address on a host whose every resolved address is public. */

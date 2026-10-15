@@ -40,7 +40,6 @@
       "planDisabled": "Paket Anda tidak mencakup penagihan.",
       "invalidState": "Tindakan itu tidak mungkin dilakukan pada status faktur saat ini. Muat ulang dan periksa statusnya.",
       "unexpected": "Terjadi kesalahan di sisi kami. Coba lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi"
     },
     "picker": {

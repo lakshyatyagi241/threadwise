@@ -145,10 +145,20 @@
         "privacyUrl": "Lien vers la politique de confidentialité",
         "privacyUrlHint": "Facultatif. Affiché à côté du texte de consentement. Doit commencer par https://.",
         "privacyUrlHttps": "Utilisez une adresse qui commence par https://.",
+        "termsUrl": "Lien vers les conditions",
+        "termsUrlHint": "Facultatif. Affiché à côté du texte de consentement et du lien de confidentialité. Doit commencer par https://.",
+        "useWorkspacePrivacy": "Utiliser le lien de confidentialité de mon espace de travail",
+        "useWorkspaceTerms": "Utiliser le lien des conditions de mon espace de travail",
         "required": "À cocher pour envoyer",
         "requiredHint": "Désactivez cette option si le consentement est facultatif.",
         "marketing": "Consentement marketing",
-        "marketingHint": "Cocher la case enregistre le consentement marketing sur le contact. Une case non cochée n’inscrit jamais personne."
+        "marketingHint": "Cocher la case enregistre le consentement marketing sur le contact. Une case non cochée n’inscrit jamais personne.",
+        "whatsappHint": "Allez-vous envoyer des messages à ces contacts sur WhatsApp ? Utilisez une formulation qui le précise et indique comment se désabonner. La case cochée est conservée comme preuve, avec ce texte exact et sa version.",
+        "whatsappInsert": "Utiliser la formulation d'acceptation WhatsApp",
+        "whatsappWording": "J'accepte de recevoir des actualités et des offres sur WhatsApp. Je peux répondre STOP à tout moment pour me désabonner.",
+        "coversSms": "Le texte couvre les SMS",
+        "coversSmsHint": "À activer uniquement si le texte ci-dessus indique qu'on peut contacter par SMS. Quand un téléphone est collecté, le SMS est enregistré avec WhatsApp et l'e-mail.",
+        "serviceHint": "Cette ligne n'est pas du marketing. Une case cochée est conservée comme preuve que la personne a accepté d'être contactée au sujet de sa demande (messages de service uniquement), avec ce texte exact et sa version. Elle n'abonne jamais personne au marketing."
       },
       "crm": {
         "title": "Dans le CRM",
@@ -253,8 +263,8 @@
           "off": "Désactivé"
         },
         "captchaHints": {
-          "inherit": "Applique le réglage de votre espace de travail pour les formulaires publics.",
-          "on": "Les visiteurs doivent réussir la vérification avant de pouvoir envoyer.",
+          "inherit": "Utilise le CAPTCHA configuré par l'administrateur de votre plateforme pour les formulaires publics, s'il y en a un.",
+          "on": "Les visiteurs doivent réussir la vérification avant de pouvoir envoyer le formulaire. Nécessite un CAPTCHA configuré sur la plateforme ; la publication est refusée sans lui.",
           "off": "Aucune vérification. Repose sur le champ piège masqué et les limites de débit."
         },
         "retention": "Conserver les réponses (en jours)",
@@ -271,6 +281,17 @@
           "perFormPerMinuteHint": "Envois vers ce formulaire, quelle que soit leur origine.",
           "perContactPerHour": "Par contact, par heure",
           "perContactPerHourHint": "Envois avec le même e-mail ou le même numéro de téléphone."
+        },
+        "captchaStatus": {
+          "available": "Un CAPTCHA est configuré sur cette plateforme (reCAPTCHA {version}).",
+          "none": "Aucun CAPTCHA n'est configuré sur cette plateforme, donc rien n'est vérifié ici. Demandez à l'administrateur de votre plateforme d'en ajouter un, ou fiez-vous au champ piège masqué et aux limites de débit.",
+          "noneOn": "Ce formulaire est réglé sur « toujours vérifier », mais la plateforme n'a pas de CAPTCHA : rien n'est vérifié et le formulaire ne peut pas être publié. Demandez à l'administrateur de votre plateforme d'en ajouter un, ou choisissez un autre réglage.",
+          "failed": "Impossible de vérifier si un CAPTCHA est configuré."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Le champ piège masqué n'a bloqué aucun robot ce mois-ci.} one {Le champ piège masqué a bloqué 1 robot ce mois-ci.} many {Le champ piège masqué a bloqué # de robots ce mois-ci.} other {Le champ piège masqué a bloqué # robots ce mois-ci.}}",
+          "held": "{count, plural, one {1 envoi est retenu comme spam.} many {# d'envois sont retenus comme spam.} other {# envois sont retenus comme spam.}}",
+          "review": "Les examiner"
         }
       }
     }

@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import type { BroadcastDetail } from '@crm/contracts';
+import { DirectorSummary } from '@/features/campaigns/components/director-summary';
 import { barWidth, funnel } from '../lib/detail-model';
 import { AreaChart, Donut } from './charts';
 import { TemplatePreview } from './template-preview';
@@ -24,6 +25,7 @@ export function OverviewTab({ detail }: { detail: BroadcastDetail }) {
   const colors = ['var(--brand)', 'var(--primary)', 'var(--warning)', '#9CA8A4', 'var(--danger)'];
   return (
     <div className="space-y-5">
+      <DirectorSummary kind="broadcast" id={detail.broadcast.id} />
       <div className="grid grid-cols-12 gap-5">
         <div className={`${CARD} col-span-12 xl:col-span-8`}>
           <div className="mb-3 flex items-start justify-between gap-4">

@@ -17,6 +17,8 @@
       "whatsapp": "WhatsApp (WABA)",
       "campaigns": "קמפיינים",
       "googleCalendar": "Google Calendar",
+      "googleMail": "Gmail",
+      "microsoftMail": "Microsoft 365",
       "flowBuilder": "עורך תהליכים"
     },
     "hub": {
@@ -62,7 +64,6 @@
       "conflict": "מישהו אחר שמר את ההגדרות האלה אחרי שפתחתם אותן. טענו מחדש כדי לראות את השינויים שלו, ואז החילו שוב את השינויים שלכם.",
       "reload": "טעינה מחדש של ההגדרות",
       "unexpected": "משהו השתבש ולא נשמר דבר.",
-      "requestId": "מזהה בקשה",
       "readOnly": "אפשר לקרוא את ההגדרות האלה, אך רק מנהל־על יכול לשנות אותן.",
       "secretSet": "נשמר. השאירו ריק כדי לשמור את הערך הקיים.",
       "secretUnset": "לא הוגדר.",
@@ -930,6 +931,79 @@
           }
         }
       },
+      "googleMail": {
+        "title": "דוא\"ל Gmail",
+        "description": "לקוח ה-OAuth של Google שדרכו כל סביבת עבודה מחברת את התיבות שלה.",
+        "sections": {
+          "oauth": {
+            "title": "לקוח OAuth של Google"
+          },
+          "push": {
+            "title": "Gmail Push (אופציונלי)"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "לאפשר לסביבות עבודה לחבר Gmail",
+            "hint": "כבוי: אף סביבת עבודה לא יכולה להתחבר, ודואר לא נקרא ולא נשלח. תיבות שכבר מחוברות נשמרות."
+          },
+          "clientId": {
+            "label": "Client ID",
+            "hint": "מ-Google Cloud, Credentials, OAuth 2.0 Client ID (Web application). ריק משתמש ב-GOOGLE_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "סוד הלקוח",
+            "hint": "נשמר מוצפן ולא יוצג שוב. ריק שומר על השמור; GOOGLE_MAIL_CLIENT_SECRET הוא הגיבוי."
+          },
+          "redirectUri": {
+            "label": "עקיפת Redirect URI",
+            "hint": "השאירו ריק כדי להשתמש בכתובת שלמעלה. היא חייבת להתאים בדיוק ל-Authorised redirect URI בלקוח."
+          },
+          "pubsubTopic": {
+            "label": "נושא Pub/Sub",
+            "hint": "projects/PROJECT_ID/topics/TOPIC_ID. הענקו ל-gmail-api-push@system.gserviceaccount.com את התפקיד Publisher עליו. ריק משתמש ב-GOOGLE_MAIL_PUBSUB_TOPIC; בלי נושא, תיבות הדואר נבדקות רק בבדיקה תקופתית."
+          },
+          "pushAudience": {
+            "label": "קהל היעד של ה-Push",
+            "hint": "קהל היעד (audience) שהוגדר במנוי ה-Push. ריק משתמש ב-GOOGLE_MAIL_PUSH_AUDIENCE, ואחרת בכתובת נקודת הקצה של ה-Push בפלטפורמה זו."
+          },
+          "pushServiceAccount": {
+            "label": "חשבון שירות של Push",
+            "hint": "חשבון השירות שבו מנוי ה-Push חותם. Push מכל חשבון אחר נדחה. ריק משתמש ב-GOOGLE_MAIL_PUSH_SERVICE_ACCOUNT."
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "דוא\"ל Microsoft 365",
+        "description": "אפליקציית Microsoft שדרכה כל סביבת עבודה מחברת את תיבות הדואר שלה ב-Outlook וב-Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "אפליקציית Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "לאפשר לסביבות עבודה לחבר Microsoft 365",
+            "hint": "כבוי: אף סביבת עבודה לא יכולה להתחבר, ודואר לא נקרא ולא נשלח. תיבות שכבר מחוברות נשמרות."
+          },
+          "clientId": {
+            "label": "מזהה אפליקציה (לקוח)",
+            "hint": "ממרכז הניהול של Microsoft Entra, רישומי אפליקציות, סקירה כללית. אם ריק, נעשה שימוש ב-MICROSOFT_MAIL_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "סוד הלקוח",
+            "hint": "נשמר מוצפן ולא יוצג שוב. ריק שומר על השמור; MICROSOFT_MAIL_CLIENT_SECRET הוא הגיבוי."
+          },
+          "tenant": {
+            "label": "דייר (Tenant)",
+            "hint": "common מאפשר חשבונות עבודה, בית ספר ואישיים; לאפליקציה של דייר יחיד השתמשו במזהה הספרייה (הדייר). אם ריק, נעשה שימוש ב-MICROSOFT_MAIL_TENANT, ואם אין אז common."
+          },
+          "redirectUri": {
+            "label": "עקיפת Redirect URI",
+            "hint": "השאירו ריק כדי להשתמש בכתובת שלמעלה. היא חייבת להתאים בדיוק ל-Authorised redirect URI בלקוח."
+          }
+        }
+      },
       "flowBuilder": {
         "title": "עורך תהליכים",
         "description": "אילו עורכי תהליכים מוצעים לסביבות העבודה.",
@@ -1062,6 +1136,16 @@
         "title": "Google Calendar",
         "description": "לקוח OAuth של Google שסביבות העבודה משתמשות בו לחיבור היומן לצורך הזמנות ושעות תפוסות.",
         "tags": "Google / OAuth / Calendar"
+      },
+      "googleMail": {
+        "title": "דוא\"ל Gmail",
+        "description": "לקוח ה-OAuth של Google שבאמצעותו סביבות עבודה מחברות את תיבות ה-Gmail שלהן.",
+        "tags": "Google / OAuth / Gmail"
+      },
+      "microsoftMail": {
+        "title": "דוא\"ל Microsoft 365",
+        "description": "אפליקציית Microsoft שבה סביבות עבודה מחברות את תיבות הדואר שלהן ב-Outlook וב-Microsoft 365.",
+        "tags": "Microsoft / OAuth / Outlook"
       },
       "flowBuilder": {
         "title": "עורך תהליכים",
@@ -1648,6 +1732,78 @@
           }
         }
       },
+      "googleMail": {
+        "title": "דוא\"ל Gmail",
+        "eyebrow": "ניהול - דוא\"ל",
+        "description": "לקוח OAuth אחד של Google Cloud לכל הפלטפורמה, נפרד מ-Google Calendar. כל סביבת עבודה מחברת את התיבות שלה מתוך דוא\"ל ואינה רואה את מזהה הלקוח או הסוד.",
+        "sections": {
+          "oauth": {
+            "title": "לקוח OAuth של Google",
+            "description": "בלי מזהה לקוח וסוד, סביבות עבודה לא יכולות לחבר תיבה."
+          },
+          "push": {
+            "title": "Gmail Push (אופציונלי)",
+            "description": "דואר חדש מגיע לתיבת הצוות תוך שניות, בלי להמתין לבדיקה הבאה. הבדיקה התקופתית נשארת פעילה כרשת ביטחון."
+          }
+        },
+        "guide": {
+          "title": "הגדירו ב-Google Cloud",
+          "items": {
+            "project": {
+              "title": "1. פרויקט ו-API",
+              "body": "ב-Google Cloud Console צרו פרויקט והפעילו את Gmail API."
+            },
+            "redirect": {
+              "title": "2. לקוח OAuth",
+              "body": "צרו OAuth 2.0 Client ID מסוג Web application והוסיפו את ה-redirect URI המוצג בעמוד זה תחת Authorised redirect URIs."
+            },
+            "consent": {
+              "title": "3. מסך הסכמה",
+              "body": "הוסיפו את ההיקפים openid, email, gmail.readonly ו-gmail.send. היקפי Gmail מוגבלים: Google חייבת לאמת את האפליקציה לשימוש כללי, ובמצב בדיקה ההרשאה פוקעת אחרי 7 ימים."
+            },
+            "workspaces": {
+              "title": "4. סביבות העבודה מתחברות",
+              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. לאחר מכן מנהלים מתחברים מתוך דוא\"ל."
+            },
+            "push": {
+              "title": "5. דואר מיידי (אופציונלי)",
+              "body": "צרו נושא Pub/Sub, הענקו ל-gmail-api-push@system.gserviceaccount.com את התפקיד Publisher, הוסיפו מנוי Push אל APP_URL/v2/public/email/google/push עם אימות OIDC, ואז הזינו כאן את הנושא, קהל היעד וחשבון השירות."
+            }
+          }
+        }
+      },
+      "microsoftMail": {
+        "title": "דוא\"ל Microsoft 365",
+        "eyebrow": "ניהול - דוא\"ל",
+        "description": "אפליקציית Microsoft Entra אחת לכל הפלטפורמה. כל סביבת עבודה מחברת את תיבות הדואר שלה מתוך דוא\"ל ולעולם אינה רואה את מזהה הלקוח או הסוד.",
+        "sections": {
+          "oauth": {
+            "title": "אפליקציית Microsoft Entra",
+            "description": "בלי מזהה לקוח וסוד, סביבות עבודה לא יכולות לחבר תיבה."
+          }
+        },
+        "guide": {
+          "title": "הגדרה ב-Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. רישום האפליקציה",
+              "body": "במרכז הניהול של Microsoft Entra צרו רישום אפליקציה. בחרו את סוגי החשבונות של הלקוחות שלכם (עבודה או בית ספר, וחשבונות אישיים עבור Outlook.com) והעתיקו לכאן את מזהה האפליקציה (לקוח) ואת הדייר."
+            },
+            "redirect": {
+              "title": "2. כתובת הפניה וסוד",
+              "body": "הוסיפו את כתובת ההפניה המוצגת בעמוד זה כהפניה של פלטפורמת Web, ואז צרו סוד לקוח תחת אישורים וסודות והדביקו כאן את ערכו."
+            },
+            "permissions": {
+              "title": "3. הרשאות API",
+              "body": "הוסיפו את הרשאות Microsoft Graph המואצלות Mail.Read, Mail.Send, User.Read ו-offline_access. לשימוש כללי יש להשלים אימות מפרסם; חלק מהארגונים דורשים גם הסכמה של מנהל."
+            },
+            "workspaces": {
+              "title": "4. סביבות העבודה מתחברות",
+              "body": "הדביקו כאן את מזהה הלקוח והסוד ושמרו. לאחר מכן מנהלים מתחברים מתוך דוא\"ל."
+            }
+          }
+        }
+      },
       "flowBuilder": {
         "title": "עורך תהליכים",
         "eyebrow": "מנהל - אוטומציה",
@@ -1735,6 +1891,12 @@
     "googleCallback": {
       "redirectTitle": "Redirect URI",
       "redirectHint": "רשמו את הכתובת הזו בדיוק כ-Authorised redirect URI בלקוח ה-OAuth. לכאן Google שולחת את הדפדפן לאחר שמנהל סביבת העבודה מאשר.",
+      "copy": "העתקה",
+      "copied": "הועתק"
+    },
+    "microsoftCallback": {
+      "redirectTitle": "Redirect URI",
+      "redirectHint": "רשמו בדיוק את הכתובת הזו ככתובת הפניה מסוג Web ברישום האפליקציה. לשם Microsoft שולחת את הדפדפן לאחר שמנהל סביבת העבודה מאשר.",
       "copy": "העתקה",
       "copied": "הועתק"
     }

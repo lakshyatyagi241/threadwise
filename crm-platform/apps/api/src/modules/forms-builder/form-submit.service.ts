@@ -11,6 +11,7 @@ import {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { ownersAvailable } from '../../common/leave-owner-pool';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
@@ -27,6 +28,8 @@ import {
 } from '../crm';
 import { coerceCustomValue, normaliseLeadEmail, pickOwner } from '../leads';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
+import { createHash } from 'node:crypto';
+import { ContactConsentService } from '../contact-consent';
 import { resolveConsent, type ConsentOutcome } from './form-consent';
 import { computeAmount } from './form-payment-rules';
 import { FormPaymentsService, type Payer } from './form-payments.service';
@@ -138,6 +141,7 @@ export class FormSubmitService {
     private readonly payments: FormPaymentsService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consentLedger: ContactConsentService,
     config: ConfigService<Env, true>,
   ) {
     this.ipSecret = `forms-ip:${config.get('JWT_ACCESS_SECRET', { infer: true })}`;
@@ -344,8 +348,16 @@ export class FormSubmitService {
           stored: { ...sub.consent, shownVersion: null },
           missing: false,
           marketingOptIn: sub.consent.given && def.consent.marketing,
+          serviceAgreed: sub.consent.given && !def.consent.marketing,
+          coversSms: def.consent.coversSms,
         }
-      : { stored: null, missing: false, marketingOptIn: false };
+      : {
+          stored: null,
+          missing: false,
+          marketingOptIn: false,
+          serviceAgreed: false,
+          coversSms: false,
+        };
     // A staff re-run of a form that takes payment opens its attempt as well (staff then get the link from the submission screen).
     const gatewaySlug = def.payment.enabled ? await this.payments.assertGateway(orgId) : '';
     await this.processInTx(
@@ -571,7 +583,7 @@ export class FormSubmitService {
       form: form.name.slice(0, 255),
       capturedAt: sub.createdAt,
     });
-    if (consent.marketingOptIn)
+    if (consent.marketingOptIn) {
       await this.subscribe(
         tx,
         orgId,
@@ -581,7 +593,20 @@ export class FormSubmitService {
         found.uuid,
         email,
         phone?.e164 ?? null,
+        consent.coversSms,
       );
+    } else if (consent.serviceAgreed) {
+      await this.recordServiceAgreement(
+        tx,
+        orgId,
+        form,
+        sub,
+        found.contactId,
+        email,
+        phone?.e164 ?? null,
+        consent.coversSms,
+      );
+    }
 
     await this.activities.insert(tx, orgId, {
       contactId: found.contactId,
@@ -703,7 +728,12 @@ export class FormSubmitService {
       label: string;
       owner: number | null;
       customTypes: Map<string, string>;
-      extras: { title: string | null; address: string | null; message: string | null };
+      extras: {
+        title: string | null;
+        address: string | null;
+        message: string | null;
+        middleName: string | null;
+      };
       created: boolean;
     },
   ): Promise<void> {
@@ -715,6 +745,7 @@ export class FormSubmitService {
     if (blank(row.name) && v.name.name) patch.name = v.name.name;
     if (blank(row.firstName) && v.name.first) patch.firstName = v.name.first;
     if (blank(row.lastName) && v.name.last) patch.lastName = v.name.last;
+    if (blank(v.extras.middleName) && b.middle_name) patch.middleName = b.middle_name.slice(0, 191);
     if (blank(row.source)) patch.source = v.label;
     if (v.owner !== null && row.ownerId === null) patch.ownerId = v.owner;
     if (blank(v.extras.title) && b.title) patch.title = b.title.slice(0, 191);
@@ -854,8 +885,13 @@ export class FormSubmitService {
       userIds?: string[];
     };
     const mode = rule.mode ?? 'unassigned';
-    const active =
-      mode === 'unassigned' ? [] : await this.forms.activeUsers(tx, orgId, rule.userIds ?? []);
+    // People on leave today are never picked (BL-112): a fixed person is replaced by their delegate, a rotation skips them.
+    const active = await ownersAvailable(
+      tx,
+      orgId,
+      mode === 'unassigned' ? [] : await this.forms.activeUsers(tx, orgId, rule.userIds ?? []),
+      mode,
+    );
     if (mode !== 'round_robin' || active.length === 0) return pickOwner({ mode }, active, 0).pick;
     return pickOwner({ mode }, active, await this.forms.takeTurn(tx, orgId, form.id)).pick;
   }
@@ -889,12 +925,39 @@ export class FormSubmitService {
     contactUuid: string,
     email: string | null,
     phone: string | null,
+    coversSms: boolean,
   ): Promise<void> {
     const row = (await this.contactRepo.findById(tx, orgId, contactId))!;
     if (row.isUnsubscribed) return;
+    // The consent ledger keeps the proof: the exact line the visitor ticked (text cut to 300 characters plus the hash of the whole
+    // text and its version), the form and the submission. Never the visitor's IP. A form cannot override a STOP (respectWithdrawn).
+    const given = sub.consent;
+    for (const channel of [
+      ...(phone ? (['whatsapp'] as const) : []),
+      ...(phone && coversSms ? (['sms'] as const) : []),
+      ...(email ? (['email'] as const) : []),
+    ]) {
+      await this.consentLedger.recordInTx(tx, orgId, {
+        contactId,
+        channel,
+        action: 'granted',
+        source: 'form',
+        evidence: {
+          consentText: given?.text.slice(0, 300),
+          consentVersion: given ? String(given.version) : undefined,
+          consentHash: given ? createHash('sha256').update(given.text).digest('hex') : undefined,
+          formId: form.uuid,
+          submissionId: sub.uuid,
+        },
+        occurredAt: given ? new Date(given.at) : undefined,
+        idempotencyKey: `form:${sub.uuid}:${channel}`,
+        respectWithdrawn: true,
+      });
+    }
     const patch: Record<string, unknown> = {};
     if (email && !row.emailSubscriptionStatus) patch.emailSubscriptionStatus = 'subscribed';
     if (phone && !row.whatsappSubscriptionStatus) patch.whatsappSubscriptionStatus = 'subscribed';
+    if (phone && coversSms && !row.smsSubscriptionStatus) patch.smsSubscriptionStatus = 'subscribed';
     if (Object.keys(patch).length === 0) return;
     await this.contactRepo.updateFieldsById(tx, orgId, contactId, { ...patch, updatedBy: null });
     await this.audit.record(tx, {
@@ -919,6 +982,51 @@ export class FormSubmitService {
         submissionId: sub.uuid,
       },
     });
+  }
+
+  /**
+   * A ticked consent line that is NOT marketing (BL-171, privacy spec 4.3.2): the person agreed to be contacted about their request.
+   * The ledger keeps that as evidence, with the exact line they ticked (text cut to 300 characters, the hash of the whole text, the
+   * version), the form and the submission, but only for SERVICE messages (purpose `utility`): it is never a marketing grant, changes no
+   * subscription label and announces no opt-in. WhatsApp and email follow what the form collected; SMS only when the form declares that its
+   * wording covers SMS. A person who stopped service messages on a channel is not turned back on (`respectWithdrawn`).
+   */
+  private async recordServiceAgreement(
+    tx: Tx,
+    orgId: number,
+    form: FormRow,
+    sub: SubmissionRow,
+    contactId: number,
+    email: string | null,
+    phone: string | null,
+    coversSms: boolean,
+  ): Promise<void> {
+    const given = sub.consent;
+    if (!given) return;
+    for (const channel of [
+      ...(phone ? (['whatsapp'] as const) : []),
+      ...(phone && coversSms ? (['sms'] as const) : []),
+      ...(email ? (['email'] as const) : []),
+    ]) {
+      await this.consentLedger.recordInTx(tx, orgId, {
+        contactId,
+        channel,
+        purpose: 'utility',
+        action: 'granted',
+        source: 'form',
+        evidence: {
+          consentText: given.text.slice(0, 300),
+          consentVersion: String(given.version),
+          consentHash: createHash('sha256').update(given.text).digest('hex'),
+          formId: form.uuid,
+          submissionId: sub.uuid,
+        },
+        note: 'Agreed to be contacted about their request (not marketing)',
+        occurredAt: new Date(given.at),
+        idempotencyKey: `form:${sub.uuid}:utility:${channel}`,
+        respectWithdrawn: true,
+      });
+    }
   }
 
   // --- small reads ---------------------------------------------------------------------------------------------------------------------

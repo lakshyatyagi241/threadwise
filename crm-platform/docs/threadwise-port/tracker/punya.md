@@ -137,3 +137,67 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-SMS-028 | done |  | built and tested; hub twin-compared with Reference |
 | TW-SMS-029 | wontfix |  | no per-message SMS table by design; the broadcast and campaign recipient rows carry the result |
 | TW-SMS-030 | done |  | built and tested; hub twin-compared with Reference |
+
+## channel-email (mail)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-MAIL-001 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-002 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-003 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-004 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-005 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-006 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-007 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-008 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-009 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-010 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-011 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-012 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-013 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-014 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-015 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-016 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-017 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-018 | wontfix |  | Reference MailTrixy bridge: not ported (native Gmail instead, see parity/channel-email.md) |
+| TW-MAIL-019 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-020 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-021 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-022 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-023 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-024 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-025 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-026 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-027 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-028 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-029 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-030 | done |  | built and tested against a fake Gmail; hub probed ours-only; no live Google run |
+| TW-MAIL-031 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-032 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-033 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-034 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+| TW-MAIL-035 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+
+## channel-line (line)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-LINE-001 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-002 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-003 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-004 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-005 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-006 | backend-done |  | lakshya/channels/line: signed webhook, fake LINE only |
+| TW-LINE-007 | backend-done |  | thread, contact, file done; flow and automation hooks are stand-ins |
+| TW-LINE-008 | backend-done |  | adapter: reply token else push |
+| TW-LINE-009 | backend-done |  |  |
+| TW-LINE-010 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-011 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-012 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-013 | backend-done |  | queue job, batches of 40, consent gate |
+| TW-LINE-014 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-015 | blocked |  | needs flow-runtime-engine and node-bridge-runtime (TW-FLR / TW-NODE) |
+| TW-LINE-016 | blocked |  | rich menus not ported yet; outside the first LINE branch |
+| TW-LINE-017 | blocked |  | insights not ported yet; outside the first LINE branch |
+| TW-LINE-018 | backend-done |  | permission keys + extra_channels; channel cap not enforced (as Reference) |
+| TW-LINE-019 | wontfix |  | unused client methods in Reference 1.7.0, no caller |

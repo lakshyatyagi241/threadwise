@@ -173,11 +173,6 @@ function MembersScreen() {
         >
           <div className="space-y-1">
             <p>{te(failure.key, failure.values)}</p>
-            {failure.requestId && (
-              <p className="font-mono text-xs opacity-80">
-                {tc('requestId')}: {failure.requestId}
-              </p>
-            )}
           </div>
           <div className="flex gap-2">
             {failure.kind === 'conflict' && (
@@ -366,9 +361,9 @@ function MembersScreen() {
         <AddMemberModal
           roles={grantable}
           onClose={() => setAdding(false)}
-          onCreated={(name) => {
+          onCreated={(name, emailSent) => {
             setAdding(false);
-            toast.toast(t('toasts.added', { name }), 'success');
+            toast.toast(t(emailSent ? 'toasts.invited' : 'toasts.added', { name }), 'success');
           }}
         />
       )}

@@ -37,3 +37,29 @@ export async function emitScheduledStatus(
     },
   });
 }
+
+export const SCHEDULED_UPDATED_EVENT = 'scheduled.updated';
+
+/**
+ * `scheduled.updated` when a person edited a schedule that had not started (TW-SCHED-016), in the edit's own transaction. The payload
+ * names the fields that changed and nothing else: no message text, no recipients.
+ */
+export async function emitScheduledUpdated(
+  outbox: OutboxService,
+  tx: Tx,
+  orgId: number,
+  scheduledId: number,
+  fields: string[],
+): Promise<void> {
+  const res = await tx.execute(sql`
+    SELECT uuid, schedule_name FROM scheduled_messages WHERE org_id = ${orgId} AND id = ${scheduledId}`);
+  const row = res.rows[0] as { uuid: string; schedule_name: string } | undefined;
+  if (!row) return;
+  await outbox.emit(tx, {
+    orgId,
+    aggregateModule: 'scheduled_messages',
+    aggregateId: scheduledId,
+    eventType: SCHEDULED_UPDATED_EVENT,
+    payload: { uuid: row.uuid, name: row.schedule_name, fields },
+  });
+}

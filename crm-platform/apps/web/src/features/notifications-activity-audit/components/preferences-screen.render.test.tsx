@@ -92,16 +92,20 @@ const GROUP_TYPES = [
   'waba_group_join_request',
   'waba_group_suspended',
   'waba_group_suspension_cleared',
+  'device_group_join_request',
+  'device_group_removed',
 ] as const;
 const groupItems = () => GROUP_TYPES.map((type) => item(type, 'whatsapp_groups'));
 
 describe('the WhatsApp Groups rows of the preferences screen (BL-099)', () => {
-  it('shows the three rows under their own heading with the quiet defaults, in English', () => {
+  it('shows the five rows under their own heading with the quiet defaults, in English', () => {
     const out = html(view({ state: state(...groupItems()) }));
     expect(out).toContain('WhatsApp groups');
     expect(out).toContain('Request to join a group');
     expect(out).toContain('Group suspended');
     expect(out).toContain('Group active again');
+    expect(out).toContain('Request to join a personal-number group');
+    expect(out).toContain('Removed from a personal-number group');
     expect(out).toContain('aria-label="Request to join a group: bell"');
     expect(out).toContain('Default: bell on, pop-up on, sound off');
     expect(out).not.toContain('notifications.prefs');
@@ -122,7 +126,7 @@ describe('the WhatsApp Groups rows of the preferences screen (BL-099)', () => {
     expect(out).not.toContain('Group suspended');
   });
 
-  it('has the push off by default for all three (a person turns it on)', () => {
+  it('has the push off by default for all five (a person turns it on)', () => {
     for (const e of state(...groupItems()).entries) {
       expect(e.defaults.push, e.type).toBe(false);
       expect(e.flags.push, e.type).toBe(false);
@@ -337,5 +341,36 @@ describe('the preferences screen (ar)', () => {
   it('uses logical alignment so the layout mirrors (no left or right utilities)', () => {
     const out = html(view(), 'ar');
     expect(out).not.toMatch(/class="[^"]*\b(?:ml|mr|pl|pr|left|right|text-left|text-right)-/);
+  });
+});
+
+describe('the System group and the paused note', () => {
+  const testRow = () => [
+    item('test', 'system', {
+      sound: true,
+      defaults: { bell: true, toast: true, sound: true, push: false },
+    }),
+  ];
+
+  it('lists the test notification under System, with its default', () => {
+    const out = html(view({ state: state(...testRow()) }));
+    expect(out).toContain('System');
+    expect(out).toContain('Test notification');
+    expect(out).toContain('aria-label="Test notification: bell"');
+    expect(out).not.toContain('notifications.prefs');
+  });
+
+  it('words the System group in Arabic', () => {
+    const out = html(view({ state: state(...testRow()) }), 'ar');
+    expect(out).toContain('النظام');
+    expect(out).toContain('إشعار تجريبي');
+  });
+
+  it('explains a title-only state with a small note when live updates are paused, and shows nothing otherwise', () => {
+    const paused = html(view({ livePaused: true }));
+    expect(paused).toContain('data-testid="live-paused"');
+    expect(paused).toContain('Live updates are paused');
+    expect(html(view())).not.toContain('data-testid="live-paused"');
+    expect(html(view({ livePaused: true }), 'ar')).toContain('data-testid="live-paused"');
   });
 });

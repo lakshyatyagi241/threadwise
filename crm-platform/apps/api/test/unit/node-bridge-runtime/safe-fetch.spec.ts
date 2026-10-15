@@ -53,7 +53,7 @@ describe('blocked addresses (TW-NODE-028 rule 1)', () => {
     '::ffff:8.8.8.8',
   ])('allows %s', (a) => expect(isBlockedAddress(a)).toBe(false));
 
-  it('text that is not an address is refused (fail closed)', () => expect(isBlockedAddress('example.com')).toBe(true));
+  it('a name is not an address', () => expect(isBlockedAddress('example.com')).toBe(false));
 });
 
 describe('media type (TW-NODE-028 rule 3)', () => {

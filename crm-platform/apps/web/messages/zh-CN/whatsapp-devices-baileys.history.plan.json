@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "您的套餐不包含此功能。升级后即可导入完整历史记录。",
+        "fullLockedLink": "查看套餐"
+      }
+    }
+  }
+}

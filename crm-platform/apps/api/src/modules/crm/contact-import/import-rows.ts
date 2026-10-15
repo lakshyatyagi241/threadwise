@@ -5,6 +5,8 @@ import {
   canonicalizePhone,
   composeDisplayName,
   detectImportColumns,
+  parseImportConsent,
+  type ImportConsentValue,
   type ImportField,
   type ImportMapping,
   type ImportRejectReason,
@@ -29,6 +31,19 @@ export interface ParsedRow {
   source?: string;
   groups: string[];
   tags: string[];
+  /** What the consent column says, only when a column is mapped (`blank` is left out so a later row for the same number can refine it). */
+  consent?: Exclude<ImportConsentValue, 'blank'>;
+  /** A column is mapped to consent, so this row counts as "not granted" when `consent` is absent. */
+  consentColumn?: boolean;
+  /** The cell as written, kept only when it was neither yes nor no (the preview shows a few). */
+  consentRaw?: string;
+  /** The same for the SMS and email consent columns (BL-170); read only when a column is mapped. */
+  consentSms?: Exclude<ImportConsentValue, 'blank'>;
+  consentSmsColumn?: boolean;
+  consentSmsRaw?: string;
+  consentEmail?: Exclude<ImportConsentValue, 'blank'>;
+  consentEmailColumn?: boolean;
+  consentEmailRaw?: string;
 }
 
 export type RowResult =
@@ -134,6 +149,12 @@ export function extractRow(
   if (tags.some((t) => t.length > TAG_NAME_MAX)) return reject('tag_name_too_long');
 
   const opt = (v: string, max: number): string | undefined => (v ? v.slice(0, max) : undefined);
+  const consentColumn = mapping.consent !== undefined;
+  const consent = consentColumn ? parseImportConsent(cell('consent')) : undefined;
+  const smsColumn = mapping.consentSms !== undefined;
+  const consentSms = smsColumn ? parseImportConsent(cell('consentSms')) : undefined;
+  const emailColumn = mapping.consentEmail !== undefined;
+  const consentEmail = emailColumn ? parseImportConsent(cell('consentEmail')) : undefined;
   return {
     ok: true,
     row: {
@@ -152,6 +173,17 @@ export function extractRow(
       source: opt(cell('source'), 128),
       groups,
       tags,
+      ...(consentColumn ? { consentColumn } : {}),
+      ...(consent && consent !== 'blank' ? { consent } : {}),
+      ...(consent === 'unrecognised' ? { consentRaw: cell('consent').slice(0, 40) } : {}),
+      ...(smsColumn ? { consentSmsColumn: true } : {}),
+      ...(consentSms && consentSms !== 'blank' ? { consentSms } : {}),
+      ...(consentSms === 'unrecognised' ? { consentSmsRaw: cell('consentSms').slice(0, 40) } : {}),
+      ...(emailColumn ? { consentEmailColumn: true } : {}),
+      ...(consentEmail && consentEmail !== 'blank' ? { consentEmail } : {}),
+      ...(consentEmail === 'unrecognised'
+        ? { consentEmailRaw: cell('consentEmail').slice(0, 40) }
+        : {}),
     },
   };
 }

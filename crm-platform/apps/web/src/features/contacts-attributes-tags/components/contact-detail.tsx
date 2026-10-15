@@ -8,9 +8,14 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { contactActivityResponseSchema } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
+import { ConsentCard } from '@/features/contact-consent';
+import { ContactPrivacyMenu } from '@/features/privacy-requests';
+import { ContactGrowthCard } from '@/features/growth';
+import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
 import { LinkedInvoices } from '@/features/invoicing';
 import { LinkedTasks } from '@/features/tasks';
@@ -24,7 +29,6 @@ import {
 } from '../api/contacts';
 import { useStatusOptions } from '../api/attributes';
 import { useContactFields, useFieldSections } from '../api/properties';
-import { useContactTags } from '../api/tags';
 import {
   displayName,
   EXTRA_KEYS,
@@ -36,13 +40,16 @@ import {
 import { errorKind } from '../lib/errors';
 import { detailGroups } from '../lib/property-model';
 import { stageChoices, statusChoices } from '../lib/option-sets';
-import { ContactAvatar, GroupChip, TagPill } from './chips';
+import { ContactAvatar, GroupChip } from './chips';
+import { ContactQuickTags } from './contact-quick-tags';
 import { StageMenu } from './stage-menu';
 import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
+import { OwnerControl } from './owner-control';
 import { LostReasonDialog, type LostPrompt } from './lost-reason';
 import { isLostStage } from '../lib/stage-flow';
 import { statusAfterMove, statusNotice } from '../lib/status-scope';
+import { DeleteHistoryOption } from './delete-history-option';
 import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
 
 /**
@@ -57,12 +64,12 @@ export function ContactDetail({ id }: { id: string }) {
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
   const contact = useContact(id);
-  const tags = useContactTags(id);
   const registry = useContactFields();
   const sections = useFieldSections();
   const statusOptions = useStatusOptions();
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [keepHistory, setKeepHistory] = useState(false);
   const ts = useTranslations('contacts-attributes-tags.stageMenu');
   const tForm = useTranslations('contacts-attributes-tags.form');
   /** A status value as the workspace names it (its configured label, else the platform's). */
@@ -115,7 +122,7 @@ export function ContactDetail({ id }: { id: string }) {
   });
 
   const remove = useMutation({
-    mutationFn: () => deleteContact(id),
+    mutationFn: () => deleteContact(id, { eraseHistory: !keepHistory }),
     onSuccess: async () => {
       await invalidateContacts(qc);
       toast(t('deleted'), 'success');
@@ -235,13 +242,12 @@ export function ContactDetail({ id }: { id: string }) {
               )}
               {c.status && <Badge tone="success">{statusLabelOf(c.status)}</Badge>}
               {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
-              {(tags.data ?? []).map((tag) => (
-                <TagPill key={tag.id} name={tag.name} color={tag.color} />
-              ))}
+              <ContactQuickTags contactId={id} />
             </div>
           </div>
         </div>
         <div className="flex shrink-0 gap-2">
+          <ContactPrivacyMenu contactId={id} />
           {canUpdate && (
             <Button variant="secondary" onClick={() => setEditing(true)}>
               <PencilIcon /> {t('edit')}
@@ -259,14 +265,33 @@ export function ContactDetail({ id }: { id: string }) {
         </div>
       </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <StatTile label={t('leadScore')} value={c.leadScore ?? '—'} />
-        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
-        <StatTile
-          label={t('created')}
-          value={<DateText value={c.createdAt} />}
-          className="col-span-2 sm:col-span-1"
+      <div className="mb-6 grid grid-cols-2 gap-3">
+        <ScoreCard
+          contactId={id}
+          contact={c}
+          className="col-span-2"
+          onScored={() =>
+            Promise.all([
+              invalidateContacts(qc),
+              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+            ])
+          }
         />
+        {/* Only present in a workspace that has the chat reading on; every other workspace sees the page as before. */}
+        <ChatInsightCard
+          contactId={id}
+          className="col-span-2"
+          onChanged={() =>
+            Promise.all([
+              invalidateContacts(qc),
+              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+            ])
+          }
+        />
+        {/* Only present in a workspace that is in the growth pilot with the conversion model or enrichment on. */}
+        <ContactGrowthCard contactId={id} className="col-span-2" />
+        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
+        <StatTile label={t('created')} value={<DateText value={c.createdAt} />} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
@@ -276,6 +301,15 @@ export function ContactDetail({ id }: { id: string }) {
           <LinkedSalesDocs kind="contact" id={id} />
           <LinkedAppointments contactId={id} />
           <ContactAttributionCard contactId={id} />
+          <ConsentCard
+            contactId={id}
+            onChanged={() =>
+              Promise.all([
+                invalidateContacts(qc),
+                qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
+              ])
+            }
+          />
           <Timeline id={id} />
         </div>
         <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">
@@ -283,6 +317,14 @@ export function ContactDetail({ id }: { id: string }) {
             {t('details')}
           </h2>
           <dl className="space-y-3 text-sm">
+            <Detail label={t('owner')}>
+              <OwnerControl
+                contactId={id}
+                ownerId={c.ownerId}
+                rowVersion={c.rowVersion}
+                canEdit={canUpdate}
+              />
+            </Detail>
             <Detail label={t('language')}>{text(EXTRA_KEYS.language)}</Detail>
             <Detail label={t('source')}>{c.source ?? text(EXTRA_KEYS.source)}</Detail>
             <Detail label={t('address')}>{text(EXTRA_KEYS.address)}</Detail>
@@ -339,10 +381,18 @@ export function ContactDetail({ id }: { id: string }) {
         tone="danger"
         busy={remove.isPending}
         title={t('deleteTitle')}
-        message={t('deleteMessage', { name })}
+        message={
+          <>
+            <p>{t('deleteMessage', { name })}</p>
+            <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
+          </>
+        }
         confirmLabel={t('delete')}
         cancelLabel={t('keep')}
-        onClose={() => setDeleting(false)}
+        onClose={() => {
+          setDeleting(false);
+          setKeepHistory(false);
+        }}
         onConfirm={() => remove.mutate()}
       />
     </section>
@@ -397,7 +447,10 @@ function Timeline({ id }: { id: string }) {
       ) : list.items.length === 0 ? (
         <p className="py-6 text-center text-sm text-muted-foreground">{t('noActivity')}</p>
       ) : (
-        <ol className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border">
+        <ol
+          {...AGENT_IGNORE}
+          className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border"
+        >
           {list.items.map((a) => (
             <li key={a.id} className="relative">
               <span className="absolute -start-6 top-1 size-[18px] rounded-full border border-border bg-background" />

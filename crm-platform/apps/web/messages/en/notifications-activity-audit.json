@@ -149,6 +149,21 @@
         "title": "{name} is active again",
         "titleNoName": "A WhatsApp group is active again",
         "body": "WhatsApp restored this group. You can message it again."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Someone wants to join {name}} other {# people want to join {name}}}",
+        "titleNoName": "{count, plural, one {Someone wants to join a WhatsApp group} other {# people want to join a WhatsApp group}}",
+        "body": "Open Groups to approve or reject."
+      },
+      "device_group_removed": {
+        "title": "Your number was removed from {name}",
+        "titleNoName": "Your number was removed from a WhatsApp group",
+        "body": "Someone removed your personal number from this group. The group is kept here, read-only."
+      },
+      "test": {
+        "title": "Test notification",
+        "titleNoName": "Test notification",
+        "bodyNoActor": "If you can read this, live notifications are working."
       }
     },
     "live": {
@@ -177,8 +192,13 @@
         "teamchat_message": "New direct message",
         "waba_group_join_request": "Request to join a group",
         "waba_group_suspended": "WhatsApp group suspended",
-        "waba_group_suspension_cleared": "WhatsApp group active again"
-      }
+        "waba_group_suspension_cleared": "WhatsApp group active again",
+        "device_group_join_request": "Request to join a group",
+        "device_group_removed": "Removed from a WhatsApp group",
+        "test": "Test notification"
+      },
+      "generic": "You have a new notification",
+      "paused": "Live updates are paused, so new alerts can arrive up to a minute late. Reload the page to reconnect."
     },
     "prefs": {
       "title": "Notification preferences",
@@ -199,7 +219,9 @@
         "devices": "WhatsApp numbers",
         "broadcasts": "Broadcasts and campaigns",
         "team_chat": "Team chat",
-        "whatsapp_groups": "WhatsApp groups"
+        "whatsapp_groups": "WhatsApp groups",
+        "billing": "Billing and subscriptions",
+        "system": "System"
       },
       "types": {
         "new_chat": {
@@ -306,6 +328,10 @@
           "label": "Sales document decided",
           "hint": "A quote or invoice was accepted or declined."
         },
+        "email_bounced": {
+          "label": "Email not delivered",
+          "hint": "A reply you sent by email bounced or was delayed."
+        },
         "wallet_credited": {
           "label": "Wallet topped up",
           "hint": "The workspace wallet was credited."
@@ -321,6 +347,38 @@
         "waba_group_suspension_cleared": {
           "label": "Group active again",
           "hint": "WhatsApp restored a group it had suspended. Only if you were told about the suspension."
+        },
+        "device_group_join_request": {
+          "label": "Request to join a personal-number group",
+          "hint": "People ask to join a group of a personal WhatsApp number you manage. Ten requests make one row."
+        },
+        "device_group_removed": {
+          "label": "Removed from a personal-number group",
+          "hint": "Someone removed one of your personal WhatsApp numbers from a group. It can be a sign the number was reported."
+        },
+        "billing_payment_failed": {
+          "label": "Subscription payment failed",
+          "hint": "A renewal charge did not go through and needs your attention."
+        },
+        "billing_subscription_canceled": {
+          "label": "Subscription cancelled",
+          "hint": "Your payment provider ended a subscription of this workspace."
+        },
+        "sla_breached": {
+          "label": "SLA breached",
+          "hint": "A conversation you own missed its first-reply or resolution target."
+        },
+        "member_leave_started": {
+          "label": "Member went on leave",
+          "hint": "A member of your team went on leave. Shows what they hold and a link to reassign it."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Chat nobody could take",
+          "hint": "Routing found nobody for a new chat because the people it chose are on leave. Assign it by hand."
+        },
+        "test": {
+          "label": "Test notification",
+          "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."
         }
       },
       "loading": "Loading your preferences",
@@ -400,6 +458,11 @@
           "neverUsed": "not notified yet",
           "remove": "Remove",
           "removeFor": "Remove {device}"
+        },
+        "testInApp": {
+          "watch": "You should see a pop-up, the bell number and the tab title change.",
+          "notConnected": "Live updates are not connected on this page, so the pop-up cannot appear here. Reload the page and try again.",
+          "off": "No bell notification was created: the bell is turned off for \"Test notification\" in the table below, or by your workspace owner."
         }
       }
     },

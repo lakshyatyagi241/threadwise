@@ -6,6 +6,7 @@ import {
   hasFilters,
   indexingShares,
   pruneSelection,
+  stepMissing,
   toggleAll,
   toListQuery,
 } from './list-model';
@@ -45,5 +46,23 @@ describe('list model', () => {
     expect([...pruneSelection(new Set(['a', 'z']), rows)]).toEqual(['a']);
     expect(toggleAll(new Set(), rows).size).toBe(2);
     expect(toggleAll(new Set(['a', 'b']), rows).size).toBe(0);
+  });
+});
+
+describe('stepMissing', () => {
+  const flow = { answerType: 'flow' as const, flowName: 'Refunds' };
+  it('is true only for a flow that exists whose chosen step has no name any more', () => {
+    expect(stepMissing({ ...flow, flowNodeId: 'n1', flowNodeLabel: null })).toBe(true);
+    expect(stepMissing({ ...flow, flowNodeId: 'n1', flowNodeLabel: 'Ask question' })).toBe(false);
+  });
+  it('is false when the FAQ starts at the flow start, for a text answer, and when the whole flow is gone', () => {
+    expect(stepMissing({ ...flow, flowNodeId: null, flowNodeLabel: null })).toBe(false);
+    expect(
+      stepMissing({ answerType: 'text', flowName: null, flowNodeId: null, flowNodeLabel: null }),
+    ).toBe(false);
+    // The flow is missing: the list shows "Flow missing" and the step is not reported on top of it.
+    expect(
+      stepMissing({ answerType: 'flow', flowName: null, flowNodeId: 'n1', flowNodeLabel: null }),
+    ).toBe(false);
   });
 });

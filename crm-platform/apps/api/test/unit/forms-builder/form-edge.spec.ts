@@ -6,7 +6,7 @@ import {
   type FormDefinitionInput,
 } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
-import { buildCsv, csvCell } from '../../../src/modules/forms-builder/form-csv';
+import { buildCsv, csvCell } from '../../../src/common/csv';
 import { resolveConsent } from '../../../src/modules/forms-builder/form-consent';
 import { buildEmbedScript, jsString } from '../../../src/modules/forms-builder/embed-script';
 import { hashIp, newPublicKey, randomToken } from '../../../src/modules/forms-builder/form-key';
@@ -172,7 +172,36 @@ describe('consent (spec 9.5, D10)', () => {
       stored: null,
       missing: false,
       marketingOptIn: false,
+      serviceAgreed: false,
+      coversSms: false,
     });
+  });
+
+  it('BL-171: a ticked line that is not marketing is a service agreement, never a marketing opt-in', () => {
+    const d = def({ enabled: true, required: false, marketing: false, text: 'Contact me about my request' });
+    expect(resolveConsent(d, { given: true, textVersion: 1 }, now)).toMatchObject({
+      marketingOptIn: false,
+      serviceAgreed: true,
+    });
+    // Unticked: the person agreed to nothing, so there is nothing to record in the ledger.
+    expect(resolveConsent(d, { given: false, textVersion: 1 }, now)).toMatchObject({
+      marketingOptIn: false,
+      serviceAgreed: false,
+    });
+    expect(resolveConsent(d, undefined, now)).toMatchObject({ serviceAgreed: false });
+    // A marketing line is a marketing grant only, not also a service agreement.
+    const m = def({ enabled: true, marketing: true });
+    expect(resolveConsent(m, { given: true, textVersion: 1 }, now)).toMatchObject({
+      marketingOptIn: true,
+      serviceAgreed: false,
+    });
+  });
+
+  it('BL-171: the form declares whether its wording covers SMS (never guessed from the text)', () => {
+    const covers = def({ enabled: true, marketing: true, coversSms: true, text: 'WhatsApp, email or SMS' });
+    expect(resolveConsent(covers, { given: true, textVersion: 1 }, now).coversSms).toBe(true);
+    const plain = def({ enabled: true, marketing: true, text: 'Send me an SMS' });
+    expect(resolveConsent(plain, { given: true, textVersion: 1 }, now).coversSms).toBe(false);
   });
 
   it('a required box that is not ticked is missing; a ticked marketing box subscribes; an unticked one never does', () => {

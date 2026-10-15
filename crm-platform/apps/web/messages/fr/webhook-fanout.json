@@ -7,7 +7,6 @@
     "common": {
       "loading": "Chargement",
       "retry": "Réessayer",
-      "requestId": "Identifiant de la requête",
       "dash": "-",
       "errors": {
         "forbidden": "Vous n’avez pas l’autorisation d’effectuer cette action.",

@@ -7,7 +7,7 @@ import { Alert, Button, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import type { PaymentMethod } from '@crm/contracts';
 import { todayKey } from '../lib/dates';
-import { errorCode, errorKind, isRetryable, requestIdOf } from '../lib/errors';
+import { errorCode, errorKind, isRetryable } from '../lib/errors';
 import { formatMoney } from '../lib/money';
 import { invoicingCan } from '../lib/permissions';
 import type { DisplayStatus } from '../lib/status';
@@ -162,15 +162,9 @@ export function ErrorLine({
   const t = useTranslations('invoicing.errors');
   const text = useErrorText();
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone={kind === 'unavailable' ? 'warning' : 'danger'} className={className}>
       <span>{text(error)}</span>
-      {requestId && (
-        <span className="mt-1 block text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </span>
-      )}
       {onRetry && isRetryable(kind) && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}

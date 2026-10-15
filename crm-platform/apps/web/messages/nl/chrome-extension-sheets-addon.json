@@ -14,12 +14,11 @@
       "copy": "Kopiëren",
       "copied": "Gekopieerd",
       "copyFailed": "Kopiëren mislukt. Selecteer de sleutel en kopieer hem handmatig.",
-      "reference": "Referentie voor support: {id}",
       "back": "Terug naar integraties"
     },
     "page": {
       "title": "Google Sheets-add-on",
-      "subtitle": "Haal contacten op en push ze, en synchroniseer producten tussen een spreadsheet en je workspace.",
+      "subtitle": "Stuur nieuwe en gewijzigde bladrijen als contacten naar je werkruimte, haal contacten in een blad en synchroniseer producten.",
       "loading": "De add-oninstellingen laden",
       "retry": "Opnieuw proberen",
       "status": {
@@ -51,7 +50,7 @@
     },
     "key": {
       "title": "Je sleutel",
-      "intro": "De add-on gebruikt je persoonlijke sleutel om als jou te handelen. Hij ziet alleen wat je rol toestaat.",
+      "intro": "De add-on gebruikt je persoonlijke sleutel om als jou te handelen. Hij ziet alleen wat je rol toestaat. De sleutel is het laatste deel van je Webhook URL.",
       "none": "Je hebt nog geen sleutel.",
       "generate": "Sleutel genereren",
       "rotate": "Een nieuwe sleutel genereren",
@@ -61,8 +60,8 @@
       "created": "Gemaakt {when}",
       "lastUsed": "Laatst gebruikt {when}",
       "neverUsed": "Nooit gebruikt",
-      "newTitle": "Je nieuwe sleutel",
-      "newWarning": "Kopieer hem nu. Hij wordt maar één keer getoond en kan niet opnieuw worden getoond. Iedereen met deze sleutel kan in de add-on als jou handelen.",
+      "newTitle": "Je nieuwe sleutel en Webhook URL",
+      "newWarning": "Kopieer ze nu. De sleutel en de Webhook URL worden maar één keer getoond en kunnen niet opnieuw worden getoond. Iedereen die ze heeft, kan in de add-on als jou handelen.",
       "rotatedNote": "Je vorige sleutel werkt niet meer.",
       "keyLabel": "Nieuwe sleutel",
       "confirmRotate": {
@@ -86,7 +85,8 @@
         "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
         "network": "We konden de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
         "unexpected": "Er is iets misgegaan aan onze kant. Probeer het opnieuw."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Wat je sleutel kan doen",
@@ -109,12 +109,12 @@
     },
     "steps": {
       "title": "Stel het in een spreadsheet in",
-      "one": "Open een spreadsheet, dan Extensies, dan Apps Script.",
-      "two": "Download de zes bestanden hierboven. Toon in Projectinstellingen het bestand appsscript.json en plak appsscript.json en Code.gs over de bestanden in de editor.",
-      "three": "Voeg drie HTML-bestanden toe met de namen Dialog, Settings en Help en plak de gedownloade bestanden erin.",
-      "four": "Sla op en laad de spreadsheet opnieuw. Er verschijnt een CRM-menu. Sta de drie machtigingen toe waar Google om vraagt.",
-      "five": "Kies CRM, dan Instellingen, plak je sleutel en kies Opslaan en controleren.",
-      "six": "Rij 1 van je sheet bevat de kolomnamen. Gebruik daarna Contacten ophalen, Contacten pushen of Producten synchroniseren in het CRM-menu."
+      "one": "Kopieer je Webhook URL wanneer je je sleutel maakt. Hij wordt maar één keer getoond.",
+      "two": "Kies in een spreadsheet Extensions, dan Add-ons, dan Get add-ons en installeer de add-on vanuit de Google Workspace Marketplace. Zolang hij daar niet staat, plak je de zes bestanden hieronder in Extensions, Apps Script.",
+      "three": "Laad de spreadsheet opnieuw. Kies Extensions, dan de add-on, dan Initial Setup en plak de Webhook URL.",
+      "four": "Kies het blad en de triggerkolom. Een rij wordt verzonden wanneer die cel wordt ingevuld of gewijzigd.",
+      "five": "Kies Send Test om de verbinding te controleren. Er wordt niets opgeslagen; je ziet de kolommen die het CRM heeft ontvangen. Kies daarna Submit.",
+      "six": "Zet Send on event aan (een rij wordt verzonden zodra je hem bewerkt) en/of Send on schedule (elk uur, rijen gewijzigd door een formulier of andere app). Elke rij komt binnen als contact en het resultaat wordt in een CRM status-kolom geschreven."
     },
     "columns": {
       "title": "Kolommen die de add-on leest",
@@ -134,6 +134,22 @@
       "title": "Recente producten",
       "empty": "Nog geen producten. Synchroniseer een sheet om er toe te voegen.",
       "count": "{count, plural, one {# product in je workspace} other {# producten in je workspace}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Plak dit in Initial Setup in de add-on. Het bevat je sleutel, dus houd het privé.",
+      "none": "Maak een sleutel om je Webhook URL te krijgen.",
+      "capture": {
+        "title": "Laatst ontvangen gegevens",
+        "none": "Nog niets ontvangen. Kies in de add-on Initial Setup en dan Send Test.",
+        "when": "{event} van {sheet}, {when}. {rows, plural, one {# rij} other {# rijen}}.",
+        "noSheet": "een naamloos blad",
+        "events": {
+          "test": "Test",
+          "edit": "Bewerking",
+          "schedule": "Uurlijkse controle"
+        }
+      }
     }
   }
 }

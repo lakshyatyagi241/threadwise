@@ -1,0 +1,4 @@
+# customer data and reports never enter git
+dumps/
+out/
+node_modules/

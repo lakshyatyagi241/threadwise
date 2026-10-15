@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type {
   BroadcastDetail,
   BroadcastListItem,
@@ -18,6 +18,11 @@ import { OverviewTab } from './overview-tab';
 import { RecipientsTable } from './recipients-table';
 import { KpiStrip } from './kpi-strip';
 import { ListRail } from './list-rail';
+
+// The director summary has its own tests (director-summary.test.tsx); here it is a marker so this screen is tested on its own.
+vi.mock('@/features/campaigns/components/director-summary', () => ({
+  DirectorSummary: () => <section data-testid="director-summary" />,
+}));
 
 const messages = JSON.parse(
   readFileSync(join(process.cwd(), 'messages', 'en', 'broadcasts.json'), 'utf8'),
@@ -95,9 +100,9 @@ describe('broadcast table', () => {
     }
   });
 
-  it('offers delete only for a scheduled or failed broadcast, and only with the permission', () => {
+  it('offers delete only for a scheduled broadcast, and only with the permission', () => {
     expect(table([item({ status: 'scheduled' })])).toContain('aria-label="Delete"');
-    expect(table([item({ status: 'failed' })])).toContain('aria-label="Delete"');
+    expect(table([item({ status: 'failed' })])).not.toContain('aria-label="Delete"');
     expect(table([item({ status: 'processing' })])).not.toContain('aria-label="Delete"');
     expect(table([item({ status: 'completed' })])).not.toContain('aria-label="Delete"');
     expect(table([item({ status: 'failed' })], true, false)).not.toContain('aria-label="Delete"');
@@ -228,6 +233,11 @@ describe('detail tabs', () => {
       'role="img"',
     ])
       expect(out).toContain(s);
+    // The director summary sits at the top of the Overview.
+    expect(out.indexOf('data-testid="director-summary"')).toBeGreaterThanOrEqual(0);
+    expect(out.indexOf('data-testid="director-summary"')).toBeLessThan(
+      out.indexOf('From send to read'),
+    );
   });
 
   it('overview: no template means no preview; no curve data says so', () => {

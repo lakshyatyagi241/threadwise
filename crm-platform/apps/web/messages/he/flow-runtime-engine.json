@@ -119,6 +119,8 @@
       "colStarted": "התחיל",
       "colActivity": "פעילות אחרונה",
       "colSteps": "שלבים",
+      "colReplies": "תגובות",
+      "repliesHint": "הודעות לקוח שהגיעו לצומת המתנה של ההרצה הזו",
       "colActions": "פעולות",
       "open": "פתיחת הרצה",
       "cancel": "ביטול",
@@ -192,7 +194,24 @@
       "retention": "יומנים נמחקים {days} ימים לאחר סיום הרצה.",
       "pathTitle": "המסלול שנעבר",
       "notReached": "לא הושגו",
-      "noErrors": "אין שגיאות בהרצה זו."
+      "noErrors": "אין שגיאות בהרצה זו.",
+      "factNext": "הבא: {node}",
+      "factWaiting": "ממתין ב: {node}",
+      "factDelay": "ממתין {time}",
+      "factReplied": "הלקוח השיב: {text}",
+      "factEnded": "הסתיים: {reason}",
+      "ioInput": "קלט",
+      "ioOutput": "פלט",
+      "ioKind": {
+        "message": "הודעה שנשלחה",
+        "reply": "תשובת הלקוח",
+        "variable": "משתנה",
+        "request": "בקשה",
+        "response": "תגובה",
+        "result": "תוצאה"
+      },
+      "factMenuKept": "אין כאן שלב הבא. האפשרויות של {node} נשארות פעילות.",
+      "factAnswered": "נענה לאחר {time}"
     },
     "event": {
       "step": "שלב",
@@ -498,7 +517,9 @@
       "error": "שגיאה",
       "skipped": "דולג",
       "waiting": "ממתין",
-      "timeout": "זמן קצוב עבר"
+      "timeout": "זמן קצוב עבר",
+      "answered": "נענה",
+      "gaveUp": "אין תשובה"
     }
   }
 }

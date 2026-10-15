@@ -211,6 +211,29 @@ export const emptyState = (m: PanelMeta): PanelState => ({
   buttons: {},
 });
 
+/** The panel's state for overrides saved earlier (the edit screen of a schedule): the inverse of `toOverrides`. */
+export function stateFromOverrides(
+  o: Record<string, unknown> | null | undefined,
+  m: PanelMeta,
+): PanelState {
+  const s = emptyState(m);
+  if (!o) return s;
+  const header = o.header as { mode?: string; text?: string; mediaUrl?: string } | undefined;
+  if (header?.mode === 'media' && typeof header.mediaUrl === 'string') s.mediaUrl = header.mediaUrl;
+  else if (header?.mode === 'text' && typeof header.text === 'string') s.header = header.text;
+  for (const key of ['body', 'footer'] as const) {
+    const list = o[key];
+    if (Array.isArray(list))
+      list.forEach((v, i) => i < s[key].length && (s[key][i] = String(v ?? '')));
+  }
+  if (Array.isArray(o.buttons)) {
+    for (const b of o.buttons as Array<{ index?: number; value?: string }>) {
+      if (typeof b.index === 'number' && typeof b.value === 'string') s.buttons[b.index] = b.value;
+    }
+  }
+  return s;
+}
+
 /**
  * The `templateOverrides` the form posts. A blank slot is not an empty value: it means "use what the template does", so an
  * all-blank section is left out. A pasted media link wins over header text; buttons with nothing typed are left out.

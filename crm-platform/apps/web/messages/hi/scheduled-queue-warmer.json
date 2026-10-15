@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "आप अपने प्लान की सीमा तक पहुँच चुके हैं।",
       "WA_UNOFFICIAL_DISABLED": "आपके वर्कस्पेस के लिए निजी WhatsApp नंबरों (अनऑफ़िशियल API) से भेजना चालू नहीं है। कोई आधिकारिक WhatsApp Business API नंबर चुनें।",
       "AUTH_SEND_HALTED": "इस वर्कस्पेस के लिए भेजना रोका गया है।",
-      "upgrade": "प्लान देखें और अपग्रेड करें",
-      "requestId": "अनुरोध {id}"
+      "upgrade": "प्लान देखें और अपग्रेड करें"
     },
     "actions": {
       "done": {

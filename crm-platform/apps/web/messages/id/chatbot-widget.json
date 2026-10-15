@@ -276,7 +276,14 @@
           "iconOnly": "Hanya ikon",
           "buttonColor": "Warna Tombol",
           "pickCustom": "Pilih warna kustom",
-          "custom": "Kustom {hex}"
+          "custom": "Kustom {hex}",
+          "animation": "Animasi tombol",
+          "animationHint": "Menarik perhatian ke tombol saat obrolan tertutup.",
+          "animations": {
+            "none": "Mati",
+            "bounce": "Memantul",
+            "ripple": "Riak"
+          }
         },
         "2": {
           "title": "Desain messenger Anda",
@@ -289,7 +296,9 @@
             "person": "Orang"
           },
           "url": "Atau gunakan alamat gambar Anda sendiri",
-          "urlHint": "Tempel alamat gambar persegi (https://...). Unggah file belum tersedia."
+          "urlHint": "Tempel alamat gambar persegi (https://...). Unggah file belum tersedia.",
+          "botName": "Nama bot",
+          "botNameHint": "Ditampilkan di header jendela obrolan. Kosongkan untuk memakai nama bot Anda."
         },
         "3": {
           "title": "Atur pesan sambutan Anda",
@@ -297,7 +306,13 @@
           "greeting": "Salam",
           "greetingHint": "Sapa pelanggan Anda saat mereka membuka messenger",
           "intro": "Pesan Perkenalan",
-          "introHint": "Perkenalkan bisnis Anda dan beri tahu pelanggan bagaimana Anda dapat membantu"
+          "introHint": "Perkenalkan bisnis Anda dan beri tahu pelanggan bagaimana Anda dapat membantu",
+          "subHeader": "Teks sub-header",
+          "subHeaderHint": "Baris di bawah nama, misalnya seberapa cepat Anda membalas.",
+          "cta": "Teks tombol",
+          "ctaHint": "Teks pada tombol yang membuka WhatsApp.",
+          "prefilled": "Pesan terisi otomatis",
+          "prefilledHint": "Pesan yang dikirim saat tombol diketuk. Awalnya berisi kata kunci bot Anda, sehingga bot langsung berjalan."
         },
         "4": {
           "title": "Atur posisi Tombol Obrolan Anda",
@@ -322,6 +337,19 @@
           "numberHint": "Messenger akan mengarahkan pelanggan Anda ke nomor WhatsApp ini",
           "prefilled": "Pesan Terisi Otomatis",
           "prefilledHint": "Ini akan menjadi teks pesan default pertama"
+        },
+        "6": {
+          "title": "Tampilkan pesan popup",
+          "subtitle": "Gelembung kecil yang mengajak pengunjung untuk mengobrol",
+          "visibility": "Tampilan popup",
+          "visibilityHint": "Tampilkan popup di samping tombol sampai pengunjung menutupnya.",
+          "position": "Posisi popup",
+          "side": "Samping",
+          "top": "Atas",
+          "text": "Teks popup",
+          "textHint": "Undangan singkat, misalnya: Hai! Ada yang bisa kami bantu?",
+          "image": "Gambar popup (opsional)",
+          "imageHint": "Alamat gambar, atau unggah gambar di bawah."
         }
       },
       "install": {
@@ -335,7 +363,11 @@
         "greeting": "Tambahkan salam.",
         "intro": "Tambahkan pesan perkenalan.",
         "spacing": "Jarak harus berupa bilangan bulat piksel dari 0 sampai 500.",
-        "whatsapp": "Tambahkan nomor WhatsApp lengkap: kode negara dan angka."
+        "whatsapp": "Tambahkan nomor WhatsApp lengkap: kode negara dan angka.",
+        "cta": "Tambahkan teks tombol.",
+        "prefilled": "Tambahkan pesan yang dikirim saat tombol diketuk.",
+        "popupText": "Tambahkan teks popup, atau matikan popup.",
+        "popupImage": "Gunakan gambar bawaan atau alamat gambar http(s)."
       },
       "preview": {
         "title": "Pratinjau langsung",
@@ -344,7 +376,333 @@
         "frameTitle": "Pratinjau langsung widget WhatsApp Anda",
         "hint": "Ciutkan panel dengan tombol bundar, buka lagi dari launcher, dan coba Start Conversation.",
         "businessName": "Bisnis Anda"
+      },
+      "upload": {
+        "choose": "Unggah gambar",
+        "replace": "Ganti gambar",
+        "remove": "Hapus",
+        "uploading": "Mengunggah…",
+        "hint": "SVG, PNG, JPG, WebP, atau GIF, hingga 1 MB.",
+        "failed": "Gambar tidak dapat diunggah. Coba lagi.",
+        "tooLarge": "Ukuran gambar melebihi 1 MB."
       }
+    },
+    "flowBot": {
+      "customize": {
+        "loading": "Memuat widget…",
+        "loadError": "Widget tidak dapat dimuat. Muat ulang halaman untuk mencoba lagi.",
+        "untouched": "Anda masih memakai tampilan default. Tinjau tampilannya, lalu simpan untuk membuka Deploy dan Publikasikan.",
+        "position": "Posisi tombol chat",
+        "right": "Kanan bawah",
+        "left": "Kiri bawah",
+        "save": "Simpan kustomisasi",
+        "saved": "Kustomisasi tersimpan",
+        "saveFailed": "Widget tidak dapat disimpan. Coba lagi.",
+        "launcher": {
+          "title": "Peluncur tertutup",
+          "hint": "Yang dilihat pengunjung sebelum membuka chat: callout, animasi, dan titik belum dibaca.",
+          "calloutOn": "Tampilkan callout di samping peluncur",
+          "style": "Gaya callout",
+          "styles": {
+            "bubble": "Gelembung atas",
+            "pill": "Pil samping",
+            "avatar": "Pil dengan avatar",
+            "media": "Kartu gambar",
+            "bar": "Bilah input"
+          },
+          "text": "Teks callout",
+          "image": "Gambar",
+          "animation": "Animasi peluncur",
+          "animations": {
+            "none": "Tidak ada",
+            "bounce": "Memantul",
+            "ripple": "Riak"
+          },
+          "badge": "Tampilkan titik belum dibaca",
+          "popupTextRequired": "Tambahkan teks callout, atau matikan callout.",
+          "gaps": {
+            "title": "Jarak dari tepi layar (px)",
+            "desktop": {
+              "side": "Desktop: dari samping",
+              "bottom": "Desktop: dari bawah"
+            },
+            "mobile": {
+              "side": "Telepon: dari samping",
+              "bottom": "Telepon: dari bawah"
+            }
+          }
+        },
+        "chat": {
+          "title": "Jendela chat",
+          "hint": "Tampilan dan perilaku jendela. Warnanya diatur di atas.",
+          "fill": "Isian tombol balasan",
+          "fills": {
+            "outline": "Garis tepi",
+            "tinted": "Berwarna lembut",
+            "solid": "Solid"
+          },
+          "shape": "Bentuk tombol balasan",
+          "shapes": {
+            "pill": "Pil",
+            "rounded": "Membulat",
+            "soft": "Lembut",
+            "square": "Kotak"
+          },
+          "font": "Jenis huruf",
+          "fonts": {
+            "system": "Sistem",
+            "serif": "Serif",
+            "rounded": "Membulat",
+            "humanist": "Humanis",
+            "mono": "Monospasi"
+          },
+          "size": "Ukuran jendela",
+          "sizes": {
+            "compact": "Ringkas",
+            "standard": "Standar",
+            "tall": "Tinggi",
+            "wide": "Lebar"
+          },
+          "suggestions": "Saran di bawah percakapan",
+          "suggestionsHint": "Maksimal 4 baris pendek. Hilang saat pengunjung mengetik.",
+          "suggestionPlaceholder": "Pertanyaan yang sering diajukan pengunjung",
+          "addSuggestion": "Tambah saran",
+          "removeSuggestion": "Hapus saran",
+          "actions": "Ikon salin dan jempol di bawah setiap baris bot",
+          "expand": "Tombol perbesar",
+          "voice": "Percakapan suara (memakai alat suara peramban)",
+          "header": "Latar belakang header",
+          "headers": {
+            "solid": "Solid",
+            "diagonal": "Diagonal",
+            "vivid": "Cerah",
+            "dusk": "Senja",
+            "soft": "Sapuan lembut"
+          },
+          "direction": "Arah teks",
+          "directions": {
+            "auto": "Ikuti bahasa pengunjung",
+            "ltr": "Kiri ke kanan",
+            "rtl": "Kanan ke kiri"
+          },
+          "icons": "Ikon bulat di depan setiap tombol balasan",
+          "fontSize": "Ukuran teks: {value}px",
+          "hoverBg": "Warna hover tombol balasan",
+          "hoverBgReset": "Gunakan rona"
+        },
+        "preview": {
+          "title": "Pratinjau langsung",
+          "loading": "Memuat pratinjau…",
+          "error": "Pratinjau tidak dapat dimuat. Segarkan untuk mencoba lagi.",
+          "frame": "Pratinjau jendela chat",
+          "hint": "Ini jendela chat asli dengan pengaturan Anda yang belum disimpan. Percakapan dan tombol hanyalah contoh.",
+          "launcherFrame": "Pratinjau peluncur tertutup"
+        },
+        "groups": {
+          "look": "Tampilan dan merek",
+          "voice": "Suara dan sambutan",
+          "window": "Jendela obrolan",
+          "launcher": "Peluncur dan seruan",
+          "launch": "Luncurkan",
+          "chat": "Alat percakapan",
+          "behave": "Perilaku"
+        },
+        "surfaces": {
+          "chat": "Jendela obrolan",
+          "expanded": "Diperluas",
+          "mobile": "Ponsel",
+          "closed": "Peluncur tertutup"
+        },
+        "brand": {
+          "title": "Gambar merek dan ekstra",
+          "logo": {
+            "label": "Logo perusahaan",
+            "hint": "Ditampilkan di header obrolan."
+          },
+          "avatar": {
+            "label": "Avatar chatbot",
+            "hint": "Ditampilkan di samping setiap pesan yang dikirim bot."
+          },
+          "background": {
+            "label": "Latar belakang obrolan",
+            "hint": "Gambar di balik percakapan. Opsional."
+          },
+          "corner": "Sudut tubuh",
+          "corners": {
+            "rounded": "Bulat",
+            "soft": "Lembut",
+            "square": "Persegi"
+          },
+          "autoOpen": "Buka otomatis setelah (detik)",
+          "autoOpenHint": "0 membuat obrolan tetap tertutup sampai pengunjung membukanya. Terbuka sekali per kunjungan.",
+          "sound": "Mainkan suara lembut untuk baris bot baru",
+          "soundVolume": "Volume: {value}%",
+          "speak": "Bacakan ucapan bot dengan suara (suara browser)",
+          "devices": {
+            "title": "Tampilkan widget di",
+            "desktop": "Desktop",
+            "tablet": "Tablet",
+            "mobile": "Ponsel",
+            "hint": "Ponsel lebarnya hingga 768 px, tablet hingga 1024 px."
+          },
+          "pictures": "Gambar · SVG, PNG, GIF",
+          "botName": "Nama bot",
+          "primary": "Warna utama",
+          "primaryCustom": "Warna kustom",
+          "fineTune": "Atur halus setiap warna",
+          "pip": "Tawarkan jendela obrolan mengambang saat pengunjung berpindah tab",
+          "pipHint": "Seperti panggilan video, obrolan dapat mengambang di atas tab dan aplikasi lain (Chrome dan Edge). Pengunjung diminta sekali untuk mengizinkan notifikasi, dan browser yang menentukan kapan jendela boleh terbuka.",
+          "domains": {
+            "label": "Tampilkan chat hanya di situs web ini",
+            "hint": "Pengunjung di situs lain tidak akan melihat chat. Masukkan alamat situs, misalnya example.com. Subdomain suatu situs tidak disertakan kecuali Anda menambahkannya.",
+            "placeholder": "example.com",
+            "add": "Tambah situs web",
+            "remove": "Hapus situs web"
+          }
+        },
+        "rail": {
+          "label": "Sesuaikan bagian",
+          "look": "Merek",
+          "voice": "Sambutan",
+          "window": "Jendela",
+          "launcher": "Peluncur",
+          "launch": "Peluncuran",
+          "chat": "Ekstra",
+          "behave": "Perilaku"
+        },
+        "leads": {
+          "look": "Logo, gambar, warna, dan tampilan header.",
+          "voice": "Nama, baris sambutan, dan tombol kirim.",
+          "window": "Ukuran, jenis huruf, tombol respons, dan pembantu.",
+          "launcher": "Apa yang dilihat pengunjung sebelum membuka obrolan.",
+          "launch": "Di mana widget terbuka dan cara menempatkannya di situs Anda.",
+          "chat": "Kartu notifikasi, menu cepat, banner, dan balasan cepat.",
+          "behave": "Kapan obrolan terbuka, bagaimana nada bicaranya, dan siapa yang melihatnya."
+        },
+        "footer": "Perubahan ditampilkan dalam pratinjau saat Anda membuatnya.",
+        "conversation": {
+          "title": "Alat percakapan",
+          "tabs": {
+            "notice": "Blok notifikasi",
+            "menu": "Menu cepat",
+            "banner": "Banner",
+            "replies": "Balasan cepat"
+          },
+          "enable": {
+            "notice": "Tampilkan lonceng notifikasi",
+            "menu": "Tampilkan menu cepat",
+            "banner": "Tampilkan banner",
+            "replies": "Tampilkan balasan cepat"
+          },
+          "icon": "Gaya lonceng",
+          "icons": {
+            "1": "Lonceng",
+            "2": "Tiket",
+            "3": "Kotak",
+            "4": "Pesan"
+          },
+          "view": "Tampilan",
+          "views": {
+            "list": "Daftar",
+            "blocks": "Blok"
+          },
+          "card": "Kartu {n}",
+          "entry": "Entri menu {n}",
+          "slide": "Slide {n}",
+          "remove": "Hapus",
+          "max": "Maksimal {count}.",
+          "addCard": "Tambah kartu",
+          "addEntry": "Tambah entri menu",
+          "addSlide": "Tambah slide",
+          "kinds": {
+            "image": "Gambar",
+            "video": "Video"
+          },
+          "fields": {
+            "title": "Judul",
+            "description": "Deskripsi",
+            "buttonTitle": "Judul tombol",
+            "buttonUrl": "Alamat tombol",
+            "urlHint": "Halaman web, alamat tel: atau mailto:. Kosongkan jika tanpa tombol.",
+            "footer": "Teks footer",
+            "menuTitle": "Judul menu",
+            "menuUrl": "Membuka (opsional)",
+            "menuUrlHint": "Kosongkan untuk mengirim judul sebagai pesan yang dijawab bot.",
+            "video": "Tautan video",
+            "videoHint": "Tempel tautan YouTube atau Vimeo, atau kode embed-nya.",
+            "videoOk": "Video ditemukan.",
+            "bannerUrl": "Tautan saat diketuk (opsional)"
+          },
+          "action": "Aksi tombol",
+          "step": "Langkah bot",
+          "stepPlaceholder": "Pilih langkah",
+          "noSteps": "Bot ini belum punya langkah. Tambahkan di tab Bangun lalu simpan.",
+          "replyStep": "Saat diketuk",
+          "replyAsMessage": "Kirim baris sebagai pesan",
+          "actions": {
+            "link": "Tambah tautan",
+            "flow": "Tautkan ke alur"
+          }
+        },
+        "launchNote": "Kode sematan untuk ditempel di situs Anda ada di tab Deploy."
+      },
+      "deploy": {
+        "loading": "Memuat opsi deploy Anda…",
+        "locked": "Simpan tab Kustomisasi terlebih dahulu. Kode embed Anda akan muncul di sini setelah widget dibuat.",
+        "lockedWhatsapp": "Simpan tab Kustomisasi terlebih dahulu. Tombol situs web dan tautan WhatsApp Anda akan muncul di sini setelah dibuat.",
+        "title": "Deploy",
+        "lead": "Pasang jendela chat Anda di situs web. Bot akan aktif saat Anda mempublikasikannya.",
+        "leadWhatsapp": "Pasang tombol WhatsApp Anda di situs web, atau bagikan tautan langsungnya di mana saja. Bot akan menjawab di nomor WhatsApp-nya setelah dipublikasikan.",
+        "notPublished": "Bot ini belum dipublikasikan, sehingga pengunjung tidak akan mendapat jawaban. Publikasikan dari tab Build.",
+        "notPublishedWhatsapp": "Bot ini belum dipublikasikan, sehingga tidak akan menjawab di WhatsApp. Publikasikan dari tab Build.",
+        "embedTitle": "Tambahkan ke situs web Anda",
+        "embedBody": "Tempel kode ini tepat sebelum tag penutup body di setiap halaman tempat widget harus muncul.",
+        "copy": "Salin kode",
+        "copied": "Kode embed disalin",
+        "clipboardBlocked": "Browser Anda memblokir penyalinan. Pilih teksnya dan salin secara manual.",
+        "preview": "Pratinjau",
+        "linkTitle": "Tautan WhatsApp langsung",
+        "linkBody": "Membuka chat WhatsApp dengan nomor bot dan pesan yang Anda atur. Gunakan di email, bio media sosial, kode QR, dan iklan.",
+        "copyLink": "Salin tautan",
+        "linkCopied": "Tautan WhatsApp disalin",
+        "openLink": "Buka tautan",
+        "qrTitle": "Kode QR",
+        "qrBody": "Cetak atau tampilkan di layar. Saat dipindai, kode ini membuka obrolan WhatsApp dengan bot Anda.",
+        "downloadQr": "Unduh kode QR",
+        "statusLive": "Aktif",
+        "statusDraft": "Belum dipublikasikan",
+        "codeLabel": "HTML",
+        "localNote": "Kode ini mengarah ke alamat di komputer ini (localhost), jadi hanya berfungsi di halaman yang dibuka di sini. Di situs web langsung, gunakan alamat yang sudah di-deploy."
+      },
+      "whatsapp": {
+        "loading": "Memuat tombol…",
+        "loadError": "Tombol tidak dapat dimuat. Muat ulang halaman untuk mencoba lagi.",
+        "untouched": "Tombol WhatsApp Anda belum disiapkan. Tombol ini dimulai dari nomor dan kata kunci bot Anda. Tinjau, lalu simpan untuk membuka Deploy dan Publikasikan.",
+        "saved": "Tombol WhatsApp tersimpan",
+        "saveFailed": "Tombol tidak dapat disimpan. Coba lagi.",
+        "fromBot": "Tombol membuka WhatsApp di {number}, nomor tempat bot ini berjalan. Ubah nomor di Pemicu pada tab Buat.",
+        "noNumber": "Bot ini belum punya nomor WhatsApp. Pilih satu di pemicu pada tab Bangun, lalu kembali untuk menyimpan tombol."
+      }
+    },
+    "webBots": {
+      "title": "Bot chat situs web",
+      "intro": "Semua bot yang Anda buat untuk chat situs web beserta widget tempatnya berjalan. Buka satu baris untuk mengubah tampilan widget atau menyalin kode embed-nya.",
+      "create": "Bot situs web baru",
+      "loading": "Memuat bot situs web Anda…",
+      "loadError": "Bot situs web tidak dapat dimuat. Muat ulang halaman untuk mencoba lagi.",
+      "emptyTitle": "Belum ada bot chat situs web",
+      "emptyBody": "Buat bot untuk chat situs web dan widget-nya akan muncul di sini.",
+      "widgetLine": "Widget: {title}",
+      "noWidget": "Belum ada widget. Kustomisasi untuk membuatnya.",
+      "customize": "Kustomisasi",
+      "more": "Menampilkan {shown} dari {total} bot. Buka sisanya dari Flow.",
+      "state": {
+        "needs_customizing": "Perlu dikustomisasi",
+        "draft": "Draf",
+        "live": "Aktif",
+        "paused": "Dijeda"
+      },
+      "deploy": "Deploy"
     }
   }
 }

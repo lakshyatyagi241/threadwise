@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { ConfirmDialog, Textarea, Button, cn, useToast } from '@crm/ui';
 import type { TchatMe, TchatMessageResponse } from '@crm/contracts';
@@ -36,6 +36,7 @@ export function MessageItem({
 }: MessageItemProps) {
   const t = useTranslations('team-chat.message');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const { toast } = useToast();
   const errorText = useErrorText();
   const [editing, setEditing] = useState(false);
@@ -117,7 +118,7 @@ export function MessageItem({
         <div className="flex items-baseline gap-2 text-[10px] text-muted-foreground">
           <span className="text-xs font-semibold text-foreground">{m.authorName}</span>
           <time dateTime={m.createdAt} className="font-mono">
-            {formatStamp(m.createdAt, now, locale)}
+            {formatStamp(m.createdAt, now, locale, timeZone)}
           </time>
           {m.editedAt && <span>{t('edited')}</span>}
           {m.pinnedAt && <span aria-label={t('pinned')}>📌</span>}
@@ -344,6 +345,7 @@ export function PendingItem({
 }) {
   const t = useTranslations('team-chat.message');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   return (
     <li data-testid="tchat-pending" className="flex flex-row-reverse gap-2.5">
@@ -351,7 +353,7 @@ export function PendingItem({
       <div className="flex min-w-0 max-w-[70%] flex-col items-end gap-0.5">
         <div className="flex items-baseline gap-2 text-xs text-muted-foreground">
           <span className="font-medium text-foreground">{authorName}</span>
-          <time dateTime={createdAt}>{formatStamp(createdAt, now, locale)}</time>
+          <time dateTime={createdAt}>{formatStamp(createdAt, now, locale, timeZone)}</time>
         </div>
         <div
           className={cn(

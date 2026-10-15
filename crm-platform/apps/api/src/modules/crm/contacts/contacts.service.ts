@@ -1,8 +1,12 @@
+import { randomUUID } from 'node:crypto';
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES, canonicalizePhone, composeDisplayName } from '@crm/contracts';
 import type {
+  ConsentProof,
+  ConsentSource,
+  IntakeChannel,
   AssigneeResponse,
   BulkResult,
   BulkUpdateContactsInput,
@@ -19,7 +23,7 @@ import type {
   SetContactAssigneeInput,
   UpdateContactInput,
 } from '@crm/contracts';
-import { RequestContextStore } from '../../../common/context/request-context';
+import { RequestContextStore, type RequestContext } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
@@ -35,6 +39,15 @@ import { planStatus } from './contact-status-stage';
 import { assertFormFieldLimits } from './form-field-limits';
 import { applyPropertyPlan, planPropertyChanges } from './contact-property-values';
 import { missingRequired, requiredPropertiesError } from './required-properties';
+import {
+  ConsentIntakeService,
+  ContactConsentService,
+  hasProof,
+  intakeEvidence,
+  planIntakeGrants,
+  type IntakePlan,
+} from '../../contact-consent';
+import { PersonalDataErasureService } from '../../privacy';
 import { ContactQuotaService } from './contact-quota.service';
 import { assertContactScope } from './contact-scope';
 import { assertOwnerWithinScope } from '../owner-scope';
@@ -55,11 +68,63 @@ export const FLOW_CONTACT_COLUMNS: Readonly<Record<string, string>> = {
 };
 const DISPLAY_PREFIX = 'CON';
 
+/** The status column of each channel a consent can be granted on at intake. */
+const STATUS_COLUMN = {
+  whatsapp: 'whatsappSubscriptionStatus',
+  sms: 'smsSubscriptionStatus',
+  email: 'emailSubscriptionStatus',
+} as const satisfies Record<IntakeChannel, string>;
+
+/**
+ * Who is agreeing, for the ledger event a contact write may leave behind (`create` and `update` take it as an optional last argument).
+ * A staff session records `manual`, an API key `api`; a caller that stands for the person (a partner agent, a public lead submit) says
+ * `api` and names itself in `evidence.reference`.
+ */
+export interface ContactConsentContext {
+  source?: ConsentSource;
+  evidence?: Record<string, string | undefined>;
+  /**
+   * A stable key for callers that send the same agreement again and again (a sheet re-sent by its add-on): the grant is written once.
+   * Omitted, every write that carries a claim records its own event.
+   */
+  dedupeKey?: string;
+}
+
+/** The statuses a write carries, by channel (undefined: not part of the write). */
+function statusesOf(input: {
+  whatsappSubscriptionStatus?: string | null;
+  smsSubscriptionStatus?: string | null;
+  emailSubscriptionStatus?: string | null;
+}) {
+  return {
+    whatsapp: input.whatsappSubscriptionStatus,
+    sms: input.smsSubscriptionStatus,
+    email: input.emailSubscriptionStatus,
+  };
+}
+
 /** What an inbound message knows about its sender (`ContactsService.resolveOrCreateByIdentity`). */
 export interface ResolveContactInput {
-  kind: 'phone' | 'email';
-  /** As the channel wrote it: a phone number in any format, or an email address. Canonicalised here. */
+  /**
+   * `phone` and `email` are identities; `channel_uid` is a person a channel knows only by its own id (a Telegram user, a Facebook or
+   * Instagram sender, a website widget visitor): `value` is that id and `channel` names the channel. Such a contact is unique per
+   * (workspace, channel, id).
+   */
+  kind: 'phone' | 'email' | 'channel_uid';
+  /** As the channel wrote it: a phone number in any format, an email address, or (`channel_uid`) the channel's own id. */
   value: string;
+  /** `channel_uid` only: the channel the id belongs to (`telegram`, `facebook`, `instagram`, `chatbot_widget`). */
+  channel?: string;
+  /**
+   * `channel_uid` only: what else the channel knows. With `matchPhoneFirst`, a contact that already holds this phone IS the person
+   * (the widget's pre-chat form) and nothing new is made; otherwise the extras are stored on a contact created here.
+   */
+  phone?: string | null;
+  email?: string | null;
+  firstName?: string | null;
+  matchPhoneFirst?: boolean;
+  /** `channel_uid` only: the contact's note (`contacts.message`), such as "Source: Telegram DM". */
+  message?: string;
   /** The sender's own name (WhatsApp's profile name), kept only when a contact is created. */
   name?: string | null;
   /** Where the contact came from (`contacts.source`). */
@@ -70,6 +135,8 @@ export interface ResolveContactInput {
    * somebody wrote is never replaced).
    */
   quiet?: boolean;
+  /** The name a CREATED contact gets when `name` is empty (a placeholder for a bare number). Never written to an existing contact. */
+  createdName?: string;
   /** The stage a created contact starts in, instead of the workspace default (a lead source's own stage). A lost stage is ignored. */
   lifecycleStage?: string;
   /** The owner of a created contact (an internal user id), for a writer that assigns on arrival (lead sources). */
@@ -121,6 +188,9 @@ export class ContactsService {
     private readonly displayIds: DisplayIdService,
     private readonly rbac: RbacService,
     private readonly quota: ContactQuotaService,
+    private readonly consent: ContactConsentService,
+    private readonly intake: ConsentIntakeService,
+    private readonly erasure: PersonalDataErasureService,
   ) {}
 
   async list(query: ListContactsQuery, scope: RecordScope): Promise<ContactListResponse> {
@@ -219,7 +289,7 @@ export class ContactsService {
     });
   }
 
-  async create(input: CreateContactInput): Promise<ContactResponse> {
+  async create(input: CreateContactInput, via?: ContactConsentContext): Promise<ContactResponse> {
     const ctx = RequestContextStore.require();
 
     // One canonicaliser for create, import and dedupe (TW-CON-013). The contract already insists
@@ -229,10 +299,24 @@ export class ContactsService {
       ? (canonicalizePhone({ number: input.phone })?.e164 ?? input.phone)
       : undefined;
 
+    // Consent at intake (spec privacy-and-data-governance 4.3.2): a status set to `subscribed`, or a consent block, is a claim that the
+    // person agreed. It needs proof (422 without), and it writes a ledger grant; the status alone never grants anything.
+    const plan = planIntakeGrants({
+      given: statusesOf(input),
+      proof: input.consent,
+      reachable: { phone: Boolean(phone), email: Boolean(input.email) },
+    });
+    this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
+
     return this.db.tx(async (tx) => {
-      const ownerId = input.ownerId
-        ? await this.requireUser(tx, ctx.orgId, input.ownerId)
-        : ctx.userId;
+      // Omitted: the creator (Reference stamped `user_id` with the caller). `null`: nobody, which a caller whose
+      // record scope is own/team is refused below (the contact would vanish from their own list).
+      const ownerId =
+        input.ownerId === null
+          ? null
+          : input.ownerId
+            ? await this.requireUser(tx, ctx.orgId, input.ownerId)
+            : ctx.userId;
       await this.assertOwnerAllowed(tx, 'record.contacts.create', ownerId ?? null);
       const companyId = input.companyId
         ? await this.requireCompany(tx, ctx.orgId, input.companyId)
@@ -255,7 +339,13 @@ export class ContactsService {
             { orgId: ctx.orgId, contactId: existingId },
             'contact create matched an existing identity — returning the existing contact',
           );
-          return toContactResponse(existing);
+          // The same person agreeing again is still an agreement: the grant lands on the contact they already are.
+          const regranted = await this.grantOnMatch(tx, ctx, existing, input, via);
+          return toContactResponse(
+            regranted
+              ? ((await this.repo.findById(tx, ctx.orgId, existing.id)) ?? existing)
+              : existing,
+          );
         }
       }
 
@@ -316,9 +406,15 @@ export class ContactsService {
         lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
         status: statusPlan.status ?? undefined,
         leadScore: input.leadScore,
-        whatsappSubscriptionStatus: input.whatsappSubscriptionStatus,
-        smsSubscriptionStatus: input.smsSubscriptionStatus,
-        emailSubscriptionStatus: input.emailSubscriptionStatus,
+        whatsappSubscriptionStatus:
+          input.whatsappSubscriptionStatus ??
+          (plan.fillStatus.includes('whatsapp') ? 'subscribed' : undefined),
+        smsSubscriptionStatus:
+          input.smsSubscriptionStatus ??
+          (plan.fillStatus.includes('sms') ? 'subscribed' : undefined),
+        emailSubscriptionStatus:
+          input.emailSubscriptionStatus ??
+          (plan.fillStatus.includes('email') ? 'subscribed' : undefined),
         emailConfirmed: input.emailConfirmed,
         faxNumber: input.faxNumber,
         source: input.source,
@@ -341,6 +437,29 @@ export class ContactsService {
         recordId: created.id,
         action: 'insert',
       });
+      // A contact created already opted out leaves its proof in the consent ledger (it is never invented for the other case).
+      if (input.isUnsubscribed === true) {
+        await this.consent.recordInTx(tx, ctx.orgId, {
+          contactId: created.id,
+          channel: 'whatsapp',
+          action: 'withdrawn',
+          source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+          actorUserId: ctx.userId,
+          note: 'Created as unsubscribed',
+          idempotencyKey: `create:${created.uuid}`,
+        });
+      }
+      if (plan.grant.length > 0) {
+        await this.intake.grant(tx, ctx.orgId, {
+          contactId: created.id,
+          channels: plan.grant,
+          source: this.grantSource(ctx, via),
+          proof: input.consent,
+          evidence: via?.evidence,
+          actorUserId: ctx.userId,
+          keyBase: via?.dedupeKey ?? `create:${created.uuid}:grant`,
+        });
+      }
 
       // Same transaction as the insert — see OutboxService for why that is
       // not negotiable.
@@ -372,6 +491,28 @@ export class ContactsService {
     orgId: number,
     input: ResolveContactInput,
   ): Promise<ResolvedContact> {
+    // The audit row names the context's workspace and actor. A worker (a channel webhook, a store import) has none of its own: it acts
+    // as the system actor of THIS workspace; a request of the same workspace keeps its own actor.
+    const current = RequestContextStore.peek();
+    if (current && current.orgId === orgId) return this.resolveInContext(tx, orgId, input);
+    return RequestContextStore.run(
+      {
+        requestId: `resolve-${randomUUID()}`,
+        orgId,
+        actorType: 'system',
+        actorId: null,
+        userId: null,
+      },
+      () => this.resolveInContext(tx, orgId, input),
+    );
+  }
+
+  private async resolveInContext(
+    tx: Tx,
+    orgId: number,
+    input: ResolveContactInput,
+  ): Promise<ResolvedContact> {
+    if (input.kind === 'channel_uid') return this.resolveByChannelUid(tx, orgId, input);
     const phone = input.kind === 'phone' ? canonicalizePhone({ number: input.value }) : null;
     const value = input.kind === 'phone' ? phone?.e164 : input.value.trim().toLowerCase();
     if (!value || (input.kind === 'phone' && !phone)) return { outcome: 'unusable' };
@@ -439,7 +580,7 @@ export class ContactsService {
 
     const displayId = await this.displayIds.next(tx, orgId, MODULE_KEY, DISPLAY_PREFIX);
     const created = await this.repo.insert(tx, orgId, {
-      name: input.name?.trim() || null,
+      name: input.name?.trim() || input.createdName?.trim() || null,
       email: input.kind === 'email' ? value : undefined,
       phone: input.kind === 'phone' ? value : undefined,
       lifecycleStage: stage ?? undefined,
@@ -569,6 +710,79 @@ export class ContactsService {
   }
 
   /** One field of a contact as text, for the flow triggers and conditions: an own column or a custom property; null when it is blank. */
+  /**
+   * A stage change made by the system, not by a person: the guarded automatic mode of the growth pilot, and its undo. The edit's own
+   * rules hold (the won stamp, the status kept valid for the stage, audit, the stage-changed event), with two refusals: a contact that
+   * is no longer in `expectFrom` (a person moved it first) and a lost stage (it needs a reason a person gives). Returns whether it moved.
+   */
+  async changeStageAsSystem(
+    orgId: number,
+    contactId: number,
+    args: { expectFrom: string; to: string },
+  ): Promise<boolean> {
+    return this.db.txAs({ orgId }, async (tx) => {
+      const existing = await this.repo.findById(tx, orgId, contactId);
+      if (
+        !existing ||
+        existing.lifecycleStage !== args.expectFrom ||
+        args.to === existing.lifecycleStage
+      ) {
+        return false;
+      }
+      const flags = await this.repo.stageFlags(tx, orgId, args.to);
+      if (flags.isLost) return false;
+      const now = new Date();
+      const values: Record<string, unknown> = {
+        lifecycleStage: args.to,
+        lifecycleStageDate: now,
+        previousLifecycleStage: existing.lifecycleStage,
+        previousLifecycleStageDate: existing.lifecycleStageDate,
+        ...stageEntryValues({ flags, current: existing, now }),
+      };
+      const statusCtx = await this.repo.statusContext(tx, orgId);
+      const plan = planStatus({
+        scope: statusCtx.scope,
+        stage: args.to,
+        stageLabel: statusCtx.stageLabels.get(args.to) ?? null,
+        stageChanged: true,
+        current: existing.status,
+        requested: undefined,
+      });
+      if (plan.status !== undefined) values.status = plan.status;
+      const updated = await this.repo.updateWithVersion(
+        tx,
+        orgId,
+        existing.id,
+        existing.rowVersion,
+        values,
+      );
+      if (!updated) return false;
+      const after = await this.repo.findById(tx, orgId, existing.id);
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'update',
+        delta: this.audit.diff(
+          existing as unknown as Record<string, unknown>,
+          after as unknown as Record<string, unknown>,
+        ),
+      });
+      await this.outbox.emit(tx, {
+        orgId,
+        aggregateModule: MODULE_KEY,
+        aggregateId: existing.id,
+        eventType: 'contact.stage_changed',
+        payload: {
+          uuid: existing.uuid,
+          previousStage: existing.lifecycleStage,
+          stage: args.to,
+          via: 'growth',
+        },
+      });
+      return true;
+    });
+  }
+
   async readFieldForFlow(orgId: number, contactId: number, key: string): Promise<string | null> {
     const clean = key.trim();
     if (clean === '') return null;
@@ -582,6 +796,106 @@ export class ContactsService {
       const v = (res.rows[0] as { v: string | null } | undefined)?.v;
       return v === null || v === undefined || v.trim() === '' ? null : v;
     });
+  }
+
+  /**
+   * `resolveOrCreateByIdentity` for a person a channel knows only by its own id. The same rules as the phone and email path: one lookup
+   * under an advisory lock (two messages from one new sender make one contact), the plan's contact cap (`quota_reached`, never an
+   * exception: the message must still arrive), the workspace's default stage and status, an identity row for any phone or address the
+   * channel gave, and an audit row. It is quiet: no `contact.created` event, as the raw inserts it replaces never announced one. A blank
+   * name on an existing contact is filled in; a curated one is never replaced. Consent: none is granted, ever.
+   */
+  private async resolveByChannelUid(
+    tx: Tx,
+    orgId: number,
+    input: ResolveContactInput,
+  ): Promise<ResolvedContact> {
+    const channel = input.channel?.trim();
+    const uid = input.value.trim();
+    if (!channel || uid === '') return { outcome: 'unusable' };
+
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`contact-channel:${orgId}:${channel}:${uid}`}, 0))`,
+    );
+
+    const typedPhone = input.phone?.trim() ? input.phone.trim() : null;
+    const phone = typedPhone
+      ? (canonicalizePhone({ number: typedPhone })?.e164 ?? typedPhone)
+      : null;
+    const email = input.email?.trim() ? input.email.trim().toLowerCase() : null;
+
+    if (phone && input.matchPhoneFirst) {
+      const digits = phone.replace(/[^0-9]/g, '');
+      const hit = await tx.execute(sql`
+        SELECT id, uuid FROM contacts
+        WHERE org_id = ${orgId} AND regexp_replace(coalesce(normalized_phone, ''), '[^0-9]', '', 'g') = ${digits}
+        ORDER BY id LIMIT 1`);
+      const row = hit.rows[0] as { id: number | string; uuid: string } | undefined;
+      if (row) return { outcome: 'found', contactId: Number(row.id), uuid: row.uuid };
+    }
+
+    const keyed = await tx.execute(
+      sql`SELECT id, uuid FROM contacts WHERE org_id = ${orgId} AND channel = ${channel} AND channel_uid = ${uid}`,
+    );
+    const known = keyed.rows[0] as { id: number | string; uuid: string } | undefined;
+    if (known) {
+      await this.fillBlankName(tx, orgId, Number(known.id), input.name);
+      return { outcome: 'found', contactId: Number(known.id), uuid: known.uuid };
+    }
+
+    try {
+      await this.quota.assertCanAddOne(tx, orgId);
+    } catch (err) {
+      if (err instanceof AppError && err.code === ERROR_CODES.PLAN_LIMIT_REACHED) {
+        return { outcome: 'quota_reached' };
+      }
+      throw err;
+    }
+
+    let stage =
+      input.lifecycleStage ?? (await this.repo.defaultOptionValue(tx, orgId, 'lifecycle_stage'));
+    const flags = stage ? await this.repo.stageFlags(tx, orgId, stage) : null;
+    if (flags?.isLost) stage = undefined;
+    const stageValues =
+      stage && flags
+        ? stageEntryValues({
+            flags,
+            current: { wonAt: null, lostAt: null, lostReason: null, otherLostReason: null },
+            now: new Date(),
+          })
+        : {};
+    const statusCtx = await this.repo.statusContext(tx, orgId);
+    const statusPlan = planStatus({
+      scope: statusCtx.scope,
+      stage: stage ?? 'new',
+      stageLabel: statusCtx.stageLabels.get(stage ?? 'new') ?? null,
+      stageChanged: true,
+      current: null,
+      requested: undefined,
+    });
+    const displayId = await this.displayIds.next(tx, orgId, MODULE_KEY, DISPLAY_PREFIX);
+    const created = await this.repo.insert(tx, orgId, {
+      name: input.name?.trim() || null,
+      firstName: input.firstName?.trim() || null,
+      email,
+      phone,
+      lifecycleStage: stage ?? undefined,
+      wonAt: (stageValues.wonAt as Date | null | undefined) ?? null,
+      lostAt: (stageValues.lostAt as Date | null | undefined) ?? null,
+      status: statusPlan.status ?? undefined,
+      source: input.source ?? null,
+      ownerId: input.ownerId ?? null,
+      channel,
+      channelUid: uid,
+      message: input.message ?? null,
+      data: {},
+      displayId,
+      createdBy: null,
+    });
+    if (email) await this.repo.addIdentity(tx, orgId, created.id, 'email', email);
+    if (phone) await this.repo.addIdentity(tx, orgId, created.id, 'phone', phone);
+    await this.audit.record(tx, { module: MODULE_KEY, recordId: created.id, action: 'insert' });
+    return { outcome: 'created', contactId: created.id, uuid: created.uuid };
   }
 
   /** A name nobody has written yet is filled in; a curated one is never replaced. */
@@ -606,7 +920,89 @@ export class ContactsService {
     return (res.rows[0] as { uuid: string } | undefined)?.uuid ?? null;
   }
 
-  async update(uuid: string, input: UpdateContactInput): Promise<ContactResponse> {
+  /** A grant claimed in a write needs proof and cannot sit beside an opt-out in the same write. */
+  private assertIntakeAllowed(
+    plan: IntakePlan,
+    proof: ConsentProof | undefined,
+    optingOut: boolean,
+  ): void {
+    if (plan.grant.length === 0) return;
+    if (optingOut) {
+      throw AppError.validation(
+        'A contact cannot be marked unsubscribed and subscribed in the same change.',
+      );
+    }
+    this.intake.requireProof(proof);
+  }
+
+  private grantSource(ctx: RequestContext, via?: ContactConsentContext): ConsentSource {
+    return via?.source ?? (ctx.actorType === 'api_key' ? 'api' : 'manual');
+  }
+
+  /**
+   * `create` found the person already in the workspace. If the write carried a consent claim, the agreement still happened: the grant
+   * is written on that contact (never over a withdrawal) and a blank status of a granted channel becomes `subscribed`. Nothing else
+   * of the existing contact is touched. Returns whether anything was written.
+   */
+  private async grantOnMatch(
+    tx: Tx,
+    ctx: RequestContext,
+    existing: ContactRow,
+    input: CreateContactInput,
+    via?: ContactConsentContext,
+  ): Promise<boolean> {
+    const plan = planIntakeGrants({
+      given: statusesOf(input),
+      stored: {
+        whatsapp: existing.whatsappSubscriptionStatus,
+        sms: existing.smsSubscriptionStatus,
+        email: existing.emailSubscriptionStatus,
+      },
+      proof: input.consent,
+      reachable: { phone: Boolean(existing.phone), email: Boolean(existing.email) },
+    });
+    if (plan.grant.length === 0) return false;
+    this.intake.requireProof(input.consent);
+    const recorded = await this.intake.grant(tx, ctx.orgId, {
+      contactId: existing.id,
+      channels: plan.grant,
+      source: this.grantSource(ctx, via),
+      proof: input.consent,
+      evidence: via?.evidence,
+      actorUserId: ctx.userId,
+      keyBase: via?.dedupeKey ?? `create:${existing.uuid}:${randomUUID()}:grant`,
+    });
+    const patch: Record<string, unknown> = {};
+    const stored: Record<IntakeChannel, string | null> = {
+      whatsapp: existing.whatsappSubscriptionStatus,
+      sms: existing.smsSubscriptionStatus,
+      email: existing.emailSubscriptionStatus,
+    };
+    for (const ch of recorded as IntakeChannel[]) {
+      if (!(stored[ch] ?? '').trim()) patch[STATUS_COLUMN[ch]] = 'subscribed';
+    }
+    if (Object.keys(patch).length > 0) {
+      await this.repo.updateFieldsById(tx, ctx.orgId, existing.id, {
+        ...patch,
+        updatedBy: ctx.userId,
+      });
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: existing.id,
+        action: 'update',
+        delta: Object.fromEntries(
+          Object.keys(patch).map((k) => [k, { old: null, new: 'subscribed' }]),
+        ),
+      });
+    }
+    return recorded.length > 0;
+  }
+
+  async update(
+    uuid: string,
+    input: UpdateContactInput,
+    via?: ContactConsentContext,
+  ): Promise<ContactResponse> {
     const ctx = RequestContextStore.require();
 
     return this.db.tx(async (tx) => {
@@ -633,7 +1029,32 @@ export class ContactsService {
       if (phone !== undefined) values.phone = phone;
       if (input.lostReason !== undefined) values.lostReason = input.lostReason;
       if (input.otherLostReason !== undefined) values.otherLostReason = input.otherLostReason;
-      if (input.leadScore !== undefined) values.leadScore = input.leadScore;
+      if (input.leadScore !== undefined) {
+        values.leadScore = input.leadScore;
+        // A score a person types (or clears) takes the AI's explanation with it: the number is theirs now, and clearing it hands the
+        // contact back to the AI scorer.
+        values.leadScoreSource = input.leadScore === null ? null : 'manual';
+        values.leadScoreReasons = null;
+        values.leadScoredAt = null;
+        values.leadScoreModel = null;
+      }
+      // Consent at intake: a status that changes to `subscribed`, or a consent block, is a claim that the person agreed. It needs proof
+      // and writes a ledger grant below; the status alone never grants anything (spec privacy-and-data-governance 4.3.2).
+      const plan = planIntakeGrants({
+        given: statusesOf(input),
+        stored: {
+          whatsapp: existing.whatsappSubscriptionStatus,
+          sms: existing.smsSubscriptionStatus,
+          email: existing.emailSubscriptionStatus,
+        },
+        proof: input.consent,
+        reachable: {
+          phone: Boolean(input.phone !== undefined ? input.phone : existing.phone),
+          email: Boolean(input.email !== undefined ? input.email : existing.email),
+        },
+      });
+      this.assertIntakeAllowed(plan, input.consent, input.isUnsubscribed === true);
+      for (const ch of plan.fillStatus) values[STATUS_COLUMN[ch]] = 'subscribed';
       if (input.whatsappSubscriptionStatus !== undefined) {
         values.whatsappSubscriptionStatus = input.whatsappSubscriptionStatus;
       }
@@ -735,6 +1156,56 @@ export class ContactsService {
         await this.repo.addIdentity(tx, ctx.orgId, existing.id, 'phone', phone);
       }
 
+      // The toggle on the contact form / REST API keeps working as before; the ledger records who changed it (a grant here has no
+      // required reason: the Consent card on the profile asks for one).
+      // Switching the flag back on while the write carries the person's proof records THAT proof (the wording, the version, the note)
+      // instead of the bare "changed on the record" line, and covers the WhatsApp grant of the consent block.
+      const proofForFlag =
+        values.isUnsubscribed === false && hasProof(input.consent) ? input.consent : undefined;
+      if (values.isUnsubscribed !== undefined) {
+        await this.consent.recordInTx(tx, ctx.orgId, {
+          contactId: existing.id,
+          channel: 'whatsapp',
+          action: values.isUnsubscribed ? 'withdrawn' : 'granted',
+          source: this.grantSource(ctx, via),
+          evidence: proofForFlag ? intakeEvidence(proofForFlag, via?.evidence) : undefined,
+          actorUserId: ctx.userId,
+          note: proofForFlag?.note?.trim() || 'Changed on the contact record',
+          idempotencyKey: `edit:${existing.uuid}:${existing.rowVersion}`,
+        });
+        // Switching the flag back on is a person coming back: `contact.opt_in` (optedIn: true), the opt-in flow trigger, in the same
+        // transaction as the change, like the STOP / START keyword and the Consent card. The ledger cannot announce it here (this update
+        // has already moved the flag, so the ledger sees no change). Switching it off announces nothing, as before.
+        if (values.isUnsubscribed === false) {
+          await this.outbox.emit(tx, {
+            aggregateModule: MODULE_KEY,
+            aggregateId: existing.id,
+            eventType: 'contact.opt_in',
+            payload: {
+              contactId: existing.uuid,
+              optedIn: true,
+              action: 'resubscribed',
+              source: ctx.actorType === 'api_key' ? 'api' : 'manual',
+            },
+          });
+        }
+      }
+
+      const grantChannels = proofForFlag
+        ? plan.grant.filter((ch) => ch !== 'whatsapp')
+        : plan.grant;
+      if (grantChannels.length > 0) {
+        await this.intake.grant(tx, ctx.orgId, {
+          contactId: existing.id,
+          channels: grantChannels,
+          source: this.grantSource(ctx, via),
+          proof: input.consent,
+          evidence: via?.evidence,
+          actorUserId: ctx.userId,
+          keyBase: via?.dedupeKey ?? `edit:${existing.uuid}:${existing.rowVersion}:grant`,
+        });
+      }
+
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);
 
       await this.audit.record(tx, {
@@ -765,8 +1236,14 @@ export class ContactsService {
     });
   }
 
-  async remove(uuid: string): Promise<void> {
+  /**
+   * Hard delete. With `eraseHistory` (the default) the contact's conversations, messages, media, files, call logs and recordings go
+   * with it (the shared erasure pipeline of the rights service); without it they are kept without the person's identity. Leads,
+   * deals, tasks and invoices stay as business records. Either way nothing is left pointing at the person by number or name.
+   */
+  async remove(uuid: string, opts: { eraseHistory?: boolean } = {}): Promise<void> {
     const ctx = RequestContextStore.require();
+    const eraseHistory = opts.eraseHistory ?? true;
 
     await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
@@ -781,6 +1258,15 @@ export class ContactsService {
         existing.ownerId,
       );
 
+      // The history first, in the same transaction: the conversations are found through the contact link, which the delete below
+      // clears. A call that loses the race below rolls this back with it.
+      await this.erasure.eraseContactHistory(
+        tx,
+        ctx.orgId,
+        [existing.id],
+        eraseHistory ? 'delete' : 'anonymise',
+      );
+
       // Hard delete. The delete itself decides who won a race (AZ-014): `DELETE ... RETURNING` reports a row only to the
       // call that removed it, and a second concurrent call (which waited on the row lock) gets 404 and writes nothing.
       // The audit row and the outbox event follow in the same transaction; the audit trail keeps the record id.
@@ -790,6 +1276,7 @@ export class ContactsService {
         module: MODULE_KEY,
         recordId: existing.id,
         action: 'delete',
+        delta: { history: { old: null, new: eraseHistory ? 'erased' : 'anonymised' } },
       });
       await this.outbox.emit(tx, {
         aggregateModule: MODULE_KEY,
@@ -927,9 +1414,15 @@ export class ContactsService {
     );
   }
 
+  /**
+   * Everyone active, each marked with whether the caller's record scope lets them assign a contact to that person
+   * (the same rule `assertOwnerWithinScope` enforces on every write): the form offers only those, the list filter and
+   * the Owner column need every name.
+   */
   async listAssignees(): Promise<AssigneeResponse[]> {
     const ctx = RequestContextStore.require();
-    return this.db.tx((tx) => this.repo.listAssignable(tx, ctx.orgId));
+    const scope = ctx.grants ? this.rbac.can(ctx.grants, 'record.contacts.update').scope : 'all';
+    return this.db.tx((tx) => this.repo.listAssignable(tx, ctx.orgId, scope, ctx.userId));
   }
 
   async setAssignee(input: SetContactAssigneeInput): Promise<BulkResult> {

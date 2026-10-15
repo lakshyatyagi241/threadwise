@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "יובא",
+      "importedHint": "הצ'אט הזה יובא מההיסטוריה של הטלפון"
+    },
+    "bubble": {
+      "imported": "יובא",
+      "importedHint": "יובא מהיסטוריית הצ'אטים בטלפון"
+    }
+  }
+}

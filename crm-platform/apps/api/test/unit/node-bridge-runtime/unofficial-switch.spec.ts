@@ -313,6 +313,7 @@ describe("per-workspace decisions use the row's own workspace", () => {
         {} as never,
         {} as never,
         {} as never,
+        {} as never,
         g,
       );
       (svc as unknown as { mustResolve: () => Promise<unknown> }).mustResolve = async () => ({

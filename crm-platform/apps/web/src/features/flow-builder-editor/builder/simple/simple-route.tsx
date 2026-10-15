@@ -23,11 +23,14 @@ export function SimpleRoute({ flowId }: { flowId?: string }) {
     queryFn: ({ signal }) => flowsApi.overview(signal),
   });
   const mode = overview.data?.builderMode;
+  // The FAQs of a flow are edited here only: a link to them opens this screen even where the workspace builds in Advanced.
+  const wantsFaqs = !!flowId && params.get('tab') === 'faqs';
+  const redirectToAdvanced = mode === 'advanced' && !wantsFaqs;
   useEffect(() => {
     if (!allowed) router.replace('/inbox');
-    else if (mode === 'advanced')
+    else if (redirectToAdvanced)
       router.replace(flowId ? `/flows/builder/${flowId}` : newHref('advanced', channel));
-  }, [allowed, mode, flowId, router, channel]);
-  if (!allowed || mode === 'advanced') return null;
+  }, [allowed, redirectToAdvanced, flowId, router, channel]);
+  if (!allowed || redirectToAdvanced) return null;
   return <SimpleScreen flowId={flowId} channel={channel} />;
 }

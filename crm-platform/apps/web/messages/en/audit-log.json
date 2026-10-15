@@ -1,0 +1,180 @@
+{
+  "audit-log": {
+    "title": "Audit log",
+    "description": "Who changed what in this workspace, and when, from what to what. Use it to answer \"who did this?\", to review changes made by your team, and to check what platform support did when you asked for help.",
+    "tile": {
+      "label": "Audit log",
+      "description": "See who changed what in your workspace, when, and from what to what. Filter it and export it.",
+      "keywords": "activity log, audit, history, changes, who changed, security, compliance, export, support access"
+    },
+    "retention": {
+      "days": "Entries are kept for {days, plural, one {# day} other {# days}}, then deleted. The platform sets this period.",
+      "forever": "Entries are kept without an end date. The platform sets this policy.",
+      "unknown": "Entries are kept for the period the platform sets, then deleted."
+    },
+    "forbidden": {
+      "title": "You do not have access to the audit log",
+      "body": "Ask a workspace Owner or Admin to give your role the permission to view the audit log."
+    },
+    "filters": {
+      "label": "Audit log filters",
+      "range": "Period",
+      "from": "From",
+      "to": "To",
+      "actor": "Person",
+      "allActors": "Everyone",
+      "actorType": "Who acted",
+      "allActorTypes": "Anyone",
+      "module": "Area",
+      "allModules": "All areas",
+      "action": "Action",
+      "allActions": "All actions",
+      "search": "Search areas and actions",
+      "searchHint": "Matches the area and the action only, never the changed values.",
+      "recordId": "Record number",
+      "requestId": "Request ID",
+      "supportOnly": "Only platform support sessions",
+      "apply": "Apply filters",
+      "refresh": "Refresh",
+      "reset": "Reset filters"
+    },
+    "ranges": {
+      "24h": "Last 24 hours",
+      "7d": "Last 7 days",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days",
+      "custom": "Choose dates"
+    },
+    "actorTypes": {
+      "user": "A person",
+      "system": "The system",
+      "api_key": "An API key",
+      "bot": "A bot",
+      "partner_agent": "A partner agent",
+      "candidate": "A candidate",
+      "other": "Something else"
+    },
+    "actors": {
+      "system": "System",
+      "api_key": "API key",
+      "apiKeyNamed": "API key: {name}",
+      "bot": "Bot",
+      "partner_agent": "Partner agent",
+      "candidate": "Candidate",
+      "other": "Other",
+      "removedUser": "A removed user",
+      "support": "Platform support",
+      "actingAs": "acting as {name}",
+      "supportBadge": "Platform support"
+    },
+    "actions": {
+      "insert": "Created",
+      "update": "Updated",
+      "delete": "Deleted",
+      "merge": "Merged",
+      "login": "Signed in",
+      "export": "Exported",
+      "read": "Viewed"
+    },
+    "modules": {
+      "contacts": "Contacts",
+      "contact_groups": "Contact groups",
+      "contact_notes": "Contact notes",
+      "companies": "Companies",
+      "deals": "Deals",
+      "tags": "Tags",
+      "members": "Team members",
+      "teams": "Teams",
+      "conversation_notes": "Conversation notes",
+      "broadcasts": "Broadcasts",
+      "campaigns": "Campaigns",
+      "faqs": "FAQs",
+      "api_keys": "API keys",
+      "audit-log": "Audit log",
+      "audit-log-exports": "Audit log exports",
+      "contact_consent_exports": "Consent proof exports"
+    },
+    "table": {
+      "caption": "Audit entries, newest first. Times are shown in your time zone ({zone}).",
+      "zone": "Times are shown in your time zone: {zone}.",
+      "time": "When",
+      "actor": "Who",
+      "action": "What",
+      "record": "Record",
+      "changed": "Fields changed",
+      "request": "Request",
+      "details": "Details",
+      "openDetails": "Details of this change: {what}"
+    },
+    "states": {
+      "loading": "Loading the audit log",
+      "empty": "Nothing recorded in this period",
+      "emptyHint": "Changes your team makes will appear here.",
+      "emptyFiltered": "No entries match these filters",
+      "emptyFilteredHint": "Try a longer period or remove a filter.",
+      "retry": "Try again",
+      "showing": "{count, plural, one {# entry loaded} other {# entries loaded}}",
+      "loadMore": "Load more",
+      "end": "End of the list"
+    },
+    "detail": {
+      "title": "Audit entry",
+      "when": "When",
+      "who": "Who",
+      "what": "What",
+      "record": "Record",
+      "openRecord": "Open the record",
+      "request": "Request ID",
+      "changes": "What changed",
+      "field": "Field",
+      "before": "Before",
+      "after": "After",
+      "noChanges": "This entry does not list field changes.",
+      "supportTitle": "Platform support was acting in your workspace",
+      "supportBody": "A member of platform support used a support session as {name}. They could do what that person can do.",
+      "supportReason": "Reason given: {reason}",
+      "supportNoReason": "The reason for this session is no longer available.",
+      "supportReadOnly": "The session was read-only.",
+      "secret": "Hidden secret",
+      "secretHint": "Passwords, keys and tokens are never shown.",
+      "maskedHint": "Personal data is partly hidden.",
+      "maskedNote": "Personal data such as phone numbers, e-mail addresses, names and notes is partly hidden. Secrets are never shown.",
+      "maskedNoteOwner": "Secrets such as passwords, keys and tokens are hidden for everyone.",
+      "audited": "Opening this entry is recorded in the audit log."
+    },
+    "export": {
+      "title": "Export",
+      "note": "Prepares a CSV of the entries that match the filters above. It is kept for {days} days and always hides personal data.",
+      "button": "Export CSV",
+      "preparing": "Preparing the file",
+      "requested": "The export is being prepared. We will email you when it is ready.",
+      "none": "No exports yet.",
+      "status": {
+        "queued": "Waiting",
+        "running": "Preparing",
+        "ready": "Ready",
+        "failed": "Failed",
+        "expired": "Expired"
+      },
+      "rows": "{count, plural, one {# entry} other {# entries}}",
+      "expires": "kept until {date}",
+      "download": "Download",
+      "failed": "This export could not be built. Request it again."
+    },
+    "errors": {
+      "network": "Could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do this.",
+      "notFound": "That entry or export was not found.",
+      "rangeInvalid": "Choose a period of at most 400 days, ending after it starts.",
+      "exportInProgress": "An export is already being prepared. Wait for its email, then request another.",
+      "exportNotReady": "This export is not ready, or it has expired.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "validation": "One of the filters is not valid.",
+      "unexpected": "Something went wrong. Try again."
+    },
+    "common": {
+      "close": "Close",
+      "dismiss": "Dismiss"
+    }
+  }
+}

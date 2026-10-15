@@ -193,7 +193,6 @@
         "outOfOrder": "A step ran out of order. Reload the page and start again.",
         "step": "Installation step failed. Check your details and the server logs, then try again.",
         "unknown": "Something went wrong. Try again.",
-        "requestId": "Request id {id}",
         "prerequisites": "The server is not ready for setup: {items}.",
         "licence": {
           "empty": "Enter your CodeCanyon purchase code.",
@@ -265,7 +264,6 @@
       "loading": "Loading",
       "errorForbidden": "You cannot view this page.",
       "errorUnexpected": "Could not load the updater.",
-      "requestId": "Request id",
       "retry": "Try again",
       "licence": {
         "kicker": "step 1 · licence",

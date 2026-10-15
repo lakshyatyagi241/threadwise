@@ -257,7 +257,6 @@
       "ownerInvalid": "Người phụ trách phải là thành viên đang hoạt động của không gian làm việc.",
       "invoicingUnavailable": "Tính năng xuất hóa đơn chưa khả dụng, nên tài liệu này không thể chuyển đổi.",
       "unexpected": "Đã xảy ra lỗi. Vui lòng thử lại.",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại"
     },
     "link": {

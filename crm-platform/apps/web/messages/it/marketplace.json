@@ -10,13 +10,13 @@
       "install": "Installa · Marketplace",
       "installed": "Installata · Marketplace",
       "manage": "Gestisci app · Marketplace",
-      "requests": "Richieste · Marketplace"
+      "requests": "Richieste · Marketplace",
+      "addons": "Componenti aggiuntivi · Marketplace"
     },
     "common": {
       "dismiss": "Ignora",
       "loading": "Caricamento",
       "errorTitle": "Impossibile caricare questo",
-      "requestId": "ID richiesta",
       "retry": "Riprova",
       "upgrade": "Vedi i piani e passa a un piano superiore",
       "opensNewTab": "(si apre in una nuova scheda)",
@@ -124,7 +124,8 @@
       "moreLabel": "Installate e richieste",
       "tabs": {
         "mini_app": "Mini app",
-        "integration": "Integrazioni"
+        "integration": "Integrazioni",
+        "addon": "Componenti aggiuntivi"
       },
       "installed": "Installate",
       "installedLimit": "Installate ({installed} di {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "In corso",
       "noCheckout": "Il checkout non è disponibile per questa app al momento. Riprova tra poco."
+    },
+    "tools": {
+      "open": "Apri",
+      "empty": {
+        "title": "Nessun componente aggiuntivo disponibile",
+        "message": "I componenti inclusi nel tuo ruolo e nel tuo piano appariranno qui."
+      },
+      "soon": "In arrivo",
+      "upgrade": "Passa a un piano superiore"
     }
   }
 }

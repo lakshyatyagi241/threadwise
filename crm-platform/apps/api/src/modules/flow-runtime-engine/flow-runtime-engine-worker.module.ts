@@ -1,5 +1,6 @@
 import { Inject, Module, type OnModuleInit } from '@nestjs/common';
 import { CampaignsModule, CAMPAIGN_FLOW_STARTER, NoFlowStarter } from '../campaigns';
+import { ContactConsentModule } from '../contact-consent';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { ShopifyWoocommerceModule } from '../shopify-woocommerce';
@@ -15,6 +16,8 @@ import { FlowRunRetentionService } from './runtime/flow-run-retention.service';
 import { FlowSweeperService } from './runtime/flow-sweeper.service';
 import { FlowInboundService } from './triggers/inbound.service';
 import { FlowScheduleSweeper } from './triggers/schedule.sweeper';
+import { LeadFlowConsumer } from './triggers/lead-flow.consumer';
+import { RoutingFlowConsumer } from './triggers/routing-flow.consumer';
 import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
 
 /**
@@ -26,6 +29,7 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
   imports: [
     FlowRuntimeEngineModule,
     ChatConversationsModule,
+    ContactConsentModule,
     CampaignsModule,
     CatalogProductsModule,
     CommerceNodesModule,
@@ -38,6 +42,8 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     FlowRunRetentionService,
     FlowInboundService,
     FlowTriggerEventsConsumer,
+    RoutingFlowConsumer,
+    LeadFlowConsumer,
     FlowScheduleSweeper,
     CommerceResume,
     CatalogCartResume,

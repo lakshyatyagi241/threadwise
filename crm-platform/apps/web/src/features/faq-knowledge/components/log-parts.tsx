@@ -1,19 +1,26 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { FaqLogItem } from '@crm/contracts';
 import { Badge, Button, Modal, Spinner } from '@crm/ui';
 import { useFaqList } from '../api/hooks';
-import { pct, tierKey, verdictOf, verdictTone } from '../lib/decision';
+import { originKey, pct, tierKey, verdictTone, verdictWithCheck } from '../lib/decision';
 import { EMPTY_FILTERS } from '../lib/list-model';
 import { whyKey } from '../lib/log-model';
 import { SearchIcon } from './icons';
 import { useDebounced } from './parts';
 
-export function OutcomeBadge({ outcome }: { outcome: FaqLogItem['outcome'] }) {
+/** The outcome of a row; with the row's second-check result a veto reads "Answer withheld" instead of "Below threshold". */
+export function OutcomeBadge({
+  outcome,
+  verify,
+}: {
+  outcome: FaqLogItem['outcome'];
+  verify?: FaqLogItem['verify'];
+}) {
   const t = useTranslations('faq.decision.verdict');
-  const v = verdictOf(outcome);
+  const v = verdictWithCheck({ outcome, verify });
   return <Badge tone={verdictTone(v)}>{t(`${v}.title`)}</Badge>;
 }
 
@@ -22,7 +29,10 @@ export function WhyText({ row, threshold }: { row: FaqLogItem; threshold?: numbe
   const t = useTranslations('faq.log.why');
   // Without the workspace bar to compare with, a "below the 0% bar" sentence would be wrong: say less instead.
   const key = whyKey(row);
-  const name = key === 'belowThreshold' && threshold === undefined ? 'belowThresholdNoBar' : key;
+  const name =
+    threshold === undefined && (key === 'belowThreshold' || key === 'vetoed')
+      ? (`${key}NoBar` as const)
+      : key;
   return (
     <p className="text-sm text-muted-foreground">
       {t(name, {
@@ -35,6 +45,13 @@ export function WhyText({ row, threshold }: { row: FaqLogItem; threshold?: numbe
       {row.error && <> {t('error', { error: row.error })}</>}
     </p>
   );
+}
+
+/** Marks a row that is not a customer's message: a playground test or a match a flow's FAQ step ran. */
+export function OriginTag({ origin }: { origin: FaqLogItem['origin'] }) {
+  const t = useTranslations('faq.log');
+  const key = originKey(origin);
+  return key ? <span className="ms-2 text-xs text-muted-foreground">{t(key)}</span> : null;
 }
 
 /** The candidates a decision considered, best first. */
@@ -78,6 +95,13 @@ export function FaqPickerModal({
   const [search, setSearch] = useState('');
   const debounced = useDebounced(search);
   const list = useFaqList(EMPTY_FILTERS, debounced, open);
+  const searchRef = useRef<HTMLInputElement>(null);
+  // The dialog moves focus to its Close button when it opens, after `autoFocus` ran: ask again once it is on screen.
+  useEffect(() => {
+    if (!open) return;
+    const id = requestAnimationFrame(() => searchRef.current?.focus());
+    return () => cancelAnimationFrame(id);
+  }, [open]);
   return (
     <Modal open={open} onClose={onClose} title={title} size="md" closeLabel={t('close')}>
       <div className="space-y-3">
@@ -88,6 +112,7 @@ export function FaqPickerModal({
           <SearchIcon className="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             id="faq-picker-search"
+            ref={searchRef}
             type="search"
             autoFocus
             value={search}

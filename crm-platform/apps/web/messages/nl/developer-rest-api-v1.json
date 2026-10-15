@@ -96,8 +96,7 @@
       "unexpected": "Er ging iets mis aan onze kant. Probeer het zo meteen opnieuw.",
       "loadFailed": "Je API-sleutel kon niet worden geladen.",
       "retry": "Opnieuw proberen",
-      "upgrade": "Abonnementen bekijken",
-      "requestId": "Verzoek-ID: {id}"
+      "upgrade": "Abonnementen bekijken"
     }
   }
 }

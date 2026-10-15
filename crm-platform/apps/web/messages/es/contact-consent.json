@@ -1,0 +1,340 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Descartar",
+      "retry": "Reintentar",
+      "loading": "Cargando..."
+    },
+    "errors": {
+      "network": "No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "No tienes permiso para hacer esto.",
+      "notFound": "Este contacto ya no existe.",
+      "conflict": "Otra persona modificó esto mientras lo editabas. Recarga e inténtalo de nuevo.",
+      "noteRequired": "Indica por qué el contacto aceptó (qué dijo o firmó, y dónde) antes de registrar el consentimiento.",
+      "settingsInvalid": "Una palabra clave necesita al menos una letra o un dígito, y debe quedar al menos una palabra clave STOP mientras la detección esté activada.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "validation": "Algunos valores no son válidos. Revisa el formulario e inténtalo de nuevo.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo.",
+      "exportInProgress": "Ya se está preparando un archivo de prueba. Espera a que termine y vuelve a intentarlo.",
+      "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara uno nuevo.",
+      "noticeTargetMissing": "Ese widget, página de reservas o tienda ya no existe."
+    },
+    "settings": {
+      "title": "Consentimiento y respuestas STOP",
+      "subtitle": "Elige las palabras que dan de baja o de alta a un contacto, qué respondemos, la línea de baja para mensajes de marketing y si el marketing requiere un consentimiento registrado.",
+      "exportProof": "Exportar prueba de consentimiento (CSV)",
+      "discard": "Descartar cambios",
+      "save": "Guardar cambios",
+      "saved": "Ajustes de consentimiento guardados.",
+      "conflict": "Otra persona guardó estos ajustes primero. El formulario ahora muestra lo almacenado.",
+      "conflictOk": "Aceptar",
+      "problems": {
+        "noOptOutWord": "Agrega al menos una palabra clave STOP o desactiva la detección.",
+        "badLang": "Un código de idioma se ve así: en, ar o pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Política de marketing",
+      "requireConsent": "Exigir consentimiento registrado para envíos de marketing",
+      "requireConsentHint": "Desactivado: el marketing llega a todos los contactos que no se han dado de baja. Activado: solo a contactos con consentimiento registrado. Las audiencias de campañas y difusiones muestran cuántos se omitieron.",
+      "withdrawnAlways": "Los contactos que se dieron de baja siempre se omiten, sin importar este interruptor."
+    },
+    "detect": {
+      "title": "Respuestas STOP y START",
+      "enabled": "Detectar respuestas STOP y START",
+      "enabledHint": "Cuando un contacto envía solo una de las palabras de abajo, se le da de baja o de alta en ese canal.",
+      "autoReply": "Enviar una respuesta de confirmación",
+      "autoReplyHint": "Una respuesta corta de texto libre dentro de la ventana de 24 horas, enviada una vez por cada cambio. No es una campaña y no cuenta como marketing.",
+      "rule": "El mensaje completo debe ser la palabra clave: se ignoran mayúsculas, espacios, puntuación, emojis y diacríticos árabes. \"Por favor deja de enviarme facturas\" o \"no pares\" no coinciden, así nadie se da de baja por accidente."
+    },
+    "lang": {
+      "groupLabel": "Palabras y respuestas para {lang}",
+      "title": "Idioma",
+      "remove": "Quitar idioma",
+      "optOutWords": "Palabras clave STOP (baja)",
+      "optInWords": "Palabras clave START (alta)",
+      "wordsHint": "Una por línea.",
+      "optOutReply": "Respuesta tras STOP",
+      "optInReply": "Respuesta tras START",
+      "replyHint": "Puedes usar '{{name}}' para el nombre del contacto. Explica cómo volver a suscribirse.",
+      "footer": "Línea de baja para mensajes de marketing",
+      "footerHint": "Se agrega al final de los textos de marketing. Indica la palabra que deben enviar.",
+      "add": "Agregar un idioma",
+      "addHint": "Un código de idioma como fr o pt-BR.",
+      "invalid": "Usa un código como fr o pt-BR.",
+      "addButton": "Agregar"
+    },
+    "footer": {
+      "title": "La línea de baja",
+      "intro": "Los editores de difusiones y campañas pueden agregar esta línea al final de los textos de marketing para que los destinatarios sepan que pueden responder STOP. Las plantillas aprobadas nunca se modifican: incluye la línea en la propia plantilla.",
+      "defaultOn": "Avisar cuando un texto de marketing no tiene línea de baja",
+      "defaultOnHint": "El editor muestra una advertencia y un botón para agregarla con un clic.",
+      "noneSet": "No hay línea de baja definida para ningún idioma.",
+      "previewLabel": "Lo que ve el destinatario",
+      "sample": "Nuestras rebajas de primavera empiezan hoy. Visítanos esta semana."
+    },
+    "test": {
+      "title": "Probar un mensaje",
+      "intro": "Escribe lo que un contacto podría enviar y mira qué pasaría. No se cambia ni se envía nada. Usa las palabras de arriba, incluso antes de guardar.",
+      "label": "Mensaje de un contacto",
+      "run": "Probar",
+      "failed": "No se pudo ejecutar la prueba. Inténtalo de nuevo.",
+      "outcome": {
+        "opts_out": "Esto da de baja al contacto del marketing.",
+        "opts_in": "Esto vuelve a dar de alta al contacto.",
+        "no_match": "No pasa nada: el mensaje no es una palabra clave.",
+        "detection_off": "No pasa nada: la detección está desactivada."
+      },
+      "matched": "Coincide con la palabra clave \"{keyword}\" ({lang}).",
+      "replyLabel": "El contacto recibe",
+      "noReply": "No se envía ninguna respuesta."
+    },
+    "card": {
+      "title": "Consentimiento",
+      "status": {
+        "optedOut": "Dado de baja",
+        "subscribed": "Suscrito",
+        "none": "Sin consentimiento registrado"
+      },
+      "export": "Exportar prueba (CSV)",
+      "markSubscribed": "Marcar como suscrito",
+      "markUnsubscribed": "Marcar como dado de baja",
+      "loading": "Cargando consentimiento...",
+      "noneRecorded": "No hay consentimiento registrado para este contacto. Los envíos de marketing siguen la política de tu espacio de trabajo.",
+      "perChannel": "Consentimiento por canal",
+      "timeline": "Historial de consentimiento",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "Correo electrónico",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Chat web",
+        "voice": "Llamada de voz",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "state": {
+        "granted": "suscrito",
+        "withdrawn": "dado de baja",
+        "utilityGranted": "aceptó mensajes de servicio",
+        "utilityWithdrawn": "mensajes de servicio detenidos"
+      },
+      "action": {
+        "granted": "Suscrito",
+        "withdrawn": "Dado de baja",
+        "utilityGranted": "Aceptó que le contacten sobre su solicitud",
+        "utilityWithdrawn": "Detuvo los mensajes de servicio"
+      },
+      "source": {
+        "form": "Formulario",
+        "keyword": "Respuesta con palabra clave",
+        "manual": "Registrado por una persona",
+        "import": "Importación",
+        "api": "API",
+        "flow": "Flujo",
+        "inbound_message": "Mensaje",
+        "contact_request": "Solicitud del contacto",
+        "legacy": "Antes del historial de consentimiento",
+        "widget": "Chat del sitio web",
+        "booking": "Página de reservas",
+        "commerce": "Pago en la tienda",
+        "lead": "Captación de leads"
+      },
+      "by": "por {name}",
+      "evidence": {
+        "consentText": "Texto mostrado",
+        "consentVersion": "Versión",
+        "consentHash": "Hash",
+        "formId": "Formulario",
+        "submissionId": "Envío",
+        "messageId": "Mensaje",
+        "keyword": "Palabra clave",
+        "fileName": "Archivo",
+        "apiKeyId": "Clave de API",
+        "flowId": "Flujo",
+        "reference": "Referencia",
+        "noticeVersion": "Versión del aviso",
+        "noticeUrl": "Enlace del aviso",
+        "widgetId": "Widget de chat",
+        "bookingTypeId": "Página de reservas",
+        "integrationId": "Tienda",
+        "storeFlag": "Ajuste de la tienda",
+        "leadSourceId": "Origen del lead",
+        "leadFormId": "Formulario de lead",
+        "adId": "Anuncio"
+      },
+      "dialog": {
+        "titleGranted": "Marcar como suscrito",
+        "titleWithdrawn": "Marcar como dado de baja",
+        "introGranted": "Registra que este contacto aceptó recibir mensajes de marketing. El motivo se conserva como prueba.",
+        "introWithdrawn": "Registra que este contacto ya no quiere mensajes de marketing. Todas las campañas y difusiones lo omitirán.",
+        "channel": "Canal",
+        "noteRequired": "¿Por qué? (obligatorio)",
+        "noteOptional": "Nota (opcional)",
+        "noteHint": "Por ejemplo: firmó el formulario en papel en el mostrador, o aceptó por correo el 3 de marzo.",
+        "confirm": "Guardar",
+        "cancel": "Cancelar",
+        "close": "Cerrar",
+        "savedGranted": "Marcado como suscrito.",
+        "savedWithdrawn": "Marcado como dado de baja."
+      }
+    },
+    "composer": {
+      "add": "Agregar la línea de baja",
+      "missing": "Este mensaje de marketing no explica cómo darse de baja. Agrega una línea como \"Responde STOP para darte de baja\".",
+      "addButton": "Agregar la línea",
+      "templateHint": "Las plantillas quedan fijas tras su aprobación. Para indicar que pueden darse de baja, incluye una línea como \"{line}\" en la propia plantilla.",
+      "footerSuggestion": "Sugerido para una plantilla de marketing: «{line}»",
+      "footerUse": "Usarlo como pie de página"
+    },
+    "import": {
+      "legend": "Consentimiento",
+      "label": "Tengo consentimiento para enviar mensajes a estos contactos",
+      "hint": "Si se marca, todos los contactos del archivo quedan registrados como que aceptaron recibir marketing, con el nombre del archivo como prueba. Si no se marca, la importación no registra ningún consentimiento. Los contactos que se dieron de baja siguen dados de baja.",
+      "hintColumn": "La columna asignada al consentimiento de marketing decide quién se registra: solo las filas que dicen sí obtienen un consentimiento, con el nombre del archivo como prueba. Un no, una celda vacía o una palabra desconocida no registran nada. Los contactos que se dieron de baja siguen dados de baja.",
+      "columnSummary": "{granted} filas dicen sí y se registrarán. {notGranted} dicen no o están vacías y no reciben ningún registro de consentimiento.",
+      "unrecognised": "{count, plural, one {# fila tiene} other {# filas tienen}} un valor de consentimiento que no es sí ni no ({values}). {count, plural, one {Se trata} other {Se tratan}} como no concedido. Usa yes / no, true / false o 1 / 0.",
+      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba.",
+      "noticeText": "Aviso o base legal (opcional)",
+      "noticeTextHint": "A qué accedieron estos contactos y dónde, por ejemplo: se suscribieron en el pago con el aviso de privacidad v3. Se guarda como prueba con cada consentimiento registrado.",
+      "noticeVersion": "Versión del aviso (opcional)",
+      "smsSummary": "Columna de consentimiento SMS: {granted} filas dicen sí y se registrarán como consentimiento SMS. {notGranted} dicen no o están en blanco.",
+      "emailSummary": "Columna de consentimiento de correo: {granted} filas dicen sí y se registrarán como consentimiento de correo (la fila también necesita una dirección de correo). {notGranted} dicen no o están en blanco.",
+      "labelNumbers": "Tengo consentimiento para escribir a estos números",
+      "hintNumbers": "Marcada, cada número del archivo se registra como que aceptó marketing al lanzar la difusión, con el nombre del archivo como prueba. Sin marcar, no se registra consentimiento. Quienes se dieron de baja siguen de baja."
+    },
+    "systemLine": {
+      "withdrawn": "El contacto respondió {keyword}: se dio de baja del marketing",
+      "granted": "El contacto respondió {keyword}: volvió a suscribirse al marketing"
+    },
+    "proof": {
+      "title": "Archivos de prueba preparados",
+      "prepare": "Preparar el archivo de prueba completo",
+      "preparing": "Preparando el archivo de prueba",
+      "largeHint": "El registro tiene más de {max} eventos, así que el archivo se prepara en segundo plano",
+      "large": "El registro tiene más de {max} eventos, más de lo que admite una descarga directa. Prepara el archivo completo: se genera en segundo plano y recibirás un correo cuando esté listo.",
+      "none": "Todavía no hay archivos preparados.",
+      "keptFor": "Un archivo preparado se puede descargar durante {days} días y después se elimina. Solo se prepara un archivo a la vez.",
+      "rows": "{count, plural, one {# evento} other {# eventos}}",
+      "expires": "disponible hasta {date}",
+      "download": "Descargar CSV",
+      "failed": "No se pudo generar el archivo. Vuelve a prepararlo.",
+      "status": {
+        "queued": "En espera",
+        "running": "Generando",
+        "ready": "Listo",
+        "failed": "Fallido",
+        "expired": "Caducado"
+      }
+    },
+    "unsubscribe": {
+      "title": "Darse de baja de los correos de marketing",
+      "intro": "Confirma que ya no quieres recibir correos de marketing de este negocio. Seguirás recibiendo mensajes sobre tus pedidos y citas.",
+      "confirm": "Darme de baja",
+      "working": "Dando de baja...",
+      "doneTitle": "Te has dado de baja",
+      "doneBody": "Ya no recibirás mensajes de marketing de este negocio.",
+      "already": "Ya te habías dado de baja.",
+      "invalidTitle": "Este enlace no es válido",
+      "invalidBody": "El enlace de baja está incompleto o fue modificado. Usa el enlace del último correo que recibiste.",
+      "error": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Permitido: el aviso se entregó primero.",
+        "consent_evidence_recorded": "Permitido: el aviso se entregó y la persona aceptó.",
+        "purpose_not_enabled": "No permitido: el espacio de trabajo no lo ha activado.",
+        "consent_declined": "No permitido: la persona rechazó.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "Línea de consentimiento en el formulario del chat",
+        "booking": "Línea de consentimiento en la página de reservas",
+        "commerce": "Qué significa la casilla de marketing de la tienda",
+        "workspace": "Aviso de consentimiento predeterminado"
+      },
+      "intro": {
+        "widget": "Se muestra como una casilla bajo los datos del visitante. Solo se registra como que acepta quien la marca, y solo si dio un teléfono o un correo.",
+        "booking": "Se muestra como una casilla en el formulario de reserva. Solo se registra como que acepta quien la marca; reservar nunca la exige.",
+        "commerce": "Un cliente que acepta marketing en su tienda se registra como que acepta. Escriba lo que esa casilla le dice, para que la prueba lo nombre.",
+        "workspace": "El texto que tu espacio de trabajo muestra junto a una casilla de consentimiento cuando un formulario, widget o página de reservas no tiene uno propio. Cada cambio es una nueva versión numerada."
+      },
+      "enabled": "Línea de consentimiento activada",
+      "text": "Texto que la persona acepta",
+      "textHint": "Hasta {max} caracteres. Cada cambio se guarda como una versión nueva.",
+      "textRequired": "Escriba el texto antes de activar la línea.",
+      "url": "Enlace a su política de privacidad (opcional)",
+      "urlHint": "Debe empezar por https://",
+      "save": "Guardar la línea de consentimiento",
+      "saved": "Línea de consentimiento guardada (versión {version}).",
+      "version": "Versión actual: {version}",
+      "noVersion": "Aún no guardada.",
+      "saveFirst": "Guarde esto primero y luego podrá definir su línea de consentimiento.",
+      "whatsappToo": "Contar también como consentimiento de WhatsApp (solo si el texto lo dice)",
+      "termsUrl": "Enlace a tus términos (opcional)",
+      "termsUrlHint": "Debe empezar por https://",
+      "useWorkspacePrivacy": "Usar el enlace de privacidad de mi espacio de trabajo",
+      "useWorkspaceTerms": "Usar el enlace de términos de mi espacio de trabajo",
+      "useWorkspaceText": "Usar el texto predeterminado de mi espacio de trabajo"
+    }
+  }
+}

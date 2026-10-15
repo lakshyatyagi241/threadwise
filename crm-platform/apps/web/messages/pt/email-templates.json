@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Modelos de e-mail"
+    },
+    "common": {
+      "dismiss": "Dispensar"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Modelos de e-mail",
+      "subtitle": "E-mails reutilizáveis com assunto, texto formatado e variáveis. Insira um deles em uma resposta pelo editor de e-mail.",
+      "newTemplate": "Novo modelo",
+      "loading": "Carregando modelos…",
+      "emptyTitle": "Ainda não há modelos de e-mail",
+      "empty": "Escreva um e-mail uma única vez, com variáveis como o primeiro nome do contato, e reutilize em qualquer conversa por e-mail.",
+      "emptyFilteredTitle": "Nenhum modelo encontrado",
+      "emptyFiltered": "Tente outra busca ou limpe os filtros.",
+      "clearFilters": "Limpar filtros",
+      "unavailableTitle": "Os modelos de e-mail não estão disponíveis",
+      "unavailable": "Este workspace não consegue acessar o serviço de modelos de e-mail no momento.",
+      "showing": "{count, plural, one {Exibindo # modelo} many {Exibindo # de modelos} other {Exibindo # modelos}}",
+      "loadMore": "Carregar mais",
+      "loadingMore": "Carregando…",
+      "noPermission": "Você pode usar os modelos compartilhados pelo seu workspace e manter os seus. Peça a um administrador se precisar alterar os compartilhados."
+    },
+    "toolbar": {
+      "search": "Buscar modelos",
+      "searchPlaceholder": "Buscar por nome, assunto ou categoria",
+      "scope": "De quem",
+      "scopes": {
+        "all": "Todos",
+        "shared": "Compartilhados",
+        "mine": "Meus"
+      },
+      "purpose": "Tipo",
+      "anyPurpose": "Qualquer tipo",
+      "purposes": {
+        "general": "Geral",
+        "marketing": "Marketing"
+      },
+      "status": "Status",
+      "statuses": {
+        "active": "Ativos",
+        "archived": "Arquivados",
+        "all": "Todos"
+      },
+      "category": "Categoria",
+      "anyCategory": "Qualquer categoria",
+      "refresh": "Atualizar"
+    },
+    "card": {
+      "subject": "Assunto",
+      "noSubject": "Sem assunto: a resposta mantém o próprio",
+      "badges": {
+        "shared": "Compartilhado",
+        "mine": "Meu",
+        "marketing": "Marketing",
+        "archived": "Arquivado"
+      },
+      "used": "{count, plural, =0 {Nunca usado} one {Usado uma vez} many {Usado # de vezes} other {Usado # vezes}}",
+      "lastUsed": "Último uso: {date}",
+      "by": "Por {name}",
+      "variables": "Variáveis: {list}",
+      "edit": "Editar",
+      "archive": "Arquivar",
+      "restore": "Restaurar",
+      "delete": "Excluir",
+      "preview": "Mostrar prévia",
+      "hidePreview": "Ocultar prévia"
+    },
+    "delete": {
+      "title": "Excluir este modelo?",
+      "message": "\"{name}\" será removido para todos que podem usá-lo. Os e-mails já enviados com ele não são afetados.",
+      "confirm": "Excluir",
+      "cancel": "Cancelar"
+    },
+    "editor": {
+      "eyebrow": "Modelo de e-mail",
+      "newTitle": "Novo modelo de e-mail",
+      "editTitle": "Editar modelo de e-mail",
+      "close": "Fechar",
+      "name": "Nome",
+      "namePlaceholder": "Boas-vindas após o cadastro",
+      "subject": "Assunto",
+      "subjectPlaceholder": "Boas-vindas ao {workspace}, {name}",
+      "subjectHint": "Opcional. Se ficar vazio, a resposta mantém o próprio assunto.",
+      "body": "Mensagem",
+      "bodyPlaceholder": "Escreva o e-mail. Use as variáveis abaixo para personalizá-lo.",
+      "category": "Categoria",
+      "categoryPlaceholder": "Integração",
+      "categoryList": "Categorias em uso",
+      "purpose": "Tipo",
+      "purposes": {
+        "general": {
+          "label": "Geral",
+          "hint": "Respostas e e-mails individuais. Enviado como qualquer resposta."
+        },
+        "marketing": {
+          "label": "Marketing",
+          "hint": "E-mail promocional. Exige o consentimento de marketing do contato quando o seu workspace pedir, e sempre inclui um link para cancelar a inscrição."
+        }
+      },
+      "scope": "Quem pode usar",
+      "scopes": {
+        "shared": {
+          "label": "Todos no workspace",
+          "hint": "Um modelo compartilhado. Somente quem gerencia modelos pode alterá-lo."
+        },
+        "mine": {
+          "label": "Somente eu",
+          "hint": "Um modelo pessoal. Ninguém mais o vê."
+        }
+      },
+      "variables": "Inserir uma variável",
+      "variablesHint": "As variáveis são preenchidas com dados do contato, seus e do workspace quando o modelo é usado. Uma variável sem valor fica como foi escrita para você corrigir.",
+      "variableGroups": {
+        "contact": "Contato",
+        "agent": "Você",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Insere no campo {field}",
+      "fields": {
+        "subject": "assunto",
+        "body": "mensagem"
+      },
+      "save": "Salvar alterações",
+      "create": "Criar modelo",
+      "cancel": "Cancelar",
+      "problems": {
+        "required": "Este campo é obrigatório.",
+        "tooLong": "Está muito longo (no máximo {limit} caracteres).",
+        "subjectLines": "O assunto deve ter uma única linha."
+      }
+    },
+    "preview": {
+      "title": "Prévia com dados de exemplo",
+      "subjectLabel": "Assunto",
+      "noSubject": "(sem assunto)",
+      "empty": "Escreva a mensagem para ver uma prévia.",
+      "loading": "Atualizando a prévia…",
+      "failed": "Não foi possível atualizar a prévia.",
+      "issues": "{count, plural, one {Esta variável não tem valor de exemplo e fica como foi escrita: {list}} many {Estas variáveis não têm valor de exemplo e ficam como foram escritas: {list}} other {Estas variáveis não têm valor de exemplo e ficam como foram escritas: {list}}}",
+      "sampleNote": "Apenas valores de exemplo. Os valores reais vêm do contato quando você usa o modelo."
+    },
+    "picker": {
+      "button": "Modelos",
+      "title": "Modelos de e-mail",
+      "search": "Buscar modelos",
+      "searchPlaceholder": "Buscar modelos",
+      "loading": "Carregando modelos…",
+      "empty": "Ainda não há modelos. Crie-os em Modelos de e-mail, no menu do CRM.",
+      "emptyFiltered": "Nenhum modelo corresponde à sua busca.",
+      "loadError": "Não foi possível carregar os modelos.",
+      "marketing": "Marketing",
+      "mine": "Meus",
+      "replaceTitle": "Substituir o que você escreveu?",
+      "replaceMessage": "Usar \"{name}\" substitui a mensagem na caixa e o assunto, se o modelo tiver um.",
+      "replaceConfirm": "Substituir",
+      "replaceCancel": "Cancelar",
+      "used": "Usando o modelo \"{name}\"",
+      "marketingNote": "Este é um e-mail de marketing: segue as suas regras de consentimento e inclui um link para cancelar a inscrição.",
+      "forget": "Parar de usar este modelo",
+      "more": "Carregar mais"
+    },
+    "toast": {
+      "created": "Modelo criado",
+      "updated": "Modelo salvo",
+      "archived": "Modelo arquivado",
+      "restored": "Modelo restaurado",
+      "deleted": "Modelo excluído"
+    },
+    "errors": {
+      "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
+      "forbidden": "Você não tem permissão para fazer isso.",
+      "signedOut": "Sua sessão foi encerrada. Entre novamente para continuar.",
+      "conflict": "Outra pessoa alterou este modelo. A versão dela foi carregada; revise e tente novamente.",
+      "validation": "Alguns dados informados não são válidos. Verifique os campos e tente novamente.",
+      "unavailable": "Os modelos de e-mail não estão disponíveis no momento.",
+      "rateLimited": "Muitas solicitações. Aguarde um instante e tente novamente.",
+      "notFound": "Este modelo não existe mais.",
+      "planDisabled": "Seu plano não inclui e-mail. Faça upgrade do plano para usar modelos de e-mail.",
+      "nameTaken": "Você já tem um modelo com este nome. Escolha outro nome.",
+      "notEditable": "Somente quem gerencia modelos de e-mail pode alterar um modelo compartilhado.",
+      "archived": "Este modelo está arquivado. Restaure-o para usá-lo.",
+      "unexpected": "Algo deu errado. Tente novamente.",
+      "retry": "Tentar novamente"
+    }
+  }
+}

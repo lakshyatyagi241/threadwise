@@ -46,7 +46,6 @@
         "copyFailed": "복사할 수 없습니다",
         "loading": "로드 중",
         "retry": "다시 시도",
-        "requestId": "요청 ID",
         "errors": {
           "forbidden": "현재 역할로는 허용되지 않습니다.",
           "request": "요청이 거부되었습니다. 페이지를 새로고침하고 다시 시도하세요.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "운영자 로그인",
         "intro": "이 콘솔은 플랫폼을 운영하는 사람을 위한 곳입니다. 워크스페이스 사용자는 메인 로그인 페이지에서 로그인하세요.",
-        "requestId": "요청 ID",
         "submit": "로그인",
         "submitting": "로그인 중",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "내 계정",
         "title": "2단계 인증",
         "description": "인증 앱으로 {email}을(를) 보호하세요. 운영자 계정은 플랫폼에서 신뢰도가 가장 높은 계정입니다.",
-        "requestId": "요청 ID",
         "status": {
           "title": "인증 앱",
           "on": "켜짐",
@@ -181,7 +178,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "처리 중",
             "close": "닫기",
             "signInAgain": "다시 로그인",
-            "requestId": "요청 ID",
             "errors": {
               "forbidden": "슈퍼 관리자만 이 작업을 실행할 수 있습니다.",
               "unexpected": "작업이 완료되지 않았습니다. 다시 시도하기 전에 이벤트 로그를 확인하세요."
@@ -731,7 +726,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "/legal/terms 같은 사이트 경로 또는 전체 http/https 주소를 사용하세요.",
           "senderFormat": "목록에서 발신자를 선택하세요.",
           "countryFormat": "두 글자 국가 코드를 사용하세요.",
-          "senderRequired": "템플릿을 만들기 전에 발신 채널을 선택하세요."
+          "senderRequired": "템플릿을 만들기 전에 발신 채널을 선택하세요.",
+          "domainFormat": "{entry}은(는) 올바른 도메인이 아닙니다. example.com 같은 이름을 사용하세요.",
+          "tooMany": "도메인은 {max}개까지 가능합니다."
         },
         "policy": {
           "kicker": "가입",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "최대 시도 횟수"
+          },
+          "businessEmailOnly": {
+            "label": "업무용 이메일 주소만",
+            "hintOn": "Gmail, Outlook, Yahoo 같은 무료 서비스는 가입 시 거부됩니다.",
+            "hintOff": "누구나 무료 개인 주소로 가입할 수 있습니다."
+          },
+          "blockDisposableEmail": {
+            "label": "임시 이메일 차단",
+            "hintOn": "일회용·임시 도메인과 메일 서버가 없는 도메인은 거부됩니다.",
+            "hintOff": "임시 주소도 허용됩니다."
+          },
+          "requirePhoneVerification": {
+            "label": "인증된 휴대폰 번호 필수",
+            "hintOn": "모든 가입은 일회용 코드를 확인해야 합니다. 코드를 보낼 수 없으면 확인을 건너뛰지 않고 가입이 중단됩니다.",
+            "hintOff": "아래 가입 코드가 켜져 있을 때만 코드 단계가 실행됩니다."
+          },
+          "blockedEmailDomains": {
+            "label": "항상 차단할 도메인",
+            "hint": "한 줄에 도메인 하나. 하위 도메인도 차단됩니다. '업무용 이메일 주소만'이 꺼져 있어도 거부됩니다.",
+            "placeholder": "example.com"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "테스트 코드를 {to}(으)로 보냈습니다.",
             "remaining": "{count, plural, other {이번 시간에 남은 테스트 #회.}}",
             "notShown": "코드는 여기에 표시되지 않습니다. 휴대폰에서 확인하세요.",
-            "requestId": "요청 ID",
             "errors": {
               "invalidNumber": "국가 번호를 포함해 번호를 입력하세요(예: +91 98765 43221).",
               "rateLimited": "이번 시간의 테스트 코드 전송 횟수를 초과했습니다. {minutes, plural, other {#분}} 후에 다시 시도하세요.",
@@ -1045,7 +1060,6 @@
           "saved": "발신자가 저장되었습니다",
           "removed": "발신자가 제거되었습니다",
           "secretRemoved": "저장된 시크릿이 제거되었습니다",
-          "requestId": "요청 ID",
           "problems": {
             "required": "필수 입력 항목입니다.",
             "tooLong": "최대 {max}자까지 입력할 수 있습니다.",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "해당 푸터는 허용되지 않습니다.",
             "unexpected": "푸터를 저장할 수 없습니다. 잠시 후 다시 시도하세요."
-          },
-          "requestId": "요청 ID"
+          }
+        },
+        "guard": {
+          "kicker": "가입 보호",
+          "title": "업무용 이메일 및 휴대폰 확인",
+          "description": "일회용 주소와 개인 주소를 막고 모든 새 계정에 인증된 휴대폰 번호가 있도록 합니다. 이메일 및 소셜 가입에 적용됩니다.",
+          "phoneOffWarning": "휴대폰 확인을 끄면 인증된 번호 없이 계정을 만들 수 있어 대량 가짜 가입이 쉬워집니다."
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "취소",
           "working": "제거 중",
           "error": "시크릿을 제거할 수 없습니다. 잠시 후 다시 시도하세요.",
-          "requestId": "요청 ID",
           "done": "저장된 {name} 시크릿이 제거되었습니다.",
           "names": {
             "google": "Google",
@@ -1416,10 +1433,13 @@
             "storefront_builder": "온라인 스토어프론트 빌더입니다.",
             "invoicing": "인보이스, 대변 전표, 결제, 판매 주문, 세율입니다.",
             "forms_and_links": "리드 수집 양식 및 공유 가능한 링크입니다.",
-            "extra_channels": "Telegram, Facebook, Instagram 채널입니다.",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber, WeChat 채널입니다.",
             "form_builder": "CRM에서 연락처를 생성하는 호스팅 및 임베드 웹 양식입니다. 유료 양식 앱이 이 스위치를 관리합니다.",
             "waba_groups": "Cloud API 번호로 WhatsApp 그룹을 만들고 관리합니다: 초대 링크, 가입 요청, 멤버. 번호는 공식 비즈니스 계정이어야 합니다.",
-            "sms": "Twilio 또는 MSG91을 통한 발송 전용 SMS: 발신자를 연결하고 SMS 브로드캐스트와 캠페인을 보냅니다."
+            "sms": "Twilio 또는 MSG91을 통한 발송 전용 SMS: 발신자를 연결하고 SMS 브로드캐스트와 캠페인을 보냅니다.",
+            "help_agent": "앱 안의 도움말 어시스턴트: 사용자가 하고 싶은 일을 평범한 말로 요청하면 본인 세션에서 안내하거나 대신 처리하며, 위험한 작업 전에는 먼저 물어봅니다. AI 토큰을 사용합니다.",
+            "email_channel": "Gmail 및 Google Workspace 메일함을 팀 받은편지함에 연결합니다. 이 스위치는 유료 이메일 앱이 관리합니다.",
+            "personal_history_full": "개인 WhatsApp 번호를 처음 연결할 때 전체 채팅 기록을 가져올 수 있습니다. 최근 채팅 가져오기는 개인 번호를 지원하는 모든 요금제에서 사용할 수 있습니다."
           },
           "units": {
             "days": "일",
@@ -1561,7 +1581,9 @@
             "forms": "웹 양식",
             "form_submissions_monthly": "월별 양식 제출",
             "ai_form_generations_monthly": "월별 AI 양식 빌더 생성",
-            "sms_monthly": "월간 SMS"
+            "sms_monthly": "월간 SMS",
+            "email_mailboxes": "이메일 메일함",
+            "email_monthly": "월간 이메일"
           },
           "featureGroups": {
             "messaging": "메시징",
@@ -1596,10 +1618,13 @@
             "storefront_builder": "스토어프론트 및 웹사이트 빌더",
             "invoicing": "인보이스(인보이스, 대변 전표, 정기 인보이스)",
             "forms_and_links": "양식, 클릭하여 채팅 링크 및 그룹",
-            "extra_channels": "Telegram, Facebook, Instagram 채널",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber, WeChat 채널",
             "form_builder": "양식(웹 양식 빌더)",
             "waba_groups": "WhatsApp 그룹(Cloud API)",
-            "sms": "SMS 채널"
+            "sms": "SMS 채널",
+            "help_agent": "도움말 어시스턴트(AI, 토큰 사용)",
+            "email_channel": "이메일(Gmail) 채널",
+            "personal_history_full": "전체 채팅 기록 가져오기 (개인 WhatsApp)"
           },
           "problems": {
             "required": "필수 입력 항목입니다.",
@@ -1652,7 +1677,9 @@
             "forms": "활성 웹 양식입니다(양식 앱). 양식을 보관하면 자리가 반환됩니다. 0 = 무제한.",
             "form_submissions_monthly": "해당 월에 접수된 양식 제출이며 스팸은 제외됩니다. 한도를 초과해도 제출은 검토용으로 저장되며 삭제되지 않습니다. 0 = 무제한.",
             "ai_form_generations_monthly": "해당 월의 AI 양식 빌더 생성 횟수이며 복구 재시도를 포함합니다. 0 = 무제한.",
-            "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한."
+            "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한.",
+            "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
+            "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한."
           }
         }
       },
@@ -1664,7 +1691,6 @@
         "saving": "저장 중",
         "saved": "{count, plural, other {설정 #개 저장됨}}",
         "rejected": "저장된 항목이 없습니다. {count, plural, other {필드 #개가}} 거부되었습니다.",
-        "requestId": "요청 ID",
         "unsaved": "{count, plural, other {저장하지 않은 변경 #개}}",
         "discard": "변경 사항 취소",
         "errors": {

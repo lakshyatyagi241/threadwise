@@ -18,9 +18,23 @@ const WEB = resolve(__dirname, '../../..');
 const ROOT_KEY = 'calling-voice';
 
 type Tree = { [key: string]: string | Tree };
-const tree = JSON.parse(
-  readFileSync(join(WEB, 'messages', 'en', 'calling-voice.json'), 'utf8'),
-) as Tree;
+function merge(a: Tree, b: Tree): Tree {
+  const out: Tree = { ...a };
+  for (const [k, v] of Object.entries(b)) {
+    const cur = out[k];
+    out[k] = typeof v === 'object' && typeof cur === 'object' ? merge(cur, v) : v;
+  }
+  return out;
+}
+// The domain's slices: `calling-voice.json` and `calling-voice.<part>.json` (the call log and the analytics).
+const tree = readdirSync(join(WEB, 'messages', 'en'))
+  .filter((f) => /^calling-voice(\.[a-z]+)?\.json$/.test(f))
+  .sort()
+  .reduce<Tree>(
+    (all, f) =>
+      merge(all, JSON.parse(readFileSync(join(WEB, 'messages', 'en', f), 'utf8')) as Tree),
+    {},
+  );
 
 function flatten(t: Tree, prefix = ''): Record<string, string> {
   const out: Record<string, string> = {};
@@ -61,7 +75,7 @@ describe('calling-voice messages', () => {
     expect(at('toast.noPhone')).toBe('No phone number on this contact.');
     expect(at('toast.noNumber')).toBe('Calling is not enabled on any WABA number.');
     expect(at('toast.alreadyPermitted')).toBe(
-      'This contact already allows calls - starting the call...',
+      'This contact already allows calls. Press Call to start the call.',
     );
     expect(at('toast.permissionSent')).toBe(
       'Permission request sent. They will see Accept/Decline in WhatsApp - try Call again after they respond.',
@@ -132,8 +146,10 @@ describe('message keys used in code', () => {
   it('are all used (no dead strings)', () => {
     // The nav label is read by the menu from `nav.ts`, not by a component.
     const used = new Set(files.flatMap((f) => usedKeys(readFileSync(f, 'utf8'))));
-    // Keys built at run time: failures.*, errors.* (see use-error-text.ts).
-    const dynamic = /^calling-voice\.(failures\.|errors\.|nav\.)/;
+    // Keys built at run time: failures.*, errors.* (see use-error-text.ts), and the call log's words picked by a status, a range, a
+    // direction, a reason or a ledger step; and the readiness card's words, picked by a status, a row, a code or a reason.
+    const dynamic =
+      /^calling-voice\.(failures\.|errors\.|nav\.|logs\.(status|range)\.(?!title|all|custom|from|to|apply)|logs\.(filters|table)\.(inbound|outbound)$|logs\.table\.(customer|number|handledBy|started|duration|status)$|logs\.detail\.(reasons|steps)\.|recording\.(settings\.(modeHint|modeOption)|lifecycle\.(method|deletedReason))\.|readiness\.(status|statusHint|state|checks|codes|reasons)\.)/;
     const dead = Object.keys(en).filter((k) => !used.has(k) && !dynamic.test(k));
     expect(dead).toEqual([]);
   });

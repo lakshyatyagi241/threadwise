@@ -1,0 +1,216 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "AI potansiyel müşteri puanlama"
+    },
+    "common": {
+      "loading": "Yükleniyor",
+      "retry": "Tekrar dene",
+      "dash": "-",
+      "cancel": "İptal",
+      "errors": {
+        "forbidden": "Bunu yapmak için izniniz yok.",
+        "request": "Bu istek tamamlanamadı.",
+        "unexpected": "Bizim tarafımızda bir sorun oluştu. Birazdan tekrar deneyin.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "validation": "Bazı değerler geçerli değil. Vurgulanan alanları kontrol edin.",
+        "notFound": "Bu öğe artık mevcut değil."
+      }
+    },
+    "page": {
+      "eyebrow": "Yönetim · AI · Potansiyel müşteri puanlama",
+      "title": "AI potansiyel müşteri puanlama",
+      "description": "Çalışma alanlarının kişilerini bir AI modeliyle puanlayıp puanlayamayacağını, hangi modelin kullanıldığını, limitleri ve maliyeti denetler.",
+      "superOnly": "AI potansiyel müşteri puanlamayı yalnızca süper yönetici görebilir veya değiştirebilir."
+    },
+    "status": {
+      "label": "Puanlama durumu",
+      "switch": {
+        "title": "Platform anahtarı",
+        "on": "Açık",
+        "off": "Kapalı",
+        "hintOn": "Katılmayı seçen çalışma alanları kişilerini puanlayabilir.",
+        "hintOff": "Kendi ayarı ne olursa olsun hiçbir çalışma alanı kişileri puanlayamaz."
+      },
+      "model": {
+        "title": "Model",
+        "custom": "Elle girilmiş, listede olmayan bir model."
+      },
+      "key": {
+        "title": "Platform OpenRouter anahtarı",
+        "ready": "Hazır",
+        "missing": "Eksik",
+        "explainReady": "Kendi OpenRouter anahtarı olmayan çalışma alanları bu anahtarla puanlanır ve bu puanların ücretini siz ödersiniz.",
+        "explainMissing": "Platform anahtarı yoksa yalnızca kendi OpenRouter anahtarını kaydetmiş çalışma alanları kişileri puanlayabilir.",
+        "link": "AI anahtarlarını aç"
+      },
+      "reach": {
+        "title": "Kapsam",
+        "workspaces": "Katılan çalışma alanları",
+        "contacts": "Puanlanan kişiler"
+      }
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "description": "Değişiklikler tüm çalışma alanlarına aynı anda uygulanır. Yalnızca değiştirdiğiniz alanlar kaydedilir.",
+      "enabled": {
+        "label": "AI potansiyel müşteri puanlama",
+        "hint": "Varsayılan olarak kapalıdır. Açıkken, katılmayı seçen çalışma alanları anonimleştirilmiş kişi bilgilerini OpenRouter'a gönderip 0 ile 100 arasında bir puan alır. Tüm puanlamayı durdurmak için kapatın."
+      },
+      "model": {
+        "label": "Model",
+        "hint": "Fiyatlar, OpenRouter listesine göre milyon token başına ABD dolarıdır.",
+        "option": "{label} · {input} in / {output} out",
+        "other": "Başka bir OpenRouter model kimliği",
+        "details": "Milyon giriş tokeni başına {input}, milyon çıkış tokeni başına {output}.",
+        "customLabel": "OpenRouter model kimliği",
+        "customHint": "OpenRouter'daki, yapılandırılmış çıktıyı destekleyen herhangi bir model kimliği.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Limitler",
+        "scoresPerHour": "Çalışma alanı başına saatlik puan sayısı",
+        "scoresPerHourHint": "Platform anahtarını kullanan çalışma alanları için bir maliyet sınırı. 0 sınırsız demektir.",
+        "retentionDays": "Günlüğü şu süre sakla (gün)",
+        "retentionDaysHint": "Daha eski çalıştırmalar ve maliyet geçmişleri silinir. 7 ile 730 gün arası."
+      },
+      "saving": "Kaydediliyor",
+      "save": "Değişiklikleri kaydet",
+      "reset": "Değişiklikleri at",
+      "changed": "{count, plural, one {# değişiklik kaydedilmeye hazır} other {# değişiklik kaydedilmeye hazır}}",
+      "unchanged": "Kaydedilecek değişiklik yok.",
+      "saved": "Puanlama ayarları kaydedildi.",
+      "errors": {
+        "range": "{min} ile {max} arasında bir değer girin.",
+        "integer": "Tam sayı girin.",
+        "modelId": "openai/gpt-6-luna gibi bir OpenRouter model kimliği kullanın.",
+        "invalid": "Bu değer geçerli değil."
+      },
+      "confirm": {
+        "title": "Değişikliği onaylayın",
+        "turnOn": "Bu, katılmayı seçen çalışma alanlarının anonimleştirilmiş kişi bilgilerini OpenRouter'a göndermesine ve platform anahtarınızın kredisini harcamasına izin verir.",
+        "turnOff": "Bu, tüm çalışma alanları için AI puanlamayı durdurur. Kaydedilmiş puanlar korunur.",
+        "confirm": "Değişiklikleri kaydet"
+      }
+    },
+    "cost": {
+      "title": "Puanlamanın maliyeti",
+      "description": "Puanlama günlüğünden toplamlar, ABD doları cinsinden.",
+      "last24h": "Son 24 saat",
+      "last30d": "Son 30 gün",
+      "scores": "Yazılan puanlar",
+      "failed": "Başarısız çalıştırmalar",
+      "tokens": "Token",
+      "tokensSplit": "Giriş / çıkış tokeni",
+      "total": "Toplam maliyet",
+      "average": "Puan başına ortalama",
+      "platform": "Platform anahtarıyla ödenen",
+      "footnote": "Maliyetler, OpenRouter'ın bildirdiği tutardır; hiçbir şey bildirmediyse token sayılarından yapılan bir tahmindir. Bir çalışma alanının kendi anahtarına faturalanan çalıştırmalar toplama dahildir ancak platformun payına dahil değildir."
+    },
+    "workspaces": {
+      "title": "Çalışma alanları",
+      "description": "AI puanlamayı kimlerin kullandığı ve son 30 günde ne kadar tuttuğu, en yüksekten başlayarak.",
+      "search": "Çalışma alanı ara",
+      "searchPlaceholder": "Çalışma alanı adı",
+      "limit": "Satır",
+      "limitOption": "{count} satır",
+      "noMatchTitle": "Eşleşen çalışma alanı yok",
+      "noMatchMessage": "Farklı bir ad deneyin.",
+      "clearSearch": "Aramayı temizle",
+      "emptyTitle": "Henüz çalışma alanı yok",
+      "emptyMessage": "Çalışma alanları oluşturulunca burada görünür.",
+      "tableLabel": "Puanlama maliyetine göre çalışma alanları",
+      "columns": {
+        "name": "Çalışma alanı",
+        "enabled": "Puanlama",
+        "contacts": "Puanlanan kişiler",
+        "scores": "Puanlar, 30 gün",
+        "cost": "Maliyet, 30 gün"
+      },
+      "enabled": "Açık",
+      "disabled": "Kapalı"
+    },
+    "runs": {
+      "title": "Puanlama günlüğü",
+      "description": "Tüm çalışma alanlarındaki her puanlama denemesi, en yeniden başlayarak; token, maliyet ve ödeyen bilgisiyle.",
+      "refresh": "Yenile",
+      "filters": {
+        "status": "Durum",
+        "anyStatus": "Tüm durumlar",
+        "workspace": "Çalışma alanı",
+        "anyWorkspace": "Tüm çalışma alanları",
+        "clear": "Filtreleri temizle"
+      },
+      "status": {
+        "ok": "Puanlandı",
+        "kept": "Korundu",
+        "failed": "Başarısız",
+        "skipped": "Atlandı"
+      },
+      "trigger": {
+        "created": "Kişi oluşturuldu",
+        "updated": "Kişi güncellendi",
+        "manual": "Puanla düğmesi",
+        "backfill": "Toplu geçmiş puanlama"
+      },
+      "scoreWas": "{score} (önceki {previous})",
+      "tokensTitle": "{input} giriş, {output} çıkış",
+      "costSource": {
+        "vendor": "Bildirilen",
+        "estimate": "Tahmin",
+        "none": "Çağrı yok"
+      },
+      "costSourceHelp": {
+        "vendor": "OpenRouter'ın bu çağrı için bildirdiği maliyet.",
+        "estimate": "Maliyet bildirilmediği için bu, token sayısı çarpı modelin liste fiyatıdır.",
+        "none": "Çağrı yapılmadığı için ücret alınmadı."
+      },
+      "paidBy": {
+        "admin": "Platform",
+        "workspace": "Çalışma alanı",
+        "none": "Kimse"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "Platform anahtarı kapalı",
+        "not_enabled": "Çalışma alanı katılmadı",
+        "contact_gone": "Kişi silindi",
+        "manual_score": "Kişinin elle girilmiş bir puanı var",
+        "no_key": "OpenRouter anahtarı yok",
+        "token_allowance": "Token hakkı tükendi",
+        "hourly_limit": "Saatlik limite ulaşıldı",
+        "auth": "OpenRouter anahtarı reddetti",
+        "rate_limited": "OpenRouter hız sınırı",
+        "provider": "OpenRouter hatası",
+        "timeout": "OpenRouter zaman aşımına uğradı",
+        "bad_response": "Yanıt geçerli bir puan değildi"
+      },
+      "noMatchTitle": "Eşleşen çalıştırma yok",
+      "noMatchMessage": "Bu filtrelerle eşleşen puanlama çalıştırması yok.",
+      "emptyTitle": "Henüz çalıştırma yok",
+      "emptyMessage": "Bir çalışma alanı kişiyi puanladığında çalıştırmalar burada görünür.",
+      "tableLabel": "Puanlama çalıştırmaları",
+      "columns": {
+        "time": "Zaman",
+        "workspace": "Çalışma alanı",
+        "contact": "Kişi",
+        "trigger": "Tetikleyici",
+        "status": "Durum",
+        "score": "Puan",
+        "model": "Model",
+        "tokens": "Token",
+        "cost": "Maliyet",
+        "paidBy": "Ödeyen",
+        "duration": "Süre",
+        "error": "Neden"
+      },
+      "costLegend": "Maliyetin önündeki ~ işareti, OpenRouter'ın bildirdiği tutar yerine token sayılarından yapılmış bir tahmini gösterir.",
+      "loadMore": "Daha fazla yükle",
+      "loadingMore": "Yükleniyor"
+    }
+  }
+}

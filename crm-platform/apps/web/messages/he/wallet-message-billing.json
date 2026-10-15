@@ -754,7 +754,6 @@
     "common": {
       "loading": "טוען",
       "retry": "נסה שוב",
-      "requestId": "מזהה בקשה",
       "cancel": "ביטול",
       "back": "חזרה",
       "close": "סגור",

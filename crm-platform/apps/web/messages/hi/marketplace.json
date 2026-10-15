@@ -10,13 +10,13 @@
       "install": "इंस्टॉल · Marketplace",
       "installed": "इंस्टॉल हो चुका · Marketplace",
       "manage": "ऐप प्रबंधित करें · Marketplace",
-      "requests": "अनुरोध · Marketplace"
+      "requests": "अनुरोध · Marketplace",
+      "addons": "ऐड-ऑन · Marketplace"
     },
     "common": {
       "dismiss": "खारिज करें",
       "loading": "लोड हो रहा है",
       "errorTitle": "यह लोड नहीं हो सका",
-      "requestId": "अनुरोध आईडी",
       "retry": "फिर कोशिश करें",
       "upgrade": "प्लान देखें और अपग्रेड करें",
       "opensNewTab": "(नए टैब में खुलेगा)",
@@ -124,7 +124,8 @@
       "moreLabel": "इंस्टॉल किए गए और अनुरोध",
       "tabs": {
         "mini_app": "मिनी ऐप्स",
-        "integration": "इंटीग्रेशन"
+        "integration": "इंटीग्रेशन",
+        "addon": "ऐड-ऑन"
       },
       "installed": "इंस्टॉल किए गए",
       "installedLimit": "इंस्टॉल किए गए ({installed} में से {limit})",
@@ -865,6 +866,15 @@
       },
       "working": "प्रक्रिया जारी है",
       "noCheckout": "इस ऐप के लिए अभी चेकआउट उपलब्ध नहीं है। कुछ देर बाद फिर कोशिश करें।"
+    },
+    "tools": {
+      "open": "खोलें",
+      "empty": {
+        "title": "कोई ऐड-ऑन उपलब्ध नहीं",
+        "message": "आपकी भूमिका और प्लान में शामिल ऐड-ऑन यहाँ दिखेंगे।"
+      },
+      "soon": "जल्द आ रहा है",
+      "upgrade": "अपग्रेड करें"
     }
   }
 }

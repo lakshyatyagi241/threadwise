@@ -189,3 +189,23 @@ describe('discount spread and the lines the sales order is made from', () => {
     expect(specs.every((s) => s.tax?.items[0]?.ratePercent === '10')).toBe(true);
   });
 });
+
+describe('itemFacts: variant lines', () => {
+  it('puts the variant title in the sales-order / invoice line name', () => {
+    const f = itemFacts(
+      [
+        {
+          name: 'T-shirt',
+          variant_title: 'M / Red',
+          qty: 1,
+          price_minor: 100,
+          retailer_id: 'TS-1',
+        },
+        { name: 'Mug', qty: 1, price_minor: 50 },
+      ],
+      [],
+    );
+    expect(f.map((x) => x.name)).toEqual(['T-shirt (M / Red)', 'Mug']);
+    expect(f[0]!.sku).toBe('TS-1');
+  });
+});

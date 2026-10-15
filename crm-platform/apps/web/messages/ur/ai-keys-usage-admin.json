@@ -14,7 +14,6 @@
     "common": {
       "loading": "لوڈ ہو رہا ہے",
       "retry": "دوبارہ کوشش کریں",
-      "requestId": "درخواست آئی ڈی",
       "dismiss": "مسترد کریں",
       "tokens": "{count, number} ٹوکنز",
       "dash": "-",

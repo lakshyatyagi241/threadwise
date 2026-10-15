@@ -14,12 +14,11 @@
       "copy": "Copy",
       "copied": "Copied",
       "copyFailed": "Could not copy. Select the key and copy it by hand.",
-      "reference": "Reference for support: {id}",
       "back": "Back to integrations"
     },
     "page": {
       "title": "Google Sheets add-on",
-      "subtitle": "Pull and push contacts and sync products between a spreadsheet and your workspace.",
+      "subtitle": "Send new and changed sheet rows to your workspace as contacts, pull contacts into a sheet and sync products.",
       "loading": "Loading the add-on setup",
       "retry": "Retry",
       "status": {
@@ -51,7 +50,7 @@
     },
     "key": {
       "title": "Your key",
-      "intro": "The add-on uses your personal key to act as you. It sees only what your role allows.",
+      "intro": "The add-on uses your personal key to act as you. It sees only what your role allows. The key is the last part of your Webhook URL.",
       "none": "You have no key yet.",
       "generate": "Generate key",
       "rotate": "Generate a new key",
@@ -61,8 +60,8 @@
       "created": "Created {when}",
       "lastUsed": "Last used {when}",
       "neverUsed": "Never used",
-      "newTitle": "Your new key",
-      "newWarning": "Copy it now. It is shown only once and cannot be shown again. Anyone with this key can act as you in the add-on.",
+      "newTitle": "Your new key and Webhook URL",
+      "newWarning": "Copy them now. The key and the Webhook URL are shown only once and cannot be shown again. Anyone with them can act as you in the add-on.",
       "rotatedNote": "Your previous key stopped working.",
       "keyLabel": "New key",
       "confirmRotate": {
@@ -86,7 +85,8 @@
         "rateLimited": "Too many requests. Wait a moment and try again.",
         "network": "We could not reach the server. Check your connection and try again.",
         "unexpected": "Something went wrong on our side. Try again."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "What your key can do",
@@ -109,12 +109,12 @@
     },
     "steps": {
       "title": "Set it up in a spreadsheet",
-      "one": "Open a spreadsheet, then Extensions, then Apps Script.",
-      "two": "Download the six files above. In Project Settings show the appsscript.json file, and paste appsscript.json and Code.gs over the ones in the editor.",
-      "three": "Add three HTML files named Dialog, Settings and Help and paste the downloaded files into them.",
-      "four": "Save and reload the spreadsheet. A CRM menu appears. Allow the three permissions Google asks for.",
-      "five": "Choose CRM, then Settings, paste your key and select Save and check.",
-      "six": "Row 1 of your sheet holds the column names. Then use Pull contacts, Push contacts or Sync products from the CRM menu."
+      "one": "Copy your Webhook URL when you create your key. It is shown once.",
+      "two": "In a spreadsheet choose Extensions, then Add-ons, then Get add-ons, and install the add-on from the Google Workspace Marketplace. Until it is listed there, paste the six files below into Extensions, Apps Script.",
+      "three": "Reload the spreadsheet. Choose Extensions, then the add-on, then Initial Setup, and paste the Webhook URL.",
+      "four": "Pick the sheet and the trigger column. A row is sent when that cell is filled or changed.",
+      "five": "Select Send Test to check the connection. Nothing is saved; you see the columns the CRM received. Then select Submit.",
+      "six": "Switch on Send on event (a row is sent as soon as you edit it) and/or Send on schedule (every hour, rows changed by a form or another app). Each row arrives as a contact and its result is written to a CRM status column."
     },
     "columns": {
       "title": "Columns the add-on reads",
@@ -134,6 +134,22 @@
       "title": "Recent products",
       "empty": "No products yet. Sync a sheet to add some.",
       "count": "{count, plural, one {# product in your workspace} other {# products in your workspace}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Paste this into Initial Setup in the add-on. It carries your key, so keep it private.",
+      "none": "Create a key to get your Webhook URL.",
+      "capture": {
+        "title": "Last data received",
+        "none": "Nothing received yet. In the add-on choose Initial Setup, then Send Test.",
+        "when": "{event} from {sheet}, {when}. {rows, plural, one {# row} other {# rows}}.",
+        "noSheet": "an unnamed sheet",
+        "events": {
+          "test": "Test",
+          "edit": "Edit",
+          "schedule": "Hourly sweep"
+        }
+      }
     }
   }
 }

@@ -5,8 +5,7 @@
       "loading": "Loading",
       "retry": "Try again",
       "copied": "Copied",
-      "copyFailed": "Could not copy: select the text and copy it by hand",
-      "requestId": "Reference: {id}"
+      "copyFailed": "Could not copy: select the text and copy it by hand"
     },
     "states": {
       "noAccessTitle": "You do not have access to Social leads",

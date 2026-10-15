@@ -10,6 +10,7 @@ import {
 import {
   EXT_SHEETS_MAX_BODY_BYTES,
   FORM_SUBMIT_MAX_BODY_BYTES,
+  HELP_AGENT_MAX_BODY_BYTES,
   LEAD_HOOK_MAX_BODY_BYTES,
   MARKET_HOOK_MAX_BYTES,
 } from '@crm/contracts';
@@ -54,6 +55,12 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
       pattern: under('api/v1/sheets-addon'),
       bytes: EXT_SHEETS_MAX_BODY_BYTES,
     },
+    // The Help assistant's model call carries the visible text of a page. Authenticated and throttled; bounded by the contract's number.
+    {
+      name: 'help-agent',
+      pattern: under('help-agent/chat/completions'),
+      bytes: HELP_AGENT_MAX_BODY_BYTES,
+    },
     {
       name: 'marketplace-hook',
       pattern: under('public/marketplace'),
@@ -70,6 +77,7 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
             'facebook',
             'instaflow',
             'telegram/inbound',
+            '(?:line|viber|wechat)/inbound',
             'shopify/(?:webhook|compliance)',
             'woocommerce/webhook',
             'campaigns/node',

@@ -9,7 +9,6 @@
       "breadcrumb": "パンくず",
       "loading": "読み込み中…",
       "retry": "再試行",
-      "requestId": "リクエストID",
       "cancel": "キャンセル",
       "close": "閉じる",
       "dismiss": "閉じる",
@@ -102,7 +101,8 @@
         "added": "{name}をワークスペースに追加しました。",
         "rolesUpdated": "{name}のロールを更新しました。",
         "deactivated": "{name}を無効にしました。",
-        "reactivated": "{name}を再有効化しました。"
+        "reactivated": "{name}を再有効化しました。",
+        "invited": "{name} に招待を送信しました。"
       },
       "deactivate": {
         "action": "無効化",
@@ -123,7 +123,13 @@
         "passwordShort": "パスワードは8文字以上にしてください。",
         "generate": "生成",
         "role": "ロール",
-        "submit": "メンバーを追加"
+        "submit": "メンバーを追加",
+        "inviteHint": "本人がパスワードを設定するためのリンクをメールで送ります。リンクは一度だけ有効で、数日後に期限切れになります。",
+        "submitInvite": "招待を送信",
+        "linkNotSent": "{email} へのメールを送信できませんでした。このリンクをコピーして渡してください。再表示されません。",
+        "copyLink": "リンクをコピー",
+        "copied": "コピーしました",
+        "done": "完了"
       },
       "changeRole": {
         "title": "{name}のロールを変更",

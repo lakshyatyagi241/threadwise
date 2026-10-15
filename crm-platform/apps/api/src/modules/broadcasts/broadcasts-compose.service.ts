@@ -5,10 +5,13 @@ import type {
   BroadcastComposeQuery,
   ComposeSender,
   ComposeTemplate,
+  SenderHidden,
 } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlatformSettingsService } from '../auth';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
@@ -21,6 +24,7 @@ const ENGINE_LABEL: Record<string, string> = {
   waba: 'Meta',
   twilio: 'Twilio',
   sms: 'SMS',
+  email: 'Email',
 };
 const WA_CATEGORIES = new Set(['marketing', 'utility', 'authentication']);
 
@@ -79,9 +83,10 @@ interface SenderRaw {
  *
  * Templates follow Reference's `approved` scope: on a Meta (WABA) workspace only those Meta approved (a Meta id and status
  * APPROVED, not paused); on any other engine the locally approved or public ones. A template tied to a WABA number that is no
- * longer connected is hidden. Senders are the connected numbers of every engine except SMS (that channel has its own card),
- * default engine first. `channel=sms` is that card (TW-SMS-016): the SMS senders and the SMS templates only, and nothing at all
- * while the platform switch `sms_enabled` is off.
+ * longer connected is hidden. Senders are the connected numbers of every engine except SMS and Email (those channels have their own
+ * cards), default engine first. `channel=sms` is that card (TW-SMS-016): the SMS senders and the SMS templates only, and nothing at
+ * all while the platform switch `sms_enabled` is off. `channel=email` is the Email card: the connected mailboxes the person may send
+ * from, no templates (an email campaign is a typed message), and nothing at all when the plan has no Email add-on.
  */
 @Injectable()
 export class BroadcastsComposeService {
@@ -90,11 +95,13 @@ export class BroadcastsComposeService {
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     private readonly settings: PlatformSettingsService,
+    private readonly entitlements: PlanEntitlementService,
   ) {}
 
   async compose(query: BroadcastComposeQuery = {}): Promise<BroadcastCompose> {
     const { orgId } = RequestContextStore.require();
     if (query.channel === 'sms') return this.composeSms(orgId);
+    if (query.channel === 'email') return this.composeEmail(orgId);
     // Personal numbers are not offered, and `baileys` is not the default engine, while the platform switch is off or the workspace is not allowed.
     const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
@@ -136,6 +143,7 @@ export class BroadcastsComposeService {
 
       const twilio = await tx.execute(sql`
         SELECT 1 FROM wa_provider_configs WHERE org_id = ${orgId} AND provider = 'twilio' AND status = 'connected' LIMIT 1`);
+      const hidden = await this.hiddenSenders(tx, orgId, unofficialOn);
 
       return {
         templates: (tpl.rows as unknown as TemplateRaw[]).map((r): ComposeTemplate => ({
@@ -163,16 +171,60 @@ export class BroadcastsComposeService {
           engineLabel: ENGINE_LABEL[r.engine] ?? r.engine,
           isDefault: r.engine === defaultEngine,
         })),
+        hidden,
         twilioEnabled: twilio.rows.length > 0,
       };
     });
+  }
+
+  /**
+   * The numbers the workspace has that the list leaves out, counted by engine and reason (never a number, label or secret), so an
+   * empty list can say why. It reads the same rows the list filters: personal devices (all of them while the unofficial engine is off for
+   * the workspace, else the ones not connected or inactive) and Meta or Twilio configs that are not `connected` (pending, failed, other).
+   * `providers` is the scope: the WhatsApp composer's engines, or `sms` for the SMS card.
+   */
+  private async hiddenSenders(
+    tx: Tx,
+    orgId: number,
+    unofficialOn: boolean,
+    scope: 'whatsapp' | 'sms' = 'whatsapp',
+  ): Promise<SenderHidden[]> {
+    const out: SenderHidden[] = [];
+    if (scope === 'whatsapp') {
+      const dev = await tx.execute(sql`
+        SELECT count(*)::int AS count FROM devices
+        WHERE org_id = ${orgId} AND (NOT ${unofficialOn}::boolean OR status <> 'connected' OR NOT active)`);
+      const n = Number((dev.rows[0] as { count: number | string } | undefined)?.count ?? 0);
+      if (n > 0)
+        out.push({
+          engine: 'baileys',
+          reason: unofficialOn ? 'not_connected' : 'unofficial_disabled',
+          count: n,
+        });
+    }
+    const providers = scope === 'sms' ? sql`('sms')` : sql`('waba', 'twilio')`;
+    const cfg = await tx.execute(sql`
+      SELECT provider AS engine,
+             CASE status WHEN 'pending' THEN 'pending' WHEN 'failed' THEN 'error' ELSE 'not_connected' END AS reason,
+             count(*)::int AS count
+      FROM wa_provider_configs
+      WHERE org_id = ${orgId} AND provider IN ${providers} AND status <> 'connected'
+      GROUP BY 1, 2
+      ORDER BY 1, 2`);
+    for (const r of cfg.rows as unknown as Array<{
+      engine: string;
+      reason: SenderHidden['reason'];
+      count: number | string;
+    }>)
+      out.push({ engine: r.engine, reason: r.reason, count: Number(r.count) });
+    return out;
   }
 
   /** The SMS card's composer: plain-text SMS templates (approved on save) and the connected SMS senders, oldest first. */
   private async composeSms(orgId: number): Promise<BroadcastCompose> {
     const on = await this.settings.get<unknown>('sms_enabled');
     if (!(on === true || on === 1 || on === '1' || on === 'true')) {
-      return { templates: [], senders: [], twilioEnabled: false };
+      return { templates: [], senders: [], hidden: [], twilioEnabled: false };
     }
     return this.db.tx(async (tx) => {
       const tpl = await tx.execute(sql`
@@ -186,7 +238,9 @@ export class BroadcastsComposeService {
         SELECT uuid, provider AS engine, coalesce(nullif(display_label, ''), phone_number) AS label, NULL AS country_code, phone_number
         FROM wa_provider_configs WHERE org_id = ${orgId} AND provider = 'sms' AND status = 'connected'
         ORDER BY id`);
+      const hidden = await this.hiddenSenders(tx, orgId, false, 'sms');
       return {
+        hidden,
         templates: (tpl.rows as unknown as TemplateRaw[]).map((r): ComposeTemplate => ({
           id: r.uuid,
           name: r.template_name,
@@ -214,6 +268,44 @@ export class BroadcastsComposeService {
           isDefault: true,
         })),
         twilioEnabled: false,
+      };
+    });
+  }
+
+  /**
+   * The Email card's composer: the connected mailboxes the person may send a campaign from (every shared one, and their own personal
+   * one), oldest first. There are no templates. The sender's address is shown as typed. `hidden` counts the mailboxes the person can
+   * see that cannot send, so an empty list can say why: one that needs reconnecting is an error, a disconnected one is not connected.
+   */
+  private async composeEmail(orgId: number): Promise<BroadcastCompose> {
+    const none: BroadcastCompose = { templates: [], senders: [], hidden: [], twilioEnabled: false };
+    if (!(await this.entitlements.featureEnabled(orgId, 'email_channel'))) return none;
+    const userId = RequestContextStore.require().userId;
+    return this.db.tx(async (tx) => {
+      const mine = sql`(scope = 'shared' OR (owner_user_id IS NOT NULL AND owner_user_id = ${userId}))`;
+      const snd = await tx.execute(sql`
+        SELECT uuid, coalesce(nullif(display_name, ''), address::text) AS label, address::text AS address
+        FROM mail_mailboxes WHERE org_id = ${orgId} AND status = 'connected' AND ${mine}
+        ORDER BY created_at, id`);
+      const off = await tx.execute(sql`
+        SELECT CASE status WHEN 'disconnected' THEN 'not_connected' ELSE 'error' END AS reason, count(*)::int AS count
+        FROM mail_mailboxes WHERE org_id = ${orgId} AND status <> 'connected' AND ${mine}
+        GROUP BY 1 ORDER BY 1`);
+      return {
+        ...none,
+        senders: (
+          snd.rows as unknown as Array<{ uuid: string; label: string; address: string }>
+        ).map((r): ComposeSender => ({
+          key: `email:${r.uuid}`,
+          label: r.label,
+          phone: r.address,
+          engine: 'email',
+          engineLabel: ENGINE_LABEL.email!,
+          isDefault: true,
+        })),
+        hidden: (
+          off.rows as unknown as Array<{ reason: SenderHidden['reason']; count: number | string }>
+        ).map((r): SenderHidden => ({ engine: 'email', reason: r.reason, count: Number(r.count) })),
       };
     });
   }

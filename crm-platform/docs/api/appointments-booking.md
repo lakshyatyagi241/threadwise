@@ -277,6 +277,13 @@ received: `payment.status` becomes `partial` or `paid`, and when what is due to 
 needs approval, which stays a staff decision). More than the price, a free booking and a final-status booking are refused. Cancel and
 no-show fees are only **recorded** (`payment.feeRecorded`): the customer's cancel inside the type's cancel window, and a no-show.
 
+## Consent line on the booking page (BL-167)
+
+Optional. The workspace writes it per booking type (`PUT /v2/contact-consent/notices/booking/:typeId`, versioned; the Messaging step of the
+editor embeds the editor). `GET /public/booking/:org/:type` returns `service.consent { text, version, url }` or `null`. `POST .../book` takes
+`consent { given, version }`; only a ticked box at a real, enabled version of that type's notice records a grant (source `booking`, whatsapp for a
+phone, email for an address, evidence `bookingTypeId`, `noticeVersion`, `noticeUrl`). Booking itself never needs it and never grants consent.
+
 ## The customer's side (no login)
 
 Responses carry `Cache-Control: no-store`, `X-Robots-Tag: noindex, nofollow`, `Referrer-Policy: no-referrer`. Throttled on Redis per IP and

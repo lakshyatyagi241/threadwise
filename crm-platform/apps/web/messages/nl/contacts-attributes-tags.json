@@ -21,7 +21,6 @@
       "unavailable": "Dit deel van de API is nog niet beschikbaar.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "unexpected": "Er is iets misgegaan. Probeer het opnieuw.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen",
       "reservedKey": "Die sleutel is gereserveerd voor een ingebouwd token. Kies een andere.",
       "attributeInUse": "Sommige contacten hebben een waarde voor dit kenmerk.",
@@ -121,6 +120,11 @@
       "selectedActionsNone": "Geselecteerde contacten (selecteer eerst rijen)",
       "modifyColumns": "Kolommen aanpassen",
       "resetColumns": "Standaard herstellen",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsSave": "Save",
       "colContactName": "Contactnaam",
       "colPhone": "Telefoonnummer",
       "colEmailId": "E-mailadres",
@@ -170,7 +174,42 @@
       "import": "Importeren",
       "columns": "Kolommen",
       "addColumnField": "Een aangepast veld als kolom toevoegen",
-      "kanbanView": "Bordweergave (per fase)"
+      "kanbanView": "Bordweergave (per fase)",
+      "colLeadScore": "Leadscore",
+      "colOwner": "Eigenaar",
+      "unassigned": "Niet toegewezen",
+      "ownerFilter": "Filteren op eigenaar",
+      "selectOwner": "Eigenaar",
+      "allOwners": "Alle eigenaren",
+      "myContacts": "Mijn contacten",
+      "ownersCount": "{count, plural, one {# eigenaar} other {# eigenaren}}",
+      "ownerMe": "{name} (ik)",
+      "ownerFormer": "Voormalig lid",
+      "reassignView": "Wijs de contacten van {name} opnieuw toe...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Geen telefoonnummer voor sms",
+      "pqlLabel": "Zoek contacten in gewone taal",
+      "pqlAsk": "Vragen",
+      "pqlAsking": "Bezig met vragen...",
+      "pqlIgnored": "Niet begrepen: {parts}",
+      "pqlNothing": "Uit deze zoekopdracht kon geen filter worden gemaakt.",
+      "pqlFailed": "Zoeken in gewone taal is nu niet beschikbaar. Probeer het opnieuw.",
+      "filter": "Filter",
+      "filterAi": "Filteren met AI",
+      "filterAiHint": "Beschrijf wie je zoekt",
+      "filterAdvanced": "Geavanceerd filter toevoegen",
+      "quickFilters": "Snelfilters",
+      "sortButton": "Sorteren",
+      "back": "Terug",
+      "pqlPromptPlaceholder": "Beschrijf de contacten die je wilt...",
+      "pqlTry": "Probeer er een",
+      "pqlExample2": "30 dagen niet actief",
+      "pqlExample3": "In de afgelopen 7 dagen aangemaakt",
+      "clearFilter": "Filter wissen",
+      "conditionsChip": "Voorwaarden: {count}",
+      "pqlExampleTag": "Contacten met tag {tag} die 30 dagen niet actief zijn",
+      "pqlExampleStage": "{stage}-contacten van de afgelopen 7 dagen",
+      "pqlExampleNoOwner": "Contacten zonder eigenaar"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -215,7 +254,6 @@
       "exportStarted": "Je export is gedownload.",
       "exportTooLarge": "Dat zijn te veel contacten om in één keer te exporteren. Beperk het filter en probeer het opnieuw.",
       "update": "Bijwerken",
-      "updateNeedsRows": "Kies rijen",
       "updated": "{count, plural, one {# contact bijgewerkt.} other {# contacten bijgewerkt.}}"
     },
     "form": {
@@ -304,7 +342,13 @@
       "statusNoticeReset": "Status teruggezet naar {status}.",
       "statusNoticeSet": "Status ingesteld op {status}, de standaard voor deze fase.",
       "statusNoticeCleared": "Status gewist: hij is niet van toepassing op deze fase.",
-      "statusNoneForStage": "Voor deze fase is geen status ingesteld."
+      "statusNoneForStage": "Voor deze fase is geen status ingesteld.",
+      "owner": "Eigenaar",
+      "ownerNone": "Niet toegewezen",
+      "ownerMe": "{name} (ik)",
+      "ownerFormer": "Voormalig lid",
+      "ownerHelp": "Wie zich om dit contact bekommert. Je kunt alleen mensen kiezen die je toegang toestaat.",
+      "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen."
     },
     "tags": {
       "title": "Tags",
@@ -320,7 +364,12 @@
       "addPlaceholder": "Voeg een tag toe of kies er een...",
       "addLabel": "Tagnaam",
       "add": "Tag toevoegen",
-      "failed": "De tag kon niet worden gewijzigd. Probeer het opnieuw."
+      "failed": "De tag kon niet worden gewijzigd. Probeer het opnieuw.",
+      "quickPlaceholder": "Zoek of maak een tag",
+      "create": "Tag “{name}” maken",
+      "noMatch": "Geen overeenkomende tags",
+      "quickHint": "Kies meerdere tags, of typ een naam en druk op Enter om een nieuwe tag te maken.",
+      "quickHintPick": "Kies meerdere tags uit de lijst."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
@@ -406,7 +455,10 @@
         "address": "Adres",
         "memo": "Memo",
         "status": "Status",
-        "source": "Bron"
+        "source": "Bron",
+        "consent": "Marketingtoestemming (ja / nee)",
+        "consentSms": "SMS-marketingtoestemming (ja / nee)",
+        "consentEmail": "E-mailmarketingtoestemming (ja / nee)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",
@@ -431,7 +483,7 @@
       "imported": "{count, plural, one {# contact geïmporteerd.} other {# contacten geïmporteerd.}}",
       "importedUpdated": "{count, plural, one {# bestaand contact bijgewerkt.} other {# bestaande contacten bijgewerkt.}}",
       "importedInvalid": "{count, plural, one {# ongeldige rij overgeslagen.} other {# ongeldige rijen overgeslagen.}}",
-      "downloadRejects": "Afgewezen rijen downloaden",
+      "downloadRejects": "Fouten en overgeslagen rijen downloaden",
       "fileTooLarge": "Dat bestand is groter dan {mb} MB.",
       "checking": "Bestand controleren...",
       "errorFile": "Dat bestand kon niet worden gelezen als contacten-CSV. Controleer of het een kopregel en minstens één contact heeft.",
@@ -462,7 +514,8 @@
         "group_name_too_long": "groepsnaam te lang",
         "tag_name_too_long": "tagnaam te lang",
         "plan_limit_reached": "contactlimiet van abonnement bereikt",
-        "tag_limit_reached": "taglimiet van abonnement bereikt"
+        "tag_limit_reached": "taglimiet van abonnement bereikt",
+        "duplicate_in_file": "herhaald nummer, samengevoegd met een eerdere rij"
       },
       "statusHint": "Wordt toegepast op contacten die dit bestand aanmaakt.",
       "queued": "Wachten op start...",
@@ -512,7 +565,17 @@
       "noActivity": "Nog geen activiteit voor dit contact.",
       "loadMore": "Meer laden",
       "yes": "Ja",
-      "no": "Nee"
+      "no": "Nee",
+      "owner": "Eigenaar",
+      "ownerNone": "Niet toegewezen",
+      "ownerChange": "Eigenaar wijzigen",
+      "ownerChanged": "Eigenaar ingesteld op {name}.",
+      "ownerCleared": "Eigenaar verwijderd.",
+      "ownerConflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+      "ownerForbidden": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
+      "ownerFailed": "De eigenaar kon niet worden gewijzigd. Probeer het opnieuw.",
+      "ownerMe": "{name} (ik)",
+      "ownerFormer": "Voormalig lid"
     },
     "attributes": {
       "eyebrow": "Meer / Attributen",
@@ -1137,7 +1200,11 @@
         "willClear": "Wordt leeggemaakt voor {count, plural, one {het geselecteerde contact} other {alle # geselecteerde contacten}}.",
         "requiredNoClear": "Een verplichte eigenschap kan niet worden gewist.",
         "problemEmpty": "Voer een waarde in of kies Wissen."
-      }
+      },
+      "titleAll": "Alle overeenkomende contacten bijwerken",
+      "hintAll": "Stel dezelfde waarden in voor elk contact dat overeenkomt met de huidige filters. Velden die op Behouden staan, worden niet gewijzigd.",
+      "applyAll": "Alle overeenkomende contacten bijwerken",
+      "ownerOnlyNote": "Voor alle overeenkomende contacten kan hier alleen de eigenaar worden gewijzigd. Vink de rijen aan om de fase, status of eigenschappen te wijzigen."
     },
     "kanban": {
       "board": "Contacten per fase",
@@ -1164,17 +1231,18 @@
         "updated": "Bijgewerkt",
         "rejected": "Afgewezen",
         "actions": "Acties",
-        "downloadRejects": "Afgewezen rijen downloaden",
+        "downloadRejects": "Fouten en overgeslagen rijen downloaden",
         "statuses": {
           "queued": "In wachtrij",
           "running": "Actief",
           "completed": "Voltooid",
           "failed": "Mislukt"
-        }
+        },
+        "by": "Geïmporteerd door"
       },
       "exports": {
         "title": "Exports",
-        "hint": "Contactexports vanuit de Contact Hub, nieuwste eerst. Het gedownloade bestand wordt niet bewaard.",
+        "hint": "Contactexports vanuit de Hub, nieuwste eerst. Elk bestand wordt 30 dagen bewaard, zodat jij en collega's met exportrechten het opnieuw kunnen downloaden.",
         "empty": "Nog geen exports.",
         "by": "Door",
         "rows": "Contacten",
@@ -1183,8 +1251,176 @@
         "selections": {
           "ids": "Aangevinkte contacten",
           "filter": "Alles wat overeenkomt"
-        }
+        },
+        "download": "Downloaden",
+        "noFile": "Niet opgeslagen",
+        "keptUntil": "Bewaard tot {date}",
+        "downloadFailed": "Het bestand kon niet worden gedownload. Het is mogelijk verlopen."
       }
+    },
+    "singleSend": {
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "send": "Verzenden",
+      "sending": "Bezig met verzenden",
+      "contact": "Contact",
+      "name": "Naam",
+      "phone": "Mobiel",
+      "email": "E-mail",
+      "title": {
+        "whatsapp": "WhatsApp-bericht verzenden",
+        "sms": "Sms verzenden",
+        "email": "E-mail verzenden",
+        "call": "Bellen"
+      },
+      "optedOut": "Dit contact heeft zich afgemeld voor communicatie. Er kunnen geen berichten worden verzonden.",
+      "noPhone": "Dit contact heeft geen telefoonnummer.",
+      "noEmail": "Dit contact heeft geen e-mailadres.",
+      "number": "Verzenden vanaf",
+      "numberHint": "Het WhatsApp-nummer waarmee het bericht wordt verzonden.",
+      "noChannel": "Er is geen WhatsApp-nummer gekoppeld. Koppel er eerst een in Kanalen.",
+      "template": "WhatsApp-sjabloon",
+      "templatePlaceholder": "Selecteer een sjabloon",
+      "noTemplates": "Geen goedgekeurde sjablonen voor dit nummer.",
+      "notSendable": "Dit sjabloon kan hier niet worden ingevuld ({reason}).",
+      "variables": "Sjabloonvariabelen",
+      "preview": "Voorbeeld",
+      "slot": "Variabele {key}",
+      "loading": "Laden",
+      "openFailed": "Kan het gesprek niet openen: {message}",
+      "sent": "Bericht voor {name} staat in de wachtrij.",
+      "failed": "Verzenden mislukt: {message}",
+      "callIntro": "Bel dit contact via WhatsApp vanuit de browser.",
+      "callOff": "Bellen is niet ingeschakeld voor dit WhatsApp-nummer. Schakel het in via de instellingen van het nummer.",
+      "callPermission": "Het contact heeft nog geen toestemming gegeven voor oproepen. Bij het bellen wordt eerst om toestemming gevraagd.",
+      "callReady": "Klaar om {phone} te bellen.",
+      "later": {
+        "sms": "Sms verzenden vanuit de CRM is nog niet beschikbaar.",
+        "email": "E-mail verzenden vanuit de CRM is nog niet beschikbaar."
+      },
+      "openApp": {
+        "sms": "Openen in je berichten-app",
+        "email": "Openen in je e-mailapp"
+      }
+    },
+    "views": {
+      "label": "Weergaven",
+      "all": "Alle contacten",
+      "add": "Weergave toevoegen",
+      "changed": "Filters zijn gewijzigd sinds deze weergave is opgeslagen",
+      "more": "Meer voor {name}",
+      "picker": {
+        "title": "Selecteer een weergave",
+        "create": "Nieuwe weergave maken",
+        "search": "Weergaven zoeken...",
+        "empty": "Geen weergaven gevonden",
+        "pinned": "Op tabbladen",
+        "favorites": "Favorieten",
+        "defaultFilters": "Standaardfilters",
+        "createdViews": "Gemaakte weergaven",
+        "addView": "Weergave toevoegen",
+        "markFavorite": "Markeren als favoriet",
+        "unmarkFavorite": "Verwijderen uit favorieten"
+      },
+      "menu": {
+        "rename": "Weergave hernoemen",
+        "update": "Huidige filters opslaan",
+        "unpin": "Van tabbladen verwijderen",
+        "pin": "Als tabblad tonen",
+        "delete": "Weergave verwijderen",
+        "edit": "Weergave bewerken"
+      },
+      "drawer": {
+        "editTitle": "Weergave hernoemen",
+        "name": "Naam van weergave",
+        "namePlaceholder": "Naamloze weergave",
+        "shareWith": "Delen met",
+        "justMe": "Alleen ik",
+        "everyone": "Iedereen",
+        "save": "Bijwerken",
+        "cancel": "Annuleren",
+        "close": "Sluiten"
+      },
+      "toast": {
+        "created": "Weergave \"{name}\" is gemaakt.",
+        "updated": "Weergave bijgewerkt.",
+        "filtersSaved": "Filters opgeslagen in \"{name}\".",
+        "deleted": "Weergave \"{name}\" is verwijderd.",
+        "failed": "Kan de weergave niet opslaan: {message}",
+        "conflict": "Iemand anders heeft deze weergave gewijzigd. Laad opnieuw en probeer het nog eens."
+      },
+      "delete": {
+        "title": "Deze weergave verwijderen?",
+        "message": "\"{name}\" wordt verwijderd voor iedereen met wie de weergave is gedeeld. Contacten worden niet gewijzigd.",
+        "confirm": "Weergave verwijderen",
+        "cancel": "Weergave behouden"
+      },
+      "editor": {
+        "title": {
+          "create": "Nieuwe weergave maken",
+          "edit": "Weergave bewerken"
+        },
+        "close": "Sluiten",
+        "back": "Terug naar contacten",
+        "name": "Naam van weergave",
+        "namePlaceholder": "Voer een naam voor de weergave in",
+        "favorite": "Markeren als favoriet",
+        "favoriteHint": "Een favoriete weergave krijgt een eigen tabblad.",
+        "shareWith": "Delen met",
+        "justMe": "Alleen ik",
+        "everyone": "Iedereen",
+        "filterTitle": "Contacten filteren",
+        "filterHint": "Voldoe aan alle of een van je voorwaarden en voeg groepen toe voor complexere filters.",
+        "columnsTitle": "Kolomvoorkeuren",
+        "locked": "Altijd zichtbaar",
+        "cancel": "Annuleren",
+        "create": "Weergave maken",
+        "save": "Weergave opslaan",
+        "saving": "Opslaan",
+        "needName": "Voer een naam voor de weergave in.",
+        "needFilter": "Voeg minimaal één volledige voorwaarde toe.",
+        "notFound": "Deze weergave is niet gevonden of is verwijderd.",
+        "noPermission": "Je hebt hier geen toestemming voor.",
+        "loading": "Laden",
+        "columnsHint": "Zoek en vink de kolommen aan die deze weergave toont. Sleep de gekozen kolommen om de volgorde te bepalen.",
+        "drag": "Sleep om {name} te herschikken",
+        "selectedUsers": "Geselecteerde gebruikers",
+        "accessLevel": "Toegangsniveau",
+        "canView": "Kan bekijken",
+        "canEdit": "Kan bekijken en bewerken",
+        "peoplePlaceholder": "Personen zoeken",
+        "noPeople": "Geen personen gevonden",
+        "removePerson": "{name} verwijderen",
+        "clearPeople": "Alle personen wissen",
+        "needPeople": "Kies minimaal één persoon.",
+        "onlyCreator": "Alleen de maker van deze weergave kan wijzigen met wie deze wordt gedeeld.",
+        "searchColumns": "Kolommen zoeken",
+        "noColumnMatch": "Geen kolom komt overeen.",
+        "available": "Beschikbare kolommen",
+        "selected": "Geselecteerde kolommen",
+        "selectAll": "Alles selecteren",
+        "reorder": "Sleep om kolommen te herschikken",
+        "remove": "{name} verwijderen"
+      },
+      "presets": {
+        "myContacts": "Mijn contacten",
+        "newThisWeek": "Nieuw deze week",
+        "newLastWeek": "Nieuw vorige week",
+        "recentlyCreated": "Onlangs aangemaakt",
+        "recentlyModified": "Onlangs gewijzigd",
+        "recentlyImported": "Onlangs geïmporteerd",
+        "neverContacted": "Nooit gecontacteerd",
+        "needsFollowUp": "Opvolging nodig",
+        "active": "Actief",
+        "inactive": "Inactief",
+        "unsubscribed": "Uitgeschreven"
+      }
+    },
+    "erase": {
+      "scope": "Als je een contact verwijdert, worden ook de gesprekken, berichten, media, bestanden, gespreksopnamen en gesprekslogboeken gewist. Leads, deals, taken en facturen blijven bestaan.",
+      "scopeMany": "Als je contacten verwijdert, worden ook hun gesprekken, berichten, media, bestanden, gespreksopnamen en gesprekslogboeken gewist. Leads, deals, taken en facturen blijven bestaan.",
+      "keepHistory": "Gespreksgeschiedenis bewaren zonder de identiteit van de persoon",
+      "keepHistoryHint": "De gesprekken blijven bewaard voor je administratie maar verwijzen niet meer naar de persoon."
     }
   }
 }

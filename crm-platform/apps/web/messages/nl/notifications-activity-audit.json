@@ -149,6 +149,21 @@
         "title": "{name} is weer actief",
         "titleNoName": "Een WhatsApp-groep is weer actief",
         "body": "WhatsApp heeft deze groep hersteld. Je kunt er weer berichten naartoe sturen."
+      },
+      "device_group_join_request": {
+        "title": "{count, plural, one {Iemand wil deelnemen aan {name}} other {# personen willen deelnemen aan {name}}}",
+        "titleNoName": "{count, plural, one {Iemand wil deelnemen aan een WhatsApp-groep} other {# personen willen deelnemen aan een WhatsApp-groep}}",
+        "body": "Open Groepen om goed te keuren of af te wijzen."
+      },
+      "device_group_removed": {
+        "title": "Je nummer is verwijderd uit {name}",
+        "titleNoName": "Je nummer is verwijderd uit een WhatsApp-groep",
+        "body": "Iemand heeft je persoonlijke nummer uit deze groep verwijderd. De groep wordt hier alleen-lezen bewaard."
+      },
+      "test": {
+        "title": "Testmelding",
+        "titleNoName": "Testmelding",
+        "bodyNoActor": "Als je dit kunt lezen, werken livemeldingen."
       }
     },
     "live": {
@@ -177,8 +192,13 @@
         "teamchat_message": "Nieuw direct bericht",
         "waba_group_join_request": "Verzoek om een groep te joinen",
         "waba_group_suspended": "WhatsApp-groep geschorst",
-        "waba_group_suspension_cleared": "WhatsApp-groep weer actief"
-      }
+        "waba_group_suspension_cleared": "WhatsApp-groep weer actief",
+        "device_group_join_request": "Verzoek om deel te nemen aan een groep",
+        "device_group_removed": "Verwijderd uit een WhatsApp-groep",
+        "test": "Testmelding"
+      },
+      "generic": "Je hebt een nieuwe melding",
+      "paused": "Live-updates zijn gepauzeerd, dus nieuwe meldingen kunnen tot een minuut later aankomen. Laad de pagina opnieuw om opnieuw verbinding te maken."
     },
     "prefs": {
       "title": "Meldingsvoorkeuren",
@@ -199,7 +219,9 @@
         "devices": "WhatsApp-nummers",
         "broadcasts": "Broadcasts en campagnes",
         "team_chat": "Teamchat",
-        "whatsapp_groups": "WhatsApp-groepen"
+        "whatsapp_groups": "WhatsApp-groepen",
+        "billing": "Facturatie en abonnementen",
+        "system": "Systeem"
       },
       "types": {
         "new_chat": {
@@ -298,6 +320,10 @@
           "label": "Verkoopdocument beslist",
           "hint": "Een offerte of factuur is geaccepteerd of afgewezen."
         },
+        "email_bounced": {
+          "label": "E-mail niet bezorgd",
+          "hint": "Een e-mail die je verstuurde is teruggekomen of vertraagd."
+        },
         "wallet_credited": {
           "label": "Wallet opgeladen",
           "hint": "Het walletsaldo van de workspace is bijgeschreven."
@@ -321,6 +347,38 @@
         "form_payment_duplicate": {
           "label": "Formulier twee keer betaald",
           "hint": "Een bezoeker heeft een tweede keer betaald en de extra betaling moet worden terugbetaald."
+        },
+        "billing_payment_failed": {
+          "label": "Abonnementsbetaling mislukt",
+          "hint": "Een verlengingsbetaling is niet doorgegaan en vraagt je aandacht."
+        },
+        "billing_subscription_canceled": {
+          "label": "Abonnement geannuleerd",
+          "hint": "Je betalingsprovider heeft een abonnement van deze werkruimte beëindigd."
+        },
+        "device_group_join_request": {
+          "label": "Verzoek om deel te nemen aan een groep van een persoonlijk nummer",
+          "hint": "Mensen vragen om deel te nemen aan een groep van een persoonlijk WhatsApp-nummer dat je beheert. Tien verzoeken vormen één rij."
+        },
+        "device_group_removed": {
+          "label": "Verwijderd uit een groep van een persoonlijk nummer",
+          "hint": "Iemand heeft een van je persoonlijke WhatsApp-nummers uit een groep verwijderd. Dit kan een teken zijn dat het nummer is gerapporteerd."
+        },
+        "sla_breached": {
+          "label": "SLA overschreden",
+          "hint": "Een gesprek van jou heeft het doel voor de eerste reactie of de oplossing gemist."
+        },
+        "member_leave_started": {
+          "label": "Teamlid is met verlof",
+          "hint": "Een teamlid is met verlof gegaan. Toont wat diegene beheert en een link om opnieuw toe te wijzen."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Chat die niemand kon oppakken",
+          "hint": "De routering vond niemand voor een nieuwe chat omdat de gekozen personen met verlof zijn. Wijs hem handmatig toe."
+        },
+        "test": {
+          "label": "Testmelding",
+          "hint": "De test die je verstuurt vanuit Browsermeldingen, zodat je ziet dat het belletje, de pop-up en de tabtitel werken."
         }
       },
       "loading": "Je voorkeuren laden",
@@ -400,6 +458,11 @@
           "neverUsed": "nog niet gemeld",
           "remove": "Verwijderen",
           "removeFor": "{device} verwijderen"
+        },
+        "testInApp": {
+          "watch": "Je zou een pop-up moeten zien, en het getal bij het belletje en de tabtitel veranderen.",
+          "notConnected": "Live-updates zijn op deze pagina niet verbonden, dus de pop-up kan hier niet verschijnen. Laad de pagina opnieuw en probeer het nog eens.",
+          "off": "Er is geen melding in het belletje gemaakt: het belletje staat uit voor “Testmelding” in de tabel hieronder, of is uitgezet door de eigenaar van je werkruimte."
         }
       }
     },

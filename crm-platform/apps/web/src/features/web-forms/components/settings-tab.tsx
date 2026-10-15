@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useId, useState, type ReactNode } from 'react';
 import { FORM_CAPTCHA_MODES, lifecycleStageSchema } from '@crm/contracts';
@@ -40,6 +41,8 @@ import {
 } from '../lib/settings-model';
 import type { Definition, FormCaptchaMode } from '../lib/types';
 import type { BuilderTabProps } from './builder-types';
+import { useFormProtection } from '../api/forms';
+import { useComplianceLinks } from '@/features/compliance-center/api/hooks';
 import { useFormUsers } from './forms-users';
 import { PaymentPanel } from './payment-panel';
 
@@ -343,6 +346,7 @@ export function SettingsTab(props: BuilderTabProps) {
   const { form, draft, setDraft, live, patchLive, name, setName, canEdit } = props;
   const t = useTranslations('web-forms.settings');
   const users = useFormUsers();
+  const protection = useFormProtection();
   const disabled = !canEdit;
   const published = form.publishedVersion !== null;
   const saved = form.draft;
@@ -373,6 +377,9 @@ export function SettingsTab(props: BuilderTabProps) {
   const labelIssue = submitLabelIssue(s.submitLabel);
   const redirectProblem = redirectIssue(s.successMode, s.redirectUrl);
   const privacyProblem = consent.enabled ? privacyUrlIssue(consent.privacyUrl) : null;
+  const termsProblem = consent.enabled ? privacyUrlIssue(consent.termsUrl) : null;
+  // The workspace links (Compliance center) are offered, never filled in: a role without access to them simply gets no buttons.
+  const workspaceLinks = useComplianceLinks(canEdit);
   const consentTextEmpty = consent.enabled && consent.text.trim().length === 0;
   const rangeText = { min: RETENTION_RANGE.min, max: RETENTION_RANGE.max };
 
@@ -567,6 +574,57 @@ export function SettingsTab(props: BuilderTabProps) {
                 />
               )}
             </FieldBox>
+            {workspaceLinks.data?.privacyUrl &&
+              consent.privacyUrl !== workspaceLinks.data.privacyUrl && (
+                <div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    disabled={disabled}
+                    onClick={() =>
+                      setConsent({ privacyUrl: workspaceLinks.data?.privacyUrl ?? undefined })
+                    }
+                  >
+                    {t('consent.useWorkspacePrivacy')}
+                  </Button>
+                </div>
+              )}
+            <FieldBox
+              label={t('consent.termsUrl')}
+              hint={t('consent.termsUrlHint')}
+              error={termsProblem ? t('consent.privacyUrlHttps') : undefined}
+            >
+              {(a) => (
+                <Input
+                  {...a}
+                  type="url"
+                  dir="ltr"
+                  placeholder="https://example.com/terms"
+                  value={consent.termsUrl ?? ''}
+                  disabled={disabled}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setConsent({ termsUrl: v.trim() === '' ? undefined : v });
+                  }}
+                />
+              )}
+            </FieldBox>
+            {workspaceLinks.data?.termsUrl && consent.termsUrl !== workspaceLinks.data.termsUrl && (
+              <div>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  disabled={disabled}
+                  onClick={() =>
+                    setConsent({ termsUrl: workspaceLinks.data?.termsUrl ?? undefined })
+                  }
+                >
+                  {t('consent.useWorkspaceTerms')}
+                </Button>
+              </div>
+            )}
             <SwitchRow
               label={t('consent.required')}
               hint={t('consent.requiredHint')}
@@ -581,6 +639,38 @@ export function SettingsTab(props: BuilderTabProps) {
               disabled={disabled}
               onChange={(marketing) => setConsent({ marketing })}
             />
+            {!consent.marketing && <p className={HINT}>{t('consent.serviceHint')}</p>}
+            <SwitchRow
+              label={t('consent.coversSms')}
+              hint={t('consent.coversSmsHint')}
+              checked={consent.coversSms}
+              disabled={disabled}
+              onChange={(coversSms) => setConsent({ coversSms })}
+            />
+            {consent.marketing && (
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-dashed border-border p-3">
+                <p className={`${HINT} min-w-0 flex-1`}>{t('consent.whatsappHint')}</p>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  disabled={disabled || consent.text.trim() === t('consent.whatsappWording')}
+                  onClick={() =>
+                    setDraft((d) => ({
+                      ...d,
+                      consent: consentWithText(
+                        d.consent,
+                        t('consent.whatsappWording'),
+                        saved.consent,
+                        published,
+                      ),
+                    }))
+                  }
+                >
+                  {t('consent.whatsappInsert')}
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </Section>
@@ -837,6 +927,42 @@ export function SettingsTab(props: BuilderTabProps) {
             </Select>
           )}
         </FieldBox>
+        {protection.isError && <Alert tone="warning">{t('protection.captchaStatus.failed')}</Alert>}
+        {protection.data &&
+          (protection.data.captcha.available ? (
+            <p className={HINT} data-testid="captcha-status">
+              {t('protection.captchaStatus.available', {
+                version: protection.data.captcha.version ?? '',
+              })}
+            </p>
+          ) : (
+            <Alert
+              tone={live.captchaMode === 'on' ? 'warning' : 'info'}
+              data-testid="captcha-status"
+            >
+              {live.captchaMode === 'on'
+                ? t('protection.captchaStatus.noneOn')
+                : t('protection.captchaStatus.none')}
+            </Alert>
+          ))}
+        {protection.data && (
+          <div className="space-y-1" data-testid="spam-caught">
+            <p className={HINT}>
+              {t('protection.caught.blocked', { count: protection.data.blockedThisMonth })}
+            </p>
+            {protection.data.heldAsSpam > 0 && (
+              <p className={HINT}>
+                {t('protection.caught.held', { count: protection.data.heldAsSpam })}{' '}
+                <Link
+                  href={`/forms/${form.id}/submissions?tab=spam`}
+                  className="underline focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {t('protection.caught.review')}
+                </Link>
+              </p>
+            )}
+          </div>
+        )}
 
         <div className="space-y-2">
           <NumberSetting

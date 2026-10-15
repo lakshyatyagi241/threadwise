@@ -214,7 +214,6 @@
         "sessionExpired": "La sessione è scaduta per motivi di sicurezza. Riprova.",
         "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
         "unexpected": "Qualcosa è andato storto da parte nostra. Riprova.",
-        "requestId": "ID richiesta",
         "signupExpired": "Ricomincia la registrazione.",
         "policyRules": {
           "min_length": "Usa almeno {min, plural, one {# carattere} other {# caratteri}}.",

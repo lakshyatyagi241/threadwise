@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
+import { consentProofSchema } from '../contact-consent/intake';
 
 /**
  * Sub-agent / channel-partner contracts.
@@ -31,6 +32,12 @@ export const submitPartnerLeadSchema = z.object({
   collegeTag: z.string().max(200).optional(),
   programOfInterest: z.string().max(200).optional(),
   notes: z.string().max(2000).optional(),
+  /**
+   * Only when the person told the agent they agree to marketing messages: how they agreed (`note`) or the wording they were shown
+   * (`text`). Without it the lead is stored as a contact with NO marketing consent (the gate then holds marketing back when the
+   * workspace requires consent). The agent's id is kept as evidence.
+   */
+  consent: consentProofSchema.optional(),
 });
 export type SubmitPartnerLeadInput = z.infer<typeof submitPartnerLeadSchema>;
 

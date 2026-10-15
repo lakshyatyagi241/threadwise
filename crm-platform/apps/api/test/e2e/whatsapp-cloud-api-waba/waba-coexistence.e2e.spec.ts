@@ -355,7 +355,7 @@ describe('groups, hand-offs, orders and coexistence imports (TW-WABA-039, 040, 0
     ).toHaveLength(0);
   });
 
-  it('imports history quietly: backdated, deduped, both sides, no unread, no contact', async () => {
+  it('imports history quietly: backdated, deduped, both sides, no unread, a quiet contact without consent', async () => {
     const x = await arrange('gr5');
     const own = (
       await p.h.owner.query(`SELECT phone_number FROM wa_provider_configs WHERE id = $1`, [
@@ -417,7 +417,152 @@ describe('groups, hand-offs, orders and coexistence imports (TW-WABA-039, 040, 0
       ])
     ).rows[0];
     expect(Number(fresh.unread_count)).toBe(0);
-    expect(fresh.contact_id).toBeNull();
+    // The customer became a contact, quietly: no event, no consent, one contact however often the history is pushed.
+    expect(fresh.contact_id).not.toBeNull();
+    const contacts = (
+      await p.h.owner.query(`SELECT source, normalized_phone FROM contacts WHERE org_id = $1`, [
+        x.t.orgId,
+      ])
+    ).rows;
+    expect(contacts).toHaveLength(1);
+    expect(contacts[0].source).toBe('whatsapp_coexistence_import');
+    for (const t of ['contact_consent_events', 'contact_consent_state']) {
+      expect(
+        (await p.h.owner.query(`SELECT 1 FROM ${t} WHERE org_id = $1`, [x.t.orgId])).rows,
+      ).toHaveLength(0);
+    }
+    expect(
+      (
+        await p.h.owner.query(
+          `SELECT 1 FROM event_outbox WHERE org_id = $1 AND event_type IN ('contact.created', 'conversation.created', 'message.received')`,
+          [x.t.orgId],
+        )
+      ).rows,
+    ).toHaveLength(0);
+    // The thread says it was imported.
+    expect(
+      (await p.h.owner.query(`SELECT imported_at FROM conversations WHERE id = $1`, [conv.id]))
+        .rows[0].imported_at,
+    ).not.toBeNull();
+  });
+
+  it('history stops creating contacts at the plan cap and keeps every message', async () => {
+    const x = await arrange('gr5b');
+    await p.h.owner.query(
+      `UPDATE org_plan_state SET overrides = jsonb_build_object('limits', jsonb_build_object('contacts', 1)) WHERE org_id = $1`,
+      [x.t.orgId],
+    );
+    const at = Math.floor(Date.now() / 1000) - 30 * 86400;
+    const thread = (id: string) => ({
+      id,
+      messages: [
+        {
+          id: `wamid.cap-${id}`,
+          from: id,
+          timestamp: String(at),
+          type: 'text',
+          text: { body: `hi ${id}` },
+        },
+      ],
+    });
+    // One thread after the other: two ingest jobs running side by side can both see room under a cap of one (the plan check is a count,
+    // not a lock), which is how every writer of contacts behaves; the personal import is sequential and exact.
+    await feed(x, 'history', { history: [{ threads: [thread('919800000051')] }] });
+    await until('the first thread has its contact', async () => {
+      const r = (
+        await p.h.owner.query(`SELECT contact_id FROM conversations WHERE org_id = $1`, [x.t.orgId])
+      ).rows[0];
+      return r?.contact_id ? true : undefined;
+    });
+    await feed(x, 'history', { history: [{ threads: [thread('919800000052')] }] });
+    await until('both threads', async () => {
+      const n = (
+        await p.h.owner.query(`SELECT count(*)::int AS n FROM conversations WHERE org_id = $1`, [
+          x.t.orgId,
+        ])
+      ).rows[0].n;
+      return n === 2 ? true : undefined;
+    });
+    const rows = (
+      await p.h.owner.query(
+        `SELECT contact_id, needs_contact FROM conversations WHERE org_id = $1 ORDER BY id`,
+        [x.t.orgId],
+      )
+    ).rows;
+    expect(rows.filter((r) => r.contact_id !== null)).toHaveLength(1);
+    // The second delivery found the cap reached and did not try to link a contact, so it is not flagged either.
+    expect(rows.filter((r) => r.needs_contact === true)).toHaveLength(0);
+    expect(
+      (
+        await p.h.owner.query(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1`, [
+          x.t.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(2);
+    expect(
+      (
+        await p.h.owner.query(`SELECT count(*)::int AS n FROM contacts WHERE org_id = $1`, [
+          x.t.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(1);
+  });
+
+  it('history delivered after the contact cap was reached stores every message without trying to link contacts', async () => {
+    const x = await arrange('gr5c');
+    await p.h.owner.query(
+      `UPDATE org_plan_state SET overrides = jsonb_build_object('limits', jsonb_build_object('contacts', 1)) WHERE org_id = $1`,
+      [x.t.orgId],
+    );
+    await p.h.owner.query(`INSERT INTO contacts (org_id, name) VALUES ($1, 'Already here')`, [
+      x.t.orgId,
+    ]);
+    const at = Math.floor(Date.now() / 1000) - 20 * 86400;
+    const thread = (id: string) => ({
+      id,
+      messages: [
+        {
+          id: `wamid.full-${id}`,
+          from: id,
+          timestamp: String(at),
+          type: 'text',
+          text: { body: `hi ${id}` },
+        },
+      ],
+    });
+    await feed(x, 'history', {
+      history: [{ threads: [thread('919800000061'), thread('919800000062')] }],
+    });
+    await until('both threads', async () => {
+      const n = (
+        await p.h.owner.query(`SELECT count(*)::int AS n FROM conversations WHERE org_id = $1`, [
+          x.t.orgId,
+        ])
+      ).rows[0].n;
+      return n === 2 ? true : undefined;
+    });
+    const rows = (
+      await p.h.owner.query(
+        `SELECT contact_id, needs_contact FROM conversations WHERE org_id = $1`,
+        [x.t.orgId],
+      )
+    ).rows;
+    // No contact was tried, so nothing is flagged as "needs a contact" and no contact was made.
+    expect(rows.every((r) => r.contact_id === null && r.needs_contact === false)).toBe(true);
+    expect(
+      (
+        await p.h.owner.query(`SELECT count(*)::int AS n FROM contacts WHERE org_id = $1`, [
+          x.t.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(1);
+    expect(
+      (
+        await p.h.owner.query(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1`, [
+          x.t.orgId,
+        ])
+      ).rows[0].n,
+    ).toBe(2);
   });
 
   it('mirrors the phone address book without events and never applies a remove', async () => {

@@ -40,7 +40,6 @@
       "planDisabled": "Je abonnement omvat geen facturatie.",
       "invalidState": "Dat kan niet in de huidige status van de factuur. Laad de pagina opnieuw en controleer de status.",
       "unexpected": "Er ging iets mis aan onze kant. Probeer het opnieuw.",
-      "requestId": "Verzoek-ID",
       "retry": "Opnieuw proberen"
     },
     "picker": {

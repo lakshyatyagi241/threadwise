@@ -1,0 +1,133 @@
+{
+  "help-agent": {
+    "launcher": {
+      "label": "Preguntar",
+      "shortcut": "Preguntar al asistente (Ctrl o Cmd + Mayús + L)"
+    },
+    "panel": {
+      "title": "Preguntar al asistente",
+      "subtitle": "Dime qué quieres hacer. Leo esta página y hago clic por ti, y te pregunto antes de guardar, enviar, eliminar o pagar nada.",
+      "close": "Cerrar",
+      "taskLabel": "¿Qué quieres hacer?",
+      "taskPlaceholder": "Por ejemplo: añadir la etiqueta VIP a un contacto",
+      "tooLong": "Máximo {max} caracteres.",
+      "doItForMe": "Hazlo por mí",
+      "showMe": "Muéstrame cómo",
+      "stop": "Detener",
+      "stopping": "Deteniendo...",
+      "newTask": "Nueva tarea",
+      "tryAgain": "Reintentar",
+      "openGuide": "Abrir guía",
+      "showSteps": "Ver pasos",
+      "guidesTitle": "De las guías de ayuda",
+      "examplesTitle": "Prueba a preguntar",
+      "disabledHere": "El asistente está desactivado en esta pantalla porque muestra mensajes y datos escritos por clientes. Abre otra pantalla para usarlo."
+    },
+    "notice": {
+      "title": "Antes de empezar",
+      "sent": "Para hacer una tarea, el asistente envía tu petición y el texto de la página en la que estás a un proveedor de IA.",
+      "masked": "Antes se ocultan los números de teléfono, los correos electrónicos y los secretos. Los nombres y el resto del texto de la página no.",
+      "asks": "Usa tu propia cuenta, así que solo puede hacer lo que tú puedes hacer. Te pregunta antes de guardar, enviar, eliminar, pagar, invitar a personas o cambiar ajustes.",
+      "limits": "Nunca escribe contraseñas ni datos de tarjeta, nunca abre otros sitios web y puedes detenerlo en cualquier momento.",
+      "accept": "Entendido"
+    },
+    "status": {
+      "progress": "Paso {n} de {max}",
+      "thinking": "Pensando...",
+      "starting": "Iniciando..."
+    },
+    "activity": {
+      "click": "Haciendo clic en: {label}",
+      "type": "Escribiendo en: {label}",
+      "select": "Eligiendo en: {label}",
+      "blocked": "Omitido: {label}",
+      "declined": "Rechazaste: {label}",
+      "shown": "Mostrando: {label}"
+    },
+    "confirm": {
+      "title": "¿Permitir esto?",
+      "clickBody": "El asistente va a hacer clic en \"{label}\".",
+      "selectBody": "El asistente va a elegir \"{detail}\" en \"{label}\".",
+      "allow": "Permitir una vez",
+      "deny": "Denegar",
+      "reasons": {
+        "marked": "Este es uno de los botones más delicados de la app.",
+        "submit": "Esto guarda o envía lo que hay en la página.",
+        "delete": "Esto elimina, quita o desconecta algo.",
+        "send": "Esto envía, publica o inicia algo que verán otras personas.",
+        "pay": "Esto puede gastar dinero o cambiar lo que pagas.",
+        "invite": "Esto invita a alguien a tu espacio de trabajo.",
+        "connect": "Esto conecta o desconecta un canal o una app.",
+        "access": "Esto cambia quién puede hacer qué, o un secreto o un dato de facturación.",
+        "settings": "Esto activa o desactiva algo.",
+        "toggle": "Este interruptor surte efecto de inmediato.",
+        "dialog": "Esto confirma lo que pide la ventana.",
+        "signout": "Esto cierra tu sesión."
+      }
+    },
+    "question": {
+      "title": "El asistente pregunta",
+      "answerLabel": "Tu respuesta",
+      "send": "Enviar"
+    },
+    "result": {
+      "completedTitle": "Listo",
+      "failedTitle": "No pude terminar esto",
+      "stoppedTitle": "Detenido",
+      "summary": "{steps, plural, one {# paso} other {# pasos}}, {confirmed} permitidos, {denied} rechazados."
+    },
+    "stopped": {
+      "person": "Detuviste la tarea.",
+      "budget": "La tarea alcanzó su límite de pasos y se detuvo. Prueba con una petición más pequeña.",
+      "location": "La tarea se detuvo porque llegó a una pantalla que el asistente no puede usar."
+    },
+    "errors": {
+      "disabled": "El asistente está desactivado para este espacio de trabajo o en esta pantalla.",
+      "planLocked": "El asistente no forma parte de tu plan.",
+      "forbidden": "No tienes permiso para usar el asistente.",
+      "rateLimited": "Demasiadas peticiones. Espera un momento e inténtalo de nuevo.",
+      "taskLimit": "Has iniciado todas las tareas permitidas por ahora. Inténtalo de nuevo más tarde.",
+      "stepLimit": "Esta tarea agotó sus pasos. Empieza una nueva con una petición más pequeña.",
+      "closed": "Esta tarea ha terminado. Empieza una nueva.",
+      "providerDown": "El servicio de IA no respondió. Inténtalo de nuevo en un momento o consulta al propietario de la plataforma si sigue pasando.",
+      "monthlyLimit": "Tu espacio de trabajo ha usado la cuota de IA de este mes.",
+      "signedOut": "Tu sesión terminó. Vuelve a iniciar sesión.",
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "retryIn": "Inténtalo de nuevo en {seconds} segundos."
+    },
+    "examples": {
+      "howDo": "¿Cómo uso {title}?",
+      "showMe": "Muéstrame por dónde empezar en {title}",
+      "whereIs": "¿Dónde encuentro {title}?",
+      "generic1": "¿Cómo conecto mi número de WhatsApp?",
+      "generic2": "¿Dónde cambio el perfil de mi negocio?",
+      "generic3": "¿Cómo invito a un compañero de equipo?"
+    },
+    "helpCard": {
+      "title": "Preguntar al asistente",
+      "body": "Dile lo que quieres hacer. Encuentra la guía adecuada, te muestra dónde hacer clic o hace los pasos por ti y pregunta antes de cualquier acción importante.",
+      "button": "Abrir el asistente"
+    },
+    "settingsPage": {
+      "title": "Asistente de ayuda",
+      "description": "Deja que tu equipo pida lo que quiere hacer y que la app lo guíe o haga los pasos en su propia cuenta.",
+      "loading": "Cargando",
+      "loadFailed": "No se pudo cargar el ajuste.",
+      "shareTitle": "Qué se comparte cuando alguien lo usa",
+      "share1": "La petición que escribe la persona y el texto visible de la página en la que está se envían al proveedor de IA que usa la plataforma.",
+      "share2": "Antes se ocultan los números de teléfono, los correos electrónicos, los secretos y los campos personales de los formularios. Los nombres y el resto del texto libre de una página no.",
+      "share3": "Los mensajes de clientes y el chat del equipo nunca se leen: el asistente está desactivado en esas pantallas.",
+      "share4": "El asistente actúa con los permisos de la persona que ha iniciado sesión y pregunta antes de guardar, enviar, eliminar, pagar o cambiar ajustes. Solo se guardan los recuentos y el resultado de cada tarea, nunca el texto de la petición.",
+      "optIn": "Al activarlo confirmas que tu espacio de trabajo acepta compartir esto con el proveedor de IA.",
+      "switchLabel": "Activar el asistente de ayuda para este espacio de trabajo",
+      "stateOn": "Activado. Las personas con permiso ven el botón Preguntar.",
+      "stateOff": "Desactivado. Nadie ve el asistente.",
+      "saveFailed": "No se pudo guardar el ajuste.",
+      "savedOn": "El asistente está activado.",
+      "savedOff": "El asistente está desactivado.",
+      "whoCanUse": "Solo los roles con el permiso \"Usar el asistente de ayuda\" lo ven. Los propietarios y administradores lo tienen.",
+      "rolesLink": "Abrir roles"
+    }
+  }
+}

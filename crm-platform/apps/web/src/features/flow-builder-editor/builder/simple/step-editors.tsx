@@ -1,8 +1,12 @@
 'use client';
 
+import { ButtonIcon } from '../button-icon';
 import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
+  FLB_CAROUSEL_LIMITS,
+  FLB_CAROUSEL_MAX_BUTTONS,
+  FLB_CAROUSEL_MAX_CARDS,
   FLB_ASK_FILE_GROUPS,
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
@@ -17,7 +21,20 @@ import {
   askInputWrongText,
   dateFormatLabel,
 } from '../../lib/contract-text';
+import {
+  FAQ_DEFAULT_QUERY,
+  FAQ_MIN_SCORE,
+  FAQ_MIN_SCORE_START,
+  FAQ_VARIABLES,
+  faqSaveName,
+  hasOwnMinScore,
+  minScoreOutOfRange,
+} from '../../lib/faq-node';
+import { useFaqSummary } from '../../api/hooks';
+import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { renderMsg, useFlb } from '../../lib/msg';
+import { conditionTreeOf } from '../../lib/condition-tree';
+import { ConditionGroupEditor } from '../inspector/forms-core/logic';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
 import { Field, Input, Select, Textarea } from '@crm/ui';
 import {
@@ -88,6 +105,8 @@ interface EditorProps {
   step: SimpleStep;
   doc: SimpleDoc;
   ctx: FlbBuilderContext;
+  /** The saved flow (null before the first save): the FAQ step answers from this flow's FAQs. */
+  flowId: string | null;
   /** Merge keys into the step's data. */
   set: (patch: Record<string, unknown>) => void;
   /** Point button / row `i` at a step (or `null` to end, or NEW_JOURNEY). */
@@ -122,6 +141,10 @@ export function StepEditor(p: EditorProps) {
       return <MediaEditor {...p} />;
     case 'buttons':
       return <ButtonsEditor {...p} />;
+    case 'carousel':
+      return <CarouselEditor {...p} />;
+    case 'condition':
+      return <ConditionEditor {...p} />;
     case 'list':
       return <ListEditor {...p} />;
     case 'ask':
@@ -140,6 +163,8 @@ export function StepEditor(p: EditorProps) {
       return <CtaEditor {...p} />;
     case 'assign':
       return <AssignEditor {...p} />;
+    case 'faq':
+      return <FaqEditor {...p} />;
   }
 }
 
@@ -200,10 +225,256 @@ function MediaEditor({ step, set }: EditorProps) {
   );
 }
 
-function ButtonsEditor({ step, doc, set, link }: EditorProps) {
+/**
+ * The Condition step: rules joined by AND / OR (groups can nest), then two exits, one when they hold and one when they do not. The
+ * rules are the same editor the Advanced builder's Condition node has.
+ */
+function ConditionEditor({ step, doc, set, link }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
+  const tree = conditionTreeOf(step.data)?.tree ?? {
+    op: 'and' as const,
+    items: [{ variable: '', operator: 'equals', value: '' }],
+  };
+  return (
+    <div className="space-y-3">
+      <p className="text-[12px] text-muted-foreground">{t('condition.info')}</p>
+      <ConditionGroupEditor tree={tree} onChange={(next) => set({ conditionGroup: next })} />
+      {(['yes', 'no'] as const).map((exit, i) => (
+        <Row key={exit}>
+          <div className="mb-1.5 text-[12px] font-semibold">{t(`condition.${exit}`)}</div>
+          <LinkSelect
+            doc={doc}
+            stepId={step.id}
+            value={step.links[i] ?? null}
+            onChange={(target) => link(i, target)}
+          />
+        </Row>
+      ))}
+    </div>
+  );
+}
+
+const CAROUSEL_BTN_KINDS = ['reply', 'agent', 'url', 'phone', 'email'] as const;
+
+/** The team and the note of a button that hands the visitor to a person: nothing needs to be connected after such a button. */
+function HandoffFields({
+  ctx,
+  team,
+  note,
+  onTeam,
+  onNote,
+}: {
+  ctx: FlbBuilderContext;
+  team: string;
+  note: string;
+  onTeam: (v: string) => void;
+  onNote: (v: string) => void;
+}) {
+  const t = useTranslations('flb.builder.simple.editors');
+  return (
+    <div className="mt-2 space-y-2">
+      <Select value={team} onChange={(e) => onTeam(e.target.value)}>
+        <option value="">{ctx.teams.length ? t('assign.pickTeam') : t('assign.noTeams')}</option>
+        {ctx.teams.map((tm) => (
+          <option key={tm.id} value={tm.id}>
+            {t('assign.teamOption', { name: tm.name, count: tm.members.length })}
+          </option>
+        ))}
+      </Select>
+      <Input value={note} placeholder={t('assign.note')} onChange={(e) => onNote(e.target.value)} />
+      <p className="text-[11.5px] text-muted-foreground">{t('handoff.hint')}</p>
+    </div>
+  );
+}
+
+/**
+ * The Carousel step: cards (a picture link, a title, a line of text) with up to two buttons each. A "reply in chat" button is an exit
+ * of the step (pick where it leads, like a Quick reply); the others open a page, a call or an email.
+ */
+function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
+  const t = useTranslations('flb.builder.simple.editors');
+  const cards = arr(step.data.cards).map(rec);
+  const setCards = (next: Array<Record<string, unknown>>) => set({ cards: next });
+  const patchCard = (i: number, p: Record<string, unknown>) =>
+    setCards(cards.map((c, j) => (j === i ? { ...c, ...p } : c)));
+  const buttonsOf = (c: Record<string, unknown>) => arr(c.buttons).map(rec);
+  const patchBtn = (i: number, k: number, p: Record<string, unknown>) =>
+    patchCard(i, { buttons: buttonsOf(cards[i]!).map((b, j) => (j === k ? { ...b, ...p } : b)) });
+  const isReply = (b: Record<string, unknown>) =>
+    str(b.type) === 'reply' || str(b.type) === 'agent';
+  // The position of a reply button among all the step's replies is its exit.
+  const replyIndex = (ci: number, bi: number): number =>
+    cards.slice(0, ci).reduce((n, c) => n + buttonsOf(c).filter(isReply).length, 0) +
+    buttonsOf(cards[ci]!).slice(0, bi).filter(isReply).length;
+  const holder = (kind: string) =>
+    kind === 'phone' ? '+91 98765 43210' : kind === 'email' ? 'name@example.com' : 'https://';
+  return (
+    <div className="space-y-3">
+      <Field label={t('carousel.intro')}>
+        <Textarea
+          rows={2}
+          value={str(step.data.text)}
+          onChange={(e) => set({ text: e.target.value })}
+        />
+      </Field>
+      {cards.map((c, ci) => (
+        <Row key={ci}>
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <span className="text-[12px] font-semibold">{t('carousel.card', { n: ci + 1 })}</span>
+            <RemoveBtn
+              label={t('carousel.removeCard')}
+              disabled={cards.length <= 1}
+              onClick={() => setCards(cards.filter((_, j) => j !== ci))}
+            />
+          </div>
+          <div className="space-y-2">
+            <Field label={t('carousel.image')}>
+              <Input
+                value={str(c.image)}
+                placeholder="https://"
+                onChange={(e) => patchCard(ci, { image: e.target.value })}
+              />
+            </Field>
+            <Field
+              label={
+                <span className="flex items-center justify-between">
+                  {t('carousel.title')}{' '}
+                  <Counter value={str(c.title)} max={FLB_CAROUSEL_LIMITS.title} />
+                </span>
+              }
+            >
+              <Input
+                value={str(c.title)}
+                maxLength={FLB_CAROUSEL_LIMITS.title + 20}
+                onChange={(e) => patchCard(ci, { title: e.target.value })}
+              />
+            </Field>
+            <Field
+              label={
+                <span className="flex items-center justify-between">
+                  {t('carousel.text')}{' '}
+                  <Counter value={str(c.text)} max={FLB_CAROUSEL_LIMITS.text} />
+                </span>
+              }
+            >
+              <Textarea
+                rows={2}
+                value={str(c.text)}
+                onChange={(e) => patchCard(ci, { text: e.target.value })}
+              />
+            </Field>
+            <div className="text-[12px] font-medium">{t('carousel.buttons')}</div>
+            {buttonsOf(c).map((b, bi) => {
+              const kind = (CAROUSEL_BTN_KINDS as readonly string[]).includes(str(b.type))
+                ? str(b.type)
+                : 'reply';
+              const ri = replyIndex(ci, bi);
+              return (
+                <div key={bi} className="rounded-lg border border-border bg-background p-2">
+                  <div className="grid gap-2 sm:grid-cols-[9rem_1fr_1fr_auto]">
+                    <Select
+                      value={kind}
+                      onChange={(e) => patchBtn(ci, bi, { type: e.target.value })}
+                    >
+                      {CAROUSEL_BTN_KINDS.map((k) => (
+                        <option key={k} value={k}>
+                          {t(`carousel.btnKinds.${k}`)}
+                        </option>
+                      ))}
+                    </Select>
+                    <Input
+                      value={str(b.label)}
+                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
+                      placeholder={t('carousel.label')}
+                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
+                    />
+                    {kind === 'reply' || kind === 'agent' ? (
+                      <span />
+                    ) : (
+                      <Input
+                        value={str(b.value)}
+                        placeholder={holder(kind)}
+                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
+                      />
+                    )}
+                    <RemoveBtn
+                      label={t('carousel.removeButton')}
+                      onClick={() =>
+                        patchCard(ci, { buttons: buttonsOf(c).filter((_, j) => j !== bi) })
+                      }
+                    />
+                  </div>
+                  {kind === 'reply' ? (
+                    <div className="mt-2">
+                      <LinkSelect
+                        doc={doc}
+                        stepId={step.id}
+                        value={step.links[ri] ?? null}
+                        onChange={(target) => link(ri, target)}
+                      />
+                    </div>
+                  ) : kind === 'agent' ? (
+                    <HandoffFields
+                      ctx={ctx}
+                      team={str(b.team)}
+                      note={str(b.note)}
+                      onTeam={(v) => patchBtn(ci, bi, { team: v })}
+                      onNote={(v) => patchBtn(ci, bi, { note: v })}
+                    />
+                  ) : null}
+                </div>
+              );
+            })}
+            {buttonsOf(c).length < FLB_CAROUSEL_MAX_BUTTONS ? (
+              <AddBtn
+                onClick={() =>
+                  patchCard(ci, {
+                    buttons: [...buttonsOf(c), { type: 'reply', label: '', value: '' }],
+                  })
+                }
+              >
+                {t('carousel.addButton')}
+              </AddBtn>
+            ) : null}
+          </div>
+        </Row>
+      ))}
+      {cards.length < FLB_CAROUSEL_MAX_CARDS ? (
+        <AddBtn
+          onClick={() =>
+            setCards([
+              ...cards,
+              { image: '', title: '', text: '', buttons: [{ type: 'url', label: '', value: '' }] },
+            ])
+          }
+        >
+          {t('carousel.addCard')}
+        </AddBtn>
+      ) : null}
+    </div>
+  );
+}
+
+function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const opts = arr(step.data.options).map(str);
+  // The small picture of each button (website chat bots only), by position.
+  const icons = opts.map((_, j) => str(arr(step.data.optionIcons)[j]));
   const prompt = str(step.data.prompt);
+  // A button can hand the visitor to a person instead of leading to another step: `handoffs` is keyed by the button's position.
+  const handoffs = rec(step.data.handoffs);
+  const setHandoff = (i: number, h: { team: string; message: string } | null) => {
+    const next = { ...handoffs };
+    if (h) next[String(i)] = h;
+    else delete next[String(i)];
+    set({ handoffs: next });
+  };
+  const withoutOption = (i: number) =>
+    Object.fromEntries(
+      Object.entries(handoffs)
+        .filter(([k]) => Number(k) !== i)
+        .map(([k, v]) => [String(Number(k) > i ? Number(k) - 1 : Number(k)), v]),
+    );
   return (
     <div className="space-y-3">
       <Field
@@ -238,15 +509,54 @@ function ButtonsEditor({ step, doc, set, link }: EditorProps) {
               <RemoveBtn
                 label={t('buttons.remove')}
                 disabled={opts.length <= 1}
-                onClick={() => set({ options: opts.filter((_, j) => j !== i) })}
+                onClick={() =>
+                  set({
+                    options: opts.filter((_, j) => j !== i),
+                    optionIcons: icons.filter((_, j) => j !== i),
+                    handoffs: withoutOption(i),
+                  })
+                }
               />
             </div>
-            <LinkSelect
-              doc={doc}
-              stepId={step.id}
-              value={step.links[i] ?? null}
-              onChange={(target) => link(i, target)}
-            />
+            <div className="mb-2">
+              <ButtonIcon
+                value={icons[i] ?? ''}
+                onChange={(v) => set({ optionIcons: icons.map((x, j) => (j === i ? v : x)) })}
+              />
+            </div>
+            <label className="mb-2 flex items-center gap-2 text-[12px]">
+              <input
+                type="checkbox"
+                checked={handoffs[String(i)] !== undefined}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    link(i, null);
+                    setHandoff(i, { team: '', message: '' });
+                  } else setHandoff(i, null);
+                }}
+              />
+              {t('buttons.handoff')}
+            </label>
+            {handoffs[String(i)] !== undefined ? (
+              <HandoffFields
+                ctx={ctx}
+                team={str(rec(handoffs[String(i)]).team)}
+                note={str(rec(handoffs[String(i)]).message)}
+                onTeam={(v) =>
+                  setHandoff(i, { team: v, message: str(rec(handoffs[String(i)]).message) })
+                }
+                onNote={(v) =>
+                  setHandoff(i, { team: str(rec(handoffs[String(i)]).team), message: v })
+                }
+              />
+            ) : (
+              <LinkSelect
+                doc={doc}
+                stepId={step.id}
+                value={step.links[i] ?? null}
+                onChange={(target) => link(i, target)}
+              />
+            )}
           </Row>
         ))}
         {opts.length < LIMITS.buttons ? (
@@ -490,6 +800,20 @@ function AskEditor({ step, set }: EditorProps) {
           </Select>
         </Field>
       ) : null}
+      {type === 'phone' ? (
+        <label className="flex items-start gap-2 text-[12.5px]">
+          <input
+            type="checkbox"
+            className="mt-0.5"
+            checked={step.data.verifyOtp === true}
+            onChange={(e) => set({ verifyOtp: e.target.checked })}
+          />
+          <span>
+            <span className="font-medium">{t('ask.verifyOtp')}</span>
+            <span className="mt-0.5 block text-muted-foreground">{t('ask.verifyOtpHint')}</span>
+          </span>
+        </label>
+      ) : null}
       <VarField step={step} set={set} label={t('ask.saveIn')} />
       {checked ? (
         <>
@@ -608,6 +932,149 @@ function VarField({
         onChange={(e) => set({ var: slug(e.target.value) })}
       />
     </Field>
+  );
+}
+
+/**
+ * "Answer from FAQ": the same settings as the Advanced form, and one "where it leads" for each of its two exits (an FAQ answered / no
+ * FAQ answered). Like buttons and lists it ends its part of the flow: a flow FAQ continues in its own flow and does not come back.
+ */
+function FaqEditor({ step, doc, flowId, set, link }: EditorProps) {
+  // The settings read the Advanced form's texts (one translation each); only the two "where it leads" lines are Simple's own.
+  const t = useTranslations('flb.builder.formsChannels.faq');
+  const ts = useTranslations('flb.builder.simple.editors.faq');
+  const summary = useFaqSummary(flowId);
+  const categories = summary.data?.categories ?? [];
+  const category = str(step.data.category);
+  const own = hasOwnMinScore(step.data.minScore);
+  const outOfRange = minScoreOutOfRange(step.data.minScore);
+  const send = step.data.sendAnswer !== false;
+  const save = faqSaveName(step.data.save);
+  const code = (c: ReactNode) => <code className="font-mono">{c}</code>;
+  // Links into this flow's FAQs tab (a new tab, so the flow being edited stays open). Before the first save there is none.
+  const page = (view: 'new' | 'test') =>
+    function PageLink(c: ReactNode) {
+      return flowId ? (
+        <a
+          href={faqHref(flowId, view)}
+          target="_blank"
+          rel="noreferrer"
+          className="text-brand underline"
+        >
+          {c}
+        </a>
+      ) : (
+        <>{c}</>
+      );
+    };
+  return (
+    <div className="space-y-3">
+      <p className="text-[12px] text-muted-foreground">{t.rich('intro.body', { mono: code })}</p>
+      {flowId === null ? (
+        <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
+          {t('saveFlowFirst')}
+        </p>
+      ) : summary.isSuccess && summary.data.total === 0 ? (
+        <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
+          {t.rich('noFaqs', { link: page('new') })}
+        </p>
+      ) : null}
+      <Field label={t('query')} hint={t.rich('queryHint', { mono: code, variable: '{{answer}}' })}>
+        <Input
+          className="font-mono"
+          value={str(step.data.query)}
+          placeholder={FAQ_DEFAULT_QUERY}
+          onChange={(e) => set({ query: e.target.value })}
+        />
+      </Field>
+      <Field
+        label={t('category')}
+        hint={
+          <>
+            {summary.isError ? `${t('categoriesFailed')} ` : ''}
+            {t('categoryHint')}
+          </>
+        }
+      >
+        <Select value={category} onChange={(e) => set({ category: e.target.value })}>
+          <option value="">{summary.isPending ? t('loadingCategories') : t('allFaqs')}</option>
+          {categories.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+          {category && !categories.includes(category) ? (
+            <option value={category}>{t('categoryGone', { name: category })}</option>
+          ) : null}
+        </Select>
+      </Field>
+      <Field
+        label={t('minScore')}
+        hint={t.rich('minScoreHint', { ...FAQ_MIN_SCORE, link: page('test') })}
+      >
+        <label className="flex items-center gap-2 text-[13px]">
+          <input
+            type="checkbox"
+            checked={!own}
+            onChange={(e) => set({ minScore: e.target.checked ? null : FAQ_MIN_SCORE_START })}
+          />
+          {t('useWorkspaceScore')}
+        </label>
+        {own ? (
+          <Input
+            className="mt-2"
+            type="number"
+            min={FAQ_MIN_SCORE.min}
+            max={FAQ_MIN_SCORE.max}
+            step={0.01}
+            aria-label={t('minScore')}
+            invalid={outOfRange}
+            value={step.data.minScore === '' ? '' : str(step.data.minScore)}
+            onChange={(e) => set({ minScore: e.target.value === '' ? '' : Number(e.target.value) })}
+          />
+        ) : null}
+        {outOfRange ? (
+          <p role="alert" className="mt-1.5 text-[11.5px] text-danger">
+            {t('minScoreInvalid', FAQ_MIN_SCORE)}
+          </p>
+        ) : null}
+      </Field>
+      <Field label={t('sendAnswer')} hint={send ? t('sendAnswerOnHint') : t('sendAnswerOffHint')}>
+        <label className="flex items-center gap-2 text-[13px]">
+          <input
+            type="checkbox"
+            checked={send}
+            onChange={(e) => set({ sendAnswer: e.target.checked })}
+          />
+          {t('sendAnswerToggle')}
+        </label>
+      </Field>
+      <Field label={t('save')} hint={t('saveHint')}>
+        <Input
+          className="font-mono"
+          value={str(step.data.save)}
+          placeholder="faq"
+          onChange={(e) => set({ save: slug(e.target.value) })}
+        />
+        <ul className="mt-2 space-y-1 text-[11.5px] text-muted-foreground">
+          {FAQ_VARIABLES.map((name) => (
+            <li key={name}>
+              <code className="font-mono">{`{{${save}.${name}}}`}</code> {t(`variables.${name}`)}
+            </li>
+          ))}
+        </ul>
+      </Field>
+      {(['matched', 'no_match'] as const).map((handle, i) => (
+        <Field key={handle} label={ts(`exits.${handle}`)} hint={ts(`exitsHint.${handle}`)}>
+          <LinkSelect
+            doc={doc}
+            stepId={step.id}
+            value={step.links[i] ?? null}
+            onChange={(target) => link(i, target)}
+          />
+        </Field>
+      ))}
+    </div>
   );
 }
 
@@ -738,11 +1205,24 @@ function TemplateEditor({ step, ctx, set }: EditorProps) {
   );
 }
 
+const CTA_KINDS = ['url', 'phone', 'email'] as const;
+const CTA_MAX = 3;
+
+/**
+ * The buttons of a Link button step: up to three, each opening a web page, a phone call or an email. The website chat window draws
+ * all of them; WhatsApp sends the first web link as its button and the rest as lines of text.
+ */
 function CtaEditor({ step, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
-  const a = rec(arr(step.data.actions)[0]);
-  const setA = (patch: Record<string, unknown>) =>
-    set({ actions: [{ type: 'url', label: '', value: '', ...a, ...patch }] });
+  const raw = arr(step.data.actions).map(rec);
+  const actions = raw.length ? raw : [{ type: 'url', label: '', value: '' }];
+  const setAll = (next: Array<Record<string, unknown>>) => set({ actions: next });
+  const patch = (i: number, p: Record<string, unknown>) =>
+    setAll(
+      actions.map((a, j) => (j === i ? { type: 'url', label: '', value: '', ...a, ...p } : a)),
+    );
+  const holder = (kind: string) =>
+    kind === 'phone' ? '+91 98765 43210' : kind === 'email' ? 'name@example.com' : 'https://';
   return (
     <div className="space-y-3">
       <Field label={t('message.label')}>
@@ -752,22 +1232,61 @@ function CtaEditor({ step, set }: EditorProps) {
           onChange={(e) => set({ bodyText: e.target.value })}
         />
       </Field>
-      <div className="grid grid-cols-2 gap-3">
-        <Field label={t('cta.buttonText')}>
-          <Input
-            value={str(a.label)}
-            maxLength={20}
-            onChange={(e) => setA({ label: e.target.value })}
-          />
-        </Field>
-        <Field label={t('cta.opens')}>
-          <Input
-            value={str(a.value)}
-            placeholder="https://"
-            onChange={(e) => setA({ value: e.target.value })}
-          />
-        </Field>
-      </div>
+      {actions.map((a, i) => {
+        const kind = (CTA_KINDS as readonly string[]).includes(str(a.type)) ? str(a.type) : 'url';
+        return (
+          <Row key={i}>
+            <div className="grid gap-3 sm:grid-cols-[9rem_1fr_1fr_auto]">
+              <Field label={t('cta.type')}>
+                <Select value={kind} onChange={(e) => patch(i, { type: e.target.value })}>
+                  {CTA_KINDS.map((k) => (
+                    <option key={k} value={k}>
+                      {t(`cta.kinds.${k}`)}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label={t('cta.buttonText')}>
+                <Input
+                  value={str(a.label)}
+                  maxLength={20}
+                  onChange={(e) => patch(i, { label: e.target.value })}
+                />
+              </Field>
+              <Field
+                label={t(
+                  kind === 'phone'
+                    ? 'cta.opensPhone'
+                    : kind === 'email'
+                      ? 'cta.opensEmail'
+                      : 'cta.opens',
+                )}
+              >
+                <Input
+                  value={str(a.value)}
+                  placeholder={holder(kind)}
+                  onChange={(e) => patch(i, { value: e.target.value })}
+                />
+              </Field>
+              <div className="flex items-end pb-1">
+                <RemoveBtn
+                  label={t('cta.remove')}
+                  disabled={actions.length <= 1}
+                  onClick={() => setAll(actions.filter((_, j) => j !== i))}
+                />
+              </div>
+            </div>
+            <div className="mt-2">
+              <ButtonIcon value={str(a.icon)} onChange={(v) => patch(i, { icon: v })} />
+            </div>
+          </Row>
+        );
+      })}
+      {actions.length < CTA_MAX ? (
+        <AddBtn onClick={() => setAll([...actions, { type: 'url', label: '', value: '' }])}>
+          {t('cta.add')}
+        </AddBtn>
+      ) : null}
     </div>
   );
 }

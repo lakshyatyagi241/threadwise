@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Zamknij",
-      "retry": "Spróbuj ponownie",
-      "requestId": "ID żądania"
+      "retry": "Spróbuj ponownie"
     },
     "errors": {
       "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
@@ -35,7 +34,10 @@
       "sendFailed": "Nie udało się wysłać wiadomości: {detail}",
       "collectionProducts": "Żaden z wybranych produktów nie należy do tej przestrzeni roboczej.",
       "providerFailed": "WhatsApp lub Meta nie mogły zrealizować żądania: {detail}",
-      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
+      "alreadyConnected": "Katalog jest już połączony. Najpierw go odłącz, aby utworzyć nowy.",
+      "confirmMismatch": "Wpisany identyfikator katalogu nie pasuje do połączonego katalogu.",
+      "setNotSyncable": "Ta kolekcja nie ma aktywnych produktów do zestawu produktów Meta."
     },
     "paywall": {
       "kicker": "Funkcja premium",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "Opis jest zbyt długi.",
           "noProducts": "Wybierz co najmniej jeden produkt."
         }
+      },
+      "meta": {
+        "onMeta": "W Meta",
+        "notOnMeta": "Nie ma w Meta",
+        "push": "Wyślij do Meta",
+        "update": "Zaktualizuj w Meta",
+        "remove": "Usuń z Meta",
+        "pushed": "Kolekcja wysłana do Meta.",
+        "removed": "Kolekcja usunięta z Meta."
       }
     },
     "activity": {
@@ -447,7 +458,8 @@
       "cancel": "Anuluj",
       "deleted": "Usunięto produkt.",
       "deleteTitle": "Usunąć ten produkt?",
-      "deleteBody": "„{name}” zostanie usunięty. Pozostanie w Meta, dopóki go tam nie usuniesz."
+      "deleteBody": "„{name}” zostanie usunięty. Pozostanie w Meta, dopóki go tam nie usuniesz.",
+      "variantsBadge": "{count, plural, one {# wariant} few {# warianty} many {# wariantów} other {# wariantu}}"
     },
     "share": {
       "eyebrow": "Udostępnij produkt",
@@ -552,6 +564,91 @@
         "badUrl": "Wpisz pełny link zaczynający się od https://",
         "outOfRange": "Ta liczba jest spoza zakresu.",
         "tooMany": "Zbyt wiele obrazów."
+      },
+      "variants": {
+        "title": "Warianty",
+        "hint": "Sprzedawaj ten produkt w więcej niż jednej formie, na przykład w różnych rozmiarach lub kolorach. Każda kombinacja ma własny SKU, cenę i stan magazynowy.",
+        "toggle": "Ten produkt ma warianty",
+        "removeOnSave": "Warianty tego produktu zostaną usunięte po zapisaniu.",
+        "optionName": "Nazwa opcji {n}",
+        "optionNamePlaceholder": "Rozmiar, Kolor...",
+        "suggest": {
+          "size": "Rozmiar",
+          "colour": "Kolor",
+          "material": "Materiał",
+          "style": "Styl"
+        },
+        "values": "Wartości",
+        "valuesHint": "Naciśnij Enter lub wpisz przecinek po każdej wartości. Maksymalnie {max} znaków każda.",
+        "valuesPlaceholder": "Wpisz wartość, na przykład M",
+        "valuesMore": "Dodaj kolejną wartość",
+        "quickAdd": "Szybkie dodawanie:",
+        "preset": {
+          "clothing": "Rozmiary odzieży ({values})",
+          "shoes": "Rozmiary obuwia ({values})"
+        },
+        "addOption": "Dodaj opcję",
+        "maxOptions": "Maksymalnie {max} opcji.",
+        "removeOption": "Usuń opcję {n}",
+        "moveOptionUp": "Przesuń opcję {n} w górę",
+        "moveOptionDown": "Przesuń opcję {n} w dół",
+        "removeValue": "Usuń wartość {value}",
+        "moveValueEarlier": "Przesuń {value} wcześniej",
+        "moveValueLater": "Przesuń {value} później",
+        "refused": {
+          "tooLong": "Ta wartość jest za długa.",
+          "dup": "Ta wartość jest już na liście.",
+          "tooMany": "Osiągnięto limit wartości dla tej opcji."
+        },
+        "tableTitle": "Warianty",
+        "count": "{count, plural, one {# wariant} few {# warianty} many {# wariantów} other {# wariantu}}",
+        "tableEmpty": "Nadaj nazwę każdej opcji i dodaj co najmniej jedną wartość, aby wygenerować warianty.",
+        "totalStock": "Łączny stan magazynowy",
+        "fromPrice": "Cena od",
+        "fromPreview": "Od {price}",
+        "unlimited": "Bez limitu",
+        "priceHint": "Najniższa cena wśród aktywnych wariantów. Warianty bez własnej ceny używają tej ceny.",
+        "stockHint": "Suma aktywnych wariantów, ustawiana w tabeli powyżej.",
+        "bulkPrice": "Cena dla wszystkich wariantów",
+        "bulkStock": "Stan magazynowy dla wszystkich wariantów",
+        "bulkApplyPrice": "Zastosuj cenę",
+        "bulkApplyStock": "Zastosuj stan",
+        "pricePlaceholder": "Cena produktu",
+        "stockPlaceholder": "Bez limitu",
+        "col": {
+          "variant": "Wariant",
+          "sku": "SKU",
+          "price": "Cena",
+          "stock": "Stan magazynowy",
+          "image": "Link do obrazu",
+          "active": "Aktywny"
+        },
+        "rowSku": "SKU dla {title}",
+        "rowPrice": "Cena dla {title}",
+        "rowStock": "Stan magazynowy dla {title}",
+        "rowImage": "Link do obrazu dla {title}",
+        "rowActive": "Wariant {title} jest aktywny",
+        "confirm": {
+          "title": "Usunąć warianty?",
+          "body": "{count, plural, one {# wariant, który ma dane, zostanie usunięty} few {# warianty, które mają dane, zostaną usunięte} many {# wariantów, które mają dane, zostanie usuniętych} other {# wariantu, który ma dane, zostanie usunięte}}, ponieważ ta kombinacja już nie istnieje.",
+          "remove": "Usuń",
+          "keep": "Zachowaj"
+        },
+        "problem": {
+          "required": "To pole jest wymagane.",
+          "tooLong": "Ten tekst jest za długi.",
+          "dupName": "Dwie opcje mają taką samą nazwę.",
+          "dupValue": "Ta wartość występuje dwa razy.",
+          "needOption": "Dodaj co najmniej jedną opcję.",
+          "needValue": "Dodaj co najmniej jedną wartość.",
+          "tooManyValues": "Za dużo wartości dla tej opcji.",
+          "tooManyVariants": "Te opcje tworzą zbyt wiele wariantów. Limit to 100.",
+          "notNumber": "Wpisz liczbę, na przykład 499 lub 499.50.",
+          "tooBig": "Kwota jest zbyt duża.",
+          "notWhole": "Wpisz liczbę całkowitą.",
+          "outOfRange": "Ta liczba jest poza zakresem.",
+          "badUrl": "Wpisz pełny link zaczynający się od https://"
+        }
       }
     },
     "reviews": {
@@ -724,6 +821,33 @@
           "goods": "Zakaz alkoholu, treści dla dorosłych i towarów regulowanych",
           "verification": "Weryfikacja firmy wymagana w środowisku produkcyjnym"
         }
+      }
+    },
+    "manage": {
+      "title": "Zarządzaj katalogiem w Meta",
+      "create": {
+        "title": "Utwórz nowy katalog w Meta",
+        "intro": "Tworzy pusty katalog na koncie WhatsApp Business, łączy go i podłącza tutaj.",
+        "name": "Nazwa katalogu",
+        "placeholder": "np. Mój sklep",
+        "button": "Utwórz katalog",
+        "needName": "Wpisz nazwę katalogu.",
+        "done": "Katalog utworzony i połączony."
+      },
+      "rename": {
+        "label": "Nazwa katalogu",
+        "button": "Zmień nazwę w Meta",
+        "done": "Zmieniono nazwę katalogu w Meta."
+      },
+      "delete": {
+        "title": "Usuń katalog w Meta",
+        "warning": "Trwale usuwa katalog i jego produkty w Meta. Tej operacji nie można cofnąć.",
+        "confirmLabel": "Wpisz identyfikator katalogu {id}, aby potwierdzić",
+        "button": "Usuń w Meta",
+        "dialogTitle": "Usunąć katalog w Meta?",
+        "dialogMessage": "Katalog zostanie usunięty w Meta i odłączony tutaj. Tej operacji nie można cofnąć.",
+        "cancel": "Anuluj",
+        "done": "Katalog usunięty w Meta."
       }
     }
   }

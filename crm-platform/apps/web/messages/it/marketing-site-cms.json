@@ -17,7 +17,6 @@
       "delete": "Elimina",
       "edit": "Modifica",
       "loadMore": "Carica altri",
-      "requestId": "ID richiesta",
       "errors": {
         "forbidden": "Solo un super admin può modificarlo.",
         "conflict": "Qualcun altro ha modificato questo mentre stavi lavorando. Ricarica e riprova.",

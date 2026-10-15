@@ -105,6 +105,13 @@ export async function startHarness(options: HarnessOptions = {}): Promise<Harnes
      ON CONFLICT (key) DO UPDATE SET value = platform_settings.value || '{"requireMfaForSuperAdmins": true}'::jsonb`,
   );
 
+  // The suites sign up with made-up domains and, unless they switch the code on, no mobile number. The work-email,
+  // disposable-mail and mandatory-phone rules default on, so they are off here; signup-email-phone-policy.e2e.spec.ts covers them.
+  await owner.query(
+    `INSERT INTO platform_settings (key, value, is_secret) VALUES ('registration', '{"businessEmailOnly": false, "blockDisposableEmail": false, "requirePhoneVerification": false}'::jsonb, false)
+     ON CONFLICT (key) DO UPDATE SET value = platform_settings.value || '{"businessEmailOnly": false, "blockDisposableEmail": false, "requirePhoneVerification": false}'::jsonb`,
+  );
+
   if (options.unofficialWhatsapp !== false) {
     await owner.query(
       `INSERT INTO platform_settings (key, value, is_secret) VALUES ('wa.unofficial.enabled', 'true'::jsonb, false)

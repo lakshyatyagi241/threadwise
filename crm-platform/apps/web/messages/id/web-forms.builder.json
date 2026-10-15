@@ -51,7 +51,9 @@
         "generic": "Masalah: {reason}",
         "reason": {
           "crm_required_unbound": "Properti yang diwajibkan workspace Anda tidak ada di formulir.",
-          "no_contact_point": "Tambahkan kolom email atau telepon yang ditautkan ke kontak, agar setiap pengiriman dapat dicocokkan dengan seseorang."
+          "no_contact_point": "Tambahkan kolom email atau telepon yang ditautkan ke kontak, agar setiap pengiriman dapat dicocokkan dengan seseorang.",
+          "payment_no_gateway": "Hubungkan gateway pembayaran yang dapat membuat tautan pembayaran, atau matikan pembayaran.",
+          "captcha_not_configured": "CAPTCHA diatur selalu aktif, tetapi platform tidak memiliki CAPTCHA. Pilih pengaturan lain, atau minta administrator platform Anda untuk menambahkannya."
         },
         "code": {
           "no_fields": "Tambahkan minimal satu kolom.",
@@ -129,7 +131,14 @@
         "custom": "Kustom",
         "requiredByCrm": "Wajib",
         "inForm": "Di formulir",
-        "full": "Formulir telah mencapai batas blok."
+        "full": "Formulir telah mencapai batas blok.",
+        "section": {
+          "contact": "Kontak",
+          "contactAddress": "Alamat kontak",
+          "company": "Perusahaan",
+          "companyAddress": "Alamat perusahaan"
+        },
+        "addAddress": "Tambahkan semua kolom alamat"
       },
       "list": {
         "title": "Kolom",

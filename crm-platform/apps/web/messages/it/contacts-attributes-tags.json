@@ -21,7 +21,6 @@
       "unavailable": "Questa parte dell'API non è ancora disponibile.",
       "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
       "unexpected": "Qualcosa è andato storto. Riprova.",
-      "requestId": "ID richiesta",
       "retry": "Riprova",
       "reservedKey": "Quella chiave è riservata a un token integrato. Scegline un'altra.",
       "attributeInUse": "Alcuni contatti hanno un valore per questo attributo.",
@@ -121,6 +120,11 @@
       "selectedActionsNone": "Contatti selezionati (seleziona prima le righe)",
       "modifyColumns": "Modifica colonne",
       "resetColumns": "Ripristina predefiniti",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsSave": "Save",
       "colContactName": "Nome contatto",
       "colPhone": "Numero di telefono",
       "colEmailId": "ID email",
@@ -170,7 +174,42 @@
       "import": "Importa",
       "columns": "Colonne",
       "addColumnField": "Aggiungi un campo personalizzato come colonna",
-      "kanbanView": "Vista board (per fase)"
+      "kanbanView": "Vista board (per fase)",
+      "colLeadScore": "Punteggio lead",
+      "colOwner": "Responsabile",
+      "unassigned": "Non assegnato",
+      "ownerFilter": "Filtra per responsabile",
+      "selectOwner": "Responsabile",
+      "allOwners": "Tutti i responsabili",
+      "myContacts": "I miei contatti",
+      "ownersCount": "{count} responsabili",
+      "ownerMe": "{name} (io)",
+      "ownerFormer": "Ex membro",
+      "reassignView": "Riassegna i contatti di {name}...",
+      "smsNamed": "SMS a {name}",
+      "noSms": "Nessun numero di telefono per gli SMS",
+      "pqlLabel": "Cerca contatti in linguaggio naturale",
+      "pqlAsk": "Chiedi",
+      "pqlAsking": "Richiesta in corso...",
+      "pqlIgnored": "Non compreso: {parts}",
+      "pqlNothing": "Nulla di questa ricerca è diventato un filtro.",
+      "pqlFailed": "La ricerca in linguaggio naturale non è disponibile ora. Riprova.",
+      "filter": "Filtra",
+      "filterAi": "Filtra con l'IA",
+      "filterAiHint": "Descrivi chi stai cercando",
+      "filterAdvanced": "Aggiungi filtro avanzato",
+      "quickFilters": "Filtri rapidi",
+      "sortButton": "Ordina",
+      "back": "Indietro",
+      "pqlPromptPlaceholder": "Descrivi i contatti che vuoi...",
+      "pqlTry": "Prova uno di questi",
+      "pqlExample2": "Inattivi da 30 giorni",
+      "pqlExample3": "Creati negli ultimi 7 giorni",
+      "clearFilter": "Rimuovi filtro",
+      "conditionsChip": "Condizioni: {count}",
+      "pqlExampleTag": "Contatti con il tag {tag} inattivi da 30 giorni",
+      "pqlExampleStage": "Contatti in {stage} creati negli ultimi 7 giorni",
+      "pqlExampleNoOwner": "Contatti senza proprietario"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -215,7 +254,6 @@
       "exportStarted": "La tua esportazione è stata scaricata.",
       "exportTooLarge": "Sono troppi contatti da esportare in una volta. Restringi il filtro e riprova.",
       "update": "Aggiorna",
-      "updateNeedsRows": "Scegli le righe",
       "updated": "{count, plural, one {Aggiornato # contatto.} other {Aggiornati # contatti.}}"
     },
     "form": {
@@ -304,7 +342,13 @@
       "statusNoticeReset": "Stato reimpostato su {status}.",
       "statusNoticeSet": "Stato impostato su {status}, il predefinito per questa fase.",
       "statusNoticeCleared": "Stato cancellato: non si applica a questa fase.",
-      "statusNoneForStage": "Nessuno stato configurato per questa fase."
+      "statusNoneForStage": "Nessuno stato configurato per questa fase.",
+      "owner": "Responsabile",
+      "ownerNone": "Non assegnato",
+      "ownerMe": "{name} (io)",
+      "ownerFormer": "Ex membro",
+      "ownerHelp": "Chi si occupa di questo contatto. Puoi scegliere solo le persone consentite dal tuo accesso.",
+      "ownerOutOfScope": "Il tuo accesso non ti consente di assegnare questo contatto a quella persona."
     },
     "tags": {
       "title": "Tag",
@@ -320,7 +364,12 @@
       "addPlaceholder": "Aggiungi o scegli un tag...",
       "addLabel": "Nome del tag",
       "add": "Aggiungi tag",
-      "failed": "Non è stato possibile modificare il tag. Riprova."
+      "failed": "Non è stato possibile modificare il tag. Riprova.",
+      "quickPlaceholder": "Cerca o crea un tag",
+      "create": "Crea il tag «{name}»",
+      "noMatch": "Nessun tag corrispondente",
+      "quickHint": "Scegli più tag, oppure digita un nome e premi Invio per crearne uno nuovo.",
+      "quickHintPick": "Scegli più tag dall'elenco."
     },
     "groups": {
       "eyebrow": "Workspace · {workspace}",
@@ -406,7 +455,10 @@
         "address": "Indirizzo",
         "memo": "Memo",
         "status": "Stato",
-        "source": "Origine"
+        "source": "Origine",
+        "consent": "Consenso marketing (sì / no)",
+        "consentSms": "Consenso marketing via SMS (sì / no)",
+        "consentEmail": "Consenso marketing via email (sì / no)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",
@@ -431,7 +483,7 @@
       "imported": "{count, plural, one {Importato # contatto.} other {Importati # contatti.}}",
       "importedUpdated": "{count, plural, one {# contatto esistente aggiornato.} other {# contatti esistenti aggiornati.}}",
       "importedInvalid": "{count, plural, one {# riga non valida saltata.} other {# righe non valide saltate.}}",
-      "downloadRejects": "Scarica le righe rifiutate",
+      "downloadRejects": "Scarica errori e righe saltate",
       "fileTooLarge": "Quel file supera {mb} MB.",
       "checking": "Controllo del file...",
       "errorFile": "Impossibile leggere quel file come CSV di contatti. Verifica che abbia una riga di intestazione e almeno un contatto.",
@@ -462,7 +514,8 @@
         "group_name_too_long": "nome del gruppo troppo lungo",
         "tag_name_too_long": "nome del tag troppo lungo",
         "plan_limit_reached": "limite di contatti del piano raggiunto",
-        "tag_limit_reached": "limite di tag del piano raggiunto"
+        "tag_limit_reached": "limite di tag del piano raggiunto",
+        "duplicate_in_file": "numero ripetuto, unito a una riga precedente"
       },
       "statusHint": "Applicato ai contatti creati da questo file.",
       "queued": "In attesa di avvio...",
@@ -512,7 +565,17 @@
       "noActivity": "Ancora nessuna attività per questo contatto.",
       "loadMore": "Carica altro",
       "yes": "Sì",
-      "no": "No"
+      "no": "No",
+      "owner": "Responsabile",
+      "ownerNone": "Non assegnato",
+      "ownerChange": "Cambia responsabile",
+      "ownerChanged": "Responsabile impostato su {name}.",
+      "ownerCleared": "Responsabile rimosso.",
+      "ownerConflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
+      "ownerForbidden": "Il tuo accesso non ti consente di assegnare questo contatto a quella persona.",
+      "ownerFailed": "Impossibile cambiare il responsabile. Riprova.",
+      "ownerMe": "{name} (io)",
+      "ownerFormer": "Ex membro"
     },
     "attributes": {
       "eyebrow": "Altro / Attributi",
@@ -1137,7 +1200,11 @@
         "willClear": "Verrà svuotata su {count, plural, one {il contatto selezionato} other {tutti i # contatti selezionati}}.",
         "requiredNoClear": "Una proprietà obbligatoria non può essere svuotata.",
         "problemEmpty": "Inserisci un valore o scegli Svuota."
-      }
+      },
+      "titleAll": "Aggiorna tutti i contatti corrispondenti",
+      "hintAll": "Imposta gli stessi valori su ogni contatto che corrisponde ai filtri attuali. I campi lasciati su Mantieni non vengono modificati.",
+      "applyAll": "Aggiorna tutti i contatti corrispondenti",
+      "ownerOnlyNote": "Per tutti i contatti corrispondenti qui si può modificare solo il responsabile. Per cambiare fase, stato o proprietà, seleziona invece le righe."
     },
     "kanban": {
       "board": "Contatti per fase",
@@ -1164,17 +1231,18 @@
         "updated": "Aggiornati",
         "rejected": "Rifiutate",
         "actions": "Azioni",
-        "downloadRejects": "Scarica rifiutate",
+        "downloadRejects": "Scarica errori e righe saltate",
         "statuses": {
           "queued": "In coda",
           "running": "In esecuzione",
           "completed": "Completata",
           "failed": "Non riuscita"
-        }
+        },
+        "by": "Importato da"
       },
       "exports": {
         "title": "Esportazioni",
-        "hint": "Esportazioni di contatti dall'Hub, dalla più recente. Il file scaricato non viene conservato.",
+        "hint": "Esportazioni di contatti dall'Hub, dalla più recente. Ogni file viene conservato 30 giorni, così tu e i colleghi con permesso di esportazione potete scaricarlo di nuovo.",
         "empty": "Ancora nessuna esportazione.",
         "by": "Da",
         "rows": "Contatti",
@@ -1183,8 +1251,176 @@
         "selections": {
           "ids": "Contatti selezionati",
           "filter": "Tutto ciò che corrisponde"
-        }
+        },
+        "download": "Scarica",
+        "noFile": "Non salvato",
+        "keptUntil": "Conservato fino al {date}",
+        "downloadFailed": "Impossibile scaricare il file. Potrebbe essere scaduto."
       }
+    },
+    "singleSend": {
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "send": "Invia",
+      "sending": "Invio in corso",
+      "contact": "Contatto",
+      "name": "Nome",
+      "phone": "Cellulare",
+      "email": "Email",
+      "title": {
+        "whatsapp": "Invia messaggio WhatsApp",
+        "sms": "Invia SMS",
+        "email": "Invia email",
+        "call": "Chiama"
+      },
+      "optedOut": "Questo contatto ha rifiutato le comunicazioni. Non è possibile inviare messaggi.",
+      "noPhone": "Questo contatto non ha un numero di telefono.",
+      "noEmail": "Questo contatto non ha un indirizzo email.",
+      "number": "Invia da",
+      "numberHint": "Il numero WhatsApp da cui viene inviato il messaggio.",
+      "noChannel": "Nessun numero WhatsApp collegato. Collegane uno prima in Canali.",
+      "template": "Template WhatsApp",
+      "templatePlaceholder": "Seleziona un template",
+      "noTemplates": "Nessun template approvato per questo numero.",
+      "notSendable": "Questo template non può essere compilato qui ({reason}).",
+      "variables": "Variabili del template",
+      "preview": "Anteprima",
+      "slot": "Variabile {key}",
+      "loading": "Caricamento",
+      "openFailed": "Impossibile aprire la conversazione: {message}",
+      "sent": "Messaggio in coda per {name}.",
+      "failed": "Impossibile inviare: {message}",
+      "callIntro": "Effettua una chiamata WhatsApp a questo contatto dal browser.",
+      "callOff": "Le chiamate non sono attive per questo numero WhatsApp. Attivale nelle impostazioni del numero.",
+      "callPermission": "Il contatto non ha ancora consentito le chiamate. La chiamata richiede prima il suo permesso.",
+      "callReady": "Pronto a chiamare {phone}.",
+      "later": {
+        "sms": "L'invio di SMS dal CRM non è ancora disponibile.",
+        "email": "L'invio di email dal CRM non è ancora disponibile."
+      },
+      "openApp": {
+        "sms": "Apri nella tua app di messaggi",
+        "email": "Apri nella tua app di posta"
+      }
+    },
+    "views": {
+      "label": "Viste",
+      "all": "Tutti i contatti",
+      "add": "Aggiungi una vista",
+      "changed": "I filtri sono cambiati dopo il salvataggio di questa vista",
+      "more": "Altro per {name}",
+      "picker": {
+        "title": "Seleziona una vista",
+        "create": "Crea nuova vista",
+        "search": "Cerca viste...",
+        "empty": "Nessuna vista trovata",
+        "pinned": "Nelle schede",
+        "favorites": "Preferiti",
+        "defaultFilters": "Filtri predefiniti",
+        "createdViews": "Viste create",
+        "addView": "Aggiungi vista",
+        "markFavorite": "Segna come preferita",
+        "unmarkFavorite": "Rimuovi dai preferiti"
+      },
+      "menu": {
+        "rename": "Rinomina vista",
+        "update": "Salva i filtri attuali",
+        "unpin": "Rimuovi dalle schede",
+        "pin": "Mostra come scheda",
+        "delete": "Elimina vista",
+        "edit": "Modifica vista"
+      },
+      "drawer": {
+        "editTitle": "Rinomina vista",
+        "name": "Nome della vista",
+        "namePlaceholder": "Vista senza titolo",
+        "shareWith": "Condividi con",
+        "justMe": "Solo io",
+        "everyone": "Tutti",
+        "save": "Aggiorna",
+        "cancel": "Annulla",
+        "close": "Chiudi"
+      },
+      "toast": {
+        "created": "Vista \"{name}\" creata.",
+        "updated": "Vista aggiornata.",
+        "filtersSaved": "Filtri salvati in \"{name}\".",
+        "deleted": "Vista \"{name}\" eliminata.",
+        "failed": "Impossibile salvare la vista: {message}",
+        "conflict": "Qualcun altro ha modificato questa vista. Ricarica e riprova."
+      },
+      "delete": {
+        "title": "Eliminare questa vista?",
+        "message": "\"{name}\" verrà eliminata per tutti con cui è condivisa. I contatti non vengono modificati.",
+        "confirm": "Elimina vista",
+        "cancel": "Mantieni vista"
+      },
+      "editor": {
+        "title": {
+          "create": "Crea nuova vista",
+          "edit": "Modifica vista"
+        },
+        "close": "Chiudi",
+        "back": "Torna ai contatti",
+        "name": "Nome della vista",
+        "namePlaceholder": "Inserisci il nome della vista",
+        "favorite": "Segna come preferita",
+        "favoriteHint": "Una vista preferita ha una propria scheda.",
+        "shareWith": "Condividi con",
+        "justMe": "Solo io",
+        "everyone": "Tutti",
+        "filterTitle": "Filtra contatti",
+        "filterHint": "Soddisfa tutte o almeno una delle condizioni e aggiungi gruppi per filtri più complessi.",
+        "columnsTitle": "Preferenze colonne",
+        "locked": "Sempre visibile",
+        "cancel": "Annulla",
+        "create": "Crea vista",
+        "save": "Salva vista",
+        "saving": "Salvataggio",
+        "needName": "Inserisci un nome per la vista.",
+        "needFilter": "Aggiungi almeno una condizione completa.",
+        "notFound": "Questa vista non è stata trovata o è stata eliminata.",
+        "noPermission": "Non hai il permesso di eseguire questa azione.",
+        "loading": "Caricamento",
+        "columnsHint": "Cerca e seleziona le colonne mostrate da questa vista, poi trascina quelle scelte per impostarne l'ordine.",
+        "drag": "Trascina per riordinare {name}",
+        "selectedUsers": "Utenti selezionati",
+        "accessLevel": "Livello di accesso",
+        "canView": "Può visualizzare",
+        "canEdit": "Può visualizzare e modificare",
+        "peoplePlaceholder": "Cerca persone",
+        "noPeople": "Nessuna persona trovata",
+        "removePerson": "Rimuovi {name}",
+        "clearPeople": "Rimuovi tutte le persone",
+        "needPeople": "Scegli almeno una persona.",
+        "onlyCreator": "Solo la persona che ha creato questa vista può cambiare con chi è condivisa.",
+        "searchColumns": "Cerca colonne",
+        "noColumnMatch": "Nessuna colonna corrisponde.",
+        "available": "Colonne disponibili",
+        "selected": "Colonne selezionate",
+        "selectAll": "Seleziona tutto",
+        "reorder": "Trascina per riordinare le colonne",
+        "remove": "Rimuovi {name}"
+      },
+      "presets": {
+        "myContacts": "I miei contatti",
+        "newThisWeek": "Nuovi questa settimana",
+        "newLastWeek": "Nuovi la settimana scorsa",
+        "recentlyCreated": "Creati di recente",
+        "recentlyModified": "Modificati di recente",
+        "recentlyImported": "Importati di recente",
+        "neverContacted": "Mai contattati",
+        "needsFollowUp": "Da ricontattare",
+        "active": "Attivi",
+        "inactive": "Inattivi",
+        "unsubscribed": "Disiscritti"
+      }
+    },
+    "erase": {
+      "scope": "Eliminare un contatto cancella anche le sue conversazioni, i messaggi, i contenuti multimediali, i file, le registrazioni delle chiamate e i registri chiamate. Lead, trattative, attività e fatture restano.",
+      "scopeMany": "Eliminare dei contatti cancella anche le loro conversazioni, i messaggi, i contenuti multimediali, i file, le registrazioni delle chiamate e i registri chiamate. Lead, trattative, attività e fatture restano.",
+      "keepHistory": "Conserva la cronologia delle conversazioni senza l'identità della persona",
+      "keepHistoryHint": "Le conversazioni restano nei tuoi archivi ma non rimandano più alla persona."
     }
   }
 }

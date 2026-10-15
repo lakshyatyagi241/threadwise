@@ -51,3 +51,10 @@ describe('dates', () => {
     expect(timeAgo('2026-10-02T12:00:00Z', now, 'en')).toBe('0 seconds ago');
   });
 });
+
+describe('formatWhen time zone', () => {
+  it('gives a different day and hour for two zones', () => {
+    expect(formatWhen('2026-10-02T20:30:00Z', 'en', 'Asia/Kolkata')).toBe('Oct 03, 02:00');
+    expect(formatWhen('2026-10-02T20:30:00Z', 'en', 'America/New_York')).toBe('Oct 02, 16:30');
+  });
+});

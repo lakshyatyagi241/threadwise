@@ -8,6 +8,7 @@ import type {
   ChannelStatus,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { channelRowOwnerSql } from '../../realtime';
 
 /**
  * Every SQL statement of the channel registry. Each method takes the transaction it runs in (tenant scoping is the caller's, through
@@ -103,6 +104,19 @@ export interface ChannelPatch {
 
 @Injectable()
 export class ChannelsRepository {
+  /** Channel id -> owner user id for the email channels that have one (a personal mailbox's), see `channelRowOwnerSql`. */
+  async owners(tx: Tx, orgId: number): Promise<Map<number, number>> {
+    const res = await tx.execute(sql`
+      SELECT ch.id, ${channelRowOwnerSql('ch')} AS owner_user_id
+      FROM channels ch WHERE ch.org_id = ${orgId} AND ch.kind = 'email'`);
+    const out = new Map<number, number>();
+    for (const r of rowsOf(res)) {
+      if (r.owner_user_id !== null && r.owner_user_id !== undefined)
+        out.set(Number(r.id), Number(r.owner_user_id));
+    }
+    return out;
+  }
+
   async list(tx: Tx, orgId: number): Promise<ChannelRow[]> {
     const res = await tx.execute(
       sql`SELECT ${COLUMNS} FROM channels WHERE org_id = ${orgId} ORDER BY created_at, id`,

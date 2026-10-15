@@ -50,10 +50,9 @@ export function PhoneField({
     const picker = intlTelInput(el, {
       initialCountry: openingCountry(s.defaultIso).toLowerCase() as InitialCountry,
       separateDialCode: true,
-      nationalMode: false,
-      autoPlaceholder: 'aggressive',
+      placeholderNumberPolicy: 'AGGRESSIVE',
       // The builder card clips its overflow; the country list is portalled out of it, as in Reference.
-      dropdownContainer: document.body,
+      dropdownParent: document.body,
     });
     iti.current = picker;
 
@@ -69,7 +68,7 @@ export function PhoneField({
     }
 
     const syncCountry = () => {
-      const data = picker.getSelectedCountryData();
+      const data = picker.getSelectedCountry();
       if (data?.dialCode) live.current.onCc(`+${data.dialCode}`);
     };
     const syncNumber = () => live.current.onNumber(nationalDigits(el.value));

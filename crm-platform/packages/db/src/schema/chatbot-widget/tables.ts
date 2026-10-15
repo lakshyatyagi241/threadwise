@@ -6,6 +6,7 @@ import { sql } from 'drizzle-orm';
 import {
   boolean,
   check,
+  customType,
   foreignKey,
   index,
   jsonb,
@@ -111,6 +112,47 @@ export const chatbotWidgets = pgTable(
 
 export type ChatbotWidgetsRow = typeof chatbotWidgets.$inferSelect;
 export type NewChatbotWidgetsRow = typeof chatbotWidgets.$inferInsert;
+
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
+
+/**
+ * Mirror of migrations/20261118090000_wgt_flow_widget_assets.sql (the SQL is the source of truth): the logo and the popup picture
+ * a flow bot's widget carries, one row per flow and slot, replaced in place and deleted with the flow.
+ */
+export const flowWidgetAssets = pgTable(
+  'flow_widget_assets',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    flowId: idColumn('flow_id').notNull(),
+    slot: text('slot').notNull(),
+    mime: text('mime').notNull(),
+    bytes: bytea('bytes').notNull(),
+    etag: text('etag').notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('flow_widget_assets_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('flow_widget_assets_org_id_flow_id_slot_key').on(t.orgId, t.flowId, t.slot),
+    foreignKey({
+      name: 'flow_widget_assets_org_id_flow_id_fkey',
+      columns: [t.orgId, t.flowId],
+      foreignColumns: [flows.orgId, flows.id],
+    }).onDelete('cascade'),
+    check('chk_flow_widget_assets_slot', sql`${t.slot} IN ('logo', 'popup')`),
+    check(
+      'chk_flow_widget_assets_mime',
+      sql`${t.mime} IN ('image/png', 'image/jpeg', 'image/webp', 'image/gif')`,
+    ),
+    check('chk_flow_widget_assets_size', sql`octet_length(${t.bytes}) <= 1048576`),
+  ],
+);
+
+export type FlowWidgetAssetsRow = typeof flowWidgetAssets.$inferSelect;
 
 export const chatbotWidgetVisitors = pgTable(
   'chatbot_widget_visitors',

@@ -4,8 +4,7 @@
       "title": "テンプレート"
     },
     "common": {
-      "dismiss": "閉じる",
-      "requestId": "リクエストID"
+      "dismiss": "閉じる"
     },
     "status": {
       "draft": "下書き",

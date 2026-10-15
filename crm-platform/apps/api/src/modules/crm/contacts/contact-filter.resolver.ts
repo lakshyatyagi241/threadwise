@@ -64,6 +64,20 @@ export async function resolveContactFilter(
     resolved.ownerId = rows[0].id;
   }
 
+  const ownerUuids = [...new Set(input.ownerIds ?? [])];
+  if (ownerUuids.length > 0 || input.unassigned) {
+    const rows =
+      ownerUuids.length > 0
+        ? await tx
+            .select({ id: users.id })
+            .from(users)
+            .where(and(eq(users.orgId, orgId), inArray(users.uuid, ownerUuids)))
+        : [];
+    // Unknown people simply own nothing; when none is known and "nobody" is not asked for, nothing can match.
+    if (rows.length === 0 && !input.unassigned) return { empty: true };
+    resolved.ownerAny = { ids: rows.map((r) => r.id), unassigned: input.unassigned === true };
+  }
+
   if (input.groupId) {
     const rows = await tx
       .select({ id: contactGroups.id })

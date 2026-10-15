@@ -193,7 +193,6 @@
         "outOfOrder": "Một bước chạy sai thứ tự. Hãy tải lại trang và bắt đầu lại.",
         "step": "Bước cài đặt thất bại. Hãy kiểm tra thông tin và nhật ký máy chủ, rồi thử lại.",
         "unknown": "Đã xảy ra lỗi. Hãy thử lại.",
-        "requestId": "Mã yêu cầu {id}",
         "prerequisites": "Máy chủ chưa sẵn sàng để thiết lập: {items}.",
         "licence": {
           "empty": "Nhập mã mua hàng CodeCanyon của bạn.",
@@ -265,7 +264,6 @@
       "loading": "Đang tải",
       "errorForbidden": "Bạn không có quyền xem trang này.",
       "errorUnexpected": "Không tải được trình cập nhật.",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại",
       "licence": {
         "kicker": "bước 1 · giấy phép",

@@ -75,7 +75,9 @@
       "removeWish": "{name} van verlanglijst verwijderen",
       "quickView": "Snelle weergave van {name}",
       "quickViewTitle": "Snelle weergave",
-      "was": "Was"
+      "was": "Was",
+      "chooseOptions": "Kies opties",
+      "chooseOptionsNamed": "Kies opties voor {name}"
     },
     "quick": {
       "details": "Volledige details →"
@@ -162,7 +164,9 @@
       "increase": "Aantal verhogen",
       "remove": "{name} uit winkelwagen verwijderen",
       "fullTitle": "Je winkelwagen is vol",
-      "fullBody": "Een winkelwagen bevat maximaal 100 verschillende producten. Bestel deze eerst en start daarna een nieuwe winkelwagen."
+      "fullBody": "Een winkelwagen bevat maximaal 100 verschillende producten. Bestel deze eerst en start daarna een nieuwe winkelwagen.",
+      "variantDroppedTitle": "Je winkelwagen is bijgewerkt",
+      "variantDroppedBody": "{count, plural, one {# artikel moet opnieuw worden gekozen en is uit je winkelwagen verwijderd.} other {# artikelen moeten opnieuw worden gekozen en zijn uit je winkelwagen verwijderd.}}"
     },
     "wish": {
       "title": "Verlanglijst",
@@ -233,9 +237,9 @@
       "couponFallback": "Ongeldige code."
     },
     "errors": {
-      "itemsUnavailable": "Die artikelen zijn niet meer beschikbaar. Ververs de pagina en probeer het opnieuw.",
       "notAvailable": "Deze store is niet beschikbaar.",
-      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw."
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "itemsRefreshed": "Sommige artikelen zijn gewijzigd of uitverkocht, dus we hebben je winkelwagen bijgewerkt. Controleer hem en probeer het opnieuw."
     },
     "placed": {
       "title": "Bestelling geplaatst",
@@ -331,6 +335,13 @@
       "help": "Hulp nodig?",
       "support": "Neem contact op met support",
       "metaTitle": "Pagina niet gevonden"
+    },
+    "variant": {
+      "from": "Vanaf {price}",
+      "optionsCount": "{count, plural, one {# optie} other {# opties}}",
+      "select": "Kies {option}",
+      "unavailable": "Deze combinatie is niet beschikbaar",
+      "soldOutValue": "uitverkocht"
     }
   }
 }

@@ -5,6 +5,7 @@ import type { Redis } from 'ioredis';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
 import type { NormalisedInbound } from '../../../infra/providers/chat-conversations/channel.port';
+import { bareGroupId } from '../../../infra/providers/node-bridge-runtime/group-mapping';
 import type { Normalized } from '../../../infra/providers/node-bridge-runtime/inbound-normalizer';
 import type { InboundMessage } from '../../../infra/providers/node-bridge-runtime/inbound.port';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
@@ -30,6 +31,8 @@ interface DeviceRow {
   status: string;
 }
 
+const GROUP_FALLBACK_TITLE = 'WhatsApp group';
+
 const digits = (s: string | null | undefined) => (s ?? '').replace(/\D+/g, '');
 
 /** What the thread shows for a file that did not come with the message. */
@@ -51,14 +54,17 @@ const KIND_LABEL: Record<string, string> = {
  * - A customer's message becomes an inbound job. A file is held in Redis for the job (`fetchMedia` reads it), because it cannot be
  *   downloaded later without the live message; one that was too large or failed arrives as text saying so, never lost.
  * - The business's own message typed on the phone (an echo) is recorded on the thread as outbound, once (the ledger keys on the id).
- * - Group messages are not threads here: they stay in the group directory (TW-NODE-021), as in Reference's inbox, which listed
- *   individual chats.
+ * - A group message (personal-number groups, D2/D3) is a message on the group's own thread, keyed `g:<bare group id>` by the ingest:
+ *   storage only (no contact per speaker, no flow, keyword reply, AI or routing), the speaker's name and number on the message, the
+ *   thread titled with the group's subject from the directory. One typed on the phone or another linked device is mirrored as
+ *   outbound, once.
  * - Delivery reports go to the channel that sent the message (a marker the adapter leaves); anything else is not ours.
  */
 @Injectable()
 export class InboxBridge implements InboundSink, OnModuleInit {
   private readonly logger = new Logger(InboxBridge.name);
   private readonly channels = new Map<string, { uuid: string; at: number }>();
+  private readonly subjects = new Map<string, { subject: string; at: number }>();
 
   constructor(
     private readonly db: DatabaseService,
@@ -82,7 +88,7 @@ export class InboxBridge implements InboundSink, OnModuleInit {
     n: Normalized,
     media?: Buffer,
   ): Promise<void> {
-    if (n.kind === 'group') return;
+    if (n.kind === 'group') return this.groupMessage(ctx, n.message, media);
     const m = n.message;
     const peerKey = digits(m.chat.phone) || digits(m.chat.lid?.split('@')[0]);
     if (!peerKey) return;
@@ -113,6 +119,78 @@ export class InboxBridge implements InboundSink, OnModuleInit {
       channelUuid,
       await this.normalise(ctx, m, peerKey, media),
     );
+  }
+
+  /** A message in a group the number belongs to (never an automation trigger: the ingest skips every listener for a `g:` thread). */
+  private async groupMessage(
+    ctx: { orgId: number; deviceId: number },
+    m: InboundMessage,
+    media?: Buffer,
+  ): Promise<void> {
+    const groupId = bareGroupId(m.chat.jid);
+    if (!groupId) return;
+    const channelUuid = await this.channelOf(ctx.orgId, ctx.deviceId);
+    if (!channelUuid) return;
+    const title = await this.groupTitle(ctx, groupId);
+
+    if (m.fromMe) {
+      // Typed on the phone or on another linked device. A reaction of ours is not a bubble. A message our own send just made is already
+      // on the thread (the adapter leaves its id in the sent marker, and the ledger keys on it): never a second bubble.
+      if (m.reaction) return;
+      if (await this.redis.get(inboxKeys.sent(m.providerMessageId))) return;
+      await this.system(ctx.orgId, () =>
+        this.conversations.recordOutbound({
+          channelId: channelUuid,
+          peerKey: `g:${groupId}`,
+          source: 'phone',
+          body: this.summary(m),
+          providerMessageId: m.providerMessageId,
+          threadTitle: title,
+        }),
+      );
+      await this.redis.set(
+        inboxKeys.sent(m.providerMessageId),
+        channelUuid,
+        'EX',
+        SENT_MARKER_TTL_S,
+      );
+      return;
+    }
+
+    const who = m.participant;
+    // The speaker is named on the message, never on the thread: the thread has no peer name and no contact.
+    const { peerName: _speaker, ...normalised } = await this.normalise(ctx, m, groupId, media);
+    await this.publisher.enqueueInbound(ctx.orgId, channelUuid, {
+      ...normalised,
+      group: {
+        title,
+        // A speaker WhatsApp knows only by an anonymous id has no phone: the number is empty and the id travels separately.
+        participant: who?.phone ?? '',
+        ...(m.pushName || who?.name ? { participantName: (m.pushName ?? who?.name)! } : {}),
+        ...(who?.lid ? { participantLid: who.lid } : {}),
+      },
+    });
+  }
+
+  /** The group's subject from the directory (kept in sync by the groups API), or the generic title until the first sync. */
+  private async groupTitle(
+    ctx: { orgId: number; deviceId: number },
+    groupId: string,
+  ): Promise<string> {
+    const key = `${ctx.orgId}:${ctx.deviceId}:${groupId}`;
+    const hit = this.subjects.get(key);
+    if (hit && Date.now() - hit.at < 60_000) return hit.subject;
+    const subject = await this.db.txAs({ orgId: ctx.orgId, userId: null }, async (tx) => {
+      const res = await tx.execute(
+        sql`SELECT subject FROM wa_device_groups
+             WHERE org_id = ${ctx.orgId} AND device_id = ${ctx.deviceId} AND group_jid = ${groupId} LIMIT 1`,
+      );
+      return ((res.rows[0] as { subject: string | null } | undefined)?.subject ?? '').trim();
+    });
+    const title = subject || GROUP_FALLBACK_TITLE;
+    if (this.subjects.size > 2000) this.subjects.clear();
+    this.subjects.set(key, { subject: title, at: Date.now() });
+    return title;
   }
 
   async deviceStatus(
@@ -157,7 +235,16 @@ export class InboxBridge implements InboundSink, OnModuleInit {
       ...(m.replyToProviderMessageId
         ? { replyToProviderMessageId: m.replyToProviderMessageId }
         : {}),
-      ...(m.forwarded ? { meta: { forwarded: true } } : {}),
+      ...(m.forwarded || m.mentionedJids?.length
+        ? {
+            meta: {
+              ...(m.forwarded ? { forwarded: true } : {}),
+              ...(m.mentionedJids?.length
+                ? { mentions: m.mentionedJids.slice(0, 50).map((jid) => ({ jid })) }
+                : {}),
+            },
+          }
+        : {}),
     };
     if (m.reaction) {
       return {

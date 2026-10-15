@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { Alert, Button, Checkbox, Field, Input, Select, Textarea, cn } from '@crm/ui';
+import { ConsentNoticeEditor } from '@/features/contact-consent';
 import {
   QUESTION_TYPES,
   TEMPLATE_EVENTS,
@@ -38,11 +39,13 @@ const TOKEN_VALUES = {
 
 /** Step 5: the four lifecycle messages, the reminders, and the questions asked at booking. */
 export function MessagingStep() {
+  const { typeId } = useEditor();
   return (
     <div className="space-y-4">
       <LifecycleMessages />
       <Reminders />
       <Questionnaire />
+      <ConsentNoticeEditor scope="booking" refId={typeId ?? ''} disabled={typeId === null} />
     </div>
   );
 }

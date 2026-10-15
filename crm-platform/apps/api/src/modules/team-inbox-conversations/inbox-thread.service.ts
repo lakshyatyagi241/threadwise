@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
   INBOX_TEMPLATE_LIST_MAX,
+  type EmailReplyExtras,
   type InboxTemplateListResponse,
   type InboxTemplateOption,
   type ListInboxTemplatesQuery,
@@ -20,6 +21,7 @@ import {
   type ConversationsFacade,
   type OutboundContent,
 } from '../chat-conversations';
+import { EmailTemplatesReader } from '../email-templates';
 import { TemplatesRepository } from '../message-templates';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
@@ -52,8 +54,15 @@ export class InboxThreadService {
     private readonly uploads: MediaUploadsRepository,
     private readonly channels: ChannelsFacade,
     private readonly templates: TemplatesRepository,
+    private readonly emailTemplates: EmailTemplatesReader,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
+
+  /** The conversation for a contact on a channel, created if missing. The route requires `inbox.conversation.reply`, like sending the first message. */
+  async open(contactId: string, channelId: string): Promise<{ id: string }> {
+    const ref = await this.conversations.openConversationFor(contactId, channelId);
+    return { id: ref.id };
+  }
 
   async listMessages(uuid: string, query: ListMessagesQuery): Promise<MessageListResponse> {
     const ctx = RequestContextStore.require();
@@ -100,7 +109,26 @@ export class InboxThreadService {
     let claimed: { id: number; fresh: boolean } | null = null;
     const content = await this.db.tx(async (tx): Promise<OutboundContent> => {
       await this.assertCanReply(tx, ctx, uuid);
-      if (input.kind === 'text') return { kind: 'text', body: input.body };
+      if (input.kind === 'text') {
+        // A reply from a marketing email template is marketing mail: the server decides, so the client cannot send it without the
+        // ConsentGate and the unsubscribe link. A template the sender cannot use (or an archived one) refuses the reply.
+        let email: (EmailReplyExtras & { marketing?: boolean }) | undefined = input.email;
+        if (email?.templateId) {
+          const purpose = await this.emailTemplates.purposeForReply(
+            tx,
+            ctx.orgId,
+            ctx.userId!,
+            email.templateId,
+          );
+          if (purpose === 'marketing') email = { ...email, marketing: true };
+        }
+        return {
+          kind: 'text',
+          body: input.body,
+          ...(email ? { email } : {}),
+          ...(input.mentions?.length ? { mentions: input.mentions } : {}),
+        };
+      }
       if (input.kind === 'reaction') return { kind: 'reaction', emoji: input.emoji };
       if (input.kind === 'location') {
         const { latitude, longitude, name, address } = input;

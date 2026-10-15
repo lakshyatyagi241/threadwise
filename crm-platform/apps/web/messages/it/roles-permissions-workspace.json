@@ -9,7 +9,6 @@
       "breadcrumb": "Percorso di navigazione",
       "loading": "Caricamento…",
       "retry": "Riprova",
-      "requestId": "ID richiesta",
       "cancel": "Annulla",
       "close": "Chiudi",
       "dismiss": "Ignora",
@@ -102,7 +101,8 @@
         "added": "{name} è stato aggiunto al workspace.",
         "rolesUpdated": "Ruoli aggiornati per {name}.",
         "deactivated": "{name} è stato disattivato.",
-        "reactivated": "{name} è stato riattivato."
+        "reactivated": "{name} è stato riattivato.",
+        "invited": "Invito inviato a {name}."
       },
       "deactivate": {
         "action": "Disattiva",
@@ -123,7 +123,13 @@
         "passwordShort": "La password deve contenere almeno 8 caratteri.",
         "generate": "Genera",
         "role": "Ruolo",
-        "submit": "Aggiungi membro"
+        "submit": "Aggiungi membro",
+        "inviteHint": "Inviamo loro via e-mail un link per impostare la propria password. Il link funziona una sola volta e scade dopo alcuni giorni.",
+        "submitInvite": "Invia invito",
+        "linkNotSent": "Impossibile inviare l'e-mail a {email}. Copia questo link e consegnalo; non verrà mostrato di nuovo.",
+        "copyLink": "Copia link",
+        "copied": "Copiato",
+        "done": "Fatto"
       },
       "changeRole": {
         "title": "Cambia ruoli di {name}",

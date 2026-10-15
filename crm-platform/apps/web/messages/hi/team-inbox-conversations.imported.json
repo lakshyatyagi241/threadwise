@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "इंपोर्टेड",
+      "importedHint": "यह चैट फ़ोन की हिस्ट्री से इंपोर्ट की गई थी"
+    },
+    "bubble": {
+      "imported": "इंपोर्टेड",
+      "importedHint": "फ़ोन की चैट हिस्ट्री से इंपोर्ट किया गया"
+    }
+  }
+}

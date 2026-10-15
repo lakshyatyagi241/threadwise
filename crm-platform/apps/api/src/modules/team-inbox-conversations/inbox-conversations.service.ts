@@ -5,6 +5,8 @@ import {
   canMoveConversationStatus,
   type ChannelCapabilities,
   type ConversationDetail,
+  type ConversationGroupMembers,
+  type ListConversationGroupMembersQuery,
   type ConversationListResponse,
   type ConversationStatus,
   type ConversationSummary,
@@ -28,6 +30,8 @@ import {
   CONVERSATIONS_FACADE,
   ChannelRegistryService,
   ChannelsFacade,
+  CloudGroupThreadReader,
+  PersonalGroupThreadReader,
   type ConversationsFacade,
 } from '../chat-conversations';
 import { ContactsRepository } from '../crm';
@@ -84,6 +88,8 @@ export class InboxConversationsService {
     @Inject(CHANNEL_ADAPTERS) private readonly adapters: ChannelAdapter[],
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
     private readonly notifications: NotificationsService,
+    private readonly personalGroups: PersonalGroupThreadReader,
+    private readonly cloudGroups: CloudGroupThreadReader,
   ) {}
 
   async list(query: ListConversationsQuery): Promise<ConversationListResponse> {
@@ -109,6 +115,9 @@ export class InboxConversationsService {
         tab: query.tab,
         status: query.status,
         channelId,
+        // `labels` is the original name of the `tags` query parameter; both are read.
+        tagIds: [...new Set([...query.tags, ...query.labels])],
+        tagScope: query.tagScope,
         q: query.q,
         archived: query.archived,
         limit: query.limit,
@@ -158,13 +167,26 @@ export class InboxConversationsService {
       if (!row) throw conversationNotFound();
       this.access.assertVisible(viewer, row);
 
-      const [{ capabilities, window }, contactSummary, past] = await Promise.all([
-        this.channelState(tx, ctx.orgId, row),
-        this.contactSummary(tx, ctx, row),
-        row.contactId === null
-          ? Promise.resolve([])
-          : this.repo.pastConversations(tx, ctx.orgId, viewer, row.contactId, row.id),
-      ]);
+      const [{ capabilities, window }, contactSummary, past, personalGroup, cloudGroup] =
+        await Promise.all([
+          this.channelState(tx, ctx.orgId, row),
+          this.contactSummary(tx, ctx, row),
+          row.contactId === null
+            ? Promise.resolve([])
+            : this.repo.pastConversations(tx, ctx.orgId, viewer, row.contactId, row.id),
+          this.personalGroups.stateOf(
+            tx,
+            ctx.orgId,
+            { id: row.channelId, kind: row.channelKind },
+            row.peerKey,
+          ),
+          this.cloudGroups.stateOf(
+            tx,
+            ctx.orgId,
+            { id: row.channelId, kind: row.channelKind },
+            row.peerKey,
+          ),
+        ]);
 
       const base: ConversationDetail = {
         ...toConversationSummary(row),
@@ -174,6 +196,8 @@ export class InboxConversationsService {
         waitingSince: iso(row.waitingSince),
         firstResponseAt: iso(row.firstResponseAt),
         resolvedAt: iso(row.resolvedAt),
+        ...(personalGroup ? { personalGroup } : {}),
+        ...(cloudGroup ? { cloudGroup } : {}),
         sla: {
           firstResponseDueAt: iso(row.slaFirstResponseDue),
           resolutionDueAt: iso(row.slaResolutionDue),
@@ -185,6 +209,30 @@ export class InboxConversationsService {
         contactSummary,
         pastConversations: past.map((p) => toPastConversation(p)),
       };
+    });
+  }
+
+  /**
+   * `GET .../group-members`: the members of a personal-number group thread, for the composer's @mention picker. Read from the directory
+   * (`wa_device_groups.participants`), visibility-checked like the thread itself. Empty for any other thread.
+   */
+  async groupMembers(
+    uuid: string,
+    query: ListConversationGroupMembersQuery,
+  ): Promise<ConversationGroupMembers> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const viewer = await this.access.viewer(tx, ctx);
+      const row = await this.repo.byUuid(tx, ctx.orgId, uuid);
+      if (!row) throw conversationNotFound();
+      this.access.assertVisible(viewer, row);
+      return this.personalGroups.members(
+        tx,
+        ctx.orgId,
+        { id: row.channelId, kind: row.channelKind },
+        row.peerKey,
+        query,
+      );
     });
   }
 
@@ -287,6 +335,7 @@ export class InboxConversationsService {
           rowVersion: result.row.rowVersion,
           assigneeUserId: result.row.assigneeUserId,
           assigneeTeamId: result.row.assigneeTeamId,
+          channelOwnerUserId: result.row.channelOwnerUserId,
         },
         ['status'],
       );
@@ -346,6 +395,14 @@ export class InboxConversationsService {
       ownerName = ((res.rows[0] as { full_name?: string } | undefined)?.full_name ?? null) as
         string | null;
     }
+    const tagRes = await tx.execute(
+      sql`SELECT t.uuid, t.name::text AS name, t.color FROM contact_tags ct
+          JOIN tags t ON t.org_id = ct.org_id AND t.id = ct.tag_id
+          WHERE ct.org_id = ${ctx.orgId} AND ct.contact_id = ${row.contactId} ORDER BY t.name`,
+    );
+    const contactTags = (
+      tagRes.rows as Array<{ uuid: string; name: string; color: string | null }>
+    ).map((r) => ({ id: r.uuid, name: r.name, color: r.color ?? null }));
     return toContactSummary(
       {
         uuid: contact.uuid,
@@ -358,9 +415,16 @@ export class InboxConversationsService {
         source: contact.source,
         isUnsubscribed: contact.isUnsubscribed,
         whatsappSubscriptionStatus: contact.whatsappSubscriptionStatus,
+        leadScore: contact.leadScore,
+        leadScoreSource:
+          contact.leadScoreSource === 'ai' ? 'ai' : contact.leadScore === null ? null : 'manual',
+        leadScoreReasons: contact.leadScoreReasons,
+        leadScoredAt: contact.leadScoredAt,
+        leadScoreModel: contact.leadScoreModel,
         createdAt: contact.createdAt,
       },
       ownerName,
+      contactTags,
     );
   }
 }

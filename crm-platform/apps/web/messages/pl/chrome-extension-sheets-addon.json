@@ -14,12 +14,11 @@
       "copy": "Kopiuj",
       "copied": "Skopiowano",
       "copyFailed": "Nie udało się skopiować. Zaznacz klucz i skopiuj go ręcznie.",
-      "reference": "Numer referencyjny dla pomocy technicznej: {id}",
       "back": "Wróć do integracji"
     },
     "page": {
       "title": "Dodatek Arkuszy Google",
-      "subtitle": "Pobieraj i wysyłaj kontakty oraz synchronizuj produkty między arkuszem kalkulacyjnym a Twoją przestrzenią roboczą.",
+      "subtitle": "Wysyłaj nowe i zmienione wiersze arkusza do swojego obszaru roboczego jako kontakty, pobieraj kontakty do arkusza i synchronizuj produkty.",
       "loading": "Wczytywanie konfiguracji dodatku",
       "retry": "Ponów",
       "status": {
@@ -51,7 +50,7 @@
     },
     "key": {
       "title": "Twój klucz",
-      "intro": "Dodatek używa Twojego osobistego klucza, aby działać w Twoim imieniu. Widzi tylko to, na co pozwala Twoja rola.",
+      "intro": "Dodatek używa Twojego osobistego klucza, aby działać w Twoim imieniu. Widzi tylko to, na co pozwala Twoja rola. Klucz to ostatnia część Twojego Webhook URL.",
       "none": "Nie masz jeszcze klucza.",
       "generate": "Wygeneruj klucz",
       "rotate": "Wygeneruj nowy klucz",
@@ -61,8 +60,8 @@
       "created": "Utworzono {when}",
       "lastUsed": "Ostatnio użyto {when}",
       "neverUsed": "Nigdy nie używano",
-      "newTitle": "Twój nowy klucz",
-      "newWarning": "Skopiuj go teraz. Jest pokazywany tylko raz i nie można go pokazać ponownie. Każdy, kto ma ten klucz, może działać w dodatku w Twoim imieniu.",
+      "newTitle": "Twój nowy klucz i Webhook URL",
+      "newWarning": "Skopiuj je teraz. Klucz i Webhook URL są pokazywane tylko raz i nie można ich pokazać ponownie. Każdy, kto je ma, może działać w dodatku w Twoim imieniu.",
       "rotatedNote": "Twój poprzedni klucz przestał działać.",
       "keyLabel": "Nowy klucz",
       "confirmRotate": {
@@ -86,7 +85,8 @@
         "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
         "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
         "unexpected": "Po naszej stronie coś poszło nie tak. Spróbuj ponownie."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Co może Twój klucz",
@@ -109,12 +109,12 @@
     },
     "steps": {
       "title": "Skonfiguruj w arkuszu kalkulacyjnym",
-      "one": "Otwórz arkusz kalkulacyjny, następnie Rozszerzenia, potem Apps Script.",
-      "two": "Pobierz sześć powyższych plików. W Ustawieniach projektu pokaż plik appsscript.json i wklej appsscript.json oraz Code.gs w miejsce tych w edytorze.",
-      "three": "Dodaj trzy pliki HTML o nazwach Dialog, Settings i Help i wklej do nich pobrane pliki.",
-      "four": "Zapisz i przeładuj arkusz kalkulacyjny. Pojawi się menu CRM. Zezwól na trzy uprawnienia, o które prosi Google.",
-      "five": "Wybierz CRM, następnie Ustawienia, wklej swój klucz i wybierz Zapisz i sprawdź.",
-      "six": "Wiersz 1 arkusza zawiera nazwy kolumn. Następnie użyj w menu CRM opcji Pobierz kontakty, Wyślij kontakty lub Synchronizuj produkty."
+      "one": "Skopiuj swój Webhook URL podczas tworzenia klucza. Jest pokazywany tylko raz.",
+      "two": "W arkuszu kalkulacyjnym wybierz Extensions, potem Add-ons, potem Get add-ons i zainstaluj dodatek z Google Workspace Marketplace. Dopóki go tam nie ma, wklej sześć plików poniżej w Extensions, Apps Script.",
+      "three": "Odśwież arkusz kalkulacyjny. Wybierz Extensions, potem dodatek, potem Initial Setup i wklej Webhook URL.",
+      "four": "Wybierz arkusz i kolumnę wyzwalającą. Wiersz jest wysyłany, gdy ta komórka zostanie wypełniona lub zmieniona.",
+      "five": "Wybierz Send Test, aby sprawdzić połączenie. Nic nie jest zapisywane; zobaczysz kolumny odebrane przez CRM. Następnie wybierz Submit.",
+      "six": "Włącz Send on event (wiersz jest wysyłany zaraz po edycji) i/lub Send on schedule (co godzinę, wiersze zmienione przez formularz lub inną aplikację). Każdy wiersz trafia jako kontakt, a jego wynik jest zapisywany w kolumnie CRM status."
     },
     "columns": {
       "title": "Kolumny odczytywane przez dodatek",
@@ -134,6 +134,22 @@
       "title": "Ostatnie produkty",
       "empty": "Brak produktów. Zsynchronizuj arkusz, aby je dodać.",
       "count": "{count, plural, one {# produkt w Twojej przestrzeni roboczej} few {# produkty w Twojej przestrzeni roboczej} many {# produktów w Twojej przestrzeni roboczej} other {# produktu w Twojej przestrzeni roboczej}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Wklej go w Initial Setup w dodatku. Zawiera Twój klucz, więc zachowaj go w tajemnicy.",
+      "none": "Utwórz klucz, aby otrzymać swój Webhook URL.",
+      "capture": {
+        "title": "Ostatnio odebrane dane",
+        "none": "Nic jeszcze nie odebrano. W dodatku wybierz Initial Setup, a potem Send Test.",
+        "when": "{event} z {sheet}, {when}. {rows, plural, one {# wiersz} few {# wiersze} many {# wierszy} other {# wiersza}}.",
+        "noSheet": "arkusza bez nazwy",
+        "events": {
+          "test": "Test",
+          "edit": "Edycja",
+          "schedule": "Cogodzinne skanowanie"
+        }
+      }
     }
   }
 }

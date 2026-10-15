@@ -119,6 +119,8 @@
       "colStarted": "Gestartet",
       "colActivity": "Letzte Aktivität",
       "colSteps": "Schritte",
+      "colReplies": "Antworten",
+      "repliesHint": "Kundennachrichten, die einen Warteknoten dieses Laufs erreicht haben",
       "colActions": "Aktionen",
       "open": "Durchlauf öffnen",
       "cancel": "Abbrechen",
@@ -192,7 +194,24 @@
       "retention": "Protokolle werden {days} Tage nach Ende eines Laufs gelöscht.",
       "pathTitle": "Genommener Weg",
       "notReached": "Nicht erreicht",
-      "noErrors": "Keine Fehler in diesem Lauf."
+      "noErrors": "Keine Fehler in diesem Lauf.",
+      "factNext": "Weiter: {node}",
+      "factWaiting": "Wartet bei: {node}",
+      "factDelay": "Wartet {time}",
+      "factReplied": "Kunde antwortete: {text}",
+      "factEnded": "Beendet: {reason}",
+      "ioInput": "Eingabe",
+      "ioOutput": "Ausgabe",
+      "ioKind": {
+        "message": "Gesendete Nachricht",
+        "reply": "Antwort des Kunden",
+        "variable": "Variable",
+        "request": "Anfrage",
+        "response": "Antwort",
+        "result": "Ergebnis"
+      },
+      "factMenuKept": "Hier gibt es keinen nächsten Schritt. Die Optionen von {node} bleiben aktiv.",
+      "factAnswered": "Beantwortet nach {time}"
     },
     "event": {
       "step": "Schritt",
@@ -498,7 +517,9 @@
       "error": "Fehler",
       "skipped": "Übersprungen",
       "waiting": "Wartet",
-      "timeout": "Zeitüberschreitung"
+      "timeout": "Zeitüberschreitung",
+      "answered": "Beantwortet",
+      "gaveUp": "Keine Antwort"
     }
   }
 }

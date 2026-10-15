@@ -1,0 +1,340 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Kapat",
+      "retry": "Tekrar dene",
+      "loading": "Yükleniyor..."
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapma yetkiniz yok.",
+      "notFound": "Bu kişi artık mevcut değil.",
+      "conflict": "Siz düzenlerken başka biri bunu değiştirdi. Sayfayı yenileyip tekrar deneyin.",
+      "noteRequired": "Onayı kaydetmeden önce kişinin neden kabul ettiğini belirtin (ne söyledi veya imzaladı ve nerede).",
+      "settingsInvalid": "Bir anahtar kelime en az bir harf veya rakam içermelidir; algılama açıkken en az bir STOP anahtar kelimesi kalmalıdır.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "exportInProgress": "Bir kanıt dosyası zaten hazırlanıyor. Bitmesini bekleyin ve tekrar deneyin.",
+      "exportNotReady": "Bu dosya hazır değil veya süresi doldu. Yeni bir dosya hazırlayın.",
+      "noticeTargetMissing": "Bu widget, rezervasyon sayfası veya mağaza artık yok."
+    },
+    "settings": {
+      "title": "Onay ve STOP yanıtları",
+      "subtitle": "Bir kişiyi abonelikten çıkaran veya geri alan kelimeleri, vereceğimiz yanıtı, pazarlama mesajları için abonelikten çıkma satırını ve pazarlamanın kayıtlı onay gerektirip gerektirmediğini seçin.",
+      "exportProof": "Onay kanıtını dışa aktar (CSV)",
+      "discard": "Değişiklikleri at",
+      "save": "Değişiklikleri kaydet",
+      "saved": "Onay ayarları kaydedildi.",
+      "conflict": "Bu ayarları başka biri önce kaydetti. Form artık kayıtlı olanı gösteriyor.",
+      "conflictOk": "Tamam",
+      "problems": {
+        "noOptOutWord": "En az bir STOP anahtar kelimesi ekleyin veya algılamayı kapatın.",
+        "badLang": "Dil kodu en, ar veya pt-BR gibi görünür."
+      }
+    },
+    "policy": {
+      "title": "Pazarlama politikası",
+      "requireConsent": "Pazarlama gönderimleri için kayıtlı onay iste",
+      "requireConsentHint": "Kapalı: pazarlama, abonelikten çıkmamış her kişiye gider. Açık: yalnızca kayıtlı onayı olan kişilere gider. Kampanya ve toplu gönderim kitleleri kaç kişinin atlandığını gösterir.",
+      "withdrawnAlways": "Abonelikten çıkan kişiler, bu anahtar ne olursa olsun her zaman atlanır."
+    },
+    "detect": {
+      "title": "STOP ve START yanıtları",
+      "enabled": "STOP ve START yanıtlarını algıla",
+      "enabledHint": "Bir kişi yalnızca aşağıdaki kelimelerden birini gönderirse, o kanalda abonelikten çıkar veya geri abone olur.",
+      "autoReply": "Onay yanıtı gönder",
+      "autoReplyHint": "24 saatlik pencere içinde, her değişiklik için bir kez gönderilen kısa serbest metin yanıtı. Kampanya değildir ve pazarlama sayılmaz.",
+      "rule": "Mesajın tamamı anahtar kelime olmalıdır: büyük harfler, boşluklar, noktalama, emoji ve Arapça harekeler yok sayılır. \"Please stop sending me invoices\" veya \"don't stop\" eşleşmez, böylece kimse yanlışlıkla abonelikten çıkarılmaz."
+    },
+    "lang": {
+      "groupLabel": "{lang} için kelimeler ve yanıtlar",
+      "title": "Dil",
+      "remove": "Dili kaldır",
+      "optOutWords": "STOP anahtar kelimeleri (abonelikten çık)",
+      "optInWords": "START anahtar kelimeleri (geri abone ol)",
+      "wordsHint": "Her satıra bir tane.",
+      "optOutReply": "STOP sonrası yanıt",
+      "optInReply": "START sonrası yanıt",
+      "replyHint": "Kişinin adı için '{{name}}' kullanabilirsiniz. Nasıl geri dönüleceğini belirtin.",
+      "footer": "Pazarlama mesajları için abonelikten çıkma satırı",
+      "footerHint": "Pazarlama metinlerinin altına eklenir. Gönderilecek kelimeyi belirtin.",
+      "add": "Dil ekle",
+      "addHint": "fr veya pt-BR gibi bir dil kodu.",
+      "invalid": "fr veya pt-BR gibi bir kod kullanın.",
+      "addButton": "Ekle"
+    },
+    "footer": {
+      "title": "Abonelikten çıkma satırı",
+      "intro": "Toplu gönderim ve kampanya düzenleyicileri, alıcılar STOP yazabileceklerini bilsin diye bu satırı pazarlama metinlerinin altına ekleyebilir. Onaylı şablonlar asla değiştirilmez: satırı şablonun kendisine ekleyin.",
+      "defaultOn": "Pazarlama metninde abonelikten çıkma satırı yoksa uyar",
+      "defaultOnHint": "Düzenleyici bir uyarı ve eklemek için tek tıklık bir düğme gösterir.",
+      "noneSet": "Hiçbir dil için abonelikten çıkma satırı ayarlanmadı.",
+      "previewLabel": "Alıcının gördüğü",
+      "sample": "İlkbahar indirimimiz bugün başlıyor. Bu hafta bizi ziyaret edin."
+    },
+    "test": {
+      "title": "Mesajı test et",
+      "intro": "Bir kişinin gönderebileceği metni yazın ve ne olacağını görün. Hiçbir şey değiştirilmez veya gönderilmez. Kaydetmeden önce bile yukarıdaki kelimeleri kullanır.",
+      "label": "Kişiden gelen mesaj",
+      "run": "Test et",
+      "failed": "Test çalıştırılamadı. Tekrar deneyin.",
+      "outcome": {
+        "opts_out": "Bu, kişiyi pazarlamadan çıkarır.",
+        "opts_in": "Bu, kişiyi yeniden abone yapar.",
+        "no_match": "Hiçbir şey olmaz: mesaj bir anahtar kelime değil.",
+        "detection_off": "Hiçbir şey olmaz: algılama kapalı."
+      },
+      "matched": "\"{keyword}\" anahtar kelimesiyle eşleşti ({lang}).",
+      "replyLabel": "Kişi şunu alır",
+      "noReply": "Yanıt gönderilmez."
+    },
+    "card": {
+      "title": "Onay",
+      "status": {
+        "optedOut": "Abonelikten çıktı",
+        "subscribed": "Abone",
+        "none": "Kayıtlı onay yok"
+      },
+      "export": "Kanıtı dışa aktar (CSV)",
+      "markSubscribed": "Abone olarak işaretle",
+      "markUnsubscribed": "Abonelikten çıkmış olarak işaretle",
+      "loading": "Onay yükleniyor...",
+      "noneRecorded": "Bu kişi için kayıtlı onay yok. Pazarlama gönderimleri çalışma alanı politikanızı izler.",
+      "perChannel": "Kanala göre onay",
+      "timeline": "Onay geçmişi",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "E-posta",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Web sohbeti",
+        "voice": "Sesli arama",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "state": {
+        "granted": "abone",
+        "withdrawn": "abonelikten çıktı",
+        "utilityGranted": "hizmet mesajlarını kabul etti",
+        "utilityWithdrawn": "hizmet mesajları durduruldu"
+      },
+      "action": {
+        "granted": "Abone",
+        "withdrawn": "Abonelikten çıktı",
+        "utilityGranted": "Talebi hakkında iletişime geçilmesini kabul etti",
+        "utilityWithdrawn": "Hizmet mesajlarını durdurdu"
+      },
+      "source": {
+        "form": "Form",
+        "keyword": "Anahtar kelime yanıtı",
+        "manual": "Bir kişi tarafından kaydedildi",
+        "import": "İçe aktarma",
+        "api": "API",
+        "flow": "Akış",
+        "inbound_message": "Mesaj",
+        "contact_request": "İletişim isteği",
+        "legacy": "Onay geçmişinden önce",
+        "widget": "Web sitesi sohbeti",
+        "booking": "Rezervasyon sayfası",
+        "commerce": "Mağaza ödeme sayfası",
+        "lead": "Potansiyel müşteri toplama"
+      },
+      "by": "{name} tarafından",
+      "evidence": {
+        "consentText": "Gösterilen metin",
+        "consentVersion": "Sürüm",
+        "consentHash": "Karma",
+        "formId": "Form",
+        "submissionId": "Gönderim",
+        "messageId": "Mesaj",
+        "keyword": "Anahtar kelime",
+        "fileName": "Dosya",
+        "apiKeyId": "API anahtarı",
+        "flowId": "Akış",
+        "reference": "Referans",
+        "noticeVersion": "Bildirim sürümü",
+        "noticeUrl": "Bildirim bağlantısı",
+        "widgetId": "Sohbet widget'ı",
+        "bookingTypeId": "Rezervasyon sayfası",
+        "integrationId": "Mağaza",
+        "storeFlag": "Mağaza ayarı",
+        "leadSourceId": "Müşteri adayı kaynağı",
+        "leadFormId": "Müşteri adayı formu",
+        "adId": "Reklam"
+      },
+      "dialog": {
+        "titleGranted": "Abone olarak işaretle",
+        "titleWithdrawn": "Abonelikten çıkmış olarak işaretle",
+        "introGranted": "Bu kişinin pazarlama mesajları almayı kabul ettiğini kaydedin. Neden kanıt olarak saklanır.",
+        "introWithdrawn": "Bu kişinin artık pazarlama mesajları istemediğini kaydedin. Tüm kampanya ve toplu gönderimlerde atlanır.",
+        "channel": "Kanal",
+        "noteRequired": "Neden? (zorunlu)",
+        "noteOptional": "Not (isteğe bağlı)",
+        "noteHint": "Örneğin: tezgahta kâğıt formu imzaladı veya 3 Mart'ta e-postayla kabul etti.",
+        "confirm": "Kaydet",
+        "cancel": "İptal",
+        "close": "Kapat",
+        "savedGranted": "Abone olarak işaretlendi.",
+        "savedWithdrawn": "Abonelikten çıkmış olarak işaretlendi."
+      }
+    },
+    "composer": {
+      "add": "Abonelikten çıkma satırını ekle",
+      "missing": "Bu pazarlama mesajı, kişilere nasıl abonelikten çıkacaklarını söylemiyor. \"Abonelikten çıkmak için STOP yazın\" gibi bir satır ekleyin.",
+      "addButton": "Satırı ekle",
+      "templateHint": "Şablonlar onaylandıktan sonra sabittir. Kişilere abonelikten çıkabileceklerini söylemek için şablonun kendisine \"{line}\" gibi bir satır ekleyin.",
+      "footerSuggestion": "Pazarlama şablonu için önerilen: \"{line}\"",
+      "footerUse": "Alt bilgi olarak kullan"
+    },
+    "import": {
+      "legend": "İzin",
+      "label": "Bu kişilere mesaj gönderme iznim var",
+      "hint": "İşaretlenirse, dosyadaki tüm kişiler pazarlamayı kabul etmiş olarak kaydedilir ve kanıt olarak dosya adı saklanır. İşaretlenmezse, içe aktarma herhangi bir izin kaydetmez. Abonelikten çıkan kişiler çıkmış olarak kalır.",
+      "hintColumn": "Pazarlama iznine eşlenen sütun kimin kaydedileceğini belirler: yalnızca evet diyen satırlar, dosya adı kanıt olarak kullanılarak izin alır. Hayır, boş hücre veya bilinmeyen bir kelime hiçbir şey kaydetmez. Abonelikten çıkmış kişiler çıkmış kalır.",
+      "columnSummary": "{granted} satır evet diyor ve kaydedilecek. {notGranted} satır hayır diyor veya boş ve izin kaydı almayacak.",
+      "unrecognised": "{count, plural, one {# satırda} other {# satırda}} evet veya hayır olmayan bir izin değeri var ({values}). Bunlar izin verilmemiş sayılır. Evet / hayır, true / false veya 1 / 0 kullanın.",
+      "columnIgnored": "Yukarıdaki kutuyu işaretleyene kadar izin sütunu etki etmez.",
+      "noticeText": "Bildirim veya hukuki dayanak (isteğe bağlı)",
+      "noticeTextHint": "Bu kişilerin neyi ve nerede kabul ettiği, örneğin: ödeme sırasında gizlilik bildirimi v3 kapsamında abone oldu. Kaydedilen her onayla birlikte kanıt olarak saklanır.",
+      "noticeVersion": "Bildirim sürümü (isteğe bağlı)",
+      "smsSummary": "SMS onay sütunu: {granted} satır evet diyor ve SMS onayı olarak kaydedilecek. {notGranted} satır hayır diyor veya boş.",
+      "emailSummary": "E-posta onay sütunu: {granted} satır evet diyor ve e-posta onayı olarak kaydedilecek (satırda e-posta adresi de olmalı). {notGranted} satır hayır diyor veya boş.",
+      "labelNumbers": "Bu numaralara mesaj göndermek için onayım var",
+      "hintNumbers": "İşaretlenirse, yayını başlattığınızda dosyadaki her numara pazarlamayı kabul etmiş olarak kaydedilir, kanıt olarak dosya adı tutulur. İşaretlenmezse onay kaydedilmez. Abonelikten çıkanlar çıkmış kalır."
+    },
+    "systemLine": {
+      "withdrawn": "Kişi {keyword} yanıtı verdi: pazarlama aboneliğinden çıktı",
+      "granted": "Kişi {keyword} yanıtı verdi: pazarlamaya yeniden abone oldu"
+    },
+    "proof": {
+      "title": "Hazırlanan kanıt dosyaları",
+      "prepare": "Tam kanıt dosyasını hazırla",
+      "preparing": "Kanıt dosyası hazırlanıyor",
+      "largeHint": "Kayıt defteri {max} olaydan büyük olduğu için dosya arka planda hazırlanır",
+      "large": "Kayıt defteri {max} olaydan fazla içeriyor, bu doğrudan indirmenin taşıyabileceğinden fazla. Tam dosyayı hazırlayın: arka planda oluşturulur ve hazır olduğunda size e-posta gönderilir.",
+      "none": "Henüz hazırlanmış dosya yok.",
+      "keptFor": "Hazırlanan bir dosya {days} gün boyunca indirilebilir, sonra silinir. Aynı anda yalnızca bir dosya hazırlanır.",
+      "rows": "{count, plural, one {# olay} other {# olay}}",
+      "expires": "{date} tarihine kadar kullanılabilir",
+      "download": "CSV indir",
+      "failed": "Dosya oluşturulamadı. Lütfen yeniden hazırlayın.",
+      "status": {
+        "queued": "Bekliyor",
+        "running": "Oluşturuluyor",
+        "ready": "Hazır",
+        "failed": "Başarısız",
+        "expired": "Süresi doldu"
+      }
+    },
+    "unsubscribe": {
+      "title": "Pazarlama e-postalarından çık",
+      "intro": "Bu işletmeden artık pazarlama e-postası almak istemediğinizi onaylayın. Siparişleriniz ve randevularınızla ilgili iletileri almaya devam edeceksiniz.",
+      "confirm": "Abonelikten çık",
+      "working": "İşleniyor...",
+      "doneTitle": "Abonelikten çıktınız",
+      "doneBody": "Bu işletmeden artık pazarlama iletisi almayacaksınız.",
+      "already": "Zaten abonelikten çıkmıştınız.",
+      "invalidTitle": "Bu bağlantı geçerli değil",
+      "invalidBody": "Abonelikten çıkma bağlantısı eksik veya değiştirilmiş. Aldığınız son e-postadaki bağlantıyı kullanın.",
+      "error": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "İzin verildi: bildirim önce iletildi.",
+        "consent_evidence_recorded": "İzin verildi: bildirim iletildi ve kişi onay verdi.",
+        "purpose_not_enabled": "İzin verilmedi: çalışma alanı bunu açmadı.",
+        "consent_declined": "İzin verilmedi: kişi reddetti.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "Sohbet formundaki onay satırı",
+        "booking": "Rezervasyon sayfasındaki onay satırı",
+        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir",
+        "workspace": "Varsayılan onay bildirimi"
+      },
+      "intro": {
+        "widget": "Ziyaretçinin bilgilerinin altında bir onay kutusu olarak gösterilir. Yalnızca işaretleyen ziyaretçi kabul etmiş olarak kaydedilir, o da telefon veya e-posta verdiyse.",
+        "booking": "Rezervasyon formunda bir onay kutusu olarak gösterilir. Yalnızca işaretleyen kişi kabul etmiş olarak kaydedilir; rezervasyon bunu hiçbir zaman gerektirmez.",
+        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin.",
+        "workspace": "Bir form, widget veya rezervasyon sayfasının kendi metni olmadığında çalışma alanınızın onay kutusunun yanında gösterdiği metin. Her değişiklik yeni numaralı bir sürümdür."
+      },
+      "enabled": "Onay satırı açık",
+      "text": "Kişinin kabul ettiği metin",
+      "textHint": "En fazla {max} karakter. Her değişiklik yeni bir sürüm olarak kaydedilir.",
+      "textRequired": "Satırı açmadan önce metni yazın.",
+      "url": "Gizlilik politikanızın bağlantısı (isteğe bağlı)",
+      "urlHint": "https:// ile başlamalıdır",
+      "save": "Onay satırını kaydet",
+      "saved": "Onay satırı kaydedildi (sürüm {version}).",
+      "version": "Geçerli sürüm: {version}",
+      "noVersion": "Henüz kaydedilmedi.",
+      "saveFirst": "Önce bunu kaydedin, sonra onay satırını ayarlayabilirsiniz.",
+      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)",
+      "termsUrl": "Şartlarınızın bağlantısı (isteğe bağlı)",
+      "termsUrlHint": "https:// ile başlamalıdır",
+      "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
+      "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan",
+      "useWorkspaceText": "Çalışma alanı varsayılan metnini kullan"
+    }
+  }
+}

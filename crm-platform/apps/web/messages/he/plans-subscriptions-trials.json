@@ -44,7 +44,9 @@
       "forms": "טפסי אינטרנט",
       "form_submissions_monthly": "שליחות טופס בחודש",
       "ai_form_generations_monthly": "יצירות של בונה הטפסים באמצעות AI בחודש",
-      "sms_monthly": "הודעות SMS בחודש"
+      "sms_monthly": "הודעות SMS בחודש",
+      "email_mailboxes": "תיבות דוא\"ל",
+      "email_monthly": "הודעות דוא\"ל בחודש"
     },
     "features": {
       "automation": "אוטומציה",
@@ -73,10 +75,13 @@
       "storefront_builder": "בונה חנות",
       "invoicing": "חשבוניות",
       "forms_and_links": "טפסים וקישורים",
-      "extra_channels": "Telegram, Facebook ו־Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ו-WeChat",
       "form_builder": "טפסים",
       "waba_groups": "קבוצות WhatsApp",
-      "sms": "ערוץ SMS"
+      "sms": "ערוץ SMS",
+      "help_agent": "עוזר העזרה",
+      "email_channel": "ערוץ דוא\"ל (Gmail)",
+      "personal_history_full": "ייבוא היסטוריה מלאה (WhatsApp אישי)"
     },
     "limitGroups": {
       "messaging": "הודעות",
@@ -127,7 +132,9 @@
       "forms": "טפסי אינטרנט פעילים (אפליקציית טפסים). העברת טופס לארכיון מפנה את המקום שלו. 0 = ללא הגבלה.",
       "form_submissions_monthly": "שליחות טופס שהתקבלו בחודש הקלנדרי, ללא ספאם. מעבר למכסה, השליחה עדיין נשמרת לבדיקה ולא נמחקת. 0 = ללא הגבלה.",
       "ai_form_generations_monthly": "יצירות של בונה הטפסים באמצעות AI בחודש הקלנדרי, כולל ניסיון תיקון חוזר. 0 = ללא הגבלה.",
-      "sms_monthly": "הודעות SMS יוצאות שנשלחו בחודש הקלנדרי. 0 = ללא הגבלה."
+      "sms_monthly": "הודעות SMS יוצאות שנשלחו בחודש הקלנדרי. 0 = ללא הגבלה.",
+      "email_mailboxes": "תיבות Gmail מחוברות (תיבה שנותקה פוטרת את מקומה). 0 = ללא הגבלה.",
+      "email_monthly": "הודעות דוא\"ל שנשלחו בחודש הקלנדרי, תשובות ומיילים של קמפיינים יחד. 0 = ללא הגבלה."
     },
     "planAddons": {
       "title": "תוספים הזמינים בתוכנית שלך",

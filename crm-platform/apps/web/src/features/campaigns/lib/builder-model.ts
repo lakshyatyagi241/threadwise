@@ -1,4 +1,9 @@
-import type { CampaignConfig, CampaignType, CreateCampaignInput } from '@crm/contracts';
+import {
+  CAMPAIGN_EMAIL_SUBJECT_MAX,
+  type CampaignConfig,
+  type CampaignType,
+  type CreateCampaignInput,
+} from '@crm/contracts';
 
 /** What the campaign builder decides without the network (TW-CAMP-003 to 010). Pure. */
 
@@ -27,6 +32,7 @@ export interface BuilderForm {
   abTesting: boolean;
   abSplit: number;
   trackingEnabled: boolean;
+  retryFailed: boolean;
   scheduleType: 'now' | 'scheduled' | 'recurring';
   sendDate: string;
   sendTime: string;
@@ -68,6 +74,7 @@ export const EMPTY_FORM: BuilderForm = {
   abTesting: false,
   abSplit: 50,
   trackingEnabled: true,
+  retryFailed: true,
   scheduleType: 'now',
   sendDate: '',
   sendTime: '',
@@ -97,6 +104,9 @@ export const isBodyType = (t: CampaignType) => TYPES_WITH_BODY.includes(t);
 /** `button` and `media` campaigns edit as the rich custom message; the type they were saved with is kept. */
 export const editorType = (t: CampaignType): 'text' | 'custom' | 'template' | 'flow' =>
   t === 'button' || t === 'media' ? 'custom' : t;
+
+/** A mailbox sender (`email:<mailbox id>`): the form is an email campaign. */
+export const isEmailKey = (senderKey: string): boolean => senderKey.startsWith('email:');
 
 const num = (v: string): number | null => (v.trim() === '' ? null : Number(v));
 
@@ -152,6 +162,7 @@ export function fromConfig(c: CampaignConfig, zone: string): BuilderForm {
     abTesting: c.abTesting,
     abSplit: c.abSplit,
     trackingEnabled: c.trackingEnabled,
+    retryFailed: c.retryFailed,
     scheduleType: c.scheduleType,
     sendDate: c.sendDate ?? '',
     sendTime: c.sendTime ?? '',
@@ -184,22 +195,27 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
   const body = isBodyType(f.type);
   const template = f.type === 'template';
   const scheduled = f.scheduleType !== 'now';
-  const buttons = f.buttons.filter((b) => b.text.trim() !== '').map(rowToButton);
+  // A mail carries a subject and a body only: the rest is left out (the server refuses a split test, a template, a flow or an attachment,
+  // and clears the footer, buttons, pacing and click tracking).
+  const email = isEmailKey(f.senderKey);
+  const buttons = email ? [] : f.buttons.filter((b) => b.text.trim() !== '').map(rowToButton);
+  const pace = (v: string) => (email ? null : num(v));
   return {
     name: f.name.trim(),
     senderKey: f.senderKey || null,
     type: f.type,
     status: opts.draft ? 'draft' : null,
-    abTesting: f.abTesting,
+    abTesting: email ? false : f.abTesting,
     abSplit: f.abSplit,
     customMessage: body ? f.customMessage : null,
-    customMessageB: body && f.abTesting && f.customMessageB.trim() !== '' ? f.customMessageB : null,
+    customMessageB:
+      body && !email && f.abTesting && f.customMessageB.trim() !== '' ? f.customMessageB : null,
     customHeader: body && f.customHeader.trim() !== '' ? f.customHeader : null,
-    customFooter: body && f.customFooter.trim() !== '' ? f.customFooter : null,
+    customFooter: body && !email && f.customFooter.trim() !== '' ? f.customFooter : null,
     customButtons: body && buttons.length > 0 ? buttons : null,
     customQuickReplies: null,
     variableMap: null,
-    mediaUrl: body && f.mediaUrl.trim() !== '' ? f.mediaUrl.trim() : null,
+    mediaUrl: body && !email && f.mediaUrl.trim() !== '' ? f.mediaUrl.trim() : null,
     templateId: template && f.templateId ? f.templateId : null,
     templateIdA: null,
     templateIdB: template && f.abTesting && f.templateIdB ? f.templateIdB : null,
@@ -208,7 +224,8 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
     flowId: f.type === 'flow' && f.flowId ? f.flowId : null,
     flowIdB: f.type === 'flow' && f.abTesting && f.flowIdB ? f.flowIdB : null,
     useAttributes: false,
-    trackingEnabled: f.trackingEnabled,
+    trackingEnabled: email ? false : f.trackingEnabled,
+    retryFailed: f.retryFailed,
     scheduleType: f.scheduleType,
     sendDate: scheduled && f.sendDate ? f.sendDate : null,
     sendTime: scheduled && f.sendTime ? f.sendTime : null,
@@ -216,13 +233,13 @@ export function toInput(f: BuilderForm, opts: { draft?: boolean } = {}): CreateC
     timezone: f.timezone || null,
     repeatInterval: f.scheduleType === 'recurring' ? f.repeatInterval : null,
     repeatUntil: f.scheduleType === 'recurring' && f.repeatUntil ? f.repeatUntil : null,
-    throttleMinSec: num(f.throttleMinSec),
-    throttleMaxSec: num(f.throttleMaxSec),
-    batchSize: num(f.batchSize),
-    batchPauseMin: num(f.batchPauseMin),
-    dailyLimit: num(f.dailyLimit),
-    windowStart: f.windowStart || null,
-    windowEnd: f.windowEnd || null,
+    throttleMinSec: pace(f.throttleMinSec),
+    throttleMaxSec: pace(f.throttleMaxSec),
+    batchSize: pace(f.batchSize),
+    batchPauseMin: pace(f.batchPauseMin),
+    dailyLimit: pace(f.dailyLimit),
+    windowStart: email ? null : f.windowStart || null,
+    windowEnd: email ? null : f.windowEnd || null,
     contactIds: f.contactIds,
     groupIds: f.groupIds,
     tagIds: f.tagIds,
@@ -244,7 +261,8 @@ export type Problem =
   | 'window'
   | 'throttle'
   | 'expiry'
-  | 'media';
+  | 'media'
+  | 'subject';
 
 const isUrl = (v: string) => {
   try {
@@ -266,6 +284,8 @@ export function problems(f: BuilderForm, o: { draft?: boolean } = {}): Problem[]
   if (f.type === 'flow' && f.flowId === '') out.push('flow');
   if (isBodyType(f.type) && f.mediaUrl.trim() !== '' && !isUrl(f.mediaUrl.trim()))
     out.push('media');
+  if (isEmailKey(f.senderKey) && f.customHeader.length > CAMPAIGN_EMAIL_SUBJECT_MAX)
+    out.push('subject');
   const audience =
     f.contactIds.length +
     f.groupIds.length +
@@ -278,10 +298,13 @@ export function problems(f: BuilderForm, o: { draft?: boolean } = {}): Problem[]
     if (f.sendDate === '') out.push('date');
     if (f.sendTime === '') out.push('time');
   }
-  if ((f.windowStart === '') !== (f.windowEnd === '')) out.push('window');
-  const min = num(f.throttleMinSec);
-  const max = num(f.throttleMaxSec);
-  if (min !== null && max !== null && max < min) out.push('throttle');
+  // A mail has no sending hours or gap between messages (they are cleared), so they cannot be wrong.
+  if (!isEmailKey(f.senderKey)) {
+    if ((f.windowStart === '') !== (f.windowEnd === '')) out.push('window');
+    const min = num(f.throttleMinSec);
+    const max = num(f.throttleMaxSec);
+    if (min !== null && max !== null && max < min) out.push('throttle');
+  }
   if (f.scheduleType !== 'now' && f.expiresAt !== '' && f.sendDate !== '') {
     if (f.expiresAt <= `${f.sendDate}T${f.sendTime || '00:00'}`) out.push('expiry');
   }

@@ -282,7 +282,6 @@
       "planDisabled": "Il tuo piano non include le attività. Passa a un piano superiore per sbloccarle.",
       "assigneeInvalid": "Questa persona non è un membro attivo di questo Workspace.",
       "unexpected": "Si è verificato un errore. Riprova tra poco.",
-      "requestId": "ID richiesta",
       "retry": "Riprova"
     },
     "toast": {

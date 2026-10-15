@@ -1,0 +1,216 @@
+{
+  "lead-scoring-admin": {
+    "nav": {
+      "group": "AI",
+      "scoring": "Chấm điểm lead bằng AI"
+    },
+    "common": {
+      "loading": "Đang tải",
+      "retry": "Thử lại",
+      "dash": "-",
+      "cancel": "Hủy",
+      "errors": {
+        "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+        "request": "Không thể hoàn tất yêu cầu đó.",
+        "unexpected": "Đã xảy ra lỗi phía chúng tôi. Hãy thử lại sau giây lát.",
+        "network": "Không thể kết nối tới máy chủ. Kiểm tra kết nối và thử lại.",
+        "validation": "Một số giá trị không hợp lệ. Kiểm tra các trường được đánh dấu.",
+        "notFound": "Mục đó không còn tồn tại."
+      }
+    },
+    "page": {
+      "eyebrow": "Quản trị · AI · Chấm điểm lead",
+      "title": "Chấm điểm lead bằng AI",
+      "description": "Kiểm soát việc các workspace có được chấm điểm liên hệ bằng mô hình AI hay không, mô hình nào thực hiện, các giới hạn và chi phí.",
+      "superOnly": "Chỉ super admin mới có thể xem hoặc thay đổi chấm điểm lead bằng AI."
+    },
+    "status": {
+      "label": "Trạng thái chấm điểm lead",
+      "switch": {
+        "title": "Công tắc nền tảng",
+        "on": "Bật",
+        "off": "Tắt",
+        "hintOn": "Các workspace đã đăng ký có thể chấm điểm liên hệ của mình.",
+        "hintOff": "Không workspace nào có thể chấm điểm liên hệ, bất kể cài đặt riêng của workspace."
+      },
+      "model": {
+        "title": "Mô hình",
+        "custom": "Mô hình nhập tay, không có trong danh sách."
+      },
+      "key": {
+        "title": "Khóa OpenRouter của nền tảng",
+        "ready": "Sẵn sàng",
+        "missing": "Thiếu",
+        "explainReady": "Các workspace không có khóa OpenRouter riêng được chấm điểm bằng khóa này, và bạn trả phí cho các lượt chấm đó.",
+        "explainMissing": "Không có khóa nền tảng, chỉ các workspace đã lưu khóa OpenRouter riêng mới có thể chấm điểm liên hệ.",
+        "link": "Mở khóa AI"
+      },
+      "reach": {
+        "title": "Phạm vi",
+        "workspaces": "Workspace đã đăng ký",
+        "contacts": "Liên hệ đã chấm điểm"
+      }
+    },
+    "settings": {
+      "title": "Cài đặt",
+      "description": "Thay đổi áp dụng cho mọi workspace cùng lúc. Chỉ các trường bạn thay đổi được lưu.",
+      "enabled": {
+        "label": "Chấm điểm lead bằng AI",
+        "hint": "Mặc định là tắt. Khi bật, các workspace đã đăng ký sẽ gửi dữ kiện liên hệ đã ẩn danh tới OpenRouter để nhận điểm từ 0 đến 100. Tắt để dừng toàn bộ việc chấm điểm."
+      },
+      "model": {
+        "label": "Mô hình",
+        "hint": "Giá tính bằng đô la Mỹ trên mỗi triệu token, theo danh sách của OpenRouter.",
+        "option": "{label} · {input} vào / {output} ra",
+        "other": "ID mô hình OpenRouter khác",
+        "details": "{input} cho mỗi triệu token đầu vào, {output} cho mỗi triệu token đầu ra.",
+        "customLabel": "ID mô hình OpenRouter",
+        "customHint": "Bất kỳ ID mô hình nào của OpenRouter hỗ trợ đầu ra có cấu trúc.",
+        "placeholder": "openai/gpt-6-luna"
+      },
+      "limits": {
+        "title": "Giới hạn",
+        "scoresPerHour": "Số điểm mỗi workspace mỗi giờ",
+        "scoresPerHourHint": "Biện pháp kiểm soát chi phí cho các workspace dùng khóa nền tảng. 0 nghĩa là không giới hạn.",
+        "retentionDays": "Giữ nhật ký trong (ngày)",
+        "retentionDaysHint": "Các lượt chạy cũ hơn và lịch sử chi phí của chúng sẽ bị xóa. Từ 7 đến 730 ngày."
+      },
+      "saving": "Đang lưu",
+      "save": "Lưu thay đổi",
+      "reset": "Hủy thay đổi",
+      "changed": "{count, plural, other {# thay đổi sẵn sàng để lưu}}",
+      "unchanged": "Không có thay đổi nào để lưu.",
+      "saved": "Đã lưu cài đặt chấm điểm lead.",
+      "errors": {
+        "range": "Nhập giá trị từ {min} đến {max}.",
+        "integer": "Nhập một số nguyên.",
+        "modelId": "Dùng ID mô hình OpenRouter, ví dụ openai/gpt-6-luna.",
+        "invalid": "Giá trị này không hợp lệ."
+      },
+      "confirm": {
+        "title": "Xác nhận thay đổi",
+        "turnOn": "Thao tác này cho phép các workspace đã đăng ký gửi dữ kiện liên hệ đã ẩn danh tới OpenRouter và tiêu hao tín dụng khóa nền tảng của bạn.",
+        "turnOff": "Thao tác này dừng toàn bộ chấm điểm lead bằng AI cho mọi workspace. Các điểm đã lưu vẫn được giữ.",
+        "confirm": "Lưu thay đổi"
+      }
+    },
+    "cost": {
+      "title": "Chi phí chấm điểm",
+      "description": "Tổng hợp từ nhật ký chấm điểm, tính bằng đô la Mỹ.",
+      "last24h": "24 giờ qua",
+      "last30d": "30 ngày qua",
+      "scores": "Điểm đã ghi",
+      "failed": "Lượt chạy thất bại",
+      "tokens": "Token",
+      "tokensSplit": "Token đầu vào / đầu ra",
+      "total": "Tổng chi phí",
+      "average": "Trung bình mỗi điểm",
+      "platform": "Do khóa nền tảng chi trả",
+      "footnote": "Chi phí là số tiền OpenRouter báo cáo, hoặc ước tính từ số token khi không có báo cáo. Các lượt chạy tính vào khóa riêng của workspace nằm trong tổng nhưng không thuộc phần của nền tảng."
+    },
+    "workspaces": {
+      "title": "Workspace",
+      "description": "Ai đang dùng chấm điểm lead bằng AI và chi phí của họ trong 30 ngày qua, cao nhất trước.",
+      "search": "Tìm workspace",
+      "searchPlaceholder": "Tên workspace",
+      "limit": "Số dòng",
+      "limitOption": "{count} dòng",
+      "noMatchTitle": "Không có workspace nào khớp",
+      "noMatchMessage": "Hãy thử tên khác.",
+      "clearSearch": "Xóa tìm kiếm",
+      "emptyTitle": "Chưa có workspace",
+      "emptyMessage": "Workspace sẽ xuất hiện ở đây khi được tạo.",
+      "tableLabel": "Workspace theo chi phí chấm điểm",
+      "columns": {
+        "name": "Workspace",
+        "enabled": "Chấm điểm",
+        "contacts": "Liên hệ đã chấm điểm",
+        "scores": "Số điểm, 30 ngày",
+        "cost": "Chi phí, 30 ngày"
+      },
+      "enabled": "Bật",
+      "disabled": "Tắt"
+    },
+    "runs": {
+      "title": "Nhật ký chấm điểm",
+      "description": "Mọi lần chấm điểm trên các workspace, mới nhất trước, kèm token, chi phí và người chi trả.",
+      "refresh": "Làm mới",
+      "filters": {
+        "status": "Trạng thái",
+        "anyStatus": "Mọi trạng thái",
+        "workspace": "Workspace",
+        "anyWorkspace": "Tất cả workspace",
+        "clear": "Xóa bộ lọc"
+      },
+      "status": {
+        "ok": "Đã chấm điểm",
+        "kept": "Đã giữ",
+        "failed": "Thất bại",
+        "skipped": "Đã bỏ qua"
+      },
+      "trigger": {
+        "created": "Liên hệ được tạo",
+        "updated": "Liên hệ được cập nhật",
+        "manual": "Nút Chấm điểm",
+        "backfill": "Chấm bù"
+      },
+      "scoreWas": "{score} (trước đó {previous})",
+      "tokensTitle": "{input} vào, {output} ra",
+      "costSource": {
+        "vendor": "Đã báo cáo",
+        "estimate": "Ước tính",
+        "none": "Không gọi"
+      },
+      "costSourceHelp": {
+        "vendor": "Chi phí OpenRouter báo cáo cho lệnh gọi này.",
+        "estimate": "Không có chi phí được báo cáo, nên đây là số token nhân với giá niêm yết của mô hình.",
+        "none": "Không có lệnh gọi nào được thực hiện nên không bị tính phí."
+      },
+      "paidBy": {
+        "admin": "Nền tảng",
+        "workspace": "Workspace",
+        "none": "Không ai"
+      },
+      "duration": {
+        "ms": "{value} ms",
+        "s": "{value} s"
+      },
+      "reason": {
+        "platform_off": "Công tắc nền tảng đang tắt",
+        "not_enabled": "Workspace chưa đăng ký",
+        "contact_gone": "Liên hệ đã bị xóa",
+        "manual_score": "Liên hệ có điểm nhập tay",
+        "no_key": "Không có khóa OpenRouter",
+        "token_allowance": "Đã dùng hết hạn mức token",
+        "hourly_limit": "Đã đạt giới hạn theo giờ",
+        "auth": "OpenRouter từ chối khóa",
+        "rate_limited": "Giới hạn tốc độ của OpenRouter",
+        "provider": "Lỗi OpenRouter",
+        "timeout": "OpenRouter hết thời gian chờ",
+        "bad_response": "Câu trả lời không phải điểm hợp lệ"
+      },
+      "noMatchTitle": "Không có lượt chạy nào khớp",
+      "noMatchMessage": "Không có lượt chấm điểm nào khớp với các bộ lọc này.",
+      "emptyTitle": "Chưa có lượt chạy",
+      "emptyMessage": "Các lượt chạy sẽ xuất hiện ở đây khi workspace chấm điểm một liên hệ.",
+      "tableLabel": "Các lượt chấm điểm",
+      "columns": {
+        "time": "Thời gian",
+        "workspace": "Workspace",
+        "contact": "Liên hệ",
+        "trigger": "Kích hoạt",
+        "status": "Trạng thái",
+        "score": "Điểm",
+        "model": "Mô hình",
+        "tokens": "Token",
+        "cost": "Chi phí",
+        "paidBy": "Người chi trả",
+        "duration": "Thời lượng",
+        "error": "Lý do"
+      },
+      "costLegend": "Dấu ~ đặt trước chi phí đánh dấu ước tính từ số token thay vì số tiền OpenRouter báo cáo.",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải"
+    }
+  }
+}

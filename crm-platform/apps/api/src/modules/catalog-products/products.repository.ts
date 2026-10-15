@@ -1,8 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, type ProductOption } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { computeAggregate, type ProductAggregate, type VariantWrite } from './variant-rules';
+
+/** One variant as the SQL returns it. */
+export interface VariantRow {
+  id: number;
+  uuid: string;
+  productId: number;
+  optionValues: string[];
+  title: string;
+  sku: string | null;
+  /** Null reads as the product's price (the API always stores a concrete amount). */
+  priceMinor: number | null;
+  comparePriceMinor: number | null;
+  imageUrl: string | null;
+  weightGrams: number | null;
+  stockQty: number | null;
+  reservedQty: number;
+  active: boolean;
+  position: number;
+  metaRetailerId: string | null;
+  rowVersion: number;
+}
 
 /** One product as the SQL returns it. Internal ids stay here; the mapper puts `uuid` on the wire. */
 export interface ProductRow {
@@ -31,6 +53,10 @@ export interface ProductRow {
   currencyCode: string;
   imageUrl: string | null;
   gallery: string[];
+  /** The named options of the product (empty without variants). */
+  options: ProductOption[];
+  /** Loaded by the repository's reads (not by the raw `PRODUCT_SELECT`, where it is empty). */
+  variants: VariantRow[];
   inStock: boolean;
   stockQty: number | null;
   reservedQty: number;
@@ -51,6 +77,38 @@ const s = (v: unknown): string | null => (v === null || v === undefined ? null :
 const d = (v: unknown): Date | null => (v ? new Date(v as string) : null);
 const strings = (v: unknown): string[] =>
   Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [];
+
+const toOptions = (v: unknown): ProductOption[] =>
+  Array.isArray(v)
+    ? v.flatMap((o) => {
+        const x = o as { name?: unknown; values?: unknown };
+        return typeof x?.name === 'string' && Array.isArray(x.values)
+          ? [{ name: x.name, values: strings(x.values) }]
+          : [];
+      })
+    : [];
+
+export const toVariantRow = (r: Raw): VariantRow => ({
+  id: Number(r.id),
+  uuid: r.uuid as string,
+  productId: Number(r.product_id),
+  optionValues: strings(r.option_values_json),
+  title: r.title as string,
+  sku: s(r.sku),
+  priceMinor: n(r.price_minor),
+  comparePriceMinor: n(r.compare_price_minor),
+  imageUrl: s(r.image_url),
+  weightGrams: n(r.weight_grams),
+  stockQty: n(r.stock_qty),
+  reservedQty: Number(r.reserved_qty ?? 0),
+  active: r.active !== false,
+  position: Number(r.position ?? 0),
+  metaRetailerId: s(r.meta_retailer_id),
+  rowVersion: Number(r.row_version),
+});
+
+export const VARIANT_SELECT = sql`id, uuid, product_id, option_values_json, title, sku, price_minor, compare_price_minor,
+  image_url, weight_grams, stock_qty, reserved_qty, active, position, meta_retailer_id, row_version`;
 
 export const toProductRow = (r: Raw): ProductRow => ({
   id: Number(r.id),
@@ -78,6 +136,8 @@ export const toProductRow = (r: Raw): ProductRow => ({
   currencyCode: r.currency_code as string,
   imageUrl: s(r.image_url),
   gallery: strings(r.gallery_json),
+  options: toOptions(r.options_json),
+  variants: [],
   inStock: r.in_stock === true,
   stockQty: n(r.stock_qty),
   reservedQty: Number(r.reserved_qty ?? 0),
@@ -96,7 +156,7 @@ export const toProductRow = (r: Raw): ProductRow => ({
 export const PRODUCT_SELECT = sql`
   p.id, p.uuid, p.storefront_id, sf.uuid AS storefront_uuid, p.user_id, p.sku, p.name, p.slug, p.description, p.body_html,
   p.price_minor, p.compare_price_minor, p.weight_grams, p.category, p.tags_json, p.aliases_json, p.status, p.availability,
-  p.condition, p.brand, p.product_url, p.google_product_category, p.currency_code, p.image_url, p.gallery_json, p.in_stock,
+  p.condition, p.brand, p.product_url, p.google_product_category, p.currency_code, p.image_url, p.gallery_json, p.options_json, p.in_stock,
   p.stock_qty, p.reserved_qty, p.sort_order, p.meta_retailer_id, p.meta_sync_status, p.meta_synced_at, p.meta_batch_handle,
   p.meta_last_error, p.created_at, p.updated_at, p.row_version`;
 
@@ -118,6 +178,7 @@ const WRITABLE: Record<string, string> = {
   currency_code: '',
   image_url: '',
   gallery_json: '::jsonb',
+  options_json: '::jsonb',
   in_stock: '',
   stock_qty: '',
   reserved_qty: '',
@@ -142,7 +203,7 @@ const WRITABLE: Record<string, string> = {
 
 export type ProductPatch = Partial<Record<keyof typeof WRITABLE, unknown>>;
 
-const JSON_COLUMNS = new Set(['gallery_json', 'tags_json', 'aliases_json']);
+const JSON_COLUMNS = new Set(['gallery_json', 'options_json', 'tags_json', 'aliases_json']);
 
 function valueSql(column: string, value: unknown): SQL {
   if (value === null || value === undefined) return sql`NULL`;
@@ -200,7 +261,7 @@ export class ProductsRepository {
       WHERE p.org_id = ${orgId} ${this.searchCond(f.q)} ${after}
       ORDER BY p.sort_order, p.id DESC
       LIMIT ${f.limit + 1}`);
-    return (res.rows as Raw[]).map(toProductRow);
+    return this.withVariants(tx, orgId, (res.rows as Raw[]).map(toProductRow));
   }
 
   async count(tx: Tx, orgId: number, q?: string): Promise<number> {
@@ -221,7 +282,7 @@ export class ProductsRepository {
       WHERE p.org_id = ${orgId} AND p.uuid = ${uuid}::uuid
       ${forUpdate ? sql`FOR UPDATE OF p` : sql``}`);
     const row = res.rows[0] as Raw | undefined;
-    return row ? toProductRow(row) : undefined;
+    return row ? this.withVariantsOne(tx, orgId, toProductRow(row)) : undefined;
   }
 
   /**
@@ -238,13 +299,13 @@ export class ProductsRepository {
         SELECT ${PRODUCT_SELECT} ${FROM}
         WHERE p.org_id = ${orgId} AND p.sku = ${key.sku} ORDER BY p.id LIMIT 1`);
       const row = bySku.rows[0] as Raw | undefined;
-      if (row) return toProductRow(row);
+      if (row) return this.withVariantsOne(tx, orgId, toProductRow(row));
     }
     const byName = await tx.execute(sql`
       SELECT ${PRODUCT_SELECT} ${FROM}
       WHERE p.org_id = ${orgId} AND lower(p.name) = lower(${key.name}) ORDER BY p.id LIMIT 1`);
     const row = byName.rows[0] as Raw | undefined;
-    return row ? toProductRow(row) : undefined;
+    return row ? this.withVariantsOne(tx, orgId, toProductRow(row)) : undefined;
   }
 
   async findById(tx: Tx, orgId: number, id: number): Promise<ProductRow | undefined> {
@@ -252,7 +313,7 @@ export class ProductsRepository {
       sql`SELECT ${PRODUCT_SELECT} ${FROM} WHERE p.org_id = ${orgId} AND p.id = ${id}`,
     );
     const row = res.rows[0] as Raw | undefined;
-    return row ? toProductRow(row) : undefined;
+    return row ? this.withVariantsOne(tx, orgId, toProductRow(row)) : undefined;
   }
 
   /** The products of this organization among these uuids, optionally only the `active` ones; unknown uuids are absent. */
@@ -267,7 +328,7 @@ export class ProductsRepository {
       SELECT ${PRODUCT_SELECT} ${FROM}
       WHERE p.org_id = ${orgId} AND p.uuid::text = ANY(${textArray(uuids)})
         ${opts.activeOnly ? sql`AND p.status = 'active'` : sql``}`);
-    return (res.rows as Raw[]).map(toProductRow);
+    return this.withVariants(tx, orgId, (res.rows as Raw[]).map(toProductRow));
   }
 
   async findByIds(tx: Tx, orgId: number, ids: readonly number[]): Promise<ProductRow[]> {
@@ -275,7 +336,7 @@ export class ProductsRepository {
     const res = await tx.execute(sql`
       SELECT ${PRODUCT_SELECT} ${FROM}
       WHERE p.org_id = ${orgId} AND p.id = ANY(${intArray(ids)})`);
-    return (res.rows as Raw[]).map(toProductRow);
+    return this.withVariants(tx, orgId, (res.rows as Raw[]).map(toProductRow));
   }
 
   async insert(tx: Tx, orgId: number, values: ProductPatch): Promise<number> {
@@ -337,6 +398,80 @@ export class ProductsRepository {
     return (res.rows as Raw[]).map(toProductRow);
   }
 
+  // --- variants ------------------------------------------------------------------------------------------------------------
+
+  /** Attaches every product's variants with ONE query (no N+1 on the list). */
+  async withVariants(tx: Tx, orgId: number, rows: ProductRow[]): Promise<ProductRow[]> {
+    if (rows.length === 0) return rows;
+    const byProduct = await this.variantsOf(
+      tx,
+      orgId,
+      rows.map((r) => r.id),
+    );
+    return rows.map((r) => ({ ...r, variants: byProduct.get(r.id) ?? [] }));
+  }
+
+  private async withVariantsOne(tx: Tx, orgId: number, row: ProductRow): Promise<ProductRow> {
+    return (await this.withVariants(tx, orgId, [row]))[0]!;
+  }
+
+  /** The variants of these products by product id, in position order; `forUpdate` locks them (stock moves, writes). */
+  async variantsOf(
+    tx: Tx,
+    orgId: number,
+    productIds: readonly number[],
+    forUpdate = false,
+  ): Promise<Map<number, VariantRow[]>> {
+    const out = new Map<number, VariantRow[]>();
+    if (productIds.length === 0) return out;
+    const res = await tx.execute(sql`
+      SELECT ${VARIANT_SELECT} FROM wa_product_variants
+      WHERE org_id = ${orgId} AND product_id = ANY(${intArray(productIds)})
+      ORDER BY product_id, position, id
+      ${forUpdate ? sql`FOR UPDATE` : sql``}`);
+    for (const r of res.rows as Raw[]) {
+      const v = toVariantRow(r);
+      const list = out.get(v.productId);
+      if (list) list.push(v);
+      else out.set(v.productId, [v]);
+    }
+    return out;
+  }
+
+  async insertVariant(tx: Tx, orgId: number, productId: number, w: VariantWrite): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO wa_product_variants (org_id, product_id, option_values_json, title, sku, price_minor, compare_price_minor,
+        image_url, weight_grams, stock_qty, active, position)
+      VALUES (${orgId}, ${productId}, ${JSON.stringify(w.optionValues)}::jsonb, ${w.title}, ${w.sku}, ${w.priceMinor},
+        ${w.comparePriceMinor}, ${w.imageUrl}, ${w.weightGrams}, ${w.stockQty}, ${w.active}, ${w.position})`);
+  }
+
+  async updateVariant(tx: Tx, orgId: number, id: number, w: VariantWrite): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wa_product_variants SET option_values_json = ${JSON.stringify(w.optionValues)}::jsonb, title = ${w.title},
+        sku = ${w.sku}, price_minor = ${w.priceMinor}, compare_price_minor = ${w.comparePriceMinor}, image_url = ${w.imageUrl},
+        weight_grams = ${w.weightGrams}, stock_qty = ${w.stockQty}, active = ${w.active}, position = ${w.position}
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * Frees the unique title and SKU of variants about to change them, so two kept variants can swap values in one save without a
+   * transient unique violation (their final values are written right after).
+   */
+  async parkVariantKeys(tx: Tx, orgId: number, ids: readonly number[]): Promise<void> {
+    if (ids.length === 0) return;
+    await tx.execute(sql`
+      UPDATE wa_product_variants SET title = uuid::text, sku = NULL
+      WHERE org_id = ${orgId} AND id = ANY(${intArray(ids)})`);
+  }
+
+  /** Deletes variants; their holds go with them (the reservation rows cascade) and the caller recomputes the aggregate. */
+  async deleteVariants(tx: Tx, orgId: number, ids: readonly number[]): Promise<void> {
+    if (ids.length === 0) return;
+    await tx.execute(sql`
+      DELETE FROM wa_product_variants WHERE org_id = ${orgId} AND id = ANY(${intArray(ids)})`);
+  }
+
   async countAll(tx: Tx, orgId: number): Promise<number> {
     const res = await tx.execute(
       sql`SELECT count(*) AS c FROM wa_products WHERE org_id = ${orgId}`,
@@ -358,4 +493,44 @@ export function intArray(values: readonly number[]): SQL {
     values.map((v) => sql`${v}`),
     sql`, `,
   )}]::bigint[]`;
+}
+
+/**
+ * Invariant 1: while a product has variants, its row is the aggregate older readers use (lowest active variant price, summed
+ * stock, held total, in stock). Call it in the SAME transaction as every variant write or stock move, after the variant rows are
+ * written (and locked). A product without variants is left alone. Returns the aggregate it wrote, or null.
+ */
+export async function recomputeProductAggregate(
+  tx: Tx,
+  orgId: number,
+  productId: number,
+): Promise<ProductAggregate | null> {
+  const vs = await tx.execute(sql`
+    SELECT price_minor, stock_qty, reserved_qty, active FROM wa_product_variants
+    WHERE org_id = ${orgId} AND product_id = ${productId}`);
+  const rows = vs.rows as Raw[];
+  if (rows.length === 0) return null;
+  const pr = await tx.execute(
+    sql`SELECT price_minor FROM wa_products WHERE org_id = ${orgId} AND id = ${productId}`,
+  );
+  const product = pr.rows[0] as Raw | undefined;
+  if (!product) return null;
+  const agg = computeAggregate(
+    rows.map((r) => ({
+      priceMinor: n(r.price_minor),
+      stockQty: n(r.stock_qty),
+      reservedQty: Number(r.reserved_qty ?? 0),
+      active: r.active !== false,
+    })),
+    Number(product.price_minor),
+  );
+  if (!agg) return null;
+  await tx.execute(sql`
+    UPDATE wa_products
+    SET price_minor = ${agg.priceMinor}, stock_qty = ${agg.stockQty}, reserved_qty = ${agg.reservedQty},
+        in_stock = ${agg.inStock}
+    WHERE org_id = ${orgId} AND id = ${productId}
+      AND (price_minor IS DISTINCT FROM ${agg.priceMinor} OR stock_qty IS DISTINCT FROM ${agg.stockQty}
+        OR reserved_qty IS DISTINCT FROM ${agg.reservedQty} OR in_stock IS DISTINCT FROM ${agg.inStock})`);
+  return agg;
 }

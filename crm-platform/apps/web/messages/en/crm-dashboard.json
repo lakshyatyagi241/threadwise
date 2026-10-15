@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "CRM dashboard"
+    },
+    "title": "Your CRM",
+    "subtitle": "Deals, invoices, payments and tasks — the whole business in one view.",
+    "period": "{from} to {to} · time zone {zone}",
+    "openBoard": "Open the deals board",
+    "loading": "Loading the dashboard",
+    "retry": "Try again",
+    "stale": "The refresh failed. These are the last numbers we had.",
+    "empty": {
+      "title": "Nothing to report yet",
+      "message": "Add contacts and deals and this page fills in: the pipeline funnel, who is winning, where leads come from, tasks and what you are owed.",
+      "deals": "Go to deals",
+      "contacts": "Go to contacts"
+    },
+    "filters": {
+      "label": "Dashboard filters",
+      "period": "Period",
+      "range": {
+        "month": "This month",
+        "7d": "7 days",
+        "30d": "30 days",
+        "90d": "90 days",
+        "custom": "Custom"
+      },
+      "from": "From",
+      "to": "To",
+      "pipeline": "Pipeline",
+      "allPipelines": "All pipelines",
+      "owner": "Owner",
+      "everyone": "Everyone",
+      "team": "Team",
+      "allTeams": "All teams",
+      "reset": "Reset filters"
+    },
+    "kpi": {
+      "title": "Key figures",
+      "vsPrevious": "Compared with the previous period of the same length",
+      "open": "Open pipeline",
+      "openHint": "{count, plural, one {# deal} other {# deals}} · forecast {forecast}",
+      "won": "Won",
+      "wonHint": "{count, plural, one {# deal closed} other {# deals closed}}",
+      "collected": "Collected",
+      "collectedHint": "Payments received",
+      "outstanding": "Outstanding",
+      "outstandingHint": "{count, plural, one {# open invoice} other {# open invoices}}",
+      "winRate": "Win rate",
+      "winRateHint": "{won} won, {lost} lost",
+      "avgSize": "Average deal size",
+      "avgSizeHint": "Of the deals won",
+      "avgCycle": "Average sales cycle",
+      "avgCycleHint": "Creation to won",
+      "days": "{count, plural, one {# day} other {# days}}",
+      "lost": "Lost deals",
+      "lateClose": "Past expected close",
+      "lateCloseHint": "Open deals whose date has passed",
+      "contacts": "Contacts",
+      "contactsHint": "In your view today",
+      "newContacts": "New contacts",
+      "newLeads": "New leads",
+      "newLeadsHint": "Contacts that came with a source",
+      "paid": "Paid invoices",
+      "paidHint": "Became paid in the period",
+      "tasksOpen": "Open tasks",
+      "tasksOpenHint": "{count} due later today",
+      "tasksOverdue": "Overdue tasks"
+    },
+    "funnel": {
+      "title": "Pipeline funnel",
+      "subtitle": "{pipeline} · {count, plural, one {# deal created} other {# deals created}} in the period",
+      "noPipeline": "There is no pipeline yet.",
+      "empty": "No deals were created in this period.",
+      "conversion": "{percent}% moved on",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached} reached this stage, {open} open now. Open them.",
+      "openNow": "{count, plural, one {# open now} other {# open now}} · {value}"
+    },
+    "trend": {
+      "title": "Deals won and lost",
+      "subtitle": {
+        "day": "Per day · {value} won",
+        "week": "Per week · {value} won",
+        "month": "Per month · {value} won"
+      },
+      "chartLabel": "Deals won and deals lost over the period",
+      "won": "Won",
+      "lost": "Lost"
+    },
+    "leaderboard": {
+      "title": "Owner leaderboard",
+      "subtitle": "By value won in the period",
+      "empty": "No deals to rank in this view.",
+      "owner": "Owner",
+      "won": "Won",
+      "value": "Value",
+      "lost": "Lost",
+      "open": "Open",
+      "activities": "Activities",
+      "unowned": "No owner"
+    },
+    "sources": {
+      "title": "Lead sources",
+      "subtitle": "Contacts that arrived in the period, and how far they got",
+      "empty": "No contact with a source arrived in this period.",
+      "source": "Source",
+      "leads": "Leads",
+      "toDeal": "To deal",
+      "toWon": "To won",
+      "wonValue": "Won value",
+      "none": "No source"
+    },
+    "tasks": {
+      "title": "Tasks",
+      "subtitle": "{open} open · {overdue} overdue · {today} due later today",
+      "all": "All tasks",
+      "empty": "No open tasks.",
+      "byAssignee": "Open tasks by assignee",
+      "assignee": "Assignee",
+      "open": "Open",
+      "overdue": "Overdue",
+      "dueToday": "Later today",
+      "unassigned": "Unassigned",
+      "upcoming": "Upcoming tasks",
+      "overdueTag": "Overdue"
+    },
+    "aging": {
+      "title": "Receivables aging",
+      "open": "Payments",
+      "empty": "Nothing is owed.",
+      "bucket": {
+        "current": "Not yet due",
+        "d1_30": "1–30 days past due",
+        "d31_60": "31–60 days past due",
+        "d61_90": "61–90 days past due",
+        "d90_plus": "90+ days past due"
+      }
+    },
+    "payments": {
+      "title": "Recent payments",
+      "empty": "No payments yet."
+    },
+    "activity": {
+      "title": "Recent activity",
+      "empty": "No activity yet.",
+      "stageMoved": "Moved from {from} to {to}",
+      "stagePlaced": "Placed in {to}",
+      "by": "by {name}",
+      "system": "by the system",
+      "type": {
+        "note": "Note",
+        "stage_change": "Stage change",
+        "call": "Call",
+        "message": "Message",
+        "email": "Email",
+        "meeting": "Meeting",
+        "task": "Task"
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ import { disconnectCatalog, KEYS, syncProducts } from '../api/catalog';
 import { bucket, providerLabel, truncate } from '../lib/format';
 import { showHealth } from '../lib/health';
 import { waiting, type SyncCounts } from '../lib/sync-model';
+import { ManageCatalogPanel } from './catalog-manage';
 import { HealthCard } from './health-card';
 import { CARD, KICKER, ProductThumb, SyncPill, TEXT_LINK, TH } from './parts';
 import { AutomationForm, CommerceForm } from './settings-forms';
@@ -243,6 +244,8 @@ export function ConnectedView({
       <AutomationForm key={`a-${catalog.rowVersion}`} catalog={catalog} canManage={canManage} />
 
       <ProductsTable products={overview.products} canManage={canManage} />
+
+      {canManage && <ManageCatalogPanel key={`m-${catalog.rowVersion}`} catalog={catalog} />}
 
       <ConfirmDialog
         open={askDisconnect}

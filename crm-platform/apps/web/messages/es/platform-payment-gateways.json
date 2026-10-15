@@ -6,7 +6,8 @@
       "orders": "Historial de pedidos",
       "billingHistory": "Historial de facturación",
       "invoices": "Facturas",
-      "billingSettings": "Ajustes de facturación"
+      "billingSettings": "Ajustes de facturación",
+      "subscriptions": "Suscripciones"
     },
     "admin": {
       "title": "Pasarelas de pago",
@@ -236,8 +237,12 @@
           "30d": "Últimos 30 días",
           "90d": "Últimos 90 días",
           "1y": "Último año",
-          "all": "Todo el tiempo"
-        }
+          "all": "Todo el tiempo",
+          "custom": "Rango personalizado"
+        },
+        "customFrom": "Fecha de inicio",
+        "customTo": "Fecha de fin",
+        "customInvalid": "Elige dos días válidos: el inicio no puede ser posterior al fin, con un máximo de 5 años de diferencia."
       },
       "orders": {
         "title": "Historial de pedidos",
@@ -249,7 +254,8 @@
         "windows": {
           "90d": "Últimos 90 días",
           "this_year": "Este año",
-          "all": "Todo el tiempo"
+          "all": "Todo el tiempo",
+          "custom": "Rango personalizado"
         },
         "kpi": {
           "total": "Pedidos totales",
@@ -299,7 +305,8 @@
           "markPaid": "Marcar como pagado",
           "cancelOrder": "Cancelar",
           "approve": "Aprobar",
-          "reject": "Rechazar"
+          "reject": "Rechazar",
+          "refund": "Reembolso"
         },
         "confirm": {
           "approveTitle": "¿Marcar este pedido como pagado?",
@@ -432,7 +439,7 @@
           "gross": "Ingresos brutos",
           "net": "Ingresos netos",
           "netPct": "{pct} % neto",
-          "success": "Autorizaciones exitosas",
+          "success": "Tasa de pagos exitosos",
           "failed": "Fallidas",
           "events": "{count, plural, one {# evento} other {# eventos}}",
           "refunds": "Reembolsos",
@@ -673,6 +680,79 @@
           "faqsHint": "Elementos desplegables que se muestran bajo los planes.",
           "configured": "{count} configuradas."
         }
+      },
+      "subscriptions": {
+        "title": "Suscripciones",
+        "eyebrow": "Facturación",
+        "titleFirst": "Plataforma",
+        "titleSecond": "suscripciones",
+        "description": "Suscripciones de planes y complementos gestionadas con un proveedor de pagos, en todos los espacios de trabajo. Finaliza una, actualízala desde el proveedor o reembolsa un cargo.",
+        "kpi": {
+          "active": "Activa",
+          "pastDue": "Pago fallido",
+          "canceled": "Cancelada"
+        },
+        "statusFilter": "Estado de la suscripción",
+        "statuses": {
+          "all": "Todas",
+          "active": "Activa",
+          "past_due": "Pago fallido",
+          "pending": "Pendiente",
+          "canceled": "Cancelada",
+          "expired": "Vencida"
+        },
+        "kind": {
+          "plan": "Plan",
+          "addon": "Complemento"
+        },
+        "search": "Buscar espacio de trabajo o ID del proveedor",
+        "noun": "suscripciones",
+        "empty": "Ninguna suscripción coincide.",
+        "col": {
+          "workspace": "Espacio de trabajo",
+          "item": "Artículo",
+          "price": "Precio",
+          "paidUntil": "Pagado hasta",
+          "status": "Estado",
+          "provider": "Proveedor",
+          "actions": "Acciones"
+        },
+        "cancelFailed": "Falló la cancelación en el proveedor",
+        "cancelFailedHint": "El registro local está finalizado, pero el proveedor no confirmó la cancelación. Complétala en el panel del proveedor para que deje de cobrar.",
+        "actions": {
+          "sync": "Actualizar",
+          "refund": "Reembolso",
+          "endAtCycle": "Finalizar al terminar el ciclo",
+          "endNow": "Finalizar ahora"
+        },
+        "confirm": {
+          "title": "¿Finalizar esta suscripción?",
+          "atCycle": "{name} mantiene el acceso hasta el final del ciclo pagado y no se le volverá a cobrar.",
+          "now": "Finalizar ahora la suscripción de {name} en el proveedor. No se realizará ningún cargo adicional."
+        },
+        "ended": "Suscripción finalizada en el proveedor.",
+        "endedLocalOnly": "Finalizada aquí, pero el proveedor no confirmó la cancelación. Complétala en el panel del proveedor.",
+        "endedUnsupported": "Finalizada aquí. Este proveedor no se puede cancelar desde aquí.",
+        "alreadyEnded": "Ya estaba finalizada.",
+        "synced": "Comprobado con el proveedor: {outcome}."
+      },
+      "refund": {
+        "title": "Reembolsar {label}",
+        "intro": "El reembolso se envía al proveedor de pagos y vuelve al método de pago original del comprador.",
+        "charge": "Cargo a reembolsar",
+        "pickCharge": "Elige un cargo pagado",
+        "loadingCharges": "Cargando cargos",
+        "chargesFailed": "No se pudieron consultar al proveedor de pagos los cargos de esta suscripción.",
+        "noPaidCharges": "El proveedor no lista ningún cargo pagado para esta suscripción.",
+        "amount": "Importe ({currency})",
+        "amountHint": "Déjalo vacío para reembolsar todo lo que aún no se haya reembolsado.",
+        "reason": "Motivo",
+        "endSubscription": "Finalizar también la suscripción ahora para que no se vuelva a cobrar",
+        "submit": "Reembolsar",
+        "processed": "Se reembolsó {amount}.",
+        "pending": "Reembolso enviado. El proveedor lo está procesando.",
+        "failed": "El proveedor rechazó el reembolso.",
+        "badAmount": "Introduce el importe como número, por ejemplo 12.50."
       }
     },
     "offline": {
@@ -711,6 +791,74 @@
       "rejected": "Ese tipo de archivo no está permitido. Usa JPG, PNG, WEBP o PDF.",
       "closed": "Ya no se puede enviar el comprobante de pago para este pedido.",
       "failed": "No se pudo subir el archivo. Inténtalo de nuevo."
+    },
+    "subscriptions": {
+      "title": "Suscripciones",
+      "subtitle": "Tus suscripciones de planes y complementos con el proveedor de pagos: qué se renueva, hasta cuándo estás pagado y qué se cobró.",
+      "loading": "Cargando suscripciones",
+      "loadFailed": "No pudimos cargar tus suscripciones. Inténtalo de nuevo en un momento.",
+      "emptyTitle": "Aún no hay suscripciones",
+      "emptyMessage": "Cuando pagues un plan o complemento con renovación automática, aparecerá aquí.",
+      "browsePlans": "Ver planes",
+      "failedBanner": "Falló el último pago de {names}. Tu acceso continúa por ahora mientras el proveedor reintenta; actualiza tu método de pago con tu banco o el proveedor para no perderlo.",
+      "paymentFailed": "Falló el último pago. El proveedor lo está reintentando.",
+      "kind": {
+        "plan": "Plan",
+        "addon": "Complemento"
+      },
+      "status": {
+        "active": "Activa",
+        "past_due": "Pago fallido",
+        "pending": "Esperando el pago",
+        "canceled": "Cancelada",
+        "expired": "Vencida"
+      },
+      "cycle": {
+        "monthly": "mes",
+        "yearly": "año"
+      },
+      "price": "{amount} por {cycle}",
+      "renewsOn": "Se renueva el {date}",
+      "endsOn": "Pagado hasta el {date}. No se renovará.",
+      "endedOn": "Finalizó el {date}",
+      "refreshFromProvider": "Actualizar desde el proveedor",
+      "showCharges": "Mostrar cargos",
+      "hideCharges": "Ocultar cargos",
+      "cancel": "Cancelar suscripción",
+      "confirmTitle": "¿Cancelar {name}?",
+      "confirmBody": "Mantienes el acceso hasta el {date}. Después no se renovará y no se te volverá a cobrar.",
+      "confirmBodyNoDate": "No se renovará y no se te volverá a cobrar.",
+      "confirm": "Cancelar suscripción",
+      "keep": "Conservarla",
+      "cancelDone": "Cancelada. Tu periodo pagado sigue vigente y no se cobrará nada más.",
+      "cancelFailed": "No pudimos cancelar esta suscripción. Inténtalo de nuevo o contacta con soporte.",
+      "forbidden": "No tienes permiso para gestionar suscripciones.",
+      "sync": {
+        "up_to_date": "Ya está al día con el proveedor de pagos.",
+        "renewed": "Actualizada: el proveedor tenía una renovación más reciente.",
+        "gateway_canceled": "El proveedor muestra esta suscripción como cancelada.",
+        "gateway_expired": "El proveedor muestra esta suscripción como finalizada.",
+        "unknown": "Comprobado con el proveedor de pagos.",
+        "failed": "No pudimos contactar con el proveedor de pagos. Inténtalo de nuevo en un momento."
+      },
+      "chargesFailed": "No pudimos cargar los cargos.",
+      "chargesFromOrders": "No se pudo contactar con el proveedor de pagos, así que se muestran tus pedidos pagados.",
+      "noCharges": "Aún no hay cargos.",
+      "col": {
+        "date": "Fecha",
+        "amount": "Importe",
+        "status": "Estado",
+        "receipt": "Recibo"
+      },
+      "chargeStatus": {
+        "paid": "Pagado",
+        "issued": "Pendiente de pago",
+        "failed": "Fallido",
+        "cancelled": "Cancelado",
+        "expired": "Vencido",
+        "other": "Otro"
+      },
+      "openReceipt": "Abrir recibo"
     }
   }
 }

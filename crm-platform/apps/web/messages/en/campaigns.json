@@ -128,7 +128,8 @@
         "recipients": "{count} recipients",
         "scheduled": "Scheduled: {date}",
         "instant": "Send: instant",
-        "template": "Template {name}"
+        "template": "Template {name}",
+        "cost": "Cost"
       },
       "noData": "No data found",
       "noDataHint": "No WhatsApp campaigns match the current filters. Try clearing filters or launch your first campaign.",
@@ -150,7 +151,18 @@
           }
         }
       },
-      "createBroadcast": "Create campaign"
+      "createBroadcast": "Create campaign",
+      "view": {
+        "label": "View",
+        "list": "List",
+        "blocks": "Blocks"
+      },
+      "col": {
+        "name": "Campaign",
+        "status": "Status",
+        "schedule": "Schedule",
+        "actions": "Actions"
+      }
     },
     "builder": {
       "loadError": "Could not load this campaign.",
@@ -188,7 +200,16 @@
         "customMessage": "Custom message",
         "flowTitle": "Flow",
         "variants": "Variant shown",
-        "variant": "Variant {v}"
+        "variant": "Variant {v}",
+        "typeEmail": "Email",
+        "emailTitle": "Email preview",
+        "emailFrom": "From",
+        "emailSubject": "Subject",
+        "emailNoSender": "Pick a sender",
+        "emailNoSubject": "(no subject)",
+        "emailEmpty": "Write your message body and it appears here.",
+        "emailUnsubscribe": "An unsubscribe link is added at the bottom of every email.",
+        "emailNote": "This is how your campaign will look in each recipient's inbox."
       },
       "previewEmpty": "Your message preview…",
       "previewTemplate": "Template",
@@ -207,7 +228,8 @@
         "throttle": "The longest gap must be at least the shortest.",
         "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
         "media": "Enter a full address starting with http:// or https://.",
-        "sender": "Pick a sender."
+        "sender": "Pick a sender.",
+        "subject": "Shorten the subject to 150 characters or fewer."
       },
       "submit": {
         "save": "Save changes",
@@ -224,8 +246,6 @@
         "senderHint": "Only connected senders can launch a queue.",
         "defaultSender": "Default sender",
         "nameHint": "Internal label for reports and queue history.",
-        "noSenders": "No connected senders.",
-        "connectOne": "Connect one →",
         "type": "Campaign type",
         "types": {
           "custom": {
@@ -274,7 +294,10 @@
         },
         "csvRows": "{count} numbers in the file",
         "numbersPlaceholder": "One number per line — include the country code, no plus sign",
-        "numbersCount": "{count} numbers"
+        "numbersCount": "{count} numbers",
+        "emailNote": "Emails go to the address on each contact. Contacts without an email address, duplicate addresses and opted-out contacts are skipped.",
+        "emailSkipped": "{count, plural, one {# chosen recipient has no email address and will be skipped.} other {# chosen recipients have no email address and will be skipped.}}",
+        "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead."
       },
       "message": {
         "title": "Message",
@@ -384,7 +407,9 @@
         "smartIntro": "Leave blank to use the workspace default pacing. These rules space out sending so a large list looks human and stays under WhatsApp's ban radar.",
         "smartZone": "Times in {zone}.",
         "throttleMaxHint": "The longest wait before a message.",
-        "batchPauseHint": "Minutes to rest after each batch."
+        "batchPauseHint": "Minutes to rest after each batch.",
+        "retryFailed": "Retry failed messages automatically",
+        "retryFailedHint": "A message that fails for a temporary reason is tried again a few times, with a pause between tries. Turn this off to send each message once."
       },
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "draftChip": "Draft / unsaved",
@@ -505,7 +530,13 @@
           "baileys": "No Unofficial API templates yet. Create one on the Templates page."
         },
         "templateIntroApproved": "Pick an approved Meta template. Per-contact variable values are filled at send time from contact attributes.",
-        "templateApproved": "Approved template"
+        "templateApproved": "Approved template",
+        "subject": "Subject",
+        "subjectNote": "Subject line max 150",
+        "subjectPlaceholder": "e.g. Your May offer is live",
+        "subjectHint": "Used as the email subject. Leave it blank to fall back to the campaign name.",
+        "emailNote": "This campaign is sent as an email from the mailbox you picked. An unsubscribe link is added at the bottom of every email.",
+        "emailBodyHint": "Plain text. Use '{{name}}' or '{{first_name}}' to personalise. Contacts without an email address are skipped."
       },
       "review": {
         "title": "Review",
@@ -547,8 +578,14 @@
           "throttle": "The longest gap must be at least the shortest.",
           "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
           "media": "Enter a full address starting with http:// or https://.",
-          "sender": "Pick a sender."
-        }
+          "sender": "Pick a sender.",
+          "subject": "Shorten the subject to 150 characters or fewer."
+        },
+        "from": "From",
+        "subject": "Subject",
+        "subjectFallback": "The campaign name",
+        "skippedNoEmail": "Skipped (no email address)",
+        "estimateEmail": "An estimate: a contact in two groups is counted twice. Contacts without an email address in groups, tags and segments are skipped when the campaign runs."
       },
       "ai": {
         "open": "Build with AI",
@@ -668,7 +705,8 @@
         "edit": "Edit",
         "resendAll": "Resend to all",
         "export": "Export rows",
-        "delete": "Delete"
+        "delete": "Delete",
+        "broadcastStatus": "Broadcast status"
       },
       "kpi": {
         "recipients": "Recipients",
@@ -677,15 +715,19 @@
         "read": "Read",
         "replies": "Replies",
         "clicks": "Clicks",
-        "failed": "Failed"
+        "failed": "Failed",
+        "cost": "Cost",
+        "costHint": "Charged to the wallet so far"
       },
       "tabs": {
+        "summary": "Summary",
         "overview": "Overview",
         "messages": "Messages",
         "engagement": "Engagement",
         "replies": "Replies ({count})",
         "failures": "Failures ({count})",
-        "optouts": "Opt-outs ({count})"
+        "optouts": "Opt-outs ({count})",
+        "statistics": "Statistics"
       },
       "cancel": "Cancel",
       "deleted": "Campaign deleted.",
@@ -796,6 +838,186 @@
         "replies": "Replies",
         "optOuts": "Opt-outs",
         "readRate": "Read rate"
+      },
+      "summary": {
+        "title": "Summary",
+        "intro": "In plain words: who got your message, who wrote back and who filled in an application form.",
+        "loading": "Loading your summary",
+        "headline": {
+          "none": "No messages have gone out yet.",
+          "messaged": "{count, plural, one {You messaged # person.} other {You messaged # people.}}",
+          "notReceived": "{messaged} No one has received it yet.",
+          "received": "{count, plural, =0 {no one has received it yet} other {# received it}}",
+          "opened": "{count, plural, =0 {no one has opened it yet} other {# opened it}}",
+          "wroteBack": "{count, plural, =0 {no one has written back within {days, plural, one {# day} other {# days}} yet} other {# wrote back within {days, plural, one {# day} other {# days}}}}",
+          "filledForm": "{count, plural, =0 {no one has filled in an application form yet} other {# filled in an application form}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Count replies and forms that arrive",
+          "hint": "Counted from the moment you sent the message.",
+          "option": "Within {days, plural, one {# day} other {# days}}"
+        },
+        "forms": {
+          "label": "Which forms count as an application?",
+          "hint": "Leave it empty to count every web form and WhatsApp form.",
+          "placeholder": "All forms",
+          "empty": "No forms found",
+          "clear": "Count all forms",
+          "remove": "Remove {name}",
+          "web": "{name} (web form)",
+          "whatsapp": "{name} (WhatsApp form)",
+          "loadError": "We could not load your forms. All forms are counted for now."
+        },
+        "tile": {
+          "listLabel": "The numbers",
+          "unit": "{count, plural, one {person} other {people}}",
+          "messaged": {
+            "label": "Messaged",
+            "explain": "People we sent your message to.",
+            "pct": "The people you chose to message"
+          },
+          "received": {
+            "label": "Received",
+            "explain": "People whose phone received the message."
+          },
+          "opened": {
+            "label": "Opened",
+            "explain": "People who opened and read the message."
+          },
+          "wroteBack": {
+            "label": "Wrote back",
+            "explain": "People who sent you a message within {days, plural, one {# day} other {# days}} of the send."
+          },
+          "filledForm": {
+            "label": "Filled a form",
+            "explainAll": "People who filled in any of your application forms.",
+            "explainSome": "{count, plural, one {People who filled in the form you chose.} other {People who filled in one of the # forms you chose.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% of the people you messaged",
+          "less": "Less than 1% of the people you messaged",
+          "zero": "None of the people you messaged",
+          "everyone": "Everyone you messaged"
+        },
+        "funnel": {
+          "title": "From message to application form",
+          "alt": "Number of people at each step, from messaged to filled a form",
+          "note": "People can skip a step. Someone may write back without opening the message first, so a bar can be longer than the one above it."
+        },
+        "daily": {
+          "title": "People writing back each day",
+          "series": "People who wrote back",
+          "empty": "No one has written back yet.",
+          "alt": "{total, plural, one {# person wrote} other {# people wrote}} back. The busiest day was {day}, with {count, plural, one {# person} other {# people}}."
+        },
+        "people": {
+          "title": "See who",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Wrote back",
+            "hint": "People who sent you a message after your message went out."
+          },
+          "filled_form": {
+            "title": "Filled a form",
+            "hint": "People who filled in an application form."
+          },
+          "not_reached": {
+            "title": "Not reached",
+            "hint": "People your message did not reach."
+          },
+          "table": "People in this list",
+          "name": "Name",
+          "phone": "Phone",
+          "when": "When",
+          "form": "Form",
+          "unknown": "Name not known",
+          "noContact": "Not matched to a contact",
+          "open": "Open {name}",
+          "empty": "No one in this list yet.",
+          "shown": "Showing {shown} of {total}",
+          "more": "Show more",
+          "loading": "Loading the list",
+          "error": "We could not load this list.",
+          "retry": "Try again",
+          "forbidden": "You do not have access to see these names."
+        },
+        "download": {
+          "button": "Download names",
+          "busy": "Preparing the file",
+          "failed": "We could not prepare the names file.",
+          "done": "The names file is ready.",
+          "truncated": "The file holds the first {count} people of each list.",
+          "none": "There are no names to download yet.",
+          "csv": {
+            "group": "List",
+            "name": "Name",
+            "phone": "Phone",
+            "when": "When",
+            "form": "Form"
+          }
+        },
+        "print": {
+          "button": "Print summary",
+          "sent": "Sent {date}",
+          "notSent": "Not sent yet",
+          "window": "Counting replies and forms within {days, plural, one {# day} other {# days}} of the send",
+          "printed": "Printed {date}"
+        },
+        "caveats": {
+          "title": "Good to know",
+          "recipients_without_contact": "{count, plural, one {# person could not be matched to a contact, so we cannot tell whether they wrote back.} other {# people could not be matched to a contact, so we cannot tell whether they wrote back.}}",
+          "contact_match_only": "We match people to your contacts by phone number. Someone who writes from a different number is not counted.",
+          "opted_out_excluded": "People who asked not to be messaged are not counted.",
+          "counted_in_other_campaigns": "Someone you messaged in more than one campaign can be counted in each of them."
+        },
+        "notSent": {
+          "title": "Nothing has been sent yet",
+          "body": "Once the messages go out, you will see here who received them, who wrote back and who filled in an application form."
+        },
+        "sending": "Still sending, so these numbers will keep growing.",
+        "error": {
+          "title": "We could not load this summary.",
+          "retry": "Try again"
+        },
+        "latestRun": "Showing run {occurrence}, the newest one of this series."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "updated {time}",
+        "queued": "{count} waiting to send",
+        "processing": "{count} sending now"
+      },
+      "statistics": {
+        "loadFailed": "The statistics could not be loaded.",
+        "rates": {
+          "delivered": "Delivery rate",
+          "deliveredHint": "of the audience",
+          "read": "Read rate",
+          "readHint": "of delivered",
+          "replies": "Reply rate",
+          "clicks": "Click rate",
+          "failed": "Failure rate"
+        },
+        "breakdown": {
+          "title": "Where everyone is now",
+          "hint": "Each of the {total} recipients is counted once, at the status it holds.",
+          "empty": "This campaign has no recipients yet."
+        },
+        "timeline": {
+          "title": "Timeline",
+          "created": "Created",
+          "scheduled": "Set to start",
+          "firstSent": "First message sent",
+          "lastRun": "Last run",
+          "finished": "Finished",
+          "notYet": "Not yet"
+        },
+        "live": "Following live",
+        "atRest": "Final numbers",
+        "updated": "Updated {time}"
       }
     },
     "wizard": {
@@ -854,7 +1076,6 @@
         "notFound": "This was not found. It may have been deleted.",
         "rateLimited": "Too many requests. Wait a moment and try again.",
         "unexpected": "Something went wrong on our side. Try again.",
-        "requestId": "Request ID",
         "retry": "Try again"
       },
       "categories": {
@@ -930,7 +1151,6 @@
         "senderLabel": "Send from",
         "senderHint": "The WhatsApp number this campaign is sent from.",
         "pickSender": "Choose a number",
-        "noSenders": "No WhatsApp number is connected. Connect one first.",
         "classicOption": "classic builder"
       },
       "audience": {
@@ -965,6 +1185,7 @@
         "optedOut": "Opted out",
         "invalidNumbers": "Invalid numbers",
         "alwaysSkipped": "Opted-out contacts and invalid numbers are always skipped.",
+        "noConsent": "No consent recorded (skipped)",
         "willBeMessaged": "Will be messaged",
         "about": "about {count}",
         "approximate": "This is an estimate: the audience is too large to count exactly in time.",
@@ -1073,7 +1294,9 @@
           "invalid_phone": "Not a valid number",
           "duplicate": "Duplicate"
         },
-        "csvIssuesMore": "{count} more are in the download."
+        "csvIssuesMore": "{count} more are in the download.",
+        "csvConsentOn": "You confirmed consent for these numbers. They are recorded as agreed when the broadcast launches.",
+        "csvConsentVersion": "Notice version: {version}."
       },
       "review": {
         "intro": "Check the cost, tell us what each template variable is filled with, and review the campaign.",
@@ -1089,6 +1312,7 @@
         "messages": "Messages",
         "modePlan": "{count, plural, one {Your plan covers the first messages; the wallet pays for # message beyond them.} other {Your plan covers the first messages; the wallet pays for # messages beyond them.}}",
         "modeWallet": "{count, plural, one {Every delivered message is charged to your wallet: # message.} other {Every delivered message is charged to your wallet: # messages.}}",
+        "platformOwned": "This workspace is not billed for sends, so nothing is charged to your wallet.",
         "breakdown": "Cost by country",
         "country": "Country",
         "unitPrice": "Per message",
@@ -1318,12 +1542,17 @@
         "action": {
           "pause": "Pause",
           "resume": "Resume",
-          "cancel": "Cancel campaign"
+          "cancel": "Cancel campaign",
+          "retryFailed": "Retry failed ({count})",
+          "export": "Export rows",
+          "delete": "Delete"
         },
         "done": {
           "pause": "Campaign paused.",
           "resume": "Campaign resumed.",
-          "cancel": "Campaign cancelled."
+          "cancel": "Campaign cancelled.",
+          "retryFailed": "Retrying {count, plural, one {# failed recipient} other {# failed recipients}}.",
+          "delete": "Broadcast deleted."
         },
         "failed": "That did not work. Try again.",
         "noControl": "You do not have permission to pause, resume or cancel campaigns.",
@@ -1342,7 +1571,13 @@
           "cancelled": "Cancelled",
           "active": "Active",
           "ended": "Ended"
-        }
+        },
+        "retryTitle": "Retry the failed messages?",
+        "retryMessage": "Sends again to the {count, plural, one {# recipient} other {# recipients}} whose message failed. Everyone who already got it is left alone, and a message is charged only when it is delivered.",
+        "exportFailed": "The export could not be downloaded.",
+        "deleteTitle": "Delete this broadcast?",
+        "deleteOne": "Deletes this broadcast and its recipients. This cannot be undone.",
+        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone."
       },
       "panel": {
         "title": "Created with the guided flow",
@@ -1445,12 +1680,70 @@
         "noRuns": "No run has started yet.",
         "cancel": "Cancel series"
       },
-      "legacy": "Legacy broadcasts ({count})"
+      "legacy": "Legacy broadcasts ({count})",
+      "view": {
+        "label": "View",
+        "list": "List",
+        "blocks": "Blocks"
+      },
+      "showing": "Showing {count, plural, one {# campaign} other {# campaigns}}"
     },
     "create": {
       "loading": "Loading your numbers",
       "noAccessTitle": "You cannot create campaigns",
       "noAccess": "Ask a workspace admin for permission to create campaigns."
+    },
+    "senderEmpty": {
+      "loading": "Loading your numbers…",
+      "none": {
+        "title": "No WhatsApp number is connected",
+        "body": "Connect a WhatsApp Business number to choose who this campaign is sent from.",
+        "action": "Connect a WhatsApp number"
+      },
+      "sms": {
+        "none": {
+          "title": "No SMS sender is connected",
+          "body": "Connect an SMS sender to choose who this campaign is sent from.",
+          "action": "Connect an SMS sender"
+        }
+      },
+      "pending": {
+        "title": "{count, plural, one {# number is still connecting} other {# numbers are still connecting}}",
+        "body": "A number can send campaigns once its connection is finished. Open its status to complete the setup.",
+        "action": "Check the number's status"
+      },
+      "error": {
+        "title": "{count, plural, one {The connection of # number failed} other {The connection of # numbers failed}}",
+        "body": "Reconnect the number from its status page and it will appear here.",
+        "action": "Fix the connection"
+      },
+      "disconnected": {
+        "title": "{count, plural, one {# number is disconnected} other {# numbers are disconnected}}",
+        "body": "Reconnect it to send campaigns from it. Connected numbers appear here.",
+        "action": "Reconnect a number"
+      },
+      "personal_off": {
+        "title": "Personal numbers are turned off for this workspace",
+        "body": "{count, plural, one {Your personal (QR) number can't} other {Your # personal (QR) numbers can't}} send campaigns while this is off. A platform administrator can turn it on for this workspace, or you can connect an official WhatsApp Business number.",
+        "action": "Connect an official number"
+      },
+      "email": {
+        "none": {
+          "title": "No mailbox is connected",
+          "body": "Connect a mailbox on the Email page to choose who this campaign is sent from.",
+          "action": "Connect a mailbox"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# mailbox is disconnected} other {# mailboxes are disconnected}}",
+          "body": "Reconnect it on the Email page to send campaigns from it.",
+          "action": "Open the Email page"
+        },
+        "error": {
+          "title": "{count, plural, one {# mailbox needs reconnecting} other {# mailboxes need reconnecting}}",
+          "body": "Its last sign-in failed. Reconnect it on the Email page and it will appear here.",
+          "action": "Open the Email page"
+        }
+      }
     }
   }
 }

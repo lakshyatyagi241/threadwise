@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
+import { senderHiddenSchema } from '../broadcasts/broadcast-compose';
 import { segmentRulesSchema } from '../segments/rules';
 import { contactSelectionSchema } from '../contacts-attributes-tags/contact-filter';
 import { CAMPAIGN_STATUSES, campaignCountsSchema } from './campaign';
@@ -249,7 +250,7 @@ export const wizardDraftSchema = z.object({
   /**
    * What the campaign builder adds to a guided send. A/B test: variant A is `templateId`, variant B `templateIdB` with its own variable
    * mapping, and `abSplit` is the percent that gets A. `autoEnd` stops the send at that moment; `pacing` is Smart Delivery;
-   * `trackLinks` wraps links to count clicks. All are carried to every run of a recurring series.
+   * `trackLinks` wraps links to count clicks; `retryFailed` retries a temporary failure. All are carried to every run of a recurring series.
    */
   abTesting: z.boolean().default(false),
   abSplit: z.number().int().min(0).max(100).default(50),
@@ -258,6 +259,8 @@ export const wizardDraftSchema = z.object({
   autoEnd: wizardAutoEndSchema.nullable().default(null),
   pacing: wizardPacingSchema.default({}),
   trackLinks: z.boolean().default(true),
+  /** Retry a message that failed for a temporary reason (the platform's retry settings); false makes the first failure final. */
+  retryFailed: z.boolean().default(true),
   /** The furthest step the person reached (1 to 4), so a resumed draft opens where they stopped. */
   step: z.number().int().min(1).max(WIZARD_STEP_COUNT).default(1),
 });
@@ -361,7 +364,9 @@ export const wizardAudienceCountSchema = z.object({
   optedOut: z.number().int(),
   /** Of those, never messaged: no usable WhatsApp number. */
   invalidNumber: z.number().int(),
-  /** Who will be messaged: matching minus the two above. */
+  /** Of those, never messaged: the workspace requires a recorded consent and there is none. 0 while that switch is off. */
+  noConsent: z.number().int().default(0),
+  /** Who will be messaged: matching minus the three above. */
   recipients: z.number().int(),
   /** Of the recipients, numbers from the CSV that are not contacts yet (they are created when the broadcast is launched). */
   newContacts: z.number().int().default(0),
@@ -417,6 +422,18 @@ export type WizardContactsPage = z.infer<typeof wizardContactsPageSchema>;
 export const WIZARD_CSV_REJECT_REASONS = ['missing_phone', 'invalid_phone', 'duplicate'] as const;
 export type WizardCsvRejectReason = (typeof WIZARD_CSV_REJECT_REASONS)[number];
 
+/**
+ * The `options` field of the CSV upload (a JSON string beside the file, like the contact import's). BL-170: "I have consent to message
+ * these numbers" and, optionally, the notice or lawful basis the file's contacts agreed under with its version. Without the confirmation
+ * the upload records no consent, as before.
+ */
+export const wizardCsvUploadOptionsSchema = z.object({
+  consentConfirmed: z.boolean().default(false),
+  consentNoticeText: z.string().trim().max(2000).optional(),
+  consentNoticeVersion: z.string().trim().max(64).optional(),
+});
+export type WizardCsvUploadOptions = z.infer<typeof wizardCsvUploadOptionsSchema>;
+
 export const wizardCsvReportSchema = z.object({
   /** The stored upload: what `audience.csv.id` carries. */
   id: uuidSchema,
@@ -453,6 +470,10 @@ export const wizardCsvReportSchema = z.object({
   ),
   issuesTotal: z.number().int(),
   expiresAt: z.string().datetime().nullable(),
+  /** The person who uploaded the file confirmed they hold consent for its numbers (BL-170): they are granted when the broadcast launches. */
+  consentConfirmed: z.boolean(),
+  /** The version of the notice they stated the file's contacts agreed under, when they gave one. */
+  consentNoticeVersion: z.string().nullable(),
 });
 export type WizardCsvReport = z.infer<typeof wizardCsvReportSchema>;
 
@@ -488,6 +509,8 @@ export const wizardCreditCheckSchema = z.object({
   estimatedCostMinor: z.number().int(),
   /** Every message at its price, independent of the plan (shown beside what is charged now). */
   fullCostMinor: z.number().int(),
+  /** The workspace is owned by the platform: its sends are never billed, so the wallet and the plan's allowance play no part. */
+  platformOwned: z.boolean(),
   lines: z.array(wizardCreditLineSchema),
   /** The wallet's own launch rule says this send may start. Sending is blocked when false. */
   sufficient: z.boolean(),
@@ -757,6 +780,25 @@ export const wizardControlResponseSchema = z.object({
 });
 export type WizardControlResponse = z.infer<typeof wizardControlResponseSchema>;
 
+/** Delete a launched broadcast: a one-off campaign, or a recurring series with the (unsent) runs it had planned. */
+export const wizardDeleteResponseSchema = z.object({
+  id: uuidSchema,
+  kind: z.enum(['campaign', 'series']),
+  /** Runs removed with it (1 for a one-off broadcast). */
+  runs: z.number().int(),
+  message: z.string(),
+});
+export type WizardDeleteResponse = z.infer<typeof wizardDeleteResponseSchema>;
+
+/** "Retry failed" on a launched broadcast: the failed recipients go back in the queue (a series: those of every finished run). */
+export const wizardRetryFailedResponseSchema = wizardControlResponseSchema.extend({
+  /** Recipients put back in the queue. */
+  recipients: z.number().int(),
+  /** Runs they belong to (always 1 for a one-off broadcast). */
+  runs: z.number().int(),
+});
+export type WizardRetryFailedResponse = z.infer<typeof wizardRetryFailedResponseSchema>;
+
 // ---------------------------------------------------------------------------------------- validation, shared by the steps and the launch
 
 export interface WizardIssue {
@@ -943,5 +985,9 @@ export const wizardSenderSchema = z.object({
   guided: z.boolean(),
 });
 export type WizardSender = z.infer<typeof wizardSenderSchema>;
-export const wizardSendersResponseSchema = z.object({ data: z.array(wizardSenderSchema) });
+export const wizardSendersResponseSchema = z.object({
+  data: z.array(wizardSenderSchema),
+  /** The numbers the workspace has that are not in `data`, by engine and reason, so an empty or short list can say why. */
+  hidden: z.array(senderHiddenSchema),
+});
 export type WizardSendersResponse = z.infer<typeof wizardSendersResponseSchema>;

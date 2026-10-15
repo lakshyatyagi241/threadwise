@@ -50,6 +50,7 @@
       "out_of_hours": "Out of hours",
       "group_leave": "List leave",
       "segment_join": "Segment join",
+      "segment_leave": "Segment leave",
       "contact_updated": "Contact updated",
       "field_match": "Field match",
       "date_field_match": "Date match",
@@ -119,6 +120,8 @@
       "colStarted": "Started",
       "colActivity": "Last activity",
       "colSteps": "Steps",
+      "colReplies": "Replies",
+      "repliesHint": "Customer messages that reached a wait node of this run",
       "colActions": "Actions",
       "open": "Open run",
       "cancel": "Cancel",
@@ -192,7 +195,24 @@
       "retention": "Logs are deleted {days} days after a run ends.",
       "pathTitle": "Path taken",
       "notReached": "Not reached",
-      "noErrors": "No errors in this run."
+      "noErrors": "No errors in this run.",
+      "factNext": "Next: {node}",
+      "factWaiting": "Waiting at: {node}",
+      "factDelay": "Waits {time}",
+      "factReplied": "Customer replied: {text}",
+      "factEnded": "Ended: {reason}",
+      "ioInput": "Input",
+      "ioOutput": "Output",
+      "ioKind": {
+        "message": "Message sent",
+        "reply": "Customer reply",
+        "variable": "Variable",
+        "request": "Request",
+        "response": "Response",
+        "result": "Result"
+      },
+      "factMenuKept": "No next step here. The options from {node} stay active.",
+      "factAnswered": "Answered after {time}"
     },
     "event": {
       "step": "Step",
@@ -498,7 +518,9 @@
       "error": "Error",
       "skipped": "Skipped",
       "waiting": "Waiting",
-      "timeout": "Timed out"
+      "timeout": "Timed out",
+      "answered": "Answered",
+      "gaveUp": "No reply"
     }
   }
 }

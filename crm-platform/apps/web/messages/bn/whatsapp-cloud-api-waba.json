@@ -7,7 +7,6 @@
       "dismiss": "বন্ধ করুন",
       "cancel": "বাতিল",
       "close": "বন্ধ করুন",
-      "requestId": "অনুরোধ {id}",
       "unknown": "—"
     },
     "numbers": {
@@ -34,7 +33,8 @@
         "registered": "\"{name}\" Cloud API-তে নিবন্ধিত হয়েছে।",
         "disconnected": "\"{name}\" সংযোগ বিচ্ছিন্ন হয়েছে।",
         "removed": "\"{name}\" সরানো হয়েছে।",
-        "warningsTitle": "সংযুক্ত হয়েছে, তবে এটি একবার দেখুন:"
+        "warningsTitle": "সংযুক্ত হয়েছে, তবে এটি একবার দেখুন:",
+        "verified": "\"{name}\" যাচাই হয়েছে।"
       },
       "notReady": {
         "title": "এমবেডেড সাইনআপ কনফিগার করা নেই",
@@ -81,7 +81,8 @@
         "register": "নিবন্ধন করুন",
         "meta": "Meta",
         "disconnect": "সংযোগ বিচ্ছিন্ন করুন",
-        "remove": "সরান"
+        "remove": "সরান",
+        "verify": "নম্বর যাচাই করুন"
       },
       "confirm": {
         "fixInboundTitle": "ইনবাউন্ড ঠিক করবেন?",
@@ -100,6 +101,17 @@
         "pin": "টু-স্টেপ PIN (ঐচ্ছিক)",
         "pinError": "PIN ৬ সংখ্যার হতে হবে",
         "submit": "নিবন্ধন করুন"
+      },
+      "verifyDialog": {
+        "title": "এই নম্বর যাচাই করুন",
+        "message": "Meta {phone} নম্বরে ৬ সংখ্যার একটি কোড পাঠাবে। কীভাবে পেতে চান বেছে নিন।",
+        "enterCode": "Meta {phone} নম্বরে যে ৬ সংখ্যার কোড পাঠিয়েছে তা লিখুন।",
+        "sendSms": "SMS-এ কোড পাঠান",
+        "sendVoice": "কলের মাধ্যমে কোড পাঠান",
+        "code": "যাচাইকরণ কোড",
+        "codeError": "কোডটি ৬ সংখ্যার",
+        "submit": "যাচাই করুন",
+        "resend": "নতুন কোড পাঠান"
       }
     },
     "connect": {

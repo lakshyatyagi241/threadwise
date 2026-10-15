@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "可以通话了吗？",
+      "status": {
+        "never_checked": "尚未检查",
+        "blocked": "未就绪",
+        "ready_to_enable": "可以开启",
+        "attention": "可用，需留意",
+        "ready": "已就绪"
+      },
+      "statusHint": {
+        "never_checked": "此号码尚未检查。",
+        "blocked": "在标有“需修复”的项目处理好之前，通话无法使用。",
+        "ready_to_enable": "WhatsApp 要求的条件均已满足。启用通话后即可显示“通话”按钮。",
+        "attention": "通话可用，但下方有项目需要留意。",
+        "ready": "通话已开启，所有检查均已通过。"
+      },
+      "checkedAt": "检查于 {date}",
+      "checking": "正在向 WhatsApp 检查...",
+      "checkAgain": "重新检查",
+      "checkFailed": "无法检查此号码。",
+      "checkedDone": "已重新检查。",
+      "blockedHint": "请先处理标有“需修复”的项目，否则 WhatsApp 很可能拒绝开启通话。",
+      "details": "检查项目",
+      "fixLabel": "建议操作：",
+      "state": {
+        "ok": "正常",
+        "warn": "需留意",
+        "fail": "需修复"
+      },
+      "checks": {
+        "plan_feature": "套餐包含 WhatsApp 通话",
+        "connection": "号码已连接",
+        "not_coexistence": "号码仅使用 Cloud API",
+        "number_registered": "号码已在 WhatsApp 注册",
+        "messaging_limit": "消息限额与质量",
+        "token_scopes": "访问令牌权限",
+        "webhook_subscribed": "应用已订阅此账号",
+        "calls_field": "通话 Webhook 已送达",
+        "calling_enabled": "WhatsApp 已开启通话",
+        "turn": "通话中继 (TURN) 已配置",
+        "dialler_permissions": "同事可发起通话",
+        "recording_consent": "录音与同意规则"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "您的套餐包含 WhatsApp 通话。"
+        },
+        "plan_missing": {
+          "detail": "您的套餐不包含 WhatsApp 通话。",
+          "fix": "请升级套餐，然后重新检查。"
+        },
+        "connected": {
+          "detail": "号码已连接，且已有访问令牌。"
+        },
+        "not_connected": {
+          "detail": "此号码当前未连接。",
+          "fix": "请在“渠道”下重新连接，然后重新检查。"
+        },
+        "no_credentials": {
+          "detail": "此号码未保存访问令牌或电话号码 ID。",
+          "fix": "请重新连接号码，以便重新保存其凭据。"
+        },
+        "cloud_api_only": {
+          "detail": "此号码仅通过 WhatsApp Cloud API 运行。"
+        },
+        "coexistence": {
+          "detail": "此号码同时用于 WhatsApp Business 应用（共存模式），WhatsApp 不允许此类号码通话。",
+          "fix": "请仅在 Cloud API 上注册，或改用其他号码通话。"
+        },
+        "on_premise": {
+          "detail": "此号码使用的是旧版本地部署 API，Meta 已将其停用。",
+          "fix": "请在 Cloud API 上注册，或改用其他号码。"
+        },
+        "number_ok": {
+          "detail": "WhatsApp 显示此号码已上线并通过验证。"
+        },
+        "number_not_verified": {
+          "detail": "此号码的所有权验证码尚未验证。",
+          "fix": "请在号码的 WhatsApp 连接页面完成验证，然后重新检查。"
+        },
+        "number_not_live": {
+          "detail": "WhatsApp 显示此号码状态为 {status}，而非已连接。",
+          "fix": "请在 Meta Business Suite 中处理该号码（可能处于待审核、被标记或受限状态），然后重新检查。"
+        },
+        "limit_ok": {
+          "detail": "每日消息限额和质量评级满足通话要求。"
+        },
+        "limit_test_number": {
+          "detail": "这是测试号码，不需要消息限额。"
+        },
+        "limit_low": {
+          "detail": "消息限额为 {tier}。开启通话前，WhatsApp 要求每天至少可联系 {needed} 位客户。",
+          "fix": "请保持良好质量并发送更多消息，或在 Meta Business Suite 中验证您的企业，以提升限额，然后重新检查。"
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp 未返回本应用可识别的消息限额。",
+          "fix": "请在 Meta Business Suite 中打开该号码查看限额。通话要求每天至少可联系 2,000 位客户。"
+        },
+        "quality_low": {
+          "detail": "此号码的质量评级偏低（红色），WhatsApp 可能对其加以限制。",
+          "fix": "请减少被屏蔽和被举报的消息，待评级恢复后再使用通话。"
+        },
+        "scopes_ok": {
+          "detail": "访问令牌具备通话所需的权限。"
+        },
+        "scope_missing": {
+          "detail": "访问令牌缺少：{missing}。",
+          "fix": "请生成同时包含 whatsapp_business_management 和 whatsapp_business_messaging 的新系统用户令牌，然后重新连接号码。"
+        },
+        "token_invalid": {
+          "detail": "WhatsApp 不接受已保存的访问令牌。",
+          "fix": "请重新连接号码，或保存新的永久令牌。"
+        },
+        "token_expiring": {
+          "detail": "访问令牌将在 {days, plural, other {# 天}}后过期。",
+          "fix": "请在过期前重新连接号码，或保存永久系统用户令牌。"
+        },
+        "scopes_unverifiable": {
+          "detail": "无法读取令牌权限。此号码可能通过服务商接入，或本平台没有可用于检查的应用凭据。",
+          "fix": "如果通话被拒绝，请向您的服务商确认此号码是否可以使用通话。"
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp 会将此账号的事件发送到平台。"
+        },
+        "waba_not_subscribed": {
+          "detail": "此 WhatsApp Business 账号未订阅任何应用，因此来电永远不会送达。",
+          "fix": "请在号码的健康状态页面使用“修复入站”，然后重新检查。"
+        },
+        "calls_field_ok": {
+          "detail": "Meta 应用会推送通话 Webhook 字段。"
+        },
+        "calls_field_added": {
+          "detail": "原先缺少通话 Webhook 字段，现已添加到平台的 Meta 应用中。"
+        },
+        "calls_field_missing": {
+          "detail": "Meta 应用未推送通话 Webhook 字段，因此无法收到来电和应答。",
+          "fix": "请联系平台运营方，在 Meta 应用的 Webhook 设置（WhatsApp，配置）中勾选通话字段，然后重新检查。"
+        },
+        "calls_field_unverifiable": {
+          "detail": "此号码所在的 Meta 应用平台无法读取，因此无法检查通话 Webhook 字段。",
+          "fix": "请打开该应用的 Webhook 设置，确认已勾选通话字段。"
+        },
+        "calling_on": {
+          "detail": "通话已开启，客户可看到通话图标。"
+        },
+        "calling_off": {
+          "detail": "此号码已关闭通话。",
+          "fix": "其他项目都没问题后，请选择“启用通话”。"
+        },
+        "icon_hidden": {
+          "detail": "通话已开启，但客户看不到通话图标，因此无法发起通话。",
+          "fix": "请在 Meta 的号码通话设置中，将通话图标的可见性恢复为默认。"
+        },
+        "turn_ok": {
+          "detail": "已配置 TURN 中继，因此在严格防火墙后也能通话。"
+        },
+        "turn_missing": {
+          "detail": "未配置 TURN 中继，处于严格防火墙后的用户可能接通后听不到声音。",
+          "fix": "请联系平台运营方，在 CALLING_ICE_SERVERS 中添加 TURN 服务器。"
+        },
+        "turn_incomplete": {
+          "detail": "已列出的 TURN 服务器缺少用户名或凭据。",
+          "fix": "请在 CALLING_ICE_SERVERS 的该条目中补充用户名和凭据。"
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS 已设置，但不是有效的列表，因此只会使用公共 STUN 服务器。",
+          "fix": "请修正 CALLING_ICE_SERVERS 中的 JSON。"
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, other {# 位同事}}可发起和接听通话。"
+        },
+        "dialler_none": {
+          "detail": "此工作区中没有人有权发起和接听通话。",
+          "fix": "请在“设置”的“角色”中，为某个角色授予使用通话的权限。"
+        },
+        "recording_off": {
+          "detail": "通话录音已关闭，无需同意。"
+        },
+        "recording_configured": {
+          "detail": "通话录音已开启，并设有提示和同意规则。"
+        },
+        "recording_notice_missing": {
+          "detail": "通话录音已开启，但没有可播报的提示。",
+          "fix": "请在下方“录音”中填写录音提示。"
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp 未响应此项检查。",
+          "fix": "请稍后重新检查。"
+        },
+        "not_checked": {
+          "detail": "正在等待上方的项目。",
+          "fix": "请先处理上方的项目。"
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp 暂不会开启通话。号码的每日消息限额需至少可联系 2,000 位客户，且应用必须已订阅 WhatsApp Business 账号和通话 Webhook 字段，并具备 whatsapp_business_messaging 权限。测试号码不受限额要求。",
+        "coexistence": "WhatsApp 通话要求号码完全使用 Cloud API。此号码与 WhatsApp Business 应用共用同一线路（共存模式），WhatsApp 不允许此类号码通话。请仅在 Cloud API 上注册，或改用其他号码。",
+        "permission_scope": "访问令牌缺少通话所需的权限（whatsapp_business_management 和 whatsapp_business_messaging）。请生成包含这两项权限的新令牌，并重新连接号码。",
+        "token_expired": "WhatsApp 已不再接受已保存的访问令牌。请重新连接号码，然后重试。",
+        "calling_not_enabled": "此号码在 WhatsApp 尚未开启通话。请先开启，然后重试。",
+        "no_call_permission": "该客户尚未允许通话。系统会发送权限请求，等待对方接受。",
+        "permission_request_limit": "WhatsApp 限制了向该客户请求通话权限的频率。请稍后再试。",
+        "receiver_uncallable": "该客户的 WhatsApp 无法接收通话（应用版本过旧，或已关闭通话）。请让对方更新 WhatsApp。",
+        "meta_unreachable": "WhatsApp 响应超时。请稍后重试。"
+      },
+      "refusedBecause": "WhatsApp 拒绝了请求：{reason}",
+      "autoEnable": {
+        "title": "自动开启通话",
+        "hint": "WhatsApp 号码连接或重新连接后，若满足所有条件，则无需询问，自动为其开启通话。默认关闭；未启用此选项时，系统不会自动开启通话。",
+        "label": "号码连接后自动开启通话",
+        "saved": "已保存。",
+        "loadFailed": "无法加载此设置。"
+      },
+      "testCall": {
+        "title": "发起测试通话",
+        "intro": "拨打您自己的 WhatsApp 号码，完整体验一次通话。WhatsApp 只允许企业呼叫已授权的用户：如果您尚未授权，系统会向您的手机发送权限请求，且不会发起通话。请在 WhatsApp 中点击“允许”，然后再次点击“呼叫我”。",
+        "phoneLabel": "您的 WhatsApp 号码",
+        "phoneHint": "请包含国家区号，不带加号，例如 919812345678。",
+        "call": "呼叫我",
+        "invalid": "请输入包含国家区号的号码（6 至 15 位数字）。",
+        "show": "发起测试通话"
+      }
+    }
+  }
+}

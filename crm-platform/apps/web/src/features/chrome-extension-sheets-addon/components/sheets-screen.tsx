@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import type { ExtSheetsKeyStatus, ExtSheetsOverview } from '@crm/contracts';
 import { EXT_SHEETS_USE_PERMISSION } from '@crm/contracts';
@@ -106,13 +106,10 @@ function Header({ overview }: { overview: ExtSheetsOverview | undefined }) {
 
 export function LoadFailed({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   const t = useTranslations('chrome-extension-sheets-addon.page');
-  const c = useTranslations('chrome-extension-sheets-addon.common');
-  const requestId = error instanceof ApiError ? error.requestId : undefined;
   return (
     <Alert tone="danger">
       <p className="font-semibold">{t('loadFailed.title')}</p>
       <p>{t(`loadFailed.${errorKind(error)}`)}</p>
-      {requestId && <p className="mt-1 font-mono text-xs">{c('reference', { id: requestId })}</p>}
       <Button className="mt-2" variant="secondary" size="sm" onClick={onRetry}>
         {t('retry')}
       </Button>
@@ -127,9 +124,10 @@ function Body({ overview }: { overview: ExtSheetsOverview }) {
         <InstallNotice marketplaceUrl={overview.marketplaceUrl} keyActive={overview.key.active} />
       )}
       <KeyCard overview={overview} />
-      {overview.installed && <CanCard can={overview.can} />}
-      <FilesCard files={overview.files} />
+      {overview.installed && <WebhookCard overview={overview} />}
       <StepsCard />
+      <FilesCard files={overview.files} />
+      {overview.installed && <CanCard can={overview.can} />}
       <ShopsCard overview={overview} />
     </>
   );
@@ -180,6 +178,7 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
   const t = useTranslations('chrome-extension-sheets-addon.key');
   const c = useTranslations('chrome-extension-sheets-addon.common');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { toast } = useToast();
   const [shown, setShown] = useState<OneTimeKey | null>(null);
@@ -201,7 +200,7 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
     setNotice(null);
     try {
       const issued = await sheetsApi.generate();
-      setShown({ secret: issued.key, rotated: issued.rotated });
+      setShown({ secret: issued.key, webhookUrl: issued.webhookUrl, rotated: issued.rotated });
       toast(t('generated'), 'success');
       await refresh();
     } catch (error) {
@@ -230,8 +229,8 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
   };
 
   const mask = displayMask(status);
-  const created = formatWhen(status.createdAt, locale);
-  const lastUsed = formatWhen(status.lastUsedAt, locale);
+  const created = formatWhen(status.createdAt, locale, timeZone);
+  const lastUsed = formatWhen(status.lastUsedAt, locale, timeZone);
 
   return (
     <section aria-labelledby="sheets-key" className={CARD}>
@@ -243,7 +242,6 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
       {notice && (
         <Alert tone="danger" className="mt-3">
           <p>{t(`errors.${notice.kind}`)}</p>
-          {notice.requestId && <p className="mt-1 font-mono text-xs">{notice.requestId}</p>}
         </Alert>
       )}
 
@@ -269,6 +267,24 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
             />
             <CopyButton
               text={shown.secret}
+              label={c('copy')}
+              copiedLabel={c('copied')}
+              failedLabel={c('copyFailed')}
+            />
+          </div>
+          <label htmlFor="sheets-webhook-new" className="mt-3 block text-sm font-medium">
+            {t('webhookLabel')}
+          </label>
+          <div className="mt-1 flex flex-wrap items-center gap-2">
+            <input
+              id="sheets-webhook-new"
+              readOnly
+              value={shown.webhookUrl}
+              onFocus={(e) => e.currentTarget.select()}
+              className="min-w-0 flex-1 rounded-md border border-border bg-background px-3 py-2 font-mono text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            />
+            <CopyButton
+              text={shown.webhookUrl}
               label={c('copy')}
               copiedLabel={c('copied')}
               failedLabel={c('copyFailed')}
@@ -337,6 +353,60 @@ export function KeyCard({ overview }: { overview: ExtSheetsOverview }) {
         onConfirm={() => void revoke()}
         onClose={() => setConfirm(null)}
       />
+    </section>
+  );
+}
+
+export function WebhookCard({ overview }: { overview: ExtSheetsOverview }) {
+  const t = useTranslations('chrome-extension-sheets-addon.webhook');
+  const locale = useLocale();
+  const timeZone = useTimeZone();
+  const capture = overview.lastCapture;
+  const when = capture ? formatWhen(capture.receivedAt, locale, timeZone) : null;
+  return (
+    <section aria-labelledby="sheets-webhook" className={CARD}>
+      <h2 id="sheets-webhook" className={H2}>
+        {t('title')}
+      </h2>
+      <p className="mt-1 text-sm text-muted-foreground">{t('intro')}</p>
+      {overview.webhookUrl ? (
+        <p
+          className="mt-3 break-all rounded-xl border border-border bg-muted/40 p-3 font-mono text-sm"
+          data-testid="sheets-webhook-mask"
+        >
+          {overview.webhookUrl}
+        </p>
+      ) : (
+        <p className="mt-3 text-sm text-muted-foreground">{t('none')}</p>
+      )}
+
+      <h3 className="mt-4 text-sm font-semibold">{t('capture.title')}</h3>
+      {capture ? (
+        <div className="mt-2 space-y-2 text-sm">
+          <p className="text-xs text-muted-foreground">
+            {t('capture.when', {
+              event: t(`capture.events.${capture.event}`),
+              sheet: capture.sheetName ?? t('capture.noSheet'),
+              when: when ?? '',
+              rows: capture.rows,
+            })}
+          </p>
+          {capture.fields.length > 0 && (
+            <dl className="grid gap-x-4 gap-y-1 sm:grid-cols-2">
+              {capture.fields.map((field) => (
+                <div key={field} className="min-w-0 rounded-lg border border-border px-3 py-1.5">
+                  <dt className="truncate text-xs font-medium">{field}</dt>
+                  <dd className="truncate font-mono text-xs text-muted-foreground">
+                    {capture.sample[field] ?? ''}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      ) : (
+        <p className="mt-2 text-sm text-muted-foreground">{t('capture.none')}</p>
+      )}
     </section>
   );
 }
@@ -457,6 +527,7 @@ export function ShopsCard({ overview }: { overview: ExtSheetsOverview }) {
   const t = useTranslations('chrome-extension-sheets-addon.shops');
   const p = useTranslations('chrome-extension-sheets-addon.products');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   if (!overview.installed) return null;
   return (
     <section aria-labelledby="sheets-shops" className={CARD}>
@@ -486,7 +557,7 @@ export function ShopsCard({ overview }: { overview: ExtSheetsOverview }) {
                 {shop.publicUrl}
               </a>
               <p className="mt-1 text-xs text-muted-foreground">
-                {t('updated', { when: formatWhen(shop.updatedAt, locale) ?? '' })}
+                {t('updated', { when: formatWhen(shop.updatedAt, locale, timeZone) ?? '' })}
               </p>
             </li>
           ))}

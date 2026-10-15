@@ -101,7 +101,7 @@ describe('GroupsScreen', () => {
         ],
         locale,
       );
-      expect(html).toContain('href="/channels"');
+      expect(html).toContain('href="/channels/whatsapp"');
       expect(html).not.toContain('<table');
       if (locale === 'en') {
         expect(html).toContain('No groups yet');

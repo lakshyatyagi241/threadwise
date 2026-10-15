@@ -139,11 +139,6 @@ function FooterForm({ saved }: { saved: { footer: string; isDefault: boolean } }
         {error && (
           <Alert tone="danger" className="space-y-1">
             <p>{error.message}</p>
-            {error.requestId && (
-              <p className="text-xs opacity-80">
-                {t('requestId')}: <span className="font-mono">{error.requestId}</span>
-              </p>
-            )}
           </Alert>
         )}
 

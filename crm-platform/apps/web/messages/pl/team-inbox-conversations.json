@@ -1,7 +1,9 @@
 {
   "team-inbox-conversations": {
     "nav": {
-      "inbox": "Skrzynka odbiorcza"
+      "inbox": "Skrzynka odbiorcza",
+      "messageLogs": "Dzienniki wiadomości",
+      "savedReplies": "Szablony odpowiedzi"
     },
     "common": {
       "dismiss": "Odrzuć"
@@ -23,7 +25,11 @@
       "pickTitle": "Wybierz rozmowę",
       "pickMessage": "Wybierz rozmowę z listy, aby ją przeczytać i odpowiedzieć. Nowe wiadomości pojawiają się tutaj automatycznie.",
       "shortcuts": "Skróty: j i k przechodzą po liście, e kończy rozmowę, / wyszukuje.",
-      "teamChanged": "Zespół zaktualizowany."
+      "teamChanged": "Zespół zaktualizowany.",
+      "priorityChanged": "Zaktualizowano priorytet",
+      "snoozed": "Rozmowa została odłożona",
+      "tagAdded": "Dodano tag",
+      "tagRemoved": "Usunięto tag"
     },
     "list": {
       "title": "Skrzynka odbiorcza",
@@ -99,7 +105,9 @@
           "title": "Wszystko przeczytane",
           "message": "Tutaj wyświetlane są rozmowy z nowymi wiadomościami od klientów."
         }
-      }
+      },
+      "select": "Wybierz",
+      "selectDone": "Gotowe"
     },
     "status": {
       "received": "Odebrano",
@@ -129,9 +137,24 @@
       "unsupported": "Ten kanał nie może wysłać tego typu wiadomości ani pliku.",
       "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie.",
-      "genericWithId": "Coś poszło nie tak. Spróbuj ponownie. Numer referencyjny: {id}",
       "templateNotSendable": "Tego szablonu nie można wysłać do tej rozmowy. Wybierz inny.",
-      "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business."
+      "groupSendUnavailable": "Wysyłanie do grup WhatsApp nie jest jeszcze dostępne. Odpowiedz w aplikacji WhatsApp Business.",
+      "logRange": "Wybierz daty z ostatniego roku, przy czym początek musi być przed końcem i nie może być w przyszłości.",
+      "logBusy": "Eksport jest już przygotowywany. Poczekaj na e-mail z nim, a potem zamów kolejny.",
+      "logNotReady": "Ten eksport nie jest gotowy lub wygasł. Zamów go ponownie.",
+      "groupSuspended": "Meta zawiesiła tę grupę, więc nie można do niej pisać, dopóki Meta jej nie przywróci.",
+      "groupLeft": "Ten numer opuścił grupę, więc nie może już wysyłać tam wiadomości.",
+      "groupAnnounceOnly": "Tylko administratorzy mogą wysyłać wiadomości w tej grupie, a ten numer nie jest administratorem.",
+      "groupRateLimited": "Zbyt wiele wiadomości grupowych z tego numeru w krótkim czasie. Poczekaj minutę i spróbuj ponownie.",
+      "groupUnavailable": "WhatsApp nie przyjął tej wiadomości grupowej. Spróbuj ponownie za kilka minut.",
+      "walletEmpty": "Portfel wiadomości nie pokrywa tej wiadomości grupowej (jedna opłata za każdego członka). Doładuj go i spróbuj ponownie.",
+      "groupPlanLocked": "Twój plan nie obejmuje grup WhatsApp, więc nie można pisać do tej grupy. Poproś administratora o zmianę planu.",
+      "savedReplyGone": "Ten szablon odpowiedzi już nie istnieje.",
+      "savedReplyChannel": "Ten szablon odpowiedzi nie jest przeznaczony dla tego rodzaju kanału.",
+      "shortcutTaken": "Inny szablon odpowiedzi używa już tego skrótu.",
+      "importInvalid": "Tego pliku nie można odczytać jako zapisanych odpowiedzi. Pierwszy wiersz musi zawierać kolumny title, shortcut i body, a plik może mieć najwyżej 1000 wierszy.",
+      "contactOptedOut": "Ten kontakt wypisał się z wiadomości marketingowych, więc wiadomość nie została wysłana.",
+      "consentRequired": "Ta przestrzeń robocza wymaga zarejestrowanej zgody na wiadomości marketingowe, a ten kontakt jej nie ma, więc wiadomość nie została wysłana."
     },
     "bubble": {
       "kind": {
@@ -196,6 +219,19 @@
         "takeBack": "Dotknij, aby cofnąć reakcję",
         "takeBackLabel": "Twoja reakcja {emoji}. Cofnij",
         "failed": "Ta reakcja nie została wysłana"
+      },
+      "deliveryLog": "Dziennik dostarczania",
+      "groupMember": "Członek grupy",
+      "groupTally": "Dostarczono do {delivered} z {members}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
+      "groupTallyNoTotal": "Dostarczono do: {delivered, plural, one {# członka} other {# członków}}{read, plural, =0 {} other {, odczytało: #}}{failed, plural, =0 {} other {, błędy: #}}",
+      "groupTallyBilled": "płatnych {billable}, bezpłatnych {free}",
+      "stageLine": {
+        "auto": "AI przeczytało czat i przeniosło ten kontakt z etapu {from} do {to}.",
+        "undo": "Cofnij",
+        "wasUndone": "Cofnięto",
+        "undone": "Zmiana etapu cofnięta: z powrotem {stage}.",
+        "undoneToast": "Etap przywrócono na {stage}.",
+        "couldNotUndo": "Tej zmiany nie można już cofnąć: kontakt poszedł dalej albo zmianę już cofnięto."
       }
     },
     "media": {
@@ -248,6 +284,44 @@
       "attachment": "załącznik",
       "jumpLatest": "Przejdź do najnowszych",
       "jumpLatestNew": "{count, plural, one {# nowa wiadomość} few {# nowe wiadomości} many {# nowych wiadomości} other {# nowej wiadomości}}"
+    },
+    "groupThread": {
+      "openGroup": "Otwórz grupę",
+      "readOnly": {
+        "left": {
+          "title": "Ten numer opuścił grupę",
+          "message": "Rozmowa została zachowana w dotychczasowej postaci. Możesz ją czytać i dodawać notatki wewnętrzne, ale nie możesz wysyłać wiadomości."
+        },
+        "announceOnly": {
+          "title": "Tylko administratorzy mogą pisać w tej grupie",
+          "message": "Ten numer nie jest administratorem grupy, więc WhatsApp nie dostarczyłby wiadomości. Nadal możesz dodawać notatki wewnętrzne."
+        }
+      },
+      "mention": {
+        "label": "Członkowie grupy",
+        "loading": "Szukanie członków",
+        "none": "Żaden członek nie pasuje"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta zawiesiła tę grupę",
+          "message": "WhatsApp nie dostarcza wiadomości do zawieszonej grupy. Możesz czytać rozmowę i dodawać notatki wewnętrzne, dopóki Meta nie zdejmie blokady."
+        },
+        "plan": {
+          "title": "Twój plan nie obejmuje grup WhatsApp",
+          "message": "Możesz czytać tę rozmowę i dodawać notatki wewnętrzne, ale wysyłanie do grupy wymaga planu z grupami. Poproś administratora o zmianę planu."
+        },
+        "ineligible": {
+          "title": "Ten numer nie może korzystać z grup WhatsApp",
+          "message": "Podczas ostatniego sprawdzenia Meta nie zezwoliła na grupy dla tego numeru (wymagane jest oficjalne konto firmowe). Możesz czytać rozmowę i dodawać notatki wewnętrzne. Otwórz Grupy Meta, aby sprawdzić ponownie."
+        }
+      },
+      "cost": {
+        "members": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. Szacowany koszt {cost}: WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
+        "membersNoEstimate": "Ta wiadomość trafi do: {count, plural, one {# członka} other {# członków}}. WhatsApp nalicza opłatę za każdego członka, który ją otrzyma.",
+        "sizeUnknown": "Liczba członków nie jest jeszcze znana. WhatsApp nalicza opłatę za każdego członka, który otrzyma tę wiadomość.",
+        "walletShort": "Środki w portfelu mogą nie wystarczyć na tę wiadomość. Doładuj portfel przed wysłaniem."
+      }
     },
     "composer": {
       "modeLabel": "Typ wiadomości",
@@ -345,7 +419,9 @@
           "url": "Wpisz link zaczynający się od http:// lub https://",
           "tooManyRows": "Lista może zawierać łącznie co najwyżej 10 wierszy"
         }
-      }
+      },
+      "savedReplies": "Szablony odpowiedzi",
+      "savedReplyIssues": "Nie uzupełniono i pozostawiono bez zmian ({count}): {list}. Popraw przed wysłaniem."
     },
     "panel": {
       "tabsLabel": "Notatki i oś czasu",
@@ -374,7 +450,9 @@
         "unassign": "Cofnij przypisanie",
         "open": "{count} otwartych",
         "pickTeam": "Wybierz zespół dla tej rozmowy",
-        "noTeam": "Brak zespołu"
+        "noTeam": "Brak zespołu",
+        "onLeave": "Na urlopie",
+        "onLeaveUntil": "Na urlopie do {date}"
       },
       "presence": {
         "online": "Online",
@@ -414,8 +492,8 @@
           "snoozed": "Odroczone przez {actor}",
           "auto_unsnoozed": "Odroczenie zakończone",
           "priority_changed": "Priorytet zmieniony przez {actor}",
-          "tag_added": "Etykieta dodana przez {actor}",
-          "tag_removed": "Etykieta usunięta przez {actor}",
+          "tag_added": "Tag dodany przez {actor}",
+          "tag_removed": "Tag usunięty przez {actor}",
           "first_response": "Wysłano pierwszą odpowiedź",
           "sla_breach": "Przekroczono termin odpowiedzi",
           "unknown": "{what}, przez {actor}"
@@ -526,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Wyślij szablon",
       "close": "Zamknij",
-      "cancel": "Anuluj",
-      "back": "Wróć do szablonów",
       "search": "Szukaj po nazwie lub treści",
       "searchLabel": "Szukaj szablonów",
       "loading": "Wczytywanie szablonów",
@@ -536,9 +612,7 @@
       "empty": "Dla tego numeru WhatsApp nie ma jeszcze zatwierdzonych szablonów. Utwórz szablon w sekcji Szablony i poczekaj, aż Meta go zatwierdzi.",
       "noResults": "Żaden szablon nie pasuje do wyszukiwania.",
       "windowHint": "Szablon działa nawet wtedy, gdy okno odpowiedzi 24-godzinne jest zamknięte.",
-      "variables": "Uzupełnij zmienne",
       "preview": "Co przeczyta klient",
-      "send": "Wyślij szablon",
       "sending": "Wysyłanie",
       "sent": "Szablon wysłany",
       "problem": {
@@ -553,7 +627,408 @@
         "authentication": "Szablony jednorazowego hasła są wysyłane przez system, a nie ze skrzynki odbiorczej.",
         "named_variables": "Używa nazwanych zmiennych, których skrzynka odbiorcza jeszcze nie obsługuje."
       },
-      "hasMore": "Pokazano pierwsze {count} szablonów. Wyszukaj po nazwie lub treści, aby znaleźć pozostałe."
+      "hasMore": "Pokazano pierwsze {count} szablonów. Wyszukaj po nazwie lub treści, aby znaleźć pozostałe.",
+      "previewEmpty": "Wskaż szablon, aby zobaczyć, jak będzie wyglądał na telefonie klienta.",
+      "previewCustomer": "Klient",
+      "noVariables": "Ten szablon nie wymaga niczego do uzupełnienia. Sprawdź telefon, a potem wyślij.",
+      "sendTo": "Wyślij do {name}",
+      "refresh": "Odśwież listę",
+      "device": "Podgląd telefonu",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Skonfiguruj zmienne treści",
+      "or": "lub",
+      "mapField": "Przypisz pole do {key}",
+      "mapNone": "Ten kontakt nie ma danych do przypisania.",
+      "typeMessage": "Wpisz wiadomość",
+      "fields": {
+        "name": "Imię i nazwisko",
+        "phone": "Telefon",
+        "email": "E-mail"
+      },
+      "create": "Utwórz nowy szablon",
+      "actions": "Akcje szablonu",
+      "edit": "Edytuj szablon",
+      "duplicate": "Duplikuj szablon"
+    },
+    "log": {
+      "title": "Dziennik dostarczania",
+      "close": "Zamknij",
+      "loading": "Wczytywanie dziennika",
+      "tryAgain": "Spróbuj ponownie",
+      "statusNow": "Aktualny status",
+      "createdAt": "Utworzono",
+      "providerId": "ID wiadomości u dostawcy",
+      "failedNoReason": "Ta wiadomość nie została dostarczona.",
+      "expired": "Ta wiadomość jest starsza niż {days} dni. Jej dziennik nie jest już przechowywany.",
+      "empty": "Dla tej wiadomości nie zapisano dziennika. Wiadomości wysłane, zanim zaczęto prowadzić dzienniki, go nie mają.",
+      "archived": "Wpisy starsze niż {days} dni są odczytywane z archiwum.",
+      "exportLink": "Eksportuj dzienniki wiadomości",
+      "source": {
+        "system": "Nasz system",
+        "provider": "Potwierdzenie od dostawcy"
+      },
+      "event": {
+        "queued": "W kolejce do wysłania",
+        "attempt": "Próba wysłania {attempt}",
+        "accepted": "Przyjęto przez dostawcę",
+        "sentReceipt": "Dostawca potwierdził wysłanie",
+        "delivered": "Dostarczono na telefon klienta",
+        "read": "Przeczytane przez klienta",
+        "failedReceipt": "Dostawca zgłosił brak dostarczenia",
+        "failedSend": "Nie udało się wysłać",
+        "retryAuto": "Zostanie ponowiona automatycznie",
+        "retryManual": "Członek zespołu kliknął Ponów"
+      },
+      "notApplied": "To powiadomienie przyszło za późno lub dotyczyło wcześniejszej wysyłki. Nie zmieniło wiadomości.",
+      "replayed": "Nie wysłano nowego żądania: użyto wcześniejszej odpowiedzi dostawcy.",
+      "resent": "Wysłano ponownie do dostawcy jako nową wiadomość."
+    },
+    "logs": {
+      "back": "Wróć do skrzynki",
+      "title": "Dzienniki wiadomości",
+      "intro": "Każda wiadomość zachowuje swój dziennik dostarczania: {hot} dni w skrzynce, potem w archiwum do {days} dni od zdarzenia. Zamów eksport dla wybranego zakresu dat; jest przygotowywany w tle i wysyłany do Ciebie e-mailem, gdy będzie gotowy.",
+      "requested": "Zamówiono eksport. Wyślemy Ci e-mail, gdy będzie gotowy.",
+      "requestedTo": "Zamówiono eksport. Wyślemy e-mail na adres {email}, gdy będzie gotowy.",
+      "form": {
+        "title": "Zamów eksport",
+        "from": "Od",
+        "to": "Do",
+        "status": "Tylko wiadomości, które mają teraz status",
+        "anyStatus": "Dowolny status",
+        "hint": "Daty są w UTC. Możesz cofnąć się maksymalnie o {days} dni. Naraz przygotowywany jest jeden eksport.",
+        "submit": "Zamów eksport",
+        "sending": "Zamawianie"
+      },
+      "problem": {
+        "order": "Data początkowa nie może być późniejsza niż końcowa.",
+        "future": "Data końcowa nie może być w przyszłości.",
+        "tooOld": "Dzienniki są przechowywane przez {days} dni. Wybierz późniejszą datę początkową.",
+        "invalid": "Podaj obie daty."
+      },
+      "history": {
+        "title": "Twoje eksporty",
+        "loading": "Wczytywanie eksportów",
+        "tryAgain": "Spróbuj ponownie",
+        "empty": "Brak eksportów.",
+        "onlyStatus": "Tylko wiadomości ze statusem {status}",
+        "requestedAt": "Zamówiono {date}",
+        "lines": "{count, plural, one {# wiersz} few {# wiersze} many {# wierszy} other {# wiersza}}",
+        "until": "Dostępny do {date}",
+        "download": "Pobierz",
+        "status": {
+          "queued": "Oczekuje",
+          "running": "Przygotowywanie",
+          "ready": "Gotowy",
+          "failed": "Niepowodzenie",
+          "expired": "Wygasł"
+        }
+      }
+    },
+    "savedReplies": {
+      "channelKind": {
+        "simulator": "Symulator (testy)",
+        "whatsapp_cloud": "WhatsApp Cloud API",
+        "whatsapp_qr": "WhatsApp (QR)",
+        "webchat": "Czat na stronie",
+        "telegram": "Telegram",
+        "facebook": "Facebook Messenger",
+        "instagram": "Instagram",
+        "email": "E-mail",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "variableGroup": {
+        "contact": "Kontakt",
+        "agent": "Ty",
+        "workspace": "Przestrzeń robocza",
+        "conversation": "Rozmowa"
+      },
+      "variable": {
+        "first_name": "Imię kontaktu",
+        "last_name": "Nazwisko kontaktu",
+        "name": "Pełne imię i nazwisko kontaktu",
+        "email": "E-mail kontaktu",
+        "phone": "Numer telefonu kontaktu",
+        "agent_name": "Twoje imię i nazwisko",
+        "agent_first_name": "Twoje imię",
+        "workspace_name": "Nazwa przestrzeni roboczej",
+        "company_name": "Nazwa firmy",
+        "today": "Dzisiejsza data",
+        "device_name": "Nazwa kanału",
+        "device_phone": "Numer telefonu kanału"
+      },
+      "picker": {
+        "title": "Szablony odpowiedzi",
+        "close": "Zamknij szablony odpowiedzi",
+        "searchLabel": "Szukaj szablonów odpowiedzi",
+        "searchPlaceholder": "Szukaj według skrótu, tytułu lub tekstu",
+        "listLabel": "Szablony odpowiedzi",
+        "loading": "Wczytywanie szablonów odpowiedzi",
+        "loadFailed": "Nie udało się wczytać szablonów odpowiedzi.",
+        "retry": "Spróbuj ponownie",
+        "empty": "Nie ma jeszcze szablonów odpowiedzi.",
+        "emptyForChannel": "Żaden szablon odpowiedzi nie jest przeznaczony dla tego kanału.",
+        "createFirst": "Utwórz pierwszy",
+        "noMatch": "Żaden szablon odpowiedzi nie pasuje do \"{q}\".",
+        "mine": "Moje",
+        "hint": "Strzałki przesuwają, Enter wstawia, Esc zamyka.",
+        "manage": "Zarządzaj szablonami odpowiedzi",
+        "tooLong": "Ta odpowiedź jest za długa jak na limit wiadomości tego kanału, więc nie została wstawiona."
+      },
+      "screen": {
+        "back": "Ustawienia",
+        "title": "Szablony odpowiedzi",
+        "subtitle": "Gotowe odpowiedzi, które zespół wstawia do wiadomości. Wpisz / w rozmowie, aby jakąś znaleźć.",
+        "create": "Nowy szablon odpowiedzi",
+        "noAccess": "Nie masz uprawnień do zarządzania szablonami odpowiedzi.",
+        "meter": "Wykorzystano {used} z {limit} szablonów odpowiedzi",
+        "meterLabel": "Szablony odpowiedzi wykorzystane w Twoim planie",
+        "meterNote": "Do limitu wliczają się zarówno odpowiedzi wspólne, jak i osobiste.",
+        "atLimit": "Osiągnięto limit {limit} szablonów odpowiedzi w Twoim planie. Usuń jeden lub zmień plan, aby dodać więcej.",
+        "nearLimit": "Zbliżasz się do limitu {limit} szablonów odpowiedzi w Twoim planie.",
+        "upgrade": "Zobacz plany",
+        "tabsLabel": "Pokaż",
+        "tab": {
+          "all": "Wszystkie ({count})",
+          "shared": "Wspólne ({count})",
+          "mine": "Moje ({count})"
+        },
+        "categoryFilter": "Filtruj według kategorii",
+        "allCategories": "Wszystkie kategorie",
+        "searchLabel": "Szukaj szablonów odpowiedzi",
+        "searchPlaceholder": "Szukaj według skrótu, tytułu lub tekstu",
+        "howItWorks": "W skrzynce odbiorczej wpisz / w polu wiadomości lub użyj przycisku Szablony odpowiedzi. Zmienne takie jak '{{first_name}}' są uzupełniane z rozmowy, zanim tekst trafi do pola. Nic nie zostanie wysłane, dopóki agent nie naciśnie Wyślij.",
+        "loading": "Wczytywanie szablonów odpowiedzi",
+        "loadFailed": "Nie udało się wczytać szablonów odpowiedzi.",
+        "retry": "Spróbuj ponownie",
+        "loadMore": "Wczytaj więcej",
+        "list": "Szablony odpowiedzi",
+        "emptyTitle": "Nie ma jeszcze szablonów odpowiedzi",
+        "empty": "Zapisz odpowiedzi, których Twój zespół udziela raz za razem, i wstawiaj je jednym skrótem.",
+        "noMatchTitle": "Nic nie znaleziono",
+        "noMatch": "Żaden szablon odpowiedzi nie pasuje do \"{q}\".",
+        "noMatchCategory": "Brak szablonów odpowiedzi w tej kategorii.",
+        "scope": {
+          "shared": "Wspólne",
+          "mine": "Moje"
+        },
+        "allChannels": "Wszystkie kanały",
+        "neverUsed": "Jeszcze nieużywany",
+        "used": "{count, plural, one {Użyto # raz} few {Użyto # razy} many {Użyto # razy} other {Użyto # razy}}",
+        "lastUsed": "Ostatnio użyto {when}",
+        "createdBy": "Utworzył(a): {name}",
+        "readOnly": "Tylko osoby zarządzające szablonami odpowiedzi mogą zmienić wspólną odpowiedź.",
+        "edit": "Edytuj",
+        "duplicate": "Duplikuj",
+        "delete": "Usuń",
+        "cancel": "Anuluj",
+        "deleteTitle": "Usunąć ten szablon odpowiedzi?",
+        "deleteShared": "/{shortcut} zostanie usunięty dla wszystkich w przestrzeni roboczej.",
+        "deleteMine": "/{shortcut} zostanie usunięty z Twoich odpowiedzi.",
+        "deleted": "Szablon odpowiedzi usunięty.",
+        "duplicated": "Szablon odpowiedzi zduplikowany.",
+        "created": "Utworzono szablon odpowiedzi /{shortcut}.",
+        "saved": "Szablon odpowiedzi zaktualizowany."
+      },
+      "form": {
+        "eyebrow": "Szablon odpowiedzi",
+        "titleNew": "Nowy szablon odpowiedzi",
+        "titleEdit": "Edytuj szablon odpowiedzi",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "saving": "Zapisywanie…",
+        "shortcut": "Skrót",
+        "shortcutPlaceholder": "dzieki",
+        "shortcutHint": "Litery, cyfry i podkreślenia, do {max} znaków.",
+        "shortcutStored": "Agenci wpisują /{shortcut}",
+        "shortcutEmpty": "Wpisz skrót złożony z liter, cyfr lub podkreśleń.",
+        "shortcutTaken": "/{shortcut} jest już używany przez inną odpowiedź. Wybierz inny skrót.",
+        "title": "Tytuł",
+        "titlePlaceholder": "Dziękujemy za kontakt",
+        "titleEmpty": "Wpisz tytuł.",
+        "titleLong": "Tytuł może mieć co najwyżej {max} znaków.",
+        "body": "Tekst",
+        "bodyHint": "Zwykły tekst. Użyj *pogrubienia* i _kursywy_ jak w WhatsApp.",
+        "bodyPlaceholder": "Cześć '{{first_name}}', dziękujemy za kontakt. W czym możemy pomóc?",
+        "bodyEmpty": "Wpisz treść odpowiedzi.",
+        "bodyLong": "Tekst może mieć co najwyżej {max} znaków.",
+        "count": "{n} z {max}",
+        "variables": "Wstaw zmienną",
+        "variablesHint": "Kliknij jedną, aby dodać ją w miejscu kursora. Zmienna, której nie można uzupełnić, pozostaje bez zmian, aby agent ją zobaczył.",
+        "preview": "Podgląd",
+        "previewHint": "Na przykładowych danych klienta.",
+        "previewEmpty": "Wpisz tekst, aby zobaczyć, jak będzie wyglądał.",
+        "previewIssues": "Nie uzupełniono w podglądzie: {list}. Gdy odpowiedź jest używana, atrybuty kontaktu są uzupełniane, jeśli kontakt je ma; reszta pozostaje bez zmian.",
+        "category": "Kategoria (opcjonalnie)",
+        "categoryPlaceholder": "Powitania, płatności, wsparcie",
+        "language": "Język (opcjonalnie)",
+        "languageHint": "Kod, taki jak en lub pt-BR, jako Twoja własna notatka.",
+        "languageFormat": "Użyj kodu języka, takiego jak en lub pt-BR.",
+        "channels": "Tylko w tych kanałach",
+        "channelsHint": "Pozostaw wszystko niezaznaczone, aby oferować w każdym kanale.",
+        "scope": "Kto może używać",
+        "scopeOption": {
+          "shared": "Wszyscy w przestrzeni roboczej",
+          "mine": "Tylko ja"
+        },
+        "scopeLocked": "Po zapisaniu odpowiedzi nie można zmienić jej z wspólnej na osobistą ani odwrotnie.",
+        "planLimit": "Osiągnięto limit szablonów odpowiedzi w Twoim planie.",
+        "upgrade": "Zobacz plany",
+        "conflict": "Ktoś inny zmienił tę odpowiedź wcześniej. Zamknij to okno i otwórz je ponownie.",
+        "invalid": "Część wprowadzonych danych jest nieprawidłowa."
+      },
+      "transfer": {
+        "export": "Eksportuj CSV",
+        "import": "Importuj CSV",
+        "title": "Importuj zapisane odpowiedzi",
+        "intro": "Prześlij plik CSV z kolumnami title, shortcut, body oraz, jeśli chcesz, category, language i channel (rodzaje kanałów oddzielone znakiem |, puste dla wszystkich kanałów). Do 1000 wierszy i {maxKb} KB. Zaimportowane odpowiedzi są udostępniane całemu zespołowi. Eksport ma te same kolumny.",
+        "file": "Plik CSV",
+        "tooBig": "Ten plik jest za duży.",
+        "duplicates": "Gdy udostępniona odpowiedź już używa skrótu",
+        "policy": {
+          "skip": "Zachowaj istniejącą odpowiedź",
+          "overwrite": "Zastąp jej treść"
+        },
+        "policyHint": {
+          "skip": "Wiersz zostanie pominięty, a odpowiedź pozostanie bez zmian.",
+          "overwrite": "Tytuł, treść, kategoria, język i kanały zostaną zastąpione. Licznik użyć zostaje zachowany."
+        },
+        "check": "Sprawdź plik",
+        "go": "Importuj ({count})",
+        "cancel": "Anuluj",
+        "summary": "{create} do utworzenia, {update} do zastąpienia, {skip} pominięte, {invalid} z problemem. Nic jeszcze nie zostało zapisane.",
+        "plan": "Twój plan: {used} z {limit} odpowiedzi.",
+        "row": "Wiersz {line}: /{shortcut}",
+        "truncated": "Wyświetlono tylko pierwsze wiersze z problemem lub zmianą.",
+        "done": "Zaimportowano: utworzono {created}, zastąpiono {updated}.",
+        "issue": {
+          "update": "zostanie zastąpiona",
+          "skip": "pominięta",
+          "invalid": "ma problem",
+          "duplicate": "skrót jest już używany, pominięto",
+          "missing_shortcut": "brak skrótu",
+          "shortcut_invalid": "skrót nie zawiera użytecznych liter ani cyfr",
+          "missing_title": "brak tytułu",
+          "title_too_long": "tytuł jest za długi",
+          "missing_body": "brak treści",
+          "body_too_long": "treść jest za długa",
+          "control_characters": "zawiera znaki sterujące",
+          "category_too_long": "kategoria jest za długa",
+          "language_invalid": "język nie jest kodem takim jak en lub pt-BR",
+          "channel_unknown": "nieznany kanał",
+          "duplicate_in_file": "skrót pojawia się wcześniej w pliku",
+          "plan_limit_reached": "przekroczono limit Twojego planu"
+        }
+      }
+    },
+    "triage": {
+      "priority": "Priorytet",
+      "snooze": "Odłóż",
+      "wake": "Przywróć teraz"
+    },
+    "bulk": {
+      "barLabel": "Działania zbiorcze",
+      "selected": "{count, plural, one {Wybrano # rozmowę} few {Wybrano # rozmowy} many {Wybrano # rozmów} other {Wybrano # rozmowy}}",
+      "selectAllInView": "Wybierz wszystkie widoczne ({count})",
+      "done": "Gotowe",
+      "markRead": "Oznacz jako przeczytane",
+      "resolve": "Rozwiąż",
+      "close": "Zamknij",
+      "reopen": "Otwórz ponownie",
+      "assign": "Przypisz",
+      "assignToMe": "Przypisz do mnie",
+      "unassign": "Cofnij przypisanie",
+      "removeTeam": "Usuń zespół",
+      "priority": "Priorytet",
+      "snooze": "Odłóż",
+      "snoozePreset": {
+        "oneHour": "1 godzina",
+        "threeHours": "3 godziny",
+        "tomorrow": "Jutro, 9:00",
+        "nextWeek": "W przyszły poniedziałek, 9:00"
+      },
+      "result": {
+        "allDone": "{done, plural, one {Zaktualizowano # rozmowę} few {Zaktualizowano # rozmowy} many {Zaktualizowano # rozmów} other {Zaktualizowano # rozmowy}}.",
+        "nothingChanged": "Nic do zmiany: wybrane rozmowy są już aktualne.",
+        "partial": "Zaktualizowano: {done}, już aktualne: {unchanged}, nie udało się zmienić: {failed}. Te, które się nie udały, pozostają zaznaczone.",
+        "allFailed": "Nie udało się zmienić żadnej z {count, plural, one {# rozmowy} few {# rozmów} many {# rozmów} other {# rozmów}}."
+      },
+      "tag": "Tag",
+      "tagAdd": "Dodaj tag",
+      "tagRemove": "Usuń tag",
+      "onLeave": "na urlopie",
+      "onLeaveUntil": "na urlopie do {date}"
+    },
+    "tags": {
+      "tag": "Tag",
+      "loading": "Ładowanie tagów…",
+      "loadFailed": "Nie udało się załadować tagów.",
+      "none": "Brak tagów.",
+      "newTag": "Nowy tag",
+      "add": "Dodaj",
+      "filter": "Tagi",
+      "filterActive": "{count, plural, one {# tag} few {# tagi} many {# tagów} other {# tagu}}",
+      "clearFilter": "Wyczyść filtr tagów",
+      "scope": {
+        "label": "Dopasuj tagi w",
+        "conversation": "Tagi rozmowy",
+        "contact": "Tagi kontaktu"
+      },
+      "groups": {
+        "title": "Tagi",
+        "helpFor": "O: {title}",
+        "rule": "Oba rodzaje pochodzą z tej samej biblioteki tagów obszaru roboczego.",
+        "contactTitle": "Tagi kontaktu",
+        "contactHelp": "Tag kontaktu opisuje osobę (VIP, lead, region). Towarzyszy jej w każdej rozmowie.",
+        "contactNone": "Ten kontakt nie ma tagów.",
+        "contactEdit": "Edytuj w kontakcie",
+        "conversationTitle": "Tagi rozmowy",
+        "conversationHelp": "Tag rozmowy opisuje ten wątek (rozliczenia, zwrot, pilne).",
+        "conversationNone": "Ta rozmowa nie ma jeszcze tagów.",
+        "remove": "Usuń tag {name}"
+      },
+      "screen": {
+        "back": "Wróć do skrzynki",
+        "title": "Tagi rozmowy",
+        "intro": "Tagi rozmowy oznaczają wątek (rozliczenia, zwrot, pilne), aby zespół mógł sortować i filtrować skrzynkę. Pochodzą z tej samej biblioteki tagów co tagi kontaktu, które opisują osobę.",
+        "newTitle": "Nowy tag",
+        "editTitle": "Edytuj tag",
+        "name": "Nazwa",
+        "color": "Kolor",
+        "colorInvalid": "Użyj koloru szesnastkowego, np. #075E54, lub nazwy koloru.",
+        "description": "Opis (opcjonalnie)",
+        "create": "Utwórz tag",
+        "save": "Zapisz zmiany",
+        "cancel": "Anuluj",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "inUse": "{count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}",
+        "emptyTitle": "Brak tagów",
+        "emptyMessage": "Utwórz pierwszy tag powyżej, a następnie dodawaj go do rozmów ze skrzynki.",
+        "deleteTitle": "Usunąć ten tag?",
+        "deleteMessage": "\"{name}\" jest użyty w liczbie rozmów: {count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}. Usunięcie zdejmie go z tych rozmów i ze wszystkich kontaktów, które go mają. Tej operacji nie można cofnąć.",
+        "nameTaken": "Tag o tej nazwie już istnieje.",
+        "conflict": "Ktoś inny zmienił ten tag wcześniej. Lista została przeładowana.",
+        "saved": "Zapisano tag",
+        "created": "Utworzono tag",
+        "deleted": "Usunięto tag"
+      }
+    },
+    "sla": {
+      "breached": "Przekroczono SLA",
+      "atRisk": "SLA upływa za {minutes} min",
+      "ok": "SLA do {time}",
+      "kind": {
+        "first_response": "Cel pierwszej odpowiedzi",
+        "resolution": "Cel rozwiązania"
+      },
+      "titleBreached": "{kind}: nie dotrzymano (termin: {time})",
+      "titleOpen": "{kind}: termin {time}"
     }
   }
 }

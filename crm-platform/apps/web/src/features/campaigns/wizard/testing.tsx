@@ -38,6 +38,8 @@ export function session(
   return {
     permissions: Object.fromEntries(perms.map((p) => [p, true])),
     org: { name: 'Acme', timezone },
+    // The person's own zone, else the workspace's, else UTC (what the API sends as `effectiveTimezone`).
+    effectiveTimezone: timezone ?? 'UTC',
   } as unknown as SessionResponse;
 }
 
@@ -163,6 +165,7 @@ export const sources = (): WizardAudienceSources => ({
 export const count = (over: Partial<WizardAudienceCount> = {}): WizardAudienceCount => ({
   matching: 1000,
   newContacts: 0,
+  noConsent: 0,
   optedOut: 30,
   invalidNumber: 20,
   recipients: 950,
@@ -181,6 +184,7 @@ export const credit = (over: Partial<WizardCreditCheck> = {}): WizardCreditCheck
   chargeableMessages: 950,
   estimatedCostMinor: 9_500,
   fullCostMinor: 9_500,
+  platformOwned: false,
   lines: [
     {
       country: 'IN',

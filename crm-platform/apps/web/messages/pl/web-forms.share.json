@@ -145,10 +145,20 @@
         "privacyUrl": "Link do polityki prywatności",
         "privacyUrlHint": "Opcjonalne. Pokazywane obok tekstu zgody. Musi zaczynać się od https://.",
         "privacyUrlHttps": "Użyj adresu zaczynającego się od https://.",
+        "termsUrl": "Link do regulaminu",
+        "termsUrlHint": "Opcjonalne. Wyświetlany obok tekstu zgody i linku do polityki prywatności. Musi zaczynać się od https://.",
+        "useWorkspacePrivacy": "Użyj linku do polityki prywatności przestrzeni roboczej",
+        "useWorkspaceTerms": "Użyj linku do regulaminu przestrzeni roboczej",
         "required": "Aby wysłać, trzeba zaznaczyć",
         "requiredHint": "Wyłącz, jeśli zgoda jest dobrowolna.",
         "marketing": "Zgoda marketingowa",
-        "marketingHint": "Zaznaczenie pola zapisuje na kontakcie zgodę na marketing. Niezaznaczone pole nigdy nikogo nie zapisuje."
+        "marketingHint": "Zaznaczenie pola zapisuje na kontakcie zgodę na marketing. Niezaznaczone pole nigdy nikogo nie zapisuje.",
+        "whatsappHint": "Czy będziesz wysyłać do tych kontaktów wiadomości na WhatsApp? Użyj treści, która to mówi i wyjaśnia, jak zrezygnować. Zaznaczone pole jest zachowywane jako dowód, wraz z tym dokładnym tekstem i jego wersją.",
+        "whatsappInsert": "Użyj tekstu zgody na WhatsApp",
+        "whatsappWording": "Zgadzam się na otrzymywanie aktualności i ofert przez WhatsApp. Mogę w każdej chwili odpowiedzieć STOP, aby zrezygnować.",
+        "coversSms": "Treść obejmuje SMS",
+        "coversSmsHint": "Włącz tylko wtedy, gdy powyższy tekst informuje, że można się kontaktować przez SMS. Gdy zbierany jest numer telefonu, SMS jest zapisywany razem z WhatsApp i e-mailem.",
+        "serviceHint": "Ten wiersz nie jest marketingiem. Zaznaczone pole jest zapisywane jako dowód, że osoba zgodziła się na kontakt w sprawie swojego zapytania (tylko wiadomości serwisowe), z tą dokładną treścią i jej wersją. Nigdy nie zapisuje nikogo na marketing."
       },
       "crm": {
         "title": "W CRM",
@@ -253,8 +263,8 @@
           "off": "Wyłączona"
         },
         "captchaHints": {
-          "inherit": "Używa ustawienia przestrzeni roboczej dla formularzy publicznych.",
-          "on": "Odwiedzający muszą przejść weryfikację, zanim wyślą formularz.",
+          "inherit": "Używa CAPTCHA skonfigurowanej przez administratora platformy dla formularzy publicznych, jeśli jest dostępna.",
+          "on": "Odwiedzający muszą przejść weryfikację, zanim wyślą formularz. Wymaga skonfigurowanej CAPTCHA na platformie, a bez niej publikacja jest odrzucana.",
           "off": "Brak weryfikacji. Polegaj na ukrytym polu pułapki i limitach częstotliwości."
         },
         "retention": "Przechowuj odpowiedzi (dni)",
@@ -271,6 +281,17 @@
           "perFormPerMinuteHint": "Zgłoszenia do tego formularza z dowolnego miejsca.",
           "perContactPerHour": "Na kontakt, na godzinę",
           "perContactPerHourHint": "Zgłoszenia z tym samym e-mailem lub numerem telefonu."
+        },
+        "captchaStatus": {
+          "available": "Na tej platformie skonfigurowano CAPTCHA (reCAPTCHA {version}).",
+          "none": "Na tej platformie nie skonfigurowano CAPTCHA, więc nic tu nie jest sprawdzane. Poproś administratora platformy o jej dodanie lub polegaj na ukrytym polu-pułapce i limitach żądań.",
+          "noneOn": "Ten formularz jest ustawiony na zawsze sprawdzaj, ale platforma nie ma CAPTCHA, więc nic nie sprawdza i nie można go opublikować. Poproś administratora platformy o jej dodanie lub wybierz inne ustawienie.",
+          "failed": "Nie udało się sprawdzić, czy CAPTCHA jest skonfigurowana."
+        },
+        "caught": {
+          "blocked": "{count, plural, =0 {Ukryte pole-pułapka nie zatrzymało w tym miesiącu żadnych botów.} one {Ukryte pole-pułapka zatrzymało w tym miesiącu 1 bota.} few {Ukryte pole-pułapka zatrzymało w tym miesiącu # boty.} many {Ukryte pole-pułapka zatrzymało w tym miesiącu # botów.} other {Ukryte pole-pułapka zatrzymało w tym miesiącu # bota.}}",
+          "held": "{count, plural, one {1 zgłoszenie jest wstrzymane jako spam.} few {# zgłoszenia są wstrzymane jako spam.} many {# zgłoszeń jest wstrzymanych jako spam.} other {# zgłoszenia jest wstrzymane jako spam.}}",
+          "review": "Przejrzyj"
         }
       }
     }

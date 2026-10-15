@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ERROR_CODES } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
 import { errorKind, fieldErrors } from './errors';
-import { displayPhone, formatMoney, formatWhen, withShop } from './format';
+import { displayPhone, formatDay, formatMoney, formatWhen, withShop } from './format';
 import {
   ORDER_STATUSES,
   isTerminalStatus,
@@ -74,5 +74,14 @@ describe('format helpers', () => {
     expect(displayPhone(null)).toBe('');
     expect(formatWhen('not-a-date', 'en')).toBe('');
     expect(formatWhen(null, 'en')).toBe('');
+  });
+});
+
+describe('formatWhen and formatDay time zone', () => {
+  it('gives a different day and hour for two zones', () => {
+    expect(formatWhen('2026-10-02T20:30:00Z', 'en', 'Asia/Kolkata')).toBe('Oct 03, 02:00');
+    expect(formatWhen('2026-10-02T20:30:00Z', 'en', 'America/New_York')).toBe('Oct 02, 16:30');
+    expect(formatDay('2026-10-02T20:30:00Z', 'en', 'Asia/Kolkata')).toBe('Oct 03, 2026');
+    expect(formatDay('2026-10-02T20:30:00Z', 'en', 'America/New_York')).toBe('Oct 02, 2026');
   });
 });

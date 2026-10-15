@@ -12,7 +12,7 @@ import { CheckIcon, CopyIcon, ExternalIcon, LockIcon } from './icons';
 
 /** Pieces every Marketplace screen shares. Text comes from `marketplace.common` and its siblings; no screen writes its own wording for these. */
 
-export const PAGE = 'mx-auto w-full max-w-6xl space-y-5';
+export const PAGE = 'w-full space-y-5';
 export const TEXT_LINK =
   'font-medium text-primary underline-offset-2 hover:underline focus-visible:underline';
 export const LINK_BUTTON =
@@ -103,33 +103,26 @@ export function ErrorPanel({
   const te = useTranslations('marketplace.errors');
   const e = mktError(error);
   return (
-    <EmptyState
-      title={title ?? t('errorTitle')}
-      message={
-        <>
-          {errorMessage(te, e, error)}
-          {e.requestId && (
-            <span className="mt-1 block font-mono text-[11px]">
-              {t('requestId')}: {e.requestId}
-            </span>
-          )}
-        </>
-      }
-      actions={
-        <>
-          {isPlanGate(e) && e.upgradeHref && (
-            <Link href={e.upgradeHref} className={LINK_BUTTON_PRIMARY}>
-              {t('upgrade')}
-            </Link>
-          )}
-          {onRetry && isRetryable(e) && (
-            <Button variant="secondary" onClick={onRetry}>
-              {t('retry')}
-            </Button>
-          )}
-        </>
-      }
-    />
+    <div role="alert">
+      <EmptyState
+        title={title ?? t('errorTitle')}
+        message={<>{errorMessage(te, e, error)}</>}
+        actions={
+          <>
+            {isPlanGate(e) && e.upgradeHref && (
+              <Link href={e.upgradeHref} className={LINK_BUTTON_PRIMARY}>
+                {t('upgrade')}
+              </Link>
+            )}
+            {onRetry && isRetryable(e) && (
+              <Button variant="secondary" onClick={onRetry}>
+                {t('retry')}
+              </Button>
+            )}
+          </>
+        }
+      />
+    </div>
   );
 }
 
@@ -146,11 +139,6 @@ export function ErrorLine({ error, className }: { error: unknown; className?: st
           <Link href={e.upgradeHref} className={TEXT_LINK}>
             {t('upgrade')}
           </Link>
-        </p>
-      )}
-      {e.requestId && (
-        <p className="mt-1 font-mono text-[11px]">
-          {t('requestId')}: {e.requestId}
         </p>
       )}
     </Alert>
@@ -175,7 +163,7 @@ export function AppLogo({
     <span
       aria-hidden="true"
       className={cn(
-        'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted text-sm font-semibold text-muted-foreground',
+        'flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted text-sm font-semibold text-foreground/80',
         className,
       )}
     >

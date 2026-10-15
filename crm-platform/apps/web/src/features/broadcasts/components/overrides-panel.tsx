@@ -7,8 +7,8 @@ import type { AttributeCatalog, ComposeTemplate } from '@crm/contracts';
 import {
   buildMeta,
   chipKeys,
-  emptyState,
   hasFields,
+  stateFromOverrides,
   toOverrides,
   type ButtonMeta,
   type PanelMeta,
@@ -270,15 +270,18 @@ export function OverridesPanel({
   template,
   catalog,
   onChange,
+  initial,
 }: {
   template: ComposeTemplate;
   catalog: AttributeCatalog | undefined;
   onChange: (overrides: Record<string, unknown> | null) => void;
+  /** Overrides saved earlier, to open the panel filled in (the edit screen of a schedule). */
+  initial?: Record<string, unknown> | null;
 }) {
   const t = useTranslations('broadcasts.overrides');
   const meta: PanelMeta = useMemo(() => buildMeta(template), [template]);
   const attrs = useMemo(() => flatten(catalog), [catalog]);
-  const [state, setState] = useState<PanelState>(() => emptyState(meta));
+  const [state, setState] = useState<PanelState>(() => stateFromOverrides(initial, meta));
 
   const update = (next: PanelState) => {
     setState(next);

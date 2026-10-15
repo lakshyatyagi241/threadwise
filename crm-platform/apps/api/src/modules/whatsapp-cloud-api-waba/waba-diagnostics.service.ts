@@ -134,6 +134,50 @@ export class WabaDiagnosticsService {
     return { ...after, subscribedNow: after.ok };
   }
 
+  /**
+   * Makes sure the platform's Meta app is subscribed to `fields`. With `write: false` it only reads (`absent` says a field is missing);
+   * with `write: true` it adds what is missing, keeping every field and the callback Meta already has (EXT-CALL-008: the calling domain
+   * needs `calls`, which is not one of the coexistence or Groups fields above). Meta replaces the whole list on a write, so a caller that
+   * writes must be the only one writing (the calling worker holds a lock). It never sets a callback of its own on an app that has none: a
+   * first-time callback is an operator's decision (`subscribeFields`). Never throws; the answer says what happened.
+   */
+  async ensureFields(
+    fields: readonly string[],
+    opts: { write: boolean },
+  ): Promise<
+    | 'present'
+    | 'added'
+    | 'absent'
+    | 'no_app_credentials'
+    | 'no_callback'
+    | 'unreadable'
+    | 'subscribe_failed'
+  > {
+    let state;
+    let app;
+    try {
+      await this.cfg.refresh();
+      app = this.app();
+      if (!app) return 'no_app_credentials';
+      state = await this.admin.getAppSubscription(app);
+    } catch {
+      return 'unreadable';
+    }
+    if (fields.every((f) => state.fields.includes(f))) return 'present';
+    if (!state.hasWabaObject || !state.callbackUrl) return 'no_callback';
+    if (!opts.write) return 'absent';
+    try {
+      await this.admin.setAppSubscription(app, {
+        callbackUrl: state.callbackUrl,
+        verifyToken: this.callback().verifyToken,
+        fields: [...new Set([...state.fields, ...fields])],
+      });
+    } catch {
+      return 'subscribe_failed';
+    }
+    return 'added';
+  }
+
   // --- one number (TW-WABA-015) ----------------------------------------------------------------------
 
   async inboundCheck(uuid: string): Promise<WabaInboundCheck> {

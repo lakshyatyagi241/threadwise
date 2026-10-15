@@ -1,7 +1,12 @@
 {
   "scheduled-queue-warmer": {
-    "nav": { "scheduled": "Scheduled", "warmer": "Warmer" },
-    "common": { "dismiss": "Dismiss" },
+    "nav": {
+      "scheduled": "Scheduled",
+      "warmer": "Warmer"
+    },
+    "common": {
+      "dismiss": "Dismiss"
+    },
     "status": {
       "scheduled": "Queued",
       "running": "Running",
@@ -10,7 +15,12 @@
       "failed": "Failed",
       "cancelled": "Cancelled"
     },
-    "type": { "plain": "Plain", "template": "Template", "media": "Media", "location": "Location" },
+    "type": {
+      "plain": "Plain",
+      "template": "Template",
+      "media": "Media",
+      "location": "Location"
+    },
     "errors": {
       "generic": "Something went wrong. Try again.",
       "FORBIDDEN": "You do not have permission to do this.",
@@ -20,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "You have reached the limit of your plan.",
       "WA_UNOFFICIAL_DISABLED": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "AUTH_SEND_HALTED": "Sending is halted for this workspace.",
-      "upgrade": "See plans and upgrade",
-      "requestId": "Request {id}"
+      "upgrade": "See plans and upgrade"
     },
     "actions": {
       "done": {
@@ -106,7 +115,12 @@
         "status": "Status",
         "actions": "Actions"
       },
-      "recipients": { "group": "Group", "tag": "Tag", "queue": "Queue", "number": "Numbers" },
+      "recipients": {
+        "group": "Group",
+        "tag": "Tag",
+        "queue": "Queue",
+        "number": "Numbers"
+      },
       "when": {
         "overdue": "overdue",
         "now": "now",
@@ -125,7 +139,8 @@
         "cancel": "Cancel",
         "retry": "Retry with new time",
         "delete": "Delete",
-        "deleteHistory": "Delete from history"
+        "deleteHistory": "Delete from history",
+        "edit": "Edit"
       },
       "empty": {
         "title": "No schedules",
@@ -161,14 +176,26 @@
         "twilio": "Twilio"
       },
       "types": {
-        "plain": { "title": "Plain text", "hint": "Just words and emojis.", "pill": "plain text" },
+        "plain": {
+          "title": "Plain text",
+          "hint": "Just words and emojis.",
+          "pill": "plain text"
+        },
         "template": {
           "title": "Template",
           "hint": "Approved WhatsApp template.",
           "pill": "template"
         },
-        "media": { "title": "With media", "hint": "Image, video, doc, audio.", "pill": "media" },
-        "location": { "title": "Location", "hint": "Lat/long pin.", "pill": "location" }
+        "media": {
+          "title": "With media",
+          "hint": "Image, video, doc, audio.",
+          "pill": "media"
+        },
+        "location": {
+          "title": "Location",
+          "hint": "Lat/long pin.",
+          "pill": "location"
+        }
       },
       "basics": {
         "title": "Schedule basics",
@@ -181,19 +208,29 @@
         "noSenders": "No connected sender. Connect a number first.",
         "warming": "Warming",
         "splitHint": "Each ticked sender runs its own schedule with a fair share of the audience.",
-        "messageType": "Message type"
+        "messageType": "Message type",
+        "editSenderHint": "A schedule has one number. Choosing another moves the schedule to it and reserves its warm-up budget again."
       },
       "audience": {
         "title": "Recipients",
         "source": "Recipient source",
         "sources": {
-          "group": { "title": "Group", "hint": "Pick one or more saved contact groups." },
-          "tag": { "title": "Tags", "hint": "Everyone carrying a tag" },
+          "group": {
+            "title": "Group",
+            "hint": "Pick one or more saved contact groups."
+          },
+          "tag": {
+            "title": "Tags",
+            "hint": "Everyone carrying a tag"
+          },
           "queue": {
             "title": "Audience queue",
             "hint": "Re-target a past broadcast's recipients."
           },
-          "number": { "title": "Numbers", "hint": "Paste a list manually." }
+          "number": {
+            "title": "Numbers",
+            "hint": "Paste a list manually."
+          }
         },
         "chooseGroups": "Choose group(s)",
         "chooseTags": "Pick one or more tags",
@@ -240,12 +277,42 @@
         "pickerSearch": "Search by name or language…",
         "pickerEmpty": "No templates match.",
         "manageTemplates": "Manage templates →",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "pickToPreview": "Pick a template to see it.",
+        "headerMedia": "{kind} header",
+        "windowNote": "A Cloud API number delivers an approved template even when the customer has not written in the last 24 hours.",
+        "previewSamples": "Preview with sample values",
+        "pickerCategories": "Template category",
+        "categories": {
+          "all": "All",
+          "marketing": "Marketing",
+          "utility": "Utility"
+        },
+        "pickerHidden": "{n, plural, one {# more template is hidden because a ticked number cannot send it.} other {# more templates are hidden because a ticked number cannot send them.}}",
+        "file": "File",
+        "chooseFile": "Choose a file to send",
+        "fileHint": "Image, video, audio or document. It is stored privately in your workspace.",
+        "limits": "On the numbers you picked: up to {image} MB for images, {video} MB for video, {audio} MB for audio and {document} MB for documents.",
+        "tooBigUpload": "The file is bigger than {mb} MB.",
+        "uploadFailed": "The file could not be uploaded. Try again.",
+        "uploading": "Uploading…",
+        "replace": "Replace",
+        "remove": "Remove",
+        "kinds": {
+          "image": "Image",
+          "video": "Video",
+          "audio": "Audio",
+          "document": "Document"
+        },
+        "orLink": "Or paste a link to the file"
       },
       "when": {
         "title": "When to send",
         "modes": {
-          "once": { "title": "Send once", "hint": "A single delivery at the chosen date & time." },
+          "once": {
+            "title": "Send once",
+            "hint": "A single delivery at the chosen date & time."
+          },
           "recurring": {
             "title": "Recurring",
             "hint": "Repeat daily, weekly, or monthly on a fixed cadence."
@@ -257,7 +324,11 @@
         "recurrence": "Recurrence",
         "every": "Repeat every",
         "interval": "Interval",
-        "intervals": { "daily": "day(s)", "weekly": "week(s)", "monthly": "month(s)" },
+        "intervals": {
+          "daily": "day(s)",
+          "weekly": "week(s)",
+          "monthly": "month(s)"
+        },
         "end": "End",
         "endNever": "Never",
         "endDate": "On a specific date",
@@ -297,7 +368,6 @@
       "errors": {
         "nameRequired": "Give the schedule a name.",
         "senderRequired": "Pick at least one sender.",
-        "wabaTemplate": "WhatsApp Cloud API numbers cannot send template schedules. Untick them or choose another message type.",
         "audienceRequired": "Pick at least one.",
         "numbersRequired": "Paste at least one number.",
         "messageRequired": "Write the message.",
@@ -314,7 +384,18 @@
         "daysRequired": "Choose the days of the week.",
         "endDateRequired": "Choose the last day.",
         "endBeforeStart": "The end date is before the first send.",
-        "testNumber": "Enter the number with its country code."
+        "testNumber": "Enter the number with its country code.",
+        "mediaTooLarge": "This file is bigger than a ticked number accepts. Choose a smaller file.",
+        "mediaType": "A ticked number does not accept this file type for this kind of media.",
+        "templateNotForSender": "A ticked number cannot send this template: a WhatsApp Cloud API number sends only templates Meta has approved. Choose another template or number."
+      },
+      "edit": {
+        "title": "Edit scheduled message",
+        "saved": "Schedule updated.",
+        "submit": "Save changes",
+        "stale": "Someone changed this schedule while you were editing it. Reload it to see their changes; what you typed here will be lost.",
+        "reload": "Reload the schedule",
+        "backToSchedule": "Back to the schedule"
       }
     },
     "detail": {
@@ -331,7 +412,8 @@
         "runNow": "Run now",
         "cancel": "Cancel",
         "retry": "Retry with new time",
-        "delete": "Delete"
+        "delete": "Delete",
+        "edit": "Edit"
       },
       "kpi": {
         "recipients": "Recipients",
@@ -392,7 +474,11 @@
           "delivered": "Delivered",
           "read": "Read",
           "failed": "Failed"
-        }
+        },
+        "search": "Search name or number",
+        "range": "{from}–{to} of {total}",
+        "prev": "Previous",
+        "next": "Next"
       },
       "config": {
         "eyebrow": "Schedule details",
@@ -411,9 +497,26 @@
       "preview": {
         "eyebrow": "Message preview",
         "title": "What recipients see",
-        "empty": "(empty body)"
+        "empty": "(empty body)",
+        "template": "Template {name} ({language})",
+        "file": "File: {name}"
       },
-      "another": "Schedule another"
+      "another": "Schedule another",
+      "engagement": {
+        "eyebrow": "Engagement",
+        "title": "Delivery over time",
+        "legend": "Legend",
+        "steps": {
+          "queued": "Queued",
+          "sent": "Sent",
+          "delivered": "Delivered",
+          "read": "Read",
+          "failed": "Failed"
+        },
+        "empty": "Nothing has been sent yet, so there is nothing to chart.",
+        "perHour": "Running totals at the start of each hour, in {zone}.",
+        "perDay": "Running totals at the start of each day, in {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} warming",
@@ -446,7 +549,11 @@
       "empty": "No connected numbers yet.",
       "connect": "Connect a number",
       "number": "Number",
-      "engines": { "baileys": "Unofficial API", "waba": "WABA", "twilio": "Twilio" },
+      "engines": {
+        "baileys": "Unofficial API",
+        "waba": "WABA",
+        "twilio": "Twilio"
+      },
       "health": "Health {n}",
       "healthTitle": "Health score (higher = safer to ramp)",
       "switch": "Warming",

@@ -5,7 +5,7 @@ import { Alert, Badge, Button, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import type { DealSource, DealStatus } from '../api/schemas';
 import { avatarColor, initials } from '../lib/format';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 
 /** Two-letter circle for a person; the colour follows the name so it is the same everywhere. */
 export function Avatar({
@@ -55,15 +55,9 @@ export function ErrorLine({
 }) {
   const t = useTranslations('deals-pipelines.errors');
   const kind = errorKind(error);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone={kind === 'unavailable' ? 'warning' : 'danger'} className={className}>
       <span>{t(kind)}</span>
-      {requestId && (
-        <span className="mt-1 block text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </span>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}

@@ -1,0 +1,79 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Impor obrolan yang sudah ada?",
+        "intro": "WhatsApp hanya mengirim riwayat obrolan sebuah nomor satu kali, tepat setelah nomor pertama kali ditautkan. Pilih sekarang, sebelum Anda memindai.",
+        "label": "Impor obrolan yang ada",
+        "none": "Tidak, mulai dari kosong",
+        "noneHelp": "Hanya pesan baru yang muncul di kotak masuk bersama. Ini adalah pilihan default.",
+        "recent": "Ya, obrolan dan kontak terbaru",
+        "recentHelp": "Obrolan terbaru yang dikirim WhatsApp saat nomor pertama kali ditautkan, beserta orang-orang di dalamnya.",
+        "full": "Ya, sebanyak yang dikirim WhatsApp",
+        "fullHelp": "Termasuk riwayat lama WhatsApp. Prosesnya lebih lama dan memakai lebih banyak batas kontak Anda.",
+        "pointsTitle": "Yang perlu diketahui",
+        "pointQuiet": "Obrolan yang diimpor ditandai sudah dibaca dan tetap senyap: tanpa notifikasi, otomatisasi, atau balasan otomatis.",
+        "pointNothingSent": "Tidak ada yang dikirim ke siapa pun.",
+        "pointMedia": "Foto, video, pesan suara, dan file tidak diimpor. Anda akan melihat pengganti seperti [Foto].",
+        "pointGroups": "Obrolan grup disimpan sebagai percakapan grup dan tidak membuat kontak.",
+        "pointConsent": "Orang yang diimpor tidak ditandai telah menyetujui pesan pemasaran.",
+        "pointLimit": "Orang yang diimpor dihitung dalam batas kontak paket Anda. Impor berhenti dengan rapi jika batas tercapai.",
+        "pointTime": "Proses ini bisa memakan waktu beberapa menit. Anda tetap bisa bekerja, dan dapat membatalkan kapan saja.",
+        "pointOnce": "Menautkan nomor lagi hanya akan mengimpor jika Anda memilih impor lagi sebelum memindai."
+      },
+      "result": {
+        "note": "Obrolan Anda sedang diimpor. Pantau progresnya di halaman nomor.",
+        "link": "Lihat impor"
+      },
+      "card": {
+        "title": "Obrolan yang diimpor",
+        "state": {
+          "not_requested": "Tidak diminta",
+          "idle": "Menunggu WhatsApp",
+          "running": "Mengimpor",
+          "done": "Selesai",
+          "failed": "Tidak selesai",
+          "cancelled": "Dibatalkan",
+          "limit_reached": "Berhenti di batas kontak Anda"
+        },
+        "body": {
+          "not_requested": "Nomor ini tidak mengimpor obrolannya. WhatsApp hanya menyediakan riwayat saat nomor pertama kali ditautkan, jadi pilih opsi impor saat Anda menautkan nomor ini lagi.",
+          "idle": "Menunggu nomor tertaut dan WhatsApp mengirim obrolannya. Ini bisa memakan waktu beberapa menit.",
+          "running": "Mengimpor obrolan. Anda boleh meninggalkan halaman ini, impor akan terus berjalan.",
+          "done": "Impor selesai. Obrolan ada di kotak masuk bersama, ditandai sudah dibaca.",
+          "failed": "Impor tidak selesai. Yang sudah diimpor tetap ada di kotak masuk.",
+          "cancelled": "Anda menghentikan impor. Yang sudah diimpor tetap ada di kotak masuk.",
+          "limit_reached": "Impor berhenti karena batas kontak paket Anda tercapai. Yang sudah diimpor tetap ada di kotak masuk."
+        },
+        "chats": "{count, plural, other {# obrolan}}",
+        "contacts": "{count, plural, other {# kontak}}",
+        "messages": "{count, plural, other {# pesan}}",
+        "progress": "Progres: {percent}%",
+        "window": "Pesan dari {days, plural, other {# hari}} terakhir.",
+        "mediaNote": "Foto, video, pesan suara, dan file tidak diimpor. Tempatnya menampilkan pengganti.",
+        "started": "Dimulai",
+        "finished": "Selesai",
+        "openInbox": "Buka kotak masuk",
+        "cancel": "Hentikan impor",
+        "cancelling": "Menghentikan...",
+        "cancelTitle": "Hentikan impor?",
+        "cancelMessage": "Tidak ada lagi obrolan yang akan diambil. Yang sudah diimpor tetap ada di kotak masuk.",
+        "cancelConfirm": "Hentikan impor",
+        "cancelKeep": "Lanjutkan impor",
+        "cancelDone": "Impor dihentikan. Yang sudah diimpor tetap ada di kotak masuk."
+      },
+      "error": {
+        "history_not_received": "WhatsApp tidak mengirim riwayat obrolan apa pun. Ini hanya dilakukan saat nomor pertama kali ditautkan. Tautkan nomor lagi dan pilih impor untuk mencoba lagi.",
+        "message_cap_reached": "Berhenti di batas jumlah pesan untuk satu nomor. Yang sudah diimpor tetap ada.",
+        "chat_cap_reached": "Berhenti di batas jumlah obrolan untuk satu nomor. Yang sudah diimpor tetap ada.",
+        "contact_limit_reached": "Berhenti karena batas kontak paket Anda tercapai. Kosongkan beberapa kontak atau tingkatkan paket, lalu tautkan nomor lagi dan impor.",
+        "worker_error": "Impor berhenti karena terjadi kesalahan. Yang sudah diimpor tetap ada. Tautkan nomor lagi untuk mencoba lagi.",
+        "ended_idle": "Selesai. WhatsApp berhenti mengirim riwayat, sehingga impor berakhir dengan data yang sudah masuk.",
+        "limits_unavailable": "Impor tidak dapat dijalankan karena layanan belum disiapkan dengan benar. Hubungi dukungan, lalu tautkan kembali nomornya."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Tidak ada impor yang sedang berjalan untuk nomor ini."
+    }
+  }
+}

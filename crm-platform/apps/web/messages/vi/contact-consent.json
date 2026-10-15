@@ -1,0 +1,340 @@
+{
+  "contact-consent": {
+    "common": {
+      "dismiss": "Bỏ qua",
+      "retry": "Thử lại",
+      "loading": "Đang tải..."
+    },
+    "errors": {
+      "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "notFound": "Liên hệ này không còn tồn tại.",
+      "conflict": "Có người khác đã thay đổi nội dung này khi bạn đang chỉnh sửa. Hãy tải lại và thử lại.",
+      "noteRequired": "Hãy ghi rõ lý do liên hệ đồng ý (họ đã nói hoặc ký gì, ở đâu) trước khi ghi nhận sự đồng ý.",
+      "settingsInvalid": "Từ khóa cần ít nhất một chữ cái hoặc chữ số, và phải còn ít nhất một từ khóa STOP khi bật tính năng nhận diện.",
+      "rateLimited": "Quá nhiều yêu cầu. Vui lòng đợi một lát rồi thử lại.",
+      "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "exportInProgress": "Tệp bằng chứng đang được chuẩn bị. Hãy đợi hoàn tất rồi thử lại.",
+      "exportNotReady": "Tệp đó chưa sẵn sàng hoặc đã hết hạn. Hãy chuẩn bị tệp mới.",
+      "noticeTargetMissing": "Tiện ích, trang đặt lịch hoặc cửa hàng đó không còn tồn tại."
+    },
+    "settings": {
+      "title": "Đồng ý nhận tin và phản hồi STOP",
+      "subtitle": "Chọn các từ để liên hệ từ chối hoặc đăng ký lại, nội dung phản hồi của chúng tôi, dòng từ chối trong tin nhắn marketing và việc marketing có cần ghi nhận sự đồng ý hay không.",
+      "exportProof": "Xuất bằng chứng đồng ý (CSV)",
+      "discard": "Hủy thay đổi",
+      "save": "Lưu thay đổi",
+      "saved": "Đã lưu cài đặt đồng ý nhận tin.",
+      "conflict": "Có người khác đã lưu cài đặt này trước. Biểu mẫu hiện hiển thị nội dung đã lưu.",
+      "conflictOk": "OK",
+      "problems": {
+        "noOptOutWord": "Hãy thêm ít nhất một từ khóa STOP, hoặc tắt tính năng nhận diện.",
+        "badLang": "Mã ngôn ngữ có dạng như en, ar hoặc pt-BR."
+      }
+    },
+    "policy": {
+      "title": "Chính sách marketing",
+      "requireConsent": "Yêu cầu có sự đồng ý đã ghi nhận để gửi marketing",
+      "requireConsentHint": "Tắt: marketing được gửi đến mọi liên hệ chưa từ chối. Bật: chỉ gửi đến liên hệ có sự đồng ý đã ghi nhận. Đối tượng chiến dịch và tin phát sóng hiển thị số liên hệ bị bỏ qua.",
+      "withdrawnAlways": "Liên hệ đã từ chối luôn bị bỏ qua, bất kể công tắc này ở trạng thái nào."
+    },
+    "detect": {
+      "title": "Phản hồi STOP và START",
+      "enabled": "Nhận diện phản hồi STOP và START",
+      "enabledHint": "Khi liên hệ chỉ gửi đúng một trong các từ bên dưới, họ sẽ bị từ chối hoặc được đăng ký lại trên kênh đó.",
+      "autoReply": "Gửi phản hồi xác nhận",
+      "autoReplyHint": "Một câu trả lời văn bản ngắn trong khung 24 giờ, chỉ gửi một lần cho mỗi thay đổi. Đây không phải chiến dịch và không tính là marketing.",
+      "rule": "Toàn bộ tin nhắn phải đúng là từ khóa: chữ hoa, khoảng trắng, dấu câu, emoji và dấu phụ tiếng Ả Rập đều được bỏ qua. \"Please stop sending me invoices\" hoặc \"don't stop\" không khớp, nên sẽ không ai bị từ chối nhầm."
+    },
+    "lang": {
+      "groupLabel": "Từ khóa và phản hồi cho {lang}",
+      "title": "Ngôn ngữ",
+      "remove": "Xóa ngôn ngữ",
+      "optOutWords": "Từ khóa STOP (từ chối)",
+      "optInWords": "Từ khóa START (đăng ký lại)",
+      "wordsHint": "Mỗi dòng một từ.",
+      "optOutReply": "Phản hồi sau STOP",
+      "optInReply": "Phản hồi sau START",
+      "replyHint": "Bạn có thể dùng '{{name}}' cho tên của liên hệ. Hãy nói cách đăng ký lại.",
+      "footer": "Dòng từ chối trong tin nhắn marketing",
+      "footerHint": "Được thêm dưới tin nhắn marketing. Hãy cho mọi người biết từ cần gửi.",
+      "add": "Thêm ngôn ngữ",
+      "addHint": "Mã ngôn ngữ như fr hoặc pt-BR.",
+      "invalid": "Hãy dùng mã như fr hoặc pt-BR.",
+      "addButton": "Thêm"
+    },
+    "footer": {
+      "title": "Dòng từ chối",
+      "intro": "Trình soạn tin phát sóng và chiến dịch có thể thêm dòng này dưới tin marketing để người nhận biết họ có thể trả lời STOP. Mẫu đã được duyệt không bao giờ bị thay đổi: hãy đặt dòng này vào chính mẫu.",
+      "defaultOn": "Cảnh báo khi tin marketing không có dòng từ chối",
+      "defaultOnHint": "Trình soạn tin hiển thị cảnh báo và nút một chạm để thêm dòng này.",
+      "noneSet": "Chưa đặt dòng từ chối cho ngôn ngữ nào.",
+      "previewLabel": "Người nhận sẽ thấy",
+      "sample": "Đợt giảm giá mùa xuân của chúng tôi bắt đầu hôm nay. Hãy ghé thăm trong tuần này."
+    },
+    "test": {
+      "title": "Thử một tin nhắn",
+      "intro": "Nhập nội dung liên hệ có thể gửi để xem điều gì sẽ xảy ra. Không có gì bị thay đổi hoặc gửi đi. Dùng các từ ở trên, kể cả khi bạn chưa lưu.",
+      "label": "Tin nhắn từ liên hệ",
+      "run": "Thử",
+      "failed": "Không thể chạy thử. Hãy thử lại.",
+      "outcome": {
+        "opts_out": "Liên hệ sẽ bị từ chối nhận marketing.",
+        "opts_in": "Liên hệ sẽ được đăng ký nhận lại.",
+        "no_match": "Không có gì xảy ra: tin nhắn không phải từ khóa.",
+        "detection_off": "Không có gì xảy ra: tính năng nhận diện đang tắt."
+      },
+      "matched": "Khớp với từ khóa \"{keyword}\" ({lang}).",
+      "replyLabel": "Liên hệ nhận được",
+      "noReply": "Không gửi phản hồi nào."
+    },
+    "card": {
+      "title": "Đồng ý nhận tin",
+      "status": {
+        "optedOut": "Đã từ chối",
+        "subscribed": "Đã đăng ký",
+        "none": "Chưa ghi nhận sự đồng ý"
+      },
+      "export": "Xuất bằng chứng (CSV)",
+      "markSubscribed": "Đánh dấu đã đăng ký",
+      "markUnsubscribed": "Đánh dấu đã hủy đăng ký",
+      "loading": "Đang tải thông tin đồng ý...",
+      "noneRecorded": "Chưa ghi nhận sự đồng ý của liên hệ này. Việc gửi marketing tuân theo chính sách của không gian làm việc.",
+      "perChannel": "Đồng ý theo kênh",
+      "timeline": "Lịch sử đồng ý",
+      "channel": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "telegram": "Telegram",
+        "email": "Email",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "webchat": "Chat web",
+        "voice": "Cuộc gọi thoại",
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
+      },
+      "state": {
+        "granted": "đã đăng ký",
+        "withdrawn": "đã từ chối",
+        "utilityGranted": "đã đồng ý nhận tin nhắn dịch vụ",
+        "utilityWithdrawn": "đã dừng tin nhắn dịch vụ"
+      },
+      "action": {
+        "granted": "Đã đăng ký",
+        "withdrawn": "Đã từ chối",
+        "utilityGranted": "Đã đồng ý được liên hệ về yêu cầu của mình",
+        "utilityWithdrawn": "Đã dừng tin nhắn dịch vụ"
+      },
+      "source": {
+        "form": "Biểu mẫu",
+        "keyword": "Phản hồi từ khóa",
+        "manual": "Do người dùng ghi nhận",
+        "import": "Nhập",
+        "api": "API",
+        "flow": "Luồng",
+        "inbound_message": "Tin nhắn",
+        "contact_request": "Yêu cầu liên hệ",
+        "legacy": "Trước lịch sử đồng ý",
+        "widget": "Trò chuyện trên website",
+        "booking": "Trang đặt lịch",
+        "commerce": "Thanh toán của cửa hàng",
+        "lead": "Thu thập lead"
+      },
+      "by": "bởi {name}",
+      "evidence": {
+        "consentText": "Văn bản hiển thị",
+        "consentVersion": "Phiên bản",
+        "consentHash": "Mã băm",
+        "formId": "Biểu mẫu",
+        "submissionId": "Lượt gửi",
+        "messageId": "Tin nhắn",
+        "keyword": "Từ khóa",
+        "fileName": "Tệp",
+        "apiKeyId": "Khóa API",
+        "flowId": "Luồng",
+        "reference": "Tham chiếu",
+        "noticeVersion": "Phiên bản thông báo",
+        "noticeUrl": "Liên kết thông báo",
+        "widgetId": "Tiện ích trò chuyện",
+        "bookingTypeId": "Trang đặt lịch",
+        "integrationId": "Cửa hàng",
+        "storeFlag": "Cài đặt cửa hàng",
+        "leadSourceId": "Nguồn lead",
+        "leadFormId": "Biểu mẫu lead",
+        "adId": "Quảng cáo"
+      },
+      "dialog": {
+        "titleGranted": "Đánh dấu đã đăng ký",
+        "titleWithdrawn": "Đánh dấu đã hủy đăng ký",
+        "introGranted": "Ghi nhận rằng liên hệ này đã đồng ý nhận tin nhắn marketing. Lý do được lưu làm bằng chứng.",
+        "introWithdrawn": "Ghi nhận rằng liên hệ này không muốn nhận tin nhắn marketing nữa. Họ sẽ bị bỏ qua trong mọi chiến dịch và tin phát sóng.",
+        "channel": "Kênh",
+        "noteRequired": "Lý do? (bắt buộc)",
+        "noteOptional": "Ghi chú (không bắt buộc)",
+        "noteHint": "Ví dụ: đã ký biểu mẫu giấy tại quầy, hoặc đồng ý qua email ngày 3 tháng 3.",
+        "confirm": "Lưu",
+        "cancel": "Hủy",
+        "close": "Đóng",
+        "savedGranted": "Đã đánh dấu đăng ký.",
+        "savedWithdrawn": "Đã đánh dấu hủy đăng ký."
+      }
+    },
+    "composer": {
+      "add": "Thêm dòng từ chối",
+      "missing": "Tin nhắn marketing này chưa hướng dẫn cách từ chối. Hãy thêm một dòng như \"Trả lời STOP để hủy đăng ký\".",
+      "addButton": "Thêm dòng này",
+      "templateHint": "Mẫu tin được cố định theo bản đã duyệt. Để cho mọi người biết họ có thể từ chối, hãy đưa một dòng như \"{line}\" vào chính mẫu tin.",
+      "footerSuggestion": "Gợi ý cho mẫu tin tiếp thị: \"{line}\"",
+      "footerUse": "Dùng làm chân trang"
+    },
+    "import": {
+      "legend": "Sự đồng ý",
+      "label": "Tôi có sự đồng ý để nhắn tin cho các liên hệ này",
+      "hint": "Nếu được chọn, mọi liên hệ trong tệp sẽ được ghi nhận là đã đồng ý nhận tiếp thị, với tên tệp làm bằng chứng. Nếu không chọn, quá trình nhập không ghi nhận sự đồng ý nào. Các liên hệ đã từ chối nhận tin vẫn giữ trạng thái từ chối.",
+      "hintColumn": "Cột được ánh xạ tới sự đồng ý tiếp thị sẽ quyết định ai được ghi nhận: chỉ những hàng ghi có mới được ghi nhận sự đồng ý, với tên tệp làm bằng chứng. Không, ô trống hoặc từ không xác định sẽ không ghi nhận gì. Các liên hệ đã hủy đăng ký vẫn ở trạng thái đã hủy.",
+      "columnSummary": "{granted} hàng ghi có và sẽ được ghi nhận. {notGranted} ghi không hoặc để trống và không có bản ghi đồng ý nào.",
+      "unrecognised": "{count, plural, one {# hàng có} other {# hàng có}} giá trị đồng ý không phải có hoặc không ({values}). {count, plural, one {Giá trị này} other {Các giá trị này}} được coi là không được đồng ý. Hãy dùng yes / no, true / false hoặc 1 / 0.",
+      "columnIgnored": "Cột đồng ý sẽ không có tác dụng cho đến khi bạn chọn ô ở trên.",
+      "noticeText": "Thông báo hoặc cơ sở pháp lý (tùy chọn)",
+      "noticeTextHint": "Những liên hệ này đã đồng ý điều gì và ở đâu, ví dụ: đăng ký khi thanh toán theo thông báo quyền riêng tư v3. Được lưu làm bằng chứng cho mỗi sự đồng ý đã ghi.",
+      "noticeVersion": "Phiên bản thông báo (tùy chọn)",
+      "smsSummary": "Cột đồng ý SMS: {granted} dòng ghi có và sẽ được ghi nhận là đồng ý SMS. {notGranted} dòng ghi không hoặc để trống.",
+      "emailSummary": "Cột đồng ý email: {granted} dòng ghi có và sẽ được ghi nhận là đồng ý email (dòng cũng cần có địa chỉ email). {notGranted} dòng ghi không hoặc để trống.",
+      "labelNumbers": "Tôi có sự đồng ý để nhắn tin cho các số này",
+      "hintNumbers": "Khi chọn, mỗi số trong tệp được ghi nhận là đã đồng ý nhận tiếp thị khi bạn khởi chạy chiến dịch, với tên tệp làm bằng chứng. Khi không chọn, không ghi nhận sự đồng ý nào. Người đã hủy đăng ký vẫn ở trạng thái hủy."
+    },
+    "systemLine": {
+      "withdrawn": "Liên hệ đã trả lời {keyword}: đã hủy đăng ký tiếp thị",
+      "granted": "Liên hệ đã trả lời {keyword}: đã đăng ký lại tiếp thị"
+    },
+    "proof": {
+      "title": "Tệp bằng chứng đã chuẩn bị",
+      "prepare": "Chuẩn bị tệp bằng chứng đầy đủ",
+      "preparing": "Đang chuẩn bị tệp bằng chứng",
+      "largeHint": "Sổ ghi có hơn {max} sự kiện nên tệp được chuẩn bị ở chế độ nền",
+      "large": "Sổ ghi có hơn {max} sự kiện, nhiều hơn mức có thể tải trực tiếp. Hãy chuẩn bị tệp đầy đủ: tệp được tạo ở chế độ nền và bạn sẽ nhận email khi sẵn sàng.",
+      "none": "Chưa có tệp nào được chuẩn bị.",
+      "keptFor": "Tệp đã chuẩn bị có thể tải xuống trong {days} ngày, sau đó sẽ bị xóa. Chỉ chuẩn bị một tệp tại một thời điểm.",
+      "rows": "{count, plural, one {# sự kiện} other {# sự kiện}}",
+      "expires": "có đến {date}",
+      "download": "Tải CSV",
+      "failed": "Không thể tạo tệp. Hãy chuẩn bị lại.",
+      "status": {
+        "queued": "Đang chờ",
+        "running": "Đang tạo",
+        "ready": "Sẵn sàng",
+        "failed": "Lỗi",
+        "expired": "Đã hết hạn"
+      }
+    },
+    "unsubscribe": {
+      "title": "Hủy đăng ký email tiếp thị",
+      "intro": "Xác nhận rằng bạn không muốn nhận email tiếp thị từ doanh nghiệp này nữa. Bạn vẫn sẽ nhận tin nhắn về đơn hàng và lịch hẹn.",
+      "confirm": "Hủy đăng ký",
+      "working": "Đang xử lý...",
+      "doneTitle": "Bạn đã hủy đăng ký",
+      "doneBody": "Bạn sẽ không nhận tin nhắn tiếp thị từ doanh nghiệp này nữa.",
+      "already": "Bạn đã hủy đăng ký trước đó.",
+      "invalidTitle": "Liên kết này không hợp lệ",
+      "invalidBody": "Liên kết hủy đăng ký chưa đầy đủ hoặc đã bị thay đổi. Hãy dùng liên kết trong email mới nhất bạn nhận được.",
+      "error": "Đã xảy ra lỗi. Hãy thử lại."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Được phép: thông báo đã được gửi trước.",
+        "consent_evidence_recorded": "Được phép: đã gửi thông báo và người đó đồng ý.",
+        "purpose_not_enabled": "Không được phép: không gian làm việc chưa bật tính năng này.",
+        "consent_declined": "Không được phép: người đó đã từ chối.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "Dòng đồng ý trong biểu mẫu trò chuyện",
+        "booking": "Dòng đồng ý trên trang đặt lịch",
+        "commerce": "Ô tiếp thị của cửa hàng có nghĩa là gì",
+        "workspace": "Thông báo đồng ý mặc định"
+      },
+      "intro": {
+        "widget": "Hiển thị dưới dạng ô đánh dấu bên dưới thông tin của khách truy cập. Chỉ khách đánh dấu mới được ghi nhận là đồng ý, và chỉ khi họ cung cấp số điện thoại hoặc email.",
+        "booking": "Hiển thị dưới dạng ô đánh dấu trên biểu mẫu đặt lịch. Chỉ người đánh dấu mới được ghi nhận là đồng ý; việc đặt lịch không bao giờ cần ô này.",
+        "commerce": "Khách hàng chấp nhận tiếp thị trong cửa hàng của bạn được ghi nhận là đồng ý. Hãy viết điều ô đó nói với họ để bằng chứng nêu rõ.",
+        "workspace": "Nội dung mà không gian làm việc của bạn hiển thị bên cạnh hộp đồng ý khi biểu mẫu, tiện ích hoặc trang đặt lịch không có nội dung riêng. Mỗi thay đổi là một phiên bản được đánh số mới."
+      },
+      "enabled": "Bật dòng đồng ý",
+      "text": "Nội dung mà người đó đồng ý",
+      "textHint": "Tối đa {max} ký tự. Mỗi thay đổi được lưu thành một phiên bản mới.",
+      "textRequired": "Hãy viết nội dung trước khi bật dòng này.",
+      "url": "Liên kết đến chính sách quyền riêng tư của bạn (không bắt buộc)",
+      "urlHint": "Phải bắt đầu bằng https://",
+      "save": "Lưu dòng đồng ý",
+      "saved": "Đã lưu dòng đồng ý (phiên bản {version}).",
+      "version": "Phiên bản hiện tại: {version}",
+      "noVersion": "Chưa lưu.",
+      "saveFirst": "Hãy lưu mục này trước, sau đó bạn có thể đặt dòng đồng ý cho nó.",
+      "whatsappToo": "Tính cả là đồng ý trên WhatsApp (chỉ khi nội dung nói vậy)",
+      "termsUrl": "Liên kết đến điều khoản của bạn (tùy chọn)",
+      "termsUrlHint": "Phải bắt đầu bằng https://",
+      "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
+      "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc",
+      "useWorkspaceText": "Dùng nội dung mặc định của không gian làm việc"
+    }
+  }
+}

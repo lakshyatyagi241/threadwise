@@ -214,7 +214,6 @@
         "sessionExpired": "Votre session a expiré par mesure de sécurité. Veuillez réessayer.",
         "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
         "unexpected": "Un problème est survenu de notre côté. Veuillez réessayer.",
-        "requestId": "ID de requête",
         "signupExpired": "Veuillez recommencer l’inscription.",
         "policyRules": {
           "min_length": "Utilisez au moins {min, plural, one {# caractère} other {# caractères}}.",

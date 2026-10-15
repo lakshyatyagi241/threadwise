@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "Not part of your plan. Upgrade to import the full history.",
+        "fullLockedLink": "See plans"
+      }
+    }
+  }
+}

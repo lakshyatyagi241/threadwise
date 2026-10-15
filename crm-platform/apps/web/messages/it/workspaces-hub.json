@@ -187,8 +187,7 @@
       "notFound": "Questo workspace non esiste più.",
       "reasonRequired": "È richiesto un motivo di almeno 8 caratteri.",
       "orgSuspended": "Il workspace è sospeso, quindi non può essere aperto.",
-      "validation": "Verifica i valori e riprova.",
-      "requestId": "ID richiesta"
+      "validation": "Verifica i valori e riprova."
     },
     "detail": {
       "crumb": "Workspace",

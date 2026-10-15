@@ -51,6 +51,8 @@ export function WorkspaceStep({
   const t = useTranslations('auth-registration-security.account.onboarding.workspace');
   const locale = useLocale();
   const tg = useTranslations('auth-registration-security.gate.onboarding');
+  // Not a health-data product: said once, plainly, before the workspace is created (docs/privacy/hipaa-not-supported.md).
+  const tphi = useTranslations('compliance-center.phi');
   const router = useRouter();
   const queryClient = useQueryClient();
   const formRef = useRef<HTMLFormElement>(null);
@@ -279,6 +281,10 @@ export function WorkspaceStep({
           )}
         </FormField>
       )}
+
+      <p role="note" className="text-xs leading-relaxed opacity-80" data-testid="phi-note">
+        <strong>{tphi('title')}</strong> {tphi('body')}
+      </p>
 
       <ErrorNote error={error} />
 

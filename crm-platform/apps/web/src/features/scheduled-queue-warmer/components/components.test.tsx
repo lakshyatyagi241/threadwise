@@ -8,9 +8,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   WARMER_DEFAULTS,
   type ScheduleDetail,
+  type ScheduleDraft,
+  type ScheduleFunnel,
   type ScheduleList,
   type ScheduleOptions,
+  type ScheduleRecipientList,
   type ScheduleSummary,
+  type ScheduleTemplate,
   type WarmerList,
 } from '@crm/contracts';
 import { ToastProvider } from '@crm/ui';
@@ -21,6 +25,14 @@ const state = vi.hoisted(() => ({
   list: { data: undefined as unknown, isPending: false, isError: false, error: null as unknown },
   options: { data: undefined as unknown, isPending: false, isError: false, error: null as unknown },
   detail: { data: undefined as unknown, isPending: false, isError: false, error: null as unknown },
+  draft: { data: undefined as unknown, isPending: false, isError: false, error: null as unknown },
+  funnel: { data: undefined as unknown, isPending: false, isError: false, error: null as unknown },
+  recipients: {
+    data: undefined as unknown,
+    isPending: false,
+    isError: false,
+    error: null as unknown,
+  },
   warmer: { data: undefined as unknown, isPending: false, isError: false, error: null as unknown },
   preview: { data: undefined as unknown, isFetching: false },
   can: true,
@@ -42,21 +54,34 @@ vi.mock('../api/schedules', () => ({
   useSchedules: () => state.list,
   useScheduleOptions: () => state.options,
   useScheduleDetail: () => state.detail,
+  useScheduleDraft: () => state.draft,
+  useScheduleFunnel: () => state.funnel,
+  useScheduleRecipients: () => state.recipients,
+  useUpdateSchedule: () => ({ mutate: () => undefined, isPending: false }),
+  uploadScheduleMedia: () => Promise.reject(new Error('not in a render test')),
   useWarmer: () => state.warmer,
   useAudiencePreview: () => state.preview,
   useCreateSchedule: () => ({ mutate: () => undefined, isPending: false }),
 }));
 
 import { ApiError } from '@/lib/api/errors';
-import { ComposerScreen } from './composer-screen';
+import { ComposerScreen, EditScreen } from './composer-screen';
 import { AudienceStep, MessageStep, ReviewStep, WhenStep } from './composer-steps';
 import { DetailScreen } from './detail-screen';
+import { templatesFor } from './message-parts';
 import { ScheduledScreen } from './scheduled-screen';
 import { WarmerScreen } from './warmer-screen';
 
-const messages = JSON.parse(
-  readFileSync(join(process.cwd(), 'messages', 'en', 'scheduled-queue-warmer.json'), 'utf8'),
-) as Record<string, unknown>;
+const load = (loc: string, file: string) =>
+  JSON.parse(readFileSync(join(process.cwd(), 'messages', loc, file), 'utf8')) as Record<
+    string,
+    unknown
+  >;
+// The template step reuses the broadcast composer's variable panel, which has its own copy.
+const messages = {
+  ...load('en', 'scheduled-queue-warmer.json'),
+  ...load('en', 'broadcasts.json'),
+};
 
 /** `unofficial`: the platform has switched the unofficial WhatsApp engine on (the entitlement the workspace reads). */
 const renderWith = (el: ReactElement, unofficial: boolean) => {
@@ -76,6 +101,31 @@ const html = (el: ReactElement) => renderWith(el, true);
 const htmlOff = (el: ReactElement) => renderWith(el, false);
 
 const G1 = '11111111-1111-4111-8111-111111111111';
+
+const G2 = '22222222-2222-4222-8222-222222222222';
+
+function tpl(over: Partial<ScheduleTemplate> = {}): ScheduleTemplate {
+  return {
+    id: G1,
+    name: 'spring_promo',
+    header: null,
+    body: 'Hello {{1}}, your spring offer is ready',
+    footer: 'Reply STOP to opt out',
+    category: 'marketing',
+    type: 'standard',
+    engine: 'waba',
+    language: 'en',
+    buttons: [{ type: 'quick_reply', text: 'Show me' }],
+    variableMap: { body: [{ num: 1, key: 'first_name' }] },
+    attachmentType: null,
+    attachmentUrl: null,
+    senderLabel: null,
+    twilioReady: false,
+    usableOn: ['waba'],
+    senderKey: null,
+    ...over,
+  };
+}
 
 const summary = (over: Partial<ScheduleSummary> = {}): ScheduleSummary => ({
   id: G1,
@@ -115,7 +165,16 @@ const options: ScheduleOptions = {
   groups: [{ id: G1, name: 'VIP', members: 40 }],
   tags: [],
   queues: [],
-  templates: [{ id: G1, name: 'spring_promo', language: 'en' }],
+  templates: [
+    tpl({ id: G1, name: 'spring_promo', usableOn: ['waba', 'twilio', 'baileys'] }),
+    tpl({
+      id: G2,
+      name: 'local_only',
+      category: 'utility',
+      usableOn: ['twilio', 'baileys'],
+      body: 'Local {{1}}',
+    }),
+  ],
 };
 
 beforeEach(() => {
@@ -249,6 +308,8 @@ describe('composer screen', () => {
     errors: {},
     server: [],
     options,
+    editing: false,
+    initialOverrides: null,
   });
 
   it('audience step: the total and the opted out count', () => {
@@ -271,7 +332,7 @@ describe('composer screen', () => {
       'Choose an approved template',
     );
     expect(html(<MessageStep {...step({ messageType: 'media' })} total={0} />)).toContain(
-      'Media link',
+      'Choose a file to send',
     );
     expect(html(<MessageStep {...step({ messageType: 'location' })} total={0} />)).toContain(
       'Latitude',
@@ -344,7 +405,45 @@ describe('detail screen', () => {
       },
     ],
     recipientsTruncated: true,
+    template: null,
+    mediaFile: null,
+    editable: true,
     ...over,
+  });
+
+  beforeEach(() => {
+    state.recipients.data = {
+      items: [
+        {
+          phone: '9198****0001',
+          contactName: 'Asha',
+          status: 'read',
+          error: null,
+          sentAt: null,
+          deliveredAt: null,
+          readAt: '2026-10-10T10:05:00.000Z',
+        },
+        {
+          phone: '9198****0002',
+          contactName: null,
+          status: 'failed',
+          error: 'Not on WhatsApp',
+          sentAt: null,
+          deliveredAt: null,
+          readAt: null,
+        },
+      ],
+      total: 2,
+      counts: { pending: 3, sent: 1, delivered: 1, read: 1, failed: 1 },
+    } satisfies ScheduleRecipientList;
+    state.funnel.data = {
+      bucket: 'hour',
+      total: 7,
+      points: [
+        { at: '2026-10-10T10:00:00.000Z', queued: 4, sent: 3, delivered: 1, read: 0, failed: 0 },
+        { at: '2026-10-10T11:00:00.000Z', queued: 3, sent: 4, delivered: 2, read: 1, failed: 1 },
+      ],
+    } satisfies ScheduleFunnel;
   });
 
   it('shows stats, funnel, recipients with status and note, config, preview, and actions for a paused schedule', () => {
@@ -362,7 +461,7 @@ describe('detail screen', () => {
       'Run now',
       'Cancel',
       'Delete',
-      'Showing the first 2 of 1,200 recipients.',
+      'Search name or number',
       'Pending',
     ]) {
       expect(out).toContain(s);
@@ -458,5 +557,276 @@ describe('warmer screen', () => {
   it('says so when no number is connected', () => {
     state.warmer.data = { defaults: { ...WARMER_DEFAULTS }, items: [] };
     expect(html(<WarmerScreen />)).toContain('No connected numbers yet.');
+  });
+});
+
+describe('template and file messages (TW-SCHED-006)', () => {
+  const step = (over: Partial<Draft> = {}) => ({
+    draft: { ...initialDraft(Date.UTC(2026, 9, 10, 10, 0), 'UTC'), ...over },
+    set: () => undefined,
+    errors: {},
+    server: [],
+    options,
+    editing: false,
+    initialOverrides: null,
+  });
+
+  it('offers a Cloud API number only the templates Meta approved, and every other number the approved text', () => {
+    const d = (senders: string[]) => ({ ...step({ senders }).draft });
+    expect(templatesFor(d(['waba:b']), options).map((x) => x.name)).toEqual(['spring_promo']);
+    expect(templatesFor(d(['baileys:a']), options).map((x) => x.name)).toEqual([
+      'spring_promo',
+      'local_only',
+    ]);
+    // one Cloud API number among several: the list shrinks to what all of them can send
+    expect(templatesFor(d(['baileys:a', 'waba:b']), options).map((x) => x.name)).toEqual([
+      'spring_promo',
+    ]);
+  });
+
+  it('shows the picked template as the customer will see it, with its sample values, and the 24-hour note for a Cloud API number', () => {
+    const out = html(
+      <MessageStep
+        {...step({ messageType: 'template', templateId: G1, senders: ['waba:b'] })}
+        total={0}
+      />,
+    );
+    for (const s of [
+      'spring_promo',
+      'Preview with sample values',
+      'your spring offer is ready',
+      'Reply STOP to opt out',
+      'Show me',
+      'even when the customer has not written in the last 24 hours',
+      // the broadcast composer's variable panel, with the slot of the template's variable map
+      'Fill in this send',
+      'Auto-fills from',
+    ]) {
+      expect(out).toContain(s);
+    }
+    // no 24-hour note when no Cloud API number is ticked
+    expect(
+      html(
+        <MessageStep
+          {...step({ messageType: 'template', templateId: G1, senders: ['baileys:a'] })}
+          total={0}
+        />,
+      ),
+    ).not.toContain('24 hours');
+  });
+
+  it('file step: a picker with the limits of the numbers ticked, and an uploaded file with replace and remove', () => {
+    const cloud = html(
+      <MessageStep {...step({ messageType: 'media', senders: ['waba:b'] })} total={0} />,
+    );
+    expect(cloud).toContain('Choose a file to send');
+    expect(cloud).toContain(
+      'up to 5 MB for images, 16 MB for video, 16 MB for audio and 20 MB for documents',
+    );
+    expect(cloud).toContain('Or paste a link to the file');
+    const personal = html(
+      <MessageStep {...step({ messageType: 'media', senders: ['baileys:a'] })} total={0} />,
+    );
+    expect(personal).toContain('up to 16 MB for images');
+    // the smallest limit wins when several channels are ticked
+    const both = html(
+      <MessageStep
+        {...step({ messageType: 'media', senders: ['baileys:a', 'waba:b'] })}
+        total={0}
+      />,
+    );
+    expect(both).toContain('up to 5 MB for images');
+
+    const uploaded = html(
+      <MessageStep
+        {...step({
+          messageType: 'media',
+          senders: ['waba:b'],
+          mediaFile: {
+            id: G2,
+            name: 'offer.png',
+            mime: 'image/png',
+            kind: 'image',
+            size: 2 * 1024 * 1024,
+            url: 'https://files.example/offer.png',
+          },
+        })}
+        total={0}
+      />,
+    );
+    expect(uploaded).toContain('offer.png');
+    expect(uploaded).toContain('Image · 2.0 MB');
+    expect(uploaded).toContain('Replace');
+    expect(uploaded).toContain('Remove');
+    expect(uploaded).not.toContain('Or paste a link');
+  });
+});
+
+describe('edit screen (TW-SCHED-016)', () => {
+  const draft: ScheduleDraft = {
+    id: G1,
+    rowVersion: 3,
+    name: 'Spring promo',
+    scheduleType: 'once',
+    sendDate: '2031-03-10',
+    sendTime: '10:30',
+    timezone: 'UTC',
+    repeatInterval: null,
+    repeatEvery: 1,
+    daysOfWeek: [],
+    endDate: null,
+    sender: 'baileys:a',
+    messageType: 'plain',
+    message: 'Hello again',
+    templateId: null,
+    templateOverrides: null,
+    media: null,
+    mediaFile: null,
+    latitude: null,
+    longitude: null,
+    recipientType: 'group',
+    groupIds: [G1],
+    tagIds: [],
+    queueIds: [],
+    numbers: [],
+    totalRecipients: 40,
+  };
+
+  it('opens the composer on the stored schedule: its name, its one number, and no split hint', () => {
+    state.draft = { data: draft, isPending: false, isError: false, error: null };
+    const out = html(<EditScreen id={G1} />);
+    expect(out).toContain('Edit scheduled message');
+    expect(out).toContain('value="Spring promo"');
+    expect(out).toContain('Step 1 of 5');
+    expect(out).toContain('A schedule has one number.');
+    expect(out).not.toContain('Each ticked sender runs its own schedule');
+  });
+
+  it('says why a schedule cannot be edited, and needs the manage permission', () => {
+    state.draft = {
+      data: undefined,
+      isPending: false,
+      isError: true,
+      error: new ApiError(409, 'CONFLICT', 'This schedule has already started sending.'),
+    };
+    const out = html(<EditScreen id={G1} />);
+    expect(out).toContain('This schedule has already started sending.');
+    expect(out).toContain('Back to the schedule');
+    state.can = false;
+    expect(html(<EditScreen id={G1} />)).toContain(
+      'You do not have permission to schedule messages.',
+    );
+  });
+});
+
+describe('detail engagement (TW-SCHED-012)', () => {
+  const base = (over: Partial<ScheduleDetail> = {}): ScheduleDetail => ({
+    ...summary({ status: 'completed', totalSent: 5, totalRecipients: 7 }),
+    message: 'Hi there',
+    media: null,
+    latitude: null,
+    longitude: null,
+    repeatEvery: 1,
+    daysOfWeek: [],
+    endDate: null,
+    sendDate: '2026-10-10',
+    sendTime: '10:00',
+    failureReason: null,
+    sendAttempts: 1,
+    breakdown: { pending: 3, sent: 1, delivered: 1, read: 1, failed: 1 },
+    recipients: [],
+    recipientsTruncated: false,
+    template: null,
+    mediaFile: null,
+    editable: false,
+    ...over,
+  });
+
+  beforeEach(() => {
+    state.detail = { data: undefined, isPending: false, isError: false, error: null };
+    state.funnel = {
+      data: {
+        bucket: 'hour',
+        total: 7,
+        points: [
+          { at: '2026-10-10T10:00:00.000Z', queued: 4, sent: 3, delivered: 1, read: 0, failed: 0 },
+          { at: '2026-10-10T11:00:00.000Z', queued: 3, sent: 4, delivered: 2, read: 1, failed: 1 },
+        ],
+      } satisfies ScheduleFunnel,
+      isPending: false,
+      isError: false,
+      error: null,
+    };
+    state.recipients = {
+      data: {
+        items: [],
+        total: 0,
+        counts: { read: 1, failed: 1, pending: 3, sent: 1, delivered: 1 },
+      },
+      isPending: false,
+      isError: false,
+      error: null,
+    };
+  });
+
+  it('draws queued, sent, delivered, read and failed over time with a legend, in the schedule timezone', () => {
+    state.detail.data = base();
+    const out = html(<DetailScreen id={G1} />);
+    expect(out).toContain('Delivery over time');
+    expect(out).toContain('data-testid="funnel-chart"');
+    for (const s of ['Queued', 'Sent', 'Delivered', 'Read', 'Failed']) expect(out).toContain(s);
+    expect(out).toContain('Running totals at the start of each hour, in UTC.');
+    expect(out).toContain('10:00');
+    expect(out).toContain('11:00');
+  });
+
+  it('says there is nothing to chart before anything was sent', () => {
+    state.detail.data = base();
+    state.funnel.data = { bucket: 'hour', total: 7, points: [] };
+    expect(html(<DetailScreen id={G1} />)).toContain('Nothing has been sent yet');
+  });
+
+  it('filters recipients by status with counts, a search box, and shows the edit action only while the schedule can be edited', () => {
+    state.detail.data = base({ status: 'scheduled', editable: true });
+    const out = html(<DetailScreen id={G1} />);
+    for (const s of ['Search name or number', 'data-rec-tab="failed"', 'data-rec-tab="pending"']) {
+      expect(out).toContain(s);
+    }
+    expect(out).toContain(`/scheduled/${G1}/edit`);
+    expect(out).toContain('data-testid="edit-schedule"');
+    state.detail.data = base({ status: 'completed', editable: false });
+    expect(html(<DetailScreen id={G1} />)).not.toContain('data-testid="edit-schedule"');
+  });
+
+  it('names the template and the uploaded file of the message', () => {
+    state.detail.data = base({
+      messageType: 'template',
+      template: { id: G1, name: 'spring_promo', language: 'en' },
+    });
+    expect(html(<DetailScreen id={G1} />)).toContain('Template spring_promo (en)');
+    state.detail.data = base({
+      messageType: 'media',
+      mediaFile: { id: G2, name: 'offer.png', mime: 'image/png', kind: 'image', size: 1000 },
+    });
+    expect(html(<DetailScreen id={G1} />)).toContain('File: offer.png');
+  });
+
+  it('reads in Arabic', () => {
+    state.detail.data = base();
+    const ar = {
+      ...load('ar', 'scheduled-queue-warmer.json'),
+      ...load('ar', 'broadcasts.json'),
+    };
+    const out = renderToStaticMarkup(
+      <NextIntlClientProvider locale="ar" messages={ar} timeZone="UTC">
+        <QueryClientProvider client={new QueryClient()}>
+          <ToastProvider dismissLabel="x">
+            <DetailScreen id={G1} />
+          </ToastProvider>
+        </QueryClientProvider>
+      </NextIntlClientProvider>,
+    );
+    expect(out).toContain('التسليم عبر الوقت');
+    expect(out).toContain('ابحث بالاسم أو الرقم');
   });
 });

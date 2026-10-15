@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
 import { statementTypeSchema, type StatementResponse, type StatementRow } from '@crm/contracts';
 import {
@@ -285,6 +285,7 @@ export function StatementTable({
 }) {
   const t = useTranslations('wallet-message-billing.statement.columns');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const money = (minor: number) => formatMinor(minor, currency, locale);
   return (
     <div className="overflow-x-auto">
@@ -315,7 +316,7 @@ export function StatementTable({
           {rows.map((r) => (
             <tr key={r.id} className="border-b border-border align-top last:border-0">
               <td className="whitespace-nowrap px-2 py-2 text-muted-foreground">
-                {formatWhen(r.createdAt, locale)}
+                {formatWhen(r.createdAt, locale, timeZone)}
               </td>
               <td className="px-2 py-2">
                 <div>{r.description || humanizeSource(r.source)}</div>

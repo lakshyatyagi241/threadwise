@@ -82,6 +82,18 @@ export const REALTIME_EVENT = {
    * the invite link or the subject; the screen refetches over REST.
    */
   wabaGroupChanged: 'whatsapp.group.changed',
+  /**
+   * A group of a PERSONAL WhatsApp number changed (created or joined, edited, the number left or was removed, a join request, members
+   * changed). Room `user`, to the people who hold `wa.groups.read`. A hint: ids and the kind of change, never a member's number, the
+   * invite code or the subject; the screen refetches over REST.
+   */
+  deviceGroupChanged: 'whatsapp.device_group.changed',
+  /**
+   * An import of a personal number's existing chats ended (finished, cancelled after storing something, or stopped on a limit): ONE hint per
+   * run, never one per message. Room `user`, to the people who can read the inbox or the numbers. The inbox list and the number's
+   * "Imported chats" card refetch over REST; the hint carries the number's uuid and the final state, nothing else.
+   */
+  historyImported: 'inbox.history.imported',
   /** A WhatsApp call rang, was answered, declined or ended: the incoming-call toast refetches (a signal, never the caller's details). */
   callChanged: 'call.changed',
 } as const;
@@ -168,6 +180,19 @@ export const realtimeEventSchemas = {
     connectionId: uuidSchema,
     /** The outbox event it stands for, without the `whatsapp.group.` prefix. */
     kind: z.enum(['created', 'updated', 'deleted', 'join_request', 'suspended']),
+  }),
+  [REALTIME_EVENT.deviceGroupChanged]: z.object({
+    /** `wa_device_groups.uuid`. */
+    groupId: uuidSchema,
+    /** `devices.uuid`. */
+    deviceId: uuidSchema,
+    /** The outbox event it stands for, without the `whatsapp.device_group.` prefix. */
+    kind: z.enum(['created', 'updated', 'left', 'join_request', 'participants_changed']),
+  }),
+  [REALTIME_EVENT.historyImported]: z.object({
+    /** `devices.uuid`. */
+    deviceId: uuidSchema,
+    state: z.enum(['done', 'failed', 'cancelled', 'limit_reached']),
   }),
   [REALTIME_EVENT.callChanged]: z.object({ callId: uuidSchema }),
 } as const;

@@ -99,6 +99,11 @@ export class CatalogsRepository {
       WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
+  async setName(tx: Tx, orgId: number, id: number, name: string): Promise<void> {
+    await tx.execute(sql`
+      UPDATE wa_catalogs SET catalog_name = ${name} WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
   async setMeta(tx: Tx, orgId: number, id: number, meta: Record<string, unknown>): Promise<void> {
     await tx.execute(sql`
       UPDATE wa_catalogs SET meta_json = ${JSON.stringify(meta)}::jsonb WHERE org_id = ${orgId} AND id = ${id}`);

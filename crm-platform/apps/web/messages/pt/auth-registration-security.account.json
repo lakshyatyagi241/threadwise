@@ -22,7 +22,6 @@
         "signedOut": "Sua sessão terminou. Faça login novamente.",
         "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
         "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}.",
-        "requestId": "ID da solicitação",
         "locked": "Muitas tentativas malsucedidas. Aguarde um pouco antes de tentar novamente.",
         "lockedWait": "Muitas tentativas malsucedidas. Tente novamente em {minutes, plural, one {# minuto} other {# minutos}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Fuso horário",
         "workspaceTimezoneHint": "Vale para {workspace}. Somente proprietários e administradores podem alterá-lo.",
+        "myTimezone": "Meu fuso horário",
+        "myTimezoneHint": "As datas e horas são mostradas para você em {zone}. Deixe em branco para seguir o fuso horário do espaço de trabalho (UTC se ele não tiver um).",
+        "myTimezoneUseWorkspace": "Usar o padrão do espaço de trabalho",
         "saved": "Perfil salvo.",
         "errors": {
           "fullNameRequired": "Digite seu nome completo.",
@@ -367,7 +369,8 @@
         "failed": "Não foi possível trocar de espaço de trabalho. Tente novamente.",
         "notAvailable": "Você não pode mudar para esse espaço de trabalho.",
         "rateLimited": "Muitas tentativas. Aguarde um momento e tente novamente.",
-        "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}."
+        "rateLimitedWait": "Muitas tentativas. Tente novamente em {seconds, plural, one {# segundo} other {# segundos}}.",
+        "unverified": "Confirme seu e-mail neste espaço de trabalho para poder mudar para ele."
       },
       "mfaChallenge": {
         "title": "Confirme que é você",
@@ -549,10 +552,13 @@
             "storefront_builder": "Construtor de loja virtual",
             "invoicing": "Faturas",
             "forms_and_links": "Formulários e links",
-            "extra_channels": "Telegram, Facebook e Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber e WeChat",
             "form_builder": "Formulários",
             "waba_groups": "Grupos do WhatsApp",
-            "sms": "SMS"
+            "sms": "SMS",
+            "help_agent": "Assistente de ajuda",
+            "email_channel": "Canal de e-mail (Gmail)",
+            "personal_history_full": "Importação do histórico completo (WhatsApp pessoal)"
           },
           "cta": {
             "continueFree": "Continuar grátis",

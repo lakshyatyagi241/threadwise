@@ -7,7 +7,6 @@
       "dismiss": "खारिज करें",
       "cancel": "रद्द करें",
       "close": "बंद करें",
-      "requestId": "अनुरोध {id}",
       "unknown": "—"
     },
     "numbers": {
@@ -34,7 +33,8 @@
         "registered": "\"{name}\" Cloud API पर रजिस्टर हुआ।",
         "disconnected": "\"{name}\" डिस्कनेक्ट हुआ।",
         "removed": "\"{name}\" हटाया गया।",
-        "warningsTitle": "कनेक्ट हो गया, पर यह जाँचें:"
+        "warningsTitle": "कनेक्ट हो गया, पर यह जाँचें:",
+        "verified": "\"{name}\" सत्यापित हो गया।"
       },
       "notReady": {
         "title": "Embedded Signup कॉन्फ़िगर नहीं है",
@@ -81,7 +81,8 @@
         "register": "रजिस्टर करें",
         "meta": "Meta",
         "disconnect": "डिस्कनेक्ट करें",
-        "remove": "हटाएँ"
+        "remove": "हटाएँ",
+        "verify": "नंबर सत्यापित करें"
       },
       "confirm": {
         "fixInboundTitle": "इनबाउंड ठीक करें?",
@@ -100,6 +101,17 @@
         "pin": "दो-चरणीय PIN (वैकल्पिक)",
         "pinError": "PIN 6 अंकों का है",
         "submit": "रजिस्टर करें"
+      },
+      "verifyDialog": {
+        "title": "इस नंबर को सत्यापित करें",
+        "message": "Meta {phone} पर 6 अंकों का कोड भेजेगा। चुनें कि कोड कैसे पाना है।",
+        "enterCode": "Meta ने {phone} पर जो 6 अंकों का कोड भेजा है, उसे दर्ज करें।",
+        "sendSms": "SMS से कोड भेजें",
+        "sendVoice": "कॉल से कोड भेजें",
+        "code": "सत्यापन कोड",
+        "codeError": "कोड 6 अंकों का होता है",
+        "submit": "सत्यापित करें",
+        "resend": "नया कोड भेजें"
       }
     },
     "connect": {

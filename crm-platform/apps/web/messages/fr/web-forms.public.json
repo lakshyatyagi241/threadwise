@@ -58,7 +58,8 @@
         "tryAgain": "Réessayer de payer",
         "missingTitle": "Paiement introuvable",
         "missingBody": "Le lien est peut-être incorrect ou trop ancien."
-      }
+      },
+      "termsOfService": "Conditions"
     }
   }
 }

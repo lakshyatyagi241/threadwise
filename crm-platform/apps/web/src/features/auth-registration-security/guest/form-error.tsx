@@ -2,7 +2,6 @@
 
 import { useTranslations } from 'next-intl';
 import type { MappedError } from './errors';
-import { showsRequestId } from './errors';
 import { PolicyList } from './policy-errors';
 import { Alert } from './ui';
 
@@ -25,11 +24,6 @@ export function FormError({
       <p>{t(`errors.${error.key}`, error.params)}</p>
       {error.policy.length > 0 && (
         <PolicyList issues={error.policy} className="list-disc space-y-0.5 ps-5 text-xs" />
-      )}
-      {showsRequestId(error) && (
-        <p className="text-xs opacity-80">
-          {t('errors.requestId')}: <span className="font-mono">{error.requestId}</span>
-        </p>
       )}
     </Alert>
   );

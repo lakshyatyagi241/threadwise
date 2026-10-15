@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Çağrı kaydı",
+        "intro": "Kayıt, siz açana kadar kapalıdır. Açıkken bir ekip arkadaşı bildirimi okur, kişi yanıt verir ve kayıt ancak ondan sonra başlar. Kayıtlar saklama süresi dolunca silinir.",
+        "loading": "Kayıt kuralları yükleniyor",
+        "loadFailed": "Kayıt kuralları yüklenemedi.",
+        "retry": "Tekrar dene",
+        "viewOnly": "Bu kuralları görebilirsiniz ancak yalnızca sahip veya yönetici değiştirebilir.",
+        "enabled": "Çağrıları kaydet",
+        "enabledOn": "Açık: ekip arkadaşları kişi onay verdikten sonra çağrıyı kaydedebilir.",
+        "enabledOff": "Kapalı: hiçbir çağrı kaydedilmez.",
+        "mode": "Kişi nasıl onay verir",
+        "modeHint": {
+          "confirmed": "Kişi kaydedilmeye evet der ve ekip arkadaşı yanıtı kaydeder. En güvenli seçenek.",
+          "announcement": "Ekip arkadaşı bildirimi okur ve çağrı devam eder. Yalnızca hukuk danışmanınız duyurunun yeterli olduğunu doğruladıysa kullanın."
+        },
+        "modeOption": {
+          "confirmed": "Kişi evet der",
+          "announcement": "Duyuru, sonra devam"
+        },
+        "retention": "Kayıtları şu kadar sakla (gün)",
+        "retentionHint": "{min} ile {max} gün arasında. Daha eski kayıtlar her gece silinir; çağrının kendisi günlükte kalır.",
+        "retentionInvalid": "İzin verilen aralıkta tam sayı olarak gün girin.",
+        "notice": "Kayıt bildirimi",
+        "noticeHint": "Ekip arkadaşı bunu kayıttan önce okur. En fazla {max} karakter. Her değişiklik yeni bir sürüm olarak kaydedilir.",
+        "noticeRequired": "Kaydı açmak için bildirimi yazın (en az {min} karakter).",
+        "noticeVersion": "Bildirim sürümü {version}",
+        "noticeNone": "Henüz kayıtlı bildirim yok",
+        "updatedAt": "kaydedildi {date}",
+        "noticeSuggestion": "Bu görüşme kalite ve eğitim amacıyla kaydedilebilir. Kayıt yapılmasını kabul ediyor musunuz?",
+        "useSuggestion": "Önerilen metni kullan",
+        "saved": "Kayıt kuralları kaydedildi.",
+        "saving": "Kaydediliyor",
+        "save": "Kuralları kaydet"
+      },
+      "consent": {
+        "title": "Kayıttan önce sor",
+        "askConfirmed": "Bildirimi okuyun. Kişi evet derse ilk düğmeye basın.",
+        "askAnnouncement": "Bildirimi okuyun, sonra kaydı başlatın.",
+        "grantConfirmed": "Evet dedi: kaydı başlat",
+        "grantAnnouncement": "Bildirim okundu: kaydı başlat",
+        "decline": "Hayır: kayıt yapmadan devam et",
+        "declinedNote": "Kayıt yapılmıyor: kişi onay vermedi.",
+        "off": "Çağrı kaydı bu çalışma alanı için kapalı.",
+        "failed": "Yanıt kaydedilemedi, bu yüzden hiçbir şey kaydedilmiyor: {message}"
+      },
+      "lifecycle": {
+        "title": "Kayıt ve onay",
+        "consent": "Kayıt onayı",
+        "consentGranted": "Kaydedilmeyi kabul etti",
+        "consentDeclined": "Kaydedilmeyi reddetti",
+        "consentNone": "Kayıtlı yanıt yok",
+        "method": {
+          "announcement_continue": "Bildirim okundu, çağrı devam etti",
+          "spoken_yes": "Evet dedi"
+        },
+        "noticeVersion": "Bildirim sürümü {version}",
+        "storedAt": "Saklandı",
+        "expiresAt": "Otomatik silinme tarihi",
+        "heldNoExpiry": "Silinmedi: yasal tutma",
+        "none": "Ayarlanmadı",
+        "deleted": "Kayıt silindi",
+        "deletedReason": {
+          "retention": "saklama süresi doldu",
+          "manual": "bir ekip arkadaşı tarafından silindi",
+          "consent_withdrawn": "onay geri çekildi"
+        },
+        "holdOn": "Yasal tutma",
+        "placeHold": "Yasal tutma koy",
+        "liftHold": "Yasal tutmayı kaldır",
+        "holdLifted": "Yasal tutma kaldırıldı.",
+        "holdPlaced": "Yasal tutma konuldu.",
+        "holdReasonLabel": "Neden saklanıyor?",
+        "cancel": "İptal",
+        "delete": "Kaydı sil",
+        "deleteBlockedByHold": "Önce yasal tutmayı kaldırın.",
+        "deleteTitle": "Bu kayıt silinsin mi?",
+        "deleteMessage": "Ses dosyası kalıcı olarak silinir. Çağrı günlükte kalır.",
+        "deletedToast": "Kayıt silindi."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "Çağrı kaydı bu çalışma alanı için kapalı.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Bu çağrı kaydedilemez: kişi onay vermedi.",
+      "CALL_RECORDING_CONSENT_INVALID": "Bu yanıt bu çağrı için kaydedilemez.",
+      "CALL_RECORDING_ON_HOLD": "Bu kayıt yasal tutma altında. Önce tutmayı kaldırın.",
+      "CALL_RECORDING_SETTINGS_INVALID": "Kayıt kuralları geçerli değil: önce bildirimi yazın."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "Kişi kaydedilmeyi kabul etti",
+          "recording_consent_declined": "Kişi kaydı reddetti",
+          "recording_deleted": "Kayıt silindi",
+          "recording_hold_set": "Yasal tutma konuldu",
+          "recording_hold_lifted": "Yasal tutma kaldırıldı"
+        }
+      }
+    }
+  }
+}

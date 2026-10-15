@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { SafeFetch } from '../../infra/providers/node-bridge-runtime/safe-fetch';
 import { ChatConversationsModule } from '../chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
+import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { ApiKeyGuard } from '../public-api';
 import { CapTally, PacingRuntime } from './caps';
 import { FlowRuntimeController } from './flow-runtime.controller';
@@ -26,6 +28,7 @@ import { CrmNodes } from './runtime/nodes/crm/crm-nodes';
 import { SocialHandoffNode } from './runtime/nodes/actions/social-handoff-node';
 import { AiNodes } from './runtime/nodes/ai/ai-nodes';
 import { AiNodesModule } from './runtime/nodes/ai/ai-nodes.module';
+import { FaqNodes } from './runtime/nodes/ai/faq-node';
 import { OrderingFlowController } from './runtime/nodes/ai/ordering.controller';
 import { CommerceNodes } from './runtime/nodes/commerce/commerce-nodes';
 import { CommerceNodesModule } from './runtime/nodes/commerce/commerce-nodes.module';
@@ -49,7 +52,9 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
 @Module({
   imports: [
     ChatConversationsModule,
+    ContactConsentModule,
     PlansCoreModule,
+    WalletMessageBillingModule,
     CrmModule,
     ActionNodesModule,
     AiNodesModule,
@@ -88,6 +93,7 @@ import { IntegrationNodesModule } from './runtime/nodes/integrations/integration
         SocialHandoffNode,
         CrmNodes,
         AiNodes,
+        FaqNodes,
         CommerceNodes,
         IntegrationNodes,
         ApiLibraryNodes,

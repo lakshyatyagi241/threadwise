@@ -15,7 +15,9 @@ import { capabilitiesOf } from './sheets-access';
 import { SheetsAppAccess } from './sheets-app-access.service';
 import { SheetsFilesService } from './sheets-files.service';
 import { SheetsKeyRepository } from './sheets-key.repository';
+import { maskedSheetsWebhookUrl } from './sheets-key.rules';
 import { toKeyStatus } from './sheets-key.service';
+import { SheetsWebhookService } from './sheets-webhook.service';
 
 /**
  * Everything the add-on setup page draws, in one call (TW-EXT-006): the member's key, whether the add-on is installed, what their role lets
@@ -34,6 +36,7 @@ export class SheetsSetupService {
     private readonly productsRepo: ProductsRepository,
     private readonly rbac: RbacService,
     private readonly config: ConfigService,
+    private readonly webhook: SheetsWebhookService,
   ) {}
 
   async overview(): Promise<ExtSheetsOverview> {
@@ -43,10 +46,12 @@ export class SheetsSetupService {
     const install = await this.access.find(ctx.orgId);
     const can = capabilitiesOf(install ?? { grantedScopes: [] }, holds);
 
-    const [key, files] = await Promise.all([
+    const [key, files, lastCapture] = await Promise.all([
       this.db.tx((tx) => this.keys.read(tx, ctx.orgId, ctx.userId!)),
       this.files.list(),
+      this.webhook.lastCapture(ctx.orgId, ctx.userId!),
     ]);
+    const status = toKeyStatus(key);
 
     let shops: ExtSheetsShop[] = [];
     let productCount = 0;
@@ -87,9 +92,11 @@ export class SheetsSetupService {
       blockers: install ? [] : ['not_installed'],
       marketplaceUrl: env.marketplaceUrl,
       apiBase: env.apiBase,
-      key: toKeyStatus(key),
+      key: status,
       can,
       files,
+      webhookUrl: status.suffix ? maskedSheetsWebhookUrl(env.apiBase, status.suffix) : null,
+      lastCapture,
       shops,
       productCount,
       recentProducts: recent,

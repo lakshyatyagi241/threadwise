@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { assemblePhone } from '../broadcasts';
+import { hasGrantedConsentSql } from '../contact-consent';
+import { DUPLICATE_EMAIL, NO_EMAIL_ADDRESS } from './email-campaign-rules';
 
 /** `IN (...)` lists are chunked so a big audience never builds one giant statement. */
 export const CHUNK = 1_000;
@@ -19,10 +21,13 @@ const list = (values: readonly (string | number)[], cast: 'uuid' | 'bigint' | 't
  * is also delivered, a reply is also sent, delivered and read. A single definition so the list, the detail and the stored
  * counters can never disagree.
  */
-const AGG = sql.raw(`
-  count(*) FILTER (WHERE r.status IN ('sent','delivered','read','responded') OR r.sent_at IS NOT NULL OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)::int AS a_sent,
-  count(*) FILTER (WHERE r.status IN ('delivered','read','responded') OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL)::int AS a_delivered,
-  count(*) FILTER (WHERE r.status IN ('read','responded') OR r.read_at IS NOT NULL)::int AS a_read,
+export const AGG_SENT = `r.status IN ('sent','delivered','read','responded') OR r.sent_at IS NOT NULL OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL`;
+export const AGG_DELIVERED = `r.status IN ('delivered','read','responded') OR r.delivered_at IS NOT NULL OR r.read_at IS NOT NULL OR r.responded_at IS NOT NULL`;
+export const AGG_READ = `r.status IN ('read','responded') OR r.read_at IS NOT NULL`;
+export const AGG = sql.raw(`
+  count(*) FILTER (WHERE ${AGG_SENT})::int AS a_sent,
+  count(*) FILTER (WHERE ${AGG_DELIVERED})::int AS a_delivered,
+  count(*) FILTER (WHERE ${AGG_READ})::int AS a_read,
   count(*) FILTER (WHERE r.status = 'responded' OR r.responded_at IS NOT NULL)::int AS a_responded,
   count(*) FILTER (WHERE r.clicked OR r.clicked_at IS NOT NULL)::int AS a_clicked,
   count(*) FILTER (WHERE r.status = 'failed')::int AS a_failed,
@@ -41,6 +46,9 @@ export interface Counts {
 }
 
 export interface CampaignRow {
+  /** Charged to the wallet for this campaign's delivered messages (hundredths of `costCurrency`). */
+  costMinor: number;
+  costCurrency: string | null;
   id: number;
   uuid: string;
   name: string;
@@ -79,6 +87,7 @@ export interface CampaignRow {
   flowBUuid: string | null;
   useAttributes: boolean;
   trackingEnabled: boolean;
+  retryFailed: boolean;
   scheduleType: string;
   sendDate: string | null;
   sendTime: string | null;
@@ -103,6 +112,8 @@ export interface CampaignRow {
   rowVersion: number;
   /** The broadcast wizard's `{ draft, launch? }`; null on a campaign the classic builder made. */
   wizard: { draft?: unknown; launch?: Record<string, unknown> } | null;
+  /** The recurring broadcast this run belongs to. */
+  seriesUuid: string | null;
   seriesId: number | null;
   occurrenceNo: number | null;
   retryEnabled: boolean;
@@ -160,6 +171,7 @@ function toRow(r: Raw): CampaignRow {
     flowBUuid: str(r.flow_b_uuid),
     useAttributes: Boolean(r.use_attributes),
     trackingEnabled: Boolean(r.tracking_enabled),
+    retryFailed: r.retry_failed === undefined ? true : Boolean(r.retry_failed),
     scheduleType: String(r.schedule_type),
     sendDate: day(r.send_date),
     sendTime: str(r.send_time),
@@ -183,10 +195,13 @@ function toRow(r: Raw): CampaignRow {
     updatedAt: new Date(r.updated_at as string),
     rowVersion: Number(r.row_version),
     wizard: (r.wizard as CampaignRow['wizard']) ?? null,
+    seriesUuid: str(r.series_uuid),
     seriesId: num(r.series_id),
     occurrenceNo: num(r.occurrence_no),
     retryEnabled: Boolean(r.retry_enabled),
     retryUntil: date(r.retry_until),
+    costMinor: Number(r.cost_minor ?? 0),
+    costCurrency: (r.cost_currency as string | null | undefined) ?? null,
     counts: {
       sent: Number(r.a_sent ?? 0),
       delivered: Number(r.a_delivered ?? 0),
@@ -202,16 +217,25 @@ function toRow(r: Raw): CampaignRow {
 
 const SELECT = sql`
   SELECT c.*, t.uuid AS template_uuid, t.template_name, ta.uuid AS template_a_uuid, tb.uuid AS template_b_uuid,
-         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, agg.*
+         f.uuid AS flow_uuid, fb.uuid AS flow_b_uuid, cs.uuid AS series_uuid, agg.*, cost.cost_minor, cost.cost_currency
   FROM wpcampaigns c
   LEFT JOIN wa_templates t  ON t.org_id  = c.org_id AND t.id  = c.template_id
   LEFT JOIN wa_templates ta ON ta.org_id = c.org_id AND ta.id = c.template_id_a
   LEFT JOIN wa_templates tb ON tb.org_id = c.org_id AND tb.id = c.template_id_b
   LEFT JOIN flows f  ON f.org_id  = c.org_id AND f.id  = c.flow_id
   LEFT JOIN flows fb ON fb.org_id = c.org_id AND fb.id = c.flow_id_b
+  LEFT JOIN camp_series cs ON cs.org_id = c.org_id AND cs.id = c.series_id
   LEFT JOIN LATERAL (
     SELECT ${AGG} FROM wp_campaign_contacts r WHERE r.org_id = c.org_id AND r.campaign_id = c.id
-  ) agg ON true`;
+  ) agg ON true
+  LEFT JOIN LATERAL (
+    -- What the delivered messages were charged to the wallet (refunded charges excluded), matched on the provider message id.
+    SELECT coalesce(sum(u.credits) FILTER (WHERE u.status = 'charged'), 0)::bigint AS cost_minor,
+           coalesce(max(u.currency), (SELECT w.unit FROM wallets w WHERE w.org_id = c.org_id ORDER BY w.id LIMIT 1)) AS cost_currency
+      FROM wp_campaign_contacts r
+      JOIN usage_charges u ON u.org_id = r.org_id AND u.wamid = r.whatsapp_message_id
+     WHERE r.org_id = c.org_id AND r.campaign_id = c.id AND r.whatsapp_message_id IS NOT NULL
+  ) cost ON true`;
 
 export interface NewCampaign {
   name: string;
@@ -240,6 +264,7 @@ export interface NewCampaign {
   flowIdB: number | null;
   useAttributes: boolean;
   trackingEnabled: boolean;
+  retryFailed: boolean;
   scheduleType: string;
   sendDate: string | null;
   sendTime: string | null;
@@ -267,6 +292,8 @@ export interface ClaimedRecipient {
   attempts: number;
   phone: string | null;
   countryCode: string | null;
+  /** The contact's email address, read for the recipients of an email campaign. */
+  email: string | null;
 }
 
 export interface RecipientRow {
@@ -339,7 +366,7 @@ export class CampaignsRepository {
         custom_message, custom_message_b, custom_header, custom_footer, custom_buttons, custom_quick_replies,
         custom_variable_map, custom_image, custom_video, custom_document,
         template_id, template_id_a, template_id_b, template_overrides, template_overrides_b, flow_id, flow_id_b,
-        use_attributes, tracking_enabled, schedule_type, send_date, send_time, timezone, repeat_interval, repeat_until,
+        use_attributes, tracking_enabled, retry_failed, schedule_type, send_date, send_time, timezone, repeat_interval, repeat_until,
         expires_at, throttle_min_sec, throttle_max_sec, batch_size, batch_pause_min, daily_limit, window_start, window_end,
         total_recipients, created_by)
       VALUES (
@@ -349,7 +376,7 @@ export class CampaignsRepository {
         ${v.customImage}, ${v.customVideo}, ${v.customDocument},
         ${v.templateId}, ${v.templateIdA}, ${v.templateIdB}, ${json(v.templateOverrides)}::jsonb,
         ${json(v.templateOverridesB)}::jsonb, ${v.flowId}, ${v.flowIdB},
-        ${v.useAttributes}, ${v.trackingEnabled}, ${v.scheduleType}, ${v.sendDate}::date, ${v.sendTime}::time,
+        ${v.useAttributes}, ${v.trackingEnabled}, ${v.retryFailed}, ${v.scheduleType}, ${v.sendDate}::date, ${v.sendTime}::time,
         ${v.timezone}, ${v.repeatInterval}, ${v.repeatUntil}::date,
         ${v.expiresAt ? v.expiresAt.toISOString() : null}::timestamptz,
         ${v.throttleMinSec}, ${v.throttleMaxSec}, ${v.batchSize}, ${v.batchPauseMin}, ${v.dailyLimit},
@@ -384,7 +411,7 @@ export class CampaignsRepository {
         template_overrides = CASE WHEN ${v.overrides} THEN ${json(v.templateOverrides)}::jsonb ELSE template_overrides END,
         template_overrides_b = CASE WHEN ${v.overridesB} THEN ${json(v.templateOverridesB)}::jsonb ELSE template_overrides_b END,
         flow_id = ${v.flowId}, flow_id_b = ${v.flowIdB}, use_attributes = ${v.useAttributes},
-        tracking_enabled = ${v.trackingEnabled}, schedule_type = ${v.scheduleType}, send_date = ${v.sendDate}::date,
+        tracking_enabled = ${v.trackingEnabled}, retry_failed = ${v.retryFailed}, schedule_type = ${v.scheduleType}, send_date = ${v.sendDate}::date,
         send_time = ${v.sendTime}::time, timezone = ${v.timezone}, repeat_interval = ${v.repeatInterval},
         repeat_until = ${v.repeatUntil}::date, expires_at = ${v.expiresAt ? v.expiresAt.toISOString() : null}::timestamptz,
         throttle_min_sec = ${v.throttleMinSec}, throttle_max_sec = ${v.throttleMaxSec}, batch_size = ${v.batchSize},
@@ -489,13 +516,17 @@ export class CampaignsRepository {
 
   /**
    * Recipients that opted out are stamped `unsubscribed` (flag set) so the run can finish and the opt-outs tab shows them; one
-   * contact per normalized phone keeps the first, the later rows are `skipped` (not sent, not a failure).
+   * contact per normalized phone keeps the first, the later rows are `skipped` (not sent, not a failure). On an email campaign
+   * (`address: 'email'`) the key is the lower-cased email address instead, and a contact with no address is `skipped` too (Reference
+   * stamps both terminally so they never read as stuck recipients).
    */
   async screenRecipients(
     tx: Tx,
     orgId: number,
     id: number,
-  ): Promise<{ optedOut: number; duplicates: number }> {
+    requireConsent = false,
+    address: 'phone' | 'email' = 'phone',
+  ): Promise<{ optedOut: number; duplicates: number; noConsent: number }> {
     const settled = sql`('sent','delivered','read','responded','unsubscribed','skipped')`;
     const out = await tx.execute(sql`
       UPDATE wp_campaign_contacts r SET status = 'unsubscribed', is_unsubscribed = true, unsubscribed = true
@@ -503,19 +534,82 @@ export class CampaignsRepository {
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
         AND c.is_unsubscribed AND r.status NOT IN ${settled}
       RETURNING r.id`);
+    // The workspace requires a recorded consent for marketing and this contact has none: not sent, not a failure.
+    const noConsent = requireConsent
+      ? await tx.execute(sql`
+          UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = 'no recorded consent'
+          FROM contacts c
+          WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
+            AND NOT c.is_unsubscribed AND r.status NOT IN ${settled}
+            AND NOT ${hasGrantedConsentSql('c')}
+          RETURNING r.id`)
+      : { rows: [] as unknown[] };
+    if (address === 'email') {
+      // A contact with no address can never be reached on this run.
+      await tx.execute(sql`
+        UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = ${NO_EMAIL_ADDRESS}
+        FROM contacts c
+        WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND c.org_id = r.org_id AND c.id = r.contact_id
+          AND coalesce(btrim(c.email::text), '') = '' AND r.status NOT IN ${settled}`);
+    }
+    const key =
+      address === 'email'
+        ? sql`lower(btrim(coalesce(c.email::text, '')))`
+        : sql`regexp_replace(coalesce(c.phone, ''), '[^0-9]', '', 'g')`;
     const dup = await tx.execute(sql`
-      UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = 'duplicate number — already sent this run'
+      UPDATE wp_campaign_contacts r SET status = 'skipped', error_message = ${address === 'email' ? DUPLICATE_EMAIL : 'duplicate number — already sent this run'}
       FROM (
         SELECT x.id, row_number() OVER (PARTITION BY x.digits ORDER BY x.id) AS rn
         FROM (
-          SELECT r2.id, regexp_replace(coalesce(c.phone, ''), '[^0-9]', '', 'g') AS digits
+          SELECT r2.id, ${key} AS digits
           FROM wp_campaign_contacts r2 JOIN contacts c ON c.org_id = r2.org_id AND c.id = r2.contact_id
           WHERE r2.org_id = ${orgId} AND r2.campaign_id = ${id} AND r2.status NOT IN ${settled}
         ) x WHERE x.digits <> ''
       ) d
       WHERE r.org_id = ${orgId} AND r.id = d.id AND d.rn > 1
       RETURNING r.id`);
-    return { optedOut: out.rows.length, duplicates: dup.rows.length };
+    return {
+      optedOut: out.rows.length,
+      duplicates: dup.rows.length,
+      noConsent: noConsent.rows.length,
+    };
+  }
+
+  /** Recipients not yet settled, with their contact, for the ConsentGate pass that follows `screenRecipients`. */
+  async screenCandidates(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<Array<{ id: number; contactId: number }>> {
+    const res = await tx.execute(sql`
+      SELECT r.id, r.contact_id FROM wp_campaign_contacts r
+      WHERE r.org_id = ${orgId} AND r.campaign_id = ${id} AND r.contact_id IS NOT NULL
+        AND r.status NOT IN ('sent','delivered','read','responded','unsubscribed','skipped')`);
+    return (res.rows as Array<{ id: number | string; contact_id: number | string }>).map((r) => ({
+      id: Number(r.id),
+      contactId: Number(r.contact_id),
+    }));
+  }
+
+  /** Stamps recipients the ConsentGate refused: `unsubscribed` (withdrawn) or `skipped` (no recorded consent). */
+  async markScreened(
+    tx: Tx,
+    orgId: number,
+    recipientIds: readonly number[],
+    status: 'unsubscribed' | 'skipped',
+  ): Promise<void> {
+    if (recipientIds.length === 0) return;
+    const ids = sql.join(
+      recipientIds.map((n) => sql`${n}::bigint`),
+      sql`, `,
+    );
+    await tx.execute(
+      status === 'unsubscribed'
+        ? sql`UPDATE wp_campaign_contacts SET status = 'unsubscribed', is_unsubscribed = true, unsubscribed = true
+              WHERE org_id = ${orgId} AND id IN (${ids})`
+        : sql`UPDATE wp_campaign_contacts SET status = 'skipped', error_message = 'no recorded consent'
+              WHERE org_id = ${orgId} AND id IN (${ids})`,
+    );
   }
 
   /**
@@ -541,7 +635,7 @@ export class CampaignsRepository {
       UPDATE wp_campaign_contacts r SET status = 'pending'
       FROM picked, contacts c
       WHERE r.org_id = ${orgId} AND r.id = picked.id AND c.org_id = r.org_id AND c.id = r.contact_id
-      RETURNING r.id, r.contact_id, r.variant, r.send_attempts, c.phone, c.country_code`);
+      RETURNING r.id, r.contact_id, r.variant, r.send_attempts, c.phone, c.country_code, c.email::text AS email`);
     return (res.rows as Raw[])
       .map((r) => ({
         id: Number(r.id),
@@ -550,6 +644,7 @@ export class CampaignsRepository {
         attempts: Number(r.send_attempts ?? 0),
         phone: str(r.phone),
         countryCode: str(r.country_code),
+        email: str(r.email),
       }))
       .sort((a, b) => a.id - b.id);
   }
@@ -918,35 +1013,17 @@ export class CampaignsRepository {
     return ok;
   }
 
-  /** The contact with this phone (digits compared), else a new one; CSV attributes are merged into its data. */
-  async rememberPhone(
+  /** CSV attributes of a recipient row, merged into the contact's data. The contact itself is made by the contacts service. */
+  async mergeAttributes(
     tx: Tx,
     orgId: number,
-    userId: number | null,
-    digits: string,
-    name: string,
+    contactId: number,
     attrs: Record<string, string>,
-  ): Promise<number> {
-    const found = await tx.execute(sql`
-      SELECT id FROM contacts
-      WHERE org_id = ${orgId} AND regexp_replace(coalesce(phone, ''), '[^0-9]', '', 'g') = ${digits}
-      ORDER BY id LIMIT 1`);
-    let id: number;
-    const hit = found.rows[0] as { id: number | string } | undefined;
-    if (hit) id = Number(hit.id);
-    else {
-      const ins = await tx.execute(sql`
-        INSERT INTO contacts (org_id, name, phone, created_by)
-        VALUES (${orgId}, ${name}, ${`+${digits}`}, ${userId})
-        RETURNING id`);
-      id = Number((ins.rows[0] as { id: number | string }).id);
-    }
-    if (Object.keys(attrs).length > 0) {
-      await tx.execute(sql`
-        UPDATE contacts SET data = coalesce(data, '{}'::jsonb) || ${JSON.stringify(attrs)}::jsonb
-        WHERE org_id = ${orgId} AND id = ${id}`);
-    }
-    return id;
+  ): Promise<void> {
+    if (Object.keys(attrs).length === 0) return;
+    await tx.execute(sql`
+      UPDATE contacts SET data = coalesce(data, '{}'::jsonb) || ${JSON.stringify(attrs)}::jsonb
+      WHERE org_id = ${orgId} AND id = ${contactId}`);
   }
 
   /** Of these contact ids, the ones that exist here and are not archived (opted-out ones stay: the run stamps them). */
@@ -997,8 +1074,10 @@ export class CampaignsRepository {
   }
 
   /**
-   * Puts the targeted recipients back to `queued` and clears what the earlier send left (sent time, message id, error, attempts).
-   * Scope `failed` is the failed rows, `all` every row, `selected` the rows of the given contacts. Returns how many were reset.
+   * Puts the targeted recipients back to `queued` and clears what the earlier send left (sent time, message id, error, attempts, and
+   * the wizard's frequency-cap retry state with its attempt log, so a new failure can be armed from a clean slate and the unique
+   * (recipient, attempt) slot is free again). Scope `failed` is the failed rows, `all` every row, `selected` the rows of the given
+   * contacts. A row the retry job holds right now (`sending`) is left alone: its message may be on the wire. Returns how many were reset.
    */
   async resetForResend(
     tx: Tx,
@@ -1015,11 +1094,17 @@ export class CampaignsRepository {
           : sql``;
     const res = await tx.execute(sql`
       UPDATE wp_campaign_contacts
-      SET status = 'queued', sent_at = NULL, whatsapp_message_id = NULL, error_message = NULL, send_attempts = 0,
-          next_attempt_at = NULL
-      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} ${scopeSql}
+      SET status = 'queued', sent_at = NULL, whatsapp_message_id = NULL, error_message = NULL, error_code = NULL, send_attempts = 0,
+          next_attempt_at = NULL, retry_state = NULL, retry_count = 0, retry_first_sent_at = NULL, retry_next_at = NULL
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND retry_state IS DISTINCT FROM 'sending' ${scopeSql}
       RETURNING id`);
-    return res.rows.length;
+    const ids = (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
+    if (ids.length > 0) {
+      await tx.execute(sql`
+        DELETE FROM camp_retry_attempts
+        WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND recipient_id IN (${list(ids, 'bigint')})`);
+    }
+    return ids.length;
   }
 
   async deleteRecipients(tx: Tx, orgId: number, campaignId: number): Promise<void> {
@@ -1046,7 +1131,7 @@ export class CampaignsRepository {
     if (o.q !== '') {
       const like = `%${o.q.replace(/[\\%_]/g, '\\$&')}%`;
       filters.push(
-        sql`(coalesce(r.recipient_name, c.name, '') ILIKE ${like} OR coalesce(r.phone_number, c.phone, '') ILIKE ${like})`,
+        sql`(coalesce(r.recipient_name, c.name, '') ILIKE ${like} OR coalesce(r.phone_number, ${REACHED_AT}, '') ILIKE ${like})`,
       );
     }
     const where = sql.join(filters, sql` AND `);
@@ -1174,7 +1259,7 @@ export class CampaignsRepository {
   async replies(tx: Tx, orgId: number, campaignId: number, limit: number) {
     const res = await tx.execute(sql`
       SELECT c.uuid AS contact_uuid, coalesce(r.recipient_name, c.name, '') AS name,
-             coalesce(r.phone_number, c.phone, '') AS phone, coalesce(r.response, '') AS response, r.responded_at
+             coalesce(r.phone_number, ${REACHED_AT}, '') AS phone, coalesce(r.response, '') AS response, r.responded_at
       FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND r.responded_at IS NOT NULL
       ORDER BY r.responded_at DESC LIMIT ${limit}`);
@@ -1255,7 +1340,7 @@ export class CampaignsRepository {
   /** WHO opted out: the campaign's recipients whose contact is now unsubscribed, newest first. */
   async optOuts(tx: Tx, orgId: number, campaignId: number, limit: number) {
     const res = await tx.execute(sql`
-      SELECT coalesce(r.recipient_name, c.name, '') AS name, coalesce(r.phone_number, c.phone, '') AS phone,
+      SELECT coalesce(r.recipient_name, c.name, '') AS name, coalesce(r.phone_number, ${REACHED_AT}, '') AS phone,
              r.unsubscribed_at, r.sent_at
       FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id
       WHERE r.org_id = ${orgId} AND r.campaign_id = ${campaignId} AND (r.is_unsubscribed OR r.status = 'unsubscribed')
@@ -1285,6 +1370,15 @@ export class CampaignsRepository {
     deviceId: number | null,
   ): Promise<{ key: string | null; label: string }> {
     if (deviceId === null) return { key: null, label: '' };
+    if (provider === 'email') {
+      const res = await tx.execute(sql`
+        SELECT uuid, coalesce(nullif(display_name, ''), address::text) AS label
+        FROM mail_mailboxes WHERE org_id = ${orgId} AND id = ${deviceId}`);
+      const r = res.rows[0] as { uuid: string; label: string | null } | undefined;
+      return r
+        ? { key: `email:${r.uuid}`, label: r.label ?? `#${deviceId}` }
+        : { key: null, label: `#${deviceId}` };
+    }
     if ((provider ?? 'baileys') === 'baileys') {
       const res = await tx.execute(sql`
         SELECT uuid, coalesce(nullif(device_name, ''), nullif(trim(coalesce(country_code, '') || ' ' || coalesce(phone_number, '')), '')) AS label
@@ -1355,9 +1449,14 @@ export class CampaignsRepository {
   }
 }
 
+/** What a recipient is reached at: the contact's email on an email campaign, else their phone. */
+const REACHED_AT = sql`CASE WHEN EXISTS (
+    SELECT 1 FROM wpcampaigns w WHERE w.org_id = r.org_id AND w.id = r.campaign_id AND w.provider = 'email'
+  ) THEN c.email::text ELSE c.phone END`;
+
 const RECIPIENT_SELECT = sql`
   SELECT r.id, r.uuid, r.contact_id, c.uuid AS contact_uuid, r.variant, r.status, r.send_attempts, r.next_attempt_at,
-         coalesce(nullif(r.phone_number, ''), c.phone) AS phone_number, coalesce(nullif(r.recipient_name, ''), c.name) AS recipient_name,
+         coalesce(nullif(r.phone_number, ''), ${REACHED_AT}) AS phone_number, coalesce(nullif(r.recipient_name, ''), c.name) AS recipient_name,
          r.whatsapp_message_id, r.clicked, r.click_count, r.clicked_at, r.sent_at, r.delivered_at, r.read_at, r.responded_at, r.response,
          r.error_message, r.created_at, r.updated_at
   FROM wp_campaign_contacts r LEFT JOIN contacts c ON c.org_id = r.org_id AND c.id = r.contact_id`;

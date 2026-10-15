@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "nav": {
+      "history": "Verlauf"
+    },
+    "crumb": "Kampagnen / Nachrichtenverlauf",
+    "title": "Nachrichtenverlauf",
+    "loading": "Nachrichten werden geladen…",
+    "tryAgain": "Erneut versuchen",
+    "retention": "Die Zustellschritte jeder Nachricht werden {hot} Tage lang vollständig gespeichert, dann archiviert und bis {days} Tage nach der Nachricht aufbewahrt. Der Feed selbst reicht ein Jahr zurück.",
+    "range": {
+      "label": "Zeitraum",
+      "24h": "Letzte 24 Stunden",
+      "7d": "Letzte 7 Tage",
+      "30d": "Letzte 30 Tage",
+      "90d": "Letzte 90 Tage",
+      "custom": "Eigener Zeitraum",
+      "short": {
+        "24h": "24 Std.",
+        "7d": "7 T.",
+        "30d": "30 T.",
+        "90d": "90 T."
+      },
+      "from": "Von",
+      "to": "Bis",
+      "apply": "Datum übernehmen",
+      "problem": {
+        "order": "Das Startdatum darf nicht nach dem Enddatum liegen."
+      }
+    },
+    "exports": {
+      "title": "CSV-Exporte",
+      "request": "CSV exportieren",
+      "requested": "Ihr Export wird vorbereitet. Wir schicken Ihnen eine E-Mail, sobald er fertig ist.",
+      "requestedTo": "Ihr Export wird vorbereitet. Wir schicken eine E-Mail an {email}, sobald er fertig ist.",
+      "status": {
+        "queued": "Wartet auf Start",
+        "running": "Wird vorbereitet",
+        "ready": "Bereit",
+        "failed": "Fehlgeschlagen",
+        "expired": "Abgelaufen"
+      },
+      "preparing": "Wird vorbereitet…",
+      "download": "Herunterladen",
+      "rows": "{n} Nachrichten",
+      "keptUntil": "aufbewahrt bis {when} ({days} Tage)",
+      "fromEmail": "Aus Ihrer E-Mail"
+    },
+    "kpi": {
+      "label": "Kennzahlen",
+      "total": "Nachrichten gesamt",
+      "vsLast": "{pct}% ggü. Vorperiode",
+      "sent": "Gesendet",
+      "received": "Empfangen",
+      "failed": "Fehlgeschlagen",
+      "avgResponse": "Ø Antwortzeit",
+      "delivered": "Zugestellt",
+      "read": "Gelesen",
+      "deliveryRate": "Zustellrate",
+      "cost": "Kosten",
+      "outgoing": "ausgehend",
+      "incoming": "eingehend",
+      "retryQueue": "Wiederholungswarteschlange",
+      "toFirstReply": "bis zur ersten Antwort",
+      "healthy": "in Ordnung",
+      "na": "k. A.",
+      "deliveredCaption": "beim Kunden angekommen",
+      "readCaption": "vom Kunden geöffnet",
+      "deliveryRateCaption": "der Nachrichten, die die Warteschlange verlassen haben",
+      "costCaption": "Ihrem Guthaben belastet"
+    },
+    "charts": {
+      "volume": "Volumen",
+      "volumeTitle": "Nachrichten im Zeitverlauf",
+      "bucketLabel": "Gruppieren nach",
+      "bucket": {
+        "daily": "Täglich",
+        "hourly": "Stündlich",
+        "weekly": "Wöchentlich"
+      },
+      "volumeAria": "Nachrichten im Zeitverlauf: {sent} gesendet, {received} empfangen, {failed} fehlgeschlagen",
+      "when": "Zeitpunkt",
+      "series": {
+        "sent": "Gesendet",
+        "received": "Empfangen",
+        "failed": "Fehlgeschlagen"
+      },
+      "direction": "Richtungsverteilung",
+      "directionTitle": "Gesendet vs. empfangen",
+      "directionAria": "{total} Nachrichten, aufgeteilt in gesendet, empfangen und fehlgeschlagen",
+      "types": "Nach Nachrichtentyp",
+      "typesTitle": "Mix in diesem Zeitraum",
+      "media": "Medien",
+      "top": "Top-Konversationen",
+      "topTitle": "Aktivste Verläufe ({range})",
+      "openInbox": "Posteingang öffnen",
+      "topEmpty": "In diesem Zeitraum noch keine aktiven Verläufe.",
+      "topMeta": "{n} Nachr. · zuletzt {time}"
+    },
+    "filters": {
+      "search": "Nachrichten durchsuchen",
+      "searchPlaceholder": "Suche nach Text, Kontakt, Telefonnummer oder Nachrichten-ID…",
+      "directionLabel": "Richtung",
+      "dir": {
+        "all": "Alle",
+        "out": "Gesendet",
+        "in": "Empfangen",
+        "fail": "Fehlgeschlagen"
+      },
+      "channel": "Kanal",
+      "allChannels": "Alle Kanäle",
+      "type": "Typ",
+      "allTypes": "Alle Typen",
+      "status": "Status",
+      "allStatuses": "Alle Status",
+      "sources": "Gesendet von",
+      "clear": "Filter zurücksetzen",
+      "active": "Aktive Filter",
+      "chip": {
+        "templateId": "Eine Vorlage",
+        "campaignId": "Eine Kampagne",
+        "broadcastId": "Ein Massenversand",
+        "scheduledId": "Eine geplante Nachricht"
+      },
+      "removeFilter": "Filter entfernen: {filter}"
+    },
+    "type": {
+      "text": "Nur Text",
+      "template": "Vorlage",
+      "auto_reply": "Automatische Antwort",
+      "campaign": "Kampagne",
+      "broadcast": "Massenversand",
+      "scheduled": "Geplant",
+      "image": "Bild",
+      "video": "Video",
+      "audio": "Audio",
+      "document": "Dokument",
+      "location": "Standort"
+    },
+    "status": {
+      "queued": "In Warteschlange",
+      "sent": "Gesendet",
+      "delivered": "Zugestellt",
+      "read": "Gelesen",
+      "failed": "Fehlgeschlagen",
+      "received": "Eingehend"
+    },
+    "source": {
+      "inbox": "Posteingang",
+      "flow": "Flow",
+      "auto_reply": "Automatische Antwort",
+      "ai": "KI-Assistent",
+      "api": "API",
+      "broadcast": "Massenversand",
+      "campaign": "Kampagne",
+      "scheduled": "Geplant",
+      "other": "Sonstige"
+    },
+    "direction": {
+      "in": "Eingehend",
+      "out": "Ausgehend",
+      "failed": "Fehlgeschlagen"
+    },
+    "table": {
+      "col": {
+        "when": "Zeitpunkt",
+        "dir": "Richt.",
+        "contact": "Kontakt",
+        "message": "Nachricht",
+        "type": "Typ",
+        "status": "Status",
+        "open": "Öffnen"
+      },
+      "unknown": "Unbekannter Kontakt",
+      "masked": "Diese Nummer ist verborgen, weil Sie diesen Kontakt nicht öffnen dürfen.",
+      "entity": {
+        "broadcast": "Massenversand · {name}",
+        "campaign": "Kampagne · {name}",
+        "scheduled": "Geplant · {name}"
+      },
+      "openSource": "Öffnen",
+      "openSourceFor": "Quelle von {name} öffnen",
+      "showing": "{n} angezeigt",
+      "showingOf": "{n} von {total} angezeigt",
+      "loadMore": "Mehr laden"
+    },
+    "empty": {
+      "noMatch": "Keine Nachrichten entsprechen diesen Filtern",
+      "noMatchHint": "Setzen Sie die Suche zurück oder wählen Sie einen größeren Zeitraum.",
+      "period": "Keine Nachrichten in den letzten {days} Tagen",
+      "periodCustom": "Keine Nachrichten in diesem Zeitraum",
+      "periodHint": "Gesendete und empfangene Nachrichten erscheinen hier mit ihrem Zustellstatus."
+    },
+    "drawer": {
+      "title": "Nachrichtendetails",
+      "close": "Schließen",
+      "loading": "Wird geladen…",
+      "tryAgain": "Erneut versuchen",
+      "copied": "Kopiert",
+      "copyFailed": "Kopieren fehlgeschlagen",
+      "copyId": "ID kopieren",
+      "openChat": "Chat öffnen",
+      "openContact": "Kontakt öffnen",
+      "openEntity": {
+        "broadcast": "Massenversand öffnen",
+        "campaign": "Kampagne öffnen",
+        "scheduled": "Geplante Nachricht öffnen"
+      },
+      "unknown": "Unbekannter Kontakt",
+      "masked": "Diese Nummer ist verborgen, weil Sie diesen Kontakt nicht öffnen dürfen.",
+      "direction": "Richtung",
+      "directionValue": {
+        "in": "Eingehend",
+        "out": "Ausgehend"
+      },
+      "status": "Status",
+      "type": "Typ",
+      "when": "Zeitpunkt",
+      "content": "Inhalt",
+      "noText": "Kein Text",
+      "failure": "Fehler",
+      "failedNoReason": "Die Nachricht ist fehlgeschlagen, ein Grund wurde nicht erfasst.",
+      "details": "Details",
+      "messageId": "Nachrichten-ID",
+      "source": "Gesendet von",
+      "sourceValue": {
+        "inbox": "Posteingang",
+        "flow": "Flow",
+        "auto_reply": "Automatische Antwort",
+        "ai": "KI-Assistent",
+        "api": "API",
+        "broadcast": "Massenversand",
+        "campaign": "Kampagne",
+        "scheduled": "Geplante Nachricht",
+        "other": "Sonstige"
+      },
+      "channel": "Kanal",
+      "template": "Vorlage",
+      "entity": {
+        "broadcast": "Massenversand",
+        "campaign": "Kampagne",
+        "scheduled": "Geplante Nachricht"
+      },
+      "sender": "Absender",
+      "senderKind": {
+        "customer": "Kunde",
+        "agent": "Mitarbeiter",
+        "bot": "Automatisierung",
+        "system": "System",
+        "broadcast": "Massenversand"
+      },
+      "providerId": "Nachrichten-ID des Anbieters",
+      "language": "Sprache",
+      "cost": "Kosten",
+      "timeline": "Zustellschritte",
+      "expired": "Diese Nachricht ist älter als {days} Tage, daher sind ihre Zustellschritte nicht mehr vorhanden. Ihr Status wird weiterhin oben angezeigt.",
+      "timelineEmpty": "Für diese Nachricht wurden keine Zustellschritte erfasst.",
+      "archived": "Ein Teil dieses Protokolls stammt aus dem Archiv (Ereignisse älter als {days} Tage)."
+    },
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "MESSAGE_NOT_FOUND": "Diese Nachricht existiert nicht oder Sie dürfen sie nicht sehen.",
+      "VALIDATION_FAILED": "Diese Daten oder Filter sind ungültig.",
+      "FORBIDDEN": "Sie haben darauf keinen Zugriff.",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "Ein Export wird bereits vorbereitet. Warten Sie auf die E-Mail und fordern Sie dann einen weiteren an.",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "Dieser Export ist noch nicht bereit.",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "Dieser Export existiert nicht.",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "Wählen Sie Daten innerhalb der letzten 365 Tage."
+    }
+  }
+}

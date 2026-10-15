@@ -4,8 +4,7 @@
       "title": "Sjablonen"
     },
     "common": {
-      "dismiss": "Negeren",
-      "requestId": "Verzoek-ID"
+      "dismiss": "Negeren"
     },
     "status": {
       "draft": "Concept",

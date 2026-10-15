@@ -30,8 +30,7 @@
       "PLAN_LIMIT_REACHED": "Je hebt de limiet van je abonnement bereikt.",
       "WA_UNOFFICIAL_DISABLED": "Verzenden via persoonlijke WhatsApp-nummers (de niet-officiële API) is niet ingeschakeld voor je workspace. Kies een officieel WhatsApp Business API-nummer.",
       "AUTH_SEND_HALTED": "Verzenden is gestopt voor deze workspace.",
-      "upgrade": "Bekijk abonnementen en upgrade",
-      "requestId": "Verzoek {id}"
+      "upgrade": "Bekijk abonnementen en upgrade"
     },
     "actions": {
       "done": {

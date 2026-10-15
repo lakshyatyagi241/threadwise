@@ -1,8 +1,92 @@
+import type { EmailMeta } from '@crm/contracts';
+import type { OutboundEmail } from '../../infra/providers/chat-conversations';
 import type { OutboundContent } from './conversations.facade';
 import { kindOfFileMime } from './message-rules';
 import type { MessageRow } from './messages.repository';
 
 /** What a stored message becomes for the dispatcher (which validates it against `outboundEnvelopeSchema`). */
+/** The reply extras kept on a queued email message (`messages.meta.emailReply`), so a retry sends the same cc, bcc and subject. */
+export interface StoredEmailReply {
+  cc: string[];
+  bcc: string[];
+  subject?: string;
+  attachmentIds?: string[];
+  /** The composer's rich-text body (raw; the email adapter sanitises it). */
+  bodyHtml?: string;
+  signatureId?: string;
+  signature?: boolean;
+  /** The email template the reply was filled from (counted as used once the mail is sent). */
+  templateId?: string;
+  /** Set by the server (never the client) when the template is marketing mail: the ConsentGate and the unsubscribe link apply. */
+  marketing?: boolean;
+}
+
+const REFERENCES_MAX = 100;
+
+/** `Re: <subject>`, without stacking a second `Re:` on a subject that already has one. */
+export function replySubject(original: string | null | undefined): string {
+  const subject = (original ?? '').replace(/\s+/g, ' ').trim();
+  if (subject === '') return 'Re:';
+  return /^re:/i.test(subject) ? subject : `Re: ${subject}`;
+}
+
+/**
+ * What an email adapter needs to answer a thread: recipients, subject and the RFC 5322 threading headers. `inbound` is the thread's
+ * newest mail to answer (`meta.email`), `reply` the agent's extras kept on the message. The reply goes to the sender of that mail;
+ * `References` is its own chain plus its Message-ID (the earliest id and the newest ones kept when the chain is long). Null when there is
+ * no mail to answer: the dispatcher then refuses the message (a thread is only ever started by a customer's mail).
+ */
+export function emailEnvelopeOf(
+  inbound: Pick<EmailMeta, 'subject' | 'from' | 'messageId' | 'references' | 'threadId'> | null,
+  reply: Partial<StoredEmailReply> | null | undefined,
+  threadId: string,
+  /** The user who wrote the reply (for their signature); omitted for a bot. */
+  sentBy?: number | null,
+): OutboundEmail | null {
+  if (!inbound) return null;
+  const chain = [...inbound.references, inbound.messageId].filter(
+    (id, i, all) => id !== '' && all.indexOf(id) === i,
+  );
+  const references =
+    chain.length > REFERENCES_MAX ? [chain[0]!, ...chain.slice(-(REFERENCES_MAX - 1))] : chain;
+  return {
+    to: [inbound.from.address],
+    cc: reply?.cc ?? [],
+    bcc: reply?.bcc ?? [],
+    subject: reply?.subject?.trim() || replySubject(inbound.subject),
+    inReplyTo: inbound.messageId || null,
+    references,
+    threadId: inbound.threadId || threadId,
+    ...(reply?.attachmentIds?.length ? { attachmentIds: reply.attachmentIds } : {}),
+    ...(reply?.bodyHtml ? { bodyHtml: reply.bodyHtml } : {}),
+    ...(reply?.signatureId ? { signatureId: reply.signatureId } : {}),
+    ...(reply?.signature === false ? { signature: false } : {}),
+    ...(reply?.templateId ? { templateId: reply.templateId } : {}),
+    ...(reply?.marketing ? { marketing: true } : {}),
+    ...(sentBy ? { sentBy } : {}),
+  };
+}
+
+/** The thread id inside an email conversation's peer key (`t:<threadId>`). */
+export const threadIdOfPeerKey = (peerKey: string): string =>
+  peerKey.startsWith('t:') ? peerKey.slice(2) : peerKey;
+
+/** The @mentions kept on a queued text message (`messages.meta.mentions`), so a retry mentions the same members. */
+function mentionsOfMeta(
+  meta: Record<string, unknown>,
+): { jid: string; name?: string }[] | undefined {
+  if (!Array.isArray(meta.mentions)) return undefined;
+  const out = meta.mentions
+    .filter(
+      (m): m is { jid: string; name?: string } => typeof (m as { jid?: unknown })?.jid === 'string',
+    )
+    .map((m) => ({
+      jid: m.jid,
+      ...(typeof m.name === 'string' && m.name ? { name: m.name } : {}),
+    }));
+  return out.length > 0 ? out : undefined;
+}
+
 export function envelopeOf(
   row: Pick<
     MessageRow,
@@ -21,6 +105,8 @@ export function envelopeOf(
   peerKey: string,
   replyToProviderMessageId: string | null,
   attempt: number,
+  /** Only for a message on an email channel; see `emailEnvelopeOf`. */
+  email?: OutboundEmail | null,
 ): unknown {
   const common = {
     to: peerKey,
@@ -32,7 +118,13 @@ export function envelopeOf(
   };
   switch (row.kind) {
     case 'text':
-      return { ...common, kind: 'text', body: row.body ?? '' };
+      return {
+        ...common,
+        kind: 'text',
+        body: row.body ?? '',
+        ...(email ? { email } : {}),
+        ...(mentionsOfMeta(row.meta) ? { mentions: mentionsOfMeta(row.meta) } : {}),
+      };
     case 'image':
     case 'video':
     case 'audio':
@@ -124,8 +216,49 @@ export function messageFieldsOf(content: OutboundContent): {
   longitude?: number;
 } {
   switch (content.kind) {
-    case 'text':
-      return { kind: 'text', body: content.body, media: null, meta: {}, templateId: null };
+    case 'text': {
+      const extras = content.email;
+      const emailReply: StoredEmailReply | null =
+        extras &&
+        (extras.cc.length > 0 ||
+          extras.bcc.length > 0 ||
+          extras.subject ||
+          extras.attachmentIds?.length ||
+          extras.bodyHtml ||
+          extras.signatureId ||
+          extras.templateId ||
+          extras.marketing ||
+          extras.signature === false)
+          ? {
+              cc: extras.cc,
+              bcc: extras.bcc,
+              ...(extras.subject ? { subject: extras.subject } : {}),
+              ...(extras.attachmentIds?.length ? { attachmentIds: extras.attachmentIds } : {}),
+              ...(extras.bodyHtml ? { bodyHtml: extras.bodyHtml } : {}),
+              ...(extras.signatureId ? { signatureId: extras.signatureId } : {}),
+              ...(extras.signature === false ? { signature: false } : {}),
+              ...(extras.templateId ? { templateId: extras.templateId } : {}),
+              ...(extras.marketing ? { marketing: true } : {}),
+            }
+          : null;
+      return {
+        kind: 'text',
+        body: content.body,
+        media: null,
+        meta: {
+          ...(emailReply ? { emailReply } : {}),
+          ...(content.mentions?.length
+            ? {
+                mentions: content.mentions.map((m) => ({
+                  jid: m.jid,
+                  ...(m.name ? { name: m.name } : {}),
+                })),
+              }
+            : {}),
+        },
+        templateId: null,
+      };
+    }
     case 'media':
       return {
         kind: kindOfFileMime(content.media.mime),

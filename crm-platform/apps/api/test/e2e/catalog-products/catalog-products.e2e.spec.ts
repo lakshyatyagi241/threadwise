@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { CatalogProviderError } from '../../../src/infra/providers/catalog-products/catalog-provider.port';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { FixtureCatalogState } from '../../../src/infra/providers/catalog-products/fixture.catalog.provider';
 import { InventoryService } from '../../../src/modules/catalog-products/inventory.service';
@@ -24,6 +25,14 @@ beforeAll(async () => {
 afterAll(async () => {
   await h?.stop();
 });
+
+const metaErr = (message: string, errCode: number) =>
+  new CatalogProviderError(message, 'meta', {
+    code: errCode,
+    subcode: null,
+    httpStatus: 400,
+    raw: message,
+  });
 
 const TOKEN = 'EAAG-test-token-0123456789-abcdef';
 const code = (res: { body: { code?: string } }) => res.body.code;
@@ -261,6 +270,67 @@ describe('TW-CAT-002..006: connect, link, disconnect, settings', () => {
     expect(code(await api.as(t3.admin).post('/v2/catalog/autodetect'))).toBe(
       'CAT_NO_CATALOG_LINKED',
     );
+  });
+
+  it('create a catalog on Meta from here, rename it, and delete it with the id typed back', async () => {
+    const { CryptoService } = await import('../../../src/common/crypto/crypto.service');
+    const crypto = h.app.get(CryptoService, { strict: false });
+    const t = await fresh('mk');
+    expect(code(await api.as(t.admin).post('/v2/catalog/create').send({ name: 'Mine' }))).toBe(
+      'CAT_NO_WABA',
+    );
+    await h.owner.query(
+      `INSERT INTO wa_provider_configs (org_id, provider, status, credentials_json, meta_json, phone_number, is_primary, connected_at)
+       VALUES ($1,'waba','connected',$2,'{}'::jsonb,'919833333333',true,now())`,
+      [
+        t.orgId,
+        crypto.encrypt(JSON.stringify({ access_token: TOKEN, waba_id: 'wm', business_id: 'bizm' })),
+      ],
+    );
+    expect((await api.as(t.admin).post('/v2/catalog/create').send({ name: '' })).status).toBe(422);
+    const made = await api.as(t.admin).post('/v2/catalog/create').send({ name: 'Mine' });
+    expect(made.status, JSON.stringify(made.body)).toBe(200);
+    expect(made.body).toMatchObject({ provider: 'meta_cloud', catalogName: 'Mine' });
+    expect(fx.createdCatalogs.at(-1)).toMatchObject({ businessId: 'bizm', name: 'Mine' });
+    expect(fx.linked.at(-1)).toMatchObject({ wabaId: 'wm', catalogId: made.body.catalogId });
+    const cfg = await h.owner.query(`SELECT meta_json FROM wa_provider_configs WHERE org_id=$1`, [
+      t.orgId,
+    ]);
+    expect(cfg.rows[0].meta_json.catalog_id).toBe(made.body.catalogId);
+
+    // one catalog at a time
+    expect(code(await api.as(t.admin).post('/v2/catalog/create').send({ name: 'Two' }))).toBe(
+      'CAT_ALREADY_CONNECTED',
+    );
+
+    const renamed = await api.as(t.admin).post('/v2/catalog/rename').send({ name: 'Renamed' });
+    expect(renamed.status, JSON.stringify(renamed.body)).toBe(200);
+    expect(renamed.body.catalogName).toBe('Renamed');
+    expect(fx.renamedCatalogs.at(-1)).toEqual({ catalogId: made.body.catalogId, name: 'Renamed' });
+
+    // Meta refusing leaves the stored name alone
+    fx.failNext.set('renameCatalog', metaErr('(#200) Permissions error', 200));
+    const refused = await api.as(t.admin).post('/v2/catalog/rename').send({ name: 'Nope' });
+    expect(refused.status).toBe(422);
+    expect(code(refused)).toBe('CAT_META_REJECTED');
+    expect((await api.as(t.admin).get('/v2/catalog/overview')).body.catalog.catalogName).toBe(
+      'Renamed',
+    );
+
+    const wrong = await api
+      .as(t.admin)
+      .post('/v2/catalog/delete-remote')
+      .send({ confirmCatalogId: 'x' });
+    expect(code(wrong)).toBe('CAT_CONFIRM_MISMATCH');
+    expect(fx.deletedCatalogs).toHaveLength(0);
+    const gone = await api
+      .as(t.admin)
+      .post('/v2/catalog/delete-remote')
+      .send({ confirmCatalogId: made.body.catalogId });
+    expect(gone.status, JSON.stringify(gone.body)).toBe(204);
+    expect(fx.deletedCatalogs).toEqual([made.body.catalogId]);
+    expect((await api.as(t.admin).get('/v2/catalog/overview')).body.catalog).toBeNull();
+    expect((await api.as(t.admin).post('/v2/catalog/rename').send({ name: 'x' })).status).toBe(404);
   });
 
   it("TW-CAT-004: disconnect removes the binding, nulls every product's sync state, keeps the retailer ids; with no catalog it still succeeds", async () => {
@@ -1004,6 +1074,54 @@ describe('TW-CAT-014..016: send and activity', () => {
           .send({ manualNumbers: '919800000001', mode: 'link' })
       ).status,
     ).toBe(403);
+  });
+});
+
+describe('collections as Meta product sets', () => {
+  it('push creates the set on Meta, a second push updates it, remove and delete clean it up', async () => {
+    const t = await fresh('pset');
+    const a = await createProduct(t, 'Set A', { sku: 'SET-A' });
+    const b = await createProduct(t, 'Set B', { sku: 'SET-B' });
+    const col = await api
+      .as(t.admin)
+      .post('/v2/catalog/collections')
+      .send({ name: 'Shirts', productIds: [a.id, b.id] });
+    expect(col.status).toBe(201);
+    expect(col.body.metaSetId).toBeNull();
+
+    expect(code(await api.as(t.admin).post(`/v2/catalog/collections/${col.body.id}/meta`))).toBe(
+      'CAT_NOT_CONNECTED',
+    );
+    await connect(t);
+    const pushed = await api.as(t.admin).post(`/v2/catalog/collections/${col.body.id}/meta`);
+    expect(pushed.status, JSON.stringify(pushed.body)).toBe(200);
+    const setId = pushed.body.metaSetId as string;
+    expect(setId).toBeTruthy();
+    expect(fx.productSets.get(setId)).toMatchObject({
+      name: 'Shirts',
+      retailerIds: ['SET-A', 'SET-B'],
+    });
+
+    await api
+      .as(t.admin)
+      .put(`/v2/catalog/collections/${col.body.id}`)
+      .send({ name: 'Shirts 2', productIds: [a.id] });
+    const again = await api.as(t.admin).post(`/v2/catalog/collections/${col.body.id}/meta`);
+    expect(again.body.metaSetId).toBe(setId);
+    expect(fx.productSets.get(setId)).toMatchObject({ name: 'Shirts 2', retailerIds: ['SET-A'] });
+
+    const removed = await api.as(t.admin).delete(`/v2/catalog/collections/${col.body.id}/meta`);
+    expect(removed.status).toBe(200);
+    expect(removed.body.metaSetId).toBeNull();
+    expect(fx.productSets.has(setId)).toBe(false);
+
+    const again2 = await api.as(t.admin).post(`/v2/catalog/collections/${col.body.id}/meta`);
+    const newSet = again2.body.metaSetId as string;
+    expect(fx.productSets.has(newSet)).toBe(true);
+    expect((await api.as(t.admin).delete(`/v2/catalog/collections/${col.body.id}`)).status).toBe(
+      204,
+    );
+    expect(fx.productSets.has(newSet)).toBe(false);
   });
 });
 

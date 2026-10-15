@@ -44,15 +44,16 @@ export const walletDeliveryReportedSchema = z.object({
 export type WalletDeliveryReported = z.infer<typeof walletDeliveryReportedSchema>;
 
 /**
- * Which statuses charge. WABA and Twilio report real delivery, so only delivered/read. Baileys cannot report delivery reliably,
- * so for it `sent` charges too (Reference's documented behavior, TW-WALLET-012 rule 1). Idempotent per message id either way.
+ * Which statuses charge. A message counts against the wallet from `sent` (every engine), so a sent-but-not-yet-delivered message is
+ * never free and a run cannot spend money that is still in flight; `failed`/`undelivered` then gives the exact charge back.
+ * (Reference charged WABA and Twilio only on delivered/read, and Baileys on sent.) Idempotent per message id: sent, delivered and
+ * read of one message charge once.
  */
 export function isBillableStatus(
-  provider: WalletDeliveryProvider,
+  _provider: WalletDeliveryProvider,
   status: WalletDeliveryStatus,
 ): boolean {
-  if (status === 'delivered' || status === 'read') return true;
-  return provider === 'baileys' && status === 'sent';
+  return status === 'sent' || status === 'delivered' || status === 'read';
 }
 
 export function isFailureStatus(status: WalletDeliveryStatus): boolean {

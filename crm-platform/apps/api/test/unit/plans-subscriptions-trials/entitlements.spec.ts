@@ -42,6 +42,7 @@ function ent(over: Partial<Entitlements> = {}): Entitlements {
     planFeatures: {},
     state: 'paid_active',
     visibleApps: { all: false, appIds: new Set() },
+    appWithheld: {},
     ...over,
   };
 }
@@ -82,6 +83,9 @@ describe('registry', () => {
       'form_builder',
       'waba_groups',
       'sms',
+      'help_agent',
+      'email_channel',
+      'personal_history_full',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

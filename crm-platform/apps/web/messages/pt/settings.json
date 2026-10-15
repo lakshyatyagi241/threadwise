@@ -102,8 +102,8 @@
       },
       "email": {
         "label": "E-mail",
-        "description": "Conecte uma caixa de e-mail para enviar e receber e-mails na caixa de entrada.",
-        "keywords": "caixa de e-mail, smtp, imap, gmail, outlook, remetente"
+        "description": "Conecte caixas de e-mail do Gmail ou Google Workspace para que sua equipe leia e responda os e-mails de clientes na caixa de entrada compartilhada.",
+        "keywords": "caixa de e-mail, gmail, google workspace, caixa de entrada compartilhada, e-mail de suporte, outlook, imap"
       },
       "line": {
         "label": "LINE",
@@ -309,7 +309,73 @@
         "label": "Atribuição automática",
         "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
         "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
+      },
+      "web": {
+        "label": "Chat do site",
+        "description": "Bots criados para o chat do seu site e o widget em que cada um é executado.",
+        "keywords": "web, site, widget, chatbot, incorporar, chat ao vivo"
+      },
+      "message-logs": {
+        "label": "Registros de mensagens",
+        "description": "Exporte o registro de entrega das suas mensagens, até um ano atrás, como um arquivo enviado ao seu e-mail.",
+        "keywords": "exportar, registro de entrega, histórico, arquivo, csv, mensagens"
+      },
+      "billing-subscriptions": {
+        "label": "Assinaturas",
+        "description": "O que renova, até quando está pago e cancelamento.",
+        "keywords": "assinatura, renovar, renovação automática, cancelar, débito automático, pagamento falhou, cobranças"
+      },
+      "lead-scoring": {
+        "label": "Pontuação de leads com IA",
+        "description": "Pontue cada contato com IA, escolha o que é enviado e veja quanto custa.",
+        "keywords": "pontuação de lead, pontuação, ia, quente, morno, frio, openrouter, custo, qualificar"
+      },
+      "help-assistant": {
+        "label": "Assistente de ajuda",
+        "description": "Ative o assistente que orienta sua equipe ou faz os passos por ela.",
+        "keywords": "ia, assistente, agente, guia, ajuda, automação"
+      },
+      "consent": {
+        "label": "Consentimento e respostas STOP",
+        "description": "Escolha as palavras STOP e START, as respostas de confirmação, a linha de cancelamento e se o marketing exige consentimento registrado.",
+        "keywords": "consentimento, cancelar inscrição, reativar inscrição, descadastrar, stop, start, lgpd, gdpr, conformidade, privacidade, marketing"
+      },
+      "inbox-tags": {
+        "label": "Tags da conversa",
+        "description": "Crie as tags que sua equipe aplica às conversas e usa para filtrar a caixa de entrada. São as mesmas tags usadas nos contatos.",
+        "keywords": "tags, tag, categorias, organizar, filtrar, tags da conversa"
+      },
+      "growth": {
+        "label": "Crescimento",
+        "description": "Leads quentes, audiências, respostas às campanhas e outras coisas em que sua equipe pode agir, obtidas de conversas e campanhas.",
+        "keywords": "crescimento, lead quente, audiência, engajamento, inativo, respostas às campanhas, propensão, opt-out, piloto"
+      },
+      "sla-policies": {
+        "label": "Metas de resposta (SLA)",
+        "description": "Defina a rapidez com que sua equipe deve responder e resolver, e receba alertas quando uma conversa descumprir a meta.",
+        "keywords": "sla, tempo de resposta, primeira resposta, resolução, descumprimento, metas, horário comercial"
+      },
+      "team-performance": {
+        "label": "Desempenho da equipe",
+        "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
+        "keywords": "relatórios, análises, agentes, tempo de resposta, primeira resposta, resolvidas, carga, desempenho"
+      },
+      "contact-assignment": {
+        "label": "Atribuição de contatos",
+        "description": "Atribui automaticamente novos contatos e negócios à pessoa certa, ignorando quem está de licença.",
+        "keywords": "atribuir, responsável, round robin, rodízio, novo contato, novo negócio, licença, férias, roteamento de leads"
+      },
+      "privacy-requests": {
+        "label": "Solicitações de dados",
+        "description": "Responda a quem pergunta o que você mantém sobre elas: verificação de identidade, exportação, exclusão com prévia e um comprovante que você pode guardar.",
+        "keywords": "privacidade, gdpr, solicitação de dados, dsar, acesso do titular, exportar dados, apagar, direito ao esquecimento, excluir dados pessoais, bloqueio legal"
+      },
+      "compliance-center": {
+        "label": "Central de conformidade",
+        "description": "Ferramentas que ajudam você a cumprir suas obrigações de privacidade: as leis a que você está sujeito, contatos de privacidade, avisos e links, suboperadores, horário de silêncio e uma lista de verificação do que já está em vigor.",
+        "keywords": "conformidade, privacidade, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, encarregado, responsável por reclamações, suboperador, dpa, termos, política de privacidade, horário de silêncio, não perturbe, lista de verificação, menores"
       }
-    }
+    },
+    "backToMarketplace": "Voltar ao Marketplace"
   }
 }

@@ -1,4 +1,4 @@
-import { FLOW_MAX_NODE_VISITS, type FlowRunEndReason, type FlowRunStatus } from '@crm/contracts';
+import { ERROR_CODES, FLOW_MAX_NODE_VISITS } from '@crm/contracts';
 import { edgeFrom, nodeById } from '../graph/runtime-graph';
 import { CORE_EXECUTORS } from './nodes';
 import { propertyToSave, routeReply } from './reply-router';
@@ -10,45 +10,13 @@ import type {
   OutboundMessage,
   RunState,
   SendOutcome,
+  StepOutcome,
+  Transition,
 } from './types';
+import { describeSent, finishIo, newIo, outboundWords, tagsRead, varsChanged } from './step-log';
 import { interpolate } from './variables';
 
-/** Where a run goes after one step. The engine persists it; nothing here touches the database, the clock (but `now`) or a queue. */
-export type Transition =
-  /** Run `nodeId` next, after `delayMs` (the humanising pause on a plain move; 0 on a routed choice). */
-  | {
-      t: 'goto';
-      nodeId: string;
-      delayMs: number;
-      /** The exit it left by: the run log shows the branch a Condition took. */
-      port?: number;
-      /** A sub-flow swapped `run.graph` for this flow's: the engine persists the new graph and logs the flow id. */
-      subflowId?: number;
-    }
-  /** The node asked to run another flow in this run: the engine resolves it (it needs the database) and turns this into a `goto`. */
-  | { t: 'subflow'; flowId: number | string }
-  | { t: 'wait'; wait: NonNullable<RunState['wait']> }
-  | { t: 'sleep'; seconds: number }
-  | {
-      t: 'end';
-      status: Extract<FlowRunStatus, 'completed' | 'failed'>;
-      reason: FlowRunEndReason;
-      failureCode?: string;
-      failureReason?: string;
-    }
-  | { t: 'halt'; reason: string }
-  /** The reply was not an answer: nothing changes. */
-  | { t: 'none' };
-
-export interface StepOutcome {
-  transition: Transition;
-  /** The node that ran, for the run log. */
-  nodeId: string | null;
-  nodeType: string | null;
-  notes: string[];
-  /** A contact property to write after the step commits ("also save to a contact attribute"); the engine does it. */
-  saveProperty?: { key: string; value: string };
-}
+export type { StepOutcome, Transition } from './types';
 
 export interface StepDeps {
   /** One send; `index` numbers the sends of this step so each has its own stable id. */
@@ -65,6 +33,48 @@ const registry = (extra: readonly NodeExecutor[] = []): Map<string, NodeExecutor
   for (const e of [...CORE_EXECUTORS, ...extra]) for (const t of e.types) m.set(t, e);
   return m;
 };
+
+/** Internal run variables (hidden from the run log): did any message reach the customer, and the window refusal that came first. */
+const DELIVERED_VAR = '__delivered';
+const WINDOW_REFUSED_VAR = '__window_refused';
+/** Runs the customer started by writing: their message opened the 24 hour window, so a refusal there is not a missing template. */
+const CUSTOMER_STARTED: ReadonlySet<string> = new Set([
+  'keyword',
+  'any_message',
+  'away',
+  'out_of_hours',
+]);
+
+/** Remembers on the run whether anything was delivered, and the first refusal by the 24 hour window before that. */
+function trackSend(run: RunState, out: SendOutcome): void {
+  if (out.ok) {
+    run.vars[DELIVERED_VAR] = 1;
+  } else if (
+    out.code === ERROR_CODES.SERVICE_WINDOW_CLOSED &&
+    run.vars[DELIVERED_VAR] === undefined
+  ) {
+    run.vars[WINDOW_REFUSED_VAR] ??= out.error;
+  }
+}
+
+/**
+ * A run that nobody asked for (an order, a lead, a re-subscribe, a routing rule, an enrolment) whose free-form messages were all
+ * refused by the 24 hour window ends `failed` with that reason instead of `completed`: the customer received nothing, and a green run
+ * would hide it. A message that did get through (a template that opened the conversation) keeps the run `completed`; the refusal of a
+ * later plain message stays a note in the log, as before.
+ */
+function windowFailure(run: RunState, t: Transition): Transition {
+  if (t.t !== 'end' || t.status !== 'completed' || CUSTOMER_STARTED.has(run.source)) return t;
+  const refused = run.vars[WINDOW_REFUSED_VAR];
+  if (typeof refused !== 'string' || run.vars[DELIVERED_VAR] !== undefined) return t;
+  return {
+    t: 'end',
+    status: 'failed',
+    reason: 'send_failed',
+    failureCode: ERROR_CODES.SERVICE_WINDOW_CLOSED,
+    failureReason: `Nothing reached the customer (${refused.replace(/[.\s]+$/, '')}). Open this flow with a Template step.`,
+  };
+}
 
 /** Leave `from` by `port`. No edge, or an edge to a node that is gone, is a dead end (TW-FLR-016 rule 6). */
 export function advanceFrom(
@@ -113,7 +123,13 @@ function transitionOf(run: RunState, nodeId: string, r: NodeResult, deps: StepDe
     case 'end':
       return { t: 'end', status: 'completed', reason: r.reason };
     case 'subflow':
-      return { t: 'subflow', flowId: r.flowId };
+      return {
+        t: 'subflow',
+        flowId: r.flowId,
+        startNodeId: r.startNodeId,
+        missPort: r.missPort,
+        missVars: r.missVars,
+      };
     case 'halt':
       return { t: 'halt', reason: r.reason };
     case 'fail':
@@ -167,21 +183,41 @@ export async function executeCurrent(run: RunState, deps: StepDeps): Promise<Ste
   }
 
   let sends = 0;
+  const sent: string[] = [];
+  const io = newIo();
+  let sendFailed = false;
+  const before = { ...run.vars };
   const ctx: NodeContext = {
     run,
     node,
     stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}`,
-    send: (message) => deps.send(run, message, sends++),
-    render: (t) => interpolate(t, run.vars),
+    send: async (message) => {
+      const out = await deps.send(run, message, sends++);
+      trackSend(run, out);
+      if (!out.ok) sendFailed = true;
+      sent.push(describeSent(message, out));
+      io.out.push({ kind: 'message', name: message.kind, value: outboundWords(message) });
+      return out;
+    },
+    render: (t) => {
+      io.in.push(...tagsRead(t, run.vars));
+      return interpolate(t, run.vars);
+    },
+    io: (side, item) => io[side].push(item),
     note: (text) => notes.push(text),
     now: deps.now,
   };
   const result = await executor.execute(ctx);
+  io.out.push(...varsChanged(before, run.vars));
+  const recorded = finishIo(io);
   return {
-    transition: transitionOf(run, node.id, result, deps),
+    transition: windowFailure(run, transitionOf(run, node.id, result, deps)),
     nodeId: node.id,
     nodeType: node.type,
     notes,
+    sent,
+    ...(sendFailed ? { sendFailed } : {}),
+    ...(recorded ? { io: recorded } : {}),
   };
 }
 
@@ -203,16 +239,38 @@ export async function applyCustomReply(
   }
   const notes: string[] = [];
   let sends = 1000;
+  const sent: string[] = [];
+  const io = newIo();
+  let sendFailed = false;
   const ctx: NodeContext = {
     run,
     node,
     stepKey: `flow:${run.uuid}:${run.stepSeq}:${node.id}:reply`,
-    send: (message) => deps.send(run, message, sends++),
+    send: async (message) => {
+      const out = await deps.send(run, message, sends++);
+      sent.push(describeSent(message, out));
+      io.out.push({ kind: 'message', name: message.kind, value: outboundWords(message) });
+      if (!out.ok) sendFailed = true;
+      return out;
+    },
     render: (t) => interpolate(t, run.vars),
+    io: (side, item) => io[side].push(item),
     note: (text) => notes.push(text),
     now: deps.now,
   };
+  const before = { ...run.vars };
   const d = await executor.onReply(ctx, reply);
+  // What the node said back (a "please enter a valid number") and what its answer saved, for the run log. Called after the decision's
+  // variables are applied, so they count as saved.
+  const logged = () => {
+    const out = [...io.out, ...varsChanged(before, run.vars)];
+    const recorded = finishIo({ in: io.in, out });
+    return {
+      sent,
+      ...(sendFailed ? { sendFailed } : {}),
+      ...(recorded ? { io: recorded } : {}),
+    };
+  };
   switch (d.action) {
     case 'ignore':
       return { ...base, transition: { t: 'none' }, notes: ['not an answer: still waiting'] };
@@ -222,16 +280,23 @@ export async function applyCustomReply(
         ...base,
         transition: { t: 'wait', wait: { ...wait, data: d.data ?? wait.data } },
         notes: [...notes, 'not complete yet: still waiting'],
+        ...logged(),
       };
     case 'route':
       Object.assign(run.vars, d.setVars ?? {});
       run.currentNodeId = node.id;
-      return { ...base, transition: advanceFrom(run, node.id, d.port, true, 0), notes };
+      return {
+        ...base,
+        transition: advanceFrom(run, node.id, d.port, true, 0),
+        notes,
+        ...logged(),
+      };
     case 'end':
       return {
         ...base,
         transition: { t: 'end', status: 'completed', reason: d.reason },
         notes,
+        ...logged(),
       };
     case 'fail':
       return {
@@ -244,6 +309,7 @@ export async function applyCustomReply(
           failureReason: d.reason,
         },
         notes,
+        ...logged(),
       };
   }
 }

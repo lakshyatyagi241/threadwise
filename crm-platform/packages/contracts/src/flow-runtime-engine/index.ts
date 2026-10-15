@@ -28,6 +28,7 @@ export const FLOW_TRIGGER_KINDS = [
   'out_of_hours',
   'group_leave',
   'segment_join',
+  'segment_leave',
   'contact_updated',
   'field_match',
   'date_field_match',
@@ -62,6 +63,7 @@ export const FLOW_RUN_SOURCES = [
   'out_of_hours',
   'group_leave',
   'segment_join',
+  'segment_leave',
   'contact_updated',
   'field_match',
   'date_field_match',
@@ -144,6 +146,8 @@ export const flowRunSummarySchema = z.object({
   endedAt: z.string().nullable(),
   resumeAt: z.string().nullable(),
   steps: z.number().int(),
+  /** Customer messages that reached a wait node of this run and moved it on (logged `reply` steps). */
+  replies: z.number().int().default(0),
   /** Node executions logged, how many of them failed, and the run's total node time (ms). */
   nodeCount: z.number().int(),
   errorCount: z.number().int(),
@@ -158,6 +162,24 @@ export const FLOW_RUN_LOG_MAX_STEPS = 200;
 
 export const FLOW_STEP_OUTCOMES = ['ok', 'error', 'skipped', 'waiting', 'timeout'] as const;
 export type FlowStepOutcome = (typeof FLOW_STEP_OUTCOMES)[number];
+
+/** What a node took in or produced, as one readable line: a message sent, the customer's reply, a variable, a request or response. */
+export const FLOW_STEP_IO_KINDS = [
+  'message',
+  'reply',
+  'variable',
+  'request',
+  'response',
+  'result',
+] as const;
+export type FlowStepIoKind = (typeof FLOW_STEP_IO_KINDS)[number];
+export const flowStepIoItemSchema = z.object({
+  kind: z.enum(FLOW_STEP_IO_KINDS),
+  /** A variable's name, or the kind of message (text, buttons, image). */
+  name: z.string().nullable(),
+  value: z.string(),
+});
+export type FlowStepIoItem = z.infer<typeof flowStepIoItemSchema>;
 
 export const flowRunStepSchema = z.object({
   seq: z.number().int(),
@@ -177,6 +199,9 @@ export const flowRunStepSchema = z.object({
   attempt: z.number().int().nullable(),
   summary: z.string().nullable(),
   errorCode: z.string().nullable(),
+  /** What the node took in and what it produced. Values are clipped and secrets masked before they are stored. */
+  input: z.array(flowStepIoItemSchema),
+  output: z.array(flowStepIoItemSchema),
 });
 export type FlowRunStep = z.infer<typeof flowRunStepSchema>;
 

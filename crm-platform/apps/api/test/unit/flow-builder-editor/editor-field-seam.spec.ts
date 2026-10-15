@@ -280,6 +280,26 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
     save: { options: ['A'] },
     reads: { buttons: [{ id: 'p0', title: 'A' }], variable: 'choice' },
   },
+  carousel: {
+    save: {
+      text: 'Pick one',
+      cards: [
+        {
+          title: 'T',
+          text: 'x',
+          buttons: [
+            { type: 'reply', label: 'A' },
+            { type: 'url', label: 'U', value: 'https://x.test' },
+          ],
+        },
+      ],
+    },
+    reads: {
+      bodyText: 'Pick one',
+      buttons: [{ id: 'p0', title: 'A' }],
+      variable: 'choice',
+    },
+  },
   list: {
     save: { options: ['A'] },
     reads: { items: [{ id: 'p0', title: 'A', description: '', section: '' }], variable: 'choice' },
@@ -367,6 +387,16 @@ const EXECUTOR_READS: Record<string, { save?: Read; reads: Read | 'raw-data-unto
   api_library: {
     save: { apiId: '9b6c7a52-0d6e-4c7d-9a65-3c1d6b1f0a11', save: '{{res}}' },
     reads: { apiId: '9b6c7a52-0d6e-4c7d-9a65-3c1d6b1f0a11', variable: 'res' },
+  },
+  faq: {
+    save: { query: '{{answer}}', save: '{{hit}}', minScore: '0.6', category: ' billing ' },
+    reads: {
+      query: '{{answer}}',
+      variable: 'hit',
+      minScore: 0.6,
+      category: 'billing',
+      sendAnswer: true,
+    },
   },
   google_sheets: { save: { saveAs: '{{row}}' }, reads: { saveAs: 'row', mode: 'write' } },
   google_docs: { save: { saveAs: '{{u}}' }, reads: { saveAs: 'u', shareable: true } },

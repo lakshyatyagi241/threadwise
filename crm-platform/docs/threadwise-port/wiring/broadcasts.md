@@ -4,21 +4,21 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 
 ## API routes
 
-| Method | Path                              | Permission                                                                                                             |
-| ------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| DELETE | `/v2/broadcasts/:id`              | `bcast.broadcasts.delete`                                                                                              |
-| POST   | `/v2/broadcasts/:id/retry-failed` | `bcast.broadcasts.retry`                                                                                               |
-| POST   | `/v2/broadcasts/:id/resume`       | `bcast.broadcasts.resume`                                                                                              |
-| GET    | `/v2/broadcasts/:id/export`       | `bcast.broadcasts.export`                                                                                              |
-| GET    | `/v2/broadcasts`                  | `bcast.broadcasts.read`                                                                                                |
-| GET    | `/v2/broadcasts/compose`          | `bcast.broadcasts.create`                                                                                              |
-| GET    | `/v2/broadcasts/summary`          | `bcast.broadcasts.read`                                                                                                |
-| GET    | `/v2/broadcasts/:id`              | `bcast.broadcasts.read`                                                                                                |
-| GET    | `/v2/broadcasts/:id/recipients`   | `bcast.broadcasts.read`                                                                                                |
-| GET    | `/v2/broadcasts/:id/live`         | `bcast.broadcasts.read`                                                                                                |
-| GET    | `/v2/broadcasts/:id/statistics`   | `bcast.broadcasts.read`                                                                                                |
-| POST   | `/v2/broadcasts`                  | `bcast.broadcasts.create`                                                                                              |
-| POST   | `/v2/media/marketing`             | `bcast.broadcasts.create`, `camp.campaigns.create`, `camp.campaigns.update`, `tg.broadcasts.manage`, `fb.posts.manage` |
+| Method | Path                              | Permission                                                                                                                                       |
+| ------ | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| DELETE | `/v2/broadcasts/:id`              | `bcast.broadcasts.delete`                                                                                                                        |
+| POST   | `/v2/broadcasts/:id/retry-failed` | `bcast.broadcasts.retry`                                                                                                                         |
+| POST   | `/v2/broadcasts/:id/resume`       | `bcast.broadcasts.resume`                                                                                                                        |
+| GET    | `/v2/broadcasts/:id/export`       | `bcast.broadcasts.export`                                                                                                                        |
+| GET    | `/v2/broadcasts`                  | `bcast.broadcasts.read`                                                                                                                          |
+| GET    | `/v2/broadcasts/compose`          | `bcast.broadcasts.create`                                                                                                                        |
+| GET    | `/v2/broadcasts/summary`          | `bcast.broadcasts.read`                                                                                                                          |
+| GET    | `/v2/broadcasts/:id`              | `bcast.broadcasts.read`                                                                                                                          |
+| GET    | `/v2/broadcasts/:id/recipients`   | `bcast.broadcasts.read`                                                                                                                          |
+| GET    | `/v2/broadcasts/:id/live`         | `bcast.broadcasts.read`                                                                                                                          |
+| GET    | `/v2/broadcasts/:id/statistics`   | `bcast.broadcasts.read`                                                                                                                          |
+| POST   | `/v2/broadcasts`                  | `bcast.broadcasts.create`                                                                                                                        |
+| POST   | `/v2/media/marketing`             | `bcast.broadcasts.create`, `camp.campaigns.create`, `camp.campaigns.update`, `tg.broadcasts.manage`, `fb.posts.manage`, `line.broadcasts.manage` |
 
 ## Web screens
 

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState, type ReactNode } from 'react';
 import {
   PLAN_UPGRADE_PATH,
@@ -87,11 +87,6 @@ export function ErrorText({
         </ul>
       )}
       <div className="flex flex-wrap items-center gap-3 text-xs">
-        {e.requestId && (
-          <span dir="ltr" className="text-muted-foreground">
-            {t('common.requestId', { id: e.requestId })}
-          </span>
-        )}
         {onRetry && (
           <button
             type="button"
@@ -151,11 +146,16 @@ export function EventStatusChip({ status }: { status: LeadEventStatus }) {
 /** A moment as "3 days ago", with the exact time on hover and for assistive technology. */
 export function When({ value, empty }: { value: string | null; empty: string }) {
   const locale = useLocale();
+  const timeZone = useTimeZone();
   if (!value) return <span className="text-muted-foreground">{empty}</span>;
   const exact = new Date(value);
   const title = Number.isNaN(exact.getTime())
     ? undefined
-    : new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(exact);
+    : new Intl.DateTimeFormat(locale, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone,
+      }).format(exact);
   return (
     <time dateTime={value} title={title}>
       {relativeTime(value, new Date(), locale)}

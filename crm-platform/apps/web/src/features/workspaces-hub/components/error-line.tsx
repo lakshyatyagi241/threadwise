@@ -11,11 +11,6 @@ export function HubErrorLine({ error }: { error: unknown }) {
   return (
     <Alert tone="danger" className="space-y-1" role="alert">
       <p>{t(info.key)}</p>
-      {info.requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{info.requestId}</span>
-        </p>
-      )}
     </Alert>
   );
 }

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useId, useState, type FormEvent, type ReactNode } from 'react';
 import {
   CHANNEL_KINDS,
@@ -29,7 +29,7 @@ import { ApiError } from '@/lib/api/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import { useSegmentCatalog } from '@/features/segments/api/lookups';
-import { refresh, routingApi, useAssignees, useRule } from '../api/routing';
+import { refresh, routingApi, useAssignees, useFlowChoices, useRule } from '../api/routing';
 import {
   editableOf,
   emptyForm,
@@ -40,6 +40,7 @@ import {
   type FormProblem,
   type RuleForm,
 } from '../lib/form';
+import { leaveDayText } from '../lib/leave-mark';
 import { ContactConditions } from './contact-conditions';
 
 const STRATEGIES: readonly RoutingStrategy[] = ['round_robin', 'least_busy', 'specific'];
@@ -110,6 +111,7 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
   const uid = useId();
   const lookups = useSegmentCatalog();
   const assignees = useAssignees();
+  const flows = useFlowChoices();
   const [form, setForm] = useState<RuleForm>(() => (rule ? formFromRule(rule) : emptyForm()));
   const [showProblems, setShowProblems] = useState(false);
   const [busy, setBusy] = useState<'save' | 'activate' | null>(null);
@@ -151,13 +153,18 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
     }
   }
 
+  const locale = useLocale();
   const users = assignees.data?.users ?? [];
   const teams = assignees.data?.teams ?? [];
   const rows: Array<{ id: string; label: string; note: string; kind: 'user' | 'team' }> = [
     ...users.map((u) => ({
       id: u.id,
       label: u.name ?? u.email,
-      note: t('openCount', { open: u.openConversations }),
+      note:
+        t('openCount', { open: u.openConversations }) +
+        (u.onLeave
+          ? ` · ${u.onLeave.until ? t('onLeaveUntil', { date: leaveDayText(u.onLeave.until, locale) }) : t('onLeave')}`
+          : ''),
       kind: 'user' as const,
     })),
     ...teams.map((tm) => ({
@@ -410,6 +417,30 @@ export function RuleFormBody({ rule }: { rule?: RoutingRule }) {
             </p>
           )}
         </fieldset>
+
+        <Field label={t('flow.title')} htmlFor={`${uid}-flow`} hint={t('flow.hint')}>
+          <Select
+            id={`${uid}-flow`}
+            value={form.triggerFlowId}
+            onChange={(e) => set('triggerFlowId', e.target.value)}
+          >
+            <option value="">{t('flow.none')}</option>
+            {(flows.data ?? []).map((f) => (
+              <option key={f.id} value={f.id}>
+                {f.isActive ? f.name : t('flow.offOption', { name: f.name })}
+              </option>
+            ))}
+            {form.triggerFlowId !== '' &&
+              !(flows.data ?? []).some((f) => f.id === form.triggerFlowId) && (
+                <option value={form.triggerFlowId}>
+                  {rule?.triggerFlow?.name ?? t('flow.goneOption')}
+                </option>
+              )}
+          </Select>
+          {flows.isError && (
+            <p className="mt-1 text-xs text-muted-foreground">{t('flow.loadFailed')}</p>
+          )}
+        </Field>
       </Card>
 
       <Card title={t('optionsTitle')}>
@@ -468,6 +499,7 @@ async function saveEdit(rule: RoutingRule, payload: ReturnType<typeof payloadFro
     description: payload.description,
     conditions: payload.conditions,
     assign: payload.assign,
+    triggerFlowId: payload.triggerFlowId,
     stopOnMatch: payload.stopOnMatch,
     isFallback: payload.isFallback,
     isActive: payload.isActive,

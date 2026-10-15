@@ -1,0 +1,390 @@
+{
+  "email": {
+    "common": {
+      "dismiss": "Đóng"
+    },
+    "hub": {
+      "kicker": "Kênh",
+      "title": "Email",
+      "titleAccent": "hộp thư",
+      "intro": "Kết nối Gmail, Microsoft 365 hoặc bất kỳ hộp thư IMAP nào. Email của khách hàng đến hộp thư đến của nhóm, mỗi chuỗi email là một cuộc trò chuyện, và câu trả lời của bạn được gửi từ cùng địa chỉ.",
+      "inbox": "Mở hộp thư đến",
+      "channels": "Kênh",
+      "loadError": "Không thể tải các hộp thư của bạn. Hãy thử lại sau giây lát.",
+      "cardCaption": "Gmail · Microsoft 365 · IMAP",
+      "connectedCount": "{count, plural, other {Đã kết nối # hộp thư}}",
+      "notConnected": "Chưa kết nối",
+      "usageLabel": "Hộp thư đã dùng",
+      "usage": "{used} trên {limit} hộp thư",
+      "usageUnlimited": "{used, plural, other {# hộp thư}}, không giới hạn",
+      "howTitle": "Cách hoạt động",
+      "how": {
+        "connect": {
+          "title": "Kết nối hộp thư",
+          "body": "Đăng nhập bằng Google hoặc Microsoft, hoặc nhập cài đặt máy chủ thư của bạn, rồi cho phép Threadwise đọc và gửi email cho địa chỉ đó."
+        },
+        "inbox": {
+          "title": "Email đến hộp thư đến",
+          "body": "Email mới được lấy về mỗi phút. Mỗi chuỗi email trở thành một cuộc trò chuyện, và mỗi hộp thư có hộp thư đến riêng."
+        },
+        "reply": {
+          "title": "Trả lời từ hộp thư đến",
+          "body": "Phản hồi của bạn được gửi từ hộp thư trong cùng chuỗi email, kèm Cc và Bcc nếu bạn thêm."
+        },
+        "limit": {
+          "title": "Số hộp thư theo gói của bạn",
+          "body": "Gói của bạn quy định số hộp thư có thể kết nối. Email không được tính vào hạn mức tin nhắn."
+        }
+      },
+      "connectedTitle": "Hộp thư đã kết nối",
+      "total": "{count, plural, other {# hộp thư}}",
+      "empty": "Chưa có hộp thư nào được kết nối. Hãy kết nối một hộp thư bên dưới để bắt đầu nhận email trong hộp thư đến.",
+      "addTitle": "Thêm hộp thư",
+      "providers": {
+        "google": {
+          "name": "Gmail / Google Workspace",
+          "hint": "Đăng nhập bằng tài khoản Google sở hữu hộp thư, ví dụ support@yourcompany.com."
+        },
+        "imap": {
+          "name": "Email khác (IMAP / SMTP)",
+          "hint": "Bất kỳ nhà cung cấp email nào khác sử dụng tên người dùng và mật khẩu."
+        },
+        "microsoft": {
+          "name": "Microsoft 365 / Outlook",
+          "hint": "Đăng nhập bằng tài khoản cơ quan hoặc trường học của Microsoft."
+        }
+      },
+      "notReady": "{provider} chưa được thiết lập cho nền tảng này. Hãy nhờ quản trị viên nền tảng thêm thông tin xác thực.",
+      "limitReached": "Bạn đã dùng hết {limit, plural, other {# hộp thư}} mà gói của bạn cho phép. Hãy xóa một hộp thư hoặc nhờ quản trị viên nâng cấp gói.",
+      "noPermission": "Bạn có thể xem các hộp thư, nhưng chỉ những người được phép quản lý mới có thể kết nối hộp thư.",
+      "connectFailed": "Không thể bắt đầu đăng nhập. Hãy thử lại.",
+      "connect": {
+        "google": "Kết nối Gmail",
+        "microsoft": "Kết nối Microsoft 365",
+        "imap": "Kết nối IMAP / SMTP"
+      },
+      "imapConnected": "Đã kết nối hộp thư. Email 7 ngày gần nhất đang được tải về hộp thư đến.",
+      "imapReconnected": "Đã kết nối lại hộp thư.",
+      "scope": {
+        "title": "Hộp thư này dành cho ai?",
+        "shared": "Dùng chung",
+        "sharedHint": "Hộp thư của công ty như support@. Cả nhóm có thể xử lý các cuộc trò chuyện của nó.",
+        "personal": "Cá nhân",
+        "personalHint": "Hộp thư riêng của bạn. Chỉ bạn đọc được các cuộc trò chuyện của nó.",
+        "onlyPersonal": "Bạn có thể kết nối hộp thư cá nhân của mình. Chỉ bạn đọc được các cuộc trò chuyện của nó."
+      }
+    },
+    "card": {
+      "status": {
+        "connected": "Đã kết nối",
+        "needs_reauth": "Cần kết nối lại",
+        "error": "Lỗi",
+        "disconnected": "Đã ngắt kết nối"
+      },
+      "sendsAs": "Phản hồi được gửi với tư cách",
+      "displayName": "Tên hiển thị",
+      "edit": "Sửa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "renamed": "Đã lưu tên hiển thị.",
+      "needsReauthHint": "Nhà cung cấp không còn cho phép chúng tôi đọc hộp thư này. Hãy kết nối lại để nhận và gửi email trở lại.",
+      "lastError": "Sự cố gần nhất: {error}",
+      "lastSynced": "Đồng bộ lần cuối",
+      "neverSynced": "Chưa đồng bộ",
+      "conversations": "Cuộc trò chuyện",
+      "openInbox": "Mở trong hộp thư đến",
+      "sync": "Đồng bộ ngay",
+      "syncStarted": "Đã bắt đầu đồng bộ. Email mới sẽ xuất hiện trong hộp thư đến sau giây lát.",
+      "reconnect": "Kết nối lại",
+      "remove": "Xóa",
+      "removeTitle": "Xóa hộp thư",
+      "removeConfirm": "Xóa {address}? Các cuộc trò chuyện của hộp thư này vẫn ở trong hộp thư đến dưới dạng lịch sử chỉ đọc, và sẽ không nhận hay gửi email mới từ địa chỉ này. Bạn có thể kết nối lại cùng địa chỉ sau.",
+      "removed": "Đã xóa hộp thư.",
+      "failed": "Không thể cập nhật hộp thư. Hãy thử lại.",
+      "provider": {
+        "google": "Gmail",
+        "microsoft": "Microsoft 365",
+        "imap": "IMAP / SMTP"
+      },
+      "scope": {
+        "shared": "Dùng chung",
+        "personal": "Cá nhân",
+        "personalOf": "Cá nhân · {name}"
+      },
+      "push": "Cập nhật trực tiếp",
+      "pushHint": "Email mới đến ngay khi nhà cung cấp báo.",
+      "signature": "Chữ ký",
+      "signatureHint": "Các phản hồi từ hộp thư này có chữ ký của nó.",
+      "summaryNote": "Đây là hộp thư cá nhân của người khác. Chỉ chủ sở hữu mới đọc và quản lý được.",
+      "sendLimit": "Giới hạn gửi mỗi giờ",
+      "limitDefault": "Mặc định của nền tảng",
+      "limitPerHour": "{count, plural, other {# email mỗi giờ}}",
+      "limitSaved": "Đã lưu giới hạn gửi.",
+      "needsReauthImap": "Máy chủ thư đã từ chối mật khẩu đã lưu. Hãy kết nối lại và nhập lại mật khẩu."
+    },
+    "outcome": {
+      "connected": "Đã kết nối hộp thư. Email trong 7 ngày gần nhất đang được lấy về hộp thư đến.",
+      "denied": "Đăng nhập đã bị hủy nên chưa kết nối gì.",
+      "missing_scope": "Chưa được cấp quyền đọc và gửi email. Hãy kết nối lại và cho phép mọi quyền trên màn hình đăng nhập.",
+      "limit": "Đã đạt giới hạn số hộp thư của gói, nên hộp thư này chưa được kết nối.",
+      "not_configured": "Đăng nhập cho nhà cung cấp này chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",
+      "wrong_account": "Bạn đã đăng nhập bằng tài khoản khác với hộp thư đang kết nối lại. Hãy đăng nhập bằng cùng địa chỉ.",
+      "failed": "Đã xảy ra lỗi khi kết nối hộp thư. Hãy thử lại."
+    },
+    "errors": {
+      "notConfigured": "Đăng nhập cho nhà cung cấp này chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",
+      "limit": "Đã đạt giới hạn số hộp thư của gói.",
+      "unavailable": "Hộp thư này đã bị ngắt kết nối hoặc cần được kết nối lại trước.",
+      "sendRefused": "Nhà cung cấp thư đã từ chối gửi email này. Hãy kiểm tra địa chỉ và dung lượng rồi thử lại.",
+      "wrongAccount": "Đó là tài khoản khác với hộp thư này. Hãy đăng nhập bằng cùng địa chỉ.",
+      "locked": "Tích hợp email không có trong gói của bạn.",
+      "changed": "Hộp thư này đã được thay đổi ở nơi khác. Danh sách đã được tải lại, hãy thử lại.",
+      "personalDisabled": "Hộp thư cá nhân đang tắt cho không gian làm việc này.",
+      "personalNotAllowed": "Bạn không được phép kết nối hộp thư cá nhân.",
+      "providerUnsupported": "Nhà cung cấp thư này không khả dụng.",
+      "rateLimited": "Hộp thư này đã đạt giới hạn gửi. Hãy thử lại sau."
+    },
+    "guide": {
+      "title": "Hướng dẫn thiết lập",
+      "google": {
+        "title": "Kết nối Gmail hoặc Google Workspace",
+        "p1": "Chọn Kết nối Gmail và đăng nhập bằng tài khoản sở hữu hộp thư, chẳng hạn địa chỉ dùng chung support@ hoặc sales@.",
+        "p2": "Trên màn hình Google, hãy cho phép đọc và gửi email. Thiếu một trong hai thì không thể nhận hoặc gửi email.",
+        "p3": "Bạn sẽ được đưa trở lại đây và email của 7 ngày đầu được lấy về hộp thư đến mà không thông báo cho ai.",
+        "p4": "Thêm các hộp thư khác theo cách tương tự, tối đa theo số lượng gói của bạn cho phép. Mỗi hộp thư hiển thị như một hộp thư đến riêng."
+      },
+      "consent": {
+        "title": "Những gì chúng tôi đọc và gửi",
+        "p1": "Chúng tôi đọc email trong hộp thư đến của bạn để hiển thị trong hộp thư đến của nhóm. Thư rác, thùng rác và thư nháp sẽ bị bỏ qua.",
+        "p2": "Email do chính chúng tôi gửi từ tài khoản của bạn ở nơi khác sẽ không được sao chép vào hộp thư đến.",
+        "p3": "Thư trả lời tự động, thư bị trả lại và thư từ danh sách gửi thư được lưu và đánh dấu là Tự động.",
+        "p4": "Xóa hộp thư sẽ dừng việc đọc và gửi. Các cuộc trò chuyện trước đó vẫn được giữ làm lịch sử chỉ đọc."
+      },
+      "trouble": {
+        "title": "Nếu có điều gì đó bất thường",
+        "p1": "Cần kết nối lại nghĩa là nhà cung cấp đã thu hồi hoặc hết hạn quyền truy cập, hoặc máy chủ thư từ chối mật khẩu. Chọn Kết nối lại.",
+        "p2": "Lỗi hiển thị sự cố gần nhất. Hãy chọn Đồng bộ ngay để thử lại; nếu vẫn thất bại, hãy kết nối lại hộp thư.",
+        "p3": "Nút Kết nối bị vô hiệu khi nền tảng chưa thiết lập đăng nhập cho nhà cung cấp đó hoặc đã đạt giới hạn hộp thư của gói.",
+        "p4": "Hình ảnh trong email sẽ bị ẩn cho đến khi bạn chọn Tải hình ảnh trong cuộc trò chuyện."
+      },
+      "other": {
+        "title": "Kết nối Microsoft 365 hoặc nhà cung cấp thư khác",
+        "p1": "Với Microsoft 365 hoặc Outlook, chọn Kết nối Microsoft 365 và đăng nhập bằng tài khoản cơ quan hoặc trường học sở hữu hộp thư.",
+        "p2": "Với nhà cung cấp khác, chọn Kết nối IMAP / SMTP và nhập máy chủ, cổng, bảo mật, tên người dùng và mật khẩu từ nhà cung cấp.",
+        "p3": "Chúng tôi đăng nhập vào máy chủ thư đến và thư đi trước. Nếu một máy chủ từ chối, thông báo sẽ nói rõ máy chủ nào.",
+        "p4": "Một số nhà cung cấp yêu cầu mật khẩu ứng dụng thay vì mật khẩu thường. Hãy tạo trong cài đặt bảo mật của nhà cung cấp."
+      },
+      "personal": {
+        "title": "Hộp thư cá nhân và chia sẻ",
+        "p1": "Quản trị viên bật hộp thư cá nhân trong Chia sẻ email và chọn ai có thể kết nối.",
+        "p2": "Khi kết nối hộp thư, chọn Cá nhân. Chỉ bạn đọc được các cuộc trò chuyện của nó trong hộp thư đến.",
+        "p3": "Quản trị viên chỉ thấy bản tóm tắt hộp thư của bạn, trừ khi không gian làm việc cho phép họ đọc hộp thư cá nhân.",
+        "p4": "Tắt hộp thư cá nhân không bao giờ mở hộp thư cá nhân hiện có cho người khác."
+      }
+    },
+    "thread": {
+      "noSubject": "(không có chủ đề)",
+      "automated": "Tự động",
+      "from": "Từ",
+      "to": "Đến",
+      "cc": "Cc",
+      "date": "Ngày",
+      "imagesBlocked": "Hình ảnh từ internet đã bị ẩn.",
+      "loadImages": "Tải hình ảnh",
+      "frameTitle": "Email: {subject}",
+      "truncated": "Email này dài nên chỉ hiển thị phần đầu.",
+      "noBody": "Email này không có nội dung văn bản.",
+      "attachments": "{count, plural, other {# tệp đính kèm}}",
+      "tooLarge": "quá lớn để lưu ({size})",
+      "download": "Tải xuống {name} ({size})",
+      "bounce": {
+        "title": "Không gửi được tới {address}.",
+        "reason": "Lý do: {reason}",
+        "hard": "Địa chỉ đã bị từ chối vĩnh viễn. Hãy kiểm tra lỗi chính tả rồi gửi email mới tới địa chỉ đã sửa.",
+        "soft": "Có vẻ đây là sự cố tạm thời, ví dụ hộp thư đầy. Gửi lại sau có thể được, hoặc hãy sửa địa chỉ."
+      }
+    },
+    "composer": {
+      "toggle": "Cc, Bcc và chủ đề",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Chủ đề",
+      "subjectPlaceholder": "Chủ đề",
+      "addressesPlaceholder": "name@example.com, other@example.com",
+      "problem": {
+        "ccInvalid": "Các địa chỉ Cc này không hợp lệ: {list}",
+        "bccInvalid": "Các địa chỉ Bcc này không hợp lệ: {list}",
+        "ccTooMany": "Cc chỉ nhận tối đa 20 địa chỉ.",
+        "bccTooMany": "Bcc chỉ nhận tối đa 20 địa chỉ.",
+        "subjectTooLong": "Chủ đề dài tối đa 998 ký tự."
+      },
+      "editor": {
+        "toolbar": "Định dạng văn bản",
+        "bold": "In đậm",
+        "italic": "In nghiêng",
+        "underline": "Gạch chân",
+        "bulletList": "Danh sách dấu đầu dòng",
+        "numberedList": "Danh sách đánh số",
+        "quote": "Trích dẫn",
+        "link": "Thêm liên kết",
+        "clear": "Xóa định dạng",
+        "linkAddress": "Địa chỉ liên kết",
+        "linkApply": "Thêm",
+        "linkInvalid": "Nhập địa chỉ web, email hoặc số điện thoại.",
+        "label": "Trả lời email",
+        "toPlain": "Chuyển sang văn bản thuần",
+        "toRich": "Chuyển sang văn bản có định dạng",
+        "hint": "Nhấn Ctrl+Enter (Cmd+Enter trên Mac) để gửi. Enter xuống dòng."
+      },
+      "attach": {
+        "dismiss": "Đóng",
+        "list": "Tệp đính kèm ({count})",
+        "uploading": "Đang tải lên {name}",
+        "ready": "Đã đính kèm",
+        "failed": "Tải lên thất bại",
+        "retry": "Thử lại",
+        "remove": "Xóa {name}",
+        "waiting": "Đang chờ các tệp tải lên xong.",
+        "fixFailed": "Hãy thử lại hoặc xóa các tệp chưa tải lên được.",
+        "refused": {
+          "empty": "{name} trống và chưa được thêm.",
+          "tooLarge": "{name} lớn hơn {max} và chưa được thêm.",
+          "tooMany": "Một email chỉ chứa được {count} tệp. {name} chưa được thêm.",
+          "totalTooLarge": "Thêm {name} sẽ làm email quá lớn nên chưa được thêm.",
+          "blocked": "{name} thuộc loại tệp mà email không thể mang theo và chưa được thêm."
+        }
+      },
+      "error": {
+        "rateLimited": "Hộp thư này đã đạt giới hạn gửi mỗi giờ. {seconds, plural, =0 {Hãy thử lại sau ít phút.} other {Hãy thử lại sau # giây.}}",
+        "attachmentTooLarge": "Có tệp quá lớn để đính kèm. Mỗi tệp tối đa 10 MB và tất cả tệp cộng lại tối đa 20 MB.",
+        "tooManyAttachments": "Quá nhiều tệp. Một email nhận tối đa 10 tệp.",
+        "attachmentGone": "Một tệp đính kèm đã hết hạn hoặc đã bị xóa. Hãy đính kèm lại.",
+        "signatureGone": "Chữ ký đã chọn không còn tồn tại. Hãy chọn chữ ký khác.",
+        "sendRefused": "Nhà cung cấp email đã từ chối email này. Hãy kiểm tra địa chỉ và dung lượng rồi thử lại.",
+        "unavailable": "Hộp thư này đã ngắt kết nối hoặc cần được kết nối lại trước.",
+        "attachmentBlocked": "Loại tệp đó không thể gửi qua email.",
+        "network": "Không kết nối được máy chủ. Hãy kiểm tra mạng rồi thử lại.",
+        "generic": "Không thể gửi email. Hãy thử lại.",
+        "bodyTooLong": "Email này quá dài để gửi. Hãy rút gọn rồi thử lại."
+      },
+      "signature": {
+        "label": "Chữ ký",
+        "auto": "Mặc định ({name})",
+        "autoNone": "Mặc định (không có)",
+        "none": "Không có chữ ký",
+        "mine": "{name} (của tôi)",
+        "shared": "{name} (hộp thư)",
+        "preview": "Xem trước chữ ký",
+        "noneShown": "Sẽ không thêm chữ ký nào."
+      }
+    },
+    "inbox": {
+      "group": "Email"
+    },
+    "imap": {
+      "eyebrow": "Thư khác",
+      "title": "Kết nối hộp thư IMAP / SMTP",
+      "reconnectTitle": "Kết nối lại hộp thư IMAP / SMTP",
+      "close": "Đóng",
+      "intro": "Nhập các cài đặt mà nhà cung cấp thư của bạn đưa ra cho địa chỉ này. Chúng tôi đăng nhập vào cả hai máy chủ trước khi lưu bất cứ thứ gì.",
+      "reconnectIntro": "Nhập lại mật khẩu. Chúng tôi đăng nhập vào cả hai máy chủ trước khi lưu bất cứ thứ gì.",
+      "address": "Địa chỉ hộp thư",
+      "displayName": "Tên hiển thị",
+      "preset": "Nhà cung cấp thư",
+      "presetHint": "Chọn một nhà cung cấp sẽ điền cài đặt máy chủ. Bạn vẫn có thể sửa.",
+      "presetCustom": "Khác (nhập cài đặt)",
+      "incoming": "Thư đến (IMAP)",
+      "outgoing": "Thư đi (SMTP)",
+      "host": "Máy chủ",
+      "port": "Cổng",
+      "securityLabel": "Bảo mật",
+      "security": {
+        "ssl": "SSL/TLS",
+        "starttls": "STARTTLS",
+        "none": "Không"
+      },
+      "username": "Tên người dùng",
+      "password": "Mật khẩu",
+      "passwordHint": "Được lưu mã hóa và không bao giờ hiển thị lại.",
+      "passwordAgain": "Nhập lại mật khẩu. Mật khẩu không bao giờ được hiển thị.",
+      "showPassword": "Hiện mật khẩu",
+      "hidePassword": "Ẩn mật khẩu",
+      "sameCredentials": "Dùng cùng tên người dùng và mật khẩu để gửi",
+      "noEncryption": "Kết nối này không được mã hóa. Bất kỳ ai trong mạng đều có thể đọc mật khẩu và email.",
+      "verifyNote": "Chứng chỉ máy chủ luôn được kiểm tra.",
+      "cancel": "Hủy",
+      "submit": "Xác minh và kết nối",
+      "reconnectSubmit": "Xác minh và kết nối lại",
+      "verifying": "Đang xác minh",
+      "errors": {
+        "required": "Trường này là bắt buộc.",
+        "invalid": "Giá trị này không hợp lệ."
+      },
+      "failure": {
+        "imapAuth": "Máy chủ thư đến (IMAP) đã từ chối tên người dùng hoặc mật khẩu. Hãy kiểm tra và thử lại.",
+        "smtpAuth": "Máy chủ thư đi (SMTP) đã từ chối tên người dùng hoặc mật khẩu. Hãy kiểm tra và thử lại.",
+        "unreachable": "Không thể kết nối tới máy chủ thư hoặc chứng chỉ của nó không hợp lệ. Hãy kiểm tra máy chủ, cổng và bảo mật.",
+        "generic": "Không thể kết nối hộp thư. Hãy thử lại."
+      }
+    },
+    "sharing": {
+      "title": "Chia sẻ email",
+      "intro": "Quyết định xem mọi người có thể kết nối hộp thư riêng hay không và ai có thể xem.",
+      "enabled": {
+        "title": "Hộp thư cá nhân",
+        "body": "Cho phép mọi người kết nối hộp thư riêng. Các cuộc trò chuyện của nó chỉ hiển thị với họ."
+      },
+      "who": {
+        "title": "Ai có thể kết nối",
+        "body": "Chỉ những người có quyền quản lý hộp thư cá nhân.",
+        "admins": "Chỉ quản trị viên",
+        "agents": "Quản trị viên và nhân viên hỗ trợ"
+      },
+      "admins": {
+        "title": "Quản trị viên có thể đọc hộp thư cá nhân",
+        "body": "Quản trị viên có thể mở các cuộc trò chuyện của hộp thư cá nhân của người khác. Khi tắt, họ chỉ thấy bản tóm tắt."
+      },
+      "offNote": "Tắt hộp thư cá nhân chỉ ẩn tùy chọn kết nối. Các hộp thư cá nhân hiện có vẫn riêng tư với chủ sở hữu.",
+      "save": "Lưu",
+      "reset": "Bỏ thay đổi",
+      "saved": "Đã lưu chia sẻ email.",
+      "failed": "Không thể lưu. Hãy thử lại."
+    },
+    "signatures": {
+      "title": "Chữ ký",
+      "intro": "Chữ ký được thêm vào cuối các câu trả lời của bạn. Mỗi hộp thư có thể có một chữ ký dùng chung, và bạn có thể có chữ ký riêng được ưu tiên dùng trước.",
+      "new": "Chữ ký mới",
+      "edit": "Sửa chữ ký",
+      "scope": "Thuộc về ai",
+      "scopes": {
+        "user": "Tôi",
+        "mailbox": "Một hộp thư",
+        "userBadge": "Của tôi",
+        "mailboxBadge": "Hộp thư"
+      },
+      "mailbox": "Hộp thư",
+      "pickMailbox": "Chọn một hộp thư",
+      "mailboxRequired": "Hãy chọn một hộp thư.",
+      "name": "Tên",
+      "nameRequired": "Hãy đặt tên cho chữ ký.",
+      "body": "Chữ ký",
+      "bodyPlaceholder": "Tên, chức vụ, số điện thoại, liên kết của bạn...",
+      "variables": "Bạn có thể dùng {name}, {title} và {phone}. Chúng được điền bằng thông tin của người gửi.",
+      "tooLong": "Chữ ký quá dài.",
+      "defaultUser": "Dùng làm chữ ký mặc định của tôi",
+      "defaultMailbox": "Dùng làm mặc định cho hộp thư này",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "loading": "Đang tải chữ ký...",
+      "loadError": "Không tải được chữ ký. Hãy thử lại sau giây lát.",
+      "empty": "Chưa có chữ ký nào.",
+      "default": "Mặc định",
+      "editShort": "Sửa",
+      "delete": "Xóa",
+      "confirmDelete": "Xóa vĩnh viễn",
+      "noPermission": "Bạn không có quyền quản lý chữ ký.",
+      "changed": "Chữ ký này đã được thay đổi ở nơi khác. Danh sách đã được tải lại, hãy thử lại.",
+      "failed": "Không lưu được chữ ký. Hãy thử lại."
+    }
+  }
+}

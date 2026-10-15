@@ -4,4 +4,6 @@
  */
 export * from './devices';
 export * from './errors';
+export * from './groups';
+export * from './history-import';
 export * from './notice';

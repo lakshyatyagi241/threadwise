@@ -1,3 +1,6 @@
+import { renderChatPage } from './chat-page';
+import { buildEmbedScript, safeColour } from './embed-script';
+import { createHash } from 'node:crypto';
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -16,14 +19,18 @@ import {
   type RotateWidgetTokenResponse,
   type Widget,
   type WidgetAssistantsResponse,
+  parseLauncher,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
+import { isAssetSlot, isWindowSlot } from './asset-slots';
+import { isSafeSvg } from './svg-safe';
 import { AppError } from '../../common/errors/app-error';
 import { buildPage, decodeCursor } from '../../common/pagination/cursor';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { UploadPolicyService } from '../auth';
 import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
 import {
   ASSISTANT_DIRECTORY,
@@ -63,6 +70,10 @@ const parse = <T>(
  * Every write is one transaction that also writes its audit row and its outbox event. Reference wrote neither; the port does
  * because both are repository rules and a token rotation in particular is something an owner must be able to trace.
  */
+/** The pictures a widget can carry (a WhatsApp button's logo and popup; a website bot's logo, avatar, background and callout), and what is accepted. */
+const FLOW_ASSET_MAX_BYTES = 1_048_576;
+const FLOW_ASSET_MIMES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/svg+xml'];
+
 /** The Web channel list shows the newest bots; `total` says when there are more. */
 const WEB_BOTS_LIMIT = 200;
 
@@ -78,6 +89,7 @@ export class WidgetsService {
     @Inject(WIDGET_PLAN_GATE) private readonly planGate: WidgetPlanGate,
     private readonly planUsage: PlanUsageService,
     private readonly entitlements: PlanEntitlementService,
+    private readonly uploads: UploadPolicyService,
   ) {}
 
   /** The origin the snippet points at: the widget script and chat page are served by the API host, not the web app. */
@@ -356,19 +368,86 @@ export class WidgetsService {
     });
   }
 
-  /** The flow a widget belongs to: it must exist in this workspace and be a website chat bot. */
-  private async requireWebFlow(tx: Tx, orgId: number, flowUuid: string) {
+  /** The flow a widget belongs to: it must exist in this workspace and be a website chat or a WhatsApp bot. */
+  /**
+   * The chat window the Customize tab previews: the real page in preview mode, so what the author sees is what a visitor gets. Only a
+   * website chat bot has one (the same check as reading its widget).
+   */
+  async previewPage(flowUuid: string, locale: string): Promise<{ html: string }> {
+    await this.getForFlow(flowUuid);
+    return {
+      html: renderChatPage({
+        uuid: 'preview',
+        token: 'preview',
+        name: 'Preview',
+        flow: true,
+        preview: true,
+        locale,
+      }),
+    };
+  }
+
+  /**
+   * The closed launcher the Customize tab previews: the real loader (the callout, the animation, the unread dot) on a stand-in page,
+   * drawn from the settings being edited. Only the launcher, the colour and the side are read from `body`; nothing is stored.
+   */
+  async previewEmbed(flowUuid: string, body: unknown): Promise<{ html: string }> {
+    await this.getForFlow(flowUuid);
+    const raw = (typeof body === 'object' && body !== null ? body : {}) as Record<string, unknown>;
+    const script = buildEmbedScript(
+      {
+        uuid: 'preview',
+        mode: 'ai',
+        name: 'Preview',
+        launcher: parseLauncher(raw.launcher),
+        whatsappUrl: null,
+        position: raw.position === 'bottom_left' ? 'bottom_left' : 'bottom_right',
+        buttonColor: safeColour(
+          typeof raw.buttonColor === 'string' ? raw.buttonColor : null,
+          '#5B4DDB',
+        ),
+        buttonImageUrl: typeof raw.buttonImageUrl === 'string' ? raw.buttonImageUrl : null,
+        autoOpen: false,
+        flow: true,
+      },
+      'about:blank',
+    );
+    const cell = '<i style="display:block;height:92px;border-radius:12px;background:#eceef6"></i>';
+    return {
+      html: `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;height:100%;background:#fff;font-family:system-ui,sans-serif}.g{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px}.h{height:12px;width:90px;border-radius:6px;background:#dfe2ee;margin:18px 18px 0}</style></head><body><div class="h"></div><div class="g">${cell.repeat(8)}</div><script>${script.replace(/<\/(script)/gi, '<\\/$1')}</script></body></html>`,
+    };
+  }
+
+  private async requireWidgetFlow(tx: Tx, orgId: number, flowUuid: string) {
     const flow = await this.repo.findFlow(tx, orgId, flowUuid);
     if (!flow) throw AppError.notFound('Flow', flowUuid);
-    if (flow.flowType !== 'web')
-      throw AppError.validation('Only a website chat bot has a widget.', [
-        { path: 'flowId', message: 'This bot is not built for website chat.' },
+    if (flow.flowType !== 'web' && flow.flowType !== 'chat')
+      throw AppError.validation('Only a website chat or WhatsApp bot has a widget.', [
+        { path: 'flowId', message: 'This bot is not built for website chat or WhatsApp.' },
       ]);
     return flow;
   }
 
-  /** What a flow bot's Customize tab saves: the look only. The bot answers, so no assistant and no WhatsApp target. */
-  private flowWrite(name: string, input: FlowWidgetSaveInput): WidgetWrite {
+  /**
+   * What a flow bot's Customize tab saves. A website chat bot sends the look only (the flow answers, so no assistant and no WhatsApp
+   * target). A WhatsApp bot's widget is the website button that opens WhatsApp: mode `whatsapp`, the bot's number and the message it
+   * prefills; the number must be a real one, as the Chat widget screen requires.
+   */
+  private flowWrite(flowType: string, name: string, input: FlowWidgetSaveInput): WidgetWrite {
+    if (flowType === 'chat') {
+      const digits = `${input.targetWhatsappCc ?? ''}${input.targetWhatsappNumber ?? ''}`.replace(
+        /\D+/g,
+        '',
+      );
+      if (digits.length < 8)
+        throw AppError.validation('Enter the WhatsApp number the button should open.', [
+          {
+            path: 'targetWhatsappNumber',
+            message: 'Enter a WhatsApp number with its country code.',
+          },
+        ]);
+      return this.toWrite({ ...input, name, mode: 'whatsapp', assistantId: null }, null);
+    }
     return this.toWrite(
       {
         ...input,
@@ -417,11 +496,79 @@ export class WidgetsService {
     };
   }
 
+  /**
+   * A picture for a widget (`logo`, `popup`, and for a website bot `avatar` and `background`), stored here and served from a public
+   * address so the widget can show it on any site. PNG, JPEG, WebP or GIF up to 1 MB, or an SVG that passes `isSafeSvg` (the shared
+   * upload policy refuses SVG because it can carry script, so the SVG is checked here, by what it contains).
+   * Returns the address to put in the button's settings; the `v` part changes with the picture so a replaced image is never stale.
+   */
+  async uploadAsset(
+    flowUuid: string,
+    slot: string,
+    file: { originalname: string; buffer: Buffer } | undefined,
+  ): Promise<{ slot: string; url: string }> {
+    if (!isAssetSlot(slot)) throw AppError.notFound('Image slot', slot);
+    if (!file)
+      throw AppError.validation('Choose an image to upload.', [
+        { path: 'file', message: 'required' },
+      ]);
+    const ctx = RequestContextStore.require();
+    const isSvg = /\.svg$/i.test(file.originalname);
+    let mime: string;
+    if (isSvg) {
+      if (!isSafeSvg(file.buffer))
+        throw AppError.validation('This SVG cannot be used.', [
+          {
+            path: 'file',
+            message: 'Use a plain SVG picture without scripts, links or embedded pages.',
+          },
+        ]);
+      mime = 'image/svg+xml';
+    } else {
+      const checked = this.uploads.validate({
+        filename: file.originalname,
+        buffer: file.buffer,
+        allow: ['image'],
+        maxBytes: FLOW_ASSET_MAX_BYTES,
+      });
+      if (!FLOW_ASSET_MIMES.includes(checked.mime))
+        throw AppError.validation('Use a PNG, JPG, WebP, GIF or SVG image.', [
+          { path: 'file', message: 'Not a supported image.' },
+        ]);
+      mime = checked.mime;
+    }
+    const etag = createHash('sha1').update(file.buffer).digest('hex').slice(0, 16);
+    await this.db.tx(async (tx) => {
+      const flow = await this.requireWidgetFlow(tx, ctx.orgId, flowUuid);
+      if (flow.flowType === 'chat' && isWindowSlot(slot))
+        throw AppError.validation('A WhatsApp bot has no chat window to put this picture in.', [
+          { path: 'flowId', message: 'This bot is built for WhatsApp.' },
+        ]);
+      await this.repo.upsertAsset(tx, ctx.orgId, flow.id, slot, mime, file.buffer, etag);
+      await this.audit.record(tx, {
+        module: MODULE_KEY,
+        recordId: flow.id,
+        action: 'update',
+        delta: { [`widgetImage.${slot}`]: { old: null, new: etag } },
+      });
+    });
+    return { slot, url: `${this.publicBase}/widget-assets/${flowUuid}/${slot}?v=${etag}` };
+  }
+
+  async removeAsset(flowUuid: string, slot: string): Promise<void> {
+    if (!isAssetSlot(slot)) throw AppError.notFound('Image slot', slot);
+    const orgId = RequestContextStore.orgId();
+    await this.db.tx(async (tx) => {
+      const flow = await this.requireWidgetFlow(tx, orgId, flowUuid);
+      await this.repo.deleteAsset(tx, orgId, flow.id, slot);
+    });
+  }
+
   /** The widget of a flow bot; `widget` is null until its owner has saved Customize once. */
   async getForFlow(flowUuid: string): Promise<FlowWidgetResponse> {
     const orgId = RequestContextStore.orgId();
     const row = await this.db.tx(async (tx) => {
-      const flow = await this.requireWebFlow(tx, orgId, flowUuid);
+      const flow = await this.requireWidgetFlow(tx, orgId, flowUuid);
       return this.repo.findByFlowId(tx, orgId, flow.id);
     });
     return { widget: row ? toWidget(row, this.publicBase) : null };
@@ -437,7 +584,7 @@ export class WidgetsService {
     await this.assertPlan(orgId);
     const input = parse(flowWidgetSaveSchema, body);
     const row = await this.db.tx(async (tx) => {
-      const flow = await this.requireWebFlow(tx, orgId, flowUuid);
+      const flow = await this.requireWidgetFlow(tx, orgId, flowUuid);
       const current = await this.repo.findByFlowId(tx, orgId, flow.id);
       if (!current) {
         await this.planUsage.assertCanAdd(orgId, 'chatbot_widgets');
@@ -450,13 +597,14 @@ export class WidgetsService {
           ctx.userId,
           slug,
           freshToken(),
-          this.flowWrite(flow.name, input),
+          this.flowWrite(flow.flowType, flow.name, input),
           'active',
           flow.id,
         );
         const created = (await this.repo.findById(tx, orgId, id))!;
-        // The bot answers through this channel, so it exists before the first visitor.
-        await this.repo.ensureWebchatChannel(tx, orgId, created.uuid, flow.name, ctx.userId);
+        // A website chat bot answers through this channel, so it exists before the first visitor. A WhatsApp bot's button opens WhatsApp.
+        if (flow.flowType === 'web')
+          await this.repo.ensureWebchatChannel(tx, orgId, created.uuid, flow.name, ctx.userId);
         await this.record(tx, created, 'insert', 'widget.created', undefined, {
           flowId: flowUuid,
         });
@@ -468,7 +616,7 @@ export class WidgetsService {
         orgId,
         current.id,
         current.slug,
-        this.flowWrite(current.name, input),
+        this.flowWrite(flow.flowType, current.name, input),
         input.rowVersion,
       );
       if (!ok) throw AppError.rowVersionConflict('Widget');

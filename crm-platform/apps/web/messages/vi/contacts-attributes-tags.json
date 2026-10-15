@@ -21,7 +21,6 @@
       "unavailable": "Phần này của API chưa khả dụng.",
       "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
       "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
-      "requestId": "Mã yêu cầu",
       "retry": "Thử lại",
       "reservedKey": "Khóa đó được dành riêng cho một token tích hợp sẵn. Hãy chọn khóa khác.",
       "attributeInUse": "Một số liên hệ đang giữ giá trị của thuộc tính này.",
@@ -121,6 +120,11 @@
       "selectedActionsNone": "Liên hệ đã chọn (hãy chọn hàng trước)",
       "modifyColumns": "Chỉnh sửa cột",
       "resetColumns": "Đặt lại về mặc định",
+      "searchColumns": "Search columns",
+      "columnsSelectAll": "Select All",
+      "dragToReorder": "Drag to re-order columns",
+      "removeColumn": "Remove {name}",
+      "columnsSave": "Save",
       "colContactName": "Tên liên hệ",
       "colPhone": "Số điện thoại",
       "colEmailId": "Email",
@@ -170,7 +174,42 @@
       "import": "Nhập",
       "columns": "Cột",
       "addColumnField": "Thêm trường tùy chỉnh làm cột",
-      "kanbanView": "Chế độ bảng (theo giai đoạn)"
+      "kanbanView": "Chế độ bảng (theo giai đoạn)",
+      "colLeadScore": "Điểm khách hàng tiềm năng",
+      "colOwner": "Người phụ trách",
+      "unassigned": "Chưa phân công",
+      "ownerFilter": "Lọc theo người phụ trách",
+      "selectOwner": "Người phụ trách",
+      "allOwners": "Tất cả người phụ trách",
+      "myContacts": "Liên hệ của tôi",
+      "ownersCount": "{count} người phụ trách",
+      "ownerMe": "{name} (tôi)",
+      "ownerFormer": "Thành viên cũ",
+      "reassignView": "Phân công lại các liên hệ của {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Không có số điện thoại để gửi SMS",
+      "pqlLabel": "Tìm liên hệ bằng ngôn ngữ thường",
+      "pqlAsk": "Hỏi",
+      "pqlAsking": "Đang hỏi...",
+      "pqlIgnored": "Không hiểu: {parts}",
+      "pqlNothing": "Không thể chuyển phần nào của tìm kiếm này thành bộ lọc.",
+      "pqlFailed": "Tìm kiếm bằng ngôn ngữ thường hiện không khả dụng. Hãy thử lại.",
+      "filter": "Bộ lọc",
+      "filterAi": "Lọc bằng AI",
+      "filterAiHint": "Mô tả người bạn cần tìm",
+      "filterAdvanced": "Thêm bộ lọc nâng cao",
+      "quickFilters": "Bộ lọc nhanh",
+      "sortButton": "Sắp xếp",
+      "back": "Quay lại",
+      "pqlPromptPlaceholder": "Mô tả các liên hệ bạn muốn...",
+      "pqlTry": "Thử một gợi ý",
+      "pqlExample2": "Không hoạt động 30 ngày",
+      "pqlExample3": "Tạo trong 7 ngày qua",
+      "clearFilter": "Xóa bộ lọc",
+      "conditionsChip": "Điều kiện: {count}",
+      "pqlExampleTag": "Liên hệ gắn thẻ {tag} không hoạt động 30 ngày",
+      "pqlExampleStage": "Liên hệ {stage} tạo trong 7 ngày qua",
+      "pqlExampleNoOwner": "Liên hệ chưa có người phụ trách"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -215,7 +254,6 @@
       "exportStarted": "Đã tải xuống tệp xuất của bạn.",
       "exportTooLarge": "Quá nhiều liên hệ để xuất cùng lúc. Hãy thu hẹp bộ lọc và thử lại.",
       "update": "Cập nhật",
-      "updateNeedsRows": "Chọn hàng",
       "updated": "{count, plural, other {Đã cập nhật # liên hệ.}}"
     },
     "form": {
@@ -304,7 +342,13 @@
       "statusNoticeReset": "Đã đặt lại trạng thái thành {status}.",
       "statusNoticeSet": "Đã đặt trạng thái thành {status}, mặc định của giai đoạn này.",
       "statusNoticeCleared": "Đã xóa trạng thái: trạng thái không áp dụng cho giai đoạn này.",
-      "statusNoneForStage": "Chưa thiết lập trạng thái nào cho giai đoạn này."
+      "statusNoneForStage": "Chưa thiết lập trạng thái nào cho giai đoạn này.",
+      "owner": "Người phụ trách",
+      "ownerNone": "Chưa phân công",
+      "ownerMe": "{name} (tôi)",
+      "ownerFormer": "Thành viên cũ",
+      "ownerHelp": "Ai phụ trách liên hệ này. Bạn chỉ có thể chọn những người mà quyền truy cập của bạn cho phép.",
+      "ownerOutOfScope": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó."
     },
     "tags": {
       "title": "Thẻ",
@@ -320,7 +364,12 @@
       "addPlaceholder": "Thêm hoặc chọn thẻ...",
       "addLabel": "Tên thẻ",
       "add": "Thêm thẻ",
-      "failed": "Không thể thay đổi thẻ. Hãy thử lại."
+      "failed": "Không thể thay đổi thẻ. Hãy thử lại.",
+      "quickPlaceholder": "Tìm hoặc tạo thẻ",
+      "create": "Tạo thẻ “{name}”",
+      "noMatch": "Không có thẻ phù hợp",
+      "quickHint": "Chọn nhiều thẻ, hoặc nhập tên rồi nhấn Enter để tạo thẻ mới.",
+      "quickHintPick": "Chọn nhiều thẻ từ danh sách."
     },
     "groups": {
       "eyebrow": "Không gian làm việc · {workspace}",
@@ -406,7 +455,10 @@
         "address": "Địa chỉ",
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
-        "source": "Nguồn"
+        "source": "Nguồn",
+        "consent": "Đồng ý tiếp thị (có / không)",
+        "consentSms": "Đồng ý tiếp thị qua SMS (có / không)",
+        "consentEmail": "Đồng ý tiếp thị qua email (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -431,7 +483,7 @@
       "imported": "{count, plural, other {Đã nhập # liên hệ.}}",
       "importedUpdated": "{count, plural, other {Đã cập nhật # liên hệ hiện có.}}",
       "importedInvalid": "{count, plural, other {Đã bỏ qua # hàng không hợp lệ.}}",
-      "downloadRejects": "Tải xuống các hàng bị từ chối",
+      "downloadRejects": "Tải xuống lỗi và các dòng bị bỏ qua",
       "fileTooLarge": "Tệp đó lớn hơn {mb} MB.",
       "checking": "Đang kiểm tra tệp...",
       "errorFile": "Không thể đọc tệp đó dưới dạng CSV liên hệ. Hãy kiểm tra tệp có hàng tiêu đề và ít nhất một liên hệ.",
@@ -462,7 +514,8 @@
         "group_name_too_long": "tên nhóm quá dài",
         "tag_name_too_long": "tên thẻ quá dài",
         "plan_limit_reached": "đã đạt giới hạn liên hệ của gói",
-        "tag_limit_reached": "đã đạt giới hạn thẻ của gói"
+        "tag_limit_reached": "đã đạt giới hạn thẻ của gói",
+        "duplicate_in_file": "số trùng lặp, đã gộp vào dòng trước"
       },
       "statusHint": "Áp dụng cho các liên hệ mà tệp này tạo ra.",
       "queued": "Đang chờ bắt đầu...",
@@ -512,7 +565,17 @@
       "noActivity": "Liên hệ này chưa có hoạt động nào.",
       "loadMore": "Tải thêm",
       "yes": "Có",
-      "no": "Không"
+      "no": "Không",
+      "owner": "Người phụ trách",
+      "ownerNone": "Chưa phân công",
+      "ownerChange": "Đổi người phụ trách",
+      "ownerChanged": "Đã đặt người phụ trách là {name}.",
+      "ownerCleared": "Đã gỡ người phụ trách.",
+      "ownerConflict": "Người khác đã thay đổi liên hệ này trước. Đã tải lại; hãy thử lại.",
+      "ownerForbidden": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó.",
+      "ownerFailed": "Không thể đổi người phụ trách. Hãy thử lại.",
+      "ownerMe": "{name} (tôi)",
+      "ownerFormer": "Thành viên cũ"
     },
     "attributes": {
       "eyebrow": "Thêm / Thuộc tính",
@@ -1137,7 +1200,11 @@
         "willClear": "Sẽ được làm trống trên {count, plural, =1 {liên hệ đã chọn} other {tất cả # liên hệ đã chọn}}.",
         "requiredNoClear": "Không thể xóa giá trị của thuộc tính bắt buộc.",
         "problemEmpty": "Nhập giá trị, hoặc chọn Xóa giá trị."
-      }
+      },
+      "titleAll": "Cập nhật tất cả liên hệ phù hợp",
+      "hintAll": "Đặt cùng một giá trị cho mọi liên hệ khớp với bộ lọc hiện tại. Các trường để ở Giữ nguyên sẽ không bị thay đổi.",
+      "applyAll": "Cập nhật tất cả liên hệ phù hợp",
+      "ownerOnlyNote": "Với mọi liên hệ phù hợp, ở đây chỉ có thể đổi người phụ trách. Để đổi giai đoạn, trạng thái hoặc thuộc tính, hãy chọn các hàng."
     },
     "kanban": {
       "board": "Liên hệ theo giai đoạn",
@@ -1164,17 +1231,18 @@
         "updated": "Đã cập nhật",
         "rejected": "Bị từ chối",
         "actions": "Thao tác",
-        "downloadRejects": "Tải xuống dòng bị từ chối",
+        "downloadRejects": "Tải xuống lỗi và các dòng bị bỏ qua",
         "statuses": {
           "queued": "Đang xếp hàng",
           "running": "Đang chạy",
           "completed": "Hoàn tất",
           "failed": "Thất bại"
-        }
+        },
+        "by": "Người nhập"
       },
       "exports": {
         "title": "Lần xuất",
-        "hint": "Các lần xuất liên hệ từ Hub, mới nhất trước. Tệp đã tải xuống không được lưu giữ.",
+        "hint": "Các lần xuất danh bạ từ Hub, mới nhất trước. Mỗi tệp được giữ 30 ngày để bạn và đồng nghiệp có quyền xuất có thể tải lại.",
         "empty": "Chưa có lần xuất nào.",
         "by": "Bởi",
         "rows": "Liên hệ",
@@ -1183,8 +1251,176 @@
         "selections": {
           "ids": "Liên hệ đã đánh dấu",
           "filter": "Tất cả liên hệ khớp"
-        }
+        },
+        "download": "Tải xuống",
+        "noFile": "Không được lưu",
+        "keptUntil": "Giữ đến {date}",
+        "downloadFailed": "Không thể tải tệp. Có thể tệp đã hết hạn."
       }
+    },
+    "singleSend": {
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "send": "Gửi",
+      "sending": "Đang gửi",
+      "contact": "Liên hệ",
+      "name": "Tên",
+      "phone": "Di động",
+      "email": "Email",
+      "title": {
+        "whatsapp": "Gửi tin nhắn WhatsApp",
+        "sms": "Gửi SMS",
+        "email": "Gửi email",
+        "call": "Gọi"
+      },
+      "optedOut": "Liên hệ này đã từ chối nhận liên lạc. Không thể gửi tin nhắn.",
+      "noPhone": "Liên hệ này chưa có số điện thoại.",
+      "noEmail": "Liên hệ này chưa có địa chỉ email.",
+      "number": "Gửi từ",
+      "numberHint": "Số WhatsApp dùng để gửi tin nhắn.",
+      "noChannel": "Chưa kết nối số WhatsApp nào. Hãy kết nối một số trong Kênh trước.",
+      "template": "Mẫu WhatsApp",
+      "templatePlaceholder": "Chọn mẫu",
+      "noTemplates": "Không có mẫu nào được duyệt cho số này.",
+      "notSendable": "Không thể điền mẫu này tại đây ({reason}).",
+      "variables": "Biến của mẫu",
+      "preview": "Xem trước",
+      "slot": "Biến {key}",
+      "loading": "Đang tải",
+      "openFailed": "Không thể mở cuộc trò chuyện: {message}",
+      "sent": "Tin nhắn cho {name} đã được xếp hàng.",
+      "failed": "Không thể gửi: {message}",
+      "callIntro": "Thực hiện cuộc gọi WhatsApp tới liên hệ này từ trình duyệt.",
+      "callOff": "Số WhatsApp này chưa bật tính năng gọi. Hãy bật trong phần cài đặt của số.",
+      "callPermission": "Liên hệ chưa cho phép cuộc gọi. Hệ thống sẽ xin phép họ trước khi gọi.",
+      "callReady": "Sẵn sàng gọi {phone}.",
+      "later": {
+        "sms": "Chưa hỗ trợ gửi SMS từ CRM.",
+        "email": "Chưa hỗ trợ gửi email từ CRM."
+      },
+      "openApp": {
+        "sms": "Mở trong ứng dụng tin nhắn",
+        "email": "Mở trong ứng dụng email"
+      }
+    },
+    "views": {
+      "label": "Chế độ xem",
+      "all": "Tất cả liên hệ",
+      "add": "Thêm chế độ xem",
+      "changed": "Bộ lọc đã thay đổi kể từ khi lưu chế độ xem này",
+      "more": "Thêm tùy chọn cho {name}",
+      "picker": {
+        "title": "Chọn chế độ xem",
+        "create": "Tạo chế độ xem mới",
+        "search": "Tìm chế độ xem...",
+        "empty": "Không tìm thấy chế độ xem",
+        "pinned": "Trên thẻ",
+        "favorites": "Yêu thích",
+        "defaultFilters": "Bộ lọc mặc định",
+        "createdViews": "Chế độ xem đã tạo",
+        "addView": "Thêm chế độ xem",
+        "markFavorite": "Đánh dấu yêu thích",
+        "unmarkFavorite": "Bỏ khỏi yêu thích"
+      },
+      "menu": {
+        "rename": "Đổi tên chế độ xem",
+        "update": "Lưu bộ lọc hiện tại",
+        "unpin": "Gỡ khỏi thẻ",
+        "pin": "Hiện dưới dạng thẻ",
+        "delete": "Xóa chế độ xem",
+        "edit": "Sửa chế độ xem"
+      },
+      "drawer": {
+        "editTitle": "Đổi tên chế độ xem",
+        "name": "Tên chế độ xem",
+        "namePlaceholder": "Chế độ xem chưa đặt tên",
+        "shareWith": "Chia sẻ với",
+        "justMe": "Chỉ mình tôi",
+        "everyone": "Mọi người",
+        "save": "Cập nhật",
+        "cancel": "Hủy",
+        "close": "Đóng"
+      },
+      "toast": {
+        "created": "Đã tạo chế độ xem \"{name}\".",
+        "updated": "Đã cập nhật chế độ xem.",
+        "filtersSaved": "Đã lưu bộ lọc vào \"{name}\".",
+        "deleted": "Đã xóa chế độ xem \"{name}\".",
+        "failed": "Không thể lưu chế độ xem: {message}",
+        "conflict": "Người khác đã thay đổi chế độ xem này. Hãy tải lại và thử lại."
+      },
+      "delete": {
+        "title": "Xóa chế độ xem này?",
+        "message": "\"{name}\" sẽ bị xóa với tất cả những người được chia sẻ. Liên hệ không bị thay đổi.",
+        "confirm": "Xóa chế độ xem",
+        "cancel": "Giữ chế độ xem"
+      },
+      "editor": {
+        "title": {
+          "create": "Tạo chế độ xem mới",
+          "edit": "Sửa chế độ xem"
+        },
+        "close": "Đóng",
+        "back": "Quay lại liên hệ",
+        "name": "Tên chế độ xem",
+        "namePlaceholder": "Nhập tên chế độ xem",
+        "favorite": "Đánh dấu yêu thích",
+        "favoriteHint": "Chế độ xem yêu thích sẽ có thẻ riêng.",
+        "shareWith": "Chia sẻ với",
+        "justMe": "Chỉ mình tôi",
+        "everyone": "Mọi người",
+        "filterTitle": "Lọc liên hệ",
+        "filterHint": "Khớp tất cả hoặc bất kỳ điều kiện nào, và thêm nhóm để tạo bộ lọc phức tạp hơn.",
+        "columnsTitle": "Tùy chọn cột",
+        "locked": "Luôn hiển thị",
+        "cancel": "Hủy",
+        "create": "Tạo chế độ xem",
+        "save": "Lưu chế độ xem",
+        "saving": "Đang lưu",
+        "needName": "Hãy nhập tên chế độ xem.",
+        "needFilter": "Thêm ít nhất một điều kiện đầy đủ.",
+        "notFound": "Không tìm thấy chế độ xem này hoặc đã bị xóa.",
+        "noPermission": "Bạn không có quyền thực hiện thao tác này.",
+        "loading": "Đang tải",
+        "columnsHint": "Tìm và chọn các cột mà chế độ xem này hiển thị, sau đó kéo các cột đã chọn để sắp xếp thứ tự.",
+        "drag": "Kéo để sắp xếp lại {name}",
+        "selectedUsers": "Người dùng đã chọn",
+        "accessLevel": "Mức truy cập",
+        "canView": "Có thể xem",
+        "canEdit": "Có thể xem và sửa",
+        "peoplePlaceholder": "Tìm người",
+        "noPeople": "Không tìm thấy người nào",
+        "removePerson": "Gỡ {name}",
+        "clearPeople": "Xóa tất cả người",
+        "needPeople": "Hãy chọn ít nhất một người.",
+        "onlyCreator": "Chỉ người tạo chế độ xem này mới có thể thay đổi người được chia sẻ.",
+        "searchColumns": "Tìm cột",
+        "noColumnMatch": "Không có cột nào khớp.",
+        "available": "Cột khả dụng",
+        "selected": "Cột đã chọn",
+        "selectAll": "Chọn tất cả",
+        "reorder": "Kéo để sắp xếp lại các cột",
+        "remove": "Gỡ {name}"
+      },
+      "presets": {
+        "myContacts": "Liên hệ của tôi",
+        "newThisWeek": "Mới trong tuần này",
+        "newLastWeek": "Mới tuần trước",
+        "recentlyCreated": "Mới tạo gần đây",
+        "recentlyModified": "Mới sửa gần đây",
+        "recentlyImported": "Mới nhập gần đây",
+        "neverContacted": "Chưa từng liên hệ",
+        "needsFollowUp": "Cần theo dõi",
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động",
+        "unsubscribed": "Đã hủy đăng ký"
+      }
+    },
+    "erase": {
+      "scope": "Xóa một liên hệ cũng xóa hội thoại, tin nhắn, phương tiện, tệp, bản ghi âm cuộc gọi và nhật ký cuộc gọi của họ. Khách tiềm năng, giao dịch, công việc và hóa đơn vẫn được giữ.",
+      "scopeMany": "Xóa các liên hệ cũng xóa hội thoại, tin nhắn, phương tiện, tệp, bản ghi âm cuộc gọi và nhật ký cuộc gọi của họ. Khách tiềm năng, giao dịch, công việc và hóa đơn vẫn được giữ.",
+      "keepHistory": "Giữ lịch sử hội thoại nhưng không kèm danh tính của người này",
+      "keepHistoryHint": "Các hội thoại vẫn được giữ làm hồ sơ nhưng không còn liên kết đến người này."
     }
   }
 }
