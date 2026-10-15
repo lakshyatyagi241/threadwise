@@ -25,6 +25,7 @@ import { AgreeLabel } from './legal-links';
 import { saveChallenge, toStoredChallenge } from './otp-challenge';
 import { PolicyErrors } from './policy-errors';
 import { longEnough, policyHintParts } from './policy-hint';
+import { sanitizeReferral } from './referral';
 import { bffSignupResponseSchema } from './schemas';
 import { completeSignIn } from './sign-in-complete';
 import {
@@ -34,13 +35,30 @@ import {
   readSignupStageRaw,
   type StoredSignupStage,
 } from './signup-challenge';
-import { Button, ArrowIcon, Checkbox, PasswordInput, Spinner } from './ui';
+import { Button, ArrowIcon, Checkbox, Input, PasswordInput, Spinner, cn } from './ui';
 import { failedFields } from './zod-fields';
 
-const FIELD_ORDER = ['password', 'confirmPassword', 'acceptTerms'] as const;
+const FIELD_ORDER = ['referralCode', 'password', 'confirmPassword', 'acceptTerms'] as const;
 
 const noopSubscribe = () => () => undefined;
 const UNREAD = Symbol('unread');
+
+/**
+ * Where a submit error for THIS step belongs: next to one of its own fields, or as a page-level
+ * alert. This step has no email input (email was collected and already verified at steps 1-2), so
+ * an error the server named `email` for — notably `AUTH_IDENTITY_EXISTS`'s re-check in `setPassword`,
+ * a real race when someone else claims the same identity in the minutes between steps 1 and 3 — has
+ * nowhere to render next to. Blindly trusting the generic "does `fieldErrors` have this field"
+ * check (as `skipFieldMessage` elsewhere does, correctly, on forms that DO have the field) would
+ * silently swallow the message: `fieldErrors.email` gets set but nothing on the page shows it, so
+ * `skipFieldMessage` ends up true and `FormError` renders nothing. Only a field that actually exists
+ * on this page is allowed to claim the message; everything else falls through to the page-level alert.
+ */
+export function fieldMessageFor(mapped: MappedError): string | null {
+  return mapped.field && (FIELD_ORDER as readonly string[]).includes(mapped.field)
+    ? mapped.field
+    : null;
+}
 
 /**
  * Sign-up step 3 of 3: the account's password and terms, now that the email is verified
@@ -109,6 +127,12 @@ export function PasswordEntry({
   const [error, setError] = useState<MappedError | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, ReactNode>>({});
   const [agree, setAgree] = useState(false);
+  // A code told to the visitor verbally or in a message, with no `?ref=` link and so no cookie for the BFF's
+  // server-side fallback to pick up: the one place left to type it, since this is when `referralCode` is
+  // actually sent to the server (step 1 only collects name/email/phone). Same sanitisation as the old
+  // one-page form (`sanitizeReferral`): upper-case letters and digits only, 16 characters.
+  const [referralEdit, setReferralEdit] = useState<string | null>(null);
+  const referral = referralEdit ?? '';
 
   function show(failed: string[], messages: Record<string, ReactNode>) {
     setFieldErrors(messages);
@@ -132,6 +156,7 @@ export function PasswordEntry({
       token: initial.token,
       password,
       acceptTerms: agree ? (true as const) : (false as unknown as true),
+      ...(referral ? { referralCode: referral } : {}),
     };
     const parsed = signupSetPasswordRequestSchema.safeParse(body);
     const messages: Record<string, ReactNode> = {};
@@ -177,8 +202,9 @@ export function PasswordEntry({
           const first = mapped.fieldErrors[name]?.[0];
           if (first) messages[name] = first;
         }
-      } else if (mapped.field) {
-        messages[mapped.field] = te(mapped.key, mapped.params);
+      } else {
+        const fieldHere = fieldMessageFor(mapped);
+        if (fieldHere) messages[fieldHere] = te(mapped.key, mapped.params);
       }
       setFieldErrors(messages);
       focusFirstInvalid(form.current, FIELD_ORDER, Object.keys(messages));
@@ -204,10 +230,34 @@ export function PasswordEntry({
           error={error}
           skipFieldMessage={Boolean(
             error &&
-            (error.key === 'passwordPolicy' || (error.field && fieldErrors[error.field])),
+            (error.key === 'passwordPolicy' ||
+              (fieldMessageFor(error) && fieldErrors[fieldMessageFor(error) as string])),
           )}
         />
       </div>
+
+      <FormField
+        label={t('referral')}
+        optionalLabel={t('optional')}
+        error={fieldErrors.referralCode}
+      >
+        {(p) => (
+          <Input
+            {...p}
+            name="referralCode"
+            value={referral}
+            onChange={(e) => setReferralEdit(sanitizeReferral(e.target.value))}
+            autoComplete="off"
+            autoCapitalize="characters"
+            spellCheck={false}
+            maxLength={16}
+            placeholder={t('referralPlaceholder')}
+            className={cn(
+              'py-2.5 font-mono uppercase tracking-wider placeholder:font-sans placeholder:normal-case placeholder:tracking-normal',
+            )}
+          />
+        )}
+      </FormField>
 
       <FormField label={t('password')} error={fieldErrors.password} hint={passwordHint}>
         {(p) => (

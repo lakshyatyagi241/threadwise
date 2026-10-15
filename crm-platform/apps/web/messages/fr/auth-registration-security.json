@@ -193,6 +193,7 @@
         "signupClosed": "Les inscriptions sont fermées. Demandez une invitation à un administrateur.",
         "slugTaken": "Cette adresse d’espace de travail est déjà prise.",
         "emailTaken": "Cet e-mail est déjà utilisé dans cet espace de travail.",
+        "identityExists": "Un compte existe déjà avec cet e-mail ou ce numéro de téléphone.",
         "passwordPolicy": "Ce mot de passe ne respecte pas la politique de sécurité :",
         "tokenInvalid": "Ce lien est invalide ou a expiré.",
         "emailUnverified": "Confirmez d’abord votre adresse e-mail.",

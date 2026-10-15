@@ -193,6 +193,7 @@
         "signupClosed": "Pendaftaran ditutup. Minta undangan kepada administrator.",
         "slugTaken": "Alamat ruang kerja itu sudah dipakai.",
         "emailTaken": "Email itu sudah digunakan di ruang kerja ini.",
+        "identityExists": "Sudah ada akun dengan email atau nomor telepon ini.",
         "passwordPolicy": "Kata sandi itu tidak memenuhi kebijakan keamanan:",
         "tokenInvalid": "Tautan ini tidak valid atau sudah kedaluwarsa.",
         "emailUnverified": "Konfirmasi alamat email Anda terlebih dahulu.",

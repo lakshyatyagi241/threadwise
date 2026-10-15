@@ -193,6 +193,7 @@
         "signupClosed": "O cadastro está fechado. Peça um convite a um administrador.",
         "slugTaken": "Esse endereço de espaço de trabalho já está em uso.",
         "emailTaken": "Esse e-mail já é usado neste espaço de trabalho.",
+        "identityExists": "Já existe uma conta com esse e-mail ou número de telefone.",
         "passwordPolicy": "Essa senha não atende à política de segurança:",
         "tokenInvalid": "Este link é inválido ou expirou.",
         "emailUnverified": "Confirme primeiro seu endereço de e-mail.",

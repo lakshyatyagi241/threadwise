@@ -193,6 +193,7 @@
         "signupClosed": "注册已关闭。请向管理员索取邀请。",
         "slugTaken": "该工作区地址已被占用。",
         "emailTaken": "该邮箱已在此工作区中使用。",
+        "identityExists": "该邮箱或电话号码已存在账户。",
         "passwordPolicy": "该密码不符合安全策略：",
         "tokenInvalid": "此链接无效或已过期。",
         "emailUnverified": "请先确认你的邮箱地址。",

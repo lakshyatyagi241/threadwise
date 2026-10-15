@@ -193,6 +193,7 @@
         "signupClosed": "Registration is closed. Ask an administrator for an invitation.",
         "slugTaken": "That workspace address is already taken.",
         "emailTaken": "That email is already used in this workspace.",
+        "identityExists": "An account with this email or phone already exists.",
         "passwordPolicy": "That password does not meet the security policy:",
         "tokenInvalid": "This link is invalid or has expired.",
         "emailUnverified": "Confirm your email address first.",

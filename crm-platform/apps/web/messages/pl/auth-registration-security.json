@@ -193,6 +193,7 @@
         "signupClosed": "Rejestracja jest zamknięta. Poproś administratora o zaproszenie.",
         "slugTaken": "Ten adres przestrzeni roboczej jest już zajęty.",
         "emailTaken": "Ten e-mail jest już używany w tej przestrzeni roboczej.",
+        "identityExists": "Konto z tym adresem e-mail lub numerem telefonu już istnieje.",
         "passwordPolicy": "To hasło nie spełnia zasad bezpieczeństwa:",
         "tokenInvalid": "Ten link jest nieprawidłowy lub wygasł.",
         "emailUnverified": "Najpierw potwierdź swój adres e-mail.",

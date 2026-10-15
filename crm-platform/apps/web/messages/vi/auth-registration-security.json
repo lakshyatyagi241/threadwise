@@ -193,6 +193,7 @@
         "signupClosed": "Đăng ký đã đóng. Hãy nhờ quản trị viên gửi lời mời.",
         "slugTaken": "Địa chỉ không gian làm việc này đã được dùng.",
         "emailTaken": "Email này đã được dùng trong không gian làm việc này.",
+        "identityExists": "Đã có tài khoản sử dụng email hoặc số điện thoại này.",
         "passwordPolicy": "Mật khẩu này không đáp ứng chính sách bảo mật:",
         "tokenInvalid": "Liên kết này không hợp lệ hoặc đã hết hạn.",
         "emailUnverified": "Hãy xác nhận địa chỉ email của bạn trước.",

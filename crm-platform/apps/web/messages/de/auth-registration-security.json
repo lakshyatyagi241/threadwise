@@ -193,6 +193,7 @@
         "signupClosed": "Die Registrierung ist geschlossen. Bitten Sie einen Administrator um eine Einladung.",
         "slugTaken": "Diese Workspace-Adresse ist bereits vergeben.",
         "emailTaken": "Diese E-Mail-Adresse wird in diesem Workspace bereits verwendet.",
+        "identityExists": "Für diese E-Mail-Adresse oder Telefonnummer besteht bereits ein Konto.",
         "passwordPolicy": "Das Passwort erfüllt die Sicherheitsrichtlinie nicht:",
         "tokenInvalid": "Dieser Link ist ungültig oder abgelaufen.",
         "emailUnverified": "Bestätigen Sie zuerst Ihre E-Mail-Adresse.",

@@ -193,6 +193,7 @@
         "signupClosed": "La registrazione è chiusa. Chiedi un invito a un amministratore.",
         "slugTaken": "L'indirizzo del workspace è già in uso.",
         "emailTaken": "Questa email è già utilizzata in questo workspace.",
+        "identityExists": "Esiste già un account con questa email o questo numero di telefono.",
         "passwordPolicy": "La password non rispetta la politica di sicurezza:",
         "tokenInvalid": "Questo link non è valido o è scaduto.",
         "emailUnverified": "Conferma prima il tuo indirizzo email.",

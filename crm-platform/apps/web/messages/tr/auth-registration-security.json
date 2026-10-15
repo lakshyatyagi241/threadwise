@@ -193,6 +193,7 @@
         "signupClosed": "Kayıt kapalı. Bir yöneticiden davet isteyin.",
         "slugTaken": "Bu çalışma alanı adresi zaten alınmış.",
         "emailTaken": "Bu e-posta bu çalışma alanında zaten kullanılıyor.",
+        "identityExists": "Bu e-posta veya telefon numarasıyla zaten bir hesap var.",
         "passwordPolicy": "Bu parola güvenlik politikasını karşılamıyor:",
         "tokenInvalid": "Bu bağlantı geçersiz veya süresi dolmuş.",
         "emailUnverified": "Önce e-posta adresinizi onaylayın.",
