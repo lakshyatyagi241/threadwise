@@ -8,6 +8,8 @@ import {
   type SignupResendOtpRequest,
   type SignupResponse,
   type SignupVerifyOtpRequest,
+  type SignupStartRequest,
+  type SignupStartResponse,
   type Authenticated,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -63,6 +65,22 @@ interface StagedSignup {
   ip: string | null;
 }
 
+/**
+ * The pre-account stage of the three-step sign-up (collect -> verify email code -> set password).
+ * Deliberately shorter-lived than `StagedSignup`'s 7 days: nothing is created until the password
+ * step, so there is no account to recover if the person wanders off.
+ */
+interface EmailStage {
+  fullName: string;
+  email: string;
+  phoneE164: string | null;
+  codeHash: string;
+  codeExpiresAt: number;
+  verified: boolean;
+  attempts: number;
+  lastSentAt: number;
+}
+
 export interface CreateOptions {
   phoneVerified: boolean;
   emailVerified?: boolean;
@@ -86,6 +104,12 @@ export interface CreateOptions {
  * the code itself expires after `otp.ttlMinutes`, and a resend issues a fresh one at any time.
  */
 const STAGE_TTL_SECONDS = 7 * 24 * 60 * 60;
+/** The three-step email-verification flow's own, much shorter stage: 30 minutes to finish all three steps. */
+const EMAIL_STAGE_TTL_SECONDS = 30 * 60;
+const EMAIL_CODE_TTL_SECONDS = 5 * 60;
+const EMAIL_CODE_LENGTH = 6;
+const EMAIL_CODE_MAX_ATTEMPTS = 5;
+const EMAIL_CODE_RESEND_COOLDOWN_SECONDS = 60;
 const SIGNUPS_PER_IP_PER_HOUR = 10;
 const OTP_SENDS_PER_NUMBER_PER_HOUR = 5;
 const OTP_SENDS_PER_IP_PER_HOUR = 15;
@@ -144,6 +168,57 @@ export class SignupService {
     private readonly db: DatabaseService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
+
+  /**
+   * Step 1 of the three-step sign-up: collect name/email(/phone), refuse a duplicate identity
+   * before anything is sent, then stage the pre-account data and mail a code. Nothing is created
+   * yet — the organization and user only appear once the password step (Task 7) lands.
+   */
+  async start(req: SignupStartRequest, meta: ClientMeta): Promise<SignupStartResponse> {
+    const exists = await this.tenants.identityExists(req.email, req.phone ?? null);
+    if (exists) {
+      throw new AppError(
+        ERROR_CODES.AUTH_IDENTITY_EXISTS,
+        'An account with this email already exists.',
+        HttpStatus.CONFLICT,
+        [
+          {
+            path: 'email',
+            message:
+              'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
+          },
+        ],
+      );
+    }
+
+    const token = randomToken();
+    const code = randomNumericCode(EMAIL_CODE_LENGTH);
+    const stage: EmailStage = {
+      fullName: req.fullName,
+      email: req.email,
+      phoneE164: req.phone ?? null,
+      codeHash: await hash(code),
+      codeExpiresAt: Date.now() + EMAIL_CODE_TTL_SECONDS * 1000,
+      verified: false,
+      attempts: 0,
+      lastSentAt: Date.now(),
+    };
+    await this.redis.set(
+      AuthKeys.signupEmailStage(token),
+      JSON.stringify(stage),
+      'EX',
+      EMAIL_STAGE_TTL_SECONDS,
+    );
+    await this.mail.sendSignupCode(req.email, req.fullName, code, EMAIL_CODE_TTL_SECONDS / 60);
+
+    return {
+      token,
+      maskedEmail: maskEmail(req.email),
+      expiresInSeconds: EMAIL_CODE_TTL_SECONDS,
+      resendCooldownSeconds: EMAIL_CODE_RESEND_COOLDOWN_SECONDS,
+      codeLength: EMAIL_CODE_LENGTH,
+    };
+  }
 
   async signup(req: SignupRequest, meta: ClientMeta): Promise<SignupResponse> {
     const registration = await this.policy.registration();
@@ -697,7 +772,21 @@ export class SignupService {
         ERROR_CODES.AUTH_OTP_SEND_FAILED,
         'We could not send the verification code. Please try again.',
         HttpStatus.BAD_GATEWAY,
+        [],
       );
     }
   }
+}
+
+/**
+ * "a***a@example.com" — first and last character of the local part kept, the rest starred out,
+ * the domain shown in full. Display only, like `maskPhone`; never the full address.
+ */
+export function maskEmail(email: string): string {
+  const at = email.indexOf('@');
+  if (at <= 0) return email;
+  const local = email.slice(0, at);
+  const domain = email.slice(at);
+  if (local.length <= 2) return `${local[0]}***${domain}`;
+  return `${local[0]}***${local[local.length - 1]}${domain}`;
 }
