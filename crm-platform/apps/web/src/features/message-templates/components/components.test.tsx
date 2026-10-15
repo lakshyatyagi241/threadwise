@@ -274,13 +274,17 @@ const summary = (over: Partial<TemplateSummary> = {}): TemplateSummary =>
   });
 
 describe('library card', () => {
-  const card = (t: TemplateSummary, over: { mayEdit?: boolean; mayDelete?: boolean } = {}) =>
+  const card = (
+    t: TemplateSummary,
+    over: { mayEdit?: boolean; mayDelete?: boolean; mayCurl?: boolean } = {},
+  ) =>
     html(
       <TemplateCard
         template={t}
         connectionLabel="+1555-013-7150"
         mayEdit={over.mayEdit ?? true}
         mayDelete={over.mayDelete ?? true}
+        mayCurl={over.mayCurl ?? false}
         onDelete={noop}
       />,
     );
@@ -316,6 +320,13 @@ describe('library card', () => {
     expect(card(summary(), { mayDelete: false })).not.toContain('Delete sample');
     expect(card(summary({ status: 'disabled' }))).not.toContain('Edit template');
     expect(card(summary({ templateType: 'carousel' }))).not.toContain('Edit template');
+  });
+
+  it('shows the cURL shortcut only when the person may see it and the template is approved', () => {
+    const href = 'href="/templates/22222222-2222-4222-8222-222222222222#curl"';
+    expect(card(summary({ status: 'approved' }))).not.toContain(href);
+    expect(card(summary({ status: 'approved' }), { mayCurl: true })).toContain(href);
+    expect(card(summary({ status: 'pending' }), { mayCurl: true })).not.toContain(href);
   });
 
   it("shows Meta's reason on a rejected template", () => {

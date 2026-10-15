@@ -1,4 +1,5 @@
 import {
+  listApiKeysResponseSchema,
   lintTemplateResultSchema,
   syncTemplatesResultSchema,
   templateCountsSchema,
@@ -70,4 +71,14 @@ export const templatesApi = {
 export const connectionsApi = {
   list: (signal?: AbortSignal) =>
     apiFetch('/waba/numbers', { schema: wabaConnectionListSchema, signal }),
+};
+
+/** Whether the workspace has a live API key (the cURL card tells the person to create one first when it has none). */
+export const apiKeysApi = {
+  list: (signal?: AbortSignal) =>
+    apiFetch('/developer/keys', {
+      query: { limit: 100 },
+      schema: listApiKeysResponseSchema,
+      signal,
+    }),
 };
