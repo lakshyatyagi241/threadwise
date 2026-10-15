@@ -108,7 +108,8 @@ const STAGE_TTL_SECONDS = 7 * 24 * 60 * 60;
 const EMAIL_STAGE_TTL_SECONDS = 30 * 60;
 const EMAIL_CODE_TTL_SECONDS = 5 * 60;
 const EMAIL_CODE_LENGTH = 6;
-const EMAIL_CODE_MAX_ATTEMPTS = 5;
+/** Consumed by the verify-code method (Task 6), not by `start()`; prefixed until then. */
+const _EMAIL_CODE_MAX_ATTEMPTS = 5;
 const EMAIL_CODE_RESEND_COOLDOWN_SECONDS = 60;
 const SIGNUPS_PER_IP_PER_HOUR = 10;
 const OTP_SENDS_PER_NUMBER_PER_HOUR = 5;
@@ -175,6 +176,28 @@ export class SignupService {
    * yet — the organization and user only appear once the password step (Task 7) lands.
    */
   async start(req: SignupStartRequest, meta: ClientMeta): Promise<SignupStartResponse> {
+    const registration = await this.policy.registration();
+    if (!registration.publicRegistration) {
+      throw new AppError(
+        ERROR_CODES.AUTH_SIGNUP_CLOSED,
+        'Registration is closed. Ask an administrator for an invitation.',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    await this.captcha.assert(req.captchaToken, 'register');
+    await this.assertEmailAllowed(req.email, registration);
+
+    const ip = normalizeIp(meta.ip) ?? 'unknown';
+    if (
+      !(await this.rate.allow(AuthKeys.ipThrottle('signup', ip), SIGNUPS_PER_IP_PER_HOUR, 3600))
+    ) {
+      throw new AppError(
+        ERROR_CODES.RATE_LIMITED,
+        'Too many sign-ups from this address. Try later.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
     const exists = await this.tenants.identityExists(req.email, req.phone ?? null);
     if (exists) {
       throw new AppError(
@@ -203,13 +226,26 @@ export class SignupService {
       attempts: 0,
       lastSentAt: Date.now(),
     };
-    await this.redis.set(
-      AuthKeys.signupEmailStage(token),
-      JSON.stringify(stage),
-      'EX',
-      EMAIL_STAGE_TTL_SECONDS,
+    const stageKey = AuthKeys.signupEmailStage(token);
+    await this.redis.set(stageKey, JSON.stringify(stage), 'EX', EMAIL_STAGE_TTL_SECONDS);
+
+    const sent = await this.mail.sendSignupCode(
+      req.email,
+      req.fullName,
+      code,
+      EMAIL_CODE_TTL_SECONDS / 60,
     );
-    await this.mail.sendSignupCode(req.email, req.fullName, code, EMAIL_CODE_TTL_SECONDS / 60);
+    if (!sent) {
+      // Don't leave a stage behind that nobody can ever complete: the code that would
+      // unlock it was never delivered.
+      await this.redis.del(stageKey);
+      this.logger.error('sign-up code mail could not be sent');
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_SEND_FAILED,
+        'We could not send the verification code. Please try again.',
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
 
     return {
       token,
@@ -772,7 +808,6 @@ export class SignupService {
         ERROR_CODES.AUTH_OTP_SEND_FAILED,
         'We could not send the verification code. Please try again.',
         HttpStatus.BAD_GATEWAY,
-        [],
       );
     }
   }
