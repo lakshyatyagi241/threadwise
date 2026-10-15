@@ -584,8 +584,8 @@ it states design intent, not legal advice (section 10).
 | `uk_gdpr` | United Kingdom       | as `gdpr_eu`, plus PECR (opt-in for electronic marketing); minors under 13                                                                                                                                    | 30 days                            | opt-in                             | none statutory                                  | 72 hours to the ICO                      |
 | `dpdp_in` | India                | **grievance officer** (name and contact) required; **notice in English and one Indian language**; **parental consent flag** for minors under 18; **consent manager placeholder** (name, link; no integration) | 30 days (inferred, not fixed)      | opt-in, withdrawable               | none beyond `trai_in`                           | Board and affected persons (CERT-In 6 h) |
 | `ccpa_us` | United States        | **Do Not Sell or Share** switch and **opt-out notice** link                                                                                                                                                   | 45 days                            | opt-out (opt-in under 16 for sale) | none                                            | per state law                            |
-| `tcpa_us` | United States        | **quiet hours** 21:00 to 08:00 and **calling window** 08:00 to 21:00 (stored; the contact's local time is a follow-up, see 11.5); **DNC registry hook**; recorded opt-in on the checklist                     | n/a                                | opt-in (written)                   | quiet 21:00 to 08:00, calling 08:00 to 21:00    | n/a                                      |
-| `trai_in` | India                | **quiet hours** 21:00 to 09:00 and **calling window** 09:00 to 21:00 (stored, see 11.5); **DND (NDNC) hook**; recorded opt-in on the checklist                                                                | n/a                                | opt-in                             | quiet 21:00 to 09:00, calling 09:00 to 21:00    | CERT-In 6 hours                          |
+| `tcpa_us` | United States        | **quiet hours** 21:00 to 08:00 and **calling window** 08:00 to 21:00 (enforced by deferring, on the contact's local time, see 11.5); **DNC registry hook**; recorded opt-in on the checklist                  | n/a                                | opt-in (written)                   | quiet 21:00 to 08:00, calling 08:00 to 21:00    | n/a                                      |
+| `trai_in` | India                | **quiet hours** 21:00 to 09:00 and **calling window** 09:00 to 21:00 (enforced by deferring, see 11.5); **DND (NDNC) hook**; recorded opt-in on the checklist                                                 | n/a                                | opt-in                             | quiet 21:00 to 09:00, calling 09:00 to 21:00    | CERT-In 6 hours                          |
 | `lgpd_br` | Brazil               | a DPO (encarregado) contact on the checklist; sub-processor locations; the answer time of 15 days                                                                                                             | 15 days                            | opt-in                             | none statutory                                  | "reasonable time" to the ANPD            |
 | `pdpa_sg` | Singapore            | a DPO contact required; Do Not Call registry hook for calls and texts                                                                                                                                         | 30 days                            | opt-in                             | none statutory                                  | 3 days to the PDPC when notifiable       |
 | `generic` | every other country  | nothing extra                                                                                                                                                                                                 | 30 days                            | opt-in recommended                 | none                                            | n/a                                      |
@@ -611,13 +611,36 @@ A profile that is switched off adds nothing, and nothing is switched on without 
 
 ### 11.5 Quiet hours, calling windows, DND hooks
 
-Stored per workspace: quiet hours for messages, a calling window and days for calls, the time zone they are read in (default: the
-workspace's), and a DND registry choice (`none`, `trai_ndnc`, `us_dnc`, `sg_dnc`, `custom`). **Enforcement is a follow-up (BL-177), on
-purpose.** The ConsentGate answers allow or deny for one send; a quiet hour needs a third answer, **defer until the window opens**, and a
-dispatcher that holds the message and sends it later. A deny would silently drop a broadcast scheduled for 22:00. Until that exists the
-pure helper `isInsideWindow` is tested and the checklist shows "stored, not enforced". Two further limits: the window should be read in
-the **contact's** time zone (the ledger has no contact time zone yet), and a DND check needs a registry feed we do not have (the hook is a
-setting and a design, no integration).
+Stored per workspace: quiet hours for messages, a calling window and days for calls, a fallback time zone, and a DND registry choice
+(`none`, `trai_ndnc`, `us_dnc`, `sg_dnc`, `custom`). **Enforced by deferring (BL-177, built).** The ConsentGate still answers allow or
+deny for one send; a quiet hour needs a third answer, **hold until the window opens**, which is a separate decision taken right after the
+gate allowed the send (`SendWindowService`, the pure rule `decideSendWindow` in `@crm/contracts`). A deny would silently drop a broadcast
+scheduled for 22:00, so nothing is ever denied for the hour.
+
+What is decided, and for whom:
+
+- **Only the marketing purpose is asked.** A service reply inside the 24 hour window, a utility or authentication template, a booking notice
+  and a note to a colleague's number are never held. Marketing is the gate's `marketing` ledger purpose: a MARKETING template, a campaign
+  or broadcast of marketing content, a scheduled message, a proactive flow's free-form message, a marketing mail.
+- **Messages: quiet hours defer.** The window used is the one the workspace switched on (a profile only suggests hours; D13 stands: nothing
+  changes without a person saving). Inbox and API sends hold the queue job (`message-dispatch`, delayed to the opening; the message stays
+  `queued` with `meta.hold`, a `held` event, and the thread shows "Held until"); flows halt the run and retry (every 5 minutes, inside the
+  run's seven day limit); broadcasts leave the recipient `pending` with `held_until`, send the rest and pause with reason `quiet_hours` (the
+  resume sweep continues them); campaigns put the recipient back to `queued` with `held_until` and schedule themselves again for the first
+  opening; scheduled messages leave the recipient `pending` and pause until the first opening; a guided campaign's follow-up step is looked
+  at again when the hours end. At release the ConsentGate is asked again, so a STOP that arrived while the message waited still stops it.
+- **Calls: the calling window refuses.** A live call cannot wait in a queue, so `POST /v2/calling/calls/dial` outside the window answers
+  422 `CALL_OUTSIDE_WINDOW` with the instant the window opens, before Meta is asked anything. A call back to someone who messaged or called in
+  the last 24 hours is service and is not refused.
+- **Which clock.** The contact's own time zone property (a contact property of type "timezone", else a property keyed `timezone`), else the
+  country code of their number (one zone for most countries; for a country that spans hours, `+1`, `+7`, `+52`, `+55`, `+61`, `+62`, the
+  hours must be right in **every** zone, the strictest reading, and when no moment satisfies all of them the fallback zone alone decides),
+  else the zone chosen in the settings, else the workspace's, else UTC. A number written without its country code is never guessed.
+- **When the windows cannot be read** (a database error) a marketing send waits five minutes and asks again; it never goes out unchecked.
+
+Still open: a DND check needs a registry feed we do not have (the hook is a setting and a design, no integration; BL-181); the broadcasts of
+LINE, Facebook and Instagram, the one-off test sends, and a recurring campaign's catch-up of held recipients are follow-ups (BL-188 to BL-190
+in the backlog).
 
 ### 11.6 Built and open
 
@@ -627,8 +650,8 @@ setting and a design, no integration).
 | BL-173 | Sub-processor list (admin-editable) with an optional public page `/trust/<workspace>`, and the DPA template download                                                                             | built (v1)                                         |
 | BL-174 | Compliance checklist: each baseline point and each switched-on profile requirement as built, partial or open, from real workspace data                                                           | built (v1)                                         |
 | BL-175 | Privacy and terms links per workspace, offered to the form builder consent block and the consent-notice editor; optional `termsUrl` beside `privacyUrl`                                          | built (v1)                                         |
-| BL-176 | Quiet hours and calling windows stored, with the pure window helper                                                                                                                              | built (v1); enforcement is BL-177                  |
-| BL-177 | Enforce quiet hours and calling windows (defer, not deny) in the dispatcher, per contact time zone; DND registry check                                                                           | open                                               |
+| BL-176 | Quiet hours and calling windows stored, with the pure window helper                                                                                                                              | built (v1); enforced by BL-177 (built)             |
+| BL-177 | Enforce quiet hours and calling windows (defer, not deny) in the dispatchers, per contact time zone (11.5); the DND registry check stays a hook (BL-181)                                         | built, awaiting sign-off                           |
 | BL-178 | HIPAA: the "do not store protected health information" notice in onboarding and the Compliance center; [hipaa-not-supported.md](../privacy/hipaa-not-supported.md)                               | built (notice, doc); the terms text is the owner's |
 | BL-179 | Workspace default notice in English and one more language (`consent_notices`, scope `workspace`), offered to forms and the notice editor                                                         | built (v1)                                         |
 | BL-180 | Contact-level extras: a minor tag per contact (the gate's `subject_minor`), parental-consent evidence, a per-contact "do not sell or share" opt-out, honouring the Global Privacy Control signal | open                                               |
@@ -643,10 +666,10 @@ necessary, audit trails, encryption in transit and at rest, breach notification,
 
 ### 11.8 Decisions for the owner (from this section)
 
-| #   | Decision                                                                                                              | Recommendation                                                 |
-| --- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
-| D13 | Should accepting a regime profile change the Consent switch ("require recorded consent") by itself?                   | No (today a hint and a link); a silent change would stop sends |
-| D14 | Enforce quiet hours by deferring, which needs a "held until" state in the dispatcher and a contact time zone (BL-177) | Yes, after the contact time zone exists; never as a deny       |
-| D15 | A public `/trust/<workspace>` page for the sub-processor list                                                         | Off by default, a switch per workspace (built so)              |
-| D16 | The platform's own sub-processor register in the app (read-only) next to the workspace list                           | Yes once the owner fills the TODO columns of the register      |
-| D17 | Add the "no PHI" clause to the platform terms and the signup checkbox text                                            | Yes; the wording in the HIPAA note is a draft for counsel      |
+| #   | Decision                                                                                                              | Recommendation                                                        |
+| --- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| D13 | Should accepting a regime profile change the Consent switch ("require recorded consent") by itself?                   | No (today a hint and a link); a silent change would stop sends        |
+| D14 | Enforce quiet hours by deferring, which needs a "held until" state in the dispatcher and a contact time zone (BL-177) | Yes; built (11.5): never a deny, the zone read from the contact first |
+| D15 | A public `/trust/<workspace>` page for the sub-processor list                                                         | Off by default, a switch per workspace (built so)                     |
+| D16 | The platform's own sub-processor register in the app (read-only) next to the workspace list                           | Yes once the owner fills the TODO columns of the register             |
+| D17 | Add the "no PHI" clause to the platform terms and the signup checkbox text                                            | Yes; the wording in the HIPAA note is a draft for counsel             |

@@ -10,9 +10,10 @@ import { CARD } from './fields';
 const DAYS = [1, 2, 3, 4, 5, 6, 7] as const;
 
 /**
- * Quiet hours for messages, a calling window for calls, the time zone they are read in and the Do Not Call / DND registry the workspace
- * scrubs against. These are STORED. Nothing enforces them yet: a send is not held back and a call is not blocked outside the window.
- * The screen says so, and so does the checklist.
+ * Quiet hours for messages, a calling window for calls, the fallback time zone they are read in and the Do Not Call / DND registry the
+ * workspace scrubs against. Enforced (BL-177): a marketing message inside the quiet hours is held until they end, a call outside the
+ * calling window is refused. Each is read on the contact's own clock; the zone here is the fallback. The screen says what is and is not
+ * held, and so does the checklist.
  */
 export function WindowsTab({
   form,
@@ -37,8 +38,8 @@ export function WindowsTab({
 
   return (
     <div className="space-y-4">
-      <Alert tone="warning" data-testid="not-enforced">
-        {t('notEnforced')}
+      <Alert tone="info" data-testid="enforced-note">
+        {t('enforcedNote')}
       </Alert>
       <p className="text-sm text-muted-foreground">{t('intro')}</p>
 

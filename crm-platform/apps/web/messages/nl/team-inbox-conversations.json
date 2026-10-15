@@ -232,7 +232,9 @@
         "undone": "Fasewijziging ongedaan gemaakt: terug naar {stage}.",
         "undoneToast": "Fase teruggezet naar {stage}.",
         "couldNotUndo": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is doorgegaan of het is al ongedaan gemaakt."
-      }
+      },
+      "heldUntil": "Vastgehouden tot {when}",
+      "heldWhy": "Dit marketingbericht wacht tot uw stille uren voorbij zijn. Het wordt dan verstuurd, tenzij het contact zich ondertussen heeft afgemeld."
     },
     "media": {
       "openImage": "Afbeelding {name} openen",

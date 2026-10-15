@@ -132,6 +132,11 @@ export function RecipientsTab({ id, fixedStatus }: { id: string; fixedStatus?: s
                     >
                       {t(`statuses.${r.status}`)}
                     </span>
+                    {r.heldUntil && (
+                      <div className="mt-1 text-[10.5px] text-warning" data-testid="recipient-held">
+                        {t('heldUntil', { when: when(r.heldUntil) })}
+                      </div>
+                    )}
                     {r.clicked && (
                       <span className="ms-1 text-[10px] text-brand">{t('clicked')}</span>
                     )}

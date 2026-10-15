@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Giờ yên tĩnh và khung giờ gọi chưa được áp dụng",
+          "title": "Giờ yên tĩnh và khung giờ gọi đang được áp dụng",
           "detail": {
-            "notEnforced": "Giờ yên tĩnh và khung giờ gọi của bạn đã được lưu, nhưng hiện chưa có gì giữ lại tin nhắn hoặc chặn cuộc gọi ngoài các khung giờ đó. Hãy tự lên kế hoạch theo các khung giờ này."
+            "enforced": "Tin nhắn tiếp thị trong giờ yên tĩnh được giữ lại đến khi hết giờ, còn cuộc gọi ngoài khung giờ gọi bị từ chối kèm thời điểm khung mở. Câu trả lời trong cửa sổ 24 giờ và thông báo dịch vụ không bao giờ bị giữ. Sổ đăng ký DND chỉ là ghi chú: hiện chưa đối chiếu gì với nó."
           }
         }
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Các cài đặt này đã được lưu nhưng chưa được áp dụng. Tin nhắn không bị giữ lại và cuộc gọi không bị chặn ngoài các giờ bạn đặt. Hãy tự lên kế hoạch gửi tin và gọi điện theo các giờ này.",
-      "intro": "Một số quy tắc hạn chế thời điểm tin nhắn và cuộc gọi tiếp thị được phép đến với mọi người. Hãy ghi lại tại đây các giờ làm việc của bạn.",
+      "intro": "Một số quy định giới hạn thời điểm tin nhắn tiếp thị và cuộc gọi được phép đến với mọi người. Hãy đặt giờ của bạn tại đây: tin nhắn tiếp thị gửi trong giờ yên tĩnh sẽ chờ và được gửi khi hết giờ, còn cuộc gọi ngoài khung giờ gọi sẽ không được thực hiện.",
       "quiet": {
         "title": "Giờ yên tĩnh cho tin nhắn",
-        "hint": "Khoảng giờ bạn không muốn tin nhắn tiếp thị đến với mọi người. Khoảng thời gian này có thể qua nửa đêm.",
+        "hint": "Khoảng giờ không gửi tin nhắn tiếp thị. Tin sẽ chờ và được gửi khi hết khoảng giờ này. Khoảng giờ có thể vắt qua nửa đêm.",
         "enabled": "Bật giờ yên tĩnh",
         "start": "Yên tĩnh từ",
         "end": "Yên tĩnh đến"
       },
       "calling": {
         "title": "Khung giờ gọi",
-        "hint": "Chỉ những giờ được phép thực hiện cuộc gọi tiếp thị, vào các ngày bạn chọn.",
+        "hint": "Những giờ duy nhất được gọi điện tiếp thị, vào các ngày bạn chọn. Cuộc gọi ngoài khung giờ này bị từ chối và cho biết khi nào khung mở.",
         "enabled": "Bật khung giờ gọi",
         "start": "Gọi từ",
         "end": "Gọi đến",
@@ -407,8 +406,8 @@
       },
       "suggested": "Các luật bạn đã bật gợi ý {start} đến {end}.",
       "zone": {
-        "label": "Múi giờ",
-        "hint": "Các khung giờ được hiểu theo múi giờ này. Múi giờ của không gian làm việc là {zone}.",
+        "label": "Múi giờ dự phòng",
+        "hint": "Giờ được đọc theo đồng hồ của từng liên hệ: thuộc tính múi giờ của họ, nếu không có thì dùng mã quốc gia của số điện thoại. Múi giờ này được dùng khi cả hai đều không rõ. Múi giờ của không gian làm việc của bạn là {zone}.",
         "workspace": "Múi giờ của không gian làm việc ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Danh sách của riêng bạn"
         },
         "note": "Đây chỉ là ghi chú. Hiện chưa có đối chiếu nào với danh sách."
-      }
+      },
+      "enforcedNote": "Giờ yên tĩnh giữ tin nhắn tiếp thị lại cho đến khi kết thúc, còn khung giờ gọi sẽ từ chối cuộc gọi nằm ngoài khung. Hệ thống dùng giờ của từng liên hệ. Câu trả lời trong cửa sổ 24 giờ và thông báo dịch vụ không bao giờ bị giữ."
     },
     "subprocessors": {
       "intro": "Các nhà cung cấp xử lý dữ liệu cá nhân cho không gian làm việc của bạn: họ làm gì, nhận dữ liệu gì và ở đâu. Bạn có thể công bố danh sách này trên một trang công khai.",
@@ -487,6 +487,10 @@
       "privacy": "Chính sách quyền riêng tư",
       "terms": "Điều khoản",
       "notFound": "Không tìm thấy trang"
+    },
+    "hold": {
+      "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)",
+      "heldCount": "{count} đang tạm giữ vì giờ yên tĩnh"
     }
   }
 }

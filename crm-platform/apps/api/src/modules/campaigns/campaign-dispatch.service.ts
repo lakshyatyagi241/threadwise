@@ -270,9 +270,11 @@ export class CampaignDispatchService {
     c: CampaignRow,
   ): Promise<boolean> {
     if (c.type !== 'template') return true;
-    const ids = [c.templateId, c.abTesting ? c.templateIdB : null].filter(
-      (x): x is number => x !== null,
-    );
+    const ids = [
+      ...new Set(
+        [c.templateId, c.abTesting ? c.templateIdB : null].filter((x): x is number => x !== null),
+      ),
+    ];
     if (ids.length === 0) return true;
     const res = await t.execute(sql`
       SELECT id, lower(coalesce(meta_category, category)) AS category FROM wa_templates

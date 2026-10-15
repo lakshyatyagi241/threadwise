@@ -528,6 +528,11 @@ export const MessageBubble = memo(function MessageBubble({
             {clockTime(m.createdAt, locale, timeZone)}
           </time>
           {out && <Ticks status={m.status} />}
+          {out && m.hold && (
+            <span data-testid="inbox-message-held" className="text-warning" title={t('heldWhy')}>
+              {t('heldUntil', { when: fullStamp(m.hold.until, locale, timeZone) })}
+            </span>
+          )}
           {tally && (
             <span data-testid="inbox-group-tally" className="flex items-center gap-1">
               <span>

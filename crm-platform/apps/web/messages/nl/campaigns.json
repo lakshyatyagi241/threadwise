@@ -864,7 +864,8 @@
         "clicked": "geklikt",
         "showing": "{shown} van {total} getoond",
         "prev": "Vorige pagina",
-        "next": "Volgende pagina"
+        "next": "Volgende pagina",
+        "heldUntil": "Vastgehouden tot {when} (stille uren)"
       },
       "engagement": {
         "opened": "Geopend",
@@ -1032,7 +1033,8 @@
         "badge": "Live",
         "updated": "bijgewerkt {time}",
         "queued": "{count} wachten op verzending",
-        "processing": "{count} worden nu verstuurd"
+        "processing": "{count} worden nu verstuurd",
+        "held": "{count} vastgehouden wegens stille uren"
       },
       "statistics": {
         "loadFailed": "De statistieken konden niet worden geladen.",

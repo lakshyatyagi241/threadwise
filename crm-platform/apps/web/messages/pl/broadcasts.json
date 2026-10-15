@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Wstrzymano: osiągnięto dzienny limit wysyłek. Zostanie wznowiona automatycznie po {when}.",
         "halt": "Wstrzymano: wysyłanie jest zatrzymane dla tej przestrzeni roboczej. Zostanie wznowione po zdjęciu blokady.",
-        "manual": "Wstrzymano."
+        "manual": "Wstrzymano.",
+        "quiet_hours": "Wstrzymano: część odbiorców jest w godzinach ciszy. Wznowi się samoczynnie po {when}."
       },
       "delete": "Usuń",
       "deleteTitle": "Usunąć wiadomość masową?",
@@ -145,7 +146,8 @@
         "queued": "W kolejce",
         "queuedHint": "oczekuje na wysłanie",
         "failed": "Nieudane",
-        "failedPct": "{pct}% wskaźnik niepowodzeń"
+        "failedPct": "{pct}% wskaźnik niepowodzeń",
+        "queuedHeld": "{count} wstrzymano z powodu godzin ciszy"
       },
       "tab": {
         "overview": "Przegląd",
@@ -193,7 +195,8 @@
         "lastClick": "Ostatnie kliknięcie: {when}",
         "empty": "Brak dołączonych odbiorców.",
         "more": "Załaduj więcej",
-        "loading": "Ładowanie"
+        "loading": "Ładowanie",
+        "heldUntil": "Wstrzymano do {when} (godziny ciszy)"
       },
       "failures": {
         "kicker": "Przyczyny niepowodzeń",

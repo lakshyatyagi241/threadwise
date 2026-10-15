@@ -864,7 +864,8 @@
         "clicked": "diklik",
         "showing": "Menampilkan {shown} dari {total}",
         "prev": "Halaman sebelumnya",
-        "next": "Halaman berikutnya"
+        "next": "Halaman berikutnya",
+        "heldUntil": "Ditahan sampai {when} (jam tenang)"
       },
       "engagement": {
         "opened": "Dibuka",
@@ -1032,7 +1033,8 @@
         "badge": "Langsung",
         "updated": "diperbarui {time}",
         "queued": "{count} menunggu dikirim",
-        "processing": "{count} sedang dikirim sekarang"
+        "processing": "{count} sedang dikirim sekarang",
+        "held": "{count} ditahan karena jam tenang"
       },
       "statistics": {
         "loadFailed": "Statistik tidak dapat dimuat.",

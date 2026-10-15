@@ -220,9 +220,9 @@
           }
         },
         "windows_enforcement": {
-          "title": "Sessiz saatler ve arama aralıkları henüz uygulanmıyor",
+          "title": "Sessiz saatler ve arama pencereleri uygulanıyor",
           "detail": {
-            "notEnforced": "Sessiz saatleriniz ve arama aralığınız kaydedildi, ancak henüz hiçbir şey bunların dışında bir mesajı bekletmiyor veya bir aramayı engellemiyor. Planlamanızı kendiniz buna göre yapın."
+            "enforced": "Sessiz saatlerinizdeki pazarlama mesajları bitene kadar bekletilir, arama pencerenizin dışındaki arama ise pencerenin ne zaman açılacağı belirtilerek reddedilir. 24 saatlik pencere içindeki yanıtlar ve hizmet bildirimleri asla bekletilmez. DND kaydı yalnızca bir nottur: henüz onunla hiçbir şey kontrol edilmiyor."
           }
         }
       }
@@ -379,18 +379,17 @@
       }
     },
     "windows": {
-      "notEnforced": "Bu ayarlar kaydedildi ancak henüz uygulanmıyor. Belirlediğiniz saatlerin dışında bir mesaj bekletilmez ve bir arama engellenmez. Gönderim ve aramalarınızı buna göre planlayın.",
-      "intro": "Bazı kurallar, pazarlama mesajlarının ve aramaların kişilere ne zaman ulaşabileceğini kısıtlar. Çalıştığınız saatleri buraya kaydedin.",
+      "intro": "Bazı kurallar pazarlama mesajlarının ve aramaların insanlara ne zaman ulaşabileceğini sınırlar. Saatlerinizi buradan belirleyin: sessiz saatlerde gönderilen pazarlama mesajı bekler ve saatler bitince gider, arama penceresi dışında ise arama yapılmaz.",
       "quiet": {
         "title": "Mesajlar için sessiz saatler",
-        "hint": "Pazarlama mesajlarının kişilere ulaşmasını istemediğiniz saatler. Süre gece yarısını aşabilir.",
+        "hint": "Pazarlama mesajlarının gönderilmediği saatler. Mesajlar bekler ve saatler bitince gönderilir. Aralık gece yarısını geçebilir.",
         "enabled": "Sessiz saatler açık",
         "start": "Sessizlik başlangıcı",
         "end": "Sessizlik bitişi"
       },
       "calling": {
         "title": "Arama aralığı",
-        "hint": "Seçtiğiniz günlerde pazarlama aramalarının yapılabileceği tek saatler.",
+        "hint": "Pazarlama aramalarının yapıldığı tek saatler, seçtiğiniz günlerde. Bunların dışındaki arama reddedilir ve pencerenin ne zaman açılacağı söylenir.",
         "enabled": "Arama aralığı açık",
         "start": "Aramaların başlangıcı",
         "end": "Aramaların bitişi",
@@ -407,8 +406,8 @@
       },
       "suggested": "Açtığınız yasalar {start} ile {end} arasını önerir.",
       "zone": {
-        "label": "Saat dilimi",
-        "hint": "Saatler bu dilime göre okunur. Çalışma alanınızın saat dilimi {zone}.",
+        "label": "Yedek saat dilimi",
+        "hint": "Saatler her kişinin kendi saatine göre okunur: saat dilimi özelliği, yoksa numarasının ülke kodu. İkisi de bilinmiyorsa bu dilim kullanılır. Çalışma alanı diliminiz {zone}.",
         "workspace": "Çalışma alanı saat dilimi ({zone})"
       },
       "dnd": {
@@ -422,7 +421,8 @@
           "custom": "Kendi listeniz"
         },
         "note": "Bu yalnızca bir nottur. Henüz hiçbir şey bir kayıtla karşılaştırılmıyor."
-      }
+      },
+      "enforcedNote": "Sessiz saatler bir pazarlama mesajını bitene kadar bekletir, arama penceresi de dışındaki aramaları reddeder. Her kişinin kendi saati kullanılır. 24 saatlik pencere içindeki yanıtlar ve hizmet bildirimleri asla bekletilmez."
     },
     "subprocessors": {
       "intro": "Çalışma alanınız için kişisel veri işleyen tedarikçiler: ne yaptıkları, hangi verileri aldıkları ve nerede. Listeyi herkese açık bir sayfada yayımlayabilirsiniz.",
@@ -487,6 +487,10 @@
       "privacy": "Gizlilik politikası",
       "terms": "Şartlar",
       "notFound": "Sayfa bulunamadı"
+    },
+    "hold": {
+      "heldUntil": "{when} tarihine kadar bekletiliyor (sessiz saatler)",
+      "heldCount": "{count} kişi sessiz saatler nedeniyle bekletiliyor"
     }
   }
 }

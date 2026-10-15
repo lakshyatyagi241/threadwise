@@ -110,7 +110,7 @@ describe('ChannelDispatcher.send: quiet hours hold a marketing send', () => {
       7,
       'message',
       { contactId: 42, phone: '919876543210', email: null },
-      expect.objectContaining({ now: expect.any(Date) }),
+      {},
     );
   });
 

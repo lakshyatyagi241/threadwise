@@ -163,7 +163,8 @@ export class ChannelDispatcher {
   }
 
   /** Worker side: guard, then one adapter call per client reference. Throws `ChannelError` (retryable or not) or an AppError. */
-  async send(req: DispatchRequest, now: Date = new Date()): Promise<DispatchResult> {
+  async send(req: DispatchRequest, at?: Date): Promise<DispatchResult> {
+    const now = at ?? new Date();
     const envelope = this.parse(req.envelope);
     const adapter = this.adapters.for(req.channel.kind);
     const window = this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
@@ -189,7 +190,7 @@ export class ChannelDispatcher {
     await this.assertConsent(req, envelope, window);
     // After the consent answer (a denied contact is never merely held) and at send time too: a message released from a hold passes
     // through here again, so the hours are checked once more on the clock of the moment it actually goes.
-    await this.assertSendWindow(req, envelope, now);
+    await this.assertSendWindow(req, envelope, at);
 
     const owner = randomUUID();
     const locked = await this.redisCall(() =>
@@ -301,7 +302,7 @@ export class ChannelDispatcher {
   private async assertSendWindow(
     req: DispatchRequest,
     envelope: OutboundEnvelope,
-    now: Date,
+    at: Date | undefined,
   ): Promise<void> {
     if (!this.sendWindow) return;
     const { purpose, contactId } = req.consent;
@@ -315,7 +316,8 @@ export class ChannelDispatcher {
         phone: mail ? null : envelope.to,
         email: mail ? envelope.to : null,
       },
-      { now },
+      // A caller that names the instant (a test) is obeyed; otherwise the window service's own clock decides.
+      at ? { now: at } : {},
     );
     const hold = holdOf(decision);
     if (hold) throw new SendHeldError(hold);

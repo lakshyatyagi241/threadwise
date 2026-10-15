@@ -166,3 +166,7 @@ Reference kept no per-node record at all. A run's log is now one row per node ex
 Evidence: `test/e2e/flow-runtime-engine/run-log.e2e.spec.ts` (labels, outcomes, shared graph, edit then read the old run, 30-day sweep), `test/unit/flow-runtime-engine/step-log.spec.ts`.
 
 Timeline wording (TW-FLR-083): a `wait` row is settled by the next customer `reply` row (`waitStates`: Answered after N, No reply once the run is over, Waiting only for the live run's latest wait). A dead end that re-arms an earlier menu (`parkOrEnd`, TW-FLR-016 rule 6) logs a wait on another node than the one that ran; the screen words that as "options from X stay active" (`menuKept`). A step whose send was refused but whose node carried on (`StepOutcome.sendFailed`) is logged as `error`. Custom-wait replies (`applyCustomReply`) log what the node said back and the variables its answer saved.
+
+## Quiet hours (BL-177, product extension)
+
+Not in Reference. A flow message that is MARKETING (a MARKETING template, or a free-form message of a run the business started: `PROACTIVE_FLOW_SOURCES`) goes through `ChannelDispatcher.send`, which asks `SendWindowService` after the ConsentGate. Inside the workspace's quiet hours it throws `SendHeldError`; `FlowSender.outcomeOf` turns that into a halt (`SEND_HELD`), so the run waits and the same step runs again on the engine's 5 minute halt retry (inside the run's seven day limit). Nothing is skipped or failed. Replies of a reply run and notes to a colleague's number are service and are never held. An exact wake-up at the opening is BL-189.

@@ -89,7 +89,8 @@
       "NETWORK": "网络错误，请重试。",
       "UNEXPECTED": "出了点问题，请重试。",
       "CALL_PLAYBACK_LINK_INVALID": "此录音链接已过期。请再次点击播放以获取新链接。",
-      "CALL_RANGE_INVALID": "这些日期无效：开始时间不能晚于结束时间，范围最长一年，且时区必须有效。"
+      "CALL_RANGE_INVALID": "这些日期无效：开始时间不能晚于结束时间，范围最长一年，且时区必须有效。",
+      "CALL_OUTSIDE_WINDOW": "该联系人不在您的通话时段内，因此未拨出电话。通话时段将于 {when} 开始。"
     },
     "settings": {
       "title": "通话",

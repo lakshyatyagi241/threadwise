@@ -89,7 +89,8 @@
       "NETWORK": "Lỗi mạng - vui lòng thử lại.",
       "UNEXPECTED": "Đã xảy ra lỗi. Vui lòng thử lại.",
       "CALL_PLAYBACK_LINK_INVALID": "Liên kết bản ghi âm này đã hết hạn. Hãy nhấn phát lại để lấy liên kết mới.",
-      "CALL_RANGE_INVALID": "Các ngày này không hợp lệ: ngày bắt đầu không được sau ngày kết thúc, khoảng thời gian tối đa một năm và múi giờ phải hợp lệ."
+      "CALL_RANGE_INVALID": "Các ngày này không hợp lệ: ngày bắt đầu không được sau ngày kết thúc, khoảng thời gian tối đa một năm và múi giờ phải hợp lệ.",
+      "CALL_OUTSIDE_WINDOW": "Liên hệ này nằm ngoài giờ gọi của bạn nên cuộc gọi chưa được thực hiện. Khung giờ gọi sẽ mở lúc {when}."
     },
     "settings": {
       "title": "Gọi điện",

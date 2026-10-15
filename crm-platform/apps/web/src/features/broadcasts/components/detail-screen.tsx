@@ -167,6 +167,8 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
       })
     : tiles(d.counts);
   const failed = c.failed;
+  // Of the queued, the recipients waiting for the end of the quiet hours (BL-177).
+  const held = live.data?.held ?? d.counts.held ?? 0;
   const refresh = () => void qc.invalidateQueries({ queryKey: KEYS.all });
 
   const run = async (fn: () => Promise<void>) => {
@@ -340,7 +342,11 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
                 hint={t('tile.readPct', { pct: c.pct.read })}
               />
               <Tile label={t('tile.audience')} value={c.total} hint={t('tile.audienceHint')} />
-              <Tile label={t('tile.queued')} value={c.queued} hint={t('tile.queuedHint')} />
+              <Tile
+                label={t('tile.queued')}
+                value={c.queued}
+                hint={held > 0 ? t('tile.queuedHeld', { count: held }) : t('tile.queuedHint')}
+              />
               <Tile
                 tone="danger"
                 label={t('tile.failed')}

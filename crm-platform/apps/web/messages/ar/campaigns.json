@@ -1544,7 +1544,8 @@
         "clicked": "نقر",
         "showing": "عرض {shown} من {total}",
         "prev": "الصفحة السابقة",
-        "next": "الصفحة التالية"
+        "next": "الصفحة التالية",
+        "heldUntil": "مؤجّل حتى {when} (ساعات الهدوء)"
       },
       "engagement": {
         "opened": "فُتحت",
@@ -1712,7 +1713,8 @@
         "badge": "مباشر",
         "updated": "آخر تحديث {time}",
         "queued": "{count} في انتظار الإرسال",
-        "processing": "{count} قيد الإرسال الآن"
+        "processing": "{count} قيد الإرسال الآن",
+        "held": "{count} مؤجّلة بسبب ساعات الهدوء"
       },
       "statistics": {
         "loadFailed": "تعذّر تحميل الإحصائيات.",

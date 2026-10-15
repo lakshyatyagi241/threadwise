@@ -27,6 +27,7 @@ A schedule sends one message to recipients at a time you choose, once or on a re
 
 - The list has status tabs, a search box and a **Next to fire** card. Row actions depend on status: **Pause**, **Resume**, **Run now**, **Cancel**, **Retry with new time** and **Delete**.
 - While a schedule is waiting or paused you can **Edit** it: the same five steps, opened on what you saved. If someone else changed it meanwhile you are asked to reload.
+- **Quiet hours.** If your workspace set quiet hours in the [Compliance center](help:compliance-center), a marketing schedule does not message a recipient inside them. That recipient is marked **Held until** a time, the others are sent, and the schedule pauses and carries on by itself when the first held recipient may be messaged. A schedule of utility templates is never held.
 - A schedule's page shows a chart of delivery over time (queued, sent, delivered, read, failed) and a recipients table you can filter by status and search. Numbers that are warming up follow the [WhatsApp warmer](help:whatsapp-warmer-overview).
 
 ## Plan and access

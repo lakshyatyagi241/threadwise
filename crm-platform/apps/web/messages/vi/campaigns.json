@@ -864,7 +864,8 @@
         "clicked": "đã nhấp",
         "showing": "Hiển thị {shown} trong tổng số {total}",
         "prev": "Trang trước",
-        "next": "Trang sau"
+        "next": "Trang sau",
+        "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)"
       },
       "engagement": {
         "opened": "Đã mở",
@@ -1032,7 +1033,8 @@
         "badge": "Trực tiếp",
         "updated": "cập nhật {time}",
         "queued": "{count} đang chờ gửi",
-        "processing": "{count} đang được gửi"
+        "processing": "{count} đang được gửi",
+        "held": "{count} đang tạm giữ vì giờ yên tĩnh"
       },
       "statistics": {
         "loadFailed": "Không tải được thống kê.",

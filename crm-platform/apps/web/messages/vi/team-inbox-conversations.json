@@ -232,7 +232,9 @@
         "undone": "Đã hoàn tác thay đổi giai đoạn: quay lại {stage}.",
         "undoneToast": "Đã đưa giai đoạn về {stage}.",
         "couldNotUndo": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển tiếp hoặc đã được hoàn tác."
-      }
+      },
+      "heldUntil": "Tạm giữ đến {when}",
+      "heldWhy": "Tin nhắn tiếp thị này đang chờ giờ yên tĩnh của bạn kết thúc. Tin sẽ được gửi khi đó, nếu trong lúc chờ liên hệ chưa hủy đăng ký."
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
