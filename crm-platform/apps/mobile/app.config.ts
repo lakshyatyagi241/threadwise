@@ -95,6 +95,9 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       'expo-router',
       'expo-secure-store',
       'expo-localization',
+      // The phone's notification permission (Android 13+ asks at run time). Delivering a push also needs the device-token API and FCM/APNs
+      // credentials (docs/mobile/backlog.md); this plugin alone only lets the app ask.
+      'expo-notifications',
       [
         'expo-splash-screen',
         {

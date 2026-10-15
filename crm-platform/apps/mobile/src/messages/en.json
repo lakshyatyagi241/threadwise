@@ -1370,5 +1370,16 @@
       "inRange": "In range",
       "today": "Today"
     }
+  },
+  "permissions": {
+    "intro": {
+      "title": "Allow a few things to get started",
+      "subtitle": "You can change these any time in your phone's settings.",
+      "notificationsTitle": "Notifications",
+      "notificationsBody": "Hear about new messages and conversations assigned to you, even when the app is closed.",
+      "allow": "Continue",
+      "notNow": "Not now",
+      "channelName": "Messages and updates"
+    }
   }
 }

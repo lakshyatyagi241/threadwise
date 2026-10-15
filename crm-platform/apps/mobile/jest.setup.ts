@@ -27,6 +27,23 @@ jest.mock('expo-secure-store', () => ({
   __store: mockSecureStore,
 }));
 
+// The phone's notification permission: undecided until a test says otherwise. The channel call is what Android 13+ needs before it
+// will show the prompt.
+jest.mock('expo-notifications', () => ({
+  AndroidImportance: { DEFAULT: 3 },
+  getPermissionsAsync: jest.fn(async () => ({
+    status: 'undetermined',
+    granted: false,
+    canAskAgain: true,
+  })),
+  requestPermissionsAsync: jest.fn(async () => ({
+    status: 'granted',
+    granted: true,
+    canAskAgain: true,
+  })),
+  setNotificationChannelAsync: jest.fn(async () => null),
+}));
+
 // The library ships its own fake: a provider that renders its children and insets of zero. Its two hooks are jest.fn()s, which the
 // `jest.resetAllMocks()` that several test files call would empty (and then `insets` is undefined), so they are plain functions here.
 jest.mock('react-native-safe-area-context', () => {
