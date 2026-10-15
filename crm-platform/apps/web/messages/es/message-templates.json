@@ -60,7 +60,9 @@
       "rejected": "Rechazada: {reason}",
       "view": "Ver",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "curl": "cURL: enviar esta plantilla con la API",
+      "curlNamed": "cURL para enviar {name}"
     },
     "library": {
       "title": "Biblioteca de plantillas",
@@ -354,6 +356,15 @@
         "title": "Contenido enviado a Meta",
         "hint": "Lo que se envía a Meta para revisión, exactamente como se construye.",
         "empty": "Todavía no hay nada construido."
+      },
+      "curl": {
+        "title": "Enviar con la API (cURL)",
+        "intro": "Envía esta plantilla aprobada a un número. Cambia los valores de ejemplo por los tuyos.",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "copyFailed": "No se pudo copiar. Selecciona el texto y cópialo a mano.",
+        "keyHint": "Cambia YOUR_API_KEY por tu clave de API.",
+        "keyLink": "Obtener una clave de API"
       }
     }
   }

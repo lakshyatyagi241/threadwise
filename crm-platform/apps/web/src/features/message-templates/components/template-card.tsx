@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import type { TemplateSummary } from '@crm/contracts';
 import { cn } from '@crm/ui';
+import { canSendViaApi } from '../lib/curl';
 import { canEdit, statusGroupOf } from '../lib/status-model';
 import { previewOfSummary } from '../lib/preview';
 import { CategoryPill } from './badges';
-import { ChatIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
+import { ChatIcon, CodeIcon, EyeIcon, PhoneIcon, TrashIcon } from './icons';
 import { MessageBubble } from './wa-bubble';
 
 const DOT = {
@@ -120,6 +121,16 @@ export function TemplateCard({
         >
           <EyeIcon className="size-3.5" />
         </Link>
+        {canSendViaApi(tpl) && (
+          <Link
+            href={`/templates/${tpl.id}#curl`}
+            title={t('curl')}
+            aria-label={t('curlNamed', { name: tpl.name })}
+            className="grid size-8 place-items-center rounded-full border border-border bg-background transition hover:border-brand hover:bg-brand/10 hover:text-brand"
+          >
+            <CodeIcon className="size-3.5" />
+          </Link>
+        )}
         {mayDelete && (
           <button
             type="button"
