@@ -313,7 +313,7 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
       await tx.execute(sql`
         SELECT count(*)::int AS n FROM (
           SELECT amount, balance_after, lag(balance_after) OVER w AS prev FROM wallet_transactions WHERE org_id = ${orgId}
-          WINDOW w AS (PARTITION BY coalesce(unit, '') ORDER BY created_at, coalesce(meta->'legacy'->'waboo'->>'id', '') COLLATE "C")
+          WINDOW w AS (PARTITION BY coalesce(unit, '') ORDER BY created_at, ${a.history ? sql`idempotency_key COLLATE "C"` : sql`coalesce(meta->'legacy'->'waboo'->>'id', '') COLLATE "C"`})
         ) t WHERE (prev IS NULL AND balance_after <> amount) OR (prev IS NOT NULL AND balance_after - prev <> amount)`)
     ).rows[0] as { n: number };
     return { w, l, chain: chain.n };
