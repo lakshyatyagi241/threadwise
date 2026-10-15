@@ -100,6 +100,25 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
     path: 'modules/channel-viber/channels.service.ts',
     reason: 'Channel setup (account check, webhook registration); sends nothing to a customer.',
   },
+  {
+    path: 'modules/channel-wechat/wechat-channel.adapter.ts',
+    reason: 'Adapter behind the dispatcher (the gate runs in ChannelDispatcher.send).',
+  },
+  {
+    path: 'modules/channel-wechat/wechat-token.service.ts',
+    reason:
+      'The Official Account access token and the request wrapper that refreshes it; used by the adapter (behind the dispatcher) and the broadcast sender. Sends nothing itself.',
+  },
+  {
+    path: 'modules/channel-wechat/channels.service.ts',
+    reason:
+      'Account setup (fetches an access token to prove the credentials); sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-wechat/inbound.service.ts',
+    reason:
+      'Inbound handling; reads a follower profile for the thread title, sends nothing to a customer.',
+  },
   // --- staff-side, setup and test sends -------------------------------------------------------------------------------------------
   {
     path: 'modules/channel-sms/sms-senders.service.ts',
@@ -201,6 +220,10 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
     reason: `${GAP} commerce broadcasts (abandoned cart, order updates) send through the engine registry; they honour the contact flag only.`,
   },
   // --- open gaps ----------------------------------------------------------------------------------------------------------------
+  {
+    path: 'modules/channel-wechat/broadcast-sender.service.ts',
+    reason: `${GAP} a WeChat mass send is ONE call whose audience (all followers, a tag) WeChat resolves, so it cannot be screened per contact; the picked-users audience could be, and is not yet.`,
+  },
   {
     path: 'modules/channel-telegram/tg-broadcast-sender.service.ts',
     reason: `${GAP} Telegram broadcasts go to bot subscribers by chat id with no contact link; needs the chat to contact mapping first.`,

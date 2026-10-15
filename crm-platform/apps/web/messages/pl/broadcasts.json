@@ -375,6 +375,11 @@
         "name": "Viber",
         "hint": "Wyślij wiadomość do osób, które już piszą z Twoim kontem Viber.",
         "cta": "Utwórz wysyłkę Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Wyślij wiadomość masowo do wszystkich obserwujących, do tagu lub do wybranych użytkowników Twojego Konta oficjalnego.",
+        "cta": "Utwórz broadcast WeChat"
       }
     }
   }

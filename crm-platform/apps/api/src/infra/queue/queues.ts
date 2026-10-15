@@ -84,6 +84,8 @@ export const QUEUES = {
   WAB_MIGRATE: 'wab-migrate',
   /** One job per WhatsApp number to check for calling readiness (EXT-CALL-007): after a connect and on a schedule. Own queue: a slow Meta must not hold WhatsApp ingest. */
   CALLING_READINESS: 'calling-readiness',
+  /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
+  WECHAT_BROADCAST: 'wechat-broadcast',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

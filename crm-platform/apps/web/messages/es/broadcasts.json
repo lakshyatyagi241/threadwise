@@ -375,6 +375,11 @@
         "name": "Viber",
         "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de Viber.",
         "cta": "Crear difusión de Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envía un mensaje masivo a todos los seguidores, a una etiqueta o a usuarios elegidos de tu Cuenta oficial.",
+        "cta": "Crear difusión de WeChat"
       }
     }
   }

@@ -103,3 +103,4 @@ export * from './contact-consent';
 export * from './privacy';
 export * from './compliance';
 export * from './waboo-migration';
+export * from './channel-wechat';

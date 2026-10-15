@@ -6,6 +6,7 @@ import {
   mailboxListResponseSchema,
   lineChannelListResponseSchema,
   viberChannelListSchema,
+  wechatChannelListSchema,
   smsSenderListResponseSchema,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -24,6 +25,7 @@ export function useBroadcastChannels(): {
   instagram: boolean;
   line: boolean;
   viber: boolean;
+  wechat: boolean;
   sms: string | null;
   email: string | null;
 } {
@@ -38,6 +40,9 @@ export function useBroadcastChannels(): {
   const canViberChannels = useCan('viber.channels.read');
   const canViberBroadcasts = useCan('viber.broadcasts.read');
   const canViber = canViberChannels && canViberBroadcasts;
+  const canWechatChannels = useCan('wechat.channels.read');
+  const canWechatBroadcasts = useCan('wechat.broadcasts.read');
+  const canWechat = canWechatChannels && canWechatBroadcasts;
   const canSms = useCan('sms.senders.read');
   const bots = useQuery({
     queryKey: ['broadcasts', 'chooser', 'telegram'],
@@ -102,6 +107,14 @@ export function useBroadcastChannels(): {
     queryFn: ({ signal }) =>
       apiFetch('/viber/channels', { schema: viberChannelListSchema, signal }),
   });
+  const wechatChannels = useQuery({
+    queryKey: ['broadcasts', 'chooser', 'wechat'],
+    enabled: canWechat,
+    retry: false,
+    staleTime: 60_000,
+    queryFn: ({ signal }) =>
+      apiFetch('/wechat/channels', { schema: wechatChannelListSchema, signal }),
+  });
   return {
     email: mailbox ? `email:${mailbox.id}` : null,
     sms: (sms.data?.data ?? []).find((s) => s.active)?.senderKey ?? null,
@@ -109,6 +122,7 @@ export function useBroadcastChannels(): {
     facebook: (pages.data?.data ?? []).some((p) => p.status === 'connected'),
     instagram: (accounts.data?.data ?? []).length > 0,
     viber: (viberChannels.data?.data ?? []).some((c) => c.active),
+    wechat: (wechatChannels.data?.data ?? []).some((c) => c.active),
     line: (lineChannels.data?.data ?? []).some((c) => c.active),
   };
 }

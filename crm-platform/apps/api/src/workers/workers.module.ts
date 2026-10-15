@@ -21,6 +21,7 @@ import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import { ChannelLineWorkerModule } from '../modules/channel-line';
 import { ChannelViberWorkerModule } from '../modules/channel-viber';
+import { ChannelWechatWorkerModule } from '../modules/channel-wechat';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
@@ -117,6 +118,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ChannelTelegramWorkerModule,
     ChannelLineWorkerModule,
     ChannelViberWorkerModule,
+    ChannelWechatWorkerModule,
     ChannelSmsWorkerModule,
     ChannelEmailWorkerModule,
     ChannelFacebookWorkerModule,
