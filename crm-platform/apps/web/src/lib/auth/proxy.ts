@@ -65,6 +65,10 @@ const isTokenIssuing = (path: string[]) => {
  * which `next dev` rewrites to its bind address.
  */
 export function isSameOrigin(req: Request): boolean {
+  // Fetch Metadata (sent by every current browser, and not settable by page script): a write that is not from this site, or only from a
+  // sibling subdomain (same-site), is refused even when the Origin header is missing or odd. `none` is a user-typed address.
+  const site = req.headers.get('sec-fetch-site');
+  if (site && site !== 'same-origin' && site !== 'none') return false;
   const origin = req.headers.get('origin');
   if (!origin) return true;
   const host =
