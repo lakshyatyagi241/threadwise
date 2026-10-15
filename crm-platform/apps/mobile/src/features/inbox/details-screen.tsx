@@ -4,7 +4,7 @@ import {
   type ConversationPriority,
   type SetConversationStatusInput,
 } from '@crm/contracts';
-import * as Linking from 'expo-linking';
+import { placeCall } from '@/lib/device/call';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -158,7 +158,7 @@ export function ConversationDetailsScreen() {
                 <Button
                   variant="secondary"
                   label={t('inbox.details.call')}
-                  onPress={() => void Linking.openURL(`tel:${phone}`)}
+                  onPress={() => void placeCall(phone)}
                 />
               </View>
             ) : null}

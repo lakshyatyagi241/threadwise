@@ -1,5 +1,5 @@
 import type { InboxConversationDetail } from '@crm/contracts';
-import * as Linking from 'expo-linking';
+import { placeCall } from '@/lib/device/call';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -67,7 +67,7 @@ export function ThreadHeader({ conversation, now, onBack, onOpenDetails, primary
               <HeaderIconButton
                 icon="call-outline"
                 label={t('inbox.thread.call', { phone })}
-                onPress={() => void Linking.openURL(`tel:${phone}`)}
+                onPress={() => void placeCall(phone)}
                 testID="thread-call-button"
               />
             ) : null}

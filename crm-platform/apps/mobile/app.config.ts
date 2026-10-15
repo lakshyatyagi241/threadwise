@@ -90,6 +90,15 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       predictiveBackGestureEnabled: false,
       // Backups would copy the keychain-backed token store to another device on restore.
       allowBackup: false,
+      // Placing a call straight from the app (lib/device/call.ts); without it the number goes to the dialer. The camera and the
+      // notification permissions come from their plugins.
+      permissions: ['android.permission.CALL_PHONE'],
+      // The image picker's plugin adds broad storage access, which the app does not need: the system photo picker reads a chosen
+      // photo without any permission, and a photo is taken with the camera permission alone.
+      blockedPermissions: [
+        'android.permission.READ_EXTERNAL_STORAGE',
+        'android.permission.WRITE_EXTERNAL_STORAGE',
+      ],
     },
     plugins: [
       'expo-router',
@@ -98,6 +107,18 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       // The phone's notification permission (Android 13+ asks at run time). Delivering a push also needs the device-token API and FCM/APNs
       // credentials (docs/mobile/backlog.md); this plugin alone only lets the app ask.
       'expo-notifications',
+      // The camera, for taking a photo to share in a conversation or attach to a contact. The picker's microphone permission is
+      // switched off: the app records no video.
+      [
+        'expo-image-picker',
+        {
+          cameraPermission:
+            'GetaDesk uses the camera so you can take a photo to share in a conversation or attach to a contact.',
+          photosPermission:
+            'GetaDesk reads a photo you choose so you can share it in a conversation or attach it to a contact.',
+          microphonePermission: false,
+        },
+      ],
       [
         'expo-splash-screen',
         {

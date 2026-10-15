@@ -1373,12 +1373,29 @@
   },
   "permissions": {
     "intro": {
-      "title": "Allow a few things to get started",
-      "subtitle": "You can change these any time in your phone's settings.",
-      "notificationsTitle": "Notifications",
-      "notificationsBody": "Hear about new messages and conversations assigned to you, even when the app is closed.",
-      "allow": "Continue",
+      "title": "Get the most out of GetaDesk",
+      "subtitle": "Allow a few things so alerts, calls and photos are ready when you need them.",
+      "notifications": {
+        "title": "Notifications",
+        "body": "Alerts for new messages and conversations assigned to you."
+      },
+      "calls": {
+        "title": "Calls",
+        "body": "Call contacts straight from the app, without switching to the dialer."
+      },
+      "camera": {
+        "title": "Camera",
+        "body": "Take photos to share in conversations and attach to contacts."
+      },
+      "allow": "Allow",
+      "allowFor": "Allow {{name}}",
+      "allowedFor": "{{name}} allowed",
+      "openSettingsFor": "Open settings to allow {{name}}",
+      "settings": "Settings",
+      "allowAll": "Allow all",
+      "continue": "Continue",
       "notNow": "Not now",
+      "footnote": "You can change these any time in your phone's settings.",
       "channelName": "Messages and updates"
     }
   }

@@ -1,17 +1,19 @@
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import * as SecureStore from 'expo-secure-store';
-import { getNotificationPermission } from '@/lib/device/notification-permission';
+import { getPermission, offeredPermissions } from '@/lib/device/permissions';
 import { usePermissionsIntro } from './use-permissions-intro';
 
-jest.mock('@/lib/device/notification-permission');
+jest.mock('@/lib/device/permissions');
 
-const permissionCall = jest.mocked(getNotificationPermission);
+const permissionCall = jest.mocked(getPermission);
+const offered = jest.mocked(offeredPermissions);
 const store = (SecureStore as unknown as { __store: Map<string, string> }).__store;
-const KEY = 'crm.permissions-intro.v1';
+const KEY = 'crm.permissions-intro.v2';
 
 beforeEach(() => {
   jest.clearAllMocks();
   store.clear();
+  offered.mockReturnValue(['notifications', 'calls', 'camera']);
   permissionCall.mockResolvedValue({ state: 'undetermined', canAskAgain: true });
 });
 
@@ -39,7 +41,17 @@ describe('usePermissionsIntro', () => {
     expect(store.has(KEY)).toBe(false);
   });
 
-  it('skips the screen, and remembers, when notifications are already allowed', async () => {
+  it('shows the screen when only one of the permissions is still open', async () => {
+    permissionCall.mockImplementation(async (kind) =>
+      kind === 'camera'
+        ? { state: 'denied', canAskAgain: true }
+        : { state: 'granted', canAskAgain: true },
+    );
+    const { result } = await renderHook(() => usePermissionsIntro());
+    await waitFor(() => expect(result.current.status).toBe('show'));
+  });
+
+  it('skips the screen, and remembers, when everything is already allowed', async () => {
     permissionCall.mockResolvedValue({ state: 'granted', canAskAgain: true });
     const { result } = await renderHook(() => usePermissionsIntro());
     await waitFor(() => expect(result.current.status).toBe('done'));

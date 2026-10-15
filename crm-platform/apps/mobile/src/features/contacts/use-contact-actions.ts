@@ -1,5 +1,6 @@
 import type { ContactResponse } from '@crm/contracts';
 import * as Linking from 'expo-linking';
+import { placeCall } from '@/lib/device/call';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -56,7 +57,7 @@ export function useContactActions(
       icon: 'call-outline',
       label: t('contacts.detail.actions.call'),
       disabled: !phone,
-      onPress: () => open(`tel:${phone}`),
+      onPress: () => void placeCall(phone ?? ''),
     },
     {
       key: 'chat',

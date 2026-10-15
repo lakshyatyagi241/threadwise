@@ -10,14 +10,22 @@ export interface NotificationPermission {
   canAskAgain: boolean;
 }
 
-const read = (result: Notifications.NotificationPermissionsStatus): NotificationPermission => ({
+/** What every Expo permission answer (notifications, camera) has in common. */
+interface ExpoAnswer {
+  status: string;
+  granted: boolean;
+  canAskAgain: boolean;
+}
+
+/** An Expo permission answer as the app reads it. */
+export const readPermission = (result: ExpoAnswer): NotificationPermission => ({
   state: result.granted ? 'granted' : result.status === 'undetermined' ? 'undetermined' : 'denied',
   canAskAgain: result.canAskAgain,
 });
 
 /** The permission as it is now, without asking the person anything. */
 export const getNotificationPermission = async (): Promise<NotificationPermission> =>
-  read(await Notifications.getPermissionsAsync());
+  readPermission(await Notifications.getPermissionsAsync());
 
 /**
  * Asks the phone to show its notification prompt. Android 13 and newer show no prompt until the app has at least one notification
@@ -33,5 +41,5 @@ export async function requestNotificationPermission(
       importance: Notifications.AndroidImportance.DEFAULT,
     });
   }
-  return read(await Notifications.requestPermissionsAsync());
+  return readPermission(await Notifications.requestPermissionsAsync());
 }

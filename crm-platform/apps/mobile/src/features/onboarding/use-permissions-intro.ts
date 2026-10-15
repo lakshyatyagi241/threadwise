@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { hasSeenPermissionsIntro, markPermissionsIntroSeen } from '@/lib/device/first-run';
-import { getNotificationPermission } from '@/lib/device/notification-permission';
+import { getPermission, offeredPermissions } from '@/lib/device/permissions';
 import { log } from '@/lib/observability/logger';
 
 /**
  * Whether the first-open permission screen has to be shown: `loading` while the phone is asked, `show` the first time the app opens
- * on a phone that has not granted notifications and would still show the prompt, `done` otherwise. A phone that has already
- * granted them, or refused for good (the app was reinstalled, or it was set in the settings), never sees the screen.
+ * on a phone where at least one of the offered permissions is not granted and the phone would still show its prompt for it, `done`
+ * otherwise. A phone that has granted everything, or refused for good (the app was reinstalled, or it was set in the settings),
+ * never sees the screen.
  */
 export function usePermissionsIntro(): { status: 'loading' | 'show' | 'done'; finish: () => void } {
   const [status, setStatus] = useState<'loading' | 'show' | 'done'>('loading');
@@ -18,8 +19,8 @@ export function usePermissionsIntro(): { status: 'loading' | 'show' | 'done'; fi
         if (await hasSeenPermissionsIntro()) return 'done';
         // Not granted yet, and the phone would still ask: Android 13 and newer call a never-asked app "denied" with
         // `canAskAgain: true`, so the state alone cannot tell "never asked" from "refused for good".
-        const permission = await getNotificationPermission();
-        if (permission.state === 'granted' || !permission.canAskAgain) {
+        const answers = await Promise.all(offeredPermissions().map(getPermission));
+        if (answers.every((a) => a.state === 'granted' || !a.canAskAgain)) {
           await markPermissionsIntroSeen();
           return 'done';
         }
