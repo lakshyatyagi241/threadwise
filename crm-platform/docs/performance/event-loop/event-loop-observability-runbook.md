@@ -71,6 +71,20 @@ node tools/event-loop-audit/bench.mjs --seconds 15 --rounds 3
 
 Writes `reports/event-loop/bench-monitor.json` with machine, Node version and commit. Compare only runs from the same environment.
 
+## Check the job metrics against a real BullMQ worker
+
+Needs Docker (a throwaway Redis; no data of the app is touched):
+
+```bash
+docker run -d --rm --name el-job-redis -p 56379:6379 redis:7-alpine
+cd apps/api && node node_modules/tsx/dist/cli.mjs ../../tools/event-loop-audit/verify-job-metrics.ts
+docker stop el-job-redis
+```
+
+It runs a success, a failure, a retried job and a delayed job, and exits 1 if the recorded wait, duration or outcome counts are off.
+Limits worth knowing: BullMQ reports a job only when it reaches a final state, so retried attempts are invisible, and a job that
+needed a retry has no wait recorded.
+
 ## Alert hygiene
 
 - Critical needs sustained loop degradation **and** impact. A single spike is recorded, not paged.

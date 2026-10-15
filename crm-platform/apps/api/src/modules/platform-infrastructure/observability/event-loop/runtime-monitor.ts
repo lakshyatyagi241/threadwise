@@ -252,11 +252,12 @@ export class RuntimeMonitor {
   /** For queue processors: how long the job waited, how long it ran, and how it ended. `queue` is a QUEUES value. */
   observeJob(
     queue: string,
-    waitMs: number,
+    waitMs: number | null,
     durationMs: number,
     outcome: 'completed' | 'failed',
   ): void {
-    this.jobWait.observe(waitMs / 1000, { queue });
+    // null: not a queue wait (a retry), so the wait histogram is left alone rather than polluted.
+    if (waitMs !== null) this.jobWait.observe(waitMs / 1000, { queue });
     this.jobDuration.observe(durationMs / 1000, { queue });
     this.jobs.inc(1, { queue, outcome });
   }

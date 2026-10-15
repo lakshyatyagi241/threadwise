@@ -63,10 +63,13 @@ export { createFatalHandler, installProcessHandlers } from './observability/proc
 export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability/log-redaction';
 export {
   EventLoopSampler,
+  JobMetricsModule,
   RuntimeMonitor,
+  attachJobMetrics,
   classifySnapshot,
   getRuntimeMonitor,
   httpMetricsMiddleware,
+  jobTimings,
   startMetricsServer,
   startRuntimeMonitor,
   stopRuntimeMonitor,

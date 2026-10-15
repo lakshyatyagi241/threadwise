@@ -37,7 +37,7 @@
       "id": 6,
       "criterion": "Actionable warning and critical alert rules active",
       "status": "NOT VERIFIED",
-      "evidence": "deploy/observability/event-loop.rules.yml parses as YAML. Not validated with promtool, not loaded anywhere, never fired. The worker queue-impact alert cannot fire until processors feed observeJob."
+      "evidence": "deploy/observability/event-loop.rules.yml parses as YAML. Not validated with promtool, not loaded anywhere, never fired. The worker queue-impact alert now has data to evaluate (job metrics hook, verified on a real BullMQ worker) but has never fired."
     },
     {
       "id": 7,
@@ -67,7 +67,7 @@
   "verifiedCount": 3,
   "openSevereRegressions": "none known; no comparison possible without a baseline",
   "nextActions": [
-    "EL-B01 feed job metrics from BullMQ processors",
+    "EL-B01 confirm job metrics from the booted app worker and count retries",
     "EL-B02/B03 stand up a Prometheus scrape, validate the rules with promtool",
     "EL-B05 choose and add a load tool, build the workload mix, record idle/normal/peak/spike baselines",
     "EL-B06 add the p99 regression comparison to CI"
