@@ -219,7 +219,15 @@ function certainBody(doc: Doc): {
         parts.push(...[el.value.name, el.value.address].map(shown).filter((x) => x !== ''));
       else if (isObj(el) && typeof el.text === 'string' && el.text.trim() !== '')
         parts.push(el.text);
-      else sure = false; // a body is only certain for a plain string or a non-blank `text`
+      else if (
+        isObj(el) &&
+        text(el.type).toLowerCase() === 'text' &&
+        typeof el.value === 'string' &&
+        el.value.trim() !== '' &&
+        Object.keys(el).every((k) => k === 'id' || k === 'type' || k === 'value')
+      )
+        parts.push(el.value); // {id?, type: 'text', value: '...'}: 10,483 of Karma's 10,599 otherwise-unverified turns
+      else sure = false; // a body is only certain for a plain string or a non-blank `text` / `value` of a text element
     }
     if (!present) return { dir: 'out', empty: true };
     return parts.length > 0 && sure ? { dir: 'out', body: parts.join('\n') } : { dir: 'out' };
