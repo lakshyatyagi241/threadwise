@@ -85,6 +85,9 @@ export const PRIVACY_ALLOWLIST: Readonly<Record<string, AllowEntry>> = {
     'The connected HubSpot portal account (email of the portal owner).',
   ),
   shopify_integrations: workspace('The connected Shopify shop (shop owner email).'),
+  compliance_settings: workspace(
+    "The workspace's own privacy officer and grievance officer contacts (name, email, phone, address) as set in the Compliance center: business contacts the workspace chose to publish, not a contact's data (privacy spec section 11).",
+  ),
   workspace_email_accounts: workspace(
     "The workspace's own sending mailboxes (addresses of the business).",
   ),

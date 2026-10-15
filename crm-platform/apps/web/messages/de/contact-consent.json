@@ -309,12 +309,14 @@
       "title": {
         "widget": "Einwilligungszeile im Chat-Formular",
         "booking": "Einwilligungszeile auf der Buchungsseite",
-        "commerce": "Wofür das Marketing-Kästchen des Shops steht"
+        "commerce": "Wofür das Marketing-Kästchen des Shops steht",
+        "workspace": "Standard-Einwilligungshinweis"
       },
       "intro": {
         "widget": "Wird als Kästchen unter den Angaben des Besuchers angezeigt. Nur wer es ankreuzt, wird als zustimmend erfasst, und nur wenn eine Telefonnummer oder E-Mail angegeben wurde.",
         "booking": "Wird als Kästchen im Buchungsformular angezeigt. Nur wer es ankreuzt, wird als zustimmend erfasst; für die Buchung ist es nie nötig.",
-        "commerce": "Ein Kunde, der in Ihrem Shop Marketing akzeptiert, wird als zustimmend erfasst. Schreiben Sie, was das Kästchen ihm sagt, damit der Nachweis es nennt."
+        "commerce": "Ein Kunde, der in Ihrem Shop Marketing akzeptiert, wird als zustimmend erfasst. Schreiben Sie, was das Kästchen ihm sagt, damit der Nachweis es nennt.",
+        "workspace": "Der Wortlaut, den Ihr Arbeitsbereich neben einem Einwilligungsfeld anzeigt, wenn ein Formular, Widget oder eine Buchungsseite keinen eigenen hat. Jede Änderung ist eine neue nummerierte Version."
       },
       "enabled": "Einwilligungszeile an",
       "text": "Wortlaut, dem die Person zustimmt",
@@ -327,7 +329,12 @@
       "version": "Aktuelle Version: {version}",
       "noVersion": "Noch nicht gespeichert.",
       "saveFirst": "Speichern Sie dies zuerst, dann können Sie die Einwilligungszeile festlegen.",
-      "whatsappToo": "Auch als WhatsApp-Einwilligung zählen (nur wenn der Wortlaut das sagt)"
+      "whatsappToo": "Auch als WhatsApp-Einwilligung zählen (nur wenn der Wortlaut das sagt)",
+      "termsUrl": "Link zu Ihren Nutzungsbedingungen (optional)",
+      "termsUrlHint": "Muss mit https:// beginnen",
+      "useWorkspacePrivacy": "Link zur Datenschutzerklärung meines Arbeitsbereichs verwenden",
+      "useWorkspaceTerms": "Link zu den Nutzungsbedingungen meines Arbeitsbereichs verwenden",
+      "useWorkspaceText": "Standardwortlaut meines Arbeitsbereichs verwenden"
     }
   }
 }

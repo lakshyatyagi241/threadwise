@@ -58,7 +58,8 @@
         "tryAgain": "Spróbuj zapłacić ponownie",
         "missingTitle": "Nie znaleziono tej płatności",
         "missingBody": "Link może być nieprawidłowy lub zbyt stary."
-      }
+      },
+      "termsOfService": "Regulamin"
     }
   }
 }

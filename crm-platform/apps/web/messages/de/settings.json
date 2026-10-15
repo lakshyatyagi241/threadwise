@@ -369,6 +369,11 @@
         "label": "Datenanfragen",
         "description": "Beantworten Sie Personen, die wissen wollen, was Sie über sie speichern: Identitätsprüfung, Export, Löschung mit Vorschau und ein Nachweis zum Aufbewahren.",
         "keywords": "Datenschutz, DSGVO, GDPR, Datenanfrage, DSR, Auskunftsersuchen, Daten exportieren, löschen, Recht auf Vergessenwerden, personenbezogene Daten löschen, Rechtssperre"
+      },
+      "compliance-center": {
+        "label": "Compliance-Center",
+        "description": "Werkzeuge, die Sie bei Ihren Datenschutzpflichten unterstützen: die Gesetze, denen Sie unterliegen, Datenschutzkontakte, Hinweise und Links, Unterauftragsverarbeiter, Ruhezeiten und eine Checkliste dessen, was vorhanden ist.",
+        "keywords": "compliance, datenschutz, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, datenschutzbeauftragter, beschwerdebeauftragter, unterauftragsverarbeiter, dpa, auftragsverarbeitungsvertrag, nutzungsbedingungen, datenschutzerklärung, ruhezeiten, do not call, checkliste, kinder"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

@@ -106,7 +106,7 @@ A grant never overrides a STOP the contact sent: to bring an opted-out contact b
 
 ## The consent line of the chat widget, a booking page or a store
 
-On the chat widget's settings, on a booking type and on your Shopify or WooCommerce connection you can write the wording a person agrees to, add a link to your privacy policy, and switch the line on. Every change to the wording, the link or the switch is saved as a numbered **version**, and a person who ticks the box is recorded against the version they saw. Switching the line on grants nothing by itself.
+On the chat widget's settings, on a booking type and on your Shopify or WooCommerce connection you can write the wording a person agrees to, add a link to your privacy policy and one to your terms, and switch the line on. If you stored your links and a default wording in the [Compliance center](help:compliance-center), a button offers them; nothing is filled in on its own. Every change to the wording, the link or the switch is saved as a numbered **version**, and a person who ticks the box is recorded against the version they saw. Switching the line on grants nothing by itself.
 
 - **Chat widget**: shown under the details form, only when the widget asks for a phone number or an email. A visitor who ticks it is recorded as agreeing on the channels they gave (WhatsApp for a phone, email for an address).
 - **Booking page**: an optional tick box on the booking form. Booking never needs it.

@@ -309,12 +309,14 @@
       "title": {
         "widget": "Dòng đồng ý trong biểu mẫu trò chuyện",
         "booking": "Dòng đồng ý trên trang đặt lịch",
-        "commerce": "Ô tiếp thị của cửa hàng có nghĩa là gì"
+        "commerce": "Ô tiếp thị của cửa hàng có nghĩa là gì",
+        "workspace": "Thông báo đồng ý mặc định"
       },
       "intro": {
         "widget": "Hiển thị dưới dạng ô đánh dấu bên dưới thông tin của khách truy cập. Chỉ khách đánh dấu mới được ghi nhận là đồng ý, và chỉ khi họ cung cấp số điện thoại hoặc email.",
         "booking": "Hiển thị dưới dạng ô đánh dấu trên biểu mẫu đặt lịch. Chỉ người đánh dấu mới được ghi nhận là đồng ý; việc đặt lịch không bao giờ cần ô này.",
-        "commerce": "Khách hàng chấp nhận tiếp thị trong cửa hàng của bạn được ghi nhận là đồng ý. Hãy viết điều ô đó nói với họ để bằng chứng nêu rõ."
+        "commerce": "Khách hàng chấp nhận tiếp thị trong cửa hàng của bạn được ghi nhận là đồng ý. Hãy viết điều ô đó nói với họ để bằng chứng nêu rõ.",
+        "workspace": "Nội dung mà không gian làm việc của bạn hiển thị bên cạnh hộp đồng ý khi biểu mẫu, tiện ích hoặc trang đặt lịch không có nội dung riêng. Mỗi thay đổi là một phiên bản được đánh số mới."
       },
       "enabled": "Bật dòng đồng ý",
       "text": "Nội dung mà người đó đồng ý",
@@ -327,7 +329,12 @@
       "version": "Phiên bản hiện tại: {version}",
       "noVersion": "Chưa lưu.",
       "saveFirst": "Hãy lưu mục này trước, sau đó bạn có thể đặt dòng đồng ý cho nó.",
-      "whatsappToo": "Tính cả là đồng ý trên WhatsApp (chỉ khi nội dung nói vậy)"
+      "whatsappToo": "Tính cả là đồng ý trên WhatsApp (chỉ khi nội dung nói vậy)",
+      "termsUrl": "Liên kết đến điều khoản của bạn (tùy chọn)",
+      "termsUrlHint": "Phải bắt đầu bằng https://",
+      "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
+      "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc",
+      "useWorkspaceText": "Dùng nội dung mặc định của không gian làm việc"
     }
   }
 }

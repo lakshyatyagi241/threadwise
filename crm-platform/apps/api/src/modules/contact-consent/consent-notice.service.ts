@@ -21,6 +21,7 @@ const toNotice = (scope: ConsentNoticeScope, ref: string, r: NoticeRow | null): 
   enabled: r?.enabled ?? false,
   text: r?.text ?? '',
   url: r?.url ?? null,
+  termsUrl: r?.termsUrl ?? null,
   channels: (r?.channels ?? []) as ConsentNotice['channels'],
   version: r?.version ?? 0,
   updatedAt: r?.createdAt ?? null,
@@ -30,6 +31,7 @@ const publicOf = (r: NoticeRow): PublicConsentNotice => ({
   text: r.text,
   version: r.version,
   url: r.url,
+  termsUrl: r.termsUrl,
   channels: r.channels as PublicConsentNotice['channels'],
 });
 
@@ -68,6 +70,7 @@ export class ConsentNoticeService {
         cur.enabled === input.enabled &&
         cur.text === input.text &&
         (cur.url ?? null) === (input.url ?? null) &&
+        (cur.termsUrl ?? null) === (input.termsUrl ?? null) &&
         [...cur.channels].sort().join() === [...input.channels].sort().join();
       if (same) return toNotice(scope, ref, cur);
       // Nothing to preserve and nothing on: do not create a version just to say "off".
@@ -76,6 +79,7 @@ export class ConsentNoticeService {
         !input.enabled &&
         input.text === '' &&
         !input.url &&
+        !input.termsUrl &&
         input.channels.length === 0
       ) {
         return toNotice(scope, ref, null);
@@ -88,6 +92,7 @@ export class ConsentNoticeService {
         enabled: input.enabled,
         text: input.text,
         url: input.url ?? null,
+        termsUrl: input.termsUrl ?? null,
         channels: [...new Set(input.channels)],
         createdBy: ctx.userId,
       });
@@ -142,7 +147,7 @@ export class ConsentNoticeService {
     if (!(await this.repo.targetExists(tx, orgId, scope, ref))) {
       throw new AppError(
         ERROR_CODES.CONSENT_NOTICE_TARGET_NOT_FOUND,
-        'That widget, booking page or store does not exist in this workspace.',
+        'That widget, booking page, store or language does not exist in this workspace.',
         HttpStatus.NOT_FOUND,
       );
     }

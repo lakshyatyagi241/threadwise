@@ -42,7 +42,7 @@ export class ConsentNoticeController {
     summary: 'Save the consent notice of a widget, booking type or store',
     description:
       'A change to the text, the link or the on/off state appends the next version; a save that changes nothing writes nothing. ' +
-      'An enabled notice needs its wording (422). The ref of a store is `shopify:<uuid>` or `woocommerce:<uuid>`.',
+      'An enabled notice needs its wording (422). The ref of a store is `shopify:<uuid>` or `woocommerce:<uuid>`; the workspace default notice (scope `workspace`) takes a language code such as `en` or `hi`.',
   })
   save(
     @Param('scope') scope: string,

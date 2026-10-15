@@ -309,12 +309,14 @@
       "title": {
         "widget": "Toestemmingsregel in het chatformulier",
         "booking": "Toestemmingsregel op de boekingspagina",
-        "commerce": "Wat het marketingvakje van de winkel betekent"
+        "commerce": "Wat het marketingvakje van de winkel betekent",
+        "workspace": "Standaard toestemmingsmededeling"
       },
       "intro": {
         "widget": "Getoond als vakje onder de gegevens van de bezoeker. Alleen een bezoeker die het aanvinkt wordt als akkoord vastgelegd, en alleen met een telefoonnummer of e-mailadres.",
         "booking": "Getoond als vakje in het boekingsformulier. Alleen wie het aanvinkt wordt als akkoord vastgelegd; boeken heeft het nooit nodig.",
-        "commerce": "Een klant die marketing accepteert in uw winkel wordt als akkoord vastgelegd. Schrijf wat dat vakje de klant vertelt, zodat het bewijs het noemt."
+        "commerce": "Een klant die marketing accepteert in uw winkel wordt als akkoord vastgelegd. Schrijf wat dat vakje de klant vertelt, zodat het bewijs het noemt.",
+        "workspace": "De tekst die je werkruimte naast een toestemmingsvakje toont wanneer een formulier, widget of boekingspagina er geen eigen heeft. Elke wijziging is een nieuwe genummerde versie."
       },
       "enabled": "Toestemmingsregel aan",
       "text": "Tekst waarmee de persoon akkoord gaat",
@@ -327,7 +329,12 @@
       "version": "Huidige versie: {version}",
       "noVersion": "Nog niet opgeslagen.",
       "saveFirst": "Sla dit eerst op, daarna kunt u de toestemmingsregel instellen.",
-      "whatsappToo": "Ook als WhatsApp-toestemming laten gelden (alleen als de tekst dat zegt)"
+      "whatsappToo": "Ook als WhatsApp-toestemming laten gelden (alleen als de tekst dat zegt)",
+      "termsUrl": "Link naar je voorwaarden (optioneel)",
+      "termsUrlHint": "Moet beginnen met https://",
+      "useWorkspacePrivacy": "Privacylink van mijn werkruimte gebruiken",
+      "useWorkspaceTerms": "Voorwaardenlink van mijn werkruimte gebruiken",
+      "useWorkspaceText": "Standaardtekst van mijn werkruimte gebruiken"
     }
   }
 }

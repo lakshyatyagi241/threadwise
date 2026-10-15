@@ -16,6 +16,7 @@ import {
   useToast,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useComplianceLinks } from '@/features/compliance-center/api/hooks';
 import { KEYS, useConsentNotice } from '../api/hooks';
 import { consentApi } from '../api/service';
 import { errorKey } from '../lib/errors';
@@ -27,27 +28,35 @@ import { errorKey } from '../lib/errors';
  * the box; the line being on never grants anything by itself.
  *
  * Settings screens embed it with the scope and the id of what it belongs to (`widget` + widget id, `booking` + booking type id,
- * `commerce` + `shopify:<id>` or `woocommerce:<id>`). Hidden from people who may not manage consent.
+ * `commerce` + `shopify:<id>` or `woocommerce:<id>`; the workspace default notice, scope `workspace`, takes a language code). Hidden
+ * from people who may not manage consent. It offers the workspace's privacy and terms links and default wording (Compliance center) with
+ * one click each; nothing is filled in by itself.
  */
 export function ConsentNoticeEditor({
   scope,
   refId,
   disabled,
+  heading,
 }: {
   scope: ConsentNoticeScope;
   refId: string;
   /** The parent form is read-only or the record is not saved yet. */
   disabled?: boolean;
+  /** Replaces the default title (the workspace notice names its language). */
+  heading?: string;
 }) {
   const t = useTranslations('contact-consent.notice');
   const te = useTranslations('contact-consent.errors');
   const allowed = useCan('settings.consent.manage');
   const q = useConsentNotice(scope, refId, allowed && !disabled);
+  // Quiet on failure: the editor works without the offer (a role without the Compliance center simply gets no buttons).
+  const links = useComplianceLinks(allowed && !disabled);
   const qc = useQueryClient();
   const { toast } = useToast();
   const [enabled, setEnabled] = useState(false);
   const [text, setText] = useState('');
   const [url, setUrl] = useState('');
+  const [termsUrl, setTermsUrl] = useState('');
   const [whatsapp, setWhatsapp] = useState(false);
   const [error, setError] = useState<unknown>(null);
 
@@ -56,6 +65,7 @@ export function ConsentNoticeEditor({
     setEnabled(q.data.enabled);
     setText(q.data.text);
     setUrl(q.data.url ?? '');
+    setTermsUrl(q.data.termsUrl ?? '');
     setWhatsapp(q.data.channels.includes('whatsapp'));
   }, [q.data]);
 
@@ -65,6 +75,7 @@ export function ConsentNoticeEditor({
         enabled,
         text: text.trim(),
         url: url.trim() || null,
+        termsUrl: termsUrl.trim() || null,
         channels: scope === 'commerce' && whatsapp ? ['whatsapp'] : [],
       }),
     onSuccess: (saved) => {
@@ -92,6 +103,7 @@ export function ConsentNoticeEditor({
     enabled !== q.data.enabled ||
     text.trim() !== q.data.text ||
     (url.trim() || null) !== q.data.url ||
+    (termsUrl.trim() || null) !== (q.data.termsUrl ?? null) ||
     (scope === 'commerce' && whatsapp !== q.data.channels.includes('whatsapp'));
   const missingText = enabled && text.trim() === '';
   const idp = `notice-${scope}`;
@@ -105,7 +117,7 @@ export function ConsentNoticeEditor({
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 id={`${idp}-title`} className="text-sm font-semibold">
-            {t(`title.${scope}`)}
+            {heading ?? t(`title.${scope}`)}
           </h3>
           <p className="mt-0.5 text-xs text-muted-foreground">{t(`intro.${scope}`)}</p>
         </div>
@@ -133,6 +145,16 @@ export function ConsentNoticeEditor({
           onChange={(e) => setText(e.target.value)}
         />
       </Field>
+      {scope !== 'workspace' && links.data?.noticeText && text.trim() !== links.data.noticeText && (
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() => setText(links.data?.noticeText ?? '')}
+          data-testid="use-workspace-text"
+        >
+          {t('useWorkspaceText')}
+        </Button>
+      )}
       <Field label={t('url')} htmlFor={`${idp}-url`} hint={t('urlHint')}>
         <Input
           id={`${idp}-url`}
@@ -142,6 +164,36 @@ export function ConsentNoticeEditor({
           placeholder="https://"
           onChange={(e) => setUrl(e.target.value)}
         />
+        {links.data?.privacyUrl && url.trim() !== links.data.privacyUrl && (
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setUrl(links.data?.privacyUrl ?? '')}
+            data-testid="use-workspace-privacy"
+          >
+            {t('useWorkspacePrivacy')}
+          </Button>
+        )}
+      </Field>
+      <Field label={t('termsUrl')} htmlFor={`${idp}-terms`} hint={t('termsUrlHint')}>
+        <Input
+          id={`${idp}-terms`}
+          type="url"
+          inputMode="url"
+          value={termsUrl}
+          placeholder="https://"
+          onChange={(e) => setTermsUrl(e.target.value)}
+        />
+        {links.data?.termsUrl && termsUrl.trim() !== links.data.termsUrl && (
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => setTermsUrl(links.data?.termsUrl ?? '')}
+            data-testid="use-workspace-terms"
+          >
+            {t('useWorkspaceTerms')}
+          </Button>
+        )}
       </Field>
 
       {scope === 'commerce' && (

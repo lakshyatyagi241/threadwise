@@ -48,8 +48,10 @@ Sheets rows use the cells `consent` (yes) and `consent_note`; a yes without a no
 
 ### Consent notices (`/v2/contact-consent/notices/:scope/:ref`, BL-167)
 
+Scope `workspace` (BL-179, [compliance.md](compliance.md)) is the workspace's default wording: `ref` is a language code (`en`, `hi`), one notice per language, same versioning.
+
 `GET` and `PUT` (permission `settings.consent.manage`). `scope` is `widget` (ref: the widget id), `booking` (the booking type id) or `commerce`
-(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, channels }`; every change to any of them
+(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, termsUrl, channels }` (`termsUrl` is the optional terms link next to the privacy link `url`, BL-175; additive, an older client that does not send it stores null); every change to any of them
 appends the next numbered **version** (a repeat writes nothing, rows are append-only). An enabled notice needs its wording (422), the link must be
 https (422), an unknown widget, booking type or store is 404 `CONSENT_NOTICE_TARGET_NOT_FOUND`, and another workspace's id is the same 404.
 `channels: ["whatsapp"]` is for stores only: it makes the store's marketing checkbox count for WhatsApp too.

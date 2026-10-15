@@ -66,6 +66,8 @@ Changing a form needs permission to update forms. Without it every control is re
 
 ## WhatsApp opt-in wording
 
+The consent box can link to your privacy policy and to your terms. If you stored them once under [Compliance center](help:compliance-center), a button under each field fills them in.
+
 If the form will lead to WhatsApp messages, switch on **Marketing opt-in** in the consent settings and press **Use the WhatsApp opt-in wording**. It fills the consent text with a ready sentence that says the visitor agrees to updates and offers on WhatsApp and can reply STOP at any time. You can edit it. The wording and its version are stored with every submission as proof, and replying STOP later opts the contact out.
 
 ## What the consent line records

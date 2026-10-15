@@ -309,12 +309,14 @@
       "title": {
         "widget": "Sohbet formundaki onay satırı",
         "booking": "Rezervasyon sayfasındaki onay satırı",
-        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir"
+        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir",
+        "workspace": "Varsayılan onay bildirimi"
       },
       "intro": {
         "widget": "Ziyaretçinin bilgilerinin altında bir onay kutusu olarak gösterilir. Yalnızca işaretleyen ziyaretçi kabul etmiş olarak kaydedilir, o da telefon veya e-posta verdiyse.",
         "booking": "Rezervasyon formunda bir onay kutusu olarak gösterilir. Yalnızca işaretleyen kişi kabul etmiş olarak kaydedilir; rezervasyon bunu hiçbir zaman gerektirmez.",
-        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin."
+        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin.",
+        "workspace": "Bir form, widget veya rezervasyon sayfasının kendi metni olmadığında çalışma alanınızın onay kutusunun yanında gösterdiği metin. Her değişiklik yeni numaralı bir sürümdür."
       },
       "enabled": "Onay satırı açık",
       "text": "Kişinin kabul ettiği metin",
@@ -327,7 +329,12 @@
       "version": "Geçerli sürüm: {version}",
       "noVersion": "Henüz kaydedilmedi.",
       "saveFirst": "Önce bunu kaydedin, sonra onay satırını ayarlayabilirsiniz.",
-      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)"
+      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)",
+      "termsUrl": "Şartlarınızın bağlantısı (isteğe bağlı)",
+      "termsUrlHint": "https:// ile başlamalıdır",
+      "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
+      "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan",
+      "useWorkspaceText": "Çalışma alanı varsayılan metnini kullan"
     }
   }
 }

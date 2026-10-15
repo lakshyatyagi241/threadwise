@@ -58,7 +58,8 @@
         "tryAgain": "Intentar pagar de nuevo",
         "missingTitle": "No encontramos este pago",
         "missingBody": "Puede que el enlace sea incorrecto o demasiado antiguo."
-      }
+      },
+      "termsOfService": "Términos"
     }
   }
 }

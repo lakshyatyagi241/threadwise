@@ -332,6 +332,8 @@ export const formConsentSchema = z
     enabled: z.boolean().default(false),
     text: z.string().trim().min(1).max(500).default('I agree to be contacted about my request.'),
     privacyUrl: httpsUrlSchema.optional(),
+    /** The terms the line points to, next to the privacy link (BL-175). */
+    termsUrl: httpsUrlSchema.optional(),
     /** The box must be ticked to submit. */
     required: z.boolean().default(true),
     /** Ticking it records marketing opt-in on the contact. */

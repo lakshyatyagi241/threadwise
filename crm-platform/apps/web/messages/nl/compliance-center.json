@@ -1,0 +1,492 @@
+{
+  "compliance-center": {
+    "title": "Compliancecentrum",
+    "subtitle": "Hulpmiddelen om je te helpen je privacyverplichtingen na te komen: de wetten waaronder je werkt, wie mensen kunnen bereiken, je mededelingen en subverwerkers, en een checklist van wat er is ingericht. Ze maken een werkruimte niet uit zichzelf compliant, en dit is geen juridisch advies.",
+    "readOnly": "Je kunt deze pagina lezen, maar niet wijzigen.",
+    "saved": "Complianceinstellingen opgeslagen.",
+    "conflict": "Iemand anders heeft deze instellingen opgeslagen terwijl je ze bewerkte. De nieuwste versie is geladen; controleer die en breng je wijziging opnieuw aan.",
+    "conflictOk": "Begrepen",
+    "common": {
+      "dismiss": "Sluiten",
+      "retry": "Opnieuw proberen",
+      "loading": "Laden..."
+    },
+    "tabs": {
+      "checklist": "Checklist",
+      "profiles": "Wetten en regio’s",
+      "contacts": "Contacten en kinderen",
+      "notices": "Mededelingen",
+      "links": "Links naar privacy en voorwaarden",
+      "subprocessors": "Subverwerkers",
+      "windows": "Stille uren en gesprekken"
+    },
+    "saveBar": {
+      "unsaved": "Je hebt niet-opgeslagen wijzigingen.",
+      "problems": "Corrigeer de gemarkeerde velden voordat je opslaat.",
+      "discard": "Wijzigingen negeren",
+      "save": "Wijzigingen opslaan"
+    },
+    "errors": {
+      "network": "We kunnen de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt hiervoor geen toestemming.",
+      "notFound": "Dit bestaat niet meer.",
+      "conflict": "Iemand anders heeft dit gewijzigd. Laad de pagina opnieuw en probeer het nog eens.",
+      "settingsInvalid": "Sommige instellingen zijn ongeldig. Controleer de stille uren, het belvenster, de tijdzone en de taal.",
+      "duplicate": "Je hebt al een subverwerker met die naam.",
+      "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+      "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "problems": {
+      "httpsOnly": "Gebruik een adres dat begint met https://.",
+      "email": "Voer een geldig e-mailadres in.",
+      "quietEmpty": "Het einde van de stille uren moet verschillen van het begin.",
+      "windowOrder": "Het belvenster moet op dezelfde dag eindigen nadat het begint.",
+      "daysEmpty": "Kies minstens één dag.",
+      "englishFirst": "Engels is altijd de eerste mededeling. Kies een andere taal."
+    },
+    "phi": {
+      "title": "Sla geen beschermde gezondheidsgegevens op.",
+      "body": "Dit product is niet gebouwd voor medische dossiers. We beweren niet HIPAA-compliant te zijn en sluiten geen business associate agreements af, dus zet geen diagnoses, behandelgegevens, verzekeringsnummers of vergelijkbare gezondheidsinformatie in contacten, notities, berichten, bestanden, formulieren of opnamen."
+    },
+    "checklist": {
+      "intro": "Wat er vandaag in je werkruimte is ingericht, afgeleid uit je eigen instellingen en gegevens. “Ingericht” betekent dat het hulpmiddel is ingesteld. Het betekent niet dat aan een wet is voldaan.",
+      "summaryLabel": "Totalen",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Ingericht",
+        "partial": "Gedeeltelijk",
+        "open": "Open"
+      },
+      "baselineTitle": "Voor elke werkruimte",
+      "baselineHint": "Een strikte set punten die we aan alle werkruimtes aanbieden, in elk land.",
+      "profileTitle": "Gevraagd door de wetten die je hebt ingeschakeld",
+      "profileHint": "Elke rij noemt de profielen die erom vragen. De strengste regel wordt gebruikt als er meerdere gelden.",
+      "noProfiles": "Er is nog geen wet of regio ingeschakeld, dus alleen de punten voor elke werkruimte worden getoond. Kies ze onder Wetten en regio’s.",
+      "disclaimer": "Deze lijst helpt je je eigen inrichting bij te houden. Het is geen juridisch advies en zegt niet dat je werkruimte aan een wet voldoet. Vraag je juridisch adviseur wat voor jou geldt.",
+      "open": "Open",
+      "items": {
+        "lawful_basis": {
+          "title": "Doel en grondslag vastgelegd",
+          "detail": {
+            "built": "Elke toestemming wordt vastgelegd bij een doel, met wie of wat haar heeft vastgelegd, de getoonde tekst, de versie en het tijdstip. Je hoeft niets in te stellen."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Toestemming en eenvoudig intrekken",
+          "detail": {
+            "detectionOff": "STOP-detectie staat uit, dus een contact dat STOP antwoordt wordt niet uitgeschreven. Schakel het in bij de toestemmingsinstellingen.",
+            "optInOff": "STOP werkt, maar marketing vereist nog geen vastgelegde toestemming. Schakel “vastgelegde toestemming vereisen” in bij de toestemmingsinstellingen.",
+            "built": "STOP wordt herkend en marketing vereist een vastgelegde toestemming."
+          }
+        },
+        "notices": {
+          "title": "Mededelingen met versiebeheer",
+          "detail": {
+            "built": "{lines, plural, one {# toestemmingsmededeling is} other {# toestemmingsmededelingen zijn}} ingeschakeld, inclusief je standaardmededeling in {languages, plural, one {# taal} other {# talen}}.",
+            "noDefault": "{lines, plural, one {# toestemmingsmededeling is} other {# toestemmingsmededelingen zijn}} ingeschakeld, maar de werkruimte heeft nog geen standaardmededeling.",
+            "none": "Er is geen toestemmingsmededeling ingeschakeld. Schrijf een standaardmededeling zodat een vastlegging de tekst kan noemen die iemand heeft gezien."
+          }
+        },
+        "rights": {
+          "title": "Verzoeken van personen (inzage, export, wissen)",
+          "detail": {
+            "overdue": "{overdue, plural, one {# verzoek is} other {# verzoeken zijn}} over de termijn, van {open} openstaande. Beantwoord ze bij Gegevensverzoeken.",
+            "noContact": "Verzoeken hebben een termijn van {days} dagen, maar er is nog geen privacycontact aangewezen. Voeg er een toe.",
+            "built": "Verzoeken hebben een termijn van {days} dagen en {open} staan open. Er is een privacycontact aangewezen."
+          }
+        },
+        "retention": {
+          "title": "Bewaring en verwijdering",
+          "detail": {
+            "recordingsOn": "Gespreksopnamen worden {days} dagen bewaard en kunnen in de wacht worden gezet. Bewaartermijnen voor andere gegevens zijn nog niet beschikbaar.",
+            "recordingsOff": "Gespreksopname staat uit. Een bewaarinstelling voor de rest van je gegevens is nog niet beschikbaar."
+          }
+        },
+        "security": {
+          "title": "Beveiliging en een datalekplan",
+          "detail": {
+            "runbook": "Werkruimte-isolatie, versleutelde inloggegevens en een auditlog zijn aanwezig. Het responsplan bij datalekken is een concept dat de platformbeheerder afrondt. Je kunt dit hier niet inschakelen."
+          }
+        },
+        "subprocessors": {
+          "title": "Lijst met subverwerkers",
+          "detail": {
+            "built": "{count, plural, one {# subverwerker staat} other {# subverwerkers staan}} in de lijst. De DPA-sjabloon is klaar om te downloaden.",
+            "none": "Er staat nog geen subverwerker in de lijst. Zet de leveranciers die persoonsgegevens voor je verwerken erin."
+          }
+        },
+        "children": {
+          "title": "Gegevens van kinderen",
+          "detail": {
+            "unset": "Nog niet beantwoord. Geef aan of minderjarigen onder je contacten kunnen zitten.",
+            "minorsNoParental": "Minderjarigen kunnen erbij zitten, maar toestemming van ouders is niet ingeschakeld.",
+            "no_minors": "Je verwerkt niet bewust gegevens van minderjarigen.",
+            "may_include_minors": "Minderjarigen kunnen erbij zitten en toestemming van ouders is ingeschakeld."
+          }
+        },
+        "contact_links": {
+          "title": "Privacycontact en links",
+          "detail": {
+            "built": "De links naar privacy en voorwaarden en een bereikbaar contact zijn ingesteld.",
+            "none": "Nog geen privacylink, geen link naar voorwaarden en geen contact.",
+            "some": "Een deel van de links en contactgegevens is ingesteld. Vul de rest aan."
+          }
+        },
+        "dpo_contact": {
+          "title": "Functionaris voor gegevensbescherming of privacycontact",
+          "detail": {
+            "built": "Een naam en een e-mailadres zijn ingesteld.",
+            "one": "Voeg zowel een naam als een e-mailadres toe.",
+            "none": "Er is nog geen functionaris of privacycontact aangewezen."
+          }
+        },
+        "grievance_officer": {
+          "title": "Klachtenfunctionaris",
+          "detail": {
+            "built": "Een naam en een e-mailadres zijn ingesteld.",
+            "one": "Voeg zowel een naam als een e-mailadres toe.",
+            "none": "Er is nog geen klachtenfunctionaris aangewezen."
+          }
+        },
+        "notice_languages": {
+          "title": "Mededeling in het Engels en een tweede taal",
+          "detail": {
+            "built": "Je standaardmededeling staat aan in het Engels en in {locale}.",
+            "noSecond": "Kies de tweede taal en schrijf daarna de mededeling in die taal.",
+            "secondMissing": "Engels staat aan. Schrijf de mededeling in de tweede taal.",
+            "englishMissing": "De tweede taal staat aan. Schrijf de Engelse mededeling.",
+            "none": "Geen van beide mededelingen staat al aan."
+          }
+        },
+        "parental_flag": {
+          "title": "Minderjarigen en toestemming van ouders",
+          "detail": {
+            "unset": "Beantwoord de vraag over kinderen onder Contacten en kinderen.",
+            "minorsNoParental": "Minderjarigen kunnen erbij zitten, maar toestemming van ouders staat uit. Dit profiel behandelt iedereen onder {age} als minderjarig.",
+            "no_minors": "Je verwerkt niet bewust gegevens van minderjarigen. Dit profiel behandelt iedereen onder {age} als minderjarig.",
+            "may_include_minors": "Toestemming van ouders is ingeschakeld voor personen onder {age}. Het bewaren van het bewijs per contact is nog niet beschikbaar."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Optie Niet verkopen of delen",
+          "detail": {
+            "built": "De opt-outoptie en de link naar de bijbehorende mededeling zijn ingesteld.",
+            "noUrl": "De optie staat aan, maar er is geen link naar de opt-outmededeling ingesteld.",
+            "off": "Schakel de optie in als je persoonlijke gegevens verkoopt of deelt, en voeg de link naar je opt-outmededeling toe."
+          }
+        },
+        "quiet_hours": {
+          "title": "Stille uren",
+          "detail": {
+            "built": "Stille uren van {start} tot {end} zijn opgeslagen.",
+            "off": "Stille uren zijn niet ingesteld."
+          }
+        },
+        "calling_window": {
+          "title": "Belvenster",
+          "detail": {
+            "built": "Een belvenster van {start} tot {end} is opgeslagen.",
+            "off": "Er is geen belvenster ingesteld."
+          }
+        },
+        "dnd_registry": {
+          "title": "Niet-bellen-register (Do Not Call / DND)",
+          "detail": {
+            "off": "Er is geen register gekozen.",
+            "hookOnly": "Register genoteerd ({registry}). Er wordt nog niets tegen gecontroleerd."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Locaties van je subverwerkers",
+          "detail": {
+            "built": "{count, plural, one {Je enige subverwerker heeft} other {Alle # subverwerkers hebben}} een locatie.",
+            "some": "{missing, plural, one {# subverwerker heeft} other {# subverwerkers hebben}} nog geen locatie.",
+            "none": "Er staat geen subverwerker in de lijst, of geen enkele heeft een locatie."
+          }
+        },
+        "request_days": {
+          "title": "Tijd om verzoeken te beantwoorden",
+          "detail": {
+            "built": "Je termijn voor verzoeken is {sla} dagen, binnen de {days} dagen die het strengste profiel vraagt.",
+            "tooLong": "Je termijn is {sla} dagen. Het strengste profiel dat je hebt ingeschakeld vraagt {days}. Wijzig dit bij Gegevensverzoeken."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Vastgelegde opt-in vóór marketing",
+          "detail": {
+            "built": "Marketing vereist een vastgelegde toestemming.",
+            "off": "Marketing vereist nog geen vastgelegde toestemming. Schakel dit in bij de toestemmingsinstellingen."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Stille uren en belvensters worden nog niet afgedwongen",
+          "detail": {
+            "notEnforced": "Je stille uren en belvenster zijn opgeslagen, maar er houdt nog niets een bericht tegen of blokkeert een gesprek erbuiten. Plan zelf rond deze tijden."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "Schakel de wetten en regio’s in die gelden voor de mensen die je benadert. Je kunt er meerdere inschakelen; waar ze verschillen, wordt de strengste regel gebruikt. Een land doet alleen een suggestie; jij beslist.",
+      "suggested": "Je land ({source}) is {country}, wat het volgende suggereert:",
+      "source": {
+        "billing": "facturering",
+        "onboarding": "werkruimte"
+      },
+      "useSuggestion": "Deze suggestie gebruiken",
+      "suggestedNote": "Een werkruimte die mensen in andere landen benadert, moet ook die wetten inschakelen.",
+      "notConfirmed": "Er is nog niets ingeschakeld. De basis voor elke werkruimte geldt totdat je een keuze opslaat.",
+      "listTitle": "Wetten en regio’s",
+      "switchesOn": "Schakelt in:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (EU en EEA)",
+          "summary": "Voor mensen in de Europese Unie, IJsland, Liechtenstein en Noorwegen.",
+          "extras": "Een functionaris voor gegevensbescherming of privacycontact, locaties van subverwerkers, antwoorden op verzoeken binnen 30 dagen, vastgelegde opt-in voor marketing."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR en PECR (Verenigd Koninkrijk)",
+          "summary": "Voor mensen in het Verenigd Koninkrijk.",
+          "extras": "Een functionaris voor gegevensbescherming of privacycontact, locaties van subverwerkers, antwoorden binnen 30 dagen, vastgelegde opt-in voor elektronische marketing."
+        },
+        "dpdp_in": {
+          "name": "DPDP Act (India)",
+          "summary": "Voor mensen in India.",
+          "extras": "Een klachtenfunctionaris, mededelingen in het Engels en in één Indiase taal, een vlag voor toestemming van ouders bij minderjarigen onder 18, een plaatshouder voor een toestemmingsbeheerder, vastgelegde opt-in."
+        },
+        "ccpa_us": {
+          "name": "CCPA en CPRA (Verenigde Staten)",
+          "summary": "Voor inwoners van Californië, en een verstandige start voor de Verenigde Staten.",
+          "extras": "Een optie “Mijn persoonlijke gegevens niet verkopen of delen” met een link naar de opt-outmededeling, antwoorden binnen 45 dagen."
+        },
+        "tcpa_us": {
+          "name": "TCPA (gesprekken en sms’jes naar de Verenigde Staten)",
+          "summary": "Voor marketinggesprekken en -sms’jes naar mensen in de Verenigde Staten.",
+          "extras": "Stille uren 21:00 tot 08:00, een belvenster van 08:00 tot 21:00, een notitie over het Do Not Call-register, vastgelegde opt-in."
+        },
+        "trai_in": {
+          "name": "TRAI-regels (gesprekken en sms’jes naar India)",
+          "summary": "Voor promotionele gesprekken en sms’jes naar mensen in India.",
+          "extras": "Stille uren 21:00 tot 09:00, een belvenster van 09:00 tot 21:00, een notitie over het DND-register, vastgelegde opt-in."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brazilië)",
+          "summary": "Voor mensen in Brazilië.",
+          "extras": "Een contact voor de functionaris voor gegevensbescherming (encarregado), locaties van subverwerkers, antwoorden binnen 15 dagen, vastgelegde opt-in."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapore)",
+          "summary": "Voor mensen in Singapore.",
+          "extras": "Een contact voor de functionaris voor gegevensbescherming, een notitie over het Do Not Call-register, antwoorden binnen 30 dagen, vastgelegde opt-in."
+        },
+        "generic": {
+          "name": "Andere landen (alleen basis)",
+          "summary": "Voor de rest van de wereld, of als je nog niet hebt gekozen.",
+          "extras": "Niets boven de basis die elke werkruimte al krijgt."
+        }
+      },
+      "effective": {
+        "title": "Wat de strengste regel vraagt",
+        "hint": "Afgeleid uit de wetten die je hebt ingeschakeld. Dit zijn uitgangspunten om met je juridisch adviseur te controleren.",
+        "baselineOnly": "Er is geen wet ingeschakeld. Alleen de basis voor elke werkruimte geldt.",
+        "optIn": "Vastgelegde opt-in vóór marketing",
+        "optInYes": "Aanbevolen.",
+        "optInNo": "Niet vereist door deze profielen.",
+        "consentLink": "Toestemmingsinstellingen openen",
+        "requestDays": "Tijd om een verzoek van een persoon te beantwoorden",
+        "days": "{count, plural, one {# dag} other {# dagen}}",
+        "minorAge": "Iemand als minderjarig beschouwen onder",
+        "years": "{count, plural, one {# jaar} other {# jaar}}",
+        "callingWindow": "Belvenster",
+        "dnd": "Niet-bellen-register (Do Not Call / DND)",
+        "none": "Geen",
+        "registry": {
+          "none": "Geen",
+          "trai_ndnc": "NDNC India (TRAI)",
+          "us_dnc": "Do Not Call Verenigde Staten",
+          "sg_dnc": "Do Not Call Singapore",
+          "custom": "Je eigen lijst"
+        },
+        "strictest": "Als meerdere profielen aanstaan, wordt de strengste regel gebruikt: de kortste antwoordtijd, de hoogste leeftijd, het smalste belvenster."
+      },
+      "ccpa": {
+        "title": "Niet verkopen of delen",
+        "hint": "Als je persoonlijke gegevens verkoopt of deelt (ook voor advertenties op andere sites), kunnen mensen je vragen daarmee te stoppen.",
+        "offer": "Een optie “Mijn persoonlijke gegevens niet verkopen of delen” aanbieden",
+        "url": "Link naar je opt-outmededeling",
+        "urlHint": "De pagina waar mensen zich kunnen afmelden. Moet beginnen met https://."
+      },
+      "dpdp": {
+        "title": "Toestemmingsbeheerder",
+        "hint": "Volgens de DPDP Act kunnen mensen hun toestemming beheren via een geregistreerde toestemmingsbeheerder. Noem hier de jouwe als je er een gebruikt.",
+        "managerName": "Toestemmingsbeheerder",
+        "managerUrl": "Link naar toestemmingsbeheerder",
+        "placeholderNote": "Dit is alleen een notitie. Er is nog niets gekoppeld aan een toestemmingsbeheerder."
+      }
+    },
+    "contacts": {
+      "intro": "Wie een persoon of toezichthouder kan bereiken over hun gegevens, en of kinderen onder je contacten kunnen zitten.",
+      "requiredByProfile": "Gevraagd door een profiel dat je hebt ingeschakeld",
+      "officer": {
+        "name": "Naam",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "address": "Postadres"
+      },
+      "dpo": {
+        "title": "Functionaris voor gegevensbescherming of privacycontact",
+        "hint": "De persoon of het team die privacyvragen beantwoordt. Wordt getoond op je openbare pagina als je dat inschakelt."
+      },
+      "grievance": {
+        "title": "Klachtenfunctionaris",
+        "hint": "De DPDP Act vraagt om een aangewezen functionaris die klachten behandelt over hoe persoonsgegevens worden verwerkt."
+      },
+      "children": {
+        "title": "Gegevens van kinderen",
+        "hint": "Dit product is voor bedrijven. Geef aan of je gegevens van minderjarigen kunt bewaren, zodat de juiste regels worden getoond.",
+        "policy": "Minderjarigen onder je contacten",
+        "policies": {
+          "unset": "Nog niet beantwoord",
+          "no_minors": "We verwerken niet bewust gegevens van minderjarigen",
+          "may_include_minors": "Minderjarigen kunnen onder onze contacten zitten"
+        },
+        "parental": "Voor minderjarigen is toestemming van ouders vereist",
+        "parentalHint": "Een vlag die je beleid vastlegt. Het verzamelen en bewaren van bewijs van ouderlijke toestemming per contact is nog niet beschikbaar.",
+        "age": "De profielen die je hebt ingeschakeld behandelen iedereen onder {age} als minderjarig.",
+        "dpdpNeedsAnswer": "Het DPDP-profiel vraagt je deze vraag te beantwoorden."
+      }
+    },
+    "links": {
+      "intro": "Sla je links naar privacy en voorwaarden één keer op. Ze worden met één klik aangeboden in de toestemmingsregel van de formulierbouwer en in elke editor voor toestemmingsmededelingen.",
+      "privacy": "Link naar privacybeleid",
+      "privacyHint": "Moet beginnen met https://",
+      "terms": "Link naar voorwaarden",
+      "termsHint": "Moet beginnen met https://",
+      "offered": "Er wordt niets automatisch ingevuld: elk formulier of elke mededeling toont een knop om deze links te gebruiken."
+    },
+    "notices": {
+      "intro": "De standaardtekst die je werkruimte naast een toestemmingsvakje toont. Elke wijziging wordt opgeslagen als een nieuwe genummerde versie, zodat een vastlegging de exacte tekst kan noemen waarmee iemand akkoord ging.",
+      "english": "Standaard toestemmingsmededeling ({language})",
+      "secondEditor": "Standaard toestemmingsmededeling ({language})",
+      "second": {
+        "title": "Tweede taal",
+        "requiredByProfile": "Gevraagd door het DPDP-profiel",
+        "hint": "De DPDP Act vraagt om de mededeling in het Engels en in een van de talen van India. Kies de tweede taal en sla op, schrijf daarna de mededeling in die taal.",
+        "language": "Taal van de tweede mededeling",
+        "none": "Geen tweede taal",
+        "saveFirst": "Sla eerst je wijzigingen op, dan verschijnt de mededelingeneditor voor deze taal."
+      }
+    },
+    "windows": {
+      "notEnforced": "Deze instellingen zijn opgeslagen, maar worden nog niet afgedwongen. Een bericht wordt niet tegengehouden en een gesprek wordt niet geblokkeerd buiten de ingestelde uren. Plan je verzending en gesprekken daaromheen.",
+      "intro": "Sommige regels beperken wanneer marketingberichten en -gesprekken mensen mogen bereiken. Leg hier de uren vast waarop je werkt.",
+      "quiet": {
+        "title": "Stille uren voor berichten",
+        "hint": "Uren waarin je niet wilt dat marketingberichten mensen bereiken. De periode mag over middernacht gaan.",
+        "enabled": "Stille uren aan",
+        "start": "Stil vanaf",
+        "end": "Stil tot"
+      },
+      "calling": {
+        "title": "Belvenster",
+        "hint": "De enige uren waarop marketinggesprekken gevoerd mogen worden, op de dagen die je kiest.",
+        "enabled": "Belvenster aan",
+        "start": "Bellen vanaf",
+        "end": "Bellen tot",
+        "days": "Dagen"
+      },
+      "day": {
+        "1": "Maandag",
+        "2": "Dinsdag",
+        "3": "Woensdag",
+        "4": "Donderdag",
+        "5": "Vrijdag",
+        "6": "Zaterdag",
+        "7": "Zondag"
+      },
+      "suggested": "De wetten die je hebt ingeschakeld suggereren {start} tot {end}.",
+      "zone": {
+        "label": "Tijdzone",
+        "hint": "De uren worden in deze zone gelezen. De zone van je werkruimte is {zone}.",
+        "workspace": "Tijdzone van de werkruimte ({zone})"
+      },
+      "dnd": {
+        "label": "Niet-bellen-register (Do Not Call / DND)",
+        "hint": "Het register waartegen je je lijsten controleert.",
+        "registry": {
+          "none": "Geen",
+          "trai_ndnc": "NDNC India (TRAI)",
+          "us_dnc": "Do Not Call Verenigde Staten",
+          "sg_dnc": "Do Not Call Singapore",
+          "custom": "Je eigen lijst"
+        },
+        "note": "Dit is alleen een notitie. Er wordt nog niets tegen een register gecontroleerd."
+      }
+    },
+    "subprocessors": {
+      "intro": "De leveranciers die persoonsgegevens voor je werkruimte verwerken: wat ze doen, welke gegevens ze krijgen en waar. Je kunt de lijst op een openbare pagina publiceren.",
+      "listTitle": "Je subverwerkers",
+      "add": "Subverwerker toevoegen",
+      "saved": "Subverwerker opgeslagen.",
+      "removed": "Subverwerker verwijderd.",
+      "empty": {
+        "title": "Nog geen subverwerkers",
+        "body": "Voeg elke leverancier toe die persoonsgegevens voor je verwerkt, bijvoorbeeld je e-mail- of sms-provider."
+      },
+      "status": {
+        "active": "In gebruik",
+        "planned": "Gepland",
+        "removed": "Niet meer in gebruik"
+      },
+      "edit": "Bewerken",
+      "remove": "Verwijderen",
+      "public": {
+        "title": "Openbare pagina",
+        "hint": "Publiceer de leveranciers in gebruik, je links naar privacy en voorwaarden en je privacycontact op een pagina die iedereen kan openen. Standaard uit.",
+        "switch": "Openbare pagina aan",
+        "saveToApply": "Sla je wijzigingen op om dit toe te passen."
+      },
+      "dpa": {
+        "title": "Sjabloon voor een verwerkersovereenkomst",
+        "hint": "Een sjabloon ingevuld met je gegevens en je lijst. Het is geen juridisch advies en geen overeenkomst: laat je juridisch adviseur het controleren voordat je het gebruikt.",
+        "download": "Sjabloon downloaden"
+      },
+      "form": {
+        "addTitle": "Subverwerker toevoegen",
+        "editTitle": "Subverwerker bewerken",
+        "close": "Sluiten",
+        "cancel": "Annuleren",
+        "save": "Opslaan",
+        "name": "Naam",
+        "required": "Een naam is verplicht.",
+        "purpose": "Wat ze voor je doen",
+        "data": "Gegevens die ze ontvangen",
+        "location": "Locatie",
+        "locationHint": "Land of regio waar ze de gegevens verwerken.",
+        "status": "Status",
+        "website": "Website",
+        "dpa": "Link naar overeenkomst",
+        "httpsOnly": "Gebruik een adres dat begint met https://.",
+        "addedOn": "Toegevoegd op",
+        "noticeSentOn": "Klanten geïnformeerd op",
+        "noticeHint": "De dag waarop je je klanten over deze leverancier hebt geïnformeerd."
+      },
+      "confirmRemove": {
+        "title": "Deze subverwerker verwijderen?",
+        "body": "{name} wordt van je lijst gehaald. Markeer de subverwerker liever als niet meer in gebruik als je de geschiedenis wilt bewaren.",
+        "confirm": "Verwijderen"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: subverwerkers en privacy",
+      "intro": "De leveranciers die dit bedrijf gebruikt om persoonsgegevens te verwerken, en hoe je het privacycontact bereikt.",
+      "subprocessors": "Subverwerkers",
+      "none": "Er staan geen subverwerkers in de lijst.",
+      "contact": "Privacycontact en beleid",
+      "privacy": "Privacybeleid",
+      "terms": "Voorwaarden",
+      "notFound": "Pagina niet gevonden"
+    }
+  }
+}

@@ -345,6 +345,11 @@
         "description": "Choose the STOP and START words, the confirmation replies, the opt-out line and whether marketing needs recorded consent.",
         "keywords": "consent, opt out, opt in, unsubscribe, stop, start, gdpr, compliance, privacy, marketing"
       },
+      "compliance-center": {
+        "label": "Compliance center",
+        "description": "Tools to help you meet your privacy duties: the laws you work under, privacy contacts, notices and links, sub-processors, quiet hours and a checklist of what is in place.",
+        "keywords": "compliance, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, grievance officer, sub-processor, dpa, terms, privacy policy, quiet hours, do not call, checklist, children"
+      },
       "privacy-requests": {
         "label": "Data requests",
         "description": "Answer people who ask what you hold on them: identity check, export, erasure with a preview, and a proof you can keep.",
