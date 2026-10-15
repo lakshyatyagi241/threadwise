@@ -1655,14 +1655,17 @@ export class ContactsService {
     const succeeded: string[] = [];
     const failed: BulkResult['failed'] = [];
 
+    // One query for the whole batch (up to BULK_IDS_MAX uuids), not one per row.
+    const ids = await this.repo.idsByUuid(tx, orgId, uuids);
+
     for (const uuid of uuids) {
-      const row = await this.repo.findByUuid(tx, orgId, uuid);
-      if (!row) {
+      const id = ids.get(uuid);
+      if (id === undefined) {
         failed.push({ id: uuid, code: ERROR_CODES.NOT_FOUND, message: 'Contact not found' });
         continue;
       }
       try {
-        await tx.transaction((rowTx) => fn(rowTx, row.id, uuid));
+        await tx.transaction((rowTx) => fn(rowTx, id, uuid));
         succeeded.push(uuid);
       } catch (err) {
         const message = err instanceof AppError ? err.message : 'Unexpected error';

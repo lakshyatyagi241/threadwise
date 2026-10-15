@@ -207,22 +207,17 @@ export class FaqService {
       const ids = found.map((f) => f.id);
       let affected = 0;
       if (input.action === 'delete') {
-        const rows: EntryRow[] = [];
-        for (const f of found) {
-          const r = await this.repo.findById(tx, orgId, f.id, cfg.embeddingModel);
-          if (r) rows.push(r);
-        }
+        // Read before the delete so the audit rows describe what was removed; one query for the batch.
+        const rows = await this.repo.findByIds(tx, orgId, ids, cfg.embeddingModel);
         affected = await this.repo.deleteMany(tx, orgId, ids);
         for (const r of rows) await this.record(tx, r, 'delete', 'faq.deleted');
       } else {
         const status = input.action === 'pause' ? 'paused' : 'active';
         affected = await this.repo.setStatus(tx, orgId, ids, status);
-        for (const f of found) {
-          const r = await this.repo.findById(tx, orgId, f.id, cfg.embeddingModel);
-          if (r)
-            await this.record(tx, r, 'update', 'faq.updated', {
-              status: { old: status === 'paused' ? 'active' : 'paused', new: status },
-            });
+        for (const r of await this.repo.findByIds(tx, orgId, ids, cfg.embeddingModel)) {
+          await this.record(tx, r, 'update', 'faq.updated', {
+            status: { old: status === 'paused' ? 'active' : 'paused', new: status },
+          });
         }
       }
       return { affected };
