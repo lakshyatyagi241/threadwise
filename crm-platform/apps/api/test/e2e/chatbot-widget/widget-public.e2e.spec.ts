@@ -838,6 +838,27 @@ describe('AI assistant reply (TW-WGT-016, 017)', () => {
   });
 });
 
+describe('Restart this chat / Close this chat', () => {
+  it('gives the visitor a fresh id and a fresh conversation; the old thread is left as it was', async () => {
+    const w = await api.widget(t.admin, { name: 'Restart 1' });
+    const first = await api.visitor(w.embedToken);
+    await api.pub(w.embedToken).message({ body: 'hi', visitor_uuid: first });
+    const res = await api.pub(w.embedToken).restart();
+    expect(res.status).toBe(200);
+    expect(res.body.ok).toBe(true);
+    expect(res.body.visitor_uuid).toMatch(uuidRe);
+    expect(res.body.visitor_uuid).not.toBe(first);
+    expect(String(res.headers['set-cookie'])).toContain(`=${res.body.visitor_uuid}`);
+    const again = await api.pub(w.embedToken).config(res.body.visitor_uuid);
+    expect(again.body.visitor.uuid).toBe(res.body.visitor_uuid);
+    expect(again.body.messages ?? []).toEqual([]);
+  });
+
+  it('answers 404 for an unknown token', async () => {
+    expect((await api.pub('nope-nope-nope').restart()).status).toBe(404);
+  });
+});
+
 describe('agent replies reach the visitor by polling (TW-WGT-018)', () => {
   it('TW-WGT-018 #1/#3: a reply typed in the inbox shows up in the poll once; with `since` at its id nothing more comes', async () => {
     const w = await api.widget(t.admin, { name: 'Poll 1' });

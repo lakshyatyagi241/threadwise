@@ -57,6 +57,8 @@ body { display: flex; flex-direction: column; background: #fff; }
 .pop[hidden] { display: none; }
 .pop.at-start { inset-inline-end: auto; inset-inline-start: 10px; }
 .pop .mi { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; text-align: start; font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 10px; border-radius: 10px; cursor: pointer; color: inherit; text-decoration: none; }
+#endpop { width: auto; min-width: 210px; gap: 2px; }
+#endpop .mi svg { flex: none; opacity: .75; }
 .pop .mi:hover { background: var(--accent-soft); color: var(--accent); }
 .pop .mi img { width: 34px; height: 34px; border-radius: 9px; object-fit: cover; flex: none; }
 .pop.blocks { display: grid; grid-template-columns: 1fr 1fr; }
@@ -418,7 +420,22 @@ const SCRIPT = `
   }
 
   var popsBound = false;
-  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; }
+  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; $('endpop').hidden = true; }
+  // Close this chat / Restart this chat: the server makes a fresh visitor (a fresh conversation), the window keeps its id and
+  // loads again. Close also asks the site to hide the panel. The Customize preview has no conversation, so it only hides.
+  function startOver(hide) {
+    closePops();
+    function done() {
+      if (hide) { try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (e) {} }
+      if (!PREVIEW) location.reload();
+    }
+    if (PREVIEW) { done(); return; }
+    fetch(BASE + 'restart', { method: 'POST', credentials: 'include' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.visitor_uuid) storeUuid(j.visitor_uuid); })
+      .catch(function () {})
+      .then(done);
+  }
   // The header's bell (notification cards) and menu (rows or blocks).
   function paintHeaderPops(hdr) {
     var np = $('noticepop'), mp = $('menupop');
@@ -896,15 +913,27 @@ const SCRIPT = `
       };
       hdr.appendChild(ex);
     }
-    // Inside the site's panel (a flow bot's), the window has its own close button: it asks the page to hide the panel.
-    if (FLOW && window.parent !== window) {
+    // Inside the site's panel (any website bot) the window has its own cross. It opens two choices: close this chat (the panel hides
+    // and the next visit starts fresh) or restart this chat (a fresh conversation right now).
+    if (window.parent !== window) {
       var x = document.createElement('button');
       x.type = 'button';
       x.className = 'hx';
       x.dataset.end = '1';
       x.setAttribute('aria-label', tx('closeChat', 'Close chat'));
+      x.setAttribute('aria-haspopup', 'true');
       x.appendChild(svg(20, ['M6 6l12 12', 'M18 6L6 18']));
-      x.onclick = function () { try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (e) {} };
+      var ep = $('endpop');
+      ep.textContent = '';
+      [['closeThis', 'Close this chat', true, ['M6 6l12 12', 'M18 6L6 18']], ['restartThis', 'Restart this chat', false, ['M3 12a9 9 0 1 0 3-6.7', 'M3 4v5h5']]].forEach(function (o) {
+        var mi = document.createElement('button');
+        mi.type = 'button'; mi.className = 'mi'; mi.setAttribute('role', 'menuitem');
+        mi.appendChild(svg(16, o[3]));
+        var sp = document.createElement('span'); sp.textContent = tx(o[0], o[1]); mi.appendChild(sp);
+        mi.onclick = function () { startOver(o[2]); };
+        ep.appendChild(mi);
+      });
+      x.onclick = function (e) { e.stopPropagation(); var on = ep.hidden; closePops(); ep.hidden = !on; };
       hdr.appendChild(x);
     }
     var acc = cfg.button_bg || '#5B4DDB';
@@ -1202,6 +1231,7 @@ export function renderChatPage(w: ChatPageWidget): string {
 <body>
 <header class="header" id="hdr"></header>
 <div class="pop" id="menupop" hidden role="menu"></div>
+<div class="pop" id="endpop" hidden role="menu"></div>
 <div class="pop" id="noticepop" hidden></div>
 <div class="banner" id="banner" hidden></div>
 <div class="stage">
