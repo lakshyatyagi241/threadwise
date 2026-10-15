@@ -51,8 +51,8 @@ export function CallButton({ conversationId, displayName, contactId }: CallButto
         // The server sent a permission request instead of placing the call.
         toast(t('toast.permissionSent'), 'info');
         void qc.invalidateQueries({ queryKey: KEYS.eligibility(conversationId) });
-      } else if (err instanceof CallError) toast(errorText(err), 'danger');
-      else toast(t('toast.startFailed', { message: errorText(err) }), 'danger');
+      } else if (err instanceof CallError) toast(errorText(err, { reasons: true }), 'danger');
+      else toast(t('toast.startFailed', { message: errorText(err, { reasons: true }) }), 'danger');
     }
   };
 
@@ -85,7 +85,7 @@ export function CallButton({ conversationId, displayName, contactId }: CallButto
       );
       void qc.invalidateQueries({ queryKey: KEYS.eligibility(conversationId) });
     } catch (err) {
-      toast(t('toast.permissionFailed', { message: errorText(err) }), 'danger');
+      toast(t('toast.permissionFailed', { message: errorText(err, { reasons: true }) }), 'danger');
     } finally {
       setWorking(false);
     }

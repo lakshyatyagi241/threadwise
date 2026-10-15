@@ -2,12 +2,21 @@
 
 import { useState } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
-import { Alert, Badge, Button, EmptyState, Spinner, useToast } from '@crm/ui';
+import { Alert, Badge, Button, EmptyState, Spinner, Switch, useToast } from '@crm/ui';
 import type { CallingNumber } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useCallingNumbers, useToggleCalling } from '../api/calling';
+import {
+  useCallingReadiness,
+  useCallingSettings,
+  useCheckReadiness,
+  useSaveCallingSettings,
+} from '../api/readiness';
 import { useErrorText } from './use-error-text';
+import { CallingProvider } from './calling-provider';
 import { PhoneIcon } from './icons';
+import { OnCallPanel } from './on-call-panel';
+import { ReadinessCard } from './readiness-card';
 import { RecordingSettingsPanel } from './recording-settings-panel';
 
 /**
@@ -22,46 +31,103 @@ export function CallingSettingsScreen() {
   const rows = numbers.data?.rows ?? [];
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-7 sm:px-6">
-      <h1 className="text-3xl font-normal tracking-tight">{t('title')}</h1>
-      <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
-      {!canManage && (
-        <Alert className="mt-4" tone="info">
-          {t('viewOnly')}
-        </Alert>
-      )}
-
-      <div className="mt-6 space-y-3">
-        {numbers.isPending && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Spinner label={t('loading')} /> {t('loading')}
-          </div>
-        )}
-        {numbers.isError && (
-          <Alert tone="danger" className="flex flex-wrap items-center justify-between gap-3">
-            <span>
-              {t('loadFailed')} {errorText(numbers.error)}
-            </span>
-            <Button size="sm" variant="secondary" onClick={() => void numbers.refetch()}>
-              {t('retry')}
-            </Button>
+    // The one call of this tab (a test call from a number's card) lives with the screen, not with a card that may refresh.
+    <CallingProvider>
+      <OnCallPanel />
+      <main className="mx-auto max-w-3xl px-4 py-7 sm:px-6">
+        <h1 className="text-3xl font-normal tracking-tight">{t('title')}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
+        {!canManage && (
+          <Alert className="mt-4" tone="info">
+            {t('viewOnly')}
           </Alert>
         )}
-        {numbers.isSuccess && rows.length === 0 && (
-          <EmptyState title={t('emptyTitle')} message={t('emptyMessage')} />
-        )}
-        {rows.map((n) => (
-          <NumberCard key={n.id} number={n} canManage={canManage} />
-        ))}
-      </div>
 
-      <RecordingSettingsPanel />
-    </main>
+        <AutoEnableSetting />
+
+        <div className="mt-6 space-y-3">
+          {numbers.isPending && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Spinner label={t('loading')} /> {t('loading')}
+            </div>
+          )}
+          {numbers.isError && (
+            <Alert tone="danger" className="flex flex-wrap items-center justify-between gap-3">
+              <span>
+                {t('loadFailed')} {errorText(numbers.error)}
+              </span>
+              <Button size="sm" variant="secondary" onClick={() => void numbers.refetch()}>
+                {t('retry')}
+              </Button>
+            </Alert>
+          )}
+          {numbers.isSuccess && rows.length === 0 && (
+            <EmptyState title={t('emptyTitle')} message={t('emptyMessage')} />
+          )}
+          {rows.map((n) => (
+            <NumberCard key={n.id} number={n} canManage={canManage} />
+          ))}
+        </div>
+
+        <RecordingSettingsPanel />
+      </main>
+    </CallingProvider>
+  );
+}
+
+/**
+ * Whether calling is switched on by itself after a number is connected (EXT-CALL-007). Off until someone with the calling management
+ * right turns it on; nothing is ever switched on at WhatsApp without it.
+ */
+function AutoEnableSetting() {
+  const t = useTranslations('calling-voice.readiness.autoEnable');
+  const { toast } = useToast();
+  const errorText = useErrorText();
+  const canManage = useCan('call.calling.manage');
+  const settings = useCallingSettings();
+  const save = useSaveCallingSettings();
+  if (settings.isError) {
+    return (
+      <Alert tone="info" className="mt-4">
+        {t('loadFailed')} {errorText(settings.error)}
+      </Alert>
+    );
+  }
+  if (!settings.data) return null;
+  const saved = settings.data;
+  return (
+    <section className="mt-5 flex items-start justify-between gap-4 rounded-xl border border-border bg-background p-4">
+      <div className="min-w-0">
+        <div className="font-medium">{t('title')}</div>
+        <p className="mt-0.5 text-xs text-muted-foreground">{t('hint')}</p>
+      </div>
+      <Switch
+        checked={saved.autoEnableOnConnect}
+        label={t('label')}
+        disabled={!canManage || save.isPending}
+        onCheckedChange={(next) =>
+          save.mutate(
+            {
+              autoEnableOnConnect: next,
+              ...(saved.rowVersion ? { rowVersion: saved.rowVersion } : {}),
+            },
+            {
+              onSuccess: () => toast(t('saved'), 'success'),
+              onError: (e) => toast(errorText(e), 'danger'),
+            },
+          )
+        }
+      />
+    </section>
   );
 }
 
 function NumberCard({ number: n, canManage }: { number: CallingNumber; canManage: boolean }) {
   const t = useTranslations('calling-voice.settings');
+  const tr = useTranslations('calling-voice.readiness');
+  const readiness = useCallingReadiness();
+  const blocked = readiness.data?.rows.find((r) => r.numberId === n.id)?.status === 'blocked';
+  const recheck = useCheckReadiness();
   const format = useFormatter();
   const { toast } = useToast();
   const errorText = useErrorText();
@@ -74,9 +140,13 @@ function NumberCard({ number: n, canManage }: { number: CallingNumber; canManage
     toggle.mutate(
       { id: n.id, enable: !on },
       {
-        onSuccess: () => toast(on ? t('disabledDone') : t('enabledDone'), 'success'),
+        onSuccess: () => {
+          toast(on ? t('disabledDone') : t('enabledDone'), 'success');
+          // The checklist follows what was just done, so the card never says "off" about a number that was just turned on.
+          recheck.mutate({ id: n.id, source: 'enable' });
+        },
         // Meta's reasons are long and worded for a person: shown in full, and kept until the next attempt.
-        onError: (e) => setRefusal(errorText(e)),
+        onError: (e) => setRefusal(errorText(e, { reasons: true })),
       },
     );
   };
@@ -124,11 +194,17 @@ function NumberCard({ number: n, canManage }: { number: CallingNumber; canManage
           </Button>
         )}
       </div>
+      {canManage && blocked && !on && (
+        <p className="mt-2 text-xs text-muted-foreground" data-testid="blocked-hint">
+          {tr('blockedHint')}
+        </p>
+      )}
       {refusal && (
         <Alert tone="danger" className="mt-3 whitespace-pre-line">
           {refusal}
         </Alert>
       )}
+      <ReadinessCard numberId={n.id} />
     </section>
   );
 }
@@ -151,5 +227,11 @@ export function CallingToggleCard({ numberId }: { numberId: string }) {
     );
   }
   const n = numbers.data?.rows.find((r) => r.id === numberId);
-  return n ? <NumberCard number={n} canManage={canManage} /> : null;
+  if (!n) return null;
+  return (
+    <CallingProvider>
+      <OnCallPanel />
+      <NumberCard number={n} canManage={canManage} />
+    </CallingProvider>
+  );
 }

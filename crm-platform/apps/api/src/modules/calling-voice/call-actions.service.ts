@@ -122,16 +122,19 @@ export class CallActionsService {
       return { callId: call.uuid, metaCallId, correlation };
     } catch (err) {
       const message = err instanceof WabaApiError ? (err.userMessage ?? err.message) : String(err);
+      // Meta's code 138006 says it outright; older answers only say "permission" in a sentence.
+      const noPermission =
+        isPermissionRefusal(message) || (err instanceof WabaApiError && err.code === 138006);
       await this.db.tx(async (tx) => {
         await this.repo.patchCall(tx, orgId, call.id, {
           status: 'failed',
           endedAt: new Date(),
-          endReason: isPermissionRefusal(message) ? NO_PERMISSION : 'META_REFUSED',
+          endReason: noPermission ? NO_PERMISSION : 'META_REFUSED',
           errorPayload: err instanceof WabaApiError ? err.body : { message },
         });
         await this.repo.logEvent(tx, orgId, call.id, 'dial_failed', { message });
       });
-      if (isPermissionRefusal(message)) {
+      if (noPermission) {
         // Meta says there is no approved permission (our ledger was stale): ask for it, as if we had known.
         await this.permissions.send(orgId, ctx.number, ctx.conn, to).catch(() => undefined);
         throw this.permissionRequested();

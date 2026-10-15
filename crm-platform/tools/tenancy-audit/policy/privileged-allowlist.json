@@ -359,6 +359,11 @@
     "reason": "worker/cron only (no controller reaches it); privileged step selects/stamps across tenants, per-recording work runs under that row's txAs with org_id and id; the delete goes through ChatMediaStore.remove(orgId, key) which checks the chat/<orgId>/ prefix",
     "reviewedOn": "2026-10-14"
   },
+  "modules/calling-voice/calling-readiness.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the one privileged step (CallingReadinessScheduler via CallingReadinessRepository.due) selects only (org_id, uuid) of numbers whose check is due and queues a job carrying those two ids; each check then runs as a system actor inside that org's own tenant context (RequestContextStore + txAs), and the connect consumer takes its org from the outbox event",
+    "reviewedOn": "2026-10-15"
+  },
   "modules/channel-email/mail-outbound-attachments.service.ts": {
     "status": "reviewed",
     "reason": "only privileged step is sweepExpired() (worker); per-row delete under txAs({orgId}) with org_id and id, object removed through ChatMediaStore.remove(orgId, key); request paths use txAs with the authenticated ctx",

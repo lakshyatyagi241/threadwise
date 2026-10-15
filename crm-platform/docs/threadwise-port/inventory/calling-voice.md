@@ -674,3 +674,18 @@ This domain covers everything voice in Reference. There are four cooperating lay
   - Given the call row is deleted, then its events are deleted.
 - **Source refs:** `app/Models/WaCallEvent.php`, `app/Services/WaCalling/WaCallingService.php` (logEvent), `app/Http/Controllers/FlowNodeActionsController.php`, migration `2026_05_23_050000_create_wa_calls_tables.php`.
 - **Port notes:** Table `call_events` with tenant_id for RLS (Reference keys only through the call). Partition or TTL-prune transcript events if volume grows.
+
+## Port extensions (not in Reference)
+
+Recorded here so the inventory and the wiring map agree. None of these exists in Reference 1.7.0, so none carries Reference source refs; each is
+specified in [the wiring map](../wiring/calling-voice.md) and [the parity file](../parity/calling-voice.md).
+
+- **EXT-CALL-001** call analytics; **EXT-CALL-002 to 006** call recording rules, consent, gated upload, retention and the personal-data registry entry.
+- **EXT-CALL-007** calling readiness checklist per WhatsApp number: what stands between a connected number and a working call (plan, connection,
+  coexistence, registration, messaging limit, token permissions, webhook subscription, `calls` field, Meta's calling status, TURN, people who may
+  call, recording rules), stored with the time and the reason it was checked. Extends TW-CALL-003 and TW-CALL-004 (Reference's card only had the switch).
+- **EXT-CALL-008** the `calls` webhook field of the platform's Meta app: read, and added when missing (Reference documented it as a manual
+  prerequisite in the toggle's refusal text, TW-CALL-004 rule 5).
+- **EXT-CALL-009** Meta's refusals as stable reasons (TW-CALL-004 rules 4 to 6, 005, 008 told them as English sentences).
+- **EXT-CALL-010** a test call to the admin's own phone through the dial path of TW-CALL-008.
+- **EXT-CALL-011** an optional switch-on after a number is connected, and a scheduled re-check, instead of "someone must remember to press the button".

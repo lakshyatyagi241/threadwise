@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Klaar om te bellen?",
+      "status": {
+        "never_checked": "Nog niet gecontroleerd",
+        "blocked": "Niet klaar",
+        "ready_to_enable": "Klaar om in te schakelen",
+        "attention": "Werkt, maar kijk even mee",
+        "ready": "Klaar"
+      },
+      "statusHint": {
+        "never_checked": "Dit nummer is nog niet gecontroleerd.",
+        "blocked": "Bellen werkt pas als de items met Los dit op in orde zijn.",
+        "ready_to_enable": "Alles wat WhatsApp nodig heeft is aanwezig. Schakel bellen in om de Bel-knop te tonen.",
+        "attention": "Bellen werkt, maar hieronder moet iets nagekeken worden.",
+        "ready": "Bellen staat aan en alle controles zijn geslaagd."
+      },
+      "checkedAt": "Gecontroleerd op {date}",
+      "checking": "Controleren bij WhatsApp...",
+      "checkAgain": "Opnieuw controleren",
+      "checkFailed": "Dit nummer kon niet worden gecontroleerd.",
+      "checkedDone": "Opnieuw gecontroleerd.",
+      "blockedHint": "Los eerst de items met Los dit op. WhatsApp weigert waarschijnlijk om bellen in te schakelen.",
+      "details": "Wat is gecontroleerd",
+      "fixLabel": "Wat te doen:",
+      "state": {
+        "ok": "OK",
+        "warn": "Even nakijken",
+        "fail": "Los dit op"
+      },
+      "checks": {
+        "plan_feature": "Abonnement bevat WhatsApp-bellen",
+        "connection": "Nummer verbonden",
+        "not_coexistence": "Nummer staat alleen op de Cloud API",
+        "number_registered": "Nummer geregistreerd bij WhatsApp",
+        "messaging_limit": "Berichtlimiet en kwaliteit",
+        "token_scopes": "Machtigingen van het toegangstoken",
+        "webhook_subscribed": "App geabonneerd op dit account",
+        "calls_field": "Bel-webhook afgeleverd",
+        "calling_enabled": "Bellen ingeschakeld bij WhatsApp",
+        "turn": "Belrelay (TURN) ingesteld",
+        "dialler_permissions": "Teamleden mogen bellen",
+        "recording_consent": "Opname- en toestemmingsregels"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "WhatsApp-bellen is onderdeel van je abonnement."
+        },
+        "plan_missing": {
+          "detail": "Je abonnement bevat geen WhatsApp-bellen.",
+          "fix": "Upgrade je abonnement en controleer daarna opnieuw."
+        },
+        "connected": {
+          "detail": "Het nummer is verbonden en heeft een toegangstoken."
+        },
+        "not_connected": {
+          "detail": "Dit nummer is op dit moment niet verbonden.",
+          "fix": "Verbind het opnieuw onder Kanalen en controleer daarna opnieuw."
+        },
+        "no_credentials": {
+          "detail": "Voor dit nummer is geen toegangstoken of telefoonnummer-id opgeslagen.",
+          "fix": "Verbind het nummer opnieuw, zodat de inloggegevens weer worden opgeslagen."
+        },
+        "cloud_api_only": {
+          "detail": "Het nummer draait alleen op de WhatsApp Cloud API."
+        },
+        "coexistence": {
+          "detail": "Dit nummer wordt ook in de WhatsApp Business-app gebruikt (coexistence) en WhatsApp staat geen gesprekken toe op zo'n nummer.",
+          "fix": "Registreer het alleen op de Cloud API, of gebruik een ander nummer om mee te bellen."
+        },
+        "on_premise": {
+          "detail": "Dit nummer staat nog op de oude On-Premises API, die Meta heeft stopgezet.",
+          "fix": "Registreer het op de Cloud API, of gebruik een ander nummer."
+        },
+        "number_ok": {
+          "detail": "WhatsApp meldt dat het nummer actief en geverifieerd is."
+        },
+        "number_not_verified": {
+          "detail": "De eigendomscode van het nummer is niet geverifieerd.",
+          "fix": "Verifieer het nummer via de WhatsApp-verbindingspagina en controleer daarna opnieuw."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp meldt dit nummer als {status}, niet als verbonden.",
+          "fix": "Los het nummer op in Meta Business Suite (het kan in behandeling, gemarkeerd of beperkt zijn) en controleer daarna opnieuw."
+        },
+        "limit_ok": {
+          "detail": "De dagelijkse berichtlimiet en de kwaliteitsscore zijn voldoende om te bellen."
+        },
+        "limit_test_number": {
+          "detail": "Dit is een testnummer en heeft geen berichtlimiet nodig."
+        },
+        "limit_low": {
+          "detail": "De berichtlimiet is {tier}. WhatsApp vereist minstens {needed} klanten per dag voordat bellen kan worden ingeschakeld.",
+          "fix": "Stuur meer berichten van goede kwaliteit of verifieer je bedrijf in Meta Business Suite, zodat de limiet stijgt. Controleer daarna opnieuw."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp gaf geen berichtlimiet door die deze app herkent.",
+          "fix": "Open het nummer in Meta Business Suite om de limiet te zien. Voor bellen zijn minstens 2.000 klanten per dag nodig."
+        },
+        "quality_low": {
+          "detail": "De kwaliteitsscore van het nummer is laag (rood) en WhatsApp kan het beperken.",
+          "fix": "Verminder het aantal geblokkeerde en gerapporteerde berichten en laat de score herstellen voordat je op bellen vertrouwt."
+        },
+        "scopes_ok": {
+          "detail": "Het toegangstoken heeft de machtigingen die bellen nodig heeft."
+        },
+        "scope_missing": {
+          "detail": "Het toegangstoken mist: {missing}.",
+          "fix": "Maak een nieuw systeemgebruikerstoken met zowel whatsapp_business_management als whatsapp_business_messaging en verbind het nummer opnieuw."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp accepteert het opgeslagen toegangstoken niet.",
+          "fix": "Verbind het nummer opnieuw of sla een nieuw permanent token op."
+        },
+        "token_expiring": {
+          "detail": "Het toegangstoken verloopt over {days, plural, one {# dag} other {# dagen}}.",
+          "fix": "Verbind het nummer opnieuw of sla een permanent systeemgebruikerstoken op voordat het verloopt."
+        },
+        "scopes_unverifiable": {
+          "detail": "De machtigingen van het token konden niet worden gelezen. Het nummer loopt mogelijk via een provider, of dit platform heeft geen app-gegevens om het te controleren.",
+          "fix": "Als bellen wordt geweigerd, vraag dan je provider of het nummer mag bellen."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp levert de gebeurtenissen van dit account af aan het platform."
+        },
+        "waba_not_subscribed": {
+          "detail": "Er is geen app geabonneerd op dit WhatsApp Business-account, dus gesprekken zouden je nooit bereiken.",
+          "fix": "Gebruik Inkomend herstellen op de gezondheidspagina van het nummer en controleer daarna opnieuw."
+        },
+        "calls_field_ok": {
+          "detail": "De Meta-app levert het calls-webhookveld af."
+        },
+        "calls_field_added": {
+          "detail": "Het calls-webhookveld ontbrak en is zojuist toegevoegd aan de Meta-app van het platform."
+        },
+        "calls_field_missing": {
+          "detail": "De Meta-app levert het calls-webhookveld niet af, dus inkomende gesprekken en antwoorden komen nooit aan.",
+          "fix": "Vraag je platformbeheerder om het veld calls aan te vinken in de webhookinstellingen van de Meta-app (WhatsApp, Configuratie) en controleer daarna opnieuw."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Dit nummer staat op een Meta-app die het platform niet kan lezen, dus het calls-webhookveld kon niet worden gecontroleerd.",
+          "fix": "Open de webhookinstellingen van die app en controleer of het veld calls is aangevinkt."
+        },
+        "calling_on": {
+          "detail": "Bellen staat aan en het belicoon wordt aan klanten getoond."
+        },
+        "calling_off": {
+          "detail": "Bellen staat uit voor dit nummer.",
+          "fix": "Kies Bellen inschakelen zodra de andere items in orde zijn."
+        },
+        "icon_hidden": {
+          "detail": "Bellen staat aan, maar het belicoon is verborgen voor klanten, dus ze kunnen geen gesprekken starten.",
+          "fix": "Zet de zichtbaarheid van het belicoon terug op standaard in de belinstellingen van het nummer bij Meta."
+        },
+        "turn_ok": {
+          "detail": "Er is een TURN-relay ingesteld, dus gesprekken werken ook achter strikte firewalls."
+        },
+        "turn_missing": {
+          "detail": "Er is geen TURN-relay ingesteld, dus gesprekken kunnen zonder geluid verbinden voor mensen achter strikte firewalls.",
+          "fix": "Vraag je platformbeheerder om een TURN-server toe te voegen aan CALLING_ICE_SERVERS."
+        },
+        "turn_incomplete": {
+          "detail": "Een TURN-server staat in de lijst zonder gebruikersnaam of wachtwoord.",
+          "fix": "Voeg de gebruikersnaam en het wachtwoord toe aan dat item in CALLING_ICE_SERVERS."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS is ingesteld maar is geen geldige lijst, dus alleen openbare STUN-servers worden gebruikt.",
+          "fix": "Herstel de JSON in CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, one {# teamlid kan} other {# teamleden kunnen}} gesprekken starten en aannemen."
+        },
+        "dialler_none": {
+          "detail": "Niemand in deze workspace mag gesprekken starten en aannemen.",
+          "fix": "Geef een rol het recht om te bellen onder Instellingen, Rollen."
+        },
+        "recording_off": {
+          "detail": "Gespreksopname staat uit, dus toestemming is niet nodig."
+        },
+        "recording_configured": {
+          "detail": "Gespreksopname staat aan, met een melding en een toestemmingsregel."
+        },
+        "recording_notice_missing": {
+          "detail": "Gespreksopname staat aan, maar er is geen melding om voor te lezen.",
+          "fix": "Schrijf hieronder onder Opname de opnamemelding."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp gaf geen antwoord op deze controle.",
+          "fix": "Controleer zo meteen opnieuw."
+        },
+        "not_checked": {
+          "detail": "Wacht op een item hierboven.",
+          "fix": "Los eerst het item hierboven op."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp schakelt bellen nog niet in. Het nummer heeft een dagelijkse berichtlimiet van minstens 2.000 klanten nodig, en de app moet geabonneerd zijn op het WhatsApp Business-account en op het calls-webhookveld, met de machtiging whatsapp_business_messaging. Een testnummer heeft de limiet niet nodig.",
+        "coexistence": "WhatsApp-bellen vereist een nummer dat volledig op de Cloud API staat. Dit nummer deelt zijn lijn met de WhatsApp Business-app (coexistence), waarop WhatsApp geen gesprekken toestaat. Registreer het alleen op de Cloud API, of gebruik een ander nummer.",
+        "permission_scope": "Het toegangstoken mist een machtiging die bellen nodig heeft (whatsapp_business_management en whatsapp_business_messaging). Maak een nieuw token met beide en verbind het nummer opnieuw.",
+        "token_expired": "WhatsApp accepteert het opgeslagen toegangstoken niet meer. Verbind het nummer opnieuw en probeer het daarna opnieuw.",
+        "calling_not_enabled": "Bellen is voor dit nummer niet ingeschakeld bij WhatsApp. Schakel het in en probeer het daarna opnieuw.",
+        "no_call_permission": "Dit contact heeft gesprekken nog niet toegestaan. Er wordt een toestemmingsverzoek verstuurd dat het contact kan accepteren.",
+        "permission_request_limit": "WhatsApp beperkt hoe vaak je dit contact om belmachtiging kunt vragen. Probeer het later opnieuw.",
+        "receiver_uncallable": "De WhatsApp van dit contact kan geen gesprekken ontvangen (oude appversie of bellen uitgeschakeld). Vraag het contact WhatsApp bij te werken.",
+        "meta_unreachable": "WhatsApp antwoordde niet op tijd. Probeer het zo meteen opnieuw."
+      },
+      "refusedBecause": "WhatsApp weigerde het verzoek: {reason}",
+      "autoEnable": {
+        "title": "Bellen automatisch inschakelen",
+        "hint": "Wanneer een WhatsApp-nummer wordt verbonden of opnieuw verbonden en aan alle vereisten voldoet, schakel dan bellen ervoor in zonder te vragen. Standaard uit; zonder deze instelling wordt bellen nooit ingeschakeld.",
+        "label": "Bellen automatisch inschakelen nadat een nummer is verbonden",
+        "saved": "Opgeslagen.",
+        "loadFailed": "Deze instelling kon niet worden geladen."
+      },
+      "testCall": {
+        "title": "Een testgesprek starten",
+        "intro": "Bel je eigen WhatsApp-nummer om een gesprek van begin tot eind te horen. WhatsApp laat een bedrijf alleen iemand bellen die dat heeft toegestaan: als jij dat nog niet hebt gedaan, wordt er een toestemmingsverzoek naar je telefoon gestuurd en wordt er niet gebeld. Tik op Toestaan in WhatsApp en druk daarna opnieuw op Bel mij.",
+        "phoneLabel": "Je WhatsApp-nummer",
+        "phoneHint": "Met landcode en zonder plus, bijvoorbeeld 919812345678.",
+        "call": "Bel mij",
+        "invalid": "Voer je nummer in met landcode (6 tot 15 cijfers).",
+        "show": "Een testgesprek starten"
+      }
+    }
+  }
+}

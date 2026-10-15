@@ -18,6 +18,38 @@ switching a number needs `call.calling.manage` (Owner, Admin and Manager by defa
 | `POST /calls/:id/recording`        | multipart `recording`, up to 50 MB                                                                     | `{ url }`; 422 `CALL_RECORDING_FAILED`, `CALL_RECORDING_DISABLED`, `CALL_RECORDING_CONSENT_REQUIRED` (nothing stored); 409 `CALL_RECORDING_ON_HOLD` |
 | `GET /calls/:id/recording`         | the file (range requests work)                                                                         | workspace only; 404 when there is none                                                                                                              |
 
+## Calling readiness (EXT-CALL-007 to 011)
+
+Same base and session auth. Reading needs `call.calls.use`; checking and the setting's write need `call.calling.manage`. Unlike the routes above,
+these do **not** answer 422 `PLAN_FEATURE_LOCKED` to a workspace without `waba_calling` on the read routes: the checklist then says
+`plan_missing` and Meta is not asked (a write of the setting still needs the plan feature). Types: `@crm/contracts` (`calling-voice/readiness`).
+
+| Method and path                     | What                                                                                 | Notes                                                                                                                                                                                         |
+| ----------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /readiness`                    | every WhatsApp number with its checklist as of its last check                        | `{ rows: [{ numberId, status, callingEnabled, metaCallingStatus, checks[], checkedAt, source, ... }] }`; no call to Meta                                                                      |
+| `GET /numbers/:id/readiness`        | one number's checklist                                                               | 404 `CALL_NUMBER_NOT_FOUND` for a number of another workspace                                                                                                                                 |
+| `POST /numbers/:id/readiness/check` | `{ source?: manual \| health \| enable }` look at the number now and keep the result | reads Meta (phone, token, subscribed apps, calling settings) and only reads the platform app's webhook fields; never switches calling on; brings the local switch in line with Meta (audited) |
+| `GET /settings`                     | `{ autoEnableOnConnect, rowVersion, updatedAt }`                                     | off until saved                                                                                                                                                                               |
+| `PUT /settings`                     | `{ autoEnableOnConnect, rowVersion? }`                                               | needs the plan feature; `rowVersion` required after the first save (409 otherwise); audited (`wa_calling_settings`)                                                                           |
+
+A check is `{ key, state: ok \| warn \| fail, code, params? }` per prerequisite, in this order: `plan_feature`, `connection`, `not_coexistence`,
+`number_registered`, `messaging_limit`, `token_scopes`, `webhook_subscribed`, `calls_field`, `calling_enabled`, `turn`, `dialler_permissions`,
+`recording_consent`. The server sends the **code** and the web writes the sentence (every code has its words in the 21 languages): nothing is
+parsed out of a message. `status` is `blocked` when any row but "calling is off" is a fail, `ready_to_enable` when only that is, `attention` when
+calling is on and a row warns, `ready` otherwise, `never_checked` before the first check.
+
+**Meta's refusals** (`toggle`, `permission-request`, `calls/dial`) are `422 CALL_META_REFUSED` with `errors: [{ path: 'reason', message }]`, the
+reason being one of `prerequisites`, `coexistence`, `permission_scope`, `token_expired`, `calling_not_enabled`,
+`no_call_permission`, `permission_request_limit`, `receiver_uncallable`, `meta_unreachable`, `unknown`; `message` keeps Meta's
+own sentence for logs and for `unknown`. Mapping is by Meta's error code first (141000, 138000, 138001, 138006, 138009, 190, 10, 200 to 299) and only
+for the prerequisite and missing-permission refusals by wording together with code 100, in `calling-meta-errors.ts`.
+
+Background: the outbox event `whatsapp.connection.connected` (the WABA domain's own) queues a check about 20 seconds after a connect, in the
+`calling-readiness` queue, for workspaces whose plan has calling (the worker's check is also the only one that may add the `calls` field to the platform's Meta app, under a Redis lock); a worker timer takes the numbers that are due every minute, claiming each for 30 minutes in the same statement and giving the claim back if queueing fails (jobs
+`calling-readiness-sched-<number>-<window>`). A check after a connect marks the number's automatic switch-on **pending** (`wa_calling_readiness.auto_enable_pending`); every later check, the
+schedule's and a person's, keeps trying while it is pending, and a check that cannot read Meta looks again after 1, 5 and 15 minutes. It ends when calling
+is on, when the plan or `autoEnableOnConnect` no longer allow it, or when a person turns calling off. Nothing else switches calling on.
+
 Public: `GET/POST /v2/public/webhooks/wa-calling`, the same callback as `/v2/public/webhooks/whatsapp` (Meta allows one per app).
 
 Call statuses: `ringing`, `connecting` (an operator claimed it), `active`, `ended`, `failed`. The ledger of everything that happens to a call is

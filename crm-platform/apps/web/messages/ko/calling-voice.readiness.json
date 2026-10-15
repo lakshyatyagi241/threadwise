@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "통화 준비 상태",
+      "status": {
+        "never_checked": "아직 확인하지 않음",
+        "blocked": "준비 안 됨",
+        "ready_to_enable": "켤 준비 완료",
+        "attention": "작동하지만 확인 필요",
+        "ready": "준비됨"
+      },
+      "statusHint": {
+        "never_checked": "이 번호는 아직 확인하지 않았습니다.",
+        "blocked": "'조치 필요'로 표시된 항목을 해결하기 전에는 통화가 작동하지 않습니다.",
+        "ready_to_enable": "WhatsApp에 필요한 조건이 모두 갖춰졌습니다. 통화 켜기를 눌러 통화 버튼을 표시하세요.",
+        "attention": "통화는 작동하지만 아래 항목을 확인해야 합니다.",
+        "ready": "통화가 켜져 있고 모든 확인을 통과했습니다."
+      },
+      "checkedAt": "{date}에 확인함",
+      "checking": "WhatsApp에서 확인하는 중...",
+      "checkAgain": "다시 확인",
+      "checkFailed": "이 번호를 확인할 수 없습니다.",
+      "checkedDone": "다시 확인했습니다.",
+      "blockedHint": "'조치 필요'로 표시된 항목을 먼저 해결하세요. WhatsApp이 통화 켜기를 거부할 가능성이 높습니다.",
+      "details": "확인한 항목",
+      "fixLabel": "해야 할 일:",
+      "state": {
+        "ok": "정상",
+        "warn": "확인 필요",
+        "fail": "조치 필요"
+      },
+      "checks": {
+        "plan_feature": "플랜에 WhatsApp 통화 포함",
+        "connection": "번호 연결됨",
+        "not_coexistence": "번호가 Cloud API만 사용함",
+        "number_registered": "번호가 WhatsApp에 등록됨",
+        "messaging_limit": "메시지 한도 및 품질",
+        "token_scopes": "액세스 토큰 권한",
+        "webhook_subscribed": "앱이 이 계정에 구독됨",
+        "calls_field": "통화 웹훅 전달됨",
+        "calling_enabled": "WhatsApp에서 통화가 켜짐",
+        "turn": "통화 릴레이(TURN) 설정됨",
+        "dialler_permissions": "통화가 허용된 팀원",
+        "recording_consent": "녹음 및 동의 규칙"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "WhatsApp 통화가 현재 플랜에 포함되어 있습니다."
+        },
+        "plan_missing": {
+          "detail": "현재 플랜에는 WhatsApp 통화가 포함되어 있지 않습니다.",
+          "fix": "플랜을 업그레이드한 후 다시 확인하세요."
+        },
+        "connected": {
+          "detail": "번호가 연결되어 있고 액세스 토큰이 있습니다."
+        },
+        "not_connected": {
+          "detail": "이 번호는 현재 연결되어 있지 않습니다.",
+          "fix": "채널에서 다시 연결한 후 다시 확인하세요."
+        },
+        "no_credentials": {
+          "detail": "이 번호에 저장된 액세스 토큰 또는 전화번호 ID가 없습니다.",
+          "fix": "인증 정보가 다시 저장되도록 번호를 다시 연결하세요."
+        },
+        "cloud_api_only": {
+          "detail": "이 번호는 WhatsApp Cloud API만 사용합니다."
+        },
+        "coexistence": {
+          "detail": "이 번호는 WhatsApp Business 앱에서도 사용 중(공존)이며, WhatsApp은 이런 번호의 통화를 허용하지 않습니다.",
+          "fix": "Cloud API에만 등록하거나 통화에 다른 번호를 사용하세요."
+        },
+        "on_premise": {
+          "detail": "이 번호는 Meta가 종료한 이전 온프레미스 API를 사용 중입니다.",
+          "fix": "Cloud API에 등록하거나 다른 번호를 사용하세요."
+        },
+        "number_ok": {
+          "detail": "WhatsApp에서 이 번호가 활성 상태이며 인증되었다고 알려 줍니다."
+        },
+        "number_not_verified": {
+          "detail": "번호의 소유 확인 코드가 인증되지 않았습니다.",
+          "fix": "번호의 WhatsApp 연결 페이지에서 인증한 후 다시 확인하세요."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp에서 이 번호를 연결됨이 아닌 {status} 상태로 알려 줍니다.",
+          "fix": "Meta Business Suite에서 번호를 해결한 후(보류, 신고됨 또는 제한 상태일 수 있습니다) 다시 확인하세요."
+        },
+        "limit_ok": {
+          "detail": "일일 메시지 한도와 품질 등급이 통화에 충분합니다."
+        },
+        "limit_test_number": {
+          "detail": "테스트 번호이므로 메시지 한도가 필요하지 않습니다."
+        },
+        "limit_low": {
+          "detail": "메시지 한도는 {tier}입니다. 통화를 켜려면 WhatsApp에서 하루 최소 {needed}명의 고객이 필요합니다.",
+          "fix": "품질 좋은 메시지를 더 많이 보내거나 Meta Business Suite에서 비즈니스를 인증해 한도를 높인 후 다시 확인하세요."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp이 이 앱에서 인식하는 메시지 한도를 알려 주지 않았습니다.",
+          "fix": "Meta Business Suite에서 번호를 열어 한도를 확인하세요. 통화에는 하루 최소 2,000명의 고객이 필요합니다."
+        },
+        "quality_low": {
+          "detail": "번호의 품질 등급이 낮아(빨강) WhatsApp이 제한할 수 있습니다.",
+          "fix": "차단 및 신고된 메시지를 줄이고 등급이 회복될 때까지 기다린 후 통화를 사용하세요."
+        },
+        "scopes_ok": {
+          "detail": "액세스 토큰에 통화에 필요한 권한이 있습니다."
+        },
+        "scope_missing": {
+          "detail": "액세스 토큰에 다음 권한이 없습니다: {missing}.",
+          "fix": "whatsapp_business_management와 whatsapp_business_messaging 권한이 모두 있는 새 시스템 사용자 토큰을 생성한 후 번호를 다시 연결하세요."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp이 저장된 액세스 토큰을 허용하지 않습니다.",
+          "fix": "번호를 다시 연결하거나 새 영구 토큰을 저장하세요."
+        },
+        "token_expiring": {
+          "detail": "액세스 토큰이 {days, plural, other {#일}} 후에 만료됩니다.",
+          "fix": "만료되기 전에 번호를 다시 연결하거나 영구 시스템 사용자 토큰을 저장하세요."
+        },
+        "scopes_unverifiable": {
+          "detail": "토큰의 권한을 읽을 수 없습니다. 번호가 제공업체를 통해 연결되어 있거나 이 플랫폼에 확인용 앱 인증 정보가 없을 수 있습니다.",
+          "fix": "통화가 거부되면 제공업체에 이 번호에서 통화를 사용할 수 있는지 확인하세요."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp이 이 계정의 이벤트를 플랫폼으로 전달합니다."
+        },
+        "waba_not_subscribed": {
+          "detail": "이 WhatsApp Business 계정에 구독된 앱이 없어 통화가 전달되지 않습니다.",
+          "fix": "번호의 상태 페이지에서 수신 문제 해결을 사용한 후 다시 확인하세요."
+        },
+        "calls_field_ok": {
+          "detail": "Meta 앱이 통화 웹훅 필드를 전달합니다."
+        },
+        "calls_field_added": {
+          "detail": "통화 웹훅 필드가 없어 플랫폼의 Meta 앱에 방금 추가했습니다."
+        },
+        "calls_field_missing": {
+          "detail": "Meta 앱이 통화 웹훅 필드를 전달하지 않아 수신 통화와 응답이 도착하지 않습니다.",
+          "fix": "플랫폼 운영자에게 Meta 앱의 웹훅 설정(WhatsApp, 구성)에서 통화 필드를 선택해 달라고 요청한 후 다시 확인하세요."
+        },
+        "calls_field_unverifiable": {
+          "detail": "이 번호는 플랫폼이 읽을 수 없는 Meta 앱을 사용 중이라 통화 웹훅 필드를 확인할 수 없었습니다.",
+          "fix": "해당 앱의 웹훅 설정을 열어 통화 필드가 선택되어 있는지 확인하세요."
+        },
+        "calling_on": {
+          "detail": "통화가 켜져 있고 고객에게 통화 아이콘이 표시됩니다."
+        },
+        "calling_off": {
+          "detail": "이 번호의 통화가 꺼져 있습니다.",
+          "fix": "다른 항목에 문제가 없으면 통화 켜기를 선택하세요."
+        },
+        "icon_hidden": {
+          "detail": "통화는 켜져 있지만 고객에게 통화 아이콘이 숨겨져 있어 통화를 시작할 수 없습니다.",
+          "fix": "Meta의 번호 통화 설정에서 통화 아이콘 표시 설정을 기본값으로 되돌리세요."
+        },
+        "turn_ok": {
+          "detail": "TURN 릴레이가 설정되어 있어 엄격한 방화벽 환경에서도 통화가 작동합니다."
+        },
+        "turn_missing": {
+          "detail": "TURN 릴레이가 설정되지 않아 엄격한 방화벽 환경의 사용자는 소리 없이 통화가 연결될 수 있습니다.",
+          "fix": "플랫폼 운영자에게 CALLING_ICE_SERVERS에 TURN 서버를 추가해 달라고 요청하세요."
+        },
+        "turn_incomplete": {
+          "detail": "TURN 서버에 사용자 이름 또는 자격 증명이 없습니다.",
+          "fix": "해당 CALLING_ICE_SERVERS 항목에 사용자 이름과 자격 증명을 추가하세요."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS가 설정되어 있지만 올바른 목록이 아니어서 공개 STUN 서버만 사용됩니다.",
+          "fix": "CALLING_ICE_SERVERS의 JSON을 수정하세요."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, other {팀원 #명이}} 통화를 걸고 받을 수 있습니다."
+        },
+        "dialler_none": {
+          "detail": "이 워크스페이스에는 통화를 걸고 받을 권한이 있는 사람이 없습니다.",
+          "fix": "설정, 역할에서 역할에 통화 사용 권한을 부여하세요."
+        },
+        "recording_off": {
+          "detail": "통화 녹음이 꺼져 있어 동의가 필요하지 않습니다."
+        },
+        "recording_configured": {
+          "detail": "통화 녹음이 켜져 있고 안내 문구와 동의 규칙이 있습니다."
+        },
+        "recording_notice_missing": {
+          "detail": "통화 녹음이 켜져 있지만 읽어 줄 안내 문구가 없습니다.",
+          "fix": "아래 녹음에서 녹음 안내 문구를 작성하세요."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp이 이 확인에 응답하지 않았습니다.",
+          "fix": "잠시 후 다시 확인하세요."
+        },
+        "not_checked": {
+          "detail": "위 항목을 기다리는 중입니다.",
+          "fix": "위 항목을 먼저 해결하세요."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp이 아직 통화를 켜지 않습니다. 번호의 일일 메시지 한도가 최소 2,000명의 고객이어야 하고, 앱이 WhatsApp Business 계정과 통화 웹훅 필드에 구독되어 있어야 하며 whatsapp_business_messaging 권한이 있어야 합니다. 테스트 번호는 한도가 필요하지 않습니다.",
+        "coexistence": "WhatsApp 통화에는 Cloud API만 사용하는 번호가 필요합니다. 이 번호는 WhatsApp Business 앱과 회선을 공유(공존)하고 있어 WhatsApp이 통화를 허용하지 않습니다. Cloud API에만 등록하거나 다른 번호를 사용하세요.",
+        "permission_scope": "액세스 토큰에 통화에 필요한 권한(whatsapp_business_management 및 whatsapp_business_messaging)이 없습니다. 두 권한이 모두 있는 새 토큰을 생성한 후 번호를 다시 연결하세요.",
+        "token_expired": "WhatsApp이 저장된 액세스 토큰을 더 이상 허용하지 않습니다. 번호를 다시 연결한 후 다시 시도하세요.",
+        "calling_not_enabled": "이 번호는 WhatsApp에서 통화가 켜져 있지 않습니다. 켠 후 다시 시도하세요.",
+        "no_call_permission": "이 고객은 아직 통화를 허용하지 않았습니다. 고객이 수락할 수 있도록 권한 요청을 보냅니다.",
+        "permission_request_limit": "WhatsApp에서 이 고객에게 통화 권한을 요청할 수 있는 횟수가 제한되어 있습니다. 나중에 다시 시도하세요.",
+        "receiver_uncallable": "이 고객의 WhatsApp은 통화를 받을 수 없습니다(오래된 앱 버전이거나 통화가 꺼져 있음). WhatsApp을 업데이트하도록 안내하세요.",
+        "meta_unreachable": "WhatsApp이 제시간에 응답하지 않았습니다. 잠시 후 다시 시도하세요."
+      },
+      "refusedBecause": "WhatsApp이 요청을 거부했습니다: {reason}",
+      "autoEnable": {
+        "title": "통화 자동으로 켜기",
+        "hint": "WhatsApp 번호가 연결되거나 다시 연결되어 모든 요건을 충족하면 확인 없이 통화를 켭니다. 기본값은 꺼짐이며, 이 설정 없이는 통화가 자동으로 켜지지 않습니다.",
+        "label": "번호가 연결되면 통화 자동으로 켜기",
+        "saved": "저장했습니다.",
+        "loadFailed": "이 설정을 불러올 수 없습니다."
+      },
+      "testCall": {
+        "title": "테스트 통화 걸기",
+        "intro": "내 WhatsApp 번호로 전화해 통화를 처음부터 끝까지 확인해 보세요. WhatsApp은 허용한 사람에게만 비즈니스가 전화할 수 있습니다. 허용하지 않았다면 휴대폰으로 권한 요청이 전송되고 통화는 걸리지 않습니다. WhatsApp에서 허용을 누른 후 전화 받기를 다시 누르세요.",
+        "phoneLabel": "내 WhatsApp 번호",
+        "phoneHint": "국가 코드를 포함하고 더하기 기호 없이 입력하세요. 예: 919812345678.",
+        "call": "전화 받기",
+        "invalid": "국가 코드를 포함해 번호를 입력하세요(6~15자리).",
+        "show": "테스트 통화 걸기"
+      }
+    }
+  }
+}

@@ -78,6 +78,8 @@ export const QUEUES = {
   /** One job per requested export of a data-subject request: reads everything the workspace holds about one person into a ZIP kept 7 days. Own queue: a heavy subject must not hold a send or a receipt. */
   PRIVACY_EXPORT: 'privacy-export',
   WAB_MIGRATE: 'wab-migrate',
+  /** One job per WhatsApp number to check for calling readiness (EXT-CALL-007): after a connect and on a schedule. Own queue: a slow Meta must not hold WhatsApp ingest. */
+  CALLING_READINESS: 'calling-readiness',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

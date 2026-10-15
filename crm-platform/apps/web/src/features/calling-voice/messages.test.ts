@@ -147,9 +147,9 @@ describe('message keys used in code', () => {
     // The nav label is read by the menu from `nav.ts`, not by a component.
     const used = new Set(files.flatMap((f) => usedKeys(readFileSync(f, 'utf8'))));
     // Keys built at run time: failures.*, errors.* (see use-error-text.ts), and the call log's words picked by a status, a range, a
-    // direction, a reason or a ledger step.
+    // direction, a reason or a ledger step; and the readiness card's words, picked by a status, a row, a code or a reason.
     const dynamic =
-      /^calling-voice\.(failures\.|errors\.|nav\.|logs\.(status|range)\.(?!title|all|custom|from|to|apply)|logs\.(filters|table)\.(inbound|outbound)$|logs\.table\.(customer|number|handledBy|started|duration|status)$|logs\.detail\.(reasons|steps)\.|recording\.(settings\.(modeHint|modeOption)|lifecycle\.(method|deletedReason))\.)/;
+      /^calling-voice\.(failures\.|errors\.|nav\.|logs\.(status|range)\.(?!title|all|custom|from|to|apply)|logs\.(filters|table)\.(inbound|outbound)$|logs\.table\.(customer|number|handledBy|started|duration|status)$|logs\.detail\.(reasons|steps)\.|recording\.(settings\.(modeHint|modeOption)|lifecycle\.(method|deletedReason))\.|readiness\.(status|statusHint|state|checks|codes|reasons)\.)/;
     const dead = Object.keys(en).filter((k) => !used.has(k) && !dynamic.test(k));
     expect(dead).toEqual([]);
   });

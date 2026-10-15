@@ -59,8 +59,8 @@ export function useDirectCall(): (input: {
         void qc.invalidateQueries({ queryKey: KEYS.eligibility(conversationId) });
         return 'permission-sent';
       }
-      if (err instanceof CallError) toast(errorText(err), 'danger');
-      else toast(t('toast.startFailed', { message: errorText(err) }), 'danger');
+      if (err instanceof CallError) toast(errorText(err, { reasons: true }), 'danger');
+      else toast(t('toast.startFailed', { message: errorText(err, { reasons: true }) }), 'danger');
       return 'failed';
     }
   };

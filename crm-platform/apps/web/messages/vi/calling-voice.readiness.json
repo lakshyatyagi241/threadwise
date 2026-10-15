@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Sẵn sàng để gọi?",
+      "status": {
+        "never_checked": "Chưa kiểm tra",
+        "blocked": "Chưa sẵn sàng",
+        "ready_to_enable": "Sẵn sàng để bật",
+        "attention": "Hoạt động, cần xem lại",
+        "ready": "Sẵn sàng"
+      },
+      "statusHint": {
+        "never_checked": "Số này chưa được kiểm tra.",
+        "blocked": "Gọi điện sẽ không hoạt động cho đến khi các mục được đánh dấu Cần sửa được xử lý.",
+        "ready_to_enable": "WhatsApp đã có đủ mọi thứ cần thiết. Hãy Bật gọi điện để hiển thị nút Gọi.",
+        "attention": "Gọi điện đang hoạt động, nhưng có mục bên dưới cần xem lại.",
+        "ready": "Gọi điện đã bật và mọi mục kiểm tra đều đạt."
+      },
+      "checkedAt": "Đã kiểm tra {date}",
+      "checking": "Đang kiểm tra với WhatsApp...",
+      "checkAgain": "Kiểm tra lại",
+      "checkFailed": "Không thể kiểm tra số này.",
+      "checkedDone": "Đã kiểm tra lại.",
+      "blockedHint": "Hãy sửa các mục được đánh dấu Cần sửa trước. Nhiều khả năng WhatsApp sẽ từ chối bật gọi điện.",
+      "details": "Các mục đã kiểm tra",
+      "fixLabel": "Cần làm:",
+      "state": {
+        "ok": "Đạt",
+        "warn": "Cần xem lại",
+        "fail": "Cần sửa"
+      },
+      "checks": {
+        "plan_feature": "Gói của bạn có gọi điện WhatsApp",
+        "connection": "Số đã được kết nối",
+        "not_coexistence": "Số chỉ chạy trên Cloud API",
+        "number_registered": "Số đã đăng ký với WhatsApp",
+        "messaging_limit": "Giới hạn nhắn tin và chất lượng",
+        "token_scopes": "Quyền của mã truy cập",
+        "webhook_subscribed": "Ứng dụng đã đăng ký với tài khoản này",
+        "calls_field": "Webhook cuộc gọi đã được gửi",
+        "calling_enabled": "Gọi điện đã bật tại WhatsApp",
+        "turn": "Đã cấu hình relay cuộc gọi (TURN)",
+        "dialler_permissions": "Đồng nghiệp được phép gọi",
+        "recording_consent": "Quy tắc ghi âm và chấp thuận"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "Gọi điện WhatsApp nằm trong gói của bạn."
+        },
+        "plan_missing": {
+          "detail": "Gói của bạn không bao gồm gọi điện WhatsApp.",
+          "fix": "Hãy nâng cấp gói, rồi kiểm tra lại."
+        },
+        "connected": {
+          "detail": "Số đã được kết nối và có mã truy cập."
+        },
+        "not_connected": {
+          "detail": "Số này hiện chưa được kết nối.",
+          "fix": "Hãy kết nối lại trong Kênh, rồi kiểm tra lại."
+        },
+        "no_credentials": {
+          "detail": "Số này chưa lưu mã truy cập hoặc ID số điện thoại.",
+          "fix": "Hãy kết nối lại số để thông tin xác thực được lưu lại."
+        },
+        "cloud_api_only": {
+          "detail": "Số này chỉ chạy trên WhatsApp Cloud API."
+        },
+        "coexistence": {
+          "detail": "Số này cũng đang được dùng trong ứng dụng WhatsApp Business (đồng tồn tại), và WhatsApp không cho phép gọi trên số như vậy.",
+          "fix": "Hãy đăng ký số chỉ trên Cloud API, hoặc dùng số khác để gọi."
+        },
+        "on_premise": {
+          "detail": "Số này đang dùng On-Premises API cũ, vốn đã bị Meta ngừng hoạt động.",
+          "fix": "Hãy đăng ký số trên Cloud API, hoặc dùng số khác."
+        },
+        "number_ok": {
+          "detail": "WhatsApp báo số này đang hoạt động và đã được xác minh."
+        },
+        "number_not_verified": {
+          "detail": "Mã xác nhận quyền sở hữu của số chưa được xác minh.",
+          "fix": "Hãy xác minh số từ trang kết nối WhatsApp của số đó, rồi kiểm tra lại."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp báo số này ở trạng thái {status}, chưa phải đã kết nối.",
+          "fix": "Hãy xử lý số trong Meta Business Suite (có thể đang chờ duyệt, bị gắn cờ hoặc bị hạn chế), rồi kiểm tra lại."
+        },
+        "limit_ok": {
+          "detail": "Giới hạn nhắn tin hằng ngày và xếp hạng chất lượng đủ để gọi điện."
+        },
+        "limit_test_number": {
+          "detail": "Đây là số thử nghiệm, không cần giới hạn nhắn tin."
+        },
+        "limit_low": {
+          "detail": "Giới hạn nhắn tin là {tier}. WhatsApp cần tối thiểu {needed} khách hàng mỗi ngày thì mới bật được gọi điện.",
+          "fix": "Hãy gửi thêm tin nhắn chất lượng tốt, hoặc xác minh doanh nghiệp trong Meta Business Suite để giới hạn tăng lên. Sau đó kiểm tra lại."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp không báo giới hạn nhắn tin mà ứng dụng này nhận ra.",
+          "fix": "Hãy mở số trong Meta Business Suite để xem giới hạn. Gọi điện cần tối thiểu 2.000 khách hàng mỗi ngày."
+        },
+        "quality_low": {
+          "detail": "Xếp hạng chất lượng của số đang thấp (đỏ) và WhatsApp có thể hạn chế số này.",
+          "fix": "Hãy giảm tin nhắn bị chặn và bị báo cáo, và chờ xếp hạng phục hồi trước khi dùng gọi điện."
+        },
+        "scopes_ok": {
+          "detail": "Mã truy cập có các quyền mà gọi điện cần."
+        },
+        "scope_missing": {
+          "detail": "Mã truy cập đang thiếu: {missing}.",
+          "fix": "Hãy tạo mã người dùng hệ thống mới có cả whatsapp_business_management và whatsapp_business_messaging, rồi kết nối lại số."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp không chấp nhận mã truy cập đã lưu.",
+          "fix": "Hãy kết nối lại số hoặc lưu một mã vĩnh viễn mới."
+        },
+        "token_expiring": {
+          "detail": "Mã truy cập sẽ hết hạn sau {days, plural, other {# ngày}}.",
+          "fix": "Hãy kết nối lại số hoặc lưu mã người dùng hệ thống vĩnh viễn trước khi mã hết hạn."
+        },
+        "scopes_unverifiable": {
+          "detail": "Không đọc được quyền của mã. Số có thể được truy cập qua một nhà cung cấp, hoặc nền tảng này không có thông tin xác thực ứng dụng để kiểm tra.",
+          "fix": "Nếu gọi điện bị từ chối, hãy xác nhận với nhà cung cấp rằng số này được phép dùng gọi điện."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp gửi các sự kiện của tài khoản này đến nền tảng."
+        },
+        "waba_not_subscribed": {
+          "detail": "Chưa có ứng dụng nào đăng ký với Tài khoản WhatsApp Business này, nên cuộc gọi sẽ không bao giờ đến được bạn.",
+          "fix": "Dùng Sửa lỗi tin nhắn đến trên trang tình trạng của số, rồi kiểm tra lại."
+        },
+        "calls_field_ok": {
+          "detail": "Ứng dụng Meta gửi trường webhook cuộc gọi."
+        },
+        "calls_field_added": {
+          "detail": "Trường webhook cuộc gọi bị thiếu và vừa được thêm vào ứng dụng Meta của nền tảng."
+        },
+        "calls_field_missing": {
+          "detail": "Ứng dụng Meta không gửi trường webhook cuộc gọi, nên cuộc gọi đến và phản hồi sẽ không bao giờ đến nơi.",
+          "fix": "Hãy nhờ quản trị viên nền tảng chọn trường cuộc gọi trong cài đặt webhook của ứng dụng Meta (WhatsApp, Cấu hình), rồi kiểm tra lại."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Số này thuộc một ứng dụng Meta mà nền tảng không đọc được, nên không kiểm tra được trường webhook cuộc gọi.",
+          "fix": "Hãy mở cài đặt webhook của ứng dụng đó và đảm bảo trường cuộc gọi đã được chọn."
+        },
+        "calling_on": {
+          "detail": "Gọi điện đã bật và biểu tượng gọi được hiển thị cho khách hàng."
+        },
+        "calling_off": {
+          "detail": "Gọi điện đang tắt cho số này.",
+          "fix": "Chọn Bật gọi điện khi các mục khác đã ổn."
+        },
+        "icon_hidden": {
+          "detail": "Gọi điện đã bật, nhưng biểu tượng gọi bị ẩn với khách hàng nên họ không thể bắt đầu cuộc gọi.",
+          "fix": "Hãy đặt lại chế độ hiển thị biểu tượng gọi về mặc định trong cài đặt gọi điện của số tại Meta."
+        },
+        "turn_ok": {
+          "detail": "Đã cấu hình relay TURN, nên cuộc gọi hoạt động được phía sau tường lửa nghiêm ngặt."
+        },
+        "turn_missing": {
+          "detail": "Chưa cấu hình relay TURN, nên cuộc gọi có thể kết nối mà không có âm thanh với người ở sau tường lửa nghiêm ngặt.",
+          "fix": "Hãy nhờ quản trị viên nền tảng thêm máy chủ TURN vào CALLING_ICE_SERVERS."
+        },
+        "turn_incomplete": {
+          "detail": "Một máy chủ TURN được liệt kê nhưng thiếu tên người dùng hoặc thông tin xác thực.",
+          "fix": "Hãy thêm tên người dùng và thông tin xác thực vào mục CALLING_ICE_SERVERS đó."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS đã được đặt nhưng không phải danh sách hợp lệ, nên chỉ dùng các máy chủ STUN công khai.",
+          "fix": "Hãy sửa JSON trong CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, other {# đồng nghiệp có thể}} thực hiện và nhận cuộc gọi."
+        },
+        "dialler_none": {
+          "detail": "Không ai trong không gian làm việc này có quyền thực hiện và nhận cuộc gọi.",
+          "fix": "Hãy cấp cho một vai trò quyền dùng gọi điện trong Cài đặt, Vai trò."
+        },
+        "recording_off": {
+          "detail": "Ghi âm cuộc gọi đang tắt, nên không cần sự chấp thuận."
+        },
+        "recording_configured": {
+          "detail": "Ghi âm cuộc gọi đang bật, có thông báo và quy tắc chấp thuận."
+        },
+        "recording_notice_missing": {
+          "detail": "Ghi âm cuộc gọi đang bật nhưng chưa có thông báo để đọc.",
+          "fix": "Hãy soạn thông báo ghi âm trong phần Ghi âm bên dưới."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp không phản hồi lần kiểm tra này.",
+          "fix": "Hãy kiểm tra lại sau giây lát."
+        },
+        "not_checked": {
+          "detail": "Đang chờ một mục ở trên.",
+          "fix": "Hãy sửa mục ở trên trước."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp chưa bật gọi điện. Số cần có giới hạn nhắn tin hằng ngày tối thiểu 2.000 khách hàng, và ứng dụng phải đăng ký với Tài khoản WhatsApp Business cùng trường webhook cuộc gọi với quyền whatsapp_business_messaging. Số thử nghiệm không cần giới hạn này.",
+        "coexistence": "Gọi điện WhatsApp cần số chạy hoàn toàn trên Cloud API. Số này dùng chung đường dây với ứng dụng WhatsApp Business (đồng tồn tại), và WhatsApp không cho phép gọi trên số như vậy. Hãy đăng ký số chỉ trên Cloud API, hoặc dùng số khác.",
+        "permission_scope": "Mã truy cập thiếu một quyền mà gọi điện cần (whatsapp_business_management và whatsapp_business_messaging). Hãy tạo mã mới có cả hai quyền và kết nối lại số.",
+        "token_expired": "WhatsApp không còn chấp nhận mã truy cập đã lưu. Hãy kết nối lại số, rồi thử lại.",
+        "calling_not_enabled": "Gọi điện chưa được bật tại WhatsApp cho số này. Hãy bật rồi thử lại.",
+        "no_call_permission": "Khách hàng này chưa cho phép gọi. Một yêu cầu cấp quyền sẽ được gửi để họ chấp nhận.",
+        "permission_request_limit": "WhatsApp giới hạn số lần bạn xin quyền gọi từ khách hàng này. Hãy thử lại sau.",
+        "receiver_uncallable": "WhatsApp của khách hàng này không nhận được cuộc gọi (phiên bản ứng dụng cũ, hoặc đã tắt cuộc gọi). Hãy nhờ họ cập nhật WhatsApp.",
+        "meta_unreachable": "WhatsApp không phản hồi kịp. Hãy thử lại sau giây lát."
+      },
+      "refusedBecause": "WhatsApp đã từ chối khi được hỏi: {reason}",
+      "autoEnable": {
+        "title": "Tự động bật gọi điện",
+        "hint": "Khi một số WhatsApp được kết nối hoặc kết nối lại và đáp ứng mọi yêu cầu, tự động bật gọi điện cho số đó mà không hỏi. Mặc định tắt; gọi điện không bao giờ được bật nếu không có tùy chọn này.",
+        "label": "Tự động bật gọi điện sau khi kết nối số",
+        "saved": "Đã lưu.",
+        "loadFailed": "Không thể tải cài đặt này."
+      },
+      "testCall": {
+        "title": "Gọi thử",
+        "intro": "Hãy gọi đến số WhatsApp của chính bạn để nghe một cuộc gọi từ đầu đến cuối. WhatsApp chỉ cho phép doanh nghiệp gọi người đã cho phép: nếu bạn chưa cho phép, một yêu cầu cấp quyền sẽ được gửi đến điện thoại của bạn và không có cuộc gọi nào được thực hiện. Hãy nhấn Cho phép trong WhatsApp, rồi nhấn Gọi cho tôi lần nữa.",
+        "phoneLabel": "Số WhatsApp của bạn",
+        "phoneHint": "Kèm mã quốc gia và không có dấu cộng, ví dụ 919812345678.",
+        "call": "Gọi cho tôi",
+        "invalid": "Nhập số của bạn kèm mã quốc gia (6 đến 15 chữ số).",
+        "show": "Gọi thử"
+      }
+    }
+  }
+}

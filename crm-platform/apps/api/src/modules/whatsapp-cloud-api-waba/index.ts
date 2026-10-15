@@ -20,5 +20,6 @@ export {
 export { WABA_CALLS_SINK, WABA_CALLS_SINK_OVERRIDE, type WabaCallsSink } from './waba-calls-sink';
 export { WabaReceiptRegistry, type WabaReceiptSink } from './waba-receipt-registry';
 export { WabaWebhookService } from './waba-webhook.service';
+export { WabaDiagnosticsService } from './waba-diagnostics.service';
 export { WabaConnectionsRepository } from './waba-connections.repository';
 export { WEBHOOK_PATH } from './waba-rules';
