@@ -263,8 +263,18 @@ html[data-theme='dark']:has(.auth-scope) {
 }
 @media (prefers-reduced-motion: reduce) {
   .auth-scope .auth-geta-blob,
-  .auth-scope .auth-geta-shape {
+  .auth-scope .auth-geta-shape,
+  .auth-scope .auth-geta-orb--pulse,
+  .auth-scope .auth-geta-sheen,
+  .auth-scope .auth-geta-ring,
+  .auth-scope .auth-geta-orbit,
+  .auth-scope .auth-geta-star,
+  .auth-scope .auth-geta-wave {
     animation: none;
+  }
+  .auth-scope .auth-geta-rise {
+    animation: none;
+    opacity: 1;
   }
 }
 
@@ -287,11 +297,10 @@ html[data-theme='dark']:has(.auth-scope) {
 }
 
 /*
- * Geta's brand has no dark variant: the card keeps its own light palette regardless of the viewer's
- * light/dark toggle, so text and field borders never flip to the (invisible-on-white) dark-mode ink
- * scale. Same specificity as `[data-theme='dark'] .auth-scope`; declared after it, so this wins.
+ * Light theme: the card keeps Geta's own light palette. In dark theme these overrides do not apply, so the
+ * scope's dark palette (paper/ink scale above) styles the card and the light/dark toggle works.
  */
-.auth-scope .auth-geta-card {
+html:not([data-theme='dark']) .auth-scope .auth-geta-card {
   --background: #ffffff;
   --foreground: #0d0b2e;
   --muted: #f5f3ec;
@@ -317,12 +326,138 @@ html[data-theme='dark']:has(.auth-scope) {
   color-scheme: light;
 }
 
+/* Dark theme: the page canvas and the card follow the scope's dark palette. */
+[data-theme='dark'] .auth-scope .auth-geta-page {
+  background: #0d0b2e;
+}
+[data-theme='dark'] .auth-scope .auth-geta-card {
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+}
+
+/* Entrance and idle motion on the right-hand panel. */
+.auth-scope .auth-geta-rise {
+  opacity: 0;
+  animation: auth-geta-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+@keyframes auth-geta-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.auth-scope .auth-geta-orb--pulse {
+  animation: auth-geta-orb-pulse 6s ease-in-out infinite;
+}
+@keyframes auth-geta-orb-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+.auth-scope .auth-geta-stat {
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+.auth-scope .auth-geta-stat:hover {
+  transform: translateX(6px);
+  border-color: rgb(255 255 255 / 0.4);
+}
+.auth-scope .auth-geta-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgb(255 255 255 / 0.07) 50%,
+    transparent 60%
+  );
+  background-size: 250% 100%;
+  animation: auth-geta-sheen 8s linear infinite;
+}
+@keyframes auth-geta-sheen {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* Orbit rings, twinkling stars and waves behind the panel copy. */
+.auth-scope .auth-geta-ring {
+  animation: auth-geta-ring-breathe 7s ease-in-out infinite;
+}
+.auth-scope .auth-geta-ring--dashed {
+  animation-delay: -3s;
+}
+@keyframes auth-geta-ring-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+.auth-scope .auth-geta-orbit {
+  animation: auth-geta-spin 14s linear infinite;
+}
+.auth-scope .auth-geta-orbit--rev {
+  animation-duration: 22s;
+  animation-direction: reverse;
+}
+@keyframes auth-geta-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.auth-scope .auth-geta-star {
+  animation: auth-geta-twinkle 3.2s ease-in-out infinite;
+}
+@keyframes auth-geta-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.3);
+  }
+}
+.auth-scope .auth-geta-wave {
+  animation: auth-geta-wave-slide 16s linear infinite;
+}
+.auth-scope .auth-geta-wave--rev {
+  animation-duration: 11s;
+  animation-direction: reverse;
+}
+@keyframes auth-geta-wave-slide {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* Tighter vertical rhythm: the sign-up step has more fields than the other designs budget room for. */
 .auth-scope .auth-geta-card header {
   margin-bottom: 0.625rem;
 }
 .auth-scope .auth-geta-card .space-y-4 > :not([hidden]) ~ :not([hidden]) {
-  margin-top: 0.5rem;
+  margin-top: 0.9rem;
 }
 .auth-scope .auth-geta-card .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) {
   margin-top: 0.4rem;
@@ -334,8 +469,8 @@ html[data-theme='dark']:has(.auth-scope) {
   margin-bottom: 0.5rem;
 }
 .auth-scope .auth-geta-card input {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 
 /* Country flags in the phone picker (flag-icons ships the SVG files). */

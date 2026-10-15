@@ -55,7 +55,7 @@ const FIELD_ORDER = [
 ] as const;
 
 /** Slightly tighter fields than the sign-in form: this one has the most of them. */
-const COMPACT = 'py-2';
+const COMPACT = 'py-2.5';
 
 /**
  * Sign-up step 1 (TW-AUTH-005): creates the workspace and its first user together. With registration OTP on, the
@@ -277,14 +277,17 @@ export function SignupForm({
           setError((cur) => (cur && cur.field === name ? null : cur));
         }}
         noValidate
-        className="space-y-2.5"
+        className="grid grid-cols-1 gap-x-3 gap-y-2.5 @md:grid-cols-2"
       >
-        <FormError
-          error={error}
-          skipFieldMessage={Boolean(
-            error && (error.key === 'passwordPolicy' || (error.field && fieldErrors[error.field])),
-          )}
-        />
+        <div className="@md:col-span-2 empty:hidden">
+          <FormError
+            error={error}
+            skipFieldMessage={Boolean(
+              error &&
+              (error.key === 'passwordPolicy' || (error.field && fieldErrors[error.field])),
+            )}
+          />
+        </div>
 
         <FormField label={t('fullName')} error={fieldErrors.fullName}>
           {(p) => (
@@ -335,6 +338,20 @@ export function SignupForm({
           )}
         </FormField>
 
+        <FormField label={t('phone')} error={fieldErrors.phone} hint={t('phoneHint')}>
+          {(p) => (
+            <PhoneInput
+              id={p.id}
+              name="phone"
+              value={phone}
+              onChange={(next) => setPhoneEdit({ raw: next.raw, iso: next.iso })}
+              invalid={p.invalid}
+              describedBy={p['aria-describedby']}
+              placeholder={t('phonePlaceholder')}
+            />
+          )}
+        </FormField>
+
         {customSlug ? (
           <FormField label={t('orgSlug')} error={fieldErrors.orgSlug} hint={t('orgSlugHint')}>
             {(p) => (
@@ -356,25 +373,11 @@ export function SignupForm({
           <button
             type="button"
             onClick={() => setCustomSlugEdit(true)}
-            className={cn(LINK, 'text-[11.5px]')}
+            className={cn(LINK, 'text-[13px]')}
           >
             {t('customiseSlug')}
           </button>
         )}
-
-        <FormField label={t('phone')} error={fieldErrors.phone} hint={t('phoneHint')}>
-          {(p) => (
-            <PhoneInput
-              id={p.id}
-              name="phone"
-              value={phone}
-              onChange={(next) => setPhoneEdit({ raw: next.raw, iso: next.iso })}
-              invalid={p.invalid}
-              describedBy={p['aria-describedby']}
-              placeholder={t('phonePlaceholder')}
-            />
-          )}
-        </FormField>
 
         <FormField
           label={t('referral')}
@@ -427,14 +430,14 @@ export function SignupForm({
           )}
         </FormField>
 
-        <div className="space-y-1.5 pt-0.5">
+        <div className="space-y-1.5 pt-0.5 @md:col-span-2">
           <Checkbox
             id="acceptTerms"
             name="acceptTerms"
             checked={agree}
             onChange={(e) => setAgree(e.target.checked)}
             aria-invalid={fieldErrors.acceptTerms ? true : undefined}
-            className="items-start text-[11px] leading-snug"
+            className="items-start text-[12.5px] leading-snug"
             label={<AgreeLabel links={config.links} />}
           />
           {fieldErrors.acceptTerms && (
@@ -444,15 +447,15 @@ export function SignupForm({
           )}
         </div>
 
-        {captcha.widget}
+        <div className="@md:col-span-2 empty:hidden">{captcha.widget}</div>
 
-        <Button type="submit" className="mt-1 w-full py-2.5" disabled={pending}>
+        <Button type="submit" className="mt-1 w-full py-3 @md:col-span-2" disabled={pending}>
           {pending ? <Spinner label={t('submitting')} /> : null}
           {pending ? t('submitting') : t('submit')}
           {!pending && <ArrowIcon />}
         </Button>
 
-        <p className="text-center text-[12px] text-(--auth-ink-600)">
+        <p className="text-center text-[13px] text-(--auth-ink-600) @md:col-span-2">
           {t('haveAccount')}{' '}
           <Link href="/login" className={LINK}>
             {t('signIn')}
