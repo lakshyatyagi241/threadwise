@@ -193,13 +193,13 @@ function toWinAnsi(text: string): number[] {
   return out;
 }
 
-const widthOf = (text: string, size: number, bold: boolean): number => {
+export const widthOf = (text: string, size: number, bold: boolean): number => {
   let w = 0;
   for (const b of toWinAnsi(text)) w += b >= 32 && b <= 126 ? W[b - 32]! : 556;
   return (w / 1000) * size * (bold ? 1.06 : 1);
 };
 
-function wrap(text: string, maxWidth: number, size: number, bold = false): string[] {
+export function wrap(text: string, maxWidth: number, size: number, bold = false): string[] {
   const out: string[] = [];
   for (const para of text.split(/\r?\n/)) {
     let line = '';
@@ -216,11 +216,11 @@ function wrap(text: string, maxWidth: number, size: number, bold = false): strin
   return out;
 }
 
-class Page {
+export class Page {
   ops: string[] = [];
 }
 
-class PdfWriter {
+export class PdfWriter {
   pages: Page[] = [new Page()];
   y = 802;
   readonly left = 40;

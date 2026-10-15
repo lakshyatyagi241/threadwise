@@ -60,6 +60,12 @@ import { DealEngine } from './deals/deal-engine.service';
 import { CrmDashboardController } from './crm-dashboard/crm-dashboard.controller';
 import { CrmDashboardRepository } from './crm-dashboard/crm-dashboard.repository';
 import { CrmDashboardService } from './crm-dashboard/crm-dashboard.service';
+import { RevenueExportPublisher } from './revenue-report/revenue-export.publisher';
+import { RevenueExportRepository } from './revenue-report/revenue-export.repository';
+import { RevenueExportService } from './revenue-report/revenue-export.service';
+import { RevenueReportController } from './revenue-report/revenue-report.controller';
+import { RevenueReportRepository } from './revenue-report/revenue-report.repository';
+import { RevenueReportService } from './revenue-report/revenue-report.service';
 import { DealReportsRepository } from './deals/deal-reports.repository';
 import { DealReportsService } from './deals/deal-reports.service';
 import { DealsPlan, SalesPipelineGuard } from './deals/deals-plan';
@@ -217,6 +223,8 @@ import { TagsService } from './tags/tags.service';
     DealsController,
     ContactDealsController,
     CrmDashboardController,
+    // The revenue report (`crm/revenue`, its files under `crm/revenue/exports`).
+    RevenueReportController,
     PipelinesController,
     PipelineStagesController,
     LostReasonsController,
@@ -309,6 +317,11 @@ import { TagsService } from './tags/tags.service';
     DealReportsService,
     CrmDashboardRepository,
     CrmDashboardService,
+    RevenueReportRepository,
+    RevenueReportService,
+    RevenueExportRepository,
+    RevenueExportService,
+    RevenueExportPublisher,
     PipelinesRepository,
     PipelinesService,
     LostReasonsService,
@@ -399,6 +412,10 @@ import { TagsService } from './tags/tags.service';
     ExternalOrderBillingService,
     InvoiceSettingsService,
     ContactActivitiesRepository,
+    // The revenue report file builder (RevenueReportWorkerModule) drives them.
+    RevenueReportRepository,
+    RevenueReportService,
+    RevenueExportRepository,
   ],
 })
 export class CrmModule {}
