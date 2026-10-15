@@ -647,8 +647,43 @@
         "notes": "Notas adicionales",
         "notesNote": "opcional / máx. 2000",
         "notesPlaceholder": "Cualquier detalle: frases imprescindibles, lo que hay que evitar, pautas de la voz de la marca…",
-        "failed": "No se pudo generar la campaña. Inténtalo de nuevo.",
-        "applied": "Se completó el texto de la campaña. Revísalo antes de continuar."
+        "applied": "Se completó el texto de la campaña. Revísalo antes de continuar.",
+        "pictureApplied": "La imagen se adjuntó a la campaña. Compruébala en la tarjeta Adjunto.",
+        "errors": {
+          "noKey": "No hay ningún proveedor de IA activado en este espacio de trabajo. Pide a un administrador que añada una clave.",
+          "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+          "providerFailed": "El proveedor de IA no respondió. Inténtalo de nuevo en un momento.",
+          "badJson": "No se pudo leer la respuesta del modelo. Inténtalo de nuevo o cambia el resumen.",
+          "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+          "forbidden": "No tienes permiso para crear campañas.",
+          "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+          "failed": "No se pudo generar la campaña. Inténtalo de nuevo."
+        },
+        "picture": {
+          "label": "Crear también una imagen",
+          "hint": "Genera una imagen a partir del mismo resumen y la adjunta a la campaña. Usa tu cuota de OpenAI.",
+          "needsOpenAi": "Las imágenes requieren una clave de OpenAI. Elige un modelo de OpenAI para activarlo.",
+          "noAttachment": "El número elegido envía solo texto, así que no hay dónde adjuntar una imagen.",
+          "size": "Formato de la imagen",
+          "sizes": {
+            "square": "Cuadrada",
+            "landscape": "Horizontal",
+            "portrait": "Vertical"
+          },
+          "textKept": "Se completó el texto de la campaña. Solo falta la imagen.",
+          "retry": "Reintentar la imagen",
+          "errors": {
+            "noKey": "Las imágenes requieren una clave de OpenAI y no hay ninguna activada en este espacio de trabajo.",
+            "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+            "providerFailed": "El servicio de imágenes no respondió. Inténtalo de nuevo en un momento.",
+            "badJson": "El servicio de imágenes devolvió una respuesta inesperada. Inténtalo de nuevo.",
+            "imageRefused": "OpenAI se negó a generar esta imagen. Cambia el producto, la oferta o las notas e inténtalo de nuevo.",
+            "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+            "forbidden": "No tienes permiso para crear campañas.",
+            "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+            "failed": "No se pudo crear la imagen. Inténtalo de nuevo."
+          }
+        }
       },
       "switch": {
         "title": "¿Usar el flujo guiado?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Enviar desde",
         "senderHint": "El número de WhatsApp desde el que se envía esta difusión.",
         "pickSender": "Elige un número",
-        "classicOption": "editor clásico"
+        "classicOption": "editor clásico",
+        "buildWithAi": "Crear con IA",
+        "aiNote": "Redacta una plantilla nueva con IA. La revisas en la página de la plantilla; después Meta la revisa antes de poder enviarla, así que vuelve y selecciónala cuando esté aprobada."
       },
       "audience": {
         "selectionTitle": "Elegidos en el Centro de contactos",

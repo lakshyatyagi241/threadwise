@@ -5,7 +5,19 @@ summary: Write WhatsApp message templates, submit them to Meta for review, and t
 area: campaigns
 order: 30
 documents: [nav:templates]
-keywords: [whatsapp template, meta approval, review, buttons, variables, sync, quality]
+keywords:
+  [
+    whatsapp template,
+    meta approval,
+    review,
+    buttons,
+    variables,
+    sync,
+    quality,
+    ai,
+    build with ai,
+    draft,
+  ]
 ---
 
 ## What it is for
@@ -20,6 +32,10 @@ WhatsApp only lets a business start a conversation with an approved template. Th
 4. Under **Variable mapping**, name the contact attribute that fills each variable when you send, and give a sample value for Meta's review.
 5. Optionally add a **Footer** and up to three **Buttons** (call to action, quick reply, or a mix). Meta limits each kind, and quick replies must sit together.
 6. Watch the preview and **Pre-submit checks** on the right. Fix every error, then select **Save draft** to keep working later or **Submit for review** to send it to Meta.
+
+## Build with AI
+
+On **New Template Message**, **Build with AI** (top bar) drafts the template from a short brief. Pick an AI model, type your **Business name**, and optionally choose the **Industry**, **Occasion**, **Purpose**, **Primary action** and **Tone** and add a **Custom prompt**. The language and the Marketing or Utility category come from the form, so set them first; the button is off for an Authentication template, whose text is fixed. **Generate template** fills the name, header, body (with `{{1}}` variables), footer and up to three buttons, and a message reminds you to review it. Nothing is submitted: check the variable samples and the pre-submit checks, edit anything, then save or submit as usual. You need the right to create templates, and an AI provider enabled for your workspace; with none, the dialog says so. The guided campaign flow has the same button next to its template list and brings you to this form with the draft filled in.
 
 ## Options and settings
 
@@ -38,6 +54,7 @@ You need the right to view templates to open the screen. Creating and editing, d
 
 - **Submit for review is greyed out.** A line beside the buttons says why, such as no number chosen, no name, or errors in the checks.
 - **Meta refused the template.** It is kept with Meta's reason on its page. Select **Edit & resubmit**, fix it and submit again.
-- **Carousel, catalog, AI drafting and other channels.** These Reference template formats are not available yet.
+- **Carousel, catalog and other channels.** These template formats are not available yet.
+- **Build with AI says no provider is enabled.** Ask an administrator to enable an AI provider, or add your own key. If it says the monthly allowance is used, wait for the next month or ask for more.
 - **Delete is refused.** A running or scheduled broadcast still uses the template. Cancel that broadcast or pick another template first.
 - **A save says someone changed the template.** Reload it and apply your change again.

@@ -80,6 +80,9 @@ export function StepCompose({
   const b = templates.find((x) => x.id === form.templateIdB);
   const [attachment, setAttachment] = useState<Attachment>(() => attachmentOf(form.mediaUrl));
   const [mode, setMode] = useState<ButtonMode>(() => modeOf(form.buttons));
+  // An address that arrives from outside this card (the picture "Build with AI" made) opens the card on the kind it looks like.
+  if (attachment === 'none' && form.mediaUrl.trim() !== '')
+    setAttachment(attachmentOf(form.mediaUrl));
 
   const setButton = (i: number, row: Partial<ButtonRow>) =>
     patch({ buttons: form.buttons.map((x, j) => (j === i ? { ...x, ...row } : x)) });

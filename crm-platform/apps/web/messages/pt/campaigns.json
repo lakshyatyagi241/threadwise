@@ -647,8 +647,43 @@
         "notes": "Observações adicionais",
         "notesNote": "opcional / máx. 2000",
         "notesPlaceholder": "Qualquer detalhe — frases obrigatórias, o que evitar, tom da marca…",
-        "failed": "Não foi possível gerar a campanha. Tente novamente.",
-        "applied": "O texto da campanha foi preenchido. Revise antes de continuar."
+        "applied": "O texto da campanha foi preenchido. Revise antes de continuar.",
+        "pictureApplied": "A imagem foi anexada à campanha. Confira no cartão Anexo.",
+        "errors": {
+          "noKey": "Nenhum provedor de IA está ativado neste workspace. Peça a um administrador para adicionar uma chave.",
+          "limitReached": "Este workspace usou a cota de IA do mês.",
+          "providerFailed": "O provedor de IA não respondeu. Tente novamente em instantes.",
+          "badJson": "Não foi possível ler a resposta do modelo. Tente novamente ou altere o briefing.",
+          "invalid": "Verifique o briefing: o nome da empresa é obrigatório e alguns campos estão longos demais.",
+          "forbidden": "Você não tem permissão para criar campanhas.",
+          "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+          "failed": "Não foi possível gerar a campanha. Tente novamente."
+        },
+        "picture": {
+          "label": "Criar também uma imagem",
+          "hint": "Gera uma imagem a partir do mesmo briefing e a anexa à campanha. Usa a sua cota da OpenAI.",
+          "needsOpenAi": "As imagens exigem uma chave da OpenAI. Escolha um modelo da OpenAI para ativar esta opção.",
+          "noAttachment": "O número selecionado envia apenas texto, então não há onde anexar uma imagem.",
+          "size": "Formato da imagem",
+          "sizes": {
+            "square": "Quadrado",
+            "landscape": "Paisagem",
+            "portrait": "Retrato"
+          },
+          "textKept": "O texto da campanha foi preenchido. Só falta a imagem.",
+          "retry": "Tentar a imagem novamente",
+          "errors": {
+            "noKey": "As imagens exigem uma chave da OpenAI, e nenhuma está ativada neste workspace.",
+            "limitReached": "Este workspace usou a cota de IA do mês.",
+            "providerFailed": "O serviço de imagens não respondeu. Tente novamente em instantes.",
+            "badJson": "O serviço de imagens enviou uma resposta inesperada. Tente novamente.",
+            "imageRefused": "A OpenAI se recusou a gerar esta imagem. Altere o produto, a oferta ou as observações e tente novamente.",
+            "invalid": "Verifique o briefing: o nome da empresa é obrigatório e alguns campos estão longos demais.",
+            "forbidden": "Você não tem permissão para criar campanhas.",
+            "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+            "failed": "Não foi possível criar a imagem. Tente novamente."
+          }
+        }
       },
       "switch": {
         "title": "Usar o fluxo guiado?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Enviar de",
         "senderHint": "O número do WhatsApp de onde esta transmissão é enviada.",
         "pickSender": "Escolha um número",
-        "classicOption": "editor clássico"
+        "classicOption": "editor clássico",
+        "buildWithAi": "Criar com IA",
+        "aiNote": "Crie um rascunho de modelo com IA. Você o revisa na página do modelo; depois a Meta o analisa antes de ele poder ser enviado, então volte e selecione-o quando for aprovado."
       },
       "audience": {
         "selectionTitle": "Escolhidos no Hub de Contatos",

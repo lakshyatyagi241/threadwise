@@ -15,7 +15,7 @@ import {
 } from '@crm/contracts';
 import { useCursorList } from '@/lib/api/use-cursor-list';
 import { DETAIL_POLL_MS, isAwaitingReview } from '../lib/status-model';
-import { apiKeysApi, connectionsApi, templatesApi } from './service';
+import { aiApi, apiKeysApi, connectionsApi, templatesApi } from './service';
 
 export const KEYS = {
   all: ['tpl'] as const,
@@ -24,6 +24,7 @@ export const KEYS = {
   connections: ['tpl', 'connections'] as const,
   lint: ['tpl', 'lint'] as const,
   apiKeys: ['tpl', 'api-keys'] as const,
+  aiModels: ['tpl', 'ai-models'] as const,
 };
 
 export const PAGE_SIZE_LIBRARY = 8;
@@ -164,5 +165,16 @@ export function useHasApiKey(enabled: boolean) {
     enabled,
     staleTime: 60_000,
     retry: false,
+  });
+}
+
+/** The text models this workspace may use for "Build with AI" (the platform's enabled ones and any provider it added its own key for). */
+export function useAiModels(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.aiModels,
+    queryFn: ({ signal }) => aiApi.models(signal),
+    select: (r) => r.data,
+    enabled,
+    staleTime: 60_000,
   });
 }

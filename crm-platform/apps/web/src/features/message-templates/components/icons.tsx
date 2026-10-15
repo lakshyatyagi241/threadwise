@@ -168,3 +168,8 @@ export const CodeIcon = (p: IconProps) => (
     <path d="m5.5 4.5-3.5 3.5 3.5 3.5M10.5 4.5 14 8l-3.5 3.5" />
   </Svg>
 );
+export const SparkIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M8 2v3M8 11v3M2 8h3M11 8h3M4.2 4.2l2.1 2.1M9.7 9.7l2.1 2.1M11.8 4.2L9.7 6.3M6.3 9.7l-2.1 2.1" />
+  </Svg>
+);

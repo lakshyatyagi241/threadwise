@@ -647,8 +647,43 @@
         "notes": "Ghi chú thêm",
         "notesNote": "không bắt buộc / tối đa 2000",
         "notesPlaceholder": "Bất kỳ điều gì cụ thể — cụm từ bắt buộc, điều cần tránh, giọng thương hiệu…",
-        "failed": "Không thể tạo chiến dịch. Vui lòng thử lại.",
-        "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục."
+        "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục.",
+        "pictureApplied": "Đã đính kèm ảnh vào chiến dịch. Hãy kiểm tra trong thẻ Tệp đính kèm.",
+        "errors": {
+          "noKey": "Không gian làm việc này chưa bật nhà cung cấp AI nào. Hãy nhờ quản trị viên thêm khóa.",
+          "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+          "providerFailed": "Nhà cung cấp AI không phản hồi. Vui lòng thử lại sau giây lát.",
+          "badJson": "Không đọc được câu trả lời của mô hình. Hãy thử lại hoặc thay đổi bản tóm tắt.",
+          "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+          "forbidden": "Bạn không có quyền tạo chiến dịch.",
+          "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+          "failed": "Không thể tạo chiến dịch. Vui lòng thử lại."
+        },
+        "picture": {
+          "label": "Tạo cả ảnh",
+          "hint": "Vẽ một ảnh từ cùng bản tóm tắt và đính kèm vào chiến dịch. Sử dụng hạn mức OpenAI của bạn.",
+          "needsOpenAi": "Tạo ảnh cần khóa OpenAI. Hãy chọn một mô hình OpenAI để bật tính năng này.",
+          "noAttachment": "Số bạn đã chọn chỉ gửi văn bản nên không có chỗ để đính kèm ảnh.",
+          "size": "Hình dạng ảnh",
+          "sizes": {
+            "square": "Vuông",
+            "landscape": "Ngang",
+            "portrait": "Dọc"
+          },
+          "textKept": "Đã điền nội dung chiến dịch. Chỉ còn thiếu ảnh.",
+          "retry": "Thử tạo lại ảnh",
+          "errors": {
+            "noKey": "Tạo ảnh cần khóa OpenAI, nhưng không gian làm việc này chưa bật khóa nào.",
+            "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+            "providerFailed": "Dịch vụ tạo ảnh không phản hồi. Vui lòng thử lại sau giây lát.",
+            "badJson": "Dịch vụ tạo ảnh trả về dữ liệu không mong đợi. Vui lòng thử lại.",
+            "imageRefused": "OpenAI từ chối vẽ ảnh này. Hãy thay đổi sản phẩm, ưu đãi hoặc ghi chú rồi thử lại.",
+            "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+            "forbidden": "Bạn không có quyền tạo chiến dịch.",
+            "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+            "failed": "Không thể tạo ảnh. Vui lòng thử lại."
+          }
+        }
       },
       "switch": {
         "title": "Dùng luồng hướng dẫn?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Gửi từ",
         "senderHint": "Số WhatsApp dùng để gửi đợt gửi hàng loạt này.",
         "pickSender": "Chọn một số",
-        "classicOption": "trình tạo cổ điển"
+        "classicOption": "trình tạo cổ điển",
+        "buildWithAi": "Tạo bằng AI",
+        "aiNote": "Soạn mẫu mới bằng AI. Bạn xem lại trên trang mẫu; sau đó Meta sẽ xét duyệt trước khi mẫu được gửi đi, vì vậy hãy quay lại chọn mẫu khi đã được phê duyệt."
       },
       "audience": {
         "selectionTitle": "Đã chọn trong Trung tâm liên hệ",

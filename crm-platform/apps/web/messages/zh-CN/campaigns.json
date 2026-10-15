@@ -647,8 +647,43 @@
         "notes": "补充说明",
         "notesNote": "可选 / 最多 2000 个字符",
         "notesPlaceholder": "任何具体要求：必须包含的措辞、需避免的内容、品牌语气提示…",
-        "failed": "无法生成营销活动，请重试。",
-        "applied": "营销活动文案已填入。继续之前请先检查。"
+        "applied": "营销活动文案已填入。继续之前请先检查。",
+        "pictureApplied": "图片已附加到营销活动。请在“附件”卡片中查看。",
+        "errors": {
+          "noKey": "此工作区未启用任何 AI 服务商。请联系管理员添加密钥。",
+          "limitReached": "此工作区本月的 AI 额度已用完。",
+          "providerFailed": "AI 服务商未响应。请稍后重试。",
+          "badJson": "无法解析模型的回复。请重试或修改简介。",
+          "invalid": "请检查简介：商家名称为必填项，部分字段过长。",
+          "forbidden": "您没有创建营销活动的权限。",
+          "network": "无法连接服务器。请检查网络连接后重试。",
+          "failed": "无法生成营销活动。请重试。"
+        },
+        "picture": {
+          "label": "同时生成图片",
+          "hint": "根据同一简介生成一张图片并附加到营销活动。将使用您的 OpenAI 额度。",
+          "needsOpenAi": "生成图片需要 OpenAI 密钥。请选择 OpenAI 模型以启用此功能。",
+          "noAttachment": "您选择的号码只发送文本，因此无法附加图片。",
+          "size": "图片形状",
+          "sizes": {
+            "square": "方形",
+            "landscape": "横向",
+            "portrait": "纵向"
+          },
+          "textKept": "营销活动文本已填写。仅图片缺失。",
+          "retry": "重试生成图片",
+          "errors": {
+            "noKey": "生成图片需要 OpenAI 密钥，而此工作区未启用任何密钥。",
+            "limitReached": "此工作区本月的 AI 额度已用完。",
+            "providerFailed": "图片服务未响应。请稍后重试。",
+            "badJson": "图片服务返回了意外内容。请重试。",
+            "imageRefused": "OpenAI 拒绝生成此图片。请修改产品、优惠或备注后重试。",
+            "invalid": "请检查简介：商家名称为必填项，部分字段过长。",
+            "forbidden": "您没有创建营销活动的权限。",
+            "network": "无法连接服务器。请检查网络连接后重试。",
+            "failed": "无法生成图片。请重试。"
+          }
+        }
       },
       "switch": {
         "title": "使用引导流程？",
@@ -1163,7 +1198,9 @@
         "senderLabel": "发送自",
         "senderHint": "发送此群发所用的 WhatsApp 号码。",
         "pickSender": "选择号码",
-        "classicOption": "经典构建器"
+        "classicOption": "经典构建器",
+        "buildWithAi": "使用 AI 生成",
+        "aiNote": "使用 AI 起草新模板。您可在模板页面查看；随后 Meta 会对其进行审核，通过后才能发送，请在审核通过后返回选择。"
       },
       "audience": {
         "selectionTitle": "在联系人中心选择",

@@ -647,8 +647,43 @@
         "notes": "Weitere Hinweise",
         "notesNote": "optional / max. 2000",
         "notesPlaceholder": "Alles Spezifische — unverzichtbare Formulierungen, was vermieden werden soll, Markenstimme…",
-        "failed": "Die Kampagne konnte nicht erstellt werden. Bitte erneut versuchen.",
-        "applied": "Der Kampagnentext wurde ausgefüllt. Bitte prüfen Sie ihn, bevor Sie fortfahren."
+        "applied": "Der Kampagnentext wurde ausgefüllt. Bitte prüfen Sie ihn, bevor Sie fortfahren.",
+        "pictureApplied": "Das Bild wurde an die Kampagne angehängt. Prüfen Sie es in der Karte „Anhang“.",
+        "errors": {
+          "noKey": "Für diesen Arbeitsbereich ist kein KI-Anbieter aktiviert. Bitten Sie einen Administrator, einen Schlüssel hinzuzufügen.",
+          "limitReached": "Dieser Arbeitsbereich hat sein KI-Kontingent für den Monat aufgebraucht.",
+          "providerFailed": "Der KI-Anbieter hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
+          "badJson": "Die Antwort des Modells konnte nicht gelesen werden. Versuchen Sie es erneut oder ändern Sie das Briefing.",
+          "invalid": "Prüfen Sie das Briefing: Der Firmenname ist erforderlich und einige Felder sind zu lang.",
+          "forbidden": "Sie haben keine Berechtigung, Kampagnen zu erstellen.",
+          "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+          "failed": "Die Kampagne konnte nicht generiert werden. Versuchen Sie es erneut."
+        },
+        "picture": {
+          "label": "Zusätzlich ein Bild erstellen",
+          "hint": "Erzeugt ein Bild aus demselben Briefing und hängt es an die Kampagne an. Verbraucht Ihr OpenAI-Kontingent.",
+          "needsOpenAi": "Für Bilder wird ein OpenAI-Schlüssel benötigt. Wählen Sie ein OpenAI-Modell, um dies zu aktivieren.",
+          "noAttachment": "Die gewählte Nummer sendet nur Text, daher gibt es nichts, woran ein Bild angehängt werden könnte.",
+          "size": "Bildformat",
+          "sizes": {
+            "square": "Quadrat",
+            "landscape": "Querformat",
+            "portrait": "Hochformat"
+          },
+          "textKept": "Der Kampagnentext wurde eingefügt. Nur das Bild fehlt.",
+          "retry": "Bild erneut versuchen",
+          "errors": {
+            "noKey": "Für Bilder wird ein OpenAI-Schlüssel benötigt, und für diesen Arbeitsbereich ist keiner aktiviert.",
+            "limitReached": "Dieser Arbeitsbereich hat sein KI-Kontingent für den Monat aufgebraucht.",
+            "providerFailed": "Der Bilddienst hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
+            "badJson": "Der Bilddienst hat eine unerwartete Antwort gesendet. Versuchen Sie es erneut.",
+            "imageRefused": "OpenAI hat die Erstellung dieses Bildes abgelehnt. Ändern Sie Produkt, Angebot oder Hinweise und versuchen Sie es erneut.",
+            "invalid": "Prüfen Sie das Briefing: Der Firmenname ist erforderlich und einige Felder sind zu lang.",
+            "forbidden": "Sie haben keine Berechtigung, Kampagnen zu erstellen.",
+            "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+            "failed": "Das Bild konnte nicht erstellt werden. Versuchen Sie es erneut."
+          }
+        }
       },
       "switch": {
         "title": "Geführten Ablauf verwenden?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Senden von",
         "senderHint": "Die WhatsApp-Nummer, von der dieser Broadcast gesendet wird.",
         "pickSender": "Nummer auswählen",
-        "classicOption": "klassischer Builder"
+        "classicOption": "klassischer Builder",
+        "buildWithAi": "Mit KI erstellen",
+        "aiNote": "Erstellen Sie mit KI den Entwurf einer neuen Vorlage. Sie prüfen ihn auf der Vorlagenseite; anschließend prüft Meta die Vorlage, bevor sie gesendet werden kann. Kommen Sie nach der Genehmigung zurück und wählen Sie sie aus."
       },
       "audience": {
         "selectionTitle": "Im Contact Hub ausgewählt",

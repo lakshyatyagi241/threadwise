@@ -36,6 +36,10 @@ keywords:
     email,
     subject,
     mailbox,
+    ai,
+    build with ai,
+    picture,
+    image,
   ]
 ---
 
@@ -92,6 +96,14 @@ With a verified Meta number the builder walks you through sending an approved Wh
    - **Send via CSV** takes a file of numbers (up to 2 MB and 10,000 rows) with a column named `phone`, and optionally `first_name`, `last_name` or `name` and `country_code`. Download the template from the panel. The file is checked on the server: numbers are put in international format, repeated numbers are kept once, and rows that cannot be used are listed with their line number (the whole list downloads as a CSV). You see how many numbers are valid, duplicate, invalid, opted out and new. Numbers that are already contacts are matched by phone. New numbers are added as contacts when you launch. The upload is kept for 7 days.
 4. **Schedule.** Choose **When to send** (see below). You can also set an **Auto-end date** (a send stops at that moment; a recurring campaign ends by its own rule instead), turn on **Activate Retries**, tune **Smart Delivery** (a random delay between messages, batches with a pause, a daily limit and the hours it may send in; blank uses the platform default) untick **Retry failed messages automatically** to send each message once (it is on by default: a message that fails for a temporary reason is tried again a few times), and untick **Track link clicks** if you do not want links wrapped to count clicks. On a Cloud API number the **Follow-ups** card sits here too (see below).
 5. **Review.** The credit check compares your wallet with the estimated cost, with a breakdown by country. If the balance is too low, **Next** is blocked and **Top up** takes you to add credit. The summary lists everything, with **Edit** links back to the step that owns each value. You can send a test first (see below). The last button sends, schedules or starts the recurring campaign.
+
+## Build with AI
+
+**Build with AI** drafts for you; you always review before anything is sent. It needs an AI provider enabled for your workspace (a platform key or your own key); with none, the dialog says so and **Generate** stays off.
+
+- **Classic builder.** The **Build with AI** button in the top bar opens a short brief: the AI model, business name, product, goal, tone, call to action, audience, offer and notes. **Generate campaign** fills the message, footer, link button and quick replies (up to three buttons) and opens **Compose**; a name you already typed is kept. Nothing is saved until you save or send.
+- **Also create a picture.** Tick it to have one image drawn from the same brief and attached as the campaign's **Attachment** once the text is in. Pick the shape: square, landscape or portrait. Pictures are drawn by OpenAI only, so the box is off until you choose an OpenAI model, and off for senders that cannot carry an image (SMS and email). If the picture fails (no OpenAI key, the monthly allowance used, or OpenAI refusing the request), the text stays in the form and the dialog shows a separate message with **Try the picture again**, which draws only the picture.
+- **Guided flow.** Next to the template list, **Build with AI** drafts a new WhatsApp template (marketing, in US English) and opens the new-template form with the draft filled in. Meta reviews every template before it can be sent, so come back to your draft campaign (it was saved as you went) and pick the template once it is approved. The button shows only if you may create templates.
 
 ## Send a test
 

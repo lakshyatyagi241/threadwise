@@ -647,8 +647,43 @@
         "notes": "Ek notlar",
         "notesNote": "isteğe bağlı / en fazla 2000",
         "notesPlaceholder": "Belirli bir şey — mutlaka geçmesi gereken ifadeler, kaçınılacaklar, marka dili ipuçları…",
-        "failed": "Kampanya oluşturulamadı. Tekrar deneyin.",
-        "applied": "Kampanya metni dolduruldu. Devam etmeden önce gözden geçirin."
+        "applied": "Kampanya metni dolduruldu. Devam etmeden önce gözden geçirin.",
+        "pictureApplied": "Görsel kampanyaya eklendi. Ek kartından kontrol edin.",
+        "errors": {
+          "noKey": "Bu çalışma alanında etkin bir yapay zeka sağlayıcısı yok. Bir yöneticiden anahtar eklemesini isteyin.",
+          "limitReached": "Bu çalışma alanı bu ayki yapay zeka kullanım hakkını doldurdu.",
+          "providerFailed": "Yapay zeka sağlayıcısı yanıt vermedi. Biraz sonra tekrar deneyin.",
+          "badJson": "Modelin yanıtı okunamadı. Tekrar deneyin veya özeti değiştirin.",
+          "invalid": "Özeti kontrol edin: işletme adı zorunludur ve bazı alanlar çok uzun.",
+          "forbidden": "Kampanya oluşturma izniniz yok.",
+          "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+          "failed": "Kampanya oluşturulamadı. Tekrar deneyin."
+        },
+        "picture": {
+          "label": "Görsel de oluştur",
+          "hint": "Aynı özetten tek bir görsel çizer ve kampanyaya ekler. OpenAI kullanım hakkınızı kullanır.",
+          "needsOpenAi": "Görseller için bir OpenAI anahtarı gerekir. Bunu açmak için bir OpenAI modeli seçin.",
+          "noAttachment": "Seçtiğiniz numara yalnızca metin gönderdiği için görsel eklenecek bir yer yok.",
+          "size": "Görsel biçimi",
+          "sizes": {
+            "square": "Kare",
+            "landscape": "Yatay",
+            "portrait": "Dikey"
+          },
+          "textKept": "Kampanya metni dolduruldu. Yalnızca görsel eksik.",
+          "retry": "Görseli tekrar dene",
+          "errors": {
+            "noKey": "Görseller için bir OpenAI anahtarı gerekir ve bu çalışma alanında etkin bir anahtar yok.",
+            "limitReached": "Bu çalışma alanı bu ayki yapay zeka kullanım hakkını doldurdu.",
+            "providerFailed": "Görsel hizmeti yanıt vermedi. Biraz sonra tekrar deneyin.",
+            "badJson": "Görsel hizmeti beklenmeyen bir yanıt gönderdi. Tekrar deneyin.",
+            "imageRefused": "OpenAI bu görseli çizmeyi reddetti. Ürünü, teklifi veya notları değiştirip tekrar deneyin.",
+            "invalid": "Özeti kontrol edin: işletme adı zorunludur ve bazı alanlar çok uzun.",
+            "forbidden": "Kampanya oluşturma izniniz yok.",
+            "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+            "failed": "Görsel oluşturulamadı. Tekrar deneyin."
+          }
+        }
       },
       "switch": {
         "title": "Yönlendirmeli akış kullanılsın mı?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Gönderen",
         "senderHint": "Bu toplu gönderimin gönderildiği WhatsApp numarası.",
         "pickSender": "Bir numara seçin",
-        "classicOption": "klasik oluşturucu"
+        "classicOption": "klasik oluşturucu",
+        "buildWithAi": "Yapay zekayla oluştur",
+        "aiNote": "Yapay zekayla yeni bir şablon taslağı hazırlayın. Şablon sayfasında inceleyin; gönderilebilmesi için önce Meta onaylar, bu yüzden onaylandıktan sonra geri gelip seçin."
       },
       "audience": {
         "selectionTitle": "Kişi Merkezinde seçildi",

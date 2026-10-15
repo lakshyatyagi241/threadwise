@@ -1,4 +1,5 @@
 import {
+  aiModelsResponseSchema,
   listApiKeysResponseSchema,
   lintTemplateResultSchema,
   syncTemplatesResultSchema,
@@ -6,8 +7,10 @@ import {
   templateDetailSchema,
   templateGalleryResponseSchema,
   templateSubmitResultSchema,
+  tplAiGenerateResponseSchema,
   wabaConnectionListSchema,
   type CreateTemplateInput,
+  type TplAiGenerateInput,
   type LintTemplateInput,
   type SubmitTemplateInput,
   type SyncTemplatesInput,
@@ -89,5 +92,17 @@ export const apiKeysApi = {
       query: { limit: 100 },
       schema: listApiKeysResponseSchema,
       signal,
+    }),
+};
+
+/** "Build with AI" (TW-TPL-016): the models the workspace may use, and a template draft from a brief. Nothing is stored. */
+export const aiApi = {
+  models: (signal?: AbortSignal) =>
+    apiFetch('/ai/models', { schema: aiModelsResponseSchema, signal }),
+  generate: (input: TplAiGenerateInput) =>
+    apiFetch(`${base}/ai-generate`, {
+      method: 'POST',
+      body: input,
+      schema: tplAiGenerateResponseSchema,
     }),
 };

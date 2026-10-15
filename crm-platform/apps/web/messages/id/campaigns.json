@@ -647,8 +647,43 @@
         "notes": "Catatan tambahan",
         "notesNote": "opsional / maks 2000",
         "notesPlaceholder": "Hal khusus — frasa wajib, hal yang harus dihindari, ciri suara brand…",
-        "failed": "Kampanye tidak dapat dibuat. Coba lagi.",
-        "applied": "Teks kampanye sudah diisi. Tinjau sebelum melanjutkan."
+        "applied": "Teks kampanye sudah diisi. Tinjau sebelum melanjutkan.",
+        "pictureApplied": "Gambar telah dilampirkan ke kampanye. Periksa di kartu Lampiran.",
+        "errors": {
+          "noKey": "Tidak ada penyedia AI yang diaktifkan untuk ruang kerja ini. Minta admin untuk menambahkan kunci.",
+          "limitReached": "Ruang kerja ini telah menggunakan seluruh kuota AI bulan ini.",
+          "providerFailed": "Penyedia AI tidak merespons. Coba lagi sebentar lagi.",
+          "badJson": "Jawaban model tidak dapat dibaca. Coba lagi atau ubah brief.",
+          "invalid": "Periksa brief: nama bisnis wajib diisi dan beberapa kolom terlalu panjang.",
+          "forbidden": "Anda tidak memiliki izin untuk membuat kampanye.",
+          "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+          "failed": "Tidak dapat membuat kampanye. Coba lagi."
+        },
+        "picture": {
+          "label": "Buat juga gambar",
+          "hint": "Membuat satu gambar dari brief yang sama dan melampirkannya ke kampanye. Menggunakan kuota OpenAI Anda.",
+          "needsOpenAi": "Gambar memerlukan kunci OpenAI. Pilih model OpenAI untuk mengaktifkan ini.",
+          "noAttachment": "Nomor yang Anda pilih hanya mengirim teks, jadi tidak ada tempat untuk melampirkan gambar.",
+          "size": "Bentuk gambar",
+          "sizes": {
+            "square": "Persegi",
+            "landscape": "Lanskap",
+            "portrait": "Potret"
+          },
+          "textKept": "Teks kampanye telah diisi. Hanya gambar yang belum ada.",
+          "retry": "Coba buat gambar lagi",
+          "errors": {
+            "noKey": "Gambar memerlukan kunci OpenAI, dan tidak ada yang diaktifkan untuk ruang kerja ini.",
+            "limitReached": "Ruang kerja ini telah menggunakan seluruh kuota AI bulan ini.",
+            "providerFailed": "Layanan gambar tidak merespons. Coba lagi sebentar lagi.",
+            "badJson": "Layanan gambar mengirim respons yang tidak terduga. Coba lagi.",
+            "imageRefused": "OpenAI menolak membuat gambar ini. Ubah produk, penawaran, atau catatan lalu coba lagi.",
+            "invalid": "Periksa brief: nama bisnis wajib diisi dan beberapa kolom terlalu panjang.",
+            "forbidden": "Anda tidak memiliki izin untuk membuat kampanye.",
+            "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+            "failed": "Tidak dapat membuat gambar. Coba lagi."
+          }
+        }
       },
       "switch": {
         "title": "Gunakan alur terpandu?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Kirim dari",
         "senderHint": "Nomor WhatsApp pengirim broadcast ini.",
         "pickSender": "Pilih nomor",
-        "classicOption": "pembuat klasik"
+        "classicOption": "pembuat klasik",
+        "buildWithAi": "Buat dengan AI",
+        "aiNote": "Buat draf templat baru dengan AI. Anda meninjaunya di halaman templat; setelah itu Meta meninjaunya sebelum dapat dikirim, jadi kembali dan pilih templat ini setelah disetujui."
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",

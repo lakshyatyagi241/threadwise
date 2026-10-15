@@ -355,6 +355,11 @@
         "saved": "下書きとして保存しました。",
         "warnings": "Metaの審査前に確認をおすすめします：",
         "open": "テンプレートを開く"
+      },
+      "ai": {
+        "open": "AIで作成",
+        "applied": "AIでテンプレートの下書きを入力しました。送信前に内容を確認してください。",
+        "authHint": "認証テンプレートの文面は固定のため、下書きを作成する内容がありません。"
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "このカテゴリでは販促的な表現は使用できません。",
         "TAG_CONTENT_MISMATCH": "カテゴリが内容と一致しません(例:UTILITYテンプレートでの販促文)。",
         "SCAM": "Metaがこのテンプレートを詐欺の可能性があると判断しました。主張と表現を見直してください。"
+      }
+    },
+    "ai": {
+      "eyebrow": "テンプレート / AI",
+      "title": "AIで",
+      "titleAccent": "作成",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "generate": "テンプレートを生成",
+      "intro": "短いブリーフから、名前、ヘッダー、本文、フッター、ボタンを含むWhatsAppテンプレートの下書きを作成します。ご自身で操作するまで何も送信されません。",
+      "model": "AIモデル",
+      "modelsError": "モデルを読み込めませんでした。",
+      "noModels": "このワークスペースで有効なAIプロバイダーがありません。管理者に有効化を依頼してください。",
+      "loadingModels": "モデルを読み込み中…",
+      "pickModel": "モデルを選択",
+      "yourKey": "ご自身のキー",
+      "business": "事業名",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "業種",
+      "pickIndustry": "業種を選択",
+      "occasion": "シーン",
+      "pickOccasion": "シーンを選択",
+      "purpose": "目的",
+      "pickPurpose": "目的を選択",
+      "action": "主なアクション",
+      "pickAction": "主なアクションを選択",
+      "tone": "トーン",
+      "pickTone": "トーンを選択",
+      "language": "言語",
+      "languageHint": "下書きはフォームの言語で作成されます。",
+      "notes": "カスタムプロンプト",
+      "notesNote": "任意 / 最大2000文字",
+      "notesPlaceholder": "含めたい内容を具体的に入力してください。変数、リンク、必須の表現、避けたい内容など…",
+      "industries": {
+        "retail": "小売 / EC",
+        "food": "飲食",
+        "healthcare": "ヘルスケア",
+        "education": "教育",
+        "travel": "旅行・宿泊",
+        "finance": "金融・銀行",
+        "realEstate": "不動産",
+        "beauty": "美容・ウェルネス",
+        "logistics": "物流・配送",
+        "services": "専門サービス",
+        "nonprofit": "非営利団体",
+        "other": "その他"
+      },
+      "occasions": {
+        "launch": "新商品の発売",
+        "sale": "セール / 割引",
+        "orderConfirmation": "注文確認",
+        "shipping": "配送状況のお知らせ",
+        "appointment": "予約のリマインダー",
+        "welcome": "ようこそ / オンボーディング",
+        "feedback": "フィードバックのお願い",
+        "abandonedCart": "カート放棄",
+        "reengage": "再エンゲージメント",
+        "event": "イベントのご招待",
+        "festival": "季節の挨拶",
+        "other": "その他"
+      },
+      "purposes": {
+        "inform": "情報提供",
+        "promote": "販促",
+        "confirm": "確認",
+        "remind": "リマインド",
+        "collectFeedback": "フィードバック収集",
+        "reengage": "再アプローチ",
+        "purchase": "購入を促す",
+        "booking": "予約を促す"
+      },
+      "actions": {
+        "website": "ウェブサイトを見る",
+        "call": "電話する",
+        "book": "予約する",
+        "order": "注文する",
+        "catalog": "カタログを見る",
+        "code": "コードで返信",
+        "other": "その他"
+      },
+      "tones": {
+        "friendly": "親しみやすい",
+        "professional": "プロフェッショナル",
+        "concise": "簡潔",
+        "empathetic": "共感的",
+        "excited": "熱意のある",
+        "formal": "フォーマル"
+      },
+      "errors": {
+        "businessRequired": "事業名は必須です。",
+        "noKey": "このワークスペースで有効なAIプロバイダーがありません。管理者にキーの追加を依頼してください。",
+        "limitReached": "このワークスペースは今月のAI利用枠を使い切りました。",
+        "providerFailed": "AIプロバイダーから応答がありませんでした。しばらくしてからもう一度お試しください。",
+        "badJson": "モデルの回答は使用できるテンプレートではありませんでした。もう一度試すか、ブリーフを見直してください。",
+        "invalid": "ブリーフを確認してください。事業名は必須で、長すぎる項目があります。",
+        "forbidden": "テンプレートを作成する権限がありません。",
+        "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。",
+        "failed": "テンプレートを生成できませんでした。もう一度お試しください。"
       }
     },
     "gallery": {

@@ -647,8 +647,43 @@
         "notes": "Note aggiuntive",
         "notesNote": "facoltativo / max 2000",
         "notesPlaceholder": "Qualsiasi dettaglio specifico: frasi obbligatorie, cosa evitare, indicazioni sul tono del brand…",
-        "failed": "Impossibile generare la campagna. Riprova.",
-        "applied": "Il testo della campagna è stato compilato. Verificalo prima di proseguire."
+        "applied": "Il testo della campagna è stato compilato. Verificalo prima di proseguire.",
+        "pictureApplied": "L'immagine è stata allegata alla campagna. Controllala nella scheda Allegato.",
+        "errors": {
+          "noKey": "Nessun provider AI è abilitato per questo workspace. Chiedi a un amministratore di aggiungere una chiave.",
+          "limitReached": "Questo workspace ha esaurito il limite AI del mese.",
+          "providerFailed": "Il provider AI non ha risposto. Riprova tra un momento.",
+          "badJson": "Non è stato possibile leggere la risposta del modello. Riprova o modifica il brief.",
+          "invalid": "Controlla il brief: il nome dell'attività è obbligatorio e alcuni campi sono troppo lunghi.",
+          "forbidden": "Non hai il permesso di creare campagne.",
+          "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+          "failed": "Impossibile generare la campagna. Riprova."
+        },
+        "picture": {
+          "label": "Crea anche un'immagine",
+          "hint": "Genera un'immagine dallo stesso brief e la allega alla campagna. Utilizza il tuo limite OpenAI.",
+          "needsOpenAi": "Le immagini richiedono una chiave OpenAI. Scegli un modello OpenAI per attivare questa opzione.",
+          "noAttachment": "Il numero selezionato invia solo testo, quindi non c'è nulla a cui allegare un'immagine.",
+          "size": "Formato dell'immagine",
+          "sizes": {
+            "square": "Quadrato",
+            "landscape": "Orizzontale",
+            "portrait": "Verticale"
+          },
+          "textKept": "Il testo della campagna è stato compilato. Manca solo l'immagine.",
+          "retry": "Riprova con l'immagine",
+          "errors": {
+            "noKey": "Le immagini richiedono una chiave OpenAI e nessuna è abilitata per questo workspace.",
+            "limitReached": "Questo workspace ha esaurito il limite AI del mese.",
+            "providerFailed": "Il servizio immagini non ha risposto. Riprova tra un momento.",
+            "badJson": "Il servizio immagini ha inviato una risposta inattesa. Riprova.",
+            "imageRefused": "OpenAI ha rifiutato di generare questa immagine. Modifica il prodotto, l'offerta o le note e riprova.",
+            "invalid": "Controlla il brief: il nome dell'attività è obbligatorio e alcuni campi sono troppo lunghi.",
+            "forbidden": "Non hai il permesso di creare campagne.",
+            "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+            "failed": "Impossibile creare l'immagine. Riprova."
+          }
+        }
       },
       "switch": {
         "title": "Usare il percorso guidato?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Invia da",
         "senderHint": "Il numero WhatsApp da cui viene inviato questo broadcast.",
         "pickSender": "Scegli un numero",
-        "classicOption": "builder classico"
+        "classicOption": "builder classico",
+        "buildWithAi": "Crea con AI",
+        "aiNote": "Crea la bozza di un nuovo template con l'AI. Lo rivedi nella pagina del template; poi Meta lo esamina prima che possa essere inviato, quindi torna a selezionarlo dopo l'approvazione."
       },
       "audience": {
         "selectionTitle": "Scelti nel Contact Hub",

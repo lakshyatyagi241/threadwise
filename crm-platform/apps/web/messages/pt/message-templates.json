@@ -355,6 +355,11 @@
         "saved": "Salvo como rascunho.",
         "warnings": "Vale uma olhada antes da análise da Meta:",
         "open": "Abrir o modelo"
+      },
+      "ai": {
+        "open": "Criar com IA",
+        "applied": "Rascunho do modelo preenchido pela IA. Revise-o antes de enviar.",
+        "authHint": "Modelos de autenticação têm texto fixo, então não há o que gerar."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Linguagem de marketing não permitida nesta categoria.",
         "TAG_CONTENT_MISMATCH": "A categoria não corresponde ao conteúdo (ex.: texto promocional em um modelo UTILITY).",
         "SCAM": "A Meta sinalizou o modelo como possível golpe. Revise as alegações e a linguagem."
+      }
+    },
+    "ai": {
+      "eyebrow": "Modelos / IA",
+      "title": "Criar com",
+      "titleAccent": "IA",
+      "close": "Fechar",
+      "cancel": "Cancelar",
+      "generate": "Gerar modelo",
+      "intro": "Crie um rascunho de modelo do WhatsApp a partir de um briefing curto: nome, cabeçalho, corpo, rodapé e botões. Nada é enviado até que você mesmo faça isso.",
+      "model": "Modelo de IA",
+      "modelsError": "Não foi possível carregar os modelos.",
+      "noModels": "Nenhum provedor de IA está ativado neste workspace. Peça a um administrador para ativar um.",
+      "loadingModels": "Carregando modelos…",
+      "pickModel": "Selecione um modelo",
+      "yourKey": "sua chave",
+      "business": "Nome da empresa",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Setor",
+      "pickIndustry": "Selecione o setor",
+      "occasion": "Ocasião",
+      "pickOccasion": "Selecione a ocasião",
+      "purpose": "Finalidade",
+      "pickPurpose": "Selecione a finalidade",
+      "action": "Ação principal",
+      "pickAction": "Selecione a ação principal",
+      "tone": "Tom",
+      "pickTone": "Selecione o tom",
+      "language": "Idioma",
+      "languageHint": "O rascunho é escrito no idioma do formulário.",
+      "notes": "Prompt personalizado",
+      "notesNote": "opcional / máx. 2000",
+      "notesPlaceholder": "Algo específico que você queira incluir: variáveis, links, frases obrigatórias, o que evitar…",
+      "industries": {
+        "retail": "Varejo / E-commerce",
+        "food": "Alimentos e bebidas",
+        "healthcare": "Saúde",
+        "education": "Educação",
+        "travel": "Viagens e hospitalidade",
+        "finance": "Finanças e bancos",
+        "realEstate": "Imobiliário",
+        "beauty": "Beleza e bem-estar",
+        "logistics": "Logística e entregas",
+        "services": "Serviços profissionais",
+        "nonprofit": "Sem fins lucrativos",
+        "other": "Outro"
+      },
+      "occasions": {
+        "launch": "Lançamento de produto",
+        "sale": "Promoção / desconto",
+        "orderConfirmation": "Confirmação de pedido",
+        "shipping": "Atualização de envio",
+        "appointment": "Lembrete de agendamento",
+        "welcome": "Boas-vindas / integração",
+        "feedback": "Pedido de feedback",
+        "abandonedCart": "Carrinho abandonado",
+        "reengage": "Reengajamento",
+        "event": "Convite para evento",
+        "festival": "Saudação festiva",
+        "other": "Outra"
+      },
+      "purposes": {
+        "inform": "Informar",
+        "promote": "Promover",
+        "confirm": "Confirmar",
+        "remind": "Lembrar",
+        "collectFeedback": "Coletar feedback",
+        "reengage": "Reengajar",
+        "purchase": "Impulsionar uma compra",
+        "booking": "Impulsionar um agendamento"
+      },
+      "actions": {
+        "website": "Visitar o site",
+        "call": "Ligar para nós",
+        "book": "Agendar um horário",
+        "order": "Fazer um pedido",
+        "catalog": "Ver catálogo",
+        "code": "Responder com um código",
+        "other": "Outra"
+      },
+      "tones": {
+        "friendly": "Amigável",
+        "professional": "Profissional",
+        "concise": "Conciso",
+        "empathetic": "Empático",
+        "excited": "Animado",
+        "formal": "Formal"
+      },
+      "errors": {
+        "businessRequired": "O nome da empresa é obrigatório.",
+        "noKey": "Nenhum provedor de IA está ativado neste workspace. Peça a um administrador para adicionar uma chave.",
+        "limitReached": "Este workspace usou a cota de IA do mês.",
+        "providerFailed": "O provedor de IA não respondeu. Tente novamente em instantes.",
+        "badJson": "A resposta do modelo não era um modelo de mensagem utilizável. Tente novamente ou refine o briefing.",
+        "invalid": "Verifique o briefing: o nome da empresa é obrigatório e alguns campos estão longos demais.",
+        "forbidden": "Você não tem permissão para criar modelos.",
+        "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+        "failed": "Não foi possível gerar o modelo. Tente novamente."
       }
     },
     "gallery": {

@@ -355,6 +355,11 @@
         "saved": "Guardada como borrador.",
         "warnings": "Conviene revisarlo antes de que Meta lo revise:",
         "open": "Abrir la plantilla"
+      },
+      "ai": {
+        "open": "Crear con IA",
+        "applied": "Borrador de plantilla completado con IA. Revísalo antes de enviarlo.",
+        "authHint": "Las plantillas de autenticación tienen un texto fijo, así que no hay nada que redactar."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Lenguaje de marketing no permitido en esta categoría.",
         "TAG_CONTENT_MISMATCH": "La categoría no coincide con el contenido (p. ej., texto promocional en una plantilla UTILITY).",
         "SCAM": "Meta marcó la plantilla como posible estafa. Revisa las afirmaciones y el lenguaje."
+      }
+    },
+    "ai": {
+      "eyebrow": "Plantillas / IA",
+      "title": "Crear con",
+      "titleAccent": "IA",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "generate": "Generar plantilla",
+      "intro": "Redacta una plantilla de WhatsApp a partir de un breve resumen: nombre, encabezado, cuerpo, pie y botones. No se envía nada hasta que lo hagas tú.",
+      "model": "Modelo de IA",
+      "modelsError": "No se pudieron cargar los modelos.",
+      "noModels": "No hay ningún proveedor de IA activado en este espacio de trabajo. Pide a un administrador que active uno.",
+      "loadingModels": "Cargando modelos…",
+      "pickModel": "Selecciona un modelo",
+      "yourKey": "tu clave",
+      "business": "Nombre del negocio",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Sector",
+      "pickIndustry": "Selecciona un sector",
+      "occasion": "Ocasión",
+      "pickOccasion": "Selecciona una ocasión",
+      "purpose": "Finalidad",
+      "pickPurpose": "Selecciona una finalidad",
+      "action": "Acción principal",
+      "pickAction": "Selecciona una acción principal",
+      "tone": "Tono",
+      "pickTone": "Selecciona un tono",
+      "language": "Idioma",
+      "languageHint": "El borrador se redacta en el idioma del formulario.",
+      "notes": "Instrucciones personalizadas",
+      "notesNote": "opcional / máx. 2000",
+      "notesPlaceholder": "Cualquier detalle que quieras incluir: variables, enlaces, frases obligatorias, qué evitar…",
+      "industries": {
+        "retail": "Comercio minorista / comercio electrónico",
+        "food": "Alimentación y bebidas",
+        "healthcare": "Salud",
+        "education": "Educación",
+        "travel": "Viajes y hostelería",
+        "finance": "Finanzas y banca",
+        "realEstate": "Inmobiliaria",
+        "beauty": "Belleza y bienestar",
+        "logistics": "Logística y reparto",
+        "services": "Servicios profesionales",
+        "nonprofit": "Sin ánimo de lucro",
+        "other": "Otro"
+      },
+      "occasions": {
+        "launch": "Lanzamiento de producto",
+        "sale": "Rebajas / descuento",
+        "orderConfirmation": "Confirmación de pedido",
+        "shipping": "Actualización de envío",
+        "appointment": "Recordatorio de cita",
+        "welcome": "Bienvenida / incorporación",
+        "feedback": "Solicitud de opinión",
+        "abandonedCart": "Carrito abandonado",
+        "reengage": "Reactivación de clientes",
+        "event": "Invitación a evento",
+        "festival": "Felicitación festiva",
+        "other": "Otra"
+      },
+      "purposes": {
+        "inform": "Informar",
+        "promote": "Promocionar",
+        "confirm": "Confirmar",
+        "remind": "Recordar",
+        "collectFeedback": "Recopilar opiniones",
+        "reengage": "Reactivar clientes",
+        "purchase": "Impulsar una compra",
+        "booking": "Impulsar una reserva"
+      },
+      "actions": {
+        "website": "Visitar el sitio web",
+        "call": "Llamarnos",
+        "book": "Reservar una cita",
+        "order": "Hacer un pedido",
+        "catalog": "Ver catálogo",
+        "code": "Responder con un código",
+        "other": "Otra"
+      },
+      "tones": {
+        "friendly": "Cercano",
+        "professional": "Profesional",
+        "concise": "Conciso",
+        "empathetic": "Empático",
+        "excited": "Entusiasta",
+        "formal": "Formal"
+      },
+      "errors": {
+        "businessRequired": "El nombre del negocio es obligatorio.",
+        "noKey": "No hay ningún proveedor de IA activado en este espacio de trabajo. Pide a un administrador que añada una clave.",
+        "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+        "providerFailed": "El proveedor de IA no respondió. Inténtalo de nuevo en un momento.",
+        "badJson": "La respuesta del modelo no era una plantilla utilizable. Inténtalo de nuevo o ajusta el resumen.",
+        "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+        "forbidden": "No tienes permiso para crear plantillas.",
+        "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+        "failed": "No se pudo generar la plantilla. Inténtalo de nuevo."
       }
     },
     "gallery": {

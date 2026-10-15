@@ -355,6 +355,11 @@
         "saved": "Đã lưu dưới dạng bản nháp.",
         "warnings": "Nên xem lại trước khi Meta xét duyệt:",
         "open": "Mở mẫu"
+      },
+      "ai": {
+        "open": "Tạo bằng AI",
+        "applied": "Bản nháp mẫu đã được AI điền sẵn. Hãy xem lại trước khi gửi duyệt.",
+        "authHint": "Mẫu xác thực có nội dung cố định nên không cần soạn."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Ngôn từ quảng cáo không được phép trong danh mục này.",
         "TAG_CONTENT_MISMATCH": "Danh mục không khớp với nội dung (ví dụ: nội dung khuyến mãi trong mẫu tin UTILITY).",
         "SCAM": "Meta gắn cờ mẫu tin này có khả năng lừa đảo. Hãy xem lại các tuyên bố và ngôn từ."
+      }
+    },
+    "ai": {
+      "eyebrow": "Mẫu / AI",
+      "title": "Tạo bằng",
+      "titleAccent": "AI",
+      "close": "Đóng",
+      "cancel": "Hủy",
+      "generate": "Tạo mẫu",
+      "intro": "Soạn mẫu WhatsApp từ một bản tóm tắt ngắn: tên, tiêu đề, nội dung, chân trang và nút. Sẽ không có gì được gửi đi cho đến khi bạn tự thực hiện.",
+      "model": "Mô hình AI",
+      "modelsError": "Không thể tải danh sách mô hình.",
+      "noModels": "Không gian làm việc này chưa bật nhà cung cấp AI nào. Hãy nhờ quản trị viên bật một nhà cung cấp.",
+      "loadingModels": "Đang tải mô hình…",
+      "pickModel": "Chọn mô hình",
+      "yourKey": "khóa của bạn",
+      "business": "Tên doanh nghiệp",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Ngành",
+      "pickIndustry": "Chọn ngành",
+      "occasion": "Dịp",
+      "pickOccasion": "Chọn dịp",
+      "purpose": "Mục đích",
+      "pickPurpose": "Chọn mục đích",
+      "action": "Hành động chính",
+      "pickAction": "Chọn hành động chính",
+      "tone": "Giọng điệu",
+      "pickTone": "Chọn giọng điệu",
+      "language": "Ngôn ngữ",
+      "languageHint": "Bản nháp được viết bằng ngôn ngữ của biểu mẫu.",
+      "notes": "Yêu cầu tùy chỉnh",
+      "notesNote": "tùy chọn / tối đa 2000",
+      "notesPlaceholder": "Bất kỳ điều gì bạn muốn đưa vào: biến, liên kết, cách diễn đạt bắt buộc, điều cần tránh…",
+      "industries": {
+        "retail": "Bán lẻ / Thương mại điện tử",
+        "food": "Ăn uống",
+        "healthcare": "Y tế",
+        "education": "Giáo dục",
+        "travel": "Du lịch & Khách sạn",
+        "finance": "Tài chính & Ngân hàng",
+        "realEstate": "Bất động sản",
+        "beauty": "Làm đẹp & Chăm sóc sức khỏe",
+        "logistics": "Logistics & Giao hàng",
+        "services": "Dịch vụ chuyên nghiệp",
+        "nonprofit": "Phi lợi nhuận",
+        "other": "Khác"
+      },
+      "occasions": {
+        "launch": "Ra mắt sản phẩm",
+        "sale": "Khuyến mãi / giảm giá",
+        "orderConfirmation": "Xác nhận đơn hàng",
+        "shipping": "Cập nhật vận chuyển",
+        "appointment": "Nhắc lịch hẹn",
+        "welcome": "Chào mừng / hướng dẫn làm quen",
+        "feedback": "Yêu cầu phản hồi",
+        "abandonedCart": "Giỏ hàng bị bỏ quên",
+        "reengage": "Kích hoạt lại khách hàng",
+        "event": "Mời tham dự sự kiện",
+        "festival": "Lời chúc lễ hội",
+        "other": "Khác"
+      },
+      "purposes": {
+        "inform": "Thông báo",
+        "promote": "Quảng bá",
+        "confirm": "Xác nhận",
+        "remind": "Nhắc nhở",
+        "collectFeedback": "Thu thập phản hồi",
+        "reengage": "Kích hoạt lại",
+        "purchase": "Thúc đẩy mua hàng",
+        "booking": "Thúc đẩy đặt lịch"
+      },
+      "actions": {
+        "website": "Truy cập trang web",
+        "call": "Gọi cho chúng tôi",
+        "book": "Đặt lịch hẹn",
+        "order": "Đặt hàng",
+        "catalog": "Xem danh mục sản phẩm",
+        "code": "Trả lời bằng mã",
+        "other": "Khác"
+      },
+      "tones": {
+        "friendly": "Thân thiện",
+        "professional": "Chuyên nghiệp",
+        "concise": "Ngắn gọn",
+        "empathetic": "Đồng cảm",
+        "excited": "Hào hứng",
+        "formal": "Trang trọng"
+      },
+      "errors": {
+        "businessRequired": "Tên doanh nghiệp là bắt buộc.",
+        "noKey": "Không gian làm việc này chưa bật nhà cung cấp AI nào. Hãy nhờ quản trị viên thêm khóa.",
+        "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+        "providerFailed": "Nhà cung cấp AI không phản hồi. Vui lòng thử lại sau giây lát.",
+        "badJson": "Câu trả lời của mô hình không phải là mẫu dùng được. Hãy thử lại hoặc chỉnh lại bản tóm tắt.",
+        "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+        "forbidden": "Bạn không có quyền tạo mẫu.",
+        "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+        "failed": "Không thể tạo mẫu. Vui lòng thử lại."
       }
     },
     "gallery": {

@@ -431,6 +431,8 @@ export const ERROR_CODES = {
   CAMP_AI_PROVIDER_FAILED: 'CAMP_AI_PROVIDER_FAILED',
   /** "Build with AI": the model's answer was not the JSON the builder expects. */
   CAMP_AI_BAD_JSON: 'CAMP_AI_BAD_JSON',
+  /** "Build with AI" picture: the vendor's safety system refused the prompt, or it returned no image. */
+  CAMP_AI_IMAGE_REFUSED: 'CAMP_AI_IMAGE_REFUSED',
   /** The campaign cannot be started or resumed in its current status. */
   CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
   /** The broadcast wizard's draft is incomplete or invalid at launch (`errors[]` names each step's problem). */

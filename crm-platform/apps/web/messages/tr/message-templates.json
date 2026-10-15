@@ -355,6 +355,11 @@
         "saved": "Taslak olarak kaydedildi.",
         "warnings": "Meta incelemeden önce bakmaya değer:",
         "open": "Şablonu aç"
+      },
+      "ai": {
+        "open": "Yapay zekayla oluştur",
+        "applied": "Şablon taslağı yapay zekayla dolduruldu. Göndermeden önce inceleyin.",
+        "authHint": "Kimlik doğrulama şablonlarının metni sabittir, bu yüzden taslak hazırlanacak bir şey yok."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Bu kategoride pazarlama dili kullanılamaz.",
         "TAG_CONTENT_MISMATCH": "Kategori içerikle uyuşmuyor (ör. UTILITY şablonunda promosyon metni).",
         "SCAM": "Meta şablonu olası dolandırıcılık olarak işaretledi. İddiaları ve dili gözden geçirin."
+      }
+    },
+    "ai": {
+      "eyebrow": "Şablonlar / Yapay zeka",
+      "title": "Şununla oluştur:",
+      "titleAccent": "Yapay zeka",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "generate": "Şablon oluştur",
+      "intro": "Kısa bir özetten WhatsApp şablonu taslağı hazırlayın: ad, üst bilgi, gövde, alt bilgi ve düğmeler. Siz kendiniz yapmadıkça hiçbir şey gönderilmez.",
+      "model": "Yapay zeka modeli",
+      "modelsError": "Modeller yüklenemedi.",
+      "noModels": "Bu çalışma alanında etkin bir yapay zeka sağlayıcısı yok. Bir yöneticiden birini etkinleştirmesini isteyin.",
+      "loadingModels": "Modeller yükleniyor…",
+      "pickModel": "Model seçin",
+      "yourKey": "anahtarınız",
+      "business": "İşletme adı",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Sektör",
+      "pickIndustry": "Sektör seçin",
+      "occasion": "Vesile",
+      "pickOccasion": "Vesile seçin",
+      "purpose": "Amaç",
+      "pickPurpose": "Amaç seçin",
+      "action": "Ana eylem",
+      "pickAction": "Ana eylem seçin",
+      "tone": "Ton",
+      "pickTone": "Ton seçin",
+      "language": "Dil",
+      "languageHint": "Taslak, formun dilinde yazılır.",
+      "notes": "Özel istem",
+      "notesNote": "isteğe bağlı / en fazla 2000",
+      "notesPlaceholder": "Eklenmesini istediğiniz her şey: değişkenler, bağlantılar, mutlaka geçmesi gereken ifadeler, kaçınılacaklar…",
+      "industries": {
+        "retail": "Perakende / E-ticaret",
+        "food": "Yiyecek ve İçecek",
+        "healthcare": "Sağlık",
+        "education": "Eğitim",
+        "travel": "Seyahat ve Konaklama",
+        "finance": "Finans ve Bankacılık",
+        "realEstate": "Gayrimenkul",
+        "beauty": "Güzellik ve Sağlıklı Yaşam",
+        "logistics": "Lojistik ve Teslimat",
+        "services": "Profesyonel Hizmetler",
+        "nonprofit": "Kâr amacı gütmeyen",
+        "other": "Diğer"
+      },
+      "occasions": {
+        "launch": "Ürün lansmanı",
+        "sale": "Satış / indirim",
+        "orderConfirmation": "Sipariş onayı",
+        "shipping": "Kargo güncellemesi",
+        "appointment": "Randevu hatırlatması",
+        "welcome": "Hoş geldin / başlangıç",
+        "feedback": "Geri bildirim isteği",
+        "abandonedCart": "Terk edilen sepet",
+        "reengage": "Yeniden etkileşim",
+        "event": "Etkinlik daveti",
+        "festival": "Bayram tebriği",
+        "other": "Diğer"
+      },
+      "purposes": {
+        "inform": "Bilgilendir",
+        "promote": "Tanıt",
+        "confirm": "Onayla",
+        "remind": "Hatırlat",
+        "collectFeedback": "Geri bildirim topla",
+        "reengage": "Yeniden etkileşim kur",
+        "purchase": "Satın almayı teşvik et",
+        "booking": "Rezervasyonu teşvik et"
+      },
+      "actions": {
+        "website": "Web sitesini ziyaret et",
+        "call": "Bizi arayın",
+        "book": "Randevu al",
+        "order": "Sipariş ver",
+        "catalog": "Kataloğu görüntüle",
+        "code": "Kodla yanıt ver",
+        "other": "Diğer"
+      },
+      "tones": {
+        "friendly": "Samimi",
+        "professional": "Profesyonel",
+        "concise": "Özlü",
+        "empathetic": "Empatik",
+        "excited": "Heyecanlı",
+        "formal": "Resmi"
+      },
+      "errors": {
+        "businessRequired": "İşletme adı zorunludur.",
+        "noKey": "Bu çalışma alanında etkin bir yapay zeka sağlayıcısı yok. Bir yöneticiden anahtar eklemesini isteyin.",
+        "limitReached": "Bu çalışma alanı bu ayki yapay zeka kullanım hakkını doldurdu.",
+        "providerFailed": "Yapay zeka sağlayıcısı yanıt vermedi. Biraz sonra tekrar deneyin.",
+        "badJson": "Modelin yanıtı kullanılabilir bir şablon değildi. Tekrar deneyin veya özeti iyileştirin.",
+        "invalid": "Özeti kontrol edin: işletme adı zorunludur ve bazı alanlar çok uzun.",
+        "forbidden": "Şablon oluşturma izniniz yok.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "failed": "Şablon oluşturulamadı. Tekrar deneyin."
       }
     },
     "gallery": {
