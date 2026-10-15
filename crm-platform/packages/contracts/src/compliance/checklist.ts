@@ -41,6 +41,34 @@ export const PROFILE_ITEM_IDS = [
 ] as const;
 export type ProfileItemId = (typeof PROFILE_ITEM_IDS)[number];
 
+/**
+ * Every explanation a row can carry, by row id: `checklist.items.<id>.detail.<key>` in the locale text. A row's `detail` is always one of
+ * these (the API test walks the rules to prove it, the web test proves each has text in every language).
+ */
+export const CHECKLIST_DETAIL_KEYS: Readonly<Record<string, readonly string[]>> = {
+  lawful_basis: ['built'],
+  consent_withdrawal: ['detectionOff', 'optInOff', 'built'],
+  notices: ['built', 'noDefault', 'none'],
+  rights: ['overdue', 'noContact', 'built'],
+  retention: ['recordingsOn', 'recordingsOff'],
+  security: ['runbook'],
+  subprocessors: ['built', 'none'],
+  children: ['unset', 'minorsNoParental', 'no_minors', 'may_include_minors'],
+  contact_links: ['built', 'none', 'some'],
+  dpo_contact: ['built', 'one', 'none'],
+  grievance_officer: ['built', 'one', 'none'],
+  notice_languages: ['built', 'noSecond', 'secondMissing', 'englishMissing', 'none'],
+  parental_flag: ['unset', 'minorsNoParental', 'no_minors', 'may_include_minors'],
+  opt_out_notice: ['built', 'noUrl', 'off'],
+  quiet_hours: ['built', 'off'],
+  calling_window: ['built', 'off'],
+  dnd_registry: ['off', 'hookOnly'],
+  subprocessor_locations: ['built', 'some', 'none'],
+  request_days: ['built', 'tooLong'],
+  marketing_opt_in: ['built', 'off'],
+  windows_enforcement: ['notEnforced'],
+};
+
 export const checklistItemSchema = z.object({
   id: z.string(),
   scope: z.enum(['baseline', 'profile']),

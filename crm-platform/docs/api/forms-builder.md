@@ -191,7 +191,7 @@ actor of the workspace the key proved:
 5. **Tags** (`after.tags`, skipped past the plan's tag cap, never an error), **owner** (`unassigned`, `fixed`, `round_robin` with a cursor on the form that
    does not bump its `row_version`; a contact that already has an owner keeps them and costs no turn), a **`contact_attributions`** row (platform
    `form`, campaign from `utm_campaign`, the form's name), the **consent** line, the **timeline** entry `Submitted <form>` (`form_submission`).
-6. **Consent**: the text shown, its version and the time are stored on the submission (`consent`). A ticked marketing box sets
+6. **Consent**: the text shown, its version and the time are stored on the submission (`consent`). The consent line has an optional `termsUrl` (https) next to `privacyUrl`, returned by the public form and offered from the workspace links of the [Compliance center](compliance.md) (BL-175). A ticked marketing box sets
    `email_subscription_status` / `whatsapp_subscription_status` to `subscribed` where they have none, never for a contact flagged `is_unsubscribed`,
    and emits `contact.opt_in` once, on a real change. An unticked box never changes anything. (Decision D10; the value `subscribed` is the first the
    product defines, flagged for the Contacts owner.)

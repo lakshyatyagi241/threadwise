@@ -209,11 +209,34 @@ export const GDPR_EU_COUNTRIES: readonly string[] = [
 ];
 
 /**
+ * The country names a billing form can hold, for the countries a profile is written for. Anything else reads as unknown. A checkout
+ * form takes free text (up to 80 characters), so the code or the common name is accepted.
+ */
+const COUNTRY_NAMES: Readonly<Record<string, string>> = {
+  austria: 'AT', belgium: 'BE', bulgaria: 'BG', croatia: 'HR', cyprus: 'CY', czechia: 'CZ', 'czech republic': 'CZ',
+  denmark: 'DK', estonia: 'EE', finland: 'FI', france: 'FR', germany: 'DE', deutschland: 'DE', greece: 'GR',
+  hungary: 'HU', ireland: 'IE', italy: 'IT', latvia: 'LV', lithuania: 'LT', luxembourg: 'LU', malta: 'MT',
+  netherlands: 'NL', 'the netherlands': 'NL', poland: 'PL', portugal: 'PT', romania: 'RO', slovakia: 'SK',
+  slovenia: 'SI', spain: 'ES', sweden: 'SE', iceland: 'IS', liechtenstein: 'LI', norway: 'NO',
+  'united kingdom': 'GB', uk: 'GB', 'great britain': 'GB', britain: 'GB', england: 'GB', scotland: 'GB', wales: 'GB',
+  india: 'IN', 'united states': 'US', 'united states of america': 'US', usa: 'US', america: 'US',
+  brazil: 'BR', brasil: 'BR', singapore: 'SG',
+};
+
+/** An ISO 3166-1 alpha-2 code from what a form holds: a two-letter code, or the name of a country a profile covers. Else null. */
+export function countryCodeOf(input: string | null | undefined): string | null {
+  const t = (input ?? '').trim();
+  if (t === '') return null;
+  if (/^[A-Za-z]{2}$/.test(t)) return t.toUpperCase();
+  return COUNTRY_NAMES[t.toLowerCase().replace(/\./g, '').replace(/\s+/g, ' ')] ?? null;
+}
+
+/**
  * The profiles a country suggests. A suggestion only: the workspace accepts, changes or ignores it. Anything unknown is `generic`,
  * which is the baseline alone.
  */
 export function suggestRegimes(country: string | null | undefined): ComplianceRegime[] {
-  const c = (country ?? '').trim().toUpperCase();
+  const c = countryCodeOf(country) ?? '';
   if (c === '') return [];
   if (GDPR_EU_COUNTRIES.includes(c)) return ['gdpr_eu'];
   switch (c) {

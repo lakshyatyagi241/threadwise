@@ -5,6 +5,7 @@ import {
   REGIME_PROFILES,
   buildDpaTemplate,
   effectivePolicy,
+  formConsentSchema,
   isInsideWindow,
   minutesOfDayIn,
   saveConsentNoticeSchema,
@@ -166,6 +167,26 @@ describe('settings and notice contracts', () => {
     expect(
       saveConsentNoticeSchema.safeParse({ enabled: false, text: '', termsUrl: 'ftp://x' }).success,
     ).toBe(false);
+  });
+});
+
+describe('the form builder consent line', () => {
+  it('takes an optional https termsUrl next to privacyUrl, and old definitions still parse', () => {
+    const old = formConsentSchema.parse({
+      enabled: true,
+      text: 'I agree',
+      privacyUrl: 'https://a.test/p',
+    });
+    expect(old.termsUrl).toBeUndefined();
+    const withTerms = formConsentSchema.parse({
+      enabled: true,
+      text: 'I agree',
+      privacyUrl: 'https://a.test/p',
+      termsUrl: 'https://a.test/t',
+    });
+    expect(withTerms.termsUrl).toBe('https://a.test/t');
+    expect(formConsentSchema.safeParse({ termsUrl: 'http://a.test/t' }).success).toBe(false);
+    expect(formConsentSchema.safeParse({ termsUrl: 'javascript:alert(1)' }).success).toBe(false);
   });
 });
 
