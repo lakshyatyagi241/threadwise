@@ -46,6 +46,7 @@
 | [mobile-local-development.md](runbooks/mobile-local-development.md)       | running the mobile app on an emulator or phone                  |
 | [mobile-store-setup.md](runbooks/mobile-store-setup.md)                   | Apple, Google and Expo accounts, bundle id, first store listing |
 | [mobile-release.md](runbooks/mobile-release.md)                           | OTA updates, store releases, rollbacks                          |
+| [enabling-whatsapp-calling.md](runbooks/enabling-whatsapp-calling.md)     | Meta app, number, TURN and the checks before WhatsApp calling   |
 
 ## Database
 

@@ -21,6 +21,8 @@ import {
   phoneForms,
   toggleRefusal,
 } from './calling.rules';
+import { metaReason, reasonDetail } from './calling-meta-errors';
+import { CallingReadinessRepository } from './calling-readiness.repository';
 import { CallsRepository } from './calls.repository';
 import {
   caller,
@@ -41,6 +43,7 @@ export class CallingNumbersService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: CallsRepository,
+    private readonly readiness: CallingReadinessRepository,
     private readonly waba: WabaConnectService,
     private readonly plans: PlanEntitlementService,
     private readonly audit: AuditService,
@@ -91,6 +94,7 @@ export class CallingNumbersService {
         throw unprocessable(
           'CALL_META_REFUSED',
           toggleRefusal(err.code, err.userMessage ?? err.message, err.status),
+          reasonDetail(metaReason(err)),
         );
       }
       throw err;
@@ -98,6 +102,8 @@ export class CallingNumbersService {
 
     const updated = await this.db.tx(async (tx) => {
       const row = await this.repo.setCalling(tx, orgId, number.id, enable, body);
+      // A person's own switch-off withdraws an automatic switch-on that was still waiting.
+      if (!enable) await this.readiness.clearPending(tx, orgId, number.id);
       await this.audit.record(tx, {
         module: MODULE,
         recordId: number.id,

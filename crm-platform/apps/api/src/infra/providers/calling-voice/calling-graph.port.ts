@@ -16,11 +16,21 @@ export interface CallActionParams {
   reason?: string;
 }
 
+/** Meta's calling settings for one number, as far as readiness needs them (`GET /{phone_number_id}/settings`). */
+export interface CallingSettingsRead {
+  /** Meta's calling status; null when the answer carries none (calling never configured on the number). */
+  status: 'ENABLED' | 'DISABLED' | null;
+  /** `DEFAULT` shows the call icon in the chat; `DISABLE_ALL` hides it, so customers cannot start a call. Null when Meta sent none. */
+  callIconVisibility: string | null;
+}
+
 /**
  * What the calling domain asks of Meta (TW-CALL-004, 005, 008, 013 to 016). Written against a port so the calling logic never builds a URL
  * or a header, and a failed request arrives as a `WabaApiError` the domain translates into words.
  */
 export interface CallingGraph {
+  /** Reads the number's calling settings (EXT-CALL-008). */
+  getSettings(conn: WabaConnection): Promise<CallingSettingsRead>;
   /** Switches calling on or off for the number (`POST /{phone_number_id}/settings`). Returns Meta's body. */
   setCalling(conn: WabaConnection, enabled: boolean): Promise<Record<string, unknown>>;
   /** Sends the interactive "can we call you" message (`call_permission_request`). */

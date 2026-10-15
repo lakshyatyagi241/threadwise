@@ -82,6 +82,11 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
     reason: 'Calling setup on the number (Meta settings); places no call.',
   },
   {
+    path: 'modules/calling-voice/calling-readiness.service.ts',
+    reason:
+      'Reads the number calling settings and, after a connect for an opted-in workspace, switches calling on at Meta; places no call and sends no message to a contact.',
+  },
+  {
     path: 'modules/calling-voice/call-permission.service.ts',
     reason:
       'Meta call-permission request, only reached from CallActionsService.dial after its gate check (service purpose, voice modality).',

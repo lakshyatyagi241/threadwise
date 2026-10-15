@@ -402,6 +402,17 @@ Reference's `/call-logs` is a list of the AI assistant's calls with a time range
 Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
 later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).
 
+## WhatsApp calling: number readiness and onboarding (EXT-CALL-007 to 011)
+
+Reference's calling screen is a switch per number. This port adds, because the product starts using WhatsApp Business Calling and needs a
+freshly connected number to reach "can place and receive calls" without anyone touching Meta by hand: a **Ready for calls?** checklist on each
+number (plan, connection, coexistence, registration, messaging limit, token permissions, webhook subscription, the `calls` field, Meta's
+calling status, TURN, people allowed to call, recording rules), each row with what was found and what to do, in 21 languages; Meta's refusals
+shown as reasons; a switch-on **after a connect** that is off until a workspace admin turns it on; a scheduled re-check; the local switch
+following Meta; and a **test call** to the admin's own phone. Detail: [calling-voice.md](calling-voice.md#number-readiness-and-onboarding-ext-call-007-to-011),
+[plan](../plan/calling-number-readiness-build.md), [runbook](../../runbooks/enabling-whatsapp-calling.md). Decisions for the owner are listed
+in the parity file.
+
 ## Audit log for the workspace and the full Notifications page (TW-NOTIF-007, 008, 029 to 031): partly beyond Reference
 
 Reference's Activity Log (KPIs, charts, table, detail, CSV) is rebuilt as Settings, Audit log at the same route `/activity-log`, without the charts. Deliberate additions and differences: platform support (act-as) sessions are shown to the workspace with their reason; personal values are masked at read time (only the Owner key sees them) and the CSV is always masked; opening an entry and asking for an export are themselves audited; text search covers the module and action only; no IP or user agent is stored. The Notifications page keeps Reference's tabs-as-filters, search, day sections, mark read, dismiss and clear, with SQL search and per-person rows. Not built: charts, top actors, "My activity" scope, do-not-disturb. Spec: [audit-log-tenant.md](../../specs/audit-log-tenant.md). Status: owner-requested, pending sign-off.
