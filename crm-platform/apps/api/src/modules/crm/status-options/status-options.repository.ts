@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { alias } from 'drizzle-orm/pg-core';
-import { and, asc, eq, isNull, ne, sql, type SQL } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNull, ne, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { ModuleKey } from '@crm/contracts';
 import type { ContactOptionColumn } from './status-option-columns';
@@ -93,6 +93,15 @@ export class StatusOptionsRepository {
       and(eq(statusOptions.orgId, orgId), eq(statusOptions.uuid, uuid)),
     );
     return rows[0];
+  }
+
+  /** uuid -> row for every uuid that exists in the workspace, in one query. Unknown uuids are absent. */
+  async findByUuids(tx: Tx, orgId: number, uuids: string[]): Promise<Map<string, StatusOptionRow>> {
+    if (uuids.length === 0) return new Map();
+    const rows = await this.selectOptions(tx).where(
+      and(eq(statusOptions.orgId, orgId), inArray(statusOptions.uuid, uuids)),
+    );
+    return new Map(rows.map((r) => [r.uuid, r]));
   }
 
   async findById(tx: Tx, orgId: number, id: number): Promise<StatusOptionRow | undefined> {
