@@ -832,7 +832,10 @@
         "placeholder": "es. Il mio negozio",
         "button": "Crea catalogo",
         "needName": "Inserisci un nome per il catalogo.",
-        "done": "Catalogo creato e connesso."
+        "done": "Catalogo creato e connesso.",
+        "loginCancelled": "L'accesso a Meta è stato chiuso prima del termine. Riprova e approva l'accesso al catalogo.",
+        "sdkFailed": "Impossibile caricare l'accesso a Meta. Controlla la connessione o il blocco annunci, poi ricarica la pagina.",
+        "sdkLoading": "L'accesso a Meta è ancora in caricamento. Riprova tra un attimo."
       },
       "rename": {
         "label": "Nome del catalogo",

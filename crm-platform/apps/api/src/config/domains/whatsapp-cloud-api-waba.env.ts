@@ -54,6 +54,11 @@ export const wabaEnvSchema = z.object({
   META_APP_SECRET: optionalString(128),
   /** Embedded Signup configuration id (Facebook Login for Business). Empty: workspaces paste a token manually. */
   META_EMBEDDED_CONFIG_ID: optionalString(64),
+  /**
+   * A second Login-for-Business configuration, used only to create a catalog: its token carries `catalog_management`, which the
+   * WhatsApp Embedded Signup token does not. Unset keeps the old behaviour (the number's own token is tried).
+   */
+  META_CATALOGUE_CONFIG_ID: optionalString(64),
   /** Interakt's Embedded Signup solution id (`extras.setup.solutionID`) and the same id sent in `tp-signup`. */
   INTERAKT_SOLUTION_ID: optionalString(64),
   /** Shared tech-partner key: `x-access-token` on every Interakt call, `Authorization` on `tp-signup`. */

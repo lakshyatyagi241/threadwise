@@ -7,6 +7,7 @@ import { Button, ConfirmDialog, Field, Input, Spinner, useToast } from '@crm/ui'
 import type { CatalogSummary } from '@crm/contracts';
 import { createCatalog, deleteRemoteCatalog, KEYS, renameCatalog } from '../api/catalog';
 import { CARD, KICKER } from './parts';
+import { useCatalogLogin } from './use-catalog-login';
 import { useErrorText } from './use-error-text';
 
 /** Create a brand-new catalog on Meta from here: name it, and it is created under the WABA's business, linked and connected. */
@@ -18,16 +19,30 @@ export function CreateCatalogPanel() {
   const [name, setName] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const login = useCatalogLogin();
 
   const submit = async () => {
     if (!name.trim()) {
       setError(t('needName'));
       return;
     }
+    if (login.required && !login.ready) {
+      setError(t(login.failed ? 'sdkFailed' : 'sdkLoading'));
+      return;
+    }
     setBusy(true);
     setError(null);
     try {
-      await createCatalog({ name: name.trim() });
+      // Opened first and synchronously: the popup is blocked if anything is awaited before it.
+      const grant = login.required ? await login.open() : null;
+      if (grant?.kind === 'cancelled') {
+        setError(t('loginCancelled'));
+        return;
+      }
+      await createCatalog({
+        name: name.trim(),
+        ...(grant ? { loginCode: grant.code } : {}),
+      });
       toast(t('done'), 'success');
       await qc.invalidateQueries({ queryKey: KEYS.all });
     } catch (e) {

@@ -116,8 +116,9 @@ lists for the WABA, else a new catalog created and linked when a business id is 
 
 ### `POST /catalog/create`
 
-`{ "name": "My shop" }`. 200 with the catalog summary. Needs a connected WABA number with its token and business id; creates the catalog under that business, links it to the
-WABA, verifies it, stores it (token encrypted) and saves the id on the WABA config. Meta is asked first: a refusal saves nothing. Errors: 422 `CAT_ALREADY_CONNECTED`,
+`{ "name": "My shop", "loginCode": "<optional>" }`. 200 with the catalog summary. Needs a connected WABA number with its business id; creates the catalog under that business, links it to the
+WABA, using the token of the catalog login when `loginCode` (the code of Meta's popup for `META_CATALOGUE_CONFIG_ID`) is sent, else the number's own token (usually refused with `(#100) Missing Permission`: it lacks `catalog_management`). `GET /catalog/login-config` (`cat.catalog.manage`) returns `{ ready, appId, configId, graphVersion }` for that popup; `ready` is false until `META_APP_ID`, `META_APP_SECRET` and `META_CATALOGUE_CONFIG_ID` are set.
+The catalog is then verified and stored with that token (encrypted), so later syncs use it, and its id is saved on the WABA config. Meta is asked first: a refusal saves nothing. Errors: 422 `CAT_ALREADY_CONNECTED`,
 `CAT_NO_WABA`, `CAT_WABA_TOKEN_MISSING`, `CAT_NO_CATALOG_LINKED` (no business id), `CAT_META_REJECTED`. Outbox `catalog.created` and `catalog.connected`.
 
 ### `POST /catalog/rename`

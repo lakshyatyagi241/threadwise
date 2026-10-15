@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
+  type CatalogLoginConfig,
   type CatalogSummary,
   type CommerceSettingsInput,
   type ConnectCatalogInput,
@@ -13,6 +14,7 @@ import {
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import { readCatalogEnv } from '../../config/domains/catalog-products.env';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -228,6 +230,18 @@ export class CatalogConnectionService {
     });
   }
 
+  /** What the browser needs to open the catalog login popup; `ready` is false until the Meta app and its configuration are set. */
+  loginConfig(): CatalogLoginConfig {
+    const e = readCatalogEnv();
+    const ready = Boolean(e.META_APP_ID && e.META_APP_SECRET && e.META_CATALOGUE_CONFIG_ID);
+    return {
+      ready,
+      appId: ready ? (e.META_APP_ID ?? null) : null,
+      configId: ready ? (e.META_CATALOGUE_CONFIG_ID ?? null) : null,
+      graphVersion: e.CAT_GRAPH_API_VERSION,
+    };
+  }
+
   // --- create, rename and delete on Meta ----------------------------------------------------------------------------------
 
   /**
@@ -252,7 +266,7 @@ export class CatalogConnectionService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    if (creds.accessToken === '' || creds.wabaId === '') {
+    if ((creds.accessToken === '' && !input.loginCode) || creds.wabaId === '') {
       throw new AppError(
         ERROR_CODES.CAT_WABA_TOKEN_MISSING,
         'Your WABA number is connected but its Meta access token could not be read. Reconnect the number.',
@@ -266,7 +280,18 @@ export class CatalogConnectionService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    const auth = { accessToken: creds.accessToken };
+    // A catalog is created with the token of the catalog login (it carries `catalog_management`); the number's own token, from
+    // WhatsApp Embedded Signup, usually does not. Without a login code the number's token is tried, as before.
+    let token = creds.accessToken;
+    if (input.loginCode) {
+      try {
+        token = await this.provider.exchangeLoginCode(input.loginCode);
+      } catch (err) {
+        if (err instanceof CatalogProviderError) throw providerRefusal(err);
+        throw err;
+      }
+    }
+    const auth = { accessToken: token };
     const name = input.name.trim();
 
     let catalogId: string | null;
@@ -286,7 +311,7 @@ export class CatalogConnectionService {
       catalogId,
       wabaId: creds.wabaId,
       phoneNumberId: creds.phoneNumberId || null,
-      accessToken: creds.accessToken,
+      accessToken: token,
     };
     try {
       await this.provider.verifyCatalog(binding);
@@ -305,7 +330,7 @@ export class CatalogConnectionService {
         catalogName: name,
         wabaId: creds.wabaId,
         phoneNumberId: creds.phoneNumberId || null,
-        accessTokenEnc: this.bindings.encrypt(creds.accessToken),
+        accessTokenEnc: this.bindings.encrypt(token),
       });
       await this.senders.saveWabaCatalogId(tx, ctx.orgId, creds.configId, catalogId as string);
       await this.audit.record(tx, {

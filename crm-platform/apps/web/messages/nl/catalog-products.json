@@ -832,7 +832,10 @@
         "placeholder": "bijv. Mijn winkel",
         "button": "Catalogus maken",
         "needName": "Voer een catalogusnaam in.",
-        "done": "Catalogus gemaakt en verbonden."
+        "done": "Catalogus gemaakt en verbonden.",
+        "loginCancelled": "De Meta-aanmelding is gesloten voordat die klaar was. Probeer het opnieuw en keur de toegang tot de catalogus goed.",
+        "sdkFailed": "De Meta-aanmelding kon niet worden geladen. Controleer je verbinding of adblocker en laad de pagina opnieuw.",
+        "sdkLoading": "De Meta-aanmelding wordt nog geladen. Probeer het zo meteen opnieuw."
       },
       "rename": {
         "label": "Catalogusnaam",

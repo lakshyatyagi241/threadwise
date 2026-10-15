@@ -832,7 +832,10 @@
         "placeholder": "mis. Toko saya",
         "button": "Buat katalog",
         "needName": "Masukkan nama katalog.",
-        "done": "Katalog dibuat dan terhubung."
+        "done": "Katalog dibuat dan terhubung.",
+        "loginCancelled": "Login Meta ditutup sebelum selesai. Coba lagi dan setujui akses katalog.",
+        "sdkFailed": "Login Meta tidak dapat dimuat. Periksa koneksi atau pemblokir iklan Anda, lalu muat ulang halaman.",
+        "sdkLoading": "Login Meta masih dimuat. Coba lagi sebentar lagi."
       },
       "rename": {
         "label": "Nama katalog",
