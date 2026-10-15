@@ -11,6 +11,20 @@
       "note": "Run after the code-review fixes. Includes two tests that block the real loop for 300 ms."
     },
     {
+      "suite": "apps/api/test/unit/platform-infrastructure/job-metrics.spec.ts",
+      "status": "PASSED",
+      "tests": 15,
+      "passed": 15,
+      "ranOn": "2026-10-15, branch claude/event-loop-job-metrics",
+      "note": "Run together with event-loop-monitor.spec.ts: 42/42. Includes one test that boots a real Nest application context to check the module wiring. Typecheck of the app config and ESLint of the changed API files are clean."
+    },
+    {
+      "suite": "tools/event-loop-audit/verify-job-metrics.ts (real BullMQ worker, throwaway redis:7-alpine in Docker)",
+      "status": "PASSED",
+      "checks": 7,
+      "note": "The first run FAILED 4 of 7 and found a bug (a promoted delayed job's delay was counted as queue wait, because BullMQ resets job.delay to 0) and a wrong assumption (BullMQ emits failed/completed only at a job's final state). Both fixed, rerun 7/7. Uses the library's own worker, not the app's processors: the booted app worker has NOT been run."
+    },
+    {
       "suite": "apps/api/test/unit/platform-infrastructure (all 7 files)",
       "status": "PASSED",
       "tests": 162,

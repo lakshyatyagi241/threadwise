@@ -1,8 +1,10 @@
 import { EventEmitter } from 'node:events';
 import { WorkerHost } from '@nestjs/bullmq';
-import type { DiscoveryService } from '@nestjs/core';
+import { Module } from '@nestjs/common';
+import { NestFactory, type DiscoveryService } from '@nestjs/core';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
+  JobMetricsModule,
   RuntimeMonitor,
   attachJobMetrics,
   jobTimings,
@@ -201,5 +203,32 @@ describe('JobMetricsService', () => {
     const p = new Proc();
     (p as unknown as { _worker: unknown })._worker = fakeWorker('q');
     expect(new JobMetricsService(discoveryOf(p)).onApplicationBootstrap()).toBe(0);
+  });
+});
+
+describe('JobMetricsModule in a real Nest application context', () => {
+  afterEach(() => stopRuntimeMonitor());
+
+  it('is wired: Nest injects the discovery service and runs the hook at bootstrap', async () => {
+    const monitor = startRuntimeMonitor('worker', {});
+    const processor = new Proc();
+    const worker = fakeWorker('wired-queue');
+    (processor as unknown as { _worker: unknown })._worker = worker;
+
+    @Module({
+      imports: [JobMetricsModule],
+      providers: [{ provide: 'A_PROCESSOR', useValue: processor }],
+    })
+    class HostModule {}
+
+    const app = await NestFactory.createApplicationContext(HostModule, { logger: false });
+    try {
+      worker.emit('completed', { timestamp: T0, processedOn: T0 + 5, finishedOn: T0 + 25 });
+      expect(monitor!.render()).toMatch(
+        /crm_queue_jobs_total\{[^}]*queue="wired-queue",outcome="completed"\} 1/,
+      );
+    } finally {
+      await app.close();
+    }
   });
 });
