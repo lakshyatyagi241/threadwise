@@ -365,6 +365,11 @@
         "name": "E-Mail",
         "hint": "Sende eine Nachricht als E-Mail von einem verbundenen Postfach, mit Abmeldelink.",
         "cta": "E-Mail-Kampagne erstellen"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Senden Sie eine Nachricht an Personen, die bereits mit Ihrem LINE-Account chatten.",
+        "cta": "LINE-Broadcast erstellen"
       }
     }
   }

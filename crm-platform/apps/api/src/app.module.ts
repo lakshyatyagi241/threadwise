@@ -46,6 +46,7 @@ import { EmailTemplatesModule } from './modules/email-templates';
 import { ChannelSmsModule } from './modules/channel-sms';
 import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { ChannelLineModule } from './modules/channel-line';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule, NodeCatalogBridgeModule } from './modules/node-bridge-runtime';
@@ -218,6 +219,7 @@ import { HealthModule } from './health/health.module';
     CampaignsModule,
     CallingVoiceModule,
     ChannelTelegramModule,
+    ChannelLineModule,
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,

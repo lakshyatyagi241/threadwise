@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { channelCards } from './channel-cards';
 
-const none = { telegram: false, facebook: false, instagram: false, sms: null, email: null };
+const none = {
+  telegram: false,
+  facebook: false,
+  instagram: false,
+  line: false,
+  sms: null,
+  email: null,
+};
 
 describe('the channel chooser cards', () => {
   it('with only WhatsApp there is one card, the campaign builder', () => {
@@ -13,6 +20,7 @@ describe('the channel chooser cards', () => {
       telegram: true,
       facebook: true,
       instagram: true,
+      line: true,
       sms: 'sms:abc',
       email: 'email:abc',
     });
@@ -23,6 +31,7 @@ describe('the channel chooser cards', () => {
       'telegram',
       'facebook',
       'instagram',
+      'line',
     ]);
   });
 
@@ -32,6 +41,7 @@ describe('the channel chooser cards', () => {
         telegram: true,
         facebook: true,
         instagram: true,
+        line: true,
         sms: 'sms:abc',
         email: 'email:abc',
       }).map((c) => [c.id, c.href]),
@@ -41,6 +51,7 @@ describe('the channel chooser cards', () => {
     expect(byId.telegram).toBe('/telegram/broadcasts');
     expect(byId.facebook).toBe('/facebook/broadcasts');
     expect(byId.instagram).toBe('/instagram/broadcast');
+    expect(byId.line).toBe('/line/broadcasts');
   });
 
   it('Email has a card only with a sender, and sits after SMS', () => {

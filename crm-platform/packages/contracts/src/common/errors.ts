@@ -246,6 +246,22 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // LINE channel (LINE)
+  /** LINE refused the channel access token (the bot info call failed). */
+  LINE_TOKEN_REJECTED: 'LINE_TOKEN_REJECTED',
+  /** A broadcast needs a message, a file, or both. */
+  LINE_BROADCAST_EMPTY: 'LINE_BROADCAST_EMPTY',
+  /** None of the picked people belong to the channel. */
+  LINE_NO_RECIPIENTS: 'LINE_NO_RECIPIENTS',
+  /** The channel is not connected or is paused. */
+  LINE_CHANNEL_UNAVAILABLE: 'LINE_CHANNEL_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  LINE_NOTHING_TO_SEND: 'LINE_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  LINE_NOTHING_TO_RETRY: 'LINE_NOTHING_TO_RETRY',
+  /** Token rotation could not be set up: the Channel ID is missing, the key does not sign, or LINE refused the assertion. */
+  LINE_ROTATION_FAILED: 'LINE_ROTATION_FAILED',
+
   // Help assistant (docs/specs/help-agent-assistant.md)
   /** The workspace switch is off, or the person may not use the assistant here (a disabled screen, a missing permission). */
   HELP_AGENT_DISABLED: 'HELP_AGENT_DISABLED',

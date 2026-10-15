@@ -419,6 +419,7 @@
   "POST /v2/team-chat/messages/:id/pin",
   "POST /v2/team-chat/messages/:id/reactions",
   "POST /v2/team-chat/presence",
+  "POST /v2/line/inbound/:token",
   "POST /v2/telegram/inbound/:token",
   "POST /v2/templates/:id/refresh",
   "POST /v2/templates/lint",

@@ -365,6 +365,11 @@
         "name": "Email",
         "hint": "Kirim pesan sebagai email dari kotak surat yang terhubung, lengkap dengan tautan berhenti berlangganan.",
         "cta": "Buat kampanye email"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Kirim pesan ke orang-orang yang sudah mengobrol dengan akun LINE Anda.",
+        "cta": "Buat siaran LINE"
       }
     }
   }

@@ -365,6 +365,11 @@
         "name": "E-posta",
         "hint": "Bağlı bir posta kutusundan mesajı e-posta olarak gönderin, abonelikten çıkma bağlantısıyla.",
         "cta": "E-posta kampanyası oluştur"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "LINE hesabınızla zaten yazışan kişilere mesaj gönderin.",
+        "cta": "LINE toplu mesajı oluştur"
       }
     }
   }

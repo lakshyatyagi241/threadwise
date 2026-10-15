@@ -177,3 +177,27 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-MAIL-033 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
 | TW-MAIL-034 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
 | TW-MAIL-035 | done |  | built and tested against fakes (GreenMail for IMAP); no live Google/Microsoft/IMAP run |
+
+## channel-line (line)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-LINE-001 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-002 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-003 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-004 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-005 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-006 | backend-done |  | lakshya/channels/line: signed webhook, fake LINE only |
+| TW-LINE-007 | backend-done |  | thread, contact, file done; flow and automation hooks are stand-ins |
+| TW-LINE-008 | backend-done |  | adapter: reply token else push |
+| TW-LINE-009 | backend-done |  |  |
+| TW-LINE-010 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-011 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-012 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-013 | backend-done |  | queue job, batches of 40, consent gate |
+| TW-LINE-014 | frontend-done |  | lakshya/channels/line: screen and API built; tests run against a fake LINE only |
+| TW-LINE-015 | blocked |  | needs flow-runtime-engine and node-bridge-runtime (TW-FLR / TW-NODE) |
+| TW-LINE-016 | blocked |  | rich menus not ported yet; outside the first LINE branch |
+| TW-LINE-017 | blocked |  | insights not ported yet; outside the first LINE branch |
+| TW-LINE-018 | backend-done |  | permission keys + extra_channels; channel cap not enforced (as Reference) |
+| TW-LINE-019 | wontfix |  | unused client methods in Reference 1.7.0, no caller |

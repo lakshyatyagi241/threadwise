@@ -365,6 +365,11 @@
         "name": "E-mail",
         "hint": "Invia un messaggio come e-mail da una casella connessa, con un link per annullare l'iscrizione.",
         "cta": "Crea campagna e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Invia un messaggio alle persone che già chattano con il tuo account LINE.",
+        "cta": "Crea broadcast LINE"
       }
     }
   }

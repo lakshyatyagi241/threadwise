@@ -365,6 +365,11 @@
         "name": "Email",
         "hint": "Gửi tin nhắn dưới dạng email từ hộp thư đã kết nối, kèm liên kết hủy đăng ký.",
         "cta": "Tạo chiến dịch email"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Gửi tin nhắn cho những người đang trò chuyện với tài khoản LINE của bạn.",
+        "cta": "Tạo đợt gửi LINE"
       }
     }
   }

@@ -23,6 +23,10 @@
     "status": "reviewed",
     "reason": "per-IP rate limit, global by policy"
   },
+  "modules/channel-line/inbound.service.ts": {
+    "status": "reviewed",
+    "reason": "per-channel-token rate limit; token is tenant-specific"
+  },
   "modules/channel-telegram/inbound.service.ts": {
     "status": "reviewed",
     "reason": "per-bot-token rate limit; token is tenant-specific"
