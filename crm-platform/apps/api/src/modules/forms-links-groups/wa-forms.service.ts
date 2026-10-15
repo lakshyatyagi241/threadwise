@@ -33,6 +33,8 @@ import {
   fieldLabelsOf,
   flattenFormAnswer,
   toWaFormPickerItem,
+  normalizeAudienceType,
+  normalizeDefinition,
   toWaFormResponse,
   toWaFormSubmissionResponse,
 } from './wa-forms.mapper';
@@ -205,10 +207,10 @@ export class WaFormsService {
     }
 
     const flowJson = buildMetaFlowJson(
-      (form.definition_json ?? { screens: [] }) as unknown as WaFormDefinition,
+      normalizeDefinition(form.definition_json),
       form.send_button_label,
     );
-    const category = mapAudienceToMetaCategory(form.audience_type as never);
+    const category = mapAudienceToMetaCategory(normalizeAudienceType(form.audience_type));
 
     try {
       const { flowId } = await this.flows.ensureFlow(resolved.conn, form.meta_flow_id, {
