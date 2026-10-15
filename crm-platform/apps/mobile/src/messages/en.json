@@ -1402,7 +1402,7 @@
     },
     "guide": {
       "title": "Turn on permissions",
-      "open": "Open settings",
+      "open": "Allow in settings",
       "later": "Not now",
       "notifications": "Notifications are off. Next, switch them on.",
       "android": "Switched off: {{list}}. Next, tap Permissions, pick each one and choose Allow.",

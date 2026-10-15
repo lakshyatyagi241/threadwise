@@ -28,7 +28,7 @@ describe('PermissionGuide', () => {
     await renderApp(<PermissionGuide off={['calls', 'camera']} onClose={onClose} />);
     expect(screen.getByText(/Phone calls, Camera/)).toBeTruthy();
     expect(screen.getByText(/tap Permissions/)).toBeTruthy();
-    await fireEvent.press(screen.getByRole('button', { name: 'Open settings' }));
+    await fireEvent.press(screen.getByRole('button', { name: 'Allow in settings' }));
     expect(open).toHaveBeenCalledWith(['calls', 'camera']);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
