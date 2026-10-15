@@ -132,6 +132,15 @@ describe('the broadcast attachment (TW-VIB-012)', () => {
     ).toBe(false);
   });
 
+  it('a request names only the fields it knows (nothing slips in beside them)', () => {
+    expect(
+      connectViberChannelSchema.safeParse({ authToken: 'a'.repeat(30), orgId: 7 }).success,
+    ).toBe(false);
+    expect(
+      createVibBroadcastSchema.safeParse({ ...base, body: 'x', status: 'done', orgId: 7 }).success,
+    ).toBe(false);
+  });
+
   it('a text may be 7000 characters, not more', () => {
     expect(createVibBroadcastSchema.safeParse({ ...base, body: 'x'.repeat(7000) }).success).toBe(
       true,

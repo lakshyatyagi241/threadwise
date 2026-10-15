@@ -54,26 +54,28 @@ export function mediaExtension(url: string): string {
   return file.includes('.') ? (file.split('.').pop() ?? '').toLowerCase() : '';
 }
 
-export const createVibBroadcastSchema = z.object({
-  name: z.string().trim().min(1).max(191),
-  channelId: uuidSchema,
-  templateId: uuidSchema.nullish(),
-  /** Blank fills from the template. */
-  body: z.string().trim().max(VIB_TEXT_MAX).optional(),
-  userIds: z.array(z.string().trim().min(1).max(64)).min(1).max(5000),
-  /** One optional attachment: a public address of a picture (jpg, png, gif) or an mp4 video, up to 26 MB. */
-  mediaUrl: z
-    .string()
-    .trim()
-    .url()
-    .max(2048)
-    .refine((u) => (VIB_MEDIA_EXTENSIONS as readonly string[]).includes(mediaExtension(u)), {
-      message: 'The attachment must be a jpg, png, gif or mp4 file.',
-    })
-    .optional(),
-  /** The file's size in bytes when the page knows it (an upload); Viber needs it for a video. */
-  mediaSize: z.number().int().positive().max(VIB_MEDIA_MAX_BYTES).optional(),
-});
+export const createVibBroadcastSchema = z
+  .object({
+    name: z.string().trim().min(1).max(191),
+    channelId: uuidSchema,
+    templateId: uuidSchema.nullish(),
+    /** Blank fills from the template. */
+    body: z.string().trim().max(VIB_TEXT_MAX).optional(),
+    userIds: z.array(z.string().trim().min(1).max(64)).min(1).max(5000),
+    /** One optional attachment: a public address of a picture (jpg, png, gif) or an mp4 video, up to 26 MB. */
+    mediaUrl: z
+      .string()
+      .trim()
+      .url()
+      .max(2048)
+      .refine((u) => (VIB_MEDIA_EXTENSIONS as readonly string[]).includes(mediaExtension(u)), {
+        message: 'The attachment must be a jpg, png, gif or mp4 file.',
+      })
+      .optional(),
+    /** The file's size in bytes when the page knows it (an upload); Viber needs it for a video. */
+    mediaSize: z.number().int().positive().max(VIB_MEDIA_MAX_BYTES).optional(),
+  })
+  .strict();
 export type CreateVibBroadcastInput = z.infer<typeof createVibBroadcastSchema>;
 
 export const vibBroadcastSchema = z.object({

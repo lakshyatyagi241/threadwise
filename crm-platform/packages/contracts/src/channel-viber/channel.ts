@@ -8,16 +8,18 @@ import { uuidSchema } from '../common/ids';
 
 export const VIBER_TOKEN_MIN = 20;
 
-export const connectViberChannelSchema = z.object({
-  authToken: z
-    .string()
-    .trim()
-    .min(
-      VIBER_TOKEN_MIN,
-      'That does not look like a Viber auth token. Copy the whole token from your bot.',
-    )
-    .max(255),
-});
+export const connectViberChannelSchema = z
+  .object({
+    authToken: z
+      .string()
+      .trim()
+      .min(
+        VIBER_TOKEN_MIN,
+        'That does not look like a Viber auth token. Copy the whole token from your bot.',
+      )
+      .max(255),
+  })
+  .strict();
 export type ConnectViberChannelInput = z.infer<typeof connectViberChannelSchema>;
 
 export const viberChannelSchema = z.object({
