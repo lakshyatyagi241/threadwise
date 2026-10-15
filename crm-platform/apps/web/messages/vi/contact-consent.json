@@ -17,7 +17,8 @@
       "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
       "exportInProgress": "Tệp bằng chứng đang được chuẩn bị. Hãy đợi hoàn tất rồi thử lại.",
       "exportNotReady": "Tệp đó chưa sẵn sàng hoặc đã hết hạn. Hãy chuẩn bị tệp mới.",
-      "noticeTargetMissing": "Tiện ích, trang đặt lịch hoặc cửa hàng đó không còn tồn tại."
+      "noticeTargetMissing": "Tiện ích, trang đặt lịch hoặc cửa hàng đó không còn tồn tại.",
+      "notMinor": "Chỉ có thể ghi nhận đồng ý của người giám hộ cho liên hệ được đánh dấu là chưa thành niên."
     },
     "settings": {
       "title": "Đồng ý nhận tin và phản hồi STOP",
@@ -142,7 +143,8 @@
         "widget": "Trò chuyện trên website",
         "booking": "Trang đặt lịch",
         "commerce": "Thanh toán của cửa hàng",
-        "lead": "Thu thập lead"
+        "lead": "Thu thập lead",
+        "gpc": "Global Privacy Control"
       },
       "by": "bởi {name}",
       "evidence": {
@@ -165,7 +167,8 @@
         "storeFlag": "Cài đặt cửa hàng",
         "leadSourceId": "Nguồn lead",
         "leadFormId": "Biểu mẫu lead",
-        "adId": "Quảng cáo"
+        "adId": "Quảng cáo",
+        "guardianConsentRef": "Tham chiếu đồng ý của người giám hộ"
       },
       "dialog": {
         "titleGranted": "Đánh dấu đã đăng ký",
@@ -181,6 +184,50 @@
         "close": "Đóng",
         "savedGranted": "Đã đánh dấu đăng ký.",
         "savedWithdrawn": "Đã đánh dấu hủy đăng ký."
+      },
+      "privacy": {
+        "title": "Dấu hiệu quyền riêng tư",
+        "saved": "Đã lưu.",
+        "minorLabel": "Chưa thành niên",
+        "minorOn": "Được đánh dấu là chưa thành niên từ {date}.",
+        "minorOff": "Không được đánh dấu là chưa thành niên.",
+        "rule": {
+          "off": "Không gian làm việc của bạn chưa trả lời câu hỏi về trẻ em trong Trung tâm tuân thủ, nên hoạt động tiếp thị tới liên hệ này không bị giữ lại.",
+          "guardian": "Hoạt động tiếp thị tới liên hệ này bị giữ lại cho đến khi ghi nhận sự đồng ý của cha mẹ hoặc người giám hộ.",
+          "block": "Hoạt động tiếp thị tới liên hệ này bị giữ lại vì không gian làm việc của bạn cho biết không xử lý dữ liệu của người chưa thành niên."
+        },
+        "guardianBadge": "Đã ghi nhận đồng ý của người giám hộ",
+        "guardianLabel": "Sự đồng ý của cha mẹ hoặc người giám hộ",
+        "guardianOn": "Đã ghi nhận từ {date}. Đây chỉ là bằng chứng và không đăng ký nhận tin cho liên hệ.",
+        "guardianOff": "Chưa ghi nhận.",
+        "recordGuardian": "Ghi nhận đồng ý của người giám hộ",
+        "clearGuardian": "Xóa",
+        "dnsLabel": "Không bán hoặc chia sẻ",
+        "dnsOn": "Đã từ chối từ {date} ({source}).",
+        "dnsOff": "Chưa từ chối.",
+        "history": "Lịch sử quyền riêng tư",
+        "event": {
+          "minor": {
+            "on": "Đã đánh dấu là chưa thành niên",
+            "off": "Đã bỏ dấu chưa thành niên"
+          },
+          "guardian_consent": {
+            "on": "Đã ghi nhận đồng ý của người giám hộ",
+            "off": "Đã xóa đồng ý của người giám hộ"
+          },
+          "sale_share_opt_out": {
+            "on": "Đã từ chối việc bán và chia sẻ",
+            "off": "Đã xóa từ chối"
+          }
+        },
+        "dialog": {
+          "title": "Ghi nhận đồng ý của người giám hộ",
+          "intro": "Ghi nhận rằng cha mẹ hoặc người giám hộ đã đồng ý. Đây chỉ là bằng chứng: liên hệ không được đăng ký nhận tiếp thị.",
+          "note": "Họ đã đồng ý bằng cách nào? (bắt buộc)",
+          "noteHint": "Ví dụ: đã ký biểu mẫu giấy tại quầy. Không ghi tên hoặc thông tin liên hệ của người giám hộ.",
+          "ref": "Tham chiếu (không bắt buộc)",
+          "refHint": "Số biểu mẫu hoặc mã tài liệu mà bạn có thể tra cứu sau."
+        }
       }
     },
     "composer": {
@@ -302,7 +349,9 @@
         "consent_evidence_recorded": "Được phép: đã gửi thông báo và người đó đồng ý.",
         "purpose_not_enabled": "Không được phép: không gian làm việc chưa bật tính năng này.",
         "consent_declined": "Không được phép: người đó đã từ chối.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Không được phép: liên hệ này được đánh dấu là chưa thành niên và không gian làm việc của bạn giữ lại hoạt động tiếp thị.",
+        "sale_share_opted_out": "Không được phép: liên hệ đã từ chối việc bán hoặc chia sẻ dữ liệu của họ."
       }
     },
     "notice": {

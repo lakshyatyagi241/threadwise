@@ -17,7 +17,8 @@
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
       "exportInProgress": "Plik dowodowy jest już przygotowywany. Poczekaj, aż zostanie gotowy, a następnie spróbuj ponownie.",
       "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Przygotuj nowy.",
-      "noticeTargetMissing": "Ten widżet, strona rezerwacji lub sklep już nie istnieje."
+      "noticeTargetMissing": "Ten widżet, strona rezerwacji lub sklep już nie istnieje.",
+      "notMinor": "Zgodę opiekuna można zapisać tylko dla kontaktu oznaczonego jako małoletni."
     },
     "settings": {
       "title": "Zgody i odpowiedzi STOP",
@@ -142,7 +143,8 @@
         "widget": "Czat na stronie",
         "booking": "Strona rezerwacji",
         "commerce": "Kasa sklepu",
-        "lead": "Pozyskanie leada"
+        "lead": "Pozyskanie leada",
+        "gpc": "Global Privacy Control"
       },
       "by": "przez {name}",
       "evidence": {
@@ -165,7 +167,8 @@
         "storeFlag": "Ustawienie sklepu",
         "leadSourceId": "Źródło leada",
         "leadFormId": "Formularz leada",
-        "adId": "Reklama"
+        "adId": "Reklama",
+        "guardianConsentRef": "Odniesienie do zgody opiekuna"
       },
       "dialog": {
         "titleGranted": "Oznacz jako zapisanego",
@@ -181,6 +184,50 @@
         "close": "Zamknij",
         "savedGranted": "Oznaczono jako zapisanego.",
         "savedWithdrawn": "Oznaczono jako wypisanego."
+      },
+      "privacy": {
+        "title": "Znaczniki prywatności",
+        "saved": "Zapisano.",
+        "minorLabel": "Małoletni",
+        "minorOn": "Oznaczony jako małoletni od {date}.",
+        "minorOff": "Nie jest oznaczony jako małoletni.",
+        "rule": {
+          "off": "Twoja przestrzeń robocza nie odpowiedziała na pytanie o dzieci w Centrum zgodności, więc marketing do tego kontaktu nie jest wstrzymywany.",
+          "guardian": "Marketing do tego kontaktu jest wstrzymany do czasu zapisania zgody rodzica lub opiekuna.",
+          "block": "Marketing do tego kontaktu jest wstrzymany, ponieważ Twoja przestrzeń robocza deklaruje, że nie przetwarza danych małoletnich."
+        },
+        "guardianBadge": "Zgoda opiekuna zapisana",
+        "guardianLabel": "Zgoda rodzica lub opiekuna",
+        "guardianOn": "Zapisana od {date}. To tylko dowód i nie zapisuje kontaktu na subskrypcję.",
+        "guardianOff": "Nie zapisana.",
+        "recordGuardian": "Zapisz zgodę opiekuna",
+        "clearGuardian": "Usuń",
+        "dnsLabel": "Nie sprzedawaj ani nie udostępniaj",
+        "dnsOn": "Sprzeciw od {date} ({source}).",
+        "dnsOff": "Brak sprzeciwu.",
+        "history": "Historia prywatności",
+        "event": {
+          "minor": {
+            "on": "Oznaczono jako małoletniego",
+            "off": "Usunięto oznaczenie małoletniego"
+          },
+          "guardian_consent": {
+            "on": "Zapisano zgodę opiekuna",
+            "off": "Usunięto zgodę opiekuna"
+          },
+          "sale_share_opt_out": {
+            "on": "Sprzeciw wobec sprzedaży i udostępniania",
+            "off": "Sprzeciw usunięty"
+          }
+        },
+        "dialog": {
+          "title": "Zapisz zgodę opiekuna",
+          "intro": "Zapisz, że rodzic lub opiekun wyraził zgodę. To tylko dowód: nie zapisuje kontaktu na marketing.",
+          "note": "W jaki sposób zgodzili się? (wymagane)",
+          "noteHint": "Na przykład: podpisali papierowy formularz przy okienku. Nie wpisuj imienia ani danych kontaktowych opiekuna.",
+          "ref": "Odniesienie (opcjonalnie)",
+          "refHint": "Numer formularza lub identyfikator dokumentu, który da się później odszukać."
+        }
       }
     },
     "composer": {
@@ -302,7 +349,9 @@
         "consent_evidence_recorded": "Dozwolone: komunikat został podany i osoba wyraziła zgodę.",
         "purpose_not_enabled": "Niedozwolone: przestrzeń robocza tego nie włączyła.",
         "consent_declined": "Niedozwolone: osoba odmówiła.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Niedozwolone: ten kontakt jest oznaczony jako małoletni, a Twoja przestrzeń robocza wstrzymuje marketing.",
+        "sale_share_opted_out": "Niedozwolone: kontakt sprzeciwił się sprzedaży lub udostępnianiu swoich danych."
       }
     },
     "notice": {

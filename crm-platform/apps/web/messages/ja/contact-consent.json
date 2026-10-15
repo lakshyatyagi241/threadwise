@@ -17,7 +17,8 @@
       "unexpected": "問題が発生しました。もう一度お試しください。",
       "exportInProgress": "同意証明ファイルを準備中です。完了するまでお待ちいただき、もう一度お試しください。",
       "exportNotReady": "そのファイルは準備できていないか、有効期限が切れています。新しいファイルを準備してください。",
-      "noticeTargetMissing": "そのウィジェット、予約ページ、またはストアはもう存在しません。"
+      "noticeTargetMissing": "そのウィジェット、予約ページ、またはストアはもう存在しません。",
+      "notMinor": "保護者の同意は、未成年として設定された連絡先にのみ記録できます。"
     },
     "settings": {
       "title": "同意と STOP 返信",
@@ -142,7 +143,8 @@
         "widget": "ウェブサイトのチャット",
         "booking": "予約ページ",
         "commerce": "ストアのチェックアウト",
-        "lead": "リード獲得"
+        "lead": "リード獲得",
+        "gpc": "グローバル・プライバシー・コントロール"
       },
       "by": "{name} による",
       "evidence": {
@@ -165,7 +167,8 @@
         "storeFlag": "ストアの設定",
         "leadSourceId": "リードソース",
         "leadFormId": "リードフォーム",
-        "adId": "広告"
+        "adId": "広告",
+        "guardianConsentRef": "保護者の同意の参照"
       },
       "dialog": {
         "titleGranted": "購読中にする",
@@ -181,6 +184,50 @@
         "close": "閉じる",
         "savedGranted": "購読中にしました。",
         "savedWithdrawn": "配信停止にしました。"
+      },
+      "privacy": {
+        "title": "プライバシーフラグ",
+        "saved": "保存しました。",
+        "minorLabel": "未成年",
+        "minorOn": "{date}から未成年として設定されています。",
+        "minorOff": "未成年として設定されていません。",
+        "rule": {
+          "off": "ワークスペースはコンプライアンスセンターで子どもに関する質問に回答していないため、この連絡先へのマーケティングは保留されません。",
+          "guardian": "親または保護者の同意が記録されるまで、この連絡先へのマーケティングは保留されます。",
+          "block": "ワークスペースが未成年者のデータを処理しないとしているため、この連絡先へのマーケティングは保留されます。"
+        },
+        "guardianBadge": "保護者の同意あり",
+        "guardianLabel": "親または保護者の同意",
+        "guardianOn": "{date}から記録済み。これは証拠のみで、連絡先を購読にはしません。",
+        "guardianOff": "記録されていません。",
+        "recordGuardian": "保護者の同意を記録",
+        "clearGuardian": "削除",
+        "dnsLabel": "販売・共有しない",
+        "dnsOn": "{date}からオプトアウト済み（{source}）。",
+        "dnsOff": "オプトアウトしていません。",
+        "history": "プライバシー履歴",
+        "event": {
+          "minor": {
+            "on": "未成年として設定",
+            "off": "未成年の設定を解除"
+          },
+          "guardian_consent": {
+            "on": "保護者の同意を記録",
+            "off": "保護者の同意を削除"
+          },
+          "sale_share_opt_out": {
+            "on": "販売・共有をオプトアウト",
+            "off": "オプトアウトを解除"
+          }
+        },
+        "dialog": {
+          "title": "保護者の同意を記録",
+          "intro": "親または保護者が同意したことを記録します。これは証拠のみで、連絡先をマーケティングの購読にはしません。",
+          "note": "どのように同意しましたか？（必須）",
+          "noteHint": "例：窓口で紙の用紙に署名した。保護者の氏名や連絡先は書かないでください。",
+          "ref": "参照（任意）",
+          "refHint": "後で調べられるフォーム番号や文書IDなど。"
+        }
       }
     },
     "composer": {
@@ -302,7 +349,9 @@
         "consent_evidence_recorded": "許可: 告知が届けられ、相手が同意しました。",
         "purpose_not_enabled": "不許可: ワークスペースがこれをオンにしていません。",
         "consent_declined": "不許可: 相手が拒否しました。",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "許可されません：この連絡先は未成年として設定されており、ワークスペースがマーケティングを保留しています。",
+        "sale_share_opted_out": "許可されません：この連絡先はデータの販売または共有をオプトアウトしています。"
       }
     },
     "notice": {

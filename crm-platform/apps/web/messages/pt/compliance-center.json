@@ -165,7 +165,7 @@
             "unset": "Responda à pergunta sobre crianças em Contatos e menores.",
             "minorsNoParental": "Pode haver menores, mas o consentimento dos pais ou responsáveis está desativado. Este perfil considera menor qualquer pessoa com menos de {age} anos.",
             "no_minors": "Você não trata, de forma consciente, dados de menores. Este perfil considera menor qualquer pessoa com menos de {age} anos.",
-            "may_include_minors": "O consentimento dos pais ou responsáveis está ativado para pessoas com menos de {age} anos. Guardar a evidência por contato ainda não está disponível."
+            "may_include_minors": "O consentimento dos pais está ativado para pessoas com menos de {age} anos. Marque um contato como menor no cartão de consentimento dele e registre ali o consentimento do responsável."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Dados de crianças e adolescentes",
-        "hint": "Este produto é para empresas. Informe se você pode ter dados de menores, para que as regras certas sejam exibidas.",
+        "hint": "Este produto é para empresas. Diga se você pode manter dados de menores, para que as regras certas sejam mostradas. Depois de responder, o marketing para um contato marcado como menor fica retido: sempre que você não trata dados de menores de propósito, e até o consentimento do responsável estar registrado quando menores podem estar incluídos.",
         "policy": "Menores entre os seus contatos",
         "policies": {
           "unset": "Ainda sem resposta",
@@ -352,7 +352,7 @@
           "may_include_minors": "Pode haver menores entre os nossos contatos"
         },
         "parental": "O consentimento dos pais ou responsáveis é exigido para menores",
-        "parentalHint": "Um indicador que registra a sua política. Coletar e guardar a evidência do consentimento dos pais ou responsáveis por contato ainda não está disponível.",
+        "parentalHint": "Registra sua política e retém o marketing para contatos marcados como menores até o consentimento do responsável estar registrado. Você marca um contato como menor e registra esse consentimento no cartão de consentimento dele.",
         "age": "Os perfis que você ativou tratam como menor qualquer pessoa com menos de {age} anos.",
         "dpdpNeedsAnswer": "O perfil DPDP pede que você responda a esta pergunta."
       }

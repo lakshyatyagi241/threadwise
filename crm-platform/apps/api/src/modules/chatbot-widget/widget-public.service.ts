@@ -15,7 +15,11 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { noticeGrantChannels, type ConsentChannel } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { ChannelIngestPublisher } from '../chat-conversations';
-import { ConsentIntakeService, ConsentNoticeService } from '../contact-consent';
+import {
+  ConsentIntakeService,
+  ConsentNoticeService,
+  ContactPrivacyService,
+} from '../contact-consent';
 import {
   ASSISTANT_DIRECTORY,
   INBOX_GATEWAY,
@@ -69,6 +73,8 @@ export interface PublicRequest {
   inputUuid: string;
   headerUuid: string;
   secure: boolean;
+  /** The browser sent the Global Privacy Control signal (`Sec-GPC: 1`). */
+  gpc?: boolean;
 }
 
 interface Located {
@@ -107,6 +113,7 @@ export class WidgetPublicService {
     private readonly ingest: ChannelIngestPublisher,
     private readonly notices: ConsentNoticeService,
     private readonly consentIntake: ConsentIntakeService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   /** The widget behind a token, whatever its status; undefined for a malformed, unknown or rotated token. */
@@ -343,6 +350,7 @@ export class WidgetPublicService {
       };
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
       await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
+      await this.recordGpc(tx, orgId, widget.uuid, conversation.id, fresh, req);
       const inbound = await this.inbox.insertInbound(
         tx,
         orgId,
@@ -455,6 +463,38 @@ export class WidgetPublicService {
     }
   }
 
+  /**
+   * The visitor's browser sent the Global Privacy Control signal (`Sec-GPC: 1`): record the Do Not Sell or Share opt-out of the thread's
+   * contact, but only when the workspace has `ccpa_us` on and the visitor has given a phone or an email (otherwise there is no contact
+   * to record it for; a later message that carries one does). Once per visitor of this widget. Best effort in a savepoint, like the
+   * consent line: a failure never loses the visitor's message. Nothing but the widget id is kept as evidence.
+   */
+  private async recordGpc(
+    tx: Tx,
+    orgId: number,
+    widgetUuid: string,
+    conversationId: number,
+    visitor: VisitorForInbox,
+    req: PublicRequest,
+  ): Promise<void> {
+    if (req.gpc !== true) return;
+    try {
+      await tx.transaction(async (sp) => {
+        const contactId = await this.inbox.contactOf(sp as Tx, orgId, conversationId, {
+          email: visitor.email,
+          phone: visitor.phone,
+        });
+        if (contactId === null) return;
+        await this.privacy.recordGpc(sp as Tx, orgId, contactId, {
+          keyBase: `widget:${widgetUuid}:${visitor.visitorUuid}`,
+          evidence: { widgetId: widgetUuid },
+        });
+      });
+    } catch (err) {
+      this.logger.warn({ err: String(err) }, '[WGT] GPC opt-out could not be recorded');
+    }
+  }
+
   /** The visitor, their thread and its channel for a flow bot's widget, as the inbox's ingest names them. */
   private async flowPeer(
     orgId: number,
@@ -477,6 +517,7 @@ export class WidgetPublicService {
       };
       const conversation = await this.inbox.ensureConversation(tx, orgId, forInbox, fresh);
       await this.recordConsent(tx, orgId, widget.uuid, conversation.id, fresh, data);
+      await this.recordGpc(tx, orgId, widget.uuid, conversation.id, fresh, req);
       return {
         peerKey: visitor.visitorUuid,
         peerName: fresh.name,

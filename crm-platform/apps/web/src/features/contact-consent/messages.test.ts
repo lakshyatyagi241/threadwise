@@ -1,6 +1,14 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { CONSENT_CHANNELS, CONSENT_EVIDENCE_KEYS, CONSENT_SOURCES } from '@crm/contracts';
+import {
+  CONSENT_CHANNELS,
+  CONSENT_EVIDENCE_KEYS,
+  CONSENT_GATE_REASONS,
+  CONSENT_SOURCES,
+  MINOR_RULES,
+  PRIVACY_FLAG_KINDS,
+  PRIVACY_FLAG_SOURCES,
+} from '@crm/contracts';
 import { describe, expect, it } from 'vitest';
 import { ERROR_KEYS } from './lib/errors';
 
@@ -72,6 +80,14 @@ describe('contact-consent messages', () => {
       ...CONSENT_CHANNELS.map((c) => `${ROOT}.card.channel.${c}`),
       ...CONSENT_SOURCES.map((s) => `${ROOT}.card.source.${s}`),
       ...CONSENT_EVIDENCE_KEYS.map((k) => `${ROOT}.card.evidence.${k}`),
+      // Privacy flags (BL-180): the history lines, the minor rule texts, the sources and every reason the gate can answer.
+      ...PRIVACY_FLAG_KINDS.flatMap((k) => [
+        `${ROOT}.card.privacy.event.${k}.on`,
+        `${ROOT}.card.privacy.event.${k}.off`,
+      ]),
+      ...MINOR_RULES.map((r) => `${ROOT}.card.privacy.rule.${r}`),
+      ...PRIVACY_FLAG_SOURCES.map((s) => `${ROOT}.card.source.${s}`),
+      ...CONSENT_GATE_REASONS.map((r) => `${ROOT}.gate.reasons.${r}`),
       ...['optedOut', 'subscribed', 'none'].map((s) => `${ROOT}.card.status.${s}`),
       ...['granted', 'withdrawn'].flatMap((s) => [
         `${ROOT}.card.state.${s}`,

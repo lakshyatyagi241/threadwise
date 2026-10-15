@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import type { ContactConsent } from '@crm/contracts';
+import { NO_PRIVACY, type ContactConsent } from '@crm/contracts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { button, click, mount, text, type, type Mounted } from '../testing';
 
@@ -7,6 +7,7 @@ const state = vi.hoisted(() => ({
   perms: new Set<string>(),
   query: {} as Record<string, unknown>,
   record: vi.fn(),
+  recordPrivacy: vi.fn(),
 }));
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (p: string) => state.perms.has(p),
@@ -16,7 +17,10 @@ vi.mock('../api/hooks', () => ({
   useContactConsent: () => state.query,
 }));
 vi.mock('../api/service', () => ({
-  consentApi: { record: (...a: unknown[]) => state.record(...a) },
+  consentApi: {
+    record: (...a: unknown[]) => state.record(...a),
+    recordPrivacy: (...a: unknown[]) => state.recordPrivacy(...a),
+  },
   consentExportUrl: (id?: string) => `/api/v2/contact-consent/contacts/${id}/export`,
 }));
 
@@ -27,6 +31,7 @@ const consent = (over: Partial<ContactConsent> = {}): ContactConsent => ({
   optedOut: false,
   states: [],
   events: [],
+  privacy: NO_PRIVACY,
   ...over,
 });
 const q = (data: ContactConsent) => ({ isLoading: false, isError: false, error: null, data });
@@ -36,6 +41,7 @@ beforeEach(() => {
   state.perms = new Set(['contacts.consent.read', 'contacts.consent.manage']);
   state.query = q(consent());
   state.record.mockReset();
+  state.recordPrivacy.mockReset();
 });
 afterEach(async () => {
   await m?.unmount();
@@ -149,6 +155,84 @@ describe('Consent card', () => {
       'c1',
       expect.objectContaining({ action: 'withdrawn' }),
     );
+  });
+
+  describe('privacy flags (BL-180)', () => {
+    const privacy = (over: Partial<ContactConsent['privacy']> = {}): ContactConsent['privacy'] => ({
+      ...NO_PRIVACY,
+      ...over,
+    });
+
+    it('marks a contact as a minor with one switch, and offers Do Not Sell or Share only for a ccpa_us workspace', async () => {
+      state.recordPrivacy.mockResolvedValue(consent({ privacy: privacy({ isMinor: true }) }));
+      m = await mount(<ConsentCard contactId="c1" />);
+      expect(m.host.textContent).not.toContain(text('card.privacy.dnsLabel'));
+      expect(m.host.textContent).not.toContain(text('card.privacy.guardianLabel'));
+      await click(button(m.host, text('card.privacy.minorLabel')));
+      expect(state.recordPrivacy).toHaveBeenCalledWith('c1', { kind: 'minor', value: true });
+      await m.unmount();
+
+      state.query = q(consent({ privacy: privacy({ ccpaUs: true }) }));
+      state.recordPrivacy.mockResolvedValue(consent());
+      m = await mount(<ConsentCard contactId="c1" />);
+      await click(button(m.host, text('card.privacy.dnsLabel')));
+      expect(state.recordPrivacy).toHaveBeenLastCalledWith('c1', {
+        kind: 'sale_share_opt_out',
+        value: true,
+      });
+    });
+
+    it('shows the flags as badges and explains what the workspace does with a flagged minor', async () => {
+      state.query = q(
+        consent({
+          privacy: privacy({
+            isMinor: true,
+            minorSince: '2026-03-01T10:00:00Z',
+            minorRule: 'guardian',
+            doNotSellShare: true,
+            doNotSellShareSince: '2026-03-02T10:00:00Z',
+            doNotSellShareSource: 'gpc',
+            ccpaUs: true,
+          }),
+        }),
+      );
+      m = await mount(<ConsentCard contactId="c1" />);
+      const t = m.host.textContent ?? '';
+      expect(t).toContain(text('card.privacy.rule.guardian'));
+      expect(t).toContain(text('card.privacy.guardianOff'));
+      expect(t).toContain('Global Privacy Control');
+      expect(t).not.toMatch(/contact-consent\./);
+    });
+
+    it('records guardian consent only with a note, as evidence', async () => {
+      state.query = q(consent({ privacy: privacy({ isMinor: true, minorRule: 'guardian' }) }));
+      state.recordPrivacy.mockResolvedValue(
+        consent({ privacy: privacy({ isMinor: true, guardianConsent: true }) }),
+      );
+      m = await mount(<ConsentCard contactId="c1" />);
+      await click(button(m.host, text('card.privacy.recordGuardian')));
+      const confirm = button(m.host, text('card.dialog.confirm'));
+      expect(confirm.disabled).toBe(true);
+      await type(m.host.querySelector<HTMLTextAreaElement>('#guardian-note')!, 'Signed form');
+      await type(m.host.querySelector<HTMLInputElement>('#guardian-ref')!, 'FORM-9');
+      expect(confirm.disabled).toBe(false);
+      await click(confirm);
+      expect(state.recordPrivacy).toHaveBeenCalledWith('c1', {
+        kind: 'guardian_consent',
+        value: true,
+        note: 'Signed form',
+        evidence: { guardianConsentRef: 'FORM-9' },
+      });
+    });
+
+    it('cannot be changed without the manage permission', async () => {
+      state.perms = new Set(['contacts.consent.read']);
+      state.query = q(consent({ privacy: privacy({ isMinor: true, ccpaUs: true }) }));
+      m = await mount(<ConsentCard contactId="c1" />);
+      expect(button(m.host, text('card.privacy.minorLabel')).disabled).toBe(true);
+      expect(button(m.host, text('card.privacy.dnsLabel')).disabled).toBe(true);
+      expect(m.host.textContent).not.toContain(text('card.privacy.recordGuardian'));
+    });
   });
 
   it('renders in Arabic', async () => {

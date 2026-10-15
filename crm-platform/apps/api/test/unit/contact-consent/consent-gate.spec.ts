@@ -237,6 +237,8 @@ describe('ConsentGate truth table', () => {
         noticeEvidence: { delivered: true, consent: 'declined' },
       },
       { purpose: 'voice_ai_conversation', channel: 'voice', noticeEvidence: { delivered: true } },
+      { purpose: 'marketing', minorRule: 'block', facts: facts({ minor: true }) },
+      { purpose: 'third_party_sharing', facts: facts({ saleShareOptOut: true }) },
     ];
     for (const i of all) seen.add(decide(i).reason);
     seen.add(failureResult(PURPOSE_REGISTRY.marketing_messaging).reason);

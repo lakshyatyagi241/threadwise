@@ -165,7 +165,7 @@
             "unset": "Odpowiedz na pytanie o dzieci w sekcji Kontakty i dzieci.",
             "minorsNoParental": "Mogą być uwzględnione osoby niepełnoletnie, ale zgoda rodzica jest wyłączona. Ten profil traktuje każdego poniżej {age} lat jako osobę niepełnoletnią.",
             "no_minors": "Świadomie nie przetwarzasz danych osób niepełnoletnich. Ten profil traktuje każdego poniżej {age} lat jako osobę niepełnoletnią.",
-            "may_include_minors": "Zgoda rodzica jest włączona dla osób poniżej {age} lat. Przechowywanie dowodów dla każdego kontaktu nie jest jeszcze zbudowane."
+            "may_include_minors": "Zgoda rodzica jest włączona dla osób poniżej {age} lat. Oznacz kontakt jako małoletni na jego karcie zgody i zapisz tam zgodę opiekuna."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Dane dzieci",
-        "hint": "Ten produkt jest przeznaczony dla firm. Wskaż, czy możesz przechowywać dane osób niepełnoletnich, aby wyświetlić odpowiednie zasady.",
+        "hint": "Ten produkt jest dla firm. Powiedz, czy możesz przechowywać dane małoletnich, aby pokazać właściwe zasady. Po odpowiedzi marketing do kontaktu oznaczonego jako małoletni jest wstrzymywany: zawsze, gdy świadomie nie przetwarzasz danych małoletnich, i do czasu zapisania zgody opiekuna, gdy małoletni mogą być wśród kontaktów.",
         "policy": "Osoby niepełnoletnie wśród Twoich kontaktów",
         "policies": {
           "unset": "Brak odpowiedzi",
@@ -352,7 +352,7 @@
           "may_include_minors": "Wśród naszych kontaktów mogą być osoby niepełnoletnie"
         },
         "parental": "Dla osób niepełnoletnich wymagana jest zgoda rodzica",
-        "parentalHint": "Flaga zapisująca Twoją politykę. Zbieranie i przechowywanie dowodów zgody rodzica dla każdego kontaktu nie jest jeszcze zbudowane.",
+        "parentalHint": "Zapisuje Twoją politykę i wstrzymuje marketing do kontaktów oznaczonych jako małoletni do czasu zapisania zgody opiekuna. Kontakt oznaczasz jako małoletni i zapisujesz tę zgodę na jego karcie zgody.",
         "age": "Włączone profile traktują każdego poniżej {age} lat jako osobę niepełnoletnią.",
         "dpdpNeedsAnswer": "Profil DPDP wymaga odpowiedzi na to pytanie."
       }

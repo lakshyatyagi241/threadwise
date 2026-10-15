@@ -12,7 +12,7 @@ import { AGENT_IGNORE } from '@/lib/agent-marks';
 import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
-import { ConsentCard } from '@/features/contact-consent';
+import { ConsentCard, ContactPrivacyBadges } from '@/features/contact-consent';
 import { ContactPrivacyMenu } from '@/features/privacy-requests';
 import { ContactGrowthCard } from '@/features/growth';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
@@ -242,6 +242,7 @@ export function ContactDetail({ id }: { id: string }) {
               )}
               {c.status && <Badge tone="success">{statusLabelOf(c.status)}</Badge>}
               {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
+              <ContactPrivacyBadges contactId={id} />
               <ContactQuickTags contactId={id} />
             </div>
           </div>
