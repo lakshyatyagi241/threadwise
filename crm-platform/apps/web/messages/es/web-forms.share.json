@@ -153,12 +153,16 @@
         "requiredHint": "Desactívalo si el consentimiento es opcional.",
         "marketing": "Consentimiento para marketing",
         "marketingHint": "Marcar la casilla registra el consentimiento de marketing en el contacto. Una casilla sin marcar nunca suscribe a nadie.",
-        "whatsappHint": "¿Vas a enviar mensajes a estos contactos por WhatsApp? Usa un texto que lo indique y explique cómo darse de baja. La casilla marcada se guarda como prueba, con este texto exacto y su versión.",
-        "whatsappInsert": "Usar el texto de consentimiento de WhatsApp",
-        "whatsappWording": "Acepto recibir novedades y ofertas por WhatsApp. Puedo responder STOP en cualquier momento para darme de baja.",
-        "coversSms": "El texto cubre SMS",
-        "coversSmsHint": "Actívalo solo si el texto de arriba dice que pueden contactarles por SMS. Cuando se recoge un teléfono, el SMS se registra junto con WhatsApp y el correo.",
-        "serviceHint": "Esta línea no es marketing. Una casilla marcada se guarda como prueba de que la persona aceptó que la contacten por su solicitud (solo mensajes de servicio), con este texto exacto y su versión. Nunca suscribe a nadie a marketing."
+        "serviceHint": "Esta línea no es marketing. Una casilla marcada se guarda como prueba de que la persona aceptó que la contacten por su solicitud (solo mensajes de servicio), con este texto exacto y su versión. Nunca suscribe a nadie a marketing.",
+        "statement": "Acepto recibir novedades y ofertas por {channels}. Puedo responder STOP en cualquier momento para darme de baja.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "correo electrónico"
+        },
+        "channelsLabel": "Canales que cubre este consentimiento",
+        "channelsHint": "El visitante solo se suscribe en los canales marcados aquí, y el texto del consentimiento los nombra. Un canal se usa solo si el formulario recoge el teléfono o el correo correspondiente.",
+        "channelsUse": "Actualizar el texto con estos canales"
       },
       "crm": {
         "title": "En el CRM",

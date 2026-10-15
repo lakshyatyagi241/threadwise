@@ -153,12 +153,16 @@
         "requiredHint": "Deaktivieren Sie dies, wenn die Einwilligung optional ist.",
         "marketing": "Marketing-Opt-in",
         "marketingHint": "Wenn das Kästchen angehakt wird, wird die Marketing-Einwilligung im Kontakt gespeichert. Ein nicht angehaktes Kästchen meldet niemanden an.",
-        "whatsappHint": "Wirst du diese Kontakte per WhatsApp anschreiben? Verwende einen Hinweis, der das sagt, und erkläre, wie man sich abmeldet. Das angekreuzte Kästchen wird mit genau diesem Text und seiner Version als Nachweis gespeichert.",
-        "whatsappInsert": "WhatsApp-Einwilligungstext verwenden",
-        "whatsappWording": "Ich stimme zu, Updates und Angebote über WhatsApp zu erhalten. Ich kann jederzeit mit STOP antworten, um mich abzumelden.",
-        "coversSms": "Der Wortlaut umfasst SMS",
-        "coversSmsHint": "Nur aktivieren, wenn der Text oben mitteilt, dass per SMS Kontakt aufgenommen werden darf. Wird eine Telefonnummer erfasst, wird SMS zusammen mit WhatsApp und E-Mail erfasst.",
-        "serviceHint": "Diese Zeile ist kein Marketing. Ein angehaktes Kästchen wird als Nachweis gespeichert, dass die Person der Kontaktaufnahme zu ihrer Anfrage zugestimmt hat (nur Servicenachrichten), mit genau diesem Wortlaut und seiner Version. Es meldet niemanden für Marketing an."
+        "serviceHint": "Diese Zeile ist kein Marketing. Ein angehaktes Kästchen wird als Nachweis gespeichert, dass die Person der Kontaktaufnahme zu ihrer Anfrage zugestimmt hat (nur Servicenachrichten), mit genau diesem Wortlaut und seiner Version. Es meldet niemanden für Marketing an.",
+        "statement": "Ich stimme zu, Updates und Angebote über {channels} zu erhalten. Ich kann jederzeit mit STOP antworten, um mich abzumelden.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "E-Mail"
+        },
+        "channelsLabel": "Kanäle dieser Einwilligung",
+        "channelsHint": "Besucher werden nur auf den hier angehakten Kanälen angemeldet, und der Einwilligungstext nennt sie. Ein Kanal wird nur genutzt, wenn das Formular die passende Telefonnummer oder E-Mail erfasst.",
+        "channelsUse": "Text mit diesen Kanälen aktualisieren"
       },
       "crm": {
         "title": "Im CRM",

@@ -1,10 +1,13 @@
 import { z } from 'zod';
 import {
+  consentChannels,
+  FORM_CONSENT_CHANNELS,
   FORM_LIMITS,
   FORM_RETENTION_DEFAULT_DAYS,
   FORM_RETENTION_MAX_DAYS,
   FORM_RETENTION_MIN_DAYS,
 } from '@crm/contracts';
+import type { FormConsentChannel } from '@crm/contracts';
 import type { FormConsent, FormLiveSettings } from './types';
 import { safeRedirect } from './share';
 
@@ -19,6 +22,8 @@ export const MAX_NOTIFY_EMAILS = 5;
 export const MAX_NOTIFY_USERS = 20;
 export const MAX_OWNER_USERS = 50;
 export const MAX_CONSENT_TEXT = 500;
+/** The wording a new consent line starts with (the contract default). */
+export const DEFAULT_CONSENT_TEXT = 'I agree to be contacted about my request.';
 export const MAX_SUBMIT_LABEL = 60;
 export const MAX_SUCCESS_MESSAGE = FORM_LIMITS.maxRichText;
 
@@ -142,6 +147,42 @@ export function consentWithText(
   const changed = text.trim() !== saved.text.trim();
   const version = published && changed ? Math.min(saved.version + 1, 10_000) : saved.version;
   return { ...current, text, version };
+}
+
+/**
+ * The consent sentence for the chosen channels: the localized template with the channel names joined as a list ("WhatsApp, SMS and
+ * email"). `statement` holds a `{channels}` placeholder.
+ */
+export function consentStatement(
+  statement: string,
+  channels: readonly FormConsentChannel[],
+  names: Record<FormConsentChannel, string>,
+  locale: string,
+): string {
+  const list = formatList(
+    consentChannels({ channels: [...channels], coversSms: false }).map((c) => names[c]),
+    locale,
+  );
+  return statement.replace('{channels}', list);
+}
+
+function formatList(items: string[], locale: string): string {
+  try {
+    return new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(items);
+  } catch {
+    return items.join(', ');
+  }
+}
+
+/** Tick or untick a channel. The last channel cannot be unticked: a consent line must name at least one. */
+export function toggleConsentChannel(
+  current: readonly FormConsentChannel[],
+  channel: FormConsentChannel,
+  on: boolean,
+): FormConsentChannel[] {
+  const next = on ? [...current, channel] : current.filter((c) => c !== channel);
+  const unique = FORM_CONSENT_CHANNELS.filter((c) => next.includes(c));
+  return unique.length === 0 ? [...current] : unique;
 }
 
 // --- after submit -------------------------------------------------------------------------------------------------------------------
