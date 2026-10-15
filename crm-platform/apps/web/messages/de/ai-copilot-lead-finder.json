@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "KI-CRM-Copilot"
+    },
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "AICRM_NO_AI_PROVIDER": "Es ist kein KI-Anbieter konfiguriert. Bitten Sie Ihren Administrator, einen KI-Schlüssel hinzuzufügen.",
+      "AICRM_PROVIDER_FAILED": "Der KI-Dienst hat einen Fehler zurückgegeben. Bitte versuchen Sie es erneut.",
+      "VALIDATION_FAILED": "Überprüfen Sie die hervorgehobenen Felder und versuchen Sie es erneut.",
+      "PLAN_FEATURE_LOCKED": "Aktualisieren Sie Ihren Plan, um diese Funktion zu nutzen."
+    },
+    "chat": {
+      "title": "KI-CRM-Copilot",
+      "subtitle": "Bitten Sie ihn, Kontakte und Deals zu finden oder zu erstellen, Pipeline-Phasen zu ändern oder einen Bericht auszuführen.",
+      "loading": "Wird geladen…",
+      "thinking": "Denkt nach…",
+      "emptyState": "Sagen Sie Hallo oder fragen Sie etwas wie \"Welche Deals sind offen?\"",
+      "inputPlaceholder": "Fragen Sie den Copilot…",
+      "send": "Senden",
+      "resetConversation": "Unterhaltung zurücksetzen",
+      "recentActions": "Letzte Aktionen",
+      "noRecentActions": "Noch keine Aktionen.",
+      "notice": {
+        "settingsSaved": "Einstellung gespeichert."
+      },
+      "settings": {
+        "title": "WhatsApp-Mitarbeiterkanal",
+        "waCopilotToggle": "Mitarbeitern erlauben, über WhatsApp mit dem Copilot zu chatten (noch nicht verfügbar)"
+      }
+    }
+  }
+}

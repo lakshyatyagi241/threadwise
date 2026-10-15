@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "Copilot IA CRM"
+    },
+    "errors": {
+      "generic": "Qualcosa è andato storto. Riprova.",
+      "AICRM_NO_AI_PROVIDER": "Nessun provider IA configurato. Chiedi al tuo amministratore di aggiungere una chiave IA.",
+      "AICRM_PROVIDER_FAILED": "Il servizio IA ha restituito un errore. Riprova.",
+      "VALIDATION_FAILED": "Controlla i campi evidenziati e riprova.",
+      "PLAN_FEATURE_LOCKED": "Aggiorna il tuo piano per usare questa funzionalità."
+    },
+    "chat": {
+      "title": "Copilot IA CRM",
+      "subtitle": "Chiedigli di trovare o creare contatti e trattative, spostare le fasi della pipeline o generare un report.",
+      "loading": "Caricamento…",
+      "thinking": "Sto pensando…",
+      "emptyState": "Dì ciao, oppure chiedi qualcosa come \"quali trattative sono aperte?\"",
+      "inputPlaceholder": "Chiedi al Copilot…",
+      "send": "Invia",
+      "resetConversation": "Reimposta conversazione",
+      "recentActions": "Azioni recenti",
+      "noRecentActions": "Ancora nessuna azione.",
+      "notice": {
+        "settingsSaved": "Impostazione salvata."
+      },
+      "settings": {
+        "title": "Canale staff su WhatsApp",
+        "waCopilotToggle": "Consenti allo staff di chattare con il Copilot via WhatsApp (non ancora disponibile)"
+      }
+    }
+  }
+}

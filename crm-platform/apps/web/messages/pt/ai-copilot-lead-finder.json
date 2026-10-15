@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "Copiloto de IA do CRM"
+    },
+    "errors": {
+      "generic": "Algo deu errado. Tente novamente.",
+      "AICRM_NO_AI_PROVIDER": "Nenhum provedor de IA está configurado. Peça ao seu administrador para adicionar uma chave de IA.",
+      "AICRM_PROVIDER_FAILED": "O serviço de IA retornou um erro. Tente novamente.",
+      "VALIDATION_FAILED": "Verifique os campos destacados e tente novamente.",
+      "PLAN_FEATURE_LOCKED": "Atualize seu plano para usar este recurso."
+    },
+    "chat": {
+      "title": "Copiloto de IA do CRM",
+      "subtitle": "Peça para encontrar ou criar contatos e negócios, mover etapas do funil, ou gerar um relatório.",
+      "loading": "Carregando…",
+      "thinking": "Pensando…",
+      "emptyState": "Diga olá, ou pergunte algo como \"quais negócios estão abertos?\"",
+      "inputPlaceholder": "Pergunte ao Copiloto…",
+      "send": "Enviar",
+      "resetConversation": "Redefinir conversa",
+      "recentActions": "Ações recentes",
+      "noRecentActions": "Ainda não há ações.",
+      "notice": {
+        "settingsSaved": "Configuração salva."
+      },
+      "settings": {
+        "title": "Canal da equipe no WhatsApp",
+        "waCopilotToggle": "Permitir que a equipe converse com o Copiloto pelo WhatsApp (ainda não disponível)"
+      }
+    }
+  }
+}

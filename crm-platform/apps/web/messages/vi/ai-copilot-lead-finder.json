@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "Copilot AI CRM"
+    },
+    "errors": {
+      "generic": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+      "AICRM_NO_AI_PROVIDER": "Chưa có nhà cung cấp AI nào được cấu hình. Hãy yêu cầu quản trị viên thêm khóa AI.",
+      "AICRM_PROVIDER_FAILED": "Dịch vụ AI đã trả về lỗi. Vui lòng thử lại.",
+      "VALIDATION_FAILED": "Kiểm tra các trường được đánh dấu và thử lại.",
+      "PLAN_FEATURE_LOCKED": "Nâng cấp gói của bạn để sử dụng tính năng này."
+    },
+    "chat": {
+      "title": "Copilot AI CRM",
+      "subtitle": "Hãy yêu cầu nó tìm hoặc tạo liên hệ và giao dịch, chuyển giai đoạn quy trình bán hàng, hoặc chạy báo cáo.",
+      "loading": "Đang tải…",
+      "thinking": "Đang suy nghĩ…",
+      "emptyState": "Hãy chào hỏi, hoặc hỏi điều gì đó như \"những giao dịch nào đang mở?\"",
+      "inputPlaceholder": "Hỏi Copilot…",
+      "send": "Gửi",
+      "resetConversation": "Đặt lại cuộc trò chuyện",
+      "recentActions": "Hoạt động gần đây",
+      "noRecentActions": "Chưa có hoạt động nào.",
+      "notice": {
+        "settingsSaved": "Đã lưu cài đặt."
+      },
+      "settings": {
+        "title": "Kênh nhân viên qua WhatsApp",
+        "waCopilotToggle": "Cho phép nhân viên trò chuyện với Copilot qua WhatsApp (chưa khả dụng)"
+      }
+    }
+  }
+}
