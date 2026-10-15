@@ -647,8 +647,43 @@
         "notes": "Aanvullende opmerkingen",
         "notesNote": "optioneel / max. 2000",
         "notesPlaceholder": "Alles wat specifiek is — verplichte zinnen, wat je moet vermijden, kenmerken van de merkstem…",
-        "failed": "De campagne kon niet worden gegenereerd. Probeer het opnieuw.",
-        "applied": "De campagnetekst is ingevuld. Controleer deze voordat je verdergaat."
+        "applied": "De campagnetekst is ingevuld. Controleer deze voordat je verdergaat.",
+        "pictureApplied": "De afbeelding is aan de campagne toegevoegd. Controleer deze in de kaart Bijlage.",
+        "errors": {
+          "noKey": "Voor deze werkruimte is geen AI-provider ingeschakeld. Vraag een beheerder om een sleutel toe te voegen.",
+          "limitReached": "Deze werkruimte heeft het AI-tegoed voor deze maand opgebruikt.",
+          "providerFailed": "De AI-provider reageerde niet. Probeer het zo meteen opnieuw.",
+          "badJson": "Het antwoord van het model kon niet worden gelezen. Probeer het opnieuw of pas de briefing aan.",
+          "invalid": "Controleer de briefing: de bedrijfsnaam is verplicht en sommige velden zijn te lang.",
+          "forbidden": "U hebt geen toestemming om campagnes aan te maken.",
+          "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
+          "failed": "De campagne kon niet worden gegenereerd. Probeer het opnieuw."
+        },
+        "picture": {
+          "label": "Ook een afbeelding maken",
+          "hint": "Tekent één afbeelding op basis van dezelfde briefing en voegt deze toe aan de campagne. Gebruikt uw OpenAI-tegoed.",
+          "needsOpenAi": "Voor afbeeldingen is een OpenAI-sleutel nodig. Kies een OpenAI-model om dit in te schakelen.",
+          "noAttachment": "Het gekozen nummer verstuurt alleen tekst, dus er is niets om een afbeelding aan toe te voegen.",
+          "size": "Vorm van de afbeelding",
+          "sizes": {
+            "square": "Vierkant",
+            "landscape": "Liggend",
+            "portrait": "Staand"
+          },
+          "textKept": "De campagnetekst is ingevuld. Alleen de afbeelding ontbreekt nog.",
+          "retry": "Afbeelding opnieuw proberen",
+          "errors": {
+            "noKey": "Voor afbeeldingen is een OpenAI-sleutel nodig, en er is er geen ingeschakeld voor deze werkruimte.",
+            "limitReached": "Deze werkruimte heeft het AI-tegoed voor deze maand opgebruikt.",
+            "providerFailed": "De afbeeldingsservice reageerde niet. Probeer het zo meteen opnieuw.",
+            "badJson": "De afbeeldingsservice stuurde een onverwacht antwoord. Probeer het opnieuw.",
+            "imageRefused": "OpenAI weigerde deze afbeelding te tekenen. Pas het product, de aanbieding of de notities aan en probeer het opnieuw.",
+            "invalid": "Controleer de briefing: de bedrijfsnaam is verplicht en sommige velden zijn te lang.",
+            "forbidden": "U hebt geen toestemming om campagnes aan te maken.",
+            "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
+            "failed": "De afbeelding kon niet worden gemaakt. Probeer het opnieuw."
+          }
+        }
       },
       "switch": {
         "title": "De begeleide flow gebruiken?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Verzenden vanaf",
         "senderHint": "Het WhatsApp-nummer waarvanaf deze broadcast wordt verzonden.",
         "pickSender": "Kies een nummer",
-        "classicOption": "klassieke builder"
+        "classicOption": "klassieke builder",
+        "buildWithAi": "Bouwen met AI",
+        "aiNote": "Maak met AI een concept voor een nieuwe sjabloon. U controleert het op de sjabloonpagina; daarna beoordeelt Meta het voordat het kan worden verzonden, dus kom terug en kies het zodra het is goedgekeurd."
       },
       "audience": {
         "selectionTitle": "Gekozen in de Contact Hub",

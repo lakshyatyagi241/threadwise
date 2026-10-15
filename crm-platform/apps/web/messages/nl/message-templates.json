@@ -355,6 +355,11 @@
         "saved": "Opgeslagen als concept.",
         "warnings": "De moeite waard om te bekijken voordat Meta het beoordeelt:",
         "open": "Het sjabloon openen"
+      },
+      "ai": {
+        "open": "Bouwen met AI",
+        "applied": "Sjabloonconcept ingevuld door AI. Controleer het voordat u het indient.",
+        "authHint": "Authenticatiesjablonen hebben een vaste tekst, dus er valt niets te schrijven."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Marketingtaal is niet toegestaan in deze categorie.",
         "TAG_CONTENT_MISMATCH": "Categorie komt niet overeen met de inhoud (bijv. promotionele tekst in een UTILITY-sjabloon).",
         "SCAM": "Meta heeft het sjabloon gemarkeerd als mogelijke oplichting. Controleer beweringen en taalgebruik."
+      }
+    },
+    "ai": {
+      "eyebrow": "Sjablonen / AI",
+      "title": "Bouwen met",
+      "titleAccent": "AI",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "generate": "Sjabloon genereren",
+      "intro": "Schrijf een WhatsApp-sjabloon op basis van een korte briefing: naam, koptekst, hoofdtekst, voettekst en knoppen. Er wordt niets ingediend totdat u dat zelf doet.",
+      "model": "AI-model",
+      "modelsError": "De modellen konden niet worden geladen.",
+      "noModels": "Voor deze werkruimte is geen AI-provider ingeschakeld. Vraag een beheerder er een in te schakelen.",
+      "loadingModels": "Modellen laden…",
+      "pickModel": "Kies een model",
+      "yourKey": "uw sleutel",
+      "business": "Bedrijfsnaam",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Branche",
+      "pickIndustry": "Kies een branche",
+      "occasion": "Gelegenheid",
+      "pickOccasion": "Kies een gelegenheid",
+      "purpose": "Doel",
+      "pickPurpose": "Kies een doel",
+      "action": "Hoofdactie",
+      "pickAction": "Kies een hoofdactie",
+      "tone": "Toon",
+      "pickTone": "Kies een toon",
+      "language": "Taal",
+      "languageHint": "Het concept wordt geschreven in de taal van het formulier.",
+      "notes": "Eigen instructie",
+      "notesNote": "optioneel / max. 2000",
+      "notesPlaceholder": "Alles wat u specifiek wilt opnemen: variabelen, links, verplichte formuleringen, wat vermeden moet worden…",
+      "industries": {
+        "retail": "Retail / e-commerce",
+        "food": "Eten en drinken",
+        "healthcare": "Gezondheidszorg",
+        "education": "Onderwijs",
+        "travel": "Reizen en horeca",
+        "finance": "Financiën en bankwezen",
+        "realEstate": "Vastgoed",
+        "beauty": "Beauty en wellness",
+        "logistics": "Logistiek en bezorging",
+        "services": "Zakelijke dienstverlening",
+        "nonprofit": "Non-profit",
+        "other": "Overig"
+      },
+      "occasions": {
+        "launch": "Productlancering",
+        "sale": "Uitverkoop / korting",
+        "orderConfirmation": "Orderbevestiging",
+        "shipping": "Verzendupdate",
+        "appointment": "Afspraakherinnering",
+        "welcome": "Welkom / onboarding",
+        "feedback": "Feedbackverzoek",
+        "abandonedCart": "Verlaten winkelwagen",
+        "reengage": "Heractivering",
+        "event": "Uitnodiging voor evenement",
+        "festival": "Feestdagengroet",
+        "other": "Overig"
+      },
+      "purposes": {
+        "inform": "Informeren",
+        "promote": "Promoten",
+        "confirm": "Bevestigen",
+        "remind": "Herinneren",
+        "collectFeedback": "Feedback verzamelen",
+        "reengage": "Heractiveren",
+        "purchase": "Aankoop stimuleren",
+        "booking": "Boeking stimuleren"
+      },
+      "actions": {
+        "website": "Website bezoeken",
+        "call": "Bel ons",
+        "book": "Afspraak maken",
+        "order": "Bestelling plaatsen",
+        "catalog": "Catalogus bekijken",
+        "code": "Antwoorden met een code",
+        "other": "Overig"
+      },
+      "tones": {
+        "friendly": "Vriendelijk",
+        "professional": "Professioneel",
+        "concise": "Beknopt",
+        "empathetic": "Empathisch",
+        "excited": "Enthousiast",
+        "formal": "Formeel"
+      },
+      "errors": {
+        "businessRequired": "Bedrijfsnaam is verplicht.",
+        "noKey": "Voor deze werkruimte is geen AI-provider ingeschakeld. Vraag een beheerder om een sleutel toe te voegen.",
+        "limitReached": "Deze werkruimte heeft het AI-tegoed voor deze maand opgebruikt.",
+        "providerFailed": "De AI-provider reageerde niet. Probeer het zo meteen opnieuw.",
+        "badJson": "Het antwoord van het model was geen bruikbare sjabloon. Probeer het opnieuw of verfijn de briefing.",
+        "invalid": "Controleer de briefing: de bedrijfsnaam is verplicht en sommige velden zijn te lang.",
+        "forbidden": "U hebt geen toestemming om sjablonen aan te maken.",
+        "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
+        "failed": "Het sjabloon kon niet worden gegenereerd. Probeer het opnieuw."
       }
     }
   }

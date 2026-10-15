@@ -355,6 +355,11 @@
         "saved": "Enregistré en brouillon.",
         "warnings": "À vérifier avant l’examen par Meta :",
         "open": "Ouvrir le modèle"
+      },
+      "ai": {
+        "open": "Créer avec l'IA",
+        "applied": "Brouillon du modèle rempli par l'IA. Relisez-le avant de le soumettre.",
+        "authHint": "Les modèles d'authentification ont un texte fixe, il n'y a donc rien à rédiger."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Langage marketing non autorisé dans cette catégorie.",
         "TAG_CONTENT_MISMATCH": "La catégorie ne correspond pas au contenu (p. ex. texte promotionnel dans un modèle UTILITY).",
         "SCAM": "Meta a signalé le modèle comme une arnaque potentielle. Vérifiez les affirmations et le langage."
+      }
+    },
+    "ai": {
+      "eyebrow": "Modèles / IA",
+      "title": "Créer avec",
+      "titleAccent": "l'IA",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "generate": "Générer le modèle",
+      "intro": "Rédigez un modèle WhatsApp à partir d'un court brief : nom, en-tête, corps, pied de page et boutons. Rien n'est soumis tant que vous ne le faites pas vous-même.",
+      "model": "Modèle d'IA",
+      "modelsError": "Impossible de charger les modèles.",
+      "noModels": "Aucun fournisseur d'IA n'est activé pour cet espace de travail. Demandez à un administrateur d'en activer un.",
+      "loadingModels": "Chargement des modèles…",
+      "pickModel": "Sélectionner un modèle",
+      "yourKey": "votre clé",
+      "business": "Nom de l'entreprise",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Secteur d'activité",
+      "pickIndustry": "Sélectionner un secteur",
+      "occasion": "Occasion",
+      "pickOccasion": "Sélectionner une occasion",
+      "purpose": "Objectif",
+      "pickPurpose": "Sélectionner un objectif",
+      "action": "Action principale",
+      "pickAction": "Sélectionner une action principale",
+      "tone": "Ton",
+      "pickTone": "Sélectionner un ton",
+      "language": "Langue",
+      "languageHint": "Le brouillon est rédigé dans la langue du formulaire.",
+      "notes": "Instructions personnalisées",
+      "notesNote": "facultatif / 2000 max.",
+      "notesPlaceholder": "Tout élément précis à inclure : variables, liens, formulations obligatoires, ce qu'il faut éviter…",
+      "industries": {
+        "retail": "Commerce de détail / E-commerce",
+        "food": "Restauration et boissons",
+        "healthcare": "Santé",
+        "education": "Éducation",
+        "travel": "Voyage et hôtellerie",
+        "finance": "Finance et banque",
+        "realEstate": "Immobilier",
+        "beauty": "Beauté et bien-être",
+        "logistics": "Logistique et livraison",
+        "services": "Services professionnels",
+        "nonprofit": "Association à but non lucratif",
+        "other": "Autre"
+      },
+      "occasions": {
+        "launch": "Lancement de produit",
+        "sale": "Soldes / remise",
+        "orderConfirmation": "Confirmation de commande",
+        "shipping": "Suivi d'expédition",
+        "appointment": "Rappel de rendez-vous",
+        "welcome": "Bienvenue / intégration",
+        "feedback": "Demande d'avis",
+        "abandonedCart": "Panier abandonné",
+        "reengage": "Réengagement",
+        "event": "Invitation à un événement",
+        "festival": "Vœux de fête",
+        "other": "Autre"
+      },
+      "purposes": {
+        "inform": "Informer",
+        "promote": "Promouvoir",
+        "confirm": "Confirmer",
+        "remind": "Rappeler",
+        "collectFeedback": "Recueillir des avis",
+        "reengage": "Réengager",
+        "purchase": "Inciter à l'achat",
+        "booking": "Inciter à réserver"
+      },
+      "actions": {
+        "website": "Visiter le site web",
+        "call": "Appelez-nous",
+        "book": "Prendre rendez-vous",
+        "order": "Passer commande",
+        "catalog": "Voir le catalogue",
+        "code": "Répondre avec un code",
+        "other": "Autre"
+      },
+      "tones": {
+        "friendly": "Amical",
+        "professional": "Professionnel",
+        "concise": "Concis",
+        "empathetic": "Empathique",
+        "excited": "Enthousiaste",
+        "formal": "Formel"
+      },
+      "errors": {
+        "businessRequired": "Le nom de l'entreprise est obligatoire.",
+        "noKey": "Aucun fournisseur d'IA n'est activé pour cet espace de travail. Demandez à un administrateur d'ajouter une clé.",
+        "limitReached": "Cet espace de travail a épuisé son quota d'IA pour le mois.",
+        "providerFailed": "Le fournisseur d'IA n'a pas répondu. Réessayez dans un instant.",
+        "badJson": "La réponse du modèle n'était pas un modèle exploitable. Réessayez ou précisez le brief.",
+        "invalid": "Vérifiez le brief : le nom de l'entreprise est obligatoire et certains champs sont trop longs.",
+        "forbidden": "Vous n'avez pas l'autorisation de créer des modèles.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "failed": "Impossible de générer le modèle. Réessayez."
       }
     }
   }

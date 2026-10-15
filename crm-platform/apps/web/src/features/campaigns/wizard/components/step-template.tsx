@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   WIZARD_NAME_MAX,
@@ -7,11 +9,25 @@ import {
   type WizardSender,
   type WizardTemplate,
 } from '@crm/contracts';
-import { Field, Input, Select } from '@crm/ui';
+import type { TplAiDraft } from '@crm/contracts';
+import { Button, Field, Input, Select } from '@crm/ui';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { stashAiDraft } from '@/features/message-templates/lib/ai-draft';
+import { SparkIcon } from '@/features/message-templates/components/icons';
+import { TemplateAiModal } from '@/features/message-templates/components/template-ai-modal';
 import { SenderEmptyNotice, SenderLoading } from '../../components/sender-empty';
 import { issueFor, type StepIssue } from '../lib/issues';
 import { TemplatePicker, type TemplatesQuery } from './template-picker';
 import { TemplatePreview } from './template-preview';
+
+/** The language the wizard writes a drafted template in (the wizard picks no language of its own). */
+export const AI_TEMPLATE_LANGUAGE = 'en_US';
+
+/** The connection uuid of a `waba:<uuid>` sender key, which the new-template form takes as the number to start on. */
+export function wabaConnectionOf(senderKey: string | null): string | null {
+  const m = /^waba:([0-9a-f-]{36})$/i.exec(senderKey ?? '');
+  return m ? m[1]! : null;
+}
 
 /** Step 1: the broadcast's name and the approved template it sends, with the live preview beside the list. */
 export function StepTemplate({
@@ -45,6 +61,16 @@ export function StepTemplate({
   const t = useTranslations('campaigns.wizard.template');
   const ti = useTranslations('campaigns.wizard.issues');
   const selected = templates.data?.data.find((x) => x.id === templateId) ?? null;
+  const router = useRouter();
+  const mayCreateTemplate = useCan('tpl.templates.create');
+  const [aiOpen, setAiOpen] = useState(false);
+  // "Build with AI" (TW-TPL-016): the draft goes to the new-template form in this tab, which fills itself from it; the template must
+  // then pass Meta's review before this list offers it. The wizard's own draft autosaves, so coming back resumes this campaign.
+  const sendDraftToTemplates = (draft: TplAiDraft) => {
+    stashAiDraft({ draft, language: AI_TEMPLATE_LANGUAGE, metaCategory: 'MARKETING' });
+    const connection = wabaConnectionOf(senderKey);
+    router.push(connection ? `/templates/new?connection=${connection}` : '/templates/new');
+  };
   const nameIssue = issueFor(issues, 'name');
   const tplIssue = issueFor(issues, 'templateId');
   const senderIssue = issueFor(issues, 'senderKey');
@@ -98,7 +124,22 @@ export function StepTemplate({
           )}
         </Field>
         <div className="space-y-2">
-          <h2 className="text-sm font-medium">{t('pickTitle')}</h2>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-sm font-medium">{t('pickTitle')}</h2>
+            {mayCreateTemplate && (
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                className="rounded-full border-brand/40 text-brand"
+                disabled={disabled}
+                onClick={() => setAiOpen(true)}
+              >
+                <SparkIcon className="size-3.5" />
+                {t('buildWithAi')}
+              </Button>
+            )}
+          </div>
           <p className="text-xs text-muted-foreground">{t('pickHint')}</p>
           <TemplatePicker
             templates={templates}
@@ -114,6 +155,16 @@ export function StepTemplate({
         </div>
       </div>
       <TemplatePreview template={selected} />
+      {mayCreateTemplate && (
+        <TemplateAiModal
+          open={aiOpen}
+          onClose={() => setAiOpen(false)}
+          language={AI_TEMPLATE_LANGUAGE}
+          metaCategory="MARKETING"
+          onDraft={sendDraftToTemplates}
+          note={t('aiNote')}
+        />
+      )}
     </div>
   );
 }

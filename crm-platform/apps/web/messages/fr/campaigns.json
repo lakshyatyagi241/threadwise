@@ -647,8 +647,43 @@
         "notes": "Notes supplémentaires",
         "notesNote": "facultatif / 2000 caractères max",
         "notesPlaceholder": "Précisions : expressions obligatoires, ce qu'il faut éviter, indications sur le ton de la marque…",
-        "failed": "Impossible de générer la campagne. Réessayez.",
-        "applied": "Le texte de la campagne a été rempli. Vérifiez-le avant de continuer."
+        "applied": "Le texte de la campagne a été rempli. Vérifiez-le avant de continuer.",
+        "pictureApplied": "L'image a été jointe à la campagne. Vérifiez-la dans la carte Pièce jointe.",
+        "errors": {
+          "noKey": "Aucun fournisseur d'IA n'est activé pour cet espace de travail. Demandez à un administrateur d'ajouter une clé.",
+          "limitReached": "Cet espace de travail a épuisé son quota d'IA pour le mois.",
+          "providerFailed": "Le fournisseur d'IA n'a pas répondu. Réessayez dans un instant.",
+          "badJson": "La réponse du modèle n'a pas pu être lue. Réessayez ou modifiez le brief.",
+          "invalid": "Vérifiez le brief : le nom de l'entreprise est obligatoire et certains champs sont trop longs.",
+          "forbidden": "Vous n'avez pas l'autorisation de créer des campagnes.",
+          "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+          "failed": "Impossible de générer la campagne. Réessayez."
+        },
+        "picture": {
+          "label": "Créer aussi une image",
+          "hint": "Génère une image à partir du même brief et la joint à la campagne. Utilise votre quota OpenAI.",
+          "needsOpenAi": "Les images nécessitent une clé OpenAI. Choisissez un modèle OpenAI pour activer cette option.",
+          "noAttachment": "Le numéro choisi envoie uniquement du texte, il n'y a donc rien à quoi joindre une image.",
+          "size": "Format de l'image",
+          "sizes": {
+            "square": "Carré",
+            "landscape": "Paysage",
+            "portrait": "Portrait"
+          },
+          "textKept": "Le texte de la campagne a été rempli. Seule l'image est manquante.",
+          "retry": "Réessayer l'image",
+          "errors": {
+            "noKey": "Les images nécessitent une clé OpenAI, et aucune n'est activée pour cet espace de travail.",
+            "limitReached": "Cet espace de travail a épuisé son quota d'IA pour le mois.",
+            "providerFailed": "Le service d'images n'a pas répondu. Réessayez dans un instant.",
+            "badJson": "Le service d'images a renvoyé une réponse inattendue. Réessayez.",
+            "imageRefused": "OpenAI a refusé de générer cette image. Modifiez le produit, l'offre ou les notes, puis réessayez.",
+            "invalid": "Vérifiez le brief : le nom de l'entreprise est obligatoire et certains champs sont trop longs.",
+            "forbidden": "Vous n'avez pas l'autorisation de créer des campagnes.",
+            "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+            "failed": "Impossible de créer l'image. Réessayez."
+          }
+        }
       },
       "switch": {
         "title": "Utiliser le parcours guidé ?",
@@ -1163,7 +1198,9 @@
         "senderLabel": "Envoyer depuis",
         "senderHint": "Le numéro WhatsApp depuis lequel cette diffusion est envoyée.",
         "pickSender": "Choisir un numéro",
-        "classicOption": "éditeur classique"
+        "classicOption": "éditeur classique",
+        "buildWithAi": "Créer avec l'IA",
+        "aiNote": "Rédigez un nouveau modèle avec l'IA. Vous le relisez sur la page du modèle ; Meta l'examine ensuite avant qu'il puisse être envoyé, revenez donc le sélectionner une fois qu'il est approuvé."
       },
       "audience": {
         "selectionTitle": "Choisi dans le Hub de contacts",
