@@ -15,7 +15,7 @@ Open pipeline (value, deals), won, collected, outstanding, paid invoices, open t
 5. Sections the caller may not read are left out; Reference showed the whole workspace to any user on the plan.
 6. "Due later today" is added next to overdue.
 7. Additions (see product-extensions): funnel with conversion, won/lost trend, lead sources, owner leaderboard, tasks by assignee, recent activity, pipeline/owner/team filters.
-8. The "Revenue report" button, `/crm/revenue`, `.csv`, `.pdf` and `/crm/guide` are not on this screen: the revenue report is a separate unit (`blocked`, TW-PAY-017); the guide is the Help center guide `crm-dashboard`.
+8. The "Revenue report" button opens `/crm/revenue` (built: [crm-revenue-report.md](crm-revenue-report.md)); it shows with the invoices section. `/crm/guide` is the Help center guide `crm-dashboard`; the client brief stays blocked (WIRE-CTP-021).
 9. The "Won this month" label is "Won" with the period shown under the title.
 
 ## Not verified

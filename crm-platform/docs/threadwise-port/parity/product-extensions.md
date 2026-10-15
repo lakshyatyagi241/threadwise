@@ -484,6 +484,10 @@ Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/priv
 
 Beyond Reference's eight counters: period selector (this month, 7/30/90 days, custom) in the viewer's zone; pipeline, owner and team filters in the address; pipeline funnel by stage with step conversion and drill-down to the deals list (`/deals?view=list&stage=`); won/lost trend; lead sources performance (leads, to deal, to won, won value); owner leaderboard; tasks by assignee; recent activity. Backend: `GET /v2/crm/dashboard`. Differences from Reference: parity/crm-dashboard.md.
 
+## CRM revenue report (`/crm/revenue`, BL-CRMD-1, BL-182, BL-183)
+
+Reference's report was four counters, a six month bar chart, an aging box, a CSV of the last 5,000 payments and a PDF, all built inside the request and summed across currencies. Beyond that: a period (this month, last month, quarter, year, 30 or 90 days, custom) in the viewer's zone with a comparison (previous period, same period last year, none); invoiced against paid, owed and overdue for the invoices issued in the period, beside the money collected and refunded in it; a table split by lead source, invoice origin, product, owner or team; exact per-currency figures with an optional conversion; every number and file cut to the caller's record scope; CSV (payments ledger or the table) and PDF prepared by the worker with a separate export permission. Backend: `GET /v2/crm/revenue`, `POST /v2/crm/revenue/exports`. Differences from Reference and what is open: parity/crm-revenue-report.md. Owner decisions: parity/crm-revenue-report.md and the backlog notes on BL-182 to BL-187.
+
 ## Call recording consent and lifecycle (BL-144): a new feature on top of operator recording, not a port
 
 Reference starts recording every inbound call as soon as it is answered (no notice, no consent, no limit), stores the file on the public disk under a
