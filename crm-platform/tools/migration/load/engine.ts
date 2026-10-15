@@ -226,7 +226,7 @@ async function idsByUuid(
     : sql``;
   const res = await tx.execute(sql`
     SELECT id, uuid::text AS uuid FROM ${sql.raw(q(table))}
-    WHERE org_id = ${orgId} AND uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify(uuids)}::jsonb)::uuid) ${bound}`);
+    WHERE org_id = ${orgId} AND uuid = ANY (ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(uuids)}::jsonb)::uuid)) ${bound}`);
   for (const r of res.rows as Array<{ id: number; uuid: string }>) out.set(r.uuid, Number(r.id));
   return out;
 }

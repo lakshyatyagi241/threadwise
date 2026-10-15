@@ -322,7 +322,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
         LEFT JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
         LEFT JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
         WHERE m.org_id = ${orgId}
-          AND m.uuid IN (SELECT jsonb_array_elements_text('${JSON.stringify(part.map((m) => uuidOf(m.key))).replace(/'/g, "''")}'::jsonb)::uuid)`),
+          AND m.uuid = ANY (ARRAY(SELECT jsonb_array_elements_text('${JSON.stringify(part.map((m) => uuidOf(m.key))).replace(/'/g, "''")}'::jsonb)::uuid))`),
       ),
     );
     const byUuid = new Map(

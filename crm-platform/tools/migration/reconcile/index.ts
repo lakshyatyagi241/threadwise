@@ -1587,7 +1587,7 @@ async function verifyChunk(
     );
     const res = await withTenant(v.db, { orgId: v.orgId }, (tx) =>
       tx.execute(sql`SELECT ${colSql} FROM ${sql.raw(`"${table}"`)} WHERE org_id = ${v.orgId}
-        AND uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify(list.map((l) => l.uuid))}::jsonb)::uuid)`),
+        AND uuid = ANY (ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(list.map((l) => l.uuid))}::jsonb)::uuid))`),
     );
     const found = new Map((res.rows as Row[]).map((r) => [r.uuid as string, r]));
     const roll = v.fingerprints.get(table) ?? { s: [], t: [], rows: 0 };
