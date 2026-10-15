@@ -8,7 +8,7 @@ import {
   askForPermissions,
   requestPermission,
 } from './permissions';
-import { openPermissionSettings } from './open-settings';
+import { openNotificationSettings, openPermissionSettings } from './open-settings';
 
 jest.mock('./open-settings');
 
@@ -112,12 +112,14 @@ describe('askForPermissions', () => {
   const notifyAsk = jest.mocked(Notifications.requestPermissionsAsync);
   const labels = { channelName: 'Messages' };
   const openSettings = jest.mocked(openPermissionSettings);
+  const openNotifications = jest.mocked(openNotificationSettings);
   const callAnswer = (result: string) =>
     jest.spyOn(PermissionsAndroid, 'request').mockResolvedValue(result as never);
 
   beforeEach(() => {
     onPlatform('android');
     openSettings.mockResolvedValue();
+    openNotifications.mockResolvedValue();
   });
 
   it("shows the phone's prompt for each permission, in order, and opens nothing when all are allowed", async () => {
@@ -139,12 +141,22 @@ describe('askForPermissions', () => {
     expect(openSettings).not.toHaveBeenCalled();
   });
 
-  it("goes straight to the app's settings, once, when the phone will not ask again", async () => {
+  it("goes straight to the app's settings page, once, when the phone will not ask again", async () => {
     notifyAsk.mockResolvedValue(answer('denied', false));
     cameraAsk.mockResolvedValue(answer('denied', false));
     callAnswer('never_ask_again');
     await askForPermissions(labels);
     expect(openSettings).toHaveBeenCalledTimes(1);
+    expect(openNotifications).not.toHaveBeenCalled();
+  });
+
+  it('opens the notification page itself when notifications are the only ones refused for good', async () => {
+    notifyAsk.mockResolvedValue(answer('denied', false));
+    cameraAsk.mockResolvedValue(answer('granted', true));
+    callAnswer('granted');
+    await askForPermissions(labels);
+    expect(openNotifications).toHaveBeenCalledTimes(1);
+    expect(openSettings).not.toHaveBeenCalled();
   });
 
   it('keeps going when one permission fails to ask', async () => {

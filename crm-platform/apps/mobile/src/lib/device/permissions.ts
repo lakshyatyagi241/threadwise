@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { log } from '@/lib/observability/logger';
-import { openPermissionSettings } from './open-settings';
+import { openNotificationSettings, openPermissionSettings } from './open-settings';
 import {
   getNotificationPermission,
   readPermission,
@@ -70,19 +70,22 @@ export async function requestPermission(
 /**
  * The first-open flow: the phone's own "Allow" prompt for each permission, one after the other, with no screen of the app in
  * between. A permission the phone will not ask about again (refused for good, here or in an earlier install) cannot be turned on
- * by a prompt, so the app's permissions page in the phone's settings is opened once, at the end, for the person to switch it on there. A
+ * by a prompt, so the app's page in the phone's settings is opened once, at the end, for the person to switch it on there (the notification page itself when that is the only one). A
  * single "Don't allow" is respected: the phone would still ask next time, so nothing more happens.
  */
 export async function askForPermissions(labels: Labels): Promise<void> {
-  let blocked = false;
+  const blocked: DevicePermission[] = [];
   for (const kind of offeredPermissions()) {
     try {
       // A permission that is already on is answered at once, without a prompt.
       const answer = await requestPermission(kind, labels);
-      if (answer.state !== 'granted' && !answer.canAskAgain) blocked = true;
+      if (answer.state !== 'granted' && !answer.canAskAgain) blocked.push(kind);
     } catch (error) {
       log.exception(error, 'device.permission_request_failed');
     }
   }
-  if (blocked) await openPermissionSettings();
+  if (blocked.length === 0) return;
+  // Notifications have a settings page of their own, with the switch on it; the rest are found under "Permissions" in the app's page.
+  if (blocked.every((kind) => kind === 'notifications')) await openNotificationSettings();
+  else await openPermissionSettings();
 }

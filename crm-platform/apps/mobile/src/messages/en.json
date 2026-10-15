@@ -1393,6 +1393,7 @@
     }
   },
   "permissions": {
-    "channelName": "Messages and updates"
+    "channelName": "Messages and updates",
+    "settingsHint": "Tap Permissions, then switch on what you need."
   }
 }
