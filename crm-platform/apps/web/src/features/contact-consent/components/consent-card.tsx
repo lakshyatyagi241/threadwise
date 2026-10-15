@@ -32,7 +32,7 @@ const TONE = { optedOut: 'danger', subscribed: 'success', none: 'neutral' } as c
  * A grant for SERVICE messages (purpose `utility`: the person agreed to be contacted about their request, BL-171) is not a marketing
  * subscription and must never read like one, so it has its own words beside the marketing ones.
  */
-const stateKey = (purpose: string, state: 'granted' | 'withdrawn') =>
+const stateKey = (purpose: string, state: 'granted' | 'withdrawn' | 'unknown') =>
   purpose === 'utility'
     ? (`state.utility${state === 'granted' ? 'Granted' : 'Withdrawn'}` as const)
     : (`state.${state}` as const);
