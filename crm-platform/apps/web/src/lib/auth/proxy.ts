@@ -47,6 +47,7 @@ const TOKEN_ISSUING = new Set([
   'auth/refresh',
   'auth/signup',
   'auth/signup/verify-otp',
+  'auth/signup/set-password',
   'auth/workspaces/switch',
   'auth/partner/login',
   'auth/clerk/session',
