@@ -568,7 +568,7 @@ function GetaSplit({
               page === 'register' ? 'max-w-[380px] xl:max-w-[560px]' : 'max-w-[420px]',
             )}
           >
-            <div className="mb-4 flex items-center justify-between gap-3">
+            <div className="relative z-30 mb-4 flex items-center justify-between gap-3">
               <GetaMark name={name} />
               {toolbar}
             </div>
