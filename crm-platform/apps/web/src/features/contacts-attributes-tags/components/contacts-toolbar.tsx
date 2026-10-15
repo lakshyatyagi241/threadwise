@@ -124,7 +124,7 @@ export interface ContactsToolbarProps {
   picker: BulkPicker;
   onPicker: (p: BulkPicker) => void;
   onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
-  onTagApply: (action: 'add' | 'remove', choice: TagChoice) => Promise<boolean>;
+  onTagApply: (action: 'add' | 'remove', choices: TagChoice[]) => Promise<boolean>;
 
   allColumns: readonly ColumnDef[];
   /** The columns drawn now, in order. */
