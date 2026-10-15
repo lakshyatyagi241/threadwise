@@ -4,6 +4,7 @@ export { BroadcastsWorkerModule } from './broadcasts-worker.module';
 export { BroadcastReceiptsService, type DeliveryReceipt } from './broadcast-receipts.service';
 /** The staff services, for the customer REST API (`/api/v1`), which runs the same create, read and status paths as the dashboard. */
 export { BroadcastsService } from './broadcasts.service';
+export { MarketingMediaService } from './marketing-media.service';
 export { BroadcastsReadService } from './broadcasts-read.service';
 export { BroadcastsRepository } from './broadcasts.repository';
 export { BroadcastProgressService } from './broadcast-progress.service';

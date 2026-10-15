@@ -355,6 +355,11 @@
         "saved": "Disimpan sebagai draf.",
         "warnings": "Perlu diperiksa sebelum Meta meninjau:",
         "open": "Buka templat"
+      },
+      "ai": {
+        "open": "Buat dengan AI",
+        "applied": "Draf templat diisi dari AI. Tinjau sebelum Anda mengirimkannya.",
+        "authHint": "Templat autentikasi memiliki teks tetap, jadi tidak ada yang perlu dibuat."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Bahasa pemasaran tidak diizinkan dalam kategori ini.",
         "TAG_CONTENT_MISMATCH": "Kategori tidak sesuai dengan konten (mis. teks promosi dalam template UTILITY).",
         "SCAM": "Meta menandai template ini sebagai potensi penipuan. Tinjau klaim dan bahasanya."
+      }
+    },
+    "ai": {
+      "eyebrow": "Templat / AI",
+      "title": "Buat dengan",
+      "titleAccent": "AI",
+      "close": "Tutup",
+      "cancel": "Batal",
+      "generate": "Buat templat",
+      "intro": "Buat draf templat WhatsApp dari brief singkat: nama, header, isi, footer, dan tombol. Tidak ada yang dikirim sampai Anda melakukannya sendiri.",
+      "model": "Model AI",
+      "modelsError": "Tidak dapat memuat model.",
+      "noModels": "Tidak ada penyedia AI yang diaktifkan untuk ruang kerja ini. Minta admin untuk mengaktifkannya.",
+      "loadingModels": "Memuat model…",
+      "pickModel": "Pilih model",
+      "yourKey": "kunci Anda",
+      "business": "Nama bisnis",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Industri",
+      "pickIndustry": "Pilih industri",
+      "occasion": "Momen",
+      "pickOccasion": "Pilih momen",
+      "purpose": "Tujuan",
+      "pickPurpose": "Pilih tujuan",
+      "action": "Aksi utama",
+      "pickAction": "Pilih aksi utama",
+      "tone": "Nada",
+      "pickTone": "Pilih nada",
+      "language": "Bahasa",
+      "languageHint": "Draf ditulis dalam bahasa formulir.",
+      "notes": "Prompt kustom",
+      "notesNote": "opsional / maks. 2000",
+      "notesPlaceholder": "Hal spesifik yang ingin disertakan: variabel, tautan, frasa wajib, hal yang harus dihindari…",
+      "industries": {
+        "retail": "Ritel / E-commerce",
+        "food": "Makanan & Minuman",
+        "healthcare": "Kesehatan",
+        "education": "Pendidikan",
+        "travel": "Perjalanan & Perhotelan",
+        "finance": "Keuangan & Perbankan",
+        "realEstate": "Properti",
+        "beauty": "Kecantikan & Kebugaran",
+        "logistics": "Logistik & Pengiriman",
+        "services": "Jasa Profesional",
+        "nonprofit": "Nirlaba",
+        "other": "Lainnya"
+      },
+      "occasions": {
+        "launch": "Peluncuran produk",
+        "sale": "Obral / diskon",
+        "orderConfirmation": "Konfirmasi pesanan",
+        "shipping": "Info pengiriman",
+        "appointment": "Pengingat janji temu",
+        "welcome": "Sambutan / orientasi",
+        "feedback": "Permintaan masukan",
+        "abandonedCart": "Keranjang terlupakan",
+        "reengage": "Pelibatan ulang",
+        "event": "Undangan acara",
+        "festival": "Ucapan hari raya",
+        "other": "Lainnya"
+      },
+      "purposes": {
+        "inform": "Memberi informasi",
+        "promote": "Promosi",
+        "confirm": "Konfirmasi",
+        "remind": "Mengingatkan",
+        "collectFeedback": "Mengumpulkan masukan",
+        "reengage": "Melibatkan kembali",
+        "purchase": "Mendorong pembelian",
+        "booking": "Mendorong pemesanan"
+      },
+      "actions": {
+        "website": "Kunjungi situs web",
+        "call": "Hubungi kami",
+        "book": "Buat janji temu",
+        "order": "Buat pesanan",
+        "catalog": "Lihat katalog",
+        "code": "Balas dengan kode",
+        "other": "Lainnya"
+      },
+      "tones": {
+        "friendly": "Ramah",
+        "professional": "Profesional",
+        "concise": "Ringkas",
+        "empathetic": "Empatik",
+        "excited": "Antusias",
+        "formal": "Formal"
+      },
+      "errors": {
+        "businessRequired": "Nama bisnis wajib diisi.",
+        "noKey": "Tidak ada penyedia AI yang diaktifkan untuk ruang kerja ini. Minta admin untuk menambahkan kunci.",
+        "limitReached": "Ruang kerja ini telah menggunakan seluruh kuota AI bulan ini.",
+        "providerFailed": "Penyedia AI tidak merespons. Coba lagi sebentar lagi.",
+        "badJson": "Jawaban model bukan templat yang dapat digunakan. Coba lagi atau perbaiki brief.",
+        "invalid": "Periksa brief: nama bisnis wajib diisi dan beberapa kolom terlalu panjang.",
+        "forbidden": "Anda tidak memiliki izin untuk membuat templat.",
+        "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+        "failed": "Tidak dapat membuat templat. Coba lagi."
       }
     }
   }

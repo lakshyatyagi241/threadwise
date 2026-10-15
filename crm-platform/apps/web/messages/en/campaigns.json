@@ -638,8 +638,43 @@
         "notes": "Additional notes",
         "notesNote": "optional / max 2000",
         "notesPlaceholder": "Anything specific — must-have phrases, what to avoid, brand voice cues…",
-        "failed": "Could not generate the campaign. Try again.",
-        "applied": "The campaign copy was filled in. Review it before you go on."
+        "applied": "The campaign copy was filled in. Review it before you go on.",
+        "pictureApplied": "The picture was attached to the campaign. Check it in the Attachment card.",
+        "errors": {
+          "noKey": "No AI provider is enabled for this workspace. Ask an admin to add a key.",
+          "limitReached": "This workspace has used its AI allowance for the month.",
+          "providerFailed": "The AI provider did not answer. Try again in a moment.",
+          "badJson": "The model's answer could not be read. Try again or change the brief.",
+          "invalid": "Check the brief: the business name is required and some fields are too long.",
+          "forbidden": "You do not have permission to create campaigns.",
+          "network": "Could not reach the server. Check your connection and try again.",
+          "failed": "Could not generate the campaign. Try again."
+        },
+        "picture": {
+          "label": "Also create a picture",
+          "hint": "Draws one image from the same brief and attaches it to the campaign. Uses your OpenAI allowance.",
+          "needsOpenAi": "Pictures need an OpenAI key. Choose an OpenAI model to turn this on.",
+          "noAttachment": "The number you picked sends text only, so there is nothing to attach a picture to.",
+          "size": "Picture shape",
+          "sizes": {
+            "square": "Square",
+            "landscape": "Landscape",
+            "portrait": "Portrait"
+          },
+          "textKept": "The campaign text was filled in. Only the picture is missing.",
+          "retry": "Try the picture again",
+          "errors": {
+            "noKey": "Pictures need an OpenAI key, and none is enabled for this workspace.",
+            "limitReached": "This workspace has used its AI allowance for the month.",
+            "providerFailed": "The picture service did not answer. Try again in a moment.",
+            "badJson": "The picture service sent something unexpected. Try again.",
+            "imageRefused": "OpenAI refused to draw this picture. Change the product, offer or notes and try again.",
+            "invalid": "Check the brief: the business name is required and some fields are too long.",
+            "forbidden": "You do not have permission to create campaigns.",
+            "network": "Could not reach the server. Check your connection and try again.",
+            "failed": "Could not create the picture. Try again."
+          }
+        }
       },
       "switch": {
         "title": "Use the guided flow?",
@@ -1154,7 +1189,9 @@
         "senderLabel": "Send from",
         "senderHint": "The WhatsApp number this campaign is sent from.",
         "pickSender": "Choose a number",
-        "classicOption": "classic builder"
+        "classicOption": "classic builder",
+        "buildWithAi": "Build with AI",
+        "aiNote": "Draft a new template with AI. You review it on the template page; Meta then reviews it before it can be sent, so come back and pick it once it is approved."
       },
       "audience": {
         "selectionTitle": "Chosen in the Contact Hub",

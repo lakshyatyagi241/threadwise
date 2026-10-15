@@ -355,6 +355,11 @@
         "saved": "Als Entwurf gespeichert.",
         "warnings": "Vor der Prüfung durch Meta lohnt ein Blick darauf:",
         "open": "Vorlage öffnen"
+      },
+      "ai": {
+        "open": "Mit KI erstellen",
+        "applied": "Vorlagenentwurf von der KI ausgefüllt. Prüfen Sie ihn, bevor Sie ihn einreichen.",
+        "authHint": "Authentifizierungsvorlagen haben einen festen Text, daher gibt es nichts zu entwerfen."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Werbesprache ist in dieser Kategorie nicht erlaubt.",
         "TAG_CONTENT_MISMATCH": "Kategorie passt nicht zum Inhalt (z. B. Werbetext in einer UTILITY-Vorlage).",
         "SCAM": "Meta hat die Vorlage als möglichen Betrug markiert. Prüfen Sie Aussagen und Sprache."
+      }
+    },
+    "ai": {
+      "eyebrow": "Vorlagen / KI",
+      "title": "Erstellen mit",
+      "titleAccent": "KI",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "generate": "Vorlage generieren",
+      "intro": "Erstellen Sie aus einem kurzen Briefing den Entwurf einer WhatsApp-Vorlage: Name, Kopfzeile, Text, Fußzeile und Schaltflächen. Es wird nichts eingereicht, solange Sie das nicht selbst tun.",
+      "model": "KI-Modell",
+      "modelsError": "Die Modelle konnten nicht geladen werden.",
+      "noModels": "Für diesen Arbeitsbereich ist kein KI-Anbieter aktiviert. Bitten Sie einen Administrator, einen zu aktivieren.",
+      "loadingModels": "Modelle werden geladen…",
+      "pickModel": "Modell auswählen",
+      "yourKey": "Ihr Schlüssel",
+      "business": "Firmenname",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Branche",
+      "pickIndustry": "Branche auswählen",
+      "occasion": "Anlass",
+      "pickOccasion": "Anlass auswählen",
+      "purpose": "Zweck",
+      "pickPurpose": "Zweck auswählen",
+      "action": "Hauptaktion",
+      "pickAction": "Hauptaktion auswählen",
+      "tone": "Tonalität",
+      "pickTone": "Tonalität auswählen",
+      "language": "Sprache",
+      "languageHint": "Der Entwurf wird in der Sprache des Formulars verfasst.",
+      "notes": "Eigener Prompt",
+      "notesNote": "optional / max. 2000",
+      "notesPlaceholder": "Alles, was enthalten sein soll: Variablen, Links, zwingende Formulierungen, was vermieden werden soll…",
+      "industries": {
+        "retail": "Einzelhandel / E-Commerce",
+        "food": "Essen & Trinken",
+        "healthcare": "Gesundheitswesen",
+        "education": "Bildung",
+        "travel": "Reisen & Gastgewerbe",
+        "finance": "Finanzen & Bankwesen",
+        "realEstate": "Immobilien",
+        "beauty": "Schönheit & Wellness",
+        "logistics": "Logistik & Lieferung",
+        "services": "Professionelle Dienstleistungen",
+        "nonprofit": "Gemeinnützig",
+        "other": "Sonstiges"
+      },
+      "occasions": {
+        "launch": "Produkteinführung",
+        "sale": "Sale / Rabatt",
+        "orderConfirmation": "Bestellbestätigung",
+        "shipping": "Versandstatus",
+        "appointment": "Terminerinnerung",
+        "welcome": "Willkommen / Onboarding",
+        "feedback": "Feedback-Anfrage",
+        "abandonedCart": "Abgebrochener Warenkorb",
+        "reengage": "Reaktivierung",
+        "event": "Einladung zu einer Veranstaltung",
+        "festival": "Festtagsgruß",
+        "other": "Sonstiges"
+      },
+      "purposes": {
+        "inform": "Informieren",
+        "promote": "Bewerben",
+        "confirm": "Bestätigen",
+        "remind": "Erinnern",
+        "collectFeedback": "Feedback einholen",
+        "reengage": "Reaktivieren",
+        "purchase": "Kauf fördern",
+        "booking": "Buchung fördern"
+      },
+      "actions": {
+        "website": "Website besuchen",
+        "call": "Anrufen",
+        "book": "Termin buchen",
+        "order": "Bestellung aufgeben",
+        "catalog": "Katalog ansehen",
+        "code": "Mit einem Code antworten",
+        "other": "Sonstiges"
+      },
+      "tones": {
+        "friendly": "Freundlich",
+        "professional": "Professionell",
+        "concise": "Prägnant",
+        "empathetic": "Einfühlsam",
+        "excited": "Begeistert",
+        "formal": "Förmlich"
+      },
+      "errors": {
+        "businessRequired": "Der Firmenname ist erforderlich.",
+        "noKey": "Für diesen Arbeitsbereich ist kein KI-Anbieter aktiviert. Bitten Sie einen Administrator, einen Schlüssel hinzuzufügen.",
+        "limitReached": "Dieser Arbeitsbereich hat sein KI-Kontingent für den Monat aufgebraucht.",
+        "providerFailed": "Der KI-Anbieter hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
+        "badJson": "Die Antwort des Modells war keine brauchbare Vorlage. Versuchen Sie es erneut oder präzisieren Sie das Briefing.",
+        "invalid": "Prüfen Sie das Briefing: Der Firmenname ist erforderlich und einige Felder sind zu lang.",
+        "forbidden": "Sie haben keine Berechtigung, Vorlagen zu erstellen.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "failed": "Die Vorlage konnte nicht generiert werden. Versuchen Sie es erneut."
       }
     }
   }

@@ -56,6 +56,7 @@ import {
   coerceForEngine,
   engineOf,
   isEmailEngine,
+  isSmsEngine,
   senderOf,
   templatesFor,
 } from '../lib/engine-gate';
@@ -465,6 +466,12 @@ function Builder({
       <AiModal
         open={aiOpen}
         onClose={() => setAiOpen(false)}
+        canAttach={!emailChannel && !isSmsEngine(engine)}
+        onImage={(image) => {
+          // The same field the Upload button on the Attachment card fills (the card then opens on its image choice).
+          patch({ mediaUrl: image.url });
+          toast(t('ai.pictureApplied'), 'success');
+        }}
         onApply={(copy) => {
           patch({});
           setForm((f) => applyAiCopy(f, copy));

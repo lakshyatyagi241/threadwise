@@ -355,6 +355,11 @@
         "saved": "Salvato come bozza.",
         "warnings": "Da controllare prima che Meta lo esamini:",
         "open": "Apri il template"
+      },
+      "ai": {
+        "open": "Crea con AI",
+        "applied": "Bozza del template compilata dall'AI. Rivedila prima di inviarla.",
+        "authHint": "I template di autenticazione hanno un testo fisso, quindi non c'è nulla da redigere."
       }
     },
     "detail": {
@@ -466,6 +471,104 @@
         "PROMOTIONAL": "Linguaggio di marketing non consentito in questa categoria.",
         "TAG_CONTENT_MISMATCH": "La categoria non corrisponde al contenuto (es. testo promozionale in un template UTILITY).",
         "SCAM": "Meta ha segnalato il template come potenziale truffa. Controlla affermazioni e linguaggio."
+      }
+    },
+    "ai": {
+      "eyebrow": "Template / AI",
+      "title": "Crea con",
+      "titleAccent": "AI",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "generate": "Genera template",
+      "intro": "Crea la bozza di un template WhatsApp da un breve brief: nome, intestazione, corpo, piè di pagina e pulsanti. Nulla viene inviato finché non lo fai tu stesso.",
+      "model": "Modello AI",
+      "modelsError": "Impossibile caricare i modelli.",
+      "noModels": "Nessun provider AI è abilitato per questo workspace. Chiedi a un amministratore di abilitarne uno.",
+      "loadingModels": "Caricamento dei modelli…",
+      "pickModel": "Seleziona un modello",
+      "yourKey": "la tua chiave",
+      "business": "Nome dell'attività",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Settore",
+      "pickIndustry": "Seleziona il settore",
+      "occasion": "Occasione",
+      "pickOccasion": "Seleziona l'occasione",
+      "purpose": "Obiettivo",
+      "pickPurpose": "Seleziona l'obiettivo",
+      "action": "Azione principale",
+      "pickAction": "Seleziona l'azione principale",
+      "tone": "Tono",
+      "pickTone": "Seleziona il tono",
+      "language": "Lingua",
+      "languageHint": "La bozza viene scritta nella lingua del modulo.",
+      "notes": "Prompt personalizzato",
+      "notesNote": "facoltativo / max 2000",
+      "notesPlaceholder": "Tutto ciò che vuoi includere: variabili, link, formulazioni obbligatorie, cosa evitare…",
+      "industries": {
+        "retail": "Retail / E-commerce",
+        "food": "Food & Beverage",
+        "healthcare": "Sanità",
+        "education": "Istruzione",
+        "travel": "Viaggi e ospitalità",
+        "finance": "Finanza e banche",
+        "realEstate": "Immobiliare",
+        "beauty": "Bellezza e benessere",
+        "logistics": "Logistica e consegne",
+        "services": "Servizi professionali",
+        "nonprofit": "No profit",
+        "other": "Altro"
+      },
+      "occasions": {
+        "launch": "Lancio di un prodotto",
+        "sale": "Saldi / sconto",
+        "orderConfirmation": "Conferma dell'ordine",
+        "shipping": "Aggiornamento sulla spedizione",
+        "appointment": "Promemoria di appuntamento",
+        "welcome": "Benvenuto / onboarding",
+        "feedback": "Richiesta di feedback",
+        "abandonedCart": "Carrello abbandonato",
+        "reengage": "Riattivazione",
+        "event": "Invito a un evento",
+        "festival": "Auguri per una festività",
+        "other": "Altro"
+      },
+      "purposes": {
+        "inform": "Informare",
+        "promote": "Promuovere",
+        "confirm": "Confermare",
+        "remind": "Ricordare",
+        "collectFeedback": "Raccogliere feedback",
+        "reengage": "Riattivare",
+        "purchase": "Spingere un acquisto",
+        "booking": "Spingere una prenotazione"
+      },
+      "actions": {
+        "website": "Visita il sito web",
+        "call": "Chiamaci",
+        "book": "Prenota un appuntamento",
+        "order": "Effettua un ordine",
+        "catalog": "Vedi il catalogo",
+        "code": "Rispondi con un codice",
+        "other": "Altro"
+      },
+      "tones": {
+        "friendly": "Amichevole",
+        "professional": "Professionale",
+        "concise": "Conciso",
+        "empathetic": "Empatico",
+        "excited": "Entusiasta",
+        "formal": "Formale"
+      },
+      "errors": {
+        "businessRequired": "Il nome dell'attività è obbligatorio.",
+        "noKey": "Nessun provider AI è abilitato per questo workspace. Chiedi a un amministratore di aggiungere una chiave.",
+        "limitReached": "Questo workspace ha esaurito il limite AI del mese.",
+        "providerFailed": "Il provider AI non ha risposto. Riprova tra un momento.",
+        "badJson": "La risposta del modello non era un template utilizzabile. Riprova o rifinisci il brief.",
+        "invalid": "Controlla il brief: il nome dell'attività è obbligatorio e alcuni campi sono troppo lunghi.",
+        "forbidden": "Non hai il permesso di creare template.",
+        "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+        "failed": "Impossibile generare il template. Riprova."
       }
     }
   }

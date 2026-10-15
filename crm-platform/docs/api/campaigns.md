@@ -207,6 +207,21 @@ The wallet is never asked (no launch precheck, no per-recipient charge): email h
 
 The recipients list and the export show the contact's address where other campaigns show the phone. Reports, receipts and the wallet: a mail has no delivery receipt (Gmail only says `sent`), the outbox's delivery report is not emitted for it and nothing is charged.
 
+### The picture (an addition beyond Reference)
+
+`POST /campaigns/ai-image` (200, needs `camp.campaigns.create`): a brief in, one generated image out, stored as a marketing upload (the same storage and link rules as `POST /media/marketing`) so the builder can attach it to the campaign. Reference's builder writes the text only.
+
+Request: `provider` (only `openai`), `model` (default `gpt-image-1`), `businessName` (required), optional `product`, `offer`, `tone`, `customPrompt` (up to 1,000, what the picture should show), `size` (`1024x1024` default, `1536x1024`, `1024x1536`). The prompt sent asks for a clean marketing picture and bans text, logos, watermarks and real people's faces.
+
+Response: `{ image: { url, name, mime, kind: "image", size }, model }`. The image comes back from the vendor as base64 (no address of the vendor's is ever fetched) and is stored under the workspace's folder.
+
+The key and allowance rules are the text generation's. An image is priced per picture, so the usage ledger gets a flat 4,000 token-equivalent per picture (billed against the key's side). A refused or failed call writes nothing and stores nothing.
+
+- 422 `CAMP_AI_NO_KEY` / `CAMP_AI_LIMIT_REACHED`: as for the text.
+- 422 `CAMP_AI_IMAGE_REFUSED`: the vendor's safety system refused the prompt.
+- 502 `CAMP_AI_PROVIDER_FAILED`: the vendor failed, timed out (90 s) or returned no image.
+- 422 (validation): the workspace storage is local, so a provider could not fetch the file; cloud object storage must be on.
+
 ## Run
 
 | Method and path                | What it does                                                                                                               |

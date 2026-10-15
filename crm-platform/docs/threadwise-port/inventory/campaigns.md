@@ -283,6 +283,14 @@ send custom text, media, flows and A/B tests; the wizard is a second front end o
 - **To decide before building:** the winning measure (read rate, reply rate, click rate), the test share and how long it runs before the rest is sent, what a tie does, whether the person confirms the winner, and whether it applies to a recurring series' every run.
 - **Status:** pending (tracker `todo`).
 
+### TW-CAMP-038: Build with AI in the guided wizard, and the picture (ADDITION)
+
+- **Source:** the meeting's "Build with AI ... campaign AI message generation, with images and content, creating templates. Needs mapping." The classic builder had text generation (TW-CAMP-002/026) but a verified Meta number always opens the guided wizard, which had no AI button, so the feature looked unwired.
+- **Mapping:** the wizard sends an approved **template**, never free text, so its "Build with AI" drafts a **template** (TW-TPL-016, `POST /v2/templates/ai-generate`), hands it to the template form for review, and the person picks it in the wizard once Meta approves it. The classic builder keeps the text generation and gains an optional **picture** (`POST /v2/campaigns/ai-image`, OpenAI image model, stored as a marketing upload and attached as the campaign's image).
+- **Not built:** carousel drafts (TW-TPL-016's carousel mode), a picture as a template header example (Meta needs the file uploaded through the template media endpoint), image models of other vendors.
+- **Tests:** `apps/api/test/e2e/campaigns/campaigns-ai-build.e2e.spec.ts`, `test/unit/campaigns/http-campaign-ai-image.adapter.spec.ts`, `test/unit/message-templates/template-ai-rules.spec.ts`, and the web tests of the modal, the wizard button and the picture option.
+- **Not verified:** nothing was run against a real OpenAI, Anthropic or Gemini key, or Meta's review of an AI-written template.
+
 ### Reference comparison (live Reference, read-only)
 
 See [parity/campaigns.md](../parity/campaigns.md#broadcast-wizard-addition): Reference's create flow, and what the wizard does the same or differently.
