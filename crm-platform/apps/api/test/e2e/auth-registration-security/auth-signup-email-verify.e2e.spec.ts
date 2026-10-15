@@ -1,9 +1,11 @@
 import request from 'supertest';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import {
   MAIL_PORT,
   type MailPort,
 } from '../../../src/infra/providers/auth-registration-security/mail.port';
+import { PlatformSettingsService } from '../../../src/modules/auth/platform/platform-settings.service';
+import { AuthKeys } from '../../../src/modules/auth/support/redis-keys';
 import { startHarness, type Harness } from './harness';
 
 /**
@@ -27,9 +29,26 @@ async function startAndReadCode(fullName: string, email: string) {
   return { token: res.body.token as string, code: match[1]! };
 }
 
+/** `start()` stamps `lastSentAt`, so a resend straight after it hits the 60s cooldown; backdate it. */
+async function skipResendCooldown(token: string) {
+  const key = AuthKeys.signupEmailStage(token);
+  const stage = JSON.parse((await h.redis.get(key))!);
+  stage.lastSentAt = 0;
+  await h.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+}
+
 beforeAll(async () => {
   h = await startHarness();
 }, 240_000);
+
+// Every request here comes from one IP; reset the per-IP sign-up throttle so the scenarios do not
+// exhaust it for each other.
+beforeEach(async () => {
+  await h.redis.eval(
+    `for _,k in ipairs(redis.call('keys','auth:ip:*')) do redis.call('del',k) end`,
+    0,
+  );
+});
 
 afterAll(async () => {
   await h?.stop();
@@ -104,6 +123,7 @@ describe('POST /v2/auth/signup/verify-email-code', () => {
 describe('POST /v2/auth/signup/resend-email-code', () => {
   it('rejects a second resend inside the cooldown', async () => {
     const { token } = await startAndReadCode('Ada', uniqueEmail('r'));
+    await skipResendCooldown(token);
     const first = await api().post('/v2/auth/signup/resend-email-code').send({ token });
     expect(first.status, JSON.stringify(first.body)).toBe(201);
     const second = await api().post('/v2/auth/signup/resend-email-code').send({ token });
@@ -113,6 +133,7 @@ describe('POST /v2/auth/signup/resend-email-code', () => {
 
   it('leaves the old code still verifiable when the resend mail fails to send', async () => {
     const { token, code } = await startAndReadCode('Ada', uniqueEmail('resend-fail'));
+    await skipResendCooldown(token);
     const port = h.app.get<MailPort>(MAIL_PORT);
     const realSend = port.send.bind(port);
     port.send = async () => {
@@ -170,5 +191,92 @@ describe('POST /v2/auth/signup/set-password', () => {
       .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
     expect(second.status, JSON.stringify(second.body)).toBe(400);
     expect(second.body.code).toBe('AUTH_SIGNUP_EXPIRED');
+  });
+
+  it('refuses with AUTH_IDENTITY_EXISTS when a parallel sign-up took the address after /start', async () => {
+    const email = uniqueEmail('par');
+    // Two /start calls for one address both pass start()'s duplicate check (nothing exists yet).
+    const a = await startAndVerify('Ada', email);
+    h.mail.splice(0, h.mail.length); // so startAndReadCode reads the second stage's code, not the first
+    const b = await startAndVerify('Ada', email);
+    const first = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token: a, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(first.status, JSON.stringify(first.body)).toBe(201);
+    const second = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token: b, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(second.status, JSON.stringify(second.body)).toBe(409);
+    expect(second.body.code).toBe('AUTH_IDENTITY_EXISTS');
+  });
+
+  it('does not burn the verified stage when the phone-verification config refuses', async () => {
+    const token = await startAndVerify('Ada', uniqueEmail('cfg'));
+    const setRequirePhone = async (on: boolean) => {
+      await h.owner.query(
+        `UPDATE platform_settings SET value = value || jsonb_build_object('requirePhoneVerification', $1::boolean) WHERE key = 'registration'`,
+        [on],
+      );
+      h.app.get(PlatformSettingsService).invalidate();
+    };
+    // Mandatory phone verification with the OTP step inactive: fail closed (503)...
+    await setRequirePhone(true);
+    try {
+      const refused = await api()
+        .post('/v2/auth/signup/set-password')
+        .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+      expect(refused.status, JSON.stringify(refused.body)).toBe(503);
+      expect(await h.redis.exists(AuthKeys.signupEmailStage(token))).toBe(1);
+    } finally {
+      await setRequirePhone(false);
+    }
+    // ...and the same verified stage still finishes once the config is fixed.
+    const ok = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(201);
+  });
+});
+
+describe('email-stage write-back race', () => {
+  it('a resend whose mail send overlaps set-password cannot resurrect the consumed stage', async () => {
+    const { token, code } = await startAndReadCode('Ada', uniqueEmail('race'));
+    const verify = await api().post('/v2/auth/signup/verify-email-code').send({ token, code });
+    expect(verify.status, JSON.stringify(verify.body)).toBe(200);
+    const key = AuthKeys.signupEmailStage(token);
+    await skipResendCooldown(token);
+
+    // resendEmailCode does GET -> send mail -> SET. Run set-password (which DELs the stage) inside
+    // the send, i.e. exactly between that GET and that SET.
+    const port = h.app.get<MailPort>(MAIL_PORT);
+    const realSend = port.send.bind(port);
+    let setPasswordStatus = 0;
+    let fired = false;
+    port.send = async (m) => {
+      if (!fired) {
+        fired = true;
+        const r = await api()
+          .post('/v2/auth/signup/set-password')
+          .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+        setPasswordStatus = r.status;
+      }
+      return realSend(m);
+    };
+    let resend: request.Response;
+    try {
+      resend = await api().post('/v2/auth/signup/resend-email-code').send({ token });
+    } finally {
+      port.send = realSend;
+    }
+    expect(setPasswordStatus).toBe(201);
+    expect(resend.status, JSON.stringify(resend.body)).toBe(400);
+    expect(resend.body.code).toBe('AUTH_SIGNUP_EXPIRED');
+    // The stage stays gone (no TTL-less resurrection), so the token cannot create a second account.
+    expect(await h.redis.exists(key)).toBe(0);
+    const again = await api()
+      .post('/v2/auth/signup/set-password')
+      .send({ token, password: 'Str0ngPassw0rd#1', acceptTerms: true });
+    expect(again.status, JSON.stringify(again.body)).toBe(400);
+    expect(again.body.code).toBe('AUTH_SIGNUP_EXPIRED');
   });
 });

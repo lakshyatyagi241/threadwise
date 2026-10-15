@@ -204,20 +204,8 @@ export class SignupService {
       );
     }
 
-    const exists = await this.tenants.identityExists(req.email, req.phone ?? null);
-    if (exists) {
-      throw new AppError(
-        ERROR_CODES.AUTH_IDENTITY_EXISTS,
-        'An account with this email already exists.',
-        HttpStatus.CONFLICT,
-        [
-          {
-            path: 'email',
-            message:
-              'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
-          },
-        ],
-      );
+    if (await this.tenants.identityExists(req.email, req.phone ?? null)) {
+      throw this.identityExistsError();
     }
 
     const token = randomToken();
@@ -290,7 +278,7 @@ export class SignupService {
     const ok = await verify(stage.codeHash, req.code).catch(() => false);
     if (!ok) {
       stage.attempts += 1;
-      await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+      await this.stageWriteBack(key, stage);
       throw new AppError(
         ERROR_CODES.AUTH_OTP_INVALID,
         'Incorrect code. Please try again.',
@@ -298,7 +286,8 @@ export class SignupService {
       );
     }
     stage.verified = true;
-    await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+    // XX: a stage consumed between our GET and this SET stays consumed (see `stageWriteBack`).
+    if (!(await this.stageWriteBack(key, stage))) throw this.signupExpired();
     return { token: req.token };
   }
 
@@ -345,7 +334,7 @@ export class SignupService {
     stage.codeExpiresAt = Date.now() + EMAIL_CODE_TTL_SECONDS * 1000;
     stage.attempts = 0;
     stage.lastSentAt = Date.now();
-    await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL');
+    if (!(await this.stageWriteBack(key, stage))) throw this.signupExpired();
 
     return {
       expiresInSeconds: EMAIL_CODE_TTL_SECONDS,
@@ -382,6 +371,7 @@ export class SignupService {
     });
     const { slug, explicit } = await this.chooseSlug(req);
     const passwordHash = await this.passwords.hash(req.password);
+    const otpActive = await this.otpGate(registration, req.phone ?? null);
 
     return this.createOrChallenge(
       {
@@ -395,6 +385,7 @@ export class SignupService {
         referralCode: req.referralCode ?? null,
       },
       registration,
+      otpActive,
       ip,
       meta,
       false,
@@ -428,11 +419,19 @@ export class SignupService {
         HttpStatus.FORBIDDEN,
       );
     }
-    // Policy check BEFORE the stage is consumed, so a rejected password can simply be retried.
+    // Everything that can refuse for a reason already known (identity taken meanwhile, password
+    // policy, OTP config, missing number) runs BEFORE the stage is consumed, so it never burns a
+    // verified stage.
+    // Up to EMAIL_STAGE_TTL can pass since `start()`'s check; a parallel `/start` for the same address
+    // may have created the account by now. Still check-then-act, but closes the multi-minute window.
+    if (await this.tenants.identityExists(stage.email, stage.phoneE164)) {
+      throw this.identityExistsError();
+    }
     await this.passwords.assertAcceptable(req.password, {
       email: stage.email,
       fullName: stage.fullName,
     });
+    const otpActive = await this.otpGate(registration, stage.phoneE164);
 
     // Single use from here on, whichever branch follows. DEL's count makes it race-safe: of any
     // number of parallel posts with the same token only one gets 1 and goes on to create.
@@ -456,6 +455,7 @@ export class SignupService {
         referralCode: req.referralCode ?? null,
       },
       registration,
+      otpActive,
       ip,
       meta,
       true,
@@ -463,17 +463,14 @@ export class SignupService {
   }
 
   /**
-   * The shared tail of `signup()` and `setPassword()`: create the account straight away, or, with
-   * registration OTP active, stage it and send the phone code. `emailVerified` is carried through
-   * the staged record so an email already confirmed by code is not asked to verify again.
+   * The static half of the create-or-challenge decision: whether the registration OTP step is
+   * active, refusing when it is mandatory but inactive, or active with no number to send to. Kept
+   * apart from `createOrChallenge` so `setPassword` can run it before it consumes the email stage.
    */
-  private async createOrChallenge(
-    data: SignupData,
+  private async otpGate(
     registration: Awaited<ReturnType<SecurityPolicyService['registration']>>,
-    ip: string,
-    meta: ClientMeta,
-    emailVerified: boolean,
-  ): Promise<SignupResponse> {
+    phoneE164: string | null,
+  ): Promise<boolean> {
     // The real activation rule: enabled, a sender that can deliver and, for a WhatsApp Business
     // sender, an approved template. Otherwise sign-up silently skips the code (TW-AUTH-006).
     const otpActive = (await this.otp.statusFor(registration)).active;
@@ -488,6 +485,30 @@ export class SignupService {
         HttpStatus.SERVICE_UNAVAILABLE,
       );
     }
+    // OTP path: the number is required and is the one thing we must not let
+    // be turned into a free SMS cannon.
+    if (otpActive && !phoneE164) {
+      throw AppError.validation('A mobile number is required to verify your account.', [
+        { path: 'phone', message: 'A mobile number is required.' },
+      ]);
+    }
+    return otpActive;
+  }
+
+  /**
+   * The shared tail of `signup()` and `setPassword()`: create the account straight away, or, with
+   * registration OTP active, stage it and send the phone code. `otpActive` comes from `otpGate`,
+   * which has already refused the static failure cases. `emailVerified` is carried through the
+   * staged record so an email already confirmed by code is not asked to verify again.
+   */
+  private async createOrChallenge(
+    data: SignupData,
+    registration: Awaited<ReturnType<SecurityPolicyService['registration']>>,
+    otpActive: boolean,
+    ip: string,
+    meta: ClientMeta,
+    emailVerified: boolean,
+  ): Promise<SignupResponse> {
     if (!otpActive) {
       return this.create(
         data,
@@ -496,14 +517,9 @@ export class SignupService {
       );
     }
 
-    // OTP path: the number is required and is the one thing we must not let
-    // be turned into a free SMS cannon.
     const phone = data.phoneE164;
-    if (!phone) {
-      throw AppError.validation('A mobile number is required to verify your account.', [
-        { path: 'phone', message: 'A mobile number is required.' },
-      ]);
-    }
+    // `otpGate` refused an active OTP step without a number; this narrows the type.
+    if (!phone) throw new Error('otpGate let an OTP sign-up through without a number');
     if (
       !(await this.rate.allow(AuthKeys.otpPhone(phone), OTP_SENDS_PER_NUMBER_PER_HOUR, 3600)) ||
       !(await this.rate.allow(AuthKeys.ipThrottle('otp', ip), OTP_SENDS_PER_IP_PER_HOUR, 3600))
@@ -967,6 +983,31 @@ export class SignupService {
       'Too many attempts. Slow down.',
       HttpStatus.TOO_MANY_REQUESTS,
       [{ path: 'retryAfterSeconds', message: String(retryAfterSeconds) }],
+    );
+  }
+
+  /**
+   * Read-modify-write of an `EmailStage`. `KEEPTTL` keeps the stage's own expiry, and `XX` makes the
+   * write a no-op when the key is gone: without it, a write racing `setPassword`'s DEL (or the TTL)
+   * would recreate the stage with NO expiry, still `verified`, and reusable for unlimited accounts.
+   * Returns false when the stage no longer existed.
+   */
+  private async stageWriteBack(key: string, stage: EmailStage): Promise<boolean> {
+    return (await this.redis.set(key, JSON.stringify(stage), 'KEEPTTL', 'XX')) === 'OK';
+  }
+
+  private identityExistsError(): AppError {
+    return new AppError(
+      ERROR_CODES.AUTH_IDENTITY_EXISTS,
+      'An account with this email already exists.',
+      HttpStatus.CONFLICT,
+      [
+        {
+          path: 'email',
+          message:
+            'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
+        },
+      ],
     );
   }
 
