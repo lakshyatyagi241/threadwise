@@ -13,6 +13,7 @@ import { ScreenHeader } from '@/components/ui/screen-header';
 import { Text } from '@/components/ui/text';
 import { BRAND_NAME } from '@/config/brand';
 import { signOut } from '@/lib/auth/sign-out';
+import { openPermissionSettings } from '@/lib/device/open-settings';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
@@ -220,7 +221,7 @@ export function MenuScreen() {
             icon="phone-portrait-outline"
             label={t('menu.devicePermissions')}
             hint={t('menu.devicePermissionsHint')}
-            onPress={() => void Linking.openSettings()}
+            onPress={() => void openPermissionSettings()}
           />
         </Section>
 

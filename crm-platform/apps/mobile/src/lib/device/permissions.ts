@@ -1,21 +1,22 @@
 import * as ImagePicker from 'expo-image-picker';
 import { PermissionsAndroid, Platform } from 'react-native';
+import { log } from '@/lib/observability/logger';
+import { openPermissionSettings } from './open-settings';
 import {
-  ensureNotificationChannel,
   getNotificationPermission,
   readPermission,
   requestNotificationPermission,
   type NotificationPermission,
 } from './notification-permission';
 
-/** The things the app asks the phone for. Each one is asked for with a reason the person has just read (the first-open screen). */
+/** The things the app asks the phone for, each with the phone's own "Allow" prompt. */
 export type DevicePermission = 'notifications' | 'calls' | 'camera';
 
 /** Where one permission stands. `canAskAgain: false` means only the phone's settings can change it. */
 export type PermissionInfo = NotificationPermission;
 
 /**
- * The permissions the first-open screen offers on this phone, in the order shown. Calls exist only on Android: iOS has no call
+ * The permissions the app asks for on this phone, in the order shown. Calls exist only on Android: iOS has no call
  * permission, it asks the person to confirm each call itself.
  */
 export const offeredPermissions = (): DevicePermission[] =>
@@ -47,13 +48,6 @@ interface Labels {
   channelName: string;
 }
 
-/**
- * Gets the phone ready for the person to switch permissions on in its settings, without asking anything: Android lists an app's
- * notification permission there only once the app has a notification channel.
- */
-export const preparePermissions = (labels: Labels): Promise<void> =>
-  ensureNotificationChannel(labels.channelName);
-
 /** Shows the phone's own prompt for one permission, and answers with where it stands after the person has chosen. */
 export async function requestPermission(
   kind: DevicePermission,
@@ -71,4 +65,24 @@ export async function requestPermission(
         : { state: 'denied', canAskAgain: answer !== PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN };
     }
   }
+}
+
+/**
+ * The first-open flow: the phone's own "Allow" prompt for each permission, one after the other, with no screen of the app in
+ * between. A permission the phone will not ask about again (refused for good, here or in an earlier install) cannot be turned on
+ * by a prompt, so the app's permissions page in the phone's settings is opened once, at the end, for the person to switch it on there. A
+ * single "Don't allow" is respected: the phone would still ask next time, so nothing more happens.
+ */
+export async function askForPermissions(labels: Labels): Promise<void> {
+  let blocked = false;
+  for (const kind of offeredPermissions()) {
+    try {
+      // A permission that is already on is answered at once, without a prompt.
+      const answer = await requestPermission(kind, labels);
+      if (answer.state !== 'granted' && !answer.canAskAgain) blocked = true;
+    } catch (error) {
+      log.exception(error, 'device.permission_request_failed');
+    }
+  }
+  if (blocked) await openPermissionSettings();
 }

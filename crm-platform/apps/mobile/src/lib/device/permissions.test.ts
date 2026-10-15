@@ -5,9 +5,12 @@ import {
   canPlaceCalls,
   getPermission,
   offeredPermissions,
-  preparePermissions,
+  askForPermissions,
   requestPermission,
 } from './permissions';
+import { openPermissionSettings } from './open-settings';
+
+jest.mock('./open-settings');
 
 const cameraGet = jest.mocked(ImagePicker.getCameraPermissionsAsync);
 const cameraAsk = jest.mocked(ImagePicker.requestCameraPermissionsAsync);
@@ -105,12 +108,51 @@ describe('requestPermission', () => {
   });
 });
 
-describe('preparePermissions', () => {
-  it('makes the notification channel on Android without asking the person anything', async () => {
+describe('askForPermissions', () => {
+  const notifyAsk = jest.mocked(Notifications.requestPermissionsAsync);
+  const labels = { channelName: 'Messages' };
+  const openSettings = jest.mocked(openPermissionSettings);
+  const callAnswer = (result: string) =>
+    jest.spyOn(PermissionsAndroid, 'request').mockResolvedValue(result as never);
+
+  beforeEach(() => {
     onPlatform('android');
-    const channel = jest.mocked(Notifications.setNotificationChannelAsync);
-    await preparePermissions({ channelName: 'Messages' });
-    expect(channel).toHaveBeenCalledWith('default', { name: 'Messages', importance: 3 });
-    expect(jest.mocked(Notifications.requestPermissionsAsync)).not.toHaveBeenCalled();
+    openSettings.mockResolvedValue();
+  });
+
+  it("shows the phone's prompt for each permission, in order, and opens nothing when all are allowed", async () => {
+    notifyAsk.mockResolvedValue(answer('granted', true));
+    cameraAsk.mockResolvedValue(answer('granted', true));
+    const calls = callAnswer('granted');
+    await askForPermissions(labels);
+    expect(notifyAsk).toHaveBeenCalledTimes(1);
+    expect(calls).toHaveBeenCalledTimes(1);
+    expect(cameraAsk).toHaveBeenCalledTimes(1);
+    expect(openSettings).not.toHaveBeenCalled();
+  });
+
+  it('respects a single "Don\'t allow": the phone would ask again, so settings stay closed', async () => {
+    notifyAsk.mockResolvedValue(answer('denied', true));
+    cameraAsk.mockResolvedValue(answer('denied', true));
+    callAnswer('denied');
+    await askForPermissions(labels);
+    expect(openSettings).not.toHaveBeenCalled();
+  });
+
+  it("goes straight to the app's settings, once, when the phone will not ask again", async () => {
+    notifyAsk.mockResolvedValue(answer('denied', false));
+    cameraAsk.mockResolvedValue(answer('denied', false));
+    callAnswer('never_ask_again');
+    await askForPermissions(labels);
+    expect(openSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps going when one permission fails to ask', async () => {
+    notifyAsk.mockRejectedValue(new Error('boom'));
+    cameraAsk.mockResolvedValue(answer('granted', true));
+    const calls = callAnswer('granted');
+    await expect(askForPermissions(labels)).resolves.toBeUndefined();
+    expect(calls).toHaveBeenCalledTimes(1);
+    expect(cameraAsk).toHaveBeenCalledTimes(1);
   });
 });

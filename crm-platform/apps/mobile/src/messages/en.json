@@ -938,7 +938,10 @@
         "all": "All activities",
         "timeline": "Activity timeline"
       },
-      "more": { "account": "Account", "deals": "Deals" },
+      "more": {
+        "account": "Account",
+        "deals": "Deals"
+      },
       "summary": {
         "title": "Activity",
         "notes": "Notes",
@@ -1232,7 +1235,9 @@
       "title": "You can't view deals",
       "hint": "Ask a workspace admin to give your role access to deals."
     },
-    "empty": { "title": "No deals yet." }
+    "empty": {
+      "title": "No deals yet."
+    }
   },
   "contactCompany": {
     "title": "Account",
@@ -1388,29 +1393,6 @@
     }
   },
   "permissions": {
-    "intro": {
-      "title": "Get the most out of GetaDesk",
-      "subtitle": "Allow a few things so alerts, calls and photos are ready when you need them.",
-      "notifications": {
-        "title": "Notifications",
-        "body": "Alerts for new messages and conversations assigned to you."
-      },
-      "calls": {
-        "title": "Calls",
-        "body": "Call contacts straight from the app, without switching to the dialer."
-      },
-      "camera": {
-        "title": "Camera",
-        "body": "Take photos to share in conversations and attach to contacts."
-      },
-      "allowedFor": "{{name}} allowed",
-      "openSettingsFor": "Open settings to allow {{name}}",
-      "settings": "Settings",
-      "openSettings": "Open settings",
-      "continue": "Continue",
-      "notNow": "Not now",
-      "footnote": "You can change these any time in your phone's settings.",
-      "channelName": "Messages and updates"
-    }
+    "channelName": "Messages and updates"
   }
 }

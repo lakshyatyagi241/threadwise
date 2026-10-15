@@ -3,6 +3,7 @@ import * as Linking from 'expo-linking';
 import * as Updates from 'expo-updates';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { signOut } from '@/lib/auth/sign-out';
+import { openPermissionSettings } from '@/lib/device/open-settings';
 import { initI18n } from '@/lib/i18n';
 import { fetchSession } from '@/lib/session/api';
 import { session } from '@/test/dashboard-fixtures';
@@ -14,6 +15,7 @@ const mockNavigate = jest.fn();
 let mockUpdatesEnabled = false;
 jest.mock('expo-router', () => ({ useRouter: () => ({ navigate: mockNavigate }) }));
 jest.mock('expo-linking', () => ({ openURL: jest.fn(), openSettings: jest.fn() }));
+jest.mock('@/lib/device/open-settings');
 jest.mock('expo-updates', () => ({
   get isEnabled() {
     return mockUpdatesEnabled;
@@ -177,10 +179,10 @@ describe('MenuScreen', () => {
       expect(screen.getByText(label)).toBeTruthy();
     });
 
-    it("opens this app's settings on the phone for the device permissions", async () => {
+    it("opens this app's permissions page on the phone for the device permissions", async () => {
       await show();
       await press('Device permissions');
-      expect(Linking.openSettings).toHaveBeenCalledTimes(1);
+      expect(openPermissionSettings).toHaveBeenCalledTimes(1);
     });
   });
 

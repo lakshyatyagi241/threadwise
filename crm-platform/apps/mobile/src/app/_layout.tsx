@@ -9,8 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
-import { PermissionsScreen } from '@/features/onboarding/permissions-screen';
-import { usePermissionsIntro } from '@/features/onboarding/use-permissions-intro';
+import { useFirstRunPermissions } from '@/features/onboarding/use-first-run-permissions';
 import { i18n, initI18n } from '@/lib/i18n';
 import { getSnapshot, restoreSession, subscribe } from '@/lib/auth/session-manager';
 import { log } from '@/lib/observability/logger';
@@ -31,8 +30,6 @@ function RootLayout() {
   const [ready, setReady] = useState(false);
   const auth = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   const [fontsLoaded, fontError] = useAppFonts();
-  // The first time the app opens, a screen explains what it would like to be allowed to do before the phone's own prompt.
-  const intro = usePermissionsIntro();
   // A font that cannot load must not keep the app on the splash screen: the text falls back to the phone's own font.
   const fontsDone = fontsLoaded || fontError !== null;
 
@@ -43,17 +40,20 @@ function RootLayout() {
       .finally(() => setReady(true));
   }, []);
 
+  // The first time the app opens, the phone's own permission prompts (no screen of ours before them).
+  useFirstRunPermissions(ready && fontsDone && auth.status !== 'loading');
+
   useEffect(() => {
     if (fontError) log.exception(fontError, 'app.fonts_failed');
   }, [fontError]);
 
   useEffect(() => {
-    if (ready && fontsDone && auth.status !== 'loading' && intro.status !== 'loading') {
+    if (ready && fontsDone && auth.status !== 'loading') {
       void SplashScreen.hideAsync();
     }
-  }, [ready, fontsDone, auth.status, intro.status]);
+  }, [ready, fontsDone, auth.status]);
 
-  if (!ready || !fontsDone || auth.status === 'loading' || intro.status === 'loading') return null;
+  if (!ready || !fontsDone || auth.status === 'loading') return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -61,18 +61,14 @@ function RootLayout() {
         <I18nextProvider i18n={i18n}>
           <QueryClientProvider client={queryClient}>
             <StatusBar style="auto" />
-            {intro.status === 'show' ? (
-              <PermissionsScreen onDone={intro.finish} />
-            ) : (
-              <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Protected guard={auth.status === 'signedIn'}>
-                  <Stack.Screen name="(app)" />
-                </Stack.Protected>
-                <Stack.Protected guard={auth.status === 'signedOut'}>
-                  <Stack.Screen name="(auth)" />
-                </Stack.Protected>
-              </Stack>
-            )}
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Protected guard={auth.status === 'signedIn'}>
+                <Stack.Screen name="(app)" />
+              </Stack.Protected>
+              <Stack.Protected guard={auth.status === 'signedOut'}>
+                <Stack.Screen name="(auth)" />
+              </Stack.Protected>
+            </Stack>
           </QueryClientProvider>
         </I18nextProvider>
       </SafeAreaProvider>

@@ -5,7 +5,7 @@ import { log } from '@/lib/observability/logger';
 import { canPlaceCalls } from './permissions';
 
 /**
- * Calls a phone number. On Android, when the person allowed calls (the first-open screen), the call is placed straight away; in
+ * Calls a phone number. On Android, when the person allowed calls (the permission prompt at first open), the call is placed straight away; in
  * every other case, and if that fails, the number is handed to the phone's dialer, which needs no permission and lets the person
  * confirm. iOS always goes through the dialer, which asks the person to confirm the call.
  */
