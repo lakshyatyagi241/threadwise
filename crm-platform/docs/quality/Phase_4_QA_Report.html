@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Phase 4 QA Report</title>
+    <style>
+      :root {
+        --bg: #f4f6f9;
+        --surface: #fff;
+        --ink: #141a26;
+        --muted: #586275;
+        --line: #dde2ea;
+        --accent: #2a49c9;
+        --pass: #17613a;
+        --pass-soft: #dff3e7;
+        --part: #8a4a00;
+        --part-soft: #fdeccf;
+        --fail: #8a2b1f;
+        --fail-soft: #fbe4df;
+        --info: #3d4f7a;
+        --info-soft: #e6ebf5;
+        --code-bg: #eef1f6;
+        --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #0f131b;
+          --surface: #171c27;
+          --ink: #e8ecf4;
+          --muted: #9aa5b8;
+          --line: #2a3242;
+          --accent: #8ea3f5;
+          --pass: #7fd6a2;
+          --pass-soft: #14301f;
+          --part: #f4c37a;
+          --part-soft: #3a2c14;
+          --fail: #f2a99c;
+          --fail-soft: #3a1d19;
+          --info: #aebbe0;
+          --info-soft: #232b40;
+          --code-bg: #0f1420;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px/1.55 var(--font);
+        margin: 0;
+        padding: 28px 16px 80px;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 34px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      code,
+      pre {
+        font-family: var(--mono);
+      }
+      code {
+        background: var(--code-bg);
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        overflow-wrap: anywhere;
+      }
+      a {
+        color: var(--accent);
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      h1 {
+        font-size: clamp(26px, 4.2vw, 36px);
+        line-height: 1.12;
+        font-weight: 600;
+      }
+      .lede {
+        color: var(--muted);
+        max-width: 70ch;
+        margin-top: 10px;
+      }
+      h2.sec {
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .meta b {
+        color: var(--ink);
+      }
+      .chip {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .pass {
+        background: var(--pass-soft);
+        color: var(--pass);
+      }
+      .part {
+        background: var(--part-soft);
+        color: var(--part);
+      }
+      .fail {
+        background: var(--fail-soft);
+        color: var(--fail);
+      }
+      .info {
+        background: var(--info-soft);
+        color: var(--info);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      .stat b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 500;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .board {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      td {
+        padding: 11px 14px;
+        border-top: 1px solid var(--line);
+        vertical-align: top;
+      }
+      tr:first-child td {
+        border-top: 0;
+      }
+      td.n {
+        font-family: var(--mono);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .board table {
+        min-width: 720px;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .toc a {
+        text-decoration: none;
+        font-size: 12.5px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 4px 11px;
+      }
+      article.report {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      article.report > header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .rt {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        align-items: baseline;
+      }
+      .rt h2 {
+        font-size: 20px;
+        font-weight: 600;
+        flex: 1;
+        min-width: 200px;
+      }
+      .rt .id {
+        font-family: var(--mono);
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+      dl.facts {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      dl.facts dt,
+      dl.facts dd {
+        margin: 0;
+        padding: 9px 12px;
+        border-top: 1px solid var(--line);
+      }
+      dl.facts dt:first-of-type,
+      dl.facts dd:first-of-type {
+        border-top: 0;
+      }
+      dl.facts dt {
+        background: var(--code-bg);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      @media (max-width: 560px) {
+        dl.facts {
+          grid-template-columns: 1fr;
+        }
+      }
+      .blk h3 {
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .blk ul,
+      .blk ol {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .cases {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .cases table {
+        min-width: 640px;
+        font-size: 13px;
+      }
+      .cases td,
+      .cases th {
+        padding: 8px 12px;
+      }
+      .res {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      .res div {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .res b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .res span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      pre {
+        margin: 0;
+        background: var(--code-bg);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+      .note {
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .warn {
+        font-size: 12.5px;
+        background: var(--part-soft);
+        color: var(--part);
+        border-radius: 6px;
+        padding: 8px 10px;
+      }
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">QA, security and performance backlog · Phase 4 · cross-browser</div>
+        <h1>Phase 4 QA Report</h1>
+        <p class="lede">
+          One task from the team sheet: cross-browser testing. The report says what kind of work it
+          is, what it covers, the tools used, what was run, what was found, and where it falls short
+          of the sheet's target. <b>The task is partly met.</b> Three engines run the public pages
+          and the engine-sensitive spec cleanly, and one real defect was fixed, but the signed-in
+          flows were not run on Firefox or WebKit because they need the full stack.
+        </p>
+        <div class="meta">
+          <span><b>Prepared by</b> Vishal</span><span><b>Date</b> 15 Oct 2026</span
+          ><span
+            ><b>Branch</b> <code>vishal/qa-phase-4</code> (from <code>main</code> at
+            <code>2c8f32f4</code>), PR #459 (draft)</span
+          ><span><b>Commits</b> 4 on the branch</span>
+        </div>
+      </header>
+
+      <section style="display: flex; flex-direction: column; gap: 14px">
+        <h2 class="sec">Summary</h2>
+        <div class="stats">
+          <div class="stat"><b>1 / 1</b><span>task built and measured; partly met</span></div>
+          <div class="stat">
+            <b>3 + 1</b
+            ><span>engines: Chromium, Firefox, WebKit, plus mobile Safari (P0 only)</span>
+          </div>
+          <div class="stat">
+            <b>82</b><span>spec tests run across four projects, 0 unexpected failures</span>
+          </div>
+          <div class="stat"><b>14</b><span>e2e folders classified: 5 P0, 8 P1, 1 P2</span></div>
+          <div class="stat">
+            <b>1</b><span>real defect found and fixed (four unnamed buttons)</span>
+          </div>
+          <div class="stat"><b>0</b><span>signed-in flows run on Firefox or WebKit</span></div>
+        </div>
+        <p>
+          <b>What changed in how this was run.</b> The sandbox had only Chromium. Firefox and WebKit
+          were installed (with their host libraries), and a small stand-in API was written so the
+          public pages render without Postgres and Redis. That is what makes the public run honest:
+          the pages are real, only the backend answers are faked.
+        </p>
+        <p>
+          <b>The most useful findings were about the tests, not the browsers:</b> two of the first
+          failures came from wrong assumptions in the tests (the OS dark preference does not set the
+          theme; the theme cookie is written after the colour flips), and one came from the
+          environment (a proxy with no API behind it). The one real product defect was an
+          accessibility one that every engine shared.
+        </p>
+        <p class="warn">
+          Nothing here runs on GitHub automatically: the check workflows were removed in #328 and
+          jobs do not start on this account. The new <code>Browsers</code> workflow is manual, like
+          <code>Quality</code> and <code>Security</code>, and has never run. After the accessibility
+          fix the public matrix was not re-run on the three engines, and type-check and lint of the
+          web app were not run in the last session.
+        </p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Result against the sheet's target</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Sheet target</th>
+                <th>Result</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="n">#19</td>
+                <td><a href="#qa-19">Cross-browser testing</a></td>
+                <td>P0 and P1 flows work in Chromium, Firefox and WebKit</td>
+                <td>
+                  Public pages and the engine-sensitive spec pass on all three (21/21, 21/21, 20 + 1
+                  skipped); mobile Safari 20 + 1 skipped. Signed-in flows not run on Firefox or
+                  WebKit.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <nav class="toc">
+          <a href="#qa-19">#19 Cross-browser</a><a href="#def-h">Defect register</a>
+        </nav>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Test environment and tools</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Machine</td>
+                <td>
+                  Cloud Linux container, Node 22.22, pnpm 9.15.4, Playwright 1.64.
+                  <b>No Docker daemon.</b>
+                </td>
+              </tr>
+              <tr>
+                <td>Engines</td>
+                <td>
+                  Chromium revision 1194 (pre-installed, via <code>CHROMIUM_PATH</code>), Firefox
+                  157, WebKit 27.2 (Linux build; mobile Safari is WebKit with the iPhone 14 profile)
+                </td>
+              </tr>
+              <tr>
+                <td>How the pages were served</td>
+                <td>
+                  A scratch copy of <code>crm-platform</code> with one override (the blocked
+                  <code>libsignal</code> package stubbed, as in Phase 3), built with
+                  <code>next build</code> and served with <code>next start</code> on port 3001; the
+                  stand-in API on port 3000
+                </td>
+              </tr>
+              <tr>
+                <td>What ran</td>
+                <td>
+                  Cross-browser spec on four projects; the public route matrix on three engines
+                  (before the fix); the priority check and the quality tools' Node tests (48 pass);
+                  Prettier on every file touched
+                </td>
+              </tr>
+              <tr>
+                <td>What did not run</td>
+                <td>
+                  Anything that needs the API, Postgres and Redis: the signed-in specs and the 189
+                  signed-in routes; the public matrix after the fix; type-check and lint of
+                  <code>apps/web</code> in the last session; the manual
+                  <code>Browsers</code> workflow
+                </td>
+              </tr>
+              <tr>
+                <td>Data</td>
+                <td>
+                  No customer data. The stand-in API returns a fixed language list and 401 for
+                  everything else
+                </td>
+              </tr>
+              <tr>
+                <td>Severity scale</td>
+                <td>
+                  <b>High</b> real harm possible or a release blocker · <b>Medium</b> wrong
+                  behaviour or a gap the team can hit · <b>Low</b> cosmetic or a limit worth knowing
+                  · <b>Info</b> recorded for awareness
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div id="reports" style="display: flex; flex-direction: column; gap: 22px"></div>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec" id="def-h">Defect and finding register</h2>
+        <p class="note">
+          Numbered P4-xx to keep them apart from the earlier registers. "Recorded" means written
+          down, not changed.
+        </p>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Task</th>
+                <th>Finding</th>
+                <th>Severity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="defects"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="blk" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 class="sec">What is still open</h2>
+        <ul id="open"></ul>
+      </section>
+      <footer>
+        Sources: the team sheet "Action items" tab (row 19), the repository, and the Playwright runs
+        of 15 Oct 2026. Nothing was measured on GitHub.
+      </footer>
+    </div>
+
+    <script>
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+        );
+      const li = (a) => a.map((x) => `<li>${x}</li>`).join('');
+      const chip = (s) =>
+        ({
+          pass: '<span class="chip pass">Met</span>',
+          part: '<span class="chip part">Partly met</span>',
+          fail: '<span class="chip fail">Not met</span>',
+        })[s];
+      const R = [
+        {
+          id: 'qa-19',
+          n: 19,
+          t: 'Cross-browser testing',
+          status: 'part',
+          type: 'Compatibility testing · the same flows run in Chromium, Firefox and WebKit (Safari engine), plus a phone-sized Safari',
+          target: 'P0 and P1 flows work in Chromium, Firefox and WebKit',
+          summary:
+            'Until now every browser test ran in Chromium only. This task adds Firefox, WebKit and mobile-Safari projects to the Playwright setup, gives every e2e folder a priority (P0, P1, P2) with a check that keeps the map complete, and adds a spec for the things that differ between engines: sign-in, language menu, right-to-left languages, theme, consent banner and keyboard. The public pages and that spec were run on all three engines. <b>The signed-in flows were not run on Firefox or WebKit</b>: they need the API, Postgres and Redis, and there is no Docker here. The work found one real defect (four decorative buttons with no accessible name, in every engine) and fixed it.',
+          what: 'Browsers do not all behave the same: cookies are written at different moments, Safari does not Tab to buttons by default, fonts and right-to-left layout differ. A flow that passes in Chromium can fail in Safari, which is a large share of phone users.',
+          objective:
+            'Run the P0 and P1 flows on three engines, sort every failure into a real browser bug, a wrong test assumption or a timing problem, fix the real bugs with the smallest change, and make the setup repeatable.',
+          coverage:
+            'The sheet asks for P0 and P1 flows on three engines. Done on all three: the engine-sensitive spec (21 tests) and the 19 public routes (matrix scoped to public). Not done: the 189 signed-in routes and the signed-in P0/P1 specs on Firefox and WebKit. The priority map exists for all 14 e2e folders (5 P0, 8 P1, 1 P2), so the run is one command once the stack is up.',
+          defects: 'P4-01 (medium, fixed), P4-02 (medium, open), P4-03, P4-04 (low, recorded).',
+          scope: [
+            'In: Playwright projects for Firefox 157, WebKit 27.2 and mobile Safari (iPhone 14 profile, P0 folders only); the priority map and its check; the engine-sensitive spec; the public route matrix on three engines; a stand-in API so public pages run without the backend; the manual workflow and the guide.',
+            'Out: the signed-in flows on Firefox and WebKit (need Docker); real devices and real Safari on macOS or iOS (WebKit on Linux is the same engine, not the same product); visual regression; Edge and older browser versions.',
+          ],
+          tools: [
+            'Playwright 1.64: projects, <code>devices</code>, <code>testMatch</code>, <code>--repeat-each</code>, JSON reporter.',
+            'Engines: Chromium (pre-installed, revision 1194, passed in through <code>CHROMIUM_PATH</code>), Firefox 157 and WebKit 27.2 installed with <code>playwright install</code> and <code>install-deps</code>.',
+            "<code>apps/web/e2e/priority.json</code> and <code>tools/quality/check-browser-priority.mjs</code> (3 tests on Node's built-in runner).",
+            '<code>apps/web/e2e/_matrix/stub-api.mjs</code>: a small stand-in API (languages list, 401 for login and everything else).',
+          ],
+          approach: [
+            'Added the three projects to <code>playwright.config.ts</code> behind <code>CROSS_BROWSER=1</code> so normal runs are unchanged; <code>E2E_PRIORITY</code> turns the priority map into a <code>testMatch</code>.',
+            'Wrote the map as one file of folder names and a check that fails on a folder without a priority, a stale name or an invalid value. Priorities are per folder, not per-test tags: one place to decide, one check to enforce.',
+            'Installed the engines. The first install failed validation (missing host libraries); <code>install-deps</code> fixed it.',
+            'Ran the existing route matrix on each engine with <code>QA_MATRIX_SCOPE=public</code>. Firefox showed 500 on the languages request; traced to the web proxy having no API behind it, so wrote the stand-in API. Both public pages <code>/</code> and <code>/features</code> failed an accessible-name check on all engines.',
+            'Wrote the engine-sensitive spec: sign-in form and error, language menu, Arabic, Hebrew and Urdu (direction, script, mirrored layout), theme toggle and persistence, consent banner choices, keyboard.',
+            'Triaged every failure: real bug (fixed), wrong test assumption (test corrected), or timing (wait on the real signal). Two assumptions were mine: that the OS dark preference sets the dark theme (the site is light by default, cookie-driven), and that the theme cookie exists the moment the colour flips (it is written afterwards by a server action).',
+            'Fixed the real defect with the smallest change: four decorative mock-up buttons became <code>aria-hidden</code> divs with the same classes.',
+          ],
+          cases: [
+            [
+              'C1',
+              'Priority check: unclassified folder, stale name, invalid value, complete map',
+              'As specified',
+              '3 pass',
+              'Pass',
+            ],
+            ['C2', 'Every e2e folder has a priority', 'All', '14 of 14: 5 P0, 8 P1, 1 P2', 'Pass'],
+            ['C3', 'Cross-browser spec on Chromium', 'All pass', '21 of 21', 'Pass'],
+            ['C4', 'Cross-browser spec on Firefox', 'All pass', '21 of 21', 'Pass'],
+            [
+              'C5',
+              'Cross-browser spec on WebKit',
+              'All pass',
+              '20 passed, 1 skipped (Tab order: Safari skips buttons unless the OS setting is on)',
+              'Pass',
+            ],
+            [
+              'C6',
+              'Cross-browser spec on mobile Safari',
+              'All pass',
+              '20 passed, 1 skipped (same reason)',
+              'Pass',
+            ],
+            [
+              'C7',
+              'Unnamed buttons on <code>/</code> and <code>/features</code> (matrix accessible-name check, all engines)',
+              'Every button has a name',
+              'Four decorative buttons had none',
+              'Defect P4-01 (fixed)',
+            ],
+            [
+              'C8',
+              'Public matrix on three engines after the fix',
+              'No failures',
+              'Not re-run (see limits)',
+              'Not run',
+            ],
+            [
+              'C9',
+              'Signed-in P0/P1 specs and 189 signed-in routes on Firefox and WebKit',
+              'Pass',
+              'Not run (need the full stack)',
+              'Not run',
+            ],
+            [
+              'C10',
+              'Repeat run (3 repeats of the spec on four projects)',
+              '0 flaky',
+              'Started; result not captured. The single full run had 0 unexpected and 0 flaky',
+              'Recorded',
+            ],
+          ],
+          counts: [
+            ['82', 'spec tests run on four projects'],
+            ['0', 'unexpected failures'],
+            ['2', 'skipped (Tab order, by design)'],
+            ['3', 'priority-check tests'],
+          ],
+          evidence: [
+            '<pre>Chromium       21 passed\nFirefox        21 passed\nWebKit         20 passed, 1 skipped\nmobile Safari  20 passed, 1 skipped\n14 e2e folders with specs: 5 P0, 8 P1, 1 P2</pre>',
+            'Guide: <code>docs/quality/cross-browser-testing.md</code>. Pull request: <a href="https://github.com/lakshyatyagi241/threadwise/pull/459">#459</a>.',
+          ],
+          limits: [
+            'The signed-in flows, which are most of the P0/P1 value, were not run on Firefox or WebKit. The passing result covers public pages and the engine-sensitive behaviour only.',
+            'The public matrix was not re-run after the accessible-name fix because the build environment was gone by the time the fix was committed; the fix is a markup change with no visual effect, but it is unconfirmed on the three engines.',
+            'WebKit here is the Linux build of the engine. It is a good guide to Safari, but it is not Safari on macOS or iOS.',
+            'Type-check and lint of <code>apps/web</code> were not run in the last session (web dependencies not installed there). Prettier and the Node tool tests were.',
+            'Mobile Safari runs the P0 folders only, by design.',
+          ],
+          recs: [
+            'With the Docker stack up, run <code>CROSS_BROWSER=1 E2E_PRIORITY=P0,P1 npx playwright test</code> on all projects and triage with the same three classes.',
+            'Re-run <code>QA_MATRIX_SCOPE=public</code> on the three engines once to confirm the accessible-name fix.',
+            'Run the manual <code>Browsers</code> workflow once on GitHub when jobs start, and make the public-page run a nightly job.',
+            'Spot-check on a real iPhone and on Safari for macOS before a release; WebKit on Linux does not replace it.',
+          ],
+          rerun:
+            '<pre>node tools/quality/check-browser-priority.mjs\npnpm --filter @crm/web exec playwright install --with-deps firefox webkit\nnode apps/web/e2e/_matrix/stub-api.mjs &   # :3000\npnpm --filter @crm/web build && pnpm --filter @crm/web exec next start -p 3001 &\ncd apps/web\nCROSS_BROWSER=1 npx playwright test e2e/cross-browser\nCROSS_BROWSER=1 QA_MATRIX_SCOPE=public npx playwright test e2e/_matrix --project=firefox</pre>',
+          files:
+            '<code>apps/web/playwright.config.ts</code>, <code>apps/web/e2e/priority.json</code>, <code>apps/web/e2e/cross-browser/sign-in-and-locale.spec.ts</code>, <code>apps/web/e2e/_matrix/route-matrix.spec.ts</code>, <code>apps/web/e2e/_matrix/stub-api.mjs</code>, <code>tools/quality/check-browser-priority.mjs</code> and test, <code>apps/web/src/features/marketing-site-cms/site/tw-home.tsx</code>, <code>tw-features-page.tsx</code>, <code>.github/workflows/browsers.yml</code>, <code>docs/quality/cross-browser-testing.md</code>',
+        },
+      ];
+      const DEFECTS = [
+        [
+          'P4-01',
+          '19',
+          'Four decorative buttons in the marketing mock-ups on <code>/</code> and <code>/features</code> had no accessible name in every engine, so a screen reader announced empty buttons.',
+          'Medium',
+          'Fixed (aria-hidden divs, same classes); not re-run on three engines',
+        ],
+        [
+          'P4-02',
+          '19',
+          'The signed-in P0/P1 flows have never run on Firefox or WebKit (no Docker stack here), so engine bugs in them are unknown.',
+          'Medium',
+          'Open: run with the stack',
+        ],
+        [
+          'P4-03',
+          '19',
+          'The theme cookie is written by a server action after the colour flips, so leaving the page straight after the toggle can lose the choice (seen on Firefox and mobile Safari in tests).',
+          'Low',
+          'Recorded: tests wait for the cookie; product behaviour unchanged',
+        ],
+        [
+          'P4-04',
+          '19',
+          'Safari does not Tab to buttons by default, so keyboard Tab order cannot be asserted the same way on WebKit.',
+          'Info',
+          'Recorded: test skipped on WebKit with the reason in the spec',
+        ],
+        [
+          'P4-05',
+          'all',
+          'The <code>aria-hidden</code> fix could not be type-checked or linted in the last session and the public matrix was not re-run; the manual <code>Browsers</code> workflow has not run on GitHub.',
+          'Low',
+          'Open',
+        ],
+      ];
+      const OPEN = [
+        'Run the signed-in P0/P1 specs and the 189 signed-in routes on Firefox and WebKit with the Docker stack up; triage each failure as a real bug, a wrong test assumption or a timing problem.',
+        'Re-run <code>QA_MATRIX_SCOPE=public</code> on Chromium, Firefox and WebKit to confirm P4-01 is gone; capture the <code>--repeat-each</code> result for flakiness.',
+        'Run <code>tsc</code> and eslint for <code>apps/web</code> on a machine with the web dependencies installed.',
+        'Start the manual <code>Browsers</code> workflow once on GitHub and make the public-page run nightly when jobs start.',
+        'Spot-check on real Safari (macOS and iPhone) before a release.',
+        'Review: pull request #459 (<code>vishal/qa-phase-4</code>) is open as a draft.',
+      ];
+      const caseStatus = (s) =>
+        /^Pass/.test(s)
+          ? `<span class="chip pass">${esc(s)}</span>`
+          : /^Defect|^Open/.test(s)
+            ? `<span class="chip fail">${esc(s)}</span>`
+            : `<span class="chip info">${esc(s)}</span>`;
+      document.getElementById('reports').innerHTML = R.map(
+        (
+          r,
+        ) => `<article class="report" id="${r.id}"><header><div class="rt"><span class="id">QA task #${r.n}</span><h2>${esc(r.t)}</h2>${chip(r.status)}</div><p>${r.summary}</p></header>
+<dl class="facts"><dt>Type of testing</dt><dd>${esc(r.type)}</dd><dt>What it is</dt><dd>${r.what}</dd><dt>Objective</dt><dd>${r.objective}</dd><dt>Sheet target</dt><dd>${esc(r.target)}</dd><dt>Result against target</dt><dd>${r.coverage}</dd><dt>Defects</dt><dd>${r.defects}</dd></dl>
+<div class="blk"><h3>Scope</h3><ul>${li(r.scope)}</ul></div><div class="blk"><h3>Tools used</h3><ul>${li(r.tools)}</ul></div><div class="blk"><h3>Approach</h3><ol>${li(r.approach)}</ol></div>
+<div class="blk"><h3>Test cases and results</h3><div class="cases"><table><thead><tr><th>ID</th><th>Scenario</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead><tbody>${r.cases.map((c) => `<tr><td class="n">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td><td>${c[3]}</td><td>${caseStatus(c[4])}</td></tr>`).join('')}</tbody></table></div></div>
+<div class="blk"><h3>Execution summary</h3><div class="res">${r.counts.map((c) => `<div><b>${esc(c[0])}</b><span>${esc(c[1])}</span></div>`).join('')}</div></div>
+<div class="blk"><h3>Evidence</h3><div style="display:flex;flex-direction:column;gap:10px">${r.evidence.map((e) => (e.startsWith('<pre>') ? e : `<p class="note">${e}</p>`)).join('')}</div></div>
+<div class="blk"><h3>Limitations and risks</h3><ul>${li(r.limits)}</ul></div><div class="blk"><h3>Recommendations</h3><ul>${li(r.recs)}</ul></div>
+<div class="blk"><h3>How to re-run</h3>${r.rerun}</div><div class="blk"><h3>Files changed</h3><p class="note">${r.files}</p></div></article>`,
+      ).join('');
+      document.getElementById('defects').innerHTML = DEFECTS.map((d) => {
+        const sev = d[3] === 'High' ? 'fail' : d[3] === 'Medium' ? 'part' : 'info';
+        return `<tr><td class="n">${d[0]}</td><td class="n">${d[1] === 'all' ? 'all' : '#' + d[1]}</td><td>${d[2]}</td><td><span class="chip ${sev}">${d[3]}</span></td><td>${d[4]}</td></tr>`;
+      }).join('');
+      document.getElementById('open').innerHTML = li(OPEN);
+    </script>
+  </body>
+</html>

@@ -288,7 +288,10 @@ export function TwoDeviceStage({ ctx, def }: P) {
                     <span className="ring-out"></span>
                     <span className="ring-out r2"></span>
                     <span className="ring-out r3"></span>
-                    <button className="relative w-12 h-12 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-lg hover:scale-105 transition-transform">
+                    <div
+                      aria-hidden="true"
+                      className="relative w-12 h-12 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+                    >
                       <svg
                         viewBox="0 0 24 24"
                         className="w-5 h-5 -translate-x-[1px] translate-y-[1px]"
@@ -301,7 +304,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
                         <path d="M22 2L11 13" />
                         <path d="M22 2l-7 20-4-9-9-4 20-7z" />
                       </svg>
-                    </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -474,7 +477,10 @@ export function TwoDeviceStage({ ctx, def }: P) {
                   <div className="flex-1 bg-white hairline rounded-full px-3 py-2 text-[11px] text-ink-400">
                     Type a message…
                   </div>
-                  <button className="w-8 h-8 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-sm hover:scale-105 transition-transform">
+                  <div
+                    aria-hidden="true"
+                    className="w-8 h-8 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-sm hover:scale-105 transition-transform"
+                  >
                     <svg
                       viewBox="0 0 24 24"
                       className="w-3.5 h-3.5"
@@ -487,7 +493,7 @@ export function TwoDeviceStage({ ctx, def }: P) {
                       <path d="M22 2L11 13" />
                       <path d="M22 2l-7 20-4-9-9-4 20-7z" />
                     </svg>
-                  </button>
+                  </div>
                 </div>
               </div>
 
