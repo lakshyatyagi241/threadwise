@@ -7,7 +7,8 @@ order: 31
 documents: [tile:web]
 gates:
   planFeature: chatbot_widgets
-keywords: [website chat, web, widget, chat window, embed, deploy, customize, bot, live chat, channel]
+keywords:
+  [website chat, web, widget, chat window, embed, deploy, customize, bot, live chat, channel]
 ---
 
 ## What it is for

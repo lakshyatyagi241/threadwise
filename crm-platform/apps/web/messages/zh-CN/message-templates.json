@@ -60,7 +60,9 @@
       "rejected": "已拒绝:{reason}",
       "view": "查看",
       "edit": "编辑",
-      "delete": "删除"
+      "delete": "删除",
+      "curl": "cURL：通过 API 发送此模板",
+      "curlNamed": "发送 {name} 的 cURL"
     },
     "library": {
       "title": "模板库",
@@ -354,6 +356,15 @@
         "title": "Meta 请求内容",
         "hint": "按原样构建后发送给 Meta 审核的内容。",
         "empty": "尚未生成任何内容。"
+      },
+      "curl": {
+        "title": "通过 API 发送 (cURL)",
+        "intro": "将这个已获批准的模板发送到一个号码。请把示例值换成你自己的值。",
+        "copy": "复制",
+        "copied": "已复制",
+        "copyFailed": "无法复制。请选中文本后手动复制。",
+        "keyHint": "请把 YOUR_API_KEY 换成你的 API 密钥。",
+        "keyLink": "获取 API 密钥"
       }
     }
   }

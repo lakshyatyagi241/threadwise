@@ -97,7 +97,7 @@ the device idle-logout consumer (037), a WebKit/Safari pass and a signed-in Refe
 | channel-telegram                                  | TG     | API + web built, e2e green       |          |       |
 | channel-tiktok                                    | TT     | not started                      |          |       |
 | channel-line                                      | LINE   | API + web built, e2e green       |          |       |
-| channel-wechat                                    | WECH   | not started                      |          |       |
+| channel-wechat                                    | WECH   | API + web built, tests green     |          |       |
 | channel-viber                                     | VIB    | not started                      |          |       |
 | channel-sms                                       | SMS    | not started                      |          |       |
 | channel-email                                     | MAIL   | not started                      |          |       |

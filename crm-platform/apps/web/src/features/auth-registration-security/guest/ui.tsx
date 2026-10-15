@@ -42,14 +42,14 @@ export function ArrowIcon({ className }: { className?: string }) {
 
 /** A link that looks like the main button (a way forward after a dead end). */
 export const PRIMARY_LINK =
-  'inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-[13px] font-semibold text-primary-foreground hover:bg-(--auth-teal)';
+  'inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-[15px] font-semibold text-primary-foreground hover:bg-(--auth-teal)';
 
 /** Class names for text links on the guest pages. */
 export const LINK = 'font-semibold text-(--auth-link) hover:underline underline-offset-2';
 
 /** Shared field look: 13 px text, 10 px/12 px padding, 8 px corners, green border and halo on focus. */
 export const FIELD =
-  'h-auto rounded-lg px-3 py-2.5 text-[13px] focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10';
+  'h-auto rounded-lg px-3 py-2.5 text-[14px] focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10';
 
 export function Input({ className, ...rest }: InputProps) {
   return <BaseInput className={cn(FIELD, className)} {...rest} />;

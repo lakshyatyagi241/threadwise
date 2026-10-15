@@ -174,5 +174,13 @@
   "modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts": {
     "status": "reviewed",
     "reason": "mail dedupe key wsp:lifecycle-mail:<outbox event id>:<sha256(address)>; global event_outbox.id sequence; value is a flag. Redis error path fails open and can send a duplicate mail"
+  },
+  "modules/channel-wechat/inbound.service.ts": {
+    "status": "reviewed",
+    "reason": "per-channel-token rate limit; token is tenant-specific"
+  },
+  "modules/channel-wechat/wechat-token.service.ts": {
+    "status": "reviewed",
+    "reason": "per-channel lock key carries the org id and the channel id; guards one account's access-token refresh"
   }
 }

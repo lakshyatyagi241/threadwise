@@ -5,7 +5,18 @@ summary: Build smart agents and teach them from your own pages, files, text and 
 area: settings
 order: 5
 documents: [tile:ai-training]
-keywords: [knowledge base, smart agent, assistant, faq, train, sources, meta business agent, responder, chatbot]
+keywords:
+  [
+    knowledge base,
+    smart agent,
+    assistant,
+    faq,
+    train,
+    sources,
+    meta business agent,
+    responder,
+    chatbot,
+  ]
 ---
 
 ## What it is for

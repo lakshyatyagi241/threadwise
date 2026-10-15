@@ -5,7 +5,21 @@ summary: Create the key your own apps use to call the REST API, choose what it m
 area: settings
 order: 100
 documents: [tile:rest-api]
-keywords: [api key, developers, token, bearer, rest, curl, revoke, integration, scopes, restrict, permissions, full access]
+keywords:
+  [
+    api key,
+    developers,
+    token,
+    bearer,
+    rest,
+    curl,
+    revoke,
+    integration,
+    scopes,
+    restrict,
+    permissions,
+    full access,
+  ]
 ---
 
 ## What it is for

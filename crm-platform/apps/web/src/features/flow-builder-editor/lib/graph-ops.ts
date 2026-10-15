@@ -8,6 +8,7 @@ import {
   type FlowNode,
   type FlbNodeData,
 } from '@crm/contracts';
+import { buttonActionsWithout } from './button-actions';
 import { nodeLabelMsg } from './contract-text';
 import { msg, type Msg } from './msg';
 
@@ -153,7 +154,18 @@ export function removeOption(s: CanvasState, id: string, i: number): CanvasState
   if (!node) return s;
   const opts = Array.isArray(node.data.options) ? [...(node.data.options as unknown[])] : [];
   opts.splice(i, 1);
-  const withData = updateData(s, id, { options: opts });
+  // A Quick replies button keeps its picture and its pressed action by position: they move up with the options that follow.
+  const buttonData =
+    node.type === 'buttons'
+      ? {
+          optionIcons: (Array.isArray(node.data.optionIcons)
+            ? (node.data.optionIcons as unknown[])
+            : []
+          ).filter((_, j) => j !== i),
+          ...buttonActionsWithout(node.data, i),
+        }
+      : {};
+  const withData = updateData(s, id, { options: opts, ...buttonData });
   const edges = withData.edges
     .filter((e) => !(e.source === id && e.sourceHandle === `p${i}`))
     .map((e) => {

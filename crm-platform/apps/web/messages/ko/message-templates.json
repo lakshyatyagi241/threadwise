@@ -60,7 +60,9 @@
       "rejected": "거부됨: {reason}",
       "view": "보기",
       "edit": "편집",
-      "delete": "삭제"
+      "delete": "삭제",
+      "curl": "cURL: API로 이 템플릿 보내기",
+      "curlNamed": "{name} 전송용 cURL"
     },
     "library": {
       "title": "템플릿 라이브러리",
@@ -354,6 +356,15 @@
         "title": "Meta 전송 데이터",
         "hint": "Meta 검토를 위해 구성된 그대로 전송되는 내용입니다.",
         "empty": "아직 생성된 내용이 없습니다."
+      },
+      "curl": {
+        "title": "API로 보내기 (cURL)",
+        "intro": "승인된 이 템플릿을 한 번호로 보냅니다. 예시 값을 본인의 값으로 바꾸세요.",
+        "copy": "복사",
+        "copied": "복사됨",
+        "copyFailed": "복사하지 못했습니다. 텍스트를 선택해 직접 복사하세요.",
+        "keyHint": "YOUR_API_KEY를 본인의 API 키로 바꾸세요.",
+        "keyLink": "API 키 받기"
       }
     }
   }

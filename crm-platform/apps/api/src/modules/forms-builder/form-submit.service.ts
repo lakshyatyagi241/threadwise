@@ -3,8 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
   canonicalizeLocalPhone,
+  consentChannels,
   ERROR_CODES,
   formRateLimitsSchema,
+  type FormConsentChannel,
   type FormDefinition,
   type PublicFormSubmitInput,
   type PublicFormSubmitResponse,
@@ -342,6 +344,12 @@ export class FormSubmitService {
     const version = await this.forms.findVersionById(tx, orgId, versionId);
     if (!version) throw notFound();
     const def = readDefinition(version.definition);
+    // The channels are the ones of the wording the visitor saw (the submission's own version), not of a later republish.
+    const seen =
+      sub.versionId === versionId
+        ? version
+        : ((await this.forms.findVersionById(tx, orgId, sub.versionId)) ?? version);
+    const seenChannels = consentChannels(readDefinition(seen.definition).consent);
     await this.subs.markRetry(tx, orgId, sub.id);
     const consent: ConsentOutcome = sub.consent
       ? {
@@ -349,14 +357,14 @@ export class FormSubmitService {
           missing: false,
           marketingOptIn: sub.consent.given && def.consent.marketing,
           serviceAgreed: sub.consent.given && !def.consent.marketing,
-          coversSms: def.consent.coversSms,
+          channels: seenChannels,
         }
       : {
           stored: null,
           missing: false,
           marketingOptIn: false,
           serviceAgreed: false,
-          coversSms: false,
+          channels: [],
         };
     // A staff re-run of a form that takes payment opens its attempt as well (staff then get the link from the submission screen).
     const gatewaySlug = def.payment.enabled ? await this.payments.assertGateway(orgId) : '';
@@ -593,7 +601,7 @@ export class FormSubmitService {
         found.uuid,
         email,
         phone?.e164 ?? null,
-        consent.coversSms,
+        consent.channels,
       );
     } else if (consent.serviceAgreed) {
       await this.recordServiceAgreement(
@@ -604,7 +612,7 @@ export class FormSubmitService {
         found.contactId,
         email,
         phone?.e164 ?? null,
-        consent.coversSms,
+        consent.channels,
       );
     }
 
@@ -925,7 +933,7 @@ export class FormSubmitService {
     contactUuid: string,
     email: string | null,
     phone: string | null,
-    coversSms: boolean,
+    channels: readonly FormConsentChannel[],
   ): Promise<void> {
     const row = (await this.contactRepo.findById(tx, orgId, contactId))!;
     if (row.isUnsubscribed) return;
@@ -933,9 +941,9 @@ export class FormSubmitService {
     // text and its version), the form and the submission. Never the visitor's IP. A form cannot override a STOP (respectWithdrawn).
     const given = sub.consent;
     for (const channel of [
-      ...(phone ? (['whatsapp'] as const) : []),
-      ...(phone && coversSms ? (['sms'] as const) : []),
-      ...(email ? (['email'] as const) : []),
+      ...(phone && channels.includes('whatsapp') ? (['whatsapp'] as const) : []),
+      ...(phone && channels.includes('sms') ? (['sms'] as const) : []),
+      ...(email && channels.includes('email') ? (['email'] as const) : []),
     ]) {
       await this.consentLedger.recordInTx(tx, orgId, {
         contactId,
@@ -955,9 +963,12 @@ export class FormSubmitService {
       });
     }
     const patch: Record<string, unknown> = {};
-    if (email && !row.emailSubscriptionStatus) patch.emailSubscriptionStatus = 'subscribed';
-    if (phone && !row.whatsappSubscriptionStatus) patch.whatsappSubscriptionStatus = 'subscribed';
-    if (phone && coversSms && !row.smsSubscriptionStatus) patch.smsSubscriptionStatus = 'subscribed';
+    if (email && channels.includes('email') && !row.emailSubscriptionStatus)
+      patch.emailSubscriptionStatus = 'subscribed';
+    if (phone && channels.includes('whatsapp') && !row.whatsappSubscriptionStatus)
+      patch.whatsappSubscriptionStatus = 'subscribed';
+    if (phone && channels.includes('sms') && !row.smsSubscriptionStatus)
+      patch.smsSubscriptionStatus = 'subscribed';
     if (Object.keys(patch).length === 0) return;
     await this.contactRepo.updateFieldsById(tx, orgId, contactId, { ...patch, updatedBy: null });
     await this.audit.record(tx, {
@@ -999,14 +1010,14 @@ export class FormSubmitService {
     contactId: number,
     email: string | null,
     phone: string | null,
-    coversSms: boolean,
+    channels: readonly FormConsentChannel[],
   ): Promise<void> {
     const given = sub.consent;
     if (!given) return;
     for (const channel of [
-      ...(phone ? (['whatsapp'] as const) : []),
-      ...(phone && coversSms ? (['sms'] as const) : []),
-      ...(email ? (['email'] as const) : []),
+      ...(phone && channels.includes('whatsapp') ? (['whatsapp'] as const) : []),
+      ...(phone && channels.includes('sms') ? (['sms'] as const) : []),
+      ...(email && channels.includes('email') ? (['email'] as const) : []),
     ]) {
       await this.consentLedger.recordInTx(tx, orgId, {
         contactId,

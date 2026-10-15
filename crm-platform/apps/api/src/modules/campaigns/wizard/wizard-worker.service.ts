@@ -3,6 +3,7 @@ import { Interval } from '@nestjs/schedule';
 import { WabaReceiptRegistry } from '../../whatsapp-cloud-api-waba';
 import { CampaignReceiptsService } from '../campaign-receipts.service';
 import { WizardCsvService } from './wizard-csv.service';
+import { WizardFollowUpService } from './wizard-follow-up.service';
 import { WizardRetryService } from './wizard-retry.service';
 import { WizardSeriesService } from './wizard-series.service';
 import { WizardTestSendService } from './wizard-test-send.service';
@@ -20,11 +21,13 @@ export class WizardWorker implements OnModuleInit {
   private readonly logger = new Logger(WizardWorker.name);
   private planning = false;
   private retrying = false;
+  private following = false;
   private purging = false;
 
   constructor(
     private readonly series: WizardSeriesService,
     private readonly retries: WizardRetryService,
+    private readonly followUps: WizardFollowUpService,
     private readonly receipts: WabaReceiptRegistry,
     private readonly campaignReceipts: CampaignReceiptsService,
     private readonly tests: WizardTestSendService,
@@ -47,6 +50,20 @@ export class WizardWorker implements OnModuleInit {
       this.logger.error({ err }, '[CAMP] planning recurring broadcasts failed');
     } finally {
       this.planning = false;
+    }
+  }
+
+  @Interval(10_000)
+  async followUpTick(): Promise<void> {
+    if (this.following) return;
+    this.following = true;
+    try {
+      const done = await this.followUps.tick();
+      if (done.armed + done.acted > 0) this.logger.log(done, '[CAMP] follow-up steps worked');
+    } catch (err) {
+      this.logger.error({ err }, '[CAMP] follow-up steps failed');
+    } finally {
+      this.following = false;
     }
   }
 

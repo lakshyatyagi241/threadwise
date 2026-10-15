@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "Data automatycznego zakończenia już minęła.",
         "auto_end_before_send": "Data automatycznego zakończenia musi być późniejsza niż czas wysyłki.",
         "auto_end_recurring": "Kampania cykliczna kończy się według własnej reguły: wyczyść datę automatycznego zakończenia.",
-        "pacing_range": "Sprawdź Smart Delivery: najdłuższe opóźnienie jest krótsze od najkrótszego albo ustawiono tylko jedną z dwóch godzin wysyłki."
+        "pacing_range": "Sprawdź Smart Delivery: najdłuższe opóźnienie jest krótsze od najkrótszego albo ustawiono tylko jedną z dwóch godzin wysyłki.",
+        "follow_up_template_required": "Wybierz szablon wysyłany w każdej wiadomości uzupełniającej.",
+        "follow_up_flow_required": "Wybierz przepływ uruchamiany w każdej wiadomości uzupełniającej.",
+        "follow_up_cloud_api_only": "Wiadomości uzupełniające działają tylko z numerem WhatsApp Cloud API. Wybierz taki numer w kroku 1 lub usuń wiadomości uzupełniające."
       },
       "template": {
         "previewOnline": "online",
@@ -1382,7 +1385,8 @@
         "sumCsv": "Plik CSV {name}: {count, plural, one {# prawidłowy numer} few {# prawidłowe numery} many {# prawidłowych numerów} other {# prawidłowego numeru}}",
         "estimatedCostFull": "Szacowany koszt (pełny)",
         "chargedPlan": "Pobrano teraz z Twojego portfela: {amount} (Twój plan pokrywa {covered} tych wiadomości)",
-        "chargedWallet": "Pobrano z Twojego portfela: {amount}"
+        "chargedWallet": "Pobrano z Twojego portfela: {amount}",
+        "sumFollowUps": "Wiadomości uzupełniające"
       },
       "test": {
         "title": "Wyślij testową wiadomość WhatsApp",
@@ -1587,7 +1591,25 @@
         "exportFailed": "Nie udało się pobrać eksportu.",
         "deleteTitle": "Usunąć tę wysyłkę?",
         "deleteOne": "Usuwa tę wysyłkę i jej odbiorców. Tej operacji nie można cofnąć.",
-        "deleteSeries": "Usuwa tę wysyłkę cykliczną i zaplanowane uruchomienia. Nic nie zostało wysłane, więc historia nie przepada. Tej operacji nie można cofnąć."
+        "deleteSeries": "Usuwa tę wysyłkę cykliczną i zaplanowane uruchomienia. Nic nie zostało wysłane, więc historia nie przepada. Tej operacji nie można cofnąć.",
+        "followUps": {
+          "title": "Wiadomości uzupełniające",
+          "step": "Wiadomość uzupełniająca {step}",
+          "count": {
+            "waiting": "{count} oczekuje",
+            "sent": "{count} wysłano",
+            "delivered": "{count} dostarczono",
+            "read": "{count} przeczytano",
+            "flowsStarted": "{count} uruchomionych przepływów",
+            "skipped": "{count} pominięto",
+            "lapsed": "{count} wygasło",
+            "failed": "{count} nieudanych"
+          },
+          "hint": {
+            "skipped": "Warunek nie został spełniony w chwili sprawdzenia, więc sekwencja zakończyła się w tym miejscu.",
+            "lapsed": "Czas obserwacji minął, zanim kontakt odpowiedział lub przeczytał wiadomość, więc sekwencja zakończyła się w tym miejscu."
+          }
+        }
       },
       "panel": {
         "title": "Utworzone przez Utwórz wiadomość masową",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) wysyła się z kreatora klasycznego, który zaczyna od nowa. Ta kampania zostaje zapisana jako wersja robocza i pozostaje na liście Kampanii, więc możesz do niej wrócić.",
         "confirm": "Otwórz kreator klasyczny",
         "cancel": "Zostań tutaj"
+      },
+      "followUps": {
+        "title": "Wiadomości uzupełniające",
+        "intro": "Wyślij kolejną wiadomość lub uruchom przepływ w zależności od tego, co kontakt zrobi po wiadomości z kampanii. Do 3 kroków z rzędu.",
+        "cloudOnly": "Wiadomości uzupełniające wymagają numeru WhatsApp Cloud API, ponieważ korzystają z raportów Meta o odczytach i odpowiedziach. Wybierz taki numer w kroku 1.",
+        "add": "Dodaj wiadomość uzupełniającą",
+        "count": "{used} z {max} wiadomości uzupełniających",
+        "limitReached": "Osiągnięto limit: {max} wiadomości uzupełniających.",
+        "stepTitle": "Wiadomość uzupełniająca {step}",
+        "measuredFromCampaign": "Liczone od wiadomości z kampanii.",
+        "measuredFromStep": "Liczone od wiadomości uzupełniającej {step}.",
+        "remove": "Usuń wiadomość uzupełniającą {step}",
+        "removeShort": "Usuń",
+        "triggerLabel": "Gdy kontakt",
+        "trigger": {
+          "replied": "Odpowie",
+          "read": "Przeczyta wiadomość",
+          "not_replied": "Nie odpowiedział",
+          "not_read": "Nie przeczytał wiadomości"
+        },
+        "triggerHelp": {
+          "replied": "Uruchamia się w chwili odpowiedzi, jeśli nastąpi ona w ustawionym czasie. W przeciwnym razie sekwencja się kończy.",
+          "read": "Uruchamia się w chwili przeczytania, jeśli nastąpi ono w ustawionym czasie. W przeciwnym razie sekwencja się kończy.",
+          "not_replied": "Czeka ustawiony czas, a potem uruchamia się, jeśli kontakt nie odpowiedział. Jeśli odpowiedział, sekwencja się kończy.",
+          "not_read": "Czeka ustawiony czas, a potem uruchamia się, jeśli kontakt nie przeczytał wiadomości. Jeśli przeczytał, sekwencja się kończy."
+        },
+        "watchLabel": "Obserwuj maksymalnie przez",
+        "waitLabel": "Czekaj",
+        "unitLabel": "Jednostka czasu",
+        "duration": {
+          "minutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+          "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
+          "days": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}"
+        },
+        "actionLabel": "Wtedy",
+        "action": {
+          "template": "Wyślij szablon",
+          "flow": "Uruchom przepływ"
+        },
+        "templateLabel": "Szablon do wysłania",
+        "flowLabel": "Przepływ do uruchomienia",
+        "pickTemplate": "Wybierz szablon",
+        "pickFlow": "Wybierz przepływ",
+        "loading": "Ładowanie...",
+        "unavailable": "Już niedostępne",
+        "noTemplates": "Brak zatwierdzonych szablonów.",
+        "createTemplate": "Utwórz szablon",
+        "noFlows": "Brak przepływów.",
+        "createFlow": "Utwórz przepływ",
+        "flowsError": "Nie udało się załadować przepływów. Spróbuj ponownie później.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Jeśli odpowie w ciągu {wait}",
+          "read": "Jeśli przeczyta w ciągu {wait}",
+          "not_replied": "Jeśli nie odpowie po {wait}",
+          "not_read": "Jeśli nie przeczyta po {wait}"
+        },
+        "does": {
+          "template": "wyślij {name}",
+          "flow": "uruchom przepływ {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuta} few {minuty} many {minut} other {minuty}}",
+          "hours": "{count, plural, one {godzina} few {godziny} many {godzin} other {godziny}}",
+          "days": "{count, plural, one {dzień} few {dni} many {dni} other {dnia}}"
+        }
       }
     },
     "history": {

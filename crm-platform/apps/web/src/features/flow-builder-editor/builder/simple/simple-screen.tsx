@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
-import { Badge, Button, ConfirmDialog, Field, Input, Select, useToast } from '@crm/ui';
+import { Badge, Button, ConfirmDialog, Drawer, Field, Input, Select, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { ApiError } from '@/lib/api/errors';
@@ -57,6 +57,7 @@ import {
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
 import '../builder.css';
+import { lookOf } from '../../lib/node-ui';
 
 const errMessage = (e: unknown, fallback: string): string =>
   e instanceof ApiError ? e.message : e instanceof Error ? e.message : fallback;
@@ -289,6 +290,14 @@ function Editor({
       const at = doc.journeys.findIndex((j) => j.steps.some((s) => s.id === stepId));
       if (at >= 0) setGi(groupIndexOf(doc, at));
       setActiveId(stepId);
+      // The step may be in another flow of the list: wait for it to be drawn, then bring it into view.
+      window.setTimeout(
+        () =>
+          document
+            .getElementById(`step-${stepId}`)
+            ?.scrollIntoView({ block: 'center', behavior: 'smooth' }),
+        60,
+      );
     } else setGi(0);
   };
   const badSteps = useMemo(
@@ -310,16 +319,20 @@ function Editor({
     setActiveId(step.id);
   };
 
-  const setData = (id: string, patch: Record<string, unknown>) =>
-    change(updateStep(doc, id, { data: patch }));
+  const setData = (id: string, patch: Record<string, unknown>, links?: (string | null)[]) =>
+    change(updateStep(doc, id, { data: patch, ...(links ? { links } : {}) }));
 
-  const link = (id: string, i: number, target: string | null) => {
+  /** A button (or the end of a part) asked to lead to a new flow: ask which part it starts with before anything is created. */
+  const [newFlowFor, setNewFlowFor] = useState<
+    { kind: 'link'; stepId: string; i: number } | { kind: 'goto'; stepId: string } | null
+  >(null);
+
+  const linkTo = (id: string, i: number, target: string | null, first?: SimpleStep) => {
     const step = allSteps(doc).find((s) => s.id === id);
     if (!step) return;
     let next = doc;
     let to = target;
-    if (target === NEW_JOURNEY) {
-      const first = newStep('message', allSteps(doc));
+    if (first) {
       next = addJourney(next, first);
       to = first.id;
       setGi(groupsOf(next).length - 1);
@@ -328,6 +341,14 @@ function Editor({
     const links = step.links.slice();
     links[i] = to;
     change(updateStep(next, id, { links }));
+  };
+
+  const link = (id: string, i: number, target: string | null) => {
+    if (target === NEW_JOURNEY) {
+      setNewFlowFor({ kind: 'link', stepId: id, i });
+      return;
+    }
+    linkTo(id, i, target);
   };
 
   /**
@@ -361,11 +382,14 @@ function Editor({
   };
 
   /** Where the last step of a part carries on (a "node to node" connection). */
-  const setGoto = (id: string, target: string | null) => {
+  const setGoto = (id: string, target: string | null, first?: SimpleStep) => {
+    if (target === NEW_JOURNEY) {
+      setNewFlowFor({ kind: 'goto', stepId: id });
+      return;
+    }
     let next = doc;
     let to = target;
-    if (target === NEW_JOURNEY) {
-      const first = newStep('message', allSteps(doc));
+    if (first) {
       next = addJourney(next, first);
       to = first.id;
       setGi(groupsOf(next).length - 1);
@@ -479,7 +503,7 @@ function Editor({
     const onOutside = (e: MouseEvent) => {
       const target = e.target instanceof Element ? e.target : null;
       if (!target || !target.isConnected) return;
-      if (target.closest(`#step-${activeId}`)) return;
+      if (target.closest(`#step-${activeId}, [data-step-tools="${activeId}"]`)) return;
       if (
         target.closest(
           '[role="dialog"],[role="listbox"],[role="menu"],[role="alertdialog"],[data-radix-popper-content-wrapper]',
@@ -814,7 +838,7 @@ function Editor({
           </aside>
 
           <main className="min-w-0 flex-1 overflow-y-auto">
-            <div className="mx-auto w-full max-w-xl px-4 py-6">
+            <div className="mx-auto w-full max-w-[24rem] px-4 py-6">
               <div className="mb-4 flex flex-wrap items-center gap-2 md:hidden">
                 <Select
                   aria-label={t('flowSelect')}
@@ -901,10 +925,24 @@ function Editor({
                           first={si === 0}
                           last={si === journey.steps.length - 1}
                           onToggle={() => setActiveId(activeId === s.id ? null : s.id)}
-                          onSet={(patch) => setData(s.id, patch)}
+                          onSet={(patch, links) => setData(s.id, patch, links)}
                           onLink={(i, target) => link(s.id, i, target)}
                           onMove={(d) => change(moveStep(doc, s.id, d))}
                           onCopy={() => change(duplicateStep(doc, s.id))}
+                          actionKinds={stepKindsFor(channel).filter((k) =>
+                            ACTION_KINDS.includes(k.key),
+                          )}
+                          onAddAction={BRANCHING.has(s.type) ? null : (k) => add(ci, si + 1, k)}
+                          onAddCondition={
+                            BRANCHING.has(s.type) || si !== journey.steps.length - 1
+                              ? null
+                              : () => {
+                                  const k = stepKindsFor(channel).find(
+                                    (x) => x.type === 'condition',
+                                  );
+                                  if (k) add(ci, si + 1, k);
+                                }
+                          }
                           onDelete={() => {
                             change(removeStep(doc, s.id));
                             setActiveId(null);
@@ -980,6 +1018,19 @@ function Editor({
             </div>
           </main>
         </div>
+
+        <AddMenu
+          channel={channel}
+          atEnd
+          modal={{ open: newFlowFor !== null, onDismiss: () => setNewFlowFor(null) }}
+          onPick={(k) => {
+            if (!newFlowFor) return;
+            const first = newStep(k.type, allSteps(doc), k.preset);
+            if (newFlowFor.kind === 'link') linkTo(newFlowFor.stepId, newFlowFor.i, null, first);
+            else setGoto(newFlowFor.stepId, null, first);
+            setNewFlowFor(null);
+          }}
+        />
 
         <ConfirmDialog
           open={pendingImport !== null}
@@ -1143,77 +1194,184 @@ function TriggerCard({
   );
 }
 
+/** The steps the ⚡ Actions list offers: what can run right after a step. */
+const ACTION_KINDS: readonly string[] = ['api-library', 'code', 'delay'];
+
 function AddMenu({
   onPick,
   channel,
   atEnd,
   hint,
+  modal,
 }: {
   onPick: (k: StepKind) => void;
   channel: 'chat' | 'web';
   atEnd: boolean;
   hint?: string;
+  /** Opened from elsewhere (a button that should lead to a new flow): no "+" is drawn, the menu is centred over the page. */
+  modal?: { open: boolean; onDismiss: () => void };
 }) {
   const t = useTranslations('flb.builder.simple.add');
   const m = useMsg();
-  const [open, setOpen] = useState(false);
+  const [openLocal, setOpen] = useState(false);
+  const open = modal ? modal.open : openLocal;
+  const box = useRef<HTMLDivElement>(null);
+  const tClose = useTranslations('flb.builder.shell.modals');
+  const tSearch = useTranslations('flb.builder.simple');
+  const [q, setQ] = useState('');
+  const needle = q.trim().toLowerCase();
+  const close = () => {
+    setOpen(false);
+    setQ('');
+    modal?.onDismiss();
+  };
+  // The menu closes when the page outside it is clicked, or on Escape (a click inside it, on a step or the + button, is handled there).
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (!box.current?.contains(e.target as Node)) close();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close();
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
   return (
-    <div className="relative my-2 flex flex-col items-center">
-      <div className="h-3 w-px bg-border" />
-      <button
-        type="button"
-        aria-label={hint ?? t('addStep')}
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-        className={`grid place-items-center rounded-full border border-border bg-background text-brand shadow-sm hover:bg-muted ${
-          hint
-            ? 'h-auto gap-1 px-4 py-2 text-[12.5px] font-semibold'
-            : 'h-8 w-8 text-lg leading-none'
-        }`}
-      >
-        {hint ? `+ ${hint}` : '+'}
-      </button>
-      <div className="h-3 w-px bg-border" />
+    <div
+      ref={box}
+      className={
+        modal
+          ? 'fixed inset-0 z-50 grid place-items-center bg-black/40 p-4'
+          : 'relative my-2 flex flex-col items-center'
+      }
+      onMouseDown={(e) => {
+        if (modal && e.target === e.currentTarget) close();
+      }}
+      hidden={modal ? !modal.open : undefined}
+    >
+      {modal ? null : <div className="h-3 w-px bg-border" />}
+      {modal ? null : (
+        <button
+          type="button"
+          aria-label={hint ?? t('addStep')}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className={`grid place-items-center rounded-full bg-brand text-brand-foreground shadow-sm hover:opacity-90 ${
+            hint
+              ? 'h-auto gap-1 px-4 py-2 text-[12.5px] font-semibold'
+              : 'h-8 w-8 text-lg leading-none'
+          }`}
+        >
+          {hint ? `+ ${hint}` : '+'}
+        </button>
+      )}
+      {modal ? null : <div className="h-3 w-px bg-border" />}
       {open ? (
         <div
           role="menu"
-          className="absolute top-12 z-20 max-h-[70vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-background p-2 shadow-xl"
+          className={`flex max-h-[72vh] w-[min(28rem,calc(100vw-2rem))] flex-col rounded-2xl border border-border bg-background shadow-xl ${
+            modal ? '' : 'absolute start-1/2 top-12 z-20 -translate-x-1/2 rtl:translate-x-1/2'
+          }`}
         >
-          {(['send', 'ask', 'logic', 'answer', 'handoff'] as const).map((group) => (
-            <div key={group} className="mb-1 last:mb-0">
-              <div className="px-2.5 pt-1.5 pb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                {t(`groups.${group}`)}
-              </div>
-              <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-                {stepKindsFor(channel)
-                  .filter((k) => k.group === group)
-                  .map((k) => {
-                    const blocked = BRANCHING.has(k.type) && !atEnd;
-                    return (
-                      <button
-                        key={k.key}
-                        type="button"
-                        role="menuitem"
-                        disabled={blocked}
-                        title={
-                          blocked
-                            ? t(k.type === 'faq' ? 'blockedTitleFaq' : 'blockedTitle')
-                            : undefined
-                        }
-                        onClick={() => {
-                          setOpen(false);
-                          onPick(k);
-                        }}
-                        className="rounded-xl p-2.5 text-left hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        <div className="text-[13px] font-semibold">{m(k.label)}</div>
-                        <div className="text-[11.5px] text-muted-foreground">{m(k.help)}</div>
-                      </button>
-                    );
-                  })}
-              </div>
-            </div>
-          ))}
+          <div className="flex items-center justify-between px-5 pb-2 pt-4">
+            <h3 className="text-[15px] font-semibold">{t('addStep')}</h3>
+            <button
+              type="button"
+              aria-label={tClose('close')}
+              onClick={close}
+              className="grid size-8 place-items-center rounded-md text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                className="size-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
+              </svg>
+            </button>
+          </div>
+          <div className="px-5 pb-3">
+            <input
+              type="search"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder={tSearch('search')}
+              aria-label={tSearch('search')}
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              autoFocus
+            />
+          </div>
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-4">
+            {(['send', 'ask', 'logic', 'action', 'answer', 'handoff'] as const).map((group) => {
+              const kinds = stepKindsFor(channel).filter(
+                (k) =>
+                  k.group === group &&
+                  (needle === '' || `${m(k.label)} ${m(k.help)}`.toLowerCase().includes(needle)),
+              );
+              if (kinds.length === 0) return null;
+              return (
+                <div key={group} className="mb-4 last:mb-0">
+                  <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                    {t(`groups.${group}`)}
+                  </div>
+                  <div className="grid grid-cols-1 gap-x-3 gap-y-1 sm:grid-cols-2">
+                    {kinds.map((k) => {
+                      const blocked = BRANCHING.has(k.type) && !atEnd;
+                      const look = lookOf(k.type);
+                      return (
+                        <button
+                          key={k.key}
+                          type="button"
+                          role="menuitem"
+                          disabled={blocked}
+                          title={
+                            blocked
+                              ? t(k.type === 'faq' ? 'blockedTitleFaq' : 'blockedTitle')
+                              : m(k.help)
+                          }
+                          onClick={() => {
+                            close();
+                            onPick(k);
+                          }}
+                          className="flex items-center gap-2.5 rounded-xl p-1.5 text-start outline-none transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
+                        >
+                          <span
+                            className="grid size-9 shrink-0 place-items-center rounded-lg"
+                            style={{ background: look.bg, color: look.fg }}
+                            aria-hidden="true"
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              className="size-[18px]"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d={look.icon} />
+                            </svg>
+                          </span>
+                          <span className="min-w-0 text-[13px] font-medium leading-tight">
+                            {m(k.label)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       ) : null}
     </div>
@@ -1232,13 +1390,25 @@ function StepCard(p: {
   first: boolean;
   last: boolean;
   onToggle: () => void;
-  onSet: (patch: Record<string, unknown>) => void;
+  onSet: (patch: Record<string, unknown>, links?: (string | null)[]) => void;
   onLink: (i: number, target: string | null) => void;
   onMove: (dir: -1 | 1) => void;
   onCopy: () => void;
+  /** The steps the ⚡ Actions list offers (API call, JS function, Wait) on this channel. */
+  actionKinds: readonly StepKind[];
+  /** Adds the chosen step right after this one; null for a step that ends its part (nothing can follow it). */
+  onAddAction: ((k: StepKind) => void) | null;
+  /** Adds a Condition right after this step; null when a condition cannot go here (the step ends its part, or is not the last). */
+  onAddCondition: (() => void) | null;
   onDelete: () => void;
 }) {
   const t = useTranslations('flb.builder.simple.card');
+  const tCommon = useTranslations('flb.common');
+  const tShell = useTranslations('flb.builder.shell.modals');
+  const tSearch = useTranslations('flb.builder.simple');
+  const [confirm, setConfirm] = useState<'duplicate' | 'delete' | null>(null);
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [actionQ, setActionQ] = useState('');
   const m = useMsg();
   const tf = useFlb();
   const { step: s } = p;
@@ -1251,83 +1421,277 @@ function StepCard(p: {
     return null;
   };
   const fixed = FIXED_EXITS[s.type];
-  const labels: string[] = fixed
-    ? fixed.map((handle, i) =>
-        t('branchLabel', {
-          title: t(`faqExits.${handle}`),
-          target: stageOf(s.links[i] ?? null) ?? t('ends'),
-        }),
-      )
+  /** What each exit of a branching step leads to: the stage number of the step it reaches, or null (the conversation ends). */
+  const exits: Array<{ title: string; target: string | null }> = fixed
+    ? fixed.map((handle, i) => ({
+        title: t(`faqExits.${handle}`),
+        target: stageOf(s.links[i] ?? null),
+      }))
     : BRANCHING.has(s.type)
       ? (Array.isArray(s.data.options) ? s.data.options : []).map((o: unknown, i: number) => {
           const label = typeof o === 'string' ? o : str((o as Record<string, unknown>).title);
-          const to = stageOf(s.links[i] ?? null);
-          return t('branchLabel', { title: label || `#${i + 1}`, target: to ?? t('ends') });
+          return { title: label || `#${i + 1}`, target: stageOf(s.links[i] ?? null) };
         })
       : [];
-  return (
-    <section
-      id={`step-${s.id}`}
-      className={`rounded-2xl border bg-background transition ${
-        p.bad ? 'border-danger' : p.active ? 'border-brand shadow-md' : 'border-border'
-      }`}
-    >
-      <div className="flex items-center gap-2 p-3">
-        <button
-          type="button"
-          onClick={p.onToggle}
-          aria-expanded={p.active}
-          className="flex min-w-0 flex-1 items-center gap-3 text-left"
-        >
-          <span className="rounded-full bg-brand/10 px-2 py-0.5 font-mono text-[11px] text-brand">
-            {p.stage}
-          </span>
-          <span className="min-w-0">
-            <span className="block text-[13px] font-semibold">{m(stepLabel(s))}</span>
-            <span className="block truncate text-[12px] text-muted-foreground">
-              {stepSummary(s, tf) || t('empty')}
-            </span>
-          </span>
-        </button>
-        <div className="flex shrink-0 items-center gap-0.5 text-muted-foreground">
-          <IconBtn label={t('moveUp')} disabled={p.first} onClick={() => p.onMove(-1)}>
-            ↑
-          </IconBtn>
-          <IconBtn label={t('moveDown')} disabled={p.last} onClick={() => p.onMove(1)}>
-            ↓
-          </IconBtn>
-          {!BRANCHING.has(s.type) ? (
-            <IconBtn label={t('duplicate')} onClick={p.onCopy}>
-              ⧉
-            </IconBtn>
-          ) : null}
-          <IconBtn label={t('deleteStep')} danger onClick={p.onDelete}>
-            ✕
-          </IconBtn>
-        </div>
-      </div>
-      {!p.active && labels.length > 0 ? (
-        <div className="flex flex-wrap gap-1.5 px-3 pb-3">
-          {labels.map((l, i) => (
-            <span key={i} className="rounded-full bg-muted px-2.5 py-1 text-[11.5px]">
-              {l}
-            </span>
-          ))}
-        </div>
-      ) : null}
+  const look = lookOf(s.type);
+  const property =
+    s.data.saveProperty === true && str(s.data.propertyKey).trim() ? str(s.data.propertyKey) : '';
+  const bodyText = stepSummary(s, tf);
+  const tools = () => (
+    <>
       {p.active ? (
-        <div className="border-t border-border p-4">
-          <StepEditor
-            step={s}
-            doc={p.doc}
-            ctx={p.ctx}
-            flowId={p.flowId}
-            set={p.onSet}
-            link={p.onLink}
-          />
-        </div>
+        <IconBtn label={t('close')} onClick={p.onToggle}>
+          <Glyph d="M4 4l8 8M12 4l-8 8" />
+        </IconBtn>
       ) : null}
-    </section>
+      <IconBtn
+        label={p.onAddAction ? t('actions') : t('actionsBlocked')}
+        disabled={!p.onAddAction}
+        onClick={() => {
+          setActionQ('');
+          setActionsOpen(true);
+        }}
+      >
+        <Glyph d="M9 1.5 3.5 9H8l-1 5.5L12.5 7H8z" />
+      </IconBtn>
+      <IconBtn label={t('moveUp')} disabled={p.first} onClick={() => p.onMove(-1)}>
+        <Glyph d="M8 13V3M4 7l4-4 4 4" />
+      </IconBtn>
+      <IconBtn label={t('moveDown')} disabled={p.last} onClick={() => p.onMove(1)}>
+        <Glyph d="M8 3v10M4 9l4 4 4-4" />
+      </IconBtn>
+      {!BRANCHING.has(s.type) ? (
+        <IconBtn label={t('duplicate')} onClick={() => setConfirm('duplicate')}>
+          <Glyph d="M5.5 5.5h7v7h-7zM3.5 10.5v-7h7" />
+        </IconBtn>
+      ) : null}
+      <IconBtn
+        label={p.onAddCondition ? t('addCondition') : t('conditionLast')}
+        disabled={!p.onAddCondition}
+        onClick={() => p.onAddCondition?.()}
+      >
+        <Glyph d="M3 8h4M7 8l5-4M7 8l5 4M12 2.5v3M12 10.5v3" />
+      </IconBtn>
+      <IconBtn label={t('deleteStep')} danger onClick={() => setConfirm('delete')}>
+        <Glyph d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 8.5h5.6l.7-8.5M7 7v4M9 7v4" />
+      </IconBtn>
+    </>
+  );
+  return (
+    <div className={`group relative ${p.active ? 'z-20' : ''}`}>
+      {p.active ? (
+        <>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none fixed inset-0 -z-10 bg-foreground/15"
+          />
+          <div
+            role="status"
+            className="pointer-events-none fixed inset-x-0 top-[98px] z-30 bg-background py-3 text-center text-[15px] shadow-sm"
+          >
+            {t('outsideToSave')}
+          </div>
+        </>
+      ) : null}
+      <section
+        id={`step-${s.id}`}
+        className={`rounded-2xl border bg-background transition ${
+          p.bad ? 'border-danger' : p.active ? 'border-brand shadow-md' : 'border-border'
+        }`}
+      >
+        <div className="flex items-center gap-2 p-3">
+          <button
+            type="button"
+            onClick={p.onToggle}
+            aria-expanded={p.active}
+            title={p.active ? undefined : t('clickToEdit')}
+            className="flex min-w-0 flex-1 items-center gap-3 text-start"
+          >
+            <span
+              className="grid size-8 shrink-0 place-items-center rounded-lg"
+              style={{ background: look.bg, color: look.fg }}
+              aria-hidden="true"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                className="size-[18px]"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d={look.icon} />
+              </svg>
+            </span>
+            <span className="min-w-0 flex-1 truncate text-[14px] font-medium">
+              {m(stepLabel(s))}
+            </span>
+            <span className="shrink-0 font-mono text-[12px] text-muted-foreground">{p.stage}</span>
+          </button>
+          <div className="flex shrink-0 items-center gap-0.5 text-muted-foreground lg:hidden">
+            {tools()}
+          </div>
+        </div>
+        {!p.active ? (
+          <button
+            type="button"
+            onClick={p.onToggle}
+            title={t('clickToEdit')}
+            className="block w-full border-t border-border px-4 pb-4 pt-3 text-start"
+          >
+            <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
+              {bodyText || t('empty')}
+            </p>
+            {exits.length > 0 ? (
+              <div className="mt-3 space-y-2 rounded-lg bg-muted/60 p-3">
+                {exits.map((e, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center gap-2 rounded-full border bg-background px-4 py-1.5 text-[13px] font-semibold ${
+                      e.target ? 'border-brand text-brand' : 'border-orange-400 text-orange-600'
+                    }`}
+                  >
+                    <span className="min-w-0 flex-1 truncate">{e.title}</span>
+                    {e.target ? (
+                      <span className="shrink-0 rounded bg-brand/15 px-1.5 py-0.5 font-mono text-[10.5px] font-normal italic">
+                        {t('stage', { stage: e.target })}
+                      </span>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {property ? (
+              <p className="mt-3 text-[12.5px] text-muted-foreground">
+                {t.rich('storedIn', {
+                  property,
+                  b: (chunks) => <b className="font-semibold text-foreground/80">{chunks}</b>,
+                })}
+              </p>
+            ) : null}
+            {str(s.data.var).trim() ? (
+              <p className="mt-2">
+                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand">
+                  {`{{${str(s.data.var).trim()}}}`}
+                </code>
+              </p>
+            ) : null}
+          </button>
+        ) : null}
+        {p.active ? (
+          <div className="border-t border-border p-4">
+            <StepEditor
+              step={s}
+              doc={p.doc}
+              ctx={p.ctx}
+              flowId={p.flowId}
+              set={p.onSet}
+              link={p.onLink}
+            />
+          </div>
+        ) : null}
+      </section>
+      <div
+        data-step-tools={s.id}
+        className={`absolute start-full top-0 ms-2 hidden flex-col gap-0.5 rounded-xl border border-border bg-background p-1 text-muted-foreground shadow-md group-hover:lg:flex ${
+          p.active ? 'lg:flex' : ''
+        }`}
+      >
+        {tools()}
+      </div>
+      <Drawer
+        open={actionsOpen}
+        onClose={() => setActionsOpen(false)}
+        title={t('actions')}
+        closeLabel={tShell('close')}
+      >
+        <p className="mb-3 text-[12.5px] text-muted-foreground">{t('actionsHint')}</p>
+        <input
+          type="search"
+          value={actionQ}
+          onChange={(e) => setActionQ(e.target.value)}
+          placeholder={tSearch('search')}
+          aria-label={tSearch('search')}
+          className="mb-3 h-10 w-full rounded-lg border border-border bg-background px-3 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        />
+        <div className="space-y-1">
+          {p.actionKinds
+            .filter((k) =>
+              `${m(k.label)} ${m(k.help)}`.toLowerCase().includes(actionQ.trim().toLowerCase()),
+            )
+            .map((k) => {
+              const look = lookOf(k.type);
+              return (
+                <button
+                  key={k.key}
+                  type="button"
+                  onClick={() => {
+                    setActionsOpen(false);
+                    p.onAddAction?.(k);
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl p-2 text-start outline-none transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <span
+                    className="grid size-10 shrink-0 place-items-center rounded-lg"
+                    style={{ background: look.bg, color: look.fg }}
+                    aria-hidden="true"
+                  >
+                    <svg
+                      viewBox="0 0 16 16"
+                      className="size-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d={look.icon} />
+                    </svg>
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[13.5px] font-medium">{m(k.label)}</span>
+                    <span className="block text-[12px] text-muted-foreground">{m(k.help)}</span>
+                  </span>
+                </button>
+              );
+            })}
+        </div>
+      </Drawer>
+      <ConfirmDialog
+        open={confirm !== null}
+        title={confirm === 'delete' ? t('deleteTitle') : t('duplicateTitle')}
+        message={confirm === 'delete' ? t('deleteBody') : t('duplicateBody')}
+        confirmLabel={confirm === 'delete' ? t('deleteStep') : t('duplicate')}
+        cancelLabel={tCommon('cancel')}
+        tone={confirm === 'delete' ? 'danger' : 'default'}
+        onClose={() => setConfirm(null)}
+        onConfirm={() => {
+          const what = confirm;
+          setConfirm(null);
+          if (what === 'delete') p.onDelete();
+          else if (what === 'duplicate') p.onCopy();
+        }}
+      />
+    </div>
+  );
+}
+
+/** A 16px outline glyph from a path (the toolbar buttons). */
+function Glyph({ d }: { d: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className="size-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d={d} />
+    </svg>
   );
 }
 

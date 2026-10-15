@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "La date de fin automatique est déjà passée.",
         "auto_end_before_send": "La date de fin automatique doit être postérieure à l’heure d’envoi.",
         "auto_end_recurring": "Une campagne récurrente se termine selon sa propre règle : effacez la date de fin automatique.",
-        "pacing_range": "Vérifiez Smart Delivery : le délai le plus long est inférieur au plus court, ou une seule des deux heures d’envoi est définie."
+        "pacing_range": "Vérifiez Smart Delivery : le délai le plus long est inférieur au plus court, ou une seule des deux heures d’envoi est définie.",
+        "follow_up_template_required": "Choisissez le modèle envoyé par chaque relance.",
+        "follow_up_flow_required": "Choisissez le flux démarré par chaque relance.",
+        "follow_up_cloud_api_only": "Les relances ne fonctionnent qu'avec un numéro WhatsApp Cloud API. Choisissez-en un à l'étape 1 ou supprimez les relances."
       },
       "template": {
         "previewOnline": "en ligne",
@@ -1382,7 +1385,8 @@
         "sumCsv": "Fichier CSV {name} : {count, plural, one {# numéro valide} other {# numéros valides}}",
         "estimatedCostFull": "Coût estimé (total)",
         "chargedPlan": "Débité maintenant de votre portefeuille : {amount} (votre forfait couvre {covered} de ces messages)",
-        "chargedWallet": "Débité de votre portefeuille : {amount}"
+        "chargedWallet": "Débité de votre portefeuille : {amount}",
+        "sumFollowUps": "Relances"
       },
       "test": {
         "title": "Envoyer un message WhatsApp de test",
@@ -1587,7 +1591,25 @@
         "exportFailed": "L’export n’a pas pu être téléchargé.",
         "deleteTitle": "Supprimer cette diffusion ?",
         "deleteOne": "Supprime cette diffusion et ses destinataires. Cette action est irréversible.",
-        "deleteSeries": "Supprime cette diffusion récurrente et les exécutions qu’elle avait planifiées. Rien n’a été envoyé, aucun historique n’est donc perdu. Cette action est irréversible."
+        "deleteSeries": "Supprime cette diffusion récurrente et les exécutions qu’elle avait planifiées. Rien n’a été envoyé, aucun historique n’est donc perdu. Cette action est irréversible.",
+        "followUps": {
+          "title": "Relances",
+          "step": "Relance {step}",
+          "count": {
+            "waiting": "{count} en attente",
+            "sent": "{count} envoyées",
+            "delivered": "{count} délivrées",
+            "read": "{count} lues",
+            "flowsStarted": "{count} flux démarrés",
+            "skipped": "{count} ignorées",
+            "lapsed": "{count} expirées",
+            "failed": "{count} échouées"
+          },
+          "hint": {
+            "skipped": "La condition n'était pas remplie lors de la vérification, la séquence s'est donc arrêtée là.",
+            "lapsed": "Le délai de surveillance a expiré avant que le contact ne réponde ou ne lise, la séquence s'est donc arrêtée là."
+          }
+        }
       },
       "panel": {
         "title": "Créées avec Créer une diffusion",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) est envoyé depuis l’éditeur classique, qui repart de zéro. Cette campagne est enregistrée comme brouillon et reste dans votre liste de campagnes, vous pourrez donc y revenir.",
         "confirm": "Ouvrir l’éditeur classique",
         "cancel": "Rester ici"
+      },
+      "followUps": {
+        "title": "Relances",
+        "intro": "Envoyez un autre message, ou démarrez un flux, selon ce que fait le contact après le message de la campagne. Jusqu'à 3 étapes à la suite.",
+        "cloudOnly": "Les relances nécessitent un numéro WhatsApp Cloud API, car elles s'appuient sur les rapports de lecture et de réponse de Meta. Choisissez-en un à l'étape 1.",
+        "add": "Ajouter une relance",
+        "count": "{used} relance(s) sur {max}",
+        "limitReached": "Limite atteinte : {max} relances.",
+        "stepTitle": "Relance {step}",
+        "measuredFromCampaign": "Compté à partir du message de la campagne.",
+        "measuredFromStep": "Compté à partir du message de la relance {step}.",
+        "remove": "Supprimer la relance {step}",
+        "removeShort": "Supprimer",
+        "triggerLabel": "Quand le contact",
+        "trigger": {
+          "replied": "Répond",
+          "read": "Lit le message",
+          "not_replied": "N'a pas répondu",
+          "not_read": "N'a pas lu le message"
+        },
+        "triggerHelp": {
+          "replied": "Se déclenche dès qu'il répond, si cela arrive dans le délai défini. Sinon, la séquence s'arrête.",
+          "read": "Se déclenche dès qu'il lit le message, si cela arrive dans le délai défini. Sinon, la séquence s'arrête.",
+          "not_replied": "Attend le délai défini, puis se déclenche s'il n'a pas répondu. S'il a répondu, la séquence s'arrête.",
+          "not_read": "Attend le délai défini, puis se déclenche s'il n'a pas lu le message. S'il l'a lu, la séquence s'arrête."
+        },
+        "watchLabel": "Surveiller pendant au plus",
+        "waitLabel": "Attendre",
+        "unitLabel": "Unité de temps",
+        "duration": {
+          "minutes": "{count, plural, one {# minute} many {# de minutes} other {# minutes}}",
+          "hours": "{count, plural, one {# heure} many {# d'heures} other {# heures}}",
+          "days": "{count, plural, one {# jour} many {# de jours} other {# jours}}"
+        },
+        "actionLabel": "Alors",
+        "action": {
+          "template": "Envoyer un modèle",
+          "flow": "Démarrer un flux"
+        },
+        "templateLabel": "Modèle à envoyer",
+        "flowLabel": "Flux à démarrer",
+        "pickTemplate": "Choisir un modèle",
+        "pickFlow": "Choisir un flux",
+        "loading": "Chargement...",
+        "unavailable": "Plus disponible",
+        "noTemplates": "Aucun modèle approuvé pour l'instant.",
+        "createTemplate": "Créer un modèle",
+        "noFlows": "Aucun flux pour l'instant.",
+        "createFlow": "Créer un flux",
+        "flowsError": "Impossible de charger les flux. Réessayez plus tard.",
+        "line": "{when} : {what}",
+        "when": {
+          "replied": "S'il répond dans les {wait}",
+          "read": "S'il lit le message dans les {wait}",
+          "not_replied": "Sans réponse après {wait}",
+          "not_read": "Sans lecture après {wait}"
+        },
+        "does": {
+          "template": "envoyer {name}",
+          "flow": "démarrer le flux {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minute} many {de minutes} other {minutes}}",
+          "hours": "{count, plural, one {heure} many {d'heures} other {heures}}",
+          "days": "{count, plural, one {jour} many {de jours} other {jours}}"
+        }
       }
     },
     "history": {

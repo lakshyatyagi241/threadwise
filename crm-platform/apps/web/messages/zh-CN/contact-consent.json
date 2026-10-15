@@ -334,7 +334,16 @@
       "termsUrlHint": "必须以 https:// 开头",
       "useWorkspacePrivacy": "使用我的工作区隐私链接",
       "useWorkspaceTerms": "使用我的工作区条款链接",
-      "useWorkspaceText": "使用我的工作区默认文字"
+      "useWorkspaceText": "使用我的工作区默认文字",
+      "statement": "我同意通过 {channels} 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "短信",
+        "email": "电子邮件"
+      },
+      "channelsLabel": "此同意涵盖的渠道",
+      "channelsHint": "对方仅会订阅此处勾选的渠道,同意文案也会列出这些渠道。仅当对方提供了对应的手机号码或邮箱时才会使用该渠道。",
+      "channelsUse": "用这些渠道更新文案"
     }
   }
 }

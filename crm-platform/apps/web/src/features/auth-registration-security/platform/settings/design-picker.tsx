@@ -108,7 +108,15 @@ function Thumb({ variant }: { variant: number }) {
             transform="rotate(20 51 11)"
           />
           <circle cx="72" cy="44" r="14" fill="var(--background)" opacity="0.14" />
-          <rect x="46" y="16" width="20" height="3" rx="1.5" fill="var(--background)" opacity="0.9" />
+          <rect
+            x="46"
+            y="16"
+            width="20"
+            height="3"
+            rx="1.5"
+            fill="var(--background)"
+            opacity="0.9"
+          />
           <rect x="46" y="34" width="10" height="2" rx="1" fill="var(--background)" opacity="0.6" />
           <rect x="46" y="39" width="10" height="2" rx="1" fill="var(--background)" opacity="0.6" />
           <rect x="6" y="12" width="26" height="26" rx="3" {...card} />

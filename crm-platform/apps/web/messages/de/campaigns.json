@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "Das automatische Enddatum liegt bereits in der Vergangenheit.",
         "auto_end_before_send": "Das automatische Enddatum muss nach dem Sendezeitpunkt liegen.",
         "auto_end_recurring": "Eine wiederkehrende Kampagne endet nach ihrer eigenen Regel: Entfernen Sie das automatische Enddatum.",
-        "pacing_range": "Prüfen Sie Smart Delivery: Die längste Verzögerung ist kürzer als die kürzeste, oder nur eine der beiden Sendezeiten ist festgelegt."
+        "pacing_range": "Prüfen Sie Smart Delivery: Die längste Verzögerung ist kürzer als die kürzeste, oder nur eine der beiden Sendezeiten ist festgelegt.",
+        "follow_up_template_required": "Wählen Sie die Vorlage, die jede Folgenachricht sendet.",
+        "follow_up_flow_required": "Wählen Sie den Flow, den jede Folgenachricht startet.",
+        "follow_up_cloud_api_only": "Folgenachrichten funktionieren nur mit einer WhatsApp-Cloud-API-Nummer. Wählen Sie in Schritt 1 eine aus oder entfernen Sie die Folgenachrichten."
       },
       "template": {
         "previewOnline": "online",
@@ -1382,7 +1385,8 @@
         "sumCsv": "CSV-Datei {name}: {count, plural, one {# gültige Nummer} other {# gültige Nummern}}",
         "estimatedCostFull": "Geschätzte Kosten (gesamt)",
         "chargedPlan": "Jetzt Ihrem Wallet belastet: {amount} (Ihr Tarif deckt {covered} dieser Nachrichten ab)",
-        "chargedWallet": "Ihrem Wallet belastet: {amount}"
+        "chargedWallet": "Ihrem Wallet belastet: {amount}",
+        "sumFollowUps": "Folgenachrichten"
       },
       "test": {
         "title": "Eine WhatsApp-Testnachricht senden",
@@ -1587,7 +1591,25 @@
         "exportFailed": "Der Export konnte nicht heruntergeladen werden.",
         "deleteTitle": "Diesen Versand löschen?",
         "deleteOne": "Löscht diesen Versand und seine Empfänger. Das lässt sich nicht rückgängig machen.",
-        "deleteSeries": "Löscht diesen wiederkehrenden Versand und die geplanten Durchläufe. Es wurde nichts gesendet, daher geht kein Verlauf verloren. Das lässt sich nicht rückgängig machen."
+        "deleteSeries": "Löscht diesen wiederkehrenden Versand und die geplanten Durchläufe. Es wurde nichts gesendet, daher geht kein Verlauf verloren. Das lässt sich nicht rückgängig machen.",
+        "followUps": {
+          "title": "Folgenachrichten",
+          "step": "Folgenachricht {step}",
+          "count": {
+            "waiting": "{count} wartend",
+            "sent": "{count} gesendet",
+            "delivered": "{count} zugestellt",
+            "read": "{count} gelesen",
+            "flowsStarted": "{count} Flows gestartet",
+            "skipped": "{count} übersprungen",
+            "lapsed": "{count} abgelaufen",
+            "failed": "{count} fehlgeschlagen"
+          },
+          "hint": {
+            "skipped": "Die Bedingung war bei der Prüfung nicht erfüllt, daher endete die Sequenz dort.",
+            "lapsed": "Die Beobachtungszeit lief ab, bevor der Kontakt geantwortet oder gelesen hat, daher endete die Sequenz dort."
+          }
+        }
       },
       "panel": {
         "title": "Erstellt mit Broadcast erstellen",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) wird über den klassischen Builder versendet, der neu beginnt. Diese Kampagne wird als Entwurf gespeichert und bleibt in Ihrer Kampagnenliste, sodass Sie sie später fortsetzen können.",
         "confirm": "Klassischen Builder öffnen",
         "cancel": "Hier bleiben"
+      },
+      "followUps": {
+        "title": "Folgenachrichten",
+        "intro": "Senden Sie eine weitere Nachricht oder starten Sie einen Flow, je nachdem, was der Kontakt nach der Kampagnennachricht tut. Bis zu 3 Schritte hintereinander.",
+        "cloudOnly": "Folgenachrichten benötigen eine WhatsApp-Cloud-API-Nummer, da sie auf die Lese- und Antwortberichte von Meta angewiesen sind. Wählen Sie in Schritt 1 eine aus.",
+        "add": "Folgenachricht hinzufügen",
+        "count": "{used} von {max} Folgenachrichten",
+        "limitReached": "Limit erreicht: {max} Folgenachrichten.",
+        "stepTitle": "Folgenachricht {step}",
+        "measuredFromCampaign": "Gerechnet ab der Kampagnennachricht.",
+        "measuredFromStep": "Gerechnet ab der Nachricht von Folgenachricht {step}.",
+        "remove": "Folgenachricht {step} entfernen",
+        "removeShort": "Entfernen",
+        "triggerLabel": "Wenn der Kontakt",
+        "trigger": {
+          "replied": "antwortet",
+          "read": "die Nachricht liest",
+          "not_replied": "nicht geantwortet hat",
+          "not_read": "die Nachricht nicht gelesen hat"
+        },
+        "triggerHelp": {
+          "replied": "Wird ausgelöst, sobald der Kontakt antwortet, sofern das innerhalb der eingestellten Zeit geschieht. Andernfalls endet die Sequenz.",
+          "read": "Wird ausgelöst, sobald der Kontakt die Nachricht liest, sofern das innerhalb der eingestellten Zeit geschieht. Andernfalls endet die Sequenz.",
+          "not_replied": "Wartet die eingestellte Zeit und wird dann ausgelöst, wenn der Kontakt nicht geantwortet hat. Hat er geantwortet, endet die Sequenz.",
+          "not_read": "Wartet die eingestellte Zeit und wird dann ausgelöst, wenn der Kontakt die Nachricht nicht gelesen hat. Hat er sie gelesen, endet die Sequenz."
+        },
+        "watchLabel": "Beobachten für bis zu",
+        "waitLabel": "Warten",
+        "unitLabel": "Zeiteinheit",
+        "duration": {
+          "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+          "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
+          "days": "{count, plural, one {# Tag} other {# Tage}}"
+        },
+        "actionLabel": "Dann",
+        "action": {
+          "template": "Vorlage senden",
+          "flow": "Flow starten"
+        },
+        "templateLabel": "Zu sendende Vorlage",
+        "flowLabel": "Zu startender Flow",
+        "pickTemplate": "Vorlage auswählen",
+        "pickFlow": "Flow auswählen",
+        "loading": "Wird geladen...",
+        "unavailable": "Nicht mehr verfügbar",
+        "noTemplates": "Noch keine genehmigten Vorlagen.",
+        "createTemplate": "Vorlage erstellen",
+        "noFlows": "Noch keine Flows.",
+        "createFlow": "Flow erstellen",
+        "flowsError": "Die Flows konnten nicht geladen werden. Versuchen Sie es später erneut.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Wenn der Kontakt innerhalb von {wait} antwortet",
+          "read": "Wenn der Kontakt innerhalb von {wait} liest",
+          "not_replied": "Wenn nach {wait} keine Antwort kam",
+          "not_read": "Wenn nach {wait} nicht gelesen wurde"
+        },
+        "does": {
+          "template": "{name} senden",
+          "flow": "Flow {name} starten"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {Minute} other {Minuten}}",
+          "hours": "{count, plural, one {Stunde} other {Stunden}}",
+          "days": "{count, plural, one {Tag} other {Tage}}"
+        }
       }
     },
     "history": {

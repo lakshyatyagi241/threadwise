@@ -31,6 +31,8 @@ const REVIEWED_BARE_FETCH: Record<string, string> = {
   'infra/providers/channel-email/microsoft-http.ts':
     'fixed Microsoft Graph host; follow-up: a Graph nextLink/deltaLink is followed with the token, so check its host and set redirect manual',
   'infra/providers/channel-line/line-api.client.ts': 'fixed api.line.me and api-data.line.me',
+  'infra/providers/channel-viber/viber-bot-api.client.ts': 'fixed chatapi.viber.com',
+  'infra/providers/channel-wechat/wechat-api.client.ts': 'fixed api.weixin.qq.com',
   'infra/providers/growth-enrichment/growth-enrichment.adapters.ts': 'fixed api.apollo.io',
   'infra/providers/help-agent/http-help-agent-llm.adapter.ts':
     'fixed vendor hosts (env override is deploy-time)',

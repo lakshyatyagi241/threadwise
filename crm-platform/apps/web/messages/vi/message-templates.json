@@ -60,7 +60,9 @@
       "rejected": "Bị từ chối: {reason}",
       "view": "Xem",
       "edit": "Chỉnh sửa",
-      "delete": "Xóa"
+      "delete": "Xóa",
+      "curl": "cURL: gửi mẫu này bằng API",
+      "curlNamed": "cURL để gửi {name}"
     },
     "library": {
       "title": "Thư viện mẫu",
@@ -354,6 +356,15 @@
         "title": "Dữ liệu gửi Meta",
         "hint": "Nội dung gửi Meta để xét duyệt, đúng như đã tạo.",
         "empty": "Chưa tạo gì."
+      },
+      "curl": {
+        "title": "Gửi bằng API (cURL)",
+        "intro": "Gửi mẫu đã được duyệt này đến một số. Thay các giá trị mẫu bằng giá trị của bạn.",
+        "copy": "Sao chép",
+        "copied": "Đã sao chép",
+        "copyFailed": "Không thể sao chép. Hãy chọn văn bản và sao chép thủ công.",
+        "keyHint": "Thay YOUR_API_KEY bằng khóa API của bạn.",
+        "keyLink": "Lấy khóa API"
       }
     }
   }

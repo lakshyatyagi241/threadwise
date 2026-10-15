@@ -197,6 +197,7 @@ export class WizardBroadcastsService {
       status: c.status as CampaignStatus,
       counts: await this.repo.runCounts(tx, orgId, c.id),
       retries: this.retries(draft, await this.repo.retryTotals(tx, orgId, [c.id])),
+      followUps: await this.repo.followUpTotals(tx, orgId, c.id, draft.followUps.length),
     };
   }
 

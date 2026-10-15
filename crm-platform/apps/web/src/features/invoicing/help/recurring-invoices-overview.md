@@ -5,7 +5,8 @@ summary: Set up schedules that make invoices by themselves every day, week, mont
 area: sales
 order: 32
 documents: [nav:recurring-invoices]
-keywords: [subscription, retainer, repeat, schedule, automatic invoice, monthly, billing cycle, template]
+keywords:
+  [subscription, retainer, repeat, schedule, automatic invoice, monthly, billing cycle, template]
 ---
 
 ## What it is for

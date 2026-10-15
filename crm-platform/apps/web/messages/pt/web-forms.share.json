@@ -153,12 +153,18 @@
         "requiredHint": "Desative esta opção se o consentimento for opcional.",
         "marketing": "Opt-in de marketing",
         "marketingHint": "Marcar a caixa registra o consentimento de marketing no contato. Uma caixa desmarcada nunca inscreve ninguém.",
-        "whatsappHint": "Você vai enviar mensagens para estes contatos pelo WhatsApp? Use um texto que informe isso e explique como cancelar. A caixa marcada é guardada como comprovação, com este texto exato e a versão dele.",
-        "whatsappInsert": "Usar o texto de consentimento do WhatsApp",
-        "whatsappWording": "Concordo em receber novidades e ofertas pelo WhatsApp. Posso responder STOP a qualquer momento para cancelar.",
-        "coversSms": "O texto abrange SMS",
-        "coversSmsHint": "Ative apenas se o texto acima disser que podem ser contactados por SMS. Quando um telefone é recolhido, o SMS é registado junto com o WhatsApp e o e-mail.",
-        "serviceHint": "Esta linha não é marketing. Uma caixa assinalada é guardada como prova de que a pessoa aceitou ser contactada sobre o seu pedido (apenas mensagens de serviço), com este texto exato e a sua versão. Nunca subscreve ninguém a marketing."
+        "serviceHint": "Esta linha não é marketing. Uma caixa assinalada é guardada como prova de que a pessoa aceitou ser contactada sobre o seu pedido (apenas mensagens de serviço), com este texto exato e a sua versão. Nunca subscreve ninguém a marketing.",
+        "statement": "Concordo em receber novidades e ofertas pelo {channels}. Posso responder STOP a qualquer momento para cancelar.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "e-mail"
+        },
+        "channelsLabel": "Canais cobertos por este consentimento",
+        "channelsHint": "O visitante só é inscrito nos canais marcados aqui, e o texto do consentimento os cita. Um canal só é usado se o formulário coletar o telefone ou o e-mail correspondente.",
+        "channelsUse": "Atualizar o texto com estes canais",
+        "channelNeedsPhone": "Este formulário não tem campo de telefone, então ninguém é inscrito neste canal por ele.",
+        "channelNeedsEmail": "Este formulário não tem campo de e-mail, então ninguém é inscrito neste canal por ele."
       },
       "crm": {
         "title": "No CRM",

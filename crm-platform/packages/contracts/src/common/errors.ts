@@ -272,6 +272,16 @@ export const ERROR_CODES = {
   VIB_CHANNEL_UNAVAILABLE: 'VIB_CHANNEL_UNAVAILABLE',
   VIB_NOTHING_TO_SEND: 'VIB_NOTHING_TO_SEND',
   VIB_NOTHING_TO_RETRY: 'VIB_NOTHING_TO_RETRY',
+  // WeChat channel (WECH)
+  /** WeChat refused the AppID and AppSecret (no access token). */
+  WECH_CREDENTIALS_REJECTED: 'WECH_CREDENTIALS_REJECTED',
+  /** An OpenID broadcast needs at least two recipients that belong to the channel. */
+  WECH_TOO_FEW_RECIPIENTS: 'WECH_TOO_FEW_RECIPIENTS',
+  WECH_CHANNEL_UNAVAILABLE: 'WECH_CHANNEL_UNAVAILABLE',
+  /** The broadcast was already sent: a mass send cannot be repeated. */
+  WECH_ALREADY_SENT: 'WECH_ALREADY_SENT',
+  /** Retry: the broadcast did not fail. */
+  WECH_NOT_RETRYABLE: 'WECH_NOT_RETRYABLE',
 
   // Help assistant (docs/specs/help-agent-assistant.md)
   /** The workspace switch is off, or the person may not use the assistant here (a disabled screen, a missing permission). */

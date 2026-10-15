@@ -315,8 +315,10 @@ joined (`composeAddress`: `street, city, state postal, country`, empty parts ski
 
 ## Consent line and the ledger (BL-171)
 
-`definition.consent.coversSms` (default false): the form's owner declares that the wording also covers SMS. A ticked **marketing** line grants
-marketing on WhatsApp and email, and on SMS when the form collects a phone and `coversSms` is on. A ticked line that is **not marketing** is
+`definition.consent.channels` (`whatsapp`, `sms`, `email`): the channels the wording covers, chosen by the form's owner (`consentChannels()` in
+contracts; a form saved before it keeps the old rule: WhatsApp and email, SMS when `coversSms`). A ticked **marketing** line grants marketing only
+on those channels, and only when the form collected the matching phone (WhatsApp, SMS) or email. A changed channel set on a published form is a
+new consent version in the editor. Re-running a submission uses the channels of the version the visitor saw. A ticked line that is **not marketing** is
 recorded as agreement to service messages (ledger purpose `utility`, source `form`, with the wording, version, form and submission), never as
 marketing, and changes no subscription label. An unticked line records nothing in the ledger (the submission keeps the wording shown and
 `given: false`). A person who stopped a channel is not turned back on.

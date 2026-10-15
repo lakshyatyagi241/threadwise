@@ -60,7 +60,9 @@
       "rejected": "却下：{reason}",
       "view": "表示",
       "edit": "編集",
-      "delete": "削除"
+      "delete": "削除",
+      "curl": "cURL: APIでこのテンプレートを送信",
+      "curlNamed": "{name} を送信する cURL"
     },
     "library": {
       "title": "テンプレートライブラリ",
@@ -354,6 +356,15 @@
         "title": "Metaに送信するデータ",
         "hint": "Metaの審査に送信される内容です（作成された通りに表示）。",
         "empty": "まだ作成されていません。"
+      },
+      "curl": {
+        "title": "APIで送信 (cURL)",
+        "intro": "承認済みのこのテンプレートを1つの番号に送信します。サンプル値をご自身の値に置き換えてください。",
+        "copy": "コピー",
+        "copied": "コピーしました",
+        "copyFailed": "コピーできませんでした。テキストを選択して手動でコピーしてください。",
+        "keyHint": "YOUR_API_KEY をご自身のAPIキーに置き換えてください。",
+        "keyLink": "APIキーを取得"
       }
     }
   }

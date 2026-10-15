@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import { type FlowFeatured, type FlowState, type FlowSummary } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { purposeOf, relativeTime } from '../lib/list-model';
-import { useMsg } from '../lib/msg';
+import { useFlb, useMsg } from '../lib/msg';
+import { flowTypeLabel } from '../lib/contract-text';
 import { openHref, type BuilderMode } from '../lib/builder-mode';
 
 export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
@@ -141,6 +142,7 @@ export function triggerLabelKey(
 /** One flow in the grid: category icon, state pill, title, the static purpose line, three bullets and the action row. */
 export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardActions }) {
   const t = useTranslations('flb.card');
+  const tf = useFlb();
   const m = useMsg();
   const tl = useTranslations('flb.list.state');
   const sty = STATE_STYLE[flow.state];
@@ -208,6 +210,41 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
             <span className={cn('h-1.5 w-1.5 rounded-full', sty.dot)} />
             {tl(flow.state)}
           </span>
+          {flow.flowType === 'chat' ? (
+            <span
+              title={flowTypeLabel(tf, 'chat')}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white"
+            >
+              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" aria-hidden="true">
+                <path
+                  d="M20.5 3.5A11 11 0 0 0 3.2 17.4L2 22l4.7-1.2A11 11 0 1 0 20.5 3.5Z"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M8.5 7.5c-.3 0-.6.1-.8.4-.5.6-.9 1.4-.6 2.4.5 1.6 1.7 3.2 3.2 4.4 1.2.9 2.5 1.5 3.7 1.5.9 0 1.6-.5 1.9-1.1.1-.3.1-.6-.2-.8l-1.6-.9c-.3-.1-.6 0-.8.2l-.5.6c-1-.4-2.1-1.4-2.6-2.5l.5-.5c.2-.2.2-.5.1-.8l-.8-1.7c-.1-.3-.4-.4-.6-.4Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+          ) : flow.flowType === 'web' ? (
+            <span
+              title={flowTypeLabel(tf, 'web')}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-500 text-white"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                aria-hidden="true"
+              >
+                <path d="M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z" />
+              </svg>
+            </span>
+          ) : null}
         </div>
       </div>
 

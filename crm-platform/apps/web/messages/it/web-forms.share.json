@@ -153,12 +153,18 @@
         "requiredHint": "Disattiva se il consenso è facoltativo.",
         "marketing": "Adesione al marketing",
         "marketingHint": "Spuntando la casella il consenso al marketing viene registrato sul contatto. Una casella non spuntata non iscrive mai nessuno.",
-        "whatsappHint": "Invierai messaggi a questi contatti su WhatsApp? Usa un testo che lo dica e spieghi come annullare l'iscrizione. La casella spuntata viene conservata come prova, con questo testo esatto e la sua versione.",
-        "whatsappInsert": "Usa il testo di adesione WhatsApp",
-        "whatsappWording": "Accetto di ricevere aggiornamenti e offerte su WhatsApp. Posso rispondere STOP in qualsiasi momento per annullare l'iscrizione.",
-        "coversSms": "Il testo copre gli SMS",
-        "coversSmsHint": "Attivalo solo se il testo sopra dice che si può essere contattati via SMS. Quando viene raccolto un telefono, l'SMS viene registrato insieme a WhatsApp ed email.",
-        "serviceHint": "Questa riga non è marketing. Una casella selezionata viene conservata come prova che la persona ha accettato di essere contattata per la sua richiesta (solo messaggi di servizio), con questo testo esatto e la sua versione. Non iscrive mai nessuno al marketing."
+        "serviceHint": "Questa riga non è marketing. Una casella selezionata viene conservata come prova che la persona ha accettato di essere contattata per la sua richiesta (solo messaggi di servizio), con questo testo esatto e la sua versione. Non iscrive mai nessuno al marketing.",
+        "statement": "Accetto di ricevere aggiornamenti e offerte su {channels}. Posso rispondere STOP in qualsiasi momento per annullare l'iscrizione.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "e-mail"
+        },
+        "channelsLabel": "Canali coperti da questo consenso",
+        "channelsHint": "Il visitatore viene iscritto solo ai canali selezionati qui e il testo del consenso li indica. Un canale viene usato solo se il modulo raccoglie il telefono o l’e-mail corrispondente.",
+        "channelsUse": "Aggiorna il testo con questi canali",
+        "channelNeedsPhone": "Questo modulo non ha un campo telefono, quindi nessuno viene iscritto a questo canale tramite esso.",
+        "channelNeedsEmail": "Questo modulo non ha un campo e-mail, quindi nessuno viene iscritto a questo canale tramite esso."
       },
       "crm": {
         "title": "Nel CRM",
