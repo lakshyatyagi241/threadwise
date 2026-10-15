@@ -1,6 +1,6 @@
 # Privacy and data governance: platform-wide design and audit
 
-Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); **BL-165 to BL-167 (consent at intake: policy, grants on contact writes, channel contacts through the contacts service, consent lines for the chat widget, booking page and stores) are built** (section 4.3.2); the rest is still design. Backlog: BL-140 to BL-153
+Status: design + audit (spec). **BL-140 and BL-141 (first slice) are built**: the purpose registry, the extended consent vocabulary and the ConsentGate with its adopters (section 4.3.1 below); no migration came with that slice. **BL-142 (personal-data registry + schema test) and BL-143 (rights service: requests, export, erasure, contact delete) are built** (section 4.5 note below); **BL-165 to BL-167 (consent at intake: policy, grants on contact writes, channel contacts through the contacts service, consent lines for the chat widget, booking page and stores) and BL-168 to BL-171 (round 2: lead capture proof, click-to-WhatsApp referral as evidence, import and wizard CSV notice and per-channel grants, the consent line of web forms) are built** (section 4.3.2); the rest is still design. Backlog: BL-140 to BL-153
 ([backlog.md](../backlog.md) section O). Not legal advice: see section 10.
 
 ## How to read the evidence
@@ -285,20 +285,29 @@ Plug-in map (each is a backlog task):
 
 Paths that write an intake grant (all through `ConsentIntakeService`, one idempotency key per source event):
 
-| Path                                                                       | Source     | Evidence (besides wording and version)        |
-| -------------------------------------------------------------------------- | ---------- | --------------------------------------------- |
-| CRM contact create and update (a status set to `subscribed`, or `consent`) | `manual`   | actor, note                                   |
-| Customer REST API v1 contact create and update (`consent`)                 | `api`      | `apiKeyId`                                    |
-| Partner agent lead submit (`consent`)                                      | `api`      | `reference: partner_agent:<id>`               |
-| Public lead submit `/public/v1/leads` (`consent`)                          | `api`      | `apiKeyId`                                    |
-| Google Sheets add-on contact rows (`consent` yes + `consent_note`)         | `api`      | `reference: google_sheets`                    |
-| Website chat widget pre-chat consent line                                  | `widget`   | `widgetId`, `noticeVersion`                   |
-| Appointment booking page consent line                                      | `booking`  | `bookingPageId`, `noticeVersion`              |
-| Shopify and WooCommerce customers who accepted marketing in the store      | `commerce` | `integrationId`, `noticeVersion`, `noticeUrl` |
-| Forms with a ticked marketing line (built before this policy)              | `form`     | `formId`, `submissionId`                      |
+| Path                                                                                                                                          | Source     | Evidence (besides wording and version)                                            |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------- |
+| CRM contact create and update (a status set to `subscribed`, or `consent`)                                                                    | `manual`   | actor, note                                                                       |
+| Customer REST API v1 contact create and update (`consent`)                                                                                    | `api`      | `apiKeyId`                                                                        |
+| Partner agent lead submit (`consent`)                                                                                                         | `api`      | `reference: partner_agent:<id>`                                                   |
+| Public lead submit `/public/v1/leads` (`consent`)                                                                                             | `api`      | `apiKeyId`                                                                        |
+| Google Sheets add-on contact rows (`consent` yes + `consent_note`)                                                                            | `api`      | `reference: google_sheets`                                                        |
+| Website chat widget pre-chat consent line                                                                                                     | `widget`   | `widgetId`, `noticeVersion`                                                       |
+| Appointment booking page consent line                                                                                                         | `booking`  | `bookingPageId`, `noticeVersion`                                                  |
+| Shopify and WooCommerce customers who accepted marketing in the store                                                                         | `commerce` | `integrationId`, `noticeVersion`, `noticeUrl`                                     |
+| Forms with a ticked marketing line (built before this policy; SMS added in round 2 when the form declares its wording covers SMS)             | `form`     | `formId`, `submissionId`                                                          |
+| Lead webhook and marketplace connectors that pass a `consent` block with a yes and readable proof (BL-168)                                    | `lead`     | `leadSourceId`, `leadFormId`, `adId`, wording and version                         |
+| Contact import with "I have consent" ticked (BL-170): WhatsApp from the consent column or every row, SMS and email only from their own column | `import`   | `fileName`, `reference` (job), the notice wording and version the importer stated |
+| Broadcast wizard CSV with the confirmation (BL-170), granted when the broadcast launches                                                      | `import`   | `fileName`, `reference: wizard_csv:<upload>`, the stated notice and version       |
+| Forms with a ticked line that is NOT marketing (BL-171): purpose `utility` (service messages), never a marketing grant                        | `form`     | `formId`, `submissionId`, wording and version                                     |
 
-**Later round, not covered here:** lead capture (Meta lead ads, click-to-WhatsApp), the contact import's consent column redesign, and
-the consent line of non-marketing forms. They follow the same rules (source, wording, version, time) when built.
+**Evidence that is not a grant (round 2).** A click-to-WhatsApp ad that brought a person to their first message (Meta `referral`: ad id,
+link, headline, click id) is kept as an append-only attribution touch on the contact (`contact_attributions`, platform
+`click_to_whatsapp`), never in the ledger: clicking an ad is not an agreement (BL-169). An unticked consent box on a web form is not an
+agreement either, so it writes nothing to the ledger; the submission keeps the wording shown and that it was left unticked (BL-171).
+A subscription label set from proof (a lead or a form) is filled only on a channel that really got a grant.
+
+**Still open:** a native Meta lead-ads connector with its own screen (leads reach the pipeline through the generic webhook and recipes today).
 
 ### 4.4 Voice bot and call recording
 

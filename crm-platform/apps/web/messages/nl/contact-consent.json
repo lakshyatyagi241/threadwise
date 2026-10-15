@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "aangemeld",
-        "withdrawn": "afgemeld"
+        "withdrawn": "afgemeld",
+        "utilityGranted": "akkoord met serviceberichten",
+        "utilityWithdrawn": "serviceberichten gestopt"
       },
       "action": {
         "granted": "Aangemeld",
-        "withdrawn": "Afgemeld"
+        "withdrawn": "Afgemeld",
+        "utilityGranted": "Akkoord met contact over zijn of haar verzoek",
+        "utilityWithdrawn": "Servicenberichten gestopt"
       },
       "source": {
         "form": "Formulier",
@@ -134,7 +138,8 @@
         "legacy": "Vóór de toestemmingsgeschiedenis",
         "widget": "Websitechat",
         "booking": "Boekingspagina",
-        "commerce": "Winkelkassa"
+        "commerce": "Winkelkassa",
+        "lead": "Leadregistratie"
       },
       "by": "door {name}",
       "evidence": {
@@ -154,7 +159,10 @@
         "widgetId": "Chatwidget",
         "bookingTypeId": "Boekingspagina",
         "integrationId": "Winkel",
-        "storeFlag": "Winkelinstelling"
+        "storeFlag": "Winkelinstelling",
+        "leadSourceId": "Leadbron",
+        "leadFormId": "Leadformulier",
+        "adId": "Advertentie"
       },
       "dialog": {
         "titleGranted": "Markeren als aangemeld",
@@ -187,7 +195,14 @@
       "hintColumn": "De kolom die is gekoppeld aan marketingtoestemming bepaalt wie wordt vastgelegd: alleen rijen met ja krijgen een toestemming, met de bestandsnaam als bewijs. Nee, een lege cel of een onbekend woord legt niets vast. Contacten die zich hebben afgemeld, blijven afgemeld.",
       "columnSummary": "{granted} rijen zeggen ja en worden vastgelegd. {notGranted} zeggen nee of zijn leeg en krijgen geen toestemmingsrecord.",
       "unrecognised": "{count, plural, one {# rij heeft} other {# rijen hebben}} een toestemmingswaarde die geen ja of nee is ({values}). {count, plural, one {Die wordt} other {Ze worden}} behandeld als niet verleend. Gebruik ja / nee, true / false of 1 / 0.",
-      "columnIgnored": "De toestemmingskolom doet niets totdat je het vakje hierboven aanvinkt."
+      "columnIgnored": "De toestemmingskolom doet niets totdat je het vakje hierboven aanvinkt.",
+      "noticeText": "Mededeling of rechtsgrond (optioneel)",
+      "noticeTextHint": "Waarmee deze contacten akkoord gingen en waar, bijvoorbeeld: aangemeld bij het afrekenen onder privacyverklaring v3. Wordt als bewijs bewaard bij elke vastgelegde toestemming.",
+      "noticeVersion": "Versie van de mededeling (optioneel)",
+      "smsSummary": "SMS-toestemmingskolom: {granted} rijen zeggen ja en worden vastgelegd als SMS-toestemming. {notGranted} zeggen nee of zijn leeg.",
+      "emailSummary": "E-mailtoestemmingskolom: {granted} rijen zeggen ja en worden vastgelegd als e-mailtoestemming (de rij heeft ook een e-mailadres nodig). {notGranted} zeggen nee of zijn leeg.",
+      "labelNumbers": "Ik heb toestemming om deze nummers te berichten",
+      "hintNumbers": "Aangevinkt wordt bij het starten van de verzending elk nummer in het bestand vastgelegd als akkoord met marketing, met de bestandsnaam als bewijs. Uitgevinkt wordt geen toestemming vastgelegd. Wie zich heeft afgemeld, blijft afgemeld."
     },
     "systemLine": {
       "withdrawn": "Contact heeft {keyword} geantwoord: afgemeld voor marketing",

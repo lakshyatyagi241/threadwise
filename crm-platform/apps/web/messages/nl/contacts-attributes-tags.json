@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Bron",
-        "consent": "Marketingtoestemming (ja / nee)"
+        "consent": "Marketingtoestemming (ja / nee)",
+        "consentSms": "SMS-marketingtoestemming (ja / nee)",
+        "consentEmail": "E-mailmarketingtoestemming (ja / nee)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",

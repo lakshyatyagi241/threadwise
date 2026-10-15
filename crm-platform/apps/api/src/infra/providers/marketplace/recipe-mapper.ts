@@ -1,10 +1,12 @@
 import { createHash } from 'node:crypto';
-import type {
-  MarketRecipe,
-  RecipeDerivedId,
-  RecipeFieldRule,
-  RecipeSource,
-  RecipeTime,
+import {
+  parseImportConsent,
+  type MarketRecipe,
+  type RecipeConsent,
+  type RecipeDerivedId,
+  type RecipeFieldRule,
+  type RecipeSource,
+  type RecipeTime,
 } from '@crm/contracts';
 import type { ConnectorFieldValue, ConnectorLead, ParsedDelivery } from './connector.port';
 
@@ -269,7 +271,44 @@ function mapExplicit(
     }
     if (Object.keys(attribution).length > 0) lead.attribution = attribution;
   }
+  const consent = consentOf(item, mapping.consent);
+  if (consent) lead.consent = consent;
   return { lead };
+}
+
+/**
+ * The proof of consent a recipe maps (BL-168): present only when the recipe asks for it AND the portal's value reads as a yes. A lead
+ * whose value is a no, blank or an unknown word carries no consent object at all, so nothing downstream can mistake it for one.
+ */
+function consentOf(item: Json, rule: RecipeConsent | undefined): ConnectorLead['consent'] {
+  if (!rule) return undefined;
+  const raw = sourceValue(item, rule.given);
+  if (raw === undefined || parseImportConsent(raw) !== 'granted') return undefined;
+  const out: NonNullable<ConnectorLead['consent']> = { given: true };
+  const text = longValue(item, rule.text, 2000);
+  const version = longValue(item, rule.version, 64);
+  const formId = longValue(item, rule.formId, 120);
+  const adId = longValue(item, rule.adId, 120);
+  if (text) out.text = text;
+  if (version) out.version = version;
+  if (formId) out.formId = formId;
+  if (adId) out.adId = adId;
+  if (rule.at) {
+    const at = parseTime(readPath(item, rule.at.from), rule.at.format, rule.at.utcOffsetMinutes);
+    if (at) out.at = at;
+  }
+  if (rule.channels) out.channels = [...rule.channels];
+  return out;
+}
+
+/** Like `sourceValue` but with a caller's own length cap (the wording of a consent line is longer than a campaign name). */
+function longValue(item: Json, src: RecipeSource | undefined, max: number): string | undefined {
+  if (!src) return undefined;
+  const v = 'from' in src ? scalarOf(readPath(item, src.from)) : scalarOf(src.const);
+  if (v === undefined || v === null) return undefined;
+  const text = String(v).trim();
+  const out = ('from' in src ? mapped(text, src.map) : text).slice(0, max);
+  return out === '' ? undefined : out;
 }
 
 // --- auto mode ------------------------------------------------------------------------------------------------------------------------------

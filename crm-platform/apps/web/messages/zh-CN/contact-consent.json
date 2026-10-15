@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "已订阅",
-        "withdrawn": "已退订"
+        "withdrawn": "已退订",
+        "utilityGranted": "已同意服务消息",
+        "utilityWithdrawn": "已停止服务消息"
       },
       "action": {
         "granted": "已订阅",
-        "withdrawn": "已退订"
+        "withdrawn": "已退订",
+        "utilityGranted": "同意就其请求被联系",
+        "utilityWithdrawn": "已停止服务消息"
       },
       "source": {
         "form": "表单",
@@ -134,7 +138,8 @@
         "legacy": "同意历史之前",
         "widget": "网站聊天",
         "booking": "预约页面",
-        "commerce": "店铺结账"
+        "commerce": "店铺结账",
+        "lead": "线索收集"
       },
       "by": "由 {name}",
       "evidence": {
@@ -154,7 +159,10 @@
         "widgetId": "聊天小组件",
         "bookingTypeId": "预约页面",
         "integrationId": "店铺",
-        "storeFlag": "店铺设置"
+        "storeFlag": "店铺设置",
+        "leadSourceId": "线索来源",
+        "leadFormId": "线索表单",
+        "adId": "广告"
       },
       "dialog": {
         "titleGranted": "标记为已订阅",
@@ -187,7 +195,14 @@
       "hintColumn": "映射为营销同意的列决定记录对象：只有标注为“是”的行会记录同意，并以文件名作为证明。“否”、空白单元格或无法识别的词不会记录任何内容。已退订的联系人将保持退订状态。",
       "columnSummary": "{granted} 行标注为“是”，将被记录。{notGranted} 行为“否”或空白，不会生成同意记录。",
       "unrecognised": "{count, plural, one {# 行} other {# 行}}的同意值既不是“是”也不是“否”（{values}），将被视为未同意。请使用 yes / no、true / false 或 1 / 0。",
-      "columnIgnored": "在你勾选上方的复选框之前，同意列不会生效。"
+      "columnIgnored": "在你勾选上方的复选框之前，同意列不会生效。",
+      "noticeText": "告知或法律依据(可选)",
+      "noticeTextHint": "这些联系人同意了什么、在哪里同意,例如:结账时按隐私声明 v3 订阅。它会作为证据与每条已记录的同意一起保存。",
+      "noticeVersion": "告知版本(可选)",
+      "smsSummary": "短信同意列:{granted} 行为“是”,将记录为短信同意。{notGranted} 行为“否”或为空。",
+      "emailSummary": "邮件同意列:{granted} 行为“是”,将记录为邮件同意(该行还需有邮箱地址)。{notGranted} 行为“否”或为空。",
+      "labelNumbers": "我已获得向这些号码发送消息的同意",
+      "hintNumbers": "勾选后,发起群发时文件中的每个号码都会被记录为已同意营销,并以文件名作为证据。不勾选则不记录同意。已退订的人保持退订。"
     },
     "systemLine": {
       "withdrawn": "联系人回复 {keyword}：已取消营销订阅",

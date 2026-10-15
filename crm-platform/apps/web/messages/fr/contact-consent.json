@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "inscrit",
-        "withdrawn": "désinscrit"
+        "withdrawn": "désinscrit",
+        "utilityGranted": "a accepté les messages de service",
+        "utilityWithdrawn": "messages de service arrêtés"
       },
       "action": {
         "granted": "Inscrit",
-        "withdrawn": "Désinscrit"
+        "withdrawn": "Désinscrit",
+        "utilityGranted": "A accepté d'être contacté au sujet de sa demande",
+        "utilityWithdrawn": "A arrêté les messages de service"
       },
       "source": {
         "form": "Formulaire",
@@ -134,7 +138,8 @@
         "legacy": "Avant l'historique du consentement",
         "widget": "Chat du site web",
         "booking": "Page de réservation",
-        "commerce": "Paiement en boutique"
+        "commerce": "Paiement en boutique",
+        "lead": "Capture de leads"
       },
       "by": "par {name}",
       "evidence": {
@@ -154,7 +159,10 @@
         "widgetId": "Widget de chat",
         "bookingTypeId": "Page de réservation",
         "integrationId": "Boutique",
-        "storeFlag": "Réglage de la boutique"
+        "storeFlag": "Réglage de la boutique",
+        "leadSourceId": "Source du lead",
+        "leadFormId": "Formulaire de lead",
+        "adId": "Annonce"
       },
       "dialog": {
         "titleGranted": "Marquer comme inscrit",
@@ -187,7 +195,14 @@
       "hintColumn": "La colonne associée au consentement marketing détermine qui est enregistré : seules les lignes qui disent oui obtiennent un consentement, avec le nom du fichier comme preuve. Un non, une cellule vide ou un mot inconnu n'enregistre rien. Les contacts désabonnés restent désabonnés.",
       "columnSummary": "{granted} lignes disent oui et seront enregistrées. {notGranted} disent non ou sont vides et ne reçoivent aucun enregistrement de consentement.",
       "unrecognised": "{count, plural, one {# ligne contient} other {# lignes contiennent}} une valeur de consentement qui n'est ni oui ni non ({values}). {count, plural, one {Elle est considérée} other {Elles sont considérées}} comme non accordée. Utilisez yes / no, true / false ou 1 / 0.",
-      "columnIgnored": "La colonne de consentement n'a aucun effet tant que vous ne cochez pas la case ci-dessus."
+      "columnIgnored": "La colonne de consentement n'a aucun effet tant que vous ne cochez pas la case ci-dessus.",
+      "noticeText": "Mention ou base légale (facultatif)",
+      "noticeTextHint": "Ce à quoi ces contacts ont consenti et où, par exemple : inscrits à la caisse selon la politique de confidentialité v3. Conservé comme preuve avec chaque consentement enregistré.",
+      "noticeVersion": "Version de la mention (facultatif)",
+      "smsSummary": "Colonne de consentement SMS : {granted} lignes disent oui et seront enregistrées comme consentement SMS. {notGranted} disent non ou sont vides.",
+      "emailSummary": "Colonne de consentement e-mail : {granted} lignes disent oui et seront enregistrées comme consentement e-mail (la ligne doit aussi avoir une adresse e-mail). {notGranted} disent non ou sont vides.",
+      "labelNumbers": "J'ai le consentement pour écrire à ces numéros",
+      "hintNumbers": "Cochée, chaque numéro du fichier est enregistré comme ayant accepté le marketing au lancement de la diffusion, avec le nom du fichier comme preuve. Décochée, aucun consentement n'est enregistré. Les personnes désinscrites le restent."
     },
     "systemLine": {
       "withdrawn": "Le contact a répondu {keyword} : désabonné du marketing",

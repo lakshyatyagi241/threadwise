@@ -1278,7 +1278,9 @@
           "invalid_phone": "Bukan nomor yang valid",
           "duplicate": "Duplikat"
         },
-        "csvIssuesMore": "{count} lainnya ada di unduhan."
+        "csvIssuesMore": "{count} lainnya ada di unduhan.",
+        "csvConsentOn": "Anda mengonfirmasi persetujuan untuk nomor-nomor ini. Nomor ini dicatat sebagai setuju saat siaran diluncurkan.",
+        "csvConsentVersion": "Versi pemberitahuan: {version}."
       },
       "review": {
         "intro": "Periksa biaya, beri tahu kami isi setiap variabel template, dan tinjau broadcast.",

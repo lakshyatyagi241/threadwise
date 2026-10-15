@@ -6,6 +6,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import type { ChannelRuntime, NormalisedInbound } from '../../infra/providers/chat-conversations';
 import { ChatMediaStore, type StoredMedia } from '../../infra/providers/chat-conversations/media';
 import { ContactsService } from '../crm';
+import { recordAdReferral, referralOf } from './ad-referral';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { effectiveCapabilitiesOf } from './channel-capabilities';
 import { ChannelRegistryService } from './channel-registry.service';
@@ -390,6 +391,27 @@ export class InboundIngestService {
       meta,
       providerTs: customerAt,
     });
+
+    // A click-to-WhatsApp ad that brought the person here is kept on the contact as an attribution touch. It is evidence of how they
+    // arrived, NOT consent: nothing is written to the ledger (privacy spec 4.3.2). Best effort in a savepoint: the message always lands.
+    const referral = m.history ? null : referralOf(meta);
+    if (referral && conv.contactId !== null) {
+      try {
+        await tx.transaction(async (sp) => {
+          await recordAdReferral(sp as Tx, orgId, {
+            contactId: conv.contactId!,
+            referral,
+            providerMessageId: m.providerMessageId,
+            at: arrivedAt,
+          });
+        });
+      } catch (err) {
+        this.logger.warn(
+          { orgId, err: (err as Error).message },
+          'ad referral could not be recorded',
+        );
+      }
+    }
 
     if (createdConversation) {
       await this.lifecycle.created(tx, orgId, channel, after, 'customer', undefined, {

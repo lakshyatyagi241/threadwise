@@ -456,7 +456,9 @@
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
         "source": "Nguồn",
-        "consent": "Đồng ý tiếp thị (có / không)"
+        "consent": "Đồng ý tiếp thị (có / không)",
+        "consentSms": "Đồng ý tiếp thị qua SMS (có / không)",
+        "consentEmail": "Đồng ý tiếp thị qua email (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",

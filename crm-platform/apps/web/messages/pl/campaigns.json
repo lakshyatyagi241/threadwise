@@ -1278,7 +1278,9 @@
           "invalid_phone": "Nieprawidłowy numer",
           "duplicate": "Duplikat"
         },
-        "csvIssuesMore": "Kolejnych {count} jest w pobranym pliku."
+        "csvIssuesMore": "Kolejnych {count} jest w pobranym pliku.",
+        "csvConsentOn": "Potwierdziłeś zgodę dla tych numerów. Zostaną zapisane jako zgadzające się po uruchomieniu wysyłki.",
+        "csvConsentVersion": "Wersja informacji: {version}."
       },
       "review": {
         "intro": "Sprawdź koszt, wskaż, czym wypełnić każdą zmienną szablonu, i przejrzyj wiadomość masową.",

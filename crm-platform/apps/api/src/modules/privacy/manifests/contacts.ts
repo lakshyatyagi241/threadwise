@@ -61,7 +61,7 @@ export const contactsCard = defineHolder({
       parent: 'contacts',
       tier: 'core',
       categories: ['attribution'],
-      pii: ['campaign', 'adset', 'ad', 'form', 'source_label'],
+      pii: ['campaign', 'adset', 'ad', 'form', 'source_label', 'evidence'],
       retention: 'With the contact.',
     },
   ],

@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "angemeldet",
-        "withdrawn": "abgemeldet"
+        "withdrawn": "abgemeldet",
+        "utilityGranted": "Servicenachrichten zugestimmt",
+        "utilityWithdrawn": "Servicenachrichten beendet"
       },
       "action": {
         "granted": "Angemeldet",
-        "withdrawn": "Abgemeldet"
+        "withdrawn": "Abgemeldet",
+        "utilityGranted": "Stimmte der Kontaktaufnahme zu seiner Anfrage zu",
+        "utilityWithdrawn": "Servicenachrichten beendet"
       },
       "source": {
         "form": "Formular",
@@ -134,7 +138,8 @@
         "legacy": "Vor dem Einwilligungsverlauf",
         "widget": "Website-Chat",
         "booking": "Buchungsseite",
-        "commerce": "Shop-Kasse"
+        "commerce": "Shop-Kasse",
+        "lead": "Lead-Erfassung"
       },
       "by": "von {name}",
       "evidence": {
@@ -154,7 +159,10 @@
         "widgetId": "Chat-Widget",
         "bookingTypeId": "Buchungsseite",
         "integrationId": "Shop",
-        "storeFlag": "Shop-Einstellung"
+        "storeFlag": "Shop-Einstellung",
+        "leadSourceId": "Lead-Quelle",
+        "leadFormId": "Lead-Formular",
+        "adId": "Anzeige"
       },
       "dialog": {
         "titleGranted": "Als angemeldet markieren",
@@ -187,7 +195,14 @@
       "hintColumn": "Die Spalte, die dem Marketing-Einverständnis zugeordnet ist, bestimmt, wer erfasst wird: Nur Zeilen mit ja erhalten eine Einwilligung, mit dem Dateinamen als Nachweis. Nein, eine leere Zelle oder ein unbekanntes Wort erfasst nichts. Kontakte, die sich abgemeldet haben, bleiben abgemeldet.",
       "columnSummary": "{granted} Zeilen sagen ja und werden erfasst. {notGranted} sagen nein oder sind leer und erhalten keinen Einwilligungseintrag.",
       "unrecognised": "{count, plural, one {# Zeile hat} other {# Zeilen haben}} einen Einwilligungswert, der weder ja noch nein ist ({values}). {count, plural, one {Er wird} other {Sie werden}} als nicht erteilt behandelt. Verwende ja / nein, true / false oder 1 / 0.",
-      "columnIgnored": "Die Einwilligungsspalte hat keine Wirkung, bis du das Kästchen oben aktivierst."
+      "columnIgnored": "Die Einwilligungsspalte hat keine Wirkung, bis du das Kästchen oben aktivierst.",
+      "noticeText": "Hinweis oder Rechtsgrundlage (optional)",
+      "noticeTextHint": "Wozu diese Kontakte wo zugestimmt haben, z. B.: an der Kasse gemäß Datenschutzhinweis v3 angemeldet. Wird als Nachweis bei jeder erfassten Einwilligung gespeichert.",
+      "noticeVersion": "Version des Hinweises (optional)",
+      "smsSummary": "SMS-Einwilligungsspalte: {granted} Zeilen sagen Ja und werden als SMS-Einwilligung erfasst. {notGranted} sagen Nein oder sind leer.",
+      "emailSummary": "E-Mail-Einwilligungsspalte: {granted} Zeilen sagen Ja und werden als E-Mail-Einwilligung erfasst (die Zeile braucht auch eine E-Mail-Adresse). {notGranted} sagen Nein oder sind leer.",
+      "labelNumbers": "Ich habe die Einwilligung, diese Nummern anzuschreiben",
+      "hintNumbers": "Angehakt wird beim Start des Versands jede Nummer der Datei als einverstanden mit Marketing erfasst, mit dem Dateinamen als Nachweis. Nicht angehakt wird keine Einwilligung erfasst. Wer sich abgemeldet hat, bleibt abgemeldet."
     },
     "systemLine": {
       "withdrawn": "Kontakt hat {keyword} geantwortet: Marketing abbestellt",

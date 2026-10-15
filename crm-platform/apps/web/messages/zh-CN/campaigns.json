@@ -1278,7 +1278,9 @@
           "invalid_phone": "不是有效号码",
           "duplicate": "重复"
         },
-        "csvIssuesMore": "下载文件中还有 {count} 条。"
+        "csvIssuesMore": "下载文件中还有 {count} 条。",
+        "csvConsentOn": "您已确认这些号码的同意。发起群发时将记录为已同意。",
+        "csvConsentVersion": "告知版本:{version}。"
       },
       "review": {
         "intro": "核对费用，告诉我们每个模板变量的填充内容，并检查群发。",

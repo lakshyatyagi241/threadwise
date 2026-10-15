@@ -584,6 +584,14 @@ export function SettingsTab(props: BuilderTabProps) {
               disabled={disabled}
               onChange={(marketing) => setConsent({ marketing })}
             />
+            {!consent.marketing && <p className={HINT}>{t('consent.serviceHint')}</p>}
+            <SwitchRow
+              label={t('consent.coversSms')}
+              hint={t('consent.coversSmsHint')}
+              checked={consent.coversSms}
+              disabled={disabled}
+              onChange={(coversSms) => setConsent({ coversSms })}
+            />
             {consent.marketing && (
               <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-dashed border-border p-3">
                 <p className={`${HINT} min-w-0 flex-1`}>{t('consent.whatsappHint')}</p>

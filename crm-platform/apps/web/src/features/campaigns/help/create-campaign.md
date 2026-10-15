@@ -109,3 +109,7 @@ It shows the status, the schedule in words, the next run, the runs with their co
 - A banner saying the draft was changed somewhere else means someone saved it from another tab. Choose **Reload draft** to continue from the latest version.
 - **Insufficient balance** on the launch sends you back to **Review**. Top up and continue.
 - A launched campaign cannot be edited. Its draft shows a link to the status page instead.
+
+## Consent for a CSV of numbers
+
+Before you choose the file in **Send via CSV**, you can tick **I have consent to message these numbers** and, if you want, write the notice or lawful basis they agreed under and its version. The choice is kept with the upload. When you launch, every number in the file (new contacts and existing ones) is recorded as having agreed to marketing, with the file name and your notice as proof; people who opted out are skipped and stay opted out. If the workspace requires recorded consent for marketing, numbers of a confirmed file count as consented. Without the tick, nothing is recorded and the numbers stay "No consent recorded".

@@ -348,8 +348,16 @@ export class FormSubmitService {
           stored: { ...sub.consent, shownVersion: null },
           missing: false,
           marketingOptIn: sub.consent.given && def.consent.marketing,
+          serviceAgreed: sub.consent.given && !def.consent.marketing,
+          coversSms: def.consent.coversSms,
         }
-      : { stored: null, missing: false, marketingOptIn: false };
+      : {
+          stored: null,
+          missing: false,
+          marketingOptIn: false,
+          serviceAgreed: false,
+          coversSms: false,
+        };
     // A staff re-run of a form that takes payment opens its attempt as well (staff then get the link from the submission screen).
     const gatewaySlug = def.payment.enabled ? await this.payments.assertGateway(orgId) : '';
     await this.processInTx(
@@ -575,7 +583,7 @@ export class FormSubmitService {
       form: form.name.slice(0, 255),
       capturedAt: sub.createdAt,
     });
-    if (consent.marketingOptIn)
+    if (consent.marketingOptIn) {
       await this.subscribe(
         tx,
         orgId,
@@ -585,7 +593,20 @@ export class FormSubmitService {
         found.uuid,
         email,
         phone?.e164 ?? null,
+        consent.coversSms,
       );
+    } else if (consent.serviceAgreed) {
+      await this.recordServiceAgreement(
+        tx,
+        orgId,
+        form,
+        sub,
+        found.contactId,
+        email,
+        phone?.e164 ?? null,
+        consent.coversSms,
+      );
+    }
 
     await this.activities.insert(tx, orgId, {
       contactId: found.contactId,
@@ -904,6 +925,7 @@ export class FormSubmitService {
     contactUuid: string,
     email: string | null,
     phone: string | null,
+    coversSms: boolean,
   ): Promise<void> {
     const row = (await this.contactRepo.findById(tx, orgId, contactId))!;
     if (row.isUnsubscribed) return;
@@ -912,6 +934,7 @@ export class FormSubmitService {
     const given = sub.consent;
     for (const channel of [
       ...(phone ? (['whatsapp'] as const) : []),
+      ...(phone && coversSms ? (['sms'] as const) : []),
       ...(email ? (['email'] as const) : []),
     ]) {
       await this.consentLedger.recordInTx(tx, orgId, {
@@ -934,6 +957,7 @@ export class FormSubmitService {
     const patch: Record<string, unknown> = {};
     if (email && !row.emailSubscriptionStatus) patch.emailSubscriptionStatus = 'subscribed';
     if (phone && !row.whatsappSubscriptionStatus) patch.whatsappSubscriptionStatus = 'subscribed';
+    if (phone && coversSms && !row.smsSubscriptionStatus) patch.smsSubscriptionStatus = 'subscribed';
     if (Object.keys(patch).length === 0) return;
     await this.contactRepo.updateFieldsById(tx, orgId, contactId, { ...patch, updatedBy: null });
     await this.audit.record(tx, {
@@ -958,6 +982,51 @@ export class FormSubmitService {
         submissionId: sub.uuid,
       },
     });
+  }
+
+  /**
+   * A ticked consent line that is NOT marketing (BL-171, privacy spec 4.3.2): the person agreed to be contacted about their request.
+   * The ledger keeps that as evidence, with the exact line they ticked (text cut to 300 characters, the hash of the whole text, the
+   * version), the form and the submission, but only for SERVICE messages (purpose `utility`): it is never a marketing grant, changes no
+   * subscription label and announces no opt-in. WhatsApp and email follow what the form collected; SMS only when the form declares that its
+   * wording covers SMS. A person who stopped service messages on a channel is not turned back on (`respectWithdrawn`).
+   */
+  private async recordServiceAgreement(
+    tx: Tx,
+    orgId: number,
+    form: FormRow,
+    sub: SubmissionRow,
+    contactId: number,
+    email: string | null,
+    phone: string | null,
+    coversSms: boolean,
+  ): Promise<void> {
+    const given = sub.consent;
+    if (!given) return;
+    for (const channel of [
+      ...(phone ? (['whatsapp'] as const) : []),
+      ...(phone && coversSms ? (['sms'] as const) : []),
+      ...(email ? (['email'] as const) : []),
+    ]) {
+      await this.consentLedger.recordInTx(tx, orgId, {
+        contactId,
+        channel,
+        purpose: 'utility',
+        action: 'granted',
+        source: 'form',
+        evidence: {
+          consentText: given.text.slice(0, 300),
+          consentVersion: String(given.version),
+          consentHash: createHash('sha256').update(given.text).digest('hex'),
+          formId: form.uuid,
+          submissionId: sub.uuid,
+        },
+        note: 'Agreed to be contacted about their request (not marketing)',
+        occurredAt: new Date(given.at),
+        idempotencyKey: `form:${sub.uuid}:utility:${channel}`,
+        respectWithdrawn: true,
+      });
+    }
   }
 
   // --- small reads ---------------------------------------------------------------------------------------------------------------------

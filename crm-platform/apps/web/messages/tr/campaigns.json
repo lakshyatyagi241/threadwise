@@ -1278,7 +1278,9 @@
           "invalid_phone": "Geçerli bir numara değil",
           "duplicate": "Yinelenen"
         },
-        "csvIssuesMore": "{count} tane daha indirmede."
+        "csvIssuesMore": "{count} tane daha indirmede.",
+        "csvConsentOn": "Bu numaralar için onayı doğruladınız. Yayın başlatıldığında kabul etmiş olarak kaydedilecekler.",
+        "csvConsentVersion": "Bildirim sürümü: {version}."
       },
       "review": {
         "intro": "Maliyeti kontrol edin, her şablon değişkeninin neyle doldurulacağını belirtin ve toplu gönderimi gözden geçirin.",

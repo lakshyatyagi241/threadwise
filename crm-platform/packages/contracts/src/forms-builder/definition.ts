@@ -336,6 +336,11 @@ export const formConsentSchema = z
     required: z.boolean().default(true),
     /** Ticking it records marketing opt-in on the contact. */
     marketing: z.boolean().default(false),
+    /**
+     * The wording also tells the person they may be contacted by SMS (BL-171). Declared by the form's owner, never guessed from the
+     * text: it adds an SMS record beside WhatsApp and email when the form collects a phone number.
+     */
+    coversSms: z.boolean().default(false),
     /** Bump when the text changes: submissions keep the version they saw. */
     version: z.number().int().min(1).max(10_000).default(1),
   })

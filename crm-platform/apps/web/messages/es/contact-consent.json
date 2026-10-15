@@ -116,11 +116,15 @@
       },
       "state": {
         "granted": "suscrito",
-        "withdrawn": "dado de baja"
+        "withdrawn": "dado de baja",
+        "utilityGranted": "aceptó mensajes de servicio",
+        "utilityWithdrawn": "mensajes de servicio detenidos"
       },
       "action": {
         "granted": "Suscrito",
-        "withdrawn": "Dado de baja"
+        "withdrawn": "Dado de baja",
+        "utilityGranted": "Aceptó que le contacten sobre su solicitud",
+        "utilityWithdrawn": "Detuvo los mensajes de servicio"
       },
       "source": {
         "form": "Formulario",
@@ -134,7 +138,8 @@
         "legacy": "Antes del historial de consentimiento",
         "widget": "Chat del sitio web",
         "booking": "Página de reservas",
-        "commerce": "Pago en la tienda"
+        "commerce": "Pago en la tienda",
+        "lead": "Captación de leads"
       },
       "by": "por {name}",
       "evidence": {
@@ -154,7 +159,10 @@
         "widgetId": "Widget de chat",
         "bookingTypeId": "Página de reservas",
         "integrationId": "Tienda",
-        "storeFlag": "Ajuste de la tienda"
+        "storeFlag": "Ajuste de la tienda",
+        "leadSourceId": "Origen del lead",
+        "leadFormId": "Formulario de lead",
+        "adId": "Anuncio"
       },
       "dialog": {
         "titleGranted": "Marcar como suscrito",
@@ -187,7 +195,14 @@
       "hintColumn": "La columna asignada al consentimiento de marketing decide quién se registra: solo las filas que dicen sí obtienen un consentimiento, con el nombre del archivo como prueba. Un no, una celda vacía o una palabra desconocida no registran nada. Los contactos que se dieron de baja siguen dados de baja.",
       "columnSummary": "{granted} filas dicen sí y se registrarán. {notGranted} dicen no o están vacías y no reciben ningún registro de consentimiento.",
       "unrecognised": "{count, plural, one {# fila tiene} other {# filas tienen}} un valor de consentimiento que no es sí ni no ({values}). {count, plural, one {Se trata} other {Se tratan}} como no concedido. Usa yes / no, true / false o 1 / 0.",
-      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba."
+      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba.",
+      "noticeText": "Aviso o base legal (opcional)",
+      "noticeTextHint": "A qué accedieron estos contactos y dónde, por ejemplo: se suscribieron en el pago con el aviso de privacidad v3. Se guarda como prueba con cada consentimiento registrado.",
+      "noticeVersion": "Versión del aviso (opcional)",
+      "smsSummary": "Columna de consentimiento SMS: {granted} filas dicen sí y se registrarán como consentimiento SMS. {notGranted} dicen no o están en blanco.",
+      "emailSummary": "Columna de consentimiento de correo: {granted} filas dicen sí y se registrarán como consentimiento de correo (la fila también necesita una dirección de correo). {notGranted} dicen no o están en blanco.",
+      "labelNumbers": "Tengo consentimiento para escribir a estos números",
+      "hintNumbers": "Marcada, cada número del archivo se registra como que aceptó marketing al lanzar la difusión, con el nombre del archivo como prueba. Sin marcar, no se registra consentimiento. Quienes se dieron de baja siguen de baja."
     },
     "systemLine": {
       "withdrawn": "El contacto respondió {keyword}: se dio de baja del marketing",

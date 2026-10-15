@@ -1269,7 +1269,9 @@
           "invalid_phone": "Not a valid number",
           "duplicate": "Duplicate"
         },
-        "csvIssuesMore": "{count} more are in the download."
+        "csvIssuesMore": "{count} more are in the download.",
+        "csvConsentOn": "You confirmed consent for these numbers. They are recorded as agreed when the broadcast launches.",
+        "csvConsentVersion": "Notice version: {version}."
       },
       "review": {
         "intro": "Check the cost, tell us what each template variable is filled with, and review the campaign.",

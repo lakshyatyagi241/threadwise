@@ -285,10 +285,22 @@ export function useCsvReport(id: string | null) {
   });
 }
 
-/** Uploads the CSV as multipart; the server parses and validates it and answers with the report. */
-export async function uploadCsv(file: File, signal?: AbortSignal): Promise<WizardCsvReport> {
+/**
+ * Uploads the CSV as multipart; the server parses and validates it and answers with the report. `options` carries the uploader's
+ * confirmation that they hold consent for the numbers (BL-170) and the notice they stated; without it the upload records no consent.
+ */
+export async function uploadCsv(
+  file: File,
+  options: {
+    consentConfirmed?: boolean;
+    consentNoticeText?: string;
+    consentNoticeVersion?: string;
+  } = {},
+  signal?: AbortSignal,
+): Promise<WizardCsvReport> {
   const form = new FormData();
   form.set('file', file);
+  if (options.consentConfirmed) form.set('options', JSON.stringify(options));
   const res = await fetch(`/api/v2${BASE}/csv`, {
     method: 'POST',
     body: form,

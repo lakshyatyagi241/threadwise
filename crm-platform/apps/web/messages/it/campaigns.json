@@ -1278,7 +1278,9 @@
           "invalid_phone": "Numero non valido",
           "duplicate": "Duplicato"
         },
-        "csvIssuesMore": "Altri {count} sono nel file scaricabile."
+        "csvIssuesMore": "Altri {count} sono nel file scaricabile.",
+        "csvConsentOn": "Hai confermato il consenso per questi numeri. Verranno registrati come consenzienti al lancio della trasmissione.",
+        "csvConsentVersion": "Versione dell'informativa: {version}."
       },
       "review": {
         "intro": "Controlla il costo, indicaci con cosa viene compilata ogni variabile del template e rivedi il broadcast.",

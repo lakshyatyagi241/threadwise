@@ -45,6 +45,9 @@ export const CONSENT_SOURCES = [
   'widget',
   'booking',
   'commerce',
+  // Lead capture (BL-168, migration 20261205090000): the agreement was given on a lead form or ad that a connector or the generic lead
+  // webhook delivered, and the sender passed the proof (wording, version, time, form or ad) along with the lead.
+  'lead',
 ] as const;
 export const consentSourceSchema = z.enum(CONSENT_SOURCES);
 export type ConsentSource = z.infer<typeof consentSourceSchema>;
@@ -172,6 +175,10 @@ export const CONSENT_EVIDENCE_KEYS = [
   'bookingTypeId',
   'integrationId',
   'storeFlag',
+  // Lead capture evidence (BL-168): the lead source (our uuid), the provider's own lead form and ad ids.
+  'leadSourceId',
+  'leadFormId',
+  'adId',
 ] as const;
 
 export const recordConsentSchema = z.object({
