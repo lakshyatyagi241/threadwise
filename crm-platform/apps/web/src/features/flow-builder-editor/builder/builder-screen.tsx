@@ -62,6 +62,7 @@ import { AIGenModal, SaveConfirmModal } from './modals';
 import { Icon } from './node-card';
 import { Palette } from './palette';
 import { QuickAddMenu } from './quick-add';
+import { uploadFlowMedia } from '../lib/upload-media';
 import { TestPanel } from './simulator/test-panel';
 import { Toolbar } from './toolbar';
 
@@ -562,25 +563,7 @@ function BuilderInner({
       toast,
       nodes: state.nodes,
       flowId,
-      uploadMedia: async (file, kind) => {
-        const fd = new FormData();
-        fd.append('file', file);
-        fd.append('type', kind);
-        const res = await fetch('/api/v2/flows/upload-media', {
-          method: 'POST',
-          body: fd,
-          credentials: 'same-origin',
-          headers: { Accept: 'application/json' },
-        });
-        const json = (await res.json().catch(() => ({}))) as {
-          data?: { url: string; filename: string };
-          detail?: string;
-          title?: string;
-        };
-        if (!res.ok || !json.data)
-          throw new Error(json.detail ?? json.title ?? `HTTP ${res.status}`);
-        return { url: json.data.url, filename: json.data.filename };
-      },
+      uploadMedia: uploadFlowMedia,
     }),
     [ctx, mode, openedAs, refreshContext, toast, state.nodes, flowId],
   );

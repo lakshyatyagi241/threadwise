@@ -314,13 +314,17 @@ function Editor({
   const setData = (id: string, patch: Record<string, unknown>, links?: (string | null)[]) =>
     change(updateStep(doc, id, { data: patch, ...(links ? { links } : {}) }));
 
-  const link = (id: string, i: number, target: string | null) => {
+  /** A button (or the end of a part) asked to lead to a new flow: ask which part it starts with before anything is created. */
+  const [newFlowFor, setNewFlowFor] = useState<
+    { kind: 'link'; stepId: string; i: number } | { kind: 'goto'; stepId: string } | null
+  >(null);
+
+  const linkTo = (id: string, i: number, target: string | null, first?: SimpleStep) => {
     const step = allSteps(doc).find((s) => s.id === id);
     if (!step) return;
     let next = doc;
     let to = target;
-    if (target === NEW_JOURNEY) {
-      const first = newStep('message', allSteps(doc));
+    if (first) {
       next = addJourney(next, first);
       to = first.id;
       setGi(groupsOf(next).length - 1);
@@ -329,6 +333,14 @@ function Editor({
     const links = step.links.slice();
     links[i] = to;
     change(updateStep(next, id, { links }));
+  };
+
+  const link = (id: string, i: number, target: string | null) => {
+    if (target === NEW_JOURNEY) {
+      setNewFlowFor({ kind: 'link', stepId: id, i });
+      return;
+    }
+    linkTo(id, i, target);
   };
 
   /**
@@ -362,11 +374,14 @@ function Editor({
   };
 
   /** Where the last step of a part carries on (a "node to node" connection). */
-  const setGoto = (id: string, target: string | null) => {
+  const setGoto = (id: string, target: string | null, first?: SimpleStep) => {
+    if (target === NEW_JOURNEY) {
+      setNewFlowFor({ kind: 'goto', stepId: id });
+      return;
+    }
     let next = doc;
     let to = target;
-    if (target === NEW_JOURNEY) {
-      const first = newStep('message', allSteps(doc));
+    if (first) {
       next = addJourney(next, first);
       to = first.id;
       setGi(groupsOf(next).length - 1);
@@ -996,6 +1011,19 @@ function Editor({
           </main>
         </div>
 
+        <AddMenu
+          channel={channel}
+          atEnd
+          modal={{ open: newFlowFor !== null, onDismiss: () => setNewFlowFor(null) }}
+          onPick={(k) => {
+            if (!newFlowFor) return;
+            const first = newStep(k.type, allSteps(doc), k.preset);
+            if (newFlowFor.kind === 'link') linkTo(newFlowFor.stepId, newFlowFor.i, null, first);
+            else setGoto(newFlowFor.stepId, null, first);
+            setNewFlowFor(null);
+          }}
+        />
+
         <ConfirmDialog
           open={pendingImport !== null}
           title={t('confirmImport.title')}
@@ -1166,15 +1194,19 @@ function AddMenu({
   channel,
   atEnd,
   hint,
+  modal,
 }: {
   onPick: (k: StepKind) => void;
   channel: 'chat' | 'web';
   atEnd: boolean;
   hint?: string;
+  /** Opened from elsewhere (a button that should lead to a new flow): no "+" is drawn, the menu is centred over the page. */
+  modal?: { open: boolean; onDismiss: () => void };
 }) {
   const t = useTranslations('flb.builder.simple.add');
   const m = useMsg();
-  const [open, setOpen] = useState(false);
+  const [openLocal, setOpen] = useState(false);
+  const open = modal ? modal.open : openLocal;
   const box = useRef<HTMLDivElement>(null);
   const tClose = useTranslations('flb.builder.shell.modals');
   const tSearch = useTranslations('flb.builder.simple');
@@ -1183,6 +1215,7 @@ function AddMenu({
   const close = () => {
     setOpen(false);
     setQ('');
+    modal?.onDismiss();
   };
   // The menu closes when the page outside it is clicked, or on Escape (a click inside it, on a step or the + button, is handled there).
   useEffect(() => {
@@ -1201,26 +1234,41 @@ function AddMenu({
     };
   }, [open]);
   return (
-    <div ref={box} className="relative my-2 flex flex-col items-center">
-      <div className="h-3 w-px bg-border" />
-      <button
-        type="button"
-        aria-label={hint ?? t('addStep')}
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-        className={`grid place-items-center rounded-full bg-brand text-brand-foreground shadow-sm hover:opacity-90 ${
-          hint
-            ? 'h-auto gap-1 px-4 py-2 text-[12.5px] font-semibold'
-            : 'h-8 w-8 text-lg leading-none'
-        }`}
-      >
-        {hint ? `+ ${hint}` : '+'}
-      </button>
-      <div className="h-3 w-px bg-border" />
+    <div
+      ref={box}
+      className={
+        modal
+          ? 'fixed inset-0 z-50 grid place-items-center bg-black/40 p-4'
+          : 'relative my-2 flex flex-col items-center'
+      }
+      onMouseDown={(e) => {
+        if (modal && e.target === e.currentTarget) close();
+      }}
+      hidden={modal ? !modal.open : undefined}
+    >
+      {modal ? null : <div className="h-3 w-px bg-border" />}
+      {modal ? null : (
+        <button
+          type="button"
+          aria-label={hint ?? t('addStep')}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className={`grid place-items-center rounded-full bg-brand text-brand-foreground shadow-sm hover:opacity-90 ${
+            hint
+              ? 'h-auto gap-1 px-4 py-2 text-[12.5px] font-semibold'
+              : 'h-8 w-8 text-lg leading-none'
+          }`}
+        >
+          {hint ? `+ ${hint}` : '+'}
+        </button>
+      )}
+      {modal ? null : <div className="h-3 w-px bg-border" />}
       {open ? (
         <div
           role="menu"
-          className="absolute start-1/2 top-12 z-20 flex max-h-[72vh] w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 flex-col rounded-2xl border border-border bg-background shadow-xl rtl:translate-x-1/2"
+          className={`flex max-h-[72vh] w-[min(28rem,calc(100vw-2rem))] flex-col rounded-2xl border border-border bg-background shadow-xl ${
+            modal ? '' : 'absolute start-1/2 top-12 z-20 -translate-x-1/2 rtl:translate-x-1/2'
+          }`}
         >
           <div className="flex items-center justify-between px-5 pb-2 pt-4">
             <h3 className="text-[15px] font-semibold">{t('addStep')}</h3>
@@ -1512,6 +1560,13 @@ function StepCard(p: {
                   property,
                   b: (chunks) => <b className="font-semibold text-foreground/80">{chunks}</b>,
                 })}
+              </p>
+            ) : null}
+            {str(s.data.var).trim() ? (
+              <p className="mt-2">
+                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-brand">
+                  {`{{${str(s.data.var).trim()}}}`}
+                </code>
               </p>
             ) : null}
           </button>

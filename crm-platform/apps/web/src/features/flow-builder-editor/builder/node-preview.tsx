@@ -140,6 +140,25 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           </Box>
         );
       }
+      if ((kind === 'video' || kind === 'audio') && url) {
+        return (
+          <Box>
+            <div className="bubble wa">
+              {kind === 'video' ? (
+                <video
+                  src={url}
+                  controls
+                  preload="metadata"
+                  className="block max-h-[140px] w-full rounded bg-black"
+                />
+              ) : (
+                <audio src={url} controls preload="metadata" className="block h-9 w-full" />
+              )}
+              {d.caption ? <div className="mt-1 text-[12px]">{trunc(d.caption, 80)}</div> : null}
+            </div>
+          </Box>
+        );
+      }
       return (
         <Box>
           <div className="bubble wa flex items-center gap-2">
@@ -408,6 +427,33 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         </div>
       );
     }
+    case 'carousel': {
+      const cards = asArr(d.cards);
+      const first = cards[0] ?? {};
+      return (
+        <div className="px-3 pt-2 pb-2">
+          <div className="bubble wa">
+            {str(first.image) ? (
+              <FlowImage
+                src={str(first.image)}
+                where="carousel card"
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  maxHeight: 100,
+                  objectFit: 'cover',
+                  borderRadius: 4,
+                }}
+              />
+            ) : null}
+            {str(first.title) ? (
+              <div className="mt-1 text-[12px] font-semibold">{trunc(first.title, 40)}</div>
+            ) : null}
+            <div className="mt-0.5 text-[10.5px] text-muted-foreground">{cards.length} ×</div>
+          </div>
+        </div>
+      );
+    }
     case 'cta': {
       let actions = Array.isArray(d.actions) ? asArr(d.actions) : null;
       if (!actions) {
@@ -426,28 +472,32 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           {actions.slice(0, 3).map((a, i) => {
             const t = str(a.type) || 'url';
             return (
-              <div
-                key={i}
-                className="flex items-center gap-1.5 rounded bg-[var(--flb-bubble)] px-2 py-1 text-[11px] text-brand"
-              >
-                <svg
-                  viewBox="0 0 16 16"
-                  className="h-3 w-3 shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                >
-                  <path d={icon(t)} />
-                </svg>
-                <span className="flex-1 truncate font-medium">
-                  {str(a.label) ||
-                    (t === 'copy'
-                      ? tp('ctaCopy')
-                      : t === 'phone' || t === 'call_now'
-                        ? tp('ctaCall')
-                        : tp('ctaVisit'))}
-                </span>
-                <span className="font-mono text-[9.5px] uppercase opacity-70">{t}</span>
+              <div key={i}>
+                <div className="flex items-center gap-1.5 rounded bg-[var(--flb-bubble)] px-2 py-1 text-[11px] text-brand">
+                  <svg
+                    viewBox="0 0 16 16"
+                    className="h-3 w-3 shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  >
+                    <path d={icon(t)} />
+                  </svg>
+                  <span className="flex-1 truncate font-medium">
+                    {str(a.label) ||
+                      (t === 'copy'
+                        ? tp('ctaCopy')
+                        : t === 'phone' || t === 'call_now'
+                          ? tp('ctaCall')
+                          : tp('ctaVisit'))}
+                  </span>
+                  <span className="font-mono text-[9.5px] uppercase opacity-70">{t}</span>
+                </div>
+                {str(a.value) ? (
+                  <div className="truncate px-2 pt-0.5 font-mono text-[10px] text-muted-foreground">
+                    {str(a.value)}
+                  </div>
+                ) : null}
               </div>
             );
           })}
