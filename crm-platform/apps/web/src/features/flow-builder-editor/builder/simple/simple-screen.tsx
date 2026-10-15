@@ -290,6 +290,14 @@ function Editor({
       const at = doc.journeys.findIndex((j) => j.steps.some((s) => s.id === stepId));
       if (at >= 0) setGi(groupIndexOf(doc, at));
       setActiveId(stepId);
+      // The step may be in another flow of the list: wait for it to be drawn, then bring it into view.
+      window.setTimeout(
+        () =>
+          document
+            .getElementById(`step-${stepId}`)
+            ?.scrollIntoView({ block: 'center', behavior: 'smooth' }),
+        60,
+      );
     } else setGi(0);
   };
   const badSteps = useMemo(

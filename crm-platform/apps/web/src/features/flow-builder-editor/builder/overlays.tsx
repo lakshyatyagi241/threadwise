@@ -181,7 +181,18 @@ export function Minimap({
 }
 
 /** The red popup that lists why Save or Publish was blocked (TW-FLB-018). */
-export function ValidationPopup({ items, onClose }: { items: string[]; onClose: () => void }) {
+export function ValidationPopup({
+  items,
+  nodes = [],
+  onGoTo,
+  onClose,
+}: {
+  items: string[];
+  /** The nodes that need attention: each one is a button that takes the canvas to it. */
+  nodes?: Array<{ id: string; label: string }>;
+  onGoTo?: (id: string) => void;
+  onClose: () => void;
+}) {
   const t = useTranslations('flb.builder.shell.overlays');
   const tc = useTranslations('flb.common');
   return (
@@ -206,6 +217,22 @@ export function ValidationPopup({ items, onClose }: { items: string[]; onClose: 
             {items.length > 6 ? (
               <div className="mt-1 text-[11px] text-muted-foreground">
                 {t('andMore', { count: items.length - 6 })}
+              </div>
+            ) : null}
+            {onGoTo && nodes.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {nodes.slice(0, 8).map((n) => (
+                  <button
+                    key={n.id}
+                    type="button"
+                    data-goto-node={n.id}
+                    onClick={() => onGoTo(n.id)}
+                    className="inline-flex items-center gap-1 rounded-full border border-[var(--flb-coral)]/50 bg-background px-2.5 py-1 text-[11.5px] font-medium text-foreground hover:bg-[var(--flb-coral)]/10"
+                  >
+                    {n.label}
+                    <Icon d="M6 4l4 4-4 4" className="h-3 w-3" />
+                  </button>
+                ))}
               </div>
             ) : null}
             <div className="mt-1.5 text-[11px] text-muted-foreground">{t('outlined')}</div>
