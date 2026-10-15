@@ -145,13 +145,26 @@
         "privacyUrl": "Lien vers la politique de confidentialité",
         "privacyUrlHint": "Facultatif. Affiché à côté du texte de consentement. Doit commencer par https://.",
         "privacyUrlHttps": "Utilisez une adresse qui commence par https://.",
+        "termsUrl": "Lien vers les conditions",
+        "termsUrlHint": "Facultatif. Affiché à côté du texte de consentement et du lien de confidentialité. Doit commencer par https://.",
+        "useWorkspacePrivacy": "Utiliser le lien de confidentialité de mon espace de travail",
+        "useWorkspaceTerms": "Utiliser le lien des conditions de mon espace de travail",
         "required": "À cocher pour envoyer",
         "requiredHint": "Désactivez cette option si le consentement est facultatif.",
         "marketing": "Consentement marketing",
         "marketingHint": "Cocher la case enregistre le consentement marketing sur le contact. Une case non cochée n’inscrit jamais personne.",
-        "whatsappHint": "Allez-vous envoyer des messages à ces contacts sur WhatsApp ? Utilisez une formulation qui le précise et indique comment se désabonner. La case cochée est conservée comme preuve, avec ce texte exact et sa version.",
-        "whatsappInsert": "Utiliser la formulation d'acceptation WhatsApp",
-        "whatsappWording": "J'accepte de recevoir des actualités et des offres sur WhatsApp. Je peux répondre STOP à tout moment pour me désabonner."
+        "serviceHint": "Cette ligne n'est pas du marketing. Une case cochée est conservée comme preuve que la personne a accepté d'être contactée au sujet de sa demande (messages de service uniquement), avec ce texte exact et sa version. Elle n'abonne jamais personne au marketing.",
+        "statement": "J'accepte de recevoir des actualités et des offres sur {channels}. Je peux répondre STOP à tout moment pour me désabonner.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "e-mail"
+        },
+        "channelsLabel": "Canaux couverts par ce consentement",
+        "channelsHint": "Le visiteur n’est abonné que sur les canaux cochés ici, et le texte du consentement les nomme. Un canal n’est utilisé que si le formulaire recueille le téléphone ou l’e-mail correspondant.",
+        "channelsUse": "Mettre à jour le texte avec ces canaux",
+        "channelNeedsPhone": "Ce formulaire n’a pas de champ téléphone : personne ne sera abonné à ce canal par ce biais.",
+        "channelNeedsEmail": "Ce formulaire n’a pas de champ e-mail : personne ne sera abonné à ce canal par ce biais."
       },
       "crm": {
         "title": "Dans le CRM",

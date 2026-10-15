@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / 报表",
+    "title": "收入报表",
+    "subtitle": "查看所选时间段内的开票金额、已付款金额、仍欠款金额以及实际收到的款项。",
+    "back": "CRM 仪表盘",
+    "period": "{from} 至 {to}（{zone}）",
+    "comparedWith": "与{mode}对比：{from} 至 {to}",
+    "loading": "正在加载收入报表",
+    "retry": "重试",
+    "stale": "无法刷新数据，当前显示的是上次加载的数据。",
+    "empty": {
+      "title": "此时间段内没有数据",
+      "message": "这段日期内没有开具发票，也没有收到付款。请选择其他时间段，或打开发票列表。",
+      "invoices": "打开发票"
+    },
+    "mode": {
+      "previous": "上一周期",
+      "lastYear": "去年同期"
+    },
+    "filters": {
+      "label": "报表筛选",
+      "period": "时间段",
+      "range": {
+        "month": "本月",
+        "lastMonth": "上月",
+        "quarter": "本季度",
+        "year": "今年",
+        "30d": "30 天",
+        "90d": "90 天",
+        "custom": "自定义"
+      },
+      "from": "开始日期",
+      "to": "结束日期",
+      "compare": "对比对象",
+      "compareOption": {
+        "previous": "上一周期",
+        "lastYear": "去年同期",
+        "none": "不对比"
+      },
+      "groupBy": "拆分方式",
+      "groupOption": {
+        "source": "线索来源",
+        "origin": "发票来源",
+        "product": "产品",
+        "owner": "负责人",
+        "team": "团队"
+      },
+      "owner": "负责人",
+      "everyone": "所有人",
+      "team": "团队",
+      "allTeams": "所有团队",
+      "currency": "币种",
+      "allCurrencies": "全部，以 {currency} 显示",
+      "reset": "重置筛选"
+    },
+    "note": {
+      "converted": "当前使用了多种币种，数据已换算为 {currency}。选择单一币种可查看其精确金额。",
+      "missingRate": "缺少 {currencies} 的汇率：这些金额未计入换算后的数据。",
+      "invoiced": "已开票、已付款和欠款统计的是该时间段内开具的发票（不含草稿、已作废发票和形式发票）。已收款和已退款统计的是该时间段内实际收到的款项，无论其结清的是哪张发票。"
+    },
+    "kpi": {
+      "title": "关键指标",
+      "vsPrevious": "与对比周期相比",
+      "collected": "已收款",
+      "collectedHint": "该时间段内收到的付款",
+      "collectedAll": "已收款（累计）",
+      "collectedAllHint": "您可查看的全部付款",
+      "outstanding": "未结金额",
+      "outstandingHint": "截至今天，{count, plural, other {# 张未结发票}}",
+      "tax": "已收税款",
+      "taxHint": "该时间段内已全额付清的发票",
+      "invoiced": "已开票",
+      "invoicedHint": "{count, plural, other {已开具 # 张发票}}",
+      "paid": "已付款",
+      "paidHint": "该时间段内开具的发票中已付部分",
+      "overdue": "逾期",
+      "overdueHint": "已过到期日",
+      "refunded": "已退款",
+      "refundedHint": "该时间段内退还的款项",
+      "paidInFull": "已全额付清",
+      "paidInFullHint": "已全额付清的发票",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "已开票、已付款与欠款",
+      "subtitle": "该时间段内开具的发票及其当前状态",
+      "paid": "已付款",
+      "owed": "欠款（未到期）",
+      "overdue": "逾期",
+      "credited": "贷项通知单",
+      "invoiced": "已开票",
+      "empty": "此时间段内没有开具发票。",
+      "several": "这些发票使用了多种币种。请在上方选择一种币种，以单个条形图查看。"
+    },
+    "trend": {
+      "title": "已开票与已收款",
+      "subtitle": {
+        "day": "按天",
+        "week": "按周",
+        "month": "按月"
+      },
+      "chartLabel": "该时间段内的已开票与已收款",
+      "invoiced": "已开票",
+      "collected": "已收款"
+    },
+    "split": {
+      "title": "按{group}",
+      "subtitle": "金额从大到小排列，以 {currency} 显示。",
+      "subtitlePerCurrency": "金额从大到小排列，按币种分别列出。",
+      "group": {
+        "source": "线索来源",
+        "origin": "发票来源",
+        "product": "产品",
+        "owner": "负责人",
+        "team": "团队"
+      },
+      "empty": {
+        "source": "无线索来源",
+        "origin": "来源未知",
+        "product": "无明细行",
+        "owner": "未分配",
+        "team": "无团队"
+      },
+      "origin": {
+        "manual": "手动创建",
+        "quote": "来自报价单",
+        "order": "来自订单",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "自有商店",
+        "api": "API",
+        "ai": "AI 助手"
+      },
+      "col": {
+        "invoices": "发票",
+        "invoiced": "已开票",
+        "paid": "已付款",
+        "outstanding": "欠款",
+        "overdue": "逾期",
+        "collected": "已收款",
+        "refunded": "已退款"
+      },
+      "total": "合计",
+      "truncated": "仅列出金额最大的 {count} 行。CSV 汇总包含相同的行。",
+      "teamNote": "同时属于两个团队的人员会在两个团队中重复计算，因此各团队合计可能超过总计。",
+      "productNote": "整张发票的折扣、运费和舍入差额会按各明细行金额比例分摊。"
+    },
+    "aging": {
+      "title": "应收账款账龄",
+      "open": "付款",
+      "empty": "没有欠款。",
+      "bucket": {
+        "current": "未到期",
+        "d1_30": "逾期 1-30 天",
+        "d31_60": "逾期 31-60 天",
+        "d61_90": "逾期 61-90 天",
+        "d90_plus": "逾期 90 天以上"
+      }
+    },
+    "export": {
+      "title": "下载此报表",
+      "note": "将按上方筛选条件在后台生成，保留 {days} 天，并通过邮件通知您。您获得的内容不会超出报表中显示的范围。",
+      "csvPayments": "CSV：付款",
+      "csvPaymentsHint": "该时间段内每笔付款和退款一行",
+      "csvSummary": "CSV：此表",
+      "csvSummaryHint": "上方的拆分数据及合计",
+      "pdf": "PDF",
+      "pdfHint": "文档形式的报表",
+      "preparing": "准备中…",
+      "requested": "正在为您准备文件。文件就绪后您将收到邮件，同时它也会出现在下方列表中。",
+      "recent": "您最近的文件",
+      "none": "您还没有生成过文件。",
+      "kind": {
+        "pdf": "PDF 报表",
+        "csv-payments": "付款 CSV",
+        "csv-summary": "CSV 汇总"
+      },
+      "status": {
+        "queued": "等待中",
+        "running": "准备中",
+        "ready": "已就绪",
+        "failed": "失败",
+        "expired": "已过期"
+      },
+      "range": "{from} 至 {to}",
+      "rows": "{count, plural, other {# 行}}",
+      "expires": "保留至 {date}",
+      "failed": "无法生成此文件，请重新申请。",
+      "download": "下载"
+    },
+    "errors": {
+      "network": "无法连接到服务器。请检查网络连接后重试。",
+      "forbidden": "您没有权限访问此内容。",
+      "notFound": "该文件不存在。",
+      "exportInProgress": "已有一个文件正在为您准备。请等待其邮件通知后再申请新的文件。",
+      "exportNotReady": "此文件尚未就绪或已过期，请重新申请。",
+      "rateLimited": "请求过于频繁，请稍候再试。",
+      "validation": "筛选条件无效。",
+      "unexpected": "出了点问题，请重试。"
+    }
+  }
+}

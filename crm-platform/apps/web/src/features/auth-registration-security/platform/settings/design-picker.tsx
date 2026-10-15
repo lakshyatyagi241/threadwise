@@ -94,11 +94,42 @@ function Thumb({ variant }: { variant: number }) {
           <rect x="29" y="31" width="22" height="3" rx="1.5" fill="var(--primary)" />
         </>
       )}
+      {variant === 6 && (
+        <>
+          <rect x="40" y="0" width="40" height="50" fill="var(--primary)" opacity="0.9" />
+          <rect
+            x="48"
+            y="8"
+            width="7"
+            height="7"
+            rx="1.5"
+            fill="var(--background)"
+            opacity="0.5"
+            transform="rotate(20 51 11)"
+          />
+          <circle cx="72" cy="44" r="14" fill="var(--background)" opacity="0.14" />
+          <rect
+            x="46"
+            y="16"
+            width="20"
+            height="3"
+            rx="1.5"
+            fill="var(--background)"
+            opacity="0.9"
+          />
+          <rect x="46" y="34" width="10" height="2" rx="1" fill="var(--background)" opacity="0.6" />
+          <rect x="46" y="39" width="10" height="2" rx="1" fill="var(--background)" opacity="0.6" />
+          <rect x="6" y="12" width="26" height="26" rx="3" {...card} />
+          <rect x="10" y="18" width="18" height="3" rx="1.5" fill="var(--border)" />
+          <rect x="10" y="25" width="18" height="3" rx="1.5" fill="var(--border)" />
+          <rect x="10" y="32" width="18" height="3" rx="1.5" fill="var(--primary)" />
+        </>
+      )}
     </svg>
   );
 }
 
-const NAMES = ['split', 'cinematic', 'minimal', 'spotlight', 'aurora'] as const;
+const NAMES = ['split', 'cinematic', 'minimal', 'spotlight', 'aurora', 'geta'] as const;
 
 /** The five designs, one choice for all three auth pages. Native radios, so arrow keys and the screen reader work. */
 export function DesignPicker({
@@ -118,7 +149,7 @@ export function DesignPicker({
       <legend className="mb-1 text-sm font-medium">
         {t('legend')} <span className="font-normal text-muted-foreground">{t('legendNote')}</span>
       </legend>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
         {VARIANT_IDS.map((id) => (
           <label
             key={id}

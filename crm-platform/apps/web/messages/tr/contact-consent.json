@@ -112,15 +112,22 @@
         "instagram": "Instagram",
         "webchat": "Web sohbeti",
         "voice": "Sesli arama",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "abone",
-        "withdrawn": "abonelikten çıktı"
+        "withdrawn": "abonelikten çıktı",
+        "utilityGranted": "hizmet mesajlarını kabul etti",
+        "utilityWithdrawn": "hizmet mesajları durduruldu"
       },
       "action": {
         "granted": "Abone",
-        "withdrawn": "Abonelikten çıktı"
+        "withdrawn": "Abonelikten çıktı",
+        "utilityGranted": "Talebi hakkında iletişime geçilmesini kabul etti",
+        "utilityWithdrawn": "Hizmet mesajlarını durdurdu"
       },
       "source": {
         "form": "Form",
@@ -134,7 +141,8 @@
         "legacy": "Onay geçmişinden önce",
         "widget": "Web sitesi sohbeti",
         "booking": "Rezervasyon sayfası",
-        "commerce": "Mağaza ödeme sayfası"
+        "commerce": "Mağaza ödeme sayfası",
+        "lead": "Potansiyel müşteri toplama"
       },
       "by": "{name} tarafından",
       "evidence": {
@@ -154,7 +162,10 @@
         "widgetId": "Sohbet widget'ı",
         "bookingTypeId": "Rezervasyon sayfası",
         "integrationId": "Mağaza",
-        "storeFlag": "Mağaza ayarı"
+        "storeFlag": "Mağaza ayarı",
+        "leadSourceId": "Müşteri adayı kaynağı",
+        "leadFormId": "Müşteri adayı formu",
+        "adId": "Reklam"
       },
       "dialog": {
         "titleGranted": "Abone olarak işaretle",
@@ -187,7 +198,14 @@
       "hintColumn": "Pazarlama iznine eşlenen sütun kimin kaydedileceğini belirler: yalnızca evet diyen satırlar, dosya adı kanıt olarak kullanılarak izin alır. Hayır, boş hücre veya bilinmeyen bir kelime hiçbir şey kaydetmez. Abonelikten çıkmış kişiler çıkmış kalır.",
       "columnSummary": "{granted} satır evet diyor ve kaydedilecek. {notGranted} satır hayır diyor veya boş ve izin kaydı almayacak.",
       "unrecognised": "{count, plural, one {# satırda} other {# satırda}} evet veya hayır olmayan bir izin değeri var ({values}). Bunlar izin verilmemiş sayılır. Evet / hayır, true / false veya 1 / 0 kullanın.",
-      "columnIgnored": "Yukarıdaki kutuyu işaretleyene kadar izin sütunu etki etmez."
+      "columnIgnored": "Yukarıdaki kutuyu işaretleyene kadar izin sütunu etki etmez.",
+      "noticeText": "Bildirim veya hukuki dayanak (isteğe bağlı)",
+      "noticeTextHint": "Bu kişilerin neyi ve nerede kabul ettiği, örneğin: ödeme sırasında gizlilik bildirimi v3 kapsamında abone oldu. Kaydedilen her onayla birlikte kanıt olarak saklanır.",
+      "noticeVersion": "Bildirim sürümü (isteğe bağlı)",
+      "smsSummary": "SMS onay sütunu: {granted} satır evet diyor ve SMS onayı olarak kaydedilecek. {notGranted} satır hayır diyor veya boş.",
+      "emailSummary": "E-posta onay sütunu: {granted} satır evet diyor ve e-posta onayı olarak kaydedilecek (satırda e-posta adresi de olmalı). {notGranted} satır hayır diyor veya boş.",
+      "labelNumbers": "Bu numaralara mesaj göndermek için onayım var",
+      "hintNumbers": "İşaretlenirse, yayını başlattığınızda dosyadaki her numara pazarlamayı kabul etmiş olarak kaydedilir, kanıt olarak dosya adı tutulur. İşaretlenmezse onay kaydedilmez. Abonelikten çıkanlar çıkmış kalır."
     },
     "systemLine": {
       "withdrawn": "Kişi {keyword} yanıtı verdi: pazarlama aboneliğinden çıktı",
@@ -291,12 +309,14 @@
       "title": {
         "widget": "Sohbet formundaki onay satırı",
         "booking": "Rezervasyon sayfasındaki onay satırı",
-        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir"
+        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir",
+        "workspace": "Varsayılan onay bildirimi"
       },
       "intro": {
         "widget": "Ziyaretçinin bilgilerinin altında bir onay kutusu olarak gösterilir. Yalnızca işaretleyen ziyaretçi kabul etmiş olarak kaydedilir, o da telefon veya e-posta verdiyse.",
         "booking": "Rezervasyon formunda bir onay kutusu olarak gösterilir. Yalnızca işaretleyen kişi kabul etmiş olarak kaydedilir; rezervasyon bunu hiçbir zaman gerektirmez.",
-        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin."
+        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin.",
+        "workspace": "Bir form, widget veya rezervasyon sayfasının kendi metni olmadığında çalışma alanınızın onay kutusunun yanında gösterdiği metin. Her değişiklik yeni numaralı bir sürümdür."
       },
       "enabled": "Onay satırı açık",
       "text": "Kişinin kabul ettiği metin",
@@ -309,7 +329,21 @@
       "version": "Geçerli sürüm: {version}",
       "noVersion": "Henüz kaydedilmedi.",
       "saveFirst": "Önce bunu kaydedin, sonra onay satırını ayarlayabilirsiniz.",
-      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)"
+      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)",
+      "termsUrl": "Şartlarınızın bağlantısı (isteğe bağlı)",
+      "termsUrlHint": "https:// ile başlamalıdır",
+      "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
+      "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan",
+      "useWorkspaceText": "Çalışma alanı varsayılan metnini kullan",
+      "statement": "{channels} üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-posta"
+      },
+      "channelsLabel": "Bu onayın kapsadığı kanallar",
+      "channelsHint": "Kişi yalnızca burada işaretlenen kanallara abone edilir ve onay metni bunları belirtir. Bir kanal, yalnızca kişi ilgili telefon numarasını veya e-postayı verirse kullanılır.",
+      "channelsUse": "Metni bu kanallarla güncelle"
     }
   }
 }

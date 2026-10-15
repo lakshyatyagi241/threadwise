@@ -7,6 +7,7 @@ import {
   flowExportSchema,
   flowsOverviewSchema,
   flbGoogleFilesResponseSchema,
+  googleAccountSummarySchema,
   listFlowsResponseSchema,
   flbTestWebhookResponseSchema,
   toggleFlowResponseSchema,
@@ -70,6 +71,11 @@ export const flowsApi = {
     apiFetch('/flows/builder-context/commerce-products', {
       query: q as Query,
       schema: flbCommerceProductsResponseSchema,
+      signal,
+    }),
+  googleStatus: (signal?: AbortSignal) =>
+    apiFetch('/flows/builder-context/google/status', {
+      schema: googleAccountSummarySchema,
       signal,
     }),
   googleFiles: (kind: 'sheets' | 'docs' | 'forms', signal?: AbortSignal) =>

@@ -3,6 +3,7 @@ import type { SenderHidden } from '@crm/contracts';
 import {
   classicFallback,
   DEVICES_HREF,
+  EMAIL_HREF,
   NUMBERS_HREF,
   senderEmpty,
   SMS_HREF,
@@ -92,5 +93,17 @@ describe('classicFallback: only numbers the guided flow cannot send from', () =>
       classicFallback([classic('a'), { key: 'g', guided: true, isDefault: false }]),
     ).toBeNull();
     expect(classicFallback([])).toBeNull();
+  });
+});
+
+describe('senderEmpty on the Email card', () => {
+  it('every cause is fixed on the Email page', () => {
+    expect(senderEmpty([], { email: true })).toEqual({ cause: 'none', count: 0, href: EMAIL_HREF });
+    expect(senderEmpty([h('email', 'not_connected', 2)], { email: true })).toEqual({
+      cause: 'disconnected',
+      count: 2,
+      href: EMAIL_HREF,
+    });
+    expect(senderEmpty([h('email', 'error')], { email: true }).href).toBe('/email');
   });
 });

@@ -35,6 +35,7 @@ import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
+import { GoogleAccountModule } from './modules/google-account';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CallingVoiceModule } from './modules/calling-voice';
 import { CampaignsModule } from './modules/campaigns';
@@ -46,6 +47,9 @@ import { EmailTemplatesModule } from './modules/email-templates';
 import { ChannelSmsModule } from './modules/channel-sms';
 import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { ChannelLineModule } from './modules/channel-line';
+import { ChannelViberModule } from './modules/channel-viber';
+import { ChannelWechatModule } from './modules/channel-wechat';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule, NodeCatalogBridgeModule } from './modules/node-bridge-runtime';
@@ -84,6 +88,7 @@ import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
 import { PrivacyModule } from './modules/privacy';
+import { ComplianceCenterModule } from './modules/compliance-center';
 import { AuditLogModule } from './modules/audit-log';
 import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
@@ -97,6 +102,7 @@ import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy
 import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy/workspace-impersonation.module';
 import { LeadsModule } from './modules/leads';
 import { FormsBuilderModule } from './modules/forms-builder';
+import { FormsLinksGroupsModule } from './modules/forms-links-groups';
 import { MarketplaceModule } from './modules/marketplace';
 import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
@@ -212,11 +218,15 @@ import { HealthModule } from './health/health.module';
     CrmModule,
     DashboardsAnalyticsChartsModule,
     AppointmentsBookingModule,
+    GoogleAccountModule,
     NotificationsModule,
     BroadcastsModule,
     CampaignsModule,
     CallingVoiceModule,
     ChannelTelegramModule,
+    ChannelLineModule,
+    ChannelViberModule,
+    ChannelWechatModule,
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,
@@ -242,6 +252,7 @@ import { HealthModule } from './health/health.module';
     GrowthPilotModule,
     ContactConsentModule,
     PrivacyModule,
+    ComplianceCenterModule,
     AuditLogModule,
     ContactsPqlModule,
     WabaModule,
@@ -254,6 +265,7 @@ import { HealthModule } from './health/health.module';
     WorkspaceImpersonationModule,
     LeadsModule,
     FormsBuilderModule,
+    FormsLinksGroupsModule,
     MarketplaceModule,
     ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each

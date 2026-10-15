@@ -456,7 +456,9 @@
         "memo": "মেমো",
         "status": "স্ট্যাটাস",
         "source": "উৎস",
-        "consent": "মার্কেটিং সম্মতি (হ্যাঁ / না)"
+        "consent": "মার্কেটিং সম্মতি (হ্যাঁ / না)",
+        "consentSms": "SMS মার্কেটিং সম্মতি (হ্যাঁ / না)",
+        "consentEmail": "ইমেইল মার্কেটিং সম্মতি (হ্যাঁ / না)"
       },
       "notInFile": "ফাইলে নেই",
       "columnN": "কলাম {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "সব নির্বাচন করুন",
         "reorder": "কলামের ক্রম বদলাতে টেনে আনুন",
         "remove": "{name} সরান"
+      },
+      "presets": {
+        "myContacts": "আমার কন্টাক্ট",
+        "newThisWeek": "এই সপ্তাহে নতুন",
+        "newLastWeek": "গত সপ্তাহে নতুন",
+        "recentlyCreated": "সম্প্রতি তৈরি",
+        "recentlyModified": "সম্প্রতি পরিবর্তিত",
+        "recentlyImported": "সম্প্রতি ইমপোর্ট করা",
+        "neverContacted": "কখনো যোগাযোগ হয়নি",
+        "needsFollowUp": "ফলো-আপ দরকার",
+        "active": "সক্রিয়",
+        "inactive": "নিষ্ক্রিয়",
+        "unsubscribed": "আনসাবস্ক্রাইব করেছে"
       }
     },
     "erase": {

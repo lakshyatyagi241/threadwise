@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Stato",
         "source": "Origine",
-        "consent": "Consenso marketing (sì / no)"
+        "consent": "Consenso marketing (sì / no)",
+        "consentSms": "Consenso marketing via SMS (sì / no)",
+        "consentEmail": "Consenso marketing via email (sì / no)"
       },
       "notInFile": "Non presente nel file",
       "columnN": "Colonna {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "Seleziona tutto",
         "reorder": "Trascina per riordinare le colonne",
         "remove": "Rimuovi {name}"
+      },
+      "presets": {
+        "myContacts": "I miei contatti",
+        "newThisWeek": "Nuovi questa settimana",
+        "newLastWeek": "Nuovi la settimana scorsa",
+        "recentlyCreated": "Creati di recente",
+        "recentlyModified": "Modificati di recente",
+        "recentlyImported": "Importati di recente",
+        "neverContacted": "Mai contattati",
+        "needsFollowUp": "Da ricontattare",
+        "active": "Attivi",
+        "inactive": "Inattivi",
+        "unsubscribed": "Disiscritti"
       }
     },
     "erase": {

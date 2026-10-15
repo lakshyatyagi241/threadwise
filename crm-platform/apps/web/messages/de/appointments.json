@@ -41,7 +41,10 @@
       "notStarted": "Dies ist erst möglich, nachdem die Buchung begonnen hat.",
       "alreadyStarted": "Diese Buchung hat bereits begonnen und kann daher nicht mehr geändert werden.",
       "bookingOff": "Eine Buchung ist für diesen Service derzeit nicht verfügbar.",
-      "notDeletable": "Dies kann nicht gelöscht werden, solange noch Buchungen anstehen."
+      "notDeletable": "Dies kann nicht gelöscht werden, solange noch Buchungen anstehen.",
+      "notDrifted": "Diese Buchung stimmt bereits mit ihrem Google-Termin überein. Sie wurde neu geladen.",
+      "calendarNotConnected": "Google Calendar ist nicht verbunden. Verbinden Sie es auf der Seite „Google-Konto“ erneut und versuchen Sie es noch einmal.",
+      "calendarFailed": "Google hat nicht geantwortet oder die Änderung abgelehnt. Versuchen Sie es gleich noch einmal."
     },
     "picker": {
       "timeZone": "Zeitzone",
@@ -156,7 +159,8 @@
       "yesterday": "Gestern",
       "rowLabel": "Buchung öffnen: {title}",
       "noName": "Kein Name",
-      "needsReview": "Prüfung erforderlich"
+      "needsReview": "Prüfung erforderlich",
+      "outOfSync": "Kalender nicht synchron"
     },
     "row": {
       "moreFor": "Weitere Aktionen für {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Buchung auf die neue Zeit verschoben.",
       "linkCopied": "Verwaltungslink kopiert.",
       "copyFailed": "Der Link konnte nicht kopiert werden.",
-      "declined": "Anfrage abgelehnt."
+      "declined": "Anfrage abgelehnt.",
+      "calendarPushed": "An Google übertragen: Der Termin stimmt jetzt mit dieser Buchung überein.",
+      "calendarAccepted": {
+        "cancelled": "Änderung von Google übernommen: Die Buchung wurde storniert.",
+        "rescheduled": "Änderung von Google übernommen: Die Buchung wurde auf die neue Zeit verschoben.",
+        "acknowledged": "Änderung von Google übernommen. Die Buchung bleibt unverändert."
+      }
     },
     "typesList": {
       "breadcrumb": "Brotkrümelnavigation",
@@ -962,7 +972,7 @@
         "calendarSaved": "Kalender gespeichert.",
         "confirmOff": {
           "title": "Google Kalender trennen?",
-          "message": "Neue Buchungen gelangen nicht mehr in Ihren Kalender, und dessen Belegtzeiten werden nicht mehr gelesen. Termine, die bereits in Ihrem Kalender stehen, bleiben dort, und Google wird angewiesen, diesen Zugriff zu widerrufen.",
+          "message": "Neue Buchungen gelangen nicht mehr in Ihren Kalender, und dessen Belegtzeiten werden nicht mehr gelesen. Die Google-Schritte in Ihren Flows stoppen ebenfalls, da sie diese Verbindung mitnutzen. Termine, die bereits in Ihrem Kalender stehen, bleiben dort, und Google wird angewiesen, diesen Zugriff zu widerrufen.",
           "confirm": "Trennen",
           "cancel": "Beibehalten"
         },
@@ -972,7 +982,8 @@
           "failed": "Das Verbinden wurde nicht abgeschlossen. Versuchen Sie es erneut; wenn es weiter fehlschlägt, bitten Sie Ihren Plattformadministrator, die Google-Einrichtung zu prüfen.",
           "expired": "Dieser Versuch hat zu lange gedauert. Klicken Sie auf „Verbinden“, um neu zu beginnen.",
           "not_configured": "Google Kalender ist für diese Plattform nicht eingerichtet. Bitten Sie Ihren Plattformadministrator, den Google-OAuth-Client hinzuzufügen.",
-          "missing_scope": "Google hat nicht alle erforderlichen Kalenderberechtigungen erteilt. Verbinden Sie erneut und lassen Sie alle Kästchen angehakt."
+          "missing_scope": "Google hat nicht alle erforderlichen Kalenderberechtigungen erteilt. Verbinden Sie erneut und lassen Sie alle Kästchen angehakt.",
+          "cancelled": "Sie haben abgebrochen. Es wurde nichts verbunden."
         },
         "whatTitle": "Was dies bewirkt",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Mehr laden",
       "loadMorePast": "Mehr Vergangene laden",
       "noType": "Termin"
+    },
+    "sync": {
+      "title": "Kalender nicht synchron",
+      "reason": {
+        "event_deleted": "Der Termin wurde in Google Calendar gelöscht oder abgesagt.",
+        "event_missing": "Der Termin ist in Google Calendar nicht mehr zu finden.",
+        "time_changed": "Der Termin wurde in Google Calendar auf eine andere Zeit verschoben.",
+        "attendees_changed": "Die Gäste des Termins wurden in Google Calendar geändert."
+      },
+      "googleShows": "Google zeigt: {time}",
+      "notChanged": "Diese Buchung wurde nicht geändert. Wählen Sie, welche Version richtig ist.",
+      "found": "Gefunden: {when}",
+      "push": "Unsere Zeit an Google zurückschreiben",
+      "accept": "Änderung von Google übernehmen",
+      "keep": "Nicht jetzt",
+      "acceptTitle": {
+        "cancel": "Diese Buchung stornieren?",
+        "reschedule": "Diese Buchung auf die Zeit von Google verschieben?",
+        "acknowledge": "Die von Google angezeigten Gäste übernehmen?"
+      },
+      "acceptMessage": {
+        "cancel": "Der Termin existiert bei Google nicht mehr. Daher wird diese Buchung storniert und ihr Zeitfenster wird wieder frei. Der Kunde wird wie bei jeder Stornierung benachrichtigt.",
+        "reschedule": "Diese Buchung wird auf {time} verschoben. Der Kunde wird wie bei jeder Verschiebung über die neue Zeit informiert.",
+        "acknowledge": "Die Buchung selbst ändert sich nicht. Die Gästeliste von Google wird gemerkt und dieser Hinweis verschwindet."
+      },
+      "acceptConfirm": {
+        "cancel": "Buchung stornieren",
+        "reschedule": "Buchung verschieben",
+        "acknowledge": "Übernehmen"
+      }
     }
   }
 }

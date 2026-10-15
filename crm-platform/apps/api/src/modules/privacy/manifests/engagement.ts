@@ -87,6 +87,23 @@ export const campaignsRecipients = defineHolder({
       retention: 'With the recipient row.',
     },
     {
+      table: 'camp_follow_up_attempts',
+      link: {
+        by: 'via',
+        column: 'recipient_id',
+        table: 'wp_campaign_contacts',
+        key: 'id',
+        link: [CONTACT, { by: 'phone', column: 'phone_number' }],
+      },
+      disposition: 'retain',
+      reason:
+        'Which follow-up step went to a recipient row and how it was delivered; holds no personal value (the recipient row itself is anonymised).',
+      tier: 'records',
+      categories: ['communications'],
+      pii: [],
+      retention: 'With the recipient row.',
+    },
+    {
       table: 'camp_wizard_csv_rows',
       link: { by: 'phone', column: 'digits' },
       disposition: 'delete',

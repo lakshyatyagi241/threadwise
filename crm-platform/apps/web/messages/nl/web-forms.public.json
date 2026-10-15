@@ -58,7 +58,8 @@
         "tryAgain": "Opnieuw proberen te betalen",
         "missingTitle": "We konden deze betaling niet vinden",
         "missingBody": "De link is mogelijk onjuist of te oud."
-      }
+      },
+      "termsOfService": "Voorwaarden"
     }
   }
 }

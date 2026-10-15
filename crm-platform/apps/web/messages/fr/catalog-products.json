@@ -832,7 +832,10 @@
         "placeholder": "ex. Ma boutique",
         "button": "Créer le catalogue",
         "needName": "Saisissez un nom de catalogue.",
-        "done": "Catalogue créé et connecté."
+        "done": "Catalogue créé et connecté.",
+        "loginCancelled": "La connexion Meta a été fermée avant la fin. Réessayez et autorisez l'accès au catalogue.",
+        "sdkFailed": "Impossible de charger la connexion Meta. Vérifiez votre connexion ou votre bloqueur de publicités, puis rechargez la page.",
+        "sdkLoading": "La connexion Meta est encore en cours de chargement. Réessayez dans un instant."
       },
       "rename": {
         "label": "Nom du catalogue",

@@ -1,0 +1,200 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp फ़ॉर्म",
+      "links": "WhatsApp लिंक"
+    },
+    "errors": {
+      "generic": "कुछ गड़बड़ हो गई। कृपया फिर से कोशिश करें।",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "फ़ॉर्म का उपयोग करने के लिए एक WhatsApp Cloud API नंबर कनेक्ट करें।",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "किसी भी कनेक्टेड WhatsApp Cloud API नंबर के पास मान्य क्रेडेंशियल नहीं हैं।",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta ने इस फ़ॉर्म परिभाषा को अस्वीकार कर दिया।",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "फ़ॉर्म प्रकाशित करने से पहले आपके WhatsApp Business खाते को Meta के सत्यापन से गुज़रना होगा।",
+      "WFL_FORM_PUBLISH_FAILED": "Meta इस फ़ॉर्म को प्रकाशित नहीं कर सका।",
+      "WFL_LINK_NOT_LIVE": "यह लिंक रुका हुआ है या इसकी समय-सीमा समाप्त हो गई है।",
+      "ROW_VERSION_CONFLICT": "इसे किसी अन्य स्थान पर बदल दिया गया है। पेज रीलोड करें और फिर से कोशिश करें।",
+      "VALIDATION_FAILED": "हाइलाइट किए गए फ़ील्ड जाँचें और फिर से कोशिश करें।",
+      "PLAN_FEATURE_LOCKED": "इस सुविधा का उपयोग करने के लिए अपना प्लान अपग्रेड करें।"
+    },
+    "forms": {
+      "heading": "WhatsApp फ़ॉर्म",
+      "intro": "ऐसे फ़ॉर्म बनाएं जिन्हें ग्राहक सीधे WhatsApp में भरें, फिर उन्हें किसी फ़्लो से भेजें और जवाब यहाँ देखें।",
+      "loading": "फ़ॉर्म लोड हो रहे हैं…",
+      "retry": "फिर से कोशिश करें",
+      "create": {
+        "cta": "नया फ़ॉर्म",
+        "creating": "बनाया जा रहा है…",
+        "defaultTitle": "बिना शीर्षक का फ़ॉर्म",
+        "defaultField": "पूरा नाम"
+      },
+      "stats": {
+        "all": "सभी फ़ॉर्म",
+        "published": "प्रकाशित",
+        "draft": "ड्राफ़्ट",
+        "submissions": "जवाब"
+      },
+      "empty": {
+        "title": "अभी तक कोई फ़ॉर्म नहीं",
+        "description": "एक फ़ॉर्म बनाएं, फिर उसे किसी फ़्लो के WhatsApp फ़ॉर्म स्टेप से भेजें।"
+      },
+      "table": {
+        "form": "फ़ॉर्म",
+        "type": "प्रकार",
+        "fields": "फ़ील्ड",
+        "submissions": "जवाब"
+      },
+      "status": {
+        "draft": "ड्राफ़्ट",
+        "published": "प्रकाशित",
+        "paused": "रुका हुआ"
+      },
+      "audience": {
+        "lead_capture": "लीड कैप्चर",
+        "survey": "सर्वेक्षण",
+        "appointment_booking": "अपॉइंटमेंट बुकिंग",
+        "customer_support": "ग्राहक सहायता",
+        "sign_up": "साइन अप",
+        "other": "अन्य"
+      },
+      "row": {
+        "edit": "संपादित करें",
+        "duplicate": "डुप्लिकेट करें",
+        "delete": "हटाएं"
+      },
+      "confirm": {
+        "deleteTitle": "क्या इस फ़ॉर्म को हटाएं?",
+        "deleteMessage": "इसे संदर्भित करने वाले सक्रिय फ़्लो नोड काम करना बंद कर देंगे।",
+        "deleteConfirm": "हटाएं",
+        "cancel": "रद्द करें"
+      },
+      "notice": {
+        "saved": "सहेजा गया।",
+        "published": "WhatsApp पर प्रकाशित किया गया।"
+      },
+      "builder": {
+        "back": "फ़ॉर्म पर वापस जाएं",
+        "untitled": "बिना शीर्षक का फ़ॉर्म",
+        "saving": "सहेजा जा रहा है…",
+        "saveDraft": "ड्राफ़्ट सहेजें",
+        "savePublish": "सहेजें और प्रकाशित करें",
+        "publishing": "प्रकाशित किया जा रहा है…",
+        "basics": "फ़ॉर्म की बुनियादी जानकारी",
+        "title": "शीर्षक",
+        "audienceType": "प्रकार",
+        "purpose": "उद्देश्य",
+        "sendButtonLabel": "भेजें बटन का लेबल",
+        "thankYouNote": "धन्यवाद संदेश",
+        "screens": "स्क्रीन",
+        "addScreen": "स्क्रीन जोड़ें",
+        "removeScreen": "स्क्रीन हटाएं",
+        "screenN": "स्क्रीन {n}",
+        "defaultField": "पूरा नाम",
+        "newFieldLabel": "नया फ़ील्ड",
+        "fieldKind": "फ़ील्ड का प्रकार",
+        "fieldLabel": "लेबल",
+        "required": "आवश्यक",
+        "removeField": "हटाएं",
+        "options": "विकल्प (कॉमा से अलग करें)",
+        "optionsPlaceholder": "विकल्प 1, विकल्प 2, विकल्प 3"
+      },
+      "fieldKind": {
+        "heading": "शीर्षक",
+        "short_text": "छोटा टेक्स्ट",
+        "paragraph": "पैराग्राफ़",
+        "email": "ईमेल",
+        "phone_number": "फ़ोन नंबर",
+        "number": "संख्या",
+        "date": "तारीख़",
+        "dropdown": "ड्रॉपडाउन",
+        "radio_buttons": "रेडियो बटन",
+        "checkbox": "चेकबॉक्स"
+      },
+      "submissions": {
+        "heading": "जवाब",
+        "metaFlowId": "Meta Flow ID: {id}",
+        "export": "CSV एक्सपोर्ट करें",
+        "empty": {
+          "title": "अभी तक कोई जवाब नहीं",
+          "description": "जब यह फ़ॉर्म किसी फ़्लो से भेजा जाएगा और कोई इसे भरेगा, तो जवाब यहाँ दिखाई देंगे।"
+        },
+        "table": {
+          "submitted": "सबमिट किया गया",
+          "contact": "संपर्क",
+          "phone": "फ़ोन"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp लिंक",
+      "intro": "एक ट्रैक करने योग्य लिंक बनाएं जो पहले से भरे गए संदेश के साथ WhatsApp खोलता है — विज्ञापनों, बायो और QR कोड के लिए।",
+      "loading": "लिंक लोड हो रहे हैं…",
+      "retry": "फिर से कोशिश करें",
+      "searchPlaceholder": "नाम या लिंक से खोजें",
+      "create": { "cta": "नया लिंक" },
+      "stats": {
+        "all": "सभी लिंक",
+        "live": "लाइव",
+        "totalClicks": "कुल क्लिक",
+        "avgClicks": "औसत क्लिक / लिंक"
+      },
+      "tabs": { "all": "सभी", "live": "लाइव", "paused": "रुके हुए" },
+      "status": { "live": "लाइव", "paused": "रुका हुआ" },
+      "empty": {
+        "title": "अभी तक कोई लिंक नहीं",
+        "description": "विज्ञापनों, बायो या QR कोड में शेयर करने के लिए एक लिंक बनाएं।"
+      },
+      "table": {
+        "link": "लिंक",
+        "destination": "डेस्टिनेशन",
+        "clicks": "क्लिक",
+        "lastClicked": "आख़िरी क्लिक"
+      },
+      "row": {
+        "open": "खोलें",
+        "copy": "कॉपी करें",
+        "copied": "कॉपी हो गया!",
+        "edit": "संपादित करें",
+        "duplicate": "डुप्लिकेट करें",
+        "delete": "हटाएं"
+      },
+      "confirm": {
+        "deleteTitle": "क्या इस लिंक को हटाएं?",
+        "deleteMessage": "शॉर्ट लिंक तुरंत काम करना बंद कर देगा।",
+        "deleteConfirm": "हटाएं",
+        "cancel": "रद्द करें"
+      },
+      "notice": {
+        "saved": "सहेजा गया।",
+        "copyFailed": "लिंक कॉपी नहीं किया जा सका।"
+      },
+      "builder": {
+        "back": "लिंक पर वापस जाएं",
+        "newHeading": "नया लिंक",
+        "step": { "destination": "डेस्टिनेशन", "message": "शुरुआती संदेश", "tracking": "ट्रैकिंग" },
+        "name": "नाम",
+        "status": "स्थिति",
+        "countryCode": "कंट्री कोड",
+        "phoneNumber": "फ़ोन नंबर",
+        "welcomeMessage": "शुरुआती संदेश",
+        "welcomeMessageHint": "जब कोई लिंक पर टैप करता है, तो यह चैट में पहले से भर जाता है।",
+        "slug": "शॉर्ट लिंक",
+        "slugHint": "केवल अक्षर, अंक और हाइफ़न। स्वचालित रूप से बनाने के लिए इसे खाली छोड़ें।",
+        "slugPlaceholder": "summer-sale",
+        "expiresAt": "समाप्ति तिथि",
+        "utmSource": "UTM स्रोत",
+        "utmMedium": "UTM माध्यम",
+        "utmCampaign": "UTM कैंपेन",
+        "previous": "पिछला",
+        "next": "आगे",
+        "mint": "लिंक बनाएं",
+        "save": "सहेजें",
+        "saving": "सहेजा जा रहा है…",
+        "fixErrors": "डेस्टिनेशन और शॉर्ट लिंक फ़ील्ड जाँचें।",
+        "mintedHeading": "आपका लिंक",
+        "shortUrl": "शॉर्ट लिंक",
+        "waUrl": "WhatsApp लिंक",
+        "qrAlt": "इस लिंक का QR कोड"
+      }
+    }
+  }
+}

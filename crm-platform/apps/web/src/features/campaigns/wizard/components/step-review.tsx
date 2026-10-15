@@ -11,6 +11,7 @@ import type {
   WizardVariables,
   WizardSender,
 } from '@crm/contracts';
+import { useBuilder } from '../../api/campaigns';
 import type { StepIssue } from '../lib/issues';
 import type { WizardView } from '../lib/state';
 import { CreditCard, type CreditQuery } from './credit-card';
@@ -25,6 +26,7 @@ export function StepReview({
   sources,
   count,
   credit,
+  templates,
   properties,
   issues,
   showIssues,
@@ -39,6 +41,8 @@ export function StepReview({
   sources: WizardAudienceSources | undefined;
   count: WizardAudienceCount | undefined;
   credit: CreditQuery;
+  /** Template names for the follow-up lines of the summary. */
+  templates?: readonly Pick<WizardTemplate, 'id' | 'name'>[] | undefined;
   properties: readonly CustomProperty[];
   issues: StepIssue[];
   showIssues: boolean;
@@ -49,6 +53,8 @@ export function StepReview({
 }) {
   const t = useTranslations('campaigns.wizard.review');
   const audience: WizardAudience = draft.audience;
+  // Only to name the flows the follow-ups start; the list is the one the campaign builder offers.
+  const builder = useBuilder();
   return (
     <div className="space-y-5">
       <p className="text-sm text-muted-foreground">{t('intro')}</p>
@@ -71,6 +77,8 @@ export function StepReview({
         sources={sources}
         count={count}
         credit={credit.data}
+        templates={templates}
+        flows={builder.data?.flows}
         onEdit={onEdit}
       />
     </div>

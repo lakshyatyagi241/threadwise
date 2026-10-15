@@ -1433,7 +1433,7 @@
             "storefront_builder": "The online storefront builder.",
             "invoicing": "Invoices, credit notes, payments, sales orders and tax rates.",
             "forms_and_links": "Lead capture forms and shareable links.",
-            "extra_channels": "The Telegram, Facebook and Instagram channels.",
+            "extra_channels": "The Telegram, Facebook, Instagram, LINE, Viber and WeChat channels.",
             "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch.",
             "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account.",
             "sms": "Send-only SMS through Twilio or MSG91: connect senders, send SMS broadcasts and campaigns.",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "Form submissions per month",
             "ai_form_generations_monthly": "AI form builder generations per month",
             "sms_monthly": "SMS per month",
-            "email_mailboxes": "Email mailboxes"
+            "email_mailboxes": "Email mailboxes",
+            "email_monthly": "Emails per month"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "Storefront and website builder",
             "invoicing": "Invoicing (invoices, credit notes, recurring invoices)",
             "forms_and_links": "Forms, click-to-chat links and groups",
-            "extra_channels": "Telegram, Facebook and Instagram channels",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber and WeChat channels",
             "form_builder": "Forms (web form builder)",
             "waba_groups": "WhatsApp groups (Cloud API)",
             "sms": "SMS channel",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
             "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited.",
             "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
-            "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited."
+            "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
+            "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited."
           }
         }
       },
@@ -1725,6 +1727,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Soft glowing colour behind a frosted card."
+          },
+          "geta": {
+            "name": "Geta split",
+            "description": "Form on one side, an animated brand panel with stats on the other."
           }
         },
         "fields": {

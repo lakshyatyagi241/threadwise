@@ -22,6 +22,7 @@ import {
   submitTemplateInputSchema,
   syncTemplatesInputSchema,
   templateCountsQuerySchema,
+  templateGalleryQuerySchema,
   updateTemplateInputSchema,
   type CreateTemplateInput,
   type LintTemplateInput,
@@ -29,10 +30,12 @@ import {
   type SubmitTemplateInput,
   type SyncTemplatesInput,
   type TemplateCountsQuery,
+  type TemplateGalleryQuery,
   type UpdateTemplateInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { galleryOf } from './gallery';
 import { TemplateSyncService } from './template-sync.service';
 import { MEDIA_UPLOAD_MAX_BYTES, TemplatesService } from './templates.service';
 
@@ -102,6 +105,15 @@ export class TemplatesController {
   @ApiOperation({ summary: 'Pull every template of one WhatsApp number from Meta' })
   async syncFromMeta(@Body(zodPipe(syncTemplatesInputSchema)) body: SyncTemplatesInput) {
     return this.sync.sync(body);
+  }
+
+  @Get('gallery')
+  @RequirePermission('tpl.templates.read')
+  @ApiOperation({
+    summary: 'The template gallery: ready-made templates by use, to start a new template from',
+  })
+  gallery(@Query(zodPipe(templateGalleryQuerySchema)) query: TemplateGalleryQuery) {
+    return galleryOf(query);
   }
 
   @Get(':id')

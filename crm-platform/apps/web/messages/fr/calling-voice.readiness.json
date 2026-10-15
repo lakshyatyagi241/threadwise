@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Prêt pour les appels ?",
+      "status": {
+        "never_checked": "Pas encore vérifié",
+        "blocked": "Pas prêt",
+        "ready_to_enable": "Prêt à activer",
+        "attention": "Fonctionne, à examiner",
+        "ready": "Prêt"
+      },
+      "statusHint": {
+        "never_checked": "Ce numéro n’a pas encore été vérifié.",
+        "blocked": "Les appels ne fonctionneront pas tant que les éléments marqués « À corriger » ne sont pas réglés.",
+        "ready_to_enable": "Tout ce dont WhatsApp a besoin est en place. Activez les appels pour afficher le bouton Appeler.",
+        "attention": "Les appels fonctionnent, mais un point ci-dessous mérite votre attention.",
+        "ready": "Les appels sont activés et toutes les vérifications sont réussies."
+      },
+      "checkedAt": "Vérifié le {date}",
+      "checking": "Vérification auprès de WhatsApp...",
+      "checkAgain": "Vérifier à nouveau",
+      "checkFailed": "Impossible de vérifier ce numéro.",
+      "checkedDone": "Vérification terminée.",
+      "blockedHint": "Corrigez d’abord les éléments marqués « À corriger ». WhatsApp refusera très probablement d’activer les appels.",
+      "details": "Éléments vérifiés",
+      "fixLabel": "Que faire :",
+      "state": {
+        "ok": "OK",
+        "warn": "À examiner",
+        "fail": "À corriger"
+      },
+      "checks": {
+        "plan_feature": "Le forfait inclut les appels WhatsApp",
+        "connection": "Numéro connecté",
+        "not_coexistence": "Numéro uniquement sur Cloud API",
+        "number_registered": "Numéro enregistré auprès de WhatsApp",
+        "messaging_limit": "Limite d’envoi et qualité",
+        "token_scopes": "Autorisations du jeton d’accès",
+        "webhook_subscribed": "Application abonnée à ce compte",
+        "calls_field": "Webhook des appels reçu",
+        "calling_enabled": "Appels activés chez WhatsApp",
+        "turn": "Relais d’appel (TURN) configuré",
+        "dialler_permissions": "Coéquipiers autorisés à appeler",
+        "recording_consent": "Règles d’enregistrement et de consentement"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "Les appels WhatsApp font partie de votre forfait."
+        },
+        "plan_missing": {
+          "detail": "Votre forfait n’inclut pas les appels WhatsApp.",
+          "fix": "Passez à un forfait supérieur, puis vérifiez à nouveau."
+        },
+        "connected": {
+          "detail": "Le numéro est connecté et dispose d’un jeton d’accès."
+        },
+        "not_connected": {
+          "detail": "Ce numéro n’est pas connecté pour le moment.",
+          "fix": "Reconnectez-le dans Canaux, puis vérifiez à nouveau."
+        },
+        "no_credentials": {
+          "detail": "Aucun jeton d’accès ni identifiant de numéro de téléphone n’est enregistré pour ce numéro.",
+          "fix": "Reconnectez le numéro pour que ses identifiants soient de nouveau enregistrés."
+        },
+        "cloud_api_only": {
+          "detail": "Le numéro fonctionne uniquement avec WhatsApp Cloud API."
+        },
+        "coexistence": {
+          "detail": "Ce numéro est aussi utilisé dans l’application WhatsApp Business (coexistence), et WhatsApp n’autorise pas les appels sur un tel numéro.",
+          "fix": "Enregistrez-le uniquement sur Cloud API, ou utilisez un autre numéro pour les appels."
+        },
+        "on_premise": {
+          "detail": "Ce numéro utilise l’ancienne API On-Premises, que Meta a arrêtée.",
+          "fix": "Enregistrez-le sur Cloud API, ou utilisez un autre numéro."
+        },
+        "number_ok": {
+          "detail": "WhatsApp indique que le numéro est actif et vérifié."
+        },
+        "number_not_verified": {
+          "detail": "Le code de propriété du numéro n’a pas été vérifié.",
+          "fix": "Vérifiez le numéro depuis sa page de connexion WhatsApp, puis vérifiez à nouveau."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp indique que ce numéro est {status}, et non connecté.",
+          "fix": "Corrigez le numéro dans Meta Business Suite (il est peut-être en attente, signalé ou restreint), puis vérifiez à nouveau."
+        },
+        "limit_ok": {
+          "detail": "La limite d’envoi quotidienne et la note de qualité suffisent pour les appels."
+        },
+        "limit_test_number": {
+          "detail": "Il s’agit d’un numéro de test, qui n’a pas besoin de limite d’envoi."
+        },
+        "limit_low": {
+          "detail": "La limite d’envoi est {tier}. WhatsApp exige au moins {needed} clients par jour pour pouvoir activer les appels.",
+          "fix": "Envoyez plus de messages de bonne qualité, ou faites vérifier votre entreprise dans Meta Business Suite, afin de relever la limite. Puis vérifiez à nouveau."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp n’a pas indiqué de limite d’envoi reconnue par cette application.",
+          "fix": "Ouvrez le numéro dans Meta Business Suite pour voir sa limite. Les appels exigent au moins 2 000 clients par jour."
+        },
+        "quality_low": {
+          "detail": "La note de qualité du numéro est basse (rouge) et WhatsApp peut le restreindre.",
+          "fix": "Réduisez les messages bloqués et signalés et laissez la note remonter avant de compter sur les appels."
+        },
+        "scopes_ok": {
+          "detail": "Le jeton d’accès a les autorisations nécessaires aux appels."
+        },
+        "scope_missing": {
+          "detail": "Il manque au jeton d’accès : {missing}.",
+          "fix": "Générez un nouveau jeton d’utilisateur système avec whatsapp_business_management et whatsapp_business_messaging, puis reconnectez le numéro."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp n’accepte pas le jeton d’accès enregistré.",
+          "fix": "Reconnectez le numéro ou enregistrez un nouveau jeton permanent."
+        },
+        "token_expiring": {
+          "detail": "Le jeton d’accès expire dans {days, plural, one {# jour} many {# de jours} other {# jours}}.",
+          "fix": "Reconnectez le numéro ou enregistrez un jeton d’utilisateur système permanent avant son expiration."
+        },
+        "scopes_unverifiable": {
+          "detail": "Impossible de lire les autorisations du jeton. Le numéro est peut-être accessible via un prestataire, ou la plateforme n’a pas d’identifiants d’application pour l’inspecter.",
+          "fix": "Si les appels sont refusés, vérifiez auprès de votre prestataire que le numéro peut utiliser les appels."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp transmet les événements de ce compte à la plateforme."
+        },
+        "waba_not_subscribed": {
+          "detail": "Aucune application n’est abonnée à ce compte WhatsApp Business : les appels ne vous parviendraient jamais.",
+          "fix": "Utilisez Corriger la réception sur la page d’état du numéro, puis vérifiez à nouveau."
+        },
+        "calls_field_ok": {
+          "detail": "L’application Meta transmet le champ webhook des appels."
+        },
+        "calls_field_added": {
+          "detail": "Le champ webhook des appels manquait et vient d’être ajouté à l’application Meta de la plateforme."
+        },
+        "calls_field_missing": {
+          "detail": "L’application Meta ne transmet pas le champ webhook des appels : les appels entrants et les réponses n’arrivent donc jamais.",
+          "fix": "Demandez à l’opérateur de votre plateforme de cocher le champ des appels dans les paramètres webhook de l’application Meta (WhatsApp, Configuration), puis vérifiez à nouveau."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Ce numéro est sur une application Meta que la plateforme ne peut pas lire : le champ webhook des appels n’a pas pu être vérifié.",
+          "fix": "Ouvrez les paramètres webhook de cette application et assurez-vous que le champ des appels est coché."
+        },
+        "calling_on": {
+          "detail": "Les appels sont activés et l’icône d’appel est visible pour les clients."
+        },
+        "calling_off": {
+          "detail": "Les appels sont désactivés pour ce numéro.",
+          "fix": "Sélectionnez Activer les appels une fois les autres points réglés."
+        },
+        "icon_hidden": {
+          "detail": "Les appels sont activés, mais l’icône d’appel est masquée aux clients : ils ne peuvent pas démarrer d’appel.",
+          "fix": "Remettez la visibilité de l’icône d’appel sur la valeur par défaut dans les paramètres d’appel du numéro chez Meta."
+        },
+        "turn_ok": {
+          "detail": "Un relais TURN est configuré : les appels fonctionnent derrière des pare-feu stricts."
+        },
+        "turn_missing": {
+          "detail": "Aucun relais TURN n’est configuré : les appels peuvent se connecter sans son pour les personnes derrière des pare-feu stricts.",
+          "fix": "Demandez à l’opérateur de votre plateforme d’ajouter un serveur TURN à CALLING_ICE_SERVERS."
+        },
+        "turn_incomplete": {
+          "detail": "Un serveur TURN est indiqué sans son nom d’utilisateur ni son identifiant secret.",
+          "fix": "Ajoutez le nom d’utilisateur et l’identifiant secret à cette entrée de CALLING_ICE_SERVERS."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS est défini mais n’est pas une liste valide : seuls les serveurs STUN publics sont utilisés.",
+          "fix": "Corrigez le JSON de CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, one {# coéquipier peut} many {# de coéquipiers peuvent} other {# coéquipiers peuvent}} passer et recevoir des appels."
+        },
+        "dialler_none": {
+          "detail": "Personne dans cet espace de travail n’a l’autorisation de passer et de recevoir des appels.",
+          "fix": "Donnez à un rôle l’autorisation d’utiliser les appels dans Paramètres, Rôles."
+        },
+        "recording_off": {
+          "detail": "L’enregistrement des appels est désactivé : aucun consentement n’est nécessaire."
+        },
+        "recording_configured": {
+          "detail": "L’enregistrement des appels est activé, avec un avis et une règle de consentement."
+        },
+        "recording_notice_missing": {
+          "detail": "L’enregistrement des appels est activé mais aucun avis n’est prévu pour être lu.",
+          "fix": "Rédigez l’avis d’enregistrement dans Enregistrement ci-dessous."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp n’a pas répondu à cette vérification.",
+          "fix": "Vérifiez à nouveau dans un instant."
+        },
+        "not_checked": {
+          "detail": "En attente d’un élément ci-dessus.",
+          "fix": "Corrigez d’abord l’élément ci-dessus."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp n’activera pas encore les appels. Le numéro doit avoir une limite d’envoi quotidienne d’au moins 2 000 clients, et l’application doit être abonnée au compte WhatsApp Business et au champ webhook des appels avec l’autorisation whatsapp_business_messaging. Un numéro de test n’a pas besoin de cette limite.",
+        "coexistence": "Les appels WhatsApp exigent un numéro entièrement sur Cloud API. Ce numéro partage sa ligne avec l’application WhatsApp Business (coexistence), sur laquelle WhatsApp n’autorise pas les appels. Enregistrez-le uniquement sur Cloud API, ou utilisez un autre numéro.",
+        "permission_scope": "Il manque au jeton d’accès une autorisation nécessaire aux appels (whatsapp_business_management et whatsapp_business_messaging). Générez un nouveau jeton avec les deux et reconnectez le numéro.",
+        "token_expired": "WhatsApp n’accepte plus le jeton d’accès enregistré. Reconnectez le numéro, puis réessayez.",
+        "calling_not_enabled": "Les appels ne sont pas activés chez WhatsApp pour ce numéro. Activez-les, puis réessayez.",
+        "no_call_permission": "Ce client n’a pas encore autorisé les appels. Une demande d’autorisation lui est envoyée pour qu’il l’accepte.",
+        "permission_request_limit": "WhatsApp limite la fréquence des demandes d’autorisation d’appel à ce client. Réessayez plus tard.",
+        "receiver_uncallable": "Le WhatsApp de ce client ne peut pas recevoir d’appels (ancienne version de l’application, ou appels désactivés). Demandez-lui de mettre à jour WhatsApp.",
+        "meta_unreachable": "WhatsApp n’a pas répondu à temps. Réessayez dans un instant."
+      },
+      "refusedBecause": "WhatsApp a refusé la demande : {reason}",
+      "autoEnable": {
+        "title": "Activer les appels automatiquement",
+        "hint": "Quand un numéro WhatsApp est connecté ou reconnecté et remplit toutes les conditions, activer les appels pour lui sans demander. Désactivé par défaut ; les appels ne sont jamais activés sans ce réglage.",
+        "label": "Activer les appels automatiquement après la connexion d’un numéro",
+        "saved": "Enregistré.",
+        "loadFailed": "Impossible de charger ce réglage."
+      },
+      "testCall": {
+        "title": "Passer un appel test",
+        "intro": "Appelez votre propre numéro WhatsApp pour entendre un appel du début à la fin. WhatsApp n’autorise une entreprise à appeler que les personnes qui l’ont permis : si ce n’est pas votre cas, une demande d’autorisation est envoyée sur votre téléphone et aucun appel n’est passé. Appuyez sur Autoriser dans WhatsApp, puis appuyez de nouveau sur Appelez-moi.",
+        "phoneLabel": "Votre numéro WhatsApp",
+        "phoneHint": "Avec l’indicatif du pays et sans le signe plus, par exemple 919812345678.",
+        "call": "Appelez-moi",
+        "invalid": "Saisissez votre numéro avec l’indicatif du pays (6 à 15 chiffres).",
+        "show": "Passer un appel test"
+      }
+    }
+  }
+}

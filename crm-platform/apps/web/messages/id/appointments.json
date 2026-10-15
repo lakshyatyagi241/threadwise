@@ -41,7 +41,10 @@
       "notStarted": "Ini hanya dapat dilakukan setelah pemesanan dimulai.",
       "alreadyStarted": "Pemesanan ini sudah dimulai, sehingga tidak dapat diubah lagi.",
       "bookingOff": "Pemesanan tidak tersedia untuk layanan ini saat ini.",
-      "notDeletable": "Ini tidak dapat dihapus selama masih ada pemesanan mendatang."
+      "notDeletable": "Ini tidak dapat dihapus selama masih ada pemesanan mendatang.",
+      "notDrifted": "Pemesanan ini sudah sesuai dengan acaranya di Google. Data telah dimuat ulang.",
+      "calendarNotConnected": "Google Calendar belum terhubung. Hubungkan kembali di halaman akun Google, lalu coba lagi.",
+      "calendarFailed": "Google tidak merespons atau menolak perubahan ini. Coba lagi sebentar lagi."
     },
     "picker": {
       "timeZone": "Zona waktu",
@@ -156,7 +159,8 @@
       "yesterday": "Kemarin",
       "rowLabel": "Buka pemesanan: {title}",
       "noName": "Tanpa nama",
-      "needsReview": "Perlu ditinjau"
+      "needsReview": "Perlu ditinjau",
+      "outOfSync": "Kalender tidak sinkron"
     },
     "row": {
       "moreFor": "Aksi lainnya untuk {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Pemesanan dipindahkan ke waktu baru.",
       "linkCopied": "Tautan kelola disalin.",
       "copyFailed": "Tautan tidak dapat disalin.",
-      "declined": "Permintaan ditolak."
+      "declined": "Permintaan ditolak.",
+      "calendarPushed": "Dikirim ke Google: acara kini sesuai dengan pemesanan ini.",
+      "calendarAccepted": {
+        "cancelled": "Perubahan dari Google diterima: pemesanan dibatalkan.",
+        "rescheduled": "Perubahan dari Google diterima: pemesanan dipindahkan ke waktu yang baru.",
+        "acknowledged": "Perubahan dari Google diterima. Pemesanan tetap seperti semula."
+      }
     },
     "typesList": {
       "breadcrumb": "Breadcrumb",
@@ -962,7 +972,7 @@
         "calendarSaved": "Kalender disimpan.",
         "confirmOff": {
           "title": "Putuskan Google Calendar?",
-          "message": "Pemesanan baru berhenti masuk ke kalender Anda dan waktu sibuknya tidak dibaca lagi. Acara yang sudah ada di kalender Anda tetap di sana, dan Google diminta mencabut akses ini.",
+          "message": "Pemesanan baru berhenti masuk ke kalender Anda dan waktu sibuknya tidak dibaca lagi. Langkah Google di alur Anda juga berhenti, karena menggunakan koneksi yang sama. Acara yang sudah ada di kalender Anda tetap di sana, dan Google diminta mencabut akses ini.",
           "confirm": "Putuskan",
           "cancel": "Pertahankan"
         },
@@ -972,7 +982,8 @@
           "failed": "Proses menghubungkan tidak selesai. Coba lagi; jika terus gagal, minta administrator platform Anda memeriksa pengaturan Google.",
           "expired": "Percobaan itu terlalu lama. Tekan Hubungkan untuk memulai lagi.",
           "not_configured": "Google Calendar belum disiapkan untuk platform ini. Minta administrator platform Anda menambahkan klien OAuth Google.",
-          "missing_scope": "Google tidak memberikan semua izin kalender yang diperlukan. Hubungkan lagi dan biarkan semua kotak tetap tercentang."
+          "missing_scope": "Google tidak memberikan semua izin kalender yang diperlukan. Hubungkan lagi dan biarkan semua kotak tetap tercentang.",
+          "cancelled": "Anda membatalkan. Tidak ada yang terhubung."
         },
         "whatTitle": "Fungsinya",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Muat lebih banyak",
       "loadMorePast": "Muat lebih banyak yang lampau",
       "noType": "Janji temu"
+    },
+    "sync": {
+      "title": "Kalender tidak sinkron",
+      "reason": {
+        "event_deleted": "Acara dihapus atau dibatalkan di Google Calendar.",
+        "event_missing": "Acara tidak lagi ditemukan di Google Calendar.",
+        "time_changed": "Acara dipindahkan ke waktu lain di Google Calendar.",
+        "attendees_changed": "Tamu acara diubah di Google Calendar."
+      },
+      "googleShows": "Google menampilkan: {time}",
+      "notChanged": "Pemesanan ini belum diubah. Pilih mana yang benar.",
+      "found": "Ditemukan {when}",
+      "push": "Kirim waktu kami kembali ke Google",
+      "accept": "Terima perubahan dari Google",
+      "keep": "Nanti saja",
+      "acceptTitle": {
+        "cancel": "Batalkan pemesanan ini?",
+        "reschedule": "Pindahkan pemesanan ini ke waktu di Google?",
+        "acknowledge": "Terima tamu yang ditampilkan Google?"
+      },
+      "acceptMessage": {
+        "cancel": "Acara sudah tidak ada di Google, sehingga pemesanan ini dibatalkan dan waktunya kembali tersedia. Pelanggan akan diberi tahu, seperti pada pembatalan lainnya.",
+        "reschedule": "Pemesanan ini dipindahkan ke {time}. Pelanggan akan diberi tahu waktu barunya, seperti pada penjadwalan ulang lainnya.",
+        "acknowledge": "Pemesanan itu sendiri tidak berubah. Daftar tamu dari Google akan disimpan, dan pemberitahuan ini akan hilang."
+      },
+      "acceptConfirm": {
+        "cancel": "Batalkan pemesanan",
+        "reschedule": "Pindahkan pemesanan",
+        "acknowledge": "Terima"
+      }
     }
   }
 }

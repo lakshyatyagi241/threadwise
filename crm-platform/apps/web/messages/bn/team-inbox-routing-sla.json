@@ -11,7 +11,10 @@
       "telegram": "Telegram",
       "facebook": "Facebook Messenger",
       "instagram": "Instagram",
-      "email": "ইমেইল (Gmail)"
+      "email": "ইমেইল (Gmail)",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
     },
     "page": {
       "back": "অটোমেশন ও AI",

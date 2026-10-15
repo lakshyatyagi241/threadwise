@@ -209,7 +209,16 @@
         "customMessage": "Wiadomość własna",
         "flowTitle": "Przepływ",
         "variants": "Wyświetlany wariant",
-        "variant": "Wariant {v}"
+        "variant": "Wariant {v}",
+        "typeEmail": "E-mail",
+        "emailTitle": "Podgląd e-maila",
+        "emailFrom": "Od",
+        "emailSubject": "Temat",
+        "emailNoSender": "Wybierz nadawcę",
+        "emailNoSubject": "(bez tematu)",
+        "emailEmpty": "Napisz treść wiadomości, a pojawi się tutaj.",
+        "emailUnsubscribe": "Na końcu każdego e-maila dodawany jest link do rezygnacji z subskrypcji.",
+        "emailNote": "Tak kampania będzie wyglądać w skrzynce odbiorczej każdego odbiorcy."
       },
       "previewEmpty": "Podgląd Twojej wiadomości…",
       "previewTemplate": "Szablon",
@@ -228,7 +237,8 @@
         "throttle": "Najdłuższy odstęp musi być co najmniej równy najkrótszemu.",
         "expiry": "Data zakończenia musi być późniejsza niż data wysyłki, w przeciwnym razie kampania wygasłaby, zanim cokolwiek wyśle.",
         "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
-        "sender": "Wybierz nadawcę."
+        "sender": "Wybierz nadawcę.",
+        "subject": "Skróć temat do 150 znaków lub mniej."
       },
       "submit": {
         "save": "Zapisz zmiany",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} numerów w pliku",
         "numbersPlaceholder": "Jeden numer w wierszu — z kodem kraju, bez znaku plus",
-        "numbersCount": "{count} numerów"
+        "numbersCount": "{count} numerów",
+        "emailNote": "E-maile trafiają na adres każdego kontaktu. Kontakty bez adresu e-mail, powtórzone adresy i kontakty, które zrezygnowały z subskrypcji, są pomijane.",
+        "emailSkipped": "Wybrani odbiorcy bez adresu e-mail (zostaną pominięci): {count}",
+        "emailNoAddress": "Wpisane numery i wiersze CSV nie mają adresu e-mail, więc są pomijane. Wybierz zamiast tego kontakty, grupy, tagi lub segmenty."
       },
       "message": {
         "title": "Wiadomość",
@@ -526,7 +539,13 @@
           "baileys": "Brak szablonów Unofficial API. Utwórz jeden na stronie Szablony."
         },
         "templateIntroApproved": "Wybierz zatwierdzony szablon Meta. Wartości zmiennych dla kontaktu są uzupełniane w chwili wysyłki z atrybutów kontaktu.",
-        "templateApproved": "Zatwierdzony szablon"
+        "templateApproved": "Zatwierdzony szablon",
+        "subject": "Temat",
+        "subjectNote": "Temat, maks. 150",
+        "subjectPlaceholder": "np. Twoja majowa oferta już jest",
+        "subjectHint": "Używany jako temat e-maila. Zostaw puste, aby użyć nazwy kampanii.",
+        "emailNote": "Ta kampania jest wysyłana jako e-mail z wybranej skrzynki. Na końcu każdego e-maila dodawany jest link do rezygnacji z subskrypcji.",
+        "emailBodyHint": "Zwykły tekst. Użyj '{{name}}' lub '{{first_name}}', aby spersonalizować. Kontakty bez adresu e-mail są pomijane."
       },
       "review": {
         "title": "Przegląd",
@@ -568,8 +587,14 @@
           "throttle": "Najdłuższa przerwa musi być nie krótsza niż najkrótsza.",
           "expiry": "Data końcowa musi być późniejsza niż data wysyłki, inaczej kampania wygaśnie, zanim cokolwiek wyśle.",
           "media": "Wpisz pełny adres zaczynający się od http:// lub https://.",
-          "sender": "Wybierz nadawcę."
-        }
+          "sender": "Wybierz nadawcę.",
+          "subject": "Skróć temat do 150 znaków lub mniej."
+        },
+        "from": "Od",
+        "subject": "Temat",
+        "subjectFallback": "Nazwa kampanii",
+        "skippedNoEmail": "Pominięci (brak adresu e-mail)",
+        "estimateEmail": "To szacunek: kontakt w dwóch grupach jest liczony dwa razy. Kontakty bez adresu e-mail w grupach, tagach i segmentach są pomijane po uruchomieniu kampanii."
       },
       "ai": {
         "open": "Twórz z AI",
@@ -622,8 +647,43 @@
         "notes": "Dodatkowe uwagi",
         "notesNote": "opcjonalnie / maks. 2000",
         "notesPlaceholder": "Wszystko, co konieczne — wymagane zwroty, czego unikać, wskazówki dotyczące głosu marki…",
-        "failed": "Nie udało się wygenerować kampanii. Spróbuj ponownie.",
-        "applied": "Treść kampanii została uzupełniona. Przejrzyj ją przed dalszym krokiem."
+        "applied": "Treść kampanii została uzupełniona. Przejrzyj ją przed dalszym krokiem.",
+        "pictureApplied": "Obraz został dołączony do kampanii. Sprawdź go na karcie Załącznik.",
+        "errors": {
+          "noKey": "Dla tego obszaru roboczego nie jest włączony żaden dostawca AI. Poproś administratora o dodanie klucza.",
+          "limitReached": "Ten obszar roboczy wykorzystał miesięczny limit AI.",
+          "providerFailed": "Dostawca AI nie odpowiedział. Spróbuj ponownie za chwilę.",
+          "badJson": "Nie udało się odczytać odpowiedzi modelu. Spróbuj ponownie lub zmień brief.",
+          "invalid": "Sprawdź brief: nazwa firmy jest wymagana, a niektóre pola są zbyt długie.",
+          "forbidden": "Nie masz uprawnień do tworzenia kampanii.",
+          "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+          "failed": "Nie udało się wygenerować kampanii. Spróbuj ponownie."
+        },
+        "picture": {
+          "label": "Utwórz także obraz",
+          "hint": "Tworzy jeden obraz na podstawie tego samego briefu i dołącza go do kampanii. Zużywa Twój limit OpenAI.",
+          "needsOpenAi": "Obrazy wymagają klucza OpenAI. Wybierz model OpenAI, aby to włączyć.",
+          "noAttachment": "Wybrany numer wysyła tylko tekst, więc nie ma do czego dołączyć obrazu.",
+          "size": "Kształt obrazu",
+          "sizes": {
+            "square": "Kwadrat",
+            "landscape": "Poziomo",
+            "portrait": "Pionowo"
+          },
+          "textKept": "Tekst kampanii został uzupełniony. Brakuje tylko obrazu.",
+          "retry": "Spróbuj ponownie utworzyć obraz",
+          "errors": {
+            "noKey": "Obrazy wymagają klucza OpenAI, a w tym obszarze roboczym żaden nie jest włączony.",
+            "limitReached": "Ten obszar roboczy wykorzystał miesięczny limit AI.",
+            "providerFailed": "Usługa obrazów nie odpowiedziała. Spróbuj ponownie za chwilę.",
+            "badJson": "Usługa obrazów zwróciła nieoczekiwaną odpowiedź. Spróbuj ponownie.",
+            "imageRefused": "OpenAI odmówiło utworzenia tego obrazu. Zmień produkt, ofertę lub notatki i spróbuj ponownie.",
+            "invalid": "Sprawdź brief: nazwa firmy jest wymagana, a niektóre pola są zbyt długie.",
+            "forbidden": "Nie masz uprawnień do tworzenia kampanii.",
+            "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+            "failed": "Nie udało się utworzyć obrazu. Spróbuj ponownie."
+          }
+        }
       },
       "switch": {
         "title": "Użyć przewodnika?",
@@ -1101,7 +1161,10 @@
         "auto_end_in_past": "Data automatycznego zakończenia już minęła.",
         "auto_end_before_send": "Data automatycznego zakończenia musi być późniejsza niż czas wysyłki.",
         "auto_end_recurring": "Kampania cykliczna kończy się według własnej reguły: wyczyść datę automatycznego zakończenia.",
-        "pacing_range": "Sprawdź Smart Delivery: najdłuższe opóźnienie jest krótsze od najkrótszego albo ustawiono tylko jedną z dwóch godzin wysyłki."
+        "pacing_range": "Sprawdź Smart Delivery: najdłuższe opóźnienie jest krótsze od najkrótszego albo ustawiono tylko jedną z dwóch godzin wysyłki.",
+        "follow_up_template_required": "Wybierz szablon wysyłany w każdej wiadomości uzupełniającej.",
+        "follow_up_flow_required": "Wybierz przepływ uruchamiany w każdej wiadomości uzupełniającej.",
+        "follow_up_cloud_api_only": "Wiadomości uzupełniające działają tylko z numerem WhatsApp Cloud API. Wybierz taki numer w kroku 1 lub usuń wiadomości uzupełniające."
       },
       "template": {
         "previewOnline": "online",
@@ -1135,7 +1198,9 @@
         "senderLabel": "Wyślij z",
         "senderHint": "Numer WhatsApp, z którego wysyłana jest ta wiadomość masowa.",
         "pickSender": "Wybierz numer",
-        "classicOption": "kreator klasyczny"
+        "classicOption": "kreator klasyczny",
+        "buildWithAi": "Utwórz z AI",
+        "aiNote": "Przygotuj nowy szablon z pomocą AI. Sprawdzisz go na stronie szablonu, a następnie Meta go zweryfikuje, zanim będzie można go wysłać, więc wróć i wybierz go po zatwierdzeniu."
       },
       "audience": {
         "selectionTitle": "Wybrane w Centrum kontaktów",
@@ -1278,7 +1343,9 @@
           "invalid_phone": "Nieprawidłowy numer",
           "duplicate": "Duplikat"
         },
-        "csvIssuesMore": "Kolejnych {count} jest w pobranym pliku."
+        "csvIssuesMore": "Kolejnych {count} jest w pobranym pliku.",
+        "csvConsentOn": "Potwierdziłeś zgodę dla tych numerów. Zostaną zapisane jako zgadzające się po uruchomieniu wysyłki.",
+        "csvConsentVersion": "Wersja informacji: {version}."
       },
       "review": {
         "intro": "Sprawdź koszt, wskaż, czym wypełnić każdą zmienną szablonu, i przejrzyj wiadomość masową.",
@@ -1355,7 +1422,8 @@
         "sumCsv": "Plik CSV {name}: {count, plural, one {# prawidłowy numer} few {# prawidłowe numery} many {# prawidłowych numerów} other {# prawidłowego numeru}}",
         "estimatedCostFull": "Szacowany koszt (pełny)",
         "chargedPlan": "Pobrano teraz z Twojego portfela: {amount} (Twój plan pokrywa {covered} tych wiadomości)",
-        "chargedWallet": "Pobrano z Twojego portfela: {amount}"
+        "chargedWallet": "Pobrano z Twojego portfela: {amount}",
+        "sumFollowUps": "Wiadomości uzupełniające"
       },
       "test": {
         "title": "Wyślij testową wiadomość WhatsApp",
@@ -1560,7 +1628,25 @@
         "exportFailed": "Nie udało się pobrać eksportu.",
         "deleteTitle": "Usunąć tę wysyłkę?",
         "deleteOne": "Usuwa tę wysyłkę i jej odbiorców. Tej operacji nie można cofnąć.",
-        "deleteSeries": "Usuwa tę wysyłkę cykliczną i zaplanowane uruchomienia. Nic nie zostało wysłane, więc historia nie przepada. Tej operacji nie można cofnąć."
+        "deleteSeries": "Usuwa tę wysyłkę cykliczną i zaplanowane uruchomienia. Nic nie zostało wysłane, więc historia nie przepada. Tej operacji nie można cofnąć.",
+        "followUps": {
+          "title": "Wiadomości uzupełniające",
+          "step": "Wiadomość uzupełniająca {step}",
+          "count": {
+            "waiting": "{count} oczekuje",
+            "sent": "{count} wysłano",
+            "delivered": "{count} dostarczono",
+            "read": "{count} przeczytano",
+            "flowsStarted": "{count} uruchomionych przepływów",
+            "skipped": "{count} pominięto",
+            "lapsed": "{count} wygasło",
+            "failed": "{count} nieudanych"
+          },
+          "hint": {
+            "skipped": "Warunek nie został spełniony w chwili sprawdzenia, więc sekwencja zakończyła się w tym miejscu.",
+            "lapsed": "Czas obserwacji minął, zanim kontakt odpowiedział lub przeczytał wiadomość, więc sekwencja zakończyła się w tym miejscu."
+          }
+        }
       },
       "panel": {
         "title": "Utworzone przez Utwórz wiadomość masową",
@@ -1591,6 +1677,72 @@
         "body": "{number} ({engine}) wysyła się z kreatora klasycznego, który zaczyna od nowa. Ta kampania zostaje zapisana jako wersja robocza i pozostaje na liście Kampanii, więc możesz do niej wrócić.",
         "confirm": "Otwórz kreator klasyczny",
         "cancel": "Zostań tutaj"
+      },
+      "followUps": {
+        "title": "Wiadomości uzupełniające",
+        "intro": "Wyślij kolejną wiadomość lub uruchom przepływ w zależności od tego, co kontakt zrobi po wiadomości z kampanii. Do 3 kroków z rzędu.",
+        "cloudOnly": "Wiadomości uzupełniające wymagają numeru WhatsApp Cloud API, ponieważ korzystają z raportów Meta o odczytach i odpowiedziach. Wybierz taki numer w kroku 1.",
+        "add": "Dodaj wiadomość uzupełniającą",
+        "count": "{used} z {max} wiadomości uzupełniających",
+        "limitReached": "Osiągnięto limit: {max} wiadomości uzupełniających.",
+        "stepTitle": "Wiadomość uzupełniająca {step}",
+        "measuredFromCampaign": "Liczone od wiadomości z kampanii.",
+        "measuredFromStep": "Liczone od wiadomości uzupełniającej {step}.",
+        "remove": "Usuń wiadomość uzupełniającą {step}",
+        "removeShort": "Usuń",
+        "triggerLabel": "Gdy kontakt",
+        "trigger": {
+          "replied": "Odpowie",
+          "read": "Przeczyta wiadomość",
+          "not_replied": "Nie odpowiedział",
+          "not_read": "Nie przeczytał wiadomości"
+        },
+        "triggerHelp": {
+          "replied": "Uruchamia się w chwili odpowiedzi, jeśli nastąpi ona w ustawionym czasie. W przeciwnym razie sekwencja się kończy.",
+          "read": "Uruchamia się w chwili przeczytania, jeśli nastąpi ono w ustawionym czasie. W przeciwnym razie sekwencja się kończy.",
+          "not_replied": "Czeka ustawiony czas, a potem uruchamia się, jeśli kontakt nie odpowiedział. Jeśli odpowiedział, sekwencja się kończy.",
+          "not_read": "Czeka ustawiony czas, a potem uruchamia się, jeśli kontakt nie przeczytał wiadomości. Jeśli przeczytał, sekwencja się kończy."
+        },
+        "watchLabel": "Obserwuj maksymalnie przez",
+        "waitLabel": "Czekaj",
+        "unitLabel": "Jednostka czasu",
+        "duration": {
+          "minutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+          "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
+          "days": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}"
+        },
+        "actionLabel": "Wtedy",
+        "action": {
+          "template": "Wyślij szablon",
+          "flow": "Uruchom przepływ"
+        },
+        "templateLabel": "Szablon do wysłania",
+        "flowLabel": "Przepływ do uruchomienia",
+        "pickTemplate": "Wybierz szablon",
+        "pickFlow": "Wybierz przepływ",
+        "loading": "Ładowanie...",
+        "unavailable": "Już niedostępne",
+        "noTemplates": "Brak zatwierdzonych szablonów.",
+        "createTemplate": "Utwórz szablon",
+        "noFlows": "Brak przepływów.",
+        "createFlow": "Utwórz przepływ",
+        "flowsError": "Nie udało się załadować przepływów. Spróbuj ponownie później.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Jeśli odpowie w ciągu {wait}",
+          "read": "Jeśli przeczyta w ciągu {wait}",
+          "not_replied": "Jeśli nie odpowie po {wait}",
+          "not_read": "Jeśli nie przeczyta po {wait}"
+        },
+        "does": {
+          "template": "wyślij {name}",
+          "flow": "uruchom przepływ {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuta} few {minuty} many {minut} other {minuty}}",
+          "hours": "{count, plural, one {godzina} few {godziny} many {godzin} other {godziny}}",
+          "days": "{count, plural, one {dzień} few {dni} many {dni} other {dnia}}"
+        }
       }
     },
     "history": {
@@ -1704,6 +1856,23 @@
         "title": "Numery osobiste są wyłączone w tym obszarze roboczym",
         "body": "Dopóki ta opcja jest wyłączona, numery osobiste (QR) w liczbie {count} nie mogą wysyłać kampanii. Administrator platformy może ją włączyć dla tego obszaru roboczego albo możesz połączyć oficjalny numer WhatsApp Business.",
         "action": "Połącz oficjalny numer"
+      },
+      "email": {
+        "none": {
+          "title": "Brak połączonej skrzynki",
+          "body": "Połącz skrzynkę na stronie E-mail, aby wybrać, skąd wysyłana jest ta kampania.",
+          "action": "Połącz skrzynkę"
+        },
+        "disconnected": {
+          "title": "Skrzynki, które są rozłączone: {count}",
+          "body": "Połącz ją ponownie na stronie E-mail, aby wysyłać z niej kampanie.",
+          "action": "Otwórz stronę E-mail"
+        },
+        "error": {
+          "title": "Skrzynki wymagające ponownego połączenia: {count}",
+          "body": "Jej ostatnie logowanie się nie powiodło. Połącz ją ponownie na stronie E-mail, a pojawi się tutaj.",
+          "action": "Otwórz stronę E-mail"
+        }
       }
     },
     "create": {

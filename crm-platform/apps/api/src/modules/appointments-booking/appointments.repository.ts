@@ -33,6 +33,17 @@ export interface AppointmentRow {
   meetUrl: string | null;
   calendarEventId: string | null;
   calendarId: string | null;
+  googleSyncState: 'in_sync' | 'drifted' | 'unreadable' | null;
+  googleSyncReason: string | null;
+  googleDriftDetectedAt: Date | null;
+  googleDriftStartsAt: Date | null;
+  googleDriftEndsAt: Date | null;
+  googleEventEtag: string | null;
+  googlePushedAt: Date | null;
+  googlePushedStartsAt: Date | null;
+  googlePushedEndsAt: Date | null;
+  googlePushedAttendee: string | null;
+  googleCheckedAt: Date | null;
   seat: number;
   source: AppointmentSource;
   answers: AnswerSnapshot[];
@@ -91,6 +102,17 @@ const toRow = (r: Raw): AppointmentRow => ({
   meetUrl: s(r.meet_url),
   calendarEventId: s(r.calendar_event_id),
   calendarId: s(r.calendar_id),
+  googleSyncState: (r.google_sync_state as AppointmentRow['googleSyncState']) ?? null,
+  googleSyncReason: s(r.google_sync_reason),
+  googleDriftDetectedAt: d(r.google_drift_detected_at),
+  googleDriftStartsAt: d(r.google_drift_starts_at),
+  googleDriftEndsAt: d(r.google_drift_ends_at),
+  googleEventEtag: s(r.google_event_etag),
+  googlePushedAt: d(r.google_pushed_at),
+  googlePushedStartsAt: d(r.google_pushed_starts_at),
+  googlePushedEndsAt: d(r.google_pushed_ends_at),
+  googlePushedAttendee: s(r.google_pushed_attendee),
+  googleCheckedAt: d(r.google_checked_at),
   seat: Number(r.seat),
   source: r.source as AppointmentSource,
   answers: Array.isArray(r.answers) ? (r.answers as AnswerSnapshot[]) : [],
@@ -263,6 +285,57 @@ export class AppointmentsRepository {
     );
     const r = res.rows[0] as Raw | undefined;
     return r ? toRow(r) : undefined;
+  }
+
+  /**
+   * The confirmed bookings that start in [from, to) and have a Google event, least recently looked at first (never looked at first of all):
+   * the reconcile's batch. `limit` bounds one pass; the rest is taken by the next.
+   */
+  async reconcileCandidates(
+    tx: Tx,
+    orgId: number,
+    from: Date,
+    to: Date,
+    limit: number,
+    checkedBefore: Date,
+  ): Promise<AppointmentRow[]> {
+    // Only what has not been looked at since `checkedBefore`: a pass that finds fewer than `limit` has caught up, so a busy workspace is read
+    // once an hour per appointment (not continuously), and a backlog is worked off oldest-checked first.
+    const res = await tx.execute(sql`${SELECT}
+      WHERE a.org_id = ${orgId} AND a.status = 'confirmed' AND a.calendar_event_id IS NOT NULL
+        AND a.starts_at >= ${from.toISOString()}::timestamptz AND a.starts_at < ${to.toISOString()}::timestamptz
+        AND (a.google_checked_at IS NULL OR a.google_checked_at < ${checkedBefore.toISOString()}::timestamptz)
+      ORDER BY a.google_checked_at ASC NULLS FIRST, a.starts_at ASC
+      LIMIT ${limit}`);
+    return (res.rows as Raw[]).map(toRow);
+  }
+
+  /** The reconcile's "looked, nothing new": one statement for the whole pass. The monitoring columns do not bump `row_version`. */
+  async markChecked(tx: Tx, orgId: number, ids: number[], at: Date): Promise<void> {
+    if (ids.length === 0) return;
+    await tx.execute(sql`
+      UPDATE appointments SET google_checked_at = ${at.toISOString()}::timestamptz
+       WHERE org_id = ${orgId} AND id = ANY(${sql`ARRAY[${sql.join(
+         ids.map((i) => sql`${i}`),
+         sql`, `,
+       )}]::bigint[]`})`);
+  }
+
+  /**
+   * The workspace moved to another Google account: every upcoming booking's event is in the old account. Forgets the event and everything
+   * learned about it (the snapshot of what we wrote, the etag, drift) so nothing is compared with, or reported about, an event that cannot
+   * be read any more. The Meet link stays on the booking.
+   */
+  async detachGoogleEvents(tx: Tx, orgId: number): Promise<number> {
+    const res = await tx.execute(sql`
+      UPDATE appointments SET calendar_event_id = NULL, calendar_id = NULL,
+             google_sync_state = NULL, google_sync_reason = NULL, google_drift_detected_at = NULL,
+             google_drift_starts_at = NULL, google_drift_ends_at = NULL, google_event_etag = NULL,
+             google_pushed_at = NULL, google_pushed_starts_at = NULL, google_pushed_ends_at = NULL,
+             google_pushed_attendee = NULL, google_checked_at = NULL
+       WHERE org_id = ${orgId} AND calendar_event_id IS NOT NULL AND ends_at >= now()
+       RETURNING id`);
+    return res.rows.length;
   }
 
   /** The manage token's lookup: by hash, across every organization (the organization is not known before it). */

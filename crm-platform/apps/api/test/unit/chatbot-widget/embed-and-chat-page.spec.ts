@@ -250,6 +250,19 @@ describe('the panel of a flow bot (a website chat bot)', () => {
   });
 });
 
+describe('the cross: Close this chat and Restart this chat', () => {
+  it('is drawn for every website bot inside the site panel, not only a flow bot', () => {
+    for (const flow of [true, false]) {
+      const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow });
+      expect(page).toContain('id="endpop"');
+      expect(page).toContain('tx(o[0], o[1])');
+      expect(page).toContain("'closeThis', 'Close this chat'");
+      expect(page).toContain("'restartThis', 'Restart this chat'");
+      expect(page).toContain("BASE + 'restart'");
+    }
+  });
+});
+
 describe("the chat window speaks the visitor's language", () => {
   it('has every word in all 21 languages, none empty', () => {
     expect(Object.keys(CHAT_TEXT)).toHaveLength(21);

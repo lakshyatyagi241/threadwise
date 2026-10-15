@@ -92,7 +92,8 @@
       "api_keys": "API-ключи",
       "audit-log": "Журнал аудита",
       "audit-log-exports": "Экспорты журнала аудита",
-      "contact_consent_exports": "Экспорты подтверждений согласия"
+      "contact_consent_exports": "Экспорты подтверждений согласия",
+      "revenue-report-exports": "Файлы отчёта о выручке"
     },
     "table": {
       "caption": "Записи аудита, сначала новые. Время указано в вашем часовом поясе ({zone}).",

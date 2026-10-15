@@ -233,7 +233,7 @@ export class AuthSettingsService {
   }
 
   private projectPages(doc: PagesDoc): AuthPagesResponse {
-    const variant = doc.variant && doc.variant >= 1 && doc.variant <= 5 ? doc.variant : 1;
+    const variant = doc.variant && doc.variant >= 1 && doc.variant <= 6 ? doc.variant : 6;
     return {
       defaults: {
         login: PAGE_DEFAULTS.login,

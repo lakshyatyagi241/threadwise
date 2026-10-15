@@ -87,6 +87,8 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'sms_monthly', group: 'messaging' },
   // Connected Gmail mailboxes the workspace holds (the Email add-on; not disconnected ones). Default for a plan that has it: 3 (DEFAULT_EMAIL_MAILBOXES). 0 = unlimited.
   { key: 'email_mailboxes', group: 'messaging' },
+  // Emails sent per calendar month, replies and campaign mails together (Reference's `email_monthly_limit`). Enforced by the email campaign sender. 0 = unlimited.
+  { key: 'email_monthly', group: 'messaging' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -191,7 +193,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   storefront_builder: 'Storefront builder',
   invoicing: 'Invoicing',
   forms_and_links: 'Forms and links',
-  extra_channels: 'Telegram, Facebook and Instagram channels',
+  extra_channels: 'Telegram, Facebook, Instagram, LINE, Viber and WeChat channels',
   form_builder: 'Forms',
   waba_groups: 'WhatsApp groups',
   sms: 'SMS channel',

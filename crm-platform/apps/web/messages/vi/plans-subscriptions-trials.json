@@ -45,7 +45,8 @@
       "form_submissions_monthly": "Lượt gửi biểu mẫu mỗi tháng",
       "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI mỗi tháng",
       "sms_monthly": "SMS mỗi tháng",
-      "email_mailboxes": "Hộp thư email"
+      "email_mailboxes": "Hộp thư email",
+      "email_monthly": "Email mỗi tháng"
     },
     "features": {
       "automation": "Tự động hóa",
@@ -74,7 +75,7 @@
       "storefront_builder": "Trình tạo cửa hàng",
       "invoicing": "Lập hóa đơn",
       "forms_and_links": "Biểu mẫu và liên kết",
-      "extra_channels": "Telegram, Facebook và Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber và WeChat",
       "form_builder": "Biểu mẫu",
       "waba_groups": "Nhóm WhatsApp",
       "sms": "Kênh SMS",
@@ -132,7 +133,8 @@
       "form_submissions_monthly": "Lượt gửi biểu mẫu được chấp nhận trong tháng dương lịch, không tính thư rác. Khi vượt hạn mức, lượt gửi vẫn được lưu để xem xét, không bao giờ bị bỏ. 0 = không giới hạn.",
       "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI trong tháng dương lịch, kể cả lần thử sửa lại. 0 = không giới hạn.",
       "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
-      "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn."
+      "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
+      "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn."
     },
     "planAddons": {
       "title": "Tiện ích bổ sung có trong gói của bạn",

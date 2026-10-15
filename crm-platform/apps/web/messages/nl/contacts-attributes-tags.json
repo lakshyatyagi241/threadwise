@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Bron",
-        "consent": "Marketingtoestemming (ja / nee)"
+        "consent": "Marketingtoestemming (ja / nee)",
+        "consentSms": "SMS-marketingtoestemming (ja / nee)",
+        "consentEmail": "E-mailmarketingtoestemming (ja / nee)"
       },
       "notInFile": "Niet in bestand",
       "columnN": "Kolom {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "Alles selecteren",
         "reorder": "Sleep om kolommen te herschikken",
         "remove": "{name} verwijderen"
+      },
+      "presets": {
+        "myContacts": "Mijn contacten",
+        "newThisWeek": "Nieuw deze week",
+        "newLastWeek": "Nieuw vorige week",
+        "recentlyCreated": "Onlangs aangemaakt",
+        "recentlyModified": "Onlangs gewijzigd",
+        "recentlyImported": "Onlangs geïmporteerd",
+        "neverContacted": "Nooit gecontacteerd",
+        "needsFollowUp": "Opvolging nodig",
+        "active": "Actief",
+        "inactive": "Inactief",
+        "unsubscribed": "Uitgeschreven"
       }
     },
     "erase": {

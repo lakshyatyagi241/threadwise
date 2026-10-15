@@ -31,6 +31,8 @@ export interface MetaGraphOptions {
   timeoutMs?: number;
   retryDelayMs?: number;
   dialogHost?: string;
+  /** The Meta app that issued the login code; both are needed to exchange it. */
+  app?: { id: string | undefined; secret: string | undefined };
 }
 
 interface Call {
@@ -463,6 +465,35 @@ export class MetaGraphCatalogProvider implements CatalogProvider {
     return (Array.isArray(json.data) ? json.data : [])
       .map((d) => asRecord(d).id)
       .filter((id): id is string => typeof id === 'string' && id !== '');
+  }
+
+  async exchangeLoginCode(code: string): Promise<string> {
+    const id = this.opts.app?.id;
+    const secret = this.opts.app?.secret;
+    if (!id || !secret) {
+      throw new CatalogProviderError(
+        'The Meta app is not configured for catalog login (META_APP_ID and META_APP_SECRET).',
+        'config',
+      );
+    }
+    // No redirect_uri on purpose: a popup code is in-window, and sending one switches Meta to classic OAuth validation.
+    const json = await this.call({
+      method: 'GET',
+      url: await this.graph('oauth/access_token'),
+      headers: {},
+      query: { client_id: id, client_secret: secret, code },
+      op: 'exchangeLoginCode',
+      timeoutMs: AUTODETECT_TIMEOUT_MS,
+      retry: false,
+      secrets: [secret, code],
+    });
+    if (typeof json.access_token !== 'string' || !json.access_token) {
+      throw new CatalogProviderError(
+        'Meta accepted the code but returned no access token.',
+        'meta',
+      );
+    }
+    return json.access_token;
   }
 
   async createCatalog(a: GraphAuth, businessId: string, name: string): Promise<string | null> {

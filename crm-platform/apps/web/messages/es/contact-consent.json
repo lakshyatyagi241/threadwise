@@ -112,15 +112,22 @@
         "instagram": "Instagram",
         "webchat": "Chat web",
         "voice": "Llamada de voz",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "suscrito",
-        "withdrawn": "dado de baja"
+        "withdrawn": "dado de baja",
+        "utilityGranted": "aceptó mensajes de servicio",
+        "utilityWithdrawn": "mensajes de servicio detenidos"
       },
       "action": {
         "granted": "Suscrito",
-        "withdrawn": "Dado de baja"
+        "withdrawn": "Dado de baja",
+        "utilityGranted": "Aceptó que le contacten sobre su solicitud",
+        "utilityWithdrawn": "Detuvo los mensajes de servicio"
       },
       "source": {
         "form": "Formulario",
@@ -134,7 +141,8 @@
         "legacy": "Antes del historial de consentimiento",
         "widget": "Chat del sitio web",
         "booking": "Página de reservas",
-        "commerce": "Pago en la tienda"
+        "commerce": "Pago en la tienda",
+        "lead": "Captación de leads"
       },
       "by": "por {name}",
       "evidence": {
@@ -154,7 +162,10 @@
         "widgetId": "Widget de chat",
         "bookingTypeId": "Página de reservas",
         "integrationId": "Tienda",
-        "storeFlag": "Ajuste de la tienda"
+        "storeFlag": "Ajuste de la tienda",
+        "leadSourceId": "Origen del lead",
+        "leadFormId": "Formulario de lead",
+        "adId": "Anuncio"
       },
       "dialog": {
         "titleGranted": "Marcar como suscrito",
@@ -187,7 +198,14 @@
       "hintColumn": "La columna asignada al consentimiento de marketing decide quién se registra: solo las filas que dicen sí obtienen un consentimiento, con el nombre del archivo como prueba. Un no, una celda vacía o una palabra desconocida no registran nada. Los contactos que se dieron de baja siguen dados de baja.",
       "columnSummary": "{granted} filas dicen sí y se registrarán. {notGranted} dicen no o están vacías y no reciben ningún registro de consentimiento.",
       "unrecognised": "{count, plural, one {# fila tiene} other {# filas tienen}} un valor de consentimiento que no es sí ni no ({values}). {count, plural, one {Se trata} other {Se tratan}} como no concedido. Usa yes / no, true / false o 1 / 0.",
-      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba."
+      "columnIgnored": "La columna de consentimiento no hace nada hasta que marques la casilla de arriba.",
+      "noticeText": "Aviso o base legal (opcional)",
+      "noticeTextHint": "A qué accedieron estos contactos y dónde, por ejemplo: se suscribieron en el pago con el aviso de privacidad v3. Se guarda como prueba con cada consentimiento registrado.",
+      "noticeVersion": "Versión del aviso (opcional)",
+      "smsSummary": "Columna de consentimiento SMS: {granted} filas dicen sí y se registrarán como consentimiento SMS. {notGranted} dicen no o están en blanco.",
+      "emailSummary": "Columna de consentimiento de correo: {granted} filas dicen sí y se registrarán como consentimiento de correo (la fila también necesita una dirección de correo). {notGranted} dicen no o están en blanco.",
+      "labelNumbers": "Tengo consentimiento para escribir a estos números",
+      "hintNumbers": "Marcada, cada número del archivo se registra como que aceptó marketing al lanzar la difusión, con el nombre del archivo como prueba. Sin marcar, no se registra consentimiento. Quienes se dieron de baja siguen de baja."
     },
     "systemLine": {
       "withdrawn": "El contacto respondió {keyword}: se dio de baja del marketing",
@@ -291,12 +309,14 @@
       "title": {
         "widget": "Línea de consentimiento en el formulario del chat",
         "booking": "Línea de consentimiento en la página de reservas",
-        "commerce": "Qué significa la casilla de marketing de la tienda"
+        "commerce": "Qué significa la casilla de marketing de la tienda",
+        "workspace": "Aviso de consentimiento predeterminado"
       },
       "intro": {
         "widget": "Se muestra como una casilla bajo los datos del visitante. Solo se registra como que acepta quien la marca, y solo si dio un teléfono o un correo.",
         "booking": "Se muestra como una casilla en el formulario de reserva. Solo se registra como que acepta quien la marca; reservar nunca la exige.",
-        "commerce": "Un cliente que acepta marketing en su tienda se registra como que acepta. Escriba lo que esa casilla le dice, para que la prueba lo nombre."
+        "commerce": "Un cliente que acepta marketing en su tienda se registra como que acepta. Escriba lo que esa casilla le dice, para que la prueba lo nombre.",
+        "workspace": "El texto que tu espacio de trabajo muestra junto a una casilla de consentimiento cuando un formulario, widget o página de reservas no tiene uno propio. Cada cambio es una nueva versión numerada."
       },
       "enabled": "Línea de consentimiento activada",
       "text": "Texto que la persona acepta",
@@ -309,7 +329,21 @@
       "version": "Versión actual: {version}",
       "noVersion": "Aún no guardada.",
       "saveFirst": "Guarde esto primero y luego podrá definir su línea de consentimiento.",
-      "whatsappToo": "Contar también como consentimiento de WhatsApp (solo si el texto lo dice)"
+      "whatsappToo": "Contar también como consentimiento de WhatsApp (solo si el texto lo dice)",
+      "termsUrl": "Enlace a tus términos (opcional)",
+      "termsUrlHint": "Debe empezar por https://",
+      "useWorkspacePrivacy": "Usar el enlace de privacidad de mi espacio de trabajo",
+      "useWorkspaceTerms": "Usar el enlace de términos de mi espacio de trabajo",
+      "useWorkspaceText": "Usar el texto predeterminado de mi espacio de trabajo",
+      "statement": "Acepto recibir novedades y ofertas por {channels}. Puedo responder STOP en cualquier momento para darme de baja.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "correo electrónico"
+      },
+      "channelsLabel": "Canales que cubre este consentimiento",
+      "channelsHint": "La persona solo se suscribe en los canales marcados aquí, y el texto del consentimiento los nombra. Un canal se usa solo si la persona da el teléfono o el correo correspondiente.",
+      "channelsUse": "Actualizar el texto con estos canales"
     }
   }
 }

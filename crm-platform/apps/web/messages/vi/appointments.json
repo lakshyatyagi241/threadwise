@@ -41,7 +41,10 @@
       "notStarted": "Chỉ có thể thực hiện sau khi lịch đặt đã bắt đầu.",
       "alreadyStarted": "Lịch đặt này đã bắt đầu nên không thể thay đổi nữa.",
       "bookingOff": "Hiện không thể đặt lịch cho dịch vụ này.",
-      "notDeletable": "Không thể xóa khi còn các lịch đặt sắp tới."
+      "notDeletable": "Không thể xóa khi còn các lịch đặt sắp tới.",
+      "notDrifted": "Lịch hẹn này đã khớp với sự kiện trên Google. Dữ liệu đã được tải lại.",
+      "calendarNotConnected": "Google Calendar chưa được kết nối. Hãy kết nối lại tại trang tài khoản Google rồi thử lại.",
+      "calendarFailed": "Google không phản hồi hoặc đã từ chối thay đổi. Vui lòng thử lại sau giây lát."
     },
     "picker": {
       "timeZone": "Múi giờ",
@@ -156,7 +159,8 @@
       "yesterday": "Hôm qua",
       "rowLabel": "Mở lịch đặt: {title}",
       "noName": "Không có tên",
-      "needsReview": "Cần xem xét"
+      "needsReview": "Cần xem xét",
+      "outOfSync": "Lịch không đồng bộ"
     },
     "row": {
       "moreFor": "Thêm thao tác cho {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Đã chuyển lịch đặt sang giờ mới.",
       "linkCopied": "Đã sao chép liên kết quản lý.",
       "copyFailed": "Không thể sao chép liên kết.",
-      "declined": "Đã từ chối yêu cầu."
+      "declined": "Đã từ chối yêu cầu.",
+      "calendarPushed": "Đã gửi lên Google: sự kiện hiện đã khớp với lịch hẹn này.",
+      "calendarAccepted": {
+        "cancelled": "Đã chấp nhận thay đổi từ Google: lịch hẹn đã bị hủy.",
+        "rescheduled": "Đã chấp nhận thay đổi từ Google: lịch hẹn đã được chuyển sang thời gian mới.",
+        "acknowledged": "Đã chấp nhận thay đổi từ Google. Lịch hẹn được giữ nguyên."
+      }
     },
     "typesList": {
       "breadcrumb": "Đường dẫn",
@@ -962,7 +972,7 @@
         "calendarSaved": "Đã lưu lịch.",
         "confirmOff": {
           "title": "Ngắt kết nối Google Calendar?",
-          "message": "Lịch đặt mới sẽ ngừng được ghi vào lịch của bạn và thời gian bận không còn được đọc. Các sự kiện đã có trong lịch vẫn giữ nguyên, và Google được yêu cầu thu hồi quyền truy cập này.",
+          "message": "Các lịch đặt mới sẽ ngừng được ghi vào lịch của bạn và thời gian bận không còn được đọc. Các bước Google trong luồng của bạn cũng dừng, vì chúng dùng chung kết nối này. Các sự kiện đã có trong lịch vẫn giữ nguyên, và Google được yêu cầu thu hồi quyền truy cập này.",
           "confirm": "Ngắt kết nối",
           "cancel": "Giữ lại"
         },
@@ -972,7 +982,8 @@
           "failed": "Việc kết nối chưa hoàn tất. Hãy thử lại; nếu vẫn thất bại, hãy nhờ quản trị viên nền tảng kiểm tra cấu hình Google.",
           "expired": "Lần thử đó mất quá nhiều thời gian. Nhấn Kết nối để bắt đầu lại.",
           "not_configured": "Google Calendar chưa được thiết lập cho nền tảng này. Hãy nhờ quản trị viên nền tảng thêm Google OAuth client.",
-          "missing_scope": "Google không cấp đủ mọi quyền lịch cần thiết. Hãy kết nối lại và giữ chọn tất cả các ô."
+          "missing_scope": "Google không cấp đủ mọi quyền lịch cần thiết. Hãy kết nối lại và giữ chọn tất cả các ô.",
+          "cancelled": "Bạn đã hủy. Chưa có gì được kết nối."
         },
         "whatTitle": "Chức năng này làm gì",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Tải thêm",
       "loadMorePast": "Tải thêm lịch đã qua",
       "noType": "Lịch hẹn"
+    },
+    "sync": {
+      "title": "Lịch không đồng bộ",
+      "reason": {
+        "event_deleted": "Sự kiện đã bị xóa hoặc hủy trong Google Calendar.",
+        "event_missing": "Không còn tìm thấy sự kiện trong Google Calendar.",
+        "time_changed": "Sự kiện đã được chuyển sang thời gian khác trong Google Calendar.",
+        "attendees_changed": "Danh sách khách của sự kiện đã được thay đổi trong Google Calendar."
+      },
+      "googleShows": "Google hiển thị: {time}",
+      "notChanged": "Lịch hẹn này chưa bị thay đổi. Hãy chọn bên nào là đúng.",
+      "found": "Đã phát hiện {when}",
+      "push": "Gửi thời gian của chúng tôi lên Google",
+      "accept": "Chấp nhận thay đổi từ Google",
+      "keep": "Để sau",
+      "acceptTitle": {
+        "cancel": "Hủy lịch hẹn này?",
+        "reschedule": "Chuyển lịch hẹn này sang thời gian trên Google?",
+        "acknowledge": "Chấp nhận danh sách khách mà Google hiển thị?"
+      },
+      "acceptMessage": {
+        "cancel": "Sự kiện không còn trên Google nên lịch hẹn này sẽ bị hủy và khung giờ được giải phóng. Khách hàng sẽ được thông báo, giống như mọi trường hợp hủy khác.",
+        "reschedule": "Lịch hẹn này sẽ được chuyển sang {time}. Khách hàng sẽ được thông báo về thời gian mới, giống như mọi trường hợp đổi lịch khác.",
+        "acknowledge": "Bản thân lịch hẹn không thay đổi. Danh sách khách từ Google sẽ được ghi nhớ và thông báo này sẽ biến mất."
+      },
+      "acceptConfirm": {
+        "cancel": "Hủy lịch hẹn",
+        "reschedule": "Chuyển lịch hẹn",
+        "acknowledge": "Chấp nhận"
+      }
     }
   }
 }

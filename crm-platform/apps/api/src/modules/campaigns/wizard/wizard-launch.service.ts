@@ -131,6 +131,31 @@ export class WizardLaunchService {
         }
         await this.campaigns.assertTemplateUsable(tx, orgId, templateB.uuid, via.provider);
       }
+      // Follow-up steps: each template must be approved and sendable from this number, each flow must exist in this workspace.
+      for (const [i, f] of draft.followUps.entries()) {
+        const path = `followUps.${i}.action`;
+        if (f.action.kind === 'template') {
+          const t = f.action.templateId
+            ? await this.repo.templateByUuid(tx, orgId, f.action.templateId)
+            : undefined;
+          if (!t) {
+            throw new AppError(
+              ERROR_CODES.CAMP_WIZARD_INCOMPLETE,
+              'The broadcast is not complete.',
+              HttpStatus.UNPROCESSABLE_ENTITY,
+              [{ path, message: 'follow_up_template_required' }],
+            );
+          }
+          await this.campaigns.assertTemplateUsable(tx, orgId, t.uuid, via.provider);
+        } else if (!f.action.flowId || !(await this.repo.flowExists(tx, orgId, f.action.flowId))) {
+          throw new AppError(
+            ERROR_CODES.CAMP_WIZARD_INCOMPLETE,
+            'The broadcast is not complete.',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path, message: 'follow_up_flow_required' }],
+          );
+        }
+      }
       await this.drafts.assertSources(tx, orgId, draft.audience);
       await this.drafts.assertCsv(tx, orgId, draft.audience);
 

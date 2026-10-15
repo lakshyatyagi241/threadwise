@@ -379,6 +379,10 @@
         "test": {
           "label": "Thông báo thử",
           "hint": "Thông báo thử bạn gửi từ Thông báo trình duyệt, để xem chuông, cửa sổ bật lên và tiêu đề tab hoạt động."
+        },
+        "appointment_calendar_drift": {
+          "label": "Lịch hẹn không đồng bộ với Google Calendar",
+          "hint": "Sự kiện Google Calendar của một lịch hẹn sắp tới đã bị xóa, chuyển giờ hoặc thay đổi danh sách khách. Lịch hẹn không bị thay đổi; bạn sẽ chọn cách xử lý."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",

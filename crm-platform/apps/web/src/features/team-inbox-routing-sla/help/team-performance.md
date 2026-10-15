@@ -9,7 +9,19 @@ gates:
   permission: inbox.analytics.view
   planFeature: team_performance
 routes: [/inbox/analytics/team]
-keywords: [team performance, report, analytics, agents, replies, resolved, first reply, response time, workload, load]
+keywords:
+  [
+    team performance,
+    report,
+    analytics,
+    agents,
+    replies,
+    resolved,
+    first reply,
+    response time,
+    workload,
+    load,
+  ]
 ---
 
 ## What it is for

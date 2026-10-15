@@ -28,6 +28,7 @@ export const KNOWN_MODULES = [
   'audit-log',
   'audit-log-exports',
   'contact_consent_exports',
+  'revenue-report-exports',
 ] as const;
 
 export const isKnownAction = (a: string): boolean =>

@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Quelle",
-        "consent": "Marketing-Einverständnis (ja / nein)"
+        "consent": "Marketing-Einverständnis (ja / nein)",
+        "consentSms": "SMS-Marketing-Einwilligung (ja / nein)",
+        "consentEmail": "E-Mail-Marketing-Einwilligung (ja / nein)"
       },
       "notInFile": "Nicht in der Datei",
       "columnN": "Spalte {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "Alle auswählen",
         "reorder": "Ziehen, um Spalten neu anzuordnen",
         "remove": "{name} entfernen"
+      },
+      "presets": {
+        "myContacts": "Meine Kontakte",
+        "newThisWeek": "Neu diese Woche",
+        "newLastWeek": "Neu letzte Woche",
+        "recentlyCreated": "Kürzlich erstellt",
+        "recentlyModified": "Kürzlich geändert",
+        "recentlyImported": "Kürzlich importiert",
+        "neverContacted": "Nie kontaktiert",
+        "needsFollowUp": "Nachfassen nötig",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "unsubscribed": "Abgemeldet"
       }
     },
     "erase": {

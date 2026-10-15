@@ -112,15 +112,22 @@
         "instagram": "Instagram",
         "webchat": "Web chat",
         "voice": "Voice call",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "subscribed",
-        "withdrawn": "opted out"
+        "withdrawn": "opted out",
+        "utilityGranted": "agreed to service messages",
+        "utilityWithdrawn": "service messages stopped"
       },
       "action": {
         "granted": "Subscribed",
-        "withdrawn": "Opted out"
+        "withdrawn": "Opted out",
+        "utilityGranted": "Agreed to be contacted about their request",
+        "utilityWithdrawn": "Stopped service messages"
       },
       "source": {
         "form": "Form",
@@ -134,7 +141,8 @@
         "legacy": "Before the consent history",
         "widget": "Website chat",
         "booking": "Booking page",
-        "commerce": "Store checkout"
+        "commerce": "Store checkout",
+        "lead": "Lead capture"
       },
       "by": "by {name}",
       "evidence": {
@@ -154,7 +162,10 @@
         "widgetId": "Chat widget",
         "bookingTypeId": "Booking page",
         "integrationId": "Store",
-        "storeFlag": "Store setting"
+        "storeFlag": "Store setting",
+        "leadSourceId": "Lead source",
+        "leadFormId": "Lead form",
+        "adId": "Ad"
       },
       "dialog": {
         "titleGranted": "Mark as subscribed",
@@ -187,7 +198,14 @@
       "hintColumn": "The column mapped to marketing consent decides who is recorded: only the rows that say yes get a consent, with the file name as proof. A no, a blank cell or an unknown word records nothing. Contacts who opted out stay opted out.",
       "columnSummary": "{granted} rows say yes and will be recorded. {notGranted} say no or are blank and get no consent record.",
       "unrecognised": "{count, plural, one {# row has} other {# rows have}} a consent value that is not a yes or a no ({values}). {count, plural, one {It is} other {They are}} treated as not granted. Use yes / no, true / false or 1 / 0.",
-      "columnIgnored": "The consent column does nothing until you tick the box above."
+      "columnIgnored": "The consent column does nothing until you tick the box above.",
+      "noticeText": "Notice or lawful basis (optional)",
+      "noticeTextHint": "What these contacts agreed to and where, for example: opted in at checkout under privacy notice v3. It is kept as proof with each recorded consent.",
+      "noticeVersion": "Notice version (optional)",
+      "smsSummary": "SMS consent column: {granted} rows say yes and will be recorded as SMS consent. {notGranted} say no or are blank.",
+      "emailSummary": "Email consent column: {granted} rows say yes and will be recorded as email consent (a row also needs an email address). {notGranted} say no or are blank.",
+      "labelNumbers": "I have consent to message these numbers",
+      "hintNumbers": "Ticked, every number in the file is recorded as having agreed to marketing when you launch the broadcast, with the file name as proof. Unticked, no consent is recorded. People who opted out stay opted out."
     },
     "systemLine": {
       "withdrawn": "Contact replied {keyword}: unsubscribed from marketing",
@@ -291,12 +309,14 @@
       "title": {
         "widget": "Consent line on the chat form",
         "booking": "Consent line on the booking page",
-        "commerce": "What the store's marketing checkbox stands for"
+        "commerce": "What the store's marketing checkbox stands for",
+        "workspace": "Default consent notice"
       },
       "intro": {
         "widget": "Shown as a tick box under the visitor's details. Only a visitor who ticks it is recorded as agreeing, and only when they gave a phone number or an email.",
         "booking": "Shown as a tick box on the booking form. Only a person who ticks it is recorded as agreeing; booking never needs it.",
-        "commerce": "A customer who accepts marketing in your store is recorded as agreeing. Write what that checkbox tells them, so the proof names it."
+        "commerce": "A customer who accepts marketing in your store is recorded as agreeing. Write what that checkbox tells them, so the proof names it.",
+        "workspace": "The wording your workspace shows next to a consent box when a form, widget or booking page has none of its own. Every change is a new numbered version."
       },
       "enabled": "Consent line on",
       "text": "Wording the person agrees to",
@@ -309,7 +329,21 @@
       "version": "Current version: {version}",
       "noVersion": "Not saved yet.",
       "saveFirst": "Save this first, then you can set its consent line.",
-      "whatsappToo": "Also count it as WhatsApp consent (only if the wording says so)"
+      "whatsappToo": "Also count it as WhatsApp consent (only if the wording says so)",
+      "termsUrl": "Link to your terms (optional)",
+      "termsUrlHint": "Must start with https://",
+      "useWorkspacePrivacy": "Use my workspace privacy link",
+      "useWorkspaceTerms": "Use my workspace terms link",
+      "useWorkspaceText": "Use my workspace default wording",
+      "statement": "I agree to receive updates and offers on {channels}. I can reply STOP at any time to unsubscribe.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "email"
+      },
+      "channelsLabel": "Channels this consent covers",
+      "channelsHint": "The person is subscribed only on the channels ticked here, and the consent text names them. A channel is used only when the person gives the matching phone number or email.",
+      "channelsUse": "Update the wording with these channels"
     }
   }
 }

@@ -5,7 +5,20 @@ summary: Talk with your teammates in channels and direct messages, share files, 
 area: inbox
 order: 40
 documents: [nav:team-chat]
-keywords: [team chat, channels, direct message, mention, reply, react, pin, search, invite, private channel, teammates]
+keywords:
+  [
+    team chat,
+    channels,
+    direct message,
+    mention,
+    reply,
+    react,
+    pin,
+    search,
+    invite,
+    private channel,
+    teammates,
+  ]
 ---
 
 ## What it is for

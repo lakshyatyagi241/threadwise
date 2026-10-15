@@ -107,6 +107,12 @@ export class BroadcastsService {
 
     return this.db.tx(async (tx) => {
       const resolved = await this.senders.resolve(tx, orgId, input.senderKeys);
+      // A mailbox sends campaigns (a typed message), never a template broadcast.
+      if (resolved.some((s) => s.engine === 'email')) {
+        throw AppError.validation('Request payload failed validation', [
+          { path: 'senderKeys', message: 'A mailbox can only send an email campaign.' },
+        ]);
+      }
       // SMS is a paid channel of its own (TW-SMS-016): Reference only checked `broadcast` here, and the owner wants `sms` enforced.
       const sms = resolved.length > 0 && resolved.every((s) => s.engine === 'sms');
       if (resolved.some((s) => s.engine === 'sms'))

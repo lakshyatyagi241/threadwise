@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { senderKeySchema } from '../broadcasts/broadcast';
+import { marketingMediaSchema } from '../broadcasts/marketing-media';
 
 /**
  * Campaigns (CAMP, Reference `wa-campaigns`): a bulk send of a custom message, a template or a flow, with A/B testing, a schedule,
@@ -45,6 +46,9 @@ export const CAMPAIGN_RECIPIENT_STATUSES = [
   'skipped',
 ] as const;
 export type CampaignRecipientStatus = (typeof CAMPAIGN_RECIPIENT_STATUSES)[number];
+
+/** The subject of an email campaign is the builder's Header field, capped at 150 characters (Reference's email builder). */
+export const CAMPAIGN_EMAIL_SUBJECT_MAX = 150;
 
 /** Reference's CSV upload limit, applied to the text of the file. */
 export const CAMPAIGN_CSV_MAX_CHARS = 5_000_000;
@@ -338,3 +342,27 @@ export const campaignAiGenerateResponseSchema = z.object({
   model: z.string(),
 });
 export type CampaignAiGenerateResponse = z.infer<typeof campaignAiGenerateResponseSchema>;
+
+/**
+ * "Build with AI", the picture (an addition: Reference's builder writes the text only): a brief in, one generated image out, stored on
+ * the workspace's object storage like any marketing upload, so the builder can attach it as the campaign's image. Only OpenAI's image
+ * model is wired; the key, the monthly allowance and the usage ledger are the text generation's. Nothing else is stored.
+ */
+export const CAMPAIGN_AI_IMAGE_SIZES = ['1024x1024', '1536x1024', '1024x1536'] as const;
+export const campaignAiImageSchema = z.object({
+  provider: z.literal('openai').default('openai'),
+  model: z.string().trim().min(1).max(120).default('gpt-image-1'),
+  businessName: z.string().trim().min(1).max(191),
+  product: brief(255),
+  offer: brief(500),
+  tone: brief(60),
+  /** What the picture should show; up to 1,000 characters. Without it the brief above decides. */
+  customPrompt: brief(1000),
+  size: z.enum(CAMPAIGN_AI_IMAGE_SIZES).default('1024x1024'),
+});
+export type CampaignAiImageInput = z.infer<typeof campaignAiImageSchema>;
+export const campaignAiImageResponseSchema = z.object({
+  image: marketingMediaSchema,
+  model: z.string(),
+});
+export type CampaignAiImageResponse = z.infer<typeof campaignAiImageResponseSchema>;

@@ -112,15 +112,22 @@
         "instagram": "Instagram",
         "webchat": "Czat WWW",
         "voice": "Połączenie głosowe",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "zapisany",
-        "withdrawn": "wypisany"
+        "withdrawn": "wypisany",
+        "utilityGranted": "zgoda na wiadomości serwisowe",
+        "utilityWithdrawn": "wiadomości serwisowe wstrzymane"
       },
       "action": {
         "granted": "Zapisany",
-        "withdrawn": "Wypisany"
+        "withdrawn": "Wypisany",
+        "utilityGranted": "Zgoda na kontakt w sprawie zapytania",
+        "utilityWithdrawn": "Wstrzymał wiadomości serwisowe"
       },
       "source": {
         "form": "Formularz",
@@ -134,7 +141,8 @@
         "legacy": "Sprzed historii zgód",
         "widget": "Czat na stronie",
         "booking": "Strona rezerwacji",
-        "commerce": "Kasa sklepu"
+        "commerce": "Kasa sklepu",
+        "lead": "Pozyskanie leada"
       },
       "by": "przez {name}",
       "evidence": {
@@ -154,7 +162,10 @@
         "widgetId": "Widżet czatu",
         "bookingTypeId": "Strona rezerwacji",
         "integrationId": "Sklep",
-        "storeFlag": "Ustawienie sklepu"
+        "storeFlag": "Ustawienie sklepu",
+        "leadSourceId": "Źródło leada",
+        "leadFormId": "Formularz leada",
+        "adId": "Reklama"
       },
       "dialog": {
         "titleGranted": "Oznacz jako zapisanego",
@@ -187,7 +198,14 @@
       "hintColumn": "Kolumna przypisana do zgody marketingowej decyduje, kto zostanie zapisany: tylko wiersze z odpowiedzią tak otrzymują zgodę, z nazwą pliku jako dowodem. Odpowiedź nie, pusta komórka lub nieznane słowo nie zapisuje niczego. Kontakty, które zrezygnowały, pozostają wypisane.",
       "columnSummary": "{granted} wierszy ma odpowiedź tak i zostanie zapisanych. {notGranted} ma odpowiedź nie lub jest pustych i nie otrzyma rekordu zgody.",
       "unrecognised": "{count, plural, one {# wiersz ma} other {# wierszy ma}} wartość zgody, która nie jest tak ani nie ({values}). {count, plural, one {Jest ona traktowana} other {Są one traktowane}} jako niewyrażona. Użyj tak / nie, true / false lub 1 / 0.",
-      "columnIgnored": "Kolumna zgody nie działa, dopóki nie zaznaczysz pola powyżej."
+      "columnIgnored": "Kolumna zgody nie działa, dopóki nie zaznaczysz pola powyżej.",
+      "noticeText": "Informacja lub podstawa prawna (opcjonalnie)",
+      "noticeTextHint": "Na co zgodzili się ci kontakci i gdzie, np. zapisali się przy kasie według informacji o prywatności v3. Zapisywane jako dowód przy każdej zarejestrowanej zgodzie.",
+      "noticeVersion": "Wersja informacji (opcjonalnie)",
+      "smsSummary": "Kolumna zgody na SMS: {granted} wierszy mówi tak i zostanie zapisanych jako zgoda na SMS. {notGranted} mówi nie lub jest puste.",
+      "emailSummary": "Kolumna zgody na e-mail: {granted} wierszy mówi tak i zostanie zapisanych jako zgoda na e-mail (wiersz musi też mieć adres e-mail). {notGranted} mówi nie lub jest puste.",
+      "labelNumbers": "Mam zgodę na wysyłanie wiadomości na te numery",
+      "hintNumbers": "Po zaznaczeniu każdy numer z pliku jest zapisywany jako zgadzający się na marketing przy uruchomieniu wysyłki, a dowodem jest nazwa pliku. Bez zaznaczenia zgoda nie jest zapisywana. Osoby, które zrezygnowały, pozostają wypisane."
     },
     "systemLine": {
       "withdrawn": "Kontakt odpowiedział {keyword}: wypisany z marketingu",
@@ -291,12 +309,14 @@
       "title": {
         "widget": "Wiersz zgody w formularzu czatu",
         "booking": "Wiersz zgody na stronie rezerwacji",
-        "commerce": "Co oznacza pole marketingowe sklepu"
+        "commerce": "Co oznacza pole marketingowe sklepu",
+        "workspace": "Domyślna informacja o zgodzie"
       },
       "intro": {
         "widget": "Wyświetlany jako pole wyboru pod danymi odwiedzającego. Tylko odwiedzający, który je zaznaczy, jest zapisany jako zgadzający się, i tylko gdy podał telefon lub e-mail.",
         "booking": "Wyświetlany jako pole wyboru w formularzu rezerwacji. Tylko osoba, która je zaznaczy, jest zapisana jako zgadzająca się; rezerwacja nigdy go nie wymaga.",
-        "commerce": "Klient, który w Twoim sklepie akceptuje marketing, jest zapisany jako zgadzający się. Napisz, co mówi mu to pole, aby dowód to wskazywał."
+        "commerce": "Klient, który w Twoim sklepie akceptuje marketing, jest zapisany jako zgadzający się. Napisz, co mówi mu to pole, aby dowód to wskazywał.",
+        "workspace": "Brzmienie, które Twoja przestrzeń robocza wyświetla obok pola zgody, gdy formularz, widżet lub strona rezerwacji nie ma własnego. Każda zmiana to nowa numerowana wersja."
       },
       "enabled": "Wiersz zgody włączony",
       "text": "Treść, na którą osoba wyraża zgodę",
@@ -309,7 +329,21 @@
       "version": "Bieżąca wersja: {version}",
       "noVersion": "Jeszcze nie zapisano.",
       "saveFirst": "Najpierw to zapisz, potem ustawisz jego wiersz zgody.",
-      "whatsappToo": "Licz także jako zgodę na WhatsApp (tylko jeśli treść tak mówi)"
+      "whatsappToo": "Licz także jako zgodę na WhatsApp (tylko jeśli treść tak mówi)",
+      "termsUrl": "Link do regulaminu (opcjonalnie)",
+      "termsUrlHint": "Musi zaczynać się od https://",
+      "useWorkspacePrivacy": "Użyj linku do polityki prywatności przestrzeni roboczej",
+      "useWorkspaceTerms": "Użyj linku do regulaminu przestrzeni roboczej",
+      "useWorkspaceText": "Użyj domyślnego brzmienia przestrzeni roboczej",
+      "statement": "Zgadzam się na otrzymywanie aktualności i ofert przez {channels}. Mogę w każdej chwili odpowiedzieć STOP, aby zrezygnować.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Kanały objęte tą zgodą",
+      "channelsHint": "Osoba jest zapisywana tylko na zaznaczone tutaj kanały, a tekst zgody je wymienia. Kanał jest używany tylko wtedy, gdy osoba poda pasujący numer telefonu lub e-mail.",
+      "channelsUse": "Zaktualizuj treść o te kanały"
     }
   }
 }

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  consentChannels,
   FORM_LIMITS,
   FORM_RETENTION_DEFAULT_DAYS,
   FORM_RETENTION_MAX_DAYS,
@@ -19,6 +20,8 @@ export const MAX_NOTIFY_EMAILS = 5;
 export const MAX_NOTIFY_USERS = 20;
 export const MAX_OWNER_USERS = 50;
 export const MAX_CONSENT_TEXT = 500;
+/** The wording a new consent line starts with (the contract default). */
+export const DEFAULT_CONSENT_TEXT = 'I agree to be contacted about my request.';
 export const MAX_SUBMIT_LABEL = 60;
 export const MAX_SUCCESS_MESSAGE = FORM_LIMITS.maxRichText;
 
@@ -130,7 +133,8 @@ export function retentionAfterToggle(keepForever: boolean, lastDays: number | nu
 // --- consent ------------------------------------------------------------------------------------------------------------------------
 
 /**
- * Submissions keep the consent version they saw, so once the form has been published a changed wording must be a new version.
+ * Submissions keep the consent version they saw, so once the form has been published a changed wording, or a changed set of channels,
+ * must be a new version.
  * The version is derived from the saved copy, not incremented per keystroke: edit back to the saved text and the number returns.
  */
 export function consentWithText(
@@ -139,10 +143,18 @@ export function consentWithText(
   saved: FormConsent,
   published: boolean,
 ): FormConsent {
-  const changed = text.trim() !== saved.text.trim();
+  const changed =
+    text.trim() !== saved.text.trim() ||
+    consentChannels(current).join() !== consentChannels(saved).join();
   const version = published && changed ? Math.min(saved.version + 1, 10_000) : saved.version;
   return { ...current, text, version };
 }
+
+// The channel sentence and the "last channel stays ticked" rule are shared with the notice editors (one copy, in contact-consent).
+export {
+  channelStatement as consentStatement,
+  toggleChannel as toggleConsentChannel,
+} from '@/features/contact-consent';
 
 // --- after submit -------------------------------------------------------------------------------------------------------------------
 
@@ -157,7 +169,7 @@ export function redirectIssue(
   return safeRedirect(v) ? null : 'https';
 }
 
-/** The optional privacy page: empty is fine, anything else must be https. */
+/** The optional privacy or terms page: empty is fine, anything else must be https. */
 export function privacyUrlIssue(url: string | undefined): 'https' | null {
   const v = (url ?? '').trim();
   if (!v) return null;

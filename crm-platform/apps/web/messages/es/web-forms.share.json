@@ -145,13 +145,26 @@
         "privacyUrl": "Enlace a la política de privacidad",
         "privacyUrlHint": "Opcional. Se muestra junto al texto de consentimiento. Debe empezar por https://.",
         "privacyUrlHttps": "Usa una dirección que empiece por https://.",
+        "termsUrl": "Enlace de los términos",
+        "termsUrlHint": "Opcional. Se muestra junto al texto de consentimiento y al enlace de privacidad. Debe empezar por https://.",
+        "useWorkspacePrivacy": "Usar el enlace de privacidad de mi espacio de trabajo",
+        "useWorkspaceTerms": "Usar el enlace de términos de mi espacio de trabajo",
         "required": "Debe marcarse para enviar",
         "requiredHint": "Desactívalo si el consentimiento es opcional.",
         "marketing": "Consentimiento para marketing",
         "marketingHint": "Marcar la casilla registra el consentimiento de marketing en el contacto. Una casilla sin marcar nunca suscribe a nadie.",
-        "whatsappHint": "¿Vas a enviar mensajes a estos contactos por WhatsApp? Usa un texto que lo indique y explique cómo darse de baja. La casilla marcada se guarda como prueba, con este texto exacto y su versión.",
-        "whatsappInsert": "Usar el texto de consentimiento de WhatsApp",
-        "whatsappWording": "Acepto recibir novedades y ofertas por WhatsApp. Puedo responder STOP en cualquier momento para darme de baja."
+        "serviceHint": "Esta línea no es marketing. Una casilla marcada se guarda como prueba de que la persona aceptó que la contacten por su solicitud (solo mensajes de servicio), con este texto exacto y su versión. Nunca suscribe a nadie a marketing.",
+        "statement": "Acepto recibir novedades y ofertas por {channels}. Puedo responder STOP en cualquier momento para darme de baja.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "correo electrónico"
+        },
+        "channelsLabel": "Canales que cubre este consentimiento",
+        "channelsHint": "El visitante solo se suscribe en los canales marcados aquí, y el texto del consentimiento los nombra. Un canal se usa solo si el formulario recoge el teléfono o el correo correspondiente.",
+        "channelsUse": "Actualizar el texto con estos canales",
+        "channelNeedsPhone": "Este formulario no tiene campo de teléfono, así que nadie se suscribe en este canal desde él.",
+        "channelNeedsEmail": "Este formulario no tiene campo de correo electrónico, así que nadie se suscribe en este canal desde él."
       },
       "crm": {
         "title": "En el CRM",

@@ -54,7 +54,13 @@ export class FakeMeta {
       method: String(init?.method ?? 'GET'),
       url: input,
       path: u.pathname.replace(/^\/v[\d.]+/, ''),
-      body: init?.body ? (JSON.parse(String(init.body)) as Record<string, unknown>) : {},
+      // The app-subscription call is multipart; read its fields as a plain object.
+      body:
+        init?.body instanceof FormData
+          ? Object.fromEntries([...init.body.entries()].map(([k, v]) => [k, String(v)]))
+          : init?.body
+            ? (JSON.parse(String(init.body)) as Record<string, unknown>)
+            : {},
       auth: headers.authorization ?? null,
     };
     this.requests.push(req);

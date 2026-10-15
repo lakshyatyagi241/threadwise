@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "وہ Google OAuth کلائنٹ جس کے ذریعے ہر ورک اسپیس اپنا کیلنڈر منسلک کرتی ہے۔",
+        "description": "وہ Google OAuth کلائنٹ جس کے ذریعے ہر ورک اسپیس اپنا Google اکاؤنٹ منسلک کرتی ہے، کیلنڈر، Sheets، Docs اور Forms کے لیے۔",
         "sections": {
           "oauth": {
             "title": "Google OAuth کلائنٹ"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "ورک اسپیسز کو Google Calendar منسلک کرنے کی اجازت دیں",
-            "hint": "بند: کوئی ورک اسپیس منسلک نہیں ہو سکتی، اور کسی کیلنڈر میں کچھ نہ لکھا جاتا ہے نہ پڑھا جاتا ہے۔"
+            "label": "ورک اسپیسز کو Google منسلک کرنے کی اجازت دیں",
+            "hint": "بند: کوئی ورک اسپیس منسلک نہیں ہو سکتی، اور Google سے کچھ پڑھا یا اس میں کچھ لکھا نہیں جاتا (کیلنڈر، Sheets، Docs، Forms)۔"
           },
           "clientId": {
             "label": "Client ID",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "وہ Google OAuth کلائنٹ جو ورک اسپیسز بکنگ اور مصروف اوقات کے لیے اپنا کیلنڈر منسلک کرنے کے لیے استعمال کرتی ہیں۔",
-        "tags": "Google / OAuth / Calendar"
+        "description": "وہ Google OAuth کلائنٹ جو ورک اسپیسز بکنگ، Sheets، Docs اور Forms کے لیے اپنا Google اکاؤنٹ منسلک کرنے کے لیے استعمال کرتی ہیں۔",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmail ای میل",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "ایڈمن - اپائنٹمنٹس",
-        "description": "پورے پلیٹ فارم کے لیے ایک Google Cloud OAuth کلائنٹ۔ ہر ورک اسپیس پھر اپنا Google اکاؤنٹ Appointments، Settings سے منسلک کرتی ہے؛ ورک اسپیس کو کلائنٹ ID یا سیکرٹ کبھی نظر نہیں آتا۔",
+        "description": "پورے پلیٹ فارم کے لیے ایک Google Cloud OAuth کلائنٹ۔ ہر ورک اسپیس پھر اپنا Google اکاؤنٹ ترتیبات میں Google اکاؤنٹ سے منسلک کرتی ہے اور چنتی ہے کہ کون سی اجازتیں دینی ہیں؛ ورک اسپیس کو کلائنٹ ID یا سیکرٹ کبھی نظر نہیں آتا۔",
         "sections": {
           "oauth": {
             "title": "Google OAuth کلائنٹ",
-            "description": "کلائنٹ ID اور سیکرٹ کے بغیر ورک اسپیسز کو Google Calendar دستیاب نظر نہیں آتا اور بکنگ بغیر کیلنڈر کے جاری رہتی ہے۔"
+            "description": "کلائنٹ ID اور سیکرٹ کے بغیر ورک اسپیسز کو Google دستیاب نظر نہیں آتا، بکنگ بغیر کیلنڈر کے جاری رہتی ہے اور فلوز میں Google کے مراحل چھوڑ دیے جاتے ہیں۔"
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. پروجیکٹ اور API",
-              "body": "Google Cloud Console میں ایک پروجیکٹ بنائیں اور Google Calendar API فعال کریں۔"
+              "body": "Google Cloud Console میں ایک پروجیکٹ بنائیں اور Google Calendar، Google Sheets، Google Docs، Google Drive اور Google Forms کی APIs فعال کریں۔ کوئی اجازت تبھی کام کرتی ہے جب اس کی API فعال ہو۔"
             },
             "redirect": {
               "title": "2. OAuth کلائنٹ",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. رضامندی کی اسکرین",
-              "body": "calendar.events، calendar.freebusy اور calendar.calendarlist.readonly scopes شامل کریں، پھر ایپ شائع کریں: Testing میں Google ہر گرانٹ 7 دن بعد ختم کر دیتا ہے اور ورک اسپیسز کو دوبارہ منسلک ہونا پڑے گا۔"
+              "body": "پروڈکٹ جو scopes مانگتی ہے وہ شامل کریں (calendar.events، calendar.freebusy، calendar.calendarlist.readonly، spreadsheets، documents، drive، forms.body.readonly، drive.metadata.readonly)، پھر ایپ شائع کریں: Testing میں Google ہر گرانٹ 7 دن بعد ختم کر دیتا ہے اور ورک اسپیسز کو دوبارہ منسلک ہونا پڑے گا۔ drive scopes محدود ہیں اور ان کے لیے Google کا جائزہ درکار ہے۔"
             },
             "workspaces": {
               "title": "4. ورک اسپیسز منسلک کریں",
-              "body": "کلائنٹ ID اور سیکرٹ یہاں چسپاں کر کے محفوظ کریں۔ پھر ایڈمنز Appointments، Settings، Google Calendar سے منسلک کریں۔"
+              "body": "کلائنٹ ID اور سیکرٹ یہاں چسپاں کر کے محفوظ کریں۔ پھر ایڈمنز ترتیبات، انٹیگریشنز، Google اکاؤنٹ سے، یا Appointments، Settings، Google Calendar سے منسلک کریں۔"
             }
           }
         }

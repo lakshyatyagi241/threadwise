@@ -2,7 +2,15 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { APPOINTMENT_CALENDAR } from '../../../src/infra/providers/appointments-booking';
 import type { OutboxEvent } from '../../../src/kernel/outbox/outbox-subscribers';
+import type { Redis } from 'ioredis';
+import { REDIS_CLIENT } from '../../../src/infra/redis/redis.module';
+import {
+  CalendarReconcileProcessor,
+  CalendarReconcileScheduler,
+} from '../../../src/modules/appointments-booking/calendar-reconcile.jobs';
+import { CalendarReconcileService } from '../../../src/modules/appointments-booking/calendar-reconcile.service';
 import { AppointmentCalendarConsumer } from '../../../src/modules/appointments-booking/appointment-calendar.consumer';
+import { GoogleCalendarTokens } from '../../../src/modules/appointments-booking/google-calendar-tokens.service';
 import { GoogleCalendarAdapter } from '../../../src/modules/appointments-booking/google-calendar.adapter';
 import {
   deriveStateKey,
@@ -45,12 +53,18 @@ beforeAll(async () => {
     'GOOGLE_CALENDAR_CLIENT_SECRET',
     'GOOGLE_BUSY_CACHE_SECONDS',
     'GOOGLE_BUSY_BACKOFF_SECONDS',
+    'GOOGLE_RETRIES',
+    'GOOGLE_RETRY_BASE_MS',
   ]) {
     saved[k] = process.env[k];
   }
+  // No retry inside one call here: these tests are about what the outbox does when a call fails. The retries inside a call have their
+  // own describe below, which turns them on.
   Object.assign(process.env, fake.env(), {
     GOOGLE_BUSY_CACHE_SECONDS: '0',
     GOOGLE_BUSY_BACKOFF_SECONDS: '0',
+    GOOGLE_RETRIES: '0',
+    GOOGLE_RETRY_BASE_MS: '1',
   });
   delete process.env.GOOGLE_CALENDAR_CLIENT_ID;
   delete process.env.GOOGLE_CALENDAR_CLIENT_SECRET;
@@ -129,7 +143,21 @@ async function connect(
     .query({ code: codeName, state })
     .redirects(0);
   expect(res.status).toBe(302);
-  return res.headers.location as string;
+  return finishConsent(t, res.headers.location as string);
+}
+
+/**
+ * Google's redirect points at the app's confirmation page when there is something to confirm: the same admin confirms there, and the page
+ * returns to `returnTo?calendar=<outcome>`. Any other address is already final (denied, failed, expired ...).
+ */
+async function finishConsent(t: Tenant, location: string): Promise<string> {
+  const m = /\/google-account\/confirm\?request=([0-9a-f-]{36})$/.exec(location);
+  if (!m) return location;
+  const seen = await api.as(t.admin).get(`/v2/google-account/consent/${m[1]}`);
+  expect(seen.status, JSON.stringify(seen.body)).toBe(200);
+  const done = await api.post(t.admin, `/v2/google-account/consent/${m[1]}/confirm`, {});
+  expect(done.status, JSON.stringify(done.body)).toBe(200);
+  return `http://localhost:3001${done.body.returnTo}?calendar=${done.body.outcome}`;
 }
 
 const rows = async (orgId: number) =>
@@ -533,7 +561,10 @@ describe('writing events (TW-APPT-029, D-08)', () => {
       calendar_id: ANA,
       meet_url: `https://meet.fake/${appt.id}`,
     });
-    expect((await api.appt(a.admin, appt.id)).calendar).toEqual({ eventId: id, calendarId: ANA });
+    expect((await api.appt(a.admin, appt.id)).calendar).toMatchObject({
+      eventId: id,
+      calendarId: ANA,
+    });
     // The access token cached at connect time was good: the adapter never had to refresh.
     expect(fake.forms('refresh_token')).toHaveLength(0);
   });
@@ -669,6 +700,120 @@ describe('writing events (TW-APPT-029, D-08)', () => {
 
 // --- busy time -------------------------------------------------------------------------------------------------------
 
+describe('retries inside one call (quota, outage, lost answers)', () => {
+  const book = async (name: string, slot: number, phone: string) => {
+    const type = await api.type(a.admin, { name });
+    const slots = await api.slots(a.admin, type.id);
+    const appt = await api.staffBook(a.admin, {
+      bookingTypeId: type.id,
+      startsAt: slots[slot]!.start,
+      invitee: { name, phone },
+    });
+    return { appt, ev: await lastEvent('appointment.booked', appt.id) };
+  };
+  const mine = (id: string) =>
+    fake.eventsOf(ANA).filter((e) => e.extendedProperties?.private?.crmAppointment === id);
+
+  it('a 503 and a 429 on the event write are repeated, so one delivery is enough', async () => {
+    process.env.GOOGLE_RETRIES = '2';
+    try {
+      const { appt, ev } = await book('Quota day', 6, '+919811166610');
+      fake.failNext('POST', /\/events$/, 503, { times: 1 });
+      fake.failNext('POST', /\/events$/, 429, {
+        times: 1,
+        body: { error: { code: 429, errors: [{ reason: 'rateLimitExceeded' }] } },
+      });
+      const before = fake.count('POST', /\/events$/);
+      await consumer.handle(ev);
+      expect(fake.count('POST', /\/events$/)).toBe(before + 3);
+      expect(mine(appt.id)).toHaveLength(1);
+      expect((await api.rowOf(appt.id)).calendar_event_id).toBe(appt.id.replace(/-/g, ''));
+    } finally {
+      process.env.GOOGLE_RETRIES = '0';
+      fake.clearFailures();
+    }
+  });
+
+  it('a lost answer is recovered inside the same call: the repeat meets 409 and becomes an update of the event that exists', async () => {
+    process.env.GOOGLE_RETRIES = '2';
+    try {
+      const { appt, ev } = await book('Lost twice', 7, '+919811166611');
+      fake.failNext('POST', /\/events$/, 500, { afterEffect: true });
+      await consumer.handle(ev);
+      expect(mine(appt.id)).toHaveLength(1);
+      expect(
+        fake.count('PATCH', new RegExp(`/events/${appt.id.replace(/-/g, '')}$`)),
+      ).toBeGreaterThan(0);
+      expect((await api.rowOf(appt.id)).calendar_event_id).toBe(appt.id.replace(/-/g, ''));
+    } finally {
+      process.env.GOOGLE_RETRIES = '0';
+      fake.clearFailures();
+    }
+  });
+
+  it('a quota answer that says to wait a long time is not slept on: the call fails at once for the outbox to retry later', async () => {
+    process.env.GOOGLE_RETRIES = '2';
+    process.env.GOOGLE_RETRY_AFTER_CAP_SECONDS = '1';
+    try {
+      const { appt, ev } = await book('Long wait', 8, '+919811166612');
+      fake.failNext('POST', /\/events$/, 429, {
+        times: 5,
+        body: { error: { code: 429, errors: [{ reason: 'userRateLimitExceeded' }] } },
+        headers: { 'retry-after': '120' },
+      });
+      const before = fake.count('POST', /\/events$/);
+      const started = Date.now();
+      await expect(consumer.handle(ev)).rejects.toMatchObject({
+        kind: 'rate_limit',
+        retryAfterSeconds: 120,
+      });
+      expect(Date.now() - started).toBeLessThan(3000);
+      expect(fake.count('POST', /\/events$/)).toBe(before + 1);
+      expect(mine(appt.id)).toHaveLength(0);
+      // The account page remembers it, and the next success clears it.
+      const row = await h.owner.query(
+        `SELECT last_error_code FROM appointment_calendar_connections WHERE org_id = $1`,
+        [a.orgId],
+      );
+      await new Promise((r) => setTimeout(r, 300));
+      const after = await h.owner.query(
+        `SELECT last_error_code FROM appointment_calendar_connections WHERE org_id = $1`,
+        [a.orgId],
+      );
+      expect(after.rows[0].last_error_code ?? row.rows[0].last_error_code).toBe(
+        'GOOGLE_RATE_LIMITED',
+      );
+      fake.clearFailures();
+      await consumer.handle(ev);
+      expect(mine(appt.id)).toHaveLength(1);
+    } finally {
+      process.env.GOOGLE_RETRIES = '0';
+      delete process.env.GOOGLE_RETRY_AFTER_CAP_SECONDS;
+      fake.clearFailures();
+    }
+  });
+
+  it('a busy-time lookup is never repeated inside the call: a visitor is waiting on the booking page', async () => {
+    process.env.GOOGLE_RETRIES = '2';
+    try {
+      fake.failNext('POST', /freeBusy$/, 503, { times: 1 });
+      const before = fake.count('POST', /freeBusy$/);
+      await expect(
+        adapter.freeBusy(
+          a.orgId,
+          null,
+          new Date(Date.now() + 86_400_000),
+          new Date(Date.now() + 2 * 86_400_000),
+        ),
+      ).rejects.toMatchObject({ kind: 'server' });
+      expect(fake.count('POST', /freeBusy$/)).toBe(before + 1);
+    } finally {
+      process.env.GOOGLE_RETRIES = '0';
+      fake.clearFailures();
+    }
+  });
+});
+
 describe("the calendar's busy time in the slots (TW-APPT-016..019)", () => {
   const starts = (slots: Array<{ start: string }>) => slots.map((s) => s.start);
 
@@ -761,6 +906,688 @@ describe("the calendar's busy time in the slots (TW-APPT-016..019)", () => {
     });
     const slots = await api.slots(a.admin, type.id);
     expect(slots.length).toBeGreaterThan(0);
+  });
+});
+
+// --- the bounded reconcile and its two actions (TW-GACC-011) -------------------------------------------------------------
+
+describe('Google event drift: looked for, shown, never auto-applied', () => {
+  const CY = 'cy@example.com';
+  let c: Tenant;
+  let reconcile: CalendarReconcileService;
+  let slotsOf: Array<{ start: string; end: string }>;
+  let typeId = '';
+  let next = 2;
+  let phone = 811100000;
+
+  const eventOf = (uuid: string) =>
+    fake.eventsOf(CY).find((e) => e.extendedProperties?.private?.crmAppointment === uuid)!;
+  const syncOf = async (uuid: string) => (await api.appt(c.admin, uuid)).calendar;
+  const driftEvents = async (uuid: string) =>
+    (
+      await h.owner.query(
+        `SELECT payload FROM event_outbox WHERE org_id = $1 AND event_type = 'appointment.calendar_drifted'`,
+        [c.orgId],
+      )
+    ).rows.filter((r) => r.payload.uuid === uuid);
+  const evs = async (type: string, uuid: string) =>
+    (await bookingEvents(c.orgId, type, uuid)).at(-1)!;
+
+  /** A confirmed booking whose Google event has been written, on its own slot. */
+  async function booked(email?: string) {
+    const appt = await api.staffBook(c.admin, {
+      bookingTypeId: typeId,
+      startsAt: slotsOf[next++]!.start,
+      invitee: { name: 'Drift', phone: `+91${++phone}`, ...(email ? { email } : {}) },
+    });
+    await consumer.handle(await evs('appointment.booked', appt.id));
+    expect(eventOf(appt.id)).toBeDefined();
+    return appt;
+  }
+  /** One pass. Appointments looked at within the last hour are not read again, so the test ages the last look first (as an hour would). */
+  const report = async () => {
+    await h.owner.query(
+      `UPDATE appointments SET google_checked_at = google_checked_at - interval '2 hours' WHERE org_id = $1`,
+      [c.orgId],
+    );
+    return reconcile.reconcileOrg(c.orgId);
+  };
+
+  beforeAll(async () => {
+    c = await api.signup('gcd');
+    expect(await connect(c, 'code-drift', { email: CY })).toBe(
+      `${SETTINGS_PAGE}?calendar=connected`,
+    );
+    reconcile = h.app.get(CalendarReconcileService);
+    typeId = (await api.type(c.admin, { name: 'Drift' })).id;
+    slotsOf = await api.slots(c.admin, typeId);
+  });
+
+  it('records what we wrote when the event is written, so the first look finds nothing wrong', async () => {
+    const appt = await booked('dee@example.com');
+    const row = await api.rowOf(appt.id);
+    expect(row).toMatchObject({
+      google_pushed_attendee: 'dee@example.com',
+      google_sync_state: 'in_sync',
+    });
+    expect(row.google_event_etag).toBeTruthy();
+    expect(new Date(row.google_pushed_starts_at as string).toISOString()).toBe(
+      new Date(slotsOf[next - 1]!.start).toISOString(),
+    );
+    const r = await report();
+    expect(r).toMatchObject({ outcome: 'ok', drifted: 0, newlyDrifted: 0 });
+    expect(r.looked).toBeGreaterThanOrEqual(1);
+    expect(await syncOf(appt.id)).toMatchObject({ sync: { state: 'in_sync', reason: null } });
+    expect(await driftEvents(appt.id)).toHaveLength(0);
+  });
+
+  it('our own changes are not drift: a move whose push has not landed is pending, and the push is an echo', async () => {
+    const appt = await booked();
+    const moved = await api.post(c.admin, `/v2/appointments/${appt.id}/reschedule`, {
+      startsAt: slotsOf[next++]!.start,
+    });
+    expect(moved.status, JSON.stringify(moved.body)).toBe(200);
+    // The outbox has not delivered the move yet: Google still shows the old time, and that is OUR change on its way.
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+    expect(await driftEvents(appt.id)).toHaveLength(0);
+    // The push lands: Google's etag changes by our own hand, which is not drift either.
+    await consumer.handle(await evs('appointment.rescheduled', appt.id));
+    const again = await report();
+    expect(again.drifted).toBe(0);
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync', reason: null });
+    expect(await driftEvents(appt.id)).toHaveLength(0);
+  });
+
+  it('a guest answering or Google filling in the Meet link is churn, not drift', async () => {
+    const appt = await booked('guest@example.com');
+    fake.editEvent(CY, appt.id.replace(/-/g, ''), {
+      attendees: [{ email: 'guest@example.com', responseStatus: 'accepted' } as never],
+      hangoutLink: 'https://meet.google.com/xyz',
+    });
+    expect((await report()).drifted).toBe(0);
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+  });
+
+  it('an event moved in Google is flagged with its time, the appointment is untouched, and the owner is told once', async () => {
+    const appt = await booked();
+    const before = await api.rowOf(appt.id);
+    // Far from every bookable slot: an event in Google counts as busy time for the slots around it.
+    const away = new Date(Date.parse(slotsOf[next++]!.start) + 45 * 86_400_000);
+    fake.editEvent(CY, appt.id.replace(/-/g, ''), {
+      start: { dateTime: away.toISOString() },
+      end: { dateTime: new Date(away.getTime() + 1_800_000).toISOString() },
+    });
+    const r = await report();
+    expect(r.newlyDrifted).toBeGreaterThanOrEqual(1);
+    const cal = (await syncOf(appt.id))!;
+    expect(cal.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'time_changed',
+      googleStartsAt: away.toISOString(),
+    });
+    // Never auto-changed.
+    const after = await api.rowOf(appt.id);
+    expect(after.starts_at).toEqual(before.starts_at);
+    expect(after.status).toBe('confirmed');
+    // One event for the owner, and a second look says nothing more.
+    expect(await driftEvents(appt.id)).toHaveLength(1);
+    expect((await driftEvents(appt.id))[0]!.payload).toMatchObject({
+      reason: 'time_changed',
+      ownerUserId: expect.any(Number),
+    });
+    await report();
+    await report();
+    expect(await driftEvents(appt.id)).toHaveLength(1);
+    expect(await api.auditCount(c.orgId, 'appointments', 'update')).toBeGreaterThan(0);
+  });
+
+  it('flags changed guests, a deleted event and a vanished event, each with its own reason', async () => {
+    const guests = await booked('one@example.com');
+    fake.editEvent(CY, guests.id.replace(/-/g, ''), {
+      attendees: [{ email: 'one@example.com' }, { email: 'two@example.com' }],
+    });
+    const deleted = await booked();
+    fake.deleteEventInGoogle(CY, deleted.id.replace(/-/g, ''));
+    const gone = await booked();
+    fake.removeEvent(CY, gone.id.replace(/-/g, ''));
+
+    await report();
+    expect((await syncOf(guests.id))!.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'attendees_changed',
+    });
+    expect((await syncOf(deleted.id))!.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'event_deleted',
+    });
+    expect((await syncOf(gone.id))!.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'event_missing',
+    });
+    for (const id of [guests.id, deleted.id, gone.id]) {
+      expect((await api.rowOf(id)).status).toBe('confirmed');
+      expect(await driftEvents(id)).toHaveLength(1);
+    }
+  });
+
+  it('puts the badge away when somebody puts the event back by hand', async () => {
+    const appt = await booked();
+    const id = appt.id.replace(/-/g, '');
+    const original = { ...eventOf(appt.id) };
+    fake.editEvent(CY, id, {
+      start: { dateTime: new Date(Date.parse(original.start.dateTime) + 3_600_000).toISOString() },
+    });
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'drifted' });
+    fake.editEvent(CY, id, { start: original.start });
+    const r = await report();
+    expect(r.cleared).toBeGreaterThanOrEqual(1);
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync', reason: null });
+  });
+
+  it('looks only at confirmed appointments in the next 60 days', async () => {
+    const appt = await booked();
+    const far = await booked();
+    await h.owner.query(
+      `UPDATE appointments SET starts_at = now() + interval '90 days', ends_at = now() + interval '90 days 30 minutes' WHERE uuid = $1`,
+      [far.id],
+    );
+    fake.deleteEventInGoogle(CY, far.id.replace(/-/g, ''));
+    const cancelled = await booked();
+    await api.post(c.admin, `/v2/appointments/${cancelled.id}/cancel`, {});
+    fake.deleteEventInGoogle(CY, appt.id.replace(/-/g, ''));
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'drifted' });
+    expect((await syncOf(far.id))!.sync?.state ?? null).not.toBe('drifted');
+    expect((await syncOf(cancelled.id))!.sync?.state ?? null).not.toBe('drifted');
+  });
+
+  it('a 5xx or a quota answer stops the pass, claims nothing about any appointment and backs the workspace off', async () => {
+    const appt = await booked();
+    fake.deleteEventInGoogle(CY, appt.id.replace(/-/g, ''));
+    fake.failNext('GET', /\/events\//, 503, { times: 50 });
+    let r;
+    try {
+      r = await report();
+    } finally {
+      fake.clearFailures();
+    }
+    expect(r.outcome).toBe('failed');
+    expect((await syncOf(appt.id))!.sync?.state ?? null).not.toBe('drifted');
+    const conn = (await rows(c.orgId))[0]!;
+    expect(Number(conn.reconcile_failures)).toBe(1);
+    expect(new Date(conn.next_reconcile_at as string).getTime()).toBeGreaterThan(
+      Date.now() + 4 * 60_000,
+    );
+    // Google is back: the next pass sees it and the back-off is reset.
+    expect((await report()).outcome).toBe('ok');
+    expect((await syncOf(appt.id))!.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'event_deleted',
+    });
+    expect(Number((await rows(c.orgId))[0]!.reconcile_failures)).toBe(0);
+  });
+
+  it('a 404 is "missing" and a cancelled event ("410" on delete) is "deleted": both are answers, neither is an outage', async () => {
+    const appt = await booked();
+    fake.removeEvent(CY, appt.id.replace(/-/g, ''));
+    expect((await report()).outcome).toBe('ok');
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ reason: 'event_missing' });
+    const other = await booked();
+    fake.failNext('GET', /\/events\//, 410, { times: 50 });
+    try {
+      expect((await report()).outcome).toBe('ok');
+    } finally {
+      fake.clearFailures();
+    }
+    expect((await syncOf(other.id))!.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'event_deleted',
+    });
+  });
+
+  it('reads each appointment about once an hour, one event at a time, and never uses a watch channel', async () => {
+    const first = await report();
+    expect(first.looked).toBeGreaterThan(0);
+    const reads = fake.count('GET', /\/events\//);
+    // Looked at a moment ago: a second pass (a retry, a second worker) reads nothing.
+    const again = await reconcile.reconcileOrg(c.orgId);
+    expect(again).toMatchObject({ outcome: 'ok', looked: 0 });
+    expect(fake.count('GET', /\/events\//)).toBe(reads);
+    expect(fake.requests.some((r) => /\/watch$|syncToken/.test(r.path + r.query.toString()))).toBe(
+      false,
+    );
+  });
+
+  // --- the two actions --------------------------------------------------------------------------------------------------
+
+  it('push and accept both say 409 GOOGLE_SYNC_NOT_DRIFTED when there is nothing to decide', async () => {
+    const appt = await booked();
+    await report();
+    for (const action of ['push', 'accept']) {
+      const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/${action}`, {});
+      expect(res.status, action).toBe(409);
+      expect(code(res)).toBe('GOOGLE_SYNC_NOT_DRIFTED');
+    }
+  });
+
+  it('"Push our time back to Google" rewrites the event from the appointment and leaves the appointment alone', async () => {
+    const appt = await booked('push@example.com');
+    const id = appt.id.replace(/-/g, '');
+    const startsAt = eventOf(appt.id).start.dateTime;
+    fake.editEvent(CY, id, {
+      start: { dateTime: new Date(Date.parse(startsAt) + 7_200_000).toISOString() },
+    });
+    await report();
+    const before = await api.rowOf(appt.id);
+    const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/push`, {});
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.result).toEqual({ done: 'pushed', applied: null });
+    expect(new Date(eventOf(appt.id).start.dateTime).toISOString()).toBe(
+      new Date(startsAt).toISOString(),
+    );
+    expect(res.body.appointment.calendar.sync).toMatchObject({ state: 'in_sync', reason: null });
+    expect((await api.rowOf(appt.id)).starts_at).toEqual(before.starts_at);
+    // And the reconcile now agrees: our push is not drift.
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+  });
+
+  it('push brings a deleted event back under the same id', async () => {
+    const appt = await booked();
+    fake.removeEvent(CY, appt.id.replace(/-/g, ''));
+    await report();
+    const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/push`, {});
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(eventOf(appt.id)).toMatchObject({ id: appt.id.replace(/-/g, ''), status: 'confirmed' });
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+  });
+
+  it('"Accept Google\'s change" for a moved event reschedules through the usual rules and tells the customer', async () => {
+    const appt = await booked();
+    const id = appt.id.replace(/-/g, '');
+    const target = new Date(Date.parse(slotsOf[next++]!.start));
+    fake.editEvent(CY, id, {
+      start: { dateTime: target.toISOString() },
+      end: { dateTime: new Date(target.getTime() + 1_800_000).toISOString() },
+    });
+    await report();
+    const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/accept`, {});
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.result).toEqual({ done: 'accepted', applied: 'rescheduled' });
+    expect(res.body.appointment.startsAt).toBe(target.toISOString());
+    expect((await evs('appointment.rescheduled', appt.id)).payload).toMatchObject({
+      uuid: appt.id,
+    });
+    expect(res.body.appointment.calendar.sync?.state ?? null).not.toBe('drifted');
+    // The usual reschedule push settles the event; nothing is flagged afterwards.
+    await consumer.handle(await evs('appointment.rescheduled', appt.id));
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+  });
+
+  it('accept for a deleted event cancels the appointment as a staff cancel would', async () => {
+    const appt = await booked();
+    fake.deleteEventInGoogle(CY, appt.id.replace(/-/g, ''));
+    await report();
+    const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/accept`, {
+      notify: false,
+    });
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.result).toEqual({ done: 'accepted', applied: 'cancelled' });
+    expect((await api.rowOf(appt.id)).status).toBe('cancelled');
+    expect((await evs('appointment.cancelled', appt.id)).payload).toMatchObject({ uuid: appt.id });
+  });
+
+  it('accept for changed guests only acknowledges: the appointment is the same and the badge goes', async () => {
+    const appt = await booked('keep@example.com');
+    fake.editEvent(CY, appt.id.replace(/-/g, ''), {
+      attendees: [{ email: 'keep@example.com' }, { email: 'extra@example.com' }],
+    });
+    await report();
+    const before = await api.rowOf(appt.id);
+    const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/accept`, {});
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.result).toEqual({ done: 'accepted', applied: 'acknowledged' });
+    expect((await api.rowOf(appt.id)).starts_at).toEqual(before.starts_at);
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+  });
+
+  it('both actions need the appointment-update permission and another workspace cannot reach them', async () => {
+    const appt = await booked();
+    fake.deleteEventInGoogle(CY, appt.id.replace(/-/g, ''));
+    await report();
+    const reader = await api.member(c, 'reader', [['record.appointments.read']]);
+    for (const action of ['push', 'accept']) {
+      expect(
+        (await api.post(reader.token, `/v2/appointments/${appt.id}/calendar/${action}`, {})).status,
+      ).toBe(403);
+      expect(
+        (await api.post(b.admin, `/v2/appointments/${appt.id}/calendar/${action}`, {})).status,
+      ).toBe(404);
+    }
+    // A reader still sees the badge (it is part of the appointment).
+    expect((await api.appt(reader.token, appt.id)).calendar!.sync).toMatchObject({
+      state: 'drifted',
+    });
+    expect((await api.rowOf(appt.id)).status).toBe('confirmed');
+  });
+
+  // --- the job ---------------------------------------------------------------------------------------------------------
+
+  it('the scheduler takes each due workspace once and the processor skips a workspace that another worker holds', async () => {
+    const scheduler = h.app.get(CalendarReconcileScheduler);
+    const processor = h.app.get(CalendarReconcileProcessor);
+    await h.owner.query(
+      `UPDATE appointment_calendar_connections SET next_reconcile_at = now() - interval '1 minute' WHERE org_id = $1`,
+      [c.orgId],
+    );
+    expect(await scheduler.enqueueDue()).toBeGreaterThanOrEqual(1);
+    expect(
+      new Date((await rows(c.orgId))[0]!.next_reconcile_at as string).getTime(),
+    ).toBeGreaterThan(Date.now());
+    // Claimed: the next tick does not offer it again.
+    const claimed = await rows(c.orgId);
+    expect(claimed).toHaveLength(1);
+    expect(await scheduler.enqueueDue()).toBe(0);
+
+    const redis = h.app.get<Redis>(REDIS_CLIENT);
+    const key = `calendar-reconcile:lock:${c.orgId}`;
+    await redis.set(key, 'someone-else', 'PX', 60_000);
+    expect(await processor.process({ data: { orgId: c.orgId } } as never)).toEqual({
+      skipped: 'locked',
+    });
+    expect(await redis.get(key)).toBe('someone-else');
+    await redis.del(key);
+    const ran = await processor.process({ data: { orgId: c.orgId } } as never);
+    expect(ran).toMatchObject({ outcome: 'ok' });
+    expect(await redis.get(key)).toBeNull(); // released
+  });
+
+  // --- one unreadable event, row versions, accepting every kind of change ------------------------------------------------
+
+  const eid = (uuid: string) => uuid.replace(/-/g, '');
+  const forbidden = (id: string, status = 403, reason = 'forbidden') =>
+    fake.failNext('GET', new RegExp(`/events/${id}$`), status, {
+      body: { error: { code: status, message: 'no', errors: [{ reason }] } },
+    });
+
+  it('ONE event Google will not show is marked unreadable and the pass goes on: no drift, no notification', async () => {
+    const bad = await booked();
+    const badId = eid(bad.id);
+    const ok = await booked();
+    fake.deleteEventInGoogle(CY, eid(ok.id)); // a real drift AFTER the unreadable one in the same pass
+    forbidden(badId);
+    const r = await report();
+    fake.clearFailures();
+    expect(r.outcome).toBe('ok');
+    expect(r.unreadable).toBe(1);
+    expect(r.looked).toBeGreaterThan(1);
+    expect((await syncOf(bad.id))!.sync).toMatchObject({
+      state: 'unreadable',
+      reason: 'event_forbidden',
+    });
+    expect(await driftEvents(bad.id)).toHaveLength(0);
+    expect((await syncOf(ok.id))!.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'event_deleted',
+    });
+    expect((await api.rowOf(bad.id)).google_checked_at).not.toBeNull();
+    expect(Number((await rows(c.orgId))[0]!.reconcile_failures)).toBe(0);
+
+    // A bad request for that one event is the same, with its own reason; and when Google shows it again the mark goes.
+    forbidden(badId, 400, 'invalid');
+    await report();
+    fake.clearFailures();
+    expect((await syncOf(bad.id))!.sync).toMatchObject({
+      state: 'unreadable',
+      reason: 'event_unreadable',
+    });
+    await report();
+    expect((await syncOf(bad.id))!.sync).toMatchObject({ state: 'in_sync', reason: null });
+    expect(await driftEvents(bad.id)).toHaveLength(0);
+  });
+
+  it('an outage (5xx), unlike one forbidden event, still stops the pass and backs off', async () => {
+    const a1 = await booked();
+    fake.failNext('GET', /\/events\//, 503, { times: 50 });
+    const r = await report();
+    fake.clearFailures();
+    expect(r.outcome).toBe('failed');
+    expect((await syncOf(a1.id))!.sync?.state ?? null).not.toBe('unreadable');
+    await report();
+  });
+
+  it('a look never bumps row_version or updated_at, so a staff edit made meanwhile is not a 409; a real edit still bumps it', async () => {
+    const appt = await booked('rv@example.com');
+    const before = await api.rowOf(appt.id);
+    await report(); // nothing new: one batched checked-at write
+    const same = await api.rowOf(appt.id);
+    expect(same.row_version).toBe(before.row_version);
+    expect(new Date(same.updated_at as string).getTime()).toBe(
+      new Date(before.updated_at as string).getTime(),
+    );
+    expect(new Date(same.google_checked_at as string).getTime()).toBeGreaterThan(
+      new Date(before.google_checked_at as string).getTime() - 1,
+    );
+    fake.deleteEventInGoogle(CY, eid(appt.id));
+    await report(); // a real transition: drifted
+    const mid = await api.rowOf(appt.id);
+    expect(mid.google_sync_state).toBe('drifted');
+    expect(mid.row_version).toBe(before.row_version);
+    // The person who opened the booking before the look can still save their notes with that version.
+    const notes = await api
+      .as(c.admin)
+      .patch(`/v2/appointments/${appt.id}`)
+      .send({ notes: 'called her', rowVersion: before.row_version });
+    expect(notes.status, JSON.stringify(notes.body)).toBe(200);
+    const edited = await api.rowOf(appt.id);
+    expect(Number(edited.row_version)).toBeGreaterThan(Number(before.row_version));
+  });
+
+  async function acceptMove(
+    patch: (start: Date, end: Date) => { start?: Date; end?: Date },
+  ): Promise<{ start: Date; end: Date; row: Record<string, unknown> }> {
+    const appt = await booked();
+    const ev = eventOf(appt.id);
+    const was = { start: new Date(ev.start.dateTime), end: new Date(ev.end.dateTime) };
+    const changed = patch(was.start, was.end);
+    const edit: Record<string, unknown> = {};
+    if (changed.start) edit.start = { dateTime: changed.start.toISOString() };
+    if (changed.end) edit.end = { dateTime: changed.end.toISOString() };
+    fake.editEvent(CY, eid(appt.id), edit);
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({
+      state: 'drifted',
+      reason: 'time_changed',
+    });
+    const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/accept`, {});
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.result).toEqual({ done: 'accepted', applied: 'rescheduled' });
+    const start = changed.start ?? was.start;
+    const end = changed.end ?? was.end;
+    const row = await api.rowOf(appt.id);
+    expect(new Date(row.starts_at as string).toISOString()).toBe(start.toISOString());
+    expect(new Date(row.ends_at as string).toISOString()).toBe(end.toISOString());
+    expect(res.body.appointment.endsAt).toBe(end.toISOString());
+    // What we know about the event is now what Google shows, the badge is gone, and the next look finds nothing wrong.
+    expect(new Date(row.google_pushed_starts_at as string).toISOString()).toBe(start.toISOString());
+    expect(new Date(row.google_pushed_ends_at as string).toISOString()).toBe(end.toISOString());
+    expect(row.google_sync_state).toBe('in_sync');
+    expect((await evs('appointment.rescheduled', appt.id)).payload).toMatchObject({
+      uuid: appt.id,
+    });
+    const again = await report();
+    expect(again.newlyDrifted).toBe(0);
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+    // A moved event counts as busy time around it: leave room so the next booking is not blocked by it.
+    next += 2;
+    return { start, end, row };
+  }
+
+  it('accept when only the START moved: the booking takes Google start and keeps its end', async () => {
+    await acceptMove((s) => ({ start: new Date(s.getTime() + 10 * 60_000) }));
+  });
+
+  it('accept when only the END moved: the booking takes the new end (this used to do nothing and hide the badge)', async () => {
+    await acceptMove((_s, e) => ({ end: new Date(e.getTime() + 5 * 60_000) }));
+  });
+
+  it('accept when both moved: the booking takes both', async () => {
+    await acceptMove((s, e) => ({
+      start: new Date(s.getTime() + 10 * 60_000),
+      end: new Date(e.getTime() + 15 * 60_000),
+    }));
+  });
+
+  it('push when nothing could be written (no usable calendar) is an error, not a success, and writes no audit row', async () => {
+    const appt = await booked();
+    fake.deleteEventInGoogle(CY, eid(appt.id));
+    await report();
+    const audits = async () =>
+      Number(
+        (
+          await h.owner.query(
+            `SELECT count(*) AS n FROM audit_log WHERE org_id = $1 AND module = 'appointments'`,
+            [c.orgId],
+          )
+        ).rows[0].n,
+      );
+    const before = await audits();
+    await h.owner.query(
+      `UPDATE appointment_calendar_connections SET status = 'needs_reconnect' WHERE org_id = $1`,
+      [c.orgId],
+    );
+    h.app.get(GoogleCalendarTokens).invalidate(c.orgId);
+    try {
+      const res = await api.post(c.admin, `/v2/appointments/${appt.id}/calendar/push`, {});
+      expect(res.status, JSON.stringify(res.body)).toBe(409);
+      expect(code(res)).toBe('APPT_CALENDAR_NOT_CONNECTED');
+      expect(await audits()).toBe(before);
+      expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'drifted' });
+    } finally {
+      await h.owner.query(
+        `UPDATE appointment_calendar_connections SET status = 'active' WHERE org_id = $1`,
+        [c.orgId],
+      );
+      h.app.get(GoogleCalendarTokens).invalidate(c.orgId);
+    }
+  });
+
+  it('a calendar that no longer exists is an error on the connection, not drift: no appointment is flagged and nobody is told', async () => {
+    const appt = await booked();
+    const drifts = async () =>
+      Number(
+        (
+          await h.owner.query(
+            `SELECT count(*) AS n FROM event_outbox WHERE org_id = $1 AND event_type = 'appointment.calendar_drifted'`,
+            [c.orgId],
+          )
+        ).rows[0].n,
+      );
+    const before = await drifts();
+    fake.missingCalendars.add(CY);
+    let r;
+    try {
+      r = await report();
+    } finally {
+      fake.missingCalendars.delete(CY);
+    }
+    expect(r.outcome).toBe('calendar_missing');
+    expect(r.drifted).toBe(0);
+    expect(await drifts()).toBe(before);
+    expect((await syncOf(appt.id))!.sync?.state ?? null).not.toBe('drifted');
+    expect(Number((await rows(c.orgId))[0]!.reconcile_failures)).toBeGreaterThan(0);
+    // The problem is shown on the connection (health is written in the background).
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    expect((await rows(c.orgId))[0]).toMatchObject({
+      last_error_code: 'GOOGLE_NOT_FOUND',
+      last_error_capability: 'calendar',
+    });
+    // The calendar is back: the next pass looks again and finds the event as it was.
+    expect((await report()).outcome).toBe('ok');
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync' });
+    expect(Number((await rows(c.orgId))[0]!.reconcile_failures)).toBe(0);
+  });
+
+  it('an invitee who IS the calendar owner is not "guests changed" for ever (Google flags the owner as self)', async () => {
+    const appt = await booked(CY);
+    expect(eventOf(appt.id).attendees?.[0]).toMatchObject({ email: CY, self: true });
+    for (let i = 0; i < 2; i += 1) {
+      await report();
+    }
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ state: 'in_sync', reason: null });
+    expect(await driftEvents(appt.id)).toHaveLength(0);
+    // A real guest change on top of it is still seen.
+    fake.editEvent(CY, eid(appt.id), {
+      attendees: [{ email: CY, self: true } as never, { email: 'extra@example.com' }],
+    });
+    await report();
+    expect((await syncOf(appt.id))!.sync).toMatchObject({ reason: 'attendees_changed' });
+  });
+
+  it('a grant revoked in the middle of a pass ends it as needs-reconnect and flags nothing', async () => {
+    const appt = await booked();
+    fake.deleteEventInGoogle(CY, appt.id.replace(/-/g, ''));
+    for (const v of fake.refreshTokens.values()) if (v.account.email === CY) v.valid = false;
+    fake.killAccessTokens();
+    adapter.forget(c.orgId);
+    const r = await report();
+    expect(r.outcome).toBe('needs_reconnect');
+    expect(r.drifted).toBe(0);
+    expect((await syncOf(appt.id))!.sync?.state ?? null).not.toBe('drifted');
+    expect((await rows(c.orgId))[0]).toMatchObject({ status: 'needs_reconnect' });
+    // Nothing more is asked of a dead grant.
+    const calls = fake.requests.length;
+    expect((await report()).outcome).toBe('not_connected');
+    expect(fake.requests.length).toBe(calls);
+  });
+
+  it('reconnecting as a DIFFERENT Google account forgets the old events and every drift state; the reconcile never reads them as missing', async () => {
+    const CY2 = 'cy2@example.com';
+    // An upcoming booking with an event in the old account, flagged as drifted.
+    const [upcoming] = (
+      await h.owner.query(
+        `SELECT uuid FROM appointments WHERE org_id = $1 AND calendar_event_id IS NOT NULL AND status = 'confirmed' AND ends_at > now() ORDER BY id LIMIT 1`,
+        [c.orgId],
+      )
+    ).rows;
+    await h.owner.query(
+      `UPDATE appointments SET google_sync_state = 'drifted', google_sync_reason = 'time_changed', google_drift_detected_at = now() WHERE uuid = $1`,
+      [upcoming.uuid],
+    );
+    expect(await connect(c, 'code-switch', { email: CY2 })).toBe(
+      `${SETTINGS_PAGE}?calendar=connected`,
+    );
+
+    const left = (
+      await h.owner.query(
+        `SELECT count(*)::int AS n FROM appointments WHERE org_id = $1 AND ends_at >= now()
+            AND (calendar_event_id IS NOT NULL OR google_sync_state IS NOT NULL OR google_event_etag IS NOT NULL OR google_pushed_at IS NOT NULL)`,
+        [c.orgId],
+      )
+    ).rows[0].n;
+    expect(left).toBe(0);
+    const calls = fake.count('GET', /\/events\//);
+    const r = await report();
+    expect(r).toMatchObject({ outcome: 'ok', looked: 0, drifted: 0 });
+    expect(fake.count('GET', /\/events\//)).toBe(calls);
+
+    // From now on the new account's calendar is the one that is written and looked at.
+    const fresh = await api.staffBook(c.admin, {
+      bookingTypeId: typeId,
+      startsAt: slotsOf[next++]!.start,
+      invitee: { name: 'After switch', phone: `+91${++phone}` },
+    });
+    await consumer.handle(await evs('appointment.booked', fresh.id));
+    expect(
+      fake.eventsOf(CY2).some((e) => e.extendedProperties?.private?.crmAppointment === fresh.id),
+    ).toBe(true);
+    expect((await report()).drifted).toBe(0);
+    expect((await syncOf(fresh.id))!.sync).toMatchObject({ state: 'in_sync' });
   });
 });
 

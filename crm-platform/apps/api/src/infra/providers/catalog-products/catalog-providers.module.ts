@@ -43,7 +43,13 @@ export class CatalogProvidersModule {
           ): CatalogProvider =>
             readCatalogEnv().CAT_PROVIDER_MODE === 'fixture'
               ? fixture
-              : new MetaGraphCatalogProvider({ graphVersion: () => settings.graphVersion() }),
+              : new MetaGraphCatalogProvider({
+                  graphVersion: () => settings.graphVersion(),
+                  app: {
+                    id: readCatalogEnv().META_APP_ID,
+                    secret: readCatalogEnv().META_APP_SECRET,
+                  },
+                }),
         },
         {
           provide: BAILEYS_CATALOG_BRIDGE,

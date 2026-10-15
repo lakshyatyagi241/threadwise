@@ -12,7 +12,7 @@ import {
   type WidgetPublicConfig,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
-import type { ConsentChannel } from '@crm/contracts';
+import { noticeGrantChannels, type ConsentChannel } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { ChannelIngestPublisher } from '../chat-conversations';
 import { ConsentIntakeService, ConsentNoticeService } from '../contact-consent';
@@ -431,9 +431,10 @@ export class WidgetPublicService {
           phone: visitor.phone,
         });
         if (contactId === null) return;
-        const channels: ConsentChannel[] = [];
-        if (phoneDigits(visitor.phone) !== '') channels.push('whatsapp');
-        if (visitor.email) channels.push('email');
+        const channels: ConsentChannel[] = noticeGrantChannels(notice, {
+          phone: phoneDigits(visitor.phone) !== '',
+          email: Boolean(visitor.email),
+        });
         if (channels.length === 0) return;
         await this.consentIntake.grant(sp as Tx, orgId, {
           contactId,
@@ -613,6 +614,25 @@ export class WidgetPublicService {
    * A visitor's thumbs up or down on a line the bot sent them, kept on that line (`meta.feedback`) for the team to read. Only a line of
    * the visitor's own thread can be marked; anything else is the same 404.
    */
+  /**
+   * "Restart this chat" and "Close this chat": the visitor starts over with a fresh visitor (and so a fresh conversation); the old
+   * thread stays in the team inbox as it was. The new uuid is returned for the cookie and the window's own storage.
+   */
+  async restart(
+    token: string,
+    req: PublicRequest,
+  ): Promise<{ widgetUuid: string; visitorUuid: string }> {
+    const { orgId, widget } = await this.locateActive(token);
+    const visitor = await this.db.txAs({ orgId }, (tx) =>
+      this.visitors.create(tx, orgId, widget.id, {
+        referrer: req.referer.slice(0, 1024),
+        userAgent: req.userAgent.slice(0, 512),
+        ip: req.ip,
+      }),
+    );
+    return { widgetUuid: widget.uuid, visitorUuid: visitor.visitorUuid };
+  }
+
   async feedback(token: string, req: PublicRequest, rawBody: unknown): Promise<{ ok: true }> {
     const parsed = widgetFeedbackRequestSchema.safeParse(rawBody ?? {});
     if (!parsed.success)

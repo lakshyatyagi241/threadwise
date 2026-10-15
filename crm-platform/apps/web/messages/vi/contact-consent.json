@@ -112,15 +112,22 @@
         "instagram": "Instagram",
         "webchat": "Chat web",
         "voice": "Cuộc gọi thoại",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "đã đăng ký",
-        "withdrawn": "đã từ chối"
+        "withdrawn": "đã từ chối",
+        "utilityGranted": "đã đồng ý nhận tin nhắn dịch vụ",
+        "utilityWithdrawn": "đã dừng tin nhắn dịch vụ"
       },
       "action": {
         "granted": "Đã đăng ký",
-        "withdrawn": "Đã từ chối"
+        "withdrawn": "Đã từ chối",
+        "utilityGranted": "Đã đồng ý được liên hệ về yêu cầu của mình",
+        "utilityWithdrawn": "Đã dừng tin nhắn dịch vụ"
       },
       "source": {
         "form": "Biểu mẫu",
@@ -134,7 +141,8 @@
         "legacy": "Trước lịch sử đồng ý",
         "widget": "Trò chuyện trên website",
         "booking": "Trang đặt lịch",
-        "commerce": "Thanh toán của cửa hàng"
+        "commerce": "Thanh toán của cửa hàng",
+        "lead": "Thu thập lead"
       },
       "by": "bởi {name}",
       "evidence": {
@@ -154,7 +162,10 @@
         "widgetId": "Tiện ích trò chuyện",
         "bookingTypeId": "Trang đặt lịch",
         "integrationId": "Cửa hàng",
-        "storeFlag": "Cài đặt cửa hàng"
+        "storeFlag": "Cài đặt cửa hàng",
+        "leadSourceId": "Nguồn lead",
+        "leadFormId": "Biểu mẫu lead",
+        "adId": "Quảng cáo"
       },
       "dialog": {
         "titleGranted": "Đánh dấu đã đăng ký",
@@ -187,7 +198,14 @@
       "hintColumn": "Cột được ánh xạ tới sự đồng ý tiếp thị sẽ quyết định ai được ghi nhận: chỉ những hàng ghi có mới được ghi nhận sự đồng ý, với tên tệp làm bằng chứng. Không, ô trống hoặc từ không xác định sẽ không ghi nhận gì. Các liên hệ đã hủy đăng ký vẫn ở trạng thái đã hủy.",
       "columnSummary": "{granted} hàng ghi có và sẽ được ghi nhận. {notGranted} ghi không hoặc để trống và không có bản ghi đồng ý nào.",
       "unrecognised": "{count, plural, one {# hàng có} other {# hàng có}} giá trị đồng ý không phải có hoặc không ({values}). {count, plural, one {Giá trị này} other {Các giá trị này}} được coi là không được đồng ý. Hãy dùng yes / no, true / false hoặc 1 / 0.",
-      "columnIgnored": "Cột đồng ý sẽ không có tác dụng cho đến khi bạn chọn ô ở trên."
+      "columnIgnored": "Cột đồng ý sẽ không có tác dụng cho đến khi bạn chọn ô ở trên.",
+      "noticeText": "Thông báo hoặc cơ sở pháp lý (tùy chọn)",
+      "noticeTextHint": "Những liên hệ này đã đồng ý điều gì và ở đâu, ví dụ: đăng ký khi thanh toán theo thông báo quyền riêng tư v3. Được lưu làm bằng chứng cho mỗi sự đồng ý đã ghi.",
+      "noticeVersion": "Phiên bản thông báo (tùy chọn)",
+      "smsSummary": "Cột đồng ý SMS: {granted} dòng ghi có và sẽ được ghi nhận là đồng ý SMS. {notGranted} dòng ghi không hoặc để trống.",
+      "emailSummary": "Cột đồng ý email: {granted} dòng ghi có và sẽ được ghi nhận là đồng ý email (dòng cũng cần có địa chỉ email). {notGranted} dòng ghi không hoặc để trống.",
+      "labelNumbers": "Tôi có sự đồng ý để nhắn tin cho các số này",
+      "hintNumbers": "Khi chọn, mỗi số trong tệp được ghi nhận là đã đồng ý nhận tiếp thị khi bạn khởi chạy chiến dịch, với tên tệp làm bằng chứng. Khi không chọn, không ghi nhận sự đồng ý nào. Người đã hủy đăng ký vẫn ở trạng thái hủy."
     },
     "systemLine": {
       "withdrawn": "Liên hệ đã trả lời {keyword}: đã hủy đăng ký tiếp thị",
@@ -291,12 +309,14 @@
       "title": {
         "widget": "Dòng đồng ý trong biểu mẫu trò chuyện",
         "booking": "Dòng đồng ý trên trang đặt lịch",
-        "commerce": "Ô tiếp thị của cửa hàng có nghĩa là gì"
+        "commerce": "Ô tiếp thị của cửa hàng có nghĩa là gì",
+        "workspace": "Thông báo đồng ý mặc định"
       },
       "intro": {
         "widget": "Hiển thị dưới dạng ô đánh dấu bên dưới thông tin của khách truy cập. Chỉ khách đánh dấu mới được ghi nhận là đồng ý, và chỉ khi họ cung cấp số điện thoại hoặc email.",
         "booking": "Hiển thị dưới dạng ô đánh dấu trên biểu mẫu đặt lịch. Chỉ người đánh dấu mới được ghi nhận là đồng ý; việc đặt lịch không bao giờ cần ô này.",
-        "commerce": "Khách hàng chấp nhận tiếp thị trong cửa hàng của bạn được ghi nhận là đồng ý. Hãy viết điều ô đó nói với họ để bằng chứng nêu rõ."
+        "commerce": "Khách hàng chấp nhận tiếp thị trong cửa hàng của bạn được ghi nhận là đồng ý. Hãy viết điều ô đó nói với họ để bằng chứng nêu rõ.",
+        "workspace": "Nội dung mà không gian làm việc của bạn hiển thị bên cạnh hộp đồng ý khi biểu mẫu, tiện ích hoặc trang đặt lịch không có nội dung riêng. Mỗi thay đổi là một phiên bản được đánh số mới."
       },
       "enabled": "Bật dòng đồng ý",
       "text": "Nội dung mà người đó đồng ý",
@@ -309,7 +329,21 @@
       "version": "Phiên bản hiện tại: {version}",
       "noVersion": "Chưa lưu.",
       "saveFirst": "Hãy lưu mục này trước, sau đó bạn có thể đặt dòng đồng ý cho nó.",
-      "whatsappToo": "Tính cả là đồng ý trên WhatsApp (chỉ khi nội dung nói vậy)"
+      "whatsappToo": "Tính cả là đồng ý trên WhatsApp (chỉ khi nội dung nói vậy)",
+      "termsUrl": "Liên kết đến điều khoản của bạn (tùy chọn)",
+      "termsUrlHint": "Phải bắt đầu bằng https://",
+      "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
+      "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc",
+      "useWorkspaceText": "Dùng nội dung mặc định của không gian làm việc",
+      "statement": "Tôi đồng ý nhận cập nhật và ưu đãi qua {channels}. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "email"
+      },
+      "channelsLabel": "Kênh mà sự đồng ý này bao gồm",
+      "channelsHint": "Người đó chỉ được đăng ký trên các kênh được chọn tại đây và nội dung đồng ý sẽ nêu tên các kênh đó. Một kênh chỉ được dùng khi người đó cung cấp số điện thoại hoặc email tương ứng.",
+      "channelsUse": "Cập nhật nội dung theo các kênh này"
     }
   }
 }

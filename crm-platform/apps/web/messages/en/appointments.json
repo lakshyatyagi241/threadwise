@@ -41,7 +41,10 @@
       "notStarted": "This can be done only after the booking has started.",
       "alreadyStarted": "This booking has already started, so it can no longer be changed.",
       "bookingOff": "Booking is not available for this service right now.",
-      "notDeletable": "This cannot be deleted while it has bookings to come."
+      "notDeletable": "This cannot be deleted while it has bookings to come.",
+      "notDrifted": "This booking already matches its Google event. It has been reloaded.",
+      "calendarNotConnected": "Google Calendar is not connected. Reconnect it on the Google account page and try again.",
+      "calendarFailed": "Google did not answer or refused the change. Try again in a moment."
     },
     "picker": {
       "timeZone": "Time zone",
@@ -156,7 +159,8 @@
       "yesterday": "Yesterday",
       "rowLabel": "Open booking: {title}",
       "noName": "No name",
-      "needsReview": "Needs review"
+      "needsReview": "Needs review",
+      "outOfSync": "Calendar out of sync"
     },
     "row": {
       "moreFor": "More actions for {title}",
@@ -269,7 +273,13 @@
       "rescheduled": "Booking moved to the new time.",
       "linkCopied": "Manage link copied.",
       "copyFailed": "The link could not be copied.",
-      "declined": "Request declined."
+      "declined": "Request declined.",
+      "calendarPushed": "Pushed to Google: the event now matches this booking.",
+      "calendarAccepted": {
+        "cancelled": "Google's change accepted: the booking was cancelled.",
+        "rescheduled": "Google's change accepted: the booking moved to the new time.",
+        "acknowledged": "Google's change accepted. The booking stays as it is."
+      }
     },
     "typesList": {
       "breadcrumb": "Breadcrumb",
@@ -962,7 +972,7 @@
         "calendarSaved": "Calendar saved.",
         "confirmOff": {
           "title": "Disconnect Google Calendar?",
-          "message": "New bookings stop going to your calendar and its busy times are no longer read. Events already in your calendar stay there, and Google is told to withdraw this access.",
+          "message": "New bookings stop going to your calendar and its busy times are no longer read. The Google steps in your flows stop too, because they share this connection. Events already in your calendar stay there, and Google is told to withdraw this access.",
           "confirm": "Disconnect",
           "cancel": "Keep it"
         },
@@ -972,7 +982,8 @@
           "failed": "Connecting did not finish. Try again; if it keeps failing, ask your platform administrator to check the Google setup.",
           "expired": "That attempt took too long. Press Connect to start again.",
           "not_configured": "Google Calendar is not set up for this platform. Ask your platform administrator to add the Google OAuth client.",
-          "missing_scope": "Google did not give every calendar permission that is needed. Connect again and keep all the boxes ticked."
+          "missing_scope": "Google did not give every calendar permission that is needed. Connect again and keep all the boxes ticked.",
+          "cancelled": "You cancelled. Nothing was connected."
         },
         "whatTitle": "What this does",
         "what": {
@@ -1060,6 +1071,36 @@
       "loadMore": "Load more",
       "loadMorePast": "Load more past",
       "noType": "Appointment"
+    },
+    "sync": {
+      "title": "Calendar out of sync",
+      "reason": {
+        "event_deleted": "The event was deleted or cancelled in Google Calendar.",
+        "event_missing": "The event can no longer be found in Google Calendar.",
+        "time_changed": "The event was moved to another time in Google Calendar.",
+        "attendees_changed": "The guests of the event were changed in Google Calendar."
+      },
+      "googleShows": "Google shows: {time}",
+      "notChanged": "This booking has not been changed. Choose which one is right.",
+      "found": "Found {when}",
+      "push": "Push our time back to Google",
+      "accept": "Accept Google's change",
+      "keep": "Not now",
+      "acceptTitle": {
+        "cancel": "Cancel this booking?",
+        "reschedule": "Move this booking to Google's time?",
+        "acknowledge": "Accept the guests Google shows?"
+      },
+      "acceptMessage": {
+        "cancel": "The event is gone from Google, so this booking is cancelled and its time becomes free again. The customer is told, as with any cancellation.",
+        "reschedule": "This booking moves to {time}. The customer is told the new time, as with any reschedule.",
+        "acknowledge": "The booking itself does not change. Google's guest list is remembered, and this notice goes away."
+      },
+      "acceptConfirm": {
+        "cancel": "Cancel booking",
+        "reschedule": "Move booking",
+        "acknowledge": "Accept"
+      }
     }
   }
 }

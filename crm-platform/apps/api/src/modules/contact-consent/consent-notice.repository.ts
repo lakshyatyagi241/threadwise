@@ -8,6 +8,7 @@ export interface NoticeRow {
   enabled: boolean;
   text: string;
   url: string | null;
+  termsUrl: string | null;
   channels: string[];
   createdAt: string;
 }
@@ -18,6 +19,7 @@ const toRow = (r: Raw): NoticeRow => ({
   enabled: r.enabled === true,
   text: String(r.text ?? ''),
   url: (r.url as string | null) ?? null,
+  termsUrl: (r.terms_url as string | null) ?? null,
   channels: Array.isArray(r.channels) ? (r.channels as string[]) : [],
   createdAt: r.created_at instanceof Date ? r.created_at.toISOString() : String(r.created_at),
 });
@@ -33,7 +35,7 @@ export class ConsentNoticeRepository {
     ref: string,
   ): Promise<NoticeRow | null> {
     const res = await tx.execute(sql`
-      SELECT version, enabled, text, url, channels, created_at FROM consent_notices
+      SELECT version, enabled, text, url, terms_url, channels, created_at FROM consent_notices
       WHERE org_id = ${orgId} AND scope = ${scope} AND scope_ref = ${ref}
       ORDER BY version DESC LIMIT 1`);
     const r = res.rows[0] as Raw | undefined;
@@ -49,7 +51,7 @@ export class ConsentNoticeRepository {
     version: number,
   ): Promise<NoticeRow | null> {
     const res = await tx.execute(sql`
-      SELECT version, enabled, text, url, channels, created_at FROM consent_notices
+      SELECT version, enabled, text, url, terms_url, channels, created_at FROM consent_notices
       WHERE org_id = ${orgId} AND scope = ${scope} AND scope_ref = ${ref} AND version = ${version}`);
     const r = res.rows[0] as Raw | undefined;
     return r ? toRow(r) : null;
@@ -65,24 +67,29 @@ export class ConsentNoticeRepository {
       enabled: boolean;
       text: string;
       url: string | null;
+      termsUrl: string | null;
       channels: string[];
       createdBy: number | null;
     },
   ): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO consent_notices (org_id, scope, scope_ref, version, enabled, text, url, channels, created_by)
-      VALUES (${orgId}, ${row.scope}, ${row.ref}, ${row.version}, ${row.enabled}, ${row.text}, ${row.url}, ${`{${row.channels.join(',')}}`}::text[], ${row.createdBy})
+      INSERT INTO consent_notices (org_id, scope, scope_ref, version, enabled, text, url, terms_url, channels, created_by)
+      VALUES (${orgId}, ${row.scope}, ${row.ref}, ${row.version}, ${row.enabled}, ${row.text}, ${row.url}, ${row.termsUrl}, ${`{${row.channels.join(',')}}`}::text[], ${row.createdBy})
       RETURNING id`);
     return Number((res.rows[0] as Raw).id);
   }
 
-  /** Does the intake point exist in this workspace? `ref` is the widget or booking type uuid, or `<store kind>:<integration uuid>`. */
+  /**
+   * Does the intake point exist in this workspace? `ref` is the widget or booking type uuid, or `<store kind>:<integration uuid>`; for the
+   * workspace default notice it is a language code.
+   */
   async targetExists(
     tx: Tx,
     orgId: number,
     scope: ConsentNoticeScope,
     ref: string,
   ): Promise<boolean> {
+    if (scope === 'workspace') return /^[a-z]{2,3}(-[a-z0-9]{2,8})?$/.test(ref);
     const uuid = scope === 'commerce' ? ref.split(':')[1] : ref;
     if (!uuid || !/^[0-9a-f-]{36}$/i.test(uuid)) return false;
     let res;

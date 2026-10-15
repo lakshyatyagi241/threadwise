@@ -5,6 +5,9 @@ const PHONE_KINDS = new Set(['simulator', 'whatsapp_cloud', 'whatsapp_qr']);
 
 const PEER_KEY_MAX = 128;
 
+/** Channels whose peer id is a case-sensitive token: kept exactly as the platform wrote it. */
+const CASE_SENSITIVE_KINDS = new Set(['email', 'line', 'viber', 'wechat']);
+
 /** A WhatsApp group thread is keyed `g:<group id>`; the id is an opaque token, never a phone number. */
 export const GROUP_KEY_PREFIX = 'g:';
 export const isGroupKey = (key: string): boolean => key.startsWith(GROUP_KEY_PREFIX);
@@ -20,6 +23,8 @@ export const isPhoneChannel = (kind: string): boolean => PHONE_KINDS.has(kind);
  *                   canonicaliser rejects (a short code, a local format) still gets its digits as key: an inbound message is
  *                   never dropped for how its sender wrote a number.
  *   email           the key as the adapter gave it (`t:<threadId>`, case kept), at most 128 characters.
+ *   LINE, Viber, WeChat  the platform's own user id, case kept: a LINE user id, a Viber user id and a WeChat OpenID are case-sensitive
+ *                   tokens, and the provider rejects a send to the same id in another case.
  *   other channels  the channel's own thread id, trimmed and lower-cased (visitor and chat ids are case-insensitive tokens).
  */
 export function normalizePeerKey(kind: string, raw: string | null | undefined): string | null {
@@ -42,7 +47,7 @@ export function normalizePeerKey(kind: string, raw: string | null | undefined): 
     return digits.length >= 4 && digits.length <= 20 ? digits : null;
   }
   // An email thread is keyed by the provider's thread id (`t:<threadId>`), an opaque token: kept exactly as given.
-  if (kind === 'email') return text.length <= PEER_KEY_MAX ? text : null;
+  if (CASE_SENSITIVE_KINDS.has(kind)) return text.length <= PEER_KEY_MAX ? text : null;
   const key = text.toLowerCase();
   return key.length <= PEER_KEY_MAX ? key : null;
 }

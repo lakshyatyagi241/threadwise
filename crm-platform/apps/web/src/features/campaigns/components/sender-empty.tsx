@@ -13,15 +13,25 @@ export function SenderEmptyNotice({
   id,
   hidden,
   sms = false,
+  email = false,
 }: {
   id?: string | undefined;
   hidden: readonly SenderHidden[] | undefined;
   sms?: boolean;
+  email?: boolean;
 }) {
   const t = useTranslations('campaigns.senderEmpty');
-  const { cause, count, href } = senderEmpty(hidden, { sms });
+  const { cause, count, href } = senderEmpty(hidden, { sms, email });
   // The SMS card words only "nothing connected" its own way; a personal number never applies to it.
-  const key = sms && (cause === 'none' || cause === 'personal_off') ? 'sms.none' : cause;
+  const key =
+    sms && (cause === 'none' || cause === 'personal_off')
+      ? 'sms.none'
+      : email
+        ? // A mailbox is disconnected or needs reconnecting, or there is none; nothing else applies to it.
+          cause === 'disconnected' || cause === 'error'
+          ? `email.${cause}`
+          : 'email.none'
+        : cause;
   return (
     <div
       id={id}

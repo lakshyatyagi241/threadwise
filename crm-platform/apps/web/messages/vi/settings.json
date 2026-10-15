@@ -369,6 +369,11 @@
         "label": "Yêu cầu dữ liệu",
         "description": "Trả lời những người hỏi bạn đang giữ gì về họ: kiểm tra danh tính, xuất, xóa có xem trước và bằng chứng bạn có thể lưu giữ.",
         "keywords": "quyền riêng tư, gdpr, yêu cầu dữ liệu, dsar, truy cập dữ liệu cá nhân, xuất dữ liệu, xóa, quyền được lãng quên, xóa dữ liệu cá nhân, lưu giữ pháp lý"
+      },
+      "compliance-center": {
+        "label": "Trung tâm tuân thủ",
+        "description": "Các công cụ giúp bạn thực hiện nghĩa vụ về quyền riêng tư: các luật áp dụng với bạn, đầu mối liên hệ về quyền riêng tư, thông báo và liên kết, bên xử lý phụ, giờ yên tĩnh và danh sách kiểm tra những gì đã có.",
+        "keywords": "tuân thủ, quyền riêng tư, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, cán bộ giải quyết khiếu nại, bên xử lý phụ, dpa, điều khoản, chính sách quyền riêng tư, giờ yên tĩnh, không gọi, danh sách kiểm tra, trẻ em"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

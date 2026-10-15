@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "Il client OAuth di Google con cui ogni workspace collega il proprio calendario.",
+        "description": "Il client OAuth di Google con cui ogni workspace collega il proprio account Google, per il calendario, Sheets, Docs e Forms.",
         "sections": {
           "oauth": {
             "title": "Client OAuth di Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Consenti ai workspace di collegare Google Calendar",
-            "hint": "Disattivato: nessun workspace può collegarsi e nulla viene scritto o letto da un calendario."
+            "label": "Consenti ai workspace di collegare Google",
+            "hint": "Disattivato: nessun workspace può collegarsi e nulla viene letto o scritto su Google (calendario, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "ID client",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "Il client OAuth di Google che i workspace usano per collegare il calendario per prenotazioni e orari occupati.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "Il client OAuth di Google che i workspace usano per collegare il proprio account Google per prenotazioni, Sheets, Docs e Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "E-mail Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "Admin - Appuntamenti",
-        "description": "Un unico client OAuth di Google Cloud per l’intera piattaforma. Ogni workspace collega poi il proprio account Google da Appuntamenti, Impostazioni; un workspace non vede mai l’ID o il segreto del client.",
+        "description": "Un unico client OAuth di Google Cloud per l’intera piattaforma. Ogni workspace collega poi il proprio account Google da Account Google nelle Impostazioni e sceglie quali permessi concedere; un workspace non vede mai l’ID o il segreto del client.",
         "sections": {
           "oauth": {
             "title": "Client OAuth di Google",
-            "description": "Senza ID e segreto del client, i workspace vedono Google Calendar come non disponibile e le prenotazioni proseguono senza calendario."
+            "description": "Senza ID e segreto del client, i workspace vedono Google come non disponibile, le prenotazioni proseguono senza calendario e i passaggi Google nei flow vengono saltati."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. Progetto e API",
-              "body": "In Google Cloud Console crea un progetto e abilita la Google Calendar API."
+              "body": "In Google Cloud Console crea un progetto e abilita le API Google Calendar, Google Sheets, Google Docs, Google Drive e Google Forms. Un permesso funziona solo se la sua API è abilitata."
             },
             "redirect": {
               "title": "2. Client OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. Schermata di consenso",
-              "body": "Aggiungi gli scope calendar.events, calendar.freebusy e calendar.calendarlist.readonly, poi pubblica l’app: in modalità Test, Google termina ogni autorizzazione dopo 7 giorni e i workspace dovranno ricollegarsi."
+              "body": "Aggiungi gli scope richiesti dal prodotto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly), poi pubblica l’app: in modalità Test, Google termina ogni autorizzazione dopo 7 giorni e i workspace dovranno ricollegarsi. Gli scope di Drive sono limitati e richiedono la revisione di Google."
             },
             "workspaces": {
               "title": "4. Collegamento dei workspace",
-              "body": "Incolla qui ID e segreto del client e salva. Gli admin si collegano poi da Appuntamenti, Impostazioni, Google Calendar."
+              "body": "Incolla qui ID e segreto del client e salva. Gli admin si collegano poi da Impostazioni, Integrazioni, Account Google, oppure da Appuntamenti, Impostazioni, Google Calendar."
             }
           }
         }

@@ -145,13 +145,26 @@
         "privacyUrl": "Privacy policy link",
         "privacyUrlHint": "Optional. Shown next to the consent text. Must start with https://.",
         "privacyUrlHttps": "Use an address that starts with https://.",
+        "termsUrl": "Terms link",
+        "termsUrlHint": "Optional. Shown next to the consent text and the privacy link. Must start with https://.",
+        "useWorkspacePrivacy": "Use my workspace privacy link",
+        "useWorkspaceTerms": "Use my workspace terms link",
         "required": "Must be ticked to submit",
         "requiredHint": "Turn this off if consent is optional.",
         "marketing": "Marketing opt-in",
         "marketingHint": "Ticking the box records marketing consent on the contact. An unticked box never subscribes anyone.",
-        "whatsappHint": "Will you message these contacts on WhatsApp? Use wording that says so and how to stop. The ticked box is kept as proof, with this exact text and its version.",
-        "whatsappInsert": "Use the WhatsApp opt-in wording",
-        "whatsappWording": "I agree to receive updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe."
+        "serviceHint": "This line is not marketing. A ticked box is kept as proof that the person agreed to be contacted about their request (service messages only), with this exact wording and its version. It never subscribes anyone to marketing.",
+        "statement": "I agree to receive updates and offers on {channels}. I can reply STOP at any time to unsubscribe.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "email"
+        },
+        "channelsLabel": "Channels this consent covers",
+        "channelsHint": "The visitor is subscribed only on the channels ticked here, and the consent text below names them. A channel is used only when the form collects the matching phone number or email.",
+        "channelsUse": "Update the wording with these channels",
+        "channelNeedsPhone": "This form has no phone number field, so nobody is subscribed on this channel from it.",
+        "channelNeedsEmail": "This form has no email field, so nobody is subscribed on this channel from it."
       },
       "crm": {
         "title": "In the CRM",

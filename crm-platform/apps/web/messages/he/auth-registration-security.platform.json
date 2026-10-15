@@ -1433,7 +1433,7 @@
             "storefront_builder": "בונה החנות המקוונת.",
             "invoicing": "חשבוניות, זיכויים, תשלומים, הזמנות מכירה ושיעורי מס.",
             "forms_and_links": "טפסי לכידת לידים וקישורים לשיתוף.",
-            "extra_channels": "ערוצי Telegram, Facebook ו-Instagram.",
+            "extra_channels": "ערוצי Telegram, Facebook, Instagram, LINE, Viber ו-WeChat.",
             "form_builder": "טפסי אינטרנט מתארחים ומוטמעים שיוצרים אנשי קשר ב-CRM. אפליקציית הטפסים בתשלום שולטת במתג הזה.",
             "waba_groups": "יצירה וניהול של קבוצות WhatsApp ממספר Cloud API: קישור הזמנה, בקשות הצטרפות, חברים. המספר חייב להיות חשבון עסקי רשמי.",
             "sms": "SMS לשליחה בלבד דרך Twilio או MSG91: חברו שולחים, ושלחו הודעות תפוצה וקמפיינים ב-SMS.",
@@ -1582,7 +1582,8 @@
             "form_submissions_monthly": "שליחות טפסים בחודש",
             "ai_form_generations_monthly": "יצירות של בונה הטפסים ב-AI בחודש",
             "sms_monthly": "הודעות SMS בחודש",
-            "email_mailboxes": "תיבות דוא\"ל"
+            "email_mailboxes": "תיבות דוא\"ל",
+            "email_monthly": "הודעות דוא\"ל בחודש"
           },
           "featureGroups": {
             "messaging": "הודעות",
@@ -1617,7 +1618,7 @@
             "storefront_builder": "בונה חנויות ואתרים",
             "invoicing": "חשבוניות (חשבוניות, זיכויים, חשבוניות חוזרות)",
             "forms_and_links": "טפסים, קישורי לחיצה-לצ'אט וקבוצות",
-            "extra_channels": "ערוצי Telegram, Facebook ו-Instagram",
+            "extra_channels": "ערוצי Telegram, Facebook, Instagram, LINE, Viber ו-WeChat",
             "form_builder": "טפסים (בונה טפסי אינטרנט)",
             "waba_groups": "קבוצות WhatsApp (Cloud API)",
             "sms": "ערוץ SMS",
@@ -1677,7 +1678,8 @@
             "form_submissions_monthly": "שליחות טפסים שהתקבלו בחודש הקלנדרי, למעט ספאם. מעבר למגבלה שליחה עדיין נשמרת לבדיקה ולעולם אינה נזרקת. 0 = ללא הגבלה.",
             "ai_form_generations_monthly": "יצירות של בונה הטפסים ב-AI בחודש הקלנדרי, כולל ניסיון תיקון חוזר. 0 = ללא הגבלה.",
             "sms_monthly": "הודעות SMS יוצאות שנשלחו בחודש הקלנדרי. 0 = ללא הגבלה.",
-            "email_mailboxes": "תיבות Gmail מחוברות (תיבה שנותקה פוטרת את מקומה). 0 = ללא הגבלה."
+            "email_mailboxes": "תיבות Gmail מחוברות (תיבה שנותקה פוטרת את מקומה). 0 = ללא הגבלה.",
+            "email_monthly": "הודעות דוא\"ל שנשלחו בחודש הקלנדרי, תשובות ומיילים של קמפיינים יחד. 0 = ללא הגבלה."
           }
         }
       },

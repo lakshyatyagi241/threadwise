@@ -92,7 +92,8 @@
       "api_keys": "API-Schlüssel",
       "audit-log": "Prüfprotokoll",
       "audit-log-exports": "Prüfprotokoll-Exporte",
-      "contact_consent_exports": "Exporte der Einwilligungsnachweise"
+      "contact_consent_exports": "Exporte der Einwilligungsnachweise",
+      "revenue-report-exports": "Umsatzbericht-Dateien"
     },
     "table": {
       "caption": "Prüfeinträge, neueste zuerst. Zeiten werden in Ihrer Zeitzone angezeigt ({zone}).",

@@ -456,7 +456,9 @@
         "memo": "메모",
         "status": "상태",
         "source": "출처",
-        "consent": "마케팅 동의(예 / 아니요)"
+        "consent": "마케팅 동의(예 / 아니요)",
+        "consentSms": "SMS 마케팅 동의(예 / 아니요)",
+        "consentEmail": "이메일 마케팅 동의(예 / 아니요)"
       },
       "notInFile": "파일에 없음",
       "columnN": "열 {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "모두 선택",
         "reorder": "끌어서 열 순서 변경",
         "remove": "{name} 제거"
+      },
+      "presets": {
+        "myContacts": "내 연락처",
+        "newThisWeek": "이번 주 신규",
+        "newLastWeek": "지난주 신규",
+        "recentlyCreated": "최근 생성",
+        "recentlyModified": "최근 수정",
+        "recentlyImported": "최근 가져옴",
+        "neverContacted": "연락한 적 없음",
+        "needsFollowUp": "후속 조치 필요",
+        "active": "활성",
+        "inactive": "비활성",
+        "unsubscribed": "수신 거부"
       }
     },
     "erase": {

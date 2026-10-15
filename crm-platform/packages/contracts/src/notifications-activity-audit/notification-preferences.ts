@@ -89,6 +89,8 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   member_leave_started: { group: 'conversations', toast: true, sound: false, push: false },
   // BL-112: a chat nobody could take is news for the leads; the push stays on because a customer is waiting.
   assignment_blocked_by_leave: { group: 'conversations', toast: true, sound: false, push: true },
+  // TW-GACC-011: one note per appointment when its Google event first stops matching; quiet like the other alerts of the group.
+  appointment_calendar_drift: { group: 'conversations', toast: true, sound: false, push: false },
   waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspended: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspension_cleared: {

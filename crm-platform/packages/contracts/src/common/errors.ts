@@ -27,14 +27,18 @@ import { FORMS_ERROR_CODES } from '../forms-builder/errors';
 import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { EXT_ERROR_CODES } from '../chrome-extension-sheets-addon/errors';
+import { GOOGLE_ERROR_CODES } from '../google-account/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
 import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 import { LSC_ERROR_CODES } from '../lead-scoring/errors';
 import { CONSENT_ERROR_CODES } from '../contact-consent/errors';
 import { PRIVACY_ERROR_CODES } from '../privacy/errors';
+import { COMPLIANCE_ERROR_CODES } from '../compliance/errors';
 import { GROWTH_ERROR_CODES } from '../growth';
 import { AUDIT_LOG_ERROR_CODES } from '../notifications-activity-audit/audit-log';
+import { REVENUE_ERROR_CODES } from '../crm/revenue-report';
 import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
+import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
 
 export const ERROR_CODES = {
   ...FAQ_ERROR_CODES,
@@ -42,10 +46,14 @@ export const ERROR_CODES = {
   ...GROWTH_ERROR_CODES,
   ...CONSENT_ERROR_CODES,
   ...PRIVACY_ERROR_CODES,
+  ...COMPLIANCE_ERROR_CODES,
   ...AUDIT_LOG_ERROR_CODES,
+  ...REVENUE_ERROR_CODES,
   ...PQL_ERROR_CODES,
+  ...WFL_ERROR_CODES,
   ...ALIB_ERROR_CODES,
   ...EXT_ERROR_CODES,
+  ...GOOGLE_ERROR_CODES,
   ...CPN_ERROR_CODES,
   ...PAYGW_ERROR_CODES,
   ...RBAC_ERROR_CODES,
@@ -244,6 +252,41 @@ export const ERROR_CODES = {
   /** Retry: nobody failed. */
   TG_NOTHING_TO_RETRY: 'TG_NOTHING_TO_RETRY',
 
+  // LINE channel (LINE)
+  /** LINE refused the channel access token (the bot info call failed). */
+  LINE_TOKEN_REJECTED: 'LINE_TOKEN_REJECTED',
+  /** A broadcast needs a message, a file, or both. */
+  LINE_BROADCAST_EMPTY: 'LINE_BROADCAST_EMPTY',
+  /** None of the picked people belong to the channel. */
+  LINE_NO_RECIPIENTS: 'LINE_NO_RECIPIENTS',
+  /** The channel is not connected or is paused. */
+  LINE_CHANNEL_UNAVAILABLE: 'LINE_CHANNEL_UNAVAILABLE',
+  /** Start: nobody is pending. */
+  LINE_NOTHING_TO_SEND: 'LINE_NOTHING_TO_SEND',
+  /** Retry: nobody failed. */
+  LINE_NOTHING_TO_RETRY: 'LINE_NOTHING_TO_RETRY',
+  /** Token rotation could not be set up: the Channel ID is missing, the key does not sign, or LINE refused the assertion. */
+  LINE_ROTATION_FAILED: 'LINE_ROTATION_FAILED',
+  // Viber channel (TW-VIB)
+  /** Viber refused the auth token (get_account_info failed). */
+  VIB_TOKEN_REJECTED: 'VIB_TOKEN_REJECTED',
+  VIB_BROADCAST_EMPTY: 'VIB_BROADCAST_EMPTY',
+  /** None of the picked users belong to the channel. */
+  VIB_NO_RECIPIENTS: 'VIB_NO_RECIPIENTS',
+  VIB_CHANNEL_UNAVAILABLE: 'VIB_CHANNEL_UNAVAILABLE',
+  VIB_NOTHING_TO_SEND: 'VIB_NOTHING_TO_SEND',
+  VIB_NOTHING_TO_RETRY: 'VIB_NOTHING_TO_RETRY',
+  // WeChat channel (WECH)
+  /** WeChat refused the AppID and AppSecret (no access token). */
+  WECH_CREDENTIALS_REJECTED: 'WECH_CREDENTIALS_REJECTED',
+  /** An OpenID broadcast needs at least two recipients that belong to the channel. */
+  WECH_TOO_FEW_RECIPIENTS: 'WECH_TOO_FEW_RECIPIENTS',
+  WECH_CHANNEL_UNAVAILABLE: 'WECH_CHANNEL_UNAVAILABLE',
+  /** The broadcast was already sent: a mass send cannot be repeated. */
+  WECH_ALREADY_SENT: 'WECH_ALREADY_SENT',
+  /** Retry: the broadcast did not fail. */
+  WECH_NOT_RETRYABLE: 'WECH_NOT_RETRYABLE',
+
   // Help assistant (docs/specs/help-agent-assistant.md)
   /** The workspace switch is off, or the person may not use the assistant here (a disabled screen, a missing permission). */
   HELP_AGENT_DISABLED: 'HELP_AGENT_DISABLED',
@@ -392,6 +435,8 @@ export const ERROR_CODES = {
   CAMP_AI_PROVIDER_FAILED: 'CAMP_AI_PROVIDER_FAILED',
   /** "Build with AI": the model's answer was not the JSON the builder expects. */
   CAMP_AI_BAD_JSON: 'CAMP_AI_BAD_JSON',
+  /** "Build with AI" picture: the vendor's safety system refused the prompt, or it returned no image. */
+  CAMP_AI_IMAGE_REFUSED: 'CAMP_AI_IMAGE_REFUSED',
   /** The campaign cannot be started or resumed in its current status. */
   CAMP_NOT_STARTABLE: 'CAMP_NOT_STARTABLE',
   /** The broadcast wizard's draft is incomplete or invalid at launch (`errors[]` names each step's problem). */

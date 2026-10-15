@@ -180,3 +180,75 @@ describe('small helpers', () => {
     });
   });
 });
+
+describe('an email campaign', () => {
+  const mail: BuilderForm = {
+    ...ok,
+    senderKey: 'email:5d1b',
+    type: 'custom',
+    customHeader: 'Your May offer is live',
+    customMessage: 'Hello {{name}}',
+  };
+
+  it('sends the subject in the Header field and a typed message only', () => {
+    const body = toInput({
+      ...mail,
+      customFooter: 'Bye',
+      mediaUrl: 'https://x.test/a.png',
+      abTesting: true,
+      customMessageB: 'B',
+      buttons: [{ type: 'url', text: 'Go', value: 'https://x.test' }],
+      throttleMinSec: '1',
+      batchSize: '10',
+      dailyLimit: '100',
+      windowStart: '09:00',
+      windowEnd: '18:00',
+    });
+    expect(body).toMatchObject({
+      senderKey: 'email:5d1b',
+      type: 'custom',
+      customHeader: 'Your May offer is live',
+      customMessage: 'Hello {{name}}',
+      abTesting: false,
+      customMessageB: null,
+      customFooter: null,
+      customButtons: null,
+      mediaUrl: null,
+      templateId: null,
+      templateIdB: null,
+      flowId: null,
+      flowIdB: null,
+      trackingEnabled: false,
+      throttleMinSec: null,
+      throttleMaxSec: null,
+      batchSize: null,
+      batchPauseMin: null,
+      dailyLimit: null,
+      windowStart: null,
+      windowEnd: null,
+    });
+  });
+
+  it('a blank subject is left out (the server falls back to the campaign name)', () => {
+    expect(toInput({ ...mail, customHeader: '  ' }).customHeader).toBeNull();
+  });
+
+  it('a subject over 150 characters is a problem, 150 is fine, and only for email', () => {
+    expect(problems({ ...mail, customHeader: 'x'.repeat(150) })).toEqual([]);
+    expect(problems({ ...mail, customHeader: 'x'.repeat(151) })).toEqual(['subject']);
+    expect(problems({ ...ok, customHeader: 'x'.repeat(151) })).toEqual([]);
+  });
+
+  it('ignores sending hours and gaps, which an email does not have', () => {
+    expect(
+      problems({ ...mail, windowStart: '09:00', throttleMinSec: '9', throttleMaxSec: '1' }),
+    ).toEqual([]);
+  });
+
+  it('a WhatsApp form still sends what it holds', () => {
+    expect(toInput({ ...ok, customFooter: 'Bye', trackingEnabled: true })).toMatchObject({
+      customFooter: 'Bye',
+      trackingEnabled: true,
+    });
+  });
+});

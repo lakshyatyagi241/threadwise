@@ -209,7 +209,16 @@
         "customMessage": "Individuelle Nachricht",
         "flowTitle": "Flow",
         "variants": "Angezeigte Variante",
-        "variant": "Variante {v}"
+        "variant": "Variante {v}",
+        "typeEmail": "E-Mail",
+        "emailTitle": "E-Mail-Vorschau",
+        "emailFrom": "Von",
+        "emailSubject": "Betreff",
+        "emailNoSender": "Absender wählen",
+        "emailNoSubject": "(kein Betreff)",
+        "emailEmpty": "Schreibe den Nachrichtentext, er erscheint hier.",
+        "emailUnsubscribe": "Am Ende jeder E-Mail wird ein Abmeldelink eingefügt.",
+        "emailNote": "So sieht deine Kampagne im Posteingang jedes Empfängers aus."
       },
       "previewEmpty": "Ihre Nachrichtenvorschau…",
       "previewTemplate": "Vorlage",
@@ -228,7 +237,8 @@
         "throttle": "Der längste Abstand muss mindestens so groß sein wie der kürzeste.",
         "expiry": "Das Enddatum muss nach dem Sendedatum liegen, sonst würde die Kampagne ablaufen, bevor sie gesendet wird.",
         "media": "Geben Sie eine vollständige Adresse ein, die mit http:// oder https:// beginnt.",
-        "sender": "Wählen Sie einen Absender."
+        "sender": "Wählen Sie einen Absender.",
+        "subject": "Kürze den Betreff auf höchstens 150 Zeichen."
       },
       "submit": {
         "save": "Änderungen speichern",
@@ -293,7 +303,10 @@
         },
         "csvRows": "{count} Nummern in der Datei",
         "numbersPlaceholder": "Eine Nummer pro Zeile — mit Ländervorwahl, ohne Pluszeichen",
-        "numbersCount": "{count} Nummern"
+        "numbersCount": "{count} Nummern",
+        "emailNote": "E-Mails gehen an die Adresse jedes Kontakts. Kontakte ohne E-Mail-Adresse, doppelte Adressen und abgemeldete Kontakte werden übersprungen.",
+        "emailSkipped": "{count, plural, one {# ausgewählter Empfänger hat keine E-Mail-Adresse und wird übersprungen.} other {# ausgewählte Empfänger haben keine E-Mail-Adresse und werden übersprungen.}}",
+        "emailNoAddress": "Eingegebene Nummern und CSV-Zeilen haben keine E-Mail-Adresse und werden deshalb übersprungen. Wähle stattdessen Kontakte, Gruppen, Tags oder Segmente."
       },
       "message": {
         "title": "Nachricht",
@@ -526,7 +539,13 @@
           "baileys": "Noch keine Vorlagen für die Inoffizielle API. Erstellen Sie eine auf der Seite Vorlagen."
         },
         "templateIntroApproved": "Wählen Sie eine genehmigte Meta-Vorlage. Variablenwerte pro Kontakt werden beim Versand aus Kontaktattributen befüllt.",
-        "templateApproved": "Genehmigte Vorlage"
+        "templateApproved": "Genehmigte Vorlage",
+        "subject": "Betreff",
+        "subjectNote": "Betreff, max. 150",
+        "subjectPlaceholder": "z. B. Dein Mai-Angebot ist da",
+        "subjectHint": "Wird als E-Mail-Betreff verwendet. Leer lassen, um den Kampagnennamen zu verwenden.",
+        "emailNote": "Diese Kampagne wird als E-Mail vom gewählten Postfach gesendet. Am Ende jeder E-Mail wird ein Abmeldelink eingefügt.",
+        "emailBodyHint": "Reintext. Nutze '{{name}}' oder '{{first_name}}' zur Personalisierung. Kontakte ohne E-Mail-Adresse werden übersprungen."
       },
       "review": {
         "title": "Prüfen",
@@ -568,8 +587,14 @@
           "throttle": "Die längste Pause muss mindestens so lang sein wie die kürzeste.",
           "expiry": "Das Enddatum muss nach dem Versanddatum liegen, sonst würde die Kampagne ablaufen, bevor sie gesendet wird.",
           "media": "Geben Sie eine vollständige Adresse ein, die mit http:// oder https:// beginnt.",
-          "sender": "Wählen Sie einen Absender."
-        }
+          "sender": "Wählen Sie einen Absender.",
+          "subject": "Kürze den Betreff auf höchstens 150 Zeichen."
+        },
+        "from": "Von",
+        "subject": "Betreff",
+        "subjectFallback": "Der Kampagnenname",
+        "skippedNoEmail": "Übersprungen (keine E-Mail-Adresse)",
+        "estimateEmail": "Das ist eine Schätzung: Ein Kontakt in zwei Gruppen wird doppelt gezählt. Kontakte ohne E-Mail-Adresse in Gruppen, Tags und Segmenten werden beim Start der Kampagne übersprungen."
       },
       "ai": {
         "open": "Mit KI erstellen",
@@ -622,8 +647,43 @@
         "notes": "Weitere Hinweise",
         "notesNote": "optional / max. 2000",
         "notesPlaceholder": "Alles Spezifische — unverzichtbare Formulierungen, was vermieden werden soll, Markenstimme…",
-        "failed": "Die Kampagne konnte nicht erstellt werden. Bitte erneut versuchen.",
-        "applied": "Der Kampagnentext wurde ausgefüllt. Bitte prüfen Sie ihn, bevor Sie fortfahren."
+        "applied": "Der Kampagnentext wurde ausgefüllt. Bitte prüfen Sie ihn, bevor Sie fortfahren.",
+        "pictureApplied": "Das Bild wurde an die Kampagne angehängt. Prüfen Sie es in der Karte „Anhang“.",
+        "errors": {
+          "noKey": "Für diesen Arbeitsbereich ist kein KI-Anbieter aktiviert. Bitten Sie einen Administrator, einen Schlüssel hinzuzufügen.",
+          "limitReached": "Dieser Arbeitsbereich hat sein KI-Kontingent für den Monat aufgebraucht.",
+          "providerFailed": "Der KI-Anbieter hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
+          "badJson": "Die Antwort des Modells konnte nicht gelesen werden. Versuchen Sie es erneut oder ändern Sie das Briefing.",
+          "invalid": "Prüfen Sie das Briefing: Der Firmenname ist erforderlich und einige Felder sind zu lang.",
+          "forbidden": "Sie haben keine Berechtigung, Kampagnen zu erstellen.",
+          "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+          "failed": "Die Kampagne konnte nicht generiert werden. Versuchen Sie es erneut."
+        },
+        "picture": {
+          "label": "Zusätzlich ein Bild erstellen",
+          "hint": "Erzeugt ein Bild aus demselben Briefing und hängt es an die Kampagne an. Verbraucht Ihr OpenAI-Kontingent.",
+          "needsOpenAi": "Für Bilder wird ein OpenAI-Schlüssel benötigt. Wählen Sie ein OpenAI-Modell, um dies zu aktivieren.",
+          "noAttachment": "Die gewählte Nummer sendet nur Text, daher gibt es nichts, woran ein Bild angehängt werden könnte.",
+          "size": "Bildformat",
+          "sizes": {
+            "square": "Quadrat",
+            "landscape": "Querformat",
+            "portrait": "Hochformat"
+          },
+          "textKept": "Der Kampagnentext wurde eingefügt. Nur das Bild fehlt.",
+          "retry": "Bild erneut versuchen",
+          "errors": {
+            "noKey": "Für Bilder wird ein OpenAI-Schlüssel benötigt, und für diesen Arbeitsbereich ist keiner aktiviert.",
+            "limitReached": "Dieser Arbeitsbereich hat sein KI-Kontingent für den Monat aufgebraucht.",
+            "providerFailed": "Der Bilddienst hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
+            "badJson": "Der Bilddienst hat eine unerwartete Antwort gesendet. Versuchen Sie es erneut.",
+            "imageRefused": "OpenAI hat die Erstellung dieses Bildes abgelehnt. Ändern Sie Produkt, Angebot oder Hinweise und versuchen Sie es erneut.",
+            "invalid": "Prüfen Sie das Briefing: Der Firmenname ist erforderlich und einige Felder sind zu lang.",
+            "forbidden": "Sie haben keine Berechtigung, Kampagnen zu erstellen.",
+            "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+            "failed": "Das Bild konnte nicht erstellt werden. Versuchen Sie es erneut."
+          }
+        }
       },
       "switch": {
         "title": "Geführten Ablauf verwenden?",
@@ -1101,7 +1161,10 @@
         "auto_end_in_past": "Das automatische Enddatum liegt bereits in der Vergangenheit.",
         "auto_end_before_send": "Das automatische Enddatum muss nach dem Sendezeitpunkt liegen.",
         "auto_end_recurring": "Eine wiederkehrende Kampagne endet nach ihrer eigenen Regel: Entfernen Sie das automatische Enddatum.",
-        "pacing_range": "Prüfen Sie Smart Delivery: Die längste Verzögerung ist kürzer als die kürzeste, oder nur eine der beiden Sendezeiten ist festgelegt."
+        "pacing_range": "Prüfen Sie Smart Delivery: Die längste Verzögerung ist kürzer als die kürzeste, oder nur eine der beiden Sendezeiten ist festgelegt.",
+        "follow_up_template_required": "Wählen Sie die Vorlage, die jede Folgenachricht sendet.",
+        "follow_up_flow_required": "Wählen Sie den Flow, den jede Folgenachricht startet.",
+        "follow_up_cloud_api_only": "Folgenachrichten funktionieren nur mit einer WhatsApp-Cloud-API-Nummer. Wählen Sie in Schritt 1 eine aus oder entfernen Sie die Folgenachrichten."
       },
       "template": {
         "previewOnline": "online",
@@ -1135,7 +1198,9 @@
         "senderLabel": "Senden von",
         "senderHint": "Die WhatsApp-Nummer, von der dieser Broadcast gesendet wird.",
         "pickSender": "Nummer auswählen",
-        "classicOption": "klassischer Builder"
+        "classicOption": "klassischer Builder",
+        "buildWithAi": "Mit KI erstellen",
+        "aiNote": "Erstellen Sie mit KI den Entwurf einer neuen Vorlage. Sie prüfen ihn auf der Vorlagenseite; anschließend prüft Meta die Vorlage, bevor sie gesendet werden kann. Kommen Sie nach der Genehmigung zurück und wählen Sie sie aus."
       },
       "audience": {
         "selectionTitle": "Im Contact Hub ausgewählt",
@@ -1278,7 +1343,9 @@
           "invalid_phone": "Keine gültige Nummer",
           "duplicate": "Duplikat"
         },
-        "csvIssuesMore": "{count} weitere sind im Download enthalten."
+        "csvIssuesMore": "{count} weitere sind im Download enthalten.",
+        "csvConsentOn": "Sie haben die Einwilligung für diese Nummern bestätigt. Sie werden beim Start des Versands als zugestimmt erfasst.",
+        "csvConsentVersion": "Version des Hinweises: {version}."
       },
       "review": {
         "intro": "Prüfen Sie die Kosten, legen Sie fest, womit jede Vorlagenvariable gefüllt wird, und kontrollieren Sie den Broadcast.",
@@ -1355,7 +1422,8 @@
         "sumCsv": "CSV-Datei {name}: {count, plural, one {# gültige Nummer} other {# gültige Nummern}}",
         "estimatedCostFull": "Geschätzte Kosten (gesamt)",
         "chargedPlan": "Jetzt Ihrem Wallet belastet: {amount} (Ihr Tarif deckt {covered} dieser Nachrichten ab)",
-        "chargedWallet": "Ihrem Wallet belastet: {amount}"
+        "chargedWallet": "Ihrem Wallet belastet: {amount}",
+        "sumFollowUps": "Folgenachrichten"
       },
       "test": {
         "title": "Eine WhatsApp-Testnachricht senden",
@@ -1560,7 +1628,25 @@
         "exportFailed": "Der Export konnte nicht heruntergeladen werden.",
         "deleteTitle": "Diesen Versand löschen?",
         "deleteOne": "Löscht diesen Versand und seine Empfänger. Das lässt sich nicht rückgängig machen.",
-        "deleteSeries": "Löscht diesen wiederkehrenden Versand und die geplanten Durchläufe. Es wurde nichts gesendet, daher geht kein Verlauf verloren. Das lässt sich nicht rückgängig machen."
+        "deleteSeries": "Löscht diesen wiederkehrenden Versand und die geplanten Durchläufe. Es wurde nichts gesendet, daher geht kein Verlauf verloren. Das lässt sich nicht rückgängig machen.",
+        "followUps": {
+          "title": "Folgenachrichten",
+          "step": "Folgenachricht {step}",
+          "count": {
+            "waiting": "{count} wartend",
+            "sent": "{count} gesendet",
+            "delivered": "{count} zugestellt",
+            "read": "{count} gelesen",
+            "flowsStarted": "{count} Flows gestartet",
+            "skipped": "{count} übersprungen",
+            "lapsed": "{count} abgelaufen",
+            "failed": "{count} fehlgeschlagen"
+          },
+          "hint": {
+            "skipped": "Die Bedingung war bei der Prüfung nicht erfüllt, daher endete die Sequenz dort.",
+            "lapsed": "Die Beobachtungszeit lief ab, bevor der Kontakt geantwortet oder gelesen hat, daher endete die Sequenz dort."
+          }
+        }
       },
       "panel": {
         "title": "Erstellt mit Broadcast erstellen",
@@ -1591,6 +1677,72 @@
         "body": "{number} ({engine}) wird über den klassischen Builder versendet, der neu beginnt. Diese Kampagne wird als Entwurf gespeichert und bleibt in Ihrer Kampagnenliste, sodass Sie sie später fortsetzen können.",
         "confirm": "Klassischen Builder öffnen",
         "cancel": "Hier bleiben"
+      },
+      "followUps": {
+        "title": "Folgenachrichten",
+        "intro": "Senden Sie eine weitere Nachricht oder starten Sie einen Flow, je nachdem, was der Kontakt nach der Kampagnennachricht tut. Bis zu 3 Schritte hintereinander.",
+        "cloudOnly": "Folgenachrichten benötigen eine WhatsApp-Cloud-API-Nummer, da sie auf die Lese- und Antwortberichte von Meta angewiesen sind. Wählen Sie in Schritt 1 eine aus.",
+        "add": "Folgenachricht hinzufügen",
+        "count": "{used} von {max} Folgenachrichten",
+        "limitReached": "Limit erreicht: {max} Folgenachrichten.",
+        "stepTitle": "Folgenachricht {step}",
+        "measuredFromCampaign": "Gerechnet ab der Kampagnennachricht.",
+        "measuredFromStep": "Gerechnet ab der Nachricht von Folgenachricht {step}.",
+        "remove": "Folgenachricht {step} entfernen",
+        "removeShort": "Entfernen",
+        "triggerLabel": "Wenn der Kontakt",
+        "trigger": {
+          "replied": "antwortet",
+          "read": "die Nachricht liest",
+          "not_replied": "nicht geantwortet hat",
+          "not_read": "die Nachricht nicht gelesen hat"
+        },
+        "triggerHelp": {
+          "replied": "Wird ausgelöst, sobald der Kontakt antwortet, sofern das innerhalb der eingestellten Zeit geschieht. Andernfalls endet die Sequenz.",
+          "read": "Wird ausgelöst, sobald der Kontakt die Nachricht liest, sofern das innerhalb der eingestellten Zeit geschieht. Andernfalls endet die Sequenz.",
+          "not_replied": "Wartet die eingestellte Zeit und wird dann ausgelöst, wenn der Kontakt nicht geantwortet hat. Hat er geantwortet, endet die Sequenz.",
+          "not_read": "Wartet die eingestellte Zeit und wird dann ausgelöst, wenn der Kontakt die Nachricht nicht gelesen hat. Hat er sie gelesen, endet die Sequenz."
+        },
+        "watchLabel": "Beobachten für bis zu",
+        "waitLabel": "Warten",
+        "unitLabel": "Zeiteinheit",
+        "duration": {
+          "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+          "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
+          "days": "{count, plural, one {# Tag} other {# Tage}}"
+        },
+        "actionLabel": "Dann",
+        "action": {
+          "template": "Vorlage senden",
+          "flow": "Flow starten"
+        },
+        "templateLabel": "Zu sendende Vorlage",
+        "flowLabel": "Zu startender Flow",
+        "pickTemplate": "Vorlage auswählen",
+        "pickFlow": "Flow auswählen",
+        "loading": "Wird geladen...",
+        "unavailable": "Nicht mehr verfügbar",
+        "noTemplates": "Noch keine genehmigten Vorlagen.",
+        "createTemplate": "Vorlage erstellen",
+        "noFlows": "Noch keine Flows.",
+        "createFlow": "Flow erstellen",
+        "flowsError": "Die Flows konnten nicht geladen werden. Versuchen Sie es später erneut.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Wenn der Kontakt innerhalb von {wait} antwortet",
+          "read": "Wenn der Kontakt innerhalb von {wait} liest",
+          "not_replied": "Wenn nach {wait} keine Antwort kam",
+          "not_read": "Wenn nach {wait} nicht gelesen wurde"
+        },
+        "does": {
+          "template": "{name} senden",
+          "flow": "Flow {name} starten"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {Minute} other {Minuten}}",
+          "hours": "{count, plural, one {Stunde} other {Stunden}}",
+          "days": "{count, plural, one {Tag} other {Tage}}"
+        }
       }
     },
     "history": {
@@ -1704,6 +1856,23 @@
         "title": "Persönliche Nummern sind für diesen Arbeitsbereich deaktiviert",
         "body": "{count, plural, one {Ihre persönliche (QR-)Nummer kann} other {Ihre # persönlichen (QR-)Nummern können}} keine Kampagnen senden, solange dies deaktiviert ist. Ein Plattform-Administrator kann es für diesen Arbeitsbereich aktivieren, oder Sie verbinden eine offizielle WhatsApp-Business-Nummer.",
         "action": "Offizielle Nummer verbinden"
+      },
+      "email": {
+        "none": {
+          "title": "Kein Postfach verbunden",
+          "body": "Verbinde ein Postfach auf der E-Mail-Seite, um den Absender dieser Kampagne zu wählen.",
+          "action": "Postfach verbinden"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# Postfach ist getrennt} other {# Postfächer sind getrennt}}",
+          "body": "Verbinde es auf der E-Mail-Seite neu, um Kampagnen darüber zu senden.",
+          "action": "E-Mail-Seite öffnen"
+        },
+        "error": {
+          "title": "{count, plural, one {# Postfach muss neu verbunden werden} other {# Postfächer müssen neu verbunden werden}}",
+          "body": "Die letzte Anmeldung ist fehlgeschlagen. Verbinde es auf der E-Mail-Seite neu, dann erscheint es hier.",
+          "action": "E-Mail-Seite öffnen"
+        }
       }
     },
     "create": {

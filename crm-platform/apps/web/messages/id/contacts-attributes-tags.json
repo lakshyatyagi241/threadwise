@@ -456,7 +456,9 @@
         "memo": "Memo",
         "status": "Status",
         "source": "Sumber",
-        "consent": "Persetujuan pemasaran (ya / tidak)"
+        "consent": "Persetujuan pemasaran (ya / tidak)",
+        "consentSms": "Persetujuan pemasaran SMS (ya / tidak)",
+        "consentEmail": "Persetujuan pemasaran email (ya / tidak)"
       },
       "notInFile": "Tidak ada di file",
       "columnN": "Kolom {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "Pilih Semua",
         "reorder": "Seret untuk mengurutkan ulang kolom",
         "remove": "Hapus {name}"
+      },
+      "presets": {
+        "myContacts": "Kontak saya",
+        "newThisWeek": "Baru minggu ini",
+        "newLastWeek": "Baru minggu lalu",
+        "recentlyCreated": "Baru dibuat",
+        "recentlyModified": "Baru diubah",
+        "recentlyImported": "Baru diimpor",
+        "neverContacted": "Belum pernah dihubungi",
+        "needsFollowUp": "Perlu tindak lanjut",
+        "active": "Aktif",
+        "inactive": "Tidak aktif",
+        "unsubscribed": "Berhenti berlangganan"
       }
     },
     "erase": {

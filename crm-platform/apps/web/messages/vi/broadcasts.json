@@ -296,7 +296,9 @@
       "media": "Xem trước {kind}",
       "contactsDenied": "Bạn không có quyền truy cập danh sách liên hệ. Hãy chọn liên hệ qua nhóm hoặc thẻ.",
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
-      "previewLabel": "Xem trước mẫu"
+      "previewLabel": "Xem trước mẫu",
+      "colEmail": "Email",
+      "noEmail": "Không có địa chỉ email"
     },
     "overrides": {
       "title": "Điền thông tin cho lần gửi này",
@@ -353,6 +355,31 @@
         "name": "Instagram",
         "hint": "Nhắn tin cho những người đã có trong tin nhắn trực tiếp Instagram của bạn — không cần duyệt mẫu.",
         "cta": "Tạo gửi hàng loạt Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Gửi tin nhắn Messenger cho những người đã nhắn tin cho Trang của bạn trong 24 giờ qua.",
+        "cta": "Tạo chiến dịch gửi Facebook"
+      },
+      "email": {
+        "name": "Email",
+        "hint": "Gửi tin nhắn dưới dạng email từ hộp thư đã kết nối, kèm liên kết hủy đăng ký.",
+        "cta": "Tạo chiến dịch email"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Gửi tin nhắn cho những người đang trò chuyện với tài khoản LINE của bạn.",
+        "cta": "Tạo đợt gửi LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Gửi tin nhắn cho những người đã trò chuyện với tài khoản Viber của bạn.",
+        "cta": "Tạo chiến dịch Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Gửi hàng loạt một tin nhắn đến tất cả người theo dõi, một thẻ hoặc những người dùng được chọn của Tài khoản chính thức.",
+        "cta": "Tạo đợt gửi WeChat"
       }
     }
   }

@@ -832,7 +832,10 @@
         "placeholder": "p. ej. Mi tienda",
         "button": "Crear catálogo",
         "needName": "Escribe un nombre para el catálogo.",
-        "done": "Catálogo creado y conectado."
+        "done": "Catálogo creado y conectado.",
+        "loginCancelled": "El inicio de sesión de Meta se cerró antes de terminar. Inténtalo de nuevo y aprueba el acceso al catálogo.",
+        "sdkFailed": "No se pudo cargar el inicio de sesión de Meta. Revisa tu conexión o el bloqueador de anuncios y recarga la página.",
+        "sdkLoading": "El inicio de sesión de Meta aún se está cargando. Inténtalo de nuevo en un momento."
       },
       "rename": {
         "label": "Nombre del catálogo",

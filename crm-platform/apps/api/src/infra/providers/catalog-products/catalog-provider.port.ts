@@ -123,6 +123,8 @@ export interface CatalogProvider {
   // Autodetect (TW-CAT-003): the WABA's own token, no catalog row yet.
   listWabaCatalogs(auth: GraphAuth, wabaId: string): Promise<string[]>;
   createCatalog(auth: GraphAuth, businessId: string, name: string): Promise<string | null>;
+  /** Exchanges the code of the catalog login popup for an access token (the token that may create catalogs). */
+  exchangeLoginCode(code: string): Promise<string>;
   linkCatalogToWaba(auth: GraphAuth, wabaId: string, catalogId: string): Promise<void>;
   catalogName(auth: GraphAuth, catalogId: string): Promise<string | null>;
 

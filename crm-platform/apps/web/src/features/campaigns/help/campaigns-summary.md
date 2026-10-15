@@ -5,7 +5,21 @@ summary: See in plain words who received a campaign, who wrote back and who fill
 area: campaigns
 order: 30
 documents: [nav:campaigns]
-keywords: [summary, report, wrote back, replies, application form, forms, admission, director, print, download names, window, who]
+keywords:
+  [
+    summary,
+    report,
+    wrote back,
+    replies,
+    application form,
+    forms,
+    admission,
+    director,
+    print,
+    download names,
+    window,
+    who,
+  ]
 ---
 
 ## What it is for

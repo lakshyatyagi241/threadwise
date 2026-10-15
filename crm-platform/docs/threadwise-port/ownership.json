@@ -477,7 +477,7 @@
    "cluster": "platform",
    "wave": 3,
    "estDays": 130,
-   "inventory": "written",
+   "inventory": "pending",
    "routeBase": "developer",
    "zone": [
     "apps/api/src/modules/developer-rest-api-v1/",
@@ -494,9 +494,6 @@
     "apps/web/src/app/(admin)/(developer-rest-api-v1)/",
     "apps/web/src/features/developer-rest-api-v1/",
     "apps/web/messages/*/developer-rest-api-v1.json",
-    "apps/web/messages/*/developer-rest-api-v1-docs.json",
-    "apps/web/src/app/(developer-rest-api-v1-docs)/",
-    "apps/web/src/app/docs/",
     "apps/web/e2e/developer-rest-api-v1/",
     "docs/api/developer-rest-api-v1.md",
     "apps/api/src/modules/partner/",
@@ -585,6 +582,33 @@
     "apps/web/messages/*/chrome-extension-sheets-addon.json",
     "apps/web/e2e/chrome-extension-sheets-addon/",
     "docs/api/chrome-extension-sheets-addon.md"
+   ]
+  },
+  "google-account": {
+   "code": "gacc",
+   "owner": "lakshya",
+   "cluster": "platform",
+   "wave": 3,
+   "estDays": 5,
+   "inventory": "pending",
+   "routeBase": "google-account",
+   "zone": [
+    "apps/api/src/modules/google-account/",
+    "apps/api/src/infra/providers/google-account/",
+    "apps/api/src/config/domains/google-account.env.ts",
+    "apps/api/test/unit/google-account/",
+    "apps/api/test/integration/google-account/",
+    "apps/api/test/e2e/google-account/",
+    "packages/contracts/src/google-account/",
+    "packages/db/src/schema/google-account/",
+    "packages/db/src/seeds/google-account.ts",
+    "packages/db/migrations/??????????????_gacc_*.sql",
+    "apps/web/src/app/(app)/(google-account)/",
+    "apps/web/src/app/(admin)/(google-account)/",
+    "apps/web/src/features/google-account/",
+    "apps/web/messages/*/google-account.json",
+    "apps/web/e2e/google-account/",
+    "docs/api/google-account.md"
    ]
   },
   "addons-extension-registry": {
@@ -1440,11 +1464,6 @@
    "routeBase": "checkout",
    "zone": [
     "apps/api/src/modules/checkout-orders-merchant-payments/",
-    "apps/api/src/modules/store-orders-sales/",
-    "apps/api/test/unit/store-orders-sales/",
-    "apps/api/test/integration/store-orders-sales/",
-    "apps/api/test/e2e/store-orders-sales/",
-    "docs/threadwise-port/wiring/store-orders-crm.md",
     "apps/api/src/infra/providers/checkout-orders-merchant-payments/",
     "apps/api/src/config/domains/checkout-orders-merchant-payments.env.ts",
     "apps/api/test/unit/checkout-orders-merchant-payments/",

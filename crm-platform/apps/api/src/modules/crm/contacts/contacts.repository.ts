@@ -405,6 +405,16 @@ export class ContactsRepository {
     return rows[0] as ContactRow | undefined;
   }
 
+  /** uuid -> internal id for every uuid that exists in the workspace, in one query. Unknown uuids are simply absent. */
+  async idsByUuid(tx: Tx, orgId: number, uuids: string[]): Promise<Map<string, number>> {
+    if (uuids.length === 0) return new Map();
+    const rows = await tx
+      .select({ uuid: contacts.uuid, id: contacts.id })
+      .from(contacts)
+      .where(and(eq(contacts.orgId, orgId), inArray(contacts.uuid, uuids)));
+    return new Map(rows.map((r) => [r.uuid, r.id]));
+  }
+
   async findById(tx: Tx, orgId: number, id: number): Promise<ContactRow | undefined> {
     const rows = await this.baseQuery(tx).where(
       and(eq(contacts.orgId, orgId), eq(contacts.id, id)),

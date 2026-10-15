@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Raporty",
+    "title": "Raport przychodów",
+    "subtitle": "Ile zafakturowano, ile z tego jest opłacone i ile jeszcze pozostaje do zapłaty, oraz wpływy pieniężne w wybranym okresie.",
+    "back": "Panel CRM",
+    "period": "od {from} do {to} ({zone})",
+    "comparedWith": "Porównanie z {mode}: od {from} do {to}",
+    "loading": "Ładowanie raportu przychodów",
+    "retry": "Spróbuj ponownie",
+    "stale": "Nie udało się odświeżyć danych. Widać ostatnio wczytane.",
+    "empty": {
+      "title": "Brak danych w tym okresie",
+      "message": "W tym przedziale dat nie wystawiono żadnej faktury i nie wpłynęła żadna płatność. Wybierz inny okres lub otwórz faktury.",
+      "invoices": "Otwórz faktury"
+    },
+    "mode": {
+      "previous": "poprzednim okresem",
+      "lastYear": "tym samym okresem rok temu"
+    },
+    "filters": {
+      "label": "Filtry raportu",
+      "period": "Okres",
+      "range": {
+        "month": "Ten miesiąc",
+        "lastMonth": "Ostatni miesiąc",
+        "quarter": "Ten kwartał",
+        "year": "Ten rok",
+        "30d": "30 dni",
+        "90d": "90 dni",
+        "custom": "Własny"
+      },
+      "from": "Od",
+      "to": "Do",
+      "compare": "Porównaj z",
+      "compareOption": {
+        "previous": "Poprzedni okres",
+        "lastYear": "Ten sam okres rok temu",
+        "none": "Bez porównania"
+      },
+      "groupBy": "Podziel według",
+      "groupOption": {
+        "source": "Źródło leada",
+        "origin": "Pochodzenie faktury",
+        "product": "Produkt",
+        "owner": "Właściciel",
+        "team": "Zespół"
+      },
+      "owner": "Właściciel",
+      "everyone": "Wszyscy",
+      "team": "Zespół",
+      "allTeams": "Wszystkie zespoły",
+      "currency": "Waluta",
+      "allCurrencies": "Wszystkie, w {currency}",
+      "reset": "Resetuj filtry"
+    },
+    "note": {
+      "converted": "Używanych jest kilka walut. Kwoty przeliczono na {currency}; wybierz jedną walutę, aby zobaczyć dokładne kwoty.",
+      "missingRate": "Brak kursu wymiany dla: {currencies}. Te kwoty pominięto w przeliczonych wartościach.",
+      "invoiced": "Zafakturowane, opłacone i do zapłaty obejmują faktury wystawione w okresie (bez wersji roboczych, anulowanych faktur i proform). Otrzymane i zwrócone obejmują pieniądze, które wpłynęły w okresie, niezależnie od tego, którą fakturę rozliczyły."
+    },
+    "kpi": {
+      "title": "Kluczowe wskaźniki",
+      "vsPrevious": "W porównaniu z okresem odniesienia",
+      "collected": "Otrzymane",
+      "collectedHint": "Płatności otrzymane w okresie",
+      "collectedAll": "Otrzymane, łącznie",
+      "collectedAllHint": "Wszystkie płatności, które widzisz",
+      "outstanding": "Do zapłaty",
+      "outstandingHint": "{count, plural, one {# otwarta faktura} few {# otwarte faktury} many {# otwartych faktur} other {# otwartej faktury}} na dziś",
+      "tax": "Pobrany podatek",
+      "taxHint": "Z faktur w pełni opłaconych w okresie",
+      "invoiced": "Zafakturowane",
+      "invoicedHint": "{count, plural, one {# wystawiona faktura} few {# wystawione faktury} many {# wystawionych faktur} other {# wystawionej faktury}}",
+      "paid": "Dotąd opłacone",
+      "paidHint": "Z faktur wystawionych w okresie",
+      "overdue": "Przeterminowane",
+      "overdueHint": "Po terminie płatności",
+      "refunded": "Zwrócone",
+      "refundedHint": "Zwrócone w okresie",
+      "paidInFull": "Opłacone w całości",
+      "paidInFullHint": "Faktury, które zostały w pełni opłacone",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Zafakturowane, opłacone i do zapłaty",
+      "subtitle": "Faktury wystawione w okresie i ich dzisiejszy stan",
+      "paid": "Opłacone",
+      "owed": "Do zapłaty, przed terminem",
+      "overdue": "Przeterminowane",
+      "credited": "Noty kredytowe",
+      "invoiced": "zafakturowano",
+      "empty": "W tym okresie nic nie zafakturowano.",
+      "several": "Te faktury są w kilku walutach. Wybierz powyżej walutę, aby zobaczyć je jako jeden pasek."
+    },
+    "trend": {
+      "title": "Zafakturowane i otrzymane",
+      "subtitle": {
+        "day": "Dziennie",
+        "week": "Tygodniowo",
+        "month": "Miesięcznie"
+      },
+      "chartLabel": "Zafakturowane i otrzymane w okresie",
+      "invoiced": "Zafakturowane",
+      "collected": "Otrzymane"
+    },
+    "split": {
+      "title": "Według {group}",
+      "subtitle": "Od największych. Kwoty pokazano w {currency}.",
+      "subtitlePerCurrency": "Od największych. Kwoty podano osobno dla każdej waluty.",
+      "group": {
+        "source": "źródła leada",
+        "origin": "pochodzenia faktury",
+        "product": "produktu",
+        "owner": "właściciela",
+        "team": "zespołu"
+      },
+      "empty": {
+        "source": "Brak źródła leada",
+        "origin": "Nieznane pochodzenie",
+        "product": "Brak pozycji",
+        "owner": "Nieprzypisane",
+        "team": "Brak zespołu"
+      },
+      "origin": {
+        "manual": "Utworzona ręcznie",
+        "quote": "Z oferty",
+        "order": "Z zamówienia",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Własny sklep",
+        "api": "API",
+        "ai": "Asystent AI"
+      },
+      "col": {
+        "invoices": "Faktury",
+        "invoiced": "Zafakturowane",
+        "paid": "Opłacone",
+        "outstanding": "Do zapłaty",
+        "overdue": "Przeterminowane",
+        "collected": "Otrzymane",
+        "refunded": "Zwrócone"
+      },
+      "total": "Razem",
+      "truncated": "Wypisano tylko {count} największych wierszy. Podsumowanie CSV zawiera te same wiersze.",
+      "teamNote": "Osoba w dwóch zespołach liczy się w obu, więc wiersze zespołów mogą w sumie dać więcej niż wartość łączna.",
+      "productNote": "Rabaty na całą fakturę, koszty wysyłki i zaokrąglenia są rozłożone na pozycje proporcjonalnie do ich wartości."
+    },
+    "aging": {
+      "title": "Struktura wiekowa należności",
+      "open": "Płatności",
+      "empty": "Nic nie jest należne.",
+      "bucket": {
+        "current": "Przed terminem",
+        "d1_30": "1-30 dni po terminie",
+        "d31_60": "31-60 dni po terminie",
+        "d61_90": "61-90 dni po terminie",
+        "d90_plus": "Ponad 90 dni po terminie"
+      }
+    },
+    "export": {
+      "title": "Pobierz ten raport",
+      "note": "Przygotowywany w tle z użyciem powyższych filtrów, przechowywany przez {days} dni i zapowiedziany e-mailem. Otrzymasz nie więcej, niż pokazuje raport.",
+      "csvPayments": "CSV: płatności",
+      "csvPaymentsHint": "Jeden wiersz na płatność i zwrot w okresie",
+      "csvSummary": "CSV: ta tabela",
+      "csvSummaryHint": "Powyższy podział wraz z sumami",
+      "pdf": "PDF",
+      "pdfHint": "Raport jako dokument",
+      "preparing": "Przygotowywanie...",
+      "requested": "Twój plik jest przygotowywany. Gdy będzie gotowy, dostaniesz e-mail, a plik pojawi się na liście poniżej.",
+      "recent": "Twoje ostatnie pliki",
+      "none": "Nie przygotowano jeszcze żadnego pliku.",
+      "kind": {
+        "pdf": "Raport PDF",
+        "csv-payments": "CSV płatności",
+        "csv-summary": "Podsumowanie CSV"
+      },
+      "status": {
+        "queued": "Oczekuje",
+        "running": "Przygotowywanie",
+        "ready": "Gotowy",
+        "failed": "Niepowodzenie",
+        "expired": "Wygasł"
+      },
+      "range": "od {from} do {to}",
+      "rows": "{count, plural, one {# wiersz} few {# wiersze} many {# wierszy} other {# wiersza}}",
+      "expires": "Przechowywany do {date}",
+      "failed": "Nie udało się przygotować tego pliku. Poproś o niego ponownie.",
+      "download": "Pobierz"
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz do tego dostępu.",
+      "notFound": "Taki plik nie istnieje.",
+      "exportInProgress": "Plik jest już dla Ciebie przygotowywany. Poczekaj na e-mail, a potem poproś o kolejny.",
+      "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Poproś o niego ponownie.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "validation": "Te filtry są nieprawidłowe.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+    }
+  }
+}

@@ -14,6 +14,27 @@
  */
 export const LEAD_INGEST = Symbol('LEAD_INGEST');
 
+/**
+ * Proof that the person agreed to be contacted, as the sender supplies it (BL-168, privacy spec 4.3.2). OPTIONAL and never inferred: a
+ * lead that arrives without it grants nothing, and a lead whose `given` is not `true` grants nothing whatever else it carries. A grant
+ * also needs something a person can read later (the wording, its version, or the form or ad they agreed on).
+ */
+export interface LeadConsent {
+  /** The sender says the person agreed (a ticked consent box on the lead form). Only `true` can grant. */
+  given: boolean;
+  /** The wording the person was shown (cut to 300 characters in the evidence, the hash of the whole text kept). */
+  text?: string;
+  /** The version of that wording. */
+  version?: string;
+  /** ISO 8601 time they agreed, when that was before the lead was delivered. Omitted: when the lead was received. */
+  at?: string;
+  /** The provider's own lead form id, and the ad that brought the person to it. */
+  formId?: string;
+  adId?: string;
+  /** The channels the wording covers. Omitted: a phone is WhatsApp, an address is email. SMS is granted only when named here. */
+  channels?: Array<'whatsapp' | 'sms' | 'email'>;
+}
+
 /** One lead, as a door hands it over. */
 export interface NormalisedLead {
   /** The sender's own id for this lead. `(source, externalId)` is the idempotency key: the same pair twice is acknowledged, not repeated. */
@@ -32,6 +53,8 @@ export interface NormalisedLead {
     ad?: string;
     form?: string;
   };
+  /** Proof that the person agreed to be contacted, when the sender has it (see `LeadConsent`). Without it the lead grants nothing. */
+  consent?: LeadConsent;
   /** The provider's payload untouched, kept for the source's retention period so a mapping can be fixed and the lead retried. */
   raw?: unknown;
 }

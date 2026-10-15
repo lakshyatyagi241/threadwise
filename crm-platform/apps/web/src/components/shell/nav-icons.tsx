@@ -146,6 +146,29 @@ const PATHS: Record<string, ReactNode> = {
       <path d="M5 5.2h6M5 8h6M5 10.8h3.2" />
     </>
   ),
+  form: (
+    <>
+      <rect x="2.5" y="2" width="11" height="12" rx="1.5" />
+      <path d="M5 5.2h6M5 8h6M5 10.8h3.2" />
+    </>
+  ),
+  globe: (
+    <>
+      <circle cx="8" cy="8" r="5.8" />
+      <path d="M2.2 8h11.6M8 2.2c1.7 1.7 2.5 3.6 2.5 5.8S9.7 12.1 8 13.8C6.3 12.1 5.5 10.2 5.5 8S6.3 3.9 8 2.2Z" />
+    </>
+  ),
+  modules: (
+    <>
+      <rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1" />
+      <rect x="9" y="2.5" width="4.5" height="4.5" rx="1" />
+      <rect x="2.5" y="9" width="4.5" height="4.5" rx="1" />
+      <rect x="9" y="9" width="4.5" height="4.5" rx="1" />
+    </>
+  ),
+  shield: (
+    <path d="M8 1.8 13 3.6v4c0 3-2.1 5.3-5 6.6-2.9-1.3-5-3.6-5-6.6v-4L8 1.8ZM5.8 8l1.6 1.6L10.4 6.4" />
+  ),
   widget: (
     <>
       <rect x="3" y="3" width="10" height="8" rx="2" />

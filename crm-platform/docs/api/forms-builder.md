@@ -191,7 +191,7 @@ actor of the workspace the key proved:
 5. **Tags** (`after.tags`, skipped past the plan's tag cap, never an error), **owner** (`unassigned`, `fixed`, `round_robin` with a cursor on the form that
    does not bump its `row_version`; a contact that already has an owner keeps them and costs no turn), a **`contact_attributions`** row (platform
    `form`, campaign from `utm_campaign`, the form's name), the **consent** line, the **timeline** entry `Submitted <form>` (`form_submission`).
-6. **Consent**: the text shown, its version and the time are stored on the submission (`consent`). A ticked marketing box sets
+6. **Consent**: the text shown, its version and the time are stored on the submission (`consent`). The consent line has an optional `termsUrl` (https) next to `privacyUrl`, returned by the public form and offered from the workspace links of the [Compliance center](compliance.md) (BL-175). A ticked marketing box sets
    `email_subscription_status` / `whatsapp_subscription_status` to `subscribed` where they have none, never for a contact flagged `is_unsubscribed`,
    and emits `contact.opt_in` once, on a real change. An unticked box never changes anything. (Decision D10; the value `subscribed` is the first the
    product defines, flagged for the Contacts owner.)
@@ -312,3 +312,13 @@ properties. Contact built-ins: `name`, `first_name`, `middle_name`, `last_name`,
 `industry`, `size_range`, `address` and the same five address parts, `notes`. The CRM keeps ONE address line per contact and company, so the parts are
 joined (`composeAddress`: `street, city, state postal, country`, empty parts skipped) when the submission is mapped, and a field bound to the whole
 `address` wins over the parts. The address, like every other built-in, fills blanks only on a returning contact. `middle_name` is contact only.
+
+## Consent line and the ledger (BL-171)
+
+`definition.consent.channels` (`whatsapp`, `sms`, `email`): the channels the wording covers, chosen by the form's owner (`consentChannels()` in
+contracts; a form saved before it keeps the old rule: WhatsApp and email, SMS when `coversSms`). A ticked **marketing** line grants marketing only
+on those channels, and only when the form collected the matching phone (WhatsApp, SMS) or email. A changed channel set on a published form is a
+new consent version in the editor. Re-running a submission uses the channels of the version the visitor saw. A ticked line that is **not marketing** is
+recorded as agreement to service messages (ledger purpose `utility`, source `form`, with the wording, version, form and submission), never as
+marketing, and changes no subscription label. An unticked line records nothing in the ledger (the submission keeps the wording shown and
+`given: false`). A person who stopped a channel is not turned back on.

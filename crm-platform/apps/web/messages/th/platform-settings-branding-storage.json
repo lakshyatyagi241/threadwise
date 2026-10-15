@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "ไคลเอนต์ Google OAuth ที่ทุกพื้นที่ทำงานใช้เชื่อมต่อปฏิทิน",
+        "description": "ไคลเอนต์ Google OAuth ที่ทุกพื้นที่ทำงานใช้เชื่อมต่อบัญชี Google ของตน สำหรับปฏิทิน Sheets Docs และ Forms",
         "sections": {
           "oauth": {
             "title": "ไคลเอนต์ Google OAuth"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "อนุญาตให้พื้นที่ทำงานเชื่อมต่อ Google Calendar",
-            "hint": "ปิดอยู่: ไม่มีพื้นที่ทำงานใดเชื่อมต่อได้ และจะไม่มีการเขียนหรืออ่านปฏิทินใดๆ"
+            "label": "อนุญาตให้พื้นที่ทำงานเชื่อมต่อ Google",
+            "hint": "ปิดอยู่: ไม่มีพื้นที่ทำงานใดเชื่อมต่อได้ และจะไม่มีการอ่านหรือเขียนข้อมูลใน Google (ปฏิทิน Sheets Docs Forms)"
           },
           "clientId": {
             "label": "Client ID",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "ไคลเอนต์ Google OAuth ที่พื้นที่ทำงานใช้เชื่อมปฏิทินเพื่อการจองและช่วงเวลาที่ไม่ว่าง",
-        "tags": "Google / OAuth / Calendar"
+        "description": "ไคลเอนต์ Google OAuth ที่พื้นที่ทำงานใช้เชื่อมบัญชี Google เพื่อการจอง Sheets Docs และ Forms",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "อีเมล Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "ผู้ดูแล - การนัดหมาย",
-        "description": "ไคลเอนต์ OAuth ของ Google Cloud หนึ่งตัวสำหรับทั้งแพลตฟอร์ม จากนั้นพื้นที่ทำงานแต่ละแห่งเชื่อมบัญชี Google ของตนเองจาก การนัดหมาย > การตั้งค่า พื้นที่ทำงานจะไม่เห็น client id หรือ secret",
+        "description": "ไคลเอนต์ OAuth ของ Google Cloud หนึ่งตัวสำหรับทั้งแพลตฟอร์ม จากนั้นพื้นที่ทำงานแต่ละแห่งเชื่อมบัญชี Google ของตนเองจาก บัญชี Google ในการตั้งค่า และเลือกสิทธิ์ที่จะให้ พื้นที่ทำงานจะไม่เห็น client id หรือ secret",
         "sections": {
           "oauth": {
             "title": "ไคลเอนต์ Google OAuth",
-            "description": "หากไม่มี client id และ secret พื้นที่ทำงานจะเห็น Google Calendar เป็นไม่พร้อมใช้งาน และการจองจะดำเนินต่อไปโดยไม่มีปฏิทิน"
+            "description": "หากไม่มี client id และ secret พื้นที่ทำงานจะเห็น Google เป็นไม่พร้อมใช้งาน การจองจะดำเนินต่อไปโดยไม่มีปฏิทิน และขั้นตอน Google ในโฟลว์จะถูกข้าม"
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. โปรเจกต์และ API",
-              "body": "ในคอนโซล Google Cloud สร้างโปรเจกต์และเปิดใช้ Google Calendar API"
+              "body": "ในคอนโซล Google Cloud สร้างโปรเจกต์และเปิดใช้ API ของ Google Calendar, Google Sheets, Google Docs, Google Drive และ Google Forms สิทธิ์จะใช้งานได้ก็ต่อเมื่อเปิดใช้ API ของสิทธิ์นั้น"
             },
             "redirect": {
               "title": "2. ไคลเอนต์ OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. หน้าจอยินยอม",
-              "body": "เพิ่มขอบเขต calendar.events, calendar.freebusy และ calendar.calendarlist.readonly แล้วเผยแพร่แอป: ในโหมด Testing Google จะยกเลิกการอนุญาตทุก 7 วัน และพื้นที่ทำงานต้องเชื่อมต่อใหม่"
+              "body": "เพิ่มขอบเขตที่ผลิตภัณฑ์ขอ (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, drive.metadata.readonly) แล้วเผยแพร่แอป: ในโหมด Testing Google จะยกเลิกการอนุญาตทุก 7 วัน และพื้นที่ทำงานต้องเชื่อมต่อใหม่ ขอบเขต drive เป็นขอบเขตที่จำกัดและต้องผ่านการตรวจสอบของ Google"
             },
             "workspaces": {
               "title": "4. พื้นที่ทำงานเชื่อมต่อ",
-              "body": "วาง client id และ secret ที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อจาก การนัดหมาย > การตั้งค่า > Google Calendar"
+              "body": "วาง client id และ secret ที่นี่แล้วบันทึก จากนั้นผู้ดูแลจะเชื่อมต่อจาก การตั้งค่า > การเชื่อมต่อ > บัญชี Google หรือจาก การนัดหมาย > การตั้งค่า > Google Calendar"
             }
           }
         }

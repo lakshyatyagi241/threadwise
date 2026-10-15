@@ -16,5 +16,43 @@
       "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `DECLARE rot NO SCROLL CURSOR FOR SELECT tableoid::regclass::text AS tbl, ctid::te",
       "reason": "identifiers go through quote(); batch is a number; maintenance CLI, not reachable from a request; reviewed 2026-10-14"
     }
+  ],
+  "43": [
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.getMessage(",
+      "reason": "one Gmail API call per new message (external HTTP, no DB query), bounded by opts.maxMessages; Gmail offers no cheaper per-id read here; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listHistory(",
+      "reason": "pagination: each page needs the previous page token, so it cannot be parallel or batched (external API, no DB query); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listMessages(",
+      "reason": "pagination: each page needs the previous page token (external API, no DB query); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/keys/api-keys.service.ts await this.repo.countActive(",
+      "reason": "retry loop on a key-hash collision: one count per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.service.ts await this.repo.findByUuid(",
+      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.service.ts await this.deals.get(",
+      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.remote.list(",
+      "reason": "pagination: the next cursor comes from the previous page, bounded by MAX_PAGES (external API); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts await this.queue.getJob(",
+      "reason": "one Redis job lookup per stale running row, bounded by BATCH, background sweep; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/waboo-migration/remote-runner.ts await this.jobs.read(",
+      "reason": "a poll loop with a sleep between reads, not a per-item lookup; reviewed 2026-10-15"
+    }
   ]
 }

@@ -187,6 +187,18 @@
       </div>
     </form>
 
+    <!-- Not window.confirm(): Google's sandbox for these windows ignores it, so the button would never do anything. -->
+    <div id="confirmRemove" class="box" role="alertdialog" aria-labelledby="confirmText" hidden>
+      <p id="confirmText">
+        Remove the connection from this Google account? Rows stop being sent until you set it up
+        again.
+      </p>
+      <div class="row">
+        <button id="confirmYes" type="button" class="danger">Yes, remove</button>
+        <button id="confirmNo" type="button" class="secondary">Keep it</button>
+      </div>
+    </div>
+
     <div id="result" role="status" aria-live="polite"></div>
 
     <script>
@@ -340,13 +352,19 @@
       });
 
       el('remove').addEventListener('click', function () {
-        if (
-          busy ||
-          !window.confirm(
-            'Remove the connection from this Google account? Rows stop being sent until you set it up again.',
-          )
-        )
-          return;
+        if (busy) return;
+        el('confirmRemove').hidden = false;
+        el('confirmYes').focus();
+      });
+
+      el('confirmNo').addEventListener('click', function () {
+        el('confirmRemove').hidden = true;
+        el('remove').focus();
+      });
+
+      el('confirmYes').addEventListener('click', function () {
+        if (busy) return;
+        el('confirmRemove').hidden = true;
         setBusy(true);
         google.script.run
           .withSuccessHandler(function () {

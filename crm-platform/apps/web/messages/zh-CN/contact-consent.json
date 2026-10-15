@@ -112,15 +112,22 @@
         "instagram": "Instagram",
         "webchat": "网页聊天",
         "voice": "语音通话",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "已订阅",
-        "withdrawn": "已退订"
+        "withdrawn": "已退订",
+        "utilityGranted": "已同意服务消息",
+        "utilityWithdrawn": "已停止服务消息"
       },
       "action": {
         "granted": "已订阅",
-        "withdrawn": "已退订"
+        "withdrawn": "已退订",
+        "utilityGranted": "同意就其请求被联系",
+        "utilityWithdrawn": "已停止服务消息"
       },
       "source": {
         "form": "表单",
@@ -134,7 +141,8 @@
         "legacy": "同意历史之前",
         "widget": "网站聊天",
         "booking": "预约页面",
-        "commerce": "店铺结账"
+        "commerce": "店铺结账",
+        "lead": "线索收集"
       },
       "by": "由 {name}",
       "evidence": {
@@ -154,7 +162,10 @@
         "widgetId": "聊天小组件",
         "bookingTypeId": "预约页面",
         "integrationId": "店铺",
-        "storeFlag": "店铺设置"
+        "storeFlag": "店铺设置",
+        "leadSourceId": "线索来源",
+        "leadFormId": "线索表单",
+        "adId": "广告"
       },
       "dialog": {
         "titleGranted": "标记为已订阅",
@@ -187,7 +198,14 @@
       "hintColumn": "映射为营销同意的列决定记录对象：只有标注为“是”的行会记录同意，并以文件名作为证明。“否”、空白单元格或无法识别的词不会记录任何内容。已退订的联系人将保持退订状态。",
       "columnSummary": "{granted} 行标注为“是”，将被记录。{notGranted} 行为“否”或空白，不会生成同意记录。",
       "unrecognised": "{count, plural, one {# 行} other {# 行}}的同意值既不是“是”也不是“否”（{values}），将被视为未同意。请使用 yes / no、true / false 或 1 / 0。",
-      "columnIgnored": "在你勾选上方的复选框之前，同意列不会生效。"
+      "columnIgnored": "在你勾选上方的复选框之前，同意列不会生效。",
+      "noticeText": "告知或法律依据(可选)",
+      "noticeTextHint": "这些联系人同意了什么、在哪里同意,例如:结账时按隐私声明 v3 订阅。它会作为证据与每条已记录的同意一起保存。",
+      "noticeVersion": "告知版本(可选)",
+      "smsSummary": "短信同意列:{granted} 行为“是”,将记录为短信同意。{notGranted} 行为“否”或为空。",
+      "emailSummary": "邮件同意列:{granted} 行为“是”,将记录为邮件同意(该行还需有邮箱地址)。{notGranted} 行为“否”或为空。",
+      "labelNumbers": "我已获得向这些号码发送消息的同意",
+      "hintNumbers": "勾选后,发起群发时文件中的每个号码都会被记录为已同意营销,并以文件名作为证据。不勾选则不记录同意。已退订的人保持退订。"
     },
     "systemLine": {
       "withdrawn": "联系人回复 {keyword}：已取消营销订阅",
@@ -291,12 +309,14 @@
       "title": {
         "widget": "聊天表单中的同意行",
         "booking": "预约页面中的同意行",
-        "commerce": "店铺营销复选框的含义"
+        "commerce": "店铺营销复选框的含义",
+        "workspace": "默认同意告知声明"
       },
       "intro": {
         "widget": "显示为访客信息下方的复选框。只有勾选的访客才会被记录为同意，且仅限其提供了电话号码或电子邮件时。",
         "booking": "显示为预约表单上的复选框。只有勾选的人才会被记录为同意；预约从不需要它。",
-        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。"
+        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。",
+        "workspace": "当表单、小组件或预约页面没有自己的文字时,您的工作区在同意框旁显示的文字。每次修改都会生成新的编号版本。"
       },
       "enabled": "开启同意行",
       "text": "此人同意的措辞",
@@ -309,7 +329,21 @@
       "version": "当前版本：{version}",
       "noVersion": "尚未保存。",
       "saveFirst": "请先保存此项，然后即可设置其同意行。",
-      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）"
+      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）",
+      "termsUrl": "条款链接(可选)",
+      "termsUrlHint": "必须以 https:// 开头",
+      "useWorkspacePrivacy": "使用我的工作区隐私链接",
+      "useWorkspaceTerms": "使用我的工作区条款链接",
+      "useWorkspaceText": "使用我的工作区默认文字",
+      "statement": "我同意通过 {channels} 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "短信",
+        "email": "电子邮件"
+      },
+      "channelsLabel": "此同意涵盖的渠道",
+      "channelsHint": "对方仅会订阅此处勾选的渠道,同意文案也会列出这些渠道。仅当对方提供了对应的手机号码或邮箱时才会使用该渠道。",
+      "channelsUse": "用这些渠道更新文案"
     }
   }
 }

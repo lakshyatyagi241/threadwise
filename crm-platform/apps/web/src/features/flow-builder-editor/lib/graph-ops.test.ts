@@ -180,6 +180,27 @@ describe('options (TW-FLB-015 rule 9, TW-FLB-035..050)', () => {
     ]);
   });
 
+  it('removing a button also moves its picture and its pressed action up with the buttons after it', () => {
+    const s: CanvasState = {
+      nodes: [
+        node('b', 'buttons', {
+          options: ['A', 'B', 'C'],
+          optionIcons: ['ia', 'ib', 'ic'],
+          handoffs: { '2': { team: 't', message: '' } },
+          optionActions: { '1': { type: 'opt_out' } },
+        }),
+      ],
+      edges: [],
+    };
+    const d = removeOption(s, 'b', 0).nodes[0]!.data;
+    expect(d.options).toEqual(['B', 'C']);
+    expect(d.optionIcons).toEqual(['ib', 'ic']);
+    expect(d.optionActions).toEqual({ '0': { type: 'opt_out' } });
+    expect(d.handoffs).toEqual({ '1': { team: 't', message: '' } });
+    // Removing the button that has the action takes the action with it.
+    expect(removeOption(s, 'b', 1).nodes[0]!.data.optionActions).toEqual({});
+  });
+
   it("removing an option never touches another node's edges", () => {
     const s = { ...buttons(3), edges: [...buttons(3).edges, edge('e9', 'x', 'p2', 'y')] };
     expect(removeOption(s, 'b', 0).edges.find((e) => e.id === 'e9')!.sourceHandle).toBe('p2');

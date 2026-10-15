@@ -7,7 +7,8 @@ order: 30
 documents: [tile:chat-widget]
 gates:
   planFeature: chatbot_widgets
-keywords: [web chat, website chat, live chat, widget, embed, snippet, bubble, launcher, whatsapp button]
+keywords:
+  [web chat, website chat, live chat, widget, embed, snippet, bubble, launcher, whatsapp button]
 ---
 
 ## What it is for

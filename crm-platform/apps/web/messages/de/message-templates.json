@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Code kopieren",
       "buttonUnnamed": "Schaltfläche",
-      "moreButtons": "{count, plural, one {+# weitere Schaltfläche} other {+# weitere Schaltflächen}}"
+      "moreButtons": "{count, plural, one {+# weitere Schaltfläche} other {+# weitere Schaltflächen}}",
+      "live": "Live-Vorschau",
+      "business": "Bloomly",
+      "online": "online"
     },
     "card": {
       "rejected": "Abgelehnt: {reason}",
       "view": "Ansehen",
       "edit": "Bearbeiten",
-      "delete": "Löschen"
+      "delete": "Löschen",
+      "curl": "cURL: diese Vorlage per API senden",
+      "curlNamed": "cURL zum Senden von {name}",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standard",
+        "media": "Medien",
+        "auth": "Authentifizierung",
+        "carousel": "Karussell",
+        "catalog": "Katalog",
+        "limited_time_offer": "Zeitlich begrenztes Angebot"
+      },
+      "rejectedLabel": "Abgelehnt:",
+      "viewTitle": "Details und Meta-Prüfstatus anzeigen",
+      "deleteNamed": "{name} löschen"
     },
     "library": {
       "title": "Vorlagenbibliothek",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Keine Vorlage passt",
       "emptyFilteredBody": "Ändern Sie die Filter oder setzen Sie sie zurück, um weitere Vorlagen zu sehen.",
       "clearFilters": "Filter zurücksetzen",
-      "loadMore": "Mehr laden"
+      "loadMore": "Mehr laden",
+      "crumb": "Kampagnen / Vorlagen",
+      "titleA": "Vorlagen",
+      "titleB": "Bibliothek",
+      "tipTitle": "Tipp",
+      "tip": "Reichen Sie Vorlagen mit klarem, variablenfreundlichem Text ein ('{{name}}', '{{order_id}}'). Die Genehmigung dauert unter 24 Std., wenn der Text keine Werbeauslöser enthält und zur gewählten Meta-Kategorie passt.",
+      "statusTitle": "Status",
+      "statusTab": {
+        "all": "Alle",
+        "approved": "Genehmigt",
+        "pending": "In Prüfung",
+        "rejected": "Abgelehnt"
+      },
+      "quickStartTitle": "Schnellstart",
+      "quickStart": "Lesen Sie die <link>Vorlagenrichtlinien</link>, bevor Sie bei Meta einreichen, damit die Genehmigung unter 24 Std. bleibt.",
+      "createTemplate": "Vorlage erstellen",
+      "syncFailedLabel": "Synchronisierung mit Meta fehlgeschlagen:",
+      "categories": "Kategorien",
+      "tabAll": "Alle",
+      "sortLabel": "Vorlagen sortieren",
+      "sort": {
+        "newest": "Neueste",
+        "oldest": "Älteste",
+        "name-asc": "Name A→Z",
+        "name-desc": "Name Z→A"
+      },
+      "showing": "Angezeigt werden",
+      "of": "von",
+      "filteredTemplates": "gefilterte Vorlagen",
+      "showingRange": "Zeige 1-{shown} von {total} Vorlagen",
+      "legend": {
+        "approved": "Genehmigt",
+        "pending": "In Prüfung",
+        "rejected": "Abgelehnt"
+      },
+      "helpLabel": "Hilfe - 0{n}",
+      "help": {
+        "one": {
+          "title": "Was ist eine Vorlagennachricht?",
+          "body": "Ein von Meta vorab genehmigtes Nachrichtenformat, das nötig ist, um neue Unterhaltungen mit Kunden außerhalb des 24-Stunden-Servicefensters zu beginnen."
+        },
+        "two": {
+          "title": "Wie verkürze ich die Genehmigungszeit?",
+          "body": "Halten Sie den Nachrichtentext klar, vermeiden Sie werbliche Sprache in Utility-Kategorien und geben Sie immer Beispielwerte für Variablen an."
+        },
+        "three": {
+          "title": "Warum wurde meine Vorlage abgelehnt?",
+          "body": "Häufige Gründe sind falsche Formatierung, nicht passende Kategorie oder beleidigende Inhalte. Prüfen Sie den Ablehnungsgrund und bearbeiten Sie die Vorlage zum erneuten Einreichen."
+        }
+      }
     },
     "delete": {
       "title": "Vorlage löschen",
@@ -289,6 +355,11 @@
         "saved": "Als Entwurf gespeichert.",
         "warnings": "Vor der Prüfung durch Meta lohnt ein Blick darauf:",
         "open": "Vorlage öffnen"
+      },
+      "ai": {
+        "open": "Mit KI erstellen",
+        "applied": "Vorlagenentwurf von der KI ausgefüllt. Prüfen Sie ihn, bevor Sie ihn einreichen.",
+        "authHint": "Authentifizierungsvorlagen haben einen festen Text, daher gibt es nichts zu entwerfen."
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "Von Meta pausiert. Sie kann erst gesendet werden, wenn Meta die Pause aufhebt.",
         "pausedUntil": "Von Meta pausiert bis {when}.",
         "disabled": "Von Meta deaktiviert. Sie kann nicht gesendet werden.",
-        "deleted": "Meta führt diese Vorlage nicht mehr auf. Sie bleibt hier erhalten; synchronisieren Sie erneut oder löschen Sie sie."
+        "deleted": "Meta führt diese Vorlage nicht mehr auf. Sie bleibt hier erhalten; synchronisieren Sie erneut oder löschen Sie sie.",
+        "notSubmitted": "Noch nicht bei Meta eingereicht",
+        "notSubmittedBody": "Diese Vorlage ist hier gespeichert, hat aber keine Meta-Vorlagen-ID: Meta hat sie nie akzeptiert, deshalb kann sie weder geprüft noch gesendet werden. Reichen Sie sie ein, um die Prüfung zu starten.",
+        "notSubmittedNoWaba": "Diese Vorlage hat keine Meta-Vorlagen-ID. Verbinden Sie ein WhatsApp Business (WABA)-Konto und reichen Sie sie dann zur Prüfung ein.",
+        "pendingBody": "Die meisten Vorlagen werden innerhalb von Minuten genehmigt; Meta benötigt bis zu 48 Stunden. Diese Seite aktualisiert sich automatisch alle 30 Sekunden, solange der Status ausstehend ist.",
+        "submittedAgo": "Eingereicht {when}",
+        "checkedAgo": "zuletzt geprüft {when}",
+        "code": "Code:",
+        "pausedBody": "Wiederholtes negatives Feedback (Blockierungen oder Spam-Meldungen) hat diese Vorlage pausiert. Ihre Qualitätsbewertung muss sich erholen, bevor sie wieder gesendet werden kann."
       },
       "facts": {
         "title": "Meta-Synchronisierung",
@@ -354,7 +433,171 @@
         "title": "Meta-Daten",
         "hint": "Was zur Prüfung an Meta gesendet wird, genau so wie es aufgebaut ist.",
         "empty": "Noch nichts erstellt."
+      },
+      "curl": {
+        "title": "Mit der API senden (cURL)",
+        "intro": "Sende diese genehmigte Vorlage an eine Nummer. Ersetze die Beispielwerte durch deine eigenen.",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "copyFailed": "Kopieren nicht möglich. Markiere den Text und kopiere ihn von Hand.",
+        "keyHint": "Ersetze YOUR_API_KEY durch deinen API-Schlüssel.",
+        "keyLink": "API-Schlüssel erhalten",
+        "loading": "Deine API-Schlüssel werden geprüft…",
+        "noKey": "Dieser Arbeitsbereich hat noch keinen API-Schlüssel. Erstelle zuerst einen API-Schlüssel und nutze dann dieses cURL.",
+        "keysUnknown": "Deine API-Schlüssel konnten nicht geprüft werden. Öffne die Seite Entwickler, um einen Schlüssel zu erstellen oder zu prüfen, und nutze dann dieses cURL.",
+        "createKey": "API-Schlüssel erstellen"
+      },
+      "refreshNow": "Jetzt aktualisieren",
+      "editTemplate": "Vorlage bearbeiten",
+      "editResubmit": "Bearbeiten und erneut einreichen",
+      "submitToMeta": "Bei Meta einreichen",
+      "wabaAccount": "WhatsApp-Business-Konto",
+      "noWaba": "Kein WABA-Konto verbunden.",
+      "connectOne": "Eines verbinden",
+      "noWabaTail": ", um Vorlagen bei Meta einzureichen.",
+      "related": "Verwandt",
+      "useInBroadcast": "In einem Broadcast verwenden",
+      "crumbTemplates": "Vorlagen",
+      "crumbDetail": "Details",
+      "notSubmittedPill": "Nicht eingereicht",
+      "qualityPill": "Qualität · {quality}",
+      "preview": {
+        "title": "Vorschau",
+        "hint": "So erscheint es in WhatsApp"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "Inhalt wurde als beleidigend oder bedrohlich markiert.",
+        "INVALID_FORMAT": "Format verstößt gegen die Vorlagenregeln von Meta (Platzhalter, Zeilenumbrüche, Länge).",
+        "PROMOTIONAL": "Werbesprache ist in dieser Kategorie nicht erlaubt.",
+        "TAG_CONTENT_MISMATCH": "Kategorie passt nicht zum Inhalt (z. B. Werbetext in einer UTILITY-Vorlage).",
+        "SCAM": "Meta hat die Vorlage als möglichen Betrug markiert. Prüfen Sie Aussagen und Sprache."
       }
+    },
+    "ai": {
+      "eyebrow": "Vorlagen / KI",
+      "title": "Erstellen mit",
+      "titleAccent": "KI",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "generate": "Vorlage generieren",
+      "intro": "Erstellen Sie aus einem kurzen Briefing den Entwurf einer WhatsApp-Vorlage: Name, Kopfzeile, Text, Fußzeile und Schaltflächen. Es wird nichts eingereicht, solange Sie das nicht selbst tun.",
+      "model": "KI-Modell",
+      "modelsError": "Die Modelle konnten nicht geladen werden.",
+      "noModels": "Für diesen Arbeitsbereich ist kein KI-Anbieter aktiviert. Bitten Sie einen Administrator, einen zu aktivieren.",
+      "loadingModels": "Modelle werden geladen…",
+      "pickModel": "Modell auswählen",
+      "yourKey": "Ihr Schlüssel",
+      "business": "Firmenname",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Branche",
+      "pickIndustry": "Branche auswählen",
+      "occasion": "Anlass",
+      "pickOccasion": "Anlass auswählen",
+      "purpose": "Zweck",
+      "pickPurpose": "Zweck auswählen",
+      "action": "Hauptaktion",
+      "pickAction": "Hauptaktion auswählen",
+      "tone": "Tonalität",
+      "pickTone": "Tonalität auswählen",
+      "language": "Sprache",
+      "languageHint": "Der Entwurf wird in der Sprache des Formulars verfasst.",
+      "notes": "Eigener Prompt",
+      "notesNote": "optional / max. 2000",
+      "notesPlaceholder": "Alles, was enthalten sein soll: Variablen, Links, zwingende Formulierungen, was vermieden werden soll…",
+      "industries": {
+        "retail": "Einzelhandel / E-Commerce",
+        "food": "Essen & Trinken",
+        "healthcare": "Gesundheitswesen",
+        "education": "Bildung",
+        "travel": "Reisen & Gastgewerbe",
+        "finance": "Finanzen & Bankwesen",
+        "realEstate": "Immobilien",
+        "beauty": "Schönheit & Wellness",
+        "logistics": "Logistik & Lieferung",
+        "services": "Professionelle Dienstleistungen",
+        "nonprofit": "Gemeinnützig",
+        "other": "Sonstiges"
+      },
+      "occasions": {
+        "launch": "Produkteinführung",
+        "sale": "Sale / Rabatt",
+        "orderConfirmation": "Bestellbestätigung",
+        "shipping": "Versandstatus",
+        "appointment": "Terminerinnerung",
+        "welcome": "Willkommen / Onboarding",
+        "feedback": "Feedback-Anfrage",
+        "abandonedCart": "Abgebrochener Warenkorb",
+        "reengage": "Reaktivierung",
+        "event": "Einladung zu einer Veranstaltung",
+        "festival": "Festtagsgruß",
+        "other": "Sonstiges"
+      },
+      "purposes": {
+        "inform": "Informieren",
+        "promote": "Bewerben",
+        "confirm": "Bestätigen",
+        "remind": "Erinnern",
+        "collectFeedback": "Feedback einholen",
+        "reengage": "Reaktivieren",
+        "purchase": "Kauf fördern",
+        "booking": "Buchung fördern"
+      },
+      "actions": {
+        "website": "Website besuchen",
+        "call": "Anrufen",
+        "book": "Termin buchen",
+        "order": "Bestellung aufgeben",
+        "catalog": "Katalog ansehen",
+        "code": "Mit einem Code antworten",
+        "other": "Sonstiges"
+      },
+      "tones": {
+        "friendly": "Freundlich",
+        "professional": "Professionell",
+        "concise": "Prägnant",
+        "empathetic": "Einfühlsam",
+        "excited": "Begeistert",
+        "formal": "Förmlich"
+      },
+      "errors": {
+        "businessRequired": "Der Firmenname ist erforderlich.",
+        "noKey": "Für diesen Arbeitsbereich ist kein KI-Anbieter aktiviert. Bitten Sie einen Administrator, einen Schlüssel hinzuzufügen.",
+        "limitReached": "Dieser Arbeitsbereich hat sein KI-Kontingent für den Monat aufgebraucht.",
+        "providerFailed": "Der KI-Anbieter hat nicht geantwortet. Versuchen Sie es gleich noch einmal.",
+        "badJson": "Die Antwort des Modells war keine brauchbare Vorlage. Versuchen Sie es erneut oder präzisieren Sie das Briefing.",
+        "invalid": "Prüfen Sie das Briefing: Der Firmenname ist erforderlich und einige Felder sind zu lang.",
+        "forbidden": "Sie haben keine Berechtigung, Vorlagen zu erstellen.",
+        "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+        "failed": "Die Vorlage konnte nicht generiert werden. Versuchen Sie es erneut."
+      }
+    },
+    "gallery": {
+      "title": "Vorlagen-Galerie",
+      "intro": "Fertige WhatsApp-Vorlagen nach Anwendungsfall. Wähle eine aus, und sie öffnet sich als neue Vorlage, die du vor dem Speichern ändern kannst.",
+      "search": "Galerie durchsuchen",
+      "categoryFilter": "Galerie-Kategorien",
+      "all": "Alle",
+      "loading": "Galerie wird geladen",
+      "loadError": "Die Galerie konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": "Keine passende Vorlage",
+      "emptyHint": "Versuche ein anderes Wort oder wähle eine andere Kategorie.",
+      "use": "Diese Vorlage verwenden",
+      "useNamed": "Vorlage {name} verwenden",
+      "count": "{count, plural, one {# Vorlage} other {# Vorlagen}}",
+      "categories": {
+        "ecommerce": "E-Commerce",
+        "food_delivery": "Essenslieferung",
+        "festival_season": "Festtagssaison",
+        "education": "Bildung",
+        "travel": "Reisen",
+        "others": "Sonstiges"
+      }
+    },
+    "home": {
+      "label": "Vorlagenansichten",
+      "saved": "Gespeicherte Vorlagen",
+      "gallery": "Vorlagen-Galerie"
     }
   }
 }

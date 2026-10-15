@@ -296,7 +296,9 @@
       "media": "{kind}のプレビュー",
       "contactsDenied": "連絡先リストへのアクセス権がありません。グループまたはタグから連絡先を選択してください。",
       "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
-      "previewLabel": "テンプレートのプレビュー"
+      "previewLabel": "テンプレートのプレビュー",
+      "colEmail": "メール",
+      "noEmail": "メールアドレスなし"
     },
     "overrides": {
       "title": "この送信の内容を入力",
@@ -353,6 +355,31 @@
         "name": "Instagram",
         "hint": "InstagramのDMにすでにいるユーザーにメッセージを送ります。テンプレートの承認は不要です。",
         "cta": "Instagram一斉配信を作成"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "過去24時間にページへメッセージを送ってくれた人に Messenger でメッセージを送ります。",
+        "cta": "Facebook 配信を作成"
+      },
+      "email": {
+        "name": "メール",
+        "hint": "接続済みのメールボックスからメッセージをメールとして送信します。配信停止リンク付きです。",
+        "cta": "メールキャンペーンを作成"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "すでにLINEアカウントでやり取りしている人にメッセージを送ります。",
+        "cta": "LINE配信を作成"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "すでに Viber アカウントとチャットしている人にメッセージを送信します。",
+        "cta": "Viber 一斉配信を作成"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "公式アカウントのすべてのフォロワー、タグ、または選択したユーザーにメッセージを一斉送信します。",
+        "cta": "WeChat一斉配信を作成"
       }
     }
   }

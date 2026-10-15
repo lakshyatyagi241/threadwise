@@ -1,4 +1,10 @@
-import type { AppointmentResponse, BookingTypeOption, BookingTypeResponse } from '@crm/contracts';
+import type {
+  AppointmentResponse,
+  BookingTypeOption,
+  BookingTypeResponse,
+  CalendarDriftReason,
+  CalendarUnreadableReason,
+} from '@crm/contracts';
 import { money, percentToBp, totalWithTax } from './appointment-rules';
 import type { AppointmentRow } from './appointments.repository';
 import type { BookingTypeRow, TypeChildren } from './booking-types.repository';
@@ -171,7 +177,20 @@ export function toAppointmentResponse(
     cancelledAt: row.cancelledAt ? row.cancelledAt.toISOString() : null,
     cancelledBy: row.cancelledBy,
     cancelReason: row.cancelReason,
-    calendar: { eventId: row.calendarEventId, calendarId: row.calendarId },
+    calendar: {
+      eventId: row.calendarEventId,
+      calendarId: row.calendarId,
+      sync: row.calendarEventId
+        ? {
+            state: row.googleSyncState,
+            reason: row.googleSyncReason as CalendarDriftReason | CalendarUnreadableReason | null,
+            detectedAt: row.googleDriftDetectedAt?.toISOString() ?? null,
+            googleStartsAt: row.googleDriftStartsAt?.toISOString() ?? null,
+            googleEndsAt: row.googleDriftEndsAt?.toISOString() ?? null,
+            checkedAt: row.googleCheckedAt?.toISOString() ?? null,
+          }
+        : null,
+    },
     manageUrl: plain.manageUrl,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),

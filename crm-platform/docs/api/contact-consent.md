@@ -48,8 +48,10 @@ Sheets rows use the cells `consent` (yes) and `consent_note`; a yes without a no
 
 ### Consent notices (`/v2/contact-consent/notices/:scope/:ref`, BL-167)
 
+Scope `workspace` (BL-179, [compliance.md](compliance.md)) is the workspace's default wording: `ref` is a language code (`en`, `hi`), one notice per language, same versioning.
+
 `GET` and `PUT` (permission `settings.consent.manage`). `scope` is `widget` (ref: the widget id), `booking` (the booking type id) or `commerce`
-(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, channels }`; every change to any of them
+(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, termsUrl, channels }` (`termsUrl` is the optional terms link next to the privacy link `url`, BL-175; additive, an older client that does not send it stores null); every change to any of them
 appends the next numbered **version** (a repeat writes nothing, rows are append-only). An enabled notice needs its wording (422), the link must be
 https (422), an unknown widget, booking type or store is 404 `CONSENT_NOTICE_TARGET_NOT_FOUND`, and another workspace's id is the same 404.
 `channels: ["whatsapp"]` is for stores only: it makes the store's marketing checkbox count for WhatsApp too.
@@ -138,3 +140,27 @@ default). The adopter is `calling-voice/call-recording-consent.service.ts` (BL-1
 Not yet on the gate (allow-list entries marked KNOWN GAP): Telegram, Facebook and Instagram broadcasts, commerce (Shopify / WooCommerce)
 broadcasts, the send-time re-check inside the broadcast dispatcher, the campaign wizard preview counts, `ai_content_processing` and
 `third_party_sharing` as workspace switches, quiet hours and calling windows.
+
+## Intake, round 2 (BL-168 to BL-171)
+
+- **Lead capture (BL-168).** `NormalisedLead.consent` / `ConnectorLead.consent`: `{ given, text, version, at, formId, adId, channels }`.
+  The generic lead webhook reads a top-level `consent` object or flat `consent_given`, `consent_text`, `consent_version`, `consent_at`,
+  `consent_form_id`, `consent_ad_id`, `consent_channels` keys (nothing deeper is searched, no alias guesses). A marketplace recipe maps it with
+  the optional `mapping.consent` block. A grant (source `lead`, evidence `leadSourceId`, `leadFormId`, `adId`, `consentText`,
+  `consentHash`, `consentVersion`, time = `at` clamped to now) is written only when the sender says yes AND names wording, version, form or ad.
+  Channels: the ones named, else WhatsApp for a phone and email for an address; SMS only when named. A test lead and a person who opted out
+  are never granted; the status labels are filled only on a channel that got the grant.
+- **Click-to-WhatsApp (BL-169).** The Meta `referral` of a first message is stored as a `contact_attributions` touch (`platform`
+  `click_to_whatsapp`, `ad` = the ad id, `evidence` = source type/id/url, headline, body, click id; `external_ref` = `ctwa:<message id>`
+  makes a redelivery write one touch). The ledger is untouched.
+- **Contact import (BL-170).** Options `consentNoticeText` (2000) and `consentNoticeVersion` (64) go into the evidence of every grant of the
+  file. New mappable columns `consentSms` and `consentEmail` (headers like `SMS consent`, `Email opt-in`); the preview returns
+  `consentSms` and `consentEmail` counts. Per row, with the confirmation: WhatsApp as before, SMS only from a yes in its column, email only
+  from a yes in its column on a row with an address.
+- **Broadcast wizard CSV (BL-170).** `POST /v2/broadcast-wizard/csv` takes an `options` JSON field (`consentConfirmed`, `consentNoticeText`,
+  `consentNoticeVersion`) stored on the upload (`camp_wizard_csv`); the report returns `consentConfirmed` and `consentNoticeVersion`. At launch
+  every contact the file's numbers belong to gets one WhatsApp grant (source `import`, `reference: wizard_csv:<upload>`), never over an opt-out;
+  with the workspace switch ON those numbers count as consented before launch.
+- **Web forms (BL-171).** `consent.channels` on the form definition (absent: WhatsApp, email, and SMS with `coversSms`). A ticked marketing line grants only the chosen channels the form collected data for.
+  A ticked line that is not marketing records purpose `utility` events (source `form`, same evidence), no subscription label, no `contact.opt_in`.
+  Unticked: nothing in the ledger.

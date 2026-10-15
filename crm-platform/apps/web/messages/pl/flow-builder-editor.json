@@ -717,7 +717,8 @@
             "ask": "Zapytaj klienta",
             "handoff": "Przekaż dalej",
             "logic": "Decyzja",
-            "answer": "Odpowiedź"
+            "answer": "Odpowiedź",
+            "action": "Akcje"
           },
           "blockedTitle": "Przyciski i listy kończą przepływ, więc mogą być tylko na końcu.",
           "blockedTitleFaq": "Odpowiedz z FAQ ma dwa wyjścia, więc może być tylko ostatnim krokiem."
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "Odpowiedziano",
             "no_match": "Brak dopasowania"
-          }
+          },
+          "close": "Zamknij",
+          "clickToEdit": "Kliknij, aby edytować",
+          "outsideToSave": "Kliknij w dowolnym miejscu poza krokiem, aby zapisać zmiany",
+          "addCondition": "Dodaj warunek po tym kroku",
+          "conditionLast": "Warunek kończy tę część, więc może być tylko na końcu.",
+          "duplicateTitle": "Powielić ten krok?",
+          "duplicateBody": "Kopia zostanie dodana zaraz po nim.",
+          "deleteTitle": "Usunąć ten krok?",
+          "deleteBody": "Krok zostanie usunięty z przepływu.",
+          "stage": "Etap {stage}",
+          "storedIn": "Wartości zostaną zapisane we właściwości <b>{property}</b> kontaktu",
+          "actions": "Akcje",
+          "actionsHint": "Dodaj krok uruchamiany zaraz po tym.",
+          "actionsBlocked": "Po kroku, który kończy swoją część, nie może być kolejnego kroku."
         },
         "editors": {
           "linkLabel": "Dokąd to prowadzi",
@@ -1317,7 +1332,8 @@
             "date_field_match": "Harmonogram: względem daty na kontakcie (urodziny…)",
             "schedule": "Harmonogram: o określonej dacie i godzinie",
             "shopify_event": "Handel: zdarzenie sklepu Shopify",
-            "woocommerce_event": "Handel: zdarzenie sklepu WooCommerce"
+            "woocommerce_event": "Handel: zdarzenie sklepu WooCommerce",
+            "segment_leave": "Odbiorcy: gdy kontakt opuści segment"
           },
           "tagsLoading": "Wczytywanie tagów…",
           "tagPick": "— wybierz tag —",
@@ -1411,7 +1427,8 @@
             "productId": "ID produktu (opcjonalnie)",
             "productIdHint": "Puste = dowolny produkt w zamówieniu.",
             "storeNote": "Klient jest dopasowywany do zapisanego kontaktu po numerze telefonu; dla zamówienia nikt nie jest tworzony. Zdarzeń „Dodano do koszyka” i „produkt obejrzany” nie ma, ponieważ sklep ich nie raportuje.",
-            "updatedNote": "Uruchamia się za każdym razem, gdy osoba lub import zmienia kontakt. Zmiana wykonana przez inny przepływ go nie uruchamia."
+            "updatedNote": "Uruchamia się za każdym razem, gdy osoba lub import zmienia kontakt. Zmiana wykonana przez inny przepływ go nie uruchamia.",
+            "segmentLeaveHint": "Uruchamia się raz za każdym razem, gdy kontakt, który był w tym segmencie, zostanie znaleziony poza nim po aktualizacji, otagowaniu lub wyświetleniu na liście. Odejście kontaktu jest wykrywane tylko wtedy, gdy przepływ wcześniej widział go w segmencie."
           }
         }
       },
@@ -1701,7 +1718,21 @@
           "setupOpen": "Otwórz formularz → <mono>menu ⋮</mono> → <mono>Edytor skryptów</mono>",
           "setupDownload": "<link>Pobierz skrypt (.gs)</link> i wklej go",
           "setupTrigger": "Dodaj wyzwalacz: <mono>onFormSubmit</mono> · Z formularza · Przy wysłaniu formularza",
-          "setupWarning": "Bez tego skryptu formularz nadal zapisze odpowiedzi w Formularzach Google, ale przepływ nie zostanie wznowiony."
+          "setupWarning": "Bez tego skryptu formularz nadal zapisze odpowiedzi w Formularzach Google, ale przepływ nie zostanie wznowiony.",
+          "noListing": "Nie można wyświetlić listy Twoich plików, ponieważ na stronie konta Google nie przyznano uprawnienia do listy plików Drive. Wklej zamiast tego link lub identyfikator.",
+          "connection": {
+            "open": "Otwórz konto Google",
+            "permission": {
+              "calendar": "Kalendarz",
+              "sheets": "Sheets",
+              "docs": "Docs i Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google nie jest skonfigurowany dla tej platformy, więc ten krok zakończy się błędem podczas działania przepływu.",
+            "disconnected": "Nie połączono żadnego konta Google, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google.",
+            "needsReconnect": "Google nie akceptuje już połączonego konta, więc ten krok zakończy się błędem podczas działania przepływu. Najpierw połącz Google ponownie.",
+            "missing": "Połączone konto Google nie otrzymało uprawnienia {permission}, więc ten krok zakończy się błędem podczas działania przepływu."
+          }
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1983,42 @@
         "label": "Ikona (opcjonalnie)",
         "add": "Dodaj ikonę",
         "saveFirst": "Zapisz bota raz, aby dodać ikonę."
+      },
+      "buttonAction": {
+        "label": "Akcja po naciśnięciu przycisku",
+        "kind": {
+          "none": "Przejdź do następnego kroku",
+          "flow": "Połącz przepływ",
+          "live_agent": "Konsultant na żywo",
+          "opt_in": "Zapis (opt-in)",
+          "opt_out": "Wypisanie (opt-out)"
+        },
+        "pickFlow": "Wybierz przepływ",
+        "loadingFlows": "Wczytywanie przepływów…",
+        "flowMissing": "Przepływ {id} (nie znaleziono)",
+        "hint": {
+          "flow": "Uruchamia wybrany przepływ dla tego kontaktu, a rozmowa toczy się dalej tam. Za tym przyciskiem nic nie jest połączone.",
+          "live_agent": "Przekazuje rozmowę wybranemu zespołowi. Za tym przyciskiem nic nie jest połączone.",
+          "opt_in": "Oznacza kontakt jako zapisany na wiadomości marketingowe, a potem przechodzi do połączonego kroku.",
+          "opt_out": "Oznacza kontakt jako wypisany z wiadomości marketingowych, a potem przechodzi do połączonego kroku."
+        }
+      },
+      "messageTools": {
+        "format": "Formatowanie tekstu",
+        "bold": "Pogrubienie",
+        "italic": "Kursywa",
+        "strike": "Przekreślenie",
+        "mono": "Czcionka stałej szerokości",
+        "bullet": "Lista punktowana",
+        "numbered": "Lista numerowana",
+        "emoji": "Emoji",
+        "emojiSearch": "Szukaj emoji",
+        "emojiNone": "Nie znaleziono emoji",
+        "variable": "Wstaw zmienną",
+        "variableSearch": "Szukaj zmiennych",
+        "groupContact": "Właściwości kontaktu",
+        "groupFlow": "Zapisane w tym przepływie",
+        "variableNone": "Nie znaleziono zmiennych"
       }
     },
     "contracts": {
@@ -2316,7 +2383,8 @@
         "date_field_match": "po dopasowaniu daty",
         "schedule": "według harmonogramu",
         "shopify_event": "po zdarzeniu Shopify",
-        "woocommerce_event": "po zdarzeniu WooCommerce"
+        "woocommerce_event": "po zdarzeniu WooCommerce",
+        "segment_leave": "po opuszczeniu segmentu"
       },
       "ports": {
         "manual": "ręcznie",
@@ -2470,6 +2538,14 @@
         "faq": {
           "label": "Odpowiedz z FAQ",
           "help": "Dopasuj wiadomość klienta do Twoich FAQ. Kończy ten przepływ: jedno wyjście, gdy FAQ odpowiedziało, drugie, gdy nie"
+        },
+        "apiLibrary": {
+          "label": "Wywołanie API",
+          "help": "Wywołaj API z biblioteki API"
+        },
+        "code": {
+          "label": "Funkcja JS",
+          "help": "Uruchom mały fragment JavaScriptu"
         }
       },
       "typeLabel": {
@@ -2487,7 +2563,9 @@
         "assign": "Przypisz do konsultanta",
         "carousel": "Karuzela",
         "condition": "Warunek",
-        "faq": "Odpowiedz z FAQ"
+        "faq": "Odpowiedz z FAQ",
+        "api_library": "Wywołanie API",
+        "code": "Funkcja JS"
       },
       "stepLabel": {
         "questionOf": "Pytanie · {kind}"
@@ -2528,7 +2606,10 @@
         "carouselCards": "Krok {stage}: dodaj co najmniej jedną kartę i nadaj każdej karcie tytuł.",
         "carouselButtons": "Krok {stage}: nadaj każdemu przyciskowi nazwę oraz link, numer lub adres tam, gdzie coś otwiera.",
         "conditionIncomplete": "Krok {stage}: dokończ reguły warunku (w każdej zmienna i wartość).",
-        "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu."
+        "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu.",
+        "chooseFlow": "Krok {stage}: wybierz przepływ uruchamiany przez przycisk.",
+        "chooseApi": "Krok {stage}: wybierz API do wywołania.",
+        "writeCode": "Krok {stage}: napisz kod do uruchomienia."
       },
       "faqSummary": "{hasCategory, select, true {Z Twoich FAQ · {category}} other {Z Twoich FAQ}}"
     },

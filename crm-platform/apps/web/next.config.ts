@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
     const security = [
       { key: 'X-Content-Type-Options', value: 'nosniff' },
       { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      {
+        key: 'Permissions-Policy',
+        value:
+          'camera=(self), microphone=(self), geolocation=(self), usb=(), serial=(), bluetooth=(), interest-cohort=()',
+      },
       { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
       { key: 'Content-Security-Policy', value: "frame-ancestors 'self'" },
       { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
@@ -102,6 +107,15 @@ const nextConfig: NextConfig = {
           { key: 'Referrer-Policy', value: 'no-referrer' },
         ],
       })),
+    ];
+  },
+  // The chat widget's pages (`/widget/<token>/chat`, `/embed`, its assets) are served by the API. The snippet and the Preview link point
+  // at the app's own address, so the app hands those paths to the API; without this the Preview opens the app's "Page not found".
+  async rewrites() {
+    const api = (process.env.API_URL ?? 'http://localhost:3000').replace(/\/+$/, '');
+    return [
+      { source: '/widget/:token/:path*', destination: `${api}/widget/:token/:path*` },
+      { source: '/widget-assets/:path*', destination: `${api}/widget-assets/:path*` },
     ];
   },
   // Addresses Reference bookmarks and old emails may still carry. Query strings travel along with each redirect.

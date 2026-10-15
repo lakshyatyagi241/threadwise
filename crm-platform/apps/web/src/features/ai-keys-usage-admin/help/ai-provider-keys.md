@@ -5,7 +5,8 @@ summary: Add your own AI provider key so your AI features run on your account, s
 area: settings
 order: 40
 documents: [tile:ai-keys]
-keywords: [ai, api key, openai, anthropic, gemini, own key, byok, provider, token, bring your own key]
+keywords:
+  [ai, api key, openai, anthropic, gemini, own key, byok, provider, token, bring your own key]
 ---
 
 ## What it is for

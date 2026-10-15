@@ -11,6 +11,7 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { PlatformSettingsService } from '../auth';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
@@ -23,6 +24,7 @@ const ENGINE_LABEL: Record<string, string> = {
   waba: 'Meta',
   twilio: 'Twilio',
   sms: 'SMS',
+  email: 'Email',
 };
 const WA_CATEGORIES = new Set(['marketing', 'utility', 'authentication']);
 
@@ -81,9 +83,10 @@ interface SenderRaw {
  *
  * Templates follow Reference's `approved` scope: on a Meta (WABA) workspace only those Meta approved (a Meta id and status
  * APPROVED, not paused); on any other engine the locally approved or public ones. A template tied to a WABA number that is no
- * longer connected is hidden. Senders are the connected numbers of every engine except SMS (that channel has its own card),
- * default engine first. `channel=sms` is that card (TW-SMS-016): the SMS senders and the SMS templates only, and nothing at all
- * while the platform switch `sms_enabled` is off.
+ * longer connected is hidden. Senders are the connected numbers of every engine except SMS and Email (those channels have their own
+ * cards), default engine first. `channel=sms` is that card (TW-SMS-016): the SMS senders and the SMS templates only, and nothing at
+ * all while the platform switch `sms_enabled` is off. `channel=email` is the Email card: the connected mailboxes the person may send
+ * from, no templates (an email campaign is a typed message), and nothing at all when the plan has no Email add-on.
  */
 @Injectable()
 export class BroadcastsComposeService {
@@ -92,11 +95,13 @@ export class BroadcastsComposeService {
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
     private readonly settings: PlatformSettingsService,
+    private readonly entitlements: PlanEntitlementService,
   ) {}
 
   async compose(query: BroadcastComposeQuery = {}): Promise<BroadcastCompose> {
     const { orgId } = RequestContextStore.require();
     if (query.channel === 'sms') return this.composeSms(orgId);
+    if (query.channel === 'email') return this.composeEmail(orgId);
     // Personal numbers are not offered, and `baileys` is not the default engine, while the platform switch is off or the workspace is not allowed.
     const unofficialOn = await this.unofficial.isEnabledFor(orgId);
     return this.db.tx(async (tx) => {
@@ -263,6 +268,44 @@ export class BroadcastsComposeService {
           isDefault: true,
         })),
         twilioEnabled: false,
+      };
+    });
+  }
+
+  /**
+   * The Email card's composer: the connected mailboxes the person may send a campaign from (every shared one, and their own personal
+   * one), oldest first. There are no templates. The sender's address is shown as typed. `hidden` counts the mailboxes the person can
+   * see that cannot send, so an empty list can say why: one that needs reconnecting is an error, a disconnected one is not connected.
+   */
+  private async composeEmail(orgId: number): Promise<BroadcastCompose> {
+    const none: BroadcastCompose = { templates: [], senders: [], hidden: [], twilioEnabled: false };
+    if (!(await this.entitlements.featureEnabled(orgId, 'email_channel'))) return none;
+    const userId = RequestContextStore.require().userId;
+    return this.db.tx(async (tx) => {
+      const mine = sql`(scope = 'shared' OR (owner_user_id IS NOT NULL AND owner_user_id = ${userId}))`;
+      const snd = await tx.execute(sql`
+        SELECT uuid, coalesce(nullif(display_name, ''), address::text) AS label, address::text AS address
+        FROM mail_mailboxes WHERE org_id = ${orgId} AND status = 'connected' AND ${mine}
+        ORDER BY created_at, id`);
+      const off = await tx.execute(sql`
+        SELECT CASE status WHEN 'disconnected' THEN 'not_connected' ELSE 'error' END AS reason, count(*)::int AS count
+        FROM mail_mailboxes WHERE org_id = ${orgId} AND status <> 'connected' AND ${mine}
+        GROUP BY 1 ORDER BY 1`);
+      return {
+        ...none,
+        senders: (
+          snd.rows as unknown as Array<{ uuid: string; label: string; address: string }>
+        ).map((r): ComposeSender => ({
+          key: `email:${r.uuid}`,
+          label: r.label,
+          phone: r.address,
+          engine: 'email',
+          engineLabel: ENGINE_LABEL.email!,
+          isDefault: true,
+        })),
+        hidden: (
+          off.rows as unknown as Array<{ reason: SenderHidden['reason']; count: number | string }>
+        ).map((r): SenderHidden => ({ engine: 'email', reason: r.reason, count: Number(r.count) })),
       };
     });
   }

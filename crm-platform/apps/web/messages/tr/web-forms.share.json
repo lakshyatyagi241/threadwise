@@ -145,13 +145,26 @@
         "privacyUrl": "Gizlilik politikası bağlantısı",
         "privacyUrlHint": "İsteğe bağlı. Onay metninin yanında gösterilir. https:// ile başlamalıdır.",
         "privacyUrlHttps": "https:// ile başlayan bir adres kullanın.",
+        "termsUrl": "Şartlar bağlantısı",
+        "termsUrlHint": "İsteğe bağlı. Onay metninin ve gizlilik bağlantısının yanında gösterilir. https:// ile başlamalıdır.",
+        "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
+        "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan",
         "required": "Gönderebilmek için işaretlenmelidir",
         "requiredHint": "Onay isteğe bağlıysa bunu kapatın.",
         "marketing": "Pazarlama onayı",
         "marketingHint": "Kutuyu işaretlemek kişiye pazarlama onayı kaydeder. İşaretlenmemiş kutu hiç kimseyi abone yapmaz.",
-        "whatsappHint": "Bu kişilere WhatsApp üzerinden mesaj gönderecek misiniz? Bunu belirten ve nasıl abonelikten çıkılacağını açıklayan bir metin kullanın. İşaretlenen kutu, bu tam metin ve sürümüyle birlikte kanıt olarak saklanır.",
-        "whatsappInsert": "WhatsApp onay metnini kullan",
-        "whatsappWording": "WhatsApp üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim."
+        "serviceHint": "Bu satır pazarlama değildir. İşaretli kutu, kişinin talebi hakkında iletişime geçilmesini kabul ettiğinin (yalnızca hizmet mesajları) kanıtı olarak, bu tam metin ve sürümüyle saklanır. Kimseyi pazarlamaya abone etmez.",
+        "statement": "{channels} üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "e-posta"
+        },
+        "channelsLabel": "Bu onayın kapsadığı kanallar",
+        "channelsHint": "Ziyaretçi yalnızca burada işaretlenen kanallara abone edilir ve onay metni bunları belirtir. Bir kanal, yalnızca form ilgili telefon numarasını veya e-postayı topluyorsa kullanılır.",
+        "channelsUse": "Metni bu kanallarla güncelle",
+        "channelNeedsPhone": "Bu formda telefon alanı yok, bu yüzden bu kanala bu formdan kimse abone edilmez.",
+        "channelNeedsEmail": "Bu formda e-posta alanı yok, bu yüzden bu kanala bu formdan kimse abone edilmez."
       },
       "crm": {
         "title": "CRM'de",

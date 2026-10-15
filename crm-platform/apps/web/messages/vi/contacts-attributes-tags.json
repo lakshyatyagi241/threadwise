@@ -456,7 +456,9 @@
         "memo": "Ghi nhớ",
         "status": "Trạng thái",
         "source": "Nguồn",
-        "consent": "Đồng ý tiếp thị (có / không)"
+        "consent": "Đồng ý tiếp thị (có / không)",
+        "consentSms": "Đồng ý tiếp thị qua SMS (có / không)",
+        "consentEmail": "Đồng ý tiếp thị qua email (có / không)"
       },
       "notInFile": "Không có trong tệp",
       "columnN": "Cột {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "Chọn tất cả",
         "reorder": "Kéo để sắp xếp lại các cột",
         "remove": "Gỡ {name}"
+      },
+      "presets": {
+        "myContacts": "Liên hệ của tôi",
+        "newThisWeek": "Mới trong tuần này",
+        "newLastWeek": "Mới tuần trước",
+        "recentlyCreated": "Mới tạo gần đây",
+        "recentlyModified": "Mới sửa gần đây",
+        "recentlyImported": "Mới nhập gần đây",
+        "neverContacted": "Chưa từng liên hệ",
+        "needsFollowUp": "Cần theo dõi",
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động",
+        "unsubscribed": "Đã hủy đăng ký"
       }
     },
     "erase": {

@@ -5,6 +5,8 @@ import {
   aiModelsResponseSchema,
   bulkDeleteCampaignsResponseSchema,
   campaignAiGenerateResponseSchema,
+  campaignAiImageResponseSchema,
+  campaignAiImageSchema,
   campaignActionResponseSchema,
   campaignBuilderSchema,
   campaignConfigSchema,
@@ -14,6 +16,7 @@ import {
   campaignRecipientsResponseSchema,
   campaignStatisticsSchema,
   resendCampaignResponseSchema,
+  type BroadcastComposeQuery,
   type CampaignAiGenerateInput,
   type CreateCampaignInput,
   type ResendCampaignInput,
@@ -54,8 +57,11 @@ export function useCampaignList(state: ListState) {
   });
 }
 
-/** `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018). */
-export function useBuilder(channel?: 'sms') {
+/**
+ * `channel: 'sms'` lists the SMS senders and templates instead of the WhatsApp ones (TW-SMS-018); `'email'` lists the connected mailboxes
+ * as senders and no templates (TW-MAIL-036).
+ */
+export function useBuilder(channel?: BroadcastComposeQuery['channel']) {
   return useQuery({
     queryKey: channel ? ([...KEYS.builder, channel] as const) : KEYS.builder,
     queryFn: ({ signal }) =>
@@ -201,3 +207,15 @@ export async function download(path: string): Promise<{ blob: Blob; filename: st
   const filename = /filename="([^"]+)"/.exec(disposition)?.[1] ?? 'campaign.csv';
   return { blob: await res.blob(), filename };
 }
+
+/**
+ * "Build with AI", the picture: one image from the same brief, stored like a marketing upload. OpenAI's image model only; the person
+ * attaches the result to the campaign.
+ */
+/** The model and the size have defaults on the server (gpt-image-1, square), so the form leaves them out. */
+export const aiImageCampaign = (body: z.input<typeof campaignAiImageSchema>) =>
+  apiFetch('/campaigns/ai-image', {
+    method: 'POST',
+    body,
+    schema: campaignAiImageResponseSchema,
+  });

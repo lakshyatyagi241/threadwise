@@ -456,7 +456,9 @@
         "memo": "Notatka",
         "status": "Status",
         "source": "Źródło",
-        "consent": "Zgoda marketingowa (tak / nie)"
+        "consent": "Zgoda marketingowa (tak / nie)",
+        "consentSms": "Zgoda na marketing SMS (tak / nie)",
+        "consentEmail": "Zgoda na marketing e-mail (tak / nie)"
       },
       "notInFile": "Brak w pliku",
       "columnN": "Kolumna {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "Zaznacz wszystko",
         "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
         "remove": "Usuń: {name}"
+      },
+      "presets": {
+        "myContacts": "Moje kontakty",
+        "newThisWeek": "Nowe w tym tygodniu",
+        "newLastWeek": "Nowe w zeszłym tygodniu",
+        "recentlyCreated": "Ostatnio utworzone",
+        "recentlyModified": "Ostatnio zmienione",
+        "recentlyImported": "Ostatnio zaimportowane",
+        "neverContacted": "Nigdy nie kontaktowano",
+        "needsFollowUp": "Wymagają kontaktu",
+        "active": "Aktywne",
+        "inactive": "Nieaktywne",
+        "unsubscribed": "Wypisane"
       }
     },
     "erase": {

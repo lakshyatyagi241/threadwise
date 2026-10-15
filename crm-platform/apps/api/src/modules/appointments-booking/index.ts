@@ -16,3 +16,7 @@ export { BookingTypesRepository } from './booking-types.repository';
 export { SlotsService } from './slots.service';
 export { generateSlots, findOpenSlot, freeSeats, pickSeat } from './slot-engine';
 export { buildIcs } from './ics';
+// The workspace's one Google grant, for the Google account domain (it owns the page and the flow bindings; this module owns the token).
+export { GoogleCalendarConnectService } from './google-calendar-connect.service';
+export { CalendarNotConnectedError, GoogleCalendarTokens } from './google-calendar-tokens.service';
+export { GoogleConsentService } from './google-consent.service';

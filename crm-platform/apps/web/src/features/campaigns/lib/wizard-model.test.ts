@@ -4,6 +4,7 @@ import {
   applyAiCopy,
   countCsvRows,
   countNumbers,
+  emailSkipped,
   firstBrokenStep,
   initialRecipientMode,
   recipientTotals,
@@ -109,5 +110,31 @@ describe('Build with AI', () => {
   it('adds no link button without both a label and an address', () => {
     const f = applyAiCopy(form(), { ...copy, buttonUrl: '', quickReplies: ['Yes'] });
     expect(f.buttons).toEqual([{ type: 'quick_reply', text: 'Yes', value: 'Yes' }]);
+  });
+});
+
+describe('emailSkipped: who an email campaign cannot reach, as far as the screen knows', () => {
+  const contacts = [
+    { id: 'a', email: 'a@x.test' },
+    { id: 'b', email: null },
+    { id: 'c', email: '  ' },
+  ];
+
+  it('counts picked contacts with no address, and every typed or uploaded number', () => {
+    const f = {
+      ...EMPTY_FORM,
+      contactIds: ['a', 'b', 'c'],
+    };
+    expect(emailSkipped(f, contacts)).toEqual({ contacts: 2, numbers: 0, total: 2 });
+    expect(
+      emailSkipped(
+        { ...EMPTY_FORM, manualNumbers: '9198\n9199', csvText: 'name,phone\nA,1' },
+        contacts,
+      ),
+    ).toEqual({ contacts: 0, numbers: 3, total: 3 });
+  });
+
+  it('a picked contact the loaded list does not carry is not guessed', () => {
+    expect(emailSkipped({ ...EMPTY_FORM, contactIds: ['zzz'] }, contacts).total).toBe(0);
   });
 });

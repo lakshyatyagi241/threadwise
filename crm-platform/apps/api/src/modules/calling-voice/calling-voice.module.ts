@@ -15,6 +15,8 @@ import { CallRecordingRepository } from './call-recording.repository';
 import { CallRecordingSettingsService } from './call-recording-settings.service';
 import { CallRecordingsService } from './call-recordings.service';
 import { CallingNumbersService } from './calling-numbers.service';
+import { CallingReadinessRepository } from './calling-readiness.repository';
+import { CallingReadinessService } from './calling-readiness.service';
 import { CallingWabaSink } from './calling-waba.sink';
 import { CallingWebhookController } from './calling-webhook.controller';
 import { CallingController } from './calling.controller';
@@ -40,6 +42,8 @@ import { CallsRepository } from './calls.repository';
     CallLogsRepository,
     CallLogsService,
     CallingNumbersService,
+    CallingReadinessRepository,
+    CallingReadinessService,
     CallPermissionService,
     CallActionsService,
     CallEventsService,
@@ -56,6 +60,8 @@ import { CallsRepository } from './calls.repository';
     CallActionsService,
     CallPermissionService,
     CallEventsService,
+    CallingReadinessService,
+    CallingReadinessRepository,
   ],
 })
 export class CallingVoiceModule {}

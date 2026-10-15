@@ -50,6 +50,32 @@ export function useAppointmentActions() {
     saveNotes: (a: Pick<Appointment, 'id' | 'rowVersion'>, notes: string | null) =>
       run(() => appointmentsApi.saveNotes(a, notes), 'notesSaved'),
 
+    /** "Push our time back to Google": the event is rewritten from the appointment. */
+    async pushToGoogle(a: Pick<Appointment, 'id'>): Promise<Appointment | null> {
+      try {
+        const { appointment } = await appointmentsApi.pushCalendar(a.id);
+        void invalidateAppointments(qc, appointment);
+        toast(t('calendarPushed'), 'success');
+        return appointment;
+      } catch (e) {
+        failed(e);
+        return null;
+      }
+    },
+
+    /** "Accept Google's change": a moved event reschedules, a deleted one cancels (the usual rules), changed guests are acknowledged. */
+    async acceptGoogle(a: Pick<Appointment, 'id'>, notify: boolean): Promise<Appointment | null> {
+      try {
+        const { appointment, result } = await appointmentsApi.acceptCalendar(a.id, notify);
+        void invalidateAppointments(qc, appointment);
+        toast(t(`calendarAccepted.${result.applied ?? 'acknowledged'}`), 'success');
+        return appointment;
+      } catch (e) {
+        failed(e);
+        return null;
+      }
+    },
+
     /** A reschedule keeps its error for the dialog (a lost race is shown there, not as a toast). */
     async reschedule(
       a: Pick<Appointment, 'id'>,

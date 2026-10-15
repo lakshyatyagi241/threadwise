@@ -167,9 +167,16 @@ export async function verifyCampaigns(a: CampaignVerifyArgs): Promise<BResult> {
   const templateKeys = new Map<number, string[]>();
   for (const [k, id] of await idMapOf('broadcast_templates', 'wa_templates'))
     templateKeys.set(id, [...(templateKeys.get(id) ?? []), k]);
-  const templates = rowsOf<{ id: number | string; template_name: string; language: string; meta_template_id: string | null }>(
+  const templates = rowsOf<{
+    id: number | string;
+    template_name: string;
+    language: string;
+    meta_template_id: string | null;
+  }>(
     await tenant((tx) =>
-      tx.execute(sql`SELECT id, template_name, language, meta_template_id FROM wa_templates WHERE org_id = ${orgId}`),
+      tx.execute(
+        sql`SELECT id, template_name, language, meta_template_id FROM wa_templates WHERE org_id = ${orgId}`,
+      ),
     ),
   ).map((t) => ({
     id: Number(t.id),
@@ -359,7 +366,11 @@ export async function verifyCampaigns(a: CampaignVerifyArgs): Promise<BResult> {
         for (const [col, want] of Object.entries(CAMPAIGN_DEFAULTS))
           if (
             !(touchedByLink && col === 'row_version' && !bumped.has(c.uuid)) &&
-            !same(t[col], col === 'row_version' && bumped.has(c.uuid) ? bumped.get(c.uuid) : want, col)
+            !same(
+              t[col],
+              col === 'row_version' && bumped.has(c.uuid) ? bumped.get(c.uuid) : want,
+              col,
+            )
           )
             bad.push(`default ${col}`);
       if (bad.length > 0) alarm(`ORACLE_MISMATCH: wpcampaigns ${c.key}: ${bad.join('; ')}`);
@@ -425,7 +436,13 @@ export async function verifyCampaigns(a: CampaignVerifyArgs): Promise<BResult> {
       if (t.campaign_uuid !== campaignIdOf.get(r.campaign!)) bad.push('campaign');
       if (!a.allowExtraRows)
         for (const [col, want] of Object.entries(RECIPIENT_DEFAULTS))
-          if (!same(t[col], col === 'row_version' && bumped.has(r.uuid) ? bumped.get(r.uuid) : want, col))
+          if (
+            !same(
+              t[col],
+              col === 'row_version' && bumped.has(r.uuid) ? bumped.get(r.uuid) : want,
+              col,
+            )
+          )
             bad.push(`default ${col}`);
       if (bad.length > 0)
         alarm(`ORACLE_MISMATCH: wp_campaign_contacts ${r.key}: ${bad.join('; ')}`);
@@ -571,6 +588,7 @@ export async function verifyCampaigns(a: CampaignVerifyArgs): Promise<BResult> {
   if (!a.allowExtraRows)
     for (const [t, col] of [
       ['camp_retry_attempts', 'campaign_id'],
+      ['camp_follow_up_attempts', 'campaign_id'],
       ['camp_test_sends', 'campaign_id'],
       ['wa_link_clicks', 'campaign_id'],
       ['scheduled_messages', 'campaign_id'],

@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "عميل Google OAuth الذي تربط كل مساحة عمل تقويمها من خلاله.",
+        "description": "عميل Google OAuth الذي تربط كل مساحة عمل حساب Google الخاص بها من خلاله، للتقويم وSheets وDocs وForms.",
         "sections": {
           "oauth": {
             "title": "عميل Google OAuth"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "السماح لمساحات العمل بربط Google Calendar",
-            "hint": "متوقف: لا يمكن لأي مساحة عمل الربط، ولا يُكتب شيء في التقويم ولا يُقرأ منه."
+            "label": "السماح لمساحات العمل بربط Google",
+            "hint": "متوقف: لا يمكن لأي مساحة عمل الربط، ولا يُقرأ أو يُكتب شيء في Google (التقويم وSheets وDocs وForms)."
           },
           "clientId": {
             "label": "معرّف العميل",
@@ -1134,8 +1134,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "عميل Google OAuth الذي تستخدمه مساحات العمل لربط تقويمها للحجوزات وأوقات الانشغال.",
-        "tags": "Google / OAuth / التقويم"
+        "description": "عميل Google OAuth الذي تستخدمه مساحات العمل لربط حساب Google الخاص بها للحجوزات وSheets وDocs وForms.",
+        "tags": "Google / OAuth / التقويم / Sheets"
       },
       "googleMail": {
         "title": "بريد Gmail",
@@ -1703,11 +1703,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "الإدارة - المواعيد",
-        "description": "عميل Google Cloud OAuth واحد للمنصة بأكملها. ثم تربط كل مساحة عمل حساب Google الخاص بها من المواعيد، الإعدادات؛ ولا ترى مساحة العمل معرّف العميل أو سره أبدًا.",
+        "description": "عميل Google Cloud OAuth واحد للمنصة بأكملها. ثم تربط كل مساحة عمل حساب Google الخاص بها من حساب Google في الإعدادات، وتختار الأذونات التي تمنحها؛ ولا ترى مساحة العمل معرّف العميل أو سره أبدًا.",
         "sections": {
           "oauth": {
             "title": "عميل Google OAuth",
-            "description": "بدون معرّف العميل وسره ترى مساحات العمل Google Calendar غير متاح وتستمر الحجوزات بدون تقويم."
+            "description": "بدون معرّف العميل وسره ترى مساحات العمل Google غير متاح، وتستمر الحجوزات بدون تقويم، وتُتخطى خطوات Google في التدفقات."
           }
         },
         "guide": {
@@ -1715,7 +1715,7 @@
           "items": {
             "project": {
               "title": "1. المشروع وواجهة API",
-              "body": "في Google Cloud Console أنشئ مشروعًا وفعّل Google Calendar API."
+              "body": "في Google Cloud Console أنشئ مشروعًا وفعّل واجهات Google Calendar وGoogle Sheets وGoogle Docs وGoogle Drive وGoogle Forms API. لا يعمل الإذن إلا عند تفعيل واجهته."
             },
             "redirect": {
               "title": "2. عميل OAuth",
@@ -1723,11 +1723,11 @@
             },
             "consent": {
               "title": "3. شاشة الموافقة",
-              "body": "أضف النطاقات calendar.events وcalendar.freebusy وcalendar.calendarlist.readonly، ثم انشر التطبيق: في وضع الاختبار تنهي Google كل منح بعد 7 أيام وستحتاج مساحات العمل إلى إعادة الاتصال."
+              "body": "أضف النطاقات التي يطلبها المنتج (calendar.events وcalendar.freebusy وcalendar.calendarlist.readonly وspreadsheets وdocuments وdrive وforms.body.readonly وdrive.metadata.readonly)، ثم انشر التطبيق: في وضع الاختبار تنهي Google كل منح بعد 7 أيام وستحتاج مساحات العمل إلى إعادة الاتصال. نطاقات drive مقيّدة وتحتاج إلى مراجعة Google."
             },
             "workspaces": {
               "title": "4. تربط مساحات العمل",
-              "body": "الصق معرّف العميل وسره هنا واحفظ. ثم يربط المشرفون من المواعيد، الإعدادات، Google Calendar."
+              "body": "الصق معرّف العميل وسره هنا واحفظ. ثم يربط المشرفون من الإعدادات، التكاملات، حساب Google، أو من المواعيد، الإعدادات، Google Calendar."
             }
           }
         }

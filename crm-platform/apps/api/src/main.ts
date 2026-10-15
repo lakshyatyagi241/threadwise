@@ -15,8 +15,8 @@ import {
 } from './modules/developer-rest-api-v1';
 import {
   corsIsClosedInProduction,
-  corsOriginFor,
   httpMetricsMiddleware,
+  staffCorsOptions,
   initSentry,
   installBodyLimits,
   installProcessHandlers,
@@ -82,18 +82,7 @@ async function bootstrap(): Promise<void> {
   app.use((req: Request, res: Response, next: NextFunction) => {
     void app.get(FormsPreflightMiddleware).use(req, res, next);
   });
-  const staffCors = {
-    origin: corsOriginFor(origins, nodeEnv),
-    credentials: true,
-    // The throttle's headers (TW-INFRA-010): a browser client reads them only if they are exposed.
-    exposedHeaders: [
-      'x-request-id',
-      'retry-after',
-      'x-ratelimit-limit',
-      'x-ratelimit-remaining',
-      'x-ratelimit-reset',
-    ],
-  };
+  const staffCors = staffCorsOptions(origins, nodeEnv);
   // The customer API (`/api/v1`, `/docs/api.json`) answers every origin without credentials; everything else keeps the staff policy.
   app.enableCors((req: { url?: string }, callback) =>
     callback(null, isCustomerApiPath(req.url) ? CUSTOMER_API_CORS : staffCors),

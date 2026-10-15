@@ -187,6 +187,9 @@ export const contactAttributions = pgTable(
     form: text('form'),
     capturedAt: timestamp('captured_at', { withTimezone: true }).notNull().defaultNow(),
     createdAt: createdAt(),
+    // Click-to-WhatsApp referral fields and the provider message behind the touch (migration 20261205090100).
+    evidence: jsonb('evidence').$type<Record<string, unknown>>().notNull().default({}),
+    externalRef: text('external_ref'),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
@@ -214,6 +217,17 @@ export const contactAttributions = pgTable(
     uniqueIndex('uq_contact_attributions_lead_event')
       .on(t.orgId, t.leadEventId)
       .where(sql`${t.leadEventId} is not null`),
+    check(
+      'ck_contact_attributions_evidence',
+      sql`jsonb_typeof(${t.evidence}) = 'object' and pg_column_size(${t.evidence}) <= 4096`,
+    ),
+    check(
+      'ck_contact_attributions_ref',
+      sql`${t.externalRef} is null or char_length(${t.externalRef}) between 1 and 200`,
+    ),
+    uniqueIndex('uq_contact_attributions_ref')
+      .on(t.orgId, t.externalRef)
+      .where(sql`${t.externalRef} is not null`),
     index('idx_contact_attributions_contact').on(t.orgId, t.contactId, t.capturedAt, t.id),
     index('idx_contact_attributions_platform').on(t.orgId, t.platform, t.capturedAt.desc()),
     index('idx_contact_attributions_source')

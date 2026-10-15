@@ -112,15 +112,22 @@
         "instagram": "Instagram",
         "webchat": "Chat web",
         "voice": "Chiamata vocale",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "iscritto",
-        "withdrawn": "disiscritto"
+        "withdrawn": "disiscritto",
+        "utilityGranted": "ha accettato i messaggi di servizio",
+        "utilityWithdrawn": "messaggi di servizio interrotti"
       },
       "action": {
         "granted": "Iscritto",
-        "withdrawn": "Disiscritto"
+        "withdrawn": "Disiscritto",
+        "utilityGranted": "Ha accettato di essere contattato per la sua richiesta",
+        "utilityWithdrawn": "Ha interrotto i messaggi di servizio"
       },
       "source": {
         "form": "Modulo",
@@ -134,7 +141,8 @@
         "legacy": "Prima della cronologia del consenso",
         "widget": "Chat del sito web",
         "booking": "Pagina di prenotazione",
-        "commerce": "Checkout del negozio"
+        "commerce": "Checkout del negozio",
+        "lead": "Acquisizione lead"
       },
       "by": "da {name}",
       "evidence": {
@@ -154,7 +162,10 @@
         "widgetId": "Widget chat",
         "bookingTypeId": "Pagina di prenotazione",
         "integrationId": "Negozio",
-        "storeFlag": "Impostazione del negozio"
+        "storeFlag": "Impostazione del negozio",
+        "leadSourceId": "Fonte del lead",
+        "leadFormId": "Modulo lead",
+        "adId": "Annuncio"
       },
       "dialog": {
         "titleGranted": "Segna come iscritto",
@@ -187,7 +198,14 @@
       "hintColumn": "La colonna associata al consenso marketing decide chi viene registrato: solo le righe che dicono sì ottengono un consenso, con il nome del file come prova. Un no, una cella vuota o una parola sconosciuta non registrano nulla. I contatti che hanno annullato l'iscrizione restano disiscritti.",
       "columnSummary": "{granted} righe dicono sì e verranno registrate. {notGranted} dicono no o sono vuote e non ricevono alcun registro di consenso.",
       "unrecognised": "{count, plural, one {# riga contiene} other {# righe contengono}} un valore di consenso che non è sì né no ({values}). {count, plural, one {Viene trattato} other {Vengono trattati}} come non concesso. Usa yes / no, true / false o 1 / 0.",
-      "columnIgnored": "La colonna del consenso non ha effetto finché non selezioni la casella qui sopra."
+      "columnIgnored": "La colonna del consenso non ha effetto finché non selezioni la casella qui sopra.",
+      "noticeText": "Informativa o base giuridica (facoltativo)",
+      "noticeTextHint": "A cosa hanno acconsentito questi contatti e dove, ad esempio: iscritti al checkout con l'informativa privacy v3. Viene conservato come prova con ogni consenso registrato.",
+      "noticeVersion": "Versione dell'informativa (facoltativo)",
+      "smsSummary": "Colonna del consenso SMS: {granted} righe dicono sì e saranno registrate come consenso SMS. {notGranted} dicono no o sono vuote.",
+      "emailSummary": "Colonna del consenso email: {granted} righe dicono sì e saranno registrate come consenso email (la riga deve avere anche un indirizzo email). {notGranted} dicono no o sono vuote.",
+      "labelNumbers": "Ho il consenso per scrivere a questi numeri",
+      "hintNumbers": "Selezionata, ogni numero del file viene registrato come consenziente al marketing al lancio della trasmissione, con il nome del file come prova. Non selezionata, non viene registrato alcun consenso. Chi si è disiscritto resta disiscritto."
     },
     "systemLine": {
       "withdrawn": "Il contatto ha risposto {keyword}: disiscritto dal marketing",
@@ -291,12 +309,14 @@
       "title": {
         "widget": "Riga di consenso nel modulo della chat",
         "booking": "Riga di consenso nella pagina di prenotazione",
-        "commerce": "Cosa significa la casella marketing del negozio"
+        "commerce": "Cosa significa la casella marketing del negozio",
+        "workspace": "Informativa sul consenso predefinita"
       },
       "intro": {
         "widget": "Mostrata come casella sotto i dati del visitatore. Solo chi la spunta viene registrato come consenziente, e solo se ha dato un telefono o un'email.",
         "booking": "Mostrata come casella nel modulo di prenotazione. Solo chi la spunta viene registrato come consenziente; prenotare non la richiede mai.",
-        "commerce": "Un cliente che accetta il marketing nel tuo negozio viene registrato come consenziente. Scrivi cosa gli dice quella casella, così la prova lo riporta."
+        "commerce": "Un cliente che accetta il marketing nel tuo negozio viene registrato come consenziente. Scrivi cosa gli dice quella casella, così la prova lo riporta.",
+        "workspace": "Il testo che il tuo spazio di lavoro mostra accanto a una casella di consenso quando un modulo, un widget o una pagina di prenotazione non ne ha uno proprio. Ogni modifica è una nuova versione numerata."
       },
       "enabled": "Riga di consenso attiva",
       "text": "Testo a cui la persona acconsente",
@@ -309,7 +329,21 @@
       "version": "Versione attuale: {version}",
       "noVersion": "Non ancora salvata.",
       "saveFirst": "Salva prima questo, poi potrai impostarne la riga di consenso.",
-      "whatsappToo": "Conta anche come consenso WhatsApp (solo se il testo lo dice)"
+      "whatsappToo": "Conta anche come consenso WhatsApp (solo se il testo lo dice)",
+      "termsUrl": "Link ai tuoi termini (facoltativo)",
+      "termsUrlHint": "Deve iniziare con https://",
+      "useWorkspacePrivacy": "Usa il link alla privacy del mio spazio di lavoro",
+      "useWorkspaceTerms": "Usa il link ai termini del mio spazio di lavoro",
+      "useWorkspaceText": "Usa il testo predefinito del mio spazio di lavoro",
+      "statement": "Accetto di ricevere aggiornamenti e offerte su {channels}. Posso rispondere STOP in qualsiasi momento per annullare l'iscrizione.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Canali coperti da questo consenso",
+      "channelsHint": "La persona viene iscritta solo ai canali selezionati qui e il testo del consenso li indica. Un canale viene usato solo se la persona fornisce il telefono o l’e-mail corrispondente.",
+      "channelsUse": "Aggiorna il testo con questi canali"
     }
   }
 }

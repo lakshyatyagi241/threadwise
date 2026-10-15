@@ -58,7 +58,8 @@
         "tryAgain": "Coba bayar lagi",
         "missingTitle": "Pembayaran ini tidak ditemukan",
         "missingBody": "Tautan mungkin salah atau sudah terlalu lama."
-      }
+      },
+      "termsOfService": "Ketentuan"
     }
   }
 }

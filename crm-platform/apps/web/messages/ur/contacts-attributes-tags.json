@@ -456,7 +456,9 @@
         "memo": "میمو",
         "status": "حالت",
         "source": "ماخذ",
-        "consent": "مارکیٹنگ رضامندی (ہاں / نہیں)"
+        "consent": "مارکیٹنگ رضامندی (ہاں / نہیں)",
+        "consentSms": "SMS مارکیٹنگ رضامندی (ہاں / نہیں)",
+        "consentEmail": "ای میل مارکیٹنگ رضامندی (ہاں / نہیں)"
       },
       "notInFile": "فائل میں نہیں",
       "columnN": "کالم {n}",
@@ -1399,6 +1401,19 @@
         "selectAll": "سب منتخب کریں",
         "reorder": "کالمز کی ترتیب بدلنے کے لیے گھسیٹیں",
         "remove": "{name} کو ہٹائیں"
+      },
+      "presets": {
+        "myContacts": "میرے رابطے",
+        "newThisWeek": "اس ہفتے نئے",
+        "newLastWeek": "پچھلے ہفتے نئے",
+        "recentlyCreated": "حال ہی میں بنائے گئے",
+        "recentlyModified": "حال ہی میں تبدیل کیے گئے",
+        "recentlyImported": "حال ہی میں درآمد کیے گئے",
+        "neverContacted": "کبھی رابطہ نہیں ہوا",
+        "needsFollowUp": "فالو اپ درکار",
+        "active": "فعال",
+        "inactive": "غیر فعال",
+        "unsubscribed": "سبسکرپشن ختم کرنے والے"
       }
     },
     "erase": {

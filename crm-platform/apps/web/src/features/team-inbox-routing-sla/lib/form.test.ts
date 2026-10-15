@@ -86,13 +86,24 @@ describe('the flow a rule starts', () => {
 
   it('is none by default, and the payload says null so an edit can clear it', () => {
     expect(emptyForm().triggerFlowId).toBe('');
-    expect(payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1] }, [], true).triggerFlowId).toBeNull();
+    expect(
+      payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1] }, [], true).triggerFlowId,
+    ).toBeNull();
   });
 
   it('goes to the payload as the flow uuid, and comes back from a saved rule', () => {
-    const payload = payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1], triggerFlowId: FLOW }, [], true);
+    const payload = payloadFromForm(
+      { ...emptyForm(), name: 'x', userIds: [U1], triggerFlowId: FLOW },
+      [],
+      true,
+    );
     expect(payload.triggerFlowId).toBe(FLOW);
-    expect(createRoutingRuleSchema.safeParse({ ...payload, conditions: { ...payload.conditions, channelKinds: ['telegram'] } }).success).toBe(true);
+    expect(
+      createRoutingRuleSchema.safeParse({
+        ...payload,
+        conditions: { ...payload.conditions, channelKinds: ['telegram'] },
+      }).success,
+    ).toBe(true);
     const saved = rule({ triggerFlow: { id: FLOW, name: 'Welcome', isActive: true } });
     expect(formFromRule(saved).triggerFlowId).toBe(FLOW);
   });
@@ -101,7 +112,11 @@ describe('the flow a rule starts', () => {
     const a = rule();
     const b = rule({ triggerFlow: { id: FLOW, name: 'Welcome', isActive: true } });
     expect(editableOf(a)).not.toBe(editableOf(b));
-    expect(editableOf(b)).toBe(editableOf(rule({ triggerFlow: { id: FLOW, name: 'Renamed', isActive: false }, firedCount: 5 })));
+    expect(editableOf(b)).toBe(
+      editableOf(
+        rule({ triggerFlow: { id: FLOW, name: 'Renamed', isActive: false }, firedCount: 5 }),
+      ),
+    );
   });
 });
 

@@ -2,13 +2,27 @@ import type { GoogleWorkspacePort } from '../../../../../infra/providers/flow-ru
 import type { CustomDecision, InboundReply, NodeContext, NodeResult } from '../../types';
 import { evalRule } from '../../condition';
 import { asText, resolveVariable } from '../../variables';
+import { GoogleAccountError } from '../../../../../infra/providers/flow-runtime-engine/google-workspace.port';
+import { googleFailureText } from './google-failure';
 import { dataOf, str } from './webhook-node';
 
 const ADVANCE: NodeResult = { kind: 'advance', port: 1 };
 const isRecord = (v: unknown): v is Record<string, unknown> =>
   v !== null && typeof v === 'object' && !Array.isArray(v);
 const TAG = /\{\{\s*([^{}]+?)\s*\}\}/g;
-const failure = (e: unknown): string => (e instanceof Error ? e.message : String(e));
+/**
+ * A Google step that could not use Google FAILS the run at that step, visibly, with the stable `GOOGLE_*` code and what to do about it
+ * (the run log and the run view show both): no account, a missing permission, a disabled API, a revoked grant, or an error Google answered.
+ * Reference noted it and went on; that silence is what hid a workspace with no Google account. The Google nodes have no error exit to route
+ * to (only Form has its own two), so the run ends here; "Retry" on the run resumes it after the account is fixed.
+ *
+ * What is NOT a failure, as in Reference: a step the author left half empty (no sheet, no columns, no template, no form) is noted in the
+ * run log and skipped (the checks take their "no" branch), and a lookup that finds no row is an ordinary empty result.
+ */
+function failed(e: unknown): NodeResult {
+  const code = e instanceof GoogleAccountError ? e.code : 'GOOGLE_UNAVAILABLE';
+  return { kind: 'fail', code, reason: googleFailureText(e) };
+}
 
 /** A value as a cell or a line of text: a record becomes its human field (title, name, label...) or JSON; never "[object Object]". */
 function flatten(v: unknown): string {
@@ -85,7 +99,7 @@ async function sendText(ctx: NodeContext, body: string): Promise<boolean> {
 /**
  * Google Sheets node (TW-FLR-044). Write appends one row built from the node's columns (merge tags per cell, optionally placed under
  * the sheet's own headers); when a column reads `{{prefix.field}}` and an AI node left `prefix.__rows`, one row per record. Read looks
- * a row up by column and value and saves it as `<saveAs>` plus `<saveAs>.<header>`. Whatever Google answers, the flow moves on.
+ * a row up by column and value and saves it as `<saveAs>` plus `<saveAs>.<header>`. When Google cannot do the work the step fails (see `failed`).
  */
 export async function runSheets(
   ctx: NodeContext,
@@ -121,7 +135,7 @@ export async function runSheets(
         ctx.note(`google sheets: no row where ${matchColumn} = ${matchValue}`);
       }
     } catch (e) {
-      ctx.note(`google sheets read failed: ${failure(e)}`);
+      return failed(e);
     }
     return ADVANCE;
   }
@@ -133,20 +147,9 @@ export async function runSheets(
   }
   const matchByHeader = d.matchByHeader === true;
   const columnHeaders = cols.map((c) => (isRecord(c) ? str(c.header) : ''));
-  const write = async (values: string[]): Promise<boolean> => {
-    try {
-      await google.appendSheetRow(orgId, {
-        sheetId,
-        tabName,
-        values,
-        columnHeaders,
-        matchByHeader,
-      });
-      return true;
-    } catch (e) {
-      ctx.note(`google sheets write failed: ${failure(e)}`);
-      return false;
-    }
+  /** ALL the rows of this step in one append: a step that fails wrote nothing, so a retry cannot duplicate rows that went in. */
+  const write = async (rows: string[][]): Promise<void> => {
+    await google.appendSheetRows(orgId, { sheetId, tabName, rows, columnHeaders, matchByHeader });
   };
 
   let records: unknown[] | null = null;
@@ -160,24 +163,29 @@ export async function runSheets(
       break;
     }
   }
-  if (records) {
-    let ok = 0;
-    for (const rec of records) {
-      if (isRecord(rec)) {
-        for (const [k, v] of Object.entries(rec)) {
-          ctx.run.vars[`${prefix}.${k}`] =
-            v === null || v === undefined
-              ? ''
-              : typeof v === 'object'
-                ? JSON.stringify(v)
-                : String(v);
+  try {
+    if (records) {
+      const rows: string[][] = [];
+      for (const rec of records) {
+        if (isRecord(rec)) {
+          for (const [k, v] of Object.entries(rec)) {
+            ctx.run.vars[`${prefix}.${k}`] =
+              v === null || v === undefined
+                ? ''
+                : typeof v === 'object'
+                  ? JSON.stringify(v)
+                  : String(v);
+          }
         }
+        rows.push(sheetRow(ctx, cols));
       }
-      if (await write(sheetRow(ctx, cols))) ok++;
+      await write(rows);
+      ctx.note(`google sheets appended ${rows.length}/${records.length} rows`);
+    } else {
+      await write([sheetRow(ctx, cols)]);
     }
-    ctx.note(`google sheets appended ${ok}/${records.length} rows`);
-  } else {
-    await write(sheetRow(ctx, cols));
+  } catch (e) {
+    return failed(e);
   }
   return ADVANCE;
 }
@@ -185,7 +193,7 @@ export async function runSheets(
 /**
  * Google Docs node (TW-FLR-045): copies the template, fills its `{{placeholders}}` from the flow's variables (text and numbers) and the
  * node's own placeholder list, shares it by link, saves the link as `doc_url` and the node's variable, and sends it. A failure
- * sends Reference's apology and the flow moves on.
+ * sends Reference's apology and then fails the step.
  */
 export async function runDocs(ctx: NodeContext, google: GoogleWorkspacePort): Promise<NodeResult> {
   const d = dataOf(ctx);
@@ -206,21 +214,28 @@ export async function runDocs(ctx: NodeContext, google: GoogleWorkspacePort): Pr
   }
   let url = '';
   try {
-    ({ url } = await google.generateDoc(ctx.run.orgId, {
+    const made = await google.generateDoc(ctx.run.orgId, {
       templateId,
       newTitle: subst(ctx, str(d.newTitle, 'Document')),
       vars,
       shareable: d.shareable !== false,
-    }));
+    });
+    url = made.url;
+    // The copy exists: a fill or a share that failed is a note, never a lost link (Reference carried on past both).
+    for (const w of made.warnings ?? []) {
+      ctx.note(
+        w.startsWith('share')
+          ? `google docs: the document was made but could not be shared by link (${w.slice(6)})`
+          : `google docs: the document was made but its placeholders could not be filled (${w.slice(5)})`,
+      );
+    }
   } catch (e) {
-    ctx.note(`google docs failed: ${failure(e)}`);
-  }
-  if (url === '') {
+    // The customer is told (Reference's apology), and the step fails with the reason for whoever runs the flow.
     await apologise(
       ctx,
       "Sorry, couldn't generate your document right now. Please try again later.",
     );
-    return ADVANCE;
+    return failed(e);
   }
   ctx.run.vars[str(d.saveAs, 'doc_url')] = url;
   ctx.run.vars.doc_url = url;
@@ -230,7 +245,7 @@ export async function runDocs(ctx: NodeContext, google: GoogleWorkspacePort): Pr
 
 /**
  * Google Meet node (TW-FLR-047): creates a Calendar event with a Meet link starting `leadMinutes` from now (default 5, lasting 30),
- * saves `meet_link`, `meet_start` and `meet_event_id`, and sends the author's message. No link: Reference's apology, then on.
+ * saves `meet_link`, `meet_start` and `meet_event_id`, and sends the author's message. No link: Reference's apology, then the step fails.
  */
 export async function runMeet(ctx: NodeContext, google: GoogleWorkspacePort): Promise<NodeResult> {
   const d = dataOf(ctx);
@@ -252,14 +267,11 @@ export async function runMeet(ctx: NodeContext, google: GoogleWorkspacePort): Pr
       requestId: ctx.stepKey,
     }));
   } catch (e) {
-    ctx.note(`google meet failed: ${failure(e)}`);
-  }
-  if (meetUrl === '') {
     await apologise(
       ctx,
       "Sorry, couldn't generate a meeting link right now. Please try again later.",
     );
-    return ADVANCE;
+    return failed(e);
   }
   const meetStart = `${startAt.toISOString().replace('T', ' ').substring(0, 16)} UTC`;
   Object.assign(ctx.run.vars, {
@@ -282,7 +294,7 @@ export const GOOGLE_FORM_HANDLER = 'GoogleForm';
 /**
  * Google Form node (TW-FLR-046): sends the form's link and parks the run until the form's webhook reports a submission
  * (`FlowEngine.deliverExternal`, handled by `onGoogleFormReply`). The wait lasts `expiresInSec` (default a day) and then leaves by
- * the `timeout` port (2); Reference's run simply stopped answering. No form or no link: the apology, then out by `submitted`.
+ * the `timeout` port (2); Reference's run simply stopped answering. No form or no link: the apology, then the step fails.
  */
 export async function runForm(ctx: NodeContext, google: GoogleWorkspacePort): Promise<NodeResult> {
   const d = dataOf(ctx);
@@ -295,11 +307,8 @@ export async function runForm(ctx: NodeContext, google: GoogleWorkspacePort): Pr
   try {
     ({ url } = await google.formResponderUrl(ctx.run.orgId, formId));
   } catch (e) {
-    ctx.note(`google form failed: ${failure(e)}`);
-  }
-  if (url === '') {
     await apologise(ctx, 'Sorry, the form is unavailable right now. Please try again later.');
-    return ADVANCE;
+    return failed(e);
   }
   const body = `${subst(ctx, str(d.bodyText, 'Please fill out this short form:'))}\n\n${url}`;
   if (!(await sendText(ctx, body))) return ADVANCE;
@@ -336,16 +345,16 @@ export async function onGoogleFormReply(
 const YES: NodeResult = { kind: 'advance', port: 1, branch: true };
 const NO: NodeResult = { kind: 'advance', port: 2, branch: true };
 
-/** The first sheet row where `matchColumn` equals the (rendered) match value, or null with the reason in the run log. */
+/** The first sheet row where `matchColumn` equals the (rendered) match value (`row` null: none, noted), or the failed step. */
 async function sheetRowOf(
   ctx: NodeContext,
   google: GoogleWorkspacePort,
   d: Record<string, unknown>,
-): Promise<Record<string, string> | null> {
+): Promise<{ row: Record<string, string> | null } | { failure: NodeResult }> {
   const sheetId = str(d.sheetId).trim();
   if (sheetId === '') {
     ctx.note('google sheets has no sheet: skipped');
-    return null;
+    return { row: null };
   }
   const matchColumn = str(d.matchColumn);
   const matchValue = subst(ctx, d.matchValue);
@@ -358,16 +367,15 @@ async function sheetRowOf(
       limit: 1,
     });
     if (!rows[0]) ctx.note(`google sheets: no row where ${matchColumn} = ${matchValue}`);
-    return rows[0] ?? null;
+    return { row: rows[0] ?? null };
   } catch (e) {
-    ctx.note(`google sheets read failed: ${failure(e)}`);
-    return null;
+    return { failure: failed(e) };
   }
 }
 
 /**
  * "Check Google Sheet field": yes (port 1) when the cell in `checkColumn` of the matching row meets the operator and value (the
- * Condition node's operators), no (port 2) when it does not, when there is no matching row, or when Google cannot be read.
+ * Condition node's operators), no (port 2) when it does not or when there is no matching row. When Google cannot be read the step fails (it must not answer "no" for a problem).
  */
 export async function runSheetCheck(
   ctx: NodeContext,
@@ -375,7 +383,9 @@ export async function runSheetCheck(
 ): Promise<NodeResult> {
   const d = dataOf(ctx);
   const column = str(d.checkColumn).trim();
-  const row = column === '' ? null : await sheetRowOf(ctx, google, d);
+  const found = column === '' ? { row: null } : await sheetRowOf(ctx, google, d);
+  if ('failure' in found) return found.failure;
+  const row = found.row;
   if (!row) return NO;
   const met = evalRule(
     { cell: row[column] ?? '' },
@@ -408,7 +418,9 @@ export async function runSheetContact(
     ctx.note('this run has no contact to save the row to: skipped');
     return ADVANCE;
   }
-  const row = await sheetRowOf(ctx, google, d);
+  const found = await sheetRowOf(ctx, google, d);
+  if ('failure' in found) return found.failure;
+  const row = found.row;
   if (!row) return ADVANCE;
   let saved = 0;
   for (const m of pairs) {

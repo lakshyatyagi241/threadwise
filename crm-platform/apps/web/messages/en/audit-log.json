@@ -92,7 +92,8 @@
       "api_keys": "API keys",
       "audit-log": "Audit log",
       "audit-log-exports": "Audit log exports",
-      "contact_consent_exports": "Consent proof exports"
+      "contact_consent_exports": "Consent proof exports",
+      "revenue-report-exports": "Revenue report files"
     },
     "table": {
       "caption": "Audit entries, newest first. Times are shown in your time zone ({zone}).",

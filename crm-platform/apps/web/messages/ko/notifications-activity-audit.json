@@ -379,6 +379,10 @@
         "test": {
           "label": "테스트 알림",
           "hint": "브라우저 알림에서 보내는 테스트로, 벨, 팝업, 탭 제목이 작동하는지 확인할 수 있습니다."
+        },
+        "appointment_calendar_drift": {
+          "label": "Google Calendar와 동기화되지 않은 예약",
+          "hint": "예정된 예약의 Google Calendar 일정이 삭제되거나 이동되었거나 참석자가 변경되었습니다. 예약은 변경되지 않으며, 어떻게 처리할지는 직접 선택합니다."
         }
       },
       "loading": "환경설정을 불러오는 중",

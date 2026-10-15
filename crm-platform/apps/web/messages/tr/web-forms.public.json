@@ -58,7 +58,8 @@
         "tryAgain": "Tekrar ödemeyi dene",
         "missingTitle": "Bu ödemeyi bulamadık",
         "missingBody": "Bağlantı yanlış veya çok eski olabilir."
-      }
+      },
+      "termsOfService": "Şartlar"
     }
   }
 }

@@ -27,7 +27,7 @@ export function inboundUrlKey(credentialsKeyB64: string): string {
 }
 
 export type WebhookAuthResult =
-  { ok: true; via: 'signature' | 'url_key' } | { ok: false; reason: string };
+  { ok: true; via: 'signature' | 'url_key' | 'trusted_source' } | { ok: false; reason: string };
 
 /**
  * Who is calling. A valid body signature is proof; failing that, the secret in the URL we registered is. Both absent or both
@@ -40,12 +40,18 @@ export function authenticateWebhook(input: {
   queryKey: string | undefined;
   expectedKey: string;
   requireSignature: boolean;
+  /**
+   * The request came from an address the operator listed as a trusted forwarder (`WABA_TRUSTED_FORWARDER_IPS`): a relay that
+   * re-posts the body without Meta's signature header and cannot add a URL key. Never overrides `requireSignature`.
+   */
+  trustedSource?: boolean;
 }): WebhookAuthResult {
   if (input.signatureHeader && input.signatureValid) return { ok: true, via: 'signature' };
   if (input.requireSignature)
     return { ok: false, reason: input.signatureHeader ? 'invalid signature' : 'missing signature' };
   if (input.queryKey && timingSafeEqualStr(input.queryKey, input.expectedKey))
     return { ok: true, via: 'url_key' };
+  if (input.trustedSource) return { ok: true, via: 'trusted_source' };
   return { ok: false, reason: input.signatureHeader ? 'invalid signature' : 'missing signature' };
 }
 
