@@ -17,7 +17,11 @@ const q = async (sql: string, params: unknown[] = []) => (await h.owner.query(sq
 const settings = (t: Tenant) => api.as(t.admin).get('/v2/compliance/settings');
 const checklist = async (t: Tenant) => (await api.as(t.admin).get('/v2/compliance/checklist')).body;
 const item = (c: { items: Array<{ id: string }> }, id: string) =>
-  c.items.find((i) => i.id === id) as { status: string; detail: string; regimes: string[] };
+  c.items.find((i) => i.id === id) as unknown as {
+    status: string;
+    detail: string;
+    regimes: string[];
+  };
 
 /** The whole document the screen sends back, with edits on top. */
 async function save(t: Tenant, edit: Record<string, unknown> = {}) {

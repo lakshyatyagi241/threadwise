@@ -17,9 +17,11 @@ import {
   settingsProblems,
 } from '../../../src/modules/compliance-center/compliance-settings.service';
 
-const facts = (
-  patch: Partial<ChecklistFacts> & { settings?: Partial<ComplianceSettingsValues> } = {},
-): ChecklistFacts => ({
+type FactsPatch = Omit<Partial<ChecklistFacts>, 'settings'> & {
+  settings?: Partial<ComplianceSettingsValues>;
+};
+
+const facts = (patch: FactsPatch = {}): ChecklistFacts => ({
   consent: { detectionEnabled: true, requireConsentForMarketing: true },
   notices: { enabledCount: 0, workspaceLocales: [] },
   requests: { slaDays: 30, open: 0, overdue: 0 },
