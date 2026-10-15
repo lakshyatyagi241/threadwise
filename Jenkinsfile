@@ -12,15 +12,17 @@
 //   sentry-auth-token        Secret text
 // Optional job parameters/env: SENTRY_ORG, SENTRY_PROJECT
 //
-// Agent must have: the Jenkins NodeJS tool "22" (Manage Jenkins > Tools), Docker
-// with the docker-workflow plugin, and network access to pull aquasec/trivy:0.75.0
-// and to reach the Hostinger box over SSH.
+// Agent must have: the Jenkins NodeJS tool "22-latest" (Manage Jenkins > Tools),
+// pinned to Node >= 22.12.0 — older 22.x predates Node's default support for
+// require() of ESM and vitest's unplugin-swc chain fails with ERR_REQUIRE_ESM.
+// Also needs Docker with the docker-workflow plugin, and network access to pull
+// aquasec/trivy:0.75.0 and to reach the Hostinger box over SSH.
 
 pipeline {
   agent any
 
   tools {
-    nodejs '22'
+    nodejs '22-latest'
   }
 
   options {
