@@ -366,6 +366,34 @@
       "copied": "Tersalin",
       "close": "Tutup",
       "keyHint": "Kunci API Anda hanya ditampilkan sekali, saat dibuat, di <link>Pengembang</link>. Kunci ini butuh izin templates:write."
+    },
+    "gallery": {
+      "title": "Galeri templat",
+      "intro": "Templat WhatsApp siap pakai menurut kegunaan. Pilih satu, lalu terbuka sebagai templat baru yang bisa Anda ubah sebelum menyimpannya.",
+      "search": "Cari di galeri",
+      "categoryFilter": "Kategori galeri",
+      "all": "Semua",
+      "loading": "Memuat galeri",
+      "loadError": "Galeri tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "empty": "Tidak ada templat yang cocok",
+      "emptyHint": "Coba kata lain atau pilih kategori lain.",
+      "use": "Gunakan templat ini",
+      "useNamed": "Gunakan templat {name}",
+      "count": "{count, plural, other {# templat}}",
+      "categories": {
+        "ecommerce": "E-commerce",
+        "food_delivery": "Pesan antar makanan",
+        "festival_season": "Musim perayaan",
+        "education": "Pendidikan",
+        "travel": "Perjalanan",
+        "others": "Lainnya"
+      }
+    },
+    "home": {
+      "label": "Tampilan templat",
+      "saved": "Templat tersimpan",
+      "gallery": "Galeri templat"
     }
   }
 }

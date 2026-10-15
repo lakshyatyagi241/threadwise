@@ -366,6 +366,34 @@
       "copied": "Kopyalandı",
       "close": "Kapat",
       "keyHint": "API anahtarınız oluşturulurken bir kez gösterilir, <link>Geliştiriciler</link> bölümünde. templates:write izni gerekir."
+    },
+    "gallery": {
+      "title": "Şablon galerisi",
+      "intro": "Kullanıma göre hazır WhatsApp şablonları. Birini seçin, kaydetmeden önce değiştirebileceğiniz yeni bir şablon olarak açılır.",
+      "search": "Galeride ara",
+      "categoryFilter": "Galeri kategorileri",
+      "all": "Tümü",
+      "loading": "Galeri yükleniyor",
+      "loadError": "Galeri yüklenemedi.",
+      "retry": "Tekrar dene",
+      "empty": "Eşleşen şablon yok",
+      "emptyHint": "Başka bir sözcük deneyin veya başka bir kategori seçin.",
+      "use": "Bu şablonu kullan",
+      "useNamed": "{name} şablonunu kullan",
+      "count": "{count, plural, one {# şablon} other {# şablon}}",
+      "categories": {
+        "ecommerce": "E-ticaret",
+        "food_delivery": "Yemek siparişi",
+        "festival_season": "Bayram sezonu",
+        "education": "Eğitim",
+        "travel": "Seyahat",
+        "others": "Diğer"
+      }
+    },
+    "home": {
+      "label": "Şablon görünümleri",
+      "saved": "Kayıtlı şablonlar",
+      "gallery": "Şablon galerisi"
     }
   }
 }

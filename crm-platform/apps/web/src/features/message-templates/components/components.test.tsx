@@ -292,9 +292,7 @@ describe('library card', () => {
       'Copy cURL to send sample_purchase_feedback',
     );
     const pending = card(summary({ status: 'pending' }));
-    expect(pending).toContain(
-      'The API can send only approved templates',
-    );
+    expect(pending).toContain('The API can send only approved templates');
     expect(pending).toContain('disabled=""');
   });
 

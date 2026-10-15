@@ -366,6 +366,34 @@
       "copied": "Copiado",
       "close": "Cerrar",
       "keyHint": "Tu clave de API se muestra una sola vez, al crearla, en <link>Desarrolladores</link>. Necesita el permiso templates:write."
+    },
+    "gallery": {
+      "title": "Galería de plantillas",
+      "intro": "Plantillas de WhatsApp listas para usar, por tipo de uso. Elige una y se abre como una plantilla nueva que puedes cambiar antes de guardarla.",
+      "search": "Buscar en la galería",
+      "categoryFilter": "Categorías de la galería",
+      "all": "Todas",
+      "loading": "Cargando la galería",
+      "loadError": "No se pudo cargar la galería.",
+      "retry": "Intentar de nuevo",
+      "empty": "Ninguna plantilla coincide",
+      "emptyHint": "Prueba otra palabra o elige otra categoría.",
+      "use": "Usar esta plantilla",
+      "useNamed": "Usar la plantilla {name}",
+      "count": "{count, plural, one {# plantilla} other {# plantillas}}",
+      "categories": {
+        "ecommerce": "Comercio electrónico",
+        "food_delivery": "Reparto de comida",
+        "festival_season": "Temporada de fiestas",
+        "education": "Educación",
+        "travel": "Viajes",
+        "others": "Otras"
+      }
+    },
+    "home": {
+      "label": "Vistas de plantillas",
+      "saved": "Plantillas guardadas",
+      "gallery": "Galería de plantillas"
     }
   }
 }

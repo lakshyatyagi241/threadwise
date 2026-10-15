@@ -366,6 +366,34 @@
       "copied": "Đã sao chép",
       "close": "Đóng",
       "keyHint": "Khóa API chỉ hiện một lần, khi bạn tạo, trong <link>Nhà phát triển</link>. Khóa cần quyền templates:write."
+    },
+    "gallery": {
+      "title": "Thư viện mẫu",
+      "intro": "Các mẫu WhatsApp làm sẵn theo mục đích sử dụng. Chọn một mẫu, nó mở ra như một mẫu mới để bạn sửa trước khi lưu.",
+      "search": "Tìm trong thư viện",
+      "categoryFilter": "Danh mục thư viện",
+      "all": "Tất cả",
+      "loading": "Đang tải thư viện",
+      "loadError": "Không thể tải thư viện.",
+      "retry": "Thử lại",
+      "empty": "Không có mẫu nào phù hợp",
+      "emptyHint": "Thử từ khác hoặc chọn danh mục khác.",
+      "use": "Dùng mẫu này",
+      "useNamed": "Dùng mẫu {name}",
+      "count": "{count, plural, other {# mẫu}}",
+      "categories": {
+        "ecommerce": "Thương mại điện tử",
+        "food_delivery": "Giao đồ ăn",
+        "festival_season": "Mùa lễ hội",
+        "education": "Giáo dục",
+        "travel": "Du lịch",
+        "others": "Khác"
+      }
+    },
+    "home": {
+      "label": "Kiểu xem mẫu",
+      "saved": "Mẫu đã lưu",
+      "gallery": "Thư viện mẫu"
     }
   }
 }

@@ -366,6 +366,34 @@
       "copied": "Skopiowano",
       "close": "Zamknij",
       "keyHint": "Klucz API jest pokazywany raz, przy tworzeniu, w sekcji <link>Programiści</link>. Wymaga uprawnienia templates:write."
+    },
+    "gallery": {
+      "title": "Galeria szablonów",
+      "intro": "Gotowe szablony WhatsApp według zastosowania. Wybierz jeden, a otworzy się jako nowy szablon, który możesz zmienić przed zapisaniem.",
+      "search": "Szukaj w galerii",
+      "categoryFilter": "Kategorie galerii",
+      "all": "Wszystkie",
+      "loading": "Wczytywanie galerii",
+      "loadError": "Nie udało się wczytać galerii.",
+      "retry": "Spróbuj ponownie",
+      "empty": "Żaden szablon nie pasuje",
+      "emptyHint": "Spróbuj innego słowa lub wybierz inną kategorię.",
+      "use": "Użyj tego szablonu",
+      "useNamed": "Użyj szablonu {name}",
+      "count": "{count, plural, one {# szablon} few {# szablony} many {# szablonów} other {# szablonu}}",
+      "categories": {
+        "ecommerce": "E-commerce",
+        "food_delivery": "Dostawa jedzenia",
+        "festival_season": "Okres świąt",
+        "education": "Edukacja",
+        "travel": "Podróże",
+        "others": "Inne"
+      }
+    },
+    "home": {
+      "label": "Widoki szablonów",
+      "saved": "Zapisane szablony",
+      "gallery": "Galeria szablonów"
     }
   }
 }

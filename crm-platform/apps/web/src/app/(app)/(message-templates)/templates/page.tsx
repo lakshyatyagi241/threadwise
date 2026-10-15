@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { TemplatesScreen } from '@/features/message-templates/components/templates-screen';
+import { TemplatesHome } from '@/features/message-templates/components/templates-home';
 import { baseUrlOf } from '@/features/developer-rest-api-v1/lib/keys-model';
 import { publicApiOrigin } from '@/features/developer-rest-api-v1/docs/lib/load-spec';
 
@@ -11,7 +11,7 @@ export default function TemplatesPage() {
   // here, on the server, for the "Copy cURL" example of a template.
   return (
     <Suspense>
-      <TemplatesScreen apiBaseUrl={baseUrlOf(publicApiOrigin())} />
+      <TemplatesHome apiBaseUrl={baseUrlOf(publicApiOrigin())} />
     </Suspense>
   );
 }

@@ -366,6 +366,34 @@
       "copied": "Kopiert",
       "close": "Schließen",
       "keyHint": "Dein API-Schlüssel wird einmal angezeigt, wenn du ihn erstellst, unter <link>Entwickler</link>. Er braucht die Berechtigung templates:write."
+    },
+    "gallery": {
+      "title": "Vorlagen-Galerie",
+      "intro": "Fertige WhatsApp-Vorlagen nach Anwendungsfall. Wähle eine aus, und sie öffnet sich als neue Vorlage, die du vor dem Speichern ändern kannst.",
+      "search": "Galerie durchsuchen",
+      "categoryFilter": "Galerie-Kategorien",
+      "all": "Alle",
+      "loading": "Galerie wird geladen",
+      "loadError": "Die Galerie konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "empty": "Keine passende Vorlage",
+      "emptyHint": "Versuche ein anderes Wort oder wähle eine andere Kategorie.",
+      "use": "Diese Vorlage verwenden",
+      "useNamed": "Vorlage {name} verwenden",
+      "count": "{count, plural, one {# Vorlage} other {# Vorlagen}}",
+      "categories": {
+        "ecommerce": "E-Commerce",
+        "food_delivery": "Essenslieferung",
+        "festival_season": "Festtagssaison",
+        "education": "Bildung",
+        "travel": "Reisen",
+        "others": "Sonstiges"
+      }
+    },
+    "home": {
+      "label": "Vorlagenansichten",
+      "saved": "Gespeicherte Vorlagen",
+      "gallery": "Vorlagen-Galerie"
     }
   }
 }
