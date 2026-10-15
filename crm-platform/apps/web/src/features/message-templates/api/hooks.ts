@@ -10,6 +10,7 @@ import {
   type SubmitTemplateInput,
   type SyncTemplatesInput,
   type TemplateDetail,
+  type TemplateGalleryQuery,
   type UpdateTemplateInput,
 } from '@crm/contracts';
 import { useCursorList } from '@/lib/api/use-cursor-list';
@@ -27,6 +28,21 @@ export const KEYS = {
 };
 
 export const PAGE_SIZE_LIBRARY = 8;
+
+/** The default templates (the Saved templates tab). The same for every workspace, so kept for a while and refetched when the filters change. */
+export function useTemplateGallery(
+  query: TemplateGalleryQuery = {},
+  opts: { enabled?: boolean } = {},
+) {
+  return useQuery({
+    enabled: opts.enabled ?? true,
+    queryKey: ['tpl', 'gallery', query.category ?? 'all', query.q ?? ''] as const,
+    queryFn: ({ signal }) => templatesApi.gallery(query, signal),
+    staleTime: 5 * 60_000,
+    placeholderData: keepPreviousData,
+    retry: false,
+  });
+}
 
 export type LibraryFilters = Pick<
   ListTemplatesQuery,

@@ -5,6 +5,7 @@ import {
   syncTemplatesResultSchema,
   templateCountsSchema,
   templateDetailSchema,
+  templateGalleryResponseSchema,
   templateSubmitResultSchema,
   tplAiGenerateResponseSchema,
   wabaConnectionListSchema,
@@ -14,6 +15,7 @@ import {
   type SubmitTemplateInput,
   type SyncTemplatesInput,
   type TemplateCountsQuery,
+  type TemplateGalleryQuery,
   type UpdateTemplateInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -22,6 +24,13 @@ const base = '/templates';
 
 /** Every message-templates call. Templates are named by uuid; the proxy adds the session token. */
 export const templatesApi = {
+  /** The default (starter) templates of the platform, by use (every category; the chosen one and the search narrow the list). */
+  gallery: (query: TemplateGalleryQuery, signal?: AbortSignal) =>
+    apiFetch(`${base}/gallery`, {
+      query: { category: query.category, q: query.q || undefined },
+      schema: templateGalleryResponseSchema,
+      signal,
+    }),
   get: (id: string, signal?: AbortSignal) =>
     apiFetch(`${base}/${id}`, { schema: templateDetailSchema, signal }),
   create: (input: CreateTemplateInput, idempotencyKey?: string) =>

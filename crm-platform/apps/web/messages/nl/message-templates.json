@@ -570,6 +570,34 @@
         "network": "De server is niet bereikbaar. Controleer uw verbinding en probeer het opnieuw.",
         "failed": "Het sjabloon kon niet worden gegenereerd. Probeer het opnieuw."
       }
+    },
+    "gallery": {
+      "title": "Sjabloongalerij",
+      "intro": "Kant-en-klare WhatsApp-sjablonen per toepassing. Kies er een en het opent als nieuw sjabloon dat je kunt aanpassen voordat je het opslaat.",
+      "search": "Zoeken in de galerij",
+      "categoryFilter": "Galerijcategorieën",
+      "all": "Alle",
+      "loading": "Galerij laden",
+      "loadError": "De galerij kon niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "empty": "Geen sjabloon gevonden",
+      "emptyHint": "Probeer een ander woord of kies een andere categorie.",
+      "use": "Dit sjabloon gebruiken",
+      "useNamed": "Sjabloon {name} gebruiken",
+      "count": "{count, plural, one {# sjabloon} other {# sjablonen}}",
+      "categories": {
+        "ecommerce": "E-commerce",
+        "food_delivery": "Maaltijdbezorging",
+        "festival_season": "Feestseizoen",
+        "education": "Onderwijs",
+        "travel": "Reizen",
+        "others": "Overig"
+      }
+    },
+    "home": {
+      "label": "Sjabloonweergaven",
+      "saved": "Opgeslagen sjablonen",
+      "gallery": "Sjabloongalerij"
     }
   }
 }

@@ -570,6 +570,34 @@
         "network": "无法连接服务器。请检查网络连接后重试。",
         "failed": "无法生成模板。请重试。"
       }
+    },
+    "gallery": {
+      "title": "模板库",
+      "intro": "按用途分类的现成 WhatsApp 模板。选择一个，它会作为新模板打开，保存前可以修改。",
+      "search": "搜索模板库",
+      "categoryFilter": "模板库分类",
+      "all": "全部",
+      "loading": "正在加载模板库",
+      "loadError": "无法加载模板库。",
+      "retry": "重试",
+      "empty": "没有匹配的模板",
+      "emptyHint": "换个词试试，或选择其他分类。",
+      "use": "使用此模板",
+      "useNamed": "使用模板 {name}",
+      "count": "{count, plural, other {# 个模板}}",
+      "categories": {
+        "ecommerce": "电商",
+        "food_delivery": "外卖配送",
+        "festival_season": "节日季",
+        "education": "教育",
+        "travel": "旅行",
+        "others": "其他"
+      }
+    },
+    "home": {
+      "label": "模板视图",
+      "saved": "已保存的模板",
+      "gallery": "模板库"
     }
   }
 }

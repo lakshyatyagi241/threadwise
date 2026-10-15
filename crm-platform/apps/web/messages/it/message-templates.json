@@ -570,6 +570,34 @@
         "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
         "failed": "Impossibile generare il template. Riprova."
       }
+    },
+    "gallery": {
+      "title": "Galleria dei modelli",
+      "intro": "Modelli WhatsApp pronti all'uso, per tipo di utilizzo. Scegline uno e si apre come nuovo modello, modificabile prima di salvarlo.",
+      "search": "Cerca nella galleria",
+      "categoryFilter": "Categorie della galleria",
+      "all": "Tutti",
+      "loading": "Caricamento della galleria",
+      "loadError": "Impossibile caricare la galleria.",
+      "retry": "Riprova",
+      "empty": "Nessun modello corrisponde",
+      "emptyHint": "Prova un'altra parola o scegli un'altra categoria.",
+      "use": "Usa questo modello",
+      "useNamed": "Usa il modello {name}",
+      "count": "{count, plural, one {# modello} other {# modelli}}",
+      "categories": {
+        "ecommerce": "E-commerce",
+        "food_delivery": "Consegna di cibo",
+        "festival_season": "Periodo festivo",
+        "education": "Istruzione",
+        "travel": "Viaggi",
+        "others": "Altro"
+      }
+    },
+    "home": {
+      "label": "Viste dei modelli",
+      "saved": "Modelli salvati",
+      "gallery": "Galleria dei modelli"
     }
   }
 }

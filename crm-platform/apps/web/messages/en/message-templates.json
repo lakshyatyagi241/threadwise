@@ -545,6 +545,34 @@
         "network": "Could not reach the server. Check your connection and try again.",
         "failed": "Could not generate the template. Try again."
       }
+    },
+    "gallery": {
+      "title": "Template gallery",
+      "intro": "Ready-made WhatsApp templates by use. Pick one and it opens as a new template you can change before you save it.",
+      "search": "Search the gallery",
+      "categoryFilter": "Gallery categories",
+      "all": "All",
+      "loading": "Loading the gallery",
+      "loadError": "The gallery could not be loaded.",
+      "retry": "Try again",
+      "empty": "No template matches",
+      "emptyHint": "Try another word or choose another category.",
+      "use": "Use this template",
+      "useNamed": "Use the template {name}",
+      "count": "{count, plural, one {# template} other {# templates}}",
+      "categories": {
+        "ecommerce": "Ecommerce",
+        "food_delivery": "Food delivery",
+        "festival_season": "Festival season",
+        "education": "Education",
+        "travel": "Travel",
+        "others": "Others"
+      }
+    },
+    "home": {
+      "label": "Template views",
+      "saved": "Saved templates",
+      "gallery": "Template gallery"
     }
   }
 }

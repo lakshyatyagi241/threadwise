@@ -5,7 +5,19 @@ summary: Write WhatsApp message templates, submit them to Meta for review, and t
 area: campaigns
 order: 30
 documents: [nav:templates]
-keywords: [whatsapp template, meta approval, review, buttons, variables, sync, quality, ai, build with ai, draft]
+keywords:
+  [
+    whatsapp template,
+    meta approval,
+    review,
+    buttons,
+    variables,
+    sync,
+    quality,
+    ai,
+    build with ai,
+    draft,
+  ]
 ---
 
 ## What it is for
@@ -28,6 +40,7 @@ On **New Template Message**, **Build with AI** (top bar) drafts the template fro
 ## Options and settings
 
 - **Sync from Meta** (top right) fetches the templates already on your WhatsApp Business account.
+- **Saved templates and Template gallery.** The two tabs above the library keep your own templates apart from the platform's default ones. **Saved templates** (the one that opens first) is your library: the templates you created or synced, with All, Marketing, Utility and Authentication. **Template gallery** shows the platform's default templates in a column for each use (ecommerce, food delivery, festival season, education, travel, others), the columns side by side in one row that you scroll sideways; narrow them with the category buttons or the search box. Hover one and select **Use this template** (on a small screen the button sits under it) to open the new-template form filled in from it: name, category, header, body with sample values, footer and buttons. Change what you need, choose the WhatsApp number, add a header picture if it has one, and save or submit as usual; it becomes one of your saved templates only then. Gallery templates are never counted or listed in your library.
 - An **Authentication** template is a one-time passcode: Meta writes the message and the Copy code button, and you can set how long the code stays valid.
 - Each template shows a status: Draft, In review, Approved, Rejected, Paused, Disabled or Missing on Meta. Approved templates also show a quality rating.
 - Open a template to see its Meta details. While it is in review the page checks every 30 seconds, and **Refresh** asks Meta now. A draft, in-review, rejected, approved or paused template can be edited; **Save changes** on a live template sends the edit to Meta and it goes back into review, and its name and language cannot change. A template you have not submitted shows **Submit to Meta** on its page.

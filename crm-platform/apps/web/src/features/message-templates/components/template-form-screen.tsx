@@ -32,10 +32,12 @@ import {
   useDebounced,
   useLint,
   useTemplate,
+  useTemplateGallery,
   useUpdateTemplate,
 } from '../api/hooks';
 import { applyAiDraft, canDraftCategory, takeAiDraft } from '../lib/ai-draft';
 import { buttonIssues } from '../lib/buttons';
+import { galleryToState } from '../lib/gallery-state';
 import { counter, wrapSelection } from '../lib/format';
 import {
   BODY_MAX,
@@ -100,23 +102,64 @@ export function TemplateFormScreen({
   id,
   copyFrom,
   connectionId,
+  galleryId,
 }: {
   id?: string;
   copyFrom?: string;
   /** A new template starts on this number (the guided campaign wizard passes the number it sends from). */
   connectionId?: string;
+  /** A default template to start from (`/templates/new?gallery=<id>`). */
+  galleryId?: string;
 }) {
   const t = useTranslations('message-templates.form');
   const errorText = useErrorText();
   // A copy opens the form of a new template filled in from this one ("Duplicate template" in the inbox's template list).
   const detail = useTemplate(id ?? copyFrom ?? '', { poll: false });
   const mayCreate = useCan('tpl.templates.create');
+  const gallery = useTemplateGallery({}, { enabled: galleryId !== undefined });
+  const fromGallery = galleryId
+    ? gallery.data?.templateList.find((g) => g.id === galleryId)
+    : undefined;
 
   if (!mayCreate) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-7">
         <Alert tone="warning">{t('noPermission')}</Alert>
       </main>
+    );
+  }
+  if (id === undefined && copyFrom === undefined && galleryId !== undefined) {
+    if (gallery.isPending)
+      return (
+        <div className="flex justify-center p-12">
+          <Spinner label={t('loading')} />
+        </div>
+      );
+    if (gallery.isError)
+      return (
+        <main className="mx-auto max-w-3xl space-y-3 px-4 py-7">
+          <ErrorAlert error={errorText(gallery.error)} />
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => void gallery.refetch()}>
+              {t('retry')}
+            </Button>
+            <Link
+              href="/templates"
+              className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium"
+            >
+              {t('backToLibrary')}
+            </Link>
+          </div>
+        </main>
+      );
+    // A default template that is not in the answer (an old link) opens the empty form.
+    return fromGallery ? (
+      <TemplateForm
+        key={`gallery:${galleryId}`}
+        initial={galleryToState(fromGallery, connectionId)}
+      />
+    ) : (
+      <TemplateForm key="new" initial={initialState()} />
     );
   }
   if (id === undefined && copyFrom === undefined)
