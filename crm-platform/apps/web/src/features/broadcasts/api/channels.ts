@@ -5,6 +5,7 @@ import {
   igAccountListSchema,
   mailboxListResponseSchema,
   lineChannelListResponseSchema,
+  viberChannelListSchema,
   smsSenderListResponseSchema,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -22,6 +23,7 @@ export function useBroadcastChannels(): {
   facebook: boolean;
   instagram: boolean;
   line: boolean;
+  viber: boolean;
   sms: string | null;
   email: string | null;
 } {
@@ -33,6 +35,9 @@ export function useBroadcastChannels(): {
   const canLineChannels = useCan('line.channels.read');
   const canLineBroadcasts = useCan('line.broadcasts.read');
   const canLine = canLineChannels && canLineBroadcasts;
+  const canViberChannels = useCan('viber.channels.read');
+  const canViberBroadcasts = useCan('viber.broadcasts.read');
+  const canViber = canViberChannels && canViberBroadcasts;
   const canSms = useCan('sms.senders.read');
   const bots = useQuery({
     queryKey: ['broadcasts', 'chooser', 'telegram'],
@@ -89,12 +94,21 @@ export function useBroadcastChannels(): {
     queryFn: ({ signal }) =>
       apiFetch('/line/channels', { schema: lineChannelListResponseSchema, signal }),
   });
+  const viberChannels = useQuery({
+    queryKey: ['broadcasts', 'chooser', 'viber'],
+    enabled: canViber,
+    retry: false,
+    staleTime: 60_000,
+    queryFn: ({ signal }) =>
+      apiFetch('/viber/channels', { schema: viberChannelListSchema, signal }),
+  });
   return {
     email: mailbox ? `email:${mailbox.id}` : null,
     sms: (sms.data?.data ?? []).find((s) => s.active)?.senderKey ?? null,
     telegram: (bots.data?.data ?? []).some((b) => b.active),
     facebook: (pages.data?.data ?? []).some((p) => p.status === 'connected'),
     instagram: (accounts.data?.data ?? []).length > 0,
+    viber: (viberChannels.data?.data ?? []).some((c) => c.active),
     line: (lineChannels.data?.data ?? []).some((c) => c.active),
   };
 }

@@ -34,6 +34,7 @@ export * from './contacts-attributes-tags';
 export * from './broadcasts';
 export * from './channel-telegram';
 export * from './channel-line';
+export * from './channel-viber';
 export * from './channel-sms';
 export * from './help-agent';
 export * from './channel-email';

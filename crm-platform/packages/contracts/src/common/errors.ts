@@ -263,6 +263,15 @@ export const ERROR_CODES = {
   LINE_NOTHING_TO_RETRY: 'LINE_NOTHING_TO_RETRY',
   /** Token rotation could not be set up: the Channel ID is missing, the key does not sign, or LINE refused the assertion. */
   LINE_ROTATION_FAILED: 'LINE_ROTATION_FAILED',
+  // Viber channel (TW-VIB)
+  /** Viber refused the auth token (get_account_info failed). */
+  VIB_TOKEN_REJECTED: 'VIB_TOKEN_REJECTED',
+  VIB_BROADCAST_EMPTY: 'VIB_BROADCAST_EMPTY',
+  /** None of the picked users belong to the channel. */
+  VIB_NO_RECIPIENTS: 'VIB_NO_RECIPIENTS',
+  VIB_CHANNEL_UNAVAILABLE: 'VIB_CHANNEL_UNAVAILABLE',
+  VIB_NOTHING_TO_SEND: 'VIB_NOTHING_TO_SEND',
+  VIB_NOTHING_TO_RETRY: 'VIB_NOTHING_TO_RETRY',
 
   // Help assistant (docs/specs/help-agent-assistant.md)
   /** The workspace switch is off, or the person may not use the assistant here (a disabled screen, a missing permission). */

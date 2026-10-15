@@ -201,3 +201,21 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-LINE-017 | blocked |  | insights not ported yet; outside the first LINE branch |
 | TW-LINE-018 | backend-done |  | permission keys + extra_channels; channel cap not enforced (as Reference) |
 | TW-LINE-019 | wontfix |  | unused client methods in Reference 1.7.0, no caller |
+## channel-viber (vib)
+| TW-VIB-001 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-002 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-003 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-004 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-005 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-006 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-007 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-008 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-009 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-010 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-011 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-012 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-013 | backend-done |  | channel-viber branch; fake Viber only, nothing run against Viber |
+| TW-VIB-014 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-015 | in-progress |  | permission keys done; both plan flags are the one plan feature extra_channels |
+| TW-VIB-016 | frontend-done |  | channel-viber branch; screens not compared with the running Reference |
+| TW-VIB-017 | blocked |  | needs flow-runtime-engine; Node callbacks not recreated |

@@ -40,6 +40,8 @@ export const QUEUES = {
   TG_BROADCAST: 'tg-broadcast',
   /** One job per LINE broadcast run: pushes to its pending people in batches of 40, paced under LINE's rate limits. */
   LINE_BROADCAST: 'line-broadcast',
+  /** One job per Viber broadcast run: sends its pending users in calls of up to 300 (TW-VIB-013). */
+  VIBER_BROADCAST: 'viber-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010). */
   FB_BACKFILL: 'fb-backfill',
   /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (TW-FB-013). */

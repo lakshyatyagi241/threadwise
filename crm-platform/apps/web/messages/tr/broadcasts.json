@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "LINE hesabınızla zaten yazışan kişilere mesaj gönderin.",
         "cta": "LINE toplu mesajı oluştur"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Viber hesabınızla zaten sohbet eden kişilere mesaj gönderin.",
+        "cta": "Viber toplu gönderimi oluştur"
       }
     }
   }

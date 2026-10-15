@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "Stuur een bericht naar mensen die al met je LINE-account chatten.",
         "cta": "LINE-broadcast aanmaken"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Stuur een bericht naar de mensen die al met je Viber-account chatten.",
+        "cta": "Viber-broadcast maken"
       }
     }
   }

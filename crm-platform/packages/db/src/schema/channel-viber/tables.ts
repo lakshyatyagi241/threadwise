@@ -3,6 +3,7 @@
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {
+  bigint,
   boolean,
   foreignKey,
   index,
@@ -135,10 +136,15 @@ export const viberBroadcasts = pgTable(
     buttons: jsonb('buttons'),
     mediaPath: text('media_path'),
     mediaKind: text('media_kind'),
+    /** Bytes of the attached file; Viber requires it on a video message. */
+    mediaSize: bigint('media_size', { mode: 'number' }),
     status: text('status').notNull().default('draft'),
     total: integer('total').notNull().default(0),
     sent: integer('sent').notNull().default(0),
     failed: integer('failed').notNull().default(0),
+    /** Receipts Viber reported for this broadcast's recipients (matched on the message token). */
+    delivered: integer('delivered').notNull().default(0),
+    seen: integer('seen').notNull().default(0),
     lastError: text('last_error'),
     startedAt: timestamp('started_at', { withTimezone: true }),
     finishedAt: timestamp('finished_at', { withTimezone: true }),
@@ -190,6 +196,10 @@ export const viberBroadcastRecipients = pgTable(
     status: text('status').notNull().default('pending'),
     error: text('error'),
     sentAt: timestamp('sent_at', { withTimezone: true }),
+    /** Viber's token for the send; a batch of up to 300 shares one, so a receipt is matched on token and user id. */
+    messageToken: text('message_token'),
+    deliveredAt: timestamp('delivered_at', { withTimezone: true }),
+    seenAt: timestamp('seen_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -219,6 +229,11 @@ export const viberBroadcastRecipients = pgTable(
     ),
     index('idx_viber_broadcast_recipients_status').on(t.orgId, t.status),
     index('idx_viber_broadcast_recipients_viber_user_id').on(t.orgId, t.viberUserId),
+    index('idx_viber_broadcast_recipients_message_token').on(
+      t.orgId,
+      t.messageToken,
+      t.viberUserId,
+    ),
   ],
 );
 

@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "Wyślij wiadomość do osób, które już piszą z Twoim kontem LINE.",
         "cta": "Utwórz wysyłkę LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Wyślij wiadomość do osób, które już piszą z Twoim kontem Viber.",
+        "cta": "Utwórz wysyłkę Viber"
       }
     }
   }

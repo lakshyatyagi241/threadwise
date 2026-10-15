@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "向已经与您的 LINE 账号聊天的人发送消息。",
         "cta": "创建 LINE 群发"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "向已经在与您的 Viber 账号聊天的用户发送消息。",
+        "cta": "创建 Viber 群发"
       }
     }
   }

@@ -20,6 +20,7 @@ import { ChannelEmailWorkerModule } from '../modules/channel-email';
 import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import { ChannelLineWorkerModule } from '../modules/channel-line';
+import { ChannelViberWorkerModule } from '../modules/channel-viber';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
@@ -115,6 +116,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
     ChannelLineWorkerModule,
+    ChannelViberWorkerModule,
     ChannelSmsWorkerModule,
     ChannelEmailWorkerModule,
     ChannelFacebookWorkerModule,

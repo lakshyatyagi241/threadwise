@@ -6,6 +6,7 @@ const none = {
   facebook: false,
   instagram: false,
   line: false,
+  viber: false,
   sms: null,
   email: null,
 };
@@ -20,6 +21,7 @@ describe('the channel chooser cards', () => {
       telegram: true,
       facebook: true,
       instagram: true,
+      viber: true,
       line: true,
       sms: 'sms:abc',
       email: 'email:abc',
@@ -32,6 +34,7 @@ describe('the channel chooser cards', () => {
       'facebook',
       'instagram',
       'line',
+      'viber',
     ]);
   });
 
@@ -41,6 +44,7 @@ describe('the channel chooser cards', () => {
         telegram: true,
         facebook: true,
         instagram: true,
+        viber: true,
         line: true,
         sms: 'sms:abc',
         email: 'email:abc',
@@ -51,6 +55,7 @@ describe('the channel chooser cards', () => {
     expect(byId.telegram).toBe('/telegram/broadcasts');
     expect(byId.facebook).toBe('/facebook/broadcasts');
     expect(byId.instagram).toBe('/instagram/broadcast');
+    expect(byId.viber).toBe('/viber/broadcasts');
     expect(byId.line).toBe('/line/broadcasts');
   });
 

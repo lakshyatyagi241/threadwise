@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de LINE.",
         "cta": "Crear difusión de LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de Viber.",
+        "cta": "Crear difusión de Viber"
       }
     }
   }

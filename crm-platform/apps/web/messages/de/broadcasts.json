@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "Senden Sie eine Nachricht an Personen, die bereits mit Ihrem LINE-Account chatten.",
         "cta": "LINE-Broadcast erstellen"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Senden Sie eine Nachricht an die Personen, die bereits mit Ihrem Viber-Account chatten.",
+        "cta": "Viber-Rundsendung erstellen"
       }
     }
   }
