@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte LINE.",
         "cta": "Créer une diffusion LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte Viber.",
+        "cta": "Créer une diffusion Viber"
       }
     }
   }
