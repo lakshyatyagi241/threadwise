@@ -90,21 +90,27 @@ export class RegistrationController {
   @HttpCode(200)
   @Post('signup/verify-email-code')
   @ApiOperation({ summary: 'Confirm the emailed code for a staged sign-up' })
-  async signupVerifyEmailCode(@Body(zodPipe(signupVerifyEmailCodeRequestSchema)) body: SignupVerifyEmailCodeRequest) {
-    return this.signup.verifyEmailCode(body);
+  async signupVerifyEmailCode(
+    @Body(zodPipe(signupVerifyEmailCodeRequestSchema)) body: SignupVerifyEmailCodeRequest,
+  ) {
+    return this.signup.verifyEmailCode(body, clientMeta());
   }
 
   @Public()
   @Post('signup/resend-email-code')
   @ApiOperation({ summary: 'Send the sign-up code again (cooldown applies)' })
-  async signupResendEmailCode(@Body(zodPipe(signupResendEmailCodeRequestSchema)) body: SignupResendEmailCodeRequest) {
-    return this.signup.resendEmailCode(body);
+  async signupResendEmailCode(
+    @Body(zodPipe(signupResendEmailCodeRequestSchema)) body: SignupResendEmailCodeRequest,
+  ) {
+    return this.signup.resendEmailCode(body, clientMeta());
   }
 
   @Public()
   @Post('signup/set-password')
   @ApiOperation({ summary: 'Choose a password and create the account after email verification' })
-  async signupSetPassword(@Body(zodPipe(signupSetPasswordRequestSchema)) body: SignupSetPasswordRequest) {
+  async signupSetPassword(
+    @Body(zodPipe(signupSetPasswordRequestSchema)) body: SignupSetPasswordRequest,
+  ) {
     return this.signup.setPassword(body, clientMeta());
   }
 

@@ -18,6 +18,10 @@ let h: Harness;
 const api = () => request(h.app.getHttpServer());
 let n = 0;
 const uniqueEmail = (tag = 'u') => `${tag}${Date.now()}${n++}@example.test`;
+/** A fresh client address per call (the harness trusts `x-forwarded-for`), so per-IP throttles stay apart. */
+const nextIp = () => `10.52.${Math.floor(n / 250) % 250}.${n++ % 250}`;
+/** Any 6-digit code that is not `code`. */
+const wrongOf = (code: string) => String((Number(code) + 1) % 1_000_000).padStart(6, '0');
 
 async function startAndReadCode(fullName: string, email: string) {
   const res = await api().post('/v2/auth/signup/start').send({ fullName, email });
@@ -118,6 +122,90 @@ describe('POST /v2/auth/signup/verify-email-code', () => {
     expect(res.status, JSON.stringify(res.body)).toBe(400);
     expect(res.body.code).toBe('AUTH_OTP_INVALID');
   });
+
+  it('counts parallel wrong guesses atomically: a burst of 10 exhausts the 5-guess budget', async () => {
+    const { token, code } = await startAndReadCode('Ada', uniqueEmail('burst'));
+    // Each guess from its own address, so the per-IP throttle is not what stops them: only the
+    // guess counter is. With a read-modify-write counter every request read the same count, so all
+    // 10 were compared with the code and the budget barely moved.
+    const answers = await Promise.all(
+      Array.from({ length: 10 }, () =>
+        api()
+          .post('/v2/auth/signup/verify-email-code')
+          .set('x-forwarded-for', nextIp())
+          .send({ token, code: wrongOf(code) }),
+      ),
+    );
+    const codes = answers.map((r) => r.body.code as string);
+    expect(
+      codes.filter((c) => c === 'AUTH_OTP_INVALID'),
+      JSON.stringify(codes),
+    ).toHaveLength(5);
+    expect(
+      codes.filter((c) => c === 'AUTH_OTP_TOO_MANY_ATTEMPTS'),
+      JSON.stringify(codes),
+    ).toHaveLength(5);
+    // The budget is genuinely spent: even the right code is no longer compared.
+    const right = await api()
+      .post('/v2/auth/signup/verify-email-code')
+      .set('x-forwarded-for', nextIp())
+      .send({ token, code });
+    expect(right.status, JSON.stringify(right.body)).toBe(429);
+    expect(right.body.code).toBe('AUTH_OTP_TOO_MANY_ATTEMPTS');
+  });
+
+  it('allows exactly 5 sequential wrong guesses, then refuses even the right code', async () => {
+    const { token, code } = await startAndReadCode('Ada', uniqueEmail('seq'));
+    for (let i = 0; i < 5; i++) {
+      const r = await api()
+        .post('/v2/auth/signup/verify-email-code')
+        .send({ token, code: wrongOf(code) });
+      expect(r.body.code, `guess ${i + 1}`).toBe('AUTH_OTP_INVALID');
+    }
+    const right = await api().post('/v2/auth/signup/verify-email-code').send({ token, code });
+    expect(right.status, JSON.stringify(right.body)).toBe(429);
+    expect(right.body.code).toBe('AUTH_OTP_TOO_MANY_ATTEMPTS');
+  });
+
+  it('a resend gives a fresh allowance of guesses', async () => {
+    const email = uniqueEmail('fresh');
+    const { token, code } = await startAndReadCode('Ada', email);
+    for (let i = 0; i < 5; i++) {
+      await api()
+        .post('/v2/auth/signup/verify-email-code')
+        .send({ token, code: wrongOf(code) });
+    }
+    expect(
+      (await api().post('/v2/auth/signup/verify-email-code').send({ token, code })).body.code,
+    ).toBe('AUTH_OTP_TOO_MANY_ATTEMPTS');
+    await skipResendCooldown(token);
+    const resend = await api().post('/v2/auth/signup/resend-email-code').send({ token });
+    expect(resend.status, JSON.stringify(resend.body)).toBe(201);
+    const msg = h.mail.filter((m) => m.to === email).at(-1)!;
+    const fresh = msg.text.match(/\b(\d{6})\b/)![1]!;
+    const ok = await api().post('/v2/auth/signup/verify-email-code').send({ token, code: fresh });
+    expect(ok.status, JSON.stringify(ok.body)).toBe(200);
+  });
+
+  it('limits verify per client address: 10 a minute, then 429 RATE_LIMITED', async () => {
+    const { token, code } = await startAndReadCode('Ada', uniqueEmail('ipv'));
+    const ip = nextIp();
+    const answers: Array<{ status: number; body: { code: string; errors?: unknown[] } }> = [];
+    for (let i = 0; i < 11; i++) {
+      answers.push(
+        await api()
+          .post('/v2/auth/signup/verify-email-code')
+          .set('x-forwarded-for', ip)
+          .send({ token, code: wrongOf(code) }),
+      );
+    }
+    expect(answers.slice(0, 10).every((r) => r.body.code !== 'RATE_LIMITED')).toBe(true);
+    expect(answers[10]!.status).toBe(429);
+    expect(answers[10]!.body.code).toBe('RATE_LIMITED');
+    expect(answers[10]!.body.errors).toEqual([
+      { path: 'retryAfterSeconds', message: expect.stringMatching(/^\d+$/) },
+    ]);
+  });
 });
 
 describe('POST /v2/auth/signup/resend-email-code', () => {
@@ -129,6 +217,21 @@ describe('POST /v2/auth/signup/resend-email-code', () => {
     const second = await api().post('/v2/auth/signup/resend-email-code').send({ token });
     expect(second.status, JSON.stringify(second.body)).toBe(429);
     expect(second.body.code).toBe('AUTH_OTP_RESEND_COOLDOWN');
+  });
+
+  it('limits resend per client address: 5 a minute, then 429 RATE_LIMITED', async () => {
+    const { token } = await startAndReadCode('Ada', uniqueEmail('ipr'));
+    const ip = nextIp();
+    const codes: string[] = [];
+    for (let i = 0; i < 6; i++) {
+      const r = await api()
+        .post('/v2/auth/signup/resend-email-code')
+        .set('x-forwarded-for', ip)
+        .send({ token });
+      codes.push(r.body.code);
+    }
+    expect(codes.slice(0, 5).every((c) => c === 'AUTH_OTP_RESEND_COOLDOWN')).toBe(true);
+    expect(codes[5]).toBe('RATE_LIMITED');
   });
 
   it('leaves the old code still verifiable when the resend mail fails to send', async () => {

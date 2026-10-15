@@ -84,7 +84,7 @@ interface EmailStage {
   codeHash: string;
   codeExpiresAt: number;
   verified: boolean;
-  attempts: number;
+  /** Read only by the resend cooldown. Wrong guesses are counted in `triesKey`, atomically. */
   lastSentAt: number;
 }
 
@@ -217,7 +217,6 @@ export class SignupService {
       codeHash: await hash(code),
       codeExpiresAt: Date.now() + EMAIL_CODE_TTL_SECONDS * 1000,
       verified: false,
-      attempts: 0,
       lastSentAt: Date.now(),
     };
     const stageKey = AuthKeys.signupEmailStage(token);
@@ -252,22 +251,21 @@ export class SignupService {
 
   /**
    * Step 2 of the three-step sign-up: check the emailed code against the staged `EmailStage`.
-   * A wrong guess is counted and persisted back with `KEEPTTL` so the stage's own remaining TTL
-   * (set once by `start()`/`resendEmailCode()`) is never reset by a failed attempt.
+   * Race-safe like `verifyOtp`: every guess is counted with one atomic INCR on `triesKey` BEFORE the
+   * comparison, so a burst of parallel guesses all get distinct numbers and no more than
+   * `EMAIL_CODE_MAX_ATTEMPTS` of them are ever compared with the code.
    */
-  async verifyEmailCode(req: SignupVerifyEmailCodeRequest): Promise<SignupVerifyEmailCodeResponse> {
+  async verifyEmailCode(
+    req: SignupVerifyEmailCodeRequest,
+    meta: ClientMeta,
+  ): Promise<SignupVerifyEmailCodeResponse> {
+    await this.throttleClient('signup-email-verify', meta, OTP_VERIFY_PER_IP_PER_MINUTE);
+
     const key = AuthKeys.signupEmailStage(req.token);
     const raw = await this.redis.get(key);
     if (!raw) throw this.signupExpired();
     const stage = JSON.parse(raw) as EmailStage;
 
-    if (stage.attempts >= EMAIL_CODE_MAX_ATTEMPTS) {
-      throw new AppError(
-        ERROR_CODES.AUTH_OTP_TOO_MANY_ATTEMPTS,
-        'Too many attempts. Please request a new code.',
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
     if (Date.now() > stage.codeExpiresAt) {
       throw new AppError(
         ERROR_CODES.AUTH_OTP_EXPIRED,
@@ -275,10 +273,15 @@ export class SignupService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    if ((await this.countGuess(key)) > EMAIL_CODE_MAX_ATTEMPTS) {
+      throw new AppError(
+        ERROR_CODES.AUTH_OTP_TOO_MANY_ATTEMPTS,
+        'Too many attempts. Please request a new code.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
     const ok = await verify(stage.codeHash, req.code).catch(() => false);
     if (!ok) {
-      stage.attempts += 1;
-      await this.stageWriteBack(key, stage);
       throw new AppError(
         ERROR_CODES.AUTH_OTP_INVALID,
         'Incorrect code. Please try again.',
@@ -288,14 +291,20 @@ export class SignupService {
     stage.verified = true;
     // XX: a stage consumed between our GET and this SET stays consumed (see `stageWriteBack`).
     if (!(await this.stageWriteBack(key, stage))) throw this.signupExpired();
+    await this.redis.del(triesKey(key));
     return { token: req.token };
   }
 
   /**
    * Issues a fresh code for the same staged sign-up: a genuinely new hash and expiry, a reset
-   * attempt budget, and a new mail sent (the old code's mail is useless once this runs).
+   * guess allowance, and a new mail sent (the old code's mail is useless once this runs).
    */
-  async resendEmailCode(req: SignupResendEmailCodeRequest): Promise<SignupResendEmailCodeResponse> {
+  async resendEmailCode(
+    req: SignupResendEmailCodeRequest,
+    meta: ClientMeta,
+  ): Promise<SignupResendEmailCodeResponse> {
+    await this.throttleClient('signup-email-resend', meta, OTP_RESEND_PER_IP_PER_MINUTE);
+
     const key = AuthKeys.signupEmailStage(req.token);
     const raw = await this.redis.get(key);
     if (!raw) throw this.signupExpired();
@@ -310,7 +319,7 @@ export class SignupService {
       );
     }
     // Generate the new code/hash and attempt delivery BEFORE touching the stage in Redis: if the
-    // send fails, the old code, old attempts and old cooldown timer must stay exactly as they were
+    // send fails, the old code, old guess count and old cooldown timer must stay exactly as they were
     // (mirroring `start()`'s own rollback-on-failed-send behavior), otherwise the client gets a 201
     // for a code that was never delivered and the still-good old code is invalidated for nothing.
     const code = randomNumericCode(EMAIL_CODE_LENGTH);
@@ -332,9 +341,10 @@ export class SignupService {
 
     stage.codeHash = codeHash;
     stage.codeExpiresAt = Date.now() + EMAIL_CODE_TTL_SECONDS * 1000;
-    stage.attempts = 0;
     stage.lastSentAt = Date.now();
     if (!(await this.stageWriteBack(key, stage))) throw this.signupExpired();
+    // A fresh code starts with a fresh allowance of guesses.
+    await this.redis.del(triesKey(key));
 
     return {
       expiresInSeconds: EMAIL_CODE_TTL_SECONDS,
