@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Phase 4 QA Report</title>
+    <style>
+      :root {
+        --bg: #f4f6f9;
+        --surface: #fff;
+        --ink: #141a26;
+        --muted: #586275;
+        --line: #dde2ea;
+        --accent: #2a49c9;
+        --pass: #17613a;
+        --pass-soft: #dff3e7;
+        --part: #8a4a00;
+        --part-soft: #fdeccf;
+        --fail: #8a2b1f;
+        --fail-soft: #fbe4df;
+        --info: #3d4f7a;
+        --info-soft: #e6ebf5;
+        --code-bg: #eef1f6;
+        --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #0f131b;
+          --surface: #171c27;
+          --ink: #e8ecf4;
+          --muted: #9aa5b8;
+          --line: #2a3242;
+          --accent: #8ea3f5;
+          --pass: #7fd6a2;
+          --pass-soft: #14301f;
+          --part: #f4c37a;
+          --part-soft: #3a2c14;
+          --fail: #f2a99c;
+          --fail-soft: #3a1d19;
+          --info: #aebbe0;
+          --info-soft: #232b40;
+          --code-bg: #0f1420;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px/1.55 var(--font);
+        margin: 0;
+        padding: 28px 16px 80px;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 34px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      code,
+      pre {
+        font-family: var(--mono);
+      }
+      code {
+        background: var(--code-bg);
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        overflow-wrap: anywhere;
+      }
+      a {
+        color: var(--accent);
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      h1 {
+        font-size: clamp(26px, 4.2vw, 36px);
+        line-height: 1.12;
+        font-weight: 600;
+      }
+      .lede {
+        color: var(--muted);
+        max-width: 70ch;
+        margin-top: 10px;
+      }
+      h2.sec {
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .meta b {
+        color: var(--ink);
+      }
+      .chip {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .pass {
+        background: var(--pass-soft);
+        color: var(--pass);
+      }
+      .part {
+        background: var(--part-soft);
+        color: var(--part);
+      }
+      .fail {
+        background: var(--fail-soft);
+        color: var(--fail);
+      }
+      .info {
+        background: var(--info-soft);
+        color: var(--info);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      .stat b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 500;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .board {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      td {
+        padding: 11px 14px;
+        border-top: 1px solid var(--line);
+        vertical-align: top;
+      }
+      tr:first-child td {
+        border-top: 0;
+      }
+      td.n {
+        font-family: var(--mono);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .board table {
+        min-width: 720px;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .toc a {
+        text-decoration: none;
+        font-size: 12.5px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 4px 11px;
+      }
+      article.report {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      article.report > header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .rt {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        align-items: baseline;
+      }
+      .rt h2 {
+        font-size: 20px;
+        font-weight: 600;
+        flex: 1;
+        min-width: 200px;
+      }
+      .rt .id {
+        font-family: var(--mono);
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+      dl.facts {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      dl.facts dt,
+      dl.facts dd {
+        margin: 0;
+        padding: 9px 12px;
+        border-top: 1px solid var(--line);
+      }
+      dl.facts dt:first-of-type,
+      dl.facts dd:first-of-type {
+        border-top: 0;
+      }
+      dl.facts dt {
+        background: var(--code-bg);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      @media (max-width: 560px) {
+        dl.facts {
+          grid-template-columns: 1fr;
+        }
+      }
+      .blk h3 {
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .blk ul,
+      .blk ol {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .cases {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .cases table {
+        min-width: 640px;
+        font-size: 13px;
+      }
+      .cases td,
+      .cases th {
+        padding: 8px 12px;
+      }
+      .res {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      .res div {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .res b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .res span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      pre {
+        margin: 0;
+        background: var(--code-bg);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+      .note {
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .warn {
+        font-size: 12.5px;
+        background: var(--part-soft);
+        color: var(--part);
+        border-radius: 6px;
+        padding: 8px 10px;
+      }
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">QA, security and performance backlog · Phase 4 · cross-browser</div>
+        <h1>Phase 4 QA Report</h1>
+        <p class="lede">
+          One task from the team sheet: cross-browser testing (#19). Target: P0 and P1 flows work in
+          Chromium, Firefox and WebKit. The browser projects, the P0/P1/P2 priority map and a check
+          that keeps it complete are built. The public pages and an engine-sensitive spec were run
+          on all three engines. <b>The authenticated flows were not run on Firefox or WebKit</b>:
+          they need the full stack (API, Postgres, Redis).
+        </p>
+        <div class="meta">
+          <span><b>Prepared by</b> Vishal</span><span><b>Date</b> 15 Oct 2026</span
+          ><span><b>Branch</b> <code>vishal/qa-phase-4</code></span>
+        </div>
+      </header>
+
+      <section style="display: flex; flex-direction: column; gap: 14px">
+        <h2 class="sec">Summary</h2>
+        <div class="stats">
+          <div class="stat">
+            <b>3 + 1</b
+            ><span>engines: Chromium, Firefox, WebKit, plus mobile Safari (P0 only)</span>
+          </div>
+          <div class="stat">
+            <b>21 / 21</b><span>cross-browser spec on Chromium and on Firefox</span>
+          </div>
+          <div class="stat">
+            <b>20 + 1 skip</b
+            ><span>on WebKit and on mobile Safari (Tab order is OS-dependent in Safari)</span>
+          </div>
+          <div class="stat"><b>14</b><span>e2e folders classified: 5 P0, 8 P1, 1 P2</span></div>
+          <div class="stat">
+            <b>1</b
+            ><span
+              >real defect found and fixed: 4 unnamed buttons on <code>/</code> and
+              <code>/features</code></span
+            >
+          </div>
+          <div class="stat"><b>48</b><span>Node tool tests passing (3 new)</span></div>
+        </div>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">What was built</h2>
+        <ul>
+          <li>
+            Firefox, WebKit and mobile-Safari projects in
+            <code>apps/web/playwright.config.ts</code> (<code>CROSS_BROWSER=1</code>);
+            <code>E2E_PRIORITY=P0,P1</code> selects tests by priority.
+          </li>
+          <li>
+            <code>e2e/priority.json</code> maps each e2e folder to P0, P1 or P2;
+            <code>tools/quality/check-browser-priority.mjs</code> fails on an unclassified or stale
+            folder. Priorities are per folder, not per-test tags.
+          </li>
+          <li>
+            <code>e2e/cross-browser/sign-in-and-locale.spec.ts</code>: sign-in form, language menu,
+            RTL (ar, he, ur), theme persistence, consent banner, keyboard.
+          </li>
+          <li>
+            <code>e2e/_matrix/stub-api.mjs</code> and <code>QA_MATRIX_SCOPE=public</code>: run the
+            19 public routes without the backend.
+          </li>
+          <li>
+            Manual workflow <code>.github/workflows/browsers.yml</code> and
+            <code>docs/quality/cross-browser-testing.md</code>.
+          </li>
+        </ul>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Findings and triage</h2>
+        <ul>
+          <li>
+            <b>Real defect, fixed:</b> decorative mock-up <code>&lt;button&gt;</code>s on the home
+            and features pages had no accessible name in every engine; now <code>aria-hidden</code>
+            <code>div</code>s with the same classes (no visual change).
+          </li>
+          <li>
+            <b>Environment:</b> Firefox <code>500 /api/v2/i18n/languages</code> came from a web
+            proxy with no API behind it; stand-in API added.
+          </li>
+          <li>
+            <b>Test assumptions corrected:</b> the theme cookie is written after the colour flips
+            (tests now wait for it); the site is light by default, not OS-driven.
+          </li>
+          <li>
+            <b>Engine behaviour:</b> Safari does not Tab to buttons by default; that one keyboard
+            test is skipped on WebKit.
+          </li>
+        </ul>
+      </section>
+
+      <section class="blk" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 class="sec">What is still open</h2>
+        <ul class="warn">
+          <li>
+            Authenticated P0/P1 specs and the 189 authenticated routes were not run on Firefox or
+            WebKit (need Docker stack).
+          </li>
+          <li>
+            The public matrix was not re-run after the accessible-name fix, so that the fix is
+            confirmed on the three engines is still to do (one command, in the guide).
+          </li>
+          <li>
+            The repeat-run stability check (<code>--repeat-each=3</code>) result was not captured;
+            the spec passed with 0 flaky on the single full run.
+          </li>
+          <li>
+            <code>browsers.yml</code> has not run on GitHub; type-check and lint of
+            <code>apps/web</code> were not run (web dependencies not installed in the final
+            session); Prettier and the Node tool tests were.
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
