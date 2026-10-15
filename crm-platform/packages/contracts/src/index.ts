@@ -16,6 +16,7 @@ export * from './common/dates';
 export * from './crm/contact';
 export * from './crm/contact-assignment';
 export * from './crm/crm-dashboard';
+export * from './crm/revenue-report';
 export * from './crm/contact-activity';
 export * from './crm/contact-file';
 export * from './crm/contact-meeting';
