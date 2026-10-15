@@ -165,7 +165,7 @@
             "unset": "Çocuklar sorusunu Kişiler ve çocuklar bölümünde yanıtlayın.",
             "minorsNoParental": "Reşit olmayanlar dahil olabilir, ancak ebeveyn onayı kapalı. Bu profil, {age} yaşından küçük herkesi reşit olmayan sayar.",
             "no_minors": "Reşit olmayanların verilerini bilerek işlemiyorsunuz. Bu profil, {age} yaşından küçük herkesi reşit olmayan sayar.",
-            "may_include_minors": "{age} yaşından küçük kişiler için ebeveyn onayı açık. Kişi başına kanıt saklama henüz geliştirilmedi."
+            "may_include_minors": "{age} yaşın altındaki kişiler için ebeveyn onayı açık. Kişiyi onay kartında reşit olmayan olarak işaretleyin ve vasi onayını orada kaydedin."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Çocukların verileri",
-        "hint": "Bu ürün işletmeler içindir. Doğru kuralların gösterilmesi için reşit olmayanların verilerini tutup tutamayacağınızı belirtin.",
+        "hint": "Bu ürün işletmeler içindir. Doğru kuralların gösterilmesi için reşit olmayanların verilerini tutup tutamayacağınızı belirtin. Yanıtladıktan sonra reşit olmayan olarak işaretlenen kişiye pazarlama engellenir: reşit olmayanların verilerini bilerek işlemiyorsanız her zaman, reşit olmayanlar bulunabiliyorsa vasi onayı kaydedilene kadar.",
         "policy": "Kişileriniz arasındaki reşit olmayanlar",
         "policies": {
           "unset": "Henüz yanıtlanmadı",
@@ -352,7 +352,7 @@
           "may_include_minors": "Kişilerimiz arasında reşit olmayanlar bulunabilir"
         },
         "parental": "Reşit olmayanlar için ebeveyn onayı gereklidir",
-        "parentalHint": "Politikanızı kaydeden bir işaret. Kişi başına ebeveyn onayı kanıtının toplanması ve saklanması henüz geliştirilmedi.",
+        "parentalHint": "Politikanızı kaydeder ve reşit olmayan olarak işaretlenen kişilere vasi onayı kaydedilene kadar pazarlamayı engeller. Kişiyi onay kartında reşit olmayan olarak işaretler ve o onayı orada kaydedersiniz.",
         "age": "Açtığınız profiller, {age} yaşından küçük herkesi reşit olmayan sayar.",
         "dpdpNeedsAnswer": "DPDP profili bu soruyu yanıtlamanızı ister."
       }

@@ -165,7 +165,7 @@
             "unset": "Jawab pertanyaan tentang anak-anak di bagian Kontak dan anak-anak.",
             "minorsNoParental": "Anak di bawah umur mungkin termasuk, tetapi persetujuan orang tua nonaktif. Profil ini menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
             "no_minors": "Anda tidak dengan sengaja memproses data anak di bawah umur. Profil ini menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
-            "may_include_minors": "Persetujuan orang tua diaktifkan untuk orang di bawah {age} tahun. Penyimpanan bukti per kontak belum tersedia."
+            "may_include_minors": "Persetujuan orang tua aktif untuk orang di bawah {age} tahun. Tandai kontak sebagai di bawah umur di kartu persetujuannya dan catat persetujuan wali di sana."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Data anak-anak",
-        "hint": "Produk ini untuk bisnis. Tentukan apakah Anda mungkin menyimpan data anak di bawah umur, agar aturan yang tepat ditampilkan.",
+        "hint": "Produk ini untuk bisnis. Katakan apakah Anda boleh menyimpan data anak di bawah umur agar aturan yang tepat ditampilkan. Setelah Anda menjawab, pemasaran ke kontak yang ditandai di bawah umur ditahan: selalu jika Anda tidak dengan sengaja memproses data anak di bawah umur, dan sampai persetujuan wali tercatat jika anak di bawah umur mungkin termasuk.",
         "policy": "Anak di bawah umur di antara kontak Anda",
         "policies": {
           "unset": "Belum dijawab",
@@ -352,7 +352,7 @@
           "may_include_minors": "Anak di bawah umur mungkin ada di antara kontak kami"
         },
         "parental": "Persetujuan orang tua diperlukan untuk anak di bawah umur",
-        "parentalHint": "Penanda yang mencatat kebijakan Anda. Pengumpulan dan penyimpanan bukti persetujuan orang tua per kontak belum tersedia.",
+        "parentalHint": "Mencatat kebijakan Anda, dan menahan pemasaran ke kontak yang ditandai di bawah umur sampai persetujuan wali tercatat. Anda menandai kontak sebagai di bawah umur dan mencatat persetujuan itu di kartu persetujuannya.",
         "age": "Profil yang Anda aktifkan menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
         "dpdpNeedsAnswer": "Profil DPDP meminta Anda menjawab pertanyaan ini."
       }

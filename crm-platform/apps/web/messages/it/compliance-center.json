@@ -165,7 +165,7 @@
             "unset": "Rispondi alla domanda sui minori in Contatti e minori.",
             "minorsNoParental": "Possono esserci minori, ma il consenso dei genitori è disattivato. Questo profilo considera minore chiunque abbia meno di {age} anni.",
             "no_minors": "Non tratti consapevolmente i dati di minori. Questo profilo considera minore chiunque abbia meno di {age} anni.",
-            "may_include_minors": "Il consenso dei genitori è attivo per le persone sotto i {age} anni. La conservazione delle prove per ogni contatto non è ancora disponibile."
+            "may_include_minors": "Il consenso dei genitori è attivo per le persone sotto i {age} anni. Contrassegna un contatto come minorenne sulla sua scheda di consenso e registra lì il consenso del tutore."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Dati dei minori",
-        "hint": "Questo prodotto è pensato per le aziende. Indica se puoi detenere dati di minori, così vengono mostrate le regole giuste.",
+        "hint": "Questo prodotto è pensato per le aziende. Indica se puoi trattenere dati di minori, così vengono mostrate le regole giuste. Dopo la risposta, il marketing verso un contatto contrassegnato come minorenne viene trattenuto: sempre se non tratti consapevolmente dati di minori, e finché non è registrato il consenso del tutore se possono esserci minori.",
         "policy": "Minori tra i tuoi contatti",
         "policies": {
           "unset": "Nessuna risposta ancora",
@@ -352,7 +352,7 @@
           "may_include_minors": "Tra i nostri contatti possono esserci minori"
         },
         "parental": "Per i minori è richiesto il consenso dei genitori",
-        "parentalHint": "Un indicatore che registra la tua politica. Raccogliere e conservare le prove del consenso dei genitori per ogni contatto non è ancora disponibile.",
+        "parentalHint": "Registra la tua politica e trattiene il marketing verso i contatti contrassegnati come minorenni finché non è registrato il consenso del tutore. Contrassegni un contatto come minorenne e registri quel consenso sulla sua scheda di consenso.",
         "age": "I profili che hai attivato considerano minore chiunque abbia meno di {age} anni.",
         "dpdpNeedsAnswer": "Il profilo DPDP ti chiede di rispondere a questa domanda."
       }

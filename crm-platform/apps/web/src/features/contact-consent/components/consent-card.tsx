@@ -15,6 +15,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { KEYS, useContactConsent } from '../api/hooks';
 import { consentApi, consentExportUrl } from '../api/service';
 import { errorKey } from '../lib/errors';
+import { PrivacyFlags } from './privacy-flags';
 
 type Status = 'optedOut' | 'subscribed' | 'none';
 
@@ -55,6 +56,7 @@ export function ConsentCard({
   const canRead = useCan('contacts.consent.read');
   const canManage = useCan('contacts.consent.manage');
   const t = useTranslations('contact-consent.card');
+  const tp = useTranslations('contact-consent.card.privacy');
   const te = useTranslations('contact-consent.errors');
   const q = useContactConsent(contactId, canRead);
   const [asking, setAsking] = useState<ConsentAction | null>(null);
@@ -73,6 +75,11 @@ export function ConsentCard({
           {q.data && (
             <Badge tone={TONE[consentStatus(q.data)]}>{t(`status.${consentStatus(q.data)}`)}</Badge>
           )}
+          {q.data?.privacy?.isMinor && <Badge tone="warning">{tp('minorLabel')}</Badge>}
+          {q.data?.privacy?.isMinor && q.data.privacy.guardianConsent && (
+            <Badge tone="neutral">{tp('guardianBadge')}</Badge>
+          )}
+          {q.data?.privacy?.doNotSellShare && <Badge tone="danger">{tp('dnsLabel')}</Badge>}
           <a
             href={consentExportUrl(contactId)}
             download
@@ -105,6 +112,14 @@ export function ConsentCard({
       )}
       {q.data && (
         <>
+          {q.data.privacy && (
+            <PrivacyFlags
+              contactId={contactId}
+              privacy={q.data.privacy}
+              canManage={canManage}
+              onChanged={onChanged}
+            />
+          )}
           {q.data.states.length === 0 ? (
             <p className="mt-3 text-sm text-muted-foreground">{t('noneRecorded')}</p>
           ) : (

@@ -1,4 +1,5 @@
 export { ConsentCard, consentStatus } from './components/consent-card';
+export { ContactPrivacyBadges } from './components/privacy-badges';
 export { ConsentSettingsScreen } from './components/consent-settings-screen';
 export { ConsentShell } from './components/consent-shell';
 export { OptOutLine, OptOutTemplateHint } from './components/opt-out-line';

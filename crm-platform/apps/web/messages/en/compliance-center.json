@@ -165,7 +165,7 @@
             "unset": "Answer the children question under Contacts and children.",
             "minorsNoParental": "Minors may be included, but parental consent is off. This profile treats anyone under {age} as a minor.",
             "no_minors": "You do not knowingly process the data of minors. This profile treats anyone under {age} as a minor.",
-            "may_include_minors": "Parental consent is switched on for people under {age}. Keeping the evidence per contact is not built yet."
+            "may_include_minors": "Parental consent is switched on for people under {age}. Mark a contact as a minor on its Consent card and record the guardian's consent there."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Children's data",
-        "hint": "This product is for businesses. Say whether you may hold the data of minors, so the right rules are shown.",
+        "hint": "This product is for businesses. Say whether you may hold the data of minors, so the right rules are shown. Once you answer, marketing to a contact marked as a minor is held back: always when you do not knowingly process minors, and until the guardian's consent is on record when minors may be included.",
         "policy": "Minors among your contacts",
         "policies": {
           "unset": "Not answered yet",
@@ -352,7 +352,7 @@
           "may_include_minors": "Minors may be among our contacts"
         },
         "parental": "Parental consent is required for minors",
-        "parentalHint": "A flag that records your policy. Collecting and keeping parental consent evidence per contact is not built yet.",
+        "parentalHint": "Records your policy, and holds marketing to contacts marked as minors until the guardian's consent is on record. You mark a contact as a minor, and record that consent, on its Consent card.",
         "age": "The profiles you switched on treat anyone under {age} as a minor.",
         "dpdpNeedsAnswer": "The DPDP profile asks you to answer this question."
       }

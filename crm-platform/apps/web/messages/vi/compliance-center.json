@@ -165,7 +165,7 @@
             "unset": "Hãy trả lời câu hỏi về trẻ em trong mục Liên hệ và trẻ em.",
             "minorsNoParental": "Có thể có người chưa thành niên, nhưng sự đồng ý của cha mẹ đang tắt. Hồ sơ này coi người dưới {age} tuổi là người chưa thành niên.",
             "no_minors": "Bạn không cố ý xử lý dữ liệu của người chưa thành niên. Hồ sơ này coi người dưới {age} tuổi là người chưa thành niên.",
-            "may_include_minors": "Sự đồng ý của cha mẹ đã được bật cho người dưới {age} tuổi. Việc lưu bằng chứng cho từng liên hệ chưa được xây dựng."
+            "may_include_minors": "Sự đồng ý của cha mẹ được bật cho người dưới {age} tuổi. Hãy đánh dấu liên hệ là chưa thành niên trên thẻ đồng ý của họ và ghi nhận sự đồng ý của người giám hộ tại đó."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Dữ liệu của trẻ em",
-        "hint": "Sản phẩm này dành cho doanh nghiệp. Hãy cho biết bạn có thể lưu dữ liệu của người chưa thành niên hay không, để hiển thị đúng các quy tắc.",
+        "hint": "Sản phẩm này dành cho doanh nghiệp. Hãy cho biết bạn có thể lưu dữ liệu của người chưa thành niên hay không để hiển thị đúng quy tắc. Sau khi bạn trả lời, hoạt động tiếp thị tới liên hệ được đánh dấu là chưa thành niên sẽ bị giữ lại: luôn luôn nếu bạn không cố ý xử lý dữ liệu của người chưa thành niên, và cho đến khi ghi nhận sự đồng ý của người giám hộ nếu có thể có người chưa thành niên.",
         "policy": "Người chưa thành niên trong danh sách liên hệ",
         "policies": {
           "unset": "Chưa trả lời",
@@ -352,7 +352,7 @@
           "may_include_minors": "Có thể có người chưa thành niên trong danh sách liên hệ của chúng tôi"
         },
         "parental": "Người chưa thành niên cần có sự đồng ý của cha mẹ",
-        "parentalHint": "Một cờ ghi lại chính sách của bạn. Việc thu thập và lưu bằng chứng đồng ý của cha mẹ cho từng liên hệ chưa được xây dựng.",
+        "parentalHint": "Ghi lại chính sách của bạn và giữ lại hoạt động tiếp thị tới các liên hệ được đánh dấu là chưa thành niên cho đến khi ghi nhận sự đồng ý của người giám hộ. Bạn đánh dấu liên hệ là chưa thành niên và ghi nhận sự đồng ý đó trên thẻ đồng ý của họ.",
         "age": "Các hồ sơ bạn đã bật coi người dưới {age} tuổi là người chưa thành niên.",
         "dpdpNeedsAnswer": "Hồ sơ DPDP yêu cầu bạn trả lời câu hỏi này."
       }

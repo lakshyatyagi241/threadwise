@@ -31,6 +31,172 @@
       "priority": "P1",
       "status": "gap",
       "source": "packages/contracts/src/contact-consent/keywords.ts"
+    },
+    {
+      "id": "EC-contact-consent-004",
+      "feature": "privacy flags",
+      "category": "state",
+      "scenario": "guardian consent is recorded for a contact that is not flagged as a minor",
+      "expected": "refused with 422 CONSENT_PRIVACY_NOT_MINOR, nothing is stored",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "marks a minor, records guardian evidence without a grant"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-005",
+      "feature": "privacy flags",
+      "category": "data",
+      "scenario": "guardian consent is recorded for a minor",
+      "expected": "it is evidence only: the consent ledger gets no event and no channel state",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "marks a minor, records guardian evidence without a grant"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-006",
+      "feature": "privacy flags",
+      "category": "state",
+      "scenario": "the minor flag is cleared while guardian consent is on record",
+      "expected": "guardian consent is cleared with it and both lines stay in the history",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/unit/contact-consent/contact-privacy.spec.ts",
+          "match": "clearing the minor flag clears guardian consent in a second history step"
+        },
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "marks a minor, records guardian evidence without a grant"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-007",
+      "feature": "consent gate",
+      "category": "data",
+      "scenario": "marketing to a flagged minor under each children setting",
+      "expected": "held (subject_minor) under block, held under guardian until guardian consent, not held when unanswered; service messages never held",
+      "priority": "P0",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "holds marketing to a flagged minor only when the setting says so"
+        },
+        {
+          "file": "apps/api/test/unit/contact-consent/contact-privacy.spec.ts",
+          "match": "is held for marketing under block"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-008",
+      "feature": "privacy flags",
+      "category": "state",
+      "scenario": "a privacy event is updated or deleted in the database",
+      "expected": "rejected by the append-only trigger, even for the owner connection",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "is append-only in the database, idempotent per key, and tenant isolated"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-009",
+      "feature": "privacy flags",
+      "category": "permission",
+      "scenario": "a member with only contacts.consent.read changes a flag",
+      "expected": "refused with 403; a member without the read permission cannot see the flags",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "needs contacts.consent.manage to change a flag"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-010",
+      "feature": "privacy flags",
+      "category": "data",
+      "scenario": "a contact of another workspace is addressed by uuid",
+      "expected": "404, nothing is read or written",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "is append-only in the database, idempotent per key, and tenant isolated"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-011",
+      "feature": "global privacy control",
+      "category": "input",
+      "scenario": "the Sec-GPC header is absent, 0 or true instead of 1",
+      "expected": "not a signal: no opt-out is recorded",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "a public form submission with Sec-GPC: 1 opts the contact out when the workspace has ccpa_us on"
+        },
+        {
+          "file": "apps/api/test/unit/contact-consent/contact-privacy.spec.ts",
+          "match": "is exactly the header value 1"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-012",
+      "feature": "global privacy control",
+      "category": "state",
+      "scenario": "the signal arrives on a workspace without the ccpa_us profile",
+      "expected": "nothing is recorded",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "a public form submission with Sec-GPC: 1 opts the contact out when the workspace has ccpa_us on"
+        }
+      ]
+    },
+    {
+      "id": "EC-contact-consent-013",
+      "feature": "global privacy control",
+      "category": "concurrency",
+      "scenario": "the same person submits twice with the signal",
+      "expected": "one opt-out line, no marketing grant ever written",
+      "priority": "P1",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "a public form submission with Sec-GPC: 1 opts the contact out when the workspace has ccpa_us on"
+        },
+        {
+          "file": "apps/api/test/e2e/contact-consent/contact-privacy.e2e.spec.ts",
+          "match": "a chat widget message with Sec-GPC: 1 opts the visitor contact out, once"
+        }
+      ]
     }
   ]
 }
