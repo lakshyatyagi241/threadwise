@@ -6,6 +6,7 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string, values?: Record<string, unknown>) =>
     values ? `${key}|${JSON.stringify(values)}` : key,
   useLocale: () => 'en',
+  useTimeZone: () => 'UTC',
 }));
 vi.mock('@/features/channel-whatsapp-cloud', () => ({
   FailureNote: ({ failure }: { failure: { code: string | null } | null }) => (

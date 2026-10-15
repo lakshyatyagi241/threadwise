@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { StorePaymentRecord } from '@crm/contracts';
 import { displayPhone, formatMoney, formatWhen, withShop } from '../lib/format';
 import { PaymentStatusBadge, Th } from './parts';
@@ -16,6 +16,7 @@ export function PaymentsTable({
 }) {
   const t = useTranslations('checkout-orders-merchant-payments.payments.table');
   const locale = useLocale();
+  const timeZone = useTimeZone();
 
   const method = (m: string) =>
     m === 'prepaid' ? t('methodPrepaid') : m === 'cod' ? t('methodCod') : m;
@@ -77,7 +78,7 @@ export function PaymentsTable({
               </td>
               <td className="px-4 py-3">{p.storefrontName || '—'}</td>
               <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                {formatWhen(p.createdAt, locale)}
+                {formatWhen(p.createdAt, locale, timeZone)}
               </td>
             </tr>
           ))}

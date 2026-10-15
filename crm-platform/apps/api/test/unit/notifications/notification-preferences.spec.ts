@@ -5,6 +5,7 @@ import {
   NOTIFICATION_LEGACY_TYPES,
   NOTIFICATION_PREF_TYPES,
   NOTIFICATION_TYPES,
+  pushTestResponseSchema,
   NOTIFICATION_TYPE_PLAN_FEATURE,
   NOTIFICATION_TYPE_PREF_KEY,
   NOTIFICATION_EVENT_KEYS,
@@ -489,5 +490,32 @@ describe('NotificationPreferencesService', () => {
         svc.get(),
       ),
     ).rejects.toMatchObject({ status: 403 });
+  });
+});
+
+describe('the test notification (the "Send a test notification" button)', () => {
+  it('is a normal, tunable type in its own System group: pop-up and ping on, no push of its own, no owner toggle', () => {
+    expect(NOTIFICATION_TYPES as readonly string[]).toContain('test');
+    expect(NOTIFICATION_GROUPS as readonly string[]).toContain('system');
+    expect(NOTIFICATION_CATALOG.test).toEqual({
+      group: 'system',
+      toast: true,
+      sound: true,
+      push: false,
+    });
+    expect(NOTIFICATION_TYPE_PREF_KEY.test).toBeUndefined();
+    expect(NOTIFICATION_TYPE_PLAN_FEATURE.test).toBeUndefined();
+  });
+
+  it('the answer says which channels fired, and an old answer without inApp is refused', () => {
+    expect(pushTestResponseSchema.parse({ inApp: true, sent: 2, failed: 0 })).toEqual({
+      inApp: true,
+      sent: 2,
+      failed: 0,
+    });
+    expect(pushTestResponseSchema.safeParse({ sent: 2, failed: 0 }).success).toBe(false);
+    expect(pushTestResponseSchema.safeParse({ inApp: true, sent: -1, failed: 0 }).success).toBe(
+      false,
+    );
   });
 });

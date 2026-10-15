@@ -8,7 +8,7 @@ import {
   Button,
   Field,
   Input,
-  Modal,
+  Drawer,
   Select,
   Spinner,
   Switch,
@@ -19,7 +19,7 @@ import {
   PhoneField,
   type PhoneValue,
 } from '@/features/auth-registration-security/shared/phone-field';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { LeadScoreField, isScoreInvalid } from '@/features/lead-scoring';
 import {
   createContact,
@@ -31,6 +31,7 @@ import {
 import { useStatusOptions } from '../api/attributes';
 import { useContactFields, useFieldDependencies, useFieldSections } from '../api/properties';
 import { setContactGroups, useGroups } from '../api/groups';
+import { useOwners } from '../api/owners';
 import { attachTagToContact, detachTag, useContactTags, useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
 import {
@@ -72,17 +73,26 @@ export interface ContactFormModalProps {
   onSaved?: (contact: ContactRow) => void;
 }
 
-/** Add / edit contact (TW-CON-009, 010). The form is mounted only while open, so it always starts from the contact's saved state. */
+/** Add / edit contact (TW-CON-009, 010), in a drawer from the side. The form is mounted only while open, so it always starts from the contact's saved state. */
 export function ContactFormModal({ open, contact, onClose, onSaved }: ContactFormModalProps) {
   const t = useTranslations('contacts-attributes-tags.form');
   return (
-    <Modal
+    <Drawer
       open={open}
       onClose={onClose}
-      size="lg"
-      eyebrow={contact ? t('editEyebrow') : t('addEyebrow')}
-      title={contact ? t('editTitle') : t('addTitle')}
+      title={
+        <span className="block">
+          <span
+            aria-hidden="true"
+            className="block font-mono text-[10px] font-normal uppercase tracking-[0.14em] text-muted-foreground"
+          >
+            {contact ? t('editEyebrow') : t('addEyebrow')}
+          </span>
+          {contact ? t('editTitle') : t('addTitle')}
+        </span>
+      }
       closeLabel={t('close')}
+      className="w-[min(44rem,100vw)]"
     >
       {open && (
         <ContactForm
@@ -92,7 +102,7 @@ export function ContactFormModal({ open, contact, onClose, onSaved }: ContactFor
           onSaved={onSaved}
         />
       )}
-    </Modal>
+    </Drawer>
   );
 }
 
@@ -111,12 +121,14 @@ function ContactForm({
   const qc = useQueryClient();
   const { toast } = useToast();
   const canCreateTags = useCan('record.tags.create');
+  const session = useSession();
   const uid = useId();
   const id = (name: string) => `${uid}-${name}`;
 
   const editing = contact !== undefined;
   const [values, setValues] = useState<ContactFormValues>(() =>
-    contact ? contactToForm(contact) : EMPTY_FORM,
+    // A new contact belongs to whoever creates it, as in Reference (it stamped `user_id` with the caller); "Unassigned" is one click away.
+    contact ? contactToForm(contact) : { ...EMPTY_FORM, ownerId: session.user.id },
   );
   const [phone, setPhone] = useState<PhoneValue>({
     e164: contact?.phone ?? null,
@@ -141,6 +153,7 @@ function ContactForm({
   const dependencies = useFieldDependencies();
   const statusOptions = useStatusOptions();
   const groups = useGroups();
+  const owners = useOwners();
   const allTags = useTags();
   const contactTags = useContactTags(contact?.id ?? null);
   const initialGroups = useRef((contact?.groups ?? []).map((g) => g.id));
@@ -253,6 +266,7 @@ function ContactForm({
             fieldsByKey,
             lostPayload,
             contact.leadScore,
+            contact.ownerId,
           ),
         );
         const before = initialGroups.current;
@@ -386,6 +400,14 @@ function ContactForm({
 
   const loadingLookups = registry.isPending;
   const err = (key: 'firstName' | 'phone' | 'email') => problems[key] ?? serverFields[key];
+  // The server refuses an owner the person's record scope does not reach (403 with the field `ownerId`): say it at the field.
+  const ownerRefused =
+    save.isError && errorKind(save.error) === 'forbidden' && !!serverFields.ownerId;
+  const people = owners.data ?? [];
+  // Only people the caller may hand a contact to; the contact's current owner stays selectable so saving never silently drops them.
+  const ownerChoices = people.filter((p) => p.canAssign || p.id === values.ownerId);
+  const ownerKnown =
+    !values.ownerId || owners.isPending || people.some((p) => p.id === values.ownerId);
 
   return (
     <form onSubmit={onSubmit} noValidate className="space-y-4">
@@ -402,7 +424,7 @@ function ContactForm({
           </Button>
         </Alert>
       )}
-      {save.isError && !conflict && <ErrorLine error={save.error} />}
+      {save.isError && !conflict && !ownerRefused && <ErrorLine error={save.error} />}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Field label={t('title')} htmlFor={id('title')}>
@@ -526,7 +548,7 @@ function ContactForm({
         />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2">
         <Field label={t('stage')} htmlFor={id('stage')}>
           <Select
             id={id('stage')}
@@ -597,6 +619,31 @@ function ContactForm({
             placeholder={t('sourcePlaceholder')}
             onChange={(e) => set('source', e.target.value)}
           />
+        </Field>
+        <Field
+          label={t('owner')}
+          htmlFor={id('owner')}
+          hint={t('ownerHelp')}
+          error={ownerRefused ? t('ownerOutOfScope') : undefined}
+        >
+          <Select
+            id={id('owner')}
+            value={values.ownerId}
+            invalid={ownerRefused}
+            disabled={owners.isLoading}
+            onChange={(e) => {
+              set('ownerId', e.target.value);
+              setServerFields(({ ownerId: _gone, ...rest }) => rest);
+            }}
+          >
+            <option value="">{t('ownerNone')}</option>
+            {!ownerKnown && <option value={values.ownerId}>{t('ownerFormer')}</option>}
+            {ownerChoices.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.id === session.user.id ? t('ownerMe', { name: p.fullName }) : p.fullName}
+              </option>
+            ))}
+          </Select>
         </Field>
       </div>
 
@@ -712,7 +759,7 @@ function ContactForm({
         }}
       />
 
-      <div className="flex justify-end gap-2 border-t border-border pt-4">
+      <div className="sticky bottom-0 z-10 -mx-5 -mb-4 flex justify-end gap-2 border-t border-border bg-background px-5 py-3">
         <Button variant="secondary" onClick={onClose} disabled={save.isPending}>
           {t('cancel')}
         </Button>

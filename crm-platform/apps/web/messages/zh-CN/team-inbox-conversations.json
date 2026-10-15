@@ -28,8 +28,8 @@
       "teamChanged": "团队已更新。",
       "priorityChanged": "优先级已更新",
       "snoozed": "对话已暂时搁置",
-      "labelAdded": "已添加标签",
-      "labelRemoved": "已移除标签"
+      "tagAdded": "已添加标签",
+      "tagRemoved": "已移除标签"
     },
     "list": {
       "title": "收件箱",
@@ -137,23 +137,24 @@
       "unsupported": "此渠道无法发送该类型的消息或文件。",
       "network": "无法连接服务器。请检查网络连接后重试。",
       "generic": "出错了，请重试。",
-      "genericWithId": "出错了，请重试。参考编号：{id}",
       "templateNotSendable": "此模板无法发送到该会话。请选择其他模板。",
       "groupSendUnavailable": "暂不支持发送到 WhatsApp 群组。请使用 WhatsApp Business 应用回复。",
       "logRange": "请选择最近一年内的日期，开始日期须早于结束日期，且不能是未来日期。",
       "logBusy": "已有一个导出正在准备中。请等待收到邮件后再发起新的导出。",
       "logNotReady": "此导出尚未就绪或已过期。请重新发起导出。",
       "groupSuspended": "Meta 已暂停此群组，在 Meta 解除之前无法向其发送消息。",
-      "walletEmpty": "消息钱包余额不足以支付此群消息（每位成员收取一次费用）。请充值后重试。",
-      "groupPlanLocked": "您的套餐不包含 WhatsApp 群组，因此无法向此群组发送消息。请联系管理员升级套餐。",
       "groupLeft": "此号码已退出该群组，因此无法再在其中发送消息。",
       "groupAnnounceOnly": "此群组仅管理员可以发送消息，而此号码不是管理员。",
       "groupRateLimited": "此号码在短时间内发送的群组消息过多。请等待一分钟后重试。",
       "groupUnavailable": "WhatsApp 未接受此群组消息。请几分钟后重试。",
+      "walletEmpty": "消息钱包余额不足以支付此群消息（每位成员收取一次费用）。请充值后重试。",
+      "groupPlanLocked": "您的套餐不包含 WhatsApp 群组，因此无法向此群组发送消息。请联系管理员升级套餐。",
       "savedReplyGone": "此快捷回复已不存在。",
       "savedReplyChannel": "此快捷回复不适用于这类渠道。",
       "shortcutTaken": "另一条快捷回复已使用该快捷方式。",
-      "importInvalid": "无法将此文件读取为快捷回复。第一行需要包含 title、shortcut 和 body 列，最多 1,000 行。"
+      "importInvalid": "无法将此文件读取为快捷回复。第一行需要包含 title、shortcut 和 body 列，最多 1,000 行。",
+      "contactOptedOut": "该联系人已退订营销消息，因此消息未发送。",
+      "consentRequired": "此工作区要求营销消息必须有已记录的同意，而该联系人没有，因此消息未发送。"
     },
     "bubble": {
       "kind": {
@@ -223,7 +224,15 @@
       "groupMember": "群成员",
       "groupTally": "已送达 {delivered}/{members} 人{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
       "groupTallyNoTotal": "已送达 {delivered, plural, other {#位成员}}{read, plural, =0 {} other {，#人已读}}{failed, plural, =0 {} other {，#条失败}}",
-      "groupTallyBilled": "计费 {billable}，免费 {free}"
+      "groupTallyBilled": "计费 {billable}，免费 {free}",
+      "stageLine": {
+        "auto": "AI 阅读了聊天，并将此联系人从“{from}”移至“{to}”。",
+        "undo": "撤销",
+        "wasUndone": "已撤销",
+        "undone": "阶段变更已撤销：已恢复为“{stage}”。",
+        "undoneToast": "阶段已恢复为“{stage}”。",
+        "couldNotUndo": "此更改已无法撤销：联系人已进入后续阶段，或已被撤销。"
+      }
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -275,6 +284,44 @@
       "attachment": "一个附件",
       "jumpLatest": "跳至最新",
       "jumpLatestNew": "{count, plural, other {# 条新消息}}"
+    },
+    "groupThread": {
+      "openGroup": "打开群组",
+      "readOnly": {
+        "left": {
+          "title": "此号码已退出该群组",
+          "message": "对话将保持原样。您可以阅读并添加内部备注，但无法发送消息。"
+        },
+        "announceOnly": {
+          "title": "此群组仅管理员可以发送",
+          "message": "此号码不是该群组的管理员，因此 WhatsApp 不会送达消息。您仍可添加内部备注。"
+        }
+      },
+      "mention": {
+        "label": "群组成员",
+        "loading": "正在查找成员",
+        "none": "没有匹配的成员"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta 已暂停此群组",
+          "message": "WhatsApp 不会向已暂停的群组送达消息。在 Meta 解除暂停之前，您可以查看对话并添加内部备注。"
+        },
+        "plan": {
+          "title": "您的套餐不包含 WhatsApp 群组",
+          "message": "您可以查看此对话并添加内部备注，但向群组发送消息需要包含群组功能的套餐。请联系管理员升级。"
+        },
+        "ineligible": {
+          "title": "此号码无法使用 WhatsApp 群组",
+          "message": "上次检查时 Meta 不允许此号码使用群组（需要官方商业账号）。您可以查看对话并添加内部备注。打开 Meta 群组可重新检查。"
+        }
+      },
+      "cost": {
+        "members": "此消息将发送给 {count, plural, other {#位成员}}。预计费用 {cost}：WhatsApp 按每位收到消息的成员计费。",
+        "membersNoEstimate": "此消息将发送给 {count, plural, other {#位成员}}。WhatsApp 按每位收到消息的成员计费。",
+        "sizeUnknown": "成员数量暂时未知。WhatsApp 按每位收到此消息的成员计费。",
+        "walletShort": "您的钱包余额可能不足以发送此消息。请先充值再发送。"
+      }
     },
     "composer": {
       "modeLabel": "消息类型",
@@ -403,7 +450,9 @@
         "unassign": "取消分配",
         "open": "{count} 个未完成",
         "pickTeam": "为此会话选择团队",
-        "noTeam": "无团队"
+        "noTeam": "无团队",
+        "onLeave": "休假中",
+        "onLeaveUntil": "休假至 {date}"
       },
       "presence": {
         "online": "在线",
@@ -443,8 +492,8 @@
           "snoozed": "由 {actor} 暂停",
           "auto_unsnoozed": "暂停已结束",
           "priority_changed": "由 {actor} 更改优先级",
-          "tag_added": "由 {actor} 添加标签",
-          "tag_removed": "由 {actor} 移除标签",
+          "tag_added": "{actor} 添加了标签",
+          "tag_removed": "{actor} 移除了标签",
           "first_response": "已发送首次回复",
           "sla_breach": "已错过回复期限",
           "unknown": "{actor} 执行：{what}"
@@ -555,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "发送模板",
       "close": "关闭",
-      "cancel": "取消",
-      "back": "返回模板",
       "search": "按名称或文本搜索",
       "searchLabel": "搜索模板",
       "loading": "正在加载模板",
@@ -565,9 +612,7 @@
       "empty": "此 WhatsApp 号码暂无已获批准的模板。请在“模板”中创建模板，并等待 Meta 批准。",
       "noResults": "没有符合搜索条件的模板。",
       "windowHint": "即使 24 小时回复窗口已关闭，模板仍可发送。",
-      "variables": "填写变量",
       "preview": "客户将看到的内容",
-      "send": "发送模板",
       "sending": "发送中",
       "sent": "模板已发送",
       "problem": {
@@ -582,7 +627,31 @@
         "authentication": "一次性密码模板由系统发送，不能从收件箱发送。",
         "named_variables": "使用了收件箱暂不支持的命名变量。"
       },
-      "hasMore": "显示前 {count} 个模板。按名称或文本搜索以查找其他模板。"
+      "hasMore": "显示前 {count} 个模板。按名称或文本搜索以查找其他模板。",
+      "previewEmpty": "指向某个模板，即可查看它在客户手机上的显示效果。",
+      "previewCustomer": "客户",
+      "noVariables": "此模板无需填写任何内容。请查看手机预览，然后发送。",
+      "sendTo": "发送给 {name}",
+      "refresh": "刷新列表",
+      "device": "手机预览",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "配置正文变量",
+      "or": "或",
+      "mapField": "将字段映射到 {key}",
+      "mapNone": "该联系人没有可映射的详细信息。",
+      "typeMessage": "输入消息",
+      "fields": {
+        "name": "姓名",
+        "phone": "电话",
+        "email": "邮箱"
+      },
+      "create": "新建模板",
+      "actions": "模板操作",
+      "edit": "编辑模板",
+      "duplicate": "复制模板"
     },
     "log": {
       "title": "投递日志",
@@ -656,44 +725,6 @@
           "failed": "失败",
           "expired": "已过期"
         }
-      }
-    },
-    "groupThread": {
-      "openGroup": "打开群组",
-      "readOnly": {
-        "left": {
-          "title": "此号码已退出该群组",
-          "message": "对话将保持原样。您可以阅读并添加内部备注，但无法发送消息。"
-        },
-        "announceOnly": {
-          "title": "此群组仅管理员可以发送",
-          "message": "此号码不是该群组的管理员，因此 WhatsApp 不会送达消息。您仍可添加内部备注。"
-        }
-      },
-      "mention": {
-        "label": "群组成员",
-        "loading": "正在查找成员",
-        "none": "没有匹配的成员"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta 已暂停此群组",
-          "message": "WhatsApp 不会向已暂停的群组送达消息。在 Meta 解除暂停之前，您可以查看对话并添加内部备注。"
-        },
-        "plan": {
-          "title": "您的套餐不包含 WhatsApp 群组",
-          "message": "您可以查看此对话并添加内部备注，但向群组发送消息需要包含群组功能的套餐。请联系管理员升级。"
-        },
-        "ineligible": {
-          "title": "此号码无法使用 WhatsApp 群组",
-          "message": "上次检查时 Meta 不允许此号码使用群组（需要官方商业账号）。您可以查看对话并添加内部备注。打开 Meta 群组可重新检查。"
-        }
-      },
-      "cost": {
-        "members": "此消息将发送给 {count, plural, other {#位成员}}。预计费用 {cost}：WhatsApp 按每位收到消息的成员计费。",
-        "membersNoEstimate": "此消息将发送给 {count, plural, other {#位成员}}。WhatsApp 按每位收到消息的成员计费。",
-        "sizeUnknown": "成员数量暂时未知。WhatsApp 按每位收到此消息的成员计费。",
-        "walletShort": "您的钱包余额可能不足以发送此消息。请先充值再发送。"
       }
     },
     "savedReplies": {
@@ -892,6 +923,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "优先级",
+      "snooze": "暂时搁置",
+      "wake": "立即恢复"
+    },
     "bulk": {
       "barLabel": "批量操作",
       "selected": "{count, plural, one {已选择 # 个对话} other {已选择 # 个对话}}",
@@ -919,30 +955,45 @@
         "partial": "已更新 {done} 个，{unchanged} 个已是最新，{failed} 个无法更改。失败的对话仍保持选中。",
         "allFailed": "{count, plural, one {# 个对话} other {# 个对话}}均无法更改。"
       },
-      "label": "标签",
-      "labelAdd": "添加标签",
-      "labelRemove": "移除标签"
+      "tag": "打标签",
+      "tagAdd": "添加标签",
+      "tagRemove": "移除标签",
+      "onLeave": "休假中",
+      "onLeaveUntil": "休假至 {date}"
     },
-    "triage": {
-      "priority": "优先级",
-      "snooze": "暂时搁置",
-      "wake": "立即恢复"
-    },
-    "labels": {
-      "label": "标签",
+    "tags": {
+      "tag": "标签",
       "loading": "正在加载标签…",
       "loadFailed": "无法加载标签。",
       "none": "暂无标签。",
-      "newLabel": "新建标签",
+      "newTag": "新标签",
       "add": "添加",
       "filter": "标签",
-      "filterActive": "{count, plural, one {# 个标签} other {# 个标签}}",
+      "filterActive": "{count, plural, other {# 个标签}}",
       "clearFilter": "清除标签筛选",
+      "scope": {
+        "label": "匹配标签范围",
+        "conversation": "会话标签",
+        "contact": "联系人标签"
+      },
+      "groups": {
+        "title": "标签",
+        "helpFor": "关于{title}",
+        "rule": "两类标签都来自同一个工作区标签库。",
+        "contactTitle": "联系人标签",
+        "contactHelp": "联系人标签描述这个人（VIP、潜在客户、地区），会跟随他们进入每个会话。",
+        "contactNone": "此联系人暂无标签。",
+        "contactEdit": "在联系人上编辑",
+        "conversationTitle": "会话标签",
+        "conversationHelp": "会话标签描述这次对话（账单、退款、紧急）。",
+        "conversationNone": "此会话暂无标签。",
+        "remove": "移除标签 {name}"
+      },
       "screen": {
         "back": "返回收件箱",
-        "title": "标签",
-        "intro": "标签用于标记会话，方便团队分类和筛选。它们与联系人上使用的标签相同。",
-        "newTitle": "新建标签",
+        "title": "会话标签",
+        "intro": "会话标签用于标记一次对话（账单、退款、紧急），方便团队整理和筛选收件箱。它们与描述联系人本人的联系人标签来自同一个标签库。",
+        "newTitle": "新标签",
         "editTitle": "编辑标签",
         "name": "名称",
         "color": "颜色",
@@ -953,17 +1004,28 @@
         "cancel": "取消",
         "edit": "编辑",
         "delete": "删除",
-        "inUse": "{count, plural, one {# 个会话} other {# 个会话}}",
+        "inUse": "{count, plural, other {# 个会话}}",
         "emptyTitle": "暂无标签",
-        "emptyMessage": "请先在上方创建第一个标签，然后在收件箱中将其添加到会话。",
+        "emptyMessage": "先在上方创建第一个标签，然后从收件箱把它添加到会话。",
         "deleteTitle": "删除此标签？",
-        "deleteMessage": "\"{name}\" 已用于 {count, plural, one {# 个会话} other {# 个会话}}。删除后，它将从这些会话以及带有该标签的所有联系人中移除。此操作无法撤销。",
+        "deleteMessage": "“{name}”已用于{count, plural, other {# 个会话}}。删除后，它将从这些会话以及带有该标签的所有联系人中移除。此操作无法撤销。",
         "nameTaken": "已存在同名标签。",
         "conflict": "其他人已先修改了此标签。列表已重新加载。",
         "saved": "标签已保存",
         "created": "标签已创建",
         "deleted": "标签已删除"
       }
+    },
+    "sla": {
+      "breached": "SLA 已超时",
+      "atRisk": "SLA 将在 {minutes} 分钟后到期",
+      "ok": "SLA 到期时间 {time}",
+      "kind": {
+        "first_response": "首次回复目标",
+        "resolution": "解决目标"
+      },
+      "titleBreached": "{kind}：已错过（应于 {time} 完成）",
+      "titleOpen": "{kind}：{time} 到期"
     }
   }
 }

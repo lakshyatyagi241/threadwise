@@ -187,8 +187,7 @@
       "notFound": "Bu çalışma alanı artık yok.",
       "reasonRequired": "En az 8 karakterlik bir neden gerekli.",
       "orgSuspended": "Çalışma alanı askıya alındığı için girilemiyor.",
-      "validation": "Değerleri kontrol edip yeniden deneyin.",
-      "requestId": "İstek kimliği"
+      "validation": "Değerleri kontrol edip yeniden deneyin."
     },
     "detail": {
       "crumb": "Çalışma alanı",

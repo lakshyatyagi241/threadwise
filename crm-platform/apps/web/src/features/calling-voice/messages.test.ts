@@ -149,7 +149,7 @@ describe('message keys used in code', () => {
     // Keys built at run time: failures.*, errors.* (see use-error-text.ts), and the call log's words picked by a status, a range, a
     // direction, a reason or a ledger step.
     const dynamic =
-      /^calling-voice\.(failures\.|errors\.|nav\.|logs\.(status|range)\.(?!title|all|custom|from|to|apply)|logs\.(filters|table)\.(inbound|outbound)$|logs\.table\.(customer|number|handledBy|started|duration|status)$|logs\.detail\.(reasons|steps)\.)/;
+      /^calling-voice\.(failures\.|errors\.|nav\.|logs\.(status|range)\.(?!title|all|custom|from|to|apply)|logs\.(filters|table)\.(inbound|outbound)$|logs\.table\.(customer|number|handledBy|started|duration|status)$|logs\.detail\.(reasons|steps)\.|recording\.(settings\.(modeHint|modeOption)|lifecycle\.(method|deletedReason))\.)/;
     const dead = Object.keys(en).filter((k) => !used.has(k) && !dynamic.test(k));
     expect(dead).toEqual([]);
   });

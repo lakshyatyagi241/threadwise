@@ -14,12 +14,11 @@
       "copy": "Copiar",
       "copied": "Copiado",
       "copyFailed": "No se pudo copiar. Selecciona la clave y cópiala a mano.",
-      "reference": "Referencia para soporte: {id}",
       "back": "Volver a integraciones"
     },
     "page": {
       "title": "Complemento de Google Sheets",
-      "subtitle": "Importa y envía contactos y sincroniza productos entre una hoja de cálculo y tu espacio de trabajo.",
+      "subtitle": "Envía a tu espacio de trabajo como contactos las filas nuevas y modificadas de una hoja, importa contactos a una hoja y sincroniza productos.",
       "loading": "Cargando la configuración del complemento",
       "retry": "Reintentar",
       "status": {
@@ -51,7 +50,7 @@
     },
     "key": {
       "title": "Tu clave",
-      "intro": "El complemento usa tu clave personal para actuar como tú. Solo ve lo que permite tu rol.",
+      "intro": "El complemento usa tu clave personal para actuar como tú. Solo ve lo que permite tu rol. La clave es la última parte de tu Webhook URL.",
       "none": "Todavía no tienes una clave.",
       "generate": "Generar clave",
       "rotate": "Generar una clave nueva",
@@ -61,8 +60,8 @@
       "created": "Creada {when}",
       "lastUsed": "Último uso {when}",
       "neverUsed": "Nunca usada",
-      "newTitle": "Tu clave nueva",
-      "newWarning": "Cópiala ahora. Solo se muestra una vez y no se podrá mostrar de nuevo. Cualquiera que tenga esta clave puede actuar como tú en el complemento.",
+      "newTitle": "Tu clave nueva y tu Webhook URL",
+      "newWarning": "Cópialas ahora. La clave y la Webhook URL se muestran una sola vez y no se podrán mostrar de nuevo. Cualquiera que las tenga puede actuar como tú en el complemento.",
       "rotatedNote": "Tu clave anterior dejó de funcionar.",
       "keyLabel": "Clave nueva",
       "confirmRotate": {
@@ -86,7 +85,8 @@
         "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
         "network": "No pudimos conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
         "unexpected": "Algo salió mal por nuestra parte. Inténtalo de nuevo."
-      }
+      },
+      "webhookLabel": "Webhook URL"
     },
     "can": {
       "title": "Qué puede hacer tu clave",
@@ -109,12 +109,12 @@
     },
     "steps": {
       "title": "Configúralo en una hoja de cálculo",
-      "one": "Abre una hoja de cálculo, luego Extensiones y después Apps Script.",
-      "two": "Descarga los seis archivos de arriba. En Configuración del proyecto, muestra el archivo appsscript.json y pega appsscript.json y Code.gs sobre los del editor.",
-      "three": "Añade tres archivos HTML llamados Dialog, Settings y Help y pega en ellos los archivos descargados.",
-      "four": "Guarda y recarga la hoja de cálculo. Aparecerá un menú CRM. Permite los tres permisos que pide Google.",
-      "five": "Elige CRM, luego Ajustes, pega tu clave y selecciona Guardar y comprobar.",
-      "six": "La fila 1 de tu hoja contiene los nombres de las columnas. Luego usa Importar contactos, Enviar contactos o Sincronizar productos desde el menú CRM."
+      "one": "Copia tu Webhook URL al crear tu clave. Se muestra una sola vez.",
+      "two": "En una hoja de cálculo elige Extensions, luego Add-ons, luego Get add-ons, e instala el complemento desde Google Workspace Marketplace. Mientras no aparezca allí, pega los seis archivos de abajo en Extensions, Apps Script.",
+      "three": "Recarga la hoja de cálculo. Elige Extensions, luego el complemento, luego Initial Setup, y pega la Webhook URL.",
+      "four": "Elige la hoja y la columna disparadora. Una fila se envía cuando esa celda se rellena o se modifica.",
+      "five": "Selecciona Send Test para comprobar la conexión. No se guarda nada; verás las columnas que recibió el CRM. Después selecciona Submit.",
+      "six": "Activa Send on event (una fila se envía en cuanto la editas) y/o Send on schedule (cada hora, filas modificadas por un formulario u otra aplicación). Cada fila llega como un contacto y su resultado se escribe en una columna CRM status."
     },
     "columns": {
       "title": "Columnas que lee el complemento",
@@ -134,6 +134,22 @@
       "title": "Productos recientes",
       "empty": "Aún no hay productos. Sincroniza una hoja para añadir algunos.",
       "count": "{count, plural, one {# producto en tu espacio de trabajo} other {# productos en tu espacio de trabajo}}"
+    },
+    "webhook": {
+      "title": "Webhook URL",
+      "intro": "Pégala en Initial Setup en el complemento. Incluye tu clave, así que mantenla en privado.",
+      "none": "Crea una clave para obtener tu Webhook URL.",
+      "capture": {
+        "title": "Últimos datos recibidos",
+        "none": "Aún no se ha recibido nada. En el complemento elige Initial Setup y luego Send Test.",
+        "when": "{event} de {sheet}, {when}. {rows, plural, one {# fila} other {# filas}}.",
+        "noSheet": "una hoja sin nombre",
+        "events": {
+          "test": "Prueba",
+          "edit": "Edición",
+          "schedule": "Barrido por hora"
+        }
+      }
     }
   }
 }

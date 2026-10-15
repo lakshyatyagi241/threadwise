@@ -1,0 +1,79 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "title": "Zaimportować istniejące czaty?",
+        "intro": "WhatsApp wysyła historię czatów numeru tylko raz, zaraz po pierwszym połączeniu numeru. Wybierz teraz, przed zeskanowaniem kodu.",
+        "label": "Importuj istniejące czaty",
+        "none": "Nie, zacznij od zera",
+        "noneHelp": "We wspólnej skrzynce odbiorczej pojawią się tylko nowe wiadomości. To ustawienie domyślne.",
+        "recent": "Tak, ostatnie czaty i kontakty",
+        "recentHelp": "Ostatnie czaty, które WhatsApp wysyła przy pierwszym połączeniu numeru, wraz z osobami w nich uczestniczącymi.",
+        "full": "Tak, tyle, ile wyśle WhatsApp",
+        "fullHelp": "Także starsza historia z WhatsApp. Trwa to dłużej i zużywa więcej limitu kontaktów.",
+        "pointsTitle": "Czego się spodziewać",
+        "pointQuiet": "Zaimportowane czaty są oznaczone jako przeczytane i pozostają ciche: bez powiadomień, automatyzacji i automatycznych odpowiedzi.",
+        "pointNothingSent": "Do nikogo nic nie jest wysyłane.",
+        "pointMedia": "Zdjęcia, filmy, wiadomości głosowe i pliki nie są importowane. Zobaczysz zamiast nich symbol zastępczy, np. [Zdjęcie].",
+        "pointGroups": "Czaty grupowe są zapisywane jako rozmowy grupowe i nie tworzą kontaktów.",
+        "pointConsent": "Zaimportowane osoby nie są oznaczane jako wyrażające zgodę na wiadomości marketingowe.",
+        "pointLimit": "Zaimportowane osoby wliczają się do limitu kontaktów w Twoim planie. Po jego osiągnięciu import zatrzymuje się bezpiecznie.",
+        "pointTime": "Może to potrwać kilka minut. Możesz dalej pracować i w każdej chwili anulować import.",
+        "pointOnce": "Ponowne połączenie numeru importuje dane tylko wtedy, gdy przed zeskanowaniem kodu ponownie wybierzesz import."
+      },
+      "result": {
+        "note": "Twoje czaty są importowane. Postęp śledzisz na stronie numeru.",
+        "link": "Zobacz import"
+      },
+      "card": {
+        "title": "Zaimportowane czaty",
+        "state": {
+          "not_requested": "Nie zażądano",
+          "idle": "Oczekiwanie na WhatsApp",
+          "running": "Importowanie",
+          "done": "Zakończono",
+          "failed": "Nie zakończono",
+          "cancelled": "Anulowano",
+          "limit_reached": "Zatrzymano na limicie kontaktów"
+        },
+        "body": {
+          "not_requested": "Ten numer nie zaimportował swoich czatów. WhatsApp udostępnia historię tylko przy pierwszym połączeniu numeru, więc wybierz ją przy następnym połączeniu tego numeru.",
+          "idle": "Oczekiwanie na połączenie numeru i na wysłanie czatów przez WhatsApp. Może to potrwać kilka minut.",
+          "running": "Importowanie czatów. Możesz opuścić tę stronę, import będzie kontynuowany.",
+          "done": "Import został zakończony. Czaty znajdują się we wspólnej skrzynce odbiorczej, oznaczone jako przeczytane.",
+          "failed": "Import nie został zakończony. To, co zaimportowano, pozostaje w skrzynce odbiorczej.",
+          "cancelled": "Zatrzymałeś import. To, co zaimportowano, pozostaje w skrzynce odbiorczej.",
+          "limit_reached": "Import został zatrzymany, ponieważ osiągnięto limit kontaktów w Twoim planie. To, co zaimportowano, pozostaje w skrzynce odbiorczej."
+        },
+        "chats": "{count, plural, one {# czat} few {# czaty} many {# czatów} other {# czatu}}",
+        "contacts": "{count, plural, one {# kontakt} few {# kontakty} many {# kontaktów} other {# kontaktu}}",
+        "messages": "{count, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}}",
+        "progress": "Postęp: {percent}%",
+        "window": "Wiadomości z ostatnich dni: {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}.",
+        "mediaNote": "Zdjęcia, filmy, wiadomości głosowe i pliki nie są importowane. W ich miejscu widoczny jest symbol zastępczy.",
+        "started": "Rozpoczęto",
+        "finished": "Zakończono",
+        "openInbox": "Otwórz skrzynkę odbiorczą",
+        "cancel": "Zatrzymaj import",
+        "cancelling": "Zatrzymywanie...",
+        "cancelTitle": "Zatrzymać import?",
+        "cancelMessage": "Kolejne czaty nie zostaną pobrane. To, co już zaimportowano, pozostaje w skrzynce odbiorczej.",
+        "cancelConfirm": "Zatrzymaj import",
+        "cancelKeep": "Kontynuuj import",
+        "cancelDone": "Import zatrzymany. To, co zaimportowano, pozostaje w skrzynce odbiorczej."
+      },
+      "error": {
+        "history_not_received": "WhatsApp nie wysłał żadnej historii czatów. Robi to tylko przy pierwszym połączeniu numeru. Połącz numer ponownie i wybierz import, aby spróbować jeszcze raz.",
+        "message_cap_reached": "Zatrzymano na limicie wiadomości dla jednego numeru. To, co zaimportowano, pozostaje.",
+        "chat_cap_reached": "Zatrzymano na limicie czatów dla jednego numeru. To, co zaimportowano, pozostaje.",
+        "contact_limit_reached": "Zatrzymano, ponieważ osiągnięto limit kontaktów w Twoim planie. Zwolnij część kontaktów lub zmień plan, a następnie połącz numer ponownie i zaimportuj.",
+        "worker_error": "Import został zatrzymany z powodu błędu. To, co zaimportowano, pozostaje. Połącz numer ponownie, aby spróbować jeszcze raz.",
+        "ended_idle": "Zakończono. WhatsApp przestał wysyłać historię, więc import zakończył się na tym, co już dotarło.",
+        "limits_unavailable": "Nie udało się uruchomić importu, ponieważ usługa jest nieprawidłowo skonfigurowana. Skontaktuj się z pomocą techniczną, a następnie ponownie połącz numer."
+      }
+    },
+    "errors": {
+      "HISTORY_IMPORT_NOT_ACTIVE": "Dla tego numeru nie trwa żaden import."
+    }
+  }
+}

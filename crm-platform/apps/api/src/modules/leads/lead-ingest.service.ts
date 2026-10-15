@@ -3,6 +3,8 @@ import { sql } from 'drizzle-orm';
 import type { LeadSourceDefaults } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
+import { ownersAvailable } from '../../common/leave-owner-pool';
+import { ConsentIntakeService, planIntakeGrants } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
@@ -11,6 +13,7 @@ import { actingUserId, runInOrg } from './lead-context';
 import type { LeadIngestPort, LeadIngestResult, NormalisedLead } from './lead-ingest.port';
 import { pickOwner } from './lead-assignment';
 import { LeadAttributionsRepository } from './lead-attributions.repository';
+import { planLeadGrant } from './lead-consent';
 import { LeadEventsRepository, type LeadEventRow } from './lead-events.repository';
 import {
   boundLead,
@@ -79,6 +82,7 @@ export class LeadIngestService implements LeadIngestPort {
     private readonly plan: LeadsPlan,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly consentIntake: ConsentIntakeService,
   ) {}
 
   /** The port: a connector's lead for a source it holds the id of. */
@@ -234,6 +238,9 @@ export class LeadIngestService implements LeadIngestPort {
     });
 
     await this.applyTag(tx, orgId, found.contactId, defaults);
+    if (!isTest) {
+      await this.recordConsent(tx, orgId, source, event, lead, row, { phone, email });
+    }
     await this.attributions.insert(tx, orgId, {
       contactId: found.contactId,
       leadEventId: event.id,
@@ -293,6 +300,65 @@ export class LeadIngestService implements LeadIngestPort {
       resolved,
       created: found.created,
     };
+  }
+
+  /**
+   * The grant a lead's own proof of consent earns (BL-168, privacy spec 4.3.2): written ONLY when the sender supplied it (`lead.consent`
+   * with a yes and something readable), never inferred from the lead itself. The evidence is the source (`lead`), the wording and its
+   * version, the time the person agreed, the lead source, and the provider's form and ad. A person who opted out themselves is not turned
+   * back on (`respectWithdrawn`). It runs in a savepoint: the ledger can never make a lead fail or be lost. A test lead writes nothing.
+   */
+  private async recordConsent(
+    tx: Tx,
+    orgId: number,
+    source: LeadSourceRow,
+    event: LeadEventRow,
+    lead: NormalisedLead,
+    row: NonNullable<Awaited<ReturnType<ContactsRepository['findById']>>>,
+    reachable: { phone: LeadPhone | null; email: string | null },
+  ): Promise<void> {
+    const plan = planLeadGrant(lead.consent, {
+      phone: reachable.phone !== null,
+      email: reachable.email !== null,
+    });
+    if (!plan) return;
+    try {
+      await tx.transaction(async (sp) => {
+        const spTx = sp as Tx;
+        const recorded = await this.consentIntake.grant(spTx, orgId, {
+          contactId: row.id,
+          channels: plan.proof.channels ?? [],
+          source: 'lead',
+          proof: plan.proof,
+          evidence: { ...plan.evidence, leadSourceId: source.uuid },
+          keyBase: `lead:${event.uuid}`,
+          fallbackNote: `Agreed on the lead form of "${source.name}"`.slice(0, 500),
+        });
+        // The label follows the proof: a channel that really got a grant and has no status yet is marked subscribed.
+        const stored = {
+          whatsapp: row.whatsappSubscriptionStatus,
+          sms: row.smsSubscriptionStatus,
+          email: row.emailSubscriptionStatus,
+        };
+        const fill = planIntakeGrants({
+          given: {},
+          stored,
+          proof: plan.proof,
+          reachable: { phone: reachable.phone !== null, email: reachable.email !== null },
+        }).fillStatus.filter((ch) => recorded.includes(ch));
+        if (fill.length === 0) return;
+        const patch: Record<string, unknown> = {};
+        if (fill.includes('whatsapp')) patch.whatsappSubscriptionStatus = 'subscribed';
+        if (fill.includes('sms')) patch.smsSubscriptionStatus = 'subscribed';
+        if (fill.includes('email')) patch.emailSubscriptionStatus = 'subscribed';
+        await this.contactRepo.updateFieldsById(spTx, orgId, row.id, { ...patch, updatedBy: null });
+      });
+    } catch (err) {
+      this.logger.warn(
+        { err, orgId, leadEvent: event.uuid },
+        'lead consent could not be recorded; the lead is kept without a grant',
+      );
+    }
   }
 
   /** Stores the lead as `needs_review`: it is kept with its payload, shown in "Needs attention", and retried after a fix. */
@@ -546,10 +612,15 @@ export class LeadIngestService implements LeadIngestPort {
     defaults: LeadSourceDefaults,
   ): Promise<{ id: number; uuid: string } | null> {
     const rule = defaults.owner;
-    const active =
+    // People on leave today are never picked (BL-112): a fixed person is replaced by their delegate, a rotation skips them.
+    const active = await ownersAvailable(
+      tx,
+      orgId,
       rule.mode === 'unassigned' || rule.userIds.length === 0
         ? []
-        : await this.sources.activeUsers(tx, orgId, rule.userIds);
+        : await this.sources.activeUsers(tx, orgId, rule.userIds),
+      rule.mode,
+    );
     // takeTurn also stamps the last event; the other branches stamp it themselves.
     if (rule.mode !== 'round_robin' || active.length === 0) {
       await this.sources.stampLastEvent(tx, orgId, source.id);

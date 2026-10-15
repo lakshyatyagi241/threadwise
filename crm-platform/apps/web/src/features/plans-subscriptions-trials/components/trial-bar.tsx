@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import { BACKGROUND_META } from '@/lib/api/background';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
@@ -20,6 +20,7 @@ export const CONNECT_PATH = '/channels/whatsapp';
 export function TrialBar() {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useQuery({
     queryKey: BILLING_KEYS.status,
     queryFn: ({ signal }) => fetchBillingStatus(signal),
@@ -33,7 +34,9 @@ export function TrialBar() {
   if (!kind) return null;
 
   const date = q.data.planEndsAt
-    ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(q.data.planEndsAt))
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone }).format(
+        new Date(q.data.planEndsAt),
+      )
     : '';
   const btn =
     'inline-flex h-7 items-center rounded-md px-3 text-xs font-medium focus-visible:ring-2 focus-visible:ring-primary';

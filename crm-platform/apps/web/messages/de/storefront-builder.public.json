@@ -75,7 +75,9 @@
       "removeWish": "{name} von der Wunschliste entfernen",
       "quickView": "Schnellansicht von {name}",
       "quickViewTitle": "Schnellansicht",
-      "was": "Statt"
+      "was": "Statt",
+      "chooseOptions": "Optionen wählen",
+      "chooseOptionsNamed": "Optionen für {name} wählen"
     },
     "quick": {
       "details": "Alle Details →"
@@ -162,7 +164,9 @@
       "increase": "Menge erhöhen",
       "remove": "{name} aus dem Warenkorb entfernen",
       "fullTitle": "Ihr Warenkorb ist voll",
-      "fullBody": "Ein Warenkorb enthält bis zu 100 verschiedene Produkte. Bestellen Sie diese zuerst, dann starten Sie einen neuen Warenkorb."
+      "fullBody": "Ein Warenkorb enthält bis zu 100 verschiedene Produkte. Bestellen Sie diese zuerst, dann starten Sie einen neuen Warenkorb.",
+      "variantDroppedTitle": "Ihr Warenkorb wurde aktualisiert",
+      "variantDroppedBody": "{count, plural, one {# Artikel braucht eine neue Auswahl der Optionen und wurde aus Ihrem Warenkorb entfernt.} other {# Artikel brauchen eine neue Auswahl der Optionen und wurden aus Ihrem Warenkorb entfernt.}}"
     },
     "wish": {
       "title": "Wunschliste",
@@ -233,9 +237,9 @@
       "couponFallback": "Ungültiger Code."
     },
     "errors": {
-      "itemsUnavailable": "Diese Artikel sind nicht mehr verfügbar. Bitte laden Sie neu und versuchen Sie es erneut.",
       "notAvailable": "Dieser Store ist nicht verfügbar.",
-      "rateLimited": "Zu viele Anfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut."
+      "rateLimited": "Zu viele Anfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+      "itemsRefreshed": "Einige Artikel haben sich geändert oder sind ausverkauft, deshalb haben wir Ihren Warenkorb aktualisiert. Bitte prüfen Sie ihn und versuchen Sie es erneut."
     },
     "placed": {
       "title": "Bestellung aufgegeben",
@@ -331,6 +335,13 @@
       "help": "Brauchen Sie Hilfe?",
       "support": "Mit dem Support sprechen",
       "metaTitle": "Seite nicht gefunden"
+    },
+    "variant": {
+      "from": "Ab {price}",
+      "optionsCount": "{count, plural, one {# Option} other {# Optionen}}",
+      "select": "{option} auswählen",
+      "unavailable": "Diese Kombination ist nicht verfügbar",
+      "soldOutValue": "ausverkauft"
     }
   }
 }

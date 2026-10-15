@@ -69,6 +69,8 @@ export const conversations = pgTable(
     /** Start of the current wait for a human answer (SLA anchor). */
     waitingSince: timestamp('waiting_since', { withTimezone: true }),
     needsContact: boolean('needs_contact').notNull().default(false),
+    /** Set once when an imported history message created the thread (20261204090100); the inbox shows an "Imported" marker. */
+    importedAt: timestamp('imported_at', { withTimezone: true }),
     priority: text('priority').notNull().default('normal'),
     assigneeUserId: idColumn('assignee_user_id'),
     assigneeTeamId: idColumn('assignee_team_id'),
@@ -533,6 +535,9 @@ export const messageLogExports = pgTable(
     rangeFrom: date('range_from').notNull(),
     rangeTo: date('range_to').notNull(),
     messageStatus: text('message_status'),
+    /** 'events': the delivery log; 'messages': the Message History feed with `filters` (20261126090000). */
+    kind: text('kind').notNull().default('events'),
+    filters: jsonb('filters').$type<Record<string, unknown>>(),
     status: text('status')
       .$type<(typeof MESSAGE_LOG_EXPORT_STATUSES)[number]>()
       .notNull()

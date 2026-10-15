@@ -32,26 +32,36 @@ export function humanSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/** Local calendar day, the key of a day separator. */
-export function dayKey(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+/**
+ * The calendar day of an instant in `timeZone` (the person's display zone: `useTimeZone()` in a component), the key of a day
+ * separator. Left out, it is the browser's zone.
+ */
+export function dayKey(iso: string, timeZone?: string): string {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    timeZone,
+  }).formatToParts(new Date(iso));
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+  return `${get('year')}-${get('month')}-${get('day')}`;
 }
 
-export function formatDay(iso: string, locale: string): string {
+export function formatDay(iso: string, locale: string, timeZone?: string): string {
   return new Date(iso).toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone,
   });
 }
 
 /** Today: `HH:MM`; another day: `Mon D, HH:MM` (Reference's rule). */
-export function formatStamp(iso: string, now: Date, locale: string): string {
+export function formatStamp(iso: string, now: Date, locale: string, timeZone?: string): string {
   const d = new Date(iso);
-  const time = d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' });
-  if (dayKey(iso) === dayKey(now.toISOString())) return time;
-  return `${d.toLocaleDateString(locale, { month: 'short', day: 'numeric' })}, ${time}`;
+  const time = d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', timeZone });
+  if (dayKey(iso, timeZone) === dayKey(now.toISOString(), timeZone)) return time;
+  return `${d.toLocaleDateString(locale, { month: 'short', day: 'numeric', timeZone })}, ${time}`;
 }
 
 /** The edit window of a message in minutes, shared with the API (15). */

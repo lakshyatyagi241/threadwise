@@ -72,6 +72,12 @@ export const QUEUES = {
   LSC_SCORE: 'lsc-score',
   /** One job per requested export of the consent proof above the direct download's 50,000 rows: reads the ledger into a CSV and mails the requester. Own queue: a large export must not hold a send or a receipt. */
   CONSENT_EXPORT: 'consent-export',
+  /** One job per requested export of the tenant audit log: reads the filtered window into a masked CSV and mails the requester. Own queue: a year of audit rows must not hold a send or a receipt. */
+  AUDIT_LOG_EXPORT: 'audit-log-export',
+  /** One job per Waboo -> WaDesk migration run started from the operator panel. Own queue: a run lasts up to an hour and must hold nothing else. */
+  /** One job per requested export of a data-subject request: reads everything the workspace holds about one person into a ZIP kept 7 days. Own queue: a heavy subject must not hold a send or a receipt. */
+  PRIVACY_EXPORT: 'privacy-export',
+  WAB_MIGRATE: 'wab-migrate',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];

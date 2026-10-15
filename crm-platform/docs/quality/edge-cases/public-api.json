@@ -1,0 +1,86 @@
+{
+  "module": "public-api",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-public-api-001",
+      "feature": "v1",
+      "category": "input",
+      "scenario": "a value of 101 (one past V1_MAX_LIMIT = 100) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/envelope.ts"
+    },
+    {
+      "id": "EC-public-api-002",
+      "feature": "api key name",
+      "category": "input",
+      "scenario": "a value of 121 (one past API_KEY_NAME_MAX = 120) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/keys.ts"
+    },
+    {
+      "id": "EC-public-api-003",
+      "feature": "v1 text",
+      "category": "input",
+      "scenario": "a value of 4097 (one past V1_TEXT_MAX = 4096) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/messaging.ts"
+    },
+    {
+      "id": "EC-public-api-004",
+      "feature": "v1 to",
+      "category": "input",
+      "scenario": "a value of 33 (one past V1_TO_MAX = 32) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/messaging.ts"
+    },
+    {
+      "id": "EC-public-api-005",
+      "feature": "v1 device id",
+      "category": "input",
+      "scenario": "a value of 65 (one past V1_DEVICE_ID_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/messaging.ts"
+    },
+    {
+      "id": "EC-public-api-006",
+      "feature": "v1 media url",
+      "category": "input",
+      "scenario": "a value of 2049 (one past V1_MEDIA_URL_MAX = 2048) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/messaging.ts"
+    },
+    {
+      "id": "EC-public-api-007",
+      "feature": "v1 messages",
+      "category": "input",
+      "scenario": "a value of 201 (one past V1_MESSAGES_MAX_LIMIT = 200) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/messaging.ts"
+    },
+    {
+      "id": "EC-public-api-008",
+      "feature": "v1 conversations",
+      "category": "input",
+      "scenario": "a value of 101 (one past V1_CONVERSATIONS_MAX_LIMIT = 100) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/developer-rest-api-v1/messaging.ts"
+    }
+  ]
+}

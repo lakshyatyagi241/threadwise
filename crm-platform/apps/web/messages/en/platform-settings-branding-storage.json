@@ -64,7 +64,6 @@
       "conflict": "Someone else saved these settings after you opened them. Reload to see their changes, then apply yours again.",
       "reload": "Reload settings",
       "unexpected": "Something went wrong and nothing was saved.",
-      "requestId": "Request id",
       "readOnly": "You can read these settings but only a super admin can change them.",
       "secretSet": "Saved. Leave blank to keep it.",
       "secretUnset": "Not set.",

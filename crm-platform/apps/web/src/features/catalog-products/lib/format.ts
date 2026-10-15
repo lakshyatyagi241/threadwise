@@ -22,7 +22,7 @@ export function truncate(text: string, max: number): string {
 export const bucket = (buckets: Record<string, number>, key: string): number => buckets[key] ?? 0;
 
 /** "Oct 02, 14:30" in the viewer's language (Reference: `M d, H:i`). */
-export function formatWhen(iso: string, locale: string): string {
+export function formatWhen(iso: string, locale: string, timeZone?: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '—';
   return new Intl.DateTimeFormat(locale, {
@@ -31,6 +31,7 @@ export function formatWhen(iso: string, locale: string): string {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
+    timeZone,
   }).format(d);
 }
 

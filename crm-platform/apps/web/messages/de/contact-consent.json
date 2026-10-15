@@ -16,7 +16,8 @@
       "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
       "exportInProgress": "Eine Nachweisdatei wird bereits erstellt. Warte, bis sie fertig ist, und versuche es dann erneut.",
-      "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Erstelle eine neue."
+      "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Erstelle eine neue.",
+      "noticeTargetMissing": "Dieses Widget, diese Buchungsseite oder dieser Shop existiert nicht mehr."
     },
     "settings": {
       "title": "Einwilligung und STOP-Antworten",
@@ -109,15 +110,21 @@
         "email": "E-Mail",
         "facebook": "Facebook",
         "instagram": "Instagram",
-        "webchat": "Web-Chat"
+        "webchat": "Web-Chat",
+        "voice": "Sprachanruf",
+        "rcs": "RCS"
       },
       "state": {
         "granted": "angemeldet",
-        "withdrawn": "abgemeldet"
+        "withdrawn": "abgemeldet",
+        "utilityGranted": "Servicenachrichten zugestimmt",
+        "utilityWithdrawn": "Servicenachrichten beendet"
       },
       "action": {
         "granted": "Angemeldet",
-        "withdrawn": "Abgemeldet"
+        "withdrawn": "Abgemeldet",
+        "utilityGranted": "Stimmte der Kontaktaufnahme zu seiner Anfrage zu",
+        "utilityWithdrawn": "Servicenachrichten beendet"
       },
       "source": {
         "form": "Formular",
@@ -128,7 +135,11 @@
         "flow": "Flow",
         "inbound_message": "Nachricht",
         "contact_request": "Kontaktanfrage",
-        "legacy": "Vor dem Einwilligungsverlauf"
+        "legacy": "Vor dem Einwilligungsverlauf",
+        "widget": "Website-Chat",
+        "booking": "Buchungsseite",
+        "commerce": "Shop-Kasse",
+        "lead": "Lead-Erfassung"
       },
       "by": "von {name}",
       "evidence": {
@@ -142,7 +153,16 @@
         "fileName": "Datei",
         "apiKeyId": "API-Schlüssel",
         "flowId": "Flow",
-        "reference": "Referenz"
+        "reference": "Referenz",
+        "noticeVersion": "Version des Hinweises",
+        "noticeUrl": "Link zum Hinweis",
+        "widgetId": "Chat-Widget",
+        "bookingTypeId": "Buchungsseite",
+        "integrationId": "Shop",
+        "storeFlag": "Shop-Einstellung",
+        "leadSourceId": "Lead-Quelle",
+        "leadFormId": "Lead-Formular",
+        "adId": "Anzeige"
       },
       "dialog": {
         "titleGranted": "Als angemeldet markieren",
@@ -175,7 +195,14 @@
       "hintColumn": "Die Spalte, die dem Marketing-Einverständnis zugeordnet ist, bestimmt, wer erfasst wird: Nur Zeilen mit ja erhalten eine Einwilligung, mit dem Dateinamen als Nachweis. Nein, eine leere Zelle oder ein unbekanntes Wort erfasst nichts. Kontakte, die sich abgemeldet haben, bleiben abgemeldet.",
       "columnSummary": "{granted} Zeilen sagen ja und werden erfasst. {notGranted} sagen nein oder sind leer und erhalten keinen Einwilligungseintrag.",
       "unrecognised": "{count, plural, one {# Zeile hat} other {# Zeilen haben}} einen Einwilligungswert, der weder ja noch nein ist ({values}). {count, plural, one {Er wird} other {Sie werden}} als nicht erteilt behandelt. Verwende ja / nein, true / false oder 1 / 0.",
-      "columnIgnored": "Die Einwilligungsspalte hat keine Wirkung, bis du das Kästchen oben aktivierst."
+      "columnIgnored": "Die Einwilligungsspalte hat keine Wirkung, bis du das Kästchen oben aktivierst.",
+      "noticeText": "Hinweis oder Rechtsgrundlage (optional)",
+      "noticeTextHint": "Wozu diese Kontakte wo zugestimmt haben, z. B.: an der Kasse gemäß Datenschutzhinweis v3 angemeldet. Wird als Nachweis bei jeder erfassten Einwilligung gespeichert.",
+      "noticeVersion": "Version des Hinweises (optional)",
+      "smsSummary": "SMS-Einwilligungsspalte: {granted} Zeilen sagen Ja und werden als SMS-Einwilligung erfasst. {notGranted} sagen Nein oder sind leer.",
+      "emailSummary": "E-Mail-Einwilligungsspalte: {granted} Zeilen sagen Ja und werden als E-Mail-Einwilligung erfasst (die Zeile braucht auch eine E-Mail-Adresse). {notGranted} sagen Nein oder sind leer.",
+      "labelNumbers": "Ich habe die Einwilligung, diese Nummern anzuschreiben",
+      "hintNumbers": "Angehakt wird beim Start des Versands jede Nummer der Datei als einverstanden mit Marketing erfasst, mit dem Dateinamen als Nachweis. Nicht angehakt wird keine Einwilligung erfasst. Wer sich abgemeldet hat, bleibt abgemeldet."
     },
     "systemLine": {
       "withdrawn": "Kontakt hat {keyword} geantwortet: Marketing abbestellt",
@@ -200,6 +227,104 @@
         "failed": "Fehlgeschlagen",
         "expired": "Abgelaufen"
       }
+    },
+    "unsubscribe": {
+      "title": "Marketing-E-Mails abbestellen",
+      "intro": "Bestätigen Sie, dass Sie von diesem Unternehmen keine Marketing-E-Mails mehr erhalten möchten. Nachrichten zu Ihren Bestellungen und Terminen erhalten Sie weiterhin.",
+      "confirm": "Abbestellen",
+      "working": "Wird abbestellt...",
+      "doneTitle": "Sie sind abgemeldet",
+      "doneBody": "Sie erhalten von diesem Unternehmen keine Marketing-Nachrichten mehr.",
+      "already": "Sie waren bereits abgemeldet.",
+      "invalidTitle": "Dieser Link ist ungültig",
+      "invalidBody": "Der Abmeldelink ist unvollständig oder wurde verändert. Verwenden Sie den Link in der neuesten E-Mail.",
+      "error": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Erlaubt: Der Hinweis wurde zuerst übermittelt.",
+        "consent_evidence_recorded": "Erlaubt: Der Hinweis wurde übermittelt und die Person hat zugestimmt.",
+        "purpose_not_enabled": "Nicht erlaubt: Der Arbeitsbereich hat dies nicht eingeschaltet.",
+        "consent_declined": "Nicht erlaubt: Die Person hat abgelehnt.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "Einwilligungszeile im Chat-Formular",
+        "booking": "Einwilligungszeile auf der Buchungsseite",
+        "commerce": "Wofür das Marketing-Kästchen des Shops steht"
+      },
+      "intro": {
+        "widget": "Wird als Kästchen unter den Angaben des Besuchers angezeigt. Nur wer es ankreuzt, wird als zustimmend erfasst, und nur wenn eine Telefonnummer oder E-Mail angegeben wurde.",
+        "booking": "Wird als Kästchen im Buchungsformular angezeigt. Nur wer es ankreuzt, wird als zustimmend erfasst; für die Buchung ist es nie nötig.",
+        "commerce": "Ein Kunde, der in Ihrem Shop Marketing akzeptiert, wird als zustimmend erfasst. Schreiben Sie, was das Kästchen ihm sagt, damit der Nachweis es nennt."
+      },
+      "enabled": "Einwilligungszeile an",
+      "text": "Wortlaut, dem die Person zustimmt",
+      "textHint": "Bis zu {max} Zeichen. Jede Änderung wird als neue Version gespeichert.",
+      "textRequired": "Schreiben Sie den Wortlaut, bevor Sie die Zeile einschalten.",
+      "url": "Link zu Ihrer Datenschutzerklärung (optional)",
+      "urlHint": "Muss mit https:// beginnen",
+      "save": "Einwilligungszeile speichern",
+      "saved": "Einwilligungszeile gespeichert (Version {version}).",
+      "version": "Aktuelle Version: {version}",
+      "noVersion": "Noch nicht gespeichert.",
+      "saveFirst": "Speichern Sie dies zuerst, dann können Sie die Einwilligungszeile festlegen.",
+      "whatsappToo": "Auch als WhatsApp-Einwilligung zählen (nur wenn der Wortlaut das sagt)"
     }
   }
 }

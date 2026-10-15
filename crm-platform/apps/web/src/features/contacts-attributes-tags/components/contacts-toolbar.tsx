@@ -7,6 +7,7 @@ import {
   Button,
   Input,
   Menu,
+  MenuCheckboxItem,
   MenuItem,
   MenuLabel,
   MenuRadioItem,
@@ -15,16 +16,19 @@ import {
 } from '@crm/ui';
 import { filtersOfPicker, pickerValue } from '../lib/segment-entries';
 import { SegmentPicker, type SegmentOption, type SegmentsState } from './segment-picker';
-import type { ContactFilters } from '../api/contacts';
+import { ownerTokens, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
+import type { Owner } from '../api/owners';
 import type { ContactGroup, ContactStats } from '../api/schemas';
 import type { ColumnDef, ColumnId } from '../lib/columns';
 import type { Choice } from '../lib/option-sets';
-import { AdvancedFilter } from '@/features/segments';
+import { appliedConditionCount } from '@/features/segments';
 import { ColumnsModal } from './columns-modal';
+import { FilterPanel } from './filter-panel';
 import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
 import {
   ChevronDownIcon,
   DownloadIcon,
+  SortIcon,
   FilterIcon,
   KanbanIcon,
   ListIcon,
@@ -32,6 +36,7 @@ import {
   RefreshIcon,
   SearchIcon,
   SendIcon,
+  SparkIcon,
   UploadIcon,
   UsersPlusIcon,
 } from './icons';
@@ -71,6 +76,18 @@ export interface ContactsToolbarProps {
   tag: string;
   onTag: (id: string) => void;
   tags: ReadonlyArray<{ id: string; name: string }>;
+
+  /** Owner filter tokens: people's ids and/or `none` (contacts nobody owns), comma-separated; empty = everyone. */
+  owner: string;
+  onOwner: (value: string) => void;
+  owners: readonly Owner[];
+  /** The signed-in person, for "My contacts". */
+  meId: string;
+  /**
+   * Present when the filter names exactly one person and the caller may change owners: selects everything the view matches and
+   * opens the owner change (the shortcut for "move all of this person's contacts").
+   */
+  onReassignView?: () => void;
 
   stage: string;
   onStage: (v: string) => void;
@@ -117,8 +134,6 @@ export interface ContactsToolbarProps {
   onResetColumns: () => void;
   /** Opens the bulk Update dialog for the selected contacts. */
   onUpdateSelected: () => void;
-  /** "Select all N matching" has no explicit ids, which a bulk update needs. */
-  updateDisabled: boolean;
   /** Opens where a custom field is made (it then shows up as a column); absent when the caller may not manage fields. */
   onAddColumnField?: () => void;
 
@@ -157,7 +172,28 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
   const hasMoreActions = Object.values(p.can).some(Boolean);
 
   const tagLabel = p.tags.find((x) => x.id === p.tag)?.name ?? t('selectTag');
-  const filtersOn = Number(p.stage !== '') + Number(p.consent !== '');
+  // What the AI understood, kept only while the rules it produced are still the ones applied.
+  const [ai, setAi] = useState<{ rules: string; summary: string } | null>(null);
+  const aiChip =
+    ai && ai.rules === p.rules && p.rules !== '' && ai.summary !== '' ? ai.summary : null;
+  const conditions = appliedConditionCount(p.rules);
+  const pickedOwners = ownerTokens(p.owner);
+  const ownerLabel =
+    pickedOwners.length === 0
+      ? t('selectOwner')
+      : pickedOwners.length > 1
+        ? t('ownersCount', { count: pickedOwners.length })
+        : pickedOwners[0] === UNASSIGNED_OWNER
+          ? t('unassigned')
+          : pickedOwners[0] === p.meId
+            ? t('myContacts')
+            : (p.owners.find((o) => o.id === pickedOwners[0])?.fullName ?? t('ownerFormer'));
+  const toggleOwner = (token: string, on: boolean) => {
+    const next = pickedOwners.filter((x) => x !== token);
+    p.onOwner((on ? [...next, token] : next).join(','));
+  };
+  const onlyPerson =
+    pickedOwners.length === 1 && pickedOwners[0] !== UNASSIGNED_OWNER ? pickedOwners[0] : undefined;
   const none = !p.anySelected;
   const search = useRef<HTMLInputElement>(null);
   const shortcut = useShortcutLabel();
@@ -235,52 +271,69 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
         </Menu>
 
         <Menu
-          label={t('moreFilters')}
+          label={t('ownerFilter')}
           trigger={
             <>
-              <FilterIcon className="size-4 text-muted-foreground" />
-              {t('filters')}
-              {filtersOn > 0 && (
-                <span className="rounded-full bg-brand px-1.5 text-[11px] leading-5 text-brand-foreground">
-                  {filtersOn}
-                </span>
-              )}
+              <span
+                className={cn(
+                  'max-w-[11rem] truncate',
+                  pickedOwners.length === 0 && 'text-muted-foreground',
+                )}
+              >
+                {ownerLabel}
+              </span>
+              <ChevronDownIcon className="size-3.5 text-muted-foreground" />
             </>
           }
           triggerClassName={trigger}
         >
-          <MenuLabel>{t('stageFilter')}</MenuLabel>
-          <MenuRadioItem checked={p.stage === ''} onSelect={() => p.onStage('')}>
-            {t('allStages')}
+          <MenuRadioItem checked={pickedOwners.length === 0} onSelect={() => p.onOwner('')}>
+            {t('allOwners')}
           </MenuRadioItem>
-          {p.stages.map((x) => (
-            <MenuRadioItem
-              key={x.value}
-              checked={p.stage === x.value}
-              onSelect={() => p.onStage(x.value)}
-            >
-              {x.label}
-            </MenuRadioItem>
-          ))}
+          <MenuRadioItem
+            checked={pickedOwners.length === 1 && pickedOwners[0] === p.meId}
+            onSelect={() => p.onOwner(p.meId)}
+          >
+            {t('myContacts')}
+          </MenuRadioItem>
           <MenuSeparator />
-          <MenuLabel>{t('consentFilter')}</MenuLabel>
-          {(
-            [
-              ['', t('allConsent')],
-              ['subscribed', t('subscribedOnly')],
-              ['unsubscribed', t('unsubscribedOnly')],
-            ] as const
-          ).map(([v, label]) => (
-            <MenuRadioItem
-              key={v || 'all'}
-              checked={p.consent === v}
-              onSelect={() => p.onConsent(v)}
+          <MenuCheckboxItem
+            checked={pickedOwners.includes(UNASSIGNED_OWNER)}
+            onCheckedChange={(on) => toggleOwner(UNASSIGNED_OWNER, on)}
+          >
+            {t('unassigned')}
+          </MenuCheckboxItem>
+          {p.owners.map((o) => (
+            <MenuCheckboxItem
+              key={o.id}
+              checked={pickedOwners.includes(o.id)}
+              onCheckedChange={(on) => toggleOwner(o.id, on)}
             >
-              {label}
-            </MenuRadioItem>
+              {o.id === p.meId ? t('ownerMe', { name: o.fullName }) : o.fullName}
+            </MenuCheckboxItem>
           ))}
-          <MenuSeparator />
-          <MenuLabel>{t('sort')}</MenuLabel>
+          {p.onReassignView && onlyPerson && (
+            <>
+              <MenuSeparator />
+              <MenuItem onSelect={p.onReassignView}>
+                {t('reassignView', {
+                  name: p.owners.find((o) => o.id === onlyPerson)?.fullName ?? t('ownerFormer'),
+                })}
+              </MenuItem>
+            </>
+          )}
+        </Menu>
+
+        <Menu
+          label={t('sort')}
+          trigger={
+            <>
+              <SortIcon className="size-4 text-muted-foreground" />
+              {t('sortButton')}
+            </>
+          }
+          triggerClassName={trigger}
+        >
           <MenuRadioItem checked={p.order === 'desc'} onSelect={() => p.onOrder('desc')}>
             {t('newestFirst')}
           </MenuRadioItem>
@@ -289,7 +342,18 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           </MenuRadioItem>
         </Menu>
 
-        <AdvancedFilter value={p.rules} onApply={p.onRules} />
+        <FilterPanel
+          stage={p.stage}
+          stages={p.stages}
+          tags={p.tags}
+          onStage={p.onStage}
+          consent={p.consent}
+          onConsent={p.onConsent}
+          rules={p.rules}
+          onRules={p.onRules}
+          onAiSummary={(rules, summary) => setAi({ rules, summary })}
+          conditionCount={appliedConditionCount(p.rules)}
+        />
 
         {p.onSaveAsSegment && (
           <Button
@@ -359,11 +423,7 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
               )}
               {p.can.update && (
                 <>
-                  <MenuItem
-                    onSelect={p.onUpdateSelected}
-                    disabled={none || p.busy || p.updateDisabled}
-                    hint={p.updateDisabled && !none ? tb('updateNeedsRows') : undefined}
-                  >
+                  <MenuItem onSelect={p.onUpdateSelected} disabled={none || p.busy}>
                     {tb('update')}
                   </MenuItem>
                   <MenuItem onSelect={() => p.onPicker('groupAdd')} disabled={none || p.busy}>
@@ -451,6 +511,24 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
           </div>
         </div>
       </div>
+
+      {p.rules !== '' && (
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 py-1 ps-2.5 pe-1 text-brand">
+            {aiChip && <SparkIcon />}
+            <span className="truncate">{aiChip ?? t('conditionsChip', { count: conditions })}</span>
+            <button
+              type="button"
+              onClick={() => p.onRules('')}
+              aria-label={t('clearFilter')}
+              title={t('clearFilter')}
+              className="inline-flex size-5 items-center justify-center rounded-full outline-none hover:bg-brand/20 focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              ×
+            </button>
+          </span>
+        </div>
+      )}
 
       {p.anySelected && (
         <div className="flex flex-wrap items-center gap-2 text-sm" role="status">

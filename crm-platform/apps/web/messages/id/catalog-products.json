@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Tutup",
-      "retry": "Coba lagi",
-      "requestId": "ID permintaan"
+      "retry": "Coba lagi"
     },
     "errors": {
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.",
@@ -35,7 +34,10 @@
       "sendFailed": "Pesan tidak dapat dikirim: {detail}",
       "collectionProducts": "Tidak ada produk terpilih yang termasuk dalam workspace ini.",
       "providerFailed": "WhatsApp atau Meta tidak dapat menyelesaikan permintaan: {detail}",
-      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi."
+      "unexpected": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+      "alreadyConnected": "Katalog sudah terhubung. Putuskan dulu untuk membuat yang baru.",
+      "confirmMismatch": "ID katalog yang Anda ketik tidak cocok dengan katalog yang terhubung.",
+      "setNotSyncable": "Koleksi ini tidak punya produk aktif untuk dimasukkan ke set produk Meta."
     },
     "paywall": {
       "kicker": "Fitur premium",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "Deskripsi terlalu panjang.",
           "noProducts": "Pilih setidaknya satu produk."
         }
+      },
+      "meta": {
+        "onMeta": "Ada di Meta",
+        "notOnMeta": "Tidak ada di Meta",
+        "push": "Kirim ke Meta",
+        "update": "Perbarui di Meta",
+        "remove": "Hapus dari Meta",
+        "pushed": "Koleksi dikirim ke Meta.",
+        "removed": "Koleksi dihapus dari Meta."
       }
     },
     "activity": {
@@ -447,7 +458,8 @@
       "cancel": "Batal",
       "deleted": "Produk dihapus.",
       "deleteTitle": "Hapus produk ini?",
-      "deleteBody": "\"{name}\" akan dihapus. Produk tetap ada di Meta sampai Anda menghapusnya di sana."
+      "deleteBody": "\"{name}\" akan dihapus. Produk tetap ada di Meta sampai Anda menghapusnya di sana.",
+      "variantsBadge": "{count, plural, other {# varian}}"
     },
     "share": {
       "eyebrow": "Bagikan produk",
@@ -552,6 +564,91 @@
         "badUrl": "Masukkan tautan lengkap yang diawali https://",
         "outOfRange": "Angka ini di luar rentang.",
         "tooMany": "Terlalu banyak gambar."
+      },
+      "variants": {
+        "title": "Varian",
+        "hint": "Jual produk ini dalam lebih dari satu bentuk, seperti ukuran atau warna. Setiap kombinasi punya SKU, harga, dan stok sendiri.",
+        "toggle": "Produk ini memiliki varian",
+        "removeOnSave": "Varian produk ini akan dihapus saat Anda menyimpan.",
+        "optionName": "Nama opsi {n}",
+        "optionNamePlaceholder": "Ukuran, Warna...",
+        "suggest": {
+          "size": "Ukuran",
+          "colour": "Warna",
+          "material": "Bahan",
+          "style": "Gaya"
+        },
+        "values": "Nilai",
+        "valuesHint": "Tekan Enter atau ketik koma setelah setiap nilai. Maksimal {max} karakter per nilai.",
+        "valuesPlaceholder": "Ketik nilai, misalnya M",
+        "valuesMore": "Tambah nilai lain",
+        "quickAdd": "Tambah cepat:",
+        "preset": {
+          "clothing": "Ukuran pakaian ({values})",
+          "shoes": "Ukuran sepatu ({values})"
+        },
+        "addOption": "Tambah opsi",
+        "maxOptions": "Maksimal {max} opsi.",
+        "removeOption": "Hapus opsi {n}",
+        "moveOptionUp": "Naikkan opsi {n}",
+        "moveOptionDown": "Turunkan opsi {n}",
+        "removeValue": "Hapus nilai {value}",
+        "moveValueEarlier": "Majukan {value}",
+        "moveValueLater": "Mundurkan {value}",
+        "refused": {
+          "tooLong": "Nilai ini terlalu panjang.",
+          "dup": "Nilai ini sudah ada dalam daftar.",
+          "tooMany": "Anda mencapai batas nilai untuk opsi ini."
+        },
+        "tableTitle": "Varian",
+        "count": "{count, plural, other {# varian}}",
+        "tableEmpty": "Beri nama setiap opsi dan minimal satu nilai untuk membuat varian.",
+        "totalStock": "Total stok",
+        "fromPrice": "Harga mulai dari",
+        "fromPreview": "Mulai {price}",
+        "unlimited": "Tak terbatas",
+        "priceHint": "Harga terendah di antara varian aktif. Varian tanpa harga sendiri memakai harga ini.",
+        "stockHint": "Total varian aktif, diatur oleh tabel di atas.",
+        "bulkPrice": "Harga untuk semua varian",
+        "bulkStock": "Stok untuk semua varian",
+        "bulkApplyPrice": "Terapkan harga",
+        "bulkApplyStock": "Terapkan stok",
+        "pricePlaceholder": "Harga produk",
+        "stockPlaceholder": "Tak terbatas",
+        "col": {
+          "variant": "Varian",
+          "sku": "SKU",
+          "price": "Harga",
+          "stock": "Stok",
+          "image": "Tautan gambar",
+          "active": "Aktif"
+        },
+        "rowSku": "SKU untuk {title}",
+        "rowPrice": "Harga untuk {title}",
+        "rowStock": "Stok untuk {title}",
+        "rowImage": "Tautan gambar untuk {title}",
+        "rowActive": "{title} aktif",
+        "confirm": {
+          "title": "Hapus varian?",
+          "body": "{count, plural, other {# varian yang memiliki data}} akan dihapus karena kombinasi tersebut sudah tidak ada.",
+          "remove": "Hapus",
+          "keep": "Simpan"
+        },
+        "problem": {
+          "required": "Kolom ini wajib diisi.",
+          "tooLong": "Teks ini terlalu panjang.",
+          "dupName": "Dua opsi memiliki nama yang sama.",
+          "dupValue": "Nilai ini muncul dua kali.",
+          "needOption": "Tambahkan minimal satu opsi.",
+          "needValue": "Tambahkan minimal satu nilai.",
+          "tooManyValues": "Terlalu banyak nilai untuk opsi ini.",
+          "tooManyVariants": "Opsi ini menghasilkan terlalu banyak varian. Batasnya 100.",
+          "notNumber": "Masukkan angka, seperti 499 atau 499,50.",
+          "tooBig": "Jumlahnya terlalu besar.",
+          "notWhole": "Masukkan bilangan bulat.",
+          "outOfRange": "Angka ini di luar rentang.",
+          "badUrl": "Masukkan tautan lengkap yang diawali https://"
+        }
       }
     },
     "reviews": {
@@ -724,6 +821,33 @@
           "goods": "Tanpa alkohol / dewasa / barang yang diatur",
           "verification": "Business Verification diperlukan untuk produksi"
         }
+      }
+    },
+    "manage": {
+      "title": "Kelola katalog di Meta",
+      "create": {
+        "title": "Buat katalog baru di Meta",
+        "intro": "Membuat katalog kosong di akun WhatsApp Business Anda, menautkannya, dan menghubungkannya di sini.",
+        "name": "Nama katalog",
+        "placeholder": "mis. Toko saya",
+        "button": "Buat katalog",
+        "needName": "Masukkan nama katalog.",
+        "done": "Katalog dibuat dan terhubung."
+      },
+      "rename": {
+        "label": "Nama katalog",
+        "button": "Ganti nama di Meta",
+        "done": "Katalog diganti namanya di Meta."
+      },
+      "delete": {
+        "title": "Hapus katalog di Meta",
+        "warning": "Menghapus permanen katalog dan produknya di Meta. Tidak dapat dibatalkan.",
+        "confirmLabel": "Ketik ID katalog {id} untuk konfirmasi",
+        "button": "Hapus di Meta",
+        "dialogTitle": "Hapus katalog di Meta?",
+        "dialogMessage": "Katalog dihapus di Meta dan diputuskan di sini. Tidak dapat dibatalkan.",
+        "cancel": "Batal",
+        "done": "Katalog dihapus di Meta."
       }
     }
   }

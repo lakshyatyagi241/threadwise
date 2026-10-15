@@ -30,6 +30,7 @@ const state = vi.hoisted(() => ({
 
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (p: string) => state.perms.has(p),
+  useSession: () => ({ effectiveTimezone: 'UTC' }),
 }));
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: () => undefined, replace: () => undefined }),
@@ -218,6 +219,28 @@ describe('call log states', () => {
   });
 });
 
+const LIFECYCLE = {
+  storedAt: '2026-10-13T09:02:00.000Z',
+  expiresAt: '2027-01-11T09:02:00.000Z',
+  legalHold: false,
+  holdReason: null,
+  deletedAt: null,
+  deletedReason: null,
+  consent: {
+    status: 'granted',
+    method: 'spoken_yes',
+    at: '2026-10-13T09:01:30.000Z',
+    noticeVersion: 2,
+    noticeSha256: 'a'.repeat(64),
+  },
+};
+const NO_LIFECYCLE = {
+  ...LIFECYCLE,
+  storedAt: null,
+  expiresAt: null,
+  consent: { status: null, method: null, at: null, noticeVersion: null, noticeSha256: null },
+};
+
 const DETAIL: CallLogDetail = {
   call: {
     ...row(),
@@ -233,7 +256,7 @@ const DETAIL: CallLogDetail = {
     { type: 'terminate', at: '2026-10-13T09:01:11.000Z', note: 'COMPLETED' },
     { type: 'brand_new_step', at: '2026-10-13T09:01:12.000Z', note: null },
   ],
-  recording: { available: true, mime: 'audio/webm', sizeBytes: null },
+  recording: { available: true, mime: 'audio/webm', sizeBytes: null, lifecycle: LIFECYCLE },
 } as never;
 
 describe.each(['en', 'ar'])('one call (%s)', (locale) => {
@@ -279,7 +302,7 @@ describe('one call: other states', () => {
       data: {
         ...DETAIL,
         call: { ...DETAIL.call, hasRecording: false },
-        recording: { available: false, mime: null, sizeBytes: null },
+        recording: { available: false, mime: null, sizeBytes: null, lifecycle: NO_LIFECYCLE },
       },
     });
     const out = html(<CallLogDetailScreen callId={ID} />);

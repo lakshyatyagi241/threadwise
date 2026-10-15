@@ -23,20 +23,23 @@ Module: `apps/api/src/modules/catalog-products`; Meta Graph, 360dialog and the N
 
 ## Catalog (`/v2/catalog`)
 
-| Method and path               | Key                  | Notes                                                                                           |
-| ----------------------------- | -------------------- | ----------------------------------------------------------------------------------------------- |
-| `GET /catalog/overview`       | `cat.catalog.read`   | The Setup tab in one read (TW-CAT-001, 007, 008).                                               |
-| `GET /catalog/send-options?q` | `cat.catalog.read`   | Senders, shops, groups, the 500 newest contacts (or matches of `q`), recent sends (TW-CAT-014). |
-| `GET /catalog/activity?limit` | `cat.catalog.read`   | The Activity tab: send log rows, newest first, 50 by default, up to 100 (TW-CAT-016).           |
-| `POST /catalog/connect`       | `cat.catalog.manage` | TW-CAT-002. 200 with the catalog summary.                                                       |
-| `POST /catalog/autodetect`    | `cat.catalog.manage` | TW-CAT-003. Links from the connected WABA number.                                               |
-| `POST /catalog/disconnect`    | `cat.catalog.manage` | TW-CAT-004. 204; succeeds when there is no catalog.                                             |
-| `POST /catalog/commerce`      | `cat.catalog.manage` | TW-CAT-005. Cart and catalog button, pushed to Meta then stored.                                |
-| `POST /catalog/automation`    | `cat.catalog.manage` | TW-CAT-006. Order acknowledgement and concierge settings.                                       |
-| `POST /catalog/sync`          | `cat.catalog.manage` | TW-CAT-009. One chunk (at most 1000); call again while `hasMore`.                               |
-| `POST /catalog/poll`          | `cat.catalog.manage` | TW-CAT-010. Settles pending batches.                                                            |
-| `POST /catalog/import`        | `cat.catalog.manage` | TW-CAT-011. Up to 2000 products from Meta.                                                      |
-| `POST /catalog/send`          | `cat.catalog.send`   | TW-CAT-014, 015. Up to 500 numbers; 200 even when every recipient failed.                       |
+| Method and path               | Key                  | Notes                                                                                                     |
+| ----------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------- |
+| `GET /catalog/overview`       | `cat.catalog.read`   | The Setup tab in one read (TW-CAT-001, 007, 008).                                                         |
+| `GET /catalog/send-options?q` | `cat.catalog.read`   | Senders, shops, groups, the 500 newest contacts (or matches of `q`), recent sends (TW-CAT-014).           |
+| `GET /catalog/activity?limit` | `cat.catalog.read`   | The Activity tab: send log rows, newest first, 50 by default, up to 100 (TW-CAT-016).                     |
+| `POST /catalog/connect`       | `cat.catalog.manage` | TW-CAT-002. 200 with the catalog summary.                                                                 |
+| `POST /catalog/autodetect`    | `cat.catalog.manage` | TW-CAT-003. Links from the connected WABA number.                                                         |
+| `POST /catalog/create`        | `cat.catalog.manage` | Extension (not in Reference). Creates a catalog on Meta under the WABA's business, links and connects it. |
+| `POST /catalog/rename`        | `cat.catalog.manage` | Extension. Renames the catalog on Meta, then locally.                                                     |
+| `POST /catalog/delete-remote` | `cat.catalog.manage` | Extension. 204. Deletes the catalog on Meta, then disconnects it here.                                    |
+| `POST /catalog/disconnect`    | `cat.catalog.manage` | TW-CAT-004. 204; succeeds when there is no catalog.                                                       |
+| `POST /catalog/commerce`      | `cat.catalog.manage` | TW-CAT-005. Cart and catalog button, pushed to Meta then stored.                                          |
+| `POST /catalog/automation`    | `cat.catalog.manage` | TW-CAT-006. Order acknowledgement and concierge settings.                                                 |
+| `POST /catalog/sync`          | `cat.catalog.manage` | TW-CAT-009. One chunk (at most 1000); call again while `hasMore`.                                         |
+| `POST /catalog/poll`          | `cat.catalog.manage` | TW-CAT-010. Settles pending batches.                                                                      |
+| `POST /catalog/import`        | `cat.catalog.manage` | TW-CAT-011. Up to 2000 products from Meta.                                                                |
+| `POST /catalog/send`          | `cat.catalog.send`   | TW-CAT-014, 015. Up to 500 numbers; 200 even when every recipient failed.                                 |
 
 ### `GET /catalog/overview`
 
@@ -110,6 +113,21 @@ Errors: 422 `CAT_META_REJECTED` (Meta's message, `metaCode`, `metaSubcode`, and 
 No body. 200 with the catalog summary. Uses the stored WABA token (the WABA domain's `wa_provider_configs`): the config's catalog id, else the first catalog Meta
 lists for the WABA, else a new catalog created and linked when a business id is known. Errors: 422 `CAT_NO_WABA`, `CAT_WABA_TOKEN_MISSING`, `CAT_NO_CATALOG_LINKED`,
 `CAT_META_REJECTED`. Outbox `catalog.connected`.
+
+### `POST /catalog/create`
+
+`{ "name": "My shop" }`. 200 with the catalog summary. Needs a connected WABA number with its token and business id; creates the catalog under that business, links it to the
+WABA, verifies it, stores it (token encrypted) and saves the id on the WABA config. Meta is asked first: a refusal saves nothing. Errors: 422 `CAT_ALREADY_CONNECTED`,
+`CAT_NO_WABA`, `CAT_WABA_TOKEN_MISSING`, `CAT_NO_CATALOG_LINKED` (no business id), `CAT_META_REJECTED`. Outbox `catalog.created` and `catalog.connected`.
+
+### `POST /catalog/rename`
+
+`{ "name": "New name" }`. 200 with the summary. Meta first; the stored name changes only when Meta accepts. 404 with no catalog; 422 `CAT_META_REJECTED`. Outbox `catalog.renamed`.
+
+### `POST /catalog/delete-remote`
+
+`{ "confirmCatalogId": "<the connected catalog id>" }`. 204. Irreversible on Meta. A wrong id is 422 `CAT_CONFIRM_MISMATCH` and nothing is deleted. After Meta accepts, the catalog is
+disconnected like `POST /catalog/disconnect` (sync state and the collections' Meta set ids are cleared). 404 with no catalog; 422 `CAT_META_REJECTED`.
 
 ### `POST /catalog/disconnect`
 
@@ -311,13 +329,15 @@ After the provider accepts a catalog message or a product share, it is shown in 
 | `catalog.product_changed`                                                     | a catalog-relevant product write (drives the auto push) |
 | `product.created`, `product.updated`, `product.deleted`                       | product writes                                          |
 | `product_set.created`, `product_set.updated`, `product_set.deleted`           | collection writes                                       |
+| `catalog.created`, `catalog.renamed`                                          | create / rename on Meta                                 |
+| `product_set.pushed`, `product_set.unpushed`                                  | collection pushed to / removed from Meta as a set       |
 | `product_review.moderated`, `product_review.deleted`                          | review moderation                                       |
 
 ## Error codes
 
 `CAT_NOT_CONNECTED`, `CAT_META_REJECTED` (Meta's message, `metaCode`, `metaSubcode` in `details`), `CAT_PROVIDER_FAILED`, `CAT_NO_WABA`, `CAT_WABA_TOKEN_MISSING`,
 `CAT_NO_CATALOG_LINKED`, `CAT_NO_PHONE_NUMBER`, `CAT_NO_RECIPIENTS`, `CAT_TOO_MANY_RECIPIENTS`, `CAT_NO_PRODUCTS`, `CAT_NO_SENDER`, `CAT_NO_SHOP`, `CAT_SEND_FAILED`,
-`CAT_COLLECTION_PRODUCTS_INVALID`; shared: `PLAN_FEATURE_LOCKED` (422), `VALIDATION_FAILED` (422), `NOT_FOUND` (404), `ROW_VERSION_CONFLICT` (409), `FORBIDDEN` (403, missing key).
+`CAT_COLLECTION_PRODUCTS_INVALID`, `CAT_ALREADY_CONNECTED`, `CAT_CONFIRM_MISMATCH`, `CAT_SET_NOT_SYNCABLE`; shared: `PLAN_FEATURE_LOCKED` (422), `VALIDATION_FAILED` (422), `NOT_FOUND` (404), `ROW_VERSION_CONFLICT` (409), `FORBIDDEN` (403, missing key).
 
 ## Seams other domains use
 
@@ -334,3 +354,12 @@ After the provider accepts a catalog message or a product share, it is shown in 
 | Plan-first message billing (monthly allowance, then a wallet credit)  | No `wallet-message-billing` module exists yet. Each catalog message is sent unmetered; the seam is the per-recipient loop of `CatalogSendService.send` (campaigns keeps its own `CAMPAIGN_BILLING` seam for the same reason). Reference answered 402 `plan_limit` per recipient. |
 | Platform emergency send halt on catalog sends                         | Reference's `SendGate` guards its dispatchers, which the catalog services bypass (they call Meta directly), so the halt does not stop a catalog message there either (QUIRK kept; a decision for the domain owner).                                                              |
 | Image upload on the product form                                      | Needs the storage domain; products take `imageUrl` and `galleryUrls`.                                                                                                                                                                                                            |
+
+## Collections as Meta product sets (extension)
+
+| Route                                  | Permission               | What                                                                                                                                                                                                                     |
+| -------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `POST /catalog/collections/:id/meta`   | `cat.collections.manage` | Creates the product set on Meta (or updates the one pushed before) from the active members' retailer ids. Returns the collection with `metaSetId`. 422 `CAT_NOT_CONNECTED`, `CAT_SET_NOT_SYNCABLE`, `CAT_META_REJECTED`. |
+| `DELETE /catalog/collections/:id/meta` | `cat.collections.manage` | Deletes the set on Meta and clears `metaSetId`; the collection stays. A set already gone on Meta counts as removed.                                                                                                      |
+
+Deleting a collection also deletes its Meta set (best effort, logged on failure). Disconnecting the catalog clears every `metaSetId`.

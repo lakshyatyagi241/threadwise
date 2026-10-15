@@ -3,20 +3,20 @@
 Base `/v2/calling`, session auth; ids are uuids; every route needs the plan feature `waba_calling`. Reads and calls need `call.calls.use`;
 switching a number needs `call.calling.manage` (Owner, Admin and Manager by default). Types are in `@crm/contracts` (`calling-voice`).
 
-| Method and path                    | What                                                                                                   | Notes                                                                                                  |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| `GET /numbers`                     | the WhatsApp numbers with their calling switch                                                         |                                                                                                        |
-| `POST /numbers/:id/toggle`         | `{ enable }` switch calling on Meta, then locally                                                      | 422 `CALL_COEXISTENCE_UNSUPPORTED` (no Meta call), `CALL_META_REFUSED` (Meta's reason in words)        |
-| `GET /eligibility?conversationId=` | whether the Call button shows, the number to use, the customer's permission and whether it is `usable` |                                                                                                        |
-| `POST /permission-request`         | `{ numberId, to, body? }` ask the customer for permission                                              | `{ alreadyPermitted: true }` when Meta says the business may already call                              |
-| `POST /calls/dial`                 | `{ numberId, to, sdpOffer, contactId?, conversationId? }` place a call                                 | 422 `CALL_PERMISSION_REQUESTED` (a request was sent, no call), `CALL_NOT_ENABLED`, `CALL_META_REFUSED` |
-| `GET /calls/:id/progress`          | `{ status, sdpAnswer, ended, endReason }`                                                              | the answer only once the call is active and the SDP is an answer                                       |
-| `GET /calls/pending`               | calls ringing now (inbound, last two minutes, five at most)                                            | `sdpOffer` for the browser to answer; `aiHandled`                                                      |
-| `POST /calls/:id/accept`           | `{ sdpAnswer }`                                                                                        | 204; 409 `CALL_STATE_CONFLICT` when a teammate took it                                                 |
-| `POST /calls/:id/reject`           | `{ reason? }`                                                                                          | 204; 409 unless ringing                                                                                |
-| `POST /calls/:id/terminate`        | hang up or cancel                                                                                      | 204; the row closes on Meta's terminate event                                                          |
-| `POST /calls/:id/recording`        | multipart `recording`, up to 50 MB                                                                     | `{ url }`; 422 `CALL_RECORDING_FAILED`                                                                 |
-| `GET /calls/:id/recording`         | the file (range requests work)                                                                         | workspace only; 404 when there is none                                                                 |
+| Method and path                    | What                                                                                                   | Notes                                                                                                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /numbers`                     | the WhatsApp numbers with their calling switch                                                         |                                                                                                                                                     |
+| `POST /numbers/:id/toggle`         | `{ enable }` switch calling on Meta, then locally                                                      | 422 `CALL_COEXISTENCE_UNSUPPORTED` (no Meta call), `CALL_META_REFUSED` (Meta's reason in words)                                                     |
+| `GET /eligibility?conversationId=` | whether the Call button shows, the number to use, the customer's permission and whether it is `usable` |                                                                                                                                                     |
+| `POST /permission-request`         | `{ numberId, to, body? }` ask the customer for permission                                              | `{ alreadyPermitted: true }` when Meta says the business may already call                                                                           |
+| `POST /calls/dial`                 | `{ numberId, to, sdpOffer, contactId?, conversationId? }` place a call                                 | 422 `CALL_PERMISSION_REQUESTED` (a request was sent, no call), `CALL_NOT_ENABLED`, `CALL_META_REFUSED`                                              |
+| `GET /calls/:id/progress`          | `{ status, sdpAnswer, ended, endReason }`                                                              | the answer only once the call is active and the SDP is an answer                                                                                    |
+| `GET /calls/pending`               | calls ringing now (inbound, last two minutes, five at most)                                            | `sdpOffer` for the browser to answer; `aiHandled`                                                                                                   |
+| `POST /calls/:id/accept`           | `{ sdpAnswer }`                                                                                        | 204; 409 `CALL_STATE_CONFLICT` when a teammate took it                                                                                              |
+| `POST /calls/:id/reject`           | `{ reason? }`                                                                                          | 204; 409 unless ringing                                                                                                                             |
+| `POST /calls/:id/terminate`        | hang up or cancel                                                                                      | 204; the row closes on Meta's terminate event                                                                                                       |
+| `POST /calls/:id/recording`        | multipart `recording`, up to 50 MB                                                                     | `{ url }`; 422 `CALL_RECORDING_FAILED`, `CALL_RECORDING_DISABLED`, `CALL_RECORDING_CONSENT_REQUIRED` (nothing stored); 409 `CALL_RECORDING_ON_HOLD` |
+| `GET /calls/:id/recording`         | the file (range requests work)                                                                         | workspace only; 404 when there is none                                                                                                              |
 
 Public: `GET/POST /v2/public/webhooks/wa-calling`, the same callback as `/v2/public/webhooks/whatsapp` (Meta allows one per app).
 
@@ -59,3 +59,39 @@ ends. There is no new event.
 
 Dev data: `pnpm --filter @crm/api seed:demo-calls` (`SEED_ORG_ID`, `SEED_CALLS`) writes a month of sample calls with their ledger steps and a few
 playable recordings into the private media store of the local disk. It never runs in production and adds nothing when run twice.
+
+## Call recording consent and lifecycle (BL-144)
+
+Not in Reference (it recorded every inbound call from the first second, with no notice and no deletion). Spec:
+[privacy-and-data-governance.md](../specs/privacy-and-data-governance.md) section 5; requirements:
+[voice-bot-consent-requirements.md](../privacy/voice-bot-consent-requirements.md). Same plan gate (`waba_calling`).
+
+| Method and path                     | Key                       | What                                                                                                                                                                                                                                                                                                                                  |
+| ----------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /recording-settings`           | `call.calls.use`          | `{ enabled, consentMode, retentionDays, noticeText, noticeVersion, rowVersion, updatedAt }`; defaults: off, `confirmed`, 90                                                                                                                                                                                                           |
+| `PUT /recording-settings`           | `call.recordings.manage`  | same fields + `rowVersion` (omit on the first save); a changed notice text is a new version; 422 `CALL_RECORDING_SETTINGS_INVALID`; 409 on a stale `rowVersion`                                                                                                                                                                       |
+| `GET /calls/:id/recording-gate`     | `call.calls.use`          | the ConsentGate answer for this call (`decision`, `reason`) with the notice text and the evidence so far                                                                                                                                                                                                                              |
+| `POST /calls/:id/recording-consent` | `call.calls.use`          | `{ decision: 'granted' \| 'declined', method }`; only on a `connecting` or `active` call; `method` must be the one the workspace mode takes (`spoken_yes` for `confirmed`, `announcement_continue` for `announcement`); 422 `CALL_RECORDING_DISABLED`, `CALL_RECORDING_CONSENT_INVALID`; a decline after a file was stored removes it |
+| `DELETE /calls/:id/recording`       | `call.recordings.manage`  | 204; the file goes, the call stays; 409 `CALL_RECORDING_ON_HOLD`; audited                                                                                                                                                                                                                                                             |
+| `PUT /call-logs/:id/recording-hold` | `privacy.requests.manage` | `{ hold, reason? }` (a reason is required to place a hold); 204; audited                                                                                                                                                                                                                                                              |
+
+**The rule.** `POST /calls/:id/recording` asks `ConsentGate.check(orgId, subject, 'voice', 'call_recording', 'voice', { purposeEnabled, noticeEvidence })`
+and stores nothing unless the answer is `allow`: the workspace switch is on (`purpose_not_enabled` otherwise), the call row holds a recorded notice
+version, and the person's answer is `granted` (`consent_declined` / `needs_notice` otherwise). The check is repeated under the call's row lock before
+the path is written, so a refusal that arrives while a file is being stored wins and the file is removed. The browser also arms its recorder only
+after a granted answer, and discards what it caught on a refusal.
+
+**Evidence kept on the call** (`wa_calls.recording_*`): answer, method, time, teammate, notice version and its sha-256 (the text of every version is
+in `call_recording_notice_versions`, append-only). No audio hash, voiceprint, IP address or free text is stored.
+
+**Lifecycle.** `recording_stored_at` starts the retention clock. A daily sweep in the worker (`CallRecordingRetentionService`, 03:23) removes the file and
+clears `recording_path` for every recording older than its workspace's `retentionDays` (90 when never chosen; 7 to 365), skipping a legal hold; each
+recording is locked and re-checked in its own transaction. `recording_deleted_at` and `recording_deleted_reason` (`retention`, `manual`,
+`consent_withdrawn`) say what happened; the call row stays so the log and billing stay correct. An erasure through the rights service clears the path
+and queues the file (`calls.logs`, `wa_calls.recording_path`). Recordings made before this migration start their clock when it ran.
+
+The call log detail carries `recording.lifecycle` (consent, storedAt, expiresAt, legalHold, holdReason, deletedAt, deletedReason). New ledger steps:
+`recording_consent_granted`, `recording_consent_declined`, `recording_deleted`, `recording_hold_set`, `recording_hold_lifted`.
+
+Outbox: `call.recording.settings_changed`. Audit: module `call_recording_settings` (switch, mode, days, notice version) and `wa_calls` (consent,
+delete, hold with reason).

@@ -28,8 +28,8 @@
       "teamChanged": "팀이 업데이트되었습니다.",
       "priorityChanged": "우선순위가 업데이트되었습니다",
       "snoozed": "대화를 일시 중지했습니다",
-      "labelAdded": "라벨을 추가했습니다",
-      "labelRemoved": "라벨을 제거했습니다"
+      "tagAdded": "태그를 추가했습니다",
+      "tagRemoved": "태그를 제거했습니다"
     },
     "list": {
       "title": "수신함",
@@ -137,23 +137,24 @@
       "unsupported": "이 채널에서는 해당 유형의 메시지나 파일을 보낼 수 없습니다.",
       "network": "서버에 연결할 수 없습니다. 네트워크 연결을 확인한 후 다시 시도하세요.",
       "generic": "문제가 발생했습니다. 다시 시도하세요.",
-      "genericWithId": "문제가 발생했습니다. 다시 시도하세요. 참조: {id}",
       "templateNotSendable": "이 대화에는 해당 템플릿을 보낼 수 없습니다. 다른 템플릿을 선택하세요.",
       "groupSendUnavailable": "WhatsApp 그룹으로의 발송은 아직 지원되지 않습니다. WhatsApp Business 앱에서 답장하세요.",
       "logRange": "최근 1년 이내의 날짜를 선택하세요. 시작일은 종료일보다 앞서야 하며 미래 날짜는 선택할 수 없습니다.",
       "logBusy": "이미 내보내기를 준비 중입니다. 이메일이 도착할 때까지 기다린 후 다시 요청하세요.",
       "logNotReady": "이 내보내기는 아직 준비되지 않았거나 만료되었습니다. 다시 요청하세요.",
       "groupSuspended": "Meta가 이 그룹을 정지했으므로 Meta가 해제할 때까지 메시지를 보낼 수 없습니다.",
-      "walletEmpty": "메시지 지갑 잔액이 이 그룹 메시지(멤버당 1회 과금)를 감당할 수 없습니다. 충전한 후 다시 시도하세요.",
-      "groupPlanLocked": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않아 이 그룹에 메시지를 보낼 수 없습니다. 관리자에게 요금제 업그레이드를 요청하세요.",
       "groupLeft": "이 번호는 그룹을 나갔으므로 더 이상 그곳에 메시지를 보낼 수 없습니다.",
       "groupAnnounceOnly": "이 그룹에서는 관리자만 메시지를 보낼 수 있으며, 이 번호는 관리자가 아닙니다.",
       "groupRateLimited": "짧은 시간 동안 이 번호에서 보낸 그룹 메시지가 너무 많습니다. 1분 후에 다시 시도해 주세요.",
       "groupUnavailable": "WhatsApp이 이 그룹 메시지를 수락하지 않았습니다. 몇 분 후에 다시 시도해 주세요.",
+      "walletEmpty": "메시지 지갑 잔액이 이 그룹 메시지(멤버당 1회 과금)를 감당할 수 없습니다. 충전한 후 다시 시도하세요.",
+      "groupPlanLocked": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않아 이 그룹에 메시지를 보낼 수 없습니다. 관리자에게 요금제 업그레이드를 요청하세요.",
       "savedReplyGone": "이 저장된 답변은 더 이상 존재하지 않습니다.",
       "savedReplyChannel": "이 저장된 답변은 이 유형의 채널용이 아닙니다.",
       "shortcutTaken": "다른 저장된 답변이 이미 해당 단축키를 사용하고 있습니다.",
-      "importInvalid": "이 파일은 저장된 답장으로 읽을 수 없습니다. 첫 행에 title, shortcut, body 열이 있어야 하며, 최대 1,000행까지 가능합니다."
+      "importInvalid": "이 파일은 저장된 답장으로 읽을 수 없습니다. 첫 행에 title, shortcut, body 열이 있어야 하며, 최대 1,000행까지 가능합니다.",
+      "contactOptedOut": "이 연락처는 마케팅 메시지를 수신 거부했으므로 메시지가 전송되지 않았습니다.",
+      "consentRequired": "이 워크스페이스는 마케팅 메시지에 기록된 동의를 요구하며 이 연락처에는 동의가 없어 메시지가 전송되지 않았습니다."
     },
     "bubble": {
       "kind": {
@@ -223,7 +224,15 @@
       "groupMember": "그룹 멤버",
       "groupTally": "{members}명 중 {delivered}명에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
       "groupTallyNoTotal": "{delivered, plural, other {#명의 멤버}}에게 전달됨{read, plural, =0 {} other {, #명 읽음}}{failed, plural, =0 {} other {, #건 실패}}",
-      "groupTallyBilled": "과금 {billable}, 무료 {free}"
+      "groupTallyBilled": "과금 {billable}, 무료 {free}",
+      "stageLine": {
+        "auto": "AI가 채팅을 읽고 이 연락처를 {from}에서 {to}(으)로 옮겼습니다.",
+        "undo": "실행 취소",
+        "wasUndone": "취소됨",
+        "undone": "단계 변경을 취소했습니다: {stage}(으)로 돌아갔습니다.",
+        "undoneToast": "단계를 {stage}(으)로 되돌렸습니다.",
+        "couldNotUndo": "이 변경은 더 이상 취소할 수 없습니다. 연락처가 이미 다음 단계로 갔거나 이미 취소되었습니다."
+      }
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -275,6 +284,44 @@
       "attachment": "첨부 파일",
       "jumpLatest": "최신 메시지로 이동",
       "jumpLatestNew": "{count, plural, other {새 메시지 #개}}"
+    },
+    "groupThread": {
+      "openGroup": "그룹 열기",
+      "readOnly": {
+        "left": {
+          "title": "이 번호는 그룹을 나갔습니다",
+          "message": "대화는 그대로 보관됩니다. 읽고 내부 메모를 추가할 수 있지만 메시지는 보낼 수 없습니다."
+        },
+        "announceOnly": {
+          "title": "이 그룹에서는 관리자만 보낼 수 있습니다",
+          "message": "이 번호는 그룹 관리자가 아니어서 WhatsApp이 메시지를 전달하지 않습니다. 내부 메모는 추가할 수 있습니다."
+        }
+      },
+      "mention": {
+        "label": "그룹 멤버",
+        "loading": "멤버 찾는 중",
+        "none": "일치하는 멤버가 없습니다"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta가 이 그룹을 정지했습니다",
+          "message": "WhatsApp은 정지된 그룹에 메시지를 전달하지 않습니다. Meta가 해제할 때까지 대화를 읽고 내부 메모를 추가할 수 있습니다."
+        },
+        "plan": {
+          "title": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않습니다",
+          "message": "이 대화를 읽고 내부 메모를 추가할 수는 있지만, 그룹에 보내려면 그룹이 포함된 요금제가 필요합니다. 관리자에게 업그레이드를 요청하세요."
+        },
+        "ineligible": {
+          "title": "이 번호는 WhatsApp 그룹을 사용할 수 없습니다",
+          "message": "마지막 확인에서 Meta가 이 번호의 그룹을 허용하지 않았습니다(공식 비즈니스 계정이 필요합니다). 대화를 읽고 내부 메모를 추가할 수 있습니다. 다시 확인하려면 Meta 그룹을 여세요."
+        }
+      },
+      "cost": {
+        "members": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. 예상 비용 {cost}: WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "membersNoEstimate": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "sizeUnknown": "멤버 수를 아직 알 수 없습니다. WhatsApp은 이 메시지를 받은 멤버마다 요금을 부과합니다.",
+        "walletShort": "지갑 잔액이 이 메시지에 부족할 수 있습니다. 보내기 전에 충전하세요."
+      }
     },
     "composer": {
       "modeLabel": "메시지 유형",
@@ -403,7 +450,9 @@
         "unassign": "배정 해제",
         "open": "진행 중 {count}건",
         "pickTeam": "이 대화에 배정할 팀 선택",
-        "noTeam": "팀 없음"
+        "noTeam": "팀 없음",
+        "onLeave": "휴가 중",
+        "onLeaveUntil": "{date}까지 휴가 중"
       },
       "presence": {
         "online": "온라인",
@@ -443,8 +492,8 @@
           "snoozed": "{actor} 님이 보류",
           "auto_unsnoozed": "보류 해제",
           "priority_changed": "{actor} 님이 우선순위 변경",
-          "tag_added": "{actor} 님이 라벨 추가",
-          "tag_removed": "{actor} 님이 라벨 제거",
+          "tag_added": "{actor}님이 태그를 추가했습니다",
+          "tag_removed": "{actor}님이 태그를 제거했습니다",
           "first_response": "첫 답장 발송됨",
           "sla_breach": "응답 기한 초과",
           "unknown": "{actor} 님: {what}"
@@ -555,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "템플릿 보내기",
       "close": "닫기",
-      "cancel": "취소",
-      "back": "템플릿으로 돌아가기",
       "search": "이름 또는 내용으로 검색",
       "searchLabel": "템플릿 검색",
       "loading": "템플릿을 불러오는 중",
@@ -565,9 +612,7 @@
       "empty": "이 WhatsApp 번호에 승인된 템플릿이 아직 없습니다. 템플릿에서 만든 후 Meta 승인을 기다리세요.",
       "noResults": "검색과 일치하는 템플릿이 없습니다.",
       "windowHint": "템플릿은 24시간 응답 기간이 지나도 보낼 수 있습니다.",
-      "variables": "변수 입력",
       "preview": "고객이 읽게 될 내용",
-      "send": "템플릿 보내기",
       "sending": "발송 중",
       "sent": "템플릿을 보냈습니다",
       "problem": {
@@ -582,7 +627,31 @@
         "authentication": "일회용 비밀번호(OTP) 템플릿은 수신함이 아닌 시스템에서 발송됩니다.",
         "named_variables": "명명된 변수를 사용하며, 수신함에서는 아직 지원되지 않습니다."
       },
-      "hasMore": "처음 {count}개의 템플릿을 표시합니다. 나머지는 이름 또는 내용으로 검색하세요."
+      "hasMore": "처음 {count}개의 템플릿을 표시합니다. 나머지는 이름 또는 내용으로 검색하세요.",
+      "previewEmpty": "템플릿을 가리키면 고객의 휴대폰에서 어떻게 보일지 확인할 수 있습니다.",
+      "previewCustomer": "고객",
+      "noVariables": "이 템플릿에는 채울 항목이 없습니다. 휴대폰을 확인한 뒤 보내세요.",
+      "sendTo": "{name}님에게 보내기",
+      "refresh": "목록 새로고침",
+      "device": "휴대폰 미리보기",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "본문 변수 설정",
+      "or": "또는",
+      "mapField": "{key}에 필드 매핑",
+      "mapNone": "이 연락처에는 매핑할 정보가 없습니다.",
+      "typeMessage": "메시지 입력",
+      "fields": {
+        "name": "이름",
+        "phone": "전화번호",
+        "email": "이메일"
+      },
+      "create": "새 템플릿 만들기",
+      "actions": "템플릿 작업",
+      "edit": "템플릿 수정",
+      "duplicate": "템플릿 복제"
     },
     "log": {
       "title": "전송 로그",
@@ -656,44 +725,6 @@
           "failed": "실패",
           "expired": "만료됨"
         }
-      }
-    },
-    "groupThread": {
-      "openGroup": "그룹 열기",
-      "readOnly": {
-        "left": {
-          "title": "이 번호는 그룹을 나갔습니다",
-          "message": "대화는 그대로 보관됩니다. 읽고 내부 메모를 추가할 수 있지만 메시지는 보낼 수 없습니다."
-        },
-        "announceOnly": {
-          "title": "이 그룹에서는 관리자만 보낼 수 있습니다",
-          "message": "이 번호는 그룹 관리자가 아니어서 WhatsApp이 메시지를 전달하지 않습니다. 내부 메모는 추가할 수 있습니다."
-        }
-      },
-      "mention": {
-        "label": "그룹 멤버",
-        "loading": "멤버 찾는 중",
-        "none": "일치하는 멤버가 없습니다"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta가 이 그룹을 정지했습니다",
-          "message": "WhatsApp은 정지된 그룹에 메시지를 전달하지 않습니다. Meta가 해제할 때까지 대화를 읽고 내부 메모를 추가할 수 있습니다."
-        },
-        "plan": {
-          "title": "현재 요금제에는 WhatsApp 그룹이 포함되어 있지 않습니다",
-          "message": "이 대화를 읽고 내부 메모를 추가할 수는 있지만, 그룹에 보내려면 그룹이 포함된 요금제가 필요합니다. 관리자에게 업그레이드를 요청하세요."
-        },
-        "ineligible": {
-          "title": "이 번호는 WhatsApp 그룹을 사용할 수 없습니다",
-          "message": "마지막 확인에서 Meta가 이 번호의 그룹을 허용하지 않았습니다(공식 비즈니스 계정이 필요합니다). 대화를 읽고 내부 메모를 추가할 수 있습니다. 다시 확인하려면 Meta 그룹을 여세요."
-        }
-      },
-      "cost": {
-        "members": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. 예상 비용 {cost}: WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
-        "membersNoEstimate": "이 메시지는 {count, plural, other {#명의 멤버}}에게 전달됩니다. WhatsApp은 메시지를 받은 멤버마다 요금을 부과합니다.",
-        "sizeUnknown": "멤버 수를 아직 알 수 없습니다. WhatsApp은 이 메시지를 받은 멤버마다 요금을 부과합니다.",
-        "walletShort": "지갑 잔액이 이 메시지에 부족할 수 있습니다. 보내기 전에 충전하세요."
       }
     },
     "savedReplies": {
@@ -892,6 +923,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "우선순위",
+      "snooze": "다시 알림",
+      "wake": "지금 다시 표시"
+    },
     "bulk": {
       "barLabel": "일괄 작업",
       "selected": "{count, plural, one {대화 #개 선택됨} other {대화 #개 선택됨}}",
@@ -919,51 +955,77 @@
         "partial": "{done}개 업데이트됨, {unchanged}개는 이미 최신 상태, {failed}개는 변경할 수 없습니다. 실패한 항목은 선택된 상태로 유지됩니다.",
         "allFailed": "{count, plural, one {대화 #개를} other {대화 #개를}} 변경할 수 없습니다."
       },
-      "label": "라벨",
-      "labelAdd": "라벨 추가",
-      "labelRemove": "라벨 제거"
+      "tag": "태그",
+      "tagAdd": "태그 추가",
+      "tagRemove": "태그 제거",
+      "onLeave": "휴가 중",
+      "onLeaveUntil": "{date}까지 휴가 중"
     },
-    "triage": {
-      "priority": "우선순위",
-      "snooze": "다시 알림",
-      "wake": "지금 다시 표시"
-    },
-    "labels": {
-      "label": "라벨",
-      "loading": "라벨을 불러오는 중…",
-      "loadFailed": "라벨을 불러오지 못했습니다.",
-      "none": "아직 라벨이 없습니다.",
-      "newLabel": "새 라벨",
+    "tags": {
+      "tag": "태그",
+      "loading": "태그를 불러오는 중…",
+      "loadFailed": "태그를 불러올 수 없습니다.",
+      "none": "아직 태그가 없습니다.",
+      "newTag": "새 태그",
       "add": "추가",
-      "filter": "라벨",
-      "filterActive": "{count, plural, one {라벨 #개} other {라벨 #개}}",
-      "clearFilter": "라벨 필터 지우기",
+      "filter": "태그",
+      "filterActive": "{count, plural, other {태그 #개}}",
+      "clearFilter": "태그 필터 지우기",
+      "scope": {
+        "label": "태그 일치 기준",
+        "conversation": "대화 태그",
+        "contact": "연락처 태그"
+      },
+      "groups": {
+        "title": "태그",
+        "helpFor": "{title} 정보",
+        "rule": "두 종류 모두 같은 워크스페이스 태그 라이브러리에서 가져옵니다.",
+        "contactTitle": "연락처 태그",
+        "contactHelp": "연락처 태그는 사람(VIP, 리드, 지역 등)을 설명합니다. 모든 대화에 함께 따라갑니다.",
+        "contactNone": "이 연락처에는 태그가 없습니다.",
+        "contactEdit": "연락처에서 편집",
+        "conversationTitle": "대화 태그",
+        "conversationHelp": "대화 태그는 이 스레드(결제, 환불, 긴급 등)를 설명합니다.",
+        "conversationNone": "이 대화에는 아직 태그가 없습니다.",
+        "remove": "태그 {name} 제거"
+      },
       "screen": {
         "back": "받은편지함으로 돌아가기",
-        "title": "라벨",
-        "intro": "라벨은 대화에 태그를 붙여 팀이 정렬하고 필터링할 수 있게 해 줍니다. 연락처에 쓰는 태그와 같습니다.",
-        "newTitle": "새 라벨",
-        "editTitle": "라벨 수정",
+        "title": "대화 태그",
+        "intro": "대화 태그는 스레드(결제, 환불, 긴급 등)에 붙여 팀이 받은편지함을 정렬하고 필터링할 수 있게 해 줍니다. 사람을 설명하는 연락처 태그와 같은 태그 라이브러리를 사용합니다.",
+        "newTitle": "새 태그",
+        "editTitle": "태그 편집",
         "name": "이름",
         "color": "색상",
         "colorInvalid": "#075E54 같은 16진수 색상 또는 색상 이름을 사용하세요.",
-        "description": "설명 (선택 사항)",
-        "create": "라벨 만들기",
-        "save": "변경 사항 저장",
+        "description": "설명(선택 사항)",
+        "create": "태그 만들기",
+        "save": "변경사항 저장",
         "cancel": "취소",
-        "edit": "수정",
+        "edit": "편집",
         "delete": "삭제",
-        "inUse": "{count, plural, one {대화 #개} other {대화 #개}}",
-        "emptyTitle": "아직 라벨이 없습니다",
-        "emptyMessage": "위에서 첫 라벨을 만든 다음 받은편지함에서 대화에 붙여 보세요.",
-        "deleteTitle": "이 라벨을 삭제할까요?",
-        "deleteMessage": "\"{name}\" 라벨이 {count, plural, one {대화 #개} other {대화 #개}}에 붙어 있습니다. 삭제하면 해당 대화와 이 라벨을 가진 연락처에서 모두 제거됩니다. 이 작업은 되돌릴 수 없습니다.",
-        "nameTaken": "같은 이름의 라벨이 이미 있습니다.",
-        "conflict": "다른 사람이 먼저 이 라벨을 변경했습니다. 목록을 다시 불러왔습니다.",
-        "saved": "라벨을 저장했습니다",
-        "created": "라벨을 만들었습니다",
-        "deleted": "라벨을 삭제했습니다"
+        "inUse": "{count, plural, other {대화 #개}}",
+        "emptyTitle": "아직 태그가 없습니다",
+        "emptyMessage": "위에서 첫 태그를 만든 다음 받은편지함에서 대화에 붙여 보세요.",
+        "deleteTitle": "이 태그를 삭제할까요?",
+        "deleteMessage": "\"{name}\" 태그가 {count, plural, other {대화 #개}}에 붙어 있습니다. 삭제하면 해당 대화와 이 태그를 가진 연락처에서 모두 제거됩니다. 이 작업은 되돌릴 수 없습니다.",
+        "nameTaken": "같은 이름의 태그가 이미 있습니다.",
+        "conflict": "다른 사용자가 먼저 이 태그를 변경했습니다. 목록을 다시 불러왔습니다.",
+        "saved": "태그를 저장했습니다",
+        "created": "태그를 만들었습니다",
+        "deleted": "태그를 삭제했습니다"
       }
+    },
+    "sla": {
+      "breached": "SLA 위반",
+      "atRisk": "SLA 마감까지 {minutes}분",
+      "ok": "SLA 마감 {time}",
+      "kind": {
+        "first_response": "첫 답변 목표",
+        "resolution": "해결 목표"
+      },
+      "titleBreached": "{kind}: 미달성 (마감 {time})",
+      "titleOpen": "{kind}: 마감 {time}"
     }
   }
 }

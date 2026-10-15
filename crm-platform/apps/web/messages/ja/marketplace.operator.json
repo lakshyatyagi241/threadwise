@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "読み込み中...",
-        "requestId": "リクエストID",
         "retry": "再試行",
         "noPermissions": "権限がありません"
       },

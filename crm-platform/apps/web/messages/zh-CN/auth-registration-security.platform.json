@@ -46,7 +46,6 @@
         "copyFailed": "无法复制",
         "loading": "加载中",
         "retry": "重试",
-        "requestId": "请求 ID",
         "errors": {
           "forbidden": "你的角色无权执行此操作。",
           "request": "请求被拒绝。请刷新页面后重试。",
@@ -61,7 +60,6 @@
       "login": {
         "title": "运维人员登录",
         "intro": "此控制台供平台运维人员使用。工作区用户请在主登录页面登录。",
-        "requestId": "请求 ID",
         "submit": "登录",
         "submitting": "正在登录",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "你的账户",
         "title": "双重验证",
         "description": "使用验证器应用保护 {email}。运维人员账户是平台上信任级别最高的账户。",
-        "requestId": "请求 ID",
         "status": {
           "title": "验证器应用",
           "on": "已开启",
@@ -181,7 +178,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "处理中",
             "close": "关闭",
             "signInAgain": "重新登录",
-            "requestId": "请求 ID",
             "errors": {
               "forbidden": "只有超级管理员可以执行此操作。",
               "unexpected": "操作未完成。重试之前请先查看事件日志。"
@@ -731,7 +726,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "请使用站内路径，例如 /legal/terms，或完整的 http 或 https 地址。",
           "senderFormat": "请从列表中选择一个发送方。",
           "countryFormat": "请使用两位字母的国家/地区代码。",
-          "senderRequired": "创建模板之前，请先选择发送渠道。"
+          "senderRequired": "创建模板之前，请先选择发送渠道。",
+          "domainFormat": "{entry} 不是有效的域名。请使用类似 example.com 的名称。",
+          "tooMany": "最多 {max} 个域名。"
         },
         "policy": {
           "kicker": "注册",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "最大尝试次数"
+          },
+          "businessEmailOnly": {
+            "label": "仅限工作邮箱",
+            "hintOn": "注册时会拒绝 Gmail、Outlook、Yahoo 等免费邮箱服务商。",
+            "hintOff": "任何人都可以使用免费个人邮箱注册。"
+          },
+          "blockDisposableEmail": {
+            "label": "屏蔽临时邮箱",
+            "hintOn": "拒绝一次性和临时域名，以及没有邮件服务器的域名。",
+            "hintOff": "接受临时邮箱地址。"
+          },
+          "requirePhoneVerification": {
+            "label": "要求已验证的手机号",
+            "hintOn": "每次注册都必须确认一次性验证码。如果无法发送验证码，注册将停止，而不是跳过验证。",
+            "hintOff": "仅当下方的注册验证码开启时，才会执行验证码步骤。"
+          },
+          "blockedEmailDomains": {
+            "label": "始终屏蔽的域名",
+            "hint": "每行一个域名。子域名也会被屏蔽。即使关闭“仅限工作邮箱”，这些域名也会被拒绝。",
+            "placeholder": "example.com"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "测试验证码已发送至 {to}。",
             "remaining": "{count, plural, other {本小时还剩 # 次测试。}}",
             "notShown": "验证码不在此处显示；请在手机上查看。",
-            "requestId": "请求 ID",
             "errors": {
               "invalidNumber": "请输入带国家/地区区号的号码，例如 +91 98765 43221。",
               "rateLimited": "本小时测试验证码过多。请在 {minutes, plural, other {# 分钟}}后重试。",
@@ -1045,7 +1060,6 @@
           "saved": "发送方已保存",
           "removed": "发送方已移除",
           "secretRemoved": "已保存的密钥已移除",
-          "requestId": "请求 ID",
           "problems": {
             "required": "此字段为必填项。",
             "tooLong": "最多 {max} 个字符。",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "该页脚未被接受。",
             "unexpected": "无法保存页脚。请稍后重试。"
-          },
-          "requestId": "请求 ID"
+          }
+        },
+        "guard": {
+          "kicker": "注册防护",
+          "title": "工作邮箱与手机验证",
+          "description": "拦截一次性和个人邮箱，并确保每个新账户都有已验证的手机号。适用于邮箱注册和社交账号注册。",
+          "phoneOffWarning": "关闭手机验证后，可以在没有已验证号码的情况下创建账户，批量虚假注册会更容易。"
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "取消",
           "working": "正在移除",
           "error": "无法移除密钥。请稍后重试。",
-          "requestId": "请求 ID",
           "done": "已保存的 {name} 密钥已移除。",
           "names": {
             "google": "Google",
@@ -1421,7 +1438,8 @@
             "waba_groups": "通过 Cloud API 号码创建和管理 WhatsApp 群组：邀请链接、加入请求、成员。该号码必须是官方商业账号。",
             "sms": "通过 Twilio 或 MSG91 发送的仅发送短信：连接发送方，发送短信群发和营销活动。",
             "help_agent": "应用内帮助助手：用户用平常的话说出要做的事，助手在其自己的会话中指引或代为操作，执行有风险的操作前会先询问。会消耗 AI 额度。",
-            "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。"
+            "email_channel": "将 Gmail 和 Google Workspace 邮箱接入团队收件箱。此开关由付费的电子邮件应用控制。",
+            "personal_history_full": "个人 WhatsApp 号码首次关联时，可导入完整的聊天记录。所有支持个人号码的套餐均可导入近期聊天。"
           },
           "units": {
             "days": "天",
@@ -1604,7 +1622,8 @@
             "waba_groups": "WhatsApp 群组（Cloud API）",
             "sms": "SMS 渠道",
             "help_agent": "帮助助手（AI，消耗额度）",
-            "email_channel": "电子邮件(Gmail)渠道"
+            "email_channel": "电子邮件(Gmail)渠道",
+            "personal_history_full": "完整聊天记录导入（个人 WhatsApp）"
           },
           "problems": {
             "required": "此字段为必填项。",
@@ -1670,7 +1689,6 @@
         "saving": "正在保存",
         "saved": "{count, plural, other {已保存 # 项设置}}",
         "rejected": "未保存任何内容。{count, plural, other {# 个字段}}被拒绝。",
-        "requestId": "请求 ID",
         "unsaved": "{count, plural, other {# 项未保存的更改}}",
         "discard": "放弃更改",
         "errors": {

@@ -21,6 +21,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
 import { UploadPolicyService } from './modules/auth';
 import { AccountGateGuard } from './modules/auth/guards/account-gate.guard';
+import { ImpersonationMaskInterceptor } from './modules/auth/guards/impersonation-mask.interceptor';
 import { ImpersonationGuard } from './modules/auth/guards/impersonation.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
@@ -41,6 +42,7 @@ import { ChannelFacebookModule } from './modules/channel-facebook';
 import { ChannelInstagramModule } from './modules/channel-instagram';
 import { ShopifyWoocommerceModule } from './modules/shopify-woocommerce';
 import { ChannelEmailModule } from './modules/channel-email';
+import { EmailTemplatesModule } from './modules/email-templates';
 import { ChannelSmsModule } from './modules/channel-sms';
 import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
@@ -74,12 +76,16 @@ import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gatewa
 import { CouponsCreditsReferralCurrencyModule } from './modules/coupons-credits-referral-currency';
 import { TeamChatModule } from './modules/team-chat';
 import { WebhookFanoutModule } from './modules/webhook-fanout';
+import { WabooMigrationModule } from './modules/waboo-migration';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
 import { FaqKnowledgeModule } from './modules/faq-knowledge';
 import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
+import { PrivacyModule } from './modules/privacy';
+import { AuditLogModule } from './modules/audit-log';
+import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
 import { WabaModule } from './modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysModule } from './modules/whatsapp-devices-baileys';
@@ -214,6 +220,7 @@ import { HealthModule } from './health/health.module';
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,
+    EmailTemplatesModule,
     ChannelFacebookModule,
     ChannelInstagramModule,
     ShopifyWoocommerceModule,
@@ -227,12 +234,16 @@ import { HealthModule } from './health/health.module';
     PlatformSupportDeskModule,
     TeamChatModule,
     WebhookFanoutModule,
+    WabooMigrationModule,
     OutboundWebhooksModule,
     ApiLibraryModule,
     FaqKnowledgeModule,
     LeadScoringModule,
     GrowthPilotModule,
     ContactConsentModule,
+    PrivacyModule,
+    AuditLogModule,
+    ContactsPqlModule,
     WabaModule,
     WhatsAppProviderAdminModule,
     MessageTemplatesModule,
@@ -268,6 +279,7 @@ import { HealthModule } from './health/health.module';
     // Route-level plan gate (TW-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
     { provide: APP_GUARD, useExisting: PlanFeatureGuard },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: ImpersonationMaskInterceptor },
   ],
   exports: [CryptoService],
 })

@@ -1,0 +1,16 @@
+{
+  "module": "waboo-migration",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-waboo-migration-001",
+      "feature": "wmig",
+      "category": "input",
+      "scenario": "a value of 51 (one past WMIG_MAX_BATCH = 50) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/waboo-migration/index.ts"
+    }
+  ]
+}

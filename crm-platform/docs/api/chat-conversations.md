@@ -398,6 +398,56 @@ receipt that did not move the status (`applied: false`).
   streams the CSV (`409 MESSAGE_LOG_EXPORT_NOT_READY` when queued, failed or expired). A mail that cannot be sent never fails the export.
 - Dev simulator: a message starting `/bounce` is accepted and then reported failed by a receipt (`ECOSYSTEM_ENGAGEMENT_BLOCKED`, as Meta 131049), and every Retry of it is a new send.
 
+## Message History (`/message-history`, TW-CHAT-039 to -042)
+
+One feed over every message the workspace sent or received, built in `team-inbox-conversations` (`MessageHistoryController`, `MessageHistoryService`: who may see what) on top of the SQL in
+`chat-conversations` (`message-history.query.ts`, `message-history.repository.ts`, `message-history-rules.ts`: pure rules; `message-history-export.ts`: the file). Reference merged six tables in PHP and
+took the newest 200 rows of each, so its numbers were wrong past 100 rows (TW-CHAT-040 quirk); here every number is a count and every page is a cursor.
+
+**What is in the feed.** The message stream (`messages`: inbox, flows, auto-replies, AI, API, and every inbound message) plus one row per recipient of a broadcast (`broadcast_contacts`), a campaign
+(`wp_campaign_contacts`) and a scheduled message (`scheduled_message_contacts`), because a recipient with no thread, or whose send failed, has no message row. Left out: system lines (a call bubble), reactions,
+deleted messages, and the bubble a broadcast or campaign mirrored into a thread (`meta.source` `broadcast` with `meta.broadcast_id`, or `campaign` with `meta.campaign_id` / a `campaign:` provider id): the recipient
+row is that send. Ids: `m:<uuid>`, `b:<uuid>`, `c:<uuid>`, `s:<uuid>` (the table and the row's uuid). Order: the moment (`created_at`; for a recipient row `COALESCE(sent_at, created_at)`, indexed in
+`20261126090000_message_history`), then the branch, then the id, newest first. The cursor carries the moment as Postgres printed it (microseconds), the branch rank and the id, so rows that share a moment are never
+skipped or repeated. Each branch is cut at `limit + 1` rows before the merge, so a page never reads the window.
+
+| Route                                                                     | Permission          |                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------------------------------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /v2/message-history`                                                 | `msg.history.read`  | the page: `range` (24h, 7d, 30d, 90d; default 30d) or `from`/`to` (UTC days, at most 365 back), `dir` (all, out, in, fail), `type` (Reference's type filter), `source` (comma list: inbox, flow, auto_reply, ai, api, broadcast, campaign, scheduled, other), `status` (queued, sent, delivered, read, failed), `channelId`, `templateId`, `campaignId`, `broadcastId`, `scheduledId`, `q`, `cursor`, `limit` (25, max 100) |
+| `GET /v2/message-history/summary`                                         | `msg.history.read`  | the cards and the tab counts of the window; `dir`, `type`, `source`, `status` and `q` do not change them (Reference's rule: the headline numbers do not jiggle)                                                                                                                                                                                                                                                             |
+| `GET /v2/message-history/insights`                                        | `msg.history.read`  | volume per bucket (`bucket` daily, hourly (last 24 h), weekly; `tz` an IANA zone, empty buckets included), the type mix, the 4 most active conversations; follows every filter                                                                                                                                                                                                                                              |
+| `GET /v2/message-history/:id`                                             | `msg.history.read`  | one row for the drawer: whole text, sender, failure, cost, and the timeline                                                                                                                                                                                                                                                                                                                                                 |
+| `POST /v2/message-history/exports`                                        | `inbox.logs.export` | the screen's filters as a CSV through the delivery log's export queue (`msg-log-export`); `202`                                                                                                                                                                                                                                                                                                                             |
+| `GET /v2/inbox/message-logs/exports?kind=messages` and `.../:id/download` | `inbox.logs.export` | the history exports (the delivery log exports are the default `kind=events`)                                                                                                                                                                                                                                                                                                                                                |
+
+**Who sees what** (`MessageHistoryService.context`, once; the SQL only receives the answer).
+
+- `msg.history.read` opens the screen. Reference gated it with `workspace.role:manager`; the key is held by the Manager preset and above (migration `20261126090000_message_history`).
+- A row that belongs to a conversation is visible exactly when the conversation is: the caller's scope for `inbox.conversation.read`, through `visibleToSql`, the rule the inbox list and the socket use. A member who reads only
+  their own conversations sees only those messages, in the table, the cards, the charts, the search and the drawer (a message they cannot see is a `404`, like one that does not exist). No read scope: `403`.
+- Recipient rows of broadcasts, campaigns and scheduled messages belong to no conversation, so they are visible only to a caller whose scope is `all`. (Decision for the owner: whether a narrower scope should see the
+  recipients of the campaigns it can open.)
+- A recipient's number: whole only for a contact the caller may read (`record.contacts.read` and its scope: `all`, `own` = contacts they own, `team` = owned by them or a teammate); otherwise the last 4 digits
+  (`maskRecipient`: `•••••••8988`). The contact's name is shown either way (Reference's rule for `mask_customer_numbers`, which it stored and never enforced). A hidden number is not searchable either: digits typed into
+  the search match only numbers the caller may see. A key that is not a phone number (a Telegram id) is not masked.
+- Text: the table shows the first 40 characters; the drawer shows the whole text, because the caller can open that conversation. Customer-written text carries `data-agent-ignore` in the web (help assistant spec).
+- Cost: joined from `usage_charges` by the provider message id, and only for a caller with `wallet.statement.read`; the cards add it up per currency. Everyone else gets `cost: null`.
+
+**The drawer's timeline.** A message: `MessageLogFacade.messageLog` (live events, and the archive for events older than 90 days, one day-object at a time; `fromArchive`, `expired`). A recipient row keeps no event log, so its
+timeline is the moments the row recorded (queued, sent, delivered, read, failed with the reason). The failure is plain language in the web through the WhatsApp failure map (`describeFailure`), the same one the thread uses.
+
+**The export.** `POST /v2/message-history/exports` takes the same filters as the list. It needs `inbox.logs.export` and `msg.history.read` and a read scope of `all` (the file has every row and full numbers, so a caller
+who sees less cannot ask for it: `403`). The window is resolved to two instants on the day of the request and stored with the filters in `message_log_exports.filters` (`kind = 'messages'`), so the worker builds what was meant.
+Same queue, same one-at-a-time rule (`409 MESSAGE_LOG_EXPORT_IN_PROGRESS`), same 7 days, same 2,000,000 line stop. Columns: ID, Source, When (UTC), Direction, Phone, Contact, Status, Type, Body, Channel, Template,
+Campaign / broadcast / schedule, Error code, Error message; a cell a spreadsheet would run as a formula is prefixed with a quote (Reference did the same). The email links to `/message-history?export=<id>`.
+
+**Retention.** The feed reads `messages` and the recipient tables, which are not archived; what ages out is the delivery log (`MESSAGE_LOG_HOT_DAYS` 90 live, `MESSAGE_LOG_RETENTION_DAYS` 365 archived). The window of the feed
+is at most `MESSAGE_HISTORY_MAX_DAYS` (365). The screen says so, read from the contracts.
+
+Tests: `test/unit/chat-conversations/message-history-rules.spec.ts` (window, masking, preview, KPI maths, cursor, timeline, file) and `test/e2e/team-inbox-conversations/message-history.e2e.spec.ts` (real Postgres: the feed
+across hot and archived days and its cursor, every filter, the cards and charts, the drawer including an archived day, own versus all visibility, masking and search, cost, tenant isolation, the export with filters and its
+refusals, and the query plan on 5,500 rows).
+
 ## Errors
 
 `SERVICE_WINDOW_CLOSED`, `CHANNEL_DISCONNECTED`, `CHANNEL_CAPABILITY_UNSUPPORTED`, `PLAN_LIMIT_REACHED` (all `422`, at enqueue); `CONVERSATION_NOT_FOUND`,

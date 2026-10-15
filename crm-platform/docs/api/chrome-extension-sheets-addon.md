@@ -464,6 +464,40 @@ Row result `status`: `created`, `updated`, `unchanged`, `failed`. Row error `cod
 `PLAN_LIMIT_REACHED` (the plan's contact or product cap), or any other stable code the CRM raises (for example a required custom property is missing). A row fails alone: the rest of the batch is still written.
 Rows are processed in order, so two rows for the same person in one call act on one contact.
 
+## 3b. The webhook trigger (Pabbly-style)
+
+New in this port. The add-on can send the rows that were added or changed in a sheet, instead of (or as well as) the member pressing Push. The member pastes one value into the add-on's **Initial Setup**: the **Webhook URL**, `<api>/api/v1/sheets-addon/webhook/<key>`. It carries the server (so one published add-on serves every installation) and the key (so no second secret exists). The add-on reads it, keeps the server and the key in the member's own Google user properties, and then calls the route with `Authorization: Bearer <key>`; a plain HTTP client may also post to the URL itself. The key in the path is masked in logs and error reports (`maskSecretUrl`).
+
+### `POST /api/v1/sheets-addon/webhook` and `POST /api/v1/sheets-addon/webhook/:key`
+
+Needs the `write_contacts` capability (same as `contacts/sync`). Body:
+
+```json
+{
+  "event": "test",
+  "sheet_name": "Leads",
+  "default_country_code": "+91",
+  "rows": [
+    {
+      "ref": 2,
+      "email": "ann@example.com",
+      "name": "Ann",
+      "values": { "Name": "Ann", "Email": "ann@example.com" }
+    }
+  ]
+}
+```
+
+- `event`: `test` (Send Test in Initial Setup), `edit` (a row edited in the sheet, "Send on event") or `schedule` (the hourly sweep for rows changed from elsewhere, "Send on schedule").
+- `rows`: 1 to 500. Each row is the contact row of `contacts/sync`, plus `values`, the raw cells by column heading (the CRM status column is left out).
+- A **test** writes nothing. It records the first row's headings and values for a day (Redis, per member) and answers `{ ok, event: "test", received, written: false, fields }`. The setup page shows them as "Last data received".
+- `edit` and `schedule` write the rows as contacts exactly as `contacts/sync` does (identity matching, plan cap, audit, events, one summary audit row and `ext.sheets.synced`) and answer `{ ok, event, received, written: true, summary, results, fields }`.
+- Errors are the add-on envelope: 401 for a missing, malformed or wrong key (header or path alike), 403 for a role or consent gap, 422 for an unknown event or 0 or more than 500 rows, 429 and 413 as elsewhere.
+
+The key and its Webhook URL are returned together, once, by `POST /v2/extension/sheets/key` (`webhookUrl`). `GET /v2/extension/sheets/overview` returns `webhookUrl` masked and `lastCapture` (`receivedAt`, `event`, `sheetName`, `rows`, `fields`, `sample`).
+
+What the add-on does on its side: a trigger column (a letter or a heading) decides which edit sends a row; "Send on event" is an installable edit trigger, "Send on schedule" an hourly time trigger that sends rows whose content differs from what was last sent (kept in a hidden `CRM sync state` sheet). Products are not sent by the trigger; "Sync products to a shop" stays the product path.
+
 ## 4. Permissions, in one place
 
 | Action                                       | Needs                                                                                     |
@@ -476,6 +510,7 @@ Rows are processed in order, so two rows for the same person in one call act on 
 | `POST /sync`                                 | `catalog.write` consented + `store.shops.manage` + products create or update (per row)    |
 | `GET /contacts`                              | `contacts.read` consented + `record.contacts.read` (with its record scope)                |
 | `POST /contacts/sync`                        | `contacts.write` consented + `record.contacts.create` or `.update` (per row)              |
+| `POST /webhook`, `POST /webhook/:key`        | as `POST /contacts/sync`                                                                  |
 
 ## 5. Rules the client can rely on
 

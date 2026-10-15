@@ -159,13 +159,14 @@ export class BroadcastsRepository {
     orgId: number,
     ids: readonly number[],
     requireConsent = false,
+    skipOptedOut = true,
   ): Promise<Set<number>> {
     const ok = new Set<number>();
     for (const part of chunks(ids)) {
       // With the workspace switch "Require recorded consent for marketing sends" ON, a contact also needs a recorded grant.
       const res = await tx.execute(sql`
         SELECT c.id FROM contacts c
-        WHERE c.org_id = ${orgId} AND c.id IN (${list(part, 'bigint')}) AND NOT c.is_unsubscribed AND NOT c.is_archived
+        WHERE c.org_id = ${orgId} AND c.id IN (${list(part, 'bigint')}) ${skipOptedOut ? sql`AND NOT c.is_unsubscribed` : sql``} AND NOT c.is_archived
           ${requireConsent ? sql`AND ${hasGrantedConsentSql('c')}` : sql``}`);
       for (const r of res.rows as Array<{ id: number | string }>) ok.add(Number(r.id));
     }

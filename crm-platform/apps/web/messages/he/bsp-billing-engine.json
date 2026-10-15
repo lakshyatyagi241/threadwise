@@ -11,7 +11,6 @@
     "common": {
       "loading": "טוען",
       "retry": "נסה שוב",
-      "requestId": "מזהה בקשה",
       "loadFailed": "לא ניתן היה לטעון זאת.",
       "forbidden": "אין לכם גישה לכך.",
       "cancel": "ביטול",

@@ -75,7 +75,9 @@
       "removeWish": "{name} ürününü istek listesinden çıkar",
       "quickView": "{name} için hızlı görünüm",
       "quickViewTitle": "Hızlı görünüm",
-      "was": "Önceki"
+      "was": "Önceki",
+      "chooseOptions": "Seçenekleri seç",
+      "chooseOptionsNamed": "{name} için seçenekleri seç"
     },
     "quick": {
       "details": "Tüm ayrıntılar →"
@@ -162,7 +164,9 @@
       "increase": "Adedi artır",
       "remove": "{name} ürününü sepetten çıkar",
       "fullTitle": "Sepetiniz dolu",
-      "fullBody": "Bir sepet en fazla 100 farklı ürün tutabilir. Önce bunları sipariş edin, ardından yeni bir sepet başlatın."
+      "fullBody": "Bir sepet en fazla 100 farklı ürün tutabilir. Önce bunları sipariş edin, ardından yeni bir sepet başlatın.",
+      "variantDroppedTitle": "Sepetiniz güncellendi",
+      "variantDroppedBody": "{count, plural, one {# ürünün seçenekleri yeniden seçilmeliydi ve sepetinizden kaldırıldı.} other {# ürünün seçenekleri yeniden seçilmeliydi ve sepetinizden kaldırıldı.}}"
     },
     "wish": {
       "title": "İstek listesi",
@@ -233,9 +237,9 @@
       "couponFallback": "Geçersiz kod."
     },
     "errors": {
-      "itemsUnavailable": "Bu ürünler artık mevcut değil. Lütfen sayfayı yenileyip tekrar deneyin.",
       "notAvailable": "Bu mağaza kullanılamıyor.",
-      "rateLimited": "Çok fazla istek. Lütfen biraz bekleyip yeniden deneyin."
+      "rateLimited": "Çok fazla istek. Lütfen biraz bekleyip yeniden deneyin.",
+      "itemsRefreshed": "Bazı ürünler değişti veya tükendi, bu yüzden sepetinizi güncelledik. Lütfen kontrol edip tekrar deneyin."
     },
     "placed": {
       "title": "Sipariş verildi",
@@ -331,6 +335,13 @@
       "help": "Yardıma mı ihtiyacınız var?",
       "support": "Destekle görüşün",
       "metaTitle": "Sayfa bulunamadı"
+    },
+    "variant": {
+      "from": "{price} fiyatından başlayan",
+      "optionsCount": "{count, plural, one {# seçenek} other {# seçenek}}",
+      "select": "{option} seçin",
+      "unavailable": "Bu kombinasyon mevcut değil",
+      "soldOutValue": "tükendi"
     }
   }
 }

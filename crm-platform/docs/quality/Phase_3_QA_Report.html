@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Phase 3 QA Report</title>
+    <style>
+      :root {
+        --bg: #f4f6f9;
+        --surface: #fff;
+        --ink: #141a26;
+        --muted: #586275;
+        --line: #dde2ea;
+        --accent: #2a49c9;
+        --pass: #17613a;
+        --pass-soft: #dff3e7;
+        --part: #8a4a00;
+        --part-soft: #fdeccf;
+        --fail: #8a2b1f;
+        --fail-soft: #fbe4df;
+        --info: #3d4f7a;
+        --info-soft: #e6ebf5;
+        --code-bg: #eef1f6;
+        --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #0f131b;
+          --surface: #171c27;
+          --ink: #e8ecf4;
+          --muted: #9aa5b8;
+          --line: #2a3242;
+          --accent: #8ea3f5;
+          --pass: #7fd6a2;
+          --pass-soft: #14301f;
+          --part: #f4c37a;
+          --part-soft: #3a2c14;
+          --fail: #f2a99c;
+          --fail-soft: #3a1d19;
+          --info: #aebbe0;
+          --info-soft: #232b40;
+          --code-bg: #0f1420;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px/1.55 var(--font);
+        margin: 0;
+        padding: 28px 16px 80px;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 34px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      code,
+      pre {
+        font-family: var(--mono);
+      }
+      code {
+        background: var(--code-bg);
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        overflow-wrap: anywhere;
+      }
+      a {
+        color: var(--accent);
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      h1 {
+        font-size: clamp(26px, 4.2vw, 36px);
+        line-height: 1.12;
+        font-weight: 600;
+      }
+      .lede {
+        color: var(--muted);
+        max-width: 70ch;
+        margin-top: 10px;
+      }
+      h2.sec {
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .meta b {
+        color: var(--ink);
+      }
+      .chip {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .pass {
+        background: var(--pass-soft);
+        color: var(--pass);
+      }
+      .part {
+        background: var(--part-soft);
+        color: var(--part);
+      }
+      .fail {
+        background: var(--fail-soft);
+        color: var(--fail);
+      }
+      .info {
+        background: var(--info-soft);
+        color: var(--info);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      .stat b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 500;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .board {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      td {
+        padding: 11px 14px;
+        border-top: 1px solid var(--line);
+        vertical-align: top;
+      }
+      tr:first-child td {
+        border-top: 0;
+      }
+      td.n {
+        font-family: var(--mono);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .board table {
+        min-width: 720px;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .toc a {
+        text-decoration: none;
+        font-size: 12.5px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 4px 11px;
+      }
+      article.report {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      article.report > header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .rt {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        align-items: baseline;
+      }
+      .rt h2 {
+        font-size: 20px;
+        font-weight: 600;
+        flex: 1;
+        min-width: 200px;
+      }
+      .rt .id {
+        font-family: var(--mono);
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+      dl.facts {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      dl.facts dt,
+      dl.facts dd {
+        margin: 0;
+        padding: 9px 12px;
+        border-top: 1px solid var(--line);
+      }
+      dl.facts dt:first-of-type,
+      dl.facts dd:first-of-type {
+        border-top: 0;
+      }
+      dl.facts dt {
+        background: var(--code-bg);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      @media (max-width: 560px) {
+        dl.facts {
+          grid-template-columns: 1fr;
+        }
+      }
+      .blk h3 {
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .blk ul,
+      .blk ol {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .cases {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .cases table {
+        min-width: 640px;
+        font-size: 13px;
+      }
+      .cases td,
+      .cases th {
+        padding: 8px 12px;
+      }
+      .res {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      .res div {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .res b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .res span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      pre {
+        margin: 0;
+        background: var(--code-bg);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+      .note {
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .warn {
+        font-size: 12.5px;
+        background: var(--part-soft);
+        color: var(--part);
+        border-radius: 6px;
+        padding: 8px 10px;
+      }
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">QA, security and performance backlog · Phase 3 · test suites</div>
+        <h1>Phase 3 QA Report</h1>
+        <p class="lede">
+          Reports for five tasks from the team sheet: API contract testing, integration tests,
+          functional scenarios, unit tests with coverage, and end-to-end journeys. Each report says
+          what kind of work it is, what it covers, the tools used, what was run, what was found, and
+          where it falls short of the sheet's target.
+          <b>None of the five reaches its numeric target.</b> The sheet's targets are volumes
+          (30,000 unit tests, 10,000 scenarios, 4,500 integration tests, 5,000 contract assertions,
+          1,200 journeys); this phase built the machinery to measure each one, ran what could run,
+          and produced the first honest numbers.
+        </p>
+        <div class="meta">
+          <span><b>Prepared by</b> Vishal</span><span><b>Date</b> 14 Oct 2026</span
+          ><span
+            ><b>Branch</b> <code>vishal/qa-phase-3</code> (from <code>main</code> at
+            <code>5fe3fc62</code>)</span
+          ><span><b>Commits</b> 12 on the branch</span>
+        </div>
+      </header>
+
+      <section style="display: flex; flex-direction: column; gap: 14px">
+        <h2 class="sec">Summary</h2>
+        <div class="stats">
+          <div class="stat">
+            <b>5 / 5</b><span>tasks built and measured; 0 of 5 at the sheet's target</span>
+          </div>
+          <div class="stat">
+            <b>18,330</b><span>unit tests run and passing (target 30,000)</span>
+          </div>
+          <div class="stat">
+            <b>443</b
+            ><span
+              >new vitest tests written and run here, all passing; plus 45 Node tool tests</span
+            >
+          </div>
+          <div class="stat">
+            <b>5.1%</b><span>of 6,873 acceptance criteria have a test that names them</span>
+          </div>
+          <div class="stat">
+            <b>97.8%</b><span>line coverage of the pure rule modules (floor 95%)</span>
+          </div>
+          <div class="stat">
+            <b>112</b><span>journey runs (target 1,200), runner written, not run</span>
+          </div>
+        </div>
+        <p>
+          <b>What changed in how this was run.</b> Phase 2 could not run any vitest test because the
+          dependencies would not install. This phase found the single blocked dependency (a
+          GitHub-hosted <code>libsignal</code> fetch, HTTP 403), installed everything else in a
+          scratch copy with that one package stubbed, and could then run the full API and web unit
+          suites, measure coverage for the first time, and typecheck the API source and tests. That
+          also ran last phase's <code>idempotency.interceptor.spec</code> and
+          <code>negative.spec</code> (all pass) and the typecheck of every Phase 2 file (clean).
+          <b>Docker is still unavailable</b>, so everything that starts Postgres and Redis (the e2e,
+          integration, contract, negative and journey specs) is written but not run.
+        </p>
+        <p>
+          <b>The most useful findings were about the tooling itself:</b> coverage could not start at
+          all (<code>@vitest/coverage-v8</code> 5.0.3 against vitest 2.1.9), vitest wrote no report
+          when any test failed, two unit tests were failing on <code>main</code>, and only 5.1% of
+          the acceptance criteria in the inventory are traceable to a test (3,554 have no test at
+          all).
+        </p>
+        <p class="warn">
+          Nothing here runs on GitHub automatically: the check workflows were removed in #328 and
+          jobs do not start on this account. The new <code>Quality</code> workflow is manual, like
+          <code>Security</code>, and has never run.
+        </p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Result against the sheet's target</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Sheet target</th>
+                <th>Result</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="n">#8</td>
+                <td><a href="#qa-8">API contract testing</a></td>
+                <td>5,000 assertions; 100% of supported endpoints, schemas and error contracts</td>
+                <td>
+                  Assertion helper, breaking-change checker and three e2e specs built. 14 + 9 + 2
+                  tests run. Assertions counted so far: 0, because the e2e specs need Docker.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#7</td>
+                <td><a href="#qa-7">Integration test cases</a></td>
+                <td>4,500 tests across DB, queue, cache, provider and service boundaries</td>
+                <td>
+                  977 existing blocks plus 240 new boundary tests (queues, subscribers) that run
+                  without a database: about 1,200, or 27%.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#6</td>
+                <td><a href="#qa-6">Functional test cases</a></td>
+                <td>10,000 scenarios; 100% of P0/P1 acceptance criteria covered</td>
+                <td>
+                  All 6,873 criteria of 2,096 features extracted and traced. 352 proven (5.1%); P0
+                  7.1%, P1 4.4%. 6,129 e2e test blocks exist.
+                </td>
+                <td><span class="chip fail">Not met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#5</td>
+                <td><a href="#qa-5">Unit test cases</a></td>
+                <td>30,000 tests; ≥85% line and ≥80% branch on business logic</td>
+                <td>
+                  18,330 tests (61%). Pure rules 97.8% / 91.9% (met); common 81.4% / 85.9%; mappers
+                  34.4% / 77.0%. Floors enforced.
+                </td>
+                <td><span class="chip part">Partly met</span></td>
+              </tr>
+              <tr>
+                <td class="n">#9</td>
+                <td><a href="#qa-9">End-to-end test cases</a></td>
+                <td>1,200 critical and major user journeys</td>
+                <td>
+                  5 journeys expand to 112 runs (9%). Runner and catalogue check built; the e2e
+                  runner has not been run.
+                </td>
+                <td><span class="chip fail">Not met</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <nav class="toc">
+          <a href="#qa-8">#8 Contract</a><a href="#qa-7">#7 Integration</a
+          ><a href="#qa-6">#6 Functional</a><a href="#qa-5">#5 Unit</a
+          ><a href="#qa-9">#9 End to end</a><a href="#def-h">Defect register</a>
+        </nav>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Test environment and tools</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Machine</td>
+                <td>
+                  Cloud Linux container, Node 22.22, pnpm 9.15.4, TypeScript 6.0.3, vitest 2.1.9.
+                  <b>No Docker daemon.</b>
+                </td>
+              </tr>
+              <tr>
+                <td>How the suites were run</td>
+                <td>
+                  A scratch copy of <code>crm-platform</code> with one override: the
+                  <code>libsignal</code> package (fetched from GitHub, blocked) replaced by a stub
+                  that exports the names <code>baileys</code> imports. The shared packages were
+                  built there. The committed lockfile was changed only for
+                  <code>@vitest/coverage-v8</code> (see task 5) and was checked to still satisfy
+                  every <code>package.json</code>.
+                </td>
+              </tr>
+              <tr>
+                <td>What ran</td>
+                <td>
+                  API unit suite (579 files), web unit suite (779 files), the quality tools' Node
+                  tests (45), a full <code>tsc</code> of API source and tests (no errors), Prettier
+                  on every file touched
+                </td>
+              </tr>
+              <tr>
+                <td>What did not run</td>
+                <td>
+                  Anything that starts Postgres or Redis through Testcontainers:
+                  <code>test/e2e/*</code> (including the contract, negative, journeys and
+                  double-submit specs), <code>test/integration/*</code>, and the manual
+                  <code>Quality</code> and <code>Security</code> workflows
+                </td>
+              </tr>
+              <tr>
+                <td>Data</td>
+                <td>
+                  No customer data. The journeys use the shared Unicode fixture file from Phase 1
+                </td>
+              </tr>
+              <tr>
+                <td>Severity scale</td>
+                <td>
+                  <b>High</b> real harm possible or a release blocker · <b>Medium</b> wrong
+                  behaviour or a gap the team can hit · <b>Low</b> cosmetic or a limit worth knowing
+                  · <b>Info</b> recorded for awareness
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div id="reports" style="display: flex; flex-direction: column; gap: 22px"></div>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec" id="def-h">Defect and finding register</h2>
+        <p class="note">
+          Numbered P3-xx to keep them apart from the earlier registers. "Recorded" means written
+          down, not changed.
+        </p>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Task</th>
+                <th>Finding</th>
+                <th>Severity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="defects"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="blk" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 class="sec">What is still open</h2>
+        <ul id="open"></ul>
+      </section>
+      <footer>
+        Sources: the team sheet "Action items" tab (rows 5, 6, 7, 8, 9), the repository, and the
+        command output from 14 Oct 2026. Numbers come from vitest JSON reports and coverage
+        summaries kept with the run; nothing was measured on GitHub.
+      </footer>
+    </div>
+
+    <script>
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+        );
+      const li = (a) => a.map((x) => `<li>${x}</li>`).join('');
+      const chip = (s) =>
+        ({
+          pass: '<span class="chip pass">Met</span>',
+          part: '<span class="chip part">Partly met</span>',
+          fail: '<span class="chip fail">Not met</span>',
+        })[s];
+      const R = [
+        {
+          id: 'qa-8',
+          n: 8,
+          t: 'API contract testing',
+          status: 'part',
+          type: 'Contract and API-conformance testing · responses, errors and documents checked against their declared shapes',
+          target: '5,000 assertions; 100% supported endpoints/schema/error contracts',
+          summary:
+            'A way to prove that what the API sends matches the zod schemas the frontends use, that every error is a well-formed problem+json with a registered code, and that a change which breaks a caller of the customer API is caught before it merges. The helper, the breaking-change checker and the counting tool are built and their tests pass. The three e2e specs that use them (responses, errors, route registry and customer-API document) need a database and <b>have not been run</b>, so no assertion count and no route-coverage figure exists yet.',
+          what: 'Contract testing checks the promise between the server and the people who call it. A response must have the fields and types it says it has; an error must have the agreed envelope; a field removed from the public API must be noticed.',
+          objective:
+            'Turn every existing e2e request into a contract check at no cost, add targeted checks for success and error shapes, and guard the customer API against breaking changes.',
+          coverage:
+            'The sheet asks for 5,000 assertions and 100% of endpoints, schemas and error contracts. Neither can be stated: the specs that count assertions and walk the route table have not run. The helper counts one assertion per status plus one per validated leaf value, so one list response of 50 rows is hundreds; read the count together with the number of distinct routes.',
+          defects: 'P3-09 (low, fixed), P3-11 (medium, open).',
+          scope: [
+            'In: <code>expectContract</code>, <code>expectProblem</code>, an opt-in watch on every e2e request, an OpenAPI differ, an assertion counter, a shared OpenAPI builder, and e2e specs for responses (tags, companies, contacts), errors (401, 403, 404, 409, 422 on four resources) and the documents.',
+            "Out: 429 (rate limits have their own specs), success shapes of the other roughly 1,500 routes, and the customer API's own error code list.",
+          ],
+          tools: [
+            '<code>apps/api/test/support/contract.ts</code> (zod, <code>@crm/contracts</code> <code>problemSchema</code> and <code>ERROR_CODES</code>).',
+            '<code>tools/quality/openapi-diff.mjs</code>: a stand-in for <code>oasdiff</code> written in Node, no extra binary.',
+            '<code>tools/quality/sum-contract-assertions.mjs</code> and <code>QA_CONTRACT_OUT</code>.',
+            '<code>apps/api/src/common/openapi.ts</code>: the OpenAPI document of the app, now shared by <code>main.ts</code>, the old <code>emit-openapi</code> tool and the tests.',
+          ],
+          approach: [
+            'Found that the customer API already has its own OpenAPI document (<code>ApiV1DocsService</code>, served at <code>/docs/api.json</code>) with a different error envelope; the breaking-change check targets that document, not an assumed <code>/public/v1</code>.',
+            "Wrote the helper and tested it against a fake app: this found a real bug in my own watcher, where a violation thrown in strict mode left the caller's rejection handler unreachable and an <code>await</code> would have hung. Fixed by running the check as a first stage.",
+            'Wrote the differ with a cycle guard (a recursive schema is compared once per pair of references on the path) and 9 tests.',
+            'Wrote the three e2e specs, with ratchet files that are created on the first run and must be committed, then enforced.',
+            'Added the opt-in watch to the shared <code>Api.as()</code> client: one import and five wrappers, a no-op unless <code>QA_CONTRACT</code> is set.',
+            'Typechecked everything with <code>tsc</code>: no errors.',
+          ],
+          cases: [
+            [
+              'C1',
+              'Helper: counts leaves, validates a body, fails with the field path, fails on the wrong status, counts but tolerates undeclared fields',
+              'As specified',
+              '14 pass (vitest, with a real HTTP fixture for the watcher)',
+              'Pass',
+            ],
+            [
+              'C2',
+              'Differ: removed path, method, response field, success status; retyped field; new required input; lost request enum value; response enum gain is a warning only; $ref and cycles; prefix scope',
+              'As specified',
+              '9 pass',
+              'Pass',
+            ],
+            ['C3', 'Assertion summing tool', 'Totals and malformed lines', '2 pass', 'Pass'],
+            [
+              'C4',
+              'Typecheck of API source and tests with the new files',
+              'No errors',
+              'No errors',
+              'Pass',
+            ],
+            [
+              'C5',
+              'Responses: create, read, list, update for tags, companies, contacts',
+              'Shape matches contract',
+              '12 tests written',
+              'Not run',
+            ],
+            [
+              'C6',
+              'Errors: 401, 403, 404, 409, 422 per endpoint class',
+              'problem+json, known code, no stack',
+              '30 tests written',
+              'Not run',
+            ],
+            [
+              'C7',
+              'Route registry and customer API document vs baseline',
+              'No new undocumented route; no breaking change',
+              '3 tests written; first run writes the two baseline files',
+              'Not run',
+            ],
+          ],
+          counts: [
+            ['25', 'tests run (14 + 9 + 2)'],
+            ['25', 'passed'],
+            ['45', 'e2e tests written, not run'],
+            ['0', 'contract assertions counted'],
+          ],
+          evidence: [
+            '<pre>test/unit/common/contract.spec.ts   14 passed\ntools/quality/openapi-diff.test.mjs   9 passed\ntools/quality/sum-contract-assertions.test.mjs   2 passed</pre>',
+            'Runbook: <code>docs/quality/contract-testing.md</code>.',
+          ],
+          limits: [
+            'The three e2e specs have never run; expect a first round of fixes (a list route that returns a different envelope, a status I assumed).',
+            'Success shapes are checked for three resources only; the registry of routes to response schemas is the part that scales and is not built.',
+            'The watch only sees awaited requests made through <code>Api.as()</code>; a request ended with <code>.expect()</code> or made with <code>api.http()</code> is not seen.',
+            'The assertion count rewards long lists; it is a measure of fields checked, not of routes covered.',
+          ],
+          recs: [
+            'Run the three specs with Docker, commit the two baseline files the first run writes, then run with <code>QA_CONTRACT=1</code> over the whole e2e suite to list every route that returns a non-problem error.',
+            "Add a registry of routes to response schemas, seeded from the controllers' <code>@ApiResponse</code> where present.",
+            "Add the customer API's error codes to a registry and check them in <code>expectProblem</code>.",
+          ],
+          rerun:
+            '<pre>pnpm --filter @crm/api exec vitest run test/unit/common/contract.spec.ts\nnode --test tools/quality/openapi-diff.test.mjs tools/quality/sum-contract-assertions.test.mjs\n# with Docker:\nQA_CONTRACT_OUT=/tmp/contract.jsonl pnpm --filter @crm/api exec vitest run test/e2e/contract --testTimeout=120000\nnode tools/quality/sum-contract-assertions.mjs /tmp/contract.jsonl --min 5000</pre>',
+          files:
+            '<code>apps/api/test/support/contract.ts</code>, <code>apps/api/test/e2e/contract/</code>, <code>apps/api/src/common/openapi.ts</code>, <code>apps/api/src/main.ts</code>, <code>apps/api/src/tools/emit-openapi.ts</code>, <code>apps/api/test/e2e/contacts-attributes-tags/support.ts</code>, <code>tools/quality/openapi-diff.mjs</code>, <code>tools/quality/sum-contract-assertions.mjs</code>, <code>docs/quality/contract-testing.md</code>',
+        },
+        {
+          id: 'qa-7',
+          n: 7,
+          t: 'Integration test cases',
+          status: 'part',
+          type: 'Integration testing · the boundaries between our code and the database, queues, outbox and providers',
+          target: '4,500 tests across DB, queue, cache, provider and service boundaries',
+          summary:
+            'This task named five boundaries and asked for 4,500 tests across them. The database boundary (row-level security on every tenant table) already has a generated suite; what was missing was the queue and outbox wiring, which can be checked without a database. 240 new tests now check that every queue has a consumer and a producer and that every outbox subscriber registers itself under a unique name and says how a redelivery is harmless. They found six queue names nothing uses. The runtime halves (a job really retries, an event really reaches its subscriber) still need Docker and are not written as a generic suite.',
+          what: 'An integration test exercises our code together with something real: Postgres, Redis, a queue, an outbox, a provider API. Boundary bugs (a queue nobody consumes, a subscriber that is never registered, a table without row-level security) are exactly what unit tests cannot see.',
+          objective:
+            'Define what "covered" means per boundary, prove the parts that need no database, and list honestly what still needs one.',
+          coverage:
+            'The sheet asks for 4,500 tests. 977 integration blocks exist (static count; <code>it.each</code> rows add more) and 240 new tests were added and run, about 1,200 or 27%. Of the five boundaries, DB tenant isolation and DB shape are covered, queue and outbox wiring are now covered, queue and outbox behaviour and provider failure matrices are not.',
+          defects: 'P3-05 (low), P3-06 (info).',
+          scope: [
+            'In: the boundary table in <code>docs/quality/integration-testing.md</code>, the queue and outbox wiring matrices, the findings they produced.',
+            'Out: a generic BullMQ retry harness per queue, a generic replay-twice spec per subscriber, a per-provider failure matrix, all of which need Docker.',
+          ],
+          tools: [
+            'Vitest reading the source tree (no database).',
+            'The existing generated tenancy spec (<code>tenancy-isolation.generated.spec.ts</code>) and <code>tools/tenancy-audit</code>.',
+          ],
+          approach: [
+            'Read the existing integration suite and found the RLS boundary is already generated from the live catalog for every tenant table, so it was not duplicated.',
+            'Wrote <code>boundaries.matrix.spec.ts</code>: for each name in <code>QUEUES</code> a kebab-case check, a consumer check and a producer check; for each outbox subscriber a registration check, a unique-name check (the registry silently ignores a second subscriber with a name it already has) and an idempotency check.',
+            'Ran it: 16 failures. Six were queues with no consumer or producer; four were subscribers with no word on idempotency in the file.',
+            'Read the code behind each: three of the queues are done by interval services, three are not built; the four subscribers are explained in the Phase 2 audit.',
+            'Recorded the six queues as reserved with a reason, and made the test fail if a reserved queue starts being used (so the list only shrinks). Tied the subscriber check to the audit document.',
+          ],
+          cases: [
+            ['C1', 'Queue names are distinct and kebab-case', 'All', 'All', 'Pass'],
+            [
+              'C2',
+              'Each of the 36 queue names is used, or reserved with a reason',
+              'All',
+              '30 have a consumer and a producer; 6 reserved and still unused',
+              'Pass',
+            ],
+            [
+              'C3',
+              'Six reserved queues are still unused',
+              'Unused',
+              'Unused: OUTBOX, BILLING_POSTING, SLA_SWEEP, COUNTER_FLUSH, PARTITION_MAINTENANCE, BULK_JOBS',
+              'Recorded P3-05',
+            ],
+            [
+              'C4',
+              'Each of 44 subscribers (41 files) registers itself, has a unique name and listens for an event',
+              'All',
+              'All',
+              'Pass',
+            ],
+            [
+              'C5',
+              'Each subscriber explains its redelivery safety, in the file or in the idempotency audit',
+              'All',
+              '44 of 44 (four rely on the audit)',
+              'Pass',
+            ],
+            [
+              'C6',
+              'Default job options retry with backoff and keep bounded history',
+              'As specified',
+              'As specified',
+              'Pass',
+            ],
+            [
+              'C7',
+              'Queue retry behaviour, outbox redelivery, provider failure matrix',
+              'Per boundary',
+              'Not written as generic suites',
+              'Not run',
+            ],
+          ],
+          counts: [
+            ['240', 'tests run'],
+            ['240', 'passed'],
+            ['16', 'failures found first, all resolved by reading the code'],
+            ['6', 'queue names with no user'],
+          ],
+          evidence: [
+            '<pre>test/unit/infra/boundaries.matrix.spec.ts   240 passed</pre>',
+            'Document: <code>docs/quality/integration-testing.md</code> (the boundary table and what proves each).',
+          ],
+          limits: [
+            'The wiring checks are text scans of the source: a consumer that names its queue through a variable would be missed (none was found).',
+            '"Says how a redelivery is harmless" is a statement check, not a proof; the proof is the audit and the e2e specs.',
+            'The 4,500 target is a volume; the honest route is more per-domain integration specs, not a larger matrix over the same tables.',
+          ],
+          recs: [
+            'Decide for the three "not built" queue names (<code>BILLING_POSTING</code>, <code>COUNTER_FLUSH</code>, <code>BULK_JOBS</code>) whether to build or delete them.',
+            'Write the generic BullMQ harness (enqueue, process, retry with backoff, fail into the failed set) over <code>QUEUES</code> and a replay-twice harness over the subscriber registry; both need Docker.',
+            'Count the integration suite with the JSON reporter on a machine with Docker.',
+          ],
+          rerun:
+            '<pre>pnpm --filter @crm/api exec vitest run test/unit/infra\n# with Docker:\npnpm --filter @crm/api test:integration</pre>',
+          files:
+            '<code>apps/api/test/unit/infra/boundaries.matrix.spec.ts</code>, <code>docs/quality/integration-testing.md</code>',
+        },
+        {
+          id: 'qa-6',
+          n: 6,
+          t: 'Functional test cases',
+          status: 'fail',
+          type: 'Requirements-based functional testing · traceability from acceptance criteria to tests',
+          target: '10,000 executable scenarios; 100% P0/P1 acceptance criteria covered',
+          summary:
+            'Every feature in the port inventory lists Given/When/Then criteria. This task extracts all of them (6,873 criteria across 2,096 features), and reports which have a test that names them. <b>Only 352 do (5.1%)</b>; for P0 criteria it is 7.1% and for P1 4.4%. A further 2,967 criteria belong to features that have some test but not one naming the criterion, and 3,554 have no test that mentions their feature at all. The tooling is complete and tested; the target is far from met.',
+          what: 'Functional testing checks that the product does what the requirements say. Here the requirements are the acceptance criteria in the inventory, and the question is which ones a test proves.',
+          objective:
+            'Turn the inventory into a number: how many criteria exist, how many are proven, and which ones are not.',
+          coverage:
+            'The sheet asks for 100% of P0 and P1 acceptance criteria covered and 10,000 scenarios. P0: 218 of 3,071 proven. P1: 119 of 2,679. There are 6,129 e2e test blocks, so the volume is not the gap; naming the criterion is. 157 features have no Given/When/Then list at all (most of <code>campaigns.md</code> uses a numbered rules list), so they cannot be traced.',
+          defects: 'P3-07 (high), P3-13 (medium).',
+          scope: [
+            'In: all files in <code>docs/threadwise-port/inventory</code>, the extractor, the coverage checker, the report.',
+            'Out: writing the missing scenarios (the report is the work list), and judging whether a test that names a criterion really asserts it.',
+          ],
+          tools: [
+            '<code>tools/quality/extract-acceptance.mjs</code> (inventory to <code>docs/quality/acceptance/acceptance.json</code>, stable ids <code>AC-TW-XXX-NNN-n</code>).',
+            '<code>tools/quality/check-acceptance-coverage.mjs</code> (scans test files for <code>AC-...</code> and <code>TW-XXX-NNN #n</code>), with <code>--min-p0</code> as a gate.',
+            "Node's built-in test runner (11 tests).",
+          ],
+          approach: [
+            'Read the inventory format spec and several entries; found three shapes in use (an em dash, a hyphen or a colon in the heading; status and priority on separate lines or on one).',
+            'Wrote the parser, ran it, and compared its feature count with a plain count of headings: 2,065 against 2,097. Fixed the colon headings and the one-line fields, and recorded the one grouped heading (<code>TW-CAMP-025 to 028</code>) instead of dropping it silently.',
+            'Chose the existing test-title convention (<code>TW-CON-025 #1:</code>) as the way a test names a criterion, so 352 are already counted without touching a test.',
+            'Made the report distinguish proven, feature-only and none, because "a test mentions the feature" is not proof.',
+            'Listed 45 references to criteria that do not exist (a test numbering its own scenarios).',
+          ],
+          cases: [
+            [
+              'C1',
+              'Parser: features, status, priority, numbered criteria, wrapped lines, colon headings, one-line fields',
+              'As specified',
+              '7 pass',
+              'Pass',
+            ],
+            [
+              'C2',
+              'Coverage checker: criterion ids, feature plus number, lists, feature-only mentions, counts by priority and domain, report',
+              'As specified',
+              '4 pass',
+              'Pass',
+            ],
+            [
+              'C3',
+              'Extractor on the real inventory',
+              'All features',
+              '2,096 features, 6,873 criteria, 157 features without a list, 1 grouped heading',
+              'Pass',
+            ],
+            ['C4', 'P0 criteria proven', '100%', '218 of 3,071 (7.1%)', 'Defect P3-07'],
+            ['C5', 'P1 criteria proven', '100%', '119 of 2,679 (4.4%)', 'Defect P3-07'],
+            [
+              'C6',
+              'Features with a Given/When/Then list',
+              'All',
+              '1,939 of 2,096',
+              'Recorded P3-13',
+            ],
+          ],
+          counts: [
+            ['11', 'tool tests run'],
+            ['11', 'passed'],
+            ['6,873', 'criteria extracted'],
+            ['352', 'proven (5.1%)'],
+          ],
+          evidence: [
+            '<pre>| Priority | Criteria | Proven | Feature only | No test | Proven % |\n| P0  | 3071 | 218 | 1444 | 1409 | 7.1% |\n| P1  | 2679 | 119 | 1187 | 1373 | 4.4% |\n| P2  | 1123 |  15 |  336 |  772 | 1.3% |\n| All | 6873 | 352 | 2967 | 3554 | 5.1% |</pre>',
+            'Report with the per-domain table: <code>docs/quality/acceptance/REPORT.md</code>. Runbook: <code>docs/quality/functional-testing.md</code>.',
+          ],
+          limits: [
+            'A test that names a criterion is counted as proving it. Whether it asserts the criterion was not checked.',
+            'Most existing tests do not carry a criterion number, so the 2,967 "feature only" criteria may well be tested; the report cannot tell.',
+            'The extractor depends on the inventory format; a new shape would be silently missed (the feature count is compared with the heading count to catch that).',
+          ],
+          recs: [
+            'Add the criterion number to existing test titles domain by domain, starting with the P0 criteria in the "feature only" group: it is a rename, not new tests.',
+            'Write scenarios for the P0 criteria with no test (1,409), in the domains the report lists first.',
+            'Give <code>campaigns.md</code> Given/When/Then criteria, or agree a second accepted format.',
+            'Run <code>check-acceptance-coverage.mjs --min-p0 N</code> in the Quality workflow with N raised as the numbers rise.',
+          ],
+          rerun:
+            '<pre>node tools/quality/extract-acceptance.mjs --check\nnode tools/quality/check-acceptance-coverage.mjs --report docs/quality/acceptance/REPORT.md\nnode --test tools/quality/extract-acceptance.test.mjs tools/quality/check-acceptance-coverage.test.mjs</pre>',
+          files:
+            '<code>tools/quality/extract-acceptance.mjs</code>, <code>tools/quality/check-acceptance-coverage.mjs</code>, <code>docs/quality/acceptance/</code>, <code>docs/quality/functional-testing.md</code>',
+        },
+        {
+          id: 'qa-5',
+          n: 5,
+          t: 'Unit test cases',
+          status: 'part',
+          type: 'Unit testing and coverage measurement · single functions and classes, with a gate on business logic',
+          target: '30,000 tests; ≥85% line and ≥80% branch coverage on business logic',
+          summary:
+            'For the first time the unit suites were run end to end and coverage was measured. <b>18,330 unit tests run (API 8,849, web 9,481), 61% of the 30,000 target.</b> Coverage of the pure business rules is 97.8% of lines and 91.9% of branches, above the target; the shared helpers are at 81.4% and 85.9%; mappers at 34.4% and 77.0%. Services and repositories need a database and are measured by the other suites. Getting there needed three fixes to the tooling and two to tests that were failing on <code>main</code>. 185 new tests were written for the lowest-covered money and contract code.',
+          what: 'Unit tests check one function or class at a time with no database. Coverage says which lines ran; a threshold stops it falling back.',
+          objective:
+            'Measure honestly, make the measurement repeatable and gated, and spend new tests where the gap is largest.',
+          coverage:
+            'Volume: 18,330 of 30,000 (61%). Coverage on business logic, read by kind of code: rules met (97.8% lines, 91.9% branches), common 81.4% lines (just under 85%), mappers 34.4% (far under). A single "business logic" figure would hide this, so the gate is per kind.',
+          defects: 'P3-01, P3-02, P3-03, P3-04 (all fixed), P3-08 (open).',
+          scope: [
+            'In: API and web unit suites, coverage configuration and floors, the metrics collector, tests for the lowest-covered pure modules.',
+            'Out: services and repositories (need a database), components (rendered to a string, excluded from web coverage), and the other 17,000 tests the target implies.',
+          ],
+          tools: [
+            'Vitest 2.1.9 with <code>@vitest/coverage-v8</code> 2.1.9 (v8 provider); <code>tools/quality/collect-metrics.mjs</code> for totals and coverage by kind (5 tests).',
+          ],
+          approach: [
+            'Ran the full API unit suite: 32 files could not load because the one stubbed dependency lacked named exports; extended the stub, all load.',
+            "Tried <code>--coverage</code>: it could not start. The repo pinned the coverage provider at 5.0.3 against vitest 2.1.9. Aligned it to 2.1.9, patching only that package's entries in the lockfile and checking the lockfile still satisfies every manifest.",
+            'Ran coverage on the full suite (17 minutes): two tests failed, so vitest wrote no report. Set <code>reportOnFailure</code> and ran again.',
+            'Fixed the two failing tests (a stale expectation after BL-112; a 5 s timeout on a memory-cap test), scoped coverage to business logic, set floors a little under the measurement, and added coverage to the web app.',
+            'Read which pure functions in <code>@crm/contracts</code> no test names (84) and wrote 118 tests for 21 of them, then 67 for the three lowest-covered money files. Expected values were worked out by hand; while writing them I found <code>formatScaled(-5n, 4)</code> returned <code>"0.00-5"</code> and fixed it.',
+            'Considered generating tests from the zod schemas to reach 30,000 and rejected it: a test that asserts the schema refuses what the schema refuses checks zod, not the product.',
+          ],
+          cases: [
+            [
+              'C1',
+              'API unit suite',
+              'All pass',
+              '8,849 run, 8,845 passed at measurement; 2 failures fixed afterwards',
+              'Pass',
+            ],
+            ['C2', 'Web unit suite', 'All pass', '9,481 run, 9,480 passed, 1 skipped', 'Pass'],
+            [
+              'C3',
+              'Coverage can run',
+              'Report written',
+              'Fixed: provider version, reportOnFailure',
+              'Defect P3-01, P3-02',
+            ],
+            [
+              'C4',
+              'Rules ≥85% lines and ≥80% branches',
+              'Met',
+              '97.8% / 91.9% (123 files)',
+              'Pass',
+            ],
+            [
+              'C5',
+              'Common ≥85% lines and ≥80% branches',
+              'Met',
+              '81.4% / 85.9% (20 files)',
+              'Defect (lines)',
+            ],
+            [
+              'C6',
+              'Mappers ≥85% lines and ≥80% branches',
+              'Met',
+              '34.4% / 77.0% (68 files)',
+              'Defect',
+            ],
+            ['C7', '30,000 tests', '30,000', '18,330 (+67 added after the run)', 'Recorded'],
+            [
+              'C8',
+              'New tests: contracts helpers (118), coupon/subscription rules and invoice balances (67), queue/subscriber matrices counted under #7',
+              'All pass',
+              '185 pass',
+              'Pass',
+            ],
+          ],
+          counts: [
+            ['18,330', 'unit tests run'],
+            ['18,325', 'passed (2 fixed since)'],
+            ['185', 'new unit tests, all passing'],
+            ['97.8%', 'rules line coverage'],
+          ],
+          evidence: [
+            '<pre>Kind        Files  Lines   Branches  Floor\nrules         123  97.8%   91.9%     95 / 88\ncommon         20  81.4%   85.9%     78 / 82\nmappers        68  34.4%   77.0%     30 / 70\nworkers        99  18.9%   75.2%     not gated\nservices      640  10.4%   75.0%     not gated\nrepositories  154  12.8%   48.9%     not gated</pre>',
+            'Document with the lists of where to add tests next: <code>docs/quality/unit-testing.md</code>. Metrics file: <code>docs/quality/metrics/metrics.json</code>.',
+          ],
+          limits: [
+            'v8 line coverage means the line ran, not that its result was checked.',
+            'The two weakest rule files had 9% and 25% coverage; they are now tested, but the committed coverage figures were taken before those tests.',
+            'The first run of a full <code>test:coverage</code> with the new floors has not been done; the floors are set from the measured figures and the glob groups were computed with the same patterns.',
+            "The 30,000 target is not reachable by this phase's method; see the recommendations.",
+          ],
+          recs: [
+            'Spend the next tests on mappers (the six largest uncovered are listed in the document) and on the common helpers.',
+            'Raise the floors as tests land; never lower them.',
+            'Run <code>test:coverage</code> in the manual Quality workflow, and review a sample of generated or table-driven tests for real assertions.',
+            'Agree whether 30,000 is the number that matters, or the per-kind coverage table.',
+          ],
+          rerun:
+            '<pre>pnpm --filter @crm/api test:coverage\npnpm --filter @crm/web test:coverage\nnode tools/quality/collect-metrics.mjs --suite api-unit=api.json --suite web-unit=web.json --coverage apps/api/coverage/coverage-summary.json</pre>',
+          files:
+            '<code>apps/api/vitest.config.ts</code>, <code>apps/web/vitest.config.ts</code>, <code>apps/api/package.json</code>, <code>apps/web/package.json</code>, <code>pnpm-lock.yaml</code>, <code>apps/api/test/unit/contracts/</code>, <code>apps/api/test/unit/platform-payment-gateways/</code>, <code>apps/api/test/unit/invoicing/invoice-amounts.spec.ts</code>, <code>packages/contracts/src/sales-docs/money.ts</code>, <code>tools/quality/collect-metrics.mjs</code>, <code>docs/quality/unit-testing.md</code>',
+        },
+        {
+          id: 'qa-9',
+          n: 9,
+          t: 'End-to-end test cases',
+          status: 'fail',
+          type: 'End-to-end testing · multi-step journeys through the real API and database, expanded by variants',
+          target: '1,200 critical/major user journeys',
+          summary:
+            "A catalogue of journeys, a tool that expands each by its variants into runs, and a runner. Five journeys (sign up and find a contact, a teammate's view by role, tagging, a company, a task) expand by role and by the 24 shared Unicode samples into <b>112 runs, 9% of the 1,200 target</b>. The expander and the agreement between the catalogue and the step implementations are tested and pass; the runner needs a database and has not been run.",
+          what: 'A journey is what a person does across features: sign up, create a contact, tag it, find it again, see what a colleague with a narrower role can see. Variants (role, text) multiply a journey into runs.',
+          objective:
+            'Make adding a journey a data change, make the run count measurable before anything runs, and make the first journeys meaningful rather than padded.',
+          coverage:
+            "The sheet asks for 1,200 journeys. 112 runs from 5 journeys; the guide's plan was about 60 base journeys. The variants are real (four roles with different expected outcomes; 24 different texts), but the base set is small.",
+          defects: 'P3-11 (medium, open).',
+          scope: [
+            'In: the catalogue, the expander, 13 steps built only from routes that existing tests prove, the runner, the catalogue/steps agreement test.',
+            'Out: journeys that cross channels, billing or flows, which need routes and fixtures no test proves yet; the browser layer (a separate task).',
+          ],
+          tools: [
+            '<code>docs/quality/journeys/journeys.json</code>; <code>tools/quality/journeys.mjs</code> (validate, expand, count; 6 tests).',
+            '<code>apps/api/test/e2e/journeys/</code> (<code>steps.ts</code>, <code>journeys.e2e.spec.ts</code>) on the shared harness.',
+          ],
+          approach: [
+            'Listed only routes that existing e2e specs call successfully (contacts, tags, companies, tasks, session, member with grants), and their request bodies.',
+            'Wrote the expander so the number it prints is the number the runner runs (the runner imports the same function).',
+            'Chose variants that change behaviour: the role decides what the actor may see (own-only, all, none); the text variant sends emoji, right-to-left scripts, joiners and accents through every step.',
+            'Wrote the unit test that fails when a step is described but not implemented, or implemented but not described, or used by a journey and missing.',
+          ],
+          cases: [
+            [
+              'C1',
+              'Expander: variants multiply, names, explicit lists narrow, exclusions with *',
+              'As specified',
+              '6 pass',
+              'Pass',
+            ],
+            [
+              'C2',
+              'Catalogue and steps agree; every journey starts with a workspace; P0 journeys exist',
+              'All',
+              '4 pass',
+              'Pass',
+            ],
+            ['C3', 'Catalogue validates', 'No problems', 'Valid: 5 journeys, 112 runs', 'Pass'],
+            ['C4', 'Typecheck of the steps and the runner', 'No errors', 'No errors', 'Pass'],
+            [
+              'C5',
+              '112 journey runs through the real app',
+              'All pass',
+              'Not run (needs Docker)',
+              'Not run',
+            ],
+            ['C6', '1,200 runs', '1,200', '112', 'Recorded'],
+          ],
+          counts: [
+            ['10', 'tests run (6 + 4)'],
+            ['10', 'passed'],
+            ['112', 'runs defined'],
+            ['0', 'runs executed'],
+          ],
+          evidence: [
+            '<pre>J-001    24 runs  P0  A new workspace records its first contact and finds it again\nJ-002    16 runs  P0  A teammate sees the contact the admin created, according to their role\nJ-003    24 runs  P1  The admin tags a contact and the tag comes back exactly as typed\nJ-004    24 runs  P1  A company is created and found by search\nJ-005    24 runs  P1  A follow-up task is created and found by search\n5 journeys, 112 runs (target 1200)</pre>',
+          ],
+          limits: [
+            'The expected outcomes for the narrower roles (a 403 or 404 for a contact owned by someone else) were taken from how existing tests describe scoping, not from running them.',
+            'Each run creates its own workspace, which is slow; 112 runs will take minutes, 1,200 would need the runs split by journey.',
+            'Variants multiply runs cheaply; a count of runs is not a count of distinct journeys, and the report says both.',
+          ],
+          recs: [
+            'Run the runner with Docker, fix the expectations it disproves, and decide the P0 set for pull requests (<code>JOURNEY_PRIORITY=P0</code>).',
+            'Add journeys that cross features once their routes are proven by a spec: import then message then reply, broadcast then delivery then wallet charge, flow enrolment.',
+            'Count distinct journeys as well as runs in the target.',
+          ],
+          rerun:
+            '<pre>node tools/quality/journeys.mjs --min 1200\npnpm --filter @crm/api exec vitest run test/unit/journeys\n# with Docker:\nJOURNEY_PRIORITY=P0 pnpm --filter @crm/api exec vitest run test/e2e/journeys --testTimeout=120000</pre>',
+          files:
+            '<code>docs/quality/journeys/journeys.json</code>, <code>tools/quality/journeys.mjs</code>, <code>apps/api/test/e2e/journeys/</code>, <code>apps/api/test/unit/journeys/catalogue.spec.ts</code>',
+        },
+      ];
+      const DEFECTS = [
+        [
+          'P3-01',
+          '5',
+          'The coverage provider could not start: <code>@vitest/coverage-v8</code> 5.0.3 against vitest 2.1.9 ("does not provide an export named BaseCoverageProvider"). Coverage had never produced a number.',
+          'High',
+          'Fixed (2.1.9; lockfile delta for that package only)',
+        ],
+        [
+          'P3-02',
+          '5',
+          'Vitest writes no coverage report when any test fails; one failing test hid a 17-minute baseline.',
+          'Medium',
+          'Fixed (<code>reportOnFailure</code>)',
+        ],
+        [
+          'P3-03',
+          '5',
+          'Two API unit tests were failing on <code>main</code>: <code>web-push-enqueue</code> (stale list of push-on types after BL-112) and <code>integrations-nodes</code> (a 5 s timeout on the memory-cap test).',
+          'Medium',
+          'Fixed',
+        ],
+        [
+          'P3-04',
+          '5',
+          '<code>formatScaled(-5n, 4)</code> returned <code>"0.00-5"</code>. Not reachable from <code>parseScaled</code> today (it refuses negatives).',
+          'Low',
+          'Fixed, test added',
+        ],
+        [
+          'P3-05',
+          '7',
+          'Six names in <code>QUEUES</code> are used by no code (<code>OUTBOX</code>, <code>BILLING_POSTING</code>, <code>SLA_SWEEP</code>, <code>COUNTER_FLUSH</code>, <code>PARTITION_MAINTENANCE</code>, <code>BULK_JOBS</code>); three are done by interval services, three are not built.',
+          'Low',
+          'Recorded as reserved; the matrix keeps the list shrinking',
+        ],
+        [
+          'P3-06',
+          '7',
+          'Four subscribers carry no word on idempotency in their own file (<code>call-realtime</code>, <code>social-handoff</code>, two in <code>commerce-resume</code>).',
+          'Info',
+          'Covered by the Phase 2 audit; the matrix now checks the audit',
+        ],
+        [
+          'P3-07',
+          '6',
+          'Only 352 of 6,873 acceptance criteria (5.1%) have a test that names them; P0 7.1%. 3,554 criteria belong to features with no test mentioning them.',
+          'High',
+          'Open: the report is the work list',
+        ],
+        [
+          'P3-08',
+          '5',
+          '<code>@crm/contracts</code> has no tests of its own; 63 of its 339 exported logic functions are still named in no test (84 before this phase).',
+          'Medium',
+          'Open (21 now named in a test)',
+        ],
+        [
+          'P3-09',
+          '8',
+          'The old <code>pnpm openapi</code> tool built a bare document under version 1 while the app serves version 2 with its own tag list, and its comment said CI runs it (no workflow does).',
+          'Low',
+          'Fixed (shares the builder); comment corrected',
+        ],
+        [
+          'P3-10',
+          'all',
+          'Phase 2 files had been merged without Prettier formatting, so <code>format:check</code> would fail on them.',
+          'Low',
+          'Fixed (formatted; generated files added to <code>.prettierignore</code>)',
+        ],
+        [
+          'P3-11',
+          '8, 9',
+          'The contract, negative, journeys and double-submit specs, and all integration specs, were not run: no Docker here. About 60 tests are written and unrun (45 contract, 5 journey, 8 negative, 2 double-submit).',
+          'Medium',
+          'Open: run with Docker',
+        ],
+        [
+          'P3-12',
+          'all',
+          'Not touched and not Prettier-clean: <code>deploy.yml</code>, <code>mobile-release.yml</code> and seven older test files.',
+          'Info',
+          'Recorded',
+        ],
+        [
+          'P3-13',
+          '6',
+          '157 features have no Given/When/Then list (most of <code>campaigns.md</code> uses numbered rules), so they cannot be traced to a test.',
+          'Medium',
+          'Open: format decision',
+        ],
+        [
+          'P3-14',
+          'all',
+          '<code>pnpm install</code> fails in environments that cannot fetch <code>libsignal</code> from GitHub; the 32 test files that import <code>baileys</code> then cannot load.',
+          'Info',
+          'Recorded; worked around in the scratch copy only',
+        ],
+      ];
+      const OPEN = [
+        'Run the unrun specs on a machine with Docker: contract, negative, journeys, double-submit, integration; commit the baseline files the contract spec writes; triage failures into the known-gaps lists.',
+        'Acceptance coverage: add criterion numbers to existing test titles (a rename), then write scenarios for the 1,409 P0 criteria with no test.',
+        'Unit tests: mappers (34.4%) and common helpers (81.4% lines) first; raise the floors as they rise; decide whether 30,000 or the per-kind table is the target.',
+        'Run <code>pnpm --filter @crm/api test:coverage</code> once with the new floors to confirm they pass on a full run.',
+        'Journeys: add cross-feature journeys once their routes are proven; count distinct journeys as well as runs.',
+        'Decide the three queue names that are not built: build or delete.',
+        'Update the Phase 1 report (D-01 closed by <code>main</code>) and note the Phase 2 report\'s "not run" tests that now have a run (the interceptor and generator specs pass).',
+        'Run <code>pre-pr</code> and <code>security-review-gate</code> (they need agents and a full install) before merge.',
+      ];
+      const caseStatus = (s) =>
+        /^Pass/.test(s)
+          ? `<span class="chip pass">${esc(s)}</span>`
+          : /^Defect|^Open/.test(s)
+            ? `<span class="chip fail">${esc(s)}</span>`
+            : `<span class="chip info">${esc(s)}</span>`;
+      document.getElementById('reports').innerHTML = R.map(
+        (
+          r,
+        ) => `<article class="report" id="${r.id}"><header><div class="rt"><span class="id">QA task #${r.n}</span><h2>${esc(r.t)}</h2>${chip(r.status)}</div><p>${r.summary}</p></header>
+<dl class="facts"><dt>Type of testing</dt><dd>${esc(r.type)}</dd><dt>What it is</dt><dd>${r.what}</dd><dt>Objective</dt><dd>${r.objective}</dd><dt>Sheet target</dt><dd>${esc(r.target)}</dd><dt>Result against target</dt><dd>${r.coverage}</dd><dt>Defects</dt><dd>${r.defects}</dd></dl>
+<div class="blk"><h3>Scope</h3><ul>${li(r.scope)}</ul></div><div class="blk"><h3>Tools used</h3><ul>${li(r.tools)}</ul></div><div class="blk"><h3>Approach</h3><ol>${li(r.approach)}</ol></div>
+<div class="blk"><h3>Test cases and results</h3><div class="cases"><table><thead><tr><th>ID</th><th>Scenario</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead><tbody>${r.cases.map((c) => `<tr><td class="n">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td><td>${c[3]}</td><td>${caseStatus(c[4])}</td></tr>`).join('')}</tbody></table></div></div>
+<div class="blk"><h3>Execution summary</h3><div class="res">${r.counts.map((c) => `<div><b>${esc(c[0])}</b><span>${esc(c[1])}</span></div>`).join('')}</div></div>
+<div class="blk"><h3>Evidence</h3><div style="display:flex;flex-direction:column;gap:10px">${r.evidence.map((e) => (e.startsWith('<pre>') ? e : `<p class="note">${e}</p>`)).join('')}</div></div>
+<div class="blk"><h3>Limitations and risks</h3><ul>${li(r.limits)}</ul></div><div class="blk"><h3>Recommendations</h3><ul>${li(r.recs)}</ul></div>
+<div class="blk"><h3>How to re-run</h3>${r.rerun}</div><div class="blk"><h3>Files changed</h3><p class="note">${r.files}</p></div></article>`,
+      ).join('');
+      document.getElementById('defects').innerHTML = DEFECTS.map((d) => {
+        const sev = d[3] === 'High' ? 'fail' : d[3] === 'Medium' ? 'part' : 'info';
+        return `<tr><td class="n">${d[0]}</td><td class="n">${d[1] === 'all' ? 'all' : '#' + d[1]}</td><td>${d[2]}</td><td><span class="chip ${sev}">${d[3]}</span></td><td>${d[4]}</td></tr>`;
+      }).join('');
+      document.getElementById('open').innerHTML = li(OPEN);
+    </script>
+  </body>
+</html>

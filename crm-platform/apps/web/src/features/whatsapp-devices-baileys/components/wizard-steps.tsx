@@ -206,13 +206,17 @@ export function ResultStep({
   phoneLabel,
   warmerHref,
   inboxHref,
+  importHref = null,
 }: {
   outcome: Outcome;
   phoneLabel: string;
   warmerHref: string;
   inboxHref: string;
+  /** Where the import's progress is shown; set only when the person chose to import. */
+  importHref?: string | null;
 }) {
   const t = useTranslations(`${NS}.result`);
+  const th = useTranslations('whatsapp-devices-baileys.history.result');
   if (outcome.kind === 'connected') {
     return (
       <div className="space-y-3" data-testid="result-connected" role="status">
@@ -220,6 +224,14 @@ export function ResultStep({
         <p className="text-sm" dir="auto">
           {t('connectedBody', { phone: phoneLabel })}
         </p>
+        {importHref && (
+          <p className="text-sm" data-testid="result-import">
+            {th('note')}{' '}
+            <Link href={importHref} className="font-medium underline">
+              {th('link')}
+            </Link>
+          </p>
+        )}
         <div className="flex flex-wrap gap-3 text-sm">
           <Link href={warmerHref} className="font-medium underline">
             {t('warmer')}

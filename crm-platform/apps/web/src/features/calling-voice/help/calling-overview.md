@@ -19,11 +19,12 @@ Calling lets your team place and answer WhatsApp voice calls from the browser. Y
 3. Open a chat on that number in the inbox and select **Call**. The button is hidden if the contact has no phone number.
 4. If there is no confirmed calling permission for the contact, a window offers two choices. **Call anyway** works if they already tapped Allow in WhatsApp. **Ask permission** sends them a request and places no call, even if they already allow calls (then you just press Call). Try again after they answer.
 5. While a call is live, a panel shows the call length with **Mute**, **End** and **Record**. An incoming call shows a popup with **Accept** and **Decline**.
+6. To record a call, first turn recording on (see [Recording calls](help:call-recording)). Then select **Record**, read the notice shown in the panel to the person and press the button that matches their answer. Nothing is recorded until they agree.
 
 ## Options and settings
 
 - **Turn off calling** removes the Call button from that number's chats.
-- **Record** starts recording and cannot be stopped mid-call. The panel says the call is being recorded.
+- **Record** asks the person for their agreement first. Once they agree, recording starts and cannot be stopped mid-call. The panel says the call is being recorded. If they decline, the call goes on without a recording. Recording is off for every workspace until an owner or admin turns it on.
 - If microphone access is blocked, the caller cannot hear you. Allow the microphone for this site and try again.
 
 > Keep the call to the inbox screens. Leaving them hangs up a live call. Only one call can be active in a browser tab.

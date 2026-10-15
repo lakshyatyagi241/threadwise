@@ -94,8 +94,7 @@
       "signedOut": "Sua sessão terminou. Entre novamente.",
       "network": "Não foi possível acessar o servidor. Verifique sua conexão e tente novamente.",
       "generic": "Algo deu errado. Tente novamente.",
-      "retryIn": "Tente novamente em {seconds} segundos.",
-      "requestId": "ID da solicitação: {id}"
+      "retryIn": "Tente novamente em {seconds} segundos."
     },
     "examples": {
       "howDo": "Como uso {title}?",
@@ -115,7 +114,6 @@
       "description": "Deixe sua equipe pedir o que quer fazer e faça o app orientá-la ou executar os passos na própria conta.",
       "loading": "Carregando",
       "loadFailed": "Não foi possível carregar a configuração.",
-      "requestId": "ID da solicitação: {id}",
       "shareTitle": "O que é compartilhado quando alguém o usa",
       "share1": "O pedido digitado pela pessoa e o texto visível da página em que ela está são enviados ao provedor de IA usado pela plataforma.",
       "share2": "Números de telefone, e-mails, segredos e os campos pessoais de formulários são ocultados antes. Nomes e outros textos livres da página não são.",

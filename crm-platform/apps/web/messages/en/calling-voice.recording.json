@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Call recording",
+        "intro": "Recording is off until you turn it on. When it is on, a teammate reads the notice, the person answers, and only then does the recorder start. Recordings are deleted after the retention period.",
+        "loading": "Loading the recording rules",
+        "loadFailed": "The recording rules could not be loaded.",
+        "retry": "Try again",
+        "viewOnly": "You can see these rules, but only an owner or admin can change them.",
+        "enabled": "Record calls",
+        "enabledOn": "On: teammates can record a call after the person agrees.",
+        "enabledOff": "Off: no call is recorded.",
+        "mode": "How the person agrees",
+        "modeHint": {
+          "confirmed": "The person says yes to being recorded and the teammate saves the answer. The safest choice.",
+          "announcement": "The teammate reads the notice and the call goes on. Use this only where your legal advisor confirms an announcement is enough."
+        },
+        "modeOption": {
+          "confirmed": "The person says yes",
+          "announcement": "Announcement, then continue"
+        },
+        "retention": "Keep recordings for (days)",
+        "retentionHint": "Between {min} and {max} days. Older recordings are deleted every night; the call itself stays in the log.",
+        "retentionInvalid": "Enter a whole number of days within the allowed range.",
+        "notice": "Recording notice",
+        "noticeHint": "The teammate reads this out before recording. Up to {max} characters. Each change is saved as a new version.",
+        "noticeRequired": "Write the notice (at least {min} characters) to turn recording on.",
+        "noticeVersion": "Notice version {version}",
+        "noticeNone": "No notice saved yet",
+        "updatedAt": "saved {date}",
+        "noticeSuggestion": "This call may be recorded for quality and training. Do you agree to the recording?",
+        "useSuggestion": "Use suggested text",
+        "saved": "Recording rules saved.",
+        "saving": "Saving",
+        "save": "Save rules"
+      },
+      "consent": {
+        "title": "Ask before recording",
+        "askConfirmed": "Read the notice. Press the first button only if the person says yes.",
+        "askAnnouncement": "Read the notice, then start recording.",
+        "grantConfirmed": "They said yes: start recording",
+        "grantAnnouncement": "Notice read: start recording",
+        "decline": "No: continue without recording",
+        "declinedNote": "Not recording: the person did not agree.",
+        "off": "Call recording is switched off for this workspace.",
+        "failed": "The answer could not be saved, so nothing is recorded: {message}"
+      },
+      "lifecycle": {
+        "title": "Recording and consent",
+        "consent": "Consent to record",
+        "consentGranted": "Agreed to be recorded",
+        "consentDeclined": "Declined to be recorded",
+        "consentNone": "No answer recorded",
+        "method": {
+          "announcement_continue": "Notice read, call continued",
+          "spoken_yes": "Said yes"
+        },
+        "noticeVersion": "Notice version {version}",
+        "storedAt": "Stored",
+        "expiresAt": "Deleted automatically on",
+        "heldNoExpiry": "Not deleted: legal hold",
+        "none": "Not set",
+        "deleted": "Recording deleted",
+        "deletedReason": {
+          "retention": "retention period ended",
+          "manual": "deleted by a teammate",
+          "consent_withdrawn": "consent withdrawn"
+        },
+        "holdOn": "Legal hold",
+        "placeHold": "Place legal hold",
+        "liftHold": "Lift legal hold",
+        "holdLifted": "Legal hold lifted.",
+        "holdPlaced": "Legal hold placed.",
+        "holdReasonLabel": "Why is it kept?",
+        "cancel": "Cancel",
+        "delete": "Delete recording",
+        "deleteBlockedByHold": "Lift the legal hold first.",
+        "deleteTitle": "Delete this recording?",
+        "deleteMessage": "The audio file is removed for good. The call stays in the log.",
+        "deletedToast": "Recording deleted."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "Call recording is switched off for this workspace.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "This call cannot be recorded: the person has not agreed.",
+      "CALL_RECORDING_CONSENT_INVALID": "That answer cannot be saved for this call.",
+      "CALL_RECORDING_ON_HOLD": "This recording is on legal hold. Lift the hold first.",
+      "CALL_RECORDING_SETTINGS_INVALID": "The recording rules are not valid: write the notice first."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "Person agreed to be recorded",
+          "recording_consent_declined": "Person declined recording",
+          "recording_deleted": "Recording deleted",
+          "recording_hold_set": "Legal hold placed",
+          "recording_hold_lifted": "Legal hold lifted"
+        }
+      }
+    }
+  }
+}

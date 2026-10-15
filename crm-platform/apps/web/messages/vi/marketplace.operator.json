@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "Đang tải...",
-        "requestId": "Mã yêu cầu",
         "retry": "Thử lại",
         "noPermissions": "Không có quyền"
       },

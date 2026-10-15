@@ -292,5 +292,20 @@
     "reproduction": "run the whole flows e2e spec: 99 of 101 tests pass; this scenario errors in both a filtered and a full run",
     "fix": "Test owner: find why supertest sees a closed server for that request (ephemeral-port or listener lifecycle) and make the scenario listen once.",
     "regressionTest": "the scenario itself, once stable"
+  },
+  {
+    "id": "TI-022",
+    "severity": "Medium",
+    "status": "fixed",
+    "releaseBlocking": false,
+    "title": "Erasing a workspace deleted tenant-written storage keys from the shared bucket without checking they belong to it",
+    "resource": "StoragePurgeService.pass / ContactFilesService.create",
+    "code": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/storage-purge.service.ts; apps/api/src/modules/crm/contact-files/contact-files.service.ts",
+    "affectedTenants": "any workspace whose object key (chat/<orgId>/<name>) is known to another workspace owner",
+    "exploitability": "Narrow: needs cloud storage, the victim's object key, and the attacker deleting and erasing their own workspace. The AZ-009 key check on contact files only looked at the second path segment, so storage/chat/<victimOrg>/<name> passed; the storage layer strips storage/ and the purge worker then deleted the victim's object.",
+    "reproduction": "Contact file with storageKey \"storage/chat/<otherOrg>/x\", delete the workspace, let the lifecycle sweep erase it: the purge queue holds that key and MediaStorageService.remove deletes it. Unit: test/unit/tenancy/storage-key-owner.spec.ts.",
+    "fix": "storageKeyIsOwnedBy(orgId, key) compares the canonical key (trim, leading slashes, one storage/ removed; no ., .. or empty segments; second segment must be the workspace id); the purge worker refuses to delete anything else and records the error on the queue row; the contact-files guard uses the same canonical form.",
+    "regressionTest": "apps/api/test/unit/tenancy/storage-key-owner.spec.ts",
+    "note": "Follow-up: the other client-writable key columns (message_templates.media_path, flow_file_path, invoicing logo/signature paths, team_chat.attachment_path, order_media_path, payment_proof_path) were not each traced; the purge-side check covers them whatever they hold. Keys that do not follow <area>/<orgId>/ are no longer purged: they stay in storage_purge_queue with last_error for an operator."
   }
 ]

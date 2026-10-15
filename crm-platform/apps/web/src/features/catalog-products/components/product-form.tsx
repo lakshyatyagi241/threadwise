@@ -23,6 +23,7 @@ import {
   PRODUCT_GALLERY_MAX,
   PRODUCT_NAME_MAX,
   PRODUCT_SKU_MAX,
+  formatProductMoney,
   type ProductResponse,
 } from '@crm/contracts';
 import { KEYS } from '../api/catalog';
@@ -44,9 +45,20 @@ import {
   type FieldKey,
   type ProductForm as Form,
 } from '../lib/product-form';
+import {
+  EMPTY_VARIANTS,
+  fromPrice,
+  hasVariantProblems,
+  stockTotal,
+  validateVariants,
+  variantPathOf,
+  variantsFromProduct,
+  type VariantsState,
+} from '../lib/variants-model';
 import { CloseIcon, ImageIcon, PlusIcon } from './icons';
 import { CARD, ErrorLine, KICKER, ProductThumb } from './parts';
 import { useErrorText } from './use-error-text';
+import { VariantsSection } from './variants-section';
 
 const SECTION = `${CARD} p-5`;
 const LABEL = 'font-semibold';
@@ -74,14 +86,28 @@ export function ProductForm({
   const [form, setForm] = useState<Form>(() =>
     product ? formFromProduct(product) : EMPTY_PRODUCT_FORM,
   );
+  const [variants, setVariants] = useState<VariantsState>(() =>
+    product ? variantsFromProduct(product) : EMPTY_VARIANTS,
+  );
   const [picked, setPicked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const patch = (p: Partial<Form>) => setForm((f) => ({ ...f, ...p }));
 
-  const problems = validate(form);
+  const hadVariants = Boolean(product?.hasVariants);
+  const allVariantsPriced =
+    variants.enabled &&
+    variants.rows.some((r) => r.active) &&
+    variants.rows.filter((r) => r.active).every((r) => r.priceMajor.trim() !== '');
+  const problems = validate(form, { variants: variants.enabled, allVariantsPriced });
+  const variantProblems = validateVariants(variants);
+  const variantServer: Record<string, string> = {};
   const server: Partial<Record<FieldKey, string>> = {};
   for (const [path, message] of Object.entries(fieldErrors(error))) {
+    if (variantPathOf(path)) {
+      variantServer[path] = message;
+      continue;
+    }
     const key = fieldOfPath(path);
     if (key && !(key in server)) server[key] = message;
   }
@@ -91,7 +117,11 @@ export function ProductForm({
   };
   const conflict = error !== null && isRowVersionConflict(error);
   const hasFieldErrors =
-    (picked && Object.keys(problems).length > 0) || Object.keys(server).length > 0;
+    (picked && (Object.keys(problems).length > 0 || hasVariantProblems(variantProblems))) ||
+    Object.keys(server).length > 0 ||
+    Object.keys(variantServer).length > 0;
+  const total = stockTotal(variants.rows);
+  const low = fromPrice(variants.rows, form.priceMajor);
   const profit = profitIndicator(form.priceMajor, form.comparePriceMajor);
   const compare = previewCompare(form);
 
@@ -99,13 +129,14 @@ export function ProductForm({
     e.preventDefault();
     setPicked(true);
     setError(null);
-    if (Object.keys(problems).length > 0) {
-      focusFirstInvalid(Object.keys(problems) as FieldKey[]);
+    if (Object.keys(problems).length > 0 || hasVariantProblems(variantProblems)) {
+      if (Object.keys(problems).length > 0) focusFirstInvalid(Object.keys(problems) as FieldKey[]);
+      else focusFirstInvalidVariant();
       return;
     }
     setBusy(true);
     try {
-      const input = buildInput(form);
+      const input = buildInput(form, variants, hadVariants);
       if (product) await updateProduct(product.id, { ...input, rowVersion: product.rowVersion });
       else await createProduct(input);
       toast(product ? t('updated') : t('created'), 'success');
@@ -116,11 +147,20 @@ export function ProductForm({
     } catch (err) {
       setError(err);
       setBusy(false);
-      const keys = Object.keys(fieldErrors(err))
-        .map(fieldOfPath)
-        .filter((k): k is FieldKey => k !== null);
+      const paths = Object.keys(fieldErrors(err));
+      const keys = paths.map(fieldOfPath).filter((k): k is FieldKey => k !== null);
       if (keys.length > 0) focusFirstInvalid(keys);
+      else if (paths.some((p) => variantPathOf(p))) focusFirstInvalidVariant();
     }
+  };
+
+  /** Moves focus to the first invalid control of the variants section (an alert line is its own target). */
+  const focusFirstInvalidVariant = () => {
+    document
+      .querySelector<HTMLElement>(
+        'section[aria-labelledby="cat-form-variants"] [aria-invalid="true"]',
+      )
+      ?.focus();
   };
 
   const setGallery = (i: number, value: string) =>
@@ -331,6 +371,16 @@ export function ProductForm({
             </div>
           </section>
 
+          <VariantsSection
+            state={variants}
+            onChange={setVariants}
+            problems={picked ? variantProblems : null}
+            serverErrors={variantServer}
+            hadVariants={hadVariants}
+            productPriceMajor={form.priceMajor}
+            currencyCode={form.currencyCode}
+          />
+
           <section className={SECTION} aria-labelledby="cat-form-pricing">
             <h2 id="cat-form-pricing" className={`${KICKER} mb-3 font-normal`}>
               {t('pricing')}
@@ -339,10 +389,12 @@ export function ProductForm({
               <Field
                 label={
                   <span className={LABEL}>
-                    {t('price')} <span className="text-danger">*</span>
+                    {variants.enabled ? t('variants.fromPrice') : t('price')}{' '}
+                    {!allVariantsPriced && <span className="text-danger">*</span>}
                   </span>
                 }
                 htmlFor="cat-p-price"
+                hint={variants.enabled ? t('variants.priceHint') : undefined}
                 error={fieldError('priceMajor')}
               >
                 <Input
@@ -426,16 +478,28 @@ export function ProductForm({
             </h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               <Field
-                label={<span className={LABEL}>{t('stockQty')}</span>}
+                label={
+                  <span className={LABEL}>
+                    {variants.enabled ? t('variants.totalStock') : t('stockQty')}
+                  </span>
+                }
                 htmlFor="cat-p-stock"
+                hint={variants.enabled ? t('variants.stockHint') : undefined}
                 error={fieldError('stockQty')}
               >
                 <Input
                   id="cat-p-stock"
-                  type="number"
+                  type={variants.enabled ? 'text' : 'number'}
                   min={0}
                   max={1000000}
-                  value={form.stockQty}
+                  readOnly={variants.enabled}
+                  value={
+                    variants.enabled
+                      ? total.unlimited
+                        ? t('variants.unlimited')
+                        : String(total.total)
+                      : form.stockQty
+                  }
                   placeholder={t('stockPlaceholder')}
                   invalid={Boolean(fieldError('stockQty'))}
                   className={MONO}
@@ -584,7 +648,13 @@ export function ProductForm({
                   {form.name.trim() || t('productName')}
                 </div>
                 <div className="mt-1 flex items-baseline gap-2">
-                  <span className="text-[14px] font-semibold">{previewPrice(form)}</span>
+                  <span className="text-[14px] font-semibold">
+                    {variants.enabled && low !== null
+                      ? t('variants.fromPreview', {
+                          price: formatProductMoney(Math.round(low * 100), form.currencyCode),
+                        })
+                      : previewPrice(form)}
+                  </span>
                   {compare && (
                     <span className="text-[11.5px] text-muted-foreground line-through">
                       {compare}

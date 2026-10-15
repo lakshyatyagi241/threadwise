@@ -23,8 +23,12 @@ export function formatInt(n: number, locale: string): string {
   return new Intl.NumberFormat(locale).format(n);
 }
 
-/** "Oct 02, 14:05" in the viewer's language and the browser's time zone; empty for a missing or invalid time. */
-export function formatWhen(iso: string | null | undefined, locale: string): string {
+/** "Oct 02, 14:05" in the viewer's language and time zone (left out: the browser's); empty for a missing or invalid time. */
+export function formatWhen(
+  iso: string | null | undefined,
+  locale: string,
+  timeZone?: string,
+): string {
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
@@ -34,11 +38,16 @@ export function formatWhen(iso: string | null | undefined, locale: string): stri
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
+    timeZone,
   }).format(d);
 }
 
 /** "Oct 02, 2026". */
-export function formatDay(iso: string | null | undefined, locale: string): string {
+export function formatDay(
+  iso: string | null | undefined,
+  locale: string,
+  timeZone?: string,
+): string {
   if (!iso) return '';
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
@@ -46,6 +55,7 @@ export function formatDay(iso: string | null | undefined, locale: string): strin
     year: 'numeric',
     month: 'short',
     day: '2-digit',
+    timeZone,
   }).format(d);
 }
 

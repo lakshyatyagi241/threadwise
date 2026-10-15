@@ -75,7 +75,9 @@
       "removeWish": "Remover {name} da lista de desejos",
       "quickView": "Visualização rápida de {name}",
       "quickViewTitle": "Visualização rápida",
-      "was": "De"
+      "was": "De",
+      "chooseOptions": "Escolher opções",
+      "chooseOptionsNamed": "Escolher opções de {name}"
     },
     "quick": {
       "details": "Detalhes completos →"
@@ -162,7 +164,9 @@
       "increase": "Aumentar quantidade",
       "remove": "Remover {name} do carrinho",
       "fullTitle": "Seu carrinho está cheio",
-      "fullBody": "Um carrinho comporta até 100 produtos diferentes. Faça estes pedidos primeiro e depois inicie um novo carrinho."
+      "fullBody": "Um carrinho comporta até 100 produtos diferentes. Faça estes pedidos primeiro e depois inicie um novo carrinho.",
+      "variantDroppedTitle": "Seu carrinho foi atualizado",
+      "variantDroppedBody": "{count, plural, one {# item precisa que você escolha as opções novamente e foi removido do carrinho.} other {# itens precisam que você escolha as opções novamente e foram removidos do carrinho.}}"
     },
     "wish": {
       "title": "Lista de desejos",
@@ -233,9 +237,9 @@
       "couponFallback": "Código inválido."
     },
     "errors": {
-      "itemsUnavailable": "Estes itens não estão mais disponíveis. Atualize a página e tente novamente.",
       "notAvailable": "Esta loja não está disponível.",
-      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente."
+      "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
+      "itemsRefreshed": "Alguns itens mudaram ou esgotaram, então atualizamos seu carrinho. Confira e tente novamente."
     },
     "placed": {
       "title": "Pedido feito",
@@ -331,6 +335,13 @@
       "help": "Precisa de ajuda?",
       "support": "Falar com o suporte",
       "metaTitle": "Página não encontrada"
+    },
+    "variant": {
+      "from": "A partir de {price}",
+      "optionsCount": "{count, plural, one {# opção} other {# opções}}",
+      "select": "Selecione {option}",
+      "unavailable": "Esta combinação não está disponível",
+      "soldOutValue": "esgotado"
     }
   }
 }

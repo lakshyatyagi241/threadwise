@@ -148,7 +148,7 @@ function WizardBody({
   const w = useWizard(initial);
   const session = useSession();
   const canTest = useCan('camp.campaigns.test');
-  const zone = defaultTimeZone(session.org.timezone);
+  const zone = defaultTimeZone(session.effectiveTimezone);
   const { draft, view } = w.state;
 
   const templates = useWizardTemplates();

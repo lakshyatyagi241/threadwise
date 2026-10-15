@@ -1268,14 +1268,14 @@ describe('the campaign builder options ride on a guided send', () => {
     ...o,
   });
 
-  it('an A/B send with auto-end, Smart Delivery and no link tracking reaches the campaign row, splits the recipients and sends each variant its own template', async () => {
+  it('an A/B send with auto-end, Smart Delivery, no link tracking and retries off reaches the campaign row, splits the recipients and sends each variant its own template', async () => {
     lab.clock.now = new Date();
     const w = await world(lab, 'bwo1');
     await payPerMessage(lab, w.t, 1_000_000);
     const b = await templateB(w);
     const ids = await people(lab, w.t, [{}, {}, {}, {}]);
     const g = await group(owner(), w.t, 'G', ids);
-    const d = await makeDraft(lab, w, readyDraft(w, g, options(b)));
+    const d = await makeDraft(lab, w, readyDraft(w, g, options(b, { retryFailed: false })));
     const res = await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, {
       rowVersion: d.rowVersion,
     });
@@ -1283,7 +1283,7 @@ describe('the campaign builder options ride on a guided send', () => {
 
     const c = (
       await owner().query(
-        `SELECT ab_testing, ab_split, tracking_enabled, throttle_min_sec, throttle_max_sec, batch_size, batch_pause_min,
+        `SELECT ab_testing, ab_split, tracking_enabled, retry_failed, throttle_min_sec, throttle_max_sec, batch_size, batch_pause_min,
                 daily_limit, window_start AS ws, window_end AS we, expires_at,
                 (SELECT uuid FROM wa_templates t WHERE t.org_id = c.org_id AND t.id = c.template_id_b) AS b
          FROM wpcampaigns c WHERE uuid = $1`,
@@ -1294,6 +1294,7 @@ describe('the campaign builder options ride on a guided send', () => {
       ab_testing: true,
       ab_split: 50,
       tracking_enabled: false,
+      retry_failed: false,
       throttle_min_sec: 1,
       throttle_max_sec: 3,
       batch_size: 50,
@@ -1324,7 +1325,7 @@ describe('the campaign builder options ride on a guided send', () => {
     expect(lab.sent.filter((m) => m.templateName !== b.name)).toHaveLength(2);
   });
 
-  it('a send without the builder options keeps the classic defaults (no A/B, links tracked, nothing paced)', async () => {
+  it('a send without the builder options keeps the classic defaults (no A/B, links tracked, retries on, nothing paced)', async () => {
     const w = await world(lab, 'bwo2');
     await payPerMessage(lab, w.t, 1_000_000);
     const g = await group(owner(), w.t, 'G', await people(lab, w.t, [{}, {}]));
@@ -1332,13 +1333,14 @@ describe('the campaign builder options ride on a guided send', () => {
     await wiz(lab, w.t.admin).post(`/drafts/${d.id}/launch`, { rowVersion: d.rowVersion });
     const c = (
       await owner().query(
-        `SELECT ab_testing, tracking_enabled, throttle_min_sec, expires_at, template_id_b FROM wpcampaigns WHERE uuid = $1`,
+        `SELECT ab_testing, tracking_enabled, retry_failed, throttle_min_sec, expires_at, template_id_b FROM wpcampaigns WHERE uuid = $1`,
         [d.id],
       )
     ).rows[0];
     expect(c).toMatchObject({
       ab_testing: false,
       tracking_enabled: true,
+      retry_failed: true,
       throttle_min_sec: null,
       expires_at: null,
       template_id_b: null,

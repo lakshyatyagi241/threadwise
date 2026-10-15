@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useToast } from '@crm/ui';
 import type { ShopifyStore, WoocommerceStore } from '@crm/contracts';
+import { ConsentNoticeEditor } from '@/features/contact-consent';
 import { formatRelative } from '@/features/auth-registration-security/shared/relative-time';
 import type { Kind } from '../../lib/model';
 import { PluginCard } from '../plugin-card';
@@ -19,11 +20,14 @@ export function SettingsTab({
 }) {
   const t = useTranslations('ecom.settings');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const { toast } = useToast();
   const [now] = useState(() => new Date().getTime());
   const count = Object.keys(store.webhookIds).length;
   const when = (iso: string | null) =>
-    iso ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+    iso
+      ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone })
+      : '—';
 
   const rows: Array<[string, string]> = [
     [t('storeUrl'), store.storeUrl],
@@ -83,6 +87,8 @@ export function SettingsTab({
           </div>
         </dl>
       </Panel>
+      {/* What the store's marketing checkbox stands for: the store's own marketing choice is recorded as consent only when this is on. */}
+      <ConsentNoticeEditor scope="commerce" refId={`${kind}:${store.id}`} />
       {kind === 'woocommerce' && <PluginCard storeId={store.id} />}
     </>
   );

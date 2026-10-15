@@ -130,4 +130,16 @@ export class LeadScoringController {
   decide(@Body(zodPipe(lscSuggestionDecisionSchema)) body: LscSuggestionDecisionInput) {
     return this.digests.decide(body);
   }
+
+  @Post('suggestions/:uuid/undo')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @RequirePermission('lsc.stage.review')
+  @ApiOperation({
+    summary: 'Put a contact back where it was before the AI moved it, if nobody moved it since',
+    description:
+      'The Undo on the chat line. Only a suggestion that was applied automatically can be undone; 409 when the contact moved on or it was undone already.',
+  })
+  async undo(@Param('uuid', ParseUUIDPipe) uuid: string): Promise<void> {
+    await this.digests.undo(uuid);
+  }
 }

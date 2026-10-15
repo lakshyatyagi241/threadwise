@@ -9,6 +9,8 @@ import { DeviceGroupsService } from './device-groups.service';
 import { DeviceGroupsSyncService } from './device-groups-sync.service';
 import { DeviceLimits } from './device-limits.service';
 import { DevicePairingService } from './device-pairing.service';
+import { HistoryImportRepository } from './history-import.repository';
+import { HistoryImportService } from './history-import.service';
 import { DevicesController } from './devices.controller';
 import { DevicesRepository } from './devices.repository';
 import { DevicesService } from './devices.service';
@@ -40,8 +42,10 @@ import { UnofficialEngineGuard } from './unofficial-engine.guard';
     DeviceGroupsLegacyDirectory,
     DeviceGroupsSyncService,
     DeviceGroupsService,
+    HistoryImportRepository,
+    HistoryImportService,
   ],
   // The worker side (WhatsappDevicesBaileysWorkerModule) shares the directory sync; the groups API itself is HTTP only.
-  exports: [DeviceGroupsSyncService],
+  exports: [DeviceGroupsSyncService, HistoryImportRepository, HistoryImportService],
 })
 export class WhatsappDevicesBaileysModule {}

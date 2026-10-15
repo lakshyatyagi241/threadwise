@@ -120,6 +120,7 @@ const stored: PlanAdminItem = {
     sms: false,
     help_agent: false,
     email_channel: false,
+    personal_history_full: false,
   },
   moduleFeatures: {},
   moduleLimits: {},

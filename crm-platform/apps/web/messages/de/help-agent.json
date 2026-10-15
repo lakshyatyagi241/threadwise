@@ -94,8 +94,7 @@
       "signedOut": "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.",
       "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
       "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
-      "retryIn": "Versuchen Sie es in {seconds} Sekunden erneut.",
-      "requestId": "Anfrage-ID: {id}"
+      "retryIn": "Versuchen Sie es in {seconds} Sekunden erneut."
     },
     "examples": {
       "howDo": "Wie verwende ich {title}?",
@@ -115,7 +114,6 @@
       "description": "Lassen Sie Ihr Team sagen, was es tun möchte, und die App führt es an oder erledigt die Schritte im eigenen Konto.",
       "loading": "Wird geladen",
       "loadFailed": "Die Einstellung konnte nicht geladen werden.",
-      "requestId": "Anfrage-ID: {id}",
       "shareTitle": "Was bei der Nutzung geteilt wird",
       "share1": "Die eingegebene Anfrage und der sichtbare Text der aktuellen Seite werden an den KI-Anbieter der Plattform gesendet.",
       "share2": "Telefonnummern, E-Mail-Adressen, Geheimnisse und die persönlichen Felder von Formularen werden zuvor ausgeblendet. Namen und anderer freier Text auf einer Seite nicht.",

@@ -65,10 +65,9 @@ describe('labels', () => {
     expect(providerTag(null, false, off)).toBe('—');
   });
 
-  it('only scheduled and failed broadcasts can be deleted', () => {
+  it('only scheduled broadcasts can be deleted', () => {
     expect(['scheduled', 'failed', 'processing', 'completed', 'paused'].filter(canDelete)).toEqual([
       'scheduled',
-      'failed',
     ]);
   });
 
@@ -87,5 +86,11 @@ describe('schedule text', () => {
       'Oct 03, 08:00',
     );
     expect(scheduleText(null, now, 'Today')).toBeNull();
+  });
+  it('reads the same instant in the zone it is given', () => {
+    const iso = '2026-10-02T20:30:00Z';
+    const base = new Date('2026-10-02T09:00:00Z');
+    expect(scheduleText(iso, base, 'Today', 'Asia/Kolkata')).toBe('Oct 03, 02:00');
+    expect(scheduleText(iso, base, 'Today', 'America/New_York')).toBe('Today, 16:30');
   });
 });

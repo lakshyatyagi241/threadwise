@@ -245,7 +245,7 @@ describe('step 1: name and template', () => {
     expect(step({ templates: pending })).toContain('Loading templates');
     const bad = step({ templates: failed(new ApiError(500, 'INTERNAL', 'x', 'req-9')) });
     expect(bad).toContain('Something went wrong on our side');
-    expect(bad).toContain('req-9');
+    expect(bad).not.toContain('req-9');
     expect(bad).toContain('Try again');
     const empty = step({ templates: ready({ data: [] }) });
     expect(empty).toContain('No approved templates yet');

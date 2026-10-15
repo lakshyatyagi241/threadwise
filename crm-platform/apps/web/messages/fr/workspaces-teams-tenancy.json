@@ -12,7 +12,7 @@
       "retry": "Réessayer",
       "loadMore": "Charger plus",
       "loadingMore": "Chargement",
-      "requestId": "Identifiant de la requête"
+      "loading": "Chargement"
     },
     "tiers": {
       "owner": "Propriétaire",
@@ -96,7 +96,11 @@
       "linkReset": "L’envoi d’e-mails n’est pas configuré sur ce serveur : partagez directement ce lien avec la personne. Il ne fonctionne qu’une fois.",
       "linkInvite": "L’envoi d’e-mails n’est pas configuré sur ce serveur : partagez directement ce lien avec la personne. Il ne fonctionne qu’une fois et expire après {days, plural, one {# jour} other {# jours}}.",
       "linkLabel": "Lien à usage unique",
-      "linkEmail": "E-mail"
+      "linkEmail": "E-mail",
+      "onLeaveUntil": "En congé jusqu’au {date}",
+      "onLeaveOpen": "En congé",
+      "leaveFrom": "Congé à partir du {date}",
+      "leaveAction": "Congés et suppléance"
     },
     "invite": {
       "eyebrow": "Espace de travail",
@@ -215,7 +219,13 @@
       "teamNameTaken": "Une équipe portant ce nom existe déjà.",
       "teamMemberUnknown": "L’une des personnes sélectionnées ne fait pas partie de cet espace de travail.",
       "orgSuspended": "Cet espace de travail est suspendu.",
-      "unexpected": "Une erreur s’est produite. Réessayez dans un instant."
+      "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
+      "leaveOverlap": "Cette personne a déjà un congé qui partage au moins un jour avec ces dates.",
+      "leaveInvalid": "Ces dates ne peuvent pas être utilisées. Le premier jour ne peut pas être dans le passé, et un congé déjà commencé garde son premier jour.",
+      "delegateInvalid": "Le suppléant doit être un autre membre actif de cet espace de travail.",
+      "delegateCycle": "Cela créerait une boucle : la personne choisie a déjà cette personne comme suppléante.",
+      "reassignInvalid": "Rien n’a pu être réattribué. Vérifiez que la personne possède des contacts ou des affaires ouvertes et que la cible peut les prendre.",
+      "reassignNotRestorable": "Cette réattribution ne peut plus être annulée."
     },
     "accept": {
       "title": "Rejoignez votre espace de travail",
@@ -235,6 +245,81 @@
       "submit": "Accepter l’invitation",
       "submitting": "Adhésion en cours",
       "invalidHeading": "Lien d’invitation"
+    },
+    "leave": {
+      "eyebrow": "Congés et suppléance",
+      "calendarNote": "Les dates sont des jours du calendrier de votre espace de travail ({timezone}).",
+      "nowTitle": "En congé maintenant",
+      "upcomingTitle": "À venir",
+      "notAway": "Pas en congé pour le moment.",
+      "range": "Du {from} au {to}",
+      "rangeOpen": "À partir du {from}, sans date de fin",
+      "reasonShown": "Motif (visible uniquement des responsables) : {reason}",
+      "endNow": "Terminer le congé maintenant",
+      "cancelLeave": "Annuler le congé",
+      "endTitle": "Terminer ce congé maintenant ?",
+      "endMessage": "La personne est de retour aujourd’hui. L’attribution automatique recommencera à la choisir.",
+      "cancelTitle": "Annuler ce congé ?",
+      "cancelMessage": "Il n’a pas encore commencé. Il sera supprimé.",
+      "ended": "Congé terminé.",
+      "added": "Congé enregistré.",
+      "readOnly": "Seule la personne concernée et les responsables peuvent modifier un congé.",
+      "addTitle": "Ajouter un congé",
+      "firstDay": "Premier jour",
+      "lastDay": "Dernier jour",
+      "openEnded": "Pas encore de date de fin (jusqu’à ce que quelqu’un y mette fin)",
+      "reason": "Motif (facultatif)",
+      "reasonHint": "Seuls la personne et ses responsables voient ceci.",
+      "addSubmit": "Enregistrer le congé",
+      "problems": {
+        "startRequired": "Choisissez le premier jour.",
+        "startPast": "Le premier jour ne peut pas être dans le passé.",
+        "endRequired": "Choisissez le dernier jour ou cochez « Pas de date de fin ».",
+        "endBeforeStart": "Le dernier jour ne peut pas précéder le premier jour."
+      },
+      "delegateTitle": "Suppléant",
+      "delegateHelp": "Pendant le congé de cette personne, les nouvelles conversations et l’attribution automatique vont à son suppléant s’il est disponible, sinon à l’équipe.",
+      "noDelegate": "Aucun suppléant",
+      "delegateSaved": "Suppléant enregistré.",
+      "delegateRemoved": "Suppléant retiré.",
+      "delegateAway": "{name} est aussi en congé et ne peut donc pas assurer la suppléance pour le moment."
+    },
+    "reassign": {
+      "title": "Réattribuer les contacts et les affaires",
+      "holds": "{name} possède {contacts, plural, one {# contact} other {# contacts}} et {chats, plural, one {# conversation ouverte} other {# conversations ouvertes}}.",
+      "target": "Les confier à",
+      "kindUser": "Une personne",
+      "kindDelegate": "Son suppléant",
+      "kindTeam": "Une équipe, en round robin",
+      "person": "Personne",
+      "team": "Équipe",
+      "teamHint": "Réparti à tour de rôle entre les membres présents et pas en congé.",
+      "choose": "Choisir",
+      "includeDeals": "Inclure les affaires ouvertes",
+      "returnOn": "Les rendre le {date}, au retour de la personne",
+      "returnUnavailable": "Les rendre au retour de la personne (nécessite un congé avec un dernier jour)",
+      "returnHelp": "Seuls reviennent les contacts et affaires que personne n’a modifiés depuis. Vous pouvez aussi annuler pendant {days} jours.",
+      "reason": "Note (facultatif)",
+      "submit": "Vérifier et réattribuer",
+      "confirmTitle": "Réattribuer maintenant ?",
+      "confirmMessage": "{name} possède {contacts, plural, one {# contact} other {# contacts}} et {deals, plural, one {# affaire ouverte} other {# affaires ouvertes}} qui seront déplacés.",
+      "confirm": "Réattribuer",
+      "done": "{contacts, plural, one {# contact déplacé} other {# contacts déplacés}} et {deals, plural, one {# affaire déplacée} other {# affaires déplacées}}.",
+      "history": "Réattributions précédentes",
+      "historyEmpty": "Rien n’a encore été réattribué.",
+      "status": {
+        "applied": "Déplacé",
+        "restored": "Rendu",
+        "restore_blocked": "Non rendu"
+      },
+      "summary": "{contacts} contacts et {deals} affaires vers {target}",
+      "returnsOn": "revient le {date}",
+      "restoredSummary": "{restored} rendus, {skipped} laissés en place",
+      "remaining": "Encore {count} à déplacer : relancez l’opération",
+      "undo": "Annuler",
+      "undoTitle": "Annuler cette réattribution ?",
+      "undoMessage": "Les contacts et affaires que personne n’a modifiés depuis reviennent à leur ancien propriétaire. Les autres restent en place.",
+      "restored": "{count} rendus, {skipped} laissés en place."
     }
   }
 }

@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "סגירה"
+    },
+    "nav": {
+      "history": "היסטוריה"
+    },
+    "crumb": "קמפיינים / היסטוריית הודעות",
+    "title": "היסטוריית הודעות",
+    "loading": "טוען הודעות…",
+    "tryAgain": "נסו שוב",
+    "retention": "שלבי המסירה של כל הודעה נשמרים במלואם {hot} ימים, ואז מועברים לארכיון ונשמרים עד {days} ימים אחרי ההודעה. הפיד עצמו חוזר שנה אחורה.",
+    "range": {
+      "label": "תקופה",
+      "24h": "24 השעות האחרונות",
+      "7d": "7 הימים האחרונים",
+      "30d": "30 הימים האחרונים",
+      "90d": "90 הימים האחרונים",
+      "custom": "תאריכים מותאמים",
+      "short": {
+        "24h": "24 ש׳",
+        "7d": "7 י׳",
+        "30d": "30 י׳",
+        "90d": "90 י׳"
+      },
+      "from": "מתאריך",
+      "to": "עד תאריך",
+      "apply": "החלת תאריכים",
+      "problem": {
+        "order": "התאריך הראשון לא יכול להיות אחרי התאריך האחרון."
+      }
+    },
+    "exports": {
+      "title": "ייצואי CSV",
+      "request": "ייצוא CSV",
+      "requested": "הייצוא שלכם בהכנה. נשלח לכם אימייל כשיהיה מוכן.",
+      "requestedTo": "הייצוא שלכם בהכנה. נשלח אימייל אל {email} כשיהיה מוכן.",
+      "status": {
+        "queued": "ממתין להתחלה",
+        "running": "בהכנה",
+        "ready": "מוכן",
+        "failed": "נכשל",
+        "expired": "פג תוקף"
+      },
+      "preparing": "מכין…",
+      "download": "הורדה",
+      "rows": "{n} הודעות",
+      "keptUntil": "נשמר עד {when} ({days} ימים)",
+      "fromEmail": "מהאימייל שלכם"
+    },
+    "kpi": {
+      "label": "נתוני מפתח",
+      "total": "סך ההודעות",
+      "vsLast": "{pct}% לעומת התקופה הקודמת",
+      "sent": "נשלחו",
+      "received": "התקבלו",
+      "failed": "נכשלו",
+      "avgResponse": "זמן תגובה ממוצע",
+      "delivered": "נמסרו",
+      "read": "נקראו",
+      "deliveryRate": "שיעור מסירה",
+      "cost": "עלות",
+      "outgoing": "יוצאות",
+      "incoming": "נכנסות",
+      "retryQueue": "תור ניסיון חוזר",
+      "toFirstReply": "עד התגובה הראשונה",
+      "healthy": "תקין",
+      "na": "לא זמין",
+      "deliveredCaption": "הגיעו ללקוח",
+      "readCaption": "נפתחו על ידי הלקוח",
+      "deliveryRateCaption": "מההודעות שיצאו מהתור",
+      "costCaption": "חויב מהארנק שלכם"
+    },
+    "charts": {
+      "volume": "נפח",
+      "volumeTitle": "הודעות לאורך זמן",
+      "bucketLabel": "קיבוץ לפי",
+      "bucket": {
+        "daily": "יומי",
+        "hourly": "שעתי",
+        "weekly": "שבועי"
+      },
+      "volumeAria": "הודעות לאורך זמן: {sent} נשלחו, {received} התקבלו, {failed} נכשלו",
+      "when": "מתי",
+      "series": {
+        "sent": "נשלחו",
+        "received": "התקבלו",
+        "failed": "נכשלו"
+      },
+      "direction": "חלוקה לפי כיוון",
+      "directionTitle": "נשלחו לעומת התקבלו",
+      "directionAria": "{total} הודעות, מחולקות לנשלחו, התקבלו ונכשלו",
+      "types": "לפי סוג הודעה",
+      "typesTitle": "התמהיל בתקופה זו",
+      "media": "מדיה",
+      "top": "השיחות המובילות",
+      "topTitle": "השיחות הפעילות ביותר ({range})",
+      "openInbox": "פתיחת תיבת הדואר",
+      "topEmpty": "אין עדיין שיחות פעילות בתקופה זו.",
+      "topMeta": "{n} הודעות · אחרונה {time}"
+    },
+    "filters": {
+      "search": "חיפוש הודעות",
+      "searchPlaceholder": "חיפוש לפי טקסט, איש קשר, טלפון או מזהה הודעה…",
+      "directionLabel": "כיוון",
+      "dir": {
+        "all": "הכול",
+        "out": "נשלחו",
+        "in": "התקבלו",
+        "fail": "נכשלו"
+      },
+      "channel": "ערוץ",
+      "allChannels": "כל הערוצים",
+      "type": "סוג",
+      "allTypes": "כל הסוגים",
+      "status": "סטטוס",
+      "allStatuses": "כל הסטטוסים",
+      "sources": "נשלח על ידי",
+      "clear": "ניקוי מסננים",
+      "active": "מסננים פעילים",
+      "chip": {
+        "templateId": "תבנית אחת",
+        "campaignId": "קמפיין אחד",
+        "broadcastId": "שידור אחד",
+        "scheduledId": "הודעה מתוזמנת אחת"
+      },
+      "removeFilter": "הסרת מסנן: {filter}"
+    },
+    "type": {
+      "text": "טקסט רגיל",
+      "template": "תבנית",
+      "auto_reply": "מענה אוטומטי",
+      "campaign": "קמפיין",
+      "broadcast": "שידור",
+      "scheduled": "מתוזמן",
+      "image": "תמונה",
+      "video": "וידאו",
+      "audio": "אודיו",
+      "document": "מסמך",
+      "location": "מיקום"
+    },
+    "status": {
+      "queued": "בתור",
+      "sent": "נשלחה",
+      "delivered": "נמסרה",
+      "read": "נקראה",
+      "failed": "נכשלה",
+      "received": "נכנסת"
+    },
+    "source": {
+      "inbox": "תיבת דואר",
+      "flow": "זרימה",
+      "auto_reply": "מענה אוטומטי",
+      "ai": "עוזר בינה מלאכותית",
+      "api": "API",
+      "broadcast": "שידור",
+      "campaign": "קמפיין",
+      "scheduled": "מתוזמן",
+      "other": "אחר"
+    },
+    "direction": {
+      "in": "נכנסת",
+      "out": "יוצאת",
+      "failed": "נכשלה"
+    },
+    "table": {
+      "col": {
+        "when": "מתי",
+        "dir": "כיוון",
+        "contact": "איש קשר",
+        "message": "הודעה",
+        "type": "סוג",
+        "status": "סטטוס",
+        "open": "פתיחה"
+      },
+      "unknown": "איש קשר לא ידוע",
+      "masked": "המספר מוסתר כי אין לכם הרשאה לפתוח איש קשר זה.",
+      "entity": {
+        "broadcast": "שידור · {name}",
+        "campaign": "קמפיין · {name}",
+        "scheduled": "מתוזמן · {name}"
+      },
+      "openSource": "פתיחה",
+      "openSourceFor": "פתיחת המקור של {name}",
+      "showing": "מוצגות {n}",
+      "showingOf": "מוצגות {n} מתוך {total}",
+      "loadMore": "טעינת עוד"
+    },
+    "empty": {
+      "noMatch": "אין הודעות התואמות למסננים",
+      "noMatchHint": "נסו לנקות את החיפוש או לבחור תקופה רחבה יותר.",
+      "period": "אין הודעות ב-{days} הימים האחרונים",
+      "periodCustom": "אין הודעות בתאריכים אלה",
+      "periodHint": "הודעות שתשלחו או תקבלו יופיעו כאן, יחד עם סטטוס המסירה שלהן."
+    },
+    "drawer": {
+      "title": "פרטי ההודעה",
+      "close": "סגירה",
+      "loading": "טוען…",
+      "tryAgain": "נסו שוב",
+      "copied": "הועתק",
+      "copyFailed": "ההעתקה נכשלה",
+      "copyId": "העתקת מזהה",
+      "openChat": "פתיחת צ׳אט",
+      "openContact": "פתיחת איש קשר",
+      "openEntity": {
+        "broadcast": "פתיחת שידור",
+        "campaign": "פתיחת קמפיין",
+        "scheduled": "פתיחת הודעה מתוזמנת"
+      },
+      "unknown": "איש קשר לא ידוע",
+      "masked": "המספר מוסתר כי אין לכם הרשאה לפתוח איש קשר זה.",
+      "direction": "כיוון",
+      "directionValue": {
+        "in": "נכנסת",
+        "out": "יוצאת"
+      },
+      "status": "סטטוס",
+      "type": "סוג",
+      "when": "מתי",
+      "content": "תוכן",
+      "noText": "אין טקסט",
+      "failure": "כשל",
+      "failedNoReason": "ההודעה נכשלה ולא נרשמה סיבה.",
+      "details": "פרטים",
+      "messageId": "מזהה הודעה",
+      "source": "נשלח על ידי",
+      "sourceValue": {
+        "inbox": "תיבת דואר",
+        "flow": "זרימה",
+        "auto_reply": "מענה אוטומטי",
+        "ai": "עוזר בינה מלאכותית",
+        "api": "API",
+        "broadcast": "שידור",
+        "campaign": "קמפיין",
+        "scheduled": "הודעה מתוזמנת",
+        "other": "אחר"
+      },
+      "channel": "ערוץ",
+      "template": "תבנית",
+      "entity": {
+        "broadcast": "שידור",
+        "campaign": "קמפיין",
+        "scheduled": "הודעה מתוזמנת"
+      },
+      "sender": "שולח",
+      "senderKind": {
+        "customer": "לקוח",
+        "agent": "נציג",
+        "bot": "אוטומציה",
+        "system": "מערכת",
+        "broadcast": "שליחה המונית"
+      },
+      "providerId": "מזהה הודעה אצל הספק",
+      "language": "שפה",
+      "cost": "עלות",
+      "timeline": "שלבי מסירה",
+      "expired": "ההודעה ישנה מ-{days} ימים, ולכן שלבי המסירה שלה נמחקו. הסטטוס שלה עדיין מוצג למעלה.",
+      "timelineEmpty": "לא נרשמו שלבי מסירה להודעה זו.",
+      "archived": "חלק מהיומן הזה מגיע מהארכיון (אירועים ישנים מ-{days} ימים)."
+    },
+    "errors": {
+      "generic": "משהו השתבש. נסו שוב.",
+      "MESSAGE_NOT_FOUND": "ההודעה אינה קיימת, או שאין לכם הרשאה לראות אותה.",
+      "VALIDATION_FAILED": "התאריכים או המסננים אינם תקינים.",
+      "FORBIDDEN": "אין לכם גישה לכך.",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "ייצוא כבר בהכנה. המתינו לאימייל שלו ואז בקשו ייצוא נוסף.",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "הייצוא הזה עדיין לא מוכן.",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "הייצוא הזה אינו קיים.",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "בחרו תאריכים בתוך 365 הימים האחרונים."
+    }
+  }
+}

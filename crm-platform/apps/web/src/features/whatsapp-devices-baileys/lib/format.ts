@@ -1,10 +1,18 @@
 /** "Oct 7, 2026, 10:15 AM" in the UI language, or null when there is no time (the screen then says "Never"). */
-export function formatWhen(iso: string | null | undefined, locale: string): string | null {
+export function formatWhen(
+  iso: string | null | undefined,
+  locale: string,
+  timeZone?: string,
+): string | null {
   if (!iso) return null;
   const at = new Date(iso);
   if (Number.isNaN(at.getTime())) return null;
   try {
-    return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(at);
+    return new Intl.DateTimeFormat(locale, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone,
+    }).format(at);
   } catch {
     return at.toISOString();
   }

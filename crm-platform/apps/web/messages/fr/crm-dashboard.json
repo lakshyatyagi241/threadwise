@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "Tableau de bord CRM"
+    },
+    "title": "Votre CRM",
+    "subtitle": "Affaires, factures, paiements et tâches : toute l'activité en une seule vue.",
+    "period": "{from} au {to} · fuseau horaire {zone}",
+    "openBoard": "Ouvrir le tableau des affaires",
+    "loading": "Chargement du tableau de bord",
+    "retry": "Réessayer",
+    "stale": "L'actualisation a échoué. Voici les derniers chiffres dont nous disposons.",
+    "empty": {
+      "title": "Rien à signaler pour le moment",
+      "message": "Ajoutez des contacts et des affaires et cette page se remplit : l'entonnoir du pipeline, qui gagne, d'où viennent les leads, les tâches et ce qu'on vous doit.",
+      "deals": "Aller aux affaires",
+      "contacts": "Aller aux contacts"
+    },
+    "filters": {
+      "label": "Filtres du tableau de bord",
+      "period": "Période",
+      "range": {
+        "month": "Ce mois-ci",
+        "7d": "7 jours",
+        "30d": "30 jours",
+        "90d": "90 jours",
+        "custom": "Personnalisée"
+      },
+      "from": "Du",
+      "to": "Au",
+      "pipeline": "Pipeline",
+      "allPipelines": "Tous les pipelines",
+      "owner": "Responsable",
+      "everyone": "Tout le monde",
+      "team": "Équipe",
+      "allTeams": "Toutes les équipes",
+      "reset": "Réinitialiser les filtres"
+    },
+    "kpi": {
+      "title": "Chiffres clés",
+      "vsPrevious": "Par rapport à la période précédente de même durée",
+      "open": "Pipeline ouvert",
+      "openHint": "{count, plural, one {# affaire} other {# affaires}} · prévision {forecast}",
+      "won": "Gagnées",
+      "wonHint": "{count, plural, one {# affaire conclue} other {# affaires conclues}}",
+      "collected": "Encaissé",
+      "collectedHint": "Paiements reçus",
+      "outstanding": "En attente",
+      "outstandingHint": "{count, plural, one {# facture ouverte} other {# factures ouvertes}}",
+      "winRate": "Taux de réussite",
+      "winRateHint": "{won} gagnées, {lost} perdues",
+      "avgSize": "Taille moyenne des affaires",
+      "avgSizeHint": "Des affaires gagnées",
+      "avgCycle": "Cycle de vente moyen",
+      "avgCycleHint": "De la création au gain",
+      "days": "{count, plural, one {# jour} other {# jours}}",
+      "lost": "Affaires perdues",
+      "lateClose": "Clôture prévue dépassée",
+      "lateCloseHint": "Affaires ouvertes dont la date est passée",
+      "contacts": "Contacts",
+      "contactsHint": "Dans votre vue aujourd'hui",
+      "newContacts": "Nouveaux contacts",
+      "newLeads": "Nouveaux leads",
+      "newLeadsHint": "Contacts arrivés avec une source",
+      "paid": "Factures payées",
+      "paidHint": "Passées à payées sur la période",
+      "tasksOpen": "Tâches ouvertes",
+      "tasksOpenHint": "{count} à rendre plus tard aujourd'hui",
+      "tasksOverdue": "Tâches en retard"
+    },
+    "funnel": {
+      "title": "Entonnoir du pipeline",
+      "subtitle": "{pipeline} · {count, plural, one {# affaire créée} other {# affaires créées}} sur la période",
+      "noPipeline": "Il n'y a pas encore de pipeline.",
+      "empty": "Aucune affaire n'a été créée sur cette période.",
+      "conversion": "{percent} % ont avancé",
+      "noConversion": "–",
+      "rowLabel": "{name} : {reached} ont atteint cette étape, {open} ouvertes actuellement. Ouvrez-les.",
+      "openNow": "{count, plural, one {# ouverte actuellement} other {# ouvertes actuellement}} · {value}"
+    },
+    "trend": {
+      "title": "Affaires gagnées et perdues",
+      "subtitle": {
+        "day": "Par jour · {value} gagné",
+        "week": "Par semaine · {value} gagné",
+        "month": "Par mois · {value} gagné"
+      },
+      "chartLabel": "Affaires gagnées et perdues sur la période",
+      "won": "Gagnées",
+      "lost": "Perdues"
+    },
+    "leaderboard": {
+      "title": "Classement des responsables",
+      "subtitle": "Par valeur gagnée sur la période",
+      "empty": "Aucune affaire à classer dans cette vue.",
+      "owner": "Responsable",
+      "won": "Gagnées",
+      "value": "Valeur",
+      "lost": "Perdues",
+      "open": "Ouvertes",
+      "activities": "Activités",
+      "unowned": "Sans responsable"
+    },
+    "sources": {
+      "title": "Sources des leads",
+      "subtitle": "Contacts arrivés sur la période et jusqu'où ils sont allés",
+      "empty": "Aucun contact avec une source n'est arrivé sur cette période.",
+      "source": "Source",
+      "leads": "Leads",
+      "toDeal": "Vers affaire",
+      "toWon": "Vers gagné",
+      "wonValue": "Valeur gagnée",
+      "none": "Sans source"
+    },
+    "tasks": {
+      "title": "Tâches",
+      "subtitle": "{open} ouvertes · {overdue} en retard · {today} à rendre plus tard aujourd'hui",
+      "all": "Toutes les tâches",
+      "empty": "Aucune tâche ouverte.",
+      "byAssignee": "Tâches ouvertes par assigné",
+      "assignee": "Assigné",
+      "open": "Ouvertes",
+      "overdue": "En retard",
+      "dueToday": "Plus tard aujourd'hui",
+      "unassigned": "Non assignées",
+      "upcoming": "Tâches à venir",
+      "overdueTag": "En retard"
+    },
+    "aging": {
+      "title": "Balance âgée des créances",
+      "open": "Paiements",
+      "empty": "Rien n'est dû.",
+      "bucket": {
+        "current": "Pas encore échu",
+        "d1_30": "Échu depuis 1–30 jours",
+        "d31_60": "Échu depuis 31–60 jours",
+        "d61_90": "Échu depuis 61–90 jours",
+        "d90_plus": "Échu depuis plus de 90 jours"
+      }
+    },
+    "payments": {
+      "title": "Paiements récents",
+      "empty": "Aucun paiement pour le moment."
+    },
+    "activity": {
+      "title": "Activité récente",
+      "empty": "Aucune activité pour le moment.",
+      "stageMoved": "Déplacée de {from} vers {to}",
+      "stagePlaced": "Placée dans {to}",
+      "by": "par {name}",
+      "system": "par le système",
+      "type": {
+        "note": "Note",
+        "stage_change": "Changement d'étape",
+        "call": "Appel",
+        "message": "Message",
+        "email": "E-mail",
+        "meeting": "Réunion",
+        "task": "Tâche"
+      }
+    }
+  }
+}

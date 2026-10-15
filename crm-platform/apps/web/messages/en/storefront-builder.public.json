@@ -75,7 +75,9 @@
       "removeWish": "Remove {name} from wishlist",
       "quickView": "Quick view of {name}",
       "quickViewTitle": "Quick view",
-      "was": "Was"
+      "was": "Was",
+      "chooseOptions": "Choose options",
+      "chooseOptionsNamed": "Choose options for {name}"
     },
     "quick": {
       "details": "Full details →"
@@ -162,7 +164,9 @@
       "increase": "Increase quantity",
       "remove": "Remove {name} from cart",
       "fullTitle": "Your cart is full",
-      "fullBody": "A cart holds up to 100 different products. Order these first, then start a new cart."
+      "fullBody": "A cart holds up to 100 different products. Order these first, then start a new cart.",
+      "variantDroppedTitle": "Your cart was updated",
+      "variantDroppedBody": "{count, plural, one {# item needs its options chosen again and was removed from your cart.} other {# items need their options chosen again and were removed from your cart.}}"
     },
     "wish": {
       "title": "Wishlist",
@@ -233,9 +237,9 @@
       "couponFallback": "Invalid code."
     },
     "errors": {
-      "itemsUnavailable": "Those items are no longer available. Please refresh and try again.",
       "notAvailable": "This store is not available.",
-      "rateLimited": "Too many requests. Please wait a moment and try again."
+      "rateLimited": "Too many requests. Please wait a moment and try again.",
+      "itemsRefreshed": "Some items changed or sold out, so we updated your cart. Please check it and try again."
     },
     "placed": {
       "title": "Order placed",
@@ -331,6 +335,13 @@
       "help": "Need help?",
       "support": "Talk to support",
       "metaTitle": "Page not found"
+    },
+    "variant": {
+      "from": "From {price}",
+      "optionsCount": "{count, plural, one {# option} other {# options}}",
+      "select": "Select {option}",
+      "unavailable": "This combination is not available",
+      "soldOutValue": "sold out"
     }
   }
 }

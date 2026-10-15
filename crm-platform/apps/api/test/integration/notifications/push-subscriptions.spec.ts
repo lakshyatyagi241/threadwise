@@ -9,6 +9,8 @@ import {
   type RequestContext,
 } from '../../../src/common/context/request-context';
 import { DatabaseService } from '../../../src/infra/db/database.service';
+import { NotificationFanout } from '../../../src/modules/notifications/notification-fanout';
+import { NotificationPublisher } from '../../../src/modules/notifications/notification.publisher';
 import { NotificationsRepository } from '../../../src/modules/notifications/notifications.repository';
 import { PushSubscriptionsPruneService } from '../../../src/modules/notifications/push-subscriptions-prune.service';
 import { PushSubscriptionsRepository } from '../../../src/modules/notifications/push-subscriptions.repository';
@@ -37,6 +39,7 @@ describe('push_subscriptions', () => {
   let service: PushSubscriptionsService;
   let delivery: WebPushDeliveryService;
   const visible = { value: false };
+  const announced: Array<{ orgId: number; users: number[]; type: string; payload: unknown }> = [];
   let orgA: number;
   let orgB: number;
   let ann: number; // orgA
@@ -91,13 +94,32 @@ describe('push_subscriptions', () => {
     db = new DatabaseService(clients);
     const sender = new WebPushSender(provider, db, repo);
     const redisKeys = new Set<string>();
-    service = new PushSubscriptionsService(db, repo, sender, {
+    const redis = {
       set: vi.fn(async (key: string) => {
         if (redisKeys.has(key)) return null;
         redisKeys.add(key);
         return 'OK';
       }),
-    } as never);
+    };
+    const notificationsRepo = new NotificationsRepository();
+    const publisher = new NotificationPublisher(
+      db,
+      notificationsRepo,
+      {
+        emitToUsers: vi.fn(
+          async (orgId: number, users: number[], type: string, payload: unknown) => {
+            announced.push({ orgId, users, type, payload });
+          },
+        ),
+      } as never,
+      redis as never,
+    );
+    const fanout = new NotificationFanout(
+      notificationsRepo,
+      { inappAllowed: async () => true } as never,
+      publisher,
+    );
+    service = new PushSubscriptionsService(db, repo, sender, redis as never, fanout);
     delivery = new WebPushDeliveryService(db, new NotificationsRepository(), repo, sender, {
       isVisible: async () => visible.value,
     } as never);
@@ -113,10 +135,13 @@ describe('push_subscriptions', () => {
   beforeEach(async () => {
     visible.value = false;
     provider.sent.length = 0;
+    announced.length = 0;
     await owner.query(`DELETE FROM push_subscriptions`);
     await owner.query(`DELETE FROM inbox_notifications`);
   });
 
+  const stored_notifications = async () =>
+    (await owner.query(`SELECT * FROM inbox_notifications ORDER BY id`)).rows;
   const stored = async (where = '') =>
     (await owner.query(`SELECT * FROM push_subscriptions ${where} ORDER BY id`)).rows;
 
@@ -224,7 +249,7 @@ describe('push_subscriptions', () => {
       });
       expect(await stored()).toHaveLength(1);
       const test = await as(orgA, bob, () => service.test());
-      expect(test).toEqual({ sent: 0, failed: 0 });
+      expect(test).toEqual({ inApp: true, sent: 0, failed: 0 });
       expect(provider.sent).toHaveLength(0);
     });
 
@@ -313,8 +338,17 @@ describe('push_subscriptions', () => {
       await as(orgA, ann, () => service.subscribe(fakeSubscription(2), UA_CHROME_WIN));
       visible.value = true;
       const result = await as(orgA, ann, () => service.test());
-      expect(result).toEqual({ sent: 2, failed: 0 });
+      expect(result).toEqual({ inApp: true, sent: 2, failed: 0 });
       expect(provider.sent.map((s) => s.payload.test)).toEqual([true, true]);
+      // The in-app leg: one unread `test` bell row for the caller (and nobody else), announced to the caller's user room only.
+      const rows = await stored_notifications();
+      expect(rows).toEqual([
+        expect.objectContaining({ user_id: ann, type: 'test', read_at: null }),
+      ]);
+      expect(announced).toEqual([
+        expect.objectContaining({ orgId: orgA, users: [ann], type: 'notification.created' }),
+      ]);
+      expect(announced[0]!.payload).toMatchObject({ type: 'test', unread: 1, silent: false });
       expect((await as(orgA, ann, () => service.list())).items.every((d) => d.lastUsedAt)).toBe(
         true,
       );

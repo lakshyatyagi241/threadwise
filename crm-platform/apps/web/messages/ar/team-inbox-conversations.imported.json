@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "مستوردة",
+      "importedHint": "تم استيراد هذه المحادثة من سجل الهاتف"
+    },
+    "bubble": {
+      "imported": "مستورد",
+      "importedHint": "مستورد من سجل محادثات الهاتف"
+    }
+  }
+}

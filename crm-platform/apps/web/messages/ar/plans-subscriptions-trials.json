@@ -70,7 +70,8 @@
       "waba_groups": "مجموعات واتساب",
       "sms": "قناة الرسائل النصية SMS",
       "help_agent": "المساعد الذكي",
-      "email_channel": "قناة البريد الإلكتروني (Gmail)"
+      "email_channel": "قناة البريد الإلكتروني (Gmail)",
+      "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)"
     },
     "limitGroups": {
       "messaging": "المراسلة",

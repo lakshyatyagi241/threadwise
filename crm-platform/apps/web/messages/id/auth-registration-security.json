@@ -214,7 +214,6 @@
         "sessionExpired": "Sesi Anda kedaluwarsa demi keamanan. Silakan coba lagi.",
         "network": "Kami tidak dapat menjangkau server. Periksa koneksi Anda lalu coba lagi.",
         "unexpected": "Terjadi kesalahan di pihak kami. Silakan coba lagi.",
-        "requestId": "ID permintaan",
         "signupExpired": "Silakan mulai pendaftaran lagi.",
         "policyRules": {
           "min_length": "Gunakan minimal {min, plural, other {# karakter}}.",

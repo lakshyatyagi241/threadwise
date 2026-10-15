@@ -15,6 +15,10 @@ export interface StoredEmailReply {
   bodyHtml?: string;
   signatureId?: string;
   signature?: boolean;
+  /** The email template the reply was filled from (counted as used once the mail is sent). */
+  templateId?: string;
+  /** Set by the server (never the client) when the template is marketing mail: the ConsentGate and the unsubscribe link apply. */
+  marketing?: boolean;
 }
 
 const REFERENCES_MAX = 100;
@@ -57,6 +61,8 @@ export function emailEnvelopeOf(
     ...(reply?.bodyHtml ? { bodyHtml: reply.bodyHtml } : {}),
     ...(reply?.signatureId ? { signatureId: reply.signatureId } : {}),
     ...(reply?.signature === false ? { signature: false } : {}),
+    ...(reply?.templateId ? { templateId: reply.templateId } : {}),
+    ...(reply?.marketing ? { marketing: true } : {}),
     ...(sentBy ? { sentBy } : {}),
   };
 }
@@ -220,6 +226,8 @@ export function messageFieldsOf(content: OutboundContent): {
           extras.attachmentIds?.length ||
           extras.bodyHtml ||
           extras.signatureId ||
+          extras.templateId ||
+          extras.marketing ||
           extras.signature === false)
           ? {
               cc: extras.cc,
@@ -229,6 +237,8 @@ export function messageFieldsOf(content: OutboundContent): {
               ...(extras.bodyHtml ? { bodyHtml: extras.bodyHtml } : {}),
               ...(extras.signatureId ? { signatureId: extras.signatureId } : {}),
               ...(extras.signature === false ? { signature: false } : {}),
+              ...(extras.templateId ? { templateId: extras.templateId } : {}),
+              ...(extras.marketing ? { marketing: true } : {}),
             }
           : null;
       return {

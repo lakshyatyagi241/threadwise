@@ -7,7 +7,6 @@
     "common": {
       "loading": "লোড হচ্ছে",
       "retry": "আবার চেষ্টা করুন",
-      "requestId": "অনুরোধের আইডি",
       "dash": "-",
       "cancel": "বাতিল করুন",
       "errors": {

@@ -163,11 +163,6 @@ export function OtpTestModal({
           <Alert tone="danger" className="space-y-1">
             <p>{failure.text}</p>
             {failure.detail && <p className="text-xs">{failure.detail}</p>}
-            {failure.requestId && (
-              <p className="text-xs opacity-80">
-                {t('requestId')}: <span className="font-mono">{failure.requestId}</span>
-              </p>
-            )}
           </Alert>
         )}
       </div>

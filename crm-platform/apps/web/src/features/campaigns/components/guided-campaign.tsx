@@ -45,6 +45,7 @@ import {
   AutoEndField,
   PACING_KEYS,
   SmartDelivery,
+  RetryFailed,
   TrackClicks,
   type PacingKey,
 } from './builder/delivery-extras';
@@ -125,7 +126,7 @@ export function GuidedCampaign({
   const w = useWizard(initial);
   const session = useSession();
   const canTest = useCan('camp.campaigns.test');
-  const zone = defaultTimeZone(session.org.timezone);
+  const zone = defaultTimeZone(session.effectiveTimezone);
   const { draft } = w.state;
 
   const [step, setStep] = useState<WizardStep>('setup');
@@ -614,6 +615,10 @@ export function GuidedCampaign({
                             ? ti('pacing_range')
                             : undefined
                         }
+                      />
+                      <RetryFailed
+                        checked={draft.retryFailed}
+                        onChange={(retryFailed) => act({ type: 'options', patch: { retryFailed } })}
                       />
                       <TrackClicks
                         checked={draft.trackLinks}

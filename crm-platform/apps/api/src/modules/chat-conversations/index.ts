@@ -15,13 +15,18 @@ export {
 export {
   ChannelDispatcher,
   type DispatchRequest,
+  type DispatchConsent,
   type DispatchResult,
   type QueueCheckOptions,
 } from './channel-dispatcher.service';
 export { ChannelAdapterRegistry } from './channel-adapter.registry';
 export { ChannelRegistryService } from './channel-registry.service';
 export { ChannelIngestPublisher } from './channel-ingest.publisher';
-export { InboundIngestService, type IngestOutcome } from './inbound-ingest.service';
+export {
+  InboundIngestService,
+  IMPORT_CONTACT_SOURCE,
+  type IngestOutcome,
+} from './inbound-ingest.service';
 export { ExternalChannelIngest, type ExternalAccount } from './external-channel-ingest.service';
 export { ChatConversationsWorkerModule } from './chat-conversations-worker.module';
 export { MessageMediaAccessPolicy } from './media-access.policy';
@@ -39,7 +44,31 @@ export {
   type RecordBounceInput,
   type RecordBounceOutcome,
 } from './email-delivery.service';
-export { MESSAGE_LOG_FACADE, type MessageLogFacade } from './message-log.facade';
+export {
+  MESSAGE_LOG_FACADE,
+  type HistoryExportRequest,
+  type MessageLogFacade,
+} from './message-log.facade';
+export {
+  MessageHistoryRepository,
+  ENTITY_OF_PREFIX,
+  historyId,
+  toHistoryRow,
+} from './message-history.repository';
+export type { HistoryContext, HistorySelection } from './message-history.query';
+export {
+  decodeCursor,
+  isPhoneLike,
+  maskRecipient,
+  previewOf,
+  previousWindow,
+  recipientTimeline,
+  resolveWindow,
+  safeZone,
+  type HistoryWindow,
+  type HistoryWindowProblem,
+  type VolumeBucket,
+} from './message-history-rules';
 export { PersonalGroupThreadReader } from './personal-group-thread.reader';
 export { CloudGroupThreadReader } from './cloud-group-thread.reader';
 export { DeviceGroupThreadTitleService } from './device-group-thread-title.service';

@@ -3,8 +3,8 @@
 import { useId, useMemo, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Field, Modal, Select, Spinner } from '@crm/ui';
-import { usePeople } from '@/features/segments';
 import { useStatusOptions } from '../api/attributes';
+import { useOwners } from '../api/owners';
 import type { BulkUpdateValues } from '../api/bulk';
 import { useContactFields } from '../api/properties';
 import {
@@ -33,31 +33,47 @@ const UNASSIGN = '__none__';
 export function BulkUpdateDialog({
   open,
   count,
+  ownerOnly = false,
   busy,
   onApply,
   onClose,
 }: {
   open: boolean;
-  count: number;
+  /** How many contacts the update reaches; `null` = everything the filter matches, count not known. */
+  count: number | null;
+  /**
+   * "Select all N matching" has no explicit ids, which stage, status and property changes need: that selection can only be
+   * handed to a new owner (the API moves a whole filter in one request), so the other fields are not offered.
+   */
+  ownerOnly?: boolean;
   busy: boolean;
   onApply: (values: BulkUpdateValues) => Promise<boolean>;
   onClose: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.bulkUpdate');
   return (
-    <Modal open={open} onClose={onClose} title={t('title', { count })} closeLabel={t('close')}>
-      {open && <Form count={count} busy={busy} onApply={onApply} onClose={onClose} />}
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={count === null ? t('titleAll') : t('title', { count })}
+      closeLabel={t('close')}
+    >
+      {open && (
+        <Form count={count} ownerOnly={ownerOnly} busy={busy} onApply={onApply} onClose={onClose} />
+      )}
     </Modal>
   );
 }
 
 function Form({
   count,
+  ownerOnly,
   busy,
   onApply,
   onClose,
 }: {
-  count: number;
+  count: number | null;
+  ownerOnly: boolean;
   busy: boolean;
   onApply: (values: BulkUpdateValues) => Promise<boolean>;
   onClose: () => void;
@@ -66,7 +82,7 @@ function Form({
   const tf = useTranslations('contacts-attributes-tags.form');
   const uid = useId();
   const options = useStatusOptions();
-  const people = usePeople();
+  const owners = useOwners();
   const stages = useMemo(() => stageChoices(options.data), [options.data]);
   const [stage, setStage] = useState(KEEP);
   const [status, setStatus] = useState(KEEP);
@@ -112,69 +128,80 @@ function Form({
 
   return (
     <form onSubmit={(e) => void submit(e)} className="space-y-4">
-      <p className="text-sm text-muted-foreground">{t('hint', { count })}</p>
-      <Field label={t('stage')} htmlFor={`${uid}-stage`}>
-        <Select
-          id={`${uid}-stage`}
-          value={stage}
-          onChange={(e) => {
-            setStage(e.target.value);
-            setStatus(KEEP);
-          }}
-        >
-          <option value={KEEP}>{t('keep')}</option>
-          {stages.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </Select>
-      </Field>
-      {lost && (
-        <LostReasonFields
-          choices={reasons}
-          value={reason}
-          onChange={setReason}
-          problem={showProblems ? problem : null}
-          idPrefix={`${uid}-lost`}
-        />
+      <p className="text-sm text-muted-foreground">
+        {count === null ? t('hintAll') : t('hint', { count })}
+      </p>
+      {ownerOnly && <p className="text-sm text-muted-foreground">{t('ownerOnlyNote')}</p>}
+      {!ownerOnly && (
+        <>
+          <Field label={t('stage')} htmlFor={`${uid}-stage`}>
+            <Select
+              id={`${uid}-stage`}
+              value={stage}
+              onChange={(e) => {
+                setStage(e.target.value);
+                setStatus(KEEP);
+              }}
+            >
+              <option value={KEEP}>{t('keep')}</option>
+              {stages.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          {lost && (
+            <LostReasonFields
+              choices={reasons}
+              value={reason}
+              onChange={setReason}
+              problem={showProblems ? problem : null}
+              idPrefix={`${uid}-lost`}
+            />
+          )}
+          <Field label={t('status')} htmlFor={`${uid}-status`}>
+            <Select id={`${uid}-status`} value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value={KEEP}>{t('keep')}</option>
+              {statuses.map((c) => (
+                <option key={c.value} value={c.value}>
+                  {c.label}
+                </option>
+              ))}
+            </Select>
+          </Field>
+        </>
       )}
-      <Field label={t('status')} htmlFor={`${uid}-status`}>
-        <Select id={`${uid}-status`} value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value={KEEP}>{t('keep')}</option>
-          {statuses.map((c) => (
-            <option key={c.value} value={c.value}>
-              {c.label}
-            </option>
-          ))}
-        </Select>
-      </Field>
       <Field label={t('owner')} htmlFor={`${uid}-owner`}>
         <Select id={`${uid}-owner`} value={owner} onChange={(e) => setOwner(e.target.value)}>
           <option value={KEEP}>{t('keep')}</option>
           <option value={UNASSIGN}>{t('unassign')}</option>
-          {(people.data ?? []).map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.fullName}
-            </option>
-          ))}
+          {(owners.data ?? [])
+            .filter((p) => p.canAssign)
+            .map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.fullName}
+              </option>
+            ))}
         </Select>
       </Field>
-      <BulkPropertiesSection
-        fields={registry.data ?? []}
-        changes={changes}
-        problems={showProblems ? propertyProblems : {}}
-        count={count}
-        idPrefix={`${uid}-props`}
-        onChange={setChanges}
-      />
+      {!ownerOnly && (
+        <BulkPropertiesSection
+          fields={registry.data ?? []}
+          changes={changes}
+          problems={showProblems ? propertyProblems : {}}
+          count={count ?? 0}
+          idPrefix={`${uid}-props`}
+          onChange={setChanges}
+        />
+      )}
       <div className="flex justify-end gap-2">
         <Button type="button" variant="secondary" onClick={onClose}>
           {t('cancel')}
         </Button>
         <Button type="submit" disabled={nothing || busy}>
           {busy && <Spinner />}
-          {t('apply', { count })}
+          {count === null ? t('applyAll') : t('apply', { count })}
         </Button>
       </div>
     </form>

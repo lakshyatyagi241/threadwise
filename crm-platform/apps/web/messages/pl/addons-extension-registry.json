@@ -19,7 +19,6 @@
       "optional": "opcjonalne",
       "required": "wymagane",
       "readOnly": "Możesz przeglądać tę stronę, ale zmieniać ją może tylko superadministrator.",
-      "requestId": "Identyfikator żądania",
       "errors": {
         "forbidden": "Nie masz dostępu do tej strony.",
         "request": "Nie udało się zrealizować żądania.",

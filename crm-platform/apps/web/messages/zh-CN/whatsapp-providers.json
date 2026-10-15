@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "正在加载...",
-      "retry": "重试",
-      "requestId": "请求 ID"
+      "retry": "重试"
     },
     "errors": {
       "conflict": "您编辑期间，此服务商已被他人修改。已加载最新版本，请检查后重新应用您的更改。",

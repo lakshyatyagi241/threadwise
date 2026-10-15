@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import {
   STORE_COUPON_STATES,
@@ -359,9 +359,10 @@ function Dash() {
 
 /** "1 Oct 2026 – 31 Oct 2026", "From ...", "Until ..." or "Always valid". */
 function Validity({ coupon, locale }: { coupon: StoreCoupon; locale: string }) {
+  const timeZone = useTimeZone();
   const t = useTranslations('checkout-orders-merchant-payments.coupons');
-  const from = formatDay(coupon.startsAt, locale);
-  const to = formatDay(coupon.expiresAt, locale);
+  const from = formatDay(coupon.startsAt, locale, timeZone);
+  const to = formatDay(coupon.expiresAt, locale, timeZone);
   if (from && to) return <>{t('validBetween', { from, to })}</>;
   if (from) return <>{t('validFrom', { from })}</>;
   if (to) return <>{t('validUntil', { to })}</>;

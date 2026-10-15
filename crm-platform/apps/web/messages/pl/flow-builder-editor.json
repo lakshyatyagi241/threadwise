@@ -707,7 +707,8 @@
           "wordsPlaceholder": "hej, cześć, menu",
           "whatsappNumber": "Numer WhatsApp",
           "noNumberHint": "Nie połączono jeszcze żadnego numeru WhatsApp: połącz go w Ustawieniach, a następnie wybierz tutaj.",
-          "chooseNumber": "Wybierz numer…"
+          "chooseNumber": "Wybierz numer…",
+          "connectedNumber": "Odpowiada z Twojego połączonego numeru WhatsApp: {number}"
         },
         "add": {
           "addStep": "Dodaj krok",
@@ -715,6 +716,7 @@
             "send": "Wyślij",
             "ask": "Zapytaj klienta",
             "handoff": "Przekaż dalej",
+            "logic": "Decyzja",
             "answer": "Odpowiedź"
           },
           "blockedTitle": "Przyciski i listy kończą przepływ, więc mogą być tylko na końcu.",
@@ -763,7 +765,8 @@
             "placeholder": "Przycisk {n}",
             "remove": "Usuń przycisk",
             "add": "Dodaj przycisk",
-            "saveIn": "Zapisz naciśnięty przycisk w"
+            "saveIn": "Zapisz naciśnięty przycisk w",
+            "handoff": "Przekaż osobie (konsultant na żywo)"
           },
           "list": {
             "above": "Wiadomość nad listą",
@@ -795,7 +798,9 @@
             "dateFormat": "Format daty",
             "dateFormatHint": "Jak klient zapisuje datę. Jest zapisywana tak, jak wpisano, a kopia w formacie rok-miesiąc-dzień w zmiennej _iso.",
             "saveIn": "Zapisz odpowiedź w",
-            "retriesHint": "0 pyta, dopóki odpowiedź nie będzie poprawna."
+            "retriesHint": "0 pyta, dopóki odpowiedź nie będzie poprawna.",
+            "verifyOtp": "Zweryfikuj numer jednorazowym kodem",
+            "verifyOtpHint": "Kod jest wysyłany na numer (potrzebny numer kierunkowy kraju), a odwiedzający wpisuje go na czacie. Numer jest zapisywany tylko, gdy kod jest poprawny; zmienna kończąca się na _verified mówi tak lub nie."
           },
           "askFile": {
             "accepted": "Akceptowane pliki",
@@ -846,7 +851,45 @@
           },
           "cta": {
             "buttonText": "Tekst przycisku",
-            "opens": "Otwiera (link)"
+            "opens": "Otwiera (link)",
+            "type": "Otwiera",
+            "kinds": {
+              "url": "Stronę internetową",
+              "phone": "Połączenie telefoniczne",
+              "email": "E-mail"
+            },
+            "add": "Dodaj kolejny przycisk",
+            "remove": "Usuń przycisk",
+            "opensPhone": "Numer telefonu",
+            "opensEmail": "Adres e-mail"
+          },
+          "carousel": {
+            "intro": "Wiadomość nad kartami",
+            "card": "Karta {n}",
+            "image": "Link do obrazu (opcjonalnie)",
+            "title": "Tytuł",
+            "text": "Tekst",
+            "buttons": "Przyciski (do 2)",
+            "label": "Tekst przycisku",
+            "addCard": "Dodaj kartę",
+            "removeCard": "Usuń kartę",
+            "addButton": "Dodaj przycisk",
+            "removeButton": "Usuń przycisk",
+            "btnKinds": {
+              "reply": "Odpowiedz w czacie",
+              "url": "Otwórz stronę internetową",
+              "phone": "Zadzwoń pod numer",
+              "email": "Wyślij e-mail",
+              "agent": "Porozmawiaj z człowiekiem"
+            }
+          },
+          "condition": {
+            "info": "Dodaj reguły (zmienną, porównanie i wartość). Połącz je przez AND lub OR i zagnieżdżaj grupy, gdy trzeba.",
+            "yes": "Gdy reguły są spełnione, przejdź do",
+            "no": "Gdy nie są spełnione, przejdź do"
+          },
+          "handoff": {
+            "hint": "Odwiedzający trafia do tego zespołu z Twoją notatką. Po tym przycisku nie trzeba niczego łączyć."
           },
           "faq": {
             "exits": {
@@ -859,6 +902,7 @@
             }
           }
         },
+        "branchAdd": "Dodaj krok dla „{title}”",
         "faqEnds": "Ten krok kończy tę część: to, co zostanie wysłane dalej, zależy od tego, czy FAQ odpowiedziało."
       },
       "formsCore": {
@@ -1894,13 +1938,20 @@
       },
       "webBot": {
         "aria": "Sekcje przepływu",
-        "faqs": "FAQ",
-        "saveFirst": "Najpierw zapisz przepływ.",
         "build": "Twórz",
         "customize": "Dostosuj",
-        "install": "Zainstaluj",
+        "saveFirst": "Najpierw zapisz przepływ.",
         "needsCustomizing": "Widżet nadal używa domyślnego wyglądu. Otwórz Dostosuj.",
-        "customizeFirst": "Dostosuj widżet czatu i zapisz go raz przed publikacją."
+        "customizeFirst": "Dostosuj widżet czatu i zapisz go raz przed publikacją.",
+        "deploy": "Wdróż",
+        "customizeFirstWhatsapp": "Spersonalizuj przycisk WhatsApp i zapisz go raz przed publikacją.",
+        "faqs": "FAQ",
+        "install": "Zainstaluj"
+      },
+      "buttonIcon": {
+        "label": "Ikona (opcjonalnie)",
+        "add": "Dodaj ikonę",
+        "saveFirst": "Zapisz bota raz, aby dodać ikonę."
       }
     },
     "contracts": {
@@ -2177,6 +2228,10 @@
           "label": "API (z biblioteki)",
           "description": "Wywołaj zapisane API z Biblioteki API"
         },
+        "carousel": {
+          "label": "Karuzela",
+          "description": "Przewijane karty z obrazami i przyciskami"
+        },
         "faq": {
           "label": "Odpowiedz z FAQ",
           "description": "Dopasuj wiadomość do Twoich FAQ"
@@ -2404,6 +2459,14 @@
           "label": "Lokalizacja klienta",
           "help": "Czekaj, aż klient udostępni lokalizację"
         },
+        "carousel": {
+          "label": "Karuzela",
+          "help": "Przewijane karty z obrazami i przyciskami"
+        },
+        "condition": {
+          "label": "Warunek",
+          "help": "Rozgałęzienie według tego, co klient powiedział lub zapisał, z regułami AND / OR"
+        },
         "faq": {
           "label": "Odpowiedz z FAQ",
           "help": "Dopasuj wiadomość klienta do Twoich FAQ. Kończy ten przepływ: jedno wyjście, gdy FAQ odpowiedziało, drugie, gdy nie"
@@ -2422,6 +2485,8 @@
         "template": "Szablon",
         "cta": "Przycisk z linkiem",
         "assign": "Przypisz do konsultanta",
+        "carousel": "Karuzela",
+        "condition": "Warunek",
         "faq": "Odpowiedz z FAQ"
       },
       "stepLabel": {
@@ -2460,6 +2525,9 @@
         "rowTitle": "Krok {stage}: każdy wiersz wymaga tytułu do {max} znaków.",
         "rowDescriptionTooLong": "Krok {stage}: opis wiersza jest dłuższy niż {max} znaków.",
         "variableUsed": "Krok {stage}: „{name}” jest już używane przez krok {other}; nadaj każdej odpowiedzi osobną nazwę.",
+        "carouselCards": "Krok {stage}: dodaj co najmniej jedną kartę i nadaj każdej karcie tytuł.",
+        "carouselButtons": "Krok {stage}: nadaj każdemu przyciskowi nazwę oraz link, numer lub adres tam, gdzie coś otwiera.",
+        "conditionIncomplete": "Krok {stage}: dokończ reguły warunku (w każdej zmienna i wartość).",
         "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu."
       },
       "faqSummary": "{hasCategory, select, true {Z Twoich FAQ · {category}} other {Z Twoich FAQ}}"
@@ -2470,7 +2538,11 @@
         "buttonNoTarget": "Przycisk „{type}” („{text}”) nie ma celu w uproszczonym kreatorze.",
         "skippedStep": "Pominięto krok „{sub}”: uproszczony kreator nie ma takiego odpowiednika.",
         "leadsOutside": "„{text}” prowadzi do przepływu, którego nie ma w tym pliku; kończy się tam, dopóki go nie połączysz.",
-        "connectsOutside": "Krok łączy się z węzłem, którego nie ma w tym pliku ({id}); pozostaje niepołączony."
+        "connectsOutside": "Krok łączy się z węzłem, którego nie ma w tym pliku ({id}); pozostaje niepołączony.",
+        "dateLimits": "Pytanie o datę zachowuje format, ale nie ograniczenia (najwcześniej, najpóźniej, wykluczone dni).",
+        "tooManyButtons": "Wiadomość z przyciskami miała więcej wyborów, niż się mieści; nadmiarowe przyciski pominięto.",
+        "agentTeam": "Zachowano przycisk konsultanta na żywo: wybierz zespół, który przejmie rozmowę.",
+        "tooManySlides": "Karuzela miała ponad 10 kart; nadmiarowe karty pominięto."
       },
       "reasons": {
         "notExport": "Ten plik nie jest eksportem przepływu. Użyj pliku .json wyeksportowanego z Flows lub przepływu wyeksportowanego z konsoli wabo.",

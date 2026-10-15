@@ -308,6 +308,28 @@ function ChatCard({
           <p className="mt-1 text-muted-foreground">{t('stageBody')}</p>
         </div>
       </div>
+      <fieldset
+        className="border-t border-border pt-4 text-sm"
+        disabled={disabled || !form.chatDigest || !form.stageSuggestions}
+      >
+        <legend className="font-medium">{t('stageMode.title')}</legend>
+        {(['auto', 'manual'] as const).map((mode) => (
+          <label key={mode} className="mt-2 flex items-start gap-2">
+            <input
+              type="radio"
+              name="lsc-stage-mode"
+              data-testid={`lsc-stage-mode-${mode}`}
+              className="mt-1"
+              checked={form.stageAutoApply === (mode === 'auto')}
+              onChange={() => setForm((f) => ({ ...f, stageAutoApply: mode === 'auto' }))}
+            />
+            <span>
+              <span className="font-medium">{t(`stageMode.${mode}.label`)}</span>
+              <span className="block text-muted-foreground">{t(`stageMode.${mode}.body`)}</span>
+            </span>
+          </label>
+        ))}
+      </fieldset>
       <div className="grid gap-4 border-t border-border pt-4 text-sm sm:grid-cols-2">
         <div>
           <h3 className="font-medium">{t('masked.title')}</h3>

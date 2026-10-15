@@ -46,7 +46,6 @@
         "copyFailed": "Impossibile copiare",
         "loading": "Caricamento",
         "retry": "Riprova",
-        "requestId": "ID richiesta",
         "errors": {
           "forbidden": "Il tuo ruolo non lo consente.",
           "request": "La richiesta è stata rifiutata. Ricarica la pagina e riprova.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Accesso operatori",
         "intro": "Questa console è riservata a chi gestisce la piattaforma. Gli utenti dei workspace accedono dalla pagina di accesso principale.",
-        "requestId": "ID richiesta",
         "submit": "Accedi",
         "submitting": "Accesso in corso",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Il tuo account",
         "title": "Autenticazione a due fattori",
         "description": "Proteggi {email} con un'app di autenticazione. Gli account operatore sono gli account più sensibili della piattaforma.",
-        "requestId": "ID richiesta",
         "status": {
           "title": "App di autenticazione",
           "on": "Attiva",
@@ -181,7 +178,6 @@
         "saving": "Salvataggio in corso",
         "saved": "{count, plural, one {# impostazione salvata} other {# impostazioni salvate}}",
         "rejected": "Nessun salvataggio. {count, plural, one {# campo è stato rifiutato} other {# campi sono stati rifiutati}}.",
-        "requestId": "ID richiesta",
         "unsaved": "{count, plural, one {# modifica non salvata} other {# modifiche non salvate}}",
         "discard": "Annulla modifiche",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Elaborazione in corso",
             "close": "Chiudi",
             "signInAgain": "Accedi di nuovo",
-            "requestId": "ID richiesta",
             "errors": {
               "forbidden": "Solo un super amministratore può eseguire questa azione.",
               "unexpected": "L'azione non è stata completata. Controlla il log degli eventi prima di riprovare."
@@ -731,7 +726,6 @@
         "saving": "Salvataggio in corso",
         "saved": "{count, plural, one {# impostazione salvata} other {# impostazioni salvate}}",
         "rejected": "Nessun salvataggio. {count, plural, one {# campo è stato rifiutato} other {# campi sono stati rifiutati}}.",
-        "requestId": "ID richiesta",
         "unsaved": "{count, plural, one {# modifica non salvata} other {# modifiche non salvate}}",
         "discard": "Annulla modifiche",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "Usa un percorso del sito come /legal/terms oppure un indirizzo http o https completo.",
           "senderFormat": "Scegli uno dei mittenti dell'elenco.",
           "countryFormat": "Usa un codice paese di due lettere.",
-          "senderRequired": "Scegli un canale mittente prima di creare il template."
+          "senderRequired": "Scegli un canale mittente prima di creare il template.",
+          "domainFormat": "{entry} non è un dominio valido. Usa un nome come esempio.it.",
+          "tooMany": "Non più di {max} domini."
         },
         "policy": {
           "kicker": "Registrazione",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Massimo di tentativi"
+          },
+          "businessEmailOnly": {
+            "label": "Solo indirizzi e-mail aziendali",
+            "hintOn": "I provider gratuiti come Gmail, Outlook e Yahoo vengono rifiutati alla registrazione.",
+            "hintOff": "Chiunque può registrarsi con un indirizzo personale gratuito."
+          },
+          "blockDisposableEmail": {
+            "label": "Blocca le e-mail temporanee",
+            "hintOn": "I domini usa e getta e temporanei, e i domini senza server di posta, vengono rifiutati.",
+            "hintOff": "Gli indirizzi temporanei sono accettati."
+          },
+          "requirePhoneVerification": {
+            "label": "Richiedi un numero di cellulare verificato",
+            "hintOn": "Ogni registrazione deve confermare un codice monouso. Se il codice non può essere inviato, la registrazione si ferma invece di saltare il controllo.",
+            "hintOff": "Il passaggio del codice viene eseguito solo quando il codice di registrazione qui sotto è attivo."
+          },
+          "blockedEmailDomains": {
+            "label": "Domini sempre bloccati",
+            "hint": "Un dominio per riga. Anche i sottodomini sono bloccati. Vengono rifiutati anche con «Solo indirizzi e-mail aziendali» disattivato.",
+            "placeholder": "esempio.it"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "Un codice di prova è stato inviato a {to}.",
             "remaining": "{count, plural, one {Resta # prova questa ora.} other {Restano # prove questa ora.}}",
             "notShown": "Il codice non viene mostrato qui; leggilo sul telefono.",
-            "requestId": "ID richiesta",
             "errors": {
               "invalidNumber": "Inserisci il numero con il prefisso internazionale, ad esempio +91 98765 43221.",
               "rateLimited": "Troppi codici di prova in quest'ora. Riprova tra {minutes, plural, one {# minuto} other {# minuti}}.",
@@ -1045,7 +1060,6 @@
           "saved": "Mittente salvato",
           "removed": "Mittente rimosso",
           "secretRemoved": "Segreto salvato rimosso",
-          "requestId": "ID richiesta",
           "problems": {
             "required": "Questo campo è obbligatorio.",
             "tooLong": "Al massimo {max} caratteri.",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "Il piè di pagina non è stato accettato.",
             "unexpected": "Impossibile salvare il piè di pagina. Riprova tra un momento."
-          },
-          "requestId": "ID richiesta"
+          }
+        },
+        "guard": {
+          "kicker": "Protezione della registrazione",
+          "title": "Controllo di e-mail aziendale e cellulare",
+          "description": "Tiene fuori gli indirizzi usa e getta e personali e assicura che ogni nuovo account abbia un cellulare verificato. Vale per la registrazione via e-mail e social.",
+          "phoneOffWarning": "Con il controllo del cellulare disattivato si possono creare account senza un numero verificato, il che facilita le registrazioni false in massa."
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "Salvataggio in corso",
         "saved": "{count, plural, one {# impostazione salvata} other {# impostazioni salvate}}",
         "rejected": "Nessun salvataggio. {count, plural, one {# campo è stato rifiutato} other {# campi sono stati rifiutati}}.",
-        "requestId": "ID richiesta",
         "unsaved": "{count, plural, one {# modifica non salvata} other {# modifiche non salvate}}",
         "discard": "Annulla modifiche",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "Annulla",
           "working": "Rimozione in corso",
           "error": "Impossibile rimuovere il segreto. Riprova tra un momento.",
-          "requestId": "ID richiesta",
           "done": "Il segreto salvato di {name} è stato rimosso.",
           "names": {
             "google": "Google",
@@ -1421,7 +1438,8 @@
             "waba_groups": "Crea e gestisci gruppi WhatsApp da un numero Cloud API: link di invito, richieste di adesione, membri. Il numero deve essere un Official Business Account.",
             "sms": "SMS solo in invio tramite Twilio o MSG91: collega i mittenti, invia broadcast e campagne SMS.",
             "help_agent": "L'assistente di aiuto nell'app: le persone chiedono un'attività con parole semplici e lui le guida o la svolge nella loro sessione, chiedendo prima di qualsiasi azione rischiosa. Consuma token AI.",
-            "email_channel": "Collega caselle Gmail e Google Workspace alla posta in arrivo del team. L'app a pagamento E-mail controlla questo interruttore."
+            "email_channel": "Collega caselle Gmail e Google Workspace alla posta in arrivo del team. L'app a pagamento E-mail controlla questo interruttore.",
+            "personal_history_full": "Consente a un numero WhatsApp personale di importare l'intera cronologia delle chat al primo collegamento. L'importazione delle chat recenti è disponibile in tutti i piani che includono numeri personali."
           },
           "units": {
             "days": "Giorni",
@@ -1604,7 +1622,8 @@
             "waba_groups": "Gruppi WhatsApp (Cloud API)",
             "sms": "Canale SMS",
             "help_agent": "Assistente di aiuto (AI, consuma token)",
-            "email_channel": "Canale e-mail (Gmail)"
+            "email_channel": "Canale e-mail (Gmail)",
+            "personal_history_full": "Importazione completa della cronologia chat (WhatsApp personale)"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",
@@ -1670,7 +1689,6 @@
         "saving": "Salvataggio in corso",
         "saved": "{count, plural, one {# impostazione salvata} other {# impostazioni salvate}}",
         "rejected": "Nessun salvataggio. {count, plural, one {# campo è stato rifiutato} other {# campi sono stati rifiutati}}.",
-        "requestId": "ID richiesta",
         "unsaved": "{count, plural, one {# modifica non salvata} other {# modifiche non salvate}}",
         "discard": "Annulla modifiche",
         "errors": {

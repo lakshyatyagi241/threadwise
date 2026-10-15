@@ -14,7 +14,6 @@
     "common": {
       "loading": "Laden",
       "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-ID",
       "dismiss": "Negeren",
       "tokens": "{count, number} tokens",
       "dash": "-",

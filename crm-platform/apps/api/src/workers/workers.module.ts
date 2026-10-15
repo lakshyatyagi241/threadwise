@@ -22,6 +22,8 @@ import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
+  OwnerReassignWorkerModule,
+  ContactAssignmentWorkerModule,
   SalesDocsWorkerModule,
   SegmentsWorkerModule,
   TasksWorkerModule,
@@ -37,12 +39,15 @@ import {
 } from '../modules/node-bridge-runtime';
 import { NotificationsWorkerModule } from '../modules/notifications';
 import { WebhookFanoutWorkerModule } from '../modules/webhook-fanout';
+import { WabooMigrationWorkerModule } from '../modules/waboo-migration';
 import { OutboundWebhooksWorkerModule } from '../modules/outbound-webhooks';
 import { ApiLibraryWorkerModule } from '../modules/api-library';
 import { FaqKnowledgeWorkerModule } from '../modules/faq-knowledge/faq-knowledge-worker.module';
 import { GrowthPilotWorkerModule } from '../modules/growth-pilot/growth-pilot-worker.module';
 import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-worker.module';
 import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
+import { PrivacyWorkerModule } from '../modules/privacy/privacy-worker.module';
+import { AuditLogWorkerModule } from '../modules/audit-log/audit-log-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysWorkerModule } from '../modules/whatsapp-devices-baileys';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
@@ -79,6 +84,8 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     SegmentsWorkerModule,
     SalesDocsWorkerModule,
     InvoicingWorkerModule,
+    OwnerReassignWorkerModule,
+    ContactAssignmentWorkerModule,
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
     BroadcastsWorkerModule,
@@ -87,12 +94,15 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     CouponsCreditsReferralCurrencyWorkerModule,
     WabaWorkerModule,
     WebhookFanoutWorkerModule,
+    WabooMigrationWorkerModule,
     OutboundWebhooksWorkerModule,
     ApiLibraryWorkerModule,
     FaqKnowledgeWorkerModule,
     LeadScoringWorkerModule,
     GrowthPilotWorkerModule,
     ContactConsentWorkerModule,
+    PrivacyWorkerModule,
+    AuditLogWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,

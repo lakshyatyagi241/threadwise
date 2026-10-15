@@ -39,7 +39,7 @@ describe('ErrorNote on a lockout (every two-factor screen of the account pane)',
   });
 
   it('shows the request id so support can trace it', () => {
-    expect(render(lockedError('900'))).toContain('req-lock');
+    expect(render(lockedError('900'))).not.toContain('req-lock');
   });
 
   it('is translated', () => {

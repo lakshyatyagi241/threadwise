@@ -13,6 +13,7 @@ import {
   extSheetsContactsQuerySchema,
   extSheetsContactsSyncRequestSchema,
   extSheetsSyncRequestSchema,
+  extSheetsWebhookRequestSchema,
   type ExtSheetsContactsQuery,
   type ExtSheetsContactsResponse,
   type ExtSheetsContactsSyncRequest,
@@ -21,6 +22,8 @@ import {
   type ExtSheetsShopsResponse,
   type ExtSheetsSyncRequest,
   type ExtSheetsSyncResponse,
+  type ExtSheetsWebhookRequest,
+  type ExtSheetsWebhookResponse,
 } from '@crm/contracts';
 import { Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -31,6 +34,7 @@ import { SheetsAddonService } from './sheets-addon.service';
 import { SheetsCatalogService } from './sheets-catalog.service';
 import { SheetsContactsService } from './sheets-contacts.service';
 import { SheetsKeyGuard } from './sheets-key.guard';
+import { SheetsWebhookService } from './sheets-webhook.service';
 
 /**
  * The API the Google Apps Script add-on calls (`/api/v1/sheets-addon`), authenticated by the member's Sheets key alone (see
@@ -53,6 +57,7 @@ export class SheetsAddonController {
     private readonly addon: SheetsAddonService,
     private readonly catalog: SheetsCatalogService,
     private readonly contacts: SheetsContactsService,
+    private readonly webhook: SheetsWebhookService,
   ) {}
 
   @Get('health')
@@ -92,5 +97,31 @@ export class SheetsAddonController {
     @Body(zodPipe(extSheetsContactsSyncRequestSchema)) body: ExtSheetsContactsSyncRequest,
   ): Promise<ExtSheetsContactsSyncResponse> {
     return this.contacts.sync(caller, body);
+  }
+
+  /**
+   * The Pabbly-style trigger: the add-on posts new or changed rows here. Two spellings of one route: the bearer header (what the add-on
+   * sends) and the key as the last path segment (the URL a member pastes into Initial Setup, also usable by any HTTP client). The guard
+   * reads whichever is present.
+   */
+  @Post('webhook')
+  @HttpCode(200)
+  @SheetsNeeds('writeContacts')
+  receive(
+    @SheetsCaller() caller: SheetsCallerState,
+    @Body(zodPipe(extSheetsWebhookRequestSchema)) body: ExtSheetsWebhookRequest,
+  ): Promise<ExtSheetsWebhookResponse> {
+    return this.webhook.receive(caller, body);
+  }
+
+  /** The same route with the key as the last path segment: the Webhook URL exactly as the member pastes it. */
+  @Post('webhook/:key')
+  @HttpCode(200)
+  @SheetsNeeds('writeContacts')
+  receiveByUrl(
+    @SheetsCaller() caller: SheetsCallerState,
+    @Body(zodPipe(extSheetsWebhookRequestSchema)) body: ExtSheetsWebhookRequest,
+  ): Promise<ExtSheetsWebhookResponse> {
+    return this.webhook.receive(caller, body);
   }
 }

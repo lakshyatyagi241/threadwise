@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Wird geladen...",
-      "retry": "Erneut versuchen",
-      "requestId": "Anfrage-ID"
+      "retry": "Erneut versuchen"
     },
     "errors": {
       "conflict": "Jemand anderes hat diesen Provider geändert, während Sie ihn bearbeitet haben. Die neueste Version wurde geladen. Prüfen Sie sie und wenden Sie Ihre Änderung erneut an.",

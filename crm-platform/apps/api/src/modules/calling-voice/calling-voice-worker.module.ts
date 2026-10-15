@@ -3,6 +3,7 @@ import { RealtimeEmitterModule } from '../../realtime';
 import { WABA_CALLS_SINK_OVERRIDE } from '../whatsapp-cloud-api-waba';
 import { CallRealtimeConsumer } from './call-realtime.consumer';
 import { CallingVoiceModule } from './calling-voice.module';
+import { CallRecordingRetentionService } from './call-recording-retention.service';
 import { CallingWabaSink } from './calling-waba.sink';
 
 /**
@@ -18,6 +19,7 @@ import { CallingWabaSink } from './calling-waba.sink';
   providers: [
     { provide: WABA_CALLS_SINK_OVERRIDE, useExisting: CallingWabaSink },
     CallRealtimeConsumer,
+    CallRecordingRetentionService,
   ],
   exports: [WABA_CALLS_SINK_OVERRIDE],
 })

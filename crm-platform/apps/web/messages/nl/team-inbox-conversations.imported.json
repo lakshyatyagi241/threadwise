@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "Geïmporteerd",
+      "importedHint": "Deze chat is geïmporteerd uit de geschiedenis van de telefoon"
+    },
+    "bubble": {
+      "imported": "Geïmporteerd",
+      "importedHint": "Geïmporteerd uit de chatgeschiedenis van de telefoon"
+    }
+  }
+}

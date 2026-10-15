@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Bỏ qua",
+      "retry": "Thử lại",
+      "loading": "Đang tải...",
+      "cancel": "Hủy",
+      "back": "Quay lại",
+      "next": "Tiếp theo",
+      "close": "Đóng",
+      "save": "Lưu"
+    },
+    "errors": {
+      "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "notFound": "Yêu cầu này không còn tồn tại.",
+      "subjectNotFound": "Người này không còn trong không gian làm việc này.",
+      "stateInvalid": "Yêu cầu này không ở trạng thái cho phép thực hiện thao tác đó. Hãy tải lại và kiểm tra trạng thái.",
+      "notVerified": "Hãy xác minh danh tính của người này trước.",
+      "legalHold": "Yêu cầu này đang bị lưu giữ theo quy định pháp lý. Hãy gỡ lưu giữ trước khi xóa.",
+      "confirmationRequired": "Hãy chạy bản xem trước trước và nhập chính xác cụm từ xác nhận.",
+      "exportInProgress": "Một bản xuất cho yêu cầu này đang được chuẩn bị.",
+      "exportNotReady": "Tệp đó chưa sẵn sàng hoặc đã hết hạn. Hãy chuẩn bị một bản xuất mới.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy chờ một lát rồi thử lại.",
+      "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại."
+    },
+    "type": {
+      "access": "Truy cập",
+      "export": "Xuất",
+      "erasure": "Xóa dữ liệu",
+      "rectification": "Chỉnh sửa",
+      "restriction": "Hạn chế",
+      "objection": "Phản đối",
+      "withdrawal": "Rút lại sự đồng ý",
+      "portability": "Chuyển dữ liệu"
+    },
+    "typeHint": {
+      "access": "Người này hỏi chúng tôi đang giữ dữ liệu gì về họ. Kết thúc bằng một tệp.",
+      "export": "Một bản sao dữ liệu của người này. Kết thúc bằng một tệp.",
+      "erasure": "Xóa dữ liệu của người này. Bạn xem trước trước khi xóa.",
+      "rectification": "Sửa dữ liệu sai. Bạn sửa thủ công rồi đóng yêu cầu.",
+      "restriction": "Tạm ngừng sử dụng dữ liệu. Bạn xử lý thủ công rồi đóng yêu cầu.",
+      "objection": "Người này phản đối việc sử dụng dữ liệu của họ. Bạn xử lý thủ công rồi đóng yêu cầu.",
+      "withdrawal": "Người này rút lại sự đồng ý. Bạn xử lý thủ công rồi đóng yêu cầu.",
+      "portability": "Một bản sao máy có thể đọc được để chuyển sang nơi khác. Kết thúc bằng một tệp."
+    },
+    "status": {
+      "received": "Đã nhận",
+      "verifying": "Đang xác minh danh tính",
+      "in_progress": "Đang xử lý",
+      "completed": "Đã hoàn thành",
+      "rejected": "Bị từ chối",
+      "expired": "Đã hết hạn"
+    },
+    "channel": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Điện thoại",
+      "in_person": "Trực tiếp",
+      "portal": "Cổng thông tin",
+      "staff": "Do nhân viên nhập",
+      "other": "Khác"
+    },
+    "method": {
+      "channel_code": "Mã được gửi đến kênh của người này",
+      "email_link": "Liên kết được gửi qua email",
+      "known_contact": "Liên hệ qua số điện thoại hoặc email chúng tôi đã có",
+      "existing_session": "Đã đăng nhập vào tài khoản của họ",
+      "id_document_checked": "Đã kiểm tra giấy tờ tùy thân",
+      "other": "Khác"
+    },
+    "disposition": {
+      "deleted": "Đã xóa",
+      "anonymised": "Đã ẩn danh",
+      "cascaded": "Xóa liên đới",
+      "retained": "Được giữ lại",
+      "unlinked": "Đã hủy liên kết"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {Còn # ngày} other {Còn # ngày}}",
+      "dueToday": "Đến hạn hôm nay",
+      "overdue": "{count, plural, one {Quá hạn # ngày} other {Quá hạn # ngày}}",
+      "closed": "Đã đóng",
+      "dueOn": "Hạn {date}"
+    },
+    "list": {
+      "title": "Yêu cầu dữ liệu",
+      "subtitle": "Yêu cầu của mọi người về dữ liệu bạn đang giữ về họ: truy cập, xuất, xóa và nhiều hơn nữa. Mỗi yêu cầu có thời hạn và nhật ký những việc đã làm.",
+      "newRequest": "Yêu cầu mới",
+      "settings": "Cài đặt",
+      "empty": "Chưa có yêu cầu dữ liệu nào.",
+      "emptyFiltered": "Không có yêu cầu nào khớp với các bộ lọc này.",
+      "loadMore": "Tải thêm",
+      "loadingMore": "Đang tải...",
+      "columns": {
+        "reference": "Mã tham chiếu",
+        "type": "Loại",
+        "subject": "Người",
+        "status": "Trạng thái",
+        "due": "Thời hạn"
+      },
+      "filters": {
+        "label": "Bộ lọc",
+        "status": "Trạng thái",
+        "type": "Loại",
+        "any": "Bất kỳ",
+        "overdue": "Chỉ quá hạn"
+      },
+      "open": "Mở yêu cầu {reference}"
+    },
+    "settings": {
+      "title": "Thời hạn",
+      "slaDays": "Số ngày để trả lời yêu cầu",
+      "slaHint": "Số ngày kể từ khi nhận yêu cầu đến hạn xử lý. Mặc định là 30.",
+      "saved": "Đã lưu cài đặt.",
+      "invalid": "Nhập một số nguyên ngày từ 1 đến 90."
+    },
+    "wizard": {
+      "title": "Yêu cầu dữ liệu mới",
+      "step": "Bước {current} trên {total}",
+      "person": {
+        "title": "Tìm người này",
+        "search": "Tìm theo tên, số điện thoại hoặc email",
+        "searchHint": "Nhập ít nhất 2 ký tự.",
+        "searching": "Đang tìm...",
+        "none": "Không tìm thấy ai. Bạn có thể dùng số điện thoại hoặc email bên dưới.",
+        "pick": "Chọn {name}",
+        "unnamed": "Chưa đặt tên",
+        "kindContact": "Liên hệ",
+        "kindLead": "Khách tiềm năng",
+        "selected": "Đã chọn: {name}",
+        "other": "Không có trong danh bạ của bạn",
+        "otherValue": "Số điện thoại hoặc email",
+        "otherHint": "Dành cho người chưa được lưu. Chúng tôi tìm dữ liệu của họ theo giá trị này.",
+        "useOther": "Dùng giá trị này",
+        "clear": "Chọn người khác"
+      },
+      "kind": {
+        "title": "Người này yêu cầu điều gì?"
+      },
+      "details": {
+        "title": "Chi tiết",
+        "channel": "Yêu cầu đến với bạn bằng cách nào?",
+        "note": "Ghi chú nội bộ",
+        "noteHint": "Tùy chọn. Chỉ nhóm của bạn thấy nội dung này. Không ghi thông tin cá nhân ở đây.",
+        "history": "Lịch sử hội thoại",
+        "historyHint": "Điều gì xảy ra với các cuộc hội thoại của người này khi dữ liệu của họ bị xóa.",
+        "historyDelete": "Xóa hội thoại, tin nhắn và tệp",
+        "historyAnonymise": "Giữ hội thoại nhưng không kèm danh tính của người này"
+      },
+      "create": "Tạo yêu cầu",
+      "creating": "Đang tạo...",
+      "created": "Đã tạo yêu cầu {reference}."
+    },
+    "detail": {
+      "back": "Yêu cầu dữ liệu",
+      "loading": "Đang tải...",
+      "received": "Nhận ngày {date}",
+      "channel": "Kênh: {channel}",
+      "history": {
+        "delete": "Khi xóa: các hội thoại bị xóa",
+        "anonymise": "Khi xóa: các hội thoại được giữ lại nhưng không kèm danh tính của người này"
+      },
+      "note": "Ghi chú nội bộ",
+      "legalHoldBadge": "Lưu giữ pháp lý",
+      "timeline": {
+        "title": "Dòng thời gian",
+        "empty": "Chưa có gì được ghi lại.",
+        "by": "bởi {actor}",
+        "system": "hệ thống",
+        "event": {
+          "created": "Đã tạo yêu cầu",
+          "verification_started": "Đã bắt đầu kiểm tra danh tính",
+          "verified": "Đã xác minh danh tính",
+          "verification_failed": "Danh tính chưa được xác minh",
+          "hold_set": "Đã đặt lưu giữ pháp lý",
+          "hold_released": "Đã gỡ lưu giữ pháp lý",
+          "rejected": "Yêu cầu bị từ chối",
+          "export_requested": "Đã yêu cầu xuất",
+          "export_downloaded": "Đã tải xuống bản xuất",
+          "erase_previewed": "Đã xem trước việc xóa",
+          "erased": "Đã xóa dữ liệu",
+          "completed": "Yêu cầu đã hoàn thành",
+          "other": "Cập nhật"
+        }
+      },
+      "verify": {
+        "title": "Xác minh danh tính",
+        "intro": "Hãy kiểm tra người yêu cầu đúng là người họ nói trước khi xuất hoặc xóa bất cứ điều gì.",
+        "state": {
+          "none": "Chưa kiểm tra.",
+          "verified": "Đã xác minh {date} ({method}).",
+          "evidence": "Mã tham chiếu bằng chứng: {ref}"
+        },
+        "method": "Đã kiểm tra bằng cách nào?",
+        "evidence": "ID tham chiếu bằng chứng",
+        "evidenceHint": "Chỉ nhập ID tham chiếu, không tải tài liệu lên. Dùng số phiếu hoặc ID tin nhắn.",
+        "note": "Ghi chú",
+        "outcome": "Kết quả",
+        "pending": "Đã bắt đầu kiểm tra",
+        "verified": "Đã xác minh",
+        "notVerified": "Chưa xác minh",
+        "submit": "Ghi nhận kết quả",
+        "notVerifiedWarn": "Yêu cầu của người chưa được xác minh sẽ bị từ chối.",
+        "saved": "Đã ghi nhận xác minh."
+      },
+      "hold": {
+        "title": "Lưu giữ pháp lý",
+        "intro": "Khi đang lưu giữ, việc xóa bị từ chối. Dùng khi pháp luật hoặc tranh chấp yêu cầu giữ dữ liệu.",
+        "toggle": "Lưu giữ pháp lý",
+        "reason": "Lý do",
+        "reasonHint": "Ít nhất 3 ký tự.",
+        "apply": "Đặt lưu giữ",
+        "release": "Gỡ lưu giữ",
+        "active": "Đang lưu giữ: {reason}",
+        "saved": "Đã cập nhật lưu giữ."
+      },
+      "export": {
+        "title": "Xuất",
+        "intro": "Chuẩn bị một tệp ZIP chứa dữ liệu chúng tôi giữ về người này.",
+        "expiry": "Tệp hoàn tất có sẵn trong {days} ngày, sau đó sẽ bị xóa.",
+        "noEmail": "Không có gì được gửi cho người này. Hãy tải tệp xuống và gửi cho họ qua một kênh an toàn.",
+        "request": "Chuẩn bị bản xuất",
+        "requesting": "Đang chuẩn bị...",
+        "requested": "Đã bắt đầu xuất.",
+        "none": "Chưa có bản xuất nào.",
+        "download": "Tải xuống",
+        "size": "{size} KB",
+        "expires": "Hết hạn {date}",
+        "status": {
+          "queued": "Đang chờ",
+          "running": "Đang tạo",
+          "ready": "Sẵn sàng",
+          "failed": "Thất bại",
+          "expired": "Đã hết hạn"
+        }
+      },
+      "erase": {
+        "title": "Xóa",
+        "intro": "Xóa dữ liệu của người này khỏi mọi mô-đun. Xem trước trước: không có gì thay đổi cho đến khi bạn xác nhận.",
+        "preview": "Xem trước",
+        "previewing": "Đang đếm...",
+        "previewTitle": "Điều sẽ xảy ra",
+        "previewNote": "Chỉ là bản xem trước. Không có gì bị thay đổi.",
+        "files": "{count, plural, one {# tệp đã lưu được đưa vào hàng đợi xóa} other {# tệp đã lưu được đưa vào hàng đợi xóa}}",
+        "totals": "Đã xóa {deleted}, đã ẩn danh {anonymised}, giữ lại {retained}",
+        "colTable": "Bảng",
+        "colWhat": "Điều xảy ra",
+        "colCount": "Số dòng",
+        "colReason": "Lý do",
+        "confirmLabel": "Nhập {phrase} để xác nhận",
+        "confirmHint": "Không thể hoàn tác thao tác này.",
+        "execute": "Xóa ngay",
+        "executing": "Đang xóa...",
+        "done": "Đã xóa xong.",
+        "blocked": "Chỉ xóa được khi danh tính đã được xác minh và không có lưu giữ pháp lý."
+      },
+      "proof": {
+        "title": "Bằng chứng đã xóa",
+        "executedAt": "Thực hiện {date}",
+        "executedBy": "Bởi {actor}",
+        "totals": "Đã xóa {deleted}, đã ẩn danh {anonymised}, giữ lại {retained}, {files} tệp",
+        "registryDigest": "Mã băm sổ đăng ký",
+        "sha256": "SHA-256",
+        "notes": "Giới hạn của lần xóa này",
+        "download": "Tải bằng chứng"
+      },
+      "close": {
+        "title": "Đóng yêu cầu",
+        "complete": "Đánh dấu hoàn thành",
+        "completeHint": "Dùng khi đã trả lời người này hoặc đã xử lý thủ công.",
+        "completed": "Yêu cầu đã hoàn thành.",
+        "rejectReason": "Lý do từ chối",
+        "reject": "Từ chối yêu cầu",
+        "rejectConfirm": "Từ chối",
+        "rejected": "Yêu cầu đã bị từ chối.",
+        "rejectedWith": "Bị từ chối: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Quyền riêng tư",
+      "export": "Xuất dữ liệu của người này",
+      "erase": "Xóa người này",
+      "created": "Đã tạo yêu cầu {reference}.",
+      "failed": "Không thể tạo yêu cầu."
+    }
+  }
+}

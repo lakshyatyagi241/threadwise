@@ -5,7 +5,6 @@
     "loading": "読み込み中",
     "empty": "まだ何もありません",
     "retry": "再試行",
-    "requestId": "リクエストID",
     "search": "検索",
     "unexpected": "問題が発生しました",
     "fatal": {

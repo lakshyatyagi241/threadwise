@@ -144,6 +144,16 @@ piece is an endpoint a screen composes.
 An id of another organization is a 404, a malformed id a 400. Percentages: delivery is delivered over sent, read is read over
 delivered, failed is failed over sent on the tiles; on the detail header sent, delivered and failed are over the audience.
 
+### Director summary (an addition beyond Reference)
+
+`GET /v2/broadcasts/:id/summary?cameBackDays=3|7|14&formIds=` and `GET /v2/broadcasts/:id/summary/people?kind=came_back|filled_form|not_reached`
+return the same shapes as a campaign's (`kind: 'broadcast'`): people messaged, delivered, read, failed, who wrote back inside the window
+and who filled an application form, as distinct people. Permission `bcast.broadcasts.read`; the form figures and `filled_form` need
+`record.form-submissions.read`. The rules, the caveats and the 60-second cache are in
+[campaigns.md](campaigns.md#director-summary-an-addition-beyond-reference). The routes are served by the campaigns module (it already
+depends on this one), so the two share one engine. A broadcast row carries no opt-out of its own, so an opted-out contact (`status`
+`unsubscribed` or the contact's flag) is left out of "wrote back".
+
 ## Actions: delete, retry, export (TW-BCAST-037, 038, 039, 040)
 
 | Route                                  | Permission                | What                                                                                                                                                                                                                                                                                                                                                                                                                                                         |

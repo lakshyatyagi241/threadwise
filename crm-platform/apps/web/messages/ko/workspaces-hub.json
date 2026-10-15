@@ -187,8 +187,7 @@
       "notFound": "이 워크스페이스는 더 이상 존재하지 않습니다.",
       "reasonRequired": "사유는 최소 8자 이상이어야 합니다.",
       "orgSuspended": "워크스페이스가 일시 중지되어 들어갈 수 없습니다.",
-      "validation": "값을 확인하고 다시 시도하세요.",
-      "requestId": "요청 ID"
+      "validation": "값을 확인하고 다시 시도하세요."
     },
     "detail": {
       "crumb": "워크스페이스",

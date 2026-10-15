@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { createContext, useContext, type ReactNode } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
-import { errorKind, requestIdOf } from '../lib/errors';
+import { errorKind } from '../lib/errors';
 
 /**
  * The wizard's cards (credit, variables, summary, schedule, retries, count) take the look of the screen they sit in. On Campaigns,
@@ -66,15 +66,9 @@ export function ErrorBlock({
   className?: string;
 }) {
   const t = useTranslations('campaigns.wizard.errors');
-  const requestId = requestIdOf(error);
   return (
     <Alert tone="danger" className={className}>
       <span>{t(errorKind(error))}</span>
-      {requestId && (
-        <span className="mt-1 block text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </span>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" className="mt-2" onClick={onRetry}>
           {t('retry')}

@@ -50,18 +50,35 @@
   <body>
     <h1>CRM add-on help</h1>
 
-    <h2>Connect</h2>
+    <h2>Initial Setup</h2>
     <ol>
-      <li>In the CRM open Settings, then Google Sheets add-on, and create your key.</li>
       <li>
-        Here choose <strong>CRM, Settings</strong>, paste the key and select
-        <strong>Save and check</strong>.
+        In the CRM open Settings, then Google Sheets add-on, create your key and copy the Webhook
+        URL.
       </li>
       <li>
-        The check shows who you are, your workspace and what your role can do. Menu items your role
-        cannot use are hidden.
+        Here choose <strong>Initial Setup</strong> in the add-on menu and paste the Webhook URL.
+      </li>
+      <li>
+        Pick the sheet and the trigger column (a letter such as F, or its heading in row 1). A row
+        is sent when that cell is filled or changed.
+      </li>
+      <li>
+        Select <strong>Send Test</strong>. Nothing is saved in the CRM; you see the columns it
+        received.
+      </li>
+      <li>
+        Tick <strong>Send on event</strong> (rows you edit here go straight away) and/or
+        <strong>Send on schedule</strong> (every hour, rows changed by a form or another app), then
+        select <strong>Submit</strong>.
       </li>
     </ol>
+    <p>
+      Each row arrives in the CRM as a contact (an <code>email</code> or <code>phone</code> column
+      is required) and its result is written to the <code>CRM status</code> column. The check shows
+      who you are, your workspace and what your role can do; menu items your role cannot use are
+      hidden.
+    </p>
 
     <h2>Pull contacts</h2>
     <p>

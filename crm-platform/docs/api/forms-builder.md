@@ -312,3 +312,11 @@ properties. Contact built-ins: `name`, `first_name`, `middle_name`, `last_name`,
 `industry`, `size_range`, `address` and the same five address parts, `notes`. The CRM keeps ONE address line per contact and company, so the parts are
 joined (`composeAddress`: `street, city, state postal, country`, empty parts skipped) when the submission is mapped, and a field bound to the whole
 `address` wins over the parts. The address, like every other built-in, fills blanks only on a returning contact. `middle_name` is contact only.
+
+## Consent line and the ledger (BL-171)
+
+`definition.consent.coversSms` (default false): the form's owner declares that the wording also covers SMS. A ticked **marketing** line grants
+marketing on WhatsApp and email, and on SMS when the form collects a phone and `coversSms` is on. A ticked line that is **not marketing** is
+recorded as agreement to service messages (ledger purpose `utility`, source `form`, with the wording, version, form and submission), never as
+marketing, and changes no subscription label. An unticked line records nothing in the ledger (the submission keeps the wording shown and
+`given: false`). A person who stopped a channel is not turned back on.

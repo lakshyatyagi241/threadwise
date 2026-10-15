@@ -8,8 +8,7 @@
     },
     "common": {
       "loading": "Cargando...",
-      "retry": "Reintentar",
-      "requestId": "ID de la solicitud"
+      "retry": "Reintentar"
     },
     "errors": {
       "conflict": "Otra persona cambió este proveedor mientras lo editabas. Se cargó la versión más reciente; revísala y aplica tu cambio de nuevo.",

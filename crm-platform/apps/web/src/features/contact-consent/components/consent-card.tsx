@@ -29,6 +29,19 @@ export function consentStatus(c: Pick<ContactConsent, 'optedOut' | 'states'>): S
 const TONE = { optedOut: 'danger', subscribed: 'success', none: 'neutral' } as const;
 
 /**
+ * A grant for SERVICE messages (purpose `utility`: the person agreed to be contacted about their request, BL-171) is not a marketing
+ * subscription and must never read like one, so it has its own words beside the marketing ones.
+ */
+const stateKey = (purpose: string, state: 'granted' | 'withdrawn' | 'unknown') =>
+  purpose === 'utility'
+    ? (`state.utility${state === 'granted' ? 'Granted' : 'Withdrawn'}` as const)
+    : (`state.${state}` as const);
+const actionKey = (purpose: string, action: ConsentAction) =>
+  purpose === 'utility'
+    ? (`action.utility${action === 'granted' ? 'Granted' : 'Withdrawn'}` as const)
+    : (`action.${action}` as const);
+
+/**
  * The Consent card of a contact: who agreed or opted out, when, from where, on which channel, with the proof, and the two
  * buttons to record a change (a grant needs a reason). Hidden without `contacts.consent.read`.
  */
@@ -99,7 +112,7 @@ export function ConsentCard({
               {q.data.states.map((s) => (
                 <li key={`${s.channel}-${s.purpose}`}>
                   <Badge tone={s.state === 'granted' ? 'success' : 'danger'}>
-                    {t(`channel.${s.channel}`)}: {t(`state.${s.state}`)}
+                    {t(`channel.${s.channel}`)}: {t(stateKey(s.purpose, s.state))}
                   </Badge>
                 </li>
               ))}
@@ -136,7 +149,8 @@ function EventRow({ event: e }: { event: ConsentEvent }) {
   return (
     <li className="text-sm">
       <p className="font-medium">
-        {t(`action.${e.action}`)} · {t(`channel.${e.channel}`)} · {t(`source.${e.source}`)}
+        {t(actionKey(e.purpose, e.action))} · {t(`channel.${e.channel}`)} ·{' '}
+        {t(`source.${e.source}`)}
       </p>
       <p className="text-xs text-muted-foreground">
         <time dateTime={e.occurredAt}>

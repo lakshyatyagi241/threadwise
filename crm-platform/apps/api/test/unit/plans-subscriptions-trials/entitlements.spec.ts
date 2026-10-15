@@ -85,6 +85,7 @@ describe('registry', () => {
       'sms',
       'help_agent',
       'email_channel',
+      'personal_history_full',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });

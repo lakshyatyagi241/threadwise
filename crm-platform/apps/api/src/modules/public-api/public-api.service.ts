@@ -73,19 +73,27 @@ export class PublicApiService {
     );
     const existed = before.rows.length > 0;
 
-    const contact = await this.contacts.create({
-      name: input.name,
-      email: input.email,
-      phone: input.mobile,
-      customFields: {
-        college_tag: input.collegeTag ?? null,
-        source: input.source,
-        // Caller's own nomenclature, stored verbatim. The platform never
-        // branches on these — they exist so the caller's data comes back out
-        // looking the way it went in.
-        ...(input.custom ?? {}),
+    const contact = await this.contacts.create(
+      {
+        name: input.name,
+        email: input.email,
+        phone: input.mobile,
+        consent: input.consent,
+        customFields: {
+          college_tag: input.collegeTag ?? null,
+          source: input.source,
+          // Caller's own nomenclature, stored verbatim. The platform never
+          // branches on these — they exist so the caller's data comes back out
+          // looking the way it went in.
+          ...(input.custom ?? {}),
+        },
       },
-    });
+      // The caller (an API key) vouches for the person's agreement; the key is the evidence, the grant's source is `api`.
+      {
+        source: 'api',
+        evidence: { apiKeyId: ctx.actorId === null ? undefined : String(ctx.actorId) },
+      },
+    );
 
     return { id: contact.id, created: !existed };
   }

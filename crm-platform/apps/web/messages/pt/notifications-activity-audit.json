@@ -159,6 +159,11 @@
         "title": "Seu número foi removido de {name}",
         "titleNoName": "Seu número foi removido de um grupo do WhatsApp",
         "body": "Alguém removeu seu número pessoal deste grupo. O grupo é mantido aqui, somente leitura."
+      },
+      "test": {
+        "title": "Notificação de teste",
+        "titleNoName": "Notificação de teste",
+        "bodyNoActor": "Se você consegue ler isto, as notificações em tempo real estão funcionando."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "Grupo do WhatsApp suspenso",
         "waba_group_suspension_cleared": "Grupo do WhatsApp ativo novamente",
         "device_group_join_request": "Solicitação para entrar em um grupo",
-        "device_group_removed": "Removido de um grupo do WhatsApp"
-      }
+        "device_group_removed": "Removido de um grupo do WhatsApp",
+        "test": "Notificação de teste"
+      },
+      "generic": "Você tem uma nova notificação",
+      "paused": "As atualizações em tempo real estão pausadas, então novos alertas podem chegar com até um minuto de atraso. Recarregue a página para reconectar."
     },
     "prefs": {
       "title": "Preferências de notificação",
@@ -212,7 +220,8 @@
         "broadcasts": "Transmissões e campanhas",
         "team_chat": "Chat da equipe",
         "whatsapp_groups": "Grupos do WhatsApp",
-        "billing": "Faturamento e assinaturas"
+        "billing": "Faturamento e assinaturas",
+        "system": "Sistema"
       },
       "types": {
         "new_chat": {
@@ -354,6 +363,22 @@
         "device_group_removed": {
           "label": "Removido de um grupo de número pessoal",
           "hint": "Alguém removeu um dos seus números pessoais do WhatsApp de um grupo. Pode ser sinal de que o número foi denunciado."
+        },
+        "sla_breached": {
+          "label": "SLA descumprido",
+          "hint": "Uma conversa sua não cumpriu a meta de primeira resposta ou de resolução."
+        },
+        "member_leave_started": {
+          "label": "Membro entrou de licença",
+          "hint": "Um membro da sua equipe entrou de licença. Mostra o que ele tem e um link para reatribuir."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Conversa que ninguém pôde assumir",
+          "hint": "O roteamento não encontrou ninguém para uma nova conversa porque as pessoas escolhidas estão de licença. Atribua manualmente."
+        },
+        "test": {
+          "label": "Notificação de teste",
+          "hint": "O teste que você envia em Notificações do navegador, para ver o sino, o pop-up e o título da aba funcionando."
         }
       },
       "loading": "Carregando suas preferências",
@@ -433,6 +458,11 @@
           "neverUsed": "ainda sem notificação",
           "remove": "Remover",
           "removeFor": "Remover {device}"
+        },
+        "testInApp": {
+          "watch": "Você deve ver um pop-up, e o número do sino e o título da aba devem mudar.",
+          "notConnected": "As atualizações em tempo real não estão conectadas nesta página, então o pop-up não pode aparecer aqui. Recarregue a página e tente de novo.",
+          "off": "Nenhuma notificação foi criada no sino: o sino está desativado para \"Notificação de teste\" na tabela abaixo, ou pelo proprietário do seu espaço de trabalho."
         }
       }
     },

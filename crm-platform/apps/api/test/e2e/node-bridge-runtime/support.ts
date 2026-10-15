@@ -4,6 +4,7 @@ import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { DeviceAuthStore } from '../../../src/infra/providers/node-bridge-runtime/device-auth-store';
 import type { GroupSnapshot } from '../../../src/infra/providers/node-bridge-runtime/inbound.port';
+import type { HistoryBatch } from '../../../src/infra/providers/node-bridge-runtime/history.port';
 import type {
   MessageAction,
   SendCommand,
@@ -86,8 +87,16 @@ export class FakeSocket implements WaSocket {
   groupReplies: Partial<
     Record<GroupAction['type'], GroupResult | Error | ((a: GroupAction) => GroupResult)>
   > = {};
+  historyHandler: ((b: HistoryBatch) => Promise<void>) | null = null;
   subscribe(l: (e: SocketEvent) => void) {
     this.listener = l;
+  }
+  subscribeHistory(h: (b: HistoryBatch) => Promise<void>) {
+    this.historyHandler = h;
+  }
+  /** WhatsApp pushes one slice of the first link's history; resolves when the importer has taken it. */
+  async emitHistory(b: HistoryBatch) {
+    await this.historyHandler?.(b);
   }
   async requestPairingCode(digits: string) {
     this.pairingFor = digits;

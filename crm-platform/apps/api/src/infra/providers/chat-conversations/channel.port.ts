@@ -82,8 +82,15 @@ export const outboundEmailSchema = z.object({
   signature: z.boolean().optional(),
   /** The user who wrote the reply (internal id), for their default signature; null for a bot or flow. */
   sentBy: z.number().int().nullable().optional(),
+  /**
+   * A marketing email (BL-141): the ConsentGate treats it as `marketing_messaging`, and the adapter adds the signed unsubscribe link
+   * and the RFC 8058 `List-Unsubscribe` headers. Replies and transactional mail leave it unset.
+   */
+  marketing: z.boolean().optional(),
   /** The composer's rich-text body (raw: the email adapter sanitises it before it goes out); the envelope `body` is its plain text. */
   bodyHtml: z.string().max(200_000).optional(),
+  /** The email template (`email_templates.uuid`) the reply was filled from: a sent reply counts one use of it. */
+  templateId: z.string().uuid().optional(),
 });
 export type OutboundEmail = z.infer<typeof outboundEmailSchema>;
 export const OUTBOUND_CAPTION_MAX = 1024;
@@ -387,8 +394,12 @@ export interface NormalisedInbound {
   /**
    * Imported history (WhatsApp Business app coexistence): stored quietly and backdated to when it was really sent, with no unread,
    * no reopening, no contact creation and no realtime alert. `direction` is who wrote it.
+   *
+   * `contact: true` (the personal-number import, TW-WAHIST, where the person chose to bring their chats in): the thread is linked to the
+   * contact of its number, created quietly when there is none (no `contact.created` event, so no flow and no notification), counted
+   * against the plan's contact cap. It never grants consent: a contact made this way has no consent event. Never set for a group.
    */
-  history?: { direction: 'in' | 'out' };
+  history?: { direction: 'in' | 'out'; contact?: boolean };
 }
 
 export interface NormalisedReceipt {

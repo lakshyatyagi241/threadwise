@@ -442,6 +442,10 @@ export class ContactsRepository {
       displayId: string;
       createdBy: number | null;
       submittedByAgentId?: number | null;
+      /** A contact keyed by a channel's own id (no phone: Telegram, Facebook, Instagram, the website widget). */
+      channel?: string | null;
+      channelUid?: string | null;
+      message?: string | null;
     },
   ): Promise<{ id: number; uuid: string }> {
     const [row] = await tx
@@ -479,6 +483,9 @@ export class ContactsRepository {
         createdBy: values.createdBy,
         updatedBy: values.createdBy,
         submittedByAgentId: values.submittedByAgentId ?? null,
+        channel: values.channel ?? null,
+        channelUid: values.channelUid ?? null,
+        message: values.message ?? null,
       })
       .returning({ id: contacts.id, uuid: contacts.uuid });
 
@@ -530,6 +537,15 @@ export class ContactsRepository {
       .select({ id: users.id })
       .from(users)
       .where(and(eq(users.orgId, orgId), eq(users.uuid, uuid)));
+    return rows[0]?.id;
+  }
+
+  /** The internal id of an ACTIVE member of this org (a bulk reassignment must not hand records to a disabled login). */
+  async resolveActiveUserId(tx: Tx, orgId: number, uuid: string): Promise<number | undefined> {
+    const rows = await tx
+      .select({ id: users.id })
+      .from(users)
+      .where(and(eq(users.orgId, orgId), eq(users.uuid, uuid), eq(users.status, 'active')));
     return rows[0]?.id;
   }
 
@@ -874,13 +890,28 @@ export class ContactsRepository {
   async listAssignable(
     tx: Tx,
     orgId: number,
-  ): Promise<Array<{ id: string; fullName: string; email: string }>> {
+    scope: RecordScope,
+    actorUserId: number | null,
+  ): Promise<Array<{ id: string; fullName: string; email: string; canAssign: boolean }>> {
+    // Mirrors assertOwnerWithinScope: all = anyone; team = me or someone who shares a team with me; own = me.
+    const canAssign =
+      scope === 'all'
+        ? sql<boolean>`true`
+        : !actorUserId
+          ? sql<boolean>`false`
+          : scope === 'own'
+            ? sql<boolean>`${users.id} = ${actorUserId}`
+            : sql<boolean>`(${users.id} = ${actorUserId} OR EXISTS (
+                SELECT 1 FROM ${teamMembers} tm1
+                JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
+                WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${users.id}
+              ))`;
     const rows = await tx
-      .select({ id: users.uuid, fullName: users.fullName, email: users.email })
+      .select({ id: users.uuid, fullName: users.fullName, email: users.email, canAssign })
       .from(users)
       .where(and(eq(users.orgId, orgId), eq(users.status, 'active')))
       .orderBy(asc(users.fullName));
-    return rows as Array<{ id: string; fullName: string; email: string }>;
+    return rows as Array<{ id: string; fullName: string; email: string; canAssign: boolean }>;
   }
 
   /** Called by contact-notes/activities/meetings on write — backs the list "Last Activity" column. */

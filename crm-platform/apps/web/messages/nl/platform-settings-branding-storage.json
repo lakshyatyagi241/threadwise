@@ -64,7 +64,6 @@
       "conflict": "Iemand anders heeft deze instellingen opgeslagen nadat jij ze opende. Laad de pagina opnieuw om hun wijzigingen te zien en pas daarna die van jou opnieuw toe.",
       "reload": "Instellingen opnieuw laden",
       "unexpected": "Er ging iets mis en er is niets opgeslagen.",
-      "requestId": "Verzoek-id",
       "readOnly": "Je kunt deze instellingen lezen, maar alleen een super-admin kan ze wijzigen.",
       "secretSet": "Opgeslagen. Laat leeg om te behouden.",
       "secretUnset": "Niet ingesteld.",

@@ -46,7 +46,6 @@
         "copyFailed": "Tidak dapat menyalin",
         "loading": "Memuat",
         "retry": "Coba lagi",
-        "requestId": "ID permintaan",
         "errors": {
           "forbidden": "Peran Anda tidak mengizinkan ini.",
           "request": "Permintaan ditolak. Muat ulang halaman lalu coba lagi.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Masuk operator",
         "intro": "Konsol ini untuk orang yang menjalankan platform. Pengguna ruang kerja masuk di halaman masuk utama.",
-        "requestId": "ID permintaan",
         "submit": "Masuk",
         "submitting": "Sedang masuk",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Akun Anda",
         "title": "Autentikasi dua faktor",
         "description": "Lindungi {email} dengan aplikasi autentikator. Akun operator adalah akun dengan tingkat kepercayaan tertinggi di platform.",
-        "requestId": "ID permintaan",
         "status": {
           "title": "Aplikasi autentikator",
           "on": "Aktif",
@@ -181,7 +178,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "Memproses",
             "close": "Tutup",
             "signInAgain": "Masuk lagi",
-            "requestId": "ID permintaan",
             "errors": {
               "forbidden": "Hanya super admin yang dapat menjalankan tindakan ini.",
               "unexpected": "Tindakan tidak selesai. Periksa log peristiwa sebelum mencoba lagi."
@@ -731,7 +726,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "Gunakan path situs seperti /legal/terms, atau alamat http atau https lengkap.",
           "senderFormat": "Pilih salah satu pengirim dari daftar.",
           "countryFormat": "Gunakan kode negara dua huruf.",
-          "senderRequired": "Pilih kanal pengirim sebelum membuat templat."
+          "senderRequired": "Pilih kanal pengirim sebelum membuat templat.",
+          "domainFormat": "{entry} bukan domain yang valid. Gunakan nama seperti contoh.com.",
+          "tooMany": "Paling banyak {max} domain."
         },
         "policy": {
           "kicker": "Pendaftaran",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "Maks. percobaan"
+          },
+          "businessEmailOnly": {
+            "label": "Hanya alamat email kerja",
+            "hintOn": "Penyedia gratis seperti Gmail, Outlook, dan Yahoo ditolak saat pendaftaran.",
+            "hintOff": "Siapa pun dapat mendaftar dengan alamat pribadi gratis."
+          },
+          "blockDisposableEmail": {
+            "label": "Blokir email sementara",
+            "hintOn": "Domain sekali pakai dan sementara, serta domain tanpa server email, ditolak.",
+            "hintOff": "Alamat sementara diterima."
+          },
+          "requirePhoneVerification": {
+            "label": "Wajibkan nomor ponsel terverifikasi",
+            "hintOn": "Setiap pendaftaran harus mengonfirmasi kode sekali pakai. Jika kode tidak dapat dikirim, pendaftaran berhenti alih-alih melewati pemeriksaan.",
+            "hintOff": "Langkah kode hanya berjalan saat kode pendaftaran di bawah aktif."
+          },
+          "blockedEmailDomains": {
+            "label": "Domain yang selalu diblokir",
+            "hint": "Satu domain per baris. Subdomain juga diblokir. Tetap ditolak meskipun «Hanya alamat email kerja» dinonaktifkan.",
+            "placeholder": "contoh.com"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "Kode uji dikirim ke {to}.",
             "remaining": "{count, plural, other {Sisa # uji jam ini.}}",
             "notShown": "Kode tidak ditampilkan di sini; baca di ponsel.",
-            "requestId": "ID permintaan",
             "errors": {
               "invalidNumber": "Masukkan nomor dengan kode negaranya, misalnya +91 98765 43221.",
               "rateLimited": "Terlalu banyak kode uji jam ini. Coba lagi dalam {minutes, plural, other {# menit}}.",
@@ -1045,7 +1060,6 @@
           "saved": "Pengirim disimpan",
           "removed": "Pengirim dihapus",
           "secretRemoved": "Rahasia tersimpan dihapus",
-          "requestId": "ID permintaan",
           "problems": {
             "required": "Kolom ini wajib diisi.",
             "tooLong": "Maksimal {max} karakter.",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "Footer itu tidak diterima.",
             "unexpected": "Footer tidak dapat disimpan. Coba lagi sebentar lagi."
-          },
-          "requestId": "ID permintaan"
+          }
+        },
+        "guard": {
+          "kicker": "Perlindungan pendaftaran",
+          "title": "Pemeriksaan email kerja dan ponsel",
+          "description": "Menolak alamat sekali pakai dan pribadi serta memastikan setiap akun baru memiliki nomor ponsel terverifikasi. Berlaku untuk pendaftaran email dan sosial.",
+          "phoneOffWarning": "Dengan pemeriksaan ponsel dimatikan, akun dapat dibuat tanpa nomor terverifikasi, sehingga pendaftaran palsu massal lebih mudah."
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "Batal",
           "working": "Menghapus",
           "error": "Rahasia tidak dapat dihapus. Coba lagi sebentar lagi.",
-          "requestId": "ID permintaan",
           "done": "Rahasia {name} yang tersimpan telah dihapus.",
           "names": {
             "google": "Google",
@@ -1421,7 +1438,8 @@
             "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account.",
             "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS.",
             "help_agent": "Asisten Bantuan dalam aplikasi: pengguna meminta tugas dengan kata-kata biasa, lalu asisten memandu atau mengerjakannya di sesi mereka sendiri dan bertanya dulu sebelum hal berisiko. Memakai token AI.",
-            "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini."
+            "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini.",
+            "personal_history_full": "Memungkinkan nomor WhatsApp pribadi mengimpor seluruh riwayat chat saat pertama kali ditautkan. Impor chat terbaru tersedia untuk semua paket yang memiliki nomor pribadi."
           },
           "units": {
             "days": "Hari",
@@ -1604,7 +1622,8 @@
             "waba_groups": "Grup WhatsApp (Cloud API)",
             "sms": "Kanal SMS",
             "help_agent": "Asisten Bantuan (AI, memakai token)",
-            "email_channel": "Kanal email (Gmail)"
+            "email_channel": "Kanal email (Gmail)",
+            "personal_history_full": "Impor riwayat chat lengkap (WhatsApp pribadi)"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",
@@ -1670,7 +1689,6 @@
         "saving": "Menyimpan",
         "saved": "{count, plural, other {# pengaturan disimpan}}",
         "rejected": "Tidak ada yang disimpan. {count, plural, other {# kolom ditolak}}.",
-        "requestId": "ID permintaan",
         "unsaved": "{count, plural, other {# perubahan belum disimpan}}",
         "discard": "Buang perubahan",
         "errors": {

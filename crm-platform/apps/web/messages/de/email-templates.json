@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "E-Mail-Vorlagen"
+    },
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "E-Mail-Vorlagen",
+      "subtitle": "Wiederverwendbare E-Mails mit Betreff, formatiertem Text und Variablen. Fügen Sie eine Vorlage im E-Mail-Editor in eine Antwort ein.",
+      "newTemplate": "Neue Vorlage",
+      "loading": "Vorlagen werden geladen…",
+      "emptyTitle": "Noch keine E-Mail-Vorlagen",
+      "empty": "Schreiben Sie eine E-Mail einmal, mit Variablen wie dem Vornamen des Kontakts, und nutzen Sie sie in jeder E-Mail-Unterhaltung wieder.",
+      "emptyFilteredTitle": "Keine passenden Vorlagen",
+      "emptyFiltered": "Versuchen Sie eine andere Suche oder setzen Sie die Filter zurück.",
+      "clearFilters": "Filter zurücksetzen",
+      "unavailableTitle": "E-Mail-Vorlagen sind nicht verfügbar",
+      "unavailable": "Dieser Workspace kann den Dienst für E-Mail-Vorlagen derzeit nicht erreichen.",
+      "showing": "{count, plural, one {# Vorlage wird angezeigt} other {# Vorlagen werden angezeigt}}",
+      "loadMore": "Mehr laden",
+      "loadingMore": "Wird geladen…",
+      "noPermission": "Sie können die geteilten Vorlagen Ihres Workspace nutzen und eigene behalten. Wenn Sie geteilte Vorlagen ändern müssen, wenden Sie sich an einen Admin."
+    },
+    "toolbar": {
+      "search": "Vorlagen suchen",
+      "searchPlaceholder": "Nach Name, Betreff oder Kategorie suchen",
+      "scope": "Von wem",
+      "scopes": {
+        "all": "Alle",
+        "shared": "Geteilt",
+        "mine": "Meine"
+      },
+      "purpose": "Typ",
+      "anyPurpose": "Jeder Typ",
+      "purposes": {
+        "general": "Allgemein",
+        "marketing": "Marketing"
+      },
+      "status": "Status",
+      "statuses": {
+        "active": "Aktiv",
+        "archived": "Archiviert",
+        "all": "Alle"
+      },
+      "category": "Kategorie",
+      "anyCategory": "Jede Kategorie",
+      "refresh": "Aktualisieren"
+    },
+    "card": {
+      "subject": "Betreff",
+      "noSubject": "Kein Betreff: Die Antwort behält ihren eigenen",
+      "badges": {
+        "shared": "Geteilt",
+        "mine": "Meine",
+        "marketing": "Marketing",
+        "archived": "Archiviert"
+      },
+      "used": "{count, plural, =0 {Nie verwendet} one {Einmal verwendet} other {# Mal verwendet}}",
+      "lastUsed": "Zuletzt verwendet: {date}",
+      "by": "Von {name}",
+      "variables": "Variablen: {list}",
+      "edit": "Bearbeiten",
+      "archive": "Archivieren",
+      "restore": "Wiederherstellen",
+      "delete": "Löschen",
+      "preview": "Vorschau anzeigen",
+      "hidePreview": "Vorschau ausblenden"
+    },
+    "delete": {
+      "title": "Diese Vorlage löschen?",
+      "message": "„{name}“ wird für alle entfernt, die sie nutzen können. Bereits mit ihr gesendete E-Mails sind nicht betroffen.",
+      "confirm": "Löschen",
+      "cancel": "Abbrechen"
+    },
+    "editor": {
+      "eyebrow": "E-Mail-Vorlage",
+      "newTitle": "Neue E-Mail-Vorlage",
+      "editTitle": "E-Mail-Vorlage bearbeiten",
+      "close": "Schließen",
+      "name": "Name",
+      "namePlaceholder": "Willkommen nach der Registrierung",
+      "subject": "Betreff",
+      "subjectPlaceholder": "Willkommen bei {workspace}, {name}",
+      "subjectHint": "Optional. Bleibt das Feld leer, behält eine Antwort ihren eigenen Betreff.",
+      "body": "Nachricht",
+      "bodyPlaceholder": "Schreiben Sie die E-Mail. Mit den Variablen unten können Sie sie personalisieren.",
+      "category": "Kategorie",
+      "categoryPlaceholder": "Onboarding",
+      "categoryList": "Verwendete Kategorien",
+      "purpose": "Typ",
+      "purposes": {
+        "general": {
+          "label": "Allgemein",
+          "hint": "Antworten und persönliche E-Mails. Wird wie jede Antwort gesendet."
+        },
+        "marketing": {
+          "label": "Marketing",
+          "hint": "Werbliche E-Mails. Erfordert die Marketing-Einwilligung des Kontakts, sofern Ihr Workspace sie verlangt, und enthält immer einen Abmeldelink."
+        }
+      },
+      "scope": "Wer darf sie nutzen",
+      "scopes": {
+        "shared": {
+          "label": "Alle im Workspace",
+          "hint": "Eine geteilte Vorlage. Nur Personen, die Vorlagen verwalten, können sie ändern."
+        },
+        "mine": {
+          "label": "Nur ich",
+          "hint": "Eine persönliche Vorlage. Niemand sonst sieht sie."
+        }
+      },
+      "variables": "Variable einfügen",
+      "variablesHint": "Variablen werden beim Verwenden der Vorlage mit Daten des Kontakts, von Ihnen und vom Workspace gefüllt. Eine Variable ohne Wert bleibt unverändert stehen, damit Sie sie korrigieren können.",
+      "variableGroups": {
+        "contact": "Kontakt",
+        "agent": "Sie",
+        "workspace": "Workspace"
+      },
+      "insertingIn": "Wird eingefügt in: {field}",
+      "fields": {
+        "subject": "Betreff",
+        "body": "Nachricht"
+      },
+      "save": "Änderungen speichern",
+      "create": "Vorlage erstellen",
+      "cancel": "Abbrechen",
+      "problems": {
+        "required": "Pflichtfeld.",
+        "tooLong": "Zu lang (höchstens {limit} Zeichen).",
+        "subjectLines": "Der Betreff muss einzeilig sein."
+      }
+    },
+    "preview": {
+      "title": "Vorschau mit Beispieldaten",
+      "subjectLabel": "Betreff",
+      "noSubject": "(kein Betreff)",
+      "empty": "Schreiben Sie die Nachricht, um eine Vorschau zu sehen.",
+      "loading": "Vorschau wird aktualisiert…",
+      "failed": "Die Vorschau konnte nicht aktualisiert werden.",
+      "issues": "{count, plural, one {Diese Variable hat keinen Beispielwert und bleibt unverändert: {list}} other {Diese Variablen haben keinen Beispielwert und bleiben unverändert: {list}}}",
+      "sampleNote": "Nur Beispielwerte. Die echten Werte stammen vom Kontakt, wenn Sie die Vorlage verwenden."
+    },
+    "picker": {
+      "button": "Vorlagen",
+      "title": "E-Mail-Vorlagen",
+      "search": "Vorlagen suchen",
+      "searchPlaceholder": "Vorlagen suchen",
+      "loading": "Vorlagen werden geladen…",
+      "empty": "Noch keine Vorlagen. Erstellen Sie sie im CRM-Menü unter „E-Mail-Vorlagen“.",
+      "emptyFiltered": "Keine Vorlage passt zu Ihrer Suche.",
+      "loadError": "Die Vorlagen konnten nicht geladen werden.",
+      "marketing": "Marketing",
+      "mine": "Meine",
+      "replaceTitle": "Geschriebenen Text ersetzen?",
+      "replaceMessage": "Mit „{name}“ wird die Nachricht im Feld ersetzt, ebenso der Betreff, falls die Vorlage einen hat.",
+      "replaceConfirm": "Ersetzen",
+      "replaceCancel": "Abbrechen",
+      "used": "Vorlage „{name}“ wird verwendet",
+      "marketingNote": "Dies ist eine Marketing-E-Mail: Es gelten Ihre Einwilligungsregeln, und sie enthält einen Abmeldelink.",
+      "forget": "Diese Vorlage nicht mehr verwenden",
+      "more": "Mehr laden"
+    },
+    "toast": {
+      "created": "Vorlage erstellt",
+      "updated": "Vorlage gespeichert",
+      "archived": "Vorlage archiviert",
+      "restored": "Vorlage wiederhergestellt",
+      "deleted": "Vorlage gelöscht"
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Dafür fehlt Ihnen die Berechtigung.",
+      "signedOut": "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an, um fortzufahren.",
+      "conflict": "Jemand anderes hat diese Vorlage geändert. Deren Version wurde geladen; prüfen Sie sie und versuchen Sie es erneut.",
+      "validation": "Einige Ihrer Eingaben sind ungültig. Prüfen Sie die Felder und versuchen Sie es erneut.",
+      "unavailable": "E-Mail-Vorlagen sind derzeit nicht verfügbar.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "notFound": "Diese Vorlage gibt es nicht mehr.",
+      "planDisabled": "Ihr Tarif enthält keine E-Mail-Funktion. Wechseln Sie auf einen höheren Tarif, um E-Mail-Vorlagen zu nutzen.",
+      "nameTaken": "Sie haben bereits eine Vorlage mit diesem Namen. Wählen Sie einen anderen Namen.",
+      "notEditable": "Nur Personen, die E-Mail-Vorlagen verwalten, können eine geteilte Vorlage ändern.",
+      "archived": "Diese Vorlage ist archiviert. Stellen Sie sie wieder her, um sie zu verwenden.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "retry": "Erneut versuchen"
+    }
+  }
+}

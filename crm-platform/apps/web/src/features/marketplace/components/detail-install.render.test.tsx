@@ -272,7 +272,7 @@ describe('install flow, step 1: permissions and consent', () => {
     ]);
     const html = renderMarket(<FailureView failed={mktError(e)} error={e} alreadyId={null} />);
     expect(html).toContain('inbox.conversation.reply');
-    expect(html).toContain('req-9');
+    expect(html).not.toContain('req-9');
     expect(renderMarket(<GapsNotice keys={['a.b']} />)).toContain('a.b');
   });
 

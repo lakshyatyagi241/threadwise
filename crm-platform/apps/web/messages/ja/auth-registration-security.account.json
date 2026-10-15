@@ -22,7 +22,6 @@
         "signedOut": "セッションが終了しました。もう一度サインインしてください。",
         "rateLimited": "試行回数が多すぎます。しばらく待ってからもう一度お試しください。",
         "rateLimitedWait": "試行回数が多すぎます。{seconds, plural, other {# 秒}}後にもう一度お試しください。",
-        "requestId": "リクエストID",
         "locked": "失敗が続いています。しばらく待ってからもう一度お試しください。",
         "lockedWait": "失敗が続いています。{minutes, plural, other {# 分}}後にもう一度お試しください。"
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "タイムゾーン",
         "workspaceTimezoneHint": "{workspace}に適用されます。変更できるのはオーナーと管理者のみです。",
+        "myTimezone": "自分のタイムゾーン",
+        "myTimezoneHint": "日付と時刻は {zone} で表示されます。空欄にするとワークスペースのタイムゾーンに従います(ワークスペースに設定がない場合は UTC)。",
+        "myTimezoneUseWorkspace": "ワークスペースの設定を使う",
         "saved": "プロフィールを保存しました。",
         "errors": {
           "fullNameRequired": "氏名を入力してください。",
@@ -555,7 +557,8 @@
             "waba_groups": "WhatsAppグループ",
             "sms": "SMS",
             "help_agent": "ヘルプアシスタント",
-            "email_channel": "メール(Gmail)チャネル"
+            "email_channel": "メール(Gmail)チャネル",
+            "personal_history_full": "全履歴インポート(個人用WhatsApp)"
           },
           "cta": {
             "continueFree": "無料で続ける",

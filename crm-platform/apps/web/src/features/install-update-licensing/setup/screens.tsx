@@ -68,9 +68,9 @@ export function failureText(t: ReturnType<typeof useTranslations>, f: SetupFailu
           .join(', '),
       });
     case 'step':
-      return `${t('problems.step')}${f.requestId ? ` (${t('problems.requestId', { id: f.requestId })})` : ''}`;
+      return `${t('problems.step')}`;
     case 'unknown':
-      return `${t('problems.unknown')}${f.requestId ? ` (${t('problems.requestId', { id: f.requestId })})` : ''}`;
+      return `${t('problems.unknown')}`;
     default:
       return null;
   }

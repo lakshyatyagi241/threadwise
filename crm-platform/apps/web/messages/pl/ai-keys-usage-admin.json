@@ -14,7 +14,6 @@
     "common": {
       "loading": "Ładowanie",
       "retry": "Spróbuj ponownie",
-      "requestId": "Identyfikator żądania",
       "dismiss": "Odrzuć",
       "tokens": "{count, number} tokenów",
       "dash": "-",

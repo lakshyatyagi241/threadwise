@@ -22,7 +22,6 @@
         "signedOut": "你的会话已结束。请重新登录。",
         "rateLimited": "尝试次数过多。请稍等片刻后重试。",
         "rateLimitedWait": "尝试次数过多。请在 {seconds, plural, other {# 秒}}后重试。",
-        "requestId": "请求 ID",
         "locked": "失败次数过多。请稍等一段时间后再试。",
         "lockedWait": "失败次数过多。请在 {minutes, plural, other {# 分钟}}后重试。"
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "时区",
         "workspaceTimezoneHint": "适用于 {workspace}。仅所有者和管理员可以更改。",
+        "myTimezone": "我的时区",
+        "myTimezoneHint": "日期和时间将按 {zone} 显示给你。留空则沿用工作区时区(工作区未设置时使用 UTC)。",
+        "myTimezoneUseWorkspace": "使用工作区默认值",
         "saved": "个人资料已保存。",
         "errors": {
           "fullNameRequired": "请输入你的姓名。",
@@ -555,7 +557,8 @@
             "waba_groups": "WhatsApp 群组",
             "sms": "SMS",
             "help_agent": "帮助助手",
-            "email_channel": "电子邮件(Gmail)渠道"
+            "email_channel": "电子邮件(Gmail)渠道",
+            "personal_history_full": "完整历史记录导入（个人 WhatsApp）"
           },
           "cta": {
             "continueFree": "继续免费使用",

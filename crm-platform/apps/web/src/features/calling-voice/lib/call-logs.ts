@@ -77,15 +77,6 @@ export function logSearch(p: Partial<LogParams>): string {
   return s ? `?${s}` : '';
 }
 
-/** The browser's time zone, so "today" and the hours of the heat map are the person's own. */
-export function browserTimeZone(): string {
-  try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-  } catch {
-    return 'UTC';
-  }
-}
-
 export function toListQuery(p: LogParams, tz: string): Partial<CallLogListQuery> {
   const custom = Boolean(p.from || p.to);
   return {
@@ -171,6 +162,11 @@ export const KNOWN_STEPS = [
   'terminate_sent',
   'terminate',
   'recording_stored',
+  'recording_consent_granted',
+  'recording_consent_declined',
+  'recording_deleted',
+  'recording_hold_set',
+  'recording_hold_lifted',
 ] as const;
 export const knownStep = (type: string): string | null =>
   (KNOWN_STEPS as readonly string[]).includes(type) ? type : null;

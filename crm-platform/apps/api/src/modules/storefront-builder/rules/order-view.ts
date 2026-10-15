@@ -38,6 +38,7 @@ export function parseOrderLines(items: unknown): StoreOrderLine[] {
       lineTotalMinor: qty * priceMinor,
       image: str(o.image) ?? str(o.image_url),
       retailerId: str(o.retailer_id) ?? str(o.retailerId),
+      variantTitle: str(o.variant_title) ?? str(o.variantTitle),
     };
   });
 }

@@ -101,6 +101,8 @@ export class CampaignMirrorService {
               channelId: conv.channel_uuid,
               peerKey: conv.peer_key,
               source: 'campaign',
+              // Message History shows the campaign's recipient row, so it reads this key to leave the bubble out of the feed.
+              meta: { campaign_id: c.uuid },
               body,
               providerMessageId: providerMessageId ?? key,
               // The body above is already filled in for this contact, so the thread keeps it as the text the customer read and the

@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "メールテンプレート"
+    },
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "メールテンプレート",
+      "subtitle": "件名、書式付きテキスト、変数を含む再利用可能なメールです。メール作成画面から返信に挿入できます。",
+      "newTemplate": "新規テンプレート",
+      "loading": "テンプレートを読み込み中…",
+      "emptyTitle": "メールテンプレートはまだありません",
+      "empty": "連絡先の名前などの変数を使ってメールを一度書いておけば、あらゆるメールの会話で再利用できます。",
+      "emptyFilteredTitle": "一致するテンプレートがありません",
+      "emptyFiltered": "検索条件を変えるか、フィルターを解除してください。",
+      "clearFilters": "フィルターを解除",
+      "unavailableTitle": "メールテンプレートは利用できません",
+      "unavailable": "現在、このワークスペースからメールテンプレートのサービスに接続できません。",
+      "showing": "{count, plural, other {#件のテンプレートを表示中}}",
+      "loadMore": "さらに読み込む",
+      "loadingMore": "読み込み中…",
+      "noPermission": "ワークスペースの共有テンプレートを使用し、自分用のテンプレートを管理できます。共有テンプレートを変更するには管理者に依頼してください。"
+    },
+    "toolbar": {
+      "search": "テンプレートを検索",
+      "searchPlaceholder": "名前、件名、カテゴリで検索",
+      "scope": "対象",
+      "scopes": {
+        "all": "すべて",
+        "shared": "共有",
+        "mine": "自分用"
+      },
+      "purpose": "種類",
+      "anyPurpose": "すべての種類",
+      "purposes": {
+        "general": "一般",
+        "marketing": "マーケティング"
+      },
+      "status": "ステータス",
+      "statuses": {
+        "active": "有効",
+        "archived": "アーカイブ済み",
+        "all": "すべて"
+      },
+      "category": "カテゴリ",
+      "anyCategory": "すべてのカテゴリ",
+      "refresh": "更新"
+    },
+    "card": {
+      "subject": "件名",
+      "noSubject": "件名なし：返信の件名がそのまま使われます",
+      "badges": {
+        "shared": "共有",
+        "mine": "自分用",
+        "marketing": "マーケティング",
+        "archived": "アーカイブ済み"
+      },
+      "used": "{count, plural, =0 {未使用} other {#回使用}}",
+      "lastUsed": "最終使用日：{date}",
+      "by": "作成者：{name}",
+      "variables": "変数：{list}",
+      "edit": "編集",
+      "archive": "アーカイブ",
+      "restore": "復元",
+      "delete": "削除",
+      "preview": "プレビューを表示",
+      "hidePreview": "プレビューを隠す"
+    },
+    "delete": {
+      "title": "このテンプレートを削除しますか？",
+      "message": "「{name}」は、利用できるすべての人から削除されます。このテンプレートから送信済みのメールには影響しません。",
+      "confirm": "削除",
+      "cancel": "キャンセル"
+    },
+    "editor": {
+      "eyebrow": "メールテンプレート",
+      "newTitle": "新規メールテンプレート",
+      "editTitle": "メールテンプレートを編集",
+      "close": "閉じる",
+      "name": "名前",
+      "namePlaceholder": "登録後のウェルカムメール",
+      "subject": "件名",
+      "subjectPlaceholder": "{workspace}へようこそ、{name}さん",
+      "subjectHint": "任意です。空欄の場合、返信の件名がそのまま使われます。",
+      "body": "本文",
+      "bodyPlaceholder": "メールを書いてください。下の変数を使うと内容をパーソナライズできます。",
+      "category": "カテゴリ",
+      "categoryPlaceholder": "オンボーディング",
+      "categoryList": "使用中のカテゴリ",
+      "purpose": "種類",
+      "purposes": {
+        "general": {
+          "label": "一般",
+          "hint": "回答や1対1のメール用です。通常の返信と同じように送信されます。"
+        },
+        "marketing": {
+          "label": "マーケティング",
+          "hint": "プロモーションメール用です。ワークスペースで必要な場合は連絡先のマーケティング同意が必要で、配信停止リンクが必ず付きます。"
+        }
+      },
+      "scope": "利用できる人",
+      "scopes": {
+        "shared": {
+          "label": "ワークスペースの全員",
+          "hint": "共有テンプレートです。テンプレートを管理する権限のある人だけが変更できます。"
+        },
+        "mine": {
+          "label": "自分のみ",
+          "hint": "個人用テンプレートです。ほかの人には表示されません。"
+        }
+      },
+      "variables": "変数を挿入",
+      "variablesHint": "テンプレートの使用時に、変数は連絡先、あなた、ワークスペースの情報で置き換えられます。値がない変数は、修正できるようそのまま残ります。",
+      "variableGroups": {
+        "contact": "連絡先",
+        "agent": "あなた",
+        "workspace": "ワークスペース"
+      },
+      "insertingIn": "挿入先：{field}",
+      "fields": {
+        "subject": "件名",
+        "body": "本文"
+      },
+      "save": "変更を保存",
+      "create": "テンプレートを作成",
+      "cancel": "キャンセル",
+      "problems": {
+        "required": "入力必須です。",
+        "tooLong": "長すぎます（最大{limit}文字）。",
+        "subjectLines": "件名は1行で入力してください。"
+      }
+    },
+    "preview": {
+      "title": "サンプルデータでプレビュー",
+      "subjectLabel": "件名",
+      "noSubject": "（件名なし）",
+      "empty": "本文を入力するとプレビューが表示されます。",
+      "loading": "プレビューを更新中…",
+      "failed": "プレビューを更新できませんでした。",
+      "issues": "{count, plural, other {サンプル値のない変数はそのまま残ります：{list}}}",
+      "sampleNote": "サンプル値です。実際の値は、テンプレートの使用時に連絡先から取得されます。"
+    },
+    "picker": {
+      "button": "テンプレート",
+      "title": "メールテンプレート",
+      "search": "テンプレートを検索",
+      "searchPlaceholder": "テンプレートを検索",
+      "loading": "テンプレートを読み込み中…",
+      "empty": "テンプレートはまだありません。CRMメニューの「メールテンプレート」で作成できます。",
+      "emptyFiltered": "検索に一致するテンプレートがありません。",
+      "loadError": "テンプレートを読み込めませんでした。",
+      "marketing": "マーケティング",
+      "mine": "自分用",
+      "replaceTitle": "入力した内容を置き換えますか？",
+      "replaceMessage": "「{name}」を使用すると、入力欄の本文が置き換えられます。テンプレートに件名がある場合は件名も置き換えられます。",
+      "replaceConfirm": "置き換える",
+      "replaceCancel": "キャンセル",
+      "used": "テンプレート「{name}」を使用中",
+      "marketingNote": "これはマーケティングメールです。同意ルールが適用され、配信停止リンクが付きます。",
+      "forget": "このテンプレートの使用をやめる",
+      "more": "さらに読み込む"
+    },
+    "toast": {
+      "created": "テンプレートを作成しました",
+      "updated": "テンプレートを保存しました",
+      "archived": "テンプレートをアーカイブしました",
+      "restored": "テンプレートを復元しました",
+      "deleted": "テンプレートを削除しました"
+    },
+    "errors": {
+      "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+      "forbidden": "この操作を行う権限がありません。",
+      "signedOut": "セッションが終了しました。続行するには再度サインインしてください。",
+      "conflict": "ほかの人がこのテンプレートを変更しました。その最新版を読み込みました。内容を確認して、もう一度お試しください。",
+      "validation": "入力内容に正しくない箇所があります。各項目を確認して、もう一度お試しください。",
+      "unavailable": "現在、メールテンプレートは利用できません。",
+      "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
+      "notFound": "このテンプレートは既に存在しません。",
+      "planDisabled": "ご利用のプランにはメール機能が含まれていません。メールテンプレートを使うにはプランをアップグレードしてください。",
+      "nameTaken": "同じ名前のテンプレートが既にあります。別の名前を付けてください。",
+      "notEditable": "共有テンプレートを変更できるのは、メールテンプレートを管理する権限のある人だけです。",
+      "archived": "このテンプレートはアーカイブされています。使用するには復元してください。",
+      "unexpected": "問題が発生しました。もう一度お試しください。",
+      "retry": "再試行"
+    }
+  }
+}

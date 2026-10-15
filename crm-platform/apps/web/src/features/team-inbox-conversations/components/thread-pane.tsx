@@ -37,8 +37,9 @@ import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window'
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { GroupCostLine } from './group-cost-line';
 import { ShareDialog, type ShareKind } from './share-dialog';
-import { LabelChip } from './label-chip';
-import { LabelMenu } from './label-menu';
+import { TagChip } from './tag-chip';
+import { SlaBadge } from './sla-badge';
+import { TagMenu } from './tag-menu';
 import { TemplatePicker } from './template-picker';
 import { TriageMenu } from './triage-menu';
 import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
@@ -95,8 +96,8 @@ export interface ThreadPaneProps {
     onSnooze: (preset: SnoozePreset) => void;
     onWake: () => void;
   };
-  /** Labels of the open conversation: present when the caller may put labels on threads. */
-  labels?: {
+  /** Tags of the open conversation: present when the caller may put tags on threads. */
+  tags?: {
     busy: boolean;
     canCreate: boolean;
     onApply: (input: { tagId: string } | { name: string }) => void;
@@ -214,6 +215,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                 {detail.status === 'spam' && <Badge tone="danger">{t('status.spam')}</Badge>}
                 {detail.status === 'snoozed' && <Badge tone="warning">{t('status.snoozed')}</Badge>}
                 {win && <WindowBadge view={win} />}
+                <SlaBadge status={detail.slaStatus} nowMs={props.nowMs} />
               </div>
               <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
                 <span dir="ltr" className="font-mono">
@@ -233,9 +235,9 @@ export function ThreadPane(props: ThreadPaneProps) {
                 <TypingLine conversationId={detail.id} />
               </p>
               {detail.labels.length > 0 && (
-                <div className="mt-1 flex flex-wrap gap-1" data-testid="inbox-thread-labels">
+                <div className="mt-1 flex flex-wrap gap-1" data-testid="inbox-thread-tags">
                   {detail.labels.map((l) => (
-                    <LabelChip key={l.id} label={l} />
+                    <TagChip key={l.id} tag={l} />
                   ))}
                 </div>
               )}
@@ -273,13 +275,13 @@ export function ThreadPane(props: ThreadPaneProps) {
               {t('assignToMe')}
             </Button>
           )}
-          {detail && props.labels && (
-            <LabelMenu
+          {detail && props.tags && (
+            <TagMenu
               applied={detail.labels}
-              busy={props.labels.busy}
-              canCreate={props.labels.canCreate}
-              onApply={props.labels.onApply}
-              onWithdraw={props.labels.onWithdraw}
+              busy={props.tags.busy}
+              canCreate={props.tags.canCreate}
+              onApply={props.tags.onApply}
+              onWithdraw={props.tags.onWithdraw}
             />
           )}
           {detail && props.triage && (
@@ -483,6 +485,8 @@ export function ThreadPane(props: ThreadPaneProps) {
       />
       <TemplatePicker
         conversationId={props.conversationId}
+        contactName={detail?.title}
+        contactFields={contactFieldsOf(detail?.contactSummary)}
         open={templatesOpen}
         onClose={() => setTemplatesOpen(false)}
         onSend={thread.sendTemplate}
@@ -576,4 +580,14 @@ function TypingLine({ conversationId }: { conversationId: string }) {
       {t('typing', { count: typing.size })}
     </span>
   );
+}
+
+/** The contact's details a template variable can be taken from, only the ones the contact has. */
+function contactFieldsOf(
+  c: { name: string | null; phone: string | null; email: string | null } | null | undefined,
+): Array<{ key: 'name' | 'phone' | 'email'; value: string }> {
+  if (!c) return [];
+  return (['name', 'phone', 'email'] as const)
+    .map((key) => ({ key, value: (c[key] ?? '').trim() }))
+    .filter((f) => f.value !== '');
 }

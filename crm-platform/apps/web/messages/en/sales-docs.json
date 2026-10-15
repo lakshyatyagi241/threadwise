@@ -257,7 +257,6 @@
       "ownerInvalid": "The owner must be an active member of the workspace.",
       "invoicingUnavailable": "Invoicing is not available yet, so this document cannot be converted.",
       "unexpected": "Something went wrong. Try again.",
-      "requestId": "Request id",
       "retry": "Try again"
     },
     "link": {

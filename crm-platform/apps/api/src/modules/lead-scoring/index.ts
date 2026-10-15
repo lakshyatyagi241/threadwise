@@ -1,6 +1,7 @@
-export { LeadScoringModule } from './lead-scoring.module';
+export { LeadScoringModule, leadScoringAiProvider } from './lead-scoring.module';
 export { LeadScoringService } from './lead-scoring.service';
 export { LeadChatDigestService } from './lead-chat-digest.service';
+export { LeadStageLineService } from './lead-stage-line.service';
 export { LeadChatDigestRepository } from './lead-chat-digest.repository';
 export type { ContactBrief, SuggestionRow } from './lead-chat-digest.repository';
 export { ChatDigestListeners } from './lead-chat-digest.listeners';

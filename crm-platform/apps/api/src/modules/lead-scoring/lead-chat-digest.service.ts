@@ -44,7 +44,9 @@ import {
   stageToSuggest,
   strongestIntent,
   suggestableStages,
+  type StageOption,
 } from './lead-chat-digest.rules';
+import { LeadStageLineService } from './lead-stage-line.service';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository, type RunWrite } from './lead-scoring.repository';
 import { AI_PROVIDER, resolveCost } from './lead-scoring.rules';
@@ -87,6 +89,7 @@ export class LeadChatDigestService {
     private readonly audit: AuditService,
     private readonly contacts: ContactsService,
     private readonly listeners: ChatDigestListeners,
+    private readonly stageLines: LeadStageLineService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadDigestJob>,
   ) {}
@@ -396,7 +399,8 @@ export class LeadChatDigestService {
         })
       : null;
 
-    const savedDigestId = await this.db.txAs({ orgId, userId: null }, async (tx) => {
+    const saved = await this.db.txAs({ orgId, userId: null }, async (tx) => {
+      let suggestionId: number | null = null;
       const digestId = await this.chat.insertDigest(tx, orgId, {
         contactId,
         throughAt: prepared.throughAt!,
@@ -475,9 +479,15 @@ export class LeadChatDigestService {
             confidence: { old: null, new: suggest.confidence },
           },
         });
+        suggestionId = id;
       }
-      return digestId;
+      return { digestId, suggestionId };
     });
+    const savedDigestId = saved.digestId;
+    // Automatic (the default): the contact moves now and the chat says so, with an Undo. Manual: the suggestion waits in the tray.
+    if (suggest && saved.suggestionId !== null && gate.settings.stageAutoApply) {
+      await this.autoApply(orgId, saved.suggestionId, brief, suggest.to, stages);
+    }
     await announce({
       digestId: savedDigestId,
       source: 'ai',
@@ -494,6 +504,94 @@ export class LeadChatDigestService {
         prepared.phraseIntents.includes('not_interested') || parsed.intent === 'not_interested',
     });
     return { status: 'digest', source: 'ai' };
+  }
+
+  /**
+   * Moves the contact to the suggested stage as the system, only forward and only while it is still where the reading started, keeps
+   * the suggestion as `auto_applied` (so the chat's Undo has something to put back) and writes the line into the thread. A failure
+   * leaves the suggestion pending for a person; it never fails the reading.
+   */
+  private async autoApply(
+    orgId: number,
+    suggestionId: number,
+    brief: { uuid: string; lifecycleStage: string },
+    to: string,
+    stages: readonly StageOption[],
+  ): Promise<void> {
+    try {
+      const position = new Map(stages.map((s) => [s.value, s.position]));
+      const labels = new Map(stages.map((s) => [s.value, s.label]));
+      const forward = (position.get(to) ?? -1) > (position.get(brief.lifecycleStage) ?? Infinity);
+      if (!forward) return;
+      const s = await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.chat.suggestionById(tx, orgId, suggestionId),
+      );
+      if (!s || s.status !== 'pending') return;
+      const moved = await this.contacts.changeStageAsSystem(orgId, s.contactId, {
+        expectFrom: s.fromStage,
+        to: s.toStage,
+      });
+      if (!moved) return;
+      await this.db.txAs({ orgId, userId: null }, async (tx) => {
+        if (await this.chat.decide(tx, orgId, s.id, 'auto_applied', null)) {
+          await this.audit.record(tx, {
+            module: SUGGESTION_MODULE_KEY,
+            recordId: s.id,
+            action: 'update',
+            delta: { status: { old: 'pending', new: 'auto_applied' } },
+          });
+        }
+      });
+      await this.stageLines.write(orgId, {
+        suggestionUuid: s.uuid,
+        contactId: s.contactId,
+        fromLabel: labels.get(s.fromStage) ?? s.fromStage,
+        toLabel: labels.get(s.toStage) ?? s.toStage,
+        action: 'auto',
+      });
+    } catch (err) {
+      this.logger.warn({ orgId, suggestionId, err }, 'automatic stage change not applied');
+    }
+  }
+
+  /** The Undo on the chat line: puts the contact back where the reading found it, if nobody moved it since. */
+  async undo(uuid: string): Promise<void> {
+    const ctx = RequestContextStore.require();
+    const orgId = ctx.orgId;
+    const s = await this.db.tx((tx) => this.chat.suggestionByUuid(tx, orgId, uuid));
+    if (!s) throw AppError.notFound('Suggestion', uuid);
+    // The contact as this person may see it: one outside their scope is a 404 here.
+    await this.contacts.getByUuid(s.contactUuid);
+    const refuse = () =>
+      new AppError(
+        ERROR_CODES.LSC_SUGGESTION_GONE,
+        'This change cannot be undone any more: the contact moved on, or it was already undone.',
+        HttpStatus.CONFLICT,
+      );
+    if (s.status !== 'auto_applied') throw refuse();
+    const moved = await this.contacts.changeStageAsSystem(orgId, s.contactId, {
+      expectFrom: s.toStage,
+      to: s.fromStage,
+    });
+    if (!moved) throw refuse();
+    const labels = await this.db.tx(async (tx) => {
+      const stages = await this.chat.stages(tx, orgId);
+      await this.chat.markUndone(tx, orgId, s.id, ctx.userId ?? null);
+      await this.audit.record(tx, {
+        module: SUGGESTION_MODULE_KEY,
+        recordId: s.id,
+        action: 'update',
+        delta: { status: { old: 'auto_applied', new: 'undone' } },
+      });
+      return new Map(stages.map((x) => [x.value, x.label]));
+    });
+    await this.stageLines.write(orgId, {
+      suggestionUuid: s.uuid,
+      contactId: s.contactId,
+      fromLabel: labels.get(s.toStage) ?? s.toStage,
+      toLabel: labels.get(s.fromStage) ?? s.fromStage,
+      action: 'undone',
+    });
   }
 
   /** The "Analyze chat" button: reads now and answers with what was found. */

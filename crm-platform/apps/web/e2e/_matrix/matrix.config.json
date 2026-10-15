@@ -1,0 +1,20 @@
+{
+  "_comment": "Read by route-matrix.spec.ts AND by tools/qa-suite (task #10) so the scenario count in the report is the number the spec really generates.",
+  "viewports": [
+    { "name": "desktop", "width": 1280, "height": 800 },
+    { "name": "tablet", "width": 768, "height": 1024 },
+    { "name": "mobile", "width": 390, "height": 844 }
+  ],
+  "checksPerRouteViewport": [
+    "renders without a server error or script error",
+    "has no horizontal overflow",
+    "has a title and a heading or main landmark",
+    "every button, link and field has an accessible name"
+  ],
+  "checksPerRoute": [
+    "a signed-out visitor never gets a 5xx or a blank page",
+    "the keyboard can reach a focusable control"
+  ],
+  "skipGroups": ["(admin)", "(embedded)", "(setup)", "(site-preview)"],
+  "authedGroups": ["(app)", "(gate)"]
+}

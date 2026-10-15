@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import type {
   CreateMessageLogExportInput,
   MessageLogExport,
+  MessageLogExportKind,
   MessageLogExportList,
   MessageLogResponse,
 } from '@crm/contracts';
@@ -49,8 +50,8 @@ export class InboxMessageLogService {
     return this.logs.requestExport(input);
   }
 
-  listExports(): Promise<MessageLogExportList> {
-    return this.logs.listExports();
+  listExports(kind?: MessageLogExportKind): Promise<MessageLogExportList> {
+    return this.logs.listExports(kind);
   }
 
   downloadExport(exportUuid: string): Promise<{ stream: Readable; fileName: string }> {

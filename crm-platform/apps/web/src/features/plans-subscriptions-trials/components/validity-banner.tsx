@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { PlanValidity } from '@crm/contracts';
 import { Alert } from '@crm/ui';
 import { bannerFor } from '../lib/format';
@@ -17,10 +17,13 @@ export function ValidityBanner({
 }) {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const banner = bannerFor(validity);
   if (!banner) return null;
   const fmt = (iso: string | null) =>
-    iso ? new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(iso)) : '';
+    iso
+      ? new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone }).format(new Date(iso))
+      : '';
   const date = fmt(
     banner.key === 'trial' || banner.key === 'trialEnded'
       ? validity.trialEndsAt

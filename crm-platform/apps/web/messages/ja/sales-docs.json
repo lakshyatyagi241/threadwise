@@ -257,7 +257,6 @@
       "ownerInvalid": "担当者はワークスペースの有効なメンバーである必要があります。",
       "invoicingUnavailable": "請求機能はまだ利用できないため、この書類は変換できません。",
       "unexpected": "問題が発生しました。もう一度お試しください。",
-      "requestId": "リクエストID",
       "retry": "再試行"
     },
     "link": {

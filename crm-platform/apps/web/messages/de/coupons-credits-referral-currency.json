@@ -14,7 +14,6 @@
       "dismiss": "Schließen",
       "admin": "Admin",
       "readOnly": "Sie können diese Seite ansehen, aber nur ein Super-Admin kann sie ändern.",
-      "requestId": "Anfrage-ID",
       "errors": {
         "forbidden": "Sie haben keinen Zugriff auf diese Seite.",
         "request": "Die Anfrage konnte nicht abgeschlossen werden.",
@@ -404,7 +403,6 @@
         "validation": "Diese Filter konnten nicht angewendet werden. Setzen Sie sie zurück und versuchen Sie es erneut.",
         "network": "Der Server war nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
         "generic": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
-        "requestId": "Anfrage-ID",
         "retry": "Erneut versuchen"
       }
     }

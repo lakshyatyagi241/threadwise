@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import {
   WA_DEVICE_GROUP_JOIN_REQUESTS_PER_CALL_MAX,
@@ -23,6 +23,7 @@ import { OutcomeList } from './outcome-list';
 export function JoinRequests({ group }: { group: WaDeviceGroup }) {
   const t = useTranslations('whatsapp-devices-baileys.groups.requests');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const { device, online, perms, waitSeconds, notify, fail } = useGroupsCtx();
   const access = rowAccess(group, perms, online);
@@ -126,7 +127,7 @@ export function JoinRequests({ group }: { group: WaDeviceGroup }) {
           <p className="text-sm text-muted-foreground">{t('none')}</p>
         ) : (
           rows.map((r) => {
-            const when = formatWhen(r.requestedAt, locale);
+            const when = formatWhen(r.requestedAt, locale, timeZone);
             return (
               <div
                 key={r.jid}

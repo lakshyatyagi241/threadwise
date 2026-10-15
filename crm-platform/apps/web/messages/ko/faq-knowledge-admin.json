@@ -7,7 +7,6 @@
     "common": {
       "loading": "로딩 중",
       "retry": "다시 시도",
-      "requestId": "요청 ID",
       "dash": "-",
       "cancel": "취소",
       "errors": {

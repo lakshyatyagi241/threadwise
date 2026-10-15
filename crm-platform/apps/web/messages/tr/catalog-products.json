@@ -7,8 +7,7 @@
     },
     "common": {
       "dismiss": "Kapat",
-      "retry": "Tekrar dene",
-      "requestId": "İstek kimliği"
+      "retry": "Tekrar dene"
     },
     "errors": {
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
@@ -35,7 +34,10 @@
       "sendFailed": "Mesaj gönderilemedi: {detail}",
       "collectionProducts": "Seçilen ürünlerin hiçbiri bu çalışma alanına ait değil.",
       "providerFailed": "WhatsApp veya Meta isteği tamamlayamadı: {detail}",
-      "unexpected": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin.",
+      "alreadyConnected": "Zaten bağlı bir katalog var. Yenisini oluşturmak için önce bağlantısını kesin.",
+      "confirmMismatch": "Girdiğiniz katalog kimliği bağlı katalogla eşleşmiyor.",
+      "setNotSyncable": "Bu koleksiyonda Meta ürün setine eklenecek etkin ürün yok."
     },
     "paywall": {
       "kicker": "Premium özellik",
@@ -401,6 +403,15 @@
           "descriptionTooLong": "Açıklama çok uzun.",
           "noProducts": "En az bir ürün seçin."
         }
+      },
+      "meta": {
+        "onMeta": "Meta'da",
+        "notOnMeta": "Meta'da değil",
+        "push": "Meta'ya gönder",
+        "update": "Meta'da güncelle",
+        "remove": "Meta'dan kaldır",
+        "pushed": "Koleksiyon Meta'ya gönderildi.",
+        "removed": "Koleksiyon Meta'dan kaldırıldı."
       }
     },
     "activity": {
@@ -447,7 +458,8 @@
       "cancel": "İptal",
       "deleted": "Ürün kaldırıldı.",
       "deleteTitle": "Bu ürün silinsin mi?",
-      "deleteBody": "\"{name}\" silinecek. Siz Meta üzerinden kaldırana kadar orada kalır."
+      "deleteBody": "\"{name}\" silinecek. Siz Meta üzerinden kaldırana kadar orada kalır.",
+      "variantsBadge": "{count, plural, one {# varyant} other {# varyant}}"
     },
     "share": {
       "eyebrow": "Ürünü paylaş",
@@ -552,6 +564,91 @@
         "badUrl": "https:// ile başlayan tam bir bağlantı girin",
         "outOfRange": "Bu sayı aralık dışında.",
         "tooMany": "Çok fazla görsel."
+      },
+      "variants": {
+        "title": "Varyantlar",
+        "hint": "Bu ürünü beden veya renk gibi birden fazla biçimde satın. Her kombinasyonun kendi SKU'su, fiyatı ve stoğu olur.",
+        "toggle": "Bu ürünün varyantları var",
+        "removeOnSave": "Kaydettiğinizde bu ürünün varyantları kaldırılacak.",
+        "optionName": "{n}. seçenek adı",
+        "optionNamePlaceholder": "Beden, Renk...",
+        "suggest": {
+          "size": "Beden",
+          "colour": "Renk",
+          "material": "Malzeme",
+          "style": "Stil"
+        },
+        "values": "Değerler",
+        "valuesHint": "Her değerden sonra Enter'a basın veya virgül yazın. Her biri en fazla {max} karakter.",
+        "valuesPlaceholder": "Bir değer yazın, örneğin M",
+        "valuesMore": "Başka bir değer ekle",
+        "quickAdd": "Hızlı ekle:",
+        "preset": {
+          "clothing": "Giysi bedenleri ({values})",
+          "shoes": "Ayakkabı numaraları ({values})"
+        },
+        "addOption": "Seçenek ekle",
+        "maxOptions": "En fazla {max} seçenek.",
+        "removeOption": "{n}. seçeneği kaldır",
+        "moveOptionUp": "{n}. seçeneği yukarı taşı",
+        "moveOptionDown": "{n}. seçeneği aşağı taşı",
+        "removeValue": "{value} değerini kaldır",
+        "moveValueEarlier": "{value} değerini öne taşı",
+        "moveValueLater": "{value} değerini geriye taşı",
+        "refused": {
+          "tooLong": "Bu değer çok uzun.",
+          "dup": "Bu değer zaten listede.",
+          "tooMany": "Bu seçenek için değer sınırına ulaştınız."
+        },
+        "tableTitle": "Varyantlar",
+        "count": "{count, plural, one {# varyant} other {# varyant}}",
+        "tableEmpty": "Varyantları oluşturmak için her seçeneğe bir ad ve en az bir değer verin.",
+        "totalStock": "Toplam stok",
+        "fromPrice": "Başlangıç fiyatı",
+        "fromPreview": "{price}'dan başlayan",
+        "unlimited": "Sınırsız",
+        "priceHint": "Aktif varyantlar arasındaki en düşük fiyat. Kendi fiyatı olmayan varyantlar bunu kullanır.",
+        "stockHint": "Yukarıdaki tabloda ayarlanan aktif varyantların toplamı.",
+        "bulkPrice": "Tüm varyantlar için fiyat",
+        "bulkStock": "Tüm varyantlar için stok",
+        "bulkApplyPrice": "Fiyatı uygula",
+        "bulkApplyStock": "Stoğu uygula",
+        "pricePlaceholder": "Ürün fiyatı",
+        "stockPlaceholder": "Sınırsız",
+        "col": {
+          "variant": "Varyant",
+          "sku": "SKU",
+          "price": "Fiyat",
+          "stock": "Stok",
+          "image": "Görsel bağlantısı",
+          "active": "Aktif"
+        },
+        "rowSku": "{title} için SKU",
+        "rowPrice": "{title} için fiyat",
+        "rowStock": "{title} için stok",
+        "rowImage": "{title} için görsel bağlantısı",
+        "rowActive": "{title} aktif",
+        "confirm": {
+          "title": "Varyantlar kaldırılsın mı?",
+          "body": "Bu kombinasyon artık mevcut olmadığından {count, plural, one {verisi olan # varyant} other {verisi olan # varyant}} kaldırılacak.",
+          "remove": "Kaldır",
+          "keep": "Koru"
+        },
+        "problem": {
+          "required": "Bu alan zorunludur.",
+          "tooLong": "Bu metin çok uzun.",
+          "dupName": "İki seçeneğin adı aynı.",
+          "dupValue": "Bu değer iki kez geçiyor.",
+          "needOption": "En az bir seçenek ekleyin.",
+          "needValue": "En az bir değer ekleyin.",
+          "tooManyValues": "Bu seçenek için çok fazla değer var.",
+          "tooManyVariants": "Bu seçenekler çok fazla varyant oluşturuyor. Sınır 100.",
+          "notNumber": "499 veya 499,50 gibi bir sayı girin.",
+          "tooBig": "Tutar çok büyük.",
+          "notWhole": "Tam sayı girin.",
+          "outOfRange": "Bu sayı aralığın dışında.",
+          "badUrl": "https:// ile başlayan tam bir bağlantı girin."
+        }
       }
     },
     "reviews": {
@@ -724,6 +821,33 @@
           "goods": "Alkol / yetişkin / düzenlemeye tabi ürün yok",
           "verification": "Üretim için İşletme Doğrulaması gerekir"
         }
+      }
+    },
+    "manage": {
+      "title": "Kataloğu Meta'da yönet",
+      "create": {
+        "title": "Meta'da yeni katalog oluştur",
+        "intro": "WhatsApp Business hesabınızda boş bir katalog oluşturur, bağlar ve burada bağlantı kurar.",
+        "name": "Katalog adı",
+        "placeholder": "örn. Mağazam",
+        "button": "Katalog oluştur",
+        "needName": "Bir katalog adı girin.",
+        "done": "Katalog oluşturuldu ve bağlandı."
+      },
+      "rename": {
+        "label": "Katalog adı",
+        "button": "Meta'da yeniden adlandır",
+        "done": "Katalog Meta'da yeniden adlandırıldı."
+      },
+      "delete": {
+        "title": "Kataloğu Meta'da sil",
+        "warning": "Meta'daki kataloğu ve ürünlerini kalıcı olarak siler. Geri alınamaz.",
+        "confirmLabel": "Onaylamak için {id} katalog kimliğini yazın",
+        "button": "Meta'da sil",
+        "dialogTitle": "Katalog Meta'da silinsin mi?",
+        "dialogMessage": "Katalog Meta'da silinir ve burada bağlantısı kesilir. Geri alınamaz.",
+        "cancel": "İptal",
+        "done": "Katalog Meta'da silindi."
       }
     }
   }

@@ -10,7 +10,6 @@
       },
       "common": {
         "loading": "Загрузка...",
-        "requestId": "ID запроса",
         "retry": "Повторить",
         "noPermissions": "Нет разрешений"
       },

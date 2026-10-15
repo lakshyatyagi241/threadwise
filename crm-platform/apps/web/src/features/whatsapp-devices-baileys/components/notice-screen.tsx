@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Alert, Spinner } from '@crm/ui';
 import { useRiskNotice } from '../api/devices';
 import { formatWhen } from '../lib/format';
@@ -13,6 +13,7 @@ import { useErrorText } from './use-error-text';
 export function NoticeScreen() {
   const t = useTranslations('whatsapp-devices-baileys.notice');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const errorText = useErrorText();
   const q = useRiskNotice();
   return (
@@ -32,7 +33,7 @@ export function NoticeScreen() {
             {q.data.accepted
               ? t('acceptedOn', {
                   version: q.data.version,
-                  date: formatWhen(q.data.acceptedAt, locale) ?? '-',
+                  date: formatWhen(q.data.acceptedAt, locale, timeZone) ?? '-',
                 })
               : t('notAccepted')}
           </Alert>

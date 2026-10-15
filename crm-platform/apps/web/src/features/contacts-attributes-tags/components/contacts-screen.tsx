@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
 import type { ContactViewResponse } from '@crm/contracts';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { invalidateSegments, useSegments } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
@@ -15,6 +15,7 @@ import { useAttributes, useStatusOptions } from '../api/attributes';
 import {
   bulkDelete,
   bulkGroupMembership,
+  bulkOwner,
   bulkTag,
   bulkUpdate,
   exportContacts,
@@ -34,6 +35,7 @@ import {
   type ContactFilters,
 } from '../api/contacts';
 import { useGroups } from '../api/groups';
+import { useOwnerNames } from '../api/owners';
 import { useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
 import {
@@ -51,6 +53,7 @@ import { displayName } from '../lib/contact-model';
 import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
 import { filtersToSearch, hasActiveFilter, parseFilters } from '../lib/filters';
+import { presetFilters, type PresetView } from '../lib/preset-views';
 import { filtersOfView, viewColumnsOf, viewIdOf, withView } from '../lib/views';
 import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
@@ -84,6 +87,7 @@ import { GroupModal } from './group-modal';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
 import { ViewsBar } from './views-bar';
 import { ImportModal } from './import-modal';
+import { DeleteHistoryOption } from './delete-history-option';
 import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
 
 type View = 'list' | 'kanban';
@@ -107,6 +111,7 @@ export function ContactsScreen() {
   const search = useSearchParams();
   const qc = useQueryClient();
   const { toast } = useToast();
+  const session = useSession();
   const canCreate = useCan('record.contacts.create');
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
@@ -149,6 +154,17 @@ export function ContactsScreen() {
     router.replace(`${pathname}${withView(filtersToSearch(next, sizeDefault), view?.id ?? '')}`, {
       scroll: false,
     });
+  };
+
+  /** A built-in view: the filters it stands for, on top of the defaults, with no saved view open. */
+  const selectPreset = (preset: PresetView) => {
+    appliedView.current = '';
+    const next = {
+      ...DEFAULT_FILTERS,
+      limit: sizeDefault,
+      ...presetFilters(preset, session.user.id),
+    };
+    router.replace(`${pathname}${filtersToSearch(next, sizeDefault)}`, { scroll: false });
   };
 
   /**
@@ -206,6 +222,7 @@ export function ContactsScreen() {
         : 'ready';
   const attributes = useAttributes();
   const statusOptions = useStatusOptions();
+  const { owners, nameOf: ownerName, loading: ownersLoading } = useOwnerNames();
 
   const rows = list.items;
   const total = list.total;
@@ -313,6 +330,7 @@ export function ContactsScreen() {
     consent: filters.consent,
     imported: filters.imported,
     segment: filters.segment,
+    owner: filters.owner,
     rules: filters.rules,
   };
   const target = (): BulkTarget =>
@@ -322,6 +340,7 @@ export function ContactsScreen() {
   const [formFor, setFormFor] = useState<ContactRow | 'new' | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
+  const [keepHistory, setKeepHistory] = useState(false);
   const [dedupeOpen, setDedupeOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [groupOpen, setGroupOpen] = useState(false);
@@ -400,8 +419,9 @@ export function ContactsScreen() {
   }
 
   async function onBulkDelete() {
-    const out = await guarded(() => bulkDelete(target()));
+    const out = await guarded(() => bulkDelete(target(), { eraseHistory: !keepHistory }));
     setConfirmBulkDelete(false);
+    setKeepHistory(false);
     if (!out) return;
     dispatch({ type: 'clear' });
     await refresh();
@@ -419,7 +439,12 @@ export function ContactsScreen() {
   }
 
   async function onBulkUpdate(values: BulkUpdateValues): Promise<boolean> {
-    const out = await guarded(() => bulkUpdate([...sel.ids], values));
+    // "All N matching" has no ids to list: it can only change the owner, which the API does for a whole filter at once.
+    const out = await guarded(() =>
+      sel.allMatching
+        ? bulkOwner(target(), values.ownerId ?? null)
+        : bulkUpdate([...sel.ids], values),
+    );
     if (!out) return false;
     dispatch({ type: 'clear' });
     await refresh();
@@ -496,8 +521,9 @@ export function ContactsScreen() {
     if (!deleteTarget) return;
     setBusy(true);
     try {
-      await deleteContact(deleteTarget.id);
+      await deleteContact(deleteTarget.id, { eraseHistory: !keepHistory });
       setDeleteId(null);
+      setKeepHistory(false);
       await refresh();
       toast(t('deleted'), 'success');
     } catch (e) {
@@ -541,6 +567,8 @@ export function ContactsScreen() {
           });
     },
     statusLabel: (v: string) => statuses.find((x) => x.value === v)?.label ?? v,
+    // While the people are loading the cell stays empty; a person who has left the workspace reads "Former member".
+    ownerLabel: (id: string) => ownerName(id) ?? (ownersLoading ? '' : t('ownerFormer')),
     onToggle: (id: string) => dispatch({ type: 'toggle', id }),
     onView: (id: string) => router.push(`/contacts/${id}`),
     onAddToGroup: (id: string) => {
@@ -587,18 +615,6 @@ export function ContactsScreen() {
             )}
           </header>
 
-          {canReadViews && (
-            <ViewsBar
-              filters={filters}
-              defaultLimit={sizeDefault}
-              activeId={viewId}
-              columnIds={columns.map((c) => c.id)}
-              keepsColumns={savedViewCols !== null}
-              onSelect={selectView}
-              can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
-            />
-          )}
-
           <ContactsToolbar
             q={q}
             onQ={setQ}
@@ -621,6 +637,19 @@ export function ContactsScreen() {
             tag={filters.tag}
             onTag={(id) => setFilters({ tag: id })}
             tags={tags.data ?? []}
+            owner={filters.owner}
+            onOwner={(v) => setFilters({ owner: v })}
+            owners={owners}
+            meId={session.user.id}
+            // The shortcut on a one-person filter: select everything the view matches and open the owner change.
+            onReassignView={
+              canUpdate && total !== 0
+                ? () => {
+                    dispatch({ type: 'selectAllMatching' });
+                    setUpdateOpen(true);
+                  }
+                : undefined
+            }
             stage={filters.lifecycleStage}
             onStage={(v) => setFilters({ lifecycleStage: v })}
             stages={stages}
@@ -648,7 +677,6 @@ export function ContactsScreen() {
             onImport={() => setImportOpen(true)}
             onAddColumnField={() => router.push('/contact-properties')}
             onUpdateSelected={() => setUpdateOpen(true)}
-            updateDisabled={sel.allMatching}
             onDedupe={() => setDedupeOpen(true)}
             onNewGroup={() => setGroupOpen(true)}
             onDeleteSelected={() => setConfirmBulkDelete(true)}
@@ -673,6 +701,20 @@ export function ContactsScreen() {
             onRefresh={() => void Promise.all([refresh(), list.refetch()])}
             refreshing={list.isFetching}
           />
+
+          {canReadViews && (
+            <ViewsBar
+              filters={filters}
+              defaultLimit={sizeDefault}
+              activeId={viewId}
+              columnIds={columns.map((c) => c.id)}
+              keepsColumns={savedViewCols !== null}
+              onSelect={selectView}
+              onPreset={selectPreset}
+              meId={session.user.id}
+              can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
+            />
+          )}
         </div>
 
         <div>
@@ -880,7 +922,8 @@ export function ContactsScreen() {
         />
         <BulkUpdateDialog
           open={updateOpen}
-          count={sel.ids.size}
+          count={sel.allMatching ? (total ?? null) : sel.ids.size}
+          ownerOnly={sel.allMatching}
           busy={busy}
           onApply={onBulkUpdate}
           onClose={() => setUpdateOpen(false)}
@@ -900,10 +943,18 @@ export function ContactsScreen() {
           tone="danger"
           busy={busy}
           title={t('deleteTitle')}
-          message={t('deleteMessage', { name: deleteTarget ? displayName(deleteTarget) : '' })}
+          message={
+            <>
+              <p>{t('deleteMessage', { name: deleteTarget ? displayName(deleteTarget) : '' })}</p>
+              <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
+            </>
+          }
           confirmLabel={t('delete')}
           cancelLabel={t('keep')}
-          onClose={() => setDeleteId(null)}
+          onClose={() => {
+            setDeleteId(null);
+            setKeepHistory(false);
+          }}
           onConfirm={() => void onDeleteOne()}
         />
         <ConfirmDialog
@@ -911,10 +962,18 @@ export function ContactsScreen() {
           tone="danger"
           busy={busy}
           title={tb('deleteTitle')}
-          message={count === null ? tb('deleteAllMessage') : tb('deleteMessage', { count })}
+          message={
+            <>
+              <p>{count === null ? tb('deleteAllMessage') : tb('deleteMessage', { count })}</p>
+              <DeleteHistoryOption many keepHistory={keepHistory} onChange={setKeepHistory} />
+            </>
+          }
           confirmLabel={tb('delete')}
           cancelLabel={tb('keep')}
-          onClose={() => setConfirmBulkDelete(false)}
+          onClose={() => {
+            setConfirmBulkDelete(false);
+            setKeepHistory(false);
+          }}
           onConfirm={() => void onBulkDelete()}
         />
       </div>

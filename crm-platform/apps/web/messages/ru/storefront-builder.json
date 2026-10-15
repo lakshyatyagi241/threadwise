@@ -8,7 +8,6 @@
         "dismiss": "Скрыть"
       },
       "errors": {
-        "requestId": "ID запроса",
         "retry": "Повторить",
         "network": {
           "title": "Нет связи с сервером",

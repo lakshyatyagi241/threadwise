@@ -2,6 +2,7 @@ import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
   GROWTH_FEATURES,
+  isIanaTimeZone,
   type GrowthAudience,
   type GrowthAudienceKind,
   type GrowthAudiencesResponse,
@@ -29,6 +30,7 @@ import {
 import { AuditService } from '../../kernel/audit/audit.service';
 import { CampaignsRepository } from '../campaigns';
 import { ContactGroupsService, ContactsService } from '../crm';
+import { LeadStageLineService } from '../lead-scoring';
 import { auc } from './growth.rules';
 import { GrowthGateService, type GrowthContext } from './growth-gate.service';
 import { GrowthRepository } from './growth.repository';
@@ -76,6 +78,7 @@ export class GrowthService {
     private readonly audit: AuditService,
     private readonly groups: ContactGroupsService,
     private readonly contacts: ContactsService,
+    private readonly stageLines: LeadStageLineService,
     private readonly campaigns: CampaignsRepository,
     @Inject(GROWTH_ENRICHMENT_PORT) private readonly enrichment: GrowthEnrichmentPort,
   ) {}
@@ -286,14 +289,18 @@ export class GrowthService {
 
   // --- send times ----------------------------------------------------------------------------------------------------------
 
-  async sendTimes(orgId: number): Promise<GrowthSendTimes> {
+  async sendTimes(orgId: number, timezone?: string): Promise<GrowthSendTimes> {
     await this.gate.require(orgId, 'send_times');
-    return this.sendTimesIn(orgId);
+    return this.sendTimesIn(orgId, timezone);
   }
 
-  async sendTimesIn(orgId: number): Promise<GrowthSendTimes> {
+  /** The hours in `timezone` (the viewer's zone) when it is a real zone, else in the workspace's. */
+  async sendTimesIn(orgId: number, timezone?: string): Promise<GrowthSendTimes> {
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
-      const tz = safeTimezone(await this.repo.timezone(tx, orgId));
+      const tz =
+        timezone && isIanaTimeZone(timezone)
+          ? timezone
+          : safeTimezone(await this.repo.timezone(tx, orgId));
       const h = await this.repo.hourHistograms(tx, orgId, tz);
       return sendTimeProfile(h.inbound, h.read, tz);
     });
@@ -509,6 +516,18 @@ export class GrowthService {
     await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.markSuggestion(tx, orgId, s.id, 'auto_applied', 'undone'),
     );
+    const labels = new Map(
+      (await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.stages(tx, orgId))).map(
+        (x) => [x.value, x.label],
+      ),
+    );
+    await this.stageLines.write(orgId, {
+      suggestionUuid: suggestionUuid,
+      contactId: s.contactId,
+      fromLabel: labels.get(s.toStage) ?? s.toStage,
+      toLabel: labels.get(s.fromStage) ?? s.fromStage,
+      action: 'undone',
+    });
   }
 
   // --- enrichment ----------------------------------------------------------------------------------------------------------

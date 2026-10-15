@@ -3,7 +3,9 @@
  * the tests are written against it, and only the Baileys adapter knows the library. A fake implements it in the tests.
  */
 
+import type { HistoryBatch } from './history.port';
 import type { GroupEvent, GroupSnapshot, ReceiptUpdate } from './inbound.port';
+import type { HistoryImportChoice } from './history-sync';
 import type { Normalized } from './inbound-normalizer';
 import type { MessageAction, SendCommand, SendContext, SendOutcome } from './outbound.port';
 
@@ -35,6 +37,11 @@ export type SocketEvent =
 export interface WaSocket {
   /** One listener per socket. Events from a socket that has been ended are not delivered. */
   subscribe(listener: (event: SocketEvent) => void): void;
+  /**
+   * Where the one-time history of a first link is delivered (TW-WAHIST). Batches arrive one after another: the next slice of an event is
+   * not read until the handler's promise resolves, which is the backpressure. A socket built without an opt-in never calls it.
+   */
+  subscribeHistory?(handler: (batch: HistoryBatch) => Promise<void>): void;
   /** Asks WhatsApp for the 8-character code that links this phone without a QR (TW-NODE-009). */
   requestPairingCode(phoneDigits: string): Promise<string>;
   /** Unlinks the device from the phone (the unlink RPC). Only on user intent. */
@@ -157,6 +164,11 @@ export interface SocketTarget {
   phoneDigits: string;
   /** Null means a direct connection. A proxy that cannot be reached must make `create` throw, never fall back to direct. */
   proxy: ProxySettings | null;
+  /**
+   * The history import the person chose for this link, read from the device row each time a socket is built. `none` (or absent) builds
+   * the socket exactly as before: no history is asked for or downloaded.
+   */
+  historyImport?: HistoryImportChoice;
 }
 
 export interface WaSocketFactory {

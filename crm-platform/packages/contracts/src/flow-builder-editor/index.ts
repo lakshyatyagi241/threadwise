@@ -12,4 +12,5 @@ export * from './runtime-shape';
 export * from './condition-group';
 export * from './ask-media';
 export * from './ask-input';
+export * from './carousel';
 export * from './geta-publish';

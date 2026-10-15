@@ -1,7 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { callLogStatus } from '../../../src/modules/calling-voice/call-logs.rules';
 import { seedDemoCalls } from '../../../src/modules/calling-voice/cli/demo-calls';
-import { addNumber, startCallPipeline, type CallNumber, type CallPipeline } from './support';
+import {
+  addNumber,
+  enableRecording,
+  grantConsentRow,
+  startCallPipeline,
+  type CallNumber,
+  type CallPipeline,
+} from './support';
 
 /**
  * The call log and the call analytics (TW-CALL-022 onward) against the real API, real Postgres (restricted role) and the real private
@@ -392,7 +399,20 @@ describe('one call', () => {
     ]);
     expect(r.body.timeline[2].note).toBe('COMPLETED');
     expect(JSON.stringify(r.body)).not.toContain('TOP-SECRET-SDP');
-    expect(r.body.recording).toEqual({ available: false, mime: null, sizeBytes: null });
+    expect(r.body.recording).toEqual({
+      available: false,
+      mime: null,
+      sizeBytes: null,
+      lifecycle: {
+        storedAt: null,
+        expiresAt: null,
+        legalHold: false,
+        holdReason: null,
+        deletedAt: null,
+        deletedReason: null,
+        consent: { status: null, method: null, at: null, noticeVersion: null, noticeSha256: null },
+      },
+    });
   });
 
   it('a failed call says why', async () => {
@@ -425,6 +445,8 @@ describe('playing a recording', () => {
     const { t, number } = await setup(label);
     // The real path: a call row, then the operator's own upload into the private store.
     const id = await addCall(t, number, { durationSec: 40, handlerUserId: t.adminUserId });
+    await enableRecording(p, t);
+    await grantConsentRow(p, t, id);
     const up = await p.api
       .as(t.admin)
       .post(`/v2/calling/calls/${id}/recording`)

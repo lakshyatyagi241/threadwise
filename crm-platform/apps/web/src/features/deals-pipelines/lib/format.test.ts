@@ -4,6 +4,7 @@ import {
   ageParts,
   avatarColor,
   dueState,
+  formatDateTime,
   formatDay,
   initials,
   monthLabel,
@@ -61,5 +62,21 @@ describe('format helpers', () => {
     expect(monthLabel('2026-05', 'en', now)).toBe('May');
     expect(monthLabel('2025-12', 'en', now)).toContain('25');
     expect(monthLabel('garbage', 'en', now)).toBe('garbage');
+  });
+});
+
+describe('time zone', () => {
+  it('reads an instant in the zone it is given', () => {
+    const kolkata = formatDateTime('2026-10-02T20:30:00Z', 'en', 'Asia/Kolkata');
+    const newYork = formatDateTime('2026-10-02T20:30:00Z', 'en', 'America/New_York');
+    expect(kolkata).toContain('Oct 3');
+    expect(newYork).toContain('Oct 2');
+    expect(kolkata).not.toBe(newYork);
+    expect(formatDay('2026-10-02T20:30:00Z', 'en', 'Asia/Kolkata')).toContain('Oct 3');
+    expect(formatDay('2026-10-02T20:30:00Z', 'en', 'America/New_York')).toContain('Oct 2');
+  });
+
+  it('leaves a date-only value alone', () => {
+    expect(formatDay('2026-03-05', 'en', 'Asia/Kolkata')).toBe('Mar 5, 2026');
   });
 });

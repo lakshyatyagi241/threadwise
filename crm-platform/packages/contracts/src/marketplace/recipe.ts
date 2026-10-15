@@ -135,6 +135,30 @@ export const recipeAttributionSchema = z
   })
   .strict();
 
+/**
+ * Proof of consent a portal or an ad platform sends with a lead (BL-168, privacy spec 4.3.2). OPTIONAL: a recipe without it never grants
+ * anything. `given` is where the portal says the person agreed (a yes or true, read with the same yes/no words the contact import
+ * reads); the rest is the evidence kept with the grant: the wording shown, its version, when they agreed, and the provider's form and ad
+ * ids. A lead whose `given` is not a yes carries no consent, whatever else is mapped.
+ */
+export const recipeConsentSchema = z
+  .object({
+    given: recipeSourceSchema,
+    text: recipeSourceSchema.optional(),
+    version: recipeSourceSchema.optional(),
+    at: recipeTimeSchema.optional(),
+    formId: recipeSourceSchema.optional(),
+    adId: recipeSourceSchema.optional(),
+    /** The channels the wording covers. Omitted: a phone is WhatsApp, an address is email (SMS only when named here). */
+    channels: z
+      .array(z.enum(['whatsapp', 'sms', 'email']))
+      .min(1)
+      .max(3)
+      .optional(),
+  })
+  .strict();
+export type RecipeConsent = z.infer<typeof recipeConsentSchema>;
+
 export const recipeMappingSchema = z.discriminatedUnion('mode', [
   /**
    * Generic: well-known names (name, phone, email, ...) are found by alias and every other scalar is carried over as it came. A portal
@@ -172,6 +196,8 @@ export const recipeMappingSchema = z.discriminatedUnion('mode', [
       itemsPath: recipePathSchema.optional(),
       fields: z.array(recipeFieldRuleSchema).min(1).max(40),
       attribution: recipeAttributionSchema.optional(),
+      /** Where the lead says the person agreed to be contacted, and the wording they saw. Optional; see `recipeConsentSchema`. */
+      consent: recipeConsentSchema.optional(),
       /** Prefix added to a bare 10 digit number by the `phone` transform. */
       defaultCountryCode: z
         .string()

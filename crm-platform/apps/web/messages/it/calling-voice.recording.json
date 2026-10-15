@@ -1,0 +1,103 @@
+{
+  "calling-voice": {
+    "recording": {
+      "settings": {
+        "title": "Registrazione delle chiamate",
+        "intro": "La registrazione è disattivata finché non la attivi. Quando è attiva, un collega legge l'avviso, la persona risponde e solo allora parte la registrazione. Le registrazioni vengono eliminate al termine del periodo di conservazione.",
+        "loading": "Caricamento delle regole di registrazione",
+        "loadFailed": "Impossibile caricare le regole di registrazione.",
+        "retry": "Riprova",
+        "viewOnly": "Puoi vedere queste regole, ma solo un proprietario o un amministratore può modificarle.",
+        "enabled": "Registra le chiamate",
+        "enabledOn": "Attiva: i colleghi possono registrare una chiamata dopo il consenso della persona.",
+        "enabledOff": "Disattivata: nessuna chiamata viene registrata.",
+        "mode": "Come acconsente la persona",
+        "modeHint": {
+          "confirmed": "La persona dice di sì alla registrazione e il collega salva la risposta. La scelta più sicura.",
+          "announcement": "Il collega legge l'avviso e la chiamata prosegue. Da usare solo dove il tuo consulente legale conferma che un annuncio basta."
+        },
+        "modeOption": {
+          "confirmed": "La persona dice di sì",
+          "announcement": "Annuncio, poi si prosegue"
+        },
+        "retention": "Conserva le registrazioni per (giorni)",
+        "retentionHint": "Tra {min} e {max} giorni. Le registrazioni più vecchie vengono eliminate ogni notte; la chiamata resta nel registro.",
+        "retentionInvalid": "Inserisci un numero intero di giorni nell'intervallo consentito.",
+        "notice": "Avviso di registrazione",
+        "noticeHint": "Il collega lo legge prima di registrare. Fino a {max} caratteri. Ogni modifica viene salvata come nuova versione.",
+        "noticeRequired": "Scrivi l'avviso (almeno {min} caratteri) per attivare la registrazione.",
+        "noticeVersion": "Versione dell'avviso {version}",
+        "noticeNone": "Nessun avviso salvato",
+        "updatedAt": "salvato {date}",
+        "noticeSuggestion": "Questa chiamata può essere registrata per qualità e formazione. Acconsenti alla registrazione?",
+        "useSuggestion": "Usa il testo suggerito",
+        "saved": "Regole di registrazione salvate.",
+        "saving": "Salvataggio",
+        "save": "Salva le regole"
+      },
+      "consent": {
+        "title": "Chiedi prima di registrare",
+        "askConfirmed": "Leggi l'avviso. Premi il primo pulsante solo se la persona dice di sì.",
+        "askAnnouncement": "Leggi l'avviso, poi avvia la registrazione.",
+        "grantConfirmed": "Ha detto di sì: avvia la registrazione",
+        "grantAnnouncement": "Avviso letto: avvia la registrazione",
+        "decline": "No: continua senza registrare",
+        "declinedNote": "Nessuna registrazione: la persona non ha acconsentito.",
+        "off": "La registrazione delle chiamate è disattivata per questo spazio di lavoro.",
+        "failed": "Impossibile salvare la risposta, quindi nulla viene registrato: {message}"
+      },
+      "lifecycle": {
+        "title": "Registrazione e consenso",
+        "consent": "Consenso alla registrazione",
+        "consentGranted": "Ha acconsentito alla registrazione",
+        "consentDeclined": "Ha rifiutato la registrazione",
+        "consentNone": "Nessuna risposta registrata",
+        "method": {
+          "announcement_continue": "Avviso letto, chiamata proseguita",
+          "spoken_yes": "Ha detto di sì"
+        },
+        "noticeVersion": "Versione dell'avviso {version}",
+        "storedAt": "Archiviata",
+        "expiresAt": "Eliminata automaticamente il",
+        "heldNoExpiry": "Non eliminata: blocco legale",
+        "none": "Non impostato",
+        "deleted": "Registrazione eliminata",
+        "deletedReason": {
+          "retention": "periodo di conservazione terminato",
+          "manual": "eliminata da un collega",
+          "consent_withdrawn": "consenso revocato"
+        },
+        "holdOn": "Blocco legale",
+        "placeHold": "Applica blocco legale",
+        "liftHold": "Rimuovi blocco legale",
+        "holdLifted": "Blocco legale rimosso.",
+        "holdPlaced": "Blocco legale applicato.",
+        "holdReasonLabel": "Perché viene conservata?",
+        "cancel": "Annulla",
+        "delete": "Elimina registrazione",
+        "deleteBlockedByHold": "Rimuovi prima il blocco legale.",
+        "deleteTitle": "Eliminare questa registrazione?",
+        "deleteMessage": "Il file audio viene rimosso definitivamente. La chiamata resta nel registro.",
+        "deletedToast": "Registrazione eliminata."
+      }
+    },
+    "errors": {
+      "CALL_RECORDING_DISABLED": "La registrazione delle chiamate è disattivata per questo spazio di lavoro.",
+      "CALL_RECORDING_CONSENT_REQUIRED": "Questa chiamata non può essere registrata: la persona non ha acconsentito.",
+      "CALL_RECORDING_CONSENT_INVALID": "Questa risposta non può essere salvata per questa chiamata.",
+      "CALL_RECORDING_ON_HOLD": "Questa registrazione è sotto blocco legale. Rimuovi prima il blocco.",
+      "CALL_RECORDING_SETTINGS_INVALID": "Le regole di registrazione non sono valide: scrivi prima l'avviso."
+    },
+    "logs": {
+      "detail": {
+        "steps": {
+          "recording_consent_granted": "La persona ha acconsentito alla registrazione",
+          "recording_consent_declined": "La persona ha rifiutato la registrazione",
+          "recording_deleted": "Registrazione eliminata",
+          "recording_hold_set": "Blocco legale applicato",
+          "recording_hold_lifted": "Blocco legale rimosso"
+        }
+      }
+    }
+  }
+}

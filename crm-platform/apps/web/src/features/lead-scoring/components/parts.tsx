@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useCallback, type ReactNode, type SVGProps } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
-import { requestIdOf, type ErrorKey } from '../lib/errors';
+import type { ErrorKey } from '../lib/errors';
 
 /** The bordered surface of a card or a table. */
 export const CARD = 'rounded-xl border border-border bg-background';
@@ -108,25 +108,21 @@ export function LinkButton({ href, children }: { href: string; children: ReactNo
   );
 }
 
-/** A failed call, said in words, with the request id for support and a retry when there is one. */
+/** A failed call, said in words, and a retry when there is one. */
 export function LoadError({
   errorKey,
-  error,
   onRetry,
 }: {
   errorKey: ErrorKey;
+  /** Still passed by callers; the request id is no longer shown (#362). */
   error?: unknown;
   onRetry?: () => void;
 }) {
   const t = useTranslations('lead-scoring.common');
   const te = useTranslations('lead-scoring.errors');
-  const id = requestIdOf(error);
   return (
     <Alert tone="danger" className="flex flex-wrap items-center justify-between gap-3">
-      <span>
-        {te(errorKey)}
-        {id && <span className="ms-2 text-xs opacity-80">{t('requestId', { id })}</span>}
-      </span>
+      <span>{te(errorKey)}</span>
       {onRetry && (
         <Button size="sm" variant="secondary" onClick={onRetry}>
           {t('retry')}

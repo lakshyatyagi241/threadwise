@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Thử lại",
-      "requestId": "Yêu cầu {id}",
       "noAccessTitle": "Bạn không có quyền truy cập màn hình này",
       "noAccess": "Hãy nhờ quản trị viên workspace cấp quyền {permission} cho vai trò của bạn."
     },

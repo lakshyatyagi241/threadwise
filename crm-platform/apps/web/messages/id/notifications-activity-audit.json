@@ -159,6 +159,11 @@
         "title": "Nomor Anda dikeluarkan dari {name}",
         "titleNoName": "Nomor Anda dikeluarkan dari grup WhatsApp",
         "body": "Seseorang mengeluarkan nomor pribadi Anda dari grup ini. Grup disimpan di sini, hanya bisa dibaca."
+      },
+      "test": {
+        "title": "Notifikasi uji",
+        "titleNoName": "Notifikasi uji",
+        "bodyNoActor": "Jika Anda bisa membaca ini, notifikasi langsung berfungsi."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "Grup WhatsApp ditangguhkan",
         "waba_group_suspension_cleared": "Grup WhatsApp aktif kembali",
         "device_group_join_request": "Permintaan bergabung ke grup",
-        "device_group_removed": "Dikeluarkan dari grup WhatsApp"
-      }
+        "device_group_removed": "Dikeluarkan dari grup WhatsApp",
+        "test": "Notifikasi uji"
+      },
+      "generic": "Anda punya notifikasi baru",
+      "paused": "Pembaruan langsung dijeda, sehingga peringatan baru bisa terlambat hingga satu menit. Muat ulang halaman untuk menyambung kembali."
     },
     "prefs": {
       "title": "Preferensi notifikasi",
@@ -212,7 +220,8 @@
         "broadcasts": "Broadcast dan kampanye",
         "team_chat": "Team chat",
         "whatsapp_groups": "Grup WhatsApp",
-        "billing": "Penagihan dan langganan"
+        "billing": "Penagihan dan langganan",
+        "system": "Sistem"
       },
       "types": {
         "new_chat": {
@@ -354,6 +363,22 @@
         "device_group_removed": {
           "label": "Dikeluarkan dari grup nomor pribadi",
           "hint": "Seseorang mengeluarkan salah satu nomor WhatsApp pribadi Anda dari sebuah grup. Ini bisa menjadi tanda bahwa nomor tersebut dilaporkan."
+        },
+        "sla_breached": {
+          "label": "SLA terlampaui",
+          "hint": "Percakapan yang Anda tangani melewati target balasan pertama atau penyelesaian."
+        },
+        "member_leave_started": {
+          "label": "Anggota mulai cuti",
+          "hint": "Seorang anggota tim Anda mulai cuti. Menampilkan apa yang dipegangnya dan tautan untuk menugaskan ulang."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Obrolan yang tidak bisa diambil siapa pun",
+          "hint": "Perutean tidak menemukan siapa pun untuk obrolan baru karena orang yang dipilih sedang cuti. Tugaskan secara manual."
+        },
+        "test": {
+          "label": "Notifikasi uji",
+          "hint": "Uji yang Anda kirim dari Notifikasi browser, agar Anda bisa melihat lonceng, pop-up, dan judul tab berfungsi."
         }
       },
       "loading": "Memuat preferensi Anda",
@@ -433,6 +458,11 @@
           "neverUsed": "belum pernah diberi tahu",
           "remove": "Hapus",
           "removeFor": "Hapus {device}"
+        },
+        "testInApp": {
+          "watch": "Anda akan melihat pop-up, dan angka lonceng serta judul tab berubah.",
+          "notConnected": "Pembaruan langsung tidak terhubung di halaman ini, sehingga pop-up tidak bisa muncul di sini. Muat ulang halaman lalu coba lagi.",
+          "off": "Tidak ada notifikasi yang dibuat di lonceng: lonceng dimatikan untuk \"Notifikasi uji\" di tabel di bawah, atau oleh pemilik ruang kerja Anda."
         }
       }
     },

@@ -44,7 +44,15 @@ export type {
   GroupParticipantSnapshot,
   GroupPatch,
   GroupSnapshot,
+  InboundMessage,
 } from '../../infra/providers/node-bridge-runtime/inbound.port';
+export type {
+  HistoryBatch,
+  HistoryChat,
+  HistoryContact,
+} from '../../infra/providers/node-bridge-runtime/history.port';
+export type { HistoryImportLimits } from '../../infra/providers/node-bridge-runtime/baileys.socket-factory';
+export { HISTORY_IMPORT_LIMITS } from '../../infra/providers/node-bridge-runtime/baileys.socket-factory';
 export {
   bareGroupId,
   classifyGroupError,

@@ -94,8 +94,7 @@
       "signedOut": "Je sessie is beëindigd. Log opnieuw in.",
       "network": "Kon de server niet bereiken. Controleer je verbinding en probeer het opnieuw.",
       "generic": "Er ging iets mis. Probeer het opnieuw.",
-      "retryIn": "Probeer het over {seconds} seconden opnieuw.",
-      "requestId": "Verzoek-ID: {id}"
+      "retryIn": "Probeer het over {seconds} seconden opnieuw."
     },
     "examples": {
       "howDo": "Hoe gebruik ik {title}?",
@@ -115,7 +114,6 @@
       "description": "Laat je team vragen wat ze willen doen, en laat de app hen begeleiden of de stappen op hun eigen account uitvoeren.",
       "loading": "Laden",
       "loadFailed": "De instelling kon niet worden geladen.",
-      "requestId": "Verzoek-ID: {id}",
       "shareTitle": "Wat wordt gedeeld als iemand de assistent gebruikt",
       "share1": "Het verzoek dat de persoon typte en de zichtbare tekst van de pagina waarop hij zit, worden gestuurd naar de AI-aanbieder die het platform gebruikt.",
       "share2": "Telefoonnummers, e-mailadressen, geheimen en de persoonlijke velden van formulieren worden eerst verborgen. Namen en andere vrije tekst op een pagina niet.",

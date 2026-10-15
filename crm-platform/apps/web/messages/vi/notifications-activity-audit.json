@@ -159,6 +159,11 @@
         "title": "Số của bạn đã bị xóa khỏi {name}",
         "titleNoName": "Số của bạn đã bị xóa khỏi một nhóm WhatsApp",
         "body": "Ai đó đã xóa số cá nhân của bạn khỏi nhóm này. Nhóm được giữ lại ở đây, chỉ có thể đọc."
+      },
+      "test": {
+        "title": "Thông báo thử",
+        "titleNoName": "Thông báo thử",
+        "bodyNoActor": "Nếu bạn đọc được dòng này, thông báo trực tiếp đang hoạt động."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "Nhóm WhatsApp bị tạm ngưng",
         "waba_group_suspension_cleared": "Nhóm WhatsApp hoạt động trở lại",
         "device_group_join_request": "Yêu cầu tham gia nhóm",
-        "device_group_removed": "Bị xóa khỏi nhóm WhatsApp"
-      }
+        "device_group_removed": "Bị xóa khỏi nhóm WhatsApp",
+        "test": "Thông báo thử"
+      },
+      "generic": "Bạn có một thông báo mới",
+      "paused": "Cập nhật trực tiếp đang tạm dừng nên cảnh báo mới có thể đến chậm tới một phút. Hãy tải lại trang để kết nối lại."
     },
     "prefs": {
       "title": "Tùy chọn thông báo",
@@ -212,7 +220,8 @@
         "broadcasts": "Gửi hàng loạt và chiến dịch",
         "team_chat": "Chat nhóm",
         "whatsapp_groups": "Nhóm WhatsApp",
-        "billing": "Thanh toán và gói đăng ký"
+        "billing": "Thanh toán và gói đăng ký",
+        "system": "Hệ thống"
       },
       "types": {
         "new_chat": {
@@ -354,6 +363,22 @@
         "device_group_removed": {
           "label": "Bị xóa khỏi nhóm của số cá nhân",
           "hint": "Ai đó đã xóa một trong các số WhatsApp cá nhân của bạn khỏi một nhóm. Đây có thể là dấu hiệu số đã bị báo cáo."
+        },
+        "sla_breached": {
+          "label": "SLA bị vi phạm",
+          "hint": "Một cuộc trò chuyện bạn phụ trách đã lỡ mục tiêu phản hồi đầu tiên hoặc giải quyết."
+        },
+        "member_leave_started": {
+          "label": "Một thành viên đã nghỉ phép",
+          "hint": "Một thành viên trong nhóm của bạn đã nghỉ phép. Hiển thị những gì họ phụ trách và liên kết để giao lại."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Cuộc trò chuyện không ai nhận được",
+          "hint": "Định tuyến không tìm được ai cho cuộc trò chuyện mới vì những người được chọn đang nghỉ phép. Hãy giao thủ công."
+        },
+        "test": {
+          "label": "Thông báo thử",
+          "hint": "Thông báo thử bạn gửi từ Thông báo trình duyệt, để xem chuông, cửa sổ bật lên và tiêu đề tab hoạt động."
         }
       },
       "loading": "Đang tải tùy chọn của bạn",
@@ -433,6 +458,11 @@
           "neverUsed": "chưa thông báo lần nào",
           "remove": "Xóa",
           "removeFor": "Xóa {device}"
+        },
+        "testInApp": {
+          "watch": "Bạn sẽ thấy một cửa sổ bật lên, số trên chuông và tiêu đề tab thay đổi.",
+          "notConnected": "Cập nhật trực tiếp chưa được kết nối trên trang này nên cửa sổ bật lên không thể hiện ở đây. Hãy tải lại trang và thử lại.",
+          "off": "Không có thông báo nào được tạo trong chuông: chuông đang tắt cho \"Thông báo thử\" trong bảng bên dưới, hoặc do chủ không gian làm việc của bạn tắt."
         }
       }
     },

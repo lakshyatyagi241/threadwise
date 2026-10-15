@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import type { ConsentExport, ConsentExportStatus } from '@crm/contracts';
 import { CONSENT_EXPORT_SYNC_MAX, CONSENT_EXPORT_TTL_DAYS } from '@crm/contracts';
@@ -76,6 +76,7 @@ export function ProofExportButton() {
 export function ProofExports() {
   const t = useTranslations('contact-consent');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const canExport = useCan('contacts.consent.manage');
   const q = useConsentExports(canExport);
 
@@ -83,7 +84,9 @@ export function ProofExports() {
   const { data: exports, needsAsync } = q.data;
   if (!needsAsync && exports.length === 0) return null;
   const when = (iso: string | null) =>
-    iso ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short' }) : '';
+    iso
+      ? new Date(iso).toLocaleString(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone })
+      : '';
 
   return (
     <section

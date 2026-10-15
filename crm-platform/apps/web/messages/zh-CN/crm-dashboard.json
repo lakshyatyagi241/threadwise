@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "CRM 仪表盘"
+    },
+    "title": "您的 CRM",
+    "subtitle": "商机、发票、付款和任务——整个业务一目了然。",
+    "period": "{from} 至 {to} · 时区 {zone}",
+    "openBoard": "打开商机看板",
+    "loading": "正在加载仪表盘",
+    "retry": "重试",
+    "stale": "刷新失败。以下是我们最后获取的数据。",
+    "empty": {
+      "title": "暂无可报告的内容",
+      "message": "添加联系人和商机后，此页面会自动充实：销售漏斗、谁在赢单、线索来源、任务以及应收款项。",
+      "deals": "前往商机",
+      "contacts": "前往联系人"
+    },
+    "filters": {
+      "label": "仪表盘筛选",
+      "period": "时间段",
+      "range": {
+        "month": "本月",
+        "7d": "7 天",
+        "30d": "30 天",
+        "90d": "90 天",
+        "custom": "自定义"
+      },
+      "from": "开始",
+      "to": "结束",
+      "pipeline": "销售管道",
+      "allPipelines": "所有销售管道",
+      "owner": "负责人",
+      "everyone": "所有人",
+      "team": "团队",
+      "allTeams": "所有团队",
+      "reset": "重置筛选"
+    },
+    "kpi": {
+      "title": "关键指标",
+      "vsPrevious": "与上一个相同时长的时间段相比",
+      "open": "进行中的管道",
+      "openHint": "{count, plural, other {# 个商机}} · 预测 {forecast}",
+      "won": "赢单",
+      "wonHint": "{count, plural, other {已成交 # 个商机}}",
+      "collected": "已收款",
+      "collectedHint": "已收到的付款",
+      "outstanding": "未收款",
+      "outstandingHint": "{count, plural, other {# 张未结发票}}",
+      "winRate": "赢单率",
+      "winRateHint": "赢单 {won}，输单 {lost}",
+      "avgSize": "平均商机金额",
+      "avgSizeHint": "按已赢单商机计算",
+      "avgCycle": "平均销售周期",
+      "avgCycleHint": "从创建到赢单",
+      "days": "{count, plural, other {# 天}}",
+      "lost": "输单商机",
+      "lateClose": "超过预计成交日",
+      "lateCloseHint": "日期已过的进行中商机",
+      "contacts": "联系人",
+      "contactsHint": "今日视图中的数量",
+      "newContacts": "新增联系人",
+      "newLeads": "新增线索",
+      "newLeadsHint": "带有来源的联系人",
+      "paid": "已付发票",
+      "paidHint": "在此期间变为已付",
+      "tasksOpen": "未完成任务",
+      "tasksOpenHint": "今天稍后到期 {count} 项",
+      "tasksOverdue": "逾期任务"
+    },
+    "funnel": {
+      "title": "销售漏斗",
+      "subtitle": "{pipeline} · 期间创建了 {count, plural, other {# 个商机}}",
+      "noPipeline": "尚无销售管道。",
+      "empty": "此期间没有创建商机。",
+      "conversion": "{percent}% 已进入下一阶段",
+      "noConversion": "–",
+      "rowLabel": "{name}：{reached} 个到达此阶段，当前 {open} 个进行中。点击查看。",
+      "openNow": "{count, plural, other {当前 # 个进行中}} · {value}"
+    },
+    "trend": {
+      "title": "赢单与输单商机",
+      "subtitle": {
+        "day": "按天 · 赢单 {value}",
+        "week": "按周 · 赢单 {value}",
+        "month": "按月 · 赢单 {value}"
+      },
+      "chartLabel": "期间内赢单与输单的商机",
+      "won": "赢单",
+      "lost": "输单"
+    },
+    "leaderboard": {
+      "title": "负责人排行榜",
+      "subtitle": "按期间赢单金额",
+      "empty": "此视图中没有可排名的商机。",
+      "owner": "负责人",
+      "won": "赢单",
+      "value": "金额",
+      "lost": "输单",
+      "open": "进行中",
+      "activities": "活动",
+      "unowned": "无负责人"
+    },
+    "sources": {
+      "title": "线索来源",
+      "subtitle": "期间内新增的联系人及其推进程度",
+      "empty": "此期间没有带来源的联系人。",
+      "source": "来源",
+      "leads": "线索",
+      "toDeal": "转商机",
+      "toWon": "转赢单",
+      "wonValue": "赢单金额",
+      "none": "无来源"
+    },
+    "tasks": {
+      "title": "任务",
+      "subtitle": "{open} 项未完成 · {overdue} 项逾期 · {today} 项今天稍后到期",
+      "all": "所有任务",
+      "empty": "没有未完成的任务。",
+      "byAssignee": "按负责人统计未完成任务",
+      "assignee": "负责人",
+      "open": "未完成",
+      "overdue": "逾期",
+      "dueToday": "今天稍后",
+      "unassigned": "未分配",
+      "upcoming": "即将到来的任务",
+      "overdueTag": "逾期"
+    },
+    "aging": {
+      "title": "应收账款账龄",
+      "open": "付款",
+      "empty": "没有应收款项。",
+      "bucket": {
+        "current": "尚未到期",
+        "d1_30": "逾期 1–30 天",
+        "d31_60": "逾期 31–60 天",
+        "d61_90": "逾期 61–90 天",
+        "d90_plus": "逾期 90 天以上"
+      }
+    },
+    "payments": {
+      "title": "最近付款",
+      "empty": "暂无付款。"
+    },
+    "activity": {
+      "title": "最近活动",
+      "empty": "暂无活动。",
+      "stageMoved": "从{from}移至{to}",
+      "stagePlaced": "放入{to}",
+      "by": "由 {name}",
+      "system": "由系统",
+      "type": {
+        "note": "备注",
+        "stage_change": "阶段变更",
+        "call": "通话",
+        "message": "消息",
+        "email": "邮件",
+        "meeting": "会议",
+        "task": "任务"
+      }
+    }
+  }
+}

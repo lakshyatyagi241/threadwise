@@ -5,6 +5,7 @@ import { paginationQuerySchema, pageResponseSchema } from '../common/pagination'
 import {
   conversationChannelSchema,
   conversationDetailSchema,
+  conversationTagSchema,
 } from '../chat-conversations/conversation';
 import type { ConversationStatus } from '../chat-conversations/enums';
 
@@ -67,6 +68,11 @@ export const inboxContactSummarySchema = z.object({
   leadScoredAt: z.string().datetime().nullable(),
   leadScoreModel: z.string().nullable(),
   createdAt: z.string().datetime(),
+  /**
+   * The contact's own tags (they describe the person: VIP, lead, region), from the same workspace tag library as the thread's tags.
+   * Read-only here; they are edited on the contact.
+   */
+  contactTags: z.array(conversationTagSchema).default([]),
 });
 export type InboxContactSummary = z.infer<typeof inboxContactSummarySchema>;
 

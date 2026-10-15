@@ -16,7 +16,8 @@
       "validation": "חלק מהערכים אינם תקינים. בדקו את הטופס ונסו שוב.",
       "unexpected": "משהו השתבש. נסו שוב.",
       "exportInProgress": "קובץ הוכחה כבר בהכנה. המתינו לסיום ונסו שוב.",
-      "exportNotReady": "הקובץ אינו מוכן או שפג תוקפו. הכינו קובץ חדש."
+      "exportNotReady": "הקובץ אינו מוכן או שפג תוקפו. הכינו קובץ חדש.",
+      "noticeTargetMissing": "הווידג'ט, דף ההזמנות או החנות כבר אינם קיימים."
     },
     "settings": {
       "title": "הסכמה ותשובות STOP",
@@ -109,15 +110,21 @@
         "email": "אימייל",
         "facebook": "Facebook",
         "instagram": "Instagram",
-        "webchat": "צ'אט באתר"
+        "webchat": "צ'אט באתר",
+        "voice": "שיחת קול",
+        "rcs": "RCS"
       },
       "state": {
         "granted": "רשום",
-        "withdrawn": "הוסר מהדיוור"
+        "withdrawn": "הוסר מהדיוור",
+        "utilityGranted": "הסכים להודעות שירות",
+        "utilityWithdrawn": "הודעות שירות הופסקו"
       },
       "action": {
         "granted": "רשום",
-        "withdrawn": "הוסר מהדיוור"
+        "withdrawn": "הוסר מהדיוור",
+        "utilityGranted": "הסכים שייצרו איתו קשר בנוגע לפנייתו",
+        "utilityWithdrawn": "הפסיק הודעות שירות"
       },
       "source": {
         "form": "טופס",
@@ -128,7 +135,11 @@
         "flow": "תהליך",
         "inbound_message": "הודעה",
         "contact_request": "בקשת איש קשר",
-        "legacy": "לפני היסטוריית ההסכמה"
+        "legacy": "לפני היסטוריית ההסכמה",
+        "widget": "צ'אט באתר",
+        "booking": "דף הזמנות",
+        "commerce": "קופה בחנות",
+        "lead": "קליטת לידים"
       },
       "by": "על ידי {name}",
       "evidence": {
@@ -142,7 +153,16 @@
         "fileName": "קובץ",
         "apiKeyId": "מפתח API",
         "flowId": "תהליך",
-        "reference": "הפניה"
+        "reference": "הפניה",
+        "noticeVersion": "גרסת ההודעה",
+        "noticeUrl": "קישור להודעה",
+        "widgetId": "ווידג'ט צ'אט",
+        "bookingTypeId": "דף הזמנות",
+        "integrationId": "חנות",
+        "storeFlag": "הגדרת חנות",
+        "leadSourceId": "מקור הליד",
+        "leadFormId": "טופס ליד",
+        "adId": "מודעה"
       },
       "dialog": {
         "titleGranted": "סימון כרשום",
@@ -175,7 +195,14 @@
       "hintColumn": "העמודה שממופה להסכמה לשיווק קובעת מי נרשם: רק שורות שמציינות כן מקבלות הסכמה, עם שם הקובץ כהוכחה. לא, תא ריק או מילה לא מוכרת לא רושמים דבר. אנשי קשר שביטלו הרשמה נשארים מבוטלים.",
       "columnSummary": "{granted} שורות מציינות כן ויירשמו. {notGranted} מציינות לא או ריקות ולא יקבלו רשומת הסכמה.",
       "unrecognised": "ל-{count, plural, one {שורה #} other {# שורות}} יש ערך הסכמה שאינו כן או לא ({values}). הערך נחשב כלא ניתן להסכמה. השתמשו ב-yes / no, true / false או 1 / 0.",
-      "columnIgnored": "עמודת ההסכמה לא פועלת עד שתסמנו את התיבה למעלה."
+      "columnIgnored": "עמודת ההסכמה לא פועלת עד שתסמנו את התיבה למעלה.",
+      "noticeText": "הודעה או בסיס משפטי (לא חובה)",
+      "noticeTextHint": "למה אנשי הקשר האלה הסכימו ואיפה, לדוגמה: נרשמו בקופה לפי הודעת הפרטיות v3. נשמר כראיה עם כל הסכמה שנרשמה.",
+      "noticeVersion": "גרסת ההודעה (לא חובה)",
+      "smsSummary": "עמודת הסכמה ל-SMS: {granted} שורות אומרות כן ויירשמו כהסכמה ל-SMS. {notGranted} אומרות לא או ריקות.",
+      "emailSummary": "עמודת הסכמה לאימייל: {granted} שורות אומרות כן ויירשמו כהסכמה לאימייל (השורה צריכה גם כתובת אימייל). {notGranted} אומרות לא או ריקות.",
+      "labelNumbers": "יש לי הסכמה לשלוח הודעות למספרים האלה",
+      "hintNumbers": "כשמסומן, בעת שיגור התפוצה כל מספר בקובץ נרשם כמי שהסכים לשיווק, כשם הקובץ משמש ראיה. כשלא מסומן לא נרשמת הסכמה. מי שהסיר את עצמו נשאר מוסר."
     },
     "systemLine": {
       "withdrawn": "איש הקשר ענה {keyword}: בוטלה הרשמה לשיווק",
@@ -200,6 +227,104 @@
         "failed": "נכשל",
         "expired": "פג תוקף"
       }
+    },
+    "unsubscribe": {
+      "title": "ביטול הרשמה לדוא\"ל שיווקי",
+      "intro": "אשרו שאינכם רוצים עוד לקבל דוא\"ל שיווקי מהעסק הזה. תמשיכו לקבל הודעות על ההזמנות והפגישות שלכם.",
+      "confirm": "ביטול הרשמה",
+      "working": "מבטל הרשמה...",
+      "doneTitle": "ההרשמה בוטלה",
+      "doneBody": "לא תקבלו עוד הודעות שיווקיות מהעסק הזה.",
+      "already": "כבר ביטלתם את ההרשמה.",
+      "invalidTitle": "הקישור אינו תקין",
+      "invalidBody": "קישור ביטול ההרשמה חלקי או שונה. השתמשו בקישור בדוא\"ל האחרון שקיבלתם.",
+      "error": "משהו השתבש. נסו שוב."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "מותר: ההודעה נמסרה קודם.",
+        "consent_evidence_recorded": "מותר: ההודעה נמסרה והאדם הסכים.",
+        "purpose_not_enabled": "אסור: סביבת העבודה לא הפעילה זאת.",
+        "consent_declined": "אסור: האדם סירב.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "שורת הסכמה בטופס הצ'אט",
+        "booking": "שורת הסכמה בדף ההזמנות",
+        "commerce": "מה משמעות תיבת השיווק של החנות"
+      },
+      "intro": {
+        "widget": "מוצגת תיבת סימון מתחת לפרטי המבקר. רק מבקר שמסמן אותה נרשם כמסכים, ורק אם מסר מספר טלפון או אימייל.",
+        "booking": "מוצגת תיבת סימון בטופס ההזמנה. רק מי שמסמן אותה נרשם כמסכים; ההזמנה אינה דורשת אותה לעולם.",
+        "commerce": "לקוח שמאשר שיווק בחנות שלך נרשם כמסכים. כתבו מה התיבה אומרת לו, כדי שההוכחה תציין זאת."
+      },
+      "enabled": "שורת הסכמה פעילה",
+      "text": "הנוסח שהאדם מסכים לו",
+      "textHint": "עד {max} תווים. כל שינוי נשמר כגרסה חדשה.",
+      "textRequired": "כתבו את הנוסח לפני הפעלת השורה.",
+      "url": "קישור למדיניות הפרטיות שלכם (אופציונלי)",
+      "urlHint": "חייב להתחיל ב-https://",
+      "save": "שמירת שורת ההסכמה",
+      "saved": "שורת ההסכמה נשמרה (גרסה {version}).",
+      "version": "הגרסה הנוכחית: {version}",
+      "noVersion": "עדיין לא נשמר.",
+      "saveFirst": "שמרו קודם את זה, ואז תוכלו להגדיר את שורת ההסכמה שלו.",
+      "whatsappToo": "ספור גם כהסכמה בוואטסאפ (רק אם הנוסח אומר זאת)"
     }
   }
 }

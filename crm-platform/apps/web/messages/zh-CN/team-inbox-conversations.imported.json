@@ -1,0 +1,12 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "imported": "已导入",
+      "importedHint": "此聊天已从手机历史记录导入"
+    },
+    "bubble": {
+      "imported": "已导入",
+      "importedHint": "已从手机聊天记录导入"
+    }
+  }
+}

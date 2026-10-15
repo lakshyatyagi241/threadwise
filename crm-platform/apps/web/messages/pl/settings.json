@@ -310,6 +310,11 @@
         "description": "Automatycznie przydzielaj nowe rozmowy właściwemu agentowi, po kolei lub według reguł.",
         "keywords": "routing, round robin, przydział, agenci, reguły skrzynki, rozdziel, właściciel"
       },
+      "web": {
+        "label": "Czat na stronie",
+        "description": "Boty stworzone dla czatu na Twojej stronie internetowej i widżet, w którym każdy z nich działa.",
+        "keywords": "web, strona internetowa, widżet, chatbot, osadzanie, czat na żywo"
+      },
       "message-logs": {
         "label": "Dzienniki wiadomości",
         "description": "Wyeksportuj dziennik dostarczania swoich wiadomości do roku wstecz jako plik wysłany na Twój e-mail.",
@@ -319,11 +324,6 @@
         "label": "Subskrypcje",
         "description": "Co się odnawia, do kiedy jest opłacone, oraz anulowanie.",
         "keywords": "subskrypcja, odnowienie, automatyczne odnawianie, anulowanie, automatyczna płatność, nieudana płatność, opłaty"
-      },
-      "web": {
-        "label": "Czat na stronie",
-        "description": "Boty stworzone dla czatu na Twojej stronie internetowej i widżet, w którym każdy z nich działa.",
-        "keywords": "web, strona internetowa, widżet, chatbot, osadzanie, czat na żywo"
       },
       "lead-scoring": {
         "label": "Ocenianie leadów przez AI",
@@ -340,15 +340,35 @@
         "description": "Wybierz słowa STOP i START, odpowiedzi potwierdzające, linijkę rezygnacji oraz to, czy marketing wymaga zapisanej zgody.",
         "keywords": "zgoda, wypisanie, ponowny zapis, rezygnacja, stop, start, rodo, zgodność, prywatność, marketing"
       },
-      "inbox-labels": {
-        "label": "Etykiety",
-        "description": "Twórz etykiety, którymi zespół oznacza rozmowy i filtruje skrzynkę.",
-        "keywords": "tagi, etykiety, kategorie, porządkuj, filtr"
+      "inbox-tags": {
+        "label": "Tagi rozmowy",
+        "description": "Utwórz tagi, które zespół dodaje do rozmów i według których filtruje skrzynkę. To te same tagi, które są używane przy kontaktach.",
+        "keywords": "tagi, tag, kategorie, porządkuj, filtr, tagi rozmowy"
       },
       "growth": {
         "label": "Wzrost",
         "description": "Gorące leady, odbiorcy, odpowiedzi na kampanie i inne sprawy, na które zespół może zareagować, ustalone na podstawie rozmów i kampanii.",
         "keywords": "wzrost, gorący lead, odbiorcy, zaangażowanie, nieaktywni, odpowiedzi na kampanie, skłonność do konwersji, rezygnacja, pilotaż"
+      },
+      "sla-policies": {
+        "label": "Cele odpowiedzi",
+        "description": "Ustaw, jak szybko zespół ma odpowiadać i rozwiązywać sprawy (SLA), i otrzymuj alerty, gdy rozmowa nie spełni celu.",
+        "keywords": "sla, czas odpowiedzi, pierwsza odpowiedź, rozwiązanie, naruszenie, cele, godziny pracy"
+      },
+      "team-performance": {
+        "label": "Wydajność zespołu",
+        "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
+        "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
+      },
+      "contact-assignment": {
+        "label": "Przypisywanie kontaktów",
+        "description": "Automatycznie przydzielaj nowe kontakty i transakcje właściwej osobie, pomijając osoby na urlopie.",
+        "keywords": "przypisanie, właściciel, round robin, nowy kontakt, nowa transakcja, urlop, routing leadów"
+      },
+      "privacy-requests": {
+        "label": "Wnioski o dane",
+        "description": "Odpowiadaj osobom pytającym, co o nich przechowujesz: sprawdzenie tożsamości, eksport, usunięcie z podglądem i dowód, który możesz zachować.",
+        "keywords": "prywatność, gdpr, wniosek o dane, dsar, dostęp do danych, eksport danych, usunięcie, prawo do bycia zapomnianym, usunięcie danych osobowych, blokada prawna"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

@@ -10,7 +10,7 @@ import {
 } from '@crm/contracts';
 import { headers } from 'next/headers';
 import { cache } from 'react';
-import type { ZodType } from 'zod';
+import type { ZodType, ZodTypeDef } from 'zod';
 import { apiBase } from '@/lib/auth/server';
 
 /** Server-side reads of the public shop API. No session is involved: the shop is named by its slug. */
@@ -22,7 +22,10 @@ async function clientHeaders(): Promise<Record<string, string>> {
 }
 
 /** The parsed body, or null when the API says the shop, product or order does not exist (or the shop is disabled). */
-async function getPublic<T>(path: string, schema: ZodType<T>): Promise<T | null> {
+async function getPublic<T>(
+  path: string,
+  schema: ZodType<T, ZodTypeDef, unknown>,
+): Promise<T | null> {
   const res = await fetch(`${base()}${path}`, {
     cache: 'no-store',
     headers: await clientHeaders(),

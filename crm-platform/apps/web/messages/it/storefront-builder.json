@@ -8,7 +8,6 @@
         "dismiss": "Ignora"
       },
       "errors": {
-        "requestId": "ID richiesta",
         "retry": "Riprova",
         "network": {
           "title": "Impossibile raggiungere il server",

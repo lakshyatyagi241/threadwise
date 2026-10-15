@@ -13,6 +13,7 @@ import {
   type ExportHistoryQuery,
   type ExportHistoryResponse,
   type BulkGroupContactsInput,
+  type BulkOwnerContactsInput,
   type BulkSelectionResult,
   type BulkTagContactsInput,
   type ExportContactsInput,
@@ -24,7 +25,9 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { PersonalDataErasureService } from '../../privacy';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
+import { assertOwnerWithinScope } from '../owner-scope';
 import { contactConditions, contactScopeCondition, whereOf } from '../contacts/contact-conditions';
 import { resolveContactFilter } from '../contacts/contact-filter.resolver';
 import { ContactsRepository } from '../contacts/contacts.repository';
@@ -76,6 +79,7 @@ export class ContactBulkService {
     private readonly tags: TagsService,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly erasure: PersonalDataErasureService,
   ) {}
 
   private meta(): ActorMeta {
@@ -194,6 +198,42 @@ export class ContactBulkService {
     });
   }
 
+  // --- owner -------------------------------------------------------------------------------
+
+  /**
+   * Reassigns a selection (ids, or everything a filter matches) to one person or to nobody. The selection is
+   * resolved inside the caller's `update` record scope, so a member limited to their own contacts can only move their
+   * own, and the target is held to the same scope as a single edit (`assertOwnerWithinScope`: own = myself, team =
+   * myself or a teammate, all = any active member). One audit row and one `contact.updated` event per contact changed.
+   */
+  async setOwner(input: BulkOwnerContactsInput, scope: RecordScope): Promise<BulkSelectionResult> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      let owner: { id: number | null; uuid: string | null } = { id: null, uuid: null };
+      if (input.ownerId) {
+        const id = await this.contactsRepo.resolveActiveUserId(tx, ctx.orgId, input.ownerId);
+        if (id === undefined) throw AppError.notFound('User', input.ownerId);
+        owner = { id, uuid: input.ownerId };
+      }
+      if (ctx.grants) {
+        await assertOwnerWithinScope({
+          scope,
+          actorUserId: ctx.userId,
+          nextOwnerId: owner.id,
+          inActorTeam: (id) => this.contactsRepo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+          path: 'ownerId',
+        });
+      }
+
+      const r = await this.resolve(tx, input, scope, { maxMatched: BULK_FILTER_MAX });
+      const changed =
+        r.where && r.matched > 0
+          ? await this.repo.setOwner(tx, ctx.orgId, r.where, owner, this.meta())
+          : 0;
+      return this.result(r, changed);
+    });
+  }
+
   // --- tags --------------------------------------------------------------------------------
 
   async tag(input: BulkTagContactsInput, scope: RecordScope): Promise<BulkSelectionResult> {
@@ -267,6 +307,9 @@ export class ContactBulkService {
    * Hard delete, 500 at a time inside one transaction. Unknown ids and ids outside the caller's
    * scope are reported in `failed`, not a reason to refuse the rest (Reference answered 422 and
    * deleted nothing if ANY id was stale, and echoed the requested ids as if all were deleted).
+   *
+   * Each batch first runs the shared erasure pipeline over its contacts (conversations, messages, media, files, call logs): with
+   * `eraseHistory` (default) they are removed, without it they are kept without the people's identity.
    */
   async delete(input: BulkDeleteContactsInput, scope: RecordScope): Promise<BulkSelectionResult> {
     const ctx = RequestContextStore.require();
@@ -274,7 +317,10 @@ export class ContactBulkService {
       const r = await this.resolve(tx, input, scope, { maxMatched: BULK_FILTER_MAX });
       let changed = 0;
       if (r.where) {
+        const mode = input.eraseHistory === false ? 'anonymise' : 'delete';
         for (;;) {
+          const ids = await this.repo.nextIds(tx, r.where, DELETE_BATCH);
+          if (ids.length) await this.erasure.eraseContactHistory(tx, ctx.orgId, ids, mode);
           const n = await this.repo.deleteBatch(tx, ctx.orgId, r.where, DELETE_BATCH, this.meta());
           changed += n;
           if (n < DELETE_BATCH) break;
@@ -439,6 +485,7 @@ export class ContactBulkService {
       'source',
       'unsubscribed',
       'created_at',
+      'owner_email',
       ...attributes.map((a) => `attr:${a.key}`),
     ];
 
@@ -490,6 +537,7 @@ export class ContactBulkService {
             guardFormula(row.source ?? ''),
             row.isUnsubscribed ? 'true' : 'false',
             row.createdAt.toISOString(),
+            guardFormula(row.ownerEmail ?? ''),
             ...attributes.map((a) => {
               const v = row.data?.[a.key];
               return guardFormula(v === null || v === undefined ? '' : String(v));

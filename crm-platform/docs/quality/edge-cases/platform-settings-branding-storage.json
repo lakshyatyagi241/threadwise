@@ -1,0 +1,16 @@
+{
+  "module": "platform-settings-branding-storage",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-platform-settings-branding-storage-001",
+      "feature": "footer",
+      "category": "input",
+      "scenario": "a value of 61 (one past FOOTER_MAX = 60) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/platform-settings-branding-storage/helpers.ts"
+    }
+  ]
+}

@@ -128,7 +128,8 @@
         "recipients": "{count} recipients",
         "scheduled": "Scheduled: {date}",
         "instant": "Send: instant",
-        "template": "Template {name}"
+        "template": "Template {name}",
+        "cost": "Cost"
       },
       "noData": "No data found",
       "noDataHint": "No WhatsApp campaigns match the current filters. Try clearing filters or launch your first campaign.",
@@ -150,7 +151,18 @@
           }
         }
       },
-      "createBroadcast": "Create campaign"
+      "createBroadcast": "Create campaign",
+      "view": {
+        "label": "View",
+        "list": "List",
+        "blocks": "Blocks"
+      },
+      "col": {
+        "name": "Campaign",
+        "status": "Status",
+        "schedule": "Schedule",
+        "actions": "Actions"
+      }
     },
     "builder": {
       "loadError": "Could not load this campaign.",
@@ -382,7 +394,9 @@
         "smartIntro": "Leave blank to use the workspace default pacing. These rules space out sending so a large list looks human and stays under WhatsApp's ban radar.",
         "smartZone": "Times in {zone}.",
         "throttleMaxHint": "The longest wait before a message.",
-        "batchPauseHint": "Minutes to rest after each batch."
+        "batchPauseHint": "Minutes to rest after each batch.",
+        "retryFailed": "Retry failed messages automatically",
+        "retryFailedHint": "A message that fails for a temporary reason is tried again a few times, with a pause between tries. Turn this off to send each message once."
       },
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
       "draftChip": "Draft / unsaved",
@@ -666,7 +680,8 @@
         "edit": "Edit",
         "resendAll": "Resend to all",
         "export": "Export rows",
-        "delete": "Delete"
+        "delete": "Delete",
+        "broadcastStatus": "Broadcast status"
       },
       "kpi": {
         "recipients": "Recipients",
@@ -675,15 +690,19 @@
         "read": "Read",
         "replies": "Replies",
         "clicks": "Clicks",
-        "failed": "Failed"
+        "failed": "Failed",
+        "cost": "Cost",
+        "costHint": "Charged to the wallet so far"
       },
       "tabs": {
+        "summary": "Summary",
         "overview": "Overview",
         "messages": "Messages",
         "engagement": "Engagement",
         "replies": "Replies ({count})",
         "failures": "Failures ({count})",
-        "optouts": "Opt-outs ({count})"
+        "optouts": "Opt-outs ({count})",
+        "statistics": "Statistics"
       },
       "cancel": "Cancel",
       "deleted": "Campaign deleted.",
@@ -794,6 +813,186 @@
         "replies": "Replies",
         "optOuts": "Opt-outs",
         "readRate": "Read rate"
+      },
+      "summary": {
+        "title": "Summary",
+        "intro": "In plain words: who got your message, who wrote back and who filled in an application form.",
+        "loading": "Loading your summary",
+        "headline": {
+          "none": "No messages have gone out yet.",
+          "messaged": "{count, plural, one {You messaged # person.} other {You messaged # people.}}",
+          "notReceived": "{messaged} No one has received it yet.",
+          "received": "{count, plural, =0 {no one has received it yet} other {# received it}}",
+          "opened": "{count, plural, =0 {no one has opened it yet} other {# opened it}}",
+          "wroteBack": "{count, plural, =0 {no one has written back within {days, plural, one {# day} other {# days}} yet} other {# wrote back within {days, plural, one {# day} other {# days}}}}",
+          "filledForm": "{count, plural, =0 {no one has filled in an application form yet} other {# filled in an application form}}",
+          "rest": "{clauses}.",
+          "full": "{messaged} {rest}"
+        },
+        "window": {
+          "label": "Count replies and forms that arrive",
+          "hint": "Counted from the moment you sent the message.",
+          "option": "Within {days, plural, one {# day} other {# days}}"
+        },
+        "forms": {
+          "label": "Which forms count as an application?",
+          "hint": "Leave it empty to count every web form and WhatsApp form.",
+          "placeholder": "All forms",
+          "empty": "No forms found",
+          "clear": "Count all forms",
+          "remove": "Remove {name}",
+          "web": "{name} (web form)",
+          "whatsapp": "{name} (WhatsApp form)",
+          "loadError": "We could not load your forms. All forms are counted for now."
+        },
+        "tile": {
+          "listLabel": "The numbers",
+          "unit": "{count, plural, one {person} other {people}}",
+          "messaged": {
+            "label": "Messaged",
+            "explain": "People we sent your message to.",
+            "pct": "The people you chose to message"
+          },
+          "received": {
+            "label": "Received",
+            "explain": "People whose phone received the message."
+          },
+          "opened": {
+            "label": "Opened",
+            "explain": "People who opened and read the message."
+          },
+          "wroteBack": {
+            "label": "Wrote back",
+            "explain": "People who sent you a message within {days, plural, one {# day} other {# days}} of the send."
+          },
+          "filledForm": {
+            "label": "Filled a form",
+            "explainAll": "People who filled in any of your application forms.",
+            "explainSome": "{count, plural, one {People who filled in the form you chose.} other {People who filled in one of the # forms you chose.}}"
+          }
+        },
+        "pct": {
+          "of": "{pct}% of the people you messaged",
+          "less": "Less than 1% of the people you messaged",
+          "zero": "None of the people you messaged",
+          "everyone": "Everyone you messaged"
+        },
+        "funnel": {
+          "title": "From message to application form",
+          "alt": "Number of people at each step, from messaged to filled a form",
+          "note": "People can skip a step. Someone may write back without opening the message first, so a bar can be longer than the one above it."
+        },
+        "daily": {
+          "title": "People writing back each day",
+          "series": "People who wrote back",
+          "empty": "No one has written back yet.",
+          "alt": "{total, plural, one {# person wrote} other {# people wrote}} back. The busiest day was {day}, with {count, plural, one {# person} other {# people}}."
+        },
+        "people": {
+          "title": "See who",
+          "show": "{title} ({count})",
+          "came_back": {
+            "title": "Wrote back",
+            "hint": "People who sent you a message after your message went out."
+          },
+          "filled_form": {
+            "title": "Filled a form",
+            "hint": "People who filled in an application form."
+          },
+          "not_reached": {
+            "title": "Not reached",
+            "hint": "People your message did not reach."
+          },
+          "table": "People in this list",
+          "name": "Name",
+          "phone": "Phone",
+          "when": "When",
+          "form": "Form",
+          "unknown": "Name not known",
+          "noContact": "Not matched to a contact",
+          "open": "Open {name}",
+          "empty": "No one in this list yet.",
+          "shown": "Showing {shown} of {total}",
+          "more": "Show more",
+          "loading": "Loading the list",
+          "error": "We could not load this list.",
+          "retry": "Try again",
+          "forbidden": "You do not have access to see these names."
+        },
+        "download": {
+          "button": "Download names",
+          "busy": "Preparing the file",
+          "failed": "We could not prepare the names file.",
+          "done": "The names file is ready.",
+          "truncated": "The file holds the first {count} people of each list.",
+          "none": "There are no names to download yet.",
+          "csv": {
+            "group": "List",
+            "name": "Name",
+            "phone": "Phone",
+            "when": "When",
+            "form": "Form"
+          }
+        },
+        "print": {
+          "button": "Print summary",
+          "sent": "Sent {date}",
+          "notSent": "Not sent yet",
+          "window": "Counting replies and forms within {days, plural, one {# day} other {# days}} of the send",
+          "printed": "Printed {date}"
+        },
+        "caveats": {
+          "title": "Good to know",
+          "recipients_without_contact": "{count, plural, one {# person could not be matched to a contact, so we cannot tell whether they wrote back.} other {# people could not be matched to a contact, so we cannot tell whether they wrote back.}}",
+          "contact_match_only": "We match people to your contacts by phone number. Someone who writes from a different number is not counted.",
+          "opted_out_excluded": "People who asked not to be messaged are not counted.",
+          "counted_in_other_campaigns": "Someone you messaged in more than one campaign can be counted in each of them."
+        },
+        "notSent": {
+          "title": "Nothing has been sent yet",
+          "body": "Once the messages go out, you will see here who received them, who wrote back and who filled in an application form."
+        },
+        "sending": "Still sending, so these numbers will keep growing.",
+        "error": {
+          "title": "We could not load this summary.",
+          "retry": "Try again"
+        },
+        "latestRun": "Showing run {occurrence}, the newest one of this series."
+      },
+      "live": {
+        "badge": "Live",
+        "updated": "updated {time}",
+        "queued": "{count} waiting to send",
+        "processing": "{count} sending now"
+      },
+      "statistics": {
+        "loadFailed": "The statistics could not be loaded.",
+        "rates": {
+          "delivered": "Delivery rate",
+          "deliveredHint": "of the audience",
+          "read": "Read rate",
+          "readHint": "of delivered",
+          "replies": "Reply rate",
+          "clicks": "Click rate",
+          "failed": "Failure rate"
+        },
+        "breakdown": {
+          "title": "Where everyone is now",
+          "hint": "Each of the {total} recipients is counted once, at the status it holds.",
+          "empty": "This campaign has no recipients yet."
+        },
+        "timeline": {
+          "title": "Timeline",
+          "created": "Created",
+          "scheduled": "Set to start",
+          "firstSent": "First message sent",
+          "lastRun": "Last run",
+          "finished": "Finished",
+          "notYet": "Not yet"
+        },
+        "live": "Following live",
+        "atRest": "Final numbers",
+        "updated": "Updated {time}"
       }
     },
     "wizard": {
@@ -852,7 +1051,6 @@
         "notFound": "This was not found. It may have been deleted.",
         "rateLimited": "Too many requests. Wait a moment and try again.",
         "unexpected": "Something went wrong on our side. Try again.",
-        "requestId": "Request ID",
         "retry": "Try again"
       },
       "categories": {
@@ -1071,7 +1269,9 @@
           "invalid_phone": "Not a valid number",
           "duplicate": "Duplicate"
         },
-        "csvIssuesMore": "{count} more are in the download."
+        "csvIssuesMore": "{count} more are in the download.",
+        "csvConsentOn": "You confirmed consent for these numbers. They are recorded as agreed when the broadcast launches.",
+        "csvConsentVersion": "Notice version: {version}."
       },
       "review": {
         "intro": "Check the cost, tell us what each template variable is filled with, and review the campaign.",
@@ -1087,6 +1287,7 @@
         "messages": "Messages",
         "modePlan": "{count, plural, one {Your plan covers the first messages; the wallet pays for # message beyond them.} other {Your plan covers the first messages; the wallet pays for # messages beyond them.}}",
         "modeWallet": "{count, plural, one {Every delivered message is charged to your wallet: # message.} other {Every delivered message is charged to your wallet: # messages.}}",
+        "platformOwned": "This workspace is not billed for sends, so nothing is charged to your wallet.",
         "breakdown": "Cost by country",
         "country": "Country",
         "unitPrice": "Per message",
@@ -1316,12 +1517,17 @@
         "action": {
           "pause": "Pause",
           "resume": "Resume",
-          "cancel": "Cancel campaign"
+          "cancel": "Cancel campaign",
+          "retryFailed": "Retry failed ({count})",
+          "export": "Export rows",
+          "delete": "Delete"
         },
         "done": {
           "pause": "Campaign paused.",
           "resume": "Campaign resumed.",
-          "cancel": "Campaign cancelled."
+          "cancel": "Campaign cancelled.",
+          "retryFailed": "Retrying {count, plural, one {# failed recipient} other {# failed recipients}}.",
+          "delete": "Broadcast deleted."
         },
         "failed": "That did not work. Try again.",
         "noControl": "You do not have permission to pause, resume or cancel campaigns.",
@@ -1340,7 +1546,13 @@
           "cancelled": "Cancelled",
           "active": "Active",
           "ended": "Ended"
-        }
+        },
+        "retryTitle": "Retry the failed messages?",
+        "retryMessage": "Sends again to the {count, plural, one {# recipient} other {# recipients}} whose message failed. Everyone who already got it is left alone, and a message is charged only when it is delivered.",
+        "exportFailed": "The export could not be downloaded.",
+        "deleteTitle": "Delete this broadcast?",
+        "deleteOne": "Deletes this broadcast and its recipients. This cannot be undone.",
+        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone."
       },
       "panel": {
         "title": "Created with the guided flow",
@@ -1443,7 +1655,13 @@
         "noRuns": "No run has started yet.",
         "cancel": "Cancel series"
       },
-      "legacy": "Legacy broadcasts ({count})"
+      "legacy": "Legacy broadcasts ({count})",
+      "view": {
+        "label": "View",
+        "list": "List",
+        "blocks": "Blocks"
+      },
+      "showing": "Showing {count, plural, one {# campaign} other {# campaigns}}"
     },
     "create": {
       "loading": "Loading your numbers",

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { LocalizationTranslationModule } from '../localization-translation';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -31,6 +32,7 @@ import { MediaFetchService } from './media-fetch.service';
 import { MessageDispatchService } from './message-dispatch.service';
 import { MESSAGE_LOG_FACADE } from './message-log.facade';
 import { MessageLogExportPublisher } from './message-log-export.publisher';
+import { MessageHistoryRepository } from './message-history.repository';
 import { MessageLogRepository } from './message-log.repository';
 import { MessageLogService } from './message-log.service';
 import { MessageViewService } from './message-view.service';
@@ -64,6 +66,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     ChatChannelProvidersModule,
     PlansCoreModule,
     CrmModule,
+    ContactConsentModule,
     LocalizationTranslationModule,
     WalletMessageBillingModule,
   ],
@@ -110,6 +113,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     EmailDeliveryService,
     { provide: CONVERSATIONS_FACADE, useExisting: ConversationsService },
     MessageLogRepository,
+    MessageHistoryRepository,
     MessageLogExportPublisher,
     MessageLogService,
     { provide: MESSAGE_LOG_FACADE, useExisting: MessageLogService },
@@ -128,6 +132,7 @@ import { WabaChannelLinkService } from './waba-channel-link.service';
     EmailDeliveryService,
     MESSAGE_LOG_FACADE,
     MessageLogRepository,
+    MessageHistoryRepository,
     WabaChannelLinkService,
     WabaGroupThreadTitleService,
     DeviceGroupThreadTitleService,

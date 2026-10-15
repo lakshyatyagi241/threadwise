@@ -5,7 +5,7 @@ import {
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
 import { CryptoService } from '../../common/crypto/crypto.service';
-import { ConsentPolicyService } from '../contact-consent';
+import { ConsentGate, ConsentPolicyService } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MergeTagService, resolveToken, type MergeContext } from '../crm';
 import {
@@ -121,6 +121,7 @@ export class CampaignDispatchService {
     @Inject(CAMPAIGN_FLOW_STARTER) private readonly flows: CampaignFlowStarter,
     @Inject(CAMPAIGN_SETTINGS) private readonly settingsSource: CampaignSettingsSource,
     @Optional() private readonly consentPolicy?: ConsentPolicyService,
+    @Optional() private readonly consentGate?: ConsentGate,
   ) {}
 
   async run(orgId: number, campaignId: number): Promise<CampaignRunResult> {
@@ -153,8 +154,38 @@ export class CampaignDispatchService {
         t,
         orgId,
         campaignId,
-        (await this.consentPolicy?.requiresConsent(orgId)) ?? false,
+        // With the gate present it decides the grant requirement below; the repository keeps the flag, duplicates and counts.
+        this.consentGate ? false : ((await this.consentPolicy?.requiresConsent(orgId)) ?? false),
       );
+      if (this.consentGate) {
+        const ids = await this.repo.screenCandidates(t, orgId, campaignId);
+        const verdict = await this.consentGate.checkMany(
+          orgId,
+          ids.map((r) => r.contactId),
+          'whatsapp',
+          'marketing_messaging',
+          undefined,
+          { tx: t },
+        );
+        const withdrawn = ids.filter(
+          (r) => verdict.decisions.get(r.contactId)?.reason === 'withdrawn',
+        );
+        const missing = ids.filter(
+          (r) => verdict.decisions.get(r.contactId)?.decision === 'deny' && !withdrawn.includes(r),
+        );
+        await this.repo.markScreened(
+          t,
+          orgId,
+          withdrawn.map((r) => r.id),
+          'unsubscribed',
+        );
+        await this.repo.markScreened(
+          t,
+          orgId,
+          missing.map((r) => r.id),
+          'skipped',
+        );
+      }
       return { c, settings };
     });
     if (!prep) return 'skipped';
@@ -345,7 +376,7 @@ export class CampaignDispatchService {
 
     batches: for (;;) {
       const batch = await this.db.txAs({ orgId }, (t) =>
-        this.repo.claim(t, orgId, c.id, maxAttempts, BATCH),
+        this.repo.claim(t, orgId, c.id, c.retryFailed ? maxAttempts : 0, BATCH),
       );
       if (batch.length === 0) break;
 
@@ -442,8 +473,9 @@ export class CampaignDispatchService {
       this.db.txAs({ orgId }, async (t) => {
         // A broadcast made by the wizard leaves Meta's frequency cap (131049) to its own retry job: 24 hours apart until the end date
         // the person chose, or not at all when they did not switch retries on. Retrying it here at 6 and 12 hours would defeat that.
+        // A campaign made without "Retry failed messages" treats its first failure as final too.
         const out =
-          c.wizard !== null && isEcosystemThrottle(error)
+          !c.retryFailed || (c.wizard !== null && isEcosystemThrottle(error))
             ? { attempts: maxAttempts, nextAttemptAt: null, final: true }
             : retryOutcome({
                 attemptsBefore: r.attempts,
@@ -622,7 +654,7 @@ export class CampaignDispatchService {
   ): Promise<CampaignRunResult> {
     for (;;) {
       const batch = await this.db.txAs({ orgId }, (t) =>
-        this.repo.claim(t, orgId, c.id, maxAttempts, BATCH),
+        this.repo.claim(t, orgId, c.id, c.retryFailed ? maxAttempts : 0, BATCH),
       );
       if (batch.length === 0) break;
       for (const r of batch) {
@@ -681,7 +713,7 @@ export class CampaignDispatchService {
   ): Promise<CampaignRunResult> {
     const { orgId, c, maxAttempts, settings } = o;
     const left = await this.db.txAs({ orgId }, (t) =>
-      this.repo.remaining(t, orgId, c.id, maxAttempts),
+      this.repo.remaining(t, orgId, c.id, c.retryFailed ? maxAttempts : 0),
     );
     if (o.stop === 'wallet') {
       await this.db.txAs({ orgId }, async (t) => {

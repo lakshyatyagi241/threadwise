@@ -121,11 +121,19 @@ export class NotificationsRepository {
     tx: Tx,
     orgId: number,
     userId: number,
-    opts: { limit: number; beforeId?: number; unreadOnly: boolean },
+    opts: { limit: number; beforeId?: number; unreadOnly: boolean; type?: string; q?: string },
   ): Promise<NotificationRow[]> {
     const conditions = this.mine(orgId, userId);
     if (opts.beforeId !== undefined) conditions.push(lt(inboxNotifications.id, opts.beforeId));
     if (opts.unreadOnly) conditions.push(isNull(inboxNotifications.readAt));
+    if (opts.type) conditions.push(eq(inboxNotifications.type, opts.type));
+    if (opts.q) {
+      // Wildcards in the person's text are literal.
+      const like = `%${opts.q.replace(/[\\%_]/g, (c) => `\\${c}`)}%`;
+      conditions.push(
+        sql`(${inboxNotifications.title} ILIKE ${like} ESCAPE '\\' OR coalesce(${inboxNotifications.body}, '') ILIKE ${like} ESCAPE '\\')`,
+      );
+    }
     const rows = await tx
       .select(this.selection())
       .from(inboxNotifications)
@@ -175,6 +183,46 @@ export class NotificationsRepository {
       .where(and(...this.mine(orgId, userId), eq(inboxNotifications.uuid, uuid)))
       .returning(this.selection());
     return touched as NotificationRow | undefined;
+  }
+
+  /** The numbers around the Notifications page: per type, how many are kept and how many arrived in the last day and week. */
+  async summary(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+  ): Promise<{
+    byType: Record<string, number>;
+    total: number;
+    last24Hours: number;
+    last7Days: number;
+  }> {
+    const res = await tx.execute(sql`
+      SELECT type, count(*)::int AS n,
+             (count(*) FILTER (WHERE created_at >= now() - interval '1 day'))::int AS d1,
+             (count(*) FILTER (WHERE created_at >= now() - interval '7 days'))::int AS d7
+      FROM inbox_notifications WHERE org_id = ${orgId} AND user_id = ${userId} GROUP BY type`);
+    const out = { byType: {} as Record<string, number>, total: 0, last24Hours: 0, last7Days: 0 };
+    for (const r of res.rows as Array<{ type: string; n: number; d1: number; d7: number }>) {
+      out.byType[r.type] = Number(r.n);
+      out.total += Number(r.n);
+      out.last24Hours += Number(r.d1);
+      out.last7Days += Number(r.d7);
+    }
+    return out;
+  }
+
+  /** Removes one of the caller's own rows (dismiss). Returns whether it was unread, or undefined when it is not theirs or absent. */
+  async deleteOne(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    uuid: string,
+  ): Promise<{ wasUnread: boolean } | undefined> {
+    const [gone] = await tx
+      .delete(inboxNotifications)
+      .where(and(...this.mine(orgId, userId), eq(inboxNotifications.uuid, uuid)))
+      .returning({ readAt: inboxNotifications.readAt });
+    return gone ? { wasUnread: gone.readAt === null } : undefined;
   }
 
   async markAllRead(tx: Tx, orgId: number, userId: number): Promise<number> {

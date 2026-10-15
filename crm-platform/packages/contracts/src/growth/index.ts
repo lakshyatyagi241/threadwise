@@ -282,9 +282,15 @@ export interface SyncAudienceResult {
 
 // --- send times ----------------------------------------------------------------------------------------------------------------
 
+/** `GET /growth/send-times`: the hours are counted in `timezone` when it is given (the viewer's zone), else the workspace's. */
+export const growthSendTimesQuerySchema = z.object({
+  timezone: z.string().trim().min(1).max(64).optional(),
+});
+export type GrowthSendTimesQuery = z.infer<typeof growthSendTimesQuerySchema>;
+
 export interface GrowthSendTimes {
   timezone: string;
-  /** Messages the contacts wrote and campaign messages they opened, by hour of the day (0 to 23) in the workspace time zone. */
+  /** Messages the contacts wrote and campaign messages they opened, by hour of the day (0 to 23) in `timezone`. */
   inboundByHour: number[];
   readByHour: number[];
   /** The three best hours to send (most reads and replies), best first. */
@@ -314,6 +320,8 @@ export interface GrowthPropensityModel {
 
 export const broadcastAssistantSchema = z.object({
   goal: z.string().trim().min(5).max(500),
+  /** The zone `sendHour` is read in (the viewer's); the workspace's when left out. */
+  timezone: z.string().trim().min(1).max(64).optional(),
 });
 export type BroadcastAssistantInput = z.infer<typeof broadcastAssistantSchema>;
 

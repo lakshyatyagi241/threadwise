@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { DEFAULT_LAUNCHER } from '@crm/contracts';
 import { renderChatPage } from '../../../src/modules/chatbot-widget/chat-page';
 import {
+  CHAT_TEXT,
+  CHAT_TEXT_KEYS,
+  pickChatLocale,
+} from '../../../src/modules/chatbot-widget/chat-page-text';
+import {
   buildEmbedScript,
   jsString,
   safeColour,
@@ -26,6 +31,7 @@ const chat = 'https://crm.example/widget/TOKEN/chat';
 function run(script: string) {
   const created: Array<Record<string, unknown>> = [];
   const doc = {
+    head: { appendChild: () => undefined },
     body: {
       appendChild(el: unknown) {
         (doc as { appended?: unknown }).appended = el;
@@ -34,7 +40,7 @@ function run(script: string) {
     createElement(tag: string) {
       const el: Record<string, unknown> = {
         tag,
-        style: { cssText: '' },
+        style: { cssText: '', setProperty: () => undefined },
         children: [] as unknown[],
         attrs: {} as Record<string, string>,
         listeners: {} as Record<string, () => void>,
@@ -52,7 +58,7 @@ function run(script: string) {
       return el;
     },
   };
-  const win: Record<string, unknown> = {};
+  const win: Record<string, unknown> = { addEventListener: () => undefined };
   const timers: Array<{ fn: () => void; ms: number }> = [];
   new Function('window', 'document', 'setTimeout', script)(win, doc, (fn: () => void, ms: number) =>
     timers.push({ fn, ms }),
@@ -201,5 +207,172 @@ describe('the chat page for a flow bot', () => {
   it('retires old buttons when any new line appears, and looks often for a while after the visitor writes', () => {
     expect(page).toContain('clearChips();');
     expect(page).toContain('function burstPoll()');
+  });
+});
+
+describe('the panel of a flow bot (a website chat bot)', () => {
+  it('is larger and softer than the AI widget panel, which keeps its original size', () => {
+    const rich = run(buildEmbedScript({ ...widget, mode: 'ai', flow: true }, chat));
+    const panel = rich.created.find(
+      (e) =>
+        e.tag === 'div' &&
+        String((e.style as { cssText: string }).cssText).includes('display:none'),
+    )!;
+    const css = String((panel.style as { cssText: string }).cssText);
+    expect(css).toContain('width:404px;height:672px');
+    expect(css).toContain('border-radius:20px');
+    const plain = run(buildEmbedScript({ ...widget, mode: 'ai' }, chat));
+    const old = plain.created.find(
+      (e) =>
+        e.tag === 'div' &&
+        String((e.style as { cssText: string }).cssText).includes('display:none'),
+    )!;
+    expect(String((old.style as { cssText: string }).cssText)).toContain(
+      'width:380px;height:560px',
+    );
+  });
+
+  it("listens for the chat window's close request, and only for its own frame", () => {
+    const script = buildEmbedScript({ ...widget, mode: 'ai', flow: true }, chat);
+    expect(script).toContain('e.source !== frame.contentWindow || !e.data');
+    expect(script).toContain("e.data.wgt === 'close'");
+    expect(script).toContain("e.data.wgt === 'expand'");
+    expect(buildEmbedScript({ ...widget, mode: 'ai' }, chat)).not.toContain("wgt === 'close'");
+  });
+
+  it('its chat page draws a close button only when it is a flow bot, and starts violet', () => {
+    const page = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', flow: true });
+    expect(page).toContain('var FLOW = true;');
+    expect(renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme' })).toContain(
+      'var FLOW = false;',
+    );
+    expect(page).toContain('--accent: #5B4DDB');
+  });
+});
+
+describe("the chat window speaks the visitor's language", () => {
+  it('has every word in all 21 languages, none empty', () => {
+    expect(Object.keys(CHAT_TEXT)).toHaveLength(21);
+    for (const [locale, words] of Object.entries(CHAT_TEXT))
+      for (const k of CHAT_TEXT_KEYS) expect(words[k], `${locale}.${k}`).toBeTruthy();
+  });
+
+  it('picks a language from the browser header, with regional and Chinese variants, and falls back to English', () => {
+    expect(pickChatLocale('hi-IN,hi;q=0.9,en;q=0.8')).toBe('hi');
+    expect(pickChatLocale('pt-BR')).toBe('pt');
+    expect(pickChatLocale('zh-TW,zh;q=0.9')).toBe('zh-CN');
+    expect(pickChatLocale('xx-YY', undefined)).toBe('en');
+    expect(pickChatLocale(undefined)).toBe('en');
+    expect(pickChatLocale('fr-FR', 'de')).toBe('de');
+  });
+
+  it('draws the page in that language, flips a right-to-left one, and the script still parses', () => {
+    const ar = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', locale: 'ar' });
+    expect(ar).toContain('<html lang="ar" dir="rtl">');
+    expect(ar).toContain(CHAT_TEXT.ar!.online);
+    const script = /<script>([\s\S]*)<\/script>/.exec(ar)![1]!;
+    expect(() => new Function('window', 'document', script)).not.toThrow();
+    const en = renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme' });
+    expect(en).toContain('<html lang="en" dir="ltr">');
+    expect(renderChatPage({ uuid: widget.uuid, token: 'T', name: 'Acme', locale: 'zz' })).toContain(
+      'lang="en"',
+    );
+  });
+});
+
+describe('the closed launcher of a flow bot: callout, animation and unread dot', () => {
+  const flow = (launcher: Record<string, unknown>) =>
+    buildEmbedScript(
+      {
+        ...widget,
+        mode: 'ai',
+        flow: true,
+        launcher: { ...widget.launcher, ...launcher } as typeof widget.launcher,
+      },
+      chat,
+    );
+  const popup = (style: string, over: Record<string, unknown> = {}) => ({
+    popup: { enabled: true, position: 'top', style, text: 'Need <b>help</b>?', image: '', ...over },
+  });
+
+  it.each(['bubble', 'pill', 'avatar', 'media', 'bar'])(
+    "draws the %s callout with the author's text as text, never as markup",
+    (style) => {
+      const { created } = run(flow(popup(style)));
+      const texts = created.map((e) => e.textContent).filter(Boolean);
+      expect(texts).toContain('Need <b>help</b>?');
+      expect(created.some((e) => String(e.innerHTML ?? '').includes('help'))).toBe(false);
+    },
+  );
+
+  it('draws no callout while it is off, and the unread dot only while it is on', () => {
+    const off = run(
+      flow({
+        popup: { enabled: false, position: 'top', style: 'bubble', text: 'Hi', image: '' },
+        badge: true,
+      }),
+    );
+    expect(off.created.map((e) => e.textContent)).not.toContain('Hi');
+    expect(off.created.map((e) => e.textContent)).toContain('1');
+    const noBadge = run(flow({ badge: false }));
+    expect(noBadge.created.map((e) => e.textContent)).not.toContain('1');
+  });
+
+  it('adds the bounce or the ripple to the launcher button, and nothing for none', () => {
+    const animationOf = (animation: string) => {
+      const { created } = run(flow({ animation }));
+      const btn = created.find(
+        (e) =>
+          e.tag === 'button' && (e.attrs as Record<string, string>)['aria-label'] === 'Open chat',
+      )!;
+      return (btn.style as { animation?: string }).animation;
+    };
+    expect(animationOf('bounce')).toContain('wgtBounce');
+    expect(animationOf('ripple')).toContain('wgtRipple');
+    expect(animationOf('none')).toBeUndefined();
+  });
+
+  it("keeps the AI widget's launcher exactly as it was (no callout code at all)", () => {
+    const plain = buildEmbedScript({ ...widget, mode: 'ai' }, chat);
+    expect(plain).not.toContain('wgtBounce');
+    expect(plain).not.toContain('hideExtras');
+  });
+});
+
+describe('the panel size and the frame permissions of a flow bot', () => {
+  const panelCss = (size: string) => {
+    const { created } = run(
+      buildEmbedScript(
+        {
+          ...widget,
+          mode: 'ai',
+          flow: true,
+          launcher: {
+            ...widget.launcher,
+            chat: { ...widget.launcher.chat, size },
+          } as typeof widget.launcher,
+        },
+        chat,
+      ),
+    );
+    const panel = created.find(
+      (e) =>
+        e.tag === 'div' &&
+        String((e.style as { cssText: string }).cssText).includes('display:none'),
+    )!;
+    return String((panel.style as { cssText: string }).cssText);
+  };
+
+  it('follows the size the author chose', () => {
+    expect(panelCss('compact')).toContain('width:372px;height:560px');
+    expect(panelCss('tall')).toContain('width:404px;height:780px');
+    expect(panelCss('wide')).toContain('width:468px;height:700px');
+  });
+
+  it('lets only the flow bot window copy and listen', () => {
+    expect(buildEmbedScript({ ...widget, mode: 'ai', flow: true }, chat)).toContain(
+      "'clipboard-write; microphone'",
+    );
+    expect(buildEmbedScript({ ...widget, mode: 'ai' }, chat)).not.toContain('microphone');
   });
 });

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, Select, Spinner, Tabs, Textarea, cn } from '@crm/ui';
@@ -15,10 +15,12 @@ import { LinkedAppointments } from '@/features/appointments';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useAssignees, useTimeline } from '../api/hooks';
+import { leaveDayText } from '../lib/leave-mark';
 import { eventLabel } from '../lib/timeline';
 import { fullStamp, listTime } from '../lib/time';
 import { CheckCircleIcon, ExternalIcon, NoteIcon, TrashIcon, UserPlusIcon } from './icons';
 import { Avatar, ChannelTag, useErrorText } from './parts';
+import { TagGroups, type TagGroupsProps } from './tag-groups';
 
 export interface ContactPanelProps {
   detail: InboxConversationDetail;
@@ -38,6 +40,10 @@ export interface ContactPanelProps {
   onDeleteNote: (id: string) => void;
   canDeleteNote: (note: ConversationNote) => boolean;
   onOpenConversation: (id: string) => void;
+  /** May the person edit the contact (`record.contacts.update`): the contact tags then link to it. */
+  canEditContact?: boolean;
+  /** Conversation-tag controls: present when the person may put tags on threads (`inbox.conversation.tag`). */
+  tags?: TagGroupsProps['tags'];
 }
 
 /**
@@ -53,6 +59,13 @@ export function ContactPanel(props: ContactPanelProps) {
   return (
     <div className="space-y-4 p-4" data-testid="inbox-contact-panel">
       <ContactSummary detail={detail} contactId={contactId} />
+
+      <TagGroups
+        detail={detail}
+        contactId={contactId}
+        canEditContact={props.canEditContact ?? false}
+        tags={props.tags}
+      />
 
       <LeadScoreSection detail={detail} contactId={contactId} />
 
@@ -109,6 +122,7 @@ function ContactSummary({
 }) {
   const t = useTranslations('team-inbox-conversations.panel');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const c = detail.contactSummary;
   const name = c?.name ?? detail.contact?.name ?? detail.title;
 
@@ -146,7 +160,7 @@ function ContactSummary({
           {c.status && <Row label={t('status')} value={c.status} />}
           {c.ownerName && <Row label={t('owner')} value={c.ownerName} />}
           {c.source && <Row label={t('source')} value={c.source} />}
-          <Row label={t('since')} value={fullStamp(c.createdAt, locale)} />
+          <Row label={t('since')} value={fullStamp(c.createdAt, locale, timeZone)} />
           {c.isUnsubscribed && (
             <p className="pt-1">
               <Badge tone="warning">{t('optedOut')}</Badge>
@@ -206,6 +220,7 @@ function Row({ label, value, ltr }: { label: string; value: string; ltr?: boolea
 
 function AssigneeSection(props: ContactPanelProps) {
   const t = useTranslations('team-inbox-conversations.panel');
+  const locale = useLocale();
   const { detail, can } = props;
   // Anyone who may assign loads the staff list; a person who may only claim needs no list.
   const assignees = useAssignees(can.assign);
@@ -214,6 +229,7 @@ function AssigneeSection(props: ContactPanelProps) {
   const current = detail.assignment.user;
   const currentTeam = detail.assignment.team;
   const resolved = detail.status === 'resolved' || detail.status === 'closed';
+  const awayMark = users.find((u) => u.id === current?.id)?.onLeave ?? null;
   const availability =
     (current && props.presence.get(current.id)) ??
     users.find((u) => u.id === current?.id)?.availability;
@@ -255,6 +271,13 @@ function AssigneeSection(props: ContactPanelProps) {
           <span className="text-muted-foreground">{t('assignee.none')}</span>
         )}
       </p>
+      {awayMark && (
+        <p className="text-xs text-warning" data-testid="inbox-assignee-leave">
+          {awayMark.until
+            ? t('assignee.onLeaveUntil', { date: leaveDayText(awayMark.until, locale) })
+            : t('assignee.onLeave')}
+        </p>
+      )}
       {currentTeam && (
         <p className="text-xs text-muted-foreground">
           {t('assignee.team', { name: currentTeam.name })}
@@ -284,6 +307,9 @@ function AssigneeSection(props: ContactPanelProps) {
                   {u.name ?? u.email}
                   {u.isMe ? ` (${t('assignee.you')})` : ''} ·{' '}
                   {t('assignee.open', { count: u.openConversations })}
+                  {u.onLeave
+                    ? ` · ${u.onLeave.until ? t('assignee.onLeaveUntil', { date: leaveDayText(u.onLeave.until, locale) }) : t('assignee.onLeave')}`
+                    : ''}
                 </option>
               ))}
             </Select>
@@ -364,6 +390,7 @@ function NotesTab(props: ContactPanelProps) {
   const t = useTranslations('team-inbox-conversations.panel.notes');
   const errorText = useErrorText();
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -449,7 +476,7 @@ function NotesTab(props: ContactPanelProps) {
                 <span className="font-medium text-foreground">
                   {n.author.name ?? t('unknownAuthor')}
                 </span>
-                <span>· {fullStamp(n.createdAt, locale)}</span>
+                <span>· {fullStamp(n.createdAt, locale, timeZone)}</span>
                 {props.canDeleteNote(n) && (
                   <button
                     type="button"
@@ -475,6 +502,7 @@ function NotesTab(props: ContactPanelProps) {
 function TimelineTab({ conversationId }: { conversationId: string }) {
   const t = useTranslations('team-inbox-conversations.panel.timeline');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const q = useTimeline(conversationId, true);
   const events: ConversationEvent[] = q.data?.data ?? [];
   // Newest first, whatever order the server answers in.
@@ -520,7 +548,9 @@ function TimelineTab({ conversationId }: { conversationId: string }) {
                 ? t(`events.${label.key}`, { actor })
                 : t('events.unknown', { what: label.text, actor })}
             </p>
-            <p className="text-[11px] text-muted-foreground">{fullStamp(e.createdAt, locale)}</p>
+            <p className="text-[11px] text-muted-foreground">
+              {fullStamp(e.createdAt, locale, timeZone)}
+            </p>
           </li>
         );
       })}
@@ -540,6 +570,7 @@ function PastConversations({
 }) {
   const t = useTranslations('team-inbox-conversations.panel.past');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   if (items.length === 0) return null;
   return (
     <section aria-label={t('title')} className="space-y-2" data-testid="inbox-past">
@@ -558,7 +589,7 @@ function PastConversations({
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm">{p.preview ?? t('noMessages')}</span>
                 <span className="block text-[11px] text-muted-foreground">
-                  {t(`status.${p.status}`)} · {listTime(p.lastMessageAt, nowMs, locale)}
+                  {t(`status.${p.status}`)} · {listTime(p.lastMessageAt, nowMs, locale, timeZone)}
                 </span>
               </span>
             </button>

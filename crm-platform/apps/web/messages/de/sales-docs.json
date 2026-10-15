@@ -257,7 +257,6 @@
       "ownerInvalid": "Der Verantwortliche muss ein aktives Mitglied des Workspaces sein.",
       "invoicingUnavailable": "Die Rechnungsstellung ist noch nicht verfügbar, daher kann dieses Dokument nicht umgewandelt werden.",
       "unexpected": "Ein Fehler ist aufgetreten. Versuchen Sie es erneut.",
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen"
     },
     "link": {

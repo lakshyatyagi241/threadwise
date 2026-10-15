@@ -294,7 +294,15 @@ export class SocialAuthService {
         HttpStatus.FORBIDDEN,
       );
     }
+    const registration = await this.policy.registration();
+    if (registration.requirePhoneVerification) {
+      // A social profile carries no verified mobile number, so it cannot satisfy the mandatory check.
+      throw AppError.validation('Create your account with email and a mobile number.', [
+        { path: 'phone', message: 'A verified mobile number is required to sign up.' },
+      ]);
+    }
     const email = profile.email!;
+    await this.signup.assertEmailAllowed(email, registration);
     const orgName = state.orgName ?? `${profile.name ?? 'My'} workspace`;
     const base = slugify(orgName);
     let slug = base;

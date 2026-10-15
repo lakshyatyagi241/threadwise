@@ -3,6 +3,8 @@ import type { OutboundMessage } from './types';
 /** What a channel kind can show beyond text (TW-FLR-019). Interactive content a channel lacks degrades to numbered text. */
 export interface ChannelProfile {
   buttons: boolean;
+  /** The channel's window can draw a small picture in front of a reply button (the website chat). */
+  icons?: boolean;
   list: boolean;
   ctaUrl: boolean;
   location: boolean;
@@ -46,7 +48,7 @@ export function profileOf(kind: string): ChannelProfile {
     // The website chat widget draws up to three reply buttons itself (the thread keeps them in its meta, see `FlowSender`); a longer
     // menu or a link button is text, and a typed number answers a menu.
     case 'webchat':
-      return { buttons: true, list: false, ctaUrl: false, location: false, paceMs: 0 };
+      return { buttons: true, list: false, ctaUrl: false, location: false, paceMs: 0, icons: true };
     default:
       // TikTok, LINE, Viber, WeChat and email (TW-FLR-063, 065 to 068) are text with numbered options, like Telegram.
       return { ...PLAIN, location: false };
@@ -68,7 +70,7 @@ export type Rendered =
             body: string;
             header?: string;
             footer?: string;
-            buttons: Array<{ id: string; title: string }>;
+            buttons: Array<{ id: string; title: string; icon?: string }>;
           }
         | {
             type: 'list';
@@ -124,6 +126,26 @@ export function renderForChannel(m: OutboundMessage, profile: ChannelProfile): R
   switch (m.kind) {
     case 'text':
       return { kind: 'text', body: m.body };
+    case 'carousel':
+      // Only the website chat window draws cards; its thread keeps them in the meta (see `FlowSender`). Every other channel is sent the
+      // cards as text, so nothing is lost where the carousel cannot be drawn.
+      return {
+        kind: 'text',
+        body: [
+          m.body,
+          ...m.cards.map((c, i) =>
+            [
+              `${i + 1}. ${c.title}`,
+              c.text,
+              ...c.buttons.map((b) => (b.kind === 'link' ? `${b.label}: ${b.url}` : b.title)),
+            ]
+              .filter(Boolean)
+              .join('\n'),
+          ),
+        ]
+          .filter(Boolean)
+          .join('\n\n'),
+      };
     case 'media':
       return {
         kind: 'media',
@@ -175,7 +197,11 @@ export function renderForChannel(m: OutboundMessage, profile: ChannelProfile): R
             body: cut(m.body, 1024),
             ...header,
             ...footer,
-            buttons: m.buttons.map((b) => ({ id: cut(b.id, 256), title: cut(b.text, 20) })),
+            buttons: m.buttons.map((b) => ({
+              id: cut(b.id, 256),
+              title: cut(b.text, 20),
+              ...(profile.icons && b.icon ? { icon: b.icon } : {}),
+            })),
           },
         };
       }

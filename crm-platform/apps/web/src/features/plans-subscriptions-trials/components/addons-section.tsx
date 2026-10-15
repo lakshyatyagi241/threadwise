@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useId } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import type { AddonCard } from '@crm/contracts';
 import { Badge } from '@crm/ui';
@@ -18,6 +18,7 @@ const NS = 'plans-subscriptions-trials.plans.addons';
 export function AddonsSection({ canManage }: { canManage: boolean }) {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const titleId = useId();
   const q = useQuery({
     queryKey: ['billing', 'addons'],
@@ -43,7 +44,7 @@ export function AddonsSection({ canManage }: { canManage: boolean }) {
               <Badge tone="success">
                 {o.name}
                 {o.endsAt &&
-                  ` · ${new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(o.endsAt))}`}
+                  ` · ${new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone }).format(new Date(o.endsAt))}`}
               </Badge>
             </li>
           ))}

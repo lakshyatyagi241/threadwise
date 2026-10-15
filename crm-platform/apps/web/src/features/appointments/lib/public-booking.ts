@@ -154,6 +154,8 @@ export function buildBookInput(args: {
   details: Details;
   questions: readonly BookingQuestion[];
   values: Readonly<Record<number, string>>;
+  /** The consent line's version when the visitor ticked it; nothing when they did not. */
+  consentVersion?: number;
 }): BuiltBooking {
   const { details } = args;
   const answers: Answer[] = [];
@@ -174,6 +176,9 @@ export function buildBookInput(args: {
       ...(phone ? { phone } : {}),
       inviteeTimezone: args.zone,
       answers,
+      ...(args.consentVersion
+        ? { consent: { given: true as const, version: args.consentVersion } }
+        : {}),
     },
     sources,
   };

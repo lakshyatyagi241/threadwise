@@ -10,6 +10,7 @@ import { ApiError } from '@/lib/api/errors';
 import { useCallLog, useCallLogsLive } from '../api/call-logs';
 import { durationText, knownReason, knownStep, phoneText } from '../lib/call-logs';
 import { StatusBadge } from './call-logs-screen';
+import { RecordingLifecycleCard } from './recording-lifecycle-card';
 import { RecordingPlayer } from './recording-player';
 import { useErrorText } from './use-error-text';
 
@@ -203,6 +204,11 @@ function Detail({ data, canPlay }: { data: CallLogDetail; canPlay: boolean }) {
               </p>
             </section>
           )}
+          <RecordingLifecycleCard
+            callId={call.id}
+            hasRecording={data.recording.available}
+            lifecycle={data.recording.lifecycle}
+          />
         </aside>
       </div>
     </main>

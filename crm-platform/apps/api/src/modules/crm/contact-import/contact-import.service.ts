@@ -177,16 +177,23 @@ export function analyzeCsv(text: string, options: ContactImportOptions): Analysi
 /** The consent column's yes / no / unknown counts for the preview; null when no column is mapped. */
 export function consentSummary(
   a: Pick<Analysis, 'mapping' | 'valid'>,
+  channel: 'whatsapp' | 'sms' | 'email' = 'whatsapp',
 ): ContactImportPreview['consent'] {
-  if (a.mapping.consent === undefined) return null;
+  const field = channel === 'sms' ? 'consentSms' : channel === 'email' ? 'consentEmail' : 'consent';
+  if (a.mapping[field] === undefined) return null;
+  const value = (r: ParsedRow) =>
+    channel === 'sms' ? r.consentSms : channel === 'email' ? r.consentEmail : r.consent;
+  const raw = (r: ParsedRow) =>
+    channel === 'sms' ? r.consentSmsRaw : channel === 'email' ? r.consentEmailRaw : r.consentRaw;
   let granted = 0;
   let unrecognised = 0;
   const samples = new Set<string>();
   for (const r of a.valid) {
-    if (r.consent === 'granted') granted += 1;
-    else if (r.consent === 'unrecognised') {
+    if (value(r) === 'granted') granted += 1;
+    else if (value(r) === 'unrecognised') {
       unrecognised += 1;
-      if (r.consentRaw && samples.size < 5) samples.add(r.consentRaw);
+      const text = raw(r);
+      if (text && samples.size < 5) samples.add(text);
     }
   }
   return {
@@ -262,6 +269,8 @@ export class ContactImportService {
         },
         invalidSamples: a.invalid,
         consent,
+        consentSms: consentSummary(a, 'sms'),
+        consentEmail: consentSummary(a, 'email'),
         newGroups: newGroups.slice(0, NAME_LIST_MAX),
         newTags: newTags.slice(0, NAME_LIST_MAX),
         quota: usage,
@@ -431,8 +440,24 @@ export class ContactImportService {
     return this.db.tx(async (tx) => {
       const row = await this.jobs.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Import', uuid);
-      return toImportJobResponse(row);
+      const names = await this.userNames(tx, ctx.orgId, [row]);
+      return toImportJobResponse(row, names.get(row.createdBy ?? -1) ?? null);
     });
+  }
+
+  /** The display names of whoever started these imports. */
+  private async userNames(
+    tx: Tx,
+    orgId: number,
+    jobs: ReadonlyArray<{ createdBy: number | null }>,
+  ): Promise<Map<number, string>> {
+    const ids = [...new Set(jobs.map((j) => j.createdBy).filter((v): v is number => v !== null))];
+    if (ids.length === 0) return new Map();
+    const rows = await tx
+      .select({ id: schema.users.id, name: schema.users.fullName })
+      .from(schema.users)
+      .where(and(eq(schema.users.orgId, orgId), inArray(schema.users.id, ids)));
+    return new Map(rows.map((r) => [r.id, r.name]));
   }
 
   async listJobs(query: ListImportJobsQuery): Promise<PageResponse<ContactImportJob>> {
@@ -440,7 +465,11 @@ export class ContactImportService {
     return this.db.tx(async (tx) => {
       const rows = await this.jobs.list(tx, ctx.orgId, query);
       const { items, page } = buildPage(rows, query.limit);
-      return { data: items.map(toImportJobResponse), page };
+      const names = await this.userNames(tx, ctx.orgId, items);
+      return {
+        data: items.map((j) => toImportJobResponse(j, names.get(j.createdBy ?? -1) ?? null)),
+        page,
+      };
     });
   }
 

@@ -153,14 +153,34 @@ export const PREVIEW_LENGTH = 191;
 export const phoneDigits = (phone: string | null | undefined): string =>
   (phone ?? '').replace(/\D+/g, '');
 
+type InboxCards = NonNullable<import('./_shims/tokens').InboxLine['cards']>;
+
 export interface TranscriptSource {
   id: number;
   direction: string;
   body: string | null;
   agentId: number | null;
   /** Reply buttons a flow bot offered with this line. */
-  buttons?: Array<{ id: string; title: string }> | null;
+  buttons?: Array<{ id: string; title: string; icon?: string }> | null;
+  /** A file a flow bot sent with this line. */
+  media?: { kind: string; name: string } | null;
+  /** What a question line waits for. */
+  input?: { type: string; format?: string; accept?: string[] } | null;
+  /** Link, call and email buttons on this line. */
+  links?: Array<{ label: string; url: string; icon?: string }> | null;
+  /** The cards of a carousel the bot sent with this line. */
+  cards?: InboxCards | null;
 }
+
+/** A file as the chat window draws it: its address is relative to the widget's own, read through the visitor's thread. */
+export const widgetMediaOf = (m: { id: number; media?: { kind: string; name: string } | null }) =>
+  m.media
+    ? {
+        kind: m.media.kind as 'image' | 'video' | 'audio' | 'document',
+        name: m.media.name,
+        url: `api/media/${m.id}`,
+      }
+    : undefined;
 
 /**
  * One stored message as the widget draws it (TW-WGT-012 rule 1): the direction is flipped to the widget's point of view
@@ -178,6 +198,10 @@ export function toTranscriptEntry(m: TranscriptSource) {
           ? ('agent' as const)
           : ('assistant' as const),
     ...(m.buttons && m.buttons.length ? { buttons: m.buttons } : {}),
+    ...(m.media ? { media: widgetMediaOf(m) } : {}),
+    ...(m.input ? { input: m.input } : {}),
+    ...(m.links && m.links.length ? { links: m.links } : {}),
+    ...(m.cards && m.cards.length ? { cards: m.cards } : {}),
   };
 }
 

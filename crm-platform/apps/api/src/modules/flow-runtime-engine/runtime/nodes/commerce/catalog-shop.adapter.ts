@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { RequestContextStore } from '../../../../../common/context/request-context';
 import { DatabaseService } from '../../../../../infra/db/database.service';
-import { CatalogSendService } from '../../../../catalog-products';
+import { CatalogSendService, resolveVariantRetailerIds } from '../../../../catalog-products';
 import type { FlowShopPort } from './shop-port';
 
 type Rows = { rows: Array<Record<string, unknown>> };
@@ -30,8 +30,10 @@ export class CatalogShopAdapter implements FlowShopPort {
     input: { provider: string; storeId: string; retailerIds: string[] },
   ): Promise<Set<string> | null> {
     if (input.provider !== 'whatsapp_shop' || input.retailerIds.length === 0) return null;
-    const res = (await this.db.txAs({ orgId }, (tx) =>
-      tx.execute(
+    // A retailer id is a product's, or a variant's (a product with variants is offered through its variants): a variant is in stock
+    // when it is active and has something not held; the product's own row is the aggregate, true while any variant is sellable.
+    const out = await this.db.txAs({ orgId }, async (tx) => {
+      const res = (await tx.execute(
         sql`SELECT meta_retailer_id FROM wa_products
              WHERE org_id = ${orgId} AND status = 'active' AND in_stock
                AND (stock_qty IS NULL OR stock_qty - reserved_qty > 0)
@@ -39,9 +41,16 @@ export class CatalogShopAdapter implements FlowShopPort {
                  input.retailerIds.map((r) => sql`${r}`),
                  sql`, `,
                )})`,
-      ),
-    )) as unknown as Rows;
-    return new Set(res.rows.map((r) => String(r.meta_retailer_id)));
+      )) as unknown as Rows;
+      const found = new Set(res.rows.map((r) => String(r.meta_retailer_id)));
+      const variants = await resolveVariantRetailerIds(tx, orgId, input.retailerIds);
+      for (const [rid, v] of variants) {
+        if (v.active && (v.stockQty === null || v.stockQty - v.reservedQty > 0)) found.add(rid);
+        else found.delete(rid);
+      }
+      return found;
+    });
+    return out;
   }
 
   async sendNative(
@@ -57,18 +66,40 @@ export class CatalogShopAdapter implements FlowShopPort {
   ): Promise<boolean> {
     if (input.provider !== 'whatsapp_shop') return false;
     const ids = input.products.map((p) => p.retailerId);
-    const found = (await this.db.txAs({ orgId }, (tx) =>
-      tx.execute(
+    const { byRetailer, byVariant } = await this.db.txAs({ orgId }, async (tx) => {
+      const found = (await tx.execute(
         sql`SELECT uuid, meta_retailer_id FROM wa_products
              WHERE org_id = ${orgId} AND meta_retailer_id IN (${sql.join(
                ids.map((r) => sql`${r}`),
                sql`, `,
              )})`,
+      )) as unknown as Rows;
+      const variants = await resolveVariantRetailerIds(tx, orgId, ids);
+      const owners = variants.size
+        ? ((await tx.execute(
+            sql`SELECT id, uuid FROM wa_products WHERE org_id = ${orgId} AND id IN (${sql.join(
+              [...new Set([...variants.values()].map((v) => v.productId))].map((i) => sql`${i}`),
+              sql`, `,
+            )})`,
+          )) as unknown as Rows)
+        : { rows: [] };
+      const uuidOf = new Map(owners.rows.map((r) => [Number(r.id), String(r.uuid)]));
+      return {
+        byRetailer: new Map(found.rows.map((r) => [String(r.meta_retailer_id), String(r.uuid)])),
+        // A variant's retailer id offers its product (the send picks the variant to show).
+        byVariant: new Map(
+          [...variants].map(([rid, v]) => [rid, uuidOf.get(v.productId)] as const),
+        ),
+      };
+    });
+    // The order the flow offered them in, and only the ones the catalog really has (a product once, however many of its variants).
+    const productIds = [
+      ...new Set(
+        ids
+          .map((r) => byRetailer.get(r) ?? byVariant.get(r))
+          .filter((u): u is string => Boolean(u)),
       ),
-    )) as unknown as Rows;
-    const byRetailer = new Map(found.rows.map((r) => [String(r.meta_retailer_id), String(r.uuid)]));
-    // The order the flow offered them in, and only the ones the catalog really has.
-    const productIds = ids.map((r) => byRetailer.get(r)).filter((u): u is string => Boolean(u));
+    ];
     if (productIds.length === 0) return false;
     try {
       const sent = await RequestContextStore.run(

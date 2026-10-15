@@ -102,6 +102,7 @@ function setup(page: MessageResponse[]) {
     {} as never,
     {} as never,
     { findManyByUuids } as never,
+    {} as never,
     {
       listMessages: async () => ({
         data: page,

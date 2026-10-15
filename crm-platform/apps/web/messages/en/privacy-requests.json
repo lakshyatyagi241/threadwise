@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Dismiss",
+      "retry": "Try again",
+      "loading": "Loading...",
+      "cancel": "Cancel",
+      "back": "Back",
+      "next": "Next",
+      "close": "Close",
+      "save": "Save"
+    },
+    "errors": {
+      "network": "We could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do this.",
+      "notFound": "This request no longer exists.",
+      "subjectNotFound": "That person no longer exists in this workspace.",
+      "stateInvalid": "This request is not in a state where that can be done. Reload and check its status.",
+      "notVerified": "Verify the person's identity first.",
+      "legalHold": "This request is on legal hold. Release the hold before erasing.",
+      "confirmationRequired": "Run the preview first and type the confirmation phrase exactly.",
+      "exportInProgress": "An export of this request is already being prepared.",
+      "exportNotReady": "That file is not ready or has expired. Prepare a new export.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "validation": "Some of the values are not valid. Check the form and try again.",
+      "unexpected": "Something went wrong. Try again."
+    },
+    "type": {
+      "access": "Access",
+      "export": "Export",
+      "erasure": "Erasure",
+      "rectification": "Rectification",
+      "restriction": "Restriction",
+      "objection": "Objection",
+      "withdrawal": "Withdrawal of consent",
+      "portability": "Portability"
+    },
+    "typeHint": {
+      "access": "The person asks what data we hold on them. Ends in a file.",
+      "export": "A copy of the person's data. Ends in a file.",
+      "erasure": "Delete the person's data. You preview it first.",
+      "rectification": "Correct data that is wrong. You fix it by hand and close the request.",
+      "restriction": "Stop using the data for now. You handle it by hand and close the request.",
+      "objection": "The person objects to a use of their data. You handle it by hand and close the request.",
+      "withdrawal": "The person withdraws consent. You handle it by hand and close the request.",
+      "portability": "A machine readable copy to move elsewhere. Ends in a file."
+    },
+    "status": {
+      "received": "Received",
+      "verifying": "Verifying identity",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "rejected": "Rejected",
+      "expired": "Expired"
+    },
+    "channel": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Phone",
+      "in_person": "In person",
+      "portal": "Portal",
+      "staff": "Entered by staff",
+      "other": "Other"
+    },
+    "method": {
+      "channel_code": "Code sent to the person's channel",
+      "email_link": "Link sent by email",
+      "known_contact": "Reached on the number or email we already hold",
+      "existing_session": "Signed in to their account",
+      "id_document_checked": "Identity document checked",
+      "other": "Other"
+    },
+    "disposition": {
+      "deleted": "Deleted",
+      "anonymised": "Anonymised",
+      "cascaded": "Cascaded",
+      "retained": "Retained",
+      "unlinked": "Unlinked"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {# day left} other {# days left}}",
+      "dueToday": "Due today",
+      "overdue": "{count, plural, one {# day overdue} other {# days overdue}}",
+      "closed": "Closed",
+      "dueOn": "Due {date}"
+    },
+    "list": {
+      "title": "Data requests",
+      "subtitle": "Requests from people about the data you hold on them: access, export, erasure and more. Each has a deadline and a record of what was done.",
+      "newRequest": "New request",
+      "settings": "Settings",
+      "empty": "No data requests yet.",
+      "emptyFiltered": "No requests match these filters.",
+      "loadMore": "Load more",
+      "loadingMore": "Loading...",
+      "columns": {
+        "reference": "Reference",
+        "type": "Type",
+        "subject": "Person",
+        "status": "Status",
+        "due": "Deadline"
+      },
+      "filters": {
+        "label": "Filters",
+        "status": "Status",
+        "type": "Type",
+        "any": "Any",
+        "overdue": "Overdue only"
+      },
+      "open": "Open request {reference}"
+    },
+    "settings": {
+      "title": "Deadline",
+      "slaDays": "Days to answer a request",
+      "slaHint": "How many days after a request arrives it is due. The default is 30.",
+      "saved": "Settings saved.",
+      "invalid": "Enter a whole number of days from 1 to 90."
+    },
+    "wizard": {
+      "title": "New data request",
+      "step": "Step {current} of {total}",
+      "person": {
+        "title": "Find the person",
+        "search": "Search by name, phone or email",
+        "searchHint": "Type at least 2 characters.",
+        "searching": "Searching...",
+        "none": "No one found. You can use a phone number or an email below.",
+        "pick": "Select {name}",
+        "unnamed": "Unnamed",
+        "kindContact": "Contact",
+        "kindLead": "Lead",
+        "selected": "Selected: {name}",
+        "other": "Not in your contacts",
+        "otherValue": "Phone number or email",
+        "otherHint": "For someone who is not saved. We look for their data by this value.",
+        "useOther": "Use this value",
+        "clear": "Choose someone else"
+      },
+      "kind": {
+        "title": "What does the person ask for?"
+      },
+      "details": {
+        "title": "Details",
+        "channel": "How did the request reach you?",
+        "note": "Internal note",
+        "noteHint": "Optional. Only your team sees this. Do not write personal details here.",
+        "history": "Conversation history",
+        "historyHint": "What happens to the person's conversations when their data is erased.",
+        "historyDelete": "Delete the conversations, messages and files",
+        "historyAnonymise": "Keep the conversations without the person's identity"
+      },
+      "create": "Create request",
+      "creating": "Creating...",
+      "created": "Request {reference} created."
+    },
+    "detail": {
+      "back": "Data requests",
+      "loading": "Loading...",
+      "received": "Received {date}",
+      "channel": "Channel: {channel}",
+      "history": {
+        "delete": "On erasure: conversations are deleted",
+        "anonymise": "On erasure: conversations are kept without the person's identity"
+      },
+      "note": "Internal note",
+      "legalHoldBadge": "Legal hold",
+      "timeline": {
+        "title": "Timeline",
+        "empty": "Nothing recorded yet.",
+        "by": "by {actor}",
+        "system": "the system",
+        "event": {
+          "created": "Request created",
+          "verification_started": "Identity check started",
+          "verified": "Identity verified",
+          "verification_failed": "Identity not verified",
+          "hold_set": "Legal hold placed",
+          "hold_released": "Legal hold released",
+          "rejected": "Request rejected",
+          "export_requested": "Export requested",
+          "export_downloaded": "Export downloaded",
+          "erase_previewed": "Erasure previewed",
+          "erased": "Data erased",
+          "completed": "Request completed",
+          "other": "Update"
+        }
+      },
+      "verify": {
+        "title": "Identity verification",
+        "intro": "Check that the person asking is who they say they are before exporting or erasing anything.",
+        "state": {
+          "none": "Not checked yet.",
+          "verified": "Verified {date} ({method}).",
+          "evidence": "Evidence reference: {ref}"
+        },
+        "method": "How was it checked?",
+        "evidence": "Evidence reference id",
+        "evidenceHint": "Reference id only, never upload documents. Use a ticket number or a message id.",
+        "note": "Note",
+        "outcome": "Outcome",
+        "pending": "Check started",
+        "verified": "Verified",
+        "notVerified": "Not verified",
+        "submit": "Record outcome",
+        "notVerifiedWarn": "A person who is not verified has their request rejected.",
+        "saved": "Verification recorded."
+      },
+      "hold": {
+        "title": "Legal hold",
+        "intro": "While a hold is on, erasure is refused. Use it when the law or a dispute requires keeping the data.",
+        "toggle": "Legal hold",
+        "reason": "Reason",
+        "reasonHint": "At least 3 characters.",
+        "apply": "Place hold",
+        "release": "Release hold",
+        "active": "On hold: {reason}",
+        "saved": "Hold updated."
+      },
+      "export": {
+        "title": "Export",
+        "intro": "Prepares a ZIP file with the data we hold on this person.",
+        "expiry": "A finished file stays available for {days} days, then it is deleted.",
+        "noEmail": "Nothing is sent to the person. Download the file and give it to them through a safe channel.",
+        "request": "Prepare export",
+        "requesting": "Preparing...",
+        "requested": "Export started.",
+        "none": "No exports yet.",
+        "download": "Download",
+        "size": "{size} KB",
+        "expires": "Expires {date}",
+        "status": {
+          "queued": "Waiting",
+          "running": "Building",
+          "ready": "Ready",
+          "failed": "Failed",
+          "expired": "Expired"
+        }
+      },
+      "erase": {
+        "title": "Erase",
+        "intro": "Deletes the person's data from every module. Preview first: nothing changes until you confirm.",
+        "preview": "Preview",
+        "previewing": "Counting...",
+        "previewTitle": "What would happen",
+        "previewNote": "Preview only. Nothing was changed.",
+        "files": "{count, plural, one {# stored file queued for deletion} other {# stored files queued for deletion}}",
+        "totals": "{deleted} deleted, {anonymised} anonymised, {retained} retained",
+        "colTable": "Table",
+        "colWhat": "What happens",
+        "colCount": "Rows",
+        "colReason": "Why",
+        "confirmLabel": "Type {phrase} to confirm",
+        "confirmHint": "This cannot be undone.",
+        "execute": "Erase now",
+        "executing": "Erasing...",
+        "done": "Erasure done.",
+        "blocked": "Erasure is available once the identity is verified and no legal hold is on."
+      },
+      "proof": {
+        "title": "Proof of erasure",
+        "executedAt": "Executed {date}",
+        "executedBy": "By {actor}",
+        "totals": "{deleted} deleted, {anonymised} anonymised, {retained} retained, {files} files",
+        "registryDigest": "Registry digest",
+        "sha256": "SHA-256",
+        "notes": "Limits of this erasure",
+        "download": "Download proof"
+      },
+      "close": {
+        "title": "Close the request",
+        "complete": "Mark as completed",
+        "completeHint": "Use when the person has been answered or the work was done by hand.",
+        "completed": "Request completed.",
+        "rejectReason": "Reason for rejecting",
+        "reject": "Reject request",
+        "rejectConfirm": "Reject",
+        "rejected": "Request rejected.",
+        "rejectedWith": "Rejected: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Privacy",
+      "export": "Export this person's data",
+      "erase": "Erase this person",
+      "created": "Request {reference} created.",
+      "failed": "Could not create the request."
+    }
+  }
+}

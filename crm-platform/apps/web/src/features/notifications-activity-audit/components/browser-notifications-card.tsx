@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTimeZone, useTranslations } from 'next-intl';
 import type { PushDevice } from '@crm/contracts';
 import { Alert, Badge, Button, Card, Spinner } from '@crm/ui';
 import {
@@ -100,6 +100,9 @@ export function BrowserNotificationsView({ push }: { push: BrowserPush }) {
             </Button>
           </div>
           {push.testResult && <TestResult outcome={push.testResult} />}
+          {push.testInApp !== null && (
+            <InAppTestResult inApp={push.testInApp} connected={push.liveConnected} />
+          )}
           <p className="text-xs text-muted-foreground">{t('howItWorks')}</p>
         </div>
       )}
@@ -153,6 +156,20 @@ function TestResult({ outcome }: { outcome: TestOutcome | 'wait' }) {
   );
 }
 
+/**
+ * What to look for after a test: the bell row it wrote is announced live, so on a connected page a toast, the bell number and the tab title
+ * change; on a page with no live connection only a reload shows it (the number then moves on its own within a minute).
+ */
+function InAppTestResult({ inApp, connected }: { inApp: boolean; connected: boolean }) {
+  const t = useTranslations('notifications.prefs.push.testInApp');
+  const key = !inApp ? 'off' : connected ? 'watch' : 'notConnected';
+  return (
+    <Alert tone={key === 'watch' ? 'info' : 'warning'} data-testid="test-in-app" data-state={key}>
+      {t(key)}
+    </Alert>
+  );
+}
+
 function Devices({
   devices,
   failed,
@@ -167,6 +184,7 @@ function Devices({
   onRemove: (id: string) => void;
 }) {
   const t = useTranslations('notifications.prefs.push');
+  const timeZone = useTimeZone();
   if (failed) return <p className="text-xs text-muted-foreground">{t('devicesFailed')}</p>;
   if (!devices || devices.length === 0) return null;
   return (
@@ -187,9 +205,9 @@ function Devices({
                 )}
               </p>
               <p className="text-xs text-muted-foreground">
-                {t('devices.added', { date: formatDate(device.createdAt) })}
+                {t('devices.added', { date: formatDate(device.createdAt, timeZone) })}
                 {device.lastUsedAt
-                  ? ` · ${t('devices.lastUsed', { date: formatDate(device.lastUsedAt) })}`
+                  ? ` · ${t('devices.lastUsed', { date: formatDate(device.lastUsedAt, timeZone) })}`
                   : ` · ${t('devices.neverUsed')}`}
               </p>
             </div>
@@ -209,9 +227,13 @@ function Devices({
   );
 }
 
-function formatDate(iso: string): string {
+function formatDate(iso: string, timeZone?: string): string {
   const d = new Date(iso);
   return Number.isNaN(d.getTime())
     ? ''
-    : new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(d);
+    : new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone,
+      }).format(d);
 }

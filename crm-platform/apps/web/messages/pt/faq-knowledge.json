@@ -13,7 +13,6 @@
     },
     "common": {
       "retry": "Tentar novamente",
-      "requestId": "Solicitação {id}",
       "noAccessTitle": "Você não tem acesso a esta tela",
       "noAccess": "Peça a um administrador do workspace para dar ao seu perfil a permissão {permission}."
     },

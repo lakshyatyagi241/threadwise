@@ -1,12 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
   hasRoutingConditions,
+  ROUTING_BLOCKED_BY_LEAVE,
   ROUTING_FLOW_REQUESTED,
   type RoutingAssign,
   type RoutingConditions,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { isOutsideBusinessHours } from '../../common/business-hours';
+import { pickDelegate } from '../../common/leave-delegate';
+import { loadWorkspaceCalendar, onLeaveMap } from '../../common/workspace-calendar';
 import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { MemberDirectory, PERM_CONVERSATION_READ } from '../../realtime';
@@ -46,6 +49,15 @@ interface Pick {
   how: AssignmentHow;
   /** The person who took the turn (the rule's new round robin cursor). */
   cursor: number | null;
+  /** Uuid of the person on leave whose delegate this is (BL-112), for the timeline. */
+  delegateFor?: string | null;
+}
+
+/** What the engine knows about the calendar while it evaluates one conversation. */
+interface Calendar {
+  today: string;
+  /** People a rule wanted but who are on leave today (internal ids): the notice to the leads when nobody could take the conversation. */
+  blocked: Set<number>;
 }
 
 /**
@@ -68,6 +80,10 @@ interface Pick {
  *     takes over the assignment (Reference ran every matching rule's actions in order too).
  *     A rule that also names a flow writes `routing.flow_requested` in the same transaction (the flow runtime's worker starts it, see
  *     `RoutingFlowConsumer`); it fires even when nobody is available to take the conversation.
+ *     People on leave today (the workspace calendar, BL-112) are never picked. When a rule names a person who is away, their delegate
+ *     (if active, present and able to open the inbox) takes their place, ahead of the rule's teams; otherwise the team pool decides, and
+ *     with nobody left the conversation stays unassigned and the leads are told (`routing.blocked_by_leave`). Behaviour for people who
+ *     are not on leave is unchanged.
  *  4. If no primary rule fired, the fallback rule (conditions, when it has any, still apply). Otherwise the conversation stays unassigned.
  */
 @Injectable()
@@ -111,6 +127,10 @@ export class RoutingEngine {
       }
       // Whatever happens below, this message has been looked at: a retry must not look again.
       await this.repo.stampRouted(tx, orgId, locked.id, input.messageUuid);
+      const cal: Calendar = {
+        today: (await loadWorkspaceCalendar(tx, orgId, now)).today,
+        blocked: new Set<number>(),
+      };
 
       let current = locked;
       let change: AssignmentChange | null = null;
@@ -142,7 +162,7 @@ export class RoutingEngine {
 
       // 2. the contact's own agent
       if (facts.contactId !== null && (await this.repo.keepContactAgent(tx, orgId))) {
-        const mine = await this.contactAgent(tx, orgId, facts.contactId, locked, canOpen);
+        const mine = await this.contactAgent(tx, orgId, facts.contactId, locked, canOpen, cal);
         if (mine) {
           await apply(
             { ...mine, teamId: null, teamUuid: null, how: 'contact_agent', cursor: null },
@@ -175,10 +195,14 @@ export class RoutingEngine {
         ) {
           return false;
         }
-        const turn = await this.fire(tx, orgId, rule, canOpen);
+        const turn = await this.fire(tx, orgId, rule, canOpen, cal);
         if (!turn) return false;
         if (turn.pick)
-          await apply(turn.pick, { ruleId: rule.uuid as string, ruleName: rule.name as string });
+          await apply(turn.pick, {
+            ruleId: rule.uuid as string,
+            ruleName: rule.name as string,
+            ...(turn.pick.delegateFor ? { delegateFor: turn.pick.delegateFor } : {}),
+          });
         if (turn.flowId) {
           // The flow starts in the flow runtime's worker (the event is committed with the rule's firing, so a crash cannot lose it).
           // Reference started it on the next Baileys inbound only; here it starts on every channel.
@@ -206,6 +230,21 @@ export class RoutingEngine {
         for (const rule of rules.filter((r) => r.is_fallback === true)) {
           if (await run(rule)) break;
         }
+      }
+      // Somebody who should have had it is away and nobody took their place: the leads hear of it (once per message, with the event).
+      if (change === null && cal.blocked.size > 0) {
+        await this.outbox.emit(tx, {
+          aggregateModule: 'conversations',
+          aggregateId: locked.id,
+          orgId,
+          eventType: ROUTING_BLOCKED_BY_LEAVE,
+          payload: {
+            conversationId: locked.uuid,
+            messageUuid: input.messageUuid,
+            awayUserIds: [...cal.blocked],
+            ruleIds: fired,
+          },
+        });
       }
       if (fired.length === 0) return { result: { outcome: 'unmatched' } };
       if (change === null) return { result: { outcome: 'triggered', ruleIds: fired } };
@@ -251,10 +290,11 @@ export class RoutingEngine {
     orgId: number,
     rule: RuleRow,
     canOpen: ReadonlySet<number>,
+    cal: Calendar,
   ): Promise<{ pick: Pick | null; flowId: string | null } | null> {
     const ruleId = Number(rule.id);
     const stored = decodeActions(await this.repo.lockActions(tx, orgId, ruleId));
-    const pick = await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen);
+    const pick = await this.choose(tx, orgId, stored.assign, stored.cursor, canOpen, cal);
     if (!pick && !stored.triggerFlowId) return null;
     await this.repo.markFired(
       tx,
@@ -278,6 +318,7 @@ export class RoutingEngine {
     a: RoutingAssign,
     cursor: number | null,
     canOpen: ReadonlySet<number>,
+    cal: Calendar,
   ): Promise<Pick | null> {
     const users = await this.repo.activeUsers(tx, orgId, a.userIds);
     const teams = await this.repo.teams(tx, orgId, a.teamIds);
@@ -294,9 +335,50 @@ export class RoutingEngine {
     }
     for (const id of users.values()) origin.set(id, null);
 
-    const pool = (await this.repo.available(tx, orgId, [...origin.keys()])).filter((p) =>
+    // On leave today (BL-112): never picked. A person NAMED by the rule who is away is replaced by their delegate, and the named
+    // people (with their delegates) go ahead of the rule's teams; with nobody to take their place the team pool decides.
+    const away = await onLeaveMap(tx, orgId, [...origin.keys()], cal.today);
+    const delegateFor = new Map<number, string>(); // delegate id -> uuid of the absent person
+    let namedAway = false;
+    if (away.size > 0) {
+      const awayNamed = [...away.keys()].filter((id) => origin.get(id) === null);
+      namedAway = awayNamed.length > 0;
+      const delegates = await this.repo.delegatesOf(tx, orgId, awayNamed);
+      const delegateAway = await onLeaveMap(
+        tx,
+        orgId,
+        [...delegates.values()].map((d) => d.id),
+        cal.today,
+      );
+      const delegateOf = new Map([...delegates].map(([p, d]) => [p, d.id] as const));
+      const personUuid = await this.repo.userUuids(tx, orgId, awayNamed);
+      for (const id of away.keys()) {
+        origin.delete(id);
+        cal.blocked.add(id);
+      }
+      for (const person of awayNamed) {
+        const d = pickDelegate(
+          delegateOf,
+          person,
+          (x) => delegateAway.has(x),
+          (x) => canOpen.has(x),
+        );
+        if (d !== null && !origin.has(d) && !away.has(d)) {
+          origin.set(d, null);
+          delegateFor.set(d, personUuid.get(person) ?? '');
+        }
+      }
+    }
+
+    let pool = (await this.repo.available(tx, orgId, [...origin.keys()], cal.today)).filter((p) =>
       canOpen.has(p.id),
     );
+    if (namedAway) {
+      const direct = pool.filter((p) => origin.get(p.id) === null);
+      if (direct.length > 0) pool = direct;
+    }
+    // Somebody (a delegate or a teammate) took the place of whoever was away: nothing is blocked for this rule.
+    if (pool.length > 0) for (const id of away.keys()) cal.blocked.delete(id);
     const chosen =
       a.strategy === 'least_busy'
         ? pickLeastBusy(
@@ -320,6 +402,7 @@ export class RoutingEngine {
         teamUuid,
         how: a.strategy,
         cursor: person.id,
+        delegateFor: delegateFor.get(person.id) ?? null,
       };
     }
     const queue = a.teamIds.find((t) => teams.has(t));
@@ -346,13 +429,32 @@ export class RoutingEngine {
     contactId: number,
     locked: LockedConversation,
     canOpen: ReadonlySet<number>,
+    cal: Calendar,
   ): Promise<Pick | null> {
     const candidates = [
       await this.repo.contactOwner(tx, orgId, contactId),
       await this.repo.lastAgentOf(tx, orgId, contactId, locked.id),
     ];
-    for (const id of candidates) {
-      if (id === null || !canOpen.has(id)) continue;
+    for (const original of candidates) {
+      let id = original;
+      if (id === null) continue;
+      // The owner is away (BL-112): their delegate carries the contact meanwhile; with none present, on to the rules.
+      if ((await onLeaveMap(tx, orgId, [id], cal.today)).has(id)) {
+        const d = (await this.repo.delegatesOf(tx, orgId, [id])).get(id);
+        const dAway = d ? await onLeaveMap(tx, orgId, [d.id], cal.today) : new Map();
+        const next = pickDelegate(
+          new Map(d ? [[id, d.id]] : []),
+          id,
+          (x) => dAway.has(x),
+          (x) => canOpen.has(x),
+        );
+        if (next === null) {
+          cal.blocked.add(id);
+          continue;
+        }
+        id = next;
+      }
+      if (!canOpen.has(id)) continue;
       const user = await this.repo.activeUserById(tx, orgId, id);
       if (user) {
         return {

@@ -68,3 +68,30 @@ payload), then `afterCommit`, so the timeline, audit, `conversation.assigned` ou
 ## Start a flow (`triggerFlowId`)
 
 Create and update accept `triggerFlowId` (a flow uuid of the workspace, `null` clears it); rules return `triggerFlow { id, name, isActive }`. A firing rule writes `routing.flow_requested`; the flow runtime starts the flow for the conversation (source `routing`, no subscriber, 600 s). A rule that names a flow fires even when nobody is available.
+
+## Team performance report (TW-TIB2-034)
+
+`GET /v2/inbox/analytics/team?range=today|week|month&channelId=<uuid>`. Needs `inbox.analytics.view` (Owner, Admin, Manager presets) and the plan feature `team_performance`
+(`PLAN_FEATURE_LOCKED` otherwise). Reference left its JSON open to every member; here it is gated like the page.
+
+- `range`: `today` (default), `week` (from Monday) or `month`, started at midnight in the workspace time zone (`organizations.settings.timezone`, UTC when unset or unknown). Anything else reads as `today`.
+- `channelId`: narrows every figure to conversations on one channel; an unknown channel is 404, a non-uuid 422.
+
+```json
+{
+  "range": "today",
+  "since": "2026-10-13T00:00:00.000Z",
+  "totals": { "replies": 3, "resolved": 1, "inbounds": 4, "avgFirstResponseMin": 6 },
+  "agents": [
+    { "userId": "…", "name": "Dana", "replies": 2, "resolved": 1, "avgResponseMin": null,
+      "status": "online", "currentLoad": 2, "lastSeenAt": "2026-10-13T08:55:00.000Z" }
+  ]
+}
+```
+
+- **Replies** = outbound `messages` with `sender_kind = 'agent'` and a `sender_user_id`, grouped by that person. Automatic replies (routing, keyword, out-of-hours, AI) carry another sender kind and are not counted (Reference attributed them to the conversation owner: deliberate fix).
+- **Agents listed** = people with at least one reply in the window (Reference rule, kept): someone who only resolved or was assigned is not listed.
+- **resolved** per person = conversations `resolved` with `resolved_at` in the window, grouped by `resolved_by`; the total counts all of them.
+- **avgResponseMin** = mean minutes from `created_at` to `first_response_at` over conversations resolved in the window, credited to the **assignee**; `avgFirstResponseMin` is the same mean over all of them (one decimal, `null` when none).
+- **currentLoad** = live count of open and pending, unarchived conversations assigned to the person (Reference used a counter that drifted); `status` is the stored availability or `offline`.
+- No pagination, export or CSAT here (Reference has none either).

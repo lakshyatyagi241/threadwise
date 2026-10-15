@@ -1,4 +1,5 @@
 import type { BulkConversationsResponse, BulkItemResult } from '@crm/contracts';
+import { dayParts, weekdayIn, zonedInstant } from './time';
 
 /**
  * The multi-select of the conversation list as pure functions over a set of ids: a plain click toggles one, a shift-click selects
@@ -78,7 +79,7 @@ export function summarize(
   return res.done + res.unchanged === 0 ? 'allFailed' : 'partial';
 }
 
-/** The wake-up times the snooze menu offers, from `now`. Tomorrow and next week are at 09:00 local time. */
+/** The wake-up times the snooze menu offers, from `now`. Tomorrow and next week are at 09:00 in `timeZone` (the person's zone; the browser's when left out). */
 export type SnoozePreset = 'oneHour' | 'threeHours' | 'tomorrow' | 'nextWeek';
 export const SNOOZE_PRESETS: readonly SnoozePreset[] = [
   'oneHour',
@@ -87,26 +88,23 @@ export const SNOOZE_PRESETS: readonly SnoozePreset[] = [
   'nextWeek',
 ];
 
-export function snoozeUntil(preset: SnoozePreset, now: Date): string {
-  const at = new Date(now);
-  switch (preset) {
-    case 'oneHour':
-      at.setTime(now.getTime() + 3_600_000);
-      break;
-    case 'threeHours':
-      at.setTime(now.getTime() + 3 * 3_600_000);
-      break;
-    case 'tomorrow':
-      at.setDate(at.getDate() + 1);
-      at.setHours(9, 0, 0, 0);
-      break;
-    case 'nextWeek': {
-      // The coming Monday (a Monday today means the next one), 09:00.
-      const ahead = (8 - at.getDay()) % 7 || 7;
-      at.setDate(at.getDate() + ahead);
-      at.setHours(9, 0, 0, 0);
-      break;
-    }
+export function snoozeUntil(preset: SnoozePreset, now: Date, timeZone?: string): string {
+  if (preset === 'oneHour') return new Date(now.getTime() + 3_600_000).toISOString();
+  if (preset === 'threeHours') return new Date(now.getTime() + 3 * 3_600_000).toISOString();
+  if (timeZone) {
+    // 09:00 on the person's own calendar, not the browser's.
+    const { y, m, d } = dayParts(now.getTime(), timeZone);
+    // The coming Monday (a Monday today means the next one).
+    const ahead = preset === 'tomorrow' ? 1 : (8 - weekdayIn(now.getTime(), timeZone)) % 7 || 7;
+    return new Date(zonedInstant(y, m, d + ahead, 9, 0, timeZone)).toISOString();
   }
+  const at = new Date(now);
+  if (preset === 'tomorrow') {
+    at.setDate(at.getDate() + 1);
+  } else {
+    // The coming Monday (a Monday today means the next one).
+    at.setDate(at.getDate() + ((8 - at.getDay()) % 7 || 7));
+  }
+  at.setHours(9, 0, 0, 0);
   return at.toISOString();
 }

@@ -4,8 +4,7 @@
       "title": "Templat"
     },
     "common": {
-      "dismiss": "Tutup",
-      "requestId": "ID permintaan"
+      "dismiss": "Tutup"
     },
     "status": {
       "draft": "Draf",

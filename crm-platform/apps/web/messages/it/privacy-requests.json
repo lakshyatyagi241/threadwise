@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Chiudi",
+      "retry": "Riprova",
+      "loading": "Caricamento...",
+      "cancel": "Annulla",
+      "back": "Indietro",
+      "next": "Avanti",
+      "close": "Chiudi",
+      "save": "Salva"
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai l'autorizzazione per farlo.",
+      "notFound": "Questa richiesta non esiste più.",
+      "subjectNotFound": "Questa persona non esiste più in questo workspace.",
+      "stateInvalid": "Questa richiesta non è in uno stato che consente questa operazione. Ricarica e controlla il suo stato.",
+      "notVerified": "Verifica prima l'identità della persona.",
+      "legalHold": "Questa richiesta è sotto blocco legale. Rimuovi il blocco prima di cancellare.",
+      "confirmationRequired": "Esegui prima l'anteprima e digita esattamente la frase di conferma.",
+      "exportInProgress": "È già in preparazione un'esportazione di questa richiesta.",
+      "exportNotReady": "Il file non è pronto o è scaduto. Prepara una nuova esportazione.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
+      "unexpected": "Qualcosa è andato storto. Riprova."
+    },
+    "type": {
+      "access": "Accesso",
+      "export": "Esportazione",
+      "erasure": "Cancellazione",
+      "rectification": "Rettifica",
+      "restriction": "Limitazione",
+      "objection": "Opposizione",
+      "withdrawal": "Revoca del consenso",
+      "portability": "Portabilità"
+    },
+    "typeHint": {
+      "access": "La persona chiede quali dati conserviamo su di lei. Si conclude con un file.",
+      "export": "Una copia dei dati della persona. Si conclude con un file.",
+      "erasure": "Elimina i dati della persona. Prima vedi un'anteprima.",
+      "rectification": "Correggi i dati errati. Li correggi a mano e chiudi la richiesta.",
+      "restriction": "Smetti per ora di usare i dati. La gestisci a mano e chiudi la richiesta.",
+      "objection": "La persona si oppone a un uso dei suoi dati. La gestisci a mano e chiudi la richiesta.",
+      "withdrawal": "La persona revoca il consenso. La gestisci a mano e chiudi la richiesta.",
+      "portability": "Una copia leggibile da una macchina da trasferire altrove. Si conclude con un file."
+    },
+    "status": {
+      "received": "Ricevuta",
+      "verifying": "Verifica dell'identità",
+      "in_progress": "In corso",
+      "completed": "Completata",
+      "rejected": "Rifiutata",
+      "expired": "Scaduta"
+    },
+    "channel": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Telefono",
+      "in_person": "Di persona",
+      "portal": "Portale",
+      "staff": "Inserita dal personale",
+      "other": "Altro"
+    },
+    "method": {
+      "channel_code": "Codice inviato al canale della persona",
+      "email_link": "Link inviato via email",
+      "known_contact": "Contattata al numero o all'email che abbiamo già",
+      "existing_session": "Accesso effettuato al proprio account",
+      "id_document_checked": "Documento d'identità controllato",
+      "other": "Altro"
+    },
+    "disposition": {
+      "deleted": "Eliminati",
+      "anonymised": "Anonimizzati",
+      "cascaded": "A cascata",
+      "retained": "Conservati",
+      "unlinked": "Scollegati"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {# giorno rimasto} other {# giorni rimasti}}",
+      "dueToday": "Scade oggi",
+      "overdue": "{count, plural, one {# giorno di ritardo} other {# giorni di ritardo}}",
+      "closed": "Chiusa",
+      "dueOn": "Scadenza {date}"
+    },
+    "list": {
+      "title": "Richieste sui dati",
+      "subtitle": "Richieste delle persone sui dati che conservi su di loro: accesso, esportazione, cancellazione e altro. Ognuna ha una scadenza e un registro di ciò che è stato fatto.",
+      "newRequest": "Nuova richiesta",
+      "settings": "Impostazioni",
+      "empty": "Nessuna richiesta sui dati.",
+      "emptyFiltered": "Nessuna richiesta corrisponde a questi filtri.",
+      "loadMore": "Carica altre",
+      "loadingMore": "Caricamento...",
+      "columns": {
+        "reference": "Riferimento",
+        "type": "Tipo",
+        "subject": "Persona",
+        "status": "Stato",
+        "due": "Scadenza"
+      },
+      "filters": {
+        "label": "Filtri",
+        "status": "Stato",
+        "type": "Tipo",
+        "any": "Qualsiasi",
+        "overdue": "Solo in ritardo"
+      },
+      "open": "Apri la richiesta {reference}"
+    },
+    "settings": {
+      "title": "Scadenza",
+      "slaDays": "Giorni per rispondere a una richiesta",
+      "slaHint": "Entro quanti giorni dall'arrivo una richiesta va evasa. Il valore predefinito è 30.",
+      "saved": "Impostazioni salvate.",
+      "invalid": "Inserisci un numero intero di giorni da 1 a 90."
+    },
+    "wizard": {
+      "title": "Nuova richiesta sui dati",
+      "step": "Passaggio {current} di {total}",
+      "person": {
+        "title": "Trova la persona",
+        "search": "Cerca per nome, telefono o email",
+        "searchHint": "Digita almeno 2 caratteri.",
+        "searching": "Ricerca in corso...",
+        "none": "Nessun risultato. Puoi usare un numero di telefono o un'email qui sotto.",
+        "pick": "Seleziona {name}",
+        "unnamed": "Senza nome",
+        "kindContact": "Contatto",
+        "kindLead": "Lead",
+        "selected": "Selezionato: {name}",
+        "other": "Non nei tuoi contatti",
+        "otherValue": "Numero di telefono o email",
+        "otherHint": "Per chi non è salvato. Cerchiamo i suoi dati tramite questo valore.",
+        "useOther": "Usa questo valore",
+        "clear": "Scegli un'altra persona"
+      },
+      "kind": {
+        "title": "Cosa chiede la persona?"
+      },
+      "details": {
+        "title": "Dettagli",
+        "channel": "Come è arrivata la richiesta?",
+        "note": "Nota interna",
+        "noteHint": "Facoltativa. La vede solo il tuo team. Non scrivere qui dati personali.",
+        "history": "Cronologia delle conversazioni",
+        "historyHint": "Cosa succede alle conversazioni della persona quando i suoi dati vengono cancellati.",
+        "historyDelete": "Elimina conversazioni, messaggi e file",
+        "historyAnonymise": "Conserva le conversazioni senza l'identità della persona"
+      },
+      "create": "Crea richiesta",
+      "creating": "Creazione...",
+      "created": "Richiesta {reference} creata."
+    },
+    "detail": {
+      "back": "Richieste sui dati",
+      "loading": "Caricamento...",
+      "received": "Ricevuta il {date}",
+      "channel": "Canale: {channel}",
+      "history": {
+        "delete": "In caso di cancellazione: le conversazioni vengono eliminate",
+        "anonymise": "In caso di cancellazione: le conversazioni vengono conservate senza l'identità della persona"
+      },
+      "note": "Nota interna",
+      "legalHoldBadge": "Blocco legale",
+      "timeline": {
+        "title": "Cronologia",
+        "empty": "Ancora nulla di registrato.",
+        "by": "da {actor}",
+        "system": "il sistema",
+        "event": {
+          "created": "Richiesta creata",
+          "verification_started": "Verifica dell'identità avviata",
+          "verified": "Identità verificata",
+          "verification_failed": "Identità non verificata",
+          "hold_set": "Blocco legale applicato",
+          "hold_released": "Blocco legale rimosso",
+          "rejected": "Richiesta rifiutata",
+          "export_requested": "Esportazione richiesta",
+          "export_downloaded": "Esportazione scaricata",
+          "erase_previewed": "Anteprima della cancellazione",
+          "erased": "Dati cancellati",
+          "completed": "Richiesta completata",
+          "other": "Aggiorna"
+        }
+      },
+      "verify": {
+        "title": "Verifica dell'identità",
+        "intro": "Controlla che chi chiede sia chi dice di essere prima di esportare o cancellare qualsiasi cosa.",
+        "state": {
+          "none": "Non ancora verificata.",
+          "verified": "Verificata il {date} ({method}).",
+          "evidence": "Riferimento della prova: {ref}"
+        },
+        "method": "Come è stata verificata?",
+        "evidence": "ID di riferimento della prova",
+        "evidenceHint": "Solo un ID di riferimento, non caricare mai documenti. Usa il numero di un ticket o l'ID di un messaggio.",
+        "note": "Nota",
+        "outcome": "Esito",
+        "pending": "Verifica avviata",
+        "verified": "Verificata",
+        "notVerified": "Non verificata",
+        "submit": "Registra l'esito",
+        "notVerifiedWarn": "La richiesta di una persona non verificata viene rifiutata.",
+        "saved": "Verifica registrata."
+      },
+      "hold": {
+        "title": "Blocco legale",
+        "intro": "Finché il blocco è attivo, la cancellazione è rifiutata. Usalo quando la legge o una controversia richiede di conservare i dati.",
+        "toggle": "Blocco legale",
+        "reason": "Motivo",
+        "reasonHint": "Almeno 3 caratteri.",
+        "apply": "Applica il blocco",
+        "release": "Rimuovi il blocco",
+        "active": "Bloccata: {reason}",
+        "saved": "Blocco aggiornato."
+      },
+      "export": {
+        "title": "Esportazione",
+        "intro": "Prepara un file ZIP con i dati che conserviamo su questa persona.",
+        "expiry": "Un file completato resta disponibile per {days} giorni, poi viene eliminato.",
+        "noEmail": "Non viene inviato nulla alla persona. Scarica il file e consegnaglielo tramite un canale sicuro.",
+        "request": "Prepara l'esportazione",
+        "requesting": "Preparazione...",
+        "requested": "Esportazione avviata.",
+        "none": "Nessuna esportazione.",
+        "download": "Scarica",
+        "size": "{size} KB",
+        "expires": "Scade il {date}",
+        "status": {
+          "queued": "In attesa",
+          "running": "In creazione",
+          "ready": "Pronta",
+          "failed": "Non riuscita",
+          "expired": "Scaduta"
+        }
+      },
+      "erase": {
+        "title": "Cancella",
+        "intro": "Elimina i dati della persona da ogni modulo. Prima l'anteprima: nulla cambia finché non confermi.",
+        "preview": "Anteprima",
+        "previewing": "Conteggio...",
+        "previewTitle": "Cosa succederebbe",
+        "previewNote": "Solo anteprima. Non è stato modificato nulla.",
+        "files": "{count, plural, one {# file archiviato in coda per l'eliminazione} other {# file archiviati in coda per l'eliminazione}}",
+        "totals": "{deleted} eliminati, {anonymised} anonimizzati, {retained} conservati",
+        "colTable": "Tabella",
+        "colWhat": "Cosa succede",
+        "colCount": "Righe",
+        "colReason": "Perché",
+        "confirmLabel": "Digita {phrase} per confermare",
+        "confirmHint": "L'operazione non può essere annullata.",
+        "execute": "Cancella ora",
+        "executing": "Cancellazione...",
+        "done": "Cancellazione completata.",
+        "blocked": "La cancellazione è disponibile quando l'identità è verificata e non c'è alcun blocco legale."
+      },
+      "proof": {
+        "title": "Prova della cancellazione",
+        "executedAt": "Eseguita il {date}",
+        "executedBy": "Da {actor}",
+        "totals": "{deleted} eliminati, {anonymised} anonimizzati, {retained} conservati, {files} file",
+        "registryDigest": "Digest del registro",
+        "sha256": "SHA-256",
+        "notes": "Limiti di questa cancellazione",
+        "download": "Scarica la prova"
+      },
+      "close": {
+        "title": "Chiudi la richiesta",
+        "complete": "Segna come completata",
+        "completeHint": "Usalo quando la persona ha ricevuto risposta o il lavoro è stato fatto a mano.",
+        "completed": "Richiesta completata.",
+        "rejectReason": "Motivo del rifiuto",
+        "reject": "Rifiuta la richiesta",
+        "rejectConfirm": "Rifiuta",
+        "rejected": "Richiesta rifiutata.",
+        "rejectedWith": "Rifiutata: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Privacy",
+      "export": "Esporta i dati di questa persona",
+      "erase": "Cancella questa persona",
+      "created": "Richiesta {reference} creata.",
+      "failed": "Impossibile creare la richiesta."
+    }
+  }
+}

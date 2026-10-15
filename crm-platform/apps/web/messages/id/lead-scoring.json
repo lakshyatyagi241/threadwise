@@ -3,7 +3,6 @@
     "common": {
       "dismiss": "Tutup",
       "retry": "Coba lagi",
-      "requestId": "Permintaan {id}",
       "noAccessTitle": "Anda tidak memiliki akses ke layar ini",
       "noAccess": "Minta admin ruang kerja untuk memberikan izin {permission} kepada peran Anda."
     },
@@ -261,7 +260,7 @@
         "offBody": "Percakapan tidak dibaca. Skor hanya menggunakan data kontak dan angka interaksi.",
         "needsScoring": "Aktifkan penilaian prospek AI terlebih dahulu.",
         "stageLabel": "Sarankan tahap siklus hidup",
-        "stageBody": "Ketika percakapan dengan jelas menunjukkan bahwa kontak sudah maju, AI menyarankan tahap berikutnya. Seseorang menerima atau menolaknya; tidak ada yang berpindah sendiri, dan tahap Menang dan Kalah tidak pernah disarankan.",
+        "stageBody": "Saat percakapan jelas menunjukkan kontak sudah maju, AI memilih tahap berikutnya. AI tidak pernah menetapkan tahap Menang dan Kalah. Pilih di bawah apakah perubahan diterapkan otomatis atau menunggu seseorang.",
         "masked": {
           "title": "Cara data pribadi disamarkan",
           "phone": "Nomor telepon hanya menyisakan digit pertama dan dua digit terakhir (+91 ***** ***10)",
@@ -281,6 +280,17 @@
           "body": "Setelah diaktifkan, pesan terbaru kontak dikirim ke penyedia AI melalui OpenRouter setelah obrolan menjadi sepi. Nomor telepon, email, nomor kartu, dan nama disamarkan sebagian terlebih dahulu, sehingga data yang dikirim tidak dapat digunakan untuk menghubungi orangnya. Anda dapat menonaktifkannya kapan saja.",
           "yes": "Aktifkan",
           "no": "Batal"
+        },
+        "stageMode": {
+          "title": "Cara tahap diubah",
+          "auto": {
+            "label": "Otomatis",
+            "body": "Kontak langsung dipindahkan dan obrolan menampilkan satu baris dengan Urungkan."
+          },
+          "manual": {
+            "label": "Manual",
+            "body": "Saran menunggu di Saran tahap sampai seseorang menerima atau menolaknya."
+          }
         }
       }
     },

@@ -12,7 +12,7 @@
       "retry": "Riprova",
       "loadMore": "Carica altri",
       "loadingMore": "Caricamento",
-      "requestId": "ID richiesta"
+      "loading": "Caricamento"
     },
     "tiers": {
       "owner": "Proprietario",
@@ -96,7 +96,11 @@
       "linkReset": "L’email non è configurata su questo server, quindi condividi direttamente questo link. Funziona una sola volta.",
       "linkInvite": "L’email non è configurata su questo server, quindi condividi direttamente questo link. Funziona una sola volta e scade dopo {days, plural, one {# giorno} other {# giorni}}.",
       "linkLabel": "Link monouso",
-      "linkEmail": "Email"
+      "linkEmail": "Email",
+      "onLeaveUntil": "In ferie fino al {date}",
+      "onLeaveOpen": "In ferie",
+      "leaveFrom": "Ferie dal {date}",
+      "leaveAction": "Ferie e delegato"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -215,7 +219,13 @@
       "teamNameTaken": "Esiste già un team con questo nome.",
       "teamMemberUnknown": "Una delle persone selezionate non è in questo workspace.",
       "orgSuspended": "Questo workspace è sospeso.",
-      "unexpected": "Qualcosa è andato storto. Riprova tra un momento."
+      "unexpected": "Qualcosa è andato storto. Riprova tra un momento.",
+      "leaveOverlap": "Questa persona ha già delle ferie che hanno almeno un giorno in comune con queste date.",
+      "leaveInvalid": "Queste date non sono utilizzabili. Il primo giorno non può essere nel passato e le ferie già iniziate mantengono il primo giorno.",
+      "delegateInvalid": "Il delegato deve essere un altro membro attivo di questo spazio di lavoro.",
+      "delegateCycle": "Si creerebbe un cerchio: la persona scelta ha già questa persona come delegato.",
+      "reassignInvalid": "Non è stato possibile riassegnare nulla. Verifica che la persona abbia contatti o trattative aperte e che il destinatario possa riceverli.",
+      "reassignNotRestorable": "Questa riassegnazione non può più essere annullata."
     },
     "accept": {
       "title": "Unisciti al tuo workspace",
@@ -235,6 +245,81 @@
       "submit": "Accetta invito",
       "submitting": "Accesso in corso",
       "invalidHeading": "Link di invito"
+    },
+    "leave": {
+      "eyebrow": "Ferie e delegato",
+      "calendarNote": "Le date sono giorni del calendario del tuo spazio di lavoro ({timezone}).",
+      "nowTitle": "In ferie ora",
+      "upcomingTitle": "In arrivo",
+      "notAway": "Al momento non è in ferie.",
+      "range": "Dal {from} al {to}",
+      "rangeOpen": "Dal {from}, senza data di fine",
+      "reasonShown": "Motivo (visibile solo ai responsabili): {reason}",
+      "endNow": "Termina le ferie ora",
+      "cancelLeave": "Annulla le ferie",
+      "endTitle": "Terminare queste ferie ora?",
+      "endMessage": "La persona torna oggi. L’assegnazione automatica ricomincerà a sceglierla.",
+      "cancelTitle": "Annullare queste ferie?",
+      "cancelMessage": "Non sono ancora iniziate. Verranno rimosse.",
+      "ended": "Ferie terminate.",
+      "added": "Ferie salvate.",
+      "readOnly": "Solo la persona stessa e i responsabili possono modificare le ferie.",
+      "addTitle": "Aggiungi ferie",
+      "firstDay": "Primo giorno",
+      "lastDay": "Ultimo giorno",
+      "openEnded": "Ancora nessuna data di fine (finché qualcuno non le termina)",
+      "reason": "Motivo (facoltativo)",
+      "reasonHint": "Lo vedono solo la persona e i suoi responsabili.",
+      "addSubmit": "Salva ferie",
+      "problems": {
+        "startRequired": "Scegli il primo giorno.",
+        "startPast": "Il primo giorno non può essere nel passato.",
+        "endRequired": "Scegli l’ultimo giorno oppure seleziona «Nessuna data di fine».",
+        "endBeforeStart": "L’ultimo giorno non può precedere il primo giorno."
+      },
+      "delegateTitle": "Delegato",
+      "delegateHelp": "Mentre questa persona è in ferie, le nuove chat e l’assegnazione automatica vanno al suo delegato se è disponibile, altrimenti al team.",
+      "noDelegate": "Nessun delegato",
+      "delegateSaved": "Delegato salvato.",
+      "delegateRemoved": "Delegato rimosso.",
+      "delegateAway": "Anche {name} è in ferie, quindi non può sostituirla al momento."
+    },
+    "reassign": {
+      "title": "Riassegna contatti e trattative",
+      "holds": "{name} ha {contacts, plural, one {# contatto} other {# contatti}} e {chats, plural, one {# chat aperta} other {# chat aperte}}.",
+      "target": "Assegnali a",
+      "kindUser": "Una persona",
+      "kindDelegate": "Il suo delegato",
+      "kindTeam": "Un team, round robin",
+      "person": "Persona",
+      "team": "Team",
+      "teamHint": "Distribuiti a turno tra i membri presenti e non in ferie.",
+      "choose": "Scegli",
+      "includeDeals": "Includi le trattative aperte",
+      "returnOn": "Riportali il {date}, quando la persona torna",
+      "returnUnavailable": "Riportali quando la persona torna (richiede ferie con un ultimo giorno)",
+      "returnHelp": "Tornano solo i contatti e le trattative che nessuno ha modificato da allora. Puoi anche annullare entro {days} giorni.",
+      "reason": "Nota (facoltativa)",
+      "submit": "Controlla e riassegna",
+      "confirmTitle": "Riassegnare ora?",
+      "confirmMessage": "{name} ha {contacts, plural, one {# contatto} other {# contatti}} e {deals, plural, one {# trattativa aperta} other {# trattative aperte}} che verranno spostati.",
+      "confirm": "Riassegna",
+      "done": "{contacts, plural, one {# contatto spostato} other {# contatti spostati}} e {deals, plural, one {# trattativa spostata} other {# trattative spostate}}.",
+      "history": "Riassegnazioni precedenti",
+      "historyEmpty": "Non è ancora stato riassegnato nulla.",
+      "status": {
+        "applied": "Spostati",
+        "restored": "Riportati",
+        "restore_blocked": "Non riportati"
+      },
+      "summary": "{contacts} contatti e {deals} trattative a {target}",
+      "returnsOn": "tornano il {date}",
+      "restoredSummary": "{restored} riportati, {skipped} lasciati dove sono",
+      "remaining": "Ancora {count} da spostare: eseguilo di nuovo",
+      "undo": "Annulla",
+      "undoTitle": "Annullare questa riassegnazione?",
+      "undoMessage": "I contatti e le trattative che nessuno ha modificato da allora tornano al proprietario precedente. Gli altri restano dove sono.",
+      "restored": "{count} riportati, {skipped} lasciati dove sono."
     }
   }
 }

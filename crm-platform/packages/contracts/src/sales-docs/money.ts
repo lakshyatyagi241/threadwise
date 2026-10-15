@@ -171,12 +171,15 @@ export function parseScaled(value: string, scale: number): bigint | null {
   return BigInt(m[1]! + (frac + '0'.repeat(scale)).slice(0, scale));
 }
 
-/** 125000n at scale 4 -> "12.5" (trailing zeros dropped). */
+/** 125000n at scale 4 -> "12.5" (trailing zeros dropped). A negative value keeps its sign in front: -5n at scale 4 -> "-0.0005". */
 export function formatScaled(n: bigint, scale: number): string {
-  const s = n.toString().padStart(scale + 1, '0');
+  const negative = n < 0n;
+  // Pad the magnitude, not the text with its minus sign: padding "-5" gave "0.00-5".
+  const s = (negative ? -n : n).toString().padStart(scale + 1, '0');
   const whole = s.slice(0, s.length - scale);
   const frac = s.slice(s.length - scale).replace(/0+$/, '');
-  return frac ? `${whole}.${frac}` : whole;
+  const text = frac ? `${whole}.${frac}` : whole;
+  return negative ? `-${text}` : text;
 }
 
 export const parseQty = (v: string): bigint | null => parseScaled(v, QTY_SCALE);

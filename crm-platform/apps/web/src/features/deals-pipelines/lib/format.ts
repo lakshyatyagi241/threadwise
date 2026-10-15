@@ -67,23 +67,37 @@ export function toDateInput(d: Date): string {
 }
 
 /** A date-only value shown in the viewer's language without a time-zone shift. */
-export function formatDay(value: string | null | undefined, locale: string): string {
+export function formatDay(
+  value: string | null | undefined,
+  locale: string,
+  timeZone?: string,
+): string {
   if (!value) return '';
-  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   const d = m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : new Date(value);
   if (Number.isNaN(d.getTime())) return '';
   return new Intl.DateTimeFormat(locale, {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
+    // A date-only value was built in local time above and must not shift; a full timestamp reads in the zone.
+    timeZone: m ? undefined : timeZone,
   }).format(d);
 }
 
-export function formatDateTime(value: string | null | undefined, locale: string): string {
+export function formatDateTime(
+  value: string | null | undefined,
+  locale: string,
+  timeZone?: string,
+): string {
   if (!value) return '';
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return '';
-  return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(d);
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone,
+  }).format(d);
 }
 
 /** `2026-05` -> "May" (and the year when it differs from `ref`'s). */

@@ -163,7 +163,11 @@ export class CallLogsRepository {
   /** One call by uuid, when the viewer may see it. */
   async byUuid(tx: Tx, v: Viewer, uuid: string) {
     const res = await tx.execute(sql`
-      SELECT w.id, w.recording_path, w.conversation_id, conv.uuid AS conversation_uuid, ${ROW_COLS}
+      SELECT w.id, w.recording_path, w.conversation_id, conv.uuid AS conversation_uuid, ${ROW_COLS},
+             w.recording_consent_status, w.recording_consent_method, w.recording_consent_at, w.recording_notice_version,
+             w.recording_notice_sha256, w.recording_stored_at, w.recording_legal_hold, w.recording_hold_reason,
+             w.recording_deleted_at, w.recording_deleted_reason,
+             coalesce((SELECT s.retention_days FROM call_recording_settings s WHERE s.org_id = w.org_id), 90) AS retention_days
       ${FROM}
       LEFT JOIN conversations conv ON conv.org_id = w.org_id AND conv.id = w.conversation_id
       WHERE ${and([sql`w.org_id = ${v.orgId}`, scopeClause(v), sql`w.uuid = ${uuid}::uuid`])}`);

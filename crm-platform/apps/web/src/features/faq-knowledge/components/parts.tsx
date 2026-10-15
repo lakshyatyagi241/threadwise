@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
-import { requestIdOf, type ErrorKey } from '../lib/errors';
+import type { ErrorKey } from '../lib/errors';
 import { ArrowLeftIcon } from './icons';
 
 /** The bordered surface of a toolbar or a table. */
@@ -188,25 +188,21 @@ export function RelativeTime({ iso }: { iso: string }) {
   );
 }
 
-/** A failed load with the reason, the request id for support and a retry. */
+/** A failed load with the reason and a retry. */
 export function LoadError({
   errorKey,
-  error,
   onRetry,
 }: {
   errorKey: ErrorKey;
+  /** Still passed by callers; the request id is no longer shown (#362). */
   error?: unknown;
   onRetry?: () => void;
 }) {
   const t = useTranslations('faq.common');
   const te = useTranslations('faq.errors');
-  const id = requestIdOf(error);
   return (
     <Alert tone="danger" className="flex flex-wrap items-center justify-between gap-3">
-      <span>
-        {te(errorKey)}
-        {id && <span className="ms-2 text-xs opacity-80">{t('requestId', { id })}</span>}
-      </span>
+      <span>{te(errorKey)}</span>
       {onRetry && (
         <Button size="sm" variant="secondary" onClick={onRetry}>
           {t('retry')}

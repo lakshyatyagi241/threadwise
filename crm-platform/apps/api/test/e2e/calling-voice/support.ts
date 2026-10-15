@@ -183,3 +183,40 @@ export const events = async (p: CallPipeline, callId: number) =>
       [callId],
     )
   ).rows.map((r) => String(r.event_type));
+
+// --- call recording consent (BL-144) -----------------------------------------------------------------------------------------
+
+export const RECORDING_NOTICE = 'This call may be recorded to check quality and to train our team.';
+
+/** Switches recording on for the workspace through the API (the first save, or a later one with the current version). */
+export async function enableRecording(
+  p: CallPipeline,
+  t: Tenant,
+  o: { mode?: 'announcement' | 'confirmed'; retentionDays?: number; notice?: string } = {},
+) {
+  const cur = await p.api.as(t.admin).get('/v2/calling/recording-settings');
+  const res = await p.api
+    .as(t.admin)
+    .put('/v2/calling/recording-settings')
+    .send({
+      enabled: true,
+      consentMode: o.mode ?? 'confirmed',
+      retentionDays: o.retentionDays ?? 90,
+      noticeText: o.notice ?? RECORDING_NOTICE,
+      ...(cur.body.rowVersion ? { rowVersion: cur.body.rowVersion } : {}),
+    });
+  if (res.status !== 200)
+    throw new Error(`enableRecording: ${res.status} ${JSON.stringify(res.body)}`);
+  return res.body as { noticeVersion: number; rowVersion: number };
+}
+
+/** Writes the consent evidence on a call the way the consent route does, for specs whose call is not live (arrangement only). */
+export async function grantConsentRow(p: CallPipeline, t: Tenant, callUuid: string) {
+  await p.h.owner.query(
+    `UPDATE wa_calls w SET recording_consent_status = 'granted', recording_consent_method = 'spoken_yes',
+            recording_consent_at = now(), recording_notice_version = s.notice_version,
+            recording_notice_sha256 = (SELECT sha256 FROM call_recording_notice_versions v WHERE v.org_id = s.org_id AND v.version = s.notice_version)
+       FROM call_recording_settings s WHERE s.org_id = w.org_id AND w.org_id = $1 AND w.uuid = $2::uuid`,
+    [t.orgId, callUuid],
+  );
+}

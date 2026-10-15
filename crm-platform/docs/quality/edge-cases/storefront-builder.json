@@ -1,0 +1,36 @@
+{
+  "module": "storefront-builder",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-storefront-builder-001",
+      "feature": "store cart",
+      "category": "input",
+      "scenario": "a value of 101 (one past STORE_CART_MAX_LINES = 100) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/storefront-builder/public.ts"
+    },
+    {
+      "id": "EC-storefront-builder-002",
+      "feature": "store cart",
+      "category": "input",
+      "scenario": "a value of 1000 (one past STORE_CART_MAX_QTY = 999) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/storefront-builder/public.ts"
+    },
+    {
+      "id": "EC-storefront-builder-003",
+      "feature": "store slug",
+      "category": "input",
+      "scenario": "a value of 65 (one past STORE_SLUG_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/storefront-builder/storefront.ts"
+    }
+  ]
+}

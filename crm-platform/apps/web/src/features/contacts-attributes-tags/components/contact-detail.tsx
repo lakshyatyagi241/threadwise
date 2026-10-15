@@ -13,6 +13,7 @@ import { LinkedAppointments } from '@/features/appointments';
 import { ContactAttributionCard } from '@/features/lead-sources';
 import { CompanyLink } from '@/features/companies';
 import { ConsentCard } from '@/features/contact-consent';
+import { ContactPrivacyMenu } from '@/features/privacy-requests';
 import { ContactGrowthCard } from '@/features/growth';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedSalesDocs } from '@/features/sales-docs';
@@ -28,7 +29,6 @@ import {
 } from '../api/contacts';
 import { useStatusOptions } from '../api/attributes';
 import { useContactFields, useFieldSections } from '../api/properties';
-import { useContactTags } from '../api/tags';
 import {
   displayName,
   EXTRA_KEYS,
@@ -40,13 +40,16 @@ import {
 import { errorKind } from '../lib/errors';
 import { detailGroups } from '../lib/property-model';
 import { stageChoices, statusChoices } from '../lib/option-sets';
-import { ContactAvatar, GroupChip, TagPill } from './chips';
+import { ContactAvatar, GroupChip } from './chips';
+import { ContactQuickTags } from './contact-quick-tags';
 import { StageMenu } from './stage-menu';
 import { ContactFormModal } from './contact-form-modal';
 import { ErrorLine } from './error-line';
+import { OwnerControl } from './owner-control';
 import { LostReasonDialog, type LostPrompt } from './lost-reason';
 import { isLostStage } from '../lib/stage-flow';
 import { statusAfterMove, statusNotice } from '../lib/status-scope';
+import { DeleteHistoryOption } from './delete-history-option';
 import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
 
 /**
@@ -61,12 +64,12 @@ export function ContactDetail({ id }: { id: string }) {
   const canUpdate = useCan('record.contacts.update');
   const canDelete = useCan('record.contacts.delete');
   const contact = useContact(id);
-  const tags = useContactTags(id);
   const registry = useContactFields();
   const sections = useFieldSections();
   const statusOptions = useStatusOptions();
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [keepHistory, setKeepHistory] = useState(false);
   const ts = useTranslations('contacts-attributes-tags.stageMenu');
   const tForm = useTranslations('contacts-attributes-tags.form');
   /** A status value as the workspace names it (its configured label, else the platform's). */
@@ -119,7 +122,7 @@ export function ContactDetail({ id }: { id: string }) {
   });
 
   const remove = useMutation({
-    mutationFn: () => deleteContact(id),
+    mutationFn: () => deleteContact(id, { eraseHistory: !keepHistory }),
     onSuccess: async () => {
       await invalidateContacts(qc);
       toast(t('deleted'), 'success');
@@ -239,13 +242,12 @@ export function ContactDetail({ id }: { id: string }) {
               )}
               {c.status && <Badge tone="success">{statusLabelOf(c.status)}</Badge>}
               {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
-              {(tags.data ?? []).map((tag) => (
-                <TagPill key={tag.id} name={tag.name} color={tag.color} />
-              ))}
+              <ContactQuickTags contactId={id} />
             </div>
           </div>
         </div>
         <div className="flex shrink-0 gap-2">
+          <ContactPrivacyMenu contactId={id} />
           {canUpdate && (
             <Button variant="secondary" onClick={() => setEditing(true)}>
               <PencilIcon /> {t('edit')}
@@ -315,6 +317,14 @@ export function ContactDetail({ id }: { id: string }) {
             {t('details')}
           </h2>
           <dl className="space-y-3 text-sm">
+            <Detail label={t('owner')}>
+              <OwnerControl
+                contactId={id}
+                ownerId={c.ownerId}
+                rowVersion={c.rowVersion}
+                canEdit={canUpdate}
+              />
+            </Detail>
             <Detail label={t('language')}>{text(EXTRA_KEYS.language)}</Detail>
             <Detail label={t('source')}>{c.source ?? text(EXTRA_KEYS.source)}</Detail>
             <Detail label={t('address')}>{text(EXTRA_KEYS.address)}</Detail>
@@ -371,10 +381,18 @@ export function ContactDetail({ id }: { id: string }) {
         tone="danger"
         busy={remove.isPending}
         title={t('deleteTitle')}
-        message={t('deleteMessage', { name })}
+        message={
+          <>
+            <p>{t('deleteMessage', { name })}</p>
+            <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
+          </>
+        }
         confirmLabel={t('delete')}
         cancelLabel={t('keep')}
-        onClose={() => setDeleting(false)}
+        onClose={() => {
+          setDeleting(false);
+          setKeepHistory(false);
+        }}
         onConfirm={() => remove.mutate()}
       />
     </section>

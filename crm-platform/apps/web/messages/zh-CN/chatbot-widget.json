@@ -276,7 +276,14 @@
           "iconOnly": "仅图标",
           "buttonColor": "按钮颜色",
           "pickCustom": "选择自定义颜色",
-          "custom": "自定义 {hex}"
+          "custom": "自定义 {hex}",
+          "animation": "按钮动画",
+          "animationHint": "在聊天窗口关闭时吸引访客注意按钮。",
+          "animations": {
+            "none": "关闭",
+            "bounce": "弹跳",
+            "ripple": "波纹"
+          }
         },
         "2": {
           "title": "设计您的聊天窗口",
@@ -289,7 +296,9 @@
             "person": "人物"
           },
           "url": "或使用您自己的图片地址",
-          "urlHint": "粘贴方形图片的地址 (https://...)。暂不支持上传文件。"
+          "urlHint": "粘贴方形图片的地址 (https://...)。暂不支持上传文件。",
+          "botName": "机器人名称",
+          "botNameHint": "显示在聊天窗口的标题栏中。留空则使用机器人的名称。"
         },
         "3": {
           "title": "设置欢迎消息",
@@ -297,7 +306,13 @@
           "greeting": "问候语",
           "greetingHint": "客户打开聊天窗口时向他们问好",
           "intro": "介绍消息",
-          "introHint": "介绍您的业务，并告诉客户您能提供哪些帮助"
+          "introHint": "介绍您的业务，并告诉客户您能提供哪些帮助",
+          "subHeader": "副标题文字",
+          "subHeaderHint": "名称下方的一行文字，例如你的回复速度。",
+          "cta": "按钮文字",
+          "ctaHint": "用于打开 WhatsApp 的按钮上的文字。",
+          "prefilled": "预填消息",
+          "prefilledHint": "点击按钮时发送的内容。默认是机器人的关键词，以便机器人启动。"
         },
         "4": {
           "title": "设置聊天按钮位置",
@@ -322,6 +337,19 @@
           "numberHint": "聊天窗口会将您的客户引导至此 WhatsApp 号码",
           "prefilled": "预填消息",
           "prefilledHint": "这将是默认的第一条消息文本"
+        },
+        "6": {
+          "title": "显示弹出消息",
+          "subtitle": "邀请访客聊天的小气泡",
+          "visibility": "弹出消息显示方式",
+          "visibilityHint": "在按钮旁显示弹出消息，直到访客将其关闭。",
+          "position": "弹出消息位置",
+          "side": "侧边",
+          "top": "顶部",
+          "text": "弹出消息文字",
+          "textHint": "简短的邀请语，例如：你好！需要帮忙吗？",
+          "image": "弹出消息图片（可选）",
+          "imageHint": "填写图片地址，或在下方上传图片。"
         }
       },
       "install": {
@@ -335,7 +363,11 @@
         "greeting": "请填写问候语。",
         "intro": "请填写介绍消息。",
         "spacing": "间距必须是 0 到 500 之间的整数像素值。",
-        "whatsapp": "请填写完整的 WhatsApp 号码：国家/地区区号加数字。"
+        "whatsapp": "请填写完整的 WhatsApp 号码：国家/地区区号加数字。",
+        "cta": "请填写按钮文字。",
+        "prefilled": "请填写点击按钮时发送的消息。",
+        "popupText": "请填写弹出消息文字，或关闭弹出消息。",
+        "popupImage": "请使用内置图片或 http(s) 图片地址。"
       },
       "preview": {
         "title": "实时预览",
@@ -344,7 +376,333 @@
         "frameTitle": "WhatsApp 小组件实时预览",
         "hint": "用圆形按钮收起面板，从启动器再次打开，并试试“开始对话”。",
         "businessName": "您的业务"
+      },
+      "upload": {
+        "choose": "上传图片",
+        "replace": "更换图片",
+        "remove": "移除",
+        "uploading": "正在上传…",
+        "hint": "SVG、PNG、JPG、WebP 或 GIF，最大 1 MB。",
+        "failed": "图片上传失败，请重试。",
+        "tooLarge": "图片超过 1 MB。"
       }
+    },
+    "flowBot": {
+      "customize": {
+        "loading": "正在加载小组件…",
+        "loadError": "无法加载小组件。请刷新后重试。",
+        "untouched": "您仍在使用默认外观。请检查外观并保存，以解锁“部署”和“发布”。",
+        "position": "聊天按钮的位置",
+        "right": "右下角",
+        "left": "左下角",
+        "save": "保存自定义设置",
+        "saved": "自定义设置已保存",
+        "saveFailed": "无法保存小组件。请重试。",
+        "launcher": {
+          "title": "关闭状态的启动按钮",
+          "hint": "访客打开聊天之前看到的内容：提示气泡、动画和未读红点。",
+          "calloutOn": "在启动按钮旁显示提示",
+          "style": "提示样式",
+          "styles": {
+            "bubble": "顶部气泡",
+            "pill": "侧边胶囊",
+            "avatar": "带头像的胶囊",
+            "media": "图片卡片",
+            "bar": "输入栏"
+          },
+          "text": "提示文字",
+          "image": "图片",
+          "animation": "启动按钮动画",
+          "animations": {
+            "none": "无",
+            "bounce": "弹跳",
+            "ripple": "涟漪"
+          },
+          "badge": "显示未读红点",
+          "popupTextRequired": "请添加提示文字，或关闭提示。",
+          "gaps": {
+            "title": "距屏幕边缘的距离 (px)",
+            "desktop": {
+              "side": "桌面：从侧面",
+              "bottom": "桌面：从底部"
+            },
+            "mobile": {
+              "side": "手机：从侧面",
+              "bottom": "手机：从底部"
+            }
+          }
+        },
+        "chat": {
+          "title": "聊天窗口",
+          "hint": "窗口的外观与行为。颜色请在上方设置。",
+          "fill": "回复按钮填充",
+          "fills": {
+            "outline": "轮廓",
+            "tinted": "淡色",
+            "solid": "实心"
+          },
+          "shape": "回复按钮形状",
+          "shapes": {
+            "pill": "胶囊",
+            "rounded": "圆角",
+            "soft": "小圆角",
+            "square": "方形"
+          },
+          "font": "字体",
+          "fonts": {
+            "system": "系统",
+            "serif": "衬线",
+            "rounded": "圆体",
+            "humanist": "人文",
+            "mono": "等宽"
+          },
+          "size": "窗口大小",
+          "sizes": {
+            "compact": "紧凑",
+            "standard": "标准",
+            "tall": "加高",
+            "wide": "加宽"
+          },
+          "suggestions": "对话下方的建议",
+          "suggestionsHint": "最多 4 条短句。访客开始输入后消失。",
+          "suggestionPlaceholder": "访客常问的问题",
+          "addSuggestion": "添加建议",
+          "removeSuggestion": "删除建议",
+          "actions": "每条机器人消息下的复制和点赞图标",
+          "expand": "展开按钮",
+          "voice": "语音对话（使用浏览器的语音工具）",
+          "header": "页眉背景",
+          "headers": {
+            "solid": "纯色",
+            "diagonal": "对角线",
+            "vivid": "鲜艳",
+            "dusk": "黄昏",
+            "soft": "柔和渐变"
+          },
+          "direction": "文本方向",
+          "directions": {
+            "auto": "跟随访客语言",
+            "ltr": "从左到右",
+            "rtl": "从右到左"
+          },
+          "icons": "每个回复按钮前的圆形图标",
+          "fontSize": "文字大小：{value}px",
+          "hoverBg": "回复按钮悬停颜色",
+          "hoverBgReset": "使用色调"
+        },
+        "preview": {
+          "title": "实时预览",
+          "loading": "正在加载预览…",
+          "error": "无法加载预览。请刷新后重试。",
+          "frame": "聊天窗口预览",
+          "hint": "这是带有您未保存设置的真实聊天窗口。对话和按钮仅为示例。",
+          "launcherFrame": "关闭启动器预览"
+        },
+        "groups": {
+          "look": "外观和品牌",
+          "voice": "语音和欢迎词",
+          "window": "聊天窗口",
+          "launcher": "启动器和标语",
+          "launch": "启动",
+          "chat": "对话工具",
+          "behave": "行为"
+        },
+        "surfaces": {
+          "chat": "聊天窗口",
+          "expanded": "展开",
+          "mobile": "手机",
+          "closed": "关闭启动器"
+        },
+        "brand": {
+          "title": "品牌图片和额外内容",
+          "logo": {
+            "label": "公司徽标",
+            "hint": "显示在聊天标题栏中。"
+          },
+          "avatar": {
+            "label": "聊天机器人头像",
+            "hint": "显示在机器人发送的每条消息旁边。"
+          },
+          "background": {
+            "label": "聊天背景",
+            "hint": "对话后面的图片。可选。"
+          },
+          "corner": "边框圆角",
+          "corners": {
+            "rounded": "圆形",
+            "soft": "柔和",
+            "square": "方形"
+          },
+          "autoOpen": "自动打开后（秒数）",
+          "autoOpenHint": "0 保持聊天关闭，直到访客打开为止。每次访问打开一次。",
+          "sound": "为新机器人消息播放柔和声音",
+          "soundVolume": "音量：{value}%",
+          "speak": "朗读机器人的话语（浏览器语音）",
+          "devices": {
+            "title": "显示组件的设备",
+            "desktop": "桌面端",
+            "tablet": "平板",
+            "mobile": "手机",
+            "hint": "手机宽度最大 768 px，平板最大 1024 px。"
+          },
+          "pictures": "图片 · SVG, PNG, GIF",
+          "botName": "机器人名称",
+          "primary": "主色",
+          "primaryCustom": "自定义颜色",
+          "fineTune": "精细调整每种颜色",
+          "pip": "访客切换标签页时提供悬浮聊天窗口",
+          "pipHint": "像视频通话一样,聊天窗口可以悬浮在其他标签页和应用之上(Chrome 和 Edge)。系统只会向访客请求一次通知权限,浏览器会决定何时可以打开窗口。",
+          "domains": {
+            "label": "仅在这些网站上显示聊天",
+            "hint": "其他任何网站的访客都不会看到聊天。请输入网站地址，例如 example.com。除非您单独添加，否则网站的子域名不包含在内。",
+            "placeholder": "example.com",
+            "add": "添加网站",
+            "remove": "移除网站"
+          }
+        },
+        "rail": {
+          "label": "自定义部分",
+          "look": "品牌",
+          "voice": "欢迎",
+          "window": "窗口",
+          "launcher": "启动器",
+          "launch": "启动",
+          "chat": "扩展",
+          "behave": "行为"
+        },
+        "leads": {
+          "look": "徽标、图片、颜色和标题外观。",
+          "voice": "名称、欢迎文本和发送按钮。",
+          "window": "大小、字体、回复按钮和帮助工具。",
+          "launcher": "访问者打开聊天之前看到的内容。",
+          "launch": "小工具打开的位置以及如何将其放在您的网站上。",
+          "chat": "通知卡片、快捷菜单、横幅和快捷回复。",
+          "behave": "聊天何时打开、语气如何以及谁能看到。"
+        },
+        "footer": "当您进行更改时，预览会实时显示。",
+        "conversation": {
+          "title": "对话工具",
+          "tabs": {
+            "notice": "通知区块",
+            "menu": "快捷菜单",
+            "banner": "横幅",
+            "replies": "快捷回复"
+          },
+          "enable": {
+            "notice": "显示通知铃铛",
+            "menu": "显示快捷菜单",
+            "banner": "显示横幅",
+            "replies": "显示快捷回复"
+          },
+          "icon": "铃铛样式",
+          "icons": {
+            "1": "铃铛",
+            "2": "票券",
+            "3": "盒子",
+            "4": "消息"
+          },
+          "view": "显示方式",
+          "views": {
+            "list": "列表",
+            "blocks": "区块"
+          },
+          "card": "卡片 {n}",
+          "entry": "菜单项 {n}",
+          "slide": "幻灯片 {n}",
+          "remove": "删除",
+          "max": "最多 {count} 个。",
+          "addCard": "添加卡片",
+          "addEntry": "添加菜单项",
+          "addSlide": "添加幻灯片",
+          "kinds": {
+            "image": "图片",
+            "video": "视频"
+          },
+          "fields": {
+            "title": "标题",
+            "description": "描述",
+            "buttonTitle": "按钮标题",
+            "buttonUrl": "按钮地址",
+            "urlHint": "网页、tel: 或 mailto: 地址。留空则不显示按钮。",
+            "footer": "页脚文字",
+            "menuTitle": "菜单标题",
+            "menuUrl": "打开（可选）",
+            "menuUrlHint": "留空则将标题作为消息发送，由机器人回复。",
+            "video": "视频链接",
+            "videoHint": "粘贴 YouTube 或 Vimeo 链接，或其嵌入代码。",
+            "videoOk": "已找到视频。",
+            "bannerUrl": "点击后的链接（可选）"
+          },
+          "action": "按钮动作",
+          "step": "机器人步骤",
+          "stepPlaceholder": "选择步骤",
+          "noSteps": "此机器人还没有步骤。请在“构建”选项卡中添加并保存。",
+          "replyStep": "点击时",
+          "replyAsMessage": "将该行作为消息发送",
+          "actions": {
+            "link": "添加链接",
+            "flow": "链接到流程"
+          }
+        },
+        "launchNote": "要粘贴到您网站的嵌入代码位于“部署”标签页。"
+      },
+      "deploy": {
+        "loading": "正在加载部署选项…",
+        "locked": "请先保存“自定义”标签页。小组件创建后，嵌入代码会显示在这里。",
+        "lockedWhatsapp": "请先保存“自定义”标签页。创建后，您的网站按钮和 WhatsApp 链接会显示在这里。",
+        "title": "部署",
+        "lead": "将聊天窗口添加到您的网站。机器人会在您发布后上线。",
+        "leadWhatsapp": "将 WhatsApp 按钮添加到您的网站，或在任何地方分享直达链接。机器人发布后，会通过其 WhatsApp 号码进行回复。",
+        "notPublished": "此机器人尚未发布，访客将无法获得回复。请在“构建”标签页中发布。",
+        "notPublishedWhatsapp": "此机器人尚未发布，不会在 WhatsApp 上回复。请在“构建”标签页中发布。",
+        "embedTitle": "添加到您的网站",
+        "embedBody": "将此代码粘贴到每个需要显示的页面的结束 body 标签之前。",
+        "copy": "复制代码",
+        "copied": "嵌入代码已复制",
+        "clipboardBlocked": "浏览器阻止了复制。请选中文本后手动复制。",
+        "preview": "预览",
+        "linkTitle": "WhatsApp 直达链接",
+        "linkBody": "打开与机器人号码的 WhatsApp 对话，并附带您设置的消息。可用于邮件、社交媒体简介、二维码和广告。",
+        "copyLink": "复制链接",
+        "linkCopied": "WhatsApp 链接已复制",
+        "openLink": "打开链接",
+        "qrTitle": "QR 码",
+        "qrBody": "可打印或显示在屏幕上。扫描后会打开与你的机器人的 WhatsApp 对话。",
+        "downloadQr": "下载 QR 码",
+        "statusLive": "已上线",
+        "statusDraft": "未发布",
+        "codeLabel": "HTML",
+        "localNote": "此代码指向本机上的地址（localhost），因此只能在本机打开的页面上运行。在线网站请改用已部署的地址。"
+      },
+      "whatsapp": {
+        "loading": "正在加载按钮…",
+        "loadError": "无法加载按钮。请刷新后重试。",
+        "untouched": "您的 WhatsApp 按钮尚未设置。它默认使用机器人的号码和关键词。请检查后保存，以解锁“部署”和“发布”。",
+        "saved": "WhatsApp 按钮已保存",
+        "saveFailed": "无法保存按钮。请重试。",
+        "fromBot": "该按钮会打开 {number} 的 WhatsApp，即此机器人使用的号码。如需更改号码，请在“构建”标签页中修改触发器。",
+        "noNumber": "此机器人还没有 WhatsApp 号码。请先在“构建”标签页的触发器中选择一个，再回来保存按钮。"
+      }
+    },
+    "webBots": {
+      "title": "网站聊天机器人",
+      "intro": "您为网站聊天创建的所有机器人及其运行的小组件。打开某一行可更改小组件外观或复制其嵌入代码。",
+      "create": "新建网站机器人",
+      "loading": "正在加载网站机器人…",
+      "loadError": "无法加载网站机器人。请刷新后重试。",
+      "emptyTitle": "暂无网站聊天机器人",
+      "emptyBody": "创建网站聊天机器人后，其小组件会显示在这里。",
+      "widgetLine": "小组件：{title}",
+      "noWidget": "暂无小组件。请先进行自定义以创建。",
+      "customize": "自定义",
+      "more": "显示 {shown} / {total} 个机器人。其余请在“流程”中打开。",
+      "state": {
+        "needs_customizing": "需要自定义",
+        "draft": "草稿",
+        "live": "已上线",
+        "paused": "已暂停"
+      },
+      "deploy": "部署"
     }
   }
 }

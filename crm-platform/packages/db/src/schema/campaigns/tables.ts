@@ -97,6 +97,10 @@ export const campWizardCsv = pgTable(
     validCount: integer('valid_count').notNull().default(0),
     duplicateCount: integer('duplicate_count').notNull().default(0),
     invalidCount: integer('invalid_count').notNull().default(0),
+    // BL-170: the uploader confirmed consent for the file, and the notice they stated (migration 20261205090200).
+    consentConfirmed: boolean('consent_confirmed').notNull().default(false),
+    consentNoticeText: text('consent_notice_text'),
+    consentNoticeVersion: text('consent_notice_version'),
     createdBy: idColumn('created_by'),
     expiresAt: timestamp('expires_at', { withTimezone: true }),
     createdAt: createdAt(),
@@ -116,6 +120,10 @@ export const campWizardCsv = pgTable(
       columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    check(
+      'ck_camp_wizard_csv_notice',
+      sql`char_length(coalesce(${t.consentNoticeText}, '')) <= 2000 and char_length(coalesce(${t.consentNoticeVersion}, '')) <= 64`,
+    ),
     index('idx_camp_wizard_csv_expiry')
       .on(t.expiresAt)
       .where(sql`expires_at IS NOT NULL`),
@@ -181,6 +189,8 @@ export const wpcampaigns = pgTable(
     flowIdB: idColumn('flow_id_b'),
     useAttributes: boolean('use_attributes').notNull().default(false),
     trackingEnabled: boolean('tracking_enabled').notNull().default(true),
+    /** Retry a transient failure under the platform's retry settings; false makes the first failure final. */
+    retryFailed: boolean('retry_failed').notNull().default(true),
     scheduleType: text('schedule_type').notNull().default('now'),
     sendDate: date('send_date'),
     sendTime: time('send_time'),
@@ -358,6 +368,12 @@ export const wpCampaignContacts = pgTable(
     index('idx_wp_campaign_contacts_contact_id').on(t.orgId, t.contactId),
     index('idx_wp_campaign_contacts_next_attempt_at').on(t.orgId, t.nextAttemptAt),
     index('idx_wp_campaign_contacts_tracking_id').on(t.orgId, t.trackingId),
+    // The Message History feed, newest send first (20261126090000).
+    index('idx_wp_campaign_contacts_org_at').on(
+      t.orgId,
+      sql`(COALESCE(${t.sentAt}, ${t.createdAt})) DESC`,
+      t.id.desc(),
+    ),
   ],
 );
 

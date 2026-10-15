@@ -5,8 +5,7 @@
       "loading": "Cargando",
       "retry": "Reintentar",
       "copied": "Copiado",
-      "copyFailed": "No se pudo copiar: selecciona el texto y cópialo a mano",
-      "requestId": "Referencia: {id}"
+      "copyFailed": "No se pudo copiar: selecciona el texto y cópialo a mano"
     },
     "states": {
       "noAccessTitle": "No tienes acceso a Leads sociales",

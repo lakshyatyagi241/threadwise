@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import {
   PERSONAL_WA_NOTICE_VERSION,
+  type HistoryImportMode,
   type PairingMethod,
   type PersonalDevice,
 } from '@crm/contracts';
@@ -35,6 +36,8 @@ import {
   type WizardDraft,
   type WizardStep,
 } from '../lib/wizard-model';
+import { DEFAULT_HISTORY_CHOICE } from '../lib/history-model';
+import { HistoryChoice } from './history-choice';
 import { CodePanel, ProgressStrip, QrPanel } from './pairing-panel';
 import {
   MethodChoice,
@@ -55,6 +58,8 @@ interface Props {
   existing?: PersonalDevice | null;
   noticeVersion: string | null;
   noticeAccepted: boolean;
+  /** The plan has the full-history feature; otherwise that choice is shown disabled with an upgrade hint. */
+  historyFullAllowed?: boolean;
   onClose: () => void;
 }
 
@@ -63,7 +68,13 @@ interface Props {
  * Mount it only while it is open: closing unmounts it, which stops the polling and drops the QR from memory. Closing asks first
  * when there is something to lose, and a link in progress is ended on the server.
  */
-export function ConnectWizard({ existing = null, noticeVersion, noticeAccepted, onClose }: Props) {
+export function ConnectWizard({
+  existing = null,
+  noticeVersion,
+  noticeAccepted,
+  historyFullAllowed = false,
+  onClose,
+}: Props) {
   const t = useTranslations(NS);
   const tw = useTranslations(`${NS}.wizard`);
   const locale = useLocale();
@@ -80,6 +91,8 @@ export function ConnectWizard({ existing = null, noticeVersion, noticeAccepted, 
     existing ? { id: existing.id, name: existing.name, phone: existing.phone } : null,
   );
   const [method, setMethod] = useState<PairingMethod>('qr');
+  // Chosen before the scan and sent with the start: WhatsApp sends history only right after a link. Never pre-selected.
+  const [importHistory, setImportHistory] = useState<HistoryImportMode>(DEFAULT_HISTORY_CHOICE);
   const [attempt, setAttempt] = useState<{
     method: PairingMethod;
     deadlineMs: number | null;
@@ -194,7 +207,7 @@ export function ConnectWizard({ existing = null, noticeVersion, noticeAccepted, 
     if (!device) return;
     setError(null);
     start.mutate(
-      { method, input: { relink: needRelink } },
+      { method, input: { relink: needRelink, importHistory } },
       {
         onSuccess: (answer) => {
           // Seed the poll with the answer so the QR or the code shows at once.
@@ -290,6 +303,11 @@ export function ConnectWizard({ existing = null, noticeVersion, noticeAccepted, 
                     onMethod={setMethod}
                     codeAllowed={canUsePairingCode(phoneRead)}
                   />
+                  <HistoryChoice
+                    value={importHistory}
+                    onChange={setImportHistory}
+                    fullAllowed={historyFullAllowed}
+                  />
                   {start.isPending && <Starting label={tw('link.starting')} />}
                   {error && <ErrorNotice error={error} />}
                 </>
@@ -331,6 +349,7 @@ export function ConnectWizard({ existing = null, noticeVersion, noticeAccepted, 
               phoneLabel={phoneLabel}
               warmerHref="/warmer"
               inboxHref="/inbox"
+              importHref={importHistory !== 'none' && device ? `/devices/${device.id}` : null}
             />
           )}
 

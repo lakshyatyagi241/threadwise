@@ -30,6 +30,8 @@ export interface ExportRow {
   source: string | null;
   isUnsubscribed: boolean;
   createdAt: Date;
+  /** The owner's login email, or null for an unassigned contact. */
+  ownerEmail: string | null;
   data: Record<string, unknown>;
 }
 
@@ -110,6 +112,47 @@ export class ContactBulkRepository {
     return Number((res.rows[0] as { changed: number }).changed);
   }
 
+  /**
+   * Hands every contact the filter matches to `owner` (null = nobody) in one statement, skipping the ones already
+   * there. The statement writes what a single edit writes, for exactly the contacts it changed: the audit row with the
+   * old and new owner, and a `contact.updated` event. `row_version` and `updated_at` move through the table trigger.
+   */
+  async setOwner(
+    tx: Tx,
+    orgId: number,
+    where: SQL,
+    owner: { id: number | null; uuid: string | null },
+    meta: ActorMeta,
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      WITH picked AS (
+        SELECT contacts.id, contacts.uuid, prev.uuid AS prev_owner
+        FROM contacts
+        LEFT JOIN users prev ON prev.org_id = contacts.org_id AND prev.id = contacts.owner_id
+        WHERE ${where} AND contacts.owner_id IS DISTINCT FROM ${owner.id}::bigint
+      ), upd AS (
+        UPDATE contacts SET owner_id = ${owner.id}::bigint, updated_by = ${meta.actorId}::bigint
+        FROM picked
+        WHERE contacts.org_id = ${orgId}::bigint AND contacts.id = picked.id
+        RETURNING contacts.id, picked.uuid, picked.prev_owner
+      ), au AS (
+        INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta, request_id)
+        SELECT ${orgId}::bigint, ${meta.actorId}::bigint, ${meta.actorType}, 'contacts', upd.id, 'update',
+               jsonb_build_object('ownerId', jsonb_build_object('old', upd.prev_owner, 'new', ${owner.uuid}::text)),
+               ${meta.requestId}
+        FROM upd
+      ), ev AS (
+        INSERT INTO event_outbox (org_id, aggregate_module, aggregate_id, event_type, payload)
+        SELECT ${orgId}::bigint, 'contacts', upd.id, 'contact.updated',
+               jsonb_build_object('uuid', upd.uuid, 'ownerId', ${owner.uuid}::text,
+                                  'previousOwnerId', upd.prev_owner, '_meta', ${metaJson(meta)}::jsonb)
+        FROM upd
+      )
+      SELECT count(*)::int AS n FROM upd
+    `);
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
   async addTag(
     tx: Tx,
     orgId: number,
@@ -161,6 +204,14 @@ export class ContactBulkRepository {
       SELECT (SELECT count(*) FROM del)::int AS changed
     `);
     return Number((res.rows[0] as { changed: number }).changed);
+  }
+
+  /** The ids the next `deleteBatch` call with the same arguments will delete (same order, same limit). */
+  async nextIds(tx: Tx, where: SQL, batch: number): Promise<number[]> {
+    const res = await tx.execute(
+      sql`SELECT contacts.id FROM contacts WHERE ${where} ORDER BY contacts.id LIMIT ${batch}`,
+    );
+    return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
   }
 
   /**
@@ -229,6 +280,9 @@ export class ContactBulkRepository {
         source: contacts.source,
         isUnsubscribed: contacts.isUnsubscribed,
         createdAt: contacts.createdAt,
+        ownerEmail: sql<
+          string | null
+        >`(SELECT u.email FROM users u WHERE u.org_id = ${contacts.orgId} AND u.id = ${contacts.ownerId})`,
         data: contacts.data,
       })
       .from(contacts)

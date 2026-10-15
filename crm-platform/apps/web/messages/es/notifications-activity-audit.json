@@ -159,6 +159,11 @@
         "title": "Tu número fue eliminado de {name}",
         "titleNoName": "Tu número fue eliminado de un grupo de WhatsApp",
         "body": "Alguien eliminó tu número personal de este grupo. El grupo se conserva aquí, de solo lectura."
+      },
+      "test": {
+        "title": "Notificación de prueba",
+        "titleNoName": "Notificación de prueba",
+        "bodyNoActor": "Si puedes leer esto, las notificaciones en vivo funcionan."
       }
     },
     "live": {
@@ -189,8 +194,11 @@
         "waba_group_suspended": "Grupo de WhatsApp suspendido",
         "waba_group_suspension_cleared": "Grupo de WhatsApp activo de nuevo",
         "device_group_join_request": "Solicitud para unirse a un grupo",
-        "device_group_removed": "Eliminado de un grupo de WhatsApp"
-      }
+        "device_group_removed": "Eliminado de un grupo de WhatsApp",
+        "test": "Notificación de prueba"
+      },
+      "generic": "Tienes una notificación nueva",
+      "paused": "Las actualizaciones en vivo están en pausa, así que las alertas nuevas pueden tardar hasta un minuto. Recarga la página para reconectar."
     },
     "prefs": {
       "title": "Preferencias de notificación",
@@ -212,7 +220,8 @@
         "broadcasts": "Difusiones y campañas",
         "team_chat": "Chat de equipo",
         "whatsapp_groups": "Grupos de WhatsApp",
-        "billing": "Facturación y suscripciones"
+        "billing": "Facturación y suscripciones",
+        "system": "Sistema"
       },
       "types": {
         "new_chat": {
@@ -354,6 +363,22 @@
         "device_group_removed": {
           "label": "Eliminado de un grupo de número personal",
           "hint": "Alguien eliminó uno de tus números personales de WhatsApp de un grupo. Puede ser señal de que el número fue denunciado."
+        },
+        "sla_breached": {
+          "label": "SLA incumplido",
+          "hint": "Una conversación que te pertenece no cumplió el objetivo de primera respuesta o de resolución."
+        },
+        "member_leave_started": {
+          "label": "Un miembro se fue de permiso",
+          "hint": "Un miembro de tu equipo se fue de permiso. Muestra lo que tiene y un enlace para reasignarlo."
+        },
+        "assignment_blocked_by_leave": {
+          "label": "Chat que nadie pudo tomar",
+          "hint": "El enrutamiento no encontró a nadie para un chat nuevo porque las personas elegidas están de permiso. Asígnalo a mano."
+        },
+        "test": {
+          "label": "Notificación de prueba",
+          "hint": "La prueba que envías desde Notificaciones del navegador, para comprobar que funcionan la campana, la ventana emergente y el título de la pestaña."
         }
       },
       "loading": "Cargando tus preferencias",
@@ -433,6 +458,11 @@
           "neverUsed": "aún sin notificaciones",
           "remove": "Quitar",
           "removeFor": "Quitar {device}"
+        },
+        "testInApp": {
+          "watch": "Deberías ver una ventana emergente y cambiar el número de la campana y el título de la pestaña.",
+          "notConnected": "Las actualizaciones en vivo no están conectadas en esta página, así que la ventana emergente no puede aparecer aquí. Recarga la página y vuelve a intentarlo.",
+          "off": "No se creó ninguna notificación en la campana: la campana está desactivada para «Notificación de prueba» en la tabla de abajo, o por el propietario de tu espacio de trabajo."
         }
       }
     },

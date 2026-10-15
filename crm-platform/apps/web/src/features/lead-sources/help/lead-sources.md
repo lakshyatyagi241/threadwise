@@ -38,3 +38,15 @@ The tile needs the **Lead sources** plan feature and permission to read lead sou
 - **A lead needs review.** The reason is shown, such as no email or phone, or an unreadable phone number. Fix the mapping or the default country code, then retry.
 - **Nothing arrives.** Check the source is not paused, the URL is current and, with a shared secret, that your tool sends it in the `X-Webhook-Secret` header.
 - **You lost the URL or token.** They cannot be shown again. Rotate the token to get a new URL.
+
+## Proof of consent with a lead
+
+A lead does not mean the person agreed to marketing, so a lead records no consent on its own. If your form tool or ad platform already holds the person's agreement, it can send it with the lead and it is recorded on the contact:
+
+- Put a `consent` object in the body: `given` (true or yes), and at least one of `text` (the wording the person saw), `version`, `form_id` or `ad_id`. You can also send `at` (when they agreed) and `channels` (`whatsapp`, `sms`, `email`).
+- Flat keys work too: `consent_given`, `consent_text`, `consent_version`, `consent_at`, `consent_form_id`, `consent_ad_id`, `consent_channels`.
+- Without `channels`, a phone number is recorded for WhatsApp and an email address for email. SMS is recorded only when you name it.
+- A `given` that is not a yes, or a yes with no wording, version, form or ad, records nothing.
+- **Send test lead** never records consent. A person who opted out is never turned back on.
+
+The Consent card of the contact shows the record with the source **Lead capture**.

@@ -40,6 +40,14 @@ export const publicBookingTypeSchema = z.object({
     .object({ currency: z.string().nullable(), total: z.string(), dueNow: z.string() })
     .nullable(),
   questions: z.array(publicQuestionSchema),
+  /**
+   * The optional consent line (BL-167): the wording and version of the tick box under the form, or null when the workspace has none.
+   * Booking never needs it; only a visitor who ticks it is recorded as agreeing.
+   */
+  consent: z
+    .object({ text: z.string(), version: z.number().int().min(1), url: z.string().nullable() })
+    .nullable()
+    .default(null),
 });
 export type PublicBookingType = z.infer<typeof publicBookingTypeSchema>;
 
@@ -60,6 +68,8 @@ export const publicBookInputSchema = z
     timezone: timeZoneSchema.nullish(),
     notes: z.string().trim().max(2000).nullish(),
     answers: answersInputSchema.optional(),
+    /** The visitor ticked the consent line, which was at this version. Ignored when the page has no such line or the version is unknown. */
+    consent: z.object({ given: z.boolean(), version: z.number().int().min(1) }).optional(),
   })
   .refine((v) => v.email || v.phone, {
     message: 'give an email or a phone number so we can reach you',

@@ -16,7 +16,8 @@
       "validation": "Sommige waarden zijn ongeldig. Controleer het formulier en probeer het opnieuw.",
       "unexpected": "Er is iets misgegaan. Probeer het opnieuw.",
       "exportInProgress": "Er wordt al een bewijsbestand voorbereid. Wacht tot het klaar is en probeer het dan opnieuw.",
-      "exportNotReady": "Dat bestand is niet klaar of verlopen. Bereid een nieuw bestand voor."
+      "exportNotReady": "Dat bestand is niet klaar of verlopen. Bereid een nieuw bestand voor.",
+      "noticeTargetMissing": "Die widget, boekingspagina of winkel bestaat niet meer."
     },
     "settings": {
       "title": "Toestemming en STOP-antwoorden",
@@ -109,15 +110,21 @@
         "email": "E-mail",
         "facebook": "Facebook",
         "instagram": "Instagram",
-        "webchat": "Webchat"
+        "webchat": "Webchat",
+        "voice": "Spraakoproep",
+        "rcs": "RCS"
       },
       "state": {
         "granted": "aangemeld",
-        "withdrawn": "afgemeld"
+        "withdrawn": "afgemeld",
+        "utilityGranted": "akkoord met serviceberichten",
+        "utilityWithdrawn": "serviceberichten gestopt"
       },
       "action": {
         "granted": "Aangemeld",
-        "withdrawn": "Afgemeld"
+        "withdrawn": "Afgemeld",
+        "utilityGranted": "Akkoord met contact over zijn of haar verzoek",
+        "utilityWithdrawn": "Servicenberichten gestopt"
       },
       "source": {
         "form": "Formulier",
@@ -128,7 +135,11 @@
         "flow": "Flow",
         "inbound_message": "Bericht",
         "contact_request": "Contactverzoek",
-        "legacy": "Vóór de toestemmingsgeschiedenis"
+        "legacy": "Vóór de toestemmingsgeschiedenis",
+        "widget": "Websitechat",
+        "booking": "Boekingspagina",
+        "commerce": "Winkelkassa",
+        "lead": "Leadregistratie"
       },
       "by": "door {name}",
       "evidence": {
@@ -142,7 +153,16 @@
         "fileName": "Bestand",
         "apiKeyId": "API-sleutel",
         "flowId": "Flow",
-        "reference": "Referentie"
+        "reference": "Referentie",
+        "noticeVersion": "Versie van de melding",
+        "noticeUrl": "Link naar de melding",
+        "widgetId": "Chatwidget",
+        "bookingTypeId": "Boekingspagina",
+        "integrationId": "Winkel",
+        "storeFlag": "Winkelinstelling",
+        "leadSourceId": "Leadbron",
+        "leadFormId": "Leadformulier",
+        "adId": "Advertentie"
       },
       "dialog": {
         "titleGranted": "Markeren als aangemeld",
@@ -175,7 +195,14 @@
       "hintColumn": "De kolom die is gekoppeld aan marketingtoestemming bepaalt wie wordt vastgelegd: alleen rijen met ja krijgen een toestemming, met de bestandsnaam als bewijs. Nee, een lege cel of een onbekend woord legt niets vast. Contacten die zich hebben afgemeld, blijven afgemeld.",
       "columnSummary": "{granted} rijen zeggen ja en worden vastgelegd. {notGranted} zeggen nee of zijn leeg en krijgen geen toestemmingsrecord.",
       "unrecognised": "{count, plural, one {# rij heeft} other {# rijen hebben}} een toestemmingswaarde die geen ja of nee is ({values}). {count, plural, one {Die wordt} other {Ze worden}} behandeld als niet verleend. Gebruik ja / nee, true / false of 1 / 0.",
-      "columnIgnored": "De toestemmingskolom doet niets totdat je het vakje hierboven aanvinkt."
+      "columnIgnored": "De toestemmingskolom doet niets totdat je het vakje hierboven aanvinkt.",
+      "noticeText": "Mededeling of rechtsgrond (optioneel)",
+      "noticeTextHint": "Waarmee deze contacten akkoord gingen en waar, bijvoorbeeld: aangemeld bij het afrekenen onder privacyverklaring v3. Wordt als bewijs bewaard bij elke vastgelegde toestemming.",
+      "noticeVersion": "Versie van de mededeling (optioneel)",
+      "smsSummary": "SMS-toestemmingskolom: {granted} rijen zeggen ja en worden vastgelegd als SMS-toestemming. {notGranted} zeggen nee of zijn leeg.",
+      "emailSummary": "E-mailtoestemmingskolom: {granted} rijen zeggen ja en worden vastgelegd als e-mailtoestemming (de rij heeft ook een e-mailadres nodig). {notGranted} zeggen nee of zijn leeg.",
+      "labelNumbers": "Ik heb toestemming om deze nummers te berichten",
+      "hintNumbers": "Aangevinkt wordt bij het starten van de verzending elk nummer in het bestand vastgelegd als akkoord met marketing, met de bestandsnaam als bewijs. Uitgevinkt wordt geen toestemming vastgelegd. Wie zich heeft afgemeld, blijft afgemeld."
     },
     "systemLine": {
       "withdrawn": "Contact heeft {keyword} geantwoord: afgemeld voor marketing",
@@ -200,6 +227,104 @@
         "failed": "Mislukt",
         "expired": "Verlopen"
       }
+    },
+    "unsubscribe": {
+      "title": "Afmelden voor marketing-e-mails",
+      "intro": "Bevestig dat u geen marketing-e-mails meer wilt van dit bedrijf. U blijft berichten over uw bestellingen en afspraken ontvangen.",
+      "confirm": "Afmelden",
+      "working": "Bezig met afmelden...",
+      "doneTitle": "U bent afgemeld",
+      "doneBody": "U ontvangt geen marketingberichten meer van dit bedrijf.",
+      "already": "U was al afgemeld.",
+      "invalidTitle": "Deze link is niet geldig",
+      "invalidBody": "De afmeldlink is onvolledig of gewijzigd. Gebruik de link in de laatste e-mail die u ontving.",
+      "error": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "purposes": {
+      "marketing_messaging": {
+        "label": "Marketing messages",
+        "description": "Promotions, offers and campaigns. Needs the contact not to have unsubscribed; a recorded opt-in when the workspace requires it."
+      },
+      "service_messaging": {
+        "label": "Service messages",
+        "description": "Replies, order and appointment notices and other messages the customer expects. Not blocked by a marketing unsubscribe."
+      },
+      "call_recording": {
+        "label": "Call recording",
+        "description": "Recording and transcribing a call. Needs the recording notice first."
+      },
+      "voice_ai_conversation": {
+        "label": "Voice AI conversation",
+        "description": "A call handled by an AI voice agent. The caller hears that it is automated first."
+      },
+      "ai_content_processing": {
+        "label": "AI processing of messages",
+        "description": "Sending message text to an AI provider to answer, translate or summarise."
+      },
+      "analytics_profiling": {
+        "label": "Analytics and profiling",
+        "description": "Scoring and analysing contact activity inside the workspace."
+      },
+      "third_party_sharing": {
+        "label": "Sharing with third parties",
+        "description": "Passing personal data to a service outside the platform. Needs a recorded consent."
+      },
+      "push_notifications": {
+        "label": "Push notifications",
+        "description": "Browser notifications to your own team members. The browser permission is the consent."
+      },
+      "cookies_analytics": {
+        "label": "Cookies and visitor analytics",
+        "description": "Identifiers for website chat visitors. Needs the visitor to accept first."
+      },
+      "staff_ai_assist": {
+        "label": "AI help for your team",
+        "description": "Draft replies and summaries for agents."
+      }
+    },
+    "gate": {
+      "reasons": {
+        "policy_off": "Allowed: the workspace does not require a recorded consent and the contact has not unsubscribed.",
+        "granted": "Allowed: a consent is recorded for this channel.",
+        "utility_exempt": "Allowed: a service message is not blocked by a marketing unsubscribe.",
+        "inbound_reply_window": "Allowed: a reply inside the customer-service window.",
+        "no_grant_required_by_policy": "Allowed: this purpose needs no recorded consent.",
+        "gate_unavailable_open": "Allowed: the consent check was unavailable and this is a service message.",
+        "withdrawn": "Not allowed: the contact unsubscribed.",
+        "no_consent_recorded": "Not allowed: the workspace requires a recorded consent and there is none.",
+        "channel_unmapped": "Not allowed: a consent cannot be recorded for this channel.",
+        "gate_unavailable_closed": "Not allowed: the consent check was unavailable, so marketing is held back.",
+        "purpose_not_applicable": "Not allowed: this purpose does not apply to this channel.",
+        "notice_delivered": "Toegestaan: de melding is eerst gegeven.",
+        "consent_evidence_recorded": "Toegestaan: de melding is gegeven en de persoon ging akkoord.",
+        "purpose_not_enabled": "Niet toegestaan: de werkruimte heeft dit niet aangezet.",
+        "consent_declined": "Niet toegestaan: de persoon weigerde.",
+        "notice_required": "A notice must be delivered first."
+      }
+    },
+    "notice": {
+      "title": {
+        "widget": "Toestemmingsregel in het chatformulier",
+        "booking": "Toestemmingsregel op de boekingspagina",
+        "commerce": "Wat het marketingvakje van de winkel betekent"
+      },
+      "intro": {
+        "widget": "Getoond als vakje onder de gegevens van de bezoeker. Alleen een bezoeker die het aanvinkt wordt als akkoord vastgelegd, en alleen met een telefoonnummer of e-mailadres.",
+        "booking": "Getoond als vakje in het boekingsformulier. Alleen wie het aanvinkt wordt als akkoord vastgelegd; boeken heeft het nooit nodig.",
+        "commerce": "Een klant die marketing accepteert in uw winkel wordt als akkoord vastgelegd. Schrijf wat dat vakje de klant vertelt, zodat het bewijs het noemt."
+      },
+      "enabled": "Toestemmingsregel aan",
+      "text": "Tekst waarmee de persoon akkoord gaat",
+      "textHint": "Maximaal {max} tekens. Elke wijziging wordt als nieuwe versie opgeslagen.",
+      "textRequired": "Schrijf de tekst voordat u de regel inschakelt.",
+      "url": "Link naar uw privacybeleid (optioneel)",
+      "urlHint": "Moet met https:// beginnen",
+      "save": "Toestemmingsregel opslaan",
+      "saved": "Toestemmingsregel opgeslagen (versie {version}).",
+      "version": "Huidige versie: {version}",
+      "noVersion": "Nog niet opgeslagen.",
+      "saveFirst": "Sla dit eerst op, daarna kunt u de toestemmingsregel instellen.",
+      "whatsappToo": "Ook als WhatsApp-toestemming laten gelden (alleen als de tekst dat zegt)"
     }
   }
 }

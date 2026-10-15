@@ -23,6 +23,16 @@ export const CALL_ERROR_CODES = {
   CALL_STATE_CONFLICT: 'CALL_STATE_CONFLICT',
   /** The recording could not be stored. */
   CALL_RECORDING_FAILED: 'CALL_RECORDING_FAILED',
+  /** Recording is switched off for the workspace (it is off until a workspace turns it on). */
+  CALL_RECORDING_DISABLED: 'CALL_RECORDING_DISABLED',
+  /** No recording without the person's recorded consent: the gate has not allowed it for this call. Nothing was stored. */
+  CALL_RECORDING_CONSENT_REQUIRED: 'CALL_RECORDING_CONSENT_REQUIRED',
+  /** The consent method does not fit the workspace's mode, or the call is over: nothing was recorded. */
+  CALL_RECORDING_CONSENT_INVALID: 'CALL_RECORDING_CONSENT_INVALID',
+  /** The recording is on a legal hold: it cannot be deleted until the hold is lifted. */
+  CALL_RECORDING_ON_HOLD: 'CALL_RECORDING_ON_HOLD',
+  /** The recording notice or the settings changed under you: reload and try again. */
+  CALL_RECORDING_SETTINGS_INVALID: 'CALL_RECORDING_SETTINGS_INVALID',
   /** The playback link is not one we issued, has run out, or its call has no recording any more: ask for a new one. */
   CALL_PLAYBACK_LINK_INVALID: 'CALL_PLAYBACK_LINK_INVALID',
   /** The range or time zone of a call log or analytics request does not make sense (backwards, too wide, an unknown zone). */

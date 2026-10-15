@@ -21,7 +21,6 @@
       "unavailable": "Ta część API nie jest jeszcze dostępna.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
-      "requestId": "Identyfikator żądania",
       "retry": "Spróbuj ponownie",
       "reservedKey": "Ten klucz jest zarezerwowany dla wbudowanego tokenu. Wybierz inny.",
       "attributeInUse": "Niektóre kontakty mają wartość dla tego atrybutu.",
@@ -125,7 +124,6 @@
       "columnsSelectAll": "Select All",
       "dragToReorder": "Drag to re-order columns",
       "removeColumn": "Remove {name}",
-      "columnsClose": "Close",
       "columnsSave": "Save",
       "colContactName": "Nazwa kontaktu",
       "colPhone": "Numer telefonu",
@@ -177,7 +175,41 @@
       "columns": "Kolumny",
       "addColumnField": "Dodaj pole niestandardowe jako kolumnę",
       "kanbanView": "Widok tablicy (według etapu)",
-      "colLeadScore": "Ocena leada"
+      "colLeadScore": "Ocena leada",
+      "colOwner": "Właściciel",
+      "unassigned": "Nieprzypisany",
+      "ownerFilter": "Filtruj według właściciela",
+      "selectOwner": "Właściciel",
+      "allOwners": "Wszyscy właściciele",
+      "myContacts": "Moje kontakty",
+      "ownersCount": "{count, plural, one {# właściciel} few {# właścicieli} many {# właścicieli} other {# właściciela}}",
+      "ownerMe": "{name} (ja)",
+      "ownerFormer": "Były członek",
+      "reassignView": "Przypisz ponownie kontakty użytkownika {name}...",
+      "smsNamed": "SMS {name}",
+      "noSms": "Brak numeru telefonu do SMS",
+      "pqlLabel": "Szukaj kontaktów zwykłym językiem",
+      "pqlAsk": "Zapytaj",
+      "pqlAsking": "Pytanie...",
+      "pqlIgnored": "Niezrozumiane: {parts}",
+      "pqlNothing": "Z tego wyszukiwania nie udało się utworzyć filtra.",
+      "pqlFailed": "Wyszukiwanie zwykłym językiem jest teraz niedostępne. Spróbuj ponownie.",
+      "filter": "Filtr",
+      "filterAi": "Filtruj z AI",
+      "filterAiHint": "Opisz, kogo szukasz",
+      "filterAdvanced": "Dodaj filtr zaawansowany",
+      "quickFilters": "Szybkie filtry",
+      "sortButton": "Sortuj",
+      "back": "Wstecz",
+      "pqlPromptPlaceholder": "Opisz potrzebne kontakty...",
+      "pqlTry": "Wypróbuj jeden z przykładów",
+      "pqlExample2": "Nieaktywne od 30 dni",
+      "pqlExample3": "Utworzone w ostatnich 7 dniach",
+      "clearFilter": "Wyczyść filtr",
+      "conditionsChip": "Warunki: {count}",
+      "pqlExampleTag": "Kontakty z tagiem {tag} nieaktywne od 30 dni",
+      "pqlExampleStage": "Kontakty na etapie {stage} utworzone w ostatnich 7 dniach",
+      "pqlExampleNoOwner": "Kontakty bez właściciela"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -222,7 +254,6 @@
       "exportStarted": "Twój eksport został pobrany.",
       "exportTooLarge": "Zbyt wiele kontaktów do jednorazowego wyeksportowania. Zawęź filtr i spróbuj ponownie.",
       "update": "Aktualizuj",
-      "updateNeedsRows": "Wybierz wiersze",
       "updated": "{count, plural, one {Zaktualizowano # kontakt.} few {Zaktualizowano # kontakty.} many {Zaktualizowano # kontaktów.} other {Zaktualizowano # kontaktu.}}"
     },
     "form": {
@@ -311,7 +342,13 @@
       "statusNoticeReset": "Status zresetowany do: {status}.",
       "statusNoticeSet": "Status ustawiony na {status}, domyślny dla tego etapu.",
       "statusNoticeCleared": "Status wyczyszczony: nie dotyczy tego etapu.",
-      "statusNoneForStage": "Dla tego etapu nie skonfigurowano żadnego statusu."
+      "statusNoneForStage": "Dla tego etapu nie skonfigurowano żadnego statusu.",
+      "owner": "Właściciel",
+      "ownerNone": "Nieprzypisany",
+      "ownerMe": "{name} (ja)",
+      "ownerFormer": "Były członek",
+      "ownerHelp": "Kto opiekuje się tym kontaktem. Możesz wybrać tylko osoby dozwolone przez Twój dostęp.",
+      "ownerOutOfScope": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby."
     },
     "tags": {
       "title": "Tagi",
@@ -327,7 +364,12 @@
       "addPlaceholder": "Dodaj lub wybierz tag...",
       "addLabel": "Nazwa tagu",
       "add": "Dodaj tag",
-      "failed": "Nie udało się zmienić tagu. Spróbuj ponownie."
+      "failed": "Nie udało się zmienić tagu. Spróbuj ponownie.",
+      "quickPlaceholder": "Szukaj lub utwórz tag",
+      "create": "Utwórz tag „{name}”",
+      "noMatch": "Brak pasujących tagów",
+      "quickHint": "Wybierz kilka tagów albo wpisz nazwę i naciśnij Enter, aby utworzyć nowy.",
+      "quickHintPick": "Wybierz kilka tagów z listy."
     },
     "groups": {
       "eyebrow": "Przestrzeń robocza · {workspace}",
@@ -414,7 +456,9 @@
         "memo": "Notatka",
         "status": "Status",
         "source": "Źródło",
-        "consent": "Zgoda marketingowa (tak / nie)"
+        "consent": "Zgoda marketingowa (tak / nie)",
+        "consentSms": "Zgoda na marketing SMS (tak / nie)",
+        "consentEmail": "Zgoda na marketing e-mail (tak / nie)"
       },
       "notInFile": "Brak w pliku",
       "columnN": "Kolumna {n}",
@@ -439,7 +483,7 @@
       "imported": "{count, plural, one {Zaimportowano # kontakt.} few {Zaimportowano # kontakty.} many {Zaimportowano # kontaktów.} other {Zaimportowano # kontaktu.}}",
       "importedUpdated": "{count, plural, one {Zaktualizowano # istniejący kontakt.} few {Zaktualizowano # istniejące kontakty.} many {Zaktualizowano # istniejących kontaktów.} other {Zaktualizowano # istniejącego kontaktu.}}",
       "importedInvalid": "{count, plural, one {Pominięto # nieprawidłowy wiersz.} few {Pominięto # nieprawidłowe wiersze.} many {Pominięto # nieprawidłowych wierszy.} other {Pominięto # nieprawidłowego wiersza.}}",
-      "downloadRejects": "Pobierz odrzucone wiersze",
+      "downloadRejects": "Pobierz błędy i pominięte wiersze",
       "fileTooLarge": "Ten plik jest większy niż {mb} MB.",
       "checking": "Sprawdzanie pliku...",
       "errorFile": "Nie można odczytać tego pliku jako pliku CSV z kontaktami. Sprawdź, czy ma wiersz nagłówka i co najmniej jeden kontakt.",
@@ -470,7 +514,8 @@
         "group_name_too_long": "nazwa grupy jest za długa",
         "tag_name_too_long": "nazwa tagu jest za długa",
         "plan_limit_reached": "osiągnięto limit kontaktów w planie",
-        "tag_limit_reached": "osiągnięto limit tagów w planie"
+        "tag_limit_reached": "osiągnięto limit tagów w planie",
+        "duplicate_in_file": "powtórzony numer, scalony z wcześniejszym wierszem"
       },
       "statusHint": "Stosowane do kontaktów tworzonych przez ten plik.",
       "queued": "Oczekiwanie na start...",
@@ -520,7 +565,17 @@
       "noActivity": "Brak aktywności dla tego kontaktu.",
       "loadMore": "Wczytaj więcej",
       "yes": "Tak",
-      "no": "Nie"
+      "no": "Nie",
+      "owner": "Właściciel",
+      "ownerNone": "Nieprzypisany",
+      "ownerChange": "Zmień właściciela",
+      "ownerChanged": "Właściciel ustawiony na: {name}.",
+      "ownerCleared": "Usunięto właściciela.",
+      "ownerConflict": "Ktoś inny najpierw zmienił ten kontakt. Został wczytany ponownie, spróbuj jeszcze raz.",
+      "ownerForbidden": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby.",
+      "ownerFailed": "Nie udało się zmienić właściciela. Spróbuj ponownie.",
+      "ownerMe": "{name} (ja)",
+      "ownerFormer": "Były członek"
     },
     "attributes": {
       "eyebrow": "Więcej / Atrybuty",
@@ -1145,7 +1200,11 @@
         "willClear": "Zostanie opróżniona dla {count, plural, one {zaznaczonego kontaktu} few {wszystkich # zaznaczonych kontaktów} many {wszystkich # zaznaczonych kontaktów} other {wszystkich # zaznaczonych kontaktów}}.",
         "requiredNoClear": "Wymaganej właściwości nie można wyczyścić.",
         "problemEmpty": "Wpisz wartość lub wybierz Wyczyść."
-      }
+      },
+      "titleAll": "Zaktualizuj wszystkie pasujące kontakty",
+      "hintAll": "Ustaw te same wartości dla każdego kontaktu pasującego do bieżących filtrów. Pola ustawione na Zachowaj nie zostaną zmienione.",
+      "applyAll": "Zaktualizuj wszystkie pasujące kontakty",
+      "ownerOnlyNote": "W przypadku wszystkich pasujących kontaktów można tu zmienić tylko właściciela. Aby zmienić etap, status lub właściwości, zaznacz wiersze."
     },
     "kanban": {
       "board": "Kontakty według etapu",
@@ -1172,13 +1231,14 @@
         "updated": "Zaktualizowano",
         "rejected": "Odrzucono",
         "actions": "Akcje",
-        "downloadRejects": "Pobierz odrzucone",
+        "downloadRejects": "Pobierz błędy i pominięte wiersze",
         "statuses": {
           "queued": "W kolejce",
           "running": "W toku",
           "completed": "Ukończono",
           "failed": "Niepowodzenie"
-        }
+        },
+        "by": "Zaimportował"
       },
       "exports": {
         "title": "Eksporty",
@@ -1197,6 +1257,170 @@
         "keptUntil": "Przechowywany do {date}",
         "downloadFailed": "Nie udało się pobrać pliku. Mógł wygasnąć."
       }
+    },
+    "singleSend": {
+      "close": "Zamknij",
+      "cancel": "Anuluj",
+      "send": "Wyślij",
+      "sending": "Wysyłanie",
+      "contact": "Kontakt",
+      "name": "Imię i nazwisko",
+      "phone": "Telefon komórkowy",
+      "email": "E-mail",
+      "title": {
+        "whatsapp": "Wyślij wiadomość WhatsApp",
+        "sms": "Wyślij SMS",
+        "email": "Wyślij e-mail",
+        "call": "Zadzwoń"
+      },
+      "optedOut": "Ten kontakt zrezygnował z komunikacji. Nie można wysyłać wiadomości.",
+      "noPhone": "Ten kontakt nie ma numeru telefonu.",
+      "noEmail": "Ten kontakt nie ma adresu e-mail.",
+      "number": "Wyślij z",
+      "numberHint": "Numer WhatsApp, z którego zostanie wysłana wiadomość.",
+      "noChannel": "Nie podłączono żadnego numeru WhatsApp. Najpierw podłącz go w Kanałach.",
+      "template": "Szablon WhatsApp",
+      "templatePlaceholder": "Wybierz szablon",
+      "noTemplates": "Brak zatwierdzonych szablonów dla tego numeru.",
+      "notSendable": "Tego szablonu nie można tutaj wypełnić ({reason}).",
+      "variables": "Zmienne szablonu",
+      "preview": "Podgląd",
+      "slot": "Zmienna {key}",
+      "loading": "Ładowanie",
+      "openFailed": "Nie udało się otworzyć rozmowy: {message}",
+      "sent": "Wiadomość dla {name} została dodana do kolejki.",
+      "failed": "Nie udało się wysłać: {message}",
+      "callIntro": "Wykonaj połączenie WhatsApp z tym kontaktem z przeglądarki.",
+      "callOff": "Połączenia nie są włączone dla tego numeru WhatsApp. Włącz je w ustawieniach numeru.",
+      "callPermission": "Kontakt nie zezwolił jeszcze na połączenia. Przed połączeniem zostanie poproszony o zgodę.",
+      "callReady": "Gotowe do połączenia z {phone}.",
+      "later": {
+        "sms": "Wysyłanie SMS z CRM nie jest jeszcze dostępne.",
+        "email": "Wysyłanie e-maili z CRM nie jest jeszcze dostępne."
+      },
+      "openApp": {
+        "sms": "Otwórz w aplikacji do wiadomości",
+        "email": "Otwórz w aplikacji pocztowej"
+      }
+    },
+    "views": {
+      "label": "Widoki",
+      "all": "Wszystkie kontakty",
+      "add": "Dodaj widok",
+      "changed": "Filtry zmieniły się od zapisania tego widoku",
+      "more": "Więcej dla {name}",
+      "picker": {
+        "title": "Wybierz widok",
+        "create": "Utwórz nowy widok",
+        "search": "Szukaj widoków...",
+        "empty": "Nie znaleziono widoków",
+        "pinned": "Na kartach",
+        "favorites": "Ulubione",
+        "defaultFilters": "Filtry domyślne",
+        "createdViews": "Utworzone widoki",
+        "addView": "Dodaj widok",
+        "markFavorite": "Oznacz jako ulubiony",
+        "unmarkFavorite": "Usuń z ulubionych"
+      },
+      "menu": {
+        "rename": "Zmień nazwę widoku",
+        "update": "Zapisz bieżące filtry",
+        "unpin": "Usuń z kart",
+        "pin": "Pokaż jako kartę",
+        "delete": "Usuń widok",
+        "edit": "Edytuj widok"
+      },
+      "drawer": {
+        "editTitle": "Zmień nazwę widoku",
+        "name": "Nazwa widoku",
+        "namePlaceholder": "Widok bez nazwy",
+        "shareWith": "Udostępnij",
+        "justMe": "Tylko ja",
+        "everyone": "Wszyscy",
+        "save": "Zaktualizuj",
+        "cancel": "Anuluj",
+        "close": "Zamknij"
+      },
+      "toast": {
+        "created": "Utworzono widok \"{name}\".",
+        "updated": "Widok zaktualizowano.",
+        "filtersSaved": "Filtry zapisano w widoku \"{name}\".",
+        "deleted": "Usunięto widok \"{name}\".",
+        "failed": "Nie udało się zapisać widoku: {message}",
+        "conflict": "Ktoś inny zmienił ten widok. Odśwież stronę i spróbuj ponownie."
+      },
+      "delete": {
+        "title": "Usunąć ten widok?",
+        "message": "Widok \"{name}\" zostanie usunięty dla wszystkich, którym jest udostępniony. Kontakty nie zostaną zmienione.",
+        "confirm": "Usuń widok",
+        "cancel": "Zachowaj widok"
+      },
+      "editor": {
+        "title": {
+          "create": "Utwórz nowy widok",
+          "edit": "Edytuj widok"
+        },
+        "close": "Zamknij",
+        "back": "Wróć do kontaktów",
+        "name": "Nazwa widoku",
+        "namePlaceholder": "Wpisz nazwę widoku",
+        "favorite": "Oznacz jako ulubiony",
+        "favoriteHint": "Ulubiony widok ma własną kartę.",
+        "shareWith": "Udostępnij",
+        "justMe": "Tylko ja",
+        "everyone": "Wszyscy",
+        "filterTitle": "Filtruj kontakty",
+        "filterHint": "Dopasuj wszystkie lub dowolne warunki i dodawaj grupy, aby tworzyć bardziej złożone filtry.",
+        "columnsTitle": "Preferencje kolumn",
+        "locked": "Zawsze widoczne",
+        "cancel": "Anuluj",
+        "create": "Utwórz widok",
+        "save": "Zapisz widok",
+        "saving": "Zapisywanie",
+        "needName": "Wpisz nazwę widoku.",
+        "needFilter": "Dodaj co najmniej jeden kompletny warunek.",
+        "notFound": "Nie znaleziono tego widoku lub został usunięty.",
+        "noPermission": "Nie masz uprawnień do wykonania tej czynności.",
+        "loading": "Ładowanie",
+        "columnsHint": "Wyszukaj i zaznacz kolumny wyświetlane w tym widoku, a następnie przeciągnij wybrane, aby ustawić ich kolejność.",
+        "drag": "Przeciągnij, aby zmienić kolejność: {name}",
+        "selectedUsers": "Wybrani użytkownicy",
+        "accessLevel": "Poziom dostępu",
+        "canView": "Może wyświetlać",
+        "canEdit": "Może wyświetlać i edytować",
+        "peoplePlaceholder": "Szukaj osób",
+        "noPeople": "Nie znaleziono osób",
+        "removePerson": "Usuń: {name}",
+        "clearPeople": "Wyczyść wszystkie osoby",
+        "needPeople": "Wybierz co najmniej jedną osobę.",
+        "onlyCreator": "Tylko osoba, która utworzyła ten widok, może zmienić jego udostępnianie.",
+        "searchColumns": "Szukaj kolumn",
+        "noColumnMatch": "Brak pasujących kolumn.",
+        "available": "Dostępne kolumny",
+        "selected": "Wybrane kolumny",
+        "selectAll": "Zaznacz wszystko",
+        "reorder": "Przeciągnij, aby zmienić kolejność kolumn",
+        "remove": "Usuń: {name}"
+      },
+      "presets": {
+        "myContacts": "Moje kontakty",
+        "newThisWeek": "Nowe w tym tygodniu",
+        "newLastWeek": "Nowe w zeszłym tygodniu",
+        "recentlyCreated": "Ostatnio utworzone",
+        "recentlyModified": "Ostatnio zmienione",
+        "recentlyImported": "Ostatnio zaimportowane",
+        "neverContacted": "Nigdy nie kontaktowano",
+        "needsFollowUp": "Wymagają kontaktu",
+        "active": "Aktywne",
+        "inactive": "Nieaktywne",
+        "unsubscribed": "Wypisane"
+      }
+    },
+    "erase": {
+      "scope": "Usunięcie kontaktu usuwa też jego rozmowy, wiadomości, multimedia, pliki, nagrania połączeń i logi połączeń. Leady, transakcje, zadania i faktury pozostają.",
+      "scopeMany": "Usunięcie kontaktów usuwa też ich rozmowy, wiadomości, multimedia, pliki, nagrania połączeń i logi połączeń. Leady, transakcje, zadania i faktury pozostają.",
+      "keepHistory": "Zachowaj historię rozmów bez tożsamości osoby",
+      "keepHistoryHint": "Rozmowy pozostają w Twoich zapisach, ale nie wskazują już na osobę."
     }
   }
 }

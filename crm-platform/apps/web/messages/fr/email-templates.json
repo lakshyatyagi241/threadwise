@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Modèles d'e-mail"
+    },
+    "common": {
+      "dismiss": "Fermer"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Modèles d'e-mail",
+      "subtitle": "Des e-mails réutilisables avec un objet, du texte mis en forme et des variables. Insérez-en un dans une réponse depuis l'éditeur d'e-mail.",
+      "newTemplate": "Nouveau modèle",
+      "loading": "Chargement des modèles…",
+      "emptyTitle": "Aucun modèle d'e-mail pour le moment",
+      "empty": "Rédigez un e-mail une seule fois, avec des variables comme le prénom du contact, et réutilisez-le dans toute conversation par e-mail.",
+      "emptyFilteredTitle": "Aucun modèle ne correspond",
+      "emptyFiltered": "Essayez une autre recherche ou effacez les filtres.",
+      "clearFilters": "Effacer les filtres",
+      "unavailableTitle": "Les modèles d'e-mail ne sont pas disponibles",
+      "unavailable": "Cet espace de travail ne parvient pas à joindre le service des modèles d'e-mail pour le moment.",
+      "showing": "{count, plural, one {# modèle affiché} other {# modèles affichés}}",
+      "loadMore": "Charger plus",
+      "loadingMore": "Chargement…",
+      "noPermission": "Vous pouvez utiliser les modèles partagés de votre espace de travail et conserver les vôtres. Pour modifier les modèles partagés, demandez à un administrateur."
+    },
+    "toolbar": {
+      "search": "Rechercher des modèles",
+      "searchPlaceholder": "Rechercher par nom, objet ou catégorie",
+      "scope": "De qui",
+      "scopes": {
+        "all": "Tous",
+        "shared": "Partagés",
+        "mine": "Les miens"
+      },
+      "purpose": "Type",
+      "anyPurpose": "Tous les types",
+      "purposes": {
+        "general": "Général",
+        "marketing": "Marketing"
+      },
+      "status": "Statut",
+      "statuses": {
+        "active": "Actifs",
+        "archived": "Archivés",
+        "all": "Tous"
+      },
+      "category": "Catégorie",
+      "anyCategory": "Toutes les catégories",
+      "refresh": "Actualiser"
+    },
+    "card": {
+      "subject": "Objet",
+      "noSubject": "Sans objet : la réponse garde le sien",
+      "badges": {
+        "shared": "Partagé",
+        "mine": "Le mien",
+        "marketing": "Marketing",
+        "archived": "Archivé"
+      },
+      "used": "{count, plural, =0 {Jamais utilisé} one {Utilisé une fois} other {Utilisé # fois}}",
+      "lastUsed": "Dernière utilisation : {date}",
+      "by": "Par {name}",
+      "variables": "Variables : {list}",
+      "edit": "Modifier",
+      "archive": "Archiver",
+      "restore": "Restaurer",
+      "delete": "Supprimer",
+      "preview": "Afficher l'aperçu",
+      "hidePreview": "Masquer l'aperçu"
+    },
+    "delete": {
+      "title": "Supprimer ce modèle ?",
+      "message": "« {name} » sera supprimé pour toutes les personnes qui peuvent l'utiliser. Les e-mails déjà envoyés avec ce modèle ne sont pas concernés.",
+      "confirm": "Supprimer",
+      "cancel": "Annuler"
+    },
+    "editor": {
+      "eyebrow": "Modèle d'e-mail",
+      "newTitle": "Nouveau modèle d'e-mail",
+      "editTitle": "Modifier le modèle d'e-mail",
+      "close": "Fermer",
+      "name": "Nom",
+      "namePlaceholder": "Bienvenue après l'inscription",
+      "subject": "Objet",
+      "subjectPlaceholder": "Bienvenue chez {workspace}, {name}",
+      "subjectHint": "Facultatif. Si vous le laissez vide, une réponse garde son propre objet.",
+      "body": "Message",
+      "bodyPlaceholder": "Rédigez l'e-mail. Utilisez les variables ci-dessous pour le personnaliser.",
+      "category": "Catégorie",
+      "categoryPlaceholder": "Intégration",
+      "categoryList": "Catégories utilisées",
+      "purpose": "Type",
+      "purposes": {
+        "general": {
+          "label": "Général",
+          "hint": "Réponses et e-mails individuels. Envoyé comme n'importe quelle réponse."
+        },
+        "marketing": {
+          "label": "Marketing",
+          "hint": "E-mail promotionnel. Nécessite le consentement marketing du contact lorsque votre espace de travail l'exige, et comporte toujours un lien de désabonnement."
+        }
+      },
+      "scope": "Qui peut l'utiliser",
+      "scopes": {
+        "shared": {
+          "label": "Tout l'espace de travail",
+          "hint": "Un modèle partagé. Seules les personnes qui gèrent les modèles peuvent le modifier."
+        },
+        "mine": {
+          "label": "Moi uniquement",
+          "hint": "Un modèle personnel. Personne d'autre ne le voit."
+        }
+      },
+      "variables": "Insérer une variable",
+      "variablesHint": "Les variables sont remplies à partir du contact, de vous et de l'espace de travail lorsque le modèle est utilisé. Une variable sans valeur reste telle quelle pour que vous puissiez la corriger.",
+      "variableGroups": {
+        "contact": "Contact",
+        "agent": "Vous",
+        "workspace": "Espace de travail"
+      },
+      "insertingIn": "Insertion dans : {field}",
+      "fields": {
+        "subject": "objet",
+        "body": "message"
+      },
+      "save": "Enregistrer les modifications",
+      "create": "Créer le modèle",
+      "cancel": "Annuler",
+      "problems": {
+        "required": "Ce champ est obligatoire.",
+        "tooLong": "Trop long ({limit} caractères au maximum).",
+        "subjectLines": "L'objet doit tenir sur une seule ligne."
+      }
+    },
+    "preview": {
+      "title": "Aperçu avec des données d'exemple",
+      "subjectLabel": "Objet",
+      "noSubject": "(sans objet)",
+      "empty": "Rédigez le message pour voir un aperçu.",
+      "loading": "Mise à jour de l'aperçu…",
+      "failed": "L'aperçu n'a pas pu être mis à jour.",
+      "issues": "{count, plural, one {Cette variable n'a pas de valeur d'exemple et reste telle quelle : {list}} other {Ces variables n'ont pas de valeur d'exemple et restent telles quelles : {list}}}",
+      "sampleNote": "Valeurs d'exemple uniquement. Les vraies valeurs proviennent du contact lorsque vous utilisez le modèle."
+    },
+    "picker": {
+      "button": "Modèles",
+      "title": "Modèles d'e-mail",
+      "search": "Rechercher des modèles",
+      "searchPlaceholder": "Rechercher des modèles",
+      "loading": "Chargement des modèles…",
+      "empty": "Aucun modèle pour le moment. Créez-en dans « Modèles d'e-mail », dans le menu CRM.",
+      "emptyFiltered": "Aucun modèle ne correspond à votre recherche.",
+      "loadError": "Les modèles n'ont pas pu être chargés.",
+      "marketing": "Marketing",
+      "mine": "Le mien",
+      "replaceTitle": "Remplacer ce que vous avez écrit ?",
+      "replaceMessage": "Utiliser « {name} » remplace le message dans le champ, ainsi que l'objet si le modèle en a un.",
+      "replaceConfirm": "Remplacer",
+      "replaceCancel": "Annuler",
+      "used": "Modèle utilisé : « {name} »",
+      "marketingNote": "Ceci est un e-mail marketing : il est soumis à vos règles de consentement et comporte un lien de désabonnement.",
+      "forget": "Ne plus utiliser ce modèle",
+      "more": "Charger plus"
+    },
+    "toast": {
+      "created": "Modèle créé",
+      "updated": "Modèle enregistré",
+      "archived": "Modèle archivé",
+      "restored": "Modèle restauré",
+      "deleted": "Modèle supprimé"
+    },
+    "errors": {
+      "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n'avez pas l'autorisation d'effectuer cette action.",
+      "signedOut": "Votre session a expiré. Reconnectez-vous pour continuer.",
+      "conflict": "Quelqu'un d'autre a modifié ce modèle. Sa version est chargée ; vérifiez-la et réessayez.",
+      "validation": "Certaines informations saisies ne sont pas valides. Vérifiez les champs et réessayez.",
+      "unavailable": "Les modèles d'e-mail ne sont pas disponibles pour le moment.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "notFound": "Ce modèle n'existe plus.",
+      "planDisabled": "Votre offre n'inclut pas l'e-mail. Passez à une offre supérieure pour utiliser les modèles d'e-mail.",
+      "nameTaken": "Vous avez déjà un modèle portant ce nom. Choisissez un autre nom.",
+      "notEditable": "Seules les personnes qui gèrent les modèles d'e-mail peuvent modifier un modèle partagé.",
+      "archived": "Ce modèle est archivé. Restaurez-le pour l'utiliser.",
+      "unexpected": "Une erreur s'est produite. Réessayez.",
+      "retry": "Réessayer"
+    }
+  }
+}

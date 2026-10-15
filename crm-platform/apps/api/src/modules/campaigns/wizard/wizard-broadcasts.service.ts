@@ -9,12 +9,15 @@ import {
   type WizardBroadcast,
   type WizardBroadcastDetail,
   type WizardBroadcastList,
+  type WizardDeleteResponse,
   type WizardControlResponse,
   type WizardDraft,
+  type WizardRetryFailedResponse,
   type WizardRetrySummary,
   type WizardRun,
   type CampaignStatus,
 } from '@crm/contracts';
+import type { Readable } from 'node:stream';
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
@@ -23,6 +26,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PacingRuntime, WALLET_GATE, type WalletGate } from '../../broadcasts';
 import { CampaignEvents } from '../campaign-events';
+import { CampaignsActionsService } from '../campaigns-actions.service';
 import { CampaignJobs } from '../campaign-jobs';
 import { CampaignsRepository } from '../campaigns.repository';
 import { draftOf } from './wizard-drafts.service';
@@ -55,6 +59,7 @@ export class WizardBroadcastsService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly runtime: PacingRuntime,
+    private readonly actions: CampaignsActionsService,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
   ) {}
 
@@ -254,6 +259,146 @@ export class WizardBroadcastsService {
       updatedAt: s.updatedAt.toISOString(),
       rowVersion: s.rowVersion,
     };
+  }
+
+  /**
+   * Retry failed: the failed recipients of a launched broadcast go back in the queue and the run starts again. Only the failed rows
+   * are touched, so nobody who got the message is messaged twice. A series retries every run that ended on its own and has failed rows;
+   * a run still in progress, or one that was cancelled, is left alone. Each run is its own transaction (the wallet is checked per run), so a refusal on one stops there and
+   * the runs already queued stay queued.
+   */
+  async retryFailed(uuid: string): Promise<WizardRetryFailedResponse> {
+    const { orgId } = RequestContextStore.require();
+    const targets = await this.db.tx(async (tx) => {
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (series) {
+        const out: Array<{ uuid: string }> = [];
+        for (const c of await this.repo.seriesChildren(tx, orgId, series.id)) {
+          // A run the person cancelled (or that a cancelled series stopped) stays stopped: only runs that ended on their own retry.
+          if (c.status !== 'completed' && c.status !== 'failed') continue;
+          if ((await this.repo.runCounts(tx, orgId, c.id)).failed > 0) out.push({ uuid: c.uuid });
+        }
+        return { kind: 'series' as const, id: series.uuid, seriesStatus: series.status, runs: out };
+      }
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
+      return {
+        kind: 'campaign' as const,
+        id: c.uuid,
+        seriesStatus: null,
+        runs: [{ uuid: c.uuid }],
+      };
+    });
+    if (targets.runs.length === 0) {
+      throw new AppError(
+        ERROR_CODES.CAMP_NOTHING_TO_RESEND,
+        'Nothing to retry: no finished run has failed recipients.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    let recipients = 0;
+    let status = 'running';
+    for (const run of targets.runs) {
+      const res = await this.actions.resend(run.uuid, { scope: 'failed', contactIds: [] });
+      recipients += res.recipients;
+      status = res.status;
+    }
+    return {
+      id: targets.id,
+      kind: targets.kind,
+      status: targets.seriesStatus ?? status,
+      message: `Retrying ${recipients} failed recipient${recipients === 1 ? '' : 's'}.`,
+      recipients,
+      runs: targets.runs.length,
+    };
+  }
+
+  /**
+   * The recipients of a launched broadcast as one CSV (streamed): a one-off campaign exactly as its own export, a recurring series as
+   * one file with a `Run` column, run by run in order. Same permission as any campaign export.
+   */
+  async exportBroadcast(uuid: string): Promise<{ stream: Readable; fileName: string }> {
+    const { orgId } = RequestContextStore.require();
+    const found = await this.db.tx(async (tx) => {
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (series) {
+        const runs = (await this.repo.seriesChildren(tx, orgId, series.id))
+          .map((c) => ({ id: c.id, run: (c.occurrenceNo ?? 0) + 1 }))
+          .sort((a, b) => a.run - b.run);
+        return { series, runs };
+      }
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
+      return { series: null, runs: [] };
+    });
+    if (!found.series) return this.actions.export(uuid);
+    const zone = recurrenceRuleSchema.parse(found.series.rule).timezone;
+    return this.actions.exportRuns(found.runs, zone, `broadcast-${found.series.uuid}`);
+  }
+
+  /**
+   * Delete a launched broadcast. A one-off campaign goes with its recipients, as a campaign does. A recurring series goes with the runs
+   * it had planned, but only while none of them has sent a message: once a run has sent, its history is kept and the series can only be
+   * cancelled (409 CAMP_SERIES_HAS_HISTORY). A run that is going right now is never deleted under the worker.
+   */
+  async removeBroadcast(uuid: string): Promise<WizardDeleteResponse> {
+    const { orgId } = RequestContextStore.require();
+    const known = await this.db.tx(async (tx) => {
+      const series = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (series) return { kind: 'series' as const };
+      const c = await this.repo.campaignByUuid(tx, orgId, uuid);
+      if (!c || c.status === 'draft') throw AppError.notFound('Broadcast', uuid);
+      return { kind: 'campaign' as const };
+    });
+    if (known.kind === 'campaign') {
+      await this.actions.remove(uuid);
+      return { id: uuid, kind: 'campaign', runs: 1, message: 'Broadcast deleted.' };
+    }
+    return this.db.tx(async (tx) => {
+      const s0 = await this.repo.seriesByUuid(tx, orgId, uuid);
+      if (!s0) throw AppError.notFound('Broadcast', uuid);
+      const s = (await this.repo.lockSeries(tx, orgId, s0.id)) ?? s0;
+      // The runs' own rows too, so a worker cannot start one between the checks below and the delete.
+      await this.repo.lockSeriesRuns(tx, orgId, s.id);
+      const children = await this.repo.seriesChildren(tx, orgId, s.id);
+      if (children.some((c) => c.status === 'running'))
+        throw notControllable('recurring broadcast', 'running');
+      if (await this.repo.seriesHasSent(tx, orgId, s.id)) {
+        throw new AppError(
+          ERROR_CODES.CAMP_SERIES_HAS_HISTORY,
+          'This recurring broadcast has already sent messages, so its history is kept. Cancel it to stop it.',
+          HttpStatus.CONFLICT,
+        );
+      }
+      for (const c of children) {
+        await this.audit.record(tx, { module: 'campaigns', recordId: c.id, action: 'delete' });
+        await this.outbox.emit(tx, {
+          aggregateModule: 'campaigns',
+          aggregateId: c.id,
+          eventType: 'campaign.deleted',
+          payload: { uuid: c.uuid },
+        });
+      }
+      await this.campaigns.remove(
+        tx,
+        orgId,
+        children.map((c) => c.id),
+      );
+      await this.repo.deleteSeries(tx, orgId, s.id);
+      await this.audit.record(tx, { module: 'camp_series', recordId: s.id, action: 'delete' });
+      await this.outbox.emit(tx, {
+        aggregateModule: 'campaigns',
+        aggregateId: s.id,
+        eventType: 'campaign.series_deleted',
+        payload: { uuid: s.uuid, name: s.name, runs: children.length },
+      });
+      return {
+        id: s.uuid,
+        kind: 'series' as const,
+        runs: children.length,
+        message: 'Recurring broadcast deleted.',
+      };
+    });
   }
 
   // ------------------------------------------------------------------------------------------ controls

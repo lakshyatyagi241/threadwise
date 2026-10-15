@@ -75,7 +75,9 @@
       "removeWish": "Usuń {name} z listy życzeń",
       "quickView": "Szybki podgląd: {name}",
       "quickViewTitle": "Szybki podgląd",
-      "was": "Dawniej"
+      "was": "Dawniej",
+      "chooseOptions": "Wybierz opcje",
+      "chooseOptionsNamed": "Wybierz opcje dla {name}"
     },
     "quick": {
       "details": "Pełne szczegóły →"
@@ -162,7 +164,9 @@
       "increase": "Zwiększ ilość",
       "remove": "Usuń {name} z koszyka",
       "fullTitle": "Twój koszyk jest pełny",
-      "fullBody": "Koszyk może zawierać do 100 różnych produktów. Najpierw złóż zamówienie na te, potem utwórz nowy koszyk."
+      "fullBody": "Koszyk może zawierać do 100 różnych produktów. Najpierw złóż zamówienie na te, potem utwórz nowy koszyk.",
+      "variantDroppedTitle": "Twój koszyk został zaktualizowany",
+      "variantDroppedBody": "{count, plural, one {# produkt wymaga ponownego wyboru opcji i został usunięty z koszyka.} few {# produkty wymagają ponownego wyboru opcji i zostały usunięte z koszyka.} many {# produktów wymaga ponownego wyboru opcji i zostało usuniętych z koszyka.} other {# produktu wymaga ponownego wyboru opcji i zostało usuniętych z koszyka.}}"
     },
     "wish": {
       "title": "Lista życzeń",
@@ -233,9 +237,9 @@
       "couponFallback": "Nieprawidłowy kod."
     },
     "errors": {
-      "itemsUnavailable": "Te produkty są już niedostępne. Odśwież stronę i spróbuj ponownie.",
       "notAvailable": "Ten sklep jest niedostępny.",
-      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie."
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "itemsRefreshed": "Niektóre produkty zmieniły się lub zostały wyprzedane, więc zaktualizowaliśmy koszyk. Sprawdź go i spróbuj ponownie."
     },
     "placed": {
       "title": "Zamówienie złożone",
@@ -331,6 +335,13 @@
       "help": "Potrzebujesz pomocy?",
       "support": "Skontaktuj się z pomocą techniczną",
       "metaTitle": "Nie znaleziono strony"
+    },
+    "variant": {
+      "from": "Od {price}",
+      "optionsCount": "{count, plural, one {# opcja} few {# opcje} many {# opcji} other {# opcji}}",
+      "select": "Wybierz: {option}",
+      "unavailable": "Ta kombinacja jest niedostępna",
+      "soldOutValue": "wyprzedane"
     }
   }
 }

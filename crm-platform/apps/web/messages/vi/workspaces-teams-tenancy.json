@@ -12,7 +12,7 @@
       "retry": "Thử lại",
       "loadMore": "Tải thêm",
       "loadingMore": "Đang tải",
-      "requestId": "Mã yêu cầu"
+      "loading": "Đang tải"
     },
     "tiers": {
       "owner": "Chủ sở hữu",
@@ -96,7 +96,11 @@
       "linkReset": "Máy chủ này chưa cấu hình email nên hãy gửi trực tiếp liên kết này cho họ. Liên kết chỉ dùng được một lần.",
       "linkInvite": "Máy chủ này chưa cấu hình email nên hãy gửi trực tiếp liên kết này cho họ. Liên kết chỉ dùng được một lần và hết hạn sau {days, plural, other {# ngày}}.",
       "linkLabel": "Liên kết dùng một lần",
-      "linkEmail": "Email"
+      "linkEmail": "Email",
+      "onLeaveUntil": "Nghỉ phép đến {date}",
+      "onLeaveOpen": "Đang nghỉ phép",
+      "leaveFrom": "Nghỉ phép từ {date}",
+      "leaveAction": "Nghỉ phép và người đại diện"
     },
     "invite": {
       "eyebrow": "Không gian làm việc",
@@ -215,7 +219,13 @@
       "teamNameTaken": "Đã có nhóm với tên này.",
       "teamMemberUnknown": "Một trong những người bạn chọn không có trong không gian làm việc này.",
       "orgSuspended": "Không gian làm việc này đã bị tạm khóa.",
-      "unexpected": "Đã xảy ra lỗi. Thử lại sau ít phút."
+      "unexpected": "Đã xảy ra lỗi. Thử lại sau ít phút.",
+      "leaveOverlap": "Người này đã có kỳ nghỉ trùng ít nhất một ngày với các ngày này.",
+      "leaveInvalid": "Không thể dùng các ngày này. Ngày đầu tiên không được ở quá khứ, và kỳ nghỉ đã bắt đầu thì giữ nguyên ngày đầu tiên.",
+      "delegateInvalid": "Người đại diện phải là một thành viên đang hoạt động khác trong không gian làm việc này.",
+      "delegateCycle": "Điều đó sẽ tạo vòng lặp: người được chọn đã đặt người này làm người đại diện.",
+      "reassignInvalid": "Không thể phân công lại gì cả. Hãy kiểm tra người này có liên hệ hoặc deal đang mở và người nhận có thể tiếp nhận.",
+      "reassignNotRestorable": "Việc phân công lại này không thể hoàn tác nữa."
     },
     "accept": {
       "title": "Tham gia không gian làm việc của bạn",
@@ -235,6 +245,81 @@
       "submit": "Chấp nhận lời mời",
       "submitting": "Đang tham gia",
       "invalidHeading": "Liên kết mời"
+    },
+    "leave": {
+      "eyebrow": "Nghỉ phép và người đại diện",
+      "calendarNote": "Các ngày tính theo lịch không gian làm việc của bạn ({timezone}).",
+      "nowTitle": "Đang nghỉ phép",
+      "upcomingTitle": "Sắp tới",
+      "notAway": "Hiện không nghỉ phép.",
+      "range": "{from} đến {to}",
+      "rangeOpen": "Từ {from}, không có ngày kết thúc",
+      "reasonShown": "Lý do (chỉ quản lý thấy): {reason}",
+      "endNow": "Kết thúc nghỉ phép ngay",
+      "cancelLeave": "Hủy nghỉ phép",
+      "endTitle": "Kết thúc kỳ nghỉ này ngay bây giờ?",
+      "endMessage": "Người này quay lại hôm nay. Tự động phân công sẽ bắt đầu chọn họ trở lại.",
+      "cancelTitle": "Hủy kỳ nghỉ này?",
+      "cancelMessage": "Kỳ nghỉ chưa bắt đầu. Nó sẽ bị xóa.",
+      "ended": "Đã kết thúc nghỉ phép.",
+      "added": "Đã lưu nghỉ phép.",
+      "readOnly": "Chỉ bản thân người đó và quản lý mới có thể thay đổi nghỉ phép.",
+      "addTitle": "Thêm nghỉ phép",
+      "firstDay": "Ngày đầu tiên",
+      "lastDay": "Ngày cuối cùng",
+      "openEnded": "Chưa có ngày kết thúc (cho đến khi ai đó kết thúc)",
+      "reason": "Lý do (không bắt buộc)",
+      "reasonHint": "Chỉ người đó và quản lý của họ thấy nội dung này.",
+      "addSubmit": "Lưu nghỉ phép",
+      "problems": {
+        "startRequired": "Hãy chọn ngày đầu tiên.",
+        "startPast": "Ngày đầu tiên không được ở quá khứ.",
+        "endRequired": "Hãy chọn ngày cuối cùng, hoặc đánh dấu \"Không có ngày kết thúc\".",
+        "endBeforeStart": "Ngày cuối cùng không được trước ngày đầu tiên."
+      },
+      "delegateTitle": "Người đại diện",
+      "delegateHelp": "Khi người này nghỉ phép, cuộc trò chuyện mới và việc tự động phân công sẽ chuyển cho người đại diện nếu họ rảnh, nếu không thì chuyển cho nhóm.",
+      "noDelegate": "Không có người đại diện",
+      "delegateSaved": "Đã lưu người đại diện.",
+      "delegateRemoved": "Đã xóa người đại diện.",
+      "delegateAway": "{name} cũng đang nghỉ phép nên hiện chưa thể thay thế."
+    },
+    "reassign": {
+      "title": "Phân công lại liên hệ và deal",
+      "holds": "{name} phụ trách {contacts, plural, one {# liên hệ} other {# liên hệ}} và {chats, plural, one {# cuộc trò chuyện đang mở} other {# cuộc trò chuyện đang mở}}.",
+      "target": "Giao cho",
+      "kindUser": "Một người",
+      "kindDelegate": "Người đại diện của họ",
+      "kindTeam": "Một nhóm, xoay vòng",
+      "person": "Người",
+      "team": "Nhóm",
+      "teamHint": "Chia lần lượt cho các thành viên đang có mặt và không nghỉ phép.",
+      "choose": "Chọn",
+      "includeDeals": "Bao gồm deal đang mở",
+      "returnOn": "Trả lại vào {date}, khi người này quay lại",
+      "returnUnavailable": "Trả lại khi người này quay lại (cần kỳ nghỉ có ngày cuối cùng)",
+      "returnHelp": "Chỉ liên hệ và deal chưa ai thay đổi kể từ đó mới được trả lại. Bạn cũng có thể hoàn tác trong {days} ngày.",
+      "reason": "Ghi chú (không bắt buộc)",
+      "submit": "Xem lại và phân công lại",
+      "confirmTitle": "Phân công lại ngay?",
+      "confirmMessage": "{name} phụ trách {contacts, plural, one {# liên hệ} other {# liên hệ}} và {deals, plural, one {# deal đang mở} other {# deal đang mở}} sẽ được chuyển đi.",
+      "confirm": "Phân công lại",
+      "done": "Đã chuyển {contacts, plural, one {# liên hệ} other {# liên hệ}} và {deals, plural, one {# deal} other {# deal}}.",
+      "history": "Các lần phân công lại trước",
+      "historyEmpty": "Chưa có gì được phân công lại.",
+      "status": {
+        "applied": "Đã chuyển",
+        "restored": "Đã trả lại",
+        "restore_blocked": "Chưa trả lại"
+      },
+      "summary": "{contacts} liên hệ và {deals} deal cho {target}",
+      "returnsOn": "trả lại vào {date}",
+      "restoredSummary": "{restored} đã trả lại, {skipped} giữ nguyên",
+      "remaining": "Còn {count} mục cần chuyển: hãy chạy lại",
+      "undo": "Hoàn tác",
+      "undoTitle": "Hoàn tác lần phân công lại này?",
+      "undoMessage": "Liên hệ và deal chưa ai thay đổi kể từ đó sẽ quay về người phụ trách trước. Các mục còn lại giữ nguyên.",
+      "restored": "{count} đã trả lại, {skipped} giữ nguyên."
     }
   }
 }

@@ -103,24 +103,297 @@
       "customize": {
         "loading": "Loading the widget…",
         "loadError": "The widget could not be loaded. Refresh to try again.",
-        "untouched": "You are still using the default look. Review it, then save to unlock Install and Publish.",
+        "untouched": "You are still using the default look. Review it, then save to unlock Deploy and Publish.",
         "position": "Where the chat button sits",
         "right": "Bottom right",
         "left": "Bottom left",
         "save": "Save customization",
         "saved": "Customization saved",
-        "saveFailed": "Could not save the widget. Try again."
+        "saveFailed": "Could not save the widget. Try again.",
+        "launcher": {
+          "title": "Closed launcher",
+          "hint": "What visitors see before they open the chat: a callout, an animation and an unread dot.",
+          "calloutOn": "Show a callout next to the launcher",
+          "style": "Callout style",
+          "styles": {
+            "bubble": "Top bubble",
+            "pill": "Side pill",
+            "avatar": "Avatar pill",
+            "media": "Picture card",
+            "bar": "Input bar"
+          },
+          "text": "Callout text",
+          "image": "Picture",
+          "animation": "Launcher animation",
+          "animations": {
+            "none": "None",
+            "bounce": "Bounce",
+            "ripple": "Ripple"
+          },
+          "badge": "Show the unread dot",
+          "popupTextRequired": "Add the callout text, or turn the callout off.",
+          "gaps": {
+            "title": "Distance from the screen edge (px)",
+            "desktop": {
+              "side": "Desktop: from the side",
+              "bottom": "Desktop: from the bottom"
+            },
+            "mobile": {
+              "side": "Phone: from the side",
+              "bottom": "Phone: from the bottom"
+            }
+          }
+        },
+        "chat": {
+          "title": "Chat window",
+          "hint": "How the window looks and behaves. Its colours are set above.",
+          "header": "Header background",
+          "headers": {
+            "solid": "Solid",
+            "diagonal": "Diagonal",
+            "vivid": "Vivid",
+            "dusk": "Dusk",
+            "soft": "Soft sweep"
+          },
+          "direction": "Text direction",
+          "directions": {
+            "auto": "Follow the visitor’s language",
+            "ltr": "Left to right",
+            "rtl": "Right to left"
+          },
+          "icons": "Round icon in front of each reply button",
+          "fill": "Reply button fill",
+          "fills": {
+            "outline": "Outline",
+            "tinted": "Tinted",
+            "solid": "Solid"
+          },
+          "shape": "Reply button shape",
+          "shapes": {
+            "pill": "Pill",
+            "rounded": "Rounded",
+            "soft": "Soft",
+            "square": "Square"
+          },
+          "font": "Typeface",
+          "fonts": {
+            "system": "System",
+            "serif": "Serif",
+            "rounded": "Rounded",
+            "humanist": "Humanist",
+            "mono": "Monospace"
+          },
+          "size": "Window size",
+          "sizes": {
+            "compact": "Compact",
+            "standard": "Standard",
+            "tall": "Tall",
+            "wide": "Wide"
+          },
+          "suggestions": "Suggestions under the conversation",
+          "suggestionsHint": "Up to 4 short lines. They disappear once the visitor writes.",
+          "suggestionPlaceholder": "A question visitors often ask",
+          "addSuggestion": "Add a suggestion",
+          "removeSuggestion": "Remove suggestion",
+          "actions": "Copy and thumbs icons under each bot line",
+          "expand": "Expand button",
+          "voice": "Voice conversation (uses the browser's speech tools)",
+          "fontSize": "Text size: {value}px",
+          "hoverBg": "Reply button hover colour",
+          "hoverBgReset": "Use the tint"
+        },
+        "preview": {
+          "title": "Live preview",
+          "loading": "Loading the preview…",
+          "error": "The preview could not be loaded. Refresh to try again.",
+          "frame": "Chat window preview",
+          "hint": "This is the real chat window with your unsaved settings. The conversation and buttons are samples.",
+          "launcherFrame": "Closed launcher preview"
+        },
+        "groups": {
+          "look": "Look and brand",
+          "voice": "Voice and welcome",
+          "window": "Chat window",
+          "launcher": "Launcher and callout",
+          "launch": "Launch",
+          "chat": "Conversation tools",
+          "behave": "Behaviour"
+        },
+        "surfaces": {
+          "chat": "Chat window",
+          "expanded": "Expanded",
+          "mobile": "Phone",
+          "closed": "Closed launcher"
+        },
+        "brand": {
+          "title": "Brand pictures and extras",
+          "logo": {
+            "label": "Company logo",
+            "hint": "Shown in the chat header."
+          },
+          "avatar": {
+            "label": "Chatbot avatar",
+            "hint": "Shown beside each message the bot sends."
+          },
+          "background": {
+            "label": "Chat background",
+            "hint": "A picture behind the conversation. Optional."
+          },
+          "corner": "Body corners",
+          "corners": {
+            "rounded": "Rounded",
+            "soft": "Soft",
+            "square": "Square"
+          },
+          "autoOpen": "Open by itself after (seconds)",
+          "autoOpenHint": "0 keeps the chat closed until the visitor opens it. It opens once per visit.",
+          "sound": "Play a soft sound for new bot lines",
+          "soundVolume": "Volume: {value}%",
+          "speak": "Read the bot’s lines aloud (browser voice)",
+          "devices": {
+            "title": "Show the widget on",
+            "desktop": "Desktop",
+            "tablet": "Tablet",
+            "mobile": "Phone",
+            "hint": "A phone is up to 768 px wide, a tablet up to 1024 px."
+          },
+          "pictures": "Pictures · SVG, PNG, GIF",
+          "botName": "Bot name",
+          "primary": "Primary colour",
+          "primaryCustom": "Custom colour",
+          "fineTune": "Fine-tune every colour",
+          "pip": "Offer a floating chat window when the visitor switches tabs",
+          "pipHint": "Like a video call, the chat can float over other tabs and apps (Chrome and Edge). The visitor is asked once to allow notifications, and the browser decides when a window may open.",
+          "domains": {
+            "label": "Only show the chat on these websites",
+            "hint": "Visitors on any other site get no chat. Enter the site address, for example example.com. A site’s subdomains are not included unless you add them.",
+            "placeholder": "example.com",
+            "add": "Add a website",
+            "remove": "Remove website"
+          }
+        },
+        "rail": {
+          "label": "Customize sections",
+          "look": "Brand",
+          "voice": "Welcome",
+          "window": "Window",
+          "launcher": "Launcher",
+          "launch": "Launch",
+          "chat": "Extras",
+          "behave": "Behaviour"
+        },
+        "leads": {
+          "look": "Logo, pictures, colours and how the header looks.",
+          "voice": "The name, the welcome line and the send button.",
+          "window": "Size, typeface, reply buttons and helpers.",
+          "launcher": "What visitors see before they open the chat.",
+          "launch": "Where the widget opens from and how to put it on your site.",
+          "chat": "Notification cards, quick menu, banner and quick replies.",
+          "behave": "When the chat opens, how it sounds and who sees it."
+        },
+        "footer": "Changes show in the preview as you make them.",
+        "conversation": {
+          "title": "Conversation tools",
+          "tabs": {
+            "notice": "Notification block",
+            "menu": "Quick menu",
+            "banner": "Banner",
+            "replies": "Quick replies"
+          },
+          "enable": {
+            "notice": "Show the notification bell",
+            "menu": "Show the quick menu",
+            "banner": "Show the banner",
+            "replies": "Show the quick replies"
+          },
+          "icon": "Bell style",
+          "icons": {
+            "1": "Bell",
+            "2": "Ticket",
+            "3": "Box",
+            "4": "Message"
+          },
+          "view": "Display view",
+          "views": {
+            "list": "Lists",
+            "blocks": "Blocks"
+          },
+          "card": "Card {n}",
+          "entry": "Menu entry {n}",
+          "slide": "Slide {n}",
+          "remove": "Remove",
+          "max": "Up to {count}.",
+          "addCard": "Add a card",
+          "addEntry": "Add a menu entry",
+          "addSlide": "Add a slide",
+          "kinds": {
+            "image": "Picture",
+            "video": "Video"
+          },
+          "fields": {
+            "title": "Title",
+            "description": "Description",
+            "buttonTitle": "Button title",
+            "buttonUrl": "Button address",
+            "urlHint": "A web page, tel: or mailto: address. Leave empty for no button.",
+            "footer": "Footer text",
+            "menuTitle": "Menu title",
+            "menuUrl": "Opens (optional)",
+            "menuUrlHint": "Leave empty to send the title as a message the bot answers.",
+            "video": "Video link",
+            "videoHint": "Paste a YouTube or Vimeo link, or its embed code.",
+            "videoOk": "Video found.",
+            "bannerUrl": "Link when tapped (optional)"
+          },
+          "action": "Button action",
+          "actions": {
+            "link": "Add link",
+            "flow": "Link to flow"
+          },
+          "step": "Step of the bot",
+          "stepPlaceholder": "Select a step",
+          "noSteps": "This bot has no steps yet. Add some in the Build tab and save.",
+          "replyStep": "When tapped",
+          "replyAsMessage": "Send the line as a message"
+        },
+        "launchNote": "The embed code to paste on your site is on the Deploy tab."
       },
-      "install": {
-        "loading": "Loading the install code…",
-        "locked": "Save the Customize tab first. Your install code appears here once the widget exists.",
-        "title": "Install on your website",
-        "lead": "Paste this just before the closing body tag on every page where the chat should appear.",
+      "deploy": {
+        "loading": "Loading your deploy options…",
+        "locked": "Save the Customize tab first. Your embed code appears here once the widget exists.",
+        "lockedWhatsapp": "Save the Customize tab first. Your website button and WhatsApp link appear here once it exists.",
+        "title": "Deploy",
+        "lead": "Put your chat window on your website. The bot goes live when you publish it.",
+        "leadWhatsapp": "Put your WhatsApp button on your website, or share the direct link anywhere. The bot answers on its WhatsApp number once it is published.",
         "notPublished": "This bot is not published yet, so visitors will not get answers. Publish it from the Build tab.",
+        "notPublishedWhatsapp": "This bot is not published yet, so it will not answer on WhatsApp. Publish it from the Build tab.",
+        "embedTitle": "Add to your website",
+        "embedBody": "Paste this just before the closing body tag on every page where it should appear.",
         "copy": "Copy code",
-        "copied": "Install code copied",
-        "clipboardBlocked": "Your browser blocked copying. Select the code and copy it by hand.",
-        "preview": "Open the chat page"
+        "copied": "Embed code copied",
+        "clipboardBlocked": "Your browser blocked copying. Select the text and copy it by hand.",
+        "preview": "Preview",
+        "linkTitle": "Direct WhatsApp link",
+        "linkBody": "Opens a WhatsApp chat with the bot's number and the message you set. Use it in emails, social bios, QR codes and ads.",
+        "copyLink": "Copy link",
+        "linkCopied": "WhatsApp link copied",
+        "openLink": "Open link",
+        "qrTitle": "QR code",
+        "qrBody": "Print it or show it on a screen. Scanning it opens a WhatsApp chat with your bot.",
+        "downloadQr": "Download QR code",
+        "statusLive": "Live",
+        "statusDraft": "Not published",
+        "codeLabel": "HTML",
+        "localNote": "This code points to an address on this computer (localhost), so it only works on pages opened here. On a live website, use your deployed address instead."
+      },
+      "whatsapp": {
+        "loading": "Loading the button…",
+        "loadError": "The button could not be loaded. Refresh to try again.",
+        "untouched": "Your WhatsApp button is not set up yet. It starts from your bot's number and keyword. Review it, then save to unlock Deploy and Publish.",
+        "saved": "WhatsApp button saved",
+        "saveFailed": "Could not save the button. Try again.",
+        "fromBot": "The button opens WhatsApp on {number}, the number this bot runs on. Change the number on the Trigger in the Build tab.",
+        "noNumber": "This bot has no WhatsApp number yet. Choose one on the Trigger in the Build tab, then come back to save the button."
       }
     },
     "builder": {
@@ -300,7 +573,14 @@
           "iconOnly": "Icon only",
           "buttonColor": "Button Color",
           "pickCustom": "Pick a custom color",
-          "custom": "Custom {hex}"
+          "custom": "Custom {hex}",
+          "animation": "Button animation",
+          "animationHint": "Draws the eye to the button while the chat is closed.",
+          "animations": {
+            "none": "Off",
+            "bounce": "Bounce",
+            "ripple": "Ripple"
+          }
         },
         "2": {
           "title": "Design your messenger",
@@ -313,7 +593,9 @@
             "person": "Person"
           },
           "url": "Or use your own image address",
-          "urlHint": "Paste the address of a square image (https://...). Uploading a file is not available yet."
+          "urlHint": "Paste the address of a square image (https://...). Uploading a file is not available yet.",
+          "botName": "Bot name",
+          "botNameHint": "Shown in the header of the chat window. Leave it empty to use your bot's name."
         },
         "3": {
           "title": "Set your welcome message",
@@ -321,7 +603,13 @@
           "greeting": "Greetings",
           "greetingHint": "Say Hi to your customers when they open messenger",
           "intro": "Intro Message",
-          "introHint": "Introduce your business and tell customers how you can help"
+          "introHint": "Introduce your business and tell customers how you can help",
+          "subHeader": "Sub-header text",
+          "subHeaderHint": "The line under the name, for example how quickly you reply.",
+          "cta": "Button text",
+          "ctaHint": "The text on the button that opens WhatsApp.",
+          "prefilled": "Pre-filled message",
+          "prefilledHint": "What a tap on the button sends. It starts as your bot's keyword, so the bot starts."
         },
         "4": {
           "title": "Set your Chat Button position",
@@ -346,6 +634,19 @@
           "numberHint": "Messenger will send your customers to this WhatsApp number",
           "prefilled": "Pre-filled Message",
           "prefilledHint": "This will be first default message text"
+        },
+        "6": {
+          "title": "Show a popup message",
+          "subtitle": "A small bubble that invites visitors to chat",
+          "visibility": "Popup visibility",
+          "visibilityHint": "Show the popup next to the button until a visitor dismisses it.",
+          "position": "Popup position",
+          "side": "Side",
+          "top": "Top",
+          "text": "Popup text",
+          "textHint": "A short invitation, for example: Hi! May I assist you?",
+          "image": "Popup image (optional)",
+          "imageHint": "An image address, or upload a picture below."
         }
       },
       "install": {
@@ -359,7 +660,11 @@
         "greeting": "Add a greeting.",
         "intro": "Add an intro message.",
         "spacing": "Spacing must be a whole number of pixels from 0 to 500.",
-        "whatsapp": "Add a full WhatsApp number: country code and digits."
+        "whatsapp": "Add a full WhatsApp number: country code and digits.",
+        "cta": "Add the button text.",
+        "prefilled": "Add the message a tap on the button sends.",
+        "popupText": "Add the popup text, or switch the popup off.",
+        "popupImage": "Use a built-in image or an http(s) image address."
       },
       "preview": {
         "title": "Live preview",
@@ -368,11 +673,20 @@
         "frameTitle": "Live preview of your WhatsApp widget",
         "hint": "Collapse the panel with the round button, open it again from the launcher, and try Start Conversation.",
         "businessName": "Your business"
+      },
+      "upload": {
+        "choose": "Upload image",
+        "replace": "Replace image",
+        "remove": "Remove",
+        "uploading": "Uploading…",
+        "hint": "SVG, PNG, JPG, WebP or GIF, up to 1 MB.",
+        "failed": "The image could not be uploaded. Try again.",
+        "tooLarge": "The image is larger than 1 MB."
       }
     },
     "webBots": {
       "title": "Website chat bots",
-      "intro": "Every bot you built for website chat and the widget it runs in. Open a row to change the widget's look or copy its install code.",
+      "intro": "Every bot you built for website chat and the widget it runs in. Open a row to change the widget's look or copy its embed code.",
       "create": "New website bot",
       "loading": "Loading your website bots…",
       "loadError": "The website bots could not be loaded. Refresh to try again.",
@@ -381,14 +695,14 @@
       "widgetLine": "Widget: {title}",
       "noWidget": "No widget yet. Customize it to create one.",
       "customize": "Customize",
-      "install": "Install",
       "more": "Showing {shown} of {total} bots. Open the rest from Flows.",
       "state": {
         "needs_customizing": "Needs customizing",
         "draft": "Draft",
         "live": "Live",
         "paused": "Paused"
-      }
+      },
+      "deploy": "Deploy"
     }
   }
 }

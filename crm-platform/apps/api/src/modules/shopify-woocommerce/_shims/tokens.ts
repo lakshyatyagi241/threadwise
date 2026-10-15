@@ -3,6 +3,7 @@
  * real service, bind it to the same token in `shopify-woocommerce.module.ts` and delete the default.
  */
 
+import type { PublicConsentNotice } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import type { EventContext } from '../event-rules';
 import type { MirrorCustomer, MirrorOrder, MirrorProduct, StoreKind } from '../mirror-rules';
@@ -47,7 +48,15 @@ export interface StoreMirror {
     kind: StoreKind,
     c: MirrorCustomer,
     groupId: number,
+    /** The store's consent line, when the merchant switched it on: only then is the store's own marketing choice recorded as a grant. */
+    consent?: StoreConsent,
   ): Promise<boolean>;
+}
+
+/** The enabled consent notice of one store integration (`<kind>:<integration uuid>`), the wording its marketing checkbox stands for. */
+export interface StoreConsent {
+  ref: string;
+  notice: PublicConsentNotice;
 }
 export const STORE_MIRROR = Symbol('ECOM_STORE_MIRROR');
 

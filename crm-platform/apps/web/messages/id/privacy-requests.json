@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Tutup",
+      "retry": "Coba lagi",
+      "loading": "Memuat...",
+      "cancel": "Batal",
+      "back": "Kembali",
+      "next": "Berikutnya",
+      "close": "Tutup",
+      "save": "Simpan"
+    },
+    "errors": {
+      "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+      "notFound": "Permintaan ini sudah tidak ada.",
+      "subjectNotFound": "Orang tersebut sudah tidak ada di ruang kerja ini.",
+      "stateInvalid": "Permintaan ini tidak dalam status yang memungkinkan tindakan tersebut. Muat ulang dan periksa statusnya.",
+      "notVerified": "Verifikasi identitas orang tersebut terlebih dahulu.",
+      "legalHold": "Permintaan ini sedang dalam penahanan hukum. Lepaskan penahanan sebelum menghapus.",
+      "confirmationRequired": "Jalankan pratinjau terlebih dahulu dan ketik frasa konfirmasi persis seperti yang diminta.",
+      "exportInProgress": "Ekspor untuk permintaan ini sedang disiapkan.",
+      "exportNotReady": "File tersebut belum siap atau sudah kedaluwarsa. Siapkan ekspor baru.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi."
+    },
+    "type": {
+      "access": "Akses",
+      "export": "Ekspor",
+      "erasure": "Penghapusan",
+      "rectification": "Rektifikasi",
+      "restriction": "Pembatasan",
+      "objection": "Keberatan",
+      "withdrawal": "Penarikan persetujuan",
+      "portability": "Portabilitas data"
+    },
+    "typeHint": {
+      "access": "Orang tersebut menanyakan data apa yang kami simpan tentang mereka. Berakhir dengan sebuah file.",
+      "export": "Salinan data orang tersebut. Berakhir dengan sebuah file.",
+      "erasure": "Hapus data orang tersebut. Anda melihat pratinjaunya terlebih dahulu.",
+      "rectification": "Koreksi data yang salah. Anda memperbaikinya secara manual lalu menutup permintaan.",
+      "restriction": "Hentikan sementara penggunaan data. Anda menanganinya secara manual lalu menutup permintaan.",
+      "objection": "Orang tersebut keberatan atas penggunaan datanya. Anda menanganinya secara manual lalu menutup permintaan.",
+      "withdrawal": "Orang tersebut menarik persetujuannya. Anda menanganinya secara manual lalu menutup permintaan.",
+      "portability": "Salinan yang dapat dibaca mesin untuk dipindahkan ke tempat lain. Berakhir dengan sebuah file."
+    },
+    "status": {
+      "received": "Diterima",
+      "verifying": "Memverifikasi identitas",
+      "in_progress": "Sedang diproses",
+      "completed": "Selesai",
+      "rejected": "Ditolak",
+      "expired": "Kedaluwarsa"
+    },
+    "channel": {
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "phone": "Telepon",
+      "in_person": "Langsung",
+      "portal": "Portal",
+      "staff": "Dimasukkan oleh staf",
+      "other": "Lainnya"
+    },
+    "method": {
+      "channel_code": "Kode dikirim ke kanal orang tersebut",
+      "email_link": "Tautan dikirim melalui email",
+      "known_contact": "Dihubungi melalui nomor atau email yang sudah kami miliki",
+      "existing_session": "Masuk ke akun mereka",
+      "id_document_checked": "Dokumen identitas diperiksa",
+      "other": "Lainnya"
+    },
+    "disposition": {
+      "deleted": "Dihapus",
+      "anonymised": "Dianonimkan",
+      "cascaded": "Dihapus berantai",
+      "retained": "Dipertahankan",
+      "unlinked": "Tautan dilepas"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {Sisa # hari} other {Sisa # hari}}",
+      "dueToday": "Jatuh tempo hari ini",
+      "overdue": "{count, plural, one {Terlambat # hari} other {Terlambat # hari}}",
+      "closed": "Ditutup",
+      "dueOn": "Jatuh tempo {date}"
+    },
+    "list": {
+      "title": "Permintaan data",
+      "subtitle": "Permintaan dari orang-orang mengenai data yang Anda simpan tentang mereka: akses, ekspor, penghapusan, dan lainnya. Setiap permintaan memiliki tenggat dan catatan tindakan yang dilakukan.",
+      "newRequest": "Permintaan baru",
+      "settings": "Pengaturan",
+      "empty": "Belum ada permintaan data.",
+      "emptyFiltered": "Tidak ada permintaan yang cocok dengan filter ini.",
+      "loadMore": "Muat lebih banyak",
+      "loadingMore": "Memuat...",
+      "columns": {
+        "reference": "Referensi",
+        "type": "Jenis",
+        "subject": "Orang",
+        "status": "Status",
+        "due": "Tenggat"
+      },
+      "filters": {
+        "label": "Filter",
+        "status": "Status",
+        "type": "Jenis",
+        "any": "Semua",
+        "overdue": "Hanya yang terlambat"
+      },
+      "open": "Buka permintaan {reference}"
+    },
+    "settings": {
+      "title": "Tenggat",
+      "slaDays": "Jumlah hari untuk menjawab permintaan",
+      "slaHint": "Berapa hari setelah permintaan masuk hingga jatuh tempo. Bawaannya 30.",
+      "saved": "Pengaturan disimpan.",
+      "invalid": "Masukkan bilangan bulat hari dari 1 hingga 90."
+    },
+    "wizard": {
+      "title": "Permintaan data baru",
+      "step": "Langkah {current} dari {total}",
+      "person": {
+        "title": "Cari orangnya",
+        "search": "Cari berdasarkan nama, telepon, atau email",
+        "searchHint": "Ketik minimal 2 karakter.",
+        "searching": "Mencari...",
+        "none": "Tidak ada yang ditemukan. Anda dapat menggunakan nomor telepon atau email di bawah.",
+        "pick": "Pilih {name}",
+        "unnamed": "Tanpa nama",
+        "kindContact": "Kontak",
+        "kindLead": "Prospek",
+        "selected": "Dipilih: {name}",
+        "other": "Tidak ada di kontak Anda",
+        "otherValue": "Nomor telepon atau email",
+        "otherHint": "Untuk orang yang belum tersimpan. Kami mencari datanya berdasarkan nilai ini.",
+        "useOther": "Gunakan nilai ini",
+        "clear": "Pilih orang lain"
+      },
+      "kind": {
+        "title": "Apa yang diminta orang tersebut?"
+      },
+      "details": {
+        "title": "Detail",
+        "channel": "Bagaimana permintaan ini sampai kepada Anda?",
+        "note": "Catatan internal",
+        "noteHint": "Opsional. Hanya tim Anda yang melihat ini. Jangan menulis data pribadi di sini.",
+        "history": "Riwayat percakapan",
+        "historyHint": "Apa yang terjadi pada percakapan orang tersebut saat datanya dihapus.",
+        "historyDelete": "Hapus percakapan, pesan, dan file",
+        "historyAnonymise": "Simpan percakapan tanpa identitas orang tersebut"
+      },
+      "create": "Buat permintaan",
+      "creating": "Membuat...",
+      "created": "Permintaan {reference} dibuat."
+    },
+    "detail": {
+      "back": "Permintaan data",
+      "loading": "Memuat...",
+      "received": "Diterima {date}",
+      "channel": "Kanal: {channel}",
+      "history": {
+        "delete": "Saat penghapusan: percakapan dihapus",
+        "anonymise": "Saat penghapusan: percakapan disimpan tanpa identitas orang tersebut"
+      },
+      "note": "Catatan internal",
+      "legalHoldBadge": "Penahanan hukum",
+      "timeline": {
+        "title": "Linimasa",
+        "empty": "Belum ada yang tercatat.",
+        "by": "oleh {actor}",
+        "system": "sistem",
+        "event": {
+          "created": "Permintaan dibuat",
+          "verification_started": "Pemeriksaan identitas dimulai",
+          "verified": "Identitas terverifikasi",
+          "verification_failed": "Identitas tidak terverifikasi",
+          "hold_set": "Penahanan hukum diberlakukan",
+          "hold_released": "Penahanan hukum dilepas",
+          "rejected": "Permintaan ditolak",
+          "export_requested": "Ekspor diminta",
+          "export_downloaded": "Ekspor diunduh",
+          "erase_previewed": "Penghapusan dipratinjau",
+          "erased": "Data dihapus",
+          "completed": "Permintaan selesai",
+          "other": "Perbarui"
+        }
+      },
+      "verify": {
+        "title": "Verifikasi identitas",
+        "intro": "Pastikan orang yang meminta adalah benar orangnya sebelum mengekspor atau menghapus apa pun.",
+        "state": {
+          "none": "Belum diperiksa.",
+          "verified": "Diverifikasi {date} ({method}).",
+          "evidence": "Referensi bukti: {ref}"
+        },
+        "method": "Bagaimana diperiksa?",
+        "evidence": "ID referensi bukti",
+        "evidenceHint": "Hanya ID referensi, jangan unggah dokumen. Gunakan nomor tiket atau ID pesan.",
+        "note": "Catatan",
+        "outcome": "Hasil",
+        "pending": "Pemeriksaan dimulai",
+        "verified": "Terverifikasi",
+        "notVerified": "Tidak terverifikasi",
+        "submit": "Catat hasil",
+        "notVerifiedWarn": "Permintaan dari orang yang tidak terverifikasi akan ditolak.",
+        "saved": "Verifikasi dicatat."
+      },
+      "hold": {
+        "title": "Penahanan hukum",
+        "intro": "Selama penahanan berlaku, penghapusan ditolak. Gunakan jika hukum atau sengketa mengharuskan data disimpan.",
+        "toggle": "Penahanan hukum",
+        "reason": "Alasan",
+        "reasonHint": "Minimal 3 karakter.",
+        "apply": "Berlakukan penahanan",
+        "release": "Lepaskan penahanan",
+        "active": "Ditahan: {reason}",
+        "saved": "Penahanan diperbarui."
+      },
+      "export": {
+        "title": "Ekspor",
+        "intro": "Menyiapkan file ZIP berisi data yang kami simpan tentang orang ini.",
+        "expiry": "File yang sudah selesai tersedia selama {days} hari, lalu dihapus.",
+        "noEmail": "Tidak ada yang dikirim ke orang tersebut. Unduh file lalu berikan kepada mereka melalui kanal yang aman.",
+        "request": "Siapkan ekspor",
+        "requesting": "Menyiapkan...",
+        "requested": "Ekspor dimulai.",
+        "none": "Belum ada ekspor.",
+        "download": "Unduh",
+        "size": "{size} KB",
+        "expires": "Kedaluwarsa {date}",
+        "status": {
+          "queued": "Menunggu",
+          "running": "Sedang dibuat",
+          "ready": "Siap",
+          "failed": "Gagal",
+          "expired": "Kedaluwarsa"
+        }
+      },
+      "erase": {
+        "title": "Hapus",
+        "intro": "Menghapus data orang tersebut dari semua modul. Pratinjau dulu: tidak ada yang berubah sampai Anda mengonfirmasi.",
+        "preview": "Pratinjau",
+        "previewing": "Menghitung...",
+        "previewTitle": "Apa yang akan terjadi",
+        "previewNote": "Hanya pratinjau. Tidak ada yang diubah.",
+        "files": "{count, plural, one {# file tersimpan masuk antrean penghapusan} other {# file tersimpan masuk antrean penghapusan}}",
+        "totals": "{deleted} dihapus, {anonymised} dianonimkan, {retained} dipertahankan",
+        "colTable": "Tabel",
+        "colWhat": "Yang terjadi",
+        "colCount": "Baris",
+        "colReason": "Alasan",
+        "confirmLabel": "Ketik {phrase} untuk mengonfirmasi",
+        "confirmHint": "Tindakan ini tidak dapat dibatalkan.",
+        "execute": "Hapus sekarang",
+        "executing": "Menghapus...",
+        "done": "Penghapusan selesai.",
+        "blocked": "Penghapusan tersedia setelah identitas terverifikasi dan tidak ada penahanan hukum."
+      },
+      "proof": {
+        "title": "Bukti penghapusan",
+        "executedAt": "Dijalankan {date}",
+        "executedBy": "Oleh {actor}",
+        "totals": "{deleted} dihapus, {anonymised} dianonimkan, {retained} dipertahankan, {files} file",
+        "registryDigest": "Digest registri",
+        "sha256": "SHA-256",
+        "notes": "Batasan penghapusan ini",
+        "download": "Unduh bukti"
+      },
+      "close": {
+        "title": "Tutup permintaan",
+        "complete": "Tandai selesai",
+        "completeHint": "Gunakan jika orang tersebut sudah dijawab atau pekerjaan dilakukan secara manual.",
+        "completed": "Permintaan selesai.",
+        "rejectReason": "Alasan penolakan",
+        "reject": "Tolak permintaan",
+        "rejectConfirm": "Tolak",
+        "rejected": "Permintaan ditolak.",
+        "rejectedWith": "Ditolak: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Privasi",
+      "export": "Ekspor data orang ini",
+      "erase": "Hapus orang ini",
+      "created": "Permintaan {reference} dibuat.",
+      "failed": "Tidak dapat membuat permintaan."
+    }
+  }
+}

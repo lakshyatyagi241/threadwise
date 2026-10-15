@@ -1,0 +1,47 @@
+{
+  "client": "rhythm",
+  "generatedAt": "2026-10-12T10:05:00.000Z",
+  "collections": [
+    {
+      "collection": "contact_list",
+      "kind": "collection",
+      "disposition": "MIGRATE",
+      "read": 100,
+      "migrated": 100,
+      "quarantined": 0,
+      "excluded": 0,
+      "gap": 0,
+      "deferred": 0,
+      "unaccounted": 0
+    }
+  ],
+  "nonMigrated": [],
+  "fieldIssues": {},
+  "excludedByCode": {},
+  "fields": [],
+  "fingerprints": {
+    "contacts": {
+      "rows": 100,
+      "source": "1111111111111111111111111111111111111111111111111111111111111111",
+      "target": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  },
+  "sample": {
+    "size": 0,
+    "compared": 0,
+    "mismatches": []
+  },
+  "integrity": [],
+  "alarms": [],
+  "warnings": [],
+  "notPresent": {
+    "collectionsGap": [],
+    "collectionsUnknown": [],
+    "collectionsDeferred": [],
+    "collectionsOpen": [],
+    "droppedFields": [],
+    "dataOnlyFields": []
+  },
+  "unaccounted": 0,
+  "ok": true
+}

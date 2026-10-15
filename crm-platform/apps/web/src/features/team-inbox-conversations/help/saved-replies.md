@@ -5,7 +5,18 @@ summary: Write the answers your team gives again and again, then insert them int
 area: settings
 order: 55
 documents: [tile:saved-replies, nav:inbox-saved-replies]
-keywords: [saved replies, canned responses, quick replies, shortcuts, snippets, templates, slash, variables, inbox]
+keywords:
+  [
+    saved replies,
+    canned responses,
+    quick replies,
+    shortcuts,
+    snippets,
+    templates,
+    slash,
+    variables,
+    inbox,
+  ]
 ---
 
 ## What it is for

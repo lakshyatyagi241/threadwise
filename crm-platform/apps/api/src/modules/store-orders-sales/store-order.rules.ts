@@ -110,13 +110,17 @@ interface ItemFacts {
   priceMinor: number;
 }
 
+/** "T-shirt (M / Red)" for a variant line, the plain name otherwise. */
+const variantName = (name: string, variantTitle: string | null): string =>
+  variantTitle ? `${name} (${variantTitle})` : name;
+
 /** The order's lines: `items_json` first (the storefront writes `qty`, the WhatsApp cart `quantity`), else the `wa_order_items` rows. */
 export function itemFacts(itemsJson: unknown, rows: StoreOrderItemRow[]): ItemFacts[] {
   const fromJson = Array.isArray(itemsJson)
     ? (itemsJson as Array<Record<string, unknown>>)
         .filter((r) => r && typeof r === 'object')
         .map((r) => ({
-          name: text(r.name) ?? 'Item',
+          name: variantName(text(r.name) ?? 'Item', text(r.variant_title)),
           sku:
             text(r.retailer_id) ??
             text(r.sku) ??

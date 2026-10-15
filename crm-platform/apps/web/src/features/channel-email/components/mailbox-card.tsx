@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Button, ConfirmDialog, Input, useToast } from '@crm/ui';
 import type { MailboxResponse } from '@crm/contracts';
@@ -19,8 +19,8 @@ import {
   type MailboxAccess,
 } from '../lib/hub-model';
 
-const dateTime = (iso: string, locale: string) =>
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(
+const dateTime = (iso: string, locale: string, timeZone?: string) =>
+  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone }).format(
     new Date(iso),
   );
 
@@ -45,6 +45,7 @@ export function MailboxCard({
   const t = useTranslations('email.card');
   const root = useTranslations('email');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { toast } = useToast();
   const [confirming, setConfirming] = useState(false);
@@ -215,7 +216,9 @@ export function MailboxCard({
             <div className={row}>
               <span className="text-muted-foreground">{t('lastSynced')}</span>
               <span className="font-mono">
-                {mailbox.lastSyncedAt ? dateTime(mailbox.lastSyncedAt, locale) : t('neverSynced')}
+                {mailbox.lastSyncedAt
+                  ? dateTime(mailbox.lastSyncedAt, locale, timeZone)
+                  : t('neverSynced')}
               </span>
             </div>
             <div className={row}>

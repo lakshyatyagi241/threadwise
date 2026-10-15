@@ -96,8 +96,7 @@
       "unexpected": "Auf unserer Seite ist etwas schiefgelaufen. Versuchen Sie es gleich noch einmal.",
       "loadFailed": "Ihr API-Schlüssel konnte nicht geladen werden.",
       "retry": "Wiederholen",
-      "upgrade": "Tarife ansehen",
-      "requestId": "Anfrage-ID: {id}"
+      "upgrade": "Tarife ansehen"
     }
   }
 }

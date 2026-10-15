@@ -1,0 +1,289 @@
+{
+  "privacy-requests": {
+    "common": {
+      "dismiss": "Kapat",
+      "retry": "Tekrar dene",
+      "loading": "Yükleniyor...",
+      "cancel": "İptal",
+      "back": "Geri",
+      "next": "İleri",
+      "close": "Kapat",
+      "save": "Kaydet"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapmak için izniniz yok.",
+      "notFound": "Bu talep artık mevcut değil.",
+      "subjectNotFound": "Bu kişi artık bu çalışma alanında yok.",
+      "stateInvalid": "Bu talep, bu işlemin yapılabileceği bir durumda değil. Sayfayı yenileyip durumunu kontrol edin.",
+      "notVerified": "Önce kişinin kimliğini doğrulayın.",
+      "legalHold": "Bu talep yasal bekletme altında. Silmeden önce bekletmeyi kaldırın.",
+      "confirmationRequired": "Önce önizlemeyi çalıştırın ve onay ifadesini aynen yazın.",
+      "exportInProgress": "Bu talebin dışa aktarımı zaten hazırlanıyor.",
+      "exportNotReady": "Dosya hazır değil veya süresi doldu. Yeni bir dışa aktarım hazırlayın.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "type": {
+      "access": "Erişim",
+      "export": "Dışa aktarma",
+      "erasure": "Silme",
+      "rectification": "Düzeltme",
+      "restriction": "Kısıtlama",
+      "objection": "İtiraz",
+      "withdrawal": "Rızanın geri çekilmesi",
+      "portability": "Taşınabilirlik"
+    },
+    "typeHint": {
+      "access": "Kişi, hakkında hangi verileri tuttuğumuzu sorar. Bir dosyayla sonuçlanır.",
+      "export": "Kişinin verilerinin bir kopyası. Bir dosyayla sonuçlanır.",
+      "erasure": "Kişinin verilerini sil. Önce önizleme yaparsınız.",
+      "rectification": "Yanlış verileri düzelt. Elle düzeltir ve talebi kapatırsınız.",
+      "restriction": "Verileri şimdilik kullanmayı durdur. Elle işler ve talebi kapatırsınız.",
+      "objection": "Kişi, verilerinin bir şekilde kullanılmasına itiraz eder. Elle işler ve talebi kapatırsınız.",
+      "withdrawal": "Kişi rızasını geri çeker. Elle işler ve talebi kapatırsınız.",
+      "portability": "Başka yere taşımak için makine tarafından okunabilir bir kopya. Bir dosyayla sonuçlanır."
+    },
+    "status": {
+      "received": "Alındı",
+      "verifying": "Kimlik doğrulanıyor",
+      "in_progress": "Devam ediyor",
+      "completed": "Tamamlandı",
+      "rejected": "Reddedildi",
+      "expired": "Süresi doldu"
+    },
+    "channel": {
+      "email": "E-posta",
+      "whatsapp": "WhatsApp",
+      "phone": "Telefon",
+      "in_person": "Yüz yüze",
+      "portal": "Portal",
+      "staff": "Personel tarafından girildi",
+      "other": "Diğer"
+    },
+    "method": {
+      "channel_code": "Kişinin kanalına kod gönderildi",
+      "email_link": "Bağlantı e-postayla gönderildi",
+      "known_contact": "Elimizdeki numara veya e-posta üzerinden ulaşıldı",
+      "existing_session": "Hesabında oturum açtı",
+      "id_document_checked": "Kimlik belgesi kontrol edildi",
+      "other": "Diğer"
+    },
+    "disposition": {
+      "deleted": "Silindi",
+      "anonymised": "Anonimleştirildi",
+      "cascaded": "Zincirleme silindi",
+      "retained": "Saklandı",
+      "unlinked": "Bağlantısı kesildi"
+    },
+    "sla": {
+      "daysLeft": "{count, plural, one {# gün kaldı} other {# gün kaldı}}",
+      "dueToday": "Bugün son gün",
+      "overdue": "{count, plural, one {# gün gecikti} other {# gün gecikti}}",
+      "closed": "Kapandı",
+      "dueOn": "Son tarih {date}"
+    },
+    "list": {
+      "title": "Veri talepleri",
+      "subtitle": "İnsanların haklarında tuttuğunuz verilere ilişkin talepleri: erişim, dışa aktarma, silme ve daha fazlası. Her birinin bir son tarihi ve yapılanların kaydı vardır.",
+      "newRequest": "Yeni talep",
+      "settings": "Ayarlar",
+      "empty": "Henüz veri talebi yok.",
+      "emptyFiltered": "Bu filtrelerle eşleşen talep yok.",
+      "loadMore": "Daha fazla yükle",
+      "loadingMore": "Yükleniyor...",
+      "columns": {
+        "reference": "Referans",
+        "type": "Tür",
+        "subject": "Kişi",
+        "status": "Durum",
+        "due": "Son tarih"
+      },
+      "filters": {
+        "label": "Filtreler",
+        "status": "Durum",
+        "type": "Tür",
+        "any": "Herhangi",
+        "overdue": "Yalnızca geciken"
+      },
+      "open": "{reference} talebini aç"
+    },
+    "settings": {
+      "title": "Son tarih",
+      "slaDays": "Bir talebi yanıtlama süresi (gün)",
+      "slaHint": "Bir talep geldikten kaç gün sonra yanıtlanması gerektiği. Varsayılan 30'dur.",
+      "saved": "Ayarlar kaydedildi.",
+      "invalid": "1 ile 90 arasında tam sayı olarak gün girin."
+    },
+    "wizard": {
+      "title": "Yeni veri talebi",
+      "step": "Adım {current} / {total}",
+      "person": {
+        "title": "Kişiyi bul",
+        "search": "Ad, telefon veya e-posta ile ara",
+        "searchHint": "En az 2 karakter yazın.",
+        "searching": "Aranıyor...",
+        "none": "Kimse bulunamadı. Aşağıda bir telefon numarası veya e-posta kullanabilirsiniz.",
+        "pick": "{name} seç",
+        "unnamed": "Adsız",
+        "kindContact": "Kişi",
+        "kindLead": "Potansiyel müşteri",
+        "selected": "Seçilen: {name}",
+        "other": "Kişilerinizde yok",
+        "otherValue": "Telefon numarası veya e-posta",
+        "otherHint": "Kayıtlı olmayan biri için. Verilerini bu değerle ararız.",
+        "useOther": "Bu değeri kullan",
+        "clear": "Başka birini seç"
+      },
+      "kind": {
+        "title": "Kişi ne talep ediyor?"
+      },
+      "details": {
+        "title": "Ayrıntılar",
+        "channel": "Talep size nasıl ulaştı?",
+        "note": "Dahili not",
+        "noteHint": "İsteğe bağlı. Yalnızca ekibiniz görür. Buraya kişisel bilgi yazmayın.",
+        "history": "Konuşma geçmişi",
+        "historyHint": "Kişinin verileri silindiğinde konuşmalarına ne olacağı.",
+        "historyDelete": "Konuşmaları, mesajları ve dosyaları sil",
+        "historyAnonymise": "Konuşmaları kişinin kimliği olmadan sakla"
+      },
+      "create": "Talep oluştur",
+      "creating": "Oluşturuluyor...",
+      "created": "{reference} talebi oluşturuldu."
+    },
+    "detail": {
+      "back": "Veri talepleri",
+      "loading": "Yükleniyor...",
+      "received": "Alındığı tarih: {date}",
+      "channel": "Kanal: {channel}",
+      "history": {
+        "delete": "Silme durumunda: konuşmalar silinir",
+        "anonymise": "Silme durumunda: konuşmalar kişinin kimliği olmadan saklanır"
+      },
+      "note": "Dahili not",
+      "legalHoldBadge": "Yasal bekletme",
+      "timeline": {
+        "title": "Zaman çizelgesi",
+        "empty": "Henüz kayıt yok.",
+        "by": "{actor} tarafından",
+        "system": "sistem",
+        "event": {
+          "created": "Talep oluşturuldu",
+          "verification_started": "Kimlik kontrolü başlatıldı",
+          "verified": "Kimlik doğrulandı",
+          "verification_failed": "Kimlik doğrulanmadı",
+          "hold_set": "Yasal bekletme uygulandı",
+          "hold_released": "Yasal bekletme kaldırıldı",
+          "rejected": "Talep reddedildi",
+          "export_requested": "Dışa aktarım istendi",
+          "export_downloaded": "Dışa aktarım indirildi",
+          "erase_previewed": "Silme önizlendi",
+          "erased": "Veriler silindi",
+          "completed": "Talep tamamlandı",
+          "other": "Güncelle"
+        }
+      },
+      "verify": {
+        "title": "Kimlik doğrulama",
+        "intro": "Herhangi bir şeyi dışa aktarmadan veya silmeden önce talep edenin söylediği kişi olduğunu kontrol edin.",
+        "state": {
+          "none": "Henüz kontrol edilmedi.",
+          "verified": "{date} tarihinde doğrulandı ({method}).",
+          "evidence": "Kanıt referansı: {ref}"
+        },
+        "method": "Nasıl kontrol edildi?",
+        "evidence": "Kanıt referans ID'si",
+        "evidenceHint": "Yalnızca referans ID'si, asla belge yüklemeyin. Bir bilet numarası veya mesaj ID'si kullanın.",
+        "note": "Not",
+        "outcome": "Sonuç",
+        "pending": "Kontrol başladı",
+        "verified": "Doğrulandı",
+        "notVerified": "Doğrulanmadı",
+        "submit": "Sonucu kaydet",
+        "notVerifiedWarn": "Doğrulanmamış bir kişinin talebi reddedilir.",
+        "saved": "Doğrulama kaydedildi."
+      },
+      "hold": {
+        "title": "Yasal bekletme",
+        "intro": "Bekletme açıkken silme reddedilir. Yasa veya bir uyuşmazlık verilerin saklanmasını gerektirdiğinde kullanın.",
+        "toggle": "Yasal bekletme",
+        "reason": "Neden",
+        "reasonHint": "En az 3 karakter.",
+        "apply": "Bekletme uygula",
+        "release": "Bekletmeyi kaldır",
+        "active": "Bekletmede: {reason}",
+        "saved": "Bekletme güncellendi."
+      },
+      "export": {
+        "title": "Dışa aktarma",
+        "intro": "Bu kişi hakkında tuttuğumuz verileri içeren bir ZIP dosyası hazırlar.",
+        "expiry": "Tamamlanan dosya {days} gün boyunca erişilebilir kalır, sonra silinir.",
+        "noEmail": "Kişiye hiçbir şey gönderilmez. Dosyayı indirin ve güvenli bir kanaldan kendisine iletin.",
+        "request": "Dışa aktarımı hazırla",
+        "requesting": "Hazırlanıyor...",
+        "requested": "Dışa aktarım başladı.",
+        "none": "Henüz dışa aktarım yok.",
+        "download": "İndir",
+        "size": "{size} KB",
+        "expires": "Bitiş: {date}",
+        "status": {
+          "queued": "Bekliyor",
+          "running": "Oluşturuluyor",
+          "ready": "Hazır",
+          "failed": "Başarısız",
+          "expired": "Süresi doldu"
+        }
+      },
+      "erase": {
+        "title": "Sil",
+        "intro": "Kişinin verilerini tüm modüllerden siler. Önce önizleyin: siz onaylamadan hiçbir şey değişmez.",
+        "preview": "Önizleme",
+        "previewing": "Sayılıyor...",
+        "previewTitle": "Ne olacak",
+        "previewNote": "Yalnızca önizleme. Hiçbir şey değiştirilmedi.",
+        "files": "{count, plural, one {# saklanan dosya silinmek üzere sıraya alındı} other {# saklanan dosya silinmek üzere sıraya alındı}}",
+        "totals": "{deleted} silindi, {anonymised} anonimleştirildi, {retained} saklandı",
+        "colTable": "Tablo",
+        "colWhat": "Ne olacak",
+        "colCount": "Satır",
+        "colReason": "Neden",
+        "confirmLabel": "Onaylamak için {phrase} yazın",
+        "confirmHint": "Bu işlem geri alınamaz.",
+        "execute": "Şimdi sil",
+        "executing": "Siliniyor...",
+        "done": "Silme tamamlandı.",
+        "blocked": "Silme, kimlik doğrulandığında ve yasal bekletme olmadığında kullanılabilir."
+      },
+      "proof": {
+        "title": "Silme kanıtı",
+        "executedAt": "{date} tarihinde yürütüldü",
+        "executedBy": "Yapan: {actor}",
+        "totals": "{deleted} silindi, {anonymised} anonimleştirildi, {retained} saklandı, {files} dosya",
+        "registryDigest": "Kayıt özeti",
+        "sha256": "SHA-256",
+        "notes": "Bu silmenin sınırları",
+        "download": "Kanıtı indir"
+      },
+      "close": {
+        "title": "Talebi kapat",
+        "complete": "Tamamlandı olarak işaretle",
+        "completeHint": "Kişiye yanıt verildiğinde veya iş elle yapıldığında kullanın.",
+        "completed": "Talep tamamlandı.",
+        "rejectReason": "Reddetme nedeni",
+        "reject": "Talebi reddet",
+        "rejectConfirm": "Reddet",
+        "rejected": "Talep reddedildi.",
+        "rejectedWith": "Reddedildi: {reason}"
+      }
+    },
+    "contactMenu": {
+      "group": "Gizlilik",
+      "export": "Bu kişinin verilerini dışa aktar",
+      "erase": "Bu kişiyi sil",
+      "created": "{reference} talebi oluşturuldu.",
+      "failed": "Talep oluşturulamadı."
+    }
+  }
+}

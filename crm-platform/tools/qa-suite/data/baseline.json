@@ -1,0 +1,20 @@
+{
+  "30": [
+    {
+      "key": "apps/api/src/modules/crm/deals/deal-reports.repository.ts sql.raw(`d.${column}`)",
+      "reason": "column is typed 'won_at' | 'lost_at' by the caller; not request text; reviewed 2026-10-14"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/messaging.repository.ts sql.raw(`to_char(${column} AT TIME ZONE 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS.US\"Z\"')",
+      "reason": "ISO() is only called with literal column expressions inside this repository; reviewed 2026-10-14"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/browse.repository.ts sql.raw([...def.keys.map((x) => x.expr), 'a.id'] .map((e) => `${e} ${def.dir.t)",
+      "reason": "def = SORTS[q.sort]: a fixed map keyed by the AppSort enum, so the expressions are server-side constants; reviewed 2026-10-14 (confirm q.sort is validated by the zod enum)"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `DECLARE rot NO SCROLL CURSOR FOR SELECT tableoid::regclass::text AS tbl, ctid::te",
+      "reason": "identifiers go through quote(); batch is a number; maintenance CLI, not reachable from a request; reviewed 2026-10-14"
+    }
+  ]
+}

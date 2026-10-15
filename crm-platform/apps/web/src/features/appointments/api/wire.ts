@@ -404,6 +404,7 @@ export function toPublicType(s: PublicBookingType): PublicType {
       required: q.required,
       mapToContactField: null,
     })),
+    consent: s.consent ?? null,
   };
 }
 
@@ -485,5 +486,6 @@ export function toBookBody(input: PublicBookInput): BookBody {
     phone: input.phone || null,
     timezone: input.inviteeTimezone,
     ...(Object.keys(answers).length > 0 ? { answers } : {}),
+    ...(input.consent ? { consent: input.consent } : {}),
   };
 }

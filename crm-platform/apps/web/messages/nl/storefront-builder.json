@@ -8,7 +8,6 @@
         "dismiss": "Sluiten"
       },
       "errors": {
-        "requestId": "Aanvraag-ID",
         "retry": "Opnieuw proberen",
         "network": {
           "title": "Geen verbinding met de server",

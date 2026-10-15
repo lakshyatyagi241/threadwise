@@ -214,7 +214,6 @@
         "sessionExpired": "Phiên của bạn đã hết hạn vì lý do bảo mật. Vui lòng thử lại.",
         "network": "Không thể kết nối máy chủ. Hãy kiểm tra kết nối rồi thử lại.",
         "unexpected": "Đã xảy ra lỗi ở phía chúng tôi. Vui lòng thử lại.",
-        "requestId": "Mã yêu cầu",
         "signupExpired": "Vui lòng bắt đầu đăng ký lại.",
         "policyRules": {
           "min_length": "Dùng tối thiểu {min, plural, other {# ký tự}}.",

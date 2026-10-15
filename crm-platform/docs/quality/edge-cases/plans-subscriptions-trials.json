@@ -1,0 +1,16 @@
+{
+  "module": "plans-subscriptions-trials",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-plans-subscriptions-trials-001",
+      "feature": "plan chip",
+      "category": "input",
+      "scenario": "a value of 4 (one past PLAN_CHIP_MAX = 3) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/plans-subscriptions-trials/catalogue.ts"
+    }
+  ]
+}

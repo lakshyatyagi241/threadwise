@@ -1,0 +1,10 @@
+{
+  "whatsapp-devices-baileys": {
+    "history": {
+      "choice": {
+        "fullLocked": "ไม่รวมอยู่ในแพ็กเกจของคุณ อัปเกรดเพื่อนำเข้าประวัติทั้งหมด",
+        "fullLockedLink": "ดูแพ็กเกจ"
+      }
+    }
+  }
+}

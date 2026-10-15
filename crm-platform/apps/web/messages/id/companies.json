@@ -18,7 +18,6 @@
       "planDisabled": "Paket Anda tidak menyertakan perusahaan. Upgrade untuk membukanya.",
       "ownerInvalid": "Pemilik harus anggota aktif workspace ini.",
       "unexpected": "Terjadi kesalahan. Coba lagi sesaat lagi.",
-      "requestId": "ID permintaan",
       "retry": "Coba lagi"
     },
     "list": {

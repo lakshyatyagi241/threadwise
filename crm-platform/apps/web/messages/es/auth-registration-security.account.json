@@ -22,7 +22,6 @@
         "signedOut": "Tu sesión ha terminado. Inicia sesión de nuevo.",
         "rateLimited": "Demasiados intentos. Espera un momento e inténtalo de nuevo.",
         "rateLimitedWait": "Demasiados intentos. Inténtalo de nuevo en {seconds, plural, one {# segundo} other {# segundos}}.",
-        "requestId": "ID de solicitud",
         "locked": "Demasiados intentos fallidos. Espera un poco antes de volver a intentarlo.",
         "lockedWait": "Demasiados intentos fallidos. Inténtalo de nuevo en {minutes, plural, one {# minuto} other {# minutos}}."
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "Zona horaria",
         "workspaceTimezoneHint": "Se aplica a {workspace}. Solo los propietarios y administradores pueden cambiarla.",
+        "myTimezone": "Mi zona horaria",
+        "myTimezoneHint": "Las fechas y horas se te muestran en {zone}. Déjalo vacío para usar la zona horaria del espacio de trabajo (UTC si no tiene ninguna).",
+        "myTimezoneUseWorkspace": "Usar la del espacio de trabajo",
         "saved": "Perfil guardado.",
         "errors": {
           "fullNameRequired": "Introduce tu nombre completo.",
@@ -555,7 +557,8 @@
             "waba_groups": "Grupos de WhatsApp",
             "sms": "SMS",
             "help_agent": "Asistente de ayuda",
-            "email_channel": "Canal de correo (Gmail)"
+            "email_channel": "Canal de correo (Gmail)",
+            "personal_history_full": "Importación del historial completo (WhatsApp personal)"
           },
           "cta": {
             "continueFree": "Continuar gratis",

@@ -1,1 +1,5 @@
 pnpm exec lint-staged
+# Secret scan of what is staged. Skipped quietly when gitleaks is not installed (CI scans the whole history anyway).
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --redact --no-banner --config "$(git rev-parse --show-toplevel)/.gitleaks.toml"
+fi

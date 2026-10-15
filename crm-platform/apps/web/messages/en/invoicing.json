@@ -40,7 +40,6 @@
       "planDisabled": "Your plan does not include invoicing.",
       "invalidState": "That is not possible in the invoice's current state. Reload and check its status.",
       "unexpected": "Something went wrong on our side. Try again.",
-      "requestId": "Request ID",
       "retry": "Try again"
     },
     "picker": {

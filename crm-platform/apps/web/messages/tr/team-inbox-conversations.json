@@ -28,8 +28,8 @@
       "teamChanged": "Ekip güncellendi.",
       "priorityChanged": "Öncelik güncellendi",
       "snoozed": "Konuşma ertelendi",
-      "labelAdded": "Etiket eklendi",
-      "labelRemoved": "Etiket kaldırıldı"
+      "tagAdded": "Etiket eklendi",
+      "tagRemoved": "Etiket kaldırıldı"
     },
     "list": {
       "title": "Gelen kutusu",
@@ -137,23 +137,24 @@
       "unsupported": "Bu kanal bu türde mesaj veya dosya gönderemez.",
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
       "generic": "Bir sorun oluştu. Yeniden deneyin.",
-      "genericWithId": "Bir sorun oluştu. Yeniden deneyin. Referans: {id}",
       "templateNotSendable": "Bu şablon bu konuşmaya gönderilemez. Başka bir şablon seçin.",
       "groupSendUnavailable": "WhatsApp gruplarına gönderim henüz kullanılamıyor. WhatsApp Business uygulamasından yanıtlayın.",
       "logRange": "Son bir yıl içinde, başlangıcı bitişten önce olan ve gelecekte olmayan tarihler seçin.",
       "logBusy": "Bir dışa aktarma zaten hazırlanıyor. E-postasını bekleyin, sonra yenisini isteyin.",
       "logNotReady": "Bu dışa aktarma hazır değil veya süresi doldu. Yeniden isteyin.",
       "groupSuspended": "Meta bu grubu askıya aldı; Meta kaldırana kadar gruba mesaj gönderilemez.",
-      "walletEmpty": "Mesaj cüzdanınız bu grup mesajını karşılayamıyor (üye başına bir ücret). Bakiye yükleyip tekrar deneyin.",
-      "groupPlanLocked": "Planınız WhatsApp gruplarını içermiyor, bu nedenle bu gruba mesaj gönderilemez. Bir yöneticiden planı yükseltmesini isteyin.",
       "groupLeft": "Bu numara gruptan ayrıldığı için artık orada mesaj gönderemez.",
       "groupAnnounceOnly": "Bu grupta yalnızca yöneticiler mesaj gönderebilir ve bu numara yönetici değil.",
       "groupRateLimited": "Bu numaradan kısa sürede çok fazla grup mesajı gönderildi. Bir dakika bekleyip tekrar deneyin.",
       "groupUnavailable": "WhatsApp bu grup mesajını kabul etmedi. Birkaç dakika sonra tekrar deneyin.",
+      "walletEmpty": "Mesaj cüzdanınız bu grup mesajını karşılayamıyor (üye başına bir ücret). Bakiye yükleyip tekrar deneyin.",
+      "groupPlanLocked": "Planınız WhatsApp gruplarını içermiyor, bu nedenle bu gruba mesaj gönderilemez. Bir yöneticiden planı yükseltmesini isteyin.",
       "savedReplyGone": "Bu hazır yanıt artık mevcut değil.",
       "savedReplyChannel": "Bu hazır yanıt bu tür bir kanal için uygun değil.",
       "shortcutTaken": "Başka bir hazır yanıt zaten bu kısayolu kullanıyor.",
-      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır."
+      "importInvalid": "Bu dosya kayıtlı yanıt olarak okunamıyor. İlk satırda title, shortcut ve body sütunları olmalı ve en fazla 1.000 satır bulunmalıdır.",
+      "contactOptedOut": "Bu kişi pazarlama iletilerinden çıktığı için ileti gönderilmedi.",
+      "consentRequired": "Bu çalışma alanı pazarlama iletileri için kayıtlı onay gerektiriyor ve bu kişinin onayı yok, bu yüzden ileti gönderilmedi."
     },
     "bubble": {
       "kind": {
@@ -223,7 +224,15 @@
       "groupMember": "Grup üyesi",
       "groupTally": "{members} kişiden {delivered} kişiye iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
       "groupTallyNoTotal": "{delivered, plural, one {# üyeye} other {# üyeye}} iletildi{read, plural, =0 {} other {, # kişi okudu}}{failed, plural, =0 {} other {, # başarısız}}",
-      "groupTallyBilled": "{billable} ücretlendirildi, {free} ücretsiz"
+      "groupTallyBilled": "{billable} ücretlendirildi, {free} ücretsiz",
+      "stageLine": {
+        "auto": "Yapay zekâ sohbeti okudu ve bu kişiyi {from} aşamasından {to} aşamasına taşıdı.",
+        "undo": "Geri al",
+        "wasUndone": "Geri alındı",
+        "undone": "Aşama değişikliği geri alındı: tekrar {stage}.",
+        "undoneToast": "Aşama {stage} olarak geri yüklendi.",
+        "couldNotUndo": "Bu değişiklik artık geri alınamaz: kişi ilerledi veya değişiklik zaten geri alındı."
+      }
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -275,6 +284,44 @@
       "attachment": "bir ek",
       "jumpLatest": "En yeniye git",
       "jumpLatestNew": "{count, plural, other {# yeni mesaj}}"
+    },
+    "groupThread": {
+      "openGroup": "Grubu aç",
+      "readOnly": {
+        "left": {
+          "title": "Bu numara gruptan ayrıldı",
+          "message": "Sohbet olduğu gibi saklanır. Okuyabilir ve iç not ekleyebilirsiniz ama mesaj gönderemezsiniz."
+        },
+        "announceOnly": {
+          "title": "Bu grupta yalnızca yöneticiler mesaj gönderebilir",
+          "message": "Bu numara grubun yöneticisi olmadığı için WhatsApp mesajı iletmez. Yine de iç not ekleyebilirsiniz."
+        }
+      },
+      "mention": {
+        "label": "Grup üyeleri",
+        "loading": "Üyeler aranıyor",
+        "none": "Eşleşen üye yok"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta bu grubu askıya aldı",
+          "message": "WhatsApp, askıya alınmış bir gruba mesaj iletmez. Meta askıyı kaldırana kadar konuşmayı okuyabilir ve dahili not ekleyebilirsiniz."
+        },
+        "plan": {
+          "title": "Planınız WhatsApp gruplarını içermiyor",
+          "message": "Bu konuşmayı okuyabilir ve dahili not ekleyebilirsiniz, ancak gruba göndermek için gruplu bir plan gerekir. Bir yöneticiden yükseltme isteyin."
+        },
+        "ineligible": {
+          "title": "Bu numara WhatsApp gruplarını kullanamaz",
+          "message": "Son kontrolde Meta bu numarada gruplara izin vermedi (resmi işletme hesabı gerekir). Konuşmayı okuyabilir ve dahili not ekleyebilirsiniz. Yeniden kontrol etmek için Meta Grupları'nı açın."
+        }
+      },
+      "cost": {
+        "members": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. Tahmini maliyet {cost}: WhatsApp, mesajı alan her üye için ücret alır.",
+        "membersNoEstimate": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. WhatsApp, mesajı alan her üye için ücret alır.",
+        "sizeUnknown": "Üye sayısı henüz bilinmiyor. WhatsApp, bu mesajı alan her üye için ücret alır.",
+        "walletShort": "Cüzdan bakiyeniz bu mesaj için yetmeyebilir. Göndermeden önce bakiye yükleyin."
+      }
     },
     "composer": {
       "modeLabel": "Mesaj türü",
@@ -403,7 +450,9 @@
         "unassign": "Atamayı kaldır",
         "open": "{count} açık",
         "pickTeam": "Bu konuşma için bir ekip seçin",
-        "noTeam": "Ekip yok"
+        "noTeam": "Ekip yok",
+        "onLeave": "İzinli",
+        "onLeaveUntil": "{date} tarihine kadar izinli"
       },
       "presence": {
         "online": "Çevrimiçi",
@@ -555,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Şablon gönder",
       "close": "Kapat",
-      "cancel": "İptal",
-      "back": "Şablonlara dön",
       "search": "Ad veya metne göre ara",
       "searchLabel": "Şablonlarda ara",
       "loading": "Şablonlar yükleniyor",
@@ -565,9 +612,7 @@
       "empty": "Bu WhatsApp numarası için henüz onaylı şablon yok. Şablonlar bölümünde bir şablon oluşturun ve Meta onayını bekleyin.",
       "noResults": "Aramanızla eşleşen şablon yok.",
       "windowHint": "Şablon, 24 saatlik yanıt penceresi kapansa bile çalışır.",
-      "variables": "Değişkenleri doldurun",
       "preview": "Müşterinin okuyacakları",
-      "send": "Şablonu gönder",
       "sending": "Gönderiliyor",
       "sent": "Şablon gönderildi",
       "problem": {
@@ -582,7 +627,31 @@
         "authentication": "Tek kullanımlık şifre şablonları gelen kutusundan değil, sistem tarafından gönderilir.",
         "named_variables": "Gelen kutusunun henüz desteklemediği adlandırılmış değişkenler kullanır."
       },
-      "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın."
+      "hasMore": "İlk {count} şablon gösteriliyor. Diğerlerini bulmak için ad veya metne göre arayın.",
+      "previewEmpty": "Müşterinin telefonunda nasıl görüneceğini görmek için bir şablonun üzerine gelin.",
+      "previewCustomer": "Müşteri",
+      "noVariables": "Bu şablonda doldurulacak bir şey yok. Telefonu kontrol edin, sonra gönderin.",
+      "sendTo": "{name} kişisine gönder",
+      "refresh": "Listeyi yenile",
+      "device": "Telefon önizlemesi",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Gövde değişkenlerini yapılandır",
+      "or": "veya",
+      "mapField": "{key} için alan eşle",
+      "mapNone": "Bu kişide eşlenecek bilgi yok.",
+      "typeMessage": "Bir mesaj yazın",
+      "fields": {
+        "name": "Ad",
+        "phone": "Telefon",
+        "email": "E-posta"
+      },
+      "create": "Yeni şablon oluştur",
+      "actions": "Şablon işlemleri",
+      "edit": "Şablonu düzenle",
+      "duplicate": "Şablonu çoğalt"
     },
     "log": {
       "title": "Teslimat günlüğü",
@@ -656,44 +725,6 @@
           "failed": "Başarısız",
           "expired": "Süresi doldu"
         }
-      }
-    },
-    "groupThread": {
-      "openGroup": "Grubu aç",
-      "readOnly": {
-        "left": {
-          "title": "Bu numara gruptan ayrıldı",
-          "message": "Sohbet olduğu gibi saklanır. Okuyabilir ve iç not ekleyebilirsiniz ama mesaj gönderemezsiniz."
-        },
-        "announceOnly": {
-          "title": "Bu grupta yalnızca yöneticiler mesaj gönderebilir",
-          "message": "Bu numara grubun yöneticisi olmadığı için WhatsApp mesajı iletmez. Yine de iç not ekleyebilirsiniz."
-        }
-      },
-      "mention": {
-        "label": "Grup üyeleri",
-        "loading": "Üyeler aranıyor",
-        "none": "Eşleşen üye yok"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta bu grubu askıya aldı",
-          "message": "WhatsApp, askıya alınmış bir gruba mesaj iletmez. Meta askıyı kaldırana kadar konuşmayı okuyabilir ve dahili not ekleyebilirsiniz."
-        },
-        "plan": {
-          "title": "Planınız WhatsApp gruplarını içermiyor",
-          "message": "Bu konuşmayı okuyabilir ve dahili not ekleyebilirsiniz, ancak gruba göndermek için gruplu bir plan gerekir. Bir yöneticiden yükseltme isteyin."
-        },
-        "ineligible": {
-          "title": "Bu numara WhatsApp gruplarını kullanamaz",
-          "message": "Son kontrolde Meta bu numarada gruplara izin vermedi (resmi işletme hesabı gerekir). Konuşmayı okuyabilir ve dahili not ekleyebilirsiniz. Yeniden kontrol etmek için Meta Grupları'nı açın."
-        }
-      },
-      "cost": {
-        "members": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. Tahmini maliyet {cost}: WhatsApp, mesajı alan her üye için ücret alır.",
-        "membersNoEstimate": "Bu mesaj {count, plural, one {# üyeye} other {# üyeye}} gidecek. WhatsApp, mesajı alan her üye için ücret alır.",
-        "sizeUnknown": "Üye sayısı henüz bilinmiyor. WhatsApp, bu mesajı alan her üye için ücret alır.",
-        "walletShort": "Cüzdan bakiyeniz bu mesaj için yetmeyebilir. Göndermeden önce bakiye yükleyin."
       }
     },
     "savedReplies": {
@@ -892,6 +923,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Öncelik",
+      "snooze": "Ertele",
+      "wake": "Şimdi göster"
+    },
     "bulk": {
       "barLabel": "Toplu işlemler",
       "selected": "{count, plural, one {# konuşma seçildi} other {# konuşma seçildi}}",
@@ -919,29 +955,44 @@
         "partial": "{done} güncellendi, {unchanged} zaten güncel, {failed} değiştirilemedi. Başarısız olanlar seçili kalır.",
         "allFailed": "{count, plural, one {# konuşma} other {# konuşma}} değiştirilemedi."
       },
-      "label": "Etiket",
-      "labelAdd": "Etiket ekle",
-      "labelRemove": "Etiketi kaldır"
+      "tag": "Etiketle",
+      "tagAdd": "Etiket ekle",
+      "tagRemove": "Etiketi kaldır",
+      "onLeave": "izinli",
+      "onLeaveUntil": "{date} tarihine kadar izinli"
     },
-    "triage": {
-      "priority": "Öncelik",
-      "snooze": "Ertele",
-      "wake": "Şimdi göster"
-    },
-    "labels": {
-      "label": "Etiket",
+    "tags": {
+      "tag": "Etiket",
       "loading": "Etiketler yükleniyor…",
       "loadFailed": "Etiketler yüklenemedi.",
       "none": "Henüz etiket yok.",
-      "newLabel": "Yeni etiket",
+      "newTag": "Yeni etiket",
       "add": "Ekle",
       "filter": "Etiketler",
       "filterActive": "{count, plural, one {# etiket} other {# etiket}}",
       "clearFilter": "Etiket filtresini temizle",
+      "scope": {
+        "label": "Etiketleri şuna göre eşleştir",
+        "conversation": "Sohbet etiketleri",
+        "contact": "Kişi etiketleri"
+      },
+      "groups": {
+        "title": "Etiketler",
+        "helpFor": "{title} hakkında",
+        "rule": "Her iki tür de aynı çalışma alanı etiket kitaplığından gelir.",
+        "contactTitle": "Kişi etiketleri",
+        "contactHelp": "Kişi etiketi, kişiyi tanımlar (VIP, potansiyel müşteri, bölge). Her sohbette onunla birlikte görünür.",
+        "contactNone": "Bu kişinin etiketi yok.",
+        "contactEdit": "Kişide düzenle",
+        "conversationTitle": "Sohbet etiketleri",
+        "conversationHelp": "Sohbet etiketi, bu görüşmeyi tanımlar (faturalama, iade, acil).",
+        "conversationNone": "Bu sohbette henüz etiket yok.",
+        "remove": "{name} etiketini kaldır"
+      },
       "screen": {
         "back": "Gelen kutusuna dön",
-        "title": "Etiketler",
-        "intro": "Etiketler, ekibinizin sohbetleri sıralayıp filtreleyebilmesi için onları işaretler. Kişilerde kullanılan etiketlerle aynıdır.",
+        "title": "Sohbet etiketleri",
+        "intro": "Sohbet etiketleri, ekibinizin gelen kutusunu sıralayıp filtreleyebilmesi için bir görüşmeyi (faturalama, iade, acil) işaretler. Kişiyi tanımlayan kişi etiketleriyle aynı etiket kitaplığından gelir.",
         "newTitle": "Yeni etiket",
         "editTitle": "Etiketi düzenle",
         "name": "Ad",
@@ -964,6 +1015,17 @@
         "created": "Etiket oluşturuldu",
         "deleted": "Etiket silindi"
       }
+    },
+    "sla": {
+      "breached": "SLA aşıldı",
+      "atRisk": "SLA bitimine {minutes} dk kaldı",
+      "ok": "SLA bitiş: {time}",
+      "kind": {
+        "first_response": "İlk yanıt hedefi",
+        "resolution": "Çözüm hedefi"
+      },
+      "titleBreached": "{kind}: kaçırıldı (son zaman {time})",
+      "titleOpen": "{kind}: son zaman {time}"
     }
   }
 }

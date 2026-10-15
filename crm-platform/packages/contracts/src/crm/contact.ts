@@ -3,6 +3,7 @@ import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
 import { lifecycleStageSchema, recordLifecycleSchema } from '../common/enums';
 import { paginationQuerySchema } from '../common/pagination';
 import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
+import { consentProofSchema } from '../contact-consent/intake';
 import { contactGroupRefSchema } from '../contacts-attributes-tags/contact-group';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
 import type { InvalidCondition } from '../segments/rules';
@@ -81,7 +82,8 @@ export const createContactSchema = z
     email: emailSchema.optional(),
     phone: phoneSchema.optional(),
     companyId: uuidSchema.optional(),
-    ownerId: uuidSchema.optional(),
+    /** Omitted: the creator. `null`: nobody (refused to a caller whose record scope would hide the contact). */
+    ownerId: uuidSchema.nullish(),
     lifecycleStage: lifecycleStageSchema.or(z.string().min(1)).optional(),
     status: z.string().max(64).optional(),
     lostReason: z.string().max(255).optional(),
@@ -96,6 +98,12 @@ export const createContactSchema = z
     source: z.string().trim().max(128).optional(),
     /** Marketing opt-out (TW-CON-017): broadcasts and campaigns skip an opted-out contact. */
     isUnsubscribed: z.boolean().optional(),
+    /**
+     * The proof that the person agreed to marketing. A subscription status set to `subscribed` needs it (422 CONSENT_NOTE_REQUIRED
+     * without a note or text): the status alone is a label, the ledger grant written from this block is the consent. Not stored on the
+     * contact.
+     */
+    consent: consentProofSchema.optional(),
     customFields: z.record(z.unknown()).default({}),
   })
   // A contact with neither a phone nor an email cannot be reached, cannot be
@@ -127,6 +135,8 @@ export const updateContactSchema = z.object({
   source: z.string().trim().max(128).nullish(),
   /** Marketing opt-out. Turning it on stamps `unsubscribedAt`; turning it off clears it. */
   isUnsubscribed: z.boolean().optional(),
+  /** The proof that the person agreed to marketing; see `createContactSchema`. Needed when a status changes to `subscribed`. */
+  consent: consentProofSchema.optional(),
   customFields: z.record(z.unknown()).optional(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409. */
   rowVersion: z.number().int().positive(),
@@ -248,6 +258,11 @@ export const assigneeResponseSchema = z.object({
   id: uuidSchema,
   fullName: z.string(),
   email: z.string(),
+  /**
+   * Whether the caller's record scope lets them hand a contact to this person (`all`: anyone; `team`: themselves and
+   * teammates; `own`: themselves). The owner picker offers only these; the server enforces it again on every write.
+   */
+  canAssign: z.boolean(),
 });
 export type AssigneeResponse = z.infer<typeof assigneeResponseSchema>;
 

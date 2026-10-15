@@ -40,6 +40,19 @@ RUN --mount=type=secret,id=sentry_auth_token,required=false \
 
 FROM build AS runtime
 ENV NODE_ENV=production
+# The build stage holds everything `next build` needed (the compiler, the test runner, their dependencies, a cached copy of pnpm and
+# the npm that ships with the base image). `next start` needs none of it, and the image scan flagged about 75 high and critical
+# findings in those tools (QA task 39). So the runtime keeps the production dependencies only and starts Next with `node`, not pnpm,
+# which lets pnpm, its cache, npm and corepack be removed. CI=true lets pnpm replace the modules directory without asking (there is no
+# terminal to answer); --ignore-scripts skips the repository's husky `prepare` hook, which is not installed any more; --filter keeps only
+# the web app and what it depends on (the API's git-hosted packages are not in this stage's store, and the web app does not use them).
+# Take the fixed Alpine packages (OpenSSL etc.) that are newer than the node base image; see the API Dockerfile.
+RUN apk upgrade --no-cache
+RUN CI=true pnpm install --prod --frozen-lockfile --offline --ignore-scripts --filter "@crm/web..." \
+ && rm -rf /root/.cache /root/.local/share/pnpm/store \
+      /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+      /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack /usr/local/bin/pnpm /usr/local/bin/pnpx \
+      /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-*
 WORKDIR /app/apps/web
 EXPOSE 3001
-CMD ["pnpm", "exec", "next", "start", "-p", "3001"]
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "3001"]

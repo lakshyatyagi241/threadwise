@@ -193,7 +193,6 @@
         "outOfOrder": "Un paso se ejecutó fuera de orden. Recarga la página y empieza de nuevo.",
         "step": "Falló un paso de la instalación. Revisa tus datos y los registros del servidor y vuelve a intentarlo.",
         "unknown": "Algo salió mal. Inténtalo de nuevo.",
-        "requestId": "Id de solicitud {id}",
         "prerequisites": "El servidor no está listo para la configuración: {items}.",
         "licence": {
           "empty": "Introduce tu código de compra de CodeCanyon.",
@@ -265,7 +264,6 @@
       "loading": "Cargando",
       "errorForbidden": "No puedes ver esta página.",
       "errorUnexpected": "No se pudo cargar el actualizador.",
-      "requestId": "Id de solicitud",
       "retry": "Reintentar",
       "licence": {
         "kicker": "paso 1 · licencia",

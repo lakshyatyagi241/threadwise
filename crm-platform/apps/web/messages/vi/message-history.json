@@ -1,0 +1,274 @@
+{
+  "message-history": {
+    "common": {
+      "dismiss": "Đóng"
+    },
+    "nav": {
+      "history": "Lịch sử"
+    },
+    "crumb": "Chiến dịch / Lịch sử tin nhắn",
+    "title": "Lịch sử tin nhắn",
+    "loading": "Đang tải tin nhắn…",
+    "tryAgain": "Thử lại",
+    "retention": "Các bước gửi của mỗi tin nhắn được lưu đầy đủ trong {hot} ngày, sau đó được lưu trữ và giữ đến {days} ngày kể từ ngày gửi tin. Danh sách tin nhắn có thể xem lại tối đa một năm.",
+    "range": {
+      "label": "Khoảng thời gian",
+      "24h": "24 giờ qua",
+      "7d": "7 ngày qua",
+      "30d": "30 ngày qua",
+      "90d": "90 ngày qua",
+      "custom": "Tùy chọn ngày",
+      "short": {
+        "24h": "24 giờ",
+        "7d": "7 ngày",
+        "30d": "30 ngày",
+        "90d": "90 ngày"
+      },
+      "from": "Từ",
+      "to": "Đến",
+      "apply": "Áp dụng ngày",
+      "problem": {
+        "order": "Ngày bắt đầu không được sau ngày kết thúc."
+      }
+    },
+    "exports": {
+      "title": "Xuất CSV",
+      "request": "Xuất CSV",
+      "requested": "Bản xuất của bạn đang được chuẩn bị. Chúng tôi sẽ gửi email khi hoàn tất.",
+      "requestedTo": "Bản xuất của bạn đang được chuẩn bị. Chúng tôi sẽ gửi email đến {email} khi hoàn tất.",
+      "status": {
+        "queued": "Đang chờ bắt đầu",
+        "running": "Đang chuẩn bị",
+        "ready": "Sẵn sàng",
+        "failed": "Thất bại",
+        "expired": "Đã hết hạn"
+      },
+      "preparing": "Đang chuẩn bị…",
+      "download": "Tải xuống",
+      "rows": "{n} tin nhắn",
+      "keptUntil": "giữ đến {when} ({days} ngày)",
+      "fromEmail": "Từ email của bạn"
+    },
+    "kpi": {
+      "label": "Chỉ số chính",
+      "total": "Tổng tin nhắn",
+      "vsLast": "{pct}% so với kỳ trước",
+      "sent": "Đã gửi",
+      "received": "Đã nhận",
+      "failed": "Thất bại",
+      "avgResponse": "Phản hồi TB",
+      "delivered": "Đã chuyển đến",
+      "read": "Đã đọc",
+      "deliveryRate": "Tỷ lệ chuyển đến",
+      "cost": "Chi phí",
+      "outgoing": "gửi đi",
+      "incoming": "nhận vào",
+      "retryQueue": "hàng đợi thử lại",
+      "toFirstReply": "đến lần trả lời đầu",
+      "healthy": "tốt",
+      "na": "Không có",
+      "deliveredCaption": "đã đến tay khách hàng",
+      "readCaption": "khách hàng đã mở",
+      "deliveryRateCaption": "trên số tin đã rời hàng đợi",
+      "costCaption": "trừ vào ví của bạn"
+    },
+    "charts": {
+      "volume": "Số lượng",
+      "volumeTitle": "Tin nhắn theo thời gian",
+      "bucketLabel": "Nhóm theo",
+      "bucket": {
+        "daily": "Ngày",
+        "hourly": "Giờ",
+        "weekly": "Tuần"
+      },
+      "volumeAria": "Tin nhắn theo thời gian: {sent} đã gửi, {received} đã nhận, {failed} thất bại",
+      "when": "Thời gian",
+      "series": {
+        "sent": "Đã gửi",
+        "received": "Đã nhận",
+        "failed": "Thất bại"
+      },
+      "direction": "Phân chia theo hướng",
+      "directionTitle": "Đã gửi so với đã nhận",
+      "directionAria": "{total} tin nhắn, chia thành đã gửi, đã nhận và thất bại",
+      "types": "Theo loại tin nhắn",
+      "typesTitle": "Cơ cấu kỳ này",
+      "media": "Đa phương tiện",
+      "top": "Cuộc trò chuyện hàng đầu",
+      "topTitle": "Cuộc trò chuyện sôi động nhất ({range})",
+      "openInbox": "Mở hộp thư",
+      "topEmpty": "Chưa có cuộc trò chuyện nào hoạt động trong kỳ này.",
+      "topMeta": "{n} tin · gần nhất {time}"
+    },
+    "filters": {
+      "search": "Tìm tin nhắn",
+      "searchPlaceholder": "Tìm theo nội dung, liên hệ, số điện thoại hoặc ID tin nhắn…",
+      "directionLabel": "Hướng",
+      "dir": {
+        "all": "Tất cả",
+        "out": "Đã gửi",
+        "in": "Đã nhận",
+        "fail": "Thất bại"
+      },
+      "channel": "Kênh",
+      "allChannels": "Tất cả kênh",
+      "type": "Loại",
+      "allTypes": "Tất cả loại",
+      "status": "Trạng thái",
+      "allStatuses": "Tất cả trạng thái",
+      "sources": "Gửi bởi",
+      "clear": "Xóa bộ lọc",
+      "active": "Bộ lọc đang dùng",
+      "chip": {
+        "templateId": "Một mẫu tin",
+        "campaignId": "Một chiến dịch",
+        "broadcastId": "Một đợt gửi hàng loạt",
+        "scheduledId": "Một tin nhắn đã lên lịch"
+      },
+      "removeFilter": "Bỏ bộ lọc: {filter}"
+    },
+    "type": {
+      "text": "Văn bản thuần",
+      "template": "Mẫu tin",
+      "auto_reply": "Trả lời tự động",
+      "campaign": "Chiến dịch",
+      "broadcast": "Gửi hàng loạt",
+      "scheduled": "Đã lên lịch",
+      "image": "Hình ảnh",
+      "video": "Video",
+      "audio": "Âm thanh",
+      "document": "Tài liệu",
+      "location": "Vị trí"
+    },
+    "status": {
+      "queued": "Đang chờ gửi",
+      "sent": "Đã gửi",
+      "delivered": "Đã chuyển đến",
+      "read": "Đã đọc",
+      "failed": "Thất bại",
+      "received": "Tin đến"
+    },
+    "source": {
+      "inbox": "Hộp thư",
+      "flow": "Luồng",
+      "auto_reply": "Trả lời tự động",
+      "ai": "Trợ lý AI",
+      "api": "API",
+      "broadcast": "Gửi hàng loạt",
+      "campaign": "Chiến dịch",
+      "scheduled": "Đã lên lịch",
+      "other": "Khác"
+    },
+    "direction": {
+      "in": "Đến",
+      "out": "Đi",
+      "failed": "Thất bại"
+    },
+    "table": {
+      "col": {
+        "when": "Thời gian",
+        "dir": "Hướng",
+        "contact": "Liên hệ",
+        "message": "Tin nhắn",
+        "type": "Loại",
+        "status": "Trạng thái",
+        "open": "Mở"
+      },
+      "unknown": "Liên hệ không rõ",
+      "masked": "Số này bị ẩn vì bạn không thể mở liên hệ này.",
+      "entity": {
+        "broadcast": "Gửi hàng loạt · {name}",
+        "campaign": "Chiến dịch · {name}",
+        "scheduled": "Đã lên lịch · {name}"
+      },
+      "openSource": "Mở",
+      "openSourceFor": "Mở nguồn của {name}",
+      "showing": "Hiển thị {n}",
+      "showingOf": "Hiển thị {n} trên {total}",
+      "loadMore": "Tải thêm"
+    },
+    "empty": {
+      "noMatch": "Không có tin nhắn nào khớp bộ lọc",
+      "noMatchHint": "Hãy thử xóa tìm kiếm hoặc chọn khoảng thời gian rộng hơn.",
+      "period": "Không có tin nhắn nào trong {days} ngày qua",
+      "periodCustom": "Không có tin nhắn nào trong các ngày này",
+      "periodHint": "Tin nhắn bạn gửi hoặc nhận sẽ hiện ở đây cùng trạng thái chuyển đến."
+    },
+    "drawer": {
+      "title": "Chi tiết tin nhắn",
+      "close": "Đóng",
+      "loading": "Đang tải…",
+      "tryAgain": "Thử lại",
+      "copied": "Đã sao chép",
+      "copyFailed": "Không thể sao chép",
+      "copyId": "Sao chép ID",
+      "openChat": "Mở cuộc trò chuyện",
+      "openContact": "Mở liên hệ",
+      "openEntity": {
+        "broadcast": "Mở đợt gửi hàng loạt",
+        "campaign": "Mở chiến dịch",
+        "scheduled": "Mở tin nhắn đã lên lịch"
+      },
+      "unknown": "Liên hệ không rõ",
+      "masked": "Số này bị ẩn vì bạn không thể mở liên hệ này.",
+      "direction": "Hướng",
+      "directionValue": {
+        "in": "Đến",
+        "out": "Đi"
+      },
+      "status": "Trạng thái",
+      "type": "Loại",
+      "when": "Thời gian",
+      "content": "Nội dung",
+      "noText": "Không có văn bản",
+      "failure": "Lỗi",
+      "failedNoReason": "Tin nhắn thất bại và không có lý do nào được ghi lại.",
+      "details": "Chi tiết",
+      "messageId": "ID tin nhắn",
+      "source": "Gửi bởi",
+      "sourceValue": {
+        "inbox": "Hộp thư",
+        "flow": "Luồng",
+        "auto_reply": "Trả lời tự động",
+        "ai": "Trợ lý AI",
+        "api": "API",
+        "broadcast": "Gửi hàng loạt",
+        "campaign": "Chiến dịch",
+        "scheduled": "Tin nhắn đã lên lịch",
+        "other": "Khác"
+      },
+      "channel": "Kênh",
+      "template": "Mẫu tin",
+      "entity": {
+        "broadcast": "Gửi hàng loạt",
+        "campaign": "Chiến dịch",
+        "scheduled": "Tin nhắn đã lên lịch"
+      },
+      "sender": "Người gửi",
+      "senderKind": {
+        "customer": "Khách hàng",
+        "agent": "Nhân viên",
+        "bot": "Tự động hóa",
+        "system": "Hệ thống",
+        "broadcast": "Gửi hàng loạt"
+      },
+      "providerId": "ID tin nhắn của nhà cung cấp",
+      "language": "Ngôn ngữ",
+      "cost": "Chi phí",
+      "timeline": "Các bước gửi",
+      "expired": "Tin nhắn này cũ hơn {days} ngày nên các bước gửi đã bị xóa. Trạng thái vẫn được hiển thị ở trên.",
+      "timelineEmpty": "Không có bước gửi nào được ghi lại cho tin nhắn này.",
+      "archived": "Một phần nhật ký này lấy từ kho lưu trữ (sự kiện cũ hơn {days} ngày)."
+    },
+    "errors": {
+      "generic": "Đã xảy ra lỗi. Hãy thử lại.",
+      "MESSAGE_NOT_FOUND": "Tin nhắn này không tồn tại hoặc bạn không thể xem.",
+      "VALIDATION_FAILED": "Ngày hoặc bộ lọc đó không hợp lệ.",
+      "FORBIDDEN": "Bạn không có quyền truy cập mục này.",
+      "MESSAGE_LOG_EXPORT_IN_PROGRESS": "Một bản xuất đang được chuẩn bị. Hãy đợi email của nó rồi yêu cầu bản khác.",
+      "MESSAGE_LOG_EXPORT_NOT_READY": "Bản xuất này chưa sẵn sàng.",
+      "MESSAGE_LOG_EXPORT_NOT_FOUND": "Bản xuất này không tồn tại.",
+      "MESSAGE_LOG_EXPORT_RANGE_INVALID": "Hãy chọn ngày trong vòng 365 ngày qua."
+    }
+  }
+}

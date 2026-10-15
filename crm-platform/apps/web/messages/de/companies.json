@@ -18,7 +18,6 @@
       "planDisabled": "Ihr Tarif enthält keine Unternehmen. Wechseln Sie auf einen höheren Tarif, um sie freizuschalten.",
       "ownerInvalid": "Der Eigentümer muss ein aktives Mitglied dieses Workspace sein.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
-      "requestId": "Anfrage-ID",
       "retry": "Erneut versuchen"
     },
     "list": {

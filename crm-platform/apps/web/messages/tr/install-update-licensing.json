@@ -193,7 +193,6 @@
         "outOfOrder": "Bir adım sıra dışı çalıştı. Sayfayı yenileyin ve yeniden başlayın.",
         "step": "Kurulum adımı başarısız oldu. Bilgilerinizi ve sunucu günlüklerini kontrol edip yeniden deneyin.",
         "unknown": "Bir sorun oluştu. Yeniden deneyin.",
-        "requestId": "İstek kimliği {id}",
         "prerequisites": "Sunucu kurulum için hazır değil: {items}.",
         "licence": {
           "empty": "CodeCanyon satın alma kodunuzu girin.",
@@ -265,7 +264,6 @@
       "loading": "Yükleniyor",
       "errorForbidden": "Bu sayfayı görüntüleyemezsiniz.",
       "errorUnexpected": "Güncelleyici yüklenemedi.",
-      "requestId": "İstek kimliği",
       "retry": "Yeniden dene",
       "licence": {
         "kicker": "1. adım · lisans",

@@ -114,6 +114,8 @@ const CHANNEL_META_KEYS = [
   'payment',
   'referral',
   'rawType',
+  /** The import of a personal number's history left the file out (the value is its kind): the message keeps a placeholder. */
+  'mediaOmitted',
   'forwarded',
   'mentions',
   'referredProduct',

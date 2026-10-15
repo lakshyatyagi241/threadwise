@@ -63,8 +63,7 @@
       "closed": "Dit ticket is gesloten. Open een nieuw ticket om verder te gaan.",
       "notFound": "Dat ticket kon niet worden gevonden.",
       "unexpected": "Er ging iets mis. Probeer het opnieuw.",
-      "retry": "Opnieuw proberen",
-      "requestId": "Verzoek-id"
+      "retry": "Opnieuw proberen"
     },
     "customer": {
       "title": "Hoe kunnen we helpen?",

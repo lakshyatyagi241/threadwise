@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Notifications",
+      "description": "Tout ce qui a demandé votre attention, les plus récents en premier. Choisissez les événements qui vous parviennent dans vos paramètres de notification.",
+      "markAll": "Tout marquer comme lu",
+      "clearAll": "Tout effacer",
+      "preferences": "Paramètres de notification",
+      "clearTitle": "Effacer toutes les notifications ?",
+      "clearBody": "Cela supprime définitivement toutes vos notifications. Les autres personnes conservent les leurs. Cette action est irréversible.",
+      "clearConfirm": "Tout effacer",
+      "cancel": "Annuler",
+      "dismiss": "Ignorer cette notification",
+      "tiles": {
+        "unread": "Non lues",
+        "unreadHint": "Sélectionnez pour n'afficher que les non lues",
+        "day": "Dernières 24 heures",
+        "dayHint": "Reçues aujourd'hui",
+        "week": "7 derniers jours",
+        "weekHint": "Reçues cette semaine",
+        "total": "Conservées",
+        "totalHint": "Les plus anciennes sont supprimées automatiquement"
+      },
+      "filters": {
+        "label": "Filtres de notifications",
+        "readLabel": "Afficher",
+        "all": "Toutes",
+        "unread": "Non lues",
+        "type": "Type",
+        "allTypes": "Tous les types",
+        "otherTypes": "Autres",
+        "search": "Rechercher des notifications",
+        "reset": "Réinitialiser les filtres"
+      },
+      "sections": {
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "thisWeek": "Plus tôt cette semaine",
+        "older": "Plus anciennes"
+      },
+      "loading": "Chargement des notifications",
+      "failed": "Impossible de charger vos notifications.",
+      "retry": "Réessayer",
+      "empty": "Aucune notification pour le moment",
+      "emptyHint": "Les nouveaux chats, attributions, mentions et résultats de vos envois apparaîtront ici.",
+      "emptyFiltered": "Aucune notification ne correspond à ces filtres",
+      "emptyFilteredHint": "Retirez un filtre ou cherchez autre chose.",
+      "showing": "{count, plural, one {# notification chargée} many {# de notifications chargées} other {# notifications chargées}}",
+      "loadMore": "Charger plus",
+      "end": "Fin de la liste"
+    }
+  }
+}

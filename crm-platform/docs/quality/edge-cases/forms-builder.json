@@ -1,0 +1,46 @@
+{
+  "module": "forms-builder",
+  "tier": "P1",
+  "cases": [
+    {
+      "id": "EC-forms-builder-001",
+      "feature": "form payment",
+      "category": "input",
+      "scenario": "a value of 1000000001 (one past FORM_PAYMENT_MAX_MINOR = 1000000000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/forms-builder/definition.ts"
+    },
+    {
+      "id": "EC-forms-builder-002",
+      "feature": "form retention",
+      "category": "input",
+      "scenario": "a value of 29 (one under FORM_RETENTION_MIN_DAYS = 30) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/forms-builder/form.ts"
+    },
+    {
+      "id": "EC-forms-builder-003",
+      "feature": "form retention",
+      "category": "input",
+      "scenario": "a value of 3651 (one past FORM_RETENTION_MAX_DAYS = 3650) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/forms-builder/form.ts"
+    },
+    {
+      "id": "EC-forms-builder-004",
+      "feature": "form export",
+      "category": "input",
+      "scenario": "a value of 10001 (one past FORM_EXPORT_MAX_ROWS = 10000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/forms-builder/submission.ts"
+    }
+  ]
+}

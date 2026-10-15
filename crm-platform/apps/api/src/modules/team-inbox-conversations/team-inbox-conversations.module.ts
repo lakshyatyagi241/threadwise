@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversations';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
+import { EmailTemplatesModule } from '../email-templates';
 import { MessageTemplatesModule } from '../message-templates';
 import { NotificationsModule } from '../notifications';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
@@ -10,8 +11,10 @@ import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess } from './inbox-access.service';
 import { InboxConversationsService } from './inbox-conversations.service';
 import { InboxController } from './inbox.controller';
-import { InboxLabelsController } from './inbox-labels.controller';
-import { InboxLabelsService } from './inbox-labels.service';
+import { MessageHistoryController } from './message-history.controller';
+import { MessageHistoryService } from './message-history.service';
+import { InboxTagsController } from './inbox-tags.controller';
+import { InboxTagsService } from './inbox-tags.service';
 import { InboxSystemNotes } from './inbox-system-notes.service';
 import { InboxMediaService } from './inbox-media.service';
 import { InboxMessageLogService } from './inbox-message-log.service';
@@ -21,9 +24,11 @@ import { InboxSnoozeWakeService } from './inbox-snooze-wake.service';
 import { InboxThreadService } from './inbox-thread.service';
 import { InboxTimelineService } from './inbox-timeline.service';
 import { InboxTriageService } from './inbox-triage.service';
-import { LabelsRepository } from './labels.repository';
+import { InboxTagsRepository } from './inbox-tags.repository';
 import { MediaUploadsRepository } from './media-uploads.repository';
 import { NotesRepository } from './notes.repository';
+import { InboxEmailTemplatesController } from './email-templates/inbox-email-templates.controller';
+import { InboxEmailTemplatesService } from './email-templates/inbox-email-templates.service';
 import { SavedRepliesController } from './saved-replies/saved-replies.controller';
 import { SavedRepliesTransferController } from './saved-replies/saved-replies-transfer.controller';
 import { SavedRepliesTransferService } from './saved-replies/saved-replies-transfer.service';
@@ -42,6 +47,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     ChatConversationsModule,
     ChatChannelProvidersModule,
     CrmModule,
+    EmailTemplatesModule,
     MessageTemplatesModule,
     NotificationsModule,
     PlansCoreModule,
@@ -49,9 +55,11 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
   // The transfer controller first: `export` and `import` must not be read as a reply id.
   controllers: [
     InboxController,
-    InboxLabelsController,
+    MessageHistoryController,
+    InboxTagsController,
     SavedRepliesTransferController,
     SavedRepliesController,
+    InboxEmailTemplatesController,
   ],
   providers: [
     ConversationsRepository,
@@ -64,16 +72,18 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxConversationsService,
     InboxThreadService,
     InboxTriageService,
-    LabelsRepository,
-    InboxLabelsService,
+    InboxTagsRepository,
+    InboxTagsService,
     InboxNotesService,
     InboxTimelineService,
     InboxMediaService,
     InboxMessageLogService,
+    MessageHistoryService,
     SavedRepliesRepository,
     SavedRepliesService,
     SavedRepliesTransferService,
     SharedSavedRepliesReader,
+    InboxEmailTemplatesService,
   ],
   exports: [
     ConversationsRepository,
@@ -83,7 +93,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
     InboxSystemNotes,
     InboxConversationsService,
     InboxTriageService,
-    InboxLabelsService,
+    InboxTagsService,
     SharedSavedRepliesReader,
   ],
 })

@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "通知",
+      "description": "対応が必要だった項目を新しい順に表示します。受け取るイベントは通知設定で選択できます。",
+      "markAll": "すべて既読にする",
+      "clearAll": "すべて消去",
+      "preferences": "通知設定",
+      "clearTitle": "すべての通知を消去しますか?",
+      "clearBody": "あなたの通知がすべて完全に削除されます。他のユーザーの通知はそのまま残ります。この操作は元に戻せません。",
+      "clearConfirm": "すべて消去",
+      "cancel": "キャンセル",
+      "dismiss": "この通知を閉じる",
+      "tiles": {
+        "unread": "未読",
+        "unreadHint": "選択すると未読のみ表示",
+        "day": "過去24時間",
+        "dayHint": "本日受信",
+        "week": "過去7日間",
+        "weekHint": "今週受信",
+        "total": "保存中",
+        "totalHint": "古い通知は自動的に削除されます"
+      },
+      "filters": {
+        "label": "通知フィルター",
+        "readLabel": "表示",
+        "all": "すべて",
+        "unread": "未読",
+        "type": "種類",
+        "allTypes": "すべての種類",
+        "otherTypes": "その他",
+        "search": "通知を検索",
+        "reset": "フィルターをリセット"
+      },
+      "sections": {
+        "today": "今日",
+        "yesterday": "昨日",
+        "thisWeek": "今週の以前",
+        "older": "それ以前"
+      },
+      "loading": "通知を読み込み中",
+      "failed": "通知を読み込めませんでした。",
+      "retry": "再試行",
+      "empty": "通知はまだありません",
+      "emptyHint": "新しいチャット、割り当て、メンション、送信結果がここに表示されます。",
+      "emptyFiltered": "条件に一致する通知はありません",
+      "emptyFilteredHint": "フィルターを外すか、別のキーワードで検索してください。",
+      "showing": "{count, plural, other {#件の通知を読み込みました}}",
+      "loadMore": "さらに読み込む",
+      "end": "リストの最後です"
+    }
+  }
+}

@@ -707,7 +707,8 @@
           "wordsPlaceholder": "안녕, 안녕하세요, 메뉴",
           "whatsappNumber": "WhatsApp 번호",
           "noNumberHint": "연결된 WhatsApp 번호가 아직 없습니다. 설정에서 연결한 뒤 여기에서 선택하세요.",
-          "chooseNumber": "번호 선택…"
+          "chooseNumber": "번호 선택…",
+          "connectedNumber": "연결된 WhatsApp 번호로 답장합니다: {number}"
         },
         "add": {
           "addStep": "단계 추가",
@@ -715,6 +716,7 @@
             "send": "보내기",
             "ask": "고객에게 질문",
             "handoff": "인계",
+            "logic": "결정",
             "answer": "답변"
           },
           "blockedTitle": "버튼과 목록은 플로우를 끝내므로 마지막에만 둘 수 있습니다.",
@@ -763,7 +765,8 @@
             "placeholder": "버튼 {n}",
             "remove": "버튼 제거",
             "add": "버튼 추가",
-            "saveIn": "누른 버튼을 저장할 위치"
+            "saveIn": "누른 버튼을 저장할 위치",
+            "handoff": "상담원에게 넘기기(실시간 상담)"
           },
           "list": {
             "above": "목록 위 메시지",
@@ -795,7 +798,9 @@
             "dateFormat": "날짜 형식",
             "dateFormatHint": "고객이 날짜를 입력하는 방식입니다. 입력한 그대로 저장되며, 연-월-일 형식의 사본은 _iso 변수에 저장됩니다.",
             "saveIn": "답변을 저장할 위치",
-            "retriesHint": "0이면 올바른 답변이 올 때까지 계속 묻습니다."
+            "retriesHint": "0이면 올바른 답변이 올 때까지 계속 묻습니다.",
+            "verifyOtp": "일회용 코드로 번호 확인",
+            "verifyOtpHint": "번호로 코드가 전송되고(국가 번호 필요) 방문자가 채팅에 입력합니다. 코드가 맞을 때만 번호가 저장되며, _verified로 끝나는 변수가 yes 또는 no를 나타냅니다."
           },
           "askFile": {
             "accepted": "허용 파일",
@@ -846,7 +851,45 @@
           },
           "cta": {
             "buttonText": "버튼 텍스트",
-            "opens": "열기(링크)"
+            "opens": "열기(링크)",
+            "type": "여는 대상",
+            "kinds": {
+              "url": "웹 페이지",
+              "phone": "전화 걸기",
+              "email": "이메일"
+            },
+            "add": "버튼 더 추가",
+            "remove": "버튼 삭제",
+            "opensPhone": "전화번호",
+            "opensEmail": "이메일 주소"
+          },
+          "carousel": {
+            "intro": "카드 위 메시지",
+            "card": "카드 {n}",
+            "image": "이미지 링크(선택)",
+            "title": "제목",
+            "text": "텍스트",
+            "buttons": "버튼(최대 2개)",
+            "label": "버튼 텍스트",
+            "addCard": "카드 추가",
+            "removeCard": "카드 삭제",
+            "addButton": "버튼 추가",
+            "removeButton": "버튼 삭제",
+            "btnKinds": {
+              "reply": "채팅에서 답장",
+              "url": "웹 페이지 열기",
+              "phone": "번호로 전화",
+              "email": "이메일 보내기",
+              "agent": "상담원과 대화"
+            }
+          },
+          "condition": {
+            "info": "규칙(변수, 비교, 값)을 추가하세요. AND 또는 OR로 연결하고 필요하면 그룹을 중첩할 수 있습니다.",
+            "yes": "규칙이 충족되면 이동",
+            "no": "충족되지 않으면 이동"
+          },
+          "handoff": {
+            "hint": "방문자가 메모와 함께 이 팀으로 전달됩니다. 이 버튼 뒤에는 아무것도 연결하지 않아도 됩니다."
           },
           "faq": {
             "exits": {
@@ -859,6 +902,7 @@
             }
           }
         },
+        "branchAdd": "“{title}”에 단계 추가",
         "faqEnds": "이 단계는 이 부분을 끝냅니다. 다음에 전송되는 내용은 FAQ가 답변했는지에 따라 달라집니다."
       },
       "formsCore": {
@@ -1894,13 +1938,20 @@
       },
       "webBot": {
         "aria": "플로우 섹션",
-        "faqs": "FAQ",
-        "saveFirst": "먼저 플로우를 저장하세요.",
         "build": "만들기",
         "customize": "사용자 지정",
-        "install": "설치",
+        "saveFirst": "먼저 플로우를 저장하세요.",
         "needsCustomizing": "위젯이 아직 기본 모양을 사용하고 있습니다. 사용자 지정을 여세요.",
-        "customizeFirst": "게시하기 전에 채팅 위젯을 사용자 지정하고 한 번 저장하세요."
+        "customizeFirst": "게시하기 전에 채팅 위젯을 사용자 지정하고 한 번 저장하세요.",
+        "deploy": "배포",
+        "customizeFirstWhatsapp": "게시하기 전에 WhatsApp 버튼을 사용자 지정하고 한 번 저장해 주세요.",
+        "faqs": "FAQ",
+        "install": "설치"
+      },
+      "buttonIcon": {
+        "label": "아이콘(선택 사항)",
+        "add": "아이콘 추가",
+        "saveFirst": "아이콘을 추가하려면 봇을 한 번 저장하세요."
       }
     },
     "contracts": {
@@ -2177,6 +2228,10 @@
           "label": "API (라이브러리에서)",
           "description": "API 라이브러리에서 저장된 API 호출"
         },
+        "carousel": {
+          "label": "캐러셀",
+          "description": "이미지와 버튼이 있는 스크롤 카드"
+        },
         "faq": {
           "label": "FAQ로 답변",
           "description": "메시지를 FAQ와 대조"
@@ -2404,6 +2459,14 @@
           "label": "고객의 위치",
           "help": "고객이 위치를 공유할 때까지 기다림"
         },
+        "carousel": {
+          "label": "캐러셀",
+          "help": "이미지와 버튼이 있는 스크롤 카드"
+        },
+        "condition": {
+          "label": "조건",
+          "help": "고객이 말했거나 저장한 내용에 따라 분기합니다(AND / OR 규칙)"
+        },
         "faq": {
           "label": "FAQ로 답변",
           "help": "고객 메시지를 FAQ와 대조합니다. 이 플로를 끝냅니다. FAQ가 답변하면 한 출구, 아니면 다른 출구로 나갑니다"
@@ -2422,6 +2485,8 @@
         "template": "템플릿",
         "cta": "링크 버튼",
         "assign": "상담원에게 배정",
+        "carousel": "캐러셀",
+        "condition": "조건",
         "faq": "FAQ로 답변"
       },
       "stepLabel": {
@@ -2460,6 +2525,9 @@
         "rowTitle": "{stage} 단계: 모든 항목에 {max}자 이하의 제목이 필요합니다.",
         "rowDescriptionTooLong": "{stage} 단계: 항목 설명이 {max}자를 넘습니다.",
         "variableUsed": "{stage} 단계: “{name}”은(는) 이미 {other} 단계에서 사용 중입니다. 각 답변마다 고유한 이름을 지정하세요.",
+        "carouselCards": "단계 {stage}: 카드를 하나 이상 추가하고 모든 카드에 제목을 지정하세요.",
+        "carouselButtons": "단계 {stage}: 모든 버튼에 이름을 지정하고, 무언가를 여는 버튼에는 링크, 번호 또는 주소를 입력하세요.",
+        "conditionIncomplete": "단계 {stage}: 조건의 규칙을 완성하세요(각 규칙에 변수와 값).",
         "faqMinScore": "{stage}단계: 최소 점수는 0.05~0.99여야 합니다. 또는 플로우 설정을 사용하세요."
       },
       "faqSummary": "{hasCategory, select, true {내 FAQ에서 · {category}} other {내 FAQ에서}}"
@@ -2470,7 +2538,11 @@
         "buttonNoTarget": "“{type}” 버튼(“{text}”)에 간단 빌더의 대상이 없습니다.",
         "skippedStep": "“{sub}” 단계를 건너뛰었습니다. 간단 빌더에는 이에 해당하는 기능이 없습니다.",
         "leadsOutside": "“{text}”은(는) 이 파일에 없는 플로우로 연결됩니다. 연결하기 전까지 여기서 끝납니다.",
-        "connectsOutside": "한 단계가 이 파일에 없는 노드({id})에 연결됩니다. 연결되지 않은 상태로 남습니다."
+        "connectsOutside": "한 단계가 이 파일에 없는 노드({id})에 연결됩니다. 연결되지 않은 상태로 남습니다.",
+        "dateLimits": "날짜 질문은 형식은 유지하지만 제한(가장 이른 날, 늦은 날, 제외일)은 유지하지 않습니다.",
+        "tooManyButtons": "버튼 메시지에 들어갈 수 있는 것보다 선택지가 많았습니다. 넘치는 버튼은 제외했습니다.",
+        "agentTeam": "실시간 상담 버튼을 유지했습니다. 대화를 받을 팀을 선택하세요.",
+        "tooManySlides": "캐러셀에 카드가 10개를 넘었습니다. 넘치는 카드는 제외했습니다."
       },
       "reasons": {
         "notExport": "이 파일은 플로우 내보내기 파일이 아닙니다. 플로우에서 내보낸 .json 파일이나 wabo 콘솔에서 내보낸 플로우를 사용하세요.",

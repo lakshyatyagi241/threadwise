@@ -164,6 +164,8 @@ and one help guide.
 and message counts as one ZIP, built by the same worker queue as the proof export (`consent-export`, a `kind` column on
 `contact_consent_exports`), kept 7 days, audited. Erasure keeps working as today: the events are anonymised, never deleted.
 
+The platform-wide privacy plan that generalises this ledger (purposes registry, ConsentGate for every channel and modality, voice, rights requests, retention) is [privacy-and-data-governance.md](privacy-and-data-governance.md); backlog BL-140 to BL-153. Double opt-in, the preference center and the DSAR export above are tasks there (BL-143, BL-145).
+
 ## 12. As built (differences from the plan above, for the record)
 
 - The settings tile sits under the existing **Security** section (a new Settings section would need its own copy in 21 locales).
@@ -230,3 +232,12 @@ an uploaded CSV that are not contacts yet to `recipients`, although they have no
 With "Marketing opt-in" on, the Forms settings show a button that fills the consent text with a ready sentence ("I agree to receive
 updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe.") in the editor's language, through the same
 version-bumping path as typing, so the wording version and the stored proof stay honest.
+
+## 14. Consent at intake (BL-165 to BL-167)
+
+The policy and the table of intake paths are in [privacy-and-data-governance.md](privacy-and-data-governance.md) section 4.3.2:
+a first inbound message permits replying only and never creates a marketing grant; a grant is written only when the person agreed, with
+source, wording, version and time as evidence; a subscription status is a label, not proof. `ConsentIntakeService` (`consent-intake.service.ts`)
+and the pure rules `consent-intake.rules.ts` are the one writer for those paths; the API shape is in [../api/contact-consent.md](../api/contact-consent.md).
+
+Platform-wide follow-up: the consent gate, purposes beyond marketing/utility, voice and email unsubscribe are designed in [privacy-and-data-governance.md](privacy-and-data-governance.md) (BL-140, BL-141, BL-145, BL-148).

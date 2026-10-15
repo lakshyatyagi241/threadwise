@@ -3,6 +3,8 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { MAIL_DRIVER_PROVIDERS } from './drivers/driver-providers';
 import { MailDriverRegistry } from './drivers/mail-driver.registry';
 import { ChannelAdapterRegistry, ChatConversationsModule } from '../chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
+import { EmailTemplatesModule } from '../email-templates';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { EmailAttachmentsController } from './email-attachments.controller';
@@ -30,7 +32,13 @@ import { MailboxesService } from './mailboxes.service';
  * attachment download) and by the worker (through ChannelEmailWorkerModule: the sync job, and the adapter the send pipeline needs).
  */
 @Module({
-  imports: [ChatConversationsModule, PlatformSettingsModule, PlansCoreModule],
+  imports: [
+    ChatConversationsModule,
+    ContactConsentModule,
+    EmailTemplatesModule,
+    PlatformSettingsModule,
+    PlansCoreModule,
+  ],
   controllers: [
     MailboxesController,
     MailProvidersController,

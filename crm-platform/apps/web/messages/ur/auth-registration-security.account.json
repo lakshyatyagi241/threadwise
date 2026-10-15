@@ -22,7 +22,6 @@
         "signedOut": "آپ کا سیشن ختم ہو گیا ہے۔ براہ کرم دوبارہ سائن ان کریں۔",
         "rateLimited": "بہت زیادہ کوششیں۔ براہ کرم کچھ دیر انتظار کریں اور دوبارہ کوشش کریں۔",
         "rateLimitedWait": "بہت زیادہ کوششیں۔ {seconds, plural, one {# سیکنڈ} other {# سیکنڈ}} بعد دوبارہ کوشش کریں۔",
-        "requestId": "درخواست آئی ڈی",
         "locked": "بہت زیادہ ناکام کوششیں۔ دوبارہ کوشش کرنے سے پہلے کچھ دیر انتظار کریں۔",
         "lockedWait": "بہت زیادہ ناکام کوششیں۔ {minutes, plural, one {# منٹ} other {# منٹ}} بعد دوبارہ کوشش کریں۔"
       },
@@ -119,6 +118,9 @@
         },
         "workspaceTimezone": "ٹائم زون",
         "workspaceTimezoneHint": "{workspace} پر لاگو ہوتا ہے۔ صرف مالکان اور ایڈمنسٹریٹرز اسے تبدیل کر سکتے ہیں۔",
+        "myTimezone": "میرا ٹائم زون",
+        "myTimezoneHint": "تاریخیں اور اوقات آپ کو {zone} میں دکھائے جاتے ہیں۔ ورک اسپیس کا ٹائم زون اپنانے کے لیے اسے خالی چھوڑ دیں (اگر ورک اسپیس میں کوئی نہ ہو تو UTC)۔",
+        "myTimezoneUseWorkspace": "ورک اسپیس کا ڈیفالٹ استعمال کریں",
         "saved": "پروفائل محفوظ ہو گیا۔",
         "errors": {
           "fullNameRequired": "اپنا پورا نام درج کریں۔",
@@ -555,7 +557,8 @@
             "waba_groups": "WhatsApp گروپس",
             "sms": "SMS",
             "help_agent": "مددگار اسسٹنٹ",
-            "email_channel": "ای میل (Gmail) چینل"
+            "email_channel": "ای میل (Gmail) چینل",
+            "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

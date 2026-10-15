@@ -4,6 +4,7 @@ import { uuidSchema } from '../common/ids';
 import { paginationQuerySchema, pageResponseSchema } from '../common/pagination';
 import { channelCapabilitiesSchema } from './channels';
 import { conversationPrioritySchema, inboxTabSchema } from './enums';
+import { slaStatusSchema } from '../team-inbox-routing-sla/sla';
 
 /**
  * chat-conversations: the conversation (thread) as the inbox list and the thread header read it (plan-inbox-chat.md section 3.3).
@@ -55,13 +56,13 @@ export type MarkConversationReadInput = z.infer<typeof markConversationReadSchem
 
 // --- list ---------------------------------------------------------------------------------------------------------------
 
-/** A workspace label on a conversation, as the list and the thread show it. */
-export const conversationLabelSchema = z.object({
+/** A workspace tag on a conversation, as the list and the thread show it. */
+export const conversationTagSchema = z.object({
   id: uuidSchema,
   name: z.string(),
   color: z.string().nullable(),
 });
-export type ConversationLabel = z.infer<typeof conversationLabelSchema>;
+export type ConversationTag = z.infer<typeof conversationTagSchema>;
 
 export const conversationSummarySchema = z.object({
   id: uuidSchema,
@@ -80,11 +81,15 @@ export const conversationSummarySchema = z.object({
   unreadCount: z.number().int().nonnegative(),
   /** The thread has no contact record because the contact quota was reached. */
   needsContact: z.boolean(),
+  /** The thread was created by an imported history (personal-number import or Cloud API coexistence); the list and the header mark it. */
+  imported: z.boolean().optional(),
   contact: conversationContactSchema.nullable(),
   assignment: conversationAssignmentSchema,
   snoozedUntil: z.string().datetime().nullable(),
-  /** Labels on the thread, by name. */
-  labels: z.array(conversationLabelSchema),
+  /** Tags on the thread, by name. The JSON field keeps its original name `labels` so existing clients keep working: it holds tags. */
+  labels: z.array(conversationTagSchema),
+  /** The response clock that matters now (SLA, `inbox_sla`): null when the conversation has none running. */
+  slaStatus: slaStatusSchema.nullable(),
   lastMessageAt: z.string().datetime().nullable(),
   lastInboundAt: z.string().datetime().nullable(),
   lastOutboundAt: z.string().datetime().nullable(),
@@ -98,17 +103,33 @@ export const conversationSummarySchema = z.object({
 });
 export type ConversationSummary = z.infer<typeof conversationSummarySchema>;
 
+const tagIdsParam = z
+  .string()
+  .optional()
+  .transform((v) =>
+    v
+      ? v
+          .split(',')
+          .map((x) => x.trim())
+          .filter(Boolean)
+      : [],
+  )
+  .pipe(z.array(uuidSchema).max(20));
+
 export const listConversationsQuerySchema = paginationQuerySchema.extend({
   tab: inboxTabSchema.default('all'),
   /** Omitted: the open and pending threads (Reference's default view). `all` removes the filter. */
   status: z.union([conversationStatusSchema, z.literal('all')]).optional(),
   channelId: uuidSchema.optional(),
-  /** Comma-separated label ids (a query string): threads that carry ANY of them. */
-  labels: z
-    .string()
-    .optional()
-    .transform((v) => (v ? v.split(',').map((x) => x.trim()).filter(Boolean) : []))
-    .pipe(z.array(uuidSchema).max(20)),
+  /** Comma-separated tag ids (a query string): threads that carry ANY of them. */
+  tags: tagIdsParam,
+  /** The original name of `tags`, still accepted so saved links and old clients keep working; merged with `tags`. */
+  labels: tagIdsParam,
+  /**
+   * What `tags` is matched against: the tags on the conversation itself (default), or the tags on the conversation's contact
+   * (`contact`: a thread with no contact record then never matches).
+   */
+  tagScope: z.enum(['conversation', 'contact']).default('conversation'),
   /** Contact name, peer name or number, or a word of the preview. */
   q: z.string().trim().min(1).max(200).optional(),
   /** The archive view: every archived thread, whatever the tab or status. A query string, so `false` must mean false (`z.coerce.boolean` reads any non-empty string as true). */

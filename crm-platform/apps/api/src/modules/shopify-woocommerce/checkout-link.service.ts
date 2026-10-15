@@ -9,7 +9,13 @@ import {
   type ShopifyFactory,
   type WooFactory,
 } from '../../infra/providers/ecom/ecom.port';
-import { clampQty, productFor, storefrontTokenOf, wooReference } from './checkout-rules';
+import {
+  clampQty,
+  productFor,
+  storeVariantIdOf,
+  storefrontTokenOf,
+  wooReference,
+} from './checkout-rules';
 import { flowNoteOf } from './order-hooks';
 import type { ShopProductRow } from './shop-products.repository';
 import { ShopProductsRepository } from './shop-products.repository';
@@ -62,10 +68,16 @@ export class CheckoutLinkService {
         items.map((i) => i.reference),
       ),
     );
-    const lines = items.map((i) => ({
-      reference: wooReference(i.reference, productFor(i.reference, rows)),
-      qty: clampQty(i.qty),
-    }));
+    const lines = items.map((i) => {
+      const row = productFor(i.reference, rows);
+      // A variation with no SKU of its own is `WOO-V<id>`: the order line names the parent product and the variation.
+      const variationId = row?.variant ? storeVariantIdOf(row.sku, 'woocommerce') : null;
+      return {
+        reference: wooReference(i.reference, row),
+        qty: clampQty(i.qty),
+        ...(variationId && row ? { productId: row.storeProductId, variationId } : {}),
+      };
+    });
     try {
       const made = await this.woo
         .store(
@@ -130,6 +142,9 @@ export class CheckoutLinkService {
     reference: string,
     row: ShopProductRow | undefined,
   ): Promise<string | null> {
+    // A Shopify variant with no SKU of its own was mirrored as `SHOPIFY-V<id>`: that id is the variant.
+    const own = storeVariantIdOf(row?.sku ?? reference, 'shopify');
+    if (own) return own;
     if (!row) return api.variantIdBySku(reference);
     if (row.sku) return api.variantIdBySku(row.sku);
     return api.firstVariantId(row.storeProductId);

@@ -6,6 +6,8 @@ import {
   LocalizationTranslationModule,
 } from '../localization-translation';
 import { ChatConversationsModule } from '../chat-conversations';
+import { ContactConsentModule } from '../contact-consent';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { SqlAssistantDirectory } from './_shims/sql-assistant-directory';
 import { SqlInboxGateway } from './_shims/sql-inbox-gateway';
@@ -17,7 +19,7 @@ import {
 } from './_shims/tokens';
 import { EntitlementWidgetPlanGate } from './widget-plan';
 import { WidgetAiReplyService } from './widget-ai-reply.service';
-import { WidgetPublicController } from './widget-public.controller';
+import { WidgetAssetsPublicController, WidgetPublicController } from './widget-public.controller';
 import { WidgetPublicService } from './widget-public.service';
 import { WidgetThrottleService } from './widget-throttle.service';
 import { WidgetVisitorsRepository } from './widget-visitors.repository';
@@ -32,8 +34,19 @@ import { WidgetsService } from './widgets.service';
  * binding the real service to the same token (see _shims/README.md).
  */
 @Module({
-  imports: [PlansCoreModule, LocalizationTranslationModule, ChatConversationsModule],
-  controllers: [WidgetsController, FlowWidgetController, WidgetPublicController],
+  imports: [
+    PlansCoreModule,
+    LocalizationTranslationModule,
+    ChatConversationsModule,
+    ContactConsentModule,
+    CrmModule,
+  ],
+  controllers: [
+    WidgetsController,
+    FlowWidgetController,
+    WidgetPublicController,
+    WidgetAssetsPublicController,
+  ],
   providers: [
     WidgetsService,
     WidgetsRepository,

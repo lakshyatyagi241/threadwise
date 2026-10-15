@@ -97,12 +97,28 @@ function sentInteractiveOf(row: MessageRow): MessageResponse['sentInteractive'] 
 }
 
 /** The ad or link that opened the chat (Meta `referral`), on the message that carried it. */
-/** The consent line the STOP / START listener wrote (`meta.event = 'consent'`): the web app words it in the reader's language. */
+/**
+ * The system lines the web app words in the reader's language: the consent line the STOP / START listener wrote (`meta.event =
+ * 'consent'`) and the stage change lines the growth pilot writes (`meta.event = 'stage_change'`).
+ */
 function systemEventOf(row: MessageRow): MessageResponse['systemEvent'] {
-  if (row.kind !== 'system' || row.meta.event !== 'consent') return undefined;
-  const action = row.meta.consentAction;
-  if (action !== 'withdrawn' && action !== 'granted') return undefined;
-  return { event: 'consent', action, keyword: str(row.meta.consentKeyword) };
+  if (row.kind !== 'system') return undefined;
+  if (row.meta.event === 'consent') {
+    const action = row.meta.consentAction;
+    if (action !== 'withdrawn' && action !== 'granted') return undefined;
+    return { event: 'consent', action, keyword: str(row.meta.consentKeyword) };
+  }
+  if (row.meta.event === 'stage_change') {
+    const action = row.meta.stageAction;
+    const suggestionId = str(row.meta.suggestionId);
+    const fromStage = str(row.meta.fromStage);
+    const toStage = str(row.meta.toStage);
+    if ((action !== 'auto' && action !== 'undone') || !suggestionId || !fromStage || !toStage) {
+      return undefined;
+    }
+    return { event: 'stage_change', action, suggestionId, fromStage, toStage };
+  }
+  return undefined;
 }
 
 function referralOf(row: MessageRow): MessageResponse['referral'] {
@@ -283,6 +299,7 @@ export function toMessageResponse(row: MessageRow, link: MediaLinker): MessageRe
     contacts: contactsOf(row),
     interactive: legacy?.interactive ?? interactiveOf(row),
     forwarded: row.meta.forwarded === true ? true : undefined,
+    imported: row.meta.historySync === true ? true : undefined,
     systemEvent: systemEventOf(row),
     referral: referralOf(row),
     group: groupAuthorOf(row),

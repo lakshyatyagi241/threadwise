@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { ReferralListResponse, ReferralRow } from '@crm/contracts';
 import { Alert, Badge, Button, Card, StatTile, cn } from '@crm/ui';
@@ -12,7 +12,6 @@ import {
   formatDelta,
   initials,
   money,
-  requestIdOf,
   rewardLine,
   shortTxId,
   type DeltaTone,
@@ -55,15 +54,9 @@ export function AffiliateSkeleton() {
 /** A failed call: the sentence is chosen from the problem `code`/status, the request id is for support, and retry is offered. */
 export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
   const t = useTranslations(`${NS}.errors`);
-  const requestId = requestIdOf(error);
   return (
     <Alert tone="danger" className="space-y-2">
       <p>{t(affiliateErrorKind(error))}</p>
-      {requestId && (
-        <p className="text-xs opacity-80">
-          {t('requestId')}: <span className="font-mono">{requestId}</span>
-        </p>
-      )}
       {onRetry && (
         <Button variant="secondary" size="sm" onClick={onRetry}>
           {t('retry')}
@@ -238,7 +231,8 @@ export function ReferralsTable({
   now: number;
 }) {
   const t = useTranslations(`${NS}.table`);
-  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium' });
+  const timeZone = useTimeZone();
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone });
   const th = 'px-3 py-2 text-start font-medium';
   return (
     <div className="overflow-x-auto">

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { cursorSchema, pageInfoSchema } from '../common/pagination';
+import { historyImportModeSchema, historyImportStatusSchema } from './history-import';
 import { PERSONAL_WA_NOTICE_ITEM_IDS } from './notice';
 
 /**
@@ -102,6 +103,8 @@ export const personalDeviceSchema = z.object({
   }),
   sent24h: z.number().int(),
   failed24h: z.number().int(),
+  /** The opt-in import of existing chats (`not_requested` for a number that never chose it). */
+  historyImport: historyImportStatusSchema,
   createdAt: z.string().datetime({ offset: true }),
   rowVersion: z.number().int(),
 });
@@ -143,6 +146,8 @@ export const listDevicesMetaSchema = z.object({
   noticeAccepted: z.boolean(),
   /** Whether a worker is alive to answer pairing commands (the page's "connection service" line). */
   workerRunning: z.boolean(),
+  /** The plan has `personal_history_full`: the `full` history choice may be made (the web shows it disabled otherwise). */
+  historyFullAllowed: z.boolean(),
 });
 export type ListDevicesMeta = z.infer<typeof listDevicesMetaSchema>;
 
@@ -228,6 +233,11 @@ export type PairingMethod = z.infer<typeof pairingMethodSchema>;
 export const startPairingInputSchema = z.object({
   /** "Forget the saved session": required to pair a device that is linked or holds a healthy saved session. */
   relink: z.boolean().default(false),
+  /**
+   * Import existing chats and contacts once the number is linked. Chosen before the scan and valid for this attempt only: a later
+   * attempt that does not send it again imports nothing (WhatsApp sends history only right after a link).
+   */
+  importHistory: historyImportModeSchema.default('none'),
   /** Only needed when the caller has not accepted the current version of the notice. */
   acknowledgement: acknowledgementInputSchema.optional(),
 });

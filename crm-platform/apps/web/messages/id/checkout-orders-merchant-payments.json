@@ -63,7 +63,6 @@
       "whatsapp_ai": "WhatsApp AI"
     },
     "errors": {
-      "requestId": "ID permintaan",
       "retry": "Coba lagi",
       "network": {
         "title": "Tidak dapat menjangkau server",

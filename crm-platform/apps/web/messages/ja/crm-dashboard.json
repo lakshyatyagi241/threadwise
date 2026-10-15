@@ -1,0 +1,163 @@
+{
+  "crm-dashboard": {
+    "nav": {
+      "title": "CRMダッシュボード"
+    },
+    "title": "あなたのCRM",
+    "subtitle": "商談、請求書、入金、タスク — ビジネス全体をひと目で。",
+    "period": "{from}〜{to} · タイムゾーン {zone}",
+    "openBoard": "商談ボードを開く",
+    "loading": "ダッシュボードを読み込み中",
+    "retry": "再試行",
+    "stale": "更新に失敗しました。以下は最後に取得した数値です。",
+    "empty": {
+      "title": "まだ表示するものがありません",
+      "message": "連絡先と商談を追加すると、このページにパイプラインのファネル、成績上位者、リードの流入元、タスク、未回収金が表示されます。",
+      "deals": "商談へ移動",
+      "contacts": "連絡先へ移動"
+    },
+    "filters": {
+      "label": "ダッシュボードのフィルター",
+      "period": "期間",
+      "range": {
+        "month": "今月",
+        "7d": "7日間",
+        "30d": "30日間",
+        "90d": "90日間",
+        "custom": "カスタム"
+      },
+      "from": "開始",
+      "to": "終了",
+      "pipeline": "パイプライン",
+      "allPipelines": "すべてのパイプライン",
+      "owner": "担当者",
+      "everyone": "全員",
+      "team": "チーム",
+      "allTeams": "すべてのチーム",
+      "reset": "フィルターをリセット"
+    },
+    "kpi": {
+      "title": "主要指標",
+      "vsPrevious": "同じ長さの前の期間との比較",
+      "open": "進行中のパイプライン",
+      "openHint": "{count, plural, other {#件の商談}} · 予測 {forecast}",
+      "won": "受注",
+      "wonHint": "{count, plural, other {#件の商談が成立}}",
+      "collected": "回収済み",
+      "collectedHint": "受領した入金",
+      "outstanding": "未回収",
+      "outstandingHint": "{count, plural, other {未払いの請求書#件}}",
+      "winRate": "受注率",
+      "winRateHint": "受注 {won}、失注 {lost}",
+      "avgSize": "平均商談金額",
+      "avgSizeHint": "受注した商談の平均",
+      "avgCycle": "平均営業サイクル",
+      "avgCycleHint": "作成から受注まで",
+      "days": "{count, plural, other {#日}}",
+      "lost": "失注した商談",
+      "lateClose": "完了予定日を超過",
+      "lateCloseHint": "期日を過ぎた進行中の商談",
+      "contacts": "連絡先",
+      "contactsHint": "本日のビュー内",
+      "newContacts": "新規連絡先",
+      "newLeads": "新規リード",
+      "newLeadsHint": "流入元付きで登録された連絡先",
+      "paid": "支払い済み請求書",
+      "paidHint": "期間中に支払い済みになったもの",
+      "tasksOpen": "未完了のタスク",
+      "tasksOpenHint": "本日あとで期限が来るもの {count}件",
+      "tasksOverdue": "期限超過のタスク"
+    },
+    "funnel": {
+      "title": "パイプラインのファネル",
+      "subtitle": "{pipeline} · 期間中に作成された商談 {count, plural, other {#件}}",
+      "noPipeline": "パイプラインがまだありません。",
+      "empty": "この期間に作成された商談はありません。",
+      "conversion": "{percent}%が次へ進行",
+      "noConversion": "–",
+      "rowLabel": "{name}: {reached}件がこのステージに到達、現在 {open}件が進行中。開く。",
+      "openNow": "{count, plural, other {現在#件が進行中}} · {value}"
+    },
+    "trend": {
+      "title": "受注と失注の商談",
+      "subtitle": {
+        "day": "日別 · 受注 {value}",
+        "week": "週別 · 受注 {value}",
+        "month": "月別 · 受注 {value}"
+      },
+      "chartLabel": "期間中の受注と失注の商談",
+      "won": "受注",
+      "lost": "失注"
+    },
+    "leaderboard": {
+      "title": "担当者ランキング",
+      "subtitle": "期間中の受注金額順",
+      "empty": "このビューにはランキング対象の商談がありません。",
+      "owner": "担当者",
+      "won": "受注",
+      "value": "金額",
+      "lost": "失注",
+      "open": "進行中",
+      "activities": "アクティビティ",
+      "unowned": "担当者なし"
+    },
+    "sources": {
+      "title": "リードの流入元",
+      "subtitle": "期間中に登録された連絡先と、その進捗",
+      "empty": "この期間に流入元付きの連絡先はありません。",
+      "source": "流入元",
+      "leads": "リード",
+      "toDeal": "商談化",
+      "toWon": "受注化",
+      "wonValue": "受注金額",
+      "none": "流入元なし"
+    },
+    "tasks": {
+      "title": "タスク",
+      "subtitle": "未完了 {open} · 期限超過 {overdue} · 本日あと {today}",
+      "all": "すべてのタスク",
+      "empty": "未完了のタスクはありません。",
+      "byAssignee": "担当者別の未完了タスク",
+      "assignee": "担当者",
+      "open": "未完了",
+      "overdue": "期限超過",
+      "dueToday": "本日あと",
+      "unassigned": "未割り当て",
+      "upcoming": "今後のタスク",
+      "overdueTag": "期限超過"
+    },
+    "aging": {
+      "title": "売掛金のエイジング",
+      "open": "入金",
+      "empty": "未払いはありません。",
+      "bucket": {
+        "current": "期限前",
+        "d1_30": "1〜30日超過",
+        "d31_60": "31〜60日超過",
+        "d61_90": "61〜90日超過",
+        "d90_plus": "90日以上超過"
+      }
+    },
+    "payments": {
+      "title": "最近の入金",
+      "empty": "入金はまだありません。"
+    },
+    "activity": {
+      "title": "最近のアクティビティ",
+      "empty": "アクティビティはまだありません。",
+      "stageMoved": "{from}から{to}へ移動",
+      "stagePlaced": "{to}に配置",
+      "by": "{name}による",
+      "system": "システムによる",
+      "type": {
+        "note": "メモ",
+        "stage_change": "ステージ変更",
+        "call": "通話",
+        "message": "メッセージ",
+        "email": "メール",
+        "meeting": "会議",
+        "task": "タスク"
+      }
+    }
+  }
+}

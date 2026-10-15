@@ -1,0 +1,53 @@
+{
+  "notifications": {
+    "page": {
+      "title": "Notifications",
+      "description": "Everything that needed your attention, newest first. Choose which events reach you in your notification settings.",
+      "markAll": "Mark all read",
+      "clearAll": "Clear all",
+      "preferences": "Notification settings",
+      "clearTitle": "Clear all notifications?",
+      "clearBody": "This removes every notification of yours for good. Other people keep theirs. This cannot be undone.",
+      "clearConfirm": "Clear all",
+      "cancel": "Cancel",
+      "dismiss": "Dismiss this notification",
+      "tiles": {
+        "unread": "Unread",
+        "unreadHint": "Select to show only unread",
+        "day": "Last 24 hours",
+        "dayHint": "Received today",
+        "week": "Last 7 days",
+        "weekHint": "Received this week",
+        "total": "Kept",
+        "totalHint": "Older ones are removed automatically"
+      },
+      "filters": {
+        "label": "Notification filters",
+        "readLabel": "Show",
+        "all": "All",
+        "unread": "Unread",
+        "type": "Type",
+        "allTypes": "All types",
+        "otherTypes": "Other",
+        "search": "Search notifications",
+        "reset": "Reset filters"
+      },
+      "sections": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "thisWeek": "Earlier this week",
+        "older": "Older"
+      },
+      "loading": "Loading notifications",
+      "failed": "Could not load your notifications.",
+      "retry": "Try again",
+      "empty": "No notifications yet",
+      "emptyHint": "New chats, assignments, mentions and results of your sends will appear here.",
+      "emptyFiltered": "No notifications match these filters",
+      "emptyFilteredHint": "Remove a filter or search for something else.",
+      "showing": "{count, plural, one {# notification loaded} other {# notifications loaded}}",
+      "loadMore": "Load more",
+      "end": "End of the list"
+    }
+  }
+}

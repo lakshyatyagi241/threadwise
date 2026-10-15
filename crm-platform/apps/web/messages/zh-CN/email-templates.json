@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "邮件模板"
+    },
+    "common": {
+      "dismiss": "关闭"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "邮件模板",
+      "subtitle": "包含主题、格式化正文和变量的可复用邮件。可在邮件编辑器中将模板插入回复。",
+      "newTemplate": "新建模板",
+      "loading": "正在加载模板…",
+      "emptyTitle": "还没有邮件模板",
+      "empty": "只需写一次邮件，并加入联系人名字等变量，即可在任何邮件会话中重复使用。",
+      "emptyFilteredTitle": "没有匹配的模板",
+      "emptyFiltered": "试试其他搜索词，或清除筛选条件。",
+      "clearFilters": "清除筛选",
+      "unavailableTitle": "邮件模板不可用",
+      "unavailable": "此工作区目前无法连接到邮件模板服务。",
+      "showing": "{count, plural, other {显示 # 个模板}}",
+      "loadMore": "加载更多",
+      "loadingMore": "加载中…",
+      "noPermission": "你可以使用工作区共享的模板，并管理自己的模板。如需修改共享模板，请联系管理员。"
+    },
+    "toolbar": {
+      "search": "搜索模板",
+      "searchPlaceholder": "按名称、主题或分类搜索",
+      "scope": "归属",
+      "scopes": {
+        "all": "全部",
+        "shared": "共享",
+        "mine": "我的"
+      },
+      "purpose": "类型",
+      "anyPurpose": "所有类型",
+      "purposes": {
+        "general": "通用",
+        "marketing": "营销"
+      },
+      "status": "状态",
+      "statuses": {
+        "active": "启用中",
+        "archived": "已归档",
+        "all": "全部"
+      },
+      "category": "分类",
+      "anyCategory": "所有分类",
+      "refresh": "刷新"
+    },
+    "card": {
+      "subject": "主题",
+      "noSubject": "无主题：回复将保留自己的主题",
+      "badges": {
+        "shared": "共享",
+        "mine": "我的",
+        "marketing": "营销",
+        "archived": "已归档"
+      },
+      "used": "{count, plural, =0 {从未使用} other {已使用 # 次}}",
+      "lastUsed": "上次使用：{date}",
+      "by": "创建者：{name}",
+      "variables": "变量：{list}",
+      "edit": "编辑",
+      "archive": "归档",
+      "restore": "恢复",
+      "delete": "删除",
+      "preview": "显示预览",
+      "hidePreview": "隐藏预览"
+    },
+    "delete": {
+      "title": "删除此模板？",
+      "message": "所有可使用“{name}”的人都将无法再使用它。已通过该模板发送的邮件不受影响。",
+      "confirm": "删除",
+      "cancel": "取消"
+    },
+    "editor": {
+      "eyebrow": "邮件模板",
+      "newTitle": "新建邮件模板",
+      "editTitle": "编辑邮件模板",
+      "close": "关闭",
+      "name": "名称",
+      "namePlaceholder": "注册后的欢迎邮件",
+      "subject": "主题",
+      "subjectPlaceholder": "{name}，欢迎来到 {workspace}",
+      "subjectHint": "选填。留空时，回复将保留自己的主题。",
+      "body": "正文",
+      "bodyPlaceholder": "撰写邮件内容。可使用下方的变量进行个性化。",
+      "category": "分类",
+      "categoryPlaceholder": "新手引导",
+      "categoryList": "已使用的分类",
+      "purpose": "类型",
+      "purposes": {
+        "general": {
+          "label": "通用",
+          "hint": "用于答复和一对一邮件，发送方式与普通回复相同。"
+        },
+        "marketing": {
+          "label": "营销",
+          "hint": "推广类邮件。若工作区有要求，需要联系人的营销许可，并且始终包含退订链接。"
+        }
+      },
+      "scope": "谁可以使用",
+      "scopes": {
+        "shared": {
+          "label": "工作区内所有人",
+          "hint": "共享模板，只有管理模板的人员才能修改。"
+        },
+        "mine": {
+          "label": "仅自己",
+          "hint": "个人模板，其他人看不到。"
+        }
+      },
+      "variables": "插入变量",
+      "variablesHint": "使用模板时，变量会根据联系人、你本人和工作区的信息自动填充。没有值的变量会保持原样，方便你修改。",
+      "variableGroups": {
+        "contact": "联系人",
+        "agent": "你",
+        "workspace": "工作区"
+      },
+      "insertingIn": "将插入到{field}",
+      "fields": {
+        "subject": "主题",
+        "body": "正文"
+      },
+      "save": "保存更改",
+      "create": "创建模板",
+      "cancel": "取消",
+      "problems": {
+        "required": "此项为必填。",
+        "tooLong": "内容过长（最多 {limit} 个字符）。",
+        "subjectLines": "主题必须为单行。"
+      }
+    },
+    "preview": {
+      "title": "使用示例数据预览",
+      "subjectLabel": "主题",
+      "noSubject": "（无主题）",
+      "empty": "撰写正文后即可查看预览。",
+      "loading": "正在更新预览…",
+      "failed": "无法更新预览。",
+      "issues": "{count, plural, other {以下变量没有示例值，将保持原样：{list}}}",
+      "sampleNote": "仅为示例值。使用模板时，实际值将来自联系人。"
+    },
+    "picker": {
+      "button": "模板",
+      "title": "邮件模板",
+      "search": "搜索模板",
+      "searchPlaceholder": "搜索模板",
+      "loading": "正在加载模板…",
+      "empty": "还没有模板。请在 CRM 菜单的“邮件模板”中创建。",
+      "emptyFiltered": "没有与搜索匹配的模板。",
+      "loadError": "无法加载模板。",
+      "marketing": "营销",
+      "mine": "我的",
+      "replaceTitle": "替换已写的内容？",
+      "replaceMessage": "使用“{name}”会替换输入框中的正文；如果模板带有主题，主题也会被替换。",
+      "replaceConfirm": "替换",
+      "replaceCancel": "取消",
+      "used": "正在使用模板“{name}”",
+      "marketingNote": "这是营销邮件：将遵循你的许可规则，并包含退订链接。",
+      "forget": "不再使用此模板",
+      "more": "加载更多"
+    },
+    "toast": {
+      "created": "模板已创建",
+      "updated": "模板已保存",
+      "archived": "模板已归档",
+      "restored": "模板已恢复",
+      "deleted": "模板已删除"
+    },
+    "errors": {
+      "network": "无法连接服务器。请检查网络连接后重试。",
+      "forbidden": "你没有执行此操作的权限。",
+      "signedOut": "会话已结束。请重新登录后继续。",
+      "conflict": "其他人修改了此模板。已加载对方的版本，请查看后重试。",
+      "validation": "部分输入内容无效。请检查各字段后重试。",
+      "unavailable": "邮件模板目前不可用。",
+      "rateLimited": "请求过于频繁。请稍候再试。",
+      "notFound": "此模板已不存在。",
+      "planDisabled": "你的套餐不包含邮件功能。请升级套餐以使用邮件模板。",
+      "nameTaken": "你已有同名模板。请换一个名称。",
+      "notEditable": "只有管理邮件模板的人员才能修改共享模板。",
+      "archived": "此模板已归档。请先恢复后再使用。",
+      "unexpected": "出了点问题。请重试。",
+      "retry": "重试"
+    }
+  }
+}

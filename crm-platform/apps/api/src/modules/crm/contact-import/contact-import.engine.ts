@@ -15,7 +15,7 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { ContactQuotaService } from '../contacts/contact-quota.service';
-import { ContactConsentService } from '../../contact-consent';
+import { ContactConsentService, intakeEvidence } from '../../contact-consent';
 import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
@@ -342,6 +342,27 @@ export class ContactImportEngine {
     const keys = [...new Set(valid.map((r) => r.phone))].filter((k) => !state.fileMap.has(k));
     const existing = await this.findExisting(tx, orgId, keys);
 
+    // A repeated number is merged, not lost, but it is listed in the report so the person sees what was folded in.
+    const cellsByLine = new Map(slice.map((rec) => [rec.line, rec.cells]));
+    const noteDuplicate = (line: number) => {
+      // At most half the report goes to merged duplicates, so a file full of them cannot hide the real errors.
+      if (
+        state.rejects.length >= IMPORT_REJECTS_MAX ||
+        state.counters.duplicatesInFile > IMPORT_REJECTS_MAX / 2
+      )
+        return;
+      const cells = cellsByLine.get(line) ?? [];
+      state.rejects.push({
+        row: line,
+        reason: 'duplicate_in_file',
+        values: Object.fromEntries(
+          header
+            .slice(0, 20)
+            .map((h, i) => [h || `column_${i + 1}`, (cells[i] ?? '').slice(0, 200)]),
+        ),
+      });
+    };
+
     // 3. one operation per distinct number in the batch; a later row for the same number
     //    refines the earlier one (its non-empty cells win)
     const ops = new Map<string, Op>();
@@ -349,6 +370,7 @@ export class ContactImportEngine {
       const seen = ops.get(row.phone);
       if (seen) {
         state.counters.duplicatesInFile += 1;
+        noteDuplicate(row.line);
         seen.row = mergeRows(seen.row, row);
         row.groups.forEach((g) => seen.groups.add(g));
         row.tags.forEach((t) => seen.tags.add(t));
@@ -356,8 +378,10 @@ export class ContactImportEngine {
       }
       const knownId = state.fileMap.get(row.phone) ?? existing.get(row.phone);
       if (knownId !== undefined) {
-        if (state.fileMap.has(row.phone)) state.counters.duplicatesInFile += 1;
-        else state.counters.updated += 1;
+        if (state.fileMap.has(row.phone)) {
+          state.counters.duplicatesInFile += 1;
+          noteDuplicate(row.line);
+        } else state.counters.updated += 1;
         ops.set(row.phone, {
           kind: 'update',
           contactId: knownId,
@@ -461,23 +485,40 @@ export class ContactImportEngine {
       ]);
     }
 
-    // 5b. consent: the importer confirmed they have it, so each contact in the batch gets a ledger grant (never over an opt-out).
-    //     With a consent column mapped, only the rows that say yes are granted; no, blank and unknown words record nothing.
+    // 5b. consent: the importer confirmed they have it, so contacts of the batch get ledger grants (never over an opt-out). The proof is
+    //     the file name and job, the time, the importer's confirmation, and the notice wording and version the importer stated for the
+    //     file (BL-170). Per channel (privacy spec 4.3.2):
+    //       whatsapp  every contact, or with a consent column mapped only the rows that say yes (as before);
+    //       sms       only with an SMS consent column mapped, only the rows that say yes;
+    //       email     only with an email consent column mapped, only the rows that say yes AND carry an address.
+    //     A no, a blank and an unknown word record nothing; a file never grants a channel it has no column for (except WhatsApp).
     if (options.consentConfirmed) {
+      const evidence = intakeEvidence(
+        { text: options.consentNoticeText, version: options.consentNoticeVersion },
+        { fileName: job.fileName, reference: job.uuid },
+      );
+      const note = options.consentNoticeText?.trim()
+        ? 'The person importing confirmed consent for this file, under the notice they stated'
+        : 'The person importing confirmed consent for this file';
       for (const o of ops.values()) {
         if (o.contactId === undefined) continue;
-        if (o.row.consentColumn && o.row.consent !== 'granted') continue;
-        await this.consent.recordInTx(tx, orgId, {
-          contactId: o.contactId,
-          channel: 'whatsapp',
-          action: 'granted',
-          source: 'import',
-          evidence: { fileName: job.fileName, reference: job.uuid },
-          actorUserId: userId,
-          note: 'The person importing confirmed consent for this file',
-          idempotencyKey: `import:${job.uuid}:${o.contactId}`,
-          respectWithdrawn: true,
-        });
+        for (const ch of importChannelsOf(o.row)) {
+          await this.consent.recordInTx(tx, orgId, {
+            contactId: o.contactId,
+            channel: ch,
+            action: 'granted',
+            source: 'import',
+            evidence,
+            actorUserId: userId,
+            note,
+            // The WhatsApp key is the one this import always used, so a retried job writes nothing twice.
+            idempotencyKey:
+              ch === 'whatsapp'
+                ? `import:${job.uuid}:${o.contactId}`
+                : `import:${job.uuid}:${o.contactId}:${ch}`,
+            respectWithdrawn: true,
+          });
+        }
       }
     }
 
@@ -591,6 +632,30 @@ export class ContactImportEngine {
   }
 }
 
+/**
+ * The channels a confirmed import grants for one row (BL-170). WhatsApp keeps its meaning: no consent column means the importer's
+ * confirmation covers every contact; a column means only a yes. SMS and email are granted only from their own column, and email also
+ * needs the row to carry an address.
+ */
+export function importChannelsOf(
+  row: Pick<
+    ParsedRow,
+    | 'consent'
+    | 'consentColumn'
+    | 'consentSms'
+    | 'consentEmail'
+    | 'consentSmsColumn'
+    | 'consentEmailColumn'
+    | 'email'
+  >,
+): Array<'whatsapp' | 'sms' | 'email'> {
+  const out: Array<'whatsapp' | 'sms' | 'email'> = [];
+  if (!row.consentColumn || row.consent === 'granted') out.push('whatsapp');
+  if (row.consentSmsColumn && row.consentSms === 'granted') out.push('sms');
+  if (row.consentEmailColumn && row.consentEmail === 'granted' && row.email) out.push('email');
+  return out;
+}
+
 /** The later row's non-empty cells win; groups and tags are unioned by the caller. */
 function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
   const out: ParsedRow = { ...a };
@@ -611,5 +676,7 @@ function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
   }
   // A later row for the same number refines the answer, except with a blank cell.
   if (b.consent) out.consent = b.consent;
+  if (b.consentSms) out.consentSms = b.consentSms;
+  if (b.consentEmail) out.consentEmail = b.consentEmail;
   return out;
 }

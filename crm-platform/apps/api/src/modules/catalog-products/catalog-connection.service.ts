@@ -5,6 +5,9 @@ import {
   type CatalogSummary,
   type CommerceSettingsInput,
   type ConnectCatalogInput,
+  type CreateCatalogInput,
+  type DeleteRemoteCatalogInput,
+  type RenameCatalogInput,
   type SaveAutomationInput,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -225,6 +228,171 @@ export class CatalogConnectionService {
     });
   }
 
+  // --- create, rename and delete on Meta ----------------------------------------------------------------------------------
+
+  /**
+   * Creates a brand-new catalog on Meta under the WABA's business, links it to the WABA and connects it here. Meta is asked first,
+   * so a refusal leaves nothing behind locally; a workspace that already has a catalog must disconnect it first.
+   */
+  async create(input: CreateCatalogInput): Promise<CatalogSummary> {
+    const ctx = RequestContextStore.require();
+    const existing = await this.db.tx((tx) => this.catalogs.first(tx, ctx.orgId));
+    if (existing) {
+      throw new AppError(
+        ERROR_CODES.CAT_ALREADY_CONNECTED,
+        'A catalog is already connected. Disconnect it first to create a new one.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const creds = await this.db.tx((tx) => this.senders.wabaCredentials(tx, ctx.orgId));
+    if (!creds) {
+      throw new AppError(
+        ERROR_CODES.CAT_NO_WABA,
+        'No connected WhatsApp Business (WABA) number found. Connect a WABA number first.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    if (creds.accessToken === '' || creds.wabaId === '') {
+      throw new AppError(
+        ERROR_CODES.CAT_WABA_TOKEN_MISSING,
+        'Your WABA number is connected but its Meta access token could not be read. Reconnect the number.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    if (creds.businessId === '') {
+      throw new AppError(
+        ERROR_CODES.CAT_NO_CATALOG_LINKED,
+        'Add the Meta Business ID to your WABA connection so the catalog can be created under it.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const auth = { accessToken: creds.accessToken };
+    const name = input.name.trim();
+
+    let catalogId: string | null;
+    try {
+      catalogId = await this.provider.createCatalog(auth, creds.businessId, name);
+      if (!catalogId) {
+        throw new CatalogProviderError('Meta did not return a catalog id.', 'meta');
+      }
+      await this.provider.linkCatalogToWaba(auth, creds.wabaId, catalogId);
+    } catch (err) {
+      if (err instanceof CatalogProviderError) throw providerRefusal(err);
+      throw err;
+    }
+
+    const binding = {
+      provider: 'meta_cloud' as const,
+      catalogId,
+      wabaId: creds.wabaId,
+      phoneNumberId: creds.phoneNumberId || null,
+      accessToken: creds.accessToken,
+    };
+    try {
+      await this.provider.verifyCatalog(binding);
+    } catch (err) {
+      throw this.verifyFailure(
+        err,
+        (e) => `Created catalog ${catalogId} but Meta would not read it back: ${e.message}`,
+        'name',
+      );
+    }
+
+    return this.db.tx(async (tx) => {
+      const row = await this.catalogs.upsert(tx, ctx.orgId, {
+        provider: 'meta_cloud',
+        catalogId: catalogId as string,
+        catalogName: name,
+        wabaId: creds.wabaId,
+        phoneNumberId: creds.phoneNumberId || null,
+        accessTokenEnc: this.bindings.encrypt(creds.accessToken),
+      });
+      await this.senders.saveWabaCatalogId(tx, ctx.orgId, creds.configId, catalogId as string);
+      await this.audit.record(tx, {
+        module: CATALOG_MODULE,
+        recordId: row.id,
+        action: 'insert',
+        delta: {
+          catalogId: { old: null, new: row.catalogId },
+          catalogName: { old: null, new: name },
+          source: { old: null, new: 'created_on_meta' },
+        },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: CATALOG_MODULE,
+        aggregateId: row.id,
+        eventType: 'catalog.created',
+        payload: { uuid: row.uuid, catalogId: row.catalogId, name },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: CATALOG_MODULE,
+        aggregateId: row.id,
+        eventType: 'catalog.connected',
+        payload: {
+          uuid: row.uuid,
+          provider: row.provider,
+          catalogId: row.catalogId,
+          source: 'created_on_meta',
+        },
+      });
+      return toCatalogSummary(row);
+    });
+  }
+
+  /** Renames the catalog on Meta, then here; Meta refusing leaves the stored name as it was. */
+  async rename(input: RenameCatalogInput): Promise<CatalogSummary> {
+    const ctx = RequestContextStore.require();
+    const row = await this.db.tx((tx) => this.requireCatalog(tx, ctx.orgId));
+    const name = input.name.trim();
+    try {
+      await this.provider.renameCatalog(this.bindings.of(row), name);
+    } catch (err) {
+      if (err instanceof CatalogProviderError) throw providerRefusal(err);
+      throw err;
+    }
+    return this.db.tx(async (tx) => {
+      const locked = await this.requireCatalog(tx, ctx.orgId, true);
+      await this.catalogs.setName(tx, ctx.orgId, locked.id, name);
+      await this.audit.record(tx, {
+        module: CATALOG_MODULE,
+        recordId: locked.id,
+        action: 'update',
+        delta: { catalogName: { old: locked.catalogName, new: name } },
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: CATALOG_MODULE,
+        aggregateId: locked.id,
+        eventType: 'catalog.renamed',
+        payload: { uuid: locked.uuid, name },
+      });
+      return toCatalogSummary((await this.catalogs.first(tx, ctx.orgId))!);
+    });
+  }
+
+  /**
+   * Deletes the catalog on Meta (irreversible there) and then disconnects it here, which also forgets every product's sync state and
+   * the Meta ids of the collections. The catalog id must be typed back exactly.
+   */
+  async deleteRemote(input: DeleteRemoteCatalogInput): Promise<void> {
+    const ctx = RequestContextStore.require();
+    const row = await this.db.tx((tx) => this.requireCatalog(tx, ctx.orgId));
+    if (input.confirmCatalogId.trim() !== row.catalogId) {
+      throw new AppError(
+        ERROR_CODES.CAT_CONFIRM_MISMATCH,
+        'The catalog id you typed does not match the connected catalog.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'confirmCatalogId', message: 'Does not match the connected catalog id.' }],
+      );
+    }
+    try {
+      await this.provider.deleteCatalog(this.bindings.of(row));
+    } catch (err) {
+      if (err instanceof CatalogProviderError) throw providerRefusal(err);
+      throw err;
+    }
+    await this.disconnect();
+  }
+
   /** Meta's verdict becomes a 422 that names its code; anything else is the generic retry message. */
   private verifyFailure(
     err: unknown,
@@ -257,6 +425,8 @@ export class CatalogConnectionService {
       const row = await this.catalogs.first(tx, ctx.orgId, true);
       const removed = await this.catalogs.deleteAll(tx, ctx.orgId);
       const cleared = await this.sync.clearSyncState(tx, ctx.orgId);
+      // The product sets lived in the catalog being left: their Meta ids point nowhere now.
+      await this.sync.clearSetIds(tx, ctx.orgId);
       if (row) {
         await this.audit.record(tx, {
           module: CATALOG_MODULE,

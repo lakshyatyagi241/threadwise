@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { costLabel } from '../wizard/lib/money';
 import { cn } from '@crm/ui';
 import type { Campaign, CampaignStatus } from '@crm/contracts';
 import { can, deliveryRate } from '../lib/list-model';
@@ -23,7 +24,10 @@ import {
 } from './icons';
 
 /** The pill and the round status icon of each status, in Reference's colours. */
-const LOOK: Record<CampaignStatus, { pill: string; dot: string; icon: string; border: string }> = {
+export const LOOK: Record<
+  CampaignStatus,
+  { pill: string; dot: string; icon: string; border: string }
+> = {
   running: {
     pill: 'border-success/30 bg-success/10 text-success',
     dot: 'bg-success',
@@ -68,7 +72,7 @@ const LOOK: Record<CampaignStatus, { pill: string; dot: string; icon: string; bo
   },
 };
 
-const STATUS_ICON: Record<CampaignStatus, typeof PlayIcon> = {
+export const STATUS_ICON: Record<CampaignStatus, typeof PlayIcon> = {
   running: PlayIcon,
   paused: PauseIcon,
   scheduled: ClockIcon,
@@ -78,7 +82,7 @@ const STATUS_ICON: Record<CampaignStatus, typeof PlayIcon> = {
   draft: DraftIcon,
 };
 
-const ROUND =
+export const ROUND =
   'grid size-8 place-items-center rounded-full border border-border bg-background text-success hover:bg-muted disabled:opacity-50';
 
 /** One campaign on the list (TW-CAMP-001): status icon and pill, the actions its status allows, seven numbers and a footer. */
@@ -112,22 +116,24 @@ export function CampaignCard({
   onExport: () => void;
 }) {
   const t = useTranslations('campaigns.list.card');
+  const locale = useLocale();
   const look = LOOK[c.status];
   const Icon = STATUS_ICON[c.status];
   const n = c.counts;
+  const cost = costLabel(c.cost, locale);
   /** A draft made by the "Create broadcast" wizard resumes there, not in the classic builder (which cannot show it). */
   const wizardDraft = c.wizard && c.status === 'draft';
   const editHref = wizardDraft ? `/campaigns/create?draft=${c.id}` : `/campaigns/${c.id}/edit`;
   const titleHref = wizardDraft ? editHref : `/campaigns/${c.id}`;
   /** A launched wizard broadcast is not edited in the classic builder either. */
   const editable = c.wizard ? wizardDraft : can.edit(c.status);
-  const metric = (label: string, value: number, tone?: string) => (
+  const metric = (label: string, value: number | string, tone?: string) => (
     <div className="rounded-[10px] border border-border bg-background px-3 py-2">
       <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
         {label}
       </div>
       <div className={cn('mt-0.5 text-sm font-semibold tabular-nums', tone)}>
-        {value.toLocaleString()}
+        {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
     </div>
   );
@@ -141,13 +147,17 @@ export function CampaignCard({
       data-campaign-id={c.id}
     >
       <div className="mb-3 flex items-start gap-3">
-        <input
-          type="checkbox"
-          checked={selected}
-          onChange={(e) => onSelect(e.target.checked)}
-          aria-label={t('select', { name: c.name })}
-          className="mt-1.5 size-6 shrink-0 accent-[var(--primary)]"
-        />
+        {canDelete && can.delete(c.status) ? (
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={(e) => onSelect(e.target.checked)}
+            aria-label={t('select', { name: c.name })}
+            className="mt-1.5 size-6 shrink-0 accent-[var(--primary)]"
+          />
+        ) : (
+          canDelete && <span className="size-6 shrink-0" aria-hidden="true" />
+        )}
         <span className={cn('grid size-9 shrink-0 place-items-center rounded-full', look.icon)}>
           <Icon className="size-3.5" />
         </span>
@@ -242,7 +252,7 @@ export function CampaignCard({
               <ResendIcon className="size-3.5" />
             </button>
           )}
-          {canDelete && (
+          {canDelete && can.delete(c.status) && (
             <button
               type="button"
               disabled={busy}
@@ -272,13 +282,14 @@ export function CampaignCard({
         </div>
       )}
 
-      <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7">
+      <div className="mb-3 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8">
         {metric(t('sent'), n.sent)}
         {metric(t('delivered'), n.delivered)}
         {metric(t('read'), n.read)}
         {metric(t('replied'), n.replies)}
         {metric(t('clicked'), n.clicks)}
         {metric(t('failed'), n.failed, n.failed > 0 ? 'text-danger' : undefined)}
+        {metric(t('cost'), cost)}
         <div className="rounded-[10px] border border-success/20 bg-success/10 px-3 py-2">
           <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-success">
             {t('delivery')}

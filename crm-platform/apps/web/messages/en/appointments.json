@@ -36,7 +36,6 @@
       "slotTaken": "That time was just taken. Please pick another.",
       "gone": "This booking can no longer be changed.",
       "unexpected": "Something went wrong. Try again in a moment.",
-      "requestId": "Request ID",
       "retry": "Try again",
       "invalidTransition": "That booking is not in a state where this can be done. Reload to see where it is.",
       "notStarted": "This can be done only after the booking has started.",

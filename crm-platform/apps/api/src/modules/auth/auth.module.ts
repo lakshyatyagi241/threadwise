@@ -154,6 +154,8 @@ import { TokenService } from './token.service';
     OtpTemplateService,
   ],
   exports: [
+    // the verification-code sender, for a flow's phone question that verifies the number
+    OTP_SENDER_PORT,
     AuthService,
     TokenService,
     ClerkService,

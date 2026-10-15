@@ -1,0 +1,86 @@
+{
+  "module": "campaigns",
+  "tier": "P0",
+  "cases": [
+    {
+      "id": "EC-campaigns-001",
+      "feature": "wizard name",
+      "category": "input",
+      "scenario": "a value of 192 (one past WIZARD_NAME_MAX = 191) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/broadcast-wizard.ts"
+    },
+    {
+      "id": "EC-campaigns-002",
+      "feature": "wizard sources",
+      "category": "input",
+      "scenario": "a value of 101 (one past WIZARD_SOURCES_MAX = 100) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/broadcast-wizard.ts"
+    },
+    {
+      "id": "EC-campaigns-003",
+      "feature": "wizard test",
+      "category": "input",
+      "scenario": "a value of 11 (one past WIZARD_TEST_MAX_RECIPIENTS = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/broadcast-wizard.ts"
+    },
+    {
+      "id": "EC-campaigns-004",
+      "feature": "wizard variable text",
+      "category": "input",
+      "scenario": "a value of 201 (one past WIZARD_VARIABLE_TEXT_MAX = 200) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/broadcast-wizard.ts"
+    },
+    {
+      "id": "EC-campaigns-005",
+      "feature": "wizard sample",
+      "category": "input",
+      "scenario": "a value of 6 (one past WIZARD_SAMPLE_MAX = 5) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/broadcast-wizard.ts"
+    },
+    {
+      "id": "EC-campaigns-006",
+      "feature": "wizard contacts",
+      "category": "input",
+      "scenario": "a value of 5001 (one past WIZARD_CONTACTS_MAX = 5000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/broadcast-wizard.ts"
+    },
+    {
+      "id": "EC-campaigns-007",
+      "feature": "wizard csv",
+      "category": "input",
+      "scenario": "a value of 10001 (one past WIZARD_CSV_MAX_ROWS = 10000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/broadcast-wizard.ts"
+    },
+    {
+      "id": "EC-campaigns-008",
+      "feature": "campaign csv",
+      "category": "input",
+      "scenario": "a value of 5000001 (one past CAMPAIGN_CSV_MAX_CHARS = 5000000) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P1",
+      "status": "gap",
+      "source": "packages/contracts/src/campaigns/campaign.ts"
+    }
+  ]
+}

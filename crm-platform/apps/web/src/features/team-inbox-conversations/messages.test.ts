@@ -39,8 +39,13 @@ function flatten(tree: Tree, prefix = ''): Record<string, string> {
 const placeholders = (message: string) =>
   [...new Set([...message.matchAll(/\{\s*([A-Za-z_]\w*)\s*[,}]/g)].map((m) => m[1]!))].sort();
 
-const en = flatten(load('en'));
-const ar = flatten(load('ar'));
+/** The "Imported" marker strings are a slice of their own (messages/<locale>/team-inbox-conversations.imported.json), merged at runtime. */
+const loadSlice = (locale: string): Tree =>
+  JSON.parse(
+    readFileSync(join(WEB, 'messages', locale, 'team-inbox-conversations.imported.json'), 'utf8'),
+  ) as Tree;
+const en = { ...flatten(load('en')), ...flatten(loadSlice('en')) };
+const ar = { ...flatten(load('ar')), ...flatten(loadSlice('ar')) };
 
 describe('team-inbox-conversations messages', () => {
   it('Arabic has exactly the keys English has', () => {
@@ -105,6 +110,7 @@ const DYNAMIC = [
   ]),
   ...CONVERSATION_STATUSES.flatMap((s) => [`list.status.${s}`, `panel.past.status.${s}`]),
   ...(['low', 'normal', 'high', 'urgent'] as const).map((s) => `list.priority.${s}`),
+  ...(['first_response', 'resolution'] as const).map((s) => `sla.kind.${s}`),
   ...(['received', 'queued', 'sent', 'delivered', 'read', 'failed'] as const).map(
     (s) => `status.${s}`,
   ),

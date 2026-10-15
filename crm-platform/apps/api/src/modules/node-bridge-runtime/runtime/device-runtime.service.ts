@@ -73,6 +73,7 @@ interface DeviceRow {
   proxy_port: number | null;
   proxy_username: string | null;
   proxy_password: string | null;
+  history_import_mode: string | null;
 }
 
 /** The domain event a state change into one of these states also raises (consumers are phase 2: notifications, webhook, audit). */
@@ -255,6 +256,11 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
       receipt: async (r) => void (await this.receipts.route({ orgId, deviceId }, r)),
       groups: (g, o) => this.inbound.groups(orgId, deviceId, g, o),
       groupEvent: (e) => this.inbound.groupEvent(orgId, deviceId, e),
+      historyImportFor: async () => {
+        const mode = (await this.loadDevice(orgId, deviceId))?.history_import_mode;
+        return mode === 'recent' || mode === 'full' ? mode : 'none';
+      },
+      history: (b) => this.inbound.history(orgId, deviceId, b),
     };
     const session = new DeviceSession(
       { orgId, deviceId, phoneDigits: senderDigits(dev.country_code, dev.phone_number) },
@@ -543,7 +549,7 @@ export class DeviceRuntimeService implements OnApplicationBootstrap, OnApplicati
   private async loadDevice(orgId: number, deviceId: number): Promise<DeviceRow | null> {
     return this.db.txAs({ orgId, userId: null }, async (tx) => {
       const res = await tx.execute(sql`
-        SELECT id, country_code, phone_number, proxy_enabled, proxy_type, proxy_host, proxy_port, proxy_username, proxy_password
+        SELECT id, country_code, phone_number, proxy_enabled, proxy_type, proxy_host, proxy_port, proxy_username, proxy_password, history_import_mode
           FROM devices WHERE org_id = ${orgId} AND id = ${deviceId}`);
       return (res.rows[0] as unknown as DeviceRow | undefined) ?? null;
     });

@@ -28,8 +28,8 @@
       "teamChanged": "Đã cập nhật nhóm.",
       "priorityChanged": "Đã cập nhật mức ưu tiên",
       "snoozed": "Đã tạm ẩn cuộc trò chuyện",
-      "labelAdded": "Đã thêm nhãn",
-      "labelRemoved": "Đã gỡ nhãn"
+      "tagAdded": "Đã thêm thẻ",
+      "tagRemoved": "Đã bỏ thẻ"
     },
     "list": {
       "title": "Hộp thư",
@@ -137,23 +137,24 @@
       "unsupported": "Kênh này không thể gửi loại tin nhắn hoặc tệp đó.",
       "network": "Không thể kết nối đến máy chủ. Kiểm tra kết nối và thử lại.",
       "generic": "Đã xảy ra lỗi. Thử lại.",
-      "genericWithId": "Đã xảy ra lỗi. Thử lại. Mã tham chiếu: {id}",
       "templateNotSendable": "Mẫu này không thể gửi vào cuộc trò chuyện này. Chọn mẫu khác.",
       "groupSendUnavailable": "Hiện chưa hỗ trợ gửi tin đến nhóm WhatsApp. Hãy trả lời từ ứng dụng WhatsApp Business.",
       "logRange": "Chọn ngày trong vòng một năm qua, ngày bắt đầu phải trước ngày kết thúc và không ở tương lai.",
       "logBusy": "Một bản xuất đang được chuẩn bị. Hãy chờ email của bản đó rồi mới yêu cầu bản khác.",
       "logNotReady": "Bản xuất này chưa sẵn sàng hoặc đã hết hạn. Hãy yêu cầu lại.",
       "groupSuspended": "Meta đã tạm ngưng nhóm này nên không thể nhắn tin cho nhóm cho đến khi Meta gỡ bỏ.",
-      "walletEmpty": "Ví tin nhắn của bạn không đủ cho tin nhắn nhóm này (tính phí cho mỗi thành viên). Hãy nạp tiền rồi thử lại.",
-      "groupPlanLocked": "Gói của bạn không có nhóm WhatsApp nên không thể nhắn vào nhóm này. Hãy nhờ quản trị viên nâng cấp gói.",
       "groupLeft": "Số này đã rời nhóm nên không thể gửi tin nhắn ở đó nữa.",
       "groupAnnounceOnly": "Chỉ quản trị viên mới có thể gửi tin nhắn trong nhóm này, và số này không phải quản trị viên.",
       "groupRateLimited": "Số này đã gửi quá nhiều tin nhắn nhóm trong thời gian ngắn. Hãy chờ một phút rồi thử lại.",
       "groupUnavailable": "WhatsApp không chấp nhận tin nhắn nhóm này. Hãy thử lại sau vài phút.",
+      "walletEmpty": "Ví tin nhắn của bạn không đủ cho tin nhắn nhóm này (tính phí cho mỗi thành viên). Hãy nạp tiền rồi thử lại.",
+      "groupPlanLocked": "Gói của bạn không có nhóm WhatsApp nên không thể nhắn vào nhóm này. Hãy nhờ quản trị viên nâng cấp gói.",
       "savedReplyGone": "Trả lời nhanh này không còn tồn tại.",
       "savedReplyChannel": "Trả lời nhanh này không dành cho loại kênh này.",
       "shortcutTaken": "Một trả lời nhanh khác đã dùng phím tắt đó.",
-      "importInvalid": "Không thể đọc tệp này dưới dạng câu trả lời đã lưu. Tệp cần có hàng đầu tiên với các cột title, shortcut và body, và tối đa 1.000 hàng."
+      "importInvalid": "Không thể đọc tệp này dưới dạng câu trả lời đã lưu. Tệp cần có hàng đầu tiên với các cột title, shortcut và body, và tối đa 1.000 hàng.",
+      "contactOptedOut": "Liên hệ này đã hủy đăng ký tin nhắn tiếp thị nên tin nhắn không được gửi.",
+      "consentRequired": "Không gian làm việc này yêu cầu sự đồng ý được ghi lại cho tin nhắn tiếp thị và liên hệ này chưa có, nên tin nhắn không được gửi."
     },
     "bubble": {
       "kind": {
@@ -223,7 +224,15 @@
       "groupMember": "Thành viên nhóm",
       "groupTally": "Đã gửi tới {delivered} trong {members} người{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
       "groupTallyNoTotal": "Đã gửi tới {delivered, plural, other {# thành viên}}{read, plural, =0 {} other {, # người đã đọc}}{failed, plural, =0 {} other {, # thất bại}}",
-      "groupTallyBilled": "{billable} tính phí, {free} miễn phí"
+      "groupTallyBilled": "{billable} tính phí, {free} miễn phí",
+      "stageLine": {
+        "auto": "AI đã đọc cuộc trò chuyện và chuyển liên hệ này từ {from} sang {to}.",
+        "undo": "Hoàn tác",
+        "wasUndone": "Đã hoàn tác",
+        "undone": "Đã hoàn tác thay đổi giai đoạn: quay lại {stage}.",
+        "undoneToast": "Đã đưa giai đoạn về {stage}.",
+        "couldNotUndo": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển tiếp hoặc đã được hoàn tác."
+      }
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -275,6 +284,44 @@
       "attachment": "một tệp đính kèm",
       "jumpLatest": "Đến tin nhắn mới nhất",
       "jumpLatestNew": "{count, plural, other {# tin nhắn mới}}"
+    },
+    "groupThread": {
+      "openGroup": "Mở nhóm",
+      "readOnly": {
+        "left": {
+          "title": "Số này đã rời nhóm",
+          "message": "Cuộc trò chuyện được giữ nguyên. Bạn có thể đọc và thêm ghi chú nội bộ nhưng không thể gửi tin nhắn."
+        },
+        "announceOnly": {
+          "title": "Chỉ quản trị viên mới có thể gửi trong nhóm này",
+          "message": "Số này không phải quản trị viên của nhóm nên WhatsApp sẽ không chuyển tin nhắn. Bạn vẫn có thể thêm ghi chú nội bộ."
+        }
+      },
+      "mention": {
+        "label": "Thành viên nhóm",
+        "loading": "Đang tìm thành viên",
+        "none": "Không có thành viên nào phù hợp"
+      },
+      "cloudBlock": {
+        "suspended": {
+          "title": "Meta đã tạm ngưng nhóm này",
+          "message": "WhatsApp không gửi tin nhắn tới nhóm bị tạm ngưng. Bạn vẫn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ cho đến khi Meta gỡ bỏ."
+        },
+        "plan": {
+          "title": "Gói của bạn không có nhóm WhatsApp",
+          "message": "Bạn có thể đọc cuộc trò chuyện này và thêm ghi chú nội bộ, nhưng gửi vào nhóm cần gói có tính năng nhóm. Hãy nhờ quản trị viên nâng cấp."
+        },
+        "ineligible": {
+          "title": "Số này không thể dùng nhóm WhatsApp",
+          "message": "Lần kiểm tra gần nhất, Meta không cho phép nhóm trên số này (cần tài khoản doanh nghiệp chính thức). Bạn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ. Mở Nhóm Meta để kiểm tra lại."
+        }
+      },
+      "cost": {
+        "members": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. Chi phí ước tính {cost}: WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "membersNoEstimate": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. WhatsApp tính phí cho mỗi thành viên nhận được.",
+        "sizeUnknown": "Chưa biết số thành viên. WhatsApp tính phí cho mỗi thành viên nhận tin nhắn này.",
+        "walletShort": "Ví của bạn có thể không đủ cho tin nhắn này. Hãy nạp tiền trước khi gửi."
+      }
     },
     "composer": {
       "modeLabel": "Loại tin nhắn",
@@ -403,7 +450,9 @@
         "unassign": "Bỏ giao",
         "open": "{count} đang mở",
         "pickTeam": "Chọn nhóm cho cuộc trò chuyện này",
-        "noTeam": "Không có nhóm"
+        "noTeam": "Không có nhóm",
+        "onLeave": "Đang nghỉ phép",
+        "onLeaveUntil": "Nghỉ phép đến {date}"
       },
       "presence": {
         "online": "Trực tuyến",
@@ -443,8 +492,8 @@
           "snoozed": "Đã tạm hoãn bởi {actor}",
           "auto_unsnoozed": "Hết thời gian tạm hoãn",
           "priority_changed": "Đã đổi mức ưu tiên bởi {actor}",
-          "tag_added": "Đã thêm nhãn bởi {actor}",
-          "tag_removed": "Đã gỡ nhãn bởi {actor}",
+          "tag_added": "Thẻ được thêm bởi {actor}",
+          "tag_removed": "Thẻ được bỏ bởi {actor}",
           "first_response": "Đã gửi phản hồi đầu tiên",
           "sla_breach": "Đã quá hạn phản hồi",
           "unknown": "{what} bởi {actor}"
@@ -555,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Gửi mẫu tin nhắn",
       "close": "Đóng",
-      "cancel": "Hủy",
-      "back": "Quay lại mẫu",
       "search": "Tìm theo tên hoặc nội dung",
       "searchLabel": "Tìm mẫu",
       "loading": "Đang tải mẫu",
@@ -565,9 +612,7 @@
       "empty": "Số WhatsApp này chưa có mẫu nào được duyệt. Tạo mẫu trong mục Mẫu và đợi Meta phê duyệt.",
       "noResults": "Không có mẫu nào khớp với tìm kiếm.",
       "windowHint": "Mẫu vẫn gửi được ngay cả khi đã hết cửa sổ trả lời 24 giờ.",
-      "variables": "Điền các biến",
       "preview": "Nội dung khách hàng sẽ đọc",
-      "send": "Gửi mẫu",
       "sending": "Đang gửi",
       "sent": "Đã gửi mẫu",
       "problem": {
@@ -582,7 +627,31 @@
         "authentication": "Mẫu mã OTP do hệ thống gửi, không gửi từ hộp thư.",
         "named_variables": "Dùng biến có tên, hiện hộp thư chưa hỗ trợ."
       },
-      "hasMore": "Đang hiển thị {count} mẫu đầu tiên. Tìm theo tên hoặc nội dung để xem các mẫu khác."
+      "hasMore": "Đang hiển thị {count} mẫu đầu tiên. Tìm theo tên hoặc nội dung để xem các mẫu khác.",
+      "previewEmpty": "Trỏ vào một mẫu để xem nó sẽ hiển thị thế nào trên điện thoại của khách hàng.",
+      "previewCustomer": "Khách hàng",
+      "noVariables": "Mẫu này không có gì cần điền. Hãy kiểm tra điện thoại rồi gửi.",
+      "sendTo": "Gửi cho {name}",
+      "refresh": "Làm mới danh sách",
+      "device": "Xem trước điện thoại",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Cấu hình biến nội dung",
+      "or": "hoặc",
+      "mapField": "Ánh xạ trường cho {key}",
+      "mapNone": "Liên hệ này không có thông tin để ánh xạ.",
+      "typeMessage": "Nhập tin nhắn",
+      "fields": {
+        "name": "Tên",
+        "phone": "Điện thoại",
+        "email": "Email"
+      },
+      "create": "Tạo mẫu mới",
+      "actions": "Thao tác với mẫu",
+      "edit": "Chỉnh sửa mẫu",
+      "duplicate": "Nhân bản mẫu"
     },
     "log": {
       "title": "Nhật ký gửi",
@@ -656,44 +725,6 @@
           "failed": "Thất bại",
           "expired": "Hết hạn"
         }
-      }
-    },
-    "groupThread": {
-      "openGroup": "Mở nhóm",
-      "readOnly": {
-        "left": {
-          "title": "Số này đã rời nhóm",
-          "message": "Cuộc trò chuyện được giữ nguyên. Bạn có thể đọc và thêm ghi chú nội bộ nhưng không thể gửi tin nhắn."
-        },
-        "announceOnly": {
-          "title": "Chỉ quản trị viên mới có thể gửi trong nhóm này",
-          "message": "Số này không phải quản trị viên của nhóm nên WhatsApp sẽ không chuyển tin nhắn. Bạn vẫn có thể thêm ghi chú nội bộ."
-        }
-      },
-      "mention": {
-        "label": "Thành viên nhóm",
-        "loading": "Đang tìm thành viên",
-        "none": "Không có thành viên nào phù hợp"
-      },
-      "cloudBlock": {
-        "suspended": {
-          "title": "Meta đã tạm ngưng nhóm này",
-          "message": "WhatsApp không gửi tin nhắn tới nhóm bị tạm ngưng. Bạn vẫn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ cho đến khi Meta gỡ bỏ."
-        },
-        "plan": {
-          "title": "Gói của bạn không có nhóm WhatsApp",
-          "message": "Bạn có thể đọc cuộc trò chuyện này và thêm ghi chú nội bộ, nhưng gửi vào nhóm cần gói có tính năng nhóm. Hãy nhờ quản trị viên nâng cấp."
-        },
-        "ineligible": {
-          "title": "Số này không thể dùng nhóm WhatsApp",
-          "message": "Lần kiểm tra gần nhất, Meta không cho phép nhóm trên số này (cần tài khoản doanh nghiệp chính thức). Bạn có thể đọc cuộc trò chuyện và thêm ghi chú nội bộ. Mở Nhóm Meta để kiểm tra lại."
-        }
-      },
-      "cost": {
-        "members": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. Chi phí ước tính {cost}: WhatsApp tính phí cho mỗi thành viên nhận được.",
-        "membersNoEstimate": "Tin nhắn này sẽ gửi tới {count, plural, other {# thành viên}}. WhatsApp tính phí cho mỗi thành viên nhận được.",
-        "sizeUnknown": "Chưa biết số thành viên. WhatsApp tính phí cho mỗi thành viên nhận tin nhắn này.",
-        "walletShort": "Ví của bạn có thể không đủ cho tin nhắn này. Hãy nạp tiền trước khi gửi."
       }
     },
     "savedReplies": {
@@ -892,6 +923,11 @@
         }
       }
     },
+    "triage": {
+      "priority": "Ưu tiên",
+      "snooze": "Tạm ẩn",
+      "wake": "Hiện lại ngay"
+    },
     "bulk": {
       "barLabel": "Thao tác hàng loạt",
       "selected": "{count, plural, one {Đã chọn # cuộc trò chuyện} other {Đã chọn # cuộc trò chuyện}}",
@@ -919,51 +955,77 @@
         "partial": "Đã cập nhật {done}, {unchanged} đã ở trạng thái mới nhất, không thể thay đổi {failed}. Các mục thất bại vẫn được chọn.",
         "allFailed": "Không thể thay đổi {count, plural, one {# cuộc trò chuyện nào} other {# cuộc trò chuyện nào}}."
       },
-      "label": "Nhãn",
-      "labelAdd": "Thêm nhãn",
-      "labelRemove": "Gỡ nhãn"
+      "tag": "Gắn thẻ",
+      "tagAdd": "Thêm thẻ",
+      "tagRemove": "Bỏ thẻ",
+      "onLeave": "đang nghỉ phép",
+      "onLeaveUntil": "nghỉ phép đến {date}"
     },
-    "triage": {
-      "priority": "Ưu tiên",
-      "snooze": "Tạm ẩn",
-      "wake": "Hiện lại ngay"
-    },
-    "labels": {
-      "label": "Nhãn",
-      "loading": "Đang tải nhãn…",
-      "loadFailed": "Không thể tải nhãn.",
-      "none": "Chưa có nhãn nào.",
-      "newLabel": "Nhãn mới",
+    "tags": {
+      "tag": "Thẻ",
+      "loading": "Đang tải thẻ…",
+      "loadFailed": "Không thể tải thẻ.",
+      "none": "Chưa có thẻ nào.",
+      "newTag": "Thẻ mới",
       "add": "Thêm",
-      "filter": "Nhãn",
-      "filterActive": "{count, plural, one {# nhãn} other {# nhãn}}",
-      "clearFilter": "Xóa bộ lọc nhãn",
+      "filter": "Thẻ",
+      "filterActive": "{count, plural, other {# thẻ}}",
+      "clearFilter": "Xóa bộ lọc thẻ",
+      "scope": {
+        "label": "Khớp thẻ trên",
+        "conversation": "Thẻ cuộc trò chuyện",
+        "contact": "Thẻ liên hệ"
+      },
+      "groups": {
+        "title": "Thẻ",
+        "helpFor": "Giới thiệu về {title}",
+        "rule": "Cả hai loại đều lấy từ cùng một thư viện thẻ của không gian làm việc.",
+        "contactTitle": "Thẻ liên hệ",
+        "contactHelp": "Thẻ liên hệ mô tả con người (VIP, khách tiềm năng, khu vực). Thẻ theo họ vào mọi cuộc trò chuyện.",
+        "contactNone": "Liên hệ này chưa có thẻ.",
+        "contactEdit": "Sửa trên liên hệ",
+        "conversationTitle": "Thẻ cuộc trò chuyện",
+        "conversationHelp": "Thẻ cuộc trò chuyện mô tả luồng này (thanh toán, hoàn tiền, khẩn cấp).",
+        "conversationNone": "Cuộc trò chuyện này chưa có thẻ.",
+        "remove": "Bỏ thẻ {name}"
+      },
       "screen": {
         "back": "Quay lại hộp thư",
-        "title": "Nhãn",
-        "intro": "Nhãn gắn thẻ cho cuộc trò chuyện để nhóm của bạn sắp xếp và lọc. Đây là các thẻ giống như dùng cho danh bạ.",
-        "newTitle": "Nhãn mới",
-        "editTitle": "Sửa nhãn",
+        "title": "Thẻ cuộc trò chuyện",
+        "intro": "Thẻ cuộc trò chuyện đánh dấu một luồng (thanh toán, hoàn tiền, khẩn cấp) để nhóm của bạn sắp xếp và lọc hộp thư. Chúng lấy từ cùng thư viện thẻ với thẻ liên hệ, vốn mô tả con người.",
+        "newTitle": "Thẻ mới",
+        "editTitle": "Sửa thẻ",
         "name": "Tên",
         "color": "Màu",
         "colorInvalid": "Dùng mã màu hex như #075E54 hoặc tên màu.",
         "description": "Mô tả (không bắt buộc)",
-        "create": "Tạo nhãn",
+        "create": "Tạo thẻ",
         "save": "Lưu thay đổi",
         "cancel": "Hủy",
         "edit": "Sửa",
         "delete": "Xóa",
-        "inUse": "{count, plural, one {# cuộc trò chuyện} other {# cuộc trò chuyện}}",
-        "emptyTitle": "Chưa có nhãn nào",
-        "emptyMessage": "Hãy tạo nhãn đầu tiên ở phía trên, rồi gắn vào các cuộc trò chuyện từ hộp thư.",
-        "deleteTitle": "Xóa nhãn này?",
-        "deleteMessage": "\"{name}\" đang được dùng cho {count, plural, one {# cuộc trò chuyện} other {# cuộc trò chuyện}}. Xóa sẽ gỡ nhãn khỏi các cuộc trò chuyện đó và khỏi mọi danh bạ đang mang nhãn này. Không thể hoàn tác.",
-        "nameTaken": "Đã có nhãn với tên này.",
-        "conflict": "Người khác đã thay đổi nhãn này trước. Danh sách đã được tải lại.",
-        "saved": "Đã lưu nhãn",
-        "created": "Đã tạo nhãn",
-        "deleted": "Đã xóa nhãn"
+        "inUse": "{count, plural, other {# cuộc trò chuyện}}",
+        "emptyTitle": "Chưa có thẻ nào",
+        "emptyMessage": "Hãy tạo thẻ đầu tiên ở trên, rồi gắn vào cuộc trò chuyện từ hộp thư.",
+        "deleteTitle": "Xóa thẻ này?",
+        "deleteMessage": "\"{name}\" đang được dùng cho {count, plural, other {# cuộc trò chuyện}}. Xóa sẽ gỡ thẻ khỏi các cuộc trò chuyện đó và khỏi mọi liên hệ đang mang thẻ này. Không thể hoàn tác.",
+        "nameTaken": "Đã có thẻ với tên này.",
+        "conflict": "Người khác đã thay đổi thẻ này trước. Danh sách đã được tải lại.",
+        "saved": "Đã lưu thẻ",
+        "created": "Đã tạo thẻ",
+        "deleted": "Đã xóa thẻ"
       }
+    },
+    "sla": {
+      "breached": "SLA bị vi phạm",
+      "atRisk": "SLA đến hạn sau {minutes} phút",
+      "ok": "SLA đến hạn {time}",
+      "kind": {
+        "first_response": "Mục tiêu phản hồi đầu tiên",
+        "resolution": "Mục tiêu giải quyết"
+      },
+      "titleBreached": "{kind}: đã lỡ (hạn là {time})",
+      "titleOpen": "{kind}: hạn {time}"
     }
   }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useQueryClient } from '@tanstack/react-query';
@@ -8,9 +9,19 @@ import type { WizardBroadcastDetail, WizardRetrySummary } from '@crm/contracts';
 import { Alert, Button, ConfirmDialog, EmptyState, Spinner, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
-import { KEYS, controlBroadcast, useBroadcast, type BroadcastAction } from '../api/wizard';
-import { controlsFor, runPath, statusTone } from '../lib/broadcast';
+import {
+  KEYS,
+  controlBroadcast,
+  deleteBroadcast,
+  exportBroadcastPath,
+  retryFailedBroadcast,
+  useBroadcast,
+  type BroadcastAction,
+} from '../api/wizard';
+import { download } from '../../api/campaigns';
+import { controlsFor, deletable, retryableFailed, runPath, statusTone } from '../lib/broadcast';
 import { scheduleZone } from '../lib/schedule';
+import { DirectorSummary } from '../../components/director-summary';
 import { Chip, ErrorBlock, Skeleton, WizardCard } from './parts';
 import { useScheduleWords } from './use-words';
 
@@ -115,6 +126,24 @@ function Runs({ b }: { b: WizardBroadcastDetail }) {
   );
 }
 
+/**
+ * The director summary of what this broadcast sent. A one-off campaign is its own campaign; a series shows its newest run (the list
+ * is newest first), and a series that has not run yet has nothing to summarise.
+ */
+function SummaryCard({ b }: { b: WizardBroadcastDetail }) {
+  const t = useTranslations('campaigns.detail.summary');
+  const latest = b.kind === 'campaign' ? null : (b.runList[0] ?? null);
+  const id = b.kind === 'campaign' ? b.id : (latest?.id ?? null);
+  if (!id) return null;
+  return (
+    <DirectorSummary
+      kind="campaign"
+      id={id}
+      note={latest ? t('latestRun', { occurrence: latest.occurrence }) : undefined}
+    />
+  );
+}
+
 /** `/campaigns/wizard/broadcasts/[id]`: what a launched broadcast (one-off or recurring) is doing, with Pause, Resume and Cancel. */
 export function BroadcastScreen({ id }: { id: string }) {
   const t = useTranslations('campaigns.wizard.status');
@@ -123,8 +152,15 @@ export function BroadcastScreen({ id }: { id: string }) {
   const q = useBroadcast(id);
   const qc = useQueryClient();
   const { toast } = useToast();
+  const router = useRouter();
   const canControl = useCan('camp.campaigns.control');
+  const canExport = useCan('camp.campaigns.export');
+  const canDelete = useCan('camp.campaigns.delete');
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [confirmRetry, setConfirmRetry] = useState(false);
+  const [retrying, setRetrying] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [busy, setBusy] = useState<BroadcastAction | null>(null);
   const b = q.data;
 
@@ -138,6 +174,46 @@ export function BroadcastScreen({ id }: { id: string }) {
     } finally {
       setBusy(null);
       void qc.invalidateQueries({ queryKey: KEYS.broadcast(id) });
+    }
+  };
+
+  const failedCount = b ? retryableFailed(b) : 0;
+  const retryFailed = async () => {
+    setRetrying(true);
+    try {
+      const out = await retryFailedBroadcast(id);
+      toast(t('done.retryFailed', { count: out.recipients }), 'success');
+    } catch (e) {
+      toast(e instanceof ApiError ? e.message : t('failed'), 'danger');
+    } finally {
+      setRetrying(false);
+      void qc.invalidateQueries({ queryKey: KEYS.broadcast(id) });
+    }
+  };
+
+  const exportRows = async () => {
+    try {
+      const { blob, filename } = await download(exportBroadcastPath(id));
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      toast(e instanceof ApiError ? e.message : t('exportFailed'), 'danger');
+    }
+  };
+  const remove = async () => {
+    setDeleting(true);
+    try {
+      await deleteBroadcast(id);
+      toast(t('done.delete'), 'success');
+      void qc.invalidateQueries({ queryKey: ['camp'] });
+      router.push('/campaigns');
+    } catch (e) {
+      toast(e instanceof ApiError ? e.message : t('failed'), 'danger');
+      setDeleting(false);
     }
   };
 
@@ -172,22 +248,50 @@ export function BroadcastScreen({ id }: { id: string }) {
                 {b.templateName && <Chip tone="brand">{b.templateName}</Chip>}
               </div>
             </div>
-            {canControl && (
+            {(canControl || canExport || canDelete) && (
               <div className="flex flex-wrap gap-2">
-                {controlsFor(b).map((a) => (
+                {canControl && failedCount > 0 && (
                   <Button
-                    key={a}
-                    variant={a === 'cancel' ? 'danger' : a === 'resume' ? 'brand' : 'secondary'}
-                    disabled={busy !== null}
-                    onClick={() => (a === 'cancel' ? setConfirmCancel(true) : void run(a))}
+                    variant="secondary"
+                    disabled={busy !== null || retrying}
+                    onClick={() => setConfirmRetry(true)}
                   >
-                    {busy === a && <Spinner />}
-                    {t(`action.${a}`)}
+                    {retrying && <Spinner />}
+                    {t('action.retryFailed', { count: failedCount })}
                   </Button>
-                ))}
+                )}
+                {canControl &&
+                  controlsFor(b).map((a) => (
+                    <Button
+                      key={a}
+                      variant={a === 'cancel' ? 'danger' : a === 'resume' ? 'brand' : 'secondary'}
+                      disabled={busy !== null}
+                      onClick={() => (a === 'cancel' ? setConfirmCancel(true) : void run(a))}
+                    >
+                      {busy === a && <Spinner />}
+                      {t(`action.${a}`)}
+                    </Button>
+                  ))}
+                {canExport && (
+                  <Button variant="secondary" onClick={() => void exportRows()}>
+                    {t('action.export')}
+                  </Button>
+                )}
+                {canDelete && deletable(b) && (
+                  <Button
+                    variant="danger"
+                    disabled={busy !== null || deleting}
+                    onClick={() => setConfirmDelete(true)}
+                  >
+                    {deleting && <Spinner />}
+                    {t('action.delete')}
+                  </Button>
+                )}
               </div>
             )}
           </header>
+
+          <SummaryCard b={b} />
 
           <WizardCard title={t('scheduleTitle')} id="status-schedule">
             <dl className="grid gap-3 sm:grid-cols-3">
@@ -228,6 +332,37 @@ export function BroadcastScreen({ id }: { id: string }) {
 
           {!canControl && controlsFor(b).length > 0 && <Alert tone="info">{t('noControl')}</Alert>}
         </>
+      )}
+      {canControl && failedCount > 0 && (
+        <ConfirmDialog
+          open={confirmRetry}
+          busy={retrying}
+          title={t('retryTitle')}
+          message={t('retryMessage', { count: failedCount })}
+          confirmLabel={t('action.retryFailed', { count: failedCount })}
+          cancelLabel={t('keep')}
+          onClose={() => setConfirmRetry(false)}
+          onConfirm={() => {
+            setConfirmRetry(false);
+            void retryFailed();
+          }}
+        />
+      )}
+      {canDelete && b && deletable(b) && (
+        <ConfirmDialog
+          open={confirmDelete}
+          tone="danger"
+          busy={deleting}
+          title={t('deleteTitle')}
+          message={b.kind === 'series' ? t('deleteSeries') : t('deleteOne')}
+          confirmLabel={t('action.delete')}
+          cancelLabel={t('keep')}
+          onClose={() => setConfirmDelete(false)}
+          onConfirm={() => {
+            setConfirmDelete(false);
+            void remove();
+          }}
+        />
       )}
       <ConfirmDialog
         open={confirmCancel}

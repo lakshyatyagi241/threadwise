@@ -28,7 +28,8 @@ export function askItems(node: RuntimeNode, render: (t: unknown) => string): Men
 export function buttonItems(node: RuntimeNode, render: (t: unknown) => string): MenuItem[] {
   return arr(node.props.buttons).map((b, i) => {
     const text = render(obj(b).title).trim() || `Option ${i + 1}`;
-    return { id: `b_${node.id}_p${i}`, text };
+    const icon = s(obj(b).icon).trim();
+    return { id: `b_${node.id}_p${i}`, text, ...(/^https?:\/\/\S+$/i.test(icon) ? { icon } : {}) };
   });
 }
 

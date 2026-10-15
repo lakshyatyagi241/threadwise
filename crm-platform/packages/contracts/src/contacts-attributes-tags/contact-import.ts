@@ -32,6 +32,10 @@ export const IMPORT_FIELDS = [
   'status',
   'source',
   'consent',
+  // BL-170: a file may carry a consent column per channel. `consent` stays the WhatsApp one (and the one a file with no per-channel
+  // column is judged by); these two are read only when mapped, and grant only a row that says yes.
+  'consentSms',
+  'consentEmail',
 ] as const;
 export type ImportField = (typeof IMPORT_FIELDS)[number];
 export const importFieldSchema = z.enum(IMPORT_FIELDS);
@@ -80,6 +84,26 @@ export const IMPORT_ALIASES: Record<ImportField, readonly string[]> = {
     'subscribed',
     'marketingoptin',
   ],
+  /** SMS marketing consent per row (yes / no). Granted only when the importer ticks the confirmation and the row says yes. */
+  consentSms: [
+    'smsconsent',
+    'smsoptin',
+    'smsoptedin',
+    'smssubscribed',
+    'textconsent',
+    'textoptin',
+    'marketingsmsconsent',
+    'smsmarketingconsent',
+  ],
+  /** Email marketing consent per row (yes / no). Granted only with the confirmation, a yes, and an email address on the row. */
+  consentEmail: [
+    'emailconsent',
+    'emailoptin',
+    'emailoptedin',
+    'emailsubscribed',
+    'marketingemailconsent',
+    'emailmarketingconsent',
+  ],
 };
 
 /** Scan order: the leftmost column wins a field, and a field takes one column. */
@@ -99,6 +123,8 @@ const DETECTION_ORDER: readonly ImportField[] = [
   'status',
   'source',
   'consent',
+  'consentSms',
+  'consentEmail',
 ];
 
 export function normalizeImportHeader(header: string): string {
@@ -248,6 +274,13 @@ export const contactImportOptionsSchema = z.object({
    * confirmation records NO consent (the column is ignored), and a contact that opted out is never turned back on by a file.
    */
   consentConfirmed: queryBoolean().default(false),
+  /**
+   * BL-170: the notice the file's contacts agreed under, as the importer states it ("Opted in at the store checkout, privacy notice v3").
+   * Kept on every grant of this file as the wording and its version, beside the file name and the time, so the proof says what they
+   * agreed to and not only that someone confirmed it. Optional; without it the grant says only that the importer confirmed consent.
+   */
+  consentNoticeText: z.string().trim().max(2000).optional(),
+  consentNoticeVersion: z.string().trim().max(64).optional(),
 });
 export type ContactImportOptions = z.infer<typeof contactImportOptionsSchema>;
 
@@ -271,6 +304,8 @@ export const IMPORT_REJECT_REASONS = [
   'tag_name_too_long',
   'plan_limit_reached',
   'tag_limit_reached',
+  /** Not an error: the row repeats a number from earlier in the file and was merged into that contact. */
+  'duplicate_in_file',
 ] as const;
 export type ImportRejectReason = (typeof IMPORT_REJECT_REASONS)[number];
 
@@ -280,6 +315,14 @@ export const importQuotaSchema = z.object({
   used: z.number().int(),
   /** null = unlimited. */
   remaining: z.number().int().nullable(),
+});
+
+const importConsentSummarySchema = z.object({
+  granted: z.number().int(),
+  notGranted: z.number().int(),
+  unrecognised: z.number().int(),
+  /** Up to 5 values that are not yes or no, as written. */
+  unrecognisedSamples: z.array(z.string()),
 });
 
 export const contactImportPreviewSchema = z.object({
@@ -312,16 +355,10 @@ export const contactImportPreviewSchema = z.object({
    * What the consent column says, per valid row, when one is mapped (null: no column, so the confirmation covers every contact).
    * `unrecognised` rows are shown so the person can fix the file; they are treated as not granted.
    */
-  consent: z
-    .object({
-      granted: z.number().int(),
-      notGranted: z.number().int(),
-      unrecognised: z.number().int(),
-      /** Up to 5 values that are not yes or no, as written. */
-      unrecognisedSamples: z.array(z.string()),
-    })
-    .nullable()
-    .optional(),
+  consent: importConsentSummarySchema.nullable().optional(),
+  /** The same counts for the SMS and email consent columns, when mapped (BL-170). */
+  consentSms: importConsentSummarySchema.nullable().optional(),
+  consentEmail: importConsentSummarySchema.nullable().optional(),
 });
 export type ContactImportPreview = z.infer<typeof contactImportPreviewSchema>;
 
@@ -344,6 +381,8 @@ export const contactImportJobSchema = z.object({
   /** New contacts the plan's contact limit stopped. */
   limitExceeded: z.number().int(),
   error: z.string().nullable(),
+  /** Who started the import; null for a deleted user. */
+  createdBy: z.string().nullable(),
   startedAt: z.string().datetime().nullable(),
   finishedAt: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),

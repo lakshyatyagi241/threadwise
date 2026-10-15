@@ -4,6 +4,7 @@ import type { PublicProduct } from '@crm/contracts';
 import { useTranslations } from 'next-intl';
 import { discountPercent, isOnSale, isSoldOut } from '../lib/catalog';
 import { productPath } from '../lib/links';
+import { allVariantsSoldOut, fromPrice, hasVariants, variantCount } from '../lib/variants';
 import { EyeIcon, HeartIcon } from './icons';
 import { ProductImage } from './product-image';
 import { useStore } from './store-provider';
@@ -11,7 +12,9 @@ import { useStore } from './store-provider';
 export function ProductCard({ product }: { product: PublicProduct }) {
   const t = useTranslations('shopPublic');
   const { shop, wish, addToCart, toggleWish, openQuickView } = useStore();
-  const soldOut = isSoldOut(product);
+  const variants = hasVariants(product);
+  const from = fromPrice(product);
+  const soldOut = variants ? allVariantsSoldOut(product) : isSoldOut(product);
   const onSale = isOnSale(product);
   const wished = wish.includes(product.id);
   const href = productPath(shop.slug, product.slug);
@@ -49,7 +52,13 @@ export function ProductCard({ product }: { product: PublicProduct }) {
           <a href={href}>{product.name}</a>
         </h3>
         <div className="sf-card-price">
-          <b>{product.priceDisplay}</b>
+          <b>
+            {variants && from.varies
+              ? t('variant.from', { price: from.display })
+              : variants
+                ? from.display
+                : product.priceDisplay}
+          </b>
           {onSale && product.comparePriceDisplay ? (
             <s className="sf-card-was">
               <span className="sf-sr">{t('card.was')}</span>
@@ -57,17 +66,33 @@ export function ProductCard({ product }: { product: PublicProduct }) {
             </s>
           ) : null}
         </div>
-        <button
-          type="button"
-          className="sf-add"
-          disabled={soldOut}
-          aria-label={t(soldOut ? 'card.soldOutNamed' : 'card.addToCartNamed', {
-            name: product.name,
-          })}
-          onClick={() => addToCart(product)}
-        >
-          {soldOut ? t('card.soldOut') : t('card.addToCart')}
-        </button>
+        {variants ? (
+          <div className="sf-card-options">
+            {t('variant.optionsCount', { count: variantCount(product) })}
+          </div>
+        ) : null}
+        {variants && !soldOut ? (
+          // A variant product is bought from its page, where the buyer picks size, colour...
+          <a
+            className="sf-add sf-add-link"
+            href={href}
+            aria-label={t('card.chooseOptionsNamed', { name: product.name })}
+          >
+            {t('card.chooseOptions')}
+          </a>
+        ) : (
+          <button
+            type="button"
+            className="sf-add"
+            disabled={soldOut}
+            aria-label={t(soldOut ? 'card.soldOutNamed' : 'card.addToCartNamed', {
+              name: product.name,
+            })}
+            onClick={() => addToCart(product)}
+          >
+            {soldOut ? t('card.soldOut') : t('card.addToCart')}
+          </button>
+        )}
       </div>
     </article>
   );

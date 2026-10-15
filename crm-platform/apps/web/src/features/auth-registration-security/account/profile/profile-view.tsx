@@ -20,11 +20,12 @@ import { useSession } from '../../shared/session-context';
 import { authApi, keys } from '../api';
 import { firstNameOf } from '../hub/person-text';
 import { EmailChangeModal } from './email-change-modal';
-import { profileChanges, savedZone } from './profile-changes';
+import { profileChanges, savedMyZone, savedZone } from './profile-changes';
 
 type Theme = ProfileResponse['theme'];
 const THEMES: Theme[] = ['paper', 'bright', 'dark'];
-type FieldKey = 'fullName' | 'displayName' | 'phone' | 'locale' | 'theme' | 'workspaceTimezone';
+type FieldKey =
+  'fullName' | 'displayName' | 'phone' | 'locale' | 'theme' | 'workspaceTimezone' | 'timezone';
 type Errors = Partial<Record<FieldKey, string>>;
 
 export function ProfileView() {
@@ -83,6 +84,7 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
   const [locale, setLocaleValue] = useState(profile.locale ?? '');
   const [theme, setThemeValue] = useState<Theme>(profile.theme);
   const [zone, setZone] = useState(initialZone);
+  const [myZone, setMyZone] = useState(savedMyZone(profile));
   const [resetCount, setResetCount] = useState(0);
   const [errors, setErrors] = useState<Errors>({});
   const [error, setError] = useState<unknown>(null);
@@ -113,6 +115,7 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
     locale,
     theme,
     zone,
+    myZone,
   });
   const dirty = Object.keys(body).length > 0;
 
@@ -170,7 +173,9 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
           const key = f.path as FieldKey;
           if (!mapped[key])
             mapped[key] =
-              key === 'workspaceTimezone' ? t('errors.timezoneInvalid') : t('errors.invalid');
+              key === 'workspaceTimezone' || key === 'timezone'
+                ? t('errors.timezoneInvalid')
+                : t('errors.invalid');
         }
         fail(mapped);
       } else {
@@ -188,6 +193,7 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
     setLocaleValue(profile.locale ?? '');
     setThemeValue(profile.theme);
     setZone(initialZone);
+    setMyZone(savedMyZone(profile));
     setErrors({});
     setError(null);
     setSaved(false);
@@ -295,6 +301,33 @@ function ProfileForm({ profile, title }: { profile: ProfileResponse; title: stri
                 invalid={Boolean(errors.workspaceTimezone)}
                 disabled={!profile.canEditWorkspaceTimezone}
               />
+            </Field>
+            {/* The person's own zone; blank follows the workspace, and UTC when the workspace has none. */}
+            <Field
+              label={t('myTimezone')}
+              htmlFor={id('mytz')}
+              hint={t('myTimezoneHint', { zone: profile.effectiveTimezone })}
+              error={errors.timezone}
+            >
+              <div className="flex items-start gap-2">
+                <div className="min-w-0 flex-1">
+                  <TimezoneCombobox
+                    id={id('mytz')}
+                    value={myZone}
+                    onChange={setMyZone}
+                    extra={[profile.workspaceTimezone]}
+                    invalid={Boolean(errors.timezone)}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  disabled={!myZone}
+                  onClick={() => setMyZone('')}
+                >
+                  {t('myTimezoneUseWorkspace')}
+                </Button>
+              </div>
             </Field>
           </div>
 

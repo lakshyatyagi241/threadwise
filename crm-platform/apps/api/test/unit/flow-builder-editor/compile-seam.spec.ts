@@ -75,8 +75,8 @@ const graphWith = (type: string) => {
 };
 
 describe('every node type of the catalogue through the runtime compiler (editor/runtime seam)', () => {
-  it('the catalogue holds 69 distinct types (every palette entry and the hidden legacy ones)', () => {
-    expect(FLB_NODE_TYPE_LIST).toHaveLength(69);
+  it('the catalogue holds 70 distinct types (every palette entry and the hidden legacy ones)', () => {
+    expect(FLB_NODE_TYPE_LIST).toHaveLength(70);
     expect(new Set(FLB_NODE_TYPE_LIST.map((d) => d.id)).size).toBe(FLB_NODE_TYPE_LIST.length);
   });
 

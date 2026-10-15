@@ -2,7 +2,7 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Badge, Button, ConfirmDialog, EmptyState, Spinner, cn, useToast } from '@crm/ui';
 import type { ChannelResponse } from '@crm/contracts';
@@ -24,6 +24,7 @@ import { ChannelTag, useErrorText } from './parts';
 export function ChannelsList({ className }: { className?: string }) {
   const t = useTranslations('team-inbox-conversations.channels');
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const { toast } = useToast();
   const errorText = useErrorText();
@@ -152,7 +153,7 @@ export function ChannelsList({ className }: { className?: string }) {
             </ul>
             <p className="text-xs text-muted-foreground">
               {c.lastEventAt
-                ? t('lastEvent', { when: fullStamp(c.lastEventAt, locale) })
+                ? t('lastEvent', { when: fullStamp(c.lastEventAt, locale, timeZone) })
                 : t('noEvents')}
             </p>
             {manage && (

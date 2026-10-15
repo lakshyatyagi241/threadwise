@@ -11,7 +11,6 @@
     "common": {
       "loading": "Cargando",
       "retry": "Reintentar",
-      "requestId": "ID de solicitud",
       "loadFailed": "No se pudo cargar.",
       "forbidden": "No tienes acceso a esto.",
       "cancel": "Cancelar",

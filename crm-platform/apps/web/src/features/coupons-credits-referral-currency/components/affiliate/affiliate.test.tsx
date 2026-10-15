@@ -319,7 +319,7 @@ describe('affiliate screen: error with retry', () => {
       />,
     );
     expect(h).toContain('Too many requests.');
-    expect(h).toContain('req-123');
+    expect(h).not.toContain('req-123');
     expect(h).toContain('>Try again</button>');
   });
 

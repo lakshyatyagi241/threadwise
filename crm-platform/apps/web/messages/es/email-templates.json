@@ -1,0 +1,190 @@
+{
+  "emailTemplates": {
+    "nav": {
+      "emailTemplates": "Plantillas de correo"
+    },
+    "common": {
+      "dismiss": "Descartar"
+    },
+    "list": {
+      "eyebrow": "CRM",
+      "title": "Plantillas de correo",
+      "subtitle": "Correos reutilizables con asunto, texto con formato y variables. Insértalos en una respuesta desde el editor de correo.",
+      "newTemplate": "Nueva plantilla",
+      "loading": "Cargando plantillas…",
+      "emptyTitle": "Aún no hay plantillas de correo",
+      "empty": "Escribe un correo una sola vez, con variables como el nombre del contacto, y reutilízalo en cualquier conversación por correo.",
+      "emptyFilteredTitle": "Ninguna plantilla coincide",
+      "emptyFiltered": "Prueba con otra búsqueda o quita los filtros.",
+      "clearFilters": "Quitar filtros",
+      "unavailableTitle": "Las plantillas de correo no están disponibles",
+      "unavailable": "Este espacio de trabajo no puede conectar con el servicio de plantillas de correo en este momento.",
+      "showing": "{count, plural, one {Mostrando # plantilla} many {Mostrando # de plantillas} other {Mostrando # plantillas}}",
+      "loadMore": "Cargar más",
+      "loadingMore": "Cargando…",
+      "noPermission": "Puedes usar las plantillas que comparte tu espacio de trabajo y conservar las tuyas. Pide a un administrador que cambie las compartidas si lo necesitas."
+    },
+    "toolbar": {
+      "search": "Buscar plantillas",
+      "searchPlaceholder": "Buscar por nombre, asunto o categoría",
+      "scope": "De quién",
+      "scopes": {
+        "all": "Todas",
+        "shared": "Compartidas",
+        "mine": "Mías"
+      },
+      "purpose": "Tipo",
+      "anyPurpose": "Cualquier tipo",
+      "purposes": {
+        "general": "General",
+        "marketing": "Marketing"
+      },
+      "status": "Estado",
+      "statuses": {
+        "active": "Activas",
+        "archived": "Archivadas",
+        "all": "Todas"
+      },
+      "category": "Categoría",
+      "anyCategory": "Cualquier categoría",
+      "refresh": "Actualizar"
+    },
+    "card": {
+      "subject": "Asunto",
+      "noSubject": "Sin asunto: la respuesta conserva el suyo",
+      "badges": {
+        "shared": "Compartida",
+        "mine": "Mía",
+        "marketing": "Marketing",
+        "archived": "Archivada"
+      },
+      "used": "{count, plural, =0 {Nunca usada} one {Usada una vez} many {Usada # de veces} other {Usada # veces}}",
+      "lastUsed": "Último uso: {date}",
+      "by": "Por {name}",
+      "variables": "Variables: {list}",
+      "edit": "Editar",
+      "archive": "Archivar",
+      "restore": "Restaurar",
+      "delete": "Eliminar",
+      "preview": "Ver vista previa",
+      "hidePreview": "Ocultar vista previa"
+    },
+    "delete": {
+      "title": "¿Eliminar esta plantilla?",
+      "message": "\"{name}\" se eliminará para todos los que pueden usarla. Los correos ya enviados con ella no se ven afectados.",
+      "confirm": "Eliminar",
+      "cancel": "Cancelar"
+    },
+    "editor": {
+      "eyebrow": "Plantilla de correo",
+      "newTitle": "Nueva plantilla de correo",
+      "editTitle": "Editar plantilla de correo",
+      "close": "Cerrar",
+      "name": "Nombre",
+      "namePlaceholder": "Bienvenida tras el registro",
+      "subject": "Asunto",
+      "subjectPlaceholder": "Te damos la bienvenida a {workspace}, {name}",
+      "subjectHint": "Opcional. Si se deja vacío, la respuesta conserva su propio asunto.",
+      "body": "Mensaje",
+      "bodyPlaceholder": "Escribe el correo. Usa las variables de abajo para personalizarlo.",
+      "category": "Categoría",
+      "categoryPlaceholder": "Incorporación",
+      "categoryList": "Categorías en uso",
+      "purpose": "Tipo",
+      "purposes": {
+        "general": {
+          "label": "General",
+          "hint": "Respuestas y correo uno a uno. Se envía como cualquier respuesta."
+        },
+        "marketing": {
+          "label": "Marketing",
+          "hint": "Correo promocional. Requiere el consentimiento de marketing del contacto cuando tu espacio de trabajo lo exija, y siempre incluye un enlace para darse de baja."
+        }
+      },
+      "scope": "Quién puede usarla",
+      "scopes": {
+        "shared": {
+          "label": "Todos en el espacio de trabajo",
+          "hint": "Una plantilla compartida. Solo quienes gestionan plantillas pueden modificarla."
+        },
+        "mine": {
+          "label": "Solo yo",
+          "hint": "Una plantilla personal. Nadie más la ve."
+        }
+      },
+      "variables": "Insertar una variable",
+      "variablesHint": "Las variables se rellenan con los datos del contacto, los tuyos y los del espacio de trabajo al usar la plantilla. Una variable sin valor se deja tal cual para que puedas corregirla.",
+      "variableGroups": {
+        "contact": "Contacto",
+        "agent": "Tú",
+        "workspace": "Espacio de trabajo"
+      },
+      "insertingIn": "Se inserta en el campo {field}",
+      "fields": {
+        "subject": "asunto",
+        "body": "mensaje"
+      },
+      "save": "Guardar cambios",
+      "create": "Crear plantilla",
+      "cancel": "Cancelar",
+      "problems": {
+        "required": "Este campo es obligatorio.",
+        "tooLong": "Es demasiado largo (máximo {limit} caracteres).",
+        "subjectLines": "El asunto debe ser de una sola línea."
+      }
+    },
+    "preview": {
+      "title": "Vista previa con datos de ejemplo",
+      "subjectLabel": "Asunto",
+      "noSubject": "(sin asunto)",
+      "empty": "Escribe el mensaje para ver una vista previa.",
+      "loading": "Actualizando la vista previa…",
+      "failed": "No se pudo actualizar la vista previa.",
+      "issues": "{count, plural, one {Esta variable no tiene valor de ejemplo y se queda tal cual: {list}} many {Estas variables no tienen valor de ejemplo y se quedan tal cual: {list}} other {Estas variables no tienen valor de ejemplo y se quedan tal cual: {list}}}",
+      "sampleNote": "Solo valores de ejemplo. Los valores reales proceden del contacto cuando usas la plantilla."
+    },
+    "picker": {
+      "button": "Plantillas",
+      "title": "Plantillas de correo",
+      "search": "Buscar plantillas",
+      "searchPlaceholder": "Buscar plantillas",
+      "loading": "Cargando plantillas…",
+      "empty": "Aún no hay plantillas. Créalas en Plantillas de correo, en el menú de CRM.",
+      "emptyFiltered": "Ninguna plantilla coincide con tu búsqueda.",
+      "loadError": "No se pudieron cargar las plantillas.",
+      "marketing": "Marketing",
+      "mine": "Mías",
+      "replaceTitle": "¿Reemplazar lo que has escrito?",
+      "replaceMessage": "Al usar \"{name}\" se reemplaza el mensaje del cuadro y el asunto, si la plantilla tiene uno.",
+      "replaceConfirm": "Reemplazar",
+      "replaceCancel": "Cancelar",
+      "used": "Usando la plantilla \"{name}\"",
+      "marketingNote": "Este es un correo de marketing: se rige por tus reglas de consentimiento e incluye un enlace para darse de baja.",
+      "forget": "Dejar de usar esta plantilla",
+      "more": "Cargar más"
+    },
+    "toast": {
+      "created": "Plantilla creada",
+      "updated": "Plantilla guardada",
+      "archived": "Plantilla archivada",
+      "restored": "Plantilla restaurada",
+      "deleted": "Plantilla eliminada"
+    },
+    "errors": {
+      "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+      "forbidden": "No tienes permiso para hacer eso.",
+      "signedOut": "Tu sesión ha terminado. Inicia sesión de nuevo para continuar.",
+      "conflict": "Otra persona ha cambiado esta plantilla. Se ha cargado su versión; revísala e inténtalo de nuevo.",
+      "validation": "Algunos datos introducidos no son válidos. Revisa los campos e inténtalo de nuevo.",
+      "unavailable": "Las plantillas de correo no están disponibles en este momento.",
+      "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+      "notFound": "Esta plantilla ya no existe.",
+      "planDisabled": "Tu plan no incluye correo. Mejora tu plan para usar plantillas de correo.",
+      "nameTaken": "Ya tienes una plantilla con este nombre. Elige otro nombre.",
+      "notEditable": "Solo quienes gestionan las plantillas de correo pueden modificar una plantilla compartida.",
+      "archived": "Esta plantilla está archivada. Restáurala para usarla.",
+      "unexpected": "Algo salió mal. Inténtalo de nuevo.",
+      "retry": "Reintentar"
+    }
+  }
+}

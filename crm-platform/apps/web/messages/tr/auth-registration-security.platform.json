@@ -46,7 +46,6 @@
         "copyFailed": "Kopyalanamadı",
         "loading": "Yükleniyor",
         "retry": "Tekrar dene",
-        "requestId": "İstek kimliği",
         "errors": {
           "forbidden": "Rolünüz buna izin vermiyor.",
           "request": "İstek reddedildi. Sayfayı yenileyip tekrar deneyin.",
@@ -61,7 +60,6 @@
       "login": {
         "title": "Operatör girişi",
         "intro": "Bu konsol platformu yöneten kişiler içindir. Çalışma alanı kullanıcıları ana oturum açma sayfasından giriş yapar.",
-        "requestId": "İstek kimliği",
         "submit": "Oturum aç",
         "submitting": "Oturum açılıyor",
         "fields": {
@@ -127,7 +125,6 @@
         "eyebrow": "Hesabınız",
         "title": "İki adımlı doğrulama",
         "description": "{email} hesabını bir kimlik doğrulama uygulamasıyla koruyun. Operatör hesapları platformdaki en yüksek güvenli hesaplardır.",
-        "requestId": "İstek kimliği",
         "status": {
           "title": "Kimlik doğrulama uygulaması",
           "on": "Açık",
@@ -181,7 +178,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -658,7 +654,6 @@
             "working": "İşleniyor",
             "close": "Kapat",
             "signInAgain": "Yeniden oturum aç",
-            "requestId": "İstek kimliği",
             "errors": {
               "forbidden": "Bu işlemi yalnızca bir süper yönetici çalıştırabilir.",
               "unexpected": "İşlem tamamlanmadı. Tekrar denemeden önce olay günlüğünü kontrol edin."
@@ -731,7 +726,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -744,7 +738,9 @@
           "link": "/legal/terms gibi bir site yolu veya tam bir http ya da https adresi kullanın.",
           "senderFormat": "Listeden gönderenlerden birini seçin.",
           "countryFormat": "İki harfli bir ülke kodu kullanın.",
-          "senderRequired": "Şablonu oluşturmadan önce bir gönderen kanalı seçin."
+          "senderRequired": "Şablonu oluşturmadan önce bir gönderen kanalı seçin.",
+          "domainFormat": "{entry} geçerli bir alan adı değil. ornek.com gibi bir ad kullanın.",
+          "tooMany": "En fazla {max} alan adı."
         },
         "policy": {
           "kicker": "Kaydolma",
@@ -826,6 +822,26 @@
           },
           "maxAttempts": {
             "label": "En fazla deneme"
+          },
+          "businessEmailOnly": {
+            "label": "Yalnızca iş e-posta adresleri",
+            "hintOn": "Gmail, Outlook ve Yahoo gibi ücretsiz sağlayıcılar kayıt sırasında reddedilir.",
+            "hintOff": "Herkes ücretsiz bir kişisel adresle kaydolabilir."
+          },
+          "blockDisposableEmail": {
+            "label": "Geçici e-postayı engelle",
+            "hintOn": "Tek kullanımlık ve geçici alan adları ile posta sunucusu olmayan alan adları reddedilir.",
+            "hintOff": "Geçici adresler kabul edilir."
+          },
+          "requirePhoneVerification": {
+            "label": "Doğrulanmış cep telefonu numarası iste",
+            "hintOn": "Her kayıt tek kullanımlık bir kodu onaylamalıdır. Kod gönderilemezse kayıt, denetimi atlamak yerine durur.",
+            "hintOff": "Kod adımı yalnızca aşağıdaki kayıt kodu açıkken çalışır."
+          },
+          "blockedEmailDomains": {
+            "label": "Her zaman engellenen alan adları",
+            "hint": "Her satırda bir alan adı. Alt alan adları da engellenir. «Yalnızca iş e-posta adresleri» kapalı olsa bile reddedilirler.",
+            "placeholder": "ornek.com"
           }
         },
         "otp": {
@@ -941,7 +957,6 @@
             "sent": "{to} numarasına bir test kodu gönderildi.",
             "remaining": "{count, plural, one {Bu saat # test hakkı kaldı.} other {Bu saat # test hakkı kaldı.}}",
             "notShown": "Kod burada gösterilmez; telefondan okuyun.",
-            "requestId": "İstek kimliği",
             "errors": {
               "invalidNumber": "Numarayı ülke koduyla girin, örneğin +91 98765 43221.",
               "rateLimited": "Bu saat çok fazla test kodu. {minutes, plural, one {# dakika} other {# dakika}} sonra tekrar deneyin.",
@@ -1045,7 +1060,6 @@
           "saved": "Gönderen kaydedildi",
           "removed": "Gönderen kaldırıldı",
           "secretRemoved": "Kayıtlı sır kaldırıldı",
-          "requestId": "İstek kimliği",
           "problems": {
             "required": "Bu alan zorunludur.",
             "tooLong": "En fazla {max} karakter.",
@@ -1076,8 +1090,13 @@
           "errors": {
             "invalid": "Bu alt bilgi kabul edilmedi.",
             "unexpected": "Alt bilgi kaydedilemedi. Biraz sonra tekrar deneyin."
-          },
-          "requestId": "İstek kimliği"
+          }
+        },
+        "guard": {
+          "kicker": "Kayıt koruması",
+          "title": "İş e-postası ve cep telefonu kontrolü",
+          "description": "Tek kullanımlık ve kişisel adresleri dışarıda tutar ve her yeni hesabın doğrulanmış bir cep telefonu numarası olmasını sağlar. E-posta ve sosyal kayıtlarda geçerlidir.",
+          "phoneOffWarning": "Cep telefonu kontrolü kapalıyken hesaplar doğrulanmış numara olmadan oluşturulabilir; bu da toplu sahte kayıtları kolaylaştırır."
         }
       },
       "social": {
@@ -1088,7 +1107,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {
@@ -1206,7 +1224,6 @@
           "cancel": "İptal",
           "working": "Kaldırılıyor",
           "error": "Sır kaldırılamadı. Biraz sonra tekrar deneyin.",
-          "requestId": "İstek kimliği",
           "done": "Kayıtlı {name} sırrı kaldırıldı.",
           "names": {
             "google": "Google",
@@ -1421,7 +1438,8 @@
             "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır.",
             "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin.",
             "help_agent": "Uygulama içi Yardım asistanı: kullanıcılar yapmak istediklerini sade kelimelerle yazar, asistan kendi oturumlarında yol gösterir veya işi yapar, riskli bir şeyden önce sorar. Yapay zeka jetonu harcar.",
-            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir."
+            "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir.",
+            "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir."
           },
           "units": {
             "days": "Gün",
@@ -1604,7 +1622,8 @@
             "waba_groups": "WhatsApp grupları (Cloud API)",
             "sms": "SMS kanalı",
             "help_agent": "Yardım asistanı (yapay zeka, jeton harcar)",
-            "email_channel": "E-posta (Gmail) kanalı"
+            "email_channel": "E-posta (Gmail) kanalı",
+            "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1670,7 +1689,6 @@
         "saving": "Kaydediliyor",
         "saved": "{count, plural, one {# ayar kaydedildi} other {# ayar kaydedildi}}",
         "rejected": "Hiçbir şey kaydedilmedi. {count, plural, one {# alan} other {# alan}} reddedildi.",
-        "requestId": "İstek kimliği",
         "unsaved": "{count, plural, one {# kaydedilmemiş değişiklik} other {# kaydedilmemiş değişiklik}}",
         "discard": "Değişiklikleri at",
         "errors": {

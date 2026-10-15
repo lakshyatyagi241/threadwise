@@ -7,6 +7,7 @@ import type {
   ReceiptUpdate,
 } from '../../../infra/providers/node-bridge-runtime/inbound.port';
 import type { Normalized } from '../../../infra/providers/node-bridge-runtime/inbound-normalizer';
+import type { HistoryBatch } from '../../../infra/providers/node-bridge-runtime/history.port';
 
 /**
  * Where inbound traffic goes (TW-NODE-016 to 021). The runtime reads WhatsApp; the inbox, the broadcast and schedule
@@ -39,6 +40,11 @@ export interface InboundSink {
   ): Promise<void>;
   /** One change in one group as it happened (subject, settings, members, a join request). */
   groupEvent?(ctx: { orgId: number; deviceId: number }, event: GroupEvent): Promise<void>;
+  /**
+   * One bounded batch of the history WhatsApp sends after a first link, for a number whose person opted in (TW-WAHIST). A sink that
+   * stores it must be quiet: no unread, no alert, no automation, no reply. Throwing stops nothing else; the router logs it.
+   */
+  history?(ctx: { orgId: number; deviceId: number }, batch: HistoryBatch): Promise<void>;
 }
 
 const DEDUP_TTL_S = 7 * 24 * 3600;
@@ -126,6 +132,19 @@ export class InboundRouter {
         await s.groups?.({ orgId, deviceId }, groups, opts);
       } catch (err) {
         this.logger.error({ orgId, deviceId, err: String(err) }, '[NODE] a group consumer failed');
+      }
+    }
+  }
+
+  async history(orgId: number, deviceId: number, batch: HistoryBatch): Promise<void> {
+    for (const s of this.sinks) {
+      try {
+        await s.history?.({ orgId, deviceId }, batch);
+      } catch (err) {
+        this.logger.error(
+          { orgId, deviceId, err: String(err) },
+          '[NODE] a history consumer failed',
+        );
       }
     }
   }

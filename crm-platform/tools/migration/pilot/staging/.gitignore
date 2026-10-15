@@ -1,0 +1,6 @@
+dist/
+.tmp/
+
+# per-client configs hold client names, owner e-mails and this machine's paths: kept on the operator's machine (pipeline.cjs writes them)
+clients/*.json
+!clients/example.json

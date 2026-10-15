@@ -310,6 +310,11 @@
         "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
         "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
       },
+      "web": {
+        "label": "Chat trên website",
+        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
+        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
+      },
       "message-logs": {
         "label": "Nhật ký tin nhắn",
         "description": "Xuất nhật ký gửi của tin nhắn, lùi tối đa một năm, thành tệp được gửi đến email của bạn.",
@@ -319,11 +324,6 @@
         "label": "Gói đăng ký",
         "description": "Gói nào sẽ gia hạn, đã trả đến khi nào và hủy gói.",
         "keywords": "gói đăng ký, gia hạn, tự động gia hạn, hủy, tự động thanh toán, thanh toán thất bại, các khoản thu"
-      },
-      "web": {
-        "label": "Chat trên website",
-        "description": "Các bot được tạo cho chat trên website của bạn và widget mà mỗi bot chạy trong đó.",
-        "keywords": "web, website, widget, chatbot, nhúng, chat trực tuyến"
       },
       "lead-scoring": {
         "label": "Chấm điểm khách hàng tiềm năng bằng AI",
@@ -340,15 +340,35 @@
         "description": "Chọn từ khóa STOP và START, phản hồi xác nhận, dòng từ chối và việc marketing có cần sự đồng ý đã ghi nhận hay không.",
         "keywords": "đồng ý, từ chối, đăng ký lại, hủy đăng ký, stop, start, gdpr, tuân thủ, quyền riêng tư, marketing"
       },
-      "inbox-labels": {
-        "label": "Nhãn",
-        "description": "Tạo các nhãn mà nhóm của bạn gắn vào cuộc trò chuyện và dùng để lọc hộp thư.",
-        "keywords": "thẻ, nhãn, danh mục, sắp xếp, lọc"
+      "inbox-tags": {
+        "label": "Thẻ cuộc trò chuyện",
+        "description": "Tạo các thẻ mà nhóm của bạn gắn vào cuộc trò chuyện và dùng để lọc hộp thư. Đây là các thẻ giống như dùng cho liên hệ.",
+        "keywords": "thẻ, thẻ cuộc trò chuyện, danh mục, sắp xếp, lọc"
       },
       "growth": {
         "label": "Tăng trưởng",
         "description": "Khách tiềm năng nóng, đối tượng, phản hồi chiến dịch và những việc khác nhóm của bạn có thể hành động, được rút ra từ các cuộc trò chuyện và chiến dịch.",
         "keywords": "tăng trưởng, khách tiềm năng nóng, đối tượng, tương tác, đã rời bỏ, phản hồi chiến dịch, xu hướng chuyển đổi, ngừng nhận tin, thí điểm"
+      },
+      "sla-policies": {
+        "label": "Mục tiêu phản hồi",
+        "description": "Đặt tốc độ phản hồi và giải quyết của nhóm (SLA), và nhận cảnh báo khi cuộc trò chuyện lỡ mục tiêu.",
+        "keywords": "sla, thời gian phản hồi, phản hồi đầu tiên, giải quyết, vi phạm, mục tiêu, giờ làm việc"
+      },
+      "team-performance": {
+        "label": "Hiệu suất nhóm",
+        "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
+        "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
+      },
+      "contact-assignment": {
+        "label": "Phân công liên hệ",
+        "description": "Tự động giao liên hệ và deal mới cho đúng người, bỏ qua những người đang nghỉ phép.",
+        "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, deal mới, nghỉ phép, định tuyến lead"
+      },
+      "privacy-requests": {
+        "label": "Yêu cầu dữ liệu",
+        "description": "Trả lời những người hỏi bạn đang giữ gì về họ: kiểm tra danh tính, xuất, xóa có xem trước và bằng chứng bạn có thể lưu giữ.",
+        "keywords": "quyền riêng tư, gdpr, yêu cầu dữ liệu, dsar, truy cập dữ liệu cá nhân, xuất dữ liệu, xóa, quyền được lãng quên, xóa dữ liệu cá nhân, lưu giữ pháp lý"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

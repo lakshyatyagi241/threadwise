@@ -224,6 +224,7 @@ export function DevicesScreen() {
           existing={dialog.device}
           noticeVersion={meta?.noticeVersion ?? null}
           noticeAccepted={meta?.noticeAccepted ?? false}
+          historyFullAllowed={meta?.historyFullAllowed ?? false}
           onClose={close}
         />
       )}

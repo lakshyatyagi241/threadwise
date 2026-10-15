@@ -401,3 +401,106 @@ Reference's `/call-logs` is a list of the AI assistant's calls with a time range
 
 Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
 later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).
+
+## Audit log for the workspace and the full Notifications page (TW-NOTIF-007, 008, 029 to 031): partly beyond Reference
+
+Reference's Activity Log (KPIs, charts, table, detail, CSV) is rebuilt as Settings, Audit log at the same route `/activity-log`, without the charts. Deliberate additions and differences: platform support (act-as) sessions are shown to the workspace with their reason; personal values are masked at read time (only the Owner key sees them) and the CSV is always masked; opening an entry and asking for an export are themselves audited; text search covers the module and action only; no IP or user agent is stored. The Notifications page keeps Reference's tabs-as-filters, search, day sections, mark read, dismiss and clear, with SQL search and per-person rows. Not built: charts, top actors, "My activity" scope, do-not-disturb. Spec: [audit-log-tenant.md](../../specs/audit-log-tenant.md). Status: owner-requested, pending sign-off.
+
+## Conversation tags: one word, and two clearly separated groups (BL-036, naming decision)
+
+The reference calls the markers on a conversation **tags** (the `conversation_tag` pivot, the `Tag` model, the same list as contact tags). The
+earlier name **labels** was ours and is retired: users asked why the inbox said "Label" where contacts and campaigns said "Tag". Every visible
+string, aria label, help guide and timeline line now says tag, in all 21 locales, using each locale's existing word for contact tags.
+
+What is added on top of the reference, and why:
+
+- **Two groups in the thread's side panel.** **Contact tags** (read-only, with an "Edit on contact" link for people who may edit contacts)
+  and **Conversation tags** (add and remove), each with a heading and a one-line help. Rule: a contact tag describes the PERSON (VIP, lead, region);
+  a conversation tag describes this THREAD (billing, refund, urgent); both come from the same workspace tag library.
+- **A Conversation tags / Contact tags switch on the list's tag filter**, kept in the address (`?tags=&tagScope=`), so a team can find every thread
+  with a given tag, or every thread with a person who has it. Reference filtered by the conversation's own tags only.
+- The old names keep working (routes `/labels`, `?labels=`, bulk type `label`, the page `/inbox/labels`, the JSON field `labels`, the
+  `INBOX_LABEL_*` error codes); the list is in [inbox-phase3-slice.md](../../specs/inbox-phase3-slice.md#25-conversation-tags-second-milestone-renamed-from-labels).
+
+## Contact owner (BL-111): visible and editable on every contact screen, not in Reference
+
+Reference keeps the creator of a contact in `user_id` and shows it nowhere. Here the owner is a first-class field of the contact: an Owner select in the form (a new contact starts as its creator), an optional Owner column (hidden until turned on), an Owner filter in the Hub (several people, Unassigned, My contacts), the owner on the profile with Change owner, `owner_email` in the CSV export, and a reassignment of "all N matching" in one request. Who may be named follows the record scope. Details, the screen-by-screen table and what is not verified: [contacts-attributes-tags.md](contacts-attributes-tags.md) (section "Contact owner"), wiring [contact-owner.md](../wiring/contact-owner.md). The owner on leave, delegation and auto-assignment are a design only: [specs/contact-owner-leave-and-delegation.md](../../specs/contact-owner-leave-and-delegation.md).
+
+## Message History: delivered, read, cost, more filters and the delivery timeline (TW-CHAT-039 to 042)
+
+Reference's `/message-history` is kept as it is (see [message-history.md](message-history.md) for the differences that fix its bugs). The project owner's brief for this screen asked for these additions, which Reference does not have:
+
+- **Delivered, Read, Delivery rate and Cost cards** under Reference's five. Delivered and read come from the receipts; the delivery rate is delivered over what left the queue; the cost is what the wallet charged for those
+  messages (`usage_charges`), per currency, shown only to a caller who may read the wallet statement.
+- **More filters:** status (queued, sent, delivered, read, failed), sent by (inbox, flow, auto-reply, AI assistant, API, broadcast, campaign, scheduled), channel, and custom dates (up to a year back). The template, campaign,
+  broadcast and scheduled-message filters exist in the API and work from the address.
+- **The delivery timeline** in the drawer: every step of the message from the delivery log (including archived days), the failure in plain words, the provider id, the cost, and links to the conversation, the contact and the
+  broadcast / campaign / scheduled message.
+- **The export honours the filters** and runs in the background (Reference exported the date range only, synchronously).
+- **A key of its own, `msg.history.read`**, instead of a workspace role, plus the inbox's record scope over which messages a person sees.
+
+Decisions for the owner: (1) whether a narrower inbox scope (`team`, `own`) should see the broadcast, campaign and scheduled recipients of what it can open (today only scope `all` sees recipient rows); (2) whether the
+Manager preset should read the cost (today only roles with `wallet.statement.read`); (3) whether the export should be limited to the caller's visible rows instead of requiring scope `all`; (4) whether campaign,
+broadcast and template screens should link to a filtered history; (5) whether `mask_customer_numbers` should become a real workspace setting (today the rule is by contact permission only).
+
+## Director summary of a campaign or broadcast: people messaged, wrote back, filled a form (owner walkthrough item 23): not in Reference
+
+Reference shows sent, delivered, read and failed for a campaign or broadcast, and replies from the bridge (`responded_at`, which only some
+workspaces fill). The owner asked for the figures an admission director reads, as distinct people: messaged, delivered, read, **wrote back**
+(a customer message in the inbox after the person's own send, inside a 3, 7 (default) or 14 day window) and **filled an application form**
+(an accepted web form or WhatsApp form submission by the same contact in the same window, any form or the picked ones), with the median hours
+to reply and a daily line. Endpoints: `GET /v2/campaigns/:id/summary`, `/summary/people`, `/summary/forms` and the same two per broadcast.
+Reference's own numbers and screens are untouched; the summary is a new card.
+
+Deviations the owner should know (all are honest floors, each carried as a `caveats` code the screen turns into a sentence):
+
+- A form submission is matched to the **contact messaged**; a different phone or email is a different person (`contact_match_only`).
+- A recipient with no contact is matched by phone; one that cannot be matched to a contact or a thread is `notTrackable` (`recipients_without_contact`).
+- An opted-out recipient who wrote back is not counted (`opted_out_excluded`).
+- Another campaign or broadcast messaging the same people in the window is flagged, not split (`counted_in_other_campaigns`).
+- Not verified against a live WhatsApp account (inbox rows are arranged directly in the tests); WhatsApp forms have no permission key of their own yet
+  (their domain is not ported), so they follow `record.forms.read` in the picker and `record.form-submissions.read` for the figures, both only at `all` scope: those permissions are record-scoped and the summary does not apply the scope, so an `own` or `team` reader gets the campaign figures without the form part.
+
+## Data requests and the personal-data registry (BL-142, BL-143)
+
+Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 4.5; API: [privacy.md](../../api/privacy.md).
+
+- **New:** Settings > Privacy > Data requests (`/privacy-requests`): log, verify, hold, export (ZIP), preview and execute an erasure, proof; keys `privacy.requests.read`, `privacy.requests.manage`, `privacy.erase.execute`.
+- **Intended difference from the reference (contact delete):** the reference deletes the contact row and leaves messages and files to its own foreign keys. Here deleting a contact (single, bulk, REST v1) also erases its conversation history, media, files, recordings and call logs by default; `eraseHistory=false` keeps conversations without the person's identity. Leads, deals, tasks and invoices stay unless a data request anonymises them.
+- Owner decisions open: message delete versus anonymise as the default, SLA default (30 days), legal-hold periods per country (D9), who verifies identity.
+
+## CRM dashboard (`/crm`)
+
+Beyond Reference's eight counters: period selector (this month, 7/30/90 days, custom) in the viewer's zone; pipeline, owner and team filters in the address; pipeline funnel by stage with step conversion and drill-down to the deals list (`/deals?view=list&stage=`); won/lost trend; lead sources performance (leads, to deal, to won, won value); owner leaderboard; tasks by assignee; recent activity. Backend: `GET /v2/crm/dashboard`. Differences from Reference: parity/crm-dashboard.md.
+
+## Call recording consent and lifecycle (BL-144): a new feature on top of operator recording, not a port
+
+Reference starts recording every inbound call as soon as it is answered (no notice, no consent, no limit), stores the file on the public disk under a
+guessable URL, and never deletes it. The privacy spec (gap G3) and the voice-bot requirements ask for the opposite defaults, so this port changes the
+behaviour of TW-CALL-019 on purpose:
+
+- **Off by default.** Recording is a workspace switch (decision D7). Reference had no switch.
+- **Notice and consent before any audio.** The teammate reads a versioned notice; the person's answer (spoken yes, or announcement then continue) is
+  saved on the call with the method, time, teammate, notice version and the notice's sha-256. The ConsentGate (`call_recording`) is the one decision
+  point; the server refuses an upload without a granted answer (`CALL_RECORDING_CONSENT_REQUIRED`) and the browser does not arm its recorder before it.
+  Inbound calls are no longer recorded automatically.
+- **Retention.** A daily sweep deletes recordings after the workspace's days (default 90, 7 to 365). Reference kept them forever.
+- **Deletion and legal hold.** One recording can be deleted by hand (the call stays), or held; both audited.
+- **Erasure and export** already reach the file through the rights service; the manifest text now says how long it is kept.
+
+What is **not** verified: a real call with a real microphone (no WhatsApp session here), that an announcement is legally enough in any country (counsel),
+and the browser recorder on every browser (only the Chromium path is exercised by tests that stub `MediaRecorder`).
+
+Decisions for the owner: (1) whether `announcement` mode should exist at all or be hidden until counsel confirms it for a region; (2) one notice text
+per workspace today, per language and per region later (requirement 1 and 3); (3) recordings that existed before this change start their 90-day clock
+when the migration runs, not at their original date; (4) whether a legal hold on a recording should block a rights erasure of the same person (today the
+erasure wins and removes the file, as the rights service has no per-call hold); (5) whether consent should also be written to the contact consent
+ledger once BL-140b adds purposes other than marketing and service.
+
+## Consent at intake (BL-165 to BL-167)
+
+Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 4.3.2; API: [contact-consent.md](../../api/contact-consent.md).
+
+- **Policy (owner-approved):** a first inbound message permits replying only and never creates a marketing grant; a grant is written only when the person agreed, with source, wording, version and time as evidence; the ConsentGate stays the enforcement point.
+- **New:** a `consent` block (note or wording, channels, version, time) on contact create/update, the REST v1 contact routes, partner and public lead submit, and `consent` / `consent_note` cells for the Google Sheets add-on; a subscription status set to `subscribed` without proof is refused (422 `CONSENT_NOTE_REQUIRED`). A versioned consent line for the chat widget, booking types and stores (`consent_notices`), and the store's own marketing flag from Shopify (and a Woo checkout plugin's meta) recorded when the store's line is on.
+- **Intended difference from the reference (contact creation):** contacts made by Telegram, Facebook, Instagram, the website widget, the campaign wizard's typed or uploaded numbers and the Shopify/WooCommerce customer sync now go through `ContactsService.resolveOrCreateByIdentity` (audit row, plan contact cap, default stage and status) instead of raw inserts. Over the cap such a person is not made a contact (the message is kept without one; a wizard number is left out of the audience).

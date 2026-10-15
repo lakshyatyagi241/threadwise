@@ -17,7 +17,7 @@ const abandonSent = new Set<string>();
 /** The checkout form (TW-STORE-012): collects the buyer's details, quotes the coupon, posts the order, then hands off to WhatsApp. */
 export function CheckoutForm() {
   const t = useTranslations('shopPublic');
-  const { shop, shipping, cart, clearCart, openModal } = useStore();
+  const { shop, shipping, cart, clearCart, openModal, refreshCart } = useStore();
   const uid = useId();
   const cur = shop.currencyCode;
   const money = (minor: number) => formatMinor(minor, cur);
@@ -46,7 +46,8 @@ export function CheckoutForm() {
     if (res.kind === 'network') return t('checkout.network');
     switch (res.code) {
       case 'STORE_ITEMS_UNAVAILABLE':
-        return t('errors.itemsUnavailable');
+        // The cart is re-read from the shop (see `refreshOnUnavailable`), so this says the lines may have changed.
+        return t('errors.itemsRefreshed');
       case 'STORE_NOT_AVAILABLE':
         return t('errors.notAvailable');
       case 'RATE_LIMITED':
@@ -54,6 +55,12 @@ export function CheckoutForm() {
       default:
         return res.message ?? fallback;
     }
+  };
+
+  /** A 422 STORE_ITEMS_UNAVAILABLE means a line was removed, changed variant or sold out: fetch the shop again and fix the cart. */
+  const refreshOnUnavailable = (res: Extract<CallResult<unknown>, { ok: false }>) => {
+    if (res.kind === 'api' && res.status === 422 && res.code === 'STORE_ITEMS_UNAVAILABLE')
+      void refreshCart();
   };
 
   const fireAbandon = () => {
@@ -91,7 +98,10 @@ export function CheckoutForm() {
     if (res.kind === 'network') setCouponLine({ tone: 'error', text: t('checkout.couponNetwork') });
     else if (res.code === 'STORE_COUPON_INVALID')
       setCouponLine({ tone: 'error', text: t('checkout.couponInvalid') });
-    else setCouponLine({ tone: 'error', text: errorText(res, t('checkout.couponFallback')) });
+    else {
+      refreshOnUnavailable(res);
+      setCouponLine({ tone: 'error', text: errorText(res, t('checkout.couponFallback')) });
+    }
   };
 
   const submit = async () => {
@@ -120,6 +130,7 @@ export function CheckoutForm() {
     );
     setBusy(false);
     if (!res.ok) {
+      refreshOnUnavailable(res);
       setStatus({ tone: 'error', text: errorText(res, t('checkout.failed')) });
       return;
     }

@@ -150,5 +150,21 @@
   "modules/storefront-builder/public/public-rate-limiter.ts": {
     "status": "baseline-unreviewed",
     "reason": "key template has no org token by heuristic; not read line by line yet"
+  },
+  "modules/whatsapp-devices-baileys/history-import.sink.ts": {
+    "status": "reviewed",
+    "reason": "keys wa:hist:<orgId>:<runId>:pc|ch (a hash of per-chat counts and a set of thread keys of one import run); the key is built once by tallyKeys(orgId, runId) and passed around as `keys`, which the heuristic cannot see through"
+  },
+  "modules/node-bridge-runtime/runtime/group-limiter.ts": {
+    "status": "reviewed",
+    "reason": "keys come from waKeys.groupCount/groupCooldown: wa:grp:<orgId>:<deviceId>:... (the template lives in wa-redis.ts, so the scanner missed the org token)"
+  },
+  "modules/platform-payment-gateways/subscription-notifications.consumer.ts": {
+    "status": "reviewed",
+    "reason": "mail dedupe key paygw:sub-mail:<outbox event id>:<sha256(address)>; event_outbox.id is one global sequence so it cannot collide across workspaces; the value is a flag"
+  },
+  "modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts": {
+    "status": "reviewed",
+    "reason": "mail dedupe key wsp:lifecycle-mail:<outbox event id>:<sha256(address)>; global event_outbox.id sequence; value is a flag. Redis error path fails open and can send a duplicate mail"
   }
 }

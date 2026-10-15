@@ -79,7 +79,8 @@
       "waba_groups": "WhatsAppグループ",
       "sms": "SMSチャネル",
       "help_agent": "ヘルプアシスタント",
-      "email_channel": "メール(Gmail)チャネル"
+      "email_channel": "メール(Gmail)チャネル",
+      "personal_history_full": "全履歴インポート(個人用WhatsApp)"
     },
     "limitGroups": {
       "messaging": "メッセージング",

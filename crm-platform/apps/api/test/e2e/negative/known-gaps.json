@@ -1,0 +1,4 @@
+{
+  "_readme": "Routes the negative sweep may fail on today. Key is 'METHOD /path'. Every entry needs an owner and a reason; the list only shrinks (a route that now passes must be removed, the sweep says so). Start empty: the first run on a machine with Docker fills it in.",
+  "gaps": {}
+}

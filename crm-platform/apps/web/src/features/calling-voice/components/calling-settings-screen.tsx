@@ -8,6 +8,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { useCallingNumbers, useToggleCalling } from '../api/calling';
 import { useErrorText } from './use-error-text';
 import { PhoneIcon } from './icons';
+import { RecordingSettingsPanel } from './recording-settings-panel';
 
 /**
  * `/calling` (TW-CALL-003, 004): the workspace's WhatsApp numbers with their calling switch. Turning it on or off asks Meta,
@@ -53,6 +54,8 @@ export function CallingSettingsScreen() {
           <NumberCard key={n.id} number={n} canManage={canManage} />
         ))}
       </div>
+
+      <RecordingSettingsPanel />
     </main>
   );
 }

@@ -75,7 +75,9 @@
       "removeWish": "Hapus {name} dari daftar keinginan",
       "quickView": "Tampilan cepat {name}",
       "quickViewTitle": "Tampilan cepat",
-      "was": "Sebelumnya"
+      "was": "Sebelumnya",
+      "chooseOptions": "Pilih opsi",
+      "chooseOptionsNamed": "Pilih opsi untuk {name}"
     },
     "quick": {
       "details": "Detail lengkap →"
@@ -162,7 +164,9 @@
       "increase": "Tambah jumlah",
       "remove": "Hapus {name} dari keranjang",
       "fullTitle": "Keranjang Anda penuh",
-      "fullBody": "Satu keranjang berisi hingga 100 produk berbeda. Pesan ini terlebih dahulu, lalu mulai keranjang baru."
+      "fullBody": "Satu keranjang berisi hingga 100 produk berbeda. Pesan ini terlebih dahulu, lalu mulai keranjang baru.",
+      "variantDroppedTitle": "Keranjang Anda diperbarui",
+      "variantDroppedBody": "{count, plural, other {# item perlu dipilih ulang opsinya dan dihapus dari keranjang Anda.}}"
     },
     "wish": {
       "title": "Daftar keinginan",
@@ -233,9 +237,9 @@
       "couponFallback": "Kode tidak valid."
     },
     "errors": {
-      "itemsUnavailable": "Item tersebut sudah tidak tersedia. Silakan muat ulang dan coba lagi.",
       "notAvailable": "Toko ini tidak tersedia.",
-      "rateLimited": "Terlalu banyak permintaan. Silakan tunggu sebentar lalu coba lagi."
+      "rateLimited": "Terlalu banyak permintaan. Silakan tunggu sebentar lalu coba lagi.",
+      "itemsRefreshed": "Beberapa item berubah atau habis, jadi kami memperbarui keranjang Anda. Silakan periksa dan coba lagi."
     },
     "placed": {
       "title": "Pesanan dibuat",
@@ -331,6 +335,13 @@
       "help": "Butuh bantuan?",
       "support": "Hubungi dukungan",
       "metaTitle": "Halaman tidak ditemukan"
+    },
+    "variant": {
+      "from": "Mulai dari {price}",
+      "optionsCount": "{count, plural, other {# opsi}}",
+      "select": "Pilih {option}",
+      "unavailable": "Kombinasi ini tidak tersedia",
+      "soldOutValue": "habis"
     }
   }
 }

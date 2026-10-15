@@ -12,7 +12,7 @@
       "retry": "Opnieuw proberen",
       "loadMore": "Meer laden",
       "loadingMore": "Laden",
-      "requestId": "Verzoek-id"
+      "loading": "Laden"
     },
     "tiers": {
       "owner": "Eigenaar",
@@ -96,7 +96,11 @@
       "linkReset": "E-mail is niet ingesteld op deze server, dus deel deze link rechtstreeks met de persoon. Hij werkt één keer.",
       "linkInvite": "E-mail is niet ingesteld op deze server, dus deel deze link rechtstreeks met de persoon. Hij werkt één keer en verloopt na {days, plural, one {# dag} other {# dagen}}.",
       "linkLabel": "Eenmalige link",
-      "linkEmail": "E-mail"
+      "linkEmail": "E-mail",
+      "onLeaveUntil": "Met verlof tot {date}",
+      "onLeaveOpen": "Met verlof",
+      "leaveFrom": "Verlof vanaf {date}",
+      "leaveAction": "Verlof en vervanging"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -215,7 +219,13 @@
       "teamNameTaken": "Er bestaat al een team met die naam.",
       "teamMemberUnknown": "Een van de personen die je hebt gekozen zit niet in deze workspace.",
       "orgSuspended": "Deze workspace is geschorst.",
-      "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw."
+      "unexpected": "Er ging iets mis. Probeer het zo meteen opnieuw.",
+      "leaveOverlap": "Deze persoon heeft al verlof dat een dag deelt met deze datums.",
+      "leaveInvalid": "Die datums kunnen niet worden gebruikt. De eerste dag mag niet in het verleden liggen en een verlof dat is begonnen behoudt zijn eerste dag.",
+      "delegateInvalid": "De vervanger moet een ander actief lid van deze werkruimte zijn.",
+      "delegateCycle": "Dat zou een kring maken: de gekozen persoon heeft deze persoon al als vervanger.",
+      "reassignInvalid": "Er kon niets opnieuw worden toegewezen. Controleer of de persoon contacten of open deals heeft en of de nieuwe eigenaar ze kan overnemen.",
+      "reassignNotRestorable": "Deze hertoewijzing kan niet meer ongedaan worden gemaakt."
     },
     "accept": {
       "title": "Word lid van je workspace",
@@ -235,6 +245,81 @@
       "submit": "Uitnodiging accepteren",
       "submitting": "Deelnemen",
       "invalidHeading": "Uitnodigingslink"
+    },
+    "leave": {
+      "eyebrow": "Verlof en vervanging",
+      "calendarNote": "Datums zijn dagen in de kalender van uw werkruimte ({timezone}).",
+      "nowTitle": "Nu met verlof",
+      "upcomingTitle": "Binnenkort",
+      "notAway": "Op dit moment niet met verlof.",
+      "range": "{from} tot {to}",
+      "rangeOpen": "Vanaf {from}, zonder einddatum",
+      "reasonShown": "Reden (alleen managers zien dit): {reason}",
+      "endNow": "Verlof nu beëindigen",
+      "cancelLeave": "Verlof annuleren",
+      "endTitle": "Dit verlof nu beëindigen?",
+      "endMessage": "De persoon is vandaag terug. Automatische toewijzing gaat hem of haar weer kiezen.",
+      "cancelTitle": "Dit verlof annuleren?",
+      "cancelMessage": "Het is nog niet begonnen. Het wordt verwijderd.",
+      "ended": "Verlof beëindigd.",
+      "added": "Verlof opgeslagen.",
+      "readOnly": "Alleen de persoon zelf en managers kunnen verlof wijzigen.",
+      "addTitle": "Verlof toevoegen",
+      "firstDay": "Eerste dag",
+      "lastDay": "Laatste dag",
+      "openEnded": "Nog geen einddatum (tot iemand het beëindigt)",
+      "reason": "Reden (optioneel)",
+      "reasonHint": "Alleen de persoon en diens managers zien dit.",
+      "addSubmit": "Verlof opslaan",
+      "problems": {
+        "startRequired": "Kies de eerste dag.",
+        "startPast": "De eerste dag mag niet in het verleden liggen.",
+        "endRequired": "Kies de laatste dag, of vink \"Geen einddatum\" aan.",
+        "endBeforeStart": "De laatste dag mag niet voor de eerste dag liggen."
+      },
+      "delegateTitle": "Vervanger",
+      "delegateHelp": "Zolang deze persoon met verlof is, gaan nieuwe chats en automatische toewijzing naar de vervanger als die beschikbaar is, anders naar het team.",
+      "noDelegate": "Geen vervanger",
+      "delegateSaved": "Vervanger opgeslagen.",
+      "delegateRemoved": "Vervanger verwijderd.",
+      "delegateAway": "{name} heeft ook verlof en kan nu dus niet invallen."
+    },
+    "reassign": {
+      "title": "Contacten en deals opnieuw toewijzen",
+      "holds": "{name} beheert {contacts, plural, one {# contact} other {# contacten}} en {chats, plural, one {# open chat} other {# open chats}}.",
+      "target": "Geef ze aan",
+      "kindUser": "Een persoon",
+      "kindDelegate": "Hun vervanger",
+      "kindTeam": "Een team, om de beurt",
+      "person": "Persoon",
+      "team": "Team",
+      "teamHint": "Om de beurt verdeeld over de leden die aanwezig zijn en geen verlof hebben.",
+      "choose": "Kies",
+      "includeDeals": "Open deals meenemen",
+      "returnOn": "Terugzetten op {date}, wanneer de persoon terugkomt",
+      "returnUnavailable": "Terugzetten wanneer de persoon terugkomt (vereist een verlof met een laatste dag)",
+      "returnHelp": "Alleen contacten en deals die sindsdien niemand heeft gewijzigd, komen terug. U kunt ook {days} dagen lang ongedaan maken.",
+      "reason": "Notitie (optioneel)",
+      "submit": "Controleren en opnieuw toewijzen",
+      "confirmTitle": "Nu opnieuw toewijzen?",
+      "confirmMessage": "{name} beheert {contacts, plural, one {# contact} other {# contacten}} en {deals, plural, one {# open deal} other {# open deals}} die worden verplaatst.",
+      "confirm": "Opnieuw toewijzen",
+      "done": "{contacts, plural, one {# contact} other {# contacten}} en {deals, plural, one {# deal} other {# deals}} verplaatst.",
+      "history": "Eerdere hertoewijzingen",
+      "historyEmpty": "Er is nog niets opnieuw toegewezen.",
+      "status": {
+        "applied": "Verplaatst",
+        "restored": "Teruggezet",
+        "restore_blocked": "Niet teruggezet"
+      },
+      "summary": "{contacts} contacten en {deals} deals naar {target}",
+      "returnsOn": "komt terug op {date}",
+      "restoredSummary": "{restored} teruggezet, {skipped} gelaten waar ze zijn",
+      "remaining": "Nog {count} te verplaatsen: voer het opnieuw uit",
+      "undo": "Ongedaan maken",
+      "undoTitle": "Deze hertoewijzing ongedaan maken?",
+      "undoMessage": "Contacten en deals die sindsdien niemand heeft gewijzigd, gaan terug naar de vorige eigenaar. De rest blijft waar het is.",
+      "restored": "{count} teruggezet, {skipped} gelaten waar ze zijn."
     }
   }
 }

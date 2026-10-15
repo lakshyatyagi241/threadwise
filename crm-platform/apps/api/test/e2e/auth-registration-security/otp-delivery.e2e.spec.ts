@@ -107,8 +107,13 @@ const useSender = (sender: string | null, otp: Record<string, unknown> = {}) =>
 async function clearAll() {
   const list = await call('get', '/senders');
   for (const s of list.body.senders) await call('delete', `/senders/${s.id}`);
-  // Back to the defaults (no saved template, no sender, OTP off) so scenarios do not leak into each other.
-  await h.owner.query(`DELETE FROM platform_settings WHERE key = 'registration'`);
+  // Back to the defaults (no saved template, no sender, OTP off) so scenarios do not leak into each other. The work-email,
+  // disposable-mail and mandatory-phone rules stay off, as the harness sets them: these scenarios use made-up domains and
+  // switch the code on themselves.
+  await h.owner.query(
+    `INSERT INTO platform_settings (key, value, is_secret) VALUES ('registration', '{"businessEmailOnly": false, "blockDisposableEmail": false, "requirePhoneVerification": false}'::jsonb, false)
+     ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+  );
   h.app.get(PlatformSettingsService).invalidate();
   await h.redis.eval(
     `for _,k in ipairs(redis.call('keys','auth:otp-test:*')) do redis.call('del',k) end`,

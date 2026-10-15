@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { QRCodeSVG } from 'qrcode.react';
 import { useId, useRef, useState, type ReactNode } from 'react';
 import { isOnSale } from '../lib/catalog';
+import { fromPrice, hasVariants } from '../lib/variants';
 import { shareLinks, productPath } from '../lib/links';
 import { LEGACY_FREE_THRESHOLD_MINOR, formatIn } from '../lib/money';
 import { CheckoutForm } from './checkout-form';
@@ -64,6 +65,8 @@ function QuickView({ productId }: { productId: string }) {
   const { shop, catalog, addToCart, closeModal } = useStore();
   const p = catalog[productId];
   if (!p) return null;
+  const variants = hasVariants(p);
+  const from = fromPrice(p);
   return (
     <ModalFrame title={p.name} onClose={closeModal}>
       <div className="sf-qv">
@@ -72,23 +75,35 @@ function QuickView({ productId }: { productId: string }) {
         </div>
         <div className="sf-qv-meta">
           <div className="sf-qv-price">
-            <span className="sf-qv-now">{p.priceDisplay}</span>
+            <span className="sf-qv-now">
+              {variants && from.varies
+                ? t('variant.from', { price: from.display })
+                : variants
+                  ? from.display
+                  : p.priceDisplay}
+            </span>
             {isOnSale(p) && p.comparePriceDisplay ? (
               <s className="sf-qv-was">{p.comparePriceDisplay}</s>
             ) : null}
           </div>
           {p.description ? <p className="sf-qv-desc">{p.description}</p> : null}
           <div className="sf-qv-actions">
-            <button
-              type="button"
-              className="sf-cta"
-              onClick={() => {
-                addToCart(p);
-                closeModal();
-              }}
-            >
-              {t('card.addToCart')}
-            </button>
+            {variants ? (
+              <a className="sf-cta" href={productPath(shop.slug, p.slug)}>
+                {t('card.chooseOptions')}
+              </a>
+            ) : (
+              <button
+                type="button"
+                className="sf-cta"
+                onClick={() => {
+                  addToCart(p);
+                  closeModal();
+                }}
+              >
+                {t('card.addToCart')}
+              </button>
+            )}
             <a className="sf-cta-ghost" href={productPath(shop.slug, p.slug)}>
               {t('quick.details')}
             </a>

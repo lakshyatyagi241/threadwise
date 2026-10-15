@@ -28,8 +28,8 @@
       "teamChanged": "Team updated.",
       "priorityChanged": "Priority updated",
       "snoozed": "Conversation snoozed",
-      "labelAdded": "Label added",
-      "labelRemoved": "Label removed"
+      "tagAdded": "Tag added",
+      "tagRemoved": "Tag removed"
     },
     "list": {
       "title": "Inbox",
@@ -137,7 +137,6 @@
       "unsupported": "This channel cannot send that kind of message or file.",
       "network": "The server could not be reached. Check your connection and try again.",
       "generic": "Something went wrong. Try again.",
-      "genericWithId": "Something went wrong. Try again. Reference: {id}",
       "templateNotSendable": "That template cannot be sent into this conversation. Pick another one.",
       "groupSendUnavailable": "Sending to WhatsApp groups is not available yet. Reply from the WhatsApp Business app.",
       "logRange": "Choose dates inside the last year, with the start before the end and not in the future.",
@@ -153,7 +152,9 @@
       "savedReplyGone": "This saved reply no longer exists.",
       "savedReplyChannel": "This saved reply is not meant for this kind of channel.",
       "shortcutTaken": "Another saved reply already uses that shortcut.",
-      "importInvalid": "That file cannot be read as saved replies. It needs a first row with the columns title, shortcut and body, and at most 1,000 rows."
+      "importInvalid": "That file cannot be read as saved replies. It needs a first row with the columns title, shortcut and body, and at most 1,000 rows.",
+      "contactOptedOut": "This contact has unsubscribed from marketing messages, so the message was not sent.",
+      "consentRequired": "This workspace requires a recorded consent for marketing messages and this contact has none, so the message was not sent."
     },
     "bubble": {
       "kind": {
@@ -223,7 +224,15 @@
       "groupMember": "Group member",
       "groupTally": "Delivered to {delivered} of {members}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
       "groupTallyNoTotal": "Delivered to {delivered, plural, one {# member} other {# members}}{read, plural, =0 {} other {, read by #}}{failed, plural, =0 {} other {, # failed}}",
-      "groupTallyBilled": "{billable} billed, {free} free"
+      "groupTallyBilled": "{billable} billed, {free} free",
+      "stageLine": {
+        "auto": "AI read the chat and moved this contact from {from} to {to}.",
+        "undo": "Undo",
+        "wasUndone": "Undone",
+        "undone": "Stage change undone: back to {stage}.",
+        "undoneToast": "Stage put back to {stage}.",
+        "couldNotUndo": "This change cannot be undone any more: the contact moved on, or it was already undone."
+      }
     },
     "media": {
       "openImage": "Open image {name}",
@@ -441,7 +450,9 @@
         "unassign": "Unassign",
         "open": "{count} open",
         "pickTeam": "Choose a team for this conversation",
-        "noTeam": "No team"
+        "noTeam": "No team",
+        "onLeave": "On leave",
+        "onLeaveUntil": "On leave until {date}"
       },
       "presence": {
         "online": "Online",
@@ -481,8 +492,8 @@
           "snoozed": "Snoozed by {actor}",
           "auto_unsnoozed": "Snooze ended",
           "priority_changed": "Priority changed by {actor}",
-          "tag_added": "Label added by {actor}",
-          "tag_removed": "Label removed by {actor}",
+          "tag_added": "Tag added by {actor}",
+          "tag_removed": "Tag removed by {actor}",
           "first_response": "First reply sent",
           "sla_breach": "Response deadline missed",
           "unknown": "{what} by {actor}"
@@ -593,8 +604,6 @@
       "eyebrow": "WhatsApp",
       "title": "Send a template",
       "close": "Close",
-      "cancel": "Cancel",
-      "back": "Back to templates",
       "search": "Search by name or text",
       "searchLabel": "Search templates",
       "loading": "Loading templates",
@@ -603,9 +612,7 @@
       "empty": "There are no approved templates for this WhatsApp number yet. Create one in Templates and wait for Meta to approve it.",
       "noResults": "No template matches your search.",
       "windowHint": "A template works even when the 24-hour reply window has closed.",
-      "variables": "Fill in the variables",
       "preview": "What the customer will read",
-      "send": "Send template",
       "sending": "Sending",
       "sent": "Template sent",
       "problem": {
@@ -620,7 +627,31 @@
         "authentication": "One-time-password templates are sent by the system, not from the inbox.",
         "named_variables": "Uses named variables, which the inbox does not support yet."
       },
-      "hasMore": "Showing the first {count} templates. Search by name or text to find the others."
+      "hasMore": "Showing the first {count} templates. Search by name or text to find the others.",
+      "previewEmpty": "Point at a template to see how it will look on the customer’s phone.",
+      "previewCustomer": "Customer",
+      "noVariables": "This template has nothing to fill in. Check the phone, then send it.",
+      "sendTo": "Send to {name}",
+      "refresh": "Refresh list",
+      "device": "Phone preview",
+      "devices": {
+        "android": "Android",
+        "ios": "iPhone"
+      },
+      "configure": "Configure body variables",
+      "or": "or",
+      "mapField": "Map a field to {key}",
+      "mapNone": "This contact has no details to map.",
+      "typeMessage": "Type a message",
+      "fields": {
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "create": "Create new template",
+      "actions": "Template actions",
+      "edit": "Edit template",
+      "duplicate": "Duplicate template"
     },
     "log": {
       "title": "Delivery log",
@@ -924,46 +955,77 @@
         "partial": "{done} updated, {unchanged} already up to date, {failed} could not be changed. The ones that failed stay selected.",
         "allFailed": "None of the {count, plural, one {# conversation} other {# conversations}} could be changed."
       },
-      "label": "Label",
-      "labelAdd": "Add label",
-      "labelRemove": "Remove label"
+      "tag": "Tag",
+      "tagAdd": "Add tag",
+      "tagRemove": "Remove tag",
+      "onLeave": "on leave",
+      "onLeaveUntil": "on leave until {date}"
     },
-    "labels": {
-      "label": "Label",
-      "loading": "Loading labels…",
-      "loadFailed": "Could not load the labels.",
-      "none": "No labels yet.",
-      "newLabel": "New label",
+    "tags": {
+      "tag": "Tag",
+      "loading": "Loading tags…",
+      "loadFailed": "Could not load the tags.",
+      "none": "No tags yet.",
+      "newTag": "New tag",
       "add": "Add",
-      "filter": "Labels",
-      "filterActive": "{count, plural, one {# label} other {# labels}}",
-      "clearFilter": "Clear label filter",
+      "filter": "Tags",
+      "filterActive": "{count, plural, one {# tag} other {# tags}}",
+      "clearFilter": "Clear tag filter",
+      "scope": {
+        "label": "Match tags on",
+        "conversation": "Conversation tags",
+        "contact": "Contact tags"
+      },
+      "groups": {
+        "title": "Tags",
+        "helpFor": "About {title}",
+        "rule": "Both kinds come from the same workspace tag library.",
+        "contactTitle": "Contact tags",
+        "contactHelp": "A contact tag describes the person (VIP, lead, region). It follows them into every conversation.",
+        "contactNone": "This contact has no tags.",
+        "contactEdit": "Edit on contact",
+        "conversationTitle": "Conversation tags",
+        "conversationHelp": "A conversation tag describes this thread (billing, refund, urgent).",
+        "conversationNone": "No tags on this conversation yet.",
+        "remove": "Remove tag {name}"
+      },
       "screen": {
         "back": "Back to the inbox",
-        "title": "Labels",
-        "intro": "Labels tag conversations so your team can sort and filter them. They are the same tags used on contacts.",
-        "newTitle": "New label",
-        "editTitle": "Edit label",
+        "title": "Conversation tags",
+        "intro": "Conversation tags mark a thread (billing, refund, urgent) so your team can sort and filter the inbox. They come from the same tag library as contact tags, which describe the person.",
+        "newTitle": "New tag",
+        "editTitle": "Edit tag",
         "name": "Name",
         "color": "Color",
         "colorInvalid": "Use a hex color such as #075E54 or a color name.",
         "description": "Description (optional)",
-        "create": "Create label",
+        "create": "Create tag",
         "save": "Save changes",
         "cancel": "Cancel",
         "edit": "Edit",
         "delete": "Delete",
         "inUse": "{count, plural, one {# conversation} other {# conversations}}",
-        "emptyTitle": "No labels yet",
-        "emptyMessage": "Create your first label above, then put it on conversations from the inbox.",
-        "deleteTitle": "Delete this label?",
+        "emptyTitle": "No tags yet",
+        "emptyMessage": "Create your first tag above, then put it on conversations from the inbox.",
+        "deleteTitle": "Delete this tag?",
         "deleteMessage": "\"{name}\" is on {count, plural, one {# conversation} other {# conversations}}. Deleting it removes it from them and from any contacts that carry it. This cannot be undone.",
-        "nameTaken": "A label with that name already exists.",
-        "conflict": "Someone else changed this label first. The list was reloaded.",
-        "saved": "Label saved",
-        "created": "Label created",
-        "deleted": "Label deleted"
+        "nameTaken": "A tag with that name already exists.",
+        "conflict": "Someone else changed this tag first. The list was reloaded.",
+        "saved": "Tag saved",
+        "created": "Tag created",
+        "deleted": "Tag deleted"
       }
+    },
+    "sla": {
+      "breached": "SLA breached",
+      "atRisk": "SLA due in {minutes} min",
+      "ok": "SLA due {time}",
+      "kind": {
+        "first_response": "First reply target",
+        "resolution": "Resolution target"
+      },
+      "titleBreached": "{kind}: missed (was due {time})",
+      "titleOpen": "{kind}: due {time}"
     }
   }
 }

@@ -11,7 +11,7 @@ import { summary } from '../lib/fixtures';
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 vi.mock('../api/hooks', () => ({
-  useLabels: () => ({
+  useTags: () => ({
     data: {
       data: [
         {
@@ -35,6 +35,7 @@ vi.mock('../api/hooks', () => ({
           availability: 'online',
           openConversations: 0,
           isMe: true,
+          onLeave: null,
         },
         {
           id: 'u-2',
@@ -43,6 +44,7 @@ vi.mock('../api/hooks', () => ({
           availability: 'online',
           openConversations: 2,
           isMe: false,
+          onLeave: null,
         },
       ],
       teams: [
@@ -168,14 +170,14 @@ describe('the bulk bar', () => {
     expect(Date.parse(snooze.until)).toBeGreaterThan(Date.now() + 3_000_000);
   });
 
-  it('adds or removes a label on the whole selection', () => {
+  it('adds or removes a tag on the whole selection', () => {
     const p = props();
     render(<BulkBar {...p} />);
-    choose('inbox-bulk-label', 'add:l-1');
-    choose('inbox-bulk-label', 'remove:l-1');
+    choose('inbox-bulk-tag', 'add:l-1');
+    choose('inbox-bulk-tag', 'remove:l-1');
     expect((p.onRun as ReturnType<typeof vi.fn>).mock.calls.map((c) => c[0])).toEqual([
-      { type: 'label', mode: 'add', tagId: 'l-1' },
-      { type: 'label', mode: 'remove', tagId: 'l-1' },
+      { type: 'tag', mode: 'add', tagId: 'l-1' },
+      { type: 'tag', mode: 'remove', tagId: 'l-1' },
     ]);
   });
 

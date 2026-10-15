@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
   listContactsQuerySchema,
+  type ConsentProof,
   type ContactGroupRef,
   type UpdateContactInput,
   type V1Contact,
@@ -28,6 +29,23 @@ const UPDATE_ATTEMPTS = 2;
 
 const invalid = (path: string, message: string) =>
   AppError.validation('The given data was invalid.', [{ path, message }]);
+
+/** The consent block of a request as the service's proof (blank cells are "not given"). */
+function toProof(c: V1CreateContact['consent']): ConsentProof | undefined {
+  if (!c) return undefined;
+  return {
+    ...(c.channels ? { channels: c.channels } : {}),
+    ...(c.note ? { note: c.note } : {}),
+    ...(c.text ? { text: c.text } : {}),
+    ...(c.version ? { version: c.version } : {}),
+    ...(c.at ? { at: c.at } : {}),
+  };
+}
+
+/** The key behind the call, for the consent evidence (an id, never the secret). */
+function apiKeyRef(ctx: { actorType: string; actorId: number | null }): string | undefined {
+  return ctx.actorType === 'api_key' && ctx.actorId !== null ? String(ctx.actorId) : undefined;
+}
 
 /** Reference's display name: the typed name, else title, first, middle and last name joined by single spaces. */
 function displayName(p: {
@@ -90,24 +108,45 @@ export class V1ContactsService {
       const id = byEmail ?? byPhone;
       return id === undefined ? undefined : (await this.repo.findById(tx, ctx.orgId, id))?.uuid;
     });
-    if (existing) return { contact: await this.read(existing), created: false };
+    if (existing) {
+      // Nothing of the existing contact is overwritten, but a person who agreed through this request has still agreed.
+      if (body.consent) {
+        await this.contacts.create(
+          {
+            name:
+              displayName({ name: body.name, first: body.first_name, last: body.last_name }) ||
+              undefined,
+            email: body.email ?? undefined,
+            phone,
+            consent: toProof(body.consent),
+            customFields: {},
+          },
+          { source: 'api', evidence: { apiKeyId: apiKeyRef(ctx) } },
+        );
+      }
+      return { contact: await this.read(existing), created: false };
+    }
 
-    const made = await this.contacts.create({
-      name: displayName({
-        name: body.name,
-        title: body.title,
-        first: body.first_name,
-        middle: body.middle_name,
-        last: body.last_name,
-      }),
-      firstName: body.first_name ?? undefined,
-      lastName: body.last_name ?? undefined,
-      email: body.email ?? undefined,
-      phone,
-      source: 'api',
-      isUnsubscribed: body.is_unsubscribed === true,
-      customFields: body.attributes ?? {},
-    });
+    const made = await this.contacts.create(
+      {
+        name: displayName({
+          name: body.name,
+          title: body.title,
+          first: body.first_name,
+          middle: body.middle_name,
+          last: body.last_name,
+        }),
+        firstName: body.first_name ?? undefined,
+        lastName: body.last_name ?? undefined,
+        email: body.email ?? undefined,
+        phone,
+        source: 'api',
+        isUnsubscribed: body.is_unsubscribed === true,
+        consent: toProof(body.consent),
+        customFields: body.attributes ?? {},
+      },
+      { source: 'api', evidence: { apiKeyId: apiKeyRef(ctx) } },
+    );
 
     await this.db.tx(async (tx) => {
       const row = await this.extras.read(tx, ctx.orgId, made.id);
@@ -142,6 +181,7 @@ export class V1ContactsService {
       if (has(raw, 'first_name')) input.firstName = body.first_name ?? null;
       if (has(raw, 'last_name')) input.lastName = body.last_name ?? null;
       if (has(raw, 'is_unsubscribed')) input.isUnsubscribed = body.is_unsubscribed === true;
+      if (has(raw, 'consent')) input.consent = toProof(body.consent);
 
       if (has(raw, 'name') || has(raw, 'first_name')) {
         const name = displayName({
@@ -175,7 +215,10 @@ export class V1ContactsService {
       }
 
       try {
-        await this.contacts.update(uuid, input);
+        await this.contacts.update(uuid, input, {
+          source: 'api',
+          evidence: { apiKeyId: apiKeyRef(ctx) },
+        });
       } catch (err) {
         if (
           attempt < UPDATE_ATTEMPTS &&

@@ -79,7 +79,8 @@
       "waba_groups": "WhatsApp 群组",
       "sms": "SMS 渠道",
       "help_agent": "帮助助手",
-      "email_channel": "电子邮件(Gmail)渠道"
+      "email_channel": "电子邮件(Gmail)渠道",
+      "personal_history_full": "完整历史记录导入（个人 WhatsApp）"
     },
     "limitGroups": {
       "messaging": "消息",

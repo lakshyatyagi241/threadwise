@@ -97,6 +97,12 @@ export function outboundWords(m: OutboundMessage): string {
       return m.name ?? m.address ?? 'location';
     case 'template':
       return m.text || m.name;
+    case 'carousel':
+      return `${m.body} [${m.cards
+        .map((c) => c.title)
+        .filter(Boolean)
+        .slice(0, 10)
+        .join(' | ')}]`;
   }
 }
 

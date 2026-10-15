@@ -1,0 +1,66 @@
+{
+  "module": "team-chat",
+  "tier": "P2",
+  "cases": [
+    {
+      "id": "EC-team-chat-001",
+      "feature": "tchat channel name",
+      "category": "input",
+      "scenario": "a value of 65 (one past TCHAT_CHANNEL_NAME_MAX = 64) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-chat/chat.ts"
+    },
+    {
+      "id": "EC-team-chat-002",
+      "feature": "tchat channel description",
+      "category": "input",
+      "scenario": "a value of 256 (one past TCHAT_CHANNEL_DESCRIPTION_MAX = 255) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-chat/chat.ts"
+    },
+    {
+      "id": "EC-team-chat-003",
+      "feature": "tchat message",
+      "category": "input",
+      "scenario": "a value of 8193 (one past TCHAT_MESSAGE_MAX = 8192) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-chat/chat.ts"
+    },
+    {
+      "id": "EC-team-chat-004",
+      "feature": "tchat history",
+      "category": "input",
+      "scenario": "a value of 9 (one under TCHAT_HISTORY_MIN = 10) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-chat/chat.ts"
+    },
+    {
+      "id": "EC-team-chat-005",
+      "feature": "tchat history",
+      "category": "input",
+      "scenario": "a value of 51 (one past TCHAT_HISTORY_MAX = 50) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-chat/chat.ts"
+    },
+    {
+      "id": "EC-team-chat-006",
+      "feature": "tchat emoji",
+      "category": "input",
+      "scenario": "a value of 17 (one past TCHAT_EMOJI_MAX = 16) is sent",
+      "expected": "refused with a 422 validation error, nothing is stored",
+      "priority": "P2",
+      "status": "gap",
+      "source": "packages/contracts/src/team-chat/chat.ts"
+    }
+  ]
+}
