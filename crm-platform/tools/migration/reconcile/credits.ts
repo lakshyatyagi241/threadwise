@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import type { CreditSettings } from '../credits/config';
 import type { CreditsPlan } from '../credits/plan';
 import type { Source } from '../extract/source';
@@ -6,6 +8,7 @@ import type { IdMap } from '../load/engine';
 import { uuidv5 } from '../util';
 import { exactText, oracleCredits, text2, text4, type CreditOracle } from './oracle-credits';
 import { text } from './oracle';
+import { fourDigits, oracleHistory } from './oracle-history';
 import type { Report } from './index';
 
 /**
@@ -38,6 +41,30 @@ export interface CreditsVerifyArgs {
   warnings: string[];
   notPresent: Report['notPresent'];
   idmap: IdMap;
+  /** the wallet-history record (migration.run_log _credits / wallet_history): when present the ledger is the full statement, not the one-opening model */
+  history?: WalletHistoryMarker | null;
+}
+
+export interface WalletHistoryMarker {
+  rows: number;
+  fingerprint: string;
+  target: string;
+  unit: string;
+  asOf: string;
+  opening: string;
+}
+
+/** The record wallet-history leaves; null for a client whose wallet is the one-opening-balance model. */
+export async function readHistoryMarker(
+  db: Database,
+  client: string,
+): Promise<WalletHistoryMarker | null> {
+  const r = (
+    await db.execute(
+      sql`SELECT counts FROM migration.run_log WHERE source_client = ${client} AND collection = '_credits' AND step = 'wallet_history'`,
+    )
+  ).rows[0] as { counts?: WalletHistoryMarker } | undefined;
+  return r?.counts ?? null;
 }
 
 const ts = (ms: number): string => `${new Date(ms).toISOString().slice(0, -1)}000`;
@@ -224,6 +251,8 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
   const found = new Set<string>();
   let extra = 0;
   let extraFirst = '';
+  // a client with a wallet history has the full statement: judged by verifyHistory below, not by the one-opening-balance model
+  if (!a.history)
   for await (const rows of pages(
     db,
     orgId,
@@ -260,9 +289,10 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
       if (bad.length > 0) alarm(`CREDITS_MISMATCH: wallet_transactions ${key}: ${bad.join('; ')}`);
     }
   }
-  for (const k of expected.keys())
-    if (!found.has(k)) alarm(`TARGET_MISSING: wallet_transactions row ${k} is gone`);
-  if (extra > 0 && !a.allowExtraRows)
+  if (!a.history)
+    for (const k of expected.keys())
+      if (!found.has(k)) alarm(`TARGET_MISSING: wallet_transactions row ${k} is gone`);
+  if (!a.history && extra > 0 && !a.allowExtraRows)
     alarm(
       `CREDITS_EXTRA_ROWS: ${extra} wallet_transactions row(s) of the organization are not accounted for by credit_logs or the opening entry (first key ${lim(extraFirst)})`,
     );
@@ -300,7 +330,7 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
       alarm(
         `WALLET_BALANCE: wallets.balance ${w.balance} != sum of the ledger ${l.sum} (${l.unit}): the app's hourly reconcile would flag it`,
       );
-    if (digits(l.min_after) < 0n)
+    if (!a.history && digits(l.min_after) < 0n)
       alarm(
         `WALLET_NEGATIVE: a balance_after of the ${l.unit} ledger is below zero (${l.min_after})`,
       );
@@ -309,6 +339,7 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
     alarm(
       `WALLET_CHAIN: ${wal.chain} ledger row(s) whose balance_after does not follow from the row before it plus its amount`,
     );
+  if (a.history) await verifyHistory(a, a.history);
   const wantWallet =
     o && settings.wallet && (o.minor > 0n || oracle.opening !== null || oracle.spendMinor > 0n)
       ? o
@@ -323,7 +354,7 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
       alarm(
         `WALLET_RESERVED: the wallet holds reserved ${w.reserved}, the migration reserves nothing`,
       );
-    if (!a.allowExtraRows && w.balance !== text4(wantWallet.minor))
+    if (!a.history && !a.allowExtraRows && w.balance !== text4(wantWallet.minor))
       alarm(
         `WALLET_ANCHOR: wallets.balance ${w.balance} is not the confirmed balance ${text4(wantWallet.minor)} (${wantWallet.confirmedBy})`,
       );
@@ -335,7 +366,7 @@ export async function verifyCredits(a: CreditsVerifyArgs): Promise<void> {
 
   // the rounding accounting, from the dump and the DB (exact integers)
   const postedDb = await sumSpends(db, orgId, unit);
-  if (settings.wallet && o) {
+  if (settings.wallet && o && !a.history) {
     if (postedDb !== oracle.postedSum)
       alarm(
         `CREDITS_ACCOUNTING: the ledger posted ${exactText(postedDb)} of spends but the dump says ${exactText(oracle.postedSum)} after rounding; exact total ${exactText(oracle.exactAll)} = posted ${exactText(oracle.postedSum)} + rounding residual ${exactText(oracle.roundedResidual)} + below 0.01 ${exactText(oracle.belowSum)} + over the limit ${exactText(oracle.overLimitSum)}`,
@@ -624,4 +655,117 @@ async function sumSpends(db: Database, orgId: number, unit: string | null): Prom
     )
   ).rows[0] as { s: string };
   return BigInt(r.s) * 10n ** 16n;
+}
+
+/**
+ * The wallet history, judged on its own: the ledger is recomputed from the dump and core.json by reconcile/oracle-history.ts and every
+ * wallet_transactions row of the organization is compared with it (amount, balance_after, type, time); a missing row, an extra row, a
+ * wallet that is not the live balance, or a core snapshot that moved since the ledger was built are findings.
+ */
+async function verifyHistory(a: CreditsVerifyArgs, h: WalletHistoryMarker): Promise<void> {
+  const { db, orgId, client, source, alarm, warnings } = a;
+  const has = (c: string): boolean => source.collections(client).includes(c);
+  const anyFile =
+    source.fileOf(client, 'whatsapp_broadcasting_data') ?? source.fileOf(client, 'credit_logs');
+  if (!anyFile) {
+    warnings.push(
+      'WALLET HISTORY: the source has no file to find core.json next to; the history was not re-checked',
+    );
+    return;
+  }
+  let core: {
+    readAt?: string;
+    readOn?: string;
+    workspace?: { timezone?: { utc?: unknown[] } | string; credits?: { remaining_amounts?: unknown } };
+    walletEvents?: Array<Record<string, unknown>>;
+  };
+  try {
+    core = JSON.parse(readFileSync(join(dirname(anyFile), 'core.json'), 'utf8'));
+  } catch {
+    alarm('HISTORY_NO_CORE: the wallet was rebuilt from core.json but the file is not readable now');
+    return;
+  }
+  const readAll = async (c: string): Promise<Array<Record<string, unknown>>> => {
+    const out: Array<Record<string, unknown>> = [];
+    if (has(c)) for await (const d of source.read(client, c)) out.push(d as Record<string, unknown>);
+    return out;
+  };
+  const tzRaw = core.workspace?.timezone;
+  const zones = typeof tzRaw === 'string' ? [tzRaw] : (tzRaw?.utc ?? []);
+  const timezone =
+    (zones.find((z) => {
+      try {
+        return typeof z === 'string' && !!new Intl.DateTimeFormat('en', { timeZone: z });
+      } catch {
+        return false;
+      }
+    }) as string | undefined) ?? 'UTC';
+  const asOf = core.readAt ?? (core.readOn ? `${core.readOn}T23:59:59Z` : '');
+  const balanceText = String(core.workspace?.credits?.remaining_amounts ?? '');
+  const want = oracleHistory({
+    client,
+    balanceText,
+    asOf,
+    timezone,
+    creditLogs: await readAll('credit_logs'),
+    charges: await readAll('whatsapp_broadcasting_data'),
+    events: core.walletEvents ?? [],
+    workspaceId: a.settings.workspaceId,
+  });
+  const unit = h.unit;
+  const rows = (
+    await withTenant(db, { orgId }, (tx) =>
+      tx.execute(sql`
+        SELECT idempotency_key AS key, amount::text AS amount, balance_after::text AS balance_after, type,
+               (extract(epoch FROM created_at) * 1000)::bigint::text AS ms
+        FROM wallet_transactions WHERE org_id = ${orgId} AND coalesce(unit, '') = ${unit}`),
+    )
+  ).rows as Array<{ key: string; amount: string; balance_after: string; type: string; ms: string }>;
+  const have = new Map(rows.map((r) => [r.key, r]));
+  const bad: string[] = [];
+  let missing = 0;
+  let differ = 0;
+  for (const w of want.rows) {
+    const r = have.get(w.key);
+    if (!r) {
+      missing++;
+      if (bad.length < 6) bad.push(`missing ${w.key}`);
+      continue;
+    }
+    const diff: string[] = [];
+    if (fourDigits(r.amount) !== w.amount) diff.push(`amount ${r.amount}`);
+    if (fourDigits(r.balance_after) !== w.balanceAfter) diff.push(`balance_after ${r.balance_after}`);
+    if (r.type !== w.type) diff.push(`type ${r.type}`);
+    if (BigInt(r.ms) !== BigInt(w.atMs)) diff.push(`time ${r.ms}`);
+    if (diff.length > 0) {
+      differ++;
+      if (bad.length < 6) bad.push(`${w.key}: ${diff.join('; ')}`);
+    }
+  }
+  const wantKeys = new Set(want.rows.map((r) => r.key));
+  const extra = rows.filter((r) => !wantKeys.has(r.key));
+  if (missing + differ > 0)
+    alarm(
+      `HISTORY_MISMATCH: the wallet ledger differs from the one recomputed from the dump and core.json (${missing} missing, ${differ} different): ${bad.join(' | ')}`,
+    );
+  if (extra.length > 0 && !a.allowExtraRows)
+    alarm(
+      `HISTORY_EXTRA_ROWS: ${extra.length} wallet_transactions row(s) that the dump and core.json do not account for (first ${lim(extra[0]!.key)})`,
+    );
+  if (balanceText !== '' && fourDigits(balanceText) !== fourDigits(h.target))
+    warnings.push(
+      `WALLET HISTORY: core.json now says the live balance is ${balanceText} but the ledger was built for ${h.target}: run wallet-history again`,
+    );
+  const w = (
+    await withTenant(db, { orgId }, (tx) =>
+      tx.execute(sql`SELECT balance::text AS balance FROM wallets WHERE org_id = ${orgId} AND unit = ${unit}`),
+    )
+  ).rows[0] as { balance: string } | undefined;
+  if ((!w || fourDigits(w.balance) !== fourDigits(h.target)) && !a.allowExtraRows)
+    alarm(
+      `HISTORY_BALANCE: wallets.balance ${w?.balance ?? '(none)'} is not the live Waboo balance the history ends at (${h.target})`,
+    );
+  warnings.push(
+    `WALLET HISTORY: ${want.rows.length} ledger row(s) recomputed from the dump and core.json (opening ${text4(want.opening / 100n)} ${unit}); ${want.rows.length - missing - differ} match the database`,
+  );
 }

@@ -13,7 +13,7 @@ import { verifyAccess } from './access';
 import { verifyAutomations } from './automation';
 import { verifyChat } from './chat';
 import { verifyCampaigns } from './campaigns';
-import { verifyCredits } from './credits';
+import { readHistoryMarker, verifyCredits } from './credits';
 import { verifyFaq } from './faq';
 import { verifyFlows } from './flows';
 import { verifyLeads } from './leads';
@@ -557,6 +557,11 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       fallbackAt,
     );
 
+    // a client whose wallet was rebuilt as the full statement (wallet-history): wallet_transactions is judged by verifyCredits against its
+    // own independent oracle, so the generic per-row fingerprint, uuid and extra-row checks leave that one table alone
+    const walletHistory = await readHistoryMarker(db, client);
+    const skipTables = new Set<string>(walletHistory ? ['wallet_transactions'] : []);
+
     // 3. bulk steps
     const claimed = new Map<string, number>();
     const rollups = new Map<string, { s: string[]; t: string[]; rows: number }>();
@@ -627,6 +632,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
           oracle,
           tableOracle,
           allowExtra: Boolean(opts.allowExtraRows),
+          skipTables,
           bumped,
         });
       };
@@ -837,7 +843,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       }
     }
     // the opening ledger entry belongs to no document: it is the one wallet_transactions row the uuid set must also expect
-    if (ctx.credits?.opening)
+    if (ctx.credits?.opening && !walletHistory)
       (
         expectedUuids.get('wallet_transactions') ??
         expectedUuids.set('wallet_transactions', new Set()).get('wallet_transactions')!
@@ -1083,6 +1089,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         warnings,
         notPresent,
         idmap,
+        history: walletHistory,
       });
     }
     if (ctx.flows && flowSettings) {
@@ -1217,7 +1224,10 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       const stepTables = new Set(
         STEPS.filter((s) => stepRan(s.handler)).flatMap((s) =>
           Object.entries(s.tables)
-            .filter(([t, ts]) => !ts.keyless && !ts.noUuid && t !== 'roles' && t !== 'users')
+            .filter(
+              ([t, ts]) =>
+                !ts.keyless && !ts.noUuid && t !== 'roles' && t !== 'users' && !skipTables.has(t),
+            )
             .map(([t]) => t),
         ),
       );
@@ -1524,6 +1534,8 @@ interface Verify {
   oracle: ContactOracle;
   tableOracle: TableOracle;
   allowExtra: boolean;
+  /** tables another verifier judges (the wallet ledger of a client with a wallet history) */
+  skipTables: Set<string>;
   /** target uuid -> the row_version the `update` command left on a row it updated (accepted in place of the loaded 1) */
   bumped: Map<string, number>;
 }
@@ -1543,6 +1555,7 @@ async function verifyChunk(
     for (const r of it.outcome.rows) {
       if (spec.tables[r.table]?.keyless) continue; // no uuid: held by the access verifier
       if (spec.tables[r.table]?.noUuid) continue; // no uuid column: held by the credits verifier
+      if (v.skipTables.has(r.table)) continue; // judged elsewhere (wallet history)
       const uuid = rowUuid(v.client, v.mapCollection, it.base, r.sub);
       byTable.set(r.table, [
         ...(byTable.get(r.table) ?? []),

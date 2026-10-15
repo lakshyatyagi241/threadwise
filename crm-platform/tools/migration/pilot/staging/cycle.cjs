@@ -619,6 +619,15 @@ async function cmdChatStatus(srv, cfg, flags = {}) {
   return r.code === 0 ? 0 : 1;
 }
 
+/** Rebuild the wallet statement as Waboo shows it (daily WhatsApp charges and reverts, AI charges, top-ups, purchases) chained to the live balance in dumps/<client>/core.json. Replaces the ledger rows this tool wrote; refuses a ledger with other rows. Dry run unless --apply. */
+async function cmdWalletHistory(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const a = ['wallet-history', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'wallet-history (APPLY)' : 'wallet-history (dry run)', `wallet-history-${cfg.client}.txt`);
+  return r.code === 0 ? 0 : 1;
+}
+
 /** Give the bot messages an earlier load wrote without their buttons (Visit our website, Call now ...) the meta.sentInteractive the inbox draws them from. Reads only the database. Dry run unless --apply. */
 async function cmdChatButtons(srv, cfg, flags = {}) {
   await assertStaging(srv);
@@ -854,7 +863,7 @@ function printStepStats(steps) {
 
 // ---------- orchestration: migrate / batch / new-client -------------------------------------------------------------------------------
 // core-load (plan, subscription, role grants from geta_core) and flow-state (publish what is live in Waboo) run after the load and before the verifier
-const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'chat-buttons', 'files', 'core-load', 'wallet-sync', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
+const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'chat-buttons', 'files', 'core-load', 'wallet-sync', 'wallet-history', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
 /** steps that only make sense for a client that is ALREADY loaded: --catch-up adds them; a fresh load never runs them (a fresh load reads everything once) */
 const CATCHUP_ONLY = new Set(['update', 'chat-status', 'chat-buttons', 'usage-append']);
 /** steps a catch-up refuses: flow-state would publish flows again (the flows are already live) */
@@ -1083,6 +1092,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (s !== 'core-load' || cfg.coreFile) && // needs the geta_core snapshot (core-opening.cjs) named in the client config
       (s !== 'files' || cfg.files !== 'off') && // the media copy; "files": "off" in the client config skips it
       (s !== 'wallet-sync' || cfg.coreFile) && // needs the same geta_core snapshot
+      (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
       (s !== 'flow-state' || cfg.flowState !== 'inactive'), // "flowState": "inactive" in the client config keeps every flow a draft
   );
   const ctxL = {};
@@ -1118,6 +1128,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     'core-load': () => cmdCoreLoad(srv, cfg, { ...flags, apply: true }),
     files: async () => (await cmdFiles(srv, cfg, 'copy', { apply: true })) || cmdFiles(srv, cfg, 'verify'),
     'wallet-sync': () => cmdWalletSync(srv, cfg, { ...flags, apply: true }),
+    'wallet-history': () => cmdWalletHistory(srv, cfg, { ...flags, apply: true }),
     'chat-status': () => cmdChatStatus(srv, cfg, { ...flags, apply: true }),
     'chat-buttons': () => cmdChatButtons(srv, cfg, { ...flags, apply: true }),
     'usage-append': () => cmdUsageAppend(srv, cfg, { ...flags, apply: true }),
@@ -1404,6 +1415,7 @@ const COMMANDS = [
   'core-load',
   'flow-state',
   'wallet-sync',
+  'wallet-history',
   'usage-charges-append',
   'update',
   'files-plan',
@@ -1455,6 +1467,7 @@ async function main(argv) {
     migrate: () => cmdMigrate(srv, cfg, flags),
     'core-load': () => cmdCoreLoad(srv, cfg, flags),
     'wallet-sync': () => cmdWalletSync(srv, cfg, flags),
+    'wallet-history': () => cmdWalletHistory(srv, cfg, flags),
     'usage-charges-append': () => cmdUsageAppend(srv, cfg, flags),
     'files-plan': () => cmdFiles(srv, cfg, 'plan'),
     'files-copy': () => cmdFiles(srv, cfg, 'copy', flags),
