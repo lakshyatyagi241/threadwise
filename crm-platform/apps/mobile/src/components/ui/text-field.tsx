@@ -1,5 +1,6 @@
 import { useState, type ReactNode, type Ref } from 'react';
 import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
+import { FONT_FAMILY } from '@/lib/theme/fonts';
 import { CONTROL_HEIGHT, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { Text } from './text';
@@ -87,6 +88,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     fontSize: 16,
+    fontFamily: FONT_FAMILY.regular,
   },
-  code: { textAlign: 'center', fontSize: 26, fontWeight: '700', letterSpacing: 8 },
+  code: { textAlign: 'center', fontSize: 26, fontFamily: FONT_FAMILY.bold, letterSpacing: 8 },
 });

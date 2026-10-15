@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
+import { FONT_FAMILY } from '@/lib/theme/fonts';
 import { CONTROL_HEIGHT, MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { Icon } from './icon';
@@ -84,7 +85,13 @@ const styles = StyleSheet.create({
     paddingStart: spacing.md,
   },
   icon: { paddingEnd: spacing.sm },
-  input: { flex: 1, minHeight: CONTROL_HEIGHT, paddingVertical: spacing.md, fontSize: 16 },
+  input: {
+    flex: 1,
+    minHeight: CONTROL_HEIGHT,
+    paddingVertical: spacing.md,
+    fontSize: 16,
+    fontFamily: FONT_FAMILY.regular,
+  },
   clear: {
     width: MIN_TOUCH_TARGET,
     height: MIN_TOUCH_TARGET,

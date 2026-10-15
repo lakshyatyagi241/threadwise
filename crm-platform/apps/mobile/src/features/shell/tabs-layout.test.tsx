@@ -5,6 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import { StyleSheet, Text } from 'react-native';
 import { i18n, initI18n } from '@/lib/i18n';
 import { fetchSession } from '@/lib/session/api';
+import { FONT_FAMILY } from '@/lib/theme/fonts';
 import { palette } from '@/lib/theme/tokens';
 import { session } from '@/test/dashboard-fixtures';
 import { TabsLayout } from './tabs-layout';
@@ -117,13 +118,14 @@ describe('the look of the tab bar', () => {
 
   it('shows the words of the tab that is open in bold, and only those', async () => {
     await renderRouter(structure, { initialUrl: '/' });
-    const weightOf = (name: string) =>
-      StyleSheet.flatten(screen.getByText(name).props.style).fontWeight;
-    expect(weightOf('Dashboard')).toBe('700');
-    expect(weightOf('Inbox')).not.toBe('700');
+    // Bold is the Inter Bold file: the style carries a family per weight, not a fontWeight (see lib/theme/fonts).
+    const familyOf = (name: string) =>
+      StyleSheet.flatten(screen.getByText(name).props.style).fontFamily;
+    expect(familyOf('Dashboard')).toBe(FONT_FAMILY.bold);
+    expect(familyOf('Inbox')).not.toBe(FONT_FAMILY.bold);
     await tab('Inbox');
-    expect(weightOf('Inbox')).toBe('700');
-    expect(weightOf('Dashboard')).not.toBe('700');
-    expect(weightOf('Contacts')).not.toBe('700');
+    expect(familyOf('Inbox')).toBe(FONT_FAMILY.bold);
+    expect(familyOf('Dashboard')).not.toBe(FONT_FAMILY.bold);
+    expect(familyOf('Contacts')).not.toBe(FONT_FAMILY.bold);
   });
 });

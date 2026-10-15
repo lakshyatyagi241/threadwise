@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react-native';
 import { StyleSheet } from 'react-native';
 import { initI18n } from '@/lib/i18n';
+import { FONT_FAMILY } from '@/lib/theme/fonts';
 import { Text } from './text';
 
 /** What the text component appends for scripts that need room at the end of a line (a no-break space). */
@@ -18,6 +19,32 @@ describe('Text in English', () => {
   it('shows its text exactly as given', async () => {
     await render(<Text>Hello</Text>);
     expect(screen.getByText('Hello').props.children).toBe('Hello');
+  });
+
+  it('draws in Inter, with the file for the weight of its variant and no second, synthetic weight', async () => {
+    await render(
+      <>
+        <Text testID="body">Body</Text>
+        <Text testID="heading" variant="heading">
+          Heading
+        </Text>
+        <Text testID="title" variant="title">
+          Title
+        </Text>
+      </>,
+    );
+    const style = (id: string) => StyleSheet.flatten(screen.getByTestId(id).props.style);
+    expect(style('body')).toMatchObject({ fontFamily: FONT_FAMILY.regular });
+    expect(style('heading')).toMatchObject({ fontFamily: FONT_FAMILY.semibold });
+    expect(style('title')).toMatchObject({ fontFamily: FONT_FAMILY.bold });
+    expect(style('title').fontWeight).toBeUndefined();
+  });
+
+  it('follows a weight a screen sets on one piece of text', async () => {
+    await render(<Text style={{ fontWeight: '500' }}>Medium</Text>);
+    expect(StyleSheet.flatten(screen.getByText('Medium').props.style)).toMatchObject({
+      fontFamily: FONT_FAMILY.medium,
+    });
   });
 
   it('turns an overline into spaced capitals', async () => {
@@ -60,6 +87,18 @@ describe('Text in Hindi and Marathi', () => {
     );
     expect(Array.isArray(screen.getByTestId('nested').props.children)).toBe(true);
     expect(screen.getByTestId('empty').props.children).toBeNull();
+  });
+
+  it('keeps the phone font and its weights: Inter has no Devanagari', async () => {
+    await initI18n('hi');
+    await render(
+      <Text testID="heading" variant="heading">
+        नमस्ते
+      </Text>,
+    );
+    const style = StyleSheet.flatten(screen.getByTestId('heading').props.style);
+    expect(style.fontFamily).toBeUndefined();
+    expect(style.fontWeight).toBe('600');
   });
 
   it('does not space out or capitalise an overline: it would pull the letters apart', async () => {

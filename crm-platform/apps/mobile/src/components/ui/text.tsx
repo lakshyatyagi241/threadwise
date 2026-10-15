@@ -1,7 +1,8 @@
 import { Children, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Text as RNText, type TextProps } from 'react-native';
+import { StyleSheet, Text as RNText, type TextProps } from 'react-native';
 import { usesShapedScript } from '@/lib/i18n/locales';
+import { withInter } from '@/lib/theme/fonts';
 import { typography, type ThemeColors, type TypographyVariant } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
@@ -38,7 +39,12 @@ function withSlack(children: ReactNode): ReactNode {
 /** Small capitals above a group of things (a kicker): upper case and spaced out, which only suits letters that have a case. */
 const LATIN_OVERLINE = { textTransform: 'uppercase', letterSpacing: 1.2 } as const;
 
-/** Every piece of text in the app. Honours the phone's font-size setting (no `allowFontScaling={false}`). */
+/**
+ * Every piece of text in the app. Honours the phone's font-size setting (no `allowFontScaling={false}`). Drawn in Inter, as in the
+ * Geta app, with the file chosen from the style's `fontWeight` (see `lib/theme/fonts`). Hindi and Marathi keep the phone's own
+ * font and its weights: Inter has no Devanagari, so those letters come from the system either way, and a weight carried only by an
+ * Inter file would not reach them.
+ */
 export function Text({
   variant = 'body',
   muted,
@@ -51,7 +57,8 @@ export function Text({
 }: Props) {
   const { colors } = useTheme();
   const { i18n } = useTranslation();
-  const shaped = usesShapedScript(i18n.language) || preventClip === true;
+  const devanagari = usesShapedScript(i18n.language);
+  const shaped = devanagari || preventClip === true;
   const resolved = color
     ? colors[color]
     : danger
@@ -59,16 +66,14 @@ export function Text({
       : muted
         ? colors.textMuted
         : colors.text;
+  const flat = StyleSheet.flatten([
+    typography[variant],
+    { color: resolved },
+    variant === 'overline' && !shaped ? LATIN_OVERLINE : null,
+    style,
+  ]);
   return (
-    <RNText
-      {...rest}
-      style={[
-        typography[variant],
-        { color: resolved },
-        variant === 'overline' && !shaped ? LATIN_OVERLINE : null,
-        style,
-      ]}
-    >
+    <RNText {...rest} style={devanagari ? flat : withInter(flat)}>
       {shaped ? withSlack(children) : children}
     </RNText>
   );

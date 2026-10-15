@@ -14,6 +14,7 @@ import { getSnapshot, restoreSession, subscribe } from '@/lib/auth/session-manag
 import { log } from '@/lib/observability/logger';
 import { initObservability, withObservability } from '@/lib/observability/sentry';
 import { createQueryClient, wireQueryEnvironment } from '@/lib/query/query-client';
+import { useAppFonts } from '@/lib/theme/fonts';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
@@ -27,6 +28,9 @@ const queryClient = createQueryClient();
 function RootLayout() {
   const [ready, setReady] = useState(false);
   const auth = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+  const [fontsLoaded, fontError] = useAppFonts();
+  // A font that cannot load must not keep the app on the splash screen: the text falls back to the phone's own font.
+  const fontsDone = fontsLoaded || fontError !== null;
 
   useEffect(() => {
     // The language and the stored session are both needed before the first screen, or it flashes the wrong one.
@@ -36,10 +40,14 @@ function RootLayout() {
   }, []);
 
   useEffect(() => {
-    if (ready && auth.status !== 'loading') void SplashScreen.hideAsync();
-  }, [ready, auth.status]);
+    if (fontError) log.exception(fontError, 'app.fonts_failed');
+  }, [fontError]);
 
-  if (!ready || auth.status === 'loading') return null;
+  useEffect(() => {
+    if (ready && fontsDone && auth.status !== 'loading') void SplashScreen.hideAsync();
+  }, [ready, fontsDone, auth.status]);
+
+  if (!ready || !fontsDone || auth.status === 'loading') return null;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
