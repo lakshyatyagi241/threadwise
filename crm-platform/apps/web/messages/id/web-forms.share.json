@@ -151,7 +151,11 @@
         "marketingHint": "Mencentang kotak ini mencatat persetujuan pemasaran pada kontak. Kotak yang tidak dicentang tidak pernah berlangganan siapa pun.",
         "whatsappHint": "Apakah Anda akan mengirim pesan ke kontak ini lewat WhatsApp? Gunakan kalimat yang menyatakannya dan cara berhenti. Kotak yang dicentang disimpan sebagai bukti, dengan teks persis ini dan versinya.",
         "whatsappInsert": "Gunakan kalimat persetujuan WhatsApp",
-        "whatsappWording": "Saya setuju menerima pembaruan dan penawaran di WhatsApp. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan."
+        "whatsappWording": "Saya setuju menerima pembaruan dan penawaran di WhatsApp. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan.",
+        "termsUrl": "Tautan ketentuan",
+        "termsUrlHint": "Opsional. Ditampilkan di samping teks persetujuan dan tautan privasi. Harus diawali dengan https://.",
+        "useWorkspacePrivacy": "Gunakan tautan privasi ruang kerja saya",
+        "useWorkspaceTerms": "Gunakan tautan ketentuan ruang kerja saya"
       },
       "crm": {
         "title": "Di CRM",

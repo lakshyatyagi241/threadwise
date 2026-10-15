@@ -291,12 +291,14 @@
       "title": {
         "widget": "Ligne de consentement dans le formulaire du chat",
         "booking": "Ligne de consentement sur la page de réservation",
-        "commerce": "Ce que signifie la case marketing de la boutique"
+        "commerce": "Ce que signifie la case marketing de la boutique",
+        "workspace": "Avis de consentement par défaut"
       },
       "intro": {
         "widget": "Affichée sous forme de case à cocher sous les coordonnées du visiteur. Seul un visiteur qui la coche est enregistré comme consentant, et seulement s'il a donné un téléphone ou un e-mail.",
         "booking": "Affichée sous forme de case à cocher dans le formulaire de réservation. Seule la personne qui la coche est enregistrée comme consentante ; réserver ne l'exige jamais.",
-        "commerce": "Un client qui accepte le marketing dans votre boutique est enregistré comme consentant. Écrivez ce que cette case lui dit, pour que la preuve le mentionne."
+        "commerce": "Un client qui accepte le marketing dans votre boutique est enregistré comme consentant. Écrivez ce que cette case lui dit, pour que la preuve le mentionne.",
+        "workspace": "Le texte que votre espace de travail affiche à côté d’une case de consentement lorsqu’un formulaire, un widget ou une page de réservation n’a pas le sien. Chaque modification est une nouvelle version numérotée."
       },
       "enabled": "Ligne de consentement activée",
       "text": "Texte auquel la personne consent",
@@ -309,7 +311,12 @@
       "version": "Version actuelle : {version}",
       "noVersion": "Pas encore enregistrée.",
       "saveFirst": "Enregistrez d'abord, vous pourrez ensuite définir sa ligne de consentement.",
-      "whatsappToo": "Compter aussi comme consentement WhatsApp (seulement si le texte le dit)"
+      "whatsappToo": "Compter aussi comme consentement WhatsApp (seulement si le texte le dit)",
+      "termsUrl": "Lien vers vos conditions (facultatif)",
+      "termsUrlHint": "Doit commencer par https://",
+      "useWorkspacePrivacy": "Utiliser le lien de confidentialité de mon espace de travail",
+      "useWorkspaceTerms": "Utiliser le lien des conditions de mon espace de travail",
+      "useWorkspaceText": "Utiliser le texte par défaut de mon espace de travail"
     }
   }
 }

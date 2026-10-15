@@ -151,7 +151,11 @@
         "marketingHint": "Đánh dấu ô sẽ ghi nhận sự đồng ý nhận tiếp thị cho liên hệ. Ô không đánh dấu sẽ không đăng ký ai cả.",
         "whatsappHint": "Bạn có định nhắn tin cho các liên hệ này qua WhatsApp không? Hãy dùng nội dung nói rõ điều đó và cách hủy đăng ký. Ô đã chọn được lưu làm bằng chứng, kèm đúng nội dung này và phiên bản của nó.",
         "whatsappInsert": "Dùng nội dung đồng ý nhận tin WhatsApp",
-        "whatsappWording": "Tôi đồng ý nhận cập nhật và ưu đãi qua WhatsApp. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký."
+        "whatsappWording": "Tôi đồng ý nhận cập nhật và ưu đãi qua WhatsApp. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
+        "termsUrl": "Liên kết điều khoản",
+        "termsUrlHint": "Tùy chọn. Hiển thị bên cạnh nội dung đồng ý và liên kết quyền riêng tư. Phải bắt đầu bằng https://.",
+        "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
+        "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc"
       },
       "crm": {
         "title": "Trong CRM",

@@ -291,12 +291,14 @@
       "title": {
         "widget": "Línea de consentimiento en el formulario del chat",
         "booking": "Línea de consentimiento en la página de reservas",
-        "commerce": "Qué significa la casilla de marketing de la tienda"
+        "commerce": "Qué significa la casilla de marketing de la tienda",
+        "workspace": "Aviso de consentimiento predeterminado"
       },
       "intro": {
         "widget": "Se muestra como una casilla bajo los datos del visitante. Solo se registra como que acepta quien la marca, y solo si dio un teléfono o un correo.",
         "booking": "Se muestra como una casilla en el formulario de reserva. Solo se registra como que acepta quien la marca; reservar nunca la exige.",
-        "commerce": "Un cliente que acepta marketing en su tienda se registra como que acepta. Escriba lo que esa casilla le dice, para que la prueba lo nombre."
+        "commerce": "Un cliente que acepta marketing en su tienda se registra como que acepta. Escriba lo que esa casilla le dice, para que la prueba lo nombre.",
+        "workspace": "El texto que tu espacio de trabajo muestra junto a una casilla de consentimiento cuando un formulario, widget o página de reservas no tiene uno propio. Cada cambio es una nueva versión numerada."
       },
       "enabled": "Línea de consentimiento activada",
       "text": "Texto que la persona acepta",
@@ -309,7 +311,12 @@
       "version": "Versión actual: {version}",
       "noVersion": "Aún no guardada.",
       "saveFirst": "Guarde esto primero y luego podrá definir su línea de consentimiento.",
-      "whatsappToo": "Contar también como consentimiento de WhatsApp (solo si el texto lo dice)"
+      "whatsappToo": "Contar también como consentimiento de WhatsApp (solo si el texto lo dice)",
+      "termsUrl": "Enlace a tus términos (opcional)",
+      "termsUrlHint": "Debe empezar por https://",
+      "useWorkspacePrivacy": "Usar el enlace de privacidad de mi espacio de trabajo",
+      "useWorkspaceTerms": "Usar el enlace de términos de mi espacio de trabajo",
+      "useWorkspaceText": "Usar el texto predeterminado de mi espacio de trabajo"
     }
   }
 }

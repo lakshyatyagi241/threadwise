@@ -151,7 +151,11 @@
         "marketingHint": "勾选此框会在联系人上记录营销同意。未勾选则不会订阅任何人。",
         "whatsappHint": "你是否会通过 WhatsApp 给这些联系人发消息？请使用明确说明这一点并告知如何退订的措辞。勾选的复选框会连同这段准确文字及其版本一起作为证明保存。",
         "whatsappInsert": "使用 WhatsApp 订阅同意文案",
-        "whatsappWording": "我同意通过 WhatsApp 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。"
+        "whatsappWording": "我同意通过 WhatsApp 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
+        "termsUrl": "条款链接",
+        "termsUrlHint": "可选。显示在同意文字和隐私链接旁。必须以 https:// 开头。",
+        "useWorkspacePrivacy": "使用我的工作区隐私链接",
+        "useWorkspaceTerms": "使用我的工作区条款链接"
       },
       "crm": {
         "title": "在 CRM 中",

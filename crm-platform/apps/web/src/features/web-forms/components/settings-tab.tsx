@@ -42,6 +42,7 @@ import {
 import type { Definition, FormCaptchaMode } from '../lib/types';
 import type { BuilderTabProps } from './builder-types';
 import { useFormProtection } from '../api/forms';
+import { useComplianceLinks } from '@/features/compliance-center/api/hooks';
 import { useFormUsers } from './forms-users';
 import { PaymentPanel } from './payment-panel';
 
@@ -376,6 +377,9 @@ export function SettingsTab(props: BuilderTabProps) {
   const labelIssue = submitLabelIssue(s.submitLabel);
   const redirectProblem = redirectIssue(s.successMode, s.redirectUrl);
   const privacyProblem = consent.enabled ? privacyUrlIssue(consent.privacyUrl) : null;
+  const termsProblem = consent.enabled ? privacyUrlIssue(consent.termsUrl) : null;
+  // The workspace links (Compliance center) are offered, never filled in: a role without access to them simply gets no buttons.
+  const workspaceLinks = useComplianceLinks(canEdit);
   const consentTextEmpty = consent.enabled && consent.text.trim().length === 0;
   const rangeText = { min: RETENTION_RANGE.min, max: RETENTION_RANGE.max };
 
@@ -570,6 +574,57 @@ export function SettingsTab(props: BuilderTabProps) {
                 />
               )}
             </FieldBox>
+            {workspaceLinks.data?.privacyUrl &&
+              consent.privacyUrl !== workspaceLinks.data.privacyUrl && (
+                <div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    disabled={disabled}
+                    onClick={() =>
+                      setConsent({ privacyUrl: workspaceLinks.data?.privacyUrl ?? undefined })
+                    }
+                  >
+                    {t('consent.useWorkspacePrivacy')}
+                  </Button>
+                </div>
+              )}
+            <FieldBox
+              label={t('consent.termsUrl')}
+              hint={t('consent.termsUrlHint')}
+              error={termsProblem ? t('consent.privacyUrlHttps') : undefined}
+            >
+              {(a) => (
+                <Input
+                  {...a}
+                  type="url"
+                  dir="ltr"
+                  placeholder="https://example.com/terms"
+                  value={consent.termsUrl ?? ''}
+                  disabled={disabled}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setConsent({ termsUrl: v.trim() === '' ? undefined : v });
+                  }}
+                />
+              )}
+            </FieldBox>
+            {workspaceLinks.data?.termsUrl && consent.termsUrl !== workspaceLinks.data.termsUrl && (
+              <div>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  disabled={disabled}
+                  onClick={() =>
+                    setConsent({ termsUrl: workspaceLinks.data?.termsUrl ?? undefined })
+                  }
+                >
+                  {t('consent.useWorkspaceTerms')}
+                </Button>
+              </div>
+            )}
             <SwitchRow
               label={t('consent.required')}
               hint={t('consent.requiredHint')}

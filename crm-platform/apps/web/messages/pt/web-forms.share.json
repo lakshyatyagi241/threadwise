@@ -151,7 +151,11 @@
         "marketingHint": "Marcar a caixa registra o consentimento de marketing no contato. Uma caixa desmarcada nunca inscreve ninguém.",
         "whatsappHint": "Você vai enviar mensagens para estes contatos pelo WhatsApp? Use um texto que informe isso e explique como cancelar. A caixa marcada é guardada como comprovação, com este texto exato e a versão dele.",
         "whatsappInsert": "Usar o texto de consentimento do WhatsApp",
-        "whatsappWording": "Concordo em receber novidades e ofertas pelo WhatsApp. Posso responder STOP a qualquer momento para cancelar."
+        "whatsappWording": "Concordo em receber novidades e ofertas pelo WhatsApp. Posso responder STOP a qualquer momento para cancelar.",
+        "termsUrl": "Link dos termos",
+        "termsUrlHint": "Opcional. Exibido ao lado do texto de consentimento e do link de privacidade. Deve começar com https://.",
+        "useWorkspacePrivacy": "Usar o link de privacidade do meu espaço de trabalho",
+        "useWorkspaceTerms": "Usar o link de termos do meu espaço de trabalho"
       },
       "crm": {
         "title": "No CRM",

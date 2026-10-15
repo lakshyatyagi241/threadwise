@@ -58,7 +58,8 @@
         "tryAgain": "もう一度支払う",
         "missingTitle": "この支払いが見つかりません",
         "missingBody": "リンクが間違っているか、古すぎる可能性があります。"
-      }
+      },
+      "termsOfService": "利用規約"
     }
   }
 }

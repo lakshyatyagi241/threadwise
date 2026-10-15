@@ -369,6 +369,11 @@
         "label": "Solicitações de dados",
         "description": "Responda a quem pergunta o que você mantém sobre elas: verificação de identidade, exportação, exclusão com prévia e um comprovante que você pode guardar.",
         "keywords": "privacidade, gdpr, solicitação de dados, dsar, acesso do titular, exportar dados, apagar, direito ao esquecimento, excluir dados pessoais, bloqueio legal"
+      },
+      "compliance-center": {
+        "label": "Central de conformidade",
+        "description": "Ferramentas que ajudam você a cumprir suas obrigações de privacidade: as leis a que você está sujeito, contatos de privacidade, avisos e links, suboperadores, horário de silêncio e uma lista de verificação do que já está em vigor.",
+        "keywords": "conformidade, privacidade, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, encarregado, responsável por reclamações, suboperador, dpa, termos, política de privacidade, horário de silêncio, não perturbe, lista de verificação, menores"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

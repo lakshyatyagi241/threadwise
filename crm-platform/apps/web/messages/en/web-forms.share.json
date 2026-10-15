@@ -151,7 +151,11 @@
         "marketingHint": "Ticking the box records marketing consent on the contact. An unticked box never subscribes anyone.",
         "whatsappHint": "Will you message these contacts on WhatsApp? Use wording that says so and how to stop. The ticked box is kept as proof, with this exact text and its version.",
         "whatsappInsert": "Use the WhatsApp opt-in wording",
-        "whatsappWording": "I agree to receive updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe."
+        "whatsappWording": "I agree to receive updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe.",
+        "termsUrl": "Terms link",
+        "termsUrlHint": "Optional. Shown next to the consent text and the privacy link. Must start with https://.",
+        "useWorkspacePrivacy": "Use my workspace privacy link",
+        "useWorkspaceTerms": "Use my workspace terms link"
       },
       "crm": {
         "title": "In the CRM",

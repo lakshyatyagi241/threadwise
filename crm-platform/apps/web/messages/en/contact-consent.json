@@ -291,12 +291,14 @@
       "title": {
         "widget": "Consent line on the chat form",
         "booking": "Consent line on the booking page",
-        "commerce": "What the store's marketing checkbox stands for"
+        "commerce": "What the store's marketing checkbox stands for",
+        "workspace": "Default consent notice"
       },
       "intro": {
         "widget": "Shown as a tick box under the visitor's details. Only a visitor who ticks it is recorded as agreeing, and only when they gave a phone number or an email.",
         "booking": "Shown as a tick box on the booking form. Only a person who ticks it is recorded as agreeing; booking never needs it.",
-        "commerce": "A customer who accepts marketing in your store is recorded as agreeing. Write what that checkbox tells them, so the proof names it."
+        "commerce": "A customer who accepts marketing in your store is recorded as agreeing. Write what that checkbox tells them, so the proof names it.",
+        "workspace": "The wording your workspace shows next to a consent box when a form, widget or booking page has none of its own. Every change is a new numbered version."
       },
       "enabled": "Consent line on",
       "text": "Wording the person agrees to",
@@ -309,7 +311,12 @@
       "version": "Current version: {version}",
       "noVersion": "Not saved yet.",
       "saveFirst": "Save this first, then you can set its consent line.",
-      "whatsappToo": "Also count it as WhatsApp consent (only if the wording says so)"
+      "whatsappToo": "Also count it as WhatsApp consent (only if the wording says so)",
+      "termsUrl": "Link to your terms (optional)",
+      "termsUrlHint": "Must start with https://",
+      "useWorkspacePrivacy": "Use my workspace privacy link",
+      "useWorkspaceTerms": "Use my workspace terms link",
+      "useWorkspaceText": "Use my workspace default wording"
     }
   }
 }

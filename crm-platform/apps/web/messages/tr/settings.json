@@ -369,6 +369,11 @@
         "label": "Veri talepleri",
         "description": "Haklarında ne tuttuğunuzu soranlara yanıt verin: kimlik kontrolü, dışa aktarma, önizlemeli silme ve saklayabileceğiniz bir kanıt.",
         "keywords": "gizlilik, gdpr, veri talebi, dsar, veri erişimi, verileri dışa aktar, sil, unutulma hakkı, kişisel verileri sil, yasal bekletme"
+      },
+      "compliance-center": {
+        "label": "Uyumluluk merkezi",
+        "description": "Gizlilik yükümlülüklerinizi yerine getirmenize yardımcı araçlar: tabi olduğunuz yasalar, gizlilik iletişim kişileri, bildirimler ve bağlantılar, alt işleyiciler, sessiz saatler ve nelerin hazır olduğunu gösteren bir kontrol listesi.",
+        "keywords": "uyumluluk, gizlilik, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, şikâyet görevlisi, alt işleyici, dpa, şartlar, gizlilik politikası, sessiz saatler, do not call, kontrol listesi, çocuklar"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

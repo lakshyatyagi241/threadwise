@@ -93,7 +93,10 @@ export interface RenderableForm {
   settings: Pick<Definition['settings'], 'submitLabel' | 'successMode' | 'locale' | 'dir'> & {
     successMessage?: string;
   };
-  consent: Pick<Definition['consent'], 'enabled' | 'text' | 'privacyUrl' | 'required' | 'version'>;
+  consent: Pick<
+    Definition['consent'],
+    'enabled' | 'text' | 'privacyUrl' | 'termsUrl' | 'required' | 'version'
+  >;
   theme: ThemeTokens;
   /** What the visitor is asked to pay: the public form's summary, or (in the builder's preview) the draft's own block. Absent = no payment. */
   payment?: PublicForm['payment'] | Definition['payment'];

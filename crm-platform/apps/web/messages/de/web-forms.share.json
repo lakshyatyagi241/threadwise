@@ -151,7 +151,11 @@
         "marketingHint": "Wenn das Kästchen angehakt wird, wird die Marketing-Einwilligung im Kontakt gespeichert. Ein nicht angehaktes Kästchen meldet niemanden an.",
         "whatsappHint": "Wirst du diese Kontakte per WhatsApp anschreiben? Verwende einen Hinweis, der das sagt, und erkläre, wie man sich abmeldet. Das angekreuzte Kästchen wird mit genau diesem Text und seiner Version als Nachweis gespeichert.",
         "whatsappInsert": "WhatsApp-Einwilligungstext verwenden",
-        "whatsappWording": "Ich stimme zu, Updates und Angebote über WhatsApp zu erhalten. Ich kann jederzeit mit STOP antworten, um mich abzumelden."
+        "whatsappWording": "Ich stimme zu, Updates und Angebote über WhatsApp zu erhalten. Ich kann jederzeit mit STOP antworten, um mich abzumelden.",
+        "termsUrl": "Link zu den Nutzungsbedingungen",
+        "termsUrlHint": "Optional. Wird neben dem Einwilligungstext und dem Datenschutzlink angezeigt. Muss mit https:// beginnen.",
+        "useWorkspacePrivacy": "Link zur Datenschutzerklärung meines Arbeitsbereichs verwenden",
+        "useWorkspaceTerms": "Link zu den Nutzungsbedingungen meines Arbeitsbereichs verwenden"
       },
       "crm": {
         "title": "Im CRM",

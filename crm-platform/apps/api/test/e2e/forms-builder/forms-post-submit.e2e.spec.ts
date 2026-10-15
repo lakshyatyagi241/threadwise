@@ -244,6 +244,7 @@ describe('consent, from the visitor to the contact to the people who read it', (
           marketing: true,
           version: 1,
           privacyUrl: 'https://example.com/privacy',
+          termsUrl: 'https://example.com/terms',
           ...over,
         },
       }),
@@ -260,6 +261,7 @@ describe('consent, from the visitor to the contact to the people who read it', (
       required: true,
       version: 1,
       privacyUrl: 'https://example.com/privacy',
+      termsUrl: 'https://example.com/terms',
     });
     const ok = await api.submit(form.publicKey, {
       answers: { name: 'Mary Jackson', email },

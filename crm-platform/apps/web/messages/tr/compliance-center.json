@@ -1,0 +1,492 @@
+{
+  "compliance-center": {
+    "title": "Uyumluluk merkezi",
+    "subtitle": "Gizlilik yükümlülüklerinizi yerine getirmenize yardımcı araçlar: tabi olduğunuz yasalar, insanların ulaşabileceği kişiler, bildirimleriniz ve alt işleyicileriniz ile nelerin hazır olduğunu gösteren bir kontrol listesi. Bu araçlar tek başına bir çalışma alanını uyumlu hâle getirmez ve bu bir hukuki tavsiye değildir.",
+    "readOnly": "Bu sayfayı görüntüleyebilirsiniz ancak değiştiremezsiniz.",
+    "saved": "Uyumluluk ayarları kaydedildi.",
+    "conflict": "Siz düzenlerken başka biri bu ayarları kaydetti. En son sürüm yüklendi; kontrol edin ve değişikliğinizi yeniden yapın.",
+    "conflictOk": "Anladım",
+    "common": {
+      "dismiss": "Kapat",
+      "retry": "Tekrar dene",
+      "loading": "Yükleniyor..."
+    },
+    "tabs": {
+      "checklist": "Kontrol listesi",
+      "profiles": "Yasalar ve bölgeler",
+      "contacts": "Kişiler ve çocuklar",
+      "notices": "Bildirimler",
+      "links": "Gizlilik ve şart bağlantıları",
+      "subprocessors": "Alt işleyiciler",
+      "windows": "Sessiz saatler ve aramalar"
+    },
+    "saveBar": {
+      "unsaved": "Kaydedilmemiş değişiklikleriniz var.",
+      "problems": "Kaydetmeden önce vurgulanan alanları düzeltin.",
+      "discard": "Değişiklikleri at",
+      "save": "Değişiklikleri kaydet"
+    },
+    "errors": {
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "forbidden": "Bunu yapmaya yetkiniz yok.",
+      "notFound": "Bu artık mevcut değil.",
+      "conflict": "Bunu başka biri değiştirdi. Sayfayı yenileyip tekrar deneyin.",
+      "settingsInvalid": "Bazı ayarlar geçerli değil. Sessiz saatleri, arama aralığını, saat dilimini ve dili kontrol edin.",
+      "duplicate": "Bu adla listelenmiş bir alt işleyiciniz zaten var.",
+      "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
+      "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+    },
+    "problems": {
+      "httpsOnly": "https:// ile başlayan bir adres kullanın.",
+      "email": "Geçerli bir e-posta adresi girin.",
+      "quietEmpty": "Sessiz saatlerin bitişi başlangıçtan farklı olmalıdır.",
+      "windowOrder": "Arama aralığı, başladığı günün içinde başlangıçtan sonra bitmelidir.",
+      "daysEmpty": "En az bir gün seçin.",
+      "englishFirst": "İngilizce her zaman ilk bildirimdir. Başka bir dil seçin."
+    },
+    "phi": {
+      "title": "Korunan sağlık bilgilerini saklamayın.",
+      "body": "Bu ürün sağlık kayıtları için tasarlanmamıştır. HIPAA uyumluluğu iddia etmiyoruz ve iş ortağı sözleşmeleri (business associate agreements) imzalamıyoruz; bu nedenle tanı, tedavi ayrıntıları, sigorta numaraları veya benzeri sağlık bilgilerini kişilere, notlara, mesajlara, dosyalara, formlara veya kayıtlara girmeyin."
+    },
+    "checklist": {
+      "intro": "Çalışma alanınızda bugün nelerin hazır olduğu, kendi ayarlarınızdan ve verilerinizden hesaplanır. “Kuruldu”, aracın ayarlandığı anlamına gelir. Bir yasanın karşılandığı anlamına gelmez.",
+      "summaryLabel": "Toplamlar",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Kuruldu",
+        "partial": "Kısmen",
+        "open": "Açık"
+      },
+      "baselineTitle": "Her çalışma alanı için",
+      "baselineHint": "Hangi ülkede olursa olsun tüm çalışma alanlarına sunduğumuz sıkı bir madde kümesi.",
+      "profileTitle": "Açtığınız yasaların istedikleri",
+      "profileHint": "Her satır, onu isteyen profilleri belirtir. Birden fazlası geçerliyse en katı kural kullanılır.",
+      "noProfiles": "Henüz hiçbir yasa veya bölge açık değil, bu yüzden yalnızca her çalışma alanı için geçerli maddeler gösteriliyor. Bunları Yasalar ve bölgeler bölümünden seçin.",
+      "disclaimer": "Bu liste kendi kurulumunuzu takip etmenize yardımcı olur. Hukuki tavsiye değildir ve çalışma alanınızın herhangi bir yasaya uyduğunu belirtmez. Size neyin uygulandığını hukuk danışmanınıza sorun.",
+      "open": "Aç",
+      "items": {
+        "lawful_basis": {
+          "title": "Amaç ve dayanak kaydedildi",
+          "detail": {
+            "built": "Her onay bir amaca karşı kaydedilir; onu kimin veya neyin kaydettiği, gösterilen metin, sürümü ve zamanı ile birlikte. Sizin kurmanız gereken bir şey yok."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Onay ve kolay geri çekme",
+          "detail": {
+            "detectionOff": "STOP algılama kapalı, bu yüzden STOP yanıtı veren bir kişi listeden çıkarılmaz. Onay ayarlarında açın.",
+            "optInOff": "STOP çalışıyor, ancak pazarlama için henüz kayıtlı onay gerekmiyor. Onay ayarlarında “kayıtlı onay iste” seçeneğini açın.",
+            "built": "STOP algılanıyor ve pazarlama için kayıtlı onay gerekiyor."
+          }
+        },
+        "notices": {
+          "title": "Sürümlü bildirimler",
+          "detail": {
+            "built": "{lines, plural, one {# onay bildirimi açık} other {# onay bildirimi açık}}; varsayılan bildiriminiz {languages, plural, one {# dilde} other {# dilde}} dahil.",
+            "noDefault": "{lines, plural, one {# onay bildirimi açık} other {# onay bildirimi açık}}, ancak çalışma alanında henüz varsayılan bildirim yok.",
+            "none": "Hiçbir onay bildirimi açık değil. Bir kaydın kişinin gördüğü metni belirtebilmesi için varsayılan bir bildirim yazın."
+          }
+        },
+        "rights": {
+          "title": "Kişilerin talepleri (erişim, dışa aktarma, silme)",
+          "detail": {
+            "overdue": "{open} açık talepten {overdue, plural, one {# talebin} other {# talebin}} süresi geçti. Bunları Veri talepleri bölümünde yanıtlayın.",
+            "noContact": "Taleplerin yanıt süresi {days} gün, ancak henüz bir gizlilik iletişim kişisi belirlenmedi. Bir tane ekleyin.",
+            "built": "Taleplerin yanıt süresi {days} gün ve {open} talep açık. Bir gizlilik iletişim kişisi belirlenmiş."
+          }
+        },
+        "retention": {
+          "title": "Saklama ve silme",
+          "detail": {
+            "recordingsOn": "Arama kayıtları {days} gün saklanır ve beklemeye alınabilir. Diğer veriler için saklama süresi henüz geliştirilmedi.",
+            "recordingsOff": "Arama kaydı kapalı. Verilerin geri kalanı için saklama ayarı henüz geliştirilmedi."
+          }
+        },
+        "security": {
+          "title": "Güvenlik ve ihlal planı",
+          "detail": {
+            "runbook": "Çalışma alanı yalıtımı, şifrelenmiş kimlik bilgileri ve denetim günlüğü hazır. İhlal müdahale planı, platform operatörünün tamamladığı bir taslaktır. Bunu buradan açamazsınız."
+          }
+        },
+        "subprocessors": {
+          "title": "Alt işleyici listesi",
+          "detail": {
+            "built": "{count, plural, one {# alt işleyici} other {# alt işleyici}} listelenmiş. DPA şablonu indirmeye hazır.",
+            "none": "Henüz hiçbir alt işleyici listelenmedi. Sizin adınıza kişisel veri işleyen tedarikçileri listeleyin."
+          }
+        },
+        "children": {
+          "title": "Çocukların verileri",
+          "detail": {
+            "unset": "Henüz yanıtlanmadı. Kişileriniz arasında reşit olmayanların bulunup bulunamayacağını belirtin.",
+            "minorsNoParental": "Reşit olmayanlar dahil olabilir, ancak ebeveyn onayı açık değil.",
+            "no_minors": "Reşit olmayanların verilerini bilerek işlemiyorsunuz.",
+            "may_include_minors": "Reşit olmayanlar dahil olabilir ve ebeveyn onayı açık."
+          }
+        },
+        "contact_links": {
+          "title": "Gizlilik iletişim kişisi ve bağlantılar",
+          "detail": {
+            "built": "Gizlilik ve şart bağlantıları ile ulaşılabilir bir iletişim kişisi ayarlı.",
+            "none": "Henüz gizlilik bağlantısı, şart bağlantısı ve iletişim kişisi yok.",
+            "some": "Bağlantıların ve iletişim bilgilerinin bir kısmı ayarlı. Kalanını tamamlayın."
+          }
+        },
+        "dpo_contact": {
+          "title": "Veri koruma görevlisi veya gizlilik iletişim kişisi",
+          "detail": {
+            "built": "Bir ad ve bir e-posta ayarlı.",
+            "one": "Hem bir ad hem de bir e-posta ekleyin.",
+            "none": "Henüz bir görevli veya gizlilik iletişim kişisi belirlenmedi."
+          }
+        },
+        "grievance_officer": {
+          "title": "Şikâyet görevlisi",
+          "detail": {
+            "built": "Bir ad ve bir e-posta ayarlı.",
+            "one": "Hem bir ad hem de bir e-posta ekleyin.",
+            "none": "Henüz bir şikâyet görevlisi belirlenmedi."
+          }
+        },
+        "notice_languages": {
+          "title": "İngilizce ve ikinci bir dilde bildirim",
+          "detail": {
+            "built": "Varsayılan bildiriminiz İngilizce ve {locale} dillerinde açık.",
+            "noSecond": "İkinci dili seçin, ardından bildirimi o dilde yazın.",
+            "secondMissing": "İngilizce açık. Bildirimi ikinci dilde yazın.",
+            "englishMissing": "İkinci dil açık. İngilizce bildirimi yazın.",
+            "none": "Henüz hiçbir bildirim açık değil."
+          }
+        },
+        "parental_flag": {
+          "title": "Reşit olmayanlar ve ebeveyn onayı",
+          "detail": {
+            "unset": "Çocuklar sorusunu Kişiler ve çocuklar bölümünde yanıtlayın.",
+            "minorsNoParental": "Reşit olmayanlar dahil olabilir, ancak ebeveyn onayı kapalı. Bu profil, {age} yaşından küçük herkesi reşit olmayan sayar.",
+            "no_minors": "Reşit olmayanların verilerini bilerek işlemiyorsunuz. Bu profil, {age} yaşından küçük herkesi reşit olmayan sayar.",
+            "may_include_minors": "{age} yaşından küçük kişiler için ebeveyn onayı açık. Kişi başına kanıt saklama henüz geliştirilmedi."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Satma veya Paylaşma seçeneği",
+          "detail": {
+            "built": "Vazgeçme seçeneği ve bildiriminin bağlantısı ayarlı.",
+            "noUrl": "Seçenek açık, ancak vazgeçme bildirimi için bağlantı ayarlanmadı.",
+            "off": "Kişisel bilgileri satıyor veya paylaşıyorsanız seçeneği açın ve vazgeçme bildiriminizin bağlantısını ekleyin."
+          }
+        },
+        "quiet_hours": {
+          "title": "Sessiz saatler",
+          "detail": {
+            "built": "{start} ile {end} arasındaki sessiz saatler kaydedildi.",
+            "off": "Sessiz saatler ayarlanmadı."
+          }
+        },
+        "calling_window": {
+          "title": "Arama aralığı",
+          "detail": {
+            "built": "{start} ile {end} arasındaki arama aralığı kaydedildi.",
+            "off": "Arama aralığı ayarlanmadı."
+          }
+        },
+        "dnd_registry": {
+          "title": "Do Not Call / DND kaydı",
+          "detail": {
+            "off": "Hiçbir kayıt seçilmedi.",
+            "hookOnly": "Kayıt not edildi ({registry}). Henüz hiçbir şey bu kayıtla karşılaştırılmıyor."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Alt işleyicilerinizin konumları",
+          "detail": {
+            "built": "{count, plural, one {# alt işleyicinin} other {# alt işleyicinin tamamının}} bir konumu var.",
+            "some": "{missing, plural, one {# alt işleyicinin} other {# alt işleyicinin}} henüz konumu yok.",
+            "none": "Hiçbir alt işleyici listelenmedi veya hiçbirinin konumu yok."
+          }
+        },
+        "request_days": {
+          "title": "Talepleri yanıtlama süresi",
+          "detail": {
+            "built": "Talepler için süreniz {sla} gün; bu, en katı profilin istediği {days} gün içinde.",
+            "tooLong": "Süreniz {sla} gün. Açtığınız en katı profil {days} gün istiyor. Veri talepleri bölümünden değiştirin."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Pazarlamadan önce kayıtlı onay",
+          "detail": {
+            "built": "Pazarlama için kayıtlı onay gerekiyor.",
+            "off": "Pazarlama için henüz kayıtlı onay gerekmiyor. Onay ayarlarında açın."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Sessiz saatler ve arama aralıkları henüz uygulanmıyor",
+          "detail": {
+            "notEnforced": "Sessiz saatleriniz ve arama aralığınız kaydedildi, ancak henüz hiçbir şey bunların dışında bir mesajı bekletmiyor veya bir aramayı engellemiyor. Planlamanızı kendiniz buna göre yapın."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "İletişim kurduğunuz kişilere uygulanan yasaları ve bölgeleri açın. Birden fazlasını açabilirsiniz; farklılık gösterdikleri yerde en katı kural kullanılır. Bir ülke yalnızca öneri sunar; karar sizindir.",
+      "suggested": "Ülkeniz {country} ({source} kaynaklı), bu da şunu önerir:",
+      "source": {
+        "billing": "faturalama",
+        "onboarding": "çalışma alanı"
+      },
+      "useSuggestion": "Bu öneriyi kullan",
+      "suggestedNote": "Başka ülkelerdeki kişilerle iletişim kuran bir çalışma alanı o yasaları da açmalıdır.",
+      "notConfirmed": "Henüz hiçbir şey açık değil. Bir seçimi kaydedene kadar her çalışma alanı için temel düzey geçerlidir.",
+      "listTitle": "Yasalar ve bölgeler",
+      "switchesOn": "Şunları açar:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (AB ve AEA)",
+          "summary": "Avrupa Birliği, İzlanda, Lihtenştayn ve Norveç'teki kişiler için.",
+          "extras": "Bir veri koruma görevlisi veya gizlilik iletişim kişisi, alt işleyici konumları, taleplere 30 gün içinde yanıt, pazarlama için kayıtlı onay."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR ve PECR (Birleşik Krallık)",
+          "summary": "Birleşik Krallık'taki kişiler için.",
+          "extras": "Bir veri koruma görevlisi veya gizlilik iletişim kişisi, alt işleyici konumları, 30 gün içinde yanıt, elektronik pazarlama için kayıtlı onay."
+        },
+        "dpdp_in": {
+          "name": "DPDP Yasası (Hindistan)",
+          "summary": "Hindistan'daki kişiler için.",
+          "extras": "Bir şikâyet görevlisi, İngilizce ve bir Hindistan dilinde bildirimler, 18 yaşından küçükler için ebeveyn onayı işareti, bir onay yöneticisi yer tutucusu, kayıtlı onay."
+        },
+        "ccpa_us": {
+          "name": "CCPA ve CPRA (Amerika Birleşik Devletleri)",
+          "summary": "Kaliforniya sakinleri için ve Amerika Birleşik Devletleri için makul bir başlangıç.",
+          "extras": "Vazgeçme bildirimi bağlantılı bir Kişisel Bilgilerimi Satma veya Paylaşma seçeneği, 45 gün içinde yanıt."
+        },
+        "tcpa_us": {
+          "name": "TCPA (Amerika Birleşik Devletleri'ne aramalar ve mesajlar)",
+          "summary": "Amerika Birleşik Devletleri'ndeki kişilere pazarlama aramaları ve mesajları için.",
+          "extras": "21:00 ile 08:00 arası sessiz saatler, 08:00 ile 21:00 arası arama aralığı, bir Do Not Call kaydı notu, kayıtlı onay."
+        },
+        "trai_in": {
+          "name": "TRAI kuralları (Hindistan'a aramalar ve mesajlar)",
+          "summary": "Hindistan'daki kişilere tanıtım aramaları ve mesajları için.",
+          "extras": "21:00 ile 09:00 arası sessiz saatler, 09:00 ile 21:00 arası arama aralığı, bir DND kaydı notu, kayıtlı onay."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brezilya)",
+          "summary": "Brezilya'daki kişiler için.",
+          "extras": "Bir veri koruma görevlisi (encarregado) iletişim kişisi, alt işleyici konumları, 15 gün içinde yanıt, kayıtlı onay."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapur)",
+          "summary": "Singapur'daki kişiler için.",
+          "extras": "Bir veri koruma görevlisi iletişim kişisi, bir Do Not Call kaydı notu, 30 gün içinde yanıt, kayıtlı onay."
+        },
+        "generic": {
+          "name": "Diğer ülkeler (yalnızca temel düzey)",
+          "summary": "Diğer her yer için veya henüz karar vermediyseniz.",
+          "extras": "Her çalışma alanının zaten aldığı temel düzeyin ötesinde bir şey yok."
+        }
+      },
+      "effective": {
+        "title": "En katı kuralın istedikleri",
+        "hint": "Açtığınız yasalara göre hesaplanır. Bunlar, hukuk danışmanınızla kontrol etmeniz gereken başlangıç noktalarıdır.",
+        "baselineOnly": "Hiçbir yasa açık değil. Yalnızca her çalışma alanı için temel düzey geçerlidir.",
+        "optIn": "Pazarlamadan önce kayıtlı onay",
+        "optInYes": "Önerilir.",
+        "optInNo": "Bu profiller tarafından gerekmiyor.",
+        "consentLink": "Onay ayarlarını aç",
+        "requestDays": "Bir kişinin talebini yanıtlama süresi",
+        "days": "{count, plural, one {# gün} other {# gün}}",
+        "minorAge": "Bir kişiyi şu yaşın altında reşit olmayan say",
+        "years": "{count, plural, one {# yaş} other {# yaş}}",
+        "callingWindow": "Arama aralığı",
+        "dnd": "Do Not Call / DND kaydı",
+        "none": "Yok",
+        "registry": {
+          "none": "Yok",
+          "trai_ndnc": "Hindistan NDNC (TRAI)",
+          "us_dnc": "ABD Do Not Call",
+          "sg_dnc": "Singapur Do Not Call",
+          "custom": "Kendi listeniz"
+        },
+        "strictest": "Birden fazla profil açıkken en katı kural kullanılır: en kısa yanıt süresi, en yüksek yaş, en dar arama aralığı."
+      },
+      "ccpa": {
+        "title": "Satma veya Paylaşma",
+        "hint": "Kişisel bilgileri satıyor veya paylaşıyorsanız (diğer sitelerdeki reklamlar dahil), kişiler bunu durdurmanızı isteyebilir.",
+        "offer": "Kişisel Bilgilerimi Satma veya Paylaşma seçeneği sun",
+        "url": "Vazgeçme bildiriminizin bağlantısı",
+        "urlHint": "Kişilerin vazgeçebileceği sayfa. https:// ile başlamalıdır."
+      },
+      "dpdp": {
+        "title": "Onay yöneticisi",
+        "hint": "DPDP Yasası, kişilerin onayı kayıtlı bir onay yöneticisi aracılığıyla yönetmesine izin verir. Kullanıyorsanız buraya kendinizinkini yazın.",
+        "managerName": "Onay yöneticisi",
+        "managerUrl": "Onay yöneticisi bağlantısı",
+        "placeholderNote": "Bu yalnızca bir nottur. Henüz hiçbir şey bir onay yöneticisine bağlı değil."
+      }
+    },
+    "contacts": {
+      "intro": "Bir kişinin veya bir düzenleyicinin verileriyle ilgili ulaşabileceği kişi ve kişileriniz arasında çocukların bulunup bulunamayacağı.",
+      "requiredByProfile": "Açtığınız bir profil tarafından isteniyor",
+      "officer": {
+        "name": "Ad",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "address": "Posta adresi"
+      },
+      "dpo": {
+        "title": "Veri koruma görevlisi veya gizlilik iletişim kişisi",
+        "hint": "Gizlilik sorularını yanıtlayan kişi veya ekip. Açarsanız herkese açık sayfanızda gösterilir."
+      },
+      "grievance": {
+        "title": "Şikâyet görevlisi",
+        "hint": "DPDP Yasası, kişisel verilerin işlenmesiyle ilgili şikâyetleri ele alan, adı belirli bir görevli ister."
+      },
+      "children": {
+        "title": "Çocukların verileri",
+        "hint": "Bu ürün işletmeler içindir. Doğru kuralların gösterilmesi için reşit olmayanların verilerini tutup tutamayacağınızı belirtin.",
+        "policy": "Kişileriniz arasındaki reşit olmayanlar",
+        "policies": {
+          "unset": "Henüz yanıtlanmadı",
+          "no_minors": "Reşit olmayanların verilerini bilerek işlemiyoruz",
+          "may_include_minors": "Kişilerimiz arasında reşit olmayanlar bulunabilir"
+        },
+        "parental": "Reşit olmayanlar için ebeveyn onayı gereklidir",
+        "parentalHint": "Politikanızı kaydeden bir işaret. Kişi başına ebeveyn onayı kanıtının toplanması ve saklanması henüz geliştirilmedi.",
+        "age": "Açtığınız profiller, {age} yaşından küçük herkesi reşit olmayan sayar.",
+        "dpdpNeedsAnswer": "DPDP profili bu soruyu yanıtlamanızı ister."
+      }
+    },
+    "links": {
+      "intro": "Gizlilik ve şart bağlantılarınızı bir kez kaydedin. Form oluşturucunun onay satırında ve her onay bildirimi düzenleyicisinde tek tıkla sunulurlar.",
+      "privacy": "Gizlilik politikası bağlantısı",
+      "privacyHint": "https:// ile başlamalıdır",
+      "terms": "Şartlar bağlantısı",
+      "termsHint": "https:// ile başlamalıdır",
+      "offered": "Hiçbir şey kendiliğinden doldurulmaz: her form veya bildirim, bu bağlantıları kullanmak için bir düğme gösterir."
+    },
+    "notices": {
+      "intro": "Çalışma alanınızın onay kutusunun yanında gösterdiği varsayılan metin. Her değişiklik yeni numaralı bir sürüm olarak kaydedilir; böylece bir kayıt, kişinin kabul ettiği metni tam olarak belirtebilir.",
+      "english": "Varsayılan onay bildirimi ({language})",
+      "secondEditor": "Varsayılan onay bildirimi ({language})",
+      "second": {
+        "title": "İkinci dil",
+        "requiredByProfile": "DPDP profili tarafından isteniyor",
+        "hint": "DPDP Yasası, bildirimin İngilizce ve Hindistan dillerinden birinde olmasını ister. İkinci dili seçip kaydedin, ardından bildirimi o dilde yazın.",
+        "language": "İkinci bildirimin dili",
+        "none": "İkinci dil yok",
+        "saveFirst": "Önce değişikliklerinizi kaydedin; ardından bu dil için bildirim düzenleyicisi görünür."
+      }
+    },
+    "windows": {
+      "notEnforced": "Bu ayarlar kaydedildi ancak henüz uygulanmıyor. Belirlediğiniz saatlerin dışında bir mesaj bekletilmez ve bir arama engellenmez. Gönderim ve aramalarınızı buna göre planlayın.",
+      "intro": "Bazı kurallar, pazarlama mesajlarının ve aramaların kişilere ne zaman ulaşabileceğini kısıtlar. Çalıştığınız saatleri buraya kaydedin.",
+      "quiet": {
+        "title": "Mesajlar için sessiz saatler",
+        "hint": "Pazarlama mesajlarının kişilere ulaşmasını istemediğiniz saatler. Süre gece yarısını aşabilir.",
+        "enabled": "Sessiz saatler açık",
+        "start": "Sessizlik başlangıcı",
+        "end": "Sessizlik bitişi"
+      },
+      "calling": {
+        "title": "Arama aralığı",
+        "hint": "Seçtiğiniz günlerde pazarlama aramalarının yapılabileceği tek saatler.",
+        "enabled": "Arama aralığı açık",
+        "start": "Aramaların başlangıcı",
+        "end": "Aramaların bitişi",
+        "days": "Günler"
+      },
+      "day": {
+        "1": "Pazartesi",
+        "2": "Salı",
+        "3": "Çarşamba",
+        "4": "Perşembe",
+        "5": "Cuma",
+        "6": "Cumartesi",
+        "7": "Pazar"
+      },
+      "suggested": "Açtığınız yasalar {start} ile {end} arasını önerir.",
+      "zone": {
+        "label": "Saat dilimi",
+        "hint": "Saatler bu dilime göre okunur. Çalışma alanınızın saat dilimi {zone}.",
+        "workspace": "Çalışma alanı saat dilimi ({zone})"
+      },
+      "dnd": {
+        "label": "Do Not Call / DND kaydı",
+        "hint": "Listelerinizi karşılaştırdığınız kayıt.",
+        "registry": {
+          "none": "Yok",
+          "trai_ndnc": "Hindistan NDNC (TRAI)",
+          "us_dnc": "ABD Do Not Call",
+          "sg_dnc": "Singapur Do Not Call",
+          "custom": "Kendi listeniz"
+        },
+        "note": "Bu yalnızca bir nottur. Henüz hiçbir şey bir kayıtla karşılaştırılmıyor."
+      }
+    },
+    "subprocessors": {
+      "intro": "Çalışma alanınız için kişisel veri işleyen tedarikçiler: ne yaptıkları, hangi verileri aldıkları ve nerede. Listeyi herkese açık bir sayfada yayımlayabilirsiniz.",
+      "listTitle": "Alt işleyicileriniz",
+      "add": "Alt işleyici ekle",
+      "saved": "Alt işleyici kaydedildi.",
+      "removed": "Alt işleyici kaldırıldı.",
+      "empty": {
+        "title": "Henüz alt işleyici yok",
+        "body": "Sizin adınıza kişisel veri işleyen her tedarikçiyi ekleyin, örneğin e-posta veya SMS sağlayıcınızı."
+      },
+      "status": {
+        "active": "Kullanımda",
+        "planned": "Planlandı",
+        "removed": "Artık kullanılmıyor"
+      },
+      "edit": "Düzenle",
+      "remove": "Kaldır",
+      "public": {
+        "title": "Herkese açık sayfa",
+        "hint": "Kullanımdaki tedarikçileri, gizlilik ve şart bağlantılarınızı ve gizlilik iletişim kişinizi herkesin açabileceği bir sayfada yayımlayın. Varsayılan olarak kapalıdır.",
+        "switch": "Herkese açık sayfa açık",
+        "saveToApply": "Bunu uygulamak için değişikliklerinizi kaydedin."
+      },
+      "dpa": {
+        "title": "Veri işleme sözleşmesi şablonu",
+        "hint": "Bilgilerinizle ve listenizle doldurulmuş bir şablon. Hukuki tavsiye değildir ve bir sözleşme değildir: kullanmadan önce hukuk danışmanınıza inceletin.",
+        "download": "Şablonu indir"
+      },
+      "form": {
+        "addTitle": "Alt işleyici ekle",
+        "editTitle": "Alt işleyiciyi düzenle",
+        "close": "Kapat",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "name": "Ad",
+        "required": "Ad gerekli.",
+        "purpose": "Sizin için ne yapıyorlar",
+        "data": "Aldıkları veriler",
+        "location": "Konum",
+        "locationHint": "Verileri işledikleri ülke veya bölge.",
+        "status": "Durum",
+        "website": "Web sitesi",
+        "dpa": "Sözleşme bağlantısı",
+        "httpsOnly": "https:// ile başlayan bir adres kullanın.",
+        "addedOn": "Eklenme tarihi",
+        "noticeSentOn": "Müşterilerin bilgilendirildiği tarih",
+        "noticeHint": "Müşterilerinize bu tedarikçiyi bildirdiğiniz gün."
+      },
+      "confirmRemove": {
+        "title": "Bu alt işleyici kaldırılsın mı?",
+        "body": "{name} listenizden çıkarılacak. Geçmişi korumak istiyorsanız bunun yerine artık kullanılmıyor olarak işaretleyin.",
+        "confirm": "Kaldır"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: alt işleyiciler ve gizlilik",
+      "intro": "Bu işletmenin kişisel verileri işlemek için kullandığı tedarikçiler ve gizlilik iletişim kişisine nasıl ulaşılacağı.",
+      "subprocessors": "Alt işleyiciler",
+      "none": "Listelenmiş alt işleyici yok.",
+      "contact": "Gizlilik iletişim kişisi ve politikalar",
+      "privacy": "Gizlilik politikası",
+      "terms": "Şartlar",
+      "notFound": "Sayfa bulunamadı"
+    }
+  }
+}

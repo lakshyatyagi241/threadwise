@@ -58,7 +58,8 @@
         "tryAgain": "Thử thanh toán lại",
         "missingTitle": "Không tìm thấy khoản thanh toán này",
         "missingBody": "Liên kết có thể sai hoặc đã quá cũ."
-      }
+      },
+      "termsOfService": "Điều khoản"
     }
   }
 }

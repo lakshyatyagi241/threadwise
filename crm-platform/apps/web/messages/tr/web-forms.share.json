@@ -151,7 +151,11 @@
         "marketingHint": "Kutuyu işaretlemek kişiye pazarlama onayı kaydeder. İşaretlenmemiş kutu hiç kimseyi abone yapmaz.",
         "whatsappHint": "Bu kişilere WhatsApp üzerinden mesaj gönderecek misiniz? Bunu belirten ve nasıl abonelikten çıkılacağını açıklayan bir metin kullanın. İşaretlenen kutu, bu tam metin ve sürümüyle birlikte kanıt olarak saklanır.",
         "whatsappInsert": "WhatsApp onay metnini kullan",
-        "whatsappWording": "WhatsApp üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim."
+        "whatsappWording": "WhatsApp üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
+        "termsUrl": "Şartlar bağlantısı",
+        "termsUrlHint": "İsteğe bağlı. Onay metninin ve gizlilik bağlantısının yanında gösterilir. https:// ile başlamalıdır.",
+        "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
+        "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan"
       },
       "crm": {
         "title": "CRM'de",

@@ -291,12 +291,14 @@
       "title": {
         "widget": "Riga di consenso nel modulo della chat",
         "booking": "Riga di consenso nella pagina di prenotazione",
-        "commerce": "Cosa significa la casella marketing del negozio"
+        "commerce": "Cosa significa la casella marketing del negozio",
+        "workspace": "Informativa sul consenso predefinita"
       },
       "intro": {
         "widget": "Mostrata come casella sotto i dati del visitatore. Solo chi la spunta viene registrato come consenziente, e solo se ha dato un telefono o un'email.",
         "booking": "Mostrata come casella nel modulo di prenotazione. Solo chi la spunta viene registrato come consenziente; prenotare non la richiede mai.",
-        "commerce": "Un cliente che accetta il marketing nel tuo negozio viene registrato come consenziente. Scrivi cosa gli dice quella casella, così la prova lo riporta."
+        "commerce": "Un cliente che accetta il marketing nel tuo negozio viene registrato come consenziente. Scrivi cosa gli dice quella casella, così la prova lo riporta.",
+        "workspace": "Il testo che il tuo spazio di lavoro mostra accanto a una casella di consenso quando un modulo, un widget o una pagina di prenotazione non ne ha uno proprio. Ogni modifica è una nuova versione numerata."
       },
       "enabled": "Riga di consenso attiva",
       "text": "Testo a cui la persona acconsente",
@@ -309,7 +311,12 @@
       "version": "Versione attuale: {version}",
       "noVersion": "Non ancora salvata.",
       "saveFirst": "Salva prima questo, poi potrai impostarne la riga di consenso.",
-      "whatsappToo": "Conta anche come consenso WhatsApp (solo se il testo lo dice)"
+      "whatsappToo": "Conta anche come consenso WhatsApp (solo se il testo lo dice)",
+      "termsUrl": "Link ai tuoi termini (facoltativo)",
+      "termsUrlHint": "Deve iniziare con https://",
+      "useWorkspacePrivacy": "Usa il link alla privacy del mio spazio di lavoro",
+      "useWorkspaceTerms": "Usa il link ai termini del mio spazio di lavoro",
+      "useWorkspaceText": "Usa il testo predefinito del mio spazio di lavoro"
     }
   }
 }

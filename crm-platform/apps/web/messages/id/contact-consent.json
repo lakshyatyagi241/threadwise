@@ -291,12 +291,14 @@
       "title": {
         "widget": "Baris persetujuan di formulir obrolan",
         "booking": "Baris persetujuan di halaman pemesanan",
-        "commerce": "Arti kotak centang pemasaran toko"
+        "commerce": "Arti kotak centang pemasaran toko",
+        "workspace": "Pemberitahuan persetujuan default"
       },
       "intro": {
         "widget": "Ditampilkan sebagai kotak centang di bawah data pengunjung. Hanya pengunjung yang mencentangnya yang dicatat setuju, dan hanya bila ia memberi nomor telepon atau email.",
         "booking": "Ditampilkan sebagai kotak centang di formulir pemesanan. Hanya orang yang mencentangnya yang dicatat setuju; pemesanan tidak pernah membutuhkannya.",
-        "commerce": "Pelanggan yang menerima pemasaran di toko Anda dicatat setuju. Tulis apa yang dikatakan kotak itu kepadanya agar bukti menyebutnya."
+        "commerce": "Pelanggan yang menerima pemasaran di toko Anda dicatat setuju. Tulis apa yang dikatakan kotak itu kepadanya agar bukti menyebutnya.",
+        "workspace": "Kata-kata yang ditampilkan ruang kerja Anda di samping kotak persetujuan saat formulir, widget, atau halaman pemesanan tidak memiliki kata-kata sendiri. Setiap perubahan adalah versi bernomor baru."
       },
       "enabled": "Baris persetujuan aktif",
       "text": "Kata-kata yang disetujui orang tersebut",
@@ -309,7 +311,12 @@
       "version": "Versi saat ini: {version}",
       "noVersion": "Belum disimpan.",
       "saveFirst": "Simpan ini dulu, lalu Anda dapat mengatur baris persetujuannya.",
-      "whatsappToo": "Hitung juga sebagai persetujuan WhatsApp (hanya jika kata-katanya menyatakannya)"
+      "whatsappToo": "Hitung juga sebagai persetujuan WhatsApp (hanya jika kata-katanya menyatakannya)",
+      "termsUrl": "Tautan ke ketentuan Anda (opsional)",
+      "termsUrlHint": "Harus diawali dengan https://",
+      "useWorkspacePrivacy": "Gunakan tautan privasi ruang kerja saya",
+      "useWorkspaceTerms": "Gunakan tautan ketentuan ruang kerja saya",
+      "useWorkspaceText": "Gunakan kata-kata default ruang kerja saya"
     }
   }
 }
