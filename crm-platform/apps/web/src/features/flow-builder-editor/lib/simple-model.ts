@@ -43,6 +43,7 @@ export const SIMPLE_TYPES = [
   'faq',
   'api_library',
   'code',
+  'ai',
 ] as const;
 export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
@@ -458,8 +459,18 @@ const kind = (
   };
 };
 
+/** A kind that reads its name and one-line help from the node catalogue's own (already translated) texts. */
+const nodeKind = (key: string, type: SimpleType, group: StepKind['group']): StepKind => ({
+  key,
+  type,
+  label: msg(`contracts.nodeTypes.${type}.label`),
+  help: msg(`contracts.nodeTypes.${type}.description`),
+  group,
+});
+
 export const STEP_KINDS: readonly StepKind[] = [
   kind('faq', 'faq', 'answer'),
+  nodeKind('ai', 'ai', 'answer'),
   kind('assign', 'assign', 'handoff'),
   kind('message', 'message', 'send'),
   kind('media', 'media', 'send'),
@@ -561,6 +572,7 @@ export function newStep(
   if (type === 'message') data.text = '';
   if (type === 'api_library') data.save = fresh('api_response');
   if (type === 'code') data.save = fresh('result');
+  if (type === 'ai') data.save = fresh('reply');
   // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
   if (type === 'location') Object.assign(data, { lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
@@ -990,7 +1002,9 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                               ? str(d.apiName)
                               : s.type === 'code'
                                 ? str(d.save)
-                                : '';
+                                : s.type === 'ai'
+                                  ? str(d.prompt)
+                                  : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
@@ -1012,5 +1026,6 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   assign: msg('simpleModel.typeLabel.assign'),
   faq: msg('simpleModel.typeLabel.faq'),
   api_library: msg('simpleModel.typeLabel.api_library'),
+  ai: nodeLabelMsg('ai'),
   code: msg('simpleModel.typeLabel.code'),
 };

@@ -43,7 +43,7 @@ import { useFaqSummary } from '../../api/hooks';
 import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
-import { CodeForm, ConditionGroupEditor } from '../inspector/forms-core/logic';
+import { AiForm, CodeForm, ConditionGroupEditor } from '../inspector/forms-core/logic';
 import {
   createAttribute,
   suggestAttributeKey,
@@ -183,6 +183,8 @@ export function StepEditor(p: EditorProps) {
       return <NodeFormEditor {...p} Form={ApiLibraryForm} />;
     case 'code':
       return <NodeFormEditor {...p} Form={CodeForm} />;
+    case 'ai':
+      return <NodeFormEditor {...p} Form={AiForm} />;
     case 'faq':
       return <FaqEditor {...p} />;
   }

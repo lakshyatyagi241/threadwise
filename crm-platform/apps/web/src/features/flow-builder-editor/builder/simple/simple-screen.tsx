@@ -46,6 +46,8 @@ import {
 import { applyImport, importToSimple } from '../../lib/simple-import';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
+import { TestPanel } from '../simulator/test-panel';
+import { templateQuickReplies } from '../../lib/templates';
 import { FaqLeaveConfirm } from '@/features/faq-knowledge/components/faq-leave-confirm';
 import { FaqPanel } from '@/features/faq-knowledge/components/faq-panel';
 import {
@@ -216,6 +218,7 @@ function Editor({
   const tw = useTranslations('flb.builder.webBot');
   const tEd = useTranslations('flb.builder.simple.editors');
   const tCommon = useTranslations('flb.common');
+  const tTool = useTranslations('flb.builder.shell.toolbar');
   const m = useMsg();
   const tf = useFlb();
   const defaultName = t('defaultName');
@@ -435,6 +438,12 @@ function Editor({
     else finishImport(res);
   };
 
+  // --- test run -------------------------------------------------------------------------------------------------------
+  // The chat simulator reads the flow as it is on screen (saved or not): nothing is sent to anyone.
+  const [testOpen, setTestOpen] = useState(false);
+  const [runNonce, setRunNonce] = useState(0);
+  const testGraph = useMemo(() => toGraph(doc), [doc]);
+
   // --- save / publish -------------------------------------------------------------------------------------------------
   const payload = () => {
     const g = toGraph(doc);
@@ -632,6 +641,16 @@ function Editor({
                 {t('openAdvanced')}
               </Link>
             ) : null}
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                setTestOpen(true);
+                setRunNonce((n) => n + 1);
+              }}
+            >
+              {tTool('test')}
+            </Button>
             <Button
               variant="secondary"
               size="sm"
@@ -1018,6 +1037,19 @@ function Editor({
             </div>
           </main>
         </div>
+
+        <TestPanel
+          open={testOpen}
+          onClose={() => setTestOpen(false)}
+          nodes={testGraph.flowNodes}
+          edges={testGraph.flowEdges}
+          runNonce={runNonce}
+          templateButtons={(node) => templateQuickReplies(ctx.templates, node)}
+          templateExists={(node) =>
+            ctx.templates.some((tpl) => tpl.name === String(node.data?.tpl ?? '').trim())
+          }
+          flowName={(id) => ctx.flows.find((f) => f.id === id)?.name}
+        />
 
         <AddMenu
           channel={channel}
