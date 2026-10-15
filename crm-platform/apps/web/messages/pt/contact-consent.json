@@ -334,7 +334,16 @@
       "termsUrlHint": "Deve começar com https://",
       "useWorkspacePrivacy": "Usar o link de privacidade do meu espaço de trabalho",
       "useWorkspaceTerms": "Usar o link de termos do meu espaço de trabalho",
-      "useWorkspaceText": "Usar o texto padrão do meu espaço de trabalho"
+      "useWorkspaceText": "Usar o texto padrão do meu espaço de trabalho",
+      "statement": "Concordo em receber novidades e ofertas pelo {channels}. Posso responder STOP a qualquer momento para cancelar.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Canais cobertos por este consentimento",
+      "channelsHint": "A pessoa só é inscrita nos canais marcados aqui, e o texto do consentimento os cita. Um canal só é usado se a pessoa informar o telefone ou o e-mail correspondente.",
+      "channelsUse": "Atualizar o texto com estes canais"
     }
   }
 }

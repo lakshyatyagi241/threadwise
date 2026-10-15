@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Bu onayın kapsadığı kanallar",
         "channelsHint": "Ziyaretçi yalnızca burada işaretlenen kanallara abone edilir ve onay metni bunları belirtir. Bir kanal, yalnızca form ilgili telefon numarasını veya e-postayı topluyorsa kullanılır.",
-        "channelsUse": "Metni bu kanallarla güncelle"
+        "channelsUse": "Metni bu kanallarla güncelle",
+        "channelNeedsPhone": "Bu formda telefon alanı yok, bu yüzden bu kanala bu formdan kimse abone edilmez.",
+        "channelNeedsEmail": "Bu formda e-posta alanı yok, bu yüzden bu kanala bu formdan kimse abone edilmez."
       },
       "crm": {
         "title": "CRM'de",

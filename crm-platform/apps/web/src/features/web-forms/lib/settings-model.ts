@@ -1,13 +1,11 @@
 import { z } from 'zod';
 import {
   consentChannels,
-  FORM_CONSENT_CHANNELS,
   FORM_LIMITS,
   FORM_RETENTION_DEFAULT_DAYS,
   FORM_RETENTION_MAX_DAYS,
   FORM_RETENTION_MIN_DAYS,
 } from '@crm/contracts';
-import type { FormConsentChannel } from '@crm/contracts';
 import type { FormConsent, FormLiveSettings } from './types';
 import { safeRedirect } from './share';
 
@@ -135,7 +133,8 @@ export function retentionAfterToggle(keepForever: boolean, lastDays: number | nu
 // --- consent ------------------------------------------------------------------------------------------------------------------------
 
 /**
- * Submissions keep the consent version they saw, so once the form has been published a changed wording must be a new version.
+ * Submissions keep the consent version they saw, so once the form has been published a changed wording, or a changed set of channels,
+ * must be a new version.
  * The version is derived from the saved copy, not incremented per keystroke: edit back to the saved text and the number returns.
  */
 export function consentWithText(
@@ -144,46 +143,18 @@ export function consentWithText(
   saved: FormConsent,
   published: boolean,
 ): FormConsent {
-  const changed = text.trim() !== saved.text.trim();
+  const changed =
+    text.trim() !== saved.text.trim() ||
+    consentChannels(current).join() !== consentChannels(saved).join();
   const version = published && changed ? Math.min(saved.version + 1, 10_000) : saved.version;
   return { ...current, text, version };
 }
 
-/**
- * The consent sentence for the chosen channels: the localized template with the channel names joined as a list ("WhatsApp, SMS and
- * email"). `statement` holds a `{channels}` placeholder.
- */
-export function consentStatement(
-  statement: string,
-  channels: readonly FormConsentChannel[],
-  names: Record<FormConsentChannel, string>,
-  locale: string,
-): string {
-  const list = formatList(
-    consentChannels({ channels: [...channels], coversSms: false }).map((c) => names[c]),
-    locale,
-  );
-  return statement.replace('{channels}', list);
-}
-
-function formatList(items: string[], locale: string): string {
-  try {
-    return new Intl.ListFormat(locale, { style: 'long', type: 'conjunction' }).format(items);
-  } catch {
-    return items.join(', ');
-  }
-}
-
-/** Tick or untick a channel. The last channel cannot be unticked: a consent line must name at least one. */
-export function toggleConsentChannel(
-  current: readonly FormConsentChannel[],
-  channel: FormConsentChannel,
-  on: boolean,
-): FormConsentChannel[] {
-  const next = on ? [...current, channel] : current.filter((c) => c !== channel);
-  const unique = FORM_CONSENT_CHANNELS.filter((c) => next.includes(c));
-  return unique.length === 0 ? [...current] : unique;
-}
+// The channel sentence and the "last channel stays ticked" rule are shared with the notice editors (one copy, in contact-consent).
+export {
+  channelStatement as consentStatement,
+  toggleChannel as toggleConsentChannel,
+} from '@/features/contact-consent';
 
 // --- after submit -------------------------------------------------------------------------------------------------------------------
 

@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  noticeGrantChannels,
   type PublicBookInput,
   type PublicBookResponse,
   type PublicBookingPage,
@@ -154,12 +155,16 @@ export class PublicBookingService {
             this.notices.seen(tx, org.id, 'booking', prep.row.uuid, input.consent!.version),
           )
         : null;
+    // Only the channels the notice's wording covers, and only those the invitee gave a phone or an address for.
+    const grantChannels = seen
+      ? noticeGrantChannels(seen, { phone: Boolean(invitee.phone), email: Boolean(invitee.email) })
+      : [];
     const contactId = await this.contactLink.resolve(
       invitee,
       prep.row.hostUuid,
-      seen
+      seen && grantChannels.length > 0
         ? {
-            proof: { text: seen.text, version: String(seen.version) },
+            proof: { text: seen.text, version: String(seen.version), channels: grantChannels },
             evidence: {
               bookingTypeId: prep.row.uuid,
               noticeVersion: String(seen.version),

@@ -368,6 +368,26 @@ export function consentChannels(
   return c.coversSms ? ['whatsapp', 'sms', 'email'] : ['whatsapp', 'email'];
 }
 
+/**
+ * Whether the form collects a phone number and an email address for the contact (a field bound to the contact's `phone` or `email`).
+ * A consent channel is only ever recorded when its data was collected, so the consent settings use this to say which channels the
+ * form can actually cover.
+ */
+export function formCollects(def: Pick<FormDefinition, 'steps'>): {
+  phone: boolean;
+  email: boolean;
+} {
+  const out = { phone: false, email: false };
+  for (const step of def.steps) {
+    for (const b of step.blocks) {
+      if (b.type !== 'field' || !b.bind || b.bind.object !== 'contact') continue;
+      if (b.bind.property === 'phone') out.phone = true;
+      if (b.bind.property === 'email') out.email = true;
+    }
+  }
+  return out;
+}
+
 /** How a company is found for a submission that carries company properties (spec 9.3). */
 export const FORM_COMPANY_MATCH = ['none', 'email_domain', 'name_or_domain'] as const;
 export const formMappingSchema = z

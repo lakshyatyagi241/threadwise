@@ -5,7 +5,18 @@ summary: Create the services customers can book, with their duration, hours, pri
 area: settings
 order: 10
 documents: [tile:booking-types]
-keywords: [services, booking types, duration, availability, price, questionnaire, reminders, public link, pause]
+keywords:
+  [
+    services,
+    booking types,
+    duration,
+    availability,
+    price,
+    questionnaire,
+    reminders,
+    public link,
+    pause,
+  ]
 ---
 
 ## What it is for

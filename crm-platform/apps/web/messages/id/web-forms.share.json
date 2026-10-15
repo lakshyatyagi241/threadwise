@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Saluran yang dicakup persetujuan ini",
         "channelsHint": "Pengunjung hanya berlangganan pada saluran yang dicentang di sini, dan teks persetujuan menyebutkannya. Saluran dipakai hanya jika formulir mengumpulkan nomor telepon atau email yang sesuai.",
-        "channelsUse": "Perbarui teks dengan saluran ini"
+        "channelsUse": "Perbarui teks dengan saluran ini",
+        "channelNeedsPhone": "Formulir ini tidak punya kolom telepon, jadi tidak ada yang berlangganan di saluran ini lewat formulir ini.",
+        "channelNeedsEmail": "Formulir ini tidak punya kolom email, jadi tidak ada yang berlangganan di saluran ini lewat formulir ini."
       },
       "crm": {
         "title": "Di CRM",

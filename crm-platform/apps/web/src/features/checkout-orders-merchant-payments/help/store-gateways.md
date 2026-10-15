@@ -5,7 +5,19 @@ summary: Add the keys of your payment gateway once. Your store checkout and Sale
 area: settings
 order: 35
 documents: [tile:payment-gateways]
-keywords: [payment gateway, razorpay, stripe, checkout, pay link, online payment, webhook, api keys, test mode, invoice payment]
+keywords:
+  [
+    payment gateway,
+    razorpay,
+    stripe,
+    checkout,
+    pay link,
+    online payment,
+    webhook,
+    api keys,
+    test mode,
+    invoice payment,
+  ]
 routes: [/store/gateways]
 ---
 

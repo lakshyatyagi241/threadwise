@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Kênh mà sự đồng ý này bao gồm",
         "channelsHint": "Khách chỉ được đăng ký trên các kênh được chọn tại đây và nội dung đồng ý sẽ nêu tên các kênh đó. Một kênh chỉ được dùng khi biểu mẫu thu thập số điện thoại hoặc email tương ứng.",
-        "channelsUse": "Cập nhật nội dung theo các kênh này"
+        "channelsUse": "Cập nhật nội dung theo các kênh này",
+        "channelNeedsPhone": "Biểu mẫu này không có trường số điện thoại nên sẽ không ai được đăng ký kênh này qua nó.",
+        "channelNeedsEmail": "Biểu mẫu này không có trường email nên sẽ không ai được đăng ký kênh này qua nó."
       },
       "crm": {
         "title": "Trong CRM",

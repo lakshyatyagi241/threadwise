@@ -4,6 +4,7 @@ import {
   formDefinitionSchema,
   formRateLimitsSchema,
   type FormDefinitionInput,
+  formCollects,
 } from '@crm/contracts';
 import { AppError } from '../../../src/common/errors/app-error';
 import { buildCsv, csvCell } from '../../../src/common/csv';
@@ -677,5 +678,30 @@ describe('company website match (spec 9.3)', () => {
       ]),
     );
     expect(s.every((x) => x === x.toLowerCase())).toBe(true);
+  });
+});
+
+describe('formCollects', () => {
+  const field = (property: string) => ({
+    id: `f_${property}`,
+    type: 'field' as const,
+    kind: 'short_text' as const,
+    label: property,
+    bind: { object: 'contact' as const, property },
+  });
+  it('says which contact details the form asks for', () => {
+    const steps = (props: string[]) => [{ id: 's1', blocks: props.map(field) }];
+    expect(formCollects({ steps: steps(['email']) } as never)).toEqual({
+      phone: false,
+      email: true,
+    });
+    expect(formCollects({ steps: steps(['phone', 'email']) } as never)).toEqual({
+      phone: true,
+      email: true,
+    });
+    expect(formCollects({ steps: steps(['name']) } as never)).toEqual({
+      phone: false,
+      email: false,
+    });
   });
 });

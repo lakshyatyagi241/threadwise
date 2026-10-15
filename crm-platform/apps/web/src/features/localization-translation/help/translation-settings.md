@@ -5,7 +5,8 @@ summary: Turn automatic translation on or off for your workspace, pick your team
 area: settings
 order: 70
 documents: [tile:i18n-translation]
-keywords: [translation, translate, language, languages, team language, auto translate, multilingual, engine]
+keywords:
+  [translation, translate, language, languages, team language, auto translate, multilingual, engine]
 ---
 
 ## What it is for

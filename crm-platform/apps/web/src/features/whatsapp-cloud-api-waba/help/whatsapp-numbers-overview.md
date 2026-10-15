@@ -5,7 +5,24 @@ summary: Connect your WhatsApp Business numbers, choose the primary one, and che
 area: settings
 order: 10
 documents: [tile:whatsapp]
-keywords: [whatsapp, cloud api, waba, number, connect, facebook, token, primary, health, quality, inbound, register, verify, code, disconnect]
+keywords:
+  [
+    whatsapp,
+    cloud api,
+    waba,
+    number,
+    connect,
+    facebook,
+    token,
+    primary,
+    health,
+    quality,
+    inbound,
+    register,
+    verify,
+    code,
+    disconnect,
+  ]
 ---
 
 ## What it is for

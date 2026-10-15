@@ -162,7 +162,9 @@
         },
         "channelsLabel": "Channels this consent covers",
         "channelsHint": "The visitor is subscribed only on the channels ticked here, and the consent text below names them. A channel is used only when the form collects the matching phone number or email.",
-        "channelsUse": "Update the wording with these channels"
+        "channelsUse": "Update the wording with these channels",
+        "channelNeedsPhone": "This form has no phone number field, so nobody is subscribed on this channel from it.",
+        "channelNeedsEmail": "This form has no email field, so nobody is subscribed on this channel from it."
       },
       "crm": {
         "title": "In the CRM",

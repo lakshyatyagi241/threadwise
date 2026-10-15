@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useId, useState, type ReactNode } from 'react';
 import {
   consentChannels,
+  formCollects,
   FORM_CAPTCHA_MODES,
   FORM_CONSENT_CHANNELS,
   lifecycleStageSchema,
@@ -380,6 +381,9 @@ export function SettingsTab(props: BuilderTabProps) {
   const consent = draft.consent;
   const locale = useLocale();
   const channels = consentChannels(consent);
+  const collects = formCollects(draft);
+  const collectsFor = (ch: FormConsentChannel) =>
+    ch === 'email' ? collects.email : collects.phone;
   const channelNames = {
     whatsapp: t('consent.channelNames.whatsapp'),
     sms: t('consent.channelNames.sms'),
@@ -404,12 +408,8 @@ export function SettingsTab(props: BuilderTabProps) {
       consent.text.trim() === DEFAULT_CONSENT_TEXT;
     setDraft((d) => {
       const withChannels = { ...d.consent, channels: next };
-      return {
-        ...d,
-        consent: generated
-          ? consentWithText(withChannels, statementFor(next), saved.consent, published)
-          : withChannels,
-      };
+      const text = generated ? statementFor(next) : withChannels.text;
+      return { ...d, consent: consentWithText(withChannels, text, saved.consent, published) };
     });
   };
   const after = draft.after;
@@ -688,15 +688,25 @@ export function SettingsTab(props: BuilderTabProps) {
               <p className={HINT}>{t('consent.channelsHint')}</p>
               <div className="flex flex-wrap gap-x-6 gap-y-2">
                 {FORM_CONSENT_CHANNELS.map((ch) => (
-                  <Checkbox
-                    key={ch}
-                    label={channelNames[ch]}
-                    checked={channels.includes(ch)}
-                    disabled={disabled || (channels.length === 1 && channels[0] === ch)}
-                    onChange={(e) =>
-                      setChannels(toggleConsentChannel(channels, ch, e.target.checked))
-                    }
-                  />
+                  <div key={ch}>
+                    <Checkbox
+                      label={channelNames[ch]}
+                      checked={channels.includes(ch)}
+                      disabled={disabled || (channels.length === 1 && channels[0] === ch)}
+                      onChange={(e) =>
+                        setChannels(toggleConsentChannel(channels, ch, e.target.checked))
+                      }
+                    />
+                    {!collectsFor(ch) && (
+                      <p className={HINT}>
+                        {t(
+                          ch === 'email'
+                            ? 'consent.channelNeedsEmail'
+                            : 'consent.channelNeedsPhone',
+                        )}
+                      </p>
+                    )}
+                  </div>
                 ))}
               </div>
               {consent.text.trim() !== suggested && (

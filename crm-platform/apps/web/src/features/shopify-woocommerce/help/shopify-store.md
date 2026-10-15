@@ -5,7 +5,8 @@ summary: Connect your Shopify store so its orders, products and customers reach 
 area: store
 order: 40
 documents: [nav:shopify, tile:shopify]
-keywords: [shopify, store, orders, products, customers, webhooks, automations, abandoned cart, offers, sync]
+keywords:
+  [shopify, store, orders, products, customers, webhooks, automations, abandoned cart, offers, sync]
 ---
 
 ## What it is for

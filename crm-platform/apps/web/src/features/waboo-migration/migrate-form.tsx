@@ -154,7 +154,9 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
         }
       >
         <div className="space-y-4">
-          <p className="text-sm">{tc(confirmMode === 'catchup' ? 'catchupBody' : 'body', { org })}</p>
+          <p className="text-sm">
+            {tc(confirmMode === 'catchup' ? 'catchupBody' : 'body', { org })}
+          </p>
           <Field label={tc('label', { org })} htmlFor={`${id}-confirm`}>
             <Input
               id={`${id}-confirm`}

@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { CONSENT_EVIDENCE_KEYS, CONSENT_SOURCES, saveConsentNoticeSchema } from '@crm/contracts';
+import {
+  CONSENT_EVIDENCE_KEYS,
+  CONSENT_SOURCES,
+  noticeGrantChannels,
+  saveConsentNoticeSchema,
+} from '@crm/contracts';
 import {
   shopifyCustomer,
   shopifyMarketing,
@@ -139,5 +144,25 @@ describe('WooCommerce marketing consent', () => {
       meta_data: [{ key: 'marketing_consent', value: '1' }],
     });
     expect(c?.marketing?.flag).toBe('meta:marketing_consent');
+  });
+});
+
+describe('noticeGrantChannels', () => {
+  const both = { phone: true, email: true };
+  it('a notice saved before the choice keeps the old rule: WhatsApp for a phone, email for an address, never SMS', () => {
+    expect(noticeGrantChannels({ channels: [] }, both)).toEqual(['whatsapp', 'email']);
+    expect(noticeGrantChannels({ channels: [] }, { phone: true, email: false })).toEqual([
+      'whatsapp',
+    ]);
+  });
+  it('grants only the channels the wording covers', () => {
+    expect(noticeGrantChannels({ channels: ['whatsapp'] }, both)).toEqual(['whatsapp']);
+    expect(noticeGrantChannels({ channels: ['sms', 'email'] }, both)).toEqual(['sms', 'email']);
+  });
+  it('skips a channel the person gave nothing for', () => {
+    expect(
+      noticeGrantChannels({ channels: ['whatsapp', 'sms'] }, { phone: false, email: true }),
+    ).toEqual([]);
+    expect(noticeGrantChannels({ channels: ['email'] }, { phone: true, email: false })).toEqual([]);
   });
 });

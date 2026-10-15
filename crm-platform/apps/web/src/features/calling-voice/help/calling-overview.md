@@ -5,7 +5,23 @@ summary: Check that a number is ready for calls, turn calling on, then place and
 area: settings
 order: 20
 documents: [tile:calling]
-keywords: [calls, voice, phone, call button, incoming call, record call, microphone, permission, readiness, checklist, test call, turn, messaging limit, webhook]
+keywords:
+  [
+    calls,
+    voice,
+    phone,
+    call button,
+    incoming call,
+    record call,
+    microphone,
+    permission,
+    readiness,
+    checklist,
+    test call,
+    turn,
+    messaging limit,
+    webhook,
+  ]
 ---
 
 ## What it is for

@@ -161,6 +161,6 @@ broadcasts, the send-time re-check inside the broadcast dispatcher, the campaign
   `consentNoticeVersion`) stored on the upload (`camp_wizard_csv`); the report returns `consentConfirmed` and `consentNoticeVersion`. At launch
   every contact the file's numbers belong to gets one WhatsApp grant (source `import`, `reference: wizard_csv:<upload>`), never over an opt-out;
   with the workspace switch ON those numbers count as consented before launch.
-- **Web forms (BL-171).** `consent.coversSms` on the form definition. A ticked marketing line grants WhatsApp, email and (covers SMS + phone) SMS.
+- **Web forms (BL-171).** `consent.channels` on the form definition (absent: WhatsApp, email, and SMS with `coversSms`). A ticked marketing line grants only the chosen channels the form collected data for.
   A ticked line that is not marketing records purpose `utility` events (source `form`, same evidence), no subscription label, no `contact.opt_in`.
   Unticked: nothing in the ledger.
