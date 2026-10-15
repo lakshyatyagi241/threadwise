@@ -25,7 +25,7 @@ export const SHOWCASE_GROUPS_BY_PAGE: Record<ShowcasePage, readonly ShowcaseGrou
   register: ['hero', 'stats', 'features', 'chips', 'footer'],
   forgot: ['hero', 'footer'],
 };
-export const VARIANT_IDS = [1, 2, 3, 4, 5] as const;
+export const VARIANT_IDS = [1, 2, 3, 4, 5, 6] as const;
 
 export const TEXT_FIELDS = ['eyebrow', 'heading', 'headingAccent', 'subheading'] as const;
 export type TextField = (typeof TEXT_FIELDS)[number];

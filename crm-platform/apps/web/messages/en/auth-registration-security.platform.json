@@ -1727,6 +1727,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Soft glowing colour behind a frosted card."
+          },
+          "geta": {
+            "name": "Geta split",
+            "description": "Form on one side, an animated brand panel with stats on the other."
           }
         },
         "fields": {

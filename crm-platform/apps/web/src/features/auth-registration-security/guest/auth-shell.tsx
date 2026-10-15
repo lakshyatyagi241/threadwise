@@ -11,6 +11,9 @@ import {
   Blobs,
   BrandMark,
   Eyebrow,
+  GetaMark,
+  GetaShapes,
+  GetaStats,
   HeroCard,
   MediaBackdrop,
   ShowcasePanel,
@@ -18,7 +21,7 @@ import {
 import { defaultFooter } from './footer-line';
 import { withLocalisedDefaults } from './localised-content';
 
-export type AuthVariant = 1 | 2 | 3 | 4 | 5;
+export type AuthVariant = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Copy above the form: a mono line, the title with an accent word, and one line of help. */
 export interface ShellHeader {
@@ -42,7 +45,7 @@ export interface FixedPanel {
 }
 
 export interface AuthShellProps {
-  /** 1 Split showcase, 2 Cinematic, 3 Minimal, 4 Brand spotlight, 5 Aurora. Anything else renders as 1. */
+  /** 1 Split showcase, 2 Cinematic, 3 Minimal, 4 Brand spotlight, 5 Aurora, 6 Geta split. Anything else renders as 1. */
   variant: AuthVariant | number;
   page: AuthPageName;
   /** Admin-editable copy, accent colour and optional media (`registration-config` `authPages.<page>`). */
@@ -74,13 +77,14 @@ export interface AuthShellProps {
 }
 
 function clampVariant(value: number): AuthVariant {
-  return value >= 1 && value <= 5 ? (Math.trunc(value) as AuthVariant) : 1;
+  return value >= 1 && value <= 6 ? (Math.trunc(value) as AuthVariant) : 1;
 }
 
 /**
- * The five guest-page designs (TW-AUTH-021). Props in, markup out: no session, no router, no
- * server-only imports, so the same component serves /login, /signup, /forgot-password and the
- * admin editor's live preview. The form is the same in every design; only the chrome around it changes.
+ * The six guest-page designs (TW-AUTH-021, plus our own design 6). Props in, markup out: no
+ * session, no router, no server-only imports, so the same component serves /login, /signup,
+ * /forgot-password and the admin editor's live preview. The form is the same in every design;
+ * only the chrome around it changes.
  */
 export function AuthShell({
   variant,
@@ -153,6 +157,7 @@ export function AuthShell({
           {v === 3 && <Minimal {...common} />}
           {v === 4 && <Spotlight {...common} />}
           {v === 5 && <Aurora {...common} />}
+          {v === 6 && <GetaSplit extra={extra} {...common} />}
         </>
       )}
     </div>
@@ -443,6 +448,86 @@ function Spotlight({ content, name, toolbar, formHeader, page, children, preview
       <FormColumn page={page} name={name} toolbar={toolbar} header={formHeader} surface wide>
         {children}
       </FormColumn>
+    </div>
+  );
+}
+
+/**
+ * Design 6: Geta's own look, not the shared brand palette the other five designs use — a centered
+ * white/indigo split card floating on a soft lavender canvas, with Geta's wordmark, colours, dotted
+ * panel texture and drifting amber shapes.
+ */
+function GetaSplit({
+  page,
+  extra,
+  content,
+  name,
+  toolbar,
+  formHeader,
+  footer,
+  children,
+  preview,
+}: VariantProps & { extra?: Record<string, string> }) {
+  return (
+    <div
+      className={cn(
+        'auth-geta-page relative flex items-center justify-center overflow-hidden px-4 py-3',
+        preview ? 'min-h-full' : 'min-h-dvh lg:h-dvh',
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className="auth-geta-blob auth-geta-blob--slow -left-40 -top-40 size-[500px] bg-violet-300/30 blur-[120px]"
+      />
+      <span
+        aria-hidden="true"
+        className="auth-geta-blob -bottom-40 -right-40 size-[500px] bg-indigo-300/30 blur-[120px]"
+      />
+      <div className="auth-geta-card relative flex w-full max-w-7xl overflow-hidden rounded-3xl shadow-2xl lg:max-h-[calc(100dvh-1.5rem)]">
+        <main
+          className={cn(
+            'relative flex w-full flex-col justify-center bg-white px-6 py-4 sm:w-1/2 sm:px-10 lg:px-12 lg:py-5',
+            MAIN_SCROLL,
+          )}
+        >
+          <ToolbarCorner toolbar={toolbar} />
+          <div className="mx-auto w-full max-w-[380px]">
+            <div className="mb-4">
+              <GetaMark name={name} />
+            </div>
+            <FormHeader header={formHeader} page={page} />
+            {children}
+          </div>
+        </main>
+        <aside className="relative hidden flex-col justify-between overflow-hidden bg-(--auth-geta-ink) p-12 text-white sm:flex sm:w-1/2">
+          <span aria-hidden="true" className="auth-geta-dots" />
+          <span
+            aria-hidden="true"
+            className="auth-geta-blob left-1/2 top-1/3 size-80 bg-(--auth-geta-primary)/15 blur-[80px]"
+          />
+          <span
+            aria-hidden="true"
+            className="auth-geta-blob auth-geta-blob--rev -right-24 top-1/4 size-80 bg-(--auth-geta-primary)/30 blur-[80px]"
+          />
+          <span aria-hidden="true" className="auth-geta-orb -bottom-16 -right-16 size-72" />
+          <GetaShapes />
+          <div className="relative z-10 my-auto max-w-[420px]">
+            {content.eyebrow && (
+              <Eyebrow on="dark" className="mb-4">
+                {content.eyebrow}
+              </Eyebrow>
+            )}
+            <h1 className="text-[clamp(28px,4vw,42px)] font-extrabold leading-[1.1] tracking-[-0.01em]">
+              {content.heading} {content.headingAccent}
+            </h1>
+            {content.subheading && (
+              <p className="mt-4 text-[14px] leading-relaxed text-white/75">{content.subheading}</p>
+            )}
+            <GetaStats page={page} extra={extra} />
+          </div>
+          <p className="relative z-10 mt-6 text-[11px] text-white/50">{footer}</p>
+        </aside>
+      </div>
     </div>
   );
 }
