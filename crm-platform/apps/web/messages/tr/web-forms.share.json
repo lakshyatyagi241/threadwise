@@ -153,12 +153,16 @@
         "requiredHint": "Onay isteğe bağlıysa bunu kapatın.",
         "marketing": "Pazarlama onayı",
         "marketingHint": "Kutuyu işaretlemek kişiye pazarlama onayı kaydeder. İşaretlenmemiş kutu hiç kimseyi abone yapmaz.",
-        "whatsappHint": "Bu kişilere WhatsApp üzerinden mesaj gönderecek misiniz? Bunu belirten ve nasıl abonelikten çıkılacağını açıklayan bir metin kullanın. İşaretlenen kutu, bu tam metin ve sürümüyle birlikte kanıt olarak saklanır.",
-        "whatsappInsert": "WhatsApp onay metnini kullan",
-        "whatsappWording": "WhatsApp üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
-        "coversSms": "Metin SMS'i kapsıyor",
-        "coversSmsHint": "Yalnızca yukarıdaki metin kişilere SMS ile ulaşılabileceğini söylüyorsa açın. Telefon numarası toplandığında SMS, WhatsApp ve e-posta ile birlikte kaydedilir.",
-        "serviceHint": "Bu satır pazarlama değildir. İşaretli kutu, kişinin talebi hakkında iletişime geçilmesini kabul ettiğinin (yalnızca hizmet mesajları) kanıtı olarak, bu tam metin ve sürümüyle saklanır. Kimseyi pazarlamaya abone etmez."
+        "serviceHint": "Bu satır pazarlama değildir. İşaretli kutu, kişinin talebi hakkında iletişime geçilmesini kabul ettiğinin (yalnızca hizmet mesajları) kanıtı olarak, bu tam metin ve sürümüyle saklanır. Kimseyi pazarlamaya abone etmez.",
+        "statement": "{channels} üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "e-posta"
+        },
+        "channelsLabel": "Bu onayın kapsadığı kanallar",
+        "channelsHint": "Ziyaretçi yalnızca burada işaretlenen kanallara abone edilir ve onay metni bunları belirtir. Bir kanal, yalnızca form ilgili telefon numarasını veya e-postayı topluyorsa kullanılır.",
+        "channelsUse": "Metni bu kanallarla güncelle"
       },
       "crm": {
         "title": "CRM'de",

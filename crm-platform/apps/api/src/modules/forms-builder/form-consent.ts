@@ -1,4 +1,4 @@
-import type { FormDefinition } from '@crm/contracts';
+import { consentChannels, type FormConsentChannel, type FormDefinition } from '@crm/contracts';
 
 /**
  * The consent line of a submission (docs/specs/forms-builder-app.md 9.5, decision D10). There is no consent table in the product, so the
@@ -32,8 +32,8 @@ export interface ConsentOutcome {
   marketingOptIn: boolean;
   /** A ticked box that is not marketing: the person agreed to be contacted about their request (service messages only). */
   serviceAgreed: boolean;
-  /** The wording also covers SMS (declared on the form). */
-  coversSms: boolean;
+  /** The channels the wording covers (chosen on the form); a ticked box subscribes only these. */
+  channels: FormConsentChannel[];
 }
 
 export function resolveConsent(
@@ -48,7 +48,7 @@ export function resolveConsent(
       missing: false,
       marketingOptIn: false,
       serviceAgreed: false,
-      coversSms: false,
+      channels: [],
     };
   }
   const given = input?.given === true;
@@ -63,6 +63,6 @@ export function resolveConsent(
     missing: c.required && !given,
     marketingOptIn: given && c.marketing,
     serviceAgreed: given && !c.marketing,
-    coversSms: c.coversSms,
+    channels: consentChannels(c),
   };
 }

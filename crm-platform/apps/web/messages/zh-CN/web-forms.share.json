@@ -153,12 +153,16 @@
         "requiredHint": "如果同意是可选的，请关闭此项。",
         "marketing": "营销订阅",
         "marketingHint": "勾选此框会在联系人上记录营销同意。未勾选则不会订阅任何人。",
-        "whatsappHint": "你是否会通过 WhatsApp 给这些联系人发消息？请使用明确说明这一点并告知如何退订的措辞。勾选的复选框会连同这段准确文字及其版本一起作为证明保存。",
-        "whatsappInsert": "使用 WhatsApp 订阅同意文案",
-        "whatsappWording": "我同意通过 WhatsApp 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
-        "coversSms": "文案涵盖短信",
-        "coversSmsHint": "仅当上方文案告知用户可能通过短信联系时才开启。收集手机号码时,短信会与 WhatsApp 和邮件一起被记录。",
-        "serviceHint": "此行不属于营销。勾选的复选框会作为证据保存,表明此人同意就其请求被联系(仅限服务消息),并附上这段确切文案及其版本。它绝不会让任何人订阅营销。"
+        "serviceHint": "此行不属于营销。勾选的复选框会作为证据保存,表明此人同意就其请求被联系(仅限服务消息),并附上这段确切文案及其版本。它绝不会让任何人订阅营销。",
+        "statement": "我同意通过 {channels} 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "短信",
+          "email": "电子邮件"
+        },
+        "channelsLabel": "此同意涵盖的渠道",
+        "channelsHint": "访客仅会订阅此处勾选的渠道,下方的同意文案也会列出这些渠道。仅当表单收集了对应的手机号码或邮箱时才会使用该渠道。",
+        "channelsUse": "用这些渠道更新文案"
       },
       "crm": {
         "title": "在 CRM 中",
