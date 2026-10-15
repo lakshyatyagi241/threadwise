@@ -439,6 +439,8 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CAMP-033 | done |  | ADDITION: now / scheduled / recurring series with child runs |
 | TW-CAMP-034 | done |  | ADDITION: 131049 retries every 24h to an end date; real Meta behaviour unverified (sandbox only) |
 | TW-CAMP-035 | done |  | ADDITION: wizard broadcasts list, status, pause, resume, cancel |
+| TW-CAMP-036 | done |  | ADDITION: follow-up steps after a campaign message (replied, read, not replied, not read; template or flow; up to 3); not in Reference, built from the meeting; sandbox only, real Meta read reports unverified |
+| TW-CAMP-037 | todo |  | ADDITION, pending: A/B auto-winner (pick the better variant and send it to the rest). Not in Reference; meeting said "ship A/B now, rebuild auto-winner later". Needs decisions on measure, test share, duration, ties |
 
 ## scheduled-queue-warmer (sched)
 
@@ -819,6 +821,11 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CALL-019 | backend-done |  | recording upload and playback in private storage, workspace only, replaced file removed; browser recorder in the web feature |
 | TW-CALL-020 | wontfix |  | dead code in Reference; AI calls arm recording from the assistant (not built) |
 | TW-CALL-021 | backend-done |  | wa_call_events written at every step (connect, dial_sent, accept_sent, terminate, ...) |
+| EXT-CALL-007 | backend-done |  | calling readiness checklist per number (wa_calling_readiness), GET /v2/calling/readiness and POST .../readiness/check; unit and e2e against a fake Meta; no real number tried |
+| EXT-CALL-008 | backend-done |  | calls webhook field read by a check, added to the platform Meta app by the worker (under a lock) when the app has a callback (WabaDiagnosticsService.ensureFields); a customer's own app or a provider is a warning |
+| EXT-CALL-009 | backend-done |  | Meta refusals carry a stable reason (CALL_META_REFUSED details); web translates; codes mapped are in the runbook |
+| EXT-CALL-010 | frontend-done |  | test call button on the readiness card through the same dial path; not tried with a real microphone or number |
+| EXT-CALL-011 | backend-done |  | connect consumer, calling-readiness queue, 10-minute schedule, autoEnableOnConnect setting (off by default); never without waba_calling |
 
 ## orphaned (no longer in inventory or domain reassigned)
 

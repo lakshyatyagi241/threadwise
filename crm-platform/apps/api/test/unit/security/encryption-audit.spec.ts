@@ -182,6 +182,7 @@ describe('source guards', () => {
       'infra/providers/channel-email/graph-normalise.ts', // synthetic message id
       'infra/providers/channel-email/mime-parse.ts', // synthetic message id
       'infra/providers/auth-registration-security/avatar-download.ts', // ETag of an avatar
+      'modules/channel-wechat/wechat-rules.ts', // WeChat's request signature is SHA-1 over token, timestamp and nonce, fixed by its protocol
       'infra/providers/channel-sms/twilio-signature.ts', // Twilio's request signature is HMAC-SHA1 by their specification
       'infra/providers/chat-conversations/simulator.adapter.ts', // synthetic message id of the simulator
       'infra/providers/platform-payment-gateways/europe.drivers.ts', // the gateway's own request hash, fixed by its API
@@ -221,6 +222,7 @@ describe('source guards', () => {
           'common/crypto/crypto.service.ts',
           'modules/platform-infrastructure/offsite-backup/seal.ts',
           'infra/providers/platform-payment-gateways/india.drivers.ts', // a gateway's own payload encryption, required by its API
+          'modules/channel-wechat/wechat-rules.ts', // decrypts WeChat's AES-256-CBC inbound messages, the cipher its protocol fixes (never used for stored data)
         ].includes(p),
     ).map((f) => f.p);
     expect(bad).toEqual([]);

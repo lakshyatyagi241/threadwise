@@ -365,6 +365,21 @@
         "name": "E-mail",
         "hint": "Invia un messaggio come e-mail da una casella connessa, con un link per annullare l'iscrizione.",
         "cta": "Crea campagna e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Invia un messaggio alle persone che già chattano con il tuo account LINE.",
+        "cta": "Crea broadcast LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Invia un messaggio alle persone che già chattano con il tuo account Viber.",
+        "cta": "Crea broadcast Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Invia un messaggio di massa a tutti i follower, a un tag o a utenti selezionati del tuo Account ufficiale.",
+        "cta": "Crea broadcast WeChat"
       }
     }
   }

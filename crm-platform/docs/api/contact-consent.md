@@ -48,8 +48,10 @@ Sheets rows use the cells `consent` (yes) and `consent_note`; a yes without a no
 
 ### Consent notices (`/v2/contact-consent/notices/:scope/:ref`, BL-167)
 
+Scope `workspace` (BL-179, [compliance.md](compliance.md)) is the workspace's default wording: `ref` is a language code (`en`, `hi`), one notice per language, same versioning.
+
 `GET` and `PUT` (permission `settings.consent.manage`). `scope` is `widget` (ref: the widget id), `booking` (the booking type id) or `commerce`
-(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, channels }`; every change to any of them
+(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, termsUrl, channels }` (`termsUrl` is the optional terms link next to the privacy link `url`, BL-175; additive, an older client that does not send it stores null); every change to any of them
 appends the next numbered **version** (a repeat writes nothing, rows are append-only). An enabled notice needs its wording (422), the link must be
 https (422), an unknown widget, booking type or store is 404 `CONSENT_NOTICE_TARGET_NOT_FOUND`, and another workspace's id is the same 404.
 `channels: ["whatsapp"]` is for stores only: it makes the store's marketing checkbox count for WhatsApp too.
@@ -159,6 +161,6 @@ broadcasts, the send-time re-check inside the broadcast dispatcher, the campaign
   `consentNoticeVersion`) stored on the upload (`camp_wizard_csv`); the report returns `consentConfirmed` and `consentNoticeVersion`. At launch
   every contact the file's numbers belong to gets one WhatsApp grant (source `import`, `reference: wizard_csv:<upload>`), never over an opt-out;
   with the workspace switch ON those numbers count as consented before launch.
-- **Web forms (BL-171).** `consent.coversSms` on the form definition. A ticked marketing line grants WhatsApp, email and (covers SMS + phone) SMS.
+- **Web forms (BL-171).** `consent.channels` on the form definition (absent: WhatsApp, email, and SMS with `coversSms`). A ticked marketing line grants only the chosen channels the form collected data for.
   A ticked line that is not marketing records purpose `utility` events (source `form`, same evidence), no subscription label, no `contact.opt_in`.
   Unticked: nothing in the ledger.

@@ -309,12 +309,14 @@
       "title": {
         "widget": "Wiersz zgody w formularzu czatu",
         "booking": "Wiersz zgody na stronie rezerwacji",
-        "commerce": "Co oznacza pole marketingowe sklepu"
+        "commerce": "Co oznacza pole marketingowe sklepu",
+        "workspace": "Domyślna informacja o zgodzie"
       },
       "intro": {
         "widget": "Wyświetlany jako pole wyboru pod danymi odwiedzającego. Tylko odwiedzający, który je zaznaczy, jest zapisany jako zgadzający się, i tylko gdy podał telefon lub e-mail.",
         "booking": "Wyświetlany jako pole wyboru w formularzu rezerwacji. Tylko osoba, która je zaznaczy, jest zapisana jako zgadzająca się; rezerwacja nigdy go nie wymaga.",
-        "commerce": "Klient, który w Twoim sklepie akceptuje marketing, jest zapisany jako zgadzający się. Napisz, co mówi mu to pole, aby dowód to wskazywał."
+        "commerce": "Klient, który w Twoim sklepie akceptuje marketing, jest zapisany jako zgadzający się. Napisz, co mówi mu to pole, aby dowód to wskazywał.",
+        "workspace": "Brzmienie, które Twoja przestrzeń robocza wyświetla obok pola zgody, gdy formularz, widżet lub strona rezerwacji nie ma własnego. Każda zmiana to nowa numerowana wersja."
       },
       "enabled": "Wiersz zgody włączony",
       "text": "Treść, na którą osoba wyraża zgodę",
@@ -327,7 +329,21 @@
       "version": "Bieżąca wersja: {version}",
       "noVersion": "Jeszcze nie zapisano.",
       "saveFirst": "Najpierw to zapisz, potem ustawisz jego wiersz zgody.",
-      "whatsappToo": "Licz także jako zgodę na WhatsApp (tylko jeśli treść tak mówi)"
+      "whatsappToo": "Licz także jako zgodę na WhatsApp (tylko jeśli treść tak mówi)",
+      "termsUrl": "Link do regulaminu (opcjonalnie)",
+      "termsUrlHint": "Musi zaczynać się od https://",
+      "useWorkspacePrivacy": "Użyj linku do polityki prywatności przestrzeni roboczej",
+      "useWorkspaceTerms": "Użyj linku do regulaminu przestrzeni roboczej",
+      "useWorkspaceText": "Użyj domyślnego brzmienia przestrzeni roboczej",
+      "statement": "Zgadzam się na otrzymywanie aktualności i ofert przez {channels}. Mogę w każdej chwili odpowiedzieć STOP, aby zrezygnować.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Kanały objęte tą zgodą",
+      "channelsHint": "Osoba jest zapisywana tylko na zaznaczone tutaj kanały, a tekst zgody je wymienia. Kanał jest używany tylko wtedy, gdy osoba poda pasujący numer telefonu lub e-mail.",
+      "channelsUse": "Zaktualizuj treść o te kanały"
     }
   }
 }

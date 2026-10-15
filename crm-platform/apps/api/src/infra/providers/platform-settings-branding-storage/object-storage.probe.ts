@@ -186,6 +186,7 @@ export class ObjectStorageProbe {
         method: 'PUT',
         headers: put.headers,
         body,
+        redirect: 'manual',
         signal: AbortSignal.timeout(10_000),
       });
       if (!putRes.ok) return { ok: false, message: `Connection failed: ${await describe(putRes)}` };
@@ -193,6 +194,7 @@ export class ObjectStorageProbe {
       const delRes = await fetch(del.url, {
         method: 'DELETE',
         headers: del.headers,
+        redirect: 'manual',
         signal: AbortSignal.timeout(10_000),
       });
       if (!delRes.ok) {

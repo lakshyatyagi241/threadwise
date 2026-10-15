@@ -1126,7 +1126,10 @@
         "auto_end_in_past": "A data de encerramento automático já passou.",
         "auto_end_before_send": "A data de encerramento automático deve ser posterior ao horário de envio.",
         "auto_end_recurring": "Uma campanha recorrente termina pela própria regra: limpe a data de encerramento automático.",
-        "pacing_range": "Verifique o Smart Delivery: o maior atraso é menor que o menor, ou apenas um dos dois horários de envio foi definido."
+        "pacing_range": "Verifique o Smart Delivery: o maior atraso é menor que o menor, ou apenas um dos dois horários de envio foi definido.",
+        "follow_up_template_required": "Escolha o modelo que cada acompanhamento envia.",
+        "follow_up_flow_required": "Escolha o fluxo que cada acompanhamento inicia.",
+        "follow_up_cloud_api_only": "Os acompanhamentos só funcionam com um número do WhatsApp Cloud API. Escolha um na etapa 1 ou remova os acompanhamentos."
       },
       "template": {
         "previewOnline": "online",
@@ -1382,7 +1385,8 @@
         "sumCsv": "Arquivo CSV {name}: {count, plural, one {# número válido} other {# números válidos}}",
         "estimatedCostFull": "Custo estimado (total)",
         "chargedPlan": "Cobrado agora da sua carteira: {amount} (seu plano cobre {covered} destas mensagens)",
-        "chargedWallet": "Cobrado da sua carteira: {amount}"
+        "chargedWallet": "Cobrado da sua carteira: {amount}",
+        "sumFollowUps": "Acompanhamentos"
       },
       "test": {
         "title": "Enviar uma mensagem de teste do WhatsApp",
@@ -1587,7 +1591,25 @@
         "exportFailed": "Não foi possível baixar a exportação.",
         "deleteTitle": "Excluir esta transmissão?",
         "deleteOne": "Exclui esta transmissão e seus destinatários. Não é possível desfazer.",
-        "deleteSeries": "Exclui esta transmissão recorrente e as execuções que ela tinha planejadas. Nada foi enviado, então nenhum histórico é perdido. Não é possível desfazer."
+        "deleteSeries": "Exclui esta transmissão recorrente e as execuções que ela tinha planejadas. Nada foi enviado, então nenhum histórico é perdido. Não é possível desfazer.",
+        "followUps": {
+          "title": "Acompanhamentos",
+          "step": "Acompanhamento {step}",
+          "count": {
+            "waiting": "{count} aguardando",
+            "sent": "{count} enviados",
+            "delivered": "{count} entregues",
+            "read": "{count} lidos",
+            "flowsStarted": "{count} fluxos iniciados",
+            "skipped": "{count} ignorados",
+            "lapsed": "{count} expirados",
+            "failed": "{count} com falha"
+          },
+          "hint": {
+            "skipped": "A condição não foi atendida quando foi verificada, então a sequência terminou ali.",
+            "lapsed": "O tempo de monitoramento acabou antes de o contato responder ou ler, então a sequência terminou ali."
+          }
+        }
       },
       "panel": {
         "title": "Criadas com Criar transmissão",
@@ -1618,6 +1640,72 @@
         "body": "{number} ({engine}) é enviado pelo editor clássico, que começa do zero. Esta campanha é salva como rascunho e continua na sua lista de Campanhas, para você voltar a ela.",
         "confirm": "Abrir o editor clássico",
         "cancel": "Ficar aqui"
+      },
+      "followUps": {
+        "title": "Acompanhamentos",
+        "intro": "Envie outra mensagem ou inicie um fluxo conforme o que o contato fizer depois da mensagem da campanha. Até 3 etapas seguidas.",
+        "cloudOnly": "Os acompanhamentos exigem um número do WhatsApp Cloud API, pois dependem dos relatórios de leitura e resposta da Meta. Escolha um na etapa 1.",
+        "add": "Adicionar acompanhamento",
+        "count": "{used} de {max} acompanhamentos",
+        "limitReached": "Limite atingido: {max} acompanhamentos.",
+        "stepTitle": "Acompanhamento {step}",
+        "measuredFromCampaign": "Contado a partir da mensagem da campanha.",
+        "measuredFromStep": "Contado a partir da mensagem do acompanhamento {step}.",
+        "remove": "Remover acompanhamento {step}",
+        "removeShort": "Remover",
+        "triggerLabel": "Quando o contato",
+        "trigger": {
+          "replied": "Responde",
+          "read": "Lê a mensagem",
+          "not_replied": "Não respondeu",
+          "not_read": "Não leu a mensagem"
+        },
+        "triggerHelp": {
+          "replied": "Dispara no momento em que o contato responde, se isso acontecer dentro do tempo definido. Caso contrário, a sequência termina.",
+          "read": "Dispara no momento em que o contato lê, se isso acontecer dentro do tempo definido. Caso contrário, a sequência termina.",
+          "not_replied": "Aguarda o tempo definido e dispara se o contato não tiver respondido. Se tiver respondido, a sequência termina.",
+          "not_read": "Aguarda o tempo definido e dispara se o contato não tiver lido. Se tiver lido, a sequência termina."
+        },
+        "watchLabel": "Monitorar por até",
+        "waitLabel": "Aguardar",
+        "unitLabel": "Unidade de tempo",
+        "duration": {
+          "minutes": "{count, plural, one {# minuto} many {# minutos} other {# minutos}}",
+          "hours": "{count, plural, one {# hora} many {# horas} other {# horas}}",
+          "days": "{count, plural, one {# dia} many {# dias} other {# dias}}"
+        },
+        "actionLabel": "Então",
+        "action": {
+          "template": "Enviar um modelo",
+          "flow": "Iniciar um fluxo"
+        },
+        "templateLabel": "Modelo a enviar",
+        "flowLabel": "Fluxo a iniciar",
+        "pickTemplate": "Escolher um modelo",
+        "pickFlow": "Escolher um fluxo",
+        "loading": "Carregando...",
+        "unavailable": "Não está mais disponível",
+        "noTemplates": "Ainda não há modelos aprovados.",
+        "createTemplate": "Criar um modelo",
+        "noFlows": "Ainda não há fluxos.",
+        "createFlow": "Criar um fluxo",
+        "flowsError": "Não foi possível carregar os fluxos. Tente novamente mais tarde.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Se responder em até {wait}",
+          "read": "Se ler em até {wait}",
+          "not_replied": "Se não responder após {wait}",
+          "not_read": "Se não ler após {wait}"
+        },
+        "does": {
+          "template": "enviar {name}",
+          "flow": "iniciar o fluxo {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuto} many {minutos} other {minutos}}",
+          "hours": "{count, plural, one {hora} many {horas} other {horas}}",
+          "days": "{count, plural, one {dia} many {dias} other {dias}}"
+        }
       }
     },
     "history": {

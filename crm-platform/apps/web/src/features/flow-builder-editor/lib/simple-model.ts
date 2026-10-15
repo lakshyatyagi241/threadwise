@@ -41,6 +41,8 @@ export const SIMPLE_TYPES = [
   'cta',
   'assign',
   'faq',
+  'api_library',
+  'code',
 ] as const;
 export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
@@ -76,6 +78,8 @@ export const LIMITS = {
   rowDescription: 72,
   listButton: 20,
   body: 1024,
+  /** A plain text message: WhatsApp allows 4096 characters (the body of a buttons or list message, 1024). */
+  message: 4096,
 } as const;
 
 export interface SimpleStep {
@@ -224,6 +228,8 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
   const option = new Map<string, string[]>();
   /** The steps (not the Trigger) whose `out` wire reaches each step. */
   const feeders = new Map<string, string[]>();
+  /** Where an API step's `error` wire goes: it has to reach the step `success` reaches, or the graph is not a Simple one. */
+  const apiError = new Map<string, string>();
   for (const e of graph.flowEdges) {
     const src = nodes.get(e.source);
     const dst = nodes.get(e.target);
@@ -242,6 +248,18 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
       if (list[i] !== undefined) reasons.push(msg('simpleModel.reasons.multiLink'));
       list[i] = dst.id;
       option.set(src.id, list);
+    } else if (
+      src.type === 'api_library' &&
+      (e.sourceHandle === 'success' || e.sourceHandle === 'error')
+    ) {
+      // An API step carries on the same way whether the call worked or not (the Simple builder has no separate error path): `success`
+      // is its next step, and an `error` wire is only read when it reaches that same step.
+      if (e.sourceHandle === 'error') apiError.set(src.id, dst.id);
+      else {
+        if (next.has(src.id)) reasons.push(msg('simpleModel.reasons.multiNext'));
+        next.set(src.id, dst.id);
+        feeders.set(dst.id, [...(feeders.get(dst.id) ?? []), src.id]);
+      }
     } else if (!branching && e.sourceHandle === 'out') {
       if (next.has(src.id)) reasons.push(msg('simpleModel.reasons.multiNext'));
       next.set(src.id, dst.id);
@@ -250,6 +268,15 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
       reasons.push(msg('simpleModel.reasons.badPort', { node: nodeLabelMsg(src.type) }));
     }
   }
+  for (const [id, to] of apiError)
+    if (next.get(id) !== to)
+      reasons.push(msg('simpleModel.reasons.badPort', { node: nodeLabelMsg('api_library') }));
+  // An API step with a next step but no `error` wire ends the flow when the call fails: that is remembered, so saving from here keeps it.
+  const errorEnds = new Set(
+    graph.flowNodes
+      .filter((n) => n.type === 'api_library' && next.has(n.id) && !apiError.has(n.id))
+      .map((n) => n.id),
+  );
   if (reasons.length) return { ok: false, reasons: dedupe(reasons) };
 
   // Journeys: the trigger's chain first, then every other chain by where its first step sits on the canvas. A step continues its
@@ -277,6 +304,7 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
           links.push(wired[i] ?? null);
       }
       const step: SimpleStep = { id: n.id, type: n.type as SimpleType, data: { ...n.data }, links };
+      if (errorEnds.has(n.id)) step.data.errorEnds = true;
       steps.push(step);
       const nx = next.get(cur);
       if (!nx) break;
@@ -355,8 +383,16 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       });
       if (si === 0 && ji === 0) edge(doc.trigger.id, 'out', s.id);
       const nextStep = j.steps[si + 1];
-      if (!BRANCHING.has(s.type) && nextStep) edge(s.id, 'out', nextStep.id);
-      else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto)) edge(s.id, 'out', s.goto);
+      // An API step has a success and an error exit; here both carry on to the next step (the flow does not stop when a call fails).
+      const exits =
+        s.type === 'api_library'
+          ? s.data.errorEnds === true
+            ? ['success']
+            : ['success', 'error']
+          : ['out'];
+      if (!BRANCHING.has(s.type) && nextStep) for (const h of exits) edge(s.id, h, nextStep.id);
+      else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto))
+        for (const h of exits) edge(s.id, h, s.goto);
       if (BRANCHING.has(s.type)) {
         s.links.forEach((target, i) => {
           if (target && known.has(target)) edge(s.id, exitHandle(s.type, i), target);
@@ -402,7 +438,7 @@ export interface StepKind {
   preset?: string;
   label: Msg;
   help: Msg;
-  group: 'send' | 'ask' | 'logic' | 'answer' | 'handoff';
+  group: 'send' | 'ask' | 'logic' | 'answer' | 'handoff' | 'action';
 }
 
 const kind = (
@@ -435,6 +471,8 @@ export const STEP_KINDS: readonly StepKind[] = [
   kind('template', 'template', 'send'),
   kind('location', 'location', 'send'),
   kind('delay', 'delay', 'send'),
+  kind('api-library', 'api_library', 'action'),
+  kind('code', 'code', 'action'),
   kind('ask', 'ask', 'ask', 'text'),
   kind('ask-name', 'ask', 'ask', 'name'),
   kind('ask-email', 'ask', 'ask', 'email'),
@@ -492,7 +530,9 @@ export function newStep(
   preset?: string,
 ): SimpleStep {
   const data: Record<string, unknown> = { ...flbDefaultNodeData(type) };
-  const taken = new Set(existing.map((s) => str(s.data.var)).filter(Boolean));
+  const taken = new Set(
+    existing.flatMap((s) => [str(s.data.var), str(s.data.save)]).filter(Boolean),
+  );
   const fresh = (base: string) => {
     let n = 1;
     while (taken.has(`${base}_${n}`)) n++;
@@ -519,6 +559,8 @@ export function newStep(
     data.options = [{ title: 'Item 1', description: '', section: '' }];
   }
   if (type === 'message') data.text = '';
+  if (type === 'api_library') data.save = fresh('api_response');
+  if (type === 'code') data.save = fresh('result');
   // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
   if (type === 'location') Object.assign(data, { lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
@@ -768,6 +810,8 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
       const d = s.data;
       if (s.type === 'message' && !str(d.text).trim()) bad('writeMessage');
       if (s.type === 'media' && !str(d.url).trim()) bad('addFileLink');
+      if (s.type === 'api_library' && !str(d.apiId).trim()) bad('chooseApi');
+      if (s.type === 'code' && !str(d.code).trim()) bad('writeCode');
       if (s.type === 'ask' || s.type === 'ask_file' || s.type === 'ask_location') {
         if (!str(d.prompt).trim()) bad('writeQuestion');
         if (!str(d.var).trim()) bad('nameVariable');
@@ -788,6 +832,13 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         Object.values(rec(d.handoffs)).some((h) => !str(rec(h).team).trim())
       )
         bad('chooseTeam');
+      if (
+        s.type === 'buttons' &&
+        Object.values(rec(d.optionActions)).some(
+          (a) => rec(a).type === 'flow' && !str(rec(a).flow).trim(),
+        )
+      )
+        bad('chooseFlow');
       if (
         s.type === 'carousel' &&
         flbCleanCarouselCards(d.cards).some((c) =>
@@ -935,7 +986,11 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                                 hasCategory: str(d.category).trim() ? 'true' : 'false',
                                 category: str(d.category).trim(),
                               })
-                            : '';
+                            : s.type === 'api_library'
+                              ? str(d.apiName)
+                              : s.type === 'code'
+                                ? str(d.save)
+                                : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }
@@ -956,4 +1011,6 @@ export const TYPE_LABEL: Record<SimpleType, Msg> = {
   condition: msg('simpleModel.typeLabel.condition'),
   assign: msg('simpleModel.typeLabel.assign'),
   faq: msg('simpleModel.typeLabel.faq'),
+  api_library: msg('simpleModel.typeLabel.api_library'),
+  code: msg('simpleModel.typeLabel.code'),
 };

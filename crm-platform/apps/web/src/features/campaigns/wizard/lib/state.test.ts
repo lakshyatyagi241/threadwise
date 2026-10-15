@@ -143,3 +143,27 @@ describe('draftPatch', () => {
     expect(draftPatch(a, b)).toEqual({});
   });
 });
+
+describe('follow-ups', () => {
+  const step = {
+    trigger: 'not_read' as const,
+    waitMinutes: 120,
+    action: { kind: 'template' as const, templateId: null },
+  };
+
+  it('replaces the list and the save patch names the key', () => {
+    const s = initialState();
+    const n = wizardReducer(s, { type: 'followUps', followUps: [step] });
+    expect(n.draft.followUps).toEqual([step]);
+    expect(draftPatch(s.draft, n.draft)).toEqual({ followUps: [step] });
+    const edited = wizardReducer(n, {
+      type: 'followUps',
+      followUps: [{ ...step, waitMinutes: 180 }],
+    });
+    expect(draftPatch(n.draft, edited.draft)).toEqual({
+      followUps: [{ ...step, waitMinutes: 180 }],
+    });
+    const cleared = wizardReducer(edited, { type: 'followUps', followUps: [] });
+    expect(draftPatch(edited.draft, cleared.draft)).toEqual({ followUps: [] });
+  });
+});

@@ -1095,13 +1095,18 @@ export class CampaignsRepository {
     const res = await tx.execute(sql`
       UPDATE wp_campaign_contacts
       SET status = 'queued', sent_at = NULL, whatsapp_message_id = NULL, error_message = NULL, error_code = NULL, send_attempts = 0,
-          next_attempt_at = NULL, retry_state = NULL, retry_count = 0, retry_first_sent_at = NULL, retry_next_at = NULL
+          next_attempt_at = NULL, retry_state = NULL, retry_count = 0, retry_first_sent_at = NULL, retry_next_at = NULL,
+          follow_up_state = NULL, follow_up_next = NULL, follow_up_base_at = NULL, follow_up_check_at = NULL
       WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND retry_state IS DISTINCT FROM 'sending' ${scopeSql}
       RETURNING id`);
     const ids = (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
     if (ids.length > 0) {
       await tx.execute(sql`
         DELETE FROM camp_retry_attempts
+        WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND recipient_id IN (${list(ids, 'bigint')})`);
+      // A resent recipient starts its follow-up chain again from the new send.
+      await tx.execute(sql`
+        DELETE FROM camp_follow_up_attempts
         WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND recipient_id IN (${list(ids, 'bigint')})`);
     }
     return ids.length;

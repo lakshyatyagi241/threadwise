@@ -348,6 +348,7 @@ export class ChatMediaStore {
     const url = await this.gateway.url(key, 60);
     const res = await fetch(url, {
       headers: range ? { range: `bytes=${range.start}-${range.end ?? ''}` } : {},
+      redirect: 'manual',
       signal: AbortSignal.timeout(30_000),
     });
     if (res.status === 404 || res.status === 403) return null;

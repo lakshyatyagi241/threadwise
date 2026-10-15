@@ -42,6 +42,7 @@ export function stepOfPath(path: string): WizardView {
     return 1;
   if (head === 'audience') return 2;
   if (head === 'variables' || head === 'variablesB') return 3;
+  // 'followUps' (and 'followUps.<i>.action') belong to step 4 with the schedule and retries.
   return 4;
 }
 

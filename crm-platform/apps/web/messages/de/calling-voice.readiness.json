@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Bereit für Anrufe?",
+      "status": {
+        "never_checked": "Noch nicht geprüft",
+        "blocked": "Nicht bereit",
+        "ready_to_enable": "Bereit zum Aktivieren",
+        "attention": "Funktioniert, bitte prüfen",
+        "ready": "Bereit"
+      },
+      "statusHint": {
+        "never_checked": "Diese Nummer wurde noch nicht geprüft.",
+        "blocked": "Anrufe funktionieren erst, wenn die mit „Beheben“ markierten Punkte erledigt sind.",
+        "ready_to_enable": "Alles, was WhatsApp benötigt, ist vorhanden. Klicken Sie auf „Anrufe aktivieren“, um den Anruf-Button anzuzeigen.",
+        "attention": "Anrufe funktionieren, aber ein Punkt weiter unten sollte geprüft werden.",
+        "ready": "Anrufe sind aktiviert und alle Prüfungen sind bestanden."
+      },
+      "checkedAt": "Geprüft am {date}",
+      "checking": "Prüfung bei WhatsApp läuft...",
+      "checkAgain": "Erneut prüfen",
+      "checkFailed": "Diese Nummer konnte nicht geprüft werden.",
+      "checkedDone": "Erneut geprüft.",
+      "blockedHint": "Beheben Sie zuerst die mit „Beheben“ markierten Punkte. WhatsApp lehnt das Aktivieren von Anrufen sonst höchstwahrscheinlich ab.",
+      "details": "Was geprüft wurde",
+      "fixLabel": "Was zu tun ist:",
+      "state": {
+        "ok": "OK",
+        "warn": "Bitte prüfen",
+        "fail": "Beheben"
+      },
+      "checks": {
+        "plan_feature": "Tarif enthält WhatsApp-Anrufe",
+        "connection": "Nummer verbunden",
+        "not_coexistence": "Nummer nur auf der Cloud API",
+        "number_registered": "Nummer bei WhatsApp registriert",
+        "messaging_limit": "Nachrichtenlimit und Qualität",
+        "token_scopes": "Berechtigungen des Zugriffstokens",
+        "webhook_subscribed": "App für dieses Konto abonniert",
+        "calls_field": "Anruf-Webhook zugestellt",
+        "calling_enabled": "Anrufe bei WhatsApp aktiviert",
+        "turn": "Anruf-Relay (TURN) eingerichtet",
+        "dialler_permissions": "Teammitglieder dürfen anrufen",
+        "recording_consent": "Aufnahme- und Einwilligungsregeln"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "WhatsApp-Anrufe sind Teil Ihres Tarifs."
+        },
+        "plan_missing": {
+          "detail": "Ihr Tarif enthält keine WhatsApp-Anrufe.",
+          "fix": "Wechseln Sie auf einen höheren Tarif und prüfen Sie dann erneut."
+        },
+        "connected": {
+          "detail": "Die Nummer ist verbunden und hat ein Zugriffstoken."
+        },
+        "not_connected": {
+          "detail": "Diese Nummer ist derzeit nicht verbunden.",
+          "fix": "Verbinden Sie sie unter Kanäle erneut und prüfen Sie dann erneut."
+        },
+        "no_credentials": {
+          "detail": "Für diese Nummer sind weder ein Zugriffstoken noch eine Telefonnummern-ID gespeichert.",
+          "fix": "Verbinden Sie die Nummer erneut, damit ihre Zugangsdaten wieder gespeichert werden."
+        },
+        "cloud_api_only": {
+          "detail": "Die Nummer läuft ausschließlich über die WhatsApp Cloud API."
+        },
+        "coexistence": {
+          "detail": "Diese Nummer wird auch in der WhatsApp-Business-App verwendet (Koexistenz). WhatsApp erlaubt auf einer solchen Nummer keine Anrufe.",
+          "fix": "Registrieren Sie sie ausschließlich auf der Cloud API oder verwenden Sie für Anrufe eine andere Nummer."
+        },
+        "on_premise": {
+          "detail": "Diese Nummer nutzt die alte On-Premises API, die Meta abgeschaltet hat.",
+          "fix": "Registrieren Sie sie auf der Cloud API oder verwenden Sie eine andere Nummer."
+        },
+        "number_ok": {
+          "detail": "WhatsApp meldet die Nummer als aktiv und verifiziert."
+        },
+        "number_not_verified": {
+          "detail": "Der Bestätigungscode zur Inhaberschaft der Nummer wurde nicht verifiziert.",
+          "fix": "Verifizieren Sie die Nummer auf der WhatsApp-Verbindungsseite und prüfen Sie dann erneut."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp meldet diese Nummer als {status}, nicht als verbunden.",
+          "fix": "Beheben Sie das Problem in Meta Business Suite (die Nummer ist eventuell ausstehend, markiert oder eingeschränkt) und prüfen Sie dann erneut."
+        },
+        "limit_ok": {
+          "detail": "Das tägliche Nachrichtenlimit und die Qualitätsbewertung reichen für Anrufe aus."
+        },
+        "limit_test_number": {
+          "detail": "Dies ist eine Testnummer, für die kein Nachrichtenlimit nötig ist."
+        },
+        "limit_low": {
+          "detail": "Das Nachrichtenlimit beträgt {tier}. WhatsApp verlangt mindestens {needed} Kunden pro Tag, bevor Anrufe aktiviert werden können.",
+          "fix": "Senden Sie mehr Nachrichten mit guter Qualität oder verifizieren Sie Ihr Unternehmen in Meta Business Suite, damit das Limit steigt. Prüfen Sie danach erneut."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp hat kein Nachrichtenlimit gemeldet, das diese App erkennt.",
+          "fix": "Öffnen Sie die Nummer in Meta Business Suite, um ihr Limit zu sehen. Für Anrufe sind mindestens 2.000 Kunden pro Tag nötig."
+        },
+        "quality_low": {
+          "detail": "Die Qualitätsbewertung der Nummer ist niedrig (rot), und WhatsApp kann sie einschränken.",
+          "fix": "Verringern Sie blockierte und gemeldete Nachrichten und lassen Sie die Bewertung sich erholen, bevor Sie auf Anrufe setzen."
+        },
+        "scopes_ok": {
+          "detail": "Das Zugriffstoken hat die Berechtigungen, die Anrufe benötigen."
+        },
+        "scope_missing": {
+          "detail": "Dem Zugriffstoken fehlt: {missing}.",
+          "fix": "Erstellen Sie ein neues Systembenutzer-Token mit whatsapp_business_management und whatsapp_business_messaging und verbinden Sie die Nummer dann erneut."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp akzeptiert das gespeicherte Zugriffstoken nicht.",
+          "fix": "Verbinden Sie die Nummer erneut oder speichern Sie ein neues dauerhaftes Token."
+        },
+        "token_expiring": {
+          "detail": "Das Zugriffstoken läuft in {days, plural, one {# Tag} other {# Tagen}} ab.",
+          "fix": "Verbinden Sie die Nummer erneut oder speichern Sie ein dauerhaftes Systembenutzer-Token, bevor es abläuft."
+        },
+        "scopes_unverifiable": {
+          "detail": "Die Berechtigungen des Tokens konnten nicht gelesen werden. Die Nummer wird möglicherweise über einen Anbieter erreicht, oder diese Plattform hat keine App-Zugangsdaten, um sie zu prüfen.",
+          "fix": "Falls Anrufe abgelehnt werden, klären Sie mit Ihrem Anbieter, ob die Nummer Anrufe nutzen darf."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp stellt die Ereignisse dieses Kontos an die Plattform zu."
+        },
+        "waba_not_subscribed": {
+          "detail": "Für dieses WhatsApp-Business-Konto ist keine App abonniert, daher würden Anrufe Sie nie erreichen.",
+          "fix": "Verwenden Sie „Eingehende Nachrichten reparieren“ auf der Statusseite der Nummer und prüfen Sie dann erneut."
+        },
+        "calls_field_ok": {
+          "detail": "Die Meta-App liefert das Webhook-Feld für Anrufe."
+        },
+        "calls_field_added": {
+          "detail": "Das Webhook-Feld für Anrufe fehlte und wurde gerade zur Meta-App der Plattform hinzugefügt."
+        },
+        "calls_field_missing": {
+          "detail": "Die Meta-App liefert das Webhook-Feld für Anrufe nicht, daher kommen eingehende Anrufe und Antworten nie an.",
+          "fix": "Bitten Sie Ihren Plattformbetreiber, das Feld „calls“ in den Webhook-Einstellungen der Meta-App (WhatsApp, Konfiguration) zu aktivieren, und prüfen Sie dann erneut."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Diese Nummer gehört zu einer Meta-App, die die Plattform nicht lesen kann, daher konnte das Webhook-Feld für Anrufe nicht geprüft werden.",
+          "fix": "Öffnen Sie die Webhook-Einstellungen dieser App und stellen Sie sicher, dass das Feld „calls“ aktiviert ist."
+        },
+        "calling_on": {
+          "detail": "Anrufe sind aktiviert, und das Anruf-Symbol wird Kunden angezeigt."
+        },
+        "calling_off": {
+          "detail": "Anrufe sind für diese Nummer ausgeschaltet.",
+          "fix": "Klicken Sie auf „Anrufe aktivieren“, sobald die übrigen Punkte in Ordnung sind."
+        },
+        "icon_hidden": {
+          "detail": "Anrufe sind aktiviert, aber das Anruf-Symbol ist für Kunden ausgeblendet, daher können sie keine Anrufe starten.",
+          "fix": "Setzen Sie die Sichtbarkeit des Anruf-Symbols in den Anrufeinstellungen der Nummer bei Meta auf den Standard zurück."
+        },
+        "turn_ok": {
+          "detail": "Ein TURN-Relay ist eingerichtet, daher funktionieren Anrufe auch hinter strengen Firewalls."
+        },
+        "turn_missing": {
+          "detail": "Es ist kein TURN-Relay eingerichtet, daher können Anrufe für Personen hinter strengen Firewalls ohne Ton zustande kommen.",
+          "fix": "Bitten Sie Ihren Plattformbetreiber, einen TURN-Server zu CALLING_ICE_SERVERS hinzuzufügen."
+        },
+        "turn_incomplete": {
+          "detail": "Ein TURN-Server ist ohne Benutzername oder Zugangsdaten eingetragen.",
+          "fix": "Ergänzen Sie Benutzername und Zugangsdaten in diesem Eintrag von CALLING_ICE_SERVERS."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS ist gesetzt, aber keine gültige Liste, daher werden nur öffentliche STUN-Server verwendet.",
+          "fix": "Korrigieren Sie das JSON in CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, one {# Teammitglied kann} other {# Teammitglieder können}} Anrufe tätigen und annehmen."
+        },
+        "dialler_none": {
+          "detail": "Niemand in diesem Workspace darf Anrufe tätigen und annehmen.",
+          "fix": "Geben Sie einer Rolle unter Einstellungen, Rollen die Berechtigung, Anrufe zu nutzen."
+        },
+        "recording_off": {
+          "detail": "Die Anrufaufnahme ist aus, daher ist keine Einwilligung nötig."
+        },
+        "recording_configured": {
+          "detail": "Die Anrufaufnahme ist ein, mit Hinweis und Einwilligungsregel."
+        },
+        "recording_notice_missing": {
+          "detail": "Die Anrufaufnahme ist ein, aber es gibt keinen Hinweis zum Vorlesen.",
+          "fix": "Schreiben Sie den Aufnahmehinweis unten unter „Aufnahme“."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp hat auf diese Prüfung nicht geantwortet.",
+          "fix": "Prüfen Sie in einem Moment erneut."
+        },
+        "not_checked": {
+          "detail": "Wartet auf einen Punkt weiter oben.",
+          "fix": "Beheben Sie zuerst den Punkt weiter oben."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp aktiviert Anrufe noch nicht. Die Nummer braucht ein tägliches Nachrichtenlimit von mindestens 2.000 Kunden, und die App muss für das WhatsApp-Business-Konto und das Webhook-Feld „calls“ mit der Berechtigung whatsapp_business_messaging abonniert sein. Eine Testnummer braucht das Limit nicht.",
+        "coexistence": "WhatsApp-Anrufe erfordern eine Nummer, die vollständig auf der Cloud API läuft. Diese Nummer teilt sich ihren Anschluss mit der WhatsApp-Business-App (Koexistenz), auf der WhatsApp keine Anrufe erlaubt. Registrieren Sie sie ausschließlich auf der Cloud API oder verwenden Sie eine andere Nummer.",
+        "permission_scope": "Dem Zugriffstoken fehlt eine Berechtigung, die Anrufe benötigen (whatsapp_business_management und whatsapp_business_messaging). Erstellen Sie ein neues Token mit beiden und verbinden Sie die Nummer erneut.",
+        "token_expired": "WhatsApp akzeptiert das gespeicherte Zugriffstoken nicht mehr. Verbinden Sie die Nummer erneut und versuchen Sie es dann noch einmal.",
+        "calling_not_enabled": "Anrufe sind für diese Nummer bei WhatsApp nicht aktiviert. Aktivieren Sie sie und versuchen Sie es dann noch einmal.",
+        "no_call_permission": "Dieser Kunde hat Anrufe noch nicht erlaubt. Es wird eine Berechtigungsanfrage gesendet, die er annehmen kann.",
+        "permission_request_limit": "WhatsApp begrenzt, wie oft Sie diesen Kunden um Anrufberechtigung bitten können. Versuchen Sie es später erneut.",
+        "receiver_uncallable": "Das WhatsApp dieses Kunden kann keine Anrufe empfangen (alte App-Version oder Anrufe ausgeschaltet). Bitten Sie ihn, WhatsApp zu aktualisieren.",
+        "meta_unreachable": "WhatsApp hat nicht rechtzeitig geantwortet. Versuchen Sie es in einem Moment erneut."
+      },
+      "refusedBecause": "WhatsApp hat die Anfrage abgelehnt: {reason}",
+      "autoEnable": {
+        "title": "Anrufe automatisch aktivieren",
+        "hint": "Wenn eine WhatsApp-Nummer verbunden oder erneut verbunden wird und alle Anforderungen erfüllt, werden Anrufe dafür ohne Rückfrage aktiviert. Standardmäßig aus; ohne diese Einstellung werden Anrufe nie automatisch aktiviert.",
+        "label": "Anrufe nach dem Verbinden einer Nummer automatisch aktivieren",
+        "saved": "Gespeichert.",
+        "loadFailed": "Diese Einstellung konnte nicht geladen werden."
+      },
+      "testCall": {
+        "title": "Testanruf starten",
+        "intro": "Rufen Sie Ihre eigene WhatsApp-Nummer an, um einen Anruf von Anfang bis Ende zu hören. WhatsApp erlaubt Unternehmen nur Anrufe bei Personen, die dies erlaubt haben: Falls Sie das nicht getan haben, wird eine Berechtigungsanfrage an Ihr Telefon gesendet und kein Anruf getätigt. Tippen Sie in WhatsApp auf „Erlauben“ und klicken Sie dann erneut auf „Mich anrufen“.",
+        "phoneLabel": "Ihre WhatsApp-Nummer",
+        "phoneHint": "Mit Ländervorwahl und ohne Plus, zum Beispiel 919812345678.",
+        "call": "Mich anrufen",
+        "invalid": "Geben Sie Ihre Nummer mit Ländervorwahl ein (6 bis 15 Ziffern).",
+        "show": "Testanruf starten"
+      }
+    }
+  }
+}

@@ -309,12 +309,14 @@
       "title": {
         "widget": "聊天表单中的同意行",
         "booking": "预约页面中的同意行",
-        "commerce": "店铺营销复选框的含义"
+        "commerce": "店铺营销复选框的含义",
+        "workspace": "默认同意告知声明"
       },
       "intro": {
         "widget": "显示为访客信息下方的复选框。只有勾选的访客才会被记录为同意，且仅限其提供了电话号码或电子邮件时。",
         "booking": "显示为预约表单上的复选框。只有勾选的人才会被记录为同意；预约从不需要它。",
-        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。"
+        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。",
+        "workspace": "当表单、小组件或预约页面没有自己的文字时,您的工作区在同意框旁显示的文字。每次修改都会生成新的编号版本。"
       },
       "enabled": "开启同意行",
       "text": "此人同意的措辞",
@@ -327,7 +329,21 @@
       "version": "当前版本：{version}",
       "noVersion": "尚未保存。",
       "saveFirst": "请先保存此项，然后即可设置其同意行。",
-      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）"
+      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）",
+      "termsUrl": "条款链接(可选)",
+      "termsUrlHint": "必须以 https:// 开头",
+      "useWorkspacePrivacy": "使用我的工作区隐私链接",
+      "useWorkspaceTerms": "使用我的工作区条款链接",
+      "useWorkspaceText": "使用我的工作区默认文字",
+      "statement": "我同意通过 {channels} 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "短信",
+        "email": "电子邮件"
+      },
+      "channelsLabel": "此同意涵盖的渠道",
+      "channelsHint": "对方仅会订阅此处勾选的渠道,同意文案也会列出这些渠道。仅当对方提供了对应的手机号码或邮箱时才会使用该渠道。",
+      "channelsUse": "用这些渠道更新文案"
     }
   }
 }

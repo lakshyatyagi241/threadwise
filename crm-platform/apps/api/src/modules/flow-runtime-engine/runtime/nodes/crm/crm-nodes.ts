@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { consentChannelOfKind } from '@crm/contracts';
 import { CONVERSATIONS_FACADE, type ConversationsFacade } from '../../../../chat-conversations';
+import { ContactConsentService } from '../../../../contact-consent';
 import { ContactGroupsService, ContactsService, SegmentsService } from '../../../../crm';
+import { DatabaseService } from '../../../../../infra/db/database.service';
 import type { NodeContext, NodeExecutor, NodeResult } from '../../types';
 import { listConfig, segmentConfig, sessionOpen, updateFieldConfig, UUID_RE } from './crm-rules';
 
@@ -34,6 +37,7 @@ export class CrmNodes implements NodeExecutor {
     'InList',
     'InSegment',
     'WaSession',
+    'ContactConsent',
   ];
 
   constructor(
@@ -41,6 +45,8 @@ export class CrmNodes implements NodeExecutor {
     private readonly groups: ContactGroupsService,
     private readonly segments: SegmentsService,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly ledger: ContactConsentService,
+    private readonly db: DatabaseService,
   ) {}
 
   async execute(ctx: NodeContext): Promise<NodeResult> {
@@ -53,6 +59,8 @@ export class CrmNodes implements NodeExecutor {
         return this.inList(ctx);
       case 'InSegment':
         return this.inSegment(ctx);
+      case 'ContactConsent':
+        return this.consent(ctx);
       default:
         return this.session(ctx);
     }
@@ -111,6 +119,53 @@ export class CrmNodes implements NodeExecutor {
       );
     } catch (err) {
       ctx.note(`list step failed: ${reasonOf(err)}`);
+    }
+    return advance;
+  }
+
+  /**
+   * A button's Opt in / Opt out: the contact's own answer, written to the consent ledger (source `flow`) so the proof, the per-channel
+   * state, the roll-up flag and the audit row all move together. A repeat of the same step (a retry) writes nothing twice.
+   */
+  private async consent(ctx: NodeContext): Promise<NodeResult> {
+    const optIn = data(ctx).action === 'opt_in';
+    const run = ctx.run;
+    if (run.contactId === null) {
+      ctx.note('this run has no contact to opt in or out: skipped');
+      return advance;
+    }
+    const contactId = run.contactId;
+    // The test chat is a WhatsApp stand-in. A call and the website chat have no marketing consent of their own (the ledger would
+    // record a withdrawal on them that still switches off the contact's WhatsApp marketing), so the step is skipped and says so.
+    const kind = run.channelKind === 'simulator' ? 'whatsapp' : (run.channelKind ?? '');
+    const channel = consentChannelOfKind(kind);
+    if (channel === null || channel === 'webchat' || channel === 'voice') {
+      ctx.note('this channel has no marketing consent to change: skipped');
+      return advance;
+    }
+    try {
+      const done = await this.db.txAs({ orgId: run.orgId }, (tx) =>
+        this.ledger.recordInTx(tx, run.orgId, {
+          contactId,
+          channel,
+          action: optIn ? 'granted' : 'withdrawn',
+          source: 'flow',
+          evidence: { flowId: String(run.flowId), reference: `run:${run.id}:${ctx.node.id}` },
+          note: optIn ? 'Opted in with a button in a flow' : 'Opted out with a button in a flow',
+          idempotencyKey: `flow:${ctx.stepKey}`,
+          announceOptIn: true,
+        }),
+      );
+      ctx.note(
+        `${optIn ? 'opted in' : 'opted out'} of marketing${done.stateChanged ? '' : ' (no change)'}`,
+      );
+    } catch (err) {
+      // A consent change that was not written must not look as if it was: the run stops, and the log says why.
+      return {
+        kind: 'fail',
+        code: 'CONSENT_WRITE_FAILED',
+        reason: `${optIn ? 'opt-in' : 'opt-out'} was not saved: ${reasonOf(err)}`,
+      };
     }
     return advance;
   }

@@ -1,0 +1,492 @@
+{
+  "compliance-center": {
+    "title": "Centro di conformità",
+    "subtitle": "Strumenti che ti aiutano a rispettare i tuoi obblighi in materia di privacy: le leggi a cui sei soggetto, chi le persone possono contattare, le tue informative e i sub-responsabili, e una checklist di ciò che è già attivo. Da soli non rendono conforme uno spazio di lavoro, e questo non è un parere legale.",
+    "readOnly": "Puoi leggere questa pagina ma non modificarla.",
+    "saved": "Impostazioni di conformità salvate.",
+    "conflict": "Qualcun altro ha salvato queste impostazioni mentre le modificavi. È stata caricata la versione più recente: controllala e rifai la tua modifica.",
+    "conflictOk": "Ho capito",
+    "common": {
+      "dismiss": "Chiudi",
+      "retry": "Riprova",
+      "loading": "Caricamento..."
+    },
+    "tabs": {
+      "checklist": "Checklist",
+      "profiles": "Leggi e regioni",
+      "contacts": "Contatti e minori",
+      "notices": "Informative",
+      "links": "Link a privacy e termini",
+      "subprocessors": "Sub-responsabili",
+      "windows": "Orari di silenzio e chiamate"
+    },
+    "saveBar": {
+      "unsaved": "Hai modifiche non salvate.",
+      "problems": "Correggi i campi evidenziati prima di salvare.",
+      "discard": "Annulla le modifiche",
+      "save": "Salva le modifiche"
+    },
+    "errors": {
+      "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+      "forbidden": "Non hai l'autorizzazione per farlo.",
+      "notFound": "Non esiste più.",
+      "conflict": "Qualcun altro ha modificato questo elemento. Ricarica e riprova.",
+      "settingsInvalid": "Alcune impostazioni non sono valide. Controlla gli orari di silenzio, la fascia di chiamata, il fuso orario e la lingua.",
+      "duplicate": "Hai già un sub-responsabile con quel nome.",
+      "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+      "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
+      "unexpected": "Qualcosa è andato storto. Riprova."
+    },
+    "problems": {
+      "httpsOnly": "Usa un indirizzo che inizia con https://.",
+      "email": "Inserisci un indirizzo email valido.",
+      "quietEmpty": "Gli orari di silenzio devono avere una fine diversa dall'inizio.",
+      "windowOrder": "La fascia di chiamata deve terminare dopo il suo inizio, nello stesso giorno.",
+      "daysEmpty": "Scegli almeno un giorno.",
+      "englishFirst": "L'inglese è sempre la prima informativa. Scegli un'altra lingua."
+    },
+    "phi": {
+      "title": "Non archiviare informazioni sanitarie protette.",
+      "body": "Questo prodotto non è progettato per le cartelle cliniche. Non dichiariamo la conformità alla HIPAA e non firmiamo business associate agreement, quindi non inserire diagnosi, dettagli di cure, numeri di polizza o simili informazioni sulla salute in contatti, note, messaggi, file, moduli o registrazioni."
+    },
+    "checklist": {
+      "intro": "Ciò che è attivo oggi nel tuo spazio di lavoro, ricavato dalle tue impostazioni e dai tuoi dati. \"Realizzato\" significa che lo strumento è configurato. Non significa che una legge sia rispettata.",
+      "summaryLabel": "Totali",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Realizzato",
+        "partial": "Parziale",
+        "open": "Aperto"
+      },
+      "baselineTitle": "Per tutti gli spazi di lavoro",
+      "baselineHint": "Un insieme rigoroso di punti che offriamo a tutti gli spazi di lavoro, in qualsiasi paese.",
+      "profileTitle": "Richiesto dalle leggi che hai attivato",
+      "profileHint": "Ogni riga indica i profili che lo richiedono. Quando se ne applicano più di uno, si usa la regola più severa.",
+      "noProfiles": "Nessuna legge o regione è ancora attiva, quindi vengono mostrati solo i punti per tutti gli spazi di lavoro. Sceglile in Leggi e regioni.",
+      "disclaimer": "Questo elenco ti aiuta a tenere traccia della tua configurazione. Non è un parere legale e non afferma che il tuo spazio di lavoro rispetti alcuna legge. Chiedi al tuo consulente legale che cosa si applica a te.",
+      "open": "Aperto",
+      "items": {
+        "lawful_basis": {
+          "title": "Finalità e base giuridica registrate",
+          "detail": {
+            "built": "Ogni consenso è registrato con una finalità, chi o che cosa lo ha registrato, il testo mostrato, la sua versione e l'ora. Non c'è nulla da configurare."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Consenso e revoca semplice",
+          "detail": {
+            "detectionOff": "Il rilevamento di STOP è disattivato, quindi un contatto che risponde STOP non viene escluso. Attivalo nelle impostazioni del consenso.",
+            "optInOff": "STOP funziona, ma il marketing non richiede ancora un consenso registrato. Attiva \"richiedi il consenso registrato\" nelle impostazioni del consenso.",
+            "built": "STOP viene rilevato e il marketing richiede un consenso registrato."
+          }
+        },
+        "notices": {
+          "title": "Informative con versioni",
+          "detail": {
+            "built": "{lines, plural, one {# informativa sul consenso è attiva} other {# informative sul consenso sono attive}}, inclusa la tua informativa predefinita in {languages, plural, one {# lingua} other {# lingue}}.",
+            "noDefault": "{lines, plural, one {# informativa sul consenso è attiva} other {# informative sul consenso sono attive}}, ma lo spazio di lavoro non ha ancora un'informativa predefinita.",
+            "none": "Nessuna informativa sul consenso è attiva. Scrivi un'informativa predefinita così che un record possa indicare il testo visto dalla persona."
+          }
+        },
+        "rights": {
+          "title": "Richieste delle persone (accesso, esportazione, cancellazione)",
+          "detail": {
+            "overdue": "{overdue, plural, one {# richiesta ha superato} other {# richieste hanno superato}} la scadenza, su {open} aperte. Rispondi in Richieste sui dati.",
+            "noContact": "Le richieste hanno una scadenza di {days} giorni, ma non è ancora indicato un contatto privacy. Aggiungine uno.",
+            "built": "Le richieste hanno una scadenza di {days} giorni e {open} sono aperte. È indicato un contatto privacy."
+          }
+        },
+        "retention": {
+          "title": "Conservazione e cancellazione",
+          "detail": {
+            "recordingsOn": "Le registrazioni delle chiamate sono conservate per {days} giorni e possono essere messe in blocco. La conservazione degli altri dati non è ancora disponibile.",
+            "recordingsOff": "La registrazione delle chiamate è disattivata. Un'impostazione di conservazione per il resto dei tuoi dati non è ancora disponibile."
+          }
+        },
+        "security": {
+          "title": "Sicurezza e piano per le violazioni",
+          "detail": {
+            "runbook": "Sono attivi l'isolamento dello spazio di lavoro, le credenziali cifrate e un registro di audit. Il piano di risposta alle violazioni è una bozza che l'operatore della piattaforma completa. Qui non puoi attivarlo."
+          }
+        },
+        "subprocessors": {
+          "title": "Elenco dei sub-responsabili",
+          "detail": {
+            "built": "{count, plural, one {# sub-responsabile è elencato} other {# sub-responsabili sono elencati}}. Il modello di DPA è pronto per il download.",
+            "none": "Nessun sub-responsabile è ancora elencato. Elenca i fornitori che trattano dati personali per te."
+          }
+        },
+        "children": {
+          "title": "Dati dei minori",
+          "detail": {
+            "unset": "Nessuna risposta ancora. Indica se tra i tuoi contatti possono esserci minori.",
+            "minorsNoParental": "Possono esserci minori, ma il consenso dei genitori non è attivo.",
+            "no_minors": "Non tratti consapevolmente i dati di minori.",
+            "may_include_minors": "Possono esserci minori e il consenso dei genitori è attivo."
+          }
+        },
+        "contact_links": {
+          "title": "Contatto privacy e link",
+          "detail": {
+            "built": "I link a privacy e termini e un contatto raggiungibile sono impostati.",
+            "none": "Non ci sono ancora link alla privacy, link ai termini né contatto.",
+            "some": "Alcuni link e dati di contatto sono impostati. Completa il resto."
+          }
+        },
+        "dpo_contact": {
+          "title": "Responsabile della protezione dei dati (DPO) o contatto privacy",
+          "detail": {
+            "built": "Sono impostati un nome e un'email.",
+            "one": "Aggiungi sia un nome sia un'email.",
+            "none": "Non è ancora indicato alcun responsabile o contatto privacy."
+          }
+        },
+        "grievance_officer": {
+          "title": "Responsabile dei reclami",
+          "detail": {
+            "built": "Sono impostati un nome e un'email.",
+            "one": "Aggiungi sia un nome sia un'email.",
+            "none": "Non è ancora indicato alcun responsabile dei reclami."
+          }
+        },
+        "notice_languages": {
+          "title": "Informativa in inglese e in una seconda lingua",
+          "detail": {
+            "built": "La tua informativa predefinita è attiva in inglese e in {locale}.",
+            "noSecond": "Scegli la seconda lingua, poi scrivi l'informativa in quella lingua.",
+            "secondMissing": "L'inglese è attivo. Scrivi l'informativa nella seconda lingua.",
+            "englishMissing": "La seconda lingua è attiva. Scrivi l'informativa in inglese.",
+            "none": "Nessuna delle due informative è ancora attiva."
+          }
+        },
+        "parental_flag": {
+          "title": "Minori e consenso dei genitori",
+          "detail": {
+            "unset": "Rispondi alla domanda sui minori in Contatti e minori.",
+            "minorsNoParental": "Possono esserci minori, ma il consenso dei genitori è disattivato. Questo profilo considera minore chiunque abbia meno di {age} anni.",
+            "no_minors": "Non tratti consapevolmente i dati di minori. Questo profilo considera minore chiunque abbia meno di {age} anni.",
+            "may_include_minors": "Il consenso dei genitori è attivo per le persone sotto i {age} anni. La conservazione delle prove per ogni contatto non è ancora disponibile."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Opzione Non vendere né condividere",
+          "detail": {
+            "built": "L'opzione di opposizione e il link alla relativa informativa sono impostati.",
+            "noUrl": "L'opzione è attiva, ma non è impostato alcun link all'informativa di opposizione.",
+            "off": "Attiva l'opzione se vendi o condividi informazioni personali e aggiungi il link alla tua informativa di opposizione."
+          }
+        },
+        "quiet_hours": {
+          "title": "Orari di silenzio",
+          "detail": {
+            "built": "Orari di silenzio dalle {start} alle {end} salvati.",
+            "off": "Gli orari di silenzio non sono impostati."
+          }
+        },
+        "calling_window": {
+          "title": "Fascia di chiamata",
+          "detail": {
+            "built": "Fascia di chiamata dalle {start} alle {end} salvata.",
+            "off": "Nessuna fascia di chiamata impostata."
+          }
+        },
+        "dnd_registry": {
+          "title": "Registro Do Not Call / DND",
+          "detail": {
+            "off": "Nessun registro scelto.",
+            "hookOnly": "Registro annotato ({registry}). Per ora non viene verificato nulla su di esso."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Ubicazione dei tuoi sub-responsabili",
+          "detail": {
+            "built": "{count, plural, one {# sub-responsabile ha} other {Tutti i # sub-responsabili hanno}} un'ubicazione.",
+            "some": "{missing, plural, one {# sub-responsabile non ha} other {# sub-responsabili non hanno}} ancora un'ubicazione.",
+            "none": "Nessun sub-responsabile è elencato, oppure nessuno ha un'ubicazione."
+          }
+        },
+        "request_days": {
+          "title": "Tempo di risposta alle richieste",
+          "detail": {
+            "built": "La tua scadenza per le richieste è di {sla} giorni, entro i {days} giorni richiesti dal profilo più severo.",
+            "tooLong": "La tua scadenza è di {sla} giorni. Il profilo più severo che hai attivato ne richiede {days}. Modificala in Richieste sui dati."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Consenso registrato prima del marketing",
+          "detail": {
+            "built": "Il marketing richiede un consenso registrato.",
+            "off": "Il marketing non richiede ancora un consenso registrato. Attivalo nelle impostazioni del consenso."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Orari di silenzio e fasce di chiamata non sono ancora applicati",
+          "detail": {
+            "notEnforced": "I tuoi orari di silenzio e la tua fascia di chiamata sono salvati, ma per ora nulla trattiene un messaggio né blocca una chiamata al di fuori di essi. Organizzati di conseguenza."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "Attiva le leggi e le regioni che si applicano alle persone che contatti. Puoi attivarne diverse; dove differiscono, si usa la regola più severa. Un paese suggerisce soltanto: decidi tu.",
+      "suggested": "Il tuo paese di {source} è {country}, il che suggerisce:",
+      "source": {
+        "billing": "fatturazione",
+        "onboarding": "spazio di lavoro"
+      },
+      "useSuggestion": "Usa questo suggerimento",
+      "suggestedNote": "Uno spazio di lavoro che contatta persone in altri paesi dovrebbe attivare anche quelle leggi.",
+      "notConfirmed": "Non è ancora attivo nulla. Vale la base comune a tutti gli spazi di lavoro finché non salvi una scelta.",
+      "listTitle": "Leggi e regioni",
+      "switchesOn": "Attiva:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (UE e SEE)",
+          "summary": "Per le persone nell'Unione europea, in Islanda, Liechtenstein e Norvegia.",
+          "extras": "Un responsabile della protezione dei dati o contatto privacy, ubicazione dei sub-responsabili, risposte alle richieste entro 30 giorni, consenso registrato per il marketing."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR e PECR (Regno Unito)",
+          "summary": "Per le persone nel Regno Unito.",
+          "extras": "Un responsabile della protezione dei dati o contatto privacy, ubicazione dei sub-responsabili, risposte entro 30 giorni, consenso registrato per il marketing elettronico."
+        },
+        "dpdp_in": {
+          "name": "Legge DPDP (India)",
+          "summary": "Per le persone in India.",
+          "extras": "Un responsabile dei reclami, informative in inglese e in una lingua indiana, un indicatore di consenso dei genitori per i minori di 18 anni, un segnaposto per il gestore del consenso, consenso registrato."
+        },
+        "ccpa_us": {
+          "name": "CCPA e CPRA (Stati Uniti)",
+          "summary": "Per i residenti in California e un buon punto di partenza per gli Stati Uniti.",
+          "extras": "Un'opzione Non vendere né condividere le mie informazioni personali con link all'informativa di opposizione, risposte entro 45 giorni."
+        },
+        "tcpa_us": {
+          "name": "TCPA (chiamate e messaggi verso gli Stati Uniti)",
+          "summary": "Per chiamate e messaggi di marketing verso persone negli Stati Uniti.",
+          "extras": "Orari di silenzio dalle 21:00 alle 08:00, fascia di chiamata dalle 08:00 alle 21:00, una nota sul registro Do Not Call, consenso registrato."
+        },
+        "trai_in": {
+          "name": "Norme TRAI (chiamate e messaggi verso l'India)",
+          "summary": "Per chiamate e messaggi promozionali verso persone in India.",
+          "extras": "Orari di silenzio dalle 21:00 alle 09:00, fascia di chiamata dalle 09:00 alle 21:00, una nota sul registro DND, consenso registrato."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brasile)",
+          "summary": "Per le persone in Brasile.",
+          "extras": "Un contatto del responsabile della protezione dei dati (encarregado), ubicazione dei sub-responsabili, risposte entro 15 giorni, consenso registrato."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapore)",
+          "summary": "Per le persone a Singapore.",
+          "extras": "Un contatto del responsabile della protezione dei dati, una nota sul registro Do Not Call, risposte entro 30 giorni, consenso registrato."
+        },
+        "generic": {
+          "name": "Altri paesi (solo base comune)",
+          "summary": "Per tutto il resto del mondo, o quando non hai ancora deciso.",
+          "extras": "Nulla oltre alla base comune che ogni spazio di lavoro ottiene già."
+        }
+      },
+      "effective": {
+        "title": "Che cosa richiede la regola più severa",
+        "hint": "Ricavato dalle leggi che hai attivato. Sono punti di partenza da verificare con il tuo consulente legale.",
+        "baselineOnly": "Nessuna legge è attiva. Si applica solo la base comune a tutti gli spazi di lavoro.",
+        "optIn": "Consenso registrato prima del marketing",
+        "optInYes": "Consigliato.",
+        "optInNo": "Non richiesto da questi profili.",
+        "consentLink": "Apri le impostazioni del consenso",
+        "requestDays": "Tempo di risposta alla richiesta di una persona",
+        "days": "{count, plural, one {# giorno} other {# giorni}}",
+        "minorAge": "Considera minore una persona sotto i",
+        "years": "{count, plural, one {# anno} other {# anni}}",
+        "callingWindow": "Fascia di chiamata",
+        "dnd": "Registro Do Not Call / DND",
+        "none": "Nessuno",
+        "registry": {
+          "none": "Nessuno",
+          "trai_ndnc": "NDNC India (TRAI)",
+          "us_dnc": "Do Not Call degli Stati Uniti",
+          "sg_dnc": "Do Not Call di Singapore",
+          "custom": "Il tuo elenco"
+        },
+        "strictest": "Quando sono attivi più profili, si usa la regola più severa: il tempo di risposta più breve, l'età più alta, la fascia di chiamata più stretta."
+      },
+      "ccpa": {
+        "title": "Non vendere né condividere",
+        "hint": "Se vendi o condividi informazioni personali (anche per la pubblicità su altri siti), le persone possono chiederti di smettere.",
+        "offer": "Offri l'opzione Non vendere né condividere le mie informazioni personali",
+        "url": "Link alla tua informativa di opposizione",
+        "urlHint": "La pagina in cui le persone possono opporsi. Deve iniziare con https://."
+      },
+      "dpdp": {
+        "title": "Gestore del consenso",
+        "hint": "La legge DPDP consente alle persone di gestire il consenso tramite un gestore del consenso registrato. Indica qui il tuo, se ne usi uno.",
+        "managerName": "Gestore del consenso",
+        "managerUrl": "Link del gestore del consenso",
+        "placeholderNote": "È solo una nota. Per ora nulla è collegato a un gestore del consenso."
+      }
+    },
+    "contacts": {
+      "intro": "Chi una persona o un'autorità può contattare in merito ai suoi dati, e se tra i tuoi contatti possono esserci minori.",
+      "requiredByProfile": "Richiesto da un profilo che hai attivato",
+      "officer": {
+        "name": "Nome",
+        "email": "Email",
+        "phone": "Telefono",
+        "address": "Indirizzo postale"
+      },
+      "dpo": {
+        "title": "Responsabile della protezione dei dati o contatto privacy",
+        "hint": "La persona o il team che risponde alle domande sulla privacy. Viene mostrato nella tua pagina pubblica, se lo attivi."
+      },
+      "grievance": {
+        "title": "Responsabile dei reclami",
+        "hint": "La legge DPDP richiede un responsabile indicato che gestisca i reclami su come vengono trattati i dati personali."
+      },
+      "children": {
+        "title": "Dati dei minori",
+        "hint": "Questo prodotto è pensato per le aziende. Indica se puoi detenere dati di minori, così vengono mostrate le regole giuste.",
+        "policy": "Minori tra i tuoi contatti",
+        "policies": {
+          "unset": "Nessuna risposta ancora",
+          "no_minors": "Non trattiamo consapevolmente i dati di minori",
+          "may_include_minors": "Tra i nostri contatti possono esserci minori"
+        },
+        "parental": "Per i minori è richiesto il consenso dei genitori",
+        "parentalHint": "Un indicatore che registra la tua politica. Raccogliere e conservare le prove del consenso dei genitori per ogni contatto non è ancora disponibile.",
+        "age": "I profili che hai attivato considerano minore chiunque abbia meno di {age} anni.",
+        "dpdpNeedsAnswer": "Il profilo DPDP ti chiede di rispondere a questa domanda."
+      }
+    },
+    "links": {
+      "intro": "Salva una sola volta i tuoi link a privacy e termini. Vengono proposti con un clic nella riga del consenso del costruttore di moduli e in ogni editor delle informative sul consenso.",
+      "privacy": "Link all'informativa sulla privacy",
+      "privacyHint": "Deve iniziare con https://",
+      "terms": "Link ai termini",
+      "termsHint": "Deve iniziare con https://",
+      "offered": "Nulla viene compilato in automatico: ogni modulo o informativa mostra un pulsante per usare questi link."
+    },
+    "notices": {
+      "intro": "Il testo predefinito che il tuo spazio di lavoro mostra accanto a una casella di consenso. Ogni modifica viene salvata come nuova versione numerata, così un record può indicare il testo esatto a cui la persona ha dato il consenso.",
+      "english": "Informativa sul consenso predefinita ({language})",
+      "secondEditor": "Informativa sul consenso predefinita ({language})",
+      "second": {
+        "title": "Seconda lingua",
+        "requiredByProfile": "Richiesto dal profilo DPDP",
+        "hint": "La legge DPDP richiede l'informativa in inglese e in una delle lingue dell'India. Scegli la seconda lingua e salva, poi scrivi l'informativa in quella lingua.",
+        "language": "Lingua della seconda informativa",
+        "none": "Nessuna seconda lingua",
+        "saveFirst": "Salva prima le modifiche: poi comparirà l'editor dell'informativa per questa lingua."
+      }
+    },
+    "windows": {
+      "notEnforced": "Queste impostazioni sono salvate, ma non ancora applicate. Un messaggio non viene trattenuto e una chiamata non viene bloccata al di fuori degli orari che imposti. Pianifica invii e chiamate di conseguenza.",
+      "intro": "Alcune norme limitano quando i messaggi e le chiamate di marketing possono raggiungere le persone. Registra qui i tuoi orari di lavoro.",
+      "quiet": {
+        "title": "Orari di silenzio per i messaggi",
+        "hint": "Orari in cui non vuoi che i messaggi di marketing raggiungano le persone. Il periodo può attraversare la mezzanotte.",
+        "enabled": "Orari di silenzio attivi",
+        "start": "Silenzio dalle",
+        "end": "Silenzio fino alle"
+      },
+      "calling": {
+        "title": "Fascia di chiamata",
+        "hint": "Gli unici orari in cui effettuare chiamate di marketing, nei giorni che scegli.",
+        "enabled": "Fascia di chiamata attiva",
+        "start": "Chiamate dalle",
+        "end": "Chiamate fino alle",
+        "days": "Giorni"
+      },
+      "day": {
+        "1": "Lunedì",
+        "2": "Martedì",
+        "3": "Mercoledì",
+        "4": "Giovedì",
+        "5": "Venerdì",
+        "6": "Sabato",
+        "7": "Domenica"
+      },
+      "suggested": "Le leggi che hai attivato suggeriscono dalle {start} alle {end}.",
+      "zone": {
+        "label": "Fuso orario",
+        "hint": "Gli orari vengono letti in questo fuso. Il fuso del tuo spazio di lavoro è {zone}.",
+        "workspace": "Fuso orario dello spazio di lavoro ({zone})"
+      },
+      "dnd": {
+        "label": "Registro Do Not Call / DND",
+        "hint": "Il registro con cui verifichi i tuoi elenchi.",
+        "registry": {
+          "none": "Nessuno",
+          "trai_ndnc": "NDNC India (TRAI)",
+          "us_dnc": "Do Not Call degli Stati Uniti",
+          "sg_dnc": "Do Not Call di Singapore",
+          "custom": "Il tuo elenco"
+        },
+        "note": "È solo una nota. Per ora non viene verificato nulla su alcun registro."
+      }
+    },
+    "subprocessors": {
+      "intro": "I fornitori che trattano dati personali per il tuo spazio di lavoro: che cosa fanno, quali dati ricevono e dove. Puoi pubblicare l'elenco su una pagina pubblica.",
+      "listTitle": "I tuoi sub-responsabili",
+      "add": "Aggiungi un sub-responsabile",
+      "saved": "Sub-responsabile salvato.",
+      "removed": "Sub-responsabile rimosso.",
+      "empty": {
+        "title": "Ancora nessun sub-responsabile",
+        "body": "Aggiungi ogni fornitore che tratta dati personali per te, ad esempio il tuo provider di email o SMS."
+      },
+      "status": {
+        "active": "In uso",
+        "planned": "Pianificato",
+        "removed": "Non più in uso"
+      },
+      "edit": "Modifica",
+      "remove": "Rimuovi",
+      "public": {
+        "title": "Pagina pubblica",
+        "hint": "Pubblica i fornitori in uso, i tuoi link a privacy e termini e il tuo contatto privacy su una pagina che chiunque può aprire. Disattivata per impostazione predefinita.",
+        "switch": "Pagina pubblica attiva",
+        "saveToApply": "Salva le modifiche per applicarlo."
+      },
+      "dpa": {
+        "title": "Modello di accordo sul trattamento dei dati (DPA)",
+        "hint": "Un modello compilato con i tuoi dati e il tuo elenco. Non è un parere legale né un accordo: fallo rivedere dal tuo consulente legale prima di usarlo.",
+        "download": "Scarica il modello"
+      },
+      "form": {
+        "addTitle": "Aggiungi un sub-responsabile",
+        "editTitle": "Modifica sub-responsabile",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "name": "Nome",
+        "required": "Il nome è obbligatorio.",
+        "purpose": "Che cosa fanno per te",
+        "data": "Dati che ricevono",
+        "location": "Ubicazione",
+        "locationHint": "Paese o regione in cui trattano i dati.",
+        "status": "Stato",
+        "website": "Sito web",
+        "dpa": "Link all'accordo",
+        "httpsOnly": "Usa un indirizzo che inizia con https://.",
+        "addedOn": "Aggiunto il",
+        "noticeSentOn": "Clienti informati il",
+        "noticeHint": "Il giorno in cui hai informato i tuoi clienti di questo fornitore."
+      },
+      "confirmRemove": {
+        "title": "Rimuovere questo sub-responsabile?",
+        "body": "{name} verrà tolto dal tuo elenco. Segnalo invece come \"non più in uso\" se vuoi conservare la cronologia.",
+        "confirm": "Rimuovi"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: sub-responsabili e privacy",
+      "intro": "I fornitori che questa azienda usa per trattare dati personali e come contattare il suo referente privacy.",
+      "subprocessors": "Sub-responsabili",
+      "none": "Nessun sub-responsabile elencato.",
+      "contact": "Contatto privacy e politiche",
+      "privacy": "Informativa sulla privacy",
+      "terms": "Termini",
+      "notFound": "Pagina non trovata"
+    }
+  }
+}

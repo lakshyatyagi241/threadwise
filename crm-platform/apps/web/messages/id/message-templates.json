@@ -60,7 +60,9 @@
       "rejected": "Ditolak: {reason}",
       "view": "Lihat",
       "edit": "Edit",
-      "delete": "Hapus"
+      "delete": "Hapus",
+      "curl": "cURL: kirim templat ini dengan API",
+      "curlNamed": "cURL untuk mengirim {name}"
     },
     "library": {
       "title": "Pustaka templat",
@@ -354,6 +356,15 @@
         "title": "Payload Meta",
         "hint": "Yang dikirim ke Meta untuk peninjauan, persis seperti yang dibuat.",
         "empty": "Belum ada yang dibuat."
+      },
+      "curl": {
+        "title": "Kirim dengan API (cURL)",
+        "intro": "Kirim templat yang sudah disetujui ini ke satu nomor. Ganti nilai contoh dengan nilai Anda.",
+        "copy": "Salin",
+        "copied": "Tersalin",
+        "copyFailed": "Gagal menyalin. Pilih teksnya lalu salin secara manual.",
+        "keyHint": "Ganti YOUR_API_KEY dengan kunci API Anda.",
+        "keyLink": "Dapatkan kunci API"
       }
     }
   }

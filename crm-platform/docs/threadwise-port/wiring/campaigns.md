@@ -54,11 +54,11 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 
 ## Tables read or written
 
-`camp_campaign_lookup`, `camp_receipt_lookup`, `camp_series`, `camp_retry_attempts`, `camp_test_sends`, `camp_test_receipt_lookup` (functions), `segments`, `usage_charges`, `channels`, `contact_group_members`, `contact_groups`, `contact_tags`, `contacts`, `conversation_tag`, `conversations`, `devices`, `flows`, `picked`, `r`, `tags`, `wa_link_clicks`, `wa_provider_configs`, `wa_templates`, `wp_campaign_contacts`, `wpcampaigns`
+`camp_campaign_lookup`, `camp_receipt_lookup`, `camp_series`, `camp_retry_attempts`, `camp_follow_up_attempts`, `camp_follow_up_receipt_lookup` (function), `camp_test_sends`, `camp_test_receipt_lookup` (functions), `segments`, `usage_charges`, `channels`, `contact_group_members`, `contact_groups`, `contact_tags`, `contacts`, `conversation_tag`, `conversations`, `devices`, `flows`, `picked`, `r`, `tags`, `wa_link_clicks`, `wa_provider_configs`, `wa_templates`, `wp_campaign_contacts`, `wpcampaigns`
 
 ## Queues and workers
 
-`CAMPAIGN` (runs, and the sandbox's `fixture-receipt` reports). Interval services in the campaigns worker: `WizardWorker.planTick` (recurring series planner) and `retryTick` (frequency-cap retries).
+`CAMPAIGN` (runs, and the sandbox's `fixture-receipt` reports). Interval services in the campaigns worker: `WizardWorker.planTick` (recurring series planner), `retryTick` (frequency-cap retries) and `followUpTick` (follow-up steps, `WizardFollowUpService`).
 
 ## Outbox events emitted
 
@@ -94,3 +94,4 @@ Blocked (recorded, not silently dropped):
 - `CAMP-EMAIL-B2` Replies and clicks counters for an email campaign (`campaign.contact_replied`, link tracking). Reference's mail runner had neither; the reply lands in the inbox thread of the mail.
 - `CAMP-EMAIL-B3` A mailbox that needs reconnecting mid-run fails each remaining recipient with the reason (resend failed after reconnecting) instead of pausing the campaign.
 - `CAMP-EMAIL-B4` Campaign mail with attachments or rich HTML (Reference's mail runner sends the escaped text only).
+- Follow-up steps (ADDITION, from the meeting's "Add a follow-up"; Reference has none): `followUps` on the wizard draft, `wpcampaigns.follow_up_count`, `wp_campaign_contacts.follow_up_*`, log `camp_follow_up_attempts`. Cloud API numbers only. A flow step uses the same `CampaignFlowStarter` seam as a flow campaign. Reply detection reads the inbox (`messages` direction `in` of the contact's conversations).

@@ -269,6 +269,18 @@ export function UploadedFile({
     <div className="mt-2 flex items-start gap-2">
       {kind === 'image' ? (
         <img src={url} alt="" className={cn(box, 'rounded-md border border-border object-cover')} />
+      ) : kind === 'video' ? (
+        <video
+          src={url}
+          controls
+          preload="metadata"
+          className={cn(
+            size === 'md' ? 'h-24 w-40' : 'h-20 w-32',
+            'rounded-md border border-border bg-black',
+          )}
+        />
+      ) : kind === 'audio' ? (
+        <audio src={url} controls preload="metadata" className="h-9 w-48 max-w-full" />
       ) : (
         <span
           className={cn(

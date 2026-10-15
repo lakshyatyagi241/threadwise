@@ -402,6 +402,17 @@ Reference's `/call-logs` is a list of the AI assistant's calls with a time range
 Decisions for the owner: whether the Manager preset should read its own calls (Reference's tier is admin only); whether "handle time" should
 later include ringing and wrap-up time once the inbox records them; whether a CSV export of the log is wanted (Reference has none).
 
+## WhatsApp calling: number readiness and onboarding (EXT-CALL-007 to 011)
+
+Reference's calling screen is a switch per number. This port adds, because the product starts using WhatsApp Business Calling and needs a
+freshly connected number to reach "can place and receive calls" without anyone touching Meta by hand: a **Ready for calls?** checklist on each
+number (plan, connection, coexistence, registration, messaging limit, token permissions, webhook subscription, the `calls` field, Meta's
+calling status, TURN, people allowed to call, recording rules), each row with what was found and what to do, in 21 languages; Meta's refusals
+shown as reasons; a switch-on **after a connect** that is off until a workspace admin turns it on; a scheduled re-check; the local switch
+following Meta; and a **test call** to the admin's own phone. Detail: [calling-voice.md](calling-voice.md#number-readiness-and-onboarding-ext-call-007-to-011),
+[plan](../plan/calling-number-readiness-build.md), [runbook](../../runbooks/enabling-whatsapp-calling.md). Decisions for the owner are listed
+in the parity file.
+
 ## Audit log for the workspace and the full Notifications page (TW-NOTIF-007, 008, 029 to 031): partly beyond Reference
 
 Reference's Activity Log (KPIs, charts, table, detail, CSV) is rebuilt as Settings, Audit log at the same route `/activity-log`, without the charts. Deliberate additions and differences: platform support (act-as) sessions are shown to the workspace with their reason; personal values are masked at read time (only the Owner key sees them) and the CSV is always masked; opening an entry and asking for an export are themselves audited; text search covers the module and action only; no IP or user agent is stored. The Notifications page keeps Reference's tabs-as-filters, search, day sections, mark read, dismiss and clear, with SQL search and per-person rows. Not built: charts, top actors, "My activity" scope, do-not-disturb. Spec: [audit-log-tenant.md](../../specs/audit-log-tenant.md). Status: owner-requested, pending sign-off.
@@ -504,3 +515,12 @@ Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/priv
 - **Policy (owner-approved):** a first inbound message permits replying only and never creates a marketing grant; a grant is written only when the person agreed, with source, wording, version and time as evidence; the ConsentGate stays the enforcement point.
 - **New:** a `consent` block (note or wording, channels, version, time) on contact create/update, the REST v1 contact routes, partner and public lead submit, and `consent` / `consent_note` cells for the Google Sheets add-on; a subscription status set to `subscribed` without proof is refused (422 `CONSENT_NOTE_REQUIRED`). A versioned consent line for the chat widget, booking types and stores (`consent_notices`), and the store's own marketing flag from Shopify (and a Woo checkout plugin's meta) recorded when the store's line is on.
 - **Intended difference from the reference (contact creation):** contacts made by Telegram, Facebook, Instagram, the website widget, the campaign wizard's typed or uploaded numbers and the Shopify/WooCommerce customer sync now go through `ContactsService.resolveOrCreateByIdentity` (audit row, plan contact cap, default stage and status) instead of raw inserts. Over the cap such a person is not made a contact (the message is kept without one; a wizard number is left out of the audience).
+
+## Compliance center and regime profiles (BL-172 to BL-181)
+
+Not a reference feature. Spec: [privacy-and-data-governance.md](../../specs/privacy-and-data-governance.md) section 11; API: [compliance.md](../../api/compliance.md); wiring: [compliance-center.md](../wiring/compliance-center.md).
+
+- **Decision (owner, 15 Oct 2026):** the product is global with no signup restriction. Every workspace gets a strict-superset baseline; regime profiles (GDPR EU, UK GDPR, DPDP India, CCPA US, TCPA US, TRAI India, LGPD Brazil, PDPA Singapore, generic) are workspace settings that switch on extras, suggested from the billing or onboarding country, always overridable, several at once, the strictest wins.
+- **New:** Settings, Security, Compliance center: profile picker with the country suggestion, DPO and grievance officer contacts, children flag, DPDP and CCPA extras, quiet hours and calling windows (stored), a DND registry choice, privacy and terms links (offered to the form builder consent block and the consent-notice editor, with an optional `termsUrl` beside `privacyUrl`), the workspace default notice in two languages, an editable sub-processor list with an optional public page, the DPA template download, and a checklist (built, partial, open) driven by workspace data.
+- **Wording:** always "tools to help you comply". Nothing in the product says a workspace is compliant. HIPAA is not supported and the notice says so; SOC 2 and ISO 27001 are out of scope.
+- **Not verified / open:** that any profile's numbers are legally right (counsel); enforcement of quiet hours and calling windows (BL-177); contact-level minor, parental-consent and do-not-sell controls (BL-180); the integrations behind the DPDP consent manager and DND hooks (BL-181).

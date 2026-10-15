@@ -1,7 +1,16 @@
 'use client';
 
 import { ButtonIcon } from '../button-icon';
-import type { ReactNode } from 'react';
+import { MessageField } from '../message-field';
+import { flowVariables } from '../../lib/flow-variables';
+import { ButtonActionPicker } from '../button-action-picker';
+import {
+  buttonActionContinues,
+  buttonActionOf,
+  buttonActionPatch,
+  buttonActionsWithout,
+} from '../../lib/button-actions';
+import { useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   FLB_CAROUSEL_LIMITS,
@@ -34,9 +43,16 @@ import { useFaqSummary } from '../../api/hooks';
 import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
-import { ConditionGroupEditor } from '../inspector/forms-core/logic';
-import { usePickerFeed } from '@/features/contacts-attributes-tags';
-import { Field, Input, Select, Textarea } from '@crm/ui';
+import { CodeForm, ConditionGroupEditor } from '../inspector/forms-core/logic';
+import {
+  createAttribute,
+  suggestAttributeKey,
+  usePickerFeed,
+} from '@/features/contacts-attributes-tags';
+import { Button, Field, Input, Select, Textarea, useToast } from '@crm/ui';
+import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
+import type { FormComponent, FormEnv } from '../inspector/types';
+import { MediaUpload } from './media-upload';
 import {
   BRANCHING,
   LIMITS,
@@ -107,8 +123,8 @@ interface EditorProps {
   ctx: FlbBuilderContext;
   /** The saved flow (null before the first save): the FAQ step answers from this flow's FAQs. */
   flowId: string | null;
-  /** Merge keys into the step's data. */
-  set: (patch: Record<string, unknown>) => void;
+  /** Merge keys into the step's data; `links` (one per button / row) replaces the step's links in the same change. */
+  set: (patch: Record<string, unknown>, links?: (string | null)[]) => void;
   /** Point button / row `i` at a step (or `null` to end, or NEW_JOURNEY). */
   link: (i: number, target: string | null) => void;
 }
@@ -163,19 +179,57 @@ export function StepEditor(p: EditorProps) {
       return <CtaEditor {...p} />;
     case 'assign':
       return <AssignEditor {...p} />;
+    case 'api_library':
+      return <NodeFormEditor {...p} Form={ApiLibraryForm} />;
+    case 'code':
+      return <NodeFormEditor {...p} Form={CodeForm} />;
     case 'faq':
       return <FaqEditor {...p} />;
   }
 }
 
-function MessageEditor({ step, set }: EditorProps) {
+/**
+ * A step whose settings are the Advanced builder's own form for the same node (API call, JS function): the form is given the step's data
+ * as a node, so the two builders edit one thing in one way.
+ */
+function NodeFormEditor({ step, ctx, flowId, set, Form }: EditorProps & { Form: FormComponent }) {
+  const { toast } = useToast();
+  const env: FormEnv = {
+    ctx,
+    loading: false,
+    mode: 'chat',
+    openedAs: 'chat',
+    channels: ['chat'],
+    refresh: () => undefined,
+    toast,
+    uploadMedia: () => Promise.reject(new Error('unsupported')),
+    nodes: [],
+    flowId,
+  };
+  return (
+    <Form
+      node={{ id: step.id, type: step.type, x: 0, y: 0, data: step.data }}
+      data={step.data}
+      set={(key, value) => set({ [key]: value })}
+      setMany={set}
+      env={env}
+      addOption={() => undefined}
+      removeOption={() => undefined}
+    />
+  );
+}
+
+function MessageEditor({ step, doc, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   return (
-    <Field label={t('message.label')} hint={t('message.hint', { token: '{{name}}' })}>
-      <Textarea
+    <Field label={t('message.label')}>
+      <MessageField
         rows={5}
+        label={t('message.label')}
         value={str(step.data.text)}
-        onChange={(e) => set({ text: e.target.value })}
+        max={LIMITS.message}
+        variables={flowVariables(doc)}
+        onChange={(text) => set({ text })}
       />
     </Field>
   );
@@ -197,6 +251,12 @@ function MediaEditor({ step, set }: EditorProps) {
           ))}
         </Select>
       </Field>
+      <MediaUpload
+        kind={kind as 'image'}
+        url={str(step.data.url)}
+        filename={str(step.data.filename)}
+        onDone={(res) => set({ url: res.url, filename: res.filename })}
+      />
       <Field label={t('media.fileLink')} hint={t('media.fileLinkHint')}>
         <Input
           value={str(step.data.url)}
@@ -329,6 +389,15 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
           </div>
           <div className="space-y-2">
             <Field label={t('carousel.image')}>
+              <div className="mb-2">
+                <MediaUpload
+                  compact
+                  kind="image"
+                  url={str(c.image)}
+                  filename=""
+                  onDone={(res) => patchCard(ci, { image: res.url })}
+                />
+              </div>
               <Input
                 value={str(c.image)}
                 placeholder="https://"
@@ -455,36 +524,23 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
   );
 }
 
-function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
+function ButtonsEditor({ step, doc, ctx, flowId, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const opts = arr(step.data.options).map(str);
   // The small picture of each button (website chat bots only), by position.
   const icons = opts.map((_, j) => str(arr(step.data.optionIcons)[j]));
   const prompt = str(step.data.prompt);
-  // A button can hand the visitor to a person instead of leading to another step: `handoffs` is keyed by the button's position.
-  const handoffs = rec(step.data.handoffs);
-  const setHandoff = (i: number, h: { team: string; message: string } | null) => {
-    const next = { ...handoffs };
-    if (h) next[String(i)] = h;
-    else delete next[String(i)];
-    set({ handoffs: next });
-  };
-  const withoutOption = (i: number) =>
-    Object.fromEntries(
-      Object.entries(handoffs)
-        .filter(([k]) => Number(k) !== i)
-        .map(([k, v]) => [String(Number(k) > i ? Number(k) - 1 : Number(k)), v]),
-    );
   return (
     <div className="space-y-3">
-      <Field
-        label={
-          <span className="flex items-center justify-between">
-            {t('buttons.above')} <Counter value={prompt} max={LIMITS.body} />
-          </span>
-        }
-      >
-        <Textarea rows={4} value={prompt} onChange={(e) => set({ prompt: e.target.value })} />
+      <Field label={t('buttons.above')}>
+        <MessageField
+          rows={4}
+          label={t('buttons.above')}
+          value={prompt}
+          max={LIMITS.body}
+          variables={flowVariables(doc)}
+          onChange={(v) => set({ prompt: v })}
+        />
       </Field>
       <div className="space-y-2">
         <div className="text-[12px] font-medium">
@@ -510,11 +566,14 @@ function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
                 label={t('buttons.remove')}
                 disabled={opts.length <= 1}
                 onClick={() =>
-                  set({
-                    options: opts.filter((_, j) => j !== i),
-                    optionIcons: icons.filter((_, j) => j !== i),
-                    handoffs: withoutOption(i),
-                  })
+                  set(
+                    {
+                      options: opts.filter((_, j) => j !== i),
+                      optionIcons: icons.filter((_, j) => j !== i),
+                      ...buttonActionsWithout(step.data, i),
+                    },
+                    step.links.filter((_, j) => j !== i),
+                  )
                 }
               />
             </div>
@@ -524,39 +583,31 @@ function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
                 onChange={(v) => set({ optionIcons: icons.map((x, j) => (j === i ? v : x)) })}
               />
             </div>
-            <label className="mb-2 flex items-center gap-2 text-[12px]">
-              <input
-                type="checkbox"
-                checked={handoffs[String(i)] !== undefined}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    link(i, null);
-                    setHandoff(i, { team: '', message: '' });
-                  } else setHandoff(i, null);
-                }}
-              />
-              {t('buttons.handoff')}
-            </label>
-            {handoffs[String(i)] !== undefined ? (
-              <HandoffFields
+            <div className="mb-2">
+              <ButtonActionPicker
+                value={buttonActionOf(step.data, i)}
                 ctx={ctx}
-                team={str(rec(handoffs[String(i)]).team)}
-                note={str(rec(handoffs[String(i)]).message)}
-                onTeam={(v) =>
-                  setHandoff(i, { team: v, message: str(rec(handoffs[String(i)]).message) })
-                }
-                onNote={(v) =>
-                  setHandoff(i, { team: str(rec(handoffs[String(i)]).team), message: v })
+                flowId={flowId}
+                onChange={(next) =>
+                  // A hand-over, or a connected flow, takes the conversation away: nothing is connected after such a button. The link
+                  // goes in the same change as the action (two separate changes would overwrite each other).
+                  set(
+                    buttonActionPatch(step.data, i, next),
+                    buttonActionContinues(next)
+                      ? undefined
+                      : step.links.map((l, j) => (j === i ? null : l)),
+                  )
                 }
               />
-            ) : (
+            </div>
+            {buttonActionContinues(buttonActionOf(step.data, i)) ? (
               <LinkSelect
                 doc={doc}
                 stepId={step.id}
                 value={step.links[i] ?? null}
                 onChange={(target) => link(i, target)}
               />
-            )}
+            ) : null}
           </Row>
         ))}
         {opts.length < LIMITS.buttons ? (
@@ -584,14 +635,15 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
     set({ options: rows.map((r, j) => (j === i ? { ...r, ...patch } : r)) });
   return (
     <div className="space-y-3">
-      <Field
-        label={
-          <span className="flex items-center justify-between">
-            {t('list.above')} <Counter value={prompt} max={LIMITS.body} />
-          </span>
-        }
-      >
-        <Textarea rows={4} value={prompt} onChange={(e) => set({ prompt: e.target.value })} />
+      <Field label={t('list.above')}>
+        <MessageField
+          rows={4}
+          label={t('list.above')}
+          value={prompt}
+          max={LIMITS.body}
+          variables={flowVariables(doc)}
+          onChange={(v) => set({ prompt: v })}
+        />
       </Field>
       <Field
         label={
@@ -732,8 +784,37 @@ function SavePropertyField({
   noun?: 'answer' | 'button' | 'row';
 }) {
   const t = useTranslations('flb.builder.simple.editors.property');
+  const tNew = useTranslations('contacts-attributes-tags.properties');
+  const tCreate = useTranslations('contacts-attributes-tags.properties.modal');
+  const { toast } = useToast();
   const feed = usePickerFeed();
   const on = step.data.saveProperty === true;
+  const [adding, setAdding] = useState(false);
+  const [name, setName] = useState('');
+  const [busy, setBusy] = useState(false);
+  // A property made right here, so nobody has to leave the builder for the Contacts settings.
+  const create = async () => {
+    const label = name.trim();
+    if (!label || busy) return;
+    setBusy(true);
+    try {
+      const made = await createAttribute({
+        name: label,
+        key: suggestAttributeKey(label),
+        defaultValue: '',
+        description: '',
+        active: true,
+      });
+      await feed.refetch();
+      set({ propertyKey: made.key });
+      setName('');
+      setAdding(false);
+    } catch (err) {
+      toast(err instanceof Error ? err.message : String(err), 'danger');
+    } finally {
+      setBusy(false);
+    }
+  };
   return (
     <Field label={t('label')}>
       <label className="flex items-center gap-2 text-[13px]">
@@ -745,25 +826,55 @@ function SavePropertyField({
         {t('copy', { what: noun })}
       </label>
       {on ? (
-        <Select
-          aria-label={t('label')}
-          className="mt-2"
-          value={str(step.data.propertyKey)}
-          onChange={(e) => set({ propertyKey: e.target.value })}
-        >
-          <option value="">{t('choose')}</option>
-          {(feed.data?.custom ?? []).map((pr) => (
-            <option key={pr.key} value={pr.key}>
-              {pr.name}
-            </option>
-          ))}
-        </Select>
+        <>
+          <Select
+            aria-label={t('label')}
+            className="mt-2"
+            value={str(step.data.propertyKey)}
+            onChange={(e) => set({ propertyKey: e.target.value })}
+          >
+            <option value="">{t('choose')}</option>
+            {(feed.data?.custom ?? []).map((pr) => (
+              <option key={pr.key} value={pr.key}>
+                {pr.name}
+              </option>
+            ))}
+          </Select>
+          {adding ? (
+            <div className="mt-2 flex items-center gap-2">
+              <Input
+                autoFocus
+                aria-label={tNew('newProperty')}
+                placeholder={tNew('newProperty')}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    void create();
+                  }
+                }}
+              />
+              <Button size="sm" disabled={busy || !name.trim()} onClick={() => void create()}>
+                {tCreate('create')}
+              </Button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setAdding(true)}
+              className="mt-2 text-[12.5px] font-semibold text-brand hover:underline"
+            >
+              + {tNew('newProperty')}
+            </button>
+          )}
+        </>
       ) : null}
     </Field>
   );
 }
 
-function AskEditor({ step, set }: EditorProps) {
+function AskEditor({ step, doc, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const tf = useFlb();
   const type = flbCleanAskInputType(step.data.validate);
@@ -771,10 +882,13 @@ function AskEditor({ step, set }: EditorProps) {
   return (
     <div className="space-y-3">
       <Field label={t('question')}>
-        <Textarea
+        <MessageField
           rows={3}
+          label={t('question')}
           value={str(step.data.prompt)}
-          onChange={(e) => set({ prompt: e.target.value })}
+          max={LIMITS.body}
+          variables={flowVariables(doc)}
+          onChange={(v) => set({ prompt: v })}
         />
       </Field>
       <Field label={t('ask.accept')} hint={checked ? t('ask.checkedHint') : t('ask.anyTextHint')}>

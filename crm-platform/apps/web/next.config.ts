@@ -109,6 +109,15 @@ const nextConfig: NextConfig = {
       })),
     ];
   },
+  // The chat widget's pages (`/widget/<token>/chat`, `/embed`, its assets) are served by the API. The snippet and the Preview link point
+  // at the app's own address, so the app hands those paths to the API; without this the Preview opens the app's "Page not found".
+  async rewrites() {
+    const api = (process.env.API_URL ?? 'http://localhost:3000').replace(/\/+$/, '');
+    return [
+      { source: '/widget/:token/:path*', destination: `${api}/widget/:token/:path*` },
+      { source: '/widget-assets/:path*', destination: `${api}/widget-assets/:path*` },
+    ];
+  },
   // Addresses Reference bookmarks and old emails may still carry. Query strings travel along with each redirect.
   async redirects() {
     return [

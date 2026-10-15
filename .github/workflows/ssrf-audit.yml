@@ -1,0 +1,64 @@
+name: SSRF audit
+
+# The SSRF suite (crm-platform/apps/api/test/unit/ssrf): one address matrix and one URL matrix run against every outbound guard
+# (blocked-address, guardedRequest, SafeFetch, flow-builder guard, webhook guard, WABA provider guard), plus the redirect and
+# webhook-delivery specs. Any failing case fails the job; the JUnit report is kept as evidence.
+#   pull request  when a guard, an outbound caller or the suite changes
+#   nightly       always
+#   release       before a release is published
+#   manual        any time
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'crm-platform/apps/api/src/infra/**'
+      - 'crm-platform/apps/api/src/modules/**/*webhook*'
+      - 'crm-platform/apps/api/src/modules/webhook-fanout/**'
+      - 'crm-platform/apps/api/src/modules/outbound-webhooks/**'
+      - 'crm-platform/apps/api/src/modules/flow-builder-editor/**'
+      - 'crm-platform/apps/api/src/modules/api-library/**'
+      - 'crm-platform/apps/api/test/unit/ssrf/**'
+      - 'crm-platform/pnpm-lock.yaml'
+      - '.github/workflows/ssrf-audit.yml'
+  schedule:
+    - cron: '30 21 * * *'
+  release:
+    types: [prereleased, released]
+  workflow_dispatch:
+
+concurrency:
+  group: ssrf-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ssrf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - name: Build the workspace packages the suite imports
+        run: pnpm --filter @crm/tax build && pnpm --filter @crm/contracts build && pnpm --filter @crm/db build
+      - name: Run the SSRF suite
+        working-directory: crm-platform/apps/api
+        run: >
+          pnpm exec vitest run test/unit/ssrf test/unit/net test/unit/webhook-fanout test/unit/outbound-webhooks/send.spec.ts
+          test/unit/node-bridge-runtime/safe-fetch.spec.ts test/unit/ai-agents-training/url-fetcher.spec.ts
+          --reporter=default --reporter=junit --outputFile.junit=../../reports/ssrf/junit.xml
+      - name: Keep the evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ssrf-audit-${{ github.run_id }}
+          path: crm-platform/reports/ssrf
+          retention-days: 90

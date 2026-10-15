@@ -24,7 +24,8 @@ export const TRIAL_DAYS = { min: 0, max: 365 } as const;
 export const SENDER_PATTERN = /^(waba|twilio|device|dev):[a-z0-9]{1,24}$/;
 export const COUNTRY_PATTERN = /^[A-Za-z]{2}$/;
 /** A bare domain (`rival.com`, `mail.rival.co.uk`): labels of letters, digits and hyphens, at least one dot. */
-export const DOMAIN_PATTERN = /^(?=.{3,253}$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/;
+export const DOMAIN_PATTERN =
+  /^(?=.{3,253}$)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/;
 export const BLOCKED_DOMAINS_MAX = 500;
 
 /**

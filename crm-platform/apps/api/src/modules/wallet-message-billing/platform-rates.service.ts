@@ -492,6 +492,7 @@ export class PlatformRatesService {
       try {
         const res = await fetch(endpoint, {
           headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' },
+          redirect: 'manual',
           signal: ctl.signal,
         });
         if (!res.ok) {

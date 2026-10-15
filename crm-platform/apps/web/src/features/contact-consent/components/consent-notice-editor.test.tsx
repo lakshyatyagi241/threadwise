@@ -8,9 +8,17 @@ const state = vi.hoisted(() => ({
   perms: new Set<string>(),
   notice: null as unknown,
   saved: [] as unknown[],
+  links: { privacyUrl: null, termsUrl: null, noticeText: null } as {
+    privacyUrl: string | null;
+    termsUrl: string | null;
+    noticeText: string | null;
+  },
 }));
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (p: string) => state.perms.has(p),
+}));
+vi.mock('@/features/compliance-center/api/hooks', () => ({
+  useComplianceLinks: () => ({ data: state.links }),
 }));
 vi.mock('../api/service', () => ({
   consentApi: {
@@ -34,6 +42,7 @@ const empty: ConsentNotice = {
   enabled: false,
   text: '',
   url: null,
+  termsUrl: null,
   channels: [],
   version: 0,
   updatedAt: null,
@@ -44,6 +53,7 @@ beforeEach(() => {
   state.perms = new Set(['settings.consent.manage']);
   state.notice = empty;
   state.saved = [];
+  state.links = { privacyUrl: null, termsUrl: null, noticeText: null };
 });
 afterEach(async () => {
   await m?.unmount();
@@ -68,6 +78,24 @@ describe('the consent line editor', () => {
     expect(m.host.textContent).toContain(text('notice.saveFirst'));
   });
 
+  it('writes the ticked channels into the sentence and saves them', async () => {
+    m = await mount(<ConsentNoticeEditor scope="widget" refId="w1" />, { client: client() });
+    await flush();
+    await flush();
+    await click(m.host.querySelector('[role="switch"]')!);
+    const area = m.host.querySelector('textarea')!;
+    // An empty wording is filled in from the channels as they are ticked.
+    await click(m.host.querySelector('#notice-widget-ch-sms')!);
+    expect(area.value).toContain('WhatsApp');
+    expect(area.value).toContain('SMS');
+    await click(button(m.host, text('notice.save')));
+    await flush();
+    expect(state.saved).toHaveLength(1);
+    const saved = state.saved[0] as { channels: string[]; text: string };
+    expect(saved.channels).toEqual(['whatsapp', 'sms', 'email']);
+    expect(saved.text).toContain('SMS');
+  });
+
   it('saves the wording and the link as a new version and says which', async () => {
     m = await mount(<ConsentNoticeEditor scope="widget" refId="w1" />, { client: client() });
     await flush();
@@ -87,9 +115,61 @@ describe('the consent line editor', () => {
         enabled: true,
         text: 'Send me offers.',
         url: 'https://example.com/privacy',
-        channels: [],
+        termsUrl: null,
+        channels: ['whatsapp', 'email'],
       },
     ]);
+  });
+
+  it('offers the workspace privacy and terms links and wording, and fills them only when asked', async () => {
+    state.links = {
+      privacyUrl: 'https://acme.test/privacy',
+      termsUrl: 'https://acme.test/terms',
+      noticeText: 'We use your details to answer you.',
+    };
+    m = await mount(<ConsentNoticeEditor scope="widget" refId="w1" />, { client: client() });
+    await flush();
+    await flush();
+    const urls = () =>
+      [...m!.host.querySelectorAll<HTMLInputElement>('input[type="url"]')].map((i) => i.value);
+    expect(urls()).toEqual(['', '']);
+    await click(m.host.querySelector('[data-testid="use-workspace-privacy"]')!);
+    await click(m.host.querySelector('[data-testid="use-workspace-terms"]')!);
+    await click(m.host.querySelector('[data-testid="use-workspace-text"]')!);
+    expect(urls()).toEqual(['https://acme.test/privacy', 'https://acme.test/terms']);
+    expect(m.host.querySelector('textarea')!.value).toBe('We use your details to answer you.');
+    // Used once, the offer goes away.
+    expect(m.host.querySelector('[data-testid="use-workspace-privacy"]')).toBeNull();
+    await click(m.host.querySelector('[role="switch"]')!);
+    await click(button(m.host, text('notice.save')));
+    await flush();
+    expect(state.saved).toEqual([
+      {
+        enabled: true,
+        text: 'We use your details to answer you.',
+        url: 'https://acme.test/privacy',
+        termsUrl: 'https://acme.test/terms',
+        channels: ['whatsapp', 'email'],
+      },
+    ]);
+  });
+
+  it('offers nothing when the workspace has set no links, and the default notice itself is not offered its own text', async () => {
+    m = await mount(<ConsentNoticeEditor scope="widget" refId="w1" />, { client: client() });
+    await flush();
+    await flush();
+    expect(m.host.querySelector('[data-testid^="use-workspace"]')).toBeNull();
+    await m.unmount();
+    state.links = { privacyUrl: null, termsUrl: null, noticeText: 'Default.' };
+    state.notice = { ...empty, scope: 'workspace', ref: 'en' };
+    m = await mount(
+      <ConsentNoticeEditor scope="workspace" refId="en" heading="Default (English)" />,
+      { client: client() },
+    );
+    await flush();
+    await flush();
+    expect(m.host.querySelector('[data-testid="use-workspace-text"]')).toBeNull();
+    expect(m.host.textContent).toContain('Default (English)');
   });
 
   it('will not save a line that is switched on without its wording', async () => {

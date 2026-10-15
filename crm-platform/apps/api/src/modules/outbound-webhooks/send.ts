@@ -19,8 +19,9 @@ const SNIPPET_BYTES = 1024;
 
 /**
  * One signed POST of an envelope to a customer's endpoint. The address is checked again here (a name can be repointed at an internal
- * host after it was saved), redirects are not followed (a redirect is a way around that check), and only the first kilobyte of the
- * answer is read.
+ * host after it was saved), the address is checked again inside the socket's own DNS lookup (`guardedRequest`, so a name repointed
+ * between the check and the connect is still refused), redirects are not followed (a redirect is a way around that check), and only
+ * the first kilobyte of the answer is kept.
  */
 export async function send(
   url: string,

@@ -717,7 +717,8 @@
             "ask": "顧客に質問",
             "handoff": "引き継ぎ",
             "logic": "判断",
-            "answer": "回答"
+            "answer": "回答",
+            "action": "アクション"
           },
           "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。",
           "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
@@ -733,7 +734,21 @@
           "faqExits": {
             "matched": "回答済み",
             "no_match": "一致なし"
-          }
+          },
+          "close": "閉じる",
+          "clickToEdit": "クリックして編集",
+          "outsideToSave": "変更を保存するには外側のどこかをクリックしてください",
+          "addCondition": "このステップの後に条件を追加",
+          "conditionLast": "条件はこの部分を終了させるため、最後にしか置けません。",
+          "duplicateTitle": "このステップを複製しますか？",
+          "duplicateBody": "直後にコピーが追加されます。",
+          "deleteTitle": "このステップを削除しますか？",
+          "deleteBody": "ステップはフローから削除されます。",
+          "stage": "ステージ {stage}",
+          "storedIn": "値は連絡先の <b>{property}</b> プロパティに保存されます",
+          "actions": "アクション",
+          "actionsHint": "このステップの直後に実行されるステップを追加します。",
+          "actionsBlocked": "自分の部分を終えるステップの後には、ステップを続けられません。"
         },
         "editors": {
           "linkLabel": "この後の移動先",
@@ -1952,6 +1967,42 @@
         "label": "アイコン(任意)",
         "add": "アイコンを追加",
         "saveFirst": "アイコンを追加するには、ボットを一度保存してください。"
+      },
+      "buttonAction": {
+        "label": "ボタン押下時のアクション",
+        "kind": {
+          "none": "次のステップへ進む",
+          "flow": "フローを接続",
+          "live_agent": "ライブエージェント",
+          "opt_in": "オプトイン",
+          "opt_out": "オプトアウト"
+        },
+        "pickFlow": "フローを選択",
+        "loadingFlows": "フローを読み込み中…",
+        "flowMissing": "フロー {id}（見つかりません）",
+        "hint": {
+          "flow": "この連絡先に対して選んだフローを開始し、会話はそのフローで続きます。このボタンの先には何もつなぎません。",
+          "live_agent": "選んだチームに会話を引き継ぎます。このボタンの先には何もつなぎません。",
+          "opt_in": "連絡先をマーケティングメッセージの配信登録済みにし、その後このボタンの先につないだステップへ進みます。",
+          "opt_out": "連絡先をマーケティングメッセージの配信停止にし、その後このボタンの先につないだステップへ進みます。"
+        }
+      },
+      "messageTools": {
+        "format": "テキストの書式",
+        "bold": "太字",
+        "italic": "斜体",
+        "strike": "取り消し線",
+        "mono": "等幅",
+        "bullet": "箇条書き",
+        "numbered": "番号付きリスト",
+        "emoji": "絵文字",
+        "emojiSearch": "絵文字を検索",
+        "emojiNone": "絵文字が見つかりません",
+        "variable": "変数を挿入",
+        "variableSearch": "変数を検索",
+        "groupContact": "連絡先のプロパティ",
+        "groupFlow": "このフローに保存済み",
+        "variableNone": "変数が見つかりません"
       }
     },
     "contracts": {
@@ -2470,6 +2521,14 @@
         "faq": {
           "label": "FAQから回答",
           "help": "お客様のメッセージをFAQと照合します。このフローを終了します。FAQが回答した場合と回答しなかった場合で出口が分かれます"
+        },
+        "apiLibrary": {
+          "label": "API呼び出し",
+          "help": "API ライブラリの API を呼び出します"
+        },
+        "code": {
+          "label": "JS関数",
+          "help": "小さな JavaScript を実行します"
         }
       },
       "typeLabel": {
@@ -2487,7 +2546,9 @@
         "assign": "担当者に割り当て",
         "carousel": "カルーセル",
         "condition": "条件",
-        "faq": "FAQから回答"
+        "faq": "FAQから回答",
+        "api_library": "API呼び出し",
+        "code": "JS関数"
       },
       "stepLabel": {
         "questionOf": "質問 · {kind}"
@@ -2528,7 +2589,10 @@
         "carouselCards": "ステップ {stage}: カードを1枚以上追加し、すべてのカードにタイトルを付けてください。",
         "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
         "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。",
-        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。"
+        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。",
+        "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
+        "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
+        "writeCode": "ステップ {stage}: 実行するコードを書いてください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },

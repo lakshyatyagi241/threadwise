@@ -38,7 +38,7 @@ export function FormField({
   return (
     <div className={className}>
       <div className="mb-1.5 flex items-center justify-between gap-2">
-        <label htmlFor={id} className="text-[11.5px] font-semibold text-(--auth-ink-700)">
+        <label htmlFor={id} className="text-[13px] font-semibold text-(--auth-ink-700)">
           {label}
           {optionalLabel && (
             <span className="ms-1 font-normal text-(--auth-ink-500)">({optionalLabel})</span>
@@ -48,12 +48,12 @@ export function FormField({
       </div>
       {children({ id, 'aria-describedby': describedBy || undefined, invalid: Boolean(error) })}
       {error ? (
-        <div id={errorId} role="alert" className="mt-1 text-[11.5px] text-(--auth-coral-ink)">
+        <div id={errorId} role="alert" className="mt-1 text-[12.5px] text-(--auth-coral-ink)">
           {error}
         </div>
       ) : null}
       {hint ? (
-        <p id={hintId} className={cn('mt-1 text-[10.5px] text-(--auth-ink-500)')}>
+        <p id={hintId} className={cn('mt-1 text-[12px] text-(--auth-ink-500)')}>
           {hint}
         </p>
       ) : null}

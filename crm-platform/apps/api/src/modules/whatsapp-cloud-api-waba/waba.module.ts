@@ -116,6 +116,7 @@ import { WabaWebhookService } from './waba-webhook.service';
     WabaReceiptRegistry,
     WabaWebhookService,
     WabaClickSyncService,
+    WabaDiagnosticsService,
     WABA_INBOUND_SINK,
     WABA_CONNECTIONS,
   ],

@@ -62,6 +62,29 @@ the same numbers are the first two cards of the log.
 - The query plan was read on 9 000 generated calls of two workspaces on a local Postgres, not on production data.
 - Rows still `ringing` for hours (Meta never sent `terminate`) show as "Live now"; Reference had the same.
 
+## Number readiness and onboarding (EXT-CALL-007 to 011)
+
+Not in Reference: this is a product extension, requested so a freshly connected number can go from "connected" to "can place and receive
+calls" without a developer touching Meta. Everything Reference did on the toggle is unchanged (same card, same button labels, same coexistence
+refusal before Meta is asked, same local flags after Meta accepts); what is added or changed:
+
+| Id           | Reference                                                                            | Here                                                                                                                                                                                    | Why                                                                                              |
+| ------------ | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 004 (words)  | Meta's refusal shown as the server's English sentence in a browser alert             | `CALL_META_REFUSED` carries a stable `reason`; the card shows it in the person's language (the long prerequisite text is kept, translated); an unnamed refusal still shows Meta's words | a sentence in English is no help to a workspace in another language, and parsing text is brittle |
+| 004 (switch) | the local flag only changed by the toggle; it could drift from Meta forever          | a check reads Meta's calling status and brings the local flag in line (audited)                                                                                                         | the Call button must never show on a number Meta refuses, nor hide on one switched on there      |
+| 008 (words)  | a dial refused for permission was recognised by the word "permission" in Meta's text | also by Meta's code 138006                                                                                                                                                              | text matching alone breaks when Meta rewords                                                     |
+| ext          | nothing                                                                              | the readiness checklist, the automatic switch after a connect (off by default), the scheduled re-check, the `calls` field repair on the platform app (worker only), the test call       | the point of this work                                                                           |
+
+Not verified (simulated): every Meta answer in the tests is a fake that returns what Meta's documentation describes (the calling settings
+read, the app subscription read and write, the phone node, the token inspection). The Meta error codes mapped (141000, 138000, 138001, 138006,
+138009, 190, 10, 200 to 299) are the ones this code has seen or that Meta documents; none was captured from a live refusal in this work. The
+Playwright spec (`apps/web/e2e/calling-voice/readiness.spec.ts`) skips without a local account and was not run. The first real number is the check
+that remains: [the manual checklist](../plan/calling-number-readiness-build.md#manual-test-with-a-real-number).
+
+Decisions for the owner: whether `autoEnableOnConnect` should stay off by default (it is: nothing is switched on at Meta without an admin saying so);
+whether a platform operator should be able to turn it on for every workspace; whether the scheduled check should stop for numbers nobody has
+used for calling in 30 days; whether TURN should move to short-lived credentials (today's are a shared static secret served to everyone who may call).
+
 ## Not done, and what it costs
 
 - **TURN is configuration, not a window global.** `CALLING_ICE_SERVERS` (a JSON list in the environment) is served to people who may call by `GET /v2/calling/ice-servers`; the provider uses it and falls back to the four public STUN servers when it is empty.

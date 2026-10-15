@@ -5,7 +5,19 @@ summary: What the Pre-submit checks flag as errors and warnings, and how to writ
 area: campaigns
 order: 52
 documents: [nav:templates]
-keywords: [template rules, pre-submit checks, approval, lint, body, header, footer, limits, warnings, errors]
+keywords:
+  [
+    template rules,
+    pre-submit checks,
+    approval,
+    lint,
+    body,
+    header,
+    footer,
+    limits,
+    warnings,
+    errors,
+  ]
 ---
 
 ## What it is for

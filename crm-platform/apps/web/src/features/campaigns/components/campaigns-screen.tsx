@@ -24,13 +24,7 @@ import { can, pageCount, parseState, stateToSearch, type ListState } from '../li
 import { CampaignCard } from './campaign-card';
 import { CampaignTable } from './campaign-table';
 import { CampaignsRail } from './campaigns-rail';
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  RefreshIcon,
-  SearchIcon,
-  TrashIcon,
-} from './icons';
+import { ChevronLeftIcon, ChevronRightIcon, RefreshIcon, SearchIcon, TrashIcon } from './icons';
 
 type View = 'list' | 'blocks';
 const VIEW_KEY = 'campaigns.list.view';

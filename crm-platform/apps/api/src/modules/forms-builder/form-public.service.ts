@@ -71,6 +71,7 @@ export class FormPublicService {
         enabled: def.consent.enabled,
         text: def.consent.text,
         privacyUrl: def.consent.privacyUrl,
+        termsUrl: def.consent.termsUrl,
         required: def.consent.required,
         version: def.consent.version,
       },

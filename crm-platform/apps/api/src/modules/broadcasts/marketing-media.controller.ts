@@ -12,7 +12,7 @@ import { MARKETING_MEDIA_MAX_BYTES } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { MarketingMediaService } from './marketing-media.service';
 
-/** `POST /v2/media/marketing`: one file for a broadcast, a campaign, a Telegram broadcast or a Facebook post. */
+/** `POST /v2/media/marketing`: one file for a broadcast, a campaign, a Telegram broadcast, a Facebook post or a LINE broadcast. */
 @ApiTags('broadcasts')
 @ActorKinds('user')
 @Controller({ path: 'media', version: '2' })
@@ -27,6 +27,7 @@ export class MarketingMediaController {
     'camp.campaigns.update',
     'tg.broadcasts.manage',
     'fb.posts.manage',
+    'line.broadcasts.manage',
   )
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(

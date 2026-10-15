@@ -31,6 +31,7 @@ export const publicFormSchema = z.object({
     enabled: true,
     text: true,
     privacyUrl: true,
+    termsUrl: true,
     required: true,
     version: true,
   }),

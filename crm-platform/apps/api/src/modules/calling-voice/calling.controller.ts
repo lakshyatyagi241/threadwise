@@ -23,20 +23,24 @@ import {
   CALL_RECORDING_MAX_BYTES,
   acceptCallInputSchema,
   callEligibilityQuerySchema,
+  checkReadinessInputSchema,
   dialInputSchema,
   recordCallConsentInputSchema,
   rejectCallInputSchema,
   requestPermissionInputSchema,
   updateCallRecordingSettingsInputSchema,
+  updateCallingSettingsInputSchema,
   toggleCallingInputSchema,
   type AcceptCallInput,
   type CallEligibilityQuery,
+  type CheckReadinessInput,
   type DialInput,
   type RecordCallConsentInput,
   type RejectCallInput,
   type RequestPermissionInput,
   type ToggleCallingInput,
   type UpdateCallRecordingSettingsInput,
+  type UpdateCallingSettingsInput,
 } from '@crm/contracts';
 import { ActorKinds, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -47,6 +51,7 @@ import { CallRecordingConsentService } from './call-recording-consent.service';
 import { CallRecordingSettingsService } from './call-recording-settings.service';
 import { CallRecordingsService } from './call-recordings.service';
 import { CallingNumbersService } from './calling-numbers.service';
+import { CallingReadinessService } from './calling-readiness.service';
 
 /** `bytes=500-` and `bytes=500-999`; anything else is answered with the whole file. */
 function parseRange(header: string | undefined): { start: number; end?: number } | undefined {
@@ -75,6 +80,7 @@ export class CallingController {
     private readonly recordings: CallRecordingsService,
     private readonly recordingSettings: CallRecordingSettingsService,
     private readonly recordingConsent: CallRecordingConsentService,
+    private readonly readiness: CallingReadinessService,
   ) {}
 
   @Get('numbers')
@@ -82,6 +88,58 @@ export class CallingController {
   @ApiOperation({ summary: 'The WhatsApp numbers with their calling switch' })
   list() {
     return this.numbers.list();
+  }
+
+  @Get('readiness')
+  @RequirePermission('call.calls.use')
+  @ApiOperation({
+    summary: 'Every WhatsApp number with its calling readiness checklist (as of its last check)',
+    description:
+      'Codes, never sentences. Works without the plan feature: the checklist then says so and Meta is not asked.',
+  })
+  readinessList() {
+    return this.readiness.list();
+  }
+
+  @Get('numbers/:id/readiness')
+  @RequirePermission('call.calls.use')
+  @ApiOperation({ summary: "One number's calling readiness checklist, as of its last check" })
+  readinessOf(@Param('id', ParseUUIDPipe) id: string) {
+    return this.readiness.get(id);
+  }
+
+  @Post('numbers/:id/readiness/check')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('call.calling.manage')
+  @ApiOperation({
+    summary:
+      'Check a number now: asks Meta, keeps the result, and brings the switch in line with Meta',
+    description:
+      'Adds the calls webhook field to the platform Meta app when it is missing and the app has a callback. Never switches calling on.',
+  })
+  checkReadiness(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(checkReadinessInputSchema)) body: CheckReadinessInput,
+  ) {
+    return this.readiness.check(id, body.source);
+  }
+
+  @Get('settings')
+  @RequirePermission('call.calls.use')
+  @ApiOperation({ summary: 'Whether calling is switched on by itself after a number is connected' })
+  settings() {
+    return this.readiness.settings();
+  }
+
+  @Put('settings')
+  @RequirePermission('call.calling.manage')
+  @ApiOperation({
+    summary: 'Switch calling on by itself after a number is connected (off by default)',
+    description:
+      'rowVersion is required after the first save. Needs the plan feature waba_calling. 409 on a stale rowVersion.',
+  })
+  saveSettings(@Body(zodPipe(updateCallingSettingsInputSchema)) body: UpdateCallingSettingsInput) {
+    return this.readiness.updateSettings(body);
   }
 
   @Get('recording-settings')

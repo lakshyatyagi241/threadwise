@@ -365,6 +365,21 @@
         "name": "Email",
         "hint": "Gửi tin nhắn dưới dạng email từ hộp thư đã kết nối, kèm liên kết hủy đăng ký.",
         "cta": "Tạo chiến dịch email"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Gửi tin nhắn cho những người đang trò chuyện với tài khoản LINE của bạn.",
+        "cta": "Tạo đợt gửi LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Gửi tin nhắn cho những người đã trò chuyện với tài khoản Viber của bạn.",
+        "cta": "Tạo chiến dịch Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Gửi hàng loạt một tin nhắn đến tất cả người theo dõi, một thẻ hoặc những người dùng được chọn của Tài khoản chính thức.",
+        "cta": "Tạo đợt gửi WeChat"
       }
     }
   }

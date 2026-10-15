@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "¿Listo para llamadas?",
+      "status": {
+        "never_checked": "Aún sin comprobar",
+        "blocked": "No está listo",
+        "ready_to_enable": "Listo para activar",
+        "attention": "Funciona, conviene revisarlo",
+        "ready": "Listo"
+      },
+      "statusHint": {
+        "never_checked": "Este número aún no se ha comprobado.",
+        "blocked": "Las llamadas no funcionarán hasta que resuelvas los puntos marcados como Corregir esto.",
+        "ready_to_enable": "WhatsApp tiene todo lo que necesita. Activa las llamadas para mostrar el botón Llamar.",
+        "attention": "Las llamadas funcionan, pero hay algo más abajo que conviene revisar.",
+        "ready": "Las llamadas están activadas y todas las comprobaciones se cumplen."
+      },
+      "checkedAt": "Comprobado el {date}",
+      "checking": "Consultando a WhatsApp...",
+      "checkAgain": "Volver a comprobar",
+      "checkFailed": "No se pudo comprobar este número.",
+      "checkedDone": "Comprobado de nuevo.",
+      "blockedHint": "Corrige primero los puntos marcados como Corregir esto. Es muy probable que WhatsApp rechace activar las llamadas.",
+      "details": "Qué se comprobó",
+      "fixLabel": "Qué hacer:",
+      "state": {
+        "ok": "Correcto",
+        "warn": "Conviene revisarlo",
+        "fail": "Corregir esto"
+      },
+      "checks": {
+        "plan_feature": "El plan incluye las llamadas de WhatsApp",
+        "connection": "Número conectado",
+        "not_coexistence": "El número usa solo la Cloud API",
+        "number_registered": "Número registrado en WhatsApp",
+        "messaging_limit": "Límite de mensajes y calidad",
+        "token_scopes": "Permisos del token de acceso",
+        "webhook_subscribed": "App suscrita a esta cuenta",
+        "calls_field": "Webhook de llamadas entregado",
+        "calling_enabled": "Llamadas activadas en WhatsApp",
+        "turn": "Relé de llamadas (TURN) configurado",
+        "dialler_permissions": "Compañeros con permiso para llamar",
+        "recording_consent": "Reglas de grabación y consentimiento"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "Las llamadas de WhatsApp forman parte de tu plan."
+        },
+        "plan_missing": {
+          "detail": "Tu plan no incluye las llamadas de WhatsApp.",
+          "fix": "Mejora tu plan y vuelve a comprobar."
+        },
+        "connected": {
+          "detail": "El número está conectado y tiene un token de acceso."
+        },
+        "not_connected": {
+          "detail": "Este número no está conectado ahora.",
+          "fix": "Vuelve a conectarlo en Canales y comprueba de nuevo."
+        },
+        "no_credentials": {
+          "detail": "Este número no tiene guardado ningún token de acceso ni ID de número de teléfono.",
+          "fix": "Vuelve a conectar el número para que se guarden de nuevo sus credenciales."
+        },
+        "cloud_api_only": {
+          "detail": "El número funciona solo con la Cloud API de WhatsApp."
+        },
+        "coexistence": {
+          "detail": "Este número también se usa en la app WhatsApp Business (coexistencia), y WhatsApp no permite llamadas en un número así.",
+          "fix": "Regístralo solo en la Cloud API o usa otro número para las llamadas."
+        },
+        "on_premise": {
+          "detail": "Este número está en la antigua API On-Premises, que Meta ha cerrado.",
+          "fix": "Regístralo en la Cloud API o usa otro número."
+        },
+        "number_ok": {
+          "detail": "WhatsApp indica que el número está activo y verificado."
+        },
+        "number_not_verified": {
+          "detail": "El código de titularidad del número no se ha verificado.",
+          "fix": "Verifica el número desde su página de conexión de WhatsApp y comprueba de nuevo."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp indica que este número está en estado {status}, no conectado.",
+          "fix": "Corrige el número en Meta Business Suite (puede estar pendiente, marcado o restringido) y comprueba de nuevo."
+        },
+        "limit_ok": {
+          "detail": "El límite diario de mensajes y la calificación de calidad bastan para las llamadas."
+        },
+        "limit_test_number": {
+          "detail": "Este es un número de prueba, que no necesita límite de mensajes."
+        },
+        "limit_low": {
+          "detail": "El límite de mensajes es {tier}. WhatsApp necesita al menos {needed} clientes al día para poder activar las llamadas.",
+          "fix": "Envía más mensajes con buena calidad o verifica tu empresa en Meta Business Suite para que suba el límite. Después, comprueba de nuevo."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp no indicó un límite de mensajes que esta app reconozca.",
+          "fix": "Abre el número en Meta Business Suite para ver su límite. Las llamadas necesitan al menos 2.000 clientes al día."
+        },
+        "quality_low": {
+          "detail": "La calificación de calidad del número es baja (roja) y WhatsApp podría restringirlo.",
+          "fix": "Reduce los mensajes bloqueados y denunciados y deja que la calificación se recupere antes de contar con las llamadas."
+        },
+        "scopes_ok": {
+          "detail": "El token de acceso tiene los permisos que necesitan las llamadas."
+        },
+        "scope_missing": {
+          "detail": "Al token de acceso le falta: {missing}.",
+          "fix": "Genera un nuevo token de usuario del sistema con whatsapp_business_management y whatsapp_business_messaging, y vuelve a conectar el número."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp no acepta el token de acceso guardado.",
+          "fix": "Vuelve a conectar el número o guarda un nuevo token permanente."
+        },
+        "token_expiring": {
+          "detail": "El token de acceso caduca en {days, plural, one {# día} other {# días}}.",
+          "fix": "Vuelve a conectar el número o guarda un token permanente de usuario del sistema antes de que caduque."
+        },
+        "scopes_unverifiable": {
+          "detail": "No se pudieron leer los permisos del token. Puede que el número se alcance a través de un proveedor, o que esta plataforma no tenga credenciales de app para inspeccionarlo.",
+          "fix": "Si se rechazan las llamadas, confirma con tu proveedor que el número puede usarlas."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp entrega a la plataforma los eventos de esta cuenta."
+        },
+        "waba_not_subscribed": {
+          "detail": "Ninguna app está suscrita a esta cuenta de WhatsApp Business, así que las llamadas nunca te llegarían.",
+          "fix": "Usa Reparar mensajes entrantes en la página de estado del número y comprueba de nuevo."
+        },
+        "calls_field_ok": {
+          "detail": "La app de Meta entrega el campo de webhook de llamadas."
+        },
+        "calls_field_added": {
+          "detail": "Faltaba el campo de webhook de llamadas y acaba de añadirse a la app de Meta de la plataforma."
+        },
+        "calls_field_missing": {
+          "detail": "La app de Meta no entrega el campo de webhook de llamadas, así que las llamadas entrantes y las respuestas nunca llegan.",
+          "fix": "Pide al operador de tu plataforma que marque el campo de llamadas en los ajustes de webhook de la app de Meta (WhatsApp, Configuración) y comprueba de nuevo."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Este número está en una app de Meta que la plataforma no puede leer, así que no se pudo comprobar el campo de webhook de llamadas.",
+          "fix": "Abre los ajustes de webhook de esa app y asegúrate de que el campo de llamadas esté marcado."
+        },
+        "calling_on": {
+          "detail": "Las llamadas están activadas y el icono de llamada se muestra a los clientes."
+        },
+        "calling_off": {
+          "detail": "Las llamadas están desactivadas para este número.",
+          "fix": "Selecciona Activar llamadas cuando el resto de los puntos estén bien."
+        },
+        "icon_hidden": {
+          "detail": "Las llamadas están activadas, pero el icono de llamada está oculto para los clientes, así que no pueden iniciar llamadas.",
+          "fix": "Restablece la visibilidad del icono de llamada al valor predeterminado en los ajustes de llamadas del número en Meta."
+        },
+        "turn_ok": {
+          "detail": "Hay un relé TURN configurado, así que las llamadas funcionan tras cortafuegos estrictos."
+        },
+        "turn_missing": {
+          "detail": "No hay ningún relé TURN configurado, así que las llamadas pueden conectarse sin sonido para quienes estén tras cortafuegos estrictos.",
+          "fix": "Pide al operador de tu plataforma que añada un servidor TURN a CALLING_ICE_SERVERS."
+        },
+        "turn_incomplete": {
+          "detail": "Hay un servidor TURN en la lista sin su usuario o credencial.",
+          "fix": "Añade el usuario y la credencial a esa entrada de CALLING_ICE_SERVERS."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS está definido, pero no es una lista válida, así que solo se usan servidores STUN públicos.",
+          "fix": "Corrige el JSON de CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, one {# compañero puede} other {# compañeros pueden}} hacer y contestar llamadas."
+        },
+        "dialler_none": {
+          "detail": "Nadie en este espacio de trabajo tiene permiso para hacer y contestar llamadas.",
+          "fix": "Da a un rol el permiso para usar las llamadas en Ajustes, Roles."
+        },
+        "recording_off": {
+          "detail": "La grabación de llamadas está desactivada, así que no hace falta consentimiento."
+        },
+        "recording_configured": {
+          "detail": "La grabación de llamadas está activada, con un aviso y una regla de consentimiento."
+        },
+        "recording_notice_missing": {
+          "detail": "La grabación de llamadas está activada, pero no hay ningún aviso que leer.",
+          "fix": "Escribe el aviso de grabación en Grabación, más abajo."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp no respondió a esta comprobación.",
+          "fix": "Vuelve a comprobar en un momento."
+        },
+        "not_checked": {
+          "detail": "A la espera de un punto anterior.",
+          "fix": "Corrige primero el punto anterior."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp aún no activará las llamadas. El número necesita un límite diario de mensajes de al menos 2.000 clientes, y la app debe estar suscrita a la cuenta de WhatsApp Business y al campo de webhook de llamadas con el permiso whatsapp_business_messaging. Un número de prueba no necesita el límite.",
+        "coexistence": "Las llamadas de WhatsApp necesitan un número que esté totalmente en la Cloud API. Este número comparte línea con la app WhatsApp Business (coexistencia), y WhatsApp no permite llamadas en ese caso. Regístralo solo en la Cloud API o usa otro número.",
+        "permission_scope": "Al token de acceso le falta un permiso que necesitan las llamadas (whatsapp_business_management y whatsapp_business_messaging). Genera un token nuevo con ambos y vuelve a conectar el número.",
+        "token_expired": "WhatsApp ya no acepta el token de acceso guardado. Vuelve a conectar el número e inténtalo de nuevo.",
+        "calling_not_enabled": "Las llamadas no están activadas en WhatsApp para este número. Actívalas e inténtalo de nuevo.",
+        "no_call_permission": "Este cliente aún no ha permitido las llamadas. Se le enviará una solicitud de permiso para que la acepte.",
+        "permission_request_limit": "WhatsApp limita cada cuánto puedes pedir permiso de llamada a este cliente. Inténtalo más tarde.",
+        "receiver_uncallable": "El WhatsApp de este cliente no puede recibir llamadas (versión antigua de la app o llamadas desactivadas). Pídele que actualice WhatsApp.",
+        "meta_unreachable": "WhatsApp no respondió a tiempo. Inténtalo de nuevo en un momento."
+      },
+      "refusedBecause": "WhatsApp rechazó la solicitud: {reason}",
+      "autoEnable": {
+        "title": "Activar las llamadas automáticamente",
+        "hint": "Cuando se conecte o se vuelva a conectar un número de WhatsApp y cumpla todos los requisitos, se activarán las llamadas en él sin preguntar. Desactivado por defecto; las llamadas nunca se activan sin esta opción.",
+        "label": "Activar las llamadas automáticamente al conectar un número",
+        "saved": "Guardado.",
+        "loadFailed": "No se pudo cargar este ajuste."
+      },
+      "testCall": {
+        "title": "Hacer una llamada de prueba",
+        "intro": "Llama a tu propio número de WhatsApp para oír una llamada de principio a fin. WhatsApp solo deja que una empresa llame a quien lo haya permitido: si no lo has hecho, se envía una solicitud de permiso a tu teléfono y no se realiza ninguna llamada. Toca Permitir en WhatsApp y pulsa Llámame de nuevo.",
+        "phoneLabel": "Tu número de WhatsApp",
+        "phoneHint": "Con el código de país y sin el signo más, por ejemplo 919812345678.",
+        "call": "Llámame",
+        "invalid": "Introduce tu número con el código de país (de 6 a 15 dígitos).",
+        "show": "Hacer una llamada de prueba"
+      }
+    }
+  }
+}
