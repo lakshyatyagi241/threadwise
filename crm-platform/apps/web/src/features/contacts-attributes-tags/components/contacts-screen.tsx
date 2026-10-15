@@ -452,14 +452,21 @@ export function ContactsScreen() {
     return true;
   }
 
-  async function onBulkTag(action: 'add' | 'remove', choice: TagChoice): Promise<boolean> {
-    const out = await guarded(() => bulkTag(target(), action, choice));
+  async function onBulkTag(action: 'add' | 'remove', choices: TagChoice[]): Promise<boolean> {
+    let out: Awaited<ReturnType<typeof bulkTag>> | null | undefined = null;
+    for (const choice of choices) {
+      out = await guarded(() => bulkTag(target(), action, choice));
+      if (!out) return false;
+    }
     if (!out) return false;
     if (!pickerRow) dispatch({ type: 'clear' });
     await refresh();
-    const name = choice.tagId
-      ? ((tags.data ?? []).find((x) => x.id === choice.tagId)?.name ?? '')
-      : (choice.name ?? '');
+    const name = choices
+      .map((c) =>
+        c.tagId ? ((tags.data ?? []).find((x) => x.id === c.tagId)?.name ?? '') : (c.name ?? ''),
+      )
+      .filter(Boolean)
+      .join(', ');
     report(tb(action === 'add' ? 'tagged' : 'untagged', { count: out.changed, name }), out);
     return true;
   }
