@@ -60,10 +60,7 @@
       "rejected": "Reddedildi: {reason}",
       "view": "Görüntüle",
       "edit": "Düzenle",
-      "delete": "Sil",
-      "copyCurl": "cURL kopyala",
-      "copyCurlNamed": "{name} göndermek için cURL kopyala",
-      "curlUnavailable": "API yalnızca gövdesinde numaralı değişken olan, medya başlığı olmayan ve başlıkta ya da bağlantılarda değişken bulunmayan onaylı şablonları gönderebilir"
+      "delete": "Sil"
     },
     "library": {
       "title": "Şablon kütüphanesi",
@@ -358,14 +355,6 @@
         "hint": "İnceleme için Meta'ya gönderilen, oluşturulduğu haliyle tam içerik.",
         "empty": "Henüz bir şey oluşturulmadı."
       }
-    },
-    "curl": {
-      "title": "API ile gönder",
-      "hint": "Açılı parantezlerdeki anahtarı, numarayı ve değerleri değiştirip terminalde çalıştırın veya uygulamanıza yapıştırın.",
-      "copy": "Kopyala",
-      "copied": "Kopyalandı",
-      "close": "Kapat",
-      "keyHint": "API anahtarınız oluşturulurken bir kez gösterilir, <link>Geliştiriciler</link> bölümünde. templates:write izni gerekir."
     },
     "gallery": {
       "title": "Şablon galerisi",

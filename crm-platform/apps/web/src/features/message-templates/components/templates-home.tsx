@@ -15,7 +15,7 @@ const VIEWS: readonly View[] = ['saved', 'gallery'];
  * opens it. **Template gallery** is the platform's default templates, kept apart from the library. The gallery is `?view=gallery`,
  * so Back from a template made from it returns to the gallery.
  */
-export function TemplatesHome({ apiBaseUrl }: { apiBaseUrl: string }) {
+export function TemplatesHome() {
   const t = useTranslations('message-templates.home');
   const router = useRouter();
   const pathname = usePathname();
@@ -81,7 +81,7 @@ export function TemplatesHome({ apiBaseUrl }: { apiBaseUrl: string }) {
             <TemplateGalleryView />
           </div>
         ) : (
-          <TemplatesScreen apiBaseUrl={apiBaseUrl} />
+          <TemplatesScreen />
         )}
       </div>
     </>

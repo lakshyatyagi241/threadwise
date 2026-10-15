@@ -60,10 +60,7 @@
       "rejected": "거부됨: {reason}",
       "view": "보기",
       "edit": "편집",
-      "delete": "삭제",
-      "copyCurl": "cURL 복사",
-      "copyCurlNamed": "{name} 전송용 cURL 복사",
-      "curlUnavailable": "API로는 본문에 번호 변수가 있고, 미디어 헤더가 없으며, 헤더나 링크에 변수가 없는 승인된 템플릿만 보낼 수 있습니다"
+      "delete": "삭제"
     },
     "library": {
       "title": "템플릿 라이브러리",
@@ -358,14 +355,6 @@
         "hint": "Meta 검토를 위해 구성된 그대로 전송되는 내용입니다.",
         "empty": "아직 생성된 내용이 없습니다."
       }
-    },
-    "curl": {
-      "title": "API로 보내기",
-      "hint": "꺾쇠 안의 키, 번호, 값을 바꾼 뒤 터미널에서 실행하거나 앱에 붙여 넣으세요.",
-      "copy": "복사",
-      "copied": "복사됨",
-      "close": "닫기",
-      "keyHint": "API 키는 만들 때 한 번만 <link>개발자</link>에 표시됩니다. templates:write 권한이 필요합니다."
     },
     "gallery": {
       "title": "템플릿 갤러리",

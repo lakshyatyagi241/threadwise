@@ -60,10 +60,7 @@
       "rejected": "已拒绝:{reason}",
       "view": "查看",
       "edit": "编辑",
-      "delete": "删除",
-      "copyCurl": "复制 cURL",
-      "copyCurlNamed": "复制用于发送 {name} 的 cURL",
-      "curlUnavailable": "API 只能发送已通过审核、正文使用编号变量、没有媒体标题且标题和链接中没有变量的模板"
+      "delete": "删除"
     },
     "library": {
       "title": "模板库",
@@ -358,14 +355,6 @@
         "hint": "按原样构建后发送给 Meta 审核的内容。",
         "empty": "尚未生成任何内容。"
       }
-    },
-    "curl": {
-      "title": "通过 API 发送",
-      "hint": "替换尖括号中的密钥、号码和值，然后在终端运行或粘贴到你的应用中。",
-      "copy": "复制",
-      "copied": "已复制",
-      "close": "关闭",
-      "keyHint": "API 密钥只会在创建时显示一次，位于<link>开发者</link>。它需要 templates:write 权限。"
     },
     "gallery": {
       "title": "模板库",

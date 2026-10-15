@@ -60,10 +60,7 @@
       "rejected": "Afgewezen: {reason}",
       "view": "Bekijken",
       "edit": "Bewerken",
-      "delete": "Verwijderen",
-      "copyCurl": "cURL kopiëren",
-      "copyCurlNamed": "cURL kopiëren om {name} te sturen",
-      "curlUnavailable": "De API kan alleen goedgekeurde sjablonen versturen met genummerde variabelen in de tekst, zonder mediakop en zonder variabelen in kop of links"
+      "delete": "Verwijderen"
     },
     "library": {
       "title": "Sjabloonbibliotheek",
@@ -358,14 +355,6 @@
         "hint": "Wat er voor de beoordeling naar Meta wordt gestuurd, precies zoals het is opgebouwd.",
         "empty": "Nog niets opgebouwd."
       }
-    },
-    "curl": {
-      "title": "Versturen met de API",
-      "hint": "Vervang de sleutel, het nummer en de waarden tussen punthaken en voer het uit in een terminal of plak het in je app.",
-      "copy": "Kopiëren",
-      "copied": "Gekopieerd",
-      "close": "Sluiten",
-      "keyHint": "Je API-sleutel wordt één keer getoond, bij het aanmaken, onder <link>Ontwikkelaars</link>. Hij heeft de rechten templates:write nodig."
     },
     "gallery": {
       "title": "Sjabloongalerij",

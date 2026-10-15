@@ -13,7 +13,6 @@ import {
 } from '@crm/contracts';
 import { newRow } from '../lib/buttons';
 import { previewOfSummary } from '../lib/preview';
-import { CurlDialog } from './curl-dialog';
 import { TemplateCard } from './template-card';
 import { initialState, previewOf, withBody, type PreviewModel } from '../lib/form-model';
 import { CategoryBadge, QualityBadge, StatusBadge } from './badges';
@@ -283,18 +282,8 @@ describe('library card', () => {
         mayEdit={over.mayEdit ?? true}
         mayDelete={over.mayDelete ?? true}
         onDelete={noop}
-        onCopyCurl={noop}
       />,
     );
-
-  it('offers Copy cURL for an approved template and a greyed icon for the others', () => {
-    expect(card(summary({ status: 'approved' }))).toContain(
-      'Copy cURL to send sample_purchase_feedback',
-    );
-    const pending = card(summary({ status: 'pending' }));
-    expect(pending).toContain('The API can send only approved templates');
-    expect(pending).toContain('disabled=""');
-  });
 
   it('shows the name, the category tag, the engine chip, the status, the type and the number', () => {
     const out = card(summary());
@@ -365,20 +354,5 @@ describe('previewOfSummary', () => {
       previewOfSummary(summary({ attachmentType: 'video', headerSampleUrl: 'https://x/y.mp4' }))
         .headerImageUrl,
     ).toBeNull();
-  });
-});
-
-describe('Copy cURL dialog', () => {
-  it('shows the send request of the template with the API address and a Copy button', () => {
-    const t = summary({ status: 'approved' });
-    const out = html(
-      <CurlDialog template={t} baseUrl="https://api.example.com/api/v1" onClose={noop} />,
-    );
-    expect(out).toContain('Send with the API');
-    expect(out).toContain(`https://api.example.com/api/v1/templates/${t.id}/send`);
-    expect(out).toContain('YOUR_API_KEY');
-    expect(out).toContain('templates:write');
-    expect(out).toContain('Copy');
-    expect(out).toContain('href="/developers"');
   });
 });

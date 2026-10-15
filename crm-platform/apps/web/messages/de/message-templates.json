@@ -60,10 +60,7 @@
       "rejected": "Abgelehnt: {reason}",
       "view": "Ansehen",
       "edit": "Bearbeiten",
-      "delete": "Löschen",
-      "copyCurl": "cURL kopieren",
-      "copyCurlNamed": "cURL zum Senden von {name} kopieren",
-      "curlUnavailable": "Über die API lassen sich nur freigegebene Vorlagen senden: nummerierte Variablen im Text, keine Medien-Kopfzeile und keine Variablen in Kopfzeile oder Links"
+      "delete": "Löschen"
     },
     "library": {
       "title": "Vorlagenbibliothek",
@@ -358,14 +355,6 @@
         "hint": "Was zur Prüfung an Meta gesendet wird, genau so wie es aufgebaut ist.",
         "empty": "Noch nichts erstellt."
       }
-    },
-    "curl": {
-      "title": "Mit der API senden",
-      "hint": "Ersetze den Schlüssel, die Nummer und die Werte in spitzen Klammern und führe es im Terminal aus oder füge es in deine App ein.",
-      "copy": "Kopieren",
-      "copied": "Kopiert",
-      "close": "Schließen",
-      "keyHint": "Dein API-Schlüssel wird einmal angezeigt, wenn du ihn erstellst, unter <link>Entwickler</link>. Er braucht die Berechtigung templates:write."
     },
     "gallery": {
       "title": "Vorlagen-Galerie",
