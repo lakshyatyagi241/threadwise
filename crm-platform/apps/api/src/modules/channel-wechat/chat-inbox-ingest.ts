@@ -91,10 +91,21 @@ export class ChatInboxIngest {
     i: WechatInbound,
   ): Promise<InboundRecorded> {
     const kind = i.location !== null ? 'location' : i.media ? 'media' : 'text';
+    // The shared pipeline writes the peer name it is given on every message: a thread that has already learnt its follower's nickname
+    // is given that back, so the next message does not turn it into the placeholder again.
+    const known = await this.db.txAs({ orgId }, (tx) =>
+      tx.execute(sql`
+        SELECT c.peer_name FROM conversations c
+        JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
+        WHERE c.org_id = ${orgId} AND ch.kind = ${WECHAT_KIND} AND ch.external_id = ${String(channel.id)}
+          AND c.peer_key = ${i.openid}`),
+    );
     const message: NormalisedInbound = {
       providerMessageId: inboundKey(i) ?? `wx-${randomUUID()}`,
       peerKey: i.openid,
-      peerName: THREAD_PLACEHOLDER,
+      peerName:
+        (known.rows[0] as { peer_name: string | null } | undefined)?.peer_name ||
+        THREAD_PLACEHOLDER,
       kind: isUnsupported(i) ? 'unsupported' : kind,
       ...(i.text !== '' ? { body: i.text } : {}),
       ...(i.media

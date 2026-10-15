@@ -22,8 +22,8 @@ import { WebhookController } from './webhook.controller';
 import { WechatChannelAdapter } from './wechat-channel.adapter';
 import { WechatTokenService } from './wechat-token.service';
 
-/** WeChat sends `text/xml`: the Express body parsers of the API read JSON and forms only. A packet is a few kilobytes. */
-const XML_BODY_LIMIT = '256kb';
+/** WeChat sends `text/xml`: the Express body parsers of the API read JSON and forms only. A packet is a few kilobytes (64 KiB is far above any). */
+const XML_BODY_LIMIT = '64kb';
 
 /**
  * The WeChat Official Account channel (WECH): connect an account, receive its messages through the public webhook, answer from the inbox

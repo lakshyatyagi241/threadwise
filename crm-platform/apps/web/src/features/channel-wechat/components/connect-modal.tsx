@@ -47,6 +47,7 @@ export function ConnectModal({ open, onClose }: { open: boolean; onClose: () => 
   };
 
   const submit = async () => {
+    if (busy) return;
     const found = connectErrors(draft);
     setErrors(found);
     if (Object.keys(found).length > 0) return;

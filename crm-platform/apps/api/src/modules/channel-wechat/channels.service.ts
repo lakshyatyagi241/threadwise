@@ -100,6 +100,7 @@ export class ChannelsService {
     const expiresAt = new Date(Date.now() + tokenLifetimeSeconds(fetched.data.expiresIn) * 1000);
 
     const saved = await this.db.tx(async (tx) => {
+      await this.repo.lockAppId(tx, ctx.orgId, appId);
       const existing = await this.repo.findByAppId(tx, ctx.orgId, appId);
       const values = {
         connectedBy: ctx.userId,

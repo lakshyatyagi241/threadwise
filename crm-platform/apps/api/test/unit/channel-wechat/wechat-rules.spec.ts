@@ -13,7 +13,9 @@ import {
   signatureMatches,
   tagIdOf,
   tokenIsFresh,
+  timestampFresh,
   tokenLifetimeSeconds,
+  XML_MAX_CHARS,
   webhookUrl,
   windowOpen,
 } from '../../../src/modules/channel-wechat/wechat-rules';
@@ -301,5 +303,24 @@ describe('broadcast helpers', () => {
 
   it('a send stuck in sending is given up on after fifteen minutes', () => {
     expect(STALE_SENDING_MINUTES).toBe(15);
+  });
+});
+
+describe('replay and size guards', () => {
+  const now = new Date('2026-03-10T12:00:00Z');
+  const at = (s: number) => String(Math.floor(now.getTime() / 1000) + s);
+
+  it('a timestamp is fresh within ten minutes either way, and only when it is a whole number', () => {
+    expect(timestampFresh(at(0), now)).toBe(true);
+    expect(timestampFresh(at(-600), now)).toBe(true);
+    expect(timestampFresh(at(-601), now)).toBe(false);
+    expect(timestampFresh(at(601), now)).toBe(false);
+    expect(timestampFresh('', now)).toBe(false);
+    expect(timestampFresh('abc', now)).toBe(false);
+    expect(timestampFresh('1.5', now)).toBe(false);
+  });
+
+  it('an oversized packet is not read', () => {
+    expect(parseXml(`<xml><Content>${'a'.repeat(XML_MAX_CHARS)}</Content></xml>`)).toEqual({});
   });
 });

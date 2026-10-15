@@ -16,7 +16,11 @@ import {
   msgSignatureMatches,
   parseXml,
   signatureMatches,
+  timestampFresh,
 } from './wechat-rules';
+
+/** The routing token is 48 alphanumerics; anything else is not ours and costs no lookup. */
+const TOKEN_SHAPE = /^[A-Za-z0-9]{8,128}$/;
 
 /** WeChat's own throttle in Reference was 240 requests a minute per address; the same cap per channel here stops a flood. */
 const HITS_PER_MINUTE = 240;
@@ -83,10 +87,12 @@ export class InboundService {
 
   /** GET: WeChat checks the address when the person saves it in the console. The echo is returned only for a valid signature. */
   async verify(token: string, q: WechatQuery): Promise<Reply> {
+    if (!TOKEN_SHAPE.test(token)) return SUCCESS;
     await this.rateLimit(token);
     const hit = await this.resolve(token);
     if (!hit) return SUCCESS;
     const { channel } = hit;
+    if (!timestampFresh(q.timestamp ?? '')) return this.refuse(channel);
     const secret = this.crypto.decrypt(channel.verifyToken);
     const echostr = (q.echostr ?? '').slice(0, ECHOSTR_MAX);
     const ts = q.timestamp ?? '';
@@ -114,6 +120,7 @@ export class InboundService {
 
   /** POST: one inbound message or event as XML. */
   async receive(token: string, q: WechatQuery, rawXml: string): Promise<Reply> {
+    if (!TOKEN_SHAPE.test(token)) return SUCCESS;
     await this.rateLimit(token);
     const hit = await this.resolve(token);
     if (!hit) return SUCCESS;
@@ -122,10 +129,14 @@ export class InboundService {
     const secret = this.crypto.decrypt(channel.verifyToken);
     const ts = q.timestamp ?? '';
     const nonce = q.nonce ?? '';
-    if (!signatureMatches(secret, q.signature ?? '', ts, nonce)) return this.refuse(channel);
+    if (!timestampFresh(ts) || !signatureMatches(secret, q.signature ?? '', ts, nonce)) {
+      return this.refuse(channel);
+    }
     if (!channel.active) return SUCCESS;
 
     let data = parseXml(rawXml);
+    // A safe-mode account only ever sends encrypted packets: a plain one is not WeChat's and is not trusted.
+    if (channel.encMode === 'safe' && !data.Encrypt) return SUCCESS;
     // Safe mode: the message is inside `<Encrypt>`, signed once more; only a valid one is decrypted.
     if (channel.encMode === 'safe' && data.Encrypt) {
       if (!msgSignatureMatches(secret, q.msg_signature ?? '', ts, nonce, data.Encrypt)) {

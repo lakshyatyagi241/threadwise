@@ -130,7 +130,11 @@ export async function connect(
   };
 }
 
-export const signed = (verifyToken: string, timestamp = '1700000000', nonce = 'nonce1') => ({
+export const signed = (
+  verifyToken: string,
+  timestamp = String(Math.floor(Date.now() / 1000)),
+  nonce = 'nonce1',
+) => ({
   timestamp,
   nonce,
   signature: sha1Sorted(verifyToken, timestamp, nonce),

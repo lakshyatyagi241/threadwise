@@ -127,7 +127,7 @@ describe('WECH handshake: GET answers the URL check in the WeChat console', () =
     const t = await api.signup('wi4');
     const a = await connect(api, h, t, { encMode: 'safe', encodingAesKey: AES_KEY });
     const echostr = encryptSafeMode(AES_KEY, '5678901234', a.appId);
-    const ts = '1700000001';
+    const ts = String(Math.floor(Date.now() / 1000));
     const res = await api
       .http()
       .get(`/v2/wechat/inbound/${a.webhookToken}`)
@@ -187,6 +187,23 @@ describe('WECH inbound: the signature is checked on every POST', () => {
     const paused = await push(api, a, xml);
     expect(paused.text).toBe('success');
     expect(await convs(t)).toHaveLength(0);
+    expect(await msgs(t)).toHaveLength(0);
+  });
+
+  it('a correctly signed request with an old timestamp is a replay: refused on GET and POST, nothing stored', async () => {
+    const t = await api.signup('wi5b');
+    const a = await connect(api, h, t);
+    const old = signed(a.verifyToken, String(Math.floor(Date.now() / 1000) - 3600));
+    const xml = textXml({ openid: 'oReplay', content: 'again', msgId: nextId() });
+    expect((await push(api, a, xml, old)).status).toBe(403);
+    expect(
+      (
+        await api
+          .http()
+          .get(`/v2/wechat/inbound/${a.webhookToken}`)
+          .query({ ...old, echostr: 'E' })
+      ).status,
+    ).toBe(403);
     expect(await msgs(t)).toHaveLength(0);
   });
 
@@ -286,6 +303,8 @@ describe('WECH inbound: a message becomes a thread, a contact and a message', ()
     await say(a, 'oMei', 'again');
     await new Promise((r) => setTimeout(r, 200));
     expect(asked()).toHaveLength(1);
+    // ...and a later message does not turn the nickname back into the placeholder.
+    expect((await convs(t))[0]).toMatchObject({ title: 'Mei', peer_name: 'Mei' });
   });
 
   it('a follower WeChat will not name keeps the placeholder names; a failed profile call never loses the message', async () => {
@@ -410,6 +429,14 @@ describe('WECH inbound: every kind of packet', () => {
 });
 
 describe('WECH inbound: AES safe mode', () => {
+  it('a safe-mode account ignores a plain packet (it cannot be downgraded)', async () => {
+    const t = await api.signup('wi19b');
+    const a = await connect(api, h, t, { encMode: 'safe', encodingAesKey: AES_KEY });
+    const res = await push(api, a, textXml({ openid: 'oPlain', content: 'x', msgId: nextId() }));
+    expect(res.text).toBe('success');
+    expect(await msgs(t)).toHaveLength(0);
+  });
+
   it('decrypts the message after checking msg_signature; anything else is refused or ignored', async () => {
     const t = await api.signup('wi19');
     const a = await connect(api, h, t, { encMode: 'safe', encodingAesKey: AES_KEY });
@@ -418,7 +445,7 @@ describe('WECH inbound: AES safe mode', () => {
     const wrapper = `<xml><ToUserName><![CDATA[gh_account]]></ToUserName><Encrypt><![CDATA[${encrypt}]]></Encrypt></xml>`;
     const q = (e: string, token = a.verifyToken) => ({
       ...signed(token),
-      msg_signature: sha1Sorted(token, '1700000000', 'nonce1', e),
+      msg_signature: sha1Sorted(token, signed(token).timestamp, 'nonce1', e),
       encrypt_type: 'aes',
     });
 

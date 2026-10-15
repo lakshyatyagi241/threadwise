@@ -68,6 +68,13 @@ export function signatureMatches(
   return safeEqual(sha1([token, timestamp, nonce]), signature.toLowerCase());
 }
 
+/** WeChat's timestamp is its own clock; a signed request older (or newer) than this is a replay, not WeChat. */
+export const TIMESTAMP_TOLERANCE_S = 600;
+export function timestampFresh(timestamp: string, now: Date = new Date()): boolean {
+  const t = Number(timestamp);
+  return Number.isInteger(t) && Math.abs(now.getTime() / 1000 - t) <= TIMESTAMP_TOLERANCE_S;
+}
+
 /** Message encryption: `msg_signature` = sha1 of the sorted `[token, timestamp, nonce, <Encrypt>]`. */
 export function msgSignatureMatches(
   token: string,
@@ -116,6 +123,9 @@ export function decryptSafeMode(
 
 // --- the webhook's XML -----------------------------------------------------------------------------------------------------
 
+/** A WeChat packet is a few kilobytes; the reader is not linear on hostile input, so it is not offered more than this. */
+export const XML_MAX_CHARS = 65_536;
+
 const ENTITIES: Record<string, string> = {
   '&lt;': '<',
   '&gt;': '>',
@@ -134,7 +144,8 @@ const FIELD = /<([A-Za-z_][\w.-]*)>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([^<]*))<\/\1>/
  * nested element cannot overwrite a top-level one. An unreadable packet is an empty object.
  */
 export function parseXml(raw: string): Record<string, string> {
-  if (raw.trim() === '' || /<!(?:DOCTYPE|ENTITY)/i.test(raw)) return {};
+  if (raw.trim() === '' || raw.length > XML_MAX_CHARS || /<!(?:DOCTYPE|ENTITY)/i.test(raw))
+    return {};
   const out: Record<string, string> = {};
   for (const m of raw.matchAll(FIELD)) {
     const name = m[1]!;

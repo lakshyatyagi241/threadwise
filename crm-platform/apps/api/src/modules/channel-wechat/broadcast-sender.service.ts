@@ -1,4 +1,6 @@
+import { randomUUID } from 'node:crypto';
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import type { Redis } from 'ioredis';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
@@ -8,6 +10,7 @@ import {
   type WechatMessage,
   type WechatResult,
 } from '../../infra/providers/channel-wechat/wechat.port';
+import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { BroadcastsRepository, type BroadcastRow } from './broadcasts.repository';
 import { ChannelsRepository } from './channels.repository';
 import { ChatInboxIngest } from './chat-inbox-ingest';
@@ -18,6 +21,11 @@ export type RunResult = 'skipped' | 'done' | 'failed';
 
 /** WeChat's answer to a mass send whose `clientmsgid` it has already accepted: the earlier call went through. */
 const DUPLICATE_CLIENT_MSG_ID = 45065;
+
+/** Longer than a mass send takes (WeChat answers in seconds), shorter than the 15 minutes after which a stuck send may be retried. */
+const RUN_LOCK_SECONDS = 300;
+const RELEASE_IF_OWNER =
+  "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
 const NOT_CONNECTED = 'The WeChat channel for this broadcast is not connected/active.';
 
@@ -38,9 +46,26 @@ export class BroadcastSenderService {
     private readonly tokens: WechatTokenService,
     private readonly inbox: ChatInboxIngest,
     @Inject(WECHAT_API) private readonly wechat: WechatApi,
+    @Inject(REDIS_CLIENT) private readonly redis: Redis,
   ) {}
 
+  /**
+   * One run at a time per broadcast: a retry queued for a send that looked stuck must not make a second mass-send call while the first
+   * job is still alive (a mass send spends the account's monthly allowance). Redis down: the run goes ahead, the `clientmsgid` still guards it.
+   */
   async run(orgId: number, broadcastId: number): Promise<RunResult> {
+    const key = `wechat:bcast:${orgId}:${broadcastId}`;
+    const owner = randomUUID();
+    const got = await this.redis.set(key, owner, 'EX', RUN_LOCK_SECONDS, 'NX').catch(() => 'OK');
+    if (got !== 'OK') return 'skipped';
+    try {
+      return await this.runLocked(orgId, broadcastId);
+    } finally {
+      await this.redis.eval(RELEASE_IF_OWNER, 1, key, owner).catch(() => undefined);
+    }
+  }
+
+  private async runLocked(orgId: number, broadcastId: number): Promise<RunResult> {
     const broadcast = await this.db.txAs({ orgId }, (tx) =>
       this.repo.findById(tx, orgId, broadcastId),
     );

@@ -13,6 +13,8 @@ const TIMEOUT_MS = 20_000;
 const TOKEN_TIMEOUT_MS = 15_000;
 const UPLOAD_TIMEOUT_MS = 60_000;
 const DOWNLOAD_TIMEOUT_MS = 30_000;
+/** The largest file taken from a follower (WeChat's own ceiling for temporary media is 10 MB). */
+const DOWNLOAD_MAX_BYTES = 20 * 1024 * 1024;
 
 /** The access token and the AppSecret travel in WeChat's query string: nothing that mentions them may leave this file. */
 const scrub = (s: string): string =>
@@ -192,7 +194,9 @@ export class WechatApiClient implements WechatApi {
       if (!res.ok || mime === '' || mime === 'application/json' || mime === 'text/plain') {
         return null;
       }
-      return { bytes: new Uint8Array(await res.arrayBuffer()), mime };
+      if (Number(res.headers.get('content-length') ?? 0) > DOWNLOAD_MAX_BYTES) return null;
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      return bytes.length > DOWNLOAD_MAX_BYTES ? null : { bytes, mime };
     } catch {
       return null;
     }

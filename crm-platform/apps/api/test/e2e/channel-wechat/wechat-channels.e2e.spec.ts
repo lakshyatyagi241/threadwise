@@ -176,6 +176,18 @@ describe('WECH connect: validate with WeChat, store encrypted, show what to past
     expect(await inboxChannels(t.orgId)).toHaveLength(1);
   });
 
+  it('two connects of the same AppID at once make one channel', async () => {
+    const t = await api.signup('wc4b');
+    const body = connectBody();
+    const both = await Promise.all([
+      post(api, t, '/v2/wechat/channels', body),
+      post(api, t, '/v2/wechat/channels', { ...body, accountName: 'Second' }),
+    ]);
+    expect(both.map((r) => r.status)).toEqual([201, 201]);
+    expect(await rows(t.orgId)).toHaveLength(1);
+    expect(both[0]!.body.id).toBe(both[1]!.body.id);
+  });
+
   it('another AppID is a second channel with its own address', async () => {
     const t = await api.signup('wc5');
     const a = await connect(api, h, t);

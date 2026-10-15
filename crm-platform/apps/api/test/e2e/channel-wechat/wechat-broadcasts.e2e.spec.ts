@@ -385,6 +385,22 @@ describe('WECH send: ONE mass-send call, made by a worker job', () => {
     });
   });
 
+  it('two jobs for one broadcast at the same time make ONE mass-send call', async () => {
+    const t = await api.signup('wb14b');
+    const a = await accountWithFollowers(t, 0);
+    const made = await create(t, a, { audience: 'all', openids: undefined });
+    await post(api, t, `/v2/wechat/broadcasts/${made.body.id}/start`);
+    wechat.answers.massSendAll = async () => {
+      await new Promise((r) => setTimeout(r, 200));
+      return { ok: true, data: { msg_id: 7001 }, errcode: null, error: null };
+    };
+    const id = await idOf(made.body.id);
+    const results = await Promise.all([sender.run(t.orgId, id), sender.run(t.orgId, id)]);
+    expect(results.sort()).toEqual(['done', 'skipped']);
+    expect(mass()).toHaveLength(1);
+    expect((await rowOf(made.body.id)).mass_msg_id).toBe('7001');
+  });
+
   it('the queue job runs the same code: the worker processor sends and returns the result', async () => {
     const t = await api.signup('wb14');
     const a = await accountWithFollowers(t, 0);

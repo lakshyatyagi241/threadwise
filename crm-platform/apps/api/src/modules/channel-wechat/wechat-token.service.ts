@@ -12,7 +12,7 @@ import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { clipError, tokenIsFresh, tokenLifetimeSeconds } from './wechat-rules';
 
-const LOCK_MS = 15_000;
+const LOCK_MS = 30_000;
 const WAIT_MS = 10_000;
 const POLL_MS = 150;
 
@@ -128,7 +128,11 @@ export class WechatTokenService {
     const first = await request(token);
     if (first.ok || first.errcode === null || !TOKEN_ERRCODES.includes(first.errcode)) return first;
 
-    await this.db.txAs({ orgId }, (tx) => this.repo.expireToken(tx, orgId, id));
+    // Only the token that failed is expired: another caller may already have replaced it, and that one must stay.
+    const current = await this.read(orgId, id);
+    if (current?.cachedAccessToken && this.crypto.decrypt(current.cachedAccessToken) === token) {
+      await this.db.txAs({ orgId }, (tx) => this.repo.expireToken(tx, orgId, id));
+    }
     const again = await this.activeToken(orgId, id);
     return again ? request(again) : first;
   }

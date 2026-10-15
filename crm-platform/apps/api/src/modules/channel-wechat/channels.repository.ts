@@ -118,6 +118,13 @@ export class ChannelsRepository {
   }
 
   /** The channel already connected for this AppID, so a re-pasted account updates the same row and keeps its webhook address. */
+  /** Serialises two connects of one AppID in one workspace: neither can miss the other's new row. */
+  async lockAppId(tx: Tx, orgId: number, appId: string): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`wechat-connect:${orgId}:${appId}`}, 0))`,
+    );
+  }
+
   async findByAppId(tx: Tx, orgId: number, appId: string): Promise<ChannelRow | undefined> {
     const res = await tx.execute(
       sql`SELECT ${COLUMNS} FROM wechat_channels WHERE org_id = ${orgId} AND app_id = ${appId} ORDER BY id LIMIT 1 FOR UPDATE`,
