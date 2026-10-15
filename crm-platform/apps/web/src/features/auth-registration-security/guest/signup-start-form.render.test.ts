@@ -42,4 +42,35 @@ describe('SignupStartForm', () => {
     );
     expect(unknown).toContain('fi fi-in');
   });
+
+  // The server's real gate (`otpGate` in signup.service.ts) demands a phone whenever the OTP step is
+  // active, regardless of `phoneRequired` (a separate flag, `requirePhoneVerification`, that only
+  // matters while OTP is inactive). Letting someone through step 1 with no phone when OTP is active
+  // strands them at step 3, which has no phone field to recover with.
+  it('marks phone required (no "(optional)" label) when otp.enabled is true, even if phoneRequired is false', () => {
+    const html = renderGuest(
+      createElement(SignupStartForm, {
+        config: makeConfig({ otp: { enabled: true }, phoneRequired: false }),
+      }),
+    );
+    expect(html).not.toContain('(optional)');
+  });
+
+  it('keeps marking phone required when phoneRequired is true, same as before', () => {
+    const html = renderGuest(
+      createElement(SignupStartForm, {
+        config: makeConfig({ otp: { enabled: false }, phoneRequired: true }),
+      }),
+    );
+    expect(html).not.toContain('(optional)');
+  });
+
+  it('marks phone optional only when neither otp.enabled nor phoneRequired asks for it', () => {
+    const html = renderGuest(
+      createElement(SignupStartForm, {
+        config: makeConfig({ otp: { enabled: false }, phoneRequired: false }),
+      }),
+    );
+    expect(html).toContain('(optional)');
+  });
 });

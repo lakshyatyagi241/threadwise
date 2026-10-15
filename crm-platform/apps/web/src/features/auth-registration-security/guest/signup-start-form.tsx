@@ -43,6 +43,14 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
   const [error, setError] = useState<MappedError | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, ReactNode>>({});
 
+  // The server's real gate (`otpGate` in signup.service.ts) demands a phone whenever the OTP step is
+  // actually active (sender configured, template approved, etc.) — `config.phoneRequired` tracks a
+  // SEPARATE admin flag (`requirePhoneVerification`) that only matters while OTP is inactive. Letting a
+  // visitor through step 1 with otp.enabled true and phoneRequired false means step 3 (`setPassword` ->
+  // `otpGate`) refuses them with no way back, since the password step has no phone field. Require the
+  // phone whenever either flag asks for it.
+  const phoneRequired = config.otp.enabled || config.phoneRequired;
+
   // Phone: opens on the platform's default country; the same on the server and in the browser.
   const defaultIso = pickDefaultCountry(config.defaultCountryIso);
   const [phoneEdit, setPhoneEdit] = useState<{ raw: string; iso: CountryCode } | null>(null);
@@ -73,7 +81,7 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
     const messages: Record<string, ReactNode> = {};
     const failed: string[] = parsed.success ? [] : failedFields(parsed.error);
     for (const f of failed) messages[f] = tv(f);
-    if (config.phoneRequired) {
+    if (phoneRequired) {
       if (!phone.raw.trim()) {
         messages.phone = tv('phoneRequired');
         if (!failed.includes('phone')) failed.push('phone');
@@ -193,7 +201,12 @@ export function SignupStartForm({ config }: { config: RegistrationConfigResponse
           )}
         </FormField>
 
-        <FormField label={t('phone')} error={fieldErrors.phone} hint={t('phoneHint')}>
+        <FormField
+          label={t('phone')}
+          error={fieldErrors.phone}
+          hint={t('phoneHint')}
+          optionalLabel={phoneRequired ? undefined : t('optional')}
+        >
           {(p) => (
             <PhoneInput
               id={p.id}
