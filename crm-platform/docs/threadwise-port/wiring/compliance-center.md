@@ -28,18 +28,18 @@ the same change as anything that reads or writes the settings below.
 
 ## Consumers of the settings (every place they are used)
 
-| Consumer                                                                    | What it takes                                                                                           | State                     |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
-| Form builder, consent line (settings tab)                                   | `GET /v2/compliance/links`: a "use workspace link" button for `privacyUrl` and the new `termsUrl` field | built                     |
-| Public form (`/f/<key>`)                                                    | `consent.termsUrl` shown next to the privacy link                                                       | built                     |
-| Consent notice editor (chat widget, booking page, store, workspace default) | the links and the default wording as one-click offers; new `termsUrl` field                             | built                     |
-| Onboarding, workspace step                                                  | the "do not store protected health information" note (`compliance-center.phi`)                          | built                     |
-| Privacy requests deadline (`privacy_settings.sla_days`)                     | compared with the strictest profile's days in the checklist; not changed by it                          | read only                 |
-| Chat dispatcher, broadcasts, campaigns, scheduled messages, flows, dialler  | quiet hours (marketing sends are held), calling window (a dial is refused): `SendWindowService`         | built (BL-177)            |
-| ConsentGate                                                                 | asked first, and again when a held send is released; the DND registry is a note                         | built / **hook (BL-181)** |
-| Consent switch "require recorded consent"                                   | hinted and linked from the profile summary; never flipped by a profile                                  | by design (D13)           |
-| Per-contact minor tag, parental evidence, do-not-sell opt-out               | `subject_minor` reason and BL-140b columns                                                              | **not built (BL-180)**    |
-| DPDP consent manager, DNC / NDNC feed                                       | name and link stored as a note                                                                          | **placeholder (BL-181)**  |
+| Consumer                                                                    | What it takes                                                                                                                                                                                 | State                     |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| Form builder, consent line (settings tab)                                   | `GET /v2/compliance/links`: a "use workspace link" button for `privacyUrl` and the new `termsUrl` field                                                                                       | built                     |
+| Public form (`/f/<key>`)                                                    | `consent.termsUrl` shown next to the privacy link                                                                                                                                             | built                     |
+| Consent notice editor (chat widget, booking page, store, workspace default) | the links and the default wording as one-click offers; new `termsUrl` field                                                                                                                   | built                     |
+| Onboarding, workspace step                                                  | the "do not store protected health information" note (`compliance-center.phi`)                                                                                                                | built                     |
+| Privacy requests deadline (`privacy_settings.sla_days`)                     | compared with the strictest profile's days in the checklist; not changed by it                                                                                                                | read only                 |
+| Chat dispatcher, broadcasts, campaigns, scheduled messages, flows, dialler  | quiet hours (marketing sends are held), calling window (a dial is refused): `SendWindowService`                                                                                               | built (BL-177)            |
+| ConsentGate                                                                 | asked first, and again when a held send is released; the DND registry is a note                                                                                                               | built / **hook (BL-181)** |
+| Consent switch "require recorded consent"                                   | hinted and linked from the profile summary; never flipped by a profile                                                                                                                        | by design (D13)           |
+| Per-contact minor tag, parental evidence, do-not-sell opt-out               | `childrenPolicy` + `parentalConsentRequired` -> `minorRuleOf` -> ConsentGate `subject_minor`; `ccpa_us` -> the opt-out switch and the Global Privacy Control rule; tables `contact_privacy_*` | built (BL-180)            |
+| DPDP consent manager, DNC / NDNC feed                                       | name and link stored as a note                                                                                                                                                                | **placeholder (BL-181)**  |
 
 ## Privacy register entries
 
@@ -48,5 +48,5 @@ the same change as anything that reads or writes the settings below.
 
 ## Open
 
-BL-188 to BL-190 (the remaining senders, a recurring campaign's held recipients, a visible contact time zone), BL-180 (contact-level extras), BL-181 (integrations behind the placeholders). Owner decisions D13 to D17 are in
+BL-191 to BL-193 (quiet hours: the remaining senders, a recurring campaign's held recipients, a visible contact time zone), BL-181 (integrations behind the placeholders), BL-188 to BL-190 (follow-ups of BL-180). BL-180 (contact-level extras) is built: saving the Compliance center drops the gate's cached minor rule. Owner decisions D13 to D17 are in
 the spec, section 11.8.

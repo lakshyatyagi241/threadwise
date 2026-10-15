@@ -57,7 +57,7 @@ Your billing country, or the country you gave when you opened the workspace, sug
 
 ## Contacts and children
 
-Name a **data protection officer or privacy contact** and, for India, a **grievance officer**, with an email and optionally a phone and an address. The profile you switched on marks the ones it asks for. Then say whether minors may be among your contacts. If they may, you can record that parental consent is required. This is a flag that states your policy; keeping parental consent evidence for each contact is not built yet.
+Name a **data protection officer or privacy contact** and, for India, a **grievance officer**, with an email and optionally a phone and an address. The profile you switched on marks the ones it asks for. Then say whether minors may be among your contacts. If they may, you can record that parental consent is required. Your answer also decides what happens to a contact you mark as a minor on its Consent card: with "we do not knowingly process the data of minors", marketing to that contact is held back; with "minors may be included", or when parental consent is required, it is held back until a parent or guardian's consent is recorded on the same card. Until you answer, the mark is only recorded. See [consent settings](help:contact-consent).
 
 ## Notices and links
 

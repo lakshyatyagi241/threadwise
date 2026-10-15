@@ -165,7 +165,7 @@
             "unset": "Beantwoord de vraag over kinderen onder Contacten en kinderen.",
             "minorsNoParental": "Minderjarigen kunnen erbij zitten, maar toestemming van ouders staat uit. Dit profiel behandelt iedereen onder {age} als minderjarig.",
             "no_minors": "Je verwerkt niet bewust gegevens van minderjarigen. Dit profiel behandelt iedereen onder {age} als minderjarig.",
-            "may_include_minors": "Toestemming van ouders is ingeschakeld voor personen onder {age}. Het bewaren van het bewijs per contact is nog niet beschikbaar."
+            "may_include_minors": "Toestemming van ouders staat aan voor mensen onder de {age}. Markeer een contact als minderjarig op de toestemmingskaart en leg daar de toestemming van de voogd vast."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Gegevens van kinderen",
-        "hint": "Dit product is voor bedrijven. Geef aan of je gegevens van minderjarigen kunt bewaren, zodat de juiste regels worden getoond.",
+        "hint": "Dit product is voor bedrijven. Geef aan of je gegevens van minderjarigen mag bewaren, zodat de juiste regels worden getoond. Na je antwoord wordt marketing naar een als minderjarig gemarkeerd contact tegengehouden: altijd als je niet bewust gegevens van minderjarigen verwerkt, en tot de toestemming van de voogd is vastgelegd als er minderjarigen bij kunnen zitten.",
         "policy": "Minderjarigen onder je contacten",
         "policies": {
           "unset": "Nog niet beantwoord",
@@ -352,7 +352,7 @@
           "may_include_minors": "Minderjarigen kunnen onder onze contacten zitten"
         },
         "parental": "Voor minderjarigen is toestemming van ouders vereist",
-        "parentalHint": "Een vlag die je beleid vastlegt. Het verzamelen en bewaren van bewijs van ouderlijke toestemming per contact is nog niet beschikbaar.",
+        "parentalHint": "Legt je beleid vast en houdt marketing naar als minderjarig gemarkeerde contacten tegen tot de toestemming van de voogd is vastgelegd. Je markeert een contact als minderjarig en legt die toestemming vast op de toestemmingskaart.",
         "age": "De profielen die je hebt ingeschakeld behandelen iedereen onder {age} als minderjarig.",
         "dpdpNeedsAnswer": "Het DPDP-profiel vraagt je deze vraag te beantwoorden."
       }

@@ -1,5 +1,6 @@
 import {
   consentChannelOfKind,
+  type MinorRule,
   modalityOfChannel,
   purposeAppliesTo,
   purposeOf,
@@ -21,6 +22,12 @@ export interface ConsentFacts {
   unsubscribedFlag: boolean;
   /** The ledger state for (channel, the purpose's ledger purpose). `unknown` = no event yet or no such contact. */
   ledgerState: 'granted' | 'withdrawn' | 'unknown';
+  /** The contact is flagged as a minor (`contact_privacy_flags`, BL-180). Absent = false. */
+  minor?: boolean;
+  /** A parent's or guardian's consent is on record for the flagged minor. Evidence only: it is never a marketing grant. */
+  guardianConsent?: boolean;
+  /** The contact opted out of the sale or sharing of their personal information. Absent = false. */
+  saleShareOptOut?: boolean;
 }
 
 export const NO_FACTS: ConsentFacts = { unsubscribedFlag: false, ledgerState: 'unknown' };
@@ -38,6 +45,8 @@ export interface DecideInput {
   purposeEnabled?: boolean;
   /** What the caller holds for a notice-first purpose: the delivered notice and the person's answer. */
   noticeEvidence?: ConsentNoticeEvidence;
+  /** What the workspace's children setting does with marketing to a flagged minor. Omitted = `off` (the flag changes nothing). */
+  minorRule?: MinorRule;
   facts: ConsentFacts;
 }
 
@@ -54,9 +63,12 @@ const deny = (reason: ConsentGateReason): ConsentGateResult => ({ decision: 'den
  *  3. Service (`utility`): a reply inside the customer-service window is allowed (`inbound_reply_window`); otherwise only an
  *     explicit withdrawal of the service purpose on that channel blocks it. STOP withdraws MARKETING only, so a contact who sent
  *     STOP still gets order, appointment and support messages.
- *  4. Marketing: a withdrawal (the roll-up flag or the ledger) ALWAYS denies, whatever the switch says. With the switch on, a recorded
- *     grant on the channel is also needed. With it off (the default) everyone else is allowed: today's behaviour, exactly.
- *  5. Any other purpose with no ledger: allowed when no opt-in is mandatory, denied (`no_consent_recorded`) when it is, until the
+ *  4. Marketing: a withdrawal (the roll-up flag or the ledger) ALWAYS denies, whatever the switch says. Then a contact flagged as a
+ *     minor is held (`subject_minor`) when the workspace's children setting says so: always under `block`, and under `guardian` until
+ *     a parent's or guardian's consent is on record (BL-180). With the switch on, a recorded grant on the channel is also needed. With
+ *     it off (the default) everyone else is allowed: today's behaviour, exactly. Service messages are never held back by the flag.
+ *  5. Third-party sharing: a contact who opted out of the sale or sharing of their data is denied (`sale_share_opted_out`).
+ *  6. Any other purpose with no ledger: allowed when no opt-in is mandatory, denied (`no_consent_recorded`) when it is, until the
  *     generalised ledger records those purposes.
  */
 export function decideConsent(input: DecideInput): ConsentGateResult {
@@ -90,12 +102,25 @@ export function decideConsent(input: DecideInput): ConsentGateResult {
     if (input.facts.unsubscribedFlag || (channel && input.facts.ledgerState === 'withdrawn')) {
       return deny('withdrawn');
     }
+    if (isHeldAsMinor(input.minorRule, input.facts)) return deny('subject_minor');
     if (!input.requireConsent) return allow('policy_off');
     if (!channel) return deny('channel_unmapped');
     return input.facts.ledgerState === 'granted' ? allow('granted') : deny('no_consent_recorded');
   }
 
+  if (def.id === 'third_party_sharing' && input.facts.saleShareOptOut) {
+    return deny('sale_share_opted_out');
+  }
   return def.consentMandatory ? deny('no_consent_recorded') : allow('no_grant_required_by_policy');
+}
+
+/**
+ * A flagged minor's marketing is held when the workspace says so. `block`: always. `guardian`: until guardian consent is on record. A
+ * contact who is not flagged, or a workspace whose children setting is not answered (`off`), is never held by this.
+ */
+export function isHeldAsMinor(rule: MinorRule | undefined, facts: ConsentFacts): boolean {
+  if (!facts.minor || !rule || rule === 'off') return false;
+  return rule === 'block' || !facts.guardianConsent;
 }
 
 /** The answer when the gate itself failed: consent-based purposes fail closed, everything else (service replies) fails open. */

@@ -165,7 +165,7 @@
             "unset": "Responde a la pregunta sobre menores en Contactos y menores.",
             "minorsNoParental": "Puede haber menores, pero el consentimiento parental está desactivado. Este perfil considera menor a cualquier persona de menos de {age} años.",
             "no_minors": "No tratas conscientemente datos de menores. Este perfil considera menor a cualquier persona de menos de {age} años.",
-            "may_include_minors": "El consentimiento parental está activado para menores de {age} años. Conservar las pruebas por contacto aún no está disponible."
+            "may_include_minors": "El consentimiento parental está activado para menores de {age}. Marca un contacto como menor en su tarjeta de consentimiento y registra allí el consentimiento del tutor."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Datos de menores",
-        "hint": "Este producto es para empresas. Indica si puedes tener datos de menores, para que se muestren las reglas adecuadas.",
+        "hint": "Este producto es para empresas. Indica si puedes tener datos de menores para que se muestren las reglas adecuadas. Al responder, el marketing a un contacto marcado como menor se frena: siempre si no tratas datos de menores a sabiendas, y hasta que conste el consentimiento del tutor si puede haber menores.",
         "policy": "Menores entre tus contactos",
         "policies": {
           "unset": "Aún sin responder",
@@ -352,7 +352,7 @@
           "may_include_minors": "Puede haber menores entre nuestros contactos"
         },
         "parental": "Se exige consentimiento parental para los menores",
-        "parentalHint": "Un indicador que registra tu política. Recopilar y conservar las pruebas del consentimiento parental por contacto aún no está disponible.",
+        "parentalHint": "Registra tu política y frena el marketing a los contactos marcados como menores hasta que conste el consentimiento del tutor. Marcas un contacto como menor y registras ese consentimiento en su tarjeta de consentimiento.",
         "age": "Los perfiles que has activado consideran menor a cualquier persona de menos de {age} años.",
         "dpdpNeedsAnswer": "El perfil DPDP te pide que respondas a esta pregunta."
       }

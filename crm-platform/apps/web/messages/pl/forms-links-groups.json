@@ -130,15 +130,24 @@
       "loading": "Wczytywanie linków…",
       "retry": "Spróbuj ponownie",
       "searchPlaceholder": "Szukaj według nazwy lub linku",
-      "create": { "cta": "Nowy link" },
+      "create": {
+        "cta": "Nowy link"
+      },
       "stats": {
         "all": "Wszystkie linki",
         "live": "Aktywne",
         "totalClicks": "Łączna liczba kliknięć",
         "avgClicks": "Śr. kliknięć / link"
       },
-      "tabs": { "all": "Wszystkie", "live": "Aktywne", "paused": "Wstrzymane" },
-      "status": { "live": "Aktywny", "paused": "Wstrzymany" },
+      "tabs": {
+        "all": "Wszystkie",
+        "live": "Aktywne",
+        "paused": "Wstrzymane"
+      },
+      "status": {
+        "live": "Aktywny",
+        "paused": "Wstrzymany"
+      },
       "empty": {
         "title": "Brak linków",
         "description": "Wygeneruj link do udostępnienia w reklamach, bio lub kodzie QR."
@@ -170,7 +179,11 @@
       "builder": {
         "back": "Wróć do linków",
         "newHeading": "Nowy link",
-        "step": { "destination": "Cel", "message": "Wiadomość początkowa", "tracking": "Śledzenie" },
+        "step": {
+          "destination": "Cel",
+          "message": "Wiadomość początkowa",
+          "tracking": "Śledzenie"
+        },
         "name": "Nazwa",
         "status": "Status",
         "countryCode": "Kod kraju",
@@ -194,6 +207,14 @@
         "shortUrl": "Krótki link",
         "waUrl": "Link WhatsApp",
         "qrAlt": "Kod QR dla tego linku"
+      },
+      "public": {
+        "missingTitle": "Nie znaleziono linku",
+        "missingBody": "Ten link nie istnieje lub został usunięty.",
+        "goneTitle": "Link już nieaktywny",
+        "goneBody": "Ten link jest wstrzymany lub wygasł.",
+        "errorTitle": "Coś poszło nie tak",
+        "errorBody": "Nie udało się otworzyć tego linku. Spróbuj ponownie."
       }
     }
   }

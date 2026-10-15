@@ -27,7 +27,7 @@ Roles: Owner and Admin everything; Manager `settings.compliance.read` (migration
 
 `regimes` (any of `gdpr_eu`, `uk_gdpr`, `dpdp_in`, `ccpa_us`, `tcpa_us`, `trai_in`, `lgpd_br`, `pdpa_sg`, `generic`), `privacyUrl`, `termsUrl`
 (https only), `dpo` and `grievanceOfficer` (name, email, phone, address), `childrenPolicy` (`unset`, `no_minors`, `may_include_minors`),
-`parentalConsentRequired`, `offerSaleShareOptOut`, `optOutNoticeUrl`, `consentManager` (name, url: a placeholder), `quietHours` (enabled,
+`parentalConsentRequired` (with `childrenPolicy`, the rule the ConsentGate applies to a contact flagged as a minor, BL-180), `offerSaleShareOptOut`, `optOutNoticeUrl`, `consentManager` (name, url: a placeholder), `quietHours` (enabled,
 start, end: may cross midnight), `callingWindow` (enabled, start, end, ISO weekdays), `windowTimezone` (IANA or null for the workspace's),
 `dndRegistry` (`none`, `trai_ndnc`, `us_dnc`, `sg_dnc`, `custom`: a note), `secondaryNoticeLocale` (the second DPDP notice language),
 `subprocessorsPublic`.

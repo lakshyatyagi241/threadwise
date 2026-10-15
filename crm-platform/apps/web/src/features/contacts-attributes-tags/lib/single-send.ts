@@ -41,3 +41,10 @@ export function whatsappChannels<T extends { kind: string; status: string }>(
 ): T[] {
   return channels.filter((c) => c.status === 'connected' && c.kind.startsWith('whatsapp'));
 }
+
+/** The mailboxes that are connected, in the order the API lists them. */
+export function emailChannels<T extends { kind: string; status: string }>(
+  channels: readonly T[],
+): T[] {
+  return channels.filter((c) => c.status === 'connected' && c.kind === 'email');
+}

@@ -165,7 +165,7 @@
             "unset": "Beantworten Sie die Frage zu Kindern unter Kontakte und Kinder.",
             "minorsNoParental": "Minderjährige können enthalten sein, aber die Einwilligung der Eltern ist aus. Dieses Profil behandelt alle unter {age} als minderjährig.",
             "no_minors": "Sie verarbeiten nicht wissentlich Daten von Minderjährigen. Dieses Profil behandelt alle unter {age} als minderjährig.",
-            "may_include_minors": "Die Einwilligung der Eltern ist für Personen unter {age} aktiviert. Die Nachweisführung pro Kontakt ist noch nicht umgesetzt."
+            "may_include_minors": "Die Einwilligung der Eltern ist für Personen unter {age} aktiviert. Markieren Sie einen Kontakt auf seiner Einwilligungskarte als minderjährig und erfassen Sie dort die Einwilligung des Vormunds."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Daten von Kindern",
-        "hint": "Dieses Produkt ist für Unternehmen gedacht. Geben Sie an, ob Sie Daten von Minderjährigen halten könnten, damit die passenden Regeln angezeigt werden.",
+        "hint": "Dieses Produkt ist für Unternehmen. Geben Sie an, ob Sie Daten von Minderjährigen speichern dürfen, damit die passenden Regeln angezeigt werden. Nach Ihrer Antwort wird Marketing an einen als minderjährig markierten Kontakt zurückgehalten: immer, wenn Sie wissentlich keine Minderjährigen verarbeiten, und bis die Einwilligung des Vormunds dokumentiert ist, wenn Minderjährige dabei sein können.",
         "policy": "Minderjährige unter Ihren Kontakten",
         "policies": {
           "unset": "Noch nicht beantwortet",
@@ -352,7 +352,7 @@
           "may_include_minors": "Minderjährige können unter unseren Kontakten sein"
         },
         "parental": "Für Minderjährige ist die Einwilligung der Eltern erforderlich",
-        "parentalHint": "Ein Kennzeichen, das Ihre Richtlinie festhält. Das Erheben und Aufbewahren von Nachweisen der elterlichen Einwilligung pro Kontakt ist noch nicht umgesetzt.",
+        "parentalHint": "Hält Ihre Richtlinie fest und hält Marketing an als minderjährig markierte Kontakte zurück, bis die Einwilligung des Vormunds dokumentiert ist. Einen Kontakt markieren Sie als minderjährig und erfassen diese Einwilligung auf seiner Einwilligungskarte.",
         "age": "Die von Ihnen aktivierten Profile behandeln alle unter {age} als minderjährig.",
         "dpdpNeedsAnswer": "Das DPDP-Profil verlangt, dass Sie diese Frage beantworten."
       }

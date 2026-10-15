@@ -13,6 +13,8 @@ import { ConsentExportPublisher } from './consent-export.publisher';
 import { ConsentExportRepository } from './consent-export.repository';
 import { ConsentExportService } from './consent-export.service';
 import { ConsentRepository } from './consent.repository';
+import { ContactPrivacyRepository } from './contact-privacy.repository';
+import { ContactPrivacyService } from './contact-privacy.service';
 import { ContactConsentController } from './consent.controller';
 import { ContactConsentService } from './consent.service';
 
@@ -29,6 +31,8 @@ import { ContactConsentService } from './consent.service';
   ],
   providers: [
     ConsentRepository,
+    ContactPrivacyRepository,
+    ContactPrivacyService,
     ContactConsentService,
     ConsentIntakeService,
     ConsentNoticeRepository,
@@ -43,6 +47,7 @@ import { ContactConsentService } from './consent.service';
   ],
   exports: [
     ContactConsentService,
+    ContactPrivacyService,
     ConsentIntakeService,
     ConsentNoticeService,
     ConsentSettingsService,

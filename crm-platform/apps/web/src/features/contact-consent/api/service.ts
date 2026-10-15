@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { recordPrivacyFlagSchema } from '@crm/contracts';
 import type {
   ConsentNotice,
   ConsentNoticeScope,
@@ -40,6 +41,9 @@ const noticeShape = shape<ConsentNotice>('scope', 'ref', 'enabled', 'text', 'ver
 const exportsList = shape<ConsentExportList>('data', 'needsAsync');
 const oneExport = shape<ConsentExport>('id', 'status');
 
+/** What a person sends to turn a privacy flag on or off (minor, guardian consent, Do Not Sell or Share). */
+export type RecordPrivacyChange = z.input<typeof recordPrivacyFlagSchema>;
+
 const BASE = '/contact-consent';
 const enc = encodeURIComponent;
 
@@ -62,6 +66,12 @@ export const consentApi = {
       method: 'PUT',
       body: input,
       schema: noticeShape,
+    }),
+  recordPrivacy: (contactId: string, input: RecordPrivacyChange) =>
+    apiFetch(`${BASE}/contacts/${enc(contactId)}/privacy-events`, {
+      method: 'POST',
+      body: input,
+      schema: contactConsent,
     }),
   record: (
     contactId: string,

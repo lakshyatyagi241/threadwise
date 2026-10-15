@@ -165,7 +165,7 @@
             "unset": "Répondez à la question sur les enfants dans Contacts et enfants.",
             "minorsNoParental": "Des mineurs peuvent être inclus, mais le consentement parental est désactivé. Ce profil considère comme mineure toute personne de moins de {age} ans.",
             "no_minors": "Vous ne traitez pas sciemment les données de mineurs. Ce profil considère comme mineure toute personne de moins de {age} ans.",
-            "may_include_minors": "Le consentement parental est activé pour les personnes de moins de {age} ans. La conservation des preuves par contact n’est pas encore disponible."
+            "may_include_minors": "Le consentement parental est activé pour les personnes de moins de {age} ans. Marquez un contact comme mineur sur sa fiche de consentement et enregistrez-y le consentement du tuteur."
           }
         },
         "opt_out_notice": {
@@ -344,7 +344,7 @@
       },
       "children": {
         "title": "Données d’enfants",
-        "hint": "Ce produit s’adresse aux entreprises. Indiquez si vous pouvez détenir des données de mineurs, afin que les bonnes règles s’affichent.",
+        "hint": "Ce produit s'adresse aux entreprises. Indiquez si vous pouvez détenir des données de mineurs afin d'afficher les règles adaptées. Une fois la réponse donnée, le marketing vers un contact marqué comme mineur est retenu : toujours si vous ne traitez pas sciemment de données de mineurs, et tant que le consentement du tuteur n'est pas enregistré si des mineurs peuvent figurer parmi vos contacts.",
         "policy": "Mineurs parmi vos contacts",
         "policies": {
           "unset": "Pas encore de réponse",
@@ -352,7 +352,7 @@
           "may_include_minors": "Des mineurs peuvent figurer parmi nos contacts"
         },
         "parental": "Le consentement parental est requis pour les mineurs",
-        "parentalHint": "Un indicateur qui enregistre votre politique. La collecte et la conservation des preuves de consentement parental par contact ne sont pas encore disponibles.",
+        "parentalHint": "Enregistre votre politique et retient le marketing vers les contacts marqués comme mineurs tant que le consentement du tuteur n'est pas enregistré. Vous marquez un contact comme mineur, et enregistrez ce consentement, sur sa fiche de consentement.",
         "age": "Les profils que vous avez activés considèrent comme mineure toute personne de moins de {age} ans.",
         "dpdpNeedsAnswer": "Le profil DPDP vous demande de répondre à cette question."
       }

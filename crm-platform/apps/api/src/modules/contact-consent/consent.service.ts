@@ -20,6 +20,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ConsentRepository, type EventRow } from './consent.repository';
+import { ContactPrivacyService } from './contact-privacy.service';
 import {
   CONSENT_CSV_HEADER,
   cleanEvidence,
@@ -76,6 +77,7 @@ export class ContactConsentService {
     private readonly repo: ConsentRepository,
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   /** Core write. Must run inside a request context (the audit row reads it) and a tenant transaction. */
@@ -240,7 +242,7 @@ export class ContactConsentService {
           HttpStatus.NOT_FOUND,
         );
       }
-      const [states, rows, optedOut] = await Promise.all([
+      const [states, rows, optedOut, privacy] = await Promise.all([
         this.repo.statesOf(tx, orgId, c.id),
         this.repo.listEvents(tx, orgId, {
           contactId: c.id,
@@ -248,6 +250,7 @@ export class ContactConsentService {
           limit: q.limit,
         }),
         this.repo.isUnsubscribed(tx, orgId, c.id),
+        this.privacy.forContactIn(tx, orgId, c.id),
       ]);
       const st: ConsentStateRow[] = states.map((s) => ({
         channel: s.channel as ConsentChannel,
@@ -255,7 +258,7 @@ export class ContactConsentService {
         state: s.state as 'granted' | 'withdrawn',
         since: s.lastOccurredAt,
       }));
-      return { contactId: contactUuid, optedOut, states: st, events: rows.map(toEvent) };
+      return { contactId: contactUuid, optedOut, states: st, events: rows.map(toEvent), privacy };
     });
   }
 

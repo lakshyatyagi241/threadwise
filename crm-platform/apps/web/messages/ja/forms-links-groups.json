@@ -130,15 +130,24 @@
       "loading": "リンクを読み込み中…",
       "retry": "再試行",
       "searchPlaceholder": "名前またはリンクで検索",
-      "create": { "cta": "新しいリンク" },
+      "create": {
+        "cta": "新しいリンク"
+      },
       "stats": {
         "all": "すべてのリンク",
         "live": "公開中",
         "totalClicks": "合計クリック数",
         "avgClicks": "平均クリック数／リンク"
       },
-      "tabs": { "all": "すべて", "live": "公開中", "paused": "一時停止中" },
-      "status": { "live": "公開中", "paused": "一時停止中" },
+      "tabs": {
+        "all": "すべて",
+        "live": "公開中",
+        "paused": "一時停止中"
+      },
+      "status": {
+        "live": "公開中",
+        "paused": "一時停止中"
+      },
       "empty": {
         "title": "リンクはまだありません",
         "description": "広告、プロフィール、QRコードで共有するリンクを発行してください。"
@@ -170,7 +179,11 @@
       "builder": {
         "back": "リンク一覧に戻る",
         "newHeading": "新しいリンク",
-        "step": { "destination": "宛先", "message": "初期メッセージ", "tracking": "トラッキング" },
+        "step": {
+          "destination": "宛先",
+          "message": "初期メッセージ",
+          "tracking": "トラッキング"
+        },
         "name": "名前",
         "status": "ステータス",
         "countryCode": "国番号",
@@ -194,6 +207,14 @@
         "shortUrl": "短縮リンク",
         "waUrl": "WhatsAppリンク",
         "qrAlt": "このリンクのQRコード"
+      },
+      "public": {
+        "missingTitle": "リンクが見つかりません",
+        "missingBody": "このリンクは存在しないか、削除されました。",
+        "goneTitle": "リンクは現在有効ではありません",
+        "goneBody": "このリンクは一時停止されているか、期限切れです。",
+        "errorTitle": "問題が発生しました",
+        "errorBody": "このリンクを開けませんでした。もう一度お試しください。"
       }
     }
   }

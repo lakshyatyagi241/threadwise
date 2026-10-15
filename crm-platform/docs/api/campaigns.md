@@ -249,7 +249,7 @@ the others; a batch pause every `batchSize`), the variant's content, merge, link
   `held_until` / `held_reason` (the claim skips it until then), sends the rest, and is scheduled again for the minute the first of them opens.
   The ConsentGate screens the audience again at the start of every run. A utility-only campaign is never held. A guided campaign's follow-up
   step is looked at again when the hours end. The live stats carry `held` (of `queued`) and the recipients list `heldUntil` / `heldReason`. A
-  recurring campaign sends its held recipients at its next occurrence (BL-189).
+  recurring campaign sends its held recipients at its next occurrence (BL-192).
 - **End:** completed; or `scheduled` again for the closed window, tomorrow's quota or the retries; a recurring campaign moves to its next date with every recipient queued again.
 - **End date:** the operator's `expiresAt`, else (not Baileys, not deliberately paced) 24 hours after the first send. Past it, what was not sent is failed ("auto-expired") and the campaign ends.
 - A custom message needs an engine that can send one; the Cloud API cannot (Reference's rule), so those recipients fail for good with the reason.

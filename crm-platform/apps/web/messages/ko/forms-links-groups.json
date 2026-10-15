@@ -130,15 +130,24 @@
       "loading": "링크를 불러오는 중…",
       "retry": "다시 시도",
       "searchPlaceholder": "이름 또는 링크로 검색",
-      "create": { "cta": "새 링크" },
+      "create": {
+        "cta": "새 링크"
+      },
       "stats": {
         "all": "전체 링크",
         "live": "활성",
         "totalClicks": "총 클릭 수",
         "avgClicks": "링크당 평균 클릭 수"
       },
-      "tabs": { "all": "전체", "live": "활성", "paused": "일시 중지됨" },
-      "status": { "live": "활성", "paused": "일시 중지됨" },
+      "tabs": {
+        "all": "전체",
+        "live": "활성",
+        "paused": "일시 중지됨"
+      },
+      "status": {
+        "live": "활성",
+        "paused": "일시 중지됨"
+      },
       "empty": {
         "title": "아직 링크가 없습니다",
         "description": "광고, 프로필 또는 QR 코드에 공유할 링크를 생성하세요."
@@ -170,7 +179,11 @@
       "builder": {
         "back": "링크 목록으로",
         "newHeading": "새 링크",
-        "step": { "destination": "대상 번호", "message": "시작 메시지", "tracking": "추적" },
+        "step": {
+          "destination": "대상 번호",
+          "message": "시작 메시지",
+          "tracking": "추적"
+        },
         "name": "이름",
         "status": "상태",
         "countryCode": "국가 코드",
@@ -194,6 +207,14 @@
         "shortUrl": "단축 링크",
         "waUrl": "WhatsApp 링크",
         "qrAlt": "이 링크의 QR 코드"
+      },
+      "public": {
+        "missingTitle": "링크를 찾을 수 없습니다",
+        "missingBody": "이 링크는 존재하지 않거나 삭제되었습니다.",
+        "goneTitle": "더 이상 활성 상태가 아닌 링크입니다",
+        "goneBody": "이 링크는 일시 중지되었거나 만료되었습니다.",
+        "errorTitle": "문제가 발생했습니다",
+        "errorBody": "이 링크를 열 수 없었습니다. 다시 시도해 주세요."
       }
     }
   }

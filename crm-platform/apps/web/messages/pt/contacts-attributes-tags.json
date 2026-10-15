@@ -1279,6 +1279,14 @@
       "number": "Enviar de",
       "numberHint": "O número do WhatsApp pelo qual a mensagem é enviada.",
       "noChannel": "Nenhum número do WhatsApp conectado. Conecte um em Canais primeiro.",
+      "mailbox": "Enviar de",
+      "mailboxPlaceholder": "Selecione uma caixa de entrada",
+      "mailboxHint": "A caixa de entrada conectada da qual o e-mail é enviado.",
+      "noMailbox": "Nenhuma caixa de e-mail está conectada. Conecte uma em Canais primeiro.",
+      "subject": "Assunto",
+      "subjectPlaceholder": "Sobre o que é isto?",
+      "body": "Mensagem",
+      "bodyPlaceholder": "Escreva seu e-mail…",
       "template": "Modelo do WhatsApp",
       "templatePlaceholder": "Selecione um modelo",
       "noTemplates": "Nenhum modelo aprovado para este número.",
@@ -1295,12 +1303,10 @@
       "callPermission": "O contato ainda não permitiu chamadas. Antes de ligar, é pedida a permissão dele.",
       "callReady": "Pronto para ligar para {phone}.",
       "later": {
-        "sms": "O envio de SMS pelo CRM ainda não está disponível.",
-        "email": "O envio de e-mail pelo CRM ainda não está disponível."
+        "sms": "O envio de SMS pelo CRM ainda não está disponível."
       },
       "openApp": {
-        "sms": "Abrir no app de mensagens",
-        "email": "Abrir no app de e-mail"
+        "sms": "Abrir no app de mensagens"
       }
     },
     "views": {

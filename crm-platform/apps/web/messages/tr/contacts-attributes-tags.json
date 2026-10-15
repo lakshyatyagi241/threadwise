@@ -1279,6 +1279,14 @@
       "number": "Gönderen",
       "numberHint": "Mesajın gönderileceği WhatsApp numarası.",
       "noChannel": "Bağlı bir WhatsApp numarası yok. Önce Kanallar bölümünden bir numara bağlayın.",
+      "mailbox": "Gönderen",
+      "mailboxPlaceholder": "Bir posta kutusu seçin",
+      "mailboxHint": "E-postanın gönderileceği bağlı posta kutusu.",
+      "noMailbox": "Bağlı bir posta kutusu yok. Önce Kanallar'dan birini bağlayın.",
+      "subject": "Konu",
+      "subjectPlaceholder": "Bu ne hakkında?",
+      "body": "Mesaj",
+      "bodyPlaceholder": "E-postanızı yazın…",
       "template": "WhatsApp şablonu",
       "templatePlaceholder": "Şablon seçin",
       "noTemplates": "Bu numara için onaylı şablon yok.",
@@ -1295,12 +1303,10 @@
       "callPermission": "Kişi henüz aramalara izin vermedi. Arama yapmadan önce izni istenir.",
       "callReady": "{phone} numarasını aramaya hazır.",
       "later": {
-        "sms": "CRM üzerinden SMS gönderme henüz kullanılamıyor.",
-        "email": "CRM üzerinden e-posta gönderme henüz kullanılamıyor."
+        "sms": "CRM üzerinden SMS gönderme henüz kullanılamıyor."
       },
       "openApp": {
-        "sms": "Mesaj uygulamanızda açın",
-        "email": "E-posta uygulamanızda açın"
+        "sms": "Mesaj uygulamanızda açın"
       }
     },
     "views": {

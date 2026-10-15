@@ -130,15 +130,24 @@
       "loading": "Carregando links…",
       "retry": "Tentar novamente",
       "searchPlaceholder": "Pesquisar por nome ou link",
-      "create": { "cta": "Novo link" },
+      "create": {
+        "cta": "Novo link"
+      },
       "stats": {
         "all": "Todos os links",
         "live": "Ativos",
         "totalClicks": "Total de cliques",
         "avgClicks": "Média de cliques / link"
       },
-      "tabs": { "all": "Todos", "live": "Ativos", "paused": "Pausados" },
-      "status": { "live": "Ativo", "paused": "Pausado" },
+      "tabs": {
+        "all": "Todos",
+        "live": "Ativos",
+        "paused": "Pausados"
+      },
+      "status": {
+        "live": "Ativo",
+        "paused": "Pausado"
+      },
       "empty": {
         "title": "Ainda não há links",
         "description": "Gere um link para compartilhar em anúncios, bios ou um código QR."
@@ -170,7 +179,11 @@
       "builder": {
         "back": "Voltar para links",
         "newHeading": "Novo link",
-        "step": { "destination": "Destino", "message": "Mensagem inicial", "tracking": "Rastreamento" },
+        "step": {
+          "destination": "Destino",
+          "message": "Mensagem inicial",
+          "tracking": "Rastreamento"
+        },
         "name": "Nome",
         "status": "Status",
         "countryCode": "Código do país",
@@ -194,6 +207,14 @@
         "shortUrl": "Link curto",
         "waUrl": "Link do WhatsApp",
         "qrAlt": "Código QR para este link"
+      },
+      "public": {
+        "missingTitle": "Link não encontrado",
+        "missingBody": "Este link não existe ou foi excluído.",
+        "goneTitle": "Link não está mais ativo",
+        "goneBody": "Este link está pausado ou expirou.",
+        "errorTitle": "Algo deu errado",
+        "errorBody": "Não foi possível abrir este link. Tente novamente."
       }
     }
   }

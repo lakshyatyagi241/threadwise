@@ -1279,6 +1279,14 @@
       "number": "Send from",
       "numberHint": "The WhatsApp number the message goes out on.",
       "noChannel": "No WhatsApp number is connected. Connect one in Channels first.",
+      "mailbox": "Send from",
+      "mailboxPlaceholder": "Select a mailbox",
+      "mailboxHint": "The connected mailbox the email goes out from.",
+      "noMailbox": "No mailbox is connected. Connect one in Channels first.",
+      "subject": "Subject",
+      "subjectPlaceholder": "What's this about?",
+      "body": "Message",
+      "bodyPlaceholder": "Write your email…",
       "template": "WhatsApp template",
       "templatePlaceholder": "Select a template",
       "noTemplates": "No approved templates for this number.",
@@ -1295,12 +1303,10 @@
       "callPermission": "The contact has not allowed calls yet. Calling asks for their permission first.",
       "callReady": "Ready to call {phone}.",
       "later": {
-        "sms": "Sending SMS from the CRM is not available yet.",
-        "email": "Sending email from the CRM is not available yet."
+        "sms": "Sending SMS from the CRM is not available yet."
       },
       "openApp": {
-        "sms": "Open in your messages app",
-        "email": "Open in your mail app"
+        "sms": "Open in your messages app"
       }
     },
     "views": {

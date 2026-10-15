@@ -99,7 +99,9 @@ const nextConfig: NextConfig = {
       // The visitor's booking pages (/book/<org>/<service>) and manage pages (/b/manage/<token>): a manage link is a secret and
       // the pages hold a customer's name and time, so the same rules as /q.
       // The email unsubscribe page (/u/<token>) is a bearer link too.
-      ...['/book/:path*', '/b/:path*', '/u/:path*'].map((source) => ({
+      // The click-to-chat short link (/l/<slug>) counts a click on every real visit — a cached response would under-count
+      // and could forward a visitor to a destination the link no longer points at.
+      ...['/book/:path*', '/b/:path*', '/u/:path*', '/l/:path*'].map((source) => ({
         source,
         headers: [
           ...noStore,

@@ -1279,6 +1279,14 @@
       "number": "Kirim dari",
       "numberHint": "Nomor WhatsApp yang digunakan untuk mengirim pesan.",
       "noChannel": "Belum ada nomor WhatsApp yang terhubung. Hubungkan satu di Saluran terlebih dahulu.",
+      "mailbox": "Kirim dari",
+      "mailboxPlaceholder": "Pilih kotak surat",
+      "mailboxHint": "Kotak surat yang terhubung dan menjadi sumber pengiriman email.",
+      "noMailbox": "Belum ada kotak surat yang terhubung. Hubungkan satu di Saluran terlebih dahulu.",
+      "subject": "Subjek",
+      "subjectPlaceholder": "Ini tentang apa?",
+      "body": "Pesan",
+      "bodyPlaceholder": "Tulis email Anda…",
       "template": "Templat WhatsApp",
       "templatePlaceholder": "Pilih templat",
       "noTemplates": "Tidak ada templat yang disetujui untuk nomor ini.",
@@ -1295,12 +1303,10 @@
       "callPermission": "Kontak belum mengizinkan panggilan. Izin mereka akan diminta lebih dulu sebelum menelepon.",
       "callReady": "Siap menelepon {phone}.",
       "later": {
-        "sms": "Pengiriman SMS dari CRM belum tersedia.",
-        "email": "Pengiriman email dari CRM belum tersedia."
+        "sms": "Pengiriman SMS dari CRM belum tersedia."
       },
       "openApp": {
-        "sms": "Buka di aplikasi pesan Anda",
-        "email": "Buka di aplikasi email Anda"
+        "sms": "Buka di aplikasi pesan Anda"
       }
     },
     "views": {

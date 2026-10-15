@@ -22,4 +22,6 @@ export const CONSENT_ERROR_CODES = {
   CONSENT_NOTICE_INVALID: 'CONSENT_NOTICE_INVALID',
   /** The intake point the notice belongs to (widget, booking type, store) does not exist in this workspace. 404. */
   CONSENT_NOTICE_TARGET_NOT_FOUND: 'CONSENT_NOTICE_TARGET_NOT_FOUND',
+  /** Guardian consent can only be recorded for a contact flagged as a minor. 422. */
+  CONSENT_PRIVACY_NOT_MINOR: 'CONSENT_PRIVACY_NOT_MINOR',
 } as const;
