@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import type { ModuleKey } from '@crm/contracts';
 
@@ -53,6 +53,16 @@ export class FieldSectionsRepository {
       .from(fieldSections)
       .where(and(eq(fieldSections.orgId, orgId), eq(fieldSections.uuid, uuid)));
     return rows[0] as FieldSectionRow | undefined;
+  }
+
+  /** uuid -> row for every uuid that exists in the workspace, in one query. Unknown uuids are absent. */
+  async findByUuids(tx: Tx, orgId: number, uuids: string[]): Promise<Map<string, FieldSectionRow>> {
+    if (uuids.length === 0) return new Map();
+    const rows = await tx
+      .select(this.selection())
+      .from(fieldSections)
+      .where(and(eq(fieldSections.orgId, orgId), inArray(fieldSections.uuid, uuids)));
+    return new Map((rows as FieldSectionRow[]).map((r) => [r.uuid, r]));
   }
 
   async findById(tx: Tx, orgId: number, id: number): Promise<FieldSectionRow | undefined> {

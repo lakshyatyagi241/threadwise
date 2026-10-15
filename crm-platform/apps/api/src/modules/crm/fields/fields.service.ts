@@ -393,8 +393,9 @@ export class FieldsService {
       const field = await this.requireField(tx, ctx.orgId, fieldUuid);
       this.requireModulePermission(field.moduleKey as ModuleKey, 'update');
       const ids: number[] = [];
+      const rows = await this.optionsRepo.findByUuids(tx, ctx.orgId, input.orderedIds);
       for (const uuid of input.orderedIds) {
-        const row = await this.optionsRepo.findByUuid(tx, ctx.orgId, uuid);
+        const row = rows.get(uuid);
         // Not just "exists" — must belong to *this* field, or a caller could
         // reorder another field's (possibly another module's) options via
         // this endpoint's permission check.

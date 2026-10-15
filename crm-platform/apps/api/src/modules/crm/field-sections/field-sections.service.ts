@@ -135,8 +135,9 @@ export class FieldSectionsService {
     this.requireModulePermission(input.moduleKey, 'update');
     await this.db.tx(async (tx) => {
       const ids: number[] = [];
+      const rows = await this.repo.findByUuids(tx, ctx.orgId, input.orderedIds);
       for (const uuid of input.orderedIds) {
-        const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
+        const row = rows.get(uuid);
         // A uuid from a different moduleKey is treated as not found here
         // rather than reordered — orderedIds must all belong to the module
         // the caller declared and was checked against above.
