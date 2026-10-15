@@ -13,6 +13,8 @@
     "apps/api/src/modules/chat-conversations/message-log-export.runner.ts::sync-zlib::gunzipSync::build": 1,
     "apps/api/src/modules/chat-conversations/message-log.service.ts::sync-zlib::gunzipSync::archivedEventsOf": 1,
     "apps/api/src/modules/contact-consent/consent-export.runner.ts::sync-zlib::gzipSync::build": 2,
+    "apps/api/src/modules/crm/revenue-report/revenue-export.runner.ts::sync-zlib::gzipSync::build": 2,
+    "apps/api/src/modules/crm/revenue-report/revenue-export.runner.ts::sync-zlib::gzipSync::ledger": 2,
     "apps/api/src/modules/install-update-licensing/migration-report.ts::sync-fs::readdirSync::readMigrationFiles": 1,
     "apps/api/src/modules/install-update-licensing/migration-report.ts::sync-fs::readFileSync::readMigrationFiles": 1,
     "apps/api/src/modules/install-update-licensing/migration-state.service.ts::sync-fs::existsSync::loadFiles": 1,
