@@ -300,6 +300,20 @@ export class SocialAuthService {
     }
     const email = profile.email!;
     await this.signup.assertEmailAllowed(email, registration);
+    if (await this.tenants.identityExists(email, null)) {
+      throw new AppError(
+        ERROR_CODES.AUTH_IDENTITY_EXISTS,
+        'An account with this email already exists.',
+        HttpStatus.CONFLICT,
+        [
+          {
+            path: 'email',
+            message:
+              'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
+          },
+        ],
+      );
+    }
     const orgName = state.orgName ?? `${profile.name ?? 'My'} workspace`;
     const base = slugify(orgName);
     let slug = base;

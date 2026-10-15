@@ -642,6 +642,33 @@ describe('social sign-in', () => {
     expect(again.status).toBe(200);
   });
 
+  it('refuses a social sign-up whose email already has an account in another org', async () => {
+    const existing = await signup();
+    h.socialProfiles.set(
+      'dup-1',
+      profile('g-dup-1', { email: existing.email, emailVerified: true }),
+    );
+    const started = await start({ mode: 'signup', orgName: 'Dup Co' });
+    const res = await callback(stateOf(started.body.url), 'dup-1');
+    expect(res.status, JSON.stringify(res.body)).toBe(409);
+    expect(res.body.code).toBe('AUTH_IDENTITY_EXISTS');
+    expect(res.body.errors).toEqual([
+      {
+        path: 'email',
+        message:
+          'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
+      },
+    ]);
+    const count = await h.owner.query(`SELECT count(*)::int AS c FROM users WHERE email = $1`, [
+      existing.email,
+    ]);
+    expect(count.rows[0].c).toBe(1);
+
+    // a returning user signing in via Google to their own org still works
+    const login = await signIn(existing.slug, 'dup-1');
+    expect(login.status, JSON.stringify(login.body)).toBe(201);
+  });
+
   describe('profile picture', () => {
     const social = () => h.app.get(SocialAuthService);
     let original: SocialAuthService['avatarFetch'];
