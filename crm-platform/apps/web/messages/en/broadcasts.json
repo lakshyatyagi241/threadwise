@@ -370,6 +370,11 @@
         "name": "LINE",
         "hint": "Send a message to the people who already chat with your LINE account.",
         "cta": "Create LINE broadcast"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Send a message to the people who already chat with your Viber account.",
+        "cta": "Create Viber broadcast"
       }
     }
   }

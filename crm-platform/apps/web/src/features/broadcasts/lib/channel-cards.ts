@@ -1,7 +1,7 @@
 import { createPath } from '@/features/campaigns/lib/create-flow';
 
 export type ChannelCardId =
-  'whatsapp' | 'sms' | 'email' | 'telegram' | 'facebook' | 'instagram' | 'line';
+  'whatsapp' | 'sms' | 'email' | 'telegram' | 'facebook' | 'instagram' | 'line' | 'viber';
 
 export interface ChannelCard {
   id: ChannelCardId;
@@ -18,6 +18,7 @@ export function channelCards(c: {
   facebook: boolean;
   instagram: boolean;
   line: boolean;
+  viber: boolean;
   sms: string | null;
   email: string | null;
 }): ChannelCard[] {
@@ -28,5 +29,6 @@ export function channelCards(c: {
   if (c.facebook) cards.push({ id: 'facebook', href: '/facebook/broadcasts' });
   if (c.instagram) cards.push({ id: 'instagram', href: '/instagram/broadcast' });
   if (c.line) cards.push({ id: 'line', href: '/line/broadcasts' });
+  if (c.viber) cards.push({ id: 'viber', href: '/viber/broadcasts' });
   return cards;
 }
